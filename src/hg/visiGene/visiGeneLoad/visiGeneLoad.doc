@@ -31,11 +31,14 @@ REQUIRED FIELD IN .RA FILE
 contributor - A comma separate list of contributers.  Each contributer is of
     the form last name followed by initials.  There is a period, but no space
     after each initial.  Example:  Kent W.J., Haussler D., van Braun W.S.D
+submissionSource - Typically the name of the lab or project behind the images.
 submitSet - name of submission set.
 
 REQUIRED FIELD IN .TAB FILE
 
-fileName - The name of the image file (not including directory).  
+fileName - The name of the image file (not including full directory).  
+imageWidth - Width of image in pixels.
+imageHeight - Height of image in pixels.
 submitId - an ID to substitute into itemUrl for image.
 
 REQUIRED FIELDS THAT CAN BE IN EITHER .RA or .TAB FILE
@@ -52,6 +55,7 @@ OPTIONAL FIELDS (WITH DEFAULT VALUES IF ANY IN BRACKETS)
 abName - Name of antibody used as probe
 abDescription - Description of antibody used as prob
 abTaxon - Taxon of animal antibody isolated from
+bac - If probe is made from a bac, the bac's name, often RP-something.
 bodyPart - Name of part of body depicted in image.  Use "whole" for whole mounts.  
 copyright - Copyright notice.
 embedding - usually either 'cryosection' or 'paraffin'

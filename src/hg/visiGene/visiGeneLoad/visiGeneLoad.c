@@ -568,7 +568,7 @@ return antibodyId;
 
 int doProbe(struct lineFile *lf, struct sqlConnection *conn, 
 	int geneId, int antibodyId,
-	char *fPrimer, char *rPrimer, char *seq)
+	char *fPrimer, char *rPrimer, char *seq, int bacId)
 /* Update probe table and probeType table if need be and return probe ID. */
 {
 struct sqlResult *sr;
@@ -594,6 +594,10 @@ else if (antibodyId)
     {
     probeType = "antibody";
     }
+else if (bacId)
+    {
+    probeType = "BAC";
+    }
 
 /* Handle probe type */
 dyStringPrintf(dy, "select id from probeType where name = '%s'", probeType);
@@ -609,60 +613,16 @@ if (probeTypeId == 0)
     }
 
 dyStringClear(dy);
-dyStringAppend(dy, "select id,gene,antibody,fPrimer,rPrimer,seq ");
-dyStringAppend(dy, "from probe ");
+dyStringAppend(dy, "select id from probe ");
 dyStringPrintf(dy, "where gene=%d and antibody=%d ", geneId, antibodyId);
+dyStringPrintf(dy, "and probeType=%d ", probeTypeId);
 dyStringPrintf(dy, "and fPrimer='%s' and rPrimer='%s' ", fPrimer, rPrimer);
 dyStringPrintf(dy, "and seq='");
 dyStringAppend(dy, seq);
-dyStringAppend(dy, "'");
+dyStringAppend(dy, "' ");
+dyStringPrintf(dy, "and bac=%d", bacId);
 verbose(2, "query: %s\n", dy->string);
-sr = sqlGetResult(conn, dy->string);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    int idOne = sqlUnsigned(row[0]);
-    int geneOne = sqlUnsigned(row[1]);
-    int antibodyOne = sqlUnsigned(row[2]);
-    char *fPrimerOne = row[3];
-    char *rPrimerOne = row[4];
-    char *seqOne = row[5];
-    int score = 1;
-    verbose(3, "idOne %d, geneOne %d, antibodyOne %d, fPrimerOne %s, rPrimerOne %s\n", idOne, geneOne, antibodyOne, fPrimerOne, rPrimerOne);
-    if (antibodyId != 0)
-        {
-	if (antibodyOne == antibodyId)
-	    score += 10;
-	else
-	    continue;
-	}
-    else
-        {
-	if (antibodyOne != 0)
-	    continue;
-	}
-    if (gotPrimers && fPrimerOne[0] != 0 && rPrimerOne[0] != 0)
-        {
-	if (sameString(fPrimerOne, fPrimer) && 
-	    sameString(rPrimerOne, rPrimer))
-	    score += 2;
-	else
-	    continue;
-	}
-    if (seq[0] != 0  && seqOne[0] != 0)
-        {
-	if (sameString(seq, seqOne))
-	    score += 4;
-	else
-	    continue;
-	}
-    verbose(3, "score = %d, bestScore %d\n", score, bestScore);
-    if (score > bestScore)
-	{
-        probeId = idOne;
-	bestScore = score;
-	}
-    }
-sqlFreeResult(&sr);
+probeId = sqlQuickNum(conn, dy->string);
 
 
 if (probeId == 0)
@@ -677,41 +637,11 @@ if (probeId == 0)
     dyStringPrintf(dy, " rPrimer='%s',\n", rPrimer);
     dyStringAppend(dy, " seq='");
     dyStringAppend(dy, seq);
-    dyStringAppend(dy, "'\n");
+    dyStringAppend(dy, "',\n");
+    dyStringPrintf(dy, " bac=%d\n", bacId);
     verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     probeId = sqlLastAutoId(conn);
-    }
-else
-    {
-    if (antibodyId != 0)
-	{
-	dyStringClear(dy);
-	dyStringPrintf(dy, "update probe set antibody=%d", antibodyId);
-	dyStringPrintf(dy, " where id=%d", probeId);
-	verbose(2, "%s\n", dy->string);
-	sqlUpdate(conn, dy->string);
-	}
-    if (gotPrimers)
-	{
-	dyStringClear(dy);
-	dyStringAppend(dy, "update probe set ");
-	dyStringPrintf(dy, "fPrimer = '%s', ", fPrimer);
-	dyStringPrintf(dy, "rPrimer = '%s'", rPrimer);
-	dyStringPrintf(dy, " where id=%d", probeId);
-	verbose(2, "%s\n", dy->string);
-	sqlUpdate(conn, dy->string);
-	}
-    if (seq[0] != 0)
-        {
-	dyStringClear(dy);
-	dyStringAppend(dy, "update probe set seq = '");
-	dyStringAppend(dy, seq);
-	dyStringAppend(dy, "'");
-	dyStringPrintf(dy, " where id=%d", probeId);
-	verbose(2, "%s\n", dy->string);
-	sqlUpdate(conn, dy->string);
-	}
     }
 
 dyStringFree(&dy);
@@ -1134,6 +1064,7 @@ struct hash *embeddingCache = newHash(0);
 struct hash *fixationCache = newHash(0);
 struct hash *permeablizationCache = newHash(0);
 struct hash *probeColorCache = newHash(0);
+struct hash *bacCache = newHash(0);
 struct hash *sliceTypeCache = newHash(0);
 struct hash *sectionSetCache = newHash(0);
 struct hash *captionIdHash = newHash(0);
@@ -1242,6 +1173,8 @@ while (lineFileNextReal(lf, &line))
 	    "name", sexCache, "sex", raHash, rowHash, words);
 	int sliceType = cachedId(conn, "sliceType", 
 	    "name", sliceTypeCache, "sliceType", raHash, rowHash, words);
+	int bac = cachedId(conn, "bac", 
+		"name", bacCache, "bac", raHash, rowHash, words);
 	
 	/* Get required fields in tab file */
 	char *fileName = getVal("fileName", raHash, rowHash, words, NULL);
@@ -1298,7 +1231,7 @@ while (lineFileNextReal(lf, &line))
 	sectionId = doSectionSet(conn, sectionSetCache, sectionSet);
 	geneId = doGene(lf, conn, gene, locusLink, refSeq, uniProt, genbank, taxon);
 	antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
-	probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq);
+	probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq, bac);
 
 	captionId = doCaption(lf, conn, captionExtId, captionTextHash, 
 		captionIdHash);

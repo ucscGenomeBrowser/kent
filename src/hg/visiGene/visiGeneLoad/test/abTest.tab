@@ -7,5 +7,5 @@ freen4	cap4	liver	freen4	AC002315	zahAb189	Zahler Lab anti-freen4	1	0	green	300	
 	expression	liver	0.7
 	expression	vein	0.6
 freen5	cap5	liver	freen4	AC002315	zahAb189	Zahler Lab anti-freen4	1	1	green	300	300
-	expression	liver	0.7
+	expression	liver	0.7	hepatocyte	squamous
 	expression	vein	0.6
