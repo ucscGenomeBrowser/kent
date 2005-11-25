@@ -180,6 +180,15 @@ CREATE TABLE antibody (
     INDEX(taxon)
 );
 
+#Color - what color probe is in
+CREATE TABLE bac (
+    id int auto_increment not null,	# Id of bac
+    name varchar(255) not null,	# BAC name
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(name(8))
+);
+
 #Info on a gene
 CREATE TABLE gene (
     id int auto_increment not null,	# ID of gene
@@ -292,10 +301,12 @@ CREATE TABLE probe (
     fPrimer varchar(255) not null,	# Forward PCR primer if any
     rPrimer varchar(255) not null,	# Reverse PCR primer if any
     seq longblob not null,	# Associated sequence if any
+    bac int not null,	#Associated BAC if any
               #Indices
     PRIMARY KEY(id),
     INDEX(gene),
-    INDEX(antibody)
+    INDEX(antibody),
+    INDEX(bac)
 );
 
 #Color - what color probe is in

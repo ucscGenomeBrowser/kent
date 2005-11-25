@@ -132,6 +132,13 @@ table antibody
     int taxon;		"NCBI Taxon of animal antibody is from"
     )
 
+table bac
+"Information on a bacterial artificial chromosome"
+    (
+    int id;	"BAD id"
+    string name;	"Name of BAC, often starts with RP"
+    )
+
 table gene
 "Info on a gene"
     (
@@ -225,6 +232,7 @@ table probe
     string fPrimer;	"Forward PCR primer, if any"
     string rPrimer;	"Reverse PCR primer, if any"
     lstring seq;	"Associated sequence, if any"
+    int bac;		"Associated BAC if any"
     )
 
 table probeColor
