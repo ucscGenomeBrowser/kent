@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.84 2005/11/23 23:25:41 kate Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.85 2005/11/25 16:35:31 kent Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -73,7 +73,6 @@ char uiState[256];
 char *scriptName = cgiScriptName();
 char *db = NULL;
 boolean isEncode = FALSE;
-boolean doTopBar = TRUE;
 char textOutBuf[512];
 
 /* found that on x86_64, the args could only be used once in this safef
