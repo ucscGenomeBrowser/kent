@@ -8,7 +8,7 @@
 #include "xap.h"
 #include "../lib/gs.h"
 
-static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.5 2005/11/25 05:44:50 kent Exp $";
+static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.6 2005/11/25 06:42:26 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -60,6 +60,7 @@ FILE *f = mustOpen(tabFile, "w");
 int i=0;
 char *headDir = "Institutions/";
 int headDirLen = strlen(headDir);
+struct dyString *imageFileName = dyStringNew(0);
 
 fprintf(f, "#");
 fprintf(f, "submitId\t");
@@ -135,6 +136,13 @@ while ((image = xapListNext(xap, "GensatImage")) != NULL)
     if (!startsWith(headDir, fileName))
         errAbort("Expecting %s to begin with %s", fileName, headDir);
     fileName += headDirLen;
+    chopSuffix(fileName);
+    dyStringClear(imageFileName);
+    dyStringAppend(imageFileName, fileName);
+    dyStringAppend(imageFileName, ".jpg");
+    fileName = imageFileName->string;
+    subChar(fileName, '(', '_');
+    stripChar(fileName, ')');
 
     /* Print out fields */
     fprintf(f, "%d\t", id);
@@ -173,8 +181,9 @@ while ((image = xapListNext(xap, "GensatImage")) != NULL)
 	    cellType = blankOutNotDone(cellType);
 	    cellSubtype = blankOutNotDone(cellSubtype);
 	    if (level != NULL)
-		fprintf(f, "\texpression\t%s\t%s\t%s\t%s\t%s\n", 
-		    region, level, pattern, cellType, cellSubtype);
+		fprintf(f, "\texpression\t%s\t%s\t%s\t%s\n", 
+		    region, level, cellType, cellSubtype);
+	    /* Todo - add expression pattern. */
 	    }
 	}
     gsGensatImageFree(&image);
@@ -188,7 +197,7 @@ void makeRaFile(char *fileName)
 {
 FILE *f = mustOpen(fileName, "w");
 
-fprintf(f, "submissionSet gensat1\n");
+fprintf(f, "submitSet gensat1\n");
 fprintf(f, "fullDir ../visiGene/full/inSitu/Mouse/gensat\n");
 fprintf(f, "thumbDir ../visiGene/200/inSitu/Mouse/gensat\n");
 fprintf(f, "priority 2000\n");
@@ -202,6 +211,8 @@ fprintf(f, "journalUrl http://www.nature.com\n");
 fprintf(f, "year 2003\n");
 fprintf(f, "setUrl http://www.ncbi.nlm.nih.gov/projects/gensat/\n");
 fprintf(f, "itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?CMD=search&DB=gensat&term=%%s\n");
+fprintf(f, "taxon 10090\n");
+fprintf(f, "probeColor deep red\n");
 
 
 carefulClose(&f);
