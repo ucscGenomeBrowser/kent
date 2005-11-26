@@ -19,7 +19,6 @@ table pushQ
     char [1]  ndxYN;      "Index verified?"
     char [1]  joinerYN;   "all.joiner verified?"
     string    stat;       "Status"
-    lstring   featureBits;"Feature Bits results"
     char [50] sponsor;    "Sponsor"
     char [50] reviewer;   "QA Reviewer"
     char [128] extSource; "External Source"
@@ -32,6 +31,7 @@ table pushQ
     char[8]   lockUser;   "User who has locked record, or empty string"
     char[16]  lockDateTime; "When user placed lock, or empty string"
     lstring   releaseLog;  "Release Log entry"
+    lstring   featureBits;"Feature Bits results"
     )
 
 table users

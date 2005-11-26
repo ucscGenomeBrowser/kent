@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.75 2005/11/26 21:30:43 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.76 2005/11/26 21:39:53 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1369,15 +1369,15 @@ dyStringPrintf(update, "cgis='%s',",cgis);
 dyStringPrintf(update, "files='%s',",files);
 dyStringPrintf(update, "sizeMB=%u,currLoc='%s',"
     "makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
-    "featureBits='%s',sponsor='%s',reviewer='%s',extSource='%s',",
+    "sponsor='%s',reviewer='%s',extSource='%s',",
     el->sizeMB ,  currLoc,  makeDocYN,  
     onlineHelp,  ndxYN,  joinerYN,  stat,  
-    featureBits, sponsor,  reviewer,  extSource);
+    sponsor,  reviewer,  extSource);
 dyStringPrintf(update, "openIssues='%s',",openIssues);
 dyStringPrintf(update, "notes='%s',",notes);
-dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s' "
+dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s',featureBits='%s' "
 	"where qid='%s'", 
-	pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, 
+	pushState, initdate, lastdate, el->bounces, lockUser, lockDateTime, releaseLog, featureBits,
 	qid
 	);
 
