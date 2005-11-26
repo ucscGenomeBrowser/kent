@@ -8,7 +8,7 @@
 #include "xap.h"
 #include "../lib/gs.h"
 
-static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.7 2005/11/26 17:27:30 kent Exp $";
+static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.8 2005/11/26 21:23:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -65,6 +65,7 @@ struct dyString *imageFileName = dyStringNew(0);
 
 fprintf(f, "#");
 fprintf(f, "submitId\t");
+fprintf(f, "captionId\t");
 fprintf(f, "gene\t");
 fprintf(f, "locusLink\t");
 fprintf(f, "genbank\t");
@@ -188,6 +189,10 @@ while ((image = xapListNext(xap, "GensatImage")) != NULL)
 
     /* Print out fields */
     fprintf(f, "%d\t", id);
+    if (comment != NULL)
+        fprintf(f, "%d\t", id);
+    else
+        fprintf(f, "\t");
     fprintf(f, "%s\t", symbol);
     fprintf(f, "%d\t", locusLinkId);
     fprintf(f, "%s\t", acc);
@@ -255,7 +260,7 @@ fprintf(f, "submitSet gensat1\n");
 fprintf(f, "fullDir ../visiGene/full/inSitu/Mouse/gensat\n");
 fprintf(f, "thumbDir ../visiGene/200/inSitu/Mouse/gensat\n");
 fprintf(f, "priority 2000\n");
-fprintf(f, "submissionSource gensat\n");
+fprintf(f, "submissionSource GENSAT\n");
 fprintf(f, "acknowledgement Thanks to Michael Dicuccio at NCBI for helping "
 	   "load these images into VisiGene.\n");
 fprintf(f, "contributor Heintz N., Curran T., Hatten M., Magdaleno S., Jensen P., Gong S., Mehta S., Wang C., Concepcion A., Kowalic E., Losos K., Feng H., Thompson T., Ford B., Baker S., Doughty M., Dinzey J., Dyer A., Grevstad C., Hinkle A., Kizima L., Madden C., Pariser E., Zheng C., Kus L., Milosevic A., Didkovsky N., Nowak N., Joyner A., Lehman K., Cheung T., Asbury A., Eden C., Batten D.,\n");
