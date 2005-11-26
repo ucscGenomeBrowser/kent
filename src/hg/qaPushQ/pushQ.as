@@ -19,6 +19,7 @@ table pushQ
     char [1]  ndxYN;      "Index verified?"
     char [1]  joinerYN;   "all.joiner verified?"
     string    stat;       "Status"
+    lstring   featureBits;"Feature Bits results"
     char [50] sponsor;    "Sponsor"
     char [50] reviewer;   "QA Reviewer"
     char [128] extSource; "External Source"

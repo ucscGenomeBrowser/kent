@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.74 2005/08/29 22:13:40 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.75 2005/11/26 21:30:43 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -113,6 +113,7 @@ static char const *colName[] = {
  "ndxYN"     ,
  "joinerYN"  ,
  "stat"      ,
+ "featureBits",
  "sponsor"   ,
  "reviewer"  ,
  "extSource" ,
@@ -147,6 +148,7 @@ e_onlineHelp,
 e_ndxYN     ,
 e_joinerYN  ,
 e_stat      ,
+e_featureBits,
 e_sponsor   ,
 e_reviewer  ,
 e_extSource ,
@@ -180,6 +182,7 @@ char *colHdr[] = {
 "Index",
 "All. Joiner",
 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Status&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",
+"Feature&nbsp;Bits",
 "Sponsor (local)",
 "Reviewer",
 "External Source or Collaborator",
@@ -537,6 +540,7 @@ replaceInStr(html, sizeof(html) , "<!onlineHelp>"  , ki->onlineHelp);
 replaceSelectOptions("ndxYN"    , "Y,N,X"          , ki->ndxYN     );
 replaceSelectOptions("joinerYN" , "Y,N,X"          , ki->joinerYN  );
 replaceInStr(html, sizeof(html) , "<!stat>"        , ki->stat      ); 
+replaceInStr(html, sizeof(html) , "<!featureBits>" , ki->featureBits); 
 replaceInStr(html, sizeof(html) , "<!sponsor>"     , ki->sponsor   ); 
 replaceInStr(html, sizeof(html) , "<!reviewer>"    , ki->reviewer  ); 
 replaceInStr(html, sizeof(html) , "<!extSource>"   , ki->extSource ); 
@@ -685,6 +689,7 @@ safef(q.onlineHelp, sizeof(q.onlineHelp), "%s", "" );
 safef(q.ndxYN     , sizeof(q.ndxYN)     , "%s", "N");  /* default to not checked yet */
 safef(q.joinerYN  , sizeof(q.joinerYN)  , "%s", "N");  /* default to all.joiner not checked yet */
 q.stat   = "";
+q.featureBits = "";
 
 safef(q.sponsor   , sizeof(q.sponsor)   , "%s", "" );
 safef(q.reviewer  , sizeof(q.reviewer)  , "%s", "" ); 
@@ -850,6 +855,11 @@ switch(col)
     case e_stat:
 	dotdotdot(ki->stat ,MAXBLOBSHOW);  /* chr(255) */
 	printf("<td>%s</td>\n", ki->stat      );
+	break;
+	
+    case e_featureBits:
+	dotdotdot(ki->featureBits,MAXBLOBSHOW);  /* longblob */
+	printf("<td>%s</td>\n", ki->featureBits);
 	break;
 	
     case e_sponsor:
@@ -1318,7 +1328,7 @@ void pushQUpdateEscaped(struct sqlConnection *conn, struct pushQ *el, char *tabl
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lastdate, *lockUser, *lockDateTime, *releaseLog;
+char  *qid, *pqid, *priority, *qadate, *newYN, *track, *dbs, *tbls, *cgis, *files, *currLoc, *makeDocYN, *onlineHelp, *ndxYN, *joinerYN, *stat, *featureBits, *sponsor, *reviewer, *extSource, *openIssues, *notes, *pushState, *initdate, *lastdate, *lockUser, *lockDateTime, *releaseLog;
 qid = sqlEscapeString(el->qid);
 pqid = sqlEscapeString(el->pqid);
 priority = sqlEscapeString(el->priority);
@@ -1335,6 +1345,7 @@ onlineHelp = sqlEscapeString(el->onlineHelp);
 ndxYN = sqlEscapeString(el->ndxYN);
 joinerYN = sqlEscapeString(el->joinerYN);
 stat = sqlEscapeString(el->stat);
+featureBits = sqlEscapeString(el->featureBits);
 sponsor = sqlEscapeString(el->sponsor);
 reviewer = sqlEscapeString(el->reviewer);
 extSource = sqlEscapeString(el->extSource);
@@ -1358,10 +1369,10 @@ dyStringPrintf(update, "cgis='%s',",cgis);
 dyStringPrintf(update, "files='%s',",files);
 dyStringPrintf(update, "sizeMB=%u,currLoc='%s',"
     "makeDocYN='%s',onlineHelp='%s',ndxYN='%s',joinerYN='%s',stat='%s',"
-    "sponsor='%s',reviewer='%s',extSource='%s',",
+    "featureBits='%s',sponsor='%s',reviewer='%s',extSource='%s',",
     el->sizeMB ,  currLoc,  makeDocYN,  
     onlineHelp,  ndxYN,  joinerYN,  stat,  
-    sponsor,  reviewer,  extSource);
+    featureBits, sponsor,  reviewer,  extSource);
 dyStringPrintf(update, "openIssues='%s',",openIssues);
 dyStringPrintf(update, "notes='%s',",notes);
 dyStringPrintf(update, "pushState='%s', initdate='%s', lastdate='%s', bounces='%u',lockUser='%s',lockDateTime='%s',releaseLog='%s' "
@@ -1594,6 +1605,7 @@ getCgiData(&isOK, FALSE, q.extSource , sizeof(q.extSource ), "extSource" );
 /* blobs */
 getCgiData(&isOK, TRUE ,&q.tbls      , -1                  , "tbls"      );  
 getCgiData(&isOK, TRUE ,&q.files     , -1                  , "files"     );
+getCgiData(&isOK, TRUE ,&q.featureBits, -1                 , "featureBits");
 getCgiData(&isOK, TRUE ,&q.openIssues, -1                  , "openIssues");
 getCgiData(&isOK, TRUE ,&q.notes     , -1                  , "notes"     );
 getCgiData(&isOK, TRUE ,&q.releaseLog, -1                  , "releaseLog");
