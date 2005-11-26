@@ -8,7 +8,7 @@
 #include "xap.h"
 #include "../lib/gs.h"
 
-static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.6 2005/11/25 06:42:26 kent Exp $";
+static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.7 2005/11/26 17:27:30 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,7 +16,7 @@ void usage()
 errAbort(
   "vgLoadGensat - Parse gensat XML file and turn it into VisiGene load files\n"
   "usage:\n"
-  "   vgLoadGensat gensat.xml out.tab\n"
+  "   vgLoadGensat gensat.xml outDir\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -49,13 +49,14 @@ if (sameString(s, "not-done"))
 return s;
 }
 
-void makeTabFile(char *gensatXml, char *tabFile)
+void makeTabFile(char *gensatXml, char *tabFile, char *commentFile)
 /* Parse XML file and turn it into tab-separated file. */
 {
 struct xap *xap = xapListOpen(gensatXml, "GensatImageSet",
     gsStartHandler, gsEndHandler);
 struct gsGensatImage *image;
 struct hash *tabFileHash = hashNew(0);
+FILE *fComment = mustOpen(commentFile, "w");
 FILE *f = mustOpen(tabFile, "w");
 int i=0;
 char *headDir = "Institutions/";
@@ -71,6 +72,8 @@ fprintf(f, "bac\t");
 fprintf(f, "sex\t");
 fprintf(f, "age\t");
 fprintf(f, "sliceType\t");
+fprintf(f, "bodyPart\t");
+fprintf(f, "probeColor\t");
 fprintf(f, "imageWidth\t");
 fprintf(f, "imageHeight\t");
 fprintf(f, "fileName\n");
@@ -96,10 +99,15 @@ while ((image = xapListNext(xap, "GensatImage")) != NULL)
     int daysToBirth = 19;
     int daysToAdult = 61;
     int averageAdult = 100;
+    char *bodyPart = "";
+    char *comment = NULL;
+    char *probeColor = NULL;
+    struct gsGensatImageImageTechnique *gsGensatImageImageTechnique;	/** Single instance required. **/
 
     struct gsGensatImageSeqInfo *gsGensatImageSeqInfo;	/** Single instance required. **/
     char *sliceType = image->gsGensatImageSectionPlane->value;	/** Single instance required. **/
     char *level = image->gsGensatImageSectionLevel->text;	/** Single instance required. **/
+    char *technique = image->gsGensatImageImageTechnique->value;	/** Single instance required. **/
 
     if (image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoGeneSymbol != NULL)
 	symbol = image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoGeneSymbol->text;	
@@ -117,9 +125,15 @@ while ((image = xapListNext(xap, "GensatImage")) != NULL)
         sex = image->gsGensatImageSex->value;
     if (image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoGeneSymbol != NULL)
 	symbol = image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoGeneSymbol->text;	
+    if (image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoBacComment != NULL)
+	comment = image->gsGensatImageGeneInfo->gsGensatGeneInfo->gsGensatGeneInfoBacComment->text;	
 
-    /* Process a few fields. */
+    /* Fix sex field. */
     tolowers(sex);
+    if (sameString(sex, "unknown"))
+        sex = "";
+
+    /* Figure out age field. */
     if (sameString(rawAge, "adult"))
         age = averageAdult;
     else 
@@ -133,6 +147,10 @@ while ((image = xapListNext(xap, "GensatImage")) != NULL)
 	else
 	    errAbort("Don't understand age %s", rawAge);
 	}
+
+    /* Process fileName to get rid of leading directory, and to reflect
+     * conversion to jpeg, and to fix a couple of little glitches in
+     * input data, and with Image Magick convert utility in tile mode. */
     if (!startsWith(headDir, fileName))
         errAbort("Expecting %s to begin with %s", fileName, headDir);
     fileName += headDirLen;
@@ -143,6 +161,30 @@ while ((image = xapListNext(xap, "GensatImage")) != NULL)
     fileName = imageFileName->string;
     subChar(fileName, '(', '_');
     stripChar(fileName, ')');
+    stripString(fileName, ".full"); /* Image magick can't handle two suffixes */
+
+    /* Figure out body part.  It'll be whole, head, or brain depending how old it is.
+     * However sometimes the level field has something meaningful to say.  (Usually
+     * it's just a number. */
+    if (age < 12)
+        bodyPart = "whole";
+    else if (age < 16)
+        bodyPart = "head";
+    else
+        bodyPart = "brain";
+    if (strlen(level) > 1 && !isdigit(level[0]) && !sameString("other", level))
+        bodyPart = level;
+
+    /* Figure out probe color by looking at technique. */
+    if (sameString(technique, "bac-brightfield"))
+        probeColor = "dark red";
+    else if (sameString(technique, "bac-confocal"))
+        probeColor = "green";
+    else if (sameString(technique, "ish-darkfield"))
+        probeColor = "white";
+    else
+        errAbort("Unrecognized technique %s", technique);
+        
 
     /* Print out fields */
     fprintf(f, "%d\t", id);
@@ -156,6 +198,8 @@ while ((image = xapListNext(xap, "GensatImage")) != NULL)
     else
         fprintf(f, "\t");
     fprintf(f, "%s\t", sliceType);
+    fprintf(f, "%s\t", bodyPart);
+    fprintf(f, "%s\t", probeColor);
     fprintf(f, "%d\t", width);
     fprintf(f, "%d\t", height);
     fprintf(f, "%s\n", fileName);
@@ -186,10 +230,20 @@ while ((image = xapListNext(xap, "GensatImage")) != NULL)
 	    /* Todo - add expression pattern. */
 	    }
 	}
+
+    /* Print out comment if any. */
+    if (comment != NULL)
+        {
+	subChar(comment, '\t', ' ');
+	subChar(comment, '\n', ' ');
+	fprintf(fComment, "%d\t%s\n", id, comment);
+	}
+
     gsGensatImageFree(&image);
     }
 xapFree(&xap);
 carefulClose(&f);
+carefulClose(&fComment);
 }
 
 void makeRaFile(char *fileName)
@@ -212,7 +266,6 @@ fprintf(f, "year 2003\n");
 fprintf(f, "setUrl http://www.ncbi.nlm.nih.gov/projects/gensat/\n");
 fprintf(f, "itemUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?CMD=search&DB=gensat&term=%%s\n");
 fprintf(f, "taxon 10090\n");
-fprintf(f, "probeColor deep red\n");
 
 
 carefulClose(&f);
@@ -222,13 +275,14 @@ carefulClose(&f);
 void vgLoadGensat(char *gensatXml, char *outDir)
 /* vgLoadGensat - Parse gensat XML file and turn it into VisiGene load files. */
 {
-char tabFile[PATH_LEN], raFile[PATH_LEN];;
+char tabFile[PATH_LEN], raFile[PATH_LEN], commentFile[PATH_LEN];
 
 makeDir(outDir);
 safef(tabFile, sizeof(tabFile), "%s/gensat.tab", outDir);
 safef(raFile, sizeof(raFile), "%s/gensat.ra", outDir);
+safef(commentFile, sizeof(commentFile), "%s/gensat.txt", outDir);
 makeRaFile(raFile);
-makeTabFile(gensatXml, tabFile);
+makeTabFile(gensatXml, tabFile, commentFile);
 }
 
 int main(int argc, char *argv[])
