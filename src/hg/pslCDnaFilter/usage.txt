@@ -1,7 +1,3 @@
-#
-# usage message for pslCDnaFilter, usage.h is created out of
-# this file.
-#
 pslCDnaFilter [options] inPsl outPsl
 
 Filter cDNA alignments in psl format.  Filtering criteria are
@@ -133,7 +129,3 @@ alignment.
   o Filter by maxAligns
 
 THE INPUT MUST BE BE SORTED BY QUERY for the comparitive filters.
-
-# Local Variables:
-# fill-column: 64
-# End:

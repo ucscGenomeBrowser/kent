@@ -25,7 +25,7 @@ polyASizes.o: polyASizes.c polyASizes.h
 # create usage msg from text
 usage.msg: usage.txt
 	echo '/* GENERATED CODE, DO NOT EDIT */' > $@.tmp
-	awk '!/^#/{print "\"" $$0 "\\n\""}' $< >> $@.tmp
+	stringify $< >> $@.tmp
 	mv -f $@.tmp $@
 
 test:
