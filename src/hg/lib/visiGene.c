@@ -698,7 +698,7 @@ if (acc[0] == 0)
     return NULL;
 safef(query, sizeof(query),
     "select imageProbe.image from gene,probe,imageProbe"
-    " where gene.%s = '%s'"
+    " where gene.%s = \"%s\""
     " and gene.id = probe.gene"
     " and probe.id = imageProbe.probe",
     field, acc);

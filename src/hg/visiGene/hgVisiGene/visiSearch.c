@@ -12,7 +12,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.14 2005/11/23 04:07:51 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.15 2005/11/26 21:11:17 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -452,7 +452,7 @@ for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     char query[512];
     safef(query, sizeof(query),
     	"select image.id from image,imageFile "
-	"where imageFile.submitId = '%s' "
+	"where imageFile.submitId = \"%s\" "
 	"and imageFile.id = image.imageFile", word->name);
     addImageListAndFree(searcher, sqlQuickNumList(conn, query),
 	wordIx, 1);
