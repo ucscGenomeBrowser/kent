@@ -2037,6 +2037,24 @@ sGroup_mammal monodelphis  platypus
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
+track encodeTbaAlignAnno
+shortLabel TBA Alignment Anno
+longLabel NHGRI/PSU TBA Alignments Anno
+group x
+priority 70.1
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+summary encodeTbaAnnoSummary
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
+sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
+sGroup_mammal monodelphis  platypus 
+sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+irows on
+
 track encodeTbaElements
 compositeTrack on
 shortLabel TBA Elements
@@ -2089,6 +2107,25 @@ sGroup_mammal monodelphis  platypus
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 
+track encodeMlaganAlignAnno
+shortLabel MLAGAN Alignment Anno
+longLabel Stanford MLAGAN Alignments Anno
+group x
+priority 72.0
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+summary encodeMlaganAnnoSummary
+maxHeightPixels 100:40:11
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
+sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
+sGroup_mammal monodelphis  platypus 
+sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+irows on
+
 track encodeMlaganElements
 compositeTrack on
 shortLabel MLAGAN Elements
@@ -2138,6 +2175,25 @@ sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephan
 sGroup_mammal monodelphis  platypus 
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+
+track encodeMavidAlignAnno
+shortLabel MAVID Alignment Anno
+longLabel UC Berkeley MAVID Alignments Anno
+group x
+priority 74.1
+visibility hide
+color 0, 10, 100
+altColor 1,128,0
+type wigMaf 0.0 1.0
+summary encodeMavidAnnoSummary
+maxHeightPixels 100:40:11
+speciesGroups primate placental mammal vertebrate
+sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
+sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
+sGroup_mammal monodelphis  platypus 
+sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+irows on
 
 track encodeMavidElements
 compositeTrack on
