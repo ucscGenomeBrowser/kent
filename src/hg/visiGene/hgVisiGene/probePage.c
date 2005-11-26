@@ -8,6 +8,7 @@
 #include "htmshell.h"
 #include "dnautil.h"
 #include "web.h"
+#include "hdb.h"
 #include "visiGene.h"
 #include "hgVisiGene.h"
 #include "probePage.h"
@@ -63,22 +64,55 @@ else
     }
 }
 
-static void bacProbeInfo(struct sqlConnection *conn, int probeId)
+static void bacProbeInfo(struct sqlConnection *conn, int probeId, int taxon)
 /* Print out information about BAC probe. */
 {
 char query[256];
 int bacId;
-char *name = "n/a";
+char *name = NULL;
+char *genomeDb = hDbForTaxon(conn, taxon);
+boolean gotMapping = FALSE;
 
-/* Lookup bacId. */
+/* Start new line. */
+printf("<BR>\n");
+
+/* Lookup bacId and print name associated with it. */
 safef(query, sizeof(query), "select bac from probe where id=%d", probeId);
 bacId = sqlQuickNum(conn, query);
 if (bacId != 0)
     {
     safef(query, sizeof(query), "select name from bac where id=%d", bacId);
-    name = naForEmpty(sqlQuickString(conn, query));
+    name = sqlQuickString(conn, query);
     }
-labeledResult("BAC name", conn, query);
+
+/* Find where bac lands in genome and print hyperlink to genome browser. */
+if (genomeDb != NULL && name != NULL && name[0] != 0)
+    {
+    struct sqlConnection *gConn = sqlConnect(genomeDb);
+    if (sqlTableExists(gConn, "bacEndPairs"))
+        {
+	char query[256];
+	int count;
+	safef(query, sizeof(query), 
+	    "select count(*) from bacEndPairs where name = '%s'", name);
+	count = sqlQuickNum(gConn, query);
+	if (count > 0)
+	    gotMapping = TRUE;
+	}
+    sqlDisconnect(&gConn);
+    }
+
+/* Print out BAC name, hyperlinked to genome browser if possible. */
+printf("<B>BAC name:</B> ");
+if (gotMapping)
+    {
+    printf("<A HREF=\"");
+    printf("../cgi-bin/hgTracks?db=%s&position=%s", genomeDb, name);
+    printf("\">");
+    }
+printf("%s", naForEmpty(name));
+if (gotMapping)
+   printf("</A>");
 }
 
 static void antibodyProbeInfo(struct sqlConnection *conn, int probeId)
@@ -153,6 +187,8 @@ probeType = sqlQuickString(conn, query);
 labeledText("probe type", probeType);
 if (sameWord(probeType, "antibody"))
     antibodyProbeInfo(conn, probeId);
+else if (sameWord(probeType, "BAC"))
+    bacProbeInfo(conn, probeId, taxon);
 else
     rnaProbeInfo(conn, probeId);
 

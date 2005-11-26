@@ -21,6 +21,7 @@ struct probeAndColor
     int probeColor;  /* ProbeColor id. */
     };
 
+
 char *getKnownGeneUrl(struct sqlConnection *conn, int geneId)
 /* Given gene ID, try and find known gene on browser in same
  * species. */
@@ -28,7 +29,6 @@ char *getKnownGeneUrl(struct sqlConnection *conn, int geneId)
 char query[256];
 int taxon;
 char *url = NULL;
-char *binomial = NULL;
 char *genomeDb = NULL;
 
 /* Figure out taxon. */
@@ -36,33 +36,14 @@ safef(query, sizeof(query),
     "select taxon from gene where id = %d", geneId);
 taxon = sqlQuickNum(conn, query);
 
-/* Figure out scientific name. */
-if (taxon != 0)
+genomeDb = hDbForTaxon(conn, taxon);
+if (genomeDb != NULL)
     {
-    safef(query, sizeof(query),
-	"select binomial from uniProt.taxon where id=%d", taxon);
-    binomial = sqlQuickString(conn, query);
-    }
-
-/* Get default database for that organism. */
-if (binomial != NULL)
-    {
-    struct sqlConnection *centralConn = hConnectCentral();
-    safef(query, sizeof(query),
-        "select defaultDb.name from dbDb,defaultDb "
-	"where dbDb.scientificName='%s' "
-	"and dbDb.name not like 'zoo%%' "
-	"and dbDb.name = defaultDb.name ", binomial);
-    genomeDb = sqlQuickString(centralConn, query);
-    if (genomeDb != NULL)
-	{
-	/* Make sure known genes track exists - we may need
-	 * to tweak this at some point for model organisms. */
-	safef(query, sizeof(query), "%s.knownToVisiGene", genomeDb);
-	if (!sqlTableExists(conn, query))
-	    genomeDb = NULL;
-	}
-    hDisconnectCentral(&centralConn);
+    /* Make sure known genes track exists - we may need
+     * to tweak this at some point for model organisms. */
+    safef(query, sizeof(query), "%s.knownToVisiGene", genomeDb);
+    if (!sqlTableExists(conn, query))
+	genomeDb = NULL;
     }
 
 /* If no db for that organism revert to human. */
@@ -104,7 +85,6 @@ if (sqlTableExists(conn, query))
 	slFreeList(&imageList);
 	}
     }
-freez(&binomial);
 freez(&genomeDb);
 return url;
 }
