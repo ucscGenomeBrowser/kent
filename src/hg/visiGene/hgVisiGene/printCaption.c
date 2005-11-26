@@ -491,6 +491,28 @@ else
     }
 }
 
+static struct slName *wrapUrlList(struct slName *labelList, 
+	struct slName *idList, char *url)
+/* Return list that substitutes id into url and wraps
+ * url as a hyperlink around label. */
+{
+struct slName *list = NULL, *label, *id;
+struct dyString *dy = dyStringNew(0);
+for (id = idList, label = labelList; id != NULL && label != NULL;
+	id = id->next, label = label->next)
+    {
+    dyStringClear(dy);
+    dyStringAppend(dy, "<A HREF=\"");
+    dyStringPrintf(dy, url, id->name);
+    dyStringAppend(dy, "\" target=_blank>");
+    dyStringAppend(dy, label->name);
+    dyStringAppend(dy, "</A>");
+    slNameAddHead(&list, dy->string);
+    }
+slReverse(&list);
+return list;
+}
+
 static struct captionElement *makePaneCaptionElements(
 	struct sqlConnection *conn, struct slInt *imageList)
 /* Make list of all caption elements */
@@ -501,7 +523,10 @@ for (image = imageList; image != NULL; image = image->next)
     {
     int paneId = image->val;
     struct slName *geneList = geneProbeList(conn, paneId);
-    struct slName *genbankList = visiGeneGenbank(conn, paneId);
+    struct slName *genbankRawList = visiGeneGenbank(conn, paneId);
+    struct slName *genbankUrlList = wrapUrlList(genbankRawList, genbankRawList,
+        "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?"
+	"cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu");
     struct slName *probeList = getProbeList(conn, paneId);
     ce = captionElementNew(paneId, "Gene", makeCommaSpacedList(geneList));
     ce->hasHtml = TRUE;
@@ -509,8 +534,9 @@ for (image = imageList; image != NULL; image = image->next)
     ce = captionElementNew(paneId, "Probe", makeCommaSpacedList(probeList));
     ce->hasHtml = TRUE;
     slAddHead(&ceList, ce);
-    ce = captionElementNew(paneId, "GenBank", makeCommaSpacedList(genbankList));
+    ce = captionElementNew(paneId, "GenBank", makeCommaSpacedList(genbankUrlList));
     slAddHead(&ceList, ce);
+    ce->hasHtml = TRUE;
     ce = captionElementNew(paneId, "Organism", visiGeneOrganism(conn, paneId));
     slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "Sex", 
