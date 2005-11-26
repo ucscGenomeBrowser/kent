@@ -1,11 +1,12 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.10 2004/09/03 23:04:11 markd Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.11 2005/11/26 16:41:23 markd Exp $";
 
 #include "common.h"
 #include "hash.h"
 #include "cheapcgi.h"
 #include "portable.h"
+#include "linefile.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -15,29 +16,20 @@ static char const rcsid[] = "$Id: hgConfig.c,v 1.10 2004/09/03 23:04:11 markd Ex
 //#define GLOBAL_CONFIG_FILE "/usr/local/apache/cgi-bin/hg.conf"
 /* the file to read the user configuration info from, starting at the user's home */
 #define USER_CONFIG_FILE ".hg.conf"
-/* the line buffer size */
-#define BUFFER_SIZE 128
 
 /* the hash holding the config options */
 static struct hash* cfgOptionsHash = 0;
 
-static void initConfig()
-/* create and initilize the config hash */
+static void getConfigFile(char filename[PATH_LEN])
+/* get path to .hg.conf file to use */
 {
-FILE* file;
-char filename[BUFFER_SIZE];
-char line[BUFFER_SIZE];
-char name[BUFFER_SIZE];
-char value[BUFFER_SIZE];
 struct stat statBuf;
-
-cfgOptionsHash = newHash(6);
-
-/* this long complicated test is needed because, cgiSpoof may have already been called
- * thus we have to look a little deeper to seem if were are really a cgi
- * we do this looking for cgiSpoof in the QUERY_STRING, if it exists*/
-if(!cgiIsOnWeb() ||	/* not a cgi, read from home director, e.g. ~/.hg.conf */
-		(getenv("QUERY_STRING") != 0 && strstr(getenv("QUERY_STRING"), "cgiSpoof") != 0))
+/* this long complicated test is needed because, cgiSpoof may have already
+ * been called thus we have to look a little deeper to seem if were are really
+ * a cgi we do this looking for cgiSpoof in the QUERY_STRING, if it exists.
+ * If not a cgi, read from home directory, e.g. ~/.hg.conf */
+if(!cgiIsOnWeb() ||
+   (getenv("QUERY_STRING") != 0 && strstr(getenv("QUERY_STRING"), "cgiSpoof") != 0))
     {
     /* Check for explictly specified file in env, otherwise use one in home */
     if (getenv("HGDB_CONF") != NULL)
@@ -56,19 +48,35 @@ else	/* on the web, read from global config file */
     {
     sprintf(filename, "%s/%s", GLOBAL_CONFIG_PATH, GLOBAL_CONFIG_FILE);
     }
+}
+
+static void initConfig()
+/* create and initilize the config hash */
+{
+struct lineFile *lf;
+char filename[PATH_LEN];
+char *line, *name, *value;
+
+cfgOptionsHash = newHash(6);
+
+getConfigFile(filename);
 
 /* parse; if the file is not there or can't be read, leave the hash empty */
-if((file = fopen(filename, "r")) != 0)
+if((lf = lineFileMayOpen(filename, TRUE)) != 0)
     {
     /* while there are lines to read */
-    while(fgets(line, BUFFER_SIZE, file))
+    while(lineFileNext(lf, &line, NULL))
 	{
 	/* if it's not a comment */
 	if(line[0] != '#')
 	    {
-	    /* read the key/value pair */
-	    if (sscanf(line, "%[^=]=%[^\n]", name, value) == 2)
+	    /* parse the key/value pair */
+            value = strchr(line, '=');
+	    if (value != NULL)
                 {
+                *value++ = '\0';
+                name = trimSpaces(line);
+                value = trimSpaces(value);
 		hashAdd(cfgOptionsHash, name, cloneString(value));
                 /* Set enviroment variables to enable sql tracing and/or profiling */
                 if (sameString(name, "JKSQL_TRACE") || sameString(name, "JKSQL_PROF"))
