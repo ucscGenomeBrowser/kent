@@ -6,7 +6,7 @@
 #include "options.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: vgRemoveSubmission.c,v 1.2 2005/11/12 02:43:24 kent Exp $";
+static char const rcsid[] = "$Id: vgRemoveSubmission.c,v 1.3 2005/11/26 17:30:07 kent Exp $";
 
 boolean testOnly = FALSE;
 
@@ -62,7 +62,7 @@ struct sqlConnection *conn = sqlConnect(database);
 int submitId = atoi(submissionSetId);
 char *submitName;
 struct dyString *query = dyStringNew(0);
-struct slInt *imageList;
+struct slInt *imageList = NULL, *imageProbeList = NULL;
 int imageFileCount, imageProbeCount = 0, contributorCount;
 
 /* As a sanity check get the name of submission set and print it */
@@ -93,21 +93,41 @@ dyStringPrintf(query,
     "select id from image where submissionSet=%d", submitId);
 imageList = sqlQuickNumList(conn, query->string);
 
-/* Delete imageProbes. */
+/* Get list of imageProbes. */
 if (imageList != NULL)
     {
     dyStringClear(query);
     dyStringAppend(query, 
-	"select count(*) from imageProbe where image ");
+	"select id from imageProbe where image ");
     intInClause(query, imageList);
-    imageProbeCount = sqlQuickNum(conn, query->string);
+    imageProbeList = sqlQuickNumList(conn, query->string);
+    }
+
+
+/* Delete expressionLevel's tied to imageProbes. */
+if (imageProbeList != NULL)
+    {
+    int oldExpLevel = sqlQuickNum(conn, "select count(*) from expressionLevel");
+    int newExpLevel;
+    dyStringClear(query);
+    dyStringAppend(query, 
+	"delete from expressionLevel where imageProbe ");
+    intInClause(query, imageProbeList);
+    maybeUpdate(conn, query->string);
+    newExpLevel = sqlQuickNum(conn, "select count(*) from expressionLevel");
+    verbose(1, "Deleted %d expressionLevels\n", oldExpLevel - newExpLevel);
+    }
+
+/* Delete image probes. */
+if (imageProbeList != NULL)
+    {
     dyStringClear(query);
     dyStringAppend(query, 
 	"delete from imageProbe where image ");
     intInClause(query, imageList);
     maybeUpdate(conn, query->string);
     }
-verbose(1, "Deleted %d image probes.\n", imageProbeCount);
+verbose(1, "Deleted %d image probes.\n", slCount(imageProbeList));
 
 /* Delete images. */
 dyStringClear(query);
