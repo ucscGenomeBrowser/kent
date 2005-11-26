@@ -993,13 +993,16 @@ return id;
 void doExpression(struct lineFile *lf, struct sqlConnection *conn, 
 	int imageProbe, char *bodyPart, struct hash *bodyPartCache,
 	char *level, char *cellType, struct hash *cellTypeCache, 
-	char *cellSubtype, struct hash *cellSubtypeCache)
+	char *cellSubtype, struct hash *cellSubtypeCache,
+	char *expressionPattern, struct hash *expressionPatternCache)
 /* Add item to expression table, possibly body part table too. */
 {
 struct dyString *dy = dyStringNew(0);
 int bodyPartId = findOrAddIdTable(conn, "bodyPart", "name", bodyPart, bodyPartCache);
 int cellTypeId = findOrAddIdTable(conn, "cellType", "name", cellType, cellTypeCache);
 int cellSubtypeId = findOrAddIdTable(conn, "cellSubtype", "name", cellSubtype, cellSubtypeCache);
+int expressionPatternId = findOrAddIdTable(conn, "expressionPattern", "description", 
+	expressionPattern, expressionPatternCache);
 double lev = atof(level);
 if (lev < 0 || lev > 1.0)
     errAbort("expression level %s out of range (0 to 1) line %d of %s", 
@@ -1014,7 +1017,8 @@ if (sqlQuickNum(conn, dy->string) == 0)
     dyStringPrintf(dy, " bodyPart=%d,", bodyPartId);
     dyStringPrintf(dy, " level=%f,", lev);
     dyStringPrintf(dy, " cellType=%d,", cellTypeId);
-    dyStringPrintf(dy, " cellSubtype=%d", cellSubtypeId);
+    dyStringPrintf(dy, " cellSubtype=%d,", cellSubtypeId);
+    dyStringPrintf(dy, " expressionPattern=%d", expressionPatternId);
     verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     }
@@ -1056,7 +1060,8 @@ struct hash *fullDirCache = newHash(0);
 struct hash *thumbDirCache = newHash(0);
 struct hash *bodyPartCache = newHash(0);
 struct hash *cellTypeCache = newHash(0);
-struct hash *cellSubtypeHash = newHash(0);
+struct hash *cellSubtypeCache = newHash(0);
+struct hash *expressionPatternCache = newHash(0);
 struct hash *sexCache = newHash(0);
 struct hash *copyrightCache = newHash(0);
 struct hash *contributorCache = newHash(0);
@@ -1129,7 +1134,8 @@ while (lineFileNextReal(lf, &line))
 	command = words[0];
 	if (sameString(command, "expression"))
 	    {
-	    char *bodyPart, *level, *cellType = "", *cellSubtype = "";
+	    char *bodyPart, *level; 
+	    char *cellType = "", *cellSubtype = "", *expressionPattern="";
 	    if (wordCount < 3)
 		lineFileExpectWords(lf, 3, wordCount);
 	    bodyPart = words[1];
@@ -1137,12 +1143,15 @@ while (lineFileNextReal(lf, &line))
 	    if (wordCount >= 4)
 	        cellType = words[3];
 	    if (wordCount >= 5)
-	        cellType = words[4];
+	        cellSubtype = words[4];
 	    if (wordCount >= 6)
-	        lineFileExpectWords(lf, 5, wordCount);
+	        expressionPattern = words[5];
+	    if (wordCount >= 7)
+	        lineFileExpectWords(lf, 6, wordCount);
 	    doExpression(lf, conn, imageProbeId, 
 	    	bodyPart, bodyPartCache, level, 
-		cellType, cellTypeCache, cellSubtype, cellSubtypeHash);
+		cellType, cellTypeCache, cellSubtype, cellSubtypeCache,
+		expressionPattern, expressionPatternCache);
 	    }
 	else
 	    {

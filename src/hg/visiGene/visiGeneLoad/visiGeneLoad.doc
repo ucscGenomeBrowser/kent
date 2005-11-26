@@ -101,7 +101,9 @@ information is in lines that are indented.
 
 Currently all indented lines must start with the keyword "expression".
 The format of expression lines is:
-	expression	bodyPart	level	cellType	cellSubtype
+	expression	bodyPart	level	cellType	cellSubtype	pattern
 where bodyPart is same as the bodyPart elsewhere, and level is a
-number between 0.0 and 1.0.   The cellType and cellSubtype are optional
-and may be omitted.
+number between 0.0 and 1.0.   The cellType, cellSubtype and pattern are optional
+and may be omitted.  The pattern is typically something like "scattered" or
+"regional."
+
