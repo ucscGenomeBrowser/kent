@@ -405,6 +405,11 @@ identifier vgImageProbe
     visiGene.imageProbe.id
     visiGene.expressionLevel.imageProbe
 
+identifier vgExpressionPattern
+"Expression pattern - scattered, regional, etc."
+    visiGene.expressionPattern.ix
+    visiGene.expressionLevel.expressionPattern
+
 identifier vgLifeStageScheme
 "A scheme for describing stages of development for an organism"
     visiGene.lifeStageScheme.id

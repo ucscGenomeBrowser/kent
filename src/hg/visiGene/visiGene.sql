@@ -377,6 +377,15 @@ CREATE TABLE imageProbe (
     INDEX(probe)
 );
 
+#Things like 'scattered' 'regional' 'widely expressed'
+CREATE TABLE expressionPattern (
+    id int auto_increment not null,	# ID of expression pattern
+    description varchar(255) not null,	# Short description of pattern
+              #Indices
+    PRIMARY KEY(id),
+    INDEX(description(8))
+);
+
 #Annotated expression level if any
 CREATE TABLE expressionLevel (
     imageProbe int not null,	# Image and probe
@@ -384,6 +393,7 @@ CREATE TABLE expressionLevel (
     level float not null,	# Expression level (0.0 to 1.0)
     cellType int not null,      # Cell type expression seen in
     cellSubtype int not null,   # Cell subtype expression seen in
+    expressionPattern int not null, # Things like scattered, regional, etc.
               #Indices
     INDEX(imageProbe),
     INDEX(bodyPart),

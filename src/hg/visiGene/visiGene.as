@@ -287,6 +287,13 @@ table imageProbe
     int probeColor;	"ID of probeColor"
     )
 
+table expressionPattern
+"Things like 'scattered' 'regional' 'widely expressed'"
+    (
+    int id;	"ID of expression pattern"
+    string description; "Short description of pattern"
+    )
+
 table expressionLevel
 "Annotated expression level if any"
     (
