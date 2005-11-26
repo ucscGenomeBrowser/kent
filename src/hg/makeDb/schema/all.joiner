@@ -332,7 +332,7 @@ identifier vgAntibody
     visiGene.antibody.id
     visiGene.probe.antibody exclude=0
 
-identifier vgAntibody
+identifier vgBac
 "Info on a BAC"
     visiGene.bac.id
     visiGene.probe.bac exclude=0
