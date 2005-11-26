@@ -8,7 +8,7 @@
 #include "xap.h"
 #include "../lib/gs.h"
 
-static char const rcsid[] = "$Id: gensatImageDownload.c,v 1.2 2005/11/22 17:47:41 kent Exp $";
+static char const rcsid[] = "$Id: gensatImageDownload.c,v 1.3 2005/11/26 17:26:24 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -107,6 +107,7 @@ while ((image = xapListNext(xap, "GensatImage")) != NULL)
     /* Figure out name of jpeg file in outDir. */
     verbose(1, "image %d, id %d\n", ++imageIx, id);
     safef(finalJpg, sizeof(finalJpg), "%s/%s", outDir, imageFile);
+    stripString(finalJpg, ".full"); /* Image magick can't handle two suffixes */
     chopSuffix(finalJpg);
     strcat(finalJpg, ".jpg");
 
