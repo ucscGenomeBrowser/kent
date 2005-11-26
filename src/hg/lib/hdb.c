@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.275 2005/10/15 00:00:18 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.276 2005/11/26 18:21:29 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -342,6 +342,36 @@ safef(query, sizeof(query),
 genome = sqlQuickString(conn, query);
 hDisconnectCentral(&conn);
 return genome;
+}
+
+char *hDbForTaxon(struct sqlConnection *conn, int taxon)
+/* Get database associated with NCBI taxon number if any. */
+{
+char *db = NULL;
+char *binomial = NULL;
+char query[256];
+
+/* Figure out scientific name. */
+if (taxon != 0)
+    {
+    safef(query, sizeof(query),
+	"select binomial from uniProt.taxon where id=%d", taxon);
+    binomial = sqlQuickString(conn, query);
+    }
+/* Get default database for that organism. */
+if (binomial != NULL)
+    {
+    struct sqlConnection *centralConn = hConnectCentral();
+    safef(query, sizeof(query),
+        "select defaultDb.name from dbDb,defaultDb "
+	"where dbDb.scientificName='%s' "
+	"and dbDb.name not like 'zoo%%' "
+	"and dbDb.name = defaultDb.name ", binomial);
+    db = sqlQuickString(centralConn, query);
+    hDisconnectCentral(&centralConn);
+    }
+freeMem(binomial);
+return db;
 }
 
 char *hDefaultDb()
