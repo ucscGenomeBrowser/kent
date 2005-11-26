@@ -6,58 +6,29 @@
 #include "dnaseq.h"
 #include "fa.h"
 #include "portable.h"
+#include "liftOver.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.60 2005/11/17 16:51:55 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.61 2005/11/26 17:25:21 kent Exp $";
 
 void usage()
 {
-errAbort("freen - rearrange messup into directories.\n"
-         "usage:  freen lsFile inDir outDir\n");
+errAbort("freen - test some hairbrained thing.\n"
+         "usage:  freen now\n");
 }
 
-void freen(char *lsFile, char *inDir, char *outDir)
+
+void freen(char *fileName)
 /* Test some hair-brained thing. */
 {
-char oldName[PATH_LEN], newName[PATH_LEN];
-struct lineFile *lf = lineFileOpen(lsFile, TRUE);
-char *row[9], *part1, *part2;
-struct hash *ncHash = hashNew(0);
-
-makeDir(outDir);
-while (lineFileRow(lf, row))
-    {
-    char *oldFile = row[8];
-    safef(oldName, sizeof(oldName), "%s/%s", inDir, oldFile);
-
-    /* Split NT_004612_135 into NT_004612 and 135 */
-    part1 = oldFile;
-    part2 = strchr(oldFile, '_');
-    if (part2 == NULL)
-        errAbort("Couldn't find first _ in %s", oldFile);
-    part2 = strchr(part2+1, '_');
-    if (part2 == NULL)
-        errAbort("Couldn't find second _ in %s", oldFile);
-    *part2++ = 0;
-
-    /* If need be make new subdirectory */
-    if (!hashLookup(ncHash, part1))
-        {
-	hashAdd(ncHash, part1, NULL);
-	safef(newName, sizeof(newName), "%s/%s", outDir, part1);
-	makeDir(newName);
-	}
-
-    safef(newName, sizeof(newName), "%s/%s/%s", outDir, part1, part2);
-    if (rename(oldName, newName) != 0)
-        errnoAbort("Couldn't rename %s to %s", oldName, newName);
-    }
+struct liftOverChain *lift = liftOverChainForDb("hg17");
+uglyf("Got %d lifts\n", slCount(lift));
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-if (argc != 4)
+if (argc != 2)
    usage();
-freen(argv[1], argv[2], argv[3]);
+freen(argv[1]);
 return 0;
 }
