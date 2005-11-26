@@ -1,12 +1,17 @@
 LOADING DATA INTO VISIGENE
 
-To load images into VisiGene we need three types of files.
+To load images into VisiGene we need four types of files.
   1) The images themselves, preferably in JPEG format, but
      we can convert from TIFF and most other formats as well.
   2) A file in what we call a .ra format that describes things
      that are common to all the images in a group.  
   3) A tab-separated text file that contains one line for each
      image in the submission.
+  4) A caption text file (optional).  This is also a tab separated
+     file.  The first column is the submitId associated with the
+     comment, the second column is the comment itself (with no tabs
+     or newlines).
+
 In general the loading system is flexible whether information goes
 in the .ra file or in the tab separated file.  
 
