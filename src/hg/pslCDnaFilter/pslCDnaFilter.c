@@ -10,7 +10,7 @@ static void usage(char *msg)
 {
 /* message got huge, so it's in a generate file */
 static char *usageMsg =
-#include "usage.h"
+#include "usage.msg"
     ;
 errAbort("%s:  %s", msg, usageMsg);
 }

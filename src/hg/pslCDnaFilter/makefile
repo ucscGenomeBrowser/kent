@@ -6,7 +6,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 
-H = cDnaAligns.h overlapFilter.h polyASize.h usage.h
+H = cDnaAligns.h overlapFilter.h polyASize.h usage.msg
 O = cDnaAligns.o overlapFilter.o polyASize.o pslCDnaFilter.o
 B =  ${HOME}/bin/${MACHTYPE}/pslCDnaFilter
 
@@ -23,14 +23,16 @@ overlapFilter.o: overlapFilter.c $H
 polyASizes.o: polyASizes.c polyASizes.h
 
 # create usage msg from text
-usage.h: usage.txt
-	awk '!/^#/{print "\"" $$0 "\\n\""}' $< > $@
+usage.msg: usage.txt
+	echo '/* GENERATED CODE, DO NOT EDIT */' > $@.tmp
+	awk '!/^#/{print "\"" $$0 "\\n\""}' $< >> $@.tmp
+	mv -f $@.tmp $@
 
 test:
 	cd tests && ${MAKE} test
 
 clean:
-	rm -f $O pslCDnaFilter usage.h
+	rm -f $O pslCDnaFilter usage.msg
 	cd tests && ${MAKE} clean
 
 savebak:
