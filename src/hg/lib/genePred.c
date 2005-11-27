@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.78 2005/11/24 20:37:50 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.79 2005/11/27 06:21:04 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -893,6 +893,7 @@ if (end > cds->end)
 
 if (start < end)
     {
+    /* compute from end if it is complete in mRNA */
     if (cds->endComplete)
         {
         int fr = (cds->end-start) % 3;
