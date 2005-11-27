@@ -302,6 +302,7 @@ table expressionLevel
     float level;	"Expression level (0.0 to 1.0)"
     int cellType;	"Cell type expression seen in"
     int cellSubtype;	"Cell subtype expression seen in"
+    int expressionPattern; "Things like scattered, regional, etc."
     )
 
 table lifeTime
