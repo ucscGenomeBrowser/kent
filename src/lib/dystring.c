@@ -6,7 +6,7 @@
 #include "common.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dystring.c,v 1.17 2005/11/02 00:04:21 markd Exp $";
+static char const rcsid[] = "$Id: dystring.c,v 1.18 2005/11/27 17:05:22 kent Exp $";
 
 struct dyString *newDyString(int initialBufSize)
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */
@@ -61,6 +61,13 @@ static void dyStringExpandBuf(struct dyString *ds, int newSize)
 {
 ds->string = needMoreMem(ds->string, ds->stringSize+1, newSize+1);
 ds->bufSize = newSize;
+}
+
+void dyStringBumpBufSize(struct dyString *ds, int size)
+/* Force dyString buffer to be at least given size. */
+{
+if (ds->bufSize < size)
+    dyStringExpandBuf(ds, size);
 }
 
 void dyStringAppendN(struct dyString *ds, char *string, int stringSize)

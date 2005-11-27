@@ -60,6 +60,9 @@ struct dyString * dyStringSub(char *orig, char *in, char *out);
 /* Make up a duplicate of orig with all occurences of in substituted
  * with out. */
 
+void dyStringBumpBufSize(struct dyString *ds, int size);
+/* Force dyString buffer to be at least given size. */
+
 char *dyStringCannibalize(struct dyString **pDy);
 /* Kill dyString, but return the string it is wrapping
  * (formerly dy->string).  This should be free'd at your
