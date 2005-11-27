@@ -81,6 +81,10 @@ char *makeEscapedString(char *in, char toEscape);
  * toEscape characters preceded by '\' 
  * When done freeMem result. */
 
+void escCopy(char *in, char *out, char toEscape, char escape);
+/* Copy in to out, escaping as needed.  Out better be big enough. 
+ * (Worst case is strlen(in)*2 + 1.) */
+
 struct slName *stringToSlNames(char *string);
 /* Convert string to a list of slNames separated by
  * white space, but allowing multiple words in quotes.

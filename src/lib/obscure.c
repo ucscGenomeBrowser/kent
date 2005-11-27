@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.39 2005/10/28 06:20:54 galt Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.40 2005/11/27 17:05:55 kent Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -302,8 +302,9 @@ else
     }
 }
 
-static void escCopy(char *in, char *out, char toEscape, char escape)
-/* Copy in to out, escaping as needed.  Out better be big enough. */
+void escCopy(char *in, char *out, char toEscape, char escape)
+/* Copy in to out, escaping as needed.  Out better be big enough. 
+ * (Worst case is strlen(in)*2 + 1.) */
 {
 char c;
 for (;;)
