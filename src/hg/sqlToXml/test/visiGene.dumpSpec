@@ -3,10 +3,11 @@ submissionSource
       journal journal.id
       copyright copyright.id
       id imageFile.submissionSet
-          fullLocation fileLocation.id
-          thumbLocation fileLocation.id
+          fullLocation hide
+          thumbLocation hide
           caption caption.id
           id image.imageFile
+	     submissionSet hide
              specimen specimen.id
                 bodyPart bodyPart.id
                 sex sex.id
