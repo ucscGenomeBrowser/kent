@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.3 2005/11/28 21:46:57 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.4 2005/11/28 22:03:22 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,6 +38,7 @@ struct table
     char *name;			/* Name of table. */
     struct field *fieldList;	/* Information about each field. */
     struct elStat *elStat;	/* Associated elStat structure. */
+    struct dtdElement *dtdElement; /* Associated dtd element. */
     struct field *primaryKey;	/* Primary key if any. */
     boolean madeUpPrimary;	/* True if we are creating primary key. */
     int lastId;			/* Last id value if we create key. */
@@ -52,6 +53,7 @@ struct field
     struct table *table;	/* Table this is part of. */
     struct field *foreignKey;	/* Field this is a foreign key for. */
     struct attStat *attStat;	/* Associated attStat structure. */
+    struct dtdAttribute *dtdAttribute;	/* Associated dtd attribute. */
     boolean isMadeUpKey;	/* True if it's a made up key. */
     boolean isPrimaryKey;	/* True if it's table's primary key. */
     };
@@ -64,6 +66,18 @@ for (field = table->fieldList; field != NULL; field = field->next)
     if (sameString(field->name, name))
 	break;
 return field;
+}
+
+struct dtdAttribute *findDtdAttribute(struct dtdElement *element, char *name)
+/* Find named attribute in element, or NULL if no such attribute. */
+{
+struct dtdAttribute *dtdAtt;
+for (dtdAtt = element->attributes; dtdAtt != NULL; dtdAtt = dtdAtt->next)
+    {
+    if (sameString(dtdAtt->name, name))
+        break;
+    }
+return dtdAtt;
 }
 
 char *makeUpFieldName(struct table *table, char *name)
@@ -130,7 +144,7 @@ if (primaryKey == NULL)
 table->primaryKey = primaryKey;
 }
 
-struct table *elsIntoTables(struct elStat *elList)
+struct table *elsIntoTables(struct elStat *elList, struct hash *dtdHash)
 /* Create table and field data structures from element/attribute
  * data structures. */
 {
@@ -144,6 +158,9 @@ for (el = elList; el != NULL; el = el->next)
     AllocVar(table);
     table->name = el->name;
     table->elStat = el;
+    table->dtdElement = hashFindVal(dtdHash, table->name);
+    if (table->dtdElement == NULL)
+        errAbort("Table %s is in .spec but not in .dtd file", table->name);
     for (att = el->attList; att != NULL; att = att->next)
         {
 	AllocVar(field);
@@ -152,6 +169,10 @@ for (el = elList; el != NULL; el = el->next)
 	    field->name = textField;
 	field->table = table;
 	field->attStat = att;
+	field->dtdAttribute = findDtdAttribute(table->dtdElement, field->name);
+	if (field->dtdAttribute == NULL)
+	    errAbort("%s.%s is in .spec but not in .dtd file", 
+	    	table->name, field->name);
 	slAddTail(&table->fieldList, field);
 	}
     makePrimaryKey(table);
@@ -175,7 +196,7 @@ verbose(1, "%d elements in %s\n", slCount(elStatList), statsFileName);
 dtdParse(dtdFileName, globalPrefix, textField,
 	&dtdList, &dtdHash);
 verbose(1, "%d elements in %s\n", dtdHash->elCount, dtdFileName);
-tableList = elsIntoTables(elStatList);
+tableList = elsIntoTables(elStatList, dtdHash);
 verbose(1, "%d elements in tableList\n", slCount(tableList));
 
 
