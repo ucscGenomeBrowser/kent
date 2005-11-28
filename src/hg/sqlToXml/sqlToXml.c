@@ -7,9 +7,8 @@
 #include "options.h"
 #include "obscure.h"
 #include "jksql.h"
-#include "asParse.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.2 2005/11/28 04:42:10 kent Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.3 2005/11/28 05:14:16 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,7 +17,7 @@ errAbort(
   "sqlToXml - dump out all or part of a relational database to XML, guided\n"
   "by a dump specification.  See sqlToXml.doc for additional information.\n"
   "usage:\n"
-  "   sqlToXml database asFile dumpSpec output.xml\n"
+  "   sqlToXml database dumpSpec output.xml\n"
   "options:\n"
   "   -topTag=name - Give the top level XML tag the given name.  By\n"
   "               default it will be the same as the database name.\n"
@@ -151,20 +150,27 @@ lineFileClose(&lf);
 return root;
 }
 
+struct hash *tablesAndFields(struct sqlConnection *conn)
+/* Get hash of all tables.  Hash is keyed by table name.
+ * Hash values are lists of slNames. */
+{
+struct hash *hash = hashNew(0);
+struct slName *table, *tableList = sqlListTables(conn);
+for (table = tableList; table != NULL; table = table->next)
+    hashAdd(hash, table->name, sqlListFields(conn, table->name));
+return hash;
+}
+
 void rSqlToXml(struct sqlConnCache *cc, char *table, char *entryField,
-	char *query, struct hash *asHash, struct specTree *tree,
+	char *query, struct hash *tableHash, struct specTree *tree,
 	FILE *f, int depth)
 /* Recursively output XML */
 {
 struct sqlConnection *conn = sqlAllocConnection(cc);
 struct sqlResult *sr;
 char **row;
-struct asObject *as = hashFindVal(asHash, table);
-struct asColumn *col;
+struct slName *col, *colList = hashMustFindVal(tableHash, table);
 boolean subObjects = FALSE;
-
-if (as == NULL)
-    errAbort("Couldn't find %s in .as file", table);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -174,7 +180,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* Print non-joining columns as attributes. */
     spaceOut(f, depth*2);
     fprintf(f, "<%s", table);
-    for (col = as->columnList; col != NULL; col = col->next, rowIx+=1)
+    for (col = colList; col != NULL; col = col->next, rowIx+=1)
         {
 	char *val = row[rowIx];
 	struct specTree *branch = specTreeTarget(tree, col->name);
@@ -212,7 +218,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		safef(query, sizeof(query),
 		    "select * from %s where %s = %s", targetTable,
 			target, row[rowIx]);
-		rSqlToXml(cc, targetTable, targetField, query, asHash, branch, f, depth+1);
+		rSqlToXml(cc, targetTable, targetField, query, tableHash, branch, f, depth+1);
 		}
 	    }
 	spaceOut(f, depth*2);
@@ -223,25 +229,15 @@ sqlFreeResult(&sr);
 sqlFreeConnection(cc, &conn);
 }
 
-struct hash *asHashFile(char *fileName)
-/* Return hash full of definitions from .as file */
-{
-struct asObject *as, *asList = asParseFile(fileName);
-struct hash *hash = hashNew(0);
-for (as = asList; as != NULL; as = as->next)
-    hashAdd(hash, as->name, as);
-return hash;
-}
 
-
-void sqlToXml(char *database, char *asFile, char *dumpSpec, char *outputXml)
+void sqlToXml(char *database, char *dumpSpec, char *outputXml)
 /* sqlToXml - Given a database, .as file, .joiner file, and a sql select 
  * statement, dump out results as XML. */
 {
 struct sqlConnCache *cc = sqlNewConnCache(database);
 struct sqlConnection *conn = sqlAllocConnection(cc);
 struct specTree *tree = specTreeLoad(dumpSpec);
-struct hash *asHash = asHashFile(asFile);
+struct hash *tableHash = tablesAndFields(conn);
 FILE *f = mustOpen(outputXml, "w");
 char *topTag = optionVal("topTag", database);
 char *table = tree->field;	/* Top level tree stores table in field! */
@@ -267,11 +263,11 @@ if (!sqlTableExists(conn, table))
 sqlFreeConnection(cc, &conn);
 
 verbose(1, "%d tables in %s\n",
-	asHash->elCount,  asFile);
+	tableHash->elCount,  database);
 
 escaper = dyStringNew(0);
 fprintf(f, "<%s>\n", topTag);
-rSqlToXml(cc, table, "", query, asHash, tree, f, 1);
+rSqlToXml(cc, table, "", query, tableHash, tree, f, 1);
 fprintf(f, "</%s>\n", topTag);
 carefulClose(&f);
 }
@@ -280,9 +276,9 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 5)
+if (argc != 4)
     usage();
 tabSize = optionInt("tab", tabSize);
-sqlToXml(argv[1], argv[2], argv[3], argv[4]);
+sqlToXml(argv[1], argv[2], argv[3]);
 return 0;
 }
