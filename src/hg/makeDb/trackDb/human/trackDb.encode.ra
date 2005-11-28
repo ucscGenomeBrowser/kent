@@ -16,6 +16,7 @@ priority 52
 visibility hide
 type bed 6 +
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
 
 track encodeGencodeGeneOct05
@@ -463,6 +464,7 @@ visibility hide
 type bed 4 .
 priority 41
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
 track encodeBuFirstExon
 compositeTrack on
@@ -475,6 +477,7 @@ chromosomes chr11,chr13,chr15,chr16,chr19,chr2,chr5,chr7,chr9,chrX
 visibility hide
 type bed 12 +
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeBuFirstExonCerebrum
     subTrack encodeBuFirstExon
@@ -552,6 +555,7 @@ viewLimits 1.0:10.0
 windowingFunction mean
 autoScale Off
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeRikenCagePlus
     subTrack encodeRikenCage
@@ -618,6 +622,7 @@ visibility hide
 type bed 9 +
 itemRgb on
 exonArrowsDense on
+dataVersion ENCODE June 2005 Freeze
 
     track encodeStanfordPromotersAGS
     subTrack encodeStanfordPromoters
@@ -731,6 +736,7 @@ visibility hide
 useScore 1
 type bed 5 +
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
 track encodeYaleMASPlacRNATransMap
 compositeTrack on
@@ -746,6 +752,7 @@ minLimit 0
 maxLimit 10.536
 autoScale Off
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeYaleMASNB4RNANprotTMFWDMless36mer36bp
     subTrack encodeYaleMASPlacRNATransMap
@@ -805,6 +812,7 @@ chromosomes chr5,chr7,chrX,chr11,chr16,chr19,chr21,chr22
 visibility hide
 type bed 6 .
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeYaleMASNB4RNANProtTarsFWDMless36mer36bp
     subTrack encodeYaleMASPlacRNATars
@@ -1944,6 +1952,7 @@ visibility hide
 useScore 1
 type bed 12
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
 track encodeGisChipPetStat1
 compositeTrack on
@@ -1957,6 +1966,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr
 visibility hide
 useScore 1
 type bed 12
+dataVersion ENCODE June 2005 Freeze
 
     track encodeGisChipPetStat1Gif
     subTrack encodeGisChipPetStat1
@@ -1982,6 +1992,7 @@ maxHeightPixels 128:16:16
 minLimit 0
 maxLimit 16
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdChipRnapHela_f
     subTrack encodeLIChIP
@@ -2079,6 +2090,7 @@ maxHeightPixels 128:16:16
 minLimit 0
 maxLimit 16
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdChipHeLaH3H4dmH3K4_p0
     subTrack encodeLIChIPgIF
@@ -2192,6 +2204,7 @@ viewLimits -1:2
 windowingFunction mean
 autoScale off
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgChipSignal
     subTrack encodeUcsdNgChip
@@ -2232,6 +2245,7 @@ viewLimits -1:3
 windowingFunction mean
 autoScale off
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgValChipH3ac
     subTrack encodeUcsdNgValChip
@@ -2278,6 +2292,7 @@ minLimit 0
 maxLimit 114
 viewLimits 0:10
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeStanfordChipHCT116Sp1
     subTrack encodeStanfordChip
@@ -2332,6 +2347,7 @@ minLimit 0
 maxLimit 721474
 viewLimits 0:1000
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeStanfordChipSmoothedHCT116Sp1
     subTrack encodeStanfordChipSmoothed
@@ -2386,6 +2402,7 @@ altColor 200,44,44
 viewLimits 0.22:0.5
 autoScale Off
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
 track encodeUtexChip
 compositeTrack on
@@ -2529,6 +2546,7 @@ minLimit 0
 maxLimit 114
 viewLimits 0:10
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeStanfordMethBe2C
     subTrack encodeStanfordMeth
@@ -2595,6 +2613,7 @@ minLimit 0
 maxLimit 364088
 viewLimits 0:1000
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeStanfordMethSmoothedBe2C
     subTrack encodeStanfordMethSmoothed
@@ -2686,6 +2705,7 @@ color 60,75,60
 altColor 10,130,10
 type bed 3 .
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeUvaDnaRep0
     subTrack encodeUvaDnaRep
@@ -2727,6 +2747,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 3 .
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeUvaDnaRepEarly
     subTrack encodeUvaDnaRepSeg
@@ -2765,6 +2786,7 @@ priority 64.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3 .
+dataVersion ENCODE June 2005 Freeze
 
     track encodeUvaDnaRepOriginsPred
     subTrack encodeUvaDnaRepOrigins
@@ -2792,6 +2814,7 @@ spanList 1
 maxHeightPixels 128:16:16
 autoScale Off
 windowingFunction mean
+dataVersion ENCODE June 2005 Freeze
 
 
 track encodeTbaCons
@@ -2806,6 +2829,7 @@ maxHeightPixels 100:25:11
 autoScaleDefault Off
 windowingFunction mean
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE June 2005 Freeze
 
     track encodeTbaPhastCons
     subTrack encodeTbaCons
@@ -2850,6 +2874,7 @@ maxHeightPixels 100:25:11
 windowingFunction mean
 autoScaleDefault Off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE June 2005 Freeze
 
     track encodeMlaganPhastCons
     subTrack encodeMlaganCons
@@ -2904,6 +2929,7 @@ sGroup_placental rat mouse cow dog armadillo
 sGroup_mammal platypus 
 sGroup_vertebrate chicken 
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE June 2005 Freeze
 
 track binMCS95_encode
 shortLabel TBA MCSs Nov04
@@ -2914,6 +2940,7 @@ visibility hide
 color 0,60,120
 useScore 1
 type bed 5 .
+dataVersion ENCODE June 2005 Freeze
 
 track encode_MSA2_MLAGAN
 shortLabel MLAGAN Nov04
@@ -2930,6 +2957,7 @@ sGroup_placental rat mouse cow dog armadillo
 sGroup_mammal platypus 
 sGroup_vertebrate chicken 
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE June 2005 Freeze
 
 track encodeUnimiCst
 shortLabel UNIMI Cons Tags
@@ -2939,6 +2967,7 @@ priority 80.0
 color 0,60,120
 type bed 5 +
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE June 2005 Freeze
 
 track encodeReseqRegions
 shortLabel Reseq Regions
@@ -2958,6 +2987,7 @@ visibility hide
 itemRgb on
 type bed 9 + 
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE June 2005 Freeze
 
 track encodeSangerGenoExprAssociation
 shortLabel Sanger Assoc
@@ -2969,6 +2999,7 @@ visibility hide
 type bed5FloatScore
 useScore 1
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
 track encodeHapMapAlleleFreq
 compositeTrack on
@@ -2981,6 +3012,7 @@ visibility hide
 type bed 6 + 
 useScore 1
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeHapMapAlleleFreqCEU
     subTrack encodeHapMapAlleleFreq
@@ -3020,6 +3052,7 @@ minLimit 0
 maxLimit 16
 autoScaleDefault Off
 type wig 0.0 100.0
+dataVersion ENCODE June 2005 Freeze
 
     track encodeHapMapCovCEU
     subTrack encodeHapMapCov
@@ -3052,7 +3085,8 @@ group encodeAnalysis
 priority 501
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr8,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr9,chrX
 visibility hide
-type genePred 
+type genePred
+dataVersion ENCODE June 2005 Freeze 
 
 track encodePromoters
 shortLabel Promoters
@@ -3062,6 +3096,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 group encodeAnalysis
 visibility hide
 type bed 3 +
+dataVersion ENCODE June 2005 Freeze
 
 track encodeTransFrags
 compositeTrack on
@@ -3072,6 +3107,7 @@ priority 504
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4
+dataVersion ENCODE June 2005 Freeze
 
     track encodeTransFragsAffyDistal
     subTrack encodeTransFrags
@@ -3136,6 +3172,7 @@ priority 505
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4
+dataVersion ENCODE June 2005 Freeze
 
     track encodeNhgriDnaseHs2
     subTrack encodeDnase
@@ -3163,6 +3200,7 @@ group encodeAnalysis
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3 +
+dataVersion ENCODE June 2005 Freeze
 
 track encodeDNDS
 compositeTrack on
@@ -3173,6 +3211,7 @@ priority 507
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4 +
+dataVersion ENCODE June 2005 Freeze
 
     track encodeDNDSsmall
     subTrack encodeDNDS
@@ -3206,6 +3245,7 @@ group encodeAnalysis
 priority 508
 visibility hide
 type bed 4 .
+dataVersion ENCODE June 2005 Freeze
 
     track encodeGencodeIntronsProximal
     subTrack encodeGencodeRegions
@@ -3251,6 +3291,7 @@ group encodeAnalysis
 priority 508
 visibility hide
 type bed 5
+dataVersion ENCODE June 2005 Freeze
 
     track L1_LINE
     subTrack encodeWorkshopIntersections
@@ -3279,6 +3320,7 @@ priority 509
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 4
+dataVersion ENCODE June 2005 Freeze
 
     track encodeAllGencodeExonic
     subTrack encodeWorkshopSelections
@@ -3330,6 +3372,7 @@ visibility hide
 type bed 4 .
 # color 0,0,255
 # altColor 0,255,0
+dataVersion ENCODE June 2005 Freeze
 
     track encodeAffyRnaGm06990SitesIntronsProximal
     subTrack encodeNoncodingTransFrags
@@ -3700,6 +3743,7 @@ maxLimit 100
 autoScaleDefault Off
 maxHeightPixels 64:32:16
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
 searchTable encodeGencodeGeneKnownOct05
 searchType genePred
