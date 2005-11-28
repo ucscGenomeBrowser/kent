@@ -555,6 +555,7 @@ csh doGene.hg17.csh >&! doGene.hg17.log
     
 ##########################################################################
 # UCSD/LI Nimblegen Hela
+# Data submitted on hg17 for June freeze
 
     cd /cluster/data/encode/UCSD/nimblegen/2005-06-01
     foreach f (lab/Nim*/*.wig)
@@ -921,7 +922,6 @@ cat > loadSites.csh << 'EOF'
     csh loadSites.csh >&! loadSites.log
 
     # RNA Signal (6 subtracks)
-    #  NOTE: check for off-by-one error in these files
     set gbdbDir = /gbdb/hg17/encode/Affy/2005-10-03
     mkdir -p $gbdbDir/wib
     mkdir wib wig
@@ -1026,7 +1026,7 @@ cat > loadChipWig.csh << 'EOF'
     cd UNC/2005-10-10/lab
     # copy files from FTP dir
     # 8 .gff data files plus description file
-    # NOTE: these are actually .bed and .wig files!
+    # NOTE: these are actually .bed and .wig files
     # the .bed files are "peaks", and the .wig are "raw"
     # NOTE: these files are basically replicates,
     # we really want to show just the averages -- 
@@ -1056,8 +1056,8 @@ cat > loadChipWig.csh << 'EOF'
     ln -s /cluster/data/encode/UNC/2005-10-10/download $dir/UncFaire
 
     # averages 
-    ln -s lab/FAIREavg_data.gff Signal.wig
-    ln -s lab/FAIREavg_peaks.gff Peaks.wig
+    sed 's/span=50/span=38/' lab/FAIREavg_data.gff > Signal.wig
+    sed 's/span=50/span=38/' lab/FAIREavg_peaks.gff > Peaks.wig
     #_data.gff:  -2.61 to 3.63
     #_peaks.gff:   .47 to 3.63
     # using viewLimits: .2 to 2.6
@@ -1215,27 +1215,30 @@ cat > load.csh << 'EOF'
 #	save to file L1_LINE_Hg17.txt.gz, L2_LINE_Hg17.txt.gz
 #	Alu_SINE_Hg17.txt.gz
 ##########################################################################
-# UW/Regulome DnaseI HS (2005-10-28 kate)
-#       HS range 1.102-3.0
+# UW/Regulome DnaseI HS (2005-10-28, 11-17 kate)
+# NOTE: trimmed overlaps in baseline files, as per Scott Kuehn
 
     cd /cluster/data/encode/Regulome
-    mkdir -p 2005-10-14
-    cd 2005-10-14
+    mkdir -p 2005-11-16
+    cd 2005-11-16
 cat > load.csh << 'EOF'
     foreach cell (CACO2 CD34 GM HeLa HepG2 Huh7 K562 SKNSH)
-        hgLoadBed -strict hg17 encodeRegulomeDnaseQual$cell lab/$cell.qc.bed
-        hgLoadBed -strict hg17 encodeRegulomeDnaseAmpOdd$cell lab/$cell.oddAmps.bed
-        hgLoadBed -strict hg17 encodeRegulomeDnaseAmpEven$cell lab/$cell.evenAmps.bed
-        set table = encodeRegulomeDnaseSites$cell
-        echo $table
-        sed -e "s/bed5FloatScore/$table/" \
-            $HOME/kent/src/hg/lib/bed5FloatScore.sql > sites.sql
-        awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", \
-            $1, $2, $3, $4, ($5 * 300), $5}' lab/$cell.hs.bed | \
-                hgLoadBed -sqlTable=sites.sql hg17 $table stdin
+        echo $cell
+        hgLoadBed -noBin -strict hg17 \
+            encodeRegulomeQuality$cell lab/$cell.qc.bed
+        hgLoadBed -noBin -strict hg17 \
+            encodeRegulomeAmplOdd$cell lab/$cell.oddAmps.bed
+        hgLoadBed -noBin -strict hg17 \
+            encodeRegulomeAmplEven$cell lab/$cell.evenAmps.bed
+        hgLoadBed -noBin -strict -bedGraph=5 hg17 \
+            encodeRegulomeProb$cell lab/$cell.hs.bed
+        sort -k1,1 -k2,2n lab/$cell.baseline.bed | \
+            /cluster/data/encode/bin/scripts/trimOverlap.pl | \
+            hgLoadBed -noSort -noBin -strict -bedGraph=5 hg17 \
+                encodeRegulomeBase$cell stdin
     end
 'EOF'
-    csh load.csh >&! load.log
+    csh load.csh >&! load.log &
 
 ##########################################################################
 # UC Davis Chip/chip (new C-Myc data) (2005-10-29 kate)
@@ -1255,19 +1258,24 @@ cat > load.csh << 'EOF'
 # 5 bed files (TARs) and 5 wig files (Signal)
 # Replacements for June tracks (and drop individual 10 Neu samples)
 # Methods changed somewhat -- use new description from Joel's email
+# NOTE: adjusted start coord -1 to coorespond to their DART entries --
+# verifying with Joel
 
     cd /cluster/data/encode/yale/rna/2005-10-14
 cat > loadBed.csh << 'EOF'
     foreach f (lab/*.bed)
         set table = `echo $f:t:r | sed 's/_//g; s/CTRL/Untr/; s/ncbi35//; s/Placenta/Plac/; s/Neutrophil/Neut/'`
         echo $table
-        hgLoadBed -strict hg17 $table $f
+        sed 's/http.*acc=//' $f | \
+            awk '{printf "%s\t%d\t%d\t%s\n", $1, $2-1, $3, $4}' | \
+                hgLoadBed -strict hg17 $table stdin
     end
 'EOF'
     csh loadBed.csh >&! loadBed.log 
 
 # NOTE: trim overlaps in regions resulting from array design
 # Joel should have done this for us -- he will verify the files.
+# Also, need to adjust coords +1 as per J. Rozowsky
 cat > loadSig.csh << 'EOF'
     mkdir -p wig wib
     set gdir = /gbdb/hg17/encode/YaleRna/2005-10-14
@@ -1275,7 +1283,9 @@ cat > loadSig.csh << 'EOF'
     foreach f (lab/*.wig)
         set table = `echo $f:t:r | sed 's/_//g; s/Transcript/Trans/; s/CTRL/Untr/; s/ncbi35//; s/Placenta/Plac/; s/Neutrophil/Neut/'`
         echo $table
-        sort -k1,1 -k2,2n $f | \
+        grep "^chr" $f | \
+            awk '{printf "%s\t%d\t%d\t%s\n", $1, $2+1, $3+1, $4}' | \
+            sort -k1,1 -k2,2n | \
             /cluster/data/encode/bin/scripts/trimOverlap.pl > $table.trim
         wigEncode $table.trim wig/$table.wig wib/$table.wib
         hgLoadWiggle -pathPrefix=$gdir hg17 $table wig/$table.wig
@@ -1283,6 +1293,7 @@ cat > loadSig.csh << 'EOF'
     end
 'EOF'
     csh loadSig.csh >&! loadSig.log 
+    rm -f *.trim
     
 
 ##########################################################################
@@ -1359,6 +1370,8 @@ cat > load.csh << 'EOF'
     #cd /cluster/data/encode/UTexas/stage/2005-10-15
     cd /cluster/data/encode/UTexas/stage/2005-11-17
     grep '^chr' lab/myc.tag.prob.bed | \
+        awk '{printf("%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t0\t1\t%d,\t0\n", \
+                $1, $2, $3, $4, $5, $6, $2, $3, $3 - $2)}' | \
         hgLoadBed -noBin -strict hg17 encodeUtexStageMycHelaTags stdin
             # 813 elements
     grep '^chr' lab/myc.stage.peaks.bed | \
