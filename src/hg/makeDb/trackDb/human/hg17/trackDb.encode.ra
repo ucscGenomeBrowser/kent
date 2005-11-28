@@ -1572,6 +1572,7 @@ color 120,30,50
 altColor 50,0,0
 type bed 12
 useScore 1
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUtexStageMycHelaTags
     subTrack encodeUtexStage
@@ -2036,6 +2037,8 @@ sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephan
 sGroup_mammal monodelphis  platypus 
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE Oct 2005 Freeze
+
 
 track encodeTbaAlignAnno
 shortLabel TBA Alignment Anno
@@ -2054,6 +2057,7 @@ sGroup_mammal monodelphis  platypus
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 irows on
+dataVersion ENCODE Oct 2005 Freeze
 
 track encodeTbaElements
 compositeTrack on
@@ -2067,6 +2071,7 @@ visibility hide
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bed 5 .
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeTbaPhastConsEl
     subTrack encodeTbaElements
@@ -2106,6 +2111,7 @@ sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephan
 sGroup_mammal monodelphis  platypus 
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE Oct 2005 Freeze
 
 track encodeMlaganAlignAnno
 shortLabel MLAGAN Alignment Anno
@@ -2125,6 +2131,7 @@ sGroup_mammal monodelphis  platypus
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 irows on
+dataVersion ENCODE Oct 2005 Freeze
 
 track encodeMlaganElements
 compositeTrack on
@@ -2136,6 +2143,7 @@ visibility hide
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bed 5 .
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeMlaganPhastConsEl
     subTrack encodeMlaganElements
@@ -2175,6 +2183,7 @@ sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephan
 sGroup_mammal monodelphis  platypus 
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE Oct 2005 Freeze
 
 track encodeMavidAlignAnno
 shortLabel MAVID Alignment Anno
@@ -2194,6 +2203,7 @@ sGroup_mammal monodelphis  platypus
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 irows on
+dataVersion ENCODE Oct 2005 Freeze
 
 track encodeMavidElements
 compositeTrack on
@@ -2205,6 +2215,7 @@ visibility hide
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bed 5 .
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeMavidPhastConsEl
     subTrack encodeMavidElements
@@ -2237,6 +2248,7 @@ visibility hide
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bed 4 .
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeMsaElUnion
     shortLabel Loose
@@ -2271,6 +2283,7 @@ viewLimits .5:1
 maxHeightPixels 128:16:16
 autoScale on
 spanList 1
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeMsaAlignMean
     subTrack encodeMsaAlignComp
@@ -2312,6 +2325,7 @@ viewLimits 0:22
 spanList 1
 autoScale on
 maxHeightPixels 128:16:16
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeMsaAlignMavidUngapped
     subTrack encodeMsaAlignUngapped
