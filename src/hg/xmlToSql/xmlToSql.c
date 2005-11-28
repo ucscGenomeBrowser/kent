@@ -7,7 +7,7 @@
 #include "portable.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.4 2005/11/28 22:03:22 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.5 2005/11/28 22:17:49 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -43,6 +43,8 @@ struct table
     boolean madeUpPrimary;	/* True if we are creating primary key. */
     int lastId;			/* Last id value if we create key. */
     struct field *parentKey;	/* If non-null, field that links to parent. */
+    int usesAsChild;		/* Number of times this is a child of another
+                                 * table. */
     };
 
 struct field
@@ -183,21 +185,79 @@ slReverse(&tableList);
 return tableList;
 }
 
+void countUsesAsChild(struct dtdElement *dtdList, struct hash *tableHash)
+/* Count up how many times each table is used as a child. */
+{
+struct dtdElement *dtdEl;
+struct table *table;
+for (dtdEl = dtdList; dtdEl != NULL; dtdEl = dtdEl->next)
+    {
+    struct dtdElChild *child;
+
+    /* Make sure table exists in table hash - not really necessary
+     * for this function, but provides a further reality check that
+     * dtd and spec go together. */
+    table = hashFindVal(tableHash, dtdEl->name);
+    if (table == NULL)
+        errAbort("Table %s is in .dtd but not .stat file", dtdEl->name);
+
+    /* Loop through dtd's children and add counts. */
+    for (child = dtdEl->children; child != NULL; child = child->next)
+        {
+	table = hashMustFindVal(tableHash, child->name);
+	table->usesAsChild += 1;
+	}
+    }
+}
+
+struct table *findRootTable(struct table *tableList)
+/* Find root table (looking for one that has no uses as child) */
+{
+struct table *root = NULL, *table;
+for (table = tableList; table != NULL; table = table->next)
+    {
+    if (table->usesAsChild == 0)
+        {
+        if (root != NULL)
+            errAbort(".dtd file has two root tables: %s and %s", 
+	      root->name, table->name);
+	root = table;
+	}
+    }
+if (root == NULL)
+    errAbort("Can't find root table in dtd.  Circular linkage?");
+return root;
+}
+
 void xmlToSql(char *xmlFileName, char *dtdFileName, char *statsFileName,
 	char *outDir)
 /* xmlToSql - Convert XML dump into a fairly normalized relational database. */
 {
-struct elStat *elStatList = elStatLoadAll(statsFileName);
+struct elStat *elStatList = NULL;
 struct dtdElement *dtdList;
 struct hash *dtdHash;
 struct table *tableList = NULL, *table;
+struct hash *tableHash = hashNew(0);
+struct table *rootTable;
 
+/* Load up dtd and stats file. */
+elStatList = elStatLoadAll(statsFileName);
 verbose(1, "%d elements in %s\n", slCount(elStatList), statsFileName);
 dtdParse(dtdFileName, globalPrefix, textField,
 	&dtdList, &dtdHash);
 verbose(1, "%d elements in %s\n", dtdHash->elCount, dtdFileName);
+
+
+/* Build up our own data structures that merge dtd, and
+ * stats info, and have other stuff too. */
 tableList = elsIntoTables(elStatList, dtdHash);
-verbose(1, "%d elements in tableList\n", slCount(tableList));
+for (table = tableList; table != NULL; table = table->next)
+    hashAdd(tableHash, table->name, table);
+uglyf("Made tableList\n");
+countUsesAsChild(dtdList, tableHash);
+uglyf("Past countUsesAsChild\n");
+rootTable = findRootTable(tableList);
+uglyf("Root table is %s\n", rootTable->name);
 
 
 makeDir(outDir);
