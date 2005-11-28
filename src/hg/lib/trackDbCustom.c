@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.23 2005/11/04 01:26:06 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.24 2005/11/28 19:54:00 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -183,6 +183,23 @@ if (bt->settings == NULL)
     bt->settings = cloneString("");
 }
 
+char *trackDbInclude(char *raFile, char *line)
+/* Get include filename from trackDb line.  
+   Return NULL if line doesn't contain #include */
+{
+static char incFile[256];
+char *file;
+
+if (!startsWith("#include", line))
+    return NULL;
+splitPath(raFile, incFile, NULL, NULL);
+nextWord(&line);
+file = nextQuotedWord(&line);
+strcat(incFile, file);
+printf("found include file: %s\n", incFile);
+return cloneString(incFile);
+}
+
 struct trackDb *trackDbFromRa(char *raFile)
 /* Load track info from ra file into list. */
 {
@@ -191,6 +208,7 @@ char *line, *word;
 struct trackDb *btList = NULL, *bt;
 boolean done = FALSE;
 struct hash *compositeHash = hashNew(8);
+char *incFile;
 
 for (;;)
     {
@@ -208,17 +226,9 @@ for (;;)
             lineFileReuse(lf);
             break;
             }
-        else if (startsWith("#include", line))
+        else if ((incFile = trackDbInclude(raFile, line)) != NULL)
             {
-            struct trackDb *incTdb;
-            char incFile[256];
-            char *file;
-            splitPath(raFile, incFile, NULL, NULL);
-            nextWord(&line);
-            file = nextQuotedWord(&line);
-            strcat(incFile, file);
-            printf("found include file: %s\n", incFile);
-            incTdb = trackDbFromRa(incFile);
+            struct trackDb *incTdb = trackDbFromRa(incFile);
             btList = slCat(btList, incTdb);
             }
 	}

@@ -12,8 +12,9 @@
 #include "hash.h"
 #include "obscure.h"
 #include <regex.h>
+#include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.10 2005/05/16 23:13:40 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.11 2005/11/28 19:54:00 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -349,6 +350,7 @@ struct lineFile *lf = lineFileOpen(raFile, TRUE);
 char *line, *word;
 struct hgFindSpec *hfsList = NULL, *hfs;
 boolean done = FALSE;
+char *incFile;
 
 for (;;)
     {
@@ -365,6 +367,11 @@ for (;;)
 	   lineFileReuse(lf);
 	   break;
 	   }
+        else if ((incFile = trackDbInclude(raFile, line)) != NULL)
+            {
+            struct hgFindSpec *incHfs = hgFindSpecFromRa(incFile);
+            hfsList = slCat(hfsList, incHfs);
+            }
 	}
     if (done)
         break;

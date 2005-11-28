@@ -114,5 +114,9 @@ bool trackDbIsComposite(struct trackDb *tdb);
 bool trackDbIsSubtrack(struct trackDb *tdb);
 /* Determine if this is a subtrack. */
 
+char *trackDbInclude(char *raFile, char *line);
+/* Get include filename from trackDb line.  
+   Return NULL if line doesn't contain #include */
+
 #endif /* TRACKDB_H */
 
