@@ -5,7 +5,7 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.1 2005/11/27 04:57:28 kent Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.2 2005/11/28 17:54:49 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -14,7 +14,7 @@ errAbort(
   "autoDtd - Give this a XML document to look at and it will come up with a DTD\n"
   "to describe it.\n"
   "usage:\n"
-  "   autoDtd in.xml out.dtd\n"
+  "   autoDtd in.xml out.dtd out.stats\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -44,10 +44,13 @@ struct attribute
     {
     struct attribute *next;
     char *name;
+    int count;		/* Number of times we've seen this attribute. */
     boolean isOptional;	/* True if it's not always there. */
     boolean nonInt;	/* True if not an int. */
     boolean nonFloat;	/* True if not a number. */
     boolean seenThisRound;  /* True if seen this round. */
+    struct hash *values;	/* Hash of unique values. */
+    int maxLen;		/* Maximum length */
     };
 
 struct element
@@ -118,15 +121,21 @@ for (att = type->attributes; att != NULL; att = att->next)
 for (i=0; atts[i] != NULL; i += 2)
     {
     char *name = atts[i], *val = atts[i+1];
+    int valLen = strlen(val);
     att = hashFindVal(type->attHash, name);
     if (att == NULL)
         {
 	AllocVar(att);
 	hashAddSaveName(type->attHash, name, att, &att->name);
+	att->values = hashNew(16);
 	slAddTail(&type->attributes, att);
 	if (type->count != 0)
 	    att->isOptional = TRUE;
 	}
+    att->count += 1;
+    hashStore(att->values, val);
+    if (valLen > att->maxLen)
+        att->maxLen = valLen;
     if (!att->nonInt)
 	if (!isAllInt(val))
 	    att->nonInt = TRUE;
@@ -153,7 +162,7 @@ if (xap->stackDepth > 1)
 	el->type = type;
 	slAddTail(&parent->elements, el);
 	if (parent->count != 0)
-	    att->isOptional = TRUE;
+	    el->isOptional = TRUE;
 	}
     if (el->seenThisRound)
         el->isList = TRUE;
@@ -187,99 +196,123 @@ else
 	if (!isAllFloat(text))
 	    type->nonFloat = TRUE;
     }
+type->count += 1;
 topType = type;
 }
 
-void rWriteDtd(FILE *f, struct type *type, struct hash *uniqHash)
+void rWriteDtd(FILE *dtdFile, FILE *statsFile, struct type *type, struct hash *uniqHash)
 /* Recursively write out DTD. */
 {
 struct element *el;
 struct attribute *att;
 hashAdd(uniqHash, type->name, type);
-fprintf(f, "<!ELEMENT %s (\n", type->name);
+fprintf(dtdFile, "<!ELEMENT %s (\n", type->name);
 for (el = type->elements; el != NULL; el = el->next)
     {
-    fprintf(f, "\t%s", el->type->name);
+    fprintf(dtdFile, "\t%s", el->type->name);
     if (el->isList)
         {
 	if (el->isOptional)
-	    fprintf(f, "*");
+	    fprintf(dtdFile, "*");
 	else
-	    fprintf(f, "+");
+	    fprintf(dtdFile, "+");
 	}
     else
         {
 	if (el->isOptional)
-	    fprintf(f, "?");
+	    fprintf(dtdFile, "?");
 	}
     if (el->next != NULL || type->anyText)
-        fprintf(f, ",");
-    fprintf(f, "\n");
+        fprintf(dtdFile, ",");
+    fprintf(dtdFile, "\n");
     }
 if (type->anyText)
     {
-    fprintf(f, "\t");
+    fprintf(dtdFile, "\t");
     if (!type->nonInt)
-        fprintf(f, "#INT");
+        fprintf(dtdFile, "#INT");
     else if (!type->nonFloat)
-        fprintf(f, "#FLOAT");
+        fprintf(dtdFile, "#FLOAT");
     else
-        fprintf(f, "#PCDATA");
-    fprintf(f, "\n");
+        fprintf(dtdFile, "#PCDATA");
+    fprintf(dtdFile, "\n");
     }
-fprintf(f, ")>\n");
+fprintf(dtdFile, ")>\n");
+fprintf(statsFile, "%s %d\n", type->name, type->count);
 
 for (att = type->attributes; att != NULL; att = att->next)
     {
-    fprintf(f, "<!ATTLIST %s %s ", type->name, att->name);
+    char *dataType = NULL;
+    fprintf(dtdFile, "<!ATTLIST %s %s ", type->name, att->name);
     if (!att->nonInt)
-        fprintf(f, "INT");
+	{
+        fprintf(dtdFile, "INT");
+	dataType = "int";
+	}
     else if (!att->nonFloat)
-        fprintf(f, "FLOAT");
+	{
+        fprintf(dtdFile, "FLOAT");
+	dataType = "float";
+	}
     else
-        fprintf(f, "CDATA");
+	{
+        fprintf(dtdFile, "CDATA");
+	dataType = "string";
+	}
     if (att->isOptional)
-        fprintf(f, " #IMPLIED");
+        fprintf(dtdFile, " #IMPLIED");
     else
-	fprintf(f, " #REQUIRED");
-    fprintf(f, ">\n");
+	fprintf(dtdFile, " #REQUIRED");
+    fprintf(dtdFile, "> ");
+    fprintf(statsFile, "\t%s\t%d\t%s\t%d\t%d\n", att->name, att->maxLen,
+    	dataType, att->count, att->values->elCount);
     }
-fprintf(f, "\n");
+fprintf(dtdFile, "\n");
+fprintf(statsFile, "\n");
 
 /* Now recurse if we haven't written children yet. */
 for (el = type->elements; el != NULL; el = el->next)
     {
     if (!hashLookup(uniqHash, el->type->name))
         {
-	rWriteDtd(f, el->type, uniqHash);
+	rWriteDtd(dtdFile, statsFile, el->type, uniqHash);
 	}
     }
 }
 
-void writeDtd(char *fileName, struct type *type)
+void writeDtd(char *dtdFileName, char *statsFileName, char *xmlFileName, struct type *type)
 /* Write out DTD. */
 {
 struct hash *uniqHash = newHash(0);  /* Prevent writing dup defs for shared types. */
-FILE *f = mustOpen(fileName, "w");
-rWriteDtd(f, type, uniqHash);
+FILE *dtdFile = mustOpen(dtdFileName, "w");
+FILE *statsFile = mustOpen(statsFileName, "w");
+fprintf(dtdFile, "<!-- This file was created by autoXml based on %s -->\n\n", xmlFileName);
+fprintf(statsFile, "#Statistics on %s\n", xmlFileName);
+fprintf(statsFile, "#Format is:\n");
+fprintf(statsFile, "#<tag name>  <tag count>\n");
+fprintf(statsFile, "#      <attribute name> <max length> <type> <count> <unique count>\n");
+fprintf(statsFile, "\n");
+rWriteDtd(dtdFile, statsFile, type, uniqHash);
+carefulClose(&dtdFile);
+carefulClose(&statsFile);
 }
 
-void autoDtd(char *inXml, char *outDtd)
+void autoDtd(char *inXml, char *outDtd, char *outStats)
 /* autoDtd - Give this a XML document to look at and it will come up with a 
  * DTD to describe it.. */
 {
 struct xap *xap = xapNew(startHandler, endHandler, inXml);
 typeHash = newHash(0);
 xapParseFile(xap, inXml);
-writeDtd(outDtd, topType);
+writeDtd(outDtd, outStats, inXml, topType);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-autoDtd(argv[1], argv[2]);
+autoDtd(argv[1], argv[2], argv[3]);
 return 0;
 }
