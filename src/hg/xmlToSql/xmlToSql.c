@@ -5,8 +5,9 @@
 #include "options.h"
 #include "dtdParse.h"
 #include "portable.h"
+#include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.1 2005/11/28 20:34:06 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.2 2005/11/28 21:05:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,66 +30,6 @@ static struct optionSpec options[] = {
    {"textField", OPTION_STRING},
    {NULL, 0},
 };
-
-struct attStat
-/* Statistics on an xml attribute. */
-   {
-   struct attStat *next;
-   char *name;		/* Attribute name. */
-   int maxLen;		/* Maximum length. */
-   char *type;		/* int/float/string/none */
-   int count;		/* Number of times attribute seen. */
-   int uniqCount;	/* Number of unique values of attribute. */
-   };
-
-struct elStat
-/* Statistics on an xml element. */
-   {
-   struct elStat *next;	/* Next in list. */
-   char *name;		/* Element name. */
-   int count;		/* Number of times element seen. */
-   struct attStat *attList;	/* List of attributes. */
-   };
-
-struct elStat *elStatLoadAll(char *fileName)
-/* Read all elStats from file. */
-{
-struct elStat *list = NULL, *el = NULL;
-struct attStat *att;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *row[6];
-int wordCount;
-
-for (;;)
-   {
-   wordCount = lineFileChop(lf, row);
-   if (wordCount == 2)
-       {
-       AllocVar(el);
-       el->name = cloneString(row[0]);
-       el->count = lineFileNeedNum(lf, row, 1);
-       slAddHead(&list, el);
-       }
-    else if (wordCount == 5)
-       {
-       if (el == NULL)
-           errAbort("%s doesn't start with an element", fileName);
-       AllocVar(att);
-       att->name = cloneString(row[0]);
-       att->maxLen = lineFileNeedNum(lf, row, 1);
-       att->type = cloneString(row[2]);
-       att->count = lineFileNeedNum(lf, row, 3);
-       att->uniqCount = lineFileNeedNum(lf, row, 4);
-       slAddTail(&el->attList, att);
-       }
-    else if (wordCount == 0)
-       break;
-    else
-       errAbort("Don't understand line %d of %s", lf->lineIx, lf->fileName);
-    }
-slReverse(&list);
-return list;
-}
 
 void xmlToSql(char *xmlFileName, char *dtdFileName, char *statsFileName,
 	char *outDir)

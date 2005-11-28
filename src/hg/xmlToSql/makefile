@@ -4,7 +4,7 @@ L = -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-O = xmlToSql.o
+O = xmlToSql.o elStat.o
 
 xmlToSql: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/xmlToSql $O ${MYLIBS} $L
