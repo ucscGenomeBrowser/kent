@@ -44,7 +44,7 @@ struct xap *xapNew(void *(*startHandler)(struct xap *xap, char *name, char **att
 void xapFree(struct xap **pXp);
 /* Free up a parse stack. */
 
-void xapParse(struct xap *xap, char *fileName);
+void xapParseFile(struct xap *xap, char *fileName);
 /* Open up file and parse it all. */
 
 void xapError(struct xap *xap, char *format, ...);
