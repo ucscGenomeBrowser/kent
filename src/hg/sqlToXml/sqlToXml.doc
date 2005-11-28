@@ -20,11 +20,6 @@ create table customer (
      name varchar(100)  # Customer name
 );
 
-create table email (
-    customer int,	# The customer this is associated with
-    address varchar(100)  # Email addresses
-);
-
 create table item (
      id int,	# Primary key
      name varchar(100),  # Item name
@@ -145,7 +140,8 @@ Let's say that our ice cream shop has entered the digital
 age, and now wants to store email addresses for the customers.
 Some customers may have more than one email address, and some
 may not have any address at all.  We can handle this in a
-relational database with the following table definitions:
+relational database with the following table definitions,
+just adding the email table to the simple example:
 
 create table purchase (
     value float,  # Dollar value of purchase
@@ -169,7 +165,7 @@ create table item (
      weight float  # Weight in grams
 );
 
-Let's populate these tables with the following values.
+As before let's populate these tables with the following values.
 Note that George Washington has no email addresses.
 
 Purchase Table:
@@ -232,7 +228,7 @@ We'd like the following XML:
 
 The dumpSpec gets a little trickier.  We treat
 the email as a child of the buyer, and we link
-to it via the buyer.id field, which is connected
+to it via the customer.id field, which is connected
 to the email.customer field.
 
 purchase
