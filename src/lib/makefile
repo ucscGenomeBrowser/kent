@@ -7,7 +7,8 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     cda.o chain.o chainBlock.o chainConnect.o chainToAxt.o \
     chainToPsl.o cheapcgi.o codebias.o colHash.o common.o \
     dgRange.o diGraph.o dlist.o dnaLoad.o dnaMarkov.o \
-    dnaseq.o dnautil.o dnaMotif.o dystring.o emblParse.o errabort.o errCatch.o \
+    dnaseq.o dnautil.o dnaMotif.o dtdParse.o dystring.o \
+    emblParse.o errabort.o errCatch.o \
     fa.o ffAli.o ffScore.o filePath.o fixColor.o flydna.o fof.o \
     fuzzyShow.o gapCalc.o gdf.o gemfont.o gfNet.o gff.o gfxPoly.o \
     gifcomp.o gifdecomp.o gifLabel.o gifread.o gifwrite.o hash.o \
