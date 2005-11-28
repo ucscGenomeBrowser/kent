@@ -6,7 +6,7 @@
 #include "cheapcgi.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: autoXml.c,v 1.19 2005/11/21 03:57:35 kent Exp $";
+static char const rcsid[] = "$Id: autoXml.c,v 1.20 2005/11/28 02:09:14 kent Exp $";
 
 /* Variables that can be over-ridden from command line. */
 char *textField = "text";
@@ -34,32 +34,32 @@ errAbort(
   );
 }
 
-struct element
+struct dtdElement
 /* An element in an XML file. */
     {
-    struct element *next;	/* Next in list. */
+    struct dtdElement *next;	/* Next in list. */
     char *name;			/* Element Name. */
     char *mixedCaseName;	/* Name converted from EL_NAME or el-name to elName. */
-    struct elChild *children;	/* Child elements. */
-    struct attribute *attributes; /* Attributes. */
+    struct dtdElChild *children;	/* Child elements. */
+    struct dtdAttribute *attributes; /* Attributes. */
     int lineIx;			/* Line where element occurs. */
     char *textType;		/* Text between tags if any. */
     };
 
-struct elChild
+struct dtdElChild
 /* A reference to a child element. */
    {
-   struct elChild *next;	/* Next in list. */
+   struct dtdElChild *next;	/* Next in list. */
    char *name;			/* Name of element. */
    char copyCode;		/* '1', '+', '?', or '*' */
    boolean isOr;                /* Is this part of a ( n | m ) "or" list? */
-   struct element *el;		/* Element definition. */
+   struct dtdElement *el;		/* Element definition. */
    };
 
-struct attribute
+struct dtdAttribute
 /* An attribute of some sort. */
     {
-    struct attribute *next;	/* Next in list. */
+    struct dtdAttribute *next;	/* Next in list. */
     char *name;			/* Name of attribute. */
     char *type;			/* Element type - CDATA, INT, FLOAT, etc. */
     boolean required;		/* True if required. */
@@ -148,14 +148,14 @@ for (;;)
 return mixed;
 }
 
-struct element *parseElement(char *line, struct hash *elHash, struct lineFile *lf)
+struct dtdElement *parseElement(char *line, struct hash *elHash, struct lineFile *lf)
 /* Parse out <!ELEMENT line after <!ELEMENT. */
 {
 char *word, *s, *e;
 char *words[256];
 int wordCount, i;
-struct elChild *ec;
-struct element *el;
+struct dtdElChild *ec;
+struct dtdElement *el;
 boolean isOr;
 char orCopyCode = '?';
 boolean isSmall;
@@ -239,8 +239,8 @@ void parseAttribute(char *line, struct hash *elHash, struct lineFile *lf)
 /* Parse out <!ATTLIST line after <!ATTLIST. */
 {
 char *word;
-struct attribute *att;
-struct element *el;
+struct dtdAttribute *att;
+struct dtdElement *el;
 char *e;
 
 /* Get rid of trailing '>' */
@@ -285,12 +285,12 @@ else
 slAddTail(&el->attributes, att);
 }
 
-void fixupChildRefs(struct element *elList, struct hash *elHash, char *fileName)
+void fixupChildRefs(struct dtdElement *elList, struct hash *elHash, char *fileName)
 /* Go through all of elements children and make sure that the corresponding
  * elements are defined. */
 {
-struct element *el, *child;
-struct elChild *ec;
+struct dtdElement *el, *child;
+struct dtdElChild *ec;
 for (el = elList; el != NULL; el = el->next)
     {
     for (ec = el->children; ec != NULL; ec = ec->next)
@@ -341,18 +341,18 @@ for (;;)
     if (buf->string[buf->stringSize-1] == '>')
          break;
     dyStringAppendC(buf, ' ');
-    if (!lineFileNextReal(lf, &line))
+    if (!lineFileNext(lf, &line, NULL))
         errAbort("End of file %s inside of a tag.", lf->fileName);
     line = trimSpaces(line);
     }
 return buf->string;
 }
 
-void parseDtdx(char *fileName, struct element **retList, struct hash **retHash)
+void parseDtdx(char *fileName, struct dtdElement **retList, struct hash **retHash)
 /* Parse out a dtdx file into element list/hash. */
 {
 struct hash *elHash = newHash(8);
-struct element *elList = NULL, *el;
+struct dtdElement *elList = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
 struct dyString *buf = dyStringNew(0);
@@ -394,11 +394,11 @@ fixupChildRefs(elList, elHash, fileName);
 *retList = elList;
 }
 
-void dumpElement(struct element *el, FILE *f)
+void dumpElement(struct dtdElement *el, FILE *f)
 /* Dump info on element. */
 {
-struct elChild *ec;
-struct attribute *att;
+struct dtdElChild *ec;
+struct dtdAttribute *att;
 fprintf(f, "%s %s (", el->name, el->mixedCaseName);
 for (ec = el->children; ec != NULL; ec = ec->next)
     {
@@ -444,7 +444,7 @@ else
     return 's';
 }
 
-void freeFunctionPrototype(struct element *el, FILE *f, char *addSemi)
+void freeFunctionPrototype(struct dtdElement *el, FILE *f, char *addSemi)
 /* Put up function prototype for elFree function. */
 {
 char *name = el->mixedCaseName;
@@ -453,7 +453,7 @@ fprintf(f, "\n");
 fprintf(f, "/* Free up %s. */\n",  name);
 }
 
-void freeListFunctionPrototype(struct element *el, FILE *f, char *addSemi)
+void freeListFunctionPrototype(struct dtdElement *el, FILE *f, char *addSemi)
 /* Put up function prototype for elFreeList function. */
 {
 char *name = el->mixedCaseName;
@@ -463,7 +463,7 @@ fprintf(f, "/* Free up list of %s. */\n",  name);
 }
 
 
-void saveFunctionPrototype(struct element *el, FILE *f, char *addSemi)
+void saveFunctionPrototype(struct dtdElement *el, FILE *f, char *addSemi)
 /* Put up function prototype for elSave function. */
 {
 char *name = el->mixedCaseName;
@@ -472,7 +472,7 @@ fprintf(f, "\n");
 fprintf(f, "/* Save %s to file. */\n",  name);
 }
 
-void loadFunctionPrototype(struct element *el, FILE *f, char *addSemi)
+void loadFunctionPrototype(struct dtdElement *el, FILE *f, char *addSemi)
 /* Put up function prototype for elLoad function. */
 {
 char *name = el->mixedCaseName;
@@ -480,7 +480,7 @@ fprintf(f, "struct %s *%sLoad(char *fileName)%s\n", name, name, addSemi);
 fprintf(f, "/* Load %s from file. */\n", name);
 }
 
-void loadFunctionBody(struct element *el, FILE *f)
+void loadFunctionBody(struct dtdElement *el, FILE *f)
 /* Write body of elLoad function. */
 {
 fprintf(f, "{\n");
@@ -492,13 +492,13 @@ fprintf(f, "}\n");
 fprintf(f, "\n");
 }
 
-void makeH(struct element *elList, char *fileName)
+void makeH(struct dtdElement *elList, char *fileName)
 /* Produce C header file. */
 {
 FILE *f = mustOpen(fileName, "w");
-struct element *el;
-struct attribute *att;
-struct elChild *ec;
+struct dtdElement *el;
+struct dtdAttribute *att;
+struct dtdElChild *ec;
 char upcPrefix[128];
 
 fprintf(f, "/* %s.h %s */\n", prefix, fileComment);
@@ -565,10 +565,10 @@ fprintf(f, "#endif /* %s_H */\n", upcPrefix);
 fprintf(f, "\n");
 }
 
-boolean optionalChildren(struct element *el)
+boolean optionalChildren(struct dtdElement *el)
 /* Return TRUE if not sure whether you have children. */
 {
-struct elChild *ec;
+struct dtdElChild *ec;
 boolean required = FALSE, optional = FALSE;
 for (ec = el->children; ec != NULL; ec = ec->next)
     {
@@ -580,17 +580,17 @@ for (ec = el->children; ec != NULL; ec = ec->next)
 return !required && optional;
 }
 
-boolean isAtomic(struct element *el)
+boolean isAtomic(struct dtdElement *el)
 /* Return TRUE if by definition no children. */
 {
 return el->textType == NULL && el->children == NULL;
 }
 
-void saveFunctionBody(struct element *el, FILE *f)
+void saveFunctionBody(struct dtdElement *el, FILE *f)
 /* Write out save function body. */
 {
-struct elChild *ec;
-struct attribute *att;
+struct dtdElChild *ec;
+struct dtdAttribute *att;
 boolean optKids = optionalChildren(el);
 boolean isAtom = isAtomic(el);
 
@@ -717,11 +717,11 @@ fprintf(f, "}\n");
 fprintf(f, "\n");
 }
 
-void freeFunctionBody(struct element *el, FILE *f)
+void freeFunctionBody(struct dtdElement *el, FILE *f)
 /* Write out free function body. */
 {
-struct elChild *ec;
-struct attribute *att;
+struct dtdElChild *ec;
+struct dtdAttribute *att;
 
 fprintf(f, "{\n");
 fprintf(f, "struct %s *obj = *pObj;\n",  el->mixedCaseName);
@@ -752,7 +752,7 @@ fprintf(f, "}\n");
 fprintf(f, "\n");
 }
 
-void freeListFunctionBody(struct element *el, FILE *f)
+void freeListFunctionBody(struct dtdElement *el, FILE *f)
 /* Write out free function body. */
 {
 fprintf(f, "{\n");
@@ -767,10 +767,10 @@ fprintf(f, "}\n");
 fprintf(f, "\n");
 }
 
-boolean childMatch(struct elChild *children, struct element *el)
+boolean childMatch(struct dtdElChild *children, struct dtdElement *el)
 /* Return TRUE if any of children are el. */
 {
-struct elChild *ec;
+struct dtdElChild *ec;
 for (ec = children; ec != NULL; ec = ec->next)
     {
     if (ec->el == el)
@@ -779,11 +779,11 @@ for (ec = children; ec != NULL; ec = ec->next)
 return FALSE;
 }
 
-boolean anyParent(struct element *elList, struct element *child)
+boolean anyParent(struct dtdElement *elList, struct dtdElement *child)
 /* Return TRUE if anybody in elList could be a parent to child. */
 {
-struct element *el;
-struct elChild *ec;
+struct dtdElement *el;
+struct dtdElChild *ec;
 for (el = elList; el != NULL; el = el->next)
     {
     if (childMatch(el->children, child))
@@ -799,11 +799,11 @@ fprintf(f, "void *%sStartHandler(struct xap *xp, char *name, char **atts)%s\n", 
 fprintf(f, "/* Called by expat with start tag.  Does most of the parsing work. */\n");
 }
 
-void makeStartHandler(struct element *elList, FILE *f)
+void makeStartHandler(struct dtdElement *elList, FILE *f)
 /* Create function that gets called by expat at start of tag. */
 {
-struct element *el;
-struct attribute *att;
+struct dtdElement *el;
+struct dtdAttribute *att;
 
 startHandlerPrototype(f, "");
 fprintf(f, "{\n");
@@ -869,7 +869,7 @@ for (el = elList; el != NULL; el = el->next)
 	}
     if (anyParent(elList, el))
         {
-	struct element *parent;
+	struct dtdElement *parent;
 	boolean first = TRUE;
 	fprintf(f, "    if (depth > 1)\n");
 	fprintf(f, "        {\n");
@@ -916,11 +916,11 @@ fprintf(f, "void %sEndHandler(struct xap *xp, char *name)%s\n", prefix, addSemi)
 fprintf(f, "/* Called by expat with end tag.  Checks all required children are loaded. */\n");
 }
 
-void makeEndHandler(struct element *elList, FILE *f)
+void makeEndHandler(struct dtdElement *elList, FILE *f)
 /* Create function that gets called by expat at end of tag. */
 {
-struct element *el;
-struct elChild *ec;
+struct dtdElement *el;
+struct dtdElChild *ec;
 boolean first = TRUE;
 
 endHandlerPrototype(f, "");
@@ -985,7 +985,7 @@ fprintf(f, "\n");
 }
 
 
-void makeTestDriver(struct element *rootEl, FILE *f)
+void makeTestDriver(struct dtdElement *rootEl, FILE *f)
 /* Make main routine. */
 {
 char *symName = rootEl->mixedCaseName;
@@ -1003,13 +1003,13 @@ fprintf(f, "}\n");
 }
 
 
-void makeC(struct element *elList, char *fileName, char *incName)
+void makeC(struct dtdElement *elList, char *fileName, char *incName)
 /* Produce C code file. */
 {
 FILE *f = mustOpen(fileName, "w");
-struct element *el;
-struct attribute *att;
-struct elChild *ec;
+struct dtdElement *el;
+struct dtdAttribute *att;
+struct dtdElChild *ec;
 char upcPrefix[128];
 
 fprintf(f, "/* %s.c %s */\n", prefix, fileComment);
@@ -1044,7 +1044,7 @@ if (makeMain)
 void autoXml(char *dtdxFile, char *outRoot)
 /* autoXml - Generate structures code and parser for XML file from DTD-like spec. */
 {
-struct element *elList = NULL, *el;
+struct dtdElement *elList = NULL, *el;
 struct hash *elHash = NULL;
 char hName[512], cName[512];
 
