@@ -117,7 +117,9 @@ In addition there are a few command line options:
 THE DUMPSPEC FILE
 
 The dumpSpec file is a line-oriented file where the indentation is
-significant.  The first line just contains the name of the master
+significant.  Blank lines and lines starting with # are ignored.
+
+The first line of a dumpSpec just contains the name of the master
 table which guides the dump.  There will be one record in the dump
 for each row of this table.   Subsequent lines are indented and
 have two columns:
