@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.3 2005/11/28 05:14:16 kent Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.4 2005/11/28 06:51:40 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -53,7 +53,11 @@ struct specTree
    struct specTree *children;
    char *field;		/* Field in table to link on. 
                          * At top level is master table name instead.  */
+   int fieldIx;		/* Index of field in table. */
    char *target;	/* Target table.field  */
+   char *targetTable;	/* Table part of target */
+   char *targetField;	/* Field part of target */
+   boolean needsQuote;	/* Does join need value in quotes? */
    };
 
 struct specTree *specTreeTarget(struct specTree *parent, char *field)
@@ -65,6 +69,14 @@ for (tree = parent->children; tree != NULL; tree = tree->next)
 	break;
 return tree;
 }
+
+struct typedField
+/* A field - name and type */
+    {
+    struct typedField *next;
+    char *name;	/* Field name. */
+    char type;  /* Value is " or space. */
+    };
 
 int countIndent(char *s, int size)
 /* Count the number of spaces and tabs. */
@@ -88,12 +100,44 @@ for (i=0; i<size; ++i)
 return count;
 }
 
-void rSpecTreeLoad(struct lineFile *lf, struct specTree *parent)
+struct typedField *findField(struct typedField *list, char *name)
+/* Return field of given name, or NULL if none. */
+{
+struct typedField *field;
+for (field = list; field != NULL; field = field->next)
+    if (sameString(field->name, name))
+        break;
+return field;
+}
+
+
+boolean isStringField(struct hash *tableHash, char *tableDotField)
+/* Return true if given field is a string type field, needing quotations
+ * in sql. */
+{
+char *dot = strchr(tableDotField, '.');
+if (dot != NULL)
+    {
+    struct typedField *field, *fieldList;
+    *dot = 0;
+    fieldList = hashMustFindVal(tableHash, tableDotField);
+    field = findField(fieldList, dot+1);
+    *dot = '.';
+    if (field == NULL)
+        errAbort("No field %s", tableDotField);
+    return field->type == '"';
+    }
+return FALSE;
+}
+
+void rSpecTreeLoad(struct lineFile *lf, 
+	struct specTree *parent, struct hash *tableHash)
 /* Load all children of parent. */
 {
 char *line, *pastSpace;
 int indent, curIndent;
 struct specTree *branch = NULL;
+struct typedField *tf, *tfList = hashMustFindVal(tableHash, parent->targetTable);
 if (!lineFileNextReal(lf, &line))
     return;
 pastSpace = skipLeadingSpaces(line);
@@ -108,7 +152,7 @@ for (;;)
     if (indent > curIndent)
 	{
 	lineFileReuse(lf);
-	rSpecTreeLoad(lf, branch);
+	rSpecTreeLoad(lf, branch, tableHash);
 	}
     else if (indent < curIndent)
 	{
@@ -120,6 +164,7 @@ for (;;)
 	char *field = nextWord(&pastSpace);
 	char *target = nextWord(&pastSpace);
 	char *pastEnd = nextWord(&pastSpace);
+	char *dot, targetTable[256], *targetField;
 	if (target == NULL)
 	   errAbort("Missing target line %d of %s", lf->lineIx, lf->fileName);
 	if (pastEnd != NULL)
@@ -127,12 +172,30 @@ for (;;)
 	AllocVar(branch);
 	branch->field = cloneString(field);
 	branch->target = cloneString(target);
+	dot = strchr(target, '.');
+	if (dot != NULL)
+	    {
+	    /* Parse out tableName and fieldName. */
+	    targetField = dot+1;
+	    *dot = 0;
+	    safef(targetTable, sizeof(targetTable), "%s", target);
+	    *dot = '.';
+	    branch->targetTable = cloneString(targetTable);
+	    branch->targetField = cloneString(targetField);
+
+	    /* Get info on current field. */
+	    tf = findField(tfList, field);
+	    if (tf == NULL)
+		errAbort("Field %s.%s doesn't exists",  parent->targetTable, field);
+	    branch->needsQuote = (tf->type == '"');
+	    branch->fieldIx = slIxFromElement(tfList, tf);
+	    }
 	slAddTail(&parent->children, branch);
 	}
     }
 }
 
-struct specTree *specTreeLoad(char *fileName)
+struct specTree *specTreeLoad(char *fileName, struct hash *tableHash)
 /* Load up a spec-tree from a file. */
 {
 struct specTree *root = NULL;
@@ -143,8 +206,8 @@ AllocVar(root);
 if (!lineFileNextReal(lf, &line))
     lineFileUnexpectedEnd(lf);
 line = trimSpaces(line);
-root->field = cloneString(line);
-rSpecTreeLoad(lf, root);
+root->targetTable = cloneString(line);
+rSpecTreeLoad(lf, root, tableHash);
 
 lineFileClose(&lf);
 return root;
@@ -152,12 +215,35 @@ return root;
 
 struct hash *tablesAndFields(struct sqlConnection *conn)
 /* Get hash of all tables.  Hash is keyed by table name.
- * Hash values are lists of slNames. */
+ * Hash values are lists of typedField.   */
 {
 struct hash *hash = hashNew(0);
 struct slName *table, *tableList = sqlListTables(conn);
 for (table = tableList; table != NULL; table = table->next)
-    hashAdd(hash, table->name, sqlListFields(conn, table->name));
+    {
+    char query[256], **row;
+    struct sqlResult *sr;
+    struct typedField *fieldList = NULL, *field;
+    safef(query, sizeof(query), "describe %s", table->name);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	char *name = row[0];
+	char *type = row[1];
+	char code = '"';
+	if ( startsWith("int", type)  
+	  || startsWith("float", type)
+	  || startsWith("tinyint", type)
+	  || startsWith("smallint", type))
+	    code = ' ';
+	AllocVar(field);
+	field->name = cloneString(name);
+	field->type = code;
+	slAddHead(&fieldList, field);
+	}
+    slReverse(&fieldList);
+    hashAdd(hash, table->name, fieldList);
+    }
 return hash;
 }
 
@@ -169,9 +255,10 @@ void rSqlToXml(struct sqlConnCache *cc, char *table, char *entryField,
 struct sqlConnection *conn = sqlAllocConnection(cc);
 struct sqlResult *sr;
 char **row;
-struct slName *col, *colList = hashMustFindVal(tableHash, table);
+struct typedField *col, *colList = hashMustFindVal(tableHash, table);
 boolean subObjects = FALSE;
 
+verbose(2, "%s\n", query);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -215,9 +302,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 		    targetField += 1;
 		safef(targetTable, sizeof(targetTable), target);
 		chopSuffix(targetTable);
-		safef(query, sizeof(query),
-		    "select * from %s where %s = %s", targetTable,
-			target, row[rowIx]);
+		if (branch->needsQuote)
+		    safef(query, sizeof(query),
+		      "select * from %s where %s = \"%s\"", targetTable,
+		      target, row[branch->fieldIx]);
+		else
+		    safef(query, sizeof(query),
+		      "select * from %s where %s = %s", targetTable,
+		      target, row[branch->fieldIx]);
 		rSqlToXml(cc, targetTable, targetField, query, tableHash, branch, f, depth+1);
 		}
 	    }
@@ -236,11 +328,11 @@ void sqlToXml(char *database, char *dumpSpec, char *outputXml)
 {
 struct sqlConnCache *cc = sqlNewConnCache(database);
 struct sqlConnection *conn = sqlAllocConnection(cc);
-struct specTree *tree = specTreeLoad(dumpSpec);
 struct hash *tableHash = tablesAndFields(conn);
+struct specTree *tree = specTreeLoad(dumpSpec, tableHash);
 FILE *f = mustOpen(outputXml, "w");
 char *topTag = optionVal("topTag", database);
-char *table = tree->field;	/* Top level tree stores table in field! */
+char *table = tree->targetTable;
 char queryBuf[512], *query = NULL;
 
 if (optionExists("query"))
