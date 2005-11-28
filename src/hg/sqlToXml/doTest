@@ -1,1 +1,1 @@
-sqlToXml visiTest visiTest submissionSet 'select * from submissionSet where id < 5' test/visiGene.as test/visiGene.dumpSpec test/visiGene.xml
+sqlToXml visiTest test/visiGene.dumpSpec test/visiTest.xml
