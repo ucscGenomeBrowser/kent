@@ -9,7 +9,7 @@
 #include "dtdParse.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.14 2005/11/29 08:25:19 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.15 2005/11/29 10:08:31 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -48,6 +48,7 @@ struct table
     struct assocRef *parentAssocs;  /* Association table linking to parent. */
     struct fieldRef *parentKeys; /* References to possible parents. */
     boolean linkedParents;	/* True if we have linked parents. */
+    boolean isAssoc;		/* True if an association we've created. */
     int usesAsChild;		/* Number of times this is a child of another
                                  * table. */
     FILE *tabFile;		/* Tab oriented file associated with table */
@@ -338,6 +339,7 @@ if (!hashLookup(rUniqParentLinkHash, linkUniqName))
 	joinedName[upperAt] = toupper(joinedName[upperAt]);
 	assocTableName = makeUpTableName(tableHash, joinedName);
 	assocTable = tableNew(joinedName, NULL, NULL);
+	assocTable->isAssoc = TRUE;
 	addFieldToTable(assocTable, parentTable->name, 
 	    NULL, TRUE, TRUE, parentTable->primaryKey->isString);
 	addFieldToTable(assocTable, table->name, 
@@ -590,6 +592,31 @@ for (assoc = table->assocList; assoc != NULL; assoc = assoc->next)
 assocFreeList(&table->assocList);
 }
 
+void printType(FILE *f, struct attStat *att)
+/* Print out a good SQL type for attribute */
+{
+char *type = att->type;
+int len = att->maxLen;
+if (sameString(type, "int"))
+    {
+    if (len <= 1)
+        fprintf(f, "tinyint");
+    else if (len <= 3)
+        fprintf(f, "smallint");
+    else
+        fprintf(f, "int");
+    }
+else if (sameString(type, "string"))
+    {
+    if (len <= 64)
+        fprintf(f, "varchar(255)");
+    else
+        fprintf(f, "longtext");
+    }
+else
+    fprintf(f, "%s", type);
+}
+
 void writeCreateSql(char *fileName, struct table *table)
 /* Write out table definition. */
 {
@@ -600,14 +627,37 @@ fprintf(f, "CREATE TABLE %s (\n", table->name);
 for (field = table->fieldList; field != NULL; field = field->next)
     {
     struct attStat *att = field->attStat;
-    fprintf(f, "\t%s ", field->name);
+    fprintf(f, "    %s ", field->name);
     if (att == NULL)
-        fprintf(f, "int ");
+        fprintf(f, "int");
     else
-        fprintf(f, "%s ", att->type);
+	printType(f, att);
+    fprintf(f, " not null,");
     fprintf(f, "\n");
     }
-fprintf(f, ");");
+if (table->isAssoc)
+    {
+    for (field = table->fieldList; field != NULL; field = field->next)
+	{
+	fprintf(f, "    INDEX(%s)", field->name);
+	    {
+	    if (field->next != NULL)
+		fprintf(f, ",");
+	    fprintf(f, "\n");
+	    }
+	}
+    }
+else
+    {
+    struct field *primaryKey = table->primaryKey;
+    char *keyName = primaryKey->name;
+    if (primaryKey->isString)
+	fprintf(f, "    PRIMARY KEY(%s(12))\n", table->primaryKey->name);
+    else
+	fprintf(f, "    PRIMARY KEY(%s)\n", table->primaryKey->name);
+    }
+
+fprintf(f, ");\n");
 
 carefulClose(&f);
 }
