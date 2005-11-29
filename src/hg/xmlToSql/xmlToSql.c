@@ -9,7 +9,7 @@
 #include "dtdParse.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.11 2005/11/29 06:03:01 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.12 2005/11/29 07:06:46 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -46,7 +46,8 @@ struct table
     boolean madeUpPrimary;	/* True if we are creating primary key. */
     int lastId;			/* Last id value if we create key. */
     struct table *parentAssociation;  /* Association table linking to parent. */
-    struct field *parentKey;	/* If non-null, field that links to parent. */
+    struct fieldRef *parentKeys; /* References to possible parents. */
+    boolean linkedParents;	/* True if we have linked parents. */
     int usesAsChild;		/* Number of times this is a child of another
                                  * table. */
     FILE *tabFile;		/* Tab oriented file associated with table */
@@ -67,6 +68,13 @@ struct field
     boolean isPrimaryKey;	/* True if it's table's primary key. */
     boolean isString;		/* Truf if it's a string field. */
     struct dyString *dy;	/* Current value of field during parsing. */
+    };
+
+struct fieldRef
+/* A reference to a field. */
+    {
+    struct fieldRef *next;
+    struct field *field;
     };
 
 struct field *findField(struct table *table, char *name)
@@ -100,7 +108,7 @@ char buf[128];
 int i;
 if (findField(table, name) == NULL)
     return name;
-warn("%s already exists in %s\n", name, table->name);
+warn("%s already exists in %s", name, table->name);
 for (i=2; ; ++i)
     {
     safef(buf, sizeof(buf), "%s%d", name, i);
@@ -287,43 +295,45 @@ struct table *table = hashMustFindVal(tableHash, element->mixedCaseName);
 struct table *parentTable = hashMustFindVal(tableHash, parent->mixedCaseName);
 struct field *field;
 
-/* Add new field in parent. */
-if (elAsChild->copyCode == '1' || elAsChild->copyCode == '?')
-    {
-    if (table->parentKey == NULL)
-	{
-	field = addFieldToTable(parentTable, 
-		makeUpFieldName(parentTable, element->name), NULL, TRUE, TRUE,
-		parentTable->primaryKey->isString);
-	table->parentKey = field;
-	}
-    /* We need to get fancier here if there are multiple parent
-     * tables. */
-    }
-else
-    {
-    /* Need to handle association here. */
-    struct table *assocTable;
-    char joinedName[256];
-    char *assocTableName;
-    int upperAt;
-    safef(joinedName, sizeof(joinedName), "%sTo%s", parentTable->name,
-      table->name);
-    upperAt = strlen(parentTable->name) + 2;
-    joinedName[upperAt] = toupper(joinedName[upperAt]);
-    assocTableName = makeUpTableName(tableHash, joinedName);
-    uglyf("Theoretically making association %s\n", assocTableName);
-    assocTable = tableNew(joinedName, NULL, NULL);
-    addFieldToTable(assocTable, parentTable->name, 
-        NULL, TRUE, TRUE, parentTable->primaryKey->isString);
-    addFieldToTable(assocTable, table->name, 
-        NULL, TRUE, TRUE, table->primaryKey->isString);
-    slAddHead(pTableList, assocTable);
-    table->parentAssociation = assocTable;
-    }
-
 for (child = element->children;  child != NULL; child = child->next)
     rAddParentKeys(element, child, tableHash, pTableList);
+
+/* Add new field in parent. */
+if (!table->linkedParents)
+    {
+    if (elAsChild->copyCode == '1' || elAsChild->copyCode == '?')
+	{
+	struct fieldRef *ref;
+	field = addFieldToTable(parentTable, 
+		    makeUpFieldName(parentTable, element->name), 
+		    NULL, TRUE, TRUE,
+		    parentTable->primaryKey->isString);
+	AllocVar(ref);
+	ref->field = field;
+	slAddHead(&table->parentKeys, ref);
+	}
+    else
+	{
+	/* Need to handle association here. */
+	struct table *assocTable;
+	char joinedName[256];
+	char *assocTableName;
+	int upperAt;
+	safef(joinedName, sizeof(joinedName), "%sTo%s", parentTable->name,
+	  table->name);
+	upperAt = strlen(parentTable->name) + 2;
+	joinedName[upperAt] = toupper(joinedName[upperAt]);
+	assocTableName = makeUpTableName(tableHash, joinedName);
+	assocTable = tableNew(joinedName, NULL, NULL);
+	addFieldToTable(assocTable, parentTable->name, 
+	    NULL, TRUE, TRUE, parentTable->primaryKey->isString);
+	addFieldToTable(assocTable, table->name, 
+	    NULL, TRUE, TRUE, table->primaryKey->isString);
+	slAddHead(pTableList, assocTable);
+	table->parentAssociation = assocTable;
+	}
+    table->linkedParents = TRUE;
+    }
 }
 
 void addParentKeys(struct dtdElement *dtdRoot, struct hash *tableHash,
@@ -474,7 +484,9 @@ void endHandler(struct xap *xap, char *name)
 /* Called at end of a tag */
 {
 struct table *table = xap->stack->object;
+struct table *parentTable = xap->stack[1].object;
 struct field *field;
+struct fieldRef *ref;
 struct dyString *dy = table->uniqString;
 char *text = skipLeadingSpaces(xap->stack->text->string);
 char *primaryKeyVal = NULL;
@@ -528,13 +540,23 @@ if (primaryKeyVal == NULL)
     fprintf(table->tabFile, "\n");
     hashAdd(table->uniqHash, dy->string, cloneString(primaryKeyVal));
     }
-if (table->parentKey != NULL)
+#ifdef OLD
+if (table->parentKeys != NULL)
     {
     dyStringAppend(table->parentKey->dy, primaryKeyVal);
     }
-else if (table->parentAssociation != NULL)
+#endif /* OLD */
+for (ref = table->parentKeys; ref != NULL; ref = ref->next)
     {
-    struct table *parentTable = xap->stack[1].object;
+    field = ref->field;
+    if (field->table == parentTable)
+        {
+	dyStringAppend(field->dy, primaryKeyVal);
+	break;
+	}
+    }
+if (table->parentAssociation != NULL)
+    {
     assoc = assocNew(table->parentAssociation->tabFile,
         primaryKeyVal);
     slAddHead(&parentTable->assocList, assoc);
