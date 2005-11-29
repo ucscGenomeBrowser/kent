@@ -5,7 +5,7 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.3 2005/11/29 17:23:42 kent Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.4 2005/11/29 19:42:54 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,11 +16,12 @@ errAbort(
   "usage:\n"
   "   autoDtd in.xml out.dtd out.stats\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -tree=out.tree - Output tag tree.\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"tree", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -304,7 +305,8 @@ for (el = type->elements; el != NULL; el = el->next)
     }
 }
 
-void writeDtd(char *dtdFileName, char *statsFileName, char *xmlFileName, struct type *type)
+void writeDtd(char *dtdFileName, char *statsFileName, char *xmlFileName, 
+	struct type *type)
 /* Write out DTD. */
 {
 struct hash *uniqHash = newHash(0);  /* Prevent writing dup defs for shared types. */
@@ -322,7 +324,37 @@ carefulClose(&dtdFile);
 carefulClose(&statsFile);
 }
 
-void autoDtd(char *inXml, char *outDtd, char *outStats)
+void rWriteTree(FILE *f, struct type *type, struct hash *uniqHash, int level)
+/* Write out type and it's children. */
+{
+struct attribute *att;
+struct element *el;
+
+spaceOut(f, level*2);
+if (level > 20)
+    {
+    fprintf(f, "%s...\n", type->name);
+    }
+else
+    {
+    fprintf(f, "%s", type->name);
+    fprintf(f, "\n");
+    for (el = type->elements; el != NULL; el = el->next)
+	rWriteTree(f, el->type, uniqHash, level+1);
+    }
+}
+
+void writeTree(char *fileName, struct type *root)
+/* Write out type tree to file. */
+{
+struct hash *uniqHash = newHash(0);  /* Prevent writing dup defs. */
+FILE *f = mustOpen(fileName, "w");
+rWriteTree(f, root, uniqHash, 0);
+carefulClose(&f);
+}
+
+
+void autoDtd(char *inXml, char *outDtd, char *outStats, char *treeFileName)
 /* autoDtd - Give this a XML document to look at and it will come up with a 
  * DTD to describe it.. */
 {
@@ -330,14 +362,18 @@ struct xap *xap = xapNew(startHandler, endHandler, inXml);
 typeHash = newHash(0);
 xapParseFile(xap, inXml);
 writeDtd(outDtd, outStats, inXml, topType);
+if (treeFileName != NULL)
+    writeTree(treeFileName, topType);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+char *treeFileName = NULL;
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
-autoDtd(argv[1], argv[2], argv[3]);
+treeFileName = optionVal("tree", treeFileName);
+autoDtd(argv[1], argv[2], argv[3], treeFileName);
 return 0;
 }
