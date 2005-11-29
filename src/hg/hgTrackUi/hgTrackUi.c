@@ -27,7 +27,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.222 2005/11/22 20:08:17 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.223 2005/11/29 18:19:29 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -255,6 +255,22 @@ radioButton("ldOut", ldOut, "none");
 printf("&nbsp; - Color for outlines<BR>&nbsp;&nbsp;");
 }
 
+void hgMutIdControls (struct trackDb *tdb) 
+/* print the controls for the label choice */
+{
+char varName[64];
+char *mutLabel;
+safef(varName, sizeof(varName), "%s.label", tdb->tableName);
+mutLabel = cartUsualString(cart, varName, "HGVS name");
+printf("<B>Label:</B> ");
+radioButton(varName, mutLabel, "HGVS name");
+radioButton(varName, mutLabel, "Common name");
+radioButton(varName, mutLabel, "ID");
+radioButton(varName, mutLabel, "all");
+radioButton(varName, mutLabel, "none");
+printf("<BR />\n");
+}
+
 void hgMutUi(struct trackDb *tdb)
 /* print UI for human mutation filters */
 {
@@ -264,6 +280,7 @@ struct sqlResult *sr;
 struct sqlConnection *conn = hAllocConn();
 char srcButton[128];
 
+hgMutIdControls(tdb);
 printf("<BR /><B>Exclude mutation type</B><BR />");
 for (i = 0; i < variantTypeSize; i++)
     {
@@ -279,7 +296,7 @@ for (i = 0; i < variantLocationSize; i++)
     }
 
 printf("<BR /><B>Exclude data source</B><BR />");
-sr = sqlGetResult(conn, "select distinct(src) from hgMut");
+sr = sqlGetResult(conn, "select distinct(src) from hgMutSrc order by src");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     safef(srcButton, sizeof(srcButton), "hgMut.filter.src.%s", row[0]);
@@ -290,13 +307,13 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 
 /* print key for colors */
-printf("<BR /><B>Color key (by mutation type)</B><BR />");
-printf("substitution = purple<BR />");
-printf("insertion = green<BR />");
-printf("deletion = blue<BR />");
-printf("duplication = orange<BR />");
-printf("complex = red<BR />");
-printf("unknown = black<BR />\n");
+//printf("<BR /><B>Color key (by mutation type)</B><BR />");
+//printf("substitution = purple<BR />");
+//printf("insertion = green<BR />");
+//printf("deletion = blue<BR />");
+//printf("duplication = orange<BR />");
+//printf("complex = red<BR />");
+//printf("unknown = black<BR />\n");
 //printf("Darker shades of the colors indicate that there is a link to clinical data available.<BR />\n");
 }
 
