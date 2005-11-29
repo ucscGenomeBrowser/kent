@@ -908,7 +908,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     rm -r axtChain/{chain,net}/ axtNet.orig
 
 
-# MAKE THIS THE DEFAULT ASSEMBLY WHEN THERE ARE ENOUGH TRACKS (TODO 8/?/05 angie)
+# MAKE THIS THE DEFAULT ASSEMBLY WHEN THERE ARE ENOUGH TRACKS (DONE 11/28/05 angie)
     hgsql -h genome-testdb hgcentraltest \
       -e 'update defaultDb set name = "canFam2" where genome = "Dog";'
 
