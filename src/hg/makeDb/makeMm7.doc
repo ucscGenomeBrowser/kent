@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.31 2005/11/21 21:11:06 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.32 2005/11/29 01:09:48 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -718,7 +718,8 @@ done
     cp -p nib/*.nib /cluster/bluearc/mm7/nib
 
 #############################################################################
-# BLASTZ SELF experiment 3 (WORKING - 2005-11-17 - Hiram)
+# BLASTZ SELF experiment 3 (DONE - 2005-11-17 - 2005-11-22 - Hiram)
+#	re-scoring to chain min score of 10,000 to cut down on volumn of data
     ssh pk
     mkdir /cluster/data/mm7/bed/blastzSelf.2005-11-17
     cd /cluster/data/mm7/bed/blastzSelf.2005-11-17
@@ -764,11 +765,32 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
 	-stop=net \
 	`pwd`/DEF > blastz.out 2>&1 &
-XXXX - Started 2005-11-17
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
 	-continue=cat -stop=net \
 	`pwd`/DEF > cat-to-net.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	-continue=chainMerge -stop=net \
+	`pwd`/DEF > chainMerge-to-net.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	-continue=load -stop=load \
+	`pwd`/DEF > load.out 2>&1 &
+
+    ssh kolossus
+    cd /cluster/data/mm7/bed/blastzSelf.2005-11-17
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainSelfLink >fb.mm7.chainSelfLink 2>&1
+    cat fb.mm7.chainSelfLink
+    #	409297278 bases of 2583394090 (15.843%) in intersection
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	-continue=download \
+	`pwd`/DEF > download.out 2>&1 &
 
 #############################################################################
 # BLASTZ SELF experiment 1 (DONE - 2005-09-14 - 2005-09-17 - Hiram)
@@ -816,8 +838,6 @@ TMPDIR=/scratch/tmp
 	| sort -k2,2nr > S2ctg.len
     twoBitInfo /cluster/bluearc/mm7/mm7.2bit stdout | sort -k2,2nr > S2.len
 
-XXXX - working on the modifications to doBlastzChainNet.pl 2005-08-29
-
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk \
 	`pwd`/DEF > blastz.out 2>&1 &
@@ -826,7 +846,6 @@ XXXX - working on the modifications to doBlastzChainNet.pl 2005-08-29
 	-bigClusterHub=pk \
 	-stop=blastz \
 	`pwd`/DEF > blastz.out 2>&1 &
-XXX - Started - 2005-09-14 22:26
     #	real    1573m31.130s
     #	user    0m0.081s
     #	sys     0m0.071s
@@ -862,8 +881,6 @@ XXX - Started - 2005-09-14 22:26
     #	user    32m4.830s
     #	sys     11m42.215s
     #	417927047 bases of 2597150411 (16.092%) in intersection
-
-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
     time featureBits mm7 netSelf
     # 2336281173 bases of 2597150411 (89.956%) in intersection
@@ -1356,7 +1373,6 @@ TMPDIR=/scratch/tmp
     time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
 	chainHg17Link linSpecRepNotHg \
 	> fbMm7.chainHg17Link.linSpecRepNotHg 2>&1
-XXXX - working
     time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
 	chainHg17noLSRLink linSpecRepNotHg \
 	> fbMm7.chainHg17noLSRLink.linSpecRepNotHg 2>&1
@@ -1513,6 +1529,28 @@ TMPDIR=/scratch/tmp
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
     
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=download \
+	`pwd`/DEF > rescoreChainDownloadSwap.out 2>&1 &
+
+    #	Measurements:
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzRn3.2005-11-14
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainRn3Link > fb.mm7.chainRn3Link.rescore 2>&1
+    cat fb.mm7.chainRn3Link.rescore
+    #	1775924100 bases of 2583394090 (68.744%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits rn3 \
+	chainMm7Link > fb.rn3.chainMm7Link.rescore 2>&1
+    cat fb.rn3.chainMm7Link.rescore
+    #	1781501323 bases of 2571104688 (69.289%) in intersection
+
 #########################################################################
 # BLASTZ RAT Rn3 (DONE - 2005-09-16 - 2005-10-18 - Hiram)
     ssh kkstore02
@@ -1623,7 +1661,6 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-swap -continue=download -bigClusterHub=pk -fileServer=kolossus \
 	`pwd`/DEF > swap-download-clean.out 2>&1 &
-XXXX
 
     ssh kolossus
     time HGDB_CONF=~/.hg.conf.read-only featureBits rn3 chainMm7Link
@@ -2087,7 +2124,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #	67616 cpgIslandGgfAndyMasked.bed
 
 #########################################################################
-# BLASTZ Cow bosTau2 (WORKING - 2005-09-20 - Hiram)
+# BLASTZ Cow bosTau2 (DONE - 2005-09-20 - 2005-11-22 - Hiram)
     ssh kkstore02
     #	There is no need to use the chrBin0 in this alignment
     #	Create a bosTau2 2bit file without the chrBin0 sequence
@@ -2142,7 +2179,6 @@ TMPDIR=/scratch/tmp
     time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
-XXX - STARTED - 2005-10-07 - 12:44
     time /cluster/bin/scripts/doBlastzChainNet.pl \
 	-continue=cat -bigClusterHub=pk \
 	`pwd`/DEF > continue.cat.out 2>&1 &
@@ -2249,10 +2285,28 @@ XXX - STARTED - 2005-10-07 - 12:44
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
+    #	Measurements:
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzBosTau2.2005-11-14
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainBosTau2Link > fb.mm7.chainBosTau2Link.rescore 2>&1
+    cat fb.mm7.chainBosTau2Link.rescore
+    #	692466702 bases of 2583394090 (26.805%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits bosTau2 \
+	chainMm7Link > fb.bosTau2.chainMm7Link.rescore 2>&1
+    cat fb.bosTau2.chainMm7Link.rescore
+    #	678966583 bases of 2812203870 (24.144%) in intersection
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	-swap -continue=net -stop=load \
-	`pwd`/DEF > rescoreChainSwap.net-to-load.out 2>&1 &
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=download \
+	`pwd`/DEF > rescoreChainSwapDownload.out 2>&1 &
 
 #############################################################################
 # BLASTZ CHICKEN galGal2 - second time (DONE - 2005-11-14 - 2005-11-21 - Hiram)
@@ -2609,8 +2663,6 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/monDom2/bed/blastz.mm7.swap/axtChain
     chainSplit -lump=1000 lump1000 monDom2.mm7.all.chain.gz
 
-XXXX  2005-10-04 09:25
-
     ssh kolossus
     cd  /cluster/data/mm7/bed/blastzMonDom1.2005-10-03
     
@@ -2664,6 +2716,16 @@ XXXX  2005-10-04 09:25
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -continue=net -stop=load \
+	`pwd`/DEF > rescoreChainSwap.net-to-load.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
 
 ##############################################################################
 # BLASTZ FROG Xenopus tropicalis (DONE - 2005-10-03 - 2005-11-21 - Hiram)
@@ -2753,7 +2815,6 @@ TMPDIR=/scratch/tmp
     time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 -chainMinScore=5000 \
 	-swap -bigClusterHub=pk -continue=cat \
 	`pwd`/DEF > swap.out 2>&1 &
-XXXX
     #	70 minutes
     #	Measurements:
 
@@ -3669,17 +3730,17 @@ xenopus_xenTro1:0.782453):0.156067,
 #                         featureBits chainLink measures
 #                                           chainMm7Link   chain   linearGap
 #    distance                       on Mm7      on other   minScore
-#  1  0.1587 - rat rn3            (% 69.61x)  (% 70.11x)   3000     medium
+#  1  0.1587 - rat rn3            (% 68.744)  (% 69.289)   3000     medium
 #  2  0.4677 - human hg17         (% 38.571)  (% 34.706)   3000     medium
-#  3  0.4686 - chimp panTro1      (% 35.085)  (% 33.28x)   3000     medium
-#  4  0.4960 - macaque rheMac1    (% 34.31x)  (% 32.42x)   3000     medium
-#  5  0.5131 - rabbit oryCun1     (% 19.49x)  (% 24.38x)   3000     medium
-#  6  0.6142 - armadillo dasNov1  (% 16.97x)  (% 20.60x)   3000     medium
-#  7  0.6230 - dog canFam2        (% 32.266)  (% 32.41x)   3000     medium
-#  8  0.6256 - elephant loxAfr1   (% 18.58x)  (% 20.80x)   3000     medium
-#  9  0.6344 - cow bosTau2        (% 26.805)  (% 24.44x)   3000     medium
-# 10  0.7805 - tenrec echTel1     (% 11.46x)  (% 14.36x)   5000     loose
-# 11  1.0698 - opossum monDom2    (%  8.50x)  (%  6.31x)   5000     loose
+#  3  0.4686 - chimp panTro1      (% 35.100)  (% 32.910)   3000     medium
+#  4  0.4960 - macaque rheMac1    (% 33.898)  (% 32.023)   3000     medium
+#  5  0.5131 - rabbit oryCun1     (% 19.319)  (% 24.164)   3000     medium
+#  6  0.6142 - armadillo dasNov1  (% 16.838)  (% 20.60x)   3000     medium
+#  7  0.6230 - dog canFam2        (% 32.266)  (% 34.135)   3000     medium
+#  8  0.6256 - elephant loxAfr1   (% 18.381)  (% 20.555)   3000     medium
+#  9  0.6344 - cow bosTau2        (% 26.805)  (% 24.144)   3000     medium
+# 10  0.7805 - tenrec echTel1     (% 11.421)  (% 14.36x)   5000     loose
+# 11  1.0698 - opossum monDom2    (%  8.501)  (%  6.31x)   5000     loose
 # 12  1.3425 - chicken galGal2    (%  3.071)  (%  6.715)   5000     loose
 # 13  1.7936 - frog xenTro1       (%  2.418)  (%  4.296)   5000     loose
 # 14  2.0157 - tetraodon tetNig1  (%  1.956)  (% 13.661)   5000     loose
@@ -3852,7 +3913,6 @@ cat  << 'EOF' > template
     para create jobList
     para try; para check
     para push
-XXXX - running 2005-10-27
 
 # Completed: 40 of 40 jobs
 # CPU time in finished jobs:     460579s    7676.32m   127.94h    5.33d  0.015 y
@@ -3866,13 +3926,13 @@ XXXX - running 2005-10-27
     ssh kolossus
     cd /cluster/data/mm7/bed/multiz17way
     time catDir maf | mafFilter stdin -minScore=500 > multiz17way.maf
-    #	rejected 2676750 blocks
-    #	real    16m10.459s
+    #	rejected 2386275 blocks
+    #	real    18m12.267s
     #	makes an 15 Gb file:
-    #	-rw-rw-r--   1 15188541524 Oct 28 08:56 multiz17way.maf
+    #	-rw-rw-r--    1 15433191843 Nov 23 09:25 multiz17way.maf
 
     #	Create per-chrom individual maf files for downloads
-    #		(TBD)
+    #		(DONE - 2005-11-23)
     ssh kkstore02
     cd /cluster/data/mm7/bed/multiz17way
     mkdir mafDownloads
@@ -3882,9 +3942,11 @@ XXXX - running 2005-10-27
 	echo "cat ${M} | mafFilter stdin -minScore=500 > mafDownloads/${B}"
 	cat ${M} | mafFilter stdin -minScore=500 > mafDownloads/${B}
     done
+    #	72 minutes
     cd mafDownloads
     gzip chr*.maf
     ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/mm7/multiz17way
     cd /usr/local/apache/htdocs/goldenPath/mm7/multiz17way
     ln -s /cluster/data/mm7/bed/multiz17way/mafDownloads/chr*.maf.gz .
 
@@ -3895,12 +3957,12 @@ XXXX - running 2005-10-27
     ln -s /cluster/data/mm7/bed/multiz17way/multiz17way.maf \
 	/gbdb/mm7/multiz17way
     time hgLoadMaf mm7 multiz17way
-    #	Loaded 9437924 mafs in 1 files from /gbdb/mm7/multiz17way
-    #	real    34m18.818
+    #	Loaded 9562737 mafs in 1 files from /gbdb/mm7/multiz17way
     hgLoadMafSummary -minSize=10000 -mergeGap=500 -maxSize=50000 mm7 \
 	multiz17waySummary multiz17way.maf
-    #	Processed 50924730 components in 8995378 mafs from multiz17way.maf
-    #	real    41m2.853s
+    #	Processed 52733402 components in 9562737 mafs from multiz17way.maf
+    #	for both of the above loads:
+    #	real    53m48.590s
 
     # create tree image:
     cat << '_EOF_' > species.nh
@@ -3917,82 +3979,92 @@ XXXX - running 2005-10-27
 
 # Estimate phastCons parameters
     ssh kkstore02
-    mkdir /cluster/data/mm7/bed/multiz10way/cons
-    cd /cluster/data/mm7/bed/multiz10way/cons
+    mkdir /cluster/data/mm7/bed/multiz17way/cons
+    cd /cluster/data/mm7/bed/multiz17way/cons
 
-    # Create a starting-tree.mod based on chr1 (the largest one)
-    /cluster/bin/phast/msa_split ../maf/chr1.maf \
-	--refseq ../../../1/chr1.fa --in-format MAF \
+    # Create a starting-tree.mod based on chr2 (the largest one)
+    /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chr2.maf \
+	--refseq ../../../2/chr2.fa --in-format MAF \
 	--windows 100000000,1000 --out-format SS \
 	--between-blocks 5000 --out-root s1
-    #	5 minutes
+    #	10 minutes
 
-    /cluster/bin/phast/phyloFit -i SS s1.*.ss \
-	--tree "((((((hg17,(mm7,rn3)),(canFam1,bosTau1)),monDom1),galGal2),xenTro1),(tetNig1,danRer2))" \
+    /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+--tree "((((((((((hg17,panTro1),rheMac1),((rn3,mm7),oryCun1)),(bosTau2,canFam2)),dasNov1),(loxAfr1,echTel1)),monDom2),galGal2),xenTro1),((tetNig1,fr1),danRer3))" \
     --out-root starting-tree
-    #	more than 1h 30m
+    #	real    840m53.157s
+    #	That is 14 hours !
+
     rm s1.*.ss
     # add up the C and G:
     grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
-    #	0.403
-    #	This 0.403 is used in the --gc argument below
+    #	0.407
+    #	This 0.407 is used in the --gc argument below
 
-    # Create big bad bloated SS files in bluearc (takes ~45 minutes)
+    # Create big bad bloated SS files on san filesystem (takes ~45 minutes)
     ssh kkstore02
-    mkdir -p /cluster/bluearc/mm7/cons/ss
-    cd /cluster/bluearc/mm7/cons/ss
-    #	this is making over 3000 files in one directory, might be better
-    #	to put them into per-chrom hierarchies
+    mkdir -p  /san/sanvol1/scratch/mm7/cons/ss
+    cd  /san/sanvol1/scratch/mm7/cons/ss
     for C in `awk '{print $1}' /cluster/data/mm7/chrom.sizes`
     do
-      if [ -s /cluster/data/mm7/bed/multiz10way/maf/${C}.maf ]; then
+      if [ -s /cluster/data/mm7/bed/multiz17way/maf/${C}.maf ]; then
+	mkdir ${C}
 	echo msa_split $C
 	chrN=${C/chr/}
 	chrN=${chrN/_random/}
-	/cluster/bin/phast/msa_split \
-	    /cluster/data/mm7/bed/multiz10way/maf/${C}.maf \
+	/cluster/bin/phast/$MACHTYPE/msa_split \
+	    /cluster/data/mm7/bed/multiz17way/maf/${C}.maf \
 	    --refseq /cluster/data/mm7/${chrN}/${C}.fa \
 	    --in-format MAF --windows 1000000,0 --between-blocks 5000 \
-	    --out-format SS --out-root ${C}
+	    --out-format SS --out-root ${C}/${C}
       fi
     done
+    #	real    116m43.090s
+
+XXX to here Thu Nov 24 10:54:06 PST 2005
 
     # Create a random list of 50 1 mb regions  (do not use the _randoms)
-    ls -l | grep -v random | awk '$5 > 4000000 {print $9;}' | \
-	randomLines stdin 50 ../randomSs
+    cd /san/sanvol1/scratch/mm7/cons/ss
+    ls -1l chr*/chr*.ss | grep -v random | \
+	awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs.list
 
     # Set up parasol directory to calculate trees on these 50 regions
-    ssh kk9
-    mkdir /cluster/bluearc/mm7/cons/treeRun1
-    cd /cluster/bluearc/mm7/cons/treeRun1
+    ssh pk
+    mkdir /san/sanvol1/scratch/mm7/cons/treeRun1
+    cd /san/sanvol1/scratch/mm7/cons/treeRun1
     mkdir tree log
 
     #	Tuning this loop should come back to here to recalculate 
     # Create little script that calls phastCons with right arguments
     #	--target-coverage of 0.20 is about right for mouse, will be
     #	tuned exactly below
-    cat > makeTree << '_EOF_'
-    /cluster/bin/phast/phastCons ../ss/$1.ss \
-      /cluster/data/mm7/bed/multiz10way/cons/starting-tree.mod \
-      --gc 0.403 --nrates 1,1 --no-post-probs --ignore-missing \
+    cat > makeTree.csh << '_EOF_'
+#!/bin/csh -fe
+set C=$1:h
+mkdir -p log/${C} tree/${C}
+    /cluster/bin/phast/$MACHTYPE/phastCons ../ss/$1 \
+      /cluster/data/mm7/bed/multiz17way/cons/starting-tree.mod \
+      --gc 0.407 --nrates 1,1 --no-post-probs --ignore-missing \
       --expected-lengths 12 --target-coverage 0.17 \
       --quiet --log log/$1 --estimate-trees tree/$1
 '_EOF_'
     #	emacs happy
-    chmod a+x makeTree
+    chmod a+x makeTree.csh
 
     # Create gensub file
     cat > template << '_EOF_'
 #LOOP
-makeTree $(root1)
+makeTree.csh $(path1)
 #ENDLOOP
 '_EOF_'
     #	happy emacs
 
     # Make cluster job and run it
-    gensub2 ../randomSs single template jobList
+    gensub2 ../randomSs.list single template jobList
     para create jobList
     para try/push/check/etc
+XXXX - working 2005-11-28 10:45
+
 # Completed: 50 of 50 jobs
 # CPU time in finished jobs:      83332s    1388.87m    23.15h    0.96d  0.003 y
 # IO & Wait Time:                   429s       7.15m     0.12h    0.00d  0.000 y
@@ -4011,7 +4083,7 @@ makeTree $(root1)
     /cluster/bin/phast/phyloBoot --read-mods '*noncons.txt' \
 	--output-average ../ave.noncons.mod > noncons_summary.txt
     cd ..
-    cp -p ave.*.mod /cluster/data/mm7/bed/multiz10way/cons
+    cp -p ave.*.mod /cluster/data/mm7/bed/multiz17way/cons
 
     #	measuring entropy
     #	consEntopy <target coverage> <expected lengths>
@@ -4099,12 +4171,12 @@ doPhast $(file1) $(root1)
     catDir bed | awk '
     	{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
         /cluster/bin/scripts/lodToBedScore /dev/stdin > \
-	/cluster/data/mm7/bed/multiz10way/mostConserved.bed
+	/cluster/data/mm7/bed/multiz17way/mostConserved.bed
     #	~ 1 minute
 
     # Figure out how much is actually covered by the bed files as so:
     ssh kkstore01
-    cd /cluster/data/mm7/bed/multiz10way
+    cd /cluster/data/mm7/bed/multiz17way
     awk '
 {sum+=$3-$2}
 END{printf "%% %.2f = 100.0*%d/2597150151\n",100.0*sum/2597150151,sum}' \
@@ -4135,7 +4207,7 @@ refGene:cds 0.980%, mostConserved.bed 5.404%, both 0.679%, cover 69.24%, enrich 
 
     # Load most conserved track into database
     ssh hgwdev
-    cd /cluster/data/mm7/bed/multiz10way
+    cd /cluster/data/mm7/bed/multiz17way
     hgLoadBed -strict mm7 phastConsElements mostConserved.bed
     #	Loaded 2291164 elements of size 5
     #	5 minute load time
@@ -4160,7 +4232,7 @@ refGene:cds 0.980%, mostConserved.bed 5.404%, both 0.679%, cover 69.24%, enrich 
 
     ssh kkstore01
     cd /cluster/bluearc/mm7/cons/consRun4
-    cp -p phastCons10.wi? /cluster/data/mm7/bed/multiz10way/cons
+    cp -p phastCons10.wi? /cluster/data/mm7/bed/multiz17way/cons
     # 2m 30s copy on kkstore01
 
     #	prepare compressed copy of ascii data values for downloads
@@ -4190,26 +4262,26 @@ done
     #	takes about 40 minutes, makes 2.8 Gb of data
     #	copy them for downloads
     ssh kkstore01
-    mkdir /cluster/data/mm7/bed/multiz10way/phastCons10Scores
-    cd /cluster/data/mm7/bed/multiz10way/phastCons10Scores
+    mkdir /cluster/data/mm7/bed/multiz17way/phastCons10Scores
+    cd /cluster/data/mm7/bed/multiz17way/phastCons10Scores
     rsync -a --progress /cluster/bluearc/mm7/cons/consRun4/phastCons10Scores/ .
     #	3 minute copy
 
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/mm7/phastCons10Scores
     cd /usr/local/apache/htdocs/goldenPath/mm7/phastCons10Scores
-    ln -s /cluster/data/mm7/bed/multiz10way/phastCons10Scores/*.gz .
+    ln -s /cluster/data/mm7/bed/multiz17way/phastCons10Scores/*.gz .
 
     # Load gbdb and database with wiggle.
     ssh hgwdev
-    cd /cluster/data/mm7/bed/multiz10way/cons
+    cd /cluster/data/mm7/bed/multiz17way/cons
     ln -s `pwd`/phastCons10.wib /gbdb/mm7/wib/phastCons10.wib
     hgLoadWiggle mm7 phastCons10 phastCons10.wig
     #  ~ 3 minute load
 
     #  Create histogram to get an overview of all the data
     ssh hgwdev
-    cd /cluster/data/mm7/bed/multiz10way/cons
+    cd /cluster/data/mm7/bed/multiz17way/cons
     time hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    -db=mm7 phastCons10 > histogram.data 2>&1
@@ -8531,6 +8603,28 @@ XXXX - Started 2005-11-14 14:50
 	-swap -continue=load -stop=load \
 	`pwd`/DEF > rescoreChainSwapLoad.out 2>&1 &
 
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=download \
+	`pwd`/DEF > rescoreChainDownloadSwap.out 2>&1 &
+
+    #	Measurements:
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzCanFam2.2005-11-14
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainCanFam2Link > fb.mm7.chainCanFam2Link.rescore 2>&1
+    cat fb.mm7.chainCanFam2Link.rescore
+    #	833554390 bases of 2583394090 (32.266%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits canFam2 \
+	chainMm7Link > fb.canFam2.chainMm7Link.rescore 2>&1
+    cat fb.canFam2.chainMm7Link.rescore
+    #	814108570 bases of 2384996543 (34.135%) in intersection
+
 ###########################################################################
 # BLASTZ/CHAIN/NET CANFAM2 (DONE - 2005-09-16 - 2005-10-12- Hiram)
     ssh kkstore02
@@ -8761,6 +8855,32 @@ BASE=/cluster/data/mm7/bed/blastzRheMac1.2005-10-19
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
 
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=load -stop=load \
+	`pwd`/DEF > rescoreChainSwapLoad.out 2>&1 &
+
+    #	Measurements:
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzRheMac1.2005-10-19
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainRheMac1Link > fb.mm7.chainRheMac1Link.rescore 2>&1
+    cat fb.mm7.chainRheMac1Link.rescore
+    #	875709370 bases of 2583394090 (33.898%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits rheMac1 \
+	chainMm7Link > fb.rheMac1.chainMm7Link.rescore 2>&1
+    cat fb.rheMac1.chainMm7Link.rescore
+    #	862032750 bases of 2691926638 (32.023%) in intersection
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=download \
+	`pwd`/DEF > rescoreChainSwapDownload.out 2>&1 &
 
 #############################################################################
 # Elephant vs. Mm7 (WORKING - 2005-10-20 - Hiram)
@@ -8843,6 +8963,28 @@ BASE=/cluster/data/mm7/bed/blastzLoxAfr1.2005-10-20
 	-swap -continue=net -stop=load \
 	`pwd`/DEF > rescoreChainSwap.net-to-load.out 2>&1 &
 
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=load \
+	`pwd`/DEF > rescoreChainSwapLoad.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
+
+    ssh kolossus
+    cd /cluster/data/mm7/bed/blastz.loxAfr1
+    time HGDB_CONF=~/.hg.conf.read-only featureBits loxAfr1 \
+	chainMm7Link > fb.loxAfr1.chainMm7Link.rescore 2>&1
+    #	real    4067m1.699s
+    #	user    5m42.134s
+    #	sys     2m9.896s
+    #	This is over 67 hours !
+
+    cat fb.loxAfr1.chainMm7Link.rescore
+    #	471844339 bases of 2295548473 (20.555%) in intersection
+
 #############################################################################
 # Tenrec vs. Mm7 (WORKING - 2005-10-20 - Hiram)
     ssh pk
@@ -8914,6 +9056,19 @@ BASE=/cluster/data/mm7/bed/blastzEchTel1.2005-10-20
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -continue=load \
+	`pwd`/DEF > rescoreChainSwapLoad.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
+
+real    5472m11.402s
+
 
 #############################################################################
 # Rabbit vs. Mm7 (WORKING - 2005-10-20 - Hiram)
@@ -8990,6 +9145,27 @@ BASE=/cluster/data/mm7/bed/blastzOryCun1.2005-10-20
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap -stop=load \
 	`pwd`/DEF > rescoreChainSwap.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=load \
+	`pwd`/DEF > rescoreChainSwapLoad.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
+
+    ssh kolossus
+    cd /cluster/data/mm7/bed/blastz.oryCun1
+    time HGDB_CONF=~/.hg.conf.read-only featureBits \
+	oryCun1 chainMm7Link > fb.oryCun1.chainMm7Link.rescore 2>&1  
+    #	real    3560m14.127s
+    #	user    3m23.400s
+    #	sys     1m23.287s
+    #	That is over 59 hours !
+    cat fb.oryCun1.chainMm7Link.rescore
+    #	501663640 bases of 2076044328 (24.164%) in intersection
 
 #############################################################################
 # Armadillo vs. Mm7 (WORKING - 2005-10-20 - Hiram)
@@ -9070,6 +9246,18 @@ BASE=/cluster/data/mm7/bed/blastzDasNov1.2005-10-20
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap -continue=net -stop=load \
 	`pwd`/DEF > rescoreChainSwap.net-to-load.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=download \
+	`pwd`/DEF > rescoreChainDownload.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=load \
+	`pwd`/DEF > rescoreChainSwapLoad.out 2>&1 &
+
+real    5472m48.563s
 
 #############################################################################
 # Create Allen Brain Atlas mapping. (In progress 25 Oct 2005 JK)
@@ -10865,7 +11053,7 @@ nice make loadDb
 # need to do a make sanClean after track verified
 
 ############################################################################
-#  BLASTZ Chimp panTro1 second time (WORKING - 2005-11-20 - Hiram)
+#  BLASTZ Chimp panTro1 second time (DONE - 2005-11-20 - 2005-11-22 - Hiram)
 #	The first attempt didn't work well when it got into the multiple
 #	alignment, it seemed to get lost in gap areas of the randoms.
     ssh pk
@@ -10912,6 +11100,33 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-continue=chainMerge -stop=load \
 	`pwd`/DEF > chainMerge.to.load.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -stop=load \
+	`pwd`/DEF > swap.to.load.out 2>&1 &
+
+    #	Measurements:
+    ssh kolossus
+    cd  /cluster/data/mm7/bed/blastzPanTro1.2005-11-20
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm7 \
+	chainPanTro1Link > fb.mm7.chainPanTro1Link 2>&1
+    cat fb.mm7.chainPanTro1Link
+    #	906762987 bases of 2583394090 (35.100%) in intersection
+    time HGDB_CONF=~/.hg.conf.read-only featureBits panTro1 \
+	chainMm7Link > fb.panTro1.chainMm7Link 2>&1
+    cat fb.panTro1.chainMm7Link
+    #	899743967 bases of 2733948177 (32.910%) in intersection
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=download \
+	`pwd`/DEF > download.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=download \
+	`pwd`/DEF > downloadSwap.out 2>&1 &
 
 ############################################################################
 # MM3/MM4/MM5/MM6 -> MM7 LIFTOVER CHAINS (DONE 11/21/2005 Andy)
@@ -11294,6 +11509,7 @@ EOF
     gzip mm6ToMm7.over.chain
     hgAddLiftOverChain mm6 mm7 /gbdb/mm6/liftOver/mm6ToMm7.over.chain
 
+############################################################################
 # RIKEN CAGE STUFF (DONE 11-16-2005 Andy)
     cd /cluster/data/mm7/bed
     mkdir rikenCageCtss
@@ -11313,3 +11529,82 @@ EOF
     hgLoadBed mm7 rikenCageTc rikenCageTc.mm7.bed
     hgLoadBed -strict -bedGraph=4 mm7 rikenCageCtssMinus minus.mm7.bed 
     hgLoadBed -strict -bedGraph=4 mm7 rikenCageCtssPlus plus.mm7.bed 
+
+############################################################################
+#   Hg17 BLASTZ Mm7 Lineage specific repeats comparison:
+    #	using Lineage Specific Repeats:
+    #	Mm7 target chunk size: 10,000,000 overlap 10,000
+    #	Hg17 query size: 30,000,000
+    #	chain minScore=3000 linearGap=medium
+    #	Hg17 on Mm7
+    featureBits mm7 chainHg17Link
+    #	996434728 bases of 2583394090 (38.571%) in intersection
+    featureBits refGene:cds mm7 chainHg17Link -enrichment
+    #	refGene:cds 1.022%, chainHg17Link 38.571%, both 1.004%,
+    #		cover 98.24%, enrich 2.55x
+    #	Mm7 on Hg17
+    featureBits hg17 chainMm7Link
+    #	994737081 bases of 2866216770 (34.706%) in intersection
+    featureBits refGene:cds hg17 chainMm7Link -enrichment
+    #	refGene:cds 1.060%, chainMm7Link 34.706%, both 1.032%,
+    #		cover 97.35%, enrich 2.80x
+
+
+    #	Not using Lineage Specific Repeats, using BLASTZ dynamic masking
+    #	with M=50, chain minScore=1000, linearGap=loose
+    #	Hg17 target chunk size: 500,000 overlap 50
+    #	Mm7 query chunk size: entire genome
+    #	Hg17 on Mm7
+    featureBits mm7 chainHg17noLSRLink
+    #	952987983 bases of 2583394090 (36.889%) in intersection
+    featureBits refGene:cds mm7 chainHg17noLSRLink -enrichment
+    #	refGene:cds 1.022%, chainHg17noLSRLink 36.889%, both 0.987%,
+    #		cover 96.61%, enrich 2.62x:
+    featureBits hg17 chainMm7noLSRLink
+    #	955168137 bases of 2866216770 (33.325%) in intersection
+    #	Mm7 on Hg17
+    featureBits refGene:cds hg17 chainMm7noLSRLink -enrichment
+    #	refGene:cds 1.060%, chainMm7noLSRLink 33.325%, both 1.031%,
+    #		cover 97.31%, enrich 2.92x
+
+    #	Intersection of the two experiments:
+    featureBits hg17 chainMm7noLSRLink chainMm7Link
+    #	899176517 bases of 2866216770 (31.372%) in intersectio
+    featureBits mm7 chainHg17noLSRLink chainHg17Link
+    #	896080475 bases of 2583394090 (34.686%) in intersection
+
+    #	Chain length measurements:
+    #	With lineage specific repeats
+    #	Mm7 on Hg17:
+    #	Number of Chains: 3,097,071
+    #	min: 4262 max: 2.45523e+08 median: 1.34452e+08 stddev: 5.90203e+07
+    #	Number of Chain Links: 60,657,219
+    #	min: 1 max: 17,154 median: 22 stddev: 63.8851
+    #	Hg17 on Mm7:
+    #	Number of Chains: 3,097,071
+    #	min: 16,299 max: 1.94924e+08 median: 1.41766e+08 stddev: 3.45528e+07
+    #	Number of Chain Links: 60,657,219
+    #	min: 1 max: 17,154 median: 22 stddev: 63.8851
+
+    #	Without lineage specific repeats:
+    #	Mm7 on Hg17:
+    #	Number of Chains: 990,397
+    #	min: 4,262 max: 2.45523e+08 median: 1.35414e+08 stddev: 6.02228e+07
+    #	Number of Chain Links: 41,223,632
+    #	min: 1 max: 17,154 median: 22 stddev: 43.5466
+
+    #	table sizes:
+    #	on hg17:
+    #	chainMm7Link 2,586,839,468 bytes 61,184,737 rows
+    #	chainMm7noLSRLink 1,743,097,348 bytes 41,223,632 rows
+    #	chainMm7 267,042,956 bytes 3,073,210 rows
+    #	chainMm7noLSR 86,227,444 bytes 990,397 rows
+
+    #	on mm7:
+    #	chainHg17Link 2,593,329,860 bytes 61,184,737 rows
+    #	chainHg17noLSRLink 1,958,082,264 bytes 41,223,632 rows
+    #	chainHg17 267,023,452 bytes 3,073,210 rows
+    #	chainHg17noLSR 89,196,048 bytes 990,397 rows
+
+############################################################################
+
