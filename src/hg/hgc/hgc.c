@@ -187,7 +187,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.978 2005/11/17 20:18:10 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.979 2005/11/29 01:08:23 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2793,8 +2793,6 @@ char **row;
 boolean firstTime = TRUE;
 int start = cartInt(cart, "o");
 
-genericHeader(tdb, item);
-printCustomUrl(tdb, item, TRUE);
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       table, seqName);
@@ -2829,8 +2827,6 @@ char **row;
 boolean firstTime = TRUE;
 int start = cartInt(cart, "o");
 
-genericHeader(tdb, item);
-printCustomUrl(tdb, item, TRUE);
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
 	       table, seqName);
