@@ -9,7 +9,7 @@
 #include "dtdParse.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.7 2005/11/29 00:55:25 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.8 2005/11/29 03:54:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -45,7 +45,7 @@ struct table
     struct field *primaryKey;	/* Primary key if any. */
     boolean madeUpPrimary;	/* True if we are creating primary key. */
     int lastId;			/* Last id value if we create key. */
-    struct table *parentAssociation;  /* Association table linking to parent. /
+    struct table *parentAssociation;  /* Association table linking to parent. */
     struct field *parentKey;	/* If non-null, field that links to parent. */
     int usesAsChild;		/* Number of times this is a child of another
                                  * table. */
@@ -60,7 +60,6 @@ struct field
     struct field *next;		/* Next in list. */
     char *name;			/* Name of field. */
     struct table *table;	/* Table this is part of. */
-    struct field *foreignKey;	/* Field this is a foreign key for. */
     struct attStat *attStat;	/* Associated attStat structure. */
     struct dtdAttribute *dtdAttribute;	/* Associated dtd attribute. */
     boolean isMadeUpKey;	/* True if it's a made up key. */
@@ -99,12 +98,43 @@ char buf[128];
 int i;
 if (findField(table, name) == NULL)
     return name;
+warn("%s already exists in %s\n", name, table->name);
 for (i=2; ; ++i)
     {
     safef(buf, sizeof(buf), "%s%d", name, i);
     if (findField(table, buf) == NULL)
         return cloneString(buf);
     }
+}
+
+struct field *addFieldToTable(struct table *table, char *name, 
+	struct attStat *att, boolean isMadeUpKey, boolean atTail)
+/* Add field to end of table.  Use proposedName if it's unique,
+ * otherwise proposed name with some numerical suffix. */
+{
+struct field *field;
+
+AllocVar(field);
+field->name = cloneString(name);
+field->table = table;
+field->attStat = att;
+field->isMadeUpKey = isMadeUpKey;
+if (!isMadeUpKey)
+    field->dtdAttribute = findDtdAttribute(table->dtdElement, name);
+field->dy = dyStringNew(16);
+hashAdd(table->fieldHash, name, field);
+if (att != NULL && field->dtdAttribute == NULL && !sameString(name, textField))
+    errAbort("%s.%s is in .spec but not in .dtd file", 
+	table->name, field->name);
+if (atTail)
+    {
+    slAddTail(&table->fieldList, field);
+    }
+else
+    {
+    slAddHead(&table->fieldList, field);
+    }
+return field;
 }
 
 void makePrimaryKey(struct table *table)
@@ -143,11 +173,8 @@ if (primaryKey == NULL)
 /* If still no key, we have to make one up */
 if (primaryKey == NULL)
     {
-    AllocVar(primaryKey);
-    primaryKey->name = makeUpFieldName(table, "id");
-    primaryKey->table = table;
-    primaryKey->isMadeUpKey = TRUE;
-    slAddHead(&table->fieldList, primaryKey);
+    primaryKey = addFieldToTable(table, 
+    	makeUpFieldName(table, "id"), NULL, TRUE, FALSE);
     table->madeUpPrimary = TRUE;
     }
 table->primaryKey = primaryKey;
@@ -178,19 +205,10 @@ for (el = elList; el != NULL; el = el->next)
 	}
     for (att = el->attList; att != NULL; att = att->next)
         {
-	AllocVar(field);
-	field->name = att->name;
-	if (sameString(field->name, "<text>"))
-	    field->name = textField;
-	field->table = table;
-	field->attStat = att;
-	field->dtdAttribute = findDtdAttribute(table->dtdElement, field->name);
-	field->dy = dyStringNew(16);
-	hashAdd(table->fieldHash, field->name, field);
-	if (field->dtdAttribute == NULL && !sameString(field->name, textField))
-	    errAbort("%s.%s is in .spec but not in .dtd file", 
-	    	table->name, field->name);
-	slAddTail(&table->fieldList, field);
+	char *name = att->name;
+	if (sameString(name, "<text>"))
+	    name = textField;
+	field = addFieldToTable(table, name, att, FALSE, TRUE);
 	}
     makePrimaryKey(table);
     slAddHead(&tableList, table);
@@ -223,6 +241,46 @@ for (dtdEl = dtdList; dtdEl != NULL; dtdEl = dtdEl->next)
 	}
     }
 }
+
+void rAddParentKeys(struct dtdElement *parent, struct dtdElement *element,
+	struct hash *tableHash)
+/* Recursively add parentKeys. */
+{
+struct dtdElChild *child;
+struct table *table = hashMustFindVal(tableHash, element->mixedCaseName);
+struct table *parentTable = hashMustFindVal(tableHash, parent->mixedCaseName);
+struct field *field;
+
+/* Add new field in parent. */
+if (table->parentKey == NULL)
+    {
+    field = addFieldToTable(parentTable, 
+	    makeUpFieldName(parentTable, element->name), NULL, TRUE, TRUE);
+    table->parentKey = field;
+    }
+/* We need to get fancier here if there are multiple parent
+ * tables. */
+
+for (child = element->children;  child != NULL; child = child->next)
+    rAddParentKeys(element, child->el, tableHash);
+}
+
+void addParentKeys(struct dtdElement *dtdRoot, struct hash *tableHash)
+/* Use dtd to guide creation of field->parentKeys  */
+{
+struct dtdElChild *topLevel;
+
+for (topLevel = dtdRoot->children; topLevel != NULL; topLevel = topLevel->next)
+    {
+    struct dtdElement *mainIterator = topLevel->el;
+    struct dtdElChild *child;
+    for (child = mainIterator->children; child != NULL; child = child->next)
+        {
+	rAddParentKeys(mainIterator, child->el, tableHash);
+	}
+    }
+}
+
 
 struct table *findRootTable(struct table *tableList)
 /* Find root table (looking for one that has no uses as child) */
@@ -304,8 +362,7 @@ if (table == NULL)
 /* Clear all fields. */
 for (field = table->fieldList; field != NULL; field = field->next)
     {
-    if (!field->isMadeUpKey)
-	dyStringClear(field->dy);
+    dyStringClear(field->dy);
     }
 
 for (i=0; atts[i] != NULL; i += 2)
@@ -326,6 +383,7 @@ struct table *table = xap->stack->object;
 struct field *field;
 struct dyString *dy = table->uniqString;
 char *text = skipLeadingSpaces(xap->stack->text->string);
+char *primaryKeyVal = NULL;
 
 if (text[0] != 0)
     {
@@ -339,25 +397,34 @@ if (text[0] != 0)
 dyStringClear(dy);
 for (field = table->fieldList; field != NULL; field = field->next)
     {
-    if (!field->isMadeUpKey)
+    if (!(field->isPrimaryKey  && field->isMadeUpKey))
 	{
 	dyStringAppendN(dy, field->dy->string, field->dy->stringSize);
+	dyStringPrintf(dy, "<%s>", field->name);  // uglyf
 	if (field->next != NULL)
 	    dyStringAppendC(dy, '\t');
 	}
     }
 
-if (!hashLookup(table->uniqHash, dy->string))
+primaryKeyVal = hashFindVal(table->uniqHash, dy->string);
+if (primaryKeyVal == NULL)
     {
-    hashAdd(table->uniqHash, dy->string, NULL);
     if (table->madeUpPrimary)
 	{
 	table->lastId += 1;
+	dyStringPrintf(table->primaryKey->dy, "%d", table->lastId);
 	fprintf(table->tabFile, "%d\t", table->lastId);
 	}
+    primaryKeyVal = table->primaryKey->dy->string;
     fprintf(table->tabFile, "%s\n", dy->string);
+    hashAdd(table->uniqHash, dy->string, cloneString(primaryKeyVal));
+    }
+if (table->parentKey != NULL)
+    {
+    dyStringAppend(table->parentKey->dy, primaryKeyVal);
     }
 }
+
 
 void xmlToSql(char *xmlFileName, char *dtdFileName, char *statsFileName,
 	char *outDir)
@@ -399,12 +466,36 @@ for (table = tableList; table != NULL; table = table->next)
     }
 uglyf("Made table hashes\n");
 
-/* Count up parent/child relationships and find top level
- * tag (which we won't actually output) */
+/* Find top level tag (which we won't actually output). */
 countUsesAsChild(dtdList, tableHash);
 uglyf("Past countUsesAsChild\n");
 rootTable = findRootTable(tableList);
 uglyf("Root table is %s\n", rootTable->name);
+
+/* Make sure that conditions hold for simple fast
+ * parent-reference-filling algorithm, and add keys to support parenting. */
+for (table = tableList; table != NULL; table = table->next)
+    if (table->usesAsChild > 1)
+        warn("%s is used in two contexts, not ready for that", table->name);
+addParentKeys(rootTable->dtdElement, tableHash);
+uglyf("Added parent keys\n");
+
+uglyf("begin table dump\n");
+for (table = tableList; table != NULL; table = table->next)
+    {
+    struct field *field = table->fieldList;
+    uglyf("%s\n", table->name);
+    for (field = table->fieldList; field != NULL; field = field->next)
+	{
+	uglyf("\t");
+	if (field == table->primaryKey)
+	    uglyf("*");
+	uglyf("%s\n", field->name);
+	}
+    }
+uglyf("end table dump\n");
+#ifdef DUMP
+#endif /* DUMP */
 
 /* Set up output directory and create tab-separated files. */
 makeDir(outDir);
