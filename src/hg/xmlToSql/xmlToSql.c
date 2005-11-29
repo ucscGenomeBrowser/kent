@@ -9,7 +9,7 @@
 #include "dtdParse.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.8 2005/11/29 03:54:41 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.9 2005/11/29 04:23:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -64,6 +64,7 @@ struct field
     struct dtdAttribute *dtdAttribute;	/* Associated dtd attribute. */
     boolean isMadeUpKey;	/* True if it's a made up key. */
     boolean isPrimaryKey;	/* True if it's table's primary key. */
+    boolean isString;		/* Truf if it's a string field. */
     struct dyString *dy;	/* Current value of field during parsing. */
     };
 
@@ -108,7 +109,8 @@ for (i=2; ; ++i)
 }
 
 struct field *addFieldToTable(struct table *table, char *name, 
-	struct attStat *att, boolean isMadeUpKey, boolean atTail)
+	struct attStat *att, boolean isMadeUpKey, boolean atTail, 
+	boolean isString)
 /* Add field to end of table.  Use proposedName if it's unique,
  * otherwise proposed name with some numerical suffix. */
 {
@@ -162,7 +164,7 @@ if (primaryKey == NULL)
 	{
 	struct attStat *att = field->attStat;
 	if (att->uniqCount == rowCount && sameString(att->type, "string")
-	    && att->maxLen <= 12)
+	    && att->maxLen <= 12 && !sameString(field->name, textField))
 	    {
 	    primaryKey = field;
 	    break;
@@ -174,11 +176,17 @@ if (primaryKey == NULL)
 if (primaryKey == NULL)
     {
     primaryKey = addFieldToTable(table, 
-    	makeUpFieldName(table, "id"), NULL, TRUE, FALSE);
+    	makeUpFieldName(table, "id"), NULL, TRUE, FALSE, FALSE);
     table->madeUpPrimary = TRUE;
     }
 table->primaryKey = primaryKey;
 primaryKey->isPrimaryKey = TRUE;
+}
+
+boolean attIsString(struct attStat *att)
+/* Return TRUE if att is of string type. */
+{
+return sameString(att->type, "string");
 }
 
 struct table *elsIntoTables(struct elStat *elList, struct hash *dtdMixedHash)
@@ -208,7 +216,7 @@ for (el = elList; el != NULL; el = el->next)
 	char *name = att->name;
 	if (sameString(name, "<text>"))
 	    name = textField;
-	field = addFieldToTable(table, name, att, FALSE, TRUE);
+	field = addFieldToTable(table, name, att, FALSE, TRUE, attIsString(att));
 	}
     makePrimaryKey(table);
     slAddHead(&tableList, table);
@@ -242,27 +250,36 @@ for (dtdEl = dtdList; dtdEl != NULL; dtdEl = dtdEl->next)
     }
 }
 
-void rAddParentKeys(struct dtdElement *parent, struct dtdElement *element,
+void rAddParentKeys(struct dtdElement *parent, struct dtdElChild *elAsChild,
 	struct hash *tableHash)
 /* Recursively add parentKeys. */
 {
+struct dtdElement *element = elAsChild->el;
 struct dtdElChild *child;
 struct table *table = hashMustFindVal(tableHash, element->mixedCaseName);
 struct table *parentTable = hashMustFindVal(tableHash, parent->mixedCaseName);
 struct field *field;
 
 /* Add new field in parent. */
-if (table->parentKey == NULL)
+if (elAsChild->copyCode == '1' || elAsChild->copyCode == '?')
     {
-    field = addFieldToTable(parentTable, 
-	    makeUpFieldName(parentTable, element->name), NULL, TRUE, TRUE);
-    table->parentKey = field;
+    if (table->parentKey == NULL)
+	{
+	field = addFieldToTable(parentTable, 
+		makeUpFieldName(parentTable, element->name), NULL, TRUE, TRUE,
+		parentTable->primaryKey->isString);
+	table->parentKey = field;
+	}
+    /* We need to get fancier here if there are multiple parent
+     * tables. */
     }
-/* We need to get fancier here if there are multiple parent
- * tables. */
+else
+    {
+    /* Need to handle association here. */
+    }
 
 for (child = element->children;  child != NULL; child = child->next)
-    rAddParentKeys(element, child->el, tableHash);
+    rAddParentKeys(element, child, tableHash);
 }
 
 void addParentKeys(struct dtdElement *dtdRoot, struct hash *tableHash)
@@ -276,7 +293,7 @@ for (topLevel = dtdRoot->children; topLevel != NULL; topLevel = topLevel->next)
     struct dtdElChild *child;
     for (child = mainIterator->children; child != NULL; child = child->next)
         {
-	rAddParentKeys(mainIterator, child->el, tableHash);
+	rAddParentKeys(mainIterator, child, tableHash);
 	}
     }
 }
@@ -399,6 +416,11 @@ for (field = table->fieldList; field != NULL; field = field->next)
     {
     if (!(field->isPrimaryKey  && field->isMadeUpKey))
 	{
+	if (field->isMadeUpKey && field->dy->stringSize == 0 &&
+	    !field->isString)
+	    {
+	    dyStringAppendC(field->dy, '0');
+	    }
 	dyStringAppendN(dy, field->dy->string, field->dy->stringSize);
 	dyStringPrintf(dy, "<%s>", field->name);  // uglyf
 	if (field->next != NULL)
