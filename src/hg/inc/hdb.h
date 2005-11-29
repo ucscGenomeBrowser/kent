@@ -297,6 +297,9 @@ struct dnaSeq *hLoadChrom(char *chromName);
 void hNibForChrom(char *chromName, char retNibName[HDB_MAX_PATH_STRING]);
 /* Get .nib file associated with chromosome. */
 
+void hNibForChrom2(char *chromName, char retNibName[HDB_MAX_PATH_STRING]);
+/* Get .nib file associated with chromosome. */
+
 struct slName *hAllChromNames();
 /* Get list of all chromosomes. */
 
