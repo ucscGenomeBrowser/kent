@@ -10,7 +10,7 @@
 #include "errabort.h"
 #include "xp.h"
 
-static char const rcsid[] = "$Id: xap.c,v 1.9 2005/11/19 02:09:18 kent Exp $";
+static char const rcsid[] = "$Id: xap.c,v 1.10 2005/11/29 17:24:21 kent Exp $";
 
 void xapError(struct xap *xap, char *format, ...)
 /* Issue an error message and abort*/
@@ -88,7 +88,7 @@ struct xap *xapNew(void *(*startHandler)(struct xap *xap, char *name, char **att
 {
 struct xap *xap;
 AllocVar(xap);
-xap->endStack = xap->stack = xap->stackBuf + ArraySize(xap->stackBuf);
+xap->endStack = xap->stack = xap->stackBuf + ArraySize(xap->stackBuf) - 1;
 xap->startHandler = startHandler;
 xap->endHandler = endHandler;
 xap->xp = xpNew(xap, xapStartTag, xapEndTag, xapRead, fileName);
