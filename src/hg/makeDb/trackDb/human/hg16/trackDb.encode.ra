@@ -1,7 +1,7 @@
 track encodeGencodeGene
 shortLabel Gencode Genes
 longLabel Gencode Gene Annotations
-Version ENCODE June 2005 Freeze
+dataVersion ENCODE June 2005 Freeze
 group encodeGenes
 color 73,76,73
 priority 10.1
@@ -1253,6 +1253,7 @@ viewLimits -1:3
 windowingFunction mean
 autoScale off
 origAssembly hg17
+dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgHeLaH3K4me3_p0
     subTrack encodeUcsdNgGif
