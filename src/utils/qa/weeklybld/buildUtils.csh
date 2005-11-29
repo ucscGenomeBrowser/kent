@@ -1,18 +1,18 @@
 #!/bin/tcsh
-# Build utils into /cluster/bin/$MACHTYPE on beta or kolossus from branch or tip
+# Build utils into /cluster/bin/$MACHTYPE on dev or beta from branch or tip
 # specify "tip" as command line parm 1 to build from tip sandbox 
 
 cd $WEEKLYBLD
 
 if ( "$MACHTYPE" == "i386" ) then
-    if ( "$HOST" != "hgwbeta" ) then
-	echo "error: you must run this script on beta!"
+    if ( "$HOST" != "hgwdev" ) then
+	echo "error: you must run this script on hgwdev!"
 	exit 1
     endif
 endif
 if ( "$MACHTYPE" == "x86_64" ) then
-    if ( "$HOST" != "kolossus" ) then
-	echo "error: you must run this script on kolossus!"
+    if ( "$HOST" != "hgwbeta" ) then
+	echo "error: you must run this script on hgwbeta!"
 	exit 1
     endif
 endif
@@ -43,7 +43,7 @@ endif
 echo "Symlink Trick."
 ./symtrick.csh
 
-if ( "$MACHTYPE" == "x86_64" ) then
+if ( "$MACHTYPE" == "i386" ) then
     echo
     echo "Doing make clean on src."
     cd $base/kent/src
@@ -71,7 +71,7 @@ endif
 $WEEKLYBLD/unsymtrick.csh
 echo "Restore: undoing Symlink Trick."
 
-if ( "$MACHTYPE" == "x86_64" ) then
+if ( "$MACHTYPE" == "i386" ) then
     echo
     echo "Doing make clean on src."
     cd $base/kent/src
