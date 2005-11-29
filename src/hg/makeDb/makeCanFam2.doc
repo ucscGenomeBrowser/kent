@@ -1763,5 +1763,143 @@ cd ../..
     ln -s /cluster/data/canFam2/chromGz/{chr*.gz,*.txt} $gp/chromosomes
     # Take a look at bigZips/* and chromosomes/*
     # Can't make refGene upstream sequence files - no refSeq for dog.
+    mkdir database
+    # Create README.txt files in database/ to explain the files.
+
+
+# CHORI BAC END PAIRS  (DONE 11/22/05 angie)
+    # Rachel downloaded and parsed BAC end sequences and pair info from 
+    # CHORI and NCBI -- seee makeCanFam1.doc "BAC END PAIRS".  Use those 
+    # files and align to canFam2.  
+
+    # Do BLAT alignments of BAC ends to the genome on the pitakluster.
+    # copy over masked contigs to the san
+    ssh kkstore01
+    cd /cluster/data/canFam2
+    mkdir /san/sanvol1/scratch/canFam2/maskedContigs
+    foreach d (?{,?}/chr*_?{,?})
+      echo $d:t
+      cp -p $d/$d:t.fa /san/sanvol1/scratch/canFam2/maskedContigs/
+    end
+    # copy over 11.ooc file to the san
+    cp -p /cluster/bluearc/canFam2/11.ooc /san/sanvol1/scratch/canFam2/
+    # make output directory, run directory and bed/ directory
+    mkdir -p /san/sanvol1/scratch/canFam2/bacendsRun/psl
+    mkdir /cluster/data/canFam2/bed/bacends
+    ssh pk
+    cd /san/sanvol1/scratch/canFam2/bacendsRun
+    echo '#LOOP\n/cluster/bin/x86_64/blat $(path1) $(path2) -ooc=/san/sanvol1/scratch/canFam2/11.ooc {check out line+ /san/sanvol1/scratch/canFam2/bacendsRun/psl/$(root1).$(root2).psl}\n#ENDLOOP' > gsub
+    ls -1S /san/sanvol1/scratch/canFam2/maskedContigs/*.fa > contigs.lst
+    ls -1S /san/sanvol1/scratch/canFam1/bacends/bacends*.fa > bacends.lst
+    gensub2 contigs.lst bacends.lst gsub jobList
+    para make jobList
+    para time
+#Completed: 49005 of 49005 jobs
+#Average job time:                   7s       0.12m     0.00h    0.00d
+#Longest finished job:             105s       1.75m     0.03h    0.00d
+#Submission to last job:          1884s      31.40m     0.52h    0.02d
+
+    # back on kkstore01, retrieve pitakluster results
+    cd /cluster/data/canFam2/bed/bacends
+    rsync -av /san/sanvol1/scratch/canFam2/bacendsRun/{*.lst,batch*,g*,j*,p*} .
+    
+    # lift alignments
+    ssh kolossus
+    cd /cluster/data/canFam2/bed/bacends
+    pslSort dirs raw.psl tmp psl
+    # started 08:15, PID: 16561
+    pslCheck raw.psl >& check.log 
+    wc -l check.log
+#4379 check.log
+    grep '< previous block' check.log | wc -l
+#2194
+    grep -v 'Error: invalid PSL' check.log | grep -v '< previous block' | wc -l
+#0
+    wc -l raw.psl
+#27352955 raw.psl -- 2194 / 27352955 = 0.000080 = 0.008% overlapping
+    pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
+                raw.psl  bacEnds.psl /dev/null
+    # Processed 27147454 alignments
+    wc -l bacEnds.psl
+#769149 bacEnds.psl
+    liftUp bacEnds.lifted.psl /cluster/data/canFam2/jkStuff/liftAll.lft \
+           warn bacEnds.psl
+    awk '{print $10}' bacEnds.lifted.psl | sort | uniq | wc -l
+#317042
+    faSize /san/sanvol1/scratch/canFam1/bacends/bacends*.fa
+#290482800 bases (10817785 N's 279665015 real 279665015 upper 0 lower) in 393408 sequences in 99 files
+    calc 317042 / 393408
+#317042 / 393408 = 0.805886
+    # Make BAC end pairs track: 
+    mkdir pairs
+    cd pairs
+    set ncbiDir = /cluster/data/ncbi/bacends/dog/bacends.1
+    /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan -mismatch -verbose ../bacEnds.lifted.psl $ncbiDir/bacEndPairs.txt all_bacends bacEnds
+    wc -l *
+#      40 bacEnds.long
+#     460 bacEnds.mismatch
+#   44366 bacEnds.orphan
+#  133248 bacEnds.pairs
+#     478 bacEnds.short
+#     816 bacEnds.slop
+#  179408 total
+
+    # Filter by score and sort by {chrom,chromStart}:
+    awk '$5 >= 300 {print;}' bacEnds.pairs | sort -k1,2n > bacEndPairs.bed
+    cat bacEnds.{slop,short,long,mismatch,orphan} \
+    | awk '$5 >= 300 {print;}' | sort -k1,2n > bacEndPairsBad.bed
+    wc -l *.bed
+#  133241 bacEndPairs.bed
+#   46057 bacEndPairsBad.bed
+#  179298 total
+    extractPslLoad -noBin ../bacEnds.lifted.psl bacEndPairs.bed   \
+      bacEndPairsBad.bed \
+    | sorttbl tname tstart | headchg -del \
+    > bacEnds.load.psl
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/bacends/pairs
+    hgLoadBed canFam2 bacEndPairs bacEndPairs.bed -notItemRgb \
+               -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+#Loaded 133241 elements of size 11
+    # note - this next track isn't pushed to RR, just used for assembly QA
+    hgLoadBed canFam2 bacEndPairsBad bacEndPairsBad.bed -notItemRgb \
+              -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+#Loaded 46057 elements of size 11
+    hgLoadPsl canFam2 -table=all_bacends bacEnds.load.psl
+#load of all_bacends did not go as planned: 748544 record(s), 0 row(s) skipped, 928 warning(s) loading psl.tab
+    # Diagnose...
+    echo select \* from all_bacends | hgsql -N canFam2 > /tmp/1
+    diff psl.tab /tmp/1 | less
+    # Looks like some rows of psl.tab have negative numbers in the 
+    # qBaseInsert column!
+
+    # load BAC end sequences into seq table so alignments may be viewed
+    # symlink to FASTA sequence file in ncbi directory
+    mkdir -p /gbdb/canFam2/bacends
+    ln -s /cluster/data/ncbi/bacends/dog/bacends.1/canFamBacends.fa \
+          /gbdb/canFam2/bacends/canFamBacends.fa
+    hgLoadSeq canFam2 /gbdb/canFam2/bacends/canFamBacends.fa
+#393408 sequences
+# featureBits canFam1 all_bacends
+#211644790 bases of 2359845093 (8.969%) in intersection
+    featureBits canFam2 all_bacends
+#218709219 bases of 2384996543 (9.170%) in intersection
+
+# featureBits canFam1 bacEndPairs
+#2334084046 bases of 2359845093 (98.908%) in intersection
+    featureBits canFam2 bacEndPairs
+#2353239742 bases of 2384996543 (98.668%) in intersection
+
+# featureBits canFam1 bacEndPairsBad
+# 548130287 bases of 2359845093 (23.227%) in intersection
+    featureBits canFam2 bacEndPairsBad
+#534195657 bases of 2384996543 (22.398%) in intersection
+
+# add trackDb entry and html
+    # Clean up
+    ssh pk
+    rm -r /san/sanvol1/scratch/canFam2/bacendsRun
 
 
