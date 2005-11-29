@@ -450,6 +450,8 @@ cd ../..
     ln -s /cluster/data/droYak2/chromGz/{chr*.gz,*.txt} $gp/chromosomes
     # Take a look at bigZips/* and chromosomes/*
     # Can't make refGene upstream sequence files - no refSeq for yakuba.
+    mkdir $gp/database
+    # Create README.txt files in database/ to explain the files.
 
 
 # PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS (DONE 11/15/05 angie)
@@ -528,82 +530,56 @@ cd ../..
     iSync
 
 
-# AUTO UPDATE GENBANK MRNA RUN  (TODO 11//05 angie)
+# AUTO UPDATE GENBANK MRNA RUN  (DONE 11/23/05 angie)
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
     cvsup .
+    make
     # See if /cluster/data/genbank/etc/genbank.conf has had any un-checked-in
     # edits, check them in if necessary:
     diff /cluster/data/genbank/etc/genbank.conf etc/genbank.conf
 
     # Edit etc/genbank.conf and add these lines:
 # droYak2 (D. yakuba)
-droYak2.genome = /iscratch/i/droYak2/droYak2.2bit
-droYak2.lift = 
+droYak2.serverGenome = /cluster/data/droYak2/droYak2.2bit
+droYak2.clusterGenome = /iscratch/i/droYak2/droYak2.2bit
+droYak2.ooc = /iscratch/i/droYak2/11.ooc
+droYak2.lift = /cluster/data/droYak2/jkStuff/liftAll.lft
+droYak2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+droYak2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+droYak2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+droYak2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+droYak2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
 droYak2.refseq.mrna.native.load = no
 droYak2.refseq.mrna.xeno.load = yes
-droYak2.refseq.mrna.xeno.pslReps = -minCover=0.15 -minAli=0.75 -nearTop=0.005
 droYak2.genbank.mrna.xeno.load = yes
-droYak2.genbank.est.xeno.load = no
 droYak2.downloadDir = droYak2
 
     cvs ci etc/genbank.conf
-    # Since D. yakuba is a new species for us, edit src/lib/gbGenome.c.  
-    # Pick some other browser species, & monkey-see monkey-do.  
-    cvs diff src/lib/gbGenome.c
-    make
-    cvs ci src/lib/gbGenome.c
 
-    # Install to /cluster/data/genbank:
-    make install-server
+    # update /cluster/data/genbank/
+    make etc-update
 
-    ssh eieio
+    ssh kkstore02
     cd /cluster/data/genbank
-    # This is an -initial run, (xeno) RefSeq only:
-    nice bin/gbAlignStep -srcDb=refseq -type=mrna -initial droYak2 &
-    tail -f [its logfile]
-    # Load results:
+    nice bin/gbAlignStep -initial droYak2 &
+
+    # when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droYak2
+    nice ./bin/gbDbLoadStep -drop -initialLoad droYak2 &
     featureBits droYak2 xenoRefGene
-#26062889 bases of 169423277 (15.383%) in intersection
-    # Clean up:
-    rm -rf work/initial.droYak2
-
-    # This is an -initial run, mRNA only:
-    nice bin/gbAlignStep -srcDb=genbank -type=mrna -initial droYak2 &
-    tail -f [its logfile]
-    # Load results:
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad droYak2
+#27309563 bases of 162681153 (16.787%) in intersection
     featureBits droYak2 mrna
-#350085 bases of 169423277 (0.207%) in intersection
+#376949 bases of 162681153 (0.232%) in intersection
     featureBits droYak2 xenoMrna
-#22644430 bases of 169423277 (13.366%) in intersection
-    # Clean up:
-    rm -rf work/initial.droYak2
-
-    ssh eieio
-    # -initial for ESTs
-    nice bin/gbAlignStep -srcDb=genbank -type=est -initial droYak2 &
-    tail -f [its logfile]
-    # Load results:
-    ssh hgwdev
-    cd /cluster/data/genbank
-    nice bin/gbDbLoadStep -verbose=1 droYak2 &
-    # Wow, very very little for yakuba, even for ESTs!
-    featureBits droYak2 intronEst
-#277291 bases of 169423277 (0.164%) in intersection
+#23932293 bases of 162681153 (14.711%) in intersection
     featureBits droYak2 est
-#420049 bases of 169423277 (0.248%) in intersection
-    # Clean up:
-    rm -rf work/initial.droYak2
+#1768531 bases of 162681153 (1.087%) in intersection
 
 
-# SWAP CHAINS FROM DM2, BUILD NETS ETC. (TODO 11//05 angie)
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 11/23/05 angie)
     mkdir /cluster/data/droYak2/bed/blastz.dm2.swap
     cd /cluster/data/droYak2/bed/blastz.dm2.swap
     doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droYak2/DEF \
@@ -612,7 +588,7 @@ droYak2.downloadDir = droYak2
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
 
 
-# MAKE THIS THE DEFAULT ASSEMBLY (TODO 11//05 angie)
+# MAKE THIS THE DEFAULT ASSEMBLY (DONE 11/23/05 angie)
     # -- when there are enough tracks!
     hgsql -h genome-testdb hgcentraltest \
       -e 'UPDATE defaultDb set name = "droYak2" where genome = "D. yakuba"'
