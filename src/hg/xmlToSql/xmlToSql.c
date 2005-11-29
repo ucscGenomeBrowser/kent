@@ -9,7 +9,7 @@
 #include "dtdParse.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.12 2005/11/29 07:06:46 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.13 2005/11/29 07:44:16 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -568,6 +568,27 @@ for (assoc = table->assocList; assoc != NULL; assoc = assoc->next)
 assocFreeList(&table->assocList);
 }
 
+void writeCreateSql(char *fileName, struct table *table)
+/* Write out table definition. */
+{
+FILE *f = mustOpen(fileName, "w");
+struct field *field;
+
+fprintf(f, "CREATE TABLE %s (\n", table->name);
+for (field = table->fieldList; field != NULL; field = field->next)
+    {
+    struct attStat *att = field->attStat;
+    fprintf(f, "\t%s ", field->name);
+    if (att == NULL)
+        fprintf(f, "int ");
+    else
+        fprintf(f, "%s ", att->type);
+    fprintf(f, "\n");
+    }
+fprintf(f, ");");
+
+carefulClose(&f);
+}
 
 void xmlToSql(char *xmlFileName, char *dtdFileName, char *statsFileName,
 	char *outDir)
@@ -657,6 +678,17 @@ uglyf("Streamed through XML\n");
 /* Close down files */
 for (table = tableList; table != NULL; table = table->next)
     carefulClose(&table->tabFile);
+uglyf("Closed tab files\n");
+
+/* Create table creation SQL files. */
+for (table = tableList; table != NULL; table = table->next)
+    {
+    safef(outFile, sizeof(outFile), "%s/%s.sql", 
+      outDir, table->name);
+    writeCreateSql(outFile, table);
+    }
+uglyf("Made sql table creation files\n");
+
 uglyf("All done\n");
 }
 
