@@ -1308,7 +1308,7 @@ cat > loadSig.csh << 'EOF'
 
     cd /cluster/data/encode/yale/chip/2005-10-26
     mkdir -p wig wib
-cat > load.csh << 'EOF'
+cat > loadSites.csh << 'EOF'
     set pfx = encodeYaleChip
     foreach d (lab/{jun,fos,taf,baf155,baf170})
         set factor = $d:t
@@ -1324,8 +1324,19 @@ cat > load.csh << 'EOF'
         sed -e "s/bed5FloatScore/$table/" \
             $HOME/kent/src/hg/lib/bed5FloatScore.sql > $table.sql
         sed 's/=/ /' $f | \
-          awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n",$1,$2,$3,$6,($4 * 330),$4}' |\
-        hgLoadBed -strict -sqlTable=$table.sql hg17 $table stdin
+          awk '{printf "%s\t%d\t%d\t%s\t%d\t%.3f\n",$1,$2-1,$3,$6,($4 * 330),$4}' |\
+            hgLoadBed -strict -sqlTable=$table.sql hg17 $table stdin
+        end
+'EOF'
+    csh loadSites.csh >&! loadSites.log 
+
+cat > loadSig.csh << 'EOF'
+    set pfx = encodeYaleChip
+    foreach d (lab/{jun,fos,taf,baf155,baf170})
+        set factor = $d:t
+        set Factor = `echo $factor | sed 's/\(.*\)/\u\1/'`
+        echo $Factor
+        set p = $d/Encode_Yale_ChIpChip_${factor}_Hela_Maskless50merevery38bp
 
         # load pval wiggle
         set gdir = /gbdb/hg17/encode/YaleChip/2005-10-26
