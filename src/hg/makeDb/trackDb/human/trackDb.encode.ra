@@ -87,8 +87,9 @@ visibility hide
 type genePred
 cdsDrawDefault genomic\ codons
 origAssembly hg17
+dataVersion ENCODE June 2005 Freeze
 
-track encodeEgaspFullAceview
+    track encodeEgaspFullAceview
     subTrack encodeEgaspFull
     shortLabel AceView
     longLabel AceView Gene Predictions
@@ -239,6 +240,7 @@ visibility hide
 type genePred
 cdsDrawDefault genomic\ codons
 origAssembly hg17
+dataVersion ENCODE June 2005 Freeze
 
     track encodeEgaspPartAceCons
     subTrack encodeEgaspPartial
@@ -308,6 +310,7 @@ visibility hide
 type genePred
 cdsDrawDefault genomic\ codons
 origAssembly hg17
+dataVersion ENCODE June 2005 Freeze
 
     track encodeEgaspUpdAugustusAbinitio
     subTrack encodeEgaspUpdate
@@ -586,6 +589,8 @@ maxLimit 5945
 viewLimits 0.0:10.0
 windowingFunction mean
 autoScale Off
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeRikenCageMappedTagsPositive
     subTrack encodeRikenCageMappedTagsScore
@@ -610,6 +615,8 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 9 .
 itemRgb On
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
 track encodeStanfordPromoters
 compositeTrack on
