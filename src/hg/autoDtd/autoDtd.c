@@ -5,7 +5,7 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.2 2005/11/28 17:54:49 kent Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.3 2005/11/29 17:23:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -29,14 +29,12 @@ struct type
     {
     struct type *next;
     char *name;		/* Name of type/field. */
+    int count;	        /* Number of occurences of this tag. */
     struct hash *attHash;	/* Hash of all elements keyed by name */
     struct attribute *attributes;
     struct hash *elHash;	/* Hash of all elements keyed by type->name */
     struct element *elements;
-    int count;		/* Number of times we've seen this in file. */
-    boolean nonInt;	/* True if text not an int. */
-    boolean nonFloat;	/* True if text not a number. */
-    boolean anyText;	/* True if ever has text. */
+    struct attribute *textAttribute;	/* Information on text. */
     };
 
 struct attribute
@@ -184,23 +182,50 @@ for (el = type->elements; el != NULL; el = el->next)
     }
 if (text[0] == 0)
     {
-    type->nonFloat = type->nonInt = TRUE;
+    if (type->textAttribute != NULL)
+        type->textAttribute->isOptional = TRUE;
     }
 else
     {
-    type->anyText = TRUE;
-    if (!type->nonInt)
+    int textLen = strlen(text);
+    char head[33];
+    struct attribute *att = type->textAttribute;
+    if (att == NULL)
+	{
+	type->textAttribute = AllocVar(att);
+	att->name = "<text>";
+	att->values = hashNew(16);
+	if (type->count != 0)
+	    att->isOptional = TRUE;
+	}
+    if (att->maxLen < textLen)
+        att->maxLen = textLen;
+    hashStore(att->values, text);
+    att->count += 1;
+    if (!att->nonInt)
 	if (!isAllInt(text))
-	    type->nonInt = TRUE;
-    if (!type->nonFloat)
+	    att->nonInt = TRUE;
+    if (!att->nonFloat)
 	if (!isAllFloat(text))
-	    type->nonFloat = TRUE;
+	    att->nonFloat = TRUE;
     }
 type->count += 1;
 topType = type;
 }
 
-void rWriteDtd(FILE *dtdFile, FILE *statsFile, struct type *type, struct hash *uniqHash)
+char *attDataType(struct attribute *att)
+/* Return data type associated with attribute as a string */
+{
+if (!att->nonInt)
+    return "int";
+else if (!att->nonFloat)
+    return "float";
+else
+    return "string";
+}
+
+void rWriteDtd(FILE *dtdFile, FILE *statsFile, struct type *type, 
+	struct hash *uniqHash)
 /* Recursively write out DTD. */
 {
 struct element *el;
@@ -222,16 +247,16 @@ for (el = type->elements; el != NULL; el = el->next)
 	if (el->isOptional)
 	    fprintf(dtdFile, "?");
 	}
-    if (el->next != NULL || type->anyText)
+    if (el->next != NULL || type->textAttribute != NULL)
         fprintf(dtdFile, ",");
     fprintf(dtdFile, "\n");
     }
-if (type->anyText)
+if (type->textAttribute != NULL)
     {
     fprintf(dtdFile, "\t");
-    if (!type->nonInt)
+    if (!type->textAttribute->nonInt)
         fprintf(dtdFile, "#INT");
-    else if (!type->nonFloat)
+    else if (!type->textAttribute->nonFloat)
         fprintf(dtdFile, "#FLOAT");
     else
         fprintf(dtdFile, "#PCDATA");
@@ -239,33 +264,32 @@ if (type->anyText)
     }
 fprintf(dtdFile, ")>\n");
 fprintf(statsFile, "%s %d\n", type->name, type->count);
+if ((att = type->textAttribute) != NULL)
+    {
+    fprintf(statsFile, "\t%s\t%d\t%s\t%d\t%d\n", att->name, att->maxLen,
+    	attDataType(att), att->count, att->values->elCount);
+    }
+else
+    {
+    fprintf(statsFile, "\t<text>\t0\tnone\t0\t0\n");
+    }
 
 for (att = type->attributes; att != NULL; att = att->next)
     {
-    char *dataType = NULL;
     fprintf(dtdFile, "<!ATTLIST %s %s ", type->name, att->name);
     if (!att->nonInt)
-	{
         fprintf(dtdFile, "INT");
-	dataType = "int";
-	}
     else if (!att->nonFloat)
-	{
         fprintf(dtdFile, "FLOAT");
-	dataType = "float";
-	}
     else
-	{
         fprintf(dtdFile, "CDATA");
-	dataType = "string";
-	}
     if (att->isOptional)
         fprintf(dtdFile, " #IMPLIED");
     else
 	fprintf(dtdFile, " #REQUIRED");
-    fprintf(dtdFile, "> ");
+    fprintf(dtdFile, ">\n");
     fprintf(statsFile, "\t%s\t%d\t%s\t%d\t%d\n", att->name, att->maxLen,
-    	dataType, att->count, att->values->elCount);
+    	attDataType(att), att->count, att->values->elCount);
     }
 fprintf(dtdFile, "\n");
 fprintf(statsFile, "\n");
@@ -290,6 +314,7 @@ fprintf(dtdFile, "<!-- This file was created by autoXml based on %s -->\n\n", xm
 fprintf(statsFile, "#Statistics on %s\n", xmlFileName);
 fprintf(statsFile, "#Format is:\n");
 fprintf(statsFile, "#<tag name>  <tag count>\n");
+fprintf(statsFile, "#      <<text>> <max length> <type> <count> <unique count>\n");
 fprintf(statsFile, "#      <attribute name> <max length> <type> <count> <unique count>\n");
 fprintf(statsFile, "\n");
 rWriteDtd(dtdFile, statsFile, type, uniqHash);
