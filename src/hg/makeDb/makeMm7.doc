@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.33 2005/11/29 03:09:03 fanhsu Exp $"
+#	"$Id: makeMm7.doc,v 1.34 2005/11/29 03:44:31 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -10111,6 +10111,21 @@ end
    hgsql mm7 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
    hgsql mm7 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
 
+# BUILD KNOWN GENE LIST FOR GOOGLE.  DONE 11/28/05 Fan.
+
+    cd /cluster/data/mm7/bed
+    rm -rf knownGeneList/mm7
+
+# Run hgKnownGeneList to generate the tree of HTML pages
+# under ./knownGeneList/mm7
+
+    hgKnownGeneList mm7
+
+# copy over to /usr/local/apache/htdocs
+
+    rm -rf /usr/local/apache/htdocs/knownGeneList/mm7
+    mkdir -p /usr/local/apache/htdocs/knownGeneList/mm7
+    cp -Rfp knownGeneList/mm7/* /usr/local/apache/htdocs/knownGeneList/mm7
 
 ############################################################################
 
