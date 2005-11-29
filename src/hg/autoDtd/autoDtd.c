@@ -5,7 +5,7 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.4 2005/11/29 19:42:54 kent Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.5 2005/11/29 20:52:35 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -324,7 +324,8 @@ carefulClose(&dtdFile);
 carefulClose(&statsFile);
 }
 
-void rWriteTree(FILE *f, struct type *type, struct hash *uniqHash, int level)
+void rWriteTree(FILE *f, struct type *type, boolean isOptional, boolean isList,
+	struct hash *uniqHash, int level)
 /* Write out type and it's children. */
 {
 struct attribute *att;
@@ -338,9 +339,17 @@ if (level > 20)
 else
     {
     fprintf(f, "%s", type->name);
+    if (isList)
+        if (isOptional)
+	    fprintf(f, "*");
+	else
+	    fprintf(f, "+");
+    else
+        if (isOptional)
+	    fprintf(f, "?");
     fprintf(f, "\n");
     for (el = type->elements; el != NULL; el = el->next)
-	rWriteTree(f, el->type, uniqHash, level+1);
+	rWriteTree(f, el->type, el->isOptional, el->isList, uniqHash, level+1);
     }
 }
 
@@ -349,7 +358,7 @@ void writeTree(char *fileName, struct type *root)
 {
 struct hash *uniqHash = newHash(0);  /* Prevent writing dup defs. */
 FILE *f = mustOpen(fileName, "w");
-rWriteTree(f, root, uniqHash, 0);
+rWriteTree(f, root, FALSE, FALSE, uniqHash, 0);
 carefulClose(&f);
 }
 
