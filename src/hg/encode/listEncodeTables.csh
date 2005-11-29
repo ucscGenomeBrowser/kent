@@ -1,5 +1,7 @@
 #!/bin/csh -ef
 
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/listEncodeTables.csh,v 1.4 2005/11/29 22:08:07 kate Exp $
+
 # listEncodeTables <db>
 # Lists all tables on hgwbeta hg16, beginning with 'encode'
 # The track type is listed in the second column

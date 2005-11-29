@@ -3,6 +3,8 @@
 # Strip empty line after comment (rejected by maf_project)
 # and map ENCODE region coordinates to assembly coords
 
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/mafCoord.pl,v 1.2 2005/11/29 22:08:07 kate Exp $
+
 $#ARGV == 3 or die "usage: mafCoord <org> <db.chr> <chromStart> <chromSize>\n";
 
 my $org = shift @ARGV;

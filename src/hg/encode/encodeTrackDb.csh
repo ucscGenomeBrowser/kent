@@ -1,5 +1,7 @@
 #!/bin/csh -f
 
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/encodeTrackDb.csh,v 1.4 2005/11/29 22:08:07 kate Exp $
+
 set schema = $1
 set tempfile = /tmp/encodeTdb.$$
 set newtable = trackDb_encodedev_new

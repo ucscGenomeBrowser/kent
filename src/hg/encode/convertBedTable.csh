@@ -1,10 +1,9 @@
 #!/bin/csh -f
 
 # convertTable <fromDb> <toDb> <table>
-# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/convertBedTable.csh,v 1.4 2005/11/28 20:35:34 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/encode/convertBedTable.csh,v 1.5 2005/11/29 22:08:07 kate Exp $
 
 set encodeBin = /cluster/data/encode/bin/scripts
-
 
 set usage = "usage: convertBedTable <fromDb> <toDb> <table> <bedFieldCt> [-chain <chainfile>]"
 
