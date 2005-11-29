@@ -8,8 +8,9 @@
 #include "xap.h"
 #include "dtdParse.h"
 #include "elStat.h"
+#include "rename.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.16 2005/11/29 10:26:13 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.17 2005/11/29 23:08:11 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -43,6 +44,7 @@ struct table
     char *name;			/* Name of table. */
     struct field *fieldList;	/* Information about each field. */
     struct hash *fieldHash;	/* Fields keyed by field name. */
+    struct hash *fieldMixedHash;/* Fields keyed by field mixed case name. */
     struct elStat *elStat;	/* Associated elStat structure. */
     struct dtdElement *dtdElement; /* Associated dtd element. */
     struct field *primaryKey;	/* Primary key if any. */
@@ -64,7 +66,8 @@ struct field
 /* Information about a field. */
     {
     struct field *next;		/* Next in list. */
-    char *name;			/* Name of field. */
+    char *name;			/* Name of field as it is in XML. */
+    char *mixedCaseName;	/* Mixed case name - as it is in SQL. */
     struct table *table;	/* Table this is part of. */
     struct attStat *attStat;	/* Associated attStat structure. */
     struct dtdAttribute *dtdAttribute;	/* Associated dtd attribute. */
@@ -89,16 +92,6 @@ struct assocRef
     struct table *parent;	/* Parent table we're associated with */
     };
 
-struct field *findField(struct table *table, char *name)
-/* Return named field in table,  or NULL if no such field. */
-{
-struct field *field;
-for (field = table->fieldList; field != NULL; field = field->next)
-    if (sameString(field->name, name))
-	break;
-return field;
-}
-
 struct dtdAttribute *findDtdAttribute(struct dtdElement *element, char *name)
 /* Find named attribute in element, or NULL if no such attribute. */
 {
@@ -111,43 +104,21 @@ for (dtdAtt = element->attributes; dtdAtt != NULL; dtdAtt = dtdAtt->next)
 return dtdAtt;
 }
 
-char *makeUpFieldName(struct table *table, char *name)
-/* See if the field name is already in table.  If not
- * then return it.  Else try appending numbers to name
- * until we find one that's not in table. */
+struct dtdAttribute *findDtdAttributeMixed(struct dtdElement *element, char *name)
+/* Find named attribute in element, or NULL if no such attribute. */
 {
-char buf[128];
-int i;
-if (findField(table, name) == NULL)
-    return name;
-warn("%s already exists in %s", name, table->name);
-for (i=2; ; ++i)
+struct dtdAttribute *dtdAtt;
+for (dtdAtt = element->attributes; dtdAtt != NULL; dtdAtt = dtdAtt->next)
     {
-    safef(buf, sizeof(buf), "%s%d", name, i);
-    if (findField(table, buf) == NULL)
-        return cloneString(buf);
+    if (sameString(dtdAtt->mixedCaseName, name))
+        break;
     }
+return dtdAtt;
 }
 
-char *makeUpTableName(struct hash *tableHash, char *name)
-/* See if the table name is already in tableHash.  If not
- * then return it.  Else try appending numbers to name
- * until we find one that isn't used. */
-{
-char buf[128];
-int i;
-if (hashLookup(tableHash, name) == NULL)
-    return name;
-warn("table %s already exists\n", name);
-for (i=2; ; ++i)
-    {
-    safef(buf, sizeof(buf), "%s%d", name, i);
-    if (hashLookup(tableHash, buf) == NULL)
-        return cloneString(buf);
-    }
-}
 
-struct field *addFieldToTable(struct table *table, char *name, 
+struct field *addFieldToTable(struct table *table, 
+	char *name, char *mixedCaseName,
 	struct attStat *att, boolean isMadeUpKey, boolean atTail, 
 	boolean isString)
 /* Add field to end of table.  Use proposedName if it's unique,
@@ -157,15 +128,17 @@ struct field *field;
 
 AllocVar(field);
 field->name = cloneString(name);
+field->mixedCaseName = cloneString(mixedCaseName);
 field->table = table;
 field->attStat = att;
 field->isMadeUpKey = isMadeUpKey;
 if (!isMadeUpKey)
     field->dtdAttribute = findDtdAttribute(table->dtdElement, name);
 field->dy = dyStringNew(16);
-hashAdd(table->fieldHash, name, field);
+hashAdd(table->fieldHash, field->name, field);
+hashAdd(table->fieldMixedHash, field->mixedCaseName, field);
 if (att != NULL && field->dtdAttribute == NULL && !sameString(name, textField))
-    errAbort("%s.%s is in .spec but not in .dtd file", 
+    errAbort("%s.%s is in .stats but not in .dtd file", 
 	table->name, field->name);
 if (atTail)
     {
@@ -214,8 +187,9 @@ if (primaryKey == NULL)
 /* If still no key, we have to make one up */
 if (primaryKey == NULL)
     {
-    primaryKey = addFieldToTable(table, 
-    	makeUpFieldName(table, "id"), NULL, TRUE, FALSE, FALSE);
+    char *fieldName = renameUnique(table->fieldMixedHash, "id");
+    primaryKey = addFieldToTable(table, fieldName, fieldName,
+    	NULL, TRUE, FALSE, FALSE);
     table->madeUpPrimary = TRUE;
     }
 table->primaryKey = primaryKey;
@@ -238,12 +212,13 @@ table->name = cloneString(name);
 table->elStat = elStat;
 table->dtdElement = dtdElement;
 table->fieldHash = hashNew(8);
+table->fieldMixedHash = hashNew(8);
 table->uniqHash = hashNew(17);
 table->uniqString = dyStringNew(0);
 return table;
 }
 
-struct table *elsIntoTables(struct elStat *elList, struct hash *dtdMixedHash)
+struct table *elsIntoTables(struct elStat *elList, struct hash *dtdHash)
 /* Create table and field data structures from element/attribute
  * data structures. */
 {
@@ -254,16 +229,26 @@ struct field *field;
 
 for (el = elList; el != NULL; el = el->next)
     {
-    struct dtdElement *dtdElement = hashFindVal(dtdMixedHash, el->name);
+    struct dtdElement *dtdElement = hashFindVal(dtdHash, el->name);
     if (dtdElement == NULL)
-        errAbort("Table %s is in .spec but not in .dtd file", el->name);
-    table = tableNew(el->name, el, dtdElement);
+        errAbort("Element %s is in .stats but not in .dtd file", el->name);
+    table = tableNew(dtdElement->mixedCaseName, el, dtdElement);
     for (att = el->attList; att != NULL; att = att->next)
         {
 	char *name = att->name;
+	char *mixedName = NULL;
 	if (sameString(name, "<text>"))
-	    name = textField;
-	field = addFieldToTable(table, name, att, FALSE, TRUE, attIsString(att));
+	    name = mixedName = textField;
+	else
+	    {
+	    struct dtdAttribute *dtdAtt = findDtdAttribute(dtdElement, name);
+	    if (dtdAtt == NULL)
+		errAbort("Element %s attribute %s is in .stats but not in .dtd file", 
+			el->name, name);
+	    mixedName = dtdAtt->mixedCaseName;
+	    }
+	field = addFieldToTable(table, name, mixedName, att, 
+		FALSE, TRUE, attIsString(att));
 	}
     makePrimaryKey(table);
     slAddHead(&tableList, table);
@@ -284,14 +269,14 @@ for (dtdEl = dtdList; dtdEl != NULL; dtdEl = dtdEl->next)
     /* Make sure table exists in table hash - not really necessary
      * for this function, but provides a further reality check that
      * dtd and spec go together. */
-    table = hashFindVal(tableHash, dtdEl->name);
+    table = hashFindVal(tableHash, dtdEl->mixedCaseName);
     if (table == NULL)
         errAbort("Table %s is in .dtd but not .stat file", dtdEl->name);
 
     /* Loop through dtd's children and add counts. */
     for (child = dtdEl->children; child != NULL; child = child->next)
         {
-	table = hashMustFindVal(tableHash, child->name);
+	table = hashMustFindVal(tableHash, child->el->mixedCaseName);
 	table->usesAsChild += 1;
 	}
     }
@@ -316,12 +301,13 @@ safef(linkUniqName, sizeof(linkUniqName), "%s.%s",
 if (!hashLookup(rUniqParentLinkHash, linkUniqName))
     {
     hashAdd(rUniqParentLinkHash, linkUniqName, NULL);
-    uglyf("Linking %s to parent %s\n", table->name, parentTable->name);
+    verbose(3, "Linking %s to parent %s\n", table->name, parentTable->name);
     if (elAsChild->copyCode == '1' || elAsChild->copyCode == '?')
 	{
 	struct fieldRef *ref;
+	char *fieldName = renameUnique(parentTable->fieldHash, element->mixedCaseName);
 	field = addFieldToTable(parentTable, 
-		    makeUpFieldName(parentTable, element->name), 
+		    fieldName, fieldName,
 		    NULL, TRUE, TRUE,
 		    parentTable->primaryKey->isString);
 	AllocVar(ref);
@@ -340,12 +326,12 @@ if (!hashLookup(rUniqParentLinkHash, linkUniqName))
 	  table->name);
 	upperAt = strlen(parentTable->name) + 2;
 	joinedName[upperAt] = toupper(joinedName[upperAt]);
-	assocTableName = makeUpTableName(tableHash, joinedName);
+	assocTableName = renameUnique(tableHash, joinedName);
 	assocTable = tableNew(joinedName, NULL, NULL);
 	assocTable->isAssoc = TRUE;
-	addFieldToTable(assocTable, parentTable->name, 
+	addFieldToTable(assocTable, parentTable->name, parentTable->name,
 	    NULL, TRUE, TRUE, parentTable->primaryKey->isString);
-	addFieldToTable(assocTable, table->name, 
+	addFieldToTable(assocTable, table->name, table->name,
 	    NULL, TRUE, TRUE, table->primaryKey->isString);
 	slAddHead(pTableList, assocTable);
 	AllocVar(ref);
@@ -356,7 +342,7 @@ if (!hashLookup(rUniqParentLinkHash, linkUniqName))
     table->linkedParents = TRUE;
     }
 else
-    uglyf("skipping link %s to parent %s\n", table->name, parentTable->name);
+    verbose(3, "skipping link %s to parent %s\n", table->name, parentTable->name);
 for (child = element->children;  child != NULL; child = child->next)
     rAddParentKeys(element, child, tableHash, pTableList);
 }
@@ -540,7 +526,6 @@ for (field = table->fieldList; field != NULL; field = field->next)
 	    dyStringAppendC(field->dy, '0');
 	    }
 	dyStringAppendN(dy, field->dy->string, field->dy->stringSize);
-	dyStringPrintf(dy, "<%s>", field->name);  // uglyf
 	if (field->next != NULL)
 	    dyStringAppendC(dy, '\t');
 	}
@@ -665,6 +650,33 @@ fprintf(f, ");\n");
 carefulClose(&f);
 }
 
+void dtdRenameMixedCase(struct dtdElement *dtdList)
+/* Rename mixed case names in dtd to avoid conflicts with
+ * C and SQL.  Likely will migrate this into dtdParse soon. */
+{
+struct hash *elHash = newHash(0);
+struct dtdElement *el;
+struct dtdElChild *child;
+renameAddSqlWords(elHash);
+renameAddCWords(elHash);
+for (el = dtdList; el != NULL; el = el->next)
+    {
+    struct dtdAttribute *att;
+    struct hash *attHash = hashNew(8);
+    renameAddSqlWords(attHash);
+    renameAddCWords(attHash);
+    el->mixedCaseName = renameUnique(elHash, el->mixedCaseName);
+    hashAdd(elHash, el->mixedCaseName, NULL);
+    for (att = el->attributes; att != NULL; att = att->next)
+	{
+        att->mixedCaseName = renameUnique(attHash, att->mixedCaseName);
+	hashAdd(attHash, att->mixedCaseName, NULL);
+	}
+    hashFree(&attHash);
+    }
+hashFree(&elHash);
+}
+
 void xmlToSql(char *xmlFileName, char *dtdFileName, char *statsFileName,
 	char *outDir)
 /* xmlToSql - Convert XML dump into a fairly normalized relational database. */
@@ -679,9 +691,10 @@ char outFile[PATH_LEN];
 
 /* Load up dtd and stats file. */
 elStatList = elStatLoadAll(statsFileName);
-verbose(1, "%d elements in %s\n", slCount(elStatList), statsFileName);
+verbose(2, "%d elements in %s\n", slCount(elStatList), statsFileName);
 dtdParse(dtdFileName, globalPrefix, textField,
 	&dtdList, &dtdHash);
+dtdRenameMixedCase(dtdList);
 verbose(1, "%d elements in %s\n", dtdHash->elCount, dtdFileName);
 
 /* Build up hash of dtdElements keyed by mixed name rather
@@ -692,8 +705,8 @@ for (dtdEl = dtdList; dtdEl != NULL; dtdEl = dtdEl->next)
 /* Create list of tables that correspond to tag types. 
  * This doesn't include any association tables we create
  * to handle lists of child elements. */
-tableList = elsIntoTables(elStatList, dtdMixedHash);
-uglyf("Made tableList\n");
+tableList = elsIntoTables(elStatList, dtdHash);
+verbose(2, "Made tableList\n");
 
 /* Create hashes of the table lists - one keyed by the
  * table name, and one keyed by the tag name. */
@@ -703,21 +716,17 @@ for (table = tableList; table != NULL; table = table->next)
     hashAdd(tableHash, table->name, table);
     hashAdd(xmlTableHash, table->dtdElement->name, table);
     }
-uglyf("Made table hashes\n");
+verbose(2, "Made table hashes\n");
 
 /* Find top level tag (which we won't actually output). */
 countUsesAsChild(dtdList, tableHash);
-uglyf("Past countUsesAsChild\n");
+verbose(2, "Past countUsesAsChild\n");
 rootTable = findRootTable(tableList);
-uglyf("Root table is %s\n", rootTable->name);
+verbose(2, "Root table is %s\n", rootTable->name);
 
-/* Make sure that conditions hold for simple fast
- * parent-reference-filling algorithm, and add keys to support parenting. */
-for (table = tableList; table != NULL; table = table->next)
-    if (table->usesAsChild > 1)
-        warn("%s is used in two contexts, not ready for that", table->name);
+/* Add stuff to support parent-child relationships. */
 addParentKeys(rootTable->dtdElement, tableHash, &tableList);
-uglyf("Added parent keys\n");
+verbose(2, "Added parent keys\n");
 
 /* Make output directory. */
 makeDir(outDir);
@@ -729,7 +738,7 @@ for (table = tableList; table != NULL; table = table->next)
       outDir, table->name);
     writeCreateSql(outFile, table);
     }
-uglyf("Made sql table creation files\n");
+verbose(2, "Made sql table creation files\n");
 
 /* Set up output directory and open tab-separated files. */
 for (table = tableList; table != NULL; table = table->next)
@@ -738,18 +747,18 @@ for (table = tableList; table != NULL; table = table->next)
       outDir, table->name);
     table->tabFile = mustOpen(outFile, "w");
     }
-uglyf("Created output files.\n");
+verbose(2, "Created output files.\n");
 
 /* Stream through XML adding to tab-separated files.. */
 xapParseFile(xap, xmlFileName);
-uglyf("Streamed through XML\n");
+verbose(2, "Streamed through XML\n");
 
 /* Close down files */
 for (table = tableList; table != NULL; table = table->next)
     carefulClose(&table->tabFile);
-uglyf("Closed tab files\n");
+verbose(2, "Closed tab files\n");
 
-uglyf("All done\n");
+verbose(1, "All done\n");
 }
 
 int main(int argc, char *argv[])
