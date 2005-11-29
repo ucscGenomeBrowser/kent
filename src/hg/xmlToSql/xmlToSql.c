@@ -9,13 +9,16 @@
 #include "dtdParse.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.15 2005/11/29 10:08:31 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.16 2005/11/29 10:26:13 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "xmlToSql - Convert XML dump into a fairly normalized relational database.\n"
+  "xmlToSql - Convert XML dump into a fairly normalized relational database\n"
+  "   in the form of a directory full of tab-separated files and table\n"
+  "   creation SQL.  You'll need to run autoDtd on the XML file first to\n"
+  "   get the dtd and stats files.\n"
   "usage:\n"
   "   xmlToSql in.xml in.dtd in.stats outDir\n"
   "options:\n"
