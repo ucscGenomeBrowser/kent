@@ -121,7 +121,7 @@ if ( $status ) then
 endif
 
 echo
-ssh kolossus $WEEKLYBLD/buildUtils.csh
+buildUtils.csh
 if ( $status ) then
  exit 1
 endif
