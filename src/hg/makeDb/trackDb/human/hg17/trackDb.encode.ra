@@ -1627,6 +1627,7 @@ spanList 250
 autoScaleDefault Off
 smoothingWindow 2
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeRegulomeBaseCACO2
     subTrack encodeRegulomeBase
@@ -1642,6 +1643,7 @@ release alpha
     longLabel GM06990 DNaseI Sensitivity
     color 90,50,210
     priority 2
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeBaseGM06990
 release beta
@@ -1686,6 +1688,7 @@ release alpha
     longLabel CD34 DNaseI Sensitivity
     color 240,50,60
     priority 7
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeBaseERY
 release beta
@@ -1716,6 +1719,7 @@ maxLimit 3.0
 viewLimits 1:2
 autoScaleDefault Off
 maxHeightPixels 128:16:16
+dataVersion ENCODE June 2005 Freeze
 
 track encodeRegulomeProb
 release alpha
@@ -1731,6 +1735,7 @@ maxLimit 3.0
 viewLimits 1:2
 autoScaleDefault Off
 maxHeightPixels 128:16:16
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeProbCACO2
     subTrack encodeRegulomeProb
@@ -1746,6 +1751,7 @@ release alpha
     longLabel GM06990 DNaseI HSs
     color 90,50,210
     priority 2
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeProbGM06990
 release beta
@@ -1790,6 +1796,7 @@ release alpha
     longLabel CD34 DNaseI HSs
     color 240,50,60
     priority 7
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeProbERY
 release beta
@@ -1807,6 +1814,7 @@ release beta
     priority 8
 
 track encodeRegulomeQuality
+release alpha
 compositeTrack on
 shortLabel UW/Reg Q/A
 longLabel ENCODE UW/Regulome Plate Quality Score
@@ -1815,6 +1823,20 @@ priority 66.3
 chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 type bed 5 .
 useScore 1
+dataVersion ENCODE Oct 2005 Freeze
+
+track encodeRegulomeQuality
+release beta
+compositeTrack on
+shortLabel UW/Reg Q/A
+longLabel ENCODE UW/Regulome Plate Quality Score
+group encodeChrom
+priority 66.3
+chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
+type bed 5 .
+useScore 1
+dataVersion ENCODE June 2005 Freeze
+origAssembly hg16
 
     track encodeRegulomeQualityCACO2
     subTrack encodeRegulomeQuality
@@ -1830,6 +1852,7 @@ release alpha
     longLabel GM06990 Quality
     color 90,50,210
     priority 2
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeQualityGM06990
 release beta
@@ -1882,6 +1905,7 @@ release alpha
     longLabel CD34 Quality
     color 240,50,60
     priority 7
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeRegulomeQualityHeLa
     subTrack encodeRegulomeQuality
@@ -1900,6 +1924,7 @@ chromosomes chr2,chr5,chr7,chr8,chr9,chr11,chr12,chr16,chr18,chrX
 type bed 5 .
 useScore 1
 subGroup1 amplicon Amplicon even=Even odd=Odd
+dataVersion ENCODE Oct2005 Freeze
 
     track encodeRegulomeAmplEvenCACO2
     subTrack encodeRegulomeAmplicon
