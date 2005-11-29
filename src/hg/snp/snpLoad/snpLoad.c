@@ -1,12 +1,16 @@
 /* snpLoad - create snp table from build125 database. */
 #include "common.h"
+
+#include "chromInfo.h"
+#include "hash.h"
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.11 2005/11/25 11:52:24 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.12 2005/11/29 02:58:53 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
+static struct hash *chromHash = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -16,6 +20,42 @@ errAbort(
     "usage:\n"
     "    snpLoad snpDb targetDb \n");
 }
+
+/* Copied from hgLoadWiggle. */
+static struct hash *loadAllChromInfo()
+/* Load up all chromosome infos. */
+{
+struct chromInfo *el;
+struct sqlConnection *conn = sqlConnect(targetDb);
+struct sqlResult *sr = NULL;
+struct hash *ret;
+char **row;
+
+ret = newHash(0);
+
+sr = sqlGetResult(conn, "select * from chromInfo");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = chromInfoLoad(row);
+    verbose(4, "Add hash %s value %u (%#lx)\n", el->chrom, el->size, (unsigned long)&el->size);
+    hashAdd(ret, el->chrom, (void *)(& el->size));
+    }
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return ret;
+}
+
+/* also copied from hgLoadWiggle. */
+static unsigned getChromSize(char *chrom)
+/* Return size of chrom.  */
+{
+struct hashEl *el = hashLookup(chromHash,chrom);
+
+if (el == NULL)
+    errAbort("Couldn't find size of chrom %s", chrom);
+    return *(unsigned *)el->val;
+}
+
 
 boolean setCoords(struct snp125 *el, int snpClass, char *startString, char *endString)
 /* set coords and class */
@@ -255,6 +295,40 @@ for (el = list; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
+void lookupRefAllele(struct snp125 *list)
+/* get reference allele from nib files */
+{
+struct snp125 *el = NULL;
+struct dnaSeq *seq;
+char fileName[HDB_MAX_PATH_STRING];
+char chromName[64];
+int chromSize = 0;
+
+AllocVar(seq);
+verbose(1, "looking up reference allele...\n");
+for (el = list; el != NULL; el = el->next)
+    {
+    el->reference = cloneString("n/a");
+    if (sameString(el->chrom, "ERROR"))
+        continue;
+    if (sameString(el->class, "simple") || sameString(el->class, "range"))
+        {
+	strcpy(chromName, "chr");
+	strcat(chromName, el->chrom);
+        chromSize = getChromSize(chromName);
+	if (el->chromStart > chromSize || el->chromEnd > chromSize)
+	    {
+	    verbose(1, "unexpected coords rs%s %s:%d-%d\n",
+	            el->name, chromName, el->chromStart, el->chromEnd);
+            continue;
+	    }
+        hNibForChrom2(chromName, fileName);
+        seq = hFetchSeq(fileName, chromName, el->chromStart, el->chromEnd);
+	touppers(seq->dna);
+	el->reference = cloneString(seq->dna);
+	}
+    }
+}
 
 void writeSnpTable(FILE *f, struct snp125 *list)
 /* write tab separated file */
@@ -273,7 +347,7 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "rs%s\t", el->name);
     fprintf(f, "%d\t", score);
     fprintf(f, "%s\t", el->strand);
-    fprintf(f, "N\t");
+    fprintf(f, "%s\t", el->reference);
     fprintf(f, "%s\t", el->observed);
     fprintf(f, "unknown\t");
     fprintf(f, "%s\t", el->class);
@@ -342,6 +416,8 @@ targetDb = argv[2];
 
 hSetDb(snpDb);
 hSetDb2(targetDb);
+chromHash = loadAllChromInfo();
+
 
 /* check for needed tables */
 if(!hTableExistsDb(snpDb, "ContigLoc"))
@@ -357,6 +433,7 @@ list = readSnps();
 lookupContigs(list);
 lookupFunction(list);
 lookupHet(list);
+lookupRefAllele(list);
 
 verbose(1, "sorting\n");
 slSort(&list, snp125Cmp);
