@@ -75,7 +75,7 @@ nextUpper = (prefixLen > 0);
 for (;;)
    {
    c = *s++;
-   if (c == '_' || c == '-')
+   if (c == '_' || c == '-' || c == ':')
        nextUpper = TRUE;
    else
        {
