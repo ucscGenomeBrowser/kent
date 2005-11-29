@@ -9,7 +9,7 @@
 #include "dtdParse.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.6 2005/11/29 00:06:19 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.7 2005/11/29 00:55:25 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -39,6 +39,7 @@ struct table
     struct table *next;		/* Next in list. */
     char *name;			/* Name of table. */
     struct field *fieldList;	/* Information about each field. */
+    struct hash *fieldHash;	/* Fields keyed by field name. */
     struct elStat *elStat;	/* Associated elStat structure. */
     struct dtdElement *dtdElement; /* Associated dtd element. */
     struct field *primaryKey;	/* Primary key if any. */
@@ -64,7 +65,7 @@ struct field
     struct dtdAttribute *dtdAttribute;	/* Associated dtd attribute. */
     boolean isMadeUpKey;	/* True if it's a made up key. */
     boolean isPrimaryKey;	/* True if it's table's primary key. */
-    char keyValue[16];		/* Space for key value. */
+    struct dyString *dy;	/* Current value of field during parsing. */
     };
 
 struct field *findField(struct table *table, char *name)
@@ -168,10 +169,13 @@ for (el = elList; el != NULL; el = el->next)
     table->name = el->name;
     table->elStat = el;
     table->dtdElement = hashFindVal(dtdMixedHash, table->name);
+    table->fieldHash = hashNew(8);
     table->uniqHash = hashNew(17);
     table->uniqString = dyStringNew(0);
     if (table->dtdElement == NULL)
+	{
         errAbort("Table %s is in .spec but not in .dtd file", table->name);
+	}
     for (att = el->attList; att != NULL; att = att->next)
         {
 	AllocVar(field);
@@ -181,14 +185,15 @@ for (el = elList; el != NULL; el = el->next)
 	field->table = table;
 	field->attStat = att;
 	field->dtdAttribute = findDtdAttribute(table->dtdElement, field->name);
-	if (field->dtdAttribute == NULL)
+	field->dy = dyStringNew(16);
+	hashAdd(table->fieldHash, field->name, field);
+	if (field->dtdAttribute == NULL && !sameString(field->name, textField))
 	    errAbort("%s.%s is in .spec but not in .dtd file", 
 	    	table->name, field->name);
 	slAddTail(&table->fieldList, field);
 	}
     makePrimaryKey(table);
     slAddHead(&tableList, table);
-    /* uglyf("%s primary key is %s (%d)\n", table->name, table->primaryKey->name, table->madeUpPrimary); */
     }
 slReverse(&tableList);
 return tableList;
@@ -286,22 +291,30 @@ else
     dyStringAppend(dy, string);
 }
 
-void *startHandler(struct xap *xap, char *name, char **atts)
+void *startHandler(struct xap *xap, char *tagName, char **atts)
 /* Called at the start of a tag after attributes are parsed. */
 {
-struct table *table = hashFindVal(xmlTableHash, name);
-struct dyString *dy = table->uniqString;
+struct table *table = hashFindVal(xmlTableHash, tagName);
+struct field *field;
 int i;
 boolean uniq = FALSE;
 
 if (table == NULL)
-    errAbort("Tag %s is in xml file but not dtd file", name);
+    errAbort("Tag %s is in xml file but not dtd file", tagName);
+/* Clear all fields. */
+for (field = table->fieldList; field != NULL; field = field->next)
+    {
+    if (!field->isMadeUpKey)
+	dyStringClear(field->dy);
+    }
 
-dyStringClear(dy);
 for (i=0; atts[i] != NULL; i += 2)
     {
-    dyStringAppendEscapedForTabFile(dy, atts[i+1]);
-    dyStringAppendC(dy, '\t');
+    char *name = atts[i], *val = atts[i+1];
+    field = hashFindVal(table->fieldHash, name);
+    if (field == NULL)
+        errAbort("Attribute %s of tag %s not in dtd", name, tagName);
+    dyStringAppendEscapedForTabFile(field->dy, val);
     }
 return table;
 }
@@ -310,7 +323,29 @@ void endHandler(struct xap *xap, char *name)
 /* Called at end of a tag */
 {
 struct table *table = xap->stack->object;
+struct field *field;
 struct dyString *dy = table->uniqString;
+char *text = skipLeadingSpaces(xap->stack->text->string);
+
+if (text[0] != 0)
+    {
+    field = hashFindVal(table->fieldHash, textField);
+    if (field == NULL)
+        errAbort("No text for %s expected in dtd", table->name);
+    dyStringAppendEscapedForTabFile(field->dy, text);
+    }
+
+/* Construct uniq string from fields, etc. */
+dyStringClear(dy);
+for (field = table->fieldList; field != NULL; field = field->next)
+    {
+    if (!field->isMadeUpKey)
+	{
+	dyStringAppendN(dy, field->dy->string, field->dy->stringSize);
+	if (field->next != NULL)
+	    dyStringAppendC(dy, '\t');
+	}
+    }
 
 if (!hashLookup(table->uniqHash, dy->string))
     {
@@ -320,9 +355,7 @@ if (!hashLookup(table->uniqHash, dy->string))
 	table->lastId += 1;
 	fprintf(table->tabFile, "%d\t", table->lastId);
 	}
-    /* Substitute '\n' for '\t' at end and write. */
-    dy->string[dy->stringSize-1] = '\n';
-    fprintf(table->tabFile, "%s", dy->string);
+    fprintf(table->tabFile, "%s\n", dy->string);
     }
 }
 

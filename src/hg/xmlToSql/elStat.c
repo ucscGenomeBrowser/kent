@@ -28,13 +28,16 @@ for (;;)
        {
        if (el == NULL)
            errAbort("%s doesn't start with an element", fileName);
-       AllocVar(att);
-       att->name = cloneString(row[0]);
-       att->maxLen = lineFileNeedNum(lf, row, 1);
-       att->type = cloneString(row[2]);
-       att->count = lineFileNeedNum(lf, row, 3);
-       att->uniqCount = lineFileNeedNum(lf, row, 4);
-       slAddTail(&el->attList, att);
+       if (!sameString(row[2], "none"))
+	   {
+	   AllocVar(att);
+	   att->name = cloneString(row[0]);
+	   att->maxLen = lineFileNeedNum(lf, row, 1);
+	   att->type = cloneString(row[2]);
+	   att->count = lineFileNeedNum(lf, row, 3);
+	   att->uniqCount = lineFileNeedNum(lf, row, 4);
+	   slAddTail(&el->attList, att);
+	   }
        }
     else if (wordCount == 0)
        break;
