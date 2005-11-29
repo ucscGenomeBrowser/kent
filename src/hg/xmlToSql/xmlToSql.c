@@ -2,12 +2,14 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "dystring.h"
 #include "options.h"
-#include "dtdParse.h"
 #include "portable.h"
+#include "xap.h"
+#include "dtdParse.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.5 2005/11/28 22:17:49 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.6 2005/11/29 00:06:19 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -42,9 +44,13 @@ struct table
     struct field *primaryKey;	/* Primary key if any. */
     boolean madeUpPrimary;	/* True if we are creating primary key. */
     int lastId;			/* Last id value if we create key. */
+    struct table *parentAssociation;  /* Association table linking to parent. /
     struct field *parentKey;	/* If non-null, field that links to parent. */
     int usesAsChild;		/* Number of times this is a child of another
                                  * table. */
+    FILE *tabFile;		/* Tab oriented file associated with table */
+    struct hash *uniqHash;	/* Table to insure unique output. */
+    struct dyString *uniqString;/* Key into unique hash. Also most of output */
     };
 
 struct field
@@ -58,6 +64,7 @@ struct field
     struct dtdAttribute *dtdAttribute;	/* Associated dtd attribute. */
     boolean isMadeUpKey;	/* True if it's a made up key. */
     boolean isPrimaryKey;	/* True if it's table's primary key. */
+    char keyValue[16];		/* Space for key value. */
     };
 
 struct field *findField(struct table *table, char *name)
@@ -142,11 +149,11 @@ if (primaryKey == NULL)
     slAddHead(&table->fieldList, primaryKey);
     table->madeUpPrimary = TRUE;
     }
-
 table->primaryKey = primaryKey;
+primaryKey->isPrimaryKey = TRUE;
 }
 
-struct table *elsIntoTables(struct elStat *elList, struct hash *dtdHash)
+struct table *elsIntoTables(struct elStat *elList, struct hash *dtdMixedHash)
 /* Create table and field data structures from element/attribute
  * data structures. */
 {
@@ -160,7 +167,9 @@ for (el = elList; el != NULL; el = el->next)
     AllocVar(table);
     table->name = el->name;
     table->elStat = el;
-    table->dtdElement = hashFindVal(dtdHash, table->name);
+    table->dtdElement = hashFindVal(dtdMixedHash, table->name);
+    table->uniqHash = hashNew(17);
+    table->uniqString = dyStringNew(0);
     if (table->dtdElement == NULL)
         errAbort("Table %s is in .spec but not in .dtd file", table->name);
     for (att = el->attList; att != NULL; att = att->next)
@@ -179,7 +188,7 @@ for (el = elList; el != NULL; el = el->next)
 	}
     makePrimaryKey(table);
     slAddHead(&tableList, table);
-    uglyf("%s primary key is %s (%d)\n", table->name, table->primaryKey->name, table->madeUpPrimary);
+    /* uglyf("%s primary key is %s (%d)\n", table->name, table->primaryKey->name, table->madeUpPrimary); */
     }
 slReverse(&tableList);
 return tableList;
@@ -229,16 +238,105 @@ if (root == NULL)
 return root;
 }
 
+/* Globals used by the streaming parser callbacks. */
+struct hash *xmlTableHash;  /* Hash of tables keyed by XML tag names */
+struct table *rootTable;    /* Highest level tag. */
+
+void dyStringAppendEscapedForTabFile(struct dyString *dy, char *string)
+/* Append string to dy, escaping if need be */
+{
+char c, *s;
+boolean needsEscape = FALSE;
+
+s =  string;
+while ((c = *s++) != 0)
+    {
+    switch (c)
+       {
+       case '\\':
+       case '\t':
+       case '\n':
+           needsEscape = TRUE;
+       }
+    }
+
+if (needsEscape)
+    {
+    s = string;
+    while ((c = *s++) != 0)
+	{
+	switch (c)
+	   {
+	   case '\\':
+	      dyStringAppendN(dy, "\\\\", 2);
+	      break;
+	   case '\t':
+	      dyStringAppendN(dy, "\\t", 2);
+	      break;
+	   case '\n':
+	      dyStringAppendN(dy, "\\n", 2);
+	      break;
+	   default:
+	      dyStringAppendC(dy, c);
+	      break;
+	   }
+	}
+    }
+else
+    dyStringAppend(dy, string);
+}
+
+void *startHandler(struct xap *xap, char *name, char **atts)
+/* Called at the start of a tag after attributes are parsed. */
+{
+struct table *table = hashFindVal(xmlTableHash, name);
+struct dyString *dy = table->uniqString;
+int i;
+boolean uniq = FALSE;
+
+if (table == NULL)
+    errAbort("Tag %s is in xml file but not dtd file", name);
+
+dyStringClear(dy);
+for (i=0; atts[i] != NULL; i += 2)
+    {
+    dyStringAppendEscapedForTabFile(dy, atts[i+1]);
+    dyStringAppendC(dy, '\t');
+    }
+return table;
+}
+
+void endHandler(struct xap *xap, char *name)
+/* Called at end of a tag */
+{
+struct table *table = xap->stack->object;
+struct dyString *dy = table->uniqString;
+
+if (!hashLookup(table->uniqHash, dy->string))
+    {
+    hashAdd(table->uniqHash, dy->string, NULL);
+    if (table->madeUpPrimary)
+	{
+	table->lastId += 1;
+	fprintf(table->tabFile, "%d\t", table->lastId);
+	}
+    /* Substitute '\n' for '\t' at end and write. */
+    dy->string[dy->stringSize-1] = '\n';
+    fprintf(table->tabFile, "%s", dy->string);
+    }
+}
+
 void xmlToSql(char *xmlFileName, char *dtdFileName, char *statsFileName,
 	char *outDir)
 /* xmlToSql - Convert XML dump into a fairly normalized relational database. */
 {
 struct elStat *elStatList = NULL;
-struct dtdElement *dtdList;
-struct hash *dtdHash;
+struct dtdElement *dtdList, *dtdEl;
+struct hash *dtdHash, *dtdMixedHash = hashNew(0);
 struct table *tableList = NULL, *table;
 struct hash *tableHash = hashNew(0);
-struct table *rootTable;
+struct xap *xap = xapNew(startHandler, endHandler, xmlFileName);
+char outFile[PATH_LEN];
 
 /* Load up dtd and stats file. */
 elStatList = elStatLoadAll(statsFileName);
@@ -247,22 +345,52 @@ dtdParse(dtdFileName, globalPrefix, textField,
 	&dtdList, &dtdHash);
 verbose(1, "%d elements in %s\n", dtdHash->elCount, dtdFileName);
 
+/* Build up hash of dtdElements keyed by mixed name rather
+ * than tag name. */
+for (dtdEl = dtdList; dtdEl != NULL; dtdEl = dtdEl->next)
+    hashAdd(dtdMixedHash, dtdEl->mixedCaseName, dtdEl);
 
-/* Build up our own data structures that merge dtd, and
- * stats info, and have other stuff too. */
-tableList = elsIntoTables(elStatList, dtdHash);
-for (table = tableList; table != NULL; table = table->next)
-    hashAdd(tableHash, table->name, table);
+/* Create list of tables that correspond to tag types. 
+ * This doesn't include any association tables we create
+ * to handle lists of child elements. */
+tableList = elsIntoTables(elStatList, dtdMixedHash);
 uglyf("Made tableList\n");
+
+/* Create hashes of the table lists - one keyed by the
+ * table name, and one keyed by the tag name. */
+xmlTableHash = hashNew(0);
+for (table = tableList; table != NULL; table = table->next)
+    {
+    hashAdd(tableHash, table->name, table);
+    hashAdd(xmlTableHash, table->dtdElement->name, table);
+    }
+uglyf("Made table hashes\n");
+
+/* Count up parent/child relationships and find top level
+ * tag (which we won't actually output) */
 countUsesAsChild(dtdList, tableHash);
 uglyf("Past countUsesAsChild\n");
 rootTable = findRootTable(tableList);
 uglyf("Root table is %s\n", rootTable->name);
 
-
+/* Set up output directory and create tab-separated files. */
 makeDir(outDir);
+for (table = tableList; table != NULL; table = table->next)
+    {
+    safef(outFile, sizeof(outFile), "%s/%s.tab", 
+      outDir, table->name);
+    table->tabFile = mustOpen(outFile, "w");
+    }
+uglyf("Created output files.\n");
 
+/* Stream through XML. */
+xapParseFile(xap, xmlFileName);
+uglyf("Streamed through XML\n");
 
+/* Close down files */
+for (table = tableList; table != NULL; table = table->next)
+    carefulClose(&table->tabFile);
+uglyf("All done\n");
 }
 
 int main(int argc, char *argv[])
