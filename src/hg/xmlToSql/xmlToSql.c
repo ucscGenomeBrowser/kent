@@ -9,7 +9,7 @@
 #include "dtdParse.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.13 2005/11/29 07:44:16 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.14 2005/11/29 08:25:19 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -45,7 +45,7 @@ struct table
     struct field *primaryKey;	/* Primary key if any. */
     boolean madeUpPrimary;	/* True if we are creating primary key. */
     int lastId;			/* Last id value if we create key. */
-    struct table *parentAssociation;  /* Association table linking to parent. */
+    struct assocRef *parentAssocs;  /* Association table linking to parent. */
     struct fieldRef *parentKeys; /* References to possible parents. */
     boolean linkedParents;	/* True if we have linked parents. */
     int usesAsChild;		/* Number of times this is a child of another
@@ -73,8 +73,16 @@ struct field
 struct fieldRef
 /* A reference to a field. */
     {
-    struct fieldRef *next;
-    struct field *field;
+    struct fieldRef *next;	/* Next in list */
+    struct field *field;	/* Associated field. */
+    };
+
+struct assocRef
+/* A reference to a table. */
+    {
+    struct assocRef *next;	/* Next in list. */
+    struct table *assoc;	/* Association table */
+    struct table *parent;	/* Parent table we're associated with */
     };
 
 struct field *findField(struct table *table, char *name)
@@ -285,6 +293,8 @@ for (dtdEl = dtdList; dtdEl != NULL; dtdEl = dtdEl->next)
     }
 }
 
+static struct hash *rUniqParentLinkHash;
+
 void rAddParentKeys(struct dtdElement *parent, struct dtdElChild *elAsChild,
 	struct hash *tableHash, struct table **pTableList)
 /* Recursively add parentKeys. */
@@ -294,13 +304,15 @@ struct dtdElChild *child;
 struct table *table = hashMustFindVal(tableHash, element->mixedCaseName);
 struct table *parentTable = hashMustFindVal(tableHash, parent->mixedCaseName);
 struct field *field;
-
-for (child = element->children;  child != NULL; child = child->next)
-    rAddParentKeys(element, child, tableHash, pTableList);
+char linkUniqName[256];
 
 /* Add new field in parent. */
-if (!table->linkedParents)
+safef(linkUniqName, sizeof(linkUniqName), "%s.%s", 
+	parentTable->name, table->name);
+if (!hashLookup(rUniqParentLinkHash, linkUniqName))
     {
+    hashAdd(rUniqParentLinkHash, linkUniqName, NULL);
+    uglyf("Linking %s to parent %s\n", table->name, parentTable->name);
     if (elAsChild->copyCode == '1' || elAsChild->copyCode == '?')
 	{
 	struct fieldRef *ref;
@@ -316,6 +328,7 @@ if (!table->linkedParents)
 	{
 	/* Need to handle association here. */
 	struct table *assocTable;
+	struct assocRef *ref;
 	char joinedName[256];
 	char *assocTableName;
 	int upperAt;
@@ -330,10 +343,17 @@ if (!table->linkedParents)
 	addFieldToTable(assocTable, table->name, 
 	    NULL, TRUE, TRUE, table->primaryKey->isString);
 	slAddHead(pTableList, assocTable);
-	table->parentAssociation = assocTable;
+	AllocVar(ref);
+	ref->assoc = assocTable;
+	ref->parent = parentTable;
+	slAddHead(&table->parentAssocs, ref);
 	}
     table->linkedParents = TRUE;
     }
+else
+    uglyf("skipping link %s to parent %s\n", table->name, parentTable->name);
+for (child = element->children;  child != NULL; child = child->next)
+    rAddParentKeys(element, child, tableHash, pTableList);
 }
 
 void addParentKeys(struct dtdElement *dtdRoot, struct hash *tableHash,
@@ -342,6 +362,7 @@ void addParentKeys(struct dtdElement *dtdRoot, struct hash *tableHash,
 {
 struct dtdElChild *topLevel;
 
+rUniqParentLinkHash = newHash(0);
 for (topLevel = dtdRoot->children; topLevel != NULL; topLevel = topLevel->next)
     {
     struct dtdElement *mainIterator = topLevel->el;
@@ -351,6 +372,7 @@ for (topLevel = dtdRoot->children; topLevel != NULL; topLevel = topLevel->next)
 	rAddParentKeys(mainIterator, child, tableHash, pTableList);
 	}
     }
+hashFree(&rUniqParentLinkHash);
 }
 
 
@@ -486,7 +508,8 @@ void endHandler(struct xap *xap, char *name)
 struct table *table = xap->stack->object;
 struct table *parentTable = xap->stack[1].object;
 struct field *field;
-struct fieldRef *ref;
+struct fieldRef *fieldRef;
+struct assocRef *assocRef;
 struct dyString *dy = table->uniqString;
 char *text = skipLeadingSpaces(xap->stack->text->string);
 char *primaryKeyVal = NULL;
@@ -540,26 +563,25 @@ if (primaryKeyVal == NULL)
     fprintf(table->tabFile, "\n");
     hashAdd(table->uniqHash, dy->string, cloneString(primaryKeyVal));
     }
-#ifdef OLD
-if (table->parentKeys != NULL)
+for (fieldRef = table->parentKeys; fieldRef != NULL; fieldRef = fieldRef->next)
     {
-    dyStringAppend(table->parentKey->dy, primaryKeyVal);
-    }
-#endif /* OLD */
-for (ref = table->parentKeys; ref != NULL; ref = ref->next)
-    {
-    field = ref->field;
+    field = fieldRef->field;
     if (field->table == parentTable)
         {
 	dyStringAppend(field->dy, primaryKeyVal);
 	break;
 	}
     }
-if (table->parentAssociation != NULL)
+
+for (assocRef = table->parentAssocs; assocRef != NULL; 
+	assocRef = assocRef->next)
     {
-    assoc = assocNew(table->parentAssociation->tabFile,
-        primaryKeyVal);
-    slAddHead(&parentTable->assocList, assoc);
+    if (assocRef->parent == parentTable)
+        {
+	assoc = assocNew(assocRef->assoc->tabFile,
+	    primaryKeyVal);
+	slAddHead(&parentTable->assocList, assoc);
+	}
     }
 
 slReverse(&table->assocList);
@@ -644,25 +666,19 @@ for (table = tableList; table != NULL; table = table->next)
 addParentKeys(rootTable->dtdElement, tableHash, &tableList);
 uglyf("Added parent keys\n");
 
-#ifdef DUMP
-uglyf("begin table dump\n");
+/* Make output directory. */
+makeDir(outDir);
+
+/* Make table creation SQL files. */
 for (table = tableList; table != NULL; table = table->next)
     {
-    struct field *field = table->fieldList;
-    uglyf("%s\n", table->name);
-    for (field = table->fieldList; field != NULL; field = field->next)
-	{
-	uglyf("\t");
-	if (field == table->primaryKey)
-	    uglyf("*");
-	uglyf("%s\n", field->name);
-	}
+    safef(outFile, sizeof(outFile), "%s/%s.sql", 
+      outDir, table->name);
+    writeCreateSql(outFile, table);
     }
-uglyf("end table dump\n");
-#endif /* DUMP */
+uglyf("Made sql table creation files\n");
 
-/* Set up output directory and create tab-separated files. */
-makeDir(outDir);
+/* Set up output directory and open tab-separated files. */
 for (table = tableList; table != NULL; table = table->next)
     {
     safef(outFile, sizeof(outFile), "%s/%s.tab", 
@@ -671,7 +687,7 @@ for (table = tableList; table != NULL; table = table->next)
     }
 uglyf("Created output files.\n");
 
-/* Stream through XML. */
+/* Stream through XML adding to tab-separated files.. */
 xapParseFile(xap, xmlFileName);
 uglyf("Streamed through XML\n");
 
@@ -679,15 +695,6 @@ uglyf("Streamed through XML\n");
 for (table = tableList; table != NULL; table = table->next)
     carefulClose(&table->tabFile);
 uglyf("Closed tab files\n");
-
-/* Create table creation SQL files. */
-for (table = tableList; table != NULL; table = table->next)
-    {
-    safef(outFile, sizeof(outFile), "%s/%s.sql", 
-      outDir, table->name);
-    writeCreateSql(outFile, table);
-    }
-uglyf("Made sql table creation files\n");
 
 uglyf("All done\n");
 }
