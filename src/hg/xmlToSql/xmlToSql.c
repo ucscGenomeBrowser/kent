@@ -9,7 +9,7 @@
 #include "dtdParse.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.9 2005/11/29 04:23:11 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.10 2005/11/29 05:04:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -108,6 +108,24 @@ for (i=2; ; ++i)
     }
 }
 
+char *makeUpTableName(struct hash *tableHash, char *name)
+/* See if the table name is already in tableHash.  If not
+ * then return it.  Else try appending numbers to name
+ * until we find one that isn't used. */
+{
+char buf[128];
+int i;
+if (hashLookup(tableHash, name) == NULL)
+    return name;
+warn("table %s already exists\n", name);
+for (i=2; ; ++i)
+    {
+    safef(buf, sizeof(buf), "%s%d", name, i);
+    if (hashLookup(tableHash, buf) == NULL)
+        return cloneString(buf);
+    }
+}
+
 struct field *addFieldToTable(struct table *table, char *name, 
 	struct attStat *att, boolean isMadeUpKey, boolean atTail, 
 	boolean isString)
@@ -189,6 +207,21 @@ boolean attIsString(struct attStat *att)
 return sameString(att->type, "string");
 }
 
+struct table *tableNew(char *name, struct elStat *elStat,
+	struct dtdElement *dtdElement)
+/* Create a new table structure. */
+{
+struct table *table;
+AllocVar(table);
+table->name = cloneString(name);
+table->elStat = elStat;
+table->dtdElement = dtdElement;
+table->fieldHash = hashNew(8);
+table->uniqHash = hashNew(17);
+table->uniqString = dyStringNew(0);
+return table;
+}
+
 struct table *elsIntoTables(struct elStat *elList, struct hash *dtdMixedHash)
 /* Create table and field data structures from element/attribute
  * data structures. */
@@ -200,17 +233,10 @@ struct field *field;
 
 for (el = elList; el != NULL; el = el->next)
     {
-    AllocVar(table);
-    table->name = el->name;
-    table->elStat = el;
-    table->dtdElement = hashFindVal(dtdMixedHash, table->name);
-    table->fieldHash = hashNew(8);
-    table->uniqHash = hashNew(17);
-    table->uniqString = dyStringNew(0);
-    if (table->dtdElement == NULL)
-	{
-        errAbort("Table %s is in .spec but not in .dtd file", table->name);
-	}
+    struct dtdElement *dtdElement = hashFindVal(dtdMixedHash, el->name);
+    if (dtdElement == NULL)
+        errAbort("Table %s is in .spec but not in .dtd file", el->name);
+    table = tableNew(el->name, el, dtdElement);
     for (att = el->attList; att != NULL; att = att->next)
         {
 	char *name = att->name;
@@ -251,7 +277,7 @@ for (dtdEl = dtdList; dtdEl != NULL; dtdEl = dtdEl->next)
 }
 
 void rAddParentKeys(struct dtdElement *parent, struct dtdElChild *elAsChild,
-	struct hash *tableHash)
+	struct hash *tableHash, struct table **pTableList)
 /* Recursively add parentKeys. */
 {
 struct dtdElement *element = elAsChild->el;
@@ -276,13 +302,31 @@ if (elAsChild->copyCode == '1' || elAsChild->copyCode == '?')
 else
     {
     /* Need to handle association here. */
+    struct table *assocTable;
+    char joinedName[256];
+    char *assocTableName;
+    int upperAt;
+    safef(joinedName, sizeof(joinedName), "%sTo%s", parentTable->name,
+      table->name);
+    upperAt = strlen(parentTable->name) + 2;
+    joinedName[upperAt] = toupper(joinedName[upperAt]);
+    assocTableName = makeUpTableName(tableHash, joinedName);
+    uglyf("Theoretically making association %s\n", assocTableName);
+    assocTable = tableNew(joinedName, NULL, NULL);
+    addFieldToTable(assocTable, parentTable->name, 
+        NULL, TRUE, TRUE, parentTable->primaryKey->isString);
+    addFieldToTable(assocTable, table->name, 
+        NULL, TRUE, TRUE, table->primaryKey->isString);
+    slAddHead(pTableList, assocTable);
+    table->parentAssociation = assocTable;
     }
 
 for (child = element->children;  child != NULL; child = child->next)
-    rAddParentKeys(element, child, tableHash);
+    rAddParentKeys(element, child, tableHash, pTableList);
 }
 
-void addParentKeys(struct dtdElement *dtdRoot, struct hash *tableHash)
+void addParentKeys(struct dtdElement *dtdRoot, struct hash *tableHash,
+	struct table **pTableList)
 /* Use dtd to guide creation of field->parentKeys  */
 {
 struct dtdElChild *topLevel;
@@ -293,7 +337,7 @@ for (topLevel = dtdRoot->children; topLevel != NULL; topLevel = topLevel->next)
     struct dtdElChild *child;
     for (child = mainIterator->children; child != NULL; child = child->next)
         {
-	rAddParentKeys(mainIterator, child, tableHash);
+	rAddParentKeys(mainIterator, child, tableHash, pTableList);
 	}
     }
 }
@@ -499,9 +543,10 @@ uglyf("Root table is %s\n", rootTable->name);
 for (table = tableList; table != NULL; table = table->next)
     if (table->usesAsChild > 1)
         warn("%s is used in two contexts, not ready for that", table->name);
-addParentKeys(rootTable->dtdElement, tableHash);
+addParentKeys(rootTable->dtdElement, tableHash, &tableList);
 uglyf("Added parent keys\n");
 
+#ifdef DUMP
 uglyf("begin table dump\n");
 for (table = tableList; table != NULL; table = table->next)
     {
@@ -516,7 +561,6 @@ for (table = tableList; table != NULL; table = table->next)
 	}
     }
 uglyf("end table dump\n");
-#ifdef DUMP
 #endif /* DUMP */
 
 /* Set up output directory and create tab-separated files. */
