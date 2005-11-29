@@ -12,6 +12,8 @@ hashAdd(hash, "create", NULL);
 hashAdd(hash, "update", NULL);
 hashAdd(hash, "database", NULL);
 hashAdd(hash, "select", NULL);
+hashAdd(hash, "from", NULL);
+hashAdd(hash, "desc", NULL);
 hashAdd(hash, "where", NULL);
 hashAdd(hash, "table", NULL);
 hashAdd(hash, "by", NULL);

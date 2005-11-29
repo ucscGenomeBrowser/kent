@@ -10,7 +10,7 @@
 #include "elStat.h"
 #include "rename.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.17 2005/11/29 23:08:11 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.18 2005/11/29 23:40:19 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -520,8 +520,7 @@ for (field = table->fieldList; field != NULL; field = field->next)
     {
     if (!(field->isPrimaryKey  && field->isMadeUpKey))
 	{
-	if (field->isMadeUpKey && field->dy->stringSize == 0 &&
-	    !field->isString)
+	if (field->dy->stringSize == 0 && !field->isString)
 	    {
 	    dyStringAppendC(field->dy, '0');
 	    }
@@ -591,8 +590,10 @@ if (sameString(type, "int"))
         fprintf(f, "tinyint");
     else if (len <= 3)
         fprintf(f, "smallint");
-    else
+    else if (len <= 9)
         fprintf(f, "int");
+    else
+        fprintf(f, "bigint");
     }
 else if (sameString(type, "string"))
     {
