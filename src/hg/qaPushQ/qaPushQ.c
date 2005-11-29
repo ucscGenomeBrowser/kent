@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.76 2005/11/26 21:39:53 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.77 2005/11/29 20:10:44 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -51,7 +51,7 @@ char *qaUser = NULL;
 #define SSSZ 256  /* MySql String Size 255 + 1 */
 #define MAXBLOBSHOW 128
 
-#define MAXCOLS 30
+
 
 #define TITLE "Push Queue v"CGI_VERSION
 
@@ -160,8 +160,11 @@ e_lastdate  ,
 e_bounces   ,
 e_lockUser  ,
 e_lockDateTime,
-e_releaseLog
+e_releaseLog,
+e_NUMCOLS
 };
+
+
 
 char *colHdr[] = {
 "Queue ID",
@@ -203,7 +206,7 @@ char pushQtbl[256] = "pushQ";   /* default */
 
 char month[256] = "";  
 
-enum colEnum colOrder[MAXCOLS];
+enum colEnum colOrder[e_NUMCOLS];
 int numColumns = 0;
 
 int randInt(int N)
@@ -359,7 +362,7 @@ mySqlReleaseLock("qapushq");
 enum colEnum mapFieldToEnum(char *f, bool must)
 {
 int i = 0;
-for(i=0;i<MAXCOLS;i++)
+for(i=0;i<e_NUMCOLS;i++)
     {
     if (sameString(colName[i],f))
 	{
@@ -2261,7 +2264,7 @@ printf("<br>\n");
 
 safef(templist,sizeof(templist),",%s,",showColumns);  /* add sentinel comma values to the ends of the col list */
 
-for (c=0; c<MAXCOLS; c++)
+for (c=0; c<e_NUMCOLS; c++)
     {
     safef(tempe,sizeof(tempe),",%s,",colName[c]);  /* add sentinel comma values to the ends of the col element */
     if (strstr(templist,tempe)==NULL)
@@ -3542,6 +3545,9 @@ sqlDisconnect(&conn);
 int main(int argc, char *argv[], char *env[])
 /* Process command line if any. */
 {
+
+assert(e_NUMCOLS == ArraySize(colName));
+assert(e_NUMCOLS == ArraySize(colHdr));
 
 if (!cgiIsOnWeb())
     {
