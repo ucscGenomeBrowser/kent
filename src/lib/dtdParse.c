@@ -203,6 +203,7 @@ if (sameString(word, textField))
     errAbort("Name conflict with text field name line %d of %s", lf->lineIx, lf->fileName);
 AllocVar(att);
 att->name = cloneString(word);
+att->mixedCaseName = mixedCaseName("", att->name);
 word = needNextWord(&line, lf);
 att->type = cloneString(word);
 line = skipLeadingSpaces(line);
