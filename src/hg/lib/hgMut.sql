@@ -3,15 +3,15 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#track for mapping human genotype and phenotype data
+#track for human mutation data
 CREATE TABLE hgMut (
     bin smallint unsigned not null,	# A field to speed indexing
     chrom varchar(255) not null,	# Chromosome
     chromStart int unsigned not null,	# Start position in chrom
     chromEnd int unsigned not null,	# End position in chrom
     name varchar(255) not null,	# HGVS description of mutation.
-    mutId varchar(255) not null,	# unique ID for this mutation
-    src varchar(255) not null,	# source for this mutation, put LSDB for locus specific
+    mutId varchar(55) not null,	# unique ID for this mutation
+    srcId smallint unsigned not null,	# source ID for this mutation
     hasPhenData char(1) not null,	# y or n, does this have phenotype data linked
     baseChangeType enum(
                         'insertion',
@@ -27,47 +27,59 @@ CREATE TABLE hgMut (
                   '3'' UTR',
                   'not within known transcription unit'),
               #Indices
-    KEY `chrom` (`chrom`(12),`bin`),
-    KEY `chrom_2` (`chrom`(12),`chromStart`),
-    KEY `name` (`name`),
-    UNIQUE KEY `uniVar` (`chrom`(12),`chromStart`,`chromEnd`,`name`(30),`mutId`(30))
+    INDEX       chrom           (chrom,bin),
+    INDEX       chromStart      (chrom,chromStart),
+    INDEX       name            (name),
+    UNIQUE KEY  univar          (chrom,chromStart,chromEnd,mutId)
 );
 
-#accessions and sources for links
-CREATE TABLE hgMutRef (
-    mutId varchar(255) not null,	# mutation ID
-    acc varchar(255) not null,	# accession or ID used by source in link
-    src int not null,	# source ID, foreign key into hgMutLink
-              #Indices
-    KEY(mutId)
-);
-
-#links for human phenotype detail page
-CREATE TABLE hgMutLink (
-    srcId int not null,	# ID for this source, links to hgMutRef table.
-    linkDisplayName varchar(255) not null,	# Display name for this link.
-    url varchar(255) not null,	# url to substitute ID in for links.
+#sources for human mutation track
+CREATE TABLE hgMutSrc (
+    srcId smallint unsigned not null,	# key into hgMut table
+    src varchar(255) not null,	# name of genome wide source or LSDB
+    details varchar(255) not null,	# for LSDB name of actual source DB
               #Indices
     PRIMARY KEY(srcId)
 );
 
-#aliases for mutations in the human phenotype track
-CREATE TABLE hgMutAlias (
-    mutId varchar(255) not null,	# first db ID from hgMut table.
-    name varchar(255) not null,	# Another name for the mutation.
+#accessions and sources for links
+CREATE TABLE hgMutExtLink (
+    mutId varchar(55) not null,	# mutation ID
+    acc varchar(255) not null,	# accession or ID used by link
+    linkId int not null,	# link ID, foreign key into hgMutLink
               #Indices
-    KEY `mutId` (mutId),
-    KEY `name` (name)
+    KEY(mutId)
+);
+
+#links for human mutation detail page
+CREATE TABLE hgMutLink (
+    linkId int not null,	# ID for this source, links to hgMutRef table.
+    linkDisplayName varchar(255) not null,	# Display name for this link.
+    url varchar(255) not null,	# url to substitute ID in for links.
+              #Indices
+    PRIMARY KEY(linkId)
+);
+
+#aliases for mutations
+CREATE TABLE hgMutAlias (
+    mutId varchar(55) not null,	# mutation ID from hgMut table.
+    name varchar(255) not null,	# Another name for the mutation.
+    nameType varchar(55) not null,	# common, or ?
+              #Indices
+    INDEX mutId      (mutId),
+    INDEX name       (name),
+    INDEX commonName (nameType, name)
 );
 
 #attributes asssociated with the mutation
 CREATE TABLE hgMutAttr (
-    mutId varchar(255) not null,	# mutation ID.
-    mutAttrClass int not null,	# id for attribute class or category, foreign key.
-    mutAttrName int not null,	# id for attribute name, foreign key.
+    mutId varchar(55) not null,	# mutation ID.
+    mutAttrClassId int not null,	# id for attribute class or category, foreign key.
+    mutAttrNameId int not null,	# id for attribute name, foreign key.
     mutAttrVal varchar(255) not null,	# value for this attribute
               #Indices
-    KEY(mutId)
+    INDEX classAndName (mutAttrClassId,  mutAttrNameId),
+    INDEX mutId (mutId)
 );
 
 #classes or categories of attributes
@@ -82,6 +94,7 @@ CREATE TABLE hgMutAttrClass (
 #Names of attributes
 CREATE TABLE hgMutAttrName (
     mutAttrNameId int not null,	# id for attribute name.
+    mutAttrClassId int not null,	# id for class this name belongs to.
     mutAttrName varchar(255) not null,	# name
               #Indices
     PRIMARY KEY(mutAttrNameId)

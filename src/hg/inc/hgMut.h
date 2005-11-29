@@ -12,7 +12,7 @@
 #define HGMUT_NUM_COLS 10
 
 struct hgMut
-/* track for mapping human genotype and phenotype data */
+/* track for human mutation data */
     {
     struct hgMut *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome */
@@ -20,12 +20,13 @@ struct hgMut
     unsigned chromEnd;	/* End position in chrom */
     char *name;	/* HGVS description of mutation. */
     char *mutId;	/* unique ID for this mutation */
-    char *src;	/* source for this mutation, put LSDB for locus specific */
+    unsigned short srcId;	/* source ID for this mutation */
     char hasPhenData[2];	/* y or n, does this have phenotype data linked */
     char *baseChangeType;	/* enum('insertion', 'deletion', 'substitution','duplication','complex','unknown'). */
     char *location;	/* enum('intron', 'exon', '5'' UTR', '3'' UTR', 'not within known transcription unit'). */
-    unsigned short bin; /* A field to speed indexing, moved so bed 4+ */
+    unsigned short bin; /* A field to speed indexing */
     };
+/* moved bin to last so can cast struct to bed if needed */
 
 void hgMutStaticLoad(char **row, struct hgMut *ret);
 /* Load a row from hgMut table into ret.  The contents of ret will
@@ -93,90 +94,167 @@ void hgMutOutput(struct hgMut *el, FILE *f, char sep, char lastSep);
 #define hgMutCommaOut(el,f) hgMutOutput(el,f,',',',');
 /* Print out hgMut as a comma separated list including final comma. */
 
-#define HGMUTREF_NUM_COLS 3
+#define HGMUTSRC_NUM_COLS 3
 
-struct hgMutRef
-/* accessions and sources for links */
+struct hgMutSrc
+/* sources for human mutation track */
     {
-    struct hgMutRef *next;  /* Next in singly linked list. */
-    char *mutId;	/* mutation ID */
-    char *acc;	/* accession or ID used by source in link */
-    int src;	/* source ID, foreign key into hgMutLink */
+    struct hgMutSrc *next;  /* Next in singly linked list. */
+    unsigned short srcId;	/* key into hgMut table */
+    char *src;	/* name of genome wide source or LSDB */
+    char *details;	/* for LSDB name of actual source DB */
     };
 
-void hgMutRefStaticLoad(char **row, struct hgMutRef *ret);
-/* Load a row from hgMutRef table into ret.  The contents of ret will
+void hgMutSrcStaticLoad(char **row, struct hgMutSrc *ret);
+/* Load a row from hgMutSrc table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct hgMutRef *hgMutRefLoad(char **row);
-/* Load a hgMutRef from row fetched with select * from hgMutRef
- * from database.  Dispose of this with hgMutRefFree(). */
+struct hgMutSrc *hgMutSrcLoad(char **row);
+/* Load a hgMutSrc from row fetched with select * from hgMutSrc
+ * from database.  Dispose of this with hgMutSrcFree(). */
 
-struct hgMutRef *hgMutRefLoadAll(char *fileName);
-/* Load all hgMutRef from whitespace-separated file.
- * Dispose of this with hgMutRefFreeList(). */
+struct hgMutSrc *hgMutSrcLoadAll(char *fileName);
+/* Load all hgMutSrc from whitespace-separated file.
+ * Dispose of this with hgMutSrcFreeList(). */
 
-struct hgMutRef *hgMutRefLoadAllByChar(char *fileName, char chopper);
-/* Load all hgMutRef from chopper separated file.
- * Dispose of this with hgMutRefFreeList(). */
+struct hgMutSrc *hgMutSrcLoadAllByChar(char *fileName, char chopper);
+/* Load all hgMutSrc from chopper separated file.
+ * Dispose of this with hgMutSrcFreeList(). */
 
-#define hgMutRefLoadAllByTab(a) hgMutRefLoadAllByChar(a, '\t');
-/* Load all hgMutRef from tab separated file.
- * Dispose of this with hgMutRefFreeList(). */
+#define hgMutSrcLoadAllByTab(a) hgMutSrcLoadAllByChar(a, '\t');
+/* Load all hgMutSrc from tab separated file.
+ * Dispose of this with hgMutSrcFreeList(). */
 
-struct hgMutRef *hgMutRefLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all hgMutRef from table that satisfy the query given.  
+struct hgMutSrc *hgMutSrcLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all hgMutSrc from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
  * anotherTable.something'.
- * Dispose of this with hgMutRefFreeList(). */
+ * Dispose of this with hgMutSrcFreeList(). */
 
-void hgMutRefSaveToDb(struct sqlConnection *conn, struct hgMutRef *el, char *tableName, int updateSize);
-/* Save hgMutRef as a row to the table specified by tableName. 
+void hgMutSrcSaveToDb(struct sqlConnection *conn, struct hgMutSrc *el, char *tableName, int updateSize);
+/* Save hgMutSrc as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
  * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use hgMutRefSaveToDbEscaped() */
+ * If worried about this use hgMutSrcSaveToDbEscaped() */
 
-void hgMutRefSaveToDbEscaped(struct sqlConnection *conn, struct hgMutRef *el, char *tableName, int updateSize);
-/* Save hgMutRef as a row to the table specified by tableName. 
+void hgMutSrcSaveToDbEscaped(struct sqlConnection *conn, struct hgMutSrc *el, char *tableName, int updateSize);
+/* Save hgMutSrc as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size.
  * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than hgMutRefSaveToDb().
+ * escapes all simple strings (not arrays of string) but may be slower than hgMutSrcSaveToDb().
  * For example automatically copies and converts: 
  * "autosql's features include" --> "autosql\'s features include" 
  * before inserting into database. */ 
 
-struct hgMutRef *hgMutRefCommaIn(char **pS, struct hgMutRef *ret);
-/* Create a hgMutRef out of a comma separated string. 
+struct hgMutSrc *hgMutSrcCommaIn(char **pS, struct hgMutSrc *ret);
+/* Create a hgMutSrc out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new hgMutRef */
+ * return a new hgMutSrc */
 
-void hgMutRefFree(struct hgMutRef **pEl);
-/* Free a single dynamically allocated hgMutRef such as created
- * with hgMutRefLoad(). */
+void hgMutSrcFree(struct hgMutSrc **pEl);
+/* Free a single dynamically allocated hgMutSrc such as created
+ * with hgMutSrcLoad(). */
 
-void hgMutRefFreeList(struct hgMutRef **pList);
-/* Free a list of dynamically allocated hgMutRef's */
+void hgMutSrcFreeList(struct hgMutSrc **pList);
+/* Free a list of dynamically allocated hgMutSrc's */
 
-void hgMutRefOutput(struct hgMutRef *el, FILE *f, char sep, char lastSep);
-/* Print out hgMutRef.  Separate fields with sep. Follow last field with lastSep. */
+void hgMutSrcOutput(struct hgMutSrc *el, FILE *f, char sep, char lastSep);
+/* Print out hgMutSrc.  Separate fields with sep. Follow last field with lastSep. */
 
-#define hgMutRefTabOut(el,f) hgMutRefOutput(el,f,'\t','\n');
-/* Print out hgMutRef as a line in a tab-separated file. */
+#define hgMutSrcTabOut(el,f) hgMutSrcOutput(el,f,'\t','\n');
+/* Print out hgMutSrc as a line in a tab-separated file. */
 
-#define hgMutRefCommaOut(el,f) hgMutRefOutput(el,f,',',',');
-/* Print out hgMutRef as a comma separated list including final comma. */
+#define hgMutSrcCommaOut(el,f) hgMutSrcOutput(el,f,',',',');
+/* Print out hgMutSrc as a comma separated list including final comma. */
+
+#define HGMUTEXTLINK_NUM_COLS 3
+
+struct hgMutExtLink
+/* accessions and sources for links */
+    {
+    struct hgMutExtLink *next;  /* Next in singly linked list. */
+    char *mutId;	/* mutation ID */
+    char *acc;	/* accession or ID used by link */
+    int linkId;	/* link ID, foreign key into hgMutLink */
+    };
+
+void hgMutExtLinkStaticLoad(char **row, struct hgMutExtLink *ret);
+/* Load a row from hgMutExtLink table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct hgMutExtLink *hgMutExtLinkLoad(char **row);
+/* Load a hgMutExtLink from row fetched with select * from hgMutExtLink
+ * from database.  Dispose of this with hgMutExtLinkFree(). */
+
+struct hgMutExtLink *hgMutExtLinkLoadAll(char *fileName);
+/* Load all hgMutExtLink from whitespace-separated file.
+ * Dispose of this with hgMutExtLinkFreeList(). */
+
+struct hgMutExtLink *hgMutExtLinkLoadAllByChar(char *fileName, char chopper);
+/* Load all hgMutExtLink from chopper separated file.
+ * Dispose of this with hgMutExtLinkFreeList(). */
+
+#define hgMutExtLinkLoadAllByTab(a) hgMutExtLinkLoadAllByChar(a, '\t');
+/* Load all hgMutExtLink from tab separated file.
+ * Dispose of this with hgMutExtLinkFreeList(). */
+
+struct hgMutExtLink *hgMutExtLinkLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all hgMutExtLink from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with hgMutExtLinkFreeList(). */
+
+void hgMutExtLinkSaveToDb(struct sqlConnection *conn, struct hgMutExtLink *el, char *tableName, int updateSize);
+/* Save hgMutExtLink as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use hgMutExtLinkSaveToDbEscaped() */
+
+void hgMutExtLinkSaveToDbEscaped(struct sqlConnection *conn, struct hgMutExtLink *el, char *tableName, int updateSize);
+/* Save hgMutExtLink as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than hgMutExtLinkSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+
+struct hgMutExtLink *hgMutExtLinkCommaIn(char **pS, struct hgMutExtLink *ret);
+/* Create a hgMutExtLink out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new hgMutExtLink */
+
+void hgMutExtLinkFree(struct hgMutExtLink **pEl);
+/* Free a single dynamically allocated hgMutExtLink such as created
+ * with hgMutExtLinkLoad(). */
+
+void hgMutExtLinkFreeList(struct hgMutExtLink **pList);
+/* Free a list of dynamically allocated hgMutExtLink's */
+
+void hgMutExtLinkOutput(struct hgMutExtLink *el, FILE *f, char sep, char lastSep);
+/* Print out hgMutExtLink.  Separate fields with sep. Follow last field with lastSep. */
+
+#define hgMutExtLinkTabOut(el,f) hgMutExtLinkOutput(el,f,'\t','\n');
+/* Print out hgMutExtLink as a line in a tab-separated file. */
+
+#define hgMutExtLinkCommaOut(el,f) hgMutExtLinkOutput(el,f,',',',');
+/* Print out hgMutExtLink as a comma separated list including final comma. */
 
 #define HGMUTLINK_NUM_COLS 3
 
 struct hgMutLink
-/* links for human phenotype detail page */
+/* links for human mutation detail page */
     {
     struct hgMutLink *next;  /* Next in singly linked list. */
-    int srcId;	/* ID for this source, links to hgMutRef table. */
+    int linkId;	/* ID for this source, links to hgMutRef table. */
     char *linkDisplayName;	/* Display name for this link. */
     char *url;	/* url to substitute ID in for links. */
     };
@@ -247,14 +325,15 @@ void hgMutLinkOutput(struct hgMutLink *el, FILE *f, char sep, char lastSep);
 #define hgMutLinkCommaOut(el,f) hgMutLinkOutput(el,f,',',',');
 /* Print out hgMutLink as a comma separated list including final comma. */
 
-#define HGMUTALIAS_NUM_COLS 2
+#define HGMUTALIAS_NUM_COLS 3
 
 struct hgMutAlias
-/* aliases for mutations in the human phenotype track */
+/* aliases for mutations */
     {
     struct hgMutAlias *next;  /* Next in singly linked list. */
-    char *mutId;	/* first db ID from hgMut table. */
+    char *mutId;	/* mutation ID from hgMut table. */
     char *name;	/* Another name for the mutation. */
+    char *nameType;	/* common, or ? */
     };
 
 void hgMutAliasStaticLoad(char **row, struct hgMutAlias *ret);
@@ -330,8 +409,8 @@ struct hgMutAttr
     {
     struct hgMutAttr *next;  /* Next in singly linked list. */
     char *mutId;	/* mutation ID. */
-    int mutAttrClass;	/* id for attribute class or category, foreign key. */
-    int mutAttrName;	/* id for attribute name, foreign key. */
+    int mutAttrClassId;	/* id for attribute class or category, foreign key. */
+    int mutAttrNameId;	/* id for attribute name, foreign key. */
     char *mutAttrVal;	/* value for this attribute */
     };
 
@@ -478,13 +557,14 @@ void hgMutAttrClassOutput(struct hgMutAttrClass *el, FILE *f, char sep, char las
 #define hgMutAttrClassCommaOut(el,f) hgMutAttrClassOutput(el,f,',',',');
 /* Print out hgMutAttrClass as a comma separated list including final comma. */
 
-#define HGMUTATTRNAME_NUM_COLS 2
+#define HGMUTATTRNAME_NUM_COLS 3
 
 struct hgMutAttrName
 /* Names of attributes */
     {
     struct hgMutAttrName *next;  /* Next in singly linked list. */
     int mutAttrNameId;	/* id for attribute name. */
+    int mutAttrClassId;	/* id for class this name belongs to. */
     char *mutAttrName;	/* name */
     };
 

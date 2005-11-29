@@ -99,7 +99,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1042 2005/11/22 20:08:28 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1043 2005/11/29 18:19:41 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9377,25 +9377,37 @@ else
     }
 }
 
-boolean hgMutFilterSrc(struct hgMut *el)
+boolean hgMutFilterSrc(struct hgMut *el, struct hgMutSrc *srcList)
 /* Check to see if this element should be excluded. */
 {
-struct hashEl *srcList = NULL;
+struct hashEl *filterList = NULL;
 struct hashEl *hashel = NULL;
+char *srcTxt = NULL;
+struct hgMutSrc *src = NULL;
 
-srcList = cartFindPrefix(cart, "hgMut.filter.src.");
-if (srcList == NULL)
-    return TRUE;
-for (hashel = srcList; hashel != NULL; hashel = hashel->next)
+for (src = srcList; src != NULL; src = src->next)
     {
-    if (endsWith(hashel->name, el->src) && 
+    if (el->srcId == src->srcId) 
+        {
+        srcTxt = cloneString(src->src);
+        break;
+        }
+    }
+filterList = cartFindPrefix(cart, "hgMut.filter.src.");
+if (filterList == NULL || srcTxt == NULL)
+    return TRUE;
+for (hashel = filterList; hashel != NULL; hashel = hashel->next)
+    {
+    if (endsWith(hashel->name, srcTxt) && 
         differentString(hashel->val, "0")) 
         {
-        hashElFreeList(&srcList);
+        freeMem(srcTxt);
+        hashElFreeList(&filterList);
         return FALSE;
         }
     }
-hashElFreeList(&srcList);
+hashElFreeList(&filterList);
+freeMem(srcTxt);
 return TRUE;
 }
 
@@ -9467,15 +9479,75 @@ for (cnt = 0; cnt < variantLocationSize; cnt++)
 return TRUE;
 }
 
+void lookupHgMutName(struct track *tg) 
+/* give option on which name to display */
+{
+struct hgMut *el;
+struct sqlConnection *conn = hAllocConn();
+char *hgMutLabel = cartUsualString(cart, "hgMut.label", "HGVS name");
+boolean useHgvs = sameString(hgMutLabel, "HGVS name")
+    || sameString(hgMutLabel, "all");
+boolean useId = sameString(hgMutLabel, "ID")
+    || sameString(hgMutLabel, "all");
+boolean useCommon = sameString(hgMutLabel, "Common name")
+    || sameString(hgMutLabel, "all");
+boolean useAll = sameString(hgMutLabel, "all");
+
+/* shortcut to leave before loop if want the default name */
+if (useHgvs && !useAll)
+    {
+    hFreeConn(&conn);
+    return;
+    }
+
+for (el = tg->items; el != NULL; el = el->next)
+    {
+    struct dyString *name = dyStringNew(64);
+    if (useHgvs) 
+        {
+        dyStringAppend(name, el->name);
+        if (useAll)
+            dyStringAppendC(name, '/');
+        }
+    /* add common here, it will need the db connection */
+    if (useCommon)
+        {
+        char query[256];
+        char *commonName = NULL;
+        char *escId = sqlEscapeString(el->mutId);
+        safef(query, sizeof(query), "select name from hgMutAlias where mutId = '%s' and nameType = 'common'", escId);
+        commonName = sqlQuickString(conn, query);
+        freeMem(escId);
+        if (commonName != NULL)
+            dyStringAppend(name, commonName);
+        else
+            dyStringAppend(name, " ");
+        if (useAll)
+            dyStringAppendC(name, '/');
+        }
+    if (useId)
+        {
+        dyStringAppend(name, el->mutId);
+        }
+    freeMem(el->name); /* free old name */
+    el->name = dyStringCannibalize(&name);
+    }
+hFreeConn(&conn);
+}
+
 void loadHgMut(struct track *tg)
 /* Load human mutation with filter */
 {
 struct hgMut *list = NULL;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
+struct hgMutSrc *srcList = NULL;
 char **row;
 int rowOffset;
+enum trackVisibility vis = tg->visibility;
 
+/* load as linked list once, outside of loop */
+srcList = hgMutSrcLoadByQuery(conn, "select * from hgMutSrc");
 sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
                  NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -9485,14 +9557,35 @@ while ((row = sqlNextRow(sr)) != NULL)
         hgMutFree(&el);
     else if (!hgMutFilterLoc(el))
         hgMutFree(&el);
-    else if (!hgMutFilterSrc(el))
+    else if (!hgMutFilterSrc(el, srcList))
         hgMutFree(&el);
     else
         slAddHead(&list, el);
     }
 sqlFreeResult(&sr);
 slReverse(&list);
+hgMutSrcFreeList(&srcList);
 tg->items = list;
+/* change names here so not affected if change filters later 
+   and no extra if when viewing dense                        */
+if (vis != tvDense)
+    {
+    lookupHgMutName(tg);
+    }
+}
+
+char *hgMutName(struct track *tg, void *item)
+/* Get name to use for hgMut item. */
+{
+struct hgMut *el = item;
+return el->name;
+}
+
+char *hgMutMapName (struct track *tg, void *item)
+/* Return unique identifier for item */
+{
+struct hgMut *el = item;
+return el->mutId;
 }
 
 void loadHumPhen(struct track *tg)
@@ -9533,6 +9626,8 @@ void hgMutMethods (struct track *tg)
 tg->loadItems = loadHgMut;
 tg->itemColor = hgMutColor;
 tg->itemNameColor = hgMutColor;
+tg->itemName = hgMutName;
+tg->mapItemName = hgMutMapName;
 }
 
 void humanPhenotypeMethods (struct track *tg)
@@ -10197,13 +10292,14 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%
       " %s </A></TD>",  hgcNameAndSettings(),
       winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
 
-if (liftOverChainForDb(database) != NULL)
-    {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"");
-    hPrintf("../cgi-bin/hgConvert?%s&db=%s&position=%s:%d-%d", 
-    	uiVars->string, database, chromName, winStart+1, winEnd);
-    hPrintf("\" class=\"topbar\">Convert</A></TD>");
-    }
+/* uncomment these after fixed!!! */
+//if (liftOverChainForDb(database) != NULL)
+    //{
+    //hPrintf("<TD ALIGN=CENTER><A HREF=\"");
+    //hPrintf("../cgi-bin/hgConvert?%s&db=%s&position=%s:%d-%d", 
+    	//uiVars->string, database, chromName, winStart+1, winEnd);
+    //hPrintf("\" class=\"topbar\">Convert</A></TD>");
+    //}
 
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */

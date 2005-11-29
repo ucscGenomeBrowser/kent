@@ -1723,16 +1723,19 @@ searchPriority 50
 
 searchName hgMutAliasSearch
 searchTable hgMut
-query select chrom, chromStart, chromEnd, name from %s where mutId = '%s'
+query select chrom, chromStart, chromEnd, mutId from %s where mutId = '%s'
 xrefTable hgMutAlias
 xrefQuery select mutId, name from %s where name like '%%%s%%'
 searchMethod fuzzy
 padding 1000
 searchPriority 51
 
+searchName hgMutHgvsSearch
 searchTable hgMut
+query select chrom, chromStart, chromEnd, mutId from %s where mutId = '%s'
+xrefTable hgMut
+xrefQuery select mutId, name from %s where name like '%%%s%%'
 searchMethod fuzzy
-query select chrom, chromStart, chromEnd, name from %s where name like '%%%s%%'
 padding 1000
 searchPriority 51
 

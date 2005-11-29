@@ -187,7 +187,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.979 2005/11/29 01:08:23 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.980 2005/11/29 18:19:41 giardine Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16910,18 +16910,32 @@ int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
 
-printf("<B>HGVS name:</B> %s <BR>\n", itemName);
 /* postion, band, genomic size */
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
-      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
-/* need to deal with the possibility of more than 1 that fits above */
-/* can I send mutId instead of name?? */ 
+      "chromStart=%d and mutId = '%s'", table, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     mut = hgMutLoad(row);
+    printf("<B>HGVS name:</B> %s <BR />\n", mut->name);
     bedPrintPos((struct bed *)mut, 3);
+    }
+sqlFreeResult(&sr);
+
+/* fetch and print the source */
+safef(query, sizeof(query),
+      "select * from hgMutSrc where srcId = %d", mut->srcId);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct hgMutSrc *src = hgMutSrcLoad(row);
+    printf("<B>source:</B> %s", src->src);
+    if (src->details != NULL && differentString(src->details, "")) 
+        {
+        printf("; %s", src->details);
+        }
+    printf("<BR />\n");
     }
 sqlFreeResult(&sr);
 
@@ -16931,7 +16945,7 @@ printf("<B>type:</B> %s<BR />\n", mut->baseChangeType);
 
 printf("<DL><DT><B>Outside Link(s):</B></DT>\n<DD> ");
 safef(query, sizeof(query),
-      "select * from hgMutRef where mutId = '%s'", mut->mutId);
+      "select * from hgMutExtLink where mutId = '%s'", mut->mutId);
 sr = sqlGetResult(conn, query);
 i = 0;  /* count lines, print message if none */
 while ((row = sqlNextRow(sr)) != NULL)
@@ -16939,7 +16953,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *url;
     i++;
     safef(query, sizeof(query),
-          "select * from hgMutLink where srcId = '%s'", row[2]);
+          "select * from hgMutLink where linkId = '%s'", row[2]);
     link = hgMutLinkLoadByQuery(conn2, query);
     if (link != NULL) 
         {
@@ -16961,7 +16975,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     i++;
     hgMutAliasStaticLoad(row, &alias);
-    printf("%s<BR />\n", alias.name);
+    printf("%s", alias.name);
+    if (alias.nameType != NULL && sameString(alias.nameType, "common"))
+        printf(" (common name)");
+    printf("<BR />\n");
     }
 sqlFreeResult(&sr);
 printf("</DD>");
@@ -16970,7 +16987,7 @@ if (i == 0)
 
 /* loop through attributes */
 safef(query, sizeof(query),
-      "select hgMutAttr.* from hgMutAttr, hgMutAttrClass where hgMutAttr.mutAttrClass = hgMutAttrClass.mutAttrClassId AND mutId = '%s' ORDER BY hgMutAttrClass.displayOrder", mut->mutId);
+      "select hgMutAttr.* from hgMutAttr, hgMutAttrClass where hgMutAttr.mutAttrClassId = hgMutAttrClass.mutAttrClassId AND mutId = '%s' ORDER BY hgMutAttrClass.displayOrder", mut->mutId);
 sr = sqlGetResult(conn, query);
 i = 0;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -16979,9 +16996,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     struct hgMutAttrName *name;
     i++;
     hgMutAttrStaticLoad(row, &attr);
-    safef(query, sizeof(query), "select * from hgMutAttrClass where mutAttrClassId = %d", attr.mutAttrClass);
+    safef(query, sizeof(query), "select * from hgMutAttrClass where mutAttrClassId = %d", attr.mutAttrClassId);
     class = hgMutAttrClassLoadByQuery(conn2, query);
-    safef(query, sizeof(query), "select * from hgMutAttrName where mutAttrNameId = %d", attr.mutAttrName);
+    safef(query, sizeof(query), "select * from hgMutAttrName where mutAttrNameId = %d", attr.mutAttrNameId);
     name = hgMutAttrNameLoadByQuery(conn2, query);
     /* only print name and class if different */
     if (prevClass == NULL || differentString(prevClass, class->mutAttrClass))

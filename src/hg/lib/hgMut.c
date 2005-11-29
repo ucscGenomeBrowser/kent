@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hgMut.h"
 
-static char const rcsid[] = "$Id: hgMut.c,v 1.1 2005/11/17 20:18:12 giardine Exp $";
+static char const rcsid[] = "$Id: hgMut.c,v 1.2 2005/11/29 18:19:43 giardine Exp $";
 
 void hgMutStaticLoad(char **row, struct hgMut *ret)
 /* Load a row from hgMut table into ret.  The contents of ret will
@@ -21,7 +21,7 @@ ret->chromStart = sqlUnsigned(row[2]);
 ret->chromEnd = sqlUnsigned(row[3]);
 ret->name = row[4];
 ret->mutId = row[5];
-ret->src = row[6];
+ret->srcId = sqlUnsigned(row[6]);
 strcpy(ret->hasPhenData, row[7]);
 ret->baseChangeType = row[8];
 ret->location = row[9];
@@ -40,7 +40,7 @@ ret->chromStart = sqlUnsigned(row[2]);
 ret->chromEnd = sqlUnsigned(row[3]);
 ret->name = cloneString(row[4]);
 ret->mutId = cloneString(row[5]);
-ret->src = cloneString(row[6]);
+ret->srcId = sqlUnsigned(row[6]);
 strcpy(ret->hasPhenData, row[7]);
 ret->baseChangeType = cloneString(row[8]);
 ret->location = cloneString(row[9]);
@@ -115,8 +115,8 @@ void hgMutSaveToDb(struct sqlConnection *conn, struct hgMut *el, char *tableName
  * If worried about this use hgMutSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s','%s','%s','%s')", 
-	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->mutId,  el->src,  el->hasPhenData,  el->baseChangeType,  el->location);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s',%u,'%s','%s','%s')", 
+	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->mutId,  el->srcId,  el->hasPhenData,  el->baseChangeType,  el->location);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -131,23 +131,21 @@ void hgMutSaveToDbEscaped(struct sqlConnection *conn, struct hgMut *el, char *ta
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *mutId, *src, *hasPhenData, *baseChangeType, *location;
+char  *chrom, *name, *mutId, *hasPhenData, *baseChangeType, *location;
 chrom = sqlEscapeString(el->chrom);
 name = sqlEscapeString(el->name);
 mutId = sqlEscapeString(el->mutId);
-src = sqlEscapeString(el->src);
 hasPhenData = sqlEscapeString(el->hasPhenData);
 baseChangeType = sqlEscapeString(el->baseChangeType);
 location = sqlEscapeString(el->location);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s','%s','%s','%s','%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name,  mutId,  src,  hasPhenData,  baseChangeType,  location);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s',%u,'%s','%s','%s')", 
+	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name,  mutId, el->srcId ,  hasPhenData,  baseChangeType,  location);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
 freez(&name);
 freez(&mutId);
-freez(&src);
 freez(&hasPhenData);
 freez(&baseChangeType);
 freez(&location);
@@ -168,7 +166,7 @@ ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->mutId = sqlStringComma(&s);
-ret->src = sqlStringComma(&s);
+ret->srcId = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->hasPhenData, sizeof(ret->hasPhenData));
 ret->baseChangeType = sqlStringComma(&s);
 ret->location = sqlStringComma(&s);
@@ -186,7 +184,6 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->mutId);
-freeMem(el->src);
 freeMem(el->baseChangeType);
 freeMem(el->location);
 freez(pEl);
@@ -226,9 +223,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mutId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->src);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%u", el->srcId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->hasPhenData);
@@ -244,40 +239,40 @@ if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
-void hgMutRefStaticLoad(char **row, struct hgMutRef *ret)
-/* Load a row from hgMutRef table into ret.  The contents of ret will
+void hgMutSrcStaticLoad(char **row, struct hgMutSrc *ret)
+/* Load a row from hgMutSrc table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-ret->mutId = row[0];
-ret->acc = row[1];
-ret->src = sqlSigned(row[2]);
+ret->srcId = sqlUnsigned(row[0]);
+ret->src = row[1];
+ret->details = row[2];
 }
 
-struct hgMutRef *hgMutRefLoad(char **row)
-/* Load a hgMutRef from row fetched with select * from hgMutRef
- * from database.  Dispose of this with hgMutRefFree(). */
+struct hgMutSrc *hgMutSrcLoad(char **row)
+/* Load a hgMutSrc from row fetched with select * from hgMutSrc
+ * from database.  Dispose of this with hgMutSrcFree(). */
 {
-struct hgMutRef *ret;
+struct hgMutSrc *ret;
 
 AllocVar(ret);
-ret->mutId = cloneString(row[0]);
-ret->acc = cloneString(row[1]);
-ret->src = sqlSigned(row[2]);
+ret->srcId = sqlUnsigned(row[0]);
+ret->src = cloneString(row[1]);
+ret->details = cloneString(row[2]);
 return ret;
 }
 
-struct hgMutRef *hgMutRefLoadAll(char *fileName) 
-/* Load all hgMutRef from a whitespace-separated file.
- * Dispose of this with hgMutRefFreeList(). */
+struct hgMutSrc *hgMutSrcLoadAll(char *fileName) 
+/* Load all hgMutSrc from a whitespace-separated file.
+ * Dispose of this with hgMutSrcFreeList(). */
 {
-struct hgMutRef *list = NULL, *el;
+struct hgMutSrc *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[3];
 
 while (lineFileRow(lf, row))
     {
-    el = hgMutRefLoad(row);
+    el = hgMutSrcLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -285,17 +280,17 @@ slReverse(&list);
 return list;
 }
 
-struct hgMutRef *hgMutRefLoadAllByChar(char *fileName, char chopper) 
-/* Load all hgMutRef from a chopper separated file.
- * Dispose of this with hgMutRefFreeList(). */
+struct hgMutSrc *hgMutSrcLoadAllByChar(char *fileName, char chopper) 
+/* Load all hgMutSrc from a chopper separated file.
+ * Dispose of this with hgMutSrcFreeList(). */
 {
-struct hgMutRef *list = NULL, *el;
+struct hgMutSrc *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[3];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
-    el = hgMutRefLoad(row);
+    el = hgMutSrcLoad(row);
     slAddHead(&list, el);
     }
 lineFileClose(&lf);
@@ -303,21 +298,21 @@ slReverse(&list);
 return list;
 }
 
-struct hgMutRef *hgMutRefLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all hgMutRef from table that satisfy the query given.  
+struct hgMutSrc *hgMutSrcLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all hgMutSrc from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
  * anotherTable.something'.
- * Dispose of this with hgMutRefFreeList(). */
+ * Dispose of this with hgMutSrcFreeList(). */
 {
-struct hgMutRef *list = NULL, *el;
+struct hgMutSrc *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = hgMutRefLoad(row);
+    el = hgMutSrcLoad(row);
     slAddHead(&list, el);
     }
 slReverse(&list);
@@ -325,27 +320,202 @@ sqlFreeResult(&sr);
 return list;
 }
 
-void hgMutRefSaveToDb(struct sqlConnection *conn, struct hgMutRef *el, char *tableName, int updateSize)
-/* Save hgMutRef as a row to the table specified by tableName. 
+void hgMutSrcSaveToDb(struct sqlConnection *conn, struct hgMutSrc *el, char *tableName, int updateSize)
+/* Save hgMutSrc as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
  * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use hgMutRefSaveToDbEscaped() */
+ * If worried about this use hgMutSrcSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s',%d)", 
-	tableName,  el->mutId,  el->acc,  el->src);
+dyStringPrintf(update, "insert into %s values ( %u,'%s','%s')", 
+	tableName,  el->srcId,  el->src,  el->details);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
 
-void hgMutRefSaveToDbEscaped(struct sqlConnection *conn, struct hgMutRef *el, char *tableName, int updateSize)
-/* Save hgMutRef as a row to the table specified by tableName. 
+void hgMutSrcSaveToDbEscaped(struct sqlConnection *conn, struct hgMutSrc *el, char *tableName, int updateSize)
+/* Save hgMutSrc as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size.
  * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than hgMutRefSaveToDb().
+ * escapes all simple strings (not arrays of string) but may be slower than hgMutSrcSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+{
+struct dyString *update = newDyString(updateSize);
+char  *src, *details;
+src = sqlEscapeString(el->src);
+details = sqlEscapeString(el->details);
+
+dyStringPrintf(update, "insert into %s values ( %u,'%s','%s')", 
+	tableName, el->srcId ,  src,  details);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+freez(&src);
+freez(&details);
+}
+
+struct hgMutSrc *hgMutSrcCommaIn(char **pS, struct hgMutSrc *ret)
+/* Create a hgMutSrc out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new hgMutSrc */
+{
+char *s = *pS;
+
+if (ret == NULL)
+    AllocVar(ret);
+ret->srcId = sqlUnsignedComma(&s);
+ret->src = sqlStringComma(&s);
+ret->details = sqlStringComma(&s);
+*pS = s;
+return ret;
+}
+
+void hgMutSrcFree(struct hgMutSrc **pEl)
+/* Free a single dynamically allocated hgMutSrc such as created
+ * with hgMutSrcLoad(). */
+{
+struct hgMutSrc *el;
+
+if ((el = *pEl) == NULL) return;
+freeMem(el->src);
+freeMem(el->details);
+freez(pEl);
+}
+
+void hgMutSrcFreeList(struct hgMutSrc **pList)
+/* Free a list of dynamically allocated hgMutSrc's */
+{
+struct hgMutSrc *el, *next;
+
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    hgMutSrcFree(&el);
+    }
+*pList = NULL;
+}
+
+void hgMutSrcOutput(struct hgMutSrc *el, FILE *f, char sep, char lastSep) 
+/* Print out hgMutSrc.  Separate fields with sep. Follow last field with lastSep. */
+{
+fprintf(f, "%u", el->srcId);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->src);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->details);
+if (sep == ',') fputc('"',f);
+fputc(lastSep,f);
+}
+
+void hgMutExtLinkStaticLoad(char **row, struct hgMutExtLink *ret)
+/* Load a row from hgMutExtLink table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+{
+
+ret->mutId = row[0];
+ret->acc = row[1];
+ret->linkId = sqlSigned(row[2]);
+}
+
+struct hgMutExtLink *hgMutExtLinkLoad(char **row)
+/* Load a hgMutExtLink from row fetched with select * from hgMutExtLink
+ * from database.  Dispose of this with hgMutExtLinkFree(). */
+{
+struct hgMutExtLink *ret;
+
+AllocVar(ret);
+ret->mutId = cloneString(row[0]);
+ret->acc = cloneString(row[1]);
+ret->linkId = sqlSigned(row[2]);
+return ret;
+}
+
+struct hgMutExtLink *hgMutExtLinkLoadAll(char *fileName) 
+/* Load all hgMutExtLink from a whitespace-separated file.
+ * Dispose of this with hgMutExtLinkFreeList(). */
+{
+struct hgMutExtLink *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileRow(lf, row))
+    {
+    el = hgMutExtLinkLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct hgMutExtLink *hgMutExtLinkLoadAllByChar(char *fileName, char chopper) 
+/* Load all hgMutExtLink from a chopper separated file.
+ * Dispose of this with hgMutExtLinkFreeList(). */
+{
+struct hgMutExtLink *list = NULL, *el;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[3];
+
+while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
+    {
+    el = hgMutExtLinkLoad(row);
+    slAddHead(&list, el);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+struct hgMutExtLink *hgMutExtLinkLoadByQuery(struct sqlConnection *conn, char *query)
+/* Load all hgMutExtLink from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with hgMutExtLinkFreeList(). */
+{
+struct hgMutExtLink *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = hgMutExtLinkLoad(row);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+return list;
+}
+
+void hgMutExtLinkSaveToDb(struct sqlConnection *conn, struct hgMutExtLink *el, char *tableName, int updateSize)
+/* Save hgMutExtLink as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use hgMutExtLinkSaveToDbEscaped() */
+{
+struct dyString *update = newDyString(updateSize);
+dyStringPrintf(update, "insert into %s values ( '%s','%s',%d)", 
+	tableName,  el->mutId,  el->acc,  el->linkId);
+sqlUpdate(conn, update->string);
+freeDyString(&update);
+}
+
+void hgMutExtLinkSaveToDbEscaped(struct sqlConnection *conn, struct hgMutExtLink *el, char *tableName, int updateSize)
+/* Save hgMutExtLink as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than hgMutExtLinkSaveToDb().
  * For example automatically copies and converts: 
  * "autosql's features include" --> "autosql\'s features include" 
  * before inserting into database. */ 
@@ -356,17 +526,17 @@ mutId = sqlEscapeString(el->mutId);
 acc = sqlEscapeString(el->acc);
 
 dyStringPrintf(update, "insert into %s values ( '%s','%s',%d)", 
-	tableName,  mutId,  acc, el->src );
+	tableName,  mutId,  acc, el->linkId );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&mutId);
 freez(&acc);
 }
 
-struct hgMutRef *hgMutRefCommaIn(char **pS, struct hgMutRef *ret)
-/* Create a hgMutRef out of a comma separated string. 
+struct hgMutExtLink *hgMutExtLinkCommaIn(char **pS, struct hgMutExtLink *ret)
+/* Create a hgMutExtLink out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new hgMutRef */
+ * return a new hgMutExtLink */
 {
 char *s = *pS;
 
@@ -374,16 +544,16 @@ if (ret == NULL)
     AllocVar(ret);
 ret->mutId = sqlStringComma(&s);
 ret->acc = sqlStringComma(&s);
-ret->src = sqlSignedComma(&s);
+ret->linkId = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
 
-void hgMutRefFree(struct hgMutRef **pEl)
-/* Free a single dynamically allocated hgMutRef such as created
- * with hgMutRefLoad(). */
+void hgMutExtLinkFree(struct hgMutExtLink **pEl)
+/* Free a single dynamically allocated hgMutExtLink such as created
+ * with hgMutExtLinkLoad(). */
 {
-struct hgMutRef *el;
+struct hgMutExtLink *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->mutId);
@@ -391,21 +561,21 @@ freeMem(el->acc);
 freez(pEl);
 }
 
-void hgMutRefFreeList(struct hgMutRef **pList)
-/* Free a list of dynamically allocated hgMutRef's */
+void hgMutExtLinkFreeList(struct hgMutExtLink **pList)
+/* Free a list of dynamically allocated hgMutExtLink's */
 {
-struct hgMutRef *el, *next;
+struct hgMutExtLink *el, *next;
 
 for (el = *pList; el != NULL; el = next)
     {
     next = el->next;
-    hgMutRefFree(&el);
+    hgMutExtLinkFree(&el);
     }
 *pList = NULL;
 }
 
-void hgMutRefOutput(struct hgMutRef *el, FILE *f, char sep, char lastSep) 
-/* Print out hgMutRef.  Separate fields with sep. Follow last field with lastSep. */
+void hgMutExtLinkOutput(struct hgMutExtLink *el, FILE *f, char sep, char lastSep) 
+/* Print out hgMutExtLink.  Separate fields with sep. Follow last field with lastSep. */
 {
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mutId);
@@ -415,7 +585,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->acc);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->src);
+fprintf(f, "%d", el->linkId);
 fputc(lastSep,f);
 }
 
@@ -424,7 +594,7 @@ void hgMutLinkStaticLoad(char **row, struct hgMutLink *ret)
  * be replaced at the next call to this function. */
 {
 
-ret->srcId = sqlSigned(row[0]);
+ret->linkId = sqlSigned(row[0]);
 ret->linkDisplayName = row[1];
 ret->url = row[2];
 }
@@ -436,7 +606,7 @@ struct hgMutLink *hgMutLinkLoad(char **row)
 struct hgMutLink *ret;
 
 AllocVar(ret);
-ret->srcId = sqlSigned(row[0]);
+ret->linkId = sqlSigned(row[0]);
 ret->linkDisplayName = cloneString(row[1]);
 ret->url = cloneString(row[2]);
 return ret;
@@ -511,7 +681,7 @@ void hgMutLinkSaveToDb(struct sqlConnection *conn, struct hgMutLink *el, char *t
 {
 struct dyString *update = newDyString(updateSize);
 dyStringPrintf(update, "insert into %s values ( %d,'%s','%s')", 
-	tableName,  el->srcId,  el->linkDisplayName,  el->url);
+	tableName,  el->linkId,  el->linkDisplayName,  el->url);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -531,7 +701,7 @@ linkDisplayName = sqlEscapeString(el->linkDisplayName);
 url = sqlEscapeString(el->url);
 
 dyStringPrintf(update, "insert into %s values ( %d,'%s','%s')", 
-	tableName, el->srcId ,  linkDisplayName,  url);
+	tableName, el->linkId ,  linkDisplayName,  url);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&linkDisplayName);
@@ -547,7 +717,7 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->srcId = sqlSignedComma(&s);
+ret->linkId = sqlSignedComma(&s);
 ret->linkDisplayName = sqlStringComma(&s);
 ret->url = sqlStringComma(&s);
 *pS = s;
@@ -582,7 +752,7 @@ for (el = *pList; el != NULL; el = next)
 void hgMutLinkOutput(struct hgMutLink *el, FILE *f, char sep, char lastSep) 
 /* Print out hgMutLink.  Separate fields with sep. Follow last field with lastSep. */
 {
-fprintf(f, "%d", el->srcId);
+fprintf(f, "%d", el->linkId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->linkDisplayName);
@@ -601,6 +771,7 @@ void hgMutAliasStaticLoad(char **row, struct hgMutAlias *ret)
 
 ret->mutId = row[0];
 ret->name = row[1];
+ret->nameType = row[2];
 }
 
 struct hgMutAlias *hgMutAliasLoad(char **row)
@@ -612,6 +783,7 @@ struct hgMutAlias *ret;
 AllocVar(ret);
 ret->mutId = cloneString(row[0]);
 ret->name = cloneString(row[1]);
+ret->nameType = cloneString(row[2]);
 return ret;
 }
 
@@ -621,7 +793,7 @@ struct hgMutAlias *hgMutAliasLoadAll(char *fileName)
 {
 struct hgMutAlias *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[3];
 
 while (lineFileRow(lf, row))
     {
@@ -639,7 +811,7 @@ struct hgMutAlias *hgMutAliasLoadAllByChar(char *fileName, char chopper)
 {
 struct hgMutAlias *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[3];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -683,8 +855,8 @@ void hgMutAliasSaveToDb(struct sqlConnection *conn, struct hgMutAlias *el, char 
  * If worried about this use hgMutAliasSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s')", 
-	tableName,  el->mutId,  el->name);
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
+	tableName,  el->mutId,  el->name,  el->nameType);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -699,16 +871,18 @@ void hgMutAliasSaveToDbEscaped(struct sqlConnection *conn, struct hgMutAlias *el
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *mutId, *name;
+char  *mutId, *name, *nameType;
 mutId = sqlEscapeString(el->mutId);
 name = sqlEscapeString(el->name);
+nameType = sqlEscapeString(el->nameType);
 
-dyStringPrintf(update, "insert into %s values ( '%s','%s')", 
-	tableName,  mutId,  name);
+dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
+	tableName,  mutId,  name,  nameType);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&mutId);
 freez(&name);
+freez(&nameType);
 }
 
 struct hgMutAlias *hgMutAliasCommaIn(char **pS, struct hgMutAlias *ret)
@@ -722,6 +896,7 @@ if (ret == NULL)
     AllocVar(ret);
 ret->mutId = sqlStringComma(&s);
 ret->name = sqlStringComma(&s);
+ret->nameType = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -735,6 +910,7 @@ struct hgMutAlias *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->mutId);
 freeMem(el->name);
+freeMem(el->nameType);
 freez(pEl);
 }
 
@@ -761,6 +937,10 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->nameType);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
@@ -770,8 +950,8 @@ void hgMutAttrStaticLoad(char **row, struct hgMutAttr *ret)
 {
 
 ret->mutId = row[0];
-ret->mutAttrClass = sqlSigned(row[1]);
-ret->mutAttrName = sqlSigned(row[2]);
+ret->mutAttrClassId = sqlSigned(row[1]);
+ret->mutAttrNameId = sqlSigned(row[2]);
 ret->mutAttrVal = row[3];
 }
 
@@ -783,8 +963,8 @@ struct hgMutAttr *ret;
 
 AllocVar(ret);
 ret->mutId = cloneString(row[0]);
-ret->mutAttrClass = sqlSigned(row[1]);
-ret->mutAttrName = sqlSigned(row[2]);
+ret->mutAttrClassId = sqlSigned(row[1]);
+ret->mutAttrNameId = sqlSigned(row[2]);
 ret->mutAttrVal = cloneString(row[3]);
 return ret;
 }
@@ -858,7 +1038,7 @@ void hgMutAttrSaveToDb(struct sqlConnection *conn, struct hgMutAttr *el, char *t
 {
 struct dyString *update = newDyString(updateSize);
 dyStringPrintf(update, "insert into %s values ( '%s',%d,%d,'%s')", 
-	tableName,  el->mutId,  el->mutAttrClass,  el->mutAttrName,  el->mutAttrVal);
+	tableName,  el->mutId,  el->mutAttrClassId,  el->mutAttrNameId,  el->mutAttrVal);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -878,7 +1058,7 @@ mutId = sqlEscapeString(el->mutId);
 mutAttrVal = sqlEscapeString(el->mutAttrVal);
 
 dyStringPrintf(update, "insert into %s values ( '%s',%d,%d,'%s')", 
-	tableName,  mutId, el->mutAttrClass , el->mutAttrName ,  mutAttrVal);
+	tableName,  mutId, el->mutAttrClassId , el->mutAttrNameId ,  mutAttrVal);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&mutId);
@@ -895,8 +1075,8 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->mutId = sqlStringComma(&s);
-ret->mutAttrClass = sqlSignedComma(&s);
-ret->mutAttrName = sqlSignedComma(&s);
+ret->mutAttrClassId = sqlSignedComma(&s);
+ret->mutAttrNameId = sqlSignedComma(&s);
 ret->mutAttrVal = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -934,9 +1114,9 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mutId);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%d", el->mutAttrClass);
+fprintf(f, "%d", el->mutAttrClassId);
 fputc(sep,f);
-fprintf(f, "%d", el->mutAttrName);
+fprintf(f, "%d", el->mutAttrNameId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mutAttrVal);
@@ -1120,7 +1300,8 @@ void hgMutAttrNameStaticLoad(char **row, struct hgMutAttrName *ret)
 {
 
 ret->mutAttrNameId = sqlSigned(row[0]);
-ret->mutAttrName = row[1];
+ret->mutAttrClassId = sqlSigned(row[1]);
+ret->mutAttrName = row[2];
 }
 
 struct hgMutAttrName *hgMutAttrNameLoad(char **row)
@@ -1131,7 +1312,8 @@ struct hgMutAttrName *ret;
 
 AllocVar(ret);
 ret->mutAttrNameId = sqlSigned(row[0]);
-ret->mutAttrName = cloneString(row[1]);
+ret->mutAttrClassId = sqlSigned(row[1]);
+ret->mutAttrName = cloneString(row[2]);
 return ret;
 }
 
@@ -1141,7 +1323,7 @@ struct hgMutAttrName *hgMutAttrNameLoadAll(char *fileName)
 {
 struct hgMutAttrName *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[3];
 
 while (lineFileRow(lf, row))
     {
@@ -1159,7 +1341,7 @@ struct hgMutAttrName *hgMutAttrNameLoadAllByChar(char *fileName, char chopper)
 {
 struct hgMutAttrName *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[3];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -1203,8 +1385,8 @@ void hgMutAttrNameSaveToDb(struct sqlConnection *conn, struct hgMutAttrName *el,
  * If worried about this use hgMutAttrNameSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %d,'%s')", 
-	tableName,  el->mutAttrNameId,  el->mutAttrName);
+dyStringPrintf(update, "insert into %s values ( %d,%d,'%s')", 
+	tableName,  el->mutAttrNameId,  el->mutAttrClassId,  el->mutAttrName);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -1222,8 +1404,8 @@ struct dyString *update = newDyString(updateSize);
 char  *mutAttrName;
 mutAttrName = sqlEscapeString(el->mutAttrName);
 
-dyStringPrintf(update, "insert into %s values ( %d,'%s')", 
-	tableName, el->mutAttrNameId ,  mutAttrName);
+dyStringPrintf(update, "insert into %s values ( %d,%d,'%s')", 
+	tableName, el->mutAttrNameId , el->mutAttrClassId ,  mutAttrName);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&mutAttrName);
@@ -1239,6 +1421,7 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->mutAttrNameId = sqlSignedComma(&s);
+ret->mutAttrClassId = sqlSignedComma(&s);
 ret->mutAttrName = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -1272,6 +1455,8 @@ void hgMutAttrNameOutput(struct hgMutAttrName *el, FILE *f, char sep, char lastS
 /* Print out hgMutAttrName.  Separate fields with sep. Follow last field with lastSep. */
 {
 fprintf(f, "%d", el->mutAttrNameId);
+fputc(sep,f);
+fprintf(f, "%d", el->mutAttrClassId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->mutAttrName);

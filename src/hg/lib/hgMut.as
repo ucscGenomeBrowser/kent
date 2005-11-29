@@ -1,5 +1,5 @@
 table hgMut
-"track for mapping human genotype and phenotype data"
+"track for human mutation data"
     (
     ushort  bin;            "A field to speed indexing"
     string  chrom;          "Chromosome"
@@ -7,41 +7,50 @@ table hgMut
     uint    chromEnd;       "End position in chrom"
     string  name;           "HGVS description of mutation."
     string  mutId;          "unique ID for this mutation"
-    string  src;            "source for this mutation, put LSDB for locus specific"
+    ushort  srcId;          "source ID for this mutation"
     char[1] hasPhenData;    "y or n, does this have phenotype data linked"
     string  baseChangeType; "enum('insertion', 'deletion', 'substitution','duplication','complex','unknown')."
     string  location;       "enum('intron', 'exon', '5'' UTR', '3'' UTR', 'not within known transcription unit')."
     )
 
-table hgMutRef 
+table hgMutSrc
+"sources for human mutation track"
+    (
+    ushort srcId;	    "key into hgMut table"
+    string src;		    "name of genome wide source or LSDB"
+    string details; 	    "for LSDB name of actual source DB"
+    )
+
+table hgMutExtLink
 "accessions and sources for links"
     (
     string mutId;           "mutation ID"
-    string acc;             "accession or ID used by source in link"
-    int src;                "source ID, foreign key into hgMutLink"
+    string acc;             "accession or ID used by link"
+    int linkId;             "link ID, foreign key into hgMutLink"
     )
 
 table hgMutLink 
-"links for human phenotype detail page"
+"links for human mutation detail page"
     (
-    int srcId;              "ID for this source, links to hgMutRef table."
+    int linkId;             "ID for this source, links to hgMutRef table."
     string linkDisplayName; "Display name for this link."
     string url;             "url to substitute ID in for links."
     )
 
 table hgMutAlias
-"aliases for mutations in the human phenotype track"
+"aliases for mutations"
     (
-    string mutId;            "first db ID from hgMut table."
+    string mutId;           "mutation ID from hgMut table."
     string name;            "Another name for the mutation."
+    string nameType;	    "common, or ?"
     )
 
 table hgMutAttr
 "attributes asssociated with the mutation"
     (
     string mutId;	    "mutation ID."
-    int mutAttrClass;       "id for attribute class or category, foreign key."
-    int mutAttrName;        "id for attribute name, foreign key."
+    int mutAttrClassId;     "id for attribute class or category, foreign key."
+    int mutAttrNameId;      "id for attribute name, foreign key."
     string mutAttrVal;      "value for this attribute"
     )
 
@@ -57,5 +66,6 @@ table hgMutAttrName
 "Names of attributes"
     (
     int mutAttrNameId;     "id for attribute name."
+    int mutAttrClassId;    "id for class this name belongs to."
     string mutAttrName;    "name"
     )
