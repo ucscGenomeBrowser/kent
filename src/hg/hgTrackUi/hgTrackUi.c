@@ -27,7 +27,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.223 2005/11/29 18:19:29 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.224 2005/11/29 19:34:50 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -680,20 +680,20 @@ void knownGeneIdConfig(struct trackDb *tdb)
 {
 char varName[64];
 char *geneLabel;
-//struct sqlConnection *conn = hAllocConn();
-//char query[256];
-//int omimAvail = 0;
-//safef(query, sizeof(query), "select count(*) from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 2");
-//omimAvail = sqlQuickNum(conn, query);
-//hFreeConn(&conn);
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+int omimAvail = 0;
+safef(query, sizeof(query), "select count(*) from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 2");
+omimAvail = sqlQuickNum(conn, query);
+hFreeConn(&conn);
 safef(varName, sizeof(varName), "%s.label", tdb->tableName);
 geneLabel = cartUsualString(cart, varName, "gene symbol");
 printf("<B>Label:</B> ");
 radioButton(varName, geneLabel, "gene symbol");
 radioButton(varName, geneLabel, "UCSC Known Gene ID");
 radioButton(varName, geneLabel, "UniProt Display ID");
-//if (omimAvail > 0)
-    //radioButton(varName, geneLabel, "OMIM ID");
+if (omimAvail > 0)
+    radioButton(varName, geneLabel, "OMIM ID");
 radioButton(varName, geneLabel, "all");
 radioButton(varName, geneLabel, "none");
 }
