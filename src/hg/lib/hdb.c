@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.276 2005/11/26 18:21:29 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.277 2005/11/29 04:27:17 heather Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -886,7 +886,7 @@ struct chromInfo *ci = mustGetChromInfo(hGetDb(), chromName);
 safef(retNibName, HDB_MAX_PATH_STRING, "%s", ci->fileName);
 }
 
-static void hNibForChrom2(char *chromName, char retNibName[HDB_MAX_PATH_STRING])
+void hNibForChrom2(char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome on db2. */
 {
 struct chromInfo *ci = mustGetChromInfo(hGetDb2(), chromName);
