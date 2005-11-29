@@ -9,7 +9,7 @@
 #include "dtdParse.h"
 #include "elStat.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.10 2005/11/29 05:04:28 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.11 2005/11/29 06:03:01 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -52,6 +52,7 @@ struct table
     FILE *tabFile;		/* Tab oriented file associated with table */
     struct hash *uniqHash;	/* Table to insure unique output. */
     struct dyString *uniqString;/* Key into unique hash. Also most of output */
+    struct assoc *assocList;    /* List of pending associations. */
     };
 
 struct field
@@ -437,6 +438,38 @@ for (i=0; atts[i] != NULL; i += 2)
 return table;
 }
 
+struct assoc
+/* List of associations we can't write until we know
+ * our key. */
+    {
+    struct assoc *next;
+    FILE *f;		/* File to write to. */
+    char *childKey;	/* Key in child (allocated here). */
+    };
+
+struct assoc *assocNew(FILE *f, char *childKey)
+/* Create new association. */
+{
+struct assoc *assoc;
+AllocVar(assoc);
+assoc->f = f;
+assoc->childKey = cloneString(childKey);
+return assoc;
+}
+
+void assocFreeList(struct assoc **pList)
+/* Free up list of associations. */
+{
+struct assoc *el, *next;
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    freeMem(el->childKey);
+    freeMem(el);
+    }
+*pList = NULL;
+}
+
 void endHandler(struct xap *xap, char *name)
 /* Called at end of a tag */
 {
@@ -445,6 +478,7 @@ struct field *field;
 struct dyString *dy = table->uniqString;
 char *text = skipLeadingSpaces(xap->stack->text->string);
 char *primaryKeyVal = NULL;
+struct assoc *assoc;
 
 if (text[0] != 0)
     {
@@ -471,6 +505,10 @@ for (field = table->fieldList; field != NULL; field = field->next)
 	    dyStringAppendC(dy, '\t');
 	}
     }
+for (assoc = table->assocList; assoc != NULL; assoc = assoc->next)
+    {
+    dyStringPrintf(dy, "%p\t%s\t", assoc->f, assoc->childKey);
+    }
 
 primaryKeyVal = hashFindVal(table->uniqHash, dy->string);
 if (primaryKeyVal == NULL)
@@ -479,16 +517,33 @@ if (primaryKeyVal == NULL)
 	{
 	table->lastId += 1;
 	dyStringPrintf(table->primaryKey->dy, "%d", table->lastId);
-	fprintf(table->tabFile, "%d\t", table->lastId);
 	}
     primaryKeyVal = table->primaryKey->dy->string;
-    fprintf(table->tabFile, "%s\n", dy->string);
+    for (field = table->fieldList; field != NULL; field = field->next)
+        {
+	fprintf(table->tabFile, "%s", field->dy->string);
+	if (field->next != NULL)
+	   fprintf(table->tabFile, "\t");
+	}
+    fprintf(table->tabFile, "\n");
     hashAdd(table->uniqHash, dy->string, cloneString(primaryKeyVal));
     }
 if (table->parentKey != NULL)
     {
     dyStringAppend(table->parentKey->dy, primaryKeyVal);
     }
+else if (table->parentAssociation != NULL)
+    {
+    struct table *parentTable = xap->stack[1].object;
+    assoc = assocNew(table->parentAssociation->tabFile,
+        primaryKeyVal);
+    slAddHead(&parentTable->assocList, assoc);
+    }
+
+slReverse(&table->assocList);
+for (assoc = table->assocList; assoc != NULL; assoc = assoc->next)
+    fprintf(assoc->f, "%s\t%s\n", primaryKeyVal, assoc->childKey);
+assocFreeList(&table->assocList);
 }
 
 
