@@ -1037,6 +1037,7 @@ subGroup1 gif Interferon no=Untreated yes=Treated
 subGroup2 factor Factor h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac stat1=STAT1 pol2=Pol2 
 subGroup3 peak Signal/Peak signal=Signal peak=Peak
 origAssembly hg17
+dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgHeLaDmH3K4_p0
     subTrack encodeUcsdNgGif
@@ -1303,6 +1304,7 @@ windowingFunction mean
 viewLimits 0:2
 autoScale Off
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
 track encodeYaleChIPSTAT1Sig
 release beta
@@ -1321,6 +1323,7 @@ windowingFunction mean
 viewLimits 0:2
 autoScale Off
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
 
     track encodeYaleChIPSTAT1HeLaMaskLess36mer36bpSig
     subTrack encodeYaleChIPSTAT1Sig
@@ -1605,6 +1608,7 @@ maxLimit 13.15
 viewLimits 0:5
 maxHeightPixels 128:16:16
 type bedGraph 5
+dataVersion ENCODE Oct 2005 Freeze
 
 track encodeRegulomeBase
 release beta
@@ -2360,6 +2364,9 @@ color 20,90,0
 type bed 6 +
 mafTrack multiz8way
 origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+
+
 searchTable encodeGisRnaPetHCT116
 searchMethod exact
 searchType bed
