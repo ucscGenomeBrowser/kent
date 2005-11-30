@@ -43,6 +43,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	droSim1 \
 	droGri1 \
 	droPer1 \
+	droSec1 \
 	anoGam1 \
 	apiMel1 \
 	apiMel2	\
