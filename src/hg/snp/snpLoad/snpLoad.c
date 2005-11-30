@@ -6,10 +6,11 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.12 2005/11/29 02:58:53 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.13 2005/11/30 23:32:22 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
+char *contigGroup = NULL;
 static struct hash *chromHash = NULL;
 
 void usage()
@@ -18,7 +19,7 @@ void usage()
 errAbort(
     "snpLoad - create snp table from build125 database\n"
     "usage:\n"
-    "    snpLoad snpDb targetDb \n");
+    "    snpLoad snpDb targetDb contigGroup\n");
 }
 
 /* Copied from hgLoadWiggle. */
@@ -123,6 +124,7 @@ struct sqlResult *sr;
 char **row;
 int snpClass;
 int pos;
+int count = 0;
 
 safef(query, sizeof(query), "select snp_id, ctg_id, loc_type, phys_pos_from, "
       "phys_pos, orientation, allele from ContigLoc where snp_type = 'rs'");
@@ -130,6 +132,14 @@ safef(query, sizeof(query), "select snp_id, ctg_id, loc_type, phys_pos_from, "
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    count++;
+    // short-circuit 
+    if (count == 1000) 
+        {
+        sqlFreeResult(&sr);
+        hFreeConn(&conn);
+        return list;
+	}
     pos = atoi(row[3]);
     if (pos == 0) 
         {
@@ -182,17 +192,25 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char *actualChrom;
+char *actualContigGroup;
 boolean errorFound = FALSE;
 
 verbose(1, "looking up contig chrom...\n");
 for (el = list; el != NULL; el = el->next)
     {
-    safef(query, sizeof(query), "select contig_chr, contig_start, contig_end from ContigInfo "
+    safef(query, sizeof(query), "select contig_chr, contig_start, contig_end, group_term from ContigInfo "
       "where ctg_id = '%s'", el->chrom);
     sr = sqlGetResult(conn, query);
     /* have a joiner check rule that assumes the contig is unique */
     /* also the index forces ctg_id to be unique */
     row = sqlNextRow(sr);
+    actualContigGroup = cloneString(row[3]);
+    if (!sameString(actualContigGroup, contigGroup)) 
+        {
+	el->chrom = "ERROR";
+        sqlFreeResult(&sr);
+        continue;
+	}
     actualChrom = cloneString(row[0]);
     if(!confirmCoords(el->chromStart, el->chromEnd, atoi(row[1]), atoi(row[2])))
         {
@@ -220,6 +238,7 @@ int functionValue = 0;
 verbose(1, "looking up function...\n");
 for (el = list; el != NULL; el = el->next)
     {
+    if (sameString(el->chrom, "ERROR")) continue;
     safef(query, sizeof(query), "select fxn_class from ContigLocusId where snp_id = '%s'", el->name);
     sr = sqlGetResult(conn, query);
     /* need a joiner check rule for this */
@@ -278,6 +297,7 @@ char **row;
 verbose(1, "looking up heterozygosity...\n");
 for (el = list; el != NULL; el = el->next)
     {
+    if (sameString(el->chrom, "ERROR")) continue;
     safef(query, sizeof(query), "select avg_heterozygosity, het_se from SNP where snp_id = '%s'", el->name);
     sr = sqlGetResult(conn, query);
     /* need a joiner check rule for this */
@@ -339,6 +359,7 @@ int bin = 0;
 
 for (el = list; el != NULL; el = el->next)
     {
+    if (sameString(el->chrom, "ERROR")) continue;
     bin = hFindBin(el->chromStart, el->chromEnd);
     fprintf(f, "%d\t", bin);
     fprintf(f, "chr%s\t", el->chrom);
@@ -405,12 +426,13 @@ int main(int argc, char *argv[])
 {
 struct snp125 *list=NULL, *el;
 
-if (argc != 3)
+if (argc != 4)
     usage();
 
 /* TODO: look in jksql for existence check for non-hgcentral database */
 snpDb = argv[1];
 targetDb = argv[2];
+contigGroup = argv[3];
 // if(!hDbExists(targetDb))
     // errAbort("%s does not exist\n", targetDb);
 
