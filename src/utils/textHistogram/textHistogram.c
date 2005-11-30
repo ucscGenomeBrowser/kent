@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: textHistogram.c,v 1.23 2005/10/22 15:26:33 kent Exp $";
+static char const rcsid[] = "$Id: textHistogram.c,v 1.24 2005/11/30 02:42:58 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -201,12 +201,12 @@ while ((wordCount = lineFileChop(lf, row)))
 	    total[x] += a;
 	    }
 	}
-	else
-	    {
-	    verbose(2, "truncating index %d\n", x);
-	    truncation = (x > truncation) ? x : truncation;
-	    totalTooBig += 1;
-	    }
+    else
+        {
+        verbose(2, "truncating index %d\n", x);
+        truncation = (x > truncation) ? x : truncation;
+        totalTooBig += 1;
+        }
     }
 
 lineFileClose(&lf);
@@ -329,7 +329,7 @@ for (i=begin; i<=end; ++i)
     if (noStar)
 	{
 	if (i == end)
-	    printf(">=");
+	    printf("<minVal or >=");
 	if (verboseLevel()>1)
 	    printf("%02d\t", i);
 	if (real)
@@ -366,7 +366,7 @@ for (i=begin; i<=end; ++i)
 	{
 	int astCount = round(ct * 60.0 / maxCt);
 	if (i == end)
-	    printf(">=");
+	    printf("<minVal or >=");
 	if (verboseLevel()>1)
 	    printf("%2d ", i);
 	if (real)
