@@ -10,7 +10,7 @@
 #include "elStat.h"
 #include "rename.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.18 2005/11/29 23:40:19 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.19 2005/11/30 00:11:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -132,14 +132,20 @@ field->mixedCaseName = cloneString(mixedCaseName);
 field->table = table;
 field->attStat = att;
 field->isMadeUpKey = isMadeUpKey;
+field->isString = isString;
 if (!isMadeUpKey)
+    {
     field->dtdAttribute = findDtdAttribute(table->dtdElement, name);
+    if (field->dtdAttribute == NULL)
+        {
+	if (att != NULL && !sameString(name, textField))
+	    errAbort("%s.%s is in .stats but not in .dtd file", 
+		table->name, field->name);
+	}
+    }
 field->dy = dyStringNew(16);
 hashAdd(table->fieldHash, field->name, field);
 hashAdd(table->fieldMixedHash, field->mixedCaseName, field);
-if (att != NULL && field->dtdAttribute == NULL && !sameString(name, textField))
-    errAbort("%s.%s is in .stats but not in .dtd file", 
-	table->name, field->name);
 if (atTail)
     {
     slAddTail(&table->fieldList, field);
@@ -308,7 +314,7 @@ if (!hashLookup(rUniqParentLinkHash, linkUniqName))
 	char *fieldName = renameUnique(parentTable->fieldHash, element->mixedCaseName);
 	field = addFieldToTable(parentTable, 
 		    fieldName, fieldName,
-		    NULL, TRUE, TRUE,
+		    parentTable->primaryKey->attStat, TRUE, TRUE,
 		    parentTable->primaryKey->isString);
 	AllocVar(ref);
 	ref->field = field;
@@ -330,9 +336,11 @@ if (!hashLookup(rUniqParentLinkHash, linkUniqName))
 	assocTable = tableNew(joinedName, NULL, NULL);
 	assocTable->isAssoc = TRUE;
 	addFieldToTable(assocTable, parentTable->name, parentTable->name,
-	    NULL, TRUE, TRUE, parentTable->primaryKey->isString);
+	    parentTable->primaryKey->attStat, TRUE, TRUE, 
+	    parentTable->primaryKey->isString);
 	addFieldToTable(assocTable, table->name, table->name,
-	    NULL, TRUE, TRUE, table->primaryKey->isString);
+	    table->primaryKey->attStat, TRUE, TRUE, 
+	    table->primaryKey->isString);
 	slAddHead(pTableList, assocTable);
 	AllocVar(ref);
 	ref->assoc = assocTable;
@@ -628,12 +636,13 @@ if (table->isAssoc)
     {
     for (field = table->fieldList; field != NULL; field = field->next)
 	{
-	fprintf(f, "    INDEX(%s)", field->name);
-	    {
-	    if (field->next != NULL)
-		fprintf(f, ",");
-	    fprintf(f, "\n");
-	    }
+	if (field->isString)
+	    fprintf(f, "    INDEX(%s(12))", field->name);
+	else
+	    fprintf(f, "    INDEX(%s)", field->name);
+	if (field->next != NULL)
+	    fprintf(f, ",");
+	fprintf(f, "\n");
 	}
     }
 else
