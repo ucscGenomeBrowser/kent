@@ -79,6 +79,7 @@ if (newName == NULL)
 	    }
 	}
     }
+if (!sameString(newName, name)) verbose(3, "renamed %s to %s\n", name, newName);
 return newName;
 }
 

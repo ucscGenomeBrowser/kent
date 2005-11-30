@@ -10,7 +10,7 @@
 #include "elStat.h"
 #include "rename.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.19 2005/11/30 00:11:14 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.20 2005/11/30 01:16:02 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -144,8 +144,8 @@ if (!isMadeUpKey)
 	}
     }
 field->dy = dyStringNew(16);
-hashAdd(table->fieldHash, field->name, field);
-hashAdd(table->fieldMixedHash, field->mixedCaseName, field);
+hashAdd(table->fieldHash, name, field);
+hashAdd(table->fieldMixedHash, mixedCaseName, field);
 if (atTail)
     {
     slAddTail(&table->fieldList, field);
@@ -311,11 +311,13 @@ if (!hashLookup(rUniqParentLinkHash, linkUniqName))
     if (elAsChild->copyCode == '1' || elAsChild->copyCode == '?')
 	{
 	struct fieldRef *ref;
-	char *fieldName = renameUnique(parentTable->fieldHash, element->mixedCaseName);
+	char *fieldName = renameUnique(parentTable->fieldHash, element->name);
+	char *fieldMixedName = renameUnique(parentTable->fieldMixedHash, 
+		element->mixedCaseName);
 	field = addFieldToTable(parentTable, 
-		    fieldName, fieldName,
-		    parentTable->primaryKey->attStat, TRUE, TRUE,
-		    parentTable->primaryKey->isString);
+		    fieldName, fieldMixedName,
+		    table->primaryKey->attStat, TRUE, TRUE,
+		    table->primaryKey->isString);
 	AllocVar(ref);
 	ref->field = field;
 	slAddHead(&table->parentKeys, ref);
@@ -624,7 +626,7 @@ fprintf(f, "CREATE TABLE %s (\n", table->name);
 for (field = table->fieldList; field != NULL; field = field->next)
     {
     struct attStat *att = field->attStat;
-    fprintf(f, "    %s ", field->name);
+    fprintf(f, "    %s ", field->mixedCaseName);
     if (att == NULL)
         fprintf(f, "int");
     else
@@ -669,14 +671,26 @@ struct dtdElement *el;
 struct dtdElChild *child;
 renameAddSqlWords(elHash);
 renameAddCWords(elHash);
+
+/* First rename tables if need be. */
+for (el = dtdList; el != NULL; el = el->next)
+    {
+    el->mixedCaseName = renameUnique(elHash, el->mixedCaseName);
+    hashAdd(elHash, el->mixedCaseName, NULL);
+    }
+
+/* Now rename fields in tables if need be. */
 for (el = dtdList; el != NULL; el = el->next)
     {
     struct dtdAttribute *att;
+    struct dtdElChild *child;
     struct hash *attHash = hashNew(8);
     renameAddSqlWords(attHash);
     renameAddCWords(attHash);
-    el->mixedCaseName = renameUnique(elHash, el->mixedCaseName);
-    hashAdd(elHash, el->mixedCaseName, NULL);
+
+    /* Don't want attributes to conflict with child elements. */
+    for (child = el->children; child != NULL; child = child->next)
+        hashAdd(attHash, child->el->mixedCaseName, NULL);
     for (att = el->attributes; att != NULL; att = att->next)
 	{
         att->mixedCaseName = renameUnique(attHash, att->mixedCaseName);
