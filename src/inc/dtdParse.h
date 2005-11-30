@@ -32,6 +32,7 @@ struct dtdAttribute
     {
     struct dtdAttribute *next;	/* Next in list. */
     char *name;			/* Name of attribute. */
+    char *mixedCaseName;	/* Name converted from EL_NAME or el-name to elName. */
     char *type;			/* Element type - CDATA, INT, FLOAT, etc. */
     boolean required;		/* True if required. */
     char *usual;		/* Default value (or NULL if none) */
