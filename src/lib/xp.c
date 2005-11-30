@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "xp.h"
 
-static char const rcsid[] = "$Id: xp.c,v 1.9 2005/11/19 02:08:30 kent Exp $";
+static char const rcsid[] = "$Id: xp.c,v 1.10 2005/11/30 16:02:48 kent Exp $";
 
 
 char xpNextBuf(struct xp *xp)
@@ -41,6 +41,7 @@ struct hash *symHash = newHash(6);
 hashAdd(symHash, "lt", "<");
 hashAdd(symHash, "gt", ">");
 hashAdd(symHash, "amp", "&");
+hashAdd(symHash, "apos", "'");
 hashAdd(symHash, "quot", "\"");
 return symHash;
 }
