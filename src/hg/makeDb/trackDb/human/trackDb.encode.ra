@@ -20,7 +20,6 @@ type bed 6 +
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
-
 track encodeGencodeGeneOct05
 compositeTrack on
 shortLabel Gencode Genes
@@ -1976,7 +1975,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr
 visibility hide
 useScore 1
 type bed 12
-dataVersion ENCODE June 2005 Freeze
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeGisChipPetStat1Gif
     subTrack encodeGisChipPetStat1
@@ -2395,25 +2394,6 @@ dataVersion ENCODE June 2005 Freeze
     longLabel Stanford ChIP/chip Smoothed Score (K562 cells, Sp3 ChIP)
     priority 6
 
-
-track encodeBu_ORChID1
-shortLabel BU ORChID
-longLabel Boston University ORChID (OH Radical Cleavage Intensity Database)
-group encodeChrom
-priority 60.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type wig -0.56 1.58
-spanList 1
-maxHeightPixels 128:36:16
-windowingFunction Mean
-color 44,44,200
-altColor 200,44,44
-viewLimits 0.22:0.5
-autoScale Off
-origAssembly hg16
-dataVersion ENCODE June 2005 Freeze
-
 track encodeUtexChip
 compositeTrack on
 shortLabel UT-Austin ChIP
@@ -2716,7 +2696,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 3 .
 origAssembly hg16
-dataVersion ENCODE June 2005 Freeze
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUvaDnaRepEarly
     subTrack encodeUvaDnaRepSeg
@@ -2755,7 +2735,7 @@ priority 64.2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
 type bed 3 .
-dataVersion ENCODE June 2005 Freeze
+dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUvaDnaRepOriginsPred
     subTrack encodeUvaDnaRepOrigins
@@ -2783,8 +2763,7 @@ spanList 1
 maxHeightPixels 128:16:16
 autoScale Off
 windowingFunction mean
-dataVersion ENCODE June 2005 Freeze
-
+dataVersion ENCODE Oct 2005 Freeze
 
 track encodeTbaCons
 compositeTrack on

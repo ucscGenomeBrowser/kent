@@ -1039,7 +1039,7 @@ subGroup1 gif Interferon no=Untreated yes=Treated
 subGroup2 factor Factor h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac stat1=STAT1 pol2=Pol2 
 subGroup3 peak Signal/Peak signal=Signal peak=Peak
 origAssembly hg17
-dataVersion ENCODE June 2005 Freeze
+dataVersion ENCODE June & Oct 2005 Freeze
 
     track encodeUcsdNgHeLaDmH3K4_p0
     subTrack encodeUcsdNgGif
@@ -1048,6 +1048,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=no factor=h3k4me2 peak=signal
     color 33,91,51
     priority 1
+    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaDmH3K4_p30
     subTrack encodeUcsdNgGif
@@ -1056,6 +1057,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=yes factor=h3k4me2 peak=signal
     color 33,91,51
     priority 2
+    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaH3K4me3_p0
     subTrack encodeUcsdNgGif
@@ -1064,6 +1066,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=no factor=h3k4me3 peak=signal
     color 0,63,135
     priority 3
+    dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgHeLaH3K4me3_p30
     subTrack encodeUcsdNgGif
@@ -1072,6 +1075,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=yes factor=h3k4me3 peak=signal
     color 0,63,135
     priority 4
+    dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgHeLaAcH3_p0
     subTrack encodeUcsdNgGif
@@ -1080,6 +1084,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=no factor=h3ac peak=signal
     color 33,91,51
     priority 5
+    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaAcH3_p30
     subTrack encodeUcsdNgGif
@@ -1088,6 +1093,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=yes factor=h3ac peak=signal
     color 33,91,51
     priority 6
+    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaAcH4_p0
     subTrack encodeUcsdNgGif
@@ -1096,6 +1102,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=no factor=h4ac peak=signal
     color 0,63,135
     priority 7
+    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaStat1_p30
     subTrack encodeUcsdNgGif
@@ -1104,6 +1111,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=yes factor=stat1 peak=signal
     color 33,91,51
     priority 8
+    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaRnap_p0
     subTrack encodeUcsdNgGif
@@ -1112,6 +1120,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=no factor=pol2 peak=signal
     color 0,63,135
     priority 9
+    dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgHeLaRnap_p30
     subTrack encodeUcsdNgGif
@@ -1120,6 +1129,7 @@ dataVersion ENCODE June 2005 Freeze
     color 0,63,135
     subGroups gif=yes factor=pol2 peak=signal
     priority 10
+    dataVersion ENCODE June 2005 Freeze
 
     track encodeUcsdNgHeLaDmH3K4_p0_peak
     subTrack encodeUcsdNgGif
@@ -1128,6 +1138,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=no factor=h3k4me2 peak=peak
     color 33,91,51
     priority 11
+    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaDmH3K4_p30_peak
     subTrack encodeUcsdNgGif
@@ -1136,6 +1147,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=yes factor=h3k4me2 peak=peak
     color 33,91,51
     priority 12
+    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaAcH3_p0_peak
     subTrack encodeUcsdNgGif
@@ -1144,6 +1156,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=no factor=h3ac peak=peak
     color 0,63,135
     priority 13
+    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaAcH3_p30_peak
     subTrack encodeUcsdNgGif
@@ -1152,6 +1165,7 @@ dataVersion ENCODE June 2005 Freeze
     subGroups gif=yes factor=h3ac peak=peak
     color 0,63,135
     priority 14
+    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaAcH4_p0_peak
     subTrack encodeUcsdNgGif
@@ -1160,6 +1174,7 @@ dataVersion ENCODE June 2005 Freeze
     longLabel Ludwig Institute/UCSD ChIP/Chip Ng Peak: HeLa, H4ac, no gamma interferon
     subGroups gif=no factor=h4ac peak=peak
     priority 15
+    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUcsdNgHeLaStat1_p30_peak
     subTrack encodeUcsdNgGif
@@ -1168,6 +1183,7 @@ dataVersion ENCODE June 2005 Freeze
     color 0,63,135
     longLabel Ludwig Institute/UCSD ChIP/Chip Ng Peak: HeLa, STAT1, 30 min after gamma interferon
     priority 16
+    dataVersion ENCODE Oct 2005 Freeze
 
 track encodeUppsalaChip
 compositeTrack on
@@ -1566,6 +1582,24 @@ urlLabel Yale DART Link:
     longLabel Yale ChIP/Chip (TAF1 ab, HeLa cells) Sites
     color 50,50,200
     priority 5
+
+track encodeBu_ORChID1
+shortLabel BU ORChID
+longLabel Boston University ORChID (OH Radical Cleavage Intensity Database)
+group encodeChrom
+priority 60.0
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type wig -0.56 1.58
+spanList 1
+maxHeightPixels 128:36:16
+windowingFunction Mean
+color 44,44,200
+altColor 200,44,44
+viewLimits 0.22:0.5
+autoScale Off
+origAssembly hg16
+dataVersion ENCODE Oct 2005 Freeze
 
 track encodeUtexStage
 compositeTrack on
