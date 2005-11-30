@@ -10,7 +10,7 @@
 #include "elStat.h"
 #include "rename.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.21 2005/11/30 01:32:42 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.22 2005/11/30 06:14:46 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -291,7 +291,7 @@ for (dtdEl = dtdList; dtdEl != NULL; dtdEl = dtdEl->next)
 static struct hash *rUniqParentLinkHash;
 
 void rAddParentKeys(struct dtdElement *parent, struct dtdElChild *elAsChild,
-	struct hash *tableHash, struct table **pTableList)
+	struct hash *tableHash, struct table **pTableList, int level)
 /* Recursively add parentKeys. */
 {
 struct dtdElement *element = elAsChild->el;
@@ -300,6 +300,16 @@ struct table *table = hashMustFindVal(tableHash, element->mixedCaseName);
 struct table *parentTable = hashMustFindVal(tableHash, parent->mixedCaseName);
 struct field *field;
 char linkUniqName[256];
+int i;
+static struct dtdElChild *parentStack[256];
+
+if (level >= ArraySize(parentStack))
+    errAbort("Recursion too deep in rAddParentKeys");
+parentStack[level] = elAsChild;
+
+for (i=level-1; i>= 0; i -= 1)
+    if (elAsChild == parentStack[i])
+        return;	/* Avoid cycling on self. */
 
 /* Add new field in parent. */
 safef(linkUniqName, sizeof(linkUniqName), "%s.%s", 
@@ -354,7 +364,7 @@ if (!hashLookup(rUniqParentLinkHash, linkUniqName))
 else
     verbose(3, "skipping link %s to parent %s\n", table->name, parentTable->name);
 for (child = element->children;  child != NULL; child = child->next)
-    rAddParentKeys(element, child, tableHash, pTableList);
+    rAddParentKeys(element, child, tableHash, pTableList, level+1);
 }
 
 void addParentKeys(struct dtdElement *dtdRoot, struct hash *tableHash,
@@ -370,7 +380,7 @@ for (topLevel = dtdRoot->children; topLevel != NULL; topLevel = topLevel->next)
     struct dtdElChild *child;
     for (child = mainIterator->children; child != NULL; child = child->next)
         {
-	rAddParentKeys(mainIterator, child, tableHash, pTableList);
+	rAddParentKeys(mainIterator, child, tableHash, pTableList, 0);
 	}
     }
 hashFree(&rUniqParentLinkHash);
