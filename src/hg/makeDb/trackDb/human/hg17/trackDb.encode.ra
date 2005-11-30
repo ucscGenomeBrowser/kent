@@ -1039,7 +1039,7 @@ subGroup1 gif Interferon no=Untreated yes=Treated
 subGroup2 factor Factor h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac stat1=STAT1 pol2=Pol2 
 subGroup3 peak Signal/Peak signal=Signal peak=Peak
 origAssembly hg17
-dataVersion ENCODE June & Oct 2005 Freeze
+dataVersion ENCODE June & Oct 2005 Freezes
 
     track encodeUcsdNgHeLaDmH3K4_p0
     subTrack encodeUcsdNgGif
