@@ -18,6 +18,5 @@ test:
 ret:
 	gcc -c t.c 
 	gcc -c out.c
-	gcc -c testUse.c
-	gcc -O -o t out.o t.o testUse.o ../runtime/runtime.a ../../../lib/powerpc/jkweb.a -lm
+	gcc -O -o t out.o t.o ../runtime/runtime.a ../../../lib/powerpc/jkweb.a -lm
 	t
