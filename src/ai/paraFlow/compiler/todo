@@ -1,3 +1,5 @@
+  - Rework code generator so that a type is kept alongside the
+    data on the expression stack.
   - Do a sort function (need function pointer?)
   - Doing parallel checking for para and flow statements.
   - Implement "para into" statement.
@@ -24,6 +26,17 @@ Check system:
 
 -----------
 DONE
+  - Reconsider where reference counting is done.  In particular
+    what if instead of bumping the refcount when it goes on the
+    expression stack, have system where strings and objects are
+    created with a ref-count of zero, and assignment bumps the
+    ref-count, and objects are de-ref-counted when they are
+    removed from the stack (which for local variables occurs
+    when they go out of scope).
+       I played around with this for a couple of hours.  It seemed
+    to actually improve the code little if any, and since there were
+    still a few bugs to fix with the reimplementation I backed out
+    the change.
   - Changing it so that a pf_ is prepended to all global
     symbols created by paraFlow to avoid name conflicts
     with the C libraries.
