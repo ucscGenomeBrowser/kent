@@ -18,6 +18,8 @@ hashAdd(hash, "where", NULL);
 hashAdd(hash, "table", NULL);
 hashAdd(hash, "by", NULL);
 hashAdd(hash, "order", NULL);
+hashAdd(hash, "key", NULL);
+hashAdd(hash, "case", NULL);
 }
 
 void renameAddCWords(struct hash *hash)
@@ -43,6 +45,7 @@ hashAdd(hash, "static", NULL);
 hashAdd(hash, "auto", NULL);
 hashAdd(hash, "typedef", NULL);
 hashAdd(hash, "enum", NULL);
+hashAdd(hash, "case", NULL);
 }
 
 char *renameUnique(struct hash *hash, char *name)

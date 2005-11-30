@@ -10,7 +10,7 @@
 #include "elStat.h"
 #include "rename.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.20 2005/11/30 01:16:02 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.21 2005/11/30 01:32:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -639,9 +639,9 @@ if (table->isAssoc)
     for (field = table->fieldList; field != NULL; field = field->next)
 	{
 	if (field->isString)
-	    fprintf(f, "    INDEX(%s(12))", field->name);
+	    fprintf(f, "    INDEX(%s(12))", field->mixedCaseName);
 	else
-	    fprintf(f, "    INDEX(%s)", field->name);
+	    fprintf(f, "    INDEX(%s)", field->mixedCaseName);
 	if (field->next != NULL)
 	    fprintf(f, ",");
 	fprintf(f, "\n");
@@ -652,9 +652,9 @@ else
     struct field *primaryKey = table->primaryKey;
     char *keyName = primaryKey->name;
     if (primaryKey->isString)
-	fprintf(f, "    PRIMARY KEY(%s(12))\n", table->primaryKey->name);
+	fprintf(f, "    PRIMARY KEY(%s(12))\n", table->primaryKey->mixedCaseName);
     else
-	fprintf(f, "    PRIMARY KEY(%s)\n", table->primaryKey->name);
+	fprintf(f, "    PRIMARY KEY(%s)\n", table->primaryKey->mixedCaseName);
     }
 
 fprintf(f, ");\n");
