@@ -10,7 +10,7 @@
 #include "elStat.h"
 #include "rename.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.22 2005/11/30 06:14:46 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.23 2005/11/30 07:50:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -309,7 +309,11 @@ parentStack[level] = elAsChild;
 
 for (i=level-1; i>= 0; i -= 1)
     if (elAsChild == parentStack[i])
+	{
+	warn("WARNING: self-referential data structure %s.", elAsChild->name);
+	warn("         Entering untested code.");
         return;	/* Avoid cycling on self. */
+	}
 
 /* Add new field in parent. */
 safef(linkUniqName, sizeof(linkUniqName), "%s.%s", 
