@@ -2926,6 +2926,7 @@ color 150,100,30
 chromosomes chr12,chr18,chr2,chr4,chr7,chr8,chr9
 visibility hide
 type bed 4 .
+
 track encodeIndels
 shortLabel NHGRI DIPs 
 longLabel NHGRI Deletion/Insertion Polymorphisms in ENCODE regions
