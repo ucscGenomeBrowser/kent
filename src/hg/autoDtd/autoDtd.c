@@ -5,7 +5,7 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.5 2005/11/29 20:52:35 kent Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.6 2005/11/30 16:03:22 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -330,27 +330,31 @@ void rWriteTree(FILE *f, struct type *type, boolean isOptional, boolean isList,
 {
 struct attribute *att;
 struct element *el;
+static struct type *parentStack[256];
+int i;
+
 
 spaceOut(f, level*2);
-if (level > 20)
-    {
-    fprintf(f, "%s...\n", type->name);
-    }
-else
-    {
-    fprintf(f, "%s", type->name);
-    if (isList)
-        if (isOptional)
-	    fprintf(f, "*");
-	else
-	    fprintf(f, "+");
+fprintf(f, "%s", type->name);
+if (isList)
+    if (isOptional)
+	fprintf(f, "*");
     else
-        if (isOptional)
-	    fprintf(f, "?");
-    fprintf(f, "\n");
-    for (el = type->elements; el != NULL; el = el->next)
-	rWriteTree(f, el->type, el->isOptional, el->isList, uniqHash, level+1);
-    }
+	fprintf(f, "+");
+else
+    if (isOptional)
+	fprintf(f, "?");
+fprintf(f, "\n");
+
+if (level >= ArraySize(parentStack))
+    errAbort("Recursion too deep in rWriteTree");
+parentStack[level] = type;
+for (i=level-1; i>= 0; i -= 1)
+    if (type == parentStack[i])
+        return;	/* Avoid cycling on self. */
+
+for (el = type->elements; el != NULL; el = el->next)
+    rWriteTree(f, el->type, el->isOptional, el->isList, uniqHash, level+1);
 }
 
 void writeTree(char *fileName, struct type *root)
