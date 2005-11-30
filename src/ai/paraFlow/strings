@@ -96,7 +96,6 @@ string.find(string s) into int pos
 string.findNext(string s, int startingPos) into int pos
     Returns the next occurence of s in string that occurs at the starting pos
     or later.
-    [NB not yet implemented]
 
 string.nextSpaced(int pos) into (string word, int nextPos)
     Returns next white-space-delimited word starting at pos or later.
