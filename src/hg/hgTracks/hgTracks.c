@@ -99,7 +99,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1045 2005/12/01 21:35:03 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1046 2005/12/01 23:19:17 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2596,6 +2596,18 @@ void genieAltMethods(struct track *tg)
 tg->itemName = genieName;
 }
 
+void loadGenePredWithName2(struct track *tg)
+/* Convert gene pred in window to linked feature. Include alternate name
+ * in "extra" field (usually gene name)*/
+{
+struct sqlConnection *conn = hAllocConn();
+tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->mapName,
+                                        chromName, winStart, winEnd, TRUE);
+hFreeConn(&conn);
+/* filter items on selected criteria if filter is available */
+filterItems(tg, genePredClassFilter, "include");
+}
+
 void lookupKnownNames(struct linkedFeatures *lfList)
 /* This converts the Genie ID to the HUGO name where possible. */
 {
@@ -2792,8 +2804,11 @@ else
 char *knownGeneMapName(struct track *tg, void *item)
 /* Return un-abbreviated gene name. */
 {
+char str2[255];
 struct linkedFeatures *lf = item;
-return lf->name;
+/* piggy back the protein ID (hgg_prot variable) on hgg_gene variable */
+safef(str2, sizeof(str2), "%s&hgg_prot=%s", lf->name, (char *)lf->extra);
+return(strdup(str2));
 }
 
 void lookupKnownGeneNames(struct linkedFeatures *lfList)
@@ -3012,7 +3027,8 @@ return(col);
 void knownGeneMethods(struct track *tg)
 /* Make track of known genes. */
 {
-tg->loadItems 	= loadKnownGene;
+/* use loadGenePredWithName2 instead of loadKnownGene to pick up proteinID */
+tg->loadItems   = loadGenePredWithName2;
 tg->itemName 	= knownGeneName;
 tg->mapItemName = knownGeneMapName;
 tg->itemColor 	= knownGeneColor;
@@ -9071,18 +9087,6 @@ tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
 filterItems(tg, genePredClassFilter, "include");
 
     
-}
-
-void loadGenePredWithName2(struct track *tg)
-/* Convert gene pred in window to linked feature. Include alternate name
- * in "extra" field (usually gene name)*/
-{
-struct sqlConnection *conn = hAllocConn();
-tg->items = connectedLfFromGenePredInRangeExtra(tg, conn, tg->mapName,
-                                        chromName, winStart, winEnd, TRUE);
-hFreeConn(&conn);
-/* filter items on selected criteria if filter is available */
-filterItems(tg, genePredClassFilter, "include");
 }
 
 void loadGenePredWithConfiguredName(struct track *tg)
