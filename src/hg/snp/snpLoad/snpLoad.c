@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.13 2005/11/30 23:32:22 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.14 2005/12/01 06:41:31 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -134,12 +134,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     count++;
     // short-circuit 
-    if (count == 1000) 
-        {
-        sqlFreeResult(&sr);
-        hFreeConn(&conn);
-        return list;
-	}
+    // if (count == 1000) 
+        // {
+        // sqlFreeResult(&sr);
+        // hFreeConn(&conn);
+        // return list;
+	// }
     pos = atoi(row[3]);
     if (pos == 0) 
         {
@@ -168,7 +168,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         strcpy(el->strand, "-");
     else
         strcpy(el->strand, "?");
-    el->observed = cloneString(row[6]);
+    el->refNCBI = cloneString(row[6]);
     slAddHead(&list,el);
     }
 sqlFreeResult(&sr);
@@ -328,7 +328,7 @@ AllocVar(seq);
 verbose(1, "looking up reference allele...\n");
 for (el = list; el != NULL; el = el->next)
     {
-    el->reference = cloneString("n/a");
+    el->refUCSC = cloneString("n/a");
     if (sameString(el->chrom, "ERROR"))
         continue;
     if (sameString(el->class, "simple") || sameString(el->class, "range"))
@@ -345,7 +345,7 @@ for (el = list; el != NULL; el = el->next)
         hNibForChrom2(chromName, fileName);
         seq = hFetchSeq(fileName, chromName, el->chromStart, el->chromEnd);
 	touppers(seq->dna);
-	el->reference = cloneString(seq->dna);
+	el->refUCSC = cloneString(seq->dna);
 	}
     }
 }
@@ -368,8 +368,9 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "rs%s\t", el->name);
     fprintf(f, "%d\t", score);
     fprintf(f, "%s\t", el->strand);
-    fprintf(f, "%s\t", el->reference);
-    fprintf(f, "%s\t", el->observed);
+    fprintf(f, "%s\t", el->refNCBI);
+    fprintf(f, "%s\t", el->refUCSC);
+    fprintf(f, "N\t");
     fprintf(f, "unknown\t");
     fprintf(f, "%s\t", el->class);
     fprintf(f, "unknown\t");
@@ -417,7 +418,7 @@ for (el = list; el != NULL; el = el->next)
     verbose(1, "end = %d, ", el->chromEnd);
     verbose(1, "strand = %s, ", el->strand);
     verbose(1, "class = %s, ", el->class);
-    verbose(1, "observed = %s\n", el->observed);
+    verbose(1, "refNCBI = %s\n", el->refNCBI);
     }
 }
 
