@@ -8,6 +8,9 @@ all:
 	    fi ;\
 	    done
 
+install:
+	cp *.csh *.pl /cluster/data/encode/bin/scripts
+
 # List of directories to build
 USE_DIRS = $(DIRS)
 
@@ -15,3 +18,4 @@ DIRS = \
 	regionAgp \
 	ldGencodeIntron \
 	hgEncodeDataVersions
+
