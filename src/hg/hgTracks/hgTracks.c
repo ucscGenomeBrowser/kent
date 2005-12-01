@@ -99,7 +99,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1043 2005/11/29 18:19:41 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1044 2005/12/01 01:24:16 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10292,14 +10292,13 @@ hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%
       " %s </A></TD>",  hgcNameAndSettings(),
       winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
 
-/* uncomment these after fixed!!! */
-//if (liftOverChainForDb(database) != NULL)
-    //{
-    //hPrintf("<TD ALIGN=CENTER><A HREF=\"");
-    //hPrintf("../cgi-bin/hgConvert?%s&db=%s&position=%s:%d-%d", 
-    	//uiVars->string, database, chromName, winStart+1, winEnd);
-    //hPrintf("\" class=\"topbar\">Convert</A></TD>");
-    //}
+if (liftOverChainForDb(database) != NULL)
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"");
+    hPrintf("../cgi-bin/hgConvert?%s&db=%s&position=%s:%d-%d", 
+    	uiVars->string, database, chromName, winStart+1, winEnd);
+    hPrintf("\" class=\"topbar\">Convert</A></TD>");
+    }
 
 /* Print Ensembl anchor for latest assembly of organisms we have
  * supported by Ensembl (human, mouse, rat, fugu) */
