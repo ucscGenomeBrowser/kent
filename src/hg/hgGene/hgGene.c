@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.60 2005/11/21 01:19:14 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.61 2005/12/01 23:10:34 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -25,6 +25,7 @@ struct hash *oldCart;	/* Old cart hash. */
 char *database;		/* Name of genome database - hg15, mm3, or the like. */
 char *genome;		/* Name of genome - mouse, human, etc. */
 char *curGeneId;	/* Current Gene Id. */
+char *curProtId = NULL;	/* Current protein Id. */
 char *curGeneName;		/* Biological name of gene. */
 char *curGeneChrom;	/* Chromosome current gene is on. */
 struct genePred *curGenePred;	/* Current gene prediction structure. */
@@ -99,6 +100,13 @@ someAcc = sqlQuickString(conn, query);
 if (someAcc == NULL)
     return NULL;
 primaryAcc = spFindAcc(spConn, someAcc);
+if (curProtId != NULL)
+    {
+    safef(query, sizeof(query), 
+    	  "select spID from %s.kgXref where kgId='%s' and spDisplayID='%s'",
+	  database, curGeneId, curProtId);
+    primaryAcc = sqlQuickString(conn, query);
+    }
 freeMem(someAcc);
 return primaryAcc;
 }
@@ -392,7 +400,6 @@ char condStr[255];
 char *kgProteinID;
 char *parAcc; /* parent accession of a variant splice protein */
 char *chp;
-
 description = genoQuery(id, "descriptionSql", conn);
 hPrintf("<B>Description:</B> ");
 if (description != NULL)
@@ -782,6 +789,10 @@ getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
 conn = hAllocConn();
 curGeneId = cartString(cart, hggGene);
+if (cgiVarExists(hggProt))
+    {
+    curProtId = cgiOptionalString(hggProt);
+    }
 curGeneType = cgiOptionalString(hggType);
 if (curGeneType == NULL) 
     {
