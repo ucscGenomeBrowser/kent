@@ -50,6 +50,8 @@
 #include "genomicDups.h"
 #include "est3.h"
 #include "rnaGene.h"
+#include "tRNAs.h"
+#include "gbRNAs.h"
 #include "encodeRna.h"
 #include "hgMaf.h"
 #include "maf.h"
@@ -128,7 +130,7 @@
 #include "sargassoSeaXra.h"
 #include "codeBlastScore.h"
 #include "codeBlast.h"
-#include "rnaGenes.h"
+/* #include "rnaGenes.h" */
 #include "tigrOperon.h"
 #include "easyGene.h"
 #include "llaInfo.h"
@@ -187,7 +189,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.980 2005/11/29 18:19:41 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.981 2005/12/01 01:23:56 lowe Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -9871,6 +9873,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+
 void doRnaGene(struct trackDb *tdb, char *itemName)
 /* Handle click on RNA Genes track. */
 {
@@ -14095,10 +14098,11 @@ void printCode(char code)
        }
 }
 
-void doRnaGenes(struct trackDb *tdb, char *trnaName)
+
+void doTrnaGenes(struct trackDb *tdb, char *trnaName)
 {
 char *track = tdb->tableName;
-struct rnaGenes *trna;
+struct tRNAs *trna;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -14106,35 +14110,95 @@ char *dupe, *words[16];
 char **row;
 int wordCount;
 int rowOffset;
-int start = cartInt(cart, "o"), num = 0;
 
 genericHeader(tdb,trnaName);
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
-if (wordCount > 1)
-    num = atoi(words[1]);
-if (num < 3) num = 3;
-genericBedClick(conn, tdb, trnaName, start, num);
+
 rowOffset = hOffsetPastBin(seqName, track);
 sprintf(query, "select * from %s where name = '%s'", track, trnaName);
 sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
+while ((row = sqlNextRow(sr)) != NULL)
+  {
+    trna = tRNAsLoad(row+rowOffset);
+    
+    printf("<img align=right src=\"http://lowelab.ucsc.edu/tRNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
+	   database,database,trna->chrom,trna->name,trna->name);
+    
+    /*	  printf("<img align=right src=\"http://lowelab.ucsc.edu/test.gif\">");  */
+    
+    printf("<B>tRNA name: </B> %s<BR>\n",trna->name);
+    printf("<B>tRNA Isotype: </B> %s<BR>\n",trna->aa);
+    printf("<B>tRNA anticodon: </B> %s<BR>\n",trna->ac);
+    printf("<B>tRNAscan-SE score: </B> %.2f<BR>\n",trna->trnaScore);    
+    printf("<B>Intron(s): </B> %s<BR>\n",trna->intron);
 
-    trna = rnaGenesLoad(row+rowOffset);
-
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-if (trna->scan > 0)
-    {
-    printf("<B>Amino acid: </B> %s<BR>\n",trna->aa);
-    printf("<B>tRNA anti-codon: </B> %s<BR>\n",trna->ac);
-    printf("<B>tRNAScanSE score: </B> %.2f<BR>\n",trna->scan);    
-    }
-if (trna->ci[0]=='Y')
-    printf("<B>This RNA contains an inton.</B>\n");
-printTrackHtml(tdb);
-rnaGenesFree(&trna);
+    printf("<BR><B>Genomic size: </B> %d nt<BR>\n",trna->chromEnd-trna->chromStart);
+    printf("<B>Position:</B> "
+	   "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, trna->chrom, trna->chromStart, trna->chromEnd);
+    printf("%s:%d-%d</A><BR>\n", trna->chrom, trna->chromStart, trna->chromEnd);
+    printf("<B>Strand:</B> %s<BR>\n", trna->strand);
+    
+    if (trna->next != NULL)
+      printf("<hr>\n");
+  }
+ sqlFreeResult(&sr);
+ hFreeConn(&conn);
+ printTrackHtml(tdb);
+ tRNAsFree(&trna);
 }
+
+void doGbRnaGenes(struct trackDb *tdb, char *gbRnaName)
+{
+char *track = tdb->tableName;
+struct gbRNAs *gbRna;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char *dupe, *words[16];
+char **row;
+int wordCount;
+int rowOffset;
+
+genericHeader(tdb,gbRnaName);
+dupe = cloneString(tdb->type);
+wordCount = chopLine(dupe, words);
+
+
+rowOffset = hOffsetPastBin(seqName, track);
+sprintf(query, "select * from %s where name = '%s'", track, gbRnaName);
+sr = sqlGetResult(conn, query);
+
+
+while ((row = sqlNextRow(sr)) != NULL)
+  {
+    
+    gbRna = gbRNAsLoad(row+rowOffset);
+    
+    printf("<B>Genbank ncRNA name: </B> %s<BR>\n",gbRna->name);
+    printf("<B>Product Description/Note: </B> %s<BR>\n",gbRna->product);
+    printf ("<B>Intron(s): </B> %s<BR>\n",gbRna->intron);
+    
+    printf("<BR><B>Genomic size: </B> %d nt<BR>\n",gbRna->chromEnd-gbRna->chromStart);
+    printf("<B>Position:</B> "
+	   "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+	   hgTracksPathAndSettings(), database, gbRna->chrom, gbRna->chromStart, gbRna->chromEnd);
+    printf("%s:%d-%d</A><BR>\n", gbRna->chrom, gbRna->chromStart, gbRna->chromEnd); 
+    printf("<B>Strand:</B> %s<BR>\n", gbRna->strand);
+     
+    if (gbRna->next != NULL)
+      printf("<hr>\n");
+    
+  }
+ sqlFreeResult(&sr);
+ hFreeConn(&conn);
+ printTrackHtml(tdb);
+ gbRNAsFree(&gbRna);
+
+}
+
+
 
 void doEasyGenes(struct trackDb *tdb, char *egName)
 {
@@ -14978,53 +15042,67 @@ tigrOperonFree(&op);
 void doTigrCmrGene(struct trackDb *tdb, char *tigrName)
 /* Handle the TIRG CMR gene track. */
 {
-char *track = tdb->tableName;
-struct tigrCmrGene *tigr;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char *dupe, *words[16];
-char **row;
-int wordCount;
-int rowOffset;
-int start = cartInt(cart, "o"), num = 0;
+  char *track = tdb->tableName;
+  struct tigrCmrGene *tigr;
+  char query[512];
+  struct sqlConnection *conn = hAllocConn();
+  struct sqlResult *sr;
+  char *dupe, *words[16];
+  char **row;
+  int wordCount;
+  int rowOffset;
+  /* int start = cartInt(cart, "o"), num = 0; */
+  
+  genericHeader(tdb,tigrName);
+  dupe = cloneString(tdb->type);
+  wordCount = chopLine(dupe, words);
 
-genericHeader(tdb,tigrName);
-dupe = cloneString(tdb->type);
-wordCount = chopLine(dupe, words);
-if (wordCount > 1)
-    num = atoi(words[1]);
-if (num < 3) num = 3;
-genericBedClick(conn, tdb, tigrName, start, num);
-rowOffset = hOffsetPastBin(seqName, track);
-sprintf(query, "select * from %s where name = '%s'", track, tigrName);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+  rowOffset = hOffsetPastBin(seqName, track);
+  sprintf(query, "select * from %s where name = '%s'", track, tigrName);
+  sr = sqlGetResult(conn, query);
+  while ((row = sqlNextRow(sr)) != NULL)
     {
-    tigr = tigrCmrGeneLoad(row);
-    if (tigr != NULL)
+      tigr = tigrCmrGeneLoad(row);
+      if (tigr != NULL)
 	{
-	printf("<B>Primary annotation locus: </B> %s<BR>\n",tigr->primLocus);
-	printf("<B>TIGR common name: </B> %s<BR>\n",tigr->tigrCommon);
-	printf("<B>Another TIGR gene name: </B> %s<BR>\n",tigr->tigrGene);
-	printf("<B>Enzyme comission number: </B> %s<BR>\n",tigr->tigrECN);
-	printf("<B>Protein length: </B> %d<BR>\n",tigr->tigrPepLength);
-	printf("<B>Main role: </B> %s<BR>\n",tigr->tigrMainRole);
-	printf("<B>Subrole: </B> %s<BR>\n",tigr->tigrSubRole);
-	printf("<B>SwissProt accession: </B> %s<BR>\n",tigr->swissProt);
-	printf("<B>Genbank accession: </B> %s<BR>\n",tigr->genbank);
-	printf("<B>Molecular weight: </B> %.2f d<BR>\n",tigr->tigrMw);
-	printf("<B>Isoelectric point: </B> %.2f<BR>\n",tigr->tigrPi);
-	printf("<B>GC percent: </B> %.2f<BR>\n",tigr->tigrGc);
-	/* printf("<B>GO term: </B> %s<BR>\n",tigr->goTerm); */
-	if (tigr->next != NULL)
+	  printf("<B>TIGR locus name: </B> %s<BR>\n",tigrName);
+	  printf("<B>TIGR gene description: </B> %s<BR>\n",tigr->tigrCommon);
+	  printf("<B>Alternate TIGR gene name: </B> ");
+	  if (strlen(tigr->tigrGene) >0) {
+	    printf("%s<BR>\n",tigr->tigrGene);
+	  }
+	  else {
+	    printf("None<BR>");
+	  }
+	  printf("<B>Genbank locus name: </B> %s<BR>\n",tigr->primLocus);
+	  printf("<B>Protein length: </B> %d aa<BR>\n",tigr->tigrPepLength);
+	  if (strlen(tigr->tigrECN)>0) {
+	    printf("<B>Enzyme comission number: </B> %s<BR>\n",tigr->tigrECN);
+	  }
+	  printf("<B>Main role: </B> %s<BR>\n",tigr->tigrMainRole);
+	  printf("<B>Subrole: </B> %s<BR>\n",tigr->tigrSubRole);
+	  if (tigr->tigrMw > 0) {
+	    printf("<B>Molecular weight: </B> %.2f Da<BR>\n",tigr->tigrMw);
+	  }
+	  if (tigr->tigrPi > 0) {
+	    printf("<B>Isoelectric point: </B> %.2f<BR>\n",tigr->tigrPi);
+	  }
+	  printf("<B>GC content: </B> %.2f %%<BR>\n",tigr->tigrGc);
+	  
+	  printf("<BR><B>Position:</B> "
+		 "<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">",
+		 hgTracksPathAndSettings(), database, tigr->chrom, tigr->chromStart, tigr->chromEnd);
+	  printf("%s:%d-%d</A><BR>\n", tigr->chrom, tigr->chromStart, tigr->chromEnd);
+	  printf("<B>Strand:</B> %s<BR>\n", tigr->strand);
+	  printf("<B>Genomic size: </B> %d nt<BR>\n",tigr->tigrLength);
+	  if (tigr->next != NULL)
 	    printf("<hr>\n");
 	}
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-printTrackHtml(tdb);
-tigrCmrGeneFree(&tigr);
+  sqlFreeResult(&sr);
+  hFreeConn(&conn);
+  printTrackHtml(tdb);
+  tigrCmrGeneFree(&tigr);
 }
 
 void doSageDataDisp(char *tableName, char *itemName, struct trackDb *tdb) 
@@ -17809,9 +17887,13 @@ else if (sameWord(track,"codeBlast"))
     {
     doCodeBlast(tdb, item);
     }
-else if (sameWord(track,"rnaGenes"))
+else if (sameWord(track,"gbRNAs"))
     {
-    doRnaGenes(tdb, item);
+    doGbRnaGenes(tdb, item);
+    }
+else if (sameWord(track,"tRNAs"))
+    {
+    doTrnaGenes(tdb, item);
     }
 else if (sameWord(track, "encodeRna"))
     {
