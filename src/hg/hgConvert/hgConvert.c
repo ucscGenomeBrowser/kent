@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.10 2005/11/22 07:08:48 kate Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.11 2005/12/01 17:47:27 kent Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -301,12 +301,23 @@ else
     for (chain = chainList; chain != NULL; chain = chain->next)
         {
 	int blockSize;
+	int qStart, qEnd;
+	if (chain->qStrand == '-')
+	    {
+	    qStart = chain->qSize - chain->qEnd;
+	    qEnd = chain->qSize - chain->qStart;
+	    }
+	else
+	    {
+	    qStart = chain->qStart;
+	    qEnd = chain->qEnd;
+	    }
 	blockSize = chainTotalBlockSize(chain);
 	printf("<A HREF=\"%s?%s=%u&db=%s&position=%s:%d-%d\">",
 	       hgTracksName(), cartSessionVarName(), cartSessionId(cart),
 	       liftOver->toDb,
-	       chain->qName, chain->qStart+1, chain->qEnd);
-	printf("%s:%d-%d",  chain->qName, chain->qStart+1, chain->qEnd);
+	       chain->qName, qStart+1, qEnd);
+	printf("%s:%d-%d",  chain->qName, qStart+1, qEnd);
 	printf("</A>");
 	printf(" (%3.1f%% of bases, %3.1f%% of span)<BR>\n",
 	    100.0 * blockSize/origSize,  
