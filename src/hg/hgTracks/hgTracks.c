@@ -99,7 +99,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1044 2005/12/01 01:24:16 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1045 2005/12/01 21:35:03 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2805,28 +2805,51 @@ char *geneSymbol;
 char *protDisplayId;
 char *mimId;
 char cond_str[256];
-char *knownGeneLabel = cartUsualString(cart, "knownGene.label", "gene symbol");
 
-boolean useGeneSymbol= sameString(knownGeneLabel, "gene symbol")
-    || sameString(knownGeneLabel, "all");
+boolean useGeneSymbol= FALSE;
+boolean useKgId      = FALSE;
+boolean useProtDisplayId = FALSE;
+boolean useMimId = FALSE;
+boolean useNone = FALSE;
 
-boolean useKgId      = sameString(knownGeneLabel, "UCSC Known Gene ID")
-    || sameString(knownGeneLabel, "all");
-
-boolean useProtDisplayId = sameString(knownGeneLabel, "UniProt Display ID")
-    || sameString(knownGeneLabel, "all");
-
-boolean useMimId = sameString(knownGeneLabel, "OMIM ID")
-    || sameString(knownGeneLabel, "all");
-
-boolean useAll = sameString(knownGeneLabel, "all");
-
+struct hashEl *knownGeneLabels = cartFindPrefix(cart, "knownGene.label");
+struct hashEl *label;
+boolean labelStarted = FALSE;
 	
 if (hTableExists("kgXref"))
     {
+    if (knownGeneLabels == NULL)
+        {
+        useGeneSymbol = TRUE; /* default to gene name */
+        /* set cart to match what doing */
+        cartSetBoolean(cart, "knownGene.label.gene", TRUE);
+        }
+
+    for (label = knownGeneLabels; label != NULL; label = label->next)
+        {
+        if (endsWith(label->name, "gene") && differentString(label->val, "0"))
+            useGeneSymbol = TRUE;
+        else if (endsWith(label->name, "kgId") && differentString(label->val, "0"))
+            useKgId = TRUE;
+        else if (endsWith(label->name, "prot") && differentString(label->val, "0"))
+            useProtDisplayId = TRUE;
+        else if (endsWith(label->name, "omim") && differentString(label->val, "0"))
+            useMimId = TRUE;
+        else if (endsWith(label->name, "none") && differentString(label->val, "0"))
+            useNone = TRUE;
+        }
+    /* doesn't match any or all false, use default */
+    if (!useGeneSymbol && !useKgId && !useMimId && !useProtDisplayId && !useNone)
+        {
+        useGeneSymbol = TRUE; /* default to gene symbol */
+        /* set cart to match what doing */
+        cartSetBoolean(cart, "knownGene.label.gene", TRUE);
+        }
+
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
         struct dyString *name = dyStringNew(64);
+        labelStarted = FALSE; /* reset between items */
     	if (useGeneSymbol)
             {
             sprintf(cond_str, "kgID='%s'", lf->name);
@@ -2834,27 +2857,36 @@ if (hTableExists("kgXref"))
             if (geneSymbol != NULL)
             	{
             	dyStringAppend(name, geneSymbol);
-            	if (useAll) dyStringAppendC(name, '/');
             	}
+            labelStarted = TRUE;
             }
     	if (useKgId)
             {
+            if (labelStarted) dyStringAppendC(name, '/');
+            else labelStarted = TRUE;
             dyStringAppend(name, lf->name);
-            if (useAll) dyStringAppendC(name, '/');
 	    }
     	if (useProtDisplayId)
             {
+            if (labelStarted) dyStringAppendC(name, '/');
+            else labelStarted = TRUE;
 	    safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
             protDisplayId = sqlGetField(conn, database, "kgXref", "spDisplayID", cond_str);
             dyStringAppend(name, protDisplayId);
-            if (useAll) dyStringAppendC(name, '/');
 	    }
         if (useMimId && hTableExists("refLink")) 
             {
+            if (labelStarted) dyStringAppendC(name, '/');
+            else labelStarted = TRUE;
             safef(cond_str, sizeof(cond_str), "select cast(refLink.omimId as char) from kgXref,refLink where kgID = '%s' and kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0", lf->name);
             mimId = sqlQuickString(conn, cond_str);
             if (mimId) 
                 dyStringAppend(name, mimId);
+            }
+        if (useNone && labelStarted)
+            {
+            dyStringFree(&name);
+            name = dyStringNew(64);
             }
     	lf->extra = dyStringCannibalize(&name);
 	}
@@ -3322,18 +3354,44 @@ void lookupRefNames(struct track *tg)
 struct linkedFeatures *lf;
 struct sqlConnection *conn = hAllocConn();
 boolean isNative = sameString(tg->mapName, "refGene");
-char *refGeneLabel = cartUsualString(cart, (isNative ? "refGene.label" : "xenoRefGene.label"), "gene");
-boolean useGeneName = sameString(refGeneLabel, "gene")
-    || sameString(refGeneLabel, "all");
-boolean useAcc = sameString(refGeneLabel, "accession")
-    || sameString(refGeneLabel, "all");
-boolean useMim = sameString(refGeneLabel, "OMIM ID")
-    || sameString(refGeneLabel, "all");
-boolean useAll = sameString(refGeneLabel, "all");
+boolean labelStarted = FALSE;
+boolean useGeneName = FALSE; 
+boolean useAcc =  FALSE;
+boolean useMim =  FALSE; 
+boolean useNone =  FALSE; 
 
+struct hashEl *refGeneLabels = cartFindPrefix(cart, (isNative ? "refGene.label" : "xenoRefGene.label"));
+struct hashEl *label;
+if (refGeneLabels == NULL)
+    {
+    useGeneName = TRUE; /* default to gene name */
+    /* set cart to match what doing */
+    if (isNative) cartSetBoolean(cart, "refGene.label.gene", TRUE);
+    else cartSetBoolean(cart, "xenoRefGene.label.gene", TRUE);
+    }
+for (label = refGeneLabels; label != NULL; label = label->next)
+    {
+    if (endsWith(label->name, "gene") && differentString(label->val, "0"))
+        useGeneName = TRUE;
+    else if (endsWith(label->name, "acc") && differentString(label->val, "0"))
+        useAcc = TRUE;
+    else if (endsWith(label->name, "omim") && differentString(label->val, "0"))
+        useMim = TRUE;
+    else if (endsWith(label->name, "none") && differentString(label->val, "0"))
+        useNone = TRUE;
+    }
+/* doesn't match any or all false, use default */
+if (!useGeneName && !useAcc && !useMim && !useNone)
+    {
+    useGeneName = TRUE; /* default to gene name */
+    /* set cart to match what doing */
+    if (isNative) cartSetBoolean(cart, "refGene.label.gene", TRUE);
+    else cartSetBoolean(cart, "xenoRefGene.label.gene", TRUE);
+    }
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct dyString *name = dyStringNew(64);
+    labelStarted = FALSE; /* reset for each item in track */
     if ((useGeneName || useAcc || useMim) && !isNative)
         {
         char *org = getOrganismShort(conn, lf->name);
@@ -3346,15 +3404,14 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         if (gene != NULL)
             {
             dyStringAppend(name, gene);
-            if (useAll)
-                dyStringAppendC(name, '/');
             }
+        labelStarted = TRUE;
         }
     if (useAcc)
         {
+        if (labelStarted) dyStringAppendC(name, '/');
+        else labelStarted = TRUE;
         dyStringAppend(name, lf->name);
-        if (useAll)
-            dyStringAppendC(name, '/');
         }
     if (useMim)
         {
@@ -3362,8 +3419,15 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         char query[256];
         safef(query, sizeof(query), "select cast(omimId as char) from refLink where mrnaAcc = '%s'", lf->name);
         mimId = sqlQuickString(conn, query);
+        if (labelStarted) dyStringAppendC(name, '/');
+        else labelStarted = TRUE;
         if (mimId && differentString(mimId, "0"))
             dyStringAppend(name, mimId);
+        }
+    if (useNone && labelStarted) /* this overrides other options */
+        {
+        freeDyString(&name);
+        name = dyStringNew(64);
         }
     lf->extra = dyStringCannibalize(&name);
     }
@@ -9484,32 +9548,48 @@ void lookupHgMutName(struct track *tg)
 {
 struct hgMut *el;
 struct sqlConnection *conn = hAllocConn();
-char *hgMutLabel = cartUsualString(cart, "hgMut.label", "HGVS name");
-boolean useHgvs = sameString(hgMutLabel, "HGVS name")
-    || sameString(hgMutLabel, "all");
-boolean useId = sameString(hgMutLabel, "ID")
-    || sameString(hgMutLabel, "all");
-boolean useCommon = sameString(hgMutLabel, "Common name")
-    || sameString(hgMutLabel, "all");
-boolean useAll = sameString(hgMutLabel, "all");
+boolean useHgvs = FALSE;
+boolean useId = FALSE;
+boolean useCommon = FALSE;
+boolean useNone = FALSE;
+boolean labelStarted = FALSE;
 
-/* shortcut to leave before loop if want the default name */
-if (useHgvs && !useAll)
+struct hashEl *hgMutLabels = cartFindPrefix(cart, "hgMut.label");
+struct hashEl *label;
+if (hgMutLabels == NULL)
     {
-    hFreeConn(&conn);
-    return;
+    useHgvs = TRUE; /* default to gene name */
+    /* set cart to match what doing */
+    cartSetBoolean(cart, "hgMut.label.hgvs", TRUE);
+    }
+for (label = hgMutLabels; label != NULL; label = label->next)
+    {
+    if (endsWith(label->name, "hgvs") && differentString(label->val, "0"))
+        useHgvs = TRUE;
+    else if (endsWith(label->name, "common") && differentString(label->val, "0"))
+        useCommon = TRUE;
+    else if (endsWith(label->name, "dbid") && differentString(label->val, "0"))
+        useId = TRUE;
+    else if (endsWith(label->name, "none") && differentString(label->val, "0"))
+        useNone = TRUE;
+    }
+/* doesn't match any or all false, use default */
+if (!useHgvs && !useCommon && !useId && !useNone)
+    {
+    useHgvs = TRUE; /* default to HGVS name */
+    /* set cart to match what doing */
+    cartSetBoolean(cart, "hgMut.label.hgvs", TRUE);
     }
 
 for (el = tg->items; el != NULL; el = el->next)
     {
     struct dyString *name = dyStringNew(64);
+    labelStarted = FALSE; /* reset for each item */
     if (useHgvs) 
         {
         dyStringAppend(name, el->name);
-        if (useAll)
-            dyStringAppendC(name, '/');
+        labelStarted = TRUE;
         }
-    /* add common here, it will need the db connection */
     if (useCommon)
         {
         char query[256];
@@ -9518,16 +9598,23 @@ for (el = tg->items; el != NULL; el = el->next)
         safef(query, sizeof(query), "select name from hgMutAlias where mutId = '%s' and nameType = 'common'", escId);
         commonName = sqlQuickString(conn, query);
         freeMem(escId);
+        if (labelStarted) dyStringAppendC(name, '/');
+        else labelStarted = TRUE;
         if (commonName != NULL)
             dyStringAppend(name, commonName);
         else
             dyStringAppend(name, " ");
-        if (useAll)
-            dyStringAppendC(name, '/');
         }
     if (useId)
         {
+        if (labelStarted) dyStringAppendC(name, '/');
+        else labelStarted = TRUE;
         dyStringAppend(name, el->mutId);
+        }
+    if (useNone && labelStarted)
+        {
+        dyStringFree(&name);
+        name = dyStringNew(64);
         }
     freeMem(el->name); /* free old name */
     el->name = dyStringCannibalize(&name);

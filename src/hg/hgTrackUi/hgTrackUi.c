@@ -27,7 +27,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.224 2005/11/29 19:34:50 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.225 2005/12/01 21:34:57 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -259,15 +259,28 @@ void hgMutIdControls (struct trackDb *tdb)
 /* print the controls for the label choice */
 {
 char varName[64];
-char *mutLabel;
-safef(varName, sizeof(varName), "%s.label", tdb->tableName);
-mutLabel = cartUsualString(cart, varName, "HGVS name");
+boolean option = FALSE;
+
 printf("<B>Label:</B> ");
-radioButton(varName, mutLabel, "HGVS name");
-radioButton(varName, mutLabel, "Common name");
-radioButton(varName, mutLabel, "ID");
-radioButton(varName, mutLabel, "all");
-radioButton(varName, mutLabel, "none");
+safef(varName, sizeof(varName), "%s.label.hgvs", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "HGVS name");
+
+safef(varName, sizeof(varName), "%s.label.common", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "Common name");
+
+safef(varName, sizeof(varName), "%s.label.dbid", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "ID");
+
+safef(varName, sizeof(varName), "%s.label.none", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "none");
 printf("<BR />\n");
 }
 
@@ -301,7 +314,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     safef(srcButton, sizeof(srcButton), "hgMut.filter.src.%s", row[0]);
     cartMakeCheckBox(cart, srcButton, FALSE);
-    printf (" %s<BR />", row[0]);
+    if (differentString(row[0], "LSDB")) 
+        printf (" %s<BR />", row[0]);
+    else 
+        printf (" Locus Specific Databases<BR />");
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -663,7 +679,6 @@ geneLabel = cartUsualString(cart, varName, "gene symbol");
 printf("<B>Label:</B> ");
 radioButton(varName, geneLabel, "gene symbol");
 radioButton(varName, geneLabel, "UCSC Known Gene ID");
-//radioButton(varName, geneLabel, "OMIM ID");
 radioButton(varName, geneLabel, "all");
 radioButton(varName, geneLabel, "none");
 }
@@ -679,23 +694,42 @@ void knownGeneIdConfig(struct trackDb *tdb)
 /* Put up gene ID track controls */
 {
 char varName[64];
-char *geneLabel;
 struct sqlConnection *conn = hAllocConn();
 char query[256];
 int omimAvail = 0;
+boolean option = FALSE;
 safef(query, sizeof(query), "select count(*) from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 2");
 omimAvail = sqlQuickNum(conn, query);
 hFreeConn(&conn);
-safef(varName, sizeof(varName), "%s.label", tdb->tableName);
-geneLabel = cartUsualString(cart, varName, "gene symbol");
+
 printf("<B>Label:</B> ");
-radioButton(varName, geneLabel, "gene symbol");
-radioButton(varName, geneLabel, "UCSC Known Gene ID");
-radioButton(varName, geneLabel, "UniProt Display ID");
+safef(varName, sizeof(varName), "%s.label.gene", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "gene symbol");
+
+safef(varName, sizeof(varName), "%s.label.kgId", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "UCSC Known Gene ID");
+
+safef(varName, sizeof(varName), "%s.label.prot", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "UniProt Display ID");
+
 if (omimAvail > 0)
-    radioButton(varName, geneLabel, "OMIM ID");
-radioButton(varName, geneLabel, "all");
-radioButton(varName, geneLabel, "none");
+    {
+    safef(varName, sizeof(varName), "%s.label.omim", tdb->tableName);
+    option = cartUsualBoolean(cart, varName, FALSE);
+    cgiMakeCheckBox(varName, option);
+    printf(" %s&nbsp;&nbsp;&nbsp;", "OMIM ID");
+    }
+
+safef(varName, sizeof(varName), "%s.label.none", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "none");
 }
 
 void knownGeneUI(struct trackDb *tdb)
@@ -725,10 +759,41 @@ else
 radioButton(varName, geneLabel, "none");
 }
 
+void geneIdConfig2(struct trackDb *tdb)
+/* Put up gene ID track controls, with checkboxes */
+{
+char varName[64];
+boolean option;
+
+printf("<B>Label:</B> ");
+safef(varName, sizeof(varName), "%s.label.gene", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "gene");
+
+safef(varName, sizeof(varName), "%s.label.acc", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "accession");
+
+if (sameString(tdb->tableName, "refGene"))
+    {
+    safef(varName, sizeof(varName), "%s.label.omim", tdb->tableName);
+    option = cartUsualBoolean(cart, varName, FALSE);
+    cgiMakeCheckBox(varName, option);
+    printf(" %s&nbsp;&nbsp;&nbsp;", "OMIM ID");
+    }
+
+safef(varName, sizeof(varName), "%s.label.none", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "none");
+}
+
 void refGeneUI(struct trackDb *tdb)
 /* Put up refGene-specifc controls */
 {
-geneIdConfig(tdb);
+geneIdConfig2(tdb);
 cdsColorOptions(tdb, 2);
 }
 
