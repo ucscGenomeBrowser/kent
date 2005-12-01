@@ -1,0 +1,4 @@
+autoDtd test/hotnews/in.xml test/hotnews/out.dtd test/hotnews/out.stats -tree=test/hotnews/out.tree
+diff test/hotnews/expected.dtd test/hotnews/out.dtd
+diff test/hotnews/expected.stats test/hotnews/out.stats
+diff test/hotnews/expected.tree test/hotnews/out.tree

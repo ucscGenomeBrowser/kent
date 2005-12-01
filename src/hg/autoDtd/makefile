@@ -12,3 +12,6 @@ autoDtd: $O ${MYLIBS}
 
 clean:
 	rm -f $O
+
+test::
+	doTest

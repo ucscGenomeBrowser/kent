@@ -1,4 +1,4 @@
-#Statistics on hotnews.rss
+#Statistics on test/hotnews/in.xml
 #Format is:
 #<tag name>  <tag count>
 #      <<text>> <max length> <type> <count> <unique count>
