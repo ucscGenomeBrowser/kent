@@ -1,5 +1,5 @@
-#include trackDb.encode.ra
 # ENCODE tracks
+include trackDb.encode.ra
 
 track cytoBandIdeo
 shortLabel Chromosome Band (Ideogram)
