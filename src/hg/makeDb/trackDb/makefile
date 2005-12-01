@@ -148,7 +148,7 @@ alpha: clean
 		fi ; \
 	    fi ; \
 	done
-	cmd="../../encode/encodeTrackDb.csh ../../lib/trackDb.sql" ; echo $$cmd; $$cmd
+#cmd="../../encode/encodeTrackDb.csh ../../lib/trackDb.sql" ; echo $$cmd; $$cmd
 
 strict: clean
 	${CVS} up -d -P .
