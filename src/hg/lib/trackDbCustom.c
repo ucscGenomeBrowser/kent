@@ -12,7 +12,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: trackDbCustom.c,v 1.24 2005/11/28 19:54:00 kate Exp $";
+static char const rcsid[] = "$Id: trackDbCustom.c,v 1.25 2005/12/02 01:09:33 kate Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -190,14 +190,19 @@ char *trackDbInclude(char *raFile, char *line)
 static char incFile[256];
 char *file;
 
-if (!startsWith("#include", line))
+/* For transition, allow with or without leading #.
+   Later, we'll only allow w/o # */
+if (startsWith("#include", line) || startsWith("include", line))
+    {
+    splitPath(raFile, incFile, NULL, NULL);
+    nextWord(&line);
+    file = nextQuotedWord(&line);
+    strcat(incFile, file);
+    printf("found include file: %s\n", incFile);
+    return cloneString(incFile);
+    }
+else
     return NULL;
-splitPath(raFile, incFile, NULL, NULL);
-nextWord(&line);
-file = nextQuotedWord(&line);
-strcat(incFile, file);
-printf("found include file: %s\n", incFile);
-return cloneString(incFile);
 }
 
 struct trackDb *trackDbFromRa(char *raFile)
