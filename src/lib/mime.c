@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mime.c,v 1.4 2005/12/01 06:53:48 galt Exp $";
+static char const rcsid[] = "$Id: mime.c,v 1.5 2005/12/02 19:35:08 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
@@ -30,7 +30,7 @@ static void setEopMB(struct mimeBuf *b)
 /* do a search for boundary, set eop End Of Part if found */
 {
 if (b->blen > 0)
-    b->eop = memmem(b->i, b->eoi - b->i, b->boundary, b->blen);
+    b->eop = memMatch(b->boundary, b->blen, b->i, b->eoi - b->i);
 else
     b->eop = NULL;
 }
@@ -198,6 +198,7 @@ while(TRUE)
     	line = getLineMB(b);
     if (sameString(line,"")) 
 	{
+	freez(&line);
 	if (started)
     	    break;
 	else	    
@@ -424,6 +425,7 @@ if (ct && startsWith("multipart/",ct))
     freez(&bnd);
     slReverse(&p->multi);
     /* restore */
+    freez(&boundary);
     boundary = parentboundary;
 	//debug
     	//fprintf(stderr,"restoring parent boundary = %s\n",boundary);
@@ -524,12 +526,4 @@ else
 return p;
 }
 
-#ifdef DEBUG
-int main(int argc, int argv[])
-{
-struct mimeBuf *b=initMimeBuf(STDIN_FILENO);
-struct mimePart *mime = parseMultiParts(b);
-return 0;
-}
-#endif
 
