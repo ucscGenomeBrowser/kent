@@ -685,7 +685,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
 
     track encodeSangerChipH3K4me2Hela
     subTrack encodeSangerChip
-    shortLabel SI H3K4m2 GM06990
+    shortLabel SI H3K4m2 HeLa
     longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, HeLa cells)
     dataVersion ENCODE Oct 2005 Freeze
     priority 10
