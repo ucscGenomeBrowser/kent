@@ -17966,7 +17966,7 @@ cd /cluster/store10/sugnet/affyTranscription/graphs/transcriptome.affymetrix.com
 
 # Copy .wib files to /cluster/data/hg17 files
 mkdir /cluster/data/hg17/bed/affyTxnPhase2/wigData/
-cp `find ./ -name "*.hg17.wib" /cluster/data/hg17/bed/affyTxnPhase2/wigData/
+cp `find ./ -name "*.hg17.wib"` /cluster/data/hg17/bed/affyTxnPhase2/wigData/
 chmod 775 /cluster/data/hg17/bed/affyTxnPhase2/wigData/
 chmod 664 /cluster/data/hg17/bed/affyTxnPhase2/wigData/*
 
@@ -18500,4 +18500,238 @@ blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
     ln -s /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa /gbdb/hg17/nibbImageProbes.fa
     hgLoadSeq hg17 /gbdb/hg17/nibbImageProbes.fa
     hgLoadPsl hg17 nibbImageProbes.psl
+
+###########################################################################
+# EXONIPHY WITH DOG (acs, 11/22/05) -- MM7, RN3, CANFAM2, HG17
+
+    # first build 4-way multiz alignment from syntenic nets (helps reduce
+    # false positive predictions due to paralogous alignments)
+
+    # (prepare mafNet files from syntenic nets and copy to
+    # /cluster/bluearc/hg17/mafNetSyn; do this for mm7, rn3, canFam2,
+    # and galGal2)
+
+    # make output dir and run dir
+    ssh pk
+    cd /cluster/data/hg17/bed/multiz.hg17Mm7Rn3CanFam2
+
+    mkdir -p mafSyn runSyn
+    cd runSyn
+
+    # create scripts to run multiz on cluster
+    cat > oneMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    set c = $1
+    set multi = /scratch/$user/multiz.hg17Mm7Rn3CanFam2.$c
+    set pairs = /cluster/bluearc/hg17/mafNetSyn
+
+    # special mode --
+    # with 1 arg, cleanup
+    if ($#argv == 1) then
+        rm -fr $multi
+        exit
+    endif
+
+    #  special mode --
+    # with 3 args, saves an alignment file
+    if ($#argv == 3) then
+        cp $multi/$2/$c.maf $3
+        exit
+    endif 
+        
+    set s1 = $2
+    set s2 = $3
+    set flag = $4
+
+    # locate input files -- in pairwise dir, or multiple dir
+    set d1 = $multi
+    set d2 = $multi
+    if (-d $pairs/$s1) then
+        set d1 = $pairs
+    endif
+    if (-d $pairs/$s2) then
+        set d2 = $pairs
+    endif
+    set f1 = $d1/$s1/$c.maf
+    set f2 = $d2/$s2/$c.maf
+    # write to output dir
+    set out = $multi/${s1}${s2}
+    mkdir -p $out
+
+    # check for empty input file
+    if (-s $f1 && -s $f2) then
+        echo "Aligning $f1 $f2 $flag"
+        /cluster/bin/penn/multiz.v10.5 $f1 $f2 $flag > $out/$c.tmp.maf
+        echo "Ordering $c.maf"
+        /cluster/bin/penn/maf_project $out/$c.tmp.maf hg17.$c > $out/$c.maf
+    else if (-s $f1) then
+        cp $f1 $out
+    else if (-s $f2) then
+        cp $f2 $out
+    endif
+'EOF'
+# << for emacs
+    chmod +x oneMultiz.csh
+
+    cat > allMultiz.csh << 'EOF'
+#!/bin/csh -fe
+set c = $1
+oneMultiz.csh $c mm7 rn3 0
+oneMultiz.csh $c mm7rn3 canFam2 1
+# get final alignment file
+oneMultiz.csh $c mm7rn3canFam2 /cluster/data/hg17/bed/multiz.hg17Mm7Rn3CanFam2/mafSyn/$c.maf
+#cleanup
+oneMultiz.csh $c
+'EOF'
+# << for emacs
+    chmod +x allMultiz.csh
+
+cat > gsub << 'EOF'
+#LOOP
+allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz.hg17Mm7Rn3CanFam2/mafSyn/$(root1).maf}
+#ENDLOOP
+'EOF'
+# << for emacs
+    cut -f 1 /cluster/data/hg17/chrom.sizes > chrom.lst
+    set path = (/parasol/bin $path);rehash
+    gensub2 chrom.lst single gsub jobList
+    para create jobList
+        # 46 jobs
+    para try; para check
+    para push
+
+    # build chromosome-by-chromosome SS files
+
+    cd /cluster/data/hg17/bed/multiz.hg17Mm7Rn3CanFam2
+    mkdir run-ss-syn
+    cd run-ss-syn
+    mkdir -p /cluster/bluearc/hg17/multiz.hg17Mm7Rn3CanFam2/ssSyn
+    cat > makeSS.csh << 'EOF'
+#!/bin/csh -fe
+set c = $1
+/cluster/bin/phast/msa_view -i MAF -o SS /cluster/bluearc/hg17/multiz.hg17Mm7Rn3CanFam2/mafSyn/$c.maf --refseq /cluster/bluearc/hg17/chrom/$c.fa | gzip -c >  /cluster/bluearc/hg17/multiz.hg17Mm7Rn3CanFam2/ssSyn/$c.ss.gz
+'EOF'
+# << for emacs
+    chmod +x makeSS.csh
+
+    rm -f jobList
+    foreach chr (`cut -f 1 /cluster/data/hg17/chrom.sizes`)
+	echo "makeSS.csh $chr" >> jobList
+    end
+
+    para create jobList
+        # 46 jobs
+    para try; para check
+    para push
+
+    # now train hmm, with indel model
+    # note: commands below require bash
+
+    # first get a clean set of genes for training (with --indel-strict)
+    mkdir -p /cluster/data/hg17/bed/exoniphy/train
+    cd /cluster/data/hg17/bed/exoniphy/train
+    mkdir -p stats genes
+    CHROMS="chr1 chr2 chr3 chr4 chr5 chr6 chr7 chr8 chr9 chr10 chr11 chr12 chr13 chr14 chr15 chr16 chr17 chr18 chr19 chr20 chr21 chr22"
+    for chr in ${CHROMS} ; do 
+	echo $chr 
+	zcat /cluster/bluearc/hg17/multiz.hg17Mm7Rn3CanFam2/ssSyn/$chr.ss.gz | clean_genes genes/refGene.$chr.gff - --stats stats/$chr.stats --conserved --indel-strict --groupby exon_id --offset3 4 --offset5 4 > genes/refGene.$chr.clean.gff 
+    done
+
+    # get conserved noncoding seqs and add to GFFs
+    mkdir -p cns
+    for chr in ${CHROMS} ; do 
+	    echo $chr
+	    featureBits -bed=cns/$chr.bed -chrom=$chr hg17 phastConsElementsPaper \!knownGene:exon:100 \!refGene:exon:100 \!mrna \!ensGene \!intronEst \!twinscan
+	cp genes/refGene.$chr.clean.gff genes/refGene.$chr.withCNS.gff 
+	awk '{printf "%s\tphastCons\tCNS\t%d\t%d\t.\t.\t.\texon_id \"CNS.%s\"\n", $1, $2+1, $3, $4}' cns/$chr.bed >> genes/refGene.$chr.withCNS.gff 
+    done
+
+    # now train HMM
+    # note: actually have to unzip SS files before this step
+    rm -f alns gffs
+    for chr in ${CHROMS} ; do 
+	echo /cluster/bluearc/hg17/multiz.hg17Mm7Rn3CanFam2/ssSyn/$chr.ss >> alns 
+	echo genes/refGene.$chr.withCNS.gff >> gffs 
+    done
+    hmm_train -m '*alns' -c ~/phast/data/exoniphy/default.cm -g '*gffs' -R exon_id -i SS -I CDS,background,CNS,5\'splice,3\'splice,prestart -t "((hg17,(mm7,rn3)),canFam2)" > indels.hmm
+
+    # training complete; now run exoniphy genome-wide
+
+    # first need to split up alignments
+    
+    mkdir -p /cluster/data/hg17/bed/exoniphy/test/run-split
+    cd /cluster/data/hg17/bed/exoniphy/test/run-split
+    
+    cat > doSplit.csh << 'EOF'
+#!/bin/csh -fe
+set c = $1
+mkdir -p /cluster/bluearc/hg17/multiz.hg17Mm7Rn3CanFam2/ssSynFrags/$c
+/cluster/bin/phast/msa_split /cluster/bluearc/hg17/multiz.hg17Mm7Rn3CanFam2/mafSyn/$c.maf --refseq /cluster/bluearc/hg17/chrom/$c.fa -i MAF --windows 100000,0 --between-blocks 5000 --min-informative 1000 --out-format SS --out-root /cluster/bluearc/hg17/multiz.hg17Mm7Rn3CanFam2/ssSynFrags/$c/$c --tuple-size 3
+gzip /cluster/bluearc/hg17/multiz.hg17Mm7Rn3CanFam2/ssSynFrags/$c/$c*.ss
+'EOF'
+# << for emacs
+    chmod +x doSplit.csh
+
+    rm -f jobList
+    for file in /cluster/bluearc/hg17/multiz.hg17Mm7Rn3CanFam2/mafSyn/chr*.maf ; do echo doSplit.csh `basename $file .maf` >> jobList ; done
+
+    para create jobList
+        # 43 jobs
+    para try; para check
+    para push
+
+    # now set up exoniphy run
+
+    mkdir -p /cluster/data/hg17/bed/exoniphy/test/run-exoniphy
+    cd /cluster/data/hg17/bed/exoniphy/test/run-exoniphy
+    cp -p ../../train/indels.hmm /cluster/bluearc/hg17/exoniphy/training
+    mkdir -p /cluster/bluearc/hg17/exoniphy/GFF
+    
+    cat > doExoniphy.sh << 'EOF'
+#!/usr/local/bin/bash
+
+root=`basename $1 .ss.gz`
+chrom=`echo $root | awk -F\. '{print $1}'`
+no=`echo $root | awk 'BEGIN{FS="[-.]"} {printf "%d\n", ($2+10000)/100000}'`
+
+if [ ! -d /cluster/bluearc/hg17/exoniphy/GFF/$chrom ] ; then 
+    mkdir -p /cluster/bluearc/hg17/exoniphy/GFF/$chrom
+fi
+
+zcat $1 | /cluster/bin/phast/exoniphy - --hmm  /cluster/bluearc/hg17/exoniphy/training/indels.hmm --reflect-strand --extrapolate default --score --indels --alias "hg17=human; mm7=mouse; rn3=rat; canFam2=dog" --seqname $chrom --idpref $chrom.$no  > /cluster/bluearc/hg17/exoniphy/GFF/$chrom/$root.gff
+'EOF'
+# << for emacs
+    chmod +x doExoniphy.sh
+
+    rm -f jobList
+    for dir in /cluster/bluearc/hg17/multiz.hg17Mm7Rn3CanFam2/ssSynFrags/* ; do find $dir -name '*.ss.gz' | awk '{printf "doExoniphy.sh %s\n", $1}' >> jobList ; done
+
+    para create jobList
+        # 27070 jobs
+    para try; para check
+    para push
+
+#Completed: 27059 of 27070 jobs
+#Crashed: 11 jobs
+#CPU time in finished jobs:    8573545s  142892.41m  2381.54h   99.23d  0.272 y
+#IO & Wait Time:                 73412s    1223.54m    20.39h    0.85d  0.002 y
+#Average job time:                 320s       5.33m     0.09h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             593s       9.88m     0.16h    0.01d
+#Submission to last job:         22823s     380.38m     6.34h    0.26d    
+
+    # crashed jobs all on random chroms, chrM, etc., and appear to be
+    # due to all species not being present; okay to ignore
+
+    # collect predictions and create track
+    rm -f exoniphy.gff
+    for dir in /cluster/bluearc/hg17/exoniphy/GFF/chr* ; do \
+	rm -f files.* tmp.gff ;\
+	find $dir -name "chr*.gff" > files ;\
+	split -l 1000 files files. ;\
+	for l in files.* ; do cat `cat $l` >> tmp.gff ; done ;\
+	refeature --sort tmp.gff >> exoniphy.gff ;\
+    done
+    ldHgGene -genePredExt -gtf hg17 exoniphyDog exoniphy.gff
+
 
