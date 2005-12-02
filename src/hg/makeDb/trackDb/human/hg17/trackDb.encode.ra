@@ -580,6 +580,8 @@ urlLabel Yale DART Link:
 
 track encodeSangerChip
 compositeTrack on
+subGroup1 celltype Cell_Type gm06990=GM06990 hela=HeLa  k562=K562
+subGroup2 factor Factor h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac
 shortLabel Sanger ChIP
 longLabel Sanger ChIP/Chip (histones H3,H4 ab in GM06990, K562 and HeLa cells) 
 group encodeChip
@@ -596,7 +598,8 @@ dataVersion ENCODE June & Oct 2005 Freezes
 
     track encodeSangerChipH3K4me1
     subTrack encodeSangerChip
-    shortLabel SI H3K4m1 GM06990
+    shortLabel SI H3K4m1 GM6990
+    subGroups celltype=gm06990 factor=h3k4me1
     longLabel Sanger Institute ChIP/Chip (H3K4me1 ab, GM06990 cells) 
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
@@ -605,7 +608,8 @@ dataVersion ENCODE June & Oct 2005 Freezes
 
     track encodeSangerChipH3K4me2
     subTrack encodeSangerChip
-    shortLabel SI H3K4m2 GM06990
+    shortLabel SI H3K4m2 GM6990
+    subGroups celltype=gm06990 factor=h3k4me2
     longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, GM06990 cells)
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
@@ -614,7 +618,8 @@ dataVersion ENCODE June & Oct 2005 Freezes
 
     track encodeSangerChipH3K4me3
     subTrack encodeSangerChip
-    shortLabel SI H3K4m3 GM06990
+    shortLabel SI H3K4m3 GM6990
+    subGroups celltype=gm06990 factor=h3k4me3
     longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, GM06990 cells)
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
@@ -624,6 +629,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     track encodeSangerChipH3ac
     subTrack encodeSangerChip
     shortLabel SI H3ac GM06990
+    subGroups celltype=gm06990 factor=h3ac
     longLabel Sanger Institute ChIP/Chip (H3ac ab, GM06990 cells) 
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
@@ -633,6 +639,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     track encodeSangerChipH4ac
     subTrack encodeSangerChip
     shortLabel SI H4ac GM06990
+    subGroups celltype=gm06990 factor=h4ac
     longLabel Sanger Institute ChIP/Chip (H4ac ab, GM06990 cells)
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
@@ -642,9 +649,10 @@ dataVersion ENCODE June & Oct 2005 Freezes
     track encodeSangerChipH3K4me2K562
     subTrack encodeSangerChip
     shortLabel SI H3K4me2 K562
+    longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, K562 cells)
+    subGroups celltype=k562 factor=h3k4me2
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
-    longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, K562 cells)
     priority 6
     color 10,10,10
 
@@ -652,6 +660,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     subTrack encodeSangerChip
     shortLabel SI H3K4me3 K562
     longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, K562 cells)
+    subGroups celltype=k562 factor=h3k4me3
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
     priority 7
@@ -661,6 +670,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     subTrack encodeSangerChip
     shortLabel SI H3ac K562
     longLabel Sanger Institute ChIP/Chip (H3ac ab, K562 cells)
+    subGroups celltype=k562 factor=h3ac
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
     priority 8
@@ -670,6 +680,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     subTrack encodeSangerChip
     shortLabel SI H4ac K562
     longLabel Sanger Institute ChIP/Chip (H4ac ab, K562 cells)
+    subGroups celltype=k562 factor=h3ac
     origAssembly hg16
     dataVersion ENCODE June 2005 Freeze
     priority 9
@@ -677,47 +688,48 @@ dataVersion ENCODE June & Oct 2005 Freezes
 
     track encodeSangerChipH3K4me1HeLa
     subTrack encodeSangerChip
-    shortLabel SI H3K4m1 HeLa
+    shortLabel SI H3K4me1 HeLa
     longLabel Sanger Institute ChIP/Chip (H3K4me1 ab, HeLa cells) 
+    subGroups celltype=hela factor=h3k4me1
     dataVersion ENCODE Oct 2005 Freeze
     priority 10
     color 10,10,130
 
-    track encodeSangerChipH3K4me2Hela
+    track encodeSangerChipH3K4me2HeLa
     subTrack encodeSangerChip
-    shortLabel SI H3K4m2 HeLa
+    shortLabel SI H3K4me2 HeLa
     longLabel Sanger Institute ChIP/Chip (H3K4me2 ab, HeLa cells)
-    dataVersion ENCODE Oct 2005 Freeze
-    priority 10
-    color 10,10,130
-    dataVersion ENCODE Oct 2005 Freeze
-
-    track encodeSangerChipH3K4me3HeLa
-    subTrack encodeSangerChip
-    shortLabel SI H3K4m3 HeLa
-    longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, HeLa cells)
+    subGroups celltype=hela factor=h3k4me2
     dataVersion ENCODE Oct 2005 Freeze
     priority 11
     color 10,10,130
+
+    track encodeSangerChipH3K4me3HeLa
+    subTrack encodeSangerChip
+    shortLabel SI H3K4me3 HeLa
+    longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, HeLa cells)
+    subGroups celltype=hela factor=h3k4me3
     dataVersion ENCODE Oct 2005 Freeze
+    priority 12
+    color 10,10,130
 
     track encodeSangerChipH3acHeLa
     subTrack encodeSangerChip
     shortLabel SI H3ac HeLa
     longLabel Sanger Institute ChIP/Chip (H3ac ab, HeLa cells) 
+    subGroups celltype=hela factor=h3ac
     dataVersion ENCODE Oct 2005 Freeze
-    priority 12
+    priority 13
     color 10,10,130
-    dataVersion ENCODE Oct 2005 Freeze
 
     track encodeSangerChipH4acHeLa
     subTrack encodeSangerChip
     shortLabel SI H4ac HeLa
     longLabel Sanger Institute ChIP/Chip (H4ac ab, HeLa cells)
+    subGroups celltype=hela factor=h4ac
     dataVersion ENCODE Oct 2005 Freeze
-    priority 13
+    priority 14
     color 10,10,130
-    dataVersion ENCODE Oct 2005 Freeze
 
 track encodeSangerChipHits
 compositeTrack on
@@ -740,7 +752,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeSangerChipHitH3K4me1GM06990
     subTrack encodeSangerChipHits
-    shortLabel SI H3K4m1 GM06990
+    shortLabel SI H3K4m1 GM6990
     longLabel Sanger Institute ChIP/Chip Hits (H3K4me1 ab, GM06990 cells) 
     subGroups datatype=hit celltype=gm06990 factor=h3k4me1
     priority 1
@@ -748,7 +760,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeSangerChipHitH3K4me2GM06990
     subTrack encodeSangerChipHits
-    shortLabel SI H3K4m2 GM06990
+    shortLabel SI H3K4m2 GM6990
     subGroups datatype=hit celltype=gm06990 factor=h3k4me2
     longLabel Sanger Institute ChIP/Chip Hits (H3K4me2 ab, GM06990 cells)
     priority 2
@@ -756,7 +768,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeSangerChipHitH3K4me3GM06990
     subTrack encodeSangerChipHits
-    shortLabel SI H3K4m3 GM06990
+    shortLabel SI H3K4m3 GM6990
     subGroups datatype=hit celltype=gm06990 factor=h3k4me3
     longLabel Sanger Institute ChIP/Chip (H3K4me3 ab, GM06990 cells)
     priority 3
@@ -812,7 +824,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeSangerChipHitH3K4me1HeLa
     subTrack encodeSangerChipHits
-    shortLabel SI H3K4m1 HeLa
+    shortLabel SI H3K4me1 HeLa
     subGroups datatype=hit celltype=hela factor=h3k4me1
     longLabel Sanger Institute ChIP/Chip Hits (H3K4me1 ab, HeLa cells) 
     priority 10
@@ -820,15 +832,15 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeSangerChipHitH3K4me2HeLa
     subTrack encodeSangerChipHits
-    shortLabel SI H3K4m2 HeLa
+    shortLabel SI H3K4me2 HeLa
     subGroups datatype=hit celltype=hela factor=h3k4me2
     longLabel Sanger Institute ChIP/Chip Hits (H3K4me2 ab, HeLa cells)
     priority 11
     color 10,10,130
 
-    track encodeSangerChipH3K4me3HeLa
+    track encodeSangerChipHitH3K4me3HeLa
     subTrack encodeSangerChipHits
-    shortLabel SI H3K4m3 HeLa
+    shortLabel SI H3K4me3 HeLa
     subGroups datatype=hit celltype=hela factor=h3k4me3
     longLabel Sanger Institute ChIP/Chip Hits (H3K4me3 ab, HeLa cells)
     priority 12
@@ -854,7 +866,7 @@ dataVersion ENCODE Oct 2005 Freeze
     subTrack encodeSangerChipHits
     noInherit on
     type bed 3 .
-    shortLabel SI H3K4m1 GM06990
+    shortLabel SI H3K4m1 GM6990
     subGroups datatype=peak celltype=gm06990 factor=h3k4me1
     longLabel Sanger Institute ChIP/Chip Peak Centers (H3K4me1 ab, GM06990 cells) 
     priority 15
@@ -862,7 +874,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeSangerChipCenterH3K4me2GM06990
     subTrack encodeSangerChipHits
-    shortLabel SI H3K4m2 GM06990
+    shortLabel SI H3K4m2 GM6990
     subGroups datatype=peak celltype=gm06990 factor=h3k4me2
     longLabel Sanger Institute ChIP/Chip Peak Centers(H3K4me2 ab, GM06990 cells)
     noInherit on
@@ -872,7 +884,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeSangerChipCenterH3K4me3GM06990
     subTrack encodeSangerChipHits
-    shortLabel SI H3K4m3 GM06990
+    shortLabel SI H3K4m3 GM6990
     subGroups datatype=peak celltype=gm06990 factor=h3k4me3
     longLabel Sanger Institute ChIP/Chip Peak Centers(H3K4me3 ab, GM06990 cells)
     noInherit on
@@ -942,7 +954,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeSangerChipCenterH3K4me1HeLa
     subTrack encodeSangerChipHits
-    shortLabel SI H3K4m1 HeLa
+    shortLabel SI H3K4me1 HeLa
     subGroups datatype=peak celltype=hela factor=h3k4me1
     longLabel Sanger Institute ChIP/Chip Peak Centers (H3K4me1 ab, HeLa cells) 
     noInherit on
@@ -952,7 +964,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeSangerChipCenterH3K4me2HeLa
     subTrack encodeSangerChipHits
-    shortLabel SI H3K4m2 HeLa
+    shortLabel SI H3K4me2 HeLa
     subGroups datatype=peak celltype=hela factor=h3k4me2
     longLabel Sanger Institute ChIP/Chip Peak Centers (H3K4me2 ab, HeLa cells)
     noInherit on
@@ -960,9 +972,9 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 25
     color 10,10,130
 
-    track encodeSangerCenterChipH3K4me3HeLa
+    track encodeSangerChipCenterH3K4me3HeLa
     subTrack encodeSangerChipHits
-    shortLabel SI H3K4m3 HeLa
+    shortLabel SI H3K4me3 HeLa
     subGroups datatype=peak celltype=hela factor=h3k4me3
     longLabel Sanger Institute ChIP/Chip Peak Centers (H3K4me3 ab, HeLa cells)
     noInherit on
