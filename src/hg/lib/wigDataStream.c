@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.74 2005/04/13 06:25:58 markd Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.75 2005/12/02 18:59:21 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -1397,7 +1397,6 @@ if (bedList && *bedList)
      */
     saveWinStart = wds->winStart;
     saveWinEnd = wds->winEnd;
-    saveChrName = wds->chrName;
 
     chromSizes = newHash(0);
 
@@ -1409,6 +1408,7 @@ if (bedList && *bedList)
      */
     if (chromConstraint)
 	{
+	saveChrName = cloneString(wds->chrName);
 	chr = newSlName(wds->chrName);
 	slAddHead(&chromList, chr);
 	AllocVar(chrStartEnd);
@@ -1890,7 +1890,10 @@ if (bedList && *bedList)
     /*	restore these constraints we used here
      */
     if (chromConstraint)
-	wds->chrName = saveChrName;
+	{
+	wds->setChromConstraint(wds, saveChrName);
+	freeMem(saveChrName);
+	}
     else
 	{
 	freeMem(wds->chrName);
