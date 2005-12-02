@@ -4,7 +4,7 @@ L = -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
-O = xmlToSql.o elStat.o rename.o
+O = xmlToSql.o elStat.o rename.o tables.o
 
 xmlToSql: $O ${MYLIBS}
 	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/xmlToSql $O ${MYLIBS} $L
@@ -12,3 +12,6 @@ xmlToSql: $O ${MYLIBS}
 
 clean:
 	rm -f $O
+
+test::
+	doTest

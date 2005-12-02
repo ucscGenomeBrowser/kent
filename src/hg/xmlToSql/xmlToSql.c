@@ -9,8 +9,9 @@
 #include "dtdParse.h"
 #include "elStat.h"
 #include "rename.h"
+#include "tables.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.25 2005/12/02 01:54:48 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.26 2005/12/02 02:43:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -41,127 +42,6 @@ static struct optionSpec options[] = {
    {"maxPromoteSize", OPTION_STRING},
    {NULL, 0},
 };
-
-struct table
-/* Information about one of the tables we are making. */
-    {
-    struct table *next;		/* Next in list. */
-    char *name;			/* Name of table. */
-    struct field *fieldList;	/* Information about each field. */
-    struct hash *fieldHash;	/* Fields keyed by field name. */
-    int fieldCount;		/* Count of fields, including made up ones. */
-    struct hash *fieldMixedHash;/* Fields keyed by field mixed case name. */
-    struct elStat *elStat;	/* Associated elStat structure. */
-    struct dtdElement *dtdElement; /* Associated dtd element. */
-    struct field *primaryKey;	/* Primary key if any. */
-    boolean madeUpPrimary;	/* True if we are creating primary key. */
-    int lastId;			/* Last id value if we create key. */
-    struct assocRef *parentAssocs;  /* Association table linking to parent. */
-    struct fieldRef *parentKeys; /* References to possible parents. */
-    boolean linkedParents;	/* True if we have linked parents. */
-    boolean isAssoc;		/* True if an association we've created. */
-    int usesAsChild;		/* Number of times this is a child of another
-                                 * table. */
-    FILE *tabFile;		/* Tab oriented file associated with table */
-    struct hash *uniqHash;	/* Table to insure unique output. */
-    struct assoc *assocList;    /* List of pending associations. */
-    boolean promoted;		/* If true table is promoted to be field in parent. */
-    };
-
-struct field
-/* Information about a field. */
-    {
-    struct field *next;		/* Next in list. */
-    char *name;			/* Name of field as it is in XML. */
-    char *mixedCaseName;	/* Mixed case name - as it is in SQL. */
-    struct table *table;	/* Table this is part of. */
-    int tablePos;		/* Field position in table (zero based) */
-    struct attStat *attStat;	/* Associated attStat structure. */
-    struct dtdAttribute *dtdAttribute;	/* Associated dtd attribute. */
-    boolean isMadeUpKey;	/* True if it's a made up key. */
-    boolean isPrimaryKey;	/* True if it's table's primary key. */
-    boolean isString;		/* True if it's a string field. */
-    };
-
-struct fieldRef
-/* A reference to a field. */
-    {
-    struct fieldRef *next;	/* Next in list */
-    struct field *field;	/* Associated field. */
-    };
-
-struct assocRef
-/* A reference to a table. */
-    {
-    struct assocRef *next;	/* Next in list. */
-    struct table *assoc;	/* Association table */
-    struct table *parent;	/* Parent table we're associated with */
-    };
-
-struct dtdAttribute *findDtdAttribute(struct dtdElement *element, char *name)
-/* Find named attribute in element, or NULL if no such attribute. */
-{
-struct dtdAttribute *dtdAtt;
-for (dtdAtt = element->attributes; dtdAtt != NULL; dtdAtt = dtdAtt->next)
-    {
-    if (sameString(dtdAtt->name, name))
-        break;
-    }
-return dtdAtt;
-}
-
-struct dtdAttribute *findDtdAttributeMixed(struct dtdElement *element, char *name)
-/* Find named attribute in element, or NULL if no such attribute. */
-{
-struct dtdAttribute *dtdAtt;
-for (dtdAtt = element->attributes; dtdAtt != NULL; dtdAtt = dtdAtt->next)
-    {
-    if (sameString(dtdAtt->mixedCaseName, name))
-        break;
-    }
-return dtdAtt;
-}
-
-
-struct field *addFieldToTable(struct table *table, 
-	char *name, char *mixedCaseName,
-	struct attStat *att, boolean isMadeUpKey, boolean atTail, 
-	boolean isString)
-/* Add field to end of table.  Use proposedName if it's unique,
- * otherwise proposed name with some numerical suffix. */
-{
-struct field *field;
-
-AllocVar(field);
-field->name = cloneString(name);
-field->mixedCaseName = cloneString(mixedCaseName);
-field->table = table;
-field->attStat = att;
-field->isMadeUpKey = isMadeUpKey;
-field->isString = isString;
-if (!isMadeUpKey)
-    {
-    field->dtdAttribute = findDtdAttribute(table->dtdElement, name);
-    if (field->dtdAttribute == NULL)
-        {
-	if (att != NULL && !sameString(name, textField))
-	    errAbort("%s.%s is in .stats but not in .dtd file", 
-		table->name, field->name);
-	}
-    }
-hashAdd(table->fieldHash, name, field);
-hashAdd(table->fieldMixedHash, mixedCaseName, field);
-if (atTail)
-    {
-    slAddTail(&table->fieldList, field);
-    }
-else
-    {
-    slAddHead(&table->fieldList, field);
-    }
-table->fieldCount += 1;
-return field;
-}
 
 void makePrimaryKey(struct table *table)
 /* Figure out primary key, using an existing field if
@@ -201,7 +81,7 @@ if (primaryKey == NULL)
     {
     char *fieldName = renameUnique(table->fieldMixedHash, "id");
     primaryKey = addFieldToTable(table, fieldName, fieldName,
-    	NULL, TRUE, FALSE, FALSE);
+    	NULL, TRUE, FALSE, FALSE, textField);
     table->madeUpPrimary = TRUE;
     }
 table->primaryKey = primaryKey;
@@ -212,21 +92,6 @@ boolean attIsString(struct attStat *att)
 /* Return TRUE if att is of string type. */
 {
 return sameString(att->type, "string");
-}
-
-struct table *tableNew(char *name, struct elStat *elStat,
-	struct dtdElement *dtdElement)
-/* Create a new table structure. */
-{
-struct table *table;
-AllocVar(table);
-table->name = cloneString(name);
-table->elStat = elStat;
-table->dtdElement = dtdElement;
-table->fieldHash = hashNew(8);
-table->fieldMixedHash = hashNew(8);
-table->uniqHash = hashNew(17);
-return table;
 }
 
 struct table *elsIntoTables(struct elStat *elList, struct hash *dtdHash)
@@ -260,7 +125,7 @@ for (el = elList; el != NULL; el = el->next)
 	    mixedName = dtdAtt->mixedCaseName;
 	    }
 	field = addFieldToTable(table, name, mixedName, att, 
-		FALSE, TRUE, attIsString(att));
+		FALSE, TRUE, attIsString(att), textField);
 	attCount += 1;
 	}
     /* If the table is real simple we'll just promote it */
@@ -342,7 +207,7 @@ if (!hashLookup(rUniqParentLinkHash, linkUniqName))
 	field = addFieldToTable(parentTable, 
 		    fieldName, fieldMixedName,
 		    table->primaryKey->attStat, TRUE, TRUE,
-		    table->primaryKey->isString);
+		    table->primaryKey->isString, textField);
 	AllocVar(ref);
 	ref->field = field;
 	slAddHead(&table->parentKeys, ref);
@@ -364,10 +229,10 @@ if (!hashLookup(rUniqParentLinkHash, linkUniqName))
 	assocTable->isAssoc = TRUE;
 	addFieldToTable(assocTable, parentTable->name, parentTable->name,
 	    parentTable->primaryKey->attStat, TRUE, TRUE, 
-	    parentTable->primaryKey->isString);
+	    parentTable->primaryKey->isString, textField);
 	addFieldToTable(assocTable, table->name, table->name,
 	    table->primaryKey->attStat, TRUE, TRUE, 
-	    table->primaryKey->isString);
+	    table->primaryKey->isString, textField);
 	slAddHead(pTableList, assocTable);
 	AllocVar(ref);
 	ref->assoc = assocTable;
