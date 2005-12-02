@@ -1,5 +1,3 @@
-extern char **environ;  // uglyf
-
 /* Common.h - functions that are commonly used.  Includes 
  * routines for managing singly linked lists, some basic
  * string manipulation stuff, and other stuff of the
