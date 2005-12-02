@@ -6,7 +6,7 @@
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredCheck.c,v 1.1 2004/09/03 04:08:25 markd Exp $";
+static char const rcsid[] = "$Id: genePredCheck.c,v 1.2 2005/12/02 04:56:10 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -28,7 +28,7 @@ errAbort(
   "is provided, then a table by this name is checked.\n"
   "\n"
   "options:\n"
-  "   -db=db - If specified, then then this is this database is used to\n"
+  "   -db=db - If specified, then this is this database is used to\n"
   "    get chromosome sizes, and perhaps the table to check.\n"
   "\n");
 }
@@ -43,9 +43,10 @@ int chromSize = -1;  /* default to not checking */
 char desc[512];
 int iRec = 0;
 
+
 if (gDb != NULL)
     {
-    hSetDb(gDb);
+    hSetDb(gDb);  /* needed for hChromSize */
     conn = hAllocConn(gDb);
     }
 
