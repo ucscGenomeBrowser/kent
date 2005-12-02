@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: spDb.c,v 1.13 2005/10/25 01:50:31 baertsch Exp $";
+static char const rcsid[] = "$Id: spDb.c,v 1.14 2005/12/02 23:57:35 fanhsu Exp $";
 
 boolean spIsPrimaryAcc(struct sqlConnection *conn, char *acc)
 /* Return TRUE if this is a primary accession in database. */
@@ -49,6 +49,15 @@ safef(query, sizeof(query), "select val from displayId where acc = '%s'",
 return sqlNeedQuickString(conn, query);
 }
 
+char *spAccToId2(struct sqlConnection *conn, char *acc)
+/* Convert primary accession to SwissProt ID (which will
+ * often look something like HXA1_HUMAN. */
+{
+char query[256];
+safef(query, sizeof(query), "select val from displayId where acc = '%s'",
+	spFindAcc(conn, acc));
+return sqlQuickString(conn, query);
+}
 
 char *spIdToAcc(struct sqlConnection *conn, char *id)
 /* Convert SwissProt ID (things like HXA1_HUMAN) to
