@@ -1496,12 +1496,21 @@ searchType bed
 searchPriority 10
 termRegex ux\.[0-9]+
 
+track exoniphyDog
+shortLabel Exoniphy Dog
+longLabel Exoniphy Human/Mouse/Rat/Dog
+group genes
+priority 50.9
+visibility dense
+color 173,17,162
+type genePred
+
 track exoniphy
 shortLabel Exoniphy 
 longLabel Exoniphy Human/Mouse/Rat, Lifted from Hg16
 group genes
 priority 50.9
-visibility dense
+visibility hide
 color 173,17,162
 type genePred
 
