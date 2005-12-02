@@ -52,7 +52,7 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     rankProp.o recombRate.o recombRateRat.o recombRateMouse.o \
     refLink.o refSeqStatus.o \
     riken.o rikenBest.o rikenCluster.o rmskOut.o \
-    rnaFold.o rnaGene.o rnaGenes.o rnaGroup.o \
+    rnaFold.o rnaGene.o rnaGroup.o tRNAs.o gbRNAs.o \
     rnaSecStr.o tfbsConsFactors.o \
     roughAli.o sage.o sageCounts.o sageExp.o sample.o \
     sqlProg.o tfbsCons.o tfbsConsSites.o \
