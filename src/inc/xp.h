@@ -57,6 +57,10 @@ int xpLineIx(struct xp *xp);
 char *xpFileName(struct xp *xp);
 /* Return current file name. */
 
+int xpReadFromFile(void *userData, char *buf, int bufSize);
+/* This is a function you can pass to xpNew as a read handler.
+ * It assumes you've passed an open FILE in as userData. */
+
 void xpError(struct xp *xp, char *format, ...);
 /* Output an error message with filename and line number included. */
 
