@@ -4773,7 +4773,15 @@ TMPDIR=/scratch/tmp
 # check trackDb entry exists. Put html at danRer3 level of trackDb and edit
 # these and the downloads README to state that chrNA and chrUn were not 
 # aligned for this track.
-
+    # Remove extra downloads made by script:
+    # Only chain track is pushed to the RR so remove the net and axtNet 
+    # downloads, re-make md5sum.txt and edit README.txt accordingly.
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/danRer3/vsSelf
+    rm danRer3.danRer3.net.gz md5sum.txt
+    rm -r axtNet
+    md5sum *.gz > md5sum.txt
+    
 # Original run with loose linear gap matrix and scaffolds for chrNA and chrUn
 # done 2005-10-26.
 # filtering chains from above on minScore 10,000. done 2005-11-18
