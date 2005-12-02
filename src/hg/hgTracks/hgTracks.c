@@ -99,7 +99,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1046 2005/12/01 23:19:17 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1047 2005/12/02 17:32:16 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2825,7 +2825,6 @@ boolean useGeneSymbol= FALSE;
 boolean useKgId      = FALSE;
 boolean useProtDisplayId = FALSE;
 boolean useMimId = FALSE;
-boolean useNone = FALSE;
 
 struct hashEl *knownGeneLabels = cartFindPrefix(cart, "knownGene.label");
 struct hashEl *label;
@@ -2850,15 +2849,6 @@ if (hTableExists("kgXref"))
             useProtDisplayId = TRUE;
         else if (endsWith(label->name, "omim") && differentString(label->val, "0"))
             useMimId = TRUE;
-        else if (endsWith(label->name, "none") && differentString(label->val, "0"))
-            useNone = TRUE;
-        }
-    /* doesn't match any or all false, use default */
-    if (!useGeneSymbol && !useKgId && !useMimId && !useProtDisplayId && !useNone)
-        {
-        useGeneSymbol = TRUE; /* default to gene symbol */
-        /* set cart to match what doing */
-        cartSetBoolean(cart, "knownGene.label.gene", TRUE);
         }
 
     for (lf = lfList; lf != NULL; lf = lf->next)
@@ -2897,11 +2887,6 @@ if (hTableExists("kgXref"))
             mimId = sqlQuickString(conn, cond_str);
             if (mimId) 
                 dyStringAppend(name, mimId);
-            }
-        if (useNone && labelStarted)
-            {
-            dyStringFree(&name);
-            name = dyStringNew(64);
             }
     	lf->extra = dyStringCannibalize(&name);
 	}
@@ -3374,7 +3359,6 @@ boolean labelStarted = FALSE;
 boolean useGeneName = FALSE; 
 boolean useAcc =  FALSE;
 boolean useMim =  FALSE; 
-boolean useNone =  FALSE; 
 
 struct hashEl *refGeneLabels = cartFindPrefix(cart, (isNative ? "refGene.label" : "xenoRefGene.label"));
 struct hashEl *label;
@@ -3393,17 +3377,8 @@ for (label = refGeneLabels; label != NULL; label = label->next)
         useAcc = TRUE;
     else if (endsWith(label->name, "omim") && differentString(label->val, "0"))
         useMim = TRUE;
-    else if (endsWith(label->name, "none") && differentString(label->val, "0"))
-        useNone = TRUE;
     }
-/* doesn't match any or all false, use default */
-if (!useGeneName && !useAcc && !useMim && !useNone)
-    {
-    useGeneName = TRUE; /* default to gene name */
-    /* set cart to match what doing */
-    if (isNative) cartSetBoolean(cart, "refGene.label.gene", TRUE);
-    else cartSetBoolean(cart, "xenoRefGene.label.gene", TRUE);
-    }
+/* doesn't match any or all false, do none */
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct dyString *name = dyStringNew(64);
@@ -3439,11 +3414,6 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
         else labelStarted = TRUE;
         if (mimId && differentString(mimId, "0"))
             dyStringAppend(name, mimId);
-        }
-    if (useNone && labelStarted) /* this overrides other options */
-        {
-        freeDyString(&name);
-        name = dyStringNew(64);
         }
     lf->extra = dyStringCannibalize(&name);
     }
@@ -9555,7 +9525,6 @@ struct sqlConnection *conn = hAllocConn();
 boolean useHgvs = FALSE;
 boolean useId = FALSE;
 boolean useCommon = FALSE;
-boolean useNone = FALSE;
 boolean labelStarted = FALSE;
 
 struct hashEl *hgMutLabels = cartFindPrefix(cart, "hgMut.label");
@@ -9574,15 +9543,6 @@ for (label = hgMutLabels; label != NULL; label = label->next)
         useCommon = TRUE;
     else if (endsWith(label->name, "dbid") && differentString(label->val, "0"))
         useId = TRUE;
-    else if (endsWith(label->name, "none") && differentString(label->val, "0"))
-        useNone = TRUE;
-    }
-/* doesn't match any or all false, use default */
-if (!useHgvs && !useCommon && !useId && !useNone)
-    {
-    useHgvs = TRUE; /* default to HGVS name */
-    /* set cart to match what doing */
-    cartSetBoolean(cart, "hgMut.label.hgvs", TRUE);
     }
 
 for (el = tg->items; el != NULL; el = el->next)
@@ -9614,11 +9574,6 @@ for (el = tg->items; el != NULL; el = el->next)
         if (labelStarted) dyStringAppendC(name, '/');
         else labelStarted = TRUE;
         dyStringAppend(name, el->mutId);
-        }
-    if (useNone && labelStarted)
-        {
-        dyStringFree(&name);
-        name = dyStringNew(64);
         }
     freeMem(el->name); /* free old name */
     el->name = dyStringCannibalize(&name);

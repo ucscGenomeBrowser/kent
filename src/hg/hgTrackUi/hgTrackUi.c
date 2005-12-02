@@ -27,7 +27,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.225 2005/12/01 21:34:57 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.226 2005/12/02 17:32:12 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -276,11 +276,6 @@ safef(varName, sizeof(varName), "%s.label.dbid", tdb->tableName);
 option = cartUsualBoolean(cart, varName, FALSE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "ID");
-
-safef(varName, sizeof(varName), "%s.label.none", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "none");
 printf("<BR />\n");
 }
 
@@ -725,11 +720,6 @@ if (omimAvail > 0)
     cgiMakeCheckBox(varName, option);
     printf(" %s&nbsp;&nbsp;&nbsp;", "OMIM ID");
     }
-
-safef(varName, sizeof(varName), "%s.label.none", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "none");
 }
 
 void knownGeneUI(struct trackDb *tdb)
@@ -783,11 +773,6 @@ if (sameString(tdb->tableName, "refGene"))
     cgiMakeCheckBox(varName, option);
     printf(" %s&nbsp;&nbsp;&nbsp;", "OMIM ID");
     }
-
-safef(varName, sizeof(varName), "%s.label.none", tdb->tableName);
-option = cartUsualBoolean(cart, varName, FALSE);
-cgiMakeCheckBox(varName, option);
-printf(" %s&nbsp;&nbsp;&nbsp;", "none");
 }
 
 void refGeneUI(struct trackDb *tdb)
