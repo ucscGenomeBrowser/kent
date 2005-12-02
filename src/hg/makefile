@@ -104,6 +104,7 @@ UTIL_DIRS = \
 	agpAllToFaFile \
 	agpToFa \
 	agpToGl \
+	autoDtd \
 	autoSql \
 	autoXml \
 	bedIntersect \
@@ -221,8 +222,10 @@ UTIL_DIRS = \
 	spideyToPsl \
 	splitFa \
 	splitFaIntoContigs \
+	sqlToXml \
 	test \
 	trfBig \
 	uniqSize \
-	updateStsInfo
+	updateStsInfo \
+	xmlToSql
 
