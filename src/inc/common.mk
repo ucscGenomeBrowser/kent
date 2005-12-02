@@ -7,7 +7,11 @@ HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc
 
 # add the follow to makefiles to enable stronger warning checks
 # HG_WARN = ${HG_WARN_ERR}
-HG_WARN_ERR = -DJK_WARN -Wall -Werror
+ifeq (${OSTYPE},darwin)
+    HG_WARN_ERR = -DJK_WARN -Wall -Werror -Wno-unused-variable
+else
+    HG_WARN_ERR = -DJK_WARN -Wall -Werror
+endif
 
 SCRIPTS=/cluster/bin/scripts
 CGI_BIN=/usr/local/apache/cgi-bin
