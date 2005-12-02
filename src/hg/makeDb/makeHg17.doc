@@ -18735,3 +18735,15 @@ zcat $1 | /cluster/bin/phast/exoniphy - --hmm  /cluster/bluearc/hg17/exoniphy/tr
     ldHgGene -genePredExt -gtf hg17 exoniphyDog exoniphy.gff
 
 
+# COW SYNTENY (Done, Heather, Dec. 2005)
+# Data from Harris A. Lewin <h-lewin@uiuc.edu>
+
+ssh hgwdev
+cd /cluster/data/hg17/bed
+mkdir syntenyCow
+cd syntenyCow
+
+hgLoadBed -noBin hg17 syntenyCow syntenyCow.bed
+
+# add to kent/src/hg/makeDb/trackDb/human/hg17/trackDb.ra
+
