@@ -229,5 +229,6 @@ UTIL_DIRS = \
 	trfBig \
 	uniqSize \
 	updateStsInfo \
+	xmlCat \
 	xmlToSql
 
