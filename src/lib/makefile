@@ -28,7 +28,7 @@ O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     spacedSeed.o spaceSaver.o \
     sqlNum.o sqlList.o subText.o synQueue.o tokenizer.o \
     twoBit.o verbose.o vGfx.o vGif.o wildcmp.o wormdna.o \
-    xa.o xAli.o xap.o xenshow.o xp.o 
+    xa.o xAli.o xap.o xenshow.o xmlEscape.o xp.o 
 
 
 $(MACHTYPE)/jkweb.a: $(O) $(MACHTYPE)
