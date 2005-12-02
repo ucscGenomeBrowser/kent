@@ -6,7 +6,7 @@
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredCheck.c,v 1.2 2005/12/02 04:56:10 markd Exp $";
+static char const rcsid[] = "$Id: genePredCheck.c,v 1.3 2005/12/02 05:47:20 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -70,6 +70,7 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
     iRec++;
     safef(desc, sizeof(desc), "%s:%d", fileTbl, iRec);
     gErrCount += genePredCheck(desc, stderr, chromSize, gp);
+    genePredFree(&gp);
     }
 genePredReaderFree(&gpr);
 if (conn != NULL)
