@@ -6,7 +6,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
-test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest
+test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest mimeTests
 	rm -r output
 	@echo tested all
 
@@ -36,6 +36,8 @@ htmlPageTest: htmlPageTest.o ${MYLIBS} mkdirs
 pipelineTests: 	pipelineWrite pipelineWriteMult pipelineWriteFd \
 		pipelineRead pipelineReadMult pipelineReadFd pipelineReadMem \
 		pipelineExitCode
+
+
 
 pipelineWrite: ${BIN_DIR}/pipelineTester mkdirs
 	${BIN_DIR}/pipelineTester -write -pipeData=input/simple1.txt -otherEnd=output/$@.out.gz "gzip -1"
@@ -78,11 +80,52 @@ pipelineExitCode: ${BIN_DIR}/pipelineTester
 ${BIN_DIR}/pipelineTester:  mkdirs pipelineTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/pipelineTester pipelineTester.o ${MYLIBS} $L
 
+
 dyStringTest: ${BIN_DIR}/dyStringTester mkdirs
 	${BIN_DIR}/dyStringTester
 
 ${BIN_DIR}/dyStringTester:  mkdirs dyStringTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/dyStringTester dyStringTester.o ${MYLIBS} $L
 
+
+mimeTests: mime1 mime2 mime3 mime4 mimeBin mime5 mimeAltHead mimeBlat
+
+${BIN_DIR}/mimeTester:  mkdirs mimeTester.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/mimeTester mimeTester.o ${MYLIBS} $L
+
+
+mime1: ${BIN_DIR}/mimeTester mkdirs
+	${BIN_DIR}/mimeTester < input/$@.txt > output/$@.out
+	diff expected/$@.out output/$@.out
+
+mime2: ${BIN_DIR}/mimeTester mkdirs
+	${BIN_DIR}/mimeTester < input/$@.txt > output/$@.out
+	diff expected/$@.out output/$@.out
+
+mime3: ${BIN_DIR}/mimeTester mkdirs
+	${BIN_DIR}/mimeTester < input/$@.txt > output/$@.out
+	diff expected/$@.out output/$@.out
+
+mime4: ${BIN_DIR}/mimeTester mkdirs
+	${BIN_DIR}/mimeTester < input/$@.txt > output/$@.out
+	diff expected/$@.out output/$@.out
+
+mimeBin: ${BIN_DIR}/mimeTester mkdirs
+	${BIN_DIR}/mimeTester < input/$@.txt > output/$@.out
+	diff expected/$@.out output/$@.out
+
+mime5: ${BIN_DIR}/mimeTester mkdirs
+	${BIN_DIR}/mimeTester < input/$@.txt > output/$@.out
+	diff expected/$@.out output/$@.out
+
+mimeAltHead: ${BIN_DIR}/mimeTester mkdirs
+	${BIN_DIR}/mimeTester -altHeader='CONTENT_TYPE=multipart/form-data; boundary=----------0xKhTmLbOuNdArY' < input/$@.txt > output/$@.out
+	diff expected/$@.out output/$@.out
+
+mimeBlat: ${BIN_DIR}/mimeTester mkdirs
+	${BIN_DIR}/mimeTester -altHeader='CONTENT_TYPE=multipart/form-data; boundary=----------0xKhTmLbOuNdArY' < input/$@.txt > output/$@.out
+	diff expected/$@.out output/$@.out
+
+	
 clean:
 	rm -rf *.o bin output *.tmp
