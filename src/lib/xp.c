@@ -11,8 +11,9 @@
 #include "errabort.h"
 #include "hash.h"
 #include "xp.h"
+#include "xmlEscape.h"
 
-static char const rcsid[] = "$Id: xp.c,v 1.10 2005/11/30 16:02:48 kent Exp $";
+static char const rcsid[] = "$Id: xp.c,v 1.11 2005/12/02 22:10:34 kent Exp $";
 
 
 char xpNextBuf(struct xp *xp)
@@ -33,18 +34,6 @@ return xp->inBuf[0];
 #define xpUngetChar(xp) \
     (--xp->in)
 /* Oops, don't fetch that after all. */
-
-struct hash *makeSymHash()
-/* Return hash of symbols to lookup. */
-{
-struct hash *symHash = newHash(6);
-hashAdd(symHash, "lt", "<");
-hashAdd(symHash, "gt", ">");
-hashAdd(symHash, "amp", "&");
-hashAdd(symHash, "apos", "'");
-hashAdd(symHash, "quot", "\"");
-return symHash;
-}
 
 struct xp *xpNew(void *userData, 
    void (*atStartTag)(void *userData, char *name, char **atts),
@@ -68,9 +57,17 @@ if (fileName)
 else
     xp->fileName = cloneString("XML");
 xp->inBufEnd = xp->in = xp->inBuf;		
-xp->symHash = makeSymHash();
+xp->symHash = xmlEscapeSymHash();
 return xp;
 }
+
+int xpReadFromFile(void *userData, char *buf, int bufSize)
+/* Read some text assuming a file was passed in as user data. */
+{
+FILE *f = userData;
+return fread(buf, 1, bufSize, f);
+}
+
 
 
 void xpFree(struct xp **pXp)
