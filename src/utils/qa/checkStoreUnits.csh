@@ -23,7 +23,10 @@ if ($#argv < 1 || $#argv > 1) then
   exit
 endif
 
-df -kh | grep store | egrep % | sort -k4 -r > storefile
+rm -f storefile
+df -kh | egrep "store|bluearc" \
+  | sed -e "s/10.1.1.3:\/bluearc/                 /" \
+  | egrep % | sort -k4 -r >> storefile
 set fullunit=`awk '$4 == "100%" || $4 == "99%" || $4 == "98%" {print $5}' \
   storefile`
 
@@ -32,11 +35,12 @@ cat storefile
 echo
 rm storefile
 
+
 set number=`echo $fullunit | awk -F" " '{print NF}'`
 if ($number == 0) then
   exit
 else
-  echo "sizes in megabytes\n"
+  echo "sizes in megabytes:\n"
   set n=0
   while ($number - $n)
     # get them in order, most full unit first
