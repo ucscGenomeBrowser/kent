@@ -85,7 +85,7 @@ struct htmlPage
     struct hash *header;		/* Hash of header lines (cookies, etc.) */
     struct htmlCookie *cookies;		/* Associated cookies if any. */
     char *fullText;			/* Full unparsed text including headers. */
-    char *htmlText;			/* Text unparsed after header. */
+    char *htmlText;			/* Text unparsed after header.  Same mem as fullText. */
     struct htmlTag *tags;		/* List of tags in this page. */
     struct htmlForm *forms;		/* List of all forms. */
     };
