@@ -10,7 +10,7 @@
 #include "elStat.h"
 #include "rename.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.24 2005/12/01 20:18:18 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.25 2005/12/02 01:54:48 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -25,15 +25,20 @@ errAbort(
   "options:\n"
   "   -prefix=name - A name to prefix all tables with\n"
   "   -textField=name - Name to use for text field (default 'text')\n"
+  "   -maxPromoteSize=N - Maximum size (default 32) for a element that\n"
+  "                       just defines a string to be promoted to a field\n"
+  "                       in parent table\n"
   );
 }
 
 char *globalPrefix = "";
 char *textField = "text";
+int maxPromoteSize=32;
 
 static struct optionSpec options[] = {
    {"prefix", OPTION_STRING},
    {"textField", OPTION_STRING},
+   {"maxPromoteSize", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -60,6 +65,7 @@ struct table
     FILE *tabFile;		/* Tab oriented file associated with table */
     struct hash *uniqHash;	/* Table to insure unique output. */
     struct assoc *assocList;    /* List of pending associations. */
+    boolean promoted;		/* If true table is promoted to be field in parent. */
     };
 
 struct field
@@ -74,7 +80,7 @@ struct field
     struct dtdAttribute *dtdAttribute;	/* Associated dtd attribute. */
     boolean isMadeUpKey;	/* True if it's a made up key. */
     boolean isPrimaryKey;	/* True if it's table's primary key. */
-    boolean isString;		/* Truf if it's a string field. */
+    boolean isString;		/* True if it's a string field. */
     };
 
 struct fieldRef
@@ -230,11 +236,12 @@ struct table *elsIntoTables(struct elStat *elList, struct hash *dtdHash)
 struct elStat *el;
 struct attStat *att;
 struct table *tableList = NULL, *table;
-struct field *field;
+struct field *field = NULL;
 
 for (el = elList; el != NULL; el = el->next)
     {
     struct dtdElement *dtdElement = hashFindVal(dtdHash, el->name);
+    int attCount = 0;
     if (dtdElement == NULL)
         errAbort("Element %s is in .stats but not in .dtd file", el->name);
     table = tableNew(dtdElement->mixedCaseName, el, dtdElement);
@@ -254,8 +261,17 @@ for (el = elList; el != NULL; el = el->next)
 	    }
 	field = addFieldToTable(table, name, mixedName, att, 
 		FALSE, TRUE, attIsString(att));
+	attCount += 1;
 	}
-    makePrimaryKey(table);
+    /* If the table is real simple we'll just promote it */
+    if (attCount == 1 && sameString(field->name, textField) 
+      && (field->attStat->maxLen < maxPromoteSize || !field->isString))
+	{
+        table->promoted = TRUE;
+	table->primaryKey = field;
+	}
+    else
+	makePrimaryKey(table);
     slAddHead(&tableList, table);
     }
 slReverse(&tableList);
@@ -308,11 +324,7 @@ parentStack[level] = elAsChild;
 
 for (i=level-1; i>= 0; i -= 1)
     if (elAsChild == parentStack[i])
-	{
-	warn("WARNING: self-referential data structure %s.", elAsChild->name);
-	warn("         Entering untested code.");
         return;	/* Avoid cycling on self. */
-	}
 
 /* Add new field in parent. */
 safef(linkUniqName, sizeof(linkUniqName), "%s.%s", 
@@ -555,82 +567,101 @@ char *primaryKeyVal = NULL;
 struct assoc *assoc;
 static struct dyString *uniq = NULL;
 
-if (text[0] != 0)
+if (table->promoted)	/* Simple case - copy text to parent table. */
     {
-    field = hashFindVal(table->fieldHash, textField);
-    if (field == NULL)
-        errAbort("No text for %s expected in dtd", table->name);
-    dyStringAppendEscapedForTabFile(contentStack[field->tablePos], text);
+    for (fieldRef = table->parentKeys; fieldRef != NULL; fieldRef = fieldRef->next)
+	{
+	field = fieldRef->field;
+	if (field->table == parentTable)
+	    {
+	    struct dyString **parentContent = contentStack + table->fieldCount;
+	    struct dyString *dy = parentContent[field->tablePos];
+	    if (!field->isString && text[0] == 0)
+	        text = "0";
+	    dyStringAppend(dy, text);
+	    break;
+	    }
+	}
     }
-
-/* Construct uniq string from fields, etc. */
-if (uniq == NULL)
-    uniq = dyStringNew(0);
 else
-    dyStringClear(uniq);
-for (field = table->fieldList; field != NULL; field = field->next)
     {
-    if (!(field->isPrimaryKey  && field->isMadeUpKey))
+    if (text[0] != 0)
 	{
-	struct dyString *dy = contentStack[field->tablePos];
-	if (dy->stringSize == 0 && !field->isString)
-	    dyStringAppendC(dy, '0');
-	dyStringAppendN(uniq, dy->string, dy->stringSize);
-	dyStringAppendC(uniq, '\t');
+	field = hashFindVal(table->fieldHash, textField);
+	if (field == NULL)
+	    errAbort("No text for %s expected in dtd", table->name);
+	dyStringAppendEscapedForTabFile(contentStack[field->tablePos], text);
 	}
-    }
-for (assoc = table->assocList; assoc != NULL; assoc = assoc->next)
-    {
-    dyStringPrintf(uniq, "%p\t%s\t", assoc->f, assoc->childKey);
-    }
 
-primaryKeyVal = hashFindVal(table->uniqHash, uniq->string);
-if (primaryKeyVal == NULL)
-    {
-    struct dyString *priDy = contentStack[table->primaryKey->tablePos];
-    if (table->madeUpPrimary)
-	{
-	table->lastId += 1;
-	dyStringPrintf(priDy, "%d", table->lastId);
-	}
-    primaryKeyVal = priDy->string;
+    /* Construct uniq string from fields, etc. */
+    if (uniq == NULL)
+	uniq = dyStringNew(0);
+    else
+	dyStringClear(uniq);
     for (field = table->fieldList; field != NULL; field = field->next)
-        {
-	struct dyString *dy = contentStack[field->tablePos];
-	fprintf(table->tabFile, "%s", dy->string);
-	if (field->next != NULL)
-	   fprintf(table->tabFile, "\t");
+	{
+	if (!(field->isPrimaryKey  && field->isMadeUpKey))
+	    {
+	    struct dyString *dy = contentStack[field->tablePos];
+	    if (dy->stringSize == 0 && !field->isString)
+		dyStringAppendC(dy, '0');
+	    dyStringAppendN(uniq, dy->string, dy->stringSize);
+	    dyStringAppendC(uniq, '\t');
+	    }
 	}
-    fprintf(table->tabFile, "\n");
-    hashAdd(table->uniqHash, uniq->string, cloneString(primaryKeyVal));
-    }
-for (fieldRef = table->parentKeys; fieldRef != NULL; fieldRef = fieldRef->next)
-    {
-    field = fieldRef->field;
-    if (field->table == parentTable)
-        {
-	struct dyString **parentContent = contentStack + table->fieldCount;
-	struct dyString *dy = parentContent[field->tablePos];
-	dyStringAppend(dy, primaryKeyVal);
-	break;
+    for (assoc = table->assocList; assoc != NULL; assoc = assoc->next)
+	{
+	dyStringPrintf(uniq, "%p\t%s\t", assoc->f, assoc->childKey);
 	}
-    }
 
-for (assocRef = table->parentAssocs; assocRef != NULL; 
-	assocRef = assocRef->next)
-    {
-    if (assocRef->parent == parentTable)
-        {
-	assoc = assocNew(assocRef->assoc->tabFile,
-	    primaryKeyVal);
-	slAddHead(&parentTable->assocList, assoc);
+    primaryKeyVal = hashFindVal(table->uniqHash, uniq->string);
+    if (primaryKeyVal == NULL)
+	{
+	struct dyString *priDy = contentStack[table->primaryKey->tablePos];
+	if (table->madeUpPrimary)
+	    {
+	    table->lastId += 1;
+	    dyStringPrintf(priDy, "%d", table->lastId);
+	    }
+	primaryKeyVal = priDy->string;
+	for (field = table->fieldList; field != NULL; field = field->next)
+	    {
+	    struct dyString *dy = contentStack[field->tablePos];
+	    fprintf(table->tabFile, "%s", dy->string);
+	    if (field->next != NULL)
+	       fprintf(table->tabFile, "\t");
+	    }
+	fprintf(table->tabFile, "\n");
+	hashAdd(table->uniqHash, uniq->string, cloneString(primaryKeyVal));
 	}
-    }
+    for (fieldRef = table->parentKeys; fieldRef != NULL; fieldRef = fieldRef->next)
+	{
+	field = fieldRef->field;
+	if (field->table == parentTable)
+	    {
+	    struct dyString **parentContent = contentStack + table->fieldCount;
+	    struct dyString *dy = parentContent[field->tablePos];
+	    dyStringAppend(dy, primaryKeyVal);
+	    break;
+	    }
+	}
 
-slReverse(&table->assocList);
-for (assoc = table->assocList; assoc != NULL; assoc = assoc->next)
-    fprintf(assoc->f, "%s\t%s\n", primaryKeyVal, assoc->childKey);
-assocFreeList(&table->assocList);
+    for (assocRef = table->parentAssocs; assocRef != NULL; 
+	    assocRef = assocRef->next)
+	{
+	if (assocRef->parent == parentTable)
+	    {
+	    assoc = assocNew(assocRef->assoc->tabFile,
+		primaryKeyVal);
+	    slAddHead(&parentTable->assocList, assoc);
+	    }
+	}
+
+    slReverse(&table->assocList);
+    for (assoc = table->assocList; assoc != NULL; assoc = assoc->next)
+	fprintf(assoc->f, "%s\t%s\n", primaryKeyVal, assoc->childKey);
+    assocFreeList(&table->assocList);
+    }
 contentStack += table->fieldCount;
 }
 
@@ -807,18 +838,24 @@ makeDir(outDir);
 /* Make table creation SQL files. */
 for (table = tableList; table != NULL; table = table->next)
     {
-    safef(outFile, sizeof(outFile), "%s/%s.sql", 
-      outDir, table->name);
-    writeCreateSql(outFile, table);
+    if (!table->promoted)
+	{
+	safef(outFile, sizeof(outFile), "%s/%s.sql", 
+	  outDir, table->name);
+	writeCreateSql(outFile, table);
+	}
     }
 verbose(2, "Made sql table creation files\n");
 
 /* Set up output directory and open tab-separated files. */
 for (table = tableList; table != NULL; table = table->next)
     {
-    safef(outFile, sizeof(outFile), "%s/%s.tab", 
-      outDir, table->name);
-    table->tabFile = mustOpen(outFile, "w");
+    if (!table->promoted)
+	{
+	safef(outFile, sizeof(outFile), "%s/%s.tab", 
+	  outDir, table->name);
+	table->tabFile = mustOpen(outFile, "w");
+	}
     }
 verbose(2, "Created output files.\n");
 
@@ -840,6 +877,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 globalPrefix = optionVal("prefix", globalPrefix);
 textField = optionVal("textField", textField);
+maxPromoteSize = optionInt("maxPromoteSize", maxPromoteSize);
 if (argc != 5)
     usage();
 xmlToSql(argv[1], argv[2], argv[3], argv[4]);
