@@ -1257,20 +1257,24 @@ getSeqs.csh $(path1)
     # clean up 
     rm *.bak
 
-# ENSEMBL GENES (DONE, 2005-07-29, hartera)
+# ENSEMBL GENES (DONE, 2005-07-29, hartera) 
     ssh hgwdev  
     mkdir -p /cluster/data/danRer3/bed/ensembl
     cd /cluster/data/danRer3/bed/ensembl
-    # Get the ensembl protein data from
+    # Get the Ensembl gene data from
     # http://www.ensembl.org/Multi/martview
     # Follow this sequence through the pages: (NOTE: this interface has changed
     # a little since danRer2)
     # Page 1) Select the Ensembl dataset (32 here) and the 
-    # Danio_rerio choice (ZFISH5 here). Hit next.
+    # Danio_rerio choice (ZFISH5 here). Hit next. 22877 entries total.
+    # Ensembl 35 now (2005-11-23) and this is the same as for the version 32
+    # downloaded as above.
     # Page 2) Then hit next.
     # Page 3) Choose the "Structures" Attribute Page from the pulldown menu
-    # at the top. Choose GTF as the output. Choose gzip compression.  
-    # hit export. Save as ensemblGene.gtf.gz
+    # at the top. Make sure that under the GENE section, the Ensembl 
+    # Attributes checked include the Ensembl Gene ID and Ensembl 
+    # Transcript ID. Choose GTF as the output. Choose gzip compression.  
+    # Hit export. Save as ensemblGene35.gtf.gz
 
     # the Ensembl gene predictions are mapped to chromosomes except for 
     # chrNA and chrUn. Use lift files for scaffolds to these chroms.
@@ -4672,17 +4676,23 @@ close STDERR;
 # Longest finished job:            1369s      22.82m     0.38h    0.02d
 # Submission to last job:          3150s      52.50m     0.88h    0.04d
 
-# SELF BLASTZ (in progress, 2005-10-24, hartera)
+# SELF BLASTZ, CHAIN, NET, AXTNET, MAFNET AND DOWNLOADS
+# (DONE, 2005-12-02, hartera)
     ssh pk
-    mkdir -p /cluster/data/danRer3/bed/blastzSelf.2005-10-24
+    mkdir -p /cluster/data/danRer3/bed/blastzSelf.2005-11-30
     cd /cluster/data/danRer3/bed
-    ln -s blastzSelf.2005-10-24 blastzSelf
+    ln -s blastzSelf.2005-11-30 blastzSelf
     cd /cluster/data/danRer3/bed/blastzSelf
-    # make run and out directories on the san
-    mkdir -p /san/sanvol1/scratch/danRer3/blastzSelf/chromsAndScafsRun
-    mkdir -p /san/sanvol1/scratch/danRer3/blastzSelf/chromsAndScafsOut
-    ln -s /san/sanvol1/scratch/danRer3/blastzSelf/chromsAndScafsRun
-    ln -s /san/sanvol1/scratch/danRer3/blastzSelf/chromsAndScafsOut
+    # make run directory on the san
+    mkdir -p /san/sanvol1/scratch/danRer3/blastzSelf/chromsRun
+    ln -s /san/sanvol1/scratch/danRer3/blastzSelf/chromsRun
+    # make 2 bit file of chr1-25 and chrM
+    cd /cluster/data/danRer3
+    faToTwoBit [1-9]/chr*.fa [12][0-9]/chr*.fa M/chrM.fa \
+        /san/sanvol1/scratch/danRer3/danRer3Chroms1to25andM.2bit
+    cd /cluster/data/danRer3/bed/blastzSelf/chromsRun
+    twoBitInfo /san/sanvol1/scratch/danRer3/danRer3Chroms1to25andM.2bit S1.len
+    cp S1.len S2.len
     cat << '_EOF_' > DEF
 # zebrafish vs zebrafish
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
@@ -4694,67 +4704,159 @@ BLASTZ_M=50
 BLASTZ_ABRIDGE_REPEATS=0
                                                                                 
 # TARGET: Zebrafish danRer3
-SEQ1_DIR=/san/sanvol1/scratch/danRer3/danRer3.2bit
-SEQ1_CTGDIR=/san/sanvol1/scratch/danRer3/nib
+SEQ1_DIR=/san/sanvol1/scratch/danRer3/danRer3Chroms1to25andM.2bit
 SEQ1_IN_CONTIGS=0
 SEQ1_LIMIT=30
 SEQ1_CHUNK=500000
 SEQ1_LAP=5000
                                                                                 
 # QUERY: Zebrafish danRer3
-SEQ2_DIR=/san/sanvol1/scratch/danRer3/danRer3.2bit
-SEQ2_CTGDIR=/san/sanvol1/scratch/danRer3/danRer3ChrUnNAScafs.2bit
-SEQ2_LIFT=/san/sanvol1/scratch/danRer3/liftNAandUnScaffoldsToChrom.lft
+SEQ2_DIR=/san/sanvol1/scratch/danRer3/danRer3Chroms1to25andM.2bit
 SEQ2_SELF=1
 SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=1800000000
 SEQ2_LAP=0
 
-BASE=/san/sanvol1/scratch/danRer3/blastzSelf/chromsAndScafsRun
+BASE=/san/sanvol1/scratch/danRer3/blastzSelf/chromsRun
                                                                                 
 DEF=$BASE/DEF
 RAW=$BASE/raw
 CDBDIR=$BASE
 SEQ1_LEN=$BASE/S1.len
 SEQ2_LEN=$BASE/S2.len
-SEQ2_CTGLEN=$BASE/chromsUnNAScafs.len
 TMPDIR=/scratch/tmp
 '_EOF_'
-
     chmod +x DEF
-    cat /cluster/data/danRer3/chrom.sizes | sort -k2,2nr > S1.len
-    twoBitInfo /san/sanvol1/scratch/danRer3/danRer3.2bit stdout \
-        | sort -k2,2nr > S2.len
-    twoBitInfo /san/sanvol1/scratch/danRer3/danRer3ChrUnNAScafs.2bit stdout \
-        | sort -k2,2nr > chromsUnNAScafs.len
     ssh hgwdev
-    cd /cluster/data/danRer3/bed/blastzSelf/chromsAndScafsRun
+    cd /cluster/data/danRer3/bed/blastzSelf/chromsRun
     nice /cluster/bin/scripts/doBlastzChainNet.pl \
          -bigClusterHub=pk \
          -smallClusterHub=pk \
          -workhorse=pk \
          -fileServer=kolossus \
-         -stop cat \
-         `pwd`/DEF >& doBlastzCat.log &
-    # Start: Mon Oct 24 11:32 Finish: Oct 24 23:47
-# para time (blastz)
-# Completed: 3302 of 3302 jobs
-# CPU time in finished jobs:    9072436s  151207.27m  2520.12h  105.01d  0.288 y
-# IO & Wait Time:                855446s   14257.43m   237.62h    9.90d  0.027 y
-# Average job time:                3007s      50.11m     0.84h    0.03d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            4315s      71.92m     1.20h    0.05d
-# Submission to last job:         43798s     729.97m    12.17h    0.51d 
-    # All worked fine so carry on with chaining and netting.
-    nice /cluster/bin/scripts/doBlastzChainNet.pl \
-         -bigClusterHub=pk \
-         -smallClusterHub=pk \
-         -workhorse=pk \
-         -fileServer=kolossus \
-         -continue chainRun \
          -chainMinScore=5000 \
-         `pwd`/DEF >& doChainNet.log &
-    # Start: Tue Oct 25 14:27 Finished: 05:55
+         -chainLinearGap=medium \
+         `pwd`/DEF >& do.log &
+    # Start: Wed Nov 30 17:07 Finish: Thur Dec  1 06:51
+    # Crashed at downloads step as these exist from previous run so remove
+    rm -r /usr/local/apache/htdocs/goldenPath/danRer3/vsSelf 
+# para time (blastz)
+# Completed: 2425 of 2425 jobs
+# CPU time in finished jobs:    4783120s   79718.66m  1328.64h   55.36d  0.152 y
+# IO & Wait Time:                108014s    1800.24m    30.00h    1.25d  0.003 y
+# Average job time:                2017s      33.62m     0.56h    0.02d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            2762s      46.03m     0.77h    0.03d
+# Submission to last job:         14993s     249.88m     4.16h    0.17d
+
+# para time (axtChain)
+# Completed: 26 of 26 jobs
+# CPU time in finished jobs:      96405s    1606.74m    26.78h    1.12d  0.003 y
+# IO & Wait Time:                   731s      12.19m     0.20h    0.01d  0.000 y
+# Average job time:                3736s      62.27m     1.04h    0.04d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            7405s     123.42m     2.06h    0.09d
+# Submission to last job:          7411s     123.52m     2.06h    0.09d
+
+    # Carry on from downloads step.
+    cd /cluster/data/danRer3/bed/blastzSelf/chromsRun
+    nice /cluster/bin/scripts/doBlastzChainNet.pl \
+         -bigClusterHub=pk \
+         -smallClusterHub=pk \
+         -workhorse=pk \
+         -fileServer=kolossus \
+         -continue download \
+         -chainMinScore=5000 \
+         -chainLinearGap=medium \
+         `pwd`/DEF >& doDownloads.log &
+    # Took 2 minutes. 
+# check trackDb entry exists. Put html at danRer3 level of trackDb and edit
+# these and the downloads README to state that chrNA and chrUn were not 
+# aligned for this track.
+
+# Original run with loose linear gap matrix and scaffolds for chrNA and chrUn
+# done 2005-10-26.
+# filtering chains from above on minScore 10,000. done 2005-11-18
+# Using the medium linear gap matrix for axtChain. minScore=5,000. 
+# done 2005-11-30.
+# chainSelf - loose linearGap matrix, filtered minScore=5000
+# chainSelfFilt10k - loose linearGap matrix, filtered minScore=10000
+# chainSelfMedGap - medium linearGap matrix, filtered minScore=5000
+# featureBits -chrom=chr1 danRer3 refGene:cds chainSelfLink -enrichment
+# refGene:cds 0.743%, chainSelfLink 65.056%, both 0.560%, cover 75.29%, 
+# enrich 1.16x
+
+# featureBits -chrom=chr1 danRer3 refGene:cds chainSelfFilt10kLink -enrichment
+# refGene:cds 0.743%, chainSelfFilt10kLink 64.019%, both 0.554%, cover 74.54%, 
+# enrich 1.16x
+# number of rows in tables for chr1:
+
+# chainSelf          	941416
+# chainSelfFilt10k	530292
+# chainSelfMedGap	997525			
+# chainSelfLink		9110071
+# chainSelfFilt10kLink	7226815
+# chainSelfMedGapLink	9149100
+
+# featureBits -chrom=chr1 danRer3 refGene:cds chainSelfMedGapLink -enrichment
+# refGene:cds 0.743%, chainSelfMedGapLink 64.525%, both 0.549%, cover 73.80%, 
+# enrich 1.14x
+
+# so the medium linearGap matrix increases the number of chains by about 5% 
+# but coverage is little different.
+# for the chains filtered with  minScore=10000
+# 12192577 chains out of 17592225 do not have chrNA or chrUn as query or 
+# target which is about 69%. 
+# 12192577 out of 12807964 do not have chrNA or chrUn as the query for just
+# chr1-25 and chrM which is about 95%.
+# so make the chains without chrNA and chrUn and using the medium linearGap
+# matrix which is for species that are not so distant.
+# 2005-12-02
+# medium linearGap matrix for axtChain, minScore=5000 and no chrNA or chrUn.
+# number of rows in tables for chr1:
+# chainSelf 	943482
+# chainSelfLink 8707208
+# featureBits -chrom=chr1 danRer3 refGene:cds chainSelfLink -enrichment
+# refGene:cds 0.743%, chainSelfLink 60.876%, both 0.503%, cover 67.65%, 
+# enrich 1.1
+# coverage dropped about 8% without chrNA and chUn alignments so not a 
+# huge difference.
+
+# KNOWN GENES BASED ON ENSEMBL GENES (in progress, 2005-11-23, hartera)
+    # compare the Ensembl and Human Proteins tracks
+    featureBits danRer3 refGene:cds ensGene:cds -enrichment
+# refGene:cds 0.658%, ensGene:cds 1.994%, both 0.589%, cover 89.60%, 
+# enrich 44.94x
+    featureBits danRer3 refGene:cds blastHg17KG -enrichment
+# refGene:cds 0.658%, blastHg17KG 1.292%, both 0.385%, cover 58.52%, 
+# enrich 45.30x
+    # little difference in enrichment and less coverage for Human Proteins so
+    # it seems like Ensembl is the best choice in terms of genome coverage
+    # and intersection with RefSeq CDS regions.
+    ssh kkstore02
+    mkdir -p /cluster/data/danRer3/bed/knownGenes
+    cd /cluster/data/danRer3/bed/knownGenes
+    # use Ensembl's BioMart to download the Ensembl Genes UniProt IDs and
+    # descriptions. For genes with no description, use the InterPro domain.
+    # Go to http://www.ensembl.org/Multi/martview
+    # Follow this sequence through the pages: 
+    # Page 1) Select the Ensembl dataset (35 here) and the 
+    # Danio_rerio choice (ZFISH5 here). Hit next. 22877 entries total.
+    # Ensembl 35 now (2005-11-23) - this dataset is the same as for the 
+    # version 32 downloaded as above for the Ensembl Genes track.
+    # Page 2) Then hit next.
+    # Page 3) Choose the "Features" Attribute Page from the pulldown menu
+    # at the top. Make sure that under the GENE section, the Ensembl 
+    # Attributes checked include the Ensembl Gene ID, Ensembl Transcript ID,
+    # Biotype and Description. Under External References, select Unified 
+    # UniProt accession, PDB ID and ZFIN Primary ID. Under the Protein 
+    # section, select InterPro ID and InterPro Description under InterPro 
+    # Attributes. Select text, tab-separated for output. Choose gzip 
+    # compression. Hit export. Save as ensGene35Desc.tsv.gz
+   
+    gunzip ensGene35Desc.tsv.gz  
+    # need to make a table of known Gene information for Ensembl
+
 # STS MARKERS (in progress, 2005-10-13, hartera)
     # DOWNLOADED RECENTLY FROM NCBI
     ssh kkstore02
