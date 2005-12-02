@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.72 2005/11/07 22:36:29 galt Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.73 2005/12/02 19:34:22 galt Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -118,6 +118,8 @@ struct mimePart *mp = NULL;
 char **env = NULL;
 struct hash *hash = newHash(6);
 struct cgiVar *list = NULL, *el;
+extern char **environ;
+
 
 //debug
 //fprintf(stderr,"GALT: top of cgiParseMultipart()\n");
