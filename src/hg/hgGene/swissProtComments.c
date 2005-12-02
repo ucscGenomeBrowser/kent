@@ -7,7 +7,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: swissProtComments.c,v 1.8 2003/11/12 18:47:21 kent Exp $";
+static char const rcsid[] = "$Id: swissProtComments.c,v 1.9 2005/12/02 23:56:48 fanhsu Exp $";
 
 struct spComment
 /* Swiss prot comment. */
@@ -92,7 +92,12 @@ static void swissProtCommentsPrint(struct section *section,
 struct spComment *com;
 char *acc = swissProtAcc;
 char *description = spDescription(spConn, acc);
-char *id = spAccToId(spConn, acc);
+char *id = spAccToId2(spConn, acc);
+if (id == NULL)
+    {
+    errAbort("<br>%s seems no longer a valid protein ID in our latest UniProt DB.", acc);
+    }
+			    
 hPrintf("<B>ID:</B> ");
 hPrintf("<A HREF=\"http://us.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>", acc);
 hPrintf("%s</A><BR>\n", id);
