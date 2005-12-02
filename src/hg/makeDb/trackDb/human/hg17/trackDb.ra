@@ -1509,7 +1509,7 @@ track exoniphy
 shortLabel Exoniphy 
 longLabel Exoniphy Human/Mouse/Rat, Lifted from Hg16
 group genes
-priority 50.9
+priority 50.91
 visibility hide
 color 173,17,162
 type genePred
@@ -1518,7 +1518,7 @@ track exoniphyGene
 shortLabel Exoniphy Genes
 longLabel Predicted Genes and Gene Fragments from Exoniphy Exons (Human/Mouse/Rat)
 group genes
-priority 50.9
+priority 50.92
 visibility hide
 color 173,17,162
 type genePred
