@@ -12,7 +12,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.28 2005/12/03 19:27:18 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.29 2005/12/03 20:02:09 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -302,6 +302,8 @@ while (lineFileNextReal(lf, &line))
     {
     word = nextWord(&line);
     line = skipLeadingSpaces(line);
+    if (line == NULL)
+        errAbort("Missing cookie value line %d of %s", lf->lineIx, lf->fileName);
     AllocVar(cookie);
     cookie->name = cloneString(word);
     cookie->value = cloneString(line);
