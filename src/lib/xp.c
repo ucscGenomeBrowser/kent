@@ -13,7 +13,7 @@
 #include "xp.h"
 #include "xmlEscape.h"
 
-static char const rcsid[] = "$Id: xp.c,v 1.11 2005/12/02 22:10:34 kent Exp $";
+static char const rcsid[] = "$Id: xp.c,v 1.12 2005/12/03 08:00:45 kent Exp $";
 
 
 char xpNextBuf(struct xp *xp)
@@ -180,6 +180,45 @@ else
     dyStringAppend(text, s);
     }
 }
+
+void xpForceMatch(struct xp *xp, char *matchString)
+/* Make sure that the next characters are match, and eat them. */
+{
+char *match = matchString, m;
+while ((m = *match++) != 0)
+    {
+    if (m != xpGetChar(xp))
+        xpError(xp, "Expecting %s", matchString);
+    }
+}
+
+void xpTextUntil(struct xp *xp, char *endPattern)
+/* Stuff xp->text with everything up to endPattern. */
+{
+int endSize = strlen(endPattern);
+int endPos = 0;
+char c;
+struct dyString *dy = xp->stack->text;
+for (;;)
+    {
+    if ((c = xpGetChar(xp)) == 0)
+	xpUnexpectedEof(xp);
+    if (c == endPattern[endPos])
+        {
+	endPos += 1;
+	if (endPos == endSize)
+	    return;
+	}
+    else
+        {
+	if (endPos > 0)
+	    dyStringAppendN(dy, endPattern, endPos);
+	dyStringAppendC(dy, c);
+	endPos = 0;
+	}
+    }
+}
+
 
 void xpRecurseParse(struct xp *xp)
 /* Parse from start tag to end tag.  Throw error if a problem.
@@ -448,8 +487,24 @@ else
 		xpError(xp, "Mismatch between start tag %s and end tag %s",  stack->tag->string, dy->string);
 	    break;
 	    }
-	else if (c == '?' || c == '!')
+	else if (c == '?')
 	    xpEatComment(xp, c);
+	else if (c == '!')
+	    {
+	    if ((c = xpGetChar(xp)) == 0)
+		xpUnexpectedEof(xp);
+	    if (c == '[')
+	        {
+		/* Cope with <![CDATA[  ...  ]]> */
+		xpForceMatch(xp, "CDATA[");
+		xpTextUntil(xp, "]]>");
+		}
+	    else
+	        {
+		xpUngetChar(xp);
+		xpEatComment(xp, '!');
+		}
+	    }
 	else
 	    {
 	    xpUngetChar(xp);
