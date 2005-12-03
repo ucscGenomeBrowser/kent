@@ -23,6 +23,7 @@ visibility pack
 color 0,100,100
 type genePred gpProtCodePep
 
+# Old Genbank ORF track
 #track gbProtCode
 #shortLabel GenBank CDS
 #longLabel GenBank protein-coding genes
@@ -79,18 +80,18 @@ color 0,0,0
 altColor 255,128,0
 type bed 6 +
 
-track rnaGenes
+track tRNAs
 shortLabel tRNA genes
 longLabel tRNA genes from tRNAscan-SE
 group genes
 priority 2.50
 visibility dense
-color 160,40,40
+color 0,20,150
 type bed 6 +
 
 track gbRNAs
 shortLabel Genbank ncRNAs
-longLabel All Annot GenBank RNAs
+longLabel Annotated Genbank ncRNAs
 group genes
 priority 2.51
 visibility dense
@@ -183,34 +184,52 @@ color 136,38,193
 altColor 255,128,0
 type wig 0 1
 
-#searchName gbProtCodeName searchTable gbProtCode searchType bed
-#searchMethod prefix searchDescription Genbank Protein-coding Genes
-#searchPriority 20
+searchName refSeqName 
+searchTable refSeq 
+searchType genePred
+searchMethod exact 
+searchPriority 18
 
-#searchName gbProtCodeAnnoteProduct
-#searchTable gbProtCode
-#searchType bed
-#searchMethod fuzzy
-#xrefTable gbProtCodeXra
-#xrefQuery select name,product from %s where product like '%%%s%%'
-#searchPriority 21
+searchName refSeqGeneName
+searchTable refSeq 
+searchType genePred
+searchMethod prefix 
+xrefTable gbProtCodeXra
+xrefQuery select name,gene from %s where gene like '%s%%'
+searchPriority 20
 
-#searchName gbProtCodeAnnoteNote
-#searchTable gbProtCode
-#searchType bed
-#searchMethod fuzzy
-#xrefTable gbProtCodeXra
-#xrefQuery select name,note from %s where note like '%%%s%%'
-#searchPriority 22
+searchName refSeqProduct 
+searchTable refSeq 
+searchType genePred
+searchMethod fuzzy 
+xrefTable gbProtCodeXra
+xrefQuery select name,product from %s where product like '%%%s%%'
+searchPriority 20
 
-#searchName gbProtCodeCOGName
-#searchTable gbProtCode
-#searchType bed
-#searchMethod exact
-#xrefTable COG
-#xrefQuery select name,COG from %s where COG like '%s'
-#searchDescription COG name search
-#searchPriority 23
+searchName refSeqNote
+searchTable refSeq 
+searchType genePred
+searchMethod fuzzy 
+xrefTable gbProtCodeXra
+xrefQuery select name,note from %s where note like '%%%s%%'
+searchPriority 20
+
+searchName refSeqProtein 
+searchTable refSeq 
+searchType genePred
+searchMethod prefix
+xrefTable gbProtCodeXra
+xrefQuery select name,protein from %s where protein like '%s%%'
+searchPriority 20
+
+searchName COGName
+searchTable refSeq
+searchType genePred
+searchMethod exact
+xrefTable COG
+xrefQuery select name,COG from %s where COG like '%s'
+searchDescription COG name search
+searchPriority 23
 
 searchTable Rfam
 searchType bed
@@ -223,6 +242,14 @@ searchType bed
 searchMethod fuzzy
 query select chrom,chromStart,chromEnd,tigrCommon from %s where tigrCommon like '%%%s%%'
 searchDescription Common Name of TIGR Locus
+searchPriority 61
+
+searchName tigrCmrORFsTigrGene
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,tigrGene from %s where tigrGene like '%%%s%%'
+searchDescription TIGR Gene Name
 searchPriority 61
 
 searchName tigrCmrORFsPrimLocus
@@ -251,7 +278,31 @@ searchPriority 63
 
 searchTable igenics
 searchType bed
-searchMethod prefix
+searchMethod exact
 searchDescription Intergenics on microarray
 searchPriority 70
+
+searchTable tRNAs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
+searchDescription tRNAscan-SE tRNA Name
+searchPriority 63
+
+searchName gbRNAs-product
+searchTable gbRNAs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,product from %s where product like '%%%s%%'
+searchDescription Genbank ncRNAs
+searchPriority 64
+
+searchName gbRNAs-name
+searchTable gbRNAs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,name from %s where name like '%%%s%%'
+searchDescription Genbank ncRNAs
+searchPriority 64
+
 
