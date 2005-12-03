@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.14 2005/12/01 06:41:31 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.15 2005/12/03 13:26:52 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -315,6 +315,38 @@ for (el = list; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
+void lookupObserved(struct snp125 *list)
+/* get observed and molType from snpFasta table */
+{
+struct snp125 *el;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char rsName[64];
+
+verbose(1, "looking up observed...\n");
+for (el = list; el != NULL; el = el->next)
+    {
+    if (sameString(el->chrom, "ERROR")) continue;
+    strcpy(rsName, "rs");
+    strcat(rsName, el->name);
+    safef(query, sizeof(query), "select molType, observed from snpFasta where rsId = '%s'", rsName);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row == NULL)
+        {
+        el->observed = "n/a";
+	el->molType = "unknown";
+	continue;
+	}
+    el->molType = cloneString(row[0]);
+    el->observed = cloneString(row[1]);
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+}
+
 void lookupRefAllele(struct snp125 *list)
 /* get reference allele from nib files */
 {
@@ -370,8 +402,8 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "%s\t", el->strand);
     fprintf(f, "%s\t", el->refNCBI);
     fprintf(f, "%s\t", el->refUCSC);
-    fprintf(f, "N\t");
-    fprintf(f, "unknown\t");
+    fprintf(f, "%s\t", el->observed);
+    fprintf(f, "%s\t", el->molType);
     fprintf(f, "%s\t", el->class);
     fprintf(f, "unknown\t");
     fprintf(f, "%f\t", el->avHet);
@@ -456,6 +488,7 @@ list = readSnps();
 lookupContigs(list);
 lookupFunction(list);
 lookupHet(list);
+lookupObserved(list);
 lookupRefAllele(list);
 
 verbose(1, "sorting\n");
