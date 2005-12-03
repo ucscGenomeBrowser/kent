@@ -5,7 +5,7 @@
 #include "linefile.h"
 #include "snpFasta.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.1 2005/12/03 12:10:27 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.2 2005/12/03 12:13:56 heather Exp $";
 
 static char *database = NULL;
 
@@ -92,7 +92,7 @@ FILE *f = hgCreateTabFile(".", "snpFasta");
 writeSnpFastaTable(f);
 
 // index length is useless here
-snpFastaTableCreate(conn, hGetMinIndexLength());
+snpFastaTableCreate(conn, 32);
 
 hgLoadTabFile(conn, ".", "snpFasta", &f);
 hFreeConn(&conn);
