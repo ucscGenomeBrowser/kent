@@ -43,6 +43,10 @@ char dyStringAppendC(struct dyString *ds, char c);
 void dyStringAppendMultiC(struct dyString *ds, char c, int n);
 /* Append N copies of char to end of string. */ 
 
+void dyStringAppendEscapeQuotes(struct dyString *dy, char *string, 
+	char quot, char esc);
+/* Append escaped-for-quotation version of string to dy. */
+
 void dyStringVaPrintf(struct dyString *ds, char *format, va_list args);
 /* VarArgs Printf to end of dyString. */
 

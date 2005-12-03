@@ -6,7 +6,7 @@
 #include "common.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dystring.c,v 1.18 2005/11/27 17:05:22 kent Exp $";
+static char const rcsid[] = "$Id: dystring.c,v 1.19 2005/12/03 08:01:41 kent Exp $";
 
 struct dyString *newDyString(int initialBufSize)
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */
@@ -118,6 +118,20 @@ void dyStringAppend(struct dyString *ds, char *string)
 /* Append zero terminated string to end of dyString. */
 {
 dyStringAppendN(ds, string, strlen(string));
+}
+
+void dyStringAppendEscapeQuotes(struct dyString *dy, char *string, 
+	char quot, char esc)
+/* Append escaped-for-quotation version of string to dy. */
+{
+char c;
+char *s = string;
+while ((c = *s++) != 0)
+     {
+     if (c == quot)
+         dyStringAppendC(dy, esc);
+     dyStringAppendC(dy, c);
+     }
 }
 
 void dyStringVaPrintf(struct dyString *ds, char *format, va_list args)
