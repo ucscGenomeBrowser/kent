@@ -127,5 +127,14 @@ mimeBlat: ${BIN_DIR}/mimeTester mkdirs
 	diff expected/$@.out output/$@.out
 
 	
+
+${BIN_DIR}/htmlMimeTest:  mkdirs htmlMimeTest.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/htmlMimeTest htmlMimeTest.o ${MYLIBS} $L
+
+htmlMime1: ${BIN_DIR}/htmlMimeTest mkdirs
+	${BIN_DIR}/htmlMimeTest http://hgwdev.cse.ucsc.edu/cgi-bin/hgBlat input/htmlMime.txt 3490 3502 > output/$@.out
+	diff expected/$@.out output/$@.out
+
+
 clean:
 	rm -rf *.o bin output *.tmp

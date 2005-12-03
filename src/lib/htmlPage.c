@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.20 2005/04/14 20:24:11 heather Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.21 2005/12/03 10:52:12 galt Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1073,6 +1073,73 @@ dyStringAppend(dy, enc);
 freez(&enc);
 }
 
+#define MIMEBOUNDARY "----------HtMlPaGe"
+#define MIMEBUFSIZE 4096
+
+static void appendMimeVar(struct dyString *dy, char *name, char *value, char *varType)
+/* Append cgiVar with cgi-encoded value to dy. */
+{
+char *fileName = NULL;
+
+if (value == NULL)
+    value = "";
+dyStringAppend(dy, "\r\n--");
+dyStringAppend(dy, MIMEBOUNDARY);
+dyStringAppend(dy, "\r\n");
+dyStringAppend(dy, "content-disposition: form-data; name=\"");
+dyStringAppend(dy, name);
+dyStringAppend(dy, "\"");
+
+if (varType && sameWord(varType, "FILE"))
+    {
+    fileName = strrchr(value,'/'); 
+    if (fileName)
+	++fileName;
+    else
+	fileName = value;
+    dyStringAppend(dy, "; filename=\"");
+    dyStringAppend(dy, fileName);
+    dyStringAppend(dy, "\"");
+    }
+dyStringAppend(dy, "\r\n");
+dyStringAppend(dy, "\r\n");
+if (varType && sameWord(varType, "FILE") && !sameWord(value,""))
+    {
+    FILE *f = mustOpen(value, "r");
+    char buf[MIMEBUFSIZE];
+    int bytesRead = 0;
+    do
+	{
+	bytesRead = fread(buf,1,MIMEBUFSIZE,f);
+	if (bytesRead < 0)
+	    errnoAbort("error reading file to upload %s",value);
+    	dyStringAppendN(dy, buf, bytesRead);
+	}
+    while(bytesRead > 0);
+    carefulClose(&f);
+    }
+else    
+    dyStringAppend(dy, value);
+}
+
+static void appendMimeTerminus(struct dyString *dy)
+/* Append MIME boundary terminator to dy. */
+{
+dyStringAppend(dy, "\r\n--");
+dyStringAppend(dy, MIMEBOUNDARY);
+dyStringAppend(dy, "--\r\n");
+}
+
+static boolean mimeEncoding(struct htmlForm *form)
+/* determine if the form is using MIME encoding */
+{
+struct htmlAttribute *a;
+for(a = form->startTag->attributes;a;a = a->next)
+    if (sameWord(a->name,"ENCTYPE") && sameWord(a->val,"multipart/form-data"))
+	return TRUE;
+return FALSE;
+}
+
 char *htmlFormCgiVars(struct htmlPage *page, struct htmlForm *form, 
 	char *buttonName, char *buttonVal)
 /* Return cgi vars in name=val format from use having pressed
@@ -1080,10 +1147,11 @@ char *htmlFormCgiVars(struct htmlPage *page, struct htmlForm *form,
 {
 struct dyString *dy = newDyString(0);
 struct htmlFormVar *var;
+boolean isMime = mimeEncoding(form);
 
 if (form == NULL)
     form = page->forms;
-if (buttonName != NULL)
+if (buttonName != NULL && !isMime)
     appendCgiVar(dy, buttonName, buttonVal);
 for (var = form->vars; var != NULL; var = var->next)
     {
@@ -1097,14 +1165,28 @@ for (var = form->vars; var != NULL; var = var->next)
 	char *val = var->curVal;
 	if (val == NULL)
 	    val = "";
-	appendCgiVar(dy, var->name, val);
+	if (isMime)	    
+	    appendMimeVar(dy, var->name, val, var->type);
+	else	    
+    	    appendCgiVar(dy, var->name, val);
 	}
     else if (var->type != NULL && sameWord(var->type, "CHECKBOX"))
         {
 	if (var->curVal != NULL)
-	    appendCgiVar(dy, var->name, var->curVal);
+	    {
+	    if (isMime)	    
+		appendMimeVar(dy, var->name, var->curVal, var->type);
+    	    else	    
+		appendCgiVar(dy, var->name, var->curVal);
+	    }
+	}
+    else if (buttonName && sameWord(buttonName,var->name))
+	{
+	appendMimeVar(dy, buttonName, buttonVal, NULL);
 	}
     }
+if (isMime)	    
+    appendMimeTerminus(dy);
 return dyStringCannibalize(&dy);
 }
 
@@ -1140,6 +1222,7 @@ char *url = htmlExpandUrl(origPage->url, form->action);
 char *cgiVars = NULL;
 int contentLength = 0;
 int sd = -1;
+boolean isMime = mimeEncoding(form);
 
 dyStringAppend(dyUrl, url);
 cookieOutput(dyHeader, origPage->cookies);
@@ -1156,14 +1239,22 @@ else if (sameWord(form->method, "POST"))
     {
     cgiVars = htmlFormCgiVars(origPage, form, buttonName, buttonVal);
     /* remove question mark from beginning */
-    stripChar(cgiVars, '?');
+    if (!isMime)
+    	stripChar(cgiVars, '?');
     contentLength = strlen(cgiVars);
     verbose(3, "POST %s\n", dyUrl->string);
     sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
     dyStringPrintf(dyHeader, "Content-length: %d\r\n", contentLength);
+    if (isMime)
+    	dyStringPrintf(dyHeader, "Content-type: multipart/form-data, boundary=%s\r\n",MIMEBOUNDARY);
     dyStringAppend(dyHeader, "\r\n");
     write(sd, dyHeader->string, dyHeader->stringSize);
     write(sd, cgiVars, contentLength);
+    if (isMime && verboseLevel() == 2)
+	{
+	mustWrite(stderr, dyHeader->string, dyHeader->stringSize);
+    	mustWrite(stderr, cgiVars, contentLength);
+	}
     }
 dyText = netSlurpFile(sd);
 close(sd);
