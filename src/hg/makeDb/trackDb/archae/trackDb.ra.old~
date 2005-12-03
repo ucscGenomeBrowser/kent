@@ -1,0 +1,260 @@
+track gc20Base
+shortLabel GC Percent
+longLabel GC Percent in 20 Base Windows
+group map
+priority 1.7
+visibility full
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+windowingFunction Mean
+color 0,94,183
+altColor 255,128,0
+defaultViewLimits 0:100
+type wig 0 100
+
+track refSeq
+shortLabel Genbank RefSeq
+longLabel Genbank RefSeq Gene Annotations 
+group genes
+priority 2.1
+visibility pack
+color 0,100,100
+type genePred gpProtCodePep
+
+#track gbProtCode
+#shortLabel GenBank CDS
+#longLabel GenBank protein-coding genes
+#group genes
+#priority 2.1
+#visibility pack
+#color 40,40,160
+#altColor 255,0,0
+#type bed 6 .
+
+track llOperons
+shortLabel Extended Operons
+longLabel Extended Operon Predictions
+group genes
+priority 2.13
+visibility pack
+spectrum on
+type bed 12 .
+
+track easyGene
+shortLabel EasyGenes
+longLabel EasyGene 1.2 gene predictions
+group genes
+priority 2.12
+visibility dense
+spectrum on
+type bed 6 +
+
+track Rfam
+shortLabel Rfam
+longLabel Rfam noncoding RNA
+group genes
+priority 2.3
+visibility pack
+color 43,127,60
+type bed 6 .
+
+track tigrOperons
+shortLabel TIGR operons
+longLabel Operon predictions by TIGR
+group genes
+priority 2.12
+visibility pack
+spectrum on
+type bed 15 .
+
+track tigrCmrORFs
+shortLabel TIGR ORFs
+longLabel ORF annotation from TIGR
+group genes
+priority 2.15
+visibility dense
+color 0,0,0
+altColor 255,128,0
+type bed 6 +
+
+track rnaGenes
+shortLabel tRNA genes
+longLabel tRNA genes from tRNAscan-SE
+group genes
+priority 2.50
+visibility dense
+color 160,40,40
+type bed 6 +
+
+track gbRNAs
+shortLabel Genbank ncRNAs
+longLabel All Annot GenBank RNAs
+group genes
+priority 2.51
+visibility dense
+color 160,40,40
+type bed 6 +
+
+track igenics
+shortLabel Intergenics
+longLabel Intergenics on microarray
+group genes
+priority 2.63
+visibility hide
+type bed 6 .
+
+track sargassoSea
+shortLabel Sargasso Sea
+longLabel Conservation of proteins with tblastn against the sargasso sea
+group compGeno
+priority 4.51
+visibility dense
+type bed 6 .
+canPack off
+
+track codeBlast
+shortLabel BLASTP codes
+longLabel Conservation of proteins with BLASTP
+group compGeno
+priority 4.52
+visibility full
+type bed 6 +
+canPack off
+
+track promoterScanPos
+shortLabel Promoter +
+longLabel Log-odds scan for promoters on plus strand (15 base window)
+group regulation
+priority 8.1
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+defaultViewLimits 0.0:1.0
+color 44,201,52
+altColor 255,128,0
+type wig 0 1
+
+track promoterScanNeg
+shortLabel Promoter -
+longLabel Log-odds scan for promoters on minus strand  (15 base window)
+group regulation
+priority 8.2
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+defaultViewLimits 0.0:1.0
+color 136,38,193
+altColor 255,128,0
+type wig 0 1
+
+track shineDGPos
+shortLabel Shine-DG +
+longLabel Shine-Dalgarno scan on plus strand (10 base window)
+group regulation
+priority 8.3
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+defaultViewLimits 0.0:1.0
+color 44,201,52
+altColor 255,128,0
+type wig 0 1
+
+track shineDGNeg
+shortLabel Shine-DG -
+longLabel Shine-Dalgarno scan on minus strand (10 base window)
+group regulation
+priority 8.4
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+defaultViewLimits 0.0:1.0
+color 136,38,193
+altColor 255,128,0
+type wig 0 1
+
+searchName gbProtCodeName
+searchTable gbProtCode
+searchType bed
+searchMethod prefix
+searchDescription Genbank Protein-coding Genes
+searchPriority 20
+
+searchName gbProtCodeAnnoteProduct
+searchTable gbProtCode
+searchType bed
+searchMethod fuzzy
+xrefTable gbProtCodeXra
+xrefQuery select name,product from %s where product like '%%%s%%'
+searchPriority 21
+
+searchName gbProtCodeAnnoteNote
+searchTable gbProtCode
+searchType bed
+searchMethod fuzzy
+xrefTable gbProtCodeXra
+xrefQuery select name,note from %s where note like '%%%s%%'
+searchPriority 22
+
+searchName gbProtCodeCOGName
+searchTable gbProtCode
+searchType bed
+searchMethod exact
+xrefTable COG
+xrefQuery select name,COG from %s where COG like '%s'
+searchDescription COG name search
+searchPriority 23
+
+searchTable Rfam
+searchType bed
+searchMethod fuzzy
+searchPriority 33
+
+searchName tigrCmrORFsCommon
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,tigrCommon from %s where tigrCommon like '%%%s%%'
+searchDescription Common Name of TIGR Locus
+searchPriority 61
+
+searchName tigrCmrORFsPrimLocus
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,primLocus from %s where primLocus like '%%%s%%'
+searchDescription Primary Name of TIGR Locus
+searchPriority 61
+
+searchName tigrCmrORFsMainRole
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,tigrMainRole from %s where tigrMainRole like '%%%s%%'
+searchDescription Main Role of TIGR Locus
+searchPriority 62
+
+searchName tigrCmrORFsSubRole
+searchTable tigrCmrORFs
+searchType bed
+searchMethod fuzzy
+query select chrom,chromStart,chromEnd,tigrSubRole from %s where tigrSubRole like '%%%s%%'
+searchDescription SubRole of TIGR Locus
+searchPriority 63
+
+searchTable igenics
+searchType bed
+searchMethod prefix
+searchDescription Intergenics on microarray
+searchPriority 70
+
