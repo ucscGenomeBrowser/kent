@@ -8,7 +8,7 @@
 #include "hash.h"
 #endif 
 
-#define MIMEBUFSIZE 99 //debug 32*1024  /* size of buffer for mime input */
+#define MIMEBUFSIZE 32*1024  /* size of buffer for mime input */
 
 struct mimePart
 /* structure for an element of a MIME (multipart) message */
