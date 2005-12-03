@@ -633,7 +633,7 @@ puts(
 "    </TR> \n"
 "    <TR><TD VALIGN=Top NOWRAP>xenopus</TD> \n"
 "        <TD WIDTH=14></TD> \n"
-"        <TD VALIGN=Top>Displays all images associated frogs of genus xenopus</Td>"
+"        <TD VALIGN=Top>Displays all images associated with frogs of the genus xenopus</Td>"
 "    </TR> \n"
 "    <TR><TD VALIGN=Top NOWRAP>mouse midbrain</TD> \n"
 "        <TD WIDTH=14></TD> \n"
@@ -643,7 +643,7 @@ puts(
 "    <TR><TD VALIGN=Top NOWRAP>smith jc 1994</TD> \n"
 "        <TD WIDTH=14></TD> \n"
 "        <TD VALIGN=Top>Displays images contributed by scientist J.C. Smith "
-"in 1994. initials.</TD> \n"
+"in 1994. </TD> \n"
 "    </TR> \n"
 "</TABLE> \n"
 );
