@@ -330,6 +330,10 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
 # canFam1 is
 #36509895 bases of 2359845093 (1.547%) in intersection
 
+# 2005-12-02 Error with simpleRepeats found during QA. 1622 entries have what
+# appears to be a parsing error. The "sequence" value is a float number of
+# format X.XX instead of an ATCG sequence. Lines removed from active tables.
+# Copy of original data on hgwdev.canFam2.simpleRepeat_1202problem
 
 # PROCESS SIMPLE REPEATS INTO MASK  (DONE 2005-07-11 braney)
     # After the simpleRepeats track has been built, make a filtered version 
