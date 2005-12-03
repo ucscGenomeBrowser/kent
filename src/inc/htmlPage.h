@@ -193,6 +193,12 @@ void htmlPageFormOrAbort(struct htmlPage *page);
 void htmlPageValidateOrAbort(struct htmlPage *page);
 /* Do some basic validations.  Aborts if there is a problem. */
 
+char *htmlSlurpWithCookies(char *url, struct htmlCookie *cookies);
+/* Send get message to url with cookies, and return full response as
+ * a dyString.  This is not parsed or validated, and includes http
+ * header lines.  Typically you'd pass this to htmlPageParse() to
+ * get an actual page. */
+
 struct htmlPage *htmlPageParse(char *url, char *fullText);
 /* Parse out page and return.  Warn and return NULL if problem. */
 
@@ -206,6 +212,10 @@ struct htmlPage *htmlPageFromForm(struct htmlPage *origPage, struct htmlForm *fo
 	char *buttonName, char *buttonVal);
 /* Return a new htmlPage based on response to pressing indicated button
  * on indicated form in origPage. */
+
+struct htmlPage *htmlPageGetWithCookies(char *url, struct htmlCookie *cookies);
+/* Get page from URL giving server the given cookies.   Note only the
+ * name and value parts of the cookies need to be filled in. */
 
 struct htmlPage *htmlPageGet(char *url);
 /* Get page from URL (may be a file). */

@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.21 2005/12/03 10:52:12 galt Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.22 2005/12/03 19:26:42 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -75,6 +75,26 @@ for (el = *pList; el != NULL; el = next)
     }
 *pList = NULL;
 }
+
+static void cookieOutput(struct dyString *dy, struct htmlCookie *cookieList)
+/* Write cookies to dy. */
+{
+struct htmlCookie *cookie;
+if (cookieList != NULL)
+    {
+    dyStringAppend(dy, "Cookie:");
+    for (cookie = cookieList; cookie != NULL; cookie = cookie->next)
+	{
+	dyStringAppendC(dy, ' ');
+	dyStringAppend(dy, cookie->name);
+	dyStringAppendC(dy, '=');
+	dyStringAppend(dy, cookie->value);
+	dyStringAppendC(dy, ';');
+	}
+    dyStringAppend(dy, "\r\n");
+    }
+}
+
 
 void htmlAttributeFree(struct htmlAttribute **pAttribute)
 /* Free up resources associated with attribute. */
@@ -841,6 +861,35 @@ if (page->status->status != 200)
 return page;
 }
 
+char *htmlSlurpWithCookies(char *url, struct htmlCookie *cookies)
+/* Send get message to url with cookies, and return full response as
+ * a dyString.  This is not parsed or validated, and includes http
+ * header lines.  Typically you'd pass this to htmlPageParse() to
+ * get an actual page. */
+{
+struct dyString *dyHeader = dyStringNew(0);
+struct dyString *dyText;
+int sd;
+char *buf;
+
+cookieOutput(dyHeader, cookies);
+dyStringAppend(dyHeader, "\r\n");
+sd = netOpenHttpExt(url, "GET", FALSE);
+write(sd, dyHeader->string, dyHeader->stringSize);
+dyText = netSlurpFile(sd);
+close(sd);
+dyStringFree(&dyHeader);
+return dyStringCannibalize(&dyText);
+}
+
+struct htmlPage *htmlPageGetWithCookies(char *url, struct htmlCookie *cookies)
+/* Get page from URL giving server the given cookies.   Note only the
+ * name and value parts of the cookies need to be filled in. */
+{
+char *buf = htmlSlurpWithCookies(url, cookies);
+return htmlPageParse(url, buf);
+}
+
 struct htmlPage *htmlPageGet(char *url)
 /* Get page from URL (may be a file). */
 {
@@ -851,11 +900,7 @@ if (fileExists(url))
     return htmlPageParseNoHead(url, buf);
     }
 else
-    {
-    struct dyString *dyText = netSlurpUrl(url);
-    char *buf = dyStringCannibalize(&dyText);
-    return htmlPageParse(url, buf);
-    }
+    return htmlPageGetWithCookies(url, NULL);
 }
 
 void htmlFormVarPrint(struct htmlFormVar *var, FILE *f, char *prefix)
@@ -1188,25 +1233,6 @@ for (var = form->vars; var != NULL; var = var->next)
 if (isMime)	    
     appendMimeTerminus(dy);
 return dyStringCannibalize(&dy);
-}
-
-static void cookieOutput(struct dyString *dy, struct htmlCookie *cookieList)
-/* Write cookies to dy. */
-{
-struct htmlCookie *cookie;
-if (cookieList != NULL)
-    {
-    dyStringAppend(dy, "Cookie:");
-    for (cookie = cookieList; cookie != NULL; cookie = cookie->next)
-	{
-	dyStringAppendC(dy, ' ');
-	dyStringAppend(dy, cookie->name);
-	dyStringAppendC(dy, '=');
-	dyStringAppend(dy, cookie->value);
-	dyStringAppendC(dy, ';');
-	}
-    dyStringAppend(dy, "\r\n");
-    }
 }
 
 struct htmlPage *htmlPageFromForm(struct htmlPage *origPage, struct htmlForm *form, 
