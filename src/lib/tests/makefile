@@ -126,6 +126,8 @@ mimeBlat: ${BIN_DIR}/mimeTester mkdirs
 	${BIN_DIR}/mimeTester -altHeader='CONTENT_TYPE=multipart/form-data; boundary=----------0xKhTmLbOuNdArY' < input/$@.txt > output/$@.out
 	diff expected/$@.out output/$@.out
 
+mimeSeries: ${BIN_DIR}/mimeTester mkdirs
+	${BIN_DIR}/mimeTester -sizeSeries=3000
 	
 
 ${BIN_DIR}/htmlMimeTest:  mkdirs htmlMimeTest.o ${MYLIBS}
@@ -137,4 +139,4 @@ htmlMime1: ${BIN_DIR}/htmlMimeTest mkdirs
 
 
 clean:
-	rm -rf *.o bin output *.tmp
+	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out
