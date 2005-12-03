@@ -12,7 +12,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.27 2004/03/03 08:00:26 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.28 2005/12/03 19:27:18 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -39,10 +39,14 @@ errAbort(
   "             (Just one level of recursion)\n"
   "   submit - submit first form in page if any using 'GET' method\n"
   "   validate - do some basic validations including TABLE/TR/TD nesting\n"
+  "options:\n"
+  "   cookies=cookie.txt - Cookies is a two column file\n"
+  "           containing <cookieName><space><value><newLine>\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"cookies", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -288,11 +292,35 @@ checkRecursiveLinks(uniqHash, page, depth, justLocal);
 hashFree(&uniqHash);
 }
 
-void htmlCheck(char *command, char *url)
+struct htmlCookie *readCookies(char *fileName)
+/* Read cookies from file. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct htmlCookie *list = NULL, *cookie;
+char *line, *word;
+while (lineFileNextReal(lf, &line))
+    {
+    word = nextWord(&line);
+    line = skipLeadingSpaces(line);
+    AllocVar(cookie);
+    cookie->name = cloneString(word);
+    cookie->value = cloneString(line);
+    slAddHead(&list, cookie);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
+}
+
+void htmlCheck(char *command, char *url, char *cookieFile)
 /* Read url. Switch on command and dispatch to appropriate routine. */
 {
-struct dyString *dy = netSlurpUrl(url);
-char *fullText = dyStringCannibalize(&dy);
+char *fullText;
+struct htmlCookie *cookies = NULL;
+
+if (cookieFile != NULL)
+    cookies = readCookies(cookieFile);
+fullText = htmlSlurpWithCookies(url, cookies);
 if (sameString(command, "getAll"))
     mustWrite(stdout, fullText, strlen(fullText));
 else if (sameString(command, "ok"))
@@ -340,9 +368,10 @@ int main(int argc, char *argv[])
 {
 char *commmand, *url;
 pushCarefulMemHandler(200000000);
+optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-htmlCheck(argv[1], argv[2]);
+htmlCheck(argv[1], argv[2], optionVal("cookies",NULL));
 carefulCheckHeap();
 return 0;
 }
