@@ -243,9 +243,9 @@ if (doLong)
         {
 	safef(query, sizeof(query),
 	    "select name from lifeStage "
-	    "where lifeStageScheme = %d and age < %f "
+	    "where lifeStageScheme = %d and age <= %f "
 	    "order by age desc"
-	    , stageScheme, age);
+	    , stageScheme, age + 0.00001);	/* Allow for some rounding error */
 	sr = sqlGetResult(conn, query);
 	if ((row = sqlNextRow(sr)) != NULL)
 	    dyStringPrintf(dy, " (%s %s)", stageSchemeName, row[0]);
