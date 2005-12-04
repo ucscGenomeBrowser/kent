@@ -20,7 +20,7 @@
 
 extern Color cdsColor[];
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.6 2005/11/24 01:08:26 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.7 2005/12/04 18:02:44 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1236,7 +1236,7 @@ else if (frame && (prevEnd != -1))
 	    ali = mafLoadInRegion(conn, tableName, chromName, prevEnd , prevEnd + 1  );
 	    sub = mafSubset(ali, masterChrom, prevEnd , prevEnd + 1  );
 	    comp = mafMayFindCompPrefix(sub, compName, ".");
-	    if (comp && (!(ISGASPACEPORN(comp->text[0]) ||ISGASPACEPORN(ptr[0]) ||ISGASPACEPORN(ptr[1]))))
+	    if (comp && comp->text && (!(ISGASPACEPORN(comp->text[0]) ||ISGASPACEPORN(ptr[0]) ||ISGASPACEPORN(ptr[1]))))
 		{
 		if (strand == '-')
 		    complement(comp->text, 1);
@@ -1264,7 +1264,7 @@ else if (frame && (prevEnd != -1))
 		sub = mafSubset(ali, masterChrom, prevEnd - 1  , prevEnd + 1  );
 		}
 	    comp = mafMayFindCompPrefix(sub, compName, ".");
-	    if (comp && (!(ISGASPACEPORN(comp->text[0]) ||ISGASPACEPORN(comp->text[1]) ||ISGASPACEPORN(*ptr))))
+	    if (comp && comp->text && (!(ISGASPACEPORN(comp->text[0])||ISGASPACEPORN(comp->text[1]) ||ISGASPACEPORN(*ptr))))
 		{
 		if (strand == '-')
 		    reverseComplement(comp->text, 2);
