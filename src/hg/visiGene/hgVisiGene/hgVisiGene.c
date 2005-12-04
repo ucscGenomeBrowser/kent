@@ -363,20 +363,21 @@ void doControls(struct sqlConnection *conn)
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
 char *selected = NULL;
 htmlSetBgColor(0xD0FFE0);
-/* htmlSetStyle(htmlStyleUndecoratedLink); */
+htmlSetStyle("	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n");
 htmStart(stdout, "do controls");
 printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_parent\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
 cartSaveSession(cart);
 
 printf("<TABLE WIDTH=100%%><TR>");
-printf("<TD>");
-printf("&nbsp;<B><A HREF=\"/index.html\" target=\"_parent\">UCSC</A> ");
-printf("<A HREF=\"../cgi-bin/%s?%s=\" target=\"_parent\">VisiGene</A></B> ",
+printf("<TD WIDTH=230 bgcolor=\"#"HG_COL_HOTLINKS"\">");
+printf("&nbsp;<B><A HREF=\"/index.html\" target=\"_parent\" class=\"topbar\">UCSC</A> ");
+printf("&nbsp;<A HREF=\"../cgi-bin/%s?%s=\" target=\"_parent\" class=\"topbar\">VisiGene</A></B> ",
 	hgVisiGeneCgiName(), hgpListSpec);
 printf("</TD>");
 
 printf("<TD>");
+printf("&nbsp");
 cgiMakeTextVar(hgpListSpec, listSpec, 16);
 cgiMakeButton(hgpDoSearch, "search");
 printf("</TD>");
