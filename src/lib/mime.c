@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mime.c,v 1.5 2005/12/02 19:35:08 galt Exp $";
+static char const rcsid[] = "$Id: mime.c,v 1.6 2005/12/04 06:30:50 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
@@ -171,7 +171,7 @@ char *eoc = b->eop ? b->eop : b->eod; /* end of chunk */
 //dumpMB(b);  //debug
 *address=b->i;
 *size=eoc - b->i;
-*hasZeros = (memmem(*address, *size, "", 1) != NULL);
+*hasZeros = (memMatch("", 1,*address, *size) != NULL);
 b->i = eoc;
 }
 
