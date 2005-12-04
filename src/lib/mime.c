@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mime.c,v 1.6 2005/12/04 06:30:50 galt Exp $";
+static char const rcsid[] = "$Id: mime.c,v 1.7 2005/12/04 09:16:04 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
@@ -198,7 +198,8 @@ while(TRUE)
     	line = getLineMB(b);
     if (sameString(line,"")) 
 	{
-	freez(&line);
+	if (!altHeader) 
+	    freez(&line);
 	if (started)
     	    break;
 	else	    
