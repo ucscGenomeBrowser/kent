@@ -17,4 +17,6 @@ USE_DIRS = $(DIRS)
 
 DIRS = \
 	joinerCheck \
-	joinableFields
+	joinableFields \
+	dbSnoop
+	
