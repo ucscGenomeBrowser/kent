@@ -72,5 +72,8 @@ char *dyStringCannibalize(struct dyString **pDy);
  * (formerly dy->string).  This should be free'd at your
  * convenience. */
 
+void dyStringResize(struct dyString *ds, int newSize);
+/* resize a string, if the string expands, blanks are appended */
+
 #endif /* DYSTRING_H */
 
