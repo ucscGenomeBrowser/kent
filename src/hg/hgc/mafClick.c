@@ -13,126 +13,11 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.29.8.1 2005/11/24 17:07:24 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.29.8.2 2005/12/04 19:40:41 braney Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
 static char *autoSubmit = "onchange=\"document.gpForm.submit();\"";
-
-static void mafPrettyHeader(FILE *f, struct mafAli *maf)
-/* Write out summary. */
-{
-struct mafComp *mc;
-char buf[16];
-for (mc = maf->components; mc != NULL; mc = mc->next)
-    {
-    char dbOnly[128];
-    char *chrom;
-    int s = mc->start;
-    int e = s + mc->size;
-    safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
-    chrom = chopPrefix(dbOnly);
-    
-    /* skip repeats, labeled as "rep" */
-    if (sameString("rep", dbOnly))
-        continue;    
-        
-    if (mc->strand == '-')
-        reverseIntRange(&s, &e, mc->srcSize);
-
-    if (hDbExists(dbOnly))
-        {
-        safef(buf, sizeof(buf), "(%s)", dbOnly);
-        fprintf(f, "%-10s %-10s %-10s ", 
-    	        hOrganism(dbOnly), hFreezeFromDb(dbOnly), buf);
-        if (hDbIsActive(dbOnly))
-            linkToOtherBrowser(dbOnly, chrom, s, e);
-        fprintf(f, "%s:%d-%d", chrom, s+1, e);
-        if (hDbIsActive(dbOnly))
-            fprintf(f, "</A>");
-        }
-    else
-        {
-        fprintf(f, "%-28s%5c", dbOnly, ' ');
-        fprintf(f, "%s:%d-%d", chrom, s+1, e);
-	}
-    if (mc->leftStatus)
-	{
-	fprintf(f, " ");
-	if (mc->size == 0)
-	    {
-	    if ((mc->leftStatus == MAF_CONTIG_STATUS) && (mc->rightStatus == MAF_CONTIG_STATUS) )
-		{
-		fprintf(f, "Deleted %d %d ",mc->leftLen, mc->rightLen);
-		}
-	    else if ((mc->leftStatus == MAF_INSERT_STATUS) && (mc->rightStatus == MAF_INSERT_STATUS) )
-		{
-		fprintf(f,"%dbp Unaligned", mc->rightLen);
-		if (hDbIsActive(dbOnly))
-		    {
-		    fprintf(f, "(");
-		    //linkToOtherBrowser(dbOnly, chrom, e, e + mc->rightLen);
-		    linkToOtherBrowser(dbOnly, chrom, mc->leftLen, mc->leftLen + mc->rightLen);
-		    fprintf(f,"B");
-		    fprintf(f, "</A>");
-		    fprintf(f, " ");
-
-		    printf("<A HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%c&db=%s\">D</A>)",  hgcName(),
-		       s, cgiEncode(chrom),
-		       chrom, mc->leftLen, mc->leftLen+mc->rightLen, mc->strand,dbOnly);
-		       //chrom, e, e+mc->rightLen, mc->strand,dbOnly);
-		    }
-		}
-	    else if ((mc->leftStatus == MAF_MISSING_STATUS) && (mc->rightStatus == MAF_MISSING_STATUS))
-		{
-		fprintf(f, "Missing %dbp",mc->leftLen);
-		}
-	    fprintf(f, ", strand %c, size %d, %c %d %c %d", mc->strand, mc->size,mc->leftStatus, mc->leftLen,mc->rightStatus,mc->rightLen);
-	    }
-	else 
-	    {
-	    fprintf(f, ", strand %c, size %d, %c %d %c %d", mc->strand, mc->size,mc->leftStatus, mc->leftLen,mc->rightStatus,mc->rightLen);
-	    if ((mc->leftStatus == MAF_INSERT_STATUS))
-		{
-		fprintf(f,"%dbp before ",mc->leftLen);
-		if (hDbIsActive(dbOnly))
-		    {
-		    fprintf(f, "(");
-		    linkToOtherBrowser(dbOnly, chrom, s - mc->leftLen, s);
-		    fprintf(f,"B");
-		    fprintf(f, "</A>");
-		    fprintf(f, " ");
-
-		    printf("<A HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%c&db=%s\">D</A>)",  hgcName(),
-		       s, cgiEncode(chrom),
-		       chrom,  s-mc->rightLen, s, mc->strand,dbOnly);
-		    }
-		}
-	    fprintf(f, " ");
-	    if ((mc->rightStatus == MAF_INSERT_STATUS))
-		{
-		fprintf(f,"%d bp after", mc->rightLen);
-		if (hDbIsActive(dbOnly))
-		    {
-		    fprintf(f, "(");
-		    linkToOtherBrowser(dbOnly, chrom, e, e + mc->rightLen);
-		    fprintf(f,"B");
-		    fprintf(f, "</A>");
-		    fprintf(f, " ");
-
-		    printf("<A HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%c&db=%s\">D</A>)",  hgcName(),
-		       s, cgiEncode(chrom),
-		       chrom, e, e+mc->rightLen, mc->strand,dbOnly);
-		    }
-		}
-	    }
-	//fprintf(f, ", strand %c, size %d, anno %c %c\n", mc->strand, mc->size,mc->leftStatus,mc->rightStatus);
-	fprintf(f,"\n");
-	}
-    else
-	fprintf(f, ", strand %c, size %d\n", mc->strand, mc->size);
-    }
-}
 
 static void blueCapWrite(FILE *f, char *s, int size, char *r)
 /* Write capital letters in blue. */
@@ -418,68 +303,11 @@ freeMem(summaryLine);
 
 }
 
-static void mafPrettyBody(FILE *f, struct mafAli *maf, int lineSize, boolean onlyDiff)
-/* Print MAF base by base with line-breaks. */
-{
-int srcChars = 0;
-struct mafComp *mc;
-int lineStart, lineEnd;
-char *summaryLine = needMem(lineSize+1);
-char *referenceText;
-
-for (mc = maf->components; mc != NULL; mc = mc->next)
-    {
-    /* Figure out length of source (species) field. */
-    if (mc->size != 0)
-	{
-	int len = strlen(mc->src);
-
-	if (srcChars < len)
-	    srcChars = len;
-	/* complement bases if hgTracks is on reverse strand */
-	if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
-	    complement(mc->text, maf->textSize);
-	}
-    }
-/* first sequence in the alignment */
-referenceText = maf->components->text;
-
-for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
-    {
-    int size;
-    lineEnd = lineStart + lineSize;
-    if (lineEnd >= maf->textSize)
-        lineEnd = maf->textSize;
-    size = lineEnd - lineStart;
-    initSummaryLine(summaryLine, size, '*');
-    for (mc = maf->components; mc != NULL; mc = mc->next)
-        {
-	if (mc->size != 0)
-	    {
-	    //fprintf(f, "%c %d %c %d %-*s ",mc->leftStatus,mc->leftLen,mc->rightStatus,mc->rightLen, srcChars, mc->src);
-	    fprintf(f, "%-*s ", srcChars, mc->src);
-	    updateSummaryLine(summaryLine, referenceText + lineStart, 
-				    mc->text + lineStart, size);
-	    blueCapWrite(f, mc->text + lineStart, size, 
-			 (onlyDiff && mc != maf->components) ? referenceText + lineStart : NULL);
-	    fprintf(f, "\n");
-	    }
-	}
-    fprintf(f, "%-*s %s\n\n", srcChars, "", summaryLine);
-    }
-freeMem(summaryLine);
-}
-
 
 
 static void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize, boolean onlyDiff)
 /* Output MAF in human readable format. */
 {
-/*
-mafPrettyHeader(f, maf);
-fprintf(f, "\n");
-mafPrettyBody(f, maf, lineSize,onlyDiff);
-*/
 mafPrettyAll(f, maf, lineSize,onlyDiff);
 }
 
@@ -659,7 +487,7 @@ else
 	safef(option, sizeof(option), "%s.speciesOrder", tdb->tableName);
 	speciesOrder = cartUsualString(cart, option, NULL);
 	//printf("speciesOrder %s\n",speciesOrder);
-	speciesOrder = NULL;
+	//speciesOrder = NULL;
 	}
     for (maf = mafList; maf != NULL; maf = maf->next)
         {
