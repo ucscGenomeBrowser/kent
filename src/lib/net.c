@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.45 2005/10/10 18:58:52 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.46 2005/12/04 09:49:04 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -653,6 +653,10 @@ int maxbuf = sizeof(buf);
 int i=0;
 char c = ' ';
 int nread = 0;
+struct dyString *redirectMsg = NULL;
+char *sep = NULL;
+char *headerName = NULL;
+char *headerVal = NULL;
 while(TRUE)
     {
     i = 0;
@@ -689,14 +693,11 @@ while(TRUE)
 	    }
 	if (startsWith("30", code) && isdigit(code[2]) && code[3] == 0)
 	    {
-	    warn("Your URL \"%s\" resulted in a redirect message "
+	    redirectMsg = newDyString(256);
+	    dyStringPrintf(redirectMsg,"Your URL \"%s\" resulted in a redirect message "
 		 "(HTTP status code %s %s).  <BR>\n"
-		 "Sorry, redirects are not supported.  "
-		 "Please use the new location of your URL, which you "
-		 "should be able to find by viewing it in your browser: "
-		 "<A HREF=\"%s\" TARGET=_BLANK>click here to view URL</A>.",
-		 url, code, line, url);
-	    return FALSE;
+		 "Sorry, redirects are not supported.",
+		 url, code, line);
 	    }
 	else if (!sameString(code, "200"))
 	    {
@@ -705,7 +706,32 @@ while(TRUE)
 	    }
 	line = buf;  /* restore it */
 	}
+    headerName = line;
+    sep = strchr(line,':');
+    if (sep)
+	{
+	*sep = 0;
+	headerVal = skipLeadingSpaces(++sep);
+	}
+    else
+	{
+	headerVal = NULL;
+	}
+    if (sameWord(headerName,"Location"))
+	{
+	if (redirectMsg)
+	    {
+	    dyStringPrintf(redirectMsg, " Redirection location: <A HREF=\"%s\">%s</A>", 
+		headerVal, headerVal);
+	    }
+	}
     }
+if (redirectMsg)
+    {
+    warn("%s", redirectMsg->string);
+    dyStringFree(&redirectMsg);
+    return FALSE;
+    }		
 return TRUE;
 }
 
