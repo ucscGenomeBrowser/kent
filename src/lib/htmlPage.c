@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.22 2005/12/03 19:26:42 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.23 2005/12/04 08:16:06 galt Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -870,7 +870,6 @@ char *htmlSlurpWithCookies(char *url, struct htmlCookie *cookies)
 struct dyString *dyHeader = dyStringNew(0);
 struct dyString *dyText;
 int sd;
-char *buf;
 
 cookieOutput(dyHeader, cookies);
 dyStringAppend(dyHeader, "\r\n");
