@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.29.8.3 2005/12/05 20:32:31 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.29.8.4 2005/12/05 22:04:17 braney Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -157,12 +157,8 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 	    reverseIntRange(&s, &e, mc->srcSize);
 
 
-	//if (mc->size != 0)
 	if (mc->text != NULL)
 	    {
-	    //fprintf(f, "%c %d %c %d %-*s ",mc->leftStatus,mc->leftLen,mc->rightStatus,mc->rightLen, srcChars, mc->src);
-	    //fprintf(f, "%s:%d-%d", chrom, s+1, e);
-	    //fprintf(f, "%-*s ", srcChars, mc->src);
 	    if (lineStart == 0)
 		{
 		if (hDbIsActive(dbOnly))
@@ -176,16 +172,12 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		    printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%c&db=%s\">D</A> ",  dy->string,hgcName(),
 		       s, cgiEncode(chrom),
 		       chrom, s, e, mc->strand,dbOnly);
-		    //fprintf(f, "%s:%d-%d", chrom, s+1, e);
 		    }
 		else
 		    {
 		    fprintf(f, "    ");
-	//	    fprintf(f, "%-28s%5c", dbOnly, ' ');
-	//	    fprintf(f, "%s:%d-%d", chrom, s+1, e);
 		    }
 
-		//fprintf(f, "%*s %c %*d ", srcChars, hOrganism(dbOnly),mc->strand,sizeChars, mc->size);
 		fprintf(f, "%*s ", srcChars, org);
 		}
 	    else
@@ -205,29 +197,25 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		{
 		if (lineStart == 0)
 		    {
-	    //	fprintf(f,"%dbp Unaligned", mc->rightLen);
 		    if (hDbIsActive(dbOnly))
 			{
 			int s = mc->start;
 			int e = s + mc->rightLen;
-			
+			struct dyString *dy = newDyString(512);
+
 			if (mc->strand == '-')
 			    reverseIntRange(&s, &e, mc->srcSize);
-			//fprintf(f, "(");
-			//if (mc->strand == '-')
-		    //	linkToOtherBrowser(dbOnly, chrom, s, s - mc->rightLen);
-		     //   else
-			    linkToOtherBrowser(dbOnly, chrom, s, e);
-			//linkToOtherBrowser(dbOnly, chrom, e, e + mc->rightLen);
-			//linkToOtherBrowser(dbOnly, chrom, mc->leftLen, mc->leftLen + mc->rightLen);
-			fprintf(f,"B</A> ");
-			//fprintf(f, "</A> ");
-		//	fprintf(f, " ");
 
-			printf("<A TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%c&db=%s\">D</A> ",  hgcName(),
+			dyStringPrintf(dy, "Browser %s:%d-%d %s %c %dbps Unaligned",chrom, s+1, e, hOrganism(dbOnly),mc->strand, e-s);
+			linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
+			
+			dyStringClear(dy);
+			dyStringPrintf(dy, "GetDNA %s:%d-%d %s %c %dbps Unaligned",chrom, s+1, e, hOrganism(dbOnly),mc->strand, e-s);
+			fprintf(f,"B</A> ");
+
+			printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%c&db=%s\">D</A> ", dy->string,  hgcName(),
 			   s, cgiEncode(chrom),
 			   chrom, s, e, mc->strand,dbOnly);
-			   //chrom, e, e+mc->rightLen, mc->strand,dbOnly);
 			}
 		    else
 			fprintf(f, "    ");
@@ -251,7 +239,6 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		    fputc(ch,f);
 		fprintf(f,"\n");
 		}
-	    //fprintf(f, ", strand %c, size %d, %c %d %c %d", mc->strand, mc->size,mc->leftStatus, mc->leftLen,mc->rightStatus,mc->rightLen);
 	    }
 	}
     if (lineStart == 0)
@@ -259,6 +246,7 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
     else
 	fprintf(f, "%-*s %s\n", srcChars, "", summaryLine);
     }
+
 if (haveInserts)
     {
     fprintf(f, "<B>Inserts between block %d and %d in window</B>\n",blockNo, blockNo+1);
