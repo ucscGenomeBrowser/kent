@@ -22,6 +22,9 @@ void sprintLongWithCommas(char *s, long long l);
 void printLongWithCommas(FILE *f, long long l);
 /* Print out a long number with commas a thousands, millions, etc. */
 
+void writeGulp(char *file, char *buf, int size);
+/* Write out a bunch of memory. */
+
 void readInGulp(char *fileName, char **retBuf, size_t *retSize);
 /* Read whole file in one big gulp. */
 

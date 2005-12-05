@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: obscure.c,v 1.40 2005/11/27 17:05:55 kent Exp $";
+static char const rcsid[] = "$Id: obscure.c,v 1.41 2005/12/05 22:14:11 kent Exp $";
 static int _dotForUserMod = 100; /* How often does dotForUser() output a dot. */
 
 long incCounterFile(char *fileName)
@@ -64,6 +64,14 @@ while (x >= 10)
     x /= 10;
     }
 return digCount;
+}
+
+void writeGulp(char *file, char *buf, int size)
+/* Write out a bunch of memory. */
+{
+FILE *f = mustOpen(file, "w");
+mustWrite(f, buf, size);
+carefulClose(&f);
 }
 
 void readInGulp(char *fileName, char **retBuf, size_t *retSize)
