@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.5 2005/11/28 07:02:48 kent Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.6 2005/12/05 22:13:39 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -247,6 +247,28 @@ for (table = tableList; table != NULL; table = table->next)
 return hash;
 }
 
+void escToXmlString(char *in, char *out)
+/* Put in the escapes xml needs inside of a string */
+{
+char c;
+while ((c = *in++) != 0)
+    {
+    if (c == '&')
+	{
+        strcpy(out, "&amp;");
+	out += 5;
+	}
+    else if (c == '"')
+        {
+	strcpy(out, "&quot;");
+	out += 5;
+	}
+    else
+        *out++ = c;
+    }
+*out = 0;
+}
+
 void rSqlToXml(struct sqlConnCache *cc, char *table, char *entryField,
 	char *query, struct hash *tableHash, struct specTree *tree,
 	FILE *f, int depth)
@@ -276,8 +298,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (!sameString(col->name, entryField))
 	    {
 	    int len = strlen(val);
-	    dyStringBumpBufSize(escaper, len*2);
-	    escCopy(val, escaper->string, '"', '\\');
+	    dyStringBumpBufSize(escaper, len*5);
+	    escToXmlString(val, escaper->string);
 	    fprintf(f, " %s=\"%s\"", col->name, escaper->string);
 	    }
 	}

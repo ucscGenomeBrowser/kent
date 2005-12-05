@@ -1,1 +1,1 @@
-sqlToXml visiTest test/visiGene.dumpSpec test/visiTest.xml
+sqlToXml visiGene test/visiGene.dumpSpec test/visiTest.xml
