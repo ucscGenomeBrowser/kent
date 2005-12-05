@@ -33,6 +33,7 @@ blatSuite: topLibs
 	cd blat && ${MAKE} && ${MAKE} test
 	cd gfClient && ${MAKE}
 	cd gfServer && ${MAKE}
+	cd webBlat && ${MAKE}
 	cd hg/pslPretty && ${MAKE}
 	cd hg/pslReps && ${MAKE}
 	cd hg/pslSort && ${MAKE}
