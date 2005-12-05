@@ -31,6 +31,16 @@ matrixHeader A, C, G, T
 type chain fr1
 otherDb fr1
 
+track netFr1
+shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 140.1
+visibility hide
+spectrum on
+type netAlign fr1 chainFr1
+otherDb fr1
+
 track chainTetNig1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
