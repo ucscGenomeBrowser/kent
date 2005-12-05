@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.77 2005/11/29 20:10:44 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.78 2005/12/05 22:37:34 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1846,7 +1846,10 @@ if (!loadPushQ(q.qid, &q,TRUE))
     return;
     }
 
-if ( sameString(qaUser,"kuhn") || sameString(qaUser,"kuhn2") )  /* for users that want to automatically try to lock record immediately */
+if ( sameString(qaUser,"kuhn") || 
+     sameString(qaUser,"kuhn2") || 
+     sameString(qaUser,"ann") 
+     )  /* for users that want to automatically try to lock record immediately */
     {
     if (sameString(action,"edit") || sameString(action,"setSize")) 
 	{
