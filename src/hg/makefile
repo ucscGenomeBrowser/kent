@@ -7,7 +7,7 @@ BROWSER_BINS=cartReset das hgBlat hgConvert hgCoordConv \
 	hgLiftOver hgc/cgiClustalw visiGene/hgVisiGene
 
 TEST_DIRS = lib autoSql blastToPsl checkTableCoords embossToPsl \
-            genePredSingleCover genePredStats genePredToMafFrames\
+            genePredSingleCover genePredHisto genePredToMafFrames\
 	    gbGetEntries \
             hgGetAnn mrnaToGene overlapSelect pslCDnaFilter pslDiff \
             pslHisto pslMap pslPartition pslSelect pslStats pslSwap spideyToPsl
@@ -134,7 +134,7 @@ UTIL_DIRS = \
 	genePredCheck \
 	genePredToGtf \
 	genePredSingleCover \
-	genePredStats \
+	genePredHisto \
 	genePredToMafFrames \
 	getFeatDna \
 	getRna \

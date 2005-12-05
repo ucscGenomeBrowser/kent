@@ -1,9 +1,9 @@
 include ../../../inc/common.mk
 
-test: exonSizeHistoTest
+test: exonLenTest
 
-exonSizeHistoTest: mkdirs
-	genePredStats exonSizeHisto input/basic.gp output/$@.stats
+exonLenTest: mkdirs
+	genePredHisto exonLen input/basic.gp output/$@.stats
 	diff expected/$@.stats output/$@.stats
 
 mkdirs:
