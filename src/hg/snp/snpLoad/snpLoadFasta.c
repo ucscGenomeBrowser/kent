@@ -5,7 +5,7 @@
 #include "linefile.h"
 #include "snpFasta.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.2 2005/12/03 12:13:56 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.3 2005/12/05 18:05:39 heather Exp $";
 
 static char *database = NULL;
 
@@ -58,7 +58,9 @@ while (lineFileNext(lf, &line, &lineSize))
 
     snpFasta->name = cloneString(name[0]);
     snpFasta->molType = cloneString(molType[1]);
+    stripChar(snpFasta->molType, '"');
     snpFasta->observed = cloneString(allele[1]);
+    stripChar(snpFasta->observed, '"');
     snpFasta->next = list;
     list = snpFasta;
     count++;
