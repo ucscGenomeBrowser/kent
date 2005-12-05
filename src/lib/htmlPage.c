@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.23 2005/12/04 08:16:06 galt Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.24 2005/12/05 22:14:44 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -74,6 +74,29 @@ for (el = *pList; el != NULL; el = next)
     htmlCookieFree(&el);
     }
 *pList = NULL;
+}
+
+struct htmlCookie *htmlCookieFileRead(char *fileName)
+/* Read cookies from a line oriented file.  First word in line
+ * is the cookie name, the rest of the line the cookie value. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct htmlCookie *list = NULL, *cookie;
+char *line, *word;
+while (lineFileNextReal(lf, &line))
+    {
+    word = nextWord(&line);
+    line = skipLeadingSpaces(line);
+    if (line == NULL)
+        errAbort("Missing cookie value line %d of %s", lf->lineIx, lf->fileName);
+    AllocVar(cookie);
+    cookie->name = cloneString(word);
+    cookie->value = cloneString(line);
+    slAddHead(&list, cookie);
+    }
+lineFileClose(&lf);
+slReverse(&list);
+return list;
 }
 
 static void cookieOutput(struct dyString *dy, struct htmlCookie *cookieList)

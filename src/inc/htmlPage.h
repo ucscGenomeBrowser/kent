@@ -106,6 +106,10 @@ void htmlCookieFree(struct htmlCookie **pCookie);
 void htmlCookieFreeList(struct htmlCookie **pList);
 /* Free a list of dynamically allocated htmlCookie's */
 
+struct htmlCookie *htmlCookieFileRead(char *fileName);
+/* Read cookies from a line oriented file.  First word in line
+ * is the cookie name, the rest of the line the cookie value. */
+
 void htmlAttributeFree(struct htmlAttribute **pAttribute);
 /* Free up resources associated with attribute. */
 
