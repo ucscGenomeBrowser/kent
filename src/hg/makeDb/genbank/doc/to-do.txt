@@ -923,6 +923,11 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - got this error during load
   mySQL error 1050: Table 'xenoEst_new_tmp' already exists
+  but for now completely disabled the copy-deletion optimization
+  due to slowing down the servers.
+
+- perhaps should include NR_ entries in refgene:
+   this was NM_031926.1, replaced by NR_001541.1
 
 -  xeno refseq NM_167334 on droAna2 had 41 poor alignments, some with huge
    introns.  Might need to add maxIntro.
@@ -930,5 +935,6 @@ Warning: NR_001874: malformed RefSeq CDS:
 - NR_s are ending up in refLink??
 
 - mm7 NM_207243 has a bunch of repetitive alignments to the same location with  3968, plus
-  one longer one.  Should probably have ability to toss weird overlaps where the is one 
+  one longer one.  Should probably have ability to toss weird overlaps where thee is one 
   better alignment.
+

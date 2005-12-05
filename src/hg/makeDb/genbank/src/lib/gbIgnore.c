@@ -8,7 +8,7 @@
 #include "gbIndex.h"
 #include "gbRelease.h"
 
-static char const rcsid[] = "$Id: gbIgnore.c,v 1.4 2005/11/06 22:56:26 markd Exp $";
+static char const rcsid[] = "$Id: gbIgnore.c,v 1.5 2005/12/05 06:18:37 markd Exp $";
 
 /* column indices in ignore.idx files */
 #define IGIDX_ACC_COL       0
@@ -41,7 +41,7 @@ if (hel == NULL)
     {
     hel = hashAdd(ignore->accHash, row[IGIDX_ACC_COL], NULL);
     }
-gbReleaseAllocEntryVar(release, igAcc);
+lmAllocVar(ignore->accHash->lm, igAcc);
 igAcc->acc = hel->name;
 igAcc->modDate = gbParseDate(lf, row[IGIDX_MODDATE_COL]);
 igAcc->srcDb = srcDb;
@@ -60,21 +60,32 @@ while (lineFileNextRowTab(lf, row, ArraySize(row)))
 lineFileClose(&lf);
 }
 
-struct gbIgnore* gbIgnoreLoad(struct gbRelease* release)
-/* Load the ignore index.  It is loading into the memory associated with 
- * the release, although it is not specific to the release. */
+struct gbIgnore* gbIgnoreNew(struct gbRelease* release)
+/* Load the ignore index. */
 {
 static char *IGNORE_IDX = "etc/ignore.idx";
 char ignoreIdx[PATH_LEN];
 struct gbIgnore* ignore;
-gbReleaseAllocEntryVar(release, ignore);
-ignore->accHash = hashNew(22);
+AllocVar(ignore);
+ignore->accHash = hashNew(21);
 
 safef(ignoreIdx, sizeof(ignoreIdx), "%s/%s", release->index->gbRoot,
       IGNORE_IDX);
 if (fileExists(ignoreIdx))
     parseIndex(release, ignore, ignoreIdx);
 return ignore;
+}
+
+void gbIgnoreFree(struct gbIgnore** ignorePtr)
+/* Free gbIgnore object */
+{
+struct gbIgnore* ignore = *ignorePtr;
+if (ignore != NULL)
+    {
+    hashFree(&ignore->accHash);
+    freeMem(ignore);
+    *ignorePtr = NULL;
+    }
 }
 
 struct gbIgnoreAcc* gbIgnoreGet(struct gbIgnore *ignore, char *acc,

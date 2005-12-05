@@ -24,6 +24,12 @@ struct gbIgnore* gbIgnoreLoad(struct gbRelease* release);
 /* Load the ignore index.  It is loading into the memory associated with 
  * the release, although it is not specific to the release. */
 
+struct gbIgnore* gbIgnoreNew(struct gbRelease* release);
+/* Load the ignore index. */
+
+void gbIgnoreFree(struct gbIgnore** ignorePtr);
+/* Free gbIgnore object */
+
 struct gbIgnoreAcc* gbIgnoreGet(struct gbIgnore *ignore, char *acc,
                                 time_t modDate);
 /* Get he ignore entry for an accession and modedate, or NULL  */

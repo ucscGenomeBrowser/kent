@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: gbRelease.c,v 1.3 2005/11/06 22:56:26 markd Exp $";
+static char const rcsid[] = "$Id: gbRelease.c,v 1.4 2005/12/05 06:18:37 markd Exp $";
 
 /* size power of hash tables for shared strings */
 #define STR_MEM_HASH_SIZE   22
@@ -82,7 +82,7 @@ static void entryInit(struct gbRelease* release)
 {
 release->entryStrs = hashNew(STR_MEM_HASH_SIZE);
 release->entryTbl = hashNew(ACC_HASH_SIZE);
-release->ignore = gbIgnoreLoad(release);
+release->ignore = gbIgnoreNew(release);
 }
 
 static void clearUpdate(struct gbUpdate* update)
@@ -107,7 +107,7 @@ void gbReleaseUnload(struct gbRelease* release)
 struct gbUpdate* update;
 for (update = release->updates; update != NULL; update = update->next)
     clearUpdate(update);
-release->ignore = NULL;
+gbIgnoreFree(&release->ignore);
 hashFree(&release->entryStrs);
 hashFree(&release->entryTbl);
 }
