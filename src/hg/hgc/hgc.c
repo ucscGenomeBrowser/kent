@@ -189,7 +189,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.981 2005/12/01 01:23:56 lowe Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.982 2005/12/05 20:33:51 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2178,6 +2178,13 @@ void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end)
 {
 printf("<A TARGET=\"_blank\" HREF=\"%s?db=%s&ct=&position=%s%%3A%d-%d\">",
        hgTracksName(), otherDb, chrom, start+1, end);
+}
+
+void linkToOtherBrowserTitle(char *otherDb, char *chrom, int start, int end, char *title)
+/* Make anchor tag to open another browser window. */
+{
+printf("<A TARGET=\"_blank\" TITLE=\"%s\" HREF=\"%s?db=%s&ct=&position=%s%%3A%d-%d\">",
+       title, hgTracksName(), otherDb, chrom, start+1, end);
 }
 
 void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg)

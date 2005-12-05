@@ -49,6 +49,9 @@ void hgcAnchor(char *group, char *item, char *other);
 /* Generate an anchor that calls click processing program with item 
  * and other parameters. */
 
+void linkToOtherBrowserTitle(char *otherDb, char *chrom, int start, int end, char *title);
+/* Make anchor tag to open another browser window with a title. */
+
 void linkToOtherBrowser(char *otherDb, char *chrom, int start, int end);
 /* Make anchor tag to open another browser window. */
 
