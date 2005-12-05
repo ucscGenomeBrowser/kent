@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.29.8.2 2005/12/04 19:40:41 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.29.8.3 2005/12/05 20:32:31 braney Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -77,7 +77,8 @@ for (i=0; i<size; i++)
     }
 }
 
-static void mafPrettyAll(FILE *f, struct mafAli *maf, int lineSize, boolean onlyDiff)
+static void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize, 
+	boolean onlyDiff, int blockNo)
 {
 int ii, ch;
 int srcChars = 0;
@@ -166,9 +167,13 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		{
 		if (hDbIsActive(dbOnly))
 		    {
-		    linkToOtherBrowser(dbOnly, chrom, s, e);
+		    struct dyString *dy = newDyString(512);
+		    dyStringPrintf(dy, "Browser %s:%d-%d %s %c %*dbps",chrom, s+1, e, hOrganism(dbOnly),mc->strand,sizeChars, mc->size);
+		    linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
+		    dyStringClear(dy);
+		    dyStringPrintf(dy, "GetDNA %s:%d-%d %s %c %*dbps",chrom, s+1, e, hOrganism(dbOnly),mc->strand,sizeChars, mc->size);
 		    fprintf(f, "B</A> ");
-		    printf("<A TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%c&db=%s\">D</A> ",  hgcName(),
+		    printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%c&db=%s\">D</A> ",  dy->string,hgcName(),
 		       s, cgiEncode(chrom),
 		       chrom, s, e, mc->strand,dbOnly);
 		    //fprintf(f, "%s:%d-%d", chrom, s+1, e);
@@ -256,13 +261,12 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
     }
 if (haveInserts)
     {
-    fprintf(f, "<B>Inserts</B>\n");
+    fprintf(f, "<B>Inserts between block %d and %d in window</B>\n",blockNo, blockNo+1);
     for (mc = maf->components; mc != NULL; mc = mc->next)
 	{
 	char dbOnly[128], *chrom;
 	int s = mc->start + mc->size;
 	int e = s + mc->rightLen;
-	//char buf[1024];
 	char *org;
 
 	if (mc->text == NULL)
@@ -301,14 +305,6 @@ if (haveInserts)
     }
 freeMem(summaryLine);
 
-}
-
-
-
-static void mafPrettyOut(FILE *f, struct mafAli *maf, int lineSize, boolean onlyDiff)
-/* Output MAF in human readable format. */
-{
-mafPrettyAll(f, maf, lineSize,onlyDiff);
 }
 
 static void mafLowerCase(struct mafAli *maf)
@@ -627,8 +623,8 @@ else
 	    if (capTrack != NULL)
 	    	capMafOnTrack(maf, capTrack, onlyCds);
 	    //printf("<B>Alignment %d of %d in window, score %0.1f</B>\n", ++aliIx, realCount, maf->score);
-	    printf("<B>Alignment %d of %d in window, %d - %d\n",++aliIx,realCount,maf->components->start + 1,maf->components->start + maf->components->size);
-	    mafPrettyOut(stdout, maf, 70,onlyDiff);
+	    printf("<B>Alignment block %d of %d in window, %d - %d\n",++aliIx,realCount,maf->components->start + 1,maf->components->start + maf->components->size);
+	    mafPrettyOut(stdout, maf, 70,onlyDiff, aliIx);
 	    }
 	mafAliFreeList(&subList);
 	}
