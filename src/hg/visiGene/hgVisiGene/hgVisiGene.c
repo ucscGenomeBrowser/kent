@@ -512,6 +512,8 @@ void doHelp()
 /* Print help section */
 {
 puts(
+"<H3>Images Available</H3>\n"
+"<P> \n"
 "The following image collections are currently available for browsing: \n"
 "<UL> \n"
 "<LI>Mouse <em>in situ</em> images from the \n"
@@ -526,10 +528,10 @@ puts(
 "<LI><em>Xenopus laevis</em> <em>in situ</em> images from the \n"
 "<A HREF=\"http://www.nibb.ac.jp/en/index.php\" TARGET=_blank>National \n"
 "Institute for Basic Biology</A> (NIBB) XDB project \n"
-"</UL> \n");
-
-webNewSection("Image Navigation");
-puts("Following a successful search, VisiGene displays a list of thumbnails of \n"
+"</UL> \n"
+"<H3>Image Navigation</H3>\n"
+"<P> \n"
+"Following a successful search, VisiGene displays a list of thumbnails of \n"
 "images matching the search criteria \n"
 "in the lefthand pane of the browser. By default, the image corresponding to \n"
 "the first thumbnail in the list is displayed in the main image pane. \n"
@@ -575,13 +577,15 @@ puts("Following a successful search, VisiGene displays a list of thumbnails of \
 "in their original full-sized format by clicking the &quot;download&quot; \n"
 "link at the bottom of the image caption. NOTE: due to the large size of \n"
 "some images, this action may take a long time and could potentially exceed \n"
-"the capabilities of some Internet browsers. </P> \n");
-webNewSection("Credits");
-puts("VisiGene was written by Jim Kent and Galt Barber. \n"
+"the capabilities of some Internet browsers. </P> \n"
+"<H3>Credits</H3>\n"
+"<P> \n"
+"VisiGene was written by Jim Kent and Galt Barber. \n"
 "Contact <A HREF=\"mailto:kent@soe.ucsc.edu\">Jim</A> if you have \n"
 "an image set you'd like to contribute for display. </P>\n"
 );
 }
+
 
 void doInitialPage()
 /* Put up page with search box that explains program and
@@ -591,30 +595,31 @@ char *listSpec = NULL;
 webStartWrapper(cart, "VisiGene Image Browser", NULL, FALSE, FALSE);
 printf("<FORM ACTION=\"../cgi-bin/%s\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
-puts("VisiGene is a virtual microscope for viewing <em>in situ</em> images. \n"
+puts("<P>VisiGene is a virtual microscope for viewing <em>in situ</em> images. \n"
 "These images show where a gene is used in an organism, sometimes down to \n"
 "cellular resolution. With VisiGene users can retrieve images that meet specific "
-"search criteria, then interactively zoom and scroll across the collection.</P\n");
+"search criteria, then interactively zoom and scroll across the collection.</P>\n");
+printf("<CENTER>");
 listSpec = cartUsualString(cart, hgpListSpec, "");
 cgiMakeTextVar(hgpListSpec, listSpec, 30);
 cgiMakeButton(hgpDoSearch, "search");
 printf("<BR>\n");
+printf("</CENTER>");
 puts(
-"<P> \n"
-"Good search terms include gene symbols, authors, years, body parts,\n"
-"organism, GenBank and UniProt accessions,\n"
+"<P>Good search terms include gene symbols, authors, years, body parts,\n"
+"organisms, GenBank and UniProt accessions,\n"
 "<A HREF=\"http://genex.hgu.mrc.ac.uk/Atlas/intro.html\" \n"
 "TARGET=_blank>Theiler</A> stages for mice, and \n"
 "<A HREF=\"http://www.xenbase.org/atlas/NF/NF-all.html\" \n"
 "TARGET=_blank>Nieuwkoop/Faber</A> stages for frogs. The wildcard characters\n"
-"* and ? work with gene symbols, otherwise the full word must match.\n"
+"* and ? work with gene symbols, otherwise the full word must match.</P>\n"
 "<P> \n"
-"<H3>Sample Searches</H3> \n"
+"<H3>Sample queries</H3> \n"
 "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0> \n"
 "    <TR><TD VALIGN=Top NOWRAP><B>Request:</B><BR></TD> \n"
 "        <TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; VisiGene Response:</B><BR></TD> \n"
 "    </TR> \n"
-"    <TR><TD VALIGN=Top><BR></TD></TR> \n"
+// "    <TR><TD VALIGN=Top><BR></TD></TR> \n"
 "    <TR><TD VALIGN=Top NOWRAP>nkx2-2</TD> \n"
 "        <TD WIDTH=14></TD> \n"
 "        <TD VALIGN=Top>Displays images associated with the gene nkx2-2</TD>\n"
@@ -633,7 +638,7 @@ puts(
 "    </TR> \n"
 "    <TR><TD VALIGN=Top NOWRAP>xenopus</TD> \n"
 "        <TD WIDTH=14></TD> \n"
-"        <TD VALIGN=Top>Displays all images associated with frogs of the genus xenopus</Td>"
+"        <TD VALIGN=Top>Displays all images associated with frogs of genus Xenopus </TD>\n"
 "    </TR> \n"
 "    <TR><TD VALIGN=Top NOWRAP>mouse midbrain</TD> \n"
 "        <TD WIDTH=14></TD> \n"
@@ -643,15 +648,15 @@ puts(
 "    <TR><TD VALIGN=Top NOWRAP>smith jc 1994</TD> \n"
 "        <TD WIDTH=14></TD> \n"
 "        <TD VALIGN=Top>Displays images contributed by scientist J.C. Smith "
-"in 1994. </TD> \n"
+"in 1994.</TD> \n"
 "    </TR> \n"
 "</TABLE> \n"
 );
 printf("</FORM>\n");
-webNewSection("Images Available");
 doHelp();
 webEnd();
 }
+
 
 void doDefault(struct sqlConnection *conn, boolean newSearch)
 /* Put up default page - if there is no specific do variable. */
