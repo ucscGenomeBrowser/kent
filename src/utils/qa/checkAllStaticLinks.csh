@@ -9,7 +9,7 @@
 ###############################################
 
 set filePath=""
-set yymmmdd="today"
+set yymmdd="today"
 set file=""
 set currDir=$cwd
 
@@ -18,9 +18,10 @@ if ($#argv == 0 || $#argv > 2) then
   echo
   echo "  checks all the static links in htdocs tree."
   echo "  uses directory on beta."
+  echo "  excludes files listed in /cluster/bin/scripts/linkCheckExclude"
   echo
   echo '    usage: <file of paths | all> -- "all" uses /cluster/bin/scripts/staticpaths'
-  echo '       yymmmdd (or other date string  --  defaults to "today")'
+  echo '       yymmdd (or other date string  --  defaults to "today")'
   echo
   exit
 else
@@ -31,11 +32,13 @@ else
     set pathfile=$argv[1]
   endif
   if ($#argv == 2) then
-    set yymmmdd=$argv[2]
+    set yymmdd=$argv[2]
   endif
 endif
 
+cp /cluster/bin/scripts/linkCheckExclude .
 foreach filePath (`cat $pathfile`)
   echo "filePath: $filePath"
-  checkStaticLinks.csh $filePath $yymmmdd
+  checkStaticLinks.csh $filePath $yymmdd linkCheckExclude
 end
+rm -f linkCheckExclude
