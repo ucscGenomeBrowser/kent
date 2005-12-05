@@ -297,7 +297,7 @@ track multiz17wayAnno
 shortLabel Conservation Anno
 longLabel Vertebrate Multiz Alignment & Conservation Anno
 group compGeno
-priority 109.11
+priority 104.1
 visibility hide
 color 0, 10, 100
 altColor 0,90,10
@@ -319,7 +319,7 @@ track multiz17way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation 
 group compGeno
-priority 109.11
+priority 104.2
 visibility hide
 color 0, 10, 100
 altColor 0,90,10
