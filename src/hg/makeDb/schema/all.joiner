@@ -417,10 +417,25 @@ identifier vgLifeStageScheme
 
 # Various types of gene predictions in UCSC Genome Browser
 
-identifier gencodeGeneName dependency
-"Link together Gencode gene model and class."
-    $hg.encodeGencodeGene.name
-    $hg.gencodeGeneClass.name full unique
+identifier gencodeGeneNameJun05 dependency
+"Link together Gencode gene model and class for June 05 Data Freeze"
+    $hg.encodeGencodeGeneJun05.name
+    $hg.gencodeGeneClassJun05.name full unique
+
+identifier gencodeGeneNameKnownOct05 dependency
+"Link together Gencode gene model (Known) and class for Oct 05 Data Freeze"
+    $hg.encodeGencodeGeneKnownOct05.name
+    $hg.gencodeGeneClassOct05.name minCheck=0.88 unique
+
+identifier gencodeGeneNamePutativeOct05 dependency
+"Link together Gencode gene model (Putative) and class for Oct 05 Data Freeze"
+    $hg.encodeGencodeGenePutativeJun05.name
+    $hg.gencodeGeneClassOct05.name minCheck=0.05 unique
+
+identifier gencodeGeneNamePseudoOct05 dependency
+"Link together Gencode gene model (Pseudo) and class for Oct 05 Data Freeze"
+    $hg.encodeGencodeGenePseudoOct05.name
+    $hg.gencodeGeneClassOct05.name minCheck=0.06 unique
 
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
