@@ -591,11 +591,10 @@ char *listSpec = NULL;
 webStartWrapper(cart, "VisiGene Image Browser", NULL, FALSE, FALSE);
 printf("<FORM ACTION=\"../cgi-bin/%s\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
-puts("VisiGene is a browser for viewing <em>in situ</em> images. \n"
-"It enables the user to examine cell-by-cell as well as tissue-by-tissue \n"
-"expression patterns. The browser serves as a virtual microscope, allowing \n" 
-"users to retrieve images that meet specific search criteria, then \n"
-"interactively zoom and scroll across the collection.</P>\n");
+puts("VisiGene is a virtual microscope for viewing <em>in situ</em> images. \n"
+"These images show where a gene is used in an organism, sometimes down to \n"
+"cellular resolution. With VisiGene users can retrieve images that meet specific "
+"search criteria, then interactively zoom and scroll across the collection.</P\n");
 listSpec = cartUsualString(cart, hgpListSpec, "");
 cgiMakeTextVar(hgpListSpec, listSpec, 30);
 cgiMakeButton(hgpDoSearch, "search");
