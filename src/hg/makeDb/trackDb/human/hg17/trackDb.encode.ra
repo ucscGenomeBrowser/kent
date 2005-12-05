@@ -1210,12 +1210,11 @@ maxHeightPixels 128:16:16
 minLimit .5
 maxLimit 15
 windowingFunction mean
-viewLimits .5:3
-autoScale on
+viewLimits .5 5
+autoScale off
 color 204,0,051 
 altColor 50, 50, 50
 yLineMark 2.378
-origAssembly hg17
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUppsalaChipAch3
@@ -1232,7 +1231,7 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUppsalaChipHnf4a
     subTrack encodeUppsalaChip
-    shortLabel UU HNF-3b HepG2
+    shortLabel UU HNF-4a HepG2
     longLabel University of Uppsala, Sweden  ChIP/Chip (HNF-4a, HepG2) 
     priority 3
 
