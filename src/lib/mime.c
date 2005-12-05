@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mime.c,v 1.7 2005/12/04 09:16:04 galt Exp $";
+static char const rcsid[] = "$Id: mime.c,v 1.8 2005/12/05 22:22:02 kent Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
@@ -25,6 +25,7 @@ static char const rcsid[] = "$Id: mime.c,v 1.7 2005/12/04 09:16:04 galt Exp $";
 #define MAXPARTLINESIZE 1024 /* header lines should be small, so bad if bigger than this */
 #define MAXDATASIZE 64LL*1024*1024*1024 /* max size allowable for large uploads */
 #define MAXBOUNDARY 72+5     /* max size of buffer for boundary 72+--""0 */
+
 
 static void setEopMB(struct mimeBuf *b)
 /* do a search for boundary, set eop End Of Part if found */
@@ -160,6 +161,7 @@ if (line[i-1] == 0x0d)
     line[i-1] = 0; /* get rid of 0x0d CR also if found */ 
 return cloneString(line);
 }
+
 
 static void getChunkMB(struct mimeBuf *b, char **address, int *size, boolean *hasZeros)
 /* Pass back address and size of chunk, and whether it contains embedded zeros.

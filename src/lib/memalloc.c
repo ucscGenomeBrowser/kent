@@ -12,7 +12,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.26 2005/12/05 22:04:42 kent Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.27 2005/12/05 22:22:02 kent Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -233,12 +233,12 @@ freeMem(pt);
 
 static int carefulAlignSize;    /* Alignment size for machine - 8 bytes for DEC alpha, 4 for Sparc. */
 static int carefulAlignAdd;     /* Do aliSize = *(unaliSize+carefulAlignAdd)&carefulAlignMask); */
+
 #if __WORDSIZE == 64
 static bits64 carefulAlignMask;    /* to make sure requests are aligned. */
 #elif __WORDSIZE == 32
 static bits32 carefulAlignMask;    /* to make sure requests are aligned. */
 #else
-#warning unrecognized _WORDSIZE - not 64 or 32 - assuming 32
 static bits32 carefulAlignMask;    /* to make sure requests are aligned. */
 #endif
 
