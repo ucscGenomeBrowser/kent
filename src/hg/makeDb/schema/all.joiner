@@ -429,7 +429,7 @@ identifier gencodeGeneNameKnownOct05 dependency
 
 identifier gencodeGeneNamePutativeOct05 dependency
 "Link together Gencode gene model (Putative) and class for Oct 05 Data Freeze"
-    $hg.encodeGencodeGenePutativeJun05.name
+    $hg.encodeGencodeGenePutativeOct05.name
     $hg.gencodeGeneClassOct05.name minCheck=0.05 unique
 
 identifier gencodeGeneNamePseudoOct05 dependency
