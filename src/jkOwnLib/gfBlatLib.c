@@ -18,7 +18,7 @@
 #include "trans3.h"
 
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.18 2005/11/20 19:24:42 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.19 2005/12/05 20:50:41 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -488,6 +488,7 @@ struct dnaSeq *tSeq = bun->genoSeq, *qSeq = bun->qSeq;
 struct ssFfItem *ffi;
 
 if (minMatch > qSeq->size/2) minMatch = qSeq->size/2;
+if (minMatch < 1) minMatch = 1;
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
     struct ffAli *ff = ffi->ff;
