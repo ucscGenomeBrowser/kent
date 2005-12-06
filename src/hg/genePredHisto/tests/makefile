@@ -1,10 +1,16 @@
 include ../../../inc/common.mk
 
-test: exonLenTest
+featTypes = 5utr cds 3utr
 
-exonLenTest: mkdirs
-	genePredHisto exonLen input/basic.gp output/$@.stats
-	diff expected/$@.stats output/$@.stats
+test: exonLenTest exonCntTest ${featTypes:%=%ExonLenTest} ${featTypes:%=%ExonCntTest}
+
+exon%Test: mkdirs
+	genePredHisto -ids exon$* input/basic.gp output/$@.histo
+	diff expected/$@.histo output/$@.histo
+
+%Test: mkdirs
+	genePredHisto $* input/basic.gp output/$@.histo
+	diff expected/$@.histo output/$@.histo
 
 mkdirs:
 	@mkdir -p output
