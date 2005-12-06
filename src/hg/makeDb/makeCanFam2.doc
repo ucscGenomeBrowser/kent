@@ -296,6 +296,7 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
 #896773874 bases of 2359845093 (38.001%) in intersection
 
 # SIMPLE REPEATS (TRF)  (DONE 2005-07-11 braney)
+# PARTIALLY REDONE 2005-12-02 angie -- See partial redo notes below...
     ssh kkstore01
     mkdir /cluster/data/canFam2/bed/simpleRepeat
     cd /cluster/data/canFam2/bed/simpleRepeat
@@ -335,7 +336,24 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
 # format X.XX instead of an ATCG sequence. Lines removed from active tables.
 # Copy of original data on hgwdev.canFam2.simpleRepeat_1202problem
 
+    # Partial redo 12/2/05 -- Jen found some lines with invalid values in 
+    # the database.  All were from trf/chr10_1.bed which I moved aside to 
+    # trf/chr10_1.bed.bad.  When I reran the chr10_1 job from jobs.csh, 
+    # it produced a valid output file.  So I did the rest of the steps and 
+    # reloaded.
+    ssh kolossus
+    cd /cluster/data/canFam2/bed/simpleRepeat
+    mv trf/chr10_1.bed{,.bad}
+    /cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf /cluster/data/canFam2/10/chr10_1/chr10_1.fa /dev/null -bedAt=trf/chr10_1.bed -tempDir=/tmp
+    mv simpleRepeat.bed simpleRepeat.bed.bad
+    liftUp simpleRepeat.bed /cluster/data/canFam2/jkStuff/liftAll.lft warn trf/*.bed
+    # on hgwdev:
+    featureBits canFam2 simpleRepeat
+#52885863 bases of 2384996543 (2.217%) in intersection
+
+
 # PROCESS SIMPLE REPEATS INTO MASK  (DONE 2005-07-11 braney)
+# 2005-12-02 angie: continuing redo of chr10_1, see below. 
     # After the simpleRepeats track has been built, make a filtered version 
     # of the trf output: keep trf's with period <= 12:
     ssh kkstore01
@@ -366,7 +384,24 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
 #canFam1 was
 #1275941 bases of 2359845093 (0.054%) in intersection
 
+    # 12/2/2005 -- since I regenerated trf/chr10_1.bed above, continue here...
+    ssh kolossus
+    cd /cluster/data/canFam2/bed/simpleRepeat
+    mv trfMask/chr10_1.bed{,.orig}
+    awk '{if ($5 <= 12) print;}' trf/chr10_1.bed  > trfMask/chr10_1.bed
+    mv trfMaskChrom/chr10.bed{,.orig}
+    cd ../..
+    liftUp bed/simpleRepeat/trfMaskChrom/chr10.bed jkStuff/liftAll.lft warn `cat 10/lift/oTrf.lst`
+    ssh hgwdev
+    cat /cluster/data/canFam2/bed/simpleRepeat/trfMaskChrom/*.bed > /tmp/filtTrf.bed
+    featureBits canFam2 /tmp/filtTrf.bed
+#23133898 bases of 2384996543 (0.970%) in intersection
+    featureBits canFam2 /tmp/filtTrf.bed \!rmsk
+#1206965 bases of 2384996543 (0.051%) in intersection
+
+
 # MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 2005-07-11 braney)
+# REDONE 2005-12-02 angie (to pick up the chr10_1 simpleRepeat redo)
     ssh kkstore01
     cd /cluster/data/canFam2
     # Soft-mask (lower-case) the contig and chr .fa's, 
@@ -1728,6 +1763,7 @@ zcat `ls -1 /san/sanvol1/scratch/canFam2/phastCons/POSTPROBS/$chr/*.pp.gz \
 
 
 # MAKE DOWNLOADABLE SEQUENCE FILES (DONE 11/21/05 angie)
+# REDONE parts: Sequence and simpleRepeat.  12/5/05 angie
     ssh kolossus
     cd /cluster/data/canFam2
     #- Build the .tar.gz files -- no genbank for now.
