@@ -14,7 +14,7 @@ set number=0
 set fullunit=""
 
 if ( "$HOST" != "hgwdev" ) then
- echo "error: you must run this script on dev!"
+ echo "\n  error: you must run this script on dev!\n"
  exit 1
 endif
 
