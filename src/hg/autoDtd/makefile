@@ -14,4 +14,4 @@ clean:
 	rm -f $O
 
 test::
-	doTest
+	./doTest
