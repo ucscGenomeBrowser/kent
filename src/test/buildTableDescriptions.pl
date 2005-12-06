@@ -309,7 +309,8 @@ my %tableAnchors = parseGbdDescriptions($gbdDPath);
 my $hgConf = HgConf->new($opt_hgConf);
 my @dbs = (defined $opt_db) ? split(',', $opt_db) : &getActiveDbs($hgConf);
 foreach my $db (@dbs) {
-  next if (($db !~ /^\w\w\d+$/ && $db !~ /^\w\w\w\w\w\w\d+$/) ||
+  next if (($db !~ /^\w\w\d+$/ && $db !~ /^\w\w\w\w\w\w\d+$/ &&
+	    $db ne 'hgFixed' && $db ne 'proteome') ||
 	   $db =~ /^zoo/);
   my $sqlFile = "$db.tableDescriptions.sql";
   open(SQL, ">$sqlFile") || die "Can't open $sqlFile for writing";
