@@ -7,7 +7,7 @@
 #include "genoFind.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcr.c,v 1.5 2004/10/27 21:32:39 kent Exp $";
+static char const rcsid[] = "$Id: gfPcr.c,v 1.6 2005/12/06 18:28:51 kent Exp $";
 
 /* Command line overridable variables. */
 int maxSize = 4000; /* corresponds to maxSize= parameter. */
@@ -20,7 +20,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "gfPcr - In silico PCR using gfServer index.\n"
+  "gfPcr - In silico PCR version %s using gfServer index.\n"
   "usage:\n"
   "   gfPcr host port seqDir fPrimer rPrimer output\n"
   "or\n"
@@ -43,7 +43,7 @@ errAbort(
   "      bed - tab delimited format. Fields: chrom/start/end/name/score/strand\n"
   "      psl - blat format.\n"
   "   -name=XXX - Name to use in bed output.\n"
-  , maxSize, minPerfect, minGood
+  , gfVersion, maxSize, minPerfect, minGood
   );
 }
 

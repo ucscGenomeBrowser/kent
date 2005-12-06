@@ -28,7 +28,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "isPcr - Standalone v %d In-Situ PCR Program\n"
+  "isPcr - Standalone v %s In-Situ PCR Program\n"
   "usage:\n"
   "   isPcr database query output\n"
   "where database is a fasta, nib, or twoBit file or a text file containing\n"

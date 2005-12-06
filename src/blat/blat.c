@@ -18,7 +18,7 @@
 #include "trans3.h"
 #include "gfClientLib.h"
 
-static char const rcsid[] = "$Id: blat.c,v 1.106 2005/10/06 21:58:40 kent Exp $";
+static char const rcsid[] = "$Id: blat.c,v 1.107 2005/12/06 18:28:50 kent Exp $";
 
 /* Variables shared with other modules.  Set in this module, read only
  * elsewhere. */
@@ -60,7 +60,7 @@ void usage()
 /* Explain usage and exit. */
 {
 printf(
-  "blat - Standalone BLAT v. %dx1 fast sequence search command line tool\n"
+  "blat - Standalone BLAT v. %s fast sequence search command line tool\n"
   "usage:\n"
   "   blat database query [-ooc=11.ooc] output.psl\n"
   "where:\n"

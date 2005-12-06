@@ -1,3 +1,6 @@
+34:
+     o (in x1) Put in check for two bit files with more than 4 gig.
+
 33:
      o Fixed problem with out=blast8 and out=blast9 output using
        dnax or rnax options where coordinates on the minus strand
@@ -8,6 +11,8 @@
      o Making translated blast output work better (Fan's work).
      o Improving splice sites handling a little in a case that
        effects about 1 in 500 alignments.
+     o Fixed a divide by zero error that happened with minScore=0
+       in a few rare cases involving sequences with rows of N's.
 
 32:
      o Dealing with out of order exons in a more sophisticated way

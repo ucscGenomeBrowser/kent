@@ -9,7 +9,7 @@
 #include "options.h"
 #include "fuzzyFind.h"
 
-static char const rcsid[] = "$Id: gfClient.c,v 1.32 2005/10/05 10:13:28 fanhsu Exp $";
+static char const rcsid[] = "$Id: gfClient.c,v 1.33 2005/12/06 18:28:51 kent Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"prot", OPTION_BOOLEAN},
@@ -36,7 +36,7 @@ void usage()
 /* Explain usage and exit. */
 {
 printf(
-  "gfClient v. %d - A client for the genomic finding program that produces a .psl file\n"
+  "gfClient v. %s - A client for the genomic finding program that produces a .psl file\n"
   "usage:\n"
   "   gfClient host port seqDir in.fa out.psl\n"
   "where\n"

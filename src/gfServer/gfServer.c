@@ -21,7 +21,7 @@
 #include "trans3.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.50 2005/09/27 17:54:32 angie Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.51 2005/12/06 18:28:51 kent Exp $";
 
 static struct optionSpec optionSpecs[] = {
     {"trans", OPTION_BOOLEAN},
@@ -63,7 +63,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "gfServer v %dx1 - Make a server to quickly find where DNA occurs in genome.\n"
+  "gfServer v %s - Make a server to quickly find where DNA occurs in genome.\n"
   "To set up a server:\n"
   "   gfServer start host port file(s)\n"
   "   Where the files are in .nib or .2bit format\n"
@@ -498,7 +498,7 @@ curtime = time (NULL);           /* Get the current time. */
 loctime = localtime (&curtime);  /* Convert it to local time representation. */
 strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime); /* formate datetime as string */
 								
-logInfo("gfServer version %d on host %s, port %s  (%s)", gfVersion, 
+logInfo("gfServer version %s on host %s, port %s  (%s)", gfVersion, 
 	hostName, portName, timestr);
 if (doTrans)
     {
@@ -565,7 +565,7 @@ for (;;)
 	}
     else if (sameString("status", command))
         {
-	sprintf(buf, "version %d", gfVersion);
+	sprintf(buf, "version %s", gfVersion);
 	netSendString(connectionHandle, buf);
 	sprintf(buf, "type %s", (doTrans ? "translated" : "nucleotide"));
 	netSendString(connectionHandle, buf);
