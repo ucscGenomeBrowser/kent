@@ -186,8 +186,8 @@ type netAlign rn3 chainRn3u1
 otherDb rn3
 
 track multiz10wayU1
-shortLabel Conservation
-longLabel 10-Way Vertebrate Multiz Alignment & Conservation 
+shortLabel U1 Conservation
+longLabel U1 10-Way Vertebrate Multiz Alignment & Conservation 
 group compGeno
 priority 104
 visibility full
@@ -209,8 +209,8 @@ sGroup_vertebrate monDom1 galGal2 xenTro1 danRer3 tetNig1
 treeImage phylo/Mm6_10way.jpg
 
 track multiz10way
-shortLabel Obsolete Conservation
-longLabel Obsolete 10-Way Vertebrate Multiz Alignment & Conservation 
+shortLabel Conservation
+longLabel 10-Way Vertebrate Multiz Alignment & Conservation 
 group compGeno
 priority 104
 visibility full
