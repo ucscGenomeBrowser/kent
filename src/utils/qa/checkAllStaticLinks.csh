@@ -13,6 +13,15 @@ set yymmdd="today"
 set file=""
 set currDir=$cwd
 
+
+
+if ( "$HOST" != "hgwdev" ) then
+ echo "\n error: you must run this script on dev!\n"
+ exit 1
+endif
+
+
+
 if ($#argv == 0 || $#argv > 2) then
   # no command line args
   echo

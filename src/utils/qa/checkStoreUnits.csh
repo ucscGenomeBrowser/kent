@@ -13,6 +13,11 @@ set machine=""
 set number=0
 set fullunit=""
 
+if ( "$HOST" != "hgwdev" ) then
+ echo "error: you must run this script on dev!"
+ exit 1
+endif
+
 set machine=""
 if ($#argv < 1 || $#argv > 1) then
   echo
