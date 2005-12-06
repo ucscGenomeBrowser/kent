@@ -9,42 +9,69 @@
 ###############################################
 
 set filePath=""
-set yymmmdd=""
+set yymmdd="today"
+set exclude=""
 set file=""
 set currDir=$cwd
 
-if ($#argv < 1) then
-  # no command line args
+if ( $#argv < 1 || $#argv > 3 ) then
+  # wrong number of command-line args
   echo
-  echo "  checks the links in all the files in a directory (uses list on hgwbeta)."
+  echo "  checks the links in all the files in a directory on the RR."
+  echo "    (uses directory on hgwbeta to get list)."
   echo
   echo "    usage:  path in /htdocs (zero for root), "
-  echo '      [yymmmdd (or other dateString)] defaults to "today"'
+  echo '      [yymmdd (or other dateString)] defaults to "today",'
+  echo "      [excludeList] filename or list of files not to check. "
   echo
   exit
-else
-  # set filePath=$argv[1]
-  set filePath=`echo $argv[1] | sed -e 's/\/$//'`
-  if ($#argv == 2) then
-    set yymmmdd=$argv[2]
-  else
-    set yymmmdd="today"
-  endif
 endif
 
+# strip trailing backslash"
 if ($argv[1] == 0) then
   set filePath=""
-  set terminalDir="htdocs"
-  # get list of active files from beta and trim pathname:
-  ssh hgwbeta 'ls /usr/local/apache/htdocs/*html' | sed -e "s/.*\///g" \
-      > ${currDir}/filelist
 else
-  set terminalDir=`echo $filePath | sed -e "s/.*\///g"`
-
-  # get list of active files from beta:
-  ssh hgwbeta 'ls /usr/local/apache/htdocs/'${filePath}'/*html' \
-      | sed -e "s/.*\///g" > ${currDir}/filelist
+  set filePath=`echo $argv[1] | sed -e 's/\/$//'`
 endif
+
+if ( $#argv == 2 ) then
+  echo
+  echo " Sorry, you cannot use only two arguments.  "
+  echo " if exclude list is used, date must be given explicitly"
+  echo
+  echo "$0"
+  $0
+  exit
+endif
+
+# set variable and check if exclude list exists
+set yymmdd=$argv[2]
+set exclude=$argv[3]
+
+if ( -e $exclude ) then
+    set exclude=`cat $exclude`
+else
+   echo "\nexclude file does not exist\n"
+   exit 1
+endif
+
+# get list of active files from beta
+# and strip off the pathnames from list leaving only filenames
+
+set origlist=`ssh hgwbeta 'ls /usr/local/apache/htdocs/'${filePath}'/*html' \
+      | sed -e "s/.*\///g"`
+
+# echo "exclude = $exclude"
+# strip out any files in exclude list
+foreach excl ( $exclude )
+  set origlist=`echo $origlist |  sed -e "s/ /\n/g" | egrep -v $excl`
+end
+
+echo $origlist | sed -e "s/ /\n/g" > ${currDir}/filelist
+
+# echo "yymmdd = $yymmdd"
+# echo "filepath = $filePath"
+# echo $exclude
 
 echo "files in htdocs/${filePath}"
 cat filelist
@@ -53,27 +80,31 @@ echo
 
 foreach file (`cat ${currDir}/filelist`)
   echo $file
-  LinkCheck $argv[1] $file $yymmmdd
+  LinkCheck $argv[1] $file $yymmdd
 end
 
-rm -f linkCheck.all.$yymmmdd
+rm -f linkCheck.all.$yymmdd
+set outfile="linkCheck.all.$yymmdd"
 
-echo  >>  linkCheck.all.$yymmmdd
-echo "========  reporting only on files with errors   ========" >>  linkCheck.all.$yymmmdd
-echo "========================================================" >>  linkCheck.all.$yymmmdd
-echo  >>  linkCheck.all.$yymmmdd
-foreach file (`ls -1 *.$yymmmdd.errors`)
+echo  >>  $outfile
+echo "========  reporting only on files with errors   ========" >>  $outfile
+echo "========================================================" >>  $outfile
+echo  >>  $outfile
+foreach file (`ls -1 *.$yymmdd.errors`)
   set fileflag=`cat $file | grep -e "Response Code" | wc -l`
   if ($fileflag > 0) then
-    set filename=`echo $file | sed -e "s/\./\//g" | sed -e "s/\/$yymmmdd\/errors/\.html/"`
-    echo >>  linkCheck.all.$yymmmdd
-    echo "for htdocs/$filename" >>  linkCheck.all.$yymmmdd
-    echo >>  linkCheck.all.$yymmmdd
-    cat $file >>  linkCheck.all.$yymmmdd
-    echo >>  linkCheck.all.$yymmmdd
-    echo "========================================================" >>  linkCheck.all.$yymmmdd
-    echo >>  linkCheck.all.$yymmmdd
+    # recover directory structure from dir.dir.dir.yymmdd.error files
+    #   and strip out filename from any file with errors
+    set filename=`echo $file | sed -e "s/\./\//g" | sed -e "s/\/$yymmdd\/errors/\.html/"`
+    echo >>  $outfile
+    echo "for htdocs/$filename" >>  $outfile
+    echo >>  $outfile
+    cat $file >>  $outfile
+    echo >>  $outfile
+    echo "========================================================" >>  $outfile
+    echo >>  $outfile
   endif
+  # rm $file ??
 end
 
-
+rm -f filelist
