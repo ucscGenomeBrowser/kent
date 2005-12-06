@@ -3701,3 +3701,112 @@ cat > gsub << 'EOF'
     mouse/dm2/nscanGene.html    
     mouse/dm2/trackDb.ra
 
+
+# BLASTZ/CHAIN/NET DROYAK2 (DONE 11/23/05 angie)
+    mkdir /cluster/data/dm2/bed/blastz.droYak2.2005-11-23
+    cd /cluster/data/dm2/bed/blastz.droYak2.2005-11-23
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. D. yakuba
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm2/nib
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm2/chrom.sizes
+
+# QUERY - D. yakuba
+SEQ2_DIR=/iscratch/i/droYak2/droYak2.2bit
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/droYak2/chrom.sizes
+
+BASE=/cluster/data/dm2/bed/blastz.droYak2.2005-11-23
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -blastzOutRoot /cluster/bluearc/dm2droYak2 >& do.log &
+    tail -f do.log
+    featureBits dm2 -chrom=chr2L -enrichment flyBaseGene chainDroYak2Link
+#flyBaseGene 22.967%, chainDroYak2Link 91.943%, both 22.758%, cover 99.09%, enrich 1.08x
+    rm -f /cluster/data/dm2/bed/blastz.droYak2
+    ln -s blastz.droYak2.2005-11-23 /cluster/data/dm2/bed/blastz.droYak2
+
+
+# BLASTZ/CHAIN/NET DROPER1 (DONE 11/29/05 angie)
+    mkdir /cluster/data/dm2/bed/blastz.droPer1.2005-11-28
+    cd /cluster/data/dm2/bed/blastz.droPer1.2005-11-28
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. D. persimilis
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm2/nib
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm2/chrom.sizes
+
+# QUERY - D. persimilis
+SEQ2_DIR=/iscratch/i/droPer1/droPer1.2bit
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/droPer1/chrom.sizes
+
+BASE=/cluster/data/dm2/bed/blastz.droPer1.2005-11-28
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -blastzOutRoot /panasas/store/dm2droPer1 >& do.log &
+    tail -f do.log
+    featureBits dm2 -chrom=chr2L -enrichment flyBaseGene chainDroPer1Link
+#flyBaseGene 22.967%, chainDroPer1Link 74.744%, both 21.320%, cover 92.83%, enrich 1.24x
+    rm -f /cluster/data/dm2/bed/blastz.droPer1
+    ln -s blastz.droPer1.2005-11-28 /cluster/data/dm2/bed/blastz.droPer1
+
+
+# BLASTZ/CHAIN/NET DROSEC1 (DONE 12/5/05 angie)
+    mkdir /cluster/data/dm2/bed/blastz.droSec1.2005-11-30
+    cd /cluster/data/dm2/bed/blastz.droSec1.2005-11-30
+    cat << '_EOF_' > DEF
+# D. melanogaster vs. D. sechellia
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - D. melanogaster
+SEQ1_DIR=/iscratch/i/dm2/nib
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/dm2/chrom.sizes
+
+# QUERY - D. sechellia
+SEQ2_DIR=/iscratch/i/droSec1/droSec1.2bit
+SEQ2_CHUNK=10000000
+SEQ2_LAP=10000
+SEQ2_LEN=/cluster/data/droSec1/chrom.sizes
+
+BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -blastzOutRoot /panasas/store/dm2droSec1 >& do.log &
+    tail -f do.log
+    featureBits dm2 -chrom=chr2L -enrichment flyBaseGene chainDroSec1Link
+#flyBaseGene 22.967%, chainDroSec1Link 92.860%, both 22.759%, cover 99.09%, enrich 1.07x
+    rm -f /cluster/data/dm2/bed/blastz.droSec1
+    ln -s blastz.droSec1.2005-11-30 /cluster/data/dm2/bed/blastz.droSec1
+
+
