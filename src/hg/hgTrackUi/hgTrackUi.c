@@ -27,7 +27,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.227 2005/12/05 19:26:24 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.228 2005/12/06 23:26:23 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -725,7 +725,8 @@ if (omimAvail > 0)
 void knownGeneUI(struct trackDb *tdb)
 /* Put up refGene-specifc controls */
 {
-knownGeneIdConfig(tdb);
+/* This is incompatible with adding Protein ID to lf->extra
+knownGeneIdConfig(tdb); */
 cdsColorOptions(tdb, 2);
 }
 
