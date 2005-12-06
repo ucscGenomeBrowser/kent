@@ -343,7 +343,7 @@ popd
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
 
 
-# AUTO UPDATE GENBANK INITIAL RUN (IN PROGRESS 12/6/05 angie)
+# AUTO UPDATE GENBANK INITIAL RUN (DONE 12/6/05 angie)
     # align with revised genbank process
     cd ~kent/src/makeDb/genbank
     cvs update -d etc
@@ -382,13 +382,14 @@ droSec1.perChromTables = no
     ssh kkstore02
     cd /cluster/data/genbank
     nice bin/gbAlignStep -initial droSec1 &
-#TODO
 
     # when finished
     ssh hgwdev
     cd /cluster/data/genbank
     nice ./bin/gbDbLoadStep -drop -initialLoad droSec1&
     featureBits droSec1 xenoRefGene
+#27947465 bases of 157238575 (17.774%) in intersection
     featureBits droSec1 xenoMrna
+#24574087 bases of 157238575 (15.629%) in intersection
 
 
