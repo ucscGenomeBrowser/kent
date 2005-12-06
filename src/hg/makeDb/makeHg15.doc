@@ -3425,6 +3425,10 @@ hgLoadBed -noBin hg15 syntenyCow in.bed
 
 hgLoadBed -noBin hg15 syntenyCow in2.bed
 
+# New data again (Dec. 2005)
+
+hgLoadBed -noBin hg15 syntenyCow in3.bed
+
 # add to kent/src/hg/makeDb/trackDb/human/hg15/trackDb.ra
 
 # COW BACENDS (Done, Heather, Mar. 8, 2005)
