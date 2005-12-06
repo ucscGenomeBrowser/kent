@@ -1164,7 +1164,7 @@ cat > load.csh << 'EOF'
     hgsql hg17 -e "ALTER TABLE encodeNhgriDnaseHsNonAct RENAME TO encodeNhgriDnaseHsMpssCd4"
 
 ##########################################################################
-# Sanger Chip/chip (2005-10-24 kate)
+# Sanger Chip/chip Hits and Centers (2005-10-24 kate)
     # From Paul Flicek, at EBI 
     # 14 files (3 cells, most with 5 factors), each file having
     # 3 tracks:  chip/chip, HMM regions, HMM centers
@@ -1377,11 +1377,15 @@ cat > loadSig.csh << 'EOF'
 # Resubmitted 11/17
 #  2 files - raw and peaks, for c-Myc in HeLa
 # range .001 to 1.0.  Peaks restricted to >.8
+# Adjusted data in Tags file:  set score=1 items to 300 so
+# they'll be visible with gray-scale tags requested by Akshay.
+# (This is why it's loaded as blocked bed)
 
     #cd /cluster/data/encode/UTexas/stage/2005-10-15
     cd /cluster/data/encode/UTexas/stage/2005-11-17
     grep '^chr' lab/myc.tag.prob.bed | \
-        awk '{printf("%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t0\t1\t%d,\t0\n", \
+        awk '{if ($5 == 1) $5 = 300; \
+                printf("%s\t%d\t%d\t%s\t%d\t%s\t%d\t%d\t0\t1\t%d,\t0\n", \
                 $1, $2, $3, $4, $5, $6, $2, $3, $3 - $2)}' | \
         hgLoadBed -noBin -strict hg17 encodeUtexStageMycHelaTags stdin
             # 813 elements
@@ -1396,8 +1400,10 @@ cat > loadSig.csh << 'EOF'
 # Submitted by Claes & Ola
 # 4 files with chrom, start, end, integer score
 # Sites file in GFF format
+# NOTE: this was submitted in hg16, without notifying us.
+# I'm reloading after lifting, 2005-05-12
 
-    cd /cluster/data/encode/uppsala/2005-11-07
+    cd /cluster/data/encode/Uppsala/2005-11-07
     /cluster/data/encode/bin/scripts/splitTracks.pl lab/chip.wig
     mv t0 Usf1.wig
     mv t1 Hnf3b.wig
@@ -1410,16 +1416,22 @@ cat > loadSig.csh << 'EOF'
 cat > load.csh << 'EOF'
     foreach factor (Usf1 Hnf3b Hnf4a Ach3)
       awk '/^chr/ {printf("%s\t%s\t%s\t%.3f\n", $1, $2, $3, $4)}' $factor.wig |\
-        hgLoadBed -strict -bedGraph=4 hg17 encodeUppsalaChip$factor stdin
+        liftOver stdin /cluster/data/encode/convertHg17/hg16ToHg17.chain \
+                $factor.hg17.bed $factor.unmapped
+        hgLoadBed -strict -bedGraph=4 hg17 encodeUppsalaChip$factor $factor.hg17.bed
     end
 'EOF'
     csh load.csh >&! load.log &
     
     # sites (they refer to as Tentative Binding Sites)
-    # NOTE: I added an item name, of the form "uu.#"
+    # NOTE: I added an item name, of the form "uutbs.#"
     grep -v track Sites.gff | sort -k1,1 -k2,2n | \
-        awk '{printf ("%s\t%d\t%d\tuu.%d\t%d\n", $1, $4, $5, NR, $6)}' | \
-            hgLoadBed -noSort -noBin -strict hg17 encodeUppsalaChipSites stdin
+        awk '{printf ("%s\t%d\t%d\tuutbs.%d\t%d\n", $1, $4, $5, NR, $6)}' | \
+            liftOver stdin /cluster/data/encode/convertHg17/hg16ToHg17.chain \
+                sites.hg17.bed sites.unmapped
+            hgLoadBed -noSort -noBin -strict hg17 encodeUppsalaChipSites sites.hg17.bed
+                # Loaded 327 elements of size 5
+
    
 ##########################################################################
 # MSA tracks from Sept. 2005 freeze
