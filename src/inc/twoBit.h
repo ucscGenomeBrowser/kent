@@ -70,6 +70,9 @@ void twoBitClose(struct twoBitFile **pTbf);
 int twoBitSeqSize(struct twoBitFile *tbf, char *name);
 /* Return size of sequence in two bit file in bases. */
 
+long long twoBitTotalSize(struct twoBitFile *tbf);
+/* Return total size of all sequences in two bit file. */
+
 struct dnaSeq *twoBitReadSeqFrag(struct twoBitFile *tbf, char *name,
 	int fragStart, int fragEnd);
 /* Read part of sequence from .2bit file.  To read full

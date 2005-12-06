@@ -9,7 +9,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.19 2005/10/18 19:23:03 lowec Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.20 2005/12/06 18:26:07 kent Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -594,6 +594,19 @@ int twoBitSeqSize(struct twoBitFile *tbf, char *name)
 {
 twoBitSeekTo(tbf, name);
 return readBits32(tbf->f, tbf->isSwapped);
+}
+
+long long twoBitTotalSize(struct twoBitFile *tbf)
+/* Return total size of all sequences in two bit file. */
+{
+struct twoBitIndex *index;
+long long totalSize = 0;
+for (index = tbf->indexList; index != NULL; index = index->next)
+    {
+    fseek(tbf->f, index->offset, SEEK_SET);
+    totalSize += readBits32(tbf->f, tbf->isSwapped);
+    }
+return totalSize;
 }
 
 struct dnaSeq *twoBitLoadAll(char *spec)
