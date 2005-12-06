@@ -113,7 +113,7 @@ verbose(1,
   "   -distOut=<file name> - output bedGraph file for the items with\n"
   "                    - their nearest distance included in column 5\n"
   "   -zeroBed=<file name> - output bed file for the items that\n"
-  "                    - are within 0bp of the measured neighbors"
+  "                    - are within 0bp of the measured neighbors\n"
 );
 exit(255);
 }
