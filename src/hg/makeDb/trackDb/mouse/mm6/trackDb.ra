@@ -208,6 +208,16 @@ sGroup_mammal rn3 hg17 canFam2 bosTau1
 sGroup_vertebrate monDom1 galGal2 xenTro1 danRer3 tetNig1
 treeImage phylo/Mm6_10way.jpg
 
+track phastConsElementsU1
+shortLabel U1 Most Conserved
+longLabel U1 PhastCons Conserved Elements
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track multiz10way
 shortLabel Conservation
 longLabel 10-Way Vertebrate Multiz Alignment & Conservation 
