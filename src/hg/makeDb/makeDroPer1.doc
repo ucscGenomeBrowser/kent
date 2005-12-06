@@ -8,9 +8,6 @@ exit; # don't actually run this like a script :)
 
 
 # DOWNLOAD SEQUENCE (DONE 11/23/05 angie)
-    # First did the download 8/5/05, but found that the sequence was 
-    # identical to the droMoj2 sequence.  Asked Mike Eisen about it, 
-    # he tracked it down with Agencourt and it's fixed now.  
     ssh kkstore02
     mkdir /cluster/store11/droPer1
     cd /cluster/data
@@ -126,10 +123,13 @@ popd
                   create index genoStart on rmsk (genoName(7), genoStart);'
 
 
-# GOLD, GAP FROM AGP (DONE 11/23/05 angie)
+# GOLD, GAP FROM AGP (DONE 11/29/05 angie)
     ssh hgwdev
     cd /cluster/data/droPer1
-    hgGoldGapGl -noGl droPer1 downloads/assembly.agp
+    # Weird, their sequences are called "super_*" but their agp has 
+    # "scaffold_*"... go with the sequence names and fix the agp.
+    sed -e 's/^scaffold_/super_/' downloads/assembly.agp > ucsc.agp
+    hgGoldGapGl -noGl droPer1 ucsc.agp
 
 
 # SIMPLE REPEATS (TRF) (DONE 11/23/05 angie)
@@ -342,7 +342,7 @@ popd
     iSync
 
 
-# SWAP CHAINS FROM DM2, BUILD NETS ETC. (TODO 11//05 angie)
+# SWAP CHAINS FROM DM2, BUILD NETS ETC. (DONE 11/29/05 angie)
     mkdir /cluster/data/droPer1/bed/blastz.dm2.swap
     cd /cluster/data/droPer1/bed/blastz.dm2.swap
     doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.droPer1/DEF \
@@ -352,13 +352,14 @@ popd
     # Add {chain,net}Dm2 to trackDb.ra if necessary.
 
 
-# AUTO UPDATE GENBANK INITIAL RUN (TODO 11//05 angie)
+# AUTO UPDATE GENBANK INITIAL RUN (DONE 12/5/05 angie)
     # align with revised genbank process
     cd ~kent/src/makeDb/genbank
     cvs update -d etc
     # edit etc/genbank.conf to add droPer1
 # droPer1 (D. persimilis)
-# genbank has 35 mRNAs and 633 ESTs at time of initial build
+# genbank.150.0/full has 1 mRNA and 0 ESTs at time of initial build,
+# so no need to make native tracks.
 droPer1.serverGenome = /cluster/data/droPer1/droPer1.2bit
 droPer1.clusterGenome = /iscratch/i/droPer1/droPer1.2bit
 droPer1.ooc = /iscratch/i/droPer1/11.ooc
@@ -369,16 +370,23 @@ droPer1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCD
 droPer1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
 droPer1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
 droPer1.genbank.est.xeno.pslCDnaFilter    = ${lowCover.genbank.est.xeno.pslCDnaFilter}
-droPer1.refseq.mrna.native.load = yes
+droPer1.refseq.mrna.native.load = no
 droPer1.refseq.mrna.xeno.load = yes
+droPer1.genbank.mrna.native.load = no
 droPer1.genbank.mrna.xeno.load = yes
-droPer1.genbank.est.native.load = yes
+droPer1.genbank.est.native.load = no
 droPer1.genbank.est.xeno.load = no
 droPer1.downloadDir = droPer1
 droPer1.perChromTables = no
 
     # update /cluster/data/genbank/
+    cvs ci etc/genbank.conf
     make etc-update
+
+    # droPer1 is a new species, so add it to src/lib/gbGenome.c
+    make
+    cvs ci src/lib/gbGenome.c
+    make install-server
 
     ssh kkstore02
     cd /cluster/data/genbank
@@ -387,6 +395,10 @@ droPer1.perChromTables = no
     # when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    nice ./bin/gbDbLoadStep -drop -initialLoad  droPer1&
+    nice ./bin/gbDbLoadStep -drop -initialLoad droPer1&
+    featureBits droPer1 xenoRefGene
+#18268342 bases of 175583556 (10.404%) in intersection
+    featureBits droPer1 xenoMrna
+#16624016 bases of 175583556 (9.468%) in intersection
 
 
