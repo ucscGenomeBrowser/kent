@@ -99,7 +99,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1047 2005/12/02 17:32:16 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1048 2005/12/06 23:27:58 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2788,6 +2788,7 @@ tg->loadItems 	= loadHg17Kg;
 tg->itemName 	= hg17KgName;
 tg->mapItemName = hg17KgMapName;
 }
+
 char *knownGeneName(struct track *tg, void *item)
 {
 static char cat[128];
@@ -2898,7 +2899,8 @@ void loadKnownGene(struct track *tg)
 /* Load up known genes. */
 {
 enum trackVisibility vis = tg->visibility;
-tg->items = lfFromGenePredInRange(tg, "knownGene", chromName, winStart, winEnd);
+//tg->items = lfFromGenePredInRange(tg, "knownGene", chromName, winStart, winEnd);
+loadGenePredWithName2(tg);
 if (vis != tvDense)
     {
     lookupKnownGeneNames(tg->items);
