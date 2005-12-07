@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: correctEst.c,v 1.3 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: correctEst.c,v 1.4 2005/12/07 17:05:39 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -73,15 +73,6 @@ uglyf("Loaded %d psls from %s\n", slCount(pslList), fileName);
 return hash;
 }
 
-struct nibInfo
-/* Info on a nib file. */
-    {
-    struct nibInfo *next;
-    char *chrom;	/* Chromosome. */
-    int size;		/* Size of chromosome. */
-    char *fileName;	/* Nib file name. */
-    FILE *f;		/* File handle. */
-    };
 
 struct dnaSeq *readCachedNib(struct hash *nibHash, char *nibDir,
 	char *chrom, int start, int size)
@@ -93,7 +84,6 @@ if (ni == NULL)
     char fileName[512];
     sprintf(fileName, "%s/%s.nib", nibDir, chrom);
     AllocVar(ni);
-    hashAddSaveName(nibHash, chrom, ni, &ni->chrom);
     ni->fileName = cloneString(fileName);
     nibOpenVerify(fileName, &ni->f, &ni->size);
     }
