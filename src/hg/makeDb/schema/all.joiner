@@ -51,7 +51,7 @@ exclusiveSet $gbd
 set otherDb uniProt,go,hgFixed,proteome,visiGene
 
 # Define protein databases (currently not checked)
-set proteinDb proteins050315, proteins050201,proteins041115,proteins0111,proteins0305,proteins031112,proteins040115,proteins040115,proteins0405,proteins070403,proteins072003,proteins092903,proteins1129
+set proteinDb proteins051015, proteins050415,  proteins050315, proteins050201,proteins041115,proteins0111,proteins0305,proteins031112,proteins040115,proteins040115,proteins0405,proteins070403,proteins072003,proteins092903,proteins1129
 
 # Define zoo databases (currently not checked)
 set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooHuman3,zooMouse3,zooPig3,zooRat3,zooTetra3,zooZebrafish3
@@ -1058,12 +1058,12 @@ identifier ccdsGeneId
 # Fields parsed out of a Genbank flat file, associated with mRNA records
 
 identifier genBankAuthor
-"Connects genBank mRNA/EST and it's author"
+"Connects genBank mRNA/EST and its author"
     $gbd.author.id
     $gbd.gbCdnaInfo.author 
 
 identifier genBankCds
-"Connects genBank mRNA/EST and it's coding region (CDS)"
+"Connects genBank mRNA/EST and its coding region (CDS)"
     $gbd.cds.id
     $gbd.gbCdnaInfo.cds 
 
