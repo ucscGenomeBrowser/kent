@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.80 2005/12/07 01:33:54 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.81 2005/12/07 07:15:55 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -790,10 +790,7 @@ for (iBlk = 0; (iBlk < psl->blockCount) && (cdsEnd < 0); iBlk++)
 if (cdsEnd < 0)
     {
     /* after last block, set to end of that block */
-    if (pslIsProtein(psl))
-	cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1] * 3;
-    else
-	cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
+    cdsEnd = psl->tStarts[iBlk-1] + psl->blockSizes[iBlk-1];
     if (gene->strand[0] == '+')
         cds->endComplete = FALSE;
     else
@@ -953,6 +950,7 @@ if (gene->optFields & genePredExonFramesFld)
         gene->exonFrames[iExon] = -1;
     }
 
+/* traverse psl in postive target order */
 if (psl->strand[1] == '-')
     {
     startIdx = psl->blockCount-1;
@@ -971,8 +969,6 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     {
     unsigned tStart = psl->tStarts[iBlk];
     unsigned tEnd = tStart + psl->blockSizes[iBlk];
-    if (pslIsProtein(psl))
-	tEnd = tStart + psl->blockSizes[iBlk] * 3;
     if (psl->strand[1] == '-')
         reverseIntRange(&tStart, &tEnd, psl->tSize);
     if (!shouldMergeBlocks(gene, iExon, tStart, options,
@@ -983,15 +979,16 @@ for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
         gene->exonStarts[iExon] = tStart;
 	}
     gene->exonEnds[iExon] = tEnd;
-    /* only set frame if it hasn't already been set for this exon. This will give
-     * the frame for the first CDS block that is merged into the exon */
-    if ((gene->optFields & genePredExonFramesFld) && (gene->exonFrames[iExon] < 0)
-        && (cds != NULL))
+    /* Set the frame. We have to deal with multiple blocks being merged.  For
+     * positive strand, the first block frame is used, for negative strand,
+     * the last is used. */
+    if ((gene->optFields & genePredExonFramesFld) && (cds != NULL)
+        && (((psl->strand[0] == '+') && (gene->exonFrames[iExon] < 0))
+            || (psl->strand[0] == '-')))
 	{
-	if (pslIsProtein(psl))
-	    gene->exonFrames[iExon] = getFrame(psl, psl->qStarts[iBlk], psl->qStarts[iBlk]+3*psl->blockSizes[iBlk], cds);
-	else
-	    gene->exonFrames[iExon] = getFrame(psl, psl->qStarts[iBlk], psl->qStarts[iBlk]+psl->blockSizes[iBlk], cds);
+        int fr = getFrame(psl, psl->qStarts[iBlk], psl->qStarts[iBlk]+psl->blockSizes[iBlk], cds);
+        if (fr >= 0)
+	    gene->exonFrames[iExon] = fr;
 	}
     }
 gene->exonCount = iExon+1;
@@ -1014,6 +1011,9 @@ struct genePred *genePredFromPsl3(struct psl *psl,  struct genbankCds* cds,
  * annotation.  If cds is null, it will set status fields to cdsNone.  */
 {
 struct genePred *gene;
+if (pslIsProtein(psl))
+    errAbort("can't convert protein psls to genePreds");
+
 AllocVar(gene);
 gene->name = cloneString(psl->qName);
 gene->chrom = cloneString(psl->tName);
