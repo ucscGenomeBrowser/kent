@@ -6,12 +6,13 @@
 #include "hdb.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoad.c,v 1.15 2005/12/03 13:26:52 heather Exp $";
+static char const rcsid[] = "$Id: snpLoad.c,v 1.16 2005/12/07 18:44:44 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
 char *contigGroup = NULL;
 static struct hash *chromHash = NULL;
+static struct slName *chromList = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -110,12 +111,12 @@ if (snpClass == 4)
     el->chromEnd = el->chromStart;
     return TRUE;
     }
-verbose(1, "skipping snp %s with loc type %d\n", el->name, snpClass);
+verbose(5, "skipping snp %s with loc type %d\n", el->name, snpClass);
 return FALSE;
 }
 
-struct snp125 *readSnps()
-/* query ContigLoc */
+struct snp125 *readSnps(char *chromName, struct slName *contigList)
+/* query ContigLoc for all snps in contig */
 {
 struct snp125 *list=NULL, *el = NULL;
 char query[512];
@@ -125,54 +126,54 @@ char **row;
 int snpClass;
 int pos;
 int count = 0;
+struct slName *contigPtr;
 
-safef(query, sizeof(query), "select snp_id, ctg_id, loc_type, phys_pos_from, "
-      "phys_pos, orientation, allele from ContigLoc where snp_type = 'rs'");
-
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+verbose(1, "reading snps...\n");
+for (contigPtr = contigList; contigPtr != NULL; contigPtr = contigPtr->next)
     {
-    count++;
-    // short-circuit 
-    // if (count == 1000) 
-        // {
-        // sqlFreeResult(&sr);
-        // hFreeConn(&conn);
-        // return list;
-	// }
-    pos = atoi(row[3]);
-    if (pos == 0) 
+
+    safef(query, sizeof(query), "select snp_id, ctg_id, loc_type, phys_pos_from, "
+      "phys_pos, orientation, allele from ContigLoc where snp_type = 'rs' and ctg_id = '%s'", contigPtr->name);
+    verbose(1, "ctg_id = %d\n", contigPtr->name);
+
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
         {
-	verbose(3, "snp %s is unaligned\n", el->name);
-	continue;
-	}
-    snpClass = atoi(row[2]);
-    if (snpClass < 1 || snpClass > 4) 
-        {
-	verbose(1, "skipping snp %s with loc_type %d\n", el->name, snpClass);
-	continue;
-	}
-    AllocVar(el);
-    el->name = cloneString(row[0]);
-    /* store ctg_id in chrom for now, substitute later */
-    el->chrom = cloneString(row[1]);
-    el->score = 0;
-    if(!setCoords(el, snpClass, row[3], row[4]))
-        {
-        free(el);
-	continue;
-	}
-    if (atoi(row[5]) == 0) 
-        strcpy(el->strand, "+");
-    else if (atoi(row[5]) == 1)
-        strcpy(el->strand, "-");
-    else
-        strcpy(el->strand, "?");
-    el->refNCBI = cloneString(row[6]);
-    slAddHead(&list,el);
+        pos = atoi(row[3]);
+        if (pos == 0) 
+            {
+	    verbose(5, "snp %s is unaligned\n", row[0]);
+	    continue;
+	    }
+        snpClass = atoi(row[2]);
+        if (snpClass < 1 || snpClass > 4) 
+            {
+	    verbose(5, "skipping snp %s with loc_type %d\n", el->name, snpClass);
+	    continue;
+	    }
+        AllocVar(el);
+        el->name = cloneString(row[0]);
+        el->chrom = chromName;
+        el->score = 0;
+        if(!setCoords(el, snpClass, row[3], row[4]))
+            {
+            free(el);
+	    continue;
+	    }
+        if (atoi(row[5]) == 0) 
+            strcpy(el->strand, "+");
+        else if (atoi(row[5]) == 1)
+            strcpy(el->strand, "-");
+        else
+            strcpy(el->strand, "?");
+        el->refNCBI = cloneString(row[6]);
+        slAddHead(&list,el);
+	count++;
+        }
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
 hFreeConn(&conn);
+verbose(1, "%d snps found\n\n\n", count);
 return list;
 }
 
@@ -184,7 +185,36 @@ boolean confirmCoords(int start1, int end1, int start2, int end2)
     return TRUE;
 }
 
+struct slName *getContigs(char *chromName)
+/* get list of contigs that are from chrom */
+{
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+struct slName *contigList = NULL;
+struct slName *el = NULL;
+int count = 0;
+
+verbose(1, "getting contigs...\n");
+safef(query, sizeof(query), "select ctg_id from ContigInfo where contig_chr = '%s'", chromName);
+verbose(5, "query = %s\n", query);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    verbose(5, "contig = %s\n", row[0]);
+    el = newSlName(row[0]);
+    slAddHead(&contigList, el);
+    count++;
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+verbose(1, "contigs found = %d\n", count);
+return(contigList);
+}
+
 void lookupContigs(struct snp125 *list)
+/* no longer used */
 {
 struct snp125 *el;
 char query[512];
@@ -195,7 +225,7 @@ char *actualChrom;
 char *actualContigGroup;
 boolean errorFound = FALSE;
 
-verbose(1, "looking up contig chrom...\n");
+verbose(5, "looking up contig chrom...\n");
 for (el = list; el != NULL; el = el->next)
     {
     safef(query, sizeof(query), "select contig_chr, contig_start, contig_end, group_term from ContigInfo "
@@ -328,21 +358,21 @@ char rsName[64];
 verbose(1, "looking up observed...\n");
 for (el = list; el != NULL; el = el->next)
     {
-    if (sameString(el->chrom, "ERROR")) continue;
-    strcpy(rsName, "rs");
-    strcat(rsName, el->name);
-    safef(query, sizeof(query), "select molType, observed from snpFasta where rsId = '%s'", rsName);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row == NULL)
-        {
+    // if (sameString(el->chrom, "ERROR")) continue;
+    // strcpy(rsName, "rs");
+    // strcat(rsName, el->name);
+    // safef(query, sizeof(query), "select molType, observed from snpFasta where rsId = '%s'", rsName);
+    // sr = sqlGetResult(conn, query);
+    // row = sqlNextRow(sr);
+    // if (row == NULL)
+        // {
         el->observed = "n/a";
 	el->molType = "unknown";
-	continue;
-	}
-    el->molType = cloneString(row[0]);
-    el->observed = cloneString(row[1]);
-    sqlFreeResult(&sr);
+	// continue;
+	// }
+    // el->molType = cloneString(row[0]);
+    // el->observed = cloneString(row[1]);
+    // sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
 }
@@ -382,12 +412,13 @@ for (el = list; el != NULL; el = el->next)
     }
 }
 
-void writeSnpTable(FILE *f, struct snp125 *list)
+void appendToTabFile(FILE *f, struct snp125 *list)
 /* write tab separated file */
 {
 struct snp125 *el;
 int score = 0;
 int bin = 0;
+int count = 0;
 
 for (el = list; el != NULL; el = el->next)
     {
@@ -413,29 +444,12 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "dbSNP125\t");
     fprintf(f, "0\t");
     fprintf(f, "\n");
+    count++;
     }
+verbose(1, "%d lines written\n", count);
 }
 
 
-
-
-void loadDatabase(struct snp125 *list)
-/* write the tab file, create the table and load the tab file */
-{
-struct sqlConnection *conn2 = hAllocConn2();
-
-FILE *f = hgCreateTabFile(".", "snp125");
-writeSnpTable(f, list);
-
-// hGetMinIndexLength requires chromInfo
-// could add hGetMinIndexLength2 to hdb.c
-// snp125TableCreate(conn2, hGetMinIndexLength2());
-snp125TableCreate(conn2, 32);
-
-hgLoadTabFile(conn2, ".", "snp125", &f);
-hFreeConn2(&conn2);
-
-}
 
 void dumpSnps(struct snp125 *list)
 {
@@ -454,10 +468,24 @@ for (el = list; el != NULL; el = el->next)
     }
 }
 
+void loadDatabase(FILE *f)
+{
+struct sqlConnection *conn2 = hAllocConn2();
+// hGetMinIndexLength requires chromInfo
+// could add hGetMinIndexLength2 to hdb.c
+// snp125TableCreate(conn2, hGetMinIndexLength2());
+snp125TableCreate(conn2, 32);
+verbose(1, "loading...\n");
+hgLoadTabFile(conn2, ".", "snp125", &f);
+hFreeConn2(&conn2);
+}
+
 int main(int argc, char *argv[])
 /* Check args; read and load . */
 {
 struct snp125 *list=NULL, *el;
+struct slName *chromPtr, *contigList;
+FILE *f = hgCreateTabFile(".", "snp125");
 
 if (argc != 4)
     usage();
@@ -472,7 +500,7 @@ contigGroup = argv[3];
 hSetDb(snpDb);
 hSetDb2(targetDb);
 chromHash = loadAllChromInfo();
-
+chromList = hAllChromNamesDb(targetDb);
 
 /* check for needed tables */
 if(!hTableExistsDb(snpDb, "ContigLoc"))
@@ -484,19 +512,32 @@ if(!hTableExistsDb(snpDb, "ContigLocusId"))
 if(!hTableExistsDb(snpDb, "SNP"))
     errAbort("no SNP table in %s\n", snpDb);
 
-list = readSnps();
-lookupContigs(list);
-lookupFunction(list);
-lookupHet(list);
-lookupObserved(list);
-lookupRefAllele(list);
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
+    {
+    stripString(chromPtr->name, "chr");
+    }
 
-verbose(1, "sorting\n");
-slSort(&list, snp125Cmp);
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
+    {
+    verbose(1, "chrom = %s\n", chromPtr->name);
+    contigList = getContigs(chromPtr->name);
+    if (contigList == NULL) continue;
+    list = readSnps(chromPtr->name, contigList);
+    slFreeList(&contigList);
+    // don't need this.   We know chrom.
+    // lookupContigs(list);
+    lookupFunction(list);
+    lookupHet(list);
+    lookupObserved(list);
+    lookupRefAllele(list);
 
-// dumpSnps(list);
-verbose(1, "loading\n");
-loadDatabase(list);
-slFreeList(&list);
+    verbose(1, "sorting\n");
+    slSort(&list, snp125Cmp);
+    // TO DO
+    appendToTabFile(f, list);
+    slFreeList(&list);
+    }
+
+loadDatabase(f);
 return 0;
 }
