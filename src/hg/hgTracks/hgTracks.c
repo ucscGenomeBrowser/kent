@@ -99,7 +99,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1048 2005/12/06 23:27:58 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1049 2005/12/07 22:40:35 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2795,7 +2795,7 @@ static char cat[128];
 struct linkedFeatures *lf = item;
 if (lf->extra != NULL) 
     {
-    sprintf(cat,"%s",(char *)lf->extra);
+    sprintf(cat,"%s",((struct knownGenesExtra *)(lf->extra))->name);
     return cat;
     }
 else 
@@ -2808,7 +2808,7 @@ char *knownGeneMapName(struct track *tg, void *item)
 char str2[255];
 struct linkedFeatures *lf = item;
 /* piggy back the protein ID (hgg_prot variable) on hgg_gene variable */
-safef(str2, sizeof(str2), "%s&hgg_prot=%s", lf->name, (char *)lf->extra);
+safef(str2, sizeof(str2), "%s&hgg_prot=%s", lf->name, ((struct knownGenesExtra *)(lf->extra))->hgg_prot);
 return(strdup(str2));
 }
 
@@ -2855,6 +2855,8 @@ if (hTableExists("kgXref"))
     for (lf = lfList; lf != NULL; lf = lf->next)
 	{
         struct dyString *name = dyStringNew(64);
+        struct knownGenesExtra *kgE;
+        AllocVar(kgE);
         labelStarted = FALSE; /* reset between items */
     	if (useGeneSymbol)
             {
@@ -2876,9 +2878,16 @@ if (hTableExists("kgXref"))
             {
             if (labelStarted) dyStringAppendC(name, '/');
             else labelStarted = TRUE;
-	    safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
-            protDisplayId = sqlGetField(conn, database, "kgXref", "spDisplayID", cond_str);
-            dyStringAppend(name, protDisplayId);
+            if (lf->extra != NULL)
+                {
+                dyStringAppend(name, (char *)lf->extra);
+                }
+            else 
+                {
+	        safef(cond_str, sizeof(cond_str), "kgID='%s'", lf->name);
+                protDisplayId = sqlGetField(conn, database, "kgXref", "spDisplayID", cond_str);
+                dyStringAppend(name, protDisplayId);
+                }
 	    }
         if (useMimId && hTableExists("refLink")) 
             {
@@ -2889,7 +2898,11 @@ if (hTableExists("kgXref"))
             if (mimId) 
                 dyStringAppend(name, mimId);
             }
-    	lf->extra = dyStringCannibalize(&name);
+        /* should this be a hash instead? */
+        kgE->name = dyStringCannibalize(&name);
+    	//lf->extra = dyStringCannibalize(&name);
+        kgE->hgg_prot = lf->extra;
+        lf->extra = kgE;
 	}
     }
 hFreeConn(&conn);
@@ -2898,14 +2911,15 @@ hFreeConn(&conn);
 void loadKnownGene(struct track *tg)
 /* Load up known genes. */
 {
-enum trackVisibility vis = tg->visibility;
+//enum trackVisibility vis = tg->visibility;
 //tg->items = lfFromGenePredInRange(tg, "knownGene", chromName, winStart, winEnd);
 loadGenePredWithName2(tg);
-if (vis != tvDense)
-    {
+/* always do so that protein ID will be in struct */
+//if (vis != tvDense)
+    //{
     lookupKnownGeneNames(tg->items);
     slSort(&tg->items, linkedFeaturesCmpStart);
-    }
+    //}
 limitVisibility(tg);
 }
 
@@ -3015,7 +3029,8 @@ void knownGeneMethods(struct track *tg)
 /* Make track of known genes. */
 {
 /* use loadGenePredWithName2 instead of loadKnownGene to pick up proteinID */
-tg->loadItems   = loadGenePredWithName2;
+//tg->loadItems   = loadGenePredWithName2;
+tg->loadItems   = loadKnownGene;
 tg->itemName 	= knownGeneName;
 tg->mapItemName = knownGeneMapName;
 tg->itemColor 	= knownGeneColor;

@@ -215,6 +215,12 @@ struct linkedFeaturesSeries
     struct linkedFeatures *features;    /* linked features for a series */
 };
 
+struct knownGenesExtra
+/* need more than 1 string in linkedFeatures extra field */
+    {
+    char *hgg_prot;             /* protein ID */
+    char *name;                 /* name to be used on label */
+    };
 
 struct trackLayout
 /* This structure controls the basic dimensions of display. */
