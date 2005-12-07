@@ -1,5 +1,13 @@
-autoDtd test/hotnews/in.xml test/hotnews/out.dtd test/hotnews/out.stats -tree=test/hotnews/out.tree -atree=test/hotnews/out.atree
-diff test/hotnews/expected.dtd test/hotnews/out.dtd
-diff test/hotnews/expected.stats test/hotnews/out.stats
-diff test/hotnews/expected.tree test/hotnews/out.tree
-diff test/hotnews/expected.atree test/hotnews/out.atree
+#!/bin/sh
+
+for T in hotnews chado
+do
+    autoDtd test/${T}/in.xml test/${T}/out.dtd \
+	test/${T}/out.stats -tree=test/${T}/out.tree -atree=test/${T}/out.atree
+    diff test/${T}/expected.dtd test/${T}/out.dtd
+    diff test/${T}/expected.stats test/${T}/out.stats
+    diff test/${T}/expected.tree test/${T}/out.tree
+    diff test/${T}/expected.atree test/${T}/out.atree
+done
+
+#	$Id: doTest,v 1.3 2005/12/07 00:42:51 hiram Exp $
