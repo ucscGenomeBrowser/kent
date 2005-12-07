@@ -1,18 +1,18 @@
-rss version
+rss %version
   channel
-    title
-    link
-    description
-    language
-    copyright
-    webMaster
-    pubDate
-    lastBuildDate
-    category
-    generator
-    docs
+    $title
+    $link
+    $description
+    $language
+    $copyright
+    $webMaster
+    $pubDate
+    $lastBuildDate
+    $category
+    $generator
+    $docs
     item+
-      title
-      link
-      description
-      pubDate
+      $title
+      $link
+      $description
+      $pubDate

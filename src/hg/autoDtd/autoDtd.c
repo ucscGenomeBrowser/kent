@@ -5,7 +5,7 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.7 2005/12/01 01:02:36 kent Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.8 2005/12/07 19:46:21 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -326,6 +326,28 @@ carefulClose(&dtdFile);
 carefulClose(&statsFile);
 }
 
+void writeAttValType(FILE *f, struct attribute *att)
+/* Write out #, % or ? depending if type is int, float, or string */
+{
+if (!att->nonInt)
+    fprintf(f, "#");
+else if (!att->nonFloat)
+    fprintf(f, "%%");
+else
+    fprintf(f, "$");
+}
+
+
+void writeAttribute(FILE *f, struct attribute *att)
+/* Write out information about attribute. */
+{
+fprintf(f, " ");
+writeAttValType(f, att);
+fprintf(f, "%s", att->name);
+if (att->isOptional)
+    fprintf(f, "?");
+}
+
 void rWriteTree(FILE *f, struct type *type, boolean isOptional, 
 	boolean isList, struct hash *uniqHash, 
 	boolean withAttributes, int level)
@@ -338,6 +360,8 @@ int i;
 
 
 spaceOut(f, level*2);
+if (withAttributes && type->textAttribute != NULL)
+    writeAttValType(f, type->textAttribute);
 fprintf(f, "%s", type->name);
 if (isList)
     if (isOptional)
@@ -350,11 +374,7 @@ else
 if (withAttributes)
     {
     for (att = type->attributes; att != NULL; att = att->next)
-        {
-	fprintf(f, " %s", att->name);
-	if (att->isOptional)
-	    fprintf(f, "?");
-	}
+	writeAttribute(f, att);
     }
 fprintf(f, "\n");
 
