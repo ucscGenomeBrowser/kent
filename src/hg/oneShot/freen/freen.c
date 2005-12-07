@@ -4,11 +4,9 @@
 #include "linefile.h"
 #include "hash.h"
 #include "dnaseq.h"
-#include "fa.h"
-#include "portable.h"
-#include "liftOver.h"
+#include "twoBit.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.61 2005/11/26 17:25:21 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.62 2005/12/07 17:11:58 kent Exp $";
 
 void usage()
 {
@@ -20,8 +18,9 @@ errAbort("freen - test some hairbrained thing.\n"
 void freen(char *fileName)
 /* Test some hair-brained thing. */
 {
-struct liftOverChain *lift = liftOverChainForDb("hg17");
-uglyf("Got %d lifts\n", slCount(lift));
+struct twoBitFile *tbf = twoBitOpen(fileName);
+long long totalSize = twoBitTotalSize(tbf);
+printf("%s contains %lld bases\n", fileName, totalSize);
 }
 
 int main(int argc, char *argv[])
