@@ -12,6 +12,7 @@ xmlToSql: $O ${MYLIBS}
 
 clean:
 	rm -f $O
+	rm -rf test/*/out
 
 test::
 	doTest
