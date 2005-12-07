@@ -346,7 +346,7 @@ done >> seq_contig.md
 	"/gbdb/hg17/html/description.html", 0, 0, "NCBI Build 35");' \
 	-h genome-testdb hgcentraltest
     # Make trackDb table so browser knows what tracks to expect:
-    cd ~kent/src/hg/makeDb/trackDb
+    cd ~/kent/src/hg/makeDb/trackDb
     cvs up -d -P .
     # Edit the makefile to add hg17 in all the right places and do
     make update
