@@ -2113,7 +2113,7 @@ color 120,10,120
 maxHeightPixels 128:16:16
 minLimit -2.252
 maxLimit 4.243
-viewLimits -1.5:1.5
+viewLimits 0:2
 windowingFunction mean
 autoScale Off
 dataVersion ENCODE Oct 2005 Freeze
