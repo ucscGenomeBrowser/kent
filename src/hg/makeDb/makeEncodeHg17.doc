@@ -1138,6 +1138,7 @@ cat > load.csh << 'EOF'
 # NHGRI DNaseI HS (2005-10-24 kate)
 #       Submitter: Greg Crawford
 #       2 datasets:  CD4, GM06690 with different methodology from previous
+#       Additional (raw) data for both cell types submitted 12/6
 
     cd /cluster/data/encode/NHGRI/crawford
     mkdir -p 2005-10-11/lab
@@ -1158,10 +1159,26 @@ cat > load.csh << 'EOF'
     end
 'EOF'
     csh load.csh >&! load.log
+
     # Add these two tracks to the hg17 NHGRI DNase track
     # Rename 2 data tables lifted from hg16
     hgsql hg17 -e "ALTER TABLE encodeNhgriDnaseHsAct RENAME TO encodeNhgriDnaseHsMpssCd4Act"
     hgsql hg17 -e "ALTER TABLE encodeNhgriDnaseHsNonAct RENAME TO encodeNhgriDnaseHsMpssCd4"
+
+    # Raw data
+    ln -s lab/NHGRI_DNase_chip_CD4_na_RAW.bed Cd4.raw.hg16.bed
+    ln -s lab/NHGRI_DNase_chip_GM_RAW.bed  Gm06990.raw.hg16.bed
+cat > loadRaw.csh << 'EOF'
+    foreach f (Cd4.raw.hg16.bed Gm06990.raw.hg16.bed)
+        set cell = $f:r:r:r
+        liftOver $f \
+                 /cluster/data/hg16/bed/liftOver/hg16ToHg17.over.chain \
+                        $cell.raw.hg17.bed $cell.raw.unmapped
+        hgLoadBed -strict -bedGraph=4 hg17 \
+                encodeNhgriDnaseHsChipRaw$cell $cell.raw.hg17.bed
+    end
+'EOF'
+    csh loadRaw.csh >&! loadRaw.log
 
 ##########################################################################
 # Sanger Chip/chip Hits and Centers (2005-10-24 kate)
@@ -1295,7 +1312,6 @@ cat > loadSig.csh << 'EOF'
     csh loadSig.csh >&! loadSig.log 
     rm -f *.trim
     
-
 ##########################################################################
 # Yale Chip/chip (2005-10-31 kate)
 # Final submission: 10/26 by Zhengdong Zhang
@@ -1338,31 +1354,24 @@ cat > loadSig.csh << 'EOF'
         echo $Factor
         set p = $d/Encode_Yale_ChIpChip_${factor}_Hela_Maskless50merevery38bp
 
-        # load pval wiggle
-        set gdir = /gbdb/hg17/encode/YaleChip/2005-10-26
-        mkdir -p $gdir/wib
-
+        # load pval 
         set table = ${pfx}Pval$Factor
         echo $table
         set f = ${p}_Pvalue.wig
         sort -k1,1 -k2,2n $f | \
             /cluster/data/encode/bin/scripts/trimOverlap.pl > $table.trim
-        wigEncode $table.trim wig/$table.wig wib/$table.wib
-        hgLoadWiggle -pathPrefix=$gdir hg17 $table wig/$table.wig
-        ln -s `pwd`/wib/$table.wib $gdir/wib
+        hgLoadBed -strict -bedGraph=4 hg17 $table $table.trim
 
-        # load pval wiggle
+        # load signal 
         set table = ${pfx}Signal$Factor
         echo $table
         set f = ${p}_Signal.wig
         sort -k1,1 -k2,2n $f | \
             /cluster/data/encode/bin/scripts/trimOverlap.pl > $table.trim
-        wigEncode $table.trim wig/$table.wig wib/$table.wib
-        hgLoadWiggle -pathPrefix=$gdir hg17 $table wig/$table.wig
-        ln -s `pwd`/wib/$table.wib $gdir/wib
+        hgLoadBed -strict -bedGraph=4 hg17 $table $table.trim 
     end
 'EOF'
-    csh load.csh >&! load.log &
+    csh loadSig.csh >&! loadSig.log &
     rm -f *.trim *.sql
 
     # description files
@@ -1432,7 +1441,6 @@ cat > load.csh << 'EOF'
             hgLoadBed -noSort -noBin -strict hg17 encodeUppsalaChipSites sites.hg17.bed
                 # Loaded 327 elements of size 5
 
-   
 ##########################################################################
 # MSA tracks from Sept. 2005 freeze
 # Use links from Wiki for data submission (as per Elliott Margulies)
