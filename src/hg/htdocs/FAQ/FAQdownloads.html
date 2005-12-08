@@ -1105,33 +1105,34 @@
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
 			You can migrate data from one assembly to another by using the 
 			<A HREF="../cgi-bin/hgBlat">blat</A> alignment tool 
-			or by converting assembly coordinates</A>.  There are 2 coordinate conversion 
-			tools available on the Genome Browser web site.
-			The <A HREF="../cgi-bin/hgLiftOver">hgLiftOver</A> utility,
-			accessed via the Utilities link on the Genome Browser home page, 
-			may be used to do forward (and in some instances, 
-			reverse) conversions of the data from one assembly to 
-		        another, as well as selected conversions across species.
-			It also handles batch conversions. The 
-			<A HREF="../cgi-bin/hgCoordConv">Convert</A> tool, which
-			is accessed from the menu on the Genome Browser annotation tracks page, supports
-			forward, reverse, and cross-species conversions, but 
-		        does not accept batch input. 
-			<P>If you have the need to update a large number of coordinates	
-			to a different assembly and have access to a Linux platform, 
-			you may find it useful to try our <TT>liftOver</TT> tool. 
-			The executable file for this utility can be downloaded from
+			or by converting assembly coordinates</A>.  There are two conversion 
+			tools available on the Genome Browser web site: the
+			Convert utility and the LiftOver tool.
+			The Convert utility, 
+			which is accessed from the menu on the Genome Browser 
+			annotation tracks page, supports forward, reverse, and 
+			cross-species conversions, but does not accept batch 
+			input. 
+			The <A HREF="../cgi-bin/hgLiftOver">LiftOver</A> tool,
+			accessed via the Utilities link on the Genome Browser 
+			home page, also supports forward, reverse, and 
+			cross-species conversions, as well as batch conversions.
+			<P>
+			If you wish to update a large number of coordinates	
+			to a different assembly and have access to a Linux 
+			platform, you may find it useful to try the command-line
+			version of the LiftOver tool. The executable file for 
+			this utility can be downloaded from 
 			<A HREF="http://www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz" 
-			TARGET=_blank> www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz</A>. LiftOver requires a UCSC-generated <em>over.chain</em> file as input. Pre-generated
-			files are available for selected assemblies. To check if a data
-			file has already been generated for the assembly in which you're
-			interested, look for the applicable <em>over.chain</em> file in the 
-			LiftOver section on the 
+			TARGET=_blank>www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz</A>. 
+			LiftOver requires a UCSC-generated <em>over.chain</em> 
+			file as input. Pre-generated files are available for 
+			selected assemblies from the 
 			<A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#liftover">Downloads</A> page.
-			If no file is available, send a request to
+			If the desired file is not available, send a request to
 			the 
 			<A HREF="mailto:&#103;e&#110;&#111;&#109;&#101;&#64;&#115;&#111;&#101;.&#117;&#99;&#115;&#99;.ed&#117;">genome mailing list</A> 
-			and we will provide you with one.
+			and we may be able to  provide you with one.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
