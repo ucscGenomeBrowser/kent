@@ -196,6 +196,7 @@ visibility full
 #altColor 255,128,0
 color 0, 10, 100
 altColor 0,90,10
+spanList 1
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons10U1
@@ -232,6 +233,7 @@ altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons10
+spanList 1
 yLineOnOff Off
 autoScaleDefault Off
 summary multiz10waySummary
