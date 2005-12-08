@@ -217,7 +217,7 @@ popd
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("droSec1", "Oct. 2005", "/gbdb/droSec1", "D. sechellia", \
-             "super_0:375824-416317", 1, 52, \
+             "super_14:795001-815000", 1, 52, \
              "D. sechellia", \
              "Drosophila sechellia", "/gbdb/droSec1/html/description.html", \
              0, 0, "Broad 28 Oct. 2005");'

@@ -296,7 +296,7 @@ if (-e /tmp/droYak2/$2/$2.cat) /bin/cp /tmp/droYak2/$2/$2.cat ./
                 defaultPos, active, orderKey, genome, scientificName, \
                 htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("droYak2", "Nov. 2005", "/gbdb/droYak2/nib", "D. yakuba", \
-               "chr2L:827700-845800", 1, 53, "D. yakuba", \
+               "chr2L:809001-825000", 1, 53, "D. yakuba", \
                 "Drosophila yakuba", "/gbdb/droYak2/html/description.html", \
                 0, 0, "WUSTL version 2.0");'
 

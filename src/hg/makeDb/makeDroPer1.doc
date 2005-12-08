@@ -221,7 +221,7 @@ popd
              defaultPos, active, orderKey, genome, scientificName, \
              htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("droPer1", "Oct. 2005", "/gbdb/droPer1", "D. persimilis", \
-             "super_0:375824-416317", 1, 57, \
+             "super_1:7109001-7125000", 1, 57, \
              "D. persimilis", \
              "Drosophila persimilis", "/gbdb/droPer1/html/description.html", \
              0, 0, "Broad 28 Oct. 2005");'
