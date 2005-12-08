@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.36 2005/12/08 00:03:20 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.37 2005/12/08 00:57:23 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -3740,7 +3740,7 @@ xenopus_xenTro1:0.782453):0.156067,
 #  8  0.6256 - elephant loxAfr1   (% 18.381)  (% 20.555)   3000     medium
 #  9  0.6344 - cow bosTau2        (% 26.805)  (% 24.144)   3000     medium
 # 10  0.7805 - tenrec echTel1     (% 11.421)  (% 14.36x)   5000     loose
-# 11  1.0698 - opossum monDom2    (%  8.501)  (%  6.31x)   5000     loose
+# 11  1.0698 - opossum monDom2    (%  8.501)  (%  6.319)   5000     loose
 # 12  1.3425 - chicken galGal2    (%  3.071)  (%  6.715)   5000     loose
 # 13  1.7936 - frog xenTro1       (%  2.418)  (%  4.296)   5000     loose
 # 14  2.0157 - tetraodon tetNig1  (%  1.956)  (% 13.661)   5000     loose
