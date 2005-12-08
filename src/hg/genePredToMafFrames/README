@@ -39,6 +39,6 @@ Notes:
 
     - the prevFramePos and nextFramePos are used for rendering codons that
       are split in the target.  These fields are in the direction of
-      translation. MafFrame rows are linked by the prev or next fields 
-      if and only if the first/last codon is discontinuous in the target
-      and the frame is continuous
+      translation. mafFrame rows are linked by the prev or next fields 
+      if and only if the first/last codon is split across MAF records
+      and the frame is continuous.

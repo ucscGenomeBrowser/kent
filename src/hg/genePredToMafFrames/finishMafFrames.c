@@ -8,21 +8,11 @@
 #include "localmem.h"
 
 static boolean isSplitCodon(struct exonFrames *ef0, struct exonFrames *ef1) 
-/* Determine if the last codon of ef0 is split in the target sequence and is
+/* Determine if the last codon of ef0 is split across maf blocks and is
  * continued in ef1. If codon is not split, or only partially aligned, false
  * is returned.  ef0 preceeds ef1 in the direction of transcription */
 {
 int tLen0 = ef0->mf.chromEnd - ef0->mf.chromStart;
-if (ef1->mf.strand[0] == '+')
-    {
-    if (ef1->mf.chromStart == ef0->mf.chromEnd)
-        return FALSE; /* contiguous in target */
-    }
-else
-    {
-    if (ef1->mf.chromEnd == ef0->mf.chromStart)
-        return FALSE; /* contiguous in target */
-    }
 if (ef1->cdsStart != ef0->cdsEnd)
     return FALSE; /* deletion in gene between two records */
 if (frameIncr(ef0->mf.frame, tLen0) == 0)
@@ -50,16 +40,16 @@ if (isSplitCodon(prevEf, ef))
         {
         prevEf->mf.nextFramePos = ef->mf.chromStart;
         ef->mf.prevFramePos = prevEf->mf.chromEnd-1;
-        if ((prevEf->mf.nextFramePos <= prevEf->mf.chromEnd)
-            || (ef->mf.prevFramePos >= ef->mf.chromStart))
+        if ((prevEf->mf.nextFramePos < prevEf->mf.chromEnd)
+            || (ef->mf.prevFramePos > ef->mf.chromStart))
             outOfOrderLink(ef);
         }
     else
         {
         prevEf->mf.nextFramePos = ef->mf.chromEnd-1;
         ef->mf.prevFramePos = prevEf->mf.chromStart;
-        if ((prevEf->mf.nextFramePos >= prevEf->mf.chromStart)
-            || (ef->mf.prevFramePos <= ef->mf.chromEnd))
+        if ((prevEf->mf.nextFramePos > prevEf->mf.chromStart)
+            || (ef->mf.prevFramePos < ef->mf.chromEnd))
             outOfOrderLink(ef);
         }
     }
