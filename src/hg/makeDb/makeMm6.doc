@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.99 2005/11/16 23:21:06 aamp Exp $"
+#	"$Id: makeMm6.doc,v 1.100 2005/12/08 19:58:23 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -3367,6 +3367,436 @@ cat << '_EOF_' > template
     ssh hgwdev
     hgsql hgcentraltest \
 	-e 'update defaultDb set name="mm6" where genome="Mouse";'
+
+#############################################################################
+# 10-WAY VAR_MULTIZ - SECOND TIME, PERHAPS CORRECTLY (WORKING 2005-11-30)
+#		- Hiram
+    ssh kkstore01
+
+    mkdir /cluster/data/mm6/bed/multiz10way.2005-11-30
+    cd /cluster/data/mm6/bed/multiz10way.2005-11-30
+
+    mkdir mafLinks
+    mkdir mafLinks/rn3
+    mkdir mafLinks/hg17
+    mkdir mafLinks/canFam2
+    mkdir mafLinks/bosTau1
+    mkdir mafLinks/monDom1
+    mkdir mafLinks/galGal2
+    mkdir mafLinks/xenTro1
+    mkdir mafLinks/danRer3
+    mkdir mafLinks/tetNig1
+
+    export H=/cluster/data/mm6/bed
+    ln -s ${H}/blastzRn3.2005-11-30/mafNet/*.maf.gz ./mafLinks/rn3
+    ln -s ${H}/blastzHg17.2005-11-30/mafNet/*.maf.gz ./mafLinks/hg17
+    ln -s ${H}/blastzCanFam2.2005-12-02/mafNet/*.maf.gz ./mafLinks/canFam2
+    ln -s ${H}/blastzBosTau1.2005_03_18/mafNet/*.maf.gz ./mafLinks/bosTau1
+    ln -s ${H}/blastzMonDom1.2005_04_01/mafNet/*.maf.gz ./mafLinks/monDom1
+    ln -s ${H}/blastzGalGal2.2005-11-30/mafNet/*.maf.gz ./mafLinks/galGal2
+    ln -s ${H}/blastzXenTro1.2005_04_05/mafNet/*.maf.gz ./mafLinks/xenTro1
+    ln -s ${H}/blastzDanRer3.2005-08-05/mafNet/*.maf.gz ./mafLinks/danRer3
+    ln -s ${H}/blastzTetNig1.2005_03_17/mafNet/*.maf.gz ./mafLinks/tetNig1
+
+    
+    #	Copy MAFs to san for pk kluster run
+    mkdir /san/sanvol1/scratch/mm6/multiz10way.2005-11-30
+    cd /san/sanvol1/scratch/mm6/multiz10way.2005-11-30
+    mkdir mafs
+    rsync -a --copy-links --progress \
+	/cluster/data/mm6/bed/multiz10way.2005-11-30/mafLinks/ ./mafs/
+    #	3.3 Gb of data to copy, about 10 minutes or so
+    mkdir penn
+    cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/maf_project penn
+
+    #	And for the kluster run
+    ssh pk
+    mkdir /cluster/data/mm6/bed/multiz10way.2005-11-30
+    cd /cluster/data/mm6/bed/multiz10way.2005-11-30
+    mkdir -p maf run
+    cd run
+
+    # create scripts to run var_multiz on cluster
+
+cat > oneMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    set c = $1
+    set multi = /scratch/mm6/multiz10way.$c
+    set pairs = /san/sanvol1/scratch/mm6/multiz10way.2005-11-30/mafs
+
+    # special mode --
+    # with 1 arg, cleanup
+    if ($#argv == 1) then
+        rm -fr $multi
+        exit
+    endif
+
+    # special mode --
+    # with 3 args, saves an alignment file
+    if ($#argv == 3) then
+        cp $multi/$2/$c.maf $3
+        exit
+    endif 
+        
+    set s1 = $2
+    set s2 = $3
+    set flag = $4
+    
+    # locate input files -- in pairwise dir, or multiple dir
+    set d1 = $multi
+    set d2 = $multi 
+    if (-d $pairs/$s1) then
+        set d1 = $pairs
+	set f1 = $d1/$s1/$c.maf.gz
+	set t1 = /tmp/$s1.$c.maf
+	zcat $f1 > $t1
+    else
+	set f1 = $d1/$s1/$c.maf
+	set t1 = /tmp/$s1.$c.maf
+	cp -p $f1 $t1
+    endif
+    if (-d $pairs/$s2) then
+        set d2 = $pairs
+	set f2 = $d2/$s2/$c.maf.gz
+	set t2 = /tmp/$s2.$c.maf
+	zcat $f2 > $t2
+    else
+	set f2 = $d2/$s2/$c.maf
+	set t2 = /tmp/$s2.$c.maf
+	cp -p $f2 $t2
+    endif
+    # write to output dir
+    set out = $multi/${s1}${s2}
+    mkdir -p $out
+
+    # check for empty input file
+    if (-s $t1 && -s $t2) then
+        echo "Aligning $f1 $f2 $flag"
+	/san/sanvol1/scratch/mm6/multiz10way.2005-11-30/penn/multiz \
+	    $t1 $t2 $flag $out/$c.unused1.maf \
+		$out/$c.unused2.maf > $out/$c.full.maf
+        cat $out/$c.full.maf $out/$c.unused1.maf $out/$c.unused2.maf > \
+                $out/$c.tmp.maf
+        echo "Ordering $c.maf"
+	/san/sanvol1/scratch/mm6/multiz10way.2005-11-30/penn/maf_project \
+		$out/$c.tmp.maf mm6.$c > $out/$c.maf
+	rm -f $t1 $t2
+    else if (-s $t1) then
+        cp -p $t1 $out/$c.maf
+	rm -f $t1
+    else if (-s $t2) then
+        cp -p $t2 $out/$c.maf
+	rm -f $t2
+    endif
+'EOF'
+# happy emacs
+    chmod +x oneMultiz.csh
+    cp -p oneMultiz.csh \
+	/san/sanvol1/scratch/mm6/multiz10way.2005-11-30/penn/oneMultiz.csh
+
+cat > allMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    # multiple alignment steps:
+set c = $1
+set s = "/san/sanvol1/scratch/mm6/multiz10way.2005-11-30/penn/oneMultiz.csh"
+
+$s $c hg17 rn3  1
+$s $c bosTau1 canFam2 0
+$s $c hg17rn3  bosTau1canFam2 1
+$s $c hg17rn3bosTau1canFam2 monDom1 1
+$s $c hg17rn3bosTau1canFam2monDom1 galGal2 1
+$s $c hg17rn3bosTau1canFam2monDom1galGal2 xenTro1 1
+$s $c danRer3 tetNig1 0
+$s $c hg17rn3bosTau1canFam2monDom1galGal2xenTro1 danRer3tetNig1 1
+# get final alignment file
+$s $c hg17rn3bosTau1canFam2monDom1galGal2xenTro1danRer3tetNig1 \
+    /cluster/data/mm6/bed/multiz10way.2005-11-30/maf/$c.maf
+#cleanup
+$s $c
+'EOF'
+# happy emacs
+    chmod +x allMultiz.csh
+
+cat  << 'EOF' > template
+#LOOP
+./allMultiz.csh $(root1) {check out line+ /cluster/data/mm6/bed/multiz10way.2005-11-30/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+
+    awk '{print $1}' ../../../chrom.sizes > chrom.lst
+
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    para try; para check
+    para push
+XXXX - running 2005-12-05 16:30
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:     124610s    2076.83m    34.61h    1.44d 0.004 y
+# IO & Wait Time:                  1331s      22.18m     0.37h    0.02d 0.000 y
+# Average job time:                3149s      52.48m     0.87h    0.04d
+# Longest finished job:           12711s     211.85m     3.53h    0.15d
+# Submission to last job:         12711s     211.85m     3.53h    0.15d
+
+
+    ssh kkstore01
+    cd /cluster/data/mm6/bed/multiz10way.2005-11-30
+    catDir maf > multiz10wayU1.maf
+    #	~ 3.5 minutes
+
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/multiz10way.2005-11-30
+    mkdir /gbdb/mm6/multiz10wayU1
+    ln -s /cluster/data/mm6/bed/multiz10way.2005-11-30/multiz10wayU1.maf \
+	/gbdb/mm6/multiz10wayU1/multiz10wayU1.maf
+    time hgLoadMaf mm6 multiz10wayU1
+    #	real    18m22.810s
+    time hgLoadMafSummary -minSize=10000 -mergeGap=500 -maxSize=50000 mm6 \
+	multiz10wayU1Summary multiz10wayU1.maf
+    #	real    20m45.326s
+
+############################################################################
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS Second time with new multiz10way
+#		(WORKING - 2005-12-06 - Hiram)
+
+# Estimate phastCons parameters
+    ssh kkstore01
+    mkdir /cluster/data/mm6/bed/multiz10way.2005-11-30/cons
+    cd /cluster/data/mm6/bed/multiz10way.2005-11-30/cons
+
+    # Create a starting-tree.mod based on chr2 (the biggest maf)
+    /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chr2.maf \
+	--refseq ../../../2/chr2.fa --in-format MAF \
+	--windows 100000000,1000 --out-format SS \
+	--between-blocks 5000 --out-root s1
+    #	~4 minutes
+
+    /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+	--tree "((((((hg17,(mm6,rn3)),(canFam2,bosTau1)),monDom1),galGal2),xenTro1),(tetNig1,danRer3))" \
+    --out-root starting-tree
+    #	about 45 minutes
+    rm s1.*.ss
+    # add up the C and G:
+    grep BACKGROUND phyloFit.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.408
+    #	This 0.408 is used in the --gc argument below
+
+    # Create big bad bloated SS files on san filesystem (takes ~ 1h 05m)
+    ssh kkstore01
+    mkdir -p  /san/sanvol1/scratch/mm6/cons/ss
+    cd /san/sanvol1/scratch/mm6/cons/ss
+    for C in `awk '{print $1}' /cluster/data/mm6/chrom.sizes`
+    do
+      if [ -s /cluster/data/mm6/bed/multiz10way.2005-11-30/maf/${C}.maf ]; then
+	mkdir ${C}
+	echo msa_split $C
+	chrN=${C/chr/}
+	chrN=${chrN/_random/}
+	/cluster/bin/phast/$MACHTYPE/msa_split \
+	    /cluster/data/mm6/bed/multiz10way.2005-11-30/maf/${C}.maf \
+	    --refseq /cluster/data/mm6/${chrN}/${C}.fa \
+	    --in-format MAF --windows 1000000,0 --between-blocks 5000 \
+	    --out-format SS --out-root ${C}/${C}
+      fi
+    done
+    #	real     63m41.485s
+
+    # Create a random list of 50 1 mb regions  (do not use the _randoms)
+    ls -1l chr*/chr*.ss | grep -v random | \
+	awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs.list
+
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh pk
+    mkdir /san/sanvol1/scratch/mm6/cons/treeRun1
+    cd /san/sanvol1/scratch/mm6/cons/treeRun1
+    mkdir tree log
+
+    #	Tuning this loop should come back to here to recalculate 
+    # Create little script that calls phastCons with right arguments
+    #	--target-coverage of 0.20 is about right for mouse, will be
+    #	tuned exactly below
+    cat > makeTree.csh << '_EOF_'
+#!/bin/csh -fe
+set C=$1:h
+mkdir -p log/${C} tree/${C}
+    /cluster/bin/phast/$MACHTYPE/phastCons ../ss/$1 \
+      /cluster/data/mm6/bed/multiz10way.2005-11-30/cons/phyloFit.mod \
+      --gc 0.408 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-lengths 12 --target-coverage 0.17 \
+      --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+    #	emacs happy
+    chmod a+x makeTree.csh
+
+    # Create gensub file
+    cat > template << '_EOF_'
+#LOOP
+makeTree.csh $(path1)
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+
+    # Make cluster job and run it
+    gensub2 ../randomSs.list single template jobList
+    para create jobList
+    para try/push/check/etc
+# Completed: 50 of 50 jobs
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ssh kkstore01
+    cd /san/sanvol1/scratch/mm6/cons/treeRun1
+    ls -1 tree/chr*/*.cons.mod > cons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.list' \
+	--output-average ../ave.cons.mod > cons_summary.txt
+    ls -1 tree/chr*/*.noncons.mod > noncons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.list' \
+	--output-average ../ave.noncons.mod > noncons_summary.txt
+    cd ..
+    cp -p ave.*.mod /cluster/data/mm6/bed/multiz10way.2005-11-30/cons
+
+    #	measuring entropy
+    #	consEntopy <target coverage> <expected lengths>
+    #		 ave.cons.mod ave.noncons.mod --NH 9.78
+    #	never stops with the --NH argument
+    /cluster/bin/phast/$MACHTYPE/consEntropy .17 12 \
+                        ave.cons.mod ave.noncons.mod
+### !!! ***  This one with .17 and 12 is the one that was finally used
+#Transition parameters:gamma=0.170000, omega=12.000000, mu=0.083333, nu=0.017068
+#Relative entropy: H=1.461641 bits/site
+#Expected min. length: L_min=6.838719 sites
+#Expected max. length: L_max=5.059638 sites
+#Phylogenetic information threshold: PIT=L_min*H=9.995752 bits
+    #	We are aiming for PIT to be near 10 (aka total entropy)
+    #	This is good enough.  Tuning wasn't necessary this time because
+    #	the tuning that was done the first time evidently was still good
+    #	for this one.
+
+    ssh pk
+    # Create cluster dir to do main phastCons run
+    mkdir /san/sanvol1/scratch/mm6/cons/consRun1
+    cd /san/sanvol1/scratch/mm6/cons/consRun1
+    mkdir ppRaw bed
+
+    # Create script to run phastCons with right parameters
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    cat > doPhast.csh << '_EOF_'
+#!/bin/csh -fe
+mkdir /scratch/tmp/${2}
+cp -p ../ss/${1}/${2}.ss ../ave.cons.mod ../ave.noncons.mod /scratch/tmp/${2}
+pushd /scratch/tmp/${2} > /dev/null
+/cluster/bin/phast/${MACHTYPE}/phastCons ${2}.ss ave.cons.mod,ave.noncons.mod \
+   --expected-length 12 --target-coverage 0.17 --quiet \
+	--seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
+popd > /dev/null
+mkdir -p ppRaw/${1}
+mkdir -p bed/${1}
+mv /scratch/tmp/${2}/${2}.pp ppRaw/${1}
+mv /scratch/tmp/${2}/${2}.bed bed/${1}
+rm /scratch/tmp/${2}/ave.*cons.mod
+rm /scratch/tmp/${2}/${2}.ss
+rmdir /scratch/tmp/${2}
+'_EOF_'
+    # emacs happy
+    chmod a+x doPhast.csh
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create gsub file
+    cat > template << '_EOF_'
+#LOOP
+doPhast.csh $(root1) $(file1)
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+
+    # Create parasol batch and run it
+    ls -1 ../ss/chr*/chr*.ss | sed 's/.ss$//' > in.list
+
+    gensub2 in.list single template jobList
+    para create jobList
+    para try/check/push/etc.
+# Completed: 3098 of 3098 jobs
+# CPU time in finished jobs:      11377s     189.61m     3.16h    0.13d  0.000 y
+# IO & Wait Time:                 88563s    1476.06m    24.60h    1.03d  0.003 y
+# Average job time:                  32s       0.54m     0.01h    0.00d
+# Longest finished job:             292s       4.87m     0.08h    0.00d
+# Submission to last job:           627s      10.45m     0.17h    0.01d
+
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    #	it uses a lot of memory, so on kolossus:
+    ssh kolossus
+    cd /san/sanvol1/scratch/mm6/cons/consRun1
+    #	The sed's and the sort get the file names in chrom,start order
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+	| /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+
+    #	~ 1m 12s
+
+    # Figure out how much is actually covered by the bed files as so:
+    #	The 2597150151 comes from the non-n genome size,
+    #	from faSize on all chroms:
+    ssh kkstore01
+    cd /cluster/data/mm6
+    faSize ?/chr*.fa ??/chr*.fa
+    #	3079633452 bases (482483301 N's 2597150151 real 1486015217
+    #	upper 1111134934
+
+    cd /san/sanvol1/scratch/mm6/cons/consRun1
+    awk '
+{sum+=$3-$2}
+END{printf "%% %.2f = 100.0*%d/2597150151\n",100.0*sum/2597150151,sum}' \
+	mostConserved.bed
+    -target-coverage 0.17: % 5.29 = 100.0*137323490/2597150151 length 12
+
+    cp -p mostConserved.bed /cluster/data/mm6/bed/multiz10way.2005-11-30
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/multiz10way.2005-11-30
+    hgLoadBed -strict mm6 phastConsElementsU1 mostConserved.bed
+    #	Loaded 2356669 elements of size 5
+    #	~5 minute load time
+    featureBits mm6 -enrichment refGene:cds phastConsElementsU1
+# -target-coverage 0.17 and expected lengths 12:
+# refGene:cds 1.013%, phastConsElementsU1 5.287%, both 0.694%, cover 68.54%,
+#	enrich 12.96x
+
+    # Create merged posterier probability file and wiggle track data files
+    # the sed business gets the names sorted by chromName, chromStart
+    #	so that everything goes in numerical order into wigEncode
+    ssh kkstore01
+    cd /san/sanvol1/scratch/mm6/cons/consRun1
+    find ./ppRaw -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+	    | wigEncode stdin phastCons10U1.wig phastCons10U1.wib
+    # about 22 minutes for above
+# -rw-rw-r--   1 1975849149 Dec  6 14:50 phastCons10U1.wib
+# -rw-rw-r--   1  253234710 Dec  6 14:50 phastCons10U1.wig
+
+    cp -p phastCons10U1.wig phastCons10U1.wib \
+	/cluster/data/mm6/bed/multiz10way.2005-11-30
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/multiz10way.2005-11-30
+    ln -s `pwd`/phastCons10U1.wib /gbdb/mm6/wib/phastCons10U1.wib
+    hgLoadWiggle mm6 phastCons10U1 phastCons10U1.wig
+    #  ~ 3 minute load
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/multiz10way.2005-11-30
+    time hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=mm6 phastCons10U1 > histogram.data 2>&1
+    #	about 23 minutes to scan all data
 
 #############################################################################
 # 10-WAY VAR_MULTIZ - ALIGNMENTS (DONE - 2005-04-08 - 2005-04-18 - Hiram)
@@ -9100,6 +9530,7 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
 # Make mapping between known genes and allenBrain
    hgMapToGene mm6 allenBrainAli -type=psl knownGene knownToAllenBrain 
 
+###########################################################################
 # RIKEN CAGE STUFF (DONE 11-16-2005 Andy)
     cd /cluster/data/mm6/bed
     mkdir rikenCageCtss
@@ -9119,4 +9550,375 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
     hgLoadBed mm6 rikenCageTc rikenCageTc.mm6.bed
     hgLoadBed -strict -bedGraph=4 mm6 rikenCageCtssMinus minus.mm6.bed 
     hgLoadBed -strict -bedGraph=4 mm6 rikenCageCtssPlus plus.mm6.bed 
+
+###########################################################################
+# BLASTZ HUMAN Hg17 second time correctly
+#	The initial run was done at a time when there was an error in
+#	the processing scripts and the lineage specific repeats were not
+#	handled correctly.  This re-work produces better chains and nets
+#	as the lineage specific repeats are handled properly, also set
+#	the chain minScore and linearGap at better settings.
+#	 (DONE - 2005-11-30 - 2005-12-07 - Hiram)
+
+    ssh pk
+    mkdir /cluster/data/mm6/bed/blastzHg17.2005-11-30
+    cd /cluster/data/mm6/bed/blastzHg17.2005-11-30
+
+    cat << '_EOF_' > DEF
+# mouse vs human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+    
+# TARGET: Mouse Mm6
+SEQ1_DIR=/san/sanvol1/scratch/mm6/nib
+SEQ1_SMSK=/san/sanvol1/scratch/mm6/linSpecRep.notInHuman
+SEQ1_LEN=/san/sanvol1/scratch/mm6/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Human Hg17 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/hg17/bothMaskedNibs
+SEQ2_SMSK=/scratch/hg/hg17/linSpecRep.notInMouse
+SEQ2_LEN=/cluster/bluearc/hg17/chrom.sizes
+SEQ2_CHUNK=3000000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzHg17.2005-11-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+    -chainMinScore=3000 -chainLinearGap=medium \
+        -stop=net `pwd`/DEF > to-net.out 2>&1
+    #	recover from broken blastz run, then continue
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+    -chainMinScore=3000 -chainLinearGap=medium \
+        -continue=cat -stop=net `pwd`/DEF > cat-to-net.out 2>&1
+    #	Manually loading to put these in a different table name than the
+    #	existing track
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastzHg17.2005-11-30/axtChain
+    #	Copy the loadUp.csh used in Mm7 and alter the script:
+    cp /cluster/data/mm7/bed/blastzHg17.2005-11-14/axtChain/loadUp.csh .
+    #	set mm6 data base and table names to chainHg17u1 and netHg17u1
+    #	and proper path names to here
+    #	then run the script
+    time ./loadUp.csh > loadUp.out
+
+    ssh kolossus
+    cd /cluster/data/mm6/bed/blastzHg17.2005-11-30
+    time HGDB_CONF=~/.hg.conf.read-only \
+	featureBits mm6 chainHg17u1Link > fb.mm6.chainHg17u1Link 2>&1 &
+    #	989964288 bases of 2597150411 (38.117%) in intersection
+    #	Previously with the broken lineage specific repeats, this was:
+    #	966916309 bases of 2597150411 (37.230%) in intersection
+    
+    #	Move the existing swap directory out of the way
+    ssh pk
+    cd /cluster/data/hg17/bed
+    mv blastz.mm6.swap blastz.mm6.swap.2005-03-29
+
+    cd /cluster/data/mm6/bed/blastzHg17.2005-11-30
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+    -chainMinScore=3000 -chainLinearGap=medium \
+        -swap -stop=net `pwd`/DEF > swap-to-net.out 2>&1
+
+    #	Manually load to change tables loaded into
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.mm6.swap/axtChain
+    #	Copy loadUp script used in mm7, change db to mm6 and table names
+    #	to be chainMm6u1 and netMm6u1
+    cp /cluster/data/hg17/bed/blastz.mm7.swap/axtChain/loadUp.csh .
+    time ./loadUp.csh > loadUp.out
+    #	79 minute load time
+    time HGDB_CONF=~/.hg.conf.read-only \
+	featureBits hg17 chainMm6u1Link > fb.hg16.chainMm6u1Link 2>&1 &
+    #	992497149 bases of 2866216770 (34.627%) in intersection
+    #	With broken lineage specific repeats, and different chain
+    #	minScore and linearGap settings, this measurement was:
+    #	969459954 bases of 2866216770 (33.824%) in intersection
+
+###########################################################################
+# BLASTZ CHICKEN GalGal2 second time correctly
+#	The initial run was done at a time when there was an error in
+#	the processing scripts and the lineage specific repeats were not
+#	handled correctly.  This re-work produces better chains and nets
+#	as the lineage specific repeats are handled properly, also set
+#	the chain minScore and linearGap at better settings.
+#	 (DONE - 2005-11-30 - 2005-12-07 - Hiram)
+
+    ssh pk
+    mkdir /cluster/data/mm6/bed/blastzGalGal2.2005-11-30
+    cd /cluster/data/mm6/bed/blastzGalGal2.2005-11-30
+
+    cat << '_EOF_' > DEF
+# mouse vs. chicken
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+    
+# TARGET: Mouse Mm6
+SEQ1_DIR=/san/sanvol1/scratch/mm6/nib
+SEQ1_SMSK=/san/sanvol1/scratch/mm6/linSpecRep.notInChicken
+SEQ1_LEN=/san/sanvol1/scratch/mm6/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+
+# QUERY: Chicken galGal2 - single chunk big enough for whole chroms at
+# once
+SEQ2_DIR=/scratch/hg/galGal2/nib
+SEQ2_LEN=/scratch/hg/galGal2/chrom.sizes
+SEQ2_SMSK=/scratch/hg/galGal2/linSpecRep
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzGal
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+    -chainMinScore=5000 -chainLinearGap=loose \
+        -stop=net `pwd`/DEF > to-net.out 2>&1
+    #	recover from network slowness in making the net file appear
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+    -chainMinScore=5000 -chainLinearGap=loose \
+        -continue=net -stop=net `pwd`/DEF > net.out 2>&1
+
+    #	Manually loading to put these in a different table name than the
+    #	existing track
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastzGalGal2.2005-11-30/axtChain
+    #	Copy the loadUp.csh used in Mm7 and alter the script:
+    cp \
+/cluster/data/mm7/bed/blastzGalGal2.2005-11-14/axtChain/axtChain/loadUp.csh .
+    #	set mm6 data base and table names to chainGalGal2u1 and netGalGal2u1
+    #	and proper path names to here
+    #	then run the script
+    time ./loadUp.csh > loadUp.out
+
+    ssh kolossus
+    cd /cluster/data/mm6/bed/blastzGalGal2.2005-11-30
+    time HGDB_CONF=~/.hg.conf.read-only \
+	featureBits mm6 chainGalGal2u1Link > fb.mm6.chainGalGal2u1Link 2>&1 &
+    #	77836209 bases of 2597150411 (2.997%) in intersection
+    #	Previously with the broken lineage specific repeats and
+    #	different linearGap matrix, this was:
+    #   82018349 bases of 2597150411 (3.158%) in intersection
+
+    #	Move the existing swap directory out of the way
+    ssh pk
+    cd /cluster/data/galGal2/bed
+    mv blastz.mm6.swap blastz.mm6.swap.2005-04-04
+
+    cd /cluster/data/mm6/bed/blastzGalGal2.2005-11-30
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	    -swap -stop=net `pwd`/DEF > swap-to-net.out 2>&1
+
+    #	Manually load to change tables loaded into
+    ssh hgwdev
+    cd /cluster/data/galGal2/bed/blastz.mm6.swap/axtChain
+    #	Copy loadUp script used in mm7, change db to mm6 and table names
+    #	to be chainMm6u1 and netMm6u1
+    cp /cluster/data/galGal2/bed/blastz.mm7.swap/axtChain/loadUp.csh .
+    time ./loadUp.csh > loadUp.out 2>&1
+
+    ssh kolossus
+    cd /cluster/data/mm6/bed/blastzGalGal2.2005-11-30
+    time HGDB_CONF=~/.hg.conf.read-only \
+	featureBits galGal2  chainMm6u1Link > fb.mm6.chainMm6u1Link 2>&1 &
+    #	70147509 bases of 1054197620 (6.654%) in intersection
+    #	Previously, with broken lineage specific repeats and different
+    #	minScore and linearGap, this was:
+    #   72687426 bases of 1054197620 (6.895%) in intersection
+
+###########################################################################
+# BLASTZ Rat Rn3 second time correctly
+#	The initial run was done at a time when there was an error in
+#	the processing scripts and the lineage specific repeats were not
+#	handled correctly.  This re-work produces better chains and nets
+#	as the lineage specific repeats are handled properly, also set
+#	the chain minScore and linearGap at better settings.
+#	 (DONE - 2005-11-30 - 2005-12-07 - Hiram)
+
+    ssh pk
+    mkdir /cluster/data/mm6/bed/blastzRn3.2005-11-30
+    cd /cluster/data/mm6/bed/blastzRn3.2005-11-30
+
+    cat << '_EOF_' > DEF
+ # mouse vs rat
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+    
+# TARGET: Mouse Mm6
+SEQ1_DIR=/san/sanvol1/scratch/mm6/nib
+SEQ1_SMSK=/san/sanvol1/scratch/mm6/linSpecRep.notInRat
+SEQ1_LEN=/san/sanvol1/scratch/mm6/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn3 - chunk big enough to do all chroms in single whole
+# pieces
+SEQ2_DIR=/san/sanvol1/scratch/rn3/softNib
+SEQ2_SMSK=/san/sanvol1/scratch/rn3/linSpecRep.notInMouse
+SEQ2_LEN=/san/sanvol1/scratch/rn3/chrom.sizes
+SEQ2_CHUNK=300000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzRn3.2005-11-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+    -chainMinScore=3000 -chainLinearGap=medium \
+        -stop=net `pwd`/DEF > to-net.out 2>&1
+
+    #	Manually loading to put these in a different table name than the
+    #	existing track
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastzRn3.2005-11-30/axtChain
+    #	Copy the loadUp.csh used in Mm7 and alter the script:
+    cp /cluster/data/mm7/bed/blastzRn3.2005-11-14/axtChain/loadUp.csh .
+    #	set mm6 data base and table names to chainRn3u1 and netRn3u1
+    #	and proper path names to here
+    #	then run the script
+    time ./loadUp.csh > loadUp.out
+
+    ssh kolossus
+    cd /cluster/data/mm6/bed/blastzRn3.2005-11-30
+    time HGDB_CONF=~/.hg.conf.read-only \
+	featureBits mm6 chainRn3u1Link > fb.mm6.chainRn3u1Link 2>&1 &
+    #	1768516862 bases of 2597150411 (68.095%) in intersection
+    #	Previously, with the broken lineage specific repeats and
+    #	different minScore and linearGap, this was:
+    #	1802980225 bases of 2597150411 (69.421%) in intersection
+
+    #	Move the existing swap directory out of the way
+    ssh pk
+    cd /cluster/data/rn3/bed
+    mv blastz.mm6.swap blastz.mm6.swap.2005-03-29
+
+    cd /cluster/data/mm6/bed/blastzRn3.2005-11-30
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	    -swap -stop=net `pwd`/DEF > swap-to-net.out 2>&1
+
+    #	Manually load to change tables loaded into
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/blastz.mm6.swap/axtChain
+    #	Copy loadUp script used in mm7, change db to mm6 and table names
+    #	to be chainMm6u1 and netMm6u1
+    cp /cluster/data/rn3/bed/blastz.mm7.swap/axtChain/loadUp.csh .
+    time ./loadUp.csh > loadUp.out 2>&1
+
+    ssh kolossus
+    cd /cluster/data/mm6/bed/blastzRn3.2005-11-30
+    time HGDB_CONF=~/.hg.conf.read-only \
+	featureBits rn3 chainMm6u1Link > fb.rn3.chainMm6u1Link 2>&1 &
+
+###########################################################################
+# BLASTZ DOG canFam2 second time correctly
+#	The initial run was done at a time when there was an error in
+#	the processing scripts and the lineage specific repeats were not
+#	handled correctly.  This re-work produces better chains and nets
+#	as the lineage specific repeats are handled properly, also set
+#	the chain minScore and linearGap at better settings.
+#	 (DONE - 2005-12-02 - 2005-12-07 - Hiram)
+
+    ssh pk
+    mkdir /cluster/data/mm6/bed/blastzCanFam2.2005-12-02
+    cd /cluster/data/mm6/bed/blastzCanFam2.2005-12-02
+
+    cat << '_EOF_' > DEF
+# mouse vs dog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+    
+# TARGET: Mouse Mm6
+SEQ1_DIR=/san/sanvol1/scratch/mm6/nib
+SEQ1_SMSK=/san/sanvol1/scratch/mm6/linSpecRep.notInDog
+SEQ1_LEN=/san/sanvol1/scratch/mm6/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Dog CanFam2 - chunk big enough to do all chroms in single whole
+# pieces
+SEQ2_DIR=/scratch/hg/canFam2/nib
+SEQ2_SMSK=/san/sanvol1/scratch/canFam2/linSpecRep.notInMouse
+SEQ2_LEN=/san/sanvol1/scratch/canFam2/chrom.sizes
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm6/bed/blastzCanFam2.2005-12-02
+TMPDIR=/scratch/tmp
+
+'_EOF_'
+    #	happy emacs
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	    -stop=net `pwd`/DEF > to-net.out 2>&1
+
+    #	Manually loading to put these in a different table name than the
+    #	existing track
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/blastzCanFam2.2005-12-02/axtChain
+    cp /cluster/data/mm7/bed/blastzCanFam2.2005-11-14/axtChain/loadUp.csh .
+    #	set mm6 data base and table names to chainRn3u1 and netRn3u1
+    #	and proper path names to here
+    #	then run the script
+    time ./loadUp.csh > loadUp.out
+
+    ssh kolossus
+    cd /cluster/data/mm6/bed/blastzRn3.2005-11-30
+    time HGDB_CONF=~/.hg.conf.read-only \
+	featureBits mm6 chainCanFam2u1Link > fb.mm6.chainCanFam2u1Link 2>&1 &
+    #	829007305 bases of 2597150411 (31.920%) in intersection
+    #	Previously on canFam1, broken lineage specific repeats,
+    #	different minScore and linearGap, this was:
+    #   798637320 bases of 2597150411 (30.751%) in intersection
+
+    #	Move the existing swap directory out of the way
+    ssh pk
+    cd /cluster/data/canFam2/bed
+    mv blastz.mm6.swap blastz.mm6.swap.2005-11-01
+
+    cd /cluster/data/mm6/bed/blastzCanFam2.2005-12-02
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	    -swap -stop=net `pwd`/DEF > swap-to-net.out 2>&1
+
+    #	Manually load to change tables loaded into
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/blastz.mm6.swap/axtChain
+    #	Copy loadUp script used in mm7, change db to mm6 and table names
+    #	to be chainMm6u1 and netMm6u1
+    cp /cluster/data/canFam2/bed/blastz.mm7.swap/axtChain/loadUp.csh .
+    time ./loadUp.csh > loadUp.out 2>&1
+    #	52 minute load time
+
+    ssh kolossus
+    time HGDB_CONF=~/.hg.conf.read-only \
+	featureBits canFam2 chainMm6u1Link > fb.canFam2.chainMm6u1Link 2>&1 &
+    #	813032415 bases of 2384996543 (34.089%) in intersection
 
