@@ -8,7 +8,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: localization.c,v 1.1 2004/08/10 00:14:26 angie Exp $";
+static char const rcsid[] = "$Id: localization.c,v 1.2 2005/12/08 19:02:56 fanhsu Exp $";
 
 
 static boolean localizationExists(struct section *section,
@@ -22,7 +22,7 @@ if (swissProtAcc != NULL && sqlTablesExist(conn, "mitopred"))
     {
     safef(query, sizeof(query),
 	  "select count(*) from mitopred where name = '%s' or name = '%s'",
-	  swissProtAcc, spAccToId(spConn, swissProtAcc));
+	  swissProtAcc, spAnyAccToId(spConn, swissProtAcc));
     if (sqlQuickNum(conn, query) > 0)
 	return TRUE;
     }
@@ -53,7 +53,7 @@ if (swissProtAcc != NULL && sqlTablesExist(conn, "mitopred"))
     {
     safef(query, sizeof(query), 
 	  "select confidence from mitopred where name = '%s' or name = '%s'",
-	  swissProtAcc, spAccToId(spConn, swissProtAcc));
+	  swissProtAcc, spAnyAccToId(spConn, swissProtAcc));
     sr = sqlGetResult(conn, query);
     firstTime = TRUE;
     while ((row = sqlNextRow(sr)) != NULL)

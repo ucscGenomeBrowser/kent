@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.63 2005/12/03 00:11:16 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.64 2005/12/08 19:02:06 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -465,7 +465,7 @@ if (protAcc != NULL)
 	}
     /* show SWISS-PROT display ID if it is different than the accession ID */
     /* but, if display name is like: Q03399 | Q03399_HUMAN, then don't show display name */
-    spDisplayId = spAccToId2(spConn, protAcc);
+    spDisplayId = spAnyAccToId(spConn, protAcc);
     if (spDisplayId == NULL) 
     	{
 	errAbort("<br>%s seems no longer a valid protein ID in our latest UniProt DB.", protAcc);
