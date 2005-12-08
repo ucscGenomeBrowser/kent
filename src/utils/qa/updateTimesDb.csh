@@ -21,8 +21,9 @@ set dbBeta=""
 
 if ($1 == "") then
   echo
-  echo "  gets list of update times for entire database."
+  echo "  gets list of update times for entire database from dev."
   echo "  will compare to database on beta with different name, if needed."
+  echo "  also shows tables that were on beta but on dev."
   echo
   echo "    usage: databaseDev, [databaseBeta]"
   echo
@@ -32,22 +33,22 @@ else
   if ($2 == "") then
     # no second db
     echo "databaseDev set to $db"
-    echo "no db provided for Beta. setting to same as first"
+    echo "no db provided for Beta. setting to: $db"
     set dbBeta=$db
   else
     set dbBeta=$2
-    echo "dbBeta=$2"
+    echo "dbBeta = $2"
   endif
 endif
 
 
-hgsql -N -e "SHOW TABLES" $db | sort > $db.tables
-hgsql -N -e "SHOW TABLES" $dbBeta | sort > $dbBeta.beta.tables
+hgsql -N -e "SHOW TABLES" $db | sort > xx$db.tables
+hgsql -N -h hgwbeta -e "SHOW TABLES" $dbBeta | sort > xx$dbBeta.beta.tables
 echo "getting update times: $db"
 echo "getting update times: $dbBeta"
 echo
 
-foreach table (`cat $db.tables`)
+foreach table (`cat xx$db.tables`)
   echo $table
   echo "============="
   set dev=`hgsql -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
@@ -69,7 +70,7 @@ echo
 # --------------------------------------------
 #  check tables that are on beta only:
 
-comm -13 $db.tables $dbBeta.beta.tables > xxBetaOnlyxx
+comm -13 xx$db.tables xx$dbBeta.beta.tables > xxBetaOnlyxx
 set betaOnly=`wc -l xxBetaOnlyxx | gawk '{print $1}'`
 if ($betaOnly != 0) then
   echo
@@ -100,4 +101,5 @@ if ($betaOnly != 0) then
 endif
 
 rm -f xxBetaOnlyxx
-
+rm -f xx$db.tables
+rm -f xx$dbBeta.beta.tables
