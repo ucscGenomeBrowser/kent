@@ -947,11 +947,14 @@ For information on using the Table Browser features, refer to the <A HREF="hgTab
 			<TR><TD WIDTH=10>&nbsp;</TD><TD>
 
 <P>
-VisiGene is a browser for viewing <em>in situ</em> images. It enables the user 
-to examine cell-by-cell as well as tissue-by-tissue expression patterns. The 
-browser serves as a virtual microscope, allowing users to retrieve images that 
-meet specific search criteria, then interactively zoom and scroll across the 
-collection.</P>
+<A HREF="../../cgi-bin/hgVisiGene">VisiGene</A> is a browser for viewing 
+<em>in situ</em> images. It enables the user to examine cell-by-cell as well as 
+tissue-by-tissue expression patterns. The browser serves as a virtual 
+microscope, allowing users to retrieve images that meet specific search 
+criteria, then interactively zoom and scroll across the collection.</P>
+<P>
+To start the VisiGene browser, click the VisiGene link in the left-hand
+sidebar menu on the <A HREF="../../index.html">Genome Browser</A> home page.</P>
 
 <P><B>Images Available</B><BR>
 The following image collections are currently available for browsing: 
@@ -971,13 +974,14 @@ for Basic Biology</A> (NIBB) XDB project
 </UL></P>
 
 <P><B>Searching the Image Database</B><BR>
-The image database may be searched by organism names, gene names, authors, body 
-parts, year of publication, GenBank or UniProt accessions, 
+The image database may be searched by gene symbols, authors, years of 
+publication, body parts, GenBank or UniProt accessions, organisms, 
 <A HREF="http://genex.hgu.mrc.ac.uk/Atlas/intro.html" 
-TARGET=_blank>Theiler stages</A>, and 
+TARGET=_blank>Theiler stages</A> (mice), and 
 <A HREF="http://www.xenbase.org/atlas/NF/NF-all.html"
-TARGET=_blank>Nieuwkoop/Faber stages</A>. The search returns only those images 
-that match all the specified criteria. </P>
+TARGET=_blank>Nieuwkoop/Faber stages</A> (frogs). The search returns only those 
+images that match all the specified criteria. For a list of sample search
+strings, see the VisiGene Gateway page.</P>
 <P>
 The wildcard characters * and ? are supported for gene name searches. For 
 example, to view the images of all genes in the Hox A cluster, search for 
@@ -999,15 +1003,15 @@ or out, sized to match the resolution of the original image or best fit the
 image display window, and moved or scrolled in any direction to focus on areas 
 of interest. The original full-sized image may also be downloaded.</P>
 <P>
-<B>Zooming in:</B> Click the Zoom <em>in</em> button above the image to enlarge 
-the image by 2X and center it on the position of the mouse click. Keyboard 
-shortcut: click on the image using the left mouse button, or click on the image,
-then use the + key.</P>
+<B>Zooming in:</B> To enlarge the image by 2X, click the Zoom <em>in</em> button
+above the image or click on the image using the left mouse button. 
+Alternatively, the + key may be used to zoom in when the main image pane is the 
+active window.</P>
 <P>
-<B>Zooming out:</B> Click the Zoom <em>out</em> button above the image to 
-reduce the image by 2X and center it on the location of the mouse click. 
-Keyboard shortcut: click on the image using the right mouse button, or click on 
-the image, then use the - key. </P> 
+<B>Zooming out:</B> To reduce the image by 2X, click the Zoom <em>out</em> 
+button above the image or click on the image using the right mouse button. 
+Alternatively, the - key may be used to zoom out when the main image pane is
+the active window. </P> 
 <P>
 <B>Sizing to full resolution:</B> Click the Zoom <em>full</em> button above the 
 image to resize the image such that each pixel on the screen corresponds to a 
@@ -1106,59 +1110,105 @@ formatted by the tool is approximately 10 Mbp.
 change from one assembly to the next as gaps are closed, strand orientations are
 corrected, and duplications are reduced. Occasionally, a chunk of sequence may
 be moved to an entirely different chromosome as the map is
-refined. There are 3 different methods available for migrating data from one 
-assembly to another: BLAT alignment, coordinate conversion, and lifting of
-coordinates. The BLAT alignment tool is described in the section 
+refined. There are three different methods available for migrating data from one
+assembly to another: BLAT alignment, coordinate conversion, and coordinate 
+lifting. The BLAT alignment tool is described in the section 
 <A HREF="#BLATAlign">Using BLAT alignments</A>.
 <P><B>Coordinate conversion</B><BR>
-The Genome Browser Convert tool is useful for 
-locating the position of a feature of interest in a newer release of a genome.
-During the conversion process, portions of the genome in the coordinate range of
-the original assembly are aligned to the new assembly while preserving their order and 
-orientation. In general, it is easier to achieve successful conversions with shorter 
-sequences. NOTE: At the present time, this tool may be used only on human
-genome assemblies.
+The Genome Browser Convert utility is useful for 
+locating the position of a feature of interest in a different release of the
+same genome or (in some cases) in a genome assembly of another species.
+During the conversion process, portions of the genome in the coordinate range 
+of the original assembly are aligned to the new assembly while preserving their 
+order and orientation. In general, it is easier to achieve successful 
+conversions with shorter sequences. 
 <P>
-The conversion tool works by performing a BLAT search on the first 1000, last 1000, and middle
-1000 bases
-in the current window. If all three searches land uniquely in the same order on
-the other version, the program announces a successful
-conversion. If the search results are not so straightforward, the user is given
-various options to find the corresponding sequence.
-Frequently, if the feature the user is looking for is tied to an mRNA, it is
-simplest just to BLAT the mRNA. 
-<P><B>Using the convert tool</B><BR>
-To access the conversion tool, click the Convert link in the top menu bar on the
-Genome Browser page. On the page that displays, select the assembly
-version in which the feature is located in the <I>Original Draft</I> list, then
-pick the assembly version you'd like to convert to in the <I>New Draft</I> list.
-Modify the position coordinates if necessary, then click the <I>submit</I>
-button. Note that archived assembly versions are not accessible from the
-conversion tool. Currently the tool supports only the human genome.
-<P>
-If the match is successful, the Genome Browser will announce success and display
-the coordinate ranges for both the original and new assemblies. Clicking the
-<I>browser</I> link to the right of the coordinate range will start up the
-browser at the given position on the assembly. The Alignment Details section
-shows which sequences of the original draft were aligned by BLAT to determine
-the new set of coordinates. Note that the conversion is a best guess: it is
-recommended that you check with local landmarks and use 
-common sense when evaluating the results.
-<P>
-If the conversion is unsuccessful, the Genome Browser returns a failure message
-and a possible explanation for the failure.
+When coordinate conversion is available for an assembly, a Convert link
+is displayed in the top menu bar on the Genome Browser tracks page. Click this
+link to convert the currently-displayed coordinate range. You will be presented
+with a list of the genome/assembly conversion options 
+available for the
+current assembly. Select the genome and assembly to which you'd like to convert
+the coordinates, then click the Submit button. If the conversion is successful,
+the browser will return a list of regions in the new assembly, along with
+the percent of bases and span covered by that region. Click on a region to 
+display it in the browser. If the conversion is unsuccessful, the utility 
+returns a failure message.
 
 <A NAME="Liftover"></A><BR>
 
 <P><B>Lifting coordinates</B><BR>
-The liftOver tool is useful for converting a large number of coordinates to a 
-different assembly. This command-line utility requires access to a Linux platform.
-The executable file can be downloaded from 
+The liftOver tool is useful if you wish to convert a large number of 
+coordinate ranges between assemblies. This tool is available in both 
+web-based and command line forms, and supports forward/reverse conversions
+as well as conversions between species.
+
+<P><B>Web-based coordinate lifting</B><BR>
+To access the graphical version of the liftOver tool, click the Utilities link
+in the left-hand sidebar on the Genome Browser home page, then select the
+<A HREF="http://genome.ucsc.edu/cgi-bin/hgLiftOver">Batch Coordinate Conversion 
+(liftOver)</A> link.
+<P>
+To convert one or more coordinate ranges using the default conversion settings: 
+<OL>
+<LI>
+Select the genome and assembly from which the ranges were taken 
+(&quot;Original&quot;), as well as the genome and assembly to which the 
+coordinates should be converted (&quot;New&quot;). 
+<LI>Select the Data Format option: 
+Browser Extensible Data format (<A HREF="../../FAQ/FAQformat#format1">BED</A>) 
+or position (coordinates of the form <em>chrN:start-end</em>). 
+<LI>Enter coordinate ranges in the selected data format into the large text 
+box, one per line.
+<LI>Click Submit. 
+</OL></P>
+<P>
+Alternatively, you may load the coordinate ranges from an existing data
+file by entering the file name in the upload box at the bottom of the screen, 
+then clicking the Submit File button. 
+<P>
+The default parameter settings are recommended for general purpose use of the
+liftOver tool. However, you may want to customize settings if you have several
+very large regions to convert. 
+<!--
+<UL>
+<LI><B>Minimum ratio of bases that must remap</B> (default 0.95)<B>:</B> It may 
+be beneficial to reduce this value when working with poor-quality assemblies or
+cross-species conversions. For large-area conversions under these conditions,
+a value as low as 0.01 may be used.
+<LI><B>Minimum chain size in target</B> (default 0)<B>:</B> This parameter is 
+applied only when the &quot;Allow multiple output regions&quot; option is 
+checked. This setting may be increased to reduce fragmentation. For example, 
+when doing large-scale conversions, we have found that a setting of 4000
+worked well for this option.
+<LI><B>Minimum hit size in query</B> (default 0)<B>:</B> This parameter is 
+applied only when the &quot;Allow multiple output regions&quot; option is 
+checked. 
+<LI><B>Allow multiple output regions</B> (default off)<B>:</B> By default, 
+liftOver does not return a match if the region is split in the new assembly. 
+Consider checking this option for conversions involving high-quality data 
+within the same species. This option should not be used when mapping large 
+regions, doing cross-species conversions or using fragmented poor-quality 
+assemblies.
+<LI><B>Min ratio of alignment blocks/exons that must map</B> (default 1)<B>:</B>
+<LI><B>If thickStart/thickEnd is not mapped, use the closest mapped bas</B>
+(default off)<B>:</B>
+</UL></P>
+-->
+
+<P><B>Command-line coordinate lifting</B><BR>
+The command-line version of liftOver offers the increased flexibility and 
+performance gained by running the tool on your local server. This utility 
+requires access to a Linux platform. The executable file 
+may be downloaded from 
 <A HREF="http://www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz">www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz</A>.
-LiftOver requires a UCSC-generated <em>over.chain</em> file as input. Pre-generated files 
-for a given assembly are located in the liftOver subdirectory of the assembly's 
-downloads directory. If the desired conversion file is not available, one can be obtained by sending a 
-request to the <A HREF="mailto:genome@cse.ucsc.edu">genome mailing list</A>. 
+Command-line liftOver requires a UCSC-generated <em>over.chain</em> file as 
+input. Pre-generated files for a given assembly are located in the 
+<A HREF="http://hgdownload.cse.ucsc.edu/downloads.html#liftover">LiftOver</A>
+section on the Downloads page. If the desired conversion file is not listed, 
+send a request to the 
+<A HREF="mailto:genome@cse.ucsc.edu">genome mailing list</A> and we may be able
+to generate one for you. 
 
 		</TD><TD WIDTH=15></TD></TR></TABLE>
 	<br></TD></TR></TABLE>
