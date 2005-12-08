@@ -139,22 +139,6 @@ matrixHeader A, C, G, T
 type chain panTro1
 otherDb panTro1
 
-track chainHg17
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 259.1
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-144,91
-matrixHeader A, C, G, T
-type chain hg17
-otherDb hg17
-
-
-
 track chainDanRer3
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -200,20 +184,22 @@ type netAlign hg17 chainHg17noLSR
 otherDb hg17
 
 track chainHg17
-shortLabel $o_Organism Chain LSR
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments WITH Lineage-Specific Repeats
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 259
 visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-144,91
+matrixHeader A, C, G, T
 type chain hg17
 otherDb hg17
 
 track netHg17
-shortLabel $o_Organism Net LSR
-longLabel $o_Organism ($o_date/$o_db) Alignment Net WITH Lineage-Specific Repeats
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 259.1
 visibility dense
@@ -234,8 +220,8 @@ type psl xeno mm7
 otherDb mm7
 
 track chainSelf
-shortLabel M=200 Chain 
-longLabel Self Chained Alignments blastz M=200
+shortLabel Self Chain 
+longLabel $Organism Chained Self Alignments
 group varRep
 priority 163
 visibility hide
@@ -247,8 +233,8 @@ type chain mm7
 otherDb mm7
 
 track netSelf
-shortLabel M=200 Net
-longLabel $Organism Chained Self-Alignment Net blastz M=200
+shortLabel Self Net
+longLabel $Organism Chained Self Alignment Net
 group varRep
 priority 164
 visibility hide
