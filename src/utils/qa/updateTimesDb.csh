@@ -42,13 +42,15 @@ else
 endif
 
 
-hgsql -N -e "SHOW TABLES" $db | sort > xx$db.tables
-hgsql -N -h hgwbeta -e "SHOW TABLES" $dbBeta | sort > xx$dbBeta.beta.tables
+# these files of table names are used by other programs, 
+# including proteins.csh:
+hgsql -N -e "SHOW TABLES" $db | sort > $db.tables
+hgsql -N -h hgwbeta -e "SHOW TABLES" $dbBeta | sort > $dbBeta.beta.tables
 echo "getting update times: $db"
 echo "getting update times: $dbBeta"
 echo
 
-foreach table (`cat xx$db.tables`)
+foreach table (`cat $db.tables`)
   echo $table
   echo "============="
   set dev=`hgsql -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
@@ -70,7 +72,7 @@ echo
 # --------------------------------------------
 #  check tables that are on beta only:
 
-comm -13 xx$db.tables xx$dbBeta.beta.tables > xxBetaOnlyxx
+comm -13 $db.tables $dbBeta.beta.tables > xxBetaOnlyxx
 set betaOnly=`wc -l xxBetaOnlyxx | gawk '{print $1}'`
 if ($betaOnly != 0) then
   echo
@@ -101,5 +103,3 @@ if ($betaOnly != 0) then
 endif
 
 rm -f xxBetaOnlyxx
-rm -f xx$db.tables
-rm -f xx$dbBeta.beta.tables
