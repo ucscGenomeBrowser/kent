@@ -20,7 +20,7 @@
 
 extern Color cdsColor[];
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.8 2005/12/08 17:42:48 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.9 2005/12/08 22:51:36 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1457,7 +1457,9 @@ char *defaultCodonSpecies = cartUsualString(cart, SPECIES_CODON_DEFAULT, NULL);
 char *codonTransMode = NULL;
 boolean startSub2 = FALSE;
 
-//char *codonTranslation = cartUsualString(cart, SPECIES_CODON_DEFAULT, NULL);
+if (defaultCodonSpecies == NULL)
+    defaultCodonSpecies = trackDbSetting(track->tdb, "speciesCodonDefault");
+
 if (seqStart > 2)
     {
     startSub2 = TRUE;
