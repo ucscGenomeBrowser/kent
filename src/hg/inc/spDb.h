@@ -60,7 +60,7 @@ char *spFindAcc(struct sqlConnection *conn, char *id);
  * primary accession, or secondary accession.  Return
  * NULL if not found. */
 
-char *spAccToId2(struct sqlConnection *conn, char *acc);
+char *spAnyAccToId(struct sqlConnection *conn, char *acc);
 
 char *spAccToId(struct sqlConnection *conn, char *acc);
 /* Convert primary accession to SwissProt ID (which will
