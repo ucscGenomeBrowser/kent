@@ -22,12 +22,13 @@
 #include "phyloTree.h"
 #include "humanPhenotypeUi.h"
 #include "hgMutUi.h"
+#include "hgConfig.h"
 
 #define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.229 2005/12/07 22:41:59 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.230 2005/12/08 00:33:29 lowe Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1807,6 +1808,7 @@ struct trackDb *tdb;
 char htmlFile[256];
 char *buf;
 size_t size;
+char *helpdir;
 
 AllocVar(tdb);
 tdb->tableName = tableName;
@@ -1814,7 +1816,13 @@ tdb->shortLabel = shortLabel;
 tdb->longLabel = longLabel;
 tdb->visibility = defaultVis;
 tdb->priority = 1.0;
-safef(htmlFile, 256, "%s/%s.html", HELP_DIR, tableName);
+
+ helpdir = cfgOption("help.html");
+ if (helpdir != NULL)
+   safef(htmlFile, 256, "%s/%s.html", helpdir, tableName);
+ else
+   safef(htmlFile, 256, "%s/%s.html", HELP_DIR, tableName);
+ 
 readInGulp(htmlFile, &buf, &size);
 tdb->html = buf;
 tdb->type = "none";
