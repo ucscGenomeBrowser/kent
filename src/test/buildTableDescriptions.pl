@@ -307,11 +307,16 @@ my %tableAutoSql = slurpAutoSql($kentSrc);
 my %fieldsAutoSql = indexAutoSqlByFields(\%tableAutoSql);
 my %tableAnchors = parseGbdDescriptions($gbdDPath);
 my $hgConf = HgConf->new($opt_hgConf);
-my @dbs = (defined $opt_db) ? split(',', $opt_db) : &getActiveDbs($hgConf);
+my @auxDbs = ('hgFixed', 'proteome');
+my @dbs = (defined $opt_db) ? split(',', $opt_db) :
+                              (&getActiveDbs($hgConf), @auxDbs);
 foreach my $db (@dbs) {
-  next if (($db !~ /^\w\w\d+$/ && $db !~ /^\w\w\w\w\w\w\d+$/ &&
-	    $db ne 'hgFixed' && $db ne 'proteome') ||
-	   $db =~ /^zoo/);
+  if (($db !~ /^\w\w\d+$/ && $db !~ /^\w\w\w\w\w\w\d+$/ &&
+       (scalar(grep {$_ eq $db} @auxDbs) == 0)) ||
+      $db =~ /^zoo/) {
+    print "Skipping database $db.\n";
+    next;
+  }
   my $sqlFile = "$db.tableDescriptions.sql";
   open(SQL, ">$sqlFile") || die "Can't open $sqlFile for writing";
   print SQL "use $db;\n";
