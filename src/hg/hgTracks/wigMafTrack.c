@@ -20,7 +20,7 @@
 
 extern Color cdsColor[];
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.7 2005/12/04 18:02:44 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.87.4.8 2005/12/08 17:42:48 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1153,6 +1153,22 @@ for (i = 0; i < size; i++, dna++)
     }
 }
 
+void reverseForStrand(DNA *dna, int length, char strand, bool alreadyComplemented)
+{
+if (strand == '-')
+    {
+    if (alreadyComplemented)
+	reverseBytes(dna, length);
+    else
+	reverseComplement(dna, length);
+    }
+else
+    {
+    if (alreadyComplemented)
+	complement(dna, length);
+    }
+}
+
 #define ISGAP(x)  (((x) == '=') || (((x) == '-')))
 #define ISN(x)  ((x) == 'N') 
 #define ISSPACE(x)  ((x) == ' ') 
@@ -1180,18 +1196,8 @@ int fillBox = FALSE;
 safef(masterChrom, sizeof(masterChrom), "%s.%s", database, chromName);
 
 dna += start;
-if (strand == '-')
-    {
-    if (alreadyComplemented)
-	reverseBytes(dna, length);
-    else
-	reverseComplement(dna, length);
-    }
-else
-    {
-    if (alreadyComplemented)
-	complement(dna, length);
-    }
+
+reverseForStrand(dna, length, strand, alreadyComplemented);
 
 ptr = dna;
 color = shadesOfSea[0];
@@ -1210,7 +1216,10 @@ if (frame && (prevEnd == -1))
 		mult = 2;
 		}
 	    else
+		{
+		reverseForStrand(ptr, 2, strand, alreadyComplemented);
 		ptr +=2;
+		}
 	    length -=2;
 	    break;
 	case 2:
@@ -1222,7 +1231,10 @@ if (frame && (prevEnd == -1))
 		mult = 1;
 		}
 	    else
+		{
+		reverseForStrand(ptr, 1, strand, alreadyComplemented);
 		ptr++;
+		}
 	    length -=1;
 	    break;
 	}
@@ -1390,6 +1402,19 @@ if (length && (nextStart != -1))
 		color = shadesOfSea[0];
 	    vgBox(vg, x1, y, mult*width/winBaseCount + 1 , height, color);
 	    }
+	}
+    }
+else if (length)	 /* broken frame, just show nucs */
+    {
+    if (strand == '-')
+	{
+	if (!alreadyComplemented)
+	    complement(ptr, length);
+	}
+    else
+	{
+	if (alreadyComplemented)
+	    complement(ptr, length);
 	}
     }
 
