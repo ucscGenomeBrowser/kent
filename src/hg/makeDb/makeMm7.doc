@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.37 2005/12/08 00:57:23 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.38 2005/12/09 23:39:27 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -4726,6 +4726,14 @@ cat out/$1/*.out >>protRefRaw.psl
    hgsql mm7 <~/src/hg/lib/knownGeneMrna.sql
    hgsql mm7 -e 'load data local infile "knownGeneMrna.tab" into table knownGeneMrna'
 
+# update mrnaRefseq table
+  
+  hgsql mm7 -N -e 'select * from mrnaRefseq' >j.1
+  hgsql mm7 -N -e 'select name, name from knownGene where name like "NM_"' >j.2
+  cat j.1 j.2 |sort -u >mrnaRefseq2.tab
+  hgsql mm7 -e 'delete from mrnaRefseq'
+  hgsql mm7 -e 'load data local infile "mrnaRefseq2.tab" into table mrnaRefseq'
+  
 # Create empty knownGeneLink table to make some old code happy.
 
    hgsql mm7 <~/src/hg/lib/knownGeneLink.sql
