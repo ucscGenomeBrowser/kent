@@ -28,7 +28,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.230 2005/12/08 00:33:29 lowe Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.231 2005/12/09 20:43:47 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -736,12 +736,22 @@ void geneIdConfig(struct trackDb *tdb)
 {
 char varName[64];
 char *geneLabel;
+struct sqlConnection *conn = hAllocConn();
+int omimAvail = 0;
+char query[128];
+if (sameString(tdb->tableName, "refGene"))
+    {
+    safef(query, sizeof(query), "select count(*) from refLink where omimId != 0 limit 2");
+    omimAvail = sqlQuickNum(conn, query);
+    }
+hFreeConn(&conn);
+
 safef(varName, sizeof(varName), "%s.label", tdb->tableName);
 geneLabel = cartUsualString(cart, varName, "gene");
 printf("<B>Label:</B> ");
 radioButton(varName, geneLabel, "gene");
 radioButton(varName, geneLabel, "accession");
-if (sameString(tdb->tableName, "refGene"))
+if (omimAvail != 0) 
     {
     radioButton(varName, geneLabel, "OMIM ID");
     radioButton(varName, geneLabel, "all");
@@ -756,6 +766,15 @@ void geneIdConfig2(struct trackDb *tdb)
 {
 char varName[64];
 boolean option;
+struct sqlConnection *conn = hAllocConn();
+int omimAvail = 0;
+char query[128];
+if (sameString(tdb->tableName, "refGene"))
+    {
+    safef(query, sizeof(query), "select count(*) from refLink where omimId != 0 limit 2");
+    omimAvail = sqlQuickNum(conn, query);
+    }
+hFreeConn(&conn);
 
 printf("<B>Label:</B> ");
 safef(varName, sizeof(varName), "%s.label.gene", tdb->tableName);
@@ -768,7 +787,7 @@ option = cartUsualBoolean(cart, varName, FALSE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "accession");
 
-if (sameString(tdb->tableName, "refGene"))
+if (omimAvail != 0)
     {
     safef(varName, sizeof(varName), "%s.label.omim", tdb->tableName);
     option = cartUsualBoolean(cart, varName, FALSE);
