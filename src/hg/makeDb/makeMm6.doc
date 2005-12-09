@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.100 2005/12/08 19:58:23 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.101 2005/12/09 20:01:15 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -9558,7 +9558,7 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
 #	handled correctly.  This re-work produces better chains and nets
 #	as the lineage specific repeats are handled properly, also set
 #	the chain minScore and linearGap at better settings.
-#	 (DONE - 2005-11-30 - 2005-12-07 - Hiram)
+#	 (DONE - 2005-11-30 - 2005-12-08 - Hiram)
 
     ssh pk
     mkdir /cluster/data/mm6/bed/blastzHg17.2005-11-30
@@ -9641,6 +9641,35 @@ TMPDIR=/scratch/tmp
     #	minScore and linearGap settings, this measurement was:
     #	969459954 bases of 2866216770 (33.824%) in intersection
 
+    #	prepare new downloads and clean up
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/mm6
+    mv vsHg17 vsHg17.old 
+    # There is no file in
+    # /usr/local/apache/htdocs/goldenPath/mm6/liftOver
+    #	this information was lost in cleaning over the summer
+    cd /usr/local/apache/htdocs/goldenPath/hg17
+    mv vsMm6 vsMm6.old
+    # There is no file in
+    # /usr/local/apache/htdocs/goldenPath/hg17/liftOver
+    #	this information was lost in cleaning over the summer
+
+    ssh pk
+    cd /cluster/data/mm6/bed/blastzHg17.2005-11-30
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	    -continue download `pwd`/DEF > download-clean.out 2>&1
+    #	2 minutes
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	    -swap -continue download `pwd`/DEF > swap.download-clean.out 2>&1
+    #	2m 20s
+    #	Check the README information in 
+    #	/usr/local/apache/htdocs/goldenPath/mm6/vsHg17
+    #	/usr/local/apache/htdocs/goldenPath/hg17/vsMm6
+    #	Use that information to place the matrix definition in the
+    #	trackDb chain html files
+
 ###########################################################################
 # BLASTZ CHICKEN GalGal2 second time correctly
 #	The initial run was done at a time when there was an error in
@@ -9648,7 +9677,7 @@ TMPDIR=/scratch/tmp
 #	handled correctly.  This re-work produces better chains and nets
 #	as the lineage specific repeats are handled properly, also set
 #	the chain minScore and linearGap at better settings.
-#	 (DONE - 2005-11-30 - 2005-12-07 - Hiram)
+#	 (DONE - 2005-11-30 - 2005-12-09 - Hiram)
 
     ssh pk
     mkdir /cluster/data/mm6/bed/blastzGalGal2.2005-11-30
@@ -9746,6 +9775,23 @@ TMPDIR=/scratch/tmp
     #	minScore and linearGap, this was:
     #   72687426 bases of 1054197620 (6.895%) in intersection
 
+    ssh hgwdev
+    #	move the existing data out of the way
+    cd /usr/local/apache/htdocs/goldenPath/galGal2
+    mv vsMm6 vsMm6.old
+    cd /usr/local/apache/htdocs/goldenPath/mm6
+    mv vsGalGal2 vsGalGal2.old
+
+    ssh pk
+    cd /cluster/data/mm6/bed/blastzGalGal2.2005-11-30
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	   -continue=download `pwd`/DEF > download.out 2>&1
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	-chainMinScore=5000 -chainLinearGap=loose \
+	   -swap -continue=download `pwd`/DEF > swap.download.out 2>&1
+
 ###########################################################################
 # BLASTZ Rat Rn3 second time correctly
 #	The initial run was done at a time when there was an error in
@@ -9753,7 +9799,7 @@ TMPDIR=/scratch/tmp
 #	handled correctly.  This re-work produces better chains and nets
 #	as the lineage specific repeats are handled properly, also set
 #	the chain minScore and linearGap at better settings.
-#	 (DONE - 2005-11-30 - 2005-12-07 - Hiram)
+#	 (DONE - 2005-11-30 - 2005-12-09 - Hiram)
 
     ssh pk
     mkdir /cluster/data/mm6/bed/blastzRn3.2005-11-30
@@ -9833,6 +9879,26 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/mm6/bed/blastzRn3.2005-11-30
     time HGDB_CONF=~/.hg.conf.read-only \
 	featureBits rn3 chainMm6u1Link > fb.rn3.chainMm6u1Link 2>&1 &
+    #	1780302108 bases of 2571104688 (69.243%) in intersection
+    #	This was previously, with broken lineage specific repeats and
+    #	different chain minScore and linearGap:
+    #	1812992492 bases of 2571104688 (70.514%) in intersection
+
+    #	move existing downloads out of the way:
+    cd /usr/local/apache/htdocs/goldenPath/mm6
+    mv vsRn3 vsRn3.old
+    cd /usr/local/apache/htdocs/goldenPath/rn3
+    mv vsMm6 vsMm6.old
+
+    ssh pk
+    cd /cluster/data/mm6/bed/blastzRn3.2005-11-30
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	   -continue=download `pwd`/DEF > download.out 2>&1
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	   -swap -continue=download `pwd`/DEF > swap.download.out 2>&1
 
 ###########################################################################
 # BLASTZ DOG canFam2 second time correctly
@@ -9841,7 +9907,7 @@ TMPDIR=/scratch/tmp
 #	handled correctly.  This re-work produces better chains and nets
 #	as the lineage specific repeats are handled properly, also set
 #	the chain minScore and linearGap at better settings.
-#	 (DONE - 2005-12-02 - 2005-12-07 - Hiram)
+#	 (DONE - 2005-12-02 - 2005-12-09 - Hiram)
 
     ssh pk
     mkdir /cluster/data/mm6/bed/blastzCanFam2.2005-12-02
@@ -9884,13 +9950,14 @@ TMPDIR=/scratch/tmp
     ssh hgwdev
     cd /cluster/data/mm6/bed/blastzCanFam2.2005-12-02/axtChain
     cp /cluster/data/mm7/bed/blastzCanFam2.2005-11-14/axtChain/loadUp.csh .
-    #	set mm6 data base and table names to chainRn3u1 and netRn3u1
+    #	set mm6 data base and table names to chainCanFam2u1 and
+    #	netCanFam2u1
     #	and proper path names to here
     #	then run the script
     time ./loadUp.csh > loadUp.out
 
     ssh kolossus
-    cd /cluster/data/mm6/bed/blastzRn3.2005-11-30
+    cd /cluster/data/mm6/bed/blastzCanFam2.2005-11-30
     time HGDB_CONF=~/.hg.conf.read-only \
 	featureBits mm6 chainCanFam2u1Link > fb.mm6.chainCanFam2u1Link 2>&1 &
     #	829007305 bases of 2597150411 (31.920%) in intersection
@@ -9921,4 +9988,21 @@ TMPDIR=/scratch/tmp
     time HGDB_CONF=~/.hg.conf.read-only \
 	featureBits canFam2 chainMm6u1Link > fb.canFam2.chainMm6u1Link 2>&1 &
     #	813032415 bases of 2384996543 (34.089%) in intersection
+    #	Angie's run of this had:
+    #	780509502 bases of 2384996543 (32.726%) in intersection
 
+    #	Move existing chain and net download data of the way
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/canFam2
+    mv vsMm6 vsMm6.old
+    #	doesn't seem to be any canFam2 data yet in mm6
+
+    ssh pk
+    cd /cluster/data/mm6/bed/blastzCanFam2.2005-12-02
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	    -continue download `pwd`/DEF > download.out 2>&1
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
+	-chainMinScore=3000 -chainLinearGap=medium \
+	    -swap -continue download `pwd`/DEF > swap.download.out 2>&1
