@@ -399,6 +399,7 @@ identifier vgImage
 "Master identifier for a visiGene image.  May be just a pane in an image file."
     visiGene.image.id
     visiGene.imageProbe.image
+    $kgDb.knownToVisiGene.value
 
 identifier vgImageProbe
 "Association between a probe and an image."
@@ -1040,6 +1041,7 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.rankProp.target
     $kgDb.pPsiBlast.kgId1
     $kgDb.pPsiBlast.kgId2
+    $kgDb.knownToVisiGene.name
 
 identifier knownAlignId
 "Which (of sometimes multiple) mapping of a known gene"
