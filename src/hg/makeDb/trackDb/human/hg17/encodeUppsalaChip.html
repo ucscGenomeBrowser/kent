@@ -11,24 +11,47 @@ subtrack by a horizontal line. Tentative binding sites (TBSs)
 in spots passing the cut-off are displayed in a separate subtrack, 
 ChIP/Chip (HepG2) Sites. These sites are numbered corresponding to the ranking 
 of spots based on enrichment ratios. Each TBS is assigned a value indicating 
-how often it was found in separate BioProspector runs (<em>e.g.</em> 1000 
-indicates that a TBS was found in ten out of ten runs).</P>
+how often it was found in separate BioProspector software runs for the 
+prediction of TBSs (<em>e.g.</em> 1000 indicates that a TBS was found in ten 
+out of ten runs).</P>
 
 <H2>Methods</H2>
 <P>
-ChIP was performed on HepG2 cells and hybridized to PCR-based tiling path 
-arrays, as described in Rada-Iglesias <em>et al.</em> (2005). Overlapping
-sequences were removed by changing the start position of downstream spots to 
-generate a continuous track. To give each track a comparable scale, the values 
-for the most enriched spots were lowered to 15. Spots deemed as false positives 
-when compared to a no-ab ChIP/chip experiment were assigned a value of 0.</P>
-
+Chromatin from HepG2 cells was cross-linked with formaldehyde, and sonicated
+to produce DNA fragments of size 0.5-2 kb. Chromatin was precipitated using
+antibodies against HNF-4a, HNF-3b, USF-1 or H3ac. DNA from a single ChIP 
+reaction was labeled with Cy5 and a fraction of the total input was labeled 
+with Cy3. This DNA was combined and hybridized to PCR-based tiling path 
+ENCODE arrays. Most array elements were just printed once onto the slide but 
+X-chromosomal regions (ENm006 and ENr324) were printed in duplicate and there
+were about 19,000 spots/slide. The array provides about 75% coverage of the 
+ENCODE regions.
+Spots flagged as bad by the image processing step were removed and those that 
+remained were normalized. The average log2 ratio was calculated for spots 
+that are replicated on the array. A log odds score for differential 
+enrichment with the negative control was calculated using an empirical Bayes
+method. Therefore, there are four log odds scores for each spot, one for each 
+antibody. If this score is greater than 0 and the log2 ratio is greater than 
+1.25 (indicative of a strong positive signal) based on at least 2 replicates, 
+then spots were considered to be enriched. Binding sites were identified 
+using the BioProspector software. It is non-deterministic so different runs
+may produce different results for the same data. Predictions consistent
+ between many runs are more likely to be correct so the analysis was
+repeated keeping all binding sites occurring in each top scoring motif to 
+generate a set of candidates. TBSs were selected that were present in at least
+five out of ten runs. Further method details are described in Rada-Iglesias 
+<em>et al.</em> (2005). For the track display, overlapping sequences were 
+removed by changing the start position of downstream spots to generate a 
+continuous track. To give each track a comparable scale, the values for the 
+most enriched spots were lowered to 15. Spots deemed as false positives when 
+compared to a no-ab ChIP/chip experiment were assigned a value of 0.
+</P>
 <H2>Verification</H2>
 <P>
-Three replicates were performed. A negative control was done with a no 
-antibody ChIP/chip to reduce the number of false positives.  Semi-quantitative 
-PCR was used to verify enrichment in at least ten positive spots for each 
-antibody. </P>
+Three independent replicates were performed for each antibody. A negative 
+control was done using no antibody for the ChIP/Chip to reduce the number 
+of false positives.  Semi-quantitative PCR was used to verify enrichment in 
+at least ten positive spots for each antibody. </P>
 
 <H2>Credits</H2>
 <P>
