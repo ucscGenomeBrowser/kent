@@ -7,7 +7,7 @@
 #include "common.h"
 #include "sqlNum.h"
 
-static char const rcsid[] = "$Id: sqlNum.c,v 1.15 2005/10/28 02:34:48 galt Exp $";
+static char const rcsid[] = "$Id: sqlNum.c,v 1.16 2005/12/09 22:39:36 hiram Exp $";
 
 unsigned sqlUnsigned(char *s)
 /* Convert series of digits to unsigned integer about
@@ -102,11 +102,11 @@ float sqlFloat(char *s)
  * and aborts on an error. */
 {
 char* end;
-#if defined(MACHTYPE_i386)
-float val = strtof(s, &end);
-#else
+/*	used to have an ifdef here to use strtof() but that doesn't
+ *	actually exist on all systems and since strtod() does, may as
+ *	well use it since it will do the job here.
+ */
 float val = (float) strtod(s, &end);
-#endif
 
 if ((end == s) || (*end != '\0'))
     errAbort("invalid float: %s", s);
