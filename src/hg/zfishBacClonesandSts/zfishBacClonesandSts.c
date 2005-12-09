@@ -481,6 +481,8 @@ else
     errAbort("The hash of BAC clones aliases is empty or there was an error retrieving the list of entries in the hash\n");
 /* those BAC clones without an entry in the alias hash have no sangerName */
 /* so do not print to this table */
+hashElFreeList(&aliasList);
+hashElFreeList(&bacList);
 }
 
 void printBacInfo(FILE *xRef, struct bac *bac)
