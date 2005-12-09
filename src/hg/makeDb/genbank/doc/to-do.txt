@@ -35,9 +35,6 @@
 
 - delete hgRefSeqStatus.c, hgRefSeqMrna
 
-- get image clones ids (already in table, need to analyze and maybe
-  split in seperate fields).
-
 - gbSanity:
       - add check of sequence in fasta
 
@@ -935,6 +932,12 @@ Warning: NR_001874: malformed RefSeq CDS:
 - NR_s are ending up in refLink??
 
 - mm7 NM_207243 has a bunch of repetitive alignments to the same location with  3968, plus
-  one longer one.  Should probably have ability to toss weird overlaps where thee is one 
+  one longer one.  Should prqobably have ability to toss weird overlaps where thee is one 
   better alignment.
 
+- some clones, (e.g. AA778675 ) have id in the form: /clone="1049033",
+  can these be assumed to be IMAGE??  They are not currently loaded into
+  the imageClone table.
+
+- gbCdnaIfno.direction  column defaults to 5' if it can't be figured out.
+  It should result to unknonw; could also check the sequence for polyA/T.
