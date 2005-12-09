@@ -99,7 +99,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1050 2005/12/09 17:39:12 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1051 2005/12/09 20:45:58 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2859,7 +2859,10 @@ if (hTableExists("kgXref"))
                  !endsWith(label->name, "kgId") &&
                  !endsWith(label->name, "prot") &&
                  !endsWith(label->name, "omim") )
+            {
             useGeneSymbol = TRUE;
+            cartRemove(cart, label->name);
+            }
         }
 
     /* cart may be from another build which has OMIM */
@@ -3400,6 +3403,11 @@ boolean useMim =  FALSE;
 
 struct hashEl *refGeneLabels = cartFindPrefix(cart, (isNative ? "refGene.label" : "xenoRefGene.label"));
 struct hashEl *label;
+int omimAvail = 0;
+char query[128];
+safef(query, sizeof(query), "select count(*) from refLink where refLink.omimId != 0 limit 2");
+omimAvail = sqlQuickNum(conn, query);
+
 if (refGeneLabels == NULL)
     {
     useGeneName = TRUE; /* default to gene name */
@@ -3415,8 +3423,27 @@ for (label = refGeneLabels; label != NULL; label = label->next)
         useAcc = TRUE;
     else if (endsWith(label->name, "omim") && differentString(label->val, "0"))
         useMim = TRUE;
+    else if (!endsWith(label->name, "gene") &&
+             !endsWith(label->name, "acc")  &&
+             !endsWith(label->name, "omim") )
+        {
+        useGeneName = TRUE;
+        cartRemove(cart, label->name);
+        }
     }
-/* doesn't match any or all false, do none */
+
+/* cart may be from another build which has OMIM */
+if (omimAvail == 0 && useMim)
+    {
+    useMim = FALSE;
+    if (!useGeneName && !useAcc) 
+        {
+        useGeneName = TRUE; /* set default */
+        if (isNative) cartSetBoolean(cart, "refGene.label.gene", TRUE);
+        else cartSetBoolean(cart, "xenoRefGene.label.gene", TRUE);
+        }
+    }
+
 for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct dyString *name = dyStringNew(64);
