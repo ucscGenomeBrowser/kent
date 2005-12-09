@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "snpTmp.h"
 
-static char const rcsid[] = "$Id: snpSplit.c,v 1.1 2005/12/09 06:53:15 heather Exp $";
+static char const rcsid[] = "$Id: snpSplit.c,v 1.2 2005/12/09 18:25:52 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -124,12 +124,15 @@ struct sqlResult *sr;
 char **row;
 int snpClass;
 int pos;
-int count = 0;
+int snpCount = 0;
+int contigCount = 0;
 struct slName *contigPtr;
 
 verbose(1, "reading snps...\n");
 for (contigPtr = contigList; contigPtr != NULL; contigPtr = contigPtr->next)
     {
+    contigCount++;
+    verbose(1, "contig count = %d\n", contigCount);
     safef(query, sizeof(query), "select snp_id, ctg_id, loc_type, phys_pos_from, "
       "phys_pos, orientation, allele from ContigLoc where snp_type = 'rs' and ctg_id = '%s'", contigPtr->name);
     verbose(3, "ctg_id = %d\n", contigPtr->name);
@@ -146,7 +149,7 @@ for (contigPtr = contigList; contigPtr != NULL; contigPtr = contigPtr->next)
         snpClass = atoi(row[2]);
         if (snpClass < 1 || snpClass > 4) 
             {
-	    verbose(1, "skipping snp %s with loc_type %d\n", el->name, snpClass);
+	    verbose(5, "skipping snp %s with loc_type %d\n", el->name, snpClass);
 	    continue;
 	    }
         AllocVar(el);
@@ -165,12 +168,12 @@ for (contigPtr = contigList; contigPtr != NULL; contigPtr = contigPtr->next)
             strcpy(el->strand, "?");
         el->refNCBI = cloneString(row[6]);
         slAddHead(&list,el);
-	count++;
+	snpCount++;
         }
     sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
-verbose(1, "%d snps found\n", count);
+verbose(1, "%d snps found\n", snpCount);
 return list;
 }
 
@@ -251,6 +254,8 @@ int main(int argc, char *argv[])
 {
 struct snpTmp *list=NULL, *el;
 struct slName *chromPtr, *contigList;
+char tableName[64];
+struct sqlConnection *conn;
 
 if (argc != 4)
     usage();
@@ -280,6 +285,14 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
 
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
+
+    conn = sqlConnect(targetDb);
+    strcpy(tableName, "chr");
+    strcat(tableName, cloneString(chromPtr->name));
+    strcat(tableName, "_snpTmp");
+    if (sqlTableExists(conn, tableName)) continue;
+    sqlDisconnect(&conn);
+
     verbose(1, "chrom = %s\n", chromPtr->name);
     contigList = getContigs(chromPtr->name);
     if (contigList == NULL) continue;
