@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.101 2005/12/09 20:01:15 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.102 2005/12/10 00:42:31 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -3797,6 +3797,63 @@ END{printf "%% %.2f = 100.0*%d/2597150151\n",100.0*sum/2597150151,sum}' \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    -db=mm6 phastCons10U1 > histogram.data 2>&1
     #	about 23 minutes to scan all data
+
+    #	prepare compressed copy of ascii data values for downloads
+    ssh pk
+    cd /san/sanvol1/scratch/mm6/cons/consRun1
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p phastCons10Scores
+
+for D in ppRaw/chr*
+do
+    C=${D/ppRaw\/}
+    out=phastCons10Scores/${C}.data.gz
+    echo "========================== ${C} ${D}"
+    find ./${D} -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat |
+	    gzip > ${out}
+done
+'_EOF_'
+    #	happy emacs
+    chmod +x gzipAscii.sh
+    time ./gzipAscii.sh
+    #	takes about 37 minutes, makes 2.9 Gb of data
+    #	copy them for downloads
+    ssh kkstore01
+    mkdir /cluster/data/mm6/bed/multiz10way.2005-11-30/phastCons10Scores
+    cd /cluster/data/mm6/bed/multiz10way.2005-11-30/phastCons10Scores
+    rsync -a --progress \
+	pk:/san/sanvol1/scratch/mm6/cons/consRun1/phastCons10Scores/ .
+    #	~5 minute copy
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/mm6/phastCons10Scores
+    cd /usr/local/apache/htdocs/goldenPath/mm6/phastCons10Scores
+    ln -s /cluster/data/mm6/bed/multiz10way.2005-11-30/phastCons10Scores/*.gz .
+
+    #	prepare maf downloads
+    ssh kkstore01
+    cd /cluster/data/mm6/bed/multiz10way.2005-11-30
+    mkdir mafDownloads
+    for M in maf/chr*.maf
+    do
+	B=`basename $M`
+	cp -p ${M} mafDownloads/${B}
+	gzip mafDownloads/${B}
+	echo ${B} done
+    done
+    #	Creates 2.7 gb of data
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/mm6/multiz10way
+    cd /usr/local/apache/htdocs/goldenPath/mm6/multiz10way
+    ln -s /cluster/data/mm6/bed/multiz10way.2005-11-30/mafDownloads/*.maf.gz .
 
 #############################################################################
 # 10-WAY VAR_MULTIZ - ALIGNMENTS (DONE - 2005-04-08 - 2005-04-18 - Hiram)
