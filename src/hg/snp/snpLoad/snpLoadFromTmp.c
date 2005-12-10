@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.1 2005/12/09 07:57:05 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.2 2005/12/10 03:04:36 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -218,17 +218,18 @@ for (el = list; el != NULL; el = el->next)
     strcpy(rsName, "rs");
     strcat(rsName, el->name);
     safef(query, sizeof(query), "select molType, observed from snpFasta where rsId = '%s'", rsName);
-    // sr = sqlGetResult(conn, query);
-    // row = sqlNextRow(sr);
-    // if (row == NULL)
-        // {
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row == NULL)
+        {
         el->observed = "n/a";
 	el->molType = "unknown";
-	// continue;
-	// }
-    // el->molType = cloneString(row[0]);
-    // el->observed = cloneString(row[1]);
-    // sqlFreeResult(&sr);
+        sqlFreeResult(&sr);
+	continue;
+	}
+    el->molType = cloneString(row[0]);
+    el->observed = cloneString(row[1]);
+    sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
 }
