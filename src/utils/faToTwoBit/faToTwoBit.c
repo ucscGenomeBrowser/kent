@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: faToTwoBit.c,v 1.6 2004/09/27 08:29:00 baertsch Exp $";
+static char const rcsid[] = "$Id: faToTwoBit.c,v 1.7 2005/12/10 05:03:37 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -71,6 +71,12 @@ for (i=0; i<inFileCount; ++i)
     ZeroVar(&seq);
     while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
         {
+	if (seq.size == 0)
+	    {
+	    warn("Skipping item %s which has no sequence.\n",seq.name);
+	    continue;
+	    }
+	    
         /* strip off version number */
         if (stripVersion)
             {
