@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.170 2005/11/02 00:50:28 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.171 2005/12/10 01:37:33 kent Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -195,6 +195,164 @@ for (i=0;  i < keyCount;  i++)
     }
 }
 
+static boolean keyIsPrefix(char *key, char *text)
+/* Return TRUE only if key is at the start of some word in text. 
+ * For short keys (2 or less) it must be whole word. */
+{
+char *s = text;
+int keyLen = strlen(key);
+while ((s = stringIn(key, s)) != NULL)
+    {
+    if (s == text || !isalnum(s[-1]))
+	{
+	if (keyLen > 2 || !isalnum(s[keyLen]))
+	    return TRUE;
+	}
+    s += 1;
+    }
+return FALSE;
+}
+
+static boolean keyIsPrefixIgnoreCase(char *key, char *text)
+/* Case insensitive keyIsPrefix */
+{
+boolean isPrefix;
+key = cloneString(key);
+touppers(key);
+text = cloneString(text);
+touppers(text);
+isPrefix = keyIsPrefix(key, text);
+freeMem(key);
+freeMem(text);
+return isPrefix;
+}
+
+static boolean allKeysPrefix(char **keys, int keyCount, char *text)
+/* Make sure that all keys in text are proper prefixes of a word. */
+{
+int i;
+touppers(text);
+for (i=0; i<keyCount; ++i)
+    {
+    if (!keyIsPrefix(keys[i], text))
+        return FALSE;
+    }
+return TRUE;
+}
+
+static char *commonDescriptionWords[] = {
+/* List of words that are too common in mRNA descriptions to be useful.
+ * Every year or two we might want to update this. */
+  "LIKE",
+  "HUMAN",
+  "FACTOR",
+  "ISOFORM",
+  "GENE",
+  "FROM",
+  "HYPOTHETICAL",
+  "FAMILY",
+  "UNKNOWN",
+  "PA",
+  "MEMBER",
+  "SIMILAR",
+  "TO",
+  "REGION",
+  "MUS",
+  "MUSCULUS",
+  "MELANOGASTER",
+  "CAENORHABDITIS",
+  "CHAIN",
+  "ELEGANS",
+  "DROSOPHILA",
+  "COT",
+  "NORMALIZED",
+  "TRANSCRIPT",
+  "FOR",
+  "VARIANT",
+  "FIS",
+  "THALIANA",
+  "ARABIDOPSIS",
+  "PARTIAL",
+  "LENGTH",
+  "HUMAN",
+  "FULL",
+  "IMAGE",
+  "PROTEIN",
+  "OF",
+  "COMPLETE",
+  "CDNA",
+  "CLONE",
+  "CDS",
+  "HOMO",
+  "SAPIENS",
+  "MRNA",
+  "5",
+  "4",
+  "3",
+  "2",
+  "1",
+};
+
+static char *commonProductNameWords[] = {
+/* List of words that are too common in productNames to be useful.
+ * Every year or two we might want to update this. */
+  "MEMBER",
+  "FAMILY",
+  "UNKNOWN",
+  "FOR",
+  "PUTATIVE",
+  "LIKE",
+  "5",
+  "4",
+  "3",
+  "2",
+  "1",
+  "HYPOTHETICAl",
+  "ISOFORM",
+ "PROTEIN",
+};
+
+static boolean anyStartWith(char *prefix, char *words[], int wordCount)
+/* Return TRUE if any words start with prefix. */
+{
+int i;
+for (i=0; i<wordCount; ++i)
+    {
+    if (startsWith(prefix, words[i]))
+        return TRUE;
+    }
+return FALSE;
+}
+
+static boolean isTooCommon(char *table, char *key)
+/* Return TRUE if key is too common to be useful in table */
+{
+if (sameString(table, "description"))
+    return anyStartWith(key, commonDescriptionWords, 
+    	ArraySize(commonDescriptionWords));
+else if (sameString(table, "productName"))
+    return anyStartWith(key, commonProductNameWords, 
+    	ArraySize(commonProductNameWords));
+else
+    return FALSE;
+}
+
+static int removeTooCommon(char *table, char **keys, int keyCount)
+/* Remove keys that are too common to be meaningful. */
+{
+int readIx, writeIx=0;
+for (readIx=0; readIx < keyCount; ++readIx)
+    {
+    if (!isTooCommon(table, keys[readIx]))
+        {
+	keys[writeIx] = keys[readIx];
+	writeIx += 1;
+	}
+    }
+return writeIx;
+}
+
+
 static struct slName *doGrepQuery(char *indexFile, char *table, char *key,
 				  char *extraOptions)
 /* grep -i key indexFile, return a list of ids (first word of each line). */
@@ -202,34 +360,44 @@ static struct slName *doGrepQuery(char *indexFile, char *table, char *key,
 struct pipeline *pl = NULL;
 struct slName *idList = NULL;
 struct lineFile *lf = NULL;
-char *words[2];
+char *id, *rest, *line;
 char *keyWords[HGFIND_MAX_KEYWORDS];
 char **cmds[HGFIND_MAX_KEYWORDS+1];
 /* No need to escape special chars here, it's already been done: */
 char *escapedKey = cloneString(key);
-int keyCount = chopLine(escapedKey, keyWords);
+int keyCount;
 
-if (extraOptions == NULL)
-    extraOptions = "";
-makeCmds(cmds, keyWords, keyCount, extraOptions);
-
-pl = pipelineOpen(cmds, pipelineRead | pipelineNoAbort, indexFile);
-lf = pipelineLineFile(pl);
-verbose(3, "\n***Running this fgrep command with pipeline from %s:\n*** %s\n\n",
-	indexFile, pipelineDesc(pl));
-while (lineFileChop(lf, words))
+keyCount = chopLine(escapedKey, keyWords);
+keyCount = removeTooCommon(table, keyWords, keyCount);
+if (keyCount > 0)
     {
-    struct slName *idEl = slNameNew(words[0]);
-    slAddHead(&idList, idEl);
+    if (extraOptions == NULL)
+	extraOptions = "";
+    makeCmds(cmds, keyWords, keyCount, extraOptions);
+
+    pl = pipelineOpen(cmds, pipelineRead | pipelineNoAbort, indexFile);
+    lf = pipelineLineFile(pl);
+    verbose(3, "\n***Running this fgrep command with pipeline from %s:\n*** %s\n\n",
+	    indexFile, pipelineDesc(pl));
+    while (lineFileNextReal(lf, &line))
+	{
+	id = nextWord(&line);
+	rest = skipLeadingSpaces(line);
+	if (allKeysPrefix(keyWords, keyCount, rest))
+	    {
+	    struct slName *idEl = slNameNew(id);
+	    slAddHead(&idList, idEl);
+	    }
+	}
+    pipelineFree(&pl);  /* Takes care of lf too. */
+    freeCmds(cmds, keyCount);
+    if (verboseLevel() >= 3)
+	{
+	int count = slCount(idList);
+	verbose(3, "*** Got %d results from %s\n\n", count, indexFile);
+	}
     }
-pipelineFree(&pl);  /* Takes care of lf too. */
 freeMem(escapedKey);
-freeCmds(cmds, keyCount);
-if (verboseLevel() >= 3)
-    {
-    int count = slCount(idList);
-    verbose(3, "*** Got %d results from %s\n\n", count, indexFile);
-    }
 return idList;
 }
 
@@ -1072,7 +1240,9 @@ if (grepIndexRoot != NULL && hfsSetting != NULL)
 return NULL;
 }
 
-static struct slName *genbankGrepQuery(char *indexFile, char *table, char *key)
+
+// static struct slName *genbankGrepQuery(char *indexFile, char *table, char *key)
+struct slName *genbankGrepQuery(char *indexFile, char *table, char *key)	// uglyf
 /* grep -i key indexFile, return a list of ids (first word of each line). */
 {
 char *extraOptions = "";
@@ -1087,18 +1257,24 @@ static struct slName *genbankSqlFuzzyQuery(struct sqlConnection *conn,
  * corresponding table.id's.  */
 {
 struct slName *idList = NULL, *idEl = NULL;
-struct sqlResult *sr;
-char **row;
-char query[256];
-safef(query, sizeof(query),
-      "select id from %s where name like '%%%s%%'", table, key);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+if (!isTooCommon(table, key))
     {
-    idEl = newSlName(row[0]);
-    slAddHead(&idList, idEl);
+    struct sqlResult *sr;
+    char **row;
+    char query[256];
+    safef(query, sizeof(query),
+	  "select id,name from %s where name like '%%%s%%'", table, key);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	if (keyIsPrefix(key, row[1]))
+	    {
+	    idEl = newSlName(row[0]);
+	    slAddHead(&idList, idEl);
+	    }
+	}
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
 return idList;
 }
 
@@ -2195,6 +2371,8 @@ static boolean searchSpecial(struct hgFindSpec *hfs, char *term,
 {
 boolean isSpecial = TRUE;
 boolean found = FALSE;
+char *upcTerm = cloneString(term);
+touppers(upcTerm);
 if (sameString(hfs->searchType, "knownGene"))
     {
     if (hTableExists("kgAlias"))
@@ -2239,7 +2417,7 @@ else if (sameString(hfs->searchType, "mrnaAcc"))
     }
 else if (sameString(hfs->searchType, "mrnaKeyword"))
     {
-    found = findMrnaKeys(hfs, term, hgp);
+    found = findMrnaKeys(hfs, upcTerm, hgp);
     }
 else if (sameString(hfs->searchType, "sgdGene"))
     {
@@ -2250,6 +2428,7 @@ else
     isSpecial = FALSE;
     }
 *retFound = found;
+freeMem(upcTerm);
 return(isSpecial);
 }
 
@@ -2262,13 +2441,17 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr = NULL;
 char **row;
 char buf[512];
+boolean isFuzzy = sameWord(hfs->searchMethod, "fuzzy");
 
 safef(buf, sizeof(buf), hfs->xrefQuery, hfs->xrefTable, term);
 sr = sqlGetResult(conn, buf);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    xrefPtr = slPairNew(cloneString(row[1]), cloneString(row[0]));
-    slAddHead(&xrefList, xrefPtr);
+    if (!isFuzzy || keyIsPrefixIgnoreCase(term, row[1]))
+        {
+	xrefPtr = slPairNew(cloneString(row[1]), cloneString(row[0]));
+	slAddHead(&xrefList, xrefPtr);
+	}
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
