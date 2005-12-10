@@ -149,7 +149,7 @@ void htmlFormPrint(struct htmlForm *form, FILE *f);
 /* Print out form structure. */
 
 char *htmlFormCgiVars(struct htmlPage *page, struct htmlForm *form, 
-	char *buttonName, char *buttonVal);
+	char *buttonName, char *buttonVal, struct dyString * dyHeader);
 /* Return cgi vars in name=val format from use having pressed
  * submit button of given name and value. */
 
