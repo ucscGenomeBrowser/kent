@@ -99,7 +99,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1051 2005/12/09 20:45:58 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1052 2005/12/10 04:41:25 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10916,7 +10916,6 @@ if(hideAll || defaultTracks)
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
-    //uglyf("working on %s\n", track->shortLabel);
     if(!hTrackOnChrom(track->tdb, chromName)) 
 	{
 	track->limitedVis = tvHide;
@@ -11054,9 +11053,7 @@ if (showTrackControls)
 makeChromIdeoImage(&trackList, psOutput);
 
 /* Make clickable image and map. */
-//uglyf("calling makeActiveImage\n");
 makeActiveImage(trackList, psOutput);
-//uglyf("back from makeActiveImage\n");
 fflush(stdout);
 if (!hideControls)
     {
