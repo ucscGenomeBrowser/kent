@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.171 2005/12/10 01:37:33 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.172 2005/12/10 04:36:25 kent Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1241,8 +1241,7 @@ return NULL;
 }
 
 
-// static struct slName *genbankGrepQuery(char *indexFile, char *table, char *key)
-struct slName *genbankGrepQuery(char *indexFile, char *table, char *key)	// uglyf
+static struct slName *genbankGrepQuery(char *indexFile, char *table, char *key)
 /* grep -i key indexFile, return a list of ids (first word of each line). */
 {
 char *extraOptions = "";
@@ -2592,6 +2591,9 @@ boolean found = FALSE;
 
 if (hfs == NULL || term == NULL || hgp == NULL)
     errAbort("NULL passed to hgFindUsingSpec.\n");
+
+if (strlen(term)<2)
+    return FALSE;
 
 if (isNotEmpty(hfs->termRegex) && ! matchRegex(term, hfs->termRegex))
     return(FALSE);
