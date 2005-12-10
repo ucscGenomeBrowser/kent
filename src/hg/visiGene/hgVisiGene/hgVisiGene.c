@@ -518,7 +518,7 @@ puts(
 "<UL> \n"
 "<LI>Mouse <em>in situ</em> images from the \n"
 "<A HREF=\"http://www.informatics.jax.org/menus/expression_menu.shtml\" \n"
-"TARGET=_blank>Jackson Labs Gene Expression Database</A> (GED) \n" 
+"TARGET=_blank>Jackson Labs Gene Expression Database</A> (GXD) at MGI \n" 
 "<LI>Transcription factors in mouse embryos from the \n"
 "<A HREF=\"http://mahoney.chip.org/mahoney/\" TARGET=_blank>Mahoney Center \n"
 "for Neuro-Oncology</A> \n"
