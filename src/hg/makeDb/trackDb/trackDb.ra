@@ -2175,7 +2175,7 @@ searchName pseudoGeneUniProt
 searchTable pseudoGeneLink
 query select chrom, chromStart,chromEnd, kgName from %s where kgName = '%s'
 xrefTable kgXref
-xrefQuery select kgID, spDisplayID from %s where spDisplayID like '%s%%'
+xrefQuery select kgID, spDisplayID from %s where spDisplayID = '%s'
 searchPriority 2.6
 
 searchTable pseudoYaleEncode
