@@ -43,12 +43,15 @@ for (i=0; i<wordCount; ++i)
     dyStringAppend(search, words[i]);
     }
 matchList = visiSearch(conn, search->string);
+uglyTime("Searched time");
 printf("%d matches to %s\n", slCount(matchList), search->string);
+#ifdef SOON
 for (match = matchList; match != NULL; match = match->next)
     {
     printf(" %d %f %d\n", match->imageId, match->weight,
     	bitCountRange(match->wordBits, 0, wordCount));
     }
+#endif /* SOON */
 }
 
 int main(int argc, char *argv[])
@@ -57,6 +60,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc < 2)
     usage();
+uglyTime(0);
 testVisiSearch(argv+1, argc-1);
 return 0;
 }
