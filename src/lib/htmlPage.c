@@ -22,7 +22,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.24 2005/12/05 22:14:44 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.25 2005/12/10 01:26:08 galt Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -1130,9 +1130,7 @@ char *enc = NULL;
 if (value == NULL)
     value = "";
 enc = cgiEncode(value);
-if (dy->stringSize == 0)
-    dyStringAppendC(dy, '?');
-else
+if (dy->stringSize != 0)
     dyStringAppendC(dy, '&');
 dyStringAppend(dy, name);
 dyStringAppendC(dy, '=');
@@ -1140,10 +1138,9 @@ dyStringAppend(dy, enc);
 freez(&enc);
 }
 
-#define MIMEBOUNDARY "----------HtMlPaGe"
 #define MIMEBUFSIZE 4096
 
-static void appendMimeVar(struct dyString *dy, char *name, char *value, char *varType)
+static void appendMimeVar(struct dyString *dy, char *name, char *value, char *varType, char *boundary)
 /* Append cgiVar with cgi-encoded value to dy. */
 {
 char *fileName = NULL;
@@ -1151,7 +1148,7 @@ char *fileName = NULL;
 if (value == NULL)
     value = "";
 dyStringAppend(dy, "\r\n--");
-dyStringAppend(dy, MIMEBOUNDARY);
+dyStringAppend(dy, boundary);
 dyStringAppend(dy, "\r\n");
 dyStringAppend(dy, "content-disposition: form-data; name=\"");
 dyStringAppend(dy, name);
@@ -1189,15 +1186,32 @@ else
     dyStringAppend(dy, value);
 }
 
-static void appendMimeTerminus(struct dyString *dy)
+static void appendMimeTerminus(struct dyString *dy, char *boundary)
 /* Append MIME boundary terminator to dy. */
 {
 dyStringAppend(dy, "\r\n--");
-dyStringAppend(dy, MIMEBOUNDARY);
+dyStringAppend(dy, boundary);
 dyStringAppend(dy, "--\r\n");
 }
 
-static boolean mimeEncoding(struct htmlForm *form)
+
+static int countOccurrences(char *needle, int nLen, char *haystack, int hLen)
+/* count # of occurrences of needle in haystack */
+{
+int count = 0;
+char *match=NULL;
+while((match=memMatch(needle, nLen, haystack, hLen)) != NULL)
+    {
+    ++count;
+    hLen -= (match - haystack) + nLen;
+    if (hLen < 1)
+	break;
+    haystack=match+nLen;
+    }
+return count;
+}
+
+static boolean isMimeEncoded(struct htmlForm *form)
 /* determine if the form is using MIME encoding */
 {
 struct htmlAttribute *a;
@@ -1208,53 +1222,97 @@ return FALSE;
 }
 
 char *htmlFormCgiVars(struct htmlPage *page, struct htmlForm *form, 
-	char *buttonName, char *buttonVal)
+	char *buttonName, char *buttonVal, struct dyString *dyHeader)
 /* Return cgi vars in name=val format from use having pressed
  * submit button of given name and value. */
 {
 struct dyString *dy = newDyString(0);
 struct htmlFormVar *var;
-boolean isMime = mimeEncoding(form);
+boolean isMime = isMimeEncoded(form);
+int mimeParts = 0;
+char boundary[256];
 
-if (form == NULL)
-    form = page->forms;
-if (buttonName != NULL && !isMime)
-    appendCgiVar(dy, buttonName, buttonVal);
-for (var = form->vars; var != NULL; var = var->next)
+while(TRUE)
     {
-    if (sameWord(var->tagName, "SELECT") || 
-        sameWord(var->tagName, "TEXTAREA") || 
-	(var->type != NULL &&
-    	((sameWord(var->type, "RADIO") || sameWord(var->type, "TEXTBOX")
-	|| sameWord(var->type, "PASSWORD") || sameWord(var->type, "HIDDEN")
-        || sameWord(var->type, "TEXT") || sameWord(var->type, "FILE")))))
-        {
-	char *val = var->curVal;
-	if (val == NULL)
-	    val = "";
-	if (isMime)	    
-	    appendMimeVar(dy, var->name, val, var->type);
-	else	    
-    	    appendCgiVar(dy, var->name, val);
-	}
-    else if (var->type != NULL && sameWord(var->type, "CHECKBOX"))
-        {
-	if (var->curVal != NULL)
+    if (isMime)
+	{
+	/* choose a new string for the boundary */
+	/* Set initial seed */
+	int i = 0;
+    	safef(boundary,sizeof(boundary),"%s", "---------");
+	srand( (unsigned)time( NULL ) );
+	for(i=strlen(boundary);i<41;++i)
 	    {
-	    if (isMime)	    
-		appendMimeVar(dy, var->name, var->curVal, var->type);
-    	    else	    
-		appendCgiVar(dy, var->name, var->curVal);
+    	    int r = (int) 26 * (rand() / (RAND_MAX + 1.0));
+	    boundary[i] = r+'A';
+	    }
+	boundary[i] = 0;
+	}
+
+    if (form == NULL)
+	form = page->forms;
+    if (buttonName != NULL && !isMime)
+	appendCgiVar(dy, buttonName, buttonVal);
+    for (var = form->vars; var != NULL; var = var->next)
+	{
+	if (sameWord(var->tagName, "SELECT") || 
+	    sameWord(var->tagName, "TEXTAREA") || 
+	    (var->type != NULL &&
+	    ((sameWord(var->type, "RADIO") || sameWord(var->type, "TEXTBOX")
+	    || sameWord(var->type, "PASSWORD") || sameWord(var->type, "HIDDEN")
+	    || sameWord(var->type, "TEXT") || sameWord(var->type, "FILE")))))
+	    {
+	    char *val = var->curVal;
+	    if (val == NULL)
+		val = "";
+	    if (isMime)
+		{
+		++mimeParts;
+		appendMimeVar(dy, var->name, val, var->type, boundary);
+		}
+	    else	    
+		appendCgiVar(dy, var->name, val);
+	    }
+	else if (var->type != NULL && sameWord(var->type, "CHECKBOX"))
+	    {
+	    if (var->curVal != NULL)
+		{
+		if (isMime)	    
+		    {
+		    ++mimeParts;
+		    appendMimeVar(dy, var->name, var->curVal, var->type, boundary);
+		    }
+		else	    
+		    appendCgiVar(dy, var->name, var->curVal);
+		}
+	    }
+	else if (isMime && buttonName && sameWord(buttonName,var->name))
+	    {
+	    ++mimeParts;
+	    appendMimeVar(dy, buttonName, buttonVal, NULL, boundary);
 	    }
 	}
-    else if (buttonName && sameWord(buttonName,var->name))
+    if (isMime) 
 	{
-	appendMimeVar(dy, buttonName, buttonVal, NULL);
+	++mimeParts;
+	appendMimeTerminus(dy,boundary);
+	if (countOccurrences(boundary,strlen(boundary),dy->string,dy->stringSize) != mimeParts)
+	    { /* boundary was found in input! # occurrences not as expected */
+	    dyStringClear(dy);
+    	    continue;  /* if at first you don't succeed, try another boundary string */
+	    }
+    	dyStringPrintf(dyHeader, "Content-type: multipart/form-data, boundary=%s\r\n",boundary);
+	if (isMime && verboseLevel() == 2)
+	    {
+    	    mustWrite(stderr, dyHeader->string, dyHeader->stringSize);
+	    mustWrite(stderr, dy->string, dy->stringSize);
+	    }
 	}
-    }
-if (isMime)	    
-    appendMimeTerminus(dy);
+    break;
+    }   
+    
 return dyStringCannibalize(&dy);
+
 }
 
 struct htmlPage *htmlPageFromForm(struct htmlPage *origPage, struct htmlForm *form, 
@@ -1270,13 +1328,13 @@ char *url = htmlExpandUrl(origPage->url, form->action);
 char *cgiVars = NULL;
 int contentLength = 0;
 int sd = -1;
-boolean isMime = mimeEncoding(form);
 
 dyStringAppend(dyUrl, url);
 cookieOutput(dyHeader, origPage->cookies);
 if (sameWord(form->method, "GET"))
     {
-    cgiVars = htmlFormCgiVars(origPage, form, buttonName, buttonVal);
+    cgiVars = htmlFormCgiVars(origPage, form, buttonName, buttonVal, dyHeader);
+    dyStringAppend(dyUrl, "?");
     dyStringAppend(dyUrl, cgiVars);
     verbose(3, "GET %s\n", dyUrl->string);
     sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
@@ -1285,24 +1343,14 @@ if (sameWord(form->method, "GET"))
     }
 else if (sameWord(form->method, "POST"))
     {
-    cgiVars = htmlFormCgiVars(origPage, form, buttonName, buttonVal);
-    /* remove question mark from beginning */
-    if (!isMime)
-    	stripChar(cgiVars, '?');
+    cgiVars = htmlFormCgiVars(origPage, form, buttonName, buttonVal, dyHeader);
     contentLength = strlen(cgiVars);
     verbose(3, "POST %s\n", dyUrl->string);
     sd = netOpenHttpExt(dyUrl->string, form->method, FALSE);
     dyStringPrintf(dyHeader, "Content-length: %d\r\n", contentLength);
-    if (isMime)
-    	dyStringPrintf(dyHeader, "Content-type: multipart/form-data, boundary=%s\r\n",MIMEBOUNDARY);
     dyStringAppend(dyHeader, "\r\n");
     write(sd, dyHeader->string, dyHeader->stringSize);
     write(sd, cgiVars, contentLength);
-    if (isMime && verboseLevel() == 2)
-	{
-	mustWrite(stderr, dyHeader->string, dyHeader->stringSize);
-    	mustWrite(stderr, cgiVars, contentLength);
-	}
     }
 dyText = netSlurpFile(sd);
 close(sd);
