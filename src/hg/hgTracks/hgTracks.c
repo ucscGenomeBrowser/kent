@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1053 2005/12/11 04:46:57 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1054 2005/12/11 04:50:43 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -353,7 +353,7 @@ else if (sameString(tl.textSize, "large"))
 else if (sameString(tl.textSize, "huge"))
      font = mgHugeFont();
 else
-     errAbort("incorrect text size '%s' in cart: %s", textSizeVar, tl.textSize);
+    font = mgSmallFont(); /* default to small */
 tl.font = font;
 tl.mWidth = mgFontStringWidth(font, "M");
 tl.nWidth = mgFontStringWidth(font, "n");
