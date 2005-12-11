@@ -330,6 +330,10 @@ void hDropList(char *name, char *menu[], int menuSize, char *checked);
 void printHtmlComment(char *format, ...);
 /* Function to print output as a comment so it is not seen in the HTML
  * output but only in the HTML source. */
+
+boolean inclFontExtras();
+/* Check if fonts.extra is set to use "yes" in the config.  This enables
+ * extra fonts and related options that are not part of the public browser */
     
 int orientFromChar(char c);
 /* Return 1 or -1 in place of + or - */

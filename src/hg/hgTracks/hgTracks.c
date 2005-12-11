@@ -96,10 +96,11 @@
 #include "humPhen.h"
 #include "humanPhenotypeUi.h"
 #include "liftOver.h"
+#include "hgConfig.h"
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1052 2005/12/10 04:41:25 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1053 2005/12/11 04:46:57 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -317,6 +318,22 @@ if (s != NULL && isdigit(s[0]))
         tl.picWidth = 320;
     }
 tl.trackWidth = tl.picWidth - tl.leftLabelWidth;
+}
+
+boolean inclFontExtras()
+/* Check if fonts.extra is set to use "yes" in the config.  This enables
+ * extra fonts and related options that are not part of the public browser */
+{
+static boolean first = TRUE;
+static boolean enabled = FALSE;
+if (first)
+    {
+    char *val = cfgOptionDefault("fonts.extra", NULL);
+    if (val != NULL)
+        enabled = sameString(val, "yes");
+    first = FALSE;
+    }
+return enabled;
 }
 
 void initTl()
