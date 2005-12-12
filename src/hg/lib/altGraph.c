@@ -9,7 +9,7 @@
 #include "altGraph.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: altGraph.c,v 1.3 2005/04/11 08:13:43 markd Exp $";
+static char const rcsid[] = "$Id: altGraph.c,v 1.4 2005/12/12 02:48:40 kent Exp $";
 
 struct altGraph *altGraphLoad(char **row)
 /* Load a altGraph from row fetched with select * from altGraph
@@ -304,7 +304,8 @@ fputc(lastSep,f);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 
-boolean isEndVertice(bool **em, int vertexCount, int vertice, char *vTypes)
+static boolean isEndVertice(bool **em, int vertexCount, int vertice, 
+	unsigned char *vTypes)
 /* check to see if there are any edges coming out of this vertice */
 {
 int i;
@@ -316,7 +317,7 @@ for(i=0; i<vertexCount; i++)
 return TRUE;
 }
 
-void countPathsFromVertice(bool **em, char *vTypes, int vertexCount, int vertice, int *pathCount)
+void countPathsFromVertice(bool **em, unsigned char *vTypes, int vertexCount, int vertice, int *pathCount)
 /* recursively count paths from vertice */
 {
 int i=0;

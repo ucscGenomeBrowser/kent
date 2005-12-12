@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.27 2005/04/13 06:25:54 markd Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.28 2005/12/12 02:48:40 kent Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -517,8 +517,8 @@ void hgSeqRange(char *chrom, int chromStart, int chromEnd, char strand,
 /* Print out dna sequence for the given range. */
 {
 int count = 0;
-int starts[1];
-int sizes[1];
+unsigned starts[1];
+unsigned sizes[1];
 boolean exonFlags[1];
 boolean cdsFlags[1];
 

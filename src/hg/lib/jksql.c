@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.83 2005/11/12 02:40:21 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.84 2005/12/12 02:48:40 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1152,6 +1152,25 @@ sqlFreeResult(&sr);
 slReverse(&list);
 return list;
 }
+
+struct slDouble *sqlQuickDoubleList(struct sqlConnection *conn, char *query)
+/* Return a list of slDoubles for a single column query.
+ * Do a slFreeList on result when done. */
+{
+struct slDouble *list = NULL, *n;
+struct sqlResult *sr;
+char **row;
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    n = slDoubleNew(atof(row[0]));
+    slAddHead(&list, n);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
+}
+
 
 int sqlTableSize(struct sqlConnection *conn, char *table)
 /* Find number of rows in table. */

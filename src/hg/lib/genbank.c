@@ -3,12 +3,12 @@
 #include "genbank.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: genbank.c,v 1.6 2005/04/04 23:53:00 markd Exp $";
+static char const rcsid[] = "$Id: genbank.c,v 1.7 2005/12/12 02:48:40 kent Exp $";
 
 static char *JOIN_PREFIX = "join(";
 static char *COMPLEMENT_PREFIX = "complement(";
 
-static boolean convertCoord(char *numStr, unsigned *coord)
+static boolean convertCoord(char *numStr, int *coord)
 /* convert an CDS cooordinate, return false if invalid */
 {
 char *endPtr;

@@ -10,7 +10,7 @@
 #include "qaSeq.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: qaSeq.c,v 1.3 2005/04/13 06:25:56 markd Exp $";
+static char const rcsid[] = "$Id: qaSeq.c,v 1.4 2005/12/12 02:48:40 kent Exp $";
 
 void qaSeqFree(struct qaSeq **pQa)
 /* Free up qaSeq. */
@@ -103,7 +103,7 @@ boolean qaIsGsFake(struct qaSeq *qa)
  * Greg Schuler. (So we can refake it our way...) */
 {
 int size = qa->size;
-BYTE *q = qa->qa;
+BYTE *q = (BYTE*)(qa->qa);
 
 /* Short sequences Greg fakes well enough. */
 if (size < 400)

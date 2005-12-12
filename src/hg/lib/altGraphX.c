@@ -10,7 +10,7 @@
 #include "geneGraph.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: altGraphX.c,v 1.29 2005/04/11 08:13:43 markd Exp $";
+static char const rcsid[] = "$Id: altGraphX.c,v 1.30 2005/12/12 02:48:40 kent Exp $";
 struct altGraphX *_agxSortable = NULL; /* used for sorting. */
 
 struct evidence *evidenceCommaIn(char **pS, struct evidence *ret)
@@ -539,7 +539,8 @@ slReverse(&agNew->evidence);
 return agNew;
 }
 
-boolean isEndXVertice(bool **em, int vertexCount, int vertice, char *vTypes)
+static boolean isEndXVertice(bool **em, int vertexCount, int vertice, 
+	unsigned char *vTypes)
 /* check to see if there are any edges coming out of this vertice */
 {
 int i;
@@ -551,7 +552,8 @@ for(i=0; i<vertexCount; i++)
 return TRUE;
 }
 
-void countXPathsFromVertice(bool **em, bool *seen, char *vTypes, int vertexCount, int vertice, int *pathCount)
+static void countXPathsFromVertice(bool **em, bool *seen, unsigned char *vTypes,
+	int vertexCount, int vertice, int *pathCount)
 /* recursively count paths from vertice */
 {
 int i=0;

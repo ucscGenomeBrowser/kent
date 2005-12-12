@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.81 2005/12/07 07:15:55 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.82 2005/12/12 02:48:40 kent Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -489,7 +489,8 @@ int cdsStart = BIGNUM, cdsEnd = -BIGNUM;
 int exonCount = 0;
 boolean haveStartCodon = FALSE, haveStopCodon = FALSE;
 struct gffLine *gl;
-unsigned *eStarts, *eEnds, *eFrames;
+unsigned *eStarts, *eEnds;
+int *eFrames;
 boolean haveFrame = FALSE;
 int i;
 
@@ -967,8 +968,8 @@ else
 iExon = -1;  /* indicate none have been added */
 for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     {
-    unsigned tStart = psl->tStarts[iBlk];
-    unsigned tEnd = tStart + psl->blockSizes[iBlk];
+    int tStart = psl->tStarts[iBlk];
+    int tEnd = tStart + psl->blockSizes[iBlk];
     if (psl->strand[1] == '-')
         reverseIntRange(&tStart, &tEnd, psl->tSize);
     if (!shouldMergeBlocks(gene, iExon, tStart, options,
@@ -1101,7 +1102,7 @@ char **row;
 struct genePred *el = NULL, *bestMatch = NULL, *gp = NULL;
 int overlap = 0 , bestOverlap = 0, i;
 struct psl *psl;
-unsigned *eFrames;
+int *eFrames;
 
 
 if (*list == NULL)
