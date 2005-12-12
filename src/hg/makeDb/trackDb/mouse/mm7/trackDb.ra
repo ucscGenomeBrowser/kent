@@ -178,7 +178,7 @@ shortLabel $o_Organism Net noLSR
 longLabel $o_Organism ($o_date/$o_db) Alignment Net WITH Blastz Dynamic Masking, NO Lineage-Specific Repeats
 group compGeno
 priority 259.11
-visibility dense
+visibility hide
 spectrum on
 type netAlign hg17 chainHg17noLSR
 otherDb hg17
@@ -202,7 +202,7 @@ shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 259.1
-visibility dense
+visibility hide
 spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
@@ -316,7 +316,7 @@ shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation 
 group compGeno
 priority 104.2
-visibility hide
+visibility pack
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
