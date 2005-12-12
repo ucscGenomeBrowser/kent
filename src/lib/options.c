@@ -12,7 +12,7 @@
 #include "verbose.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: options.c,v 1.23 2005/06/28 19:06:18 hartera Exp $";
+static char const rcsid[] = "$Id: options.c,v 1.24 2005/12/12 04:03:40 kent Exp $";
 
 #ifdef MACHTYPE_alpha
     #define strtoll strtol
@@ -134,6 +134,11 @@ if (!((eqPtr != NULL) || (arg[0] == '-')))
 /* A dash by itself is not an option.   It can mean
  * negative strand for some of the DNA oriented utilities. */
 if (arg[0] == '-' && (arg[1] == 0 || isspace(arg[1])))
+    return FALSE;
+
+/* It's nice to be able to use url's in the command line, but they
+ * may have = in them... */
+if (startsWith("http://", arg))
     return FALSE;
 
 name = arg;
