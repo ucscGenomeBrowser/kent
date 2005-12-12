@@ -21,12 +21,15 @@ Chromatin from HepG2 cells was cross-linked with formaldehyde, and sonicated
 to produce DNA fragments of size 0.5-2 kb. Chromatin was precipitated using
 antibodies against HNF-4a, HNF-3b, USF-1 or H3ac. DNA from a single ChIP 
 reaction was labeled with Cy5 and a fraction of the total input was labeled 
-with Cy3. There was no amplificatio of the ChIP DNA or the input DNA prior to
-this step to avoid introducing bias. This DNA was combined and hybridized 
+with Cy3. There was no amplification of the ChIP DNA or the input DNA prior to
+this step to avoid introducing bias. 
+<P>
+This DNA was combined and hybridized 
 to PCR-based tiling path ENCODE arrays. Most array elements were just printed 
 once onto the slide but X-chromosomal regions (ENm006 and ENr324) were 
 printed in duplicate and there were about 19,000 spots/slide. The array 
 provided about 75% coverage of the ENCODE regions.
+<P>
 Spots flagged as bad by the image processing step were removed and those that 
 remained were normalized. The average log2 ratio was calculated for spots 
 that are replicated on the array. A log odds score for differential 
@@ -34,14 +37,18 @@ enrichment with the negative control was calculated using an empirical Bayes
 method. Therefore, there are four log odds scores for each spot, one for each 
 antibody. If this score is greater than 0 and the log2 ratio is greater than 
 1.25 (indicative of a strong positive signal) based on at least 2 replicates, 
-then spots were considered to be enriched. Binding sites were identified 
-using the BioProspector software. It is non-deterministic so different runs
+then spots were considered to be enriched. 
+<P>
+Binding sites were identified using the BioProspector software. 
+It is non-deterministic, so different runs
 may produce different results for the same data. Predictions consistent
  between many runs are more likely to be correct so the analysis was
 repeated keeping all binding sites occurring in each top scoring motif to 
 generate a set of candidates. TBSs were selected that were present in at least
 five out of ten runs. Further method details are described in Rada-Iglesias 
-<em>et al.</em> (2005). For the track display, overlapping sequences were 
+<em>et al.</em> (2005). 
+<P>
+For the track display, overlapping sequences were 
 removed by changing the start position of downstream spots to generate a 
 continuous track. To give each track a comparable scale, the values for the 
 most enriched spots were lowered to 15. Spots deemed as false positives when 
