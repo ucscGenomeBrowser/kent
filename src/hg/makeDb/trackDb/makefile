@@ -14,7 +14,7 @@
 
 include ../../../inc/common.mk
 
-DBS = 	hg13 hg15 hg16 hg17 \
+DBS = 	hg13 hg15 hg16 hg17 hg18\
 	panTro1 \
 	rheMac1 \
 	canFam1 canFam2 \
@@ -70,7 +70,7 @@ DBS = 	hg13 hg15 hg16 hg17 \
 	vibCho1 
 
 MGC_DBS = \
-	hg16 hg17 \
+	hg16 hg17 hg18\
 	mm5 mm6 \
 	rn3 \
 	danRer1	danRer2 \
