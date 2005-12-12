@@ -23,7 +23,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.26 2005/12/12 04:04:52 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.27 2005/12/12 18:33:22 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -922,10 +922,11 @@ struct htmlPage *page = htmlPageGetWithCookies(url, cookies);
 int level, maxLevels = 7;
 for (level = 0; level < maxLevels; ++level)
     {
+    struct htmlPage *newPage;
     char *newUrl = hashFindVal(page->header, "Location:");
     if (newUrl == NULL)
         break;
-    struct htmlPage *newPage = htmlPageGetWithCookies(newUrl, cookies);
+    newPage = htmlPageGetWithCookies(newUrl, cookies);
     htmlPageFree(&page);
     page = newPage;
     }
