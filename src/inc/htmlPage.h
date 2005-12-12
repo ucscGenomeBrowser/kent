@@ -228,5 +228,12 @@ struct htmlPage *htmlPageGetWithCookies(char *url, struct htmlCookie *cookies);
 struct htmlPage *htmlPageGet(char *url);
 /* Get page from URL (may be a file). */
 
+struct htmlPage *htmlPageForwarded(char *url, struct htmlCookie *cookies);
+/* Get html page.  If it's just a forwarding link then get do the
+ * forwarding.  Cookies is a possibly empty list of cookies with
+ * name and value parts filled in. */
+
+struct htmlPage *htmlPageForwardedNoAbort(char *url, struct htmlCookie *cookies);
+/* Try and get an HTML page.  Print warning and return NULL if there's a problem. */
 #endif /* HTMLPAGE_H */
 

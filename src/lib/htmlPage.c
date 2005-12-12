@@ -12,6 +12,7 @@
 
 #include "common.h"
 #include "errabort.h"
+#include "errCatch.h"
 #include "memalloc.h"
 #include "linefile.h"
 #include "hash.h"
@@ -22,7 +23,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.25 2005/12/10 01:26:08 galt Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.26 2005/12/12 04:04:52 kent Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -911,6 +912,40 @@ struct htmlPage *htmlPageGetWithCookies(char *url, struct htmlCookie *cookies)
 char *buf = htmlSlurpWithCookies(url, cookies);
 return htmlPageParse(url, buf);
 }
+
+struct htmlPage *htmlPageForwarded(char *url, struct htmlCookie *cookies)
+/* Get html page.  If it's just a forwarding link then get do the
+ * forwarding.  Cookies is a possibly empty list of cookies with
+ * name and value parts filled in. */
+{
+struct htmlPage *page = htmlPageGetWithCookies(url, cookies);
+int level, maxLevels = 7;
+for (level = 0; level < maxLevels; ++level)
+    {
+    char *newUrl = hashFindVal(page->header, "Location:");
+    if (newUrl == NULL)
+        break;
+    struct htmlPage *newPage = htmlPageGetWithCookies(newUrl, cookies);
+    htmlPageFree(&page);
+    page = newPage;
+    }
+return page;
+}
+
+struct htmlPage *htmlPageForwardedNoAbort(char *url, struct htmlCookie *cookies)
+/* Try and get an HTML page.  Print warning and return NULL if there's a problem. */
+{
+struct errCatch *errCatch = errCatchNew();
+struct htmlPage *page = NULL;
+if (errCatchStart(errCatch))
+    page = htmlPageForwarded(url, cookies);
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    warn(errCatch->message->string);
+errCatchFree(&errCatch);
+return page;
+}
+
 
 struct htmlPage *htmlPageGet(char *url)
 /* Get page from URL (may be a file). */
