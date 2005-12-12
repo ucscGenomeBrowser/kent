@@ -1161,7 +1161,7 @@ SEQ2_LEN=$BASE/S2.len
     # to do in one swoop!).  Then do another round to collect all files 
     # per chrom.  
     ssh kki
-    cd /cluster/data/canFam2/bed/blastz.canFam2.2
+    cd /cluster/data/canFam2/bed/blastz.canFam2
     mkdir pslChrom pslParts run.lavToPsl
     cd run.lavToPsl
     ls -1d ../lav/* | sed -e 's@/$@@' > parts.lst
@@ -1225,9 +1225,11 @@ zcat ../pslParts/$1.*.psl.gz \
 
 # CHAIN SELF BLASTZ 
 # For future reference -- doBlastzChainNet.pl should have been used
+# REDONE partially, see below (from the filtering step onward, to get rid 
+# of duplicates, 12/6/05 angie)
     # Run axtChain on little cluster
     ssh kki
-    cd /cluster/data/canFam2/bed/blastz.canFam2.2
+    cd /cluster/data/canFam2/bed/blastz.canFam2
     mkdir -p axtChain/run1
     cd axtChain/run1
     mkdir out chain
@@ -1260,7 +1262,7 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam2/nib \
 
     # now on the cluster server, sort chains
     ssh kolossus
-    cd /cluster/data/canFam2/bed/blastz.canFam2.2/axtChain
+    cd /cluster/data/canFam2/bed/blastz.canFam2/axtChain
     chainMergeSort run1/chain/*.chain > all.chain
     chainSplit chain all.chain
     rm run1/chain/*.chain
@@ -1285,16 +1287,45 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam2/nib \
 
     # Load chains into database
     ssh hgwdev
-    cd /cluster/data/canFam2/bed/blastz.canFam2.2005-01-27/axtChain/chain
+    cd /cluster/data/canFam2/bed/blastz.canFam2/axtChain/chain
     foreach i (*.chain)
         set c = $i:r
         echo loading $c
         hgLoadChain canFam2 ${c}_chainSelf $i
     end
 
+    # 12/6/05 angie -- Jen found that all chains were duplicated --
+    # turns out that axtChain/run1/chain/ contained some chr*.filt.chain
+    # in addition to chr*.psl.chain, so *.chain resulted in duplicates.  
+    # Redo the filtering and chain merge, then re-run
+    # doBlastzChainNet.pl -continue net
+    # to redo the subsequent steps.
+    ssh kolossus
+    cd /cluster/data/canFam2/bed/blastz.canFam2/axtChain
+    chainMergeSort run1/chain/chr*.psl.chain \
+    | gzip -c > all.chain.unfiltered.gz
+    rm -r chain
+    chainSplit chain all.chain.unfiltered.gz
+    mkdir chainFilt
+    foreach f (run1/chain/chr*.psl.chain)
+      chainFilter -minScore=20000 $f > chainFilt/$f:t:r:r.chain
+    end
+    rm -r chain
+    mv chainFilt chain
+    chainMergeSort -saveId chain/*.chain \
+    | gzip -c > canFam2.canFam2.all.chain.gz
+
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/blastz.canFam2
+    rm -r axtNet mafNet
+    rm -r /usr/local/apache/htdocs/goldenPath/canFam2/vsSelf/
+    doBlastzChainNet.pl -continue net DEF >& redo.log &
+    tail -f redo.log
+
 
 # NET SELF BLASTZ 
 # For future reference -- doBlastzChainNet.pl should have been used
+# REDONE 12/6/05 angie as part of doBlastzChainNet.pl command above
     ssh kolossus
     cd /cluster/data/canFam2/bed/blastz.canFam2/axtChain
     chainPreNet all.chain.gz ../S1.len ../S2.len stdout \
@@ -1314,6 +1345,7 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam2/nib \
 # ADD SELF DOWNLOADABLE FILES (DONE 11/21/05 angie)
 # For future reference -- doBlastzChainNet.pl should have been used for 
 # all steps from blastz up to this point.
+# REDONE 12/6/05 angie as part of doBlastzChainNet.pl command above
     cd /cluster/data/canFam2/bed/blastz.canFam2/axtChain
     mv self.net canFam2.canFam2.net
     gzip canFam2.canFam2.net
