@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.65 2005/11/20 21:23:34 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.66 2005/12/12 04:02:53 kent Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1535,7 +1535,7 @@ if (startInsert > 0 || endInsert > 0)
 }
 
 static void addBlock(struct psl* psl, int qs, int qe, int ts, int te,
-                     unsigned *blockSpace)
+                     int *blockSpace)
 /* add a block to the psl, growing if necessary */
 {
 assert((qe-qs) == (te-ts));  /* same lengths? */
@@ -1598,7 +1598,7 @@ struct psl* pslFromAlign(char *qName, int qSize, int qStart, int qEnd, char *qSt
  *   utils/est2genomeToPsl
  */
 
-unsigned blockSpace = 16;
+int blockSpace = 16;
 struct psl* psl = NULL;
 int aliSize = strlen(qString);
 boolean eitherInsert = FALSE;	/* True if either in insert state. */

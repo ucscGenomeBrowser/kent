@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.46 2005/12/04 09:49:04 galt Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.47 2005/12/12 04:02:53 kent Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -80,7 +80,7 @@ int netAcceptingSocketFrom(int port, int queueSize, char *host)
 struct sockaddr_in sai;
 int sd;
 int flag = 1;
- int len;
+socklen_t len;
 
 netBlockBrokenPipes();
 if ((sd = netStreamSocket()) < 0)
@@ -111,7 +111,7 @@ return netAcceptingSocketFrom(port, queueSize, NULL);
 int netAccept(int sd)
 /* Accept incoming connection from socket descriptor. */
 {
-int fromLen;
+socklen_t fromLen;
 return accept(sd, NULL, &fromLen);
 }
 
@@ -126,7 +126,7 @@ ZeroVar(&sai);
 sai.sin_family = AF_INET;
 for (;;)
     {
-    int addrSize = sizeof(sai);
+    socklen_t addrSize = sizeof(sai);
     int sd = accept(acceptor, (struct sockaddr *)&sai, &addrSize);
     if (sd >= 0)
 	{

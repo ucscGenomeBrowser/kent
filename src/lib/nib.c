@@ -10,7 +10,7 @@
 #include "nib.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: nib.c,v 1.21 2005/06/16 06:25:19 markd Exp $";
+static char const rcsid[] = "$Id: nib.c,v 1.22 2005/12/12 04:02:53 kent Exp $";
 
 static char *findNibSubrange(char *fileName)
 /* find the colon starting a nib seq name/subrange in a nib file name, or NULL
@@ -21,7 +21,8 @@ baseName = (baseName == NULL) ? fileName : baseName+1;
 return strchr(baseName, ':');
 }
 
-static void parseSubrange(char *subrange, char *name, int *start, int *end)
+static void parseSubrange(char *subrange, char *name, 
+	unsigned *start, unsigned *end)
 /* parse the subrange specification */
 {
 char *rangePart = strchr(subrange+1, ':');
@@ -336,7 +337,7 @@ FILE *f;
 int seqSize;
 char filePath[PATH_LEN];
 char name[PATH_LEN];
-int start, end;
+unsigned start, end;
 
 nibParseName(options, fileName, filePath, name, &start, &end);
 nibOpenVerify(filePath, &f, &seqSize);

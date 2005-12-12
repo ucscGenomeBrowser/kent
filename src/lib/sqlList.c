@@ -10,7 +10,7 @@
 #include "sqlList.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: sqlList.c,v 1.17 2005/04/10 14:41:25 markd Exp $";
+static char const rcsid[] = "$Id: sqlList.c,v 1.18 2005/12/12 04:02:53 kent Exp $";
 
 int sqlByteArray(char *s, signed char *array, int arraySize)
 /* Convert comma separated list of numbers to an array.  Pass in 
@@ -173,7 +173,7 @@ void sqlCharStaticArray(char *s, char **retArray, int *retSize)
 /* Convert comma separated list of chars to an array which will be
  * overwritten next call to this function, but need not be freed. */
 {
-static signed char *array = NULL;
+static char *array = NULL;
 static unsigned alloc = 0;
 unsigned count = 0;
 
