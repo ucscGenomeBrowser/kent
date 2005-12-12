@@ -874,28 +874,33 @@ for (index = indexList; index != NULL; index = index->next)
     {
     struct chain *oneList = NULL, *chain, *nextChain;
     // LX BEG
-    if(bzp->dynaLimitT<VERY_LARGE_NUMBER){
-      targetHitDLimit = bzp->dynaLimitT;
-      // allocate zeroed memory for hit counters if necessary
-      if(index->counter == NULL){
-             // index->counter could be set later?
+    if (bzp->dynaLimitT<VERY_LARGE_NUMBER)
+       {
+       targetHitDLimit = bzp->dynaLimitT;
+       // allocate zeroed memory for hit counters if necessary
+       if (index->counter == NULL)
+          {
+          // index->counter could be set later?
           AllocArray(index->counter, index->target->size);
           globalCounter = index->counter;
-      }
-    }
-    if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
-      // allocate zeroed memory for hit counters
-      AllocArray(dynaCountQtemp, query->size); 
-    }
+          }
+       }
+    if (bzp->dynaLimitQ<VERY_LARGE_NUMBER)
+       {
+       // allocate zeroed memory for hit counters
+       AllocArray(dynaCountQtemp, query->size); 
+       }
     // LX END
     oneList = blatzAlignOne(bzp, index, query, strand);
     // LX BEG
     // Add the contents of dynaCountQtemp to dynaCountQ
-    if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
-      for(j=0;j<query->size;j++){
-        dynaCountQ[j] = dynaCountQ[j]+dynaCountQtemp[j];
-      }
-    }
+    if (bzp->dynaLimitQ<VERY_LARGE_NUMBER)
+       {
+       for (j=0;j<query->size;j++)
+           {
+           dynaCountQ[j] = dynaCountQ[j]+dynaCountQtemp[j];
+           }
+       }
     freez(&dynaCountQtemp); 
     // LX END
     for (chain = oneList; chain != NULL; chain = nextChain)

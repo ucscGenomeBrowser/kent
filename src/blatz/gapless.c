@@ -138,44 +138,56 @@ struct diagNode
 int doDynaCounting(int targetPos, int queryPos)
     {
     int retval = 0;
-                    // Count all hits to report statistics later on
-                    dynaHits++;
-                    // Now let's see if dynaLimitT has been set
-                    if(targetHitDLimit<VERY_LARGE_NUMBER){
-                      // If we are over the limit, we will stop here
-                      // and continue at the next target pos
-                      if(globalCounter[targetPos] > targetHitDLimit){
-                        dynaCountTarget++; // statistics
-                        retval = 1;
-                        //continue; 
-                      } else {
-                        // ... otherwise keep counting the hits at this position
-                        // but only if query pos that matters 
-                        if(queryHitDLimit<VERY_LARGE_NUMBER){
-                          // is not over its hit limit
-                          if(dynaCountQ[queryPos] <= queryHitDLimit){
-                            globalCounter[targetPos]++;
-                          }
-                        } else {
-                          globalCounter[targetPos]++;
-                        }
-                      }
-                    }
-                    // Now let's see if dynaLimitQ has been set
-                    if(queryHitDLimit<VERY_LARGE_NUMBER){
-                      // If we reached the limit, we will stop here
-                      // and continue evaluating the next query pos
-                      if(dynaCountQ[queryPos] > queryHitDLimit){
-                        dynaCountQuery++; // statistics
-                        dynaBreak = 1;
-                        retval = 2;
-                        //break; // go to the outer loop to get the next query pos
-                      } else {
-                        // ... otherwise keep counting the hits at this position
-                        //dynaCountQ[queryPos]++; // postponing setting the mask
-                        dynaCountQtemp[queryPos]++;
-                      }
-                    }
+    // Count all hits to report statistics later on
+    dynaHits++;
+    // Now let's see if dynaLimitT has been set
+    if (targetHitDLimit<VERY_LARGE_NUMBER)
+       {
+       // If we are over the limit, we will stop here
+       // and continue at the next target pos
+       if (globalCounter[targetPos] > targetHitDLimit)
+          {
+          dynaCountTarget++; // statistics
+          retval = 1;
+          //continue; 
+          }
+       else
+          {
+          // ... otherwise keep counting the hits at this position
+          // but only if query pos that matters 
+          if (queryHitDLimit<VERY_LARGE_NUMBER)
+             {
+             // is not over its hit limit
+             if (dynaCountQ[queryPos] <= queryHitDLimit)
+                {
+                globalCounter[targetPos]++;
+                }
+             }
+          else
+             {
+             globalCounter[targetPos]++;
+             }
+          }
+       }
+    // Now let's see if dynaLimitQ has been set
+    if (queryHitDLimit<VERY_LARGE_NUMBER)
+       {
+       // If we reached the limit, we will stop here
+       // and continue evaluating the next query pos
+       if (dynaCountQ[queryPos] > queryHitDLimit)
+          {
+          dynaCountQuery++; // statistics
+          dynaBreak = 1;
+          retval = 2;
+          //break; // go to the outer loop to get the next query pos
+          }
+       else
+          {
+          // ... otherwise keep counting the hits at this position
+          //dynaCountQ[queryPos]++; // postponing setting the mask
+          dynaCountQtemp[queryPos]++;
+          }
+       }
     return retval;
     }
 // LX END
@@ -232,7 +244,7 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
     //if (key >= 0) // LX
         {
         int tog;
-        if(dynaWordLimit>0) dynaWordCount[key]++; // LX
+        if (dynaWordLimit>0) dynaWordCount[key]++; // LX
         /* Add key, and everything that differs by a single transition 
          * from key to index.  This relies on the fact that the binary
          * representation we've chosen for DNA is a little unusual, and
@@ -255,8 +267,8 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                     struct dlNode *node;
                     boolean gotDoubleHit = FALSE;
                     dynaRet = doDynaCounting(targetPos, queryPos); // LX
-                    if(dynaRet == 1) continue; // LX
-                    if(dynaRet == 2) break; // LX
+                    if (dynaRet == 1) continue; // LX
+                    if (dynaRet == 2) break; // LX
                     ++hitCount;
                     for (node = diagList->head;  !dlEnd(node); node = node->next)
                         {
@@ -309,9 +321,10 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                     }
                     // LX BEG
                     // Check to see if we got here from the inner loop
-                    if(dynaBreak == 1){
-                      break; // we need to break again
-                    }
+                    if (dynaBreak == 1)
+                       {
+                       break; // we need to break again
+                       }
                     // LX END
                 }
             else
@@ -326,8 +339,8 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
                     struct diagonalTrack sdt, *dt;
                     int dynaRet;
                     dynaRet = doDynaCounting(targetPos, queryPos); // LX
-                    if(dynaRet == 1) continue; // LX
-                    if(dynaRet == 2) break; // LX
+                    if (dynaRet == 1) continue; // LX
+                    if (dynaRet == 2) break; // LX
                     ++hitCount;
                     sdt.diagonal = queryPos - targetPos;
                     dt = rbTreeFind(tree, &sdt);
@@ -358,10 +371,11 @@ for (queryPos=0; queryPos<=lastBase; ++queryPos)
             }
             // LX BEG
             // Check to see if we got here from the middle loop
-            if(dynaBreak == 1){
-              dynaBreak=0;
-              continue; // we need the next query position then
-            }
+            if (dynaBreak == 1)
+               {
+               dynaBreak=0;
+               continue; // we need the next query position then
+               }
             // LX END
         }
     }

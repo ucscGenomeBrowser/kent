@@ -52,8 +52,8 @@ FILE *bedfp = NULL;
 int j; 
 int i;
 // See if bed file output of the mask was requested
-if(differentString(bzp->dynaBedFileQ, ""))
-    bedfp = mustOpen(bzp->dynaBedFileQ, "w");
+if (differentString(bzp->dynaBedFileQ, "")) 
+   bedfp = mustOpen(bzp->dynaBedFileQ, "w");
 // Counts all the query-target hits encountered by the program inside the 
 // loops of gapless.c
 dynaHits = 0;
@@ -71,11 +71,12 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
     double bestScore = 0;
     struct chain *chainList;
     // LX BEG
-    if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
-      queryHitDLimit = bzp->dynaLimitQ;
-      // allocate zeroed memory for hit counters
-      AllocArray(dynaCountQ, query->size);
-    }
+    if (bzp->dynaLimitQ<VERY_LARGE_NUMBER)
+       {
+       queryHitDLimit = bzp->dynaLimitQ;
+       // allocate zeroed memory for hit counters
+       AllocArray(dynaCountQ, query->size);
+       }
     // LX END
     if (bzp->unmask || bzp->rna)
         toUpperN(query->dna, query->size);
@@ -97,28 +98,37 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
 	dnaLoadCurSize(queryDl), indexList, f);
     // LX BEG
     // This prints the contents of the mask into the .bed file opened above
-    if(bedfp != NULL){
-      if(bzp->dynaLimitQ<VERY_LARGE_NUMBER){
-        printing = 0;
-        for(b=0;b<query->size;b++){
-          if(dynaCountQ[b] > queryHitDLimit){
-            if(printing == 0){
-              printing = 1;
-              fprintf(bedfp,"%s %d ",query->name,b);
-            }
-          }
-          if(dynaCountQ[b] <= queryHitDLimit){
-            if(printing == 1){
-              printing = 0;
-              bend = b-1;
-              fprintf(bedfp,"%d\n",bend);
-            }
-          }
+    if (bedfp != NULL)
+       {
+       if (bzp->dynaLimitQ<VERY_LARGE_NUMBER)
+          {
+          printing = 0;
+          for (b=0;b<query->size;b++)
+              {
+              if (dynaCountQ[b] > queryHitDLimit)
+                 {
+                 if (printing == 0)
+                    {
+                    printing = 1;
+                    fprintf(bedfp,"%s %d ",query->name,b);
+                    }
+                 }
+              if (dynaCountQ[b] <= queryHitDLimit)
+                 {
+                 if (printing == 1)
+                    {
+                    printing = 0;
+                    bend = b-1;
+                    fprintf(bedfp,"%d\n",bend);
+                    }
+                 }
+              }
+           }
+        else
+           {
+           fprintf(bedfp,"#No dynamic masking data to print.\n");
+           }
         }
-      } else {
-        fprintf(bedfp,"#No dynamic masking data to print.\n");
-      }
-    }
     // LX END
     dnaSeqFree(&query);
     }
@@ -130,9 +140,8 @@ while ((query = dnaLoadNext(queryDl)) != NULL)
     	dynaDrops, (double)dynaDropsPerc, targetHitDLimit, queryHitDLimit);
    // Free dynamic memory used for the sequence-length-dependent counter arrays
    freeMem(dynaCountQ);
-   if(bedfp != NULL){
-     carefulClose(&bedfp);
-   }
+   if (bedfp != NULL)
+      carefulClose(&bedfp);
    freeMem(dynaWordCount);
    // LX END
 carefulClose(&f);
@@ -148,14 +157,15 @@ struct blatzIndex *indexList = blatzIndexDl(targetDl, bzp->weight, bzp->unmask);
 bzpTime("loaded and indexed target DNA");
 
 // LX BEG
-if(bzp->dynaWordCoverage > 0){
-  dynaNumWords = (pow(4,bzp->weight)); // ?? check with Jim if this is correct
-  AllocArray(dynaWordCount,dynaNumWords);
-  printf("Allocated word count table of size %d\n",dynaNumWords);
-  dynaWordLimit = bzp->dynaWordCoverage; // cheating, should be more like:
-  //dynaWordLimit = bzp->dynaWordCoverage*dynaSequenceSize/dynaNumWords;
-  printf("Set word limit to  %d\n",dynaWordLimit);
-}
+if (bzp->dynaWordCoverage > 0)
+   {
+   dynaNumWords = (pow(4,bzp->weight)); // ?? check with Jim if this is correct
+   AllocArray(dynaWordCount,dynaNumWords);
+   printf("Allocated word count table of size %d\n",dynaNumWords);
+   dynaWordLimit = bzp->dynaWordCoverage; // cheating, should be more like:
+   //dynaWordLimit = bzp->dynaWordCoverage*dynaSequenceSize/dynaNumWords;
+   printf("Set word limit to  %d\n",dynaWordLimit);
+   }
 // LX END
 
 verbose(2, "Loaded %d in %s, opened %s\n", slCount(indexList), target,
