@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.2 2005/12/10 03:04:36 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.3 2005/12/12 22:02:11 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -107,6 +107,7 @@ sqlFreeResult(&sr);
 // hFreeConn2(&conn);
 sqlDisconnect(&conn);
 verbose(1, "%d snps found\n", count);
+slReverse(&list);
 return list;
 }
 
@@ -121,11 +122,14 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int functionValue = 0;
+char snpName[32];
 
 verbose(1, "looking up function...\n");
 for (el = list; el != NULL; el = el->next)
     {
-    safef(query, sizeof(query), "select fxn_class from ContigLocusId where snp_id = '%s'", el->name);
+    strcpy(snpName, el->name);
+    stripString(snpName, "rs");
+    safef(query, sizeof(query), "select fxn_class from ContigLocusId where snp_id = %s", snpName);
     sr = sqlGetResult(conn, query);
     /* need a joiner check rule for this */
     row = sqlNextRow(sr);
@@ -180,11 +184,14 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
+char snpName[32];
 
 verbose(1, "looking up heterozygosity...\n");
 for (el = list; el != NULL; el = el->next)
     {
-    safef(query, sizeof(query), "select avg_heterozygosity, het_se from SNP where snp_id = '%s'", el->name);
+    strcpy(snpName, el->name);
+    stripString(snpName, "rs");
+    safef(query, sizeof(query), "select avg_heterozygosity, het_se from SNP where snp_id = %s", snpName);
     sr = sqlGetResult(conn, query);
     /* need a joiner check rule for this */
     row = sqlNextRow(sr);
@@ -210,14 +217,11 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char rsName[64];
 
 verbose(1, "looking up observed...\n");
 for (el = list; el != NULL; el = el->next)
     {
-    strcpy(rsName, "rs");
-    strcat(rsName, el->name);
-    safef(query, sizeof(query), "select molType, observed from snpFasta where rsId = '%s'", rsName);
+    safef(query, sizeof(query), "select molType, observed from snpFasta where rsId = '%s'", el->name);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row == NULL)
@@ -267,13 +271,20 @@ for (el = list; el != NULL; el = el->next)
     }
 }
 
-void appendToTabFile(FILE *f, struct snp125 *list)
+void writeToTabFile(char *chromName, struct snp125 *list)
 /* write tab separated file */
 {
 struct snp125 *el;
 int score = 0;
 int bin = 0;
 int count = 0;
+FILE *f;
+char fileName[64];
+
+strcpy(fileName, "chr");
+strcat(fileName, chromName);
+strcat(fileName, "_snp125");
+f = hgCreateTabFile(".", fileName);
 
 for (el = list; el != NULL; el = el->next)
     {
@@ -302,6 +313,7 @@ for (el = list; el != NULL; el = el->next)
     }
 if (count > 0)
     verbose(1, "%d lines written\n", count);
+// loadDatabase(f);
 }
 
 
@@ -324,7 +336,6 @@ int main(int argc, char *argv[])
 {
 struct snp125 *list=NULL, *el;
 struct slName *chromPtr, *contigList;
-FILE *f = hgCreateTabFile(".", "snp125");
 
 if (argc != 3)
     usage();
@@ -355,6 +366,7 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
     verbose(1, "chrom = %s\n", chromPtr->name);
     list = readSnps(chromPtr->name);
+
     if (list == NULL) 
         {
         verbose(1, "--------------------------------------\n");
@@ -364,11 +376,10 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     lookupHet(list);
     lookupObserved(list);
     lookupRefAllele(list);
-    appendToTabFile(f, list);
+    writeToTabFile(chromPtr->name, list);
     slFreeList(&list);
     verbose(1, "---------------------------------------\n");
     }
 
-loadDatabase(f);
 return 0;
 }
