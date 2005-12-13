@@ -2152,6 +2152,7 @@ searchPriority 50
 
 searchTable knownGene
 searchType knownGene
+shortCircuit 1
 searchPriority 1
 
 searchName refLink
