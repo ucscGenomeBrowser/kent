@@ -23,3 +23,4 @@ htmltest: bigImage.html
 testVisiSearch:  visiSearch.o testVisiSearch.o
 	${CC} -o testVisiSearch visiSearch.o testVisiSearch.o ${MYLIBS} ${L}
 
+# use make clean; make CFLAGS=-DDEBUG to compile to turn on DEBUG flag
