@@ -369,5 +369,7 @@ _EOF_
     ## ... nothing.  OK no big deal, just pretend the chainRun.csh script finished
     ## and continue with chainMerge.
 
-# DROSOPHILA PROTEINS BLASTP
-
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 12/12/2005 Andy)
+    ssh hgwdev
+    hgsql -N hgcentraltest -e 'insert into blatServers values("triCas2", "blat19", "17784", 1, 0);
+          insert into blatServers values("triCas2", "blat19", "17784", 0, 1);'
