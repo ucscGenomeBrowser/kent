@@ -1041,3 +1041,8 @@ EOF
 #Longest finished job:            1308s      21.80m     0.36h    0.02d
 #Submission to last job:          1356s      22.60m     0.38h    0.02d
     # The crashing one is a PROBLEM.  Andy needs to e-mail Bob Edgar about this.
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 12/12/2005 Andy)
+    ssh hgwdev
+    hgsql -N hgcentraltest -e 'insert into blatServers values("strPur1", "blat19", "17782", 1, 0);
+          insert into blatServers values("strPur1", "blat19", "17783", 0, 1);'
