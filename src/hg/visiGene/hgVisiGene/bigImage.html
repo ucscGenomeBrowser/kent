@@ -440,10 +440,11 @@ if (typeof(parent.parent) != 'undefined')
     var target = picName.replace("full","200");
     target = target.substring(0,target.lastIndexOf("/"));
     target = target+picExt;
+    target = target.substring(target.indexOf("/visiGene"));
     //alert('imgs.length='+imgs.length+' target='+target);
     for (var i = 0; i < imgs.length; ++i) {
 	var src = imgs[i].src;
-	src = '..'+src.substring(src.indexOf("/visiGene"));
+	src = src.substring(src.indexOf("/visiGene"));
 	if (src == target) {
 	    result = imgs[i];
 	    break;
