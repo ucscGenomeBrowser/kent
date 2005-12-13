@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.6 2005/12/05 22:13:39 kent Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.7 2005/12/13 16:59:48 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -295,7 +295,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	struct specTree *branch = specTreeTarget(tree, col->name);
 	if (branch != NULL)
 	    subObjects = TRUE;
-	if (!sameString(col->name, entryField))
+	else if (!sameString(col->name, entryField))
 	    {
 	    int len = strlen(val);
 	    dyStringBumpBufSize(escaper, len*5);
