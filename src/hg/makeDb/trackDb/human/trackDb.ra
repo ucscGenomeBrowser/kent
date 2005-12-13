@@ -445,19 +445,19 @@ type bedGraph 4
 
     track hapmapLdHotspotCEU
     subTrack hapmapLdHotspot
-    shortLabel LD Hotspot CEU
+    shortLabel CEU
     longLabel  Hotspots of Linkage Disequilibrium in the CEPH HapMap (CEU)
     priority 1
     
     track hapmapLdHotspotCJ
     subTrack hapmapLdHotspot
-    shortLabel LD Hotspot CJ
+    shortLabel CHB + JPT
     longLabel  Hotspots of Linkage Disequilibrium in the Chinese/Japanese HapMap (CHB and JPT)
     priority 2
 
     track hapmapLdHotspotYRI
     subTrack hapmapLdHotspot
-    shortLabel LD Hotspot YRI
+    shortLabel YRI
     longLabel  Hotspots of Linkage Disequilibrium in the Yoruban HapMap (YRI)
     priority 3
 
@@ -1310,9 +1310,10 @@ irows on
 summary brMafSum
 
 
-track hapmapRecombRate
+track snpRecombRate
+compositeTrack on
 shortLabel Recomb Rates
-longLabel Oxford Recombination Rates
+longLabel Recombination Rates from SNP Genotyping
 group varRep
 priority 145.5
 visibility hide
@@ -1324,14 +1325,48 @@ autoScaleDefault Off
 maxHeightPixels 64:32:16
 origAssembly hg16
 
-track hapmapRecombHotspots
+    track snpRecombRateHapmap
+    subTrack snpRecombRate
+    shortLabel HapMap
+    longLabel Oxford Recombination Rates from HapMap Phase I release 16c.1
+    priority 1
+
+    track snpRecombRatePerlegen
+    subTrack snpRecombRate
+    shortLabel Perlegen
+    longLabel Oxford Recombination Rates from Perlegen data
+    priority 2
+
+track snpRecombHotspot
+compositeTrack on
 shortLabel Recomb Hotspots
-longLabel Oxford Recombination Hotspots
+longLabel Recombination Hotspots from SNP Genotyping
 group varRep
-priority 145.6
+priority 145.5
 visibility hide
 type bed 3 .
 origAssembly hg16
+
+    track hapmapRecombHotspots
+    subTrack snpRecombHotspot
+    shortLabel HapMap
+    longLabel Oxford Recombination Hotspots from HapMap Phase I release 16c.1
+    priority 1
+
+    track perlegenRecombHotspots
+    subTrack snpRecombHotspot
+    shortLabel Perlegen
+    longLabel Oxford Recombination Hotspots from Perlegen data
+    priority 2
+
+#track perlegenRecombColdpots
+#shortLabel Perlegen Recomb Coldspots
+#longLabel Oxford Recombination Coldspots from Perlegen data
+#group varRep
+#priority 145.6
+#visibility hide
+#type bed 3 .
+#origAssembly hg16
 
 searchTable wgRna
 searchMethod fuzzy
