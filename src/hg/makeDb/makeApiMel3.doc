@@ -1,0 +1,31 @@
+#!/bin/bash  # set emacs mode
+exit; # don't actually run this like a script :)
+
+# Apis mellifera -- 
+# 
+# Baylor HGSC's May 5, 2005 (Amel_3.0) assembly
+# ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Amellifera/fasta/Amel20050501-freeze/
+#
+
+# DOWNLOAD SEQUENCE (DONE 12/12/05 Andy)
+    df -h /cluster/store*    
+#Filesystem            Size  Used Avail Use% Mounted on
+#kkstore01-10:/export/cluster/store9
+#                      1.3T  697G  546G  57% /cluster/store9
+    # store9, whatever
+    mkdir -p /cluster/store9/apiMel3/downloads
+    ln -s /cluster/store9/apiMel3 /cluster/data/apiMel3
+    ln -s /cluster/data/apiMel3 ~/apiMel3
+    cd apiMel3/downloads/
+    wget -N ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Amellifera/fasta/Amel20050501-freeze/contigs/All_Groups_20050501.agp
+    cut -f1-9 All_Groups_20050501.agp > tmp.agp
+    agpCondense tmp.agp apiMel3.agp
+    rm tmp.agp
+    for i in `seq 1 16` Un; do
+	f=Group${i}_20050501.fa.gz
+        wget -N ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Amellifera/fasta/Amel20050501-freeze/contigs/${f}
+	zcat $f >> contigs.fa
+    done
+    agpAllToFaFile apiMel3.agp contigs.fa apiMel3.fa
+    rm contigs.fa
+
