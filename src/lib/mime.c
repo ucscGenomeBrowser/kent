@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mime.c,v 1.3 2005/11/09 18:34:02 galt Exp $";
+static char const rcsid[] = "$Id: mime.c,v 1.4 2005/12/01 06:53:48 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
@@ -38,7 +38,7 @@ else
 static void setEodMB(struct mimeBuf *b)
 /* set end of data - eoi minus (boundary-size -1) */
 {
-if (b->blen > 1)
+if (b->blen > 1 && b->eoi == b->eom) 
     {
     b->eod = b->eoi - (b->blen-1);
     }
@@ -103,10 +103,16 @@ else
     }
 b->i = b->buf+0;
 bytesToRead = b->eom - b->eoi;
-bytesRead = read(b->d, b->eoi, bytesToRead);
-if (bytesRead < 0)
-    errnoAbort("moreMimeBuf: error reading stdin MIME");
-b->eoi += bytesRead;    
+while (bytesToRead > 0)
+    {
+    bytesRead = read(b->d, b->eoi, bytesToRead);
+    if (bytesRead < 0)
+        errnoAbort("moreMimeBuf: error reading MIME input descriptor");
+    b->eoi += bytesRead;
+    if (bytesRead == 0)
+        break;
+    bytesToRead = bytesToRead - bytesRead;
+    }
 setEopMB(b);
 setEodMB(b);
 //debug
@@ -498,11 +504,7 @@ else
 	    {
 	    break;
 	    }
-	else
-	    {
-	    moreMimeBuf(b);
-	    setEopMB(b);
-	    }	    
+	moreMimeBuf(b);
 	}
     if (dy)
 	{

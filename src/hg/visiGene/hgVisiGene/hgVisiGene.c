@@ -363,20 +363,21 @@ void doControls(struct sqlConnection *conn)
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
 char *selected = NULL;
 htmlSetBgColor(0xD0FFE0);
-/* htmlSetStyle(htmlStyleUndecoratedLink); */
+htmlSetStyle("	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n");
 htmStart(stdout, "do controls");
 printf("<FORM ACTION=\"../cgi-bin/%s\" NAME=\"mainForm\" target=\"_parent\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
 cartSaveSession(cart);
 
 printf("<TABLE WIDTH=100%%><TR>");
-printf("<TD>");
-printf("&nbsp;<B><A HREF=\"/index.html\" target=\"_parent\">UCSC</A> ");
-printf("<A HREF=\"../cgi-bin/%s?%s=\" target=\"_parent\">VisiGene</A></B> ",
+printf("<TD WIDTH=230 bgcolor=\"#"HG_COL_HOTLINKS"\">");
+printf("&nbsp;<B><A HREF=\"/index.html\" target=\"_parent\" class=\"topbar\">UCSC</A> ");
+printf("&nbsp;<A HREF=\"../cgi-bin/%s?%s=\" target=\"_parent\" class=\"topbar\">VisiGene</A></B> ",
 	hgVisiGeneCgiName(), hgpListSpec);
 printf("</TD>");
 
 printf("<TD>");
+printf("&nbsp");
 cgiMakeTextVar(hgpListSpec, listSpec, 16);
 cgiMakeButton(hgpDoSearch, "search");
 printf("</TD>");
@@ -511,19 +512,13 @@ void doHelp()
 /* Print help section */
 {
 puts(
-"<P> \n"
-"VisiGene is a browser for viewing <em>in situ</em> images. \n"
-"It enables the user to examine cell-by-cell as well as tissue-by-tissue \n"
-"expression patterns. The browser serves as a virtual microscope, allowing \n" 
-"users to retrieve images that meet specific search criteria, then \n"
-"interactively zoom and scroll across the collection.</P>\n"
 "<H3>Images Available</H3>\n"
 "<P> \n"
 "The following image collections are currently available for browsing: \n"
 "<UL> \n"
 "<LI>Mouse <em>in situ</em> images from the \n"
 "<A HREF=\"http://www.informatics.jax.org/menus/expression_menu.shtml\" \n"
-"TARGET=_blank>Jackson Labs Gene Expression Database</A> (GED) \n" 
+"TARGET=_blank>Jackson Labs Gene Expression Database</A> (GXD) at MGI \n" 
 "<LI>Transcription factors in mouse embryos from the \n"
 "<A HREF=\"http://mahoney.chip.org/mahoney/\" TARGET=_blank>Mahoney Center \n"
 "for Neuro-Oncology</A> \n"
@@ -551,15 +546,15 @@ puts(
 "original image or best fit the image display window, and moved or \n"
 "scrolled in any direction to focus on areas of interest. \n"
 "<P> \n"
-"<B>Zooming in:</B> Click the Zoom <em>in</em> button above the image to \n"
-"enlarge the image by 2X and center it on the position of the mouse click. \n"
-"Shortcuts: click on the image with the left mouse button, or \n"
-"click on the image, then use the <em>+</em> key.</P>\n"
+"<B>Zooming in:</B> To enlarge the image by 2X, click the Zoom <em>in</em> \n"
+"button above the image or click on the image using the left mouse button. \n"
+"Alternatively, the + key may be used to zoom in when the main image pane is \n"
+"the active window.</P> \n"
 "<P> \n"
-"<B>Zooming out:</B> Click the Zoom <em>out</em> button above the image \n"
-"to reduce the image by 2X and center it on the location of the mouse click. \n"
-"Shortcuts: click on the image with the right mouse button, or \n"
-"click on the image, then use the <em>-</em> key. </P> \n"
+"<B>Zooming out:</B> To reduce the image by 2X, click the Zoom <em>out</em> \n"
+"button above the image or click on the image using the right mouse button. \n"
+"Alternatively, the - key may be used to zoom out when the main image pane \n"
+"is the active window.</P> \n"
 "<P> \n"
 "<B>Sizing to full resolution:</B> Click the Zoom <em>full</em> button above \n"
 "the image to resize the image such that each pixel on the screen \n"
@@ -591,6 +586,7 @@ puts(
 );
 }
 
+
 void doInitialPage()
 /* Put up page with search box that explains program and
  * some good things to search on. */
@@ -599,69 +595,72 @@ char *listSpec = NULL;
 webStartWrapper(cart, "VisiGene Image Browser", NULL, FALSE, FALSE);
 printf("<FORM ACTION=\"../cgi-bin/%s\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
+puts("<P>VisiGene is a virtual microscope for viewing <em>in situ</em> images. \n"
+"These images show where a gene is used in an organism, sometimes down to \n"
+"cellular resolution. With VisiGene users can retrieve images that meet specific "
+"search criteria, then interactively zoom and scroll across the collection.</P>\n");
+printf("<CENTER>");
 listSpec = cartUsualString(cart, hgpListSpec, "");
 cgiMakeTextVar(hgpListSpec, listSpec, 30);
 cgiMakeButton(hgpDoSearch, "search");
 printf("<BR>\n");
+printf("</CENTER>");
 puts(
-"<P> \n"
-"Valid search terms include organism names (genus/species, genus, and some \n"
-"common names), gene names, authors, body parts, \n"
-"year of publication, GenBank or UniProt accessions, \n"
+"<P>Good search terms include gene symbols, authors, years, body parts,\n"
+"organisms, GenBank and UniProt accessions,\n"
 "<A HREF=\"http://genex.hgu.mrc.ac.uk/Atlas/intro.html\" \n"
-"TARGET=_blank>Theiler</A> stages, and \n"
+"TARGET=_blank>Theiler</A> stages for mice, and \n"
 "<A HREF=\"http://www.xenbase.org/atlas/NF/NF-all.html\" \n"
-"TARGET=_blank>Nieuwkoop/Faber</A> stages. Gene name queries may include the \n"
-"wildcard characters * and ?. The search returns only those images that \n"
-"match all the specified search criteria. \n"
+"TARGET=_blank>Nieuwkoop/Faber</A> stages for frogs. The wildcard characters\n"
+"* and ? work with gene symbols; otherwise the full word must match.</P>\n"
 "<P> \n"
 "<H3>Sample queries</H3> \n"
 "<TABLE  border=0 CELLPADDING=0 CELLSPACING=0> \n"
 "    <TR><TD VALIGN=Top NOWRAP><B>Request:</B><BR></TD> \n"
 "        <TD VALIGN=Top COLSPAN=2><B>&nbsp;&nbsp; VisiGene Response:</B><BR></TD> \n"
 "    </TR> \n"
-"    <TR><TD VALIGN=Top><BR></TD></TR> \n"
-"    <TR><TD VALIGN=Top NOWRAP>mouse</TD> \n"
+// "    <TR><TD VALIGN=Top><BR></TD></TR> \n"
+"    <TR><TD VALIGN=Top NOWRAP>nkx2-2</TD> \n"
 "        <TD WIDTH=14></TD> \n"
-"        <TD VALIGN=Top>Displays all mouse images </TD> \n"
-"    </TR> \n"
-"    <TR><TD VALIGN=Top NOWRAP>xenopus laevis</TD> \n"
-"        <TD WIDTH=14></TD> \n"
-"        <TD VALIGN=Top>Displays all images associated with the African "
-"clawed frog, <em>Xenopus laevis</em></TD> \n"
-"    <TR><TD VALIGN=Top NOWRAP>african clawed frog</TD> \n"
-"        <TD WIDTH=14></TD> \n"
-"        <TD VALIGN=Top>Displays the same results as for &quot;xenopus "
-"laevis&quot;</TD> \n" 
+"        <TD VALIGN=Top>Displays images associated with the gene nkx2-2</TD>\n"
 "    </TR> \n"
 "    <TR><TD VALIGN=Top NOWRAP>hoxa*</TD> \n"
 "        <TD WIDTH=14></TD> \n"
-"        <TD VALIGN=Top>Displays all images of genes in the Hox-A cluster</TD>\n"
+"        <TD VALIGN=Top>Displays images of all genes in the Hox-A cluster</TD>\n"
+"    </TR> \n"
 "    <TR><TD VALIGN=Top NOWRAP>NM_007492</TD> \n"
 "        <TD WIDTH=14></TD> \n"
 "        <TD VALIGN=Top>Displays images associated with accession NM_007492</TD> \n"
 "    </TR> \n"
-"    <TR><TD VALIGN=Top NOWRAP>mouse midbrain 2005</TD> \n"
+"    <TR><TD VALIGN=Top NOWRAP>theiler 22</TD> \n"
 "        <TD WIDTH=14></TD> \n"
-"        <TD VALIGN=Top>Displays mouse images deposited in 2005 that show "
-"expression in the midbrain</TD> \n"
+"        <TD VALIGN=Top>Displays all images that show Theiler stage 22</TD> \n"
 "    </TR> \n"
-"    <TR><TD VALIGN=Top NOWRAP>Ma Q</TD> \n"
+"    <TR><TD VALIGN=Top NOWRAP>mouse</TD> \n"
 "        <TD WIDTH=14></TD> \n"
-"        <TD VALIGN=Top>Displays images contributed by scientist Q. Ma. Use "
-"this format \n"
-"when searching on authors' names that contain initials.</TD> \n"
+"        <TD VALIGN=Top>Displays all mouse images </TD> \n"
+"    </TR> \n"
+"    <TR><TD VALIGN=Top NOWRAP>xenopus</TD> \n"
+"        <TD WIDTH=14></TD> \n"
+"        <TD VALIGN=Top>Displays all images associated with frogs of genus Xenopus </TD>\n"
+"    </TR> \n"
+"    <TR><TD VALIGN=Top NOWRAP>mouse midbrain</TD> \n"
+"        <TD WIDTH=14></TD> \n"
+"        <TD VALIGN=Top>Displays mouse images that show expression in the "
+"midbrain</TD> \n"
+"    </TR> \n"
+"    <TR><TD VALIGN=Top NOWRAP>smith jc 1994</TD> \n"
+"        <TD WIDTH=14></TD> \n"
+"        <TD VALIGN=Top>Displays images contributed by scientist J.C. Smith "
+"in 1994</TD> \n"
 "    </TR> \n"
 "</TABLE> \n"
-"<P>\n"
-"See &quot;About VisiGene&quot; below for more \n"
-"information about the VisiGene browser and image navigation. </P> \n" 
 );
 printf("</FORM>\n");
-webNewSection("About VisiGene");
 doHelp();
 webEnd();
 }
+
 
 void doDefault(struct sqlConnection *conn, boolean newSearch)
 /* Put up default page - if there is no specific do variable. */
