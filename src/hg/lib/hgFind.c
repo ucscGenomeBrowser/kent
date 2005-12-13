@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.172 2005/12/10 04:36:25 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.173 2005/12/13 19:06:16 kent Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -383,6 +383,7 @@ if (keyCount > 0)
 	{
 	id = nextWord(&line);
 	rest = skipLeadingSpaces(line);
+	touppers(line);
 	if (allKeysPrefix(keyWords, keyCount, rest))
 	    {
 	    struct slName *idEl = slNameNew(id);
@@ -1266,6 +1267,7 @@ if (!isTooCommon(table, key))
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
+	touppers(row[1]);
 	if (keyIsPrefix(key, row[1]))
 	    {
 	    idEl = newSlName(row[0]);
