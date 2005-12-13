@@ -960,14 +960,12 @@ if (cmd=="fit") {
     xx = x;
     yy = y;
     updatePos();
-    while ((wOrig[l]*m <= wc || hOrig[l]*m <= hc) && m < 8)
-	{
+    while ((wOrig[l]*m <= wc || hOrig[l]*m <= hc) && m < 8) {
 	zoomIn(true);
-	}
-    while ((wOrig[l]*m > wc || hOrig[l]*m > hc) && (l+1) < numLevels)
-	{
+    }
+    while ((wOrig[l]*m > wc || hOrig[l]*m > hc) && (l+1) < numLevels) {
 	zoomIn(false);
-	}
+    }
 }	
 if (cmd=="full") {
     //alert('l='+l+' m='+m+' z='+z);
