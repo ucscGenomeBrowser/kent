@@ -1,0 +1,906 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# This file describes how we made the browser database on 
+# NCBI build 36 (October 2005 freeze)
+
+# HOW TO BUILD AN ASSEMBLY FROM NCBI FILES 
+# ---------------------------------------
+# 10/06/2005
+# Make gs.19 directory, gs.19/build36 directory, and gs.19/ffa directory.
+    ssh kkstore02
+    mkdir /cluster/store11/gs.19
+    mkdir /cluster/store11/gs.19/build36
+    mkdir /cluster/store11/gs.19/agp
+    mkdir /cluster/store11/gs.19/ffa
+
+#    Make a symbolic link from /cluster/store1 to this location
+#	(I assume there is some use for this later ?)
+	
+    cd /cluster/store1
+    ln -s /cluster/store11/gs.19 ./gs.19
+    ln -s /cluster/store11/gs.19/build36 /cluster/data/hg18
+
+#    Make a symbolic link from your home directory to the build dir:
+#	(Investigate what this is used for, may no longer be necessary)
+
+    cd
+    ln -s /cluster/store11/gs.19/build36 ~/oo
+
+# NCBI download site, fetch everything into this one directory:
+
+#	with the machine and password in your $HOME/.netrc file, this
+#	wget command will require no login.  Your $HOME/.netrc file
+#	is set to 'chmod 600 .netrc' to prevent anyone from finding
+#	the data.  (There were some early files that later moved
+#		into an OLD subdirectory.  They were broken.)
+
+# 11/16/2005
+# Received answer from Greg to go ahead with the new build.
+
+    ssh kkstore02
+    mkdir /cluster/store11/gs.19/ncbi
+    cd /cluster/store11/gs.19/ncbi
+    bash
+    wget --timestamp ftp://ftp-private.ncbi.nih.gov/build_36/*
+
+#	New to this build is the sequence: NC_001807 which is the
+#	mitochondria sequence.  This prefix NC_ is new to the process
+#	and will have to be accounted for below.  The other two special
+#	prefixes are similar to what was seen before:
+#	from DR52.agp NG_002392
+#	Homo sapiens major histocompatibility complex, class II,
+#		DR52 haplotype (DR52) on chromosome 6
+#	and from DR53.agp NG_002433
+#	Homo sapiens major histocompatibility complex, class II,
+#		DR53 haplotype (DR53) on chromosome 6
+
+#	Fixup seq_contig.md
+#
+#	It has a bunch of stuff belonging to the Celera
+#	genome assembly.  Filter those out.  I don't know what the
+#	NT_07959[0-7] items are, but there are no definitions for them
+#	in the agp files and no sequence in any fa.gz file.
+#	Fixup the names for the NG_ items, and change chrom MT to be M
+
+# get the seq_contig.md file Craig just made for us on 11/28/05.
+cd /cluster/store11/gs.19/ncbi
+wget --timestamp ftp://ftp-private.ncbi.nih.gov/build_36/seq_contig.md
+
+# remove Celera and Toronto entries
+# and replace chrom number for those haplotypes
+
+ssh hgwdev
+cd /cluster/store11/gs.19/build36
+egrep -v "Celera|NT_07959[0-7]" ../ncbi/seq_contig.md |grep -v CRA_TCA >seq_contig0.tab
+
+hgsql hg18 -e 'drop table seq_contig0'
+hgsql hg18 <~/src/hg/lib/seq_contig0.sql
+hgsql hg18 -e 'load data local infile "seq_contig0.tab" into table seq_contig0'
+
+#     fix seq_contig and
+#	get the randoms sorted in proper order.  The createNcbiLifts
+#	does not work correctly if the randoms are not grouped together
+#	by chromosome
+fixMd0 hg18 |sed -e "s/6_qbl_hap1/6_qbl_hap2/"| sed -e "s/MT/M/" | grep -v "|" >seq_contig1.tab
+
+hgsql hg18 -e 'drop table seq_contig1'
+hgsql hg18 <~/src/hg/lib/seq_contig1.sql
+hgsql hg18 -e 'load data local infile "seq_contig1.tab" into table seq_contig1'
+fixMd hg18 seq_contig1 >seq_contig.md
+
+#	This pulls out all the randoms and groups them within the
+#	same chrom but leaving them in the same order as they orginally
+#	were  (warning this is BASH code ...)
+bash
+    grep "|" seq_contig0.tab | awk -F"|" '{print $1}' | \
+        awk '{print $2}' | sort -n -u | while read CHR
+do
+        grep "[^0-9]${CHR}|" seq_contig0.tab
+done >> seq_contig.md
+exit
+
+hgsql hg18 -e 'drop table seq_contig'
+hgsql hg18 <~/src/hg/lib/seq_contig.sql
+hgsql hg18 -e 'load data local infile "seq_contig.md" into table seq_contig'
+
+# FYI: agp file format documented at:
+#	http://www.ncbi.nlm.nih.gov/Genbank/WGS.agpformat.html# fixup a couple of names for our own purposes here
+cd /cluster/store11/gs.19/agp
+ln -s ../ncbi/chr*.agp ../ncbi/chr*.fa.gz .
+
+sed -e "s#MT/NC_001807#NC_001807#" ../ncbi/chrMT.agp > chrM.agp
+
+cat ../ncbi/c22_H2.agp > chr22_h2_hap1.agp
+cat ../ncbi/c5_H2.agp  > chr5_h2_hap1.agp
+cat ../ncbi/c6_COX.agp > chr6_cox_hap1.agp
+cat ../ncbi/c6_QBL.agp > chr6_qbl_hap2.agp
+
+cp -p ../ncbi/c22_H2.fa.gz chr22_h2_hap1.fa.gz
+cp -p ../ncbi/c5_H2.fa.gz  chr5_h2_hap1.fa.gz
+cp -p ../ncbi/c6_COX.fa.gz chr6_cox_hap1.fa.gz
+cp -p ../ncbi/c6_QBL.fa.gz chr6_qbl_hap2.fa.gz
+
+mkdir sav
+cp -p *hap*.agp sav
+
+# fix hap type agp files that have multiple contigs.
+ 
+fixAgp hg18 sav/chr5_h2_hap1.agp chr5_h2_hap1.agp
+fixAgp hg18 sav/chr6_qbl_hap2.agp chr6_qbl_hap2.agp
+
+# PLEASE NOTE THAT THESE TWO CORRECTED .agp FILES ABOVE ARE USED LATER, 
+# NOT BY THE NEXT STEP IMMEDIATELY.
+    
+#  Put all the agp files together into one.
+
+#	The chrM sequence now has its own agp, remove it from
+#	ref_placed.agp
+# sed -e "/^NC_001807/d" ../ncbi/ref_placed.agp > ref_placed.agp
+
+# PLEASE NOTE THAT THE ORIGINAL NCBI .agp FILES FOR THOSE
+# SPECIAL HAP TYPE SEQUENCES ARE USED, NOT THE CORRECTED ONES.
+
+cd /cluster/store11/gs.19/build36
+cat ../ncbi/ref_placed.agp ../agp/chrM.agp ../ncbi/ref_unplaced.agp \
+../ncbi/c22_H2.agp \
+../ncbi/c5_H2.agp \
+../ncbi/c6_COX.agp \
+../ncbi/c6_QBL.agp \
+../ncbi/PAR.agp > ncbi_build36.agp
+
+# cat ../ncbi/ref_placed.agp ../agp/chrM.agp ../ncbi/ref_unplaced.agp \
+# ../agp/chr22_h2_hap1.agp ../agp/chr5_h2_hap1.agp \
+# ../agp/chr6_cox_hap1.agp ../agp/chr6_qbl_hap2.agp \
+# ../ncbi/PAR.agp > ncbi_build36.agp
+
+    zcat ../ncbi/chrMT.fa.gz | \
+	sed -e "s/gi|17981852|ref|NC_001807.4/ref|NC_001807/" | \
+	gzip > chrM.fa.gz
+
+#	and into ffa
+    cd /cluster/store11/gs.19/ffa
+# NO LONGER TRUE FOR GS19!
+# There is a single bogus line at the end of ref_placed.fa.gz
+#	declaring the NC_001807 MT sequence, this was later replaced by
+#	chrMT.fa.gz, so remove that one line:
+    zcat ../ncbi/ref_placed.fa.gz | sed -e "/^>ref|NC_001807/d" | \
+    gzip > ref_placed.fa.gz
+#	(That's a 40 minute job)
+
+#	sequence.inf is usually here, symlink it
+#ln -s ../ncbi/sequence.inf
+    ln -s ../ncbi/chromosome_extents.inf
+#	put all the fa.gz files together in one big fa.gz
+#   time zcat ref_placed.fa.gz ../agp/chrM.fa.gz ../ncbi/ref_unplaced.fa.gz \
+time zcat ../ncbi/ref_placed.fa.gz ../ncbi/ref_unplaced.fa.gz \
+../agp/*hap?.fa.gz ../ncbi/PAR.fa.gz | gzip \
+> ncbi_build36.fa.gz
+
+#	Make a listing of all the fasta record headers, just FYI:
+    cd /cluster/store11/gs.19
+    zcat ffa/ncbi_build36.fa.gz | grep "^>" > ncbi.fa.headers
+
+# Sanity check, checkYbr was updated to handle the NC_ identifier
+cd /cluster/store11/gs.19/build36
+zcat ../ffa/ncbi_build36.fa.gz | $HOME/bin/i386/checkYbr ncbi_build36.agp stdin seq_contig.md >check.seq_contig
+#	result should be clean:
+cat check.seq_contig
+# Read 378 contigs from ncbi_build36.agp
+# Verifying sequence sizes in stdin
+# 0 problems detected
+
+# Convert fa files into UCSC style fa files and place in "contigs"
+# directory inside the gs.19/build36 directory 
+#	(a check that can be done here is make a list of the contigs
+#	in this ./contigs directory before and compare it with the
+#	list of distributed contigs created after they have been
+#	disbursed.)
+#	faNcbiToUcsc was fixed to handle the NC_ identifier
+
+cd /cluster/store11/gs.19/build36
+
+# We've been through this often
+
+# mv contigs contigs.0
+zcat ../ffa/ncbi_build36.fa.gz | $HOME/bin/i386/faNcbiToUcsc \
+-split -ntLast stdin contigs
+
+#	If you want to compare anything to previous work, check now, then:
+#     rm -fr contigs.0
+
+# Determine the chromosome sizes from agps
+#	Watch carefully how chrY gets constructed.  I'm not sure
+#	this chrom_sizes represents the whole length of chrY with
+#	the PAR added.  We will see about that.
+#	Script updated to handle new chrom names:
+#	my @chroms = (1 .. 22, 'X', 'Y', 'M', '6_hla_hap1', '6_hla_hap2');
+
+cd /cluster/store11/gs.19/build36
+/cluster/bin/scripts/getChromSizes ../agp
+
+#	Create chrom.lst list for use in foreach() loops
+awk '{print $1}' chrom_sizes | sed -e "s/chr//" > chrom.lst
+
+# Create lift files (this will create chromosome directory structure) and
+#	inserts file
+  
+/cluster/bin/scripts/createNcbiLifts -s chrom_sizes seq_contig.md .
+
+# Create contig agp files (will create contig directory structure)
+	
+/cluster/bin/scripts/createNcbiCtgAgp seq_contig.md ncbi_build36.agp .
+
+# Create chromsome random agp files.
+
+/cluster/bin/scripts/createNcbiChrAgp -randomonly .
+
+# Copy the original chrN.agp files from the gs.19/agp directory 
+#    into each of the chromosome directories since they contain better 
+#    gap information. Delete the comments at top from these.
+cd /cluster/store11/gs.19/build36
+foreach c ( `cat chrom.lst` )
+	sed -e "/^#.*/d" ../agp/chr${c}.agp > ./${c}/chr${c}.agp
+end
+#	chrM needs a name fixup
+sed -e "s#NC_001807#chrM#" ../agp/chrM.agp > M/chrM.agp
+
+# Distribute contig .fa to appropriate directory (assumes all files
+# are in "contigs" directory).
+
+# Create inserts file from agp and lift files (new - added by Terry, 2004-07-12)
+/cluster/bin/scripts/createInserts /cluster/data/hg18 > /cluster/data/hg18/inserts
+
+# create global data link for everyone.  No more home directory
+# links required.
+ln -s /cluster/store11/gs.19/build36 /cluster/data/hg18
+cd /cluster/data/hg18
+/cluster/bin/scripts/distNcbiCtgFa contigs .
+#	Verify that everything was moved properly, the contigs directory
+#	should be empty:
+ls contigs
+#	Nothing there, then remove it
+rmdir  contigs
+
+#	Make a list of the contigs for use later
+    rm contig.lst
+    touch contig.lst
+    foreach chrom ( `cat chrom.lst` )
+	foreach c ( $chrom/N{C,G,T}_?????? )
+	    set contig = $c:t
+	    echo "${chrom}/${contig}/${contig}.fa" >> contig.lst
+	end
+    end
+#   For later comparisons, this is how many contigs we have:
+    wc -l contig.lst
+# 378 contig.lst 
+
+#	Note 2004-06-30 - there are some clone numbers left in some of
+#	the NCBI files that are incorrect.  Due to version number
+#	changes, more than one version is listed.  Namely for accession
+#	numbers: AC004491 AC004921 AC004983 AC005088 AC006014 AC099654
+#	The AGP files are correct, the sequence.inf file lists these
+#	twice: AC004491.1 AC004491.2
+#	AC004921.1 AC004921.2 AC004983.2 AC004983.3
+#	AC005088.2 AC005088.3 AC006014.2 AC006014.3
+#	AC099654.4 AC099654.5
+
+# for hg18, NCBI did not provide the seq.inf file.
+
+# FILES ARE NOW READY FOR REPEAT MASKING - start that process as
+#	other steps here can proceed in parallel.
+
+#	Previous practice used to copy everything over for jkStuff from a
+#	previous build.  Rather than do that, pick up whatever is needed
+#	at the time it is needed and verify that it is going to do what
+#	you expect.
+
+    cd /cluster/data/hg18
+    mkdir jkStuff
+
+# Create the contig.gl files - XXX - NCBI doesn't deliver
+# contig_overlaps.agp - 2004-06-18 - this is beginning to come
+# together and there is now a contig_overlaps.agp file
+
+#	This is properly done below with a combination of psLayout
+#	alignments to create the contig_overlaps.agp file
+# /cluster/bin/i386/agpToGl contig_overlaps.agp . -md=seq_contig.md
+# Create chromosome gl files
+# jkStuff/liftGl.csh contig.gl
+
+# CREATING DATABASE  (DONE - 2005-11-30 - Fan)
+
+    ssh hgwdev
+
+# Make sure there is at least 5 gig free on hgwdev:/var/lib/mysql
+    df -h /var/lib/mysql
+# Filesystem            Size  Used Avail Use% Mounted on
+# /dev/sdc1             1.8T  1.3T  356G  79% /var/lib/mysql
+
+# Create the database.
+    hgsql -e 'create database hg18' mysql
+# Copy over grp table (for track grouping) from another database:
+    hgsql -e "create table grp (PRIMARY KEY(NAME)) select * from hg17.grp" hg18
+
+# The DB updates to grp below are not needed since we copied from hg17.
+# ENCODE groups
+# Added 2005-08016 kate
+    echo 'UPDATE grp SET priority=7 WHERE name="varRep"'| hgsql hg18
+    echo 'UPDATE grp SET priority=8 WHERE name="encode"'| hgsql hg18
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeGenes", "ENCODE Regions and Genes", 8.1)' | hgsql hg18
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeTxLevels", "ENCODE Transcript Levels", 8.2)' | hgsql hg18
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeChip", "ENCODE Chromatin Immunoprecipitation", 8.3)' | hgsql hg18
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeChrom", "ENCODE Chromosome, Chromatin and DNA Structure", 8.4)' | hgsql hg18
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeCompGeno", "ENCODE Comparative Genomics", 8.5)' | hgsql hg18
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeVariation", "ENCODE Variation", 8.6)' | hgsql hg18
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("encodeAnalysis", "ENCODE Analysis", 8.9)' | hgsql hg18
+    
+# MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) NIBS
+#	(DONE - 2005-12-02 - Fan)
+
+# Make nib/, unmasked until RepeatMasker and TRF steps are done.
+# Do this now so that the chromInfo table will exist and thus the
+#	trackDb tables can be built in the next step.
+#	These unmasked nibs will be replaced by the masked nibs after
+#	repeat mask and trf are done.
+    ssh kkstore02
+    cd /cluster/data/hg18
+    cp /cluster/data/hg17/jkStuff/chrFa.csh jkStuff -p
+
+# Make chr*.fa from contig .fa
+#  Copied chrFa.sh from hg17/jkStuff, renamed it to chrFa.csh
+bash
+time ./jkStuff/chrFa.csh
+# real    2m34.406s
+# user    1m17.405s
+# sys     0m16.730s
+exit
+
+    mkdir nib
+    foreach c (`cat chrom.lst`)
+      foreach f ($c/chr${c}{,_random}.fa)
+        if (-e $f) then
+          echo "nibbing $f"
+          /cluster/bin/i386/faToNib $f nib/$f:t:r.nib
+        endif
+      end
+    end
+
+# Make symbolic links from /gbdb/hg18/nib to the real nibs.
+    ssh hgwdev
+    mkdir -p /gbdb/hg18/nib
+    ln -s /cluster/data/hg18/nib/chr*.nib /gbdb/hg18/nib
+# Load /gbdb/hg18/nib paths into database and save size info.
+    cd /cluster/data/hg18
+    hgsql hg18  < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgNibSeq -preMadeNib hg18 /gbdb/hg18/nib */chr*.fa
+    hgsql -N -e "select chrom,size from chromInfo order by chrom" hg18 \
+	> chrom.sizes
+# You can compare this chrom.sizes with the previously created
+# chrom_sizes.  Should be no difference
+    sort chrom_sizes > s0
+    sort chrom.sizes | grep -v random > s1
+    diff s0 s1
+    rm s0 s1
+
+# MAKE HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE - 2005-12-06 - Fan)
+#	dbDb orderKey updated 2005-12-06 - Fan
+    ssh hgwdev
+#	reset dbDb orderKey - these have never been ordered properly
+#	before, this will get them on the program.
+    hgsql -e 'update dbDb set orderKey=11 where name = "hg17";' \
+	-h genome-testdb hgcentraltest
+    hgsql -e 'update dbDb set orderKey=12 where name = "hg16";' \
+	-h genome-testdb hgcentraltest
+    hgsql -e 'update dbDb set orderKey=13 where name = "hg15";' \
+	-h genome-testdb hgcentraltest
+    hgsql -e 'update dbDb set orderKey=14 where name = "hg13";' \
+	-h genome-testdb hgcentraltest
+
+# Enter hg18 into hgcentraltest.dbDb so test browser knows about it:
+    hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
+	defaultPos, active, orderKey, genome, scientificName, \
+	htmlPath, hgNearOk, hgPbOk, sourceName) \
+	VALUES("hg18", "Dec 2005", "/gbdb/hg18/nib", "Human", \
+	"chr4:56214201-56291736", 1, 10, "Human", "Homo sapiens", \
+	"/gbdb/hg18/html/description.html", 0, 0, "NCBI Build 36");' \
+	-h genome-testdb hgcentraltest
+# Make trackDb table so browser knows what tracks to expect:
+    cd ~/kent/src/hg/makeDb/trackDb
+    cvs up -d -P .
+# Edit the makefile to add hg18 in all the right places and do
+    make update
+    make alpha
+    cvs commit makefile
+
+# MAKE LIFTALL.LFT, NCBI.LFT (DONE - 2005-12-07 Fan)
+    cd /cluster/data/hg18
+    mkdir -p jkStuff
+    cat */lift/{ordered,random}.lft > jkStuff/liftAll.lft
+# Create jkStuff/ncbi.lft for lifting stuff built with the NCBI assembly.
+# Note: this ncbi.lift will not lift floating contigs to chr_random coords,
+# but it will show the strand orientation of the floating contigs 
+# (grep for '|').
+#   mdToNcbiLift seq_contig.md jkStuff/ncbi.lft 
+#	XXXX - appears to be unused, not done - Hiram
+
+# REPEAT MASKING (DONE - 2005-12-09 - Fan)
+
+#	Record the RM version here:
+ls -l /cluster/bluearc/RepeatMasker
+# lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
+
+/cluster/bluearc/RepeatMasker/RepeatMasker | head -1
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.1 2005/12/13 00:38:43 fanhsu Exp $
+
+#	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
+#	as this changes over time and there is no record in the results
+
+# Split contigs, run RepeatMasker, lift results
+#	This split takes a few minutes
+    ssh kkstore02
+    cd /cluster/data/hg18
+    foreach chrom ( `cat chrom.lst` )
+	foreach c ( $chrom/N{C,G,T}_?????? )
+	    set contig = $c:t
+	    echo "splitting ${chrom}/${contig}/${contig}.fa"
+	    faSplit size ${chrom}/${contig}/$contig.fa 500000 \
+		${chrom}/${contig}/${contig}_ \
+		-lift=${chrom}/${contig}/$contig.lft -maxN=500000
+	end
+    end
+
+#- Make the run directory and job list:
+    cd /cluster/data/hg18
+    mkdir -p jkStuff
+#  According to RepeatMasker help file, no arguments are required to
+#	specify species because its default is set for primate (human)
+#  This run script saves the .tbl file to be sent to Arian.  He uses
+# those for his analysis.  Sometimes he needs the .cat and .align files for
+# checking problems.  Krish needs the .align files, they are large.
+
+    cat << '_EOF_' > jkStuff/RMHuman
+#!/bin/csh -fe
+
+cd $1
+pushd .
+/bin/mkdir -p /tmp/hg18/$2
+/bin/cp $2 /tmp/hg18/$2/
+cd /tmp/hg18/$2
+/cluster/bluearc/RepeatMasker/RepeatMasker -ali -s $2
+popd
+/bin/cp /tmp/hg18/$2/$2.out ./
+if (-e /tmp/hg18/$2/$2.align) /bin/cp /tmp/hg18/$2/$2.align ./
+if (-e /tmp/hg18/$2/$2.tbl) /bin/cp /tmp/hg18/$2/$2.tbl ./
+# if (-e /tmp/hg18/$2/$2.cat) /bin/cp /tmp/hg18/$2/$2.cat ./
+/bin/rm -fr /tmp/hg18/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/hg18/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/hg18
+'_EOF_'
+# << this line makes emacs coloring happy
+    chmod +x jkStuff/RMHuman
+
+    ssh kkstore02
+    cd /cluster/data/hg18
+    mkdir RMRun
+    rm -f RMRun/RMJobs
+    touch RMRun/RMJobs
+    foreach d ( `cat chrom.lst` )
+     foreach c ( ${d}/N{C,G,T}_*/N{C,G,T}_*_*.fa )
+        set f = $c:t
+        set cc = $c:h
+        set contig = $cc:t
+        echo /cluster/store11/gs.19/build36/jkStuff/RMHuman \
+   		/cluster/store11/gs.19/build36/${d}/${contig} $f \
+   '{'check out line+ /cluster/store11/gs.19/build36/${d}/${contig}/$f.out'}' \
+          >> RMRun/RMJobs
+      end
+    end
+
+# We have 5990 jobs in RMJobs:
+    wc RMRun/RMJobs
+#	5990   41930 1127992 RMRun/RMJobs
+
+#- Do the run
+    ssh pk
+    cd /cluster/data/hg18/RMRun
+    para create RMJobs
+    para try, para check, para check, para push, para check,...
+
+#- While that is running, you can run TRF (simpleRepeat) on the small
+# cluster.  See SIMPLE REPEAT section below
+# Completed: 5990 of 5990 jobs
+# CPU time in finished jobs:   30661460s  511024.34m  8517.07h  354.88d  0.972 y
+# IO & Wait Time:                 38038s     633.96m    10.57h    0.44d  0.001 y
+# Average job time:                5125s      85.42m     1.42h    0.06d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            6693s     111.55m     1.86h    0.08d
+# Submission to last job:         86532s    1442.20m    24.04h    1.00d
+
+#	Lift up the split-contig .out's to contig-level .out's
+#
+#	If a mistake is made in the following it would be possible to
+#	destroy all the RM output.  So, just to be paranoid, save all
+#	the RM output in bluearc for the time being:
+    ssh kkstore02
+
+    cd /cluster/data/hg18
+    mkdir /cluster/bluearc/hg18/RMOutput
+    foreach c ( `cat chrom.lst` )
+     foreach d ( ${c}/N{C,G,T}_* )
+	set T = /cluster/bluearc/hg18/RMOutput/${d}
+	mkdir -p ${T}
+        cd ${d}
+        set contig = $d:t
+        cp -p ${contig}_?{,?,??}.fa.out ${T}
+        cd ../..
+	echo "${d} done"
+     end
+    end
+#	Make sure we got them all:
+#	(this doesn't work later since there are more *.fa.out files
+#	after the lifting.  More explicitly to find just these:
+#		find . -name "N?_*_*.fa.out" -print | wc -l
+    find . -name "*.fa.out" -print | wc -l
+#	5990
+    find /cluster/bluearc/hg18/RMOutput -type f | wc -l
+#	5990
+#	same count
+
+#	OK, now you can try this operation, do it in a script like this
+#	and save the output of the script for a record of what happened.
+
+    cat << '_EOF_' > jkStuff/liftRM.csh
+#!/bin/csh -fe
+foreach c ( `cat chrom.lst` )
+ foreach d ( ${c}/N{C,G,T}_* )
+    cd $d
+    set contig = $d:t
+    liftUp $contig.fa.out $contig.lft warn ${contig}_?{,?,??}.fa.out 
+    cd ../..
+ end
+end
+'_EOF_'
+    chmod +x jkStuff/liftRM.csh
+    mkdir scriptsOutput
+    
+    script lift.log
+    bash
+    time jkStuff/liftRM.csh > scriptsOutput/liftRM.1 2>&1
+    exit
+    exit
+
+#	Check that they all were done:
+    grep "fa.out" scriptsOutput/liftRM.1 | wc -l
+#	5990
+#	same count as above
+
+#- Lift up RepeatMask .out files to chromosome coordinates via
+# picked up jkStuff/liftOut2.sh from the hg17 build.  Renamed to
+# liftOut2.csh, changed the line that does the chrom listing
+    bash
+    time ./jkStuff/liftOut2.csh > scriptsOutput/liftOut2 2>&1
+# real    0m30.488s
+# user    0m24.670s
+# sys     0m2.797s
+# seems much faster than hg17 ???
+    
+# hg17 numbers:
+#	real    9m46.780s
+#	user    1m18.900s
+#	sys     7m33.990s
+
+#- By this point, the database should have been created (above):
+    ssh hgwdev
+    cd /cluster/data/hg18
+    bash
+    time hgLoadOut hg18 ?/*.fa.out ??/*.fa.out *hap*/*.fa.out > \
+	scriptsOutput/hgLoadOut 2>&1
+# real    9m9.045s
+# user    2m19.500s
+# sys     0m24.440s
+
+# errors during this load:  (there are always a couple of these)
+# Strange perc. field -1.2 line 153851 of 2/chr2.fa.out
+# Strange perc. field -10423.3 line 174747 of 3/chr3.fa.out
+# Strange perc. field -5635.9 line 174747 of 3/chr3.fa.out
+# Strange perc. field -259.3 line 174747 of 3/chr3.fa.out
+# Strange perc. field -1.4 line 205545 of 4/chr4.fa.out
+# Strange perc. field -0.1 line 167690 of 7/chr7.fa.out
+# Strange perc. field -1331.2 line 198656 of 7/chr7.fa.out
+# Strange perc. field -1460.4 line 198656 of 7/chr7.fa.out
+# Strange perc. field -4.2 line 223183 of 7/chr7.fa.out
+# Strange perc. field -3192.0 line 60424 of 8/chr8.fa.out
+# Strange perc. field -423.4 line 60424 of 8/chr8.fa.out
+# Strange perc. field -784.0 line 60424 of 8/chr8.fa.out
+# Strange perc. field -0.1 line 52020 of X/chrX.fa.out
+# Strange perc. field -4526.7 line 190254 of X/chrX.fa.out
+# Strange perc. field -3757.2 line 190254 of X/chrX.fa.out
+# Strange perc. field -597.2 line 190254 of X/chrX.fa.out
+# Strange perc. field -13030.4 line 137624 of 16/chr16.fa.out
+# Strange perc. field -1359.8 line 137624 of 16/chr16.fa.out
+# Strange perc. field -2223.5 line 137624 of 16/chr16.fa.out
+# Strange perc. field -1.3 line 11573 of 22/chr22.fa.out
+# Strange perc. field -12.7 line 69873 of 22/chr22.fa.out
+
+
+#	Verify we have similar results to previous assembly:
+#	featureBits hg18 rmsk
+# 	1406290513 bases of 3107677273 (45.252%) in intersection
+#	featureBits -countGaps hg17 rmsk
+#	1390952984 bases of 3095016460 (44.942%) in intersection
+#	featureBits hg17 rmsk
+#	1391378842 bases of 2867328468 (48.525%) in intersection
+#	featureBits hg16 rmsk
+#	1388770568 bases of 2865248791 (48.469%) in intersection
+#	Now proceed to MASK SEQUENCE BOTH REPEATMASKER AND SIMPLE REPEAT/TRF
+#	following the SIMPLE REPEAT sections below
+
+# let Rachel know that RepeatMask is done.
+
+# SIMPLE REPEAT [TRF] TRACK (DONE - 2005-12-07 - Fan)
+#	Copy the contigs, first to the bluearc, then to /iscratch/i
+    ssh kkstore02
+    mkdir /cluster/bluearc/hg18
+    mkdir /cluster/bluearc/hg18/contigs
+
+    cd /cluster/data/hg18
+    foreach ctg ( `cat contig.lst` )
+	set c = $ctg:t
+ 	echo "$ctg > /cluster/bluearc/hg18/contigs/$c"
+	cp -p $ctg /cluster/bluearc/hg18/contigs/$c
+    end
+#	Check how much is there:
+#	du -hsc /cluster/bluearc/hg18/contigs
+#	2.8G    /cluster/bluearc/hg18/contigs
+    exit
+
+# Distribute contigs to /iscratch/i
+    ssh pk
+    mkdir -p /san/sanvol1/scratch/hg18/unmaskedContigs
+    cd /san/sanvol1/scratch/hg18/unmaskedContigs
+    cp -p /cluster/bluearc/hg18/contigs/* .
+    ls .
+
+# Verify same amount made it there:
+#	du -hsc /san/sanvol1/scratch/hg18/unmaskedContigs
+#	2.9G    /san/sanvol1/scratch/hg18/unmaskedContigs
+#	Then send them to the other 7 Iservers
+#    /cluster/bin/iSync
+
+#	Go to the small cluster for this business:
+    ssh pk
+
+    mkdir -p /cluster/data/hg18/bed/simpleRepeat
+    cd /cluster/data/hg18/bed/simpleRepeat
+    mkdir trf
+    cat << '_EOF_' > runTrf
+#!/bin/csh -fe
+#
+set path1 = $1
+set inputFN = $1:t
+set outpath = $2
+set outputFN = $2:t
+mkdir -p /tmp/$outputFN
+cp $path1 /tmp/$outputFN
+pushd .
+cd /tmp/$outputFN
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $inputFN /dev/null -bedAt=$outputFN -tempDir=/tmp
+popd
+rm -f $outpath
+cp -p /tmp/$outputFN/$outputFN $outpath
+rm -fr /tmp/$outputFN/*
+rmdir --ignore-fail-on-non-empty /tmp/$outputFN
+'_EOF_'
+# << this line makes emacs coloring happy
+    chmod +x runTrf
+
+    cat << '_EOF_' > gsub
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+# << this line makes emacs coloring happy
+
+    ls -1S /san/sanvol1/scratch/hg18/unmaskedContigs/*.fa > genome.lst
+    gensub2 genome.lst single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    para check
+# Completed: 378 of 378 jobs
+# CPU time in finished jobs:      18956s     315.93m     5.27h    0.22d  0.001 y
+# IO & Wait Time:                  2519s      41.98m     0.70h    0.03d  0.000 y
+# Average job time:                  57s       0.95m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            2345s      39.08m     0.65h    0.03d
+# Submission to last job:          2427s      40.45m     0.67h    0.03d
+
+bash
+liftUp simpleRepeat.bed /cluster/data/hg18/jkStuff/liftAll.lft \
+warn trf/*.bed  > lu.out 2>&1
+
+# Load into the database:
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/simpleRepeat
+    /cluster/bin/i386/hgLoadBed hg18 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+#	Loaded 629076 elements of size 16
+#	Compare with previous assembly
+    featureBits hg18 simpleRepeat
+# 56164158 bases of 3107677273 (1.807%) in intersection
+# 	featureBits hg17 simpleRepeat
+#	54952425 bases of 2866216770 (1.917%) in intersection
+#     featureBits hg16 simpleRepeat
+#	54320136 bases of 2865248791 (1.896%) in intersection
+#	GAPS weren't in hg18 yet at this point, after gaps added:
+#	featureBits hg18 simpleRepeat
+#	54964044 bases of 2867328468 (1.917%) in intersection
+#	featureBits -countGaps hg18 simpleRepeat
+#	54964044 bases of 3096628158 (1.775%) in intersection
+
+# PROCESS SIMPLE REPEATS INTO MASK (DONE - 2005-12-09 - Fan)
+# After the simpleRepeats track has been built, make a filtered version 
+# of the trf output: keep trf's with period <= 12:
+    ssh kkstore02
+    mkdir -p cd /cluster/data/hg18/bed/simpleRepeat
+    cd /cluster/data/hg18/bed/simpleRepeat
+    mkdir -p trfMask
+    foreach f (trf/*.bed)
+      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+
+#	The 4 lines below were left over from makeHg17.doc.
+#	EXPERIMENT, at a filter of <= 12, we have coverage:
+#	20904399 bases of 2867328468 (0.729%) in intersection
+#	at a filter of <= 9, we have coverage:
+#	19271270 bases of 2867328468 (0.672%) in intersection
+
+# Lift up filtered trf output to chrom coords as well:
+    cd /cluster/data/hg18
+    mkdir bed/simpleRepeat/trfMaskChrom
+    foreach c ( `cat chrom.lst` )
+      if (-e $c/lift/ordered.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+          $c/lift/ordered.lst > $c/lift/oTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+      endif
+      if (-e $c/lift/random.lst) then
+        perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+           $c/lift/random.lst > $c/lift/rTrf.lst
+        liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+          jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+      endif
+    end
+
+# MASK SEQUENCE BOTH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE - 2005-12-09, Fan)
+# This used to be done right after RepeatMasking.  Now, we mask with 
+# TRF as well, so do this after the "PROCESS SIMPLE REPEATS" step above,
+#	and after Repeat Masker is complete.
+    ssh kkstore02
+    cd /cluster/data/hg18
+
+# Make chr*.fa from contig .fa
+#  chrFa.csh was already copied from hg17/jkStuff
+    bash    
+    time ./jkStuff/chrFa.csh > scriptsOutput/chrFa.out 2>&1 &
+# real    2m35.734s
+# user    1m18.351s
+# sys     0m16.596s
+# much faster than hg17 numbers as shown below.  ???
+
+# old hg17 numbers:
+#	real    13m18.512s
+#	user    9m1.670s
+#	sys     1m7.290s
+
+#- Soft-mask (lower-case) the contig and chr .fa's
+    time ./jkStuff/makeFaMasked.csh > scriptsOutput/maFaMasked.out 2>&1
+# real    8m47.289s
+# user    3m45.698s
+# sys     1m44.416s
+
+#	old hg17 numbers:	
+#	real    29m31.623s
+#	user    13m49.700s
+#	sys     5m58.750s
+
+#- Make hard-masked .fa.masked files as well:
+    time ./jkStuff/makeHardMasked.csh > scriptsOutput/maHardMasked.out 2>&1
+# real    5m48.833s
+# user    1m41.926s
+# sys     0m52.084s
+
+#- Create the bothMasksNib/ directory
+    time ./jkStuff/makeNib.csh > scriptsOutput/maNib.out 2>&1
+# real    2m23.280s
+# user    1m6.462s
+# sys     0m19.795s
+
+# old hg17 numbers:
+#	real    14m41.694s
+#	user    6m28.000s
+#	sys     1m42.500s
+
+# Make symbolic links from /gbdb/hg18/nib to the real nibs.
+    ssh hgwdev
+    cd /cluster/store11/gs.19/build36
+    mv nib nib.raw
+    mv bothMasksNib nib
+    rm /gbdb/hg18/nib/*.nib
+    ln -s `pwd`/nib/* /gbdb/hg18/nib
+
+# Load /gbdb/hg18/nib paths into database and save size info.
+
+    cd /cluster/data/hg18
+    hgNibSeq -preMadeNib hg18 /gbdb/hg18/nib */chr*.fa
+# 3107677273 total bases
+
+#	Should be the same size as before
+    hgsql -N -e "select chrom,size from chromInfo order by chrom" hg18 \
+	> chrom.sizes.masked
+    diff chrom.sizes chrom.sizes.masked
+#	should be no output at all, thus:
+    rm chrom.sizes.masked
+
+# Copy the masked contig fa to /scratch and /iscratch
+#	And everything else we will need for blastz runs, etc ...
+#	Best to do this sequence first to /cluster/bluearc/scratch,
+#	which is going to be the source for the /scratch copy.
+#	And then from there to the /iscratch
+#	Make sure you are on the fileserver for the original source:
+    ssh kkstore02
+    mkdir -p /cluster/bluearc/scratch/hg/gs.19/build36
+    cd /cluster/bluearc/scratch/hg/gs.19/build36
+
+#	these copies take less than 2 minutes each
+    mkdir bothMaskedNibs
+    cp -p /cluster/data/hg18/nib/*.nib ./bothMaskedNibs
+    mkdir maskedContigs
+    foreach chrom ( `cat /cluster/data/hg18/chrom.lst` )
+	cp -p /cluster/data/hg18/${chrom}/N{C,G,T}_*/N{C,G,T}_??????.fa \
+		./maskedContigs
+	echo "done ${chrom}"
+    end
+#	make sure you have them all:
+    ls maskedContigs | wc -l
+#	378
+    wc -l /cluster/data/hg18/contig.lst
+#	378
+    mkdir rmsk
+    foreach chrom ( `cat /cluster/data/hg18/chrom.lst` )
+	cp -p /cluster/data/hg18/${chrom}/*.out ./rmsk
+	echo "done ${chrom}"
+    end
+
+#	Now, go to the destination for /iscratch and copy from the
+#	bluearc
+    ssh kkr1u00
+    mkdir -p /iscratch/i/gs.19/build36
+    cd /iscratch/i/gs.19/build36
+#	This takes about 5 minutes
+    rsync -arlv /cluster/bluearc/scratch/hg/gs.19/build36/ .
+    
+    bash
+    time /cluster/bin/iSync
+#	real    7m27.649s
+
+# request rsync of /cluster/bluearc/scratch to the KiloKluster /scratch
+
+# Ask sysadmin to bring up BLAT server.
+
+# update central dbDb table to add the new blat server entry
+
+    echo 'INSERT INTO blatServers (db, host, port, isTrans) \
+                VALUES ("hg18", "blat19", "17778", "1"); \
+          INSERT INTO blatServers (db, host, port, isTrans) \
+                VALUES ("hg18", "blat19", "17779", "0");' \
+    | hgsql -h genome-testdb hgcentraltest
+
+# LOAD ctgPos table - Contig position track 
+#	After fixing up hgCtgPos to accept the -chromLst argument, simply:
+    cd /cluster/data/hg18
+    hgCtgPos -chromLst=chrom.lst hg18 .
+
