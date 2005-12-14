@@ -17,3 +17,10 @@ nameSql select spId from kgXref where kgID = '%s'
 url ../cgi-bin/pbTracks?proteinID=%s
 priority 21
 
+name exonPrimer
+shortLabel ExonPrimer
+tables kgXref
+idSql select kgID from kgXref where kgID = '%s'
+url http://ihg.gsf.de/cgi-bin/primer/ExonPrimerUCSC.pl?db=mm7&acc=%s
+priority 95
+
