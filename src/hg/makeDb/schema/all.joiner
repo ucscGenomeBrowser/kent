@@ -1586,15 +1586,19 @@ identifier extFileId
     hg16.multizMm3Rn3GalGal2_phyloHMM.extFile
     hg15.multizMm3Rn2.extFile
     rn3.multizHg15Mm3.extFile
-    mm5.multiz5way.extFile
-    hg17.multiz8way.extFile
+    $gbd.multiz4way.extFile
+    $gbd.multiz5way.extFile
+    $gbd.multiz6way.extFile
+    $gbd.multiz7way.extFile
+    $gbd.multiz8way.extFile
+    $gbd.multiz9way.extFile
+    $gbd.multiz10way.extFile
+    $gbd.multiz11way.extFile
+    $gbd.multiz12way.extFile
     $sacCer.multizYeast.extFile
-    $dm.multiz8way.extFile
-    $dm.multiz9way.extFile
     $dm.a_gambiae_mypa.extFile
     $dm.d_pseudoobscura_mypa.extFile
     $dm.d_yakuba_mypa.extFile
-    danRer2.multiz6way.extFile
 
 identifier gbExtFileId
 "External file ID for GenBank incremental update system"
@@ -2018,6 +2022,24 @@ tablesIgnored $gbd
     blat%
     blast%
     repeats
+    phastCons4way
+    phastConsElements4way
+    phastCons5way
+    phastConsElements5way
+    phastCons6way
+    phastConsElements6way
+    phastCons7way
+    phastConsElements7way
+    phastCons8way
+    phastConsElements8way
+    phastCons9way
+    phastConsElements9way
+    phastCons10way
+    phastConsElements10way
+    phastCons11way
+    phastConsElements11way
+    phastCons12way
+    phastConsElements12way
 
 tablesIgnored $kgDb
     pbAaDist_
@@ -2042,8 +2064,6 @@ tablesIgnored $dm
     fbRole
     flyreg
     flyreg2
-    phastCons9way
-    phastConsElements9way
 
 tablesIgnored $fr
     chr%_gold
@@ -2198,3 +2218,7 @@ tablesIgnored hg16
 
 tablesIgnored hg17
     ecoresTetNig1
+
+tablesIgnored canFam2
+    uncertified
+
