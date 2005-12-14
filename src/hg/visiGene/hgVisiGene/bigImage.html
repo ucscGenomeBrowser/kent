@@ -182,7 +182,7 @@ if (doHTML) {  // since this may be expensive for old machines, skip if just a z
     html = '';
     for(r=0; r<ht; r++) {
 	for(c=0; c<wt; c++) {
-	    html += '<IMG ID="myImg_'+cnt+'" src="dot_clear.gif" STYLE="position:absolute;left:-10000px;top:-10000px;">';
+	    html += '<IMG ID="myImg_'+cnt+'" src="images/dot_clear.gif" STYLE="position:absolute;left:-10000px;top:-10000px;">';
 	    cnt++;
 	}
     }   
@@ -205,7 +205,7 @@ cnt=0;
 for(r=0; r<ht; r++) {
     for(c=0; c<wt; c++) {
 	var cell = document.getElementById("myImg_"+cnt);
-	var cstr = "dot_clear.gif";
+	var cstr = "images/dot_clear.gif";
 	cell.style.top  = -hc-hSub*m; // move it off screen to hide  -hc
 	cell.style.left = -wc-wSub*m; // -wc
 	cell.r = -1;  // used to identify current position role
@@ -305,7 +305,7 @@ for(i=0;i<cells.length;i++) {
 	invistop++;              // point to new top element position
 	invis[invistop] = cell;  // add to list of invisible IMGs avail for reuse
 	vis[""+cell.r+"_"+cell.c] = null;     // erase id from hash of visible cell.ids
-	cstr = "dot_clear.gif";
+	cstr = "images/dot_clear.gif";
 	cell.path=cstr;
 	//cell.src=cstr; // causes IE flashes, don't even need it so skip it
 	cell.r = -1;
@@ -1076,7 +1076,7 @@ STYLE="border:thin;position:absolute;left:60;top:60;width:750;height:600;overflo
 
 This is good for making the IE hover-icons, at least reduces it to only one in upper-left corner.
 However it messes up Safari.  However the div in Safari at least still helps reduce dragging problems!
-<IMG SRC="../visiGene/dot_clear.gif" width="100%" height="100%">
+<IMG SRC="/images/dot_clear.gif" width="100%" height="100%">
 
 visibility:hidden;
 

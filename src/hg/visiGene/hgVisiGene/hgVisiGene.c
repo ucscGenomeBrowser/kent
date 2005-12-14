@@ -239,7 +239,7 @@ if (imageCount > 0)
 "    ID='perspective'"
 "    STYLE='position:absolute;left:0px;top:0px;'"
 "    >"
-"    <IMG ID='perspBox' SRC='../visiGene/dot_clear.gif' BORDER=2 HEIGHT=100 WIDTH=100 STYLE='border-color:#8080FF;border-width:1' "
+"    <IMG ID='perspBox' SRC='../images/dot_clear.gif' BORDER=2 HEIGHT=100 WIDTH=100 STYLE='position:absolute;left:0px;top:0px;border-color:#8080FF;border-width:1' "
 ">"
 "    </DIV>"
 "    </DIV>"
@@ -333,10 +333,10 @@ if (imageId != 0)
 
     splitPath(p, dir, name, extension);
 #ifdef DEBUG
-    safef(buf,sizeof(buf),"../visiGene/bigImageTest.html?url=%s%s/%s&w=%d&h=%d",
+    safef(buf,sizeof(buf),"../bigImageTest.html?url=%s%s/%s&w=%d&h=%d",
 	    dir,name,name,w,h);
 #else	    
-    safef(buf,sizeof(buf),"../visiGene/bigImage.html?url=%s%s/%s&w=%d&h=%d",
+    safef(buf,sizeof(buf),"../bigImage.html?url=%s%s/%s&w=%d&h=%d",
 	    dir,name,name,w,h);
 #endif	    
     printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);

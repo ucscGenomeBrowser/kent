@@ -15,12 +15,14 @@ compile: $O
 	mv ${AOUT} $A${EXE}
 
 html: bigImage.html
-	cp bigImage.html /usr/local/apache/htdocs/visiGene/
+	cp bigImage.html /usr/local/apache/htdocs/
 
 htmltest: bigImage.html
-	cp bigImage.html /usr/local/apache/htdocs/visiGene/bigImageTest.html
+	cp bigImage.html /usr/local/apache/htdocs/bigImageTest.html
+
+gif:
+	cp dot_clear.gif /usr/local/apache/htdocs/images/
 
 testVisiSearch:  visiSearch.o testVisiSearch.o
 	${CC} -o testVisiSearch visiSearch.o testVisiSearch.o ${MYLIBS} ${L}
 
-# use make clean; make CFLAGS=-DDEBUG to compile to turn on DEBUG flag
