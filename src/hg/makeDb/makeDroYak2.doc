@@ -730,3 +730,26 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+# CONTAMINATION (DONE 12/13/05 angie)
+    # LaDeana emailed a list of 57 contaminated contigs on chrU -- 
+    # make a track out of her coords.  She cleared them all to NNN's 
+    # in a 2.1 release for FlyBase, but all coords are the same and 
+    # we can just make a contamination track showing the affected 
+    # chrU contigs, instead of redoing the whole db.
+    mkdir /cluster/data/droYak2/bed/contamination
+    cd /cluster/data/droYak2/bed/contamination
+    # saved off LaDeana's emailed list to contamContigs.txt
+    wc -l contamContigs.txt
+#57 contamContigs.txt
+    cp /dev/null contamination.bed
+    foreach ctg (`cat contamContigs.txt`)
+      fgrep -w $ctg ../../U/chrU.agp \
+      | awk '{print $1 "\t" $2-1 "\t" $3 "\t" $6;}' >> contamination.bed
+    end
+    wc -l contamination.bed
+#57 contamination.bed
+    hgLoadBed droYak2 contamination contamination.bed
+
+
