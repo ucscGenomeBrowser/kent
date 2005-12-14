@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.33 2005/05/24 21:00:45 heather Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.34 2005/12/14 19:42:12 kent Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -525,7 +525,10 @@ if (conn != NULL)
 	{
 	okFlag = FALSE;
 	if (hits==total) okFlag = TRUE;
-	hitsNeeded = round(total * jf->minCheck);
+	if (jf->minCheck < 0.999999)	/* Control for rounding error */
+	    hitsNeeded = round(total * jf->minCheck);
+	else
+	    hitsNeeded = total;
 	if (jf->minCheck < 1.0 && hits >= hitsNeeded) okFlag = TRUE;
 	verbose(1, " %s.%s.%s - hits %d of %d%s\n", db, jf->table, jf->field, hits, total, okFlag ? " ok":"");
 	if (hits < hitsNeeded)
