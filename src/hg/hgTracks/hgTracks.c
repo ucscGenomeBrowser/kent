@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1054 2005/12/11 04:50:43 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1055 2005/12/14 18:45:43 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2941,7 +2941,6 @@ if (hTableExists("kgXref"))
             }
         /* should this be a hash instead? */
         kgE->name = dyStringCannibalize(&name);
-    	//lf->extra = dyStringCannibalize(&name);
         kgE->hgg_prot = lf->extra;
         lf->extra = kgE;
 	}
@@ -2952,15 +2951,10 @@ hFreeConn(&conn);
 void loadKnownGene(struct track *tg)
 /* Load up known genes. */
 {
-//enum trackVisibility vis = tg->visibility;
-//tg->items = lfFromGenePredInRange(tg, "knownGene", chromName, winStart, winEnd);
 loadGenePredWithName2(tg);
 /* always do so that protein ID will be in struct */
-//if (vis != tvDense)
-    //{
-    lookupKnownGeneNames(tg->items);
-    slSort(&tg->items, linkedFeaturesCmpStart);
-    //}
+lookupKnownGeneNames(tg->items);
+slSort(&tg->items, linkedFeaturesCmpStart);
 limitVisibility(tg);
 }
 
@@ -3070,7 +3064,6 @@ void knownGeneMethods(struct track *tg)
 /* Make track of known genes. */
 {
 /* use loadGenePredWithName2 instead of loadKnownGene to pick up proteinID */
-//tg->loadItems   = loadGenePredWithName2;
 tg->loadItems   = loadKnownGene;
 tg->itemName 	= knownGeneName;
 tg->mapItemName = knownGeneMapName;
