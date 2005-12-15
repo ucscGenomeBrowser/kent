@@ -16,7 +16,7 @@ type bed 6 +
 exonArrows off
 
 track chainMm6
-shortLabel Mm6 Chain 
+shortLabel Mouse Chain 
 longLabel $o_db ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 123.991
@@ -30,7 +30,7 @@ type chain mm6
 otherDb mm6
 
 track netMm6
-shortLabel Mm6 Net
+shortLabel Mouse Net
 longLabel $o_db ($o_date/$o_db) Alignment Net
 group compGeno
 priority 124.091
