@@ -241,12 +241,15 @@ purchase
 PRACTICAL CONSIDERATIONS
 
 XML files produced this way are typically an order of
-magnitude larger than the relational database.  It
-typically takes about one minute per megabase of
-relational data to produce a dump (which will be
-closer to 10 megabases).  This is assuming that
-there are indexes on all of the fields mentioned
-in the dumpSpec.   If your dump is taking even longer
-than this, it would be good to check your indexes.
-
+magnitude larger than the relational database, and the
+dump speed is not as fast as you might like.  When
+dumping VisiGene, which is well indexed but highly
+relational,  it takes 10 minutes.   The size of the
+XML is 150 meg, while the size of the relational data
+is 25 meg.  Thus for VisiGene it dumps about 2.5 meg
+of relational data a minute, and expands the data
+about 6 times.   On the other hand to just dump
+the 40 meg non-relational all_mrna table from hg17 it 
+takes 15 seconds and produces a 90 meg file, so the speed is 
+about 160 meg/minute and the expansion just over 2x.
 
