@@ -401,6 +401,7 @@ printf("<A HREF=\"/goldenPath/help/hgTracksHelp.html#VisiGeneHelp\" target=_pare
 printf("Help");
 printf("</A>&nbsp;");
 printf("</TD>");
+printf("</TR></TABLE>");
 printf("</FORM>\n");
 htmlEnd();
 }
