@@ -158,7 +158,6 @@ MgFont *mgSmallFont();
 MgFont *mgMediumFont();
 MgFont *mgLargeFont();
 MgFont *mgHugeFont();
-#ifdef NOT_NOW
 MgFont *mgTinyBoldFont();
 MgFont *mgSmallBoldFont();
 MgFont *mgMediumBoldFont();
@@ -169,7 +168,6 @@ MgFont *mgSmallFixedFont();
 MgFont *mgMediumFixedFont();
 MgFont *mgLargeFixedFont();
 MgFont *mgHugeFixedFont();
-#endif
 
 void mgText(struct memGfx *mg, int x, int y, Color color, 
 	MgFont *font, char *text);
