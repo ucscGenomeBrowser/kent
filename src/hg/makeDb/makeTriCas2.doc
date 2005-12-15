@@ -374,7 +374,7 @@ _EOF_
     hgsql -N hgcentraltest -e 'insert into blatServers values("triCas2", "blat19", "17784", 1, 0);
           insert into blatServers values("triCas2", "blat19", "17784", 0, 1);'
 
-# DROSOPHILA PROTEINS BLASTP (DONE 12/14/2005 Andy)
+# FLY PROTEINS TBLASTN (DONE 12/14/2005 Andy)
     ssh hgwdev
     cd san/triCas2/
     mkdir tblastn.dm2
@@ -417,6 +417,7 @@ _EOF_
 
     # Set up run
     ssh pk
+    cd san/triCas2/tblastn.dm2/
     ls -1S flyBaseExons/*.fa > exons.lst
     ls -1S splits/beet*.nsq > targets.lst
     cp /cluster/data/dm2/bed/blat.dm2FB/protein.lft .
@@ -461,9 +462,59 @@ EOF
        sort -rn c60.$part.psl | pslUniq stdin u.$part.psl
        awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$part.psl > m60.$part.psl
     done
-    sort -u -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* > ../tblastnDm2FB.psl
+    sort -u -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* > ../blastnDm2.psl
 
     # Load
     ssh hgwdev
     cd /cluster/data/triCas2/bed/tblastn.dm2
-    hgLoadPsl triCas2 tblastnDm2FB.psl
+    hgLoadPsl triCas2 blastDm2FB.psl
+
+# HUMAN PROTEINS TBLASTN (Done 12/14/2005 Andy)
+    ssh hgwdev
+    cd san/triCas2/
+    mkdir tblastn.hg17
+    cd tblastn.hg17/
+    ln -s ../../andy/triCas2.tblastn/splits.lft 
+    ln -s ../../andy/triCas2.tblastn/splits
+    ln -s ../../andy/blast
+    mkdir humanKgExons
+    cd humanKgExons/
+    # I want about 1000 pieces
+    calc `cat /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | wc -l`/ 1000
+#18929/500 = 37.365
+    splitFile /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl 38 kgExons_
+    for exonPsl in *; do pslxToFa $exonPsl $exonPsl.fa; rm $exonPsl; done
+
+    # Begin run
+    ssh pk
+    cd san/triCas2/tblastn.hg17/
+    ls -1S humanKgExons/*.fa > exons.lst
+    ls -1S splits/beet*.nsq > targets.lst
+    cp /cluster/data/hg17/bed/blat.hg17KG/protein.lft .
+    cp /san/sanVol1/scratch/andy/tblastn{Exons,Gsub} .
+    mkdir blastOut/
+    gensub2 targets.lst exons.lst tblastnGsub spec
+    para create spec
+    para try
+    para push
+    para time
+#Completed: 19680 of 19680 jobs
+#CPU time in finished jobs:    1258626s   20977.10m   349.62h   14.57d  0.040 y
+#IO & Wait Time:                 95442s    1590.70m    26.51h    1.10d  0.003 y
+#Average job time:                  69s       1.15m     0.02h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             410s       6.83m     0.11h    0.00d
+#Submission to last job:          3891s      64.85m     1.08h    0.05d
+
+    # Chaining
+    ssh kkstore01
+    cd /cluster/data/triCas2/bed
+    cp -rd /san/sanVol1/scratch/triCas2/tblastn.hg17 .
+    cd tblastn.hg17/blastOut/
+    cp /san/sanVol1/scratch/andy/triCas2.tblastn/tblastnChain ../
+    ../tblastnChain blastHg17KG.psl
+    
+    # Loading
+    ssh hgwdev
+    cd /cluster/data/triCas2/bed/tblastn.hg17
+    hgLoadPsl triCas2 blastHg17KG.psl
