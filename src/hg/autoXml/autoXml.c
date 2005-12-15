@@ -5,9 +5,10 @@
 #include "dystring.h"
 #include "cheapcgi.h"
 #include "obscure.h"
+#include "portable.h"
 #include "dtdParse.h"
 
-static char const rcsid[] = "$Id: autoXml.c,v 1.21 2005/11/28 02:43:19 kent Exp $";
+static char const rcsid[] = "$Id: autoXml.c,v 1.22 2005/12/15 05:49:17 kent Exp $";
 
 /* Variables that can be over-ridden from command line. */
 char *textField = "text";
@@ -624,12 +625,15 @@ struct dtdElement *el;
 struct dtdAttribute *att;
 struct dtdElChild *ec;
 char upcPrefix[128];
+char incFile[128], incExt[64];
+
+splitPath(incName, NULL, incFile, incExt);
 
 fprintf(f, "/* %s.c %s */\n", prefix, fileComment);
 fprintf(f, "\n");
 fprintf(f, "#include \"common.h\"\n");
 fprintf(f, "#include \"xap.h\"\n");
-fprintf(f, "#include \"%s\"\n", incName);
+fprintf(f, "#include \"%s%s\"\n", incFile, incExt);
 fprintf(f, "\n");
 
 startHandlerPrototype(f, ";");
@@ -660,13 +664,16 @@ void autoXml(char *dtdxFile, char *outRoot)
 struct dtdElement *elList = NULL, *el;
 struct hash *elHash = NULL;
 char hName[512], cName[512];
+char outDir[256];
 
 if (cgiVarExists("prefix"))
     {
     strcpy(prefix, cgiString("prefix"));
     }
 else
-    splitPath(outRoot, NULL, prefix, NULL);
+    splitPath(outRoot, outDir, prefix, NULL);
+if (outDir[0] != 0)
+    makeDir(outDir);
 dtdParse(dtdxFile, prefix, textField, &elList, &elHash);
 printf("Parsed %d elements in %s\n", slCount(elList), dtdxFile);
 sprintf(hName, "%s.h", outRoot);

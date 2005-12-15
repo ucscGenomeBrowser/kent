@@ -101,7 +101,7 @@ AutoXml extends the type field of ATTLIST to include INT or FLOAT for
 numerical rather than string values.  Similarly you can put
 #INT or #FLOAT in place of #PCDATA to put a numerical type in the
 text field.  If you include these extensions please use the .dtdx 
-rather than .dtd suffix on your dtd file.
+rather than .dtd suffix on your dtd file.  Alternatively you can
 
 Currently AutoXML only copes with dtd comments if they start on
 a line by themselves.  AutoXml expects all ELEMENTS and ATTLIST 
