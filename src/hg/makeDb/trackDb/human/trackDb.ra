@@ -1207,8 +1207,8 @@ otherDb hg17
 
 track cnp
 compositeTrack on
-shortLabel CNPs
-longLabel Copy Number Polymorphisms
+shortLabel Structural Var
+longLabel Structural Variation
 group varRep
 priority 146
 visibility hide
