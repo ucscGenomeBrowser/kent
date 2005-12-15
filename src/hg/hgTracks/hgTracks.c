@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1055 2005/12/14 18:45:43 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1056 2005/12/15 00:02:13 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -340,20 +340,56 @@ void initTl()
 /* Initialize layout around small font and a picture about 600 pixels
  * wide. */
 {
+char *fontType = cartUsualString(cart, "fontType", "medium");
+boolean fontExtras = inclFontExtras();
+
 MgFont *font = (MgFont *)NULL;
 tl.textSize = cartUsualString(cart, textSizeVar, "small");
-if (sameString(tl.textSize, "small"))
-     font = mgSmallFont();
-else if (sameString(tl.textSize, "tiny"))
-     font = mgTinyFont();
-else if (sameString(tl.textSize, "medium"))
-     font = mgMediumFont();
-else if (sameString(tl.textSize, "large"))
-     font = mgLargeFont();
-else if (sameString(tl.textSize, "huge"))
-     font = mgHugeFont();
+if (fontExtras && sameString(fontType,"bold"))
+    {
+    if (sameString(tl.textSize, "small"))
+	 font = mgSmallBoldFont();
+    else if (sameString(tl.textSize, "tiny"))
+	 font = mgTinyBoldFont();
+    else if (sameString(tl.textSize, "medium"))
+	 font = mgMediumBoldFont();
+    else if (sameString(tl.textSize, "large"))
+	 font = mgLargeBoldFont();
+    else if (sameString(tl.textSize, "huge"))
+	 font = mgHugeBoldFont();
+    else
+	 font = mgSmallBoldFont();	/*	default to small	*/
+    }
+else if (fontExtras && sameString(fontType,"fixed"))
+    {
+    if (sameString(tl.textSize, "small"))
+	 font = mgSmallFixedFont();
+    else if (sameString(tl.textSize, "tiny"))
+	 font = mgTinyFixedFont();
+    else if (sameString(tl.textSize, "medium"))
+	 font = mgMediumFixedFont();
+    else if (sameString(tl.textSize, "large"))
+	 font = mgLargeFixedFont();
+    else if (sameString(tl.textSize, "huge"))
+	 font = mgHugeFixedFont();
+    else
+	 font = mgSmallFixedFont();	/*	default to small	*/
+    }
 else
-    font = mgSmallFont(); /* default to small */
+    {
+    if (sameString(tl.textSize, "small"))
+	 font = mgSmallFont();
+    else if (sameString(tl.textSize, "tiny"))
+	 font = mgTinyFont();
+    else if (sameString(tl.textSize, "medium"))
+	 font = mgMediumFont();
+    else if (sameString(tl.textSize, "large"))
+	 font = mgLargeFont();
+    else if (sameString(tl.textSize, "huge"))
+	 font = mgHugeFont();
+    else
+	font = mgSmallFont(); /* default to small */
+    }
 tl.font = font;
 tl.mWidth = mgFontStringWidth(font, "M");
 tl.nWidth = mgFontStringWidth(font, "n");
