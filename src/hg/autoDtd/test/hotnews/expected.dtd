@@ -1,9 +1,18 @@
 <!-- This file was created by autoXml based on test/hotnews/in.xml -->
 
+<!-- First some entities to mark numeric types in between tags.  Same as NCBI. -->
+<!ENTITY % INTEGER "#PCDATA">
+<!ENTITY % REAL "#PCDATA">
+
+<!-- Now some entities for numeric attributes. NCBI doesn't define these but we do. -->
+<!ENTITY % int "CDATA">
+<!ENTITY % float "CDATA">
+
+<!-- Now the data structure in test/hotnews/in.xml. -->
 <!ELEMENT rss (
 	channel
 )>
-<!ATTLIST rss version FLOAT #REQUIRED>
+<!ATTLIST rss version %float; #REQUIRED>
 
 <!ELEMENT channel (
 	title,

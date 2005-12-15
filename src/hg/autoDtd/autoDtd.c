@@ -5,7 +5,7 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.8 2005/12/07 19:46:21 kent Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.9 2005/12/15 16:40:06 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -258,9 +258,9 @@ if (type->textAttribute != NULL)
     {
     fprintf(dtdFile, "\t");
     if (!type->textAttribute->nonInt)
-        fprintf(dtdFile, "#INT");
+        fprintf(dtdFile, "%%INTEGER;");
     else if (!type->textAttribute->nonFloat)
-        fprintf(dtdFile, "#FLOAT");
+        fprintf(dtdFile, "%%REAL;");
     else
         fprintf(dtdFile, "#PCDATA");
     fprintf(dtdFile, "\n");
@@ -281,9 +281,9 @@ for (att = type->attributes; att != NULL; att = att->next)
     {
     fprintf(dtdFile, "<!ATTLIST %s %s ", type->name, att->name);
     if (!att->nonInt)
-        fprintf(dtdFile, "INT");
+        fprintf(dtdFile, "%%int;");
     else if (!att->nonFloat)
-        fprintf(dtdFile, "FLOAT");
+        fprintf(dtdFile, "%%float;");
     else
         fprintf(dtdFile, "CDATA");
     if (att->isOptional)
@@ -315,6 +315,13 @@ struct hash *uniqHash = newHash(0);  /* Prevent writing dup defs for shared type
 FILE *dtdFile = mustOpen(dtdFileName, "w");
 FILE *statsFile = mustOpen(statsFileName, "w");
 fprintf(dtdFile, "<!-- This file was created by autoXml based on %s -->\n\n", xmlFileName);
+fprintf(dtdFile, "<!-- First some entities to mark numeric types in between tags.  Same as NCBI. -->\n");
+fprintf(dtdFile, "<!ENTITY %% INTEGER \"#PCDATA\">\n");
+fprintf(dtdFile, "<!ENTITY %% REAL \"#PCDATA\">\n\n");
+fprintf(dtdFile, "<!-- Now some entities for numeric attributes. NCBI doesn't define these but we do. -->\n");
+fprintf(dtdFile, "<!ENTITY %% int \"CDATA\">\n");
+fprintf(dtdFile, "<!ENTITY %% float \"CDATA\">\n\n");
+fprintf(dtdFile, "<!-- Now the data structure in %s. -->\n", xmlFileName);
 fprintf(statsFile, "#Statistics on %s\n", xmlFileName);
 fprintf(statsFile, "#Format is:\n");
 fprintf(statsFile, "#<tag name>  <tag count>\n");

@@ -1,5 +1,14 @@
 <!-- This file was created by autoXml based on test/chado/in.xml -->
 
+<!-- First some entities to mark numeric types in between tags.  Same as NCBI. -->
+<!ENTITY % INTEGER "#PCDATA">
+<!ENTITY % REAL "#PCDATA">
+
+<!-- Now some entities for numeric attributes. NCBI doesn't define these but we do. -->
+<!ENTITY % int "CDATA">
+<!ENTITY % float "CDATA">
+
+<!-- Now the data structure in test/chado/in.xml. -->
 <!ELEMENT chado (
 	_appdata+,
 	cv+,
@@ -113,7 +122,7 @@
 )>
 
 <!ELEMENT seqlen (
-	#INT
+	%INTEGER;
 )>
 
 <!ELEMENT dbxref_id (
@@ -154,7 +163,7 @@
 )>
 
 <!ELEMENT is_internal (
-	#INT
+	%INTEGER;
 )>
 
 <!ELEMENT synonym_id (
@@ -176,7 +185,7 @@
 )>
 
 <!ELEMENT is_current (
-	#INT
+	%INTEGER;
 )>
 
 <!ELEMENT featureloc (
@@ -197,31 +206,31 @@
 )>
 
 <!ELEMENT fmin (
-	#INT
+	%INTEGER;
 )>
 
 <!ELEMENT fmax (
-	#INT
+	%INTEGER;
 )>
 
 <!ELEMENT strand (
-	#INT
+	%INTEGER;
 )>
 
 <!ELEMENT is_fmin_partial (
-	#INT
+	%INTEGER;
 )>
 
 <!ELEMENT is_fmax_partial (
-	#INT
+	%INTEGER;
 )>
 
 <!ELEMENT locgroup (
-	#INT
+	%INTEGER;
 )>
 
 <!ELEMENT rank (
-	#INT
+	%INTEGER;
 )>
 
 <!ELEMENT residue_info (
@@ -247,7 +256,7 @@
 )>
 
 <!ELEMENT is_analysis (
-	#INT
+	%INTEGER;
 )>
 
 <!ELEMENT analysisfeature (
@@ -276,7 +285,7 @@
 )>
 
 <!ELEMENT sourceversion (
-	#FLOAT
+	%REAL;
 )>
 
 <!ELEMENT program (
@@ -284,10 +293,10 @@
 )>
 
 <!ELEMENT programversion (
-	#FLOAT
+	%REAL;
 )>
 
 <!ELEMENT rawscore (
-	#INT
+	%INTEGER;
 )>
 
