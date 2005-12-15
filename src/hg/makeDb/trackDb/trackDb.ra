@@ -2056,6 +2056,14 @@ shortCircuit 1
 termRegex [abuz].[0-9]+(\.[0-9]+)?
 searchPriority 8
 
+searchName knownGeneAcc
+searchTable knownGene
+searchMethod exact
+searchType knownGene
+shortCircuit 1
+termRegex [a-z][a-z0-9][0-9]+
+searchPriority 9
+
 searchName mrnaAcc
 searchTable all_mrna
 searchMethod prefix
@@ -2152,7 +2160,6 @@ searchPriority 50
 
 searchTable knownGene
 searchType knownGene
-shortCircuit 1
 searchPriority 1
 
 searchName refLink
@@ -2212,7 +2219,7 @@ searchPriority 7
 searchTable bacEndPairs
 searchMethod exact
 searchType bed
-termRegex ([[:alnum:]_ ]+|((RP|CT|GS|CH|TAM)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+termRegex ([[:alnum:]_ ]+|((RP|CT|GS|CH|TAM|MSMG)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
 searchPriority 8
 
 searchTable fosEndPairs
@@ -2480,3 +2487,4 @@ priority 170.5
 color 200,0,0
 visibility pack
 type bed 4 .
+
