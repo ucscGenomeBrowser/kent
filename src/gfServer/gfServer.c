@@ -21,24 +21,25 @@
 #include "trans3.h"
 #include "log.h"
 
-static char const rcsid[] = "$Id: gfServer.c,v 1.51 2005/12/06 18:28:51 kent Exp $";
+static char const rcsid[] = "$Id: gfServer.c,v 1.52 2005/12/15 16:38:23 kent Exp $";
 
 static struct optionSpec optionSpecs[] = {
-    {"trans", OPTION_BOOLEAN},
-    {"tileSize", OPTION_INT},
-    {"stepSize", OPTION_INT},
-    {"minMatch", OPTION_INT},
-    {"repMatch", OPTION_INT},
-    {"maxDnaHits", OPTION_INT},
-    {"maxTransHits", OPTION_INT},
-    {"maxNtSize", OPTION_INT},
-    {"maxAaSize", OPTION_INT},
-    {"seqLog", OPTION_BOOLEAN},
-    {"mask", OPTION_BOOLEAN},
     {"canStop", OPTION_BOOLEAN},
     {"log", OPTION_STRING},
-    {"syslog", OPTION_BOOLEAN},
     {"logFacility", OPTION_STRING},
+    {"mask", OPTION_BOOLEAN},
+    {"maxAaSize", OPTION_INT},
+    {"maxDnaHits", OPTION_INT},
+    {"maxGap", OPTION_INT},
+    {"maxNtSize", OPTION_INT},
+    {"maxTransHits", OPTION_INT},
+    {"minMatch", OPTION_INT},
+    {"repMatch", OPTION_INT},
+    {"seqLog", OPTION_BOOLEAN},
+    {"stepSize", OPTION_INT},
+    {"tileSize", OPTION_INT},
+    {"trans", OPTION_BOOLEAN},
+    {"syslog", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
