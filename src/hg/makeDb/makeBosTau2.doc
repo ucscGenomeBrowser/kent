@@ -1129,7 +1129,7 @@ bosTau2.perChromTables = no
     cd /cluster/data/bosTau2/bed
     mkdir quality
     cd quality
-    # I wrote a c program to process the database.gold
+    # I wrote a c program /cluster/store11/bosTau2/bed/quality/quality.c to process the database.gold
     # and also the contigs.fa.qual data from Baylor.
     # Because the qual file is so big, I do not load 
     # it all at once, instead I read it once and 
