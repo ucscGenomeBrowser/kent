@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.7 2005/12/13 16:59:48 kent Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.8 2005/12/15 03:14:42 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,7 +17,7 @@ errAbort(
   "sqlToXml - dump out all or part of a relational database to XML, guided\n"
   "by a dump specification.  See sqlToXml.doc for additional information.\n"
   "usage:\n"
-  "   sqlToXml database dumpSpec output.xml\n"
+  "   sqlToXml database dumpSpec.od output.xml\n"
   "options:\n"
   "   -topTag=name - Give the top level XML tag the given name.  By\n"
   "               default it will be the same as the database name.\n"
@@ -31,16 +31,20 @@ errAbort(
   "                   line of dumpSpec.\n"
   "   -tab=N - number of spaces betweeen tabs in xml.dumpSpec - by default it's 8.\n"
   "            (It may be best just to avoid tabs in that file though.)\n"
+  "   -maxList=N - This will limit any lists in the output to no more than\n"
+  "                size N.  This is mostly just for testing.\n"
   );
 }
 
 int tabSize = 8;
+int maxList = 0;
 char *topTag = NULL;
 
 static struct optionSpec options[] = {
    {"topTag", OPTION_STRING},
    {"query", OPTION_STRING},
    {"tab", OPTION_INT},
+   {"maxList", OPTION_INT},
    {NULL, 0},
 };
 
@@ -170,6 +174,10 @@ for (;;)
 	if (pastEnd != NULL)
 	   errAbort("Extra word line %d of %s", lf->lineIx, lf->fileName);
 	AllocVar(branch);
+	if (field[0] != '.')
+	    errAbort("Field must start with . line %d of %s", 
+	    	lf->lineIx, lf->fileName);
+	field += 1;
 	branch->field = cloneString(field);
 	branch->target = cloneString(target);
 	dot = strchr(target, '.');
@@ -279,6 +287,7 @@ struct sqlResult *sr;
 char **row;
 struct typedField *col, *colList = hashMustFindVal(tableHash, table);
 boolean subObjects = FALSE;
+int rowCount = 0;
 
 verbose(2, "%s\n", query);
 sr = sqlGetResult(conn, query);
@@ -318,21 +327,24 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    if (!sameString(target, "hide"))
 		{
 		char targetTable[256];
+		struct dyString *sql = dyStringNew(0);
 		char query[512];
 		char *targetField = strchr(target, '.');
 		if (targetField != NULL)
 		    targetField += 1;
 		safef(targetTable, sizeof(targetTable), target);
 		chopSuffix(targetTable);
+		dyStringPrintf(sql, "select * from %s where %s = ",
+			targetTable, target);
 		if (branch->needsQuote)
-		    safef(query, sizeof(query),
-		      "select * from %s where %s = \"%s\"", targetTable,
-		      target, row[branch->fieldIx]);
+		    dyStringPrintf(sql, "\"%s\"", row[branch->fieldIx]);
 		else
-		    safef(query, sizeof(query),
-		      "select * from %s where %s = %s", targetTable,
-		      target, row[branch->fieldIx]);
-		rSqlToXml(cc, targetTable, targetField, query, tableHash, branch, f, depth+1);
+		    dyStringPrintf(sql, "%s", row[branch->fieldIx]);
+		if (maxList != 0)
+		    dyStringPrintf(sql, " limit %d", maxList);
+		rSqlToXml(cc, targetTable, targetField, sql->string, 
+			tableHash, branch, f, depth+1);
+		dyStringFree(&sql);
 		}
 	    }
 	spaceOut(f, depth*2);
@@ -355,22 +367,22 @@ struct specTree *tree = specTreeLoad(dumpSpec, tableHash);
 FILE *f = mustOpen(outputXml, "w");
 char *topTag = optionVal("topTag", database);
 char *table = tree->targetTable;
-char queryBuf[512], *query = NULL;
+struct dyString *sql = dyStringNew(0);
 
 if (optionExists("query"))
     {
     char *queryFile = optionVal("query", NULL);
+    char *query;
     readInGulp(queryFile, &query, NULL);
     if (!stringIn(table, query))
 	errAbort("No mention of table %s in %s.", table, queryFile);
+    dyStringAppend(sql, query);
     }
 else
-    {
-    safef(queryBuf, sizeof(queryBuf),
-        "select * from %s", table);
-    query = queryBuf;
-    }
+    dyStringPrintf(sql, "select * from %s", table);
 
+if (maxList > 0)
+    dyStringPrintf(sql, " limit %d", maxList);
 
 if (!sqlTableExists(conn, table))
     errAbort("No table %s in %s", table, database);
@@ -381,7 +393,7 @@ verbose(1, "%d tables in %s\n",
 
 escaper = dyStringNew(0);
 fprintf(f, "<%s>\n", topTag);
-rSqlToXml(cc, table, "", query, tableHash, tree, f, 1);
+rSqlToXml(cc, table, "", sql->string, tableHash, tree, f, 1);
 fprintf(f, "</%s>\n", topTag);
 carefulClose(&f);
 }
@@ -393,6 +405,7 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 tabSize = optionInt("tab", tabSize);
+maxList = optionInt("maxList", maxList);
 sqlToXml(argv[1], argv[2], argv[3]);
 return 0;
 }

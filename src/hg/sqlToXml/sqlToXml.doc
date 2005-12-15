@@ -79,8 +79,8 @@ The XML that sqlToXml would produce would be
 The dumpSpec to produce this output would be:
 
 purchase
-    buyer customer.id
-    purchase purchase.id
+    .buyer customer.id
+    .purchase purchase.id
 
 
 
@@ -89,10 +89,11 @@ purchase
 THE COMMAND LINE
 
 The basic command line is
-     sqlToXml database dumpSpec output.xml
+     sqlToXml database dumpSpec.od output.xml
 where database is a mysql database,  dumpSpec is the dump specification,
 which will be described in detail below, and output.xml is where to put
-the resulting xml.  To put the xml into standard output put "stdout"
+the resulting xml.  By convention the dumpSpec has a file suffix of .od
+(object dump). To put the xml into standard output put "stdout"
 for the output.xml file name.
 
 In addition there are a few command line options:
@@ -106,7 +107,7 @@ In addition there are a few command line options:
 	select table.* from table,otherTables where ...
 	             Where the table is the same as the table in the first
 		     line of dumpSpec.
-   -tab=N - number of spaces betweeen tabs in xml.dumpSpec - by default it's 8.
+   -tab=N - number of spaces betweeen tabs in dumpSpec - by default it's 8.
             (It may be best just to avoid tabs in that file though.)
 
 THE DUMPSPEC FILE
@@ -118,7 +119,7 @@ The first line of a dumpSpec just contains the name of the master
 table which guides the dump.  There will be one record in the dump
 for each row of this table.   Subsequent lines are indented and
 have two columns:
-    <keyField>	<table.field>
+    <.keyField>	<table.field>
 which define how other tables should be joined into the dump.
 The keyFieldfield refers to a key field in the current table.
 It will bring in the table in the next column joining on the given
@@ -232,9 +233,9 @@ to it via the customer.id field, which is connected
 to the email.customer field.
 
 purchase
-    buyer customer.id
-       id email.customer
-    purchase purchase.id
+    .buyer customer.id
+       .id email.customer
+    .purchase purchase.id
 
 
 PRACTICAL CONSIDERATIONS

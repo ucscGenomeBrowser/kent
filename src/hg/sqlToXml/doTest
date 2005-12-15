@@ -1,1 +1,7 @@
-sqlToXml visiGene test/visiGene.dumpSpec test/visiTest.xml
+#!/bin/csh -ef
+
+foreach T (uniProt visiGene)
+    sqlToXml $T test/$T/in.od test/$T/out.xml -maxList=3
+    diff test/$T/expected.xml test/$T/out.xml
+end
+
