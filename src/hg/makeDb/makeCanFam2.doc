@@ -1232,6 +1232,14 @@ zcat ../pslParts/$1.*.psl.gz \
 # For future reference -- doBlastzChainNet.pl should have been used
 # REDONE partially, see below (from the filtering step onward, to get rid 
 # of duplicates, 12/6/05 angie)
+# CHAINS REMERGED to reassign IDs so that they're unique genome-wide, and 
+# nets deleted to avoid confusion, 12/14/05 angie.  The IDs were not unique 
+# genome-wide (only per-chrom) because the filtering was done directly on 
+# run1/chain files which had not yet had their IDs reassigned by 
+# chainMergeSort, and after filtering, chainMergeSort -saveId was used... doh.
+# It would have been OK if the filtering had been done post-merging,
+# or if -saveId had been omitted after filtering.  caught by joinerCheck.
+# Also could have been avoided by just using doBlastzChainNet.pl the first time.
     # Run axtChain on little cluster
     ssh kki
     cd /cluster/data/canFam2/bed/blastz.canFam2
@@ -1268,6 +1276,9 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam2/nib \
     # now on the cluster server, sort chains
     ssh kolossus
     cd /cluster/data/canFam2/bed/blastz.canFam2/axtChain
+    # Had these steps actually been followed it would have saved some 
+    # trouble, but instead some custom filtering was performed directly 
+    # on run1/chain files and they never got their IDs reassigned:
     chainMergeSort run1/chain/*.chain > all.chain
     chainSplit chain all.chain
     rm run1/chain/*.chain
@@ -1326,6 +1337,30 @@ axtChain -verbose=0 -psl $1 /iscratch/i/canFam2/nib \
     rm -r /usr/local/apache/htdocs/goldenPath/canFam2/vsSelf/
     doBlastzChainNet.pl -continue net DEF >& redo.log &
     tail -f redo.log
+
+    # 12/14/05 angie -- Jen ran joinerCheck and it complained about 
+    # non-unique IDs in the chain tables.  fixing...
+    ssh kolossus
+    cd /cluster/data/canFam2/bed/blastz.canFam2/axtChain
+    chainSplit chain canFam2.canFam2.all.chain.gz 
+    mv canFam2.canFam2.all.chain.gz canFam2.canFam2.all.chain.badIDs.gz
+    chainMergeSort chain/*.chain \
+    | gzip -c > canFam2.canFam2.all.chain.gz
+    rm -r chain
+    chainSplit chain canFam2.canFam2.all.chain.gz 
+
+    # Load chains into database
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/blastz.canFam2/axtChain/chain
+    foreach i (*.chain)
+        set c = $i:r
+        echo loading $c
+        hgLoadChain canFam2 ${c}_chainSelf $i
+    end
+    cd ..
+    rm -r chain
+    # I removed the self net in order to avoid confusion, so no need to 
+    # regenerate it.
 
 
 # NET SELF BLASTZ 
