@@ -15,9 +15,9 @@ visibility hide
 type bed 6 +
 exonArrows off
 
-track chainMm6u1
-shortLabel U1 Mm6 Chain 
-longLabel U1 $o_db ($o_date/$o_db) Chained Alignments
+track chainMm6
+shortLabel Mm6 Chain 
+longLabel $o_db ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 123.991
 visibility hide
@@ -29,14 +29,14 @@ matrixHeader A, C, G, T
 type chain mm6
 otherDb mm6
 
-track netMm6u1
-shortLabel U1 Mm6 Net
-longLabel U1 $o_db ($o_date/$o_db) Alignment Net
+track netMm6
+shortLabel Mm6 Net
+longLabel $o_db ($o_date/$o_db) Alignment Net
 group compGeno
 priority 124.091
 visibility hide
 spectrum on
-type netAlign mm6 chainMm6u1
+type netAlign mm6 chainMm6
 otherDb mm6
 
 track chainSelf
@@ -60,6 +60,17 @@ visibility hide
 spectrum on
 type netAlign canFam2 chainSelf
 otherDb canFam2
+
+track blastHg17KG
+shortLabel Human Proteins
+longLabel Human(hg17) proteins mapped by chained tBLASTn
+group genes
+priority 1
+visibility pack
+colorChromDefault off
+type psl protein
+pred hg17.blastKGPep02
+blastRef hg17.blastKGRef02
 
 track multiz4way
 shortLabel Conservation
