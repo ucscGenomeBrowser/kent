@@ -2022,6 +2022,15 @@ tablesIgnored $gbd
     blat%
     blast%
     repeats
+    multiz4waySummary
+    multiz5waySummary
+    multiz6waySummary
+    multiz7waySummary
+    multiz8waySummary
+    multiz9waySummary
+    multiz10waySummary
+    multiz11waySummary
+    multiz12waySummary
     phastCons4way
     phastConsElements4way
     phastCons5way
