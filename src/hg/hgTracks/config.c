@@ -170,11 +170,12 @@ textSizeDropDown();
 hPrintf("&nbsp;");
 if (inclFontExtras())
     {
-    cartMakeRadioButton(cart, "fontType", "medium", "medium");
+    char *defaultStyle = cartUsualString(cart, "fontType", "medium");
+    cartMakeRadioButton(cart, "fontType", "medium", defaultStyle);
     hPrintf("&nbsp;medium&nbsp;");
-    cartMakeRadioButton(cart, "fontType", "fixed", "fixed");
+    cartMakeRadioButton(cart, "fontType", "fixed", defaultStyle);
     hPrintf("&nbsp;fixed&nbsp;");
-    cartMakeRadioButton(cart, "fontType", "bold", "bold");
+    cartMakeRadioButton(cart, "fontType", "bold", defaultStyle);
     hPrintf("&nbsp;bold&nbsp;");
     hPrintf("&nbsp;");
     }
