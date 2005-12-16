@@ -15,8 +15,8 @@ clean:
 
 test:
 	${MKDIR} tests/output
-	@echo "EMPTY SEQUENCE WARNING THAT FOLLOWS IS OK!"	
-	faToTwoBit tests/input/noDna.fa tests/output/noDna.2bit
+	faToTwoBit tests/input/noDna.fa tests/output/noDna.2bit 2> tests/output/noDna.out
+	diff tests/expected/noDna.out tests/output/noDna.out
 	twoBitToFa tests/output/noDna.2bit tests/output/noDna.fa
 	diff tests/expected/noDna.fa tests/output/noDna.fa
 	faToTwoBit tests/input/testN.fa tests/output/testN.2bit
