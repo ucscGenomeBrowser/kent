@@ -15,7 +15,7 @@ if ($1 == "") then
  exit 1
 endif
 
-# cd ~galt
+# cd ~
 
 set host = "hgwbeta"
 set hhost = "-h $host"
@@ -52,7 +52,7 @@ echo "adjusted maxqid=$maxqid"
 
 set sql = "update $1 set releaseLog=''"
 echo $sql
-hgsql $hhost qapushq -e '"'$sql'"' 
+hgsql $hhost qapushq -e "$sql" 
 if ( $status ) then
  echo "unexpected error clearing out releaseLog field for dbs=$1 rows. ${host}:qapushq.$1 "
  exit 1
@@ -60,7 +60,7 @@ endif
 
 set sql = "update $1 set pushState='D'"
 echo $sql
-hgsql $hhost qapushq -e '"'$sql'"' 
+hgsql $hhost qapushq -e "$sql" 
 if ( $status ) then
  echo "unexpected error setting pushState=D for all rows. ${host}:qapushq.$1 "
  exit 1
@@ -68,7 +68,7 @@ endif
 
 set sql = "update $1 set priority='L'"
 echo $sql
-hgsql $hhost qapushq -e '"'$sql'"' 
+hgsql $hhost qapushq -e "$sql" 
 if ( $status ) then
  echo "unexpected error setting priority=L for all rows. ${host}:qapushq.$1 "
  exit 1
@@ -76,7 +76,7 @@ endif
 
 set sql = "update $1 set rank=0"
 echo $sql
-hgsql $hhost qapushq -e '"'$sql'"' 
+hgsql $hhost qapushq -e "$sql" 
 if ( $status ) then
  echo "unexpected error clearing out rank field for all rows. ${host}:qapushq.$1 "
  exit 1
@@ -85,7 +85,7 @@ endif
 set now=`date +%Y-%m-%d`
 set sql = "update $1 set qadate='$now'"
 echo $sql
-hgsql $hhost qapushq -e '"'$sql'"' 
+hgsql $hhost qapushq -e "$sql" 
 if ( $status ) then
  echo "unexpected error setting qadate to today for all rows. ${host}:qapushq.$1 "
  exit 1
@@ -94,7 +94,7 @@ endif
 
 set sql = "update $1 set qid=lpad(qid+$maxqid,6,'0')"
 echo $sql
-hgsql $hhost qapushq -e '"'$sql'"' 
+hgsql $hhost qapushq -e "$sql" 
 if ( $status ) then
  echo "unexpected error setting qid for all rows. ${host}:qapushq.$1 "
  exit 1
@@ -102,7 +102,7 @@ endif
 
 set sql = "update $1 set pqid=lpad(pqid+$maxqid,6,'0') where pqid > 0"
 echo $sql
-hgsql $hhost qapushq -e '"'$sql'"' 
+hgsql $hhost qapushq -e "$sql" 
 if ( $status ) then
  echo "unexpected error setting pqid for all rows. ${host}:qapushq.$1 "
  exit 1
@@ -119,7 +119,7 @@ endif
 
 set sql = "drop table $1"
 echo $sql
-hgsql $hhost qapushq -e '"'$sql'"' 
+hgsql $hhost qapushq -e "$sql" 
 if ( $status ) then
  echo "unexpected error dropping $1 table. ${host}:qapushq.$1 "
  exit 1
