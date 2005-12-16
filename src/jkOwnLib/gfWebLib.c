@@ -1,3 +1,5 @@
+/* gfWebLib - some helper routines for the webBlat and webPcr.
+ * Copyright 2004-2005 Jim Kent.  All rights reserved. */
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"

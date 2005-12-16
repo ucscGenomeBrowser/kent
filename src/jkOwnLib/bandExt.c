@@ -9,7 +9,6 @@
  * has the neat feature that the band can wander around.  
  * When a score exceeds any previous score, the band will be 
  * recentered around the highest scoring position. */
-
 /* Copyright 2003-5 Jim Kent.  All rights reserved. */
 
 #include "common.h"
@@ -19,7 +18,7 @@
 #include "localmem.h"
 #include "bandExt.h"
 
-static char const rcsid[] = "$Id: bandExt.c,v 1.11 2005/01/12 20:39:58 kent Exp $";
+static char const rcsid[] = "$Id: bandExt.c,v 1.12 2005/12/16 20:17:37 kent Exp $";
 
 /* Definitions for traceback byte.  This is encoded as so:
  *     xxxxLUMM

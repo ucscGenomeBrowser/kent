@@ -3,7 +3,7 @@
  * This is commonly used when the query sequence was broken up into
  * overlapping blocks in the initial alignment, and also to look for
  * introns larger than fuzzyFinder can handle. */
-/* Copyright 2000-2003 Jim Kent.  All rights reserved. */
+/* Copyright 2000-2005 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "dnautil.h"
@@ -15,7 +15,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.33 2005/08/29 20:59:45 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.34 2005/12/16 20:17:38 kent Exp $";
 
 static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
