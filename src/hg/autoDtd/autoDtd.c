@@ -1,11 +1,16 @@
-/* autoDtd - Give this a XML document to look at and it will come up with a DTD to describe it.. */
+/* autoDtd - Give this a XML document to look at and it will come up with a 
+ * DTD to describe it, and possibly some more readable and informative outputs
+ * as well. */
+/* This file is copyright 2005 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.9 2005/12/15 16:40:06 kent Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.10 2005/12/16 20:24:03 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

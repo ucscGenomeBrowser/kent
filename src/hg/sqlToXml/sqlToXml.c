@@ -1,5 +1,8 @@
 /* sqlToXml - Given a database, .as file, .joiner file, and a sql select 
  * statement, dump out results as XML. */
+/* This file is copyright 2005 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -8,7 +11,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.8 2005/12/15 03:14:42 kent Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.9 2005/12/16 20:24:03 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

@@ -1,5 +1,7 @@
 /* Tables - the data structures for holding all the info about
  * a table, it's fields, and it's relationships to other tables. */
+/* This file is copyright 2005 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "hash.h"

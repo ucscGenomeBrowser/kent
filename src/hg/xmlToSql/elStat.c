@@ -1,4 +1,6 @@
-/* Parse a statistics file from autoDtd. */
+/* Parse a statistics file from autoDtd and return it as C data structure. */
+/* This file is copyright 2005 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "hash.h"
