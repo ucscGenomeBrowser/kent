@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.64 2005/12/08 19:02:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.65 2005/12/16 00:18:05 donnak Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -744,7 +744,7 @@ return gp;
 
 void doKgMethod(struct sqlConnection *conn)
 /* display knownGene.html content 
-(USCS Known Genes Method, Credits, and Data Use Restrictions) */
+(UCSC Known Genes Method, Credits, and Data Use Restrictions) */
     {
     struct trackDb *tdb, *tdb2;
     struct section *sectionList = NULL;
