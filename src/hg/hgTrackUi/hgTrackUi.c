@@ -28,7 +28,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.232 2005/12/14 18:47:09 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.233 2005/12/16 01:14:59 markd Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1888,7 +1888,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-htmlSetBackground("../images/floret.jpg");
+htmlSetBackground(hBackgroundImage());
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
 }

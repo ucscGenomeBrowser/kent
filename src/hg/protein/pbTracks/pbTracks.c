@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.41 2005/11/22 23:11:53 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.42 2005/12/16 01:15:00 markd Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -557,7 +557,7 @@ cgiVarExcludeExcept(except);
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
-htmlSetBackground("../images/floret.jpg");
+htmlSetBackground(hBackgroundImage());
 if (cgiVarExists("pbt.reset"))
     resetVars();
 cartHtmlShellPB("UCSC Proteome Browser", doMiddle, hUserCookie(), excludeVars, NULL);

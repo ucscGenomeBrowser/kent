@@ -16,7 +16,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.29 2005/11/22 23:10:35 fanhsu Exp $";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.30 2005/12/16 01:15:00 markd Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -714,7 +714,7 @@ cgiVarExcludeExcept(except);
 int main(int argc, char *argv[])
 {
 cgiSpoof(&argc, argv);
-htmlSetBackground("../images/floret.jpg");
+htmlSetBackground(hBackgroundImage());
 if (cgiVarExists("pbt.reset"))
     resetVars();
 /* call cartHtmlShellPbGlobal to accomodate situations that PB not entered from GB */

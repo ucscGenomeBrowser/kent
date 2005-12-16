@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1056 2005/12/15 00:02:13 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1057 2005/12/16 01:14:59 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11969,7 +11969,7 @@ int main(int argc, char *argv[])
 uglyTime(NULL);
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
-htmlSetBackground("../images/floret.jpg");
+htmlSetBackground(hBackgroundImage());
 htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">"); 
 cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;

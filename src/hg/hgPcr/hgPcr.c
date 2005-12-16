@@ -22,7 +22,7 @@
 #include "botDelay.h"
 #include "oligoTm.h"
 
-static char const rcsid[] = "$Id: hgPcr.c,v 1.12 2005/10/05 20:45:30 donnak Exp $";
+static char const rcsid[] = "$Id: hgPcr.c,v 1.13 2005/12/16 01:14:59 markd Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -428,7 +428,7 @@ int main(int argc, char *argv[])
 {
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
-htmlSetBackground("../images/floret.jpg");
+htmlSetBackground(hBackgroundImage());
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

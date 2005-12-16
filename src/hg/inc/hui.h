@@ -12,6 +12,9 @@ char *hUserCookie();
 char *wrapWhiteFont(char *s);
 /* Write white font around s */
 
+char *hBackgroundImage();
+/* get the path to the configured background image to use, or the default */
+
 #define HELP_DIR "/usr/local/apache/htdocs/goldenPath/help" 
 
 /* Definitions for ruler pseudo-track.  It's not yet a full-fledged

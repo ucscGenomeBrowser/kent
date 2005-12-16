@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.93 2005/11/10 03:41:11 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.94 2005/12/16 01:14:59 markd Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -762,7 +762,7 @@ int main(int argc, char *argv[])
 {
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
-htmlSetBackground("../images/floret.jpg");
+htmlSetBackground(hBackgroundImage());
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }
