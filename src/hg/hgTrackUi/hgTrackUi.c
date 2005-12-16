@@ -28,7 +28,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.233 2005/12/16 01:14:59 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.234 2005/12/16 16:27:09 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -684,7 +684,7 @@ struct sqlConnection *conn = hAllocConn();
 char query[256];
 int omimAvail = 0;
 boolean option = FALSE;
-safef(query, sizeof(query), "select count(*) from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 2");
+safef(query, sizeof(query), "select count(*) from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0");
 omimAvail = sqlQuickNum(conn, query);
 hFreeConn(&conn);
 
@@ -731,7 +731,7 @@ int omimAvail = 0;
 char query[128];
 if (sameString(tdb->tableName, "refGene"))
     {
-    safef(query, sizeof(query), "select count(*) from refLink where omimId != 0 limit 2");
+    safef(query, sizeof(query), "select count(*) from refLink where omimId != 0");
     omimAvail = sqlQuickNum(conn, query);
     }
 hFreeConn(&conn);
@@ -761,7 +761,7 @@ int omimAvail = 0;
 char query[128];
 if (sameString(tdb->tableName, "refGene"))
     {
-    safef(query, sizeof(query), "select count(*) from refLink where omimId != 0 limit 2");
+    safef(query, sizeof(query), "select count(*) from refLink where omimId != 0");
     omimAvail = sqlQuickNum(conn, query);
     }
 hFreeConn(&conn);

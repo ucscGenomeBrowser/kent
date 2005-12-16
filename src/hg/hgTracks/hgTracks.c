@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1058 2005/12/16 10:20:46 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1059 2005/12/16 16:25:51 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2889,7 +2889,7 @@ if (hTableExists("kgXref"))
     {
     char query[128];
     int omimAvail = 0;
-    safef(query, sizeof(query), "select count(*) from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 2");
+    safef(query, sizeof(query), "select count(*) from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0");
     omimAvail = sqlQuickNum(conn, query);
 
     if (knownGeneLabels == NULL)
@@ -3452,7 +3452,7 @@ struct hashEl *refGeneLabels = cartFindPrefix(cart, (isNative ? "refGene.label" 
 struct hashEl *label;
 int omimAvail = 0;
 char query[128];
-safef(query, sizeof(query), "select count(*) from refLink where refLink.omimId != 0 limit 2");
+safef(query, sizeof(query), "select count(*) from refLink where refLink.omimId != 0");
 omimAvail = sqlQuickNum(conn, query);
 
 if (refGeneLabels == NULL)
@@ -9644,7 +9644,7 @@ struct hashEl *label;
 if (hgMutLabels == NULL)
     {
     useHgvs = TRUE; /* default to gene name */
-    /* set cart to match what doing */
+    /* set cart to match what is being displayed */
     cartSetBoolean(cart, "hgMut.label.hgvs", TRUE);
     }
 for (label = hgMutLabels; label != NULL; label = label->next)
