@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.24 2005/06/19 05:35:20 kent Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.25 2005/12/16 00:02:28 hiram Exp $";
 
 
 /* Return how long the named file is in bytes. 
@@ -71,7 +71,7 @@ nullPt[0] = 0;
 char *getCurrentDir()
 /* Return current directory. */
 {
-static char dir[512];
+static char dir[1024];
 
 if (getcwd( dir, sizeof(dir) ) == NULL )
     {
