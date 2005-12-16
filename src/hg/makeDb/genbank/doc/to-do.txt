@@ -935,6 +935,8 @@ Warning: NR_001874: malformed RefSeq CDS:
   one longer one.  Should prqobably have ability to toss weird overlaps where thee is one 
   better alignment.
 
+- library table has truncated descriptions if entries are multi-line.
+
 - some clones, (e.g. AA778675 ) have id in the form: /clone="1049033",
   can these be assumed to be IMAGE??  They are not currently loaded into
   the imageClone table.
