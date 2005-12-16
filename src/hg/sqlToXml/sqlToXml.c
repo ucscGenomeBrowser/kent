@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.9 2005/12/16 20:24:03 kent Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.10 2005/12/16 22:02:58 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -65,6 +65,7 @@ struct specTree
    char *targetTable;	/* Table part of target */
    char *targetField;	/* Field part of target */
    boolean needsQuote;	/* Does join need value in quotes? */
+   char *outName;	/* Name to use for output, defaults to table name. */
    };
 
 struct specTree *specTreeTarget(struct specTree *parent, char *field)
@@ -170,12 +171,10 @@ for (;;)
 	{
 	char *field = nextWord(&pastSpace);
 	char *target = nextWord(&pastSpace);
-	char *pastEnd = nextWord(&pastSpace);
+	char *extra = nextWord(&pastSpace);
 	char *dot, targetTable[256], *targetField;
 	if (target == NULL)
 	   errAbort("Missing target line %d of %s", lf->lineIx, lf->fileName);
-	if (pastEnd != NULL)
-	   errAbort("Extra word line %d of %s", lf->lineIx, lf->fileName);
 	AllocVar(branch);
 	if (field[0] != '.')
 	    errAbort("Field must start with . line %d of %s", 
@@ -201,6 +200,23 @@ for (;;)
 	    branch->needsQuote = (tf->type == '"');
 	    branch->fieldIx = slIxFromElement(tfList, tf);
 	    }
+	if (extra != NULL)
+	   {
+	   if (sameString(extra, "as"))
+	       {
+	       char *outName = nextWord(&pastSpace);
+	       if (outName == NULL)
+	           errAbort("Expecting something after 'as' line %d of %s.",
+		   	lf->lineIx, lf->fileName);
+	       branch->outName = cloneString(outName);
+	       extra = nextWord(&pastSpace);
+	       }
+	   }
+	if (extra != NULL)
+	    errAbort("There's extra stuff I don't understand line %d of %s.",
+		    lf->lineIx, lf->fileName);
+	if (branch->outName == NULL)
+	    branch->outName = cloneString(branch->targetTable);
 	slAddTail(&parent->children, branch);
 	}
     }
@@ -212,12 +228,25 @@ struct specTree *specTreeLoad(char *fileName, struct hash *tableHash)
 struct specTree *root = NULL;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
+char *table, *as, *outName;
 
 AllocVar(root);
 if (!lineFileNextReal(lf, &line))
     lineFileUnexpectedEnd(lf);
 line = trimSpaces(line);
-root->targetTable = cloneString(line);
+table = nextWord(&line);
+as = nextWord(&line);
+outName = nextWord(&line);
+root->targetTable = cloneString(table);
+if (as != NULL)
+   {
+   if (outName == NULL)
+       errAbort("Expecting something after 'as' line %d of %s", 
+       		lf->lineIx, lf->fileName);
+   root->outName = cloneString(outName);
+   }
+else
+   root->outName = cloneString(root->targetTable);
 rSpecTreeLoad(lf, root, tableHash);
 
 lineFileClose(&lf);
@@ -300,7 +329,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     /* Print non-joining columns as attributes. */
     spaceOut(f, depth*2);
-    fprintf(f, "<%s", table);
+    fprintf(f, "<%s", tree->outName);
     for (col = colList; col != NULL; col = col->next, rowIx+=1)
         {
 	char *val = row[rowIx];
@@ -329,29 +358,23 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    char *target = branch->target;
 	    if (!sameString(target, "hide"))
 		{
-		char targetTable[256];
 		struct dyString *sql = dyStringNew(0);
 		char query[512];
-		char *targetField = strchr(target, '.');
-		if (targetField != NULL)
-		    targetField += 1;
-		safef(targetTable, sizeof(targetTable), target);
-		chopSuffix(targetTable);
 		dyStringPrintf(sql, "select * from %s where %s = ",
-			targetTable, target);
+			branch->targetTable, target);
 		if (branch->needsQuote)
 		    dyStringPrintf(sql, "\"%s\"", row[branch->fieldIx]);
 		else
 		    dyStringPrintf(sql, "%s", row[branch->fieldIx]);
 		if (maxList != 0)
 		    dyStringPrintf(sql, " limit %d", maxList);
-		rSqlToXml(cc, targetTable, targetField, sql->string, 
-			tableHash, branch, f, depth+1);
+		rSqlToXml(cc, branch->targetTable, branch->targetField, 
+			sql->string, tableHash, branch, f, depth+1);
 		dyStringFree(&sql);
 		}
 	    }
 	spaceOut(f, depth*2);
-	fprintf(f, "</%s>\n", table);
+	fprintf(f, "</%s>\n", tree->outName);
 	}
     }
 sqlFreeResult(&sr);
