@@ -1240,11 +1240,19 @@ type bed 4 +
 
     track cnpFosmid
     subTrack cnp
-    shortLabel CNPs (Fosmid) 
-    longLabel Copy Number Polymorphisms from Fosmids
+    shortLabel SV Fosmids (Tuzun)
+    longLabel Structural Variation identified by Fosmids (Tuzun)
     noInherit on
     type bed 4 +
     priority 146.4
+
+    track delMccarroll
+    subTrack cnp
+    shortLabel Deletions (McCarroll)
+    longLabel Deletions from Genotype Analysis
+    noInherit on
+    type bed 3 .
+    priority 146.5
 
 track fosmidDiscordant
 shortLabel Fosmid Discordants
