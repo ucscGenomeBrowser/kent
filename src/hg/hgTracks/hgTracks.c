@@ -100,10 +100,11 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1057 2005/12/16 01:14:59 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1058 2005/12/16 10:20:46 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
+boolean isPrivateHost;		/* True if we're on genome-test. */
 char *protDbName;               /* Name of proteome database for this genome. */
 
 #define MAX_CONTROL_COLUMNS 5
@@ -5417,7 +5418,7 @@ return shadesOfBrown[grayLevel];
 void exoMouseMethods(struct track *tg)
 /* Make track for exoMouse. */
 {
-if (sameString(chromName, "chr22") && hIsPrivateHost())
+if (sameString(chromName, "chr22") && isPrivateHost)
     tg->visibility = tvDense;
 else
     tg->visibility = tvHide;
@@ -10985,6 +10986,8 @@ hPrintf("<CENTER>\n");
 
 if (!hideControls)
     {
+    char *browserName = (isPrivateHost ? "Test Browser" : "Genome Browser");
+    char *organization = (hIsMgcServer() ? "MGC" : "UCSC");
     hotLinks();
 
     /* Show title . */
@@ -10992,34 +10995,23 @@ if (!hideControls)
     if(freezeName == NULL)
 	freezeName = "Unknown";
     hPrintf("<FONT SIZE=5><B>");
-    if (hIsMgcServer())
+    if (startsWith("zoo",database) )
 	{
-	if (sameString(organism, "Archaea"))
-            hPrintf("Genome Browser on Archaeon %s", freezeName);
-	else
-            hPrintf("MGC Genome Browser on %s %s Assembly", organism, freezeName); 
+	hPrintf("%s %s on %s June 2002 Assembly %s target1",
+		organization, browserName, organism, freezeName); 
 	}
     else
 	{
-	if (startsWith("zoo",database) )
-	    {
-/* HACK ALERT - same alert as in hgGateway - The Zoo needs its own
- * mechanism of producing this title with its date and target.
- */
-	    hPrintf("UCSC Genome Browser on %s June 2002 Assembly %s target1",
-		    organism, freezeName); 
-	    }
+
+	if (sameString(clade, "ancestor"))
+	    hPrintf("%s %s on %s Common Ancestor (%s)", 
+	    	organization, browserName, organism, freezeName);
+	else if (sameString(organism, "Archaea"))
+	    hPrintf("%s %s on Archaeon %s Assembly", 
+	    	organization, browserName, freezeName);
 	else
-	    {
-
-	    if (sameString(clade, "ancestor"))
-                hPrintf("UCSC Genome Browser on %s Common Ancestor (%s)", organism, freezeName);
-	    else if (sameString(organism, "Archaea"))
-                hPrintf("UCSC Genome Browser on Archaeon %s Assembly", freezeName);
-
-	    else
-                hPrintf("UCSC Genome Browser on %s %s Assembly", organism, freezeName); 
-	    }
+	    hPrintf("%s %s on %s %s Assembly", 
+	    	organization, browserName, organism, freezeName); 
 	}
     hPrintf("</B></FONT><BR>\n");
 
@@ -11967,6 +11959,7 @@ int main(int argc, char *argv[])
  * for the benefit of the cgiVarExists, which 
  * somehow can't be moved effectively into doMiddle. */
 uglyTime(NULL);
+isPrivateHost = hIsPrivateHost();
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
