@@ -4,6 +4,12 @@
 #  A backup of both the gateway table and the pushQ will be made in the current dir for safety.
 #  Then if everything is ok, the separate gateway table is dropped.
 
+if ( "$HOST" != "hgwdev" ) then
+ echo "Error: this script must be run from hgwdev."
+ exit 1
+endif
+  
+
 if ($1 == "") then
  echo "no table specified. usage: $0 <tablename>"
  exit 1
