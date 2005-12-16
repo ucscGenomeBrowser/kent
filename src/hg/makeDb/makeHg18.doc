@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.1 2005/12/13 00:38:43 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.2 2005/12/16 18:53:31 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -903,4 +903,117 @@ warn trf/*.bed  > lu.out 2>&1
 #	After fixing up hgCtgPos to accept the -chromLst argument, simply:
     cd /cluster/data/hg18
     hgCtgPos -chromLst=chrom.lst hg18 .
+
+# PRODUCING GENSCAN PREDICTIONS (DONE - 2005-12-16 - Fan)
+    
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/genscan
+    cd /cluster/data/hg18/bed/genscan
+    cvs co hg3rdParty/genscanlinux
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the contigs
+    # *that do not have pure Ns* (due to heterochromatin, unsequencable 
+    # stuff) which would cause genscan to run forever.
+    rm -f genome.list
+    bash
+    for f in `cat /cluster/data/hg18/contig.lst`
+    do
+      egrep '[ACGT]' /cluster/data/hg18/$f.masked > /dev/null
+	if [ $? = 0 ]; then
+	    echo /cluster/data/hg18/$f.masked >> genome.list
+	fi
+    done
+    # exit your bash shell if you are [t]csh ...
+    #	This egrep matched all the contigs in hg18.  I guess none of
+    #	them are complete Ns* at this point.
+
+    # Log into kki (not kk !).  kki is the driver node for the small
+    # cluster (kkr2u00 -kkr8u00. Genscan has problem running on the
+    # big cluster, due to limitation of memory and swap space on each
+    # processing node).
+    ssh kki
+    cd /cluster/data/hg18/bed/genscan
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+    gensub2 genome.list single gsub jobList
+    para create jobList
+    para try
+    para check
+    para push ... etc ...
+# Completed: 377 of 378 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      78976s    1316.27m    21.94h    0.91d  0.003 y
+# IO & Wait Time:                  4961s      82.68m     1.38h    0.06d  0.000 y
+# Average job time:                 223s       3.71m     0.06h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            3491s      58.18m     0.97h    0.04d
+# Submission to last job:          7541s     125.68m     2.09h    0.09d
+
+    #	Running the single failed job on kolossus with a smaller window:
+
+ssh kkr7u00.kilokluster.ucsc.edu
+/cluster/bin/x86_64/gsBig /cluster/data/hg18/5/NT_006576/NT_006576.fa.masked \
+        gtf/NT_006576.fa.gtf -trans=pep/NT_006576.fa.pep \
+        -subopt=subopt/NT_006576.fa.bed -exe=hg3rdParty/genscanlinux/genscan \
+        -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2000000
+
+    # If there were out-of-memory problems (run "para problems"), then 
+    # re-run those jobs by hand but change the -window arg from 2400000
+    # something lower.  In build33, this was 22/NT_011519
+    #  In build34 there were NO failures !
+
+    # Convert these to chromosome level files as so:     
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/genscan
+    $HOME/bin/i386/liftUp genscan.gtf ../../jkStuff/liftAll.lft warn gtf/N*.gtf
+    $HOME/bin/i386/liftUp genscanSubopt.bed ../../jkStuff/liftAll.lft \
+	warn subopt/N*.bed
+    cat pep/*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/genscan
+    ldHgGene hg18 genscan genscan.gtf
+# Reading genscan.gtf
+# Read 43122 transcripts in 329799 lines in 1 files
+# 43122 groups 49 seqs 1 sources 1 feature types
+# 43122 gene predictions
+
+    hgPepPred hg18 generic genscanPep genscan.pep
+    #	Processing genscan.pep
+    hgLoadBed hg18 genscanSubopt genscanSubopt.bed
+    # Reading genscanSubopt.bed
+    # Loaded 514065 elements of size 6
+    #	Sorted
+    #	Creating table definition for 
+    #	Saving bed.tab
+    #	Loading hg18
+
+    # featureBits hg18 genscan
+    # 56039161 bases of 2881515245 (1.945%) in intersection 
+    #	featureBits hg17 genscan
+    #	55323340 bases of 2866216770 (1.930%) in intersection
+    #	featureBits hg16 genscan
+    #	55333689 bases of 2865248791 (1.931%) in intersection
+
+    #	featureBits hg18 genscanSubopt
+    # 55685959 bases of 2881515245 (1.933%) in intersection 
+    # featureBits hg17 genscanSubopt
+    #	55986178 bases of 2866216770 (1.953%) in intersection
+    #	featureBits hg16 genscanSubopt
+    #	56082952 bases of 2865248791 (1.957%) in intersection
+
+    #	Should be zero intersection with rmsk
+    #	featureBits -chrom=chr1 hg18 genscan rmsk
+    # 835 bases of 224999719 (0.000%) in intersection
+
 
