@@ -1289,3 +1289,61 @@ cp -f /projects/compbio/experiments/protein-predict/yeast/$1/$2/$2.t2k.undertake
 
     ln -s ./yeast /usr/local/apache/htdocs/goldenPath/sacCer1/sam    
 
+# REBUIL MOUSE-PROTEIN ALIGNMENTS AND LOADING (DONE 2005-12-16 Fan)
+    # Update mouse ortholog column using blastp on mouse known genes.
+    # First make mouse protein database and copy it to iscratch/i
+    # if it doesn't exist already
+    cd /cluster/data/mm7/bed
+    mkdir blastp
+    cd blastp
+    pepPredToFa mm7 knownGenePep known.faa
+    formatdb -i known.faa -t known -n known
+    ssh kkr1u00
+    if (-e /iscratch/i/mm7/blastp) then
+       rm -r /iscratch/i/mm7/blastp
+    endif
+    mkdir -p /iscratch/i/mm7/blastp
+    cp -p /cluster/data/mm7/bed/blastp/known.p?? /iscratch/i/mm7/blastp
+    iSync
+
+    # Make parasol run directory 
+    ssh kk
+    mkdir -p /cluster/data/sacCer1/bed/blastp/mm7
+    cd /cluster/data/sacCer1/bed/blastp/mm7
+    mkdir run
+    cd run
+    mkdir out
+
+    # Make blast script
+    cat > blastSome <<end
+#!/bin/csh
+setenv BLASTMAT /iscratch/i/blast/data
+/scratch/blast/blastall -p blastp -d /iscratch/i/mm7/blastp/known -i \$1 -o \$2 -e 0.001 -m 8 -b 1
+end
+chmod a+x blastSome
+
+    # Make gensub2 file
+    cat > gsub <<end
+#LOOP
+blastSome {check in line+ \$(path1)} {check out line out/\$(root1).tab}
+#ENDLOOP
+end
+
+    # Create parasol batch
+    echo ../../split/*.fa | wordLine stdin > split.lst
+    gensub2 split.lst single gsub spec
+    para create spec
+    para try,push,check ...
+# Completed: 5743 of 5743 jobs
+# CPU time in finished jobs:      11476s     191.27m     3.19h    0.13d  0.000 y
+# IO & Wait Time:                 15126s     252.10m     4.20h    0.18d  0.000 y
+# Average job time:                   5s       0.08m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              29s       0.48m     0.01h    0.00d
+# Submission to last job:           700s      11.67m     0.19h    0.01d
+
+    # Load into database.  
+    ssh hgwdev
+    cd /cluster/data/sacCer1/bed/blastp/mm7/run/out
+    hgLoadBlastTab sacCer1 mmBlastTab -maxPer=1 *.tab
+
