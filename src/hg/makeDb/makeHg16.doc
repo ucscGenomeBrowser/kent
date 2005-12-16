@@ -11108,7 +11108,6 @@ cat `ls -1 *.lav | sort -g` \
     wc -l jobList
     head jobList
     para create jobList
-<<<<<<< makeHg16.doc
         # 42 jobs
 
     # GOT HERE
@@ -11197,10 +11196,6 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     # clean up
     rm celeraOverlay.bed bed.tab
 
-
-<<<<<<< makeHg16.doc
->>>>>>> 1.203
-=======
 # YALE PSEUDOGENES (started Robert Baertsch, finished JK 2/21/05)
     ssh hgwdev
     cd /cluster/data/hg16/bed
@@ -11209,13 +11204,7 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     # Place file obtained from Mark Gerstein at yale in pseudoYale.gtf
     ldHgGene hg16 pseudoYale pseudoYale.gtf
     # Note - I'm guessing how this goes.  Robert left no record. -jk
-<<<<<<< makeHg16.doc
->>>>>>> 1.206
-=======
 
-<<<<<<< makeHg16.doc
->>>>>>> 1.211
-=======
 ## refresh vega tracks with vega build30        (done 5/4/04 Robert)
 ##download vega mysql tables
 cd /cluster/store8/ensembl
@@ -11263,18 +11252,10 @@ ldHgGene hg16 vegaGene -predTab vegaGeneHg16.gp -gtf
 ldHgGene hg16 vegaPseudoGene -predTab vegaPseudoGeneHg16.gp -gtf 
 echo 'truncate table vegaInfo' | hgsql hg16 -N -B
 echo 'load data local infile "vegaInfo.tab" into table vegaInfo' | hgsql hg16 -N -B
-<<<<<<< makeHg16.doc
->>>>>>> 1.213
-=======
-
 
 #########################################################################
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
-
-<<<<<<< makeHg16.doc
->>>>>>> 1.214
-=======
 ##########################################################################
 # CNPs from University of Washington (Done, Heather and Daryl, June/July 2005)
 # data from http://humanparalogy.gs.washington.edu/structuralvariation
@@ -11319,9 +11300,6 @@ hgLoadBed hg16 cnpIafrate -tab -sqlTable=cnpIafrate.sql cnpIafrate.bed
 cp Sebat.txt cnpSebat.bed
 hgLoadBed hg16 cnpSebat -tab -sqlTable=cnpSebat.sql cnpSebat.bed
 
-<<<<<<< makeHg16.doc
->>>>>>> 1.219
-=======
 ##########################################################################
 # sno/miRNA track from Michel Weber (DONE - 2005-06-16 - Hiram)
 #	received the data file UCSC_snotrack_hg16.txt via email
@@ -11372,9 +11350,6 @@ close (FH);
 	hg16.wgRna.tab
     #	this leaves 16 items classified as unknown, request to
     #	Michel Weber for proper classification
-<<<<<<< makeHg16.doc
->>>>>>> 1.220
-=======
 
 ################################################################################
 # Build hg17Kg table for KG II for hg16, using hg17 KG data (DONE 2005-07-11 Fan).
