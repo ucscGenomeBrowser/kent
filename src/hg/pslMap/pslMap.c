@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.7 2005/10/29 16:49:52 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.8 2005/12/17 06:24:25 kent Exp $";
 
 /*
  * Notes:
@@ -268,12 +268,12 @@ int lastBlk = mappedPsl->blockCount-1;
 mappedPsl->qStart = mappedPsl->qStarts[0];
 mappedPsl->qEnd = mappedPsl->qStarts[lastBlk] + mappedPsl->blockSizes[lastBlk];
 if (pslQStrand(mappedPsl) == '-')
-    reverseUnsignedRange(&mappedPsl->qStart, &mappedPsl->qEnd, mappedPsl->qSize);
+    reverseIntRange(&mappedPsl->qStart, &mappedPsl->qEnd, mappedPsl->qSize);
 
 mappedPsl->tStart = mappedPsl->tStarts[0];
 mappedPsl->tEnd = mappedPsl->tStarts[lastBlk] + mappedPsl->blockSizes[lastBlk];
 if (pslTStrand(mappedPsl) == '-')
-    reverseUnsignedRange(&mappedPsl->tStart, &mappedPsl->tEnd, mappedPsl->tSize);
+    reverseIntRange(&mappedPsl->tStart, &mappedPsl->tEnd, mappedPsl->tSize);
 }
 
 void adjustOrientation(struct psl *inPsl, char *mapPslOrigStrand,
