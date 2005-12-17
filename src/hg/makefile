@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-BROWSER_BINS=cartReset das hgBlat hgConvert hgCoordConv \
+BROWSER_BINS=cartReset das hgBlat hgConvert \
         hgGateway hgGene hgPcr hgTables hgText hgTracks \
 	hgTrackUi hgc cartDump near/hgNear \
 	protein/pbGateway protein/pbTracks protein/pbGlobal \
