@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1059 2005/12/16 16:25:51 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1060 2005/12/17 00:55:24 hartera Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8462,22 +8462,17 @@ char *scientificName = hScientificName(database);
 char *dir = ensOrgNameFromScientificName(scientificName);
 struct dyString *ensUrl;
 char *name;
-char *scaffoldName;
-char ensemblChrScaffoldName[64];
 int start, end;
 
 if (sameWord(scientificName, "Takifugu rubripes"))
     {
     /* for Fugu, must give scaffold, not chr coordinates */
-    /* Also, must give "chrom" as "Chr_scaffold_N" */
+    /* Also, must give "chrom" as "scaffold_N", name below. */
     if (!hScaffoldPos(chromName, winStart, winEnd,
-                        &scaffoldName, &start, &end))
+                        &name, &start, &end))
         /* position doesn't appear on Ensembl browser.
          * Ensembl doesn't show scaffolds < 2K */
         return;
-    strcpy(ensemblChrScaffoldName, "Chr_");
-    strncat(ensemblChrScaffoldName, scaffoldName, 60);
-    name = ensemblChrScaffoldName;
     }
 else
     {
@@ -8485,6 +8480,7 @@ else
     start = winStart;
     end = winEnd;
     }
+start += 1;
 ensUrl = ensContigViewUrl(dir, name, seqBaseCount, start, end);
 hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
 /* NOTE: probably should free mem from dir and scientificName ?*/
