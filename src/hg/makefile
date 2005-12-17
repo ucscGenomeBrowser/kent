@@ -7,11 +7,12 @@ BROWSER_BINS=cartReset das hgBlat hgConvert \
 	hgLiftOver hgc/cgiClustalw visiGene/hgVisiGene \
 	encode/mkEncodeFrameset encode/hgEncodeDataVersions
 
-TEST_DIRS = lib autoSql blastToPsl checkTableCoords embossToPsl \
+TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToMafFrames\
 	    gbGetEntries \
             hgGetAnn mrnaToGene overlapSelect pslCDnaFilter pslDiff \
-            pslHisto pslMap pslPartition pslSelect pslStats pslSwap spideyToPsl
+            pslHisto pslMap pslPartition pslSelect pslStats pslSwap spideyToPsl \
+	    sqlToXml xmlToSql
 
 BROKEN_TEST_DIRS = liftOver scaffoldFaToAgp
 

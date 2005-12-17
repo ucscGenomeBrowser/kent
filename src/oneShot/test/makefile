@@ -2,7 +2,7 @@ include ../../inc/common.mk
 
 L = -lm
 MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkweb.a
+MYLIBS =  $(MYLIBDIR)/jkweb.a
 
 O = test.o
 

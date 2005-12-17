@@ -17,25 +17,27 @@ errAbort(
   );
 }
 
-#include <termios.h>
-
-int testInt(int a, int b, int c, int d)
-{
-return (a + b)*c/d;
-}
-
-double testFloat(double a, double b, double c, double d)
-{
-return (a + b)*c/d;
-}
-
 
 void test(char *in)
 /* test - Test something. */
 {
-printf("%d\n", testInt(1,2,3,4));
-printf("%f\n", testFloat(1.0,2.0,3.0,4.0));
-
+clock_t now = clock();
+long nowl = now;
+time_t nowt = time(NULL);
+char *times = ctime(&nowt);
+struct tm *lt = localtime(&nowt);
+char *atime = asctime(lt);
+printf("now as long %ld\n", now);
+printf("ctime '%s'\n", times);
+printf("asctime '%s'\n", atime);
+printf("time in components:\n");
+printf("  year %d\n", 1900 + lt->tm_year);
+printf("  month %d\n", lt->tm_mon);
+printf("  day %d\n", lt->tm_mday);
+printf("  hour %d\n", lt->tm_hour);
+printf("  minute %d\n", lt->tm_min);
+printf("  sec %d\n", lt->tm_sec);
+printf("  zone %s\n", lt->tm_zone);
 }
 
 int main(int argc, char *argv[], char *env[])
