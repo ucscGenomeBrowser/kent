@@ -1612,7 +1612,7 @@ type netAlign mm6 chainMm6u1
 otherDb mm6
 
 track chainMm6
-shortLabel $o_Organism Chain
+shortLabel Mm6 Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 178.1 
@@ -1624,7 +1624,7 @@ type chain mm6
 otherDb mm6
 
 track netMm6
-shortLabel $o_Organism Net
+shortLabel Mm6 Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 178.2
@@ -1656,7 +1656,7 @@ type netAlign monDom1 chainMonDom1
 otherDb monDom1
 
 track chainMm7
-shortLabel Mm7 Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments WITH CORRECT Lineage Specific Repeats
 group compGeno
 priority 178.109
@@ -1668,7 +1668,7 @@ type chain mm7
 otherDb mm7
 
 track netMm7
-shortLabel Mm7 Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net WITH CORRECT Lineage Specific Repeats
 group compGeno
 priority 178.209
