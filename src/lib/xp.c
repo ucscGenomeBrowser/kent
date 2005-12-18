@@ -3,7 +3,7 @@
  * and smaller than expas.  I'm not sure it handles unicode
  * as well.
  *
- * This file is copyright 2002 Jim Kent, but license is hereby
+ * This file is copyright 2002-2005 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
@@ -13,7 +13,7 @@
 #include "xp.h"
 #include "xmlEscape.h"
 
-static char const rcsid[] = "$Id: xp.c,v 1.12 2005/12/03 08:00:45 kent Exp $";
+static char const rcsid[] = "$Id: xp.c,v 1.13 2005/12/18 01:30:44 kent Exp $";
 
 
 char xpNextBuf(struct xp *xp)
