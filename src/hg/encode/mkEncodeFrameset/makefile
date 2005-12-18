@@ -13,3 +13,5 @@ install: compile
 
 alpha: install
 
+clean:
+	echo "nothing to clean here"
