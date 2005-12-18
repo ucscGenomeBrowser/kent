@@ -1691,11 +1691,6 @@ cat > load.csh << 'EOF'
     csh load.csh >&! load.log &
 
 
-
-=======
-        #Reading MsaElUnion.bed
-        #Loaded 100543 elements of size 4
-
 ##########################################################################
 # MSA Conservation  (2005-12-07 kate)
 # Just phastCons and GERP for this freeze  (x3 aligners)
