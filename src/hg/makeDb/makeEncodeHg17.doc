@@ -1463,9 +1463,10 @@ cat > load.csh << 'EOF'
 ##########################################################################
 # MSA tracks from Sept. 2005 freeze
 # Use links from Wiki for data submission (as per Elliott Margulies)
-# Browser assemblies included (from colum 7 of metadata.txt):
-#       canFam1 danRer2 fr1 galGal2 mm6 monDom1 panTro1 rheMac1
-#       rn3 tetNig1 xenTro1
+# NOTE: mapping of sequence name to assembly is in column 7 of
+# metadata.txt file in Elliott's MSA release
+# Assemblies in this freeze are: canFam1 danRer2 fr1 galGal2 mm6
+#       monDom1 panTro1 rheMac1 rn3 tetNig1
 
     # TBA alignments
     cd /cluster/data/encode/TBA
@@ -1476,14 +1477,14 @@ cat > load.csh << 'EOF'
     cd ..
     foreach f (lab/*/*.maf.gz)
         echo $f
-        gunzip -c $f | sed 's/^s human\./s hg17\./; \
-                s/^s dog\./s canFam1./; s/^s zebrafish\./s danRer2./; \
-                s/^s fugu\./s fr1./; s/^s chicken\./s galGal2./; \
-                s/^s mouse\./s mm6./; s/^s monodelphis\./s monDom1./; \
-                s/^s chimp\./s panTro1./; s/^s macaque\./s rheMac1./; \
-                s/^s rat\./s rn3./; s/^s tetraodon\./s tetNig1./; \
-                s/^s frog\./s xenTro1./' \
-            > $f:t:r:r:e.maf
+        gunzip -c $f | \
+            sed 's/^s human\./s hg17./;          s/^s dog\./s canFam1./; \
+                 s/^s zebrafish\./s danRer2./;   s/^s fugu\./s fr1./; \
+                 s/^s chicken\./s galGal2./;     s/^s mouse\./s mm6./; \
+                 s/^s monodelphis\./s monDom1./; s/^s chimp\./s panTro1./; \
+                 s/^s macaque\./s rheMac1./;     s/^s rat\./s rn3./; \
+                 s/^s tetraodon\./s tetNig1./;' \
+                        > $f:t:r:r:e.maf
     end
     set gdir = /gbdb/hg17/encode/TBA/maf
     mkdir -p $gdir
@@ -1623,6 +1624,75 @@ cat > load.csh << 'EOF'
         #Loaded 30645 elements of size 4
         #Reading MsaElModerate.bed
         #Loaded 36793 elements of size 4
+
+    # conservation
+    cd /cluster/data/encode/MSA
+    mkdir -p SEP-05/conservation/lab
+    cd SEP-05/conservation/lab
+    wget ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/SEP-2005/cons/phastCons.wig.tar.gz
+    cd ..
+cat > load.csh << 'EOF'
+    # TBA
+    gunzip -c lab/tba/*/phast/human.ENm*.gz | \
+        wigEncode stdin tbaPhastCons.wig tbaPhastCons.wib
+    set d = /gbdb/hg17/encode/TBA/SEP-05
+    ln -s `pwd`/tbaPhastCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeTbaPhastCons tbaPhastCons.wig
+
+    # MLAGAN
+    gunzip -c lab/mlagan/*/phast/human.ENm*.gz | \
+        wigEncode stdin mlaganPhastCons.wig mlaganPhastCons.wib
+    set d = /gbdb/hg17/encode/MLAGAN/SEP-05
+    ln -s `pwd`/mlaganPhastCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeMlaganPhastCons mlaganPhastCons.wig
+
+    # MAVID
+    gunzip -c lab/mavid/*/phast/human.ENm*.gz | \
+        wigEncode stdin mavidPhastCons.wig mavidPhastCons.wib
+    set d = /gbdb/hg17/encode/MAVID/SEP-05
+    ln -s `pwd`/mavidPhastCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeMavidPhastCons mavidPhastCons.wig
+
+'EOF'
+    csh load.csh >&! load.log
+
+##########################################################################
+# MSA GERP Conservation (2005-12-13 kate)
+
+    cd /cluster/data/encoee/MSA/Gerp
+    mkdir -p 2005-12-12/lab
+    cd 2005-12-12/lab
+    
+
+##########################################################################
+# MSA SCONE Conservation (2005-12-12 kate)
+# From Harvard Med School
+
+    mkdir /cluster/data/encode/MSA/SconeCons
+    mkdir -p 2005-12-01/lab
+    cd 2005-12-01/lab
+   
+    # elements
+    cd bed
+    tar xvfz sconeRegions.bed.tar.gz
+    cd ../../
+cat > load.csh << 'EOF'
+    set out = sconeRegions.bed
+    rm -f $out
+    foreach f (lab/bed/*.bed)
+        set r = $f:t:r
+        echo $r
+        grep '^chr' $f | \
+            awk -v REGION=$r '{printf("%s\t%d\t%d\t%s.%d\t1000\n", \
+                        $1,$2,$3,REGION,NR)}' >> $out
+    end
+    hgLoadBed -strict hg17 encodeTbaSconeEl $out
+'EOF'
+    csh load.csh >&! load.log &
+
+
+
+=======
         #Reading MsaElUnion.bed
         #Loaded 100543 elements of size 4
 
