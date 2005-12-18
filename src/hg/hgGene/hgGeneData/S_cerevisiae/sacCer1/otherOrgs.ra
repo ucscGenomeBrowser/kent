@@ -2,7 +2,7 @@ name human
 db hg16
 
 name mouse
-db mm4
+db mm7
 
 name zebrafish
 db danRer1

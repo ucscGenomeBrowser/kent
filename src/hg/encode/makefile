@@ -17,5 +17,6 @@ USE_DIRS = $(DIRS)
 DIRS = \
 	regionAgp \
 	ldGencodeIntron \
-	hgEncodeDataVersions
+	hgEncodeDataVersions \
+	mkEncodeFrameset
 

@@ -239,7 +239,7 @@ if (imageCount > 0)
 "    ID='perspective'"
 "    STYLE='position:absolute;left:0px;top:0px;'"
 "    >"
-"    <IMG ID='perspBox' SRC='../visiGene/dot_clear.gif' BORDER=2 HEIGHT=100 WIDTH=100 STYLE='border-color:#8080FF;border-width:1' "
+"    <IMG ID='perspBox' SRC='../images/dot_clear.gif' BORDER=2 HEIGHT=100 WIDTH=100 STYLE='position:absolute;left:0px;top:0px;border-color:#8080FF;border-width:1' "
 ">"
 "    </DIV>"
 "    </DIV>"
@@ -333,10 +333,10 @@ if (imageId != 0)
 
     splitPath(p, dir, name, extension);
 #ifdef DEBUG
-    safef(buf,sizeof(buf),"../visiGene/bigImageTest.html?url=%s%s/%s&w=%d&h=%d",
+    safef(buf,sizeof(buf),"../bigImageTest.html?url=%s%s/%s&w=%d&h=%d",
 	    dir,name,name,w,h);
 #else	    
-    safef(buf,sizeof(buf),"../visiGene/bigImage.html?url=%s%s/%s&w=%d&h=%d",
+    safef(buf,sizeof(buf),"../bigImage.html?url=%s%s/%s&w=%d&h=%d",
 	    dir,name,name,w,h);
 #endif	    
     printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
@@ -546,15 +546,15 @@ puts(
 "original image or best fit the image display window, and moved or \n"
 "scrolled in any direction to focus on areas of interest. \n"
 "<P> \n"
-"<B>Zooming in:</B> Click the Zoom <em>in</em> button above the image to \n"
-"enlarge the image by 2X. \n"
-"Alternatively, click on the image with the left mouse button to zoom in \n"
-"and center the image on the position of the mouse click.</P>\n"
+"<B>Zooming in:</B> To enlarge the image by 2X, click the Zoom <em>in</em> \n"
+"button above the image or click on the image using the left mouse button. \n"
+"Alternatively, the + key may be used to zoom in when the main image pane is \n"
+"the active window.</P> \n"
 "<P> \n"
-"<B>Zooming out:</B> Click the Zoom <em>out</em> button above the image \n"
-"to reduce the image by 2X. Alternatively, click on the image with the right \n"
-"mouse button to zoom out \n"
-"and center the image on the position of the mouse click. </P> \n"
+"<B>Zooming out:</B> To reduce the image by 2X, click the Zoom <em>out</em> \n"
+"button above the image or click on the image using the right mouse button. \n"
+"Alternatively, the - key may be used to zoom out when the main image pane \n"
+"is the active window.</P> \n"
 "<P> \n"
 "<B>Sizing to full resolution:</B> Click the Zoom <em>full</em> button above \n"
 "the image to resize the image such that each pixel on the screen \n"
