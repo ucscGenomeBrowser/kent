@@ -13,7 +13,7 @@
 #include "xp.h"
 #include "xmlEscape.h"
 
-static char const rcsid[] = "$Id: xp.c,v 1.13 2005/12/18 01:30:44 kent Exp $";
+static char const rcsid[] = "$Id: xp.c,v 1.14 2005/12/19 03:18:09 kent Exp $";
 
 
 char xpNextBuf(struct xp *xp)
@@ -220,31 +220,21 @@ for (;;)
 }
 
 
-void xpRecurseParse(struct xp *xp)
-/* Parse from start tag to end tag.  Throw error if a problem.
- * Returns FALSE if nothing left to parse.  This should get
- * called after the first '<' in tag has been read. */
+void xpParseStartTag(struct xp *xp, 
+	int maxAttCount,		  /* Maximum attribute count. */
+	struct dyString *retName, 	  /* Returns tag name */
+	int *retAttCount, 		  /* Returns attribute count. */
+	struct dyString **retAttributes,  /* Name, value, name, value... */
+	boolean *retClosed)	  /* If true then is self-closing (ends in />) */
+/* Call this after the first '<' in a tag has been read.  It'll
+ * parse out until the '>' tag. */
 {
-/* This routine is written to be fast rather than dense.  
- * You'd have to get pretty extreme to make it faster and
- * still keep the i/o basically a character at a time.
- * It runs about 30% faster than expat. */
 char c, quotC;
-int i, attCount = 0;
+int attCount = 0;
 struct dyString *dy;
+int lineStart;
 
-/* Push new frame on stack and check for overflow and unallocated strings. */
-struct xpStack *stack = --xp->stack;
-if (stack < xp->stackBuf)
-    xpError(xp, "Stack overflow");
-if (stack->tag == NULL)
-    stack->tag = newDyString(32);
-else
-    dyStringClear(stack->tag);
-if (stack->text == NULL)
-    stack->text = newDyString(256);
-else
-    dyStringClear(stack->text);
+dyStringClear(retName);
 
 /* Skip white space after '<' and before tag name. */
 for (;;)
@@ -261,10 +251,9 @@ for (;;)
     }
 
 /* Read in tag name. */
-dy = stack->tag;
 for (;;)
     {
-    dyStringAppendC(dy, c);
+    dyStringAppendC(retName, c);
     if ((c = xpGetChar(xp)) == 0)
 	xpUnexpectedEof(xp);
     if (c == '>' || c == '/' || isspace(c))
@@ -295,11 +284,11 @@ if (c != '>' && c != '/')
 	    break;
 
 	/* Allocate space in attribute table. */
-	if (attCount >=  ArraySize(xp->attBuf)-2)
+	if (attCount >= maxAttCount - 2)
 	    xpError(xp, "Attribute stack overflow");
-	dy = xp->attDyBuf[attCount];
+	dy = retAttributes[attCount];
 	if (dy == NULL)
-	    dy = xp->attDyBuf[attCount] = newDyString(64);
+	    dy = retAttributes[attCount] = newDyString(64);
 	else
 	    dyStringClear(dy);
 	++attCount;
@@ -355,27 +344,25 @@ if (c != '>' && c != '/')
 		break;
 	    }
 	if (c != '\'' && c != '"')
-	    {
 	    xpError(xp, "Expecting quoted string after =");
-	    }
 
 	/* Allocate space in attribute table. */
-	if (attCount >=  ArraySize(xp->attBuf)-2)
+	if (attCount >= maxAttCount - 2)
 	    xpError(xp, "Attribute stack overflow");
-	dy = xp->attDyBuf[attCount];
+	dy = retAttributes[attCount];
 	if (dy == NULL)
-	    dy = xp->attDyBuf[attCount] = newDyString(64);
+	    dy = retAttributes[attCount] = newDyString(64);
 	else
 	    dyStringClear(dy);
 	++attCount;
 
 	/* Read until next quote. */
 	quotC = c;
-	i = xp->lineIx;
+	lineStart = xp->lineIx;
 	for (;;)
 	    {
 	    if ((c = xpGetChar(xp)) == 0)
-	       xpError(xp, "End of file inside literal string that started at line %d", i);
+	       xpError(xp, "End of file inside literal string that started at line %d", lineStart);
 	    if (c == quotC)
 		break;
 	    if (c == '&')
@@ -389,6 +376,107 @@ if (c != '>' && c != '/')
 	    }
 	}
     }
+if (c == '/')
+    {
+    *retClosed = TRUE;
+    c = xpGetChar(xp);
+    if (c != '>')
+        xpError(xp, "Expecting '>' after '/'");
+    }
+else
+    *retClosed = FALSE;
+*retAttCount = attCount;
+}
+
+void xpParseEndTag(struct xp *xp, char *tagName)
+/* Call this after have seen </.  It will parse through
+ * > and make sure that the tagName matches. */
+{
+struct dyString *dy = xp->endTag;
+char c;
+
+dyStringClear(dy);
+
+/* Skip leading space. */
+for (;;)
+    {
+    if ((c = xpGetChar(xp)) == 0)
+	xpUnexpectedEof(xp);
+    if (isspace(c))
+	{
+	if (c == '\n')
+	    ++xp->lineIx;
+	}
+    else
+	break;
+    }
+
+/* Read end tag. */
+for (;;)
+    {
+    dyStringAppendC(dy, c);
+    if ((c = xpGetChar(xp)) == 0)
+	xpUnexpectedEof(xp);
+    if (isspace(c))
+	{
+	if (c == '\n')
+	    ++xp->lineIx;
+	break;
+	}
+    if (c == '>')
+	break;
+    }
+
+/* Skip until '>' */
+while (c != '>')
+    {
+    dyStringAppendC(dy, c);
+    if ((c = xpGetChar(xp)) == 0)
+	xpUnexpectedEof(xp);
+    if (isspace(c))
+	{
+	if (c == '\n')
+	    ++xp->lineIx;
+	}
+    else if (c != '>')
+	xpError(xp, "Unexpected characters past first word in /%s tag", dy->string);
+    }
+
+if (!sameString(dy->string, tagName))
+    xpError(xp, "Mismatch between start tag %s and end tag %s",  tagName, dy->string);
+}
+
+void xpRecurseParse(struct xp *xp)
+/* Parse from start tag to end tag.  Throw error if a problem.
+ * Returns FALSE if nothing left to parse.  This should get
+ * called after the first '<' in tag has been read. */
+{
+/* This routine is written to be fast rather than dense.  
+ * You'd have to get pretty extreme to make it faster and
+ * still keep the i/o basically a character at a time.
+ * It runs about 30% faster than expat. */
+char c;
+int i, attCount = 0;
+struct dyString *dy;
+boolean isClosed;
+
+/* Push new frame on stack and check for overflow and unallocated strings. */
+struct xpStack *stack = --xp->stack;
+if (stack < xp->stackBuf)
+    xpError(xp, "Stack overflow");
+if (stack->tag == NULL)
+    stack->tag = newDyString(32);
+else
+    dyStringClear(stack->tag);
+if (stack->text == NULL)
+    stack->text = newDyString(256);
+else
+    dyStringClear(stack->text);
+
+/* Parse the start tag. */
+xpParseStartTag(xp, ArraySize(xp->attDyBuf), stack->tag, 
+	&attCount, xp->attDyBuf, &isClosed);
+
 
 /* Unpack attributes into simple array of strings. */
 for (i=0; i<attCount; ++i)
@@ -398,14 +486,7 @@ xp->attBuf[attCount] = NULL;
 /* Call user start function. */
 xp->atStartTag(xp->userData, stack->tag->string, xp->attBuf);
 
-if (c == '/')
-    {
-    if ((c = xpGetChar(xp)) == 0)
-       xpUnexpectedEof(xp);
-    if (c != '>')
-       xpError(xp, "Expecting '>' after '/'");
-    }
-else
+if (!isClosed)
     {
     /* Collect text up into next tag. */
     for (;;)
@@ -435,56 +516,7 @@ else
 	if (c == '/')
 	    {
 	    /* It's an end tag - we validate that it matches our start tag. */
-	    dy = xp->endTag;
-	    dyStringClear(dy);
-
-	    /* Skip leading space. */
-	    for (;;)
-		{
-		if ((c = xpGetChar(xp)) == 0)
-		    xpUnexpectedEof(xp);
-		if (isspace(c))
-		    {
-		    if (c == '\n')
-			++xp->lineIx;
-		    }
-		else
-		    break;
-		}
-
-	    /* Read end tag. */
-	    for (;;)
-		{
-		dyStringAppendC(dy, c);
-		if ((c = xpGetChar(xp)) == 0)
-		    xpUnexpectedEof(xp);
-		if (isspace(c))
-		    {
-		    if (c == '\n')
-			++xp->lineIx;
-		    break;
-		    }
-		if (c == '>')
-		    break;
-		}
-
-	    /* Skip until '>' */
-	    while (c != '>')
-		{
-		dyStringAppendC(dy, c);
-		if ((c = xpGetChar(xp)) == 0)
-		    xpUnexpectedEof(xp);
-		if (isspace(c))
-		    {
-		    if (c == '\n')
-			++xp->lineIx;
-		    }
-		else if (c != '>')
-		    xpError(xp, "Unexpected characters past first word in /%s tag", dy->string);
-		}
-
-	    if (!sameString(dy->string, stack->tag->string))
-		xpError(xp, "Mismatch between start tag %s and end tag %s",  stack->tag->string, dy->string);
+	    xpParseEndTag(xp, stack->tag->string);
 	    break;
 	    }
 	else if (c == '?')
