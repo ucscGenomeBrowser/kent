@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "dnautil.h"
-#include "memgfx.h"
+#include "xp.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -17,27 +17,44 @@ errAbort(
   );
 }
 
+int level = 0;
+
+void atStart(void *userData, char *name, char **atts)
+{
+char *att;
+spaceOut(stdout, level*2);
+printf("<%s", name);
+while ((att = *atts++) != NULL)
+     {
+     printf(" %s=\"", att);
+     att = *atts++;
+     printf("%s\"", att);
+     }
+printf(">\n");
+level += 1;
+}
+
+void atEnd(void *userData, char *name, char *text)
+{
+text = trimSpaces(text);
+if (text[0] != 0)
+    {
+    spaceOut(stdout, level*2);
+    printf("%s\n", trimSpaces(text));
+    }
+level -= 1;
+spaceOut(stdout, level*2);
+printf("</%s>\n", name);
+}
+
 
 void test(char *in)
 /* test - Test something. */
 {
-clock_t now = clock();
-long nowl = now;
-time_t nowt = time(NULL);
-char *times = ctime(&nowt);
-struct tm *lt = localtime(&nowt);
-char *atime = asctime(lt);
-printf("now as long %ld\n", now);
-printf("ctime '%s'\n", times);
-printf("asctime '%s'\n", atime);
-printf("time in components:\n");
-printf("  year %d\n", 1900 + lt->tm_year);
-printf("  month %d\n", lt->tm_mon);
-printf("  day %d\n", lt->tm_mday);
-printf("  hour %d\n", lt->tm_hour);
-printf("  minute %d\n", lt->tm_min);
-printf("  sec %d\n", lt->tm_sec);
-printf("  zone %s\n", lt->tm_zone);
+FILE *f = mustOpen(in, "r");
+struct xp *xp = xpNew(f, atStart, atEnd, xpReadFromFile, in);
+while (xpParseNext(xp, "interest"))
+    ;
 }
 
 int main(int argc, char *argv[], char *env[])
