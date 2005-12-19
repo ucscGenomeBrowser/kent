@@ -2,6 +2,22 @@
 #ifndef POLYGON_H
 #define POLYGON_H
 
+#ifndef XAP_H
+#include "xap.h"
+#endif
+
+/* The start and end handlers here are used with routines defined in xap.h.
+ * In particular if you want to read just parts of the XML file into memory
+ * call xapOpen() with these, and then xapNext() with the name of the tag
+ * you want to load. */
+
+void *polygonStartHandler(struct xap *xp, char *name, char **atts);
+/* Called by xap with start tag.  Does most of the parsing work. */
+
+void polygonEndHandler(struct xap *xp, char *name);
+/* Called by xap with end tag.  Checks all required children are loaded. */
+
+
 struct polygonPolygon
     {
     struct polygonPolygon *next;
@@ -20,7 +36,10 @@ void polygonPolygonSave(struct polygonPolygon *obj, int indent, FILE *f);
 /* Save polygonPolygon to file. */
 
 struct polygonPolygon *polygonPolygonLoad(char *fileName);
-/* Load polygonPolygon from file. */
+/* Load polygonPolygon from XML file where it is root element. */
+
+struct polygonPolygon *polygonPolygonLoadNext(struct xap *xap);
+/* Load next polygonPolygon element.  Use xapOpen to get xap. */
 
 struct polygonDescription
     {
@@ -38,7 +57,10 @@ void polygonDescriptionSave(struct polygonDescription *obj, int indent, FILE *f)
 /* Save polygonDescription to file. */
 
 struct polygonDescription *polygonDescriptionLoad(char *fileName);
-/* Load polygonDescription from file. */
+/* Load polygonDescription from XML file where it is root element. */
+
+struct polygonDescription *polygonDescriptionLoadNext(struct xap *xap);
+/* Load next polygonDescription element.  Use xapOpen to get xap. */
 
 struct polygonPoint
     {
@@ -58,7 +80,10 @@ void polygonPointSave(struct polygonPoint *obj, int indent, FILE *f);
 /* Save polygonPoint to file. */
 
 struct polygonPoint *polygonPointLoad(char *fileName);
-/* Load polygonPoint from file. */
+/* Load polygonPoint from XML file where it is root element. */
+
+struct polygonPoint *polygonPointLoadNext(struct xap *xap);
+/* Load next polygonPoint element.  Use xapOpen to get xap. */
 
 #endif /* POLYGON_H */
 

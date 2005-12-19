@@ -2,6 +2,22 @@
 #ifndef DASGFF_H
 #define DASGFF_H
 
+#ifndef XAP_H
+#include "xap.h"
+#endif
+
+/* The start and end handlers here are used with routines defined in xap.h.
+ * In particular if you want to read just parts of the XML file into memory
+ * call xapOpen() with these, and then xapNext() with the name of the tag
+ * you want to load. */
+
+void *dasGffStartHandler(struct xap *xp, char *name, char **atts);
+/* Called by xap with start tag.  Does most of the parsing work. */
+
+void dasGffEndHandler(struct xap *xp, char *name);
+/* Called by xap with end tag.  Checks all required children are loaded. */
+
+
 struct dasGffDasGff
     {
     struct dasGffDasGff *next;
@@ -18,7 +34,10 @@ void dasGffDasGffSave(struct dasGffDasGff *obj, int indent, FILE *f);
 /* Save dasGffDasGff to file. */
 
 struct dasGffDasGff *dasGffDasGffLoad(char *fileName);
-/* Load dasGffDasGff from file. */
+/* Load dasGffDasGff from XML file where it is root element. */
+
+struct dasGffDasGff *dasGffDasGffLoadNext(struct xap *xap);
+/* Load next dasGffDasGff element.  Use xapOpen to get xap. */
 
 struct dasGffNumber
     {
@@ -36,7 +55,10 @@ void dasGffNumberSave(struct dasGffNumber *obj, int indent, FILE *f);
 /* Save dasGffNumber to file. */
 
 struct dasGffNumber *dasGffNumberLoad(char *fileName);
-/* Load dasGffNumber from file. */
+/* Load dasGffNumber from XML file where it is root element. */
+
+struct dasGffNumber *dasGffNumberLoadNext(struct xap *xap);
+/* Load next dasGffNumber element.  Use xapOpen to get xap. */
 
 struct dasGffGff
     {
@@ -56,7 +78,10 @@ void dasGffGffSave(struct dasGffGff *obj, int indent, FILE *f);
 /* Save dasGffGff to file. */
 
 struct dasGffGff *dasGffGffLoad(char *fileName);
-/* Load dasGffGff from file. */
+/* Load dasGffGff from XML file where it is root element. */
+
+struct dasGffGff *dasGffGffLoadNext(struct xap *xap);
+/* Load next dasGffGff element.  Use xapOpen to get xap. */
 
 struct dasGffSegment
     {
@@ -79,7 +104,10 @@ void dasGffSegmentSave(struct dasGffSegment *obj, int indent, FILE *f);
 /* Save dasGffSegment to file. */
 
 struct dasGffSegment *dasGffSegmentLoad(char *fileName);
-/* Load dasGffSegment from file. */
+/* Load dasGffSegment from XML file where it is root element. */
+
+struct dasGffSegment *dasGffSegmentLoadNext(struct xap *xap);
+/* Load next dasGffSegment element.  Use xapOpen to get xap. */
 
 struct dasGffFeature
     {
@@ -107,7 +135,10 @@ void dasGffFeatureSave(struct dasGffFeature *obj, int indent, FILE *f);
 /* Save dasGffFeature to file. */
 
 struct dasGffFeature *dasGffFeatureLoad(char *fileName);
-/* Load dasGffFeature from file. */
+/* Load dasGffFeature from XML file where it is root element. */
+
+struct dasGffFeature *dasGffFeatureLoadNext(struct xap *xap);
+/* Load next dasGffFeature element.  Use xapOpen to get xap. */
 
 struct dasGffType
     {
@@ -129,7 +160,10 @@ void dasGffTypeSave(struct dasGffType *obj, int indent, FILE *f);
 /* Save dasGffType to file. */
 
 struct dasGffType *dasGffTypeLoad(char *fileName);
-/* Load dasGffType from file. */
+/* Load dasGffType from XML file where it is root element. */
+
+struct dasGffType *dasGffTypeLoadNext(struct xap *xap);
+/* Load next dasGffType element.  Use xapOpen to get xap. */
 
 struct dasGffMethod
     {
@@ -148,7 +182,10 @@ void dasGffMethodSave(struct dasGffMethod *obj, int indent, FILE *f);
 /* Save dasGffMethod to file. */
 
 struct dasGffMethod *dasGffMethodLoad(char *fileName);
-/* Load dasGffMethod from file. */
+/* Load dasGffMethod from XML file where it is root element. */
+
+struct dasGffMethod *dasGffMethodLoadNext(struct xap *xap);
+/* Load next dasGffMethod element.  Use xapOpen to get xap. */
 
 struct dasGffStart
     {
@@ -166,7 +203,10 @@ void dasGffStartSave(struct dasGffStart *obj, int indent, FILE *f);
 /* Save dasGffStart to file. */
 
 struct dasGffStart *dasGffStartLoad(char *fileName);
-/* Load dasGffStart from file. */
+/* Load dasGffStart from XML file where it is root element. */
+
+struct dasGffStart *dasGffStartLoadNext(struct xap *xap);
+/* Load next dasGffStart element.  Use xapOpen to get xap. */
 
 struct dasGffEnd
     {
@@ -184,7 +224,10 @@ void dasGffEndSave(struct dasGffEnd *obj, int indent, FILE *f);
 /* Save dasGffEnd to file. */
 
 struct dasGffEnd *dasGffEndLoad(char *fileName);
-/* Load dasGffEnd from file. */
+/* Load dasGffEnd from XML file where it is root element. */
+
+struct dasGffEnd *dasGffEndLoadNext(struct xap *xap);
+/* Load next dasGffEnd element.  Use xapOpen to get xap. */
 
 struct dasGffScore
     {
@@ -202,7 +245,10 @@ void dasGffScoreSave(struct dasGffScore *obj, int indent, FILE *f);
 /* Save dasGffScore to file. */
 
 struct dasGffScore *dasGffScoreLoad(char *fileName);
-/* Load dasGffScore from file. */
+/* Load dasGffScore from XML file where it is root element. */
+
+struct dasGffScore *dasGffScoreLoadNext(struct xap *xap);
+/* Load next dasGffScore element.  Use xapOpen to get xap. */
 
 struct dasGffOrientation
     {
@@ -220,7 +266,10 @@ void dasGffOrientationSave(struct dasGffOrientation *obj, int indent, FILE *f);
 /* Save dasGffOrientation to file. */
 
 struct dasGffOrientation *dasGffOrientationLoad(char *fileName);
-/* Load dasGffOrientation from file. */
+/* Load dasGffOrientation from XML file where it is root element. */
+
+struct dasGffOrientation *dasGffOrientationLoadNext(struct xap *xap);
+/* Load next dasGffOrientation element.  Use xapOpen to get xap. */
 
 struct dasGffPhase
     {
@@ -238,7 +287,10 @@ void dasGffPhaseSave(struct dasGffPhase *obj, int indent, FILE *f);
 /* Save dasGffPhase to file. */
 
 struct dasGffPhase *dasGffPhaseLoad(char *fileName);
-/* Load dasGffPhase from file. */
+/* Load dasGffPhase from XML file where it is root element. */
+
+struct dasGffPhase *dasGffPhaseLoadNext(struct xap *xap);
+/* Load next dasGffPhase element.  Use xapOpen to get xap. */
 
 struct dasGffGroup
     {
@@ -259,7 +311,10 @@ void dasGffGroupSave(struct dasGffGroup *obj, int indent, FILE *f);
 /* Save dasGffGroup to file. */
 
 struct dasGffGroup *dasGffGroupLoad(char *fileName);
-/* Load dasGffGroup from file. */
+/* Load dasGffGroup from XML file where it is root element. */
+
+struct dasGffGroup *dasGffGroupLoadNext(struct xap *xap);
+/* Load next dasGffGroup element.  Use xapOpen to get xap. */
 
 struct dasGffNote
     {
@@ -277,7 +332,10 @@ void dasGffNoteSave(struct dasGffNote *obj, int indent, FILE *f);
 /* Save dasGffNote to file. */
 
 struct dasGffNote *dasGffNoteLoad(char *fileName);
-/* Load dasGffNote from file. */
+/* Load dasGffNote from XML file where it is root element. */
+
+struct dasGffNote *dasGffNoteLoadNext(struct xap *xap);
+/* Load next dasGffNote element.  Use xapOpen to get xap. */
 
 struct dasGffLink
     {
@@ -296,7 +354,10 @@ void dasGffLinkSave(struct dasGffLink *obj, int indent, FILE *f);
 /* Save dasGffLink to file. */
 
 struct dasGffLink *dasGffLinkLoad(char *fileName);
-/* Load dasGffLink from file. */
+/* Load dasGffLink from XML file where it is root element. */
+
+struct dasGffLink *dasGffLinkLoadNext(struct xap *xap);
+/* Load next dasGffLink element.  Use xapOpen to get xap. */
 
 struct dasGffTarget
     {
@@ -317,7 +378,10 @@ void dasGffTargetSave(struct dasGffTarget *obj, int indent, FILE *f);
 /* Save dasGffTarget to file. */
 
 struct dasGffTarget *dasGffTargetLoad(char *fileName);
-/* Load dasGffTarget from file. */
+/* Load dasGffTarget from XML file where it is root element. */
+
+struct dasGffTarget *dasGffTargetLoadNext(struct xap *xap);
+/* Load next dasGffTarget element.  Use xapOpen to get xap. */
 
 #endif /* DASGFF_H */
 

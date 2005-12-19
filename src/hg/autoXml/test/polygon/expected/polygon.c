@@ -4,12 +4,6 @@
 #include "xap.h"
 #include "polygon.h"
 
-void *polygonStartHandler(struct xap *xp, char *name, char **atts);
-/* Called by expat with start tag.  Does most of the parsing work. */
-
-void polygonEndHandler(struct xap *xp, char *name);
-/* Called by expat with end tag.  Checks all required children are loaded. */
-
 
 void polygonPolygonFree(struct polygonPolygon **pObj)
 /* Free up polygonPolygon. */
@@ -54,11 +48,17 @@ fprintf(f, "</POLYGON>\n");
 }
 
 struct polygonPolygon *polygonPolygonLoad(char *fileName)
-/* Load polygonPolygon from file. */
+/* Load polygonPolygon from XML file where it is root element. */
 {
 struct polygonPolygon *obj;
 xapParseAny(fileName, "POLYGON", polygonStartHandler, polygonEndHandler, NULL, &obj);
 return obj;
+}
+
+struct polygonPolygon *polygonPolygonLoadNext(struct xap *xap)
+/* Load next polygonPolygon element.  Use xapOpen to get xap. */
+{
+return xapNext(xap, "POLYGON");
 }
 
 void polygonDescriptionFree(struct polygonDescription **pObj)
@@ -93,11 +93,17 @@ fprintf(f, "</DESCRIPTION>\n");
 }
 
 struct polygonDescription *polygonDescriptionLoad(char *fileName)
-/* Load polygonDescription from file. */
+/* Load polygonDescription from XML file where it is root element. */
 {
 struct polygonDescription *obj;
 xapParseAny(fileName, "DESCRIPTION", polygonStartHandler, polygonEndHandler, NULL, &obj);
 return obj;
+}
+
+struct polygonDescription *polygonDescriptionLoadNext(struct xap *xap)
+/* Load next polygonDescription element.  Use xapOpen to get xap. */
+{
+return xapNext(xap, "DESCRIPTION");
 }
 
 void polygonPointFree(struct polygonPoint **pObj)
@@ -133,15 +139,21 @@ fprintf(f, "/>\n");
 }
 
 struct polygonPoint *polygonPointLoad(char *fileName)
-/* Load polygonPoint from file. */
+/* Load polygonPoint from XML file where it is root element. */
 {
 struct polygonPoint *obj;
 xapParseAny(fileName, "POINT", polygonStartHandler, polygonEndHandler, NULL, &obj);
 return obj;
 }
 
+struct polygonPoint *polygonPointLoadNext(struct xap *xap)
+/* Load next polygonPoint element.  Use xapOpen to get xap. */
+{
+return xapNext(xap, "POINT");
+}
+
 void *polygonStartHandler(struct xap *xp, char *name, char **atts)
-/* Called by expat with start tag.  Does most of the parsing work. */
+/* Called by xap with start tag.  Does most of the parsing work. */
 {
 struct xapStack *st = xp->stack+1;
 int depth = xp->stackDepth;
@@ -208,7 +220,7 @@ else
 }
 
 void polygonEndHandler(struct xap *xp, char *name)
-/* Called by expat with end tag.  Checks all required children are loaded. */
+/* Called by xap with end tag.  Checks all required children are loaded. */
 {
 struct xapStack *stack = xp->stack;
 if (sameString(name, "POLYGON"))
