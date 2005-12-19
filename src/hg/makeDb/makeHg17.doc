@@ -18746,4 +18746,82 @@ cd syntenyCow
 hgLoadBed -noBin hg17 syntenyCow syntenyCow.bed
 
 # add to kent/src/hg/makeDb/trackDb/human/hg17/trackDb.ra
+ 
+###########################################################################
+# New Conservation track (WORKING 2005-12-15 kate)
 
+# Pairwise alignments needed for: monDom2, danRer3, bosTau2
+# Use existing alignments for:  
+# macaque_rheMac1
+# rat_rn3 
+# mouse_mm7
+# dog_canFam2
+# chicken_galGal2
+# xenopus_xenTro1
+# fugu_fr1
+# rabbit_oryCun1
+# armadillo_dasNov1
+# elephant_loxAfr1
+# tenrec_echTel1
+# tetraodon_tetNig1
+
+#########################################################################
+# BLASTZ danRer3 (WORKING - 2005-12-18 kate)
+    ssh pk
+    mkdir /cluster/data/hg17/bed/blastz.danRer3.2005-12-18
+    cd /cluster/data/hg17/bed
+    rm blastz.danRer3
+    ln -s blastz.danRer3.2005-12-18 blastz.danRer3
+    cd blastz.danRer3
+
+    cat << 'EOF' > DEF
+# human target, zebrafish query
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# use parameters suggested for human-fish evolutionary distance
+# recommended in doBlastzChainNet.pl help
+# (previously used for  hg16-fr1, danrer1-mm5)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
+
+# TARGET: Human hg17
+SEQ1_DIR=/san/sanvol1/scratch/hg17/nib
+SEQ1_SMSK=/cluster/bluearc/hg17/linSpecRep.notInZebrafish
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/san/sanvol1/scratch/hg17/chrom.sizes
+
+# QUERY: zebrafish danRer3
+# Use only non-random chroms (avoid chrNA and chrUn).
+SEQ2_DIR=/san/sanvol1/scratch/danRer3/chromNib
+SEQ2_SMSK=/san/sanvol1/scratch/danRer3/linSpecRep.notInOthers
+SEQ2_LEN=/cluster/bluearc/danRer3/chrom.sizes
+SEQ2_CHUNK=3000000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastz.danRer3.2005-12-18
+TMPDIR=/scratch/tmp
+'EOF'
+    # << happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF >& blastz.out &
+
+    # GOT HERE
+
+    #	Measurements:
+    ssh kolossus
+    cd  /cluster/data/hg17/bed/blastz.danRer3.2005-12-18
+    time HGDB_CONF=~/.hg.conf.read-only featureBits hg17 \
+	chain.danRer3Link > fb.danRer3.chainHg17Link 2>&1
+    cat fb.danRer3.chain.danRer3Link
+    time HGDB_CONF=~/.hg.conf.read-only featureBits hg17 \
+	chainMm7Link > fb.danRer3.chainMm7Link 2>&1
+    cat fb.danRer3.chainMm7Link
