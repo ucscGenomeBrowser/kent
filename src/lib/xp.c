@@ -13,7 +13,7 @@
 #include "xp.h"
 #include "xmlEscape.h"
 
-static char const rcsid[] = "$Id: xp.c,v 1.14 2005/12/19 03:18:09 kent Exp $";
+static char const rcsid[] = "$Id: xp.c,v 1.15 2005/12/19 17:51:14 kent Exp $";
 
 
 char xpNextBuf(struct xp *xp)
@@ -446,146 +446,109 @@ if (!sameString(dy->string, tagName))
     xpError(xp, "Mismatch between start tag %s and end tag %s",  tagName, dy->string);
 }
 
-void xpRecurseParse(struct xp *xp)
-/* Parse from start tag to end tag.  Throw error if a problem.
- * Returns FALSE if nothing left to parse.  This should get
- * called after the first '<' in tag has been read. */
+boolean xpParseNext(struct xp *xp, char *tag)
+/* Skip through file until get given tag.  Then parse out the
+ * tag and all of it's children (calling atStartTag/atEndTag).
+ * You can call this repeatedly to process all of a given tag
+ * in file. */
+
 {
-/* This routine is written to be fast rather than dense.  
- * You'd have to get pretty extreme to make it faster and
- * still keep the i/o basically a character at a time.
- * It runs about 30% faster than expat. */
 char c;
 int i, attCount = 0;
-struct dyString *dy;
+struct dyString *text = NULL;
 boolean isClosed;
+boolean inside = (tag == NULL);
+struct xpStack *initialStack = xp->stack;
 
-/* Push new frame on stack and check for overflow and unallocated strings. */
-struct xpStack *stack = --xp->stack;
-if (stack < xp->stackBuf)
-    xpError(xp, "Stack overflow");
-if (stack->tag == NULL)
-    stack->tag = newDyString(32);
-else
-    dyStringClear(stack->tag);
-if (stack->text == NULL)
-    stack->text = newDyString(256);
-else
-    dyStringClear(stack->text);
-
-/* Parse the start tag. */
-xpParseStartTag(xp, ArraySize(xp->attDyBuf), stack->tag, 
-	&attCount, xp->attDyBuf, &isClosed);
-
-
-/* Unpack attributes into simple array of strings. */
-for (i=0; i<attCount; ++i)
-    xp->attBuf[i] = xp->attDyBuf[i]->string;
-xp->attBuf[attCount] = NULL;
-
-/* Call user start function. */
-xp->atStartTag(xp->userData, stack->tag->string, xp->attBuf);
-
-if (!isClosed)
-    {
-    /* Collect text up into next tag. */
-    for (;;)
-	{
-	dy = stack->text;
-	for (;;)
-	    {
-	    if ((c = xpGetChar(xp)) == 0)
-	       xpError(xp, "End of file inside %s tag", stack->tag->string);
-	    if (c == '&')
-	       {
-	       xpLookup(xp, xp->endTag, dy);
-	       }
-	    else
-		{
-		if (c == '<')
-		   break;
-		else if (c == '\n')
-		   ++xp->lineIx;
-		dyStringAppendC(dy, c);
-		}
-	    }
-
-	/* Get next character to see if it's an end tag or a start tag. */
-	if ((c = xpGetChar(xp)) == 0)
-	   xpUnexpectedEof(xp);
-	if (c == '/')
-	    {
-	    /* It's an end tag - we validate that it matches our start tag. */
-	    xpParseEndTag(xp, stack->tag->string);
-	    break;
-	    }
-	else if (c == '?')
-	    xpEatComment(xp, c);
-	else if (c == '!')
-	    {
-	    if ((c = xpGetChar(xp)) == 0)
-		xpUnexpectedEof(xp);
-	    if (c == '[')
-	        {
-		/* Cope with <![CDATA[  ...  ]]> */
-		xpForceMatch(xp, "CDATA[");
-		xpTextUntil(xp, "]]>");
-		}
-	    else
-	        {
-		xpUngetChar(xp);
-		xpEatComment(xp, '!');
-		}
-	    }
-	else
-	    {
-	    xpUngetChar(xp);
-	    xpRecurseParse(xp);
-	    }
-	}
-    }
-/* Call user end function and pop stack. */
-xp->atEndTag(xp->userData, stack->tag->string, stack->text->string);
-++xp->stack;
-}
-
-boolean xpParse(struct xp *xp)
-/* Parse from start tag to end tag.  Throw error if a problem.
- * Returns FALSE if nothing left to parse. */
-{
-char c;
-
-/* Skip space until the first '<' */
 for (;;)
     {
-    if ((c = xpGetChar(xp)) == 0)
-	return FALSE;
-    if (isspace(c))
-	{
-	if (c == '\n')
-	   ++xp->lineIx;
-	}
-    else if (c == '<')
-	{
+    /* Load up text until next tag. */
+    for (;;)
+        {
 	if ((c = xpGetChar(xp)) == 0)
-	    xpUnexpectedEof(xp);
-	if (c == '?' || c == '!')
-	    {
-	    xpEatComment(xp, c);
-	    }
-	else if (c == '/') /* We're starting with a closing tag, treat as EOF. */
-	    {
 	    return FALSE;
-	    }
-	else
-	    {
-	    xpUngetChar(xp);
+	if (c == '<')
 	    break;
+	if (c == '&')
+	   xpLookup(xp, xp->endTag, text);
+	else 
+	    {
+	    if (c == '\n')
+		++xp->lineIx;
+	    if (text != NULL)
+		dyStringAppendC(text, c);
 	    }
 	}
-    else
-        xpError(xp, "Text outside of tags.");
+
+    /* Get next character to figure out what type of tag. */
+    c = xpGetChar(xp);
+    if (c == 0)
+       xpError(xp, "End of file inside tag");
+    else if (c == '?' || c == '!')
+        xpEatComment(xp, c);
+    else if (c == '/')  /* Closing tag. */
+        {
+	struct xpStack *stack = xp->stack;
+	if (stack >= xp->stackBufEnd)
+	    xpError(xp, "Extra end tag");
+	xpParseEndTag(xp, stack->tag->string);
+	if (inside)
+	    xp->atEndTag(xp->userData, stack->tag->string, stack->text->string);
+	xp->stack += 1;
+	if (xp->stack == initialStack)
+	    return TRUE;
+	}
+    else	/* Start tag. */
+        {
+	/* Push new frame on stack and check for overflow and unallocated strings. */
+	struct xpStack *stack = --xp->stack;
+	if (stack < xp->stackBuf)
+	    xpError(xp, "Stack overflow");
+	if (stack->tag == NULL)
+	    stack->tag = newDyString(32);
+	else
+	    dyStringClear(stack->tag);
+	if (stack->text == NULL)
+	    stack->text = newDyString(256);
+	else
+	    dyStringClear(stack->text);
+	text = stack->text;
+
+	/* Parse the start tag. */
+	xpUngetChar(xp);
+	xpParseStartTag(xp, ArraySize(xp->attDyBuf), stack->tag, 
+		&attCount, xp->attDyBuf, &isClosed);
+
+	if (!inside && sameString(stack->tag->string, tag))
+	    {
+	    inside = TRUE;
+	    initialStack = xp->stack + 1;
+	    }
+
+	/* Call user start function, and if closed tag, end function too. */
+	if (inside)
+	    {
+	    /* Unpack attributes into simple array of strings. */
+	    for (i=0; i<attCount; ++i)
+		xp->attBuf[i] = xp->attDyBuf[i]->string;
+	    xp->attBuf[attCount] = NULL;
+	    xp->atStartTag(xp->userData, stack->tag->string, xp->attBuf);
+	    }
+	if (isClosed)
+	    {
+	    if (inside)
+		xp->atEndTag(xp->userData, stack->tag->string, stack->text->string);
+	    xp->stack += 1;
+	    if (xp->stack == initialStack)
+		return TRUE;
+	    }
+	}
     }
-xpRecurseParse(xp);
-return TRUE;
 }
+
+void xpParse(struct xp *xp)
+/* Parse from start tag to end tag.  Throw error if a problem. */
+{
+xpParseNext(xp, NULL);
+}
+
