@@ -1,0 +1,65 @@
+#!/usr/bin/awk -f
+#
+# filter stdout/stderr of make to output from tree leves where
+# the make failed
+# 
+
+# output looks like:
+# make[3]: Entering directory `/scratch/markd/kent/src/hg/lib/tests'
+# make[3]: *** [spDbTest] Error 255
+# make[3]: Leaving directory `/scratch/markd/kent/src/hg/lib/tests'
+#
+
+# parse make[n] to get level
+function getLevel(line) {
+    if (match(line, "^make\\[([0-9]+)\\]:", a) == 0) {
+        print "Error: can't parse:",line >"/dev/stderr";
+        exit(1);
+    }
+    return a[1];
+}
+
+BEGIN {
+    nLines = 0;  # count of lines buffered in lines array
+    level = 0;   # current make level
+    lastPrinted = -1; # last line that was printed
+    curLevel = 0;     # currrent level being parsed
+    # arrays
+    #  lines - array of all lines in file 
+    #  levelStarts - contains line index where level started
+    #  levelOutCnt - count of none make: lines at this level
+}
+
+{
+    lines[++nLines] = $0;
+}
+
+/^make\[[0-9]+\]: Entering directory/ {
+    curLevel = getLevel($0);
+    levelStarts[curLevel] = nLines;
+    levelOutCnt[curLevel] = 0;
+}
+
+/^make\[[0-9]+\]: \*\*\* / {
+    # only print if there was some non-make output
+    if (levelOutCnt[curLevel] > 0) {
+        st = (levelStarts[curLevel] > lastPrinted) ? levelStarts[curLevel] : lastPrinted+1;
+        for (i = st; i <= nLines; i++) {
+            print lines[i] >"/dev/stderr";
+        }
+        print "-----------------------------------------------------" >"/dev/stderr";
+        lastPrinted = nLines;
+        levelOutCnt[curLevel] = 0;
+    }
+}
+
+/^make\[[0-9]+\]: Leaving directory/ {
+    level = getLevel($0);
+    levelStarts[level] = -1;  # flag invalid
+    curLevel = level-1;
+    levelOutCnt[curLevel] = 0;  # reset, don't care about what happened before this
+}
+
+!/^make\[[0-9]+\]:/ {
+    levelOutCnt[curLevel]++;
+}
