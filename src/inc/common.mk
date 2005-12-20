@@ -13,11 +13,17 @@ else
     HG_WARN_ERR = -DJK_WARN -Wall -Werror
 endif
 
-SCRIPTS=/cluster/bin/scripts
-CGI_BIN=/usr/local/apache/cgi-bin
+ifeq (${SCRIPTS},)
+    SCRIPTS=/cluster/bin/scripts
+endif
+ifeq (${CGI_BIN},)
+    CGI_BIN=/usr/local/apache/cgi-bin
+endif
 BINDIR = ${HOME}/bin/${MACHTYPE}
 MKDIR=mkdir -p
-STRIP=strip
+ifeq (${STRIP},)
+   STRIP=strip
+endif
 CVS=cvs
 
 # portable naming of compiled executables: add ".exe" if compiled on 
