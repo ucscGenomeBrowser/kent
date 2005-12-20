@@ -79,6 +79,7 @@ maxHeightPixels 128:16:16
 autoScale off
 viewLimits 0:25
 dataVersion ENCODE Oct 2005 Freeze
+release alpha
 
     track encodeAffyRnaGm06990Signal
     subTrack encodeAffyRnaSignal
@@ -90,7 +91,7 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeAffyRnaHeLaSignal
     subTrack encodeAffyRnaSignal
     shortLabel Affy RNA HeLa
-    longLabel Affymetrix PolyA+ RNA (HeLaS3) Signal
+    longLabel Affymetrix PolyA+ RNA (HeLa) Signal
     color 220,132,12
     priority 2
 
@@ -132,6 +133,7 @@ chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr2
 visibility hide
 type bed 3 .
 dataVersion ENCODE Oct 2005 Freeze
+release alpha
 
     track encodeAffyRnaGm06990Sites
     subTrack encodeAffyRnaTransfrags
@@ -143,7 +145,7 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeAffyRnaHeLaSites
     subTrack encodeAffyRnaTransfrags
     shortLabel Affy RNA HeLa
-    longLabel Affymetrix PolyA+ RNA (HeLaS3) Sites 
+    longLabel Affymetrix PolyA+ RNA (HeLa) Sites 
     color 220,132,12
     priority 2
 
