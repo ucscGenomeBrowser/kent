@@ -1429,7 +1429,7 @@ cat > loadSig.csh << 'EOF'
 # 4 files with chrom, start, end, integer score
 # Sites file in GFF format
 # NOTE: this was submitted in hg16, without notifying us.
-# I'm reloading after lifting, 2005-05-12
+# I'm reloading after lifting, 2005-12-05
 
     cd /cluster/data/encode/Uppsala/2005-11-07
     /cluster/data/encode/bin/scripts/splitTracks.pl lab/chip.wig
