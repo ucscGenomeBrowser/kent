@@ -11,7 +11,7 @@
 #include "fa.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: fa.c,v 1.33 2005/11/10 03:39:48 kent Exp $";
+static char const rcsid[] = "$Id: fa.c,v 1.34 2005/12/20 18:17:42 galt Exp $";
 
 boolean faReadNext(FILE *f, char *defaultName, boolean mustStartWithComment,
                          char **retCommentLine, struct dnaSeq **retSeq) 
@@ -88,6 +88,11 @@ for (;;)
         }
     }
 
+if (dnaSize == 0)
+    {
+    warn("Invalid fasta format: sequence size == 0 for element %s",name);
+    }
+
 /* Allocate DNA and fill it up from file. */
 dna = sequence = needHugeMem(dnaSize+1);
 if (fseeko(f, offset, SEEK_SET) < 0)
@@ -116,7 +121,7 @@ if (c == '>')
 
 *retSeq = newDnaSeq(sequence, dnaSize, name);
 if (ferror(f))
-    errnoAbort("read of fasta file failed");
+    errnoAbort("read of fasta file failed");    
 return TRUE;
 }
 
@@ -428,7 +433,7 @@ char *line;
 
 dnaUtilOpen();
 
-/* Read first line, make sure it starts wiht '>', and read first word
+/* Read first line, make sure it starts with '>', and read first word
  * as name of sequence. */
 name[0] = 0;
 if (!lineFileNext(lf, &line, &lineSize))
@@ -474,6 +479,11 @@ faFastBuf[bufIx] = 0;
 *retDna = faFastBuf;
 *retSize = bufIx;
 *retName = name;
+if (bufIx == 0)
+    {
+    warn("Invalid fasta format: sequence size == 0 for element %s",name);
+    }
+
 return TRUE;
 }
 
