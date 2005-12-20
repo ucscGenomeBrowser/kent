@@ -3427,7 +3427,8 @@ hgLoadBed -noBin hg15 syntenyCow in2.bed
 
 # New data again (Dec. 2005)
 
-hgLoadBed -noBin hg15 syntenyCow in3.bed
+fixChr.pl < in3.bed > in4.bed
+hgLoadBed -noBin hg15 syntenyCow in4.bed
 
 # add to kent/src/hg/makeDb/trackDb/human/hg15/trackDb.ra
 
