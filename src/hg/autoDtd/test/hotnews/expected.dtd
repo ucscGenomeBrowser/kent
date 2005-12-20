@@ -1,4 +1,4 @@
-<!-- This file was created by autoXml based on test/hotnews/in.xml -->
+<!-- This file was created by autoDtd based on test/hotnews/in.xml -->
 
 <!-- First some entities to mark numeric types in between tags.  Same as NCBI. -->
 <!ENTITY % INTEGER "#PCDATA">

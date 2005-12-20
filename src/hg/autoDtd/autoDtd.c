@@ -10,7 +10,7 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.11 2005/12/20 00:20:58 kent Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.12 2005/12/20 18:20:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -332,7 +332,7 @@ void writeDtd(char *dtdFileName, char *statsFileName, char *xmlFileName,
 struct hash *uniqHash = newHash(0);  /* Prevent writing dup defs for shared types. */
 FILE *dtdFile = mustOpen(dtdFileName, "w");
 FILE *statsFile = mustOpen(statsFileName, "w");
-fprintf(dtdFile, "<!-- This file was created by autoXml based on %s -->\n\n", xmlFileName);
+fprintf(dtdFile, "<!-- This file was created by autoDtd based on %s -->\n\n", xmlFileName);
 fprintf(dtdFile, "<!-- First some entities to mark numeric types in between tags.  Same as NCBI. -->\n");
 fprintf(dtdFile, "<!ENTITY %% INTEGER \"#PCDATA\">\n");
 fprintf(dtdFile, "<!ENTITY %% REAL \"#PCDATA\">\n\n");
