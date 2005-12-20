@@ -10,7 +10,7 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.10 2005/12/16 20:24:03 kent Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.11 2005/12/20 00:20:58 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -238,11 +238,21 @@ void rWriteDtd(FILE *dtdFile, FILE *statsFile, struct type *type,
 {
 struct element *el;
 struct attribute *att;
+int elCount = slCount(type->elements);
+boolean multiline;
+
+if (type->textAttribute != NULL)
+    elCount += 1;
+multiline = (elCount > 3);
 hashAdd(uniqHash, type->name, type);
-fprintf(dtdFile, "<!ELEMENT %s (\n", type->name);
+fprintf(dtdFile, "<!ELEMENT %s (", type->name);
+if (multiline)
+    fprintf(dtdFile, "\n");
 for (el = type->elements; el != NULL; el = el->next)
     {
-    fprintf(dtdFile, "\t%s", el->type->name);
+    if (multiline)
+       fprintf(dtdFile, "\t");
+    fprintf(dtdFile, "%s", el->type->name);
     if (el->isList)
         {
 	if (el->isOptional)
@@ -256,19 +266,22 @@ for (el = type->elements; el != NULL; el = el->next)
 	    fprintf(dtdFile, "?");
 	}
     if (el->next != NULL || type->textAttribute != NULL)
-        fprintf(dtdFile, ",");
-    fprintf(dtdFile, "\n");
+        fprintf(dtdFile, ", ");
+    if (multiline)
+	fprintf(dtdFile, "\n");
     }
 if (type->textAttribute != NULL)
     {
-    fprintf(dtdFile, "\t");
+    if (multiline)
+	fprintf(dtdFile, "\t");
     if (!type->textAttribute->nonInt)
         fprintf(dtdFile, "%%INTEGER;");
     else if (!type->textAttribute->nonFloat)
         fprintf(dtdFile, "%%REAL;");
     else
         fprintf(dtdFile, "#PCDATA");
-    fprintf(dtdFile, "\n");
+    if (multiline)
+	fprintf(dtdFile, "\n");
     }
 fprintf(dtdFile, ")>\n");
 fprintf(statsFile, "%s %d\n", type->name, type->count);
