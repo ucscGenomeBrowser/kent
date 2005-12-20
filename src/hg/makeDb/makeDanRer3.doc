@@ -1608,7 +1608,18 @@ end
       cp -p $f /iscratch/i/danRer3/linSpecRep.notInMouse/$f:t:r:r.out.spec
     end
     /cluster/bin/iSync
-  
+
+    # NOTE: the "mouse/human/etc." lineage-specific repeat files are now in
+    # /san/sanvol1/scratch/danRer3/linSpecRep.notInOthers
+    # however, the files for chrNA and chrUn were missing, so I'm
+    # adding them here.  (2005-12-19 kate)
+    ssh kkstore02
+    cd /cluster/data/danRer3
+    cp -p Un/chrUn.fa.out  \
+        /san/sanvol1/scratch/danRer3/linSpecRep.notInOthers/chrUn.out.spec
+    cp -p NA/chrNA.fa.out \
+        /san/sanvol1/scratch/danRer3/linSpecRep.notInOthers/chrNA.out.spec
+
     # do swap of mm6 vs. danRer3 chain and net alignments to 
     # create danRer3 vs. mm6. see makeMm6.doc for details.
     ssh kk
