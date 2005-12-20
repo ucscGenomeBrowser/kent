@@ -1,0 +1,4 @@
+SHAPES
+  POLYGON+ $color $name
+    $DESCRIPTION
+    PT-TWO-D+ %x #y
