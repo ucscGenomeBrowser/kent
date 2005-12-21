@@ -1,7 +1,7 @@
 #!/bin/csh -ef
 
 foreach T (uniProt visiGene)
-    sqlToXml $T test/$T/in.od test/$T/out.xml -maxList=3
+    sqlToXml $T test/$T/in.od test/$T/out.xml -maxList=3 -verbose=0
     diff test/$T/expected.xml test/$T/out.xml
 end
 
