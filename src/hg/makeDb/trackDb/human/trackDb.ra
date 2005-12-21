@@ -1482,6 +1482,15 @@ shortCircuit 1
 termRegex gnf1h[0-9]+.+
 searchPriority 16
 
+searchName affy500K
+searchTable affy500K
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex (SNP_A-[0-9]+(_[0-9]+)?)
+searchPriority 17
+padding 250
+
 searchName miRNAPrefix
 searchTable miRNA
 searchMethod prefix
@@ -1514,3 +1523,4 @@ searchType genePred
 shortcircuit 1
 termRegex EG3HTT[0-9]+
 searchPriority 50
+
