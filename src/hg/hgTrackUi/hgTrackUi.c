@@ -28,7 +28,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.234 2005/12/16 16:27:09 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.235 2005/12/21 19:54:35 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1348,7 +1348,8 @@ if (framesTable)
 
     printf("<BR><B>Codon Translation:</B><BR>");
     printf("Default species for translation: ");
-    for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL; 
+    nodeNames[0] = database;
+    for (wmSpecies = wmSpeciesList, i = 1; wmSpecies != NULL; 
 			wmSpecies = wmSpecies->next, i++)
 	{
 	nodeNames[i] = wmSpecies->name;
