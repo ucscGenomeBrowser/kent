@@ -39,7 +39,7 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     glDbRep.o goa.o goaPart.o growthCondition.o grp.o hCommon.o \
     hdb.o hgConfig.o hgExp.o hgFind.o hgFindSpec.o hgFindSpecCustom.o \
     hgGene.o hgMaf.o hgMut.o hgMutUi.o hgRelate.o hgSeq.o \
-    HInv.o hui.o humanParalog.o humPhen.o humanPhenotypeUi.o \
+    HInv.o hui.o humanParalog.o humPhen.o \
     imageClone.o isochores.o itemAttr.o jalview.o \
     jaxOrtholog.o jaxQTL.o jaxQTL3.o jksql.o joiner.o \
     kgAlias.o kgProtAlias.o kgXref.o knownInfo.o knownMore.o knownToSuper.o \
