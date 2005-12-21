@@ -18825,3 +18825,14 @@ TMPDIR=/scratch/tmp
     time HGDB_CONF=~/.hg.conf.read-only featureBits hg17 \
 	chainMm7Link > fb.danRer3.chainMm7Link 2>&1
     cat fb.danRer3.chainMm7Link
+
+##########################################################################
+# Affy 500K SNPs (Heather, December 2005)
+# Source: Venu Valmeekam (venu_valmeekam@affymetrix.com)
+
+cd /cluster/data/hg17/bed/snp/affy/500K
+hgLoadBed -noBin -sqlTable=/cluster/home/heather/kent/src/hg/lib/affy500K.sql hg17 affy500K all.bed
+
+# validate
+affyCheck hg17 affy500K snp125
+
