@@ -597,6 +597,14 @@ altColor 0,0,0
 spectrum on
 type bed 12 .
 
+track affy500K
+shortLabel Affy 500K
+longLabel Affy GeneChip Mapping 500K Array
+group varRep
+priority 145.9
+visibility hide
+type bed 6 +
+
 track chainSelf
 shortLabel Self Chain 
 longLabel Chained Self-Alignments
