@@ -51,8 +51,8 @@ type bed 6 +
 exonArrows off
 
 track chainMm6
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+shortLabel Mm6 Chain
+longLabel Mm6 ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 126.2
 visibility hide
@@ -64,8 +64,8 @@ type chain mm6
 otherDb mm6
 
 track netMm6
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+shortLabel Mm6 Net
+longLabel Mm6 ($o_date/$o_db) Alignment Net
 group compGeno
 priority 126.3
 visibility hide
@@ -74,7 +74,7 @@ type netAlign mm6 chainMm6
 otherDb mm6
 
 track chainMm7
-shortLabel $o_db Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 126.4
@@ -87,7 +87,7 @@ type chain mm7
 otherDb mm7
 
 track netMm7
-shortLabel $o_db Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 126.5
