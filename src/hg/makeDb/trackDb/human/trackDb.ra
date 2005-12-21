@@ -1355,13 +1355,13 @@ visibility hide
 type bed 3 .
 origAssembly hg16
 
-    track hapmapRecombHotspots
+    track snpRecombHotspotHapmap
     subTrack snpRecombHotspot
     shortLabel HapMap
     longLabel Oxford Recombination Hotspots from HapMap Phase I release 16c.1
     priority 1
 
-    track perlegenRecombHotspots
+    track snpRecombHotspotPerlegen
     subTrack snpRecombHotspot
     shortLabel Perlegen
     longLabel Oxford Recombination Hotspots from Perlegen data
