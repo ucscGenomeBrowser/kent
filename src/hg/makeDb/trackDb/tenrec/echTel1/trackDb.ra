@@ -22,7 +22,7 @@ type psl xeno hg17
 otherDb hg17
 
 track chainMm7
-shortLabel Mm7 Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 178.109
@@ -34,7 +34,7 @@ type chain mm7
 otherDb mm7
 
 track netMm7
-shortLabel Mm7 Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 178.209
