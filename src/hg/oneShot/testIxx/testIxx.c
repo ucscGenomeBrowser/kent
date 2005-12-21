@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: testIxx.c,v 1.1 2005/12/21 02:28:25 kent Exp $";
+static char const rcsid[] = "$Id: testIxx.c,v 1.2 2005/12/21 02:57:40 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -52,42 +52,47 @@ void testIxx(char *inIx, char *outIxx)
 {
 struct lineFile *lf = lineFileOpen(inIx, TRUE);
 FILE *f = mustOpen(outIxx, "w");
-char *prefix = needMem(prefixSize+1);
+char *curPrefix = needMem(prefixSize+1);
 char *lastPrefix = needMem(prefixSize+1);
-off_t lastPos = 0, curPos;
+char *writtenPrefix = needMem(prefixSize+1);
+off_t startPrefixPos = 0, writtenPos = 0, curPos;
 char *line, *word;
 
 /* Read first line and index it. */
 if (!lineFileNextReal(lf, &line))
     errAbort("%s is empty", inIx);
 word = nextWord(&line);
-setPrefix(word, lastPrefix);
-lastPos = lineFileTell(lf);
-writeIndexEntry(f, lastPrefix, lastPos);
+setPrefix(word, writtenPrefix);
+setPrefix(lastPrefix, writtenPrefix);
+writtenPos = lineFileTell(lf);
+writeIndexEntry(f, writtenPrefix, writtenPos);
 
 /* Loop around adding to index as need be */
 while (lineFileNextReal(lf, &line))
     {
     int diff;
     curPos = lineFileTell(lf);
-    diff = curPos - lastPos;
+    word = nextWord(&line);
+    setPrefix(word, curPrefix);
+    if (!sameString(curPrefix, lastPrefix))
+        startPrefixPos = curPos;
+    diff = curPos - writtenPos;
     if (diff >= binSize)
         {
-	word = nextWord(&line);
-	setPrefix(word, prefix);
-	if (!sameString(prefix, lastPrefix))
+	if (!sameString(curPrefix, writtenPrefix))
 	    {
-	if (diff > 5000000) uglyf("diff of %d at %s\n", diff, prefix);
-	    writeIndexEntry(f, prefix, curPos);
-	    lastPos = curPos;
-	    strcpy(lastPrefix, prefix);
+	    writeIndexEntry(f, curPrefix, startPrefixPos);
+	    writtenPos = curPos;
+	    strcpy(writtenPrefix, curPrefix);
 	    }
 	}
+    strcpy(lastPrefix, curPrefix);
     }
 carefulClose(&f);
 lineFileClose(&lf);
-freeMem(prefix);
+freeMem(curPrefix);
 freeMem(lastPrefix);
+freeMem(writtenPrefix);
 }
 
 int main(int argc, char *argv[])
