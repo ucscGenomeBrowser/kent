@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.2 2005/12/21 04:18:46 kent Exp $";
+static char const rcsid[] = "$Id: testSearch.c,v 1.3 2005/12/21 04:38:55 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,9 +22,9 @@ static struct optionSpec options[] = {
 
 #define prefixSize 5
 
-char unhexTable[128];	/* Lookup table to help with hex conversion. */
+static char unhexTable[128];	/* Lookup table to help with hex conversion. */
 
-void initUnhexTable()
+static void initUnhexTable()
 {
 int i;
 unhexTable['0'] = 0;
@@ -45,7 +45,7 @@ unhexTable['E'] = 14;
 unhexTable['F'] = 15;
 }
 
-off_t  unhex(char hex[10])
+static off_t unhex(char hex[10])
 /* Convert 10 character hex string to off_t */
 {
 off_t  x = 0;
@@ -60,43 +60,21 @@ for (i=0; i<10; ++i)
 return x;
 }
 
-off_t findIndexStartPos(char *ixxFile, char *word)
-{
-struct lineFile *lf = lineFileOpen(ixxFile, TRUE);
-char wordPrefix[8], linePrefix[8];
-char *line;
-off_t pos = 0;
-
-wordPrefix[prefixSize] = 0;
-linePrefix[prefixSize] = 0;
-memcpy(wordPrefix, word, prefixSize);
-tolowers(wordPrefix);
-while (lineFileNext(lf, &line, NULL))
-    {
-    memcpy(linePrefix, line, prefixSize);
-    if (strcmp(wordPrefix, linePrefix) < 0)
-        break;
-    pos = unhex(line+prefixSize);
-    }
-lineFileClose(&lf);
-return pos;
-}
-
-struct hitPos 
+struct trixHitPos 
 /* A hit to the index. */
     {
-    struct docPos *next;	/* Next in list */
+    struct trixHitPos *next;	/* Next in list */
     char *itemId;		/* Associated itemId */
     int docIx;			/* Which document this is part of. */
     int wordIx;			/* Which word this is part of. */
     };
 
-struct wordResults
+struct trixWordResults
 /* Results of a search on one word. */
     {
-    struct wordResults *next;
-    char *indexLine;		/* Copy of indexed line. */
-    struct hitPos *hitList;	/* Hit list. */
+    struct trixWordResults *next;
+    char *word;			/* Word name. */
+    struct trixHitPos *hitList;	/* Hit list. */
     };
 
 struct trixIxx
@@ -148,6 +126,7 @@ struct trix *trix;
 struct lineFile *lf;
 char *line;
 
+initUnhexTable();
 safef(ixxFile, sizeof(ixxFile), "%sx", ixFile);
 lf = lineFileOpen(ixxFile, TRUE);
 trix = trixNew();
@@ -161,7 +140,7 @@ trix->lf = lineFileOpen(ixFile, TRUE);
 return trix;
 }
 
-void trixSetPrefix(char *word, char *prefix)
+void trixCopyToPrefix(char *word, char *prefix)
 /* Copy first part of word to prefix.  If need be end pad with spaces. */
 {
 int len = strlen(word);
@@ -182,7 +161,7 @@ char wordPrefix[prefixSize];
 int i;
 off_t pos = 0;
 
-trixSetPrefix(word, wordPrefix);
+trixCopyToPrefix(word, wordPrefix);
 toLowerN(wordPrefix, prefixSize);
 for (i=0; i<trix->ixxSize; ++i)
     {
@@ -194,18 +173,38 @@ for (i=0; i<trix->ixxSize; ++i)
 return pos;
 }
 
-
-void testSearch(char *inFile, char *searchWord)
-/* testSearch - Set up a search program that does free text indexing and retrieval.. */
+struct trixWordResults *trixWordResultsParse(char *hitWord, char *hitString)
+/* This will create a trixWordsResult from hitWord and hitString.  It will
+ * insert zeros in place of spaces in hit string while doing this. */
 {
-struct trix *trix;
-char ixFile[PATH_LEN];
-off_t ixPos;
-char *line, *word;
+struct trixWordResults *twr;
+struct trixHitPos *hit;
+char *word;
 
-safef(ixFile, sizeof(ixFile), "%s.ix", inFile);
-trix = trixOpen(ixFile);
-ixPos = trixFindIndexStartLine(trix, searchWord);
+AllocVar(twr);
+twr->word = cloneString(hitWord);
+while ((word = nextWord(&hitString)) != NULL)
+    {
+    char *parts[4];
+    int partCount;
+    partCount = chopByChar(word, ',', parts, ArraySize(parts));
+    if (partCount != 3)
+        errAbort("Error in index format at word %s", hitWord);
+    AllocVar(hit);
+    hit->itemId = cloneString(parts[0]);
+    hit->docIx = atoi(parts[1]);
+    hit->wordIx = atoi(parts[2]);
+    slAddHead(&twr->hitList, hit);
+    }
+slReverse(&twr->hitList);
+return twr;
+}
+
+struct trixWordResults *trixSearchWordResults(struct trix *trix, char *searchWord)
+/* Get results for single word from index.  Returns NULL if no matches. */
+{
+char *line, *word;
+off_t ixPos = trixFindIndexStartLine(trix, searchWord);
 lineFileSeek(trix->lf, ixPos, SEEK_SET);
 while (lineFileNext(trix->lf, &line, NULL))
     {
@@ -213,16 +212,35 @@ while (lineFileNext(trix->lf, &line, NULL))
     word = nextWord(&line);
     diff = strcmp(searchWord, word);
     if (diff == 0)
-	{
-        printf("MATCH %s %s\n", word, line);
-	break;
-	}
+	return trixWordResultsParse(word, line);
     else if (diff < 0)
-	{
-        printf("NOT FOUND %s\n", searchWord);
 	break;
-	}
     }
+return NULL;
+}
+
+
+void testSearch(char *inFile, char *searchWord)
+/* testSearch - Set up a search program that does free text indexing and retrieval.. */
+{
+struct trix *trix;
+char ixFile[PATH_LEN];
+struct trixWordResults *twr;
+struct trixHitPos *hit;
+int hitIx, maxHits = 8;
+
+safef(ixFile, sizeof(ixFile), "%s.ix", inFile);
+trix = trixOpen(ixFile);
+twr = trixSearchWordResults(trix, searchWord);
+if (twr == NULL)
+    errAbort("%s not found", searchWord);
+printf("%d matches to %s:", slCount(twr->hitList), searchWord);
+
+for (hit=twr->hitList, hitIx=0; hit != NULL & hitIx < maxHits; hit=hit->next, hitIx+=1)
+    printf(" %s", hit->itemId);
+if (hit != NULL)
+    printf(" ...");
+printf("\n");
 }
 
 int main(int argc, char *argv[])
@@ -231,7 +249,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-initUnhexTable();
 testSearch(argv[1], argv[2]);
 return 0;
 }
