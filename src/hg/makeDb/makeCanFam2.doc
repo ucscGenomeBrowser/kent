@@ -923,7 +923,12 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     echo "check /cluster/data/canFam2/bed/blastz.rn3.swap/do.log" \
     | mail -s "check do.log" $USER
     # Add {chain,net}Rn3 to trackDb.ra if necessary.
-
+    # Found that downloads in rn3 was missing 2005-12-21 - remake - Hiram
+    cd /cluster/data/rn3/bed/blastz.canFam2
+    /cluster/bin/scripts/doBlastzChainNet.pl -continue=download \
+	/cluster/data/rn3/bed/blastz.canFam2/DEF \
+	-chainMinScore=1000 -chainLinearGap=loose > downloads.out 2>&1
+    
 # RE-RUN NETTOAXT, AXTTOMAF FOR RN3 (DONE 11/2/05 angie)
     # Kate fixed netToAxt to avoid duplicated blocks, which is important 
     # for input to multiz.  Regenerate maf using commands from sub-script 
