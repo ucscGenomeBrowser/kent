@@ -604,6 +604,7 @@ group varRep
 priority 145.9
 visibility hide
 type bed 6 +
+url http://www.affymetrix.com/LinkServlet?probeset=$$
 
 track chainSelf
 shortLabel Self Chain 
