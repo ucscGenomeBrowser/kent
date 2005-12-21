@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.38 2005/12/09 23:39:27 fanhsu Exp $"
+#	"$Id: makeMm7.doc,v 1.39 2005/12/21 00:32:06 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -5918,25 +5918,33 @@ blatSome $(path1) {check in line $(path2)} {check out line psl/$(root1)/$(root2)
     echo "rename table blastRef to blastKGRef03" | hgsql mm7
     echo "load data local infile 'blastKGRef03' into table blastKGRef03" | hgsql mm7
 
-# LOAD GENEID GENES (TBD)
+##############################################################################
+# LOAD GENEID GENES (DONE - 2005-12-20 - Hiram)
+    ssh hgwdev
     mkdir -p /cluster/data/mm7/bed/geneid/download
     cd /cluster/data/mm7/bed/geneid/download
-    foreach chr (`awk '{print $1;}' ../../../chrom.sizes`)
-      echo $chr
-      wget \
-http://genome.imim.es/genepredictions/M.musculus/mmMar2005/geneid_v1.2/$chr.gtf
-      wget \
-http://genome.imim.es/genepredictions/M.musculus/mmMar2005/geneid_v1.2/$chr.prot
-    end
+    awk '{print $1}' ../../../chrom.sizes | while read C
+    do
+      echo $C
+      wget --timestamping \
+http://genome.imim.es/genepredictions/M.musculus/mmDec2005/geneid_v1.2/$C.gtf
+      wget --timestamping \
+http://genome.imim.es/genepredictions/M.musculus/mmDec2005/geneid_v1.2/$C.prot
+    done
     # Add missing .1 to protein id's
     foreach f (*.prot)
       perl -wpe 's/^(>chr\w+)$/$1.1/' $f > $f:r-fixed.prot
     end
     cd ..
     ldHgGene -genePredExt -gtf mm7 geneid download/*.gtf
+    #	Read 34992 transcripts in 295837 lines in 40 files
+    #	34992 groups 40 seqs 1 sources 3 feature types
+    #	34992 gene predictions
     hgPepPred mm7 generic geneidPep download/*-fixed.prot
     featureBits mm7 -enrichment refGene geneid
-#refGene 1.623%, geneid 1.561%, both 0.794%, cover 48.91%, enrich 31.34x
+# refGene 1.707%, geneid 1.579%, both 0.831%, cover 48.68%, enrich 30.83x
+    featureBits mm6 -enrichment refGene geneid
+# refGene 1.623%, geneid 1.561%, both 0.794%, cover 48.91%, enrich 31.34x
 
 ##############################################################################
 # CLONE ENDS - BACEND TRACK (DONE - 2005-09-29 - Hiram)
