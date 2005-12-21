@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.5 2005/12/21 21:26:37 kent Exp $";
+static char const rcsid[] = "$Id: testSearch.c,v 1.6 2005/12/21 21:44:48 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -74,7 +74,7 @@ struct trixWordResult
     {
     struct trixWordResult *next;
     char *word;			/* Word name. */
-    struct trixHitPos *hitList;	/* Hit list. */
+    struct trixHitPos *hitList;	/* Hit list.  May be shared. */
     struct trixHitPos *hit;	/* Current position while iterating through hit list. */
     struct trixHitPos *iHit;	/* Current position during an inner iteration. */
     };
@@ -103,6 +103,7 @@ struct trix
     struct trixIxx *ixx;	/* Second level index in memory. */
     int ixxSize;		/* Size of second level index. */
     int ixxAlloc;	        /* Space allocated for index. */
+    struct hash *wordHitHash;	/* Hash of word hitsLists, so search on "the the the" works fast. */
     };
 
 struct trix *trixNew()
@@ -112,6 +113,7 @@ struct trix *trix;
 AllocVar(trix);
 trix->ixxAlloc = 8*1024;
 AllocArray(trix->ixx, trix->ixxAlloc);
+trix->wordHitHash = newHash(8);
 return trix;
 }
 
@@ -165,7 +167,7 @@ else
     }
 }
 
-off_t trixFindIndexStartLine(struct trix *trix, char *word)
+static off_t trixFindIndexStartLine(struct trix *trix, char *word)
 /* Find start position of line we want to start at in the first level
  * index. */
 {
@@ -185,16 +187,12 @@ for (i=0; i<trix->ixxSize; ++i)
 return pos;
 }
 
-struct trixWordResult *trixWordResultsParse(char *hitWord, char *hitString)
-/* This will create a trixWordsResult from hitWord and hitString.  It will
- * insert zeros in place of spaces in hit string while doing this. */
+static struct trixHitPos *trixParseHitList(char *hitWord, char *hitString)
+/* Parse out hit string, inserting zeroes in it during process.
+ * Return result as list of trixHitPos. */
 {
-struct trixWordResult *twr;
-struct trixHitPos *hit;
+struct trixHitPos *hit, *hitList = NULL;
 char *word;
-
-AllocVar(twr);
-twr->word = cloneString(hitWord);
 while ((word = nextWord(&hitString)) != NULL)
     {
     char *parts[4];
@@ -206,29 +204,42 @@ while ((word = nextWord(&hitString)) != NULL)
     hit->itemId = cloneString(parts[0]);
     hit->docIx = atoi(parts[1]);
     hit->wordIx = atoi(parts[2]);
-    slAddHead(&twr->hitList, hit);
+    slAddHead(&hitList, hit);
     }
-slReverse(&twr->hitList);
-return twr;
+slReverse(&hitList);
+return hitList;
 }
 
 struct trixWordResult *trixSearchWordResults(struct trix *trix, char *searchWord)
 /* Get results for single word from index.  Returns NULL if no matches. */
 {
 char *line, *word;
-off_t ixPos = trixFindIndexStartLine(trix, searchWord);
-lineFileSeek(trix->lf, ixPos, SEEK_SET);
-while (lineFileNext(trix->lf, &line, NULL))
+struct trixWordResult *twr;
+struct trixHitPos *hitList = hashFindVal(trix->wordHitHash, searchWord);
+
+if (hitList == NULL)
     {
-    int diff;
-    word = nextWord(&line);
-    diff = strcmp(searchWord, word);
-    if (diff == 0)
-	return trixWordResultsParse(word, line);
-    else if (diff < 0)
-	break;
+    off_t ixPos = trixFindIndexStartLine(trix, searchWord);
+    lineFileSeek(trix->lf, ixPos, SEEK_SET);
+    while (lineFileNext(trix->lf, &line, NULL))
+	{
+	int diff;
+	word = nextWord(&line);
+	diff = strcmp(searchWord, word);
+	if (diff == 0)
+	    {
+	    hitList = trixParseHitList(searchWord, line);
+	    hashAdd(trix->wordHitHash, searchWord, hitList);
+	    break;
+	    }
+	else if (diff < 0)
+	    return NULL;
+	}
     }
-return NULL;
+AllocVar(twr);
+twr->word = cloneString(searchWord);
+twr->hitList = hitList;
+return twr;
 }
 
 
