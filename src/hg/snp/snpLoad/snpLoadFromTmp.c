@@ -2,12 +2,13 @@
 #include "common.h"
 
 #include "chromInfo.h"
+#include "dystring.h"
 #include "hash.h"
 #include "hdb.h"
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.5 2005/12/15 02:55:47 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.6 2005/12/21 05:26:34 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -80,24 +81,19 @@ strcat(tableName, "_snpTmp");
 if (!sqlTableExists(conn, tableName))
     return list;
 
+/* not checking chrom */
 safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refNCBI, class from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(el);
-    el->name = cloneString(row[3]);
     el->chrom = chromName;
     el->score = 0;
     el->chromStart = atoi(row[1]);
     el->chromEnd = atoi(row[2]);
-    
-    if (atoi(row[4]) == 0) 
-        strcpy(el->strand, "+");
-    else if (atoi(row[4]) == 1)
-        strcpy(el->strand, "-");
-    else
-        strcpy(el->strand, "?");
+    el->name = cloneString(row[3]);
+    strcpy(el->strand, row[4]);
     el->refNCBI = cloneString(row[5]);
     el->class = cloneString(row[6]);
     slAddHead(&list,el);
@@ -342,6 +338,62 @@ for (el = list; el != NULL; el = el->next)
 	el->refUCSC = cloneString(seq->dna);
 	}
     }
+}
+
+void checkSize(struct snp125 *el)
+{
+char sizeError[32];
+int size = 0;
+struct dyString *dy = NULL;
+
+if (sameString(el->class, "unknown"))
+    return;
+
+size = el->chromEnd - el->chromStart;
+
+if (sameString(el->class, "simple"))
+    {
+    if (size == 1) return;
+    strcpy(sizeError, "SimpleClassWrongSize");
+    }
+else if (sameString(el->class, "insertion"))
+    {
+    if (size == 0) return;
+    strcpy(sizeError, "InsertionClassWrongSize");
+    }
+else if (sameString(el->class, "deletion"))
+    {
+    if (size >= 1) return;
+    strcpy(sizeError, "DeletionClassWrongSize");
+    }
+else if (sameString(el->class, "range"))
+    {
+    if (size >= 2) return;
+    strcpy(sizeError, "RangeClassWrongSize");
+    }
+else 
+    return;
+
+// if (el->exception == "")
+    // dy = newDyString(64);
+// else
+    // dyStringAppend(dy, ",");
+// dyStringAppend(dy, sizeError);
+
+verbose(1, "%s\n", sizeError);
+
+}
+
+void checkForExceptions(struct snp125 *list)
+/* check for exceptions */
+{
+struct snp125 *el = NULL;
+
+verbose(1, "checking for exceptions...\n");
+for (el = list; el != NULL; el = el->next)
+   {
+   checkSize(el);
+   }
 }
 
 void loadDatabase(FILE *f)
