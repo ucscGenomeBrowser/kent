@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.3 2005/12/21 04:38:55 kent Exp $";
+static char const rcsid[] = "$Id: testSearch.c,v 1.4 2005/12/21 05:58:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -69,12 +69,13 @@ struct trixHitPos
     int wordIx;			/* Which word this is part of. */
     };
 
-struct trixWordResults
+struct trixWordResult
 /* Results of a search on one word. */
     {
-    struct trixWordResults *next;
+    struct trixWordResult *next;
     char *word;			/* Word name. */
     struct trixHitPos *hitList;	/* Hit list. */
+    struct trixHitPos *hit;	/* Current position while iterating through hit list. */
     };
 
 struct trixIxx
@@ -82,6 +83,16 @@ struct trixIxx
     {
     off_t pos;	   /* Position where prefix first occurs in file. */
     char prefix[prefixSize];/* Space padded first five letters of what we're indexing. */
+    };
+
+struct trixSearchResult
+/* Result of a trix search. */
+    {
+    struct trixSearchResult *next;
+    char *itemId;		/* ID of matching item */
+    bool inSameDoc;		/* True if have matches all in same doc. */
+    short orderedSpan;		/* Minimum span in single doc with words in search order. */
+    short unorderedSpan;	/* Minimum span in single doc with words in any order. */
     };
 
 struct trix
@@ -173,11 +184,11 @@ for (i=0; i<trix->ixxSize; ++i)
 return pos;
 }
 
-struct trixWordResults *trixWordResultsParse(char *hitWord, char *hitString)
+struct trixWordResult *trixWordResultsParse(char *hitWord, char *hitString)
 /* This will create a trixWordsResult from hitWord and hitString.  It will
  * insert zeros in place of spaces in hit string while doing this. */
 {
-struct trixWordResults *twr;
+struct trixWordResult *twr;
 struct trixHitPos *hit;
 char *word;
 
@@ -200,7 +211,7 @@ slReverse(&twr->hitList);
 return twr;
 }
 
-struct trixWordResults *trixSearchWordResults(struct trix *trix, char *searchWord)
+struct trixWordResult *trixSearchWordResults(struct trix *trix, char *searchWord)
 /* Get results for single word from index.  Returns NULL if no matches. */
 {
 char *line, *word;
@@ -220,22 +231,13 @@ return NULL;
 }
 
 
-void testSearch(char *inFile, char *searchWord)
-/* testSearch - Set up a search program that does free text indexing and retrieval.. */
+void trwDump(struct trixWordResult *twr)
+/* Dump out one trixWordResult to stdout. */
 {
-struct trix *trix;
-char ixFile[PATH_LEN];
-struct trixWordResults *twr;
 struct trixHitPos *hit;
 int hitIx, maxHits = 8;
 
-safef(ixFile, sizeof(ixFile), "%s.ix", inFile);
-trix = trixOpen(ixFile);
-twr = trixSearchWordResults(trix, searchWord);
-if (twr == NULL)
-    errAbort("%s not found", searchWord);
-printf("%d matches to %s:", slCount(twr->hitList), searchWord);
-
+printf("%d matches to %s:", slCount(twr->hitList), twr->word);
 for (hit=twr->hitList, hitIx=0; hit != NULL & hitIx < maxHits; hit=hit->next, hitIx+=1)
     printf(" %s", hit->itemId);
 if (hit != NULL)
@@ -243,12 +245,183 @@ if (hit != NULL)
 printf("\n");
 }
 
+static char *highestId(struct trixWordResult *twrList)
+/* Return highest itemId at current twr->hit */
+{
+char *itemId = twrList->hit->itemId;
+struct trixWordResult *twr;
+
+for (twr = twrList->next; twr != NULL; twr = twr->next)
+    {
+    if (strcmp(itemId, twr->hit->itemId) < 0)
+        itemId = twr->hit->itemId;
+    }
+return itemId;
+}
+
+boolean seekOneToId(struct trixWordResult *twr, char *itemId)
+/* Move twr->hit forward until it hits itemId.  Return FALSE if
+ * moved past where itemId would be without hitting it. */
+{
+struct trixHitPos *hit;
+int diff = -1;
+for (hit = twr->hit; hit != NULL; hit = hit->next)
+    {
+    diff = strcmp(itemId, hit->itemId);
+    if (diff <= 0)
+        break;
+    }
+twr->hit = hit;
+return diff == 0;
+}
+
+boolean seekAllToId(struct trixWordResult *twrList, char *itemId)
+/* Try to seek all twr's in list to the same itemId */
+{
+struct trixWordResult *twr;
+boolean allHit = TRUE;
+for (twr = twrList; twr != NULL; twr = twr->next)
+    {
+    if (!seekOneToId(twr, itemId))
+        allHit = FALSE;
+    }
+return allHit;
+}
+
+void seekAllPastId(struct trixWordResult *twrList, char *itemId)
+/* Try to seek all twr's in list to past the itemId. */
+{
+struct trixWordResult *twr;
+for (twr = twrList; twr != NULL; twr = twr->next)
+    {
+    struct trixHitPos *hit;
+    for (hit = twr->hit; hit != NULL; hit = hit->next)
+	if (!sameString(hit->itemId, itemId))
+	    break;
+    twr->hit = hit;
+    }
+}
+
+static boolean anyTwrDone(struct trixWordResult *twrList)
+/* Return TRUE if any of the items in list are done */
+{
+struct trixWordResult *twr;
+for (twr = twrList; twr != NULL; twr = twr->next)
+    if (twr->hit == NULL)
+        return TRUE;
+return FALSE;
+}
+
+struct trixSearchResult *findMultipleWordHits(struct trixWordResult *twrList)
+/* Return list of items that are hit by all words. */
+{
+struct trixWordResult *twr;
+struct trixSearchResult *tsList = NULL, *ts;
+
+/* Initially set hit position to start on all words. */
+for (twr = twrList; twr != NULL; twr = twr->next)
+    twr->hit = twr->hitList;
+
+for (;;)
+    {
+    char *itemId = highestId(twrList);
+    if (seekAllToId(twrList, itemId))
+        {
+	AllocVar(ts);
+	ts->itemId = cloneString(itemId);
+	slAddHead(&tsList, ts);
+	}
+    seekAllPastId(twrList, itemId);
+    if (anyTwrDone(twrList))
+        break;
+    }
+slReverse(&tsList);
+return tsList;
+}
+
+struct trixSearchResult *trixSearch(struct trix *trix, int wordCount, char **words)
+/* Return a list of items that match all words. */
+{
+struct trixWordResult *twr, *twrList = NULL;
+struct trixSearchResult *ts, *tsList = NULL;
+int wordIx;
+boolean gotMiss = FALSE;
+
+if (wordCount == 1)
+    {
+    struct trixHitPos *hit;
+    twr = trixSearchWordResults(trix, words[0]);
+    if (twr == NULL)
+        return NULL;
+    for (hit = twr->hitList; hit != NULL; hit = hit->next)
+        {
+	AllocVar(ts);
+	ts->itemId = hit->itemId;	/* Transfer itemId */
+	hit->itemId = NULL;
+	ts->inSameDoc = TRUE;
+	ts->orderedSpan = 1;
+	ts->unorderedSpan = 1;
+	slAddHead(&tsList, ts);
+	}
+    }
+else
+    {
+    for (wordIx=0; wordIx<wordCount; ++wordIx)
+	{
+	char *searchWord = words[wordIx];
+	twr = trixSearchWordResults(trix, searchWord);
+	if (twr == NULL)
+	    {
+	    gotMiss = TRUE;
+	    break;
+	    }
+	slAddHead(&twrList, twr);
+	trwDump(twr);
+	}
+    if (!gotMiss)
+	{
+	slReverse(&twrList);
+	tsList = findMultipleWordHits(twrList);
+	}
+    }
+return tsList;
+}
+
+void dumpTsList(struct trixSearchResult *tsList)
+/* Dump out contents of tsList to stdout. */
+{
+struct trixSearchResult *ts;
+int maxIx=8, ix=0;
+printf("%d match:", slCount(tsList));
+for (ts = tsList, ix=0; ts != NULL && ix<maxIx; ts = ts->next, ++ix)
+    printf(" %s", ts->itemId);
+if (ts != NULL)
+    printf(" ...");
+printf("\n");
+}
+
+void testSearch(char *inFile, int wordCount, char *words[])
+/* testSearch - Set up a search program that does free text indexing and retrieval.. */
+{
+struct trix *trix;
+char ixFile[PATH_LEN];
+struct trixWordResult *twr;
+struct trixHitPos *hit;
+struct trixWordResult *twrList = NULL;
+struct trixSearchResult *tsList, *ts;
+
+safef(ixFile, sizeof(ixFile), "%s.ix", inFile);
+trix = trixOpen(ixFile);
+tsList = trixSearch(trix, wordCount, words);
+dumpTsList(tsList);
+}
+
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc < 3)
     usage();
-testSearch(argv[1], argv[2]);
+testSearch(argv[1], argc-2, argv+2);
 return 0;
 }
