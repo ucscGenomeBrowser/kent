@@ -18836,3 +18836,12 @@ hgLoadBed -noBin -sqlTable=/cluster/home/heather/kent/src/hg/lib/affy500K.sql hg
 # validate
 affyCheck hg17 affy500K snp125
 
+# indices
+# mysql> alter table affy500K add index chrom (chrom);     
+# Query OK, 500568 rows affected (11.46 sec)
+# Records: 500568  Duplicates: 0  Warnings: 0
+
+# mysql> alter table affy500K add index chromStart (chrom, chromStart);
+# Query OK, 500568 rows affected (22.32 sec)
+# Records: 500568  Duplicates: 0  Warnings: 0
+
