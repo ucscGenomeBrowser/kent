@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1060 2005/12/17 00:55:24 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1061 2005/12/21 06:48:43 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2887,10 +2887,12 @@ boolean labelStarted = FALSE;
 	
 if (hTableExists("kgXref"))
     {
-    char query[128];
     int omimAvail = 0;
+#ifdef BAD_PERFORMANCE_PROBLEM_HERE_BELINDA_PLEASE_FIND_A_FASTER_WAY
+    char query[128];
     safef(query, sizeof(query), "select count(*) from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0");
     omimAvail = sqlQuickNum(conn, query);
+#endif /* BAD_PERFORMANCE_PROBLEM_HERE_BELINDA_PLEASE_FIND_A_FASTER_WAY */
 
     if (knownGeneLabels == NULL)
         {
