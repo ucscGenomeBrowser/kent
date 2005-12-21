@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.1 2005/12/21 02:28:25 kent Exp $";
+static char const rcsid[] = "$Id: testSearch.c,v 1.2 2005/12/21 04:18:46 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,7 +20,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-int prefixSize = 5;
+#define prefixSize 5
 
 char unhexTable[128];	/* Lookup table to help with hex conversion. */
 
@@ -82,22 +82,132 @@ lineFileClose(&lf);
 return pos;
 }
 
+struct hitPos 
+/* A hit to the index. */
+    {
+    struct docPos *next;	/* Next in list */
+    char *itemId;		/* Associated itemId */
+    int docIx;			/* Which document this is part of. */
+    int wordIx;			/* Which word this is part of. */
+    };
+
+struct wordResults
+/* Results of a search on one word. */
+    {
+    struct wordResults *next;
+    char *indexLine;		/* Copy of indexed line. */
+    struct hitPos *hitList;	/* Hit list. */
+    };
+
+struct trixIxx
+/* A prefix and */
+    {
+    off_t pos;	   /* Position where prefix first occurs in file. */
+    char prefix[prefixSize];/* Space padded first five letters of what we're indexing. */
+    };
+
+struct trix
+/* A two level index */
+    {
+    struct lineFile *lf;	/* Open file on first level index. */
+    struct trixIxx *ixx;	/* Second level index in memory. */
+    int ixxSize;		/* Size of second level index. */
+    int ixxAlloc;	        /* Space allocated for index. */
+    };
+
+struct trix *trixNew()
+/* Create a new empty trix index. */
+{
+struct trix *trix;
+AllocVar(trix);
+trix->ixxAlloc = 8*1024;
+AllocArray(trix->ixx, trix->ixxAlloc);
+return trix;
+}
+
+void trixAddToIxx(struct trix *trix, off_t pos, char *prefix)
+/* Add to trix->ixx. */
+{
+struct trixIxx *ixx;
+if (trix->ixxSize >= trix->ixxAlloc)
+     {
+     trix->ixxAlloc += trix->ixxAlloc;	/* Double allocation. */
+     ExpandArray(trix->ixx, trix->ixxSize, trix->ixxAlloc);
+     }
+ixx = trix->ixx + trix->ixxSize;
+ixx->pos = pos;
+memcpy(ixx->prefix, prefix, sizeof(ixx->prefix));
+trix->ixxSize += 1;
+}
+
+struct trix *trixOpen(char *ixFile)
+/* Open up index.  Load second level index in memory. */
+{
+char ixxFile[PATH_LEN];
+struct trix *trix;
+struct lineFile *lf;
+char *line;
+
+safef(ixxFile, sizeof(ixxFile), "%sx", ixFile);
+lf = lineFileOpen(ixxFile, TRUE);
+trix = trixNew();
+while (lineFileNext(lf, &line, NULL))
+    {
+    off_t pos = unhex(line+prefixSize);
+    trixAddToIxx(trix, pos, line);
+    }
+lineFileClose(&lf);
+trix->lf = lineFileOpen(ixFile, TRUE);
+return trix;
+}
+
+void trixSetPrefix(char *word, char *prefix)
+/* Copy first part of word to prefix.  If need be end pad with spaces. */
+{
+int len = strlen(word);
+if (len >= prefixSize)
+    memcpy(prefix, word, prefixSize);
+else
+    {
+    memset(prefix, ' ', prefixSize);
+    memcpy(prefix, word, len);
+    }
+}
+
+off_t trixFindIndexStartLine(struct trix *trix, char *word)
+/* Find start position of line we want to start at in the first level
+ * index. */
+{
+char wordPrefix[prefixSize];
+int i;
+off_t pos = 0;
+
+trixSetPrefix(word, wordPrefix);
+toLowerN(wordPrefix, prefixSize);
+for (i=0; i<trix->ixxSize; ++i)
+    {
+    struct trixIxx *ixx = trix->ixx + i;
+    if (memcmp(wordPrefix, ixx->prefix, prefixSize) < 0)
+       break;
+    pos = ixx->pos;
+    }
+return pos;
+}
+
+
 void testSearch(char *inFile, char *searchWord)
 /* testSearch - Set up a search program that does free text indexing and retrieval.. */
 {
-char ixxFile[PATH_LEN], ixFile[PATH_LEN];
+struct trix *trix;
+char ixFile[PATH_LEN];
 off_t ixPos;
-struct lineFile *ixLf;
 char *line, *word;
 
-safef(ixxFile, sizeof(ixxFile), "%s.ixx", inFile);
 safef(ixFile, sizeof(ixFile), "%s.ix", inFile);
-uglyf("Looking up %s in %s\n", searchWord, ixxFile);
-ixPos = findIndexStartPos(ixxFile, searchWord);
-uglyf("Index start position is %lld (%llx)\n", ixPos, ixPos);
-ixLf = lineFileOpen(ixFile, TRUE);
-lineFileSeek(ixLf, ixPos, SEEK_SET);
-while (lineFileNext(ixLf, &line, NULL))
+trix = trixOpen(ixFile);
+ixPos = trixFindIndexStartLine(trix, searchWord);
+lineFileSeek(trix->lf, ixPos, SEEK_SET);
+while (lineFileNext(trix->lf, &line, NULL))
     {
     int diff;
     word = nextWord(&line);
@@ -109,7 +219,7 @@ while (lineFileNext(ixLf, &line, NULL))
 	}
     else if (diff < 0)
 	{
-        printf("NOT FOUND %s\n", word);
+        printf("NOT FOUND %s\n", searchWord);
 	break;
 	}
     }
