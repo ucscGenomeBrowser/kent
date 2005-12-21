@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1061 2005/12/21 06:48:43 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1062 2005/12/21 19:51:39 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11047,7 +11047,7 @@ if (showTrackControls)
      * we need to repeat the position in a hidden variable here
      * so that zoom/scrolling always has current position to work
      * from. */
-    hPrintf("<INPUT TYPE=HIDDEN NAME=\"position\""
+    hPrintf("<INPUT TYPE=HIDDEN NAME=\"position\" "
             "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
     hPrintf("</CENTER></FORM>\n");
     hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
