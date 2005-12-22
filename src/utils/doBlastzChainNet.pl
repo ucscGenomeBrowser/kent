@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.27 2005/12/17 02:17:01 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.28 2005/12/22 20:08:10 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -914,11 +914,11 @@ sub swapChains {
        "'chainSwap $buildDir/axtChain/$inChain stdout " .
        "| nice chainSort stdin stdout " .
        "| nice gzip -c > $runDir/$swappedChain'");
+  &nfsNoodge("$runDir/$swappedChain");
   if ($splitRef) {
     &run("ssh -x $fileServer nice " .
 	 "chainSplit $runDir/chain $runDir/$swappedChain");
   }
-  &nfsNoodge("$runDir/$swappedChain");
 }	#	sub swapChains {}
 
 
