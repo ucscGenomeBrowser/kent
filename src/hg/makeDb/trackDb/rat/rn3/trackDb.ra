@@ -242,7 +242,7 @@ visibility full
 type maf
 
 track chainCanFam2
-shortLabel $o_db Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 110
@@ -254,7 +254,7 @@ type chain canFam2
 otherDb canFam2
 
 track netCanFam2
-shortLabel $o_db Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 110.1
