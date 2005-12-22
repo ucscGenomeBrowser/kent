@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.10 2005/12/16 22:02:58 kent Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.11 2005/12/22 20:06:30 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -301,7 +301,7 @@ while ((c = *in++) != 0)
     else if (c == '"')
         {
 	strcpy(out, "&quot;");
-	out += 5;
+	out += 6;
 	}
     else
         *out++ = c;
