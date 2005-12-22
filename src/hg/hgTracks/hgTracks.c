@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1062 2005/12/21 19:51:39 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1063 2005/12/22 00:25:41 kuhn Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -5518,7 +5518,7 @@ char *chromPrefixes[] = { "chr", "Group",
 			  NULL };
 
 char *scaffoldPrefixes[] = { "scaffold_", "contig_", "SCAFFOLD", "Scaffold", 
-			     "Contig", "SuperCont", 
+			     "Contig", "SuperCont", "super_",
 			     NULL };
 
 char *maybeSkipPrefix(char *name, char *prefixes[])
