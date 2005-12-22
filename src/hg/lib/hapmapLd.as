@@ -1,5 +1,5 @@
-table hapmapLd2
-"Linkage Disequilibrium values from the HapMap project"
+table hapmapLd
+"Linkage Disequilibrium values from SNP genotypes"
     (
     string   chrom;      "Chromosome"
     uint     chromStart; "chromStart for reference marker"

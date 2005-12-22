@@ -4,7 +4,7 @@
 # automatic way.
 
 #Linkage Disequilibrium values from the HapMap project
-CREATE TABLE hapmapLd2 (
+CREATE TABLE hapmapLd (
     bin        smallint(5) unsigned   NOT NULL,
     chrom      enum( 'unknown', 
                    'chr1',  'chr2',  'chr3',  'chr4',  'chr5',  'chr6',  'chr7', 
