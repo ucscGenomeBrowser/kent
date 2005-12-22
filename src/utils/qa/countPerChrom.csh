@@ -26,12 +26,13 @@ set old=""
 set new=""
 set onlyOne=0
 set machineOut=""
+set ok=0
 
 if ($#argv < 2 ||  $#argv > 4) then
   # no command line args
   echo
   echo "  check to see if there are genes on all chroms."
-  echo "    will check to see if chrom field is named tName."
+  echo "    will check to see if chrom field is named tName or genoName."
   echo
   echo "    usage:  database, table, [oldDb], [other machine]"
   echo "      where oldDb must be specified if other machine is used"
@@ -63,17 +64,33 @@ endif
 # echo "table = $table"
 
 # check if maybe chrom is called tName
-hgsql -e "DESC $table" $db | egrep tName > /dev/null 
+hgsql -e "DESC $table" $db | egrep -w tName > /dev/null 
 if (! $status ) then
   set chrom="tName"
   echo 'chrom is "tName"'
+  set ok=1
 endif 
 
 # check if maybe chrom is called genoName (prob only rmsk)
-hgsql -e "DESC $table" $db | egrep genoName > /dev/null 
+hgsql -e "DESC $table" $db | egrep -w genoName > /dev/null 
 if (! $status ) then
   set chrom="genoName"
   echo 'chrom is "genoName"'
+  set ok=1
+endif 
+
+# final check to see chrom-like field present
+hgsql -e "DESC $table" $db | egrep -w chrom > /dev/null 
+if (! $status ) then
+  set ok=1
+endif 
+
+if ($ok == 0) then
+  echo
+  echo " no appropriate field for this table."
+  echo "   chrom, genoName or tName required."
+  echo
+  exit
 endif 
 
 echo
