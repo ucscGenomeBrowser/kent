@@ -823,6 +823,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
   ssh kk
   mkdir -p /cluster/data/monDom1/bed/zb.hg17
   cd /cluster/data/monDom1/bed/zb.hg17
+  ln -s /cluster/data/monDom1/bed/zb.hg17 /cluster/data/hg17/bed/blastz.monDom1
 
   # Create DEF file for run of scaffolds vs. human chromosomes
   cat << '_EOF_' > DEF
