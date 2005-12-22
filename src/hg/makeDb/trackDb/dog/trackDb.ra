@@ -15,7 +15,7 @@ shortLabel $o_db Net
 longLabel $o_db ($o_date/$o_db) Alignment Net
 group compGeno
 priority 124.09
-visibility dense
+visibility hide
 spectrum on
 type netAlign mm7 chainMm7
 otherDb mm7
