@@ -28,7 +28,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.235 2005/12/21 19:54:35 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.236 2005/12/22 14:38:15 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -682,10 +682,10 @@ void knownGeneIdConfig(struct trackDb *tdb)
 char varName[64];
 struct sqlConnection *conn = hAllocConn();
 char query[256];
-int omimAvail = 0;
+char *omimAvail = NULL;
 boolean option = FALSE;
-safef(query, sizeof(query), "select count(*) from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0");
-omimAvail = sqlQuickNum(conn, query);
+safef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
+omimAvail = sqlQuickString(conn, query);
 hFreeConn(&conn);
 
 printf("<B>Label:</B> ");
@@ -704,7 +704,7 @@ option = cartUsualBoolean(cart, varName, FALSE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "UniProt Display ID");
 
-if (omimAvail > 0)
+if (omimAvail != NULL)
     {
     safef(varName, sizeof(varName), "%s.label.omim", tdb->tableName);
     option = cartUsualBoolean(cart, varName, FALSE);

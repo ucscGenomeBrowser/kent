@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1063 2005/12/22 00:25:41 kuhn Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1064 2005/12/22 14:38:57 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2887,12 +2887,10 @@ boolean labelStarted = FALSE;
 	
 if (hTableExists("kgXref"))
     {
-    int omimAvail = 0;
-#ifdef BAD_PERFORMANCE_PROBLEM_HERE_BELINDA_PLEASE_FIND_A_FASTER_WAY
+    char *omimAvail = NULL;
     char query[128];
-    safef(query, sizeof(query), "select count(*) from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0");
-    omimAvail = sqlQuickNum(conn, query);
-#endif /* BAD_PERFORMANCE_PROBLEM_HERE_BELINDA_PLEASE_FIND_A_FASTER_WAY */
+    safef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
+    omimAvail = sqlQuickString(conn, query);
 
     if (knownGeneLabels == NULL)
         {
@@ -2922,7 +2920,7 @@ if (hTableExists("kgXref"))
         }
 
     /* cart may be from another build which has OMIM */
-    if (omimAvail == 0 && useMimId) 
+    if (omimAvail == NULL && useMimId) 
         {
         useMimId = FALSE;
         if (!useGeneSymbol && !useKgId && !useProtDisplayId)
