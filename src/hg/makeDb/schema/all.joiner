@@ -24,7 +24,7 @@ set droYak droYak1
 set droMoj droMoj1,droMoj2
 set droVir droVir1,droVir2
 set droEre droEre1
-set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droGri1
+set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droGri1,droPer1
 set anoGam anoGam1
 set apiMel apiMel1,apiMel2
 set cioSav cioSav1
