@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.70 2005/12/16 01:15:00 markd Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.71 2005/12/23 08:13:43 kent Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -27,7 +27,7 @@ char *wrapWhiteFont(char *s)
 /* Write white font around s */
 {
 static char buf[256];
-sprintf(buf, "<FONT COLOR=\"#FFFFFF\">%s</FONT>", s);
+safef(buf, sizeof(buf), "<FONT COLOR=\"#FFFFFF\">%s</FONT>", s);
 return buf;
 }
 
@@ -942,10 +942,10 @@ static void addMrnaFilter(struct mrnaUiData *mud, char *track, char *label, char
 /* Add an mrna filter */
 {
 struct mrnaFilter *fil;
-char buf[64];
+char buf[128];
 AllocVar(fil);
 fil->label = label;
-sprintf(buf, "%s_%s", track, key);
+safef(buf, sizeof(buf), "%s_%s", track, key);
 fil->key = cloneString(buf);
 fil->table = table;
 slAddTail(&mud->filterList, fil);
@@ -955,11 +955,11 @@ struct mrnaUiData *newBedUiData(char *track)
 /* Make a new  in extra-ui data structure for a bed. */
 {
 struct mrnaUiData *mud;
-char buf[64];
+char buf[128];  /* Expand me here */
 AllocVar(mud);
-sprintf(buf, "%sFt", track);
+safef(buf, sizeof(buf), "%sFt", track);
 mud->filterTypeVar = cloneString(buf);
-sprintf(buf, "%sLt", track);
+safef(buf, sizeof(buf), "%sLt", track);
 mud->logicTypeVar = cloneString(buf);
 addMrnaFilter(mud, track, "name", "name",track);
 return mud;
@@ -969,11 +969,11 @@ struct mrnaUiData *newMrnaUiData(char *track, boolean isXeno)
 /* Make a new  in extra-ui data structure for mRNA. */
 {
 struct mrnaUiData *mud;
-char buf[64];
+char buf[128];
 AllocVar(mud);
-sprintf(buf, "%sFt", track);
+safef(buf, sizeof(buf), "%sFt", track);
 mud->filterTypeVar = cloneString(buf);
-sprintf(buf, "%sLt", track);
+safef(buf, sizeof(buf), "%sLt", track);
 mud->logicTypeVar = cloneString(buf);
 if (isXeno)
     addMrnaFilter(mud, track, "organism", "org", "organism");
