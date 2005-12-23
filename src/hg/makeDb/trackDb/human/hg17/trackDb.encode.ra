@@ -2206,7 +2206,6 @@ shortLabel TBA Cons
 longLabel  NHGRI/PSU/UCSC TBA Conservation
 group encodeCompGeno
 priority 70.2
-visibility hide
 type wig 0.0 1.0
 maxHeightPixels 100:25:11
 autoScaleDefault Off
@@ -2218,11 +2217,6 @@ dataVersion ENCODE Oct 2005 Freeze
     subTrack encodeTbaCons
     shortLabel TBA PhastCons
     longLabel TBA PhastCons Conservation
-    type wig 0.0 1.0
-    noInherit on
-    maxHeightPixels 100:25:11
-    autoScaleDefault Off
-    windowingFunction mean
     color 170,100,50
     priority 1
 
@@ -2245,6 +2239,12 @@ dataVersion ENCODE Oct 2005 Freeze
     color 120,80,120
     priority 3
 
+    track encodeTbaSconeCons
+    subTrack encodeTbaCons
+    shortLabel TBA SCONE Cons
+    longLabel TBA SCONE Conservation
+    color 100,90,160
+    priority 4
 
 track encodeTbaElements
 compositeTrack on
@@ -2253,8 +2253,6 @@ longLabel NHGRI/PSU/UCSC TBA Conserved Elements
 group encodeCompGeno
 priority 70.3
 visibility hide
-#color 0, 10, 100
-#altColor 1,128,0
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bed 5 .

@@ -1,7 +1,7 @@
 <H2>Description</H2>
 <P>
 This track displays multi-species conserved sequences (MCSs)
-derived from binCons, phastCons, and genomic evolutionary rate profiling 
+derived from binCons, phastCons, SCONE, and genomic evolutionary rate profiling 
 (<A HREF="http://mendel.stanford.edu/sidowlab/downloads/ABC_GERP/abcgerp.html"
 TARGET=_blank>GERP</A>) conservation scoring
 of Threaded Blockset Aligner (TBA) multiple sequence alignments in the 
@@ -80,6 +80,20 @@ Thus, all annotated constrained elements are significant at better
 than 95% confidence, and the total fraction of the ENCODE regions
 annotated as constrained is 5-7%.</P>
 
+<H3>SCONE-based Elements</H3>
+<P>
+SCONE provides p-value scores per base. Constrained elements are
+defined based on SCONE site-specific scores as follows. An additive
+score is first defined as the sum of (-log p + log t) along an
+interval, where p is the SCONE score and t is some threshold value for
+conservation. This additive score may be treated as a random walk;
+elements are defined as the intervals between local minima and maxima
+along this walk. Subsequently a cutoff is set for the additive scores
+for each element. This cutoff is chosen such that the elements scoring
+above the cutoff for a random sequence of scores draw from a uniform
+distribution [0,1] with threshold t = 0.25 will cover no more than
+0.25% of the sequence.
+
 <H3>PhastCons/BinCons/GERP Union/Intersection of Conserved Elements</H3>
 <P>
 These subtracks were produced by creating unions and intersections of the
@@ -101,6 +115,11 @@ with Eric Stone (Biostatistics, NC State), and George Asimenos and
 Eugene Davydov in the lab of
 <A HREF="http://ai.stanford.edu/~serafim/" TARGET=_blank>Serafim Batzoglou</A>
 (Dept. of Computer Science, Stanford).</P>
+<P>
+SCONE was developed by Saurabh Asthana in the lab of <a
+href=http://genetics.bwh.harvard.edu/genetics/labs/Sunyaev/index.html>Shamil
+Sunyaev</a> at Harvard Medical School and Brigham & Women's Hospital
+(Department of Medicine/Division of Genetics).
 <P>
 TBA was provided by Minmei Hou, Scott Schwartz and Webb Miller of the 
 <A HREF="http://bio.cse.psu.edu/" TARGET=_blank>Penn State Bioinformatics 
