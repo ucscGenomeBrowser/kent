@@ -1659,23 +1659,56 @@ cat > load.csh << 'EOF'
 ##########################################################################
 # MSA GERP Conservation (2005-12-13 kate)
 
-    cd /cluster/data/encoee/MSA/Gerp
+    cd /cluster/data/encode/MSA/Gerp
     mkdir -p 2005-12-12/lab
     cd 2005-12-12/lab
+
+# Found start=0 at line 6607734, the first chrom position is 1, not 0
+
+    # TBA
+    cat lab/chr*_GERP_TBA_scores.wig | \
+        wigEncode stdin tbaGerpCons.wig tbaGerpCons.wib
+    set d = /gbdb/hg17/encode/TBA/SEP-05
+    ln -s `pwd`/tbaGerpCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeTbaGerpCons tbaGerpCons.wig
+
+    # MLAGAN 
+    cat lab/chr*_GERP_MLAGAN_scores.wig | \
+        wigEncode stdin mlaganGerpCons.wig mlaganGerpCons.wib
+    set d = /gbdb/hg17/encode/MLAGAN/SEP-05
+    ln -s `pwd`/mlaganGerpCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeMlaganGerpCons mlaganGerpCons.wig
+
+    # MAVID
+    cat lab/chr*_GERP_MAVID_scores.wig | \
+        wigEncode stdin mavidGerpCons.wig mavidGerpCons.wib
+    set d = /gbdb/hg17/encode/MAVIE/SEP-05
+    ln -s `pwd`/mavidGerpCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeMavidGerpCons mavidGerpCons.wig
     
 
 ##########################################################################
 # MSA SCONE Conservation (2005-12-12 kate)
-# From Harvard Med School
+# From Harvard Med School, Saurabh Asthana <faplap@gmail.com>
+# Reusbmitted 12/21/05
 
-    mkdir /cluster/data/encode/MSA/SconeCons
-    mkdir -p 2005-12-01/lab
-    cd 2005-12-01/lab
-   
+    cd /cluster/data/encode/MSA
+    mkdir -p SconeCons/2005-12-21/lab
+    ln -s SconeCons/2005-12-21 latest
+    cd latest/lab
+    mkdir bed; cd bed
+    wget http://genetics.bwh.harvard.edu/graft/bed/sconeRegions.NOV-2005.bed.tar.bz2
+    bunzip2 sconeRegions.NOV-2005.bed.tar.bz2
+    tar xvf sconeRegions.NOV-2005.bed.tar
+    cd ..
+
+    cd ..; mkdir wig; cd wig
+    wget http://ika.bwh.harvard.edu/graft/wig/scone.NOV-2005.wig.tar.bz2
+    bunzip2 scone.NOV-2005.wig.tar.bz2
+    tar xvf scone.NOV-2005.wig.tar
+    cd ../..
+
     # elements
-    cd bed
-    tar xvfz sconeRegions.bed.tar.gz
-    cd ../../
 cat > load.csh << 'EOF'
     set out = sconeRegions.bed
     rm -f $out
@@ -1683,13 +1716,28 @@ cat > load.csh << 'EOF'
         set r = $f:t:r
         echo $r
         grep '^chr' $f | \
-            awk -v REGION=$r '{printf("%s\t%d\t%d\t%s.%d\t1000\n", \
-                        $1,$2,$3,REGION,NR)}' >> $out
+            awk '{printf("%s\t%d\t%d\t%s\t1000\n", \
+                        $1,$2,$3,$4)}' >> $out
     end
     hgLoadBed -strict hg17 encodeTbaSconeEl $out
 'EOF'
     csh load.csh >&! load.log &
+        # Loaded 18817 elements 
+    featureBits -enrichment hg17 encodeRegions encodeTbaSconeEl
+        # encodeRegions 1.047%, encodeTbaSconeEl 0.083%, both 0.083%, cover 7.92%, enrich 95.55x
+    featureBits -enrichment hg17 encodeRegions encodeTbaPhastConsEl
+       # encodeRegions 1.047%, encodeTbaPhastConsEl 0.063%, both 0.063%, cover 6.04%, enrich 95.55x
+    featureBits -enrichment hg17 encodeRegions encodeTbaGerpEl
+       # encodeRegions 1.047%, encodeTbaGerpEl 0.057%, both 0.057%, cover 5.47%, enrich 95.55x
+    featureBits -enrichment hg17 encodeRegions encodeTbaBinConspEl
+        # encodeRegions 1.047%, encodeTbaBinConsEl 0.060%, both 0.060%, cover 5.71%, enrich 95.55x
 
+    # conservation
+    cat lab/wig/*.wig | \
+        wigEncode stdin tbaScone.wig tbaScone.wib
+    set d = /gbdb/hg17/encode/TBA/SEP-05
+    ln -s `pwd`/tbaScone.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeTbaSconeCons tbaScone.wig 
 
 ##########################################################################
 # MSA Conservation  (2005-12-07 kate)
