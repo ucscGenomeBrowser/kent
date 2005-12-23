@@ -888,3 +888,46 @@ doOne ${targetDb} chain${DB0}Link
 doOne ${targetDb} chain${DB1}Link
 '_EOF_'
     # << keep emacs coloring happy
+
+# CHAIN  AND NET SWAPPED HUMAN BLASTZ (WORKING 12/22/05 kate)
+#  Working in Brian's blastz dir (not doced).
+#  This procedure follows conventions in doBlastzNetChain.pl,
+#  so it can be used to complete the processing
+    ssh kki
+    cd /cluster/data/oryCun1/bed/zb.hg17
+    ln -s `pwd` /cluster/data/hg17/bed/blastz.oryCun1 
+    mkdir -p axtChain/run/chain
+    ls -1S /cluster/data/oryCun1/bed/zb.hg17/axtChrom/*.axt.gz | \
+        sed 's/.gz//' >  axtChain/run/input.lst
+    cd axtChain/run
+
+cat > chain.csh << 'EOF'
+#!/bin/csh -ef
+zcat $1 | \
+axtChain -verbose=0 -minScore=3000 -linearGap=medium stdin \
+    /cluster/data/hg17/nib /cluster/data/oryCun1/oryCun1.2bit stdout | \
+chainAntiRepeat /cluster/data/hg17/nib /cluster/data/oryCun1/oryCun1.2bit \
+          stdin $2
+'EOF'
+    # << happy emacs
+cat > gsub << 'EOF'
+#LOOP
+chain.csh {check in exists $(path1).gz} {check out line+ chain/$(root1).chain}
+#ENDLOOP
+'EOF'
+    # << happy emacs
+    chmod a+x chain.csh
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try
+    para check 
+    para push
+    # wait for completion
+    para time >  run.time
+
+    # finish pipeline
+    cd /cluster/data/oryCun1/bed/zb.hg17
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -continue=chainMerge \
+	-bigClusterHub=pk \
+	`pwd`/DEF >& blastz.out &
