@@ -7721,81 +7721,92 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
 
 
 ### hapmapRecombRate (Daryl; September 19, 2005)
-    cd /cluster/data/hg16/bed/hapmap/recombination/rates
-    wget -N http://www.stats.ox.ac.uk/~mcvean/HapMap/Genetic_Map.tar.gz
-    tar xvfz Genetic_map.tar.gz
-
-    # Make 'makeBed.pl' to re-format the data.
-cat  << '_EOF_' > makeBed.pl
-#!/usr/local/bin/perl -W
-
-$dir   = shift || "." ;
-opendir(DIR,$dir);
-@files = grep {/txt/} readdir(DIR);
-closedir(DIR);
-
-foreach $file (@files)
-{
-    open(IN,"$dir/$file");
-    $chrom =  $file;
-    $chrom =~ s/Gen_map_//;
-    $chrom =~ s/_COMBINED.txt//;
-    $chrom =~ s/_non_par//;
-    $chrom =~ s/_par1//;
-    $chrom =~ s/_par2//;
-    $line  =  <IN>;
-    if ($line =~ /Number/) 
-    {
-        $line = <IN>; 
-    }
-    @fields=split / /,$line;
-    $chromStart=$fields[1]-1;
-    $rate=$fields[4];
-    while (<IN>)
-    {
-        chomp();
-        @fields=split / /,$_;
-        $chromEnd=$fields[1];
-        printf ("%s\t%d\t%d\t%.4f\n", $chrom, $chromStart, $chromEnd, $rate);
-        $chromStart=$chromEnd-1;
-        $rate=$fields[4];
-    }
-}
-'_EOF_'
-    # << this line makes emacs coloring happy
-
-    chmod a+x makeBed.pl
+  # updated coordinates (Daryl; December 8, 2005)
+    mkdir -p /cluster/data/hg16/bed/hapmap/recombination/HapMap_PhaseI/20051115
+    cd       /cluster/data/hg16/bed/hapmap/recombination/HapMap_PhaseI/20051115
+    wget -N http://www.stats.ox.ac.uk/~cfreeman/HapMap_Phase1/genetic_map_HapMap_Phase1_UCSC.tar.gz
+    tar xvfz genetic_map_HapMap_Phase1_UCSC.tar.gz
     rm -f hg16.hapmapRecombRate.bed
-    time makeBed.pl > hg16.hapmapRecombRate.bed
-    cut -f1 hg16.hapmapRecombRate.bed | sort -u
-    wc -l hg16.hapmapRecombRate.bed
-
-    time liftOver hg16.hapmapRecombRate.bed /cluster/data/hg16/bed/bedOver/hg16ToHg17.over.chain hg17.hapmapRecombRate.bed hg16ToHg17.unmapped
-
-    time hgLoadBed -bedGraph=4 hg16 hapmapRecombRate hg16.hapmapRecombRate.bed
-    time hgLoadBed -bedGraph=4 hg17 hapmapRecombRate hg17.hapmapRecombRate.bed
-
-    rm -f bed.tab
+    tail --lines=+2 -q Gen_map_chr*_COMBINED_UCSC.txt | sed 's/_non_par//;s/_par1//;s/_par2//' | awk '{printf "%s\t%d\t%d\t%0.3f\n",$1,$2,$3,$4}' > hg16.hapmapRecombRate.bed
+    liftOver hg16.hapmapRecombRate.bed /cluster/data/hg16/bed/bedOver/hg16ToHg17.over.chain hg17.hapmapRecombRate.bed hg16ToHg17.unmapped
+    hgLoadBed -bedGraph=4 hg16 hapmapRecombRate hg16.hapmapRecombRate.bed
+    hgLoadBed -bedGraph=4 hg17 hapmapRecombRate hg17.hapmapRecombRate.bed
+    rm -f bed.tab Gen_map_chr*.txt
 
 ### hapmapRecombHotspot (Daryl; September 19, 2005; chr X data update October 21, 2005)
-
     wget -N http://www.stats.ox.ac.uk/~mcvean/HapMap/hotspots/Genomewidehots16a.txt
     wget -N http://www.stats.ox.ac.uk/~mcvean/HapMap/hotspots/chrX_non_par_hotspots.txt
     wget -N http://www.stats.ox.ac.uk/~mcvean/HapMap/hotspots/chrX_par1_hotspots.txt
-
     # this takes about 3 seconds to run
-
     rm -f hg*.hapmapRecombHotspots.bed 
     tail +2 Genomewidehots16a.txt     |                    awk -F " " '{printf "chr%s\t%d\t%d\n",$1, $3-1, $4}' >  hg16.hapmapRecombHotspots.bed
     tail +2 chrX_non_par_hotspots.txt | sed s/_non_par// | awk -F " " '{printf "chr%s\t%d\t%d\n",$1, $3-1, $4}' >> hg16.hapmapRecombHotspots.bed
     tail +2 chrX_par1_hotspots.txt    | sed s/_par1//    | awk -F " " '{printf "chr%s\t%d\t%d\n",$1, $3-1, $4}' >> hg16.hapmapRecombHotspots.bed
-    
     liftOver hg16.hapmapRecombHotspots.bed /cluster/data/hg16/bed/bedOver/hg16ToHg17.over.chain hg17.hapmapRecombHotspots.bed hg16ToHg17.unmapped
-    
     hgLoadBed hg16 hapmapRecombHotspots hg16.hapmapRecombHotspots.bed
     hgLoadBed hg17 hapmapRecombHotspots hg17.hapmapRecombHotspots.bed
-    
     rm -f bed.tab
+
+### encodeRecombHotspot (Daryl; December 8, 2005)
+    mkdir -p /cluster/data/hg16/bed/hapmap/recombination/ENCODE_16c.1/hotspots
+    cd       /cluster/data/hg16/bed/hapmap/recombination/ENCODE_16c.1/hotspots
+    wget -N http://www.stats.ox.ac.uk/~cfreeman/ENCODE_16c.1/Hotspots16c1.txt
+    wget -N http://www.stats.ox.ac.uk/~cfreeman/ENCODE_16c.1/Readme_rates_hotspots.txt
+    tail +2 Hotspots16c1.txt | sed 's/ENm010\.7p15\.2/chr7/;s/ENm013\.7q21\.13/chr7/;s/ENm014\.7q31\.33/chr7/;s/ENr112\.2p16\.3/chr2/;s/ENr113\.4q26/chr4/;s/ENr123\.12q12/chr12/;s/ENr131\.2q37\.1/chr2/;s/ENr213\.18q12\.1/chr18/;s/ENr232\.9q34\.11/chr9/;s/ENr321\.8q24\.11/chr8/' | awk '{printf "%s\t%d\t%d\n", $1, $3, $4}' > hg16.encodeRecombHotspot.bed
+    liftOver hg16.encodeRecombHotspot.bed /cluster/data/hg16/bed/bedOver/hg16ToHg17.over.chain hg17.encodeRecombHotspot.bed hg16ToHg17.unmapped
+    hgLoadBed hg16 encodeRecombHotspot hg16.encodeRecombHotspot.bed
+    hgLoadBed hg17 encodeRecombHotspot hg17.encodeRecombHotspot.bed
+    rm -f bed.tab *bed *unmapped
+
+
+
+### Perlegen Recombination Rates and Hotspots (Daryl; December 9, 2005)
+    # Home page: http://www.stats.ox.ac.uk/mathgen/Recombination.html
+
+    mkdir -p /cluster/data/hg16/bed/hapmap/recombination/Perlegen
+    cd       /cluster/data/hg16/bed/hapmap/recombination/Perlegen
+    wget -nv -N http://www.stats.ox.ac.uk/mathgen/oxstats_map/README.txt
+
+    mkdir -p /cluster/data/hg16/bed/hapmap/recombination/Perlegen/hotspots
+    cd       /cluster/data/hg16/bed/hapmap/recombination/Perlegen/hotspots
+
+    wget -nv -N http://www.stats.ox.ac.uk/mathgen/oxstats_map/README.txt
+    wget -nv -N http://www.stats.ox.ac.uk/mathgen/oxstats_map/hotspots.zip
+    unzip hotspots.zip
+    tail +2 hotspots.txt  | grep -v 1.51000 | awk '{printf "chr%s\t%d\t%d\n",$1,$3-1,$4}' > hg16.perlegenRecombHotspots.bed
+    tail +2 coldspots.txt | grep -v "-"     | awk '{printf "chr%s\t%d\t%d\n",$1,$3-1,$4}' > hg16.perlegenRecombColdspots.bed
+
+    liftOver hg16.perlegenRecombHotspots.bed  /cluster/data/hg16/bed/bedOver/hg16ToHg17.over.chain hg17.perlegenRecombHotspots.bed  hg16ToHg17.hots.unmapped
+    liftOver hg16.perlegenRecombColdspots.bed /cluster/data/hg16/bed/bedOver/hg16ToHg17.over.chain hg17.perlegenRecombColdspots.bed hg16ToHg17.cold.unmapped
+
+    hgLoadBed hg16 perlegenRecombHotspots  hg16.perlegenRecombHotspots.bed
+    hgLoadBed hg17 perlegenRecombHotspots  hg17.perlegenRecombHotspots.bed
+    hgLoadBed hg16 perlegenRecombColdspots hg16.perlegenRecombColdspots.bed
+    hgLoadBed hg17 perlegenRecombColdspots hg17.perlegenRecombColdspots.bed
+
+    rm -f bed.tab hg1*ed *spots*txt
+
+    mkdir -p /cluster/data/hg16/bed/hapmap/recombination/Perlegen/rates
+    cd       /cluster/data/hg16/bed/hapmap/recombination/Perlegen/rates
+    cp ../makeBed.pl .
+    chmod ug+x makeBed.pl
+
+    wget -nv -N http://www.stats.ox.ac.uk/mathgen/oxstats_map/README.txt
+    wget -nv -N http://www.stats.ox.ac.uk/mathgen/oxstats_map/recombination_rates.zip
+    unzip recombination_rates.zip
+
+    rm -f hg16.perlegenRecombRate.bed
+    time ./makeBed.pl > hg16.perlegenRecombRate.bed
+    cut -f1 hg16.perlegenRecombRate.bed | sort -u
+    wc -l hg16.perlegenRecombRate.bed
+
+    liftOver hg16.perlegenRecombRate.bed /cluster/data/hg16/bed/bedOver/hg16ToHg17.over.chain hg17.perlegenRecombRate.bed hg16ToHg17.rates.unmapped
+
+    hgLoadBed hg16 perlegenRecombRate  hg16.perlegenRecombRate.bed
+    hgLoadBed hg17 perlegenRecombRate  hg17.perlegenRecombRate.bed
+
+    rm -f bed.tab chr*_rates.tx hg1*ed
+
 
 # Tajima's D (DONE -- 2005-06-04 -- Daryl)
 # Data from Chris Carlson in Debbie Nickerson's lab
