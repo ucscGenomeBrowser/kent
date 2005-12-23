@@ -42,6 +42,7 @@ if ( $orgCheck == 0 ) then
   echo
   echo "  $db is not a valid genome database."
   echo
+  exit
 endif
 
 # set machines, if given on command line.
