@@ -2207,6 +2207,7 @@ longLabel  NHGRI/PSU/UCSC TBA Conservation
 group encodeCompGeno
 priority 70.2
 type wig 0.0 1.0
+spanList 1
 maxHeightPixels 100:25:11
 autoScaleDefault Off
 windowingFunction mean
