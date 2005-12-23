@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "ld.h"
 
-static char const rcsid[] = "$Id: ld.c,v 1.1 2005/01/04 01:06:30 daryl Exp $";
+static char const rcsid[] = "$Id: ld.c,v 1.2 2005/12/23 12:23:10 daryl Exp $";
 
 void ldStaticLoad(char **row, struct ld *ret)
 /* Load a row from ld table into ret.  The contents of ret will
@@ -19,12 +19,10 @@ ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
-ret->pop = row[4];
-ret->ldCount = sqlUnsigned(row[5]);
-ret->ldStarts = row[6];
-ret->dprime = row[7];
-ret->rsquared = row[8];
-ret->lod = row[9];
+ret->score = sqlUnsigned(row[4]);
+ret->dprime = row[5];
+ret->rsquared = row[6];
+ret->lod = row[7];
 }
 
 struct ld *ldLoad(char **row)
@@ -38,12 +36,10 @@ ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
-ret->pop = cloneString(row[4]);
-ret->ldCount = sqlUnsigned(row[5]);
-ret->ldStarts = cloneString(row[6]);
-ret->dprime = cloneString(row[7]);
-ret->rsquared = cloneString(row[8]);
-ret->lod = cloneString(row[9]);
+ret->score = sqlUnsigned(row[4]);
+ret->dprime = cloneString(row[5]);
+ret->rsquared = cloneString(row[6]);
+ret->lod = cloneString(row[7]);
 return ret;
 }
 
@@ -53,7 +49,7 @@ struct ld *ldLoadAll(char *fileName)
 {
 struct ld *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[8];
 
 while (lineFileRow(lf, row))
     {
@@ -71,7 +67,7 @@ struct ld *ldLoadAllByChar(char *fileName, char chopper)
 {
 struct ld *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[8];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -115,8 +111,8 @@ void ldSaveToDb(struct sqlConnection *conn, struct ld *el, char *tableName, int 
  * If worried about this use ldSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s','%s',%u,'%s','%s','%s','%s')", 
-	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->pop,  el->ldCount,  el->ldStarts,  el->dprime,  el->rsquared,  el->lod);
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s')", 
+	tableName,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->score,  el->dprime,  el->rsquared,  el->lod);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -131,23 +127,19 @@ void ldSaveToDbEscaped(struct sqlConnection *conn, struct ld *el, char *tableNam
  * before inserting into database. */ 
 {
 struct dyString *update = newDyString(updateSize);
-char  *chrom, *name, *pop, *ldStarts, *dprime, *rsquared, *lod;
+char  *chrom, *name, *dprime, *rsquared, *lod;
 chrom = sqlEscapeString(el->chrom);
 name = sqlEscapeString(el->name);
-pop = sqlEscapeString(el->pop);
-ldStarts = sqlEscapeString(el->ldStarts);
 dprime = sqlEscapeString(el->dprime);
 rsquared = sqlEscapeString(el->rsquared);
 lod = sqlEscapeString(el->lod);
 
-dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s','%s',%u,'%s','%s','%s','%s')", 
-	tableName,  chrom, el->chromStart , el->chromEnd ,  name,  pop, el->ldCount ,  ldStarts,  dprime,  rsquared,  lod);
+dyStringPrintf(update, "insert into %s values ( '%s',%u,%u,'%s',%u,'%s','%s','%s')", 
+	tableName,  chrom, el->chromStart , el->chromEnd ,  name, el->score ,  dprime,  rsquared,  lod);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
 freez(&name);
-freez(&pop);
-freez(&ldStarts);
 freez(&dprime);
 freez(&rsquared);
 freez(&lod);
@@ -166,9 +158,7 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
-ret->pop = sqlStringComma(&s);
-ret->ldCount = sqlUnsignedComma(&s);
-ret->ldStarts = sqlStringComma(&s);
+ret->score = sqlUnsignedComma(&s);
 ret->dprime = sqlStringComma(&s);
 ret->rsquared = sqlStringComma(&s);
 ret->lod = sqlStringComma(&s);
@@ -185,8 +175,6 @@ struct ld *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
-freeMem(el->pop);
-freeMem(el->ldStarts);
 freeMem(el->dprime);
 freeMem(el->rsquared);
 freeMem(el->lod);
@@ -221,15 +209,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->pop);
-if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%u", el->ldCount);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->ldStarts);
-if (sep == ',') fputc('"',f);
+fprintf(f, "%u", el->score);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->dprime);

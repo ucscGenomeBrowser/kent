@@ -1,14 +1,12 @@
 table ld
-"Linkage Disequilibrium values from the HapMap project"
+"Linkage Disequilibrium values from SNP genotypes"
     (
     string   chrom;      "Chromosome"
     uint     chromStart; "chromStart for reference marker"
     uint     chromEnd;   "chromEnd for last marker in list"
-    string   name;       "rsId"
-    string   pop;        "Population"
-    uint     ldCount;    "number of markers with LD values"
-    string   ldStarts;   "start positions of markers"
-    string   dprime;     "D' value list"
-    string   rsquared;   "r^2 value list"
-    string   lod;        "LOD value list"
+    string   name;       "rsId at chromStart"
+    uint     score;      "Number of markers with LD values"
+    string   dprime;     "Encoded lists of D' values"
+    string   rsquared;   "Encoded lists of r^2 values"
+    string   lod;        "Encoded lists of LOD values"
     )
