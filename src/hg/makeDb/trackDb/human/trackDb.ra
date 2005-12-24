@@ -554,7 +554,7 @@ type bed 4 .
 track hapmapLd
 compositeTrack on
 shortLabel HapMap LD
-longLabel HapMap Linkage Disequilibrium - Phase I
+longLabel HapMap Linkage Disequilibrium - Phase II
 group varRep
 priority 144.49
 visibility hide
@@ -567,10 +567,10 @@ type bed 4 +
     longLabel HapMap Linkage Disequilibrium for the CEPH population (30 trios)
     priority 1
 
-    track hapmapLdYri
+    track hapmapLdChb
     subTrack hapmapLd off
-    shortLabel LD YRI
-    longLabel HapMap Linkage Disequilibrium for the Yoruban population (30 trios)
+    shortLabel LD CHB
+    longLabel HapMap Linkage Disequilibrium for the Chinese Han population (45 unrelated)
     priority 2
 
     track hapmapLdJpt
@@ -579,10 +579,10 @@ type bed 4 +
     longLabel HapMap Linkage Disequilibrium for the Japanese population (45 unrelated)
     priority 3
 
-    track hapmapLdHcb
+    track hapmapLdYri
     subTrack hapmapLd off
-    shortLabel LD CHB
-    longLabel HapMap Linkage Disequilibrium for the Chinese Han population (45 unrelated)
+    shortLabel LD YRI
+    longLabel HapMap Linkage Disequilibrium for the Yoruban population (30 trios)
     priority 4
 
 track haplotype
