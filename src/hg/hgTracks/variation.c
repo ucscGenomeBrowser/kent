@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.43 2005/12/24 22:17:30 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.44 2005/12/24 23:00:36 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -970,6 +970,7 @@ void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 char  label[16];
 char *valueString = cartUsualString(cart, "ldValues", ldValueDefault);
 char *pop         = tg->mapName;
+int   yVisOffset  = ( vis == tvDense ? 0 : tg->heightPer );
 
 if (strlen(tg->mapName)>3)
     pop += strlen(tg->mapName) - 3;
@@ -984,9 +985,13 @@ else
     errAbort("%s values are not recognized", valueString);
 
 safef(label, sizeof(label), "LD: %s; %s", pop, valueString);
+
 toUpperN(label, sizeof(label));
-vgTextRight(vg, leftLabelX, yOff+tl.fontHeight, leftLabelWidth-1, 
-	    tl.fontHeight, color, font, label);
+vgUnclip(vg);
+vgSetClip(vg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer);
+vgTextRight(vg, leftLabelX, yOff+yVisOffset, leftLabelWidth, tg->heightPer, color, font, label);
+vgUnclip(vg);
+vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
 }
 
 
@@ -1070,9 +1075,11 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	}
     }
 if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+    {
     ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
-ldDrawLeftLabels(tg, seqStart, seqEnd, vg, xOff, yOff, width, tg->lineHeight, 
-		 withCenterLabels, font, color, vis);
+    ldDrawLeftLabels(tg, seqStart, seqEnd, vg, xOff, yOff, width, tg->lineHeight, 
+		     withCenterLabels, font, color, vis);
+    }
 }
 
 void ldFreeItems(struct track *tg)
