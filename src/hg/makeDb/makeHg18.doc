@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.4 2005/12/21 00:39:48 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.5 2005/12/24 09:46:37 hartera Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -1014,10 +1014,15 @@ ssh kkr7u00.kilokluster.ucsc.edu
 
     #	Should be zero intersection with rmsk
     #	featureBits -chrom=chr1 hg18 genscan rmsk
-    # 835 bases of 224999719 (0.000%) in intersection
 
+# CREATE 2 BIT FILE (DONE 12/20/05, Fan)
+   
+   ssh kkstore02
+   cd /cluster/data/hg18
+   faToTwoBit */chr*.fa hg18.2bit
+	  
 # BLASTZ, CHAIN, NET, MAFNET, AXTNET AND ALIGNMENT DOWNLOADS FOR
-# ZEBRAFISH (danRer3) (in progress, 2005-12-17, hartera)
+# ZEBRAFISH (danRer3) (DONE, 2005-12-23, hartera)
     ssh pk
     # Blastz uses lineage-specific repeats. There are none for mouse
     # and fish so use all repeats for each species as lineage-specific.
@@ -1033,7 +1038,7 @@ ssh kkr7u00.kilokluster.ucsc.edu
           /san/sanvol1/scratch/danRer3/linSpecRep.notInOthers/$f:t:r:r.out.spec
     end
     # make a nib dir without random chroms
-     mkdir -p /san/sanvol1/scratch/hg18/chromNib
+    mkdir -p /san/sanvol1/scratch/hg18/chromNib
     cp -p /cluster/data/hg18/nib/chr*.nib \
        /san/sanvol1/scratch/hg18/chromNib
     rm -r chr*_random.nib
@@ -1046,6 +1051,10 @@ ssh kkr7u00.kilokluster.ucsc.edu
     mkdir /cluster/data/hg18/bed/blastz.danRer3.2005-12-17
     cd /cluster/data/hg18/bed
     ln -s blastz.danRer3.2005-12-17 blastz.danRer3
+    # Three separate runs done to create chains. Runs 1 and 3 could be 
+    # combined into one.
+    # RUN 1: hg18 chroms (no randoms) vs danRer3 chr1-25 and chrM using 
+    # lineage-specific repeats.
     ssh hgwdev
     cd /cluster/data/hg18/bed/blastz.danRer3
     # make run dir
@@ -1107,7 +1116,8 @@ TMPDIR=/scratch/tmp
     grep -v random /cluster/data/hg18/chrom.sizes > S1chroms.len
     grep -v chrUn /cluster/data/danRer3/chrom.sizes \
             | grep -v chrNA > S2chroms.len
-    # do blastz and create chains for danRer3 chr1-25 and chrM 
+    # do blastz and create chains for danRer3 chr1-25 and chrM using 
+    # all repeats as lineage-specific repeats. 
     # chickenHumanTuned.gap scoring matrix is now used by axtChain if the 
     # linearGap parameter is set to "loose".
     nohup nice /cluster/bin/scripts/doBlastzChainNet.pl \
@@ -1144,7 +1154,7 @@ awk '{print "perl -pi.bak -e s/"$1":"$2+1"-"$3"/"$4"/ hg18RandomContigs.fa"}' \
     cd /cluster/data/hg18
     set dir=/san/sanvol1/scratch/hg18
     faToTwoBit [1-9]/chr[1-9].fa [12][0-9]/chr[12][0-9].fa M/chrM.fa \
-               X/chrX.fa Y/chrY.fa \
+               X/chrX.fa Y/chrY.fa *hap[12]/chr*.fa \
                /cluster/data/hg18/bed/blastz.danRer3/hg18RandomContigs.fa \
                $dir/chromsAndRandoms.2bit    
     twoBitInfo $dir/chromsAndRandoms.2bit $dir/chromsAndRandoms.len
@@ -1152,8 +1162,10 @@ awk '{print "perl -pi.bak -e s/"$1":"$2+1"-"$3"/"$4"/ hg18RandomContigs.fa"}' \
     faToTwoBit /cluster/data/hg18/bed/blastz.danRer3/hg18RandomContigs.fa \
                $dir/randoms.2bit    
     twoBitInfo $dir/randoms.2bit $dir/randoms.len
-    # make a 2 bit file for all the chroms and random chroms
-    faToTwoBit [1-9MXY]/chr*.fa [12][0-9]/chr*.fa \
+    # make sure all the random chroms contigs are included - should be 88.
+    # make a 2 bit file for all the chroms and random chroms, make sure to 
+    # get the haplotype chrom sequences.
+    faToTwoBit [1-9MXY]/chr*.fa [12][0-9]/chr*.fa *hap[12]/chr*.fa \
                $dir/hg18.2bit
     twoBitInfo $dir/hg18.2bit $dir/hg18Chroms.len
     twoBitInfo /san/sanvol1/scratch/danRer3/danRer3.2bit \
@@ -1165,6 +1177,10 @@ awk '{print "perl -pi.bak -e s/"$1":"$2+1"-"$3"/"$4"/ hg18RandomContigs.fa"}' \
     cd /cluster/data/hg18/bed/blastz.danRer3
     # make a lift file for the hg18 randoms contigs
     cat /cluster/data/hg18/*/lift/random.lft >> $dir/randomContigs.lft
+    # RUN 2: hg18 chroms and random chroms contigs vs danRer3 chrNA and 
+    # chrUn scaffolds with no lineage-specific repeats as there are too 
+    # many scaffolds in chrNA and chrUn. Use the dynamic masking function 
+    # of Blastz instead.
     # make run dir
     mkdir -p /san/sanvol1/scratch/hg18/blastzDanRer3/chromsAndRandomsRun
     ln -s /san/sanvol1/scratch/hg18/blastzDanRer3/chromsAndRandomsRun
@@ -1231,8 +1247,9 @@ TMPDIR=/scratch/tmp
     # << this line keeps emacs coloring happy
     chmod +x DEF
 
-    # do blastz and create for human chroms and random chroms in contigs
-    # vs zebrafish danRer3 chrNa and chrUn in scaffolds. 
+    # do blastz and create chains for human chroms and random chroms in contigs
+    # vs zebrafish danRer3 chrNA and chrUn in scaffolds without
+    # lineage-specific repeats but using blastz's dynamic masking.
     # chickenHumanTuned.gap scoring matrix is now used by axtChain if the 
     # linearGap parameter is set to "loose".
   nohup nice /cluster/bin/scripts/doBlastzChainNet.pl \       
@@ -1243,11 +1260,149 @@ TMPDIR=/scratch/tmp
    -chainMinScore=5000 \
    -chainLinearGap loose \
    -stop chainRun `pwd`/DEF >& doChains.log &
-   # PID 2671     Start: Mon Dec 19 03:02
+    # Took about 15 hours to finish.
+    ssh hgwdev
+    # Try running hg18 random chroms in contigs vs danRer3 chroms 1-25 and chrM
+    # with lineage-specific repeats.
+    # make directory of human contigs repeats to serve as lineage-specific 
+    # repeats for the random chroms contigs. 
+    mkdir -p /san/sanvol1/scratch/hg18/linSpecRepRandoms.notInOthers
+    cd /cluster/data/hg18/bed/blastz.danRer3
+    awk '{print $4}' contigPosAndNames.txt > contigNames.txt
+    foreach c (`cat contigNames.txt`)
+      foreach f (/cluster/data/hg18/*/${c}/${c}.fa.out)
+      cp -p $f \
+      /san/sanvol1/scratch/hg18/linSpecRepRandoms.notInOthers/$f:t:r:r.out.spec
+      end
+    end
+    # RUN 3: hg18 random chroms contigs vs danRer3 chr1-25 and chrM using
+    # lineage-specific repeats.
+    # make run dir
+    mkdir -p /san/sanvol1/scratch/hg18/blastzDanRer3/randomsRun 
+    ln -s /san/sanvol1/scratch/hg18/blastzDanRer3/randomsRun 
+    # make out dir
+    mkdir -p /san/sanvol1/scratch/hg18/blastzDanRer3/randomsOut 
+    ln -s /san/sanvol1/scratch/hg18/blastzDanRer3/randomsOut 
+    set dir=/san/sanvol1/scratch
+    cp $dir/hg18/blastzDanRer3/chromsRun/S2chroms.len \
+       $dir/danRer3/chr1to25andM.len
+    # make nib dir for random contigs for hg18
+    mkdir -p $dir/hg18/randomContigsNib
+    foreach c (`cat contigNames.txt`)
+      foreach f (/cluster/data/hg18/*/${c}/${c}.fa)
+      faToNib -softMask $f $dir/hg18/randomContigsNib/$f:t:r.nib
+      end
+    end
+    cd randomsRun
+    cat << '_EOF_' > DEF
+# human (hg18) vs zebrafish (danRer3)
+# human random chrom contigs vs zebrafish chr1-15 and chrM
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin
 
-# CREATE 2 BIT FILE (DONE 12/20/05, Fan)
-   
-   ssh kkstore02
-   cd /cluster/data/hg18
-   faToTwoBit */chr*.fa hg18.2bit
-	   
+ALIGN=blastz-run
+BLASTZ=blastz.v7.x86_64
+
+# Reuse parameters from hg16-fr1, danRer-hg17 and mm5-danRer
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human (hg18)
+SEQ1_DIR=/san/sanvol1/scratch/hg18/hg18.2bit
+SEQ1_CTGDIR=/san/sanvol1/scratch/hg18/randomContigsNib
+SEQ1_LIFT=/san/sanvol1/scratch/hg18/randomContigs.lft
+SEQ1_RMSK=
+SEQ1_FLAG=
+SEQ1_SMSK=/san/sanvol1/scratch/hg18/linSpecRepRandoms.notInOthers
+SEQ1_LIMIT=30
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish (danRer3)
+# just chr1-25 and chrM
+SEQ2_DIR=/san/sanvol1/scratch/danRer3/chromNib
+SEQ2_RMSK=
+SEQ2_FLAG=
+SEQ2_LIMIT=30
+SEQ2_SMSK=/san/sanvol1/scratch/danRer3/linSpecRep.notInOthers
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/san/sanvol1/scratch/hg18/blastzDanRer3/randomsRun
+
+DEF=$BASE/DEF
+RAW=$BASE/raw
+CDBDIR=$BASE
+SEQ1_LEN=/san/sanvol1/scratch/hg18/hg18Chroms.len
+SEQ1_CTGLEN=/san/sanvol1/scratch/hg18/randoms.len
+SEQ2_LEN=/san/sanvol1/scratch/danRer3/chr1to25andM.len
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    chmod +x DEF
+
+    # do blastz and create chains for human random chroms in contigs
+    # vs zebrafish danRer3 chroms 1 to 25 and chrM using all repeats
+    # as lineage-specific repeats. 
+    # chickenHumanTuned.gap scoring matrix is now used by axtChain if the 
+    # linearGap parameter is set to "loose".
+  nohup nice /cluster/bin/scripts/doBlastzChainNet.pl \       
+   -bigClusterHub=pk \
+   -smallClusterHub=pk \
+   -workhorse=pk \
+   -blastzOutRoot /san/sanvol1/scratch/hg18/blastzDanRer3/randomsOut \ 
+   -chainMinScore=5000 \
+   -chainLinearGap loose \
+   -stop chainRun `pwd`/DEF >& doChains.log &
+   # Took 15 minutes.
+   # chains are sorted by score so move into one directory and use
+   # chainMergeSort
+   ssh kolossus
+   set blastzDir=/cluster/data/hg18/bed/blastz.danRer3
+   cd $blastzDir/chromsRun/axtChain
+   mkdir -p chainsNotMerged
+   foreach r (chromsRun chromsAndRandomsRun randomsRun)
+     nice cp -p ${blastzDir}/${r}/axtChain/run/chain/*.chain \
+          ${blastzDir}/chromsRun/axtChain/chainsNotMerged/
+   end
+   nice chainMergeSort ./chainsNotMerged/*.chain | nice gzip -c \
+        > hg18.danRer3.all.chain.gz
+   # split into chains by chrom 
+   nice zcat hg18.danRer3.all.chain.gz | chainSplit chain stdin
+   # check chains, there are 48 should be 49. Chains for chr11_random
+   # are missing. These sequences have a lot of repeats in the regions that
+   # hits danRer3 with BLAT.
+   # carry on with doBlastzChainNet.pl starting from net step
+   ssh hgwdev
+   cd /cluster/data/hg18/bed/blastz.danRer3/chromsRun
+   mv DEF DEF.chroms
+   # edit DEF to give hg18.2bit as the SEQ1_DIR and danRer3.2bit as SEQ2_DIR 
+   # and remove lineage-specfic repeats.
+   nohup nice /cluster/bin/scripts/doBlastzChainNet.pl \       
+   -bigClusterHub=pk \
+   -smallClusterHub=pk \
+   -workhorse=pk \
+   -blastzOutRoot /san/sanvol1/scratch/hg18/blastzDanRer3/chromsOut \
+   -chainMinScore=5000 \
+   -chainLinearGap loose \
+   -continue net `pwd`/DEF >& doNetAndDownloads.log &
+   # Took about 25 minutes.
+   # crashed on ssh -X sanhead1 for cleanup so re-run script
+   cleanUp.csh
+   # copy chainDanRer3.html and netDanRer3.html to 
+   # kent/src/hg/makeDb/trackDb/human/hg18/ and edit to describe method used.
+   # Add tracks to trackDb.ra there. Edit README.txt in the downloads 
+   # directory to describe method used for alignments.
+# featureBits -chrom=chr1 hg18 refGene:cds chainDanRer3Link -enrichment
+# refGene:cds 1.378%, chainDanRer3Link 2.601%, both 0.927%, cover 67.26%,
+# enrich 25.86x 
+# featureBits -chrom=chr1 hg17 refGene:cds chainDanRer2Link -enrichment
+# refGene:cds 1.386%, chainDanRer3Link 2.742%, both 0.909%, cover 65.58%,
+# enrich 23.91x 
+# So similar coverage and enrichment to hg17 vs danRer2 chains.
+ 
