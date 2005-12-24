@@ -4841,7 +4841,47 @@ TMPDIR=/scratch/tmp
 # coverage dropped about 8% without chrNA and chUn alignments so not a 
 # huge difference.
 
+# BLASTZ SWAP FOR HUMAN (hg18) (DONE, 2005-12-24, hartera)
+# CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET AND ALIGNMENT DOWNLOADS
+    ssh hgwdev
+    # Blastz requires lineage-specific repeats
+    # Treat all repeats as lineage-specific for all alignments except those
+    # involving danRer3 chrUn and chrNA where the dynamic masking 
+    # functionality of Blastz was used. hg18 random chroms were aligned
+    # as contigs and danRer3 chrNA and chrUn were aligned as scaffolds -
+    # see zebrafish (danRer3) chain and net track section in makeHg18.doc
+    # for further details. 
+
+    # do swap of hg18 vs. danRer3 chain and net alignments to 
+    # create danRer3 vs. hg18 see makeHg18.doc for details.
+    cd /cluster/data/hg18/bed/blastz.danRer3/chromsRun
+    # edit DEF file and add location of danRer3 and hg18 lineage-specific
+    # repeats - move chrUn and chrNA lineage-specific repeats into a tmp
+    # directory as they were not used.
+    nohup nice /cluster/bin/scripts/doBlastzChainNet.pl \
+        -bigClusterHub=pk -swap -chainMinScore=5000 \
+        -chainLinearGap loose `pwd`/DEF >& doSwap.log &
+    # Took about 27 minutes.
+    # Blastz parameters are as for hg18 vs. danRer3 - see makeHg18.doc
+# BLASTZ_H=2000
+# BLASTZ_Y=3400
+# BLASTZ_L=6000
+# BLASTZ_K=2200
+# BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+# BLASTZ_ABRIDGE_REPEATS=1
+  # make html files and trackDb.ra entry for chain and net tracks.
+  # check README.txt for downloads.
+# featureBits -chrom=chr2 danRer3 refGene:cds chainHg18Link -enrichment 
+# refGene:cds 0.767%, chainHg18Link 4.370%, both 0.607%, cover 79.15%,
+# enrich 18.11x
+# featureBits -chrom=chr2 danRer2 refGene:cds chainHg17Link -enrichment 
+# refGene:cds 0.769%, chainHg17Link 4.576%, both 0.605%, cover 78.69%,
+# enrich 17.20x
+# Similar coverage and enrichment as for danRer2 vs hg17.
+
 # KNOWN GENES BASED ON ENSEMBL GENES (in progress, 2005-11-23, hartera)
+    # see ENSEMBL GENES section for documentation of creation of
+    # the ensGene, ensGtp and ensPep tables and the track.
     # compare the Ensembl and Human Proteins tracks
     featureBits danRer3 refGene:cds ensGene:cds -enrichment
 # refGene:cds 0.658%, ensGene:cds 1.994%, both 0.589%, cover 89.60%, 
@@ -4866,16 +4906,48 @@ TMPDIR=/scratch/tmp
     # Page 2) Then hit next.
     # Page 3) Choose the "Features" Attribute Page from the pulldown menu
     # at the top. Make sure that under the GENE section, the Ensembl 
-    # Attributes checked include the Ensembl Gene ID, Ensembl Transcript ID,
-    # Biotype and Description. Under External References, select Unified 
-    # UniProt accession, PDB ID and ZFIN Primary ID. Under the Protein 
-    # section, select InterPro ID and InterPro Description under InterPro 
+    # Attributes checked are the Ensembl Gene ID, (Ensembl Transcript ID),
+    # Description. Under External References, select Unified UniProt 
+    # accession, and ZFIN Primary ID. Under the Protein section, select 
+    # InterPro Description and InterPro ID under InterPro 
     # Attributes. Select text, tab-separated for output. Choose gzip 
     # compression. Hit export. Save as ensGene35Desc.tsv.gz
+    gunzip ensGene35Desc.tsv.gz
+    # repeat above and get the Ensembl transcript ID from Ensembl Attributes
+    # and then get EntrezGene ID and RefSeq DNA Accession from the
+    # External References section. Select text, tab-separated for output.
+    # Choose gzip compression. Hit export. Save as ensGene35Desc2.tsv.gz
+    cd /cluster/data/danRer3/bed/knownGenes
+    gunzip ensGene35Desc2.tsv.gz  
+    # need to make a table of cross reference information for Ensembl
+    # for the Known Genes details pages.
+    # create a table definition for ensXref:
+    cd ~/kent/src/hg/lib
+cat << 'EOF' > ensXRef.as
+table ensXRef
+"Link together an Ensembl Transcript ID and a gene alias." 
+    (
+    string ensId;       "Ensembl Transcript ID"
+    string zfinId;      "ZFIN ID"
+    string uniProtId;   "Unified UniProt protein accession"
+    string geneSymbol;  "Gene Symbol"
+    string refSeq;      "RefSeq DNA Accession"
+    string protAcc;     "RefSeq Protein Accession"
+    string description; "Description" 
+    )
+'EOF'
+    autoSql ensXRef.as ensXRef
+    mv ensXRef.h ../inc
+    # edit ensXRef.sql so that only ensId is not null, add zfinId, uniProtId,
+    # geneSymbol, refSeq and protAcc as keys. ensId is already the
+    # primary key.
+    # write program taking ensGene35Desc.tsv and ensGene35Desc2.tsv as input
+    # and give the tabbed output for loading into the ensXRef table.
+    # hgZfishEnsXRef.c in ~/kent/src/hg/near/hgZfishEnsXRef
+    ~/bin/i386/hgZfishEnsXRef.c ensGeneDesc.tsv ensGeneDesc2.tsv danRer3 \
+               ensGeneXRef.tab >& ensGeneXRef.log
+     # 
    
-    gunzip ensGene35Desc.tsv.gz  
-    # need to make a table of known Gene information for Ensembl
-
 # STS MARKERS (in progress, 2005-10-13, hartera)
     # DOWNLOADED RECENTLY FROM NCBI
     ssh kkstore02
