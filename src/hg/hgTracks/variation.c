@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.42 2005/12/24 09:39:22 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.43 2005/12/24 22:17:30 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -733,31 +733,31 @@ return tg->height;
 void initColorLookup(struct vGfx *vg, boolean isDprime)
 {
 ldShadesInit(vg, isDprime);
-colorLookup['y'] = ldHighLodLowDprime; /* LOD error case */
-colorLookup['z'] = ldHighDprimeLowLod; /* LOD error case */
-colorLookup['a'] = ldShadesPos[0];
-colorLookup['b'] = ldShadesPos[1];
-colorLookup['c'] = ldShadesPos[2];
-colorLookup['d'] = ldShadesPos[3];
-colorLookup['e'] = ldShadesPos[4];
-colorLookup['f'] = ldShadesPos[5];
-colorLookup['g'] = ldShadesPos[6];
-colorLookup['h'] = ldShadesPos[7];
-colorLookup['i'] = ldShadesPos[8];
-colorLookup['j'] = ldShadesPos[9];
-colorLookup['k'] = ldShadesPos[9];
+colorLookup[(int)'y'] = ldHighLodLowDprime; /* LOD error case */
+colorLookup[(int)'z'] = ldHighDprimeLowLod; /* LOD error case */
+colorLookup[(int)'a'] = ldShadesPos[0];
+colorLookup[(int)'b'] = ldShadesPos[1];
+colorLookup[(int)'c'] = ldShadesPos[2];
+colorLookup[(int)'d'] = ldShadesPos[3];
+colorLookup[(int)'e'] = ldShadesPos[4];
+colorLookup[(int)'f'] = ldShadesPos[5];
+colorLookup[(int)'g'] = ldShadesPos[6];
+colorLookup[(int)'h'] = ldShadesPos[7];
+colorLookup[(int)'i'] = ldShadesPos[8];
+colorLookup[(int)'j'] = ldShadesPos[9];
+colorLookup[(int)'k'] = ldShadesPos[9]; /* temporary kluge; remove after fixing data */
 if (isDprime)
     {
-    colorLookup['A'] = ldShadesNeg[0];
-    colorLookup['B'] = ldShadesNeg[1];
-    colorLookup['C'] = ldShadesNeg[2];
-    colorLookup['D'] = ldShadesNeg[3];
-    colorLookup['E'] = ldShadesNeg[4];
-    colorLookup['F'] = ldShadesNeg[5];
-    colorLookup['G'] = ldShadesNeg[6];
-    colorLookup['H'] = ldShadesNeg[7];
-    colorLookup['I'] = ldShadesNeg[8];
-    colorLookup['J'] = ldShadesNeg[9];
+    colorLookup[(int)'A'] = ldShadesNeg[0];
+    colorLookup[(int)'B'] = ldShadesNeg[1];
+    colorLookup[(int)'C'] = ldShadesNeg[2];
+    colorLookup[(int)'D'] = ldShadesNeg[3];
+    colorLookup[(int)'E'] = ldShadesNeg[4];
+    colorLookup[(int)'F'] = ldShadesNeg[5];
+    colorLookup[(int)'G'] = ldShadesNeg[6];
+    colorLookup[(int)'H'] = ldShadesNeg[7];
+    colorLookup[(int)'I'] = ldShadesNeg[8];
+    colorLookup[(int)'J'] = ldShadesNeg[9];
     }
 }
 
@@ -853,7 +853,7 @@ switch (charValue)
     case 'h': return 7;
     case 'i': return 8;
     case 'j': return 9;
-    case 'k': return 9; /* kluge to deal with misformatted data */
+    case 'k': return 9; /* temporary kluge to deal with misformatted data */
     case 'A': return 0;
     case 'B': return 1;
     case 'C': return 2;
@@ -933,7 +933,7 @@ void ldDrawDenseValue(struct vGfx *vg, struct track *tg, int xOff, int y1,
 {
 int   colorInt  = round(d->sumValues/d->n);
 char  colorChar = ldIndexIntToChar(colorInt);
-Color shade     = colorLookup[colorChar];
+Color shade     = colorLookup[(int)colorChar];
 int   w         = 3; /* width of box */
 int   w2        = w/2;
 int   x         = round((atoi(d->name)-winStart)*scale) + xOff - w2;
@@ -1059,7 +1059,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	d = sPtr->next->chromStart;
 	if (notInWindow(a, b, c, d, trim)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
 	    continue;
-	shade = colorLookup[values[i]];
+	shade = colorLookup[(int)values[i]];
 	if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
 	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name);
 	else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
