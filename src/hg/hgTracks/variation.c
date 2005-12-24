@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.41 2005/12/23 12:26:10 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.42 2005/12/24 09:39:22 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -692,7 +692,6 @@ if (count>5000)
     {
     tg->limitedVis=tvDense;
     tg->limitedVisSet=TRUE;
-    cartSetString(cart, "ldOut", "none"); /* overkill? */
     }
 else 
     {
@@ -839,8 +838,159 @@ if ((c-b)/2 >= winEnd-winStart) /* bottom is outside window */
 return FALSE;
 }
 
-/* ldDrawItems -- lots of disk and cpu optimizations here.  
+int ldIndexCharToInt(char charValue)
+/* convert from character encoding to intensity index */
+{
+switch (charValue)
+    {
+    case 'a': return 0;
+    case 'b': return 1;
+    case 'c': return 2;
+    case 'd': return 3;
+    case 'e': return 4;
+    case 'f': return 5;
+    case 'g': return 6;
+    case 'h': return 7;
+    case 'i': return 8;
+    case 'j': return 9;
+    case 'k': return 9; /* kluge to deal with misformatted data */
+    case 'A': return 0;
+    case 'B': return 1;
+    case 'C': return 2;
+    case 'D': return 3;
+    case 'E': return 4;
+    case 'F': return 5;
+    case 'G': return 6;
+    case 'H': return 7;
+    case 'I': return 8;
+    case 'J': return 9;
+    case 'y': return -100;
+    case 'z': return -101;
+    }
+return -102;
+}
 
+int ldIndexIntToChar(int index)
+/* convert from intensity index to character encoding */
+{
+switch (index)
+    {
+    case 0: return 'a';
+    case 1: return 'b';
+    case 2: return 'c';
+    case 3: return 'd';
+    case 4: return 'e';
+    case 5: return 'f';
+    case 6: return 'g';
+    case 7: return 'h';
+    case 8: return 'i';
+    case 9: return 'j';
+    case -1: return 'B';
+    case -2: return 'C';
+    case -3: return 'D';
+    case -4: return 'E';
+    case -5: return 'F';
+    case -6: return 'G';
+    case -7: return 'H';
+    case -8: return 'I';
+    case -9: return 'J';
+    case -100: return 'y';
+    case -101: return 'z';
+    }
+return 'x';
+}
+
+void ldAddToDenseValueHash(struct hash *ldHash, unsigned a, char charValue)
+/* Add new values to LD hash or update existing values.
+   Values are averaged along the diagonals. */
+{
+struct ldStats *stats;
+char name[16];
+int indexValue = ldIndexCharToInt(charValue);
+
+if (a<winStart || a>winEnd || indexValue<-9)
+    return;
+safef(name, sizeof(name), "%d", a);
+stats = hashFindVal(ldHash, name);
+if (!stats)
+    {
+    AllocVar(stats);
+    stats->name      = name;
+    stats->n         = 1;
+    stats->sumValues = abs(indexValue);
+    hashAddSaveName(ldHash, name, stats, &stats->name);
+    }
+else
+    {
+    stats->n         += 1;
+    stats->sumValues += abs(indexValue);
+    }
+}
+
+void ldDrawDenseValue(struct vGfx *vg, struct track *tg, int xOff, int y1, 
+		      double scale, Color outlineColor, struct ldStats *d)
+/* Draw single dense LD value */
+{
+int   colorInt  = round(d->sumValues/d->n);
+char  colorChar = ldIndexIntToChar(colorInt);
+Color shade     = colorLookup[colorChar];
+int   w         = 3; /* width of box */
+int   w2        = w/2;
+int   x         = round((atoi(d->name)-winStart)*scale) + xOff - w2;
+int   x1=x-w2, x2=x1+w, y2=y1+tg->heightPer-1;
+
+vgBox(vg, x1, y1, w, tg->heightPer, shade);
+if (outlineColor!=0)
+    {
+    vgLine(vg, x1, y1, x2, y1, outlineColor);
+    vgLine(vg, x1, y2, x2, y2, outlineColor);
+    vgLine(vg, x1, y1, x1, y2, outlineColor);
+    vgLine(vg, x2, y1, x2, y2, outlineColor);
+    }
+}
+
+void ldDrawDenseValueHash(struct vGfx *vg, struct track *tg, int xOff, int yOff, 
+			  double scale, Color outlineColor, struct hash *ldHash)
+/* Draw all dense LD values */
+{
+struct hashEl *hashEl, *stats=hashElListHash(ldHash);
+
+vgBox(vg, insideX, yOff, insideWidth, tg->height-1, shadesOfGray[2]);
+for (hashEl=stats; hashEl!=NULL; hashEl=hashEl->next)
+    ldDrawDenseValue(vg, tg, xOff, yOff, scale, outlineColor, hashEl->val);
+hashElFreeList(&stats);
+}
+
+void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
+	struct vGfx *vg, int xOff, int yOff, int width, int height, 
+	boolean withCenterLabels, MgFont *font,
+	Color color, enum trackVisibility vis)
+/* Draw left labels. */
+{
+char  label[16];
+char *valueString = cartUsualString(cart, "ldValues", ldValueDefault);
+char *pop         = tg->mapName;
+
+if (strlen(tg->mapName)>3)
+    pop += strlen(tg->mapName) - 3;
+
+if (sameString(valueString,"lod"))
+    valueString = cloneString("LOD");
+else if (sameString(valueString,"rsquared"))
+    valueString = cloneString("R^2");
+else if (sameString(valueString,"dprime"))
+    valueString = cloneString("D'");
+else
+    errAbort("%s values are not recognized", valueString);
+
+safef(label, sizeof(label), "LD: %s; %s", pop, valueString);
+toUpperN(label, sizeof(label));
+vgTextRight(vg, leftLabelX, yOff+tl.fontHeight, leftLabelWidth-1, 
+	    tl.fontHeight, color, font, label);
+}
+
+
+/* ldDrawItems -- lots of disk and cpu optimizations here.  
  * There are three data fields, (lod, rsquared, and dprime) in each
    item, and each is a list of pairwise values.  The values are
    encoded in ascii to save disk space and color calculation (drawing)
@@ -867,17 +1017,16 @@ void ldDrawItems(struct track *tg, int seqStart, int seqEnd,
 		 MgFont *font, Color color, enum trackVisibility vis)
 /* Draw item list, one per track. */
 {
-struct ld *dPtr = NULL, *sPtr = NULL; /* pointers to 5' and 3' ends */
-char      *values = cartUsualString(cart, "ldValues", ldValueDefault);
-boolean    trim  = cartUsualBoolean(cart, "ldTrim", ldTrimDefault);
-boolean    isLod = FALSE, isRsquared = FALSE, isDprime = FALSE;
-double     scale = scaleForPixels(insideWidth);
-int        itemCount = slCount((struct slList *)tg->items) + 1;
-Color      shade = 0, outlineColor = getOutlineColor(itemCount);
-int        a, b, c, d, i;
-//int        x, w=3;
-//int        heightPer    = tg->heightPer;
-boolean    drawMap      = ( itemCount<1000 ? TRUE : FALSE );
+struct ld   *dPtr      = NULL, *sPtr = NULL; /* pointers to 5' and 3' ends */
+char        *values    = cartUsualString(cart, "ldValues", ldValueDefault);
+boolean      trim      = cartUsualBoolean(cart, "ldTrim", ldTrimDefault);
+boolean      isLod     = FALSE, isRsquared = FALSE, isDprime = FALSE;
+double       scale     = scaleForPixels(insideWidth);
+int          itemCount = slCount((struct slList *)tg->items);
+Color        shade     = 0, outlineColor = getOutlineColor(itemCount);
+int          a, b, c, d, i; /* chromosome coordinates and counter */
+boolean      drawMap   = ( itemCount<1000 ? TRUE : FALSE );
+struct hash *ldHash    = newHash(20);
 
 if (sameString(values, "lod")) /* only one value can be drawn at a time, so figure it out here */
     isLod = TRUE;
@@ -913,45 +1062,23 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	shade = colorLookup[values[i]];
 	if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
 	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name);
+	else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+	    ldAddToDenseValueHash(ldHash, a, values[i]);
 	else /* write the dense mode! */
-	    errAbort("visibility '%s' not supported yet.", hStringFromTv(vis));
+	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
 	i++;
 	}
     }
+if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+    ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
+ldDrawLeftLabels(tg, seqStart, seqEnd, vg, xOff, yOff, width, tg->lineHeight, 
+		 withCenterLabels, font, color, vis);
 }
 
 void ldFreeItems(struct track *tg)
 /* Free item list. */
 {
 ldFreeList((struct ld**)&tg->items);
-}
-
-void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
-	struct vGfx *vg, int xOff, int yOff, int width, int height, 
-	boolean withCenterLabels, MgFont *font,
-	Color color, enum trackVisibility vis)
-/* Draw left labels. */
-{
-char  label[16];
-char *valueString = cartUsualString(cart, "ldValues", ldValueDefault);
-char *pop         = tg->mapName;
-
-if (strlen(tg->mapName)>3)
-    pop += strlen(tg->mapName) - 3;
-
-if (sameString(valueString,"lod"))
-    valueString = cloneString("LOD");
-else if (sameString(valueString,"rsquared"))
-    valueString = cloneString("R^2");
-else if (sameString(valueString,"dprime"))
-    valueString = cloneString("D'");
-else
-    errAbort("%s values are not recognized", valueString);
-
-safef(label, sizeof(label), "LD: %s; %s", pop, valueString);
-toUpperN(label, sizeof(label));
-vgTextRight(vg, leftLabelX, yOff+tl.fontHeight, leftLabelWidth-1, 
-	    tl.fontHeight, color, font, label);
 }
 
 void ldMethods(struct track *tg)
@@ -964,6 +1091,7 @@ tg->totalHeight    = ldTotalHeight;
 tg->drawItems      = ldDrawItems;
 tg->freeItems      = ldFreeItems;
 tg->drawLeftLabels = ldDrawLeftLabels;
+tg->mapsSelf       = TRUE;
 tg->canPack        = FALSE;
 }
 

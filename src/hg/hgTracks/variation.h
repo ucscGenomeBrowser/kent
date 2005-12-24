@@ -10,6 +10,7 @@
 #include "snpUi.h"
 #include "spaceSaver.h"
 #include "ld.h"
+#include "hash.h"
 #include "ldUi.h"
 #include "gfxPoly.h"
 #include "memgfx.h"
@@ -105,13 +106,15 @@ extern Color ldHighDprimeLowLod;
 extern int colorLookup[256];
 
 struct ldStats 
+/* collect stats for drawing LD values in dense mode */
 {
-    unsigned chromStart;
-    unsigned n;
-    double sumValues;
+    struct ldStats *next;
+    char           *name;      /* chromStart as a string */
+    unsigned        n;         /* count of snps with valid LD values */
+    unsigned        sumValues; /* sum of valid LD values */
 };
 
-void makeLdShades(struct vGfx *vg);
+//void makeLdShades(struct vGfx *vg);
 /* Allocate the LD shades of Red, Green and Blue */
 
 void ldLoadItems(struct track *tg);
