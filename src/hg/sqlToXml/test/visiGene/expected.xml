@@ -15,7 +15,6 @@
             <permeablization description="3 min proteinase K/30 min proteinase K"/>
             <sliceType name="whole mount"/>
           </preparation>
-
           <probe fPrimer="CCGGAATTCGGAATCCGGATGGTTTGAGAGC" rPrimer="CCCAAGCTTATGGCAGTAGGTGAGCTCAGGC" seq="">
             <gene name="Nkx2-6" locusLink="" refSeq="" genbank="XM_127732" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -36,7 +35,6 @@
             <permeablization description="3 min proteinase K/30 min proteinase K"/>
             <sliceType name="whole mount"/>
           </preparation>
-
           <probe fPrimer="CGCGGATCCAAGGACATCTTGGACCTTCCG" rPrimer="CCCAAGCTTGCATGTGCTGCAGCGACTGCG" seq="">
             <gene name="Nkx2-2" locusLink="18088" refSeq="NM_010919" genbank="U31566" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -57,7 +55,6 @@
             <permeablization description="3 min proteinase K/30 min proteinase K"/>
             <sliceType name="whole mount"/>
           </preparation>
-
           <probe fPrimer="CGCGGATCCGAACAGGATGCGAAGCCTAGGG" rPrimer="CCCAAGCTTACCAGTTCCAGGAGACCAGAGC" seq="">
             <gene name="Nkx2-9" locusLink="18094" refSeq="NM_008701" genbank="NM_008701" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -81,7 +78,6 @@
             <embedding description="Cryosection"/>
             <sliceType name="transverse"/>
           </preparation>
-
           <probe fPrimer="CCGGAATTCGGAATCCGGATGGTTTGAGAGC" rPrimer="CCCAAGCTTATGGCAGTAGGTGAGCTCAGGC" seq="">
             <gene name="Nkx2-6" locusLink="" refSeq="" genbank="XM_127732" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -102,7 +98,6 @@
             <embedding description="Cryosection"/>
             <sliceType name="transverse"/>
           </preparation>
-
           <probe fPrimer="CCGGAATTCAAGGGCTCCTACTGGACGCTGC" rPrimer="CCCAAGCTTGCACGGGTCTGGAATACACACC" seq="">
             <gene name="Foxa1" locusLink="15375" refSeq="NM_008259" genbank="NM_008259" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -123,7 +118,6 @@
             <embedding description="Cryosection"/>
             <sliceType name="transverse"/>
           </preparation>
-
           <probe fPrimer="CCGGAATTCAAGGGCTCCTACTGGACGCTGC" rPrimer="CCCAAGCTTGCACGGGTCTGGAATACACACC" seq="">
             <gene name="Foxa1" locusLink="15375" refSeq="NM_008259" genbank="NM_008259" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -149,7 +143,6 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Hoxc5" locusLink="15424" refSeq="NM_175730" genbank="NM_175730" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -174,7 +167,6 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Hoxb5" locusLink="15413" refSeq="NM_008268" genbank="NM_008268" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -199,7 +191,6 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Hoxa5" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -227,7 +218,6 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Hoxc5" locusLink="15424" refSeq="NM_175730" genbank="NM_175730" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -252,7 +242,6 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Hoxa5" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -280,7 +269,6 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Hoxc5" locusLink="15424" refSeq="NM_175730" genbank="NM_175730" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -305,7 +293,6 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Hoxa5" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -337,7 +324,6 @@
             <fixation description="4% paraformaldehyde"/>
             <embedding description="Cryosection"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -362,7 +348,6 @@
             <fixation description="4% paraformaldehyde"/>
             <embedding description="Cryosection"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -387,7 +372,6 @@
             <fixation description="4% paraformaldehyde"/>
             <embedding description="Cryosection"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -415,7 +399,6 @@
             <fixation description="4% paraformaldehyde"/>
             <embedding description="Cryosection"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -440,7 +423,6 @@
             <fixation description="4% paraformaldehyde"/>
             <embedding description="Cryosection"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -465,7 +447,6 @@
             <fixation description="4% paraformaldehyde"/>
             <embedding description="Cryosection"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -497,7 +478,6 @@
             <fixation description="10% Formalin"/>
             <embedding description="Paraffin"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Pdgfra" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -525,7 +505,6 @@
             <fixation description="10% Formalin"/>
             <embedding description="Paraffin"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Pdgfra" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -553,7 +532,6 @@
             <fixation description="10% Formalin"/>
             <embedding description="Paraffin"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="Pdgfra" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
@@ -584,7 +562,6 @@
           <preparation notes="">
             <sliceType name="whole mount"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="XL000x00" locusLink="" refSeq="" genbank="" uniProt="" taxon="8355"/>
             <probeType name="RNA"/>
@@ -603,7 +580,6 @@
           <preparation notes="">
             <sliceType name="whole mount"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="XL000x00" locusLink="" refSeq="" genbank="" uniProt="" taxon="8355"/>
             <probeType name="RNA"/>
@@ -622,7 +598,6 @@
           <preparation notes="">
             <sliceType name="whole mount"/>
           </preparation>
-
           <probe fPrimer="" rPrimer="" seq="">
             <gene name="XL000x00" locusLink="" refSeq="" genbank="" uniProt="" taxon="8355"/>
             <probeType name="RNA"/>
