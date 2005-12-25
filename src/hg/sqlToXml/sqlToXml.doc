@@ -83,9 +83,6 @@ purchase
     .purchase purchase.id
 
 
-
-
-
 THE COMMAND LINE
 
 The basic command line is
@@ -239,7 +236,52 @@ to the email.customer field.
 purchase
     .buyer customer.id
        .id email.customer
+    .purchase 
+
+
+OUTPUTTING TEXT BETWEEN TAGS
+
+By default sqlToXml will put all of the information in the
+file into attributes,  that is name="value" pairs inside of
+the XML tags.  It is possible to output a singe field of a
+table between the opening and closing XML tag instead by
+use of the keyword "text" after the field name.   In our
+example above changing the spec to:
+
+purchase
+    .buyer customer.id
+        .id email.customer
+           .address text
     .purchase purchase.id
+
+changes the output to read as so:
+
+<purchases>
+  <purchase value="1.60">
+     <customer name="John Smith"/>
+        <email>jsmith@yahoo.com</email>
+	<email>john.smith@megacorp.com</email>
+     <item name="ice cream cone" weight="102.3"/>
+  </purchase>
+  <purchase value="1.60">
+     <customer name="Jane Doe"/>
+	<email>janedoe318@hotmail.com</email>
+     <item name="ice cream cone" weight="102.3"/>
+  </purchase>
+  <purchase value="2.50">
+     <customer name="Jane Doe"/>
+	<email>janedoe318@hotmail.com</email>
+     <item name="double cone" weight="190.4"/>
+  </purchase>
+  <purchase value="1.60">
+     <customer name="George Washington"/>
+     <item name="ice cream cone" weight="102.3"/>
+  </purchase>
+  <purchase value="2.80">
+     <customer name="George Washington"/>
+     <item name="double cone" weight="190.4"/>
+  </purchase>
+</purchases>
 
 
 PRACTICAL CONSIDERATIONS

@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.11 2005/12/22 20:06:30 kent Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.12 2005/12/25 04:14:13 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -64,9 +64,27 @@ struct specTree
    char *target;	/* Target table.field  */
    char *targetTable;	/* Table part of target */
    char *targetField;	/* Field part of target */
-   boolean needsQuote;	/* Does join need value in quotes? */
    char *outName;	/* Name to use for output, defaults to table name. */
+   bool needsQuote;	/* Does join need value in quotes? */
+   bool hideTable;	/* If true hide table (but not children) */
+   bool hideField;	/* If true hide field. */
+   bool textField;	/* IF true this is text field. */
+   bool allInAttributes; /* If true all info is in attributes. */
+   bool gotChildTags;    /* If true has child tags. */
    };
+
+#ifdef DEBUG
+static void dumpSpecTree(FILE *f, struct specTree *tree, int level)
+{
+struct specTree *child;
+spaceOut(f, level+2);
+fprintf(f, "f %s, fIx %d, target %s, hideTable %d, hideField %d, textField %d, allInI %d\n",
+	tree->field, tree->fieldIx, tree->target, tree->hideTable, tree->hideField, 
+	tree->textField, tree->allInAttributes);
+for (child = tree->children; child != NULL; child = child->next)
+    dumpSpecTree(f, child, level+1);
+} 
+#endif /* DEBUG */
 
 struct specTree *specTreeTarget(struct specTree *parent, char *field)
 /* Look through all children for matching field. */
@@ -176,6 +194,7 @@ for (;;)
 	if (target == NULL)
 	   errAbort("Missing target line %d of %s", lf->lineIx, lf->fileName);
 	AllocVar(branch);
+	branch->allInAttributes = TRUE;
 	if (field[0] != '.')
 	    errAbort("Field must start with . line %d of %s", 
 	    	lf->lineIx, lf->fileName);
@@ -199,6 +218,35 @@ for (;;)
 		errAbort("Field %s.%s doesn't exists",  parent->targetTable, field);
 	    branch->needsQuote = (tf->type == '"');
 	    branch->fieldIx = slIxFromElement(tfList, tf);
+
+	    /* See if it is followed by 'hide' */
+	    if (extra != NULL && sameString(extra, "hide"))
+	        {
+		extra = nextWord(&pastSpace);
+		branch->hideTable = TRUE;
+		}
+
+	    parent->allInAttributes = FALSE;
+	    parent->gotChildTags = TRUE;
+	    }
+	else
+	    {
+	    if (sameString(target, "hide"))
+		{
+		branch->hideField = TRUE;
+		}
+	    else if (sameString(target, "text"))
+	        {
+		tf = findField(tfList, field);
+		branch->fieldIx = slIxFromElement(tfList, tf);
+		branch->textField = TRUE;
+		parent->allInAttributes = FALSE;
+		}
+	    else
+	        {
+		errAbort("Don't recognize %s line %d of %s", 
+			target, lf->lineIx, lf->fileName);
+		}
 	    }
 	if (extra != NULL)
 	   {
@@ -328,38 +376,62 @@ while ((row = sqlNextRow(sr)) != NULL)
     int rowIx = 0;
 
     /* Print non-joining columns as attributes. */
-    spaceOut(f, depth*2);
-    fprintf(f, "<%s", tree->outName);
+    if (!tree->hideTable)
+	{
+	spaceOut(f, depth*2);
+	fprintf(f, "<%s", tree->outName);
+	}
     for (col = colList; col != NULL; col = col->next, rowIx+=1)
         {
 	char *val = row[rowIx];
 	struct specTree *branch = specTreeTarget(tree, col->name);
-	if (branch != NULL)
-	    subObjects = TRUE;
-	else if (!sameString(col->name, entryField))
+	if (branch == NULL && !sameString(col->name, entryField))
 	    {
 	    int len = strlen(val);
 	    dyStringBumpBufSize(escaper, len*5);
 	    escToXmlString(val, escaper->string);
-	    fprintf(f, " %s=\"%s\"", col->name, escaper->string);
+	    if (!tree->hideTable)
+		fprintf(f, " %s=\"%s\"", col->name, escaper->string);
 	    }
 	}
 
     /* If no subobjects, then close up tag, else proceed to subobjects. */
-    if (!subObjects)
-        fprintf(f, "/>\n");
+    if (tree->allInAttributes)
+	{
+	if (!tree->hideTable)
+	    fprintf(f, "/>\n");
+	}
     else
         {
 	struct specTree *branch;
-	fprintf(f, ">\n");
+	if (!tree->hideTable)
+	    fprintf(f, ">");
 	rowIx = 0;
 	for (branch = tree->children; branch != NULL; branch = branch->next)
 	    {
+	    if (sameString(branch->target, "text"))
+	        {
+		char *val = row[branch->fieldIx];
+		int len = strlen(val);
+		dyStringBumpBufSize(escaper, len*5);
+		escToXmlString(val, escaper->string);
+		fprintf(f, "%s", escaper->string);
+		}
+	    }
+	if (tree->gotChildTags)
+	    fprintf(f, "\n");
+	for (branch = tree->children; branch != NULL; branch = branch->next)
+	    {
 	    char *target = branch->target;
-	    if (!sameString(target, "hide"))
+	    if (sameString(target, "text"))
+	        ;
+	    else if (!sameString(target, "hide"))
 		{
-		struct dyString *sql = dyStringNew(0);
 		char query[512];
+		struct dyString *sql = dyStringNew(0);
+		int newDepth = depth;
+		if (!tree->hideTable)
+		    newDepth += 1;
 		dyStringPrintf(sql, "select * from %s where %s = ",
 			branch->targetTable, target);
 		if (branch->needsQuote)
@@ -369,12 +441,16 @@ while ((row = sqlNextRow(sr)) != NULL)
 		if (maxList != 0)
 		    dyStringPrintf(sql, " limit %d", maxList);
 		rSqlToXml(cc, branch->targetTable, branch->targetField, 
-			sql->string, tableHash, branch, f, depth+1);
+			sql->string, tableHash, branch, f, newDepth);
 		dyStringFree(&sql);
 		}
 	    }
-	spaceOut(f, depth*2);
-	fprintf(f, "</%s>\n", tree->outName);
+	if (!tree->hideTable)
+	    {
+	    if (tree->gotChildTags)
+		spaceOut(f, depth*2);
+	    fprintf(f, "</%s>\n", tree->outName);
+	    }
 	}
     }
 sqlFreeResult(&sr);
