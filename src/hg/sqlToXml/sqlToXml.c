@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: sqlToXml.c,v 1.12 2005/12/25 04:14:13 kent Exp $";
+static char const rcsid[] = "$Id: sqlToXml.c,v 1.13 2005/12/25 04:19:16 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -419,7 +419,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 		}
 	    }
 	if (tree->gotChildTags)
-	    fprintf(f, "\n");
+	    if (!tree->hideTable)
+		fprintf(f, "\n");
 	for (branch = tree->children; branch != NULL; branch = branch->next)
 	    {
 	    char *target = branch->target;
