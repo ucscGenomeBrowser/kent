@@ -21,7 +21,7 @@ submissionSource
                 .embedding embedding.id
                 .permeablization permeablization.id
                 .sliceType sliceType.id
-             .id imageProbe.image
+             .id imageProbe.image hide
                  .probe probe.id
                     .gene gene.id
                     .antibody antibody.id

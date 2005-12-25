@@ -15,13 +15,12 @@
             <permeablization description="3 min proteinase K/30 min proteinase K"/>
             <sliceType name="whole mount"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="CCGGAATTCGGAATCCGGATGGTTTGAGAGC" rPrimer="CCCAAGCTTATGGCAGTAGGTGAGCTCAGGC" seq="">
-              <gene name="Nkx2-6" locusLink="" refSeq="" genbank="XM_127732" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <probeColor name="purple"/>
-          </imageProbe>
+
+          <probe fPrimer="CCGGAATTCGGAATCCGGATGGTTTGAGAGC" rPrimer="CCCAAGCTTATGGCAGTAGGTGAGCTCAGGC" seq="">
+            <gene name="Nkx2-6" locusLink="" refSeq="" genbank="XM_127732" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <probeColor name="purple"/>
         </image>
       </imageFile>
       <imageFile fileName="0004d.jpg" priority="50" imageWidth="1280" imageHeight="1024" submitId="4">
@@ -37,13 +36,12 @@
             <permeablization description="3 min proteinase K/30 min proteinase K"/>
             <sliceType name="whole mount"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="CGCGGATCCAAGGACATCTTGGACCTTCCG" rPrimer="CCCAAGCTTGCATGTGCTGCAGCGACTGCG" seq="">
-              <gene name="Nkx2-2" locusLink="18088" refSeq="NM_010919" genbank="U31566" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <probeColor name="purple"/>
-          </imageProbe>
+
+          <probe fPrimer="CGCGGATCCAAGGACATCTTGGACCTTCCG" rPrimer="CCCAAGCTTGCATGTGCTGCAGCGACTGCG" seq="">
+            <gene name="Nkx2-2" locusLink="18088" refSeq="NM_010919" genbank="U31566" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <probeColor name="purple"/>
         </image>
       </imageFile>
       <imageFile fileName="0005d.jpg" priority="50" imageWidth="1280" imageHeight="1024" submitId="5">
@@ -59,13 +57,12 @@
             <permeablization description="3 min proteinase K/30 min proteinase K"/>
             <sliceType name="whole mount"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="CGCGGATCCGAACAGGATGCGAAGCCTAGGG" rPrimer="CCCAAGCTTACCAGTTCCAGGAGACCAGAGC" seq="">
-              <gene name="Nkx2-9" locusLink="18094" refSeq="NM_008701" genbank="NM_008701" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <probeColor name="purple"/>
-          </imageProbe>
+
+          <probe fPrimer="CGCGGATCCGAACAGGATGCGAAGCCTAGGG" rPrimer="CCCAAGCTTACCAGTTCCAGGAGACCAGAGC" seq="">
+            <gene name="Nkx2-9" locusLink="18094" refSeq="NM_008701" genbank="NM_008701" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <probeColor name="purple"/>
         </image>
       </imageFile>
     </submissionSet>
@@ -84,13 +81,12 @@
             <embedding description="Cryosection"/>
             <sliceType name="transverse"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="CCGGAATTCGGAATCCGGATGGTTTGAGAGC" rPrimer="CCCAAGCTTATGGCAGTAGGTGAGCTCAGGC" seq="">
-              <gene name="Nkx2-6" locusLink="" refSeq="" genbank="XM_127732" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <probeColor name="purple"/>
-          </imageProbe>
+
+          <probe fPrimer="CCGGAATTCGGAATCCGGATGGTTTGAGAGC" rPrimer="CCCAAGCTTATGGCAGTAGGTGAGCTCAGGC" seq="">
+            <gene name="Nkx2-6" locusLink="" refSeq="" genbank="XM_127732" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <probeColor name="purple"/>
         </image>
       </imageFile>
       <imageFile fileName="T00101110aa.jpg" priority="1500" imageWidth="7248" imageHeight="3780" submitId="10">
@@ -106,13 +102,12 @@
             <embedding description="Cryosection"/>
             <sliceType name="transverse"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="CCGGAATTCAAGGGCTCCTACTGGACGCTGC" rPrimer="CCCAAGCTTGCACGGGTCTGGAATACACACC" seq="">
-              <gene name="Foxa1" locusLink="15375" refSeq="NM_008259" genbank="NM_008259" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <probeColor name="purple"/>
-          </imageProbe>
+
+          <probe fPrimer="CCGGAATTCAAGGGCTCCTACTGGACGCTGC" rPrimer="CCCAAGCTTGCACGGGTCTGGAATACACACC" seq="">
+            <gene name="Foxa1" locusLink="15375" refSeq="NM_008259" genbank="NM_008259" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <probeColor name="purple"/>
         </image>
       </imageFile>
       <imageFile fileName="T00101210aa.jpg" priority="1500" imageWidth="7248" imageHeight="3780" submitId="10">
@@ -128,13 +123,12 @@
             <embedding description="Cryosection"/>
             <sliceType name="transverse"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="CCGGAATTCAAGGGCTCCTACTGGACGCTGC" rPrimer="CCCAAGCTTGCACGGGTCTGGAATACACACC" seq="">
-              <gene name="Foxa1" locusLink="15375" refSeq="NM_008259" genbank="NM_008259" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <probeColor name="purple"/>
-          </imageProbe>
+
+          <probe fPrimer="CCGGAATTCAAGGGCTCCTACTGGACGCTGC" rPrimer="CCCAAGCTTGCACGGGTCTGGAATACACACC" seq="">
+            <gene name="Foxa1" locusLink="15375" refSeq="NM_008259" genbank="NM_008259" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <probeColor name="purple"/>
         </image>
       </imageFile>
     </submissionSet>
@@ -155,21 +149,20 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Hoxc5" locusLink="15424" refSeq="NM_175730" genbank="NM_175730" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="lung"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="spinal cord"/>
-            </expressionLevel>
-            <expressionLevel level="0">
-              <bodyPart name="brain"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Hoxc5" locusLink="15424" refSeq="NM_175730" genbank="NM_175730" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="lung"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="spinal cord"/>
+          </expressionLevel>
+          <expressionLevel level="0">
+            <bodyPart name="brain"/>
+          </expressionLevel>
         </image>
         <image imagePos="0" paneLabel="C" sectionSet="0" sectionIx="0">
           <specimen name="" taxon="10090" age="12.5" minAge="12.5" maxAge="12.5" notes="">
@@ -181,21 +174,20 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Hoxb5" locusLink="15413" refSeq="NM_008268" genbank="NM_008268" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="central nervous system"/>
-            </expressionLevel>
-            <expressionLevel level="0">
-              <bodyPart name="trachea"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="lung"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Hoxb5" locusLink="15413" refSeq="NM_008268" genbank="NM_008268" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="central nervous system"/>
+          </expressionLevel>
+          <expressionLevel level="0">
+            <bodyPart name="trachea"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="lung"/>
+          </expressionLevel>
         </image>
         <image imagePos="0" paneLabel="D" sectionSet="0" sectionIx="0">
           <specimen name="" taxon="10090" age="12.5" minAge="12.5" maxAge="12.5" notes="">
@@ -207,21 +199,20 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Hoxa5" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="spinal cord"/>
-            </expressionLevel>
-            <expressionLevel level="0">
-              <bodyPart name="oesophagus"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="trachea"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Hoxa5" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="spinal cord"/>
+          </expressionLevel>
+          <expressionLevel level="0">
+            <bodyPart name="oesophagus"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="trachea"/>
+          </expressionLevel>
         </image>
       </imageFile>
       <imageFile fileName="1713.jpg" priority="1000" imageWidth="258" imageHeight="535" submitId="2762">
@@ -236,21 +227,20 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Hoxc5" locusLink="15424" refSeq="NM_175730" genbank="NM_175730" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="lung"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="spinal cord"/>
-            </expressionLevel>
-            <expressionLevel level="0">
-              <bodyPart name="brain"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Hoxc5" locusLink="15424" refSeq="NM_175730" genbank="NM_175730" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="lung"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="spinal cord"/>
+          </expressionLevel>
+          <expressionLevel level="0">
+            <bodyPart name="brain"/>
+          </expressionLevel>
         </image>
         <image imagePos="0" paneLabel="C" sectionSet="0" sectionIx="0">
           <specimen name="" taxon="10090" age="12.5" minAge="12.5" maxAge="12.5" notes="">
@@ -262,21 +252,20 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Hoxa5" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="spinal cord"/>
-            </expressionLevel>
-            <expressionLevel level="0">
-              <bodyPart name="oesophagus"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="trachea"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Hoxa5" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="spinal cord"/>
+          </expressionLevel>
+          <expressionLevel level="0">
+            <bodyPart name="oesophagus"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="trachea"/>
+          </expressionLevel>
         </image>
       </imageFile>
       <imageFile fileName="1714.jpg" priority="1000" imageWidth="327" imageHeight="554" submitId="2763">
@@ -291,21 +280,20 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Hoxc5" locusLink="15424" refSeq="NM_175730" genbank="NM_175730" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="lung"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="spinal cord"/>
-            </expressionLevel>
-            <expressionLevel level="0">
-              <bodyPart name="brain"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Hoxc5" locusLink="15424" refSeq="NM_175730" genbank="NM_175730" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="lung"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="spinal cord"/>
+          </expressionLevel>
+          <expressionLevel level="0">
+            <bodyPart name="brain"/>
+          </expressionLevel>
         </image>
         <image imagePos="0" paneLabel="C" sectionSet="0" sectionIx="0">
           <specimen name="" taxon="10090" age="12.5" minAge="12.5" maxAge="12.5" notes="">
@@ -317,21 +305,20 @@
             <fixation description="Bouin's Fixative"/>
             <embedding description="Paraffin"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Hoxa5" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="spinal cord"/>
-            </expressionLevel>
-            <expressionLevel level="0">
-              <bodyPart name="oesophagus"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="trachea"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Hoxa5" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="spinal cord"/>
+          </expressionLevel>
+          <expressionLevel level="0">
+            <bodyPart name="oesophagus"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="trachea"/>
+          </expressionLevel>
         </image>
       </imageFile>
     </submissionSet>
@@ -350,21 +337,20 @@
             <fixation description="4% paraformaldehyde"/>
             <embedding description="Cryosection"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="nephric cord"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="nephric duct"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="mesonephros"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="nephric cord"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="nephric duct"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="mesonephros"/>
+          </expressionLevel>
         </image>
         <image imagePos="0" paneLabel="C/D" sectionSet="0" sectionIx="0">
           <specimen name="" taxon="10090" age="10.5" minAge="10.5" maxAge="10.5" notes="">
@@ -376,21 +362,20 @@
             <fixation description="4% paraformaldehyde"/>
             <embedding description="Cryosection"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="nephric cord"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="nephric duct"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="mesonephros"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="nephric cord"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="nephric duct"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="mesonephros"/>
+          </expressionLevel>
         </image>
         <image imagePos="0" paneLabel="E/F" sectionSet="0" sectionIx="0">
           <specimen name="" taxon="10090" age="11.5" minAge="11.5" maxAge="11.5" notes="">
@@ -402,21 +387,20 @@
             <fixation description="4% paraformaldehyde"/>
             <embedding description="Cryosection"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="nephric cord"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="nephric duct"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="mesonephros"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="nephric cord"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="nephric duct"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="mesonephros"/>
+          </expressionLevel>
         </image>
       </imageFile>
       <imageFile fileName="2267.jpg" priority="1000" imageWidth="675" imageHeight="493" submitId="3829">
@@ -431,21 +415,20 @@
             <fixation description="4% paraformaldehyde"/>
             <embedding description="Cryosection"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="nephric cord"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="nephric duct"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="mesonephros"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="nephric cord"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="nephric duct"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="mesonephros"/>
+          </expressionLevel>
         </image>
         <image imagePos="0" paneLabel="E/F" sectionSet="0" sectionIx="0">
           <specimen name="" taxon="10090" age="14.5" minAge="14.5" maxAge="14.5" notes="">
@@ -457,21 +440,20 @@
             <fixation description="4% paraformaldehyde"/>
             <embedding description="Cryosection"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="nephric cord"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="nephric duct"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="mesonephros"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="nephric cord"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="nephric duct"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="mesonephros"/>
+          </expressionLevel>
         </image>
         <image imagePos="0" paneLabel="G/H" sectionSet="0" sectionIx="0">
           <specimen name="" taxon="10090" age="17.5" minAge="17.5" maxAge="17.5" notes="">
@@ -483,21 +465,20 @@
             <fixation description="4% paraformaldehyde"/>
             <embedding description="Cryosection"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="nephric cord"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="nephric duct"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="mesonephros"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="nephric cord"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="nephric duct"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="mesonephros"/>
+          </expressionLevel>
         </image>
       </imageFile>
     </submissionSet>
@@ -516,21 +497,20 @@
             <fixation description="10% Formalin"/>
             <embedding description="Paraffin"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Pdgfra" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="visceral endoderm"/>
-            </expressionLevel>
-            <expressionLevel level="0">
-              <bodyPart name="embryo"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="ectoplacental cone"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Pdgfra" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="visceral endoderm"/>
+          </expressionLevel>
+          <expressionLevel level="0">
+            <bodyPart name="embryo"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="ectoplacental cone"/>
+          </expressionLevel>
         </image>
       </imageFile>
       <imageFile fileName="2496.jpg" priority="1000" imageWidth="767" imageHeight="707" submitId="3898">
@@ -545,21 +525,20 @@
             <fixation description="10% Formalin"/>
             <embedding description="Paraffin"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Pdgfra" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="visceral endoderm"/>
-            </expressionLevel>
-            <expressionLevel level="0">
-              <bodyPart name="embryo"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="ectoplacental cone"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Pdgfra" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="visceral endoderm"/>
+          </expressionLevel>
+          <expressionLevel level="0">
+            <bodyPart name="embryo"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="ectoplacental cone"/>
+          </expressionLevel>
         </image>
       </imageFile>
       <imageFile fileName="2497.jpg" priority="1000" imageWidth="492" imageHeight="310" submitId="3899">
@@ -574,21 +553,20 @@
             <fixation description="10% Formalin"/>
             <embedding description="Paraffin"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="Pdgfra" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
-              <probeType name="RNA"/>
-            </probe>
-            <expressionLevel level="1">
-              <bodyPart name="visceral endoderm"/>
-            </expressionLevel>
-            <expressionLevel level="0">
-              <bodyPart name="embryo"/>
-            </expressionLevel>
-            <expressionLevel level="1">
-              <bodyPart name="ectoplacental cone"/>
-            </expressionLevel>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="Pdgfra" locusLink="" refSeq="" genbank="" uniProt="" taxon="10090"/>
+            <probeType name="RNA"/>
+          </probe>
+          <expressionLevel level="1">
+            <bodyPart name="visceral endoderm"/>
+          </expressionLevel>
+          <expressionLevel level="0">
+            <bodyPart name="embryo"/>
+          </expressionLevel>
+          <expressionLevel level="1">
+            <bodyPart name="ectoplacental cone"/>
+          </expressionLevel>
         </image>
       </imageFile>
     </submissionSet>
@@ -606,13 +584,12 @@
           <preparation notes="">
             <sliceType name="whole mount"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="XL000x00" locusLink="" refSeq="" genbank="" uniProt="" taxon="8355"/>
-              <probeType name="RNA"/>
-            </probe>
-            <probeColor name="purple"/>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="XL000x00" locusLink="" refSeq="" genbank="" uniProt="" taxon="8355"/>
+            <probeType name="RNA"/>
+          </probe>
+          <probeColor name="purple"/>
         </image>
       </imageFile>
       <imageFile fileName="XL000x00_zic5_r3_7/Zic5_St10.5_lateral.jpg" priority="1200" imageWidth="1300" imageHeight="1030" submitId="XL000x00">
@@ -626,13 +603,12 @@
           <preparation notes="">
             <sliceType name="whole mount"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="XL000x00" locusLink="" refSeq="" genbank="" uniProt="" taxon="8355"/>
-              <probeType name="RNA"/>
-            </probe>
-            <probeColor name="purple"/>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="XL000x00" locusLink="" refSeq="" genbank="" uniProt="" taxon="8355"/>
+            <probeType name="RNA"/>
+          </probe>
+          <probeColor name="purple"/>
         </image>
       </imageFile>
       <imageFile fileName="XL000x00_zic5_r3_7/Zic5_St10.5_vegital.jpg" priority="1200" imageWidth="1300" imageHeight="1030" submitId="XL000x00">
@@ -646,13 +622,12 @@
           <preparation notes="">
             <sliceType name="whole mount"/>
           </preparation>
-          <imageProbe>
-            <probe fPrimer="" rPrimer="" seq="">
-              <gene name="XL000x00" locusLink="" refSeq="" genbank="" uniProt="" taxon="8355"/>
-              <probeType name="RNA"/>
-            </probe>
-            <probeColor name="purple"/>
-          </imageProbe>
+
+          <probe fPrimer="" rPrimer="" seq="">
+            <gene name="XL000x00" locusLink="" refSeq="" genbank="" uniProt="" taxon="8355"/>
+            <probeType name="RNA"/>
+          </probe>
+          <probeColor name="purple"/>
         </image>
       </imageFile>
     </submissionSet>
