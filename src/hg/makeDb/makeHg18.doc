@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.5 2005/12/24 09:46:37 hartera Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.6 2005/12/26 13:32:52 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -1405,4 +1405,87 @@ TMPDIR=/scratch/tmp
 # refGene:cds 1.386%, chainDanRer3Link 2.742%, both 0.909%, cover 65.58%,
 # enrich 23.91x 
 # So similar coverage and enrichment to hg17 vs danRer2 chains.
- 
+
+#########################################################################
+# BLASTZ MOUSE Mm7 second time (DONE - 2005-12-24 - 2005-12-25 Fan)
+    #	After fixing a bug in the lineage specific repeat snip business
+    #	in blastz-run-ucsc script
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzMm7.2005-12-24
+    cd /cluster/data/hg18/bed
+    rm blastz.mm7
+    ln -s blastzMm7.2005-12-24 blastz.mm7
+    cd blastzMm7.2005-12-24
+
+    cat << '_EOF_' > DEF
+# human vs mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_SMSK=/scratch/hg/hg18/linSpecRep/notInMouse
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+
+# QUERY: Mouse Mm7 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/mm7/nib
+SEQ2_SMSK=/scratch/hg/mm7/linSpecRep/notInHumanDogCow
+SEQ2_LEN=/cluster/bluearc/mm7/chrom.sizes
+SEQ2_CHUNK=3000000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzMm7.2005-12-24
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-stop=load \
+	`pwd`/DEF > to-load.out 2>&1 &
+    #	Started 2005-12-24 06:15
+
+    mv to-load.out to-load.out.1
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+    -continue=chainMerge -stop=load \
+    `pwd`/DEF > to-load.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -stop=load \
+	`pwd`/DEF > swap-load.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+    -continue=download \
+    `pwd`/DEF > download.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+    -swap -continue=download \
+    `pwd`/DEF > swap-download.out 2>&1 &
+
+# PLEASE NOTE THAT SOME .OUT FILES MIGHT HAVE BEEN OVERWRITTEN
+# DUE TO RETRIES AND/OR NEXT STEP COMMAND NOT FULLY EDITED CORRECTLY. 
+
+    #	Measurements:
+
+    ssh hgwdev
+
+    featureBits mm7 chainHg18Link 
+    # 990285408 bases of 2583394090 (38.333%) in intersection
+
+    featureBits hg18 chainMm7Link 
+    # 991769039 bases of 2881515245 (34.418%) in intersection
+
+    # each of above took about half hour.
+
