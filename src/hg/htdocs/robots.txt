@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /goldenPath/
+Disallow: /cgi-bin/
+Disallow: //cgi-bin/
+Disallow: /admin/
+User-agent: GoogleBot
+Disallow: /admin/
+Disallow: /goldenPath/
+User-agent: htdig
+Disallow: /admin/
+Disallow: /goldenPath/
