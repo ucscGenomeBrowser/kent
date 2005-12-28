@@ -50,7 +50,7 @@ color 12,12,120
 type genePred refPep refMrna
 
 track blastSangerGene
-shortLabel elegans Proteins
+shortLabel Elegans Proteins
 longLabel C. elegans WS140 proteins mapped by chained tBLASTn
 group compGeno
 priority 212.9
