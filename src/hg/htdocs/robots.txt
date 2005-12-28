@@ -9,3 +9,6 @@ Disallow: /goldenPath/
 User-agent: htdig
 Disallow: /admin/
 Disallow: /goldenPath/
+Disallow: /cgi-bin/hgTracks 
+Disallow: /cgi-bin/hgTables
+Disallow: /cgi-bin/hgLiftOver
