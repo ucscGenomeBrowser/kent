@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.44 2005/12/24 23:00:36 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.45 2005/12/28 09:25:55 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -610,6 +610,7 @@ Color ldShadesNeg[LD_DATA_SHADES];
 Color ldShadesPos[LD_DATA_SHADES];
 Color ldHighLodLowDprime;
 Color ldHighDprimeLowLod;
+boolean ldInvert;
 int colorLookup[256];
 
 void ldShadesInit(struct vGfx *vg, boolean isDprime) 
@@ -781,9 +782,10 @@ gfxPolyFree(&poly);
 void ldDrawDiamond(struct vGfx *vg, struct track *tg, int width, 
 		   int xOff, int yOff, int a, int b, int c, int d, 
 		   Color shade, Color outlineColor, double scale, 
-		   boolean drawMap, char *name)
+		   boolean drawMap, char *name, enum trackVisibility vis)
 /* Draw and map a single pairwise LD box */
 {
+int yMax = ldTotalHeight(tg, vis)+yOff;
 /* convert from genomic coordinates to vg coordinates */
 int xl = round((double)(scale*((c+a)/2-winStart))) + xOff;
 int xt = round((double)(scale*((d+a)/2-winStart))) + xOff;
@@ -795,8 +797,17 @@ int yr = round((double)(scale*(d-b)/2)) + yOff;
 int yb = round((double)(scale*(c-b)/2)) + yOff;
 
 /* correct bottom coordinate if necessary */
+if (ldInvert)
+    {
+    yl = yMax - yl + yOff;
+    yt = yMax - yt + yOff;
+    yr = yMax - yr + yOff;
+    yb = yMax - yb + yOff;
+    }
 if (yb<=0)
     yb=1;
+if (yt>yMax)
+    yt=yMax;
 drawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, shade, outlineColor);
 if (drawMap && xt-xl>5 && xb-xl>5)
     mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName);
@@ -1032,6 +1043,10 @@ Color        shade     = 0, outlineColor = getOutlineColor(itemCount);
 int          a, b, c, d, i; /* chromosome coordinates and counter */
 boolean      drawMap   = ( itemCount<1000 ? TRUE : FALSE );
 struct hash *ldHash    = newHash(20);
+char         cartInvertVal[32];
+
+safef(cartInvertVal, sizeof(cartInvertVal), "%s_inv", tg->mapName);
+ldInvert = cartUsualBoolean(cart, cartInvertVal, ldInvertDefault);
 
 if (sameString(values, "lod")) /* only one value can be drawn at a time, so figure it out here */
     isLod = TRUE;
@@ -1041,8 +1056,10 @@ else if (sameString(values,"rsquared"))
     isRsquared = TRUE;
 else
     errAbort ("LD score value must be 'rsquared', 'dprime', or 'lod'; '%s' is not known", values);
+
 /* initialize arrays to convert from ascii encoding to color values */
 initColorLookup(vg, isDprime);
+
 /* Loop through all items to get values and initial coordinates (a and b) */
 for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
     {
@@ -1066,7 +1083,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	    continue;
 	shade = colorLookup[(int)values[i]];
 	if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
-	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name);
+	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis);
 	else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
 	    ldAddToDenseValueHash(ldHash, a, values[i]);
 	else /* write the dense mode! */

@@ -28,7 +28,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.236 2005/12/22 14:38:15 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.237 2005/12/28 09:25:53 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -217,15 +217,20 @@ for (snpLocType=0; snpLocType<snpLocTypeCartSize; snpLocType++)
 void ldUi(struct trackDb *tdb)
 /* Put up UI snp data. */
 {
-ldValue  = cartUsualString(cart,  "ldValues", ldValueDefault);
-ldPos    = cartUsualString(cart,  "ldPos",    ldPosDefault);
-ldNeg    = cartUsualString(cart,  "ldNeg",    ldNegDefault);
-ldOut    = cartUsualString(cart,  "ldOut",    ldOutDefault);
-ldTrim   = cartUsualBoolean(cart, "ldTrim",   ldTrimDefault);
+ldValue         = cartUsualString(cart,  "ldValues",        ldValueDefault);
+ldPos           = cartUsualString(cart,  "ldPos",           ldPosDefault);
+ldNeg           = cartUsualString(cart,  "ldNeg",           ldNegDefault);
+ldOut           = cartUsualString(cart,  "ldOut",           ldOutDefault);
+ldTrim          = cartUsualBoolean(cart, "ldTrim",          ldTrimDefault);
+hapmapLdCeu_inv = cartUsualBoolean(cart, "hapmapLdCeu_inv", ldInvertDefault);
+hapmapLdChb_inv = cartUsualBoolean(cart, "hapmapLdChb_inv", ldInvertDefault);
+hapmapLdJpt_inv = cartUsualBoolean(cart, "hapmapLdJpt_inv", ldInvertDefault);
+hapmapLdYri_inv = cartUsualBoolean(cart, "hapmapLdYri_inv", ldInvertDefault);
 
 /* It would be nice to add a 'reset' button to reset the ld variables to their defaults. */
 
 printf("<BR><B>LD Values:</B><BR>&nbsp;&nbsp;\n");
+
 cgiMakeRadioButton("ldValues", "rsquared", sameString("rsquared", ldValue));
 printf("&nbsp;r^2&nbsp;&nbsp;");
 cgiMakeRadioButton("ldValues", "dprime",   sameString("dprime",   ldValue));
@@ -234,26 +239,49 @@ cgiMakeRadioButton("ldValues", "lod",      sameString("lod",      ldValue));
 printf("&nbsp;LOD<BR>");
 
 printf("<BR><B>Track Geometry:</B><BR>&nbsp;&nbsp;\n");
-cgiMakeCheckBox("ldTrim", ldTrim); 
-printf("&nbsp;Trim to triangle<BR>\n");
 
-printf("<BR><B>Colors:</B><BR>&nbsp;&nbsp;");
+cgiMakeCheckBox("ldTrim", ldTrim); 
+printf("&nbsp;Trim to triangle<BR><BR>&nbsp;&nbsp;\n");
+
+cgiMakeCheckBox("hapmapLdCeu_inv", hapmapLdCeu_inv); 
+printf("&nbsp;Invert CEU<BR>&nbsp;&nbsp;\n");
+cgiMakeCheckBox("hapmapLdChb_inv", hapmapLdChb_inv); 
+printf("&nbsp;Invert CHB<BR>&nbsp;&nbsp;\n");
+cgiMakeCheckBox("hapmapLdJpt_inv", hapmapLdJpt_inv); 
+printf("&nbsp;Invert JPT<BR>&nbsp;&nbsp;\n");
+cgiMakeCheckBox("hapmapLdYri_inv", hapmapLdYri_inv); 
+printf("&nbsp;Invert YRI<BR>&nbsp;&nbsp;\n");
+
+printf("<BR><B>Colors:</B><BR>&nbsp;&nbsp;\n");
+
 radioButton("ldPos", ldPos, "red");
+printf("\n");
 radioButton("ldPos", ldPos, "green");
+printf("\n");
 radioButton("ldPos", ldPos, "blue");
-printf("&nbsp; - Color for positive values of LD<BR>&nbsp;&nbsp;");
+printf("\n&nbsp; - Color for positive values of LD<BR>&nbsp;&nbsp;\n");
+
 radioButton("ldNeg", ldNeg, "red");
+printf("\n");
 radioButton("ldNeg", ldNeg, "green");
+printf("\n");
 radioButton("ldNeg", ldNeg, "blue");
-printf("&nbsp; - Color for negative values of LD<BR>&nbsp;&nbsp;");
+printf("\n&nbsp; - Color for negative values of LD<BR>&nbsp;&nbsp;\n");
+
 radioButton("ldOut", ldOut, "red");
+printf("\n");
 radioButton("ldOut", ldOut, "green");
+printf("\n");
 radioButton("ldOut", ldOut, "blue");
+printf("\n");
 radioButton("ldOut", ldOut, "yellow");
+printf("\n");
 radioButton("ldOut", ldOut, "black");
+printf("\n");
 radioButton("ldOut", ldOut, "white");
+printf("\n");
 radioButton("ldOut", ldOut, "none");
-printf("&nbsp; - Color for outlines<BR>&nbsp;&nbsp;");
+printf("\n&nbsp; - Color for outlines<BR>&nbsp;&nbsp;\n");
 }
 
 void hgMutIdControls (struct trackDb *tdb) 
