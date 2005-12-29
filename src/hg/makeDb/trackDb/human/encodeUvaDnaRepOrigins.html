@@ -6,8 +6,8 @@ predictions and confidence intervals for DNA synthesis.</P>
 <H2>Display Conventions and Configuration</H2>
 <P>
 This annotation follows the display conventions for composite 
-tracks.  To display only selected subtracks, uncheck the boxes next to the 
-tracks you wish to hide. </P>
+tracks.  All subtracks with checked boxes will be displayed.
+</P>
 
 <H2>Methods</H2>
 <P>
@@ -23,18 +23,18 @@ purified H/L DNA was then hybridized to a high-density
 genome-tiling Affymetrix array comprised of all unique probes within 
 the ENCODE regions.</P>
 <P>
-The time of replication of 50% (TR50) of each microarray probe was
+The time of replication of 50% (TR<SUB>50</SUB>) of each microarray probe was
 calculated by accumulating the sum over the five time points and
 linearly interpolating the time when 50% was reached.  Each probe
 was also classed as temporally specific or non-specific based on
 whether or not at least 50% of the accumulated signal appeared in a single
 time point.</P>
 <P>
-The TR50 data for the temporally specific probes were then smoothed
+The TR<SUB>50</SUB> data for the temporally specific probes were then smoothed
 within a 95 kb window using lowess smoothing.  This smoothing was done
 for three replicates (two biological and one technical) and for the
 average of the three replicates.  Local minima were identified on the
-smoothed TR50 profiles to locate possible origins of replication.
+smoothed TR<SUB>50</SUB> profiles to locate possible origins of replication.
 The predictions were taken from the average of the replicates and then
 given a width of 200 bp for display in the browser.  The confidence
 intervals were identified as consensus sites among the three replicates
