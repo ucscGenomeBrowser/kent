@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.6 2005/12/26 13:32:52 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.7 2005/12/29 05:01:57 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -1488,4 +1488,113 @@ TMPDIR=/scratch/tmp
     # 991769039 bases of 2881515245 (34.418%) in intersection
 
     # each of above took about half hour.
+
+#########################################################################
+# BLASTZ CHICKEN GalGal2 second time (DONE - 2005-12-28 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzGalGal2.2005-12-28
+    cd /cluster/data/hg18/bed
+    rm blastz.galGal2
+    ln -s blastzGalGal2.2005-12-28 blastz.galGal2
+    cd blastzGalGal2.2005-12-28
+
+    cat << '_EOF_' > DEF
+# human vs chicken
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_SMSK=/cluster/bluearc/hg18/linSpecRep/notInOthers
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_IN_CONTIGS=0 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken GalGal2 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/galGal2/nib
+SEQ2_LEN=/cluster/bluearc/galGal2/chrom.sizes
+SEQ2_SMSK=/scratch/hg/galGal2/linSpecRep
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzGalGal2.2005-12-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-stop=load \
+	`pwd`/DEF > load.out 2>&1 &
+    #	Started 2005-12-28 10:35
+
+    # Two jobs stuck in the same node.  Did manual para stop and para push.  
+    # Both finished within a few minutes.
+
+    # Done! On Wed Dec 28 15:32:45 PST 2005.
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -stop=load \
+	`pwd`/DEF > swap-load.out 2>&1 &
+
+    # Had an error at the net step
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+      -swap -continue=net -stop=load \
+	`pwd`/DEF > swap-load.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+    -continue=download \
+    `pwd`/DEF > download.out 2>&1 &
+
+    # the gzip job on kolossus seems not moving at all.
+    # killed it manually.  Try again.
+
+    # Seemed not moving, kill it again.  Now use pk instead of kolossus.
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -workhorse=pk \
+    -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+    -continue=download \
+    `pwd`/DEF > download.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -workhorse=pk \
+    -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+    -swap -continue=download \
+    `pwd`/DEF > swap-download.out 2>&1 &
+
+    # Done! Wed Dec 28 20:39:44 PST 2005
+
+    #	Measurements:
+
+    ssh hgwdev
+
+    nice featureBits galGal2 chainHg18Link 
+    # 91564024 bases of 1054197620 (8.686%) in intersection
+    nice featureBits hg18 chainGalGal2Link 
+    # 102417858 bases of 2881515245 (3.554%) in intersection
+
+    nice featureBits galGal2 chainHg17Link 
+    # 93277286 bases of 1054197620 (8.848%) in intersection
+    nice featureBits hg17 chainGalGal2Link 
+    # 103882699 bases of 2866216770 (3.624%) in intersection
 
