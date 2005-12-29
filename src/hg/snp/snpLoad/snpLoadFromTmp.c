@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.6 2005/12/21 05:26:34 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.7 2005/12/29 04:47:03 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -340,61 +340,6 @@ for (el = list; el != NULL; el = el->next)
     }
 }
 
-void checkSize(struct snp125 *el)
-{
-char sizeError[32];
-int size = 0;
-struct dyString *dy = NULL;
-
-if (sameString(el->class, "unknown"))
-    return;
-
-size = el->chromEnd - el->chromStart;
-
-if (sameString(el->class, "simple"))
-    {
-    if (size == 1) return;
-    strcpy(sizeError, "SimpleClassWrongSize");
-    }
-else if (sameString(el->class, "insertion"))
-    {
-    if (size == 0) return;
-    strcpy(sizeError, "InsertionClassWrongSize");
-    }
-else if (sameString(el->class, "deletion"))
-    {
-    if (size >= 1) return;
-    strcpy(sizeError, "DeletionClassWrongSize");
-    }
-else if (sameString(el->class, "range"))
-    {
-    if (size >= 2) return;
-    strcpy(sizeError, "RangeClassWrongSize");
-    }
-else 
-    return;
-
-// if (el->exception == "")
-    // dy = newDyString(64);
-// else
-    // dyStringAppend(dy, ",");
-// dyStringAppend(dy, sizeError);
-
-verbose(1, "%s\n", sizeError);
-
-}
-
-void checkForExceptions(struct snp125 *list)
-/* check for exceptions */
-{
-struct snp125 *el = NULL;
-
-verbose(1, "checking for exceptions...\n");
-for (el = list; el != NULL; el = el->next)
-   {
-   checkSize(el);
-   }
-}
 
 void loadDatabase(FILE *f)
 {
