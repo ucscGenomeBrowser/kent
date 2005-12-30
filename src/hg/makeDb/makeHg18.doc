@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.7 2005/12/29 05:01:57 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.8 2005/12/30 15:24:12 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -1597,4 +1597,114 @@ TMPDIR=/scratch/tmp
     # 93277286 bases of 1054197620 (8.848%) in intersection
     nice featureBits hg17 chainGalGal2Link 
     # 103882699 bases of 2866216770 (3.624%) in intersection
+
+#########################################################################
+# BLASTZ DOG CanFam2 time (DONE - 2005-12-28 - 2005-12-29 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzCanFam2.2005-12-28
+    cd /cluster/data/hg18/bed
+    rm blastz.canFam2
+    ln -s blastzCanFam2.2005-12-28 blastz.canFam2
+    cd blastzCanFam2.2005-12-28
+
+    cat << '_EOF_' > DEF
+# human vs dog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for dog (per Webb email to Brian Raney)
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_SMSK=/cluster/bluearc/hg18/linSpecRep/notInOthers
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_IN_CONTIGS=0 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Dog CanFam2 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/canFam2/nib
+SEQ2_LEN=/cluster/bluearc/canFam2/chrom.sizes
+SEQ2_SMSK=/san/sanvol1/scratch/canFam2/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzCanFam2.2005-12-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-stop=load \
+	`pwd`/DEF > load.out 2>&1 &
+    #	Started 2005-12-28 21:33
+
+    # Two jobs stuck in the same node.  Did manual para stop and para push.  
+    # Both finished within a few minutes.
+
+    # Done! On Thu Dec 29 05:27:31 PST 2005.
+
+    # system seems hang on kolossus (3 processes of [tcsh -c nice chainMergeSort], not moving)
+    # manually killed the jobs.
+    # now use pk as the workhorse.
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+      -workhorse=pk \
+      -continue=chainMerge \
+	-stop=load \
+	`pwd`/DEF > load2.out 2>&1 &
+
+    # Done! Thu Dec 29 09:10:02 PST 2005.
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=pk \
+      -swap -stop=load \
+	`pwd`/DEF > swap-load.out 2>&1 &
+
+    # Had an error at the load step,
+    # mySQL error 2013: Lost connection to MySQL server during query,
+    # probably due to sys admin working on network connections,
+    # continue at the load step
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+      -workhorse=pk \
+      -swap -continue=load -stop=load \
+	`pwd`/DEF > swap-load2.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+    -workhorse=pk \
+    -continue=download \
+    `pwd`/DEF > download.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -workhorse=pk \
+    -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+    -swap -continue=download \
+    `pwd`/DEF > swap-download.out 2>&1 &
+
+    # Done! Dec 29 13:21
+
+    #	Measurements:
+
+    ssh hgwdev
+nice featureBits canFam2 chainHg18Link 
+# 1477551526 bases of 2384996543 (61.952%) in intersection
+nice featureBits hg18 chainCanFam2Link 
+# 1524764349 bases of 2881515245 (52.915%) in intersection
+nice featureBits canFam2 chainHg17Link 
+# 1487483112 bases of 2384996543 (62.368%) in intersection
+nice featureBits hg17 chainCanFam2Link 
+# 1530197469 bases of 2866216770 (53.387%) in intersection
 
