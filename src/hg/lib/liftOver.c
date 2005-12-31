@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.28 2005/11/17 05:25:54 kent Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.29 2005/12/31 08:23:56 daryl Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -227,6 +227,9 @@ for (chain = chainsHit; chain != NULL; chain = chain->next)
     if (chain->qStrand == '-')
 	strand = otherStrand(strand);
     verbose(3, "mapped %s:%d-%d\n", chain->qName, start, end);
+    verbose(4, "Mapped! Target:\t%s\t%d\t%d\t%c\tQuery:\t%s\t%d\t%d\t%c\n",
+	    chain->tName, subChain->tStart, subChain->tEnd, strand, 
+	    chain->qName, subChain->qStart, subChain->qEnd, chain->qStrand);
     if (multiple && end - start < minSizeQ)
         {
         verbose(2,"dropping %s:%d-%d size %d (too small)\n", 
