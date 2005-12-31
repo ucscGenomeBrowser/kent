@@ -1359,7 +1359,7 @@ compositeTrack on
 shortLabel Recomb Hotspots
 longLabel Recombination Hotspots from SNP Genotyping
 group varRep
-priority 145.5
+priority 145.51
 visibility hide
 type bed 3 .
 origAssembly hg16
