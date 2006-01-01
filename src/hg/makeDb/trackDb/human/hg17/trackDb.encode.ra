@@ -394,7 +394,6 @@ dataVersion ENCODE Oct 2005 Freeze
     subGroups celltype=nb4
 
 track encodeYaleAffyRNATars
-release beta
 compositeTrack on
 shortLabel Yale TAR
 longLabel Yale RNA Transcriptionally Active Regions (TARs)
@@ -402,110 +401,19 @@ group encodeTxLevels
 priority 31.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type bed 3 .
-subGroup1 samples Sample summary=Summary samples=samples1-10
-subGroup2 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
-origAssembly hg16
-dataVersion ENCODE June 2005 Freeze
+type bed 4 .
+subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
+dataVersion ENCODE Oct 2005 Freeze
+url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+urlLabel Yale DART Link:
 
-    track encodeYaleAffyNeutRNATarsAll
-    release beta
+    track encodeYaleAffyNeutRNATars
     subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu Sum
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR), Summary
+    shortLabel Yale TAR Neu
+    longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR)
     priority 1
-    color 50,70,50
-    subGroups celltype=neutro samples=summary
-
-    track encodeYaleAffyNeutRNATars01
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 1
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 1
-    priority 2
-    color 50,205,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars02
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 2
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 2
-    priority 3
-    color 50,190,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars03
-    subTrack encodeYaleAffyRNATars
-    release beta
-    shortLabel Yale TAR Neu 3
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 3
-    priority 4
-    color 50,175,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars04
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 4
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 4
-    priority 5
-    color 50,160,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars05
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 5
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 5
-    priority 6
-    color 50,145,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars06
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 6
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 6
-    priority 7
-    color 50,130,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars07
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 7
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 7
-    priority 8
-    color 50,115,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars08
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 8
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 8
-    priority 9
     color 50,100,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars09
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 9
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 9
-    priority 10
-    color 50,85,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars10
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 10
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 10
-    priority 11
-    color 50,70,50
-    subGroups celltype=neutro samples=samples
+    subGroups celltype=neutro
 
     track encodeYaleAffyPlacRNATars
     subTrack encodeYaleAffyRNATars
@@ -538,31 +446,6 @@ dataVersion ENCODE June 2005 Freeze
     priority 15
     color 90,50,50
     subGroups celltype=nb4
-
-
-track encodeYaleAffyRNATars
-release alpha
-compositeTrack on
-shortLabel Yale TAR
-longLabel Yale RNA Transcriptionally Active Regions (TARs)
-group encodeTxLevels
-priority 31.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
-subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
-dataVersion ENCODE Oct 2005 Freeze
-url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
-urlLabel Yale DART Link:
-
-    track encodeYaleAffyNeutRNATars
-    release alpha
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR)
-    priority 1
-    color 50,100,50
-    subGroups celltype=neutro
 
 track encodeSangerChip
 compositeTrack on
