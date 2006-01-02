@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.45 2005/12/28 09:25:55 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.46 2006/01/02 09:07:08 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -782,7 +782,8 @@ gfxPolyFree(&poly);
 void ldDrawDiamond(struct vGfx *vg, struct track *tg, int width, 
 		   int xOff, int yOff, int a, int b, int c, int d, 
 		   Color shade, Color outlineColor, double scale, 
-		   boolean drawMap, char *name, enum trackVisibility vis)
+		   boolean drawMap, char *name, enum trackVisibility vis,
+		   boolean trim)
 /* Draw and map a single pairwise LD box */
 {
 int yMax = ldTotalHeight(tg, vis)+yOff;
@@ -806,7 +807,7 @@ if (ldInvert)
     }
 if (yb<=0)
     yb=1;
-if (yt>yMax)
+if (yt>yMax && trim)
     yt=yMax;
 drawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, shade, outlineColor);
 if (drawMap && xt-xl>5 && xb-xl>5)
@@ -1083,7 +1084,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	    continue;
 	shade = colorLookup[(int)values[i]];
 	if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
-	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis);
+	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
 	else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
 	    ldAddToDenseValueHash(ldHash, a, values[i]);
 	else /* write the dense mode! */
