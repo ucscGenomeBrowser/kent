@@ -2887,7 +2887,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 4
 
 track encodeRecombRate
-shortLabel Recomb Rates
+shortLabel SNP Recomb Rates
 longLabel Oxford Recombination Rates from ENCODE resequencing data
 group encodeVariation
 priority 80.9
@@ -2903,7 +2903,7 @@ origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
 track encodeRecombHotspot
-shortLabel Recomb Hotspots
+shortLabel SNP Recomb Hots
 longLabel Oxford Recombination Hotspots from ENCODE resequencing data
 group encodeVariation
 priority 80.91

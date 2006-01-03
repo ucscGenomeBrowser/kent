@@ -1329,7 +1329,7 @@ summary brMafSum
 
 track snpRecombRate
 compositeTrack on
-shortLabel Recomb Rates
+shortLabel SNP Recomb Rates
 longLabel Recombination Rates from SNP Genotyping
 group varRep
 priority 145.5
@@ -1356,7 +1356,7 @@ origAssembly hg16
 
 track snpRecombHotspot
 compositeTrack on
-shortLabel Recomb Hotspots
+shortLabel SNP Recomb Hots
 longLabel Recombination Hotspots from SNP Genotyping
 group varRep
 priority 145.51
