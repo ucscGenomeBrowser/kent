@@ -2,7 +2,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: affyCheck.c,v 1.1 2005/12/21 22:14:08 heather Exp $";
+static char const rcsid[] = "$Id: affyCheck.c,v 1.2 2006/01/03 22:08:46 heather Exp $";
 
 char *database = NULL;
 char *affyTable = NULL;
@@ -218,13 +218,7 @@ if (argc != 4)
 database = argv[1];
 affyTable = argv[2];
 lookupTable = argv[3];
-// if(!hDbExists(database))
-    // errAbort("%s does not exist\n", database);
 hSetDb(database);
-// if(!hTableExistsDb(database, affyTable))
-    // errAbort("no %s table in %s\n", affyTable, database);
-// if(!hTableExistsDb(database, lookupTable))
-    // errAbort("no %s table in %s\n", lookupTable, database);
 
 /* initialize ntCompTable[] */
 dnaUtilOpen();
