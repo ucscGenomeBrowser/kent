@@ -2,7 +2,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: affyCheck.c,v 1.2 2006/01/03 22:08:46 heather Exp $";
+static char const rcsid[] = "$Id: affyCheck.c,v 1.3 2006/01/03 22:13:31 heather Exp $";
 
 char *database = NULL;
 char *affyTable = NULL;
@@ -45,6 +45,7 @@ ret->name = cloneString(row[0]);
 ret->chrom = cloneString(row[1]);
 ret->chromStart = atoi(row[2]);
 ret->chromEnd = atoi(row[3]);
+// use cloneString rather than strcpy
 strcpy(&ret->strand, row[4]);
 ret->observed   = cloneString(row[5]);
 
@@ -52,7 +53,7 @@ if (ret->strand == '+') return ret;
 
 obsLen = strlen(ret->observed);
 obsComp = needMem(obsLen + 1);
-strcpy(obsComp, ret->observed);
+obsComp = cloneString(ret->observed);
 for (i = 0; i < obsLen; i = i+2)
     {
     char c = ret->observed[i];
