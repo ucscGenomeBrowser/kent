@@ -1,0 +1,9 @@
+table snpFasta
+"Polymorphism data from dbSnp rs_fasta files"
+    (
+    string  rsId;       "Reference SNP identifier"
+    string  molType;    "Sample type from exemplar ss"
+    lstring  observed;   "The sequences of the observed alleles from rs-fasta files"
+    lstring  leftFlank;  "Left flanking sequence"
+    lstring  rightFlank; "Right flanking sequence"
+    )
