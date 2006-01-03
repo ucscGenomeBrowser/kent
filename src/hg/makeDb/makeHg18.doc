@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.8 2005/12/30 15:24:12 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.9 2006/01/03 23:08:44 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -1708,3 +1708,14 @@ nice featureBits canFam2 chainHg17Link
 nice featureBits hg17 chainCanFam2Link 
 # 1530197469 bases of 2866216770 (53.387%) in intersection
 
+# ENABLE GENBANK UPDATE (1/3/06 Fan)
+
+# add hg18 to the following two files and check them in.
+
+     src/makeDb/genbank/etc/align.dbs
+     src/makeDb/genbank/etc/hgwdev.dbs
+
+# then go to /cluster/data/genbank/etc and do cvs update on these two files.
+
+
+     
