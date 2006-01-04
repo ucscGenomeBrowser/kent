@@ -2051,3 +2051,54 @@ cd ../..
     rm -r /san/sanvol1/scratch/canFam2/bacendsRun
 
 
+# ACCESSIONS FOR CONTIGS (DONE 2006-01-04 kate)
+# Found WGS project entry in Genbank for canFam2:
+# LOCUS       AAEX02000000           35696 rc    DNA     linear   MAM 13-DEC-2005
+# DEFINITION  Canis familiaris whole genome shotgun sequencing project.
+# Project has a total of 35696 contigs, accessioned as
+#  AAEX02000001-AAEX02035696, also named cont2.0--cont2.35695
+# Poked around after submitting "canis[ORGN] AND WGS[KYWD]" search
+# to Entrez Nucleotide
+
+    cd /cluster/data/canFam2/broad
+    grep contig Dog2.0.agp | wc -l
+        # 35696
+    grep contig Dog2.0.agp | head -1
+        # chr01   3000001 3024025 2       W       contig_30884   ...
+    hgsql canFam2 -Ns -e "select frag from chr1_gold limit 1"
+        # contig_30884
+    grep contig_0 Dog2.0.agp
+        # chrUn   57343783        57365839        7071    W       contig_0
+    grep contig_35695 Dog2.0.agp
+        # chrUn   73893245        73902697        11515   W       contig_35695 
+    grep contig_35696 Dog2.0.agp
+        # nothing
+    # 
+    # in Genbank entries)
+
+    # Looked at summary file of contig entries from Genbank by
+    # clicking the project entry (AAEX02000000), then clicking on
+    # the WGS contig acession list at the end of the page
+    # the AGP and our Gap tables frag names contig_* correspond to the
+    # cont2.* names and AEX02* names (-1) in the Genbank entries,
+    # so we don't need to to parse out the comments from the summary
+    # entries.
+
+    # create file mapping our contig names to Genbank accessions
+    cd /cluster/data/canFam2/bed
+    mkdir -p contigAcc
+    cd contigAcc
+    sed -n 's/.*contig_\([0-9][0-9]*\).*/\1/p' \
+                /cluster/data/canFam2/broad/Dog2.0.agp | \
+        sort -un | \
+        awk '{printf ("contig_%d\tAAEX020%05d\n", $1, $1+1)}' > contigAcc.tab
+    wc -l contigAcc.tab
+        # 35696 contigAcc.tab
+
+    # load into database
+    hgsql canFam2 < $HOME/kent/src/hg/lib/contigAcc.sql
+    echo "LOAD DATA LOCAL INFILE 'contigAcc.tab' INTO TABLE contigAcc" | \
+        hgsql canFam2
+    hgsql canFam2 -Nse "SELECT COUNT(*) FROM contigAcc"
+        # 35696
+
