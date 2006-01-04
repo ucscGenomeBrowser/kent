@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.7 2005/12/29 04:47:03 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.8 2006/01/04 17:36:19 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -387,8 +387,7 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "%f\t", el->avHet);
     fprintf(f, "%f\t", el->avHetSE);
     fprintf(f, "%s\t", el->func);
-    fprintf(f, "dbSNP125\t");
-    fprintf(f, "\t");
+    fprintf(f, "dbSNP125");
     fprintf(f, "\n");
     count++;
     }
