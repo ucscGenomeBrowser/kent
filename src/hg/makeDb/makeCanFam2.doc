@@ -2091,7 +2091,7 @@ cd ../..
     sed -n 's/.*contig_\([0-9][0-9]*\).*/\1/p' \
                 /cluster/data/canFam2/broad/Dog2.0.agp | \
         sort -un | \
-        awk '{printf ("contig_%d\tAAEX020%05d\n", $1, $1+1)}' > contigAcc.tab
+    awk '{printf ("contig_%d\tAAEX020%05d.1\n", $1, $1+1)}' > contigAcc.tab
     wc -l contigAcc.tab
         # 35696 contigAcc.tab
 
