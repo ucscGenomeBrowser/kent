@@ -67,6 +67,7 @@
 #include "ensPhusionBlast.h"
 #include "cytoBand.h"
 #include "knownMore.h"
+#include "snp125.h"
 #include "snp.h"
 #include "snpMap.h"
 #include "snpExceptions.h"
@@ -189,7 +190,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.983 2005/12/28 18:47:50 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.984 2006/01/04 17:41:52 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12097,6 +12098,63 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+
+void printSnp125Info(struct snp125 snp)
+/* print info on a snp125 */
+{
+if (differentString(snp.strand,"?")) {printf("<B>Strand: </B>%s\n", snp.strand);}
+printf("<BR><B>Observed: </B>%s\n",                                 snp.observed);
+printf("<BR><B>Source: </B>%s\n",           			    snp.source);
+printf("<BR><B><A HREF=\"#Class\">Variant Class</A>: </B>%s\n",     snp.class);
+printf("<BR><B><A HREF=\"#Valid\">Validation Status</A>: </B>%s\n", snp.valid);
+printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
+printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n",   snp.molType);
+if (snp.avHet>0)
+    printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
+    printf("<BR>\n");
+    }   
+    
+void writeSnp125Exception(char *itemName)
+{
+}
+
+void doSnp125(struct trackDb *tdb, char *itemName)
+/* Process SNP details. */
+{
+char   *group = tdb->tableName;
+struct snp125 snp;
+int    start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char   query[256];
+int    rowOffset=hOffsetPastBin(seqName, group);
+
+cartWebStart(cart, "dbSNP build 125");
+printf("<H2>dbSNP build 125 %s</H2>\n", itemName);
+safef(query, sizeof(query), "select * from %s where chrom='%s' and "
+      "chromStart=%d and name='%s'", group, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+snp125StaticLoad(row+rowOffset, &snp);
+bedPrintPos((struct bed *)&snp, 3);
+/*printSnpAlignment(snp);*/
+printf("<BR>\n");
+printSnp125Info(snp);
+printf("<BR>\n");
+printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
+doSnpEntrezGeneLink(tdb, itemName);
+
+if (hTableExists("snp125Exceptions"))
+    writeSnp125Exception(itemName);
+
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
 void doTigrGeneIndex(struct trackDb *tdb, char *item)
 /* Put up info on tigr gene index item. */
 {
@@ -17681,6 +17739,10 @@ else if (sameWord(track, "snpTsc") || sameWord(track, "snpNih") || sameWord(trac
 else if (sameWord(track, "snp"))
     {
     doSnp(tdb, item);
+    }
+else if (sameWord(track, "snp125"))
+    {
+    doSnp125(tdb, item);
     }
 else if (sameWord(track, "cnpIafrate"))
     {
