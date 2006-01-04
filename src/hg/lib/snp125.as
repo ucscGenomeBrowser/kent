@@ -16,7 +16,5 @@ table snp125
     float   avHet;      "The average heterozygosity from all observations"
     float   avHetSE;    "The Standard Error for the average heterozygosity"
     string  func;       "The functional category of the SNP (coding-synon, coding-nonsynon, intron, etc.)"
-    string  locType;    "Extra, between or range"
     string  source;     "Source of the data - dbSnp, Affymetrix, ..."
-    int  exception;  "List of exceptionIds for 'invariant' conditions"
     )

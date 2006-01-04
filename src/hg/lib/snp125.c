@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snp125.c,v 1.1 2006/01/03 23:52:45 heather Exp $";
+static char const rcsid[] = "$Id: snp125.c,v 1.2 2006/01/04 00:47:33 heather Exp $";
 
 void snp125StaticLoad(char **row, struct snp125 *ret)
 /* Load a row from snp125 table into ret.  The contents of ret will
@@ -31,7 +31,6 @@ ret->avHet = atof(row[12]);
 ret->avHetSE = atof(row[13]);
 ret->func = row[14];
 ret->source = row[15];
-// ret->exception = sqlSigned(row[16]);
 }
 
 struct snp125 *snp125Load(char **row)
@@ -57,7 +56,6 @@ ret->avHet = atof(row[12]);
 ret->avHetSE = atof(row[13]);
 ret->func = cloneString(row[14]);
 ret->source = cloneString(row[15]);
-ret->exception = sqlSigned(row[16]);
 return ret;
 }
 
@@ -67,7 +65,7 @@ struct snp125 *snp125LoadAll(char *fileName)
 {
 struct snp125 *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -85,7 +83,7 @@ struct snp125 *snp125LoadAllByChar(char *fileName, char chopper)
 {
 struct snp125 *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[18];
+char *row[16];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -122,7 +120,6 @@ ret->avHet = sqlFloatComma(&s);
 ret->avHetSE = sqlFloatComma(&s);
 ret->func = sqlStringComma(&s);
 ret->source = sqlStringComma(&s);
-ret->exception = sqlSignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -218,8 +215,6 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->source);
 if (sep == ',') fputc('"',f);
-fputc(sep,f);
-fprintf(f, "%d", el->exception);
 fputc(lastSep,f);
 }
 

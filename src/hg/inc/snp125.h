@@ -5,7 +5,7 @@
 #ifndef SNP125_H
 #define SNP125_H
 
-#define SNP125_NUM_COLS 18
+#define SNP125_NUM_COLS 16
 
 struct snp125
 /* Polymorphism data from dbSnp database or genotyping arrays */
@@ -26,9 +26,7 @@ struct snp125
     float avHet;	/* The average heterozygosity from all observations */
     float avHetSE;	/* The Standard Error for the average heterozygosity */
     char *func;	/* The functional category of the SNP (coding-synon, coding-nonsynon, intron, etc.) */
-    char *locType;	/* Extra, between or range */
     char *source;	/* Source of the data - dbSnp, Affymetrix, ... */
-    int exception;	/* List of exceptionIds for 'invariant' conditions */
     };
 
 void snp125StaticLoad(char **row, struct snp125 *ret);
