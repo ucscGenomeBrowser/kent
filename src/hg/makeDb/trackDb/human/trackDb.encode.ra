@@ -2909,6 +2909,7 @@ group encodeVariation
 priority 80.91
 visibility hide
 type bed 3 .
+chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
