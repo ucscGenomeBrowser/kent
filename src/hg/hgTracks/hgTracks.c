@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1064 2005/12/22 14:38:57 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1065 2006/01/05 03:39:22 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10662,6 +10662,7 @@ registerTrackHandler("stsMapMouseNew", stsMapMouseMethods);
 registerTrackHandler("stsMapRat", stsMapRatMethods);
 registerTrackHandler("snpMap", snpMapMethods);
 registerTrackHandler("snp", snpMethods);
+registerTrackHandler("snp125", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnp", cnpMethods);
 //registerTrackHandler("cnpIafrate", cnpIafrateMethods);
