@@ -32,9 +32,12 @@ char *snp125ColorSourceStrings[] = {
     "snp125ColorSourceValid",
     "snp125ColorSourceFunc",
 };
+
+// why are these arrays?
 char *snp125ColorSourceDataName[] = {
     "snp125ColorSource",
 };
+// could also make Class the default
 char *snp125ColorSourceDefault[] = {
     "snp125ColorSourceFunc",
 };
@@ -206,6 +209,7 @@ char *snp125FuncDataName[] = {
     "coding",
     "coding-synon",
     "coding-nonsynon",
+    "untranslated",
     "intron",
     "splice-site",
     "exception",
