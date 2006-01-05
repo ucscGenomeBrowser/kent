@@ -60,7 +60,8 @@ O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
     sanger22extra.o sangerGene.o sargassoSeaXra.o \
     scopDes.o scoredRef.o sgdAbundance.o \
     sgdClone.o sgdDescription.o sgdOther.o simpleNucDiff.o simpleRepeat.o \
-    snp.o snp125.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o snpUi.o softPromoter.o softberryHom.o \
+    snp.o snp125.o snpExceptions.o snpFasta.o snpMap.o snpTmp.o \
+    snpUi.o snp125Ui.o softPromoter.o softberryHom.o \
     spDb.o splignAlign.o stanMad.o stsAlias.o \
     stsInfo.o stsInfo2.o stsInfoMouse.o stsInfoMouseNew.o stsInfoRat.o \
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o \
