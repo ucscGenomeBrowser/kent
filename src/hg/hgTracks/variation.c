@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.46 2006/01/02 09:07:08 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.47 2006/01/05 03:38:35 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -200,6 +200,28 @@ filterSnpItems(tg, snpFuncFilterItem);
 filterSnpItems(tg, snpLocTypeFilterItem);
 }
 
+void loadSnp125(struct track *tg)
+/* Load up snp125 from database table to track items. */
+{
+int i = 0;
+
+snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0.0"));
+
+for (i=0; i < snp125MolTypeCartSize; i++)
+    snp125MolTypeCart[i] = cartUsualString(cart, snp125MolTypeStrings[i], snp125MolTypeDefault[i]);
+
+for (i=0; i < snp125ClassCartSize; i++)
+    snp125ClassCart[i] = cartUsualString(cart, snp125ClassStrings[i], snp125ClassDefault[i]);
+
+for (i=0; i < snp125ValidCartSize; i++)
+    snp125ValidCart[i] = cartUsualString(cart, snp125ValidStrings[i], snp125ValidDefault[i]);
+
+for (i=0; i < snp125FuncCartSize; i++)
+    snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
+
+
+}
+
 void freeSnpMap(struct track *tg)
 /* Free up snpMap items. */
 {
@@ -241,6 +263,66 @@ switch (thisSnpColor)
     }
 }
 
+
+Color snp125Color(struct track *tg, void *item, struct vGfx *vg)
+/* Return color of snp track item. */
+{
+struct snp125 *el = item;
+enum   snp125ColorEnum thisSnpColor = snp125ColorBlack;
+char  *snpColorSource = cartUsualString(cart, 
+			snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
+char  *validString = NULL;
+int    snpValid = 0;
+int    index1 = 0;
+int    index2 = 0;
+
+
+index1 = stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSourceLabelsSize);
+switch (stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSourceLabelsSize))
+    {
+    case snp125ColorSourceMolType:
+	index2 = stringArrayIx(el->molType,snp125MolTypeDataName,snp125MolTypeDataNameSize);
+	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125MolTypeCart[index2],snp125ColorLabel,snp125ColorLabelSize);
+	break;
+    case snp125ColorSourceClass:
+	index2 = stringArrayIx(el->class,snp125ClassDataName,snp125ClassDataNameSize);
+	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125ClassCart[index2],snp125ColorLabel,snp125ColorLabelSize);
+	break;
+    /* validity is a set */
+    case snp125ColorSourceValid:
+	validString = cloneString(el->valid);
+	for (snpValid=0; snpValid<snp125ValidCartSize; snpValid++)
+	    if (containsStringNoCase(validString, snp125ValidDataName[snpValid]))
+		thisSnpColor = (enum snp125ColorEnum) stringArrayIx(snp125ValidCart[snpValid],snp125ColorLabel,snp125ColorLabelSize);
+	break;
+    case snp125ColorSourceFunc:
+	index2 = stringArrayIx(el->func,snp125FuncDataName,snp125FuncDataNameSize);
+	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125FuncCart[index2],snp125ColorLabel,snp125ColorLabelSize);
+	break;
+    default:
+	thisSnpColor = snp125ColorBlack;
+	break;
+    }
+switch (thisSnpColor)
+    {
+    case snp125ColorRed:
+ 	return MG_RED;
+ 	break;
+    case snp125ColorGreen:
+ 	return vgFindColorIx(vg, 0x79, 0xaa, 0x3d);
+ 	break;
+    case snp125ColorBlue:
+ 	return MG_BLUE;
+ 	break;
+    case snp125ColorBlack:
+    default:
+ 	return MG_BLACK;
+ 	break;
+    }
+}
+
+
+
 Color snpColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of snp track item. */
 {
@@ -252,18 +334,24 @@ char  *validString = NULL;
 char  *funcString = NULL;
 int    snpValid = 0;
 int    snpFunc = 0;
+int    index1 = 0;
+int    index2 = 0;
 
-switch (stringArrayIx(snpColorSource, 
-		      snpColorSourceStrings, snpColorSourceStringsSize))
+index1 =  stringArrayIx(snpColorSource, snpColorSourceStrings, snpColorSourceStringsSize);
+
+switch (stringArrayIx(snpColorSource, snpColorSourceStrings, snpColorSourceStringsSize))
     {
     case snpColorSourceSource:
-	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpSourceCart[stringArrayIx(el->source,snpSourceDataName,snpSourceDataNameSize)],snpColorLabel,snpColorLabelSize);
+	index2 = stringArrayIx(el->source,snpSourceDataName,snpSourceDataNameSize);
+	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpSourceCart[index2],snpColorLabel,snpColorLabelSize);
 	break;
     case snpColorSourceMolType:
-	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpMolTypeCart[stringArrayIx(el->molType,snpMolTypeDataName,snpMolTypeDataNameSize)],snpColorLabel,snpColorLabelSize);
+	index2 = stringArrayIx(el->molType,snpMolTypeDataName,snpMolTypeDataNameSize);
+	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpMolTypeCart[index2],snpColorLabel,snpColorLabelSize);
 	break;
     case snpColorSourceClass:
-	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpClassCart[stringArrayIx(el->class,snpClassDataName,snpClassDataNameSize)],snpColorLabel,snpColorLabelSize);
+	index2 = stringArrayIx(el->class,snpClassDataName,snpClassDataNameSize);
+	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpClassCart[index2],snpColorLabel,snpColorLabelSize);
 	break;
     case snpColorSourceValid:
 	validString = cloneString(el->valid);
@@ -278,7 +366,8 @@ switch (stringArrayIx(snpColorSource,
 		thisSnpColor = (enum snpColorEnum) stringArrayIx(snpFuncCart[snpFunc],snpColorLabel,snpColorLabelSize);
 	break;
     case snpColorSourceLocType:
-	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpLocTypeCart[stringArrayIx(el->locType,snpLocTypeDataName,snpLocTypeDataNameSize)],snpColorLabel,snpColorLabelSize);
+	index2 = stringArrayIx(el->locType,snpLocTypeDataName,snpLocTypeDataNameSize);
+	thisSnpColor=(enum snpColorEnum)stringArrayIx(snpLocTypeCart[index2],snpColorLabel,snpColorLabelSize);
 	break;
     default:
 	thisSnpColor = snpColorBlack;
@@ -518,6 +607,13 @@ tg->loadItems     = loadSnp;
 tg->freeItems     = freeSnp;
 tg->itemColor     = snpColor;
 tg->itemNameColor = snpColor;
+}
+
+void snp125Methods(struct track *tg)
+{
+tg->loadItems = loadSnp125;
+tg->itemColor = snp125Color;
+tg->itemNameColor = snp125Color;
 }
 
 char *perlegenName(struct track *tg, void *item)
@@ -1127,6 +1223,7 @@ void cnpLoadItems(struct track *tg)
 struct track *subtrack = NULL;
 
 for (subtrack=tg->subtracks;subtrack!=NULL;subtrack=subtrack->next)
+    {
     if(sameString(subtrack->mapName,"cnpIafrate"))
 	bedLoadItem(subtrack, "cnpIafrate", (ItemLoader)cnpIafrateLoad);
     else if(sameString(subtrack->mapName,"cnpSebat"))
@@ -1135,6 +1232,7 @@ for (subtrack=tg->subtracks;subtrack!=NULL;subtrack=subtrack->next)
 	bedLoadItem(subtrack, "cnpSharp", (ItemLoader)cnpSharpLoad);
     else if(sameString(subtrack->mapName,"cnpFosmid"))
 	bedLoadItem(subtrack, "cnpFosmid", (ItemLoader)bedLoad);
+    }
 }
 
 void cnpFreeItems(struct track *tg)
