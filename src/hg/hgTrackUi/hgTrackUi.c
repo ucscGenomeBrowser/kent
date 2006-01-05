@@ -12,6 +12,7 @@
 #include "hui.h"
 #include "ldUi.h"
 #include "snpUi.h"
+#include "snp125Ui.h"
 #include "sample.h"
 #include "cdsColors.h"
 #include "wiggle.h"
@@ -28,7 +29,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.237 2005/12/28 09:25:53 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.238 2006/01/05 03:41:16 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -140,6 +141,14 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
     snpMapTypeFilterButtons(snpMapTypeStrings[snpMapType], snpMapTypeCart[snpMapType]);
     printf(" - <B>%s</B><BR>\n", snpMapTypeLabels[snpMapType]);
     }
+}
+
+void snp125Ui(struct trackDb *tdb)
+{
+printf("<BR><B>Color Specification:</B><BR>\n");
+snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snpColorSourceDefault[0]);
+cgiMakeDropList(snp125ColorSourceDataName[0], snp125ColorSourceLabels, snp125ColorSourceLabelsSize, snp125ColorSourceCart[0]);
+
 }
 
 void snpUi(struct trackDb *tdb)
@@ -1628,6 +1637,8 @@ else if (sameString(track, "snpMap"))
         snpMapUi(tdb);
 else if (sameString(track, "snp"))
         snpUi(tdb);
+else if (sameString(track, "snp125"))
+	snp125Ui(tdb);
 else if (sameString(track, "ld"))
         ldUi(tdb);
 else if (sameString(track, "hapmapLd"))
