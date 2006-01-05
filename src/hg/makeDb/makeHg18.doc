@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.9 2006/01/03 23:08:44 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.10 2006/01/05 23:07:04 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -1717,5 +1717,83 @@ nice featureBits hg17 chainCanFam2Link
 
 # then go to /cluster/data/genbank/etc and do cvs update on these two files.
 
+#########################################################################
+# BLASTZ RAT Rn3 (STARTED - 2005-12-22, DONE 2006-01-05 Fan)
 
-     
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzRn3.2005-12-22
+    cd /cluster/data/hg18/bed
+    rm blastz.rn3
+    ln -s blastzRn3.2005-12-22 blastz.rn3
+    cd blastzRn3.2005-12-22
+
+    cat << '_EOF_' > DEF
+# human vs rat
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+BLASTZ_ABRIDGE_REPEATS=1
+    
+# TARGET: Muman Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_SMSK=/scratch/hg/hg18/linSpecRep/notInRat
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn3 - chunk big enough to do all chroms in single whole
+pieces
+SEQ2_DIR=/scratch/rat/rn3/softNib
+SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInHuman
+SEQ2_LEN=/cluster/bluearc/rat/rn3/chrom.sizes
+SEQ2_CHUNK=300000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzRn3.2005-12-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # happy emacs
+
+    #	establish a screen to control this job
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-stop=load \
+	`pwd`/DEF > to-load.out 2>&1 &
+
+# start processing again on 12/31/05.
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=pk \
+      -swap \
+      -stop=load \
+	`pwd`/DEF > swap.out 2>&1 &
+
+# Either UCSC RR and hgwdev systems or network went down around 11 AM 12/31/05.
+
+# After holidays, start again on 1/3/06 and again on 1/5/06.
+
+    ssh pk
+    cd /cluster/data/hg18/bed
+    cd blastzRn3.2005-12-22
+    screen
+    bash
+
+      time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=pk \
+      -swap \
+      -continue=net \
+      -stop=load \
+	`pwd`/DEF > swap6.out 2>&1 &
+
+# DONE! Jan  5 13:39
+
+# Measurements:
+nice featureBits rn3 chainHg18Link 
+# 962630574 bases of 2571104688 (37.440%) in intersection
+nice featureBits hg18 chainRn3Link 
+# 964251210 bases of 2881515245 (33.463%) in intersection
