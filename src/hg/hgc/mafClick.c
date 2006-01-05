@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.29 2005/10/26 00:32:29 kent Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.30 2006/01/05 00:07:38 braney Exp $";
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -23,7 +23,7 @@ static void mafPrettyHeader(FILE *f, struct mafAli *maf)
 /* Write out summary. */
 {
 struct mafComp *mc;
-char buf[16];
+char buf[128];
 for (mc = maf->components; mc != NULL; mc = mc->next)
     {
     char dbOnly[128];
