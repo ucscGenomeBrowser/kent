@@ -29,7 +29,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.238 2006/01/05 03:41:16 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.239 2006/01/05 18:56:22 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -117,6 +117,16 @@ radioButton(filterTypeVar, filterTypeVal, "blue");
 radioButton(filterTypeVar, filterTypeVal, "black");
 }
 
+void snp125FilterButtons(char *filterTypeVar, char *filterTypeVal)
+/* Put up some filter buttons. */
+{
+printf("&nbsp;&nbsp;&nbsp;&nbsp;");
+radioButton(filterTypeVar, filterTypeVal, "red");
+radioButton(filterTypeVar, filterTypeVal, "green");
+radioButton(filterTypeVar, filterTypeVal, "blue");
+radioButton(filterTypeVar, filterTypeVal, "black");
+}
+
 void snpMapUi(struct trackDb *tdb)
 /* Put up UI snpMap data. */
 {
@@ -145,9 +155,50 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
 
 void snp125Ui(struct trackDb *tdb)
 {
+int i = 0;
 printf("<BR><B>Color Specification:</B><BR>\n");
 snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snpColorSourceDefault[0]);
 cgiMakeDropList(snp125ColorSourceDataName[0], snp125ColorSourceLabels, snp125ColorSourceLabelsSize, snp125ColorSourceCart[0]);
+printf("<BR>\n");
+// fprintf(stderr, "hgTrackUi: snp125Ui: snp125ColorSourceCart[0] = %s\n", snp125ColorSourceCart[0]);
+
+if (sameString(snp125ColorSourceCart[0], "Molecule Type"))
+    {
+    for (i=0; i<snp125MolTypeCartSize; i++)
+        {
+	    snp125MolTypeCart[i] = cartUsualString(cart, snp125MolTypeStrings[i], snp125MolTypeDefault[i]);
+	    snp125FilterButtons(snp125MolTypeStrings[i], snp125MolTypeCart[i]);
+	    printf(" - <B>%s</B><BR>\n", snp125MolTypeLabels[i]);
+        }
+    }
+else if (sameString(snp125ColorSourceCart[0], "Class"))
+    {
+    for (i=0; i<snp125ClassCartSize; i++)
+        {
+	    snp125ClassCart[i] = cartUsualString(cart, snp125ClassStrings[i], snp125ClassDefault[i]);
+	    snp125FilterButtons(snp125ClassStrings[i], snp125ClassCart[i]);
+	    printf(" - <B>%s</B><BR>\n", snp125ClassLabels[i]);
+        }
+    }
+else if (sameString(snp125ColorSourceCart[0], "Validation"))
+    {
+    for (i=0; i<snp125ValidCartSize; i++)
+        {
+	    snp125ValidCart[i] = cartUsualString(cart, snp125ValidStrings[i], snp125ValidDefault[i]);
+	    snp125FilterButtons(snp125ValidStrings[i], snp125ValidCart[i]);
+	    printf(" - <B>%s</B><BR>\n", snp125ValidLabels[i]);
+        }
+    }
+else if (sameString(snp125ColorSourceCart[0], "Function"))
+    {
+    for (i=0; i<snp125FuncCartSize; i++)
+        {
+	    snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
+	    snp125FilterButtons(snp125FuncStrings[i], snp125FuncCart[i]);
+	    printf(" - <B>%s</B><BR>\n", snp125FuncLabels[i]);
+        }
+    }
+
 
 }
 
