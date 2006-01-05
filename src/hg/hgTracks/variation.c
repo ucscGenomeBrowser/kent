@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.47 2006/01/05 03:38:35 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.48 2006/01/05 17:23:57 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -219,6 +219,7 @@ for (i=0; i < snp125ValidCartSize; i++)
 for (i=0; i < snp125FuncCartSize; i++)
     snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
 
+bedLoadItem(tg, "snp125", (ItemLoader)snp125Load);
 
 }
 
