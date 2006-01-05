@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.38 2005/11/16 09:59:58 daryl Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.39 2006/01/05 07:23:46 galt Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -399,11 +399,8 @@ void orTable(Bits *acc, char *track, char *chrom,
 	int chromSize, struct sqlConnection *conn)
 /* Or in table if it exists.  Else do nothing. */
 {
-boolean hasBin;
 char t[512], *s;
 char table[512];
-boolean isSplit;
-int minFeatureSize = optionInt("minFeatureSize", 0);
 
 isolateTrackPartOfSpec(track, t);
 s = strrchr(t, '.');
@@ -413,8 +410,10 @@ if (s != NULL)
     }
 else
     {
-    isSplit = hFindSplitTable(chrom, t, table, &hasBin);
-    if (hTableExists(table))
+    boolean hasBin;
+    int minFeatureSize = optionInt("minFeatureSize", 0);
+    boolean isFound = hFindSplitTable(chrom, t, table, &hasBin);
+    if (isFound)
 	fbOrTableBitsQueryMinSize(acc, track, chrom, chromSize, conn, where,
 			   TRUE, TRUE, minFeatureSize);
     }
@@ -559,6 +558,74 @@ sqlFreeResult(&sr);
 return chromSize - totalGaps;
 }
 
+void checkInputExists(struct sqlConnection *conn, struct slName *allChroms, int tableCount, char *tables[])
+/* check input tables/files exist, especially to handle split tables */
+{
+struct slName *chrom = NULL;
+char *track=NULL;
+int i = 0, missing=0;
+char t[512], *s=NULL;
+char table[512];
+char fileName[512];
+boolean found = FALSE;
+for (i=0; i<tableCount; ++i)
+    {
+    track = tables[i];
+    if (track[0] == '!')
+	{
+	++track;
+	}
+    isolateTrackPartOfSpec(track, t);
+    s = strrchr(t, '.');
+    if (s)
+	{
+	if (fileExists(t))
+	    continue;
+	}
+    else
+	{
+	if (sqlTableExists(conn, t))
+	    continue;
+	}
+    found = FALSE;
+    for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
+	{
+	if (inclChrom(chrom))
+	    {
+	    if (s)
+		{
+		chromFileName(t, chrom->name, fileName);
+		if (fileExists(fileName))
+		    {
+		    found = TRUE;
+		    break;
+		    }
+		}
+	    else
+		{
+		boolean hasBin;
+		if (hFindSplitTable(chrom->name, t, table, &hasBin))
+		    {
+		    found = TRUE;
+		    break;
+		    }
+		}
+	    }
+	}
+    if (!found)
+	{
+	if (s)
+	    warn("file %s not found for any chroms", t);
+	else
+	    warn("table %s not found for any chroms", t);
+	++missing;	    
+	}
+    }
+if (missing>0)
+    errAbort("Error: %d input table(s)/file(s) do not exist for any of the chroms specified",missing);
+}
+
+
 void featureBits(char *database, int tableCount, char *tables[])
 /* featureBits - Correlate tables via bitmap projections and booleans. */
 {
@@ -598,6 +665,9 @@ if (sameWord(clChrom, "all"))
 else
     allChroms = newSlName(clChrom);
 conn = hAllocConn();
+
+checkInputExists(conn, allChroms, tableCount, tables);
+
 if (!faIndependent)
     {
     double totalBases = 0, totalBits = 0;
