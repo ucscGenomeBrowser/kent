@@ -69,17 +69,13 @@ char *snp125MolTypeDataName[] = {
 };
 char *snp125MolTypeDefault[] = {
     "red",
-    "red",
-    "red",
-    //"black",
-    //"blue",
+    "black",
+    "blue",
 };
 char *snp125MolTypeCart[] = {
     "red",
-    "red",
-    "red",
-    //"black",
-    //"blue",
+    "black",
+    "blue",
 };
 
 int snp125MolTypeLabelsSize   = ArraySize(snp125MolTypeLabels);
