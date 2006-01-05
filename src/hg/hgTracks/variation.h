@@ -8,6 +8,8 @@
 #include "snpMap.h"
 #include "hui.h"
 #include "snpUi.h"
+#include "snp125.h"
+#include "snp125Ui.h"
 #include "spaceSaver.h"
 #include "ld.h"
 #include "hash.h"
@@ -65,12 +67,14 @@ boolean snpFuncFilterItem(struct track *tg, void *item);
 /* Return TRUE if item passes filter. */
 
 void loadSnp(struct track *tg);
+void loadSnp125(struct track *tg);
 /* Load up snps from database table to track items. */
 
 void freeSnp(struct track *tg);
 /* Free up snp items. */
 
 Color snpColor(struct track *tg, void *item, struct vGfx *vg);
+Color snp125Color(struct track *tg, void *item, struct vGfx *vg);
 /* Return color of snp track item. */
 
 void snpDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int y, 
@@ -78,6 +82,7 @@ void snpDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int 
 /* Draw a single snp item at position. */
 
 void snpMethods(struct track *tg);
+void snp125Methods(struct track *tg);
 /* Make track for snps. */
 
 /***** haplotypes *****/
