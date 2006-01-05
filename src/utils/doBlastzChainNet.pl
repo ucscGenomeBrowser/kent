@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.28 2005/12/22 20:08:10 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.29 2006/01/05 23:48:25 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -1275,9 +1275,6 @@ Penn State.";
 "rearrangements between 
     the species and the best $qGenome match to any part of the
     $tGenome genome.";
-  my $over = $isSelf ? "" : "
-  - $tDb.$qDb.over.chain.gz: chained and netted alignments in chain format.
-";
   my $desc = $isSelf ? 
 "This directory contains alignments of $tGenome ($tDb, $tDate,
 $tSource) to itself." :
@@ -1303,7 +1300,7 @@ Files included in this directory:
     i.e. the best chains in the $tGenome genome, with gaps in the best
     chains filled in by next-best chains where possible.  The axt format is
     described in http://genome.ucsc.edu/goldenPath/help/axt.html .
-$over
+
 ";
   if ($opt_swap) {
     my $TDb = ucfirst($tDb);
@@ -1362,8 +1359,7 @@ bothGap 750 825 850 1000 1300 3300  23300 58300 118300 218300  318300
   }
   print R "
 Chained alignments were processed into nets by the chainNet, netSyntenic,
-and netClass programs. Best chains (.over.chain) were extracted from the
-nets and the set of all chained alignments by the netChainSubset program.
+and netClass programs.
 Best-chain alignments in axt format were extracted by the netToAxt program.
 All programs run after blastz were written by Jim Kent at UCSC.
 
