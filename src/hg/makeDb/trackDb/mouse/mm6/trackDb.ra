@@ -86,30 +86,6 @@ spectrum on
 type netAlign galGal2 chainGalGal2u1
 otherDb galGal2
 
-track chainCanFam2u1
-shortLabel CanFam2 U1 Chain
-longLabel CanFam2 U1 ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 229.9
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-type chain canFam2
-otherDb canFam2
-
-track netCanFam2u1
-shortLabel CanFam2 U1 Net
-longLabel CanFam2 U1 ($o_date/$o_db) Alignment Net
-group compGeno
-priority 230.09
-visibility hide
-spectrum on
-type netAlign canFam2 chainCanFam2u1
-otherDb canFam2
-
 track chainHg17u1
 shortLabel Hg17 U1 Chain 
 longLabel Hg17 U1 $o_Organism ($o_date/$o_db) Chained Alignments
