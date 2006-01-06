@@ -2618,6 +2618,7 @@ chainSome $(path1)
     nice rm -rf lav &
 
 
+###########################################################################
 # LOAD GENEID PREDICTIONS (DONE 3/15/05)
     ssh eieio
     mkdir /cluster/data/ce2/bed/geneid
@@ -2635,4 +2636,18 @@ chainSome $(path1)
     ldHgGene -gtf -genePredExt ce2 geneid *.gtf 
     hgPepPred ce2 generic geneidPep geneid.fa
 
-
+###########################################################################
+#	DONE - 2006-01-06 - Hiram
+#	Obtained a photograph from Professor Mark Blaxter
+#	mark.blaxter@ed.ac.uk - http://nema.cap.ed.ac.uk/index.html
+#	Saved image from email to:
+#	/cluster/data/ce2/html/C.elegans.jpg
+#	-rw-rw-r--    1   227317 Jan  6 09:40 C.elegans.jpg
+#	Transform image to a size appropriate for our WEB pages:
+    ssh hgwdev
+    cd /cluster/data/ce2/html
+    convert -normalize -sharpen 0 -geometry 300x200 \
+	C.elegans.jpg Caenorhabditis_elegans.jpg
+    cp -p Caenorhabditis_elegans.jpg /usr/local/apache/htdocs/images
+#	Add IMG tag pointer to this image in the description.html page
+#	and for ce1 and ce3
