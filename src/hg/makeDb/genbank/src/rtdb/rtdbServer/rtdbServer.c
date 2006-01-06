@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include <signal.h>
+#include <sys/wait.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
@@ -26,6 +27,8 @@ boolean canStop = FALSE;
 int warnCount = 0;
 struct sockaddr_in sai;		/* Some system socket info. */
 volatile boolean pipeBroke = FALSE;	/* Flag broken pipes here. */
+int pid = 1; /* The Process ID */
+boolean updating = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -50,6 +53,33 @@ void rtdbCatchPipes()
 /* Set up to catch broken pipe signals. */
 {
 signal(SIGPIPE, rtdbPipeHandler);
+}
+
+void update()
+/* Run the update. First fork off a child and deal with it there. */
+{
+
+pid = fork();
+if (pid < 0)
+    errAbort("Error: couldn't fork.");
+if (pid == 0)
+    {
+    time_t curtime;
+    struct tm *loctime;
+    char timestr[256];
+    curtime = time (NULL);           /* Get the current time. */
+    loctime = localtime (&curtime);  /* Convert it to local time representation. */
+    strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime); /* format datetime as string */
+    logInfo("Running update at %s", timestr);
+    sleep(30);
+    curtime = time (NULL);
+    loctime = localtime (&curtime);
+    strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime);
+    logInfo("Finished update at %s", timestr);    
+    exit(0);
+    }
+else
+    updating = TRUE;
 }
 
 void startServer(char *hostName, char *portName)
@@ -129,13 +159,31 @@ for (;;)
 	curtime = time (NULL);
 	loctime = localtime (&curtime);
 	strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime);
-	logInfo("rtdbServer on host %s, port %s  (%s) -- Pretending to update RTDB.", 
-		hostName, portName, timestr);
+	if (updating)
+	    {
+	    warn("Attempted to update while updating.");
+	    ++warnCount;
+	    }
+	else
+	    update();
 	}
     else
         {
 	warn("Unknown command %s", command);
 	++warnCount;
+	}
+    if (updating)
+	{
+	int status;
+	pid_t childpid = waitpid(-1, &status, WNOHANG);
+	if (childpid > 0)
+	    {
+	    if (status == 0)
+		logInfo("Finished update.");
+	    else 
+		logInfo("Update errored.");
+	    updating = FALSE;
+	    }
 	}
     close(connectionHandle);
     connectionHandle = 0;
