@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.10 2006/01/05 23:07:04 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.11 2006/01/06 13:21:41 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -1797,3 +1797,110 @@ nice featureBits rn3 chainHg18Link
 # 962630574 bases of 2571104688 (37.440%) in intersection
 nice featureBits hg18 chainRn3Link 
 # 964251210 bases of 2881515245 (33.463%) in intersection
+
+#########################################################################
+# BLASTZ FUGU fr1 (STARTED - 2005-12-20, DONE 2006-01-05 Fan)
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzFr1.2005-12-20
+    cd /cluster/data/hg18/bed
+    ln -s blastzFr1.2005-12-20 blastz.fr1
+    cd blastzFr1.2005-12-20
+
+    cat << '_EOF_' > DEF
+# human vs. fugu
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Reuse parameters from human-chicken, except L=6000 (more relaxed)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Human Hg18 - testing 100,000,000 sized chunk on pk kluster
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+
+# QUERY: Fugu Fr1 - chunk big enough to run the whole chrom at once
+SEQ2_DIR=/san/sanvol1/scratch/fr1/nib
+SEQ2_LEN=/san/sanvol1/scratch/fr1/chrom.sizes
+SEQ2_CHUNK=400000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzFr1.2005-12-20
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    ssh pk
+    cd /cluster/data/hg18/bed/blastzFr1.2005-12-20
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -stop=load \
+	`pwd`/DEF > thruLoad.out 2>&1 &
+
+    ssh pk
+    cd /cluster/data/hg18/bed/blastzFr1.2005-12-20
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -continue=chainMerge -stop=load \
+	`pwd`/DEF > thruLoad.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -continue=download \
+	`pwd`/DEF > download.clean.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -swap \
+	`pwd`/DEF > swap.out 2>&1 &
+
+# Finish the remaining step, 1/4/05.
+
+    ssh pk
+    cd /cluster/data/hg18/bed/blastzFr1.2005-12-20
+    screen
+    bash
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 \
+	-swap -continue=download \
+	`pwd`/DEF > DownloadSwap.out 2>&1 &
+
+# First try found the DEF was some how altered for rn3.
+# Re-generated DEF and try again.
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 \
+	-swap -continue=download \
+	`pwd`/DEF > DownloadSwap2.out 2>&1 &
+
+# Done.  Jan  4 09:48.
+
+# measurements
+
+nice featureBits hg18 chainFr1Link
+# 51795958 bases of 2881515245 (1.798%) in intersection
+nice featureBits hg17 chainFr1Link
+#50831650 bases of 2866216770 (1.773%) in intersection
+
+nice featureBits hg18 netFr1
+# 691148929 bases of 2881515245 (23.986%) in intersection
+nice featureBits hg17 netFr1
+# 714234935 bases of 2866216770 (24.919%) in intersection
+
+nice featureBits fr1 chainHg18Link
+# 43267869 bases of 315518167 (13.713%) in intersection
+# nice featureBits fr1 chainHg17Link
+0 bases of 315518167 (0.000%) in intersection
+nice featureBits fr1 netHg18
+# 140843080 bases of 315518167 (44.639%) in intersection
+nice featureBits fr1 netHg17
+# 0 bases of 315518167 (0.000%) in intersection
+
+
