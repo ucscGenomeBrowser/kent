@@ -29,7 +29,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.241 2006/01/07 05:25:19 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.242 2006/01/07 05:51:01 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -168,14 +168,14 @@ cgiContinueHiddenVar("c");
 
 printf("<HR>\n");
 printf("<B>SNP Feature for Color Specification:</B>\n");
-snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snpColorSourceDefault[0]);
+snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
 cgiMakeDropListFull(snp125ColorSourceDataName[0], snp125ColorSourceLabels, snp125ColorSourceLabels, 
                     snp125ColorSourceLabelsSize, snp125ColorSourceCart[0], autoSubmit);
 printf("<BR><BR>\n");
 printf("The selected feature above has the following values below.  \n");
 printf("For each value, a selection of colors are available.<BR><BR>\n");
 
-snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snpColorSourceDefault[0]);
+snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
 if (sameString(snp125ColorSourceCart[0], "Molecule Type"))
     {
     for (i=0; i<snp125MolTypeLabelsSize; i++)
