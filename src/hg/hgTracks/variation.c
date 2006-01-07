@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.48 2006/01/05 17:23:57 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.49 2006/01/07 05:26:37 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -235,6 +235,13 @@ void freeSnp(struct track *tg)
 snpFreeList((struct snp**)&tg->items);
 }
 
+void freeSnp125(struct track *tg)
+/* Free up snp125 items. */
+{
+snp125FreeList((struct snp125**)&tg->items);
+}
+
+
 Color snpMapColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of snpMap track item. */
 {
@@ -276,7 +283,6 @@ char  *validString = NULL;
 int    snpValid = 0;
 int    index1 = 0;
 int    index2 = 0;
-
 
 index1 = stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSourceLabelsSize);
 switch (stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSourceLabelsSize))
@@ -419,6 +425,27 @@ void snpDrawItemAt(struct track *tg, void *item,
 /* Draw a single snp item at position. */
 {
 struct snp *s = item;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)s->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)s->chromEnd-winStart)*scale) + xOff;
+int w = x2-x1;
+Color itemColor = tg->itemColor(tg, s, vg);
+
+if ( w<1 )
+    w=1;
+vgBox(vg, x1, y, w, heightPer, itemColor);
+/* Clip here so that text will tend to be more visible... */
+if (tg->drawName && vis != tvSquish)
+    mapBoxHc(s->chromStart, s->chromEnd, x1, y, w, heightPer,
+	     tg->mapName, tg->mapItemName(tg, s), NULL);
+}
+
+void snp125DrawItemAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single snp125 item at position. */
+{
+struct snp125 *s = item;
 int heightPer = tg->heightPer;
 int x1 = round((double)((int)s->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)s->chromEnd-winStart)*scale) + xOff;
@@ -612,7 +639,10 @@ tg->itemNameColor = snpColor;
 
 void snp125Methods(struct track *tg)
 {
+tg->drawItems     = snpDrawItems;
+tg->drawItemAt    = snpDrawItemAt;
 tg->loadItems = loadSnp125;
+tg->freeItems     = freeSnp125;
 tg->itemColor = snp125Color;
 tg->itemNameColor = snp125Color;
 }
