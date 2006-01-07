@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.12 2006/01/07 16:47:14 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.13 2006/01/07 21:11:47 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -1998,4 +1998,99 @@ nice featureBits tetNig1 chainHg17Link
 nice featureBits hg17 chainTetNig1Link 
 # 35910128 bases of 2866216770 (1.253%) in intersection
 
+# BLASTZ FROG XenTro1 second time (STARTED - 2006-01-06 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzXenTro1.2006-01-06
+    cd /cluster/data/hg18/bed
+    rm blastz.xenTro1
+    ln -s blastzXenTro1.2006-01-06 blastz.xenTro1
+    cd blastzXenTro1.2006-01-06
+
+    cat << '_EOF_' > DEF
+# human vs frog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Frog XenTro1 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/xenTro1/xenTro1.2bit
+SEQ2_LEN=/scratch/hg/xenTro1/chrom.sizes
+SEQ2_LIMIT=400
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzXenTro1.2006-01-06
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+      -stop=load \
+	`pwd`/DEF > load.out 2>&1 &
+# Started Fri Jan  6 20:19:30 PST 2006
+# Blastz run done.  Jan  7 02:07 load.out
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -stop=load \
+	`pwd`/DEF > swap-load.out 2>&1 &
+
+# got the following error:
+
+startStep: 4, at step 5 net to stopStep 6
+netChains: looks like previous stage was not successful (can't find [xenTro1.hg18.]all.chain[.gz]).
+
+# Try it with pk instead of kolossus:
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-workhorse=pk \
+-swap -stop=load \
+`pwd`/DEF > swap-load2.out 2>&1 &
+
+# It worked, swap-load done. Jan  7 06:05
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-workhorse=pk \
+-continue=download \
+`pwd`/DEF > download.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-workhorse=pk \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-swap -continue=download \
+`pwd`/DEF > swap-download.out 2>&1 &
+
+# Done! Jan  7 06:18
+
+# Measurements:
+
+ssh hgwdev
+nice featureBits xenTro1 chainHg18Link 
+# 61197900 bases of 1381238994 (4.431%) in intersection
+nice featureBits hg18 chainXenTro1Link 
+# 67810866 bases of 2881515245 (2.353%) in intersection
+
+nice featureBits xenTro1 chainHg17Link 
+# 81777842 bases of 1381238994 (5.921%) in intersection
+nice featureBits hg17 chainXenTro1Link 
+# 85701475 bases of 2866216770 (2.990%) in intersection
 
