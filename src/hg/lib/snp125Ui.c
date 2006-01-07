@@ -38,10 +38,10 @@ char *snp125ColorSourceDataName[] = {
 };
 // could also make Class the default
 char *snp125ColorSourceDefault[] = {
-    "snp125ColorSourceFunc",
+    "Function",
 };
 char *snp125ColorSourceCart[] = {
-    "snp125ColorSourceFunc",
+    "Function",
 };
 
 int snp125ColorSourceLabelsSize   = ArraySize(snp125ColorSourceLabels);
