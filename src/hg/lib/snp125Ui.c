@@ -106,7 +106,7 @@ char *snp125ClassStrings[] = {
 };
 char *snp125ClassDataName[] = {
     "unknown",
-    "snp",
+    "simple",
     "insertion",
     "deletion",
     "range",
