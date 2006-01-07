@@ -9,7 +9,6 @@ char *snp125ColorLabel[] = {
     "green",
     "blue",
     "black",
-    "exclude",
 };
 
 int snp125ColorLabelSize = ArraySize(snp125ColorLabel);
@@ -81,6 +80,7 @@ char *snp125MolTypeCart[] = {
     "blue",
 };
 
+// all of these sizes are the same
 int snp125MolTypeLabelsSize   = ArraySize(snp125MolTypeLabels);
 int snp125MolTypeStringsSize  = ArraySize(snp125MolTypeStrings);
 int snp125MolTypeDataNameSize = ArraySize(snp125MolTypeDataName);
