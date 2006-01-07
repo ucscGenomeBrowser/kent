@@ -29,7 +29,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.240 2006/01/07 00:52:17 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.241 2006/01/07 05:25:19 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -166,13 +166,14 @@ cartSaveSession(cart);
 cgiContinueHiddenVar("g");
 cgiContinueHiddenVar("c");
 
+printf("<HR>\n");
 printf("<B>SNP Feature for Color Specification:</B>\n");
 snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snpColorSourceDefault[0]);
 cgiMakeDropListFull(snp125ColorSourceDataName[0], snp125ColorSourceLabels, snp125ColorSourceLabels, 
                     snp125ColorSourceLabelsSize, snp125ColorSourceCart[0], autoSubmit);
 printf("<BR><BR>\n");
-printf("The selected feature has the following values.  \n");
-printf("For each value, a selection of colors are available.<BR>\n");
+printf("The selected feature above has the following values below.  \n");
+printf("For each value, a selection of colors are available.<BR><BR>\n");
 
 snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snpColorSourceDefault[0]);
 if (sameString(snp125ColorSourceCart[0], "Molecule Type"))
@@ -183,7 +184,6 @@ if (sameString(snp125ColorSourceCart[0], "Molecule Type"))
 	snp125MolTypeCart[i] = cartUsualString(cart, snp125MolTypeStrings[i], snp125MolTypeDefault[i]);
         cgiMakeDropListFull(snp125MolTypeStrings[i], snp125ColorLabel, snp125ColorLabel, 
                             snp125ColorLabelSize, snp125MolTypeCart[i], autoSubmit);
-	printf("<BR>\n");
         }
     }
 else if (sameString(snp125ColorSourceCart[0], "Class"))
@@ -194,7 +194,6 @@ else if (sameString(snp125ColorSourceCart[0], "Class"))
 	snp125ClassCart[i] = cartUsualString(cart, snp125ClassStrings[i], snp125ClassDefault[i]);
         cgiMakeDropListFull(snp125ClassStrings[i], snp125ColorLabel, snp125ColorLabel, 
                             snp125ColorLabelSize, snp125ClassCart[i], autoSubmit);
-	printf("<BR>\n");
         }
     }
 else if (sameString(snp125ColorSourceCart[0], "Validation"))
@@ -205,7 +204,6 @@ else if (sameString(snp125ColorSourceCart[0], "Validation"))
 	snp125ValidCart[i] = cartUsualString(cart, snp125ValidStrings[i], snp125ValidDefault[i]);
         cgiMakeDropListFull(snp125ValidStrings[i], snp125ColorLabel, snp125ColorLabel, 
                             snp125ColorLabelSize, snp125ValidCart[i], autoSubmit);
-	printf("<BR>\n");
         }
     }
 else if (sameString(snp125ColorSourceCart[0], "Function"))
@@ -216,10 +214,11 @@ else if (sameString(snp125ColorSourceCart[0], "Function"))
 	snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
         cgiMakeDropListFull(snp125FuncStrings[i], snp125ColorLabel, snp125ColorLabel, 
                             snp125ColorLabelSize, snp125FuncCart[i], autoSubmit);
-	printf("<BR>\n");
         }
     }
 
+printf("<BR>\n");
+printf("<HR>\n");
 
 }
 
