@@ -943,3 +943,13 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 - gbCdnaIfno.direction  column defaults to 5' if it can't be figured out.
   It should result to unknonw; could also check the sequence for polyA/T.
+
+- If sequence version changes in the same day, it's not updated:
+
+    DQ230327
+    DQ230328
+    DQ230329
+    DQ272519
+
+-  NM_005577 multiple overlapping alignments due to repeative sequence;
+   can't be better filters.
