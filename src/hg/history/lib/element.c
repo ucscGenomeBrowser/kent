@@ -7,6 +7,10 @@
 
 #include "element.h"
 
+static struct hash *distHash = NULL;
+struct hash *distEleHash = NULL;
+//struct distance *distance;
+
 void printGenomes(struct genome *genomes)
 {
 struct genome *genome;
@@ -21,22 +25,36 @@ for(genome=genomes; genome; genome = genome->next)
     }
 }
 
-struct genome *readGenomes(char *fileName)
+struct phyloTree *readEleTree(struct lineFile *lf, struct element **parents)
 {
-struct genome *allGenomes = NULL, *genome = NULL;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *words[256];
-int wordsRead;
+int ii;
+struct phyloTree *node = NULL;
+struct genome *genome = NULL;
+int wordsRead, elementsLeft = 0, numChildren = 0;
+boolean needGenome = TRUE;
+int count = 0;
+char *words[512];
+struct element **elements;
 
 while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
     {
-    if ((wordsRead == 1) && (words[0][0] == '>'))
+    if (needGenome)
 	{
+	if ((wordsRead != 3) || (words[0][0] != '>'))
+	    errAbort("elTree genomes are named starting with a '>' with 3 total words");
+
+	AllocVar(node);
 	AllocVar(genome);
-	slAddHead(&allGenomes, genome);
+	node->priv = genome;
+	//slAddHead(&allGenomes, genome);
 	genome->name = cloneString(&words[0][1]);
-	verbose(2, "adding genome %s\n",genome->name);
 	genome->elementHash = newHash(8);
+	elementsLeft = atoi(words[1]);
+	numChildren = atoi(words[2]);
+	needGenome = FALSE;
+	elements = needMem(elementsLeft * sizeof(struct element *));
+
+	verbose(2, "adding genome %s\n",genome->name);
 	}
     else
 	{
@@ -44,6 +62,111 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 
 	if (genome == NULL)
 	    errAbort("must specify genome name before listing elements");
+
+	if (wordsRead /2> elementsLeft)
+	    errAbort("too many elements in genome %s",genome->name);
+	if ( (words[0][0] == '>'))
+	    errAbort("too few elements in genome %s\n",genome->name);
+	elementsLeft -= wordsRead/2;
+
+	for(ii=0; ii < wordsRead; ii+=2)
+	    {
+	    char *ptr;
+	    struct element *element;
+
+	    AllocVar(element);
+	    slAddHead(&genome->elements, element);
+	    elements[count++] = element;
+
+	    element->genome = genome;
+	    element->species = genome->name;
+	    element->name = cloneString(words[ii]);
+	    if (parents)
+		{
+		element->parent = parents[atoi(words[ii+1]) - 1];
+
+		if (element->parent == NULL)
+		    errAbort("parent is null %s",words[ii+1]);
+		}
+	    else
+		{
+		element->parent = NULL;
+		}
+	    if (*element->name == '-')
+		{
+		element->name++;
+		element->isFlipped = 1;
+		}
+	    hashAdd(genome->elementHash, element->name, element);
+
+	    if ((ptr = strchr(element->name, '.')) == NULL)
+		errAbort("elements must be of the format name.version");
+	    *ptr++ = 0;
+	    element->version = ptr;
+	    verbose(2, "added element %s.%s\n",element->name,element->version);
+	    }
+	if (elementsLeft == 0)
+	    break;
+	}
+    }
+    slReverse(&genome->elements);
+
+    for(ii=0; ii < count; ii++)
+	if (elements[ii] == NULL)
+	    errAbort("elemen %d isnull\n",ii);
+
+    for(ii=0; ii < numChildren; ii++)
+	phyloAddEdge(node, readEleTree(lf,elements));
+
+    freez(&elements);
+    return node;
+}
+
+struct phyloTree *eleReadTree(char *fileName)
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+
+return readEleTree(lf, NULL);
+}
+
+struct genome *readGenomes(char *fileName)
+{
+struct genome *allGenomes = NULL, *genome = NULL;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *words[256];
+int wordsRead, wordsLeft = 0;
+boolean needGenome = TRUE;
+
+while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
+    {
+    if (needGenome) 
+	{
+	if ((wordsRead != 2) || (words[0][0] != '>'))
+	    errAbort("genomes are named starting with a '>' and followed by a count");
+
+	AllocVar(genome);
+	slAddHead(&allGenomes, genome);
+	genome->name = cloneString(&words[0][1]);
+	wordsLeft = atoi(words[1]);
+	verbose(2, "adding genome %s\n",genome->name);
+	genome->elementHash = newHash(8);
+	needGenome = FALSE;
+	}
+    else
+	{
+	int ii;
+
+	if (genome == NULL)
+	    errAbort("must specify genome name before listing elements");
+
+	if (wordsRead > wordsLeft)
+	    errAbort("too many elements in genome %s",genome->name);
+	if ( (words[0][0] == '>'))
+	    errAbort("too few elements in genome %s\n",genome->name);
+	wordsLeft -= wordsRead;
+
+	if (wordsLeft == 0)
+	    needGenome = TRUE;
 
 	for(ii=0; ii < wordsRead; ii++)
 	    {
@@ -57,7 +180,10 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    element->species = genome->name;
 	    element->name = cloneString(words[ii]);
 	    if (*element->name == '-')
+		{
 		element->name++;
+		element->isFlipped = 1;
+		}
 	    hashAdd(genome->elementHash, element->name, element);
 
 	    if ((ptr = strchr(element->name, '.')) == NULL)
@@ -68,6 +194,9 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    }
 	}
     }
+
+if ( wordsLeft)
+    errAbort("too few elements in genome %s\n",genome->name);
 
 for(genome=allGenomes; genome; genome = genome->next)
     slReverse(&genome->elements);
@@ -91,8 +220,6 @@ species = s;
 ename = ptr;
 if ((ptr = strchr(ptr, '.')) == NULL)
     errAbort("element names must be species.element.version");
-//*ptr++ = 0;
-//version = ptr;
 
 if ((genome = hashFindVal(genomeHash, species)) == NULL)
     errAbort("can't find element list for %s\n",species);
@@ -103,7 +230,6 @@ if ((e = hashFindVal(genome->elementHash, ename)) == NULL)
 return e;
 }
 
-static struct hash *distHash = NULL;
 
 void setElementDist(struct element *e1, struct element *e2, double dist,
     struct distance **distanceList)
@@ -117,7 +243,9 @@ if (!sameString(e1->name, e2->name))
     errAbort("can't set element distance on elements with different names");
 
 if ((val = strcmp(e1->species, e2->species)) == 0)
+    {
     val = strcmp(e1->version , e2->version);
+    }
 
 if (val < 0)
     safef(buffer, sizeof(buffer), str, e1->species, e1->name, e1->version,
@@ -129,6 +257,7 @@ else
 if (distHash == NULL)
     {
     distHash = newHash(5);
+    distEleHash = newHash(5);
     }
 
 if ((pdist = (float *)hashFindVal(distHash, buffer)) != NULL)
@@ -141,17 +270,39 @@ if ((pdist = (float *)hashFindVal(distHash, buffer)) != NULL)
 else
     {
 	struct distance *distance;
+	struct eleDistance *list;
+	struct eleDistance *ed;
+	char *p;
 
 	AllocVar(pdist);
 	*pdist = dist;
 	hashAdd(distHash, buffer, pdist);
+
 	AllocVar(distance);
 	slAddHead(distanceList, distance);
 
 	distance->e1 = e1;
 	distance->e2 = e2;
 	distance->distance = dist;
+	distance->new = 1;
 	
+	AllocVar(ed);
+	ed->distance = distance;
+	//safef(buffer, sizeof(buffer), "%s.%s.%s", e1->species, e1->name, e1->version);
+	p = eleName(e1);
+	if ((list = hashFindVal(distEleHash, p)) == NULL)
+	    hashAdd(distEleHash, p, ed);
+	else
+	    slAddTail(&list, ed);
+
+	AllocVar(ed);
+	ed->distance = distance;
+	//safef(buffer, sizeof(buffer), "%s.%s.%s", e2->species, e2->name, e2->version);
+	p = eleName(e2);
+	if ((list = hashFindVal(distEleHash, p)) == NULL)
+	    hashAdd(distEleHash, p, ed);
+	else
+	    slAddTail(&list, ed);
     }
 }
 
@@ -165,7 +316,10 @@ if ((diff = d1->distance - d2->distance) > 0)
     return 1;
 else if (diff < 0)
     return -1;
-return 0;
+
+return d1->e1->numEdges + d1->e2->numEdges - d2->e1->numEdges - d2->e2->numEdges;
+//return strlen(eleName(d1->e1)) + strlen(eleName(d1->e2)) - strlen(eleName(d2->e1))- strlen(eleName(d2->e2));
+//return 0;
 }
 
 struct distance *readDistances(char *fileName, struct hash *genomeHash)
@@ -247,7 +401,7 @@ return parent->edges[parent->numEdges -1 ] = child;
 }
 
 struct element *eleAddEdge(struct element *parent, struct element *child)
-/* add an edge to a phyloTree node */
+/* add an edge to an element */
 {
 return newEdge(parent, child);
 }
@@ -267,4 +421,34 @@ for (ii=0; ii < tree->numEdges; ii++)
 	}
 
 errAbort("tried to delete non-existant edge");
+}
+
+char *eleName(struct element *e)
+{
+static char buffer[512];
+
+safef(buffer,sizeof buffer, "%s.%s.%s",e->species,e->name, e->version);
+
+return cloneString(buffer);
+}
+
+void printElementTrees(struct phyloTree *node, int depth)
+{
+struct genome *g = node->priv;
+struct element *e;
+int ii;
+
+for(ii=0; ii < depth; ii++)
+    printf(" ");
+printf("%s: ",g->name);
+for(e = g->elements; e; e = e->next)
+    {
+    if (e->isFlipped)
+	printf("-");
+    printf("%s.%s ",e->name,e->version);
+    }
+printf("\n");
+
+for(ii=0; ii < node->numEdges; ii++)
+    printElementTrees(node->edges[ii], depth+1);
 }
