@@ -116,6 +116,7 @@ char *snpColorSourceLabels[] = {
     "Location Type",
     "Black",
 };
+
 char *snpColorSourceStrings[] = {
     "snpColorSourceSource",
     "snpColorSourceMolType",
@@ -413,7 +414,7 @@ char *snpFuncCart[] = {
     "red",
     "blue",
     "blue",
-    "blue",
+    "red",
     "black",
     "black",
 };
