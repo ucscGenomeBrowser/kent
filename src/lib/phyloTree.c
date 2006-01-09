@@ -25,7 +25,9 @@ char *ptr = *ptrPtr;
 
 AllocVar(pName);
 /* legal id's are alphanumeric */
-while(isalpha(*ptr) || isdigit(*ptr) || (*ptr == '/'))
+while(isalpha(*ptr) || isdigit(*ptr) || (*ptr == '/')
+    || (*ptr == '[') || (*ptr == ']') || (*ptr == '\'')
+    || (*ptr == '.')) 
     ptr++;
 
 /* did we read something? */
@@ -53,6 +55,30 @@ if (*ptr == ':')
 return pName;
 }
 
+static struct phyloTree *newEdge(struct phyloTree *parent, struct phyloTree *child)
+{
+parent->numEdges++;
+
+if (parent->numEdges > parent->allocedEdges)
+    {
+    int oldSize = parent->allocedEdges * sizeof (struct phyloTree *);
+    int newSize;
+
+    parent->allocedEdges += 5;
+    newSize = parent->allocedEdges * sizeof (struct phyloTree *);
+    parent->edges = needMoreMem(parent->edges, oldSize, newSize);
+    }
+
+child->parent = parent;
+return parent->edges[parent->numEdges -1 ] = child;
+}
+
+struct phyloTree *phyloAddEdge(struct phyloTree *parent, struct phyloTree *child)
+/* add an edge to a phyloTree node */
+{
+return newEdge(parent, child);
+}
+
 static struct phyloTree *parseSubTree(char **ptrPtr)
 /* the recursive workhorse function, parses a tree from ptr */
 {
@@ -66,20 +92,23 @@ if ((*ptr == ';') || (*ptr == ',') || (*ptr == ')') )
 AllocVar(node);
 if (*ptr == '(') 
     {
+    struct phyloTree *edge;
+
     ptr++;
 
-    node->left = parseSubTree(&ptr);
-    node->left->parent = node;
-    if (*ptr++ != ',')
-	errAbort("all nodes must have zero or two children error at (%s)",ptr-1);
-    node->right = parseSubTree(&ptr);
-    node->right->parent = node;
+    do
+	{
+	edge = newEdge(node,parseSubTree(&ptr));
+	edge->parent = node;
+	} while (*ptr++ == ',');
+    --ptr;
     if (*ptr++ != ')') 
-	errAbort("unbalanced parenthesis");
+	errAbort("unbalanced parenthesis at (%s)",ptr-1);
     node->ident = parseIdent(&ptr);
     }
 else 
-    if ((*ptr == ':') || (isalpha(*ptr))|| (isdigit(*ptr)))
+    if ((*ptr == ':') || (isalpha(*ptr))|| (isdigit(*ptr)) 
+	|| (*ptr == '[') || (*ptr == ']') || (*ptr == '\'') || (*ptr == '.'))
 	node->ident = parseIdent(&ptr);
 else
     errAbort("illegal char '%c' in phyloString",*ptr);
@@ -117,21 +146,51 @@ for(i=0; i < recurseCount; i++)
     fputc('\t',f);
 }
 
+static void pTree( struct phyloTree *tree,FILE *f)
+/* print out phylogenetic tree in Newick format */
+{
+if (tree)
+    {
+    int ii;
+    if (tree->numEdges)
+	{
+	fprintf(f,"(");
+	for (ii= 0; ii < tree->numEdges; ii++)
+	    {
+	    pTree(tree->edges[ii], f);
+	    if (ii + 1 < tree->numEdges)
+		fprintf(f,",");
+	    }
+	fprintf(f,")");
+	}
+    if (tree->ident->name)
+	fprintf(f,"%s",tree->ident->name);
+    if (tree->ident->length != 0.0)
+	fprintf(f,":%g", tree->ident->length);
+    }
+}
+
 void phyloPrintTree( struct phyloTree *tree,FILE *f)
+/* print out phylogenetic tree in Newick format */
+{
+pTree(tree, f);
+fprintf(f, ";\n");
+}
+
+void phyloDebugTree( struct phyloTree *tree,FILE *f)
 /* print out phylogenetic tree */
 {
 if (tree)
     {
-    printf("%s:%g\n",tree->ident->name, tree->ident->length);
-    if (tree->left)
+    int ii;
+    fprintf(f,"%s:%g numEdges %d\n",tree->ident->name, tree->ident->length, tree->numEdges);
+    recurseCount++;
+    for (ii= 0; ii < tree->numEdges; ii++)
 	{
-	recurseCount++;
 	tabOut(f);
-	phyloPrintTree(tree->left, f);
-	tabOut(f);
-	phyloPrintTree(tree->right, f);
-	recurseCount--;
+	phyloDebugTree(tree->edges[ii], f);
 	}
+    recurseCount--;
     }
 }
 
@@ -139,14 +198,15 @@ struct phyloTree *phyloFindName( struct phyloTree *tree,char *name )
 /* find the node with this name */
 {
 struct phyloTree *subTree = NULL;
+int ii;
 
 if (tree->ident->name && sameString(tree->ident->name, name))
     return tree;
 
-if (tree->left)
+for (ii=0; ii < tree->numEdges; ii++)
     {
-    if ((subTree = phyloFindName( tree->left, name)) == NULL)
-	subTree = phyloFindName( tree->right, name);
+    if ((subTree = phyloFindName( tree->edges[ii], name)) != NULL)
+	break;
     }
 
 return subTree;
@@ -155,13 +215,12 @@ return subTree;
 void phyloClearTreeMarks(struct phyloTree *tree)
 /* clear the favorite child marks */
 {
+int ii;
+
 tree->mark = 0;
 
-if (tree->left)
-    {
-    phyloClearTreeMarks(tree->left);
-    phyloClearTreeMarks(tree->right);
-    }
+for (ii=0; ii < tree->numEdges; ii++)
+    phyloClearTreeMarks(tree->edges[ii]);
 }
 
 struct phyloTree *phyloFindMarkUpTree(struct phyloTree *tree)
@@ -229,16 +288,16 @@ return ds->string;
 static void nodeNames(struct phyloTree *tree, struct dyString *ds)
 /* recursive workhorse to add all the node names to a string */
 {
-    if (tree->ident->name)
-	{
-	dyStringAppendN(ds, tree->ident->name, strlen(tree->ident->name));
-	dyStringAppendC(ds, ' ');
-	}
-    if (tree->left)
-	{
-	nodeNames(tree->left,ds);
-	nodeNames(tree->right,ds);
-	}
+int ii;
+
+if (tree->ident->name)
+    {
+    dyStringAppendN(ds, tree->ident->name, strlen(tree->ident->name));
+    dyStringAppendC(ds, ' ');
+    }
+
+for (ii=0; ii < tree->numEdges; ii++)
+    nodeNames(tree->edges[ii],ds);
 }
 
 char *phyloNodeNames(struct phyloTree *tree)
@@ -251,4 +310,45 @@ nodeNames(tree, ds);
 ds->string[ds->stringSize-1]=0;
 
 return ds->string;
+}
+
+
+static void reParent(struct phyloTree *tree)
+{
+if (tree->parent)
+    {
+    struct phyloTree *edge, *saveParent = tree->parent;
+
+    reParent(saveParent);
+    phyloDeleteEdge(saveParent, tree);
+    edge = newEdge(tree, saveParent);
+    edge->parent = tree;
+    edge->ident->length = tree->ident->length;
+    }
+}
+
+struct phyloTree *phyloReRoot(struct phyloTree *tree)
+/* return a tree whose root is tree and what were parents are now "right" children */
+{
+reParent(tree);
+tree->ident->length = 0;
+
+return tree;
+}
+
+void phyloDeleteEdge(struct phyloTree *tree, struct phyloTree *edge)
+/* delete an edge from a node.  Aborts on error */
+{
+int ii;
+
+for (ii=0; ii < tree->numEdges; ii++)
+    if (tree->edges[ii] == edge)
+	{
+	memcpy(&tree->edges[ii], &tree->edges[ii+1], sizeof(tree) * (tree->numEdges - ii - 1));
+	tree->numEdges--;
+	//phyloFreeTree(edge);
+	return;
+	}
+
+errAbort("tried to delete non-existant edge");
 }
