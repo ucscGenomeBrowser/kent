@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.39 2005/12/21 00:32:06 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.40 2006/01/09 19:40:35 kent Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -9319,7 +9319,7 @@ BASE=/cluster/data/mm7/bed/blastzDasNov1.2005-10-20
 real    5472m48.563s
 
 #############################################################################
-# Create Allen Brain Atlas mapping. (In progress 25 Oct 2005 JK)
+# Create Allen Brain Atlas mapping. (DONE Nov 2005 JK)
 
 # Set up directory
     ssh kk
@@ -9378,8 +9378,6 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
    mkdir /gbdb/mm7/allenBrain
    ln -s /cluster/data/mm7/bed/allenBrain/allProbes.fa /gbdb/mm7/allenBrain/allProbes.fa
    hgLoadSeq mm7 /gbdb/mm7/allenBrain/allProbes.fa
-
----- DONE TO HERE, NEED KNOWN GENES FOR REST
 
 # Make mapping between known genes and allenBrain	
    hgMapToGene mm7 allenBrainAli -type=psl knownGene knownToAllenBrain 
