@@ -14,7 +14,7 @@
 #include "agpGap.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.40 2006/01/09 18:32:59 galt Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.41 2006/01/09 18:49:14 galt Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -713,7 +713,7 @@ if (!faIndependent)
 	    }
 	}
     if (calcEnrichment)
-        printf("%s %5.3f%%, %s %5.3f%%, both %5.3f%%, cover %4.2f%%, enrich %4.2fx\n",
+        fprintf(stderr,"%s %5.3f%%, %s %5.3f%%, both %5.3f%%, cover %4.2f%%, enrich %4.2fx\n",
 		tables[0], 
 		100.0 * totalFirstBits/totalBases,
 		tables[1],
@@ -722,7 +722,7 @@ if (!faIndependent)
 		100.0 * totalBits / totalFirstBits,
 		(totalBits/totalSecondBits) / (totalFirstBits/totalBases) );
     else
-	printf("%1.0f bases of %1.0f (%4.3f%%) in intersection\n",
+	fprintf(stderr,"%1.0f bases of %1.0f (%4.3f%%) in intersection\n",
 	    totalBits, totalBases, 100.0*totalBits/totalBases);
     }
 else
