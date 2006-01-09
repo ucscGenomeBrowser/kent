@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.73 2005/12/02 19:34:22 galt Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.74 2006/01/09 22:04:20 heather Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -579,7 +579,7 @@ return mustFindVarData(varName);
 
 char *cgiUsualString(char *varName, char *usual)
 /* Return value of string if it exists in cgi environment.  
- * Otherwiser return 'usual' */
+ * Otherwise return 'usual' */
 {
 char *pt;
 pt = findVarData(varName);
