@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: speciesDist.c,v 1.1 2006/01/05 16:58:58 braney Exp $";
+static char const rcsid[] = "$Id: speciesDist.c,v 1.2 2006/01/09 19:27:13 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,6 +38,7 @@ struct distance *d;
 int numSpecies = 0;
 struct hash *genomeHash = newHash(5);
 struct hash *genomeNameHash = newHash(5);
+struct hash *genomeNumHash = newHash(5);
 char **genomeNames;
 int ii;
 int numExpect;
@@ -52,11 +53,12 @@ for(genome=genomes; genome; genome=genome->next)
 genomeNames = (char **)needMem(numSpecies * sizeof(char *));
 for(genome=genomes, ii=0; genome; ii++,genome=genome->next)
     {
-    hashAdd(genomeNameHash, genome->name, (void *)ii);
+    hashAdd(genomeHash, genome->name, (void *)genome);
+    hashAdd(genomeNumHash, genome->name, (void *)ii);
     genomeNames[ii] = genome->name;
     }
 
-distanceList = readDistances(distanceFileName);
+distanceList = readDistances(distanceFileName, genomeHash);
 
 numExpect = (numSpecies * numSpecies - numSpecies ) /2;
 distanceArray = (double *)needMem(sizeof(double) * numSpecies * numSpecies);
@@ -80,15 +82,15 @@ for(d=distanceList; numExpect && d; d = d->next)
 	}
     safef(buffer, sizeof(buffer), "%s-%s",s1,s2);
 
-    if (!hashLookup(genomeHash, buffer))
+    if (!hashLookup(genomeNameHash, buffer))
 	{
 	int row, col;
 
 	numExpect--;
-	hashStoreName(genomeHash, buffer);
+	hashStoreName(genomeNameHash, buffer);
 
-	row = (int)hashMustFindVal(genomeNameHash, s1);
-	col = (int)hashMustFindVal(genomeNameHash, s2);
+	row = (int)hashMustFindVal(genomeNumHash, s1);
+	col = (int)hashMustFindVal(genomeNumHash, s2);
 
 	distanceArray[row * numSpecies + col] = d->distance;
 	distanceArray[col * numSpecies + row] = d->distance;
