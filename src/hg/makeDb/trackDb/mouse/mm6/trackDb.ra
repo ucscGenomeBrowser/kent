@@ -62,54 +62,6 @@ spectrum on
 type netAlign danRer3 chainDanRer3
 otherDb danRer3
 
-track chainGalGal2u1
-shortLabel GalGal2 U1 Chain
-longLabel GalGal2 U1 $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 180
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
-matrixHeader A, C, G, T
-type chain galGal2
-otherDb galGal2
-
-track netGalGal2u1
-shortLabel GalGal2 U1 Net
-longLabel GalGal2 U1 $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 180.1
-visibility hide
-spectrum on
-type netAlign galGal2 chainGalGal2u1
-otherDb galGal2
-
-track chainHg17u1
-shortLabel Hg17 U1 Chain 
-longLabel Hg17 U1 $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 259.1
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-type chain hg17
-otherDb hg17
-
-track netHg17u1
-shortLabel Hg17 U1 Net
-longLabel Hg17 U1 $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 259.2
-visibility hide
-spectrum on
-type netAlign hg17 chainHg17u1
-otherDb hg17
-
 track chainSelf
 shortLabel Self Chain 
 longLabel Self Chained Alignments
@@ -144,64 +96,6 @@ altColor 50,128,50
 spectrum on
 type psl xeno mm6
 otherDb mm6
-
-track chainRn3u1
-shortLabel Rn3 U1 Chain
-longLabel Rn3 U1 $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 260
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
-matrixHeader A, C, G, T
-type chain rn3
-otherDb rn3
-
-track netRn3u1
-shortLabel Rn3 U1 Net
-longLabel Rn3 U1 $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 260.1
-visibility hide 
-spectrum on
-type netAlign rn3 chainRn3u1
-otherDb rn3
-
-track multiz10wayU1
-shortLabel U1 Conservation
-longLabel U1 10-Way Vertebrate Multiz Alignment & Conservation 
-group compGeno
-priority 104
-visibility full
-#color 0, 10, 100
-#altColor 50,50,50
-#altColor 255,128,0
-color 0, 10, 100
-altColor 0,90,10
-spanList 1
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons10U1
-yLineOnOff Off
-autoScaleDefault Off
-summary multiz10wayU1Summary
-#pairwise netBlastz
-speciesGroups mammal vertebrate
-sGroup_mammal rn3 hg17 canFam2 bosTau1
-sGroup_vertebrate monDom1 galGal2 xenTro1 danRer3 tetNig1
-treeImage phylo/Mm6_10way.jpg
-
-track phastConsElementsU1
-shortLabel U1 Most Conserved
-longLabel U1 PhastCons Conserved Elements
-group compGeno
-priority 105
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
 
 track multiz10way
 shortLabel Conservation
