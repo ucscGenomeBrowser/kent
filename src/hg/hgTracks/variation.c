@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.49 2006/01/07 05:26:37 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.50 2006/01/10 04:52:22 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -90,6 +90,20 @@ for (snpMolType=0; snpMolType<snpMolTypeCartSize; snpMolType++)
 return TRUE;
 }
 
+boolean snp125MolTypeFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct snp125 *el = item;
+int i;
+
+for (i=0; i<snp125MolTypeLabelsSize; i++)
+    {
+    if (!sameString(snp125MolTypeDataName[i], el->molType)) continue;
+    return snp125MolTypeIncludeCart[i];
+    }
+return TRUE;
+}
+
 boolean snpClassFilterItem(struct track *tg, void *item)
 /* Return TRUE if item passes filter. */
 {
@@ -100,6 +114,20 @@ for (snpClass=0; snpClass<snpClassCartSize; snpClass++)
     if (containsStringNoCase(el->class,snpClassDataName[snpClass]))
  	if ( sameString(snpClassCart[snpClass], "exclude") )
  	    return FALSE;
+return TRUE;
+}
+
+boolean snp125ClassFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct snp125 *el = item;
+int i;
+
+for (i=0; i<snp125ClassLabelsSize; i++)
+    {
+    if (!sameString(snp125ClassDataName[i], el->class)) continue;
+    return snp125ClassIncludeCart[i];
+    }
 return TRUE;
 }
 
@@ -116,6 +144,20 @@ for (snpValid=0; snpValid<snpValidCartSize; snpValid++)
 return TRUE;
 }
 
+boolean snp125ValidFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct snp125 *el = item;
+int i;
+
+for (i=0; i<snp125ValidLabelsSize; i++)
+    {
+    if (!sameString(snp125ValidDataName[i], el->class)) continue;
+    return snp125ValidIncludeCart[i];
+    }
+return TRUE;
+}
+
 boolean snpFuncFilterItem(struct track *tg, void *item)
 /* Return TRUE if item passes filter. */
 {
@@ -126,6 +168,20 @@ for (snpFunc=0; snpFunc<snpFuncCartSize; snpFunc++)
     if (containsStringNoCase(el->func,snpFuncDataName[snpFunc]))
  	if ( sameString(snpFuncCart[snpFunc], "exclude") )
  	    return FALSE;
+return TRUE;
+}
+
+boolean snp125FuncFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct snp125 *el = item;
+int i;
+
+for (i=0; i<snp125FuncLabelsSize; i++)
+    {
+    if (!sameString(snp125FuncDataName[i], el->class)) continue;
+    return snp125FuncIncludeCart[i];
+    }
 return TRUE;
 }
 
@@ -208,18 +264,35 @@ int i = 0;
 snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0.0"));
 
 for (i=0; i < snp125MolTypeCartSize; i++)
+    {
     snp125MolTypeCart[i] = cartUsualString(cart, snp125MolTypeStrings[i], snp125MolTypeDefault[i]);
+    snp125MolTypeIncludeCart[i] = cartUsualBoolean(cart, snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeDefault[i]);
+    }
 
 for (i=0; i < snp125ClassCartSize; i++)
+    {
     snp125ClassCart[i] = cartUsualString(cart, snp125ClassStrings[i], snp125ClassDefault[i]);
+    snp125ClassIncludeCart[i] = cartUsualBoolean(cart, snp125ClassIncludeStrings[i], snp125ClassIncludeDefault[i]);
+    }
 
 for (i=0; i < snp125ValidCartSize; i++)
+   {
     snp125ValidCart[i] = cartUsualString(cart, snp125ValidStrings[i], snp125ValidDefault[i]);
+    snp125ValidIncludeCart[i] = cartUsualBoolean(cart, snp125ValidIncludeStrings[i], snp125ValidIncludeDefault[i]);
+    }
 
 for (i=0; i < snp125FuncCartSize; i++)
+    {
     snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
+    snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
+    }
 
 bedLoadItem(tg, "snp125", (ItemLoader)snp125Load);
+
+filterSnpItems(tg, snp125MolTypeFilterItem);
+filterSnpItems(tg, snp125ClassFilterItem);
+filterSnpItems(tg, snp125ValidFilterItem);
+filterSnpItems(tg, snp125FuncFilterItem);
 
 }
 
