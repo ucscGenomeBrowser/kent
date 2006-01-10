@@ -90,8 +90,8 @@ identifier goAccession external=GO
 identifier goAccessionChopped
 "Gene ontology term accessions without the GO:"
      go.term.acc chopBefore=GO:
-     $dm.bdgpGeneInfo.go comma minCheck=0.99
-     $dm.bdgpNonCodingInfo.go comma minCheck=0.99
+     dm1.bdgpGeneInfo.go comma minCheck=0.99
+     dm1.bdgpNonCodingInfo.go comma minCheck=0.99
 
 identifier goId external=GO
 "Gene ontology term ID's.  Shouldn't be used outside of go database"
@@ -128,8 +128,8 @@ identifier UniProtId external=UniProt
      $kgDb.knownCanonical.protein minCheck=0.80
      $kgDb.knownGene.proteinID minCheck=0.80
      $gbd.spMrna.spID minCheck=0.80
-     $dm.bdgpSwissProt.spSymbol minCheck=0.80
-     $dm.flyBaseSwissProt.spSymbol minCheck=0.80
+     dm1.bdgpSwissProt.spSymbol minCheck=0.80
+     dm1.flyBaseSwissProt.spSymbol minCheck=0.80
 
 identifier UniProtAccession external=UniProt
 "UniProt(Swiss-Prot/TrEMBL) Accession"
@@ -157,10 +157,10 @@ identifier UniProtAccession external=UniProt
      $ce.sangerCanonical.protein minCheck=0.8
      $ce.sangerGene.proteinID minCheck=0.8
      $ce.sangerLinks.protName minCheck=0.8
-     $dm.bdgpCanonical.protein minCheck=0.9
-     $dm.bdgpGene.proteinID minCheck=0.9
-     $dm.bdgpSwissProt.swissProtId minCheck=0.9
-     $dm.flyBaseSwissProt.swissProtId minCheck=0.9
+     dm1.bdgpCanonical.protein minCheck=0.9
+     dm1.bdgpGene.proteinID minCheck=0.9
+     dm1.bdgpSwissProt.swissProtId minCheck=0.9
+     dm1.flyBaseSwissProt.swissProtId minCheck=0.9
      $sacCer.sgdGene.proteinID minCheck=0.9
      $sacCer.sgdCanonical.protein minCheck=0.9
      $sacCer.sgdToSwissProt.value minCheck=0.9
@@ -954,7 +954,7 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refMrna.name
     $gbd.refSeqAli.qName
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
-    $dm.bdgpToRefSeq.value minCheck=0.99
+    dm1.bdgpToRefSeq.value minCheck=0.99
     mm6.mrnaRefseq.mrna minCheck=0.10
     mm6.spMrna.mrnaID minCheck=0.60
     mm6.dupSpMrna.mrnaID minCheck=0.60
@@ -1278,57 +1278,57 @@ identifier flyBaseAlleleId
 identifier flyBaseGeneId external=FlyBase
 "FlyBase (Drosophila) Gene ID"
     $dm.fbGene.geneId
-    $dm.bdgpExprLink.flyBaseId minCheck=0.95
-    $dm.bdgpGeneInfo.flyBaseId minCheck=0.95
-    $dm.bdgpNonCodingInfo.flyBaseId minCheck=0.20
-    $dm.bdgpSwissProt.flyBaseId minCheck=0.95
+    dm1.bdgpExprLink.flyBaseId minCheck=0.95
+    dm1.bdgpGeneInfo.flyBaseId minCheck=0.95
+    dm1.bdgpNonCodingInfo.flyBaseId minCheck=0.20
+    dm1.bdgpSwissProt.flyBaseId minCheck=0.95
     $dm.fbAllele.geneId
     $dm.fbPhenotype.geneId
     $dm.fbSynonym.geneId
     $dm.fbTranscript.geneId minCheck=0.95
-    $dm.flyBaseSwissProt.flyBaseId minCheck=0.95
+    dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
     $gbd.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
-    $dm.bdgpCanonical.clusterId
-    $dm.bdgpIsoforms.clusterId full
+    dm1.bdgpCanonical.clusterId
+    dm1.bdgpIsoforms.clusterId full
 
 identifier bdgpGeneId external=BDGP
 "Berkeley Drosophila Genome Project Gene ID"
-    $dm.bdgpGeneInfo.bdgpName
-    $dm.bdgpExprLink.bdgpName minCheck=0.85
-    $dm.bdgpToCanonical.value
+    dm1.bdgpGeneInfo.bdgpName
+    dm1.bdgpExprLink.bdgpName minCheck=0.85
+    dm1.bdgpToCanonical.value
 
 identifier bdgpTranscriptId external=BDGP dependency
 "Berkeley Drosophila Genome Project Transcript ID"
-    $dm.bdgpGene.name
-    $dm.arbExpDistance.query
-    $dm.arbExpDistance.target
-    $dm.bdgpBlastTab.query
-    $dm.bdgpBlastTab.target
-    $dm.bdgpCanonical.transcript
-    $dm.bdgpIsoforms.transcript
-    $dm.bdgpGenePep.name
-    $dm.bdgpSwissProt.bdgpName
-    $dm.bdgpToCanonical.name
-    $dm.bdgpToLocusLink.name minCheck=0.80
-    $dm.bdgpToPfam.name
-    $dm.bdgpToRefSeq.name
-    $dm.ceBlastTab.query
-    $dm.drBlastTab.query
-    $dm.hgBlastTab.query
-    $dm.mmBlastTab.query
-    $dm.rnBlastTab.query
-    $dm.scBlastTab.query
-    $dm.fbTranscript.transcriptId minCheck=0.95
-    $dm.hgBlastTab.query
-    $dm.blastFBPep00.name
+    dm1.bdgpGene.name
+    dm1.arbExpDistance.query
+    dm1.arbExpDistance.target
+    dm1.bdgpBlastTab.query
+    dm1.bdgpBlastTab.target
+    dm1.bdgpCanonical.transcript
+    dm1.bdgpIsoforms.transcript
+    dm1.bdgpGenePep.name
+    dm1.bdgpSwissProt.bdgpName
+    dm1.bdgpToCanonical.name
+    dm1.bdgpToLocusLink.name minCheck=0.80
+    dm1.bdgpToPfam.name
+    dm1.bdgpToRefSeq.name
+    dm1.ceBlastTab.query
+    dm1.drBlastTab.query
+    dm1.hgBlastTab.query
+    dm1.mmBlastTab.query
+    dm1.rnBlastTab.query
+    dm1.scBlastTab.query
+    dm1.fbTranscript.transcriptId minCheck=0.95
+    dm1.hgBlastTab.query
+    dm1.blastFBPep00.name
 
 identifier bdgpNonCodingId external=BDGP
 "Berkeley Drosophila Genome Project Noncoding Gene ID"
-    $dm.bdgpNonCoding.name chopAfter=- dupeOk
-    $dm.bdgpNonCodingInfo.bdgpName
+    dm1.bdgpNonCoding.name chopAfter=- dupeOk
+    dm1.bdgpNonCodingInfo.bdgpName
 
 identifier flyBase2004Id external=FlyBase
 "FlyBase Xref as of 2004"
@@ -1474,7 +1474,7 @@ identifier hinvTranscriptId external=H-INV dependency
 identifier pfamId external=Pfam fuzzy
 "Pfam (Protein Family) ID"
     $kgDb.knownToPfam.value
-    $dm.bdgpToPfam.value
+    dm1.bdgpToPfam.value
 
 identifier superfamilyId external=SCOP
 "Protein SCOP/Superfamily ID"
@@ -1547,7 +1547,7 @@ identifier locusLinkId external=LocusLink
     $gbd.refLink.locusLinkId dupeOk
     $gbd.keggPathway.locusID minCheck=0.99
     $kgDb.knownToLocusLink.value minCheck=0.99
-    $dm.bdgpToLocusLink.value minCheck=0.98
+    dm1.bdgpToLocusLink.value minCheck=0.98
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
@@ -1724,7 +1724,7 @@ dependency $mm.affyGnfU74CDistance $mm.knownToU74  hgFixed.gnfMouseU74cMedianRat
 dependency $hg.gnfU95Distance $hg.knownToU95 hgFixed.gnfHumanU95MedianRatio
 dependency $hg.gnfAtlas2Distance $hg.knownToGnfAtlas2 hgFixed.gnfHumanAtlas2MedianRatio
 dependency $ce.kimExpDistance hgFixed.kimWormLifeMedianRatio
-dependency $dm.arbExpDistance $dm.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio 
+dependency dm1.arbExpDistance dm1.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio 
 dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle
 dependency $pbDb.pbAnomLimit $pbDb.kgProtMap
 dependency $pbDb.pbResAvgStd $pbDb.kgProtMap
@@ -1788,7 +1788,7 @@ type pepPred
     $gbd.vegaPep
     $gbd.knownGenePep
     $ce.sangerPep
-    $dm.bdgpGenePep
+    dm1.bdgpGenePep
     $dm.flyBasePep
 
 type psl
@@ -1919,9 +1919,9 @@ type knownTo
     $ce.sangerToKim
     $ce.sangerToPfam
     $ce.sangerToRefSeq
-    $dm.bdgpToLocusLink
-    $dm.bdgpToPfam
-    $dm.bdgpToRefSeq
+    dm1.bdgpToLocusLink
+    dm1.bdgpToPfam
+    dm1.bdgpToRefSeq
     $sacCer.sgdToSwissProt
     $sacCer.sgdToSgd
     $sacCer.sgdToName
@@ -1952,19 +1952,19 @@ type blastTab
     $gbd.scBlastTab
     $gbd.knownBlastTab
     $ce.sangerBlastTab
-    $dm.bdgpBlastTab
+    dm1.bdgpBlastTab
     $sacCer.sgdBlastTab
 
 type knownCanonical
     $gbd.knownCanonical
     $ce.sangerCanonical
-    $dm.bdgpCanonical
+    dm1.bdgpCanonical
     $sacCer.sgdCanonical
 
 type knownIsoforms
     $gbd.knownIsoforms
     $ce.sangerIsoforms
-    $dm.bdgpIsoforms
+    dm1.bdgpIsoforms
     $sacCer.sgdIsoforms
 
 type rnaFold
@@ -1978,7 +1978,7 @@ type bed
 type geneAndProt
     $kgDb.knownGene
     $ce.sangerGene
-    $dm.bdgpGene
+    dm1.bdgpGene
     $sacCer.sgdGene
 
 # Ignored tables - no linkage here that we check at least.
