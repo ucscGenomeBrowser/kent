@@ -176,31 +176,24 @@ dataVersion ENCODE June 2005 Freeze
 
     track encodeEgaspFullPairagonMrna
     subTrack encodeEgaspFull
-    shortLabel Pairagon mRNA/EST
-    longLabel Pairagon mRNA/EST Gene Predictions
+    shortLabel Pairgn/NSCAN-E 
+    longLabel Pairagon/NSCAN-EST Gene Predictions
     priority 12
     color 12,50,200
 
-    track encodeEgaspFullPairagonMultiple
+    track encodeEgaspFullPairagonAny
     subTrack encodeEgaspFull
-    shortLabel Pairagon Multiple
-    longLabel Pairagon Multiple Gene Predictions
+    shortLabel Pairgn/NSCAN-E/+
+    longLabel Pairagon/NSCAN Any Evidence Gene Predictions
     priority 13
     color 12,65,165
 
-    track encodeEgaspFullPairagonAny
+    track encodeEgaspFullPairagonMultiple
     subTrack encodeEgaspFull
-    shortLabel Pairagon Any
-    longLabel Pairagon Any Evidence Gene Predictions
+    shortLabel NSCAN
+    longLabel N-SCAN Gene Predictions
     priority 14
     color 12,85,135
-
-    track encodeEgaspFullPairagonNovel
-    subTrack encodeEgaspFull
-    shortLabel Pairagon Novel
-    longLabel Pairagon Novel Gene Predictions
-    priority 15
-    color 12,100,100
 
     track encodeEgaspFullSgp2
     subTrack encodeEgaspFull
