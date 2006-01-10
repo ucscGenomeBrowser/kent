@@ -29,7 +29,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.242 2006/01/07 05:51:01 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.243 2006/01/10 04:50:40 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -158,6 +158,49 @@ void snp125Ui(struct trackDb *tdb)
 int i = 0;
 char *autoSubmit = "onchange=\"document.snp125UiForm.submit();\"";
 
+printf("Any type of data can be excluded from view by unselecting the checkbox below.\n");
+printf("<BR><BR>\n");
+
+printf("<B>Molecule Type</B>: ");
+printf("<BR>\n");
+for (i=0; i < snp125MolTypeLabelsSize; i++)
+    {
+    snp125MolTypeIncludeCart[i] = cartUsualBoolean(cart, snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeDefault[i]);
+    cgiMakeCheckBox(snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeCart[i]);
+    printf(" %s", snp125MolTypeLabels[i]);
+    }
+
+printf("<BR>\n");
+printf("<B>Class</B>: ");
+printf("<BR>\n");
+for (i=0; i < snp125ClassLabelsSize; i++)
+    {
+    snp125ClassIncludeCart[i] = cartUsualBoolean(cart, snp125ClassIncludeStrings[i], snp125ClassIncludeDefault[i]);
+    cgiMakeCheckBox(snp125ClassIncludeStrings[i], snp125ClassIncludeCart[i]);
+    printf(" %s", snp125ClassLabels[i]);
+    }
+
+printf("<BR>\n");
+printf("<B>Validation</B>: ");
+printf("<BR>\n");
+for (i=0; i < snp125ValidLabelsSize; i++)
+    {
+    snp125ValidIncludeCart[i] = cartUsualBoolean(cart, snp125ValidIncludeStrings[i], snp125ValidIncludeDefault[i]);
+    cgiMakeCheckBox(snp125ValidIncludeStrings[i], snp125ValidIncludeCart[i]);
+    printf(" %s", snp125ValidLabels[i]);
+    }
+
+printf("<BR>\n");
+printf("<B>Function</B>: ");
+printf("<BR>\n");
+for (i=0; i < snp125FuncLabelsSize; i++)
+    {
+    snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
+    cgiMakeCheckBox(snp125FuncIncludeStrings[i], snp125FuncIncludeCart[i]);
+    printf(" %s", snp125FuncLabels[i]);
+    }
+
+
 /* prematurely close the hgTracks FORM because forms cannot be nested */
 /* we will open another FORM here, and allow it to be closed later */
 printf("</FORM>\n");
@@ -219,6 +262,7 @@ else if (sameString(snp125ColorSourceCart[0], "Function"))
 
 printf("<BR>\n");
 printf("<HR>\n");
+
 
 }
 

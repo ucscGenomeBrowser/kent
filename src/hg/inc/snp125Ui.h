@@ -1,4 +1,6 @@
 /* snp125Ui.h - enums and char arrays for snp125 UI features */
+#include "common.h"
+
 #ifndef SNP125UI_H
 #define SNP125UI_H
 
@@ -44,12 +46,16 @@ extern char *snp125MolTypeStrings[];
 extern char *snp125MolTypeDataName[];
 extern char *snp125MolTypeDefault[];
 extern char *snp125MolTypeCart[];
+extern char *snp125MolTypeIncludeStrings[];
+extern boolean snp125MolTypeIncludeDefault[];
+extern boolean snp125MolTypeIncludeCart[];
 
 extern int snp125MolTypeLabelsSize;
 extern int snp125MolTypeStringsSize;
 extern int snp125MolTypeDataNameSize;
 extern int snp125MolTypeDefaultSize;
 extern int snp125MolTypeCartSize;
+extern int snp125MolTypeIncludeStringsSize;
 
 /****** Class related controls *******/
 
@@ -58,12 +64,16 @@ extern char *snp125ClassStrings[];
 extern char *snp125ClassDataName[];
 extern char *snp125ClassDefault[];
 extern char *snp125ClassCart[];
+extern char *snp125ClassIncludeStrings[];
+extern boolean snp125ClassIncludeDefault[];
+extern boolean snp125ClassIncludeCart[];
 
 extern int snp125ClassLabelsSize;
 extern int snp125ClassStringsSize;
 extern int snp125ClassDataNameSize;
 extern int snp125ClassDefaultSize;
 extern int snp125ClassCartSize;
+extern int snp125ClassIncludeStringsSize;
 
 /****** Valid related controls *******/
 
@@ -72,12 +82,16 @@ extern char *snp125ValidStrings[];
 extern char *snp125ValidDataName[];
 extern char *snp125ValidDefault[];
 extern char *snp125ValidCart[];
+extern char *snp125ValidIncludeStrings[];
+extern boolean snp125ValidIncludeDefault[];
+extern boolean snp125ValidIncludeCart[];
 
 extern int snp125ValidLabelsSize;
 extern int snp125ValidStringsSize;
 extern int snp125ValidDataNameSize;
 extern int snp125ValidDefaultSize;
 extern int snp125ValidCartSize;
+extern int snp125ValidIncludeStringsSize;
 
 /****** Func related controls *******/
 
@@ -86,12 +100,16 @@ extern char *snp125FuncStrings[];
 extern char *snp125FuncDataName[];
 extern char *snp125FuncDefault[];
 extern char *snp125FuncCart[];
+extern char *snp125FuncIncludeStrings[];
+extern boolean snp125FuncIncludeDefault[];
+extern boolean snp125FuncIncludeCart[];
 
 extern int snp125FuncLabelsSize;
 extern int snp125FuncStringsSize;
 extern int snp125FuncDataNameSize;
 extern int snp125FuncDefaultSize;
 extern int snp125FuncCartSize;
+extern int snp125FuncIncludeStringsSize;
 
 /* minimum Average Heterozygosity cutoff  */
 
