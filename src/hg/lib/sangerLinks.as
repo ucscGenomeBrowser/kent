@@ -1,8 +1,7 @@
 table sangerLinks
-"relating sanger ORF name to Swiss Prot ID with description"
+"Links from WormBase ORF to SwissProt/trEMBL ID and Description"
    (
-   string	orfName;     "WormBase ORF Name"
-   string	protName;    "Swiss Prot ID"
+   string	orfName;     "WormBase Sequence/ORF Name"
+   string	protName;    "SwissProt/trEMBL ID"
    lstring	description; "Freeform (except for no tabs) description"
    )
-
