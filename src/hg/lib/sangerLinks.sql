@@ -3,10 +3,10 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#relating sanger ORF name to Swiss Prot ID with description
+#Links from WormBase ORF to SwissProt/trEMBL ID and Description
 CREATE TABLE sangerLinks (
-    orfName varchar(255) not null,	# WormBase ORF Name
-    protName varchar(255) not null,	# Swiss Prot ID
+    orfName varchar(255) not null,	# WormBase Sequence/ORF Name
+    protName varchar(255) not null,	# SwissProt/trEMBL ID
     description longblob not null,	# Freeform (except for no tabs) description
               #Indices
     PRIMARY KEY(orfName),
