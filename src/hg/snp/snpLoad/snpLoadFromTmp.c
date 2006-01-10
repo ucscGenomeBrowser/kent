@@ -2,13 +2,12 @@
 #include "common.h"
 
 #include "chromInfo.h"
-#include "dystring.h"
 #include "hash.h"
 #include "hdb.h"
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.9 2006/01/10 20:28:56 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.10 2006/01/10 21:03:12 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
