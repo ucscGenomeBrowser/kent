@@ -18774,215 +18774,6 @@ hgLoadBed -noBin hg17 syntenyCow syntenyCow.bed
 # tetraodon_tetNig1
 
 #########################################################################
-# BLASTZ danRer3 (DONE - 2005-12-18 kate)
-    ssh pk
-    mkdir /cluster/data/hg17/bed/blastz.danRer3.2005-12-18
-    cd /cluster/data/hg17/bed
-    rm blastz.danRer3
-    ln -s blastz.danRer3.2005-12-18 blastz.danRer3
-    cd blastz.danRer3
-
-    cat << 'EOF' > DEF
-# human target, zebrafish query
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
-
-BLASTZ=blastz.v7.x86_64
-BLASTZ_ABRIDGE_REPEATS=1
-
-# use parameters suggested for human-fish evolutionary distance
-# recommended in doBlastzChainNet.pl help
-# (previously used for  hg16-fr1, danrer1-mm5)
-BLASTZ_H=2000
-BLASTZ_Y=3400
-BLASTZ_L=6000
-BLASTZ_K=2200
-BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
-
-# TARGET: Human hg17
-SEQ1_DIR=/san/sanvol1/scratch/hg17/nib
-SEQ1_SMSK=/cluster/bluearc/hg17/linSpecRep.notInZebrafish
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-SEQ1_LEN=/san/sanvol1/scratch/hg17/chrom.sizes
-
-# QUERY: zebrafish danRer3
-# Use only non-random chroms (avoid chrNA and chrUn).
-SEQ2_DIR=/san/sanvol1/scratch/danRer3/chromNib
-SEQ2_SMSK=/san/sanvol1/scratch/danRer3/linSpecRep.notInOthers
-SEQ2_LEN=/cluster/bluearc/danRer3/chrom.sizes
-SEQ2_CHUNK=3000000000
-SEQ2_LAP=0
-
-BASE=/cluster/data/hg17/bed/blastz.danRer3.2005-12-18
-TMPDIR=/scratch/tmp
-'EOF'
-    # << happy emacs
-
-    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
-	`pwd`/DEF >& blastz.out &
-
-    # chaining failed due to obsolete axtChain in my 64-bit bin.
-    # I removed the axtChain dir, and restarted
-
-    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
-        -continue=chainRun \
-	`pwd`/DEF >& blastz.2.out &
-
-    # chainmerge failed due to RSA key problem with kolossus
-    # I removed the kolossus line from ~/.ssh/known_hosts
-
-    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
-        -continue=chainMerge \
-	`pwd`/DEF >& blastz.3.out &
-
-    # the script thinks it failed -- saying it can't find the
-    # chain file, tho it is there.  At Hiram's advice, I'm
-    # just continuing to the next step.
-
-    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
-        -continue=net \
-	`pwd`/DEF >& blastz.4.out &
-
-    #	Measurements:
-    ssh hgwdev
-    cd  /cluster/data/hg17/bed/blastz.danRer3.2005-12-18
-    featureBits hg17 chainDanRer3Link >& chainDanRer3Link.fb
-    7eatureBits hg17 chainDanRer2Link >& chainDanRer2Link.fb
-    cat chainDanRer3Link.fb
-        # 46516974 bases of 2866216770 (1.623%) in intersection
-    cat chainDanRer2Link.fb
-        # 70696998 bases of 2866216770 (2.467%) in intersection
-
-#########################################################################
-# BLASTZ danRer3 (DONE - 2005-12-19 kate)
-# Second try, experiment including both randoms (chrNA and chrUn)
-# just on chr7
-    ssh pk
-    mkdir /cluster/data/hg17/bed/blastz.danRer3.chr7Rand.2005-12-19
-    cd /cluster/data/hg17/bed
-    ln -s blastz.danRer3.chr7Rand.2005-12-19 blastz.danRer3.chr7
-    cd blastz.danRer3.chr7
-
-    cat << 'EOF' > DEF
-# human target, zebrafish query
-export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
-
-BLASTZ=blastz.v7.x86_64
-BLASTZ_ABRIDGE_REPEATS=1
-
-# use parameters suggested for human-fish evolutionary distance
-# recommended in doBlastzChainNet.pl help
-# (previously used for  hg16-fr1, danrer1-mm5)
-BLASTZ_H=2000
-BLASTZ_Y=3400
-BLASTZ_L=6000
-BLASTZ_K=2200
-BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
-
-# TARGET: Human hg17
-#just chr7
-SEQ1_DIR=/san/sanvol1/scratch/hg17/chrom7nib
-SEQ1_SMSK=/cluster/bluearc/hg17/linSpecRep.notInZebrafish
-SEQ1_CHUNK=10000000
-SEQ1_LAP=10000
-SEQ1_LEN=/san/sanvol1/scratch/hg17/chrom.sizes
-
-# QUERY: zebrafish danRer3
-# Use all chroms, including both randoms (chrUn and chrNA)
-SEQ2_DIR=/san/sanvol1/scratch/danRer3/nib
-SEQ2_SMSK=/san/sanvol1/scratch/danRer3/linSpecRep.notInOthers
-SEQ2_LEN=/cluster/bluearc/danRer3/chrom.sizes
-SEQ2_CHUNK=30000000
-SEQ2_LAP=1000
-
-BASE=/cluster/data/hg17/bed/blastz.danRer3.chr7Rand.2005-12-19
-TMPDIR=/scratch/tmp
-'EOF'
-    # << happy emacs
-
-    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose  \
-        -stop=net \
-	`pwd`/DEF >& blastz.out &
-
-    # alignments failed due to missing LSR's for randoms
-    # I added these, finished the cluster job 
-
-    # add "run.time" to inform the script
-    cd run.blastz
-    para time > run.time
-    cd ..
-    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose  \
-        -continue=cat -stop=net \
-	`pwd`/DEF >& blastz.2.out &
-
-    # bogus stop at net step -- thinks it can't find chains
-    # I'm just restarting there
-    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose  \
-        -continue=net -stop=net \
-	`pwd`/DEF >& blastz.3.out &
-
-    # Now filter out chrNA from chains and build nets to compare 
-    # with full random alignments
-    ssh kkstore02
-    cd /cluster/data/hg17/bed/blastz.danRer3.chr7Rand.2005-12-19/axtChain
-    chainFilter -notQ=chrNA chain/chr7.chain > \
-                            chain/chr7.onlyUn.chain
-
-    # generate net
-    # excerpted from "netChains.csh" generated by the big script 
-    chainPreNet chain/chr7.onlyUn.chain \
-        /san/sanvol1/scratch/hg17/chrom.sizes \
-        /cluster/bluearc/danRer3/chrom.sizes stdout \
-    | chainNet stdin -minSpace=1 /san/sanvol1/scratch/hg17/chrom.sizes \
-        /cluster/data/danRer3/chrom.sizes stdout /dev/null \
-    | netSyntenic stdin noClass.onlyUn.net
-
-    # load chains, annotate and load nets
-    # excerpted from "loadUp.csh" generated by the big script 
-    ssh hgwdev
-    cd /cluster/data/hg17/bed/blastz.danRer3.chr7Rand.2005-12-19/axtChain
-
-    hgLoadChain hg17 chr7_chainBothRandomsDanRer3 chain/chr7.chain
-    netClass -verbose=0 -noAr noClass.net hg17 danRer3 hg17.danRer3.net
-    netFilter -minGap=10 hg17.danRer3.net \ 
-        | hgLoadNet -verbose=0 hg17 netBothRandomsDanRer3 stdin
-
-    hgLoadChain hg17 chr7_chainOnlyUnDanRer3 chain/chr7.onlyUn.chain
-    netClass -verbose=0 -noAr noClass.onlyUn.net hg17 danRer3 \
-                hg17.danRer3.onlyUn.net
-    netFilter -minGap=10 hg17.danRer3.onlyUn.net \ 
-        | hgLoadNet -verbose=0 hg17 netOnlyUnDanRer3 stdin
-
-    #	Measurements:
-    ssh hgwdev
-    cd  /cluster/data/hg17/bed/blastz.danRer3.chr7Rand.2005-12-19
-    featureBits -chrom=chr7 hg17 chainDanRer2Link >& chainDanRer2Link.chr7.fb
-    featureBits -chrom=chr7 hg17 chainDanRer3Link >& chainDanRer3Link.chr7.fb
-    featureBits -chrom=chr7 hg17 chainBothRandomsDanRer3Link >& \
-            chainBothRandomsDanRer3Link.chr7.fb
-    featureBits -chrom=chr7 hg17 chainOnlyUnDanRer3Link >& \
-           chainOnlyUnDanRer3Link.chr7.fb
-    cat chainDanRer2Link.chr7.fb
-        # 3711188 bases of 154759139 (2.398%) in intersection
-    cat chainDanRer3Link.chr7.fb
-        # 2391979 bases of 154759139 (1.546%) in intersection
-    cat chainBothRandomsDanRer3Link.chr7.fb
-        # 2829282 bases of 154759139 (1.828%) in intersection
-    cat chainOnlyUnDanRer3Link.chr7.fb
-        # 2550437 bases of 154759139 (1.648%) in intersection
-    # drop these tables!
-
-    # So, even including randoms, we're still well short of
-    # danRer2 coverage.  Adding just chrUn adds little.
-
-#########################################################################
 # BLASTZ danRer3 (DONE - 2005-12-20 kate)
 # Includes both randoms
     ssh pk
@@ -19120,16 +18911,23 @@ TMPDIR=/scratch/tmp
 
     # copy MAF's to cluster-friendly server
     # These MAF's already on bluearc:
-    #  canFam2, fr1, galGal2, mm7, panTro1, rn3
+    #  canFam2, fr1, galGal2, panTro1, rn3
     mkdir -p /san/sanvol1/scratch/hg17/mafNet
     cd /san/sanvol1/scratch/hg17/mafNet
     ln -s /cluster/bluearc/hg17/mafNet/{*} .
+
+    # copy others
     foreach s (rheMac1 oryCun1 dasNov1 \
             loxAfr1 bosTau2 monDom1 xenTro1 tetNig1 danRer3)
         echo $s
         cp -Rp /cluster/data/hg17/bed/blastz.$s/mafNet $s
     end
+    # a few more
     set s = echTel1
+    cp -Rp /cluster/data/hg17/bed/blastz.$s/mafNet $s
+    set s = mm7
+    cp -Rp /cluster/data/hg17/bed/blastz.$s/mafNet $s
+    set s = canFam2
     cp -Rp /cluster/data/hg17/bed/blastz.$s/mafNet $s
 
     # thanks for the tree, Hiram! Taken from mm7 17way...
@@ -19157,17 +18955,9 @@ xenopus_xenTro1:0.782453):0.156067,
         awk '{printf ("%.4f\t%s\n", $3, $2)}' > distances.txt
     # edit distances.txt to include featureBits, and chain parameters
     # from blastz run.
-    # From mm7 make doc:
-    #   Print out that file for reference, and use the calculated
-    #   distances in the table below to order the organisms and check
-    #   the button order on the browser.  Zebrafish ends up before
-    #   tetraodon and fugu on the browser despite its distance.
-    #   And if you can fill in the table below entirely, you have
-    #   succeeded in finishing all the alignments required.
     cat distances.txt
         # 0.0143  chimp_panTro1
         # 0.0902  macaque_rheMac1
-# Suspicious armadillo distance -- checking with Adam
         # 0.2563  armadillo_dasNov1
         # 0.2651  dog_canFam2
         # 0.2677  elephant_loxAfr1
@@ -19184,11 +18974,29 @@ xenopus_xenTro1:0.782453):0.156067,
         # 1.6983  fugu_fr1
         # 1.7480  zebrafish_danRer3
 
+    # the order in the browser display will be by tree topology,
+    #  not by distance, so it will be: 
+#  >>         # 0.0143  chimp_panTro1
+#  >>         # 0.0902  macaque_rheMac1
+#  >>         # 0.4677  mouse_mm7
+#  >>         # 0.4724  rat_rn3
+#  >>         # 0.3682  rabbit_oryCun1
+#  >>         # 0.2651  dog_canFam2
+#  >>         # 0.2766  cow_bosTau2
+#  >>         # 0.2563  armadillo_dasNov1
+#  >>         # 0.2677  elephant_loxAfr1
+#  >>         # 0.4226  tenrec_echTel1
+#  >>         # 0.7119  monodelphis_monDom1
+#  >>         # 0.9847  chicken_galGal2
+#  >>         # 1.4357  xenopus_xenTro1
+#  >>         # 1.6577  tetraodon_tetNig1
+#  >>         # 1.6983  fugu_fr1
+#  >>         # 1.7480  zebrafish_danRer3
+
     # make output dir and run dir
     ssh pk
     cd /cluster/data/hg17/bed/multiz17way.2005-12-20
-    mkdir -p maf
-    mkdir -p run
+    mkdir -p maf run
     cd run
 
     # stash binaries 
@@ -19200,7 +19008,8 @@ cat > oneMultiz.csh << 'EOF'
 #!/bin/csh -fe
     set c = $1
     set db = hg17
-    set multi = /scratch/tmp/$db/multiz17way.$c
+    set tmp = /scratch/tmp
+    set multi = $tmp/$db/multiz17way.$c
     set pairs = /san/sanvol1/scratch/$db/mafNet
     set penn = /cluster/data/hg17/bed/multiz17way/run/penn
 
@@ -19213,8 +19022,8 @@ cat > oneMultiz.csh << 'EOF'
         echo "cleanup"
         echo "rm -fr $multi"
         rm -fr $multi
-        echo "rmdir --ignore-fail-on-non-empty /scratch/tmp/$db"
-        rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+        echo "rmdir --ignore-fail-on-non-empty $tmp/$db"
+        rmdir --ignore-fail-on-non-empty $tmp/$db
         exit
     endif
 
@@ -19236,7 +19045,7 @@ cat > oneMultiz.csh << 'EOF'
     set d2 = $multi
     if (-d $pairs/$s1) then
         set d1 = $pairs
-        set t1 = /tmp/$s1.$c.maf
+        set t1 = $tmp/$s1.$c.maf
         set nonomatch
         set f1 =  $d1/$s1/$c.*maf*
         if ("$f1:e" == gz) then
@@ -19249,12 +19058,12 @@ cat > oneMultiz.csh << 'EOF'
         unset nonomatch
     else
         set f1 = $d1/$s1/$c.maf
-        set t1 = /tmp/$s1.$c.maf
+        set t1 = $tmp/$s1.$c.maf
         cp -p $f1 $t1
     endif
    if (-d $pairs/$s2) then
         set d2 = $pairs
-        set t2 = /tmp/$s2.$c.maf
+        set t2 = $tmp/$s2.$c.maf
         set nonomatch
         set f2 =  $d2/$s2/$c.*maf*
         if ("$f2:e" == gz) then
@@ -19267,7 +19076,7 @@ cat > oneMultiz.csh << 'EOF'
         unset nonomatch
     else
         set f2 = $d2/$s2/$c.maf
-        set t2 = /tmp/$s2.$c.maf
+        set t2 = $tmp/$s2.$c.maf
         cp -p $f2 $t2
     endif
     # write to output dir
@@ -19277,17 +19086,7 @@ cat > oneMultiz.csh << 'EOF'
     # check for empty input file
     if (-s $t1 && -s $t2) then
         echo "Aligning $f1 $f2 $flag"
-        $penn/multiz $t1 $t2 $flag $out/$c.unused1.maf \
-                $out/$c.unused2.maf > $out/$c.full.maf
-        cat $out/$c.full.maf $out/$c.unused1.maf $out/$c.unused2.maf > \
-                $out/$c.tmp.maf
-        # NOTE: Next time, replace the above multiz and cat commands
-        # with the single command:
-        #       $penn/multiz $t1 $t2 $flag > $out/$c.tmp.maf
-        # There is no need to include the "unused" args -- this
-        # causes the alignments to be split into 3 files --
-        # 1 containing alignments in all species, the others with
-        # alignments to just some, which we're concatenating together.
+        $penn/multiz $t1 $t2 $flag > $out/$c.tmp.maf
         echo "Ordering $c.maf"
         $penn/maf_project $out/$c.tmp.maf $db.$c > $out/$c.maf
         rm -f $t1 $t2
@@ -19298,6 +19097,9 @@ cat > oneMultiz.csh << 'EOF'
         cp -p $t2 $out/$c.maf
         rm -f $t2
     endif
+
+    # remove output dirs from previous alignment (input to this one)
+    rm -fr $multi/$s1 $multi/$s2
 'EOF'
 # << keep emacs coloring happy
     chmod +x oneMultiz.csh
@@ -19344,18 +19146,12 @@ cat  << 'EOF' > template
     awk '{print $1}' /cluster/data/hg17/chrom.sizes > chrom.lst
     gensub2 chrom.lst single template jobList
     para create jobList
-    para try; para check
+        # 46 files
+    para try
+    para check
     para push
 
-    # manually ran 4 crashed jobs -- chr22_random, chr18_random,
-    # hap1, and chr1.  The longest job was ~7hrs run time on PK node.
-    # manually re-ran chr5 after fixing pairwise maf's
-# CPU time in finished jobs:     351833s    5863.88m    97.73h    4.07d  0.011 y
-# IO & Wait Time:                 75134s    1252.24m    20.87h    0.87d  0.002 y
-# Average job time:               10166s     169.43m     2.82h    0.12d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:           74523s    1242.05m    20.70h    0.86d
-# Submission to last job:         74611s    1243.52m    20.73h    0.86d
+    # GOT HERE (redo with better mm7)
 
     # Load into database
     ssh hgwdev
@@ -19492,17 +19288,68 @@ doPhast.csh $(root1) $(file1)
 #Longest finished job:             290s       4.83m     0.08h    0.00d
 #Submission to last job:           401s       6.68m     0.11h    0.00d
 
-    # Create Most Conserved track
-    # combine predictions and transform scores to be in 0-1000 interval
-    #	it uses a lot of memory, so on kolossus:
+    # create Most Conserved track
     ssh kolossus
-    cd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons/bed
+    cd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons
     #	The sed's and the sort get the file names in chrom,start order
-    # (ask Hiram...)
-    find . -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
-	| sort -k7,7 -k9,9n \
-	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
-	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
-	| /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    # (Hiram tricks -- split into columns on [.-/] with 
+    #    identifying x,y,z, to allow column sorting and
+    #    restoring the filename.  Warning: the sort column
+    # will depend on how deep you are in the dir
+    find ./bed -name "chr*.bed" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+	sort -k7,7 -k9,9n | \
+	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+        xargs cat | \
+	awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+	/cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
     #	~ 1 minute
     cp -p mostConserved.bed /cluster/data/hg17/bed/multiz17way/cons
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz17way/cons
+    hgLoadBed -strict hg17 phastConsElements17way mostConserved.bed
+        # Loaded 3949677 elements of size 5
+    hgsql hg17 -e "select count(*) from phastConsElements"
+        # 1601903
+        # Note >2x increase in # of elements
+        # mm6->mm7 also doubled element count (2.4M ->4.8M)
+        # (due to increased alignment depth ??)
+    featureBits hg17 -enrichment refGene:cds phastConsElements17way
+        # refGene:cds 1.062%, phastConsElements17way 5.361%, both 0.584%, cover 55.01%, enrich 10.26x
+    featureBits hg17 -enrichment refGene:cds phastConsElements
+        # refGene:cds 1.062%, phastConsElements 4.810%, both 0.771%, cover 72.65%, enrich 15.11x
+
+    # Create merged posterier probability file and wiggle track data files
+    #	pk is currently closer to the san than any other machine
+    ssh pk
+    cd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons/
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    find ./ppRaw -name "chr*.pp" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+	sort -k7,7 -k9,9n | \
+	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+	xargs cat | \
+        wigEncode stdin phastCons17way.wig phastCons17way.wib
+    # about 23 minutes for above
+
+    time rsync -a --progress phastCons17way.wi? \
+	kkstore02:/cluster/data/hg17/bed/multiz17way/cons
+    # 3m 05s copy from pk to on kkstore02
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz17way/cons
+    ln -s `pwd`/phastCons17way.wib /gbdb/hg17/multiz17way/phastCons17way.wib
+    hgLoadWiggle hg17 phastCons17way phastCons17way.wig
+    #  ~ 3 minute load
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz17way/cons
+    time hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=hg17 phastCons17 > histogram.data 2>&1
+    #	about 27 minutes to scan all data
