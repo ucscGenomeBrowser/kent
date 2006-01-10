@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.10 2006/01/10 21:03:12 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.11 2006/01/10 23:00:54 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -392,6 +392,7 @@ for (el = list; el != NULL; el = el->next)
     }
 if (count > 0)
     verbose(1, "%d lines written\n", count);
+fclose(f);
 // loadDatabase(f);
 }
 
