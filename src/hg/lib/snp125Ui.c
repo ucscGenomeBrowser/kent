@@ -60,9 +60,9 @@ char *snp125MolTypeLabels[] = {
     "cDNA",
 };
 char *snp125MolTypeStrings[] = {
-    "snpMolTypeUnknown",
-    "snpMolTypeGenomic",
-    "snpMolTypecDNA",
+    "snp125MolTypeUnknown",
+    "snp125MolTypeGenomic",
+    "snp125MolTypecDNA",
 };
 char *snp125MolTypeDataName[] = {
     "unknown",
@@ -79,6 +79,21 @@ char *snp125MolTypeCart[] = {
     "black",
     "blue",
 };
+char *snp125MolTypeIncludeStrings[] = {
+    "snp125MolTypeUnknownInclude",
+    "snp125MolTypeGenomicInclude",
+    "snp125MolTypecDNAInclude",
+};
+boolean snp125MolTypeIncludeDefault[] = {
+    TRUE,
+    TRUE,
+    TRUE,
+};
+boolean snp125MolTypeIncludeCart[] = {
+    TRUE,
+    TRUE,
+    TRUE,
+};
 
 // all of these sizes are the same
 int snp125MolTypeLabelsSize   = ArraySize(snp125MolTypeLabels);
@@ -86,6 +101,7 @@ int snp125MolTypeStringsSize  = ArraySize(snp125MolTypeStrings);
 int snp125MolTypeDataNameSize = ArraySize(snp125MolTypeDataName);
 int snp125MolTypeDefaultSize  = ArraySize(snp125MolTypeDefault);
 int snp125MolTypeCartSize     = ArraySize(snp125MolTypeCart);
+int snp125MolTypeIncludeStringsSize  = ArraySize(snp125MolTypeIncludeStrings);
 
 /****** Class related controls *******/
 /* Types: unknown, snp, insertion, deletion, range */
@@ -125,12 +141,34 @@ char *snp125ClassCart[] = {
     "red",
     "green",
 };
+char *snp125ClassIncludeStrings[] = {
+    "snp125ClassUnknownInclude",
+    "snp125ClassSimpleInclude",
+    "snp125ClassInsertionInclude",
+    "snp125ClassDeletionInclude",
+    "snp125ClassRangeInclude"
+};
+boolean snp125ClassIncludeDefault[] = {
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+};
+boolean snp125ClassIncludeCart[] = {
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+};
 
 int snp125ClassLabelsSize   = ArraySize(snp125ClassLabels);
 int snp125ClassStringsSize  = ArraySize(snp125ClassStrings);
 int snp125ClassDataNameSize = ArraySize(snp125ClassDataName);
 int snp125ClassDefaultSize  = ArraySize(snp125ClassDefault);
 int snp125ClassCartSize     = ArraySize(snp125ClassCart);
+int snp125ClassIncludeStringsSize = ArraySize(snp125ClassIncludeStrings);
 
 /****** Validation related controls *******/
 /* Types: unknown, by-cluster, by-frequency, by-submitter, by-2hit-2allele, by-hapmap */
@@ -175,12 +213,37 @@ char *snp125ValidCart[] = {
     "black",
     "green",
 };
+char *snp125ValidIncludeStrings[] = {
+    "snp125ValidUnknownInclude",
+    "snp125ValidClusterInclude",
+    "snp125ValidFrequencyInclude",
+    "snp125ValidSubmitterInclude",
+    "snp125Valid2H2AInclude",
+    "snp125ValidHapMapInclude",
+};
+boolean snp125ValidIncludeDefault[] = {
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+};
+boolean snp125ValidIncludeCart[] = {
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+};
 
 int snp125ValidLabelsSize   = ArraySize(snp125ValidLabels);
 int snp125ValidStringsSize  = ArraySize(snp125ValidStrings);
 int snp125ValidDataNameSize = ArraySize(snp125ValidDataName);
 int snp125ValidDefaultSize  = ArraySize(snp125ValidDefault);
 int snp125ValidCartSize     = ArraySize(snp125ValidCart);
+int snp125ValidIncludeStringsSize     = ArraySize(snp125ValidIncludeStrings);
 
 /****** function related controls *******/
 /* unknown, coding, coding-synon, coding-nonsynon,
@@ -238,12 +301,43 @@ char *snp125FuncCart[] = {
     "red",
     "black",
 };
+char *snp125FuncIncludeStrings[] = {
+    "snp125FuncUnknownInclude",
+    "snp125FuncCodingInclude",
+    "snp125FuncSynonInclude",
+    "snp125FuncNonSynonInclude",
+    "snp125FuncUntranslatedInclude",
+    "snp125FuncIntronInclude",
+    "snp125FuncSpliceInclude",
+    "snp125FuncExceptionInclude",
+};
+boolean snp125FuncIncludeDefault[] = {
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+};
+boolean snp125FuncIncludeCart[] = {
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+};
 
 int snp125FuncLabelsSize   = ArraySize(snp125FuncLabels);
 int snp125FuncStringsSize  = ArraySize(snp125FuncStrings);
 int snp125FuncDataNameSize = ArraySize(snp125FuncDataName);
 int snp125FuncDefaultSize  = ArraySize(snp125FuncDefault);
 int snp125FuncCartSize     = ArraySize(snp125FuncCart);
+int snp125FuncIncludeStringsSize     = ArraySize(snp125FuncIncludeStrings);
 
 /* minimum Average Heterozygosity cutoff  */
 
