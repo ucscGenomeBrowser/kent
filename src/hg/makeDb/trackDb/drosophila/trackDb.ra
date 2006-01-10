@@ -170,6 +170,7 @@ visibility hide
 spectrum on
 type netAlign droSec1 chainDroSec1
 otherDb droSec1
+
 track chainDroYak1
 shortLabel D. yakuba Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
