@@ -27,8 +27,6 @@ boolean canStop = FALSE;
 int warnCount = 0;
 struct sockaddr_in sai;		/* Some system socket info. */
 volatile boolean pipeBroke = FALSE;	/* Flag broken pipes here. */
-int pid = 1; /* The Process ID */
-boolean updating = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -58,28 +56,9 @@ signal(SIGPIPE, rtdbPipeHandler);
 void update()
 /* Run the update. First fork off a child and deal with it there. */
 {
-
-pid = fork();
-if (pid < 0)
-    errAbort("Error: couldn't fork.");
-if (pid == 0)
-    {
-    time_t curtime;
-    struct tm *loctime;
-    char timestr[256];
-    curtime = time (NULL);           /* Get the current time. */
-    loctime = localtime (&curtime);  /* Convert it to local time representation. */
-    strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime); /* format datetime as string */
-    logInfo("Running update at %s", timestr);
-    sleep(30);
-    curtime = time (NULL);
-    loctime = localtime (&curtime);
-    strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime);
-    logInfo("Finished update at %s", timestr);    
-    exit(0);
-    }
-else
-    updating = TRUE;
+logInfo("Beginning update in child");
+sleep(20);
+logInfo("Ended update in child");
 }
 
 void startServer(char *hostName, char *portName)
@@ -90,18 +69,18 @@ char *line, *command;
 int fromLen, readSize;
 int socketHandle = 0, connectionHandle = 0;
 int port = atoi(portName);
-time_t curtime;
-struct tm *loctime;
-char timestr[256];
+int childPipe[2];
+fd_set filedes;
+boolean updating = FALSE;
+int rc; /* return codes */
+int pid = 1;
+
+FD_ZERO(&filedes);
 
 netBlockBrokenPipes();
 
-curtime = time (NULL);           /* Get the current time. */
-loctime = localtime (&curtime);  /* Convert it to local time representation. */
-strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime); /* format datetime as string */
-
-logInfo("rtdbServer on host %s, port %s  (%s)", 
-	hostName, portName, timestr);
+rc = pipe(childPipe);
+logInfo("rtdbServer on host %s, port %s", hostName, portName);
 
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = netAcceptingSocket(port, 5);
@@ -110,83 +89,101 @@ logInfo("Server ready for queries!");
 printf("Server ready for queries!\n");
 for (;;)
     {
-    connectionHandle = accept(socketHandle, NULL, &fromLen);
-    if (connectionHandle < 0)
-        {
-	warn("Error accepting the connection");
-	++warnCount;
-	continue;
-	}
-    readSize = read(connectionHandle, buf, sizeof(buf)-1);
-    if (readSize < 0)
-        {
-	warn("Error reading from socket: %s", strerror(errno));
-	++warnCount;
-	close(connectionHandle);
-	continue;
-	}
-    if (readSize == 0)
-        {
-	warn("Zero sized query");
-	++warnCount;
-	close(connectionHandle);
-	continue;
-	}
-    buf[readSize] = 0;
-    logDebug("%s", buf);
-    line = buf;
-    command = nextWord(&line);
-    if (sameString("quit", command))
-        {
-	if (canStop)
-	    break;
-	else
-	    logError("Ignoring quit message");
-	}
-    else if (sameString("status", command))
-        {
-	netSendString(connectionHandle, "RTDB Server");
-	safef(buf, 256, "host %s", hostName);
-	netSendString(connectionHandle, buf);
-	safef(buf, 256, "port %s", portName);
-	netSendString(connectionHandle, buf);
-	safef(buf, 256, "warnings %d", warnCount);
-	netSendString(connectionHandle, buf);
-	netSendString(connectionHandle, "end");
-	}
-    else if (sameString("update", command))
+    int maxfd;
+    /* Add read end of pipe to file descriptor set. */
+    FD_SET(childPipe[0], &filedes);
+    /* Add socket to file descriptor set. */
+    FD_SET(socketHandle, &filedes);
+    maxfd = max(childPipe[0], socketHandle) + 1;
+    select(maxfd, &filedes, NULL, NULL, NULL);
+    if (FD_ISSET(socketHandle, &filedes))
 	{
-	curtime = time (NULL);
-	loctime = localtime (&curtime);
-	strftime (timestr, sizeof(timestr), "%Y-%m-%d %H:%M", loctime);
-	if (updating)
+	connectionHandle = accept(socketHandle, NULL, &fromLen);
+	if (connectionHandle < 0)
 	    {
-	    warn("Attempted to update while updating.");
+	    warn("Error accepting the connection");
+	    ++warnCount;
+	    continue;
+	    }
+	readSize = read(connectionHandle, buf, sizeof(buf)-1);
+	if (readSize < 0)
+	    {
+	    warn("Error reading from socket: %s", strerror(errno));
+	    ++warnCount;
+	    close(connectionHandle);
+	    continue;
+	    }
+	if (readSize == 0)
+	    {
+	    warn("Zero sized query");
+	    ++warnCount;
+	    close(connectionHandle);
+	    continue;
+	    }
+	buf[readSize] = 0;
+	logDebug("%s", buf);
+	line = buf;
+	command = nextWord(&line);
+	if (sameString("quit", command))
+	    {
+	    if (canStop)
+		break;
+	    else
+		logError("Ignoring quit message");
+	    }
+	else if (sameString("status", command))
+	    {
+	    netSendString(connectionHandle, "RTDB Server");
+	    safef(buf, 256, "host %s", hostName);
+	    netSendString(connectionHandle, buf);
+	    safef(buf, 256, "port %s", portName);
+	    netSendString(connectionHandle, buf);
+	    safef(buf, 256, "warnings %d", warnCount);
+	    netSendString(connectionHandle, buf);
+	    netSendString(connectionHandle, "end");
+	    }
+	else if (sameString("update", command))
+	    {
+	    if (updating)
+		{
+		warn("Attempted to update while updating.");
+		++warnCount;
+		}
+	    else
+		{
+		pid = fork();
+		if (pid < 0)
+		    errAbort("Couldn't fork()");
+		else if (pid == 0)
+		    {
+		    /* We're in the child. */
+		    /* Close the read end of the pipe. */
+		    close(childPipe[0]);
+		    update();
+		    exit(0);
+		    }
+		else
+		    {
+		    updating = TRUE;
+		    close(childPipe[1]);
+		    }
+		}
+	    }
+	else
+	    {
+	    warn("Unknown command %s", command);
 	    ++warnCount;
 	    }
-	else
-	    update();
+	close(connectionHandle);
+	connectionHandle = 0;
 	}
-    else
-        {
-	warn("Unknown command %s", command);
-	++warnCount;
-	}
-    if (updating)
+    if (FD_ISSET(childPipe[0], &filedes))
 	{
-	int status;
-	pid_t childpid = waitpid(-1, &status, WNOHANG);
-	if (childpid > 0)
-	    {
-	    if (status == 0)
-		logInfo("Finished update.");
-	    else 
-		logInfo("Update errored.");
-	    updating = FALSE;
-	    }
+	logInfo("Completed update, received EOF from child pipe, creating new pipe.");
+	close(childPipe[0]);
+	pipe(childPipe);
+	updating = FALSE;
 	}
-    close(connectionHandle);
-    connectionHandle = 0;
     }
 close(socketHandle);
 }
