@@ -493,6 +493,104 @@ slReverse(&list);
 return list;
 }
 
+static char *getSimplifiedAllele(char *geneName, char *allele)
+/* If allele is of form geneName<varient> then return just
+ * varient.  Else return allele.  Do a freeMem on result when
+ * done. */
+{
+int len = strlen(geneName);
+if (startsWith(geneName, allele) && allele[len] == '<')
+    {
+    char *s = allele + len + 1;
+    char *e = strrchr(s, '>');
+    if (e == NULL) 
+    	e = s + strlen(s);
+    return cloneStringZ(s, e - s);
+    }
+else
+    return cloneString(allele);
+}
+
+char *visiGeneHypertextGenotype(struct sqlConnection *conn, int id)
+/* Return genotype of organism if any in nifty hypertext format. */
+{
+int genotypeId;
+struct slName *geneIdList, *geneId;
+char query[256];
+struct dyString *html;
+
+/* Look up genotype ID. */
+safef(query, sizeof(query),
+    "select specimen.genotype from image,specimen "
+    "where image.id=%d and image.specimen = specimen.id", id);
+genotypeId = sqlQuickNum(conn, query);
+if (genotypeId == 0)
+    return NULL;
+
+/* Get list of genes involved. */
+safef(query, sizeof(query),
+    "select distinct allele.gene from genotypeAllele,allele "
+    "where genotypeAllele.genotype=%d "
+    "and genotypeAllele.allele = allele.id"
+    , genotypeId);
+geneIdList = sqlQuickList(conn, query);
+if (geneIdList == NULL)
+    return cloneString("wild type");
+
+/* Loop through each gene adding information to html. */
+html = dyStringNew(0);
+for (geneId = geneIdList; geneId != NULL; geneId = geneId->next)
+    {
+    char *geneName;
+    struct slName *alleleList, *allele;
+    int alleleCount;
+    boolean needsSlash = FALSE;
+
+    /* Get gene name. */
+    safef(query, sizeof(query), "select name from gene where id=%s",
+        geneId->name);
+    geneName = sqlQuickString(conn, query);
+    if (geneName == NULL)
+        internalErr();
+
+    /* Process each allele of gene. */
+    safef(query, sizeof(query), 
+    	"select allele.name from genotypeAllele,allele "
+	"where genotypeAllele.genotype=%d "
+	"and genotypeAllele.allele = allele.id "
+	"and allele.gene=%s"
+	, genotypeId, geneId->name);
+    alleleList = sqlQuickList(conn, query);
+    alleleCount = slCount(alleleList);
+    for (allele = alleleList; allele != NULL; allele = allele->next)
+        {
+	char *simplifiedAllele = getSimplifiedAllele(geneName, allele->name);
+	int repCount = 1, rep;
+	if (alleleCount == 1)
+	    repCount = 2;
+	for (rep = 0; rep < repCount; ++rep)
+	    {
+	    if (needsSlash)
+	        dyStringAppendC(html, '/');
+	    else
+	        needsSlash = TRUE;
+	    dyStringAppend(html, geneName);
+	    dyStringPrintf(html, "<SUP>%s</SUP>", simplifiedAllele);
+	    }
+	freeMem(simplifiedAllele);
+	}
+
+    if (geneId->next != NULL)
+        dyStringAppendC(html, ' ');
+    slFreeList(&alleleList);
+    freeMem(geneName);
+    }
+
+slFreeList(&geneIdList);
+return dyStringCannibalize(&html);
+}
+
+
 static struct captionElement *makePaneCaptionElements(
 	struct sqlConnection *conn, struct slInt *imageList)
 /* Make list of all caption elements */
@@ -526,7 +624,8 @@ for (image = imageList; image != NULL; image = image->next)
     	naForNull(visiGeneStrain(conn, paneId)));
     slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "Genotype",
-        naForNull(visiGeneGenotype(conn, paneId)));
+        naForNull(visiGeneHypertextGenotype(conn, paneId)));
+    ce->hasHtml = TRUE;
     slAddHead(&ceList, ce);
     ce = captionElementNew(paneId, "Stage", visiGeneStage(conn, paneId, TRUE));
     slAddHead(&ceList, ce);
