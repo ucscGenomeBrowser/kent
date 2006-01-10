@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.8 2006/01/04 17:36:19 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.9 2006/01/10 20:28:56 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -21,7 +21,7 @@ void usage()
 errAbort(
     "snpLoadFromTmp - create snp table from build125 database, assuming split tables\n"
     "usage:\n"
-    "    snpLoad snpDb targetDb\n");
+    "    snpLoadFromTmp snpDb targetDb\n");
 }
 
 /* Copied from hgLoadWiggle. */
