@@ -72,7 +72,7 @@ for (id1 = idList; id1 != NULL; id1 = id1->next)
     row = sqlNextRow(sr);
     if (row == NULL) 
         {
-	verbose(1, "no matches for %s\n", id1->id);
+	verbose(1, "no matches for %d\n", id1->id);
 	continue;
 	}
 
