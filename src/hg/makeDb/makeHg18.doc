@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.14 2006/01/11 18:52:26 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.15 2006/01/11 22:35:22 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -2094,3 +2094,92 @@ nice featureBits xenTro1 chainHg17Link
 nice featureBits hg17 chainXenTro1Link 
 # 85701475 bases of 2866216770 (2.990%) in intersection
 
+############################################################################
+# BLASTZ COW BosTau2 second time (STARTED - 2006-01-07, DONE 2006-01-08 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzBosTau2.2006-01-07
+    cd /cluster/data/hg18/bed
+    rm blastz.bosTau2
+    ln -s blastzBosTau2.2006-01-07 blastz.bosTau2
+    cd blastzBosTau2.2006-01-07
+
+    cat << '_EOF_' > DEF
+# human vs cow
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow BosTau2 - single chunk big enough to run entire genome
+SEQ2_DIR=/san/sanvol1/scratch/bosTau2/bosTau2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/bosTau2/chrom.sizes
+SEQ2_CHUNK=3200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzBosTau2.2006-01-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+# establish a screen to control this job
+screen
+bash
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-stop=load \
+-workhorse=pk \
+`pwd`/DEF > load.out 2>&1 &
+
+# Started Sat Jan  7 07:57:22 PST 2006
+# blastz run (and load) done Jan  8 00:13
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-swap -stop=load \
+`pwd`/DEF > swap-load.out 2>&1 &
+
+# took a long time to finish.
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-continue=download \
+`pwd`/DEF > download.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-swap -continue=download \
+`pwd`/DEF > swap-download.out 2>&1 &
+
+# Done! Jan  8 21:10
+
+# Measurements:
+
+ssh hgwdev
+nice featureBits bosTau2 chainHg18Link 
+# 1357027317 bases of 2812203870 (48.255%) in intersection
+nice featureBits hg18 chainBosTau2Link 
+# 1357291762 bases of 2881515245 (47.103%) in intersection
+nice featureBits bosTau2 chainHg17Link 
+# 0 bases of 2812203870 (0.000%) in intersection
+nice featureBits hg17 chainBosTau2Link 
+# 1350076765 bases of 2866216770 (47.103%) in intersection
+
+#######################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2006-01-11 - Fan)
+    ssh kkstore02
+    cd /cluster/data/hg18
+
+    blat hg18.2bit \
+	 /dev/null /dev/null -tileSize=11 -makeOoc=11.ooc -repMatch=1024
+# Wrote 30378 overused 11-mers to 11.ooc
+
+# Copy over to the bluearc
+   cp -p 11.ooc /cluster/bluearc/hg18
+   
