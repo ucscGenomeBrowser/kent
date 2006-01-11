@@ -3873,7 +3873,7 @@ sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
 buildDir /cluster/data/dm2/bed/hgNearBlastp
 scratchDir /san/sanvol1/scratch/dm2HgNearBlastp
 _EOF_
-    ~/kent/src/utils/doHgNearBlastp.pl config.ra >& do.log &
+    doHgNearBlastp.pl config.ra >& do.log &
     tail -f do.log
 
 
