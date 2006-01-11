@@ -953,3 +953,6 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 -  NM_005577 multiple overlapping alignments due to repeative sequence;
    can't be better filters.
+
+- danRer1 NP_ files got dropped from gbExtFile, but not updated in
+  gbSeq *******
