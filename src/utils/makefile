@@ -39,6 +39,7 @@ SCRIPT_FILES = \
 	blastz-normalizeLav \
 	blastz-run-ucsc \
 	doBlastzChainNet.pl \
+	doHgNearBlastp.pl \
         iSync \
         lodToBedScore \
 	partitionSequence.pl
