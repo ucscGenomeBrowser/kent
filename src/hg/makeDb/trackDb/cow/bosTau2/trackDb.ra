@@ -48,6 +48,17 @@ type psl protein
 pred hg17.blastKGPep02
 blastRef hg17.blastKGRef02
 
+track sgpGene
+shortLabel SGP Genes
+longLabel SGP Gene Predictions Using Cow/Mouse Homology
+group genes
+priority 47
+visibility hide
+color 0,90,100
+type genePred sgpPep
+
+
+
 searchTable gold
 searchMethod exact
 query select chrom,chromStart,chromEnd,frag from %s where frag like '%s'
