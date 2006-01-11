@@ -2,7 +2,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: affyCheck.c,v 1.3 2006/01/03 22:13:31 heather Exp $";
+static char const rcsid[] = "$Id: affyCheck.c,v 1.4 2006/01/11 20:08:02 heather Exp $";
 
 char *database = NULL;
 char *affyTable = NULL;
@@ -212,7 +212,7 @@ snpSimpleFreeList(&snps);
 
 
 int main(int argc, char *argv[])
-/* Check args and call snpMaskChrom. */
+/* Check args and call affyCheck. */
 {
 if (argc != 4)
     usage();
