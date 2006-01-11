@@ -19150,21 +19150,30 @@ cat  << 'EOF' > template
     para try
     para check
     para push
-
-    # GOT HERE (redo with better mm7)
+# CPU time in finished jobs:     386885s    6448.08m   107.47h    4.48d  0.012 y
+# IO & Wait Time:                 87780s    1463.01m    24.38h    1.02d  0.003 y
+# Average job time:               10319s     171.98m     2.87h    0.12d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           65757s    1095.95m    18.27h    0.76d
+# Submission to last job:         65790s    1096.50m    18.27h    0.76d
+    # 18 hrs for chr2
 
     # Load into database
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way/maf
     mkdir /gbdb/hg17/multiz17way
     ln -s `pwd`/*.maf /gbdb/hg17/multiz17way/maf
+cat > loadMaf.csh << 'EOF'
     hgLoadMaf -pathPrefix=/gbdb/hg17/multiz17way/maf hg17 multiz17way
-        # 17537246 rows
-
     cat *.maf | \
         hgLoadMafSummary hg17 -minSize=10000 -mergeGap=500 -maxSize=50000 \
             multiz17waySummary stdin
         # Processed 113205774 components in 17537296 mafs from stdin
+'EOF'
+#<< happy emacs
+    csh loadMaf.csh >&! loadMaf.log &
+    hgsql hg17 -e "select count(*) from multiz17waySummary"
+        # 6257659
 
     # downloads
     # TODO 
@@ -19173,7 +19182,7 @@ cat  << 'EOF' > template
 # PHASTCONS CONSERVATION (2005-01-05 kate)
 # This process is distilled from Hiram and Adam's experiments
 # on mouse (mm7) 17way track.  Many parameters are now pegged, without
-# being experimentally determined, either because the experiments
+# being experimentally derived, either because the experiments
 # were lengthy and produced similar results, or because they
 # weren't runnable given the alignment size.
 # These parameters are:
@@ -19195,6 +19204,9 @@ cat  << 'EOF' > template
     # "sufficient statistics" (ss) files for phastCons input
     # NOTE: as the SAN fs has lotsa space, we're leaving these
     # big (temp) files unzipped, to save time during phastCons run.
+    # NOTE: Next time consider splitting into bigger chunks 
+    # e.g. 5000000, as phastCons jobs on these junks are too
+    # quick and stress I/O system
     ssh pk
     mkdir /cluster/data/hg17/bed/multiz17way.2005-12-20/cons
     cd /cluster/data/hg17/bed/multiz17way.2005-12-20/cons
@@ -19233,11 +19245,19 @@ cat  << 'EOF' > template
     para try
     para check
     para push
-    cd ..
+# CPU time in finished jobs:      12677s     211.28m     3.52h    0.15d  0.000 y
+# IO & Wait Time:                 25119s     418.66m     6.98h    0.29d  0.001 y
+# Average job time:                 822s      13.69m     0.23h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            2587s      43.12m     0.72h    0.03d
+# Submission to last job:          2589s      43.15m     0.72h    0.03d
 
     # Run phastCons
     #	This job is I/O intensive in its output files, thus it is all
     #	working over in /scratch/tmp/
+    # NOTE: these jobs seem to be too small/fast -- stressing out
+    # the SAN (I/O errors). Consider splitting into bigger chunks next time. 
+    cd ..
     mkdir run.cons
     cd run.cons
     cat > doPhast.csh << 'EOF'
@@ -19250,11 +19270,12 @@ set san = /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons
 cp -p $san/ss/$c/$f.ss ../elliotsEncode.mod $tmp
 pushd $tmp > /dev/null
 /cluster/bin/phast/$MACHTYPE/phastCons $f.ss elliotsEncode.mod \
-   --rho 0.3 --expected-length 12 --target-coverage 0.17 --quiet \
+   --rho 0.3 --expected-length 11 --target-coverage 0.16 --quiet \
 	--seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
 popd > /dev/null
-mkdir -p $san/ppRaw/$c $san/bed/$c
-mv $tmp/$f.pp $san/ppRaw/$c
+mkdir -p $san/pp/$c $san/bed/$c
+sleep 1
+mv $tmp/$f.pp $san/pp/$c
 mv $tmp/$f.bed $san/bed/$c
 rm -fr $tmp
 'EOF'
@@ -19271,7 +19292,6 @@ doPhast.csh $(root1) $(file1)
     #	happy emacs
 
     # Create parasol batch and run it
-    
     pushd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons
     ls -1 ss/chr*/chr*.ss | sed 's/.ss$//' > \
         /cluster/data/hg17/bed/multiz17way/cons/run.cons/in.list
@@ -19280,13 +19300,12 @@ doPhast.csh $(root1) $(file1)
     gensub2 in.list single template jobList
     para create jobList
         # 2932 jobs
-
-#CPU time in finished jobs:      20950s     349.16m     5.82h    0.24d  0.001 y
-#IO & Wait Time:                 34734s     578.90m     9.65h    0.40d  0.001 y
-#Average job time:                  19s       0.32m     0.01h    0.00d
-#Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:             290s       4.83m     0.08h    0.00d
-#Submission to last job:           401s       6.68m     0.11h    0.00d
+# CPU time in finished jobs:      21250s     354.17m     5.90h    0.25d  0.001 y
+# IO & Wait Time:                103369s    1722.81m    28.71h    1.20d  0.003 y
+# Average job time:                  43s       0.71m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             366s       6.10m     0.10h    0.00d
+# Submission to last job:           384s       6.40m     0.11h    0.00d
 
     # create Most Conserved track
     ssh kolossus
@@ -19310,14 +19329,16 @@ doPhast.csh $(root1) $(file1)
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way/cons
     hgLoadBed -strict hg17 phastConsElements17way mostConserved.bed
-        # Loaded 3949677 elements of size 5
+    Loaded 3937408 elements of size 5
     hgsql hg17 -e "select count(*) from phastConsElements"
         # 1601903
         # Note >2x increase in # of elements
         # mm6->mm7 also doubled element count (2.4M ->4.8M)
         # (due to increased alignment depth ??)
     featureBits hg17 -enrichment refGene:cds phastConsElements17way
-        # refGene:cds 1.062%, phastConsElements17way 5.361%, both 0.584%, cover 55.01%, enrich 10.26x
+        # refGene:cds 1.062%, phastConsElements17way 4.829%, both 0.580%, cover 54.61%, enrich 11.31x
+    featureBits hg17 -enrichment refGene:cds phastConsElements10way
+        # refGene:cds 1.062%, phastConsElements10way 5.003%, both 0.734%, cover 69.18%, enrich 13.83x
     featureBits hg17 -enrichment refGene:cds phastConsElements
         # refGene:cds 1.062%, phastConsElements 4.810%, both 0.771%, cover 72.65%, enrich 15.11x
 
@@ -19327,7 +19348,7 @@ doPhast.csh $(root1) $(file1)
     cd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons/
     # sort by chromName, chromStart so that items are in numerical order 
     #  for wigEncode
-    find ./ppRaw -name "chr*.pp" | \
+    find ./pp -name "chr*.pp" | \
         sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
 	sort -k7,7 -k9,9n | \
 	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
@@ -19343,13 +19364,9 @@ doPhast.csh $(root1) $(file1)
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way/cons
     ln -s `pwd`/phastCons17way.wib /gbdb/hg17/multiz17way/phastCons17way.wib
-    hgLoadWiggle hg17 phastCons17way phastCons17way.wig
+    hgLoadWiggle -pathPrefix=/gbdb/hg17/multiz17way hg17 \
+        phastCons17way phastCons17way.wig
     #  ~ 3 minute load
+    # WARNING: Exceeded chr1_random size 3897132 > 3897131. dropping 2 data point(s)
+    # checking with Hiram on this...
 
-    #  Create histogram to get an overview of all the data
-    ssh hgwdev
-    cd /cluster/data/hg17/bed/multiz17way/cons
-    time hgWiggle -doHistogram \
-	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
-	    -db=hg17 phastCons17 > histogram.data 2>&1
-    #	about 27 minutes to scan all data
