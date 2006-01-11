@@ -3810,3 +3810,70 @@ BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
     ln -s blastz.droSec1.2005-11-30 /cluster/data/dm2/bed/blastz.droSec1
 
 
+##########################################################################
+# HGNEAR TABLES
+
+# GET LATEST PROTEIN SEQUENCE FOR ALL HGNEAR SPECIES (DONE 1/9/06 angie)
+    # For species with knownGene, use that; otherwise, download the latest 
+    # version of the main model organism database for this species.
+    # Human: use knownGene proteins.
+# already done:
+#    mkdir /cluster/data/hg17/bed/blastp
+#    cd /cluster/data/hg17/bed/blastp
+#    pepPredToFa hg17 knownGenePep known.faa
+    # Mouse: use knownGene proteins.
+# already done:
+#mkdir -p  /cluster/data/mm7/bed/geneSorter/blastp
+#cd /cluster/data/mm7/bed/geneSorter/blastp
+#pepPredToFa mm7 knownGenePep known.faa
+    # Rat: use knownGene proteins.
+# already done:
+#    mkdir /cluster/data/rn3/bed/blastp
+#    cd /cluster/data/rn3/bed/blastp
+#    pepPredToFa rn3 knownGenePep known.faa
+    # Zebrafish: use Ensembl proteins.
+    mkdir /cluster/data/danRer3/bed/blastp
+    cd /cluster/data/danRer3/bed/blastp
+    wget ftp://ftp.ensembl.org/pub/current_danio_rerio/data/fasta/pep/Danio_rerio.ZFISH5.dec.pep.fa.gz
+    zcat Dan*.pep.fa.gz > ensembl.faa
+    # Fly: use FlyBase proteins: /cluster/data/dm2/bed/flybase4.1/flybasePep.fa
+    # Worm: use WormBase proteins.
+    mkdir /cluster/data/ce2/bed/blastp
+    cd /cluster/data/ce2/bed/blastp
+    # Point a web browser at ftp://ftp.sanger.ac.uk/pub/databases/wormpep/
+    # to find out the latest version.  Then use that in place of 142 below.
+    wget -O wormPep151.faa ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep151/wormpep151
+    # Yeast: use SGD proteins.
+    mkdir /cluster/data/sacCer1/bed/blastp
+    cd /cluster/data/sacCer1/bed/blastp
+    wget ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/orf_protein/orf_trans.fasta.gz
+    zcat orf_trans.fasta.gz > sgdPep.faa
+
+
+# HGNEAR PROTEIN BLAST TABLES (DONE 1/10/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/dm2/bed/hgNearBlastp
+    cd /cluster/data/dm2/bed/hgNearBlastp
+    cat << _EOF_ > config.ra
+# Latest fly vs. other Gene Sorter orgs:
+# human, mouse, rat, zebrafish, worm, yeast
+
+targetGenesetPrefix flyBase
+targetDb dm2
+queryDbs hg17 mm7 rn3 danRer3 ce2 sacCer1
+
+dm2Fa /cluster/data/dm2/bed/flybase4.1/flybasePep.fa
+hg17Fa /cluster/data/hg17/bed/blastp/known.faa
+mm7Fa /cluster/data/mm7/bed/geneSorter/blastp/known.faa
+rn3Fa /cluster/data/rn3/bed/blastp/known.faa
+danRer3Fa /cluster/data/danRer3/bed/blastp/ensembl.faa
+ce2Fa /cluster/data/ce2/bed/blastp/wormPep151.faa
+sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
+
+buildDir /cluster/data/dm2/bed/hgNearBlastp
+scratchDir /san/sanvol1/scratch/dm2HgNearBlastp
+_EOF_
+    ~/kent/src/utils/doHgNearBlastp.pl config.ra >& do.log &
+    tail -f do.log
+
+
