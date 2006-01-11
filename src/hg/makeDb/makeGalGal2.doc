@@ -1103,21 +1103,16 @@ gLoadNet galGal2 netSyntenyHg17 stdin
 # see makeXenTro1.doc and search for zb.galGal2
 # The results of this are also symlinked under galGal2/bed
 
-# MAKE VSHG17 DOWNLOADABLES (TODO 8/20/04 angie)
-    ssh kksilo
-    cd /cluster/data/galGal2/bed/blastz.hg17/axtChain
-    ln all.chain human.chain
-    zip /cluster/data/galGal2/zip/human.chain.zip human.chain
-    rm human.chain
-    zip /cluster/data/galGal2/zip/human.net.zip human.net
-    zip /cluster/data/galGal2/zip/humanSyn.net.zip humanSyn.net
-
+# MAKE VSHG17 DOWNLOADABLES (DONE 5/2/05 angie)
     ssh hgwdev
     mkdir /usr/local/apache/htdocs/goldenPath/galGal2/vsHg17
     cd /usr/local/apache/htdocs/goldenPath/galGal2/vsHg17
-    mv /cluster/data/galGal2/zip/HGaxtChrom.zip axtChrom.zip
-    mv /cluster/data/galGal2/zip/human*.zip .
-    md5sum *.zip > md5sum.txt
+    ln -s /cluster/data/galGal2/bed/blastz.hg17/axtChain/galGal2.hg17.*.gz .
+    mkdir axtNet
+    foreach f (/cluster/data/galGal2/bed/blastz.hg17/axtNet/*.axt.gz)
+      ln -s $f axtNet/$f:t:r:r.galGal2.hg17.net.axt.gz
+    end
+    nice md5sum *.gz */*.gz > md5sum.txt
     # Copy over & edit README.txt w/pointers to chain, net formats.
 
 
@@ -1598,6 +1593,7 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     cd ..
     ldHgGene -gtf galGal2 geneid download/*.gtf
     hgPepPred galGal2 generic geneidPep download/*-fixed.prot
+
 
 # BUILD BLAST DATABASES
     cd /cluster/data/galGal2
@@ -2228,18 +2224,18 @@ http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/geneid_v1.1/$c
     hgLoadBed galGal2 isochore isochore.bed
 
 
-# SGP GENE PREDICTIONS (REDONE 9/27/04 angie)
+# SGP GENE PREDICTIONS (REDONE 9/27/04 angie - NEW DATA 1/4/06 angie)
     # contact: "\"C%G�%@mara, Francisco\"" <FCamara@imim.es> (Roderic Guigo's group)
     ssh hgwdev
     mkdir /cluster/data/galGal2/bed/sgp
     cd /cluster/data/galGal2/bed/sgp
     foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
-      wget http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/SGP/humangp200307/$chr.gtf
-      wget http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/SGP/humangp200307/$chr.prot
+      wget http://genome.imim.es/genepredictions/G.gallus/golden_path_200402/SGP/humangp200405+Btau2/$chr.gtf
     end
     # Add .1 suffix to proteins to match gtf transcript_id's:
     cat chr*.prot | perl -wpe 's/^>(\w+)/>$1.1/' > sgpPep.fa
-    hgPepPred galGal2 generic sgpPep sgpPep.fa
+    # 1/4/06: get rid of redundant protein table:
+    hgsql galGal2 -e 'drop table sgpPep'
     ldHgGene -gtf -genePredExt galGal2 sgpGene chr*.gtf
 
 
@@ -2520,7 +2516,7 @@ _EOF_
       galGal2 cpgIslandGgfAndyMasked cpgIslandGgfAndyMasked.bed
 
 
-# RELOAD ENSEMBL GENES (DONE 6/16/04 angie)
+# RELOAD ENSEMBL GENES (DONE 6/16/04 angie - REDONE 1/10/05 angie)
     # previous set was sent out to chicken group -- pull in the released 
     # version from Ensembl's main site.  Looks like 75 transcripts have 
     # been yanked, will ask Steve Searle and Ewan.  
@@ -2560,9 +2556,10 @@ _EOF_
     # Page 4) Transcripts/Proteins.  Peptide.  Format = FASTA.
     # Save file as ensemblPep.fa.gz
     gunzip -c ensemblPep.fa.gz \
-    | perl -wpe 's/^(>ENSGALT\d+\.\d+).*/$1/' \
+    | perl -wpe 's/^>ENSGALG\w+\|(ENSGALT\d+\.\d+).*/>$1/' \
     > ensPep.fa
     hgPepPred galGal2 generic ensPep ensPep.fa
+
 
 # ECORES FROM GENOSCOPE (DONE, hartera, 2004-08-09)
 # download data from  http://www.genoscope.cns.fr/externe/4ucsc/
@@ -3605,6 +3602,19 @@ BASE=/cluster/bluearc/angie/galGal2/blastz.danRer2.2005-04-26
     end
 
 
+# MAKE VSXENTRO1 DOWNLOADABLES (DONE 5/2/05 angie)
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/galGal2/vsXenTro1
+    cd /usr/local/apache/htdocs/goldenPath/galGal2/vsXenTro1
+    ln -s /cluster/data/galGal2/bed/blastz.xenTro1/axtChain/galGal2.xenTro1.*.gz .
+    mkdir axtNet
+    foreach f (/cluster/data/galGal2/bed/blastz.xenTro1/axtNet/*.axt.gz)
+      ln -s $f axtNet/$f:t:r:r.galGal2.xenTro1.net.axt.gz
+    end
+    nice md5sum *.gz */*.gz > md5sum.txt
+    # Copy over & edit README.txt w/pointers to chain, net formats.
+
+
 # MULTIZ CHICKEN/HUMAN/MOUSE/OPOSSUM/FROG/FISHES (DONE 4/27/05 angie)
     # tree: (((galGal2 ((hg17 mm5) monDom1)) xenTro1) (danRer2 tetNig1))
     ssh kolossus
@@ -4122,6 +4132,479 @@ zcat `ls -1 /santest/scratch/galGal2/phastCons/POSTPROBS/$chr.*.pp.gz \
     rm -r /santest/scratch/galGal2/chrom
 
 
+# MULTIZ CHICKEN/HUMAN/OPOSSUM/ZEBRAFISH (DONE 4/28/05 angie)
+    # Backup plan in case QA doesn't have time to release the 7way and 
+    # all the pairwise it uses just these nicely spaced critters:
+    # tree: ((galGal2 (hg17 monDom1)) danRer2)
+    ssh kolossus
+    # Put run dir on /santest/scratch for now, to ease load on fileservers:
+    mkdir -p /santest/scratch/galGal2/multiz4way.2005-04-28
+    cd /santest/scratch/galGal2/multiz4way.2005-04-28
+    # Setup: Copy pairwise MAF to /santest/scratch:
+    mkdir /santest/scratch/chickenMultiz4way
+    foreach db (hg17 monDom1 danRer2)
+      cp -pR /cluster/data/galGal2/bed/blastz.$db/mafNet \
+        /santest/scratch/chickenMultiz4way/$db
+    end
+    # Most but not all of those dirs contain gzip'd maf -- gzip where 
+    # necessary to make them all uniform (& less cluster I/O):
+    gzip /santest/scratch/chickenMultiz4way/*/*.maf
+    # Make output dir:
+    mkdir maf
+    # Create script to run multiz.v10 in the right order:
+    cat << '_EOF_' > doMultiz.csh
+#!/bin/csh -fe
+set chr = $1
+set tmp = /scratch/tmp/chickenMultiz4way.$chr
+mkdir $tmp
+
+set REF = galGal2.$chr
+set HUM = /santest/scratch/chickenMultiz4way/hg17/$chr.maf.gz
+set MON = /santest/scratch/chickenMultiz4way/monDom1/$chr.maf.gz
+set DAN = /santest/scratch/chickenMultiz4way/danRer2/$chr.maf.gz
+set DEST = /santest/scratch/galGal2/multiz4way.2005-04-28/maf/$chr.maf
+
+set MZ10 = /cluster/bin/penn/multiz.v10
+set PROJECT = /cluster/bin/penn/maf_project
+
+# final tree: ((galGal2 (hg17 monDom1)) danRer2)
+
+# subtree: ((galGal2 (hg17 monDon1))
+if ( -s $HUM && -s $MON ) then 
+    echo "Aligning $HUM $MON..."
+    zcat $HUM > $tmp/$chr.Hum.maf
+    zcat $MON > $tmp/$chr.Mon.maf
+    $MZ10 $tmp/$chr.Hum.maf $tmp/$chr.Mon.maf 0 > $tmp/$chr.tmp.maf
+    echo "Projecting on $REF..."
+    $PROJECT $tmp/$chr.tmp.maf $REF > $tmp/$chr.HumMon.maf
+else if ( -s $HUM ) then
+    zcat $HUM > $tmp/$chr.HumMon.maf
+else if ( -s $MON ) then
+    zcat $MON > $tmp/$chr.HumMon.maf
+endif
+
+# final tree: ((galGal2 (hg17 monDom1)) danRer2)
+if ( -s $tmp/$chr.HumMon.maf && -s $DAN ) then
+    echo "Aligning $tmp/$chr.HumMon.maf $DAN..."
+    zcat $DAN > $tmp/$chr.Dan.maf
+    $MZ10 $tmp/$chr.HumMon.maf $tmp/$chr.Dan.maf 1 > $tmp/$chr.tmp.maf
+    echo "Projecting on $REF..."
+    $PROJECT $tmp/$chr.tmp.maf $REF > $tmp/$chr.HumMonDan.maf
+    mv $tmp/$chr.HumMonDan.maf $DEST
+else if ( -s $DAN ) then
+    zcat $DAN > $DEST
+    touch $tmp/$chr.stub.maf
+else if ( -s $tmp/$chr.HumMon.maf ) then
+    cp $tmp/$chr.HumMon.maf $DEST
+endif 
+
+rm $tmp/$chr.*.maf
+rmdir $tmp
+'_EOF_'
+    # << keep emacs coloring happy    
+    chmod 755 doMultiz.csh
+    awk '{print "./doMultiz.csh " $1;}' /cluster/data/galGal2/chrom.sizes \
+      > jobs.lst
+    # chr6_random and chr8_random always cause problems due to lack of 
+    # alignment coverage -- edit them out of the list now.  
+    # Run on small cluster
+    ssh kki
+    cd /santest/scratch/galGal2/multiz4way.2005-04-28
+    para create jobs.lst
+    para try, check, push, check, ...
+#Completed: 52 of 52 jobs
+#Average job time:                  55s       0.92m     0.02h    0.00d
+#Longest finished job:             384s       6.40m     0.11h    0.00d
+#Submission to last job:           417s       6.95m     0.12h    0.00d
+
+    # Copy back over to /cluster/store-land
+    rsync -av /santest/scratch/galGal2/multiz4way.2005-04-28 \
+      /cluster/data/galGal2/bed
+    ln -s /cluster/data/galGal2/bed/multiz4way.2005-04-28 \
+      /cluster/data/galGal2/bed/multiz4way
+
+    # make /gbdb/ links to 4way maf files:
+    ssh hgwdev
+    mkdir -p /gbdb/galGal2/multiz4way/maf/multiz4way
+    ln -s /cluster/data/galGal2/bed/multiz4way/maf/chr*.maf \
+      /gbdb/galGal2/multiz4way/maf/multiz4way/
+
+    # load into database
+    cd /tmp
+    hgLoadMaf -warn galGal2 multiz4way \
+      -pathPrefix=/gbdb/galGal2/multiz4way/maf/multiz4way
+
+    # put 4way MAF out for download
+    ssh kolossus
+    cd /cluster/data/galGal2/bed/multiz4way
+    mkdir mafDownload
+    foreach f (maf/*.maf)
+      nice gzip -c $f > mafDownload/$f:t.gz
+    end
+    cd mafDownload
+    nice md5sum *.maf.gz > md5sum.txt
+    # make a README.txt there too.
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/galGal2/multiz4way
+    ln -s /cluster/data/galGal2/bed/multiz4way/mafDownload/{*.maf.gz,md5sum.txt,README.txt} \
+      /usr/local/apache/htdocs/goldenPath/galGal2/multiz4way
+
+    # Cleanup
+    rm -rf /santest/scratch/galGal2/multiz4way.2005-04-28
+    rm -rf /santest/scratch/chickenMultiz4way/
+
+
+# PHASTCONS 4WAY WITH METHODS FROM PAPER (DONE 4/28/05 angie)
+    # Backup plan in case QA doesn't have time to release the 7way and 
+    # all the pairwise it uses just these nicely spaced critters:
+    # ((galGal2 (hg17 monDom1)) danRer2)
+    ssh kolossus
+    mkdir -p /santest/scratch/galGal2/chrom
+    cp -p /cluster/data/galGal2/*/chr*.fa /santest/scratch/galGal2/chrom/
+    mkdir /santest/scratch/galGal2/maf4way
+    cp -p /cluster/data/galGal2/bed/multiz4way/maf/*.maf \
+      /santest/scratch/galGal2/maf4way
+    # Split chrom fa & maf into smaller windows for phastCons:
+    ssh kki
+    mkdir /cluster/data/galGal2/bed/multiz4way/phastCons
+    mkdir /cluster/data/galGal2/bed/multiz4way/phastCons/run.split
+    cd /cluster/data/galGal2/bed/multiz4way/phastCons/run.split
+    set WINDOWS = /santest/scratch/galGal2/phastCons/WINDOWS
+    rm -fr $WINDOWS
+    mkdir -p $WINDOWS
+    cat << 'EOF' > doSplit.sh
+#!/bin/csh -ef
+
+set PHAST=/cluster/bin/phast
+set FA_SRC=/santest/scratch/galGal2/chrom
+set WINDOWS=/santest/scratch/galGal2/phastCons/WINDOWS
+
+set maf=$1
+set c = $maf:t:r:r
+set tmpDir = /scratch/msa_split/$c
+rm -rf $tmpDir
+mkdir -p $tmpDir
+${PHAST}/msa_split $1 -i MAF -M ${FA_SRC}/$c.fa \
+   -O galGal2,hg17,monDom1,danRer2 \
+   -w 1000000,0 -r $tmpDir/$c -o SS -I 1000 -B 5000
+cd $tmpDir
+foreach file ($c.*.ss)
+  gzip -c $file > ${WINDOWS}/$file.gz
+end
+rm -f $tmpDir/$c.*.ss
+rmdir $tmpDir
+'EOF'
+# << for emacs
+    chmod a+x doSplit.sh
+    rm -f jobList
+    foreach file (/santest/scratch/galGal2/maf4way/*.maf) 
+      if (-s $file) then
+        echo "doSplit.sh {check in exists+ $file}" >> jobList
+      endif
+    end
+    para create jobList
+    para try,  check, push, check...
+#Completed: 51 of 52 jobs
+#Crashed: 1 jobs
+#Average job time:                  28s       0.47m     0.01h    0.00d
+#Longest finished job:             266s       4.43m     0.07h    0.00d
+#Submission to last job:           266s       4.43m     0.07h    0.00d
+    # 1 failure because there wasn't enough info in chrE64, oh well:
+#WARNING: skipping partition 1; insufficient informative sites.
+
+    # Get genome-wide all-species average GC content 
+    # by running msa_view --aggregate --summary-only on the WINDOWS .SS files.
+    # msa_view needs seekable single-ss file, so unpack each to /tmp and 
+    # compute overall average:
+    ssh kolossus
+    cd /cluster/data/galGal2/bed/multiz4way/phastCons/
+    cp /dev/null gcs.txt
+    # Do this on just a random sample of windows:
+    foreach f (`ls -1 /santest/scratch/galGal2/phastCons/WINDOWS/* \
+                | randomLines stdin 200 stdout`)
+      echo $f:t:r:r
+      zcat $f > /tmp/galGal2.sample.ss
+      /cluster/bin/phast/msa_view \
+        --aggregate galGal2,hg17,monDom1,danRer2 \
+        -i SS --summary-only /tmp/galGal2.sample.ss \
+      | awk '$1 == "[aggregate]" {printf "%0.4f\n", $3 + $4}' \
+      >> gcs.txt
+    end
+    ave gcs.txt
+#average 0.418849
+    # OK, so use 0.419 as the --gc parameter below.
+    rm /tmp/galGal2.sample.ss
+
+    ############### FIRST ITERATION OF PARAMETER ESTIMATION ONLY #############
+    # Use phyloFit to make an initial model:
+    ssh kolossus
+    cd /cluster/data/galGal2/bed/multiz4way/phastCons
+    /cluster/bin/phast/msa_view -i MAF \
+      /santest/scratch/galGal2/maf4way/chr{1,5,10,Z_random,32}.maf \
+        --aggregate galGal2,hg17,monDom1,danRer2 \
+        > /santest/scratch/galGal2/phastCons/all.ss
+    /cluster/bin/phast/phyloFit /santest/scratch/galGal2/phastCons/all.ss \
+      --tree "((galGal2,(hg17,monDom1)),danRer2)" \
+      -i SS --out-root starting-tree
+    cat starting-tree.mod 
+#TREE: ((galGal2:0.217116,(hg17:0.159841,monDom1:0.154894):0.109434):0.197513,danRer2:0.197513);
+
+    # Use consEntropy --NH to make it suggest a --expected-lengths param 
+    # that we should try next.  Adam ran this on hg17 to find out the 
+    # total entropy of the hg17 model:
+    # consEntropy 0.265 12 ave.cons.mod ave.noncons.mod
+#Transition parameters: gamma=0.265000, omega=12.000000, mu=0.083333, nu=0.030045
+#Relative entropy: H=0.608216 bits/site
+#Required length: N=16.085437 sites
+#Total entropy: NH=9.783421 bits
+    # Our target is that NH result: 9.7834 bits.  
+    # phyloFit makes one .mod but consEntropy wants two...
+    # Multiply each subst rate on the TREE line by 3.3 which is roughly the 
+    # ratio of noncons to cons in 
+    # /cluster/data/galGal2/bed/multiz7way/cons/run.estimate/ave.*.mod
+    /cluster/bin/phast/tree_doctor -s 3.3 starting-tree.mod \
+      > starting-tree.noncons.mod
+    # Use params from last run of 7way:
+    /cluster/bin/phast/consEntropy --NH 9.7834 0.22 12.4 \
+      starting-tree*.mod
+#( Solving for new omega: 12.400000 10.781171 10.586253 10.582989 )
+#Transition parameters: gamma=0.220000, omega=12.400000, mu=0.080645, nu=0.022746
+#Relative entropy: H=0.765400 bits/site
+#Required length: N=13.193791 sites
+#Total entropy: NH=10.098533 bits
+#Recommended expected length: omega=10.582989 sites (for NH=9.783400)
+    # OK, start with 10.6 below.
+
+    ############## SUBSEQUENT ITERATIONS OF PARAM ESTIMATION ONLY ###########
+    # We're here because the actual target coverage was not satisfactory,
+    # so we're changing the --target-coverage param.  Given that we're 
+    # changing that, take a guess at how we should change --expected-lengths
+    # in order to also hit the total entropy target.
+    cd /cluster/data/galGal2/bed/multiz4way/phastCons/run.estimate
+    # SECOND ITERATION:
+    /cluster/bin/phast/consEntropy --NH 9.7834 0.35 12 ave.{cons,noncons}.mod
+#Recommended expected length: omega=18.452486 sites (for NH=9.783400)
+    # OK, --expected-lengths 18.5
+
+    # Now set up cluster job to estimate model parameters given free params 
+    # --target-coverage and --expected-lengths and the data.  
+    ssh kk9
+    mkdir /cluster/data/galGal2/bed/multiz4way/phastCons/run.estimate
+    cd /cluster/data/galGal2/bed/multiz4way/phastCons/run.estimate
+    # FIRST ITERATION: Use ../starting-tree.noncons.mod:
+    cat << '_EOF_' > doEstimate.sh
+#!/bin/csh -ef
+zcat $1 \
+| /cluster/bin/phast/phastCons - ../starting-tree.noncons.mod --gc 0.419 --nrates 1,1 \
+    --no-post-probs --ignore-missing \
+    --expected-lengths 10.6 --target-coverage 0.22 \
+    --quiet --log $2 --estimate-trees $3
+'_EOF_'
+# << for emacs
+    # SUBSEQUENT ITERATIONS: Use last iteration's estimated noncons model.
+    cat << '_EOF_' > doEstimate.sh
+#!/bin/csh -ef
+zcat $1 \
+| /cluster/bin/phast/phastCons - ave.noncons.mod --gc 0.419 --nrates 1,1 \
+    --no-post-probs --ignore-missing \
+    --expected-lengths 18.5 --target-coverage 0.35 \
+    --quiet --log $2 --estimate-trees $3
+'_EOF_'
+# << for emacs
+    chmod a+x doEstimate.sh
+    rm -fr LOG TREES
+    mkdir -p LOG TREES
+    rm -f jobList
+    foreach f (/santest/scratch/galGal2/phastCons/WINDOWS/*.ss.gz)
+      set root = $f:t:r:r
+      echo doEstimate.sh $f LOG/$root.log TREES/$root >> jobList
+    end
+    # run cluster job
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 1160 of 1160 jobs
+#Average job time:                  16s       0.26m     0.00h    0.00d
+#Longest finished job:              45s       0.75m     0.01h    0.00d
+#Submission to last job:           285s       4.75m     0.08h    0.00d
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ssh kolossus
+    cd /cluster/data/galGal2/bed/multiz4way/phastCons/run.estimate
+    ls -1 TREES/*.cons.mod > cons.txt
+    /cluster/bin/phast/phyloBoot --read-mods '*cons.txt' \
+      --output-average ave.cons.mod > cons_summary.txt
+    ls -1 TREES/*.noncons.mod > noncons.txt
+    /cluster/bin/phast/phyloBoot --read-mods '*noncons.txt' \
+      --output-average ave.noncons.mod > noncons_summary.txt
+    grep TREE ave*.mod
+    # FIRST ITERATION:
+#ave.cons.mod:TREE: ((galGal2:0.069779,(hg17:0.067234,monDom1:0.063760):0.048611):0.083881,danRer2:0.083881);
+#ave.noncons.mod:TREE: ((galGal2:0.250372,(hg17:0.241752,monDom1:0.227546):0.176240):0.307772,danRer2:0.307772);
+    # SECOND ITERATION:
+#ave.cons.mod:TREE: ((galGal2:0.084421,(hg17:0.080762,monDom1:0.076024):0.057691):0.102428,danRer2:0.102428);
+#ave.noncons.mod:TREE: ((galGal2:0.266716,(hg17:0.255716,monDom1:0.239179):0.183533):0.330915,danRer2:0.330915);
+
+    cat cons_summary.txt 
+    # look over the files cons_summary.txt and noncons_summary.txt.
+    # The means and medians should be roughly equal and the stdevs
+    # should be reasonably small compared to the means, particularly
+    # for rate matrix parameters (at bottom) and for branches to the
+    # leaves of the tree.  The stdevs may be fairly high for branches
+    # near the root of the tree; that's okay.  Some min values may be
+    # 0 for some parameters.  That's okay, but watch out for very large
+    # values in the max column, which might skew the mean.  If you see
+    # any signs of bad outliers, you may have to track down the
+    # responsible .mod files and throw them out.  I've never had to do
+    # this; the estimates generally seem pretty well behaved.
+
+    # NOTE: Actually, a random sample of several hundred to a thousand
+    # alignment fragments (say, a number equal to the number of
+    # available cluster nodes) should be more than adequate for
+    # parameter estimation.  If pressed for time, use this strategy.
+
+    # Check the total entropy figure to see if we're way off.
+    # We probably don't need to do this, since it has always been very close 
+    # if not the same as what we used above, but it only takes a second.
+    # FIRST ITERATION:
+    /cluster/bin/phast/consEntropy --NH 9.7834 0.22 10.6 ave.{cons,noncons}.mod
+#Recommended expected length: omega=7.336732 sites (for NH=9.783400)
+    # That is so low!  But OK, try it below.
+    # SECOND ITERATION:
+    /cluster/bin/phast/consEntropy --NH 9.7834 0.35 18.5 ave.{cons,noncons}.mod
+#Recommended expected length: omega=17.857022 sites (for NH=9.783400)
+    # OK, tweak --expected-lengths to 17.9 below (and for next iteration).
+
+    # Now we are ready to set up the cluster job for computing the
+    # conservation scores and predicted elements.  The we measure the 
+    # conserved elements coverage, and if that's not satisfactory then we 
+    # adjust parameters and repeat.  
+    ssh kk9
+    mkdir /cluster/data/galGal2/bed/multiz4way/phastCons/run.phast
+    cd /cluster/data/galGal2/bed/multiz4way/phastCons/run.phast
+    cat << 'EOF' > doPhastCons.sh
+#!/bin/csh -ef
+set pref = $1:t:r:r
+set chr = `echo $pref | awk -F\. '{print $1}'`
+set tmpfile = /scratch/phastCons.$$
+zcat $1 \
+| /cluster/bin/phast/phastCons - \
+    ../run.estimate/ave.cons.mod,../run.estimate/ave.noncons.mod \
+    --expected-lengths 17.9 --target-coverage 0.35 \
+    --quiet --seqname $chr --idpref $pref \
+    --viterbi /santest/scratch/galGal2/phastCons/ELEMENTS/$pref.bed --score \
+    --require-informative 0 \
+  > $tmpfile
+gzip -c $tmpfile > /santest/scratch/galGal2/phastCons/POSTPROBS/$pref.pp.gz
+rm $tmpfile
+'EOF'
+# << for emacs
+    chmod a+x doPhastCons.sh
+    rm -fr /santest/scratch/galGal2/phastCons/{POSTPROBS,ELEMENTS}
+    mkdir -p /santest/scratch/galGal2/phastCons/{POSTPROBS,ELEMENTS}
+    rm -f jobList
+    foreach f (/santest/scratch/galGal2/phastCons/WINDOWS/*.ss.gz)
+      echo doPhastCons.sh $f >> jobList
+    end
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 1160 of 1160 jobs
+#Average job time:                  10s       0.17m     0.00h    0.00d
+#Longest finished job:              16s       0.27m     0.00h    0.00d
+#Submission to last job:           138s       2.30m     0.04h    0.00d
+
+    # back on kolossus:
+    # combine predictions and transform scores to be in 0-1000 interval
+    cd /cluster/data/galGal2/bed/multiz4way/phastCons
+    awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+      /santest/scratch/galGal2/phastCons/ELEMENTS/*.bed \
+    | /cluster/bin/scripts/lodToBedScore > all.bed
+
+    ssh hgwdev
+    # Now measure coverage of CDS by conserved elements. 
+    # We want the "cover" figure to be close to 68.9%.
+    # But what to use as CDS?  There's a refGene but it's terribly incomplete.
+    # There's a human proteins track, but that's only what human and chicken 
+    # have in common.  There's a xenoRefGene too... again comparative-
+    # influenced, but a lot more complete than refGene presumably.
+    # So just go with first cut results for now?
+    cd /cluster/data/galGal2/bed/multiz4way/phastCons
+    featureBits -enrichment galGal2 refGene:cds all.bed
+    featureBits -enrichment galGal2 xenoRefGene:cds all.bed
+    featureBits -enrichment galGal2 blastHg17KG all.bed
+    # FIRST ITERATION: too low, increase --target-coverage and try again.
+#refGene:cds 0.340%, all.bed 2.488%, both 0.187%, cover 55.04%, enrich 22.12x
+#xenoRefGene:cds 1.644%, all.bed 2.488%, both 1.011%, cover 61.48%, enrich 24.71x
+#blastHg17KG 2.001%, all.bed 2.488%, both 0.993%, cover 49.63%, enrich 19.95x
+    # SECOND ITERATION: this'll do:
+#refGene:cds 0.340%, all.bed 3.497%, both 0.231%, cover 67.79%, enrich 19.39x
+#xenoRefGene:cds 1.644%, all.bed 3.497%, both 1.260%, cover 76.62%, enrich 21.91x
+#blastHg17KG 2.001%, all.bed 3.497%, both 1.263%, cover 63.12%, enrich 18.05x
+
+    # Having met the CDS coverage target, load up the results.
+    hgLoadBed galGal2 phastConsElements4way all.bed
+
+    # Create wiggle on the small cluster
+    ssh kki
+    mkdir /cluster/data/galGal2/bed/multiz4way/phastCons/run.wib
+    cd /cluster/data/galGal2/bed/multiz4way/phastCons/run.wib
+    rm -rf /santest/scratch/galGal2/phastCons/wib
+    mkdir -p /santest/scratch/galGal2/phastCons/wib
+    cat << 'EOF' > doWigEncode
+#!/bin/csh -ef
+set chr = $1
+cd /santest/scratch/galGal2/phastCons/wib
+zcat `ls -1 /santest/scratch/galGal2/phastCons/POSTPROBS/$chr.*.pp.gz \
+      | sort -t\. -k2,2n` \
+| wigEncode stdin ${chr}_phastCons.wi{g,b}
+'EOF'
+# << for emacs
+    chmod a+x doWigEncode
+    rm -f jobList
+    foreach chr (`ls -1 /santest/scratch/galGal2/phastCons/POSTPROBS \
+                  | awk -F\. '{print $1}' | sort -u`)
+      echo doWigEncode $chr >> jobList
+    end
+    para create jobList
+    para try, check, push, check, ...
+#Completed: 51 of 51 jobs
+#Average job time:                   5s       0.09m     0.00h    0.00d
+#Longest finished job:              21s       0.35m     0.01h    0.00d
+#Submission to last job:            32s       0.53m     0.01h    0.00d
+
+    # back on kolossus, copy wibs, wigs and POSTPROBS (people sometimes want 
+    # the raw scores) from bluearc
+    cd /cluster/data/galGal2/bed/multiz4way/phastCons
+    rm -rf wib POSTPROBS
+    rsync -av /santest/scratch/galGal2/phastCons/wib .
+    rsync -av /santest/scratch/galGal2/phastCons/POSTPROBS .
+
+    # load wiggle component of Conservation track
+    ssh hgwdev
+    mkdir /gbdb/galGal2/multiz4way/wib
+    cd /cluster/data/galGal2/bed/multiz4way/phastCons
+    chmod 775 . wib
+    chmod 664 wib/*.wib
+    ln -s `pwd`/wib/*.wib /gbdb/galGal2/multiz4way/wib/
+    hgLoadWiggle galGal2 phastCons4way \
+      -pathPrefix=/gbdb/galGal2/multiz4way/wib wib/*.wig
+    rm wiggle.tab
+
+    # make top-5000 list and launcher on Adam's home page:
+    sed -e 's/lod=//' all.bed | sort -k4,4nr | head -5000 \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%d\n", $1, $2, $3, $4, $4}' \
+    > top5000.bed
+    # Don't have group write perms to /cse/grads/acs/ so can't do this anymore:
+    /cluster/home/acs/bin/make-launcher-with-scores.sh top5000.bed \
+      /cse/grads/acs/public_html/gg-top5000-4way \
+      "top 5000 conserved elements (4way)" galGal2
+
+    # and clean up bluearc.
+    rm -r /santest/scratch/galGal2/phastCons/{ELEMENTS,POSTPROBS,wib}
+    rm -r /santest/scratch/galGal2/chrom
+
+
 # MAKE AN NCBI LIFT FILE FOR CHICKEN (DONE 4/29/05 angie)
     # In order to import dbSNP data, must lift NCBI-named contigs to 
     # chromosomes.  I don't see an agp file in the chicken ftp dir, 
@@ -4291,3 +4774,5 @@ searchPriority 55
    cut -f1-7,11-15 chicken13k_anno_v2.0.txt | tail +2 > chicken13kInfo.txt
    hgsql galGal2 < ~/kent/src/hg/lib/chicken13kInfo.sql
    echo "load data local infile 'chicken13kInfo.txt' into table chicken13kinfo" | hgsql galGal2
+
+
