@@ -13,7 +13,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.9 2005/10/22 02:32:05 heather Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.10 2006/01/11 20:40:23 heather Exp $";
 
 static char *database = NULL;
 static struct hash *chromHash = NULL;
@@ -47,6 +47,7 @@ struct machine *machine;
 while (lineFileNext(lf, &line, &lineSize))
     {
     AllocVar(machine);
+    // is this equivalent to slAddHead?
     machine->name = line;
     machine->next = machineList;
     machineList = machine;
