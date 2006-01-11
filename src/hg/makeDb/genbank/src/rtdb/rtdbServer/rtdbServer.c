@@ -47,6 +47,16 @@ static void rtdbPipeHandler(int sigNum)
 pipeBroke = TRUE;
 }
 
+void rtdbWarning(char *format, ...)
+/* Simplify the warning calls that also update counter. */
+{
+va_list args;
+va_start(args, format);
+warn(format, args);
+va_end(args);
+++warnCount;
+}
+
 void rtdbCatchPipes()
 /* Set up to catch broken pipe signals. */
 {
@@ -57,132 +67,157 @@ void update()
 /* Run the update. First fork off a child and deal with it there. */
 {
 logInfo("Beginning update in child");
+/* This part is still pretty weak. */
+/* It'll be a system() mostly, writing the information to stdout, */
+/* which should then be picked up by the read end of the pipe in */
+/* the parent process. */
 sleep(20);
 logInfo("Ended update in child");
+}
+
+int getSocket(char *hostName, int port)
+/* Run a few initializing steps to get the server going. */
+{
+int socketHandle = 0;
+netBlockBrokenPipes();
+logInfo("rtdbServer on host %s, port %d", hostName, port);
+/* Set up socket.  Get ready to listen to it. */
+socketHandle = netAcceptingSocketFrom(port, 5, "localhost");
+if (socketHandle == -1)
+    {
+    logError("Couldn't get the socket.");
+    errAbort("Couldn't get the socket.");
+    }
+logInfo("Server ready for queries!");
+printf("Server ready for queries!\n");
+return socketHandle;
+}
+
+int getConnection(int socketHandle)
+/* Get an accept() from the socket and return the connection */
+/* handler. */
+{
+int fromLen;
+int connectionHandle;
+connectionHandle = accept(socketHandle, NULL, &fromLen);
+if (connectionHandle < 0)
+    rtdbWarning("Error accepting the connection");
+return connectionHandle;
+}
+
+char *getCommandFromSocket(int connectionHandle)
+/* Just return the command from the client or NULL if unrecognized. */
+/* Free this later. */
+{
+char buf[256], *line;
+int readSize = read(connectionHandle, buf, sizeof(buf)-1);
+if (readSize < 0)
+    {
+    rtdbWarning("Error reading from socket: %s", strerror(errno));
+    close(connectionHandle);
+    return NULL;
+    }
+if (readSize == 0)
+    {
+    rtdbWarning("Zero sized query");
+    close(connectionHandle);
+    return NULL;
+    }
+buf[readSize] = 0;
+logDebug("%s", buf);
+line = buf;
+return cloneString(nextWord(&line));
+}
+
+void doStatus(int connectionHandle, char *hostName, int port)
+/* Return some status information to the client. */
+{
+char buf[256];
+netSendString(connectionHandle, "RTDB Server");
+safef(buf, 256, "host %s", hostName);
+netSendString(connectionHandle, buf);
+safef(buf, 256, "port %d", port);
+netSendString(connectionHandle, buf);
+safef(buf, 256, "warnings %d", warnCount);
+netSendString(connectionHandle, buf);
+netSendString(connectionHandle, "end");
+}
+
+boolean canQuit(int childPipe)
+/* Quit if possible and log things. */
+{
+if (childPipe == -1)
+    rtdbWarning("Attempted to quit server while updating");
+else if (canStop == FALSE)
+    rtdbWarning("Attempted to quit while canStop=FALSE.  Ignoring.");
+else 
+    return TRUE;
+return FALSE;
+}
+
+int doUpdate(int connectionHandle)
+/* fork off a child to run update. */
+{
+int pid, childPipe[2];
+if (pipe(childPipe) != 0)
+    errAbort("There was a problem creating a pipe.");
+pid = fork();
+if (pid < 0)
+    errAbort("Couldn't fork()!");
+if (pid  == 0)
+    {
+    close(childPipe[0]);
+    update();
+    exit(0);
+    }
+close(childPipe[1]);
+return childPipe[0];
 }
 
 void startServer(char *hostName, char *portName)
 /* Load up index and hang out in RAM. */
 {
-char buf[256];
-char *line, *command;
-int fromLen, readSize;
-int socketHandle = 0, connectionHandle = 0;
+int socketHandle = 0;
 int port = atoi(portName);
-int childPipe[2];
-fd_set filedes;
-boolean updating = FALSE;
-int rc; /* return codes */
-int pid = 1;
-
-FD_ZERO(&filedes);
-
-netBlockBrokenPipes();
-
-rc = pipe(childPipe);
-logInfo("rtdbServer on host %s, port %s", hostName, portName);
-
-/* Set up socket.  Get ready to listen to it. */
-socketHandle = netAcceptingSocket(port, 5);
-
-logInfo("Server ready for queries!");
-printf("Server ready for queries!\n");
+int childPipe = -1;
+socketHandle = getSocket(hostName, port);
 for (;;)
     {
+    fd_set filedes;
     int maxfd;
-    /* Add read end of pipe to file descriptor set. */
-    FD_SET(childPipe[0], &filedes);
-    /* Add socket to file descriptor set. */
+    FD_ZERO(&filedes);
     FD_SET(socketHandle, &filedes);
-    maxfd = max(childPipe[0], socketHandle) + 1;
+    if (childPipe > -1)
+	FD_SET(childPipe, &filedes);
+    maxfd = max(childPipe, socketHandle) + 1;    
     select(maxfd, &filedes, NULL, NULL, NULL);
     if (FD_ISSET(socketHandle, &filedes))
 	{
-	connectionHandle = accept(socketHandle, NULL, &fromLen);
-	if (connectionHandle < 0)
-	    {
-	    warn("Error accepting the connection");
-	    ++warnCount;
+	int connectionHandle = getConnection(socketHandle);
+	char *command = getCommandFromSocket(connectionHandle);
+	if (command == NULL)
 	    continue;
-	    }
-	readSize = read(connectionHandle, buf, sizeof(buf)-1);
-	if (readSize < 0)
+	if (sameString(command, "quit") && canQuit(childPipe))
+	    break;
+	else if (sameString(command, "status"))
+	    doStatus(connectionHandle, hostName, port);
+	else if (sameString(command, "update"))
 	    {
-	    warn("Error reading from socket: %s", strerror(errno));
-	    ++warnCount;
-	    close(connectionHandle);
-	    continue;
-	    }
-	if (readSize == 0)
-	    {
-	    warn("Zero sized query");
-	    ++warnCount;
-	    close(connectionHandle);
-	    continue;
-	    }
-	buf[readSize] = 0;
-	logDebug("%s", buf);
-	line = buf;
-	command = nextWord(&line);
-	if (sameString("quit", command))
-	    {
-	    if (canStop)
-		break;
-	    else
-		logError("Ignoring quit message");
-	    }
-	else if (sameString("status", command))
-	    {
-	    netSendString(connectionHandle, "RTDB Server");
-	    safef(buf, 256, "host %s", hostName);
-	    netSendString(connectionHandle, buf);
-	    safef(buf, 256, "port %s", portName);
-	    netSendString(connectionHandle, buf);
-	    safef(buf, 256, "warnings %d", warnCount);
-	    netSendString(connectionHandle, buf);
-	    netSendString(connectionHandle, "end");
-	    }
-	else if (sameString("update", command))
-	    {
-	    if (updating)
-		{
-		warn("Attempted to update while updating.");
-		++warnCount;
-		}
-	    else
-		{
-		pid = fork();
-		if (pid < 0)
-		    errAbort("Couldn't fork()");
-		else if (pid == 0)
-		    {
-		    /* We're in the child. */
-		    /* Close the read end of the pipe. */
-		    close(childPipe[0]);
-		    update();
-		    exit(0);
-		    }
-		else
-		    {
-		    updating = TRUE;
-		    close(childPipe[1]);
-		    }
-		}
+	    if (childPipe != -1)
+		rtdbWarning("Attempted to update while updating.");
+	    else 
+		childPipe = doUpdate(connectionHandle);
 	    }
 	else
-	    {
-	    warn("Unknown command %s", command);
-	    ++warnCount;
-	    }
+	    rtdbWarning("Unknown command %s", command);
+	freeMem(command);
 	close(connectionHandle);
-	connectionHandle = 0;
 	}
-    if (FD_ISSET(childPipe[0], &filedes))
+    /* Handles pipe's EOF signal when child process ends. */
+    if ((childPipe != -1) && FD_ISSET(childPipe, &filedes))
 	{
-	logInfo("Completed update, received EOF from child pipe, creating new pipe.");
-	close(childPipe[0]);
-	pipe(childPipe);
-	updating = FALSE;
+	logInfo("Completed update, received EOF from child pipe, reset pipe.");
+	childPipe = -1;
 	}
     }
 close(socketHandle);
@@ -217,7 +252,7 @@ for (;;)
     {
     if (netGetString(sd, buf) == NULL)
 	{
-	warn("Error reading status information from %s:%s",hostName,portName);
+	rtdbWarning("Error reading status information from %s:%s",hostName,portName);
 	ret = -1;
         break;
 	}
