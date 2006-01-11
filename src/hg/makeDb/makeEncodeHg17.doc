@@ -335,6 +335,8 @@ cat > doUcsd.csh << 'EOF'
 # Gene tracks submitted for the EGASP competition were hg17-based
 #       by the Gencode group (Roderic Guigo, Julien Legarde, IMIM) 
 # These were lifted to hg17, as described in makeEncodeHg16.doc
+# NOTE: Problem with encodeEgaspPartAugustusAny table detected
+# and fixed on 2006-01-09.  It was somehow loaded with Genemark full data...
     cd /cluster/data/encode
     cd EGASP/Partial
     wc -l lab/*.gtf
@@ -377,6 +379,11 @@ cat > doUcsd.csh << 'EOF'
         # augustus.any.gff      399 gene predictions
         # augustus.dual.gff     413 gene predictions
         # augustus.est.gff      381 gene predictions
+
+    # Reload .est predictions (2006-01-09 kate)
+    ldHgGene -genePredExt hg17 encodeEgaspPartAugustusEst augustus.est.gff
+        # augustus.est.gff      381 gene predictions
+    checkTableCoords hg17 encodeEgaspPartAugustusEst
 
     # AceSCAN
     # Split into two tracks -- conserved, and other, based on feature
