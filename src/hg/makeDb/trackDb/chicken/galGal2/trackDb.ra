@@ -328,6 +328,15 @@ color 170,80,0
 altColor 230,180,130
 type bed 6 +
 
+track sgpGene
+shortLabel SGP Genes
+longLabel SGP Gene Predictions Using Chicken/Human/Cow Homology
+group genes
+priority 47
+visibility hide
+color 0,90,100
+type genePred sgpPep
+
 track isochore
 shortLabel Isochores
 longLabel Isochores from PSU
