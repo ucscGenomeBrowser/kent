@@ -3,22 +3,24 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.1 2006/01/10 00:43:24 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.2 2006/01/11 21:38:29 angie Exp $
 
 use Getopt::Long;
 use warnings;
 use strict;
 
-# Hardcoded paths/command sequences:
-my $blastpath = '/san/sanvol1/scratch/blast64/blast-2.2.11';
+# Hardcoded params:
 my $blastpParams = '-e 0.01 -m 8 -b'; # Keep -b at end -- value provided below.
-my $tSplitCount = 2000;
+my $tSplitCount = 1000;
+my $selfMaxPer = 1000;
+my $pairwiseMaxPer = 1;
 
 # Option variable names:
 use vars qw/
     $opt_clusterHub
     $opt_distrHost
     $opt_dbHost
+    $opt_blastPath
     $opt_debug
     $opt_verbose
     $opt_help
@@ -28,6 +30,7 @@ use vars qw/
 my $clusterHub = 'pk';
 my $distrHost = 'pk';
 my $dbHost = 'hgwdev';
+my $blastPath = '/san/sanvol1/scratch/blast64/blast-2.2.11';
 my $defaultVerbose = 1;
 
 sub usage {
@@ -38,12 +41,19 @@ sub usage {
   print STDERR "
 usage: $base config.ra
 options:
-    -clusterHub mach	Parasol hub for blastp cluster runs.  Default: $clusterHub
+    -clusterHub mach	Parasol hub for blastp cluster runs.
+			Default: $clusterHub
     -distrHost mach	Host which distributes files to the cluster-attached
 			fast storage for the blastp cluster runs.
+			Default: $distrHost
     -dbHost mach	Mysql server into which we load *BlastTab tables.
+			Default: $dbHost
+    -blastPath dir	Directory in which the latest blat has been installed
+			(should also be compiled for the same architecture as
+			cluster hosts).
+			Default: $blastPath
     -debug		Don't actually run commands, just display them.
-    -verbose num	Set verbose level to num (default $defaultVerbose).
+    -verbose num	Set verbose level to num.  Default $defaultVerbose
     -help		Show detailed help (config.ra variables) and exit.
 Automates the protein blast runs for hgNear and loads the *BlastTab tables.
 config.ra specifies one target db and multiple query dbs.  Self-blastp for
@@ -76,11 +86,11 @@ buildDir xxx
     in which scriptlets and results will be stored.
 
 scratchDir xxx
-  - Cluster-attached fast storage (usually /san/sanvol1/scratch/... or
+  - Cluster-attached fast storage (usually under /san/sanvol1/scratch/... or
     /panasas/store/...) where fasta will be split/formatted and used during
     cluster blastp runs.
-
 " if ($detailed);
+  print STDERR "\n";
   exit $status;
 } # usage
 
@@ -101,6 +111,7 @@ sub checkOptions {
   $clusterHub = $opt_clusterHub if (defined $opt_clusterHub);
   $distrHost = $opt_distrHost if (defined $opt_distrHost);
   $dbHost = $opt_dbHost if (defined $opt_dbHost);
+  $blastPath = $opt_blastPath if (defined $opt_blastPath);
 } # checkOptions
 
 sub openOrDie {
@@ -121,6 +132,7 @@ sub parseConfig {
     next if (/^\s*#/ || /^\s*$/);
     if (/^\s*(\w+)\s*(.*)$/) {
       $vars{$1} = $2;
+      $vars{$1} = " " if (! $2 && $1 eq 'queryDbs');
     } else {
       die "Parse error line $. of $config:\n$_\n--";
     }
@@ -155,6 +167,10 @@ sub parseConfig {
     die "Error: $config contains extra variable(s) that I don't know " .
       "what to do with: " . join(", ", sort keys %vars) . "\n";
   }
+
+  die "Sorry, this script can't rsync to $scratchDir -- please use san, " .
+    "bluearc or panasas for scratchDir in $config.\n"
+      if ($scratchDir =~ /^\/i?scratch\//);
 } # parseConfig
 
 # verbatim from doBlastz... this should go in a lib:
@@ -199,7 +215,7 @@ sub splitSequence {
 # This script will fail if any of its commands fail.
 
 mkdir $scratchDir/$tDb.split
-faSplit sequence $tFasta $tSplitCount $scratchDir/$tDb.split/$tDb
+faSplit sequence $tFasta $tSplitCount $scratchDir/$tDb.split/${tDb}_
 _EOF_
     ;
   close($fh);
@@ -225,7 +241,7 @@ sub formatSequence {
 
 mkdir $scratchDir/$qDb.formatdb
 cd $scratchDir/$qDb.formatdb
-$blastpath/bin/formatdb -i $qFasta -t $qDb -n $qDb
+$blastPath/bin/formatdb -i $qFasta -t $qDb -n $qDb
 _EOF_
     ;
   close($fh);
@@ -243,8 +259,8 @@ sub runPairwiseBlastp {
   my $fh = &openOrDie(">$runDir/blastSome");
   print $fh <<_EOF_
 #!/bin/csh -ef
-setenv BLASTMAT $blastpath/data
-$blastpath/bin/blastall -p blastp -d $scratchDir/$qDb.formatdb/$qDb \\
+setenv BLASTMAT $blastPath/data
+$blastPath/bin/blastall -p blastp -d $scratchDir/$qDb.formatdb/$qDb \\
     -i \$1 -o \$2 $blastpParams $b
 _EOF_
     ;
@@ -292,7 +308,7 @@ sub dbToPrefix {
   if ($db =~ /^(\w\w)\d+$/) {
     $prefix = $1;
   } elsif ($db =~ /^(\w)\w\w(\w)\w\w\d+$/) {
-    $prefix = $1 . $2;
+    $prefix = $1 . lc($2);
   } else {
     die "Error: dbToPrefix: expecting database name, got $db";
   }
@@ -300,7 +316,7 @@ sub dbToPrefix {
 }
 
 sub loadPairwise {
-  my ($tDb, $qDb, $tablePrefix) = @_;
+  my ($tDb, $qDb, $tablePrefix, $max) = @_;
 
   my $tableName = $tablePrefix . 'BlastTab';
   my $runDir = "$buildDir/run.$tDb.$qDb/out";
@@ -315,7 +331,7 @@ sub loadPairwise {
 # This script will fail if any of its commands fail.
 
 cd $runDir
-hgLoadBlastTab $tDb $tableName -maxPer=1 *.tab
+hgLoadBlastTab $tDb $tableName -maxPer=$max *.tab
 _EOF_
     ;
   close($fh);
@@ -325,8 +341,34 @@ _EOF_
 
 
 sub cleanup {
-  &run("ssh -x $distrHost rm -rf $scratchDir");
+  # Remove what we added in $scratchDir.
+  foreach my $db (@_) {
+    &run("ssh -x $distrHost rm -rf $scratchDir/$db.split");
+    &run("ssh -x $distrHost rm -rf $scratchDir/$db.formatdb");
+  }
+  &run("ssh -x $distrHost rmdir $scratchDir");
 } # cleanup
+
+sub celebrate {
+  # Hooray, we're done.
+verbose(1,
+	"\n *** All done!\n");
+verbose(1,
+	" *** Check these tables in $tDb:\n *** " .
+	$tGenesetPrefix . "BlastTab ");
+foreach my $qDb (@qDbs) {
+  my $qPrefix = &dbToPrefix($qDb);
+  verbose(1, $qPrefix . 'BlastTab ');
+}
+my $tPrefix = &dbToPrefix($tDb);
+verbose(1,
+	"\n *** and $tPrefix" . "BlastTab in these databases:\n *** ");
+foreach my $qDb (@qDbs) {
+  verbose(1, "$qDb ");
+}
+verbose(1,
+	"\n\n");
+} # celebrate
 
 
 ###########################################################################
@@ -346,8 +388,8 @@ my $tFasta = $dbToFasta{$tDb};
 
 # Self blastp.
 &formatSequence($tDb, $tFasta);
-&runPairwiseBlastp($tDb, $tDb, 1000);
-&loadPairwise($tDb, $tDb, $tGenesetPrefix);
+&runPairwiseBlastp($tDb, $tDb, $selfMaxPer);
+&loadPairwise($tDb, $tDb, $tGenesetPrefix, $selfMaxPer);
 
 # For each query db, pairwise blastp.
 my $tPrefix = &dbToPrefix($tDb);
@@ -356,14 +398,16 @@ foreach my $qDb (@qDbs) {
   my $qPrefix = &dbToPrefix($qDb);
   # tDb vs qDb
   &formatSequence($qDb, $qFasta);
-  &runPairwiseBlastp($tDb, $qDb, 1);
-  &loadPairwise($tDb, $qDb, $qPrefix);
+  &runPairwiseBlastp($tDb, $qDb, $pairwiseMaxPer);
+  &loadPairwise($tDb, $qDb, $qPrefix, $pairwiseMaxPer);
   # qDb vs tDb
   &splitSequence($qDb, $qFasta);
-  &runPairwiseBlastp($qDb, $tDb, 1);
-  &loadPairwise($qDb, $tDb, $tPrefix);
+  &runPairwiseBlastp($qDb, $tDb, $pairwiseMaxPer);
+  &loadPairwise($qDb, $tDb, $tPrefix, $pairwiseMaxPer);
 }
 
 # Clean up.
-&cleanup();
+&cleanup($tDb, @qDbs);
+
+&celebrate();
 
