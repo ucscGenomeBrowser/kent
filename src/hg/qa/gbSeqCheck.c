@@ -68,7 +68,6 @@ verbose(1, "checking....\n");
 for (id1 = idList; id1 != NULL; id1 = id1->next)
     {
     safef(query, sizeof(query), "select path from gbExtFile where id = %d", id1->id);
-    verbose(1, "query = %s\n", query);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row == NULL) 
