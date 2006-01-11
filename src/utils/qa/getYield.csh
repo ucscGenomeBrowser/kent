@@ -7,6 +7,11 @@
 #
 ####################
 
+if ( "$HOST" != "hgwdev" ) then
+ echo "\n error: you must run this script on dev!\n"
+ exit 1
+endif
+
 
 set track=""
 set refTrack=""
@@ -14,7 +19,7 @@ set db=""
 set current_dir = $cwd
 set uniqFlag=0
 
-if ($2 == "") then
+if ($#argv < 2 || $#argv > 3) then
   # not enough command line args
   echo
   echo "  uses featureBits to get yield and enrichment."
@@ -23,18 +28,31 @@ if ($2 == "") then
   echo
   exit
 else
-  set db=$1
-  set track=$2
+  set db=$argv[1]
+  set track=$argv[2]
   set refTrack="refGene"
 endif
 
-if ($3 != "") then
-  set refTrack=$3
+if ($#argv == 3) then
+  set refTrack=$argv[3]
 endif
+
 echo
 echo "database: $db"
 echo "track: $track"
 echo "reference track: $refTrack"
+
+hgsql -N -e "SHOW TABLES" $db | grep -w $track > /dev/null
+if ($status) then
+  echo "\n  error. table $track not found in $db\n"
+  exit
+endif
+
+hgsql -N -e "SHOW TABLES" $db | grep -w $refTrack > /dev/null
+if ($status) then
+  echo "\n  error. table $refTrack not found in $db\n" 
+  exit
+endif
 
 
 # -------------------------------------------------
@@ -42,29 +60,33 @@ echo "reference track: $refTrack"
 
 echo
 echo "$track"
-featureBits $db $track > thisTrack
+featureBits $db $track >& thisTrack
 cat thisTrack
 echo
 echo "${refTrack}:cds"
-featureBits $db ${refTrack}:cds > $refTrack 
+featureBits $db ${refTrack}:cds >& $refTrack 
 cat $refTrack
 echo
 echo "intersection of $track with ${refTrack}:cds"
-featureBits $db ${refTrack}:cds $track > union
+featureBits $db ${refTrack}:cds $track >& union
 cat union
 echo
-
 
 set thisTrack=`cat thisTrack | gawk '{print $1}'`
 set genome=`cat thisTrack | gawk '{print $4}'`
 set ref=`cat $refTrack | gawk '{print $1}'`
+cat $refTrack
 set union=`cat union | gawk '{print $1}'`
-
 
 set yield=`echo $union $ref \
      | gawk '{printf "%.1f\n", $1/$2*100}'`
 set enrichment=`echo $union $thisTrack $ref $genome \
      | gawk '{printf "%.1f\n", ($1/$2)/($3/$4)}'`
+
+# yield is what portion of the reference track was captured in the
+#    other track
+# enrichment is how many times better this track overlaps the reference
+#    track than that track's proportion of the genome (I think)
 
 echo "thisTrack = $thisTrack"
 echo "refTrack  = $ref"
