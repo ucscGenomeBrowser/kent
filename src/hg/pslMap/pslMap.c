@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.8 2005/12/17 06:24:25 kent Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.9 2006/01/11 22:37:25 markd Exp $";
 
 /*
  * Notes:
@@ -32,6 +32,7 @@ static struct optionSpec optionSpecs[] = {
     {"keepTranslated", OPTION_BOOLEAN},
     {"chainMapFile", OPTION_BOOLEAN},
     {"swapMap", OPTION_BOOLEAN},
+    {"mapInfo", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -40,9 +41,22 @@ static char* suffix = NULL;
 static boolean keepTranslated = FALSE;
 static boolean chainMapFile = FALSE;
 static boolean swapMap = FALSE;
+static char* mapInfoFile = NULL;
 
 /* count of non-fatal errors */
 static int errCount = 0;
+
+static char *mapInfoHdr =
+    "#srcQName\t" "srcQStart\t" "srcQEnd\t" "srcQSize\t"
+    "srcTName\t" "srcTStart\t" "srcTEnd\t"
+    "srcStrand\t" "srcAligned\t"
+    "mappingQName\t" "mappingQStart\t" "mappingQEnd\t"
+    "mappingTName\t" "mappingTStart\t" "mappingTEnd\t"
+    "mappingStrand\t" "mappingId\t"
+    "mappedQName\t" "mappedQStart\t" "mappedQEnd\t"
+    "mappedTName\t" "mappedTStart\t" "mappedTEnd\t"
+    "mappedStrand\t"
+    "mappedAligned\t" "qStartTrunc\t" "qEndTrunc\n";
 
 struct block
 /* coordinates of a block */
@@ -53,33 +67,32 @@ struct block
     int tEnd;            /* Target end position. */
 };
 
-static void usage()
-/* Explain usage and exit. */
+static void usage(char *msg)
+/* usage msg and exit */
 {
-errAbort(
-  "pslMap - map PSLs alignments to new targets using alignments of\n"
-  "the old target to the new target.  Given inPsl and mapPsl, where\n"
-  "the target of inPsl is the query of mapPsl, create a new PSL with\n"
-  "the query of inPsl aligned to the target of mapPsl.  If inPsl is a\n"
-  "protein to nucleotide alignment and mapPsl is a nucleotide to\n"
-  "nucleotide alignment, the resulting alignment is nucleotide to\n"
-  "nucleotide alignment of a hypothetical mRNA that would code for\n"
-  "the protein.  This is useful as it gives base alignments of\n"
-  "spliced codons.  A chain file may be used instead mapPsl\n"
-  "\n"
-  "usage:\n"
-  "   pslMap [options] inPsl mapFile outPsl\n"
-  "\n"
-  "Options:\n"
-  "  -chainMapFile - mapFile is a chain file instead of a psl file\n"
-  "  -swapMap - swap query and target sides of map file.\n"
-  "  -suffix=str - append str to the query ids in the output alignment.\n"
-  "   Useful with protein alignments, where the result is not actually\n"
-  "   and alignment of the protein.\n"
-  "  -keepTranslated - if either psl is translated, the output psl will\n"
-  "   be translated (both strands explicted).  Normally an untranslated\n"
-  "   psl will always be created\n"
-  );
+/* message got huge, so it's in a generate file */
+static char *usageMsg =
+#include "usage.msg"
+    ;
+errAbort("%s\n%s", msg, usageMsg);
+}
+
+struct mapAln
+/* Mapping alignment, psl plus additional information. */
+{
+    struct mapAln *next;  /* link for entries for same query */
+    struct psl *psl;  /* psl, maybe created from a chain */
+    int id;           /* chain id, or psl file row  */
+};
+
+static struct mapAln *mapAlnNew(struct psl *psl, int id)
+/* construct a new mapAln object */
+{
+struct mapAln *mapAln;
+AllocVar(mapAln);
+mapAln->psl = psl;
+mapAln->id = id;
+return mapAln;
 }
 
 static char pslTStrand(struct psl *psl)
@@ -144,7 +157,7 @@ for (i = 0; i < psl->blockCount; i++)
     swapVars(psl->qStarts[i], psl->tStarts[i], utmp);
 }
 
-static struct psl *chainToPsl(struct chain *ch)
+static struct mapAln *chainToPsl(struct chain *ch)
 /* convert a chain to a psl, ignoring match counts, etc */
 {
 struct psl *psl;
@@ -165,35 +178,36 @@ for (cBlk = ch->blockList, iBlk = 0; cBlk != NULL; cBlk = cBlk->next, iBlk++)
     psl->match += psl->blockSizes[iBlk];
     }
 psl->blockCount = iBlk;
-return psl;
+if (swapMap)
+    swapPsl(psl);
+return mapAlnNew(psl, ch->id);
 }
 
 static struct hash* loadMapChains(char *chainFile)
-/* read a chain file, convert to psls and hash by query, linking multiple PSLs
+/* read a chain file, convert to mapAln object and hash by query, linking multiple PSLs
  * for the same query.*/
 {
-struct hash* hash = hashNew(20);
+struct hash* mapAlns = hashNew(20);
 struct chain *ch;
 struct lineFile *chLf = lineFileOpen(chainFile, TRUE);
 struct hashEl *hel;
 while ((ch = chainRead(chLf)) != NULL)
     {
-    struct psl* psl = chainToPsl(ch);
-    if (swapMap)
-        swapPsl(psl);
-    hel = hashStore(hash, psl->qName);
-    slAddHead((struct psl**)&hel->val, psl);
+    struct mapAln *mapAln = chainToPsl(ch);
+    hel = hashStore(mapAlns, mapAln->psl->qName);
+    slAddHead((struct mapAln**)&hel->val, mapAln);
     chainFree(&ch);
     }
 lineFileClose(&chLf);
-return hash;
+return mapAlns;
 }
 
 static struct hash* loadMapPsls(char *pslFile)
 /* read a psl file and hash by query, linking multiple PSLs for the
  * same query.*/
 {
-struct hash* hash = hashNew(20);
+struct hash* mapAlns = hashNew(20);
+int id = 0;
 struct psl* psl;
 struct lineFile *pslLf = pslFileOpen(pslFile);
 struct hashEl *hel;
@@ -201,25 +215,65 @@ while ((psl = pslNext(pslLf)) != NULL)
     {
     if (swapMap)
         swapPsl(psl);
-    hel = hashStore(hash, psl->qName);
-    slAddHead((struct psl**)&hel->val, psl);
+    hel = hashStore(mapAlns, psl->qName);
+    slSafeAddHead((struct mapAln**)&hel->val, mapAlnNew(psl, id));
+    id++;
     }
 lineFileClose(&pslLf);
-return hash;
+return mapAlns;
 }
 
-struct psl* createMappedPsl(struct psl* inPsl, struct psl* mapPsl,
-                            int mappedPslMax)
+static int pslAlignedBases(struct psl *psl)
+/* get number of aligned bases in a psl.  Need because we can't set the stats
+ * in the mapped psl */
+{
+int i, cnt = 0;
+for (i = 0; i < psl->blockCount; i++)
+    cnt += psl->blockSizes[i];
+return cnt;
+}
+
+static void writeMapInfo(FILE* fh, struct psl *inPsl, struct mapAln *mapAln, 
+                         struct psl* mappedPsl)
+/* write mapInfo row */
+{
+/* srcQName srcQStart srcQEnd srcQSize */
+fprintf(fh, "%s\t%d\t%d\t%d\t",
+        inPsl->qName, inPsl->qStart, inPsl->qEnd, inPsl->qSize);
+/* srcTName srcTStart srcTEnd srcStrand srcAligned */
+fprintf(fh, "%s\t%d\t%d\t%s\t%d\t",
+        inPsl->tName, inPsl->tStart, inPsl->tEnd, inPsl->strand,
+        pslAlignedBases(inPsl));
+/* mappingQName mappingQStart mappingQEnd */
+fprintf(fh, "%s\t%d\t%d\t",
+        mapAln->psl->qName, mapAln->psl->qStart, mapAln->psl->qEnd);
+/* mappingTName mappingTStart mappingTEnd mappingStrand mappingId */
+fprintf(fh, "%s\t%d\t%d\t%s\t%d\t",
+        mapAln->psl->tName, mapAln->psl->tStart, mapAln->psl->tEnd,
+        mapAln->psl->strand, mapAln->id);
+/* mappedQName mappedQStart mappedQEnd mappedTName mappedTStart mappedTEnd mappedStrand */
+fprintf(fh, "%s\t%d\t%d\t%s\t%d\t%d\t%s\t",
+        mappedPsl->qName, mappedPsl->qStart, mappedPsl->qEnd, 
+        mappedPsl->tName, mappedPsl->tStart, mappedPsl->tEnd,
+        mappedPsl->strand);
+/* mappedAligned qStartTrunc qEndTrunc */
+fprintf(fh, "%d\t%d\t%d\n",
+        pslAlignedBases(mappedPsl), 
+        (mappedPsl->qStart-inPsl->qStart), (inPsl->qEnd-mappedPsl->qEnd));
+}
+
+static struct psl* createMappedPsl(struct psl* inPsl, struct mapAln *mapAln,
+                                   int mappedPslMax)
 /* setup a PSL for the output alignment */
 {
 struct psl* mappedPsl;
 char qName[256], strand[3];
-assert(pslTStrand(inPsl) == pslQStrand(mapPsl));
+assert(pslTStrand(inPsl) == pslQStrand(mapAln->psl));
 
 /* strand can be taken from both alignments, since common sequence is in same
  * orientation. */
 strand[0] = pslQStrand(inPsl);
-strand[1] = pslTStrand(mapPsl);
+strand[1] = pslTStrand(mapAln->psl);
 strand[2] = '\n';
 
 if (suffix == NULL)
@@ -227,12 +281,12 @@ if (suffix == NULL)
 else
     safef(qName, sizeof(qName), "%s%s", inPsl->qName, suffix);
 mappedPsl = pslNew(qName, inPsl->qSize, 0, 0,
-                   mapPsl->tName, mapPsl->tSize, 0, 0,
+                   mapAln->psl->tName, mapAln->psl->tSize, 0, 0,
                    strand, mappedPslMax, 0);
 return mappedPsl;
 }
 
-struct block blockFromPslBlock(struct psl* psl, int iBlock)
+static struct block blockFromPslBlock(struct psl* psl, int iBlock)
 /* fill in a block object from a psl block */
 {
 struct block block;
@@ -243,7 +297,7 @@ block.tEnd = psl->tStarts[iBlock] + psl->blockSizes[iBlock];
 return block;
 }
 
-void addPslBlock(struct psl* psl, struct block* blk, int* pslMax)
+static void addPslBlock(struct psl* psl, struct block* blk, int* pslMax)
 /* add a block to a psl */
 {
 unsigned newIBlk = psl->blockCount;
@@ -259,7 +313,7 @@ psl->match += psl->blockSizes[newIBlk];
 psl->blockCount++;
 }
 
-void setPslBounds(struct psl* mappedPsl)
+static void setPslBounds(struct psl* mappedPsl)
 /* set sequences bounds on mapped PSL */
 {
 int lastBlk = mappedPsl->blockCount-1;
@@ -276,8 +330,8 @@ if (pslTStrand(mappedPsl) == '-')
     reverseIntRange(&mappedPsl->tStart, &mappedPsl->tEnd, mappedPsl->tSize);
 }
 
-void adjustOrientation(struct psl *inPsl, char *mapPslOrigStrand,
-                       struct psl* mappedPsl)
+static void adjustOrientation(struct psl *inPsl, char *mapPslOrigStrand,
+                              struct psl* mappedPsl)
 /* adjust strand, possibly reverse complementing, based on keepTranslated
  * option and input psls. */
 {
@@ -292,7 +346,7 @@ if ((!keepTranslated) || ((inPsl->strand[1] == '\0') && (mapPslOrigStrand[1] == 
 
 static struct block getBeforeBlockMapping(unsigned mqStart, unsigned mqEnd,
                                           struct block* align1Blk)
-/* map part of an ungapped psl block that occurs before a mapPsl block */
+/* map part of an ungapped psl block that occurs before a mapAln psl block */
 {
 struct block mappedBlk;
 ZeroVar(&mappedBlk);
@@ -309,7 +363,7 @@ return mappedBlk;
 
 static struct block getOverBlockMapping(unsigned mqStart, unsigned mqEnd,
                                         unsigned mtStart, struct block* align1Blk)
-/* map part of an ungapped psl block that overlapps a mapPsl block. */
+/* map part of an ungapped psl block that overlapps a mapAln psl block. */
 {
 struct block mappedBlk;
 ZeroVar(&mappedBlk);
@@ -327,8 +381,8 @@ mappedBlk.tEnd = mtStart + off + size;
 return mappedBlk;
 }
 
-struct block getBlockMapping(struct psl* inPsl, struct psl* mapPsl,
-                             int *iMapBlkPtr, struct block* align1Blk)
+static struct block getBlockMapping(struct psl* inPsl, struct mapAln *mapAln,
+                                    int *iMapBlkPtr, struct block* align1Blk)
 /* Map part or all of a ungapped psl block to the genome.  This returns the
  * coordinates of the sub-block starting at the beginning of the align1Blk.
  * If this is a gap, either the target or query coords are zero.  This works
@@ -340,10 +394,10 @@ int iBlk;
 struct block mappedBlk;
 
 /* search for block or gap containing start of mrna block */
-for (iBlk = *iMapBlkPtr; iBlk < mapPsl->blockCount; iBlk++)
+for (iBlk = *iMapBlkPtr; iBlk < mapAln->psl->blockCount; iBlk++)
     {
-    unsigned mqStart = mapPsl->qStarts[iBlk];
-    unsigned mqEnd = mapPsl->qStarts[iBlk]+mapPsl->blockSizes[iBlk];
+    unsigned mqStart = mapAln->psl->qStarts[iBlk];
+    unsigned mqEnd = mapAln->psl->qStarts[iBlk]+mapAln->psl->blockSizes[iBlk];
     if (align1Blk->tStart < mqStart)
         {
         *iMapBlkPtr = iBlk;
@@ -352,7 +406,7 @@ for (iBlk = *iMapBlkPtr; iBlk < mapPsl->blockCount; iBlk++)
     if ((align1Blk->tStart >= mqStart) && (align1Blk->tStart < mqEnd))
         {
         *iMapBlkPtr = iBlk;
-        return getOverBlockMapping(mqStart, mqEnd, mapPsl->tStarts[iBlk], align1Blk);
+        return getOverBlockMapping(mqStart, mqEnd, mapAln->psl->tStarts[iBlk], align1Blk);
         }
     }
 
@@ -365,11 +419,11 @@ mappedBlk.qEnd = align1Blk->qEnd;
 return mappedBlk;
 }
 
-boolean mapBlock(struct psl *inPsl, struct psl* mapPsl, int *iMapBlkPtr,
-                 struct block *align1Blk, struct psl* mappedPsl,
-                 int* mappedPslMax)
+static boolean mapBlock(struct psl *inPsl, struct mapAln *mapAln, int *iMapBlkPtr,
+                        struct block *align1Blk, struct psl* mappedPsl,
+                        int* mappedPslMax)
 /* Add a PSL block from a ungapped portion of an alignment, mapping it to the
- * genome.  If the started of the inPsl block maps to a part of the mapPsl
+ * genome.  If the started of the inPsl block maps to a part of the mapAln psl
  * that is aligned, it is added as a PSL block, otherwise the gap is skipped.
  * Block starts are adjusted for next call.  Return FALSE if the end of the
  * alignment is reached. */
@@ -384,7 +438,7 @@ if ((align1Blk->qStart >= align1Blk->qEnd) || (align1Blk->tStart >= align1Blk->t
     return FALSE;  /* end of ungapped block. */
 
 /* find block or gap with start coordinates of mrna */
-mappedBlk = getBlockMapping(inPsl, mapPsl, iMapBlkPtr, align1Blk);
+mappedBlk = getBlockMapping(inPsl, mapAln, iMapBlkPtr, align1Blk);
 
 if ((mappedBlk.qEnd != 0) && (mappedBlk.tEnd != 0))
     addPslBlock(mappedPsl, &mappedBlk, mappedPslMax);
@@ -399,23 +453,23 @@ align1Blk->tStart += size;
 return TRUE;
 }
 
-struct psl* mapAlignment(struct psl *inPsl, struct psl *mapPsl)
+static struct psl* mapAlignment(struct psl *inPsl, struct mapAln *mapAln)
 /* map one pair of alignments. */
 {
 int mappedPslMax = 8; /* allocated space in output psl */
 int iMapBlk = 0;
 char mapPslOrigStrand[3];
-boolean rcMapPsl = (pslTStrand(inPsl) != pslQStrand(mapPsl));
-boolean cnv1 = (pslIsProtein(inPsl) && !pslIsProtein(mapPsl));
-boolean cnv2 = (pslIsProtein(mapPsl) && !pslIsProtein(inPsl));
+boolean rcMapPsl = (pslTStrand(inPsl) != pslQStrand(mapAln->psl));
+boolean cnv1 = (pslIsProtein(inPsl) && !pslIsProtein(mapAln->psl));
+boolean cnv2 = (pslIsProtein(mapAln->psl) && !pslIsProtein(inPsl));
 int iBlock;
 struct psl* mappedPsl;
 
 
-if (inPsl->tSize != mapPsl->qSize)
+if (inPsl->tSize != mapAln->psl->qSize)
     {
     fprintf(stderr, "Non-fatal error: inPsl %s tSize (%d) != mapPsl %s qSize (%d)\n",
-            inPsl->tName, inPsl->tSize, mapPsl->qName, mapPsl->qSize);
+            inPsl->tName, inPsl->tSize, mapAln->psl->qName, mapAln->psl->qSize);
     errCount++;
     return NULL;
     }
@@ -424,20 +478,20 @@ if (inPsl->tSize != mapPsl->qSize)
 if (cnv1)
     pslProtToNA(inPsl);
 if (cnv2)
-    pslProtToNA(mapPsl);
+    pslProtToNA(mapAln->psl);
 
 /* need to ensure common sequence in same orientation, save strand for later */
-safef(mapPslOrigStrand, sizeof(mapPslOrigStrand), "%s", mapPsl->strand);
+safef(mapPslOrigStrand, sizeof(mapPslOrigStrand), "%s", mapAln->psl->strand);
 if (rcMapPsl)
-    pslRc(mapPsl);
+    pslRc(mapAln->psl);
 
-mappedPsl = createMappedPsl(inPsl, mapPsl, mappedPslMax);
+mappedPsl = createMappedPsl(inPsl, mapAln, mappedPslMax);
 
 /* Fill in ungapped blocks.  */
 for (iBlock = 0; iBlock < inPsl->blockCount; iBlock++)
     {
     struct block align1Blk = blockFromPslBlock(inPsl, iBlock);
-    while (mapBlock(inPsl, mapPsl, &iMapBlk, &align1Blk, mappedPsl,
+    while (mapBlock(inPsl, mapAln, &iMapBlk, &align1Blk, mappedPsl,
                     &mappedPslMax))
         continue;
     }
@@ -449,56 +503,68 @@ adjustOrientation(inPsl, mapPslOrigStrand, mappedPsl);
 /* restore input */
 if (rcMapPsl)
     {
-    pslRc(mapPsl);
-    strcpy(mapPsl->strand, mapPslOrigStrand);
+    pslRc(mapAln->psl);
+    strcpy(mapAln->psl->strand, mapPslOrigStrand);
     }
 if (cnv1)
     pslNAToProt(inPsl);
 if (cnv2)
-    pslNAToProt(mapPsl);
+    pslNAToProt(mapAln->psl);
 
 return mappedPsl;
 }
 
-void mapPslPair(struct psl *inPsl, struct psl *mapPsl, FILE* outPslFh)
+static void mapPslPair(struct psl *inPsl, struct mapAln *mapAln,
+                       FILE* outPslFh, FILE *mapInfoFh)
 /* map one pair of query and target PSL */
 {
-struct psl* mappedPsl = mapAlignment(inPsl, mapPsl);
+struct psl* mappedPsl = mapAlignment(inPsl, mapAln);
 
 /* only output if blocks were actually mapped */
 if ((mappedPsl != NULL) && (mappedPsl->blockCount > 0))
+    {
     pslTabOut(mappedPsl, outPslFh);
+    if (mapInfoFh != NULL)
+        writeMapInfo(mapInfoFh, inPsl, mapAln, mappedPsl);
+    }
 pslFree(&mappedPsl);
 }
 
-void mapQueryPsl(struct psl* inPsl, struct hash *mapPslHash, FILE* outPslFh)
+static void mapQueryPsl(struct psl* inPsl, struct hash *mapAlns,
+                        FILE* outPslFh, FILE *mapInfoFh)
 /* map a query psl to all targets  */
 {
-struct psl *mapPsl;
+struct mapAln *mapAln;
 
-for (mapPsl = hashFindVal(mapPslHash, inPsl->tName); mapPsl != NULL; mapPsl = mapPsl->next)
-    mapPslPair(inPsl, mapPsl, outPslFh);
+for (mapAln = hashFindVal(mapAlns, inPsl->tName); mapAln != NULL; mapAln = mapAln->next)
+    mapPslPair(inPsl, mapAln, outPslFh, mapInfoFh);
 }
 
-void pslMap(char* inPslFile, char *mapFile, char *outPslFile)
+static void pslMap(char* inPslFile, char *mapFile, char *outPslFile)
 /* map SNPs to proteins */
 {
-struct hash *mapPslHash;
+struct hash *mapAlns;
 struct psl* inPsl;
 struct lineFile* inPslLf = pslFileOpen(inPslFile);
-FILE *outPslFh;
+FILE *outPslFh, *mapInfoFh = NULL;
 
 if (chainMapFile)
-    mapPslHash = loadMapChains(mapFile);
+    mapAlns = loadMapChains(mapFile);
 else
-    mapPslHash = loadMapPsls(mapFile);
+    mapAlns = loadMapPsls(mapFile);
 
 outPslFh = mustOpen(outPslFile, "w");
+if (mapInfoFile != NULL)
+    {
+    mapInfoFh = mustOpen(mapInfoFile, "w");
+    fputs(mapInfoHdr, mapInfoFh);
+    }
 while ((inPsl = pslNext(inPslLf)) != NULL)
     {
-    mapQueryPsl(inPsl, mapPslHash, outPslFh);
+    mapQueryPsl(inPsl, mapAlns, outPslFh, mapInfoFh);
     pslFree(&inPsl);
     }
+carefulClose(&mapInfoFh);
 carefulClose(&outPslFh);
 lineFileClose(&inPslLf);
 }
@@ -508,11 +574,12 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
-    usage();
+    usage("Error: wrong number of arguments");
 suffix = optionVal("suffix", NULL);
 keepTranslated = optionExists("keepTranslated");
 chainMapFile = optionExists("chainMapFile");
 swapMap = optionExists("swapMap");
+mapInfoFile = optionVal("mapInfo", NULL);
 pslMap(argv[1], argv[2], argv[3]);
 
 if (errCount > 0)

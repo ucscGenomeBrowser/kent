@@ -35,16 +35,18 @@ mrnaMrnaXMap: mkdirs
 # mrna->mm6->hg17, using untranslated mrna->mm6.  At one point this
 # got the strand wrong.
 mrnaMapOver: mkdirs
-	../pslMap input/mrnaToMm6.psl input/mm6ToHg17.psl output/$@.psl
+	../pslMap -mapInfo=output/$@.mapinfo input/mrnaToMm6.psl input/mm6ToHg17.psl output/$@.psl
 	pslCheck output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.mapinfo output/$@.mapinfo
 
 # swapped mapping psl, same result as mrnaMapOver
 mrnaMapOverSwap: mkdirs
 	pslSwap -noRc input/mm6ToHg17.psl output/hg17ToMm6.psl
-	../pslMap -swapMap input/mrnaToMm6.psl output/hg17ToMm6.psl output/$@.psl
+	../pslMap -swapMap -mapInfo=output/$@.mapinfo input/mrnaToMm6.psl output/hg17ToMm6.psl output/$@.psl
 	pslCheck output/$@.psl
 	diff -u expected/mrnaMapOver.psl output/$@.psl
+	diff -u expected/$@.mapinfo output/$@.mapinfo
 
 # use chain, same results as mrnaMapOver
 mrnaMapOverChain: mkdirs
@@ -55,7 +57,7 @@ mrnaMapOverChain: mkdirs
 # use chain swapped, same results as mrnaMapOver
 mrnaMapOverChainSwap: mkdirs
 	chainSwap input/mm6ToHg17.chain output/hg17ToMm6.chain 
-	../pslMap  -chainMapFile -swapMap input/mrnaToMm6.psl output/hg17ToMm6.chain output/$@.psl
+	../pslMap -chainMapFile -swapMap input/mrnaToMm6.psl output/hg17ToMm6.chain output/$@.psl
 	pslCheck output/$@.psl
 	diff -u expected/mrnaMapOver.psl output/$@.psl
 

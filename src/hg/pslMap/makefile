@@ -18,9 +18,17 @@ ${BINDIR}/pslMap: pslMap
 pslMap: ${OBJS} ${MYLIBS}
 	${CC} ${CFLAGS} ${COPT} -o pslMap ${OBJS} ${LIBS} 
 
+pslMap.o: usage.msg
+
+# create usage msg from text
+usage.msg: usage.txt
+	echo '/* GENERATED CODE, DO NOT EDIT */' > $@.tmp
+	stringify $< >> $@.tmp
+	mv -f $@.tmp $@
+
 test::
 	(cd tests && ${MAKE} test)
 
 clean::
-	rm -f pslMap *.o
+	rm -f pslMap *.o usage.msg
 	(cd tests && ${MAKE} clean)
