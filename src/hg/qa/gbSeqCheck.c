@@ -97,6 +97,12 @@ if (argc != 2)
 database = argv[1];
 hSetDb(database);
 
+// check for table existence
+if (!hTableExistsDb(database, "gbSeq"))
+    errAbort("no gbSeq table");
+if (!hTableExistsDb(database, "gbExtFile"))
+    errAbort("no gbExtFile table");
+
 gbSeqCheck();
 return 0;
 }
