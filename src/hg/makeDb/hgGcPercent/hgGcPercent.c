@@ -11,7 +11,7 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.21 2005/10/25 22:00:39 hiram Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.22 2005/12/31 07:18:51 daryl Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -196,10 +196,10 @@ for (i=0; i < seq->size; ++i)
 if (doGaps)
     {
     if (gapCount < seq->size)
-	fprintf(f, "%s\t%d\t%d\t%d\t%s\n", chrom, start, end, gcCount, "GC");
+	fprintf(f, "%s\t%d\t%d\t%d\t%s\n", chrom, start, end, gcCount, "gcCount");
     }
 else
-    fprintf(f, "%s\t%d\t%d\t%d\t%s\n", chrom, start, end, gcCount, "GC");
+    fprintf(f, "%s\t%d\t%d\t%d\t%s\n", chrom, start, end, gcCount, "gcCount");
 }
 
 
@@ -218,12 +218,10 @@ seq = nibLdPart(nibFile, nf, chromSize, 0, chromSize);
 if (f==NULL)
     errAbort("No output file");
 
-if (bedRegionInName)
+if ((bedRegionInName != NULL))
     for (bed=bedRegions; bed!=NULL; bed=bed->next)
 	{
-	if(differentString(bed->chrom,chrom))
-	    continue;
-	else
+	if(sameString(bed->chrom, chrom))
 	    {
 	    struct dnaSeq *subSeq = NULL;
 	    DNA *subSeqDNA = NULL;
@@ -311,6 +309,22 @@ hSetDb(database);
 verbose(1, "#\tCalculating gcPercent with window size %d\n", winSize);
 verbose(2, "#\tWriting to tab file %s\n", tabFileName);
 
+if (bedRegionInName)
+    {
+    struct lineFile *lf = lineFileOpen(bedRegionInName, TRUE);
+    struct bed *bed;
+    char *row[3];
+    
+    while (lineFileRow(lf, row))
+	{
+	if (startsWith(row[0],"#"))
+	    continue;
+	bed = bedLoad3(row);
+	slAddHead(&bedRegionList, bed);
+	}
+    lineFileClose(&lf);
+    slReverse(bedRegionList);
+    }
 sprintf(twoBitFile, "%s/%s.2bit", nibDir, database);
 if (fileExists(twoBitFile))
     {
@@ -334,26 +348,7 @@ else
 		continue;
 	    }
 	verbose(1, "#\tProcessing %s\n", nibEl->name);
-
-	if (bedRegionInName)
-	    {
-	    struct lineFile *lf = lineFileOpen(bedRegionInName, TRUE);
-	    struct bed *bed;
-	    char *row[3];
-	    
-	    while (lineFileRow(lf, row))
-		{
-		if (startsWith(row[0],"#"))
-		    continue;
-		bed = bedLoad3(row);
-		slAddHead(&bedRegionList, bed);
-		}
-	    lineFileClose(&lf);
-	    slReverse(bedRegionList);
-	    makeGcTabFromNib(nibEl->name, chrom, bedRegionOutFile, bedRegionList);
-	    }
-	else
-	    makeGcTabFromNib(nibEl->name, chrom, tabFile, NULL);
+	makeGcTabFromNib(nibEl->name, chrom, bedRegionOutFile, bedRegionList);
         }
     slFreeList(&nibList);
     }

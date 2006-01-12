@@ -64,7 +64,13 @@ int xpReadFromFile(void *userData, char *buf, int bufSize);
 void xpError(struct xp *xp, char *format, ...);
 /* Output an error message with filename and line number included. */
 
-boolean xpParse(struct xp *xp);
+boolean xpParseNext(struct xp *xp, char *tag);
+/* Skip through file until get given tag.  Then parse out the
+ * tag and all of it's children (calling atStartTag/atEndTag).
+ * You can call this repeatedly to process all of a given tag
+ * in file. */
+
+void xpParse(struct xp *xp);
 /* Parse from start tag to end tag.  Throw error if a problem.
  * Returns FALSE if nothing left to parse. */
 

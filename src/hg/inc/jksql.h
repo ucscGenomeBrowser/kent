@@ -205,6 +205,10 @@ struct slInt *sqlQuickNumList(struct sqlConnection *conn, char *query);
 /* Return a list of slInts for a single column query.
  * Do a slFreeList on result when done. */
 
+struct slDouble *sqlQuickDoubleList(struct sqlConnection *conn, char *query);
+/* Return a list of slDoubles for a single column query.
+ * Do a slFreeList on result when done. */
+
 void sqlDropTable(struct sqlConnection *sc, char *table);
 /* Drop table if it exists. */
 

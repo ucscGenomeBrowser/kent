@@ -8,7 +8,7 @@
 #include "xap.h"
 #include "../lib/gs.h"
 
-static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.9 2005/11/26 22:07:21 kent Exp $";
+static char const rcsid[] = "$Id: vgLoadGensat.c,v 1.10 2005/12/19 05:21:51 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -52,8 +52,7 @@ return s;
 void makeTabFile(char *gensatXml, char *tabFile, char *commentFile)
 /* Parse XML file and turn it into tab-separated file. */
 {
-struct xap *xap = xapListOpen(gensatXml, "GensatImageSet",
-    gsStartHandler, gsEndHandler);
+struct xap *xap = xapOpen(gensatXml, gsStartHandler, gsEndHandler);
 struct gsGensatImage *image;
 struct hash *tabFileHash = hashNew(0);
 FILE *fComment = mustOpen(commentFile, "w");
@@ -79,7 +78,7 @@ fprintf(f, "imageWidth\t");
 fprintf(f, "imageHeight\t");
 fprintf(f, "fileName\n");
 
-while ((image = xapListNext(xap, "GensatImage")) != NULL)
+while ((image = xapNext(xap, "GensatImage")) != NULL)
     {
     /* Fish fields we want out of image and info. */
     struct gsGensatImageImageInfo *info = image->gsGensatImageImageInfo;	/** Single instance required. **/

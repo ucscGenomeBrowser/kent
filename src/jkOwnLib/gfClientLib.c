@@ -1,5 +1,6 @@
 /* gfClientLib - stuff that both blat and pcr clients of
  * genoFind use. */
+/* Copyright 2001-2005 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "hash.h"

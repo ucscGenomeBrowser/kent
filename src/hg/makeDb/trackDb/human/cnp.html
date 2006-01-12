@@ -24,6 +24,9 @@ of 1 Biaka, 1 Mbuti, 1 Druze, 1 Melanesian, 4 French, 1 Venezualan, 1 Cambodian,
 <B>Fosmid mapping:</B> 285 ISV sites detected by mapping paired-end sequences 
 from a human fosmid DNA library against the July 2003 human genome assembly 
 (NCBI Build 34).
+<LI>
+<B>Deletions from Genotype Analysis:</B> 541 deletions were detected
+by analysis of SNP genotypes, using the HapMap Phase I data, release 16a.
 </UL></P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -109,6 +112,71 @@ the array-based approaches.  However, because of the physical constraints of
 fosmid insert size, this technique was unable to detect insertions greater than 
 40 kb in size.</P>
 
+<H3>McCarroll genotype analysis</H3>
+<P>
+A segregating deletion can leave 'footprints' in SNP genotype data, including
+apparent deviations from mendelian inheritance, apparent deviations from
+Hardy-Weinberg equilibrium and null genotypes.  Using these clues to discover
+true variants is challenging, however, because the vast majority of such observations
+represent technical artifacts and genotyping errors.
+</P>
+<P>
+To determine whether a subset of 'failed' SNP genotyping assays in the HapMap data
+might reflect structural variation, the authors examined whether such failures
+are physically clustered in a manner that is specific to individuals.  Consistent
+with this hypothesis, the rate of mendeliam-inconsistent genotypes was elevated
+near other mendelian-inconsistent genotypes in the same individual but was unrelated to
+mendelian inconsistencies in other individuals.
+</P>
+<P>
+The authors systematically looked for regions of the genome in which the
+same failure profile appeared repeatedly at nearby markers in a manner that
+was statistically unexpected based on chance.  A set of statistical thresholds was 
+tailored to each mode of failure, genotyping center and genotyping platform used in the
+project.  The same procedure could readily apply to dense SNP data from any
+platform or study.</P>
+
+<H2>Validation</H2>
+<H3>McCarroll genotype analysis</H3>
+<P>
+Four methods of validation were used: 
+fluorescent <em>in situ</em> hybridization (FISH), 
+two-color fluorescence intensity measurements, PCR amplification and quantitative PCR.
+</P>
+<P>
+The authors performed fluorescent <em>in situ</em> hybridization (FISH) for five
+candidate deletions large enough to span available FISH probes.  In all five cases,
+FISH assays confirmed the deletions in the predicted individuals.
+</P>
+<P>
+The authors examined two-color allele-specific fluorescence data from SNP genotyping
+assays from a subset of data available at the Broad by looking for a reduction in
+fluorescence intensity in individuals predicted to carry a deletion.  At most SNPs
+in the genome, fluorescence intensity measurements cluster into two or three
+discrete groups corresponding to homozygous and hetrozygous genotypes.
+At 15 of 17 candidate deletion loci, fluorescence intensity data for one or more
+SNPs clustered into additional groups that corresponded to the predicted deletion
+genotypes.
+</P>
+<P>
+The authors used PCR amplification to query 60 loci for which the pattern of genotypes
+suggested multiple individuals with homozygous deletions.  Variants were considered
+confirmed if the pattern of amplication success and failure matched prediction
+across a set of 12-24 individuals.   The authors confirmed 51 of 60 candidate
+variants by this criterion.
+</P>
+<P>
+The authors performed quantitative PCR in all 269 HapMap DNA samples for 11 candidate
+deletions that overlapped the coding exons of genes and that were discovered in
+many individuals: at 10/11 loci, the authors observed three discrete clusters, identifying 
+individuals with zero, one and two gene copies.
+All 60 trios displayed mendelian inheritance for the ten deletions, as well as
+Hardy-Weinberg equilibrium in all four populations surveyed, and transmission rates
+close to 50%.   This suggests that the deletions behave as a stable, heritable
+genetic polymorphism.
+</P>
+
+
 <H2>References</H2>
 <P>
 Iafrate, J.A., Feuk, L., Rivera, M.N., Listewnik, M.L., Donahoe, P.K., Qi, Y., 
@@ -116,6 +184,13 @@ Scherer, S.W. and Lee, C.
 <A HREF="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=15286789&query_hl=1"
 TARGET=_blank>Detection of large-scale variation in the human genome</A>.
 <em>Nature Genet</em> <B>36</B>(9), 949-51 (2004). </P>
+<P>
+McCarroll, S.A., Hadnott, T.N., Perry, G.H., Sabeti, P.C., 
+Zody, M.C., Barrett, J.C., Dallaire, S., Gabriel, S., Lee, C., Daly, M.J., 
+Altshuler, D.M.
+<A HREF="http://www.nature.com/ng/journal/vaop/ncurrent/abs/ng1696.html" 
+TARGET=_blank>Common deletion polymorphisms in the human genome</A>.
+<em>Nat Genet.</em> Published online Dec. 4, 2005 doi:10.1038/ng1696.</P>
 <P>
 Sebat, J., Lakshmi, B., Troge, J., Alexander, J., Young, J., Lundin, P., 
 Maner, S., Massa, H., Walker, M., Chi, M. <em>et al</em>.

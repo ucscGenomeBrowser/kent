@@ -1129,7 +1129,7 @@ bosTau2.perChromTables = no
     cd /cluster/data/bosTau2/bed
     mkdir quality
     cd quality
-    # I wrote a c program to process the database.gold
+    # I wrote a c program /cluster/store11/bosTau2/bed/quality/quality.c to process the database.gold
     # and also the contigs.fa.qual data from Baylor.
     # Because the qual file is so big, I do not load 
     # it all at once, instead I read it once and 
@@ -1564,5 +1564,38 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #98183 gene predictions
     hgPepPred bosTau2 generic geneidPep geneid.fa
     #Processing geneid.fa
+
+
+# LOAD SGPGENE PREDICTIONS (DONE galt 2005-12-14)
+    ssh kksilo
+    mkdir /cluster/data/bosTau2/bed/sgpGene
+    cd /cluster/data/bosTau2/bed/sgpGene
+    {
+    rm -f bosTau2.gtf
+    rm -f bosTau2.prot
+    set base = 'http://genome.imim.es/genepredictions/B.taurus/golden_path_200503/SGP/mm6/'
+    foreach f ( `htmlCheck getLinks $base | grep '[.]gtf$'` )
+      echo $f
+      set url = "$base$f"
+      echo "$url"
+      wget $url
+      set url = "$base$f:r.prot"
+      echo "$url"
+      wget $url
+    end
+    cat {c,s}*.gtf > bosTau2.gtf
+    cat {c,s}*.prot > bosTau2.prot
+    }
+    # Add ".1" suffix to each item in .prot's, to match transcript_id's in gtf
+    perl -wpe 's/^(>scaffold\S+|>chr\S+)/$1.1/' bosTau2.prot > sgpGene.fa
+    ssh hgwdev
+    cd /cluster/data/bosTau2/bed/sgpGene
+    ldHgGene -gtf -genePredExt bosTau2 sgpGene bosTau2.gtf
+    #Reading bosTau2.gtf
+    #Read 44919 transcripts in 284636 lines in 1 files
+    #  44919 groups 14813 seqs 1 sources 3 feature types
+    #44919 gene predictions
+    hgPepPred bosTau2 generic sgpGenePep sgpGene.fa
+    #Processing sgpGene.fa
 
 

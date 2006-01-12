@@ -683,3 +683,44 @@ chainSome $(path1)
     # Add /usr/local/apache/htdocs/goldenPath/dasNov1/vsDm2/README.txt
 
 
+# CHAIN  AND NET SWAPPED HUMAN BLASTZ (WORKING 12/22/05 kate)
+#  Working in Brian's blastz dir (not doced).
+#  This procedure follows conventions in doBlastzNetChain.pl,
+#  so it can be used to complete the processing
+    ssh kki
+    cd /cluster/data/dasNov1/bed/zb.hg17
+    ln -s `pwd` /cluster/data/hg17/bed/blastz.dasNov1 
+    mkdir -p axtChain/run/chain
+    ls -1S /cluster/data/dasNov1/bed/zb.hg17/axtChrom/*.axt.gz | \
+        sed 's/.gz//' >  axtChain/run/input.lst
+    cd axtChain/run
+
+cat > chain.csh << 'EOF'
+#!/bin/csh -ef
+zcat $1 | \
+axtChain -verbose=0 -minScore=3000 -linearGap=medium stdin \
+    /cluster/data/hg17/nib /cluster/data/dasNov1/dasNov1.2bit stdout | \
+chainAntiRepeat /cluster/data/hg17/nib /cluster/data/dasNov1/dasNov1.2bit \
+          stdin $2
+'EOF'
+    # << happy emacs
+cat > gsub << 'EOF'
+#LOOP
+chain.csh {check in exists $(path1).gz} {check out line+ chain/$(root1).chain}
+#ENDLOOP
+'EOF'
+    # << happy emacs
+    chmod a+x chain.csh
+    gensub2 input.lst single gsub jobList
+    para create jobList; para try
+    para check 
+    para push
+    # wait for completion
+    para time >  run.time
+
+    # finish pipeline
+    cd /cluster/data/dasNov1/bed/zb.hg17
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -continue=chainMerge \
+	-bigClusterHub=pk \
+	`pwd`/DEF >& blastz.out &

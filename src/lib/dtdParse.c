@@ -25,6 +25,14 @@ if (word == NULL)
 return word;
 }
 
+void needQuotedString( char *in, char *out, struct lineFile *lf, char **retNext)
+/* Grab quoted string starting at in and put it into out.  Advance retNext
+ * to just past quoted string.  In and out may point to same buffer. */
+{
+if (!parseQuotedString(in, out, retNext))
+    errAbort("Missing closing quote line %d of %s", lf->lineIx, lf->fileName);
+}
+
 static boolean isAllUpper(char *s)
 /* Return true if all alphabetical letters in string
  * are upper case. */
@@ -92,8 +100,20 @@ for (;;)
 return mixed;
 }
 
-static struct dtdElement *parseElement(char *prefix, 
-	char *textField, char *line, 
+static struct hash *initialEntityHash()
+/* Make an initial entity hash - one that is just made up
+ * of our built-ins. */
+{
+struct hash *hash = hashNew(0);
+hashAdd(hash, "INTEGER", cloneString("#INT"));
+hashAdd(hash, "REAL", cloneString("#FLOAT"));
+hashAdd(hash, "INT", cloneString("INT"));
+hashAdd(hash, "FLOAT", cloneString("FLOAT"));
+return hash;
+}
+
+static struct dtdElement *parseElement(
+	char *prefix, char *textField, char *line, 
 	struct hash *elHash, struct lineFile *lf)
 /* Parse out <!ELEMENT line after <!ELEMENT. */
 {
@@ -145,13 +165,6 @@ if (line != NULL && (s = strchr(line, '(')) != NULL)
 		errAbort("Multiple types for text between tags line %d of %s", 
 			lf->lineIx, lf->fileName);
 	    el->textType = cloneString(name);
-	    }
-	else if (name[0] == '%')
-	    {
-	    if (sameString(name, "%INTEGER;"))
-	        el->textType = cloneString("#INT");
-	    else
-	        errAbort("Sorry, don't understand %s", name);
 	    }
 	else
 	    {
@@ -220,8 +233,7 @@ if (line[0] == '#')
 else if (line[0] == '\'' || line[0] == '"')
     {
     word = line;
-    if (!parseQuotedString(word, word, &line))
-	errAbort("Missing closing quote line %d of %s", lf->lineIx, lf->fileName);
+    needQuotedString(word, word, lf, &line);
     att->usual = cloneString(word);
     }
 else
@@ -231,6 +243,40 @@ else
     }
 slAddTail(&el->attributes, att);
 }
+
+
+void parseEntity(struct hash *entityHash, struct hash *predefEntityHash,
+	char *line, struct lineFile *lf)
+/* Parse out an entity and add it to hash.  We'll dodge our predefined entities. */
+{
+char *percent = needNextWord(&line, lf);
+char *name = needNextWord(&line, lf);
+char *value = skipLeadingSpaces(line);
+if (value[0] != '"')
+    errAbort("Expecting quoted string at end of ENTITY tag line %d of %s",
+    	lf->lineIx, lf->fileName);
+needQuotedString(value, value, lf, &line);
+if (!sameString(percent, "%"))
+    errAbort("Expecting %% after ENTITY tag line %d of %s", lf->lineIx, lf->fileName);
+if (hashLookup(predefEntityHash, name) == NULL)
+/* We don't want to overwrite the predefined entities.  These are all
+ * defined to be #PCDATA or CDATA for the benefit of non-UCSC XML tools.
+ * Internally we map them to #INT/#FLOAT etc. so we can have numbers
+ * as well as strings in our C structures and relational database tables. */
+    {
+    char *oldVal = hashFindVal(entityHash, name);
+    if (oldVal != NULL)
+        {
+	if (!sameString(oldVal, value))
+	    errAbort("Entity %s redefined line %d of %s", name, lf->lineIx, lf->fileName);
+	}
+    else
+        {
+	hashAdd(entityHash, name, cloneString(value));
+	}
+    }
+}
+
 
 static void fixupChildRefs(struct dtdElement *elList, struct hash *elHash, char *fileName)
 /* Go through all of elements children and make sure that the corresponding
@@ -267,8 +313,37 @@ for (;;)
     }
 }
 
+static void expandEntities(char *s, struct hash *entityHash, struct lineFile *lf,
+	struct dyString *dest)
+/* Copy s into dest, expanding any entity (something in format %name;) 
+ * by looking it up in entity hash. */
+{
+char c;
+while ((c = *s++) != 0)
+    {
+    if (c == '%' && !isspace(s[0]))
+        {
+	char *name = s;
+	char *end = strchr(s, ';');
+	char *value;
+	if (end == NULL)
+	    errAbort("Can't find ; after %% to close entity line %d of %s",
+	    	lf->lineIx, lf->fileName);
+	*end++ = 0;
+	s = end;
+	value = hashFindVal(entityHash, name);
+	if (value == NULL)
+	    errAbort("Entity %%%s; is not defined line %d of %s",
+	    	name, lf->lineIx, lf->fileName);
+	dyStringAppend(dest, value);
+	}
+    else
+        dyStringAppendC(dest, c);
+    }
+}
 
-static char *dtdxTag(struct lineFile *lf, struct dyString *buf)
+static char *dtdxTag(struct lineFile *lf, struct hash *entityHash,
+	struct dyString *buf)
 /* Return next tag. */
 {
 char *line;
@@ -282,7 +357,7 @@ if (line[0] != '<')
 dyStringClear(buf);
 for (;;)
     {
-    dyStringAppend(buf, line);
+    expandEntities(line, entityHash, lf, buf);
     if (buf->string[buf->stringSize-1] == '>')
          break;
     dyStringAppendC(buf, ' ');
@@ -307,6 +382,8 @@ void dtdParse(char *fileName, char *prefix, char *textField,
  * (if NULL) it is "text." */
 {
 struct hash *elHash = newHash(8);
+struct hash *entityHash = initialEntityHash();
+struct hash *predefEntityHash = initialEntityHash();
 struct dtdElement *elList = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word;
@@ -316,7 +393,7 @@ if (prefix == NULL)
     prefix = "";
 if (textField == NULL)
     textField = "text";
-while ((line = dtdxTag(lf, buf)) != NULL)
+while ((line = dtdxTag(lf, entityHash, buf)) != NULL)
     {
     line = trimSpaces(line);
     if (line == NULL || line[0] == 0 || line[0] == '#')
@@ -340,6 +417,10 @@ while ((line = dtdxTag(lf, buf)) != NULL)
         {
 	parseAttribute(line, textField, elHash, lf);
 	}
+    else if (sameWord("ENTITY", word))
+        {
+	parseEntity(entityHash, predefEntityHash, line, lf);
+	}
     else
         {
 	errAbort("Don't understand %s line %d of %s", word, lf->lineIx, lf->fileName);
@@ -349,6 +430,8 @@ lineFileClose(&lf);
 dyStringFree(&buf);
 slReverse(&elList);
 fixupChildRefs(elList, elHash, fileName);
+freeHashAndVals(&entityHash);
+freeHashAndVals(&predefEntityHash);
 *retHash = elHash;
 *retList = elList;
 }

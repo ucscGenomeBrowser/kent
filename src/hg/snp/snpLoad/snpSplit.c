@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "snpTmp.h"
 
-static char const rcsid[] = "$Id: snpSplit.c,v 1.2 2005/12/09 18:25:52 heather Exp $";
+static char const rcsid[] = "$Id: snpSplit.c,v 1.3 2005/12/14 22:01:48 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -189,7 +189,7 @@ struct slName *el = NULL;
 int count = 0;
 
 verbose(1, "getting contigs...\n");
-safef(query, sizeof(query), "select ctg_id from ContigInfo where contig_chr = '%s'", chromName);
+safef(query, sizeof(query), "select ctg_id from ContigInfo where contig_chr = '%s' and group_term = '%s'", chromName, contigGroup);
 verbose(5, "query = %s\n", query);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)

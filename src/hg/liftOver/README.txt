@@ -5,7 +5,9 @@ LiftOver has additional optional arguments for use with cross-species lifts:
                              when mapping to multiple output regions
                                      (default 0, 0)
 
-Depending on the size of the region being mapped, the species distance and the quality of the assembly, the user may need to adjust the minimum chain sizes.  For ENCODE regions (.5 to 1.8 MB), I used
+Depending on the size of the region being mapped, the species distance
+and the quality of the assembly, the user may need to adjust the
+minimum chain sizes.  For ENCODE regions (.5 to 1.8 MB), I used
 
     -minSizeT=4000
 and

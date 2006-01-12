@@ -135,6 +135,12 @@ hgsql -N -h hgwbeta -e "SHOW TABLES" go > go.tables.push
   echo  "-------------------------------------------------"
   
 
+  echo
+  echo  "-------------------------------------------------"
+  echo  "    remember to request autodump when tables are on RR "
+  echo  "-------------------------------------------------"
+  
+
 rm -f xxIndexx
 rm -f *desc
 dumpEmpty.csh .

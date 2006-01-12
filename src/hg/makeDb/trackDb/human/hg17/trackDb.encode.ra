@@ -65,130 +65,116 @@ type bed 12
     priority 3
     color 58,119,40
 
-track encodeAffyRna
+track encodeAffyRnaSignal
 compositeTrack on
-shortLabel Affy RNA
-longLabel Affymetrix PolyA+ RNA and Transfrags
+shortLabel Affy RNA Signal
+longLabel Affymetrix PolyA+ RNA Signal
 group encodeTxLevels
-priority 19.01
+priority 19.02
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type wig -1168.00 1686.5
+type wig -1168.00 1591.5
 spanList 1
 maxHeightPixels 128:16:16
 autoScale off
 viewLimits 0:25
-subGroup1 dataType Signal/Transfrags signal=Signal transfrags=Transfrags
-subGroup2 cellType Cell_Type gm=GM06990 hela=HeLa hl60=HL60
 dataVersion ENCODE Oct 2005 Freeze
 
     track encodeAffyRnaGm06990Signal
-    subTrack encodeAffyRna
+    subTrack encodeAffyRnaSignal
     shortLabel Affy RNA GM06990
     longLabel Affymetrix PolyA+ RNA (GM06990) Signal
     color 150,90,0
-    subGroups dataType=signal cellType=gm
     priority 1
 
     track encodeAffyRnaHeLaSignal
-    subTrack encodeAffyRna
+    subTrack encodeAffyRnaSignal
     shortLabel Affy RNA HeLa
     longLabel Affymetrix PolyA+ RNA (HeLa) Signal
-    subGroups dataType=signal cellType=hela
     color 220,132,12
     priority 2
 
     track encodeAffyRnaHl60SignalHr00
-    subTrack encodeAffyRna
-    shortLabel Affy RNA HL60 0h
+    subTrack encodeAffyRnaSignal
+    shortLabel Affy RNA RA 0h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Signal
-    subGroups dataType=signal cellType=hl60
-    color 50,50,100
+    color 50,50,150
     priority 3
 
     track encodeAffyRnaHl60SignalHr02
-    subTrack encodeAffyRna
-    shortLabel Affy RNA HL60 2h
+    subTrack encodeAffyRnaSignal
+    shortLabel Affy RNA RA 2h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Signal
-    subGroups dataType=signal cellType=hl60
-    color 50,50,150
+    color 50,50,180
     priority 4
 
     track encodeAffyRnaHl60SignalHr08
-    subTrack encodeAffyRna
-    shortLabel Affy RNA HL60 8h
+    subTrack encodeAffyRnaSignal
+    shortLabel Affy RNA RA 8h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Signal
-    subGroups dataType=signal cellType=hl60
-    color 50,50,200
+    color 50,50,210
     priority 5
 
     track encodeAffyRnaHl60SignalHr32
-    subTrack encodeAffyRna
-    shortLabel Affy RNA HL60 32h
+    subTrack encodeAffyRnaSignal
+    shortLabel Affy RNA RA 32h
     longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Signal
-    subGroups dataType=signal cellType=hl60
-    color 50,50,255
+    color 50,50,240
     priority 6
 
+track encodeAffyRnaTransfrags
+compositeTrack on
+shortLabel Affy Transfrags
+longLabel Affymetrix PolyA+ RNA Transfrags
+group encodeTxLevels
+priority 19.03
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type bed 3 .
+dataVersion ENCODE Oct 2005 Freeze
+
     track encodeAffyRnaGm06990Sites
-    subTrack encodeAffyRna
-    shortLabel Affy TF GM06990
-    longLabel Affymetrix PolyA+ RNA (GM06990) Transfrags 
-    subGroups dataType=transfrags cellType=gm
-    noInherit on
-    type bed 3 .
+    subTrack encodeAffyRnaTransfrags
+    shortLabel Affy RNA GM06990
+    longLabel Affymetrix PolyA+ RNA (GM06990) Sites 
     color 150,90,0
-    priority 7
+    priority 1
 
     track encodeAffyRnaHeLaSites
-    subTrack encodeAffyRna
-    shortLabel Affy TF HeLa
-    longLabel Affymetrix PolyA+ RNA (HeLa) Transfrags 
-    subGroups dataType=transfrags cellType=hela
-    noInherit on
+    subTrack encodeAffyRnaTransfrags
+    shortLabel Affy RNA HeLa
+    longLabel Affymetrix PolyA+ RNA (HeLa) Sites 
     color 220,132,12
-    type bed 3 .
-    priority 8
+    priority 2
 
     track encodeAffyRnaHl60SitesHr00
-    subTrack encodeAffyRna
-    shortLabel Affy TF HL60 0h
-    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Transfrags 
-    subGroups dataType=transfrags cellType=hl60
-    color 50,50,100
-    noInherit on
-    type bed 3 .
-    priority 9
+    subTrack encodeAffyRnaTransfrags
+    shortLabel Affy RNA RA 0h
+    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 0hrs) Sites 
+    color 50,50,150
+    priority 3
 
     track encodeAffyRnaHl60SitesHr02
-    subTrack encodeAffyRna
-    shortLabel Affy TF HL60 2h
-    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Transfrags 
-    subGroups dataType=transfrags cellType=hl60
-    color 50,50,150
-    noInherit on
-    type bed 3 .
-    priority 10
+    subTrack encodeAffyRnaTransfrags
+    shortLabel Affy RNA RA 2h
+    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 2hrs) Sites 
+    color 50,50,180
+    priority 4
 
     track encodeAffyRnaHl60SitesHr08
-    subTrack encodeAffyRna
-    shortLabel Affy TF HL60 8h
-    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Transfrags 
-    subGroups dataType=transfrags cellType=hl60
-    color 50,50,200
-    noInherit on
-    type bed 3 .
-    priority 11
+    subTrack encodeAffyRnaTransfrags
+    shortLabel Affy RNA RA 8h
+    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 8hrs) Sites 
+    color 50,50,210
+    priority 5
 
     track encodeAffyRnaHl60SitesHr32
-    subTrack encodeAffyRna
-    shortLabel Affy TF HL60 32h
-    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Transfrags 
-    subGroups dataType=transfrags cellType=hl60
-    noInherit on
-    color 50,50,255
-    type bed 3 .
-    priority 12
+    subTrack encodeAffyRnaTransfrags
+    shortLabel Affy RNA RA 32h
+    longLabel Affymetrix PolyA+ RNA (retinoic acid-treated HL-60, 32hrs) Sites 
+    color 50,50,240
+    priority 6
+
 
 track encodeYaleAffyRNATransMap
 release beta
@@ -408,7 +394,6 @@ dataVersion ENCODE Oct 2005 Freeze
     subGroups celltype=nb4
 
 track encodeYaleAffyRNATars
-release beta
 compositeTrack on
 shortLabel Yale TAR
 longLabel Yale RNA Transcriptionally Active Regions (TARs)
@@ -416,110 +401,19 @@ group encodeTxLevels
 priority 31.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 visibility hide
-type bed 3 .
-subGroup1 samples Sample summary=Summary samples=samples1-10
-subGroup2 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
-origAssembly hg16
-dataVersion ENCODE June 2005 Freeze
+type bed 4 .
+subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
+dataVersion ENCODE Oct 2005 Freeze
+url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
+urlLabel Yale DART Link:
 
-    track encodeYaleAffyNeutRNATarsAll
-    release beta
+    track encodeYaleAffyNeutRNATars
     subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu Sum
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR), Summary
+    shortLabel Yale TAR Neu
+    longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR)
     priority 1
-    color 50,70,50
-    subGroups celltype=neutro samples=summary
-
-    track encodeYaleAffyNeutRNATars01
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 1
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 1
-    priority 2
-    color 50,205,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars02
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 2
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 2
-    priority 3
-    color 50,190,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars03
-    subTrack encodeYaleAffyRNATars
-    release beta
-    shortLabel Yale TAR Neu 3
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 3
-    priority 4
-    color 50,175,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars04
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 4
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 4
-    priority 5
-    color 50,160,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars05
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 5
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 5
-    priority 6
-    color 50,145,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars06
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 6
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 6
-    priority 7
-    color 50,130,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars07
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 7
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 7
-    priority 8
-    color 50,115,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars08
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 8
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 8
-    priority 9
     color 50,100,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars09
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 9
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 9
-    priority 10
-    color 50,85,50
-    subGroups celltype=neutro samples=samples
-
-    track encodeYaleAffyNeutRNATars10
-    release beta
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu 10
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region, Sample 10
-    priority 11
-    color 50,70,50
-    subGroups celltype=neutro samples=samples
+    subGroups celltype=neutro
 
     track encodeYaleAffyPlacRNATars
     subTrack encodeYaleAffyRNATars
@@ -552,31 +446,6 @@ dataVersion ENCODE June 2005 Freeze
     priority 15
     color 90,50,50
     subGroups celltype=nb4
-
-
-track encodeYaleAffyRNATars
-release alpha
-compositeTrack on
-shortLabel Yale TAR
-longLabel Yale RNA Transcriptionally Active Regions (TARs)
-group encodeTxLevels
-priority 31.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bed 4 .
-subGroup1 celltype Cell_Type neutro=Neutrophil plac=Placenta nb4=NB4
-dataVersion ENCODE Oct 2005 Freeze
-url http://dart.gersteinlab.org/cgi-bin/ar/lookup.cgi?acc=$$
-urlLabel Yale DART Link:
-
-    track encodeYaleAffyNeutRNATars
-    release alpha
-    subTrack encodeYaleAffyRNATars
-    shortLabel Yale TAR Neu
-    longLabel Yale Neutrophil RNA Transcriptionally Active Region (TAR)
-    priority 1
-    color 50,100,50
-    subGroups celltype=neutro
 
 track encodeSangerChip
 compositeTrack on
@@ -2174,7 +2043,6 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion ENCODE June 2005 Freeze
     priority 4
 
-
 track encodeTbaAlign
 shortLabel TBA Alignment
 longLabel NHGRI/PSU TBA Alignments
@@ -2193,7 +2061,6 @@ sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE Oct 2005 Freeze
 
-
 track encodeTbaAlignAnno
 shortLabel TBA Alignment Anno
 longLabel NHGRI/PSU TBA Alignments Anno
@@ -2205,13 +2072,63 @@ altColor 1,128,0
 type wigMaf 0.0 1.0
 summary encodeTbaAnnoSummary
 speciesGroups primate placental mammal vertebrate
-sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
-sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
-sGroup_mammal monodelphis  platypus 
-sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+sGroup_primate panTro1 colobus_monkey baboon rheMac1 dusky_titi owl_monkey marmoset mouse_lemur galago
+sGroup_placental rn3 mm6 rabbit cow canFam1 rfbat hedgehog shrew armadillo elephant tenrec
+sGroup_mammal monDom1  platypus 
+sGroup_vertebrate galGal2 xenopus tetraodon fr1 danRer2
+#speciesOrder chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec monodelphis  platypus chicken xenopus tetraodon fugu zebrafish
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 irows on
+frames encodeTbaFrames
+speciesCodonDefault hg17
 dataVersion ENCODE Oct 2005 Freeze
+
+track encodeTbaCons
+compositeTrack on
+shortLabel TBA Cons
+longLabel  NHGRI/PSU/UCSC TBA Conservation
+group encodeCompGeno
+priority 70.2
+type wig 0.0 1.0
+spanList 1
+maxHeightPixels 100:25:11
+autoScaleDefault Off
+windowingFunction mean
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE Oct 2005 Freeze
+
+    track encodeTbaPhastCons
+    subTrack encodeTbaCons
+    shortLabel TBA PhastCons
+    longLabel TBA PhastCons Conservation
+    color 170,100,50
+    priority 1
+
+    track encodeTbaBinCons
+    subTrack encodeTbaCons
+    shortLabel TBA BinCons
+    longLabel TBA BinCons Conservation
+    color 190,70,80
+    priority 2
+
+    track encodeTbaGerpCons
+    subTrack encodeTbaCons
+    shortLabel TBA GERP Cons
+    longLabel TBA GERP Conservation
+    type wig 0.0 3.0
+    noInherit on
+    maxHeightPixels 100:25:11
+    autoScaleDefault Off
+    windowingFunction mean
+    color 120,80,120
+    priority 3
+
+    track encodeTbaSconeCons
+    subTrack encodeTbaCons
+    shortLabel TBA SCONE Cons
+    longLabel TBA SCONE Conservation
+    color 100,90,160
+    priority 4
 
 track encodeTbaElements
 compositeTrack on
@@ -2220,8 +2137,6 @@ longLabel NHGRI/PSU/UCSC TBA Conserved Elements
 group encodeCompGeno
 priority 70.3
 visibility hide
-#color 0, 10, 100
-#altColor 1,128,0
 exonArrows off
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 type bed 5 .
@@ -2247,6 +2162,13 @@ dataVersion ENCODE Oct 2005 Freeze
     longLabel TBA GERP Conserved Elements
     color 120,80,120
     priority 3
+
+    track encodeTbaSconeEl
+    subTrack encodeTbaElements
+    shortLabel TBA SCONE
+    longLabel TBA SCONE Conserved Elements
+    color 100,90,160
+    priority 4
 
 track encodeMlaganAlign
 shortLabel MLAGAN Alignment
@@ -2279,13 +2201,61 @@ type wigMaf 0.0 1.0
 summary encodeMlaganAnnoSummary
 maxHeightPixels 100:40:11
 speciesGroups primate placental mammal vertebrate
-sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
-sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
-sGroup_mammal monodelphis  platypus 
-sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+sGroup_primate panTro1 colobus_monkey baboon rheMac1 dusky_titi owl_monkey marmoset mouse_lemur galago
+sGroup_placental rn3 mm6 rabbit cow canFam1 rfbat hedgehog shrew armadillo elephant tenrec
+sGroup_mammal monDom1  platypus 
+sGroup_vertebrate galGal2 xenopus tetNig1 fr1 danRer2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 irows on
+frames encodeMlaganFrames
+speciesCodonDefault hg17
 dataVersion ENCODE Oct 2005 Freeze
+
+track encodeMlaganCons
+compositeTrack on
+shortLabel MLAGAN Cons
+longLabel Stanford MLAGAN Conservation
+group encodeCompGeno
+priority 72.1
+visibility hide
+type wig 0.0 1.0
+maxHeightPixels 100:25:11
+windowingFunction mean
+autoScaleDefault Off
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE Oct 2005 Freeze
+
+    track encodeMlaganPhastCons
+    subTrack encodeMlaganCons
+    shortLabel MLAGAN PhastCons
+    longLabel MLAGAN PhastCons Conservation
+    type wig 0.0 1.0
+    noInherit on
+    maxHeightPixels 100:25:11
+    autoScaleDefault Off
+    windowingFunction mean
+    color 170,100,50
+    priority 1
+
+    track encodeMlaganBinCons
+    subTrack encodeMlaganCons
+    shortLabel MLAGAN BinCons
+    longLabel MLAGAN BinCons Conservation
+    color 190,70,80
+    priority 2
+
+    track encodeMlaganGerpCons
+    subTrack encodeMlaganCons
+    shortLabel MLAGAN GERP Cons
+    longLabel MLAGAN GERP Conservation
+    type wig 0.0 3.0
+    noInherit on
+    maxHeightPixels 100:25:11
+    autoScaleDefault Off
+    windowingFunction mean
+# smoothingWindow 3
+    color 120,80,120
+    priority 3
 
 track encodeMlaganElements
 compositeTrack on
@@ -2351,13 +2321,60 @@ type wigMaf 0.0 1.0
 summary encodeMavidAnnoSummary
 maxHeightPixels 100:40:11
 speciesGroups primate placental mammal vertebrate
-sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
-sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
-sGroup_mammal monodelphis  platypus 
-sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+sGroup_primate panTro1 colobus_monkey baboon rheMac1 dusky_titi owl_monkey marmoset mouse_lemur galago
+sGroup_placental rn3 mm6 rabbit cow canFam1 rfbat hedgehog shrew armadillo elephant tenrec
+sGroup_mammal monDom1  platypus 
+sGroup_vertebrate galGal2 xenopus tetNig1 fr1 danRer2
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 irows on
+frames encodeMavidFrames
 dataVersion ENCODE Oct 2005 Freeze
+
+track encodeMavidCons
+compositeTrack on
+shortLabel MAVID Cons
+longLabel UC Berkeley MAVID Conservation
+group encodeCompGeno
+priority 74.2
+visibility hide
+type wig 0.0 1.0
+maxHeightPixels 100:25:11
+windowingFunction mean
+autoScaleDefault Off
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+dataVersion ENCODE Oct 2005 Freeze
+
+    track encodeMavidPhastCons
+    subTrack encodeMavidCons
+    shortLabel MAVID PhastCons
+    longLabel MAVID PhastCons Conservation
+    type wig 0.0 1.0
+    noInherit on
+    maxHeightPixels 100:25:11
+    autoScaleDefault Off
+    windowingFunction mean
+    color 170,100,50
+    priority 1
+
+    track encodeMavidBinCons
+    subTrack encodeMavidCons
+    shortLabel MLAGAN BinCons
+    longLabel MLAGAN BinCons Conservation
+    color 190,70,80
+    priority 2
+
+    track encodeMavidGerpCons
+    subTrack encodeMavidCons
+    shortLabel MAVID GERP Cons
+    longLabel MAVID GERP Conservation
+    type wig 0.0 3.0
+    noInherit on
+    maxHeightPixels 100:25:11
+    autoScaleDefault Off
+    windowingFunction mean
+# smoothingWindow 3
+    color 120,80,120
+    priority 3
 
 track encodeMavidElements
 compositeTrack on

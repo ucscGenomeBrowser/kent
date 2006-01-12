@@ -731,3 +731,14 @@ visibility hide
 type bed 6 +
 exonArrows off
 
+
+track xenoRefGene
+shortLabel Other RefSeq
+longLabel Non-$Organism RefSeq Genes
+group genes
+priority 35.1
+visibility dense
+color 12,12,120
+type genePred xenoRefPep xenoRefMrna
+
+

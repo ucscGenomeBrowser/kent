@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.277 2005/11/29 04:27:17 heather Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.278 2006/01/12 17:41:54 heather Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1168,7 +1168,10 @@ safef(query, sizeof(query),
 	"select path,size from %s where id = %u", extFileTable, extFileId);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) == NULL)
+    {
+    fprintf(stderr, "Database inconsistency with id %u in %s\n", extFileId, hGetDbName());
     errAbort("Database inconsistency - no external file with id %u", extFileId);
+    }
 path = cloneString(row[0]);
 dbSize = sqlLongLong(row[1]);
 diskSize = fileSize(path);

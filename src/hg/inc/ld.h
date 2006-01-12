@@ -9,22 +9,20 @@
 #include "jksql.h"
 #endif
 
-#define LD_NUM_COLS 10
+#define LD_NUM_COLS 8
 
 struct ld
-/* Linkage Disequilibrium values from the HapMap project */
+/* Linkage Disequilibrium values from SNP genotypes */
     {
     struct ld *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome */
     unsigned chromStart;	/* chromStart for reference marker */
     unsigned chromEnd;	/* chromEnd for last marker in list */
-    char *name;	/* rsId */
-    char *pop;	/* Population */
-    unsigned ldCount;	/* number of markers with LD values */
-    char *ldStarts;	/* start positions of markers */
-    char *dprime;	/* D' value list */
-    char *rsquared;	/* r^2 value list */
-    char *lod;	/* LOD value list */
+    char *name;	/* rsId at chromStart */
+    unsigned score;	/* Number of markers with LD values */
+    char *dprime;	/* Encoded lists of D' values */
+    char *rsquared;	/* Encoded lists of r^2 values */
+    char *lod;	/* Encoded lists of LOD values */
     };
 
 void ldStaticLoad(char **row, struct ld *ret);

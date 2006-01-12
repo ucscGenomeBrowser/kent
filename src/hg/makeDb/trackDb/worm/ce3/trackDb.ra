@@ -60,3 +60,23 @@ visibility hide
 spectrum on
 type netAlign caeRem1 chainCaeRem1
 otherDb caeRem1
+
+track multiz3way
+shortLabel Conservation
+longLabel  Multiz Alignment & Conservation elegans,briggsae,remanei
+group compGeno
+priority 104.2
+visibility full
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons3
+spanList 1
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz3waySummary
+speciesGroups worm
+sGroup_worm cb2 caeRem1
+treeImage phylo/Mm7_3way.jpg
+frames multiz3wayFrames

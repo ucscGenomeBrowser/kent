@@ -1194,3 +1194,28 @@ netFilter -minGap=10 cb2.cb2.net \
     #                             28,967 Kb               33,345 Kb
     #   featureBits SelfLink   5,761,471 bases        73,156,472 bases
     #                           % 52.999 intersection   % 67.476 intersection
+
+###########################################################################
+#	Preparing downloads
+    ssh kkstore02
+    mkdir /cluster/data/cb2/goldenPath
+    cd /cluster/data/cb2/softMask
+    mkdir ../goldenPath/bigZips
+    tar cvzf ../goldenPath/bigZips/chromFa.tar.gz ./chr*.fa
+    
+    mkdir /cluster/data/cb2/goldenPath/bigZips
+    cp -p ../../RMRun/rmsk.fa.out ./rmsk.out
+    gzip rmsk.out
+    mkdir /cluster/data/cb2/goldenPath/chromosomes
+    cd /cluster/data/cb2/goldenPath/chromosomes
+    cp -p ../../softMask/chr*.fa .
+    gzip chr*.fa
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/cb2/bigZips
+    cd /usr/local/apache/htdocs/goldenPath/cb2/bigZips
+    ln -s /cluster/data/cb2/goldenPath/bigZips/* .
+    mkdir /usr/local/apache/htdocs/goldenPath/cb2/chromosomes
+    cd /usr/local/apache/htdocs/goldenPath/cb2/chromosomes
+    ln -s /cluster/data/cb2/goldenPath/chromosomes/chr*.fa.gz .
+

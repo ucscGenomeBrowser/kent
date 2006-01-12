@@ -5,9 +5,10 @@
 #include "dystring.h"
 #include "cheapcgi.h"
 #include "obscure.h"
+#include "portable.h"
 #include "dtdParse.h"
 
-static char const rcsid[] = "$Id: autoXml.c,v 1.21 2005/11/28 02:43:19 kent Exp $";
+static char const rcsid[] = "$Id: autoXml.c,v 1.23 2005/12/19 19:04:12 kent Exp $";
 
 /* Variables that can be over-ridden from command line. */
 char *textField = "text";
@@ -57,6 +58,31 @@ else
     return 's';
 }
 
+boolean childMatch(struct dtdElChild *children, struct dtdElement *el)
+/* Return TRUE if any of children are el. */
+{
+struct dtdElChild *ec;
+for (ec = children; ec != NULL; ec = ec->next)
+    {
+    if (ec->el == el)
+	return TRUE;
+    }
+return FALSE;
+}
+
+boolean anyParent(struct dtdElement *elList, struct dtdElement *child)
+/* Return TRUE if anybody in elList could be a parent to child. */
+{
+struct dtdElement *el;
+struct dtdElChild *ec;
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (childMatch(el->children, child))
+        return TRUE;
+    }
+return FALSE;
+}
+
 void freeFunctionPrototype(struct dtdElement *el, FILE *f, char *addSemi)
 /* Put up function prototype for elFree function. */
 {
@@ -90,7 +116,7 @@ void loadFunctionPrototype(struct dtdElement *el, FILE *f, char *addSemi)
 {
 char *name = el->mixedCaseName;
 fprintf(f, "struct %s *%sLoad(char *fileName)%s\n", name, name, addSemi);
-fprintf(f, "/* Load %s from file. */\n", name);
+fprintf(f, "/* Load %s from XML file where it is root element. */\n", name);
 }
 
 void loadFunctionBody(struct dtdElement *el, FILE *f)
@@ -101,6 +127,216 @@ fprintf(f, "struct %s *obj;\n", el->mixedCaseName);
 fprintf(f, "xapParseAny(fileName, \"%s\", %sStartHandler, %sEndHandler, NULL, &obj);\n", 
 	el->name, prefix, prefix);
 fprintf(f, "return obj;\n");
+fprintf(f, "}\n");
+fprintf(f, "\n");
+}
+
+void loadNextFunctionPrototype(struct dtdElement *el, FILE *f, char *addSemi)
+/* Put up function prototype for elLoad function. */
+{
+char *name = el->mixedCaseName;
+fprintf(f, "struct %s *%sLoadNext(struct xap *xap)%s\n", name, name, addSemi);
+fprintf(f, "/* Load next %s element.  Use xapOpen to get xap. */\n", name);
+}
+
+void loadNextFunctionBody(struct dtdElement *el, FILE *f)
+/* Write body of elLoad function. */
+{
+fprintf(f, "{\n");
+fprintf(f, "return xapNext(xap, \"%s\");\n", el->name);
+fprintf(f, "}\n");
+fprintf(f, "\n");
+}
+
+
+void startHandlerPrototype(FILE *f, char *addSemi)
+/* Print function prototype for startHandler. */
+{
+fprintf(f, "void *%sStartHandler(struct xap *xp, char *name, char **atts)%s\n", prefix, addSemi);
+fprintf(f, "/* Called by xap with start tag.  Does most of the parsing work. */\n");
+}
+
+void makeStartHandler(struct dtdElement *elList, FILE *f)
+/* Create function that gets called by expat at start of tag. */
+{
+struct dtdElement *el;
+struct dtdAttribute *att;
+
+startHandlerPrototype(f, "");
+fprintf(f, "{\n");
+fprintf(f, "struct xapStack *st = xp->stack+1;\n");
+fprintf(f, "int depth = xp->stackDepth;\n");
+fprintf(f, "int i;\n");
+fprintf(f, "\n");
+for (el = elList; el != NULL; el = el->next)
+    {
+    fprintf(f, "%sif (sameString(name, \"%s\"))\n", (el == elList ? "" : "else "), el->name);
+    fprintf(f, "    {\n");
+    fprintf(f, "    struct %s *obj;\n", el->mixedCaseName);
+    fprintf(f, "    AllocVar(obj);\n");
+    if (el->attributes != NULL)
+        {
+	boolean first = TRUE;
+	for (att = el->attributes; att != NULL; att = att->next)
+	    {
+	    if (att->usual != NULL)
+		{
+		char *quote = "\"";
+		if (sameString(att->type, "INT") || sameString(att->type, "FLOAT"))
+		    quote = "";
+	        fprintf(f, "    obj->%s = %s%s%s;\n", att->name, quote, att->usual, quote);
+		}
+	    }
+	fprintf(f, "    for (i=0; atts[i] != NULL; i += 2)\n");
+	fprintf(f, "        {\n");
+	fprintf(f, "        char *name = atts[i], *val = atts[i+1];\n");
+	for (att = el->attributes; att != NULL; att = att->next)
+	    {
+	    fprintf(f, "        %s (sameString(name, \"%s\"))\n",
+		    (first ? "if " : "else if"), att->name);
+	    if (sameWord(att->type, "INT"))
+		fprintf(f, "            obj->%s = atoi(val);\n", att->name);
+	    else if (sameWord(att->type, "FLOAT"))
+		fprintf(f, "            obj->%s = atof(val);\n", att->name);
+	    else
+	        fprintf(f, "            obj->%s = cloneString(val);\n", att->name);
+	    first = FALSE;
+	    }
+	if (picky)
+	    {
+	    fprintf(f, "        else\n");
+	    fprintf(f, "            xapError(xp, \"Unknown attribute %%s\", name);\n");
+	    }
+	fprintf(f, "        }\n");
+	for (att = el->attributes; att != NULL; att = att->next)
+	    {
+	    if (att->required)
+	        {
+		if (sameWord(att->type, "INT") || sameWord(att->type, "FLOAT"))
+		    {
+		    /* For the moment can't check these. */
+		    }
+		else
+		    {
+		    fprintf(f, "    if (obj->%s == NULL)\n", att->name);
+		    fprintf(f, "        xapError(xp, \"missing %s\");\n", att->name);
+		    }
+		}
+	    }
+	}
+    if (anyParent(elList, el))
+        {
+	struct dtdElement *parent;
+	boolean first = TRUE;
+	fprintf(f, "    if (depth > 1)\n");
+	fprintf(f, "        {\n");
+	for (parent = elList; parent != NULL; parent = parent->next)
+	    {
+	    if (childMatch(parent->children, el))
+	        {
+		fprintf(f, "        %s (sameString(st->elName, \"%s\"))\n", 
+			(first ? "if " : "else if"), parent->name);
+		fprintf(f, "            {\n");
+		fprintf(f, "            struct %s *parent = st->object;\n", parent->mixedCaseName);
+		fprintf(f, "            slAddHead(&parent->%s, obj);\n", el->mixedCaseName);
+		fprintf(f, "            }\n");
+		first = FALSE;
+		}
+	    }
+	if (picky)
+	    {
+	    fprintf(f, "        else\n");
+	    fprintf(f, "            xapError(xp, \"%%s misplaced\", name);\n");
+	    }
+	fprintf(f, "        }\n");
+	}
+    fprintf(f, "    return obj;\n");
+    fprintf(f, "    }\n");
+    }
+fprintf(f, "else\n");
+fprintf(f, "    {\n");
+if (picky)
+    fprintf(f, "    xapError(xp, \"Unknown element %%s\", name);\n");
+else
+    fprintf(f, "    xapSkip(xp);\n");
+fprintf(f, "    return NULL;\n");
+fprintf(f, "    }\n");
+fprintf(f, "}\n");
+fprintf(f, "\n");
+}
+
+
+void endHandlerPrototype(FILE *f, char *addSemi)
+/* Print function prototype for endHandler. */
+{
+fprintf(f, "void %sEndHandler(struct xap *xp, char *name)%s\n", prefix, addSemi);
+fprintf(f, "/* Called by xap with end tag.  Checks all required children are loaded. */\n");
+}
+
+void makeEndHandler(struct dtdElement *elList, FILE *f)
+/* Create function that gets called by expat at end of tag. */
+{
+struct dtdElement *el;
+struct dtdElChild *ec;
+boolean first = TRUE;
+
+endHandlerPrototype(f, "");
+fprintf(f, "{\n");
+fprintf(f, "struct xapStack *stack = xp->stack;\n");
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (el->children || el->textType)
+        {
+	fprintf(f, "%sif (sameString(name, \"%s\"))\n", 
+	   (first ? "" : "else "), el->name);
+	fprintf(f, "    {\n");
+	fprintf(f, "    struct %s *obj = stack->object;\n", el->mixedCaseName);
+	for (ec = el->children; ec != NULL; ec = ec->next)
+	    {
+	    char *cBIG = ec->el->name;
+	    char *cSmall = ec->el->mixedCaseName;
+	    if (ec->copyCode == '1')
+	        {
+		fprintf(f, "    if (obj->%s == NULL)\n", cSmall);
+		fprintf(f, "        xapError(xp, \"Missing %s\");\n", cBIG);
+		fprintf(f, "    if (obj->%s->next != NULL)\n", cSmall);
+		fprintf(f, "        xapError(xp, \"Multiple %s\");\n", cBIG);
+		}
+	    else if (ec->copyCode == '+')
+	        {
+		if (! ec->isOr)
+		    {
+		    /* bypassing this is not the Right thing to do -- 
+		     * really we should make sure that somebody in the Or list
+		     * was present */
+		    fprintf(f, "    if (obj->%s == NULL)\n", cSmall);
+		    fprintf(f, "        xapError(xp, \"Missing %s\");\n",cBIG);
+		    }
+		fprintf(f, "    slReverse(&obj->%s);\n", cSmall);
+		}
+	    else if (ec->copyCode == '*')
+	        {
+		fprintf(f, "    slReverse(&obj->%s);\n", cSmall);
+		}
+	    else if (ec->copyCode == '?')
+	        {
+		fprintf(f, "    if (obj->%s != NULL && obj->%s->next != NULL)\n", cSmall, cSmall);
+		fprintf(f, "        xapError(xp, \"Multiple %s\");\n", cBIG);
+		}
+	    }
+	if (el->textType)
+	    {
+	    if (sameString(el->textType, "#INT"))
+		fprintf(f, "    obj->%s = atoi(stack->%s->string);\n", textField, textField);
+	    else if (sameString(el->textType, "#FLOAT"))
+		fprintf(f, "    obj->%s = atof(stack->%s->string);\n", textField, textField);
+	    else
+		fprintf(f, "    obj->%s = cloneString(stack->%s->string);\n", textField, textField);
+	    }
+	fprintf(f, "    }\n");
+	first = FALSE;
+	}
+    }
 fprintf(f, "}\n");
 fprintf(f, "\n");
 }
@@ -119,6 +355,21 @@ strcpy(upcPrefix, prefix);
 touppers(upcPrefix);
 fprintf(f, "#ifndef %s_H\n", upcPrefix);
 fprintf(f, "#define %s_H\n", upcPrefix);
+fprintf(f, "\n");
+fprintf(f, "#ifndef XAP_H\n");
+fprintf(f, "#include \"xap.h\"\n");
+fprintf(f, "#endif\n");
+fprintf(f, "\n");
+
+fprintf(f, 
+ "/* The start and end handlers here are used with routines defined in xap.h.\n"
+ " * In particular if you want to read just parts of the XML file into memory\n"
+ " * call xapOpen() with these, and then xapNext() with the name of the tag\n"
+ " * you want to load. */\n\n");
+startHandlerPrototype(f, ";");
+fprintf(f, "\n");
+endHandlerPrototype(f, ";");
+fprintf(f, "\n");
 fprintf(f, "\n");
 
 for (el = elList; el != NULL; el = el->next)
@@ -171,6 +422,8 @@ for (el = elList; el != NULL; el = el->next)
     saveFunctionPrototype(el, f, ";");
     fprintf(f, "\n");
     loadFunctionPrototype(el, f, ";");
+    fprintf(f, "\n");
+    loadNextFunctionPrototype(el, f, ";");
     fprintf(f, "\n");
     }
 
@@ -380,223 +633,6 @@ fprintf(f, "}\n");
 fprintf(f, "\n");
 }
 
-boolean childMatch(struct dtdElChild *children, struct dtdElement *el)
-/* Return TRUE if any of children are el. */
-{
-struct dtdElChild *ec;
-for (ec = children; ec != NULL; ec = ec->next)
-    {
-    if (ec->el == el)
-	return TRUE;
-    }
-return FALSE;
-}
-
-boolean anyParent(struct dtdElement *elList, struct dtdElement *child)
-/* Return TRUE if anybody in elList could be a parent to child. */
-{
-struct dtdElement *el;
-struct dtdElChild *ec;
-for (el = elList; el != NULL; el = el->next)
-    {
-    if (childMatch(el->children, child))
-        return TRUE;
-    }
-return FALSE;
-}
-
-void startHandlerPrototype(FILE *f, char *addSemi)
-/* Print function prototype for startHandler. */
-{
-fprintf(f, "void *%sStartHandler(struct xap *xp, char *name, char **atts)%s\n", prefix, addSemi);
-fprintf(f, "/* Called by expat with start tag.  Does most of the parsing work. */\n");
-}
-
-void makeStartHandler(struct dtdElement *elList, FILE *f)
-/* Create function that gets called by expat at start of tag. */
-{
-struct dtdElement *el;
-struct dtdAttribute *att;
-
-startHandlerPrototype(f, "");
-fprintf(f, "{\n");
-fprintf(f, "struct xapStack *st = xp->stack+1;\n");
-fprintf(f, "int depth = xp->stackDepth;\n");
-fprintf(f, "int i;\n");
-fprintf(f, "\n");
-for (el = elList; el != NULL; el = el->next)
-    {
-    fprintf(f, "%sif (sameString(name, \"%s\"))\n", (el == elList ? "" : "else "), el->name);
-    fprintf(f, "    {\n");
-    fprintf(f, "    struct %s *obj;\n", el->mixedCaseName);
-    fprintf(f, "    AllocVar(obj);\n");
-    if (el->attributes != NULL)
-        {
-	boolean first = TRUE;
-	for (att = el->attributes; att != NULL; att = att->next)
-	    {
-	    if (att->usual != NULL)
-		{
-		char *quote = "\"";
-		if (sameString(att->type, "INT") || sameString(att->type, "FLOAT"))
-		    quote = "";
-	        fprintf(f, "    obj->%s = %s%s%s;\n", att->name, quote, att->usual, quote);
-		}
-	    }
-	fprintf(f, "    for (i=0; atts[i] != NULL; i += 2)\n");
-	fprintf(f, "        {\n");
-	fprintf(f, "        char *name = atts[i], *val = atts[i+1];\n");
-	for (att = el->attributes; att != NULL; att = att->next)
-	    {
-	    fprintf(f, "        %s (sameString(name, \"%s\"))\n",
-		    (first ? "if " : "else if"), att->name);
-	    if (sameWord(att->type, "INT"))
-		fprintf(f, "            obj->%s = atoi(val);\n", att->name);
-	    else if (sameWord(att->type, "FLOAT"))
-		fprintf(f, "            obj->%s = atof(val);\n", att->name);
-	    else
-	        fprintf(f, "            obj->%s = cloneString(val);\n", att->name);
-	    first = FALSE;
-	    }
-	if (picky)
-	    {
-	    fprintf(f, "        else\n");
-	    fprintf(f, "            xapError(xp, \"Unknown attribute %%s\", name);\n");
-	    }
-	fprintf(f, "        }\n");
-	for (att = el->attributes; att != NULL; att = att->next)
-	    {
-	    if (att->required)
-	        {
-		if (sameWord(att->type, "INT") || sameWord(att->type, "FLOAT"))
-		    {
-		    /* For the moment can't check these. */
-		    }
-		else
-		    {
-		    fprintf(f, "    if (obj->%s == NULL)\n", att->name);
-		    fprintf(f, "        xapError(xp, \"missing %s\");\n", att->name);
-		    }
-		}
-	    }
-	}
-    if (anyParent(elList, el))
-        {
-	struct dtdElement *parent;
-	boolean first = TRUE;
-	fprintf(f, "    if (depth > 1)\n");
-	fprintf(f, "        {\n");
-	for (parent = elList; parent != NULL; parent = parent->next)
-	    {
-	    if (childMatch(parent->children, el))
-	        {
-		fprintf(f, "        %s (sameString(st->elName, \"%s\"))\n", 
-			(first ? "if " : "else if"), parent->name);
-		fprintf(f, "            {\n");
-		fprintf(f, "            struct %s *parent = st->object;\n", parent->mixedCaseName);
-		fprintf(f, "            slAddHead(&parent->%s, obj);\n", el->mixedCaseName);
-		fprintf(f, "            }\n");
-		first = FALSE;
-		}
-	    }
-	if (picky)
-	    {
-	    fprintf(f, "        else\n");
-	    fprintf(f, "            xapError(xp, \"%%s misplaced\", name);\n");
-	    }
-	fprintf(f, "        }\n");
-	}
-    fprintf(f, "    return obj;\n");
-    fprintf(f, "    }\n");
-    }
-fprintf(f, "else\n");
-fprintf(f, "    {\n");
-if (picky)
-    fprintf(f, "    xapError(xp, \"Unknown element %%s\", name);\n");
-else
-    fprintf(f, "    xapSkip(xp);\n");
-fprintf(f, "    return NULL;\n");
-fprintf(f, "    }\n");
-fprintf(f, "}\n");
-fprintf(f, "\n");
-}
-
-
-void endHandlerPrototype(FILE *f, char *addSemi)
-/* Print function prototype for endHandler. */
-{
-fprintf(f, "void %sEndHandler(struct xap *xp, char *name)%s\n", prefix, addSemi);
-fprintf(f, "/* Called by expat with end tag.  Checks all required children are loaded. */\n");
-}
-
-void makeEndHandler(struct dtdElement *elList, FILE *f)
-/* Create function that gets called by expat at end of tag. */
-{
-struct dtdElement *el;
-struct dtdElChild *ec;
-boolean first = TRUE;
-
-endHandlerPrototype(f, "");
-fprintf(f, "{\n");
-fprintf(f, "struct xapStack *stack = xp->stack;\n");
-for (el = elList; el != NULL; el = el->next)
-    {
-    if (el->children || el->textType)
-        {
-	fprintf(f, "%sif (sameString(name, \"%s\"))\n", 
-	   (first ? "" : "else "), el->name);
-	fprintf(f, "    {\n");
-	fprintf(f, "    struct %s *obj = stack->object;\n", el->mixedCaseName);
-	for (ec = el->children; ec != NULL; ec = ec->next)
-	    {
-	    char *cBIG = ec->el->name;
-	    char *cSmall = ec->el->mixedCaseName;
-	    if (ec->copyCode == '1')
-	        {
-		fprintf(f, "    if (obj->%s == NULL)\n", cSmall);
-		fprintf(f, "        xapError(xp, \"Missing %s\");\n", cBIG);
-		fprintf(f, "    if (obj->%s->next != NULL)\n", cSmall);
-		fprintf(f, "        xapError(xp, \"Multiple %s\");\n", cBIG);
-		}
-	    else if (ec->copyCode == '+')
-	        {
-		if (! ec->isOr)
-		    {
-		    /* bypassing this is not the Right thing to do -- 
-		     * really we should make sure that somebody in the Or list
-		     * was present */
-		    fprintf(f, "    if (obj->%s == NULL)\n", cSmall);
-		    fprintf(f, "        xapError(xp, \"Missing %s\");\n",cBIG);
-		    }
-		fprintf(f, "    slReverse(&obj->%s);\n", cSmall);
-		}
-	    else if (ec->copyCode == '*')
-	        {
-		fprintf(f, "    slReverse(&obj->%s);\n", cSmall);
-		}
-	    else if (ec->copyCode == '?')
-	        {
-		fprintf(f, "    if (obj->%s != NULL && obj->%s->next != NULL)\n", cSmall, cSmall);
-		fprintf(f, "        xapError(xp, \"Multiple %s\");\n", cBIG);
-		}
-	    }
-	if (el->textType)
-	    {
-	    if (sameString(el->textType, "#INT"))
-		fprintf(f, "    obj->%s = atoi(stack->%s->string);\n", textField, textField);
-	    else if (sameString(el->textType, "#FLOAT"))
-		fprintf(f, "    obj->%s = atof(stack->%s->string);\n", textField, textField);
-	    else
-		fprintf(f, "    obj->%s = cloneString(stack->%s->string);\n", textField, textField);
-	    }
-	fprintf(f, "    }\n");
-	first = FALSE;
-	}
-    }
-fprintf(f, "}\n");
-fprintf(f, "\n");
-}
-
 
 void makeTestDriver(struct dtdElement *rootEl, FILE *f)
 /* Make main routine. */
@@ -624,18 +660,17 @@ struct dtdElement *el;
 struct dtdAttribute *att;
 struct dtdElChild *ec;
 char upcPrefix[128];
+char incFile[128], incExt[64];
+
+splitPath(incName, NULL, incFile, incExt);
 
 fprintf(f, "/* %s.c %s */\n", prefix, fileComment);
 fprintf(f, "\n");
 fprintf(f, "#include \"common.h\"\n");
 fprintf(f, "#include \"xap.h\"\n");
-fprintf(f, "#include \"%s\"\n", incName);
+fprintf(f, "#include \"%s%s\"\n", incFile, incExt);
 fprintf(f, "\n");
 
-startHandlerPrototype(f, ";");
-fprintf(f, "\n");
-endHandlerPrototype(f, ";");
-fprintf(f, "\n");
 fprintf(f, "\n");
 for (el = elList; el != NULL; el = el->next)
     {
@@ -647,6 +682,8 @@ for (el = elList; el != NULL; el = el->next)
     saveFunctionBody(el, f);
     loadFunctionPrototype(el, f, "");
     loadFunctionBody(el, f);
+    loadNextFunctionPrototype(el, f, "");
+    loadNextFunctionBody(el, f);
     }
 makeStartHandler(elList, f);
 makeEndHandler(elList, f);
@@ -660,13 +697,13 @@ void autoXml(char *dtdxFile, char *outRoot)
 struct dtdElement *elList = NULL, *el;
 struct hash *elHash = NULL;
 char hName[512], cName[512];
+char outDir[256];
 
+splitPath(outRoot, outDir, prefix, NULL);
 if (cgiVarExists("prefix"))
-    {
     strcpy(prefix, cgiString("prefix"));
-    }
-else
-    splitPath(outRoot, NULL, prefix, NULL);
+if (outDir[0] != 0)
+    makeDir(outDir);
 dtdParse(dtdxFile, prefix, textField, &elList, &elHash);
 printf("Parsed %d elements in %s\n", slCount(elList), dtdxFile);
 sprintf(hName, "%s.h", outRoot);

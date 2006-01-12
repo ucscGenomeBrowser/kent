@@ -1,5 +1,5 @@
 /* genoFind - Quickly find where DNA occurs in genome.. */
-/* Copyright 2001-2003 Jim Kent.  All rights reserved. */
+/* Copyright 2001-2005 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include <signal.h>
@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.19 2005/12/07 17:13:02 kent Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.20 2005/12/16 20:17:37 kent Exp $";
 
 static int blockSize = 1024;
 static int blockShift = 10;

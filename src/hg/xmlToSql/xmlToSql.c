@@ -1,4 +1,7 @@
-/* xmlToSql - Convert XML dump into a fairly normalized relational database.. */
+/* xmlToSql - Convert XML dump into a fairly normalized relational database. */
+/* This file is copyright 2005 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -11,7 +14,7 @@
 #include "rename.h"
 #include "tables.h"
 
-static char const rcsid[] = "$Id: xmlToSql.c,v 1.26 2005/12/02 02:43:51 kent Exp $";
+static char const rcsid[] = "$Id: xmlToSql.c,v 1.27 2005/12/16 20:24:03 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

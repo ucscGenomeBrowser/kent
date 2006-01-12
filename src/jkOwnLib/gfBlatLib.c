@@ -1,6 +1,6 @@
 /* gfBlatLib - stuff that blat-related clients of genoFind library or
  * gfServer on the web use. */
-/* Copyright 2001-2004 Jim Kent.  All rights reserved. */
+/* Copyright 2001-2005 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "net.h"
@@ -18,7 +18,7 @@
 #include "trans3.h"
 
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.19 2005/12/05 20:50:41 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.20 2005/12/16 20:17:38 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 

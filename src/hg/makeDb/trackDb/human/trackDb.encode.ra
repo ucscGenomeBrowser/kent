@@ -2765,97 +2765,6 @@ autoScale Off
 windowingFunction mean
 dataVersion ENCODE Oct 2005 Freeze
 
-track encodeTbaCons
-compositeTrack on
-shortLabel TBA Cons
-longLabel  NHGRI/PSU/UCSC TBA Conservation
-group encodeCompGeno
-priority 71.0
-visibility hide
-type wig 0.0 1.0
-maxHeightPixels 100:25:11
-autoScaleDefault Off
-windowingFunction mean
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-dataVersion ENCODE June 2005 Freeze
-
-    track encodeTbaPhastCons
-    subTrack encodeTbaCons
-    shortLabel TBA PhastCons
-    longLabel TBA PhastCons Conservation
-    type wig 0.0 1.0
-    noInherit on
-    maxHeightPixels 100:25:11
-    autoScaleDefault Off
-    windowingFunction mean
-    color 170,100,50
-    priority 1
-
-    track encodeTbaBinCons
-    subTrack encodeTbaCons
-    shortLabel TBA BinCons
-    longLabel TBA BinCons Conservation
-    color 190,70,80
-    priority 2
-
-    track encodeTbaGerpCons
-    subTrack encodeTbaCons
-    shortLabel TBA GERP Cons
-    longLabel TBA GERP Conservation
-    type wig 0.0 3.0
-    noInherit on
-    maxHeightPixels 100:25:11
-    autoScaleDefault Off
-    windowingFunction mean
-    color 120,80,120
-    priority 3
-
-track encodeMlaganCons
-compositeTrack on
-shortLabel MLAGAN Cons
-longLabel Stanford MLAGAN Conservation
-group encodeCompGeno
-priority 74.1
-visibility hide
-type wig 0.0 1.0
-maxHeightPixels 100:25:11
-windowingFunction mean
-autoScaleDefault Off
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-dataVersion ENCODE June 2005 Freeze
-
-    track encodeMlaganPhastCons
-    subTrack encodeMlaganCons
-    shortLabel MLAGAN PhastCons
-    longLabel MLAGAN PhastCons Conservation
-    type wig 0.0 1.0
-    noInherit on
-    maxHeightPixels 100:25:11
-    autoScaleDefault Off
-    windowingFunction mean
-    color 170,100,50
-    priority 1
-
-    track encodeMlaganBinCons
-    subTrack encodeMlaganCons
-    shortLabel MLAGAN BinCons
-    longLabel MLAGAN BinCons Conservation
-    color 190,70,80
-    priority 2
-
-    track encodeMlaganGerpCons
-    subTrack encodeMlaganCons
-    shortLabel MLAGAN GERP Cons
-    longLabel MLAGAN GERP Conservation
-    type wig 0.0 3.0
-    noInherit on
-    maxHeightPixels 100:25:11
-    autoScaleDefault Off
-    windowingFunction mean
-# smoothingWindow 3
-    color 120,80,120
-    priority 3
-
 track encode_tba
 shortLabel TBA Nov04
 longLabel TBA Nov. 2004 Alignments of ENCODE Regions
@@ -2938,6 +2847,71 @@ type bed 9 +
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE June 2005 Freeze
 
+track encodeHapMapCov
+compositeTrack on
+shortLabel HapMap Coverage
+longLabel ENCODE HapMap (16c.1) Resequencing Coverage
+group encodeVariation
+priority 80.8
+chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
+maxHeightPixels 128:16:16
+visibility hide
+minLimit 0
+maxLimit 16
+autoScaleDefault Off
+type wig 0.0 100.0
+dataVersion ENCODE June 2005 Freeze
+
+    track encodeHapMapCovCEU
+    subTrack encodeHapMapCov
+    shortLabel HapMap Cov CEU
+    longLabel HapMap Resequencing Coverage CEPH (CEU)
+    priority 1
+
+    track encodeHapMapCovCHB
+    subTrack encodeHapMapCov
+    shortLabel HapMap Cov CHB
+    longLabel HapMap Resequencing Coverage Chinese (CHB)
+    priority 2
+
+    track encodeHapMapCovJPT
+    subTrack encodeHapMapCov
+    shortLabel HapMap Cov JPT
+    longLabel HapMap Resequencing Coverage Japanese (JPT)
+    priority 3
+
+    track encodeHapMapCovYRI
+    subTrack encodeHapMapCov
+    shortLabel HapMap Cov YRI
+    longLabel HapMap Resequencing Coverage Yoruban (YRI)
+    priority 4
+
+track encodeRecombRate
+shortLabel Recomb Rates
+longLabel Oxford Recombination Rates from ENCODE resequencing data
+group encodeVariation
+priority 80.9
+visibility hide
+type bedGraph 4
+chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
+defaultViewLimits 0:16
+minLimit 0
+maxLimit 100
+autoScaleDefault Off
+maxHeightPixels 64:32:16
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+
+track encodeRecombHotspot
+shortLabel Recomb Hotspots
+longLabel Oxford Recombination Hotspots from ENCODE resequencing data
+group encodeVariation
+priority 80.91
+visibility hide
+type bed 3 .
+origAssembly hg16
+dataVersion ENCODE June 2005 Freeze
+
 track encodeSangerGenoExprAssociation
 shortLabel Sanger Assoc
 longLabel Sanger Genotype-Expression Association
@@ -2987,45 +2961,6 @@ dataVersion ENCODE June 2005 Freeze
     longLabel HapMap Minor Allele Frequencies Yoruban (YRI)
     priority 4
 
-
-track encodeHapMapCov
-compositeTrack on
-shortLabel HapMap Coverage
-longLabel ENCODE HapMap (16c.1) Resequencing Coverage
-group encodeVariation
-priority 80.8
-chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
-maxHeightPixels 128:16:16
-visibility hide
-minLimit 0
-maxLimit 16
-autoScaleDefault Off
-type wig 0.0 100.0
-dataVersion ENCODE June 2005 Freeze
-
-    track encodeHapMapCovCEU
-    subTrack encodeHapMapCov
-    shortLabel HapMap Cov CEU
-    longLabel HapMap Resequencing Coverage CEPH (CEU)
-    priority 1
-
-    track encodeHapMapCovCHB
-    subTrack encodeHapMapCov
-    shortLabel HapMap Cov CHB
-    longLabel HapMap Resequencing Coverage Chinese (CHB)
-    priority 2
-
-    track encodeHapMapCovJPT
-    subTrack encodeHapMapCov
-    shortLabel HapMap Cov JPT
-    longLabel HapMap Resequencing Coverage Japanese (JPT)
-    priority 3
-
-    track encodeHapMapCovYRI
-    subTrack encodeHapMapCov
-    shortLabel HapMap Cov YRI
-    longLabel HapMap Resequencing Coverage Yoruban (YRI)
-    priority 4
 
 track encodeGencodeGeneFiltered
 shortLabel Gencode Filtered
@@ -3676,23 +3611,6 @@ dataVersion ENCODE June 2005 Freeze
     subGroups region=intergenicDistal celltype=plac source=yale
     priority 44
     color 230,0,25
-
-
-track encodeRecomb
-shortLabel Oxford Recomb
-longLabel Recombination Rates in ENCODE regions
-group encodeVariation
-priority 86
-visibility hide
-type bedGraph 4
-chromosomes chr2,chr4,chr7,chr8,chr9,chr12,chr18
-defaultViewLimits 0:16
-minLimit 0
-maxLimit 100
-autoScaleDefault Off
-maxHeightPixels 64:32:16
-origAssembly hg16
-dataVersion ENCODE June 2005 Freeze
 
 searchTable encodeGencodeGeneKnownOct05
 searchType genePred

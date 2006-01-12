@@ -1,5 +1,5 @@
 /* gfPcrLib - Routines to help do in silico PCR.
- * Copyright 2004 Jim Kent.  All rights reserved. */
+ * Copyright 2004-2005 Jim Kent.  All rights reserved. */
 
 #include "common.h"
 #include "linefile.h"
@@ -13,7 +13,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.6 2004/11/16 15:51:34 kent Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.7 2005/12/16 20:17:38 kent Exp $";
 
 /**** Input and Output Handlers *****/
 

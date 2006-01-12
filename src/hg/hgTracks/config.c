@@ -167,7 +167,18 @@ hPrintf(" image width: ");
 hIntVar("pix", tl.picWidth, 4);
 hPrintf(" text size: ");
 textSizeDropDown();
-hPrintf(" ");
+hPrintf("&nbsp;");
+if (inclFontExtras())
+    {
+    char *defaultStyle = cartUsualString(cart, "fontType", "medium");
+    cartMakeRadioButton(cart, "fontType", "medium", defaultStyle);
+    hPrintf("&nbsp;medium&nbsp;");
+    cartMakeRadioButton(cart, "fontType", "fixed", defaultStyle);
+    hPrintf("&nbsp;fixed&nbsp;");
+    cartMakeRadioButton(cart, "fontType", "bold", defaultStyle);
+    hPrintf("&nbsp;bold&nbsp;");
+    hPrintf("&nbsp;");
+    }
 cgiMakeButton("Submit", "submit");
 hPrintf("<P>");
 hTableStart();

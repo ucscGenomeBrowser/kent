@@ -875,6 +875,7 @@ cat > load.csh << 'EOF'
 # Affy Chip/chip and RNA (kate)
 # submitted by Hari_Tammana@affymetrix.com (Oct. 3)
 #  with clarifications as to display from Phil Kapranov at Affy
+# HeLa data update submitted 12/15 by Hari Tamani
 
     cd /cluster/data/encode/Affy
     mkdir 2005-10-03/lab
@@ -921,6 +922,12 @@ cat > loadSites.csh << 'EOF'
 'EOF'
     csh loadSites.csh >&! loadSites.log
 
+    # Update HeLa sites (12/15)
+    cd /cluster/data/encode/Affy/2005-11-22
+    tail +2 lab//Affy_HeLa/bed/EC_AS_HeLa_RCyP+_C01vsNULL.sig.gr.bed | \
+        hgLoadBed -strict -noBin hg17 encodeAffyRnaHeLaSites stdin
+            # 7254 elements
+
     # RNA Signal (6 subtracks)
     set gbdbDir = /gbdb/hg17/encode/Affy/2005-10-03
     mkdir -p $gbdbDir/wib
@@ -952,6 +959,18 @@ cat > loadSig.csh << 'EOF'
 'EOF'
     csh loadSig.csh >&! loadSig.log
     # Create a single composite track for RNA and Transfrags
+
+    # Update HeLa signal (2005-12-15 kate)
+    cd /cluster/data/encode/Affy/2005-11-22
+    mkdir wib wig
+    set gbdbDir = /gbdb/hg17/encode/Affy/2005-10-03
+    rm $gbdbDir/wib/$track.wib
+    set track = encodeAffyRnaHeLaSignal
+    cat lab/Affy_HeLa/wig/EC_AS_HeLa_RCyP+_C01vsNULL.sig.wig | \
+        wigEncode stdin wig/$track.wig wib/$track.wib
+            # Converted stdin, upper limit 1591.50, lower limit -779.75
+    ln -s `pwd`/wib/$track.wib $gbdbDir/wib/
+    nice hgLoadWiggle hg17 $track wig/$track.wig -pathPrefix=$gbdbDir
 
     # CHIP/Chip sites (2005-10-24 kate)
     cd /cluster/data/encode/Affy/2005-10-03
@@ -1410,7 +1429,7 @@ cat > loadSig.csh << 'EOF'
 # 4 files with chrom, start, end, integer score
 # Sites file in GFF format
 # NOTE: this was submitted in hg16, without notifying us.
-# I'm reloading after lifting, 2005-05-12
+# I'm reloading after lifting, 2005-12-05
 
     cd /cluster/data/encode/Uppsala/2005-11-07
     /cluster/data/encode/bin/scripts/splitTracks.pl lab/chip.wig
@@ -1444,6 +1463,10 @@ cat > load.csh << 'EOF'
 ##########################################################################
 # MSA tracks from Sept. 2005 freeze
 # Use links from Wiki for data submission (as per Elliott Margulies)
+# NOTE: mapping of sequence name to assembly is in column 7 of
+# metadata.txt file in Elliott's MSA release
+# Assemblies in this freeze are: canFam1 danRer2 fr1 galGal2 mm6
+#       monDom1 panTro1 rheMac1 rn3 tetNig1
 
     # TBA alignments
     cd /cluster/data/encode/TBA
@@ -1454,7 +1477,14 @@ cat > load.csh << 'EOF'
     cd ..
     foreach f (lab/*/*.maf.gz)
         echo $f
-        gunzip -c $f | sed 's/^s human/s hg17/' > $f:t:r
+        gunzip -c $f | \
+            sed 's/^s human\./s hg17./;          s/^s dog\./s canFam1./; \
+                 s/^s zebrafish\./s danRer2./;   s/^s fugu\./s fr1./; \
+                 s/^s chicken\./s galGal2./;     s/^s mouse\./s mm6./; \
+                 s/^s monodelphis\./s monDom1./; s/^s chimp\./s panTro1./; \
+                 s/^s macaque\./s rheMac1./;     s/^s rat\./s rn3./; \
+                 s/^s tetraodon\./s tetNig1./;' \
+                        > $f:t:r:r:e.maf
     end
     set gdir = /gbdb/hg17/encode/TBA/maf
     mkdir -p $gdir
@@ -1533,6 +1563,8 @@ cat > project.csh << 'EOF'
     # Force gerp to integer for consistent table format, but don't
     # bother scaling at this point (and don't use to score on display)
     # For some reason, phastCons has + strand -- strip this out
+    # NOTE: coords are ENCODE-region based, so need to adjust
+    # by start of region (Elliott used custom tracks offset= to do this).
     cd /cluster/data/encode/MSA
     mkdir -p SEP-05/elements/lab
     cd SEP-05/elements/lab
@@ -1541,17 +1573,31 @@ cat > project.csh << 'EOF'
 cat > load.csh << 'EOF'
     foreach d (lab/{tba,mlagan,mavid})
         set align = `echo $d:t | sed 's/\(.*\)/\u\1/'`
-        set table = encode${align}BinConsEl
-        cat $d/*/*.binCons.bed | grep '^chr' | \
-            hgLoadBed -strict hg17 $table stdin
-        set table = encode${align}PhastConsEl
-        cat $d/*/*.phastCons.bed | grep '^chr' | \
-            awk '{printf("%s\t%d\t%d\t%s\t%d\n", $1,$2,$3,$4,$5)}' | \
-                hgLoadBed -strict hg17 $table stdin
-        set table = encode${align}GerpEl
-        cat $d/*/*.gerp.bed | grep '^chr' | \
-            awk '{printf("%s\t%d\t%d\t%s\t%.0f\n", $1,$2,$3,$4,$5)}' | \
-                hgLoadBed -strict hg17 $table stdin
+        set bTable = encode${align}BinConsEl
+        set pTable = encode${align}PhastConsEl
+        set gTable = encode${align}GerpEl
+        rm -f $bTable.bed $pTable.bed $gTable.bed
+        foreach rd ($d/*)
+            set region = $rd:t
+            set offset = `sed -n 's/.*offset=\([0-9][0-9]*\)$/\1/p' \
+                        $rd/human.$region.gerp.bed`
+            echo "$align $region"
+            awk -v OFFSET=$offset \
+                '/^chr/ {printf("%s\t%d\t%d\t%s\t%d\n", \
+                $1,$2+OFFSET,$3+OFFSET,$4,$5)}' \
+                        $rd/human.$region.binCons.bed >> $bTable.bed
+            awk -v OFFSET=$offset \
+                '/^chr/ {printf("%s\t%d\t%d\t%s\t%d\n", \
+                $1,$2+OFFSET,$3+OFFSET,$4,$5)}' \
+                        $rd/human.$region.phastCons.bed >> $pTable.bed
+            awk -v OFFSET=$offset \
+                '/^chr/ {printf("%s\t%d\t%d\t%s\t%.0f\n", \
+                $1,$2+OFFSET,$3+OFFSET,$4,$5)}' \
+                        $rd/human.$region.gerp.bed >> $gTable.bed
+        end
+        hgLoadBed -strict hg17 $bTable $bTable.bed
+        hgLoadBed -strict hg17 $pTable $pTable.bed
+        hgLoadBed -strict hg17 $gTable $gTable.bed
     end
 'EOF'
     csh load.csh >&! load.log &
@@ -1578,8 +1624,156 @@ cat > load.csh << 'EOF'
         #Loaded 30645 elements of size 4
         #Reading MsaElModerate.bed
         #Loaded 36793 elements of size 4
-        #Reading MsaElUnion.bed
-        #Loaded 100543 elements of size 4
+
+    # conservation
+    cd /cluster/data/encode/MSA
+    mkdir -p SEP-05/conservation/lab
+    cd SEP-05/conservation/lab
+    wget ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/SEP-2005/cons/phastCons.wig.tar.gz
+    cd ..
+cat > load.csh << 'EOF'
+    # TBA
+    gunzip -c lab/tba/*/phast/human.ENm*.gz | \
+        wigEncode stdin tbaPhastCons.wig tbaPhastCons.wib
+    set d = /gbdb/hg17/encode/TBA/SEP-05
+    ln -s `pwd`/tbaPhastCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeTbaPhastCons tbaPhastCons.wig
+
+    # MLAGAN
+    gunzip -c lab/mlagan/*/phast/human.ENm*.gz | \
+        wigEncode stdin mlaganPhastCons.wig mlaganPhastCons.wib
+    set d = /gbdb/hg17/encode/MLAGAN/SEP-05
+    ln -s `pwd`/mlaganPhastCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeMlaganPhastCons mlaganPhastCons.wig
+
+    # MAVID
+    gunzip -c lab/mavid/*/phast/human.ENm*.gz | \
+        wigEncode stdin mavidPhastCons.wig mavidPhastCons.wib
+    set d = /gbdb/hg17/encode/MAVID/SEP-05
+    ln -s `pwd`/mavidPhastCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeMavidPhastCons mavidPhastCons.wig
+
+'EOF'
+    csh load.csh >&! load.log
+
+##########################################################################
+# MSA GERP Conservation (2005-12-13 kate)
+
+    cd /cluster/data/encode/MSA/Gerp
+    mkdir -p 2005-12-12/lab
+    cd 2005-12-12/lab
+
+# Found start=0 at line 6607734, the first chrom position is 1, not 0
+
+    # TBA
+    cat lab/chr*_GERP_TBA_scores.wig | \
+        wigEncode stdin tbaGerpCons.wig tbaGerpCons.wib
+    set d = /gbdb/hg17/encode/TBA/SEP-05
+    ln -s `pwd`/tbaGerpCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeTbaGerpCons tbaGerpCons.wig
+
+    # MLAGAN 
+    cat lab/chr*_GERP_MLAGAN_scores.wig | \
+        wigEncode stdin mlaganGerpCons.wig mlaganGerpCons.wib
+    set d = /gbdb/hg17/encode/MLAGAN/SEP-05
+    ln -s `pwd`/mlaganGerpCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeMlaganGerpCons mlaganGerpCons.wig
+
+    # MAVID
+    cat lab/chr*_GERP_MAVID_scores.wig | \
+        wigEncode stdin mavidGerpCons.wig mavidGerpCons.wib
+    set d = /gbdb/hg17/encode/MAVIE/SEP-05
+    ln -s `pwd`/mavidGerpCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeMavidGerpCons mavidGerpCons.wig
+    
+
+##########################################################################
+# MSA SCONE Conservation (2005-12-12 kate)
+# From Harvard Med School, Saurabh Asthana <faplap@gmail.com>
+# Reusbmitted 12/21/05
+
+    cd /cluster/data/encode/MSA
+    mkdir -p SconeCons/2005-12-21/lab
+    ln -s SconeCons/2005-12-21 latest
+    cd latest/lab
+    mkdir bed; cd bed
+    wget http://genetics.bwh.harvard.edu/graft/bed/sconeRegions.NOV-2005.bed.tar.bz2
+    bunzip2 sconeRegions.NOV-2005.bed.tar.bz2
+    tar xvf sconeRegions.NOV-2005.bed.tar
+    cd ..
+
+    cd ..; mkdir wig; cd wig
+    wget http://ika.bwh.harvard.edu/graft/wig/scone.NOV-2005.wig.tar.bz2
+    bunzip2 scone.NOV-2005.wig.tar.bz2
+    tar xvf scone.NOV-2005.wig.tar
+    cd ../..
+
+    # elements
+cat > load.csh << 'EOF'
+    set out = sconeRegions.bed
+    rm -f $out
+    foreach f (lab/bed/*.bed)
+        set r = $f:t:r
+        echo $r
+        grep '^chr' $f | \
+            awk '{printf("%s\t%d\t%d\t%s\t1000\n", \
+                        $1,$2,$3,$4)}' >> $out
+    end
+    hgLoadBed -strict hg17 encodeTbaSconeEl $out
+'EOF'
+    csh load.csh >&! load.log &
+        # Loaded 18817 elements 
+    featureBits -enrichment hg17 encodeRegions encodeTbaSconeEl
+        # encodeRegions 1.047%, encodeTbaSconeEl 0.083%, both 0.083%, cover 7.92%, enrich 95.55x
+    featureBits -enrichment hg17 encodeRegions encodeTbaPhastConsEl
+       # encodeRegions 1.047%, encodeTbaPhastConsEl 0.063%, both 0.063%, cover 6.04%, enrich 95.55x
+    featureBits -enrichment hg17 encodeRegions encodeTbaGerpEl
+       # encodeRegions 1.047%, encodeTbaGerpEl 0.057%, both 0.057%, cover 5.47%, enrich 95.55x
+    featureBits -enrichment hg17 encodeRegions encodeTbaBinConspEl
+        # encodeRegions 1.047%, encodeTbaBinConsEl 0.060%, both 0.060%, cover 5.71%, enrich 95.55x
+
+    # conservation
+    cat lab/wig/*.wig | \
+        wigEncode stdin tbaScone.wig tbaScone.wib
+    set d = /gbdb/hg17/encode/TBA/SEP-05
+    ln -s `pwd`/tbaScone.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeTbaSconeCons tbaScone.wig 
+
+##########################################################################
+# MSA Conservation  (2005-12-07 kate)
+# Just phastCons and GERP for this freeze  (x3 aligners)
+
+    cd /cluster/data/encode/MSA/SEP-05
+    mkdir -p conservation/lab
+    cd conservation/lab
+    wget ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/SEP-2005/cons/phastCons.wig.tar.gz
+    tar xvfz phastCons.wig.tar.gz
+    cd ..
+
+cat > load.csh << 'EOF'
+    # TBA
+    gunzip -c lab/tba/*/phast/human.ENm*.gz | \
+        wigEncode stdin tbaPhastCons.wig tbaPhastCons.wib
+    set d = /gbdb/hg17/encode/TBA/SEP-05
+    ln -s `pwd`/tbaPhastCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeTbaPhastCons tbaPhastCons.wig 
+
+    # MLAGAN
+    gunzip -c lab/mlagan/*/phast/human.ENm*.gz | \
+        wigEncode stdin mlaganPhastCons.wig mlaganPhastCons.wib
+    set d = /gbdb/hg17/encode/MLAGAN/SEP-05
+    ln -s `pwd`/mlaganPhastCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeMlaganPhastCons mlaganPhastCons.wig 
+
+    # MAVID
+    gunzip -c lab/mavid/*/phast/human.ENm*.gz | \
+        wigEncode stdin mavidPhastCons.wig mavidPhastCons.wib
+    set d = /gbdb/hg17/encode/MAVID/SEP-05
+    ln -s `pwd`/mavidPhastCons.wib $d
+    hgLoadWiggle -pathPrefix=$d hg17 encodeMavidPhastCons mavidPhastCons.wig 
+'EOF'
+    csh load.csh >&! load.log
+
           
 ##########################################################################
 # MSA alignment agreement
@@ -1621,3 +1815,40 @@ cat > load.csh << 'EOF'
     end
 'EOF'
     csh load.csh >&! load.log &
+
+##########################################################################
+# Harvard TBA Conservation (2005-12-12 kate)
+#  From <faplap@gmail.com> Saurabh Asthana
+# Dept. of Medicine, Brigham & Women's Hospital, Harvard Medical School
+
+    cd /cluster/data/encode/MSA/SconeCons
+    mkdir -p 2005-12-01/lab
+    cd 2005-12-01/lab
+    wget http://ika.bwh.harvard.edu/graft/wig/scone.NOV-2005.wig.tar.bz2
+    wget http://genetics.bwh.harvard.edu/graft/bed/sconeRegions.NOV-2005.bed.tar.bz2
+    mkdir -p bed wig
+    # NOTE: files are actually gzipped
+    mv scone.NOV-2005.wig.tar.bz2 wig/scone.wig.tar.gz
+    mv sconeRegions.NOV-2005.bed.tar.bz2 bed/sconeRegions.bed.tar.gz
+    cd ..
+
+    # Conservation scores
+    cat lab/wig/*.wig | grep -v track | \
+        wigEncode 
+    # Conserved Elements
+    # Add these to the TBA Elements track as a subtrack
+    # For table consistency, assign item names of the form <region>.#,
+    # and a score=1000
+    set bed = sconeRegions.bed
+    rm $out
+    foreach f (lab/bed/*.bed)
+        set r = $f:t:r
+        echo $r
+        grep '^chr' $f | \
+            awk -v REGION=$r '{printf("%s\t%d\t%d\t%s.%d\t%d\n", \
+                $1,$2,$3,REGION, NR,1000)}' >> $bed
+    end
+    hgLoadBed -strict hg17 encodeTbaSconeEl $bed
+        # Loaded 18784 elements of size 5
+
+    

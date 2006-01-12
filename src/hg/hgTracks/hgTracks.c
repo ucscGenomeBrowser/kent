@@ -100,10 +100,11 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1054 2005/12/11 04:50:43 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1064 2005/12/22 14:38:57 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
+boolean isPrivateHost;		/* True if we're on genome-test. */
 char *protDbName;               /* Name of proteome database for this genome. */
 
 #define MAX_CONTROL_COLUMNS 5
@@ -340,20 +341,56 @@ void initTl()
 /* Initialize layout around small font and a picture about 600 pixels
  * wide. */
 {
+char *fontType = cartUsualString(cart, "fontType", "medium");
+boolean fontExtras = inclFontExtras();
+
 MgFont *font = (MgFont *)NULL;
 tl.textSize = cartUsualString(cart, textSizeVar, "small");
-if (sameString(tl.textSize, "small"))
-     font = mgSmallFont();
-else if (sameString(tl.textSize, "tiny"))
-     font = mgTinyFont();
-else if (sameString(tl.textSize, "medium"))
-     font = mgMediumFont();
-else if (sameString(tl.textSize, "large"))
-     font = mgLargeFont();
-else if (sameString(tl.textSize, "huge"))
-     font = mgHugeFont();
+if (fontExtras && sameString(fontType,"bold"))
+    {
+    if (sameString(tl.textSize, "small"))
+	 font = mgSmallBoldFont();
+    else if (sameString(tl.textSize, "tiny"))
+	 font = mgTinyBoldFont();
+    else if (sameString(tl.textSize, "medium"))
+	 font = mgMediumBoldFont();
+    else if (sameString(tl.textSize, "large"))
+	 font = mgLargeBoldFont();
+    else if (sameString(tl.textSize, "huge"))
+	 font = mgHugeBoldFont();
+    else
+	 font = mgSmallBoldFont();	/*	default to small	*/
+    }
+else if (fontExtras && sameString(fontType,"fixed"))
+    {
+    if (sameString(tl.textSize, "small"))
+	 font = mgSmallFixedFont();
+    else if (sameString(tl.textSize, "tiny"))
+	 font = mgTinyFixedFont();
+    else if (sameString(tl.textSize, "medium"))
+	 font = mgMediumFixedFont();
+    else if (sameString(tl.textSize, "large"))
+	 font = mgLargeFixedFont();
+    else if (sameString(tl.textSize, "huge"))
+	 font = mgHugeFixedFont();
+    else
+	 font = mgSmallFixedFont();	/*	default to small	*/
+    }
 else
-    font = mgSmallFont(); /* default to small */
+    {
+    if (sameString(tl.textSize, "small"))
+	 font = mgSmallFont();
+    else if (sameString(tl.textSize, "tiny"))
+	 font = mgTinyFont();
+    else if (sameString(tl.textSize, "medium"))
+	 font = mgMediumFont();
+    else if (sameString(tl.textSize, "large"))
+	 font = mgLargeFont();
+    else if (sameString(tl.textSize, "huge"))
+	 font = mgHugeFont();
+    else
+	font = mgSmallFont(); /* default to small */
+    }
 tl.font = font;
 tl.mWidth = mgFontStringWidth(font, "M");
 tl.nWidth = mgFontStringWidth(font, "n");
@@ -2850,10 +2887,10 @@ boolean labelStarted = FALSE;
 	
 if (hTableExists("kgXref"))
     {
+    char *omimAvail = NULL;
     char query[128];
-    int omimAvail = 0;
-    safef(query, sizeof(query), "select count(*) from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 2");
-    omimAvail = sqlQuickNum(conn, query);
+    safef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
+    omimAvail = sqlQuickString(conn, query);
 
     if (knownGeneLabels == NULL)
         {
@@ -2883,7 +2920,7 @@ if (hTableExists("kgXref"))
         }
 
     /* cart may be from another build which has OMIM */
-    if (omimAvail == 0 && useMimId) 
+    if (omimAvail == NULL && useMimId) 
         {
         useMimId = FALSE;
         if (!useGeneSymbol && !useKgId && !useProtDisplayId)
@@ -2941,7 +2978,6 @@ if (hTableExists("kgXref"))
             }
         /* should this be a hash instead? */
         kgE->name = dyStringCannibalize(&name);
-    	//lf->extra = dyStringCannibalize(&name);
         kgE->hgg_prot = lf->extra;
         lf->extra = kgE;
 	}
@@ -2952,15 +2988,10 @@ hFreeConn(&conn);
 void loadKnownGene(struct track *tg)
 /* Load up known genes. */
 {
-//enum trackVisibility vis = tg->visibility;
-//tg->items = lfFromGenePredInRange(tg, "knownGene", chromName, winStart, winEnd);
 loadGenePredWithName2(tg);
 /* always do so that protein ID will be in struct */
-//if (vis != tvDense)
-    //{
-    lookupKnownGeneNames(tg->items);
-    slSort(&tg->items, linkedFeaturesCmpStart);
-    //}
+lookupKnownGeneNames(tg->items);
+slSort(&tg->items, linkedFeaturesCmpStart);
 limitVisibility(tg);
 }
 
@@ -3070,7 +3101,6 @@ void knownGeneMethods(struct track *tg)
 /* Make track of known genes. */
 {
 /* use loadGenePredWithName2 instead of loadKnownGene to pick up proteinID */
-//tg->loadItems   = loadGenePredWithName2;
 tg->loadItems   = loadKnownGene;
 tg->itemName 	= knownGeneName;
 tg->mapItemName = knownGeneMapName;
@@ -3422,7 +3452,7 @@ struct hashEl *refGeneLabels = cartFindPrefix(cart, (isNative ? "refGene.label" 
 struct hashEl *label;
 int omimAvail = 0;
 char query[128];
-safef(query, sizeof(query), "select count(*) from refLink where refLink.omimId != 0 limit 2");
+safef(query, sizeof(query), "select count(*) from refLink where refLink.omimId != 0");
 omimAvail = sqlQuickNum(conn, query);
 
 if (refGeneLabels == NULL)
@@ -5388,7 +5418,7 @@ return shadesOfBrown[grayLevel];
 void exoMouseMethods(struct track *tg)
 /* Make track for exoMouse. */
 {
-if (sameString(chromName, "chr22") && hIsPrivateHost())
+if (sameString(chromName, "chr22") && isPrivateHost)
     tg->visibility = tvDense;
 else
     tg->visibility = tvHide;
@@ -5486,7 +5516,7 @@ char *chromPrefixes[] = { "chr", "Group",
 			  NULL };
 
 char *scaffoldPrefixes[] = { "scaffold_", "contig_", "SCAFFOLD", "Scaffold", 
-			     "Contig", "SuperCont", 
+			     "Contig", "SuperCont", "super_",
 			     NULL };
 
 char *maybeSkipPrefix(char *name, char *prefixes[])
@@ -8432,22 +8462,17 @@ char *scientificName = hScientificName(database);
 char *dir = ensOrgNameFromScientificName(scientificName);
 struct dyString *ensUrl;
 char *name;
-char *scaffoldName;
-char ensemblChrScaffoldName[64];
 int start, end;
 
 if (sameWord(scientificName, "Takifugu rubripes"))
     {
     /* for Fugu, must give scaffold, not chr coordinates */
-    /* Also, must give "chrom" as "Chr_scaffold_N" */
+    /* Also, must give "chrom" as "scaffold_N", name below. */
     if (!hScaffoldPos(chromName, winStart, winEnd,
-                        &scaffoldName, &start, &end))
+                        &name, &start, &end))
         /* position doesn't appear on Ensembl browser.
          * Ensembl doesn't show scaffolds < 2K */
         return;
-    strcpy(ensemblChrScaffoldName, "Chr_");
-    strncat(ensemblChrScaffoldName, scaffoldName, 60);
-    name = ensemblChrScaffoldName;
     }
 else
     {
@@ -8455,6 +8480,7 @@ else
     start = winStart;
     end = winEnd;
     }
+start += 1;
 ensUrl = ensContigViewUrl(dir, name, seqBaseCount, start, end);
 hPrintf("<A HREF=\"%s\" TARGET=_blank class=\"topbar\">", ensUrl->string);
 /* NOTE: probably should free mem from dir and scientificName ?*/
@@ -9614,7 +9640,7 @@ struct hashEl *label;
 if (hgMutLabels == NULL)
     {
     useHgvs = TRUE; /* default to gene name */
-    /* set cart to match what doing */
+    /* set cart to match what is being displayed */
     cartSetBoolean(cart, "hgMut.label.hgvs", TRUE);
     }
 for (label = hgMutLabels; label != NULL; label = label->next)
@@ -10956,6 +10982,8 @@ hPrintf("<CENTER>\n");
 
 if (!hideControls)
     {
+    char *browserName = (isPrivateHost ? "Test Browser" : "Genome Browser");
+    char *organization = (hIsMgcServer() ? "MGC" : "UCSC");
     hotLinks();
 
     /* Show title . */
@@ -10963,34 +10991,23 @@ if (!hideControls)
     if(freezeName == NULL)
 	freezeName = "Unknown";
     hPrintf("<FONT SIZE=5><B>");
-    if (hIsMgcServer())
+    if (startsWith("zoo",database) )
 	{
-	if (sameString(organism, "Archaea"))
-            hPrintf("Genome Browser on Archaeon %s", freezeName);
-	else
-            hPrintf("MGC Genome Browser on %s %s Assembly", organism, freezeName); 
+	hPrintf("%s %s on %s June 2002 Assembly %s target1",
+		organization, browserName, organism, freezeName); 
 	}
     else
 	{
-	if (startsWith("zoo",database) )
-	    {
-/* HACK ALERT - same alert as in hgGateway - The Zoo needs its own
- * mechanism of producing this title with its date and target.
- */
-	    hPrintf("UCSC Genome Browser on %s June 2002 Assembly %s target1",
-		    organism, freezeName); 
-	    }
+
+	if (sameString(clade, "ancestor"))
+	    hPrintf("%s %s on %s Common Ancestor (%s)", 
+	    	organization, browserName, organism, freezeName);
+	else if (sameString(organism, "Archaea"))
+	    hPrintf("%s %s on Archaeon %s Assembly", 
+	    	organization, browserName, freezeName);
 	else
-	    {
-
-	    if (sameString(clade, "ancestor"))
-                hPrintf("UCSC Genome Browser on %s Common Ancestor (%s)", organism, freezeName);
-	    else if (sameString(organism, "Archaea"))
-                hPrintf("UCSC Genome Browser on Archaeon %s Assembly", freezeName);
-
-	    else
-                hPrintf("UCSC Genome Browser on %s %s Assembly", organism, freezeName); 
-	    }
+	    hPrintf("%s %s on %s %s Assembly", 
+	    	organization, browserName, organism, freezeName); 
 	}
     hPrintf("</B></FONT><BR>\n");
 
@@ -11028,7 +11045,7 @@ if (showTrackControls)
      * we need to repeat the position in a hidden variable here
      * so that zoom/scrolling always has current position to work
      * from. */
-    hPrintf("<INPUT TYPE=HIDDEN NAME=\"position\""
+    hPrintf("<INPUT TYPE=HIDDEN NAME=\"position\" "
             "VALUE=\"%s:%d-%d\">", chromName, winStart+1, winEnd);
     hPrintf("</CENTER></FORM>\n");
     hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackForm\" METHOD=POST>\n\n", hgTracksName());
@@ -11938,9 +11955,10 @@ int main(int argc, char *argv[])
  * for the benefit of the cgiVarExists, which 
  * somehow can't be moved effectively into doMiddle. */
 uglyTime(NULL);
+isPrivateHost = hIsPrivateHost();
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
-htmlSetBackground("../images/floret.jpg");
+htmlSetBackground(hBackgroundImage());
 htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">"); 
 cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, NULL);
 return 0;

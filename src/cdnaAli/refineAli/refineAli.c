@@ -295,7 +295,7 @@ errAbort(
 "      refineAli ea\\all.out cDNA\\allcdna chrom ra\\good.txt ra\\bad.txt ra\\cool.txt ra\\err.txt 0 100000 features\\c2g\n");
 }
 
-static char **chromNames;
+char **chromNames;
 
 
 bits32 dnaCrc(DNA *dna, int size)

@@ -2,12 +2,13 @@
 #include "common.h"
 
 #include "chromInfo.h"
+#include "dystring.h"
 #include "hash.h"
 #include "hdb.h"
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.3 2005/12/12 22:02:11 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.7 2005/12/29 04:47:03 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -80,24 +81,19 @@ strcat(tableName, "_snpTmp");
 if (!sqlTableExists(conn, tableName))
     return list;
 
+/* not checking chrom */
 safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refNCBI, class from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(el);
-    el->name = cloneString(row[3]);
     el->chrom = chromName;
     el->score = 0;
     el->chromStart = atoi(row[1]);
     el->chromEnd = atoi(row[2]);
-    
-    if (atoi(row[4]) == 0) 
-        strcpy(el->strand, "+");
-    else if (atoi(row[4]) == 1)
-        strcpy(el->strand, "-");
-    else
-        strcpy(el->strand, "?");
+    el->name = cloneString(row[3]);
+    strcpy(el->strand, row[4]);
     el->refNCBI = cloneString(row[5]);
     el->class = cloneString(row[6]);
     slAddHead(&list,el);
@@ -175,8 +171,80 @@ for (el = list; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
+char *validString(int validCode)
+{
+switch (validCode)
+    {
+    case 0:
+        return "unknown";
+    case 1:
+        return "by-cluster";
+    case 2:
+        return "by-frequency";
+    case 3:
+        return "by-cluster,by-frequency";
+    case 4:
+        return "by-submitter";
+    case 5:
+        return "by-submitter,by-cluster";
+    case 6:
+        return "by-submitter,by-frequency";
+    case 7:
+        return "by-submitter";
+    case 8:
+        return "by-2hit-2allele";
+    case 9:
+        return "by-2hit-2allele,by-cluster";
+    case 10:
+        return "by-2hit-2allele,by-frequency";
+    case 11:
+        return "by-2hit-2allele,by-frequency,by-cluster";
+    case 12:
+        return "by-2hit-2allele,by-submitter";
+    case 13:
+        return "by-2hit-2allele,by-submitter,by-cluster";
+    case 14:
+        return "by-2hit-2allele,by-submitter,by-frequency";
+    case 15:
+        return "by-2hit-2allele,by-submitter,by-frequency,by-cluster";
+    case 16:
+        return "by-hapmap";
+    case 17:
+        return "by-hapmap,by-cluster";
+    case 18:
+        return "by-hapmap,by-frequency";
+    case 19:
+        return "by-hapmap,by-frequency,by-cluster";
+    case 20:
+        return "by-hapmap,by-submitter";
+    case 21:
+        return "by-hapmap,by-submitter,by-cluster";
+    case 22:
+        return "by-hapmap,by-submitter,by-frequency";
+    case 23:
+        return "by-hapmap,by-submitter,by-frequency,by-cluster";
+    case 24:
+        return "by-hapmap,by-2hit-2allele";
+    case 25:
+        return "by-hapmap,by-2hit-2allele,by-cluster";
+    case 26:
+        return "by-hapmap,by-2hit-2allele,by-frequency";
+    case 27:
+        return "by-hapmap,by-2hit-2allele,by-frequency,by-cluster";
+    case 28:
+        return "by-hapmap,by-2hit-2allele,by-submitter";
+    case 29:
+        return "by-hapmap,by-2hit-2allele,by-submitter,by-cluster";
+    case 30:
+        return "by-hapmap,by-2hit-2allele,by-submitter,by-frequency";
+    case 31:
+        return "by-hapmap,by-2hit-2allele,by-submitter,by-frequency,by-cluster";
+    default:
+        return "unknown";
+    }
+}
 
-void lookupHet(struct snp125 *list)
+void lookupHetAndValid(struct snp125 *list)
 /* get heterozygosity from SNP table */
 {
 struct snp125 *el;
@@ -186,12 +254,12 @@ struct sqlResult *sr;
 char **row;
 char snpName[32];
 
-verbose(1, "looking up heterozygosity...\n");
+verbose(1, "looking up heterozygosity and validation status...\n");
 for (el = list; el != NULL; el = el->next)
     {
     strcpy(snpName, el->name);
     stripString(snpName, "rs");
-    safef(query, sizeof(query), "select avg_heterozygosity, het_se from SNP where snp_id = %s", snpName);
+    safef(query, sizeof(query), "select avg_heterozygosity, validation_status, het_se from SNP where snp_id = %s", snpName);
     sr = sqlGetResult(conn, query);
     /* need a joiner check rule for this */
     row = sqlNextRow(sr);
@@ -203,7 +271,8 @@ for (el = list; el != NULL; el = el->next)
 	continue;
 	}
     el->avHet = atof(cloneString(row[0]));
-    el->avHetSE = atof(cloneString(row[1]));
+    el->avHetSE = atof(cloneString(row[2]));
+    el->valid = validString(atoi(row[1]));
     sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
@@ -271,6 +340,19 @@ for (el = list; el != NULL; el = el->next)
     }
 }
 
+
+void loadDatabase(FILE *f)
+{
+struct sqlConnection *conn2 = hAllocConn2();
+// hGetMinIndexLength requires chromInfo
+// could add hGetMinIndexLength2 to hdb.c
+// snp125TableCreate(conn2, hGetMinIndexLength2());
+snp125TableCreate(conn2, 32);
+verbose(1, "loading...\n");
+hgLoadTabFile(conn2, ".", "snp125", &f);
+hFreeConn2(&conn2);
+}
+
 void writeToTabFile(char *chromName, struct snp125 *list)
 /* write tab separated file */
 {
@@ -301,13 +383,12 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "%s\t", el->observed);
     fprintf(f, "%s\t", el->molType);
     fprintf(f, "%s\t", el->class);
-    fprintf(f, "unknown\t");
+    fprintf(f, "%s\t", el->valid);
     fprintf(f, "%f\t", el->avHet);
     fprintf(f, "%f\t", el->avHetSE);
     fprintf(f, "%s\t", el->func);
-    fprintf(f, "unknown\t");
     fprintf(f, "dbSNP125\t");
-    fprintf(f, "0\t");
+    fprintf(f, "\t");
     fprintf(f, "\n");
     count++;
     }
@@ -318,18 +399,6 @@ if (count > 0)
 
 
 
-
-void loadDatabase(FILE *f)
-{
-struct sqlConnection *conn2 = hAllocConn2();
-// hGetMinIndexLength requires chromInfo
-// could add hGetMinIndexLength2 to hdb.c
-// snp125TableCreate(conn2, hGetMinIndexLength2());
-snp125TableCreate(conn2, 32);
-verbose(1, "loading...\n");
-hgLoadTabFile(conn2, ".", "snp125", &f);
-hFreeConn2(&conn2);
-}
 
 int main(int argc, char *argv[])
 /* Check args; read and load . */
@@ -373,7 +442,7 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
         continue;
 	}
     lookupFunction(list);
-    lookupHet(list);
+    lookupHetAndValid(list);
     lookupObserved(list);
     lookupRefAllele(list);
     writeToTabFile(chromPtr->name, list);

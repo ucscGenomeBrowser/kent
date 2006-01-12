@@ -1,11 +1,16 @@
-/* autoDtd - Give this a XML document to look at and it will come up with a DTD to describe it.. */
+/* autoDtd - Give this a XML document to look at and it will come up with a 
+ * DTD to describe it, and possibly some more readable and informative outputs
+ * as well. */
+/* This file is copyright 2005 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
+
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.8 2005/12/07 19:46:21 kent Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.12 2005/12/20 18:20:28 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -233,11 +238,21 @@ void rWriteDtd(FILE *dtdFile, FILE *statsFile, struct type *type,
 {
 struct element *el;
 struct attribute *att;
+int elCount = slCount(type->elements);
+boolean multiline;
+
+if (type->textAttribute != NULL)
+    elCount += 1;
+multiline = (elCount > 3);
 hashAdd(uniqHash, type->name, type);
-fprintf(dtdFile, "<!ELEMENT %s (\n", type->name);
+fprintf(dtdFile, "<!ELEMENT %s (", type->name);
+if (multiline)
+    fprintf(dtdFile, "\n");
 for (el = type->elements; el != NULL; el = el->next)
     {
-    fprintf(dtdFile, "\t%s", el->type->name);
+    if (multiline)
+       fprintf(dtdFile, "\t");
+    fprintf(dtdFile, "%s", el->type->name);
     if (el->isList)
         {
 	if (el->isOptional)
@@ -251,19 +266,22 @@ for (el = type->elements; el != NULL; el = el->next)
 	    fprintf(dtdFile, "?");
 	}
     if (el->next != NULL || type->textAttribute != NULL)
-        fprintf(dtdFile, ",");
-    fprintf(dtdFile, "\n");
+        fprintf(dtdFile, ", ");
+    if (multiline)
+	fprintf(dtdFile, "\n");
     }
 if (type->textAttribute != NULL)
     {
-    fprintf(dtdFile, "\t");
+    if (multiline)
+	fprintf(dtdFile, "\t");
     if (!type->textAttribute->nonInt)
-        fprintf(dtdFile, "#INT");
+        fprintf(dtdFile, "%%INTEGER;");
     else if (!type->textAttribute->nonFloat)
-        fprintf(dtdFile, "#FLOAT");
+        fprintf(dtdFile, "%%REAL;");
     else
         fprintf(dtdFile, "#PCDATA");
-    fprintf(dtdFile, "\n");
+    if (multiline)
+	fprintf(dtdFile, "\n");
     }
 fprintf(dtdFile, ")>\n");
 fprintf(statsFile, "%s %d\n", type->name, type->count);
@@ -281,9 +299,9 @@ for (att = type->attributes; att != NULL; att = att->next)
     {
     fprintf(dtdFile, "<!ATTLIST %s %s ", type->name, att->name);
     if (!att->nonInt)
-        fprintf(dtdFile, "INT");
+        fprintf(dtdFile, "%%int;");
     else if (!att->nonFloat)
-        fprintf(dtdFile, "FLOAT");
+        fprintf(dtdFile, "%%float;");
     else
         fprintf(dtdFile, "CDATA");
     if (att->isOptional)
@@ -314,7 +332,14 @@ void writeDtd(char *dtdFileName, char *statsFileName, char *xmlFileName,
 struct hash *uniqHash = newHash(0);  /* Prevent writing dup defs for shared types. */
 FILE *dtdFile = mustOpen(dtdFileName, "w");
 FILE *statsFile = mustOpen(statsFileName, "w");
-fprintf(dtdFile, "<!-- This file was created by autoXml based on %s -->\n\n", xmlFileName);
+fprintf(dtdFile, "<!-- This file was created by autoDtd based on %s -->\n\n", xmlFileName);
+fprintf(dtdFile, "<!-- First some entities to mark numeric types in between tags.  Same as NCBI. -->\n");
+fprintf(dtdFile, "<!ENTITY %% INTEGER \"#PCDATA\">\n");
+fprintf(dtdFile, "<!ENTITY %% REAL \"#PCDATA\">\n\n");
+fprintf(dtdFile, "<!-- Now some entities for numeric attributes. NCBI doesn't define these but we do. -->\n");
+fprintf(dtdFile, "<!ENTITY %% int \"CDATA\">\n");
+fprintf(dtdFile, "<!ENTITY %% float \"CDATA\">\n\n");
+fprintf(dtdFile, "<!-- Now the data structure in %s. -->\n", xmlFileName);
 fprintf(statsFile, "#Statistics on %s\n", xmlFileName);
 fprintf(statsFile, "#Format is:\n");
 fprintf(statsFile, "#<tag name>  <tag count>\n");

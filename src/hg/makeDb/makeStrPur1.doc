@@ -520,139 +520,6 @@ _EOF_
         /santest/scratch/bz.strPur1.ci1 >& do.log &
     screen -d
 
-# HUMAN PROTEINS TBLASTN TRACK (hg17 In Progress 5/27/2005 Andy)
-    ssh eieio
-    mkdir -p /cluster/data/strPur1/blastDb
-    cd /cluster/data/strPur1/blastDb
-    mkdir ../faSplits
-    faSplit sequence ../maskedFa/urchin.softMasked.fa 300 ../faSplits/urch_
-    ssh kolossus
-    ln -s /cluster/data/strPur1/faSplits/*.fa .
-    for i in *.fa
-    do
-	formatdb -i $i -p F
-    done
-    rm *.log *.fa
-    mkdir -p /santest/scratch/strPur1/blastDb
-    cp * /santest/scratch/strPur1/blastDb
-    mkdir -p /cluster/data/strPur1/bed/tblastn.hg17KG
-    cd /cluster/data/strPur1/bed/tblastn.hg17KG
-    ls -1S /santest/scratch/strPur1/blastDb/*.nsq | sed "s/\.nsq//" > query.lst
-
-    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(350000/`wc query.lst | awk "{print \\\$1}"`\)
-    # 42156/(350000/297) = 35.772377
-    mkdir -p /cluster/bluearc/strPur1/bed/tblastn.hg17KG/kgfa
-    split -a 4 -l 36 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/strPur1/bed/tblastn.hg17KG/kgfa/kg
-    ln -s /cluster/bluearc/strPur1/bed/tblastn.hg17KG/kgfa kgfa
-    cd kgfa
-    for i in *; do pslxToFa $i $i.fa; rm $i; done
-    cd ..
-    ls -1S kgfa/*.fa > kg.lst
-    mkdir -p /cluster/bluearc/strPur1/bed/tblastn.hg17KG/blastOut
-    ln -s /cluster/bluearc/strPur1/bed/tblastn.hg17KG/blastOut 
-    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
-    cat << _EOF_ > blastGsub
-#LOOP
-blastSome \$(path1) {check in line \$(path2)} {check out exists blastOut/\$(root2)/q.\$(root1).psl } 
-#ENDLOOP
-_EOF_
-
-cat << _EOF_ > blastSome
-#!/bin/sh
-BLASTMAT=/iscratch/i/blast/data
-export BLASTMAT
-g=\`basename \$2\`
-f=/tmp/\`basename \$3\`.\$g
-for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
-do
-if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e \$eVal -p tblastn -d \$1 -i \$2 -o \$f.8
-then
-        mv \$f.8 \$f.1
-        break;
-fi
-done
-if test -f  \$f.1
-then
-if /cluster/bin/i386/blastToPsl \$f.1 \$f.2
-then
-	liftUp -nosort -type=".psl" -nohead \$f.3 /cluster/data/strPur1/jkStuff/liftAll.lft warn \$f.2  
-	liftUp -nosort -type=".psl" -pslQ -nohead \$3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn \$f.3
-	if pslCheck -prot \$3.tmp
-	then
-	    mv \$3.tmp \$3
-	    rm -f \$f.1 \$f.2 
-	fi
-        exit 0
-    fi
-fi
-rm -f \$f.1 \$f.2 \$3.tmp \$f.8
-exit 1
-_EOF_
-
-    chmod +x blastSome
-    gensub2 query.lst kg.lst blastGsub blastSpec
-
-    ssh kk
-    cd /cluster/data/strPur1/bed/tblastn.hg17KG
-    para create blastSpec
-    para push
-    para try
-#Completed: 347787 of 347787 jobs
-#CPU time in finished jobs:   23905637s  398427.28m  6640.45h  276.69d  0.758 y
-#IO & Wait Time:               2433375s   40556.26m   675.94h   28.16d  0.077 y
-#Average job time:                  76s       1.26m     0.02h    0.00d
-#Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:             875s      14.58m     0.24h    0.01d
-#Submission to last job:        412522s    6875.37m   114.59h    4.77d
-
-   cat << _EOF_ > chainGsub
-#LOOP
-chainSome \$(path1)
-#ENDLOOP
-_EOF_
-
-    cat << _EOF_ > chainSome
-(cd \$1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=25000 stdin ../c.\`basename \$1\`.psl)
-_EOF_
-    chmod +x chainSome
-
-    ls -1dS `pwd`/blastOut/kg???? > chain.lst
-    gensub2 chain.lst single chainGsub chainSpec
-
-    ssh kki
-    cd /cluster/data/strPur1/bed/tblastn.hg17KG
-    para create chainSpec
-    para push
-# Completed: 325 of 325 jobs
-# CPU time in finished jobs:       9334s     155.56m     2.59h    0.11d  0.000 y
-# IO & Wait Time:                 25507s     425.12m     7.09h    0.30d  0.001 y
-# Average job time:                 107s       1.79m     0.03h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            2999s      49.98m     0.83h    0.03d
-# Submission to last job:          3888s      64.80m     1.08h    0.04d
-
-    exit
-    # back to kolossus
-    cd /cluster/data/strPur1/bed/tblastn.hg17KG/blastOut
-    for i in kg??
-    do 
-	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.$i.psl > c60.$i.psl
-	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
-	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
-	echo $i
-    done
-
-    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/strPur1/bed/tblastn.hg17KG/blastHg17KG.psl
-    cd ..
-
-    ssh hgwdev
-    cd /cluster/data/strPur1/bed/tblastn.hg17KG
-    hgLoadPsl strPur1 blastHg17KG.psl
-
-    # back to kolossus
-    rm -rf blastOut
-# End tblastn
-
 # REDO REPEATMASKING (DONE 8/3/2005 Andy)
     # Currently the repeat-masking is too low-coverage.
     ssh hgwdev
@@ -1041,3 +908,83 @@ EOF
 #Longest finished job:            1308s      21.80m     0.36h    0.02d
 #Submission to last job:          1356s      22.60m     0.38h    0.02d
     # The crashing one is a PROBLEM.  Andy needs to e-mail Bob Edgar about this.
+
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY (DONE 12/12/2005 Andy)
+    ssh hgwdev
+    hgsql -N hgcentraltest -e 'insert into blatServers values("strPur1", "blat19", "17782", 1, 0);
+          insert into blatServers values("strPur1", "blat19", "17783", 0, 1);'
+
+# HUMAN PROTEINS TBLASTN (DONE 12/14/2005 Andy)
+    # Split up sea urchin
+    ssh kkstore02
+    cd urch/
+    twoBitToFa strPur1.2bit urchin.fa
+    mkdir splits
+    faSplit sequence splits.fa 60 splits/urch_
+    mkdir /san/sanVol1/scratch/strPur1/tblastn.{hg17KG,splits}
+    cp splits/* /san/sanVol1/scratch/strPur1/tblastn.splits
+    
+    # Create blast databases
+    ssh kolossus
+    cd /san/sanVol1/scratch/strPur1/tblastn.hg17KG
+    awk '{printf("0\t%s\t%s\t%s\t%s\n", $1, $2, $1, $2)}' /cluster/data/strPur1/chrom.sizes > garbage.lft
+    ln -s ../../andy/blast
+    mkdir splits
+    cd splits/
+    ln -s ../../tblastn.splits/* .
+    for fa in urch*.fa; do
+       split=${fa%.fa}; echo $split
+       ../blast/bin/formatdb -i $fa -pF -n $split
+    done
+    rm *.fa formatdb.log 
+
+    # protein setup
+    mkdir humanKgExons
+    cd humanKgExons/
+    splitFile /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl 38 kgExons_
+    for exonPsl in *; do pslxToFa $exonPsl $exonPsl.fa; rm $exonPsl; done
+
+    # blast run
+    ssh pk
+    cd san/strPur1/tblastn.hg17KG/
+    ls -1S humanKgExons/*.fa > exons.lst
+    ls -1S splits/urch*.nsq > targets.lst
+    cp /cluster/data/hg17/bed/blat.hg17KG/protein.lft .
+    cp /san/sanVol1/scratch/andy/tblastn{Exons,Gsub} .
+    mkdir blastOut/
+    gensub2 targets.lst exons.lst tblastnGsub spec
+    para create spec
+    para try
+    para push
+    para time
+#Completed: 59040 of 59040 jobs
+#CPU time in finished jobs:    6544747s  109079.12m  1817.99h   75.75d  0.208 y
+#IO & Wait Time:                186223s    3103.72m    51.73h    2.16d  0.006 y
+#Average job time:                 114s       1.90m     0.03h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             300s       5.00m     0.08h    0.00d
+#Submission to last job:         20123s     335.38m     5.59h    0.23d
+    
+    # Chaining part
+    cat << "EOF" > tblastnChain
+#!/bin/bash
+dir=$1
+echo $dir
+cat blastOut/${dir}/*.psl | simpleChain -prot -outPsl /dev/stdin simpleChain/c.${dir}.psl 
+awk "(\$13 - \$12)/\$11 > 0.6 {print}" simpleChain/c.${dir}.psl > simpleChain/c60.${dir}.psl
+sort -rn simpleChain/c60.${dir}.psl | pslUniq stdin simpleChain/u.${dir}.psl
+awk "((\$1 / \$11) ) > 0.60 { print   }" simpleChain/c60.${dir}.psl > simpleChain/m60.${dir}.psl
+EOF
+    chmod +x tblastnChain
+    for d in `cat dirs.lst`; do 
+        ./tblastnChain $d
+    done        
+    cd simpleChain/
+    sort -u -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* > ../blastHg17KG.psl
+
+    # Loading
+    ssh hgwdev
+    cd /cluster/data/strPur1/bed/tblastn.hg17KG
+    hgLoadPsl strPur1 blastHg17KG.psl
+
+  

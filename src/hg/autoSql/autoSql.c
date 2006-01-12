@@ -6,7 +6,9 @@
  * changes from here I'd rewrite it though.  The tokenizer is
  * pretty sound, the parser isn't bad (though the language it
  * parses is quirky), but the code generator is u-g-l-y.
- */
+ *
+ * This file is copyright 2002-2005 Jim Kent, but license is hereby
+ * granted for all use - public, private or commercial. */
 
 #include "common.h"
 #include "errabort.h"
@@ -16,7 +18,7 @@
 #include "cheapcgi.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: autoSql.c,v 1.26 2004/07/31 20:56:06 markd Exp $";
+static char const rcsid[] = "$Id: autoSql.c,v 1.27 2005/12/16 20:24:02 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */

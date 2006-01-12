@@ -10,6 +10,7 @@
 #include "snpUi.h"
 #include "spaceSaver.h"
 #include "ld.h"
+#include "hash.h"
 #include "ldUi.h"
 #include "gfxPoly.h"
 #include "memgfx.h"
@@ -19,8 +20,7 @@
 #include "cnpSharpSample.h"
 #include "cnpSharpCutoff.h"
 
-void filterSnpItems(struct track *tg, boolean (*filter)(struct track *tg, void *item));
-/* Filter out items from track->itemList. */
+/****** snpMap *******/
 
 boolean snpMapSourceFilterItem(struct track *tg, void *item);
 /* Return TRUE if item passes filter. */
@@ -43,6 +43,11 @@ void snpMapDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, i
 
 void snpMapMethods(struct track *tg);
 /* Make track for snps. */
+
+/****** snp ******/
+
+void filterSnpItems(struct track *tg, boolean (*filter)(struct track *tg, void *item));
+/* Filter out items from track->itemList. */
 
 boolean snpSourceFilterItem(struct track *tg, void *item);
 /* Return TRUE if item passes filter. */
@@ -75,6 +80,8 @@ void snpDrawItemAt(struct track *tg, void *item, struct vGfx *vg, int xOff, int 
 void snpMethods(struct track *tg);
 /* Make track for snps. */
 
+/***** haplotypes *****/
+
 char *perlegenName(struct track *tg, void *item);
 /* return the actual perlegen name, in form xx/yyyy cut off xx/ return yyyy */
 
@@ -88,27 +95,26 @@ void perlegenMethods(struct track *tg);
 /* setup special methods for Perlegen haplotype track */
 
 
+/****** LD *****/
+
 /* 10 shades from black to fully saturated of red/green/blue */
 #define LD_DATA_SHADES 10
-extern Color ldShadesOfRed[LD_DATA_SHADES];
-extern Color ldShadesOfGreen[LD_DATA_SHADES];
-extern Color ldShadesOfBlue[LD_DATA_SHADES];
+extern Color ldShadesPos[LD_DATA_SHADES];
+extern Color ldShadesNeg[LD_DATA_SHADES];
 extern Color ldHighLodLowDprime;
 extern Color ldHighDprimeLowLod;
-extern boolean ldColorsMade; /* Have the shades of Red, Green, and Blue been allocated? */
-extern int maxLdRgbShade;
+extern int colorLookup[256];
 
 struct ldStats 
+/* collect stats for drawing LD values in dense mode */
 {
-    unsigned chromStart;
-    unsigned n;
-    double sumValues;
-    double sumSquares;
-    double sumLodValues;
-    double sumLodSquares;
+    struct ldStats *next;
+    char           *name;      /* chromStart as a string */
+    unsigned        n;         /* count of snps with valid LD values */
+    unsigned        sumValues; /* sum of valid LD values */
 };
 
-void makeLdShades(struct vGfx *vg);
+//void makeLdShades(struct vGfx *vg);
 /* Allocate the LD shades of Red, Green and Blue */
 
 void ldLoadItems(struct track *tg);
@@ -134,6 +140,7 @@ void ldFreeItems(struct track *tg);
 void ldMethods(struct track *tg);
 /* setup special methods for Linkage Disequilibrium track */
 
+/****** CNP / Structural Variants ******/
 
 void loadCnpIafrate(struct track *tg);
 /* loader for cnpIafrate table */

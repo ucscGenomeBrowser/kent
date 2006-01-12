@@ -9,4 +9,4 @@ X = gfClient
 
 gfClient: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/$X $O $(MYLIBS) $L
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/$X${EXE}
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/$X${EXE}

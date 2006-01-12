@@ -26,7 +26,7 @@ struct joinerField
     char *separator;		/* Separators for lists or NULL if not list. */
     boolean indexOf;		/* True if id is index in this list. */
     boolean isPrimary;		/* True if is primary key. */
-    float minCheck;		/* Minimum ratio that must hit primary key */
+    double minCheck;		/* Minimum ratio that must hit primary key */
     boolean unique;		/* No more than one row per identifier. */
     boolean full;		/* All identifiers covered. */
     char *splitPrefix;		/* Prefix for splitting tables. */

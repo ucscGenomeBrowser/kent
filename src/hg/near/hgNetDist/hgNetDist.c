@@ -4,7 +4,6 @@
 */
 
 #include <stdio.h>
-#include <wait.h>
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
@@ -13,7 +12,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNetDist.c,v 1.4 2005/05/24 20:55:33 galt Exp $";
+static char const rcsid[] = "$Id: hgNetDist.c,v 1.5 2005/12/17 06:27:47 kent Exp $";
 
 boolean first=FALSE;
 boolean weighted=FALSE;

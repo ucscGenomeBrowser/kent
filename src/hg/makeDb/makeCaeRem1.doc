@@ -191,6 +191,8 @@ _EOF_
       | hgsql -N hgcentraltest
     echo 'update defaultDb set name="caeRem1" where genome="C. remanei"' \
       | hgsql -N hgcentraltest
+    hgsql hgcentraltest -e 'INSERT INTO genomeClade (genome,clade,priority) \
+values ("C. remanei", "worm",30);'
 
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/trackDb
@@ -612,4 +614,20 @@ XXXX
 	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
 	VALUES ("caeRem1", "blat16", "17789", "0", "1");' \
 	    hgcentraltest
+
+############################################################################
+#	preparing goldenPath downloads (WORKING 2005-12-14 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/caeRem1/goldenPath
+    cd /cluster/data/caeRem1/goldenPath
+    mkdir bigZips
+    cp -p ../maskedFa/remanei.softMasked.fa bigZips/superContigs.masked.fa
+    gzip bigZips/superContigs.masked.fa
+    cp -p ../RMOut/rmsk.lifted.out bigZips/rmsk.out
+    gzip bigZips/rmsk.out
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/caeRem1/bigZips
+    cd /usr/local/apache/htdocs/goldenPath/caeRem1/bigZips
+    ln -s /cluster/data/caeRem1/goldenPath/bigZips/* .
 

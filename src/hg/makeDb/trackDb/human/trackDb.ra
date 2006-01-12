@@ -445,19 +445,19 @@ type bedGraph 4
 
     track hapmapLdHotspotCEU
     subTrack hapmapLdHotspot
-    shortLabel LD Hotspot CEU
+    shortLabel CEU
     longLabel  Hotspots of Linkage Disequilibrium in the CEPH HapMap (CEU)
     priority 1
     
     track hapmapLdHotspotCJ
     subTrack hapmapLdHotspot
-    shortLabel LD Hotspot CJ
+    shortLabel CHB + JPT
     longLabel  Hotspots of Linkage Disequilibrium in the Chinese/Japanese HapMap (CHB and JPT)
     priority 2
 
     track hapmapLdHotspotYRI
     subTrack hapmapLdHotspot
-    shortLabel LD Hotspot YRI
+    shortLabel YRI
     longLabel  Hotspots of Linkage Disequilibrium in the Yoruban HapMap (YRI)
     priority 3
 
@@ -554,7 +554,7 @@ type bed 4 .
 track hapmapLd
 compositeTrack on
 shortLabel HapMap LD
-longLabel HapMap Linkage Disequilibrium - Phase I
+longLabel HapMap Linkage Disequilibrium - Phase II
 group varRep
 priority 144.49
 visibility hide
@@ -567,10 +567,10 @@ type bed 4 +
     longLabel HapMap Linkage Disequilibrium for the CEPH population (30 trios)
     priority 1
 
-    track hapmapLdYri
+    track hapmapLdChb
     subTrack hapmapLd off
-    shortLabel LD YRI
-    longLabel HapMap Linkage Disequilibrium for the Yoruban population (30 trios)
+    shortLabel LD CHB
+    longLabel HapMap Linkage Disequilibrium for the Chinese Han population (45 unrelated)
     priority 2
 
     track hapmapLdJpt
@@ -579,10 +579,10 @@ type bed 4 +
     longLabel HapMap Linkage Disequilibrium for the Japanese population (45 unrelated)
     priority 3
 
-    track hapmapLdHcb
+    track hapmapLdYri
     subTrack hapmapLd off
-    shortLabel LD CHB
-    longLabel HapMap Linkage Disequilibrium for the Chinese Han population (45 unrelated)
+    shortLabel LD YRI
+    longLabel HapMap Linkage Disequilibrium for the Yoruban population (30 trios)
     priority 4
 
 track haplotype
@@ -596,6 +596,15 @@ color 0,0,0
 altColor 0,0,0
 spectrum on
 type bed 12 .
+
+track affy500K
+shortLabel Affy 500K
+longLabel Affy GeneChip Mapping 500K Array
+group varRep
+priority 145.9
+visibility hide
+type bed 6 +
+url https://www.affymetrix.com/LinkServlet?probeset=$$
 
 track chainSelf
 shortLabel Self Chain 
@@ -1207,8 +1216,8 @@ otherDb hg17
 
 track cnp
 compositeTrack on
-shortLabel CNPs
-longLabel Copy Number Polymorphisms
+shortLabel Structural Var
+longLabel Structural Variation
 group varRep
 priority 146
 visibility hide
@@ -1240,11 +1249,19 @@ type bed 4 +
 
     track cnpFosmid
     subTrack cnp
-    shortLabel CNPs (Fosmid) 
-    longLabel Copy Number Polymorphisms from Fosmids
+    shortLabel SV Fosmids (Tuzun)
+    longLabel Structural Variation identified by Fosmids (Tuzun)
     noInherit on
     type bed 4 +
     priority 146.4
+
+    track delMccarroll
+    subTrack cnp
+    shortLabel Deletions (McCarroll)
+    longLabel Deletions from Genotype Analysis
+    noInherit on
+    type bed 3 .
+    priority 146.5
 
 track fosmidDiscordant
 shortLabel Fosmid Discordants
@@ -1310,9 +1327,10 @@ irows on
 summary brMafSum
 
 
-track hapmapRecombRate
+track snpRecombRate
+compositeTrack on
 shortLabel Recomb Rates
-longLabel Oxford Recombination Rates
+longLabel Recombination Rates from SNP Genotyping
 group varRep
 priority 145.5
 visibility hide
@@ -1324,14 +1342,58 @@ autoScaleDefault Off
 maxHeightPixels 64:32:16
 origAssembly hg16
 
-track hapmapRecombHotspots
+    track snpRecombRateHapmap
+    subTrack snpRecombRate
+    shortLabel HapMap
+    longLabel Oxford Recombination Rates from HapMap Phase I release 16c.1
+    priority 1
+
+    track snpRecombRatePerlegen
+    subTrack snpRecombRate
+    shortLabel Perlegen
+    longLabel Oxford Recombination Rates from Perlegen data
+    priority 2
+
+track snpRecombHotspot
+compositeTrack on
 shortLabel Recomb Hotspots
-longLabel Oxford Recombination Hotspots
+longLabel Recombination Hotspots from SNP Genotyping
 group varRep
-priority 145.6
+priority 145.51
 visibility hide
 type bed 3 .
 origAssembly hg16
+
+    track snpRecombHotspotHapmap
+    subTrack snpRecombHotspot
+    shortLabel HapMap
+    longLabel Oxford Recombination Hotspots from HapMap Phase I release 16c.1
+    priority 1
+
+    track snpRecombHotspotPerlegen
+    subTrack snpRecombHotspot
+    shortLabel Perlegen
+    longLabel Oxford Recombination Hotspots from Perlegen data
+    priority 2
+
+#track perlegenRecombColdpots
+#shortLabel Perlegen Recomb Coldspots
+#longLabel Oxford Recombination Coldspots from Perlegen data
+#group varRep
+#priority 145.6
+#visibility hide
+#type bed 3 .
+#origAssembly hg16
+
+track syntenyCow
+shortLabel Cow Synteny
+longLabel Cow Synteny Using RH Mapping
+group compGeno
+priority 188.70
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type bed 6 .
 
 searchTable wgRna
 searchMethod fuzzy
@@ -1420,6 +1482,15 @@ shortCircuit 1
 termRegex gnf1h[0-9]+.+
 searchPriority 16
 
+searchName affy500K
+searchTable affy500K
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex (SNP_A-[0-9]+(_[0-9]+)?)
+searchPriority 17
+padding 250
+
 searchName miRNAPrefix
 searchTable miRNA
 searchMethod prefix
@@ -1452,3 +1523,4 @@ searchType genePred
 shortcircuit 1
 termRegex EG3HTT[0-9]+
 searchPriority 50
+

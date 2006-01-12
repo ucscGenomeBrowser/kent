@@ -13,8 +13,9 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.83 2005/06/16 16:54:23 angie Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.84 2005/12/16 10:14:16 kent Exp $";
 
+boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
 struct hash *oldVars = NULL;
 char *clade = NULL;
@@ -169,6 +170,12 @@ puts("</center>\n"
 "</td></tr></table>\n"
 );
 puts("</center>");
+if (isPrivateHost)
+    puts("<P>This is just our test site.  It usually works, but it is filled with tracks in various "
+         "stages of construction, and others of little interest to people outside of our local group. "
+	 "It is usually slow because we are building databases on it. The documentation is poor. "
+	 "More data than usual is flat out wrong.  Maybe you want to go to "
+	 "<A HREF=\"http://genome.ucsc.edu\">genome.ucsc.edu</A> instead.");
 
 hgPositionsHelpHtml(organism, db);
 
@@ -203,6 +210,7 @@ if (hIsMgcServer())
 else
     {
     char buffer[128];
+    char *browserName = (isPrivateHost ? "TEST Genome Browser" : "Genome Browser");
 
     /* tell html routines *not* to escape htmlOut strings*/
     htmlNoEscape();
@@ -215,9 +223,10 @@ else
 	    safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
 	}
     if (sameString(clade,"ancestor"))
-	cartWebStart(theCart, "%s Common Ancestor %sGenome Browser Gateway\n", organism,buffer);
+	cartWebStart(theCart, "%s Common Ancestor %s%s Gateway\n", organism, 
+		buffer, browserName);
     else
-	cartWebStart(theCart, "%s %sGenome Browser Gateway\n", organism,buffer);
+	cartWebStart(theCart, "%s %s%s Gateway\n", organism, buffer, browserName);
     htmlDoEscape();
     }
 hgGateway();
@@ -229,6 +238,7 @@ char *excludeVars[] = {NULL};
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+isPrivateHost = hIsPrivateHost();
 oldVars = hashNew(8);
 cgiSpoof(&argc, argv);
 

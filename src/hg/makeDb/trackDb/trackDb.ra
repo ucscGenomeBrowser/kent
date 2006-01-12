@@ -1653,7 +1653,7 @@ type netAlign mm5 chainMm5
 otherDb mm5
 
 track chainMm6
-shortLabel $o_Organism Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
@@ -1665,7 +1665,7 @@ type chain mm6
 otherDb mm6
 
 track netMm6
-shortLabel $o_Organism Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 210.1
@@ -1675,8 +1675,8 @@ type netAlign mm6 chainMm6
 otherDb mm6
 
 track chainMm7
-shortLabel Mm7 Chain
-longLabel Mm7 ($o_date/$o_db) Chained Alignments
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
 visibility hide
@@ -1687,8 +1687,8 @@ type chain mm7
 otherDb mm7
 
 track netMm7
-shortLabel Mm7 Net
-longLabel Mm7 ($o_date/$o_db) Alignment Net
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 210.1
 visibility hide
@@ -1722,7 +1722,7 @@ track chainCanFam2
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 229.9
+priority 230 
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -1734,7 +1734,7 @@ track netCanFam2
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 230.09
+priority 230.1
 visibility hide
 spectrum on
 type netAlign canFam2 chainCanFam2
@@ -2056,6 +2056,14 @@ shortCircuit 1
 termRegex [abuz].[0-9]+(\.[0-9]+)?
 searchPriority 8
 
+searchName knownGeneAcc
+searchTable knownGene
+searchMethod exact
+searchType knownGene
+shortCircuit 1
+termRegex [a-z][a-z0-9][0-9]+
+searchPriority 9
+
 searchName mrnaAcc
 searchTable all_mrna
 searchMethod prefix
@@ -2211,7 +2219,7 @@ searchPriority 7
 searchTable bacEndPairs
 searchMethod exact
 searchType bed
-termRegex ([[:alnum:]_ ]+|((RP|CT|GS|CH|TAM)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
+termRegex ([[:alnum:]_ ]+|((RP|CT|GS|CH|TAM|MSMG)[[:alnum:]]+)?(-[[:alnum:]_]+)+)
 searchPriority 8
 
 searchTable fosEndPairs
@@ -2340,7 +2348,6 @@ searchType genePred
 termRegex [[:alnum:]_]+\.[0-9]+\.[0-9]+
 searchPriority 50
 
-searchPriority 50
 searchTable rgdQtl
 searchType bed
 searchMethod fuzzy
@@ -2479,3 +2486,4 @@ priority 170.5
 color 200,0,0
 visibility pack
 type bed 4 .
+

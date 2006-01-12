@@ -12,3 +12,7 @@ sqlToXml: $O ${MYLIBS}
 
 clean:
 	rm -f $O
+	rm -f test/*/out.*
+
+test::
+	doTest

@@ -95,31 +95,41 @@ Here are the fields in an ATTLIST:
 	   case it will have a NULL or zero value after it is read by 
 	   autoXML).
 
+There's a third type of tag in a DTD file, the ENTITY.  This tag is
+used more or less as a macro definition.   An example of a ENTITY is
+     <!ENTITY % address "street,city,state,zip">
+After this ENTITY is defined you can type %address; with the same effect
+as typing street,city,state,zip.
+
+
 AUTOXML EXTENSIONS AND LIMITS
 
-AutoXml extends the type field of ATTLIST to include INT or FLOAT for
-numerical rather than string values.  Similarly you can put
-#INT or #FLOAT in place of #PCDATA to put a numerical type in the
-text field.  If you include these extensions please use the .dtdx 
-rather than .dtd suffix on your dtd file.
+One disadvantage of DTDs is that all types are strings.  This is not
+convenient for a language like C where numerical and string types are
+handled very differently, and indeed where numerical types can be handled
+much more effiently than string types.  To get around this we make use
+of some predefined XML entities.   In an ATTLIST you can use the
+entities %INT; and %FLOAT; which will map to C int and double types.
+Instead of #PCDATA  you can use the entities %INTEGER; and %REAL;
+for the same effect.  The %INTEGER; and %REAL; entities are used by
+NCBI as well as UCSC.  As far as I can tell NCBI doesn't have definitions
+for numerical attributes.
 
-Currently AutoXML only copes with dtd comments if they start on
-a line by themselves.  AutoXml expects all ELEMENTS and ATTLIST 
-declarations to fit on a single line.  It doesn't handle reference 
-data types beyond saving the reference ID as a string.
+Currently AutoXML can't handle external DTDs or DTDs that reference
+other DTDs.
 
 
 AUTOXML CODE GENERATION
 
-The polygon.dtdx file here:
+The polygon.dtd file here:
 
 <!ELEMENT POLYGON (DESCRIPTION? POINT+)>
 <!ATTLIST POLYGON id CDATA #REQUIRED>
 <!ELEMENT DESCRIPTION (#PCDATA)>
 <!ELEMENT POINT>
-<!ATTLIST POINT x INT #REQUIRED>
-<!ATTLIST POINT y INT #REQUIRED>
-<!ATTLIST POINT z INT "0">
+<!ATTLIST POINT x %FLOAT;  #REQUIRED>
+<!ATTLIST POINT y %FLOAT;  #REQUIRED>
+<!ATTLIST POINT z %FLOAT;  "0">
 
 and the command line:
    autoXml polygon.dtdx poly

@@ -189,7 +189,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.982 2005/12/05 20:33:51 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.983 2005/12/28 18:47:50 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2342,10 +2342,13 @@ char buf[512];
 char query[256];
 for (oneTrackDb = trackDbs; oneTrackDb != NULL; oneTrackDb = oneTrackDb->next)
     {
-    snprintf(query, sizeof(query), 
-	     "select type from %s where tableName = '%s'",  oneTrackDb->name, track);
-    if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
-	break;
+    if (sqlTableExists(conn, oneTrackDb->name))
+        {
+        safef(query, sizeof(query), 
+              "select type from %s where tableName = '%s'",  oneTrackDb->name, track);
+        if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
+            break;
+        }
     }
 if (oneTrackDb == NULL)
     errAbort("%s isn't in the trackDb from the hg.conf", track);

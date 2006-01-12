@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 #include "dnautil.h"
-#include "memgfx.h"
+#include "xp.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -17,25 +17,44 @@ errAbort(
   );
 }
 
-#include <termios.h>
+int level = 0;
 
-int testInt(int a, int b, int c, int d)
+void atStart(void *userData, char *name, char **atts)
 {
-return (a + b)*c/d;
+char *att;
+spaceOut(stdout, level*2);
+printf("<%s", name);
+while ((att = *atts++) != NULL)
+     {
+     printf(" %s=\"", att);
+     att = *atts++;
+     printf("%s\"", att);
+     }
+printf(">\n");
+level += 1;
 }
 
-double testFloat(double a, double b, double c, double d)
+void atEnd(void *userData, char *name, char *text)
 {
-return (a + b)*c/d;
+text = trimSpaces(text);
+if (text[0] != 0)
+    {
+    spaceOut(stdout, level*2);
+    printf("%s\n", trimSpaces(text));
+    }
+level -= 1;
+spaceOut(stdout, level*2);
+printf("</%s>\n", name);
 }
 
 
 void test(char *in)
 /* test - Test something. */
 {
-printf("%d\n", testInt(1,2,3,4));
-printf("%f\n", testFloat(1.0,2.0,3.0,4.0));
-
+FILE *f = mustOpen(in, "r");
+struct xp *xp = xpNew(f, atStart, atEnd, xpReadFromFile, in);
+while (xpParseNext(xp, "interest"))
+    ;
 }
 
 int main(int argc, char *argv[], char *env[])

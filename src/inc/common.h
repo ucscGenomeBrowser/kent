@@ -3,7 +3,7 @@
  * string manipulation stuff, and other stuff of the
  * short but useful nature. 
  *
- * This file is copyright 2002 Jim Kent, but license is hereby
+ * This file is copyright 2002-2005 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
 #ifndef COMMON_H	/* Wrapper to avoid including this twice. */
