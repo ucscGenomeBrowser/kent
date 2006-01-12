@@ -80,3 +80,13 @@ speciesGroups worm
 sGroup_worm cb2 caeRem1
 treeImage phylo/Mm7_3way.jpg
 frames multiz3wayFrames
+
+track sangerGenefinder
+shortLabel WormBase Genefinder
+longLabel WormBase Genefinder Gene Predictions
+group genes
+priority 31.2
+visibility pack
+color 178,34,34
+chromosomes chrI,chrII,chrIII,chrIV,chrV,chrX
+type genePred 
