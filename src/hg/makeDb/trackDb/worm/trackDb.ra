@@ -75,3 +75,29 @@ searchType bed
 shortCircuit 1
 termRegex cel-(mir|let|lin|lsy)-.+
 searchPriority 18.5
+
+searchName sangerGenePrefix
+searchTable sangerGene
+searchMethod fuzzy
+searchType genePred
+shortCircuit 1
+searchPriority 19
+
+searchName sangerGeneOrf
+searchTable sangerGene
+searchMethod fuzzy
+searchType genePred
+xrefTable sangerLinks
+xrefQuery select orfName,description from %s where description like '%%%s%%'
+searchDescription Description of WormBase Sanger Genes
+searchPriority 8
+padding 100
+
+searchName sangerGeneProt
+searchTable sangerGene
+searchMethod exact
+searchType genePred
+xrefTable sangerLinks
+xrefQuery select orfName,protName from %s where protName like '%s'
+searchDescription UniProt Accession of WormBase Sanger Genes
+searchPriority 8
