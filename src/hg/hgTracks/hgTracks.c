@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1065 2006/01/05 03:39:22 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1066 2006/01/12 15:53:54 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9462,7 +9462,7 @@ struct hgMut *el = item;
     else if (sameString(el->baseChangeType, "insertion"))
         return vgFindColorIx(vg, 0, 153, 0); /* dark green */
     else if (sameString(el->baseChangeType, "complex"))
-        return vgFindColorIx(vg, 221, 0, 0); /* dark red */
+        return vgFindColorIx(vg, 100, 50, 0); /* brown */ //return vgFindColorIx(vg, 221, 0, 0); /* dark red */
     else if (sameString(el->baseChangeType, "duplication"))
         return vgFindColorIx(vg, 255, 153, 0);
     else
