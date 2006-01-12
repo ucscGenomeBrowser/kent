@@ -358,13 +358,3 @@ searchTable twinscan
 searchType genePred
 termRegex chr.*\.[0-9]+\.[0-9]+
 searchPriority 50
-
-searchName sangerGeneOrf
-searchTable sangerGene
-searchMethod fuzzy
-searchType genePred
-xrefTable sangerLinks
-xrefQuery select orfName,description from %s where description like '%%%s%%'
-searchDescription Description of WormBase Sanger Genes
-searchPriority 8
-padding 100
