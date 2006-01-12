@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.26 2005/03/24 21:27:26 braney Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.27 2006/01/12 20:35:39 heather Exp $";
 
 jmp_buf htmlRecover;
 
@@ -136,6 +136,7 @@ printf("%s", htmlWarnStartPattern());
 htmlVaParagraph(format,args);
 printf("%s", htmlWarnEndPattern());
 htmlHorizontalLine();
+vfprintf(stderr, format, args);
 }
 
 void htmlAbort()
