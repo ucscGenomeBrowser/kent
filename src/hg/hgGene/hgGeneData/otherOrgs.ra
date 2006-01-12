@@ -53,6 +53,7 @@ priority 30
 name drosophila
 shortLabel D. melanogaster
 tables dmBlastTab
+idSql select target from dmBlastTab where query = '%s'
 pepTable bdgpGenePep
 genomeUrl ../cgi-bin/hgTracks?org=D.+melanogaster&position=%s
 sorterUrl ../cgi-bin/hgNear?org=D.+melanogaster&near.oldOrg=D.+melanogaster&near_search=%s
