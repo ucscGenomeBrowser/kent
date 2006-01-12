@@ -61,14 +61,6 @@ color 178,34,34
 chromosomes chrI,chrII,chrIII,chrIV,chrV,chrX
 type genePred 
 
-track altGraphX
-shortLabel Alt-Splice
-longLabel Alternative Splicing
-group rna
-priority 74.1
-visibility hide
-type bed 3 .
-
 track wabaCbr
 shortLabel Briggsae Waba
 longLabel $o_Organism ($o_date/$o_db) Waba Alignments

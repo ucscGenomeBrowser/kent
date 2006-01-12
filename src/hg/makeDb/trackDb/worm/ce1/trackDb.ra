@@ -137,14 +137,6 @@ visibility hide
 color 0,100,100
 type genePred twinscanPep
 
-track altGraphX
-shortLabel Alt-Splice
-longLabel Alternative Splicing
-group rna
-priority 74.1
-visibility hide
-type bed 3 .
-
 track gc5Base
 shortLabel GC % 5 base
 longLabel GC Percent in 5-Base Windows
