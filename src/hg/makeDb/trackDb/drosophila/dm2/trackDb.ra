@@ -248,7 +248,7 @@ priority 132.1
 visibility hide
 color 100,50,0
 altColor 255,240,200
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
 spectrum on
 type chain anoGam1
@@ -262,7 +262,7 @@ priority 141
 visibility hide
 color 100,50,0
 altColor 255,240,200
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
 spectrum on
 type chain droYak1
@@ -276,7 +276,7 @@ priority 135
 visibility hide
 color 100,50,0
 altColor 255,240,200
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
 spectrum on
 type chain droMoj1
@@ -290,7 +290,7 @@ priority 134
 visibility hide
 color 100,50,0
 altColor 255,240,200
-matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T 
 spectrum on
 type chain droVir1
