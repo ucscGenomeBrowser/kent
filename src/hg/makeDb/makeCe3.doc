@@ -531,6 +531,101 @@ done
     ln -s `pwd`/gc5Base.wib /gbdb/ce3/wib
     hgLoadWiggle ce3 gc5Base gc5Base.wig
 
+###########################################################################
+# CREATE SANGER LINKS TABLE FROM WORMBASE INFO (used by hgGene and hgNear)
+# FETCH acedb database for construction of Sanger Links table
+#	DONE - 2006-01-06 - 2006-01-09 - Hiram
+    ssh kkstore02
+    mkdir /cluster/data/ce3/bed/acedb
+    cd /cluster/data/ce3/bed/acedb
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=4 --no-parent \
+	--no-host-directories --cut-dirs=4 \
+	ftp://ftp.sanger.ac.uk/pub/wormbase/FROZEN_RELEASES/WS140/
+    #	Then, to install this acedb database:
+    chmod +x INSTALL
+    ./INSTALL
+    #	It asks a question about disk space, you should have at least
+    #	15 Mb free, answer the question with: yes
+    #	if that is true
+    #	Start up the AceDb monitor
+
+    mkdir /cluster/data/ce3/bed/sangerLinks
+    cd /cluster/data/ce3/bed/sangerLinks
+    #	fetch from our version of uniProt, name relationships
+    #	acc == uniProt ID
+    #	extAcc1 == WormBase Gene number
+    #	extAcc2 == orfName or Gene Class name
+    #   extAcc3 == haven't seen anything in this column yet
+    hgsql -N -e \
+"select acc,extAcc1,extAcc2,extAcc3 from extDbRef where extDb=19;" uniProt \
+        > uniProt.Celegans.txt
+    tar xvzf ../acedb/wormpep140.tar.gz wormpep140/wormpep140
+    zcat ../acedb/geneIDs.WS140.gz > geneIDs.WS140.txt
+
+    /cluster/bin/acedb/tace /cluster/data/ce3/bed/acedb
+    # At prompt, can type ? for help, type the following queries
+#    wbGeneClass.txt - associates 3 letter first part of worm gene
+#             name with a brief description.  
+    acedb> AQL -o wbGeneClass.txt select l,l->Description  from l in class Gene_Class
+    #	it says:
+    #	// 1471 Active Objects
+
+#    wbLongDescr.txt - associates worm gene name with a several
+#             sentence description. 
+    acedb> AQL -o wbLongDescr.txt select l,l->Gene_info[Provisional_description] from l in class Gene
+    #	it says:
+    #	// 5296 Active Objects
+    #	ctrl-D to exit the acedb monitor
+
+    #	remove header lines and "" from those two files:
+    grep -v "^Format" wbGeneClass.txt | \
+	sed -e 's/Gene_class://; s/Text://; s/"//g;' \
+	    > wbGeneClass.new
+    grep -v "^Format" wbLongDescr.txt | \
+	sed -e 's/Gene://; s/Text://; s/"//g;' \
+	    > wbLongDescr.new
+    mv wbGeneClass.new wbGeneClass.txt
+    mv wbLongDescr.new wbLongDescr.txt
+
+    #	Check how we compare to previous build, there will probably be a
+    #	few more with each new build:  (I don't know why the bigger one
+    #	is so much larger this time)
+    wc wbGeneClass.txt wbLongDescr.txt
+    #	 1515    6589   47870 wbGeneClass.txt
+    #	50417  421524 3220249 wbLongDescr.txt
+    wc /cluster/data/ce2/bed/steinHelp/wb*.txt
+    #	 1393    5982   43094 /cluster/data/ce2/bed/steinHelp/wbGeneClass.txt
+    #	18400  197407 1378516 /cluster/data/ce2/bed/steinHelp/wbConcise.txt
+
+    #	There is a copy of this script in the source tree:
+    #	/kent/src/hg/near/hgWormLinks/
+    #	There is also an hgWormLinks program there, with slightly
+    #	different inputs and outputs.
+    ./mkSangerLinks.pl wormpep140/wormpep.table140 geneIDs.WS140.txt \
+	wbLongDescr.txt wbGeneClass.txt uniProt.Celegans.txt \
+	    > sangerLinks.txt 2> dbg.out
+    #	should be relatively few names without descriptions:
+    grep "no descr" dbg.out | wc
+    #	     1214    8498   67382
+
+    ssh hgwdev
+    cd /cluster/data/ce3/bed/sangerLinks
+    hgsql ce3 < $HOME/kent/src/hg/lib/sangerLinks.sql
+    hgsql ce3 -e \
+	'load data local infile "sangerLinks.txt" into table sangerLinks;'
+    #	the index for protName doesn't seem to get populated
+    hgsql -e "analyze table sangerLinks;" ce3
+    #	should now see numbers (happen to be identical) for each of the
+    #	indices:
+    hgsql -e "show index from sangerLinks;" ce3
+
+
+    hgsql ce3 < /cluster/home/hiram/kent/src/hg/lib/orfToGene.sql
+    hgsql ce3 -e 'load data local infile "orfToGene.tab" into table orfToGene;'
+
+
+
 #######################################################################
 # MAKE SANGER GENE (WORM BASE GENES) TRACK (WORKING, 2005-05-02, Hiram)
    ssh eieio
@@ -584,24 +679,43 @@ XXXXX Stopped here 2005-05-02 14:30
     # To add index on this column
     hgsql -e 'alter table sangerGene add index(proteinID);' ce3
     # Add Swiss-Prot protein IDs to this column
-    # There are 23076 entries in sangerGene and 21780 of the names 
-    # are in sangerLinks as orfName
+    # There are 23277 entries in the sangerGene table:
+    hgsql -N -e "select count(*) from sangerGene;" ce3
+    #	23277
+    #	And 22086 names in common between sangerGene and sangerLinks:
     hgsql -N -e 'select count(*) from sangerGene as g,sangerLinks as l \
            where g.name = l.orfName;' ce3
-    # 21780
+    # 22086
     # get names from sangerGene and sangerLinks tables
     hgsql -N -e "select name from sangerGene;" ce3 | sort > name.sangerGene
     hgsql -N -e "select orfName from sangerLinks;" ce3 | sort > orfName.sangerLinks
     # get list of names in sangerGene not in sangerLinks
     comm -23 name.sangerGene orfName.sangerLinks > geneNames.notin.sangerLinks
-    # Go to the WS120 WormBase mirror site and check SwissProt IDs
-    # http://http://ws120.wormbase.org/db/searches/info_dump
-    # Some of these genes are non coding RNAs or have no SwissProt ID BUT
-    # others in the geneNames.notin.sangerLinks list do have a Swiss-Prot ID 
-    # Download IDs in using batches of about 400 for gene names from 
-    # geneNames.notin.sangerLinks and add to file, SPIds.wormPep.WS120
-    # Create a perl script to parse out Swiss-Prot IDs for those genes that 
-    # have them and create the sql statements to insert them into sangerLinks
+
+    # split this file into 5 pieces, 400 lines each:
+    split -l 300 geneNames.notin.sangerLinks
+    #	take each of those lists and paste those identifiers into
+    #	the wormbase batch_genes query,
+    #	http://ws140.wormbase.org/db/searches/batch_genes
+    #	requesting the Swiss Prot ID
+    #	You can cut and paste by viewing the 400 line file
+    #	in your WEB browser as a text document.
+    #	only a couple of them are identified as having SP IDs:
+    #	cut and paste the results from the "Plain Text" output format
+F15E11.13       Q9N565       SWALL:Q9N565_CAEEL
+
+Y19D10A.13       SWALL:Q9UAU0_CAEEL
+Y19D10A.15       SWALL:Q9UAT7_CAEEL
+Y19D10A.9       SWALL:O44596_CAEEL
+Y45G12C.7       SWALL:Q95X13_CAEEL              
+Y45G12C.9       SWALL:Q9N4Y6_CAEEL
+Y49C4A.2                     
+;       SWALL:Q8MYQ4_CAEEL               F25B5.4
+Y49C4A.3                     
+Y49C4A.3                     
+;       SWALL:Q8MYQ4_CAEEL 
+Y6B3B.12       Q5ZEQ2
+ZK131.10       P09588
 
 # CREATE SANGERPEP TABLE (DONE, 2005-08-15, hiram)
 #	Must be done after sangerGene table load to have time stamps
@@ -1694,3 +1808,131 @@ done
     cd /usr/local/apache/htdocs/goldenPath/ce3/chromosomes
     ln -s /cluster/data/ce3/goldenPath/chromosomes/chr*.fa.gz .
 
+
+###########################################################################
+# MAKE 11.OOC FILE FOR BLAT and GENBANK (DONE - 2006-01-11 - hiram)
+# Use -repMatch=40 (based on size, for human use 1024)
+    ssh kkr1u00
+    cd /iscratch/i/worms/Celegans3
+    ls -1 `pwd`/nib/chr*.nib > nib.lst
+    time /cluster/bin/x86_64/blat nib.lst /dev/null /dev/null -tileSize=11 \
+      -makeOoc=11.ooc -repMatch=40
+    #	Wrote 43651 overused 11-mers to 11.ooc
+    #	real    0m4.562s
+    rm nib.lst
+
+    #	copy to other iservers
+for i in 2 3 4 5 6 7 8
+do
+    rsync -a --progress --delete --rsh=rsh /iscratch/i/worms/Celegans3/ \
+	kkr${i}u00:/iscratch/i/worms/Celegans3/
+done
+
+###########################################################################
+# ENABLE GENBANK UPDATE (DONE 2006-01-11 - Hiram)
+
+# add ce3 to the following three files and check them in.
+#	The genbank.conf entry is a copy of the existing ce2 entry with
+#	appropriate changes for pathnames, etc ...
+
+    src/hg/makeDb/genbank/etc/align.dbs
+    src/hg/makeDb/genbank/etc/hgwdev.dbs
+    src/hg/makeDb/genbank/etc/genbank.conf
+
+    # go to /cluster/data/genbank/etc and do cvs update on these three files.
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice ./bin/gbAlignStep -initial ce3
+    #	logFile: var/build/logs/2006.01.11-11:30:41.ce3.initalign.log
+
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -initialLoad ce3
+    #	var/dbload/hgwdev/logs/2006.01.11-12:24:14.dbload.log
+
+###########################################################################
+# MAKE WORMBASE GENEFINDER TRACKS (DONE, 2006-01-11, hartera)
+    # next machine
+    ssh kkstore02
+    mkdir -p /cluster/data/ce3/bed/sangerGenefinder
+    cd /cluster/data/ce3/bed/sangerGenefinder
+    # the perl trims these files down to a reasonable size.  As they are
+    #   they cause ldHgGene to hangup due to memory size.
+    for C in I II III IV V X M
+    do
+        echo -n "${C} "
+        zcat ../../WS140/chr${C}.gff.gz | \
+        sed -e "s/CHROMOSOME_III/chrIII/g" -e "s/CHROMOSOME_II/chrII/g" \
+        -e "s/CHROMOSOME_IV/chrIV/g" -e "s/CHROMOSOME_I/chrI/g" \
+        -e "s/CHROMOSOME_X/chrX/g" -e "s/CHROMOSOME_V/chrV/g" \
+        -e "s/CHROMOSOME_M/chrM/g" \
+        -e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' | \
+        perl -ne '@a = split;
+        print if(($a[1] =~ m/Genefinder/i) &&
+        ($a[2] =~ m/intron|exon|cds|sequence|transcri/i));' | \
+	    sed -e 's/CDS //g; s/"//g' > chr${C}.gff
+    done
+    #  check file sizes, should be reasonable
+    ls -ogrt
+total 25024
+-rw-rw-r--  1 3927756 Jan 11 15:49 chrI.gff
+-rw-rw-r--  1 4205150 Jan 11 15:50 chrII.gff
+-rw-rw-r--  1 3567022 Jan 11 15:50 chrIII.gff
+-rw-rw-r--  1 4167290 Jan 11 15:51 chrIV.gff
+-rw-rw-r--  1 5547317 Jan 11 15:51 chrV.gff
+-rw-rw-r--  1 4165641 Jan 11 15:52 chrX.gff
+-rw-rw-r--  1       0 Jan 11 15:52 chrM.gff
+
+    # now load database with those transformed gff files
+    ssh hgwdev
+    cd /cluster/data/ce3/bed/sangerGenefinder
+    time ldHgGene ce3 sangerGenefinder *.gff
+    #	Read 62263 transcripts in 401688 lines in 7 files
+    #	62263 groups 6 seqs 1 sources 4 feature types
+    #	21182 gene predictions
+    #	real    0m7.532s
+
+########################################################################
+# TWINSCAN GENE PREDICTIONS (DONE, 2006-01-11, hartera)
+    # These are Iscan (new version of Twinscan) gene predictions
+    # e-mailed Michael Brent at WUSTL: brent@cse.wustl.edu to obtain data
+    #	*if* it isn't already at the location below.  If it has been
+    #	some time since the WS release, it is probably already there.
+    ssh hgwdev
+    mkdir /cluster/data/ce3/bed/twinscan
+    cd /cluster/data/ce3/bed/twinscan
+
+    for D in chr_gtf chr_ptx chr_tx
+    do
+	mkdir ${D}
+	cd ${D}
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=1 --no-parent \
+	--no-host-directories --cut-dirs=6 \
+"http://genes.cs.wustl.edu/predictions/worm/C_elegans/WS140/Twinscan/${D}/"
+	cd ..
+    done
+    #	clean up index files
+    rm chr*/index*
+
+    #	There used to be a lot of chrom name fixups to these files, but
+    #	it appears with this set the names are already in our usual chrN
+    #	format rather than the previous CHROMOSOME_N format
+    #	Except for chrM
+    sed -e "s/chrMtDNA/chrM/g" chr_gtf/CHROMOSOME_MtDNA.gtf \
+	> chr_gtf/CHROMOSOME_M.gtf
+    mv chr_gtf/CHROMOSOME_MtDNA.gtf chr_gtf/CHROMOSOME_MtDNA.gtf.original
+
+    sed -e "s/chrMtDNA/chrM/g" chr_ptx/CHROMOSOME_MtDNA.ptx \
+	> chr_ptx/CHROMOSOME_M.ptx
+    mv chr_ptx/CHROMOSOME_MtDNA.ptx chr_ptx/CHROMOSOME_MtDNA.ptx.original
+
+    # load data into database, need -gtf option as no stop codons in
+    # these predictions. also use new -frame -id and -geneName options
+    ldHgGene -gtf -genePredExt ce3 twinscan chr_gtf/CHROMOSOME_*.gtf
+    
+    #	Read 21985 transcripts in 169772 lines in 7 files
+    #	21985 groups 7 seqs 1 sources 3 feature types
+    #	21985 gene predictions
+    hgPepPred ce3 generic twinscanPep chr_ptx/CHROMOSOME_*.ptx
