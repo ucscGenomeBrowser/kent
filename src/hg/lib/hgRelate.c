@@ -14,7 +14,7 @@
 #include "hgRelate.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgRelate.c,v 1.19 2004/05/22 19:43:10 markd Exp $";
+static char const rcsid[] = "$Id: hgRelate.c,v 1.20 2006/01/12 21:37:11 heather Exp $";
 
 static char extFileCreate[] =
 /* This keeps track of external files and directories. */
@@ -213,6 +213,16 @@ void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
 {
 char path[PATH_LEN];
 getTabFile(tmpDir, tableName, path);
+carefulClose(tabFh);
+sqlLoadTabFile(conn, path, tableName, SQL_TAB_FILE_WARN_ON_ERROR);
+}
+
+void hgLoadNamedTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
+                        char *fileName, FILE **tabFh)
+/* Load named tab delimited file corresponding to tableName. close fh if not NULL */
+{
+char path[PATH_LEN];
+getTabFile(tmpDir, fileName, path);
 carefulClose(tabFh);
 sqlLoadTabFile(conn, path, tableName, SQL_TAB_FILE_WARN_ON_ERROR);
 }

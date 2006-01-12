@@ -59,6 +59,10 @@ void hgLoadTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
                    FILE **tabFh);
 /* Load tab delimited file corresponding to tableName. close fh if not NULL */
 
+void hgLoadNamedTabFile(struct sqlConnection *conn, char *tmpDir, char *tableName,
+                        char *fileName, FILE **tabFh);
+/* Load named tab delimited file corresponding to tableName. close fh if not NULL */
+
 void hgLoadTabFileOpts(struct sqlConnection *conn, char *tmpDir, char *tableName,
                        unsigned options, FILE **tabFh);
 /* Load tab delimited file corresponding to tableName. close tabFh if not NULL
