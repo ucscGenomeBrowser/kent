@@ -7,7 +7,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: elTreeBuild.c,v 1.2 2006/01/09 18:17:02 braney Exp $";
+static char const rcsid[] = "$Id: elTreeBuild.c,v 1.3 2006/01/13 17:52:11 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -188,7 +188,7 @@ int ii;
 
 for(ii = 0, e = g->elements; e; ii++,e = e->next)
     ;
-fprintf(f, ">%s %d %d\n",g->name, ii, node->numEdges);
+fprintf(f, ">%s %d %d %g\n",g->name, ii, node->numEdges, node->ident->length);
 
 for(e = g->elements; e; e = e->next)
     {
@@ -217,6 +217,7 @@ void fillParents(struct phyloTree *node)
 struct genome *g = node->priv;
 struct element *e = g->elements;
 int ii;
+char buffer[512];
 
 for(ii=0; ii < node->numEdges; ii++)
     fillParents(node->edges[ii]);
@@ -235,12 +236,43 @@ for(e=g->elements; e ; e = e->next)
 	e1->genome = pg;
 	e1->species = pg->name;
 	e1->name = e->name;
-	e1->version = e->version;
+	safef(buffer, sizeof(buffer), "%s(%s)",e->species,e->version); 
+	e1->version = cloneString(buffer);
+	//e1->version = e->version;
 	eleAddEdge(e1, e);
 	slAddHead(&pg->elements, e1);
 	}
 
 }
+
+void checkTree(struct phyloTree *node)
+{
+struct genome *g = node->priv;
+struct element *e = g->elements;
+int ii;
+struct phyloTree *parent;
+
+for(ii=0; ii < node->numEdges; ii++)
+    checkTree(node->edges[ii]);
+
+if ((parent = node->parent) != NULL)
+    {
+    for(; e ; e= e->next)
+	{
+	for(ii=0; ii < e->numEdges; ii++)
+	    {
+	    struct genome *pg = e->parent->genome;
+	    struct phyloTree *pNode = e->parent->genome->node;
+
+	    if ( parent != pNode)
+		{
+		printf("checkTree: at node %s: element %s parent %s isn't node parent %s\n",node->ident->name,eleName(e),pNode->ident->name, parent->ident->name);
+		}
+	    }
+	}
+    }
+}
+
 
 void elTreeBuild(char *speciesTreeName,char *outGroupName,char *genomeFileName,
     char *distanceFileName, char *outFileName)
@@ -260,6 +292,7 @@ int ii;
 int numExpect;
 double *distanceArray;
 double dist1, dist2;
+char buffer[512];
 
 lineFileClose(&lf);
 nameNodes(speciesTree);
@@ -438,23 +471,28 @@ do
 	    if ((mergeNode = phyloFindMarkUpTree(node2)) == NULL)
 		errAbort("can't find merge node");
 
-	    if ((mergeNode == node1) || (mergeNode == node2))
-		{
-		//printf("mergeNode is parent\n");
+//	    if ((mergeNode == node1) || (mergeNode == node2))
+//		{
+		//doit = TRUE;
+//		printf("mergeNode is parent\n");
 	//	continue;
-		}
+//		}
 	    for(;node1 != mergeNode; node1 = node1->parent)
 		{
 		struct genome *g = node1->priv;
 		struct element *e;
+//		printf("merge node %s\n",mergeNode->ident->name);
 		dist1 += node1->ident->length;
 		if (node1 == d->e1->genome->node)
 		    continue;
 		AllocVar(e);
 		e->genome = g;
+		safef(buffer, sizeof(buffer), "%s(%s)",topE1->species,topE1->version); 
 		e->species = g->name;
 		e->name = d->e1->name;
-		e->version = d->e1->version;
+		e->version = cloneString(buffer);
+//		printf("add node1 element %s\n",eleName(e));
+		//e->version = d->e1->version;
 		eleAddEdge(e, topE1);
 		slAddHead(&g->elements, e);
 		topE1 = e;
@@ -467,10 +505,12 @@ do
 		if (node2 == d->e2->genome->node)
 		    continue;
 		AllocVar(e);
+//		printf("add node2 element %s\n",g->name);
 		e->genome = g;
 		e->species = g->name;
+		safef(buffer, sizeof(buffer), "%s(%s)",topE2->species,topE2->version); 
 		e->name = d->e2->name;
-		e->version = d->e2->version;
+		e->version = cloneString(buffer);
 		eleAddEdge(e, topE2);
 		slAddHead(&g->elements, e);
 		topE2 = e;
@@ -479,6 +519,22 @@ do
 	    dist -= dist1 + dist2;
 	    if (dist < 0.0)
 		errAbort("smergeNode is too far %g\n",dist);
+	    if (dist > 0.0)
+		{
+		struct genome *g = mergeNode->priv;
+		struct element *e;
+		AllocVar(e);
+		e->genome = g;
+		safef(buffer, sizeof(buffer), "%s(%s)",topE1->species,topE1->version); 
+		e->species = g->name;
+		e->name = d->e1->name;
+		e->version = cloneString(buffer);
+//		printf("extra add node1 element %s\n",eleName(e));
+		//e->version = d->e1->version;
+		eleAddEdge(e, topE1);
+		slAddHead(&g->elements, e);
+		topE1 = e;
+		}
 	    ////printf("mergnoe %g\n",dist);
 
 	    }
@@ -490,14 +546,17 @@ do
 
 	    distTook += node->ident->length, dist -= node->ident->length*2;
 
-	    if (node == mergeNode)
+	    //if (((dist1 != 0.0) || (dist2 != 0.0)) && ( node == mergeNode))
+	    if ( node == mergeNode)
 		continue;
-	    printf("adding\n");
 	    AllocVar(e);
 	    e->genome = g;
 	    e->species = g->name;
 	    e->name = d->e1->name;
-	    e->version = d->e1->version;
+	    //e->version = d->e1->version;
+	    safef(buffer, sizeof(buffer), "%s(%s)",topE1->species,topE1->version); 
+	    e->version = cloneString(buffer);
+	    //printf("adding %s\n",eleName(e));
 	    eleAddEdge(e, topE1);
 	    slAddHead(&g->elements, e);
 	    topE1 = e;
@@ -533,10 +592,10 @@ do
 
 	    e->name = d->e1->name;
 
-	    if (sameString(d->e1->species, d->e2->species))
-		safef(buffer, sizeof(buffer), "(%s+%s)",d->e1->version,d->e2->version); 
+	    if (sameString(topE1->species, topE2->species))
+		safef(buffer, sizeof(buffer), "%s(%s+%s)",topE1->species,topE1->version,topE2->version); 
 	    else
-		safef(buffer, sizeof(buffer), "(%s(%s)+%s(%s))",d->e1->species,d->e1->version,d->e2->species,d->e2->version); 
+		safef(buffer, sizeof(buffer), "(%s(%s)+%s(%s))",topE1->species,topE1->version,topE2->species,topE2->version); 
 	    e->version = cloneString(buffer);
 
 	    //printf("new element %s.%s.%s genome %s\n",e->species, e->name, e->version,genome->name);
@@ -562,6 +621,8 @@ do
     printElementTrees(newRoot, 0);
 
     outElementTrees(f, newRoot);
+
+    checkTree(newRoot);
 }
 
 int main(int argc, char *argv[])
