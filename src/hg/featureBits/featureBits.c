@@ -13,8 +13,9 @@
 #include "featureBits.h"
 #include "agpGap.h"
 #include "chain.h"
+#include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.41 2006/01/09 18:49:14 galt Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.42 2006/01/13 18:59:15 hiram Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -29,6 +30,7 @@ static struct optionSpec optionSpecs[] =
     {"countGaps", OPTION_BOOLEAN},
     {"noRandom", OPTION_BOOLEAN},
     {"noHap", OPTION_BOOLEAN},
+    {"dots", OPTION_INT},
     {"minFeatureSize", OPTION_INT},
     {"enrichment", OPTION_BOOLEAN},
     {"where", OPTION_STRING},
@@ -48,9 +50,16 @@ char *where = NULL;		/* Extra selection info. */
 boolean countGaps = FALSE;	/* Count gaps in denominator? */
 boolean noRandom = FALSE;	/* Exclude _random chromosomes? */
 boolean noHap = FALSE;	/* Exclude _hap chromosomes? */
+int dots = 0;	/* print dots every N chroms (scaffolds) processed */
 boolean calcEnrichment = FALSE;	/* Calculate coverage/enrichment? */
 int binSize = 500000;	/* Default bin size. */
 int binOverlap = 250000;	/* Default bin size. */
+
+/* to process chroms without constantly looking up in chromInfo, create
+ * this list of them from the chromInfo once.
+ */
+static struct chromInfo *chromInfoList = NULL;
+static struct hash *gapHash = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -71,6 +80,7 @@ errAbort(
   "   -countGaps        Count gaps in denominator\n"
   "   -noRandom         Don't include _random (or Un) chromosomes\n"
   "   -noHap            Don't include _hap chromosomes\n"
+  "   -dots=N           Output dot every N chroms (scaffolds) processed\n"
   "   -minFeatureSize=n Don't include bits of the track that are smaller than\n"
   "                     minFeatureSize, useful for differentiating between\n"
   "                     alignment gaps and introns.\n"
@@ -104,6 +114,50 @@ errAbort(
   );
 }
 
+static struct chromInfo *createChromInfoList(char *name, char *database)
+/* Load up all chromosome infos. */
+{
+struct sqlConnection *conn = sqlConnect(database);
+struct sqlResult *sr = NULL;
+char **row;
+int loaded=0;
+struct chromInfo *ret = NULL;
+unsigned totalSize = 0;
+
+if (sameWord(name, "all"))
+    sr = sqlGetResult(conn, "select * from chromInfo");
+else
+    {
+    char select[256];
+    safef(select, ArraySize(select), "select * from chromInfo where chrom='%s'",
+	name);
+    sr = sqlGetResult(conn, select);
+    }
+
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct chromInfo *el;
+    struct chromInfo *ci;
+    AllocVar(ci);
+
+    el = chromInfoLoad(row);
+    ci->chrom = cloneString(el->chrom);
+    ci->size = el->size;
+    totalSize += el->size;
+    slAddHead(&ret, ci);
+    ++loaded;
+    }
+if (loaded < 1)
+    errAbort("ERROR: can not find chrom name: '%s'\n", name);
+slReverse(&ret);
+if (sameWord(name, "all"))
+    verbose(2, "#\tloaded size info for %d chroms, total size: %u\n",
+	loaded, totalSize);
+sqlFreeResult(&sr);
+sqlDisconnect(&conn);
+return ret;
+}
+
 boolean isFileType(char *file, char *suffix)
 /* determine if file ends with .suffix, or .suffix.gz */
 {
@@ -117,14 +171,14 @@ else
     }
 }
 
-bool inclChrom(struct slName *chrom)
+bool inclChrom(char *name)
 /* check if a chromosome should be included */
 {
-return  !((noRandom && (endsWith(chrom->name, "_random")
-                        || startsWith("chrUn", chrom->name)
-                        || sameWord("chrNA", chrom->name) /* danRer */
-                        || sameWord("chrU", chrom->name)))  /* dm */
-          || (noHap && stringIn( "_hap", chrom->name)));
+return  !((noRandom && (endsWith(name, "_random")
+                        || startsWith("chrUn", name)
+                        || sameWord("chrNA", name) /* danRer */
+                        || sameWord("chrU", name)))  /* dm */
+          || (noHap && stringIn( "_hap", name)));
 }
 
 void bitsToBed(Bits *bits, char *chrom, int chromSize, FILE *bed, FILE *fa, 
@@ -415,7 +469,7 @@ else
     boolean isFound = hFindSplitTable(chrom, t, table, &hasBin);
     if (isFound)
 	fbOrTableBitsQueryMinSize(acc, track, chrom, chromSize, conn, where,
-			   TRUE, TRUE, minFeatureSize);
+		   TRUE, TRUE, minFeatureSize);
     }
 }
 
@@ -424,17 +478,16 @@ void chromFeatureBits(struct sqlConnection *conn,
 	char *chrom, int tableCount, char *tables[],
 	FILE *bedFile, FILE *faFile, FILE *binFile,
         struct bed *bedRegionList, FILE *bedOutFile,
-	int *retChromSize, int *retChromBits,
+	int chromSize, int *retChromBits,
 	int *retFirstTableBits, int *retSecondTableBits)
 /* featureBits - Correlate tables via bitmap projections and booleans
  * on one chromosome. */
 {
-int chromSize, i;
+int i;
 Bits *acc = NULL;
 Bits *bits = NULL;
 char *table;
 
-*retChromSize = chromSize = hChromSize(chrom);
 acc = bitAlloc(chromSize);
 bits = bitAlloc(chromSize);
 for (i=0; i<tableCount; ++i)
@@ -536,32 +589,134 @@ for (fb = fbList; fb != NULL; fb = fb->next)
 featureBitsFreeList(&fbList);
 }
 
-int countBases(struct sqlConnection *conn, char *chrom, int chromSize)
+static struct hash *loadAllGaps(struct sqlConnection *conn, char *db)
+/*	working on all chroms, fetch all per-chrom gap counts at once
+ *	returns hash by chrom name to gap counts for that chrom
+ */
+{ 
+struct chromInfo *cInfo;
+struct sqlResult *sr;
+char **row;
+struct hash *ret;
+int totalGapSize = 0;
+int gapCount = 0;
+
+ret = newHash(0);
+
+/*	If not split, read in whole gulp, create per-chrom hash of sizes */
+if (hTableExistsDb(db, "gap"))
+    {
+    char *prevChrom = NULL;
+    int totalGapsThisChrom = 0;
+    
+    sr = sqlGetResult(conn,
+	"select chrom,chromStart,chromEnd from gap order by chrom");
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	int gapSize = sqlUnsigned(row[2]) - sqlUnsigned(row[1]);
+	++gapCount;
+	if (prevChrom && sameWord(prevChrom,row[0]))
+	    {
+	    totalGapsThisChrom += gapSize;
+	    totalGapSize += gapSize;
+	    }
+	else
+	    {
+	    if (prevChrom)
+		{
+		hashAddInt(ret, prevChrom, totalGapsThisChrom);
+		freeMem(prevChrom);
+		prevChrom = cloneString(row[0]);
+		totalGapsThisChrom = gapSize;
+		totalGapSize += gapSize;
+		}
+	    else
+		{
+		prevChrom = cloneString(row[0]);
+		totalGapsThisChrom = gapSize;
+		totalGapSize += gapSize;
+		}
+	    }
+	}
+	/*	and the last one	*/
+	if (prevChrom && (totalGapsThisChrom > 0))
+	    {
+	    hashAddInt(ret, prevChrom, totalGapsThisChrom);
+	    freeMem(prevChrom);
+	    }
+    sqlFreeResult(&sr);
+    }
+else
+    {
+    /*	for each chrom name, fetch the gap count	*/
+    for (cInfo = chromInfoList; cInfo != NULL; cInfo = cInfo->next)
+	{
+	int rowOffset;
+	int totalGapsThisChrom = 0;
+	sr = hChromQuery(conn, "gap", cInfo->chrom, NULL, &rowOffset);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    int gapSize;
+	    struct agpGap gap;
+	    ++gapCount;
+	    agpGapStaticLoad(row+rowOffset, &gap);
+	    gapSize = gap.chromEnd - gap.chromStart;
+	    totalGapsThisChrom += gapSize;
+	    totalGapSize += gapSize;
+	    }
+	sqlFreeResult(&sr);
+	hashAddInt(ret, cInfo->chrom, totalGapsThisChrom);
+	}
+    }
+verbose(2,"#\tloaded %d gaps covering %d bases\n", gapCount, totalGapSize);
+return ret;
+}
+
+int countBases(struct sqlConnection *conn, char *chrom, int chromSize,
+    char *database)
 /* Count bases, generally not including gaps, in chromosome. */
 {
-int size, totalGaps = 0;
+static boolean gapsLoaded = FALSE;
 struct sqlResult *sr;
+int totalGaps = 0;
 char **row;
 int rowOffset;
 
 if (countGaps)
     return chromSize;
-sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
+
+/*	If doing all chroms, then load up all the gaps and be done with
+ *	it instead of re-reading the gap table for every chrom
+ */
+if (sameWord(clChrom,"all"))
     {
-    struct agpGap gap;
-    agpGapStaticLoad(row+rowOffset, &gap);
-    size = gap.chromEnd - gap.chromStart;
-    totalGaps += size;
+    if (!gapsLoaded)
+	gapHash = loadAllGaps(conn, database);
+    gapsLoaded = TRUE;
+    totalGaps = hashIntValDefault(gapHash, chrom, 0);
     }
-sqlFreeResult(&sr);
+else
+    {
+    verbose(2,"countBases: calling hChromQuery()\n");
+    sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
+    verbose(2,"countBases: back from hChromQuery()\n");
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	int gapSize;
+	struct agpGap gap;
+	agpGapStaticLoad(row+rowOffset, &gap);
+	gapSize = gap.chromEnd - gap.chromStart;
+	totalGaps += gapSize;
+	}
+    sqlFreeResult(&sr);
+    }
 return chromSize - totalGaps;
 }
 
-void checkInputExists(struct sqlConnection *conn, struct slName *allChroms, int tableCount, char *tables[])
+void checkInputExists(struct sqlConnection *conn,
+	struct chromInfo *chromInfoList, int tableCount, char *tables[])
 /* check input tables/files exist, especially to handle split tables */
 {
-struct slName *chrom = NULL;
 char *track=NULL;
 int i = 0, missing=0;
 char t[512], *s=NULL;
@@ -570,6 +725,8 @@ char fileName[512];
 boolean found = FALSE;
 for (i=0; i<tableCount; ++i)
     {
+    struct chromInfo *cInfo;
+
     track = tables[i];
     if (track[0] == '!')
 	{
@@ -588,13 +745,13 @@ for (i=0; i<tableCount; ++i)
 	    continue;
 	}
     found = FALSE;
-    for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
+    for (cInfo = chromInfoList; cInfo != NULL; cInfo = cInfo->next)
 	{
-	if (inclChrom(chrom))
+	if (inclChrom(cInfo->chrom))
 	    {
 	    if (s)
 		{
-		chromFileName(t, chrom->name, fileName);
+		chromFileName(t, cInfo->chrom, fileName);
 		if (fileExists(fileName))
 		    {
 		    found = TRUE;
@@ -604,7 +761,7 @@ for (i=0; i<tableCount; ++i)
 	    else
 		{
 		boolean hasBin;
-		if (hFindSplitTable(chrom->name, t, table, &hasBin))
+		if (hFindSplitTable(cInfo->chrom, t, table, &hasBin))
 		    {
 		    found = TRUE;
 		    break;
@@ -636,9 +793,9 @@ char *bedRegionInName = optionVal("bedRegionIn", NULL);
 char *bedRegionOutName = optionVal("bedRegionOut", NULL);
 FILE *bedFile = NULL, *faFile = NULL, *binFile = NULL;
 FILE *bedRegionOutFile = NULL;
-struct slName *allChroms = NULL, *chrom = NULL;
 struct bed *bedRegionList = NULL;
 boolean faIndependent = FALSE;
+struct chromInfo *cInfo;
 
 hSetDb(database);
 if (bedName)
@@ -660,13 +817,10 @@ if (faName)
     faIndependent = (!faMerge);
     }
 
-if (sameWord(clChrom, "all"))
-    allChroms = hAllChromNames();
-else
-    allChroms = newSlName(clChrom);
+chromInfoList = createChromInfoList(clChrom, database);
 conn = hAllocConn();
 
-checkInputExists(conn, allChroms, tableCount, tables);
+checkInputExists(conn, chromInfoList, tableCount, tables);
 
 if (!faIndependent)
     {
@@ -674,6 +828,7 @@ if (!faIndependent)
     int firstTableBits = 0, secondTableBits = 0;
     int *pFirstTableBits = NULL, *pSecondTableBits = NULL;
     double totalFirstBits = 0, totalSecondBits = 0;
+    static int dotClock = 1;
 
     if (calcEnrichment)
         {
@@ -697,21 +852,36 @@ if (!faIndependent)
 	lineFileClose(&lf);
 	slReverse(bedRegionList);
 	}
-    for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
+    for (cInfo = chromInfoList; cInfo != NULL; cInfo = cInfo->next)
 	{
-	if (inclChrom(chrom))
+	if (inclChrom(cInfo->chrom))
 	    {
-	    int chromSize, chromBitSize;
-	    chromFeatureBits(conn, chrom->name, tableCount, tables,
+	    int chromBitSize;
+	    int chromSize = cInfo->size;
+	    chromFeatureBits(conn, cInfo->chrom, tableCount, tables,
 		bedFile, faFile, binFile, bedRegionList, bedRegionOutFile, 
-		&chromSize, &chromBitSize, pFirstTableBits, pSecondTableBits
+		chromSize, &chromBitSize, pFirstTableBits, pSecondTableBits
 		);
-	    totalBases += countBases(conn, chrom->name, chromSize);
+	    totalBases += countBases(conn, cInfo->chrom, chromSize, database);
 	    totalBits += chromBitSize;
 	    totalFirstBits += firstTableBits;
 	    totalSecondBits += secondTableBits;
+	    if (dots > 0)
+		{
+		if (--dotClock <= 0)
+		    {
+		    fputc('.', stdout);
+		    fflush(stdout);
+		    dotClock = dots;
+		    }
+		}
 	    }
 	}
+	if (dots > 0)
+	    {
+	    fputc('\n', stdout);
+	    fflush(stdout);
+	    }
     if (calcEnrichment)
         fprintf(stderr,"%s %5.3f%%, %s %5.3f%%, both %5.3f%%, cover %4.2f%%, enrich %4.2fx\n",
 		tables[0], 
@@ -730,13 +900,13 @@ else
     int totalItems = 0;
     double totalBases = 0;
     int itemCount, baseCount;
-    for (chrom = allChroms; chrom != NULL; chrom = chrom->next)
+    for (cInfo = chromInfoList; cInfo != NULL; cInfo = cInfo->next)
         {
-	if (inclChrom(chrom))
+	if (inclChrom(cInfo->chrom))
 	    {
-	    chromFeatureSeq(conn, chrom->name, tables[0],
+	    chromFeatureSeq(conn, cInfo->chrom, tables[0],
 		    bedFile, faFile, &itemCount, &baseCount);
-	    totalBases += countBases(conn, chrom->name, baseCount);
+	    totalBases += countBases(conn, cInfo->chrom, baseCount, database);
 	    totalItems += itemCount;
 	    }
 	}
@@ -757,6 +927,7 @@ notResults = optionExists("not");
 countGaps = optionExists("countGaps");
 noRandom = optionExists("noRandom");
 noHap = optionExists("noHap");
+dots = optionInt("dots", dots);
 where = optionVal("where", NULL);
 calcEnrichment = optionExists("enrichment");
 if (calcEnrichment && argc != 4)
