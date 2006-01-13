@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.11 2006/01/10 23:00:54 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.12 2006/01/13 19:13:28 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -320,7 +320,7 @@ verbose(1, "looking up reference allele...\n");
 for (el = list; el != NULL; el = el->next)
     {
     el->refUCSC = cloneString("n/a");
-    if (sameString(el->class, "simple") || sameString(el->class, "range"))
+    if (sameString(el->class, "simple") || sameString(el->class, "deletion") || sameString(el->class, "range"))
         {
 	strcpy(chromName, "chr");
 	strcat(chromName, el->chrom);
@@ -334,6 +334,8 @@ for (el = list; el != NULL; el = el->next)
         hNibForChrom2(chromName, fileName);
         seq = hFetchSeq(fileName, chromName, el->chromStart, el->chromEnd);
 	touppers(seq->dna);
+	if (sameString(el->strand, "-"))
+	    reverseComplement(seq->dna, strlen(seq->dna));
 	el->refUCSC = cloneString(seq->dna);
 	}
     }
