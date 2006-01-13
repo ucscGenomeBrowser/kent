@@ -1120,28 +1120,8 @@ dataVersion ENCODE Oct 2005 Freeze
     priority 5
 
 track encodeYaleChIPSTAT1Pval
-release alpha
 compositeTrack on
 shortLabel Yale STAT1 pVal
-longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) P-Value
-group encodeChip
-priority 65.0
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bedGraph 4
-maxHeightPixels 128:16:16
-minLimit 0
-maxLimit 18.2
-autoScale Off
-windowingFunction mean
-viewLimits 0:10
-origAssembly hg16
-dataVersion ENCODE June 2005 Freeze
-
-track encodeYaleChIPSTAT1Pval
-release beta
-compositeTrack on
-shortLabel Yale ChIP pVal
 longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) P-Value
 group encodeChip
 priority 65.0
@@ -1186,28 +1166,8 @@ dataVersion ENCODE June 2005 Freeze
     color 50,50,200
 
 track encodeYaleChIPSTAT1Sig
-release alpha
 compositeTrack on
 shortLabel Yale STAT1 Sig
-longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Signal
-group encodeChip
-priority 65.1
-chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-type bedGraph 4
-maxHeightPixels 128:16:16
-minLimit -4.19
-maxLimit 3.69
-windowingFunction mean
-viewLimits 0:2
-autoScale Off
-origAssembly hg16
-dataVersion ENCODE June 2005 Freeze
-
-track encodeYaleChIPSTAT1Sig
-release beta
-compositeTrack on
-shortLabel Yale ChIP Sig
 longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Signal
 group encodeChip
 priority 65.1
@@ -1256,22 +1216,8 @@ dataVersion ENCODE June 2005 Freeze
     altColor 224,66,81
 
 track encodeYaleChIPSTAT1Sites
-release alpha
 compositeTrack on
 shortLabel Yale STAT1 Sites
-longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Binding Sites
-group encodeChip
-priority 65.2
-chromosomes chr1,chr10,chr11,chr13,chr14,chr15,chr16,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
-visibility hide
-dataVersion ENCODE June 2005 Freeze
-origAssembly hg16
-type bed .
-
-track encodeYaleChIPSTAT1Sites
-release beta
-compositeTrack on
-shortLabel Yale ChIP Sites
 longLabel Yale ChIP/Chip (STAT1 ab, HeLa cells) Binding Sites
 group encodeChip
 priority 65.2
