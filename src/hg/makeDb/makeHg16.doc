@@ -7877,10 +7877,10 @@ sub encodeLod($$)
     my $dPrime = shift @_;
     $ret = ord('a');
     if ($lod>=2) # high LOD
-    {
-    if (abs($dPrime)<0.5) { $ret = ord('y'); } # high LOD, low D'  -> pink
-    else { $ret += min((int($lod-abs($dPrime)-1.5)), 9) ;}
-    }
+	{
+	if (abs($dPrime)<0.5) { $ret = ord('y'); } # high LOD, low D'  -> pink
+	else { $ret += min((int($lod-abs($dPrime)-1.5)), 9) ;}
+	}
     elsif (abs($dPrime)>0.99) { $ret = ord('z'); } # high D', low LOD  -> blue
     return chr($ret); 
 }
