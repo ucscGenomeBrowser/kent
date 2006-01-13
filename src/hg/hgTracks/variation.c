@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.50 2006/01/10 04:52:22 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.51 2006/01/13 01:00:06 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -946,7 +946,7 @@ colorLookup[(int)'g'] = ldShadesPos[6];
 colorLookup[(int)'h'] = ldShadesPos[7];
 colorLookup[(int)'i'] = ldShadesPos[8];
 colorLookup[(int)'j'] = ldShadesPos[9];
-colorLookup[(int)'k'] = ldShadesPos[9]; /* temporary kluge; remove after fixing data */
+//colorLookup[(int)'k'] = ldShadesPos[9]; /* temporary kluge; remove after fixing data */
 if (isDprime)
     {
     colorLookup[(int)'A'] = ldShadesNeg[0];
@@ -1010,6 +1010,9 @@ if (yb<=0)
 if (yt>yMax && trim)
     yt=yMax;
 drawDiamond(vg, xl, yl, xt, yt, xr, yr, xb, yb, shade, outlineColor);
+return; /* mapDiamondUI is working well, but there is a bug with 
+	   AREA=POLY on the Mac browsers, so this will be 
+	   postponed for now by not using this code */
 if (drawMap && xt-xl>5 && xb-xl>5)
     mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName);
 }
@@ -1065,7 +1068,7 @@ switch (charValue)
     case 'h': return 7;
     case 'i': return 8;
     case 'j': return 9;
-    case 'k': return 9; /* temporary kluge to deal with misformatted data */
+//    case 'k': return 9; /* temporary kluge to deal with misformatted data */
     case 'A': return 0;
     case 'B': return 1;
     case 'C': return 2;
