@@ -1,0 +1,152 @@
+<H2>Description</H2> 
+<P> 
+This track shows linkage disequilibrium between pairs of SNPs as genotyped by the HapMap consortium.</P>
+
+In full mode, each diagonal represents a different SNP, with each
+square representing a pairwise comparison between two SNPs.  By
+convention, shades of red are used to indicate statistically
+significant (LOD >= 2) allelic association (linkage disequilibrium, LD)
+between the pair of SNPs.  Three values of LD have been calculated and
+may be selected: D', r^2, and LOD (default); darker shades indicate
+higher LD values.  
+
+White squares indicate pairwise D' values less than 1 with no statistically
+significant evidence of LD.
+
+Blue squares indicate pairwise D' values of 1 but without statistical
+significance (LOD < 2).
+
+<PRE>
+sub encodeLod($$)
+{
+    my $lod    = shift @_;
+    my $dPrime = shift @_;
+    $ret = ord('a');
+    if ($lod>=2) # high LOD
+        {
+        if (abs($dPrime)<0.5) { $ret = ord('y'); } # high LOD, low D'  -> pink
+        else { $ret += min((int($lod-abs($dPrime)-1.5)), 9) ;}        
+	}
+    elsif (abs($dPrime)>0.99) { $ret = ord('z'); } # high D', low LOD  -> blue
+    return chr($ret);
+}
+</PRE>           
+
+<H2>Methods</H2>
+<P>
+</P>
+
+<H2>Display Conventions and Configuration</H2>
+<P>
+<UL>
+ <LI>
+  Display Mode<BR>
+  <UL>
+   <LI>
+    <i>Full</i> mode shows the pairwise LD values in a HaploView-style
+    mountain plot.<BR>
+   </LI>
+   <LI>
+    <i>Dense</i> mode shows the pairwise LD values in a single line for
+    each population, where the intensity at each position is the average
+    of all of the LD values for all SNPs within 250 kb.
+   </LI>
+  </UL>
+ </LI>
+ <LI>
+  LD Values<BR>
+  <UL>
+   <LI>
+    <i>r^2</i>
+   </LI>
+   <LI>
+    <i>D'</i>
+   </LI>
+   <LI>
+    <i>LOD</i>
+   </LI>
+  </UL>
+ </LI>
+ <LI>
+  Track Geometry<BR>
+  <UL>
+   <LI>
+    <i>Trim to triangle</i> shows the standard mountain plot (default); turning this option off will show LD values with SNPs outside the window.
+   </LI>
+   <LI>
+    <i>Invert</i>ing makes it easier to visually compare two adjacent populations.
+   </LI>
+  </UL>
+ </LI>
+ <LI>
+  Colors<BR>
+  <UL>
+   <LI>
+    <i>LD Values</i> can be drawn in a variety of colors.
+   </LI>
+   <LI>
+    <i>Outline</i>s can be drawn in contrasting colors or turned off.
+   </LI>
+  </UL>
+ </LI>
+ <LI>
+  Population Selection<BR>
+  The four HapMap populations can be displayed or hidden individually.
+ </LI>
+</UL>
+</P>
+
+<H2>Credits</H2>
+<P>
+This track was created by 
+<a href="mailto:daryl@soe.ucsc.edu">Daryl Thomas</a> 
+at UCSC using 
+<a href="http://www.hapmap.org/downloads/ld_data/2005-10/" target=_blank>data</a> 
+from the 
+<a href="http://www.hapmap.org/">International HapMap Project</a>, 
+following the display style from 
+<a href="http://www.broad.mit.edu/mpg/haploview/" target=_blank>HaploView</a>.
+</P>
+
+<H2>References</H2>
+
+<H3>HapMap Project</H3>
+<UL>
+ <LI>
+The International HapMap Consortium. <br>
+<a href="http://www.hapmap.org/downloads/presentations/Nature_HapMap_phaseI.pdf">
+A haplotype map of the human genome</a>.<br>
+<i>Nature</i> <B>437</B>:1299-1320. 2005. 
+ <LI>
+The International HapMap Consortium.<br>
+<a href="http://www.hapmap.org/downloads/nature02168.pdf" target=_blank>
+The International HapMap Project</a>.<br>
+<i>Nature</i> <B>426</B>:789-796. 2003.
+</UL>
+
+<H3>HapMap Data Coordination Center</H3>
+<UL>
+ <LI>
+Thorisson, G.A., Smith, A.V., Krishnan, L., and Stein, L.D. <br>
+<a href="http://www.hapmap.org/downloads/presentations/Genome_research_art10.pdf" target=_blank>
+The International HapMap Project Web site</a>.<br>
+<i>Genome Research</i> <B>15</B>:1591-1593. 2005. 
+</UL>
+
+<H3>HaploView</H3>
+<UL>
+ <LI>
+Barrett JC, Fry B, Maller J, Daly MJ. <BR>
+<a href="http://bioinformatics.oxfordjournals.org/cgi/content/full/bth457?ijkey=54SiAdNbKzbNg&keytype=ref" target=_blank>
+Haploview: analysis and visualization of LD and haplotype maps</a>. <BR>
+<i>Bioinformatics</i> <B>21</B>(2):263-265. 2005 Jan 15 [PubMed ID: 15297300]
+</UL>
+
+<H3>Tagger</H3>
+<UL>
+ <LI>
+de Bakker, P.I.W., Yelensky, R., Pe'er, I., Gabriel, S.B., Daly, M.J., and Altshuler, D. <br>
+<a href="http://www.nature.com/ng/journal/v37/n11/pdf/ng1669.pdf" target=_blank>
+Efficiency and power in genetic association studies</a>.<br>
+<i>Nature Genetics</i> <B>37</B>(11):1217-1223. 2005. 
+</UL>
