@@ -7805,7 +7805,194 @@ LOAD SNP DETAILS (Done.  Daryl Thomas; February 18, 2004)
     hgLoadBed hg16 perlegenRecombRate  hg16.perlegenRecombRate.bed
     hgLoadBed hg17 perlegenRecombRate  hg17.perlegenRecombRate.bed
 
-    rm -f bed.tab chr*_rates.tx hg1*ed
+    rm -f bed.tab chr*_rates.txt hg1*ed
+
+
+# HapMap Linkage Disequilibrium (Daryl; January 2006)
+
+    mkdir -p /cluster/data/hg16/bed/hapmap/ld_data/2005-10/data
+    cd /cluster/data/hg16/bed/hapmap/ld_data/2005-10/data
+    screen
+    ftp www.hapmap.org
+    cd ld_data/2005-10
+    prompt
+    mget ld_chr*.txt.gz
+
+    # look for consistency in max LD distance
+    set out = maxDist.txt
+    rm -f $out
+    touch $out
+    foreach f (ld_*.txt.gz)
+	echo -n "$f    " >> $out
+	zcat $f | awk '{if ($2-$1>max) max=$2-$1} END {print max}' >> $out
+    end
+    # most should be 249999
+    grep -v 249999 maxDist.txt
+
+    # look for consistency in line counts
+    # ssh eieio; screen
+    set out = wcList.txt
+    rm -f $out
+    touch $out
+    # this takes about 2 hours to run completely on eieio (local disk)"
+    foreach f (*.txt.gz) 
+	echo -n $f:r:r "    " | sed 's/ld_//;s/chr//;s/_/\t/' >> $out
+	zcat $f | cut -f1 -d " " | uniq | wc -l >> $out
+    end
+    # plot the sizes from wcList.txt by population (lines) 
+    # with chrom on the X axis and size on the Y axis.
+    # look for anomalies
+
+
+    mkdir ../bed
+    cd ../bed
+    # from the raw LD values, compute colors and encode
+    cat << EOF > makeLdBed.pl
+#!/usr/bin/perl -W
+
+sub min ($$)
+{
+    my $a = shift @_;
+    my $b = shift @_;
+    if ($a<$b) {return $a;}
+    return $b;
+}
+sub encodeDprime($)
+{
+    my $val = shift @_;
+    if    ( ($val > 1) || ($val < -1) ) { die "Dprime value ($val) is out of range [-1,1]";}
+    elsif ($val>=0) { $ret = ord('a') + $val*9;}
+    else         { $ret = ord('A') - $val*9;}
+    return chr($ret);
+}
+sub encodeRsquared($)
+{
+    my $val = shift @_;
+    if ( ($val > 1) || ($val < 0) ) { die "R^2 value ($val) is out of range [0,1]";}
+    return encodeDprime($val);
+}
+sub encodeLod($$)
+{
+    my $lod    = shift @_;
+    my $dPrime = shift @_;
+    $ret = ord('a');
+    if ($lod>=2) # high LOD
+    {
+    if (abs($dPrime)<0.5) { $ret = ord('y'); } # high LOD, low D'  -> pink
+    else { $ret += min((int($lod-abs($dPrime)-1.5)), 9) ;}
+    }
+    elsif (abs($dPrime)>0.99) { $ret = ord('z'); } # high D', low LOD  -> blue
+    return chr($ret); 
+}
+
+$inDir  = shift||"data"; 
+$outDir = shift||"bed";
+$foo    = "";
+$bar    = ""; 
+@rest   = (); 
+@pops   = ("CEU", "CHB", "JPT", "YRI");
+
+foreach $pop (@pops)
+{
+    opendir(DIR, $inDir) || die "can't open $inDir";
+    @hmFiles = grep {/^ld_/ && /_${pop}.txt.gz$/} readdir(DIR); #ld_chr22_CEU.txt.gz
+    closedir(DIR);
+    printf "\nPOP:\t$pop\t$#hmFiles\n";
+    foreach $hmFile (sort @hmFiles)
+    {
+    ($foo, $chrom, $bar) = split /_/, $hmFile;
+    $chrom =~ s/chrx/chrX/;
+    $chrom =~ s/chry/chrY/;
+    $outfile = "$outDir/${pop}_${chrom}.bed";
+    if ((-e $outfile)||(-e "$outfile.gz")) { next; }
+    $tmpFile = "/tmp/${pop}_${chrom}.bed";
+    printf("$inDir/$hmFile => $outfile.gz\t" . `date`);
+    open(OUT, "> $tmpFile" ) || die "can't open $tmpFile";
+    open(IN, "zcat $inDir/$hmFile | " ) || die "can't open $inDir/$hmFile";
+    $line = <IN>;
+    chomp($line);
+    ($chromStart, $chromEnd, $pop, $name, $marker2, $dprime, $rsquared, $lod, @rest) = split / /, $line;
+    $ldCount = 1;
+    while (<IN>)
+    {
+        chomp();
+	($chromStartNew, $chromEndNew, $pop, $nameNew, $marker2, $dprime, $rsquared, $lod, @rest) = split / /;
+	if ($chromStart ne $chromStartNew)
+	    {
+	    $chromStart--;
+	    printf(OUT "$chrom\t$chromStart\t$chromEnd\t$name\t$ldCount\t$dprimeList\t$rsquaredList\t$lodList\n");
+	    $chromStart   = $chromStartNew;
+	    $chromEnd     = $chromEndNew;
+	    $name         = $nameNew;
+	    $ldCount      = 1;
+	    $dprimeList   = encodeDprime($dprime);
+	    $rsquaredList = encodeRsquared($rsquared);
+	    $lodList      = encodeLod($lod, $dprime);
+	    }
+	elsif ($chromEndNew-$chromStartNew<250000)
+	    {
+	    $chromEnd     = $chromEndNew;
+	    $ldCount++;
+	    $dprimeList   .= encodeDprime($dprime);
+	    $rsquaredList .= encodeRsquared($rsquared);
+	    $lodList      .= encodeLod($lod, $dprime);
+	    }
+    }
+    close(IN);
+    $chromStart--;
+    printf(OUT "$chrom\t$chromStart\t$chromEnd\t$name\t$ldCount\t$dprimeList\t$rsquaredList\t$lodList\n");
+    close(OUT);
+    system("gzip $tmpFile");
+    system("mv $tmpFile.gz $outDir");
+    }
+}
+EOF
+#
+    chmod ug+x ./makeLdBed.pl
+    ssh eieio
+    screen
+    time ./makeLdBed.pl
+
+    # look for consistency in line counts
+    # ssh eieio
+    set out = wcList.txt
+    rm -f $out
+    touch $out
+    foreach f (*.bed.gz) 
+	echo -n $f:r:r "    " | sed 's/chr//g;s/_/\t/g' >> $out
+	zcat $f | wc -l >> $out
+    end
+    # plot the sizes from wcList.txt by population (lines) 
+    # with chrom on the X axis and size on the Y axis.
+    # look for anomalies
+
+
+    # load data
+    sed 's/hapmapLd/hapmapLdCeu/' ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql hg16
+    sed 's/hapmapLd/hapmapLdChb/' ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql hg16
+    sed 's/hapmapLd/hapmapLdJpt/' ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql hg16
+    sed 's/hapmapLd/hapmapLdYri/' ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql hg16
+
+    # 30-40 minutes
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X)
+	echo
+	echo -n loading CEU chr${c} 
+	zcat CEU_chr${c}.bed.gz | wc -l
+	hgLoadBed -noSort -oldTable -strict hg16 hapmapLdCeu CEU_chr${c}.bed.gz
+	echo
+	echo -n loading CHB chr${c} 
+	zcat CHB_chr${c}.bed.gz | wc -l
+	hgLoadBed -noSort -oldTable -strict hg16 hapmapLdChb CHB_chr${c}.bed.gz
+	echo
+	echo -n loading JPT chr${c} 
+	zcat JPT_chr${c}.bed.gz | wc -l
+	hgLoadBed -noSort -oldTable -strict hg16 hapmapLdJpt JPT_chr${c}.bed.gz
+	echo
+	echo -n loading YRI chr${c} 
+	zcat YRI_chr${c}.bed.gz | wc -l
+	hgLoadBed -noSort -oldTable -strict hg16 hapmapLdYri YRI_chr${c}.bed.gz
+    end
+    rm -f bed.tab
 
 
 # Tajima's D (DONE -- 2005-06-04 -- Daryl)
