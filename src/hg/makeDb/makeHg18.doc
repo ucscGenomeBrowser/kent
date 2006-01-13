@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.15 2006/01/11 22:35:22 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.16 2006/01/13 17:11:16 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -2183,3 +2183,33 @@ nice featureBits hg17 chainBosTau2Link
 # Copy over to the bluearc
    cp -p 11.ooc /cluster/bluearc/hg18
    
+#######################################################################
+# PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE (WORKING - 2006-01-12 - Hiram)
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/coverage
+    cd /cluster/data/hg18/bed/coverage
+    #	find all the clones that were used in the assembly
+    sed -e "/^#.*/d" ../../ncbi_build36.agp | \
+        awk '{if (!match($5,"N")) {print $6}}' | \
+        sort -u > placed_in_assembly.list
+    wc -l placed_in_assembly.list
+    #	27093 placed_in_assembly.list
+
+    #	how many are the same as previous build:
+    comm -12 /cluster/data/hg17/bed/contig_overlaps/placed_in_assembly.list \
+	placed_in_assembly.list > sameAsHg17.list
+    wc sameAsHg17.list
+    #	26775  26775 300641 sameAsHg17.list
+    #	and unique to hg17, not in hg18:
+    comm -23 /cluster/data/hg17/bed/contig_overlaps/placed_in_assembly.list \
+	placed_in_assembly.list > uniqueToHg17.list
+    wc uniqueToHg17.list
+    #	97   97 1080 uniqueToHg17.list
+    #	and unique to hg18, not in hg17:
+    comm -13 /cluster/data/hg17/bed/contig_overlaps/placed_in_assembly.list \
+	placed_in_assembly.list > newToHg18.list
+    wc newToHg18.list
+    #	318  318 3547 newToHg18.list
+    #	make a list of these new contigs:
+    #	using the previous perl scripts:
+    cp -p /cluster/data/hg17/bed/contig_overlaps/*.pl .
