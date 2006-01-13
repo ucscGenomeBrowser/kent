@@ -1,7 +1,6 @@
 /* liftUp - change coordinates of .psl, .agp, or .out file
  * to parent coordinate system. */
 #include "common.h"
-#include "cheapcgi.h"
 #include "linefile.h"
 #include "portable.h"
 #include "hash.h"
@@ -14,8 +13,10 @@
 #include "chain.h"
 #include "chainNet.h"
 #include "liftUp.h"
+#include "options.h"
+#include "xa.h"
 
-static char const rcsid[] = "$Id: liftUp.c,v 1.37 2005/10/25 05:35:51 markd Exp $";
+static char const rcsid[] = "$Id: liftUp.c,v 1.38 2006/01/13 20:14:15 hiram Exp $";
 
 boolean isPtoG = TRUE;  /* is protein to genome lift */
 boolean nohead = FALSE;	/* No header for psl files? */
@@ -28,7 +29,7 @@ void usage()
 {
 errAbort(
  "liftUp - change coordinates of .psl, .agp, .gap, .gl, .out, .gff, .gtf .bscore \n"
- ".tab .gdup .axt .chain .net, genePred or .bed files to parent coordinate\n"
+ ".tab .gdup .axt .chain .net, genePred, .wab or .bed files to parent coordinate\n"
  "system.\n"
  "\n"
  "usage:\n"
@@ -59,10 +60,33 @@ errAbort(
  "   -axtQ  Lift query (rather than target) side of axt\n"
  "   -chainQ  Lift query (rather than target) side of chain\n"
  "   -netQ  Lift query (rather than target) side of net\n"
+ "   -wabaQ  Lift query (rather than target) side of waba alignment\n"
+ "   	(waba lifts only work with query side at this time)\n"
  "   -nosort Don't sort bed, gff, or gdup files, to save memory\n"
  "   -gapsize change contig gapsize from default\n"
  );
 }
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"nohead", OPTION_BOOLEAN},
+    {"nosort", OPTION_BOOLEAN},
+    {"isPtoG", OPTION_BOOLEAN},
+    {"dots", OPTION_INT},
+    {"gapsize", OPTION_INT},
+    {"type", OPTION_STRING},
+    {"pslQ", OPTION_BOOLEAN},
+    {"pslq", OPTION_BOOLEAN},
+    {"axtQ", OPTION_BOOLEAN},
+    {"axtq", OPTION_BOOLEAN},
+    {"chainQ", OPTION_BOOLEAN},
+    {"chainq", OPTION_BOOLEAN},
+    {"netQ", OPTION_BOOLEAN},
+    {"netq", OPTION_BOOLEAN},
+    {"wabaQ", OPTION_BOOLEAN},
+    {"wabaq", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 enum how
 /* how to handle items missing from liftSpec */
@@ -283,8 +307,6 @@ FILE *dest = mustOpen(destFile, "w");
 char *source;
 int i,j;
 struct lineFile *lf;
-int lineSize, wordCount;
-char *line, *words[32];
 struct psl *psl;
 struct xAli *xa = NULL;
 unsigned *starts;
@@ -760,6 +782,63 @@ void liftNet(char *destFile, struct hash *liftHash,
         }
 }
 
+
+void liftWab(char *destFile, struct hash *liftHash, 
+        int sourceCount, char *sources[], boolean querySide)
+/* Lift up coordinates in .wab file. */
+{
+FILE *f = mustOpen(destFile, "w");
+int sourceIx;
+
+for (sourceIx = 0; sourceIx < sourceCount; ++sourceIx)
+    {
+    struct xaAli *xa;
+    char *source = sources[sourceIx];
+    FILE *in = mustOpen(source, "r");
+    while ((xa = xaReadNext(in, FALSE)) != NULL)
+	{
+	char *seqName = querySide ? xa->query : xa->target;
+	struct liftSpec *spec = findLift(liftHash, seqName, NULL);
+	int offset;
+	if (spec == NULL)
+	    {
+	    verbose(0,"name:\t%s\n", xa->name);
+	    verbose(0,"query:\t%s\n", xa->query);
+	    verbose(0,"qStart,qEnd:\t%d,%d\n", xa->qStart,xa->qEnd);
+	    verbose(0,"qStrand:\t%c\n", xa->qStrand);
+	    verbose(0,"target:\t%s\n", xa->target);
+	    verbose(0,"tStart,tEnd:\t%d,%d\n", xa->tStart,xa->tEnd);
+	    verbose(0,"tStrand:\t%c\n", xa->tStrand);
+	    verbose(0,"milliScore:\t%d\n", xa->milliScore);
+	    verbose(0,"symCount:\t%d\n", xa->symCount);
+	    errAbort("Can not find lift spec for %s", seqName);
+	    }
+	if (querySide)
+	    {
+	    offset = spec->offset;
+	    xa->qStart += offset;
+	    xa->qEnd += offset;
+	fprintf(f, "%s align %d.%d%% of %d %s.fa %s:%d-%d %c %s:%d-%d %c\n",
+    xa->name, xa->milliScore/10, xa->milliScore%10, xa->symCount,
+    spec->newName, spec->newName, xa->qStart, xa->qEnd, xa->qStrand,
+    xa->target, xa->tStart, xa->tEnd, xa->tStrand);
+	    }
+	else
+	    {
+	    errAbort("Sorry, lift for WABA target not yet implemented");
+	    }
+	mustWrite(f, xa->qSym, xa->symCount);
+	fputc('\n', f);
+	mustWrite(f, xa->tSym, xa->symCount);
+	fputc('\n', f);
+	mustWrite(f, xa->hSym, xa->symCount);
+	fputc('\n', f);
+
+	}
+    carefulClose(&in);
+    }
+}
+
 void malformedAgp(struct lineFile *lf)
     /* Report error in .agp. */
 {
@@ -889,8 +968,6 @@ void liftGap(char *destFile, struct hash *liftHash, int sourceCount, char *sourc
     int end = 0;
     int ix = 0;
     char newDir[256], newName[128], newExt[64];
-    struct hash *contigsHash = newHash(10);
-    boolean firstContig = TRUE;
     char lastContig[256];
     char *contig;
     int lastEnd = 0;
@@ -1255,7 +1332,6 @@ int i;
 char *source; 
 char *contig; 
 FILE *dest = mustOpen(destFile, "w"); 
-char *s;
 struct lineFile *lf = NULL;
 int lineSize, wordCount;
 char *line, *words[32];
@@ -1306,8 +1382,7 @@ void liftUp(char *destFile, char *liftFile, char *howSpec, int sourceCount, char
 {
 struct liftSpec *lifts;
 struct hash *liftHash;
-char *source = sources[0];
-char *destType = cgiUsualString("type", destFile);
+char *destType = optionVal("type", destFile);
 
 if (sameWord(howSpec, "carry"))
     how = carryMissing;
@@ -1334,7 +1409,7 @@ else if (endsWith(destType, ".pslx") || endsWith(destType, ".xa") || endsWith(de
     rmChromPart(lifts);
     liftHash = hashLift(lifts, TRUE);
     liftPsl(destFile, liftHash, sourceCount, sources, 
-    	cgiBoolean("pslQ") || cgiBoolean("pslq"), !endsWith(destType, ".psl") );
+    	optionExists("pslQ") || optionExists("pslq"), !endsWith(destType, ".psl") );
     }
 else if (endsWith(destType, ".agp"))
     {
@@ -1381,7 +1456,7 @@ else if (endsWith(destType, ".bscore"))
     rmChromPart(lifts);
     liftHash = hashLift(lifts, TRUE);
     liftBScore(destFile, liftHash, sourceCount, sources,
-    	cgiBoolean("pslQ") || cgiBoolean("pslq"));
+    	optionExists("pslQ") || optionExists("pslq"));
     }
 else if (endsWith(destType, ".tab"))
     {
@@ -1400,21 +1475,28 @@ else if (strstr(destType, ".axt"))
     rmChromPart(lifts);
     liftHash = hashLift(lifts, FALSE);
     liftAxt(destFile, liftHash, sourceCount, sources, 	
-    	cgiBoolean("axtQ") || cgiBoolean("axtq"));
+    	optionExists("axtQ") || optionExists("axtq"));
     }
 else if (strstr(destType, ".chain"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts, TRUE);
     liftChain(destFile, liftHash, sourceCount, sources, 	
-    	cgiBoolean("chainQ") || cgiBoolean("chainq"));
+    	optionExists("chainQ") || optionExists("chainq"));
     }
 else if (strstr(destType, ".net"))
     {
     rmChromPart(lifts);
     liftHash = hashLift(lifts, FALSE);
     liftNet(destFile, liftHash, sourceCount, sources, 	
-    	cgiBoolean("netQ") || cgiBoolean("netq"));
+    	optionExists("netQ") || optionExists("netq"));
+    }
+else if (strstr(destType, ".wab"))
+    {
+    rmChromPart(lifts);
+    liftHash = hashLift(lifts, FALSE);
+    liftWab(destFile, liftHash, sourceCount, sources,
+    	optionExists("wabaQ") || optionExists("wabaq"));
     }
 else 
     {
@@ -1425,12 +1507,12 @@ else
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-cgiSpoof(&argc, argv);
-nohead = cgiBoolean("nohead");
-nosort = cgiBoolean("nosort");
-isPtoG = cgiBoolean("isPtoG");
-dots = cgiUsualInt("dots", dots);
-gapsize = cgiOptionalInt("gapsize", 0);
+optionInit(&argc, argv, optionSpecs);
+nohead = optionExists("nohead");
+nosort = optionExists("nosort");
+isPtoG = optionExists("isPtoG");
+dots = optionInt("dots", dots);
+gapsize = optionInt("gapsize", gapsize);
 if (gapsize !=0)
     chromInsertsSetDefaultGapSize(gapsize);
 if (argc < 5)
@@ -1438,4 +1520,3 @@ if (argc < 5)
 liftUp(argv[1], argv[2], argv[3], argc-4, argv+4);
 return 0;
 }
-
