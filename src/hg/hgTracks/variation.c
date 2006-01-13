@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.51 2006/01/13 01:00:06 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.52 2006/01/13 05:23:32 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -808,8 +808,8 @@ tg->itemName = perlegenName;
 /* Declare our color gradients and the the number of colors in them */
 Color ldShadesNeg[LD_DATA_SHADES];
 Color ldShadesPos[LD_DATA_SHADES];
-Color ldHighLodLowDprime;
-Color ldHighDprimeLowLod;
+Color ldHighLodLowDprime; /* pink */
+Color ldHighDprimeLowLod; /* blue */
 boolean ldInvert;
 int colorLookup[256];
 
@@ -1122,23 +1122,29 @@ void ldAddToDenseValueHash(struct hash *ldHash, unsigned a, char charValue)
 struct ldStats *stats;
 char name[16];
 int indexValue = ldIndexCharToInt(charValue);
+int incrementN = 1;
 
-if (a<winStart || a>winEnd || indexValue<-9)
+if (a<winStart || a>winEnd)
     return;
+if (indexValue<0)
+    {
+    incrementN = 0;
+    indexValue = 0;
+    }
 safef(name, sizeof(name), "%d", a);
 stats = hashFindVal(ldHash, name);
 if (!stats)
     {
     AllocVar(stats);
     stats->name      = name;
-    stats->n         = 1;
-    stats->sumValues = abs(indexValue);
+    stats->n         = incrementN;
+    stats->sumValues = indexValue;
     hashAddSaveName(ldHash, name, stats, &stats->name);
     }
 else
     {
-    stats->n         += 1;
-    stats->sumValues += abs(indexValue);
+    stats->n         += incrementN;
+    stats->sumValues += indexValue;
     }
 }
 
@@ -1146,9 +1152,9 @@ void ldDrawDenseValue(struct vGfx *vg, struct track *tg, int xOff, int y1,
 		      double scale, Color outlineColor, struct ldStats *d)
 /* Draw single dense LD value */
 {
-int   colorInt  = round(d->sumValues/d->n);
+int   colorInt  = (d->n > 0) ? round(d->sumValues/d->n) : -100;
 char  colorChar = ldIndexIntToChar(colorInt);
-Color shade     = colorLookup[(int)colorChar];
+Color shade     = (d->n > 0) ? colorLookup[(int)colorChar] : ldHighDprimeLowLod;
 int   w         = 3; /* width of box */
 int   w2        = w/2;
 int   x         = round((atoi(d->name)-winStart)*scale) + xOff - w2;
