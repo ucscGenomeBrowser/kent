@@ -1,6 +1,6 @@
 <visiGene>
   <submissionSource name="Mahoney Lab" acknowledgement="Thanks to Paul Gray for transferring the images." setUrl="http://mahoney.chip.org/mahoney/" itemUrl="http://mahoney.chip.org/servlet/Mahoney2.ShowTF?mTF_ID=%s">
-    <submissionSet name="mahoneyWhole01" contributors="Gray P.A., Fu H., Luo P., Zhao Q., Yu J., Ferrari A., Tenzen T., Yuk D., Tsung E.F., Cai Z., Alberta J.A., Cheng L., Liu Y., Stenman J.M., Valerius M.T., Billings N., Kim H.A., Greenberg M.E., McMahon A.P., Rowitch D.H., Stiles C.D., Ma Q." year="2004" publication="Mouse brain organization revealed through direct genome-scale TF expression analysis" pubUrl="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=pubmed&amp;dopt=Abstract&amp;list_uids=15618518">
+    <submissionSet name="mahoneyWhole01" contributors="Gray P.A., Fu H., Luo P., Zhao Q., Yu J., Ferrari A., Tenzen T., Yuk D., Tsung E.F., Cai Z., Alberta J.A., Cheng L., Liu Y., Stenman J.M., Valerius M.T., Billings N., Kim H.A., Greenberg M.E., McMahon A.P., Rowitch D.H., Stiles C.D., Ma Q." year="2004" publication="Mouse brain organization revealed through direct genome-scale TF expression analysis" pubUrl="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=pubmed&amp;dopt=Abstract&amp;list_uids=15618518" privateUser="0">
       <journal name="Science" url="http://www.sciencemag.org/"/>
       <imageFile fileName="0001d.jpg" priority="50" imageWidth="1280" imageHeight="1024" submitId="1">
         <image imagePos="0" paneLabel="" sectionSet="0" sectionIx="0">
@@ -63,7 +63,7 @@
         </image>
       </imageFile>
     </submissionSet>
-    <submissionSet name="mahoneySlices01" contributors="Gray P.A., Fu H., Luo P., Zhao Q., Yu J., Ferrari A., Tenzen T., Yuk D., Tsung E.F., Cai Z., Alberta J.A., Cheng L., Liu Y., Stenman J.M., Valerius M.T., Billings N., Kim H.A., Greenberg M.E., McMahon A.P., Rowitch D.H., Stiles C.D., Ma Q." year="2004" publication="Mouse brain organization revealed through direct genome-scale TF expression analysis" pubUrl="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=pubmed&amp;dopt=Abstract&amp;list_uids=15618518">
+    <submissionSet name="mahoneySlices01" contributors="Gray P.A., Fu H., Luo P., Zhao Q., Yu J., Ferrari A., Tenzen T., Yuk D., Tsung E.F., Cai Z., Alberta J.A., Cheng L., Liu Y., Stenman J.M., Valerius M.T., Billings N., Kim H.A., Greenberg M.E., McMahon A.P., Rowitch D.H., Stiles C.D., Ma Q." year="2004" publication="Mouse brain organization revealed through direct genome-scale TF expression analysis" pubUrl="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=pubmed&amp;dopt=Abstract&amp;list_uids=15618518" privateUser="0">
       <journal name="Science" url="http://www.sciencemag.org/"/>
       <imageFile fileName="T00011110aa.jpg" priority="1500" imageWidth="7248" imageHeight="3780" submitId="1">
         <image imagePos="0" paneLabel="" sectionSet="0" sectionIx="0">
@@ -128,7 +128,7 @@
     </submissionSet>
   </submissionSource>
   <submissionSource name="Jackson Labs" acknowledgement="Thanks to the Gene Expression Database group at Jackson Labs for collecting, annotating and sharing this image." setUrl="http://www.informatics.jax.org/" itemUrl="http://www.informatics.jax.org/searches/image.cgi?%s">
-    <submissionSet name="jax10719" contributors="Gaunt S.J.,Coletta P.L.,Pravtcheva D.,Sharpe P.T.," year="1990" publication="Mouse Hox-3.4: homeobox sequence and embryonic expression patterns compared with other members of the Hox gene network." pubUrl="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=pubmed&amp;dopt=Abstract&amp;list_uids=1976088">
+    <submissionSet name="jax10719" contributors="Gaunt S.J.,Coletta P.L.,Pravtcheva D.,Sharpe P.T.," year="1990" publication="Mouse Hox-3.4: homeobox sequence and embryonic expression patterns compared with other members of the Hox gene network." pubUrl="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=pubmed&amp;dopt=Abstract&amp;list_uids=1976088" privateUser="0">
       <journal name="Development" url=""/>
       <copyright notice="This image is from Gaunt SJ, Development 1990 Jun;109(2):329-39, and is"/>
       <imageFile fileName="1712.jpg" priority="1000" imageWidth="667" imageHeight="283" submitId="2759">
@@ -309,7 +309,7 @@
         </image>
       </imageFile>
     </submissionSet>
-    <submissionSet name="jax10785" contributors="Dressler G.R.,Deutsch U.,Chowdhury K.,Nornes H.O.,Gruss P.," year="1990" publication="Pax2, a new murine paired-box-containing gene and its expression in the developing excretory system." pubUrl="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=pubmed&amp;dopt=Abstract&amp;list_uids=1977574">
+    <submissionSet name="jax10785" contributors="Dressler G.R.,Deutsch U.,Chowdhury K.,Nornes H.O.,Gruss P.," year="1990" publication="Pax2, a new murine paired-box-containing gene and its expression in the developing excretory system." pubUrl="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=pubmed&amp;dopt=Abstract&amp;list_uids=1977574" privateUser="0">
       <journal name="Development" url=""/>
       <copyright notice="This image is from Dressler et al., Development 109:787-795 (1990), and is displayed with the permission of The Company of Biologists Limited who owns the Copyright."/>
       <imageFile fileName="2266.jpg" priority="1000" imageWidth="675" imageHeight="698" submitId="3828">
@@ -463,7 +463,7 @@
         </image>
       </imageFile>
     </submissionSet>
-    <submissionSet name="jax1108" contributors="Schatteman G.C.,Morrison-Graham K.,van Koppen A.,Weston J.A.,Bowen-Pope D.F.," year="1992" publication="Regulation and role of PDGF receptor alpha-subunit expression during embryogenesis." pubUrl="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=pubmed&amp;dopt=Abstract&amp;list_uids=1322269">
+    <submissionSet name="jax1108" contributors="Schatteman G.C.,Morrison-Graham K.,van Koppen A.,Weston J.A.,Bowen-Pope D.F.," year="1992" publication="Regulation and role of PDGF receptor alpha-subunit expression during embryogenesis." pubUrl="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=pubmed&amp;dopt=Abstract&amp;list_uids=1322269" privateUser="0">
       <journal name="Development" url=""/>
       <copyright notice="This image is from Schatteman et al., Development 115, 123-31 (1992), and is displayed with the permission of The Company of Developmental Biologists who owns the Copyright."/>
       <imageFile fileName="2495.jpg" priority="1000" imageWidth="1101" imageHeight="1514" submitId="3897">
@@ -550,7 +550,7 @@
     </submissionSet>
   </submissionSource>
   <submissionSource name="Japanese National Institute of Basic Biology (NIBB) XDB project" acknowledgement="Thanks to Naoto Ueno and colleagues at NIBB for helping make these images available in VisiGene" setUrl="http://xenopus.nibb.ac.jp" itemUrl="">
-    <submissionSet name="nibbXenopusLaevis3" contributors="Ueno N., Kitayama A., Terasaka C., Nomoto K., Shibamoto K., Hiroyo N." year="2005" publication="" pubUrl="">
+    <submissionSet name="nibbXenopusLaevis3" contributors="Ueno N., Kitayama A., Terasaka C., Nomoto K., Shibamoto K., Hiroyo N." year="2005" publication="" pubUrl="" privateUser="0">
       <imageFile fileName="XL000x00_zic5_r3_7/Zic5_St10.5_animal.jpg" priority="1200" imageWidth="1300" imageHeight="1030" submitId="XL000x00">
         <image imagePos="0" paneLabel="" sectionSet="0" sectionIx="0">
           <specimen name="" taxon="8355" age="0.458333" minAge="0.458333" maxAge="0.458333" notes="">
