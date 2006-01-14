@@ -147,6 +147,7 @@ CREATE TABLE submissionSet (
     journal int not null,	# Journal for publication
     copyright int not null,     # Copyright notice
     submissionSource int not null, # Source of this submission
+    privateUser int not null,	# ID of user allowed to view. If 0 all can see.
               #Indices
     PRIMARY KEY(id),
     UNIQUE(name(32))

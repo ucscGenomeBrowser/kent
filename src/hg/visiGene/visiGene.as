@@ -108,6 +108,7 @@ table submissionSet
     int journal;		"Journal for publication"
     int copyright;		"Copyright notice"
     int submissionSource;	"Source of this submission"
+    int privateUser;		"ID of user allowed to view. If 0 all can see."
     )
 
 table submissionContributor

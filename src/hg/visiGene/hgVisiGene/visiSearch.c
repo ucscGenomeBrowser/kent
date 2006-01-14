@@ -12,7 +12,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.15 2005/11/26 21:11:17 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.16 2006/01/14 02:31:29 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -121,15 +121,50 @@ bitSetRange(match->wordBits, startWord, wordCount);
 return match;
 }
 
-static void visiSearcherWeedResults(struct visiSearcher *searcher)
-/* Get rid of images that are just partial matches. */
+static struct hash *makePrivateHash(struct sqlConnection *conn)
+/* Build up hash of all submission sets that are private.
+ * This is keyed by the ascii version of submissionSet.id */
+{
+struct hash *hash = hashNew(0);
+if (sqlFieldIndex(conn, "submissionSet", "privateUser") >= 0)
+    {
+    struct sqlResult *sr;
+    char **row;
+    sr = sqlGetResult(conn, "select id from submissionSet where privateUser!=0");
+    while ((row = sqlNextRow(sr)) != NULL)
+        hashAdd(hash, row[0], NULL);
+    sqlFreeResult(&sr);
+    }
+return hash;
+}
+
+static boolean isPrivate(struct sqlConnection *conn,
+	struct hash *privateHash, int imageId)
+/* Return TRUE if image is associated with private submissionSet. */
+{
+char *src, buf[16];
+char query[256];
+safef(query, sizeof(query), "select submissionSet from image where id=%d",
+	imageId);
+src = sqlQuickQuery(conn, query, buf, sizeof(buf));
+if (src != NULL && hashLookup(privateHash, src) != NULL)
+    return TRUE;
+return FALSE;
+}
+
+static void visiSearcherWeedResults(struct visiSearcher *searcher,
+	struct sqlConnection *conn)
+/* Get rid of images that are just partial matches, and also
+ * images that are private. */
 {
 struct visiMatch *newList = NULL, *match, *next;
+struct hash *privateHash = makePrivateHash(conn);
 int wordCount = searcher->wordCount;
 for (match = searcher->matchList; match != NULL; match = next)
     {
     next = match->next;
-    if (bitCountRange(match->wordBits, 0, wordCount) == wordCount)
+    if (bitCountRange(match->wordBits, 0, wordCount) == wordCount
+       && !isPrivate(conn, privateHash, match->imageId))
         {
 	slAddHead(&newList, match);
 	}
@@ -139,12 +174,13 @@ for (match = searcher->matchList; match != NULL; match = next)
 searcher->matchList = newList;
 }
 
-static struct visiMatch *visiSearcherSortResults(struct visiSearcher *searcher)
+static struct visiMatch *visiSearcherSortResults(struct visiSearcher *searcher,
+	struct sqlConnection *conn)
 /* Get sorted list of match results from searcher. 
  * You don't own the list returned though.  It will evaporate
  * with visiSearcherFree. */
 {
-visiSearcherWeedResults(searcher);
+visiSearcherWeedResults(searcher, conn);
 return searcher->matchList;
 }
 
@@ -702,7 +738,7 @@ visiGeneMatchSex(searcher, conn, wordList);
 visiGeneMatchStage(searcher, conn, wordList);
 visiGeneMatchSubmitId(searcher, conn, wordList);
 visiGeneMatchOrganism(searcher, conn, wordList);
-matchList = visiSearcherSortResults(searcher);
+matchList = visiSearcherSortResults(searcher, conn);
 searcher->matchList = NULL; /* Transferring memory ownership to return val. */
 visiSearcherFree(&searcher);
 slFreeList(&wordList);
