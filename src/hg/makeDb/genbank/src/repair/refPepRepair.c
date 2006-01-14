@@ -7,7 +7,7 @@
 #include "extFileTbl.h"
 #include "seqTbl.h"
 
-static char const rcsid[] = "$Id: refPepRepair.c,v 1.2 2005/05/14 20:42:38 markd Exp $";
+static char const rcsid[] = "$Id: refPepRepair.c,v 1.3 2006/01/14 07:59:30 markd Exp $";
 
 struct brokenRefPep
 /* data about a refPep with broken extFile link */
@@ -56,7 +56,8 @@ static void brokenRefPepGetBroken(struct sqlConnection *conn,
 {
 static char *query = "select gbSeq.id, gbSeq.acc from gbSeq "
     "left join gbExtFile on gbSeq.gbExtFile=gbExtFile.id "
-    "where (gbSeq.acc like \"NP_%\") and (gbExtFile.id is NULL)";
+    "where ((gbSeq.acc like \"NP__%\") or (gbSeq.acc like \"YP__%\")) "
+    "and (gbExtFile.id is NULL)";
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 

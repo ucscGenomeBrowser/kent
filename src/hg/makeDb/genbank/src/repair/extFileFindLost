@@ -1,0 +1,26 @@
+#!/bin/sh -e
+
+HOST=`hostname`
+
+dbsFile=/genbank/etc/rr.dbs
+if [ $HOST = "hgwbeta" ] ; then
+    dbsFile=/genbank/etc/hgwbeta.dbs
+fi
+if [ $HOST = "hgwdev" ] ; then
+    dbsFile=/cluster/data/genbank/etc/hgwdev.dbs
+fi
+   
+gbRoot=`dirname $dbsFile`
+gbRoot=`dirname $gbRoot`
+outDir=$gbRoot/misc/lostExtFiles/$HOST
+mkdir -p $outDir
+logFile=$outDir.log
+exec </dev/null >$logFile 2>&1
+
+dbs="`egrep '^[a-z]' $dbsFile`"
+
+for  db in  $dbs ; do
+    echo checking $db
+    hgc-sql -N -e 'select acc,gbExtFile from gbSeq left join gbExtFile on gbExtFile.id = gbSeq.gbExtFile where gbExtFile.id is null' $db >$outDir/$db.lost
+done
+echo done
