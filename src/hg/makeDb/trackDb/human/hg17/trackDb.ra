@@ -371,6 +371,7 @@ yLineOnOff Off
 autoScaleDefault Off
 spanList 1
 speciesOrder panTro1 canFam1 mm5 rn3 galGal2 fr1 danRer1
+treeImage phylo/hg17_8way.jpg
 
 track phastConsElements
 shortLabel Most Conserved
