@@ -1,0 +1,106 @@
+#!/bin/bash -e
+usage='
+  kentBuild [kentDir] [outRoot]
+
+Build kent/src tree and run tests.  
+
+Designed for running under a cron job, this saves output in log files and then
+parses regions of output file with errors (outputing both stdout/stderr of
+make) and then writing it to stderr.  If there are no errors, there is no
+output.
+
+This requires a checked out tree; cvs is not run.
+
+Arguments:
+   o kentDir - top of kent tree; this should be the "kent" directory,
+     NOT kent/src.  Defaults  to ~/kent.
+   o outRoot - if specified, bin and cgi-bin output is placed under this
+     directory instead of clobbering the standard locations.
+'
+
+# make a path absolute
+absPath() {
+    if [[ ! ("$1" =~ "/.*") ]] ; then
+        echo "`pwd`/$1"
+    else
+        echo "$1"
+    fi
+}
+
+# print a message about a failure in a make, output filtered log file
+# and exit.
+makeErr() {
+    local desc="$1"
+    local logFile="$2"
+    echo "Error: kent/src $desc failed"  >&2
+    echo "full log file is on `hostname`: $kentDir/$logFile" >&2
+    echo "Error summary:" >&2
+    ./build/makeErrFilter $logFile
+    exit 2
+}
+
+# begin here
+if [ $# -gt 2 ]  ; then
+    echo "Error: wrong number of arguments" >&2
+    echo "$usage" >&2
+    exit 1
+fi
+
+# some setup
+export MACHTYPE=`uname -m`
+if [ "$MACHTYPE" == "i686" ] ; then
+    export MACHTYPE=i386
+fi
+# might need to change HOME
+USERHOME=$HOME
+
+# parse command line
+if [ $# -gt 0 ] ; then
+    kentDir=`absPath "$1"`
+    shift
+else
+    kentDir=$USERHOME/kent
+fi
+if [ $# -gt 0 ] ; then
+    outRoot=`absPath "$1"`
+    shift
+    # reconfigure enviromment for different output directory
+    export SCRIPTS=$outRoot/bin/scripts
+    export CGI_BIN=$outRoot/cgi-bin
+    export HOME=$outRoot
+    export HGDB_CONF=$USERHOME/.hg.conf
+    mkdir -p $outRoot/bin/${MACHTYPE}
+    mkdir -p $SCRIPTS
+    mkdir -p ${CGI_BIN}-${USER}
+fi
+
+# find mysql libraries
+if [ "$MACHTYPE" == "x86_64" ] ; then
+    export MYSQLINC="/usr/include/mysql"
+    export MYSQLLIBS="/usr/lib64/mysql/libmysqlclient.a -lz"
+elif [ -e /usr/lib/mysql/libmysqlclient.a ] ; then 
+    export MYSQLINC="/usr/include/mysql"
+    export MYSQLLIBS="/usr/lib/mysql/libmysqlclient.a -lz"
+else
+    export MYSQLINC="/usr/local/mysql/include/mysql"
+    export MYSQLLIBS="/usr/local/mysql/lib/mysql/libmysqlclient.a -lz"
+fi
+
+cd $kentDir
+
+((cd src && make -k clean) > clean.log 2>&1) || {
+    makeErr "clean" clean.log
+}
+
+((cd src && make -k) > compile.log 2>&1) || {
+    makeErr "compile" compile.log
+}
+
+((cd src && make tags etags) > tags.log 2>&1) || {
+    makeErr "tags" tags.log
+}
+
+((cd src && make -k test) > test.log 2>&1) || {
+    makeErr "tests" test.log
+}
+

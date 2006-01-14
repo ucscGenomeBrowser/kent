@@ -4,14 +4,35 @@
 # the make failed
 # 
 
-# output looks like:
-# make[3]: Entering directory `/scratch/markd/kent/src/hg/lib/tests'
-# make[3]: *** [spDbTest] Error 255
-# make[3]: Leaving directory `/scratch/markd/kent/src/hg/lib/tests'
+# output looks like this if a command executed by a target fails:
+#   make[3]: Entering directory `/scratch/markd/kent/src/hg/lib/tests'
+#  ..
+#   make[3]: *** [spDbTest] Error 255
+#   make[3]: Leaving directory `/scratch/markd/kent/src/hg/lib/tests'
+#
+# If make generates an error, the results looks like this if it's in the
+# top top level make:
+#
+#   make[1]: Entering directory `/cluster/store3/markd/kent/src/lib'
+#   ../inc/common.mk:2: *** missing separator.  Stop.
+#   make[1]: Leaving directory `/cluster/store3/markd/kent/src/lib'
+#   make: *** [clean] Error 2
+#
+# and like this in lower-levels
+#   make[2]: Entering directory `/cluster/store3/markd/kent/src/lib'
+#   ../inc/common.mk:2: *** missing separator.  Stop.
+#   make[2]: Leaving directory `/cluster/store3/markd/kent/src/lib'
+#   make[1]: *** [clean] Error 2
+#   make[1]: Leaving directory `/cluster/store3/markd/kent/src'
+#
+# this makes the state machine somewhat complex
 #
 
 # parse make[n] to get level
 function getLevel(line) {
+    if (match(line, "^make:") != 0) {
+        return "0";  # top level
+    }
     if (match(line, "^make\\[([0-9]+)\\]:", a) == 0) {
         print "Error: can't parse:",line >"/dev/stderr";
         exit(1);
@@ -19,11 +40,26 @@ function getLevel(line) {
     return a[1];
 }
 
+# print buffered lines, if there is any output buffered.  Reset buffer
+# state
+function prLines(level) {
+    if ((levelOutCnt[level] > 0) && (levelStarts[level] <= nLines)) {
+        for (i = levelStarts[level]; i <= nLines; i++) {
+            print lines[i] >"/dev/stderr";
+        }
+        print "-----------------------------------------------------" >"/dev/stderr";
+        nLines = 0;
+        levelOutCnt[level] = 0;
+        levelStarts[level] = -1;
+    }
+    
+}
+
 BEGIN {
     nLines = 0;  # count of lines buffered in lines array
     level = 0;   # current make level
-    lastPrinted = -1; # last line that was printed
     curLevel = 0;     # currrent level being parsed
+    prevWasLeave = 0;  # previous line was leaving a directory
     # arrays
     #  lines - array of all lines in file 
     #  levelStarts - contains line index where level started
@@ -40,24 +76,17 @@ BEGIN {
     levelOutCnt[curLevel] = 0;
 }
 
-/^make\[[0-9]+\]: \*\*\* / {
-    # only print if there was some non-make output
-    if (levelOutCnt[curLevel] > 0) {
-        st = (levelStarts[curLevel] > lastPrinted) ? levelStarts[curLevel] : lastPrinted+1;
-        for (i = st; i <= nLines; i++) {
-            print lines[i] >"/dev/stderr";
-        }
-        print "-----------------------------------------------------" >"/dev/stderr";
-        lastPrinted = nLines;
-        levelOutCnt[curLevel] = 0;
-    }
+/^make.*: \*\*\*/ {
+    prLines((prevWasLeave ? curLevel+1 : curLevel));
+}
+
+{
+    prevWasLeave = 0;  # reset now that print check is done.
 }
 
 /^make\[[0-9]+\]: Leaving directory/ {
-    level = getLevel($0);
-    levelStarts[level] = -1;  # flag invalid
-    curLevel = level-1;
-    levelOutCnt[curLevel] = 0;  # reset, don't care about what happened before this
+    curLevel = getLevel($0)-1;
+    prevWasLeave = 1;
 }
 
 !/^make\[[0-9]+\]:/ {
