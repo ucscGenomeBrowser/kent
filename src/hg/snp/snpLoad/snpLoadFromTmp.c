@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.13 2006/01/15 05:52:44 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.14 2006/01/15 15:23:13 heather Exp $";
 
 char *functionStrings[] = {
     "unknown",
@@ -301,7 +301,7 @@ hFreeConn(&conn);
 
 void lookupRefAllele(struct snp125 *list)
 /* get reference allele from nib files */
-/* currently only for single SNPs */
+/* for locType exact and locType range */
 {
 struct snp125 *el = NULL;
 struct dnaSeq *seq;
@@ -313,25 +313,28 @@ AllocVar(seq);
 verbose(1, "looking up reference allele...\n");
 for (el = list; el != NULL; el = el->next)
     {
-    el->refUCSC = cloneString("n/a");
-    if (sameString(el->class, "single"))
+    if (sameString(el->locType, "unknown") || sameString(el->locType, "between"))
         {
-	strcpy(chromName, "chr");
-	strcat(chromName, el->chrom);
-        chromSize = getChromSize(chromName);
-	if (el->chromStart > chromSize || el->chromEnd > chromSize)
-	    {
-	    verbose(1, "unexpected coords %s %s:%d-%d\n",
-	            el->name, chromName, el->chromStart, el->chromEnd);
-            continue;
-	    }
-        hNibForChrom2(chromName, fileName);
-        seq = hFetchSeq(fileName, chromName, el->chromStart, el->chromEnd);
-	touppers(seq->dna);
-	if (sameString(el->strand, "-"))
-	    reverseComplement(seq->dna, strlen(seq->dna));
-	el->refUCSC = cloneString(seq->dna);
-	}
+        el->refUCSC = cloneString("n/a");
+        continue;
+        }
+
+    strcpy(chromName, "chr");
+    strcat(chromName, el->chrom);
+    chromSize = getChromSize(chromName);
+    if (el->chromStart > chromSize || el->chromEnd > chromSize || el->chromEnd <= el->chromStart)
+        {
+        verbose(1, "unexpected coords %s %s:%d-%d\n", el->name, chromName, el->chromStart, el->chromEnd);
+	el->refUCSC = cloneString("n/a");
+        continue;
+        }
+
+    hNibForChrom2(chromName, fileName);
+    seq = hFetchSeq(fileName, chromName, el->chromStart, el->chromEnd);
+    touppers(seq->dna);
+    if (sameString(el->strand, "-"))
+        reverseComplement(seq->dna, strlen(seq->dna));
+    el->refUCSC = cloneString(seq->dna);
     }
 }
 
