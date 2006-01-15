@@ -11,7 +11,7 @@ CREATE TABLE snpTmp (
     name varchar(255) not null,	# Reference SNP identifier or Affy SNP name
     strand char(1) not null,	# Which DNA strand contains the observed alleles
     refNCBI longblob not null,	# Reference genomic from dbSNP
-    locType varchar(255) not null,	# range, exact, between
+    locType enum ('unknown', 'range', 'exact', 'between') DEFAULT 'unknown' NOT NULL, # locType
               #Indices
     PRIMARY KEY(name)
 );
