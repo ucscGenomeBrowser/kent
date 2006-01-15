@@ -41,8 +41,9 @@ struct eleDistance
 
 
 extern void setElementDist(struct element *e1, struct element *e2, double dist,
-    struct distance **distanceList);
-extern struct distance *readDistances(char *fileName, struct hash  *genomeHash);
+    struct distance **distanceList, struct hash **pDistHash, struct hash **pDistEleHash);
+extern struct distance *readDistances(char *fileName, struct hash  *genomeHash,
+    struct hash **pDistHash, struct hash **pDistEleHash);
 extern struct genome *readGenomes(char *fileName);
 
 extern struct element *eleAddEdge(struct element *parent, struct element *child);
