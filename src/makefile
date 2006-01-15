@@ -30,7 +30,7 @@ check-beta:
 	cvs status makefile | egrep 'v[0-9]+_branch' > /dev/null	
 
 blatSuite: topLibs 
-	cd blat && ${MAKE} && ${MAKE} test
+	cd blat && ${MAKE}
 	cd gfClient && ${MAKE}
 	cd gfServer && ${MAKE}
 	cd webBlat && ${MAKE}
