@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "snpTmp.h"
 
-static char const rcsid[] = "$Id: snpSplit.c,v 1.4 2006/01/15 05:22:51 heather Exp $";
+static char const rcsid[] = "$Id: snpSplit.c,v 1.5 2006/01/15 15:01:36 heather Exp $";
 
 char *locTypeStrings[] = {
     "range",
@@ -72,6 +72,7 @@ char *rangeString1, *rangeString2;
 
 el->chromStart = atoi(startString);
 
+/* range */
 if (locType == 1) 
     {
     el->locType = locTypeStrings[0];
@@ -84,28 +85,39 @@ if (locType == 1)
         }
     rangeString2 = rangeString2 + 2;
     el->chromEnd = atoi(rangeString2);
+    if (el->chromEnd <= el->chromStart)
+        {
+        verbose(1, "unexpected range coords (end <= start) %s\n", el->name);
+	return FALSE;
+	}
     return TRUE;
     }
 
+/* exact */
 if (locType == 2)
     {
     el->locType = locTypeStrings[1];
     el->chromEnd = atoi(endString);
+    if (el->chromEnd != el->chromStart + 1)
+        {
+	verbose(1, "unexpected exact coords (end != start + 1) %s\n", el->name);
+	return FALSE;
+	}
     return TRUE;
     }
 
+/* between */
 if (locType == 3)
     {
     el->locType = locTypeStrings[2];
-    rangeString1 = cloneString(endString);
-    rangeString2 = strstr(rangeString1, "^");
-    if (rangeString2 == NULL) 
-        {
-        verbose(1, "error processing deletion snp %s with phys_pos %s\n", rangeString1);
-        return FALSE;
-	}
-    rangeString2 = rangeString2++;
-    el->chromEnd = atoi(rangeString2);
+    // rangeString1 = cloneString(endString);
+    // rangeString2 = strstr(rangeString1, "^");
+    // if (rangeString2 == NULL) 
+        // {
+        // verbose(1, "error processing snp %s with phys_pos %s\n", rangeString1);
+        // return FALSE;
+	// }
+    el->chromEnd = el->chromStart;
     return TRUE;
     }
 
@@ -166,6 +178,8 @@ for (contigPtr = contigList; contigPtr != NULL; contigPtr = contigPtr->next)
         else
             strcpy(el->strand, "?");
         el->refNCBI = cloneString(row[6]);
+	if (sameString(el->locType, "between") && !sameString(el->refNCBI, "-"))
+	    verbose(1, "unexpected between allele %s for %s\n", el->refNCBI, el->name);
         slAddHead(&list,el);
 	snpCount++;
         }
