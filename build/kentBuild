@@ -4,10 +4,11 @@ usage='
 
 Build kent/src tree and run tests.  
 
-Designed for running under a cron job, this saves output in log files and then
-parses regions of output file with errors (outputing both stdout/stderr of
-make) and then writing it to stderr.  If there are no errors, there is no
-output.
+Designed for running under a cron job, this saves the stdout/err in *.log
+files in kentDir. It then parses the output file to find errors reported by
+make an copies the regions of the output log containing the errors to stderr.
+This way, both the error message and the context can be seen without needing
+to read through the entire log. If there are no errors, there is no output.
 
 This requires a checked out tree; cvs is not run.
 
