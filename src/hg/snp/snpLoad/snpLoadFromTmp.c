@@ -7,7 +7,20 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.12 2006/01/13 19:13:28 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.13 2006/01/15 05:52:44 heather Exp $";
+
+char *functionStrings[] = {
+    "unknown",
+    "locus",
+    "coding",
+    "coding-synon",
+    "coding-nonsynon",
+    "untranslated",
+    "intron",
+    "splice-site",
+    "cds-reference",
+};
+
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -81,7 +94,7 @@ if (!sqlTableExists(conn, tableName))
     return list;
 
 /* not checking chrom */
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refNCBI, class from %s", tableName);
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refNCBI, locType from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -94,7 +107,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     el->name = cloneString(row[3]);
     strcpy(el->strand, row[4]);
     el->refNCBI = cloneString(row[5]);
-    el->class = cloneString(row[6]);
+    el->locType = cloneString(row[6]);
     slAddHead(&list,el);
     count++;
     }
@@ -110,6 +123,7 @@ return list;
 
 void lookupFunction(struct snp125 *list)
 /* get function from ContigLocusId table */
+/* function values are defined in snpFixed.SnpFunctionCode */
 {
 struct snp125 *el;
 char query[512];
@@ -135,36 +149,13 @@ for (el = list; el != NULL; el = el->next)
 	continue;
 	}
     functionValue = atoi(row[0]);
-    switch (functionValue)
+    if (functionValue > 8) 
         {
-	    case 1:
-                el->func = cloneString("unknown");
-	        break;
-	    case 2:
-                el->func = cloneString("unknown");
-	        break;
-	    case 3:
-                el->func = cloneString("coding-synon");
-	        break;
-	    case 4:
-                el->func = cloneString("coding-nonsynon");
-	        break;
-	    case 5:
-                el->func = cloneString("untranslated");
-	        break;
-	    case 6:
-                el->func = cloneString("intron");
-	        break;
-	    case 7:
-                el->func = cloneString("splice-site");
-	        break;
-	    case 8:
-                el->func = cloneString("coding");
-	        break;
-	    default:
-                el->func = cloneString("unknown");
-	        break;
+        verbose(1, "unexpected function value %d for %s; setting to 0 (zero)", functionValue, snpName);
+	functionValue = 0;
 	}
+
+    el->func = functionStrings[functionValue];
     sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
@@ -289,18 +280,20 @@ char **row;
 verbose(1, "looking up observed...\n");
 for (el = list; el != NULL; el = el->next)
     {
-    safef(query, sizeof(query), "select molType, observed from snpFasta where rsId = '%s'", el->name);
+    safef(query, sizeof(query), "select molType, class, observed from snpFasta where rsId = '%s'", el->name);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row == NULL)
         {
-        el->observed = "n/a";
-	el->molType = "unknown";
+        el->observed = cloneString("n/a");
+        el->class = cloneString("unknown");
+	el->molType = cloneString("unknown");
         sqlFreeResult(&sr);
 	continue;
 	}
     el->molType = cloneString(row[0]);
-    el->observed = cloneString(row[1]);
+    el->class = cloneString(row[1]);
+    el->observed = cloneString(row[2]);
     sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
@@ -308,6 +301,7 @@ hFreeConn(&conn);
 
 void lookupRefAllele(struct snp125 *list)
 /* get reference allele from nib files */
+/* currently only for single SNPs */
 {
 struct snp125 *el = NULL;
 struct dnaSeq *seq;
@@ -320,7 +314,7 @@ verbose(1, "looking up reference allele...\n");
 for (el = list; el != NULL; el = el->next)
     {
     el->refUCSC = cloneString("n/a");
-    if (sameString(el->class, "simple") || sameString(el->class, "deletion") || sameString(el->class, "range"))
+    if (sameString(el->class, "single"))
         {
 	strcpy(chromName, "chr");
 	strcat(chromName, el->chrom);
@@ -388,6 +382,7 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "%f\t", el->avHet);
     fprintf(f, "%f\t", el->avHetSE);
     fprintf(f, "%s\t", el->func);
+    fprintf(f, "%s\t", el->locType);
     fprintf(f, "dbSNP125");
     fprintf(f, "\n");
     count++;
