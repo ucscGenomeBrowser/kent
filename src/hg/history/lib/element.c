@@ -7,9 +7,7 @@
 
 #include "element.h"
 
-static struct hash *distHash = NULL;
-struct hash *distEleHash = NULL;
-//struct distance *distance;
+static struct element *newEdge(struct element *parent, struct element *child);
 
 void printGenomes(struct genome *genomes)
 {
@@ -40,17 +38,21 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
     {
     if (needGenome)
 	{
-	if ((wordsRead != 3) || (words[0][0] != '>'))
-	    errAbort("elTree genomes are named starting with a '>' with 3 total words");
+	if ((wordsRead != 4) || (words[0][0] != '>'))
+	    errAbort("elTree genomes are named starting with a '>' with 4 total words");
 
 	AllocVar(node);
+	AllocVar(node->ident);
 	AllocVar(genome);
 	node->priv = genome;
+	genome->node = node;
 	//slAddHead(&allGenomes, genome);
-	genome->name = cloneString(&words[0][1]);
+
+	node->ident->name = genome->name = cloneString(&words[0][1]);
 	genome->elementHash = newHash(8);
 	elementsLeft = atoi(words[1]);
 	numChildren = atoi(words[2]);
+	node->ident->length =  atof(words[3]);
 	needGenome = FALSE;
 	elements = needMem(elementsLeft * sizeof(struct element *));
 
@@ -84,6 +86,7 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    if (parents)
 		{
 		element->parent = parents[atoi(words[ii+1]) - 1];
+		newEdge(element->parent, element);
 
 		if (element->parent == NULL)
 		    errAbort("parent is null %s",words[ii+1]);
@@ -232,7 +235,7 @@ return e;
 
 
 void setElementDist(struct element *e1, struct element *e2, double dist,
-    struct distance **distanceList)
+    struct distance **distanceList, struct hash **pDistHash, struct hash **pDistEleHash)
 {
 int val = 0;
 char buffer[512];
@@ -244,6 +247,8 @@ if (!sameString(e1->name, e2->name))
 
 if ((val = strcmp(e1->species, e2->species)) == 0)
     {
+    //printf("ignoring orthologs\n");
+    //return;
     val = strcmp(e1->version , e2->version);
     }
 
@@ -254,13 +259,12 @@ else
     safef(buffer, sizeof(buffer), str, e2->species, e2->name, e2->version,
     	e1->species, e1->name, e1->version);
 
-if (distHash == NULL)
-    {
-    distHash = newHash(5);
-    distEleHash = newHash(5);
-    }
+if (*pDistHash == NULL)
+    *pDistHash = newHash(5);
+if (*pDistEleHash == NULL)
+    *pDistEleHash = newHash(5);
 
-if ((pdist = (float *)hashFindVal(distHash, buffer)) != NULL)
+if ((pdist = (float *)hashFindVal(*pDistHash, buffer)) != NULL)
     {
 #define EPSILON 0.01
     if (fabs(dist - *pdist) > EPSILON)
@@ -276,7 +280,7 @@ else
 
 	AllocVar(pdist);
 	*pdist = dist;
-	hashAdd(distHash, buffer, pdist);
+	hashAdd(*pDistHash, buffer, pdist);
 
 	AllocVar(distance);
 	slAddHead(distanceList, distance);
@@ -290,8 +294,8 @@ else
 	ed->distance = distance;
 	//safef(buffer, sizeof(buffer), "%s.%s.%s", e1->species, e1->name, e1->version);
 	p = eleName(e1);
-	if ((list = hashFindVal(distEleHash, p)) == NULL)
-	    hashAdd(distEleHash, p, ed);
+	if ((list = hashFindVal(*pDistEleHash, p)) == NULL)
+	    hashAdd(*pDistEleHash, p, ed);
 	else
 	    slAddTail(&list, ed);
 
@@ -299,8 +303,8 @@ else
 	ed->distance = distance;
 	//safef(buffer, sizeof(buffer), "%s.%s.%s", e2->species, e2->name, e2->version);
 	p = eleName(e2);
-	if ((list = hashFindVal(distEleHash, p)) == NULL)
-	    hashAdd(distEleHash, p, ed);
+	if ((list = hashFindVal(*pDistEleHash, p)) == NULL)
+	    hashAdd(*pDistEleHash, p, ed);
 	else
 	    slAddTail(&list, ed);
     }
@@ -322,7 +326,8 @@ return d1->e1->numEdges + d1->e2->numEdges - d2->e1->numEdges - d2->e2->numEdges
 //return 0;
 }
 
-struct distance *readDistances(char *fileName, struct hash *genomeHash)
+struct distance *readDistances(char *fileName, struct hash *genomeHash,
+    struct hash **pDistHash, struct hash **pDistEleHash)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *words[256];
@@ -372,7 +377,8 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *))))
 	    e1 = getElement(s1, genomeHash);
 	    e2 = getElement(s2, genomeHash);
 
-	    setElementDist(e1, e2, rowValues[ii][jj], &distances);
+	    setElementDist(e1, e2, rowValues[ii][jj], &distances,
+		pDistHash, pDistEleHash);
 	    }
 	}
     }
@@ -440,12 +446,12 @@ int ii;
 
 for(ii=0; ii < depth; ii++)
     printf(" ");
-printf("%s: ",g->name);
+printf("%s %g %d: ",g->name, node->ident->length, node->numEdges);
 for(e = g->elements; e; e = e->next)
     {
     if (e->isFlipped)
 	printf("-");
-    printf("%s.%s ",e->name,e->version);
+    printf("%s.%s %d ",e->name,e->version,e->numEdges);
     }
 printf("\n");
 
