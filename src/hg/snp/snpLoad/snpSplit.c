@@ -6,7 +6,13 @@
 #include "hdb.h"
 #include "snpTmp.h"
 
-static char const rcsid[] = "$Id: snpSplit.c,v 1.3 2005/12/14 22:01:48 heather Exp $";
+static char const rcsid[] = "$Id: snpSplit.c,v 1.4 2006/01/15 05:22:51 heather Exp $";
+
+char *locTypeStrings[] = {
+    "range",
+    "exact",
+    "between",
+};
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -59,17 +65,16 @@ if (el == NULL)
 }
 
 
-boolean setCoords(struct snpTmp *el, int snpClass, char *startString, char *endString)
-/* set coords and class */
-/* can switch to using #define */
+boolean setCoordsAndLocType(struct snpTmp *el, int locType, char *startString, char *endString)
+/* set coords and locType */
 {
 char *rangeString1, *rangeString2;
 
 el->chromStart = atoi(startString);
 
-if (snpClass == 1) 
+if (locType == 1) 
     {
-    el->class = cloneString("range");
+    el->locType = locTypeStrings[0];
     rangeString1 = cloneString(endString);
     rangeString2 = strstr(rangeString1, "..");
     if (rangeString2 == NULL) 
@@ -82,16 +87,16 @@ if (snpClass == 1)
     return TRUE;
     }
 
-if (snpClass == 2)
+if (locType == 2)
     {
-    el->class = cloneString("simple");
+    el->locType = locTypeStrings[1];
     el->chromEnd = atoi(endString);
     return TRUE;
     }
 
-if (snpClass == 3)
+if (locType == 3)
     {
-    el->class = cloneString("deletion");
+    el->locType = locTypeStrings[2];
     rangeString1 = cloneString(endString);
     rangeString2 = strstr(rangeString1, "^");
     if (rangeString2 == NULL) 
@@ -104,16 +109,10 @@ if (snpClass == 3)
     return TRUE;
     }
 
-/* set chromEnd = chromStart for insertions */
-if (snpClass == 4)
-    {
-    el->class = cloneString("insertion");
-    el->chromEnd = el->chromStart;
-    return TRUE;
-    }
-verbose(5, "skipping snp %s with loc type %d\n", el->name, snpClass);
+verbose(1, "skipping snp %s with loc type %d\n", el->name, locType);
 return FALSE;
 }
+
 struct snpTmp *readSnps(char *chromName, struct slName *contigList)
 /* query ContigLoc for all snps in contig */
 {
@@ -122,7 +121,7 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-int snpClass;
+int locType;
 int pos;
 int snpCount = 0;
 int contigCount = 0;
@@ -146,16 +145,16 @@ for (contigPtr = contigList; contigPtr != NULL; contigPtr = contigPtr->next)
 	    verbose(5, "snp %s is unaligned\n", row[0]);
 	    continue;
 	    }
-        snpClass = atoi(row[2]);
-        if (snpClass < 1 || snpClass > 4) 
+        locType = atoi(row[2]);
+        if (locType < 1 || locType > 3) 
             {
-	    verbose(5, "skipping snp %s with loc_type %d\n", el->name, snpClass);
+	    verbose(5, "skipping snp %s with loc_type %d\n", el->name, locType);
 	    continue;
 	    }
         AllocVar(el);
         el->name = cloneString(row[0]);
         el->chrom = chromName;
-        if(!setCoords(el, snpClass, row[3], row[4]))
+        if(!setCoordsAndLocType(el, locType, row[3], row[4]))
             {
             free(el);
 	    continue;
@@ -222,7 +221,7 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "rs%s\t", el->name);
     fprintf(f, "%s\t", el->strand);
     fprintf(f, "%s\t", el->refNCBI);
-    fprintf(f, "%s\t", el->class);
+    fprintf(f, "%s\t", el->locType);
     fprintf(f, "\n");
     count++;
     }
