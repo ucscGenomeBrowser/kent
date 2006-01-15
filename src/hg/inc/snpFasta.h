@@ -5,7 +5,7 @@
 #ifndef SNPFASTA_H
 #define SNPFASTA_H
 
-#define SNPFASTA_NUM_COLS 5
+#define SNPFASTA_NUM_COLS 6
 
 struct snpFasta
 /* Polymorphism data from dbSnp rs_fasta files */
@@ -13,6 +13,7 @@ struct snpFasta
     struct snpFasta *next;  /* Next in singly linked list. */
     char *rsId;	/* Reference SNP identifier */
     char *molType;	/* Sample type from exemplar ss */
+    char *class;	/* Single, in-del, heterozygous, microsatelite, named, etc. */
     char *observed;	/* The sequences of the observed alleles from rs-fasta files */
     char *leftFlank;	/* Left flanking sequence */
     char *rightFlank;	/* Right flanking sequence */

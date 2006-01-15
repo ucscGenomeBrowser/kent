@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snpFasta.h"
 
-static char const rcsid[] = "$Id: snpFasta.c,v 1.1 2006/01/03 23:38:42 heather Exp $";
+static char const rcsid[] = "$Id: snpFasta.c,v 1.2 2006/01/15 03:17:51 heather Exp $";
 
 void snpFastaStaticLoad(char **row, struct snpFasta *ret)
 /* Load a row from snpFasta table into ret.  The contents of ret will
@@ -17,9 +17,10 @@ void snpFastaStaticLoad(char **row, struct snpFasta *ret)
 
 ret->rsId = row[0];
 ret->molType = row[1];
-ret->observed = row[2];
-ret->leftFlank = row[3];
-ret->rightFlank = row[4];
+ret->class = row[2];
+ret->observed = row[3];
+ret->leftFlank = row[4];
+ret->rightFlank = row[5];
 }
 
 struct snpFasta *snpFastaLoad(char **row)
@@ -31,9 +32,10 @@ struct snpFasta *ret;
 AllocVar(ret);
 ret->rsId = cloneString(row[0]);
 ret->molType = cloneString(row[1]);
-ret->observed = cloneString(row[2]);
-ret->leftFlank = cloneString(row[3]);
-ret->rightFlank = cloneString(row[4]);
+ret->class = cloneString(row[2]);
+ret->observed = cloneString(row[3]);
+ret->leftFlank = cloneString(row[4]);
+ret->rightFlank = cloneString(row[5]);
 return ret;
 }
 
@@ -43,7 +45,7 @@ struct snpFasta *snpFastaLoadAll(char *fileName)
 {
 struct snpFasta *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[6];
 
 while (lineFileRow(lf, row))
     {
@@ -61,7 +63,7 @@ struct snpFasta *snpFastaLoadAllByChar(char *fileName, char chopper)
 {
 struct snpFasta *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[5];
+char *row[6];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -84,6 +86,7 @@ if (ret == NULL)
     AllocVar(ret);
 ret->rsId = sqlStringComma(&s);
 ret->molType = sqlStringComma(&s);
+ret->class = sqlStringComma(&s);
 ret->observed = sqlStringComma(&s);
 ret->leftFlank = sqlStringComma(&s);
 ret->rightFlank = sqlStringComma(&s);
@@ -100,6 +103,7 @@ struct snpFasta *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->rsId);
 freeMem(el->molType);
+freeMem(el->class);
 freeMem(el->observed);
 freeMem(el->leftFlank);
 freeMem(el->rightFlank);
@@ -131,6 +135,10 @@ fprintf(f, "%s", el->molType);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->class);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->observed);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
@@ -146,6 +154,8 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+
+
 void snpFastaTableCreate(struct sqlConnection *conn, int indexSize)
 /* create a snpFlank table */
 {
@@ -153,7 +163,8 @@ char *createString =
 "CREATE TABLE snpFasta (\n"
 "   rsId varchar(255) not null,	\n"
 "    molType varchar(255) not null, \n"
-"   observed longblob not null,	\n"
+"    class varchar(255) not null, \n"
+"    observed longblob not null, \n"
 "    leftFlank longblob not null, \n"
 "    rightFlank longblob not null, \n"
 "    PRIMARY KEY(rsId)\n"

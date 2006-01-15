@@ -3,6 +3,7 @@ table snpFasta
     (
     string  rsId;       "Reference SNP identifier"
     string  molType;    "Sample type from exemplar ss"
+    string  class;       "Single, in-del, heterozygous, microsatelite, named, etc."
     lstring  observed;   "The sequences of the observed alleles from rs-fasta files"
     lstring  leftFlank;  "Left flanking sequence"
     lstring  rightFlank; "Right flanking sequence"
