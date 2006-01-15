@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: speciesDist.c,v 1.2 2006/01/09 19:27:13 braney Exp $";
+static char const rcsid[] = "$Id: speciesDist.c,v 1.3 2006/01/15 22:24:31 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -43,6 +43,8 @@ char **genomeNames;
 int ii;
 int numExpect;
 double *distanceArray;
+struct hash *distHash = NULL;
+struct hash *distElemHash = NULL;
 
 genomes = readGenomes(genomeFileName);
 //printGenomes(genomes);
@@ -58,7 +60,7 @@ for(genome=genomes, ii=0; genome; ii++,genome=genome->next)
     genomeNames[ii] = genome->name;
     }
 
-distanceList = readDistances(distanceFileName, genomeHash);
+distanceList = readDistances(distanceFileName, genomeHash, &distHash, &distElemHash);
 
 numExpect = (numSpecies * numSpecies - numSpecies ) /2;
 distanceArray = (double *)needMem(sizeof(double) * numSpecies * numSpecies);
