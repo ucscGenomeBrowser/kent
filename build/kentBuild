@@ -20,11 +20,10 @@ Arguments:
 
 # make a path absolute
 absPath() {
-    if [[ ! ("$1" =~ "/.*") ]] ; then
-        echo "`pwd`/$1"
-    else
-        echo "$1"
-    fi
+    case "$1" in
+        /*) echo "$1";;
+        *) echo "`pwd`/$1";;
+    esac
 }
 
 # print a message about a failure in a make, output filtered log file
@@ -61,6 +60,10 @@ if [ $# -gt 0 ] ; then
 else
     kentDir=$USERHOME/kent
 fi
+
+# don't want test to pickup other binaries
+export PATH=".:/usr/local/bin:/bin:/usr/bin"
+
 if [ $# -gt 0 ] ; then
     outRoot=`absPath "$1"`
     shift
@@ -69,9 +72,13 @@ if [ $# -gt 0 ] ; then
     export CGI_BIN=$outRoot/cgi-bin
     export HOME=$outRoot
     export HGDB_CONF=$USERHOME/.hg.conf
-    mkdir -p $outRoot/bin/${MACHTYPE}
-    mkdir -p $SCRIPTS
+    machBinDir=$outRoot/bin/${MACHTYPE}
+    export PATH="${machBinDir}:${SCRIPTS}:${PATH}"
+    mkdir -p ${machBinDir}
+    mkdir -p ${SCRIPTS}
     mkdir -p ${CGI_BIN}-${USER}
+else
+    export PATH="${HOME}/bin/${MACHTYPE}:${HOME}/bin/scripts:${PATH}"
 fi
 
 # find mysql libraries

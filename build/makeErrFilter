@@ -44,13 +44,17 @@ function getLevel(line) {
 # state
 function prLines(level) {
     if ((levelOutCnt[level] > 0) && (levelStarts[level] <= nLines)) {
+        if (errCount == 0) {
+            print sep >"/dev/stderr";
+        }
         for (i = levelStarts[level]; i <= nLines; i++) {
             print lines[i] >"/dev/stderr";
         }
-        print "-----------------------------------------------------" >"/dev/stderr";
+        print sep >"/dev/stderr";
         nLines = 0;
         levelOutCnt[level] = 0;
         levelStarts[level] = -1;
+        errCount++;
     }
     
 }
@@ -60,10 +64,12 @@ BEGIN {
     level = 0;   # current make level
     curLevel = 0;     # currrent level being parsed
     prevWasLeave = 0;  # previous line was leaving a directory
+    errCount = 0;      # count of errors reported
     # arrays
     #  lines - array of all lines in file 
     #  levelStarts - contains line index where level started
     #  levelOutCnt - count of none make: lines at this level
+    sep = "-----------------------------------------------------";
 }
 
 {
