@@ -53,6 +53,9 @@ else
     set unit=$fullunit[$n]
     echo "$unit\n"
     set storeName=`echo $unit | awk -F/ '{print $NF}'`
+    if (-e du.$storeName.$date) then
+      continue
+    endif
     set machine=`df | grep export$unit | awk -F- '{print $1}'`
     ssh $machine du -m --max-depth=4 $unit | sort -nr \
       > du.$storeName.$date
