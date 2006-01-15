@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snpTmp.h"
 
-static char const rcsid[] = "$Id: snpTmp.c,v 1.1 2006/01/03 23:49:54 heather Exp $";
+static char const rcsid[] = "$Id: snpTmp.c,v 1.2 2006/01/15 03:39:46 heather Exp $";
 
 void snpTmpStaticLoad(char **row, struct snpTmp *ret)
 /* Load a row from snpTmp table into ret.  The contents of ret will
@@ -21,7 +21,7 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 strcpy(ret->strand, row[4]);
 ret->refNCBI = row[5];
-ret->class = row[6];
+ret->locType = row[6];
 }
 
 struct snpTmp *snpTmpLoad(char **row)
@@ -37,7 +37,7 @@ ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 strcpy(ret->strand, row[4]);
 ret->refNCBI = cloneString(row[5]);
-ret->class = cloneString(row[6]);
+ret->locType = cloneString(row[6]);
 return ret;
 }
 
@@ -92,7 +92,7 @@ ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->refNCBI = sqlStringComma(&s);
-ret->class = sqlStringComma(&s);
+ret->locType = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -107,7 +107,7 @@ if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->refNCBI);
-freeMem(el->class);
+freeMem(el->locType);
 freez(pEl);
 }
 
@@ -148,12 +148,14 @@ fprintf(f, "%s", el->refNCBI);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->class);
+fprintf(f, "%s", el->locType);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
+
 
 void snpTmpTableCreate(struct sqlConnection *conn, char *tableName)
 /* create a chrN_snpTmp table */
@@ -166,7 +168,7 @@ char *createString =
 "    name          varchar(255) not null,\n"
 "    strand        char(1) not null,\n"
 "    refNCBI       longblob not null,\n"
-"    class         enum('unknown', 'simple', 'insertion', 'deletion', 'range') \n"
+"    locType       enum('unknown', 'range', 'exact', 'range') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
 "    INDEX         name(name)\n"
 ")\n";

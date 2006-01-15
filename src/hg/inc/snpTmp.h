@@ -17,7 +17,7 @@ struct snpTmp
     char *name;	/* Reference SNP identifier or Affy SNP name */
     char strand[2];	/* Which DNA strand contains the observed alleles */
     char *refNCBI;	/* Reference genomic from dbSNP */
-    char *class;	/* The class of variant (simple, insertion, deletion, range, etc.) */
+    char *locType;	/* range, exact, between */
     };
 
 void snpTmpStaticLoad(char **row, struct snpTmp *ret);
@@ -63,10 +63,10 @@ void snpTmpOutput(struct snpTmp *el, FILE *f, char sep, char lastSep);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
+#endif /* SNPTMP_H */
+
 void snpTmpTableCreate(struct sqlConnection *conn, char *chromName);
 /* Create a chrN_snpTmp table. */
 
 int snpTmpCmp(const void *va, const void *vb);
-
-#endif /* SNPTMP_H */
 
