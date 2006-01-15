@@ -59,27 +59,8 @@ CREATE TABLE snp125 (
 
     				# The functional category of the SNP
 
-    source enum ('dbSNP125', 'Affy500k'),	# Source of the data - dbSnp, Affymetrix, ...
+   locType  enum( 'unknown', 'range', 'exact', 'between') DEFAULT 'unknown' NOT NULL,
 
-    exception enum ('SimpleTriAllelic', 
-    			'SimpleQuadAllelic',
-    			'NegativeSize', 
-    			'SimpleClassWrongSize',
-			'RangeClassWrongSize',
-			'InsertionClassWrongSize',
-			'DeletionClassWrongSize',
-			'SimpleClassWrongObserved',
-			'DeletionClassWrongObserved',
-			'RefNCBINotInObserved',
-			'RefUCSCNotInObserved',
-			'AlignTwoPlaces',
-			'AlignThreePlaces',
-			'AlignFourPlusPlaces',
-			'BadAlignmentFlanks',
-			'StrandIssue'),	# List of exceptionIds for 'invariant' conditions
-              #Indices
-    INDEX      chrom      (chrom,bin),
-    INDEX      chromStart (chrom,chromStart),
-    INDEX      name       (name)
+    source enum ('dbSNP125', 'Affy500k')	# Source of the data - dbSnp, Affymetrix, ...
 
 );

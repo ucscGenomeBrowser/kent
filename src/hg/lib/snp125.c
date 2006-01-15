@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snp125.c,v 1.2 2006/01/04 00:47:33 heather Exp $";
+static char const rcsid[] = "$Id: snp125.c,v 1.3 2006/01/15 03:08:18 heather Exp $";
 
 void snp125StaticLoad(char **row, struct snp125 *ret)
 /* Load a row from snp125 table into ret.  The contents of ret will
@@ -30,7 +30,8 @@ ret->valid = row[11];
 ret->avHet = atof(row[12]);
 ret->avHetSE = atof(row[13]);
 ret->func = row[14];
-ret->source = row[15];
+ret->locType = row[15];
+ret->source = row[16];
 }
 
 struct snp125 *snp125Load(char **row)
@@ -55,7 +56,8 @@ ret->valid = cloneString(row[11]);
 ret->avHet = atof(row[12]);
 ret->avHetSE = atof(row[13]);
 ret->func = cloneString(row[14]);
-ret->source = cloneString(row[15]);
+ret->locType = cloneString(row[15]);
+ret->source = cloneString(row[16]);
 return ret;
 }
 
@@ -65,7 +67,7 @@ struct snp125 *snp125LoadAll(char *fileName)
 {
 struct snp125 *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[17];
 
 while (lineFileRow(lf, row))
     {
@@ -83,7 +85,7 @@ struct snp125 *snp125LoadAllByChar(char *fileName, char chopper)
 {
 struct snp125 *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[17];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -119,6 +121,7 @@ ret->valid = sqlStringComma(&s);
 ret->avHet = sqlFloatComma(&s);
 ret->avHetSE = sqlFloatComma(&s);
 ret->func = sqlStringComma(&s);
+ret->locType = sqlStringComma(&s);
 ret->source = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -140,6 +143,7 @@ freeMem(el->molType);
 freeMem(el->class);
 freeMem(el->valid);
 freeMem(el->func);
+freeMem(el->locType);
 freeMem(el->source);
 freez(pEl);
 }
@@ -211,6 +215,8 @@ fprintf(f, "%s", el->func);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->locType);
+if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->source);
@@ -219,7 +225,6 @@ fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
-
 
 
 void snp125TableCreate(struct sqlConnection *conn, int indexSize)
@@ -273,6 +278,7 @@ char *createString =
 "    func          enum( 'unknown', 'locus-region', 'coding', 'coding-synon', 'coding-nonsynon', \n"
 "                  'mrna-utr', 'untranslated', 'intron','splice-site', 'reference', 'exception') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
+"    locType enum ('unknown', 'range', 'exact', 'between') DEFAULT 'unknown' NOT NULL,\n"
 "    source enum ('dbSNP125', 'Affy500k'),	# Source of the data - dbSnp, Affymetrix, ...\n"
 "    exception enum ('SimpleTriAllelic,'\n"
 "			'SimpleQuadAllelic',\n"
