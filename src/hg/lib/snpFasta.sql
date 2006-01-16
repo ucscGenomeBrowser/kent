@@ -12,5 +12,5 @@ CREATE TABLE snpFasta (
     leftFlank longblob not null,	# Left flanking sequence
     rightFlank longblob not null,	# Right flanking sequence
               #Indices
-    PRIMARY KEY(rsId)
+    INDEX rsId (rsId(10))
 );
