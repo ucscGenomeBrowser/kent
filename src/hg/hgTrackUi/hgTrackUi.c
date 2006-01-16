@@ -29,7 +29,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.243 2006/01/10 04:50:40 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.244 2006/01/16 23:48:40 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -343,7 +343,6 @@ void ldUi(struct trackDb *tdb)
 {
 ldValue         = cartUsualString(cart,  "ldValues",        ldValueDefault);
 ldPos           = cartUsualString(cart,  "ldPos",           ldPosDefault);
-ldNeg           = cartUsualString(cart,  "ldNeg",           ldNegDefault);
 ldOut           = cartUsualString(cart,  "ldOut",           ldOutDefault);
 ldTrim          = cartUsualBoolean(cart, "ldTrim",          ldTrimDefault);
 hapmapLdCeu_inv = cartUsualBoolean(cart, "hapmapLdCeu_inv", ldInvertDefault);
@@ -376,36 +375,33 @@ printf("&nbsp;Invert JPT<BR>&nbsp;&nbsp;\n");
 cgiMakeCheckBox("hapmapLdYri_inv", hapmapLdYri_inv); 
 printf("&nbsp;Invert YRI<BR>&nbsp;&nbsp;\n");
 
-printf("<BR><B>Colors:</B><BR>&nbsp;&nbsp;\n");
+printf("<BR><B>Colors:</B>\n");
 
+printf("<TABLE>\n ");
+printf("<TR>\n  <TD>&nbsp;&nbsp;LD values&nbsp;&nbsp;</TD>\n  <TD>- ");
 radioButton("ldPos", ldPos, "red");
-printf("\n");
+printf("</TD>\n  <TD>");
 radioButton("ldPos", ldPos, "green");
-printf("\n");
+printf("</TD>\n  <TD>");
 radioButton("ldPos", ldPos, "blue");
-printf("\n&nbsp; - Color for positive values of LD<BR>&nbsp;&nbsp;\n");
+printf("</TD>\n </TR>\n ");
 
-radioButton("ldNeg", ldNeg, "red");
-printf("\n");
-radioButton("ldNeg", ldNeg, "green");
-printf("\n");
-radioButton("ldNeg", ldNeg, "blue");
-printf("\n&nbsp; - Color for negative values of LD<BR>&nbsp;&nbsp;\n");
-
+printf("<TR>\n  <TD>&nbsp;&nbsp;Outlines&nbsp;&nbsp;</TD>\n  <TD>- ");
 radioButton("ldOut", ldOut, "red");
-printf("\n");
+printf("</TD>\n  <TD>");
 radioButton("ldOut", ldOut, "green");
-printf("\n");
+printf("</TD>\n  <TD>");
 radioButton("ldOut", ldOut, "blue");
-printf("\n");
+printf("</TD>\n  <TD>");
 radioButton("ldOut", ldOut, "yellow");
-printf("\n");
+printf("</TD>\n  <TD>");
 radioButton("ldOut", ldOut, "black");
-printf("\n");
+printf("</TD>\n  <TD>");
 radioButton("ldOut", ldOut, "white");
-printf("\n");
+printf("</TD>\n  <TD>");
 radioButton("ldOut", ldOut, "none");
-printf("\n&nbsp; - Color for outlines<BR>&nbsp;&nbsp;\n");
+printf("</TD>\n </TR>\n ");
+printf("</TABLE>\n");
 }
 
 void hgMutIdControls (struct trackDb *tdb) 

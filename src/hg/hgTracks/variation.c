@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.52 2006/01/13 05:23:32 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.53 2006/01/16 23:48:37 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -806,7 +806,6 @@ tg->itemName = perlegenName;
 /*******************************************************************/
 
 /* Declare our color gradients and the the number of colors in them */
-Color ldShadesNeg[LD_DATA_SHADES];
 Color ldShadesPos[LD_DATA_SHADES];
 Color ldHighLodLowDprime; /* pink */
 Color ldHighDprimeLowLod; /* blue */
@@ -821,7 +820,6 @@ static struct rgbColor red   = {255,   0,   0};
 static struct rgbColor green = {  0, 255,   0};
 static struct rgbColor blue  = {  0,   0, 255};
 char *posColorString = cartUsualString(cart, "ldPos", ldPosDefault);
-char *negColorString = cartUsualString(cart, "ldNeg", ldNegDefault);
 
 ldHighLodLowDprime = vgFindColorIx(vg, 255, 224, 224); /* pink */
 ldHighDprimeLowLod = vgFindColorIx(vg, 192, 192, 240); /* blue */
@@ -833,18 +831,6 @@ else if (sameString(posColorString,"green"))
     vgMakeColorGradient(vg, &white, &green, LD_DATA_SHADES, ldShadesPos);
 else
     errAbort("LD fill color must be 'red', 'blue', or 'green'; '%s' is not recognized", posColorString);
-/* D' values can be negative; others cannot */
-if (isDprime)
-    {
-    if (sameString(negColorString,"red")) 
-	vgMakeColorGradient(vg, &white, &red,   LD_DATA_SHADES, ldShadesNeg);
-    else if (sameString(negColorString,"blue"))
-	vgMakeColorGradient(vg, &white, &blue,  LD_DATA_SHADES, ldShadesNeg);
-    else if (sameString(negColorString,"green"))
-	vgMakeColorGradient(vg, &white, &green, LD_DATA_SHADES, ldShadesNeg);
-    else
-	errAbort("LD fill color must be 'red', 'blue', or 'green'; '%s' is not recognized", posColorString);
-    }
 }
 
 void bedLoadLdItemByQuery(struct track *tg, char *table, 
@@ -946,20 +932,6 @@ colorLookup[(int)'g'] = ldShadesPos[6];
 colorLookup[(int)'h'] = ldShadesPos[7];
 colorLookup[(int)'i'] = ldShadesPos[8];
 colorLookup[(int)'j'] = ldShadesPos[9];
-//colorLookup[(int)'k'] = ldShadesPos[9]; /* temporary kluge; remove after fixing data */
-if (isDprime)
-    {
-    colorLookup[(int)'A'] = ldShadesNeg[0];
-    colorLookup[(int)'B'] = ldShadesNeg[1];
-    colorLookup[(int)'C'] = ldShadesNeg[2];
-    colorLookup[(int)'D'] = ldShadesNeg[3];
-    colorLookup[(int)'E'] = ldShadesNeg[4];
-    colorLookup[(int)'F'] = ldShadesNeg[5];
-    colorLookup[(int)'G'] = ldShadesNeg[6];
-    colorLookup[(int)'H'] = ldShadesNeg[7];
-    colorLookup[(int)'I'] = ldShadesNeg[8];
-    colorLookup[(int)'J'] = ldShadesNeg[9];
-    }
 }
 
 
@@ -1068,17 +1040,6 @@ switch (charValue)
     case 'h': return 7;
     case 'i': return 8;
     case 'j': return 9;
-//    case 'k': return 9; /* temporary kluge to deal with misformatted data */
-    case 'A': return 0;
-    case 'B': return 1;
-    case 'C': return 2;
-    case 'D': return 3;
-    case 'E': return 4;
-    case 'F': return 5;
-    case 'G': return 6;
-    case 'H': return 7;
-    case 'I': return 8;
-    case 'J': return 9;
     case 'y': return -100;
     case 'z': return -101;
     }
@@ -1100,15 +1061,6 @@ switch (index)
     case 7: return 'h';
     case 8: return 'i';
     case 9: return 'j';
-    case -1: return 'B';
-    case -2: return 'C';
-    case -3: return 'D';
-    case -4: return 'E';
-    case -5: return 'F';
-    case -6: return 'G';
-    case -7: return 'H';
-    case -8: return 'I';
-    case -9: return 'J';
     case -100: return 'y';
     case -101: return 'z';
     }
@@ -1126,6 +1078,9 @@ int incrementN = 1;
 
 if (a<winStart || a>winEnd)
     return;
+/* Include SNPs with error codes, but don't add their values. 
+ * This will allow the marker to be drawn, even if all values
+ *   are missing. */
 if (indexValue<0)
     {
     incrementN = 0;

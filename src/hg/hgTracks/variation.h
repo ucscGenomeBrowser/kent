@@ -105,7 +105,6 @@ void perlegenMethods(struct track *tg);
 /* 10 shades from black to fully saturated of red/green/blue */
 #define LD_DATA_SHADES 10
 extern Color ldShadesPos[LD_DATA_SHADES];
-extern Color ldShadesNeg[LD_DATA_SHADES];
 extern Color ldHighLodLowDprime;
 extern Color ldHighDprimeLowLod;
 extern int colorLookup[256];
@@ -118,9 +117,6 @@ struct ldStats
     unsigned        n;         /* count of snps with valid LD values */
     unsigned        sumValues; /* sum of valid LD values */
 };
-
-//void makeLdShades(struct vGfx *vg);
-/* Allocate the LD shades of Red, Green and Blue */
 
 void ldLoadItems(struct track *tg);
 /* loadItems loads up items for the chromosome range indicated.   */
