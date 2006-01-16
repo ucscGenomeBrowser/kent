@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1066 2006/01/12 15:53:54 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1067 2006/01/16 06:58:48 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10150,7 +10150,6 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         if (handler != NULL)
             handler(track);
         }
-
     if (track->loadItems == NULL)
         warn("No load handler for %s", tdb->tableName);
     else if (track->drawItems == NULL)
@@ -10938,6 +10937,8 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracks
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
 cartSaveSession(cart);
 
+
+
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
 if (userSeqString && !ssFilesExist(userSeqString))
@@ -10948,7 +10949,11 @@ if (userSeqString && !ssFilesExist(userSeqString))
 if (!hideControls)
     hideControls = cartUsualBoolean(cart, "hideControls", FALSE);
 
+if (measureTiming)
+    uglyTime("Time before getTrackList");
 trackList = getTrackList(&groupList);
+if (measureTiming)
+    uglyTime("getTrackList");
 
 /* If hideAll flag set, make all tracks hidden */
 if(hideAll || defaultTracks)
