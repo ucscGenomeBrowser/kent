@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.278 2006/01/12 17:41:54 heather Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.279 2006/01/16 06:20:30 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3153,10 +3153,9 @@ static void processTrackDb(char *database, struct trackDb *tdb, char *chrom,
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
-char splitTable[HDB_MAX_TABLE_STRING];
 hLookupStringsInTdb(tdb, database);
 if ((!tdb->private || privateHost) &&
-    hFindSplitTable(chrom, tdb->tableName, splitTable, NULL) 
+    hTableForTrack(database, tdb->tableName) != NULL
 #ifdef NEEDED_UNTIL_GB_CDNA_INFO_CHANGE
 	&& !sameString(splitTable, "mrna") /* Long ago we reused this name badly. */
 #endif /* NEEDED_UNTIL_GB_CDNA_INFO_CHANGE */
