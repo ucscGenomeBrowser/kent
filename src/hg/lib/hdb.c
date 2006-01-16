@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.279 2006/01/16 06:20:30 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.280 2006/01/16 21:38:29 fanhsu Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -75,7 +75,7 @@ struct sqlConnection *conn = hAllocOrConnect(db);
 struct sqlResult *sr = NULL;
 char **row = NULL;
 char query[256];
-safef(query, sizeof(query), "select * from chromInfo where chrom like '%s'",
+safef(query, sizeof(query), "select * from chromInfo where chrom = '%s'",
       chrom);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
