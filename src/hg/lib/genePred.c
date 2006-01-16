@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.82 2005/12/12 02:48:40 kent Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.83 2006/01/16 21:37:27 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -35,7 +35,7 @@ static char *createSql =
 
 static char *binFieldSql = 
 "    bin smallint unsigned not null,"
-"    INDEX(tName(8),bin),";
+"    INDEX(chrom(%d),bin),";
 
 static char *idFieldSql = 
 "    id int unsigned PRIMARY KEY auto_increment,";   /* Numeric id of gene annotation. */
@@ -1072,8 +1072,7 @@ char* genePredGetCreateSql(char* table, unsigned optFields, unsigned options,
  * it will default to 12. */
 {
 /* the >= is used so that we create preceeding fields. */
-char sqlCmd[1024];
-char *binFld = (options & genePredWithBin) ? binFieldSql : "";
+char sqlCmd[1024], binFld[256];
 char *idFld = (optFields >= genePredIdFld) ? idFieldSql : "";
 char *name2Fld = (optFields >= genePredName2Fld) ? name2FieldSql : "";
 char *cdsStatFld = (optFields >= genePredCdsStatFld) ? cdsStatFieldSql : "";
@@ -1082,6 +1081,8 @@ char *exonFramesFld = (optFields >= genePredExonFramesFld) ? exonFramesFieldSql 
 if (chromIndexLen == 0)
     chromIndexLen = 12;
 
+safef(binFld, sizeof(binFld), ((options & genePredWithBin) ? binFieldSql : ""),
+      chromIndexLen);
 safef(sqlCmd, sizeof(sqlCmd), createSql, table,
       binFld, idFld, name2Fld, cdsStatFld, exonFramesFld,
       chromIndexLen, chromIndexLen);
