@@ -138,21 +138,26 @@ struct hash *dupeHash = newHash(17);
 
 /* Go through and make up hashes of images keyed by various fields. */
 sr = sqlGetResult(iConn,
-        "select image.id,imageFile.priority,gene.name,gene.locusLink,gene.refSeq,gene.genbank "
-	"from image,imageFile,imageProbe,probe,gene "
+        "select image.id,imageFile.priority,gene.name,gene.locusLink,gene.refSeq,gene.genbank,submissionSet.privateUser "
+	"from image,imageFile,imageProbe,probe,gene,submissionSet "
 	"where image.imageFile = imageFile.id "
 	"and image.id = imageProbe.image "
 	"and imageProbe.probe = probe.id "
-	"and probe.gene = gene.id");
+	"and probe.gene = gene.id "
+	"and image.submissionSet=submissionSet.id");
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
     int id = sqlUnsigned(row[0]);
     float priority = atof(row[1]);
-    addPrioritizedImage(geneImageHash, id, priority, row[2]);
-    addPrioritizedImage(locusLinkImageHash, id, priority, row[3]);
-    addPrioritizedImage(refSeqImageHash, id, priority, row[4]);
-    addPrioritizedImage(genbankImageHash, id, priority, row[5]);
+    int privateUser = sqlSigned(row[6]);
+    if (privateUser == 0)
+	{
+	addPrioritizedImage(geneImageHash, id, priority, row[2]);
+	addPrioritizedImage(locusLinkImageHash, id, priority, row[3]);
+	addPrioritizedImage(refSeqImageHash, id, priority, row[4]);
+	addPrioritizedImage(genbankImageHash, id, priority, row[5]);
+	}
     }
 verbose(2, "Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSeqImageHash %d, genbankImageHash %d\n", geneImageHash->elCount, locusLinkImageHash->elCount, refSeqImageHash->elCount, genbankImageHash->elCount);
 sqlFreeResult(&sr);
