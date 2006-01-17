@@ -60,7 +60,8 @@ CREATE TABLE snp125 (
 
     				# The functional category of the SNP
 
-   locType  enum( 'unknown', 'range', 'exact', 'between') DEFAULT 'unknown' NOT NULL,
+   locType  enum( 'unknown', 'range', 'exact', 'between', 
+   		  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL,
 
     source enum ('dbSNP125', 'Affy500k')	# Source of the data - dbSnp, Affymetrix, ...
 
