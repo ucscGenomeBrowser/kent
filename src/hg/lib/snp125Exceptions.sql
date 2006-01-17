@@ -11,8 +11,8 @@ CREATE TABLE snp125Exceptions (
     name varchar(255) not null,	# Reference SNP identifier or Affy SNP name
     exception enum ('NegativeSize',
                     'ExactLocTypeWrongSize','BetweenLocTypeWrongSize',
-		    'RangeLocTypeWrongSize','SingleClassWrongLocType',
-		    'DeletionClassWrongSize',
+		    'RangeLocTypeWrongSize', 'DeletionClassWrongSize',
+		    'SingleClassWrongLocType',
 		    'SingleClassTriAllelic', 'SingleClassQuadAllelic',
                     'SingleClassWrongObserved','DeletionClassWrongObserved',
                     'RefNCBINotInObserved','RefUCSCNotInObserved',
