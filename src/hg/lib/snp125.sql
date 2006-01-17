@@ -55,10 +55,9 @@ CREATE TABLE snp125 (
     avHetSE 	float not null,	# The Standard Error for the average heterozygosity
 
     func       enum( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', 
-    			'mrna-utr', 'untranslated', 'intron', 'splice-site', 'cds-reference') 
-			DEFAULT 'unknown' NOT NULL,
-
-    				# The functional category of the SNP
+    		     'untranslated', 'intron', 'splice-site', 'cds-reference') 
+		     DEFAULT 'unknown' NOT NULL,
+    			# The functional category of the SNP
 
    locType  enum( 'unknown', 'range', 'exact', 'between', 
    		  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL,

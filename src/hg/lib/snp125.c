@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snp125.c,v 1.10 2006/01/17 20:36:46 heather Exp $";
+static char const rcsid[] = "$Id: snp125.c,v 1.11 2006/01/17 23:06:10 heather Exp $";
 
 void snp125StaticLoad(char **row, struct snp125 *ret)
 /* Load a row from snp125 table into ret.  The contents of ret will
@@ -277,7 +277,7 @@ char *createString =
 "    avHet 	   float not null,\n"
 "    avHetSE 	   float not null,\n"
 "    func          enum( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', \n"
-"                  'mrna-utr', 'untranslated', 'intron','splice-site', 'cds-reference') \n"
+"                  'untranslated', 'intron','splice-site', 'cds-reference') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
 "    locType enum ('unknown', 'range', 'exact', 'between',\n"
 "                  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL,\n"
