@@ -1,21 +1,22 @@
 <H2>Description</H2> 
 <P> 
-This track shows linkage disequilibrium between pairs of SNPs as genotyped by the HapMap consortium.</P>
+
+This track shows three different measures (D', r^2, and LOD) of
+linkage disequilibrium (LD) between pairs of SNPs as genotyped by the
+HapMap consortium.  Linkage disequilibrium is a measure of the
+association between two markers.  This is useful to understand which
+regions of the genome are commonly inherited in blocks without
+recombination.  See the Recombination Rates and Recombination Hotspots
+tracks for related analyses.
+
+</P>
 
 In full mode, each diagonal represents a different SNP, with each
-square representing a pairwise comparison between two SNPs.  By
-convention, shades of red are used to indicate statistically
-significant (LOD >= 2) allelic association (linkage disequilibrium, LD)
-between the pair of SNPs.  Three values of LD have been calculated and
-may be selected: D', r^2, and LOD (default); darker shades indicate
-higher LD values.  
+square representing a pairwise comparison between two SNPs.  Shades of
+red are used to indicate linkage disequilibrium between the pair of
+SNPs, with darker shades indicating stronger LD.
 
-White squares indicate pairwise D' values less than 1 with no statistically
-significant evidence of LD.
-
-Blue squares indicate pairwise D' values of 1 but without statistical
-significance (LOD < 2).
-
+<!--
 <PRE>
 sub encodeLod($$)
 {
@@ -31,9 +32,11 @@ sub encodeLod($$)
     return chr($ret);
 }
 </PRE>           
+-->
 
 <H2>Methods</H2>
 <P>
+Genotypes from HapMap Phase II release 19 were used with HaploView to infer phasing and calculate LD values for all SNP pairs within 250kb.
 </P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -54,16 +57,39 @@ sub encodeLod($$)
   </UL>
  </LI>
  <LI>
-  LD Values<BR>
+  LD Values: measures of linkage disequilibrium<BR>
   <UL>
    <LI>
-    <i>r^2</i>
+    <i>r^2</i><BR>
+This displays the raw r^2 value for a given marker pair.  SNPs that
+have not been separated by recombination, r^2 = 1; in this case, these
+two markers are said to be redundant.  Lower r^2 values show a lower
+degree of LD, indicating that some recombination has occurred in this
+population.  <BR>
+One useful property of r^2 is that its inverse, 1/r^2,
+provides a practical estimate of the magnitude by which the sample
+size must be increased in a study design to detect association between
+the phenotype and a marker locus, as compared to the size required for
+detecting association with the susceptibility locus itself.  Please
+see Pritchard and Prezowrski (2001) for details.
    </LI>
    <LI>
-    <i>D'</i>
+    <i>D'</i><BR>
+This displays the raw D' value for a given marker pair.  A D' value of
+1 (complete LD) indicates that two SNPs have not been separated by
+recombination, while lower values indicate that the ancestral allele
+has undergone some recombination during the history of the population.
+Only D' values near 1 are a reliable measure of LD; lower values are
+difficult to interpret as the magnitude of D' depends stongly on
+sample size.  Please see Lewontin (1988) for more details. <BR>
+White squares indicate pairwise D' values less than 1 with no
+statistically significant evidence of LD.  Blue squares indicate
+pairwise D' values of 1 but without statistical significance (LOD <
+2).
    </LI>
    <LI>
-    <i>LOD</i>
+    <i>LOD</i><BR>
+This displays the log odds score for linkage disequilibrium between a given marker pair.
    </LI>
   </UL>
  </LI>
@@ -82,7 +108,7 @@ sub encodeLod($$)
   Colors<BR>
   <UL>
    <LI>
-    <i>LD Values</i> can be drawn in a variety of colors.
+    <i>LD Values</i> can be drawn in a variety of colors, with red as default.  The intensity of the color is proportional to the strength of the LD measure chosen above.
    </LI>
    <LI>
     <i>Outline</i>s can be drawn in contrasting colors or turned off.
@@ -136,10 +162,22 @@ The International HapMap Project Web site</a>.<br>
 <H3>HaploView</H3>
 <UL>
  <LI>
-Barrett JC, Fry B, Maller J, Daly MJ. <BR>
-<a href="http://bioinformatics.oxfordjournals.org/cgi/content/full/bth457?ijkey=54SiAdNbKzbNg&keytype=ref" target=_blank>
-Haploview: analysis and visualization of LD and haplotype maps</a>. <BR>
-<i>Bioinformatics</i> <B>21</B>(2):263-265. 2005 Jan 15 [PubMed ID: 15297300]
+  Barrett JC, Fry B, Maller J, Daly MJ. <BR>
+  <a href="http://bioinformatics.oxfordjournals.org/cgi/content/full/bth457?ijkey=54SiAdNbKzbNg&keytype=ref" target=_blank>
+  Haploview: analysis and visualization of LD and haplotype maps</a>. <BR>
+  <i>Bioinformatics</i> <B>21</B>(2):263-265. 2005 Jan 15 [PubMed ID: 15297300]
+ </LI>
+ <LI>
+  Jonathan K. Pritchard and Molly Przeworski.<BR>
+  <a href="http://www.journals.uchicago.edu/AJHG/journal/issues/v69n1/012882/012882.html">
+  Linkage Disequilibrium in Humans: Models and Data </a>. <BR>
+  <i>American Journal of Humuman Genetics</i>, <B>69</B>:1-14. 2001.
+ </LI>
+ <LI>
+  Richard C. Lewontin<BR>
+  <a href="http://www.genetics.org/cgi/reprint/120/3/849">On Measures of Gametic Disequilibrium</a>.
+  <i>Genetics</i> <B>120</B>:849-852. 1988
+ </LI>
 </UL>
 
 <H3>Tagger</H3>
