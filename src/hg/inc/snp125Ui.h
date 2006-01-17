@@ -111,6 +111,26 @@ extern int snp125FuncDefaultSize;
 extern int snp125FuncCartSize;
 extern int snp125FuncIncludeStringsSize;
 
+/****** LocType related controls *******/
+/* unknown, range, exact, between,
+   rangeInsertion, rangeSubstitution, rangeDeletion */
+
+extern char *snp125LocTypeLabels[];
+extern char *snp125LocTypeStrings[];
+extern char *snp125LocTypeDataName[];
+extern char *snp125LocTypeDefault[];
+extern char *snp125LocTypeCart[];
+extern char *snp125LocTypeIncludeStrings[];
+extern boolean snp125LocTypeIncludeDefault[];
+extern boolean snp125LocTypeIncludeCart[];
+
+extern int snp125LocTypeLabelsSize;
+extern int snp125LocTypeStringsSize;
+extern int snp125LocTypeDataNameSize;
+extern int snp125LocTypeDefaultSize;
+extern int snp125LocTypeCartSize;
+extern int snp125LocTypeIncludeStringsSize;
+
 /* minimum Average Heterozygosity cutoff  */
 
 extern float snp125AvHetCutoff;

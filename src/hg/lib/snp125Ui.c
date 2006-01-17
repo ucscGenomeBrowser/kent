@@ -23,6 +23,7 @@ char *snp125ColorSourceLabels[] = {
     "Class",
     "Validation",
     "Function",
+    "LocType",
 };
 
 char *snp125ColorSourceStrings[] = {
@@ -30,6 +31,7 @@ char *snp125ColorSourceStrings[] = {
     "snp125ColorSourceClass",
     "snp125ColorSourceValid",
     "snp125ColorSourceFunc",
+    "snp125ColorSourceLocType",
 };
 
 // why are these arrays?
@@ -402,4 +404,90 @@ int snp125FuncIncludeStringsSize     = ArraySize(snp125FuncIncludeStrings);
 /* minimum Average Heterozygosity cutoff  */
 
 float snp125AvHetCutoff = 0.0;
+
+
+/****** LocType related controls *******/
+/* Types: unknown, range, exact, between,
+          rangeInsertion, rangeSubstitution, rangeDeletion */
+
+char *snp125LocTypeLabels[] = {
+    "Unknown",
+    "Range",
+    "Exact",
+    "Between",
+    "RangeInsertion"
+    "RangeSubstitution"
+    "RangeDeletion"
+};
+char *snp125LocTypeStrings[] = {
+    "snp125LocTypeUnknown",
+    "snp125LocTypeRange",
+    "snp125LocTypeExact",
+    "snp125LocTypeBetween",
+    "snp125LocType",
+    "snp125LocType",
+    "snp125LocType",
+};
+char *snp125LocTypeDataName[] = {
+    "unknown",
+    "genomic",
+    "exact",
+    "between",
+    "rangeInsertion",
+    "rangeSubstitution",
+    "rangeDeletion",
+};
+char *snp125LocTypeDefault[] = {
+    "black",
+    "red",
+    "black",
+    "blue",
+    "green",
+    "green",
+    "green",
+};
+char *snp125LocTypeCart[] = {
+    "black",
+    "red",
+    "black",
+    "blue",
+    "green",
+    "green",
+    "green",
+};
+char *snp125LocTypeIncludeStrings[] = {
+    "snp125LocTypeUnknownInclude",
+    "snp125LocTypeRangeInclude",
+    "snp125LocTypeExactInclude",
+    "snp125LocTypeBetweenInclude",
+    "snp125LocTypeRangeInsertionInclude",
+    "snp125LocTypeRangeSubstitutionInclude",
+    "snp125LocTypeRangeDeletionInclude",
+};
+boolean snp125LocTypeIncludeDefault[] = {
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+};
+boolean snp125LocTypeIncludeCart[] = {
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+};
+
+// all of these sizes are the same
+int snp125LocTypeLabelsSize   = ArraySize(snp125LocTypeLabels);
+int snp125LocTypeStringsSize  = ArraySize(snp125LocTypeStrings);
+int snp125LocTypeDataNameSize = ArraySize(snp125LocTypeDataName);
+int snp125LocTypeDefaultSize  = ArraySize(snp125LocTypeDefault);
+int snp125LocTypeCartSize     = ArraySize(snp125LocTypeCart);
+int snp125LocTypeIncludeStringsSize  = ArraySize(snp125LocTypeIncludeStrings);
 
