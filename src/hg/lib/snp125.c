@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snp125.c,v 1.5 2006/01/15 05:17:31 heather Exp $";
+static char const rcsid[] = "$Id: snp125.c,v 1.6 2006/01/17 05:41:11 heather Exp $";
 
 void snp125StaticLoad(char **row, struct snp125 *ret)
 /* Load a row from snp125 table into ret.  The contents of ret will
@@ -268,8 +268,8 @@ char *createString =
 "    refUCSC       blob not null,\n"
 "    observed      blob not null,\n"
 "    molType       enum('unknown', 'genomic', 'cDNA', 'mito', 'chloro') DEFAULT 'unknown' not null,\n"
-"    class         enum('unknown', 'single', 'in-del', 'heterozygous', 'microsatelite',"
-"                  'named', 'no var', 'mixed', 'mnp') \n"
+"    class         enum('unknown', 'single', 'in-del', 'het', 'microsatelite',"
+"                  'named', 'no var', 'mixed', 'mnp', 'insertion', 'deletion') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
 "    valid         set('unknown', 'by-frequency', 'by-cluster', 'by-submitter', \n"
 "                  'by-2hit-2allele', 'by-hapmap') \n"
