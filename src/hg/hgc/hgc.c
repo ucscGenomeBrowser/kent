@@ -190,7 +190,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.984 2006/01/04 17:41:52 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.985 2006/01/17 23:46:34 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12105,6 +12105,7 @@ void printSnp125Info(struct snp125 snp)
 if (differentString(snp.strand,"?")) {printf("<B>Strand: </B>%s\n", snp.strand);}
 printf("<BR><B>Observed: </B>%s\n",                                 snp.observed);
 printf("<BR><B>Source: </B>%s\n",           			    snp.source);
+printf("<BR><B><A HREF=\"#Class\">Loc Type</A>: </B>%s\n",          snp.locType);
 printf("<BR><B><A HREF=\"#Class\">Variant Class</A>: </B>%s\n",     snp.class);
 printf("<BR><B><A HREF=\"#Valid\">Validation Status</A>: </B>%s\n", snp.valid);
 printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
