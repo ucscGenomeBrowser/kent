@@ -5,7 +5,7 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpExceptions.c,v 1.4 2006/01/17 06:57:24 heather Exp $";
+static char const rcsid[] = "$Id: snpExceptions.c,v 1.5 2006/01/17 18:52:52 heather Exp $";
 
 char *database = NULL;
 static struct slName *chromList = NULL;
@@ -98,7 +98,7 @@ struct snp125 *el = NULL;
 
 for (el = listExact; el != NULL; el = el->next)
     {
-    if (el->chromEnd >= el->chromStart + 1) 
+    if (el->chromEnd > el->chromStart + 1) 
        writeOneException(f, el, "ExactLocTypeWrongSize");
     }
 
