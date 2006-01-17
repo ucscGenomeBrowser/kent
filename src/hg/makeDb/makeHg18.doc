@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.16 2006/01/13 17:11:16 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.17 2006/01/17 18:53:43 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -2195,6 +2195,21 @@ nice featureBits hg17 chainBosTau2Link
     wc -l placed_in_assembly.list
     #	27093 placed_in_assembly.list
 
+    #	And all possible clones considered for assembly.
+    #	The AADB clones are the Celera assembly, don't want them.
+    sed -e "/^#.*/d" /cluster/store11/gs.19/ncbi/sequence.inf | \
+	grep for_assembly | grep -v AADB | awk '{print $1}' | sort -u \
+	    > allClonesConsidered.list
+    comm -12 allClonesConsidered.list \
+	/cluster/data/hg17/bed/contig_overlaps/sequence.list \
+	    > allClones.InHg17AndHg18.list
+    comm -23 allClonesConsidered.list \
+	/cluster/data/hg17/bed/contig_overlaps/sequence.list \
+	    > allClones.InHg18NotHg17.list
+    comm -13 allClonesConsidered.list \
+	/cluster/data/hg17/bed/contig_overlaps/sequence.list \
+	    > allClones.InHg17NotHg18.list
+
     #	how many are the same as previous build:
     comm -12 /cluster/data/hg17/bed/contig_overlaps/placed_in_assembly.list \
 	placed_in_assembly.list > sameAsHg17.list
@@ -2213,3 +2228,64 @@ nice featureBits hg17 chainBosTau2Link
     #	make a list of these new contigs:
     #	using the previous perl scripts:
     cp -p /cluster/data/hg17/bed/contig_overlaps/*.pl .
+
+
+###########################################################################
+# FISH CLONES (WORKING - 2006-01-13 - Hiram)
+# The STS Marker, Coverage, and BAC End Pairs tracks must be completed prior to 
+# creating this track  (and why is this ?)
+
+    ssh kkstore01
+    mkdir /cluster/data/ncbi/fishClones/fishClones.2006-01/
+    cd /cluster/data/ncbi/fishClones/fishClones.2006-01/
+
+# Download information from NCBI
+        # point browser at:
+#   http://www.ncbi.nlm.nih.gov/genome/cyto/cytobac.cgi?CHR=all&VERBOSE=ctg
+        # change "Show details on sequence-tag" to "yes"
+        # change "Download or Display" to "Download table for UNIX"
+        # press Submit - save as
+# /cluster/data/ncbi/fishClones/fishClones.2006-01/hbrc.txt
+    chmod 664 /cluster/data/ncbi/fishClones/fishClones.2006-01/hbrc.txt
+
+# Get current clone/accession information
+    wget --timestamping http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
+
+###########################################################################
+#  BLASTZ SELF
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzSelf.2006-01-17
+    cd /cluster/data/hg18/bed/blastzSelf.2006-01-17
+
+    cat << '_EOF_' > DEF
+# human vs human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_M=400
+
+# TARGET: Human Hg18
+SEQ1_DIR=/san/sanvol1/scratch/hg18/selfNib
+SEQ1_LEN=/san/sanvol1/scratch/hg18/self.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Human Hg18
+SEQ2_DIR=/san/sanvol1/scratch/hg18/selfNib
+SEQ2_LEN=/san/sanvol1/scratch/hg18/self.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/cluster/data/hg18/bed/blastzSelf.2006-01-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    cd /cluster/data/hg18/bed/blastzSelf.2006-01-17
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
+
