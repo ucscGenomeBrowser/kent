@@ -100,9 +100,9 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1067 2006/01/16 06:58:48 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1068 2006/01/17 22:01:49 kent Exp $";
 
-boolean measureTiming = FALSE;	/* Flip this on to display timing
+boolean measureTiming = TRUE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
 boolean isPrivateHost;		/* True if we're on genome-test. */
 char *protDbName;               /* Name of proteome database for this genome. */
@@ -11231,8 +11231,9 @@ if (showTrackControls)
                 }
             else 
                 {
-	        hPrintf("%s, %d, %d<BR>\n", 
-			track->shortLabel, track->loadTime, track->drawTime);
+	        hPrintf("%s, %d, %d, %d<BR>\n", 
+			track->shortLabel, track->loadTime, track->drawTime,
+			track->loadTime + track->drawTime);
                 if (startsWith("wigMaf", track->tdb->type))
                   if (track->subtracks)
                       if (track->subtracks->loadTime)
