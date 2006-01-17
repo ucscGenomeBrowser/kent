@@ -485,81 +485,20 @@ apiMel2.perChromTables = no
     rm -rf work/initial.apiMel2
 
 # SWAP DM2-APIMEL2 BLASTZ (DONE 2/9/2005 Andy)
-    ssh kksilo
-    mkdir /cluster/data/apiMel2/bed/blastz.dm2.swap.2005-02-08
-    ln -s blastz.dm2.swap.2005-02-08 /cluster/data/apiMel2/bed/blastz.dm2
-    cd /cluster/data/apiMel2/bed/blastz.dm2
-    aliDir=/cluster/data/dm2/bed/blastz.apiMel2.2005-02-08
-    cp $aliDir/S1.len S2.len
-    cp $aliDir/S2.len S1.len
-    zcat $aliDir/pslChrom/chr*.psl.gz \
-      | pslSwap stdin dm2.unsorted.psl 
-    sort -k 14,14 -k 16n,17n < dm2.unsorted.psl > dm2.psl
-    rm dm2.unsorted.psl
+# OBSOLETED 1/13/06 angie, see SWAP/CHAIN/NET DM2 below...
 
 # CHAIN MELANOGASTER BLASTZ (DONE 2/9/2005)
-    # Run axtChain on kolossus (one big dm1.axt input)
-    ssh kolossus
-    mkdir /cluster/data/apiMel2/bed/blastz.dm2/axtChain
-    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
-    axtChain -psl -scoreScheme=/cluster/data/blastz/HoxD55.q \
-         -linearGap=/cluster/data/blastz/chickenHumanTuned.gap \
-         -verbose=0 ../dm2.psl /cluster/data/apiMel2/nib \
-      /cluster/data/dm2/nib stdout \
-    | chainAntiRepeat /cluster/data/apiMel2/nib \
-      /cluster/data/dm2/nib stdin stdout \
-    | chainMergeSort stdin > all.chain
-    # Load chains into database
-    ssh hgwdev
-    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
-    hgLoadChain -tIndex apiMel2 chainDm2 all.chain
+# OBSOLETED 1/13/06 angie, see SWAP/CHAIN/NET DM2 below...
 
 # NET MELANOGASTER BLASTZ (DONE 2/9/2005 Andy)
-    ssh kksilo
-    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
-    chainPreNet all.chain ../S1.len ../S2.len stdout \
-    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
-    | netSyntenic stdin noClass.net
-
-    # Add classification info using db tables:
-    ssh hgwdev
-    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
-    netClass -noAr noClass.net apiMel2 dm2 melanogaster.net
-
-    # Make a 'syntenic' subset:
-    ssh kksilo
-    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
-    rm noClass.net
-    netFilter -syn melanogaster.net > melanogasterSyn.net
-
-    # Load the nets into database 
-    ssh hgwdev
-    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
-    netFilter -minGap=10 melanogaster.net |  hgLoadNet apiMel2 netDm2 stdin
-    netFilter -minGap=10 melanogasterSyn.net \
-    | hgLoadNet apiMel2 netSyntenyDm2 stdin
+# OBSOLETED 1/13/06 angie, see SWAP/CHAIN/NET DM2 below...
 
 # MAKE AXTNET (DONE 2/10/2005 Andy)
-    ssh kksilo
-    # Well actually I'm using hgwdev
-    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
-    netToAxt melanogaster.net all.chain /cluster/data/apiMel2/nib \
-        /cluster/data/dm2/nib stdout \
-      | axtSort stdin melanogasterNet.axt
+# OBSOLETED 1/13/06 angie, see SWAP/CHAIN/NET DM2 below...
 
-# MAKE VSDM1 DOWNLOADABLES (DONE 2/10/2005 Andy)
-    ssh kksilo
-    cd /cluster/data/apiMel2/bed/blastz.dm2/axtChain
-    nice gzip *.{chain,net,axt}
-    ssh hgwdev
-    mkdir /usr/local/apache/htdocs/goldenPath/apiMel2/vsDm2
-    cd /usr/local/apache/htdocs/goldenPath/apiMel2/vsDm2
-    cp -p /cluster/data/apiMel2/bed/blastz.dm2/axtChain/all.chain.gz \
-      melanogaster.chain.gz
-    cp -p /cluster/data/apiMel2/bed/blastz.dm2/axtChain/melanogaster.net.gz .
-    cp -p /cluster/data/apiMel2/bed/blastz.dm2/axtChain/melanogasterNet.axt.gz .
-    # Make a README.txt which explains the files & formats.
-    md5sum *.gz > md5sum.txt
+# MAKE VSDM2 DOWNLOADABLES (DONE 2/10/2005 Andy)
+# OBSOLETED 1/13/06 angie, see SWAP/CHAIN/NET DM2 below...
+
 
 # MAKE Drosophila Proteins track  (DONE 2005-02-24 braney)
     ssh kksilo
@@ -1390,5 +1329,27 @@ chainSome $(path1)
     | liftUp -type=.gff stdout ../../jkStuff/scaffolds.lft warn stdin \
     >> beeBaseCustomTracks.txt
     cp beeBaseCustomTracks.txt /usr/local/apache/htdocs/angie/
+
+
+# GENEID PREDICTIONS (DONE 1/4/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/apiMel2/bed/geneid
+    cd /cluster/data/apiMel2/bed/geneid
+    foreach chr (`awk '{print $1;}' /cluster/data/apiMel2/chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/A.mellifera/golden_path_200501/geneidv1.2/$chr.gtf
+    end
+    ldHgGene -gtf -genePredExt apiMel2 geneid *.gtf
+
+
+# SWAP/CHAIN/NET DM2 (DONE 1/13/06 angie)
+    # dm2-apiMel2 was redone with better parameters in May '05... 
+    # pick those up and also get the latest file conventions.
+    ssh hgwdev
+    rm /cluster/data/apiMel2/bed/blastz.dm2
+    mkdir /cluster/data/apiMel2/bed/blastz.dm2.swap
+    cd /cluster/data/apiMel2/bed/blastz.dm2.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.apiMel2/DEF >& do.log &
+    tail -f do.log
+    ln -s blastz.dm2.swap /cluster/data/apiMel2/bed/blastz.dm2
 
 
