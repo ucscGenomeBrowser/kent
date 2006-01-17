@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.53 2006/01/16 23:48:37 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.54 2006/01/17 23:47:50 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -198,6 +198,20 @@ for (snpLocType=0; snpLocType<snpLocTypeCartSize; snpLocType++)
 return TRUE;
 }
 
+boolean snp125LocTypeFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct snp125 *el = item;
+int i;
+
+for (i=0; i<snp125LocTypeLabelsSize; i++)
+    {
+    if (!sameString(snp125LocTypeDataName[i], el->class)) continue;
+    return snp125LocTypeIncludeCart[i];
+    }
+return TRUE;
+}
+
 void loadSnpMap(struct track *tg)
 /* Load up snpMap from database table to track items. */
 {
@@ -287,12 +301,21 @@ for (i=0; i < snp125FuncCartSize; i++)
     snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
     }
 
+for (i=0; i < snp125LocTypeCartSize; i++)
+    {
+    snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
+    snp125LocTypeIncludeCart[i] = 
+        cartUsualBoolean(cart, snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeDefault[i]);
+    }
+
+
 bedLoadItem(tg, "snp125", (ItemLoader)snp125Load);
 
 filterSnpItems(tg, snp125MolTypeFilterItem);
 filterSnpItems(tg, snp125ClassFilterItem);
 filterSnpItems(tg, snp125ValidFilterItem);
 filterSnpItems(tg, snp125FuncFilterItem);
+filterSnpItems(tg, snp125LocTypeFilterItem);
 
 }
 
@@ -378,6 +401,10 @@ switch (stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSource
     case snp125ColorSourceFunc:
 	index2 = stringArrayIx(el->func,snp125FuncDataName,snp125FuncDataNameSize);
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125FuncCart[index2],snp125ColorLabel,snp125ColorLabelSize);
+	break;
+    case snp125ColorSourceLocType:
+	index2 = stringArrayIx(el->func,snp125LocTypeDataName,snp125LocTypeDataNameSize);
+	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125LocTypeCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
     default:
 	thisSnpColor = snp125ColorBlack;
