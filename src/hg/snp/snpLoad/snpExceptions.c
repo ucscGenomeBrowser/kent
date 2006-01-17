@@ -5,7 +5,7 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpExceptions.c,v 1.3 2006/01/17 06:06:12 heather Exp $";
+static char const rcsid[] = "$Id: snpExceptions.c,v 1.4 2006/01/17 06:57:24 heather Exp $";
 
 char *database = NULL;
 static struct slName *chromList = NULL;
@@ -191,6 +191,8 @@ void writeDeletionObservedExceptions(FILE *f)
 /* Might there be other exceptions in listRange? */
 {
 struct snp125 *el = NULL;
+int rangeSize = 0;
+int observedSize = 0;
 
 for (el = listRange; el != NULL; el = el->next)
     {
@@ -201,16 +203,28 @@ for (el = listRange; el != NULL; el = el->next)
 	writeOneException(f, el, "DeletionClassWrongObserved");
 	continue;
 	}
-    if (el->observed[0] == '-' && el->observed[1] == '/') continue;
+    if (el->observed[0] == '-' && el->observed[1] == '/') 
+        {
+	/* check sizes */
+	rangeSize = el->chromEnd - el->chromStart;
+        observedSize = strlen(el->observed) - 2;
+	if (rangeSize != observedSize)
+	    writeOneException(f, el, "DeletionClassWrongObserved");
+	continue;
+	}
     writeOneException(f, el, "DeletionClassWrongObserved");
     }
 }
 
 void writeReferenceObservedExceptions(FILE *f)
-/* RefNCBINotInObserved, RefUCSCNotInObserved. */
-/* For now, apply only to listExact, class = 'single'. */
+/* Exceptions RefNCBINotInObserved and RefUCSCNotInObserved for listExact, class = 'single'. */
+/* Also check that refNCBI matches observed for listRange, class = 'deletion'. */
+/* This looks pretty good for positive strand, not so for negative strand. */
+/* Correspondence between refNCBI and refUCSC is very odd for listRange, class = 'deletion'. */
+/* Could also check that observed is '-' for listBetween. */
 {
 struct snp125 *el = NULL;
+char *chopString = NULL;
 
 for (el = listExact; el != NULL; el = el->next)
     {
@@ -220,6 +234,15 @@ for (el = listExact; el != NULL; el = el->next)
         writeOneException(f, el, "RefNCBINotInObserved");
     if (!strstr(el->observed, el->refUCSC))
         writeOneException(f, el, "RefUCSCNotInObserved");
+    }
+
+for (el = listRange; el != NULL; el = el->next)
+    {
+    if (!sameString(el->class, "deletion")) continue;
+    if (sameString(el->observed, "n/a")) continue;
+    chopString = chopPrefixAt(el->observed, '/');
+    if (!sameString(chopString, el->refNCBI))
+        writeOneException(f, el, "RefNCBINotInObserved");
     }
 }
 
