@@ -7,9 +7,10 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.14 2006/01/15 15:23:13 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.15 2006/01/17 04:10:58 heather Exp $";
 
 char *functionStrings[] = {
+/* From snpFixed.SnpFunctionCode. */
     "unknown",
     "locus",
     "coding",
@@ -268,8 +269,8 @@ for (el = list; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
-void lookupObserved(struct snp125 *list)
-/* get observed and molType from snpFasta table */
+void readFromSNPFasta(struct snp125 *list)
+/* get molType, class and observed from snpFasta table */
 {
 struct snp125 *el;
 char query[512];
@@ -277,7 +278,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 
-verbose(1, "looking up observed...\n");
+verbose(1, "query snpFasta for molType, class, observed...\n");
 for (el = list; el != NULL; el = el->next)
     {
     safef(query, sizeof(query), "select molType, class, observed from snpFasta where rsId = '%s'", el->name);
@@ -291,9 +292,21 @@ for (el = list; el != NULL; el = el->next)
         sqlFreeResult(&sr);
 	continue;
 	}
+
     el->molType = cloneString(row[0]);
     el->class = cloneString(row[1]);
     el->observed = cloneString(row[2]);
+
+    /* class: special handling for in-dels */
+    /* this leaves el->class as "in-del" only for those with locType single, which are exceptions */
+    if (sameString(el->class, "in-del"))
+        {
+	if (sameString(el->locType, "between"))
+	    el->class = cloneString("insertion");
+	else if (sameString(el->locType, "range"))
+	    el->class = cloneString("deletion");
+	}
+
     sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
@@ -442,7 +455,7 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
 	}
     lookupFunction(list);
     lookupHetAndValid(list);
-    lookupObserved(list);
+    readFromSNPFasta(list);
     lookupRefAllele(list);
     writeToTabFile(chromPtr->name, list);
     slFreeList(&list);
