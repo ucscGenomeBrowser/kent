@@ -5,7 +5,7 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpExceptions.c,v 1.5 2006/01/17 18:52:52 heather Exp $";
+static char const rcsid[] = "$Id: snpExceptions.c,v 1.6 2006/01/17 19:03:42 heather Exp $";
 
 char *database = NULL;
 static struct slName *chromList = NULL;
@@ -139,6 +139,7 @@ boolean triAllelic(char *observed)
 {
     if (sameString(observed, "A/C/G")) return TRUE;
     if (sameString(observed, "A/C/T")) return TRUE;
+    if (sameString(observed, "A/G/T")) return TRUE;
     if (sameString(observed, "C/G/T")) return TRUE;
     return FALSE;
 }
