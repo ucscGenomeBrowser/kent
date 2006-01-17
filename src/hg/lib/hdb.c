@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.280 2006/01/16 21:38:29 fanhsu Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.281 2006/01/17 01:17:58 aamp Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -53,7 +53,6 @@ static char *hdbName2 = NULL;
 static char *hdbUser = NULL;
 static char *hdbPassword = NULL;
 static char *hdbTrackDb = NULL;
-/* static char *hdbTrackDbLocal = NULL; */
 
 static char* getCfgValue(char* envName, char* cfgName)
 /* get a configuration value, from either the environment or the cfg file,
@@ -3192,8 +3191,7 @@ if (!trackDbSetting(subtrackTdb, "noInherit"))
 
 struct trackDb *hTrackDb(char *chrom)
 /* Load tracks associated with current chromosome (which may be NULL for
- * all). If trackDbLocal exists, then it's row either override or are added to
- * the standard trackDb. */
+ * all). */
 {
 struct sqlConnection *conn = hAllocConn();
 struct trackDb *tdbList = loadTrackDb(conn, NULL);
@@ -3272,9 +3270,8 @@ return trackTdb;
 
 static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn,
 					   char *track)
-/* Load trackDb object for a track. If trackDbLocal exists, then its row is
- * used if it exists. this is common code for two external functions. 
- * Handle composite tracks and subtrack inheritance here. */
+/* Load trackDb object for a track. this is common code for two external 
+ * functions. Handle composite tracks and subtrack inheritance here. */
 {
 struct trackDb *trackTdb = NULL;
 char where[256];
@@ -3311,12 +3308,11 @@ return trackTdb;
 }
 
 struct trackDb *hTrackDbForTrack(char *track)
-/* Load trackDb object for a track. If trackDbLocal exists, then its row is
- * used if it exists.  If track is composite, its subtracks will also be 
- * loaded and inheritance will be handled; if track is a subtrack then 
- * inheritance will be handled.  (Unless a subtrack has "noInherit on"...)
- * This will die if the current database does not have a trackDb, but will 
- * return NULL if track is not found. */
+/* Load trackDb object for a track. If track is composite, its subtracks 
+ * will also be loaded and inheritance will be handled; if track is a 
+ * subtrack then inheritance will be handled.  (Unless a subtrack has 
+ * "noInherit on"...) This will die if the current database does not have
+ * a trackDb, but will return NULL if track is not found. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct trackDb *tdb = loadTrackDbForTrack(conn, track);
@@ -3470,12 +3466,11 @@ return hgParseContigRange(spec, NULL, NULL, NULL);
 #endif /* UNUSED */
 
 struct trackDb *hMaybeTrackInfo(struct sqlConnection *conn, char *trackName)
-/* Load trackDb object for a track. If trackDbLocal exists, then its row is
- * used if it exists.  If track is composite, its subtracks will also be 
- * loaded and inheritance will be handled; if track is a subtrack then 
- * inheritance will be handled.  (Unless a subtrack has "noInherit on"...)
- * Don't die if conn has no trackDb table.  Return NULL if trackName is not 
- * found. */
+/* Load trackDb object for a track. If track is composite, its subtracks
+ * will also be loaded and inheritance will be handled; if track is a
+ * subtrack then inheritance will be handled.  (Unless a subtrack has
+ * "noInherit on"...) Don't die if conn has no trackDb table.  Return NULL
+ * if trackName is not found. */
 {
 if (sqlTableExists(conn, hTrackDbName()))
     return loadTrackDbForTrack(conn, trackName);
