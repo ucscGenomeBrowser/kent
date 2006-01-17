@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snpTmp.h"
 
-static char const rcsid[] = "$Id: snpTmp.c,v 1.3 2006/01/15 05:15:21 heather Exp $";
+static char const rcsid[] = "$Id: snpTmp.c,v 1.4 2006/01/17 22:31:33 heather Exp $";
 
 void snpTmpStaticLoad(char **row, struct snpTmp *ret)
 /* Load a row from snpTmp table into ret.  The contents of ret will
@@ -168,7 +168,8 @@ char *createString =
 "    name          varchar(255) not null,\n"
 "    strand        char(1) not null,\n"
 "    refNCBI       longblob not null,\n"
-"    locType       enum('unknown', 'range', 'exact', 'between') \n"
+"    locType       enum('unknown', 'range', 'exact', 'between',"
+"                  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
 "    INDEX         name(name)\n"
 ")\n";

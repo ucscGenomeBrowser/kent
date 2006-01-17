@@ -6,12 +6,17 @@
 #include "hdb.h"
 #include "snpTmp.h"
 
-static char const rcsid[] = "$Id: snpSplit.c,v 1.5 2006/01/15 15:01:36 heather Exp $";
+static char const rcsid[] = "$Id: snpSplit.c,v 1.6 2006/01/17 22:36:10 heather Exp $";
 
+/* these are described in b125_mapping.doc */
+/* Also snpFixed.LocTypeCode */
 char *locTypeStrings[] = {
     "range",
     "exact",
     "between",
+    "rangeInsertion",
+    "rangeSubstitution",
+    "rangeDeletion",
 };
 
 char *snpDb = NULL;
@@ -65,10 +70,12 @@ if (el == NULL)
 }
 
 
-boolean setCoordsAndLocType(struct snpTmp *el, int locType, char *startString, char *endString)
+boolean setCoordsAndLocType(struct snpTmp *el, int locType, int lc_ngbr, int rc_ngbr,
+                            char *startString, char *endString, int alleleSize)
 /* set coords and locType */
 {
 char *rangeString1, *rangeString2;
+int rangeInContig = 0;
 
 el->chromStart = atoi(startString);
 
@@ -121,6 +128,32 @@ if (locType == 3)
     return TRUE;
     }
 
+/* rangeInsertion */
+if (locType == 4)
+    {
+    el->locType = locTypeStrings[3];
+    rangeInContig = rc_ngbr - lc_ngbr - alleleSize;
+    el->chromEnd = el->chromStart + rangeInContig;
+    return TRUE;
+    }
+
+/* rangeSubstitution */
+if (locType == 5)
+    {
+    el->locType = locTypeStrings[4];
+    el->chromEnd = el->chromStart + alleleSize;
+    return TRUE;
+    }
+
+/* rangeDeletion */
+if (locType == 6)
+    {
+    el->locType = locTypeStrings[5];
+    rangeInContig = rc_ngbr - lc_ngbr - alleleSize;
+    el->chromEnd = el->chromStart + rangeInContig;
+    return TRUE;
+    }
+
 verbose(1, "skipping snp %s with loc type %d\n", el->name, locType);
 return FALSE;
 }
@@ -144,21 +177,21 @@ for (contigPtr = contigList; contigPtr != NULL; contigPtr = contigPtr->next)
     {
     contigCount++;
     verbose(1, "contig count = %d\n", contigCount);
-    safef(query, sizeof(query), "select snp_id, ctg_id, loc_type, phys_pos_from, "
+    safef(query, sizeof(query), "select snp_id, ctg_id, loc_type, lc_ngbr, rc_ngbr, phys_pos_from, "
       "phys_pos, orientation, allele from ContigLoc where snp_type = 'rs' and ctg_id = '%s'", contigPtr->name);
     verbose(3, "ctg_id = %d\n", contigPtr->name);
 
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
-        pos = atoi(row[3]);
+        pos = atoi(row[5]);
         if (pos == 0) 
             {
 	    verbose(5, "snp %s is unaligned\n", row[0]);
 	    continue;
 	    }
         locType = atoi(row[2]);
-        if (locType < 1 || locType > 3) 
+        if (locType < 1 || locType > 6) 
             {
 	    verbose(5, "skipping snp %s with loc_type %d\n", el->name, locType);
 	    continue;
@@ -166,18 +199,19 @@ for (contigPtr = contigList; contigPtr != NULL; contigPtr = contigPtr->next)
         AllocVar(el);
         el->name = cloneString(row[0]);
         el->chrom = chromName;
-        if(!setCoordsAndLocType(el, locType, row[3], row[4]))
+        if(!setCoordsAndLocType(el, locType, atoi(row[3]), atoi(row[4]), row[5], row[6], strlen(row[8])))
             {
             free(el);
 	    continue;
 	    }
-        if (atoi(row[5]) == 0) 
+        if (atoi(row[7]) == 0) 
             strcpy(el->strand, "+");
-        else if (atoi(row[5]) == 1)
+        else if (atoi(row[7]) == 1)
             strcpy(el->strand, "-");
         else
             strcpy(el->strand, "?");
-        el->refNCBI = cloneString(row[6]);
+        el->refNCBI = cloneString(row[8]);
+	// should this be reverseComplemented for negative strand??!!
 	if (sameString(el->locType, "between") && !sameString(el->refNCBI, "-"))
 	    verbose(1, "unexpected between allele %s for %s\n", el->refNCBI, el->name);
         slAddHead(&list,el);
