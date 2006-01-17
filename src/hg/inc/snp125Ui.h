@@ -24,6 +24,7 @@ enum snp125ColorSourceEnum {
     snp125ColorSourceClass,
     snp125ColorSourceValid,
     snp125ColorSourceFunc,
+    snp125ColorSourceLocType,
 };
 
 extern char *snp125ColorSourceLabels[];
