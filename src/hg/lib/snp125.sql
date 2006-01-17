@@ -54,7 +54,7 @@ CREATE TABLE snp125 (
     avHet 	float not null,	# The average heterozygosity from all observations
     avHetSE 	float not null,	# The Standard Error for the average heterozygosity
 
-    func       enum( 'unknown', 'locus-region', 'coding', 'coding-synon', 'coding-nonsynon', 
+    func       enum( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', 
     			'mrna-utr', 'untranslated', 'intron', 'splice-site', 'cds-reference') 
 			DEFAULT 'unknown' NOT NULL,
 
