@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.36 2005/06/04 06:42:21 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.37 2006/01/18 03:02:23 kent Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -283,12 +283,17 @@ else if (!oldTable)
     if (bedSize >= 15)
        maybeBedGraph(15, dy, "  expScores longblob not null,\n");
     dyStringAppend(dy, "#Indices\n");
-    if (!noBin)
-       dyStringPrintf(dy, "  INDEX(chrom(%d),bin),\n", minLength);
     if ((bedSize >= 4) && (0 == bedGraph))
        dyStringAppend(dy, "  INDEX(name(16)),\n");
-    dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart),\n", minLength);
-    dyStringPrintf(dy, "  INDEX(chrom(%d),chromEnd)\n", minLength);
+    if (noBin)
+	{
+	dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart),\n", minLength);
+	dyStringPrintf(dy, "  INDEX(chrom(%d),chromEnd)\n", minLength);
+	}
+    else
+	{
+        dyStringPrintf(dy, "  INDEX(chrom(%d),bin)\n", minLength);
+	}
     dyStringAppend(dy, ")\n");
     if (noLoad)
 	verbose(2,"%s", dy->string);
