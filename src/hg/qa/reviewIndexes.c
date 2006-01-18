@@ -61,15 +61,27 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
+boolean gotBin;
 
 verbose(2, "checking....\n");
 
 for (table1 = tableList; table1 != NULL; table1 = table1->next)
     {
+    /* check for bin index */
+    gotBin = FALSE;
     safef(query, sizeof(query), "show index from %s", table1->name);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
+	if (sameString(row[4], "bin"))
+	    gotBin = TRUE;
+	}
+    if (!gotBin) continue;
+    sqlFreeResult(&sr);
+    safef(query, sizeof(query), "show index from %s", table1->name);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {  
 	if (strstr(row[4], "start") || strstr(row[4], "Start"))
              printf("alter table %s drop index %s;\n", table1->name, row[2]);
 	if (strstr(row[4], "end") || strstr(row[4], "End"))
