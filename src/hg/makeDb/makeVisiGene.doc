@@ -19,6 +19,12 @@ cd ~/kent/src/hg/visiGene/vgLoadJax
 vgLoadJax /gbdb/visiGene jackson visiGene
 ./loadNew
 
+# Update the privateUser fields where we don't have permissions by entering
+# this at the mysql prompt.
+update submissionSet,journal set submissionSet.privateUser=-1 
+   where (journal.name like 'Nat %' or journal.name = 'Nature')  
+   and submissionSet.journal = journal.id and submissionSet.name like 'jax%'
+
 # LOAD NIBB IMAGES
 # Do this after creating the nibbImageProbe.fa file as described
 # in makeXenTro1.doc, and after creating the nibbImageProbes table
