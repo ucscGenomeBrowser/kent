@@ -10,7 +10,7 @@
 #include "chainBlock.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadChain.c,v 1.14 2005/01/10 00:34:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadChain.c,v 1.15 2006/01/18 17:38:33 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -176,17 +176,23 @@ else if (!oldTable)
     dyStringAppend(dy, "#Indices\n");
     if (tIndex)
         {
-	if (!noBin)
+	if (noBin)
+	    {
+	    dyStringAppend(dy, "  INDEX(tName(16),tStart),\n");
+	    dyStringAppend(dy, "  INDEX(tName(16),tEnd),\n");
+	    }
+	else
 	   dyStringAppend(dy, "  INDEX(tName(16),bin),\n");
-	dyStringAppend(dy, "  INDEX(tName(16),tStart),\n");
-	dyStringAppend(dy, "  INDEX(tName(16),tEnd),\n");
 	}
     else
 	{
-	if (!noBin)
+	if (noBin)
+	    {
+	    dyStringAppend(dy, "  INDEX(tStart),\n");
+	    dyStringAppend(dy, "  INDEX(tEnd),\n");
+	    }
+	else
 	   dyStringAppend(dy, "  INDEX(bin),\n");
-	dyStringAppend(dy, "  INDEX(tStart),\n");
-	dyStringAppend(dy, "  INDEX(tEnd),\n");
 	}
     dyStringAppend(dy, "  INDEX(id)\n");
     dyStringAppend(dy, ")\n");
