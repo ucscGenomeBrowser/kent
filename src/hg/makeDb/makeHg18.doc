@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.18 2006/01/18 00:42:41 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.19 2006/01/18 22:07:14 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -2515,4 +2515,323 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
+
+##############################################################################
+# CLONE ENDS - BACEND TRACK (DONE - 2006-01-11 - Fan)
+
+    ssh kkstore02
+    cd /cluster/data/hg18
+    # check disk space: 73Gb free
+    df -h .
+# Filesystem            Size  Used Avail Use% Mounted on
+# /export/cluster/store11
+                      1.8T  1.4T  323G  82% /cluster/store11
+
+    mkdir -p bed/cloneend/ncbi
+    cd bed/cloneend/ncbi
+
+    wget --timestamping ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/homo_sapiens/*
+
+# Somehow the wget did not work.  Did it by hand. 
+
+    cd /cluster/data/hg18/bed/cloneend
+    # seems like the *.mfa files were split just for convenience
+    # concatenate
+    
+    bash
+    for F in ncbi/*.mfa.gz
+    do
+	zcat ${F}
+    done | gzip > all.mfa.gz
+
+    exit
+
+    # Convert the title line of the all.mfa file
+    cat << '_EOF_' > convert.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+while (my $line = <>) {
+    if ($line !~ m/^>/) {
+	print $line
+    } else {
+        my @fields = split('\|', $line);
+	my $fieldCount = scalar(@fields);
+        my $printed = 0;
+        for (my $i = 0; $i < $fieldCount; $i++) {
+                if ($fields[$i] eq "gb" || $fields[$i] eq "dbj" || $fields[$i] eq "emb") {
+                        (my $name, my $vers) = split(/\./,$fields[$i+1]);
+                        print ">$name\n";
+                        $i= $fieldCount;
+                        $printed = 1;
+                }
+        }
+        if (!$printed) {
+                die("Failed for $line\n");
+        }
+    }
+}
+'_EOF_'
+    # < happy emacs
+    chmod +x convert.pl
+    zcat all.mfa | ./convert.pl | gzip > cloneEnds.fa.gz
+
+    #	make sure nothing got broken:
+    faSize all.mfa.gz
+# 400704107 bases (5941742 N's 394762365 real 255711893 upper 139050472 lower) in 832860 sequences in 1 files
+    faSize cloneEnds.fa.gz
+# 400704107 bases (5941742 N's 394762365 real 255711893 upper 139050472 lower) in 832860 sequences in 1 files
+    #	identical numbers
+
+    # concatenate the text files, too
+    bash
+    for F in ncbi/*.txt.gz
+    do
+	zcat ${F}
+    done | gzip > all.txt.gz
+
+    # generate cloneEndPairs.txt and cloneEndSingles.txt
+    cp -p /cluster/data/mm6/bed/cloneend/ncbi/convertTxt.pl .
+    zcat all.txt.gz >all.txt
+    ./convertTxt.pl all.txt
+
+
+    # Reading in end info
+    # Writing out pair info
+    # Writing out singleton info
+    # 249619 pairs and 318500 singles
+    
+    #	faSplit does not function correctly if given a .gz source file
+    #	AND, we need the unzipped file for sequence loading below
+    gunzip cloneEnds.fa.gz
+    # split
+    mkdir splitdir
+    cd splitdir
+    faSplit sequence ../cloneEnds.fa 100 cloneEnds
+    #	Check to ensure no breakage:
+    cat *.fa | faSize stdin
+# 400704107 bases (5941742 N's 394762365 real 255711893 upper 139050472 lower) in 832860 sequences in 1 files
+    #	same numbers as before
+
+    #	Copy to san for cluster runs
+    ssh pk
+    cd /cluster/data/hg18/bed/cloneend/splitdir
+    mkdir /san/sanvol1/scratch/hg18/cloneEnds
+    cp -p *.fa /san/sanvol1/scratch/hg18/cloneEnds
+    rm *
+    cd ..
+    rmdir splitdir
+
+    # load sequences
+    ssh hgwdev
+    mkdir /gbdb/hg18/cloneend
+    cd /gbdb/hg18/cloneend
+      ln -s /cluster/data/hg18/bed/cloneend/cloneEnds.fa .
+    cd /tmp
+    hgLoadSeq hg18 /gbdb/hg18/cloneend/cloneEnds.fa
+    #  Advisory lock created
+    # Creating .tab file
+    # Adding /gbdb/hg18/cloneend/cloneEnds.fa
+    # 832860 sequences
+    # Updating seq table
+    # Advisory lock has been released
+    # All done
+
+############################################################################
+# BACEND SEQUENCE ALIGNMENTS (STARTED - 2006-01-11, DONE 2006-01-18 - Fan)
+    ssh kkstore02
+    mkdir /cluster/data/hg18/noMask
+    cd /cluster/data/hg18/
+    #	Need an unmasked sequence for this work
+    bash
+    for CHR in ?/chr?.fa ??/chr??.fa ?/chr?_random.fa ??/chr??_random.fa *hap*/chr*.fa
+    do
+	C=`basename ${CHR}`
+	echo -n "working ${C} ... "
+	head -1 ${CHR} > noMask/${C}
+	tail +2 ${CHR} | tr [:lower:] [:upper:] >> noMask/${C}
+	echo "done"
+    done
+    mkdir ooc
+    ls noMask/chr*.fa > fa.list
+
+    #	The ooc file was created earlier into /cluster/bluearc/hg18/11.ooc
+    cp -p /cluster/bluearc/hg18/11.ooc  /san/sanvol1/scratch/hg18/11.ooc
+
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/noMask
+    cd /san/sanvol1/scratch/hg18/noMask
+    bash
+    time cp --verbose -p /cluster/data/hg18/noMask/chr*.fa .
+    
+    # allow blat to run politely in /tmp while it writes output, then
+    # copy results to results file:
+
+    mkdir /cluster/data/hg18/bed/bacends
+    cd    /cluster/data/hg18/bed/bacends
+
+    cat << '_EOF_' > runBlat.sh
+#!/bin/sh
+path1=$1
+path2=$2
+root1=$3
+root2=$4
+result=$5
+rm -fr /tmp/${root1}_${root2}
+mkdir /tmp/${root1}_${root2}
+pushd /tmp/${root1}_${root2}
+/cluster/bin/x86_64/blat ${path1} ${path2} \
+	-ooc=/san/sanvol1/scratch/hg18/11.ooc ${root1}.${root2}.psl
+popd
+rm -f ${result}
+mv /tmp/${root1}_${root2}/${root1}.${root2}.psl ${result}
+rm -fr /tmp/${root1}_${root2}
+'_EOF_'
+    # << emacs happy
+    chmod +x runBlat.sh
+
+    cat << '_EOF_' > template
+#LOOP
+./runBlat.sh {check in exists $(path1)} {check in exists $(path2)} $(root1) $(root2) {check out line+ bacEnds.out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << emacs happy
+
+    ls -1S /san/sanvol1/scratch/hg18/cloneEnds/cloneEnds???.fa > bacEnds.lst
+    mkdir bacEnds.out
+    #	create results directories for each to avoid the all result files in
+    #	one directory problem
+    foreach f (`cat bacEnds.lst`)
+	set b = $f:t:r
+	echo $b
+	mkdir bacEnds.out/$b
+    end
+
+    ls -1S /san/sanvol1/scratch/hg18/noMask/chr*.fa > contig.lst
+    gensub2 contig.lst bacEnds.lst template jobList
+    para create jobList
+# 4802 jobs in batch
+    para try, check, push, etc ...
+
+# There was some problem with many jobs that files not accessible.  Did chmod +x on 
+# /san/sanvol1/scratch/hg18/noMask/chr*.fa and this seems to fix the problem.
+# Completed: 4802 of 4802 jobs
+# CPU time in finished jobs:     515910s    8598.50m   143.31h    5.97d  0.016 y
+# IO & Wait Time:                 35141s     585.68m     9.76h    0.41d  0.001 y
+# Average job time:                 115s       1.91m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1185s      19.75m     0.33h    0.01d
+# Submission to last job:          2304s      38.40m     0.64h    0.03d
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/bacends
+    screen
+
+    mv temp temp_old
+    mv split split_old
+
+    mkdir temp
+    bash
+    time pslSort dirs raw.psl temp bacEnds.out/* > pslSort.out 2>&1 &
+# real    8m33.346s
+# user    4m58.200s
+# sys     0m33.400s
+
+    time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons \
+	raw.psl bacEnds.psl /dev/null > pslReps.out 2>&1 &
+
+    cp -p /cluster/data/mm7/bed/bacends/split.pl .
+    cp -p /cluster/data/mm7/bed/bacends/header .
+
+# Commented out line 23 in split.pl to avoid generating extra header in split/...0.psl.
+#print OUT $header;
+
+    time ./split.pl header < bacEnds.psl
+
+    cp -p bacEnds.psl bacEnds.psl.save
+    time pslSort dirs bacEnds.psl temp split
+
+    #	~ 1.5 minutes
+
+    # Copy files to final destination and remove
+    mkdir /cluster/data/hg18/bacends
+    cp -p bacEnds.psl /cluster/data/hg18/bacends
+
+############################################################################
+# BACEND PAIRS TRACK (DONE - 2006-01-18 - Fan)
+
+    ssh kolossus
+    cd /cluster/data/hg18/bacends
+    bash
+
+time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
+-max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+-mismatch -verbose bacEnds.psl \
+../bed/cloneend/cloneEndPairs.txt all_bacends bacEnds
+
+    # create header required by "rdb" tools
+echo -e \
+"chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes" > header
+echo -e "10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10" >> header
+
+cat header bacEnds.pairs | \
+/cluster/bin/scripts/row score ge 300 | \
+/cluster/bin/scripts/sorttbl chr start | \
+/cluster/bin/scripts/headchg -del > bacEndPairs.bed
+
+cat header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+bacEnds.orphan | /cluster/bin/scripts/row score ge 300 | \
+/cluster/bin/scripts/sorttbl chr start | \
+/cluster/bin/scripts/headchg -del > bacEndPairsBad.bed
+
+/cluster/bin/scripts/extractPslLoad -noBin bacEnds.psl bacEndPairs.bed \
+bacEndPairsBad.bed >j1.out
+cat j1.out| /cluster/bin/scripts/sorttbl tname tstart >j2.out
+cat j2.out | /cluster/bin/scripts/headchg -del > bacEnds.load.psl
+
+rm j1.out j2.out
+
+    #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
+    awk '{print $5}' bacEndPairs.bed | sort -u
+    #	result should be the scores, no extraneous strings:
+#	1000
+#	300
+#	375
+#	500
+#	750
+    #	edit the file and fix it if it has a bad name.
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/hg18/bacends
+    hgLoadBed -strict -notItemRgb hg18 bacEndPairs bacEndPairs.bed \
+	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    # Loaded 146284 elements of size 11
+
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed -strict -notItemRgb hg18 bacEndPairsBad bacEndPairsBad.bed \
+	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    # Loaded 75995 elements of size 11
+
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl hg18 -table=all_bacends bacEnds.load.psl
+
+    nice featureBits hg18 all_bacends
+# 162081172 bases of 2881515245 (5.625%) in intersection
+    nice featureBits hg17 all_bacends
+# 225763317 bases of 2866216770 (7.877%) in intersection
+
+    nice featureBits hg18 bacEndPairs
+# 2835522069 bases of 2881515245 (98.404%) in intersection
+    nice featureBits hg17 bacEndPairs
+# 2846568377 bases of 2866216770 (99.314%) in intersection
+
+    nice featureBits hg18 bacEndPairsBad
+# 781697678 bases of 2881515245 (27.128%) in intersection
+    nice featureBits hg17 bacEndPairsBad
+# 797412909 bases of 2866216770 (27.821%) in intersection
+
+############################################################################
 
