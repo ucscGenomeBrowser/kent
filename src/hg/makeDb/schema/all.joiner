@@ -464,11 +464,6 @@ identifier jgiName dependency
     $gbd.jgiGene.name
     $gbd.jgiPep.name unique minCheck=0.9
 
-identifier sgpGeneName dependency
-"Link together sgp predicted gene structure and peptide"
-    $gbd.sgpGene.name
-    $gbd.sgpPep.name full unique
-
 identifier softberryGeneName dependency
 "Link together Fshgene++ gene structure, pepdide, and homolog"
     $gbd.softberryGene.name
@@ -2013,6 +2008,7 @@ tablesIgnored $gbd
     sangerGenefinder
     sangamoDnaseHs
     simpleRepeat
+    sgpGene
     tableDescriptions
     tigrGeneIndex
     trackDb%
