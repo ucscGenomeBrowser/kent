@@ -100,9 +100,9 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1068 2006/01/17 22:01:49 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1069 2006/01/18 17:20:27 kent Exp $";
 
-boolean measureTiming = TRUE;	/* Flip this on to display timing
+boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
 boolean isPrivateHost;		/* True if we're on genome-test. */
 char *protDbName;               /* Name of proteome database for this genome. */
