@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.17 2006/01/17 18:53:43 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.18 2006/01/18 00:42:41 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -2199,7 +2199,16 @@ nice featureBits hg17 chainBosTau2Link
     #	The AADB clones are the Celera assembly, don't want them.
     sed -e "/^#.*/d" /cluster/store11/gs.19/ncbi/sequence.inf | \
 	grep for_assembly | grep -v AADB | awk '{print $1}' | sort -u \
+	    > allButOneClonesConsidered.list
+    (grep AADB01066164.1 \
+	/cluster/store11/gs.19/ncbi/sequence.inf | awk '{print $1}'; \
+	cat allButOneClonesConsidered.list) | sort -u \
 	    > allClonesConsidered.list
+    #	The grep for AADB eliminates a single clone: AADB01066164.1
+    #	Which actually should be in the list since it is in the
+    #	ncbi_build36.agp file.  Back in Hg17, this was the only AADB
+    #	clone in the sequence.inf file, now there are 400,673 of them in
+    #	this Hg18 sequence.inf file marked "for_assembly"
     comm -12 allClonesConsidered.list \
 	/cluster/data/hg17/bed/contig_overlaps/sequence.list \
 	    > allClones.InHg17AndHg18.list
@@ -2215,7 +2224,11 @@ nice featureBits hg17 chainBosTau2Link
 	placed_in_assembly.list > sameAsHg17.list
     wc sameAsHg17.list
     #	26775  26775 300641 sameAsHg17.list
-    #	and unique to hg17, not in hg18:
+    #	There is one clone: AADB01066164.1
+    #	Which is listed in allClones.InHg17NotHg18.list
+    #	But it is on the Hg18 placed_in_assembly.list
+    #	And it is on the Hg17 placed_in_assembly.list but it isn't
+    #	actually found in Hg17 ?  Perhaps it didn't align good enough.
     comm -23 /cluster/data/hg17/bed/contig_overlaps/placed_in_assembly.list \
 	placed_in_assembly.list > uniqueToHg17.list
     wc uniqueToHg17.list
@@ -2229,6 +2242,220 @@ nice featureBits hg17 chainBosTau2Link
     #	using the previous perl scripts:
     cp -p /cluster/data/hg17/bed/contig_overlaps/*.pl .
 
+    #	Now, we need to distribute the clone sequence files in a
+    #	directory hierarchy by chrom name.  Using the contigAcc.pl file
+    #	from the previous release:
+    cp /cluster/data/hg17/bed/contig_overlaps/contigAcc.pl .
+    #	This newer version is generalized a bit better to take command
+    #	line arguments for the two files it is to read instead of having
+    #	them explicitly in the code, then:
+    ./contigAcc.pl /cluster/data/hg18/ncbi_build36.agp \
+	/cluster/data/hg18/seq_contig.md > cloneToChrom.list 2>&1
+    #	And now, since most of the clone sequence already exists in the
+    #	Hg17 work directory, we only need to make symlinks to the
+    #	existing ones, and move only the new ones.  The following script
+    #	will find an existing copy and symlink it correctly.
+
+    cat << '_EOF_' > createPlacedHierarchy.sh
+#!/bin/sh
+
+mkdir -p placedClones
+
+sed -e "/^#.*/d" cloneToChrom.list | while read L
+do
+    CHROM=`echo "${L}" | awk '{print $1}'`
+    CLONE=`echo "${L}" | awk '{print $2}'`
+    if [ ! -d "placedClones/${CHROM}" ]; then
+	mkdir placedClones/${CHROM}
+    fi
+    HG17_version="/cluster/data/hg17/bed/contig_overlaps/${CHROM}/${CLONE}"
+    HG18_version_0="/cluster/data/hg18/bed/coverage/newToHg18/${CLONE}"	    
+  HG18_version_1="/cluster/data/hg18/bed/coverage/allClones.newToHg18/${CLONE}"	    
+    if [ -f "${HG17_version}" ]; then
+	if [ -f "${HG18_version_0}" -o -f "${HG18_version_1}" ]; then
+	  echo "ERROR: Why is there both an Hg17 and Hg18 version for ${CLONE}"
+	  exit 255
+	fi
+	ln -s "/cluster/data/hg17/bed/contig_overlaps/${CHROM}/${CLONE}" \
+		"./placedClones/${CHROM}/${CLONE}"
+    else
+	if [ -f "${HG18_version_0}" -a -f "${HG18_version_1}" ]; then
+	    echo "ERROR: Why are there two Hg18 copies for ${CLONE}"
+	    exit 255
+	fi
+	if [ -f "${HG18_version_0}" ]; then
+	    ln -s "${HG18_version_0}" "./placedClones/${CHROM}/${CLONE}"
+	else
+	    if [ -f "${HG18_version_1}" ]; then
+		ln -s "${HG18_version_1}" "./placedClones/${CHROM}/${CLONE}"
+	    else
+		# must be on a different chrom in hg17
+		HG17_chrom=`grep -v "^#" \
+	/cluster/data/hg17/bed/contig_overlaps/disburseEm.list \
+	| grep "^${L}$" | awk '{print $1}'`
+    HG17_version="/cluster/data/hg17/bed/contig_overlaps/${HG17_chrom}/${CLONE}"
+		if [ -f "${HG17_version}" ]; then
+		    echo "ERROR: Why is there no version for ${CLONE}"
+		    exit 255
+		fi
+		ln -s "${HG17_version}" "./placedClones/${CHROM}/${CLONE}"
+	    fi
+	fi
+    fi
+done
+'_EOF_'
+    #	happy emacs
+    chmod +x createPlacedHierarchy.sh
+    ./createPlacedHierarchy.sh
+    #	There should be no errors
+
+    #	We need masked contigs for the psLayout alignments
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/coverage/maskedContigs
+    cd /cluster/data/hg18/bed/coverage/maskedContigs
+    hgsql -N \
+	-e "select chrom,chromStart,chromEnd,contig,size from ctgPos;" hg18 \
+	> ctgPos.txt
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/coverage/maskedContigs
+    #	verify each contig only listed once:
+    awk '{print $4}' ctgPos.txt | sort | uniq -c | sort -n | less
+    #	should all have a count of one
+    #	verify all chrom sizes match the contig sizes:
+    awk '{print $3-$2}' ctgPos.txt > chrSize.list
+    awk '{print $5}' ctgPos.txt > ctgSize.list
+    diff ctgSize.list chrSize.list
+    #	should be no difference
+    #	OK, now fetch the contigs from the twoBit file:
+    
+    cat << '_EOF_' > 2bitToFa.pl
+#!/usr/bin/env perl
+use warnings;
+use strict;
+while (my $line=<>) {
+chomp $line;
+my ($chrom, $start, $end, $contig, $size) = split('\s',$line);
+$chrom =~ s/chr//;
+printf "echo -n 'working $contig ...'; mkdir -p $chrom; twoBitToFa /cluster/data/hg18/hg18.2bit:chr$chrom:$start-$end stdout | sed -e 's/^>.*/>$contig/' > $chrom/$contig.fa; gzip $chrom/$contig.fa; echo 'done'\n";
+}
+'_EOF_'
+    # happy emacs
+    chmod +x 2bitToFa.pl
+    cat ctgPos.txt | ./2bitToFa.pl > 2bitToFa.sh
+    chmod +x 2bitToFa.sh
+    time ./2bitToFa.sh
+
+    #	and create a lift file for these contigs
+    cat << '_EOF_' > mkCtgLift.pl
+#!/usr/bin/env perl
+use warnings;
+use strict;
+while (my $line=<>)
+{
+chomp $line;
+my ($start, $chrCtg, $size, $chrom, $chrLen) = split('\s',$line);
+$chrCtg =~ s#.*/##;
+printf "%s\t%s\t%s\t%s\t%s\n", $start, $chrCtg, $size, $chrom, $chrLen;
+}
+'_EOF_'
+    #	happy emacs
+    chmod +x mkCtgLift.pl
+    cat /cluster/data/hg18/jkStuff/liftAll.lft \
+	| ./mkCtgLift.pl > liftContigs.lft
+
+    #	Create individual ooc files for each contig
+    mkdir ooc
+    for C in `ls */*.fa.gz | sed -e "s/.fa.gz//"`
+    do
+	CONTIG=`basename ${C}`
+	CHR=`dirname ${C}`
+	mkdir -p ooc/${CHR}
+	zcat ${C}.fa.gz | blat -repMatch=256 \
+	    -makeOoc=ooc/${CHR}/${CONTIG}.10.ooc -tileSize=10 \
+	    stdin /dev/null /dev/null
+	echo "done: ${CONTIG}"
+    done
+
+    #	Copy everything to san filesystem for kluster run:
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/coverage
+    cd /san/sanvol1/scratch/hg18/coverage
+    rsync -a --progress --copy-links \
+	/cluster/data/hg18/bed/coverage/placedClones/ ./placedClones/
+    rsync -a --progress --copy-links \
+	/cluster/data/hg18/bed/coverage/maskedContigs/ ./maskedContigs/
+
+    mkdir /san/sanvol1/scratch/hg18/coverage/runPlaced
+    cd /san/sanvol1/scratch/hg18/coverage/runPlaced
+
+    cat << '_EOF_' > runPsLayout.sh
+#!/bin/sh
+#   runPsLayout.sh <chrom> <clone> <contig>
+#     where <chrom> is the chrom this contig is on
+#      <clone> is one of the .fa.gz files in
+#	  /san/sanvol1/scratch/hg18/coverage/placedClones/<chrom>/<clone>.fa.gz
+#      <contig> is one of the contigs found in:
+#	/san/sanvol1/scratch/hg18/coverage/maskedContigs/<chrom>/<contig>.fa.gz
+#
+HERE=`pwd`
+CHROM=$1
+CLONE=$2
+CONTIG=$3
+TARGET=/san/sanvol1/scratch/hg18/coverage/maskedContigs/$CHROM/$CONTIG.fa.gz
+CLONESRC=/san/sanvol1/scratch/hg18/coverage/placedClones/$CHROM/$CLONE.fa.gz
+OOC=/san/sanvol1/scratch/hg18/coverage/maskedContigs/ooc/$CHROM/$CONTIG.10.ooc
+RESULT="${HERE}/psl/${CHROM}/${CONTIG}/${CLONE}.psl"
+mkdir -p psl/${CHROM}/${CONTIG}
+if [ ! -s ${CLONESRC} ]; then
+        echo "Can not find: ${CLONESRC}" 1>/dev/stderr
+        exit 255
+fi
+if [ ! -s ${TARGET} ]; then
+        echo "Can not find: ${TARGET}" 1>/dev/stderr
+        exit 255
+fi
+if [ ! -s ${OOC} ]; then
+        echo "Can not find: ${OOC}" 1>/dev/stderr
+        exit 255
+fi
+WRKDIR="/scratch/tmp/hg18_${CHROM}/${CONTIG}/${CLONE}"
+mkdir -p "${WRKDIR}"
+cd ${WRKDIR}
+zcat ${CLONESRC} > ${CLONE}.fa
+zcat ${TARGET} > ${CONTIG}.fa
+cp -p ${OOC} ./10.ooc
+/cluster/bin/x86_64/psLayout ${CONTIG}.fa ${CLONE}.fa genomic 10.ooc ${RESULT}
+RET=$?
+cd ${HERE}
+rm -fr ${WRKDIR}
+rmdir --ignore-fail-on-non-empty "/scratch/tmp/hg18_${CHROM}/${CONTIG}"
+rmdir --ignore-fail-on-non-empty "/scratch/tmp/hg18_${CHROM}"
+exit ${RET}
+'_EOF_'
+    #	happy emacs
+    chmod +x runPsLayout.sh
+
+    #	create jobList from cloneToChrom.list:
+    grep -v "^#" /cluster/data/hg18/bed/coverage/cloneToChrom.list \
+	| sed -e "s/.fa.gz//" \
+	| awk '{
+printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
+        $1, $2, $3, $1, $3, $2
+}' > masterJobList
+
+    #	To do a quick test, run just chrM:
+    grep " M " masterJobList > jobList
+s
+    para create jobList
+    para try ... check ... etc ...
+
+
+    #	Then, the whole run:
+    rm -fr psl err
+    para create masterJobList
+    para try ... check ... push ... etc ...
+    #	running 2006-01-17  16:41
 
 ###########################################################################
 # FISH CLONES (WORKING - 2006-01-13 - Hiram)
