@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.6 2005/12/21 21:44:48 kent Exp $";
+static char const rcsid[] = "$Id: testSearch.c,v 1.7 2006/01/18 21:26:30 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -12,7 +12,7 @@ void usage()
 errAbort(
   "testSearch - Set up a search program that does free text indexing and retrieval.\n"
   "usage:\n"
-  "   testSearch file word\n"
+  "   testSearch file word(s)\n"
   );
 }
 
