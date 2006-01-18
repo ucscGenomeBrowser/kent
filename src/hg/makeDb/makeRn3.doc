@@ -2244,6 +2244,9 @@ SGP GENE PREDICTIONS (DONE - 2003-07-30 - Hiram)
     ldHgGene rn3 sgpGene download/*.gtf -exon=CDS
     hgPepPred rn3 generic sgpPep download/*-fixed.prot
 
+SGP GENES (UPDATE 1/18/2006)
+    sgpPep table dropped, replaced by hgc generated protein seq in browser
+
 LOAD STS MAP (TO DO )
      - login to hgwdev
       cd ~/rn3/bed

@@ -3155,6 +3155,9 @@ end
     cd ..
     ldHgGene hg15 sgpGene download/*.gtf -exon=CDS
     hgPepPred hg15 generic sgpPep download/*-fixed.prot
+ 
+# SGP GENES (UPDATE 1/18/2006)
+    sgpPep table dropped, replaced by hgc generated protein seq in browser
 
 # ALIGNED ANCIENT REPEATS FROM MOUSE BLASTZ (TODO)
     ssh eieio

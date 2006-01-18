@@ -10373,6 +10373,9 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     ldHgGene -gtf -genePredExt hg17 sgpGene chr*.gtf
     hgPepPred hg17 generic sgpPep sgpPep.fa
 
+# SGP GENES (UPDATE 1/18/2006)
+    sgpPep table dropped, replaced by hgc generated protein seq in browser
+
 # LIFTOVER RNAGENE FROM HG16 (09/29/04, acs)
     cd /cluster/data/hg17/bed
     mkdir rnaGene

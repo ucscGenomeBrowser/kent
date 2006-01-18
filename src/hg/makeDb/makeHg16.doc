@@ -3650,6 +3650,9 @@ http://genome.imim.es/genepredictions/H.sapiens/golden_path_200307_x_mm4/SGP/rea
 #  featureBits hg15 sgpGene
 #  40395614 bases of 2866466359 (1.409%) in intersection
 
+# SGP GENES (UPDATE 1/18/2006)
+    sgpPep table dropped, replaced by hgc generated protein seq in browser
+
 LOAD NCI60 (DONE: Fan 10/20/2003)
 o - # ssh hgwdev
     cd /projects/cc/hg/mapplots/data/NCI60/dross_arrays_nci60/

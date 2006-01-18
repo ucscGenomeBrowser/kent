@@ -6215,6 +6215,8 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     ldHgGene -gtf -genePredExt mm5 sgpGene chr*.gtf
     hgPepPred mm5 generic sgpPep sgpPep.fa
 
+# SGP GENES (UPDATE 1/18/2006)
+    sgpPep table dropped, replaced by hgc generated protein seq in browser
 
 # MAKE mm5-hg17 OVER.CHAIN FOR LIFTOVER  (DONE 2004-09-24 braney)
     ssh kolossus

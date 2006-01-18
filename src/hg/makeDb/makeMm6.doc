@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.102 2005/12/10 00:42:31 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.103 2006/01/18 20:12:25 jen Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -6448,6 +6448,9 @@ time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
     hgPepPred mm6 generic sgpPep sgpPep.fa
     featureBits mm6 -enrichment refGene:CDS sgpGene
 #refGene:CDS 0.983%, sgpGene 1.421%, both 0.841%, cover 85.57%, enrich 60.21x
+ 
+# SGP GENES (UPDATE 1/18/2006)
+    sgpPep table dropped, replaced by hgc generated protein seq in browser
 
 ############################################################################
 # RE-BUILD KNOWN GENES RELATED TABLES for mm6 (STARTED 5/26/05, DONE6/1/05. Fan)

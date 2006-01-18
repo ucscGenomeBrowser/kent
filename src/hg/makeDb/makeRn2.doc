@@ -1157,6 +1157,8 @@ SGP GENE PREDICTIONS (DONE 2003-05-19 - Hiram)  (RELOADED 10/28/03 angie)
     ldHgGene rn2 sgpGene download/*.gtf -exon=CDS
     hgPepPred rn2 generic sgpPep download/*-fixed.prot
 
+SGP GENES (UPDATE 1/18/2006)
+    sgpPep table dropped, replaced by hgc generated protein seq in browser
 
 TIGR GENE INDEX (TODO)
     mkdir -p ~/rn2/bed/tigr
