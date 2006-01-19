@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.54 2006/01/17 23:47:50 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.55 2006/01/19 07:22:26 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -997,7 +997,7 @@ int yr = round((double)(scale*(d-b)/2)) + yOff;
 int yb = round((double)(scale*(c-b)/2)) + yOff;
 
 /* correct bottom coordinate if necessary */
-if (ldInvert)
+if (!ldInvert)
     {
     yl = yMax - yl + yOff;
     yt = yMax - yt + yOff;
@@ -1277,8 +1277,11 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
 	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
 	else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+	    {
 	    ldAddToDenseValueHash(ldHash, a, values[i]);
-	else /* write the dense mode! */
+	    ldAddToDenseValueHash(ldHash, d, values[i]);
+	    }
+	else
 	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
 	i++;
 	}
