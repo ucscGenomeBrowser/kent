@@ -51,3 +51,5 @@ extern struct element *eleAddEdge(struct element *parent, struct element *child)
 extern char *eleName(struct element *e);
 extern struct phyloTree *eleReadTree(char *fileName);
 extern void printElementTrees(struct phyloTree *node, int depth);
+extern struct element *newElement(struct genome *g, char *name, char *version);
+extern void outElementTrees(FILE *f, struct phyloTree *node);
