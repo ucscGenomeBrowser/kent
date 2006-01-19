@@ -41,10 +41,10 @@ CREATE TABLE snp125 (
     refNCBI     blob not null,	# Reference genomic
     refUCSC     blob not null,	# Reference genomic
     observed      blob not null,	# The sequences of the observed alleles
-    molType       enum( 'unknown', 'genomic', 'cDNA', 'mito', 'chloro') DEFAULT 'unknown' not null,
+    molType       enum( 'unknown', 'genomic', 'cDNA') DEFAULT 'unknown' not null,
     					# Sample type from exemplar ss
-    class         enum('unknown', 'single', 'in-del', 'heterozygous', 'microsatelite',
-                  'named', 'no var', 'mixed', 'mnp')  DEFAULT 'unknown' NOT NULL,
+    class         enum('unknown', 'single', 'in-del', 'het', 'microsatelite',
+                  'named', 'no var', 'mixed', 'mnp', 'insertion', 'deletion')  DEFAULT 'unknown' NOT NULL,
     					# The class of variant
 
     valid      	set('unknown', 'by-cluster', 'by-frequency', 'by-submitter', 'by-2hit-2allele', 'by-hapmap') 
@@ -54,13 +54,13 @@ CREATE TABLE snp125 (
     avHet 	float not null,	# The average heterozygosity from all observations
     avHetSE 	float not null,	# The Standard Error for the average heterozygosity
 
-    func       enum( 'unknown', 'locus-region', 'coding', 'coding-synon', 'coding-nonsynon', 
-    			'mrna-utr', 'untranslated', 'intron', 'splice-site', 'reference', 'exception') 
-			DEFAULT 'unknown' NOT NULL,
+    func       enum( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', 
+    		     'untranslated', 'intron', 'splice-site', 'cds-reference') 
+		     DEFAULT 'unknown' NOT NULL,
+    			# The functional category of the SNP
 
-    				# The functional category of the SNP
-
-   locType  enum( 'unknown', 'range', 'exact', 'between') DEFAULT 'unknown' NOT NULL,
+   locType  enum( 'unknown', 'range', 'exact', 'between', 
+   		  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL,
 
     source enum ('dbSNP125', 'Affy500k')	# Source of the data - dbSnp, Affymetrix, ...
 

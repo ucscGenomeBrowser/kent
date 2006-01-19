@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snp125.c,v 1.5 2006/01/15 05:17:31 heather Exp $";
+static char const rcsid[] = "$Id: snp125.c,v 1.11 2006/01/17 23:06:10 heather Exp $";
 
 void snp125StaticLoad(char **row, struct snp125 *ret)
 /* Load a row from snp125 table into ret.  The contents of ret will
@@ -267,19 +267,20 @@ char *createString =
 "    refNCBI       blob not null,\n"
 "    refUCSC       blob not null,\n"
 "    observed      blob not null,\n"
-"    molType       enum('unknown', 'genomic', 'cDNA', 'mito', 'chloro') DEFAULT 'unknown' not null,\n"
-"    class         enum('unknown', 'single', 'in-del', 'heterozygous', 'microsatelite',"
-"                  'named', 'no var', 'mixed', 'mnp') \n"
+"    molType       enum('unknown', 'genomic', 'cDNA') DEFAULT 'unknown' not null,\n"
+"    class         enum('unknown', 'single', 'in-del', 'het', 'microsatelite',"
+"                  'named', 'no var', 'mixed', 'mnp', 'insertion', 'deletion') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
 "    valid         set('unknown', 'by-frequency', 'by-cluster', 'by-submitter', \n"
 "                  'by-2hit-2allele', 'by-hapmap') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
 "    avHet 	   float not null,\n"
 "    avHetSE 	   float not null,\n"
-"    func          enum( 'unknown', 'locus-region', 'coding', 'coding-synon', 'coding-nonsynon', \n"
-"                  'mrna-utr', 'untranslated', 'intron','splice-site', 'reference', 'exception') \n"
+"    func          enum( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', \n"
+"                  'untranslated', 'intron','splice-site', 'cds-reference') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
-"    locType enum ('unknown', 'range', 'exact', 'between') DEFAULT 'unknown' NOT NULL,\n"
+"    locType enum ('unknown', 'range', 'exact', 'between',\n"
+"                  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL,\n"
 "    source enum ('dbSNP125', 'Affy500k'),	# Source of the data - dbSnp, Affymetrix, ...\n"
 "    exception enum ('SimpleTriAllelic,'\n"
 "			'SimpleQuadAllelic',\n"

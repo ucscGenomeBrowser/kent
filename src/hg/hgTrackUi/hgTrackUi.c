@@ -29,7 +29,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.244 2006/01/16 23:48:40 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.246 2006/01/19 22:22:46 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -200,6 +200,16 @@ for (i=0; i < snp125FuncLabelsSize; i++)
     printf(" %s", snp125FuncLabels[i]);
     }
 
+printf("<BR>\n");
+printf("<B>LocType</B>: ");
+printf("<BR>\n");
+for (i=0; i < snp125LocTypeLabelsSize; i++)
+    {
+    snp125LocTypeIncludeCart[i] = 
+        cartUsualBoolean(cart, snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeDefault[i]);
+    cgiMakeCheckBox(snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeCart[i]);
+    printf(" %s", snp125LocTypeLabels[i]);
+    }
 
 /* prematurely close the hgTracks FORM because forms cannot be nested */
 /* we will open another FORM here, and allow it to be closed later */
@@ -257,6 +267,16 @@ else if (sameString(snp125ColorSourceCart[0], "Function"))
 	snp125FuncCart[i] = cartUsualString(cart, snp125FuncStrings[i], snp125FuncDefault[i]);
         cgiMakeDropListFull(snp125FuncStrings[i], snp125ColorLabel, snp125ColorLabel, 
                             snp125ColorLabelSize, snp125FuncCart[i], autoSubmit);
+        }
+    }
+else if (sameString(snp125ColorSourceCart[0], "LocType"))
+    {
+    for (i=0; i<snp125LocTypeLabelsSize; i++)
+        {
+	printf("<B>%s</B>: ", snp125LocTypeLabels[i]);
+	snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
+        cgiMakeDropListFull(snp125LocTypeStrings[i], snp125ColorLabel, snp125ColorLabel, 
+                            snp125ColorLabelSize, snp125LocTypeCart[i], autoSubmit);
         }
     }
 
@@ -355,7 +375,7 @@ hapmapLdYri_inv = cartUsualBoolean(cart, "hapmapLdYri_inv", ldInvertDefault);
 printf("<BR><B>LD Values:</B><BR>&nbsp;&nbsp;\n");
 
 cgiMakeRadioButton("ldValues", "rsquared", sameString("rsquared", ldValue));
-printf("&nbsp;r^2&nbsp;&nbsp;");
+printf("&nbsp;r<sup>2</sup>&nbsp;&nbsp;");
 cgiMakeRadioButton("ldValues", "dprime",   sameString("dprime",   ldValue));
 printf("&nbsp;D'&nbsp;&nbsp;");
 cgiMakeRadioButton("ldValues", "lod",      sameString("lod",      ldValue));

@@ -23,6 +23,7 @@ char *snp125ColorSourceLabels[] = {
     "Class",
     "Validation",
     "Function",
+    "LocType",
 };
 
 char *snp125ColorSourceStrings[] = {
@@ -30,6 +31,7 @@ char *snp125ColorSourceStrings[] = {
     "snp125ColorSourceClass",
     "snp125ColorSourceValid",
     "snp125ColorSourceFunc",
+    "snp125ColorSourceLocType",
 };
 
 // why are these arrays?
@@ -104,65 +106,117 @@ int snp125MolTypeCartSize     = ArraySize(snp125MolTypeCart);
 int snp125MolTypeIncludeStringsSize  = ArraySize(snp125MolTypeIncludeStrings);
 
 /****** Class related controls *******/
-/* Types: unknown, snp, insertion, deletion, range */
+/* Types: unknown, snp, in-del (locType exact), heterozygous, 
+          microsatelite, named, no variation, mixed, mnp, 
+	  insertion (constructed from class = in-del, locType = between)
+	  deletion (constructed from class = in-del, locType = range) */
 
 char *snp125ClassLabels[] = {
     "Unknown",
     "Single Nucleotide Polymorphism",
+    "Insertion/Deletion",
+    "Heterozygous",
+    "Microsatelite",
+    "Named",
+    "No Variation",
+    "Mixed",
+    "Mnp",
     "Insertion",
     "Deletion",
-    "Range",
 };
 char *snp125ClassStrings[] = {
     "snp125ClassUnknown",
-    "snp125ClassSnp",
-    "snp125ClassIn",
-    "snp125ClassDel",
-    "snp125ClassRange",
+    "snp125ClassSingle",
+    "snp125ClassIn-del",
+    "snp125ClassHet",
+    "snp125ClassMicrosatelite",
+    "snp125ClassNamed",
+    "snp125ClassNoVar",
+    "snp125ClassMixed",
+    "snp125ClassMnp",
+    "snp125ClassInsertion",
+    "snp125ClassDeletion",
 };
 char *snp125ClassDataName[] = {
     "unknown",
-    "simple",
+    "single",
+    "in-del",
+    "heterozygous",
+    "microsatelite",
+    "named",
+    "no variation",
+    "mixed",
+    "mnp",
     "insertion",
     "deletion",
-    "range",
 };
 char *snp125ClassDefault[] = {
-    "red",
-    "black",
-    "blue",
-    "red",
-    "green",
+    "red",    // unknown
+    "black",  // single
+    "black",  // in-del
+    "black",  // het
+    "blue",   // microsatelite
+    "blue",   // named
+    "black",  // no variation
+    "green",  // mixed
+    "green",  // mnp
+    "black",  // insertion
+    "red",    // deletion
 };
 char *snp125ClassCart[] = {
-    "red",
-    "black",
-    "blue",
-    "red",
-    "green",
+    "red",    // unknown
+    "black",  // single
+    "black",  // in-del
+    "black",  // het
+    "blue",   // microsatelite
+    "blue",   // named
+    "black",  // no variation
+    "green",  // mixed
+    "green",  // mnp
+    "black",  // insertion
+    "red",    // deletion
 };
 char *snp125ClassIncludeStrings[] = {
     "snp125ClassUnknownInclude",
-    "snp125ClassSimpleInclude",
-    "snp125ClassInsertionInclude",
-    "snp125ClassDeletionInclude",
-    "snp125ClassRangeInclude"
+    "snp125ClassSingleInclude",
+    "snp125ClassIn-delInclude",
+    "snp125ClassHetInclude",
+    "snp125ClassMicrosateliteInclude"
+    "snp125ClassNamedInclude"
+    "snp125ClassNoVarInclude"
+    "snp125ClassMixedInclude"
+    "snp125ClassMnpInclude"
+    "snp125ClassInsertionInclude"
+    "snp125ClassDeletionInclude"
 };
 boolean snp125ClassIncludeDefault[] = {
-    TRUE,
-    TRUE,
-    TRUE,
-    TRUE,
-    TRUE,
+    TRUE,  // unknown
+    TRUE,  // single
+    TRUE,  // in-del
+    TRUE,  // het
+    TRUE,  // microsatelite
+    TRUE,  // named
+    TRUE,  // no variation
+    TRUE,  // mixed
+    TRUE,  // mnp
+    TRUE,  // insertion
+    TRUE,  // deletion
 };
 boolean snp125ClassIncludeCart[] = {
-    TRUE,
-    TRUE,
-    TRUE,
-    TRUE,
-    TRUE,
+    TRUE,  // unknown
+    TRUE,  // single
+    TRUE,  // in-del
+    TRUE,  // het
+    TRUE,  // microsatelite
+    TRUE,  // named
+    TRUE,  // no variation
+    TRUE,  // mixed
+    TRUE,  // mnp
+    TRUE,  // insertion
+    TRUE,  // deletion
 };
 
+// all of these sizes are the same
 int snp125ClassLabelsSize   = ArraySize(snp125ClassLabels);
 int snp125ClassStringsSize  = ArraySize(snp125ClassStrings);
 int snp125ClassDataNameSize = ArraySize(snp125ClassDataName);
@@ -238,6 +292,7 @@ boolean snp125ValidIncludeCart[] = {
     TRUE,
 };
 
+// all of these sizes are the same
 int snp125ValidLabelsSize   = ArraySize(snp125ValidLabels);
 int snp125ValidStringsSize  = ArraySize(snp125ValidStrings);
 int snp125ValidDataNameSize = ArraySize(snp125ValidDataName);
@@ -246,31 +301,34 @@ int snp125ValidCartSize     = ArraySize(snp125ValidCart);
 int snp125ValidIncludeStringsSize     = ArraySize(snp125ValidIncludeStrings);
 
 /****** function related controls *******/
-/* unknown, coding, coding-synon, coding-nonsynon,
- * intron, splice-site, exception */
+/* unknown, locus, coding, coding-synon, coding-nonsynon,
+ * untranslated, intron, splice-site, exception */
 
 char *snp125FuncLabels[] = {
     "Unknown",
+    "Locus",
     "Coding",
     "Coding - Synonymous",
     "Coding - Non-Synonymous",
     "Untranslated",
     "Intron",
     "Splice site",
-    "Exception",
+    "Reference",
 };
 char *snp125FuncStrings[] = {
     "snp125FuncUnknown",
+    "snp125FuncLocus",
     "snp125FuncCoding",
     "snp125FuncSynon",
     "snp125FuncNonSynon",
     "snp125FuncUntranslated",
     "snp125FuncIntron",
     "snp125FuncSplice",
-    "snp125FuncException",
+    "snp125FuncReference",
 };
 char *snp125FuncDataName[] = {
     "unknown",
+    "locus",
     "coding",
     "coding-synon",
     "coding-nonsynon",
@@ -280,18 +338,18 @@ char *snp125FuncDataName[] = {
     "exception",
 };
 char *snp125FuncDefault[] = {
-    // "black",
-    "red",
-    "blue",
-    "green",
-    "red",
-    "blue",
-    "blue",
-    "red",
-    "black",
+    "black",  // unknown
+    "red",    // locus
+    "blue",   // coding
+    "green",  // coding-synon
+    "red",    // coding-nonsynon
+    "blue",   // untranslated
+    "blue",   // intron
+    "red",    // splice-site
+    "black",  // cds-reference
 };
 char *snp125FuncCart[] = {
-    // "black",
+    "black",
     "red",
     "blue",
     "green",
@@ -303,15 +361,17 @@ char *snp125FuncCart[] = {
 };
 char *snp125FuncIncludeStrings[] = {
     "snp125FuncUnknownInclude",
+    "snp125FuncLocusInclude",
     "snp125FuncCodingInclude",
     "snp125FuncSynonInclude",
     "snp125FuncNonSynonInclude",
     "snp125FuncUntranslatedInclude",
     "snp125FuncIntronInclude",
     "snp125FuncSpliceInclude",
-    "snp125FuncExceptionInclude",
+    "snp125FuncReferenceInclude",
 };
 boolean snp125FuncIncludeDefault[] = {
+    TRUE,
     TRUE,
     TRUE,
     TRUE,
@@ -330,8 +390,10 @@ boolean snp125FuncIncludeCart[] = {
     TRUE,
     TRUE,
     TRUE,
+    TRUE,
 };
 
+// all of these sizes are the same
 int snp125FuncLabelsSize   = ArraySize(snp125FuncLabels);
 int snp125FuncStringsSize  = ArraySize(snp125FuncStrings);
 int snp125FuncDataNameSize = ArraySize(snp125FuncDataName);
@@ -342,4 +404,90 @@ int snp125FuncIncludeStringsSize     = ArraySize(snp125FuncIncludeStrings);
 /* minimum Average Heterozygosity cutoff  */
 
 float snp125AvHetCutoff = 0.0;
+
+
+/****** LocType related controls *******/
+/* Types: unknown, range, exact, between,
+          rangeInsertion, rangeSubstitution, rangeDeletion */
+
+char *snp125LocTypeLabels[] = {
+    "Unknown",
+    "Range",
+    "Exact",
+    "Between",
+    "RangeInsertion"
+    "RangeSubstitution"
+    "RangeDeletion"
+};
+char *snp125LocTypeStrings[] = {
+    "snp125LocTypeUnknown",
+    "snp125LocTypeRange",
+    "snp125LocTypeExact",
+    "snp125LocTypeBetween",
+    "snp125LocType",
+    "snp125LocType",
+    "snp125LocType",
+};
+char *snp125LocTypeDataName[] = {
+    "unknown",
+    "genomic",
+    "exact",
+    "between",
+    "rangeInsertion",
+    "rangeSubstitution",
+    "rangeDeletion",
+};
+char *snp125LocTypeDefault[] = {
+    "black",
+    "red",
+    "black",
+    "blue",
+    "green",
+    "green",
+    "green",
+};
+char *snp125LocTypeCart[] = {
+    "black",
+    "red",
+    "black",
+    "blue",
+    "green",
+    "green",
+    "green",
+};
+char *snp125LocTypeIncludeStrings[] = {
+    "snp125LocTypeUnknownInclude",
+    "snp125LocTypeRangeInclude",
+    "snp125LocTypeExactInclude",
+    "snp125LocTypeBetweenInclude",
+    "snp125LocTypeRangeInsertionInclude",
+    "snp125LocTypeRangeSubstitutionInclude",
+    "snp125LocTypeRangeDeletionInclude",
+};
+boolean snp125LocTypeIncludeDefault[] = {
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+};
+boolean snp125LocTypeIncludeCart[] = {
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+    TRUE,
+};
+
+// all of these sizes are the same
+int snp125LocTypeLabelsSize   = ArraySize(snp125LocTypeLabels);
+int snp125LocTypeStringsSize  = ArraySize(snp125LocTypeStrings);
+int snp125LocTypeDataNameSize = ArraySize(snp125LocTypeDataName);
+int snp125LocTypeDefaultSize  = ArraySize(snp125LocTypeDefault);
+int snp125LocTypeCartSize     = ArraySize(snp125LocTypeCart);
+int snp125LocTypeIncludeStringsSize  = ArraySize(snp125LocTypeIncludeStrings);
 
