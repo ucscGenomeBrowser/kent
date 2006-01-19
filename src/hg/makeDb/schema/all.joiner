@@ -1535,6 +1535,13 @@ identifier dbSnpRnId typeOf=dbSnpId
     hgFixed.dbSnpRsRn.rsId
     $rn.snpMap.name
 
+identifier hapmapLdSnpId external=dbSNP fuzzy
+"HapMap dbSNP ID"
+    $hg.hapmapLdCeu.name unique
+    $hg.hapmapLdChb.name unique
+    $hg.hapmapLdJpt.name unique
+    $hg.hapmapLdYri.name unique
+
 # Other NCBI Identifiers
 
 identifier locusLinkId external=LocusLink
