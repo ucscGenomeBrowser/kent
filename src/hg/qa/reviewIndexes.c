@@ -7,10 +7,20 @@ char *database = NULL;
 struct table
 {
     struct table *next;
+    int rowCount;
     char *name;
 };
 		
 struct table *tableList = NULL;
+
+int tableCmp(const void *va, const void *vb)
+{
+const struct table *a = *((struct table **)va);
+const struct table *b = *((struct table **)vb);
+int dif;
+dif = a->rowCount - b->rowCount;
+return dif;
+}
 
 void usage()
 /* Explain usage and exit. */
@@ -47,11 +57,25 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 slReverse(&list);  /* could possibly skip if it made much difference in speed. */
-verbose(2, "%d tables found\n", count);
+verbose(1, "%d tables found\n", count);
 return list;
 }
 
+void addRowcount()
+/* get the size of each table */
+{
+struct table *table1 = NULL;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
 
+for (table1 = tableList; table1 != NULL; table1 = table1->next)
+    {
+    table1->rowCount = sqlTableSize(conn, table1->name);
+    }
+verbose(1, "done with rowCount lookup\n");
+}
 
 void reviewIndexes()
 /* reviewIndexes - look at index for each table. */
@@ -82,8 +106,8 @@ for (table1 = tableList; table1 != NULL; table1 = table1->next)
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {  
-	if (strstr(row[4], "start") || strstr(row[4], "Start"))
-             printf("alter table %s drop index %s;\n", table1->name, row[2]);
+	// if (strstr(row[4], "start") || strstr(row[4], "Start"))
+             // printf("alter table %s drop index %s;\n", table1->name, row[2]);
 	if (strstr(row[4], "end") || strstr(row[4], "End"))
              printf("alter table %s drop index %s;\n", table1->name, row[2]);
 	} 
@@ -103,6 +127,8 @@ if (argc != 2)
 database = argv[1];
 hSetDb(database);
 tableList = getTables();
+addRowcount();
+slSort(&tableList, tableCmp);
 reviewIndexes();
 return 0;
 }
