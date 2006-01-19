@@ -433,6 +433,7 @@ else
 }
 
 
+#ifdef UNUSED
 struct hash *realiCloneHash;
 struct cloneInfo *realiCloneList;
 
@@ -517,7 +518,7 @@ if (realiCloneList == NULL)
 	}
     }
 }
-
+#endif /* UNUSED */
 
 struct hash *glCloneHash;
 struct cloneInfo *glCloneList = NULL;
