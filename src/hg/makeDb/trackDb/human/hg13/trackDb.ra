@@ -3,7 +3,7 @@ shortLabel Known Genes
 longLabel Known Genes Based on SWISS-PROT, TrEMBL, mRNA, and RefSeq
 group genes
 priority 34
-visibility off
+visibility hide
 color 12,12,120
 type genePred refPep refMrna
 hgGene off
