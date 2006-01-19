@@ -561,28 +561,28 @@ visibility hide
 canPack off
 type bed 4 +
 
+    track hapmapLdYri
+    subTrack hapmapLd off
+    shortLabel LD YRI
+    longLabel HapMap Linkage Disequilibrium for the Yoruban population (30 trios)
+    priority 1
+
     track hapmapLdCeu
     subTrack hapmapLd
     shortLabel LD CEU
     longLabel HapMap Linkage Disequilibrium for the CEPH population (30 trios)
-    priority 1
+    priority 2
 
     track hapmapLdChb
     subTrack hapmapLd off
     shortLabel LD CHB
     longLabel HapMap Linkage Disequilibrium for the Chinese Han population (45 unrelated)
-    priority 2
+    priority 3
 
     track hapmapLdJpt
     subTrack hapmapLd off
     shortLabel LD JPT
     longLabel HapMap Linkage Disequilibrium for the Japanese population (45 unrelated)
-    priority 3
-
-    track hapmapLdYri
-    subTrack hapmapLd off
-    shortLabel LD YRI
-    longLabel HapMap Linkage Disequilibrium for the Yoruban population (30 trios)
     priority 4
 
 track haplotype
