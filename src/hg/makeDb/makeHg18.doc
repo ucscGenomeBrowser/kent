@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.20 2006/01/19 01:22:47 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.21 2006/01/19 19:01:42 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -903,6 +903,74 @@ warn trf/*.bed  > lu.out 2>&1
 #	After fixing up hgCtgPos to accept the -chromLst argument, simply:
     cd /cluster/data/hg18
     hgCtgPos -chromLst=chrom.lst hg18 .
+
+# GOLD AND GAP TRACKS (DONE - 2005-12-10 - Fan)
+
+    ssh hgwdev
+    cd /cluster/data/hg18
+    hgGoldGapGl -noGl -chromLst=chrom.lst hg18 /cluster/data/hg18 .
+    #	Disappointing to see this create so many tables ...
+    #	_gap and _gold for each chrom
+
+# contig.gl ... section skipped for the time being.  (Fan 2005-12-13).
+
+#############################################################################
+# GC5BASE (DONE - 2005-12-13 - Fan)
+    ssh kkstore02
+    mkdir -p /cluster/data/hg18/bed/gc5Base
+    cd /cluster/data/hg18/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 hg18 \
+        /cluster/data/hg18/nib | wigEncode stdin gc5Base.wig gc5Base.wib
+
+    #   runs for about 17 minutes
+
+    #   load database
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/gc5Base
+    mkdir /gbdb/hg18/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/hg18/wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 gc5Base gc5Base.wig
+
+    #   verify index is correct:
+    hgsql hg18 -e "show index from gc5Base;"
+    #   should see good numbers in Cardinality column
+
+#########################################################################
+# GENBANK auto update (DONE 2005-12-13 Fan)
+    # align with revised genbank process. drop xeno ESTs.
+    cd ~/kent/src/hg/makeDb/genbank
+    cvs update -d etc
+    # edit etc/genbank.conf to add hg18
+
+# hg18
+hg18.serverGenome = /cluster/data/hg18/nib/chr*.nib
+hg18.clusterGenome = /scratch/hg/gs.18/build36/bothMaskedNibs/chr*.nib
+hg18.ooc = /scratch/hg/h/11.ooc
+hg18.lift = /cluster/store11/gs.19/build36/jkStuff/liftAll.lft
+hg18.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+hg18.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+hg18.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+hg18.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+#hg18.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+#hg18.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+#hg18.genbank.est.xeno.load = yes
+hg18.refseq.mrna.xeno.load  = yes
+hg18.refseq.mrna.xeno.loadDesc = yes
+hg18.mgcTables.default = full
+hg18.mgcTables.mgc = all
+hg18.downloadDir = hg18
+
+    # update /cluster/data/genbank/
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial hg18 &
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad  hg18&
 
 # PRODUCING GENSCAN PREDICTIONS (DONE - 2005-12-16 - Fan)
     
