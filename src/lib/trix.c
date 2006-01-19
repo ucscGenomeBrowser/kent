@@ -308,11 +308,11 @@ struct trixHitPos *hit;
 int hitIx, maxHits = 8;
 
 printf("%d matches to %s:", slCount(twr->hitList), twr->word);
-for (hit=twr->hitList, hitIx=0; hit != NULL & hitIx < maxHits; hit=hit->next, hitIx+=1)
-    printf(" %s", hit->itemId);
+for (hit=twr->hitList, hitIx=0; hit != NULL && hitIx < maxHits; hit=hit->next, hitIx+=1)
+    printf(" %s@%d", hit->itemId, hit->wordIx);
 if (hit != NULL)
     printf(" ...");
-printf("\n");
+printf("<BR>\n");
 }
 #endif /* DEBUG */
 
@@ -427,6 +427,23 @@ for (;;)
 	    }
 	}
     }
+} 
+
+static int findWordPos(struct trixWordResult *twrList, char *itemId)
+/* Figure out the first word position.  For multiple words, this
+ * will be the maximimum first word position of all words. 
+ * This assumes that the hits are sorted by word position
+ * within a document. */
+{
+int firstWordPos = 0;
+struct trixWordResult *twr;
+for (twr = twrList; twr != NULL; twr = twr->next)
+    {
+    int pos = twr->hit->wordIx;
+    if (firstWordPos < pos)
+        firstWordPos = pos;
+    }
+return firstWordPos;
 }
 
 static int findOrderedSpan(struct trixWordResult *twrList,
@@ -494,6 +511,7 @@ for (;;)
 	ts->itemId = cloneString(itemId);
 	ts->unorderedSpan = findUnorderedSpan(twrList, itemId);
 	ts->orderedSpan = findOrderedSpan(twrList, itemId);
+	ts->wordPos = findWordPos(twrList, itemId);
 	slAddHead(&tsList, ts);
 	}
     seekAllPastId(twrList, itemId);
@@ -512,7 +530,12 @@ const struct trixSearchResult *b = *((struct trixSearchResult **)vb);
 int dif;
 dif = a->unorderedSpan - b->unorderedSpan;
 if (dif == 0)
+   {
    dif = a->orderedSpan - b->orderedSpan;
+   if (dif == 0)
+       dif = a->wordPos - b->wordPos;
+   }
+       
 return dif;
 }
 
@@ -529,17 +552,23 @@ boolean gotMiss = FALSE;
 if (wordCount == 1)
     {
     struct trixHitPos *hit;
+    char *lastId = "";
     twr = twrList = trixSearchWordResults(trix, words[0]);
     if (twr == NULL)
         return NULL;
     for (hit = twr->hitList; hit != NULL; hit = hit->next)
         {
-	AllocVar(ts);
-	ts->itemId = hit->itemId;	/* Transfer itemId */
-	hit->itemId = NULL;
-	ts->orderedSpan = 1;
-	ts->unorderedSpan = 1;
-	slAddHead(&tsList, ts);
+	if (!sameString(lastId, hit->itemId))
+	    {
+	    lastId = hit->itemId;
+	    AllocVar(ts);
+	    ts->itemId = hit->itemId;	/* Transfer itemId */
+	    hit->itemId = NULL;
+	    ts->orderedSpan = 1;
+	    ts->unorderedSpan = 1;
+	    ts->wordPos = hit->wordIx;
+	    slAddHead(&tsList, ts);
+	    }
 	}
     }
 else
