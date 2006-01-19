@@ -7,7 +7,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: elTreeBuild.c,v 1.4 2006/01/15 22:23:57 braney Exp $";
+static char const rcsid[] = "$Id: elTreeBuild.c,v 1.5 2006/01/19 00:15:14 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -33,19 +33,6 @@ static struct optionSpec options[] = {
 
 
 
-struct element *newElement(struct genome *g, char *name, char *version)
-{
-struct element *e;
-
-AllocVar(e);
-e->genome = g;
-e->species = g->name;
-e->name = name;
-e->version = version;
-slAddHead(&g->elements, e);
-
-return e;
-}
 
 void assignElements(struct phyloTree *tree, struct hash *genomeHash)
 {
@@ -98,16 +85,34 @@ struct genome *genome;
 for(ii=0; ii < node->numEdges; ii++)
     nameNodes(node->edges[ii]);
 
-if (node->numEdges && (node->ident->name == NULL))
+if (node->numEdges) // && (node->ident->name == NULL))
     {
-    dyStringPrintf(dy, "[");
-    for(ii=0; ii < node->numEdges; ii++)
+    if (1)
 	{
-	dyStringPrintf(dy, "%s",node->edges[ii]->ident->name);
-	if (ii < node->numEdges - 1)
-	    dyStringPrintf(dy, "+");
+	dyStringPrintf(dy, "%s",node->edges[0]->ident->name);
+	if (node->parent)
+	{
+	if (node->parent->numEdges == 1)
+	    {
+	    if ((dy->string[strlen(dy->string) - 1 ] != 'D') )
+		printf("bad treed %s %s %d\n",dy->string, node->parent->ident->name, node->parent->numEdges);
+	    }
+	else if ((dy->string[strlen(dy->string) - 1 ] != '0') &&(dy->string[strlen(dy->string) - 1 ] != '1') )
+	    printf("bad treey %s\n",dy->string);
+	    }
+	dy->string[strlen(dy->string) - 1 ] = 0;
 	}
-    dyStringPrintf(dy, "]");
+    else
+	{
+	dyStringPrintf(dy, "[");
+	for(ii=0; ii < node->numEdges; ii++)
+	    {
+	    dyStringPrintf(dy, "%s",node->edges[ii]->ident->name);
+	    if (ii < node->numEdges - 1)
+		dyStringPrintf(dy, "+");
+	    }
+	dyStringPrintf(dy, "]");
+	}
 
     node->ident->name = cloneString(dy->string);
     }
@@ -179,51 +184,6 @@ for (list = hashFindVal(distElemHash, buffer); list; list = list->next)
     }
 }
 
-
-void assignElemNums(struct phyloTree *node)
-{
-struct genome *g = node->priv;
-struct element *e;
-int ii;
-
-for(ii=0, e = g->elements; e ; ii++, e= e->next)
-    e->count = ii;
-
-for(ii=0; ii < node->numEdges; ii++)
-    assignElemNums(node->edges[ii]);
-}
-
-void outElems(FILE *f, struct phyloTree *node)
-{
-struct genome *g = node->priv;
-struct element *e;
-int ii;
-
-for(ii = 0, e = g->elements; e; ii++,e = e->next)
-    ;
-fprintf(f, ">%s %d %d %g\n",g->name, ii, node->numEdges, node->ident->length);
-
-for(e = g->elements; e; e = e->next)
-    {
-    if (e->isFlipped)
-	fprintf(f, "-");
-    fprintf(f,"%s.%s %d ",e->name,e->version, (e->parent) ? e->parent->count + 1 : 0 );
-    }
-fprintf(f,"\n");
-
-for(ii=0; ii < node->numEdges; ii++)
-    outElems(f, node->edges[ii]);
-}
-
-void outElementTrees(FILE *f, struct phyloTree *node)
-{
-struct genome *g = node->priv;
-struct element *e;
-int ii;
-
-assignElemNums(node);
-outElems(f, node);
-}
 
 void fillParents(struct phyloTree *node)
 {
@@ -394,14 +354,22 @@ for(d = distanceList; d ; d = d->next)
 
 	AllocVar(newNode);
 	AllocVar(newNode->ident);
-	safef(buffer, sizeof(buffer), "D_%s",node->ident->name) ;
+	//if (1)
+	    //{
+	    //safef(buffer, sizeof(buffer), "%s", node->ident->name);
+	    //if (buffer[strlen(buffer) -1] != 'D')
+		//errAbort("more bad tree %s",buffer);
+	    //buffer[strlen(buffer) - 1] = 0;
+	    //}
+	//else
+	    safef(buffer, sizeof(buffer), "D_%s",node->ident->name) ;
 	newNode->ident->name = cloneString(buffer);
 	phyloDeleteEdge(node->parent, node);
 	phyloAddEdge(node->parent, newNode);
 	phyloAddEdge( newNode, node);
 
-	newNode->ident->length = dist/2;
-	node->ident->length -= dist/2;
+	newNode->ident->length = node->ident->length - dist/2;
+	node->ident->length = dist/2;
 //	printf("new dist  %g\n",newNode->ident->length + node->ident->length);
 	}
 
@@ -573,7 +541,7 @@ do
 	    break;
 	    }
 	else
-	    errAbort("not finding dup node %g",dist);
+	    errAbort("not finding dup node dist %g node %s",dist,node->ident->name);
 	}
     } while(d);
 
