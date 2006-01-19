@@ -104,7 +104,6 @@ else
     {
     safef(query, sizeof(query), "select %s,%s from %s", keyField, valField, table);
     }
-verbose(2,"%s\n",query);    
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -119,8 +118,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    hashAdd(uniqHash, row[1], NULL);
 	}
     hashAdd(hash, row[0], cloneString(row[1]));
-    //debug
-    verbose(2,"%s %s\n",row[0],row[1]);
     }
 sqlFreeResult(&sr);
 }
@@ -273,8 +270,7 @@ for (known = knownList; known != NULL; known = known->next)
 
 createTable(hConn, outTable);
 hgLoadTabFile(hConn, tempDir, outTable, &f);
-// restore this!
-//debug: hgRemoveTabFile(tempDir, outTable);
+hgRemoveTabFile(tempDir, outTable);
 }
 
 int main(int argc, char *argv[])
