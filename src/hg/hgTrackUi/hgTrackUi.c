@@ -29,7 +29,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.245 2006/01/18 00:02:25 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.246 2006/01/19 22:22:46 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -375,7 +375,7 @@ hapmapLdYri_inv = cartUsualBoolean(cart, "hapmapLdYri_inv", ldInvertDefault);
 printf("<BR><B>LD Values:</B><BR>&nbsp;&nbsp;\n");
 
 cgiMakeRadioButton("ldValues", "rsquared", sameString("rsquared", ldValue));
-printf("&nbsp;r^2&nbsp;&nbsp;");
+printf("&nbsp;r<sup>2</sup>&nbsp;&nbsp;");
 cgiMakeRadioButton("ldValues", "dprime",   sameString("dprime",   ldValue));
 printf("&nbsp;D'&nbsp;&nbsp;");
 cgiMakeRadioButton("ldValues", "lod",      sameString("lod",      ldValue));
