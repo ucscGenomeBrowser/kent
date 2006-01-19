@@ -5,7 +5,7 @@
 #include "options.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.9 2006/01/18 23:42:16 kent Exp $";
+static char const rcsid[] = "$Id: testSearch.c,v 1.10 2006/01/19 01:38:41 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -40,9 +40,6 @@ void testSearch(char *inFile, int wordCount, char *words[])
 {
 struct trix *trix;
 char ixFile[PATH_LEN];
-struct trixWordResult *twr;
-struct trixHitPos *hit;
-struct trixWordResult *twrList = NULL;
 struct trixSearchResult *tsList, *ts;
 int i;
 
@@ -52,6 +49,8 @@ for (i=0; i<wordCount; ++i)
 trix = trixOpen(ixFile);
 tsList = trixSearch(trix, wordCount, words);
 dumpTsList(tsList);
+trixSearchResultFreeList(&tsList);
+trixClose(&trix);
 }
 
 int main(int argc, char *argv[])
