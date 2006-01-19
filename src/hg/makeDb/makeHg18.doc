@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.19 2006/01/18 22:07:14 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.20 2006/01/19 01:22:47 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -2457,6 +2457,77 @@ s
     para try ... check ... push ... etc ...
     #	running 2006-01-17  16:41
 
+    #	We need the phase information from the sequence.inf file:
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/coverage
+    cp /cluster/data/hg17/phase.pl .
+    #	this script was fixed up for hg18 to take an argument to the
+    #	sequence.inf file:
+    ./phase.pl /cluster/data/hg18/ncbi/sequence.inf > phase.txt
+    #	what kind of phases do we have:
+    awk '{print $2}' phase.txt | sort | uniq -c
+    #	  1134 D
+    #	562513 F
+    #	 17270 P
+    #	Compared to hg17 we had:
+    awk '{print $2}' /cluster/data/hg17/phase.txt | sort | uniq -c
+    #	  1088 D
+    #	146900 F
+    #	 17300 P
+
+    #	Back in the kluster runPlaced directory, we put together the
+    #	kluster run results with:
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/coverage/runPlaced/filteredLifted
+    cd /san/sanvol1/scratch/hg18/coverage/runPlaced/filteredLifted
+
+    cat << '_EOF_' > filterLift.sh
+#!/bin/sh
+
+for C in 22
+do
+    echo -n "chr${C} working ... "
+    mkdir -p ${C}
+    OUT="${C}/filterLift.out"
+    pslSort dirs ${C}/raw.psl tmp ../psl/${C}/N* > ${OUT} 2>&1
+    pslReps -singleHit -nearTop=0.001 ${C}/raw.psl ${C}/repsSingle.psl \
+        /dev/null >> ${OUT} 2>&1
+    liftUp ${C}/chr${C}.psl ../../maskedContigs/liftContigs.lft warn \
+        ${C}/repsSingle.psl >> ${OUT} 2>&1
+    clusterClone -agp -minCover=80 -maxGap=60000 ${C}/repsSingle.psl \
+        > ${C}/single.agp 2>> ${OUT} 2>&1
+    liftUp ${C}/rawLifted.psl ../../maskedContigs/liftContigs.lft warn \
+        ${C}/raw.psl >> ${OUT} 2>&1
+    clusterClone -agp -minCover=80 -maxGap=60000 ${C}/chr${C}.psl \
+        > ${C}/chr${C}.bed 2>> ${OUT}
+    echo "done"
+done
+'_EOF_'
+    #	happy emacs
+    chmod +x filterLift.sh
+    time ./filterLift.sh
+
+    cp /cluster/data/hg17/fixPhase.pl .
+    #	fixed up the script to take an argument pointing to the phase.txt file
+
+    ssh kkstore02
+    cd /cluster/data/hg18
+    grep "for_assembly" ncbi/sequence.inf \
+	| sed -e "s/\tW\t/\t3\t/;" > sequence.inf
+    cd /cluster/store11/gs.19/ffa
+    ln -s ../build36/sequence.inf .
+
+    ssh hgwdev
+    cd /cluster/data/hg18
+    #	currently working only on chr22
+    echo "22" > clonePos.list
+    #	need to reload gold gap *and* gl at this time.  gl wasn't loaded
+    #	before this.  It is required for the clonePos track.
+    hgGoldGapGl -chrom=chr22 hg18 /cluster/store11/gs.19 build36
+    hgClonePos  -maxErr=3 -maxWarn=2000 -chromLst=clonePos.list \
+        hg18 /cluster/data/hg18 ./sequence.inf /cluster/store11/gs.19 \
+        2> clone.pos.errors
+
 ###########################################################################
 # FISH CLONES (WORKING - 2006-01-13 - Hiram)
 # The STS Marker, Coverage, and BAC End Pairs tracks must be completed prior to 
@@ -2515,6 +2586,21 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
+    #	real    640m37.637s
+
+    ssh kolossus
+    cd /cluster/data/hg18/bed/blastzSelf.2006-01-17
+    time HGDB_CONF=~/.hg.conf.read-only featureBits \
+	-noRandom -noHap hg18 chainSelfLink > fb.chainSelfLink 2>&1 &
+    #	real    21m52.697s
+    #	324067552 bases of 2858034764 (11.339%) in intersection
+
+    #	compared to Hg17:
+    cd /cluster/data/hg17/bed/blastzSelf.2004-07-01
+    time HGDB_CONF=~/.hg.conf.read-only featureBits \
+	-noRandom -noHap hg17 chainSelfLink > fb.chainSelfLink 2>&1 &
+    #	real    56m34.802s
+    #	240976607 bases of 2851352871 (8.451%) in intersection
 
 ##############################################################################
 # CLONE ENDS - BACEND TRACK (DONE - 2006-01-11 - Fan)
