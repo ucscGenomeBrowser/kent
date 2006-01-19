@@ -16,7 +16,6 @@ struct trixSearchResult
     {
     struct trixSearchResult *next;
     char *itemId;               /* ID of matching item */
-    bool inSameDoc;             /* True if have matches all in same doc. */
     int unorderedSpan;          /* Minimum span in single doc with words in any order. */
     int orderedSpan;            /* Minimum span in single doc with words in search order. */
     };
@@ -32,4 +31,10 @@ void trixClose(struct trix **pTrix);
 struct trixSearchResult *trixSearch(struct trix *trix, int wordCount, char **words);
 /* Return a list of items that match all words.  This will be sorted so that
  * multiple-word matches where the words are closer to each other and in the
- * right order will be first. */
+ * right order will be first.  Do a trixSearchResultFreeList when done. */
+
+void trixSearchResultFree(struct trixSearchResult **pTsr);
+/* Free up data associated with trixSearchResult. */
+
+void trixSearchResultFreeList(struct trixSearchResult **pList);
+/* Free up a list of trixSearchResults. */

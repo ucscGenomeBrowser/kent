@@ -6,7 +6,6 @@
 #include "linefile.h"
 #include "trix.h"
 
-
 /* Some local structures for the search. */
 struct trixHitPos 
 /* A hit to the index. */
@@ -21,7 +20,7 @@ struct trixWordResult
     {
     struct trixWordResult *next;
     char *word;			/* Word name. */
-    struct trixHitPos *hitList;	/* Hit list.  May be shared. */
+    struct trixHitPos *hitList;	/* Hit list.  May be shared (not allocated here). */
     struct trixHitPos *hit;	/* Current position while iterating through hit list. */
     struct trixHitPos *iHit;	/* Current position during an inner iteration. */
     };
@@ -32,6 +31,100 @@ struct trixIxx
     off_t pos;	   /* Position where prefix first occurs in file. */
     char prefix[trixPrefixSize];/* Space padded first five letters of what we're indexing. */
     };
+
+/* Some cleanup code. */
+
+static void trixHitPosFree(struct trixHitPos **pPos)
+/* Free up trixHitPos. */
+{
+struct trixHitPos *pos = *pPos;
+if (pos != NULL)
+    {
+    freeMem(pos->itemId);
+    freez(pPos);
+    }
+}
+
+static void trixHitPosFreeList(struct trixHitPos **pList)
+/* Free up a list of trixHitPoss. */
+{
+struct trixHitPos *el, *next;
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    trixHitPosFree(&el);
+    }
+*pList = NULL;
+}
+
+static void trixWordResultFree(struct trixWordResult **pTwr)
+/* Free up a trixWordResult */
+{
+struct trixWordResult *twr = *pTwr;
+if (twr != NULL)
+    {
+    freeMem(twr->word);
+    freez(pTwr);
+    }
+}
+
+static void trixWordResultFreeList(struct trixWordResult **pList)
+/* Free up a list of trixWordResults. */
+{
+struct trixWordResult *el, *next;
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    trixWordResultFree(&el);
+    }
+*pList = NULL;
+}
+
+static void freeHitCallback(void *val)
+/* Val is actually list trixHitPos.  This called to free stuff in hash. */
+{
+struct trixHitPos *posList = val;
+trixHitPosFreeList(&posList);
+}
+
+void trixClose(struct trix **pTrix)
+/* Close up index and free up associated resources. */
+{
+struct trix *trix = *pTrix;
+if (trix != NULL)
+    {
+    freeMem(trix->ixx);
+    hashTraverseVals(trix->wordHitHash, freeHitCallback);
+    hashFree(&trix->wordHitHash);	/* Need to free items? */
+    freez(pTrix);
+    }
+}
+
+void trixSearchResultFree(struct trixSearchResult **pTsr)
+/* Free up data associated with trixSearchResult. */
+{
+struct trixSearchResult *tsr = *pTsr;
+if (tsr != NULL)
+    {
+    freeMem(tsr->itemId);
+    freez(pTsr);
+    }
+}
+
+void trixSearchResultFreeList(struct trixSearchResult **pList)
+/* Free up a list of trixSearchResults. */
+{
+struct trixSearchResult *el, *next;
+for (el = *pList; el != NULL; el = next)
+    {
+    next = el->next;
+    trixSearchResultFree(&el);
+    }
+*pList = NULL;
+}
+
+
+/* Code that makes, rather than cleans up. */
 
 static char unhexTable[128];	/* Lookup table to help with hex conversion. */
 
@@ -426,7 +519,7 @@ return dif;
 struct trixSearchResult *trixSearch(struct trix *trix, int wordCount, char **words)
 /* Return a list of items that match all words.  This will be sorted so that
  * multiple-word matches where the words are closer to each other and in the
- * right order will be first. */
+ * right order will be first.  Do a trixSearchResultFreeList when done. */
 {
 struct trixWordResult *twr, *twrList = NULL;
 struct trixSearchResult *ts, *tsList = NULL;
@@ -436,7 +529,7 @@ boolean gotMiss = FALSE;
 if (wordCount == 1)
     {
     struct trixHitPos *hit;
-    twr = trixSearchWordResults(trix, words[0]);
+    twr = twrList = trixSearchWordResults(trix, words[0]);
     if (twr == NULL)
         return NULL;
     for (hit = twr->hitList; hit != NULL; hit = hit->next)
@@ -471,7 +564,9 @@ else
 	tsList = findMultipleWordHits(twrList);
 	}
     }
+trixWordResultFreeList(&twrList);
 slSort(&tsList, trixSearchResultCmp);
 return tsList;
 }
+
 
