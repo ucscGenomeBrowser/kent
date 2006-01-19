@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.55 2006/01/19 07:22:26 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.56 2006/01/19 23:40:43 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -940,15 +940,13 @@ if (vis==tvDense||(tg->limitedVisSet&&tg->limitedVis==tvDense))
 else if (winEnd-winStart<250000)
     tg->height = insideWidth/2;
 else
-    tg->height = (int)(insideWidth*(250000.0/2.0)/(winEnd-winStart));
+    tg->height = max((int)(insideWidth*(250000.0/2.0)/(winEnd-winStart)),tg->lineHeight);
 return tg->height;
 }
 
 void initColorLookup(struct vGfx *vg, boolean isDprime)
 {
 ldShadesInit(vg, isDprime);
-colorLookup[(int)'y'] = ldHighLodLowDprime; /* LOD error case */
-colorLookup[(int)'z'] = ldHighDprimeLowLod; /* LOD error case */
 colorLookup[(int)'a'] = ldShadesPos[0];
 colorLookup[(int)'b'] = ldShadesPos[1];
 colorLookup[(int)'c'] = ldShadesPos[2];
@@ -959,6 +957,8 @@ colorLookup[(int)'g'] = ldShadesPos[6];
 colorLookup[(int)'h'] = ldShadesPos[7];
 colorLookup[(int)'i'] = ldShadesPos[8];
 colorLookup[(int)'j'] = ldShadesPos[9];
+colorLookup[(int)'y'] = ldHighLodLowDprime; /* LOD error case */
+colorLookup[(int)'z'] = ldHighDprimeLowLod; /* LOD error case */
 }
 
 
@@ -1287,11 +1287,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	}
     }
 if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
-    {
     ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
-    ldDrawLeftLabels(tg, seqStart, seqEnd, vg, xOff, yOff, width, tg->lineHeight, 
-		     withCenterLabels, font, color, vis);
-    }
 }
 
 void ldFreeItems(struct track *tg)
