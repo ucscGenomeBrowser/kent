@@ -5,7 +5,7 @@
 #include "gbVerb.h"
 #include "refPepRepair.h"
 
-static char const rcsid[] = "$Id: repairExtFile.c,v 1.1 2005/05/14 19:57:14 markd Exp $";
+static char const rcsid[] = "$Id: repairExtFile.c,v 1.2 2006/01/20 19:25:34 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -30,6 +30,9 @@ errAbort("%s\n\n"
          "\n"
          "Options:\n"
          "  -verbose=n\n"
+         "           1 - stats only\n"
+         "           2 - sequences repaired\n"
+         "          >3 - sql trace\n"
          "  -dryRun - don't actually update the database\n",
          msg);
 }

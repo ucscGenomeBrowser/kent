@@ -6,8 +6,9 @@
 #include "gbFa.h"
 #include "extFileTbl.h"
 #include "seqTbl.h"
+#include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: refPepRepair.c,v 1.3 2006/01/14 07:59:30 markd Exp $";
+static char const rcsid[] = "$Id: refPepRepair.c,v 1.4 2006/01/20 19:25:33 markd Exp $";
 
 struct brokenRefPep
 /* data about a refPep with broken extFile link */
@@ -31,6 +32,7 @@ struct brokenRefPepTbl
     struct hash *protPathHash;    /* hash of protPathNew, doesn't point
                                    * to anything. */
     int numToRepair;              /* number that need repaired */
+    int numToDrop;                /* number that need dropped */
 };
 
 static struct brokenRefPep *brokenRefPepNew(struct brokenRefPepTbl *brpTbl,
@@ -80,9 +82,7 @@ safef(query, sizeof(query),
       "where refLink.protAcc=\"%s\" and gbSeq.acc=refLink.mrnaAcc and gbSeq.gbExtFile=gbExtFile.id",
       brp->protAcc);
 sr= sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) == NULL)
-    gbVerbPr(1, "Note: no mRNA found for refPep %s", brp->protAcc); 
-else
+if ((row = sqlNextRow(sr)) != NULL)
     {
     struct hashEl *hel;
     char protPath[PATH_LEN];
@@ -94,6 +94,8 @@ else
     brp->mrnaAcc = cloneString(row[0]);
     brpTbl->numToRepair++;
     }
+else
+    brpTbl->numToDrop++;
 sqlFreeResult(&sr);
 }
 
@@ -173,12 +175,26 @@ while ((hel = hashNext(&cookie)) != NULL)
 static void refPepRepairOne(struct sqlConnection *conn,
                             struct brokenRefPep *brp,
                             struct seqTbl* seqTbl,
-                            struct extFileTbl* extFileTbl)
+                            struct extFileTbl* extFileTbl,
+                            boolean dryRun)
 /* repair a refPep */
 {
 HGID newFaId = extFileTblGet(extFileTbl, conn, brp->protPathNew);
-seqTblMod(seqTbl, brp->protSeqId, 0, newFaId,
-          brp->seqSize, brp->fileOff, brp->recSize);
+gbVerbPr(2, "repair %s", brp->protAcc);
+if (!dryRun)
+    seqTblMod(seqTbl, brp->protSeqId, 0, newFaId,
+              brp->seqSize, brp->fileOff, brp->recSize);
+}
+
+static void refPepDropOne(struct sqlConnection *conn,
+                          struct brokenRefPep *brp,
+                          struct sqlDeleter* seqTblDeleter,
+                          boolean dryRun)
+/* drop a refPep */
+{
+gbVerbPr(2, "drop %s", brp->protAcc);
+if (!dryRun)
+    sqlDeleterAddAcc(seqTblDeleter, brp->protAcc);
 }
 
 static void makeRepairs(struct sqlConnection *conn,
@@ -186,34 +202,45 @@ static void makeRepairs(struct sqlConnection *conn,
                         boolean dryRun)
 /* make repairs once data is collected */
 {
+static char *tmpDir = "/var/tmp";
 struct hashCookie cookie;
 struct hashEl *hel;
 int repairCnt = 0;
-struct seqTbl* seqTbl = seqTblNew(conn, "/var/tmp", (gbVerbose > 2));
+int dropCnt = 0;
+struct seqTbl* seqTbl = seqTblNew(conn, tmpDir, (gbVerbose > 3));
+struct sqlDeleter* seqTblDeleter = sqlDeleterNew(tmpDir, (gbVerbose > 3));
 struct extFileTbl* extFileTbl = extFileTblLoad(conn);
 
 cookie = hashFirst(brpTbl->protAccHash);
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct brokenRefPep *brp = hel->val;
-    if (brp->fileOff >= 0)
+    if ((brp->mrnaAcc != NULL) && (brp->fileOff >= 0))
         {
-        gbVerbPr(2, "repair %s", brp->protAcc);
-        if (!dryRun)
-            {
-            refPepRepairOne(conn, brp, seqTbl, extFileTbl);
-            repairCnt++;
-            }
+        refPepRepairOne(conn, brp, seqTbl, extFileTbl, dryRun);
+        repairCnt++;
+        }
+    else
+        {
+        refPepDropOne(conn, brp, seqTblDeleter, dryRun);
+        dropCnt++;
         }
     }
 if (dryRun)
+    {
     gbVerbMsg(1, "%s: would have repaired %d refseq protein gbExtFile entries", 
               sqlGetDatabase(conn), repairCnt);
+    gbVerbMsg(1, "%s: would have dropped %d refseq protein gbExtFile entries", 
+              sqlGetDatabase(conn), dropCnt);
+    }
 else
     {
     seqTblCommit(seqTbl, conn);
     gbVerbMsg(1, "%s: repaired %d refseq protein gbExtFile entries",
               sqlGetDatabase(conn), repairCnt);
+    sqlDeleterDel(seqTblDeleter, conn, SEQ_TBL, "acc");
+    gbVerbMsg(1, "%s: dropped %d refseq protein gbExtFile entries",
+              sqlGetDatabase(conn), dropCnt);
     }
 }
 
@@ -248,10 +275,12 @@ cookie = hashFirst(brpTbl->protAccHash);
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct brokenRefPep *brp = hel->val;
-    fprintf(outFh, "%s\n", brp->protAcc);
+    fprintf(outFh, "%s\t%s\n", brp->protAcc, (brp->mrnaAcc != NULL)? "repair" : "drop");
     }
 gbVerbMsg(1, "%s: need to repair %d refseq protein gbExtFile entries",
           sqlGetDatabase(conn), brpTbl->numToRepair);
+gbVerbMsg(1, "%s: need to drop %d refseq protein gbExtFile entries",
+          sqlGetDatabase(conn), brpTbl->numToDrop);
 }
 
 void refPepRepair(struct sqlConnection *conn,
