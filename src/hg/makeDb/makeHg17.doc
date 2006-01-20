@@ -11165,6 +11165,21 @@ hgsql kgHg17B -e 'load data local infile "chromInfo.tab" into table chromInfo ig
     cp -p hg17GeneList.html /usr/local/apache/htdocs/goldenPath
 # Check this html file into CVS.
 
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.
+
+     ssh hgwdev
+     cd /cluster/data/hg17/bed/kgHg17F
+     mkdir index
+     cd index
+     hgKgGetText hg17 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/data/hg17/bed/kgHg17F/index/knownGene.ix /gbdb/hg17/knownGene.ix
+     ln -s /cluster/data/hg17/bed/kgHg17F/index/knownGene.ixx /gbdb/hg17/knownGene.ixx
+
+
+
 # UPDATE TABLES NEEDED BY hgGene (DONE 11/30/04 Fan)
 
 # UPDATE BioCyc TABLES

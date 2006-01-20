@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.41 2006/01/18 20:01:35 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.42 2006/01/20 01:24:50 kent Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -10173,6 +10173,19 @@ end
    hgsql mm7 -e 'load data local infile "cgapAlias.tab" into table cgapAlias'
    hgsql mm7 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
    hgsql mm7 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
+
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.
+
+     ssh hgwdev
+     cd /cluster/data/mm7/bed/kgMm7A
+     mkdir index
+     cd index
+     hgKgGetText mm7 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/data/mm7/bed/kgMm7A/index/knownGene.ix /gbdb/mm7/knownGene.ix
+     ln -s /cluster/data/mm7/bed/kgMm7A/index/knownGene.ixx /gbdb/mm7/knownGene.ixx
 
 # BUILD KNOWN GENE LIST FOR GOOGLE.  DONE 11/28/05 Fan.
 
