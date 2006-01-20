@@ -91,13 +91,7 @@ if (fromProbePsl)
 	"select distinct kg.%s,ip.%s from %s ip, knownGene kg"
 	" where kg.chrom = ip.tName"
 	"   and kg.strand = ip.strand"
-	"   and ("
-	"((kg.txStart <= ip.tStart) and (ip.tStart < kg.txEnd))"
-	" or "
-	"((kg.txStart < ip.tEnd) and (ip.tEnd <= kg.txEnd))"
-	" or "
-	"((kg.txStart > ip.tStart) and (ip.tEnd > kg.txEnd))"
-	")"
+	"   and ((kg.txStart < ip.tEnd) and (ip.tStart < kg.txEnd))"
 	, keyField, valField, table);
     }
 else
