@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: hgKgGetText.c,v 1.1 2006/01/19 16:32:27 kent Exp $";
+static char const rcsid[] = "$Id: hgKgGetText.c,v 1.2 2006/01/20 02:20:58 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,6 +20,8 @@ errAbort(
   "   hgKgGetText database out.txt\n"
   );
 }
+
+boolean gotRefSeqSummary;
 
 static struct optionSpec options[] = {
    {NULL, 0},
@@ -111,15 +113,20 @@ struct hash *uniqHash = hashNew(0);
 char *spAcc = spFindAcc(spConn, kg->swissProt);
 
 fprintf(f, "%s", kg->name);
+
+addSimple(kg->name, "kgXref", "kgID", "geneSymbol", conn, uniqHash, f);
 addSimple(kg->name, "kgAlias", "kgID", "alias", conn, uniqHash, f);
 addSimple(kg->name, "kgProtAlias", "kgID", "alias", conn, uniqHash, f);
 addSimple(kg->name, "kgXref", "kgID", "description", conn, uniqHash, f);
 
-safef(query, sizeof(query),
-    "select refSeqSummary.summary from kgXref,refSeqSummary "
-    "where kgXref.kgID='%s' and refSeqSummary.mrnaAcc=kgXref.refseq"
-    , kg->name);
-addText(query, conn, f);
+if (gotRefSeqSummary)
+    {
+    safef(query, sizeof(query),
+	"select refSeqSummary.summary from kgXref,refSeqSummary "
+	"where kgXref.kgID='%s' and refSeqSummary.mrnaAcc=kgXref.refseq"
+	, kg->name);
+    addText(query, conn, f);
+    }
 
 safef(query, sizeof(query),
     "select commentVal.val from comment,commentVal "
@@ -147,6 +154,10 @@ struct sqlConnection *conn = sqlConnect(database);
 struct sqlConnection *spConn = sqlConnect("uniProt");
 struct sqlConnection *goConn = sqlConnect("go");
 struct kgInfo *kgList = NULL, *kg;
+
+gotRefSeqSummary = sqlTableExists(conn, "refSeqSummary");
+if (!gotRefSeqSummary)
+    warn("No refSeqSummary table in %s, proceeding without...", database);
 
 kgList = getKgList(conn);
 verbose(1, "Read in %d known genes from %s\n", slCount(kgList), database);
