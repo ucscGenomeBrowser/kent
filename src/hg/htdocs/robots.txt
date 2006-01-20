@@ -7,6 +7,7 @@ Disallow: /qa/
 User-agent: GoogleBot
 Disallow: /admin/
 Disallow: /goldenPath/
+Disallow: /qa/
 User-agent: htdig
 Disallow: /admin/
 Disallow: /goldenPath/
