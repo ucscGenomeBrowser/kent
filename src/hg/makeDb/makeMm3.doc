@@ -2402,6 +2402,21 @@ o Build protein aliases
 
 	load data local infile "kgProtAliasBoth.tab" into table mm3.kgProtAlias;
 
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.  The hgKgGetText takes
+# about 5 minutes when the database is not too busy.  The rest
+# is real quick.
+     ssh hgwdev
+     cd /cluster/data/mm3/bed/
+     mkdir -p kgMm3/index
+     cd kgMm3/index
+     hgKgGetText mm3 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/data/mm3/bed/kgMm3/index/knownGene.ix /gbdb/mm3/knownGene.ix
+     ln -s /cluster/data/mm3/bed/kgMm3/index/knownGene.ixx /gbdb/mm3/knownGene.ixx
+
+
 ######## MAKING FOLDUTR TABLES #######
 #
 # First set up directory structure and extract UTR sequence on hgwdev

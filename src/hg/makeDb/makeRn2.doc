@@ -1388,4 +1388,18 @@ o - Rescuing STS track:
      - rm contig.psl
      - mv chrom.psl ../convert.psl
 
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.  The hgKgGetText takes
+# about 5 minutes when the database is not too busy.  The rest
+# is real quick.
+     ssh hgwdev
+     cd /cluster/data/rn2/bed
+     mkdir -p knownGene/index
+     cd -p knownGene/index
+     hgKgGetText rn2 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/data/rn2/bed/knownGene/index/knownGene.ix /gbdb/rn2/knownGene.ix
+     ln -s /cluster/data/rn2/bed/knownGene/index/knownGene.ixx /gbdb/rn2/knownGene.ixx
+
 

@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.42 2006/01/20 01:24:50 kent Exp $"
+#	"$Id: makeMm7.doc,v 1.43 2006/01/20 17:32:39 kent Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -10176,8 +10176,9 @@ end
 
 # CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
 # This depends on the go and uniProt databases as well as 
-# the kgAlias and kgProAlias tables.
-
+# the kgAlias and kgProAlias tables.  The hgKgGetText takes
+# about 5 minutes when the database is not too busy.  The rest
+# is real quick.
      ssh hgwdev
      cd /cluster/data/mm7/bed/kgMm7A
      mkdir index

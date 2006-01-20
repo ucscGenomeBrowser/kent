@@ -2199,6 +2199,20 @@ while (<>) {
 	VALUES ("mm4","proteins031112");' \
 	-h genome-testdb hgcentraltest
 
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.  The hgKgGetText takes
+# about 5 minutes when the database is not too busy.  The rest
+# is real quick.
+     ssh hgwdev
+     cd /cluster/data/mm4/bed/
+     mkdir -p kgMm4/index
+     cd kgMm4/index
+     hgKgGetText mm4 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/data/mm4/bed/kgMm4/index/knownGene.ix /gbdb/mm4/knownGene.ix
+     ln -s /cluster/data/mm4/bed/kgMm4/index/knownGene.ixx /gbdb/mm4/knownGene.ixx
+
 
 # SET defaultDb in hgcentraltest to move from mm3 to mm4
     hgsql -e 'update defaultDb set name = "mm4" where name = "mm3";' \

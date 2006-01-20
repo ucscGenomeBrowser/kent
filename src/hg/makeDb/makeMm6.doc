@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.103 2006/01/18 20:12:25 jen Exp $"
+#	"$Id: makeMm6.doc,v 1.104 2006/01/20 17:32:39 kent Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -4969,6 +4969,21 @@ Submission to last job:           565s       9.42m     0.16h    0.01d
 # spMrna
 # foldUtr3
 # foldUtr5
+
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.  The hgKgGetText takes
+# about 5 minutes when the database is not too busy.  The rest
+# is real quick.
+     ssh hgwdev
+     cd /cluster/data/mm6/bed/kgMm6B
+     mkdir index
+     cd index
+     hgKgGetText mm6 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/data/mm6/bed/kgMm6B/index/knownGene.ix /gbdb/mm6/knownGene.ix
+     ln -s /cluster/data/mm6/bed/kgMm6B/index/knownGene.ixx /gbdb/mm6/knownGene.ixx
+
 
 ############################################################################
 

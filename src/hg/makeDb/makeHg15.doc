@@ -3736,6 +3736,21 @@ done
 
 #	continue with the FAMILY BROWSER UPDATE to complete this process
 
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.  The hgKgGetText takes
+# about 5 minutes when the database is not too busy.  The rest
+# is real quick.
+     ssh hgwdev
+     cd /cluster/data/hg15/bed/knownGene
+     mkdir index
+     cd index
+     hgKgGetText hg15 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/data/hg15/bed/knownGene/index/knownGene.ix /gbdb/hg15/knownGene.ix
+     ln -s /cluster/data/hg15/bed/knownGene/index/knownGene.ixx /gbdb/hg15/knownGene.ixx
+
+
 #	FAMILY BROWSER UPDATE	(DONE - 2004-02-24 - Hiram)
 #	to be done after knownGene tables are complete from known gene
 #	process.

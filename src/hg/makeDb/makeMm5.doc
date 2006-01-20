@@ -7484,6 +7484,20 @@ Submission to last job:           495s       8.25m     0.14h    0.01d
 # This was built using ~/kent/src/hg/protein/KGprocess.sh
 # and it was not documented. 
 
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.  The hgKgGetText takes
+# about 5 minutes when the database is not too busy.  The rest
+# is real quick.
+     ssh hgwdev
+     cd /cluster/data/mm5/bed/
+     mkdir -p kgMm5/index
+     cd kgMm5/index
+     hgKgGetText mm5 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/data/mm5/bed/kgMm5/index/knownGene.ix /gbdb/mm5/knownGene.ix
+     ln -s /cluster/data/mm5/bed/kgMm5/index/knownGene.ixx /gbdb/mm5/knownGene.ixx
+
 # RE-BUILD cgapAlias TABLE 
 # ORIGINALLY TABLE WAS BUILT BY THE KNOWN GENES PROCESS
 # cgapAlias table has replicate rows so remove (DONE, 2005-07-26, hartera)
