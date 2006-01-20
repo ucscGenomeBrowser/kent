@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.281 2006/01/17 01:17:58 aamp Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.282 2006/01/20 23:57:32 markd Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1250,16 +1250,16 @@ for (lsf = largeFileList; lsf != NULL; lsf = lsf->next)
     }
 }
 
-static void *readOpenFileSection(int fd, off_t offset, size_t size, char *fileName)
+static void *readOpenFileSection(int fd, off_t offset, size_t size, char *fileName, char *acc)
 /* Allocate a buffer big enough to hold a section of a file,
  * and read that section into it. */
 {
 void *buf;
 buf = needMem(size+1);
 if (lseek(fd, offset, SEEK_SET) < 0)
-        errAbort("Couldn't seek to %lld in %s", (long long)offset, fileName);
+    errnoAbort("Couldn't read %s: error seeking to %lld in %s", acc, (long long)offset, fileName);
 if (read(fd, buf, size) < size)
-        errAbort("Couldn't read %lld bytes at %lld in %s", (long long)size, (long long)offset, fileName);
+    errnoAbort("Couldn't read %s: error reading %lld bytes at %lld in %s", acc, (long long)size, (long long)offset, fileName);
 return buf;
 }
 
@@ -1320,7 +1320,7 @@ if (gbDate != NULL)
 sqlFreeResult(&sr);
 
 lsf = largeFileHandle(conn, extId, seqTblSet);
-buf = readOpenFileSection(lsf->fd, offset, size, lsf->path);
+buf = readOpenFileSection(lsf->fd, offset, size, lsf->path, acc);
 return buf; 
 }
 
