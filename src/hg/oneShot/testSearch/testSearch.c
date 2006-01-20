@@ -5,7 +5,7 @@
 #include "options.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: testSearch.c,v 1.10 2006/01/19 01:38:41 kent Exp $";
+static char const rcsid[] = "$Id: testSearch.c,v 1.11 2006/01/20 17:29:44 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -28,8 +28,8 @@ struct trixSearchResult *ts;
 int maxIx=40, ix=0;
 printf("%d match:", slCount(tsList));
 for (ts = tsList, ix=0; ts != NULL && ix<maxIx; ts = ts->next, ++ix)
-    printf(" %s,%d,%d", ts->itemId, 
-    	ts->unorderedSpan, ts->orderedSpan);
+    printf(" %s,%d,%d,%d", ts->itemId, 
+    	ts->unorderedSpan, ts->orderedSpan, ts->wordPos);
 if (ts != NULL)
     printf(" ...");
 printf("\n");
