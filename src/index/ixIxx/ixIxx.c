@@ -4,11 +4,12 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "trix.h"
 
-static char const rcsid[] = "$Id: ixIxx.c,v 1.1 2006/01/18 23:16:19 kent Exp $";
+static char const rcsid[] = "$Id: ixIxx.c,v 1.2 2006/01/20 17:30:24 kent Exp $";
 
 /* Variables that can be set from command line. */
-int prefixSize = 5;
+int prefixSize = trixPrefixSize;
 int binSize = 64*1024;
 
 void usage()
