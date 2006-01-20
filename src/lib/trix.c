@@ -5,6 +5,7 @@
 #include "hash.h"
 #include "linefile.h"
 #include "trix.h"
+#include "sqlNum.h"
 
 /* Some local structures for the search. */
 struct trixHitPos 
@@ -13,6 +14,7 @@ struct trixHitPos
     struct trixHitPos *next;	/* Next in list */
     char *itemId;		/* Associated itemId */
     int wordIx;			/* Which word this is part of. */
+    int leftoverLetters;	/* Number of letters at end of word not matched */
     };
 
 struct trixWordResult
@@ -244,7 +246,8 @@ for (i=0; i<trix->ixxSize; ++i)
 return pos;
 }
 
-static struct trixHitPos *trixParseHitList(char *hitWord, char *hitString)
+static struct trixHitPos *trixParseHitList(char *hitWord, char *hitString,
+	int leftoverLetters)
 /* Parse out hit string, inserting zeroes in it during process.
  * Return result as list of trixHitPos. */
 {
@@ -259,43 +262,139 @@ while ((word = nextWord(&hitString)) != NULL)
         errAbort("Error in index format at word %s", hitWord);
     AllocVar(hit);
     hit->itemId = cloneString(parts[0]);
-    hit->wordIx = atoi(parts[1]);
+    hit->wordIx = sqlUnsigned(parts[1]);
+    hit->leftoverLetters = leftoverLetters;
     slAddHead(&hitList, hit);
     }
 slReverse(&hitList);
 return hitList;
 }
 
+int trixHitPosCmp(struct trixHitPos *a, struct trixHitPos *b)
+/* Compare function to sort trixHitPos. */
+{
+int diff = strcmp(a->itemId, b->itemId);
+if (diff == 0)
+    {
+    diff = a->wordIx - b->wordIx;
+    if (diff == 0)
+        diff = a->leftoverLetters - b->leftoverLetters;
+    }
+return diff;
+}
+
+
+struct trixHitPos *mergeHits(struct trixHitPos *aList, struct trixHitPos *bList)
+/* Return hit list that merges aList and bList.  The input is sorted,
+ * and so is the output. */
+{
+struct trixHitPos *a, *b, *aNext, *bNext, *newList = NULL;
+
+a = aList;
+b = bList;
+for (;;)
+    {
+    if (a == NULL)
+        {
+	if (b == NULL)
+	    break;
+	bNext = b->next;
+	slAddHead(&newList, b);
+	b = bNext;
+	}
+    else if (b == NULL)
+        {
+	aNext = a->next;
+	slAddHead(&newList, a);
+	a = aNext;
+	}
+    else if (trixHitPosCmp(a, b) < 0)
+        {
+	aNext = a->next;
+	slAddHead(&newList, a);
+	a = aNext;
+	}
+    else
+        {
+	bNext = b->next;
+	slAddHead(&newList, b);
+	b = bNext;
+	}
+    }
+slReverse(&newList);
+return newList;
+}
+
+static int reasonablePrefix(char *prefix, char *word)
+/* Return non-negative if prefix is reasonable for word.
+ * Returns number of letters left in word not matched by
+ * prefix. */
+{
+int prefixLen = strlen(prefix);
+int wordLen = strlen(word);
+int suffixLen = wordLen - prefixLen;
+if (suffixLen == 0)
+   return 0;
+else if (prefixLen >= 3)
+    {
+    int wordEnd;
+    char *suffix = word + prefixLen;
+    boolean prefixEndsInDigit = isdigit(word[prefixLen-1]);
+    /* Find a word marker - either end of string, '-', '.', or '_'
+     * or a number. */
+    for (wordEnd=0; wordEnd < suffixLen; ++wordEnd)
+        {
+	char c = suffix[wordEnd];
+	if (c == '-' || c == '.' || c == '_' || (!prefixEndsInDigit && isdigit(c)))
+	    break;
+	}
+    if (wordEnd <= 2)
+       return wordEnd;
+    if (wordEnd == 3 && startsWith("ing", suffix))
+       return wordEnd;
+    }
+return -1;
+}
+
+
 struct trixWordResult *trixSearchWordResults(struct trix *trix, 
 	char *searchWord)
 /* Get results for single word from index.  Returns NULL if no matches. */
 {
 char *line, *word;
-struct trixWordResult *twr;
+struct trixWordResult *twr = NULL;
 struct trixHitPos *hitList = hashFindVal(trix->wordHitHash, searchWord);
 
 if (hitList == NULL)
     {
+    struct trixHitPos *oneHitList;
     off_t ixPos = trixFindIndexStartLine(trix, searchWord);
     lineFileSeek(trix->lf, ixPos, SEEK_SET);
     while (lineFileNext(trix->lf, &line, NULL))
 	{
-	int diff;
 	word = nextWord(&line);
-	diff = strcmp(searchWord, word);
-	if (diff == 0)
+	if (startsWith(searchWord, word))
 	    {
-	    hitList = trixParseHitList(searchWord, line);
-	    hashAdd(trix->wordHitHash, searchWord, hitList);
-	    break;
+	    int leftoverLetters = reasonablePrefix(searchWord, word);
+	    /* uglyf("reasonablePrefix(%s,%s)=%d<BR>\n", searchWord, word, leftoverLetters); */
+	    if (leftoverLetters >= 0)
+		{
+		oneHitList = trixParseHitList(searchWord, line, 
+			leftoverLetters);
+		hitList = mergeHits(hitList, oneHitList);
+		}
 	    }
-	else if (diff < 0)
-	    return NULL;
+	else if (strcmp(searchWord, word) < 0)
+	    break;
 	}
+    hashAdd(trix->wordHitHash, searchWord, hitList);
     }
-AllocVar(twr);
-twr->word = cloneString(searchWord);
-twr->hitList = hitList;
+if (hitList != NULL)
+    {
+    AllocVar(twr);
+    twr->word = cloneString(searchWord);
+    twr->hitList = hitList;
+    }
 return twr;
 }
 
@@ -383,12 +482,13 @@ for (twr = twrList; twr != NULL; twr = twr->next)
 return FALSE;
 }
 
-static int findUnorderedSpan(struct trixWordResult *twrList,
-	char *itemId)
+static void findUnorderedSpan(struct trixWordResult *twrList,
+	char *itemId, int *retSpan, int *retLeftoverLetters)
 /* Find out smallest number of words in doc that will cover
  * all words in search. */
 {
 int minSpan = BIGNUM;
+int leftoverLetters = 0;
 struct trixWordResult *twr;
 
 /* Set up iHit pointers we use to keep track of our 
@@ -400,6 +500,7 @@ for (twr = twrList; twr != NULL; twr = twr->next)
 for (;;)
     {
     int minWord = BIGNUM, maxWord=0, span;
+    int curLeftover = 0;
 
     /* Figure out current span and save as min if it's smallest so far. */
     for (twr = twrList; twr != NULL; twr = twr->next)
@@ -409,10 +510,14 @@ for (;;)
 	    minWord = curWord;
 	if (curWord > maxWord)
 	    maxWord = curWord;
+	curLeftover += twr->iHit->leftoverLetters;
 	}
     span = maxWord - minWord;
     if (span < minSpan)
+	{
         minSpan = span;
+	leftoverLetters = curLeftover;
+	}
 
     /* Advance iHit past minWord.  Break if we go outside of our doc or item. */
     for (twr = twrList; twr != NULL; twr = twr->next)
@@ -422,7 +527,9 @@ for (;;)
 	    struct trixHitPos *hit = twr->iHit = twr->iHit->next;
 	    if (hit == NULL || !sameString(hit->itemId, itemId))
 	        {
-		return minSpan+1;
+		*retSpan = minSpan+1;
+		*retLeftoverLetters = leftoverLetters;
+		return;
 		}
 	    }
 	}
@@ -509,7 +616,8 @@ for (;;)
         {
 	AllocVar(ts);
 	ts->itemId = cloneString(itemId);
-	ts->unorderedSpan = findUnorderedSpan(twrList, itemId);
+	findUnorderedSpan(twrList, itemId, 
+		&ts->unorderedSpan, &ts->leftoverLetters);
 	ts->orderedSpan = findOrderedSpan(twrList, itemId);
 	ts->wordPos = findWordPos(twrList, itemId);
 	slAddHead(&tsList, ts);
@@ -533,7 +641,11 @@ if (dif == 0)
    {
    dif = a->orderedSpan - b->orderedSpan;
    if (dif == 0)
-       dif = a->wordPos - b->wordPos;
+       {
+       dif = a->leftoverLetters - b->leftoverLetters;
+       if (dif == 0)
+	   dif = a->wordPos - b->wordPos;
+       }
    }
        
 return dif;
@@ -567,6 +679,7 @@ if (wordCount == 1)
 	    ts->orderedSpan = 1;
 	    ts->unorderedSpan = 1;
 	    ts->wordPos = hit->wordIx;
+	    ts->leftoverLetters = hit->leftoverLetters;
 	    slAddHead(&tsList, ts);
 	    }
 	}

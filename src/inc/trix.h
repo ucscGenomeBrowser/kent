@@ -19,6 +19,7 @@ struct trixSearchResult
     int unorderedSpan;          /* Minimum span in single doc with words in any order. */
     int orderedSpan;            /* Minimum span in single doc with words in search order. */
     int wordPos;		/* Position of word in doc more or less. */
+    int leftoverLetters;	/* Number of leftover letters in words. */
     };
 
 #define trixPrefixSize 5	/* Size of prefix in second level index. */
