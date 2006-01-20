@@ -30,7 +30,7 @@ longLabel GeneMapper Predictions from UCB
 group genes
 priority 37
 visibility hide
-color 255,0,0
+color 128,0,0
 type genePred
 
 track intronEst
