@@ -1,21 +1,21 @@
 <H2>Description</H2> 
 <P>
-This track shows a measure of evolutionary conservation in human, chimp, 
+This track shows a measure of evolutionary conservation in $organism, chimp, 
 mouse and rat based on a phylogenetic hidden Markov model (phastCons).  
 Multiz alignments of the following assemblies were used to generate this
 annotation: 
 <UL>
-<LI>Human July 2003 (hg16) 
-<LI>Chimp Nov. 2003 (panTro1)
-<LI>Mouse Feb. 2003 (mm3) draft assembly
-<LI>Rat Jun. 2003 (rn3)
+<LI>$organism $date 003 ($db) 
+<LI>chimp Nov. 2003 (panTro1)
+<LI>mouse Feb. 2003 (mm3) draft assembly
+<LI>rat Jun. 2003 (rn3)
 </UL></P>
 
 <H2>Methods</H2>
 <P>
 Multiz is a multiple alignment program that takes
 <A HREF="http://bio.cse.psu.edu/dist/blastz.pdf" TARGET=_blank>blastz</A> 
-"Best-in-Genome" alignments (axtBest or axtNet) as input.  For human/rodent
+"Best-in-Genome" alignments (axtBest or axtNet) as input.  For $organism/rodent
 alignments, it uses the same scoring matrix as blastz between pairs of sequences:  
 <PRE>
         A     C     G     T
@@ -40,7 +40,7 @@ For the mouse/rat alignments the following matrix was used:
   O = 600, E = 50
 </PRE></P>
 <P>
-For the human/chimpanzee alignments the following matrix was used:
+For the $organism/chimpanzee alignments the following matrix was used:
 
 <PRE>
 
@@ -55,7 +55,7 @@ For the human/chimpanzee alignments the following matrix was used:
 <P>
 The overall score is the sum of the score over all pairs.  </P>
 <P>
-The resulting human-chimp-mouse-rat multiple alignments were then assigned 
+The resulting $organism-chimp-mouse-rat multiple alignments were then assigned 
 conservation scores by phastCons.
 The phastCons program computes conservation scores based on a phylo-HMM, a
 type of probabilistic model that describes both the process of DNA

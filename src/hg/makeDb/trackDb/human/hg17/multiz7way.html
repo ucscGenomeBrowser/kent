@@ -1,43 +1,45 @@
-<H2>Description</H2> <P>
+<H2>Description</H2>
 <P>
-This track shows a measure of evolutionary conservation in human, chimp, 
+This track shows a measure of evolutionary conservation in $organism, chimp, 
 mouse, rat, chicken, fugu, and zebrafish, 
 based on a phylogenetic hidden Markov model (phastCons).
 Multiz alignments of the following assemblies were used to generate this
 annotation: 
-human May 2004 (hg17), 
-chimp Nov. 2003 (panTro1),
-mouse Oct. 2003 (mm4), 
-rat Jun. 2003 (rn3), 
-chicken Feb. 2004 (galGal2),
-fugu Aug. 2002 (fr1),
-and zebrafish Nov. 2003 (danRer1).</P>
+<UL>
+<LI>$organism $date ($db)
+<LI>chimp Nov. 2003 (panTro1)
+<LI>mouse Oct. 2003 (mm4)
+<LI>rat Jun. 2003 (rn3)
+<LI>chicken Feb. 2004 (galGal2)
+<LI>fugu Aug. 2002 (fr1)
+<LI>zebrafish Nov. 2003 (danRer1)
+</UL></P>
 <P>
 In full display mode, this track shows the overall conservation score across all
-species as well as pairwise alignments 
-of each species aligned to the 
-human genome.  The pairwise alignments are
+species as well as pairwise alignments of each species aligned to the 
+$organism genome.  The pairwise alignments are
 shown in dense display mode using a grayscale 
 density gradient.  The checkboxes in the track configuration section allow
 the exclusion of species from the pairwise display; however, this does not
 remove them from the conservation score display.  </P>
 <P>
 When zoomed-in to the base-display level, the track shows the base 
-composition of each alignment. The numbers and symbols on the &quot;human 
-gap&quot; line indicate the lengths of gaps in the human sequence at those 
-alignment positions. If the gap size is greater than 9, a symbol indicates this; a &quot;*&quot is displayed if the gap size is multiple of 3, otherwise a &quot;*&quot; is displayed.
-To view detailed information about the 
-alignments at a specific position, zoom in the display to 30,000 or fewer bases, 
-then click on the alignment.  </P>
+composition of each alignment. The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $organism sequence at those 
+alignment positions relative to the longest non-$organism sequence. If the gap 
+size is greater than 9, a non-numeric symbol is shown: a &quot;*&quot if the 
+gap size is a multiple of 3; otherwise &quot;+&quot;. 
+To view detailed information about the alignments at a specific position,
+zoom in the display to 30,000 or fewer bases, then click on the alignment.</P>
 <P>
-This track may be configured in a variety of ways to highlight different aspects 
-of the displayed information. Click the &quot;Graph configuration help&quot; link
-for an explanation of the configuration options.
+This track may be configured in a variety of ways to highlight different aspects
+of the displayed information. Click the &quot;Graph configuration help&quot; 
+link for an explanation of the configuration options.</P>
 
 <H2>Methods</H2>
 <P> 
 Best-in-genome blastz pairwise alignments 
-were multiply aligned using multiz, beginning with human-chimp alignments
+were multiply aligned using multiz, beginning with $organism-chimp alignments
 and subsequently adding in mouse, rat, chicken, fugu, and zebrafish.
 The resulting multiple alignments were then assigned 
 conservation scores by phastCons.</P>
