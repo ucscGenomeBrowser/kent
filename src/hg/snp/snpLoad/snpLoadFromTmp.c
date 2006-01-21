@@ -2,12 +2,13 @@
 #include "common.h"
 
 #include "chromInfo.h"
+#include "dystring.h"
 #include "hash.h"
 #include "hdb.h"
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.15 2006/01/17 04:10:58 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.16 2006/01/21 06:40:59 heather Exp $";
 
 char *functionStrings[] = {
 /* From snpFixed.SnpFunctionCode. */
@@ -124,6 +125,7 @@ return list;
 
 void lookupFunction(struct snp125 *list)
 /* get function from ContigLocusId table */
+/* can be multiple matches */
 /* function values are defined in snpFixed.SnpFunctionCode */
 {
 struct snp125 *el;
@@ -133,31 +135,44 @@ struct sqlResult *sr;
 char **row;
 int functionValue = 0;
 char snpName[32];
+struct dyString *dy = NULL;
+int funcCount = 0;
+int newSize = 0;
 
 verbose(1, "looking up function...\n");
 for (el = list; el != NULL; el = el->next)
     {
+    dy = newDyString(256);
     strcpy(snpName, el->name);
     stripString(snpName, "rs");
+
+    safef(query, sizeof(query), "select count(*) from ContigLocusId where snp_id = %s", snpName);
+    funcCount = sqlQuickNum(conn, query);
+    if (funcCount == 0)
+        {
+        el->func = cloneString("unknown");
+	continue;
+	}
+    
     safef(query, sizeof(query), "select fxn_class from ContigLocusId where snp_id = %s", snpName);
     sr = sqlGetResult(conn, query);
     /* need a joiner check rule for this */
-    row = sqlNextRow(sr);
-    if (row == NULL)
+    while ((row = sqlNextRow(sr)) != NULL)
         {
-        el->func = cloneString("unknown");
-        sqlFreeResult(&sr);
-	continue;
+        functionValue = atoi(row[0]);
+        if (functionValue > 8) 
+            {
+            verbose(1, "unexpected function value %d for %s; setting to 0 (zero)", functionValue, snpName);
+	    functionValue = 0;
+	    }
+        dyStringPrintf(dy, "%s,", functionStrings[functionValue]);
 	}
-    functionValue = atoi(row[0]);
-    if (functionValue > 8) 
-        {
-        verbose(1, "unexpected function value %d for %s; setting to 0 (zero)", functionValue, snpName);
-	functionValue = 0;
-	}
-
-    el->func = functionStrings[functionValue];
+    // chop off the last character
+    newSize = dy->stringSize - 1;
+    dyStringResize(dy, newSize);
+    el->func = cloneString(dy->string);
     sqlFreeResult(&sr);
+    freeDyString(&dy);
     }
 hFreeConn(&conn);
 }
@@ -298,12 +313,12 @@ for (el = list; el != NULL; el = el->next)
     el->observed = cloneString(row[2]);
 
     /* class: special handling for in-dels */
-    /* this leaves el->class as "in-del" only for those with locType single, which are exceptions */
+    /* split into classes of our own construction */
     if (sameString(el->class, "in-del"))
         {
 	if (sameString(el->locType, "between"))
 	    el->class = cloneString("insertion");
-	else if (sameString(el->locType, "range"))
+	else if (sameString(el->locType, "range") || sameString(el->locType, "exact"))
 	    el->class = cloneString("deletion");
 	}
 
@@ -358,7 +373,8 @@ struct sqlConnection *conn2 = hAllocConn2();
 // hGetMinIndexLength requires chromInfo
 // could add hGetMinIndexLength2 to hdb.c
 // snp125TableCreate(conn2, hGetMinIndexLength2());
-snp125TableCreate(conn2, 32);
+// send in table name
+snp125TableCreate(conn2, "chrN_snp125", 32);
 verbose(1, "loading...\n");
 hgLoadTabFile(conn2, ".", "snp125", &f);
 hFreeConn2(&conn2);
