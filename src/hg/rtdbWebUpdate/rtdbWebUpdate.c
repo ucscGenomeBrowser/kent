@@ -7,6 +7,7 @@
 #include "portable.h"
 #include "linefile.h"
 #include "dnautil.h"
+#include "net.h"
 #include "fa.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
@@ -21,48 +22,89 @@
 struct cart *cart;	        /* CGI and other variables */
 struct hash *oldCart = NULL;
 
-void makeForm()
+void makeForm(struct slName *dbs)
 /* If the button wasn't pressed already, show it. */
 {
+struct slName *cur;
 cgiParagraph("Pressing the button below will trigger an update to the MGC RTDB database:");
 /* HTML form */
 puts("<FORM ACTION=\"../cgi-bin/rtdbWebUpdate\" METHOD=\"POST\" "
        " ENCTYPE=\"multipart/form-data\" NAME=\"mainForm\">\n");
 cartSaveSession(cart);
+for (cur = dbs; cur != NULL; cur = cur->next)
+    {
+    cgiMakeRadioButton("db", cur->name, FALSE);
+    printf("&nbsp;%s\n<BR>\n", cur->name);
+    }
+puts("<BR>\n");
 cgiMakeButton("RTDBSubmit","Update RTDB");
 cartSaveSession(cart);
 puts("</FORM>");
 }
 
-void runUpdate(char *rtdbCmd)
-/* Button pressed, so time to run things. */
+int updateServer(char *hostName, char *portName, char *database)
+/* Send status message to server arnd report result. */
 {
-cgiParagraph("Running RTDB Update script:<BR>");
-puts("<PRE>");
-fflush(stdout);
-fflush(stderr);
-system(rtdbCmd);
-fflush(stdout);
-fflush(stderr);
-puts("</PRE>");
+char buf[256];
+int sd = 0;
+int ret = 0;
+/* Put together command. */
+sd = netConnect(hostName, atoi(portName));
+if (sd >= 0)
+    {
+    safef(buf, ArraySize(buf), "update.%s", database);
+    netSendString(sd, buf);
+    for (;;)
+	{
+	if (netGetString(sd, buf) == NULL)
+	    {
+	    printf("Error reading status information from %s:%s",hostName,portName);
+	    ret = -1;
+	    break;
+	    }
+	if (sameString(buf, "$end$"))
+	    break;
+	else
+	    printf("%s\n", buf);
+	}
+    close(sd);
+    }
+else
+    {
+    ret = -1;
+    printf("Couldn't connect");
+    }
+return(ret); 
 }
 
 void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
-char *rtdbCmd = cfgOption("rtdb.update");
+char *database = cgiOptionalString("db");
+char *rtdbServer = cfgOption("rtdb.server");
+char *rtdbPort = cfgOption("rtdb.port");
+char *rtdbChoices = cfgOption("rtdb.databases");
+struct slName *dbs = slNameListFromComma(rtdbChoices);
 cart = theCart;
-
 cartWebStart(cart, "MGC RTDB Update");
-if (!rtdbCmd)
+if (!rtdbServer)
+    errAbort("rtdb.update not defined in the hg.conf file. "
+	     "Chances are this CGI isn't meant for this machine.");
+if (!rtdbPort)
     errAbort("rtdb.update not defined in the hg.conf file. "
 	     "Chances are this CGI isn't meant for this machine.");
 /* create HMTL form if button wasn't pressed.  Otherwise, run the update */
 if (!cgiVarExists("RTDBSubmit"))
-    makeForm();
+    makeForm(dbs);
+else if ((database == NULL) || (!slNameInList(dbs, database)))
+    {
+    makeForm(dbs);
+    printf("<br>Error: Select one of databases listed.");
+    }
 else
-    runUpdate(rtdbCmd);
+    updateServer(rtdbServer, rtdbPort, database);
 cartWebEnd();
+slNameFreeList(&dbs);
 }
 
 /* Null terminated list of CGI Variables we don't want to save
