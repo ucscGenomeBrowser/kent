@@ -326,7 +326,7 @@ if (imageId != 0)
     {
     printf("<B>");
     smallCaption(conn, imageId);
-    printf(".</B> Click in image to zoom, drag to move.  "
+    printf(".</B> Click image to zoom in, drag or arrow keys to move. "
 	   "Caption is below.<BR>\n");
 
     p=visiGeneFullSizePath(conn, imageId);
