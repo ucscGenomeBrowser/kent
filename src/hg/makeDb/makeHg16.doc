@@ -7990,6 +7990,9 @@ EOF
     sed 's/hapmapLd/hapmapLdJpt/' ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql hg16
     sed 's/hapmapLd/hapmapLdYri/' ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql hg16
 
+    # The length of each of the three value vectors (rsquared, dprime,
+    # and lod) is the same and is stored in the score field.
+
     # 30-40 minutes
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X)
 	echo

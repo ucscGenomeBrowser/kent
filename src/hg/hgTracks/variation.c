@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.56 2006/01/19 23:40:43 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.57 2006/01/21 06:06:05 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1209,6 +1209,8 @@ vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
    means that two pointers are necessary: a data pointer (dPtr) to
    keep track of the current data, and a second pointer (sPtr) to
    retrieve the second coordinate.
+ * The length of each of the three value vectors (rsquared, dprime,
+   and lod) is the same and is stored in the score field.
  * The ascii values are mapped to colors in the colorLookup[] array.
  * The four points of each diamond are calculated from the chromosomal 
    coordinates of four SNPs:
