@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.174 2006/01/20 02:45:36 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.175 2006/01/21 18:03:55 kent Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -598,13 +598,14 @@ boolean findKnownGeneFullText(char *term,struct hgPositions *hgp)
 char *db = hGetDb();
 char path[PATH_LEN];
 boolean gotIt = FALSE;
-safef(path, sizeof(path), "/gbdb/%s/knownGene.ix", db);
-struct trix *trix = trixOpen(path);
+struct trix *trix;
 struct trixSearchResult *tsr, *tsrList;
 char *lowered = cloneString(term);
 char *keyWords[HGFIND_MAX_KEYWORDS];
 int keyCount;
 
+safef(path, sizeof(path), "/gbdb/%s/knownGene.ix", db);
+trix = trixOpen(path);
 tolowers(lowered);
 keyCount = chopLine(lowered, keyWords);
 tsrList = trixSearch(trix, keyCount, keyWords);
