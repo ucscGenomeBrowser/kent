@@ -177,7 +177,8 @@ netSendString(connectionHandle, "end");
 }
 
 void startServer(char *hostName, char *portName)
-/* Load up index and hang out in RAM. */
+/* This is the main part of the server and it runs this until it's killed. 
+ * Process commands from a client.  */
 {
 int socketHandle = 0;
 int port = atoi(portName);
