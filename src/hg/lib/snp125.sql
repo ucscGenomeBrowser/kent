@@ -43,7 +43,7 @@ CREATE TABLE snp125 (
     observed      blob not null,	# The sequences of the observed alleles
     molType       enum( 'unknown', 'genomic', 'cDNA') DEFAULT 'unknown' not null,
     					# Sample type from exemplar ss
-    class         enum('unknown', 'single', 'in-del', 'het', 'microsatelite',
+    class         enum('unknown', 'single', 'in-del', 'het', 'microsatellite',
                   'named', 'no var', 'mixed', 'mnp', 'insertion', 'deletion')  DEFAULT 'unknown' NOT NULL,
     					# The class of variant
 

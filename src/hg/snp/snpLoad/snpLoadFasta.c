@@ -5,7 +5,7 @@
 #include "linefile.h"
 #include "snpFasta.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.4 2006/01/15 05:42:29 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.5 2006/01/21 05:20:20 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 char *classStrings[] = {
@@ -13,7 +13,7 @@ char *classStrings[] = {
     "single",
     "in-del",
     "het",
-    "microsatelite",
+    "microsatellite",
     "named",
     "no var",
     "mixed",
