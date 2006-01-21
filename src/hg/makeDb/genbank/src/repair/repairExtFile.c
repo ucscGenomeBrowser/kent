@@ -5,7 +5,7 @@
 #include "gbVerb.h"
 #include "refPepRepair.h"
 
-static char const rcsid[] = "$Id: repairExtFile.c,v 1.2 2006/01/20 19:25:34 markd Exp $";
+static char const rcsid[] = "$Id: repairExtFile.c,v 1.3 2006/01/21 08:14:09 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -19,7 +19,7 @@ void usage(char *msg)
 /* Explain usage and exit. */
 {
 errAbort("%s\n\n"
-         "repairExtFile [options] db repairTask\n"
+         "repairExtFile [options] repairTask db [db2 ...]\n"
          "\n"
          "Repair the gbSeq and gbExtFile tables\n"
          "repairTask is one of:\n"
@@ -29,9 +29,10 @@ errAbort("%s\n\n"
          "                  valid gbExtFile entries.\n"
          "\n"
          "Options:\n"
-         "  -verbose=n\n"
+         "  -verbose=1\n"
          "           1 - stats only\n"
          "           2 - sequences repaired\n"
+         "           3 - more details\n"
          "          >3 - sql trace\n"
          "  -dryRun - don't actually update the database\n",
          msg);
@@ -40,21 +41,28 @@ errAbort("%s\n\n"
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-char *repairTask;
-struct sqlConnection *conn;
+char *repairTask, **dbs;
+int ndbs, i;
 optionInit(&argc, argv, optionSpecs);
-if (argc != 3)
+if (argc < 3)
     usage("wrong # args");
-gbVerbInit(optionInt("verbose", 0));
+gbVerbInit(optionInt("verbose", 1));
 gDryRun = optionExists("dryRun");
 
-conn = sqlConnect(argv[1]);
-repairTask = argv[2];
+repairTask = argv[1];
+dbs = argv+2;
+ndbs = argc-2;
 
 if (sameString(repairTask, "refPepList"))
-    refPepList(conn, stdout);
+    {
+    for (i = 0; i < ndbs; i++)
+        refPepList(dbs[i], stdout);
+    }
 else if (sameString(repairTask, "refPepRepair"))
-    refPepRepair(conn, gDryRun);
+    {
+    for (i = 0; i < ndbs; i++)
+        refPepRepair(dbs[i], gDryRun);
+    }
 else
     errAbort("invalid repairTask: %s", repairTask);
 
