@@ -5,9 +5,7 @@ Disallow: //cgi-bin/
 Disallow: /admin/
 Disallow: /qa/
 User-agent: GoogleBot
-Disallow: /admin/
-Disallow: /goldenPath/
-Disallow: /qa/
+Disallow: /*
 User-agent: htdig
 Disallow: /admin/
 Disallow: /goldenPath/
