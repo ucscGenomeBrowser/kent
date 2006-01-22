@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: vgGetText.c,v 1.3 2006/01/22 20:22:54 kent Exp $";
+static char const rcsid[] = "$Id: vgGetText.c,v 1.4 2006/01/22 23:58:18 kent Exp $";
 
 char *db = "visiGene";
 
@@ -18,7 +18,9 @@ void usage()
 errAbort(
   "vgGetText - Get text for full text indexing for VisiGene\n"
   "usage:\n"
-  "   vgGetText out.text\n"
+  "   vgGetText out.text genomeDb db/knownGenes.text [genomeDb2 db2/knownGene.text ...]\n"
+  "Where the genomeDb is typically the latest human, the genomeDb2 is the latest mouse, and\n"
+  "as more relevant organisms get added perhaps add genomeDb3 and so forth.\n"
   "options:\n"
   "   -db=xxx - Use another database (default visiGene)\n"
   );
@@ -64,6 +66,14 @@ struct hash *journalHash;
 struct hash *imageFileHash;
 struct hash *stageSchemeHash;
 struct hash *expressionLevelHash;
+
+/* Hash containing known gene text.  Keyed by knownGene id. */
+struct hash *knownTextHash;
+
+struct hash *nameToKnown;	/* Keyed by gene symbol, value knownGene id. */
+struct hash *refSeqToKnown;
+struct hash *uniProtToKnown;
+struct hash *aliasToKnown;
 
 struct stageScheme
 /* Slightly cooked version of lifeStageScheme. */
@@ -285,6 +295,77 @@ strainHash = hashSizedForTable(conn, "strain");
 fillInTwoColHash(conn, "select id,name from strain", strainHash);
 }
 
+void foldTextIntoHash(char *fileName, struct hash *hash)
+/* Read in text file a line at a time.  Make hash keyed by
+ * first word in line with value the rest of the line. */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *line, *word;
+
+while (lineFileNext(lf, &line, NULL))
+    {
+    word = nextWord(&line);
+    if (word != NULL)
+	 hashAdd(hash, word, cloneString(line));
+    }
+
+lineFileClose(&lf);
+}
+
+
+void makeKnownGeneHashes(int knownDbCount, char **knownDbInfo)
+/* Create hashes containing info on known genes. */
+{
+int i;
+knownTextHash = hashNew(18);
+uniProtToKnown = hashNew(18);
+refSeqToKnown = hashNew(18);
+aliasToKnown = hashNew(19);
+nameToKnown = hashNew(18);
+
+for (i=0; i<knownDbCount; i += 1)
+    {
+    char **pt = knownDbInfo + i + i;
+    char *gdb = pt[0];
+    char *textFile = pt[1];
+    struct sqlConnection *conn = sqlConnect(gdb);
+    struct sqlResult *sr;
+    char **row;
+
+    foldTextIntoHash(textFile, knownTextHash);
+
+    sr = sqlGetResult(conn, "select kgID,geneSymbol,spID,spDisplayID,refseq from kgXref");
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+	char *kgID = cloneString(row[0]);
+	touppers(row[1]);
+	hashAdd(nameToKnown, row[1], kgID);
+	hashAdd(uniProtToKnown, row[2], kgID);
+	hashAdd(uniProtToKnown, row[3], kgID);
+	hashAdd(refSeqToKnown, row[4], kgID);
+	}
+    sqlFreeResult(&sr);
+
+    sr = sqlGetResult(conn, "select kgID,alias from kgAlias");
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	char *upc = cloneString(row[0]);
+	touppers(upc);
+        hashAdd(aliasToKnown, row[1], upc);
+	}
+    sqlFreeResult(&sr);
+
+    sr = sqlGetResult(conn, "select kgID,alias from kgProtAlias");
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	char *upc = cloneString(row[0]);
+	touppers(upc);
+        hashAdd(aliasToKnown, row[1], upc);
+	}
+    sqlFreeResult(&sr);
+    }
+}
+
 struct imageProbe *ipForImage(struct sqlConnection *conn, char *image)
 /* Get list of probes associated with image. */
 {
@@ -325,6 +406,66 @@ for (hel = hashLookup(expressionLevelHash, ipAscii); hel != NULL;
 	    fprintf(f, "%s ", s);
 	}
     }
+}
+
+void uniqPrintGene(char *kgID, struct hash *uniqHash, FILE *f)
+/* If kgID not in uniqHash, then print out info associated with
+ * it and add it to uniqHash */
+{
+if (!hashLookup(uniqHash, kgID))
+    {
+    char *text = hashMustFindVal(knownTextHash, kgID);
+    fprintf(f, "%s ", text);
+    hashAdd(uniqHash, kgID, NULL);
+    }
+}
+
+boolean  printGeneFromHashOrAlias(char *sym, struct hash *hash, struct hash *aliasHash,
+	struct hash *uniqHash, FILE *f)
+/* Look up symbol in hash, and if not found there in aliasHash.
+ * Then print out associated info uniquely */
+{
+char *kgID = NULL;
+if (sym != NULL && sym[0] != 0)
+    {
+    kgID = hashFindVal(hash, sym);
+    if (kgID == NULL)
+	kgID = hashFindVal(aliasHash, sym);
+    if (kgID != NULL)
+	uniqPrintGene(kgID, uniqHash, f);
+    }
+return kgID != NULL;
+}
+
+void printGeneText(struct gene *gene, FILE *f)
+/* Print extended text associated with gene. */
+{
+struct hash *uniqHash = hashNew(8);
+boolean gotSomething = FALSE;
+
+gotSomething |= printGeneFromHashOrAlias(gene->refSeq, refSeqToKnown, aliasToKnown, uniqHash, f);
+gotSomething |= printGeneFromHashOrAlias(gene->uniProt, uniProtToKnown, aliasToKnown, uniqHash, f);
+gotSomething |= printGeneFromHashOrAlias(gene->genbank, aliasToKnown, aliasToKnown, uniqHash, f);
+
+if (gene->name[0] != 0)
+    {
+    char *upcName = cloneString(gene->name);
+    struct hashEl *hel;
+    touppers(upcName);
+    for (hel = hashLookup(nameToKnown, upcName); hel != NULL; 
+    	hel = hashLookupNext(hel))
+	{
+	char *kgID = hel->val;
+	gotSomething = TRUE;
+	uniqPrintGene(kgID, uniqHash, f);
+	}
+    if (!gotSomething)
+        {
+	printGeneFromHashOrAlias(upcName, aliasToKnown, aliasToKnown, uniqHash, f);
+	}
+    freeMem(upcName);
+    }
+hashFree(&uniqHash);
 }
 
 void imageText(struct sqlConnection *conn,
@@ -442,11 +583,21 @@ if (s != NULL)
     fprintf(f, "%s", s);
     }
 
+/* Write out more gene info. */
+fprintf(f, "\t");
+for (ip = ipList; ip != NULL; ip = ip->next)
+    {
+    struct probe *probe = hashMustFindValFromInt(probeHash, ip->probe);
+    struct gene *gene = hashFindValFromInt(geneHash, probe->gene);
+    if (gene != NULL)
+	printGeneText(gene, f);
+    }
+
 fprintf(f, "\n");
 imageProbeFreeList(&ipList);
 }
 
-void vgGetText(char *outText)
+void vgGetText(char *outText, int knownDbCount, char **knownDbInfo)
 /* vgGetText - Get text for full text indexing for VisiGene. */
 {
 FILE *f = mustOpen(outText, "w");
@@ -458,7 +609,7 @@ char query[512], **row;
 hashSimpleTables(conn);
 hashComplexTables(conn);
 stageSchemeHash = makeStageSchemeHash(conn);
-uglyTime("loaded hashes");
+makeKnownGeneHashes(knownDbCount, knownDbInfo);
 sr = sqlGetResult(imageConn, 
     "select id,submissionSet,imageFile,specimen,preparation from image");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -475,9 +626,8 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 db = optionVal("db", db);
-if (argc != 2)
+if (argc < 4 || ((argc&1) != 0))
     usage();
-uglyTime(NULL);
-vgGetText(argv[1]);
+vgGetText(argv[1], (argc-2)/2, argv+2);
 return 0;
 }
