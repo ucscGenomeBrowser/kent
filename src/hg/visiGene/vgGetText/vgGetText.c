@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: vgGetText.c,v 1.2 2006/01/22 20:20:47 kent Exp $";
+static char const rcsid[] = "$Id: vgGetText.c,v 1.3 2006/01/22 20:22:54 kent Exp $";
 
 char *db = "visiGene";
 
@@ -460,7 +460,7 @@ hashComplexTables(conn);
 stageSchemeHash = makeStageSchemeHash(conn);
 uglyTime("loaded hashes");
 sr = sqlGetResult(imageConn, 
-    "select id,submissionSet,imageFile,specimen,preparation from image where id > 5950 limit 20000");
+    "select id,submissionSet,imageFile,specimen,preparation from image");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     imageText(conn, row[0], row[1], row[2], row[3], row[4], f);
