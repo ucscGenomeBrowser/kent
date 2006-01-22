@@ -7,8 +7,9 @@
 #include "common.h"
 #include "errabort.h"
 #include "portable.h"
+#include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.85 2005/11/03 17:53:57 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.86 2006/01/22 16:39:24 markd Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -624,6 +625,19 @@ slReverse(&list);
 return list;
 }
 
+struct slName *slNameLoadReal(char *fileName)
+/* load file lines that are not blank or start with a '#' into a slName
+ * list */
+{
+struct slName *lines = NULL;
+char *line;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+while (lineFileNextReal(lf, &line))
+    slSafeAddHead(&lines, slNameNew(line));
+lineFileClose(&lf);
+slReverse(&lines);
+return lines;
+}
 
 struct slRef *refOnList(struct slRef *refList, void *val)
 /* Return ref if val is already on list, otherwise NULL. */

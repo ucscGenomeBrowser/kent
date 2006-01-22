@@ -449,6 +449,10 @@ struct slName *slNameListFromString(char *s, char delimiter);
 #define slNameListFromComma(s) slNameListFromString(s, ',')
 /* Parse out comma-separated list. */
 
+struct slName *slNameLoadReal(char *fileName);
+/* load file lines that are not blank or start with a '#' into a slName
+ * list */
+
 struct slRef
 /* Singly linked list of generic references. */
     {
