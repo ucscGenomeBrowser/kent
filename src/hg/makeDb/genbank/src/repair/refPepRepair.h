@@ -7,6 +7,7 @@ void refPepList(char *db,
 /* list of sequences needing repair */
 
 void refPepRepair(char *db,
+                  char *accFile,
                   boolean dryRun);
 /* fix dangling repPep gbSeq entries. */
 

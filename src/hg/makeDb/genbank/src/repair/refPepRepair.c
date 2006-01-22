@@ -9,7 +9,7 @@
 #include "localmem.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: refPepRepair.c,v 1.5 2006/01/21 08:14:09 markd Exp $";
+static char const rcsid[] = "$Id: refPepRepair.c,v 1.6 2006/01/22 08:10:46 markd Exp $";
 
 struct brokenRefPep
 /* data about a refPep with broken extFile link.  protein acc+ver used in case
@@ -73,6 +73,39 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
+static void brokenRefPepLoadAcc(struct sqlConnection *conn,
+                                struct brokenRefPepTbl *brpTbl,
+                                char *acc)
+/* load a brokenRefPep for the specified acc */
+{
+char query[512];
+struct sqlResult *sr;
+char **row;
+
+if (!(startsWith("NP_", acc) || startsWith("YP_", acc)))
+    errAbort("%s is not a RefSeq protein accession", acc);
+
+safef(query, sizeof(query),
+      "select gbSeq.id, gbSeq.acc, gbSeq.version from gbSeq "
+      "where acc=\"%s\"", acc);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("%s not found in gbSeq", acc);
+brokenRefPepNew(brpTbl, sqlUnsigned(row[0]), row[1], sqlUnsigned(row[2]));
+sqlFreeResult(&sr);
+}
+
+static void brokenRefPepLoad(struct sqlConnection *conn,
+                             struct brokenRefPepTbl *brpTbl,
+                             struct slName *accs)
+/* load refSeq peps that are listed in a file */
+{
+struct slName *acc;
+for (acc = accs; acc != NULL; acc = acc->next)
+    brokenRefPepLoadAcc(conn, brpTbl, acc->name);
+}
+
 static void saveProtFastaPath(struct brokenRefPepTbl* brpTbl,
                               struct brokenRefPep* brp,
                               char *mrnaAcc, char *mrnaFa)
@@ -120,15 +153,20 @@ while ((hel = hashNext(&cookie)) != NULL)
     brokenRefPepGetPath(conn, brpTbl, (struct brokenRefPep*)hel->val);
 }
 
-static struct brokenRefPepTbl *brokenRefPepTblNew(struct sqlConnection *conn)
-/* construct a brokenRefPepTbl object, loading data from database  */
+static struct brokenRefPepTbl *brokenRefPepTblNew(struct sqlConnection *conn,
+                                                  struct slName *accs)
+/* construct a brokenRefPepTbl object, loading data from database, optionally
+ * using a list of accessions instead of finding them */
 {
 struct brokenRefPepTbl *brpTbl;
 AllocVar(brpTbl);
 brpTbl->protAccHash = hashNew(21);
 brpTbl->protFaHash = hashNew(18);
 
-brokenRefPepGetBroken(conn, brpTbl);
+if (accs != NULL)
+    brokenRefPepLoad(conn, brpTbl, accs);
+else
+    brokenRefPepGetBroken(conn, brpTbl);
 brokenRefPepGetMrnas(conn, brpTbl);
 return brpTbl;
 }
@@ -299,9 +337,12 @@ struct hashCookie cookie;
 struct hashEl *hel;
 
 if (!checkForRefLink(conn))
+    {
+    sqlDisconnect(&conn);
     return;
+    }
 
-brpTbl = brokenRefPepTblNew(conn);
+brpTbl = brokenRefPepTblNew(conn, NULL);
 cookie = hashFirst(brpTbl->protAccHash);
 
 while ((hel = hashNext(&cookie)) != NULL)
@@ -316,28 +357,34 @@ gbVerbMsg(1, "%s: need to drop %d refseq protein gbExtFile entries",
 }
 
 void refPepRepair(char *db,
+                  char *accFile,
                   boolean dryRun)
 /* fix dangling repPep gbSeq entries. */
 {
 struct sqlConnection *conn = sqlConnect(db);
 struct brokenRefPepTbl *brpTbl;
 struct extFileTbl* extFileTbl;
-if (checkForRefLink(conn))
+struct slName *accs = (accFile == NULL) ? NULL : slNameLoadReal(accFile);
+if (!checkForRefLink(conn))
     {
-    gbVerbMsg(1, "%s: repairing refseq protein gbExtFile entries%s",
-              sqlGetDatabase(conn), (dryRun? " (dry run)" : ""));
-
-    brpTbl = brokenRefPepTblNew(conn);
-    extFileTbl = extFileTblLoad(conn);
-    fillInFastaOffsets(brpTbl, conn, extFileTbl);
-    if (brpTbl->numToRepair > 0)
-        makeRepairs(brpTbl, conn, extFileTbl, dryRun);
-    else
-        gbVerbMsg(1, "%s: no refseq proteins to repair", sqlGetDatabase(conn));
-    brokenRefPepTblFree(&brpTbl);
-    extFileTblFree(&extFileTbl);
+    sqlDisconnect(&conn);
+    return;
     }
+
+gbVerbMsg(1, "%s: repairing refseq protein gbExtFile entries%s",
+          sqlGetDatabase(conn), (dryRun? " (dry run)" : ""));
+
+brpTbl = brokenRefPepTblNew(conn, accs);
+extFileTbl = extFileTblLoad(conn);
+fillInFastaOffsets(brpTbl, conn, extFileTbl);
+if (brpTbl->numToRepair > 0)
+    makeRepairs(brpTbl, conn, extFileTbl, dryRun);
+else
+    gbVerbMsg(1, "%s: no refseq proteins to repair", sqlGetDatabase(conn));
+brokenRefPepTblFree(&brpTbl);
+extFileTblFree(&extFileTbl);
 sqlDisconnect(&conn);
+slFreeList(&accs);
 }
 
 /*

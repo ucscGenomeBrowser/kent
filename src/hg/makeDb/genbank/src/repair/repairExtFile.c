@@ -5,15 +5,15 @@
 #include "gbVerb.h"
 #include "refPepRepair.h"
 
-static char const rcsid[] = "$Id: repairExtFile.c,v 1.3 2006/01/21 08:14:09 markd Exp $";
+static char const rcsid[] = "$Id: repairExtFile.c,v 1.4 2006/01/22 08:10:46 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"dryRun", OPTION_BOOLEAN},
+    {"accFile", OPTION_STRING},
     {"verbose", OPTION_INT},
     {NULL, 0}
 };
-boolean gDryRun = FALSE;  /* don't actually update database */
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -29,25 +29,28 @@ errAbort("%s\n\n"
          "                  valid gbExtFile entries.\n"
          "\n"
          "Options:\n"
+         "  -dryRun - don't actually update the database\n"
+         "  -accFile=file - file with list of accessions to operate on\n"
          "  -verbose=1\n"
          "           1 - stats only\n"
          "           2 - sequences repaired\n"
          "           3 - more details\n"
-         "          >3 - sql trace\n"
-         "  -dryRun - don't actually update the database\n",
+         "          >3 - sql trace\n",
          msg);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-char *repairTask, **dbs;
+char *repairTask, **dbs, *accFile = NULL;;
+boolean dryRun;
 int ndbs, i;
 optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage("wrong # args");
 gbVerbInit(optionInt("verbose", 1));
-gDryRun = optionExists("dryRun");
+dryRun = optionExists("dryRun");
+accFile = optionVal("accFile", NULL);
 
 repairTask = argv[1];
 dbs = argv+2;
@@ -55,13 +58,15 @@ ndbs = argc-2;
 
 if (sameString(repairTask, "refPepList"))
     {
+    if (accFile != NULL)
+        errAbort("-accFile is not valid for refPepList");
     for (i = 0; i < ndbs; i++)
         refPepList(dbs[i], stdout);
     }
 else if (sameString(repairTask, "refPepRepair"))
     {
     for (i = 0; i < ndbs; i++)
-        refPepRepair(dbs[i], gDryRun);
+        refPepRepair(dbs[i], accFile, dryRun);
     }
 else
     errAbort("invalid repairTask: %s", repairTask);
