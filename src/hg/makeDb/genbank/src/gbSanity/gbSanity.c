@@ -21,6 +21,7 @@
 #include "options.h"
 #include "hdb.h"
 #include "hash.h"
+#include "chkCommon.h"
 #include "portable.h"
 #include "hgRelate.h"
 #include "gbIndex.h"
@@ -38,7 +39,7 @@
 #include "../dbload/dbLoadOptions.h"
 #include <stdarg.h>
 
-static char const rcsid[] = "$Id: gbSanity.c,v 1.11 2005/09/23 23:08:17 markd Exp $";
+static char const rcsid[] = "$Id: gbSanity.c,v 1.12 2006/01/22 08:10:00 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {

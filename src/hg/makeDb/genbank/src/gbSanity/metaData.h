@@ -25,6 +25,11 @@ struct metaData
     boolean inGbIndex;     /* genbank flat-file indices */
     boolean inGbAlign;     /* has aligned entry */
 
+    /* refSeq protein-specific */
+    boolean hasProt;
+    boolean protInSeq;
+    boolean protInExtFile;
+
     /* set from gbIndex */
     boolean isNative;
 
@@ -34,7 +39,7 @@ struct metaData
 
     /* fields from the gbCdnaInfo table */
     HGID gbCdnaInfoId;
-    unsigned gbCdnaInfoVersion;  /* stripped ACC */
+    unsigned gbCdnaInfoVersion;
     time_t gbCdnaInfoModdate;
     unsigned gbCdnaInfoType;
     boolean haveDesc;
@@ -44,7 +49,7 @@ struct metaData
 
     /* fieldsfrom refLinkTable */
     char rlName[64];
-    char rlProtAcc[GB_ACC_BUFSZ];   /* FIXME: should verify */
+    char rlProtAcc[GB_ACC_BUFSZ];
 
     /* fields from the gbStatus table */
     unsigned gbsVersion;
@@ -61,19 +66,6 @@ struct metaData
 struct metaDataTbls;
 /* Object with metadata collect from various tables */
 
-extern int errorCnt;  /* count of errors */
-extern boolean testMode; /* Ignore errors that occure in test db */
-
-void gbErrorSetDb(char *database);
-/* set database to use in error messages */
-
-void gbError(char *format, ...)
-/* print and count an error */
-#ifdef __GNUC__
-__attribute__((format(printf, 1, 2)))
-#endif
-;
-
 struct metaDataTbls* metaDataTblsNew();
 /* create a metaData table object */
 
@@ -84,6 +76,12 @@ struct metaData* metaDataTblsFind(struct metaDataTbls* mdt,
 struct metaData* metaDataTblsGet(struct metaDataTbls* mdt,
                                  char* acc);
 /* Get or create metadata table entry for an acc. */
+
+void metaDataTblsAddProtAcc(struct metaDataTbls* mdt, struct metaData* md);
+/* Add protein accession to protAccHash */
+
+struct metaData* metaDataTblsGetByPep(struct metaDataTbls* mdt, char* pepAcc);
+/* Get metadata table entry for an peptide acc, or NULL if not found */
 
 void metaDataTblsFirst(struct metaDataTbls* mdt);
 /* Set the pointer so the next call to metaDataTblsNext returns the first
