@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: vgGetText.c,v 1.1 2006/01/22 10:45:19 kent Exp $";
+static char const rcsid[] = "$Id: vgGetText.c,v 1.2 2006/01/22 20:20:47 kent Exp $";
 
 char *db = "visiGene";
 
@@ -53,6 +53,7 @@ struct hash *strainHash;
 
 /* More complex hashes - keyed by id as ascii number, with
  * values of structures in visiGene.h  */
+struct hash *imageProbeHash;
 struct hash *probeHash;
 struct hash *geneHash;
 struct hash *genotypeHash;
@@ -62,6 +63,7 @@ struct hash *specimenHash;
 struct hash *journalHash;
 struct hash *imageFileHash;
 struct hash *stageSchemeHash;
+struct hash *expressionLevelHash;
 
 struct stageScheme
 /* Slightly cooked version of lifeStageScheme. */
@@ -214,6 +216,7 @@ struct submissionSet *submissionSet;
 struct antibody *antibody;
 struct specimen *specimen;
 struct journal *journal;
+struct imageProbe *ip;
 
 imageFileHash = hashSizedForTable(conn, "imageFile");
 sr = sqlGetResult(conn, "select * from imageFile");
@@ -263,11 +266,65 @@ while ((row = sqlNextRow(sr)) != NULL)
      hashAdd(journalHash, row[0], journalLoad(row));
 sqlFreeResult(&sr);
 
+imageProbeHash = hashSizedForTable(conn, "imageProbe");
+sr = sqlGetResult(conn, "select * from imageProbe");
+while ((row = sqlNextRow(sr)) != NULL)
+     hashAdd(imageProbeHash, row[1], imageProbeLoad(row)); /* Key on image, not id. */
+sqlFreeResult(&sr);
+
+expressionLevelHash = hashSizedForTable(conn, "expressionLevel");
+sr = sqlGetResult(conn, "select * from expressionLevel");
+while ((row = sqlNextRow(sr)) != NULL)
+     hashAdd(expressionLevelHash, row[0], expressionLevelLoad(row));
+sqlFreeResult(&sr);
+
 binomialHash = hashSizedForTable(conn, "uniProt.taxon");
 fillInTwoColHash(conn, "select id,binomial from uniProt.taxon", binomialHash);
 
 strainHash = hashSizedForTable(conn, "strain");
 fillInTwoColHash(conn, "select id,name from strain", strainHash);
+}
+
+struct imageProbe *ipForImage(struct sqlConnection *conn, char *image)
+/* Get list of probes associated with image. */
+{
+struct hashEl *hel;
+struct imageProbe *ipList = NULL, *ip;
+
+for (hel = hashLookup(imageProbeHash, image); hel != NULL; 
+	hel = hashLookupNext(hel))
+    {
+    ip = hel->val;
+    slAddHead(&ipList, ip);
+    }
+slReverse(&ipList);
+return ipList;
+}
+
+void printExpression(FILE *f, int imageProbe)
+/* Print all positive expression associated with imageProbe. */
+{
+struct hashEl *hel;
+char ipAscii[16];
+safef(ipAscii, sizeof(ipAscii), "%d", imageProbe);
+for (hel = hashLookup(expressionLevelHash, ipAscii); hel != NULL; 
+	hel = hashLookupNext(hel))
+    {
+    struct expressionLevel *exp = hel->val;
+    if (exp->level > 0)
+        {
+	char *s;
+	s = hashFindValFromInt(bodyPart, exp->bodyPart);
+	if (s != NULL)
+	    fprintf(f, "%s ", s);
+	s = hashFindValFromInt(cellType, exp->cellType);
+	if (s != NULL)
+	    fprintf(f, "%s ", s);
+	s = hashFindValFromInt(cellSubtype, exp->cellSubtype);
+	if (s != NULL)
+	    fprintf(f, "%s ", s);
+	}
+    }
 }
 
 void imageText(struct sqlConnection *conn,
@@ -278,7 +335,7 @@ void imageText(struct sqlConnection *conn,
 {
 char query[512], **row;
 struct sqlResult *sr;
-struct slName *probeList, *probeId;
+struct imageProbe *ipList, *ip;
 struct genotype *genotype = NULL;
 struct submissionSet *set = hashMustFindVal(submissionSetHash, submissionSet);
 struct specimen *spec = hashMustFindVal(specimenHash, specimen);
@@ -289,17 +346,15 @@ char *s;
 fprintf(f, "%s", image);
 
 /* Get list of probes associated with image. */
-safef(query, sizeof(query), 
-	"select probe from imageProbe where image=%s", image);
-probeList = sqlQuickList(conn, query);
+ipList = ipForImage(conn, image);
 
 if (spec->genotype != 0)
     genotype = hashMustFindValFromInt(genotypeHash, spec->genotype);
 
 /* Write out all probe names in form we search for them. */
 fprintf(f, "\t");
-for (probeId = probeList; probeId != NULL; probeId = probeId->next)
-    fprintf(f, "vgPrb_%s ", probeId->name);
+for (ip = ipList; ip != NULL; ip = ip->next)
+    fprintf(f, "vgPrb_%d ", ip->probe);
 
 /* Write out submit id. */
 fprintf(f, "\t%s", file->submitId);
@@ -312,9 +367,9 @@ if (genotype != NULL)
 
 /* Write out all gene symbols. */
 fprintf(f, "\t");
-for (probeId = probeList; probeId != NULL; probeId = probeId->next)
+for (ip = ipList; ip != NULL; ip = ip->next)
     {
-    struct probe *probe = hashMustFindVal(probeHash, probeId->name);
+    struct probe *probe = hashMustFindValFromInt(probeHash, ip->probe);
     struct gene *gene = hashFindValFromInt(geneHash, probe->gene);
     if (gene != NULL)
         fprintf(f, "%s ", gene->name);
@@ -322,9 +377,9 @@ for (probeId = probeList; probeId != NULL; probeId = probeId->next)
 
 /* Write out gene accessions. */
 fprintf(f, "\t");
-for (probeId = probeList; probeId != NULL; probeId = probeId->next)
+for (ip = ipList; ip != NULL; ip = ip->next)
     {
-    struct probe *probe = hashMustFindVal(probeHash, probeId->name);
+    struct probe *probe = hashMustFindValFromInt(probeHash, ip->probe);
     struct gene *gene = hashFindValFromInt(geneHash, probe->gene);
     if (gene != NULL)
 	{
@@ -357,10 +412,7 @@ if (s != NULL)
 fprintf(f, "\t%s", spec->name);
 s = hashFindValFromInt(bodyPart, spec->bodyPart);
 if (s != NULL)
-    {
     fprintf(f, "\t%s", s);
-    uglyf("%s\n", s);
-    }
 s = hashFindValFromInt(sex, spec->sex);
 if (s != NULL)
     fprintf(f, "\t%s", s);
@@ -376,8 +428,10 @@ if (genotype != NULL)
 fprintf(f, "\t");
 printStage(f, spec->taxon, spec->age);
 
-/* Write out tissues it's expressed in if any. TODO */
+/* Write out tissues it's expressed in if any. */
 fprintf(f, "\t");
+for (ip = ipList; ip != NULL; ip = ip->next)
+    printExpression(f, ip->id);
 
 /* Write out caption. */
 s = hashFindValFromInt(caption, file->caption);
@@ -389,7 +443,7 @@ if (s != NULL)
     }
 
 fprintf(f, "\n");
-slFreeList(&probeList);
+imageProbeFreeList(&ipList);
 }
 
 void vgGetText(char *outText)
@@ -404,12 +458,14 @@ char query[512], **row;
 hashSimpleTables(conn);
 hashComplexTables(conn);
 stageSchemeHash = makeStageSchemeHash(conn);
+uglyTime("loaded hashes");
 sr = sqlGetResult(imageConn, 
-    "select id,submissionSet,imageFile,specimen,preparation from image where id > 5950 limit 5000");
+    "select id,submissionSet,imageFile,specimen,preparation from image where id > 5950 limit 20000");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     imageText(conn, row[0], row[1], row[2], row[3], row[4], f);
     }
+uglyTime("created saved text");
 sqlFreeResult(&sr);
 carefulClose(&f);
 }
@@ -421,6 +477,7 @@ optionInit(&argc, argv, options);
 db = optionVal("db", db);
 if (argc != 2)
     usage();
+uglyTime(NULL);
 vgGetText(argv[1]);
 return 0;
 }
