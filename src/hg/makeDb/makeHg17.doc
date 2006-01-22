@@ -19516,3 +19516,8 @@ cat > makeMaf.csh << 'EOF'
          /usr/local/apache/htdocs/goldenPath/bosTau1/axtNet
     # Request push to downloads server
 
+# Create table that maps between known genes and visiGene database 
+    # mapping to other species such as mouse, zebrafish, frog
+    # requires visiGene probe track vgImageProbes be created first
+    knownToVisiGene hg17 -fromProbePsl=vgImageProbes
+
