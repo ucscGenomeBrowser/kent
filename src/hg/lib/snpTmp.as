@@ -8,4 +8,6 @@ table snpTmp
     char[1] strand;     "Which DNA strand contains the observed alleles"
     lstring  refNCBI;  	"Reference genomic from dbSNP"
     string  locType;    "range, exact, between"
+    string  func;       "set for function"
+    string  contigName; "contig name"
     )

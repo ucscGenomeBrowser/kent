@@ -14,6 +14,11 @@ CREATE TABLE snpTmp (
     locType enum ('unknown', 'range', 'exact', 'between',
                   'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') 
 		  DEFAULT 'unknown' NOT NULL, # locType
+    func       set( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', 
+    		     'untranslated', 'intron', 'splice-site', 'cds-reference') 
+		     DEFAULT 'unknown' NOT NULL,
+    			# The functional category of the SNP
+    contigName varchar(255) not null,   # Contig name
               #Indices
     PRIMARY KEY(name)
 );

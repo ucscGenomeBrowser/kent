@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snpTmp.h"
 
-static char const rcsid[] = "$Id: snpTmp.c,v 1.4 2006/01/17 22:31:33 heather Exp $";
+static char const rcsid[] = "$Id: snpTmp.c,v 1.5 2006/01/22 03:48:01 heather Exp $";
 
 void snpTmpStaticLoad(char **row, struct snpTmp *ret)
 /* Load a row from snpTmp table into ret.  The contents of ret will
@@ -22,6 +22,8 @@ ret->name = row[3];
 strcpy(ret->strand, row[4]);
 ret->refNCBI = row[5];
 ret->locType = row[6];
+ret->func = row[7];
+ret->contigName = row[8];
 }
 
 struct snpTmp *snpTmpLoad(char **row)
@@ -38,6 +40,8 @@ ret->name = cloneString(row[3]);
 strcpy(ret->strand, row[4]);
 ret->refNCBI = cloneString(row[5]);
 ret->locType = cloneString(row[6]);
+ret->func = cloneString(row[7]);
+ret->contigName = cloneString(row[8]);
 return ret;
 }
 
@@ -47,7 +51,7 @@ struct snpTmp *snpTmpLoadAll(char *fileName)
 {
 struct snpTmp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[9];
 
 while (lineFileRow(lf, row))
     {
@@ -65,7 +69,7 @@ struct snpTmp *snpTmpLoadAllByChar(char *fileName, char chopper)
 {
 struct snpTmp *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[9];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -93,6 +97,8 @@ ret->name = sqlStringComma(&s);
 sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
 ret->refNCBI = sqlStringComma(&s);
 ret->locType = sqlStringComma(&s);
+ret->func = sqlStringComma(&s);
+ret->contigName = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -108,6 +114,8 @@ freeMem(el->chrom);
 freeMem(el->name);
 freeMem(el->refNCBI);
 freeMem(el->locType);
+freeMem(el->func);
+freeMem(el->contigName);
 freez(pEl);
 }
 
@@ -150,6 +158,14 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->locType);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->func);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->contigName);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
@@ -168,9 +184,14 @@ char *createString =
 "    name          varchar(255) not null,\n"
 "    strand        char(1) not null,\n"
 "    refNCBI       longblob not null,\n"
-"    locType       enum('unknown', 'range', 'exact', 'between',"
+"    locType       enum('unknown', 'range', 'exact', 'between',\n"
 "                  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
+"    func       set( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', \n"
+"    		     'untranslated', 'intron', 'splice-site', 'cds-reference') \n"
+"		     DEFAULT 'unknown' NOT NULL,\n"
+"    			# The functional category of the SNP\n"
+"    contigName    varchar(255) not null,\n"
 "    INDEX         name(name)\n"
 ")\n";
 
