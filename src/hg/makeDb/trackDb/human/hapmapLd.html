@@ -1,27 +1,49 @@
 <H2>Description</H2> 
 <P> 
+
 This track shows three different measures (D', r<sup>2</sup>, and LOD)
 of linkage disequilibrium (LD) between pairs of SNPs as genotyped by
 the HapMap consortium.  Linkage disequilibrium is a measure of the
-association between two markers.  This is useful to understand which
-regions of the genome are commonly inherited in blocks.  See the
-Recombination Rates and Recombination Hotspots tracks for related
-analyses. 
+association between two markers, which is useful for understanding the
+associations between genetic variants throughout the genome. 
+<!-- See the Recombination Rates and Recombination Hotspots tracks for
+related analyses. -->
 </P>
 <P>
 By default, LOD values are displayed in full mode.  Each diagonal
 represents a different SNP with each square representing a pairwise
 comparison between two SNPs.  Shades are used to indicate linkage
 disequilibrium between the pair of SNPs, with darker shades indicating
-stronger LD.  White squares indicate pairwise D' values less than 1
-with no statistically significant evidence of LD (LOD < 2).  Blue squares
-indicate pairwise D' values of 1 but without statistical significance.
+stronger LD.  
 </P>
+<UL>
+ <LI>
+  White squares indicate pairwise D' values less than 1 with no
+  statistically significant evidence of LD (LOD < 2).  
+ </LI>
+ <LI>
+  Blue squares indicate high D' values (>0.99) with low statistical
+  significance (LOD < 2).
+ </LI>
+ <LI>
+  Light pink squares are drawn when the statistical significance is
+  high (LOD >= 2) but the D' value is low (less than 0.5).
+ </LI>
+</UL>
 
 <H2>Methods</H2>
 <P>
 Genotypes from HapMap Phase II release 19 were used with HaploView to
-infer phasing and calculate LD values for all SNP pairs within 250kb.
+infer phasing and calculate LD values for all SNP pairs within 250 kb.
+</P>
+<P>
+Haploview uses a two marker EM (ignoring missing data) to estimate the
+maximum-likelihood values of the four gamete frequencies, from which
+the D', LOD, and r<sup>2</sup> calculations derive. Haplotype phase
+and population frequency are inferred using a standard EM algorithm
+with a partition-ligation approach for blocks with greater than 10
+markers.  Conformance with Hardy-Weinberg equilibrium is computed
+using an exact test.
 </P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -45,26 +67,25 @@ infer phasing and calculate LD values for all SNP pairs within 250kb.
   LD Values: measures of linkage disequilibrium<BR>
   <UL>
    <LI>
-    <i>r<sup>2</sup></i><BR>
-This displays the raw r<sup>2</sup> value for a given marker pair.  SNPs that
-have not been separated by recombination have r<sup>2</sup> = 1; in this case, these
-two markers are said to be redundant.  Lower r<sup>2</sup> values show a lower
-degree of LD, indicating that some recombination has occurred in this
-population.  Please see Pritchard and Przeowrski (2001) for details.
+    <i>r<sup>2</sup></i> displays the raw r<sup>2</sup> value for a
+given marker pair.  SNPs that have not been separated by recombination
+have r<sup>2</sup> = 1; in this case, these two markers are said to be
+redundant for genotyping, but may have different functional effects.
+Lower r<sup>2</sup> values show a lower degree of LD, indicating that
+some recombination has occurred in this population.  Please see Hill
+and Robertson (1966) for details.
    </LI>
    <LI>
-    <i>D'</i><BR>
-This displays the raw D' value for a given marker pair.  A D' value of
-1 (complete LD) indicates that two SNPs have not been separated by
-recombination, while lower values indicate that the ancestral allele
-has undergone some recombination during the history of the population.
-Only D' values near 1 are a reliable measure of LD; lower values are
-difficult to interpret as the magnitude of D' depends strongly on
-sample size.  Please see Lewontin (1988) for more details.
+    <i>D'</i> displays the raw D' value for a given marker pair.  A D'
+value of 1 (complete LD) indicates that two SNPs have not been
+separated by recombination, while lower values indicate evidence of
+recombination in the history of the sample.  Only D' values near 1 are
+a reliable measure of LD; lower values are difficult to interpret as
+the magnitude of D' depends strongly on sample size.  Please see
+Lewontin (1988) for more details.
    </LI>
    <LI>
-    <i>LOD</i><BR>
-This displays the log odds score for linkage disequilibrium between a given marker pair, and is shown by default.
+    <i>LOD</i> displays the log odds score for linkage disequilibrium between a given marker pair, and is shown by default.
    </LI>
   </UL>
  </LI>
@@ -86,7 +107,7 @@ This displays the log odds score for linkage disequilibrium between a given mark
     <i>LD Values</i> can be drawn in a variety of colors, with red as default.  The intensity of the color is proportional to the strength of the LD measure chosen above.
    </LI>
    <LI>
-    <i>Outline</i>s can be drawn in contrasting colors or turned off.
+    <i>Outline</i>s can be drawn in contrasting colors or turned off.  Outlines are automatically suppressed when there are more than a thousand markers being displayed or the window is larger than 100,000 bp.
    </LI>
   </UL>
  </LI>
@@ -102,9 +123,9 @@ This displays the log odds score for linkage disequilibrium between a given mark
 This track was created by 
 <A HREF="mailto:daryl@soe.ucsc.edu">Daryl Thomas</A> 
 at UCSC using 
-<A HREF="http://www.hapmap.org/downloads/ld_data/2005-10/" 
-TARGET=_blank>data</A> from the 
-<A HREF="http://www.hapmap.org/">International HapMap Project</A>, 
+<A HREF="http://www.hapmap.org/downloads/ld_data/2005-10/" TARGET=_blank>data</A> 
+from the 
+<A HREF="http://www.hapmap.org/" TARGET=_blank>International HapMap Project</A>, 
 following the display style from 
 <A HREF="http://www.broad.mit.edu/mpg/haploview/" TARGET=_blank>HaploView</A>.
 </P>
@@ -114,26 +135,27 @@ following the display style from
 <H3>HapMap Project</H3>
 <P>
 The International HapMap Consortium.
-<A HREF="http://www.hapmap.org/downloads/presentations/Nature_HapMap_phaseI.pdf"TARGET=_blank>A haplotype map of the human genome</A>.
+<A HREF="http://www.hapmap.org/downloads/presentations/Nature_HapMap_phaseI.pdf" 
+TARGET=_blank> A haplotype map of the human genome</A>.
 <em>Nature</em> <B>437</B>, 1299-1320 (2005).</P> 
 <P>
 The International HapMap Consortium.
-<A HREF="http://www.hapmap.org/downloads/nature02168.pdf" TARGET=_blank>The 
-International HapMap Project</A>.
+<A HREF="http://www.hapmap.org/downloads/nature02168.pdf" 
+TARGET=_blank> The International HapMap Project</A>.
 <em>Nature</em> <B>426</B>, 789-96 (2003).</P>
 
 <H3>HapMap Data Coordination Center</H3>
 <P>
 Thorisson, G.A., Smith, A.V., Krishnan, L. and Stein, L.D. 
 <A HREF="http://www.hapmap.org/downloads/presentations/Genome_research_art10.pdf" 
-TARGET=_blank>The International HapMap Project Web site</A>.
+TARGET=_blank> The International HapMap Project Web site</A>.
 <em>Genome Res</em> <B>15</B>, 1591-3 (2005).</P> 
 
 <H3>HaploView</H3>
 <P>
 Barrett, J.C., Fry, B., Maller, J. and Daly, M.J. 
 <A HREF="http://bioinformatics.oxfordjournals.org/cgi/content/full/bth457?ijkey=54SiAdNbKzbNg&keytype=ref" 
-TARGET=_blank>Haploview: analysis and visualization of LD and haplotype 
+TARGET=_blank> Haploview: analysis and visualization of LD and haplotype 
 maps</A>. 
 <em>Bioinformatics</em> <B>21</B>(2), 263-5 (2005).</P>
 
@@ -141,10 +163,8 @@ maps</A>.
 <P>
 Lewontin, R.C.
 <A HREF="http://www.genetics.org/cgi/reprint/120/3/849"
-TARGET=_blank>On measures of gametic disequilibrium</A>.
+TARGET=_blank> On measures of gametic disequilibrium</A>.
 <em>Genetics</em> <B>120</B>, 849-52 (1988).</P>
 <P>
-Pritchard, J.K. and Przeworski, M.
-<A HREF="http://www.journals.uchicago.edu/AJHG/journal/issues/v69n1/012882/012882.html"
-TARGET=_blank>Linkage disequilibrium in humans: models and data</A>.
-<em>Am. J. Hum. Genet.</em>, <B>69</B>, 1-14 (2001).</P>
+Hill, W. G. and Robertson, A. The effect of linkage on limits to artificial selection. <em>Genet. Res.</em>, <b>8</b>:269-294 (1966).
+</P>
