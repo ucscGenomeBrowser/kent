@@ -2,11 +2,12 @@
 #include "common.h"
 
 #include "chromInfo.h"
+#include "dystring.h"
 #include "hash.h"
 #include "hdb.h"
 #include "snpTmp.h"
 
-static char const rcsid[] = "$Id: snpSplit.c,v 1.6 2006/01/17 22:36:10 heather Exp $";
+static char const rcsid[] = "$Id: snpSplit.c,v 1.7 2006/01/22 03:48:28 heather Exp $";
 
 /* these are described in b125_mapping.doc */
 /* Also snpFixed.LocTypeCode */
@@ -17,6 +18,19 @@ char *locTypeStrings[] = {
     "rangeInsertion",
     "rangeSubstitution",
     "rangeDeletion",
+};
+
+char *functionStrings[] = {
+/* From snpFixed.SnpFunctionCode. */
+    "unknown", 
+    "locus", 
+    "coding", 
+    "coding-synon", 
+    "coding-nonsynon", 
+    "untranslated", 
+    "intron", 
+    "splice-site", 
+    "cds-reference", 
 };
 
 char *snpDb = NULL;
@@ -158,6 +172,60 @@ verbose(1, "skipping snp %s with loc type %d\n", el->name, locType);
 return FALSE;
 }
 
+void lookupFunction(struct snpTmp *list)
+/* get function from ContigLocusId table */
+/* can be multiple matches */
+/* function values are defined in snpFixed.SnpFunctionCode */
+{
+struct snpTmp *el;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int functionValue = 0;
+char snpName[32];
+struct dyString *dy = NULL;
+int funcCount = 0;
+int newSize = 0;
+
+for (el = list; el != NULL; el = el->next)
+{
+    dy = newDyString(256);
+    strcpy(snpName, el->name);
+    stripString(snpName, "rs");
+
+    safef(query, sizeof(query), "select count(*) from ContigLocusId where snp_id = %s and ctg_id = %s", snpName, el->contigName);
+    funcCount = sqlQuickNum(conn, query);
+    if (funcCount == 0)
+        {
+        el->func = cloneString("unknown");
+        continue;
+        }
+
+    safef(query, sizeof(query), "select fxn_class from ContigLocusId where snp_id = %s and ctg_id = %s", snpName, el->contigName);
+    sr = sqlGetResult(conn, query);
+
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        functionValue = atoi(row[0]);
+        if (functionValue > 8)
+            {
+            verbose(1, "unexpected function value %d for %s; setting to 0 (zero)", functionValue, snpName);
+            functionValue = 0;
+            }
+        dyStringPrintf(dy, "%s,", functionStrings[functionValue]);
+        }
+
+    // chop off the last character
+    newSize = dy->stringSize - 1;
+    dyStringResize(dy, newSize);
+    el->func = cloneString(dy->string);
+    sqlFreeResult(&sr);
+    freeDyString(&dy);
+    }
+hFreeConn(&conn);
+}
+
 struct snpTmp *readSnps(char *chromName, struct slName *contigList)
 /* query ContigLoc for all snps in contig */
 {
@@ -193,7 +261,7 @@ for (contigPtr = contigList; contigPtr != NULL; contigPtr = contigPtr->next)
         locType = atoi(row[2]);
         if (locType < 1 || locType > 6) 
             {
-	    verbose(5, "skipping snp %s with loc_type %d\n", el->name, locType);
+	    verbose(1, "skipping snp %s with loc_type %d\n", el->name, locType);
 	    continue;
 	    }
         AllocVar(el);
@@ -214,6 +282,7 @@ for (contigPtr = contigList; contigPtr != NULL; contigPtr = contigPtr->next)
 	// should this be reverseComplemented for negative strand??!!
 	if (sameString(el->locType, "between") && !sameString(el->refNCBI, "-"))
 	    verbose(1, "unexpected between allele %s for %s\n", el->refNCBI, el->name);
+	el->contigName = cloneString(contigPtr->name);
         slAddHead(&list,el);
 	snpCount++;
         }
@@ -270,6 +339,10 @@ for (el = list; el != NULL; el = el->next)
     fprintf(f, "%s\t", el->strand);
     fprintf(f, "%s\t", el->refNCBI);
     fprintf(f, "%s\t", el->locType);
+    fprintf(f, "%s\t", el->func);
+    /* don't need this going forward, but easier to write it */
+    /* since using snpTmp.h */
+    fprintf(f, "%s\t", el->contigName);
     fprintf(f, "\n");
     count++;
     }
@@ -324,6 +397,8 @@ if(!hTableExistsDb(snpDb, "ContigLoc"))
     errAbort("no ContigLoc table in %s\n", snpDb);
 if(!hTableExistsDb(snpDb, "ContigInfo"))
     errAbort("no ContigInfo table in %s\n", snpDb);
+if(!hTableExistsDb(snpDb, "ContigLocusId"))
+    errAbort("no ContigLocusId table in %s\n", snpDb);
 
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
@@ -350,6 +425,7 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
 	verbose(1, "no SNPs found\n");
 	continue;
 	}
+    lookupFunction(list);
     slSort(&list, snpTmpCmp);
     loadDatabase(chromPtr->name, list);
     slFreeList(&list);
