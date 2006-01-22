@@ -68,7 +68,9 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	numChildren = atoi(words[2]);
 	node->ident->length =  atof(words[3]);
 	needGenome = FALSE;
-	elements = needMem(elementsLeft * sizeof(struct element *));
+	elements = NULL;
+	if (elementsLeft)
+	    elements = needMem(elementsLeft * sizeof(struct element *));
 
 	verbose(2, "adding genome %s\n",genome->name);
 	}
@@ -441,6 +443,19 @@ for (ii=0; ii < tree->numEdges; ii++)
 	}
 
 errAbort("tried to delete non-existant edge");
+}
+
+char *eleFullName(struct element *e, boolean doNeg)
+{
+static char buffer[512];
+
+if (e->isFlipped ^ doNeg)
+    //safef(buffer,sizeof buffer, "-%s.%s.%s",e->species,e->name, e->version);
+    safef(buffer,sizeof buffer, "-%s",e->name);
+else
+    safef(buffer,sizeof buffer, "%s",e->name);
+
+return buffer;
 }
 
 char *eleName(struct element *e)
