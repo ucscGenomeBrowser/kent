@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.59 2006/01/23 21:15:38 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.60 2006/01/23 22:01:10 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1293,6 +1293,8 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	b = dPtr->chromEnd;
 	c = sPtr->chromStart;
 	d = sPtr->chromEnd;
+	if (notInWindow(a, b, c, d, trim)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
+	    continue;
 	shade = colorLookup[(int)values[i]];
 	if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
 	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
@@ -1309,22 +1311,25 @@ if (dPtr->next==NULL)
     {
     a = dPtr->chromStart;
     b = dPtr->chromEnd;
-    if (isLod) /* point to the right data values to be drawn.  'values' variable is reused */
-	values = dPtr->lod;
-    else if (isRsquared)
-	values = dPtr->rsquared;
-    else if (isDprime)
-	values = dPtr->dprime;
-    shade = colorLookup[(int)values[0]];
-    if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
-	ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, a, b, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
-    else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+    if (!notInWindow(a, b, a, b, trim)) /* Continue only if this diamond needs to be drawn */
 	{
-	ldAddToDenseValueHash(ldHash, a, values[0]);
-	ldAddToDenseValueHash(ldHash, b, values[0]);
+	if (isLod) /* point to the right data values to be drawn.  'values' variable is reused */
+	    values = dPtr->lod;
+	else if (isRsquared)
+	    values = dPtr->rsquared;
+	else if (isDprime)
+	    values = dPtr->dprime;
+	shade = colorLookup[(int)values[0]];
+	if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
+	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, a, b, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
+	else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+	    {
+	    ldAddToDenseValueHash(ldHash, a, values[0]);
+	    ldAddToDenseValueHash(ldHash, b, values[0]);
+	    }
+	else
+	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
 	}
-    else
-	errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
     }
 if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
     ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
