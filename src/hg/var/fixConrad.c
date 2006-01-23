@@ -7,10 +7,8 @@
 #include "linefile.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: fixConrad.c,v 1.1 2006/01/23 19:07:08 heather Exp $";
+static char const rcsid[] = "$Id: fixConrad.c,v 1.2 2006/01/23 19:29:12 heather Exp $";
 
-static char *database = NULL;
-static struct hash *chromHash = NULL;
 int countByChrom[25];
 
 void usage()
@@ -19,46 +17,18 @@ void usage()
 errAbort(
   "fixConrad - Assign unique identifier to Conrad input\n"
   "usage:\n"
-  "  fixConrad database file\n");
+  "  fixConrad file\n");
 }
 
 
-/* Copied from hgLoadWiggle. */
-static struct hash *loadAllChromInfo()
-/* Load up all chromosome infos. */
+int getChromIndex(char *chromString)
+/* there is probably a library function that does this... */
 {
-struct chromInfo *el;
-struct sqlConnection *conn = sqlConnect(database);
-struct sqlResult *sr = NULL;
-struct hash *ret;
-char **row;
-
-ret = newHash(0);
-
-sr = sqlGetResult(conn, "select * from chromInfo");
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = chromInfoLoad(row);
-    verbose(4, "Add hash %s value %u (%#lx)\n", el->chrom, el->size, (unsigned long)&el->size);
-    hashAdd(ret, el->chrom, (void *)(& el->size));
-    }
-sqlFreeResult(&sr);
-sqlDisconnect(&conn);
-return ret;
+    if (sameString(chromString, "X")) return 23;
+    if (sameString(chromString, "Y")) return 24;
+    if (sameString(chromString, "M")) return 25;
+    return atoi(chromString);
 }
-
-/* also copied from hgLoadWiggle. */
-static unsigned getChromSize(char *chrom)
-/* Return size of chrom.  */
-{
-struct hashEl *el = hashLookup(chromHash,chrom);
-
-if (el == NULL)
-    errAbort("Couldn't find size of chrom %s", chrom);
-return *(unsigned *)el->val;
-}   
-
-
 
 void fixConrad(char *filename)
 /* fixConrad - read file. */
@@ -68,29 +38,34 @@ char *line;
 int lineSize;
 char *row[5];
 int wordCount;
-int count = 0;
+int chromInt = 0;
+char *chromName;
 
 while (lineFileNext(lf, &line, &lineSize))
     {
     wordCount = chopByWhite(line, row, ArraySize(row));
-    count++;
-    printf("conrad%d %s %s %s %s %s\n", 
-            count, row[0], row[1], row[2], row[3], row[4]);
+    chromName = cloneString(row[0]);
+
+    stripString(row[0], "chr");
+    chromInt = getChromIndex(row[0]);
+    countByChrom[chromInt] = countByChrom[chromInt] + 1;
+
+    printf("%s.%d %s %s %s %s %s\n", 
+            chromName, countByChrom[chromInt], chromName, row[1], row[2], row[3], row[4]);
     }
 }
 
 int main(int argc, char *argv[])
 {
+int i;
 
-if (argc != 3)
+if (argc != 2)
     usage();
 
-database = cloneString(argv[1]);
-hSetDb(database);
+for (i = 0; i++; i<25)
+    countByChrom[i] = 0;
 
-chromHash = loadAllChromInfo();
-
-fixConrad(argv[2]);
+fixConrad(argv[1]);
 
 return 0;
 }
