@@ -9,7 +9,7 @@
 #include "localmem.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: refPepRepair.c,v 1.6 2006/01/22 08:10:46 markd Exp $";
+static char const rcsid[] = "$Id: refPepRepair.c,v 1.7 2006/01/23 06:33:01 markd Exp $";
 
 struct brokenRefPep
 /* data about a refPep with broken extFile link.  protein acc+ver used in case
@@ -36,28 +36,41 @@ struct brokenRefPepTbl
     int numToDrop;                /* number that need dropped */
 };
 
-static struct brokenRefPep *brokenRefPepNew(struct brokenRefPepTbl *brpTbl,
-                                            unsigned protSeqId,
-                                            char *protAcc, short protVer)
-/* construct a brokenRefPep object and add to the table */
+static struct brokenRefPep *brokenRefPepObtain(struct brokenRefPepTbl *brpTbl,
+                                               char *protAcc, int protSeqId,
+                                               short protVer)
+/* get a brokenRefPep object if it exists, or create a new one. protSeqId
+ * is 0 if not known, protVer is -1 if not known.*/
 {
-struct brokenRefPep *brp;
-struct hashEl *hel;
-hel = hashStore(brpTbl->protAccHash, protAcc);
-if (hel->val != NULL)
-    errAbort("dup refPep: %s", protAcc);
-lmAllocVar(brpTbl->protAccHash->lm, brp);
-hel->val = brp;
-brp->protSeqId = protSeqId;
-brp->protAcc = hel->name;
-brp->protVer = protVer;
-brp->faId = -1;
-brp->faOff = -1;
+struct hashEl *hel = hashStore(brpTbl->protAccHash, protAcc);
+struct brokenRefPep *brp = hel->val;
+if (brp == NULL)
+    {
+    lmAllocVar(brpTbl->protAccHash->lm, brp);
+    hel->val = brp;
+    brp->protSeqId = protSeqId;
+    brp->protAcc = hel->name;
+    brp->protVer = protVer;
+    brp->faId = -1;
+    brp->faOff = -1;
+    }
+else
+    {
+    /* exists, update ids if needed */
+    if ((protSeqId > 0) && (brp->protSeqId > 0) && (protSeqId != brp->protSeqId))
+        errAbort("%s protSeqId mismatch", protAcc);
+    if (brp->protSeqId == 0)
+        brp->protSeqId = protSeqId;
+    if ((protVer >= 0) && (brp->protVer >= 0) && (protVer != brp->protVer))
+        errAbort("%s protVer mismatch", protAcc);
+    if (brp->protVer < 0)
+        brp->protVer = protVer;
+    }
 return brp;
 }
 
-static void brokenRefPepGetBroken(struct sqlConnection *conn,
-                                  struct brokenRefPepTbl *brpTbl)
+static void brokenRefPepGetBrokenLinks(struct sqlConnection *conn,
+                                       struct brokenRefPepTbl *brpTbl)
 /* load refSeq peps that are not linked to gbSeq */
 {
 static char *query = "select gbSeq.id, gbSeq.acc, gbSeq.version from gbSeq "
@@ -68,7 +81,7 @@ struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 
 while ((row = sqlNextRow(sr)) != NULL)
-    brokenRefPepNew(brpTbl, sqlUnsigned(row[0]), row[1], sqlUnsigned(row[2]));
+    brokenRefPepObtain(brpTbl, row[1], sqlUnsigned(row[0]), sqlUnsigned(row[2]));
 
 sqlFreeResult(&sr);
 }
@@ -91,8 +104,9 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
-    errAbort("%s not found in gbSeq", acc);
-brokenRefPepNew(brpTbl, sqlUnsigned(row[0]), row[1], sqlUnsigned(row[2]));
+    fprintf(stderr, "Warning: %s not found in gbSeq", acc);
+else
+    brokenRefPepObtain(brpTbl, row[1], sqlUnsigned(row[0]), sqlUnsigned(row[2]));
 sqlFreeResult(&sr);
 }
 
@@ -166,7 +180,7 @@ brpTbl->protFaHash = hashNew(18);
 if (accs != NULL)
     brokenRefPepLoad(conn, brpTbl, accs);
 else
-    brokenRefPepGetBroken(conn, brpTbl);
+    brokenRefPepGetBrokenLinks(conn, brpTbl);
 brokenRefPepGetMrnas(conn, brpTbl);
 return brpTbl;
 }
