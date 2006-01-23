@@ -802,3 +802,15 @@ chainSome $(path1)
     echo "create index tName_3 on blastDm1FB  (tName(9), tEnd);" | hgsql dp2
 
 # End tblastn
+
+
+# GENEMAPPER PREDICTIONS FROM UCB (DONE 1/19/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/dp2/bed/geneMapper
+    cd /cluster/data/dp2/bed/geneMapper
+    wget http://bio.math.berkeley.edu/genemapper/GFF/rel0.2/DroPse_1.gff
+    # Get rid of custom track header lines:
+    egrep -v '^(track|browser) ' DroPse_1.gff \
+    | ldHgGene -gtf -genePredExt dp2 geneMapper stdin
+
+
