@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snp125.c,v 1.13 2006/01/21 05:18:24 heather Exp $";
+static char const rcsid[] = "$Id: snp125.c,v 1.14 2006/01/23 04:31:53 heather Exp $";
 
 void snp125StaticLoad(char **row, struct snp125 *ret)
 /* Load a row from snp125 table into ret.  The contents of ret will
@@ -227,11 +227,11 @@ fputc(lastSep,f);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 
-void snp125TableCreate(struct sqlConnection *conn, int indexSize)
+void snp125TableCreate(struct sqlConnection *conn, char *tableName, int indexSize)
 /* create a snp125 table */
 {
 char *createString =
-"CREATE TABLE snp125 (\n"
+"CREATE TABLE %s (\n"
 "    bin           smallint(5) unsigned not null,\n"
 
 "    chrom      enum(\n"
@@ -282,30 +282,14 @@ char *createString =
 "    locType enum ('unknown', 'range', 'exact', 'between',\n"
 "                  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL,\n"
 "    source enum ('dbSNP125', 'Affy500k'),	# Source of the data - dbSnp, Affymetrix, ...\n"
-"    exception enum ('SimpleTriAllelic,'\n"
-"			'SimpleQuadAllelic',\n"
-"			'NegativeSize',\n"
-"    			'SimpleClassWrongSize',\n"
-"			'RangeClassWrongSize',\n"
-"			'InsertionClassWrongSize',\n"
-"			'DeletionClassWrongSize',\n"
-"			'SimpleClassWrongObserved',\n"
-"			'DeletionClassWrongObserved',\n"
-"			'RefNCBINotInObserved',\n"
-"			'RefUCSCNotInObserved',\n"
-"			'AlignTwoPlaces',\n"
-"			'AlignThreePlaces',\n"
-"			'AlignFourPlusPlaces',\n"
-"			'BadAlignmentFlanks',\n"
-"			'StrandIssue'),	# List of exceptionIds for 'invariant' conditions\n"
 "    INDEX         chrom(chrom(%d),bin),\n"
 "    INDEX         chromStart(chrom(%d),chromStart),\n"
 "    INDEX         name(name)\n"
 ")\n";
 
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, createString, indexSize, indexSize);
-sqlRemakeTable(conn, "snp125", dy->string);
+dyStringPrintf(dy, createString, tableName, indexSize, indexSize);
+sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
 
