@@ -1,4 +1,4 @@
-table chain
+table chainWithNormScore
 "Summary info about a chain of alignments, with normalized score"
     (
     double score; "score of chain"
