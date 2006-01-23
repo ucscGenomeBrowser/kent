@@ -7,7 +7,7 @@
 #include "linefile.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: fixConrad.c,v 1.2 2006/01/23 19:29:12 heather Exp $";
+static char const rcsid[] = "$Id: fixConrad.c,v 1.3 2006/01/23 20:12:05 heather Exp $";
 
 int countByChrom[25];
 
@@ -50,8 +50,8 @@ while (lineFileNext(lf, &line, &lineSize))
     chromInt = getChromIndex(row[0]);
     countByChrom[chromInt] = countByChrom[chromInt] + 1;
 
-    printf("%s.%d %s %s %s %s %s\n", 
-            chromName, countByChrom[chromInt], chromName, row[1], row[2], row[3], row[4]);
+    printf("%s.%d\t%s\t+\t%s\t%s\t%s\t%s\t1\t%s,\t%s,\n", 
+            chromName, countByChrom[chromInt], chromName, row[1], row[2], row[3], row[4], row[1], row[2]);
     }
 }
 
