@@ -1194,7 +1194,8 @@ identifier mouseStsTrueName typeOf=stsName
 "Mouse STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
     $mm.stsInfoMouseNew.name
     $mm.stsAlias.trueName minCheck=0.99
-    $mm.all_sts_primer.qName chopBefore=_ minCheck=0.99
+    $mm,!mm7.all_sts_primer.qName chopBefore=_ minCheck=0.99
+    mm7.all_sts_primer.qName chopBefore=_ minCheck=0.98
     $mm.stsMapMouseNew.name
     $mm.jaxQTL3.marker exclude= minCheck=0.99
     $mm.jaxQTL3.flank1 exclude= minCheck=0.95
