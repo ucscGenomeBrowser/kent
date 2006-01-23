@@ -21,6 +21,7 @@ struct genome
     struct phyloTree *node;
     char *name;
     struct element *elements;
+    struct hash *pairOrders;
 };
 
 struct distance
@@ -48,6 +49,7 @@ extern struct genome *readGenomes(char *fileName);
 
 extern struct element *eleAddEdge(struct element *parent, struct element *child);
 /* add an edge to an element */
+extern char *eleFullName(struct element *e, boolean doNeg);
 extern char *eleName(struct element *e);
 extern struct phyloTree *eleReadTree(char *fileName);
 extern void printElementTrees(struct phyloTree *node, int depth);
