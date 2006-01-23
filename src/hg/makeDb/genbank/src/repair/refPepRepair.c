@@ -9,7 +9,7 @@
 #include "localmem.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: refPepRepair.c,v 1.7 2006/01/23 06:33:01 markd Exp $";
+static char const rcsid[] = "$Id: refPepRepair.c,v 1.8 2006/01/23 06:41:41 markd Exp $";
 
 struct brokenRefPep
 /* data about a refPep with broken extFile link.  protein acc+ver used in case
@@ -104,7 +104,7 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row == NULL)
-    fprintf(stderr, "Warning: %s not found in gbSeq", acc);
+    fprintf(stderr, "Warning: %s not found in gbSeq\n", acc);
 else
     brokenRefPepObtain(brpTbl, row[1], sqlUnsigned(row[0]), sqlUnsigned(row[2]));
 sqlFreeResult(&sr);
