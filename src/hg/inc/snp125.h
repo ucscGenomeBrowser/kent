@@ -74,7 +74,7 @@ void snp125Output(struct snp125 *el, FILE *f, char sep, char lastSep);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 
-void snp125TableCreate(struct sqlConnection *conn, char *tableName, int indexSize);
+void snp125TableCreate(struct sqlConnection *conn, char *tableName);
 /* create a snp125 table */
 
 int snp125Cmp(const void *va, const void *vb);

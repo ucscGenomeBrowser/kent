@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snp125.c,v 1.14 2006/01/23 04:31:53 heather Exp $";
+static char const rcsid[] = "$Id: snp125.c,v 1.15 2006/01/23 05:27:19 heather Exp $";
 
 void snp125StaticLoad(char **row, struct snp125 *ret)
 /* Load a row from snp125 table into ret.  The contents of ret will
@@ -227,7 +227,7 @@ fputc(lastSep,f);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 
-void snp125TableCreate(struct sqlConnection *conn, char *tableName, int indexSize)
+void snp125TableCreate(struct sqlConnection *conn, char *tableName)
 /* create a snp125 table */
 {
 char *createString =
@@ -282,13 +282,13 @@ char *createString =
 "    locType enum ('unknown', 'range', 'exact', 'between',\n"
 "                  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL,\n"
 "    source enum ('dbSNP125', 'Affy500k'),	# Source of the data - dbSnp, Affymetrix, ...\n"
-"    INDEX         chrom(chrom(%d),bin),\n"
-"    INDEX         chromStart(chrom(%d),chromStart),\n"
+"    INDEX         chrom(chrom,bin),\n"
+"    INDEX         chromStart(chrom,chromStart),\n"
 "    INDEX         name(name)\n"
 ")\n";
 
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, createString, tableName, indexSize, indexSize);
+dyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
