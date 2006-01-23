@@ -8,21 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.16 2006/01/21 06:40:59 heather Exp $";
-
-char *functionStrings[] = {
-/* From snpFixed.SnpFunctionCode. */
-    "unknown",
-    "locus",
-    "coding",
-    "coding-synon",
-    "coding-nonsynon",
-    "untranslated",
-    "intron",
-    "splice-site",
-    "cds-reference",
-};
-
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.17 2006/01/23 05:29:53 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -96,7 +82,7 @@ if (!sqlTableExists(conn, tableName))
     return list;
 
 /* not checking chrom */
-safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refNCBI, locType from %s", tableName);
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, strand, refNCBI, locType, func from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -110,6 +96,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     strcpy(el->strand, row[4]);
     el->refNCBI = cloneString(row[5]);
     el->locType = cloneString(row[6]);
+    el->func = cloneString(row[7]);
     slAddHead(&list,el);
     count++;
     }
@@ -123,59 +110,6 @@ return list;
 
 
 
-void lookupFunction(struct snp125 *list)
-/* get function from ContigLocusId table */
-/* can be multiple matches */
-/* function values are defined in snpFixed.SnpFunctionCode */
-{
-struct snp125 *el;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-int functionValue = 0;
-char snpName[32];
-struct dyString *dy = NULL;
-int funcCount = 0;
-int newSize = 0;
-
-verbose(1, "looking up function...\n");
-for (el = list; el != NULL; el = el->next)
-    {
-    dy = newDyString(256);
-    strcpy(snpName, el->name);
-    stripString(snpName, "rs");
-
-    safef(query, sizeof(query), "select count(*) from ContigLocusId where snp_id = %s", snpName);
-    funcCount = sqlQuickNum(conn, query);
-    if (funcCount == 0)
-        {
-        el->func = cloneString("unknown");
-	continue;
-	}
-    
-    safef(query, sizeof(query), "select fxn_class from ContigLocusId where snp_id = %s", snpName);
-    sr = sqlGetResult(conn, query);
-    /* need a joiner check rule for this */
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        functionValue = atoi(row[0]);
-        if (functionValue > 8) 
-            {
-            verbose(1, "unexpected function value %d for %s; setting to 0 (zero)", functionValue, snpName);
-	    functionValue = 0;
-	    }
-        dyStringPrintf(dy, "%s,", functionStrings[functionValue]);
-	}
-    // chop off the last character
-    newSize = dy->stringSize - 1;
-    dyStringResize(dy, newSize);
-    el->func = cloneString(dy->string);
-    sqlFreeResult(&sr);
-    freeDyString(&dy);
-    }
-hFreeConn(&conn);
-}
 
 char *validString(int validCode)
 {
@@ -367,16 +301,25 @@ for (el = list; el != NULL; el = el->next)
 }
 
 
-void loadDatabase(FILE *f)
+void loadDatabase(char *chromName)
 {
 struct sqlConnection *conn2 = hAllocConn2();
-// hGetMinIndexLength requires chromInfo
-// could add hGetMinIndexLength2 to hdb.c
-// snp125TableCreate(conn2, hGetMinIndexLength2());
-// send in table name
-snp125TableCreate(conn2, "chrN_snp125", 32);
-verbose(1, "loading...\n");
-hgLoadTabFile(conn2, ".", "snp125", &f);
+char fileName[64];
+char tableName[64];
+FILE *f;
+
+strcpy(tableName, "chr");
+strcat(tableName, chromName);
+strcat(tableName, "_snp125");
+strcpy(fileName, "chr");
+strcat(fileName, chromName);
+strcat(fileName, "_snp125.tab");
+verbose(1, "calling snp125TableCreate for %s\n", tableName);
+snp125TableCreate(conn2, tableName);
+f = mustOpen(fileName, "r");
+verbose(1, "loading %s...\n", tableName);
+hgLoadTabFile(conn2, ".", tableName, &f);
+verbose(1, "back from hgLoadTabFile\n");
 hFreeConn2(&conn2);
 }
 
@@ -422,7 +365,6 @@ for (el = list; el != NULL; el = el->next)
 if (count > 0)
     verbose(1, "%d lines written\n", count);
 fclose(f);
-// loadDatabase(f);
 }
 
 
@@ -469,12 +411,12 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
         verbose(1, "--------------------------------------\n");
         continue;
 	}
-    lookupFunction(list);
     lookupHetAndValid(list);
     readFromSNPFasta(list);
     lookupRefAllele(list);
     writeToTabFile(chromPtr->name, list);
     slFreeList(&list);
+    loadDatabase(chromPtr->name);
     verbose(1, "---------------------------------------\n");
     }
 
