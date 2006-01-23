@@ -1147,3 +1147,12 @@ chainSome $(path1)
     ldHgGene -gtf -genePredExt anoGam1 geneid *.gtf
 
 
+# SWAP/CHAIN/NET DM2 (DONE 1/13/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/anoGam1/bed/blastz.dm2.swap
+    cd /cluster/data/anoGam1/bed/blastz.dm2.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.anoGam1/DEF >& do.log &
+    tail -f do.log
+    ln -s blastz.dm2.swap /cluster/data/anoGam1/bed/blastz.dm2
+
+
