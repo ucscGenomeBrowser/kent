@@ -321,7 +321,6 @@ table lifeStageScheme
     int id;	"ID of scheme"
     int taxon;	"NCBI taxon"
     string name;	"Theiler, or whatever"
-    string description; "Description of stage"
     )
 
 table lifeStage
@@ -330,4 +329,5 @@ table lifeStage
     int lifeStageScheme; "Which staging scheme this is"
     string name;	 "Name of this stage"
     float age;		 "Start age of this stage measured in days since conception"
+    string description; "Description of stage"
     )
