@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.58 2006/01/23 20:34:37 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.59 2006/01/23 21:15:38 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1286,6 +1286,23 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	else
 	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
 	i++;
+	}
+    if (sPtr->next==NULL)
+	{
+	a = dPtr->chromStart;
+	b = dPtr->chromEnd;
+	c = sPtr->chromStart;
+	d = sPtr->chromEnd;
+	shade = colorLookup[(int)values[i]];
+	if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
+	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
+	else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+	    {
+	    ldAddToDenseValueHash(ldHash, a, values[i]);
+	    ldAddToDenseValueHash(ldHash, d, values[i]);
+	    }
+	else
+	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
 	}
     }
 if (dPtr->next==NULL)
