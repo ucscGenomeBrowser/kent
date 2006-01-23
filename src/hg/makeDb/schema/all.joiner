@@ -2056,6 +2056,7 @@ tablesIgnored $gbd
     phastConsElements11way
     phastCons12way
     phastConsElements12way
+    geneMapper
 
 tablesIgnored $kgDb
     pbAaDist_
