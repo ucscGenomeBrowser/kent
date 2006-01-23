@@ -124,6 +124,24 @@ popd
                   create index genoStart on rmsk (genoName(7), genoStart);'
 
 
+# EXTRACT AGP FROM ASSEMBLY.LINKS FILE (DONE 1/23/06 angie)
+    ssh hgwdev
+    cd /cluster/data/droVir2
+    # assembly.links includes negative gap values which are supposed to 
+    # indicate overlap between contigs, but when scaffold sequences were 
+    # generated, Mike Eisen chose to use +25 instead of the negative values.
+    # So replace negative gap values with 25 for consistency with the 
+    # scaffold sequences, then translate to AGP:
+    perl -wpe 'next if (/^#/); @w = split; \
+               $w[6] = 25 if ($w[6] < 0); $w[7] = 25 if ($w[7] < 0); \
+               $_ = join("\t", @w) . "\n";' \
+      downloads/agencourt_arachne_01aug05/assembly.links \
+    | ~/kent/src/utils/arachneLinksToAgp.pl \
+      > scaffolds.agp
+    nice checkAgpAndFa scaffolds.agp scaffolds.fa | tail
+    hgGoldGapGl -noGl droVir2 scaffolds.agp
+
+
 # EXTRACTING GAP INFO FROM BLOCKS OF NS (DONE 8/11/04 angie)
     ssh kkstore02
     mkdir /cluster/data/droVir2/bed/fakeAgp
@@ -494,5 +512,14 @@ droVir2.perChromTables = no
     cd /cluster/data/genbank
     nice ./bin/gbDbLoadStep -drop -initialLoad  droVir2&
 
+
+# GENEMAPPER PREDICTIONS FROM UCB (DONE 1/19/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/droVir2/bed/geneMapper
+    cd /cluster/data/droVir2/bed/geneMapper
+    wget http://bio.math.berkeley.edu/genemapper/GFF/rel0.2/DroVir_20050801.gff
+    # Get rid of custom track header lines:
+    egrep -v '^(track|browser) ' DroVir_20050801.gff \
+    | ldHgGene -gtf -genePredExt droVir2 geneMapper stdin
 
 

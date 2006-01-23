@@ -140,6 +140,24 @@ popd
                   create index genoStart on rmsk (genoName(12), genoStart);'
 
 
+# EXTRACT AGP FROM ASSEMBLY.LINKS FILE (DONE 1/23/06 angie)
+    ssh hgwdev
+    cd /cluster/data/droEre1
+    # assembly.links includes negative gap values which are supposed to 
+    # indicate overlap between contigs, but when scaffold sequences were 
+    # generated, Mike Eisen chose to use +25 instead of the negative values.
+    # So replace negative gap values with 25 for consistency with the 
+    # scaffold sequences, then translate to AGP:
+    perl -wpe 'next if (/^#/); @w = split; \
+               $w[6] = 25 if ($w[6] < 0); $w[7] = 25 if ($w[7] < 0); \
+               $_ = join("\t", @w) . "\n";' \
+      downloads/agencourt_arachne_01aug05/assembly.links \
+    | ~/kent/src/utils/arachneLinksToAgp.pl \
+      > scaffolds.agp
+    nice checkAgpAndFa scaffolds.agp scaffolds.fa | tail
+    hgGoldGapGl -noGl droEre1 scaffolds.agp
+
+
 # EXTRACTING GAP INFO FROM BLOCKS OF NS (DONE 8/3/05 angie)
     ssh kkstore02
     mkdir /cluster/data/droEre1/bed/fakeAgp
@@ -575,3 +593,15 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+
+# GENEMAPPER PREDICTIONS FROM UCB (DONE 1/19/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/droEre1/bed/geneMapper
+    cd /cluster/data/droEre1/bed/geneMapper
+    wget http://bio.math.berkeley.edu/genemapper/GFF/rel0.2/DroEre_20050801.gff
+    # Get rid of custom track header lines:
+    egrep -v '^(track|browser) ' DroEre_20050801.gff > geneMapper.gtf
+    ldHgGene -gtf -genePredExt droEre1 geneMapper geneMapper.gtf
+
+
