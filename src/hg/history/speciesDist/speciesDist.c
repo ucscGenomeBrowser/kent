@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: speciesDist.c,v 1.4 2006/01/19 00:18:30 braney Exp $";
+static char const rcsid[] = "$Id: speciesDist.c,v 1.5 2006/01/23 20:43:10 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,11 +16,11 @@ errAbort(
   "     that represent the species tree.  Ouputs distance matrix with species names in rows \n"
   "     suitable for input to neighbor joining algorithm.\n"
   "usage:\n"
-  "   speciesDist genomes distances outTree\n"
+  "   speciesDist genomes distances outDist\n"
   "arguments:\n"
   "   genomes        file with element lists\n"
   "   distances      file with distance matrices\n"
-  "   outTree        file to output species tree\n"
+  "   outDist        file to output species distance matrix\n"
   );
 }
 
