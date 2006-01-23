@@ -1265,6 +1265,14 @@ type bed 4 +
     type bed 3 .
     priority 146.5
 
+    track delConrad
+    subTrack cnp
+    shortLabel Deletions (Conrad)
+    longLabel Deletions from Conrad
+    noInherit on
+    type genePred 
+    priority 146.6
+
 track fosmidDiscordant
 shortLabel Fosmid Discordants
 longLabel Fosmid Discordants
