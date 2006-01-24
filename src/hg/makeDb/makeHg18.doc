@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.23 2006/01/24 21:51:03 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.24 2006/01/24 22:06:34 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -3122,5 +3122,89 @@ rm j1.out j2.out
     nice featureBits hg17 bacEndPairsBad
 # 797412909 bases of 2866216770 (27.821%) in intersection
 
-############################################################################
+##########################################################################
+# BLASTZ OPOSSUM monDom2 (STARTED - 2006-01-23 - Hiram)
 
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+
+    cat << '_EOF_' > DEF
+# human vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human (hg18)
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom2
+SEQ2_DIR=/san/sanvol1/scratch/monDom2/monDom2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/monDom2/chrom.sizes
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	real    912m22.818s
+
+    #	This failed during the load of the chains due to the size of
+    #	chr19.chain.  So, go to kolossus:
+    ssh kolossus
+    #	There isn't any hg18 db here yet, get it established with a
+    #	chromInfo and a 2bit sequence:
+    hgsql -e "create database hg18;" mysql
+    cd /cluster/data/hg18
+    twoBitInfo hg18.2bit stdout |
+        awk '{printf "%s\t%s\t/gbdb/hg18/hg18.2bit\n", $1,$2}' \
+		> chromInfo.kolossus.tab
+    hgsql hg18 < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgsql hg18 \
+-e 'load data local infile "chromInfo.kolossus.tab" into table chromInfo;'
+    mkdir /gbdb/hg18
+    ln -s /cluster/data/hg18/hg18.2bit /gbdb/hg18/hg18.2bit
+    #	now, loading only chr19:
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-01-23/axtChain
+    hgLoadChain hg18 chr19_chainMonDom2 chain/chr19.chain
+    #	while that is running, back on hgwdev, get the other chains loaded
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-01-23/axtChain
+    cp loadUp.csh loadUp.noChr19.csh
+    #	change the foreach line to eliminate the chr19.chain:
+    diff loadUp.csh loadUp.noChr19.csh
+    < foreach f (*.chain)
+    ---
+    > foreach f (`ls *.chain | grep -v chr19.chain`)
+    #	And then run that script
+    time ./loadUp.noChr19.csh > load.noChr19.out 2>&1
+    
+    #	When the kolossus load finishes, email to push-request and ask
+    #	for the two tables to be pushed from kolossus to hgwdev:
+    #	chr19_chainMonDom2
+    #	chr19_chainMonDom2Link
+
+    #	then, continuing:
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=download -bigClusterHub=pk -chainMinScore=5000 \
+	-chainLinearGap=loose `pwd`/DEF > download.out 2>&1 &
