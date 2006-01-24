@@ -1446,6 +1446,21 @@ CREATE TABLE altGraphX (
 	type bed 3
 	canPack off
 
+    #	copy frame based view to goldenPath 2006-01-12 - Hiram
+    cd /usr/local/apache/htdocs/goldenPath
+    ln -s ceMay2003 ce1
+    cd /cluster/data/ce1/bed/altSites
+    mkdir /usr/local/apache/htdocs/goldenPath/ce1/altGraphX
+    sed -e "s#http://hgwdev-sugnet.cse.ucsc.edu##" links.html \
+	> /usr/local/apache/htdocs/goldenPath/ce1/altGraphX/links.html
+
+    sed -e \
+    "s/Human Alt Splicing Conserved in Mouse/Alt Splicing in C. elegans/" \
+	-e "s/NM_005487/chrII:14689493-14690232/" \
+	-e "s#http://hgwdev-sugnet.cse.ucsc.edu##" \
+	 frame.html \
+	    > /usr/local/apache/htdocs/goldenPath/ce1/altGraphX/frame.html
+
 #  GC 5 BASE WIGGLE TRACK (DONE - 2004-02-13 - Hiram)
     #    working on eieio, the fileserver for this data.
     # was named gc20KBase to start with, became a 5 base dataset later
