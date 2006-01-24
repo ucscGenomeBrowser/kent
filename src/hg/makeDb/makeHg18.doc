@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.21 2006/01/19 19:01:42 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.22 2006/01/24 00:42:33 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -2596,6 +2596,75 @@ done
         hg18 /cluster/data/hg18 ./sequence.inf /cluster/store11/gs.19 \
         2> clone.pos.errors
 
+
+    #	OK, now for the hard part.  The unplaced clones.
+    #	First we will make an attempt to determine which clones they
+    #	belong to by using information from the previous build, the
+    #	sequence.inf file, the seq_contig.md file, and the
+    #	ncbi_build36.agp file.
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/coverage
+    comm -13 placed_in_assembly.list allClonesConsidered.list \
+	> unplaced.clone.list
+    comm -12 unplaced.clone.list allClones.InHg17AndHg18.list \
+	> common.to.hg17.unplaced.list
+    comm -23 unplaced.clone.list allClones.InHg17AndHg18.list \
+	> unique.to.hg18.unplaced.list
+ 
+    awk '{print $1,$6}' /cluster/data/hg17/contig_overlaps.agp \
+	| sed -e "s/_[0-9]*$//" | sort -u > hg17.contig.clone.list
+
+    awk '{print $1,$6}' ../../sequence.inf | sed -e "s/(//; s/)//" \
+	> cloneToChrom.from.seq.inf.txt
+
+    #	using the contig to clone information from Hg17, attempt to
+    #	locate the common.to.hg17.unplaced.list in terms of chrom and
+    #	contig.  Along with the ncbi_build36.agp, seq_contig.md and
+    #	cloneToChrom.from.seq.inf.txt infomation, we can attempt to
+    #	place clones that have perhaps moved, or don't have entries in
+    #	one file or another.  The relationships obtained from the
+    #	various files:
+    #   ncbi_build36.agp - gives clone to contig name and clone to chr name
+    #			but for placed clones only, not useful here
+    #			unless they moved from hg17 (try this with the
+    #			placed list)
+    #   seq_contig.md - gives contig to chrom relationship
+
+    ./chrCloneContig.pl /cluster/data/hg18/ncbi_build36.agp \
+	hg17.contig.clone.list /cluster/data/hg18/seq_contig.md \
+	    common.to.hg17.unplaced.list cloneToChrom.from.seq.inf.txt \
+		> chrCloneContigCommonToHg17.list \
+		    2> common.to.hg17.unplaced.stderr
+
+    #	With this chrCloneContigCommonToHg17.list list in hand, can now
+    #	create a hierarchy of ./unPlacedClones/
+    ./createUnplacedHierarchy.sh
+
+    #	Then, copy them to the san for kluster run
+    ssh pk
+    cd /san/sanvol1/scratch/hg18/coverage
+    rsync -a --progress --copy-links \
+	/cluster/data/hg18/bed/coverage/unPlacedClones/ ./unPlacedClones/
+
+
+    mkdir runUnPlaced
+    cd runUnPlaced
+    #	create jobList from the chrCloneContigCommonToHg17.list
+    egrep -v "^#|XX_000" \
+	/cluster/data/hg18/bed/coverage/chrCloneContigCommonToHg17.list \
+	| sed -e "s/.fa.gz//" \
+	| awk '{
+printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
+        $1, $2, $3, $1, $3, $2
+}' > masterJobList
+
+    #	Test a subset:
+    grep " Y " masterJobList > jobListY
+
+    para create jobListY
+    para try ... check ... etc ...
+
 ###########################################################################
 # FISH CLONES (WORKING - 2006-01-13 - Hiram)
 # The STS Marker, Coverage, and BAC End Pairs tracks must be completed prior to 
@@ -2617,8 +2686,58 @@ done
 # Get current clone/accession information
     wget --timestamping http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
 
+# Create initial Fish Clones bed file
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/fishClones
+    cd /cluster/data/hg18/bed/fishClones
+
+# Copy previous sts info from fhcrc (take from previous build in future)
+    cp -p /cluster/data/ncbi/fishClones/fishClones.2004-07/fhcrc.sts .
+
+XXXX - looking for backends business - 2006-01-20 - Hiram
+    fishClones -verbose=1 -fhcrc=fhcrc.sts -noBin hg18 \
+	/cluster/data/ncbi/fishClones/fishClones.2006-01/hbrc.txt \
+	/cluster/data/ncbi/fishClones/fishClones.2006-01/clac.out \
+         /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
+         /cluster/data/hg17/bed/bacends/lifted/bacEnds.lifted.psl \
+            fishClones_initial
+	     
 ###########################################################################
-#  BLASTZ SELF
+# CHROMOSOME BANDS TRACK (WORKING - 2006-01-20 - Hiram)
+# This must wait until the Fish Clones tracks is done
+    ssh kolossus
+    mkdir /cluster/data/hg18/bed/cytoband
+    cd /cluster/data/hg18/bed/cytoband
+
+# Copy in some necessary files (usually from previous version)
+    cp -p /cluster/data/hg17/bed/cytoband/pctSetBands.txt .
+    cp -p /cluster/data/hg17/bed/cytoband/ISCN800.txt .
+
+# Create some preliminary information files
+    /cluster/bin/scripts/createSetBands pctSetBands.txt \
+	/cluster/data/hg18/inserts /cluster/data/hg18  100 > setBands.txt
+    /cluster/bin/scripts/makeBands ISCN800.txt \
+        /cluster/data/hg18 > cytobands.pct.bed
+    /cluster/bin/scripts/makeBandRanges cytobands.pct.bed \
+        > cytobands.pct.ranges
+XXXX - how do we get this fishClones file ? - 2006-01-20
+# Reformat fishClones file
+    /cluster/bin/scripts/createBanderMarkers \
+	/cluster/data/hg18/bed/fishClones/fishClones.bed > fishClones.txt
+
+# Create bed file
+    ssh eieio
+    cd /cluster/data/hg18/bed/cytoband.kate
+    /cluster/bin/scripts/runBander fishClones.txt \
+	ISCN800.txt setBands.txt /cluster/data/hg18
+    # NOTE: fails on kolossus (C++ compiler different ??)
+
+    # Should be 862 bands
+    wc  -l cytobands.bed
+    # 862    cytobands.bed
+
+###########################################################################
+#  BLASTZ SELF (DONE - 2006-01-17 - 2006-01-20 - Hiram)
 
     ssh pk
     mkdir /cluster/data/hg18/bed/blastzSelf.2006-01-17
@@ -2669,6 +2788,18 @@ TMPDIR=/scratch/tmp
 	-noRandom -noHap hg17 chainSelfLink > fb.chainSelfLink 2>&1 &
     #	real    56m34.802s
     #	240976607 bases of 2851352871 (8.451%) in intersection
+
+    #	reloaded these chains to add normalized score column
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastzSelf.2006-01-17/axtChain
+    chainSplit chain hg18.hg18.all.chain.gz
+    cd /cluster/data/hg18/bed/blastzSelf.2006-01-17/axtChain/chain
+    foreach f (*.chain)
+	set c = $f:r
+	hgLoadChain -normScore hg18 ${c}_chainSelf $f
+    end
+    cd ..
+    rm -fr chain
 
 ##############################################################################
 # CLONE ENDS - BACEND TRACK (DONE - 2006-01-11 - Fan)
