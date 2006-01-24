@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.60 2006/01/23 22:01:10 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.61 2006/01/24 07:55:56 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -740,7 +740,7 @@ tg->itemNameColor = snpColor;
 void snp125Methods(struct track *tg)
 {
 tg->drawItems     = snpDrawItems;
-tg->drawItemAt    = snpDrawItemAt;
+tg->drawItemAt    = snp125DrawItemAt;
 tg->loadItems = loadSnp125;
 tg->freeItems     = freeSnp125;
 tg->itemColor = snp125Color;
