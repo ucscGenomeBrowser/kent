@@ -8668,6 +8668,13 @@ axtChain $1 /iscratch/i/gs.18/build35/bothMaskedNibs \
     # exit bash if you are tcsh
     #	This is almost 3 hours to load
 
+    ssh kolossus
+    cd /cluster/data/hg17/bed/blastzSelf.2004-07-01
+    time HGDB_CONF=~/.hg.conf.read-only featureBits \
+	-noRandom -noHap hg17 chainSelfLink > fb.chainSelfLink 2>&1 &
+    #	real    56m34.802s
+    #	240976607 bases of 2851352871 (8.451%) in intersection
+
     #	featureBits hg17 chainSelf
     #	682833453 bases of 2866216770 (23.824%) in intersection
     #	featureBits hg16 chainSelf
