@@ -19609,4 +19609,57 @@ Scanning through 7735 files
 Loading database with 51520 rows
 
 
+##########################################################################
+# BLASTZ OPOSSUM monDom2 (WORKING - 2006-01-23 - Hiram)
 
+    ssh kk
+    #	running out of disk space on store5:
+    [hiram@kk /cluster/data/hg17/bed] df -h .
+    #Filesystem            Size  Used Avail Use% Mounted on
+    #			   1.5T  1.3T   79G  95% /cluster/store5
+    #	So, keep this elsewhere, and symlink it:
+    cd /cluster/data/hg17/bed
+    ln -s /cluster/store9/hg17/bed/blastzMonDom2.2006-01-23 \
+	./blastzMonDom2.2006-01-23
+    ln -s blastzMonDom2.2006-01-23 blastz.monDom2
+
+    cd /cluster/data/hg17/bed/blastzMonDom2.2006-01-23
+
+    cat << '_EOF_' > DEF
+# human vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/parasol/bin
+
+BLASTZ=blastz.v7
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human (hg17)
+SEQ1_DIR=/scratch/hg/hg17/bothMaskedNibs
+SEQ1_LEN=/cluster/data/hg17/chrom.sizes
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom2
+SEQ2_DIR=/scratch/hg/monDom2/monDom2.2bit
+SEQ2_LEN=/scratch/hg/monDom2/chrom.sizes
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastzMonDom2.2006-01-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    cd /cluster/data/hg17/bed/blastzMonDom2.2006-01-23
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
