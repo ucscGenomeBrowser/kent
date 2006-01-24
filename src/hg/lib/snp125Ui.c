@@ -424,9 +424,9 @@ char *snp125LocTypeStrings[] = {
     "snp125LocTypeRange",
     "snp125LocTypeExact",
     "snp125LocTypeBetween",
-    "snp125LocType",
-    "snp125LocType",
-    "snp125LocType",
+    "snp125LocTypeRangeInsertion",
+    "snp125LocTypeRangeSubstitution",
+    "snp125LocTypeDeletion",
 };
 char *snp125LocTypeDataName[] = {
     "unknown",
