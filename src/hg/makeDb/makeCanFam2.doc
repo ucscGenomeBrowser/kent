@@ -2103,7 +2103,7 @@ cd ../..
         # 35696
 
 ############################################################################
-# BLASTZ BOSTAU2 (WORKING - 2006-01-17 - Hiram)
+# BLASTZ BOSTAU2 (DONE - 2006-01-17 - 2006-01-18 - Hiram)
 
     ssh kk
     mkdir /cluster/data/canFam2/bed/blastzBosTau2.2006-01-17
@@ -2138,3 +2138,12 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
 	`pwd`/DEF > blastz.out 2>&1 &
     #	running 2006-01-17 13:58
+    #	done 2005-01-18 03:40
+    #	real    823m27.169s
+
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/blastzBosTau2.2006-01-17
+    time featureBits canFam2 chainBosTau2Link \
+	> fb.canFam2.chainBosTau2Link 2>&1 &
+    #	real    32m3.460s
+    #	1376066425 bases of 2384996543 (57.697%) in intersection
