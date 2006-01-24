@@ -30,10 +30,13 @@ struct trix *trixOpen(char *ixFile);
 void trixClose(struct trix **pTrix);
 /* Close up index and free up associated resources. */
 
-struct trixSearchResult *trixSearch(struct trix *trix, int wordCount, char **words);
+struct trixSearchResult *trixSearch(struct trix *trix, int wordCount, char **words,
+	boolean expand);
 /* Return a list of items that match all words.  This will be sorted so that
  * multiple-word matches where the words are closer to each other and in the
- * right order will be first.  Do a trixSearchResultFreeList when done. */
+ * right order will be first.  Do a trixSearchResultFreeList when done. 
+ * If expand is TRUE then this will match not only the input words, but also
+ * additional words that start with the input words. */
 
 void trixSearchResultFree(struct trixSearchResult **pTsr);
 /* Free up data associated with trixSearchResult. */

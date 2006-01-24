@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.175 2006/01/21 18:03:55 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.176 2006/01/24 22:31:46 kent Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -608,7 +608,7 @@ safef(path, sizeof(path), "/gbdb/%s/knownGene.ix", db);
 trix = trixOpen(path);
 tolowers(lowered);
 keyCount = chopLine(lowered, keyWords);
-tsrList = trixSearch(trix, keyCount, keyWords);
+tsrList = trixSearch(trix, keyCount, keyWords, TRUE);
 if (tsrList != NULL)
     {
     struct hgPosTable *table = addKnownGeneTable(hgp);

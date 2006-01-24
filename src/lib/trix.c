@@ -325,7 +325,7 @@ slReverse(&newList);
 return newList;
 }
 
-static int reasonablePrefix(char *prefix, char *word)
+static int reasonablePrefix(char *prefix, char *word, boolean expand)
 /* Return non-negative if prefix is reasonable for word.
  * Returns number of letters left in word not matched by
  * prefix. */
@@ -335,7 +335,7 @@ int wordLen = strlen(word);
 int suffixLen = wordLen - prefixLen;
 if (suffixLen == 0)
    return 0;
-else if (prefixLen >= 3)
+else if (expand && prefixLen >= 3)
     {
     int wordEnd;
     char *suffix = word + prefixLen;
@@ -358,7 +358,7 @@ return -1;
 
 
 struct trixWordResult *trixSearchWordResults(struct trix *trix, 
-	char *searchWord)
+	char *searchWord, boolean expand)
 /* Get results for single word from index.  Returns NULL if no matches. */
 {
 char *line, *word;
@@ -375,7 +375,7 @@ if (hitList == NULL)
 	word = nextWord(&line);
 	if (startsWith(searchWord, word))
 	    {
-	    int leftoverLetters = reasonablePrefix(searchWord, word);
+	    int leftoverLetters = reasonablePrefix(searchWord, word, expand);
 	    /* uglyf("reasonablePrefix(%s,%s)=%d<BR>\n", searchWord, word, leftoverLetters); */
 	    if (leftoverLetters >= 0)
 		{
@@ -651,10 +651,13 @@ if (dif == 0)
 return dif;
 }
 
-struct trixSearchResult *trixSearch(struct trix *trix, int wordCount, char **words)
+struct trixSearchResult *trixSearch(struct trix *trix, int wordCount, char **words,
+	boolean expand)
 /* Return a list of items that match all words.  This will be sorted so that
  * multiple-word matches where the words are closer to each other and in the
- * right order will be first.  Do a trixSearchResultFreeList when done. */
+ * right order will be first.  Do a trixSearchResultFreeList when done. 
+ * If expand is TRUE then this will match not only the input words, but also
+ * additional words that start with the input words. */
 {
 struct trixWordResult *twr, *twrList = NULL;
 struct trixSearchResult *ts, *tsList = NULL;
@@ -665,7 +668,7 @@ if (wordCount == 1)
     {
     struct trixHitPos *hit;
     char *lastId = "";
-    twr = twrList = trixSearchWordResults(trix, words[0]);
+    twr = twrList = trixSearchWordResults(trix, words[0], expand);
     if (twr == NULL)
         return NULL;
     for (hit = twr->hitList; hit != NULL; hit = hit->next)
@@ -689,7 +692,7 @@ else
     for (wordIx=0; wordIx<wordCount; ++wordIx)
 	{
 	char *searchWord = words[wordIx];
-	twr = trixSearchWordResults(trix, searchWord);
+	twr = trixSearchWordResults(trix, searchWord, expand);
 	if (twr == NULL)
 	    {
 	    gotMiss = TRUE;
