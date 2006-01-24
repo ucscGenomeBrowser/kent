@@ -415,9 +415,9 @@ char *snp125LocTypeLabels[] = {
     "Range",
     "Exact",
     "Between",
-    "RangeInsertion"
-    "RangeSubstitution"
-    "RangeDeletion"
+    "RangeInsertion",
+    "RangeSubstitution",
+    "RangeDeletion",
 };
 char *snp125LocTypeStrings[] = {
     "snp125LocTypeUnknown",
