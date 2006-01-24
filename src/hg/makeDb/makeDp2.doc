@@ -804,13 +804,15 @@ chainSome $(path1)
 # End tblastn
 
 
-# GENEMAPPER PREDICTIONS FROM UCB (DONE 1/19/06 angie)
+# GENEMAPPER PREDICTIONS FROM UCB (DONE 1/24/06 angie)
     ssh hgwdev
     mkdir /cluster/data/dp2/bed/geneMapper
     cd /cluster/data/dp2/bed/geneMapper
     wget http://bio.math.berkeley.edu/genemapper/GFF/rel0.2/DroPse_1.gff
+    # Don't use -genePredExt... there are no start/stop_codon items, so 
+    # all get marked "incmpl", and name2 always gets the same value as name.
     # Get rid of custom track header lines:
     egrep -v '^(track|browser) ' DroPse_1.gff \
-    | ldHgGene -gtf -genePredExt dp2 geneMapper stdin
+    | ldHgGene -gtf dp2 geneMapper stdin
 
 

@@ -647,13 +647,15 @@ droMoj2.perChromTables = no
     nice ./bin/gbDbLoadStep -drop -initialLoad  droMoj2&
 
 
-# GENEMAPPER PREDICTIONS FROM UCB (DONE 1/19/06 angie)
+# GENEMAPPER PREDICTIONS FROM UCB (DONE 1/24/06 angie)
     ssh hgwdev
     mkdir /cluster/data/droMoj2/bed/geneMapper
     cd /cluster/data/droMoj2/bed/geneMapper
     wget http://bio.math.berkeley.edu/genemapper/GFF/rel0.2/DroMoj_20050801.gff
+    # Don't use -genePredExt... there are no start/stop_codon items, so 
+    # all get marked "incmpl", and name2 always gets the same value as name.
     # Get rid of custom track header lines:
     egrep -v '^(track|browser) ' DroMoj_20050801.gff \
-    | ldHgGene -gtf -genePredExt droMoj2 geneMapper stdin
+    | ldHgGene -gtf droMoj2 geneMapper stdin
 
 
