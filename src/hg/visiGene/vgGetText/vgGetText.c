@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: vgGetText.c,v 1.4 2006/01/22 23:58:18 kent Exp $";
+static char const rcsid[] = "$Id: vgGetText.c,v 1.5 2006/01/24 18:04:34 kent Exp $";
 
 char *db = "visiGene";
 
@@ -47,6 +47,7 @@ struct hash *probeType;
 struct hash *caption;
 struct hash *probeColor;
 struct hash *expressionPattern;
+struct hash *geneSynonym;
 
 /* More simple hashes, but built from complex queries. */
 struct hash *commonNameHash;
@@ -213,6 +214,7 @@ caption = twoColHash(conn, "caption");
 probeColor = twoColHash(conn, "probeColor");
 expressionPattern = twoColHash(conn, "expressionPattern");
 commonNameHash = twoColHash(conn, "uniProt.commonName");
+geneSynonym = twoColHash(conn, "geneSynonym");
 }
 
 void hashComplexTables(struct sqlConnection *conn)
@@ -524,7 +526,17 @@ for (ip = ipList; ip != NULL; ip = ip->next)
     struct gene *gene = hashFindValFromInt(geneHash, probe->gene);
     if (gene != NULL)
 	{
+	char idAsText[16];
+	struct hashEl *hel;
+	safef(idAsText, sizeof(idAsText), "%d", gene->id);
 	fprintf(f, "%s %s %s ", gene->refSeq, gene->genbank, gene->uniProt);
+	for (hel = hashLookup(geneSynonym, idAsText); hel != NULL;
+		hel = hashLookupNext(hel))
+	    {
+	    char *name = hel->val;
+	    fprintf(f, "%s ", name);
+	    }
+
 	}
     }
 
