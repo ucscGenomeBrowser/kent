@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.27 2006/01/12 20:35:39 heather Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.27.2.1 2006/01/24 01:26:35 markd Exp $";
 
 jmp_buf htmlRecover;
 
@@ -131,12 +131,26 @@ return "<!-- HGERROR-END -->\n";
 void htmlVaWarn(char *format, va_list args)
 /* Write an error message. */
 {
+/* if possible, write warning message to stderr so they get logged.  However
+ * on x86_64 args is by reference, so it can't be reused.  If we have have
+ * the ability to copy it, go for it, otherwise just punt on printing to
+ * stderr. */
+#if defined(__va_copy) && !defined(va_copy)
+#   define va_copy __va_copy /* called __va_copy on some systems */
+#endif
+#if defined(va_copy)
+va_list argsSave;
+va_copy(argsSave, args);
+vfprintf(stderr, format, argsSave);
+va_end(argsSave);
+fputc('\n', stderr);
+#endif
+
 htmlHorizontalLine();
 printf("%s", htmlWarnStartPattern());
 htmlVaParagraph(format,args);
 printf("%s", htmlWarnEndPattern());
 htmlHorizontalLine();
-vfprintf(stderr, format, args);
 }
 
 void htmlAbort()
