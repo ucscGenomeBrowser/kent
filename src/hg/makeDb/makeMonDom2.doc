@@ -1108,20 +1108,19 @@ XXX running 2006-01-23
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/monDom2/bed/genscan
-    # Reloaded without -genePredExt 1/6/05:
     ldHgGene -gtf monDom2 genscan genscan.gtf
-    #	39815 gene predictions
+    #	40051 gene predictions
     hgPepPred monDom2 generic genscanPep genscan.pep
     hgLoadBed monDom2 genscanSubopt genscanSubopt.bed
-    #	Loaded 490601 elements of size 6
+    #	Loaded 492210 elements of size 6
 
     #	Compare with other assemblies:
     featureBits monDom2 genscan
-    #	49606440 bases of 3496445653 (1.419%) in intersection
+    #	48628209 bases of 3496445653 (1.391%) in intersection
     featureBits monDom1 genscan
     #	47170795 bases of 3492108230 (1.351%) in intersection
     featureBits monDom2 genscanSubopt
-    #	53320977 bases of 3496445653 (1.525%) in intersection
+    #	52714123 bases of 3496445653 (1.508%) in intersection
     featureBits monDom1 genscanSubopt
     #	51805835 bases of 3492108230 (1.484%) in intersection
     featureBits hg17 genscan
@@ -1130,14 +1129,15 @@ XXX running 2006-01-23
     #	55986178 bases of 2866216770 (1.953%) in intersection
 
     # Clean up
-    cd /cluster/bluearc/monDom2
-    rm -fr hardChunks hardMaskedScaffolds.fa
+    cd /san/sanvol1/scratch/monDom2
+    rm -fr hardMasked200K
     #	This kolossus clean up was actually left until much later.
     #	I found these copies here to be useful later on.
     ssh kolossus
     cd /scratch/monDom2
     rm -f *
-
+    cd ..
+    rmdir monDom2
 
 ##########################################################################
 # MAKE Human Proteins track (WORKING - 2005-08-24 - Hiram)
