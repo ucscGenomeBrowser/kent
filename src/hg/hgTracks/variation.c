@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.61 2006/01/24 07:55:56 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.62 2006/01/24 21:18:23 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -152,7 +152,7 @@ int i;
 
 for (i=0; i<snp125ValidLabelsSize; i++)
     {
-    if (!sameString(snp125ValidDataName[i], el->class)) continue;
+    if (!sameString(snp125ValidDataName[i], el->valid)) continue;
     return snp125ValidIncludeCart[i];
     }
 return TRUE;
@@ -179,7 +179,7 @@ int i;
 
 for (i=0; i<snp125FuncLabelsSize; i++)
     {
-    if (!sameString(snp125FuncDataName[i], el->class)) continue;
+    if (!sameString(snp125FuncDataName[i], el->func)) continue;
     return snp125FuncIncludeCart[i];
     }
 return TRUE;
@@ -206,7 +206,7 @@ int i;
 
 for (i=0; i<snp125LocTypeLabelsSize; i++)
     {
-    if (!sameString(snp125LocTypeDataName[i], el->class)) continue;
+    if (!sameString(snp125LocTypeDataName[i], el->locType)) continue;
     return snp125LocTypeIncludeCart[i];
     }
 return TRUE;
@@ -376,7 +376,9 @@ enum   snp125ColorEnum thisSnpColor = snp125ColorBlack;
 char  *snpColorSource = cartUsualString(cart, 
 			snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
 char  *validString = NULL;
+char  *funcString = NULL;
 int    snpValid = 0;
+int    snpFunc = 0;
 int    index1 = 0;
 int    index2 = 0;
 
@@ -398,12 +400,15 @@ switch (stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSource
 	    if (containsStringNoCase(validString, snp125ValidDataName[snpValid]))
 		thisSnpColor = (enum snp125ColorEnum) stringArrayIx(snp125ValidCart[snpValid],snp125ColorLabel,snp125ColorLabelSize);
 	break;
+    /* func is a set */
     case snp125ColorSourceFunc:
-	index2 = stringArrayIx(el->func,snp125FuncDataName,snp125FuncDataNameSize);
-	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125FuncCart[index2],snp125ColorLabel,snp125ColorLabelSize);
+        funcString = cloneString(el->func);
+	for (snpFunc=0; snpFunc<snp125FuncCartSize; snpFunc++)
+	    if (containsStringNoCase(funcString, snp125FuncDataName[snpFunc]))
+	        thisSnpColor = (enum snp125ColorEnum) stringArrayIx(snp125FuncCart[snpFunc],snp125ColorLabel,snp125ColorLabelSize);
 	break;
     case snp125ColorSourceLocType:
-	index2 = stringArrayIx(el->func,snp125LocTypeDataName,snp125LocTypeDataNameSize);
+	index2 = stringArrayIx(el->locType,snp125LocTypeDataName,snp125LocTypeDataNameSize);
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125LocTypeCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
     default:
