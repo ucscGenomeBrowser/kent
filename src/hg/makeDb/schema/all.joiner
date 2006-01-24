@@ -1778,6 +1778,7 @@ type genePred
     $gbd.refGene
     $gbd.xenoRefGene
     $gbd.jgiFilteredModels
+    $gbd.geneMapper
 
 type pepPred
     $hg.acemblyPep
@@ -2056,7 +2057,6 @@ tablesIgnored $gbd
     phastConsElements11way
     phastCons12way
     phastConsElements12way
-    geneMapper
 
 tablesIgnored $kgDb
     pbAaDist_
