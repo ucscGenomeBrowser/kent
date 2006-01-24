@@ -181,13 +181,13 @@ char *snp125ClassIncludeStrings[] = {
     "snp125ClassSingleInclude",
     "snp125ClassIn-delInclude",
     "snp125ClassHetInclude",
-    "snp125ClassMicrosateliteInclude"
-    "snp125ClassNamedInclude"
-    "snp125ClassNoVarInclude"
-    "snp125ClassMixedInclude"
-    "snp125ClassMnpInclude"
-    "snp125ClassInsertionInclude"
-    "snp125ClassDeletionInclude"
+    "snp125ClassMicrosateliteInclude",
+    "snp125ClassNamedInclude",
+    "snp125ClassNoVarInclude",
+    "snp125ClassMixedInclude",
+    "snp125ClassMnpInclude",
+    "snp125ClassInsertionInclude",
+    "snp125ClassDeletionInclude",
 };
 boolean snp125ClassIncludeDefault[] = {
     TRUE,  // unknown
