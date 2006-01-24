@@ -744,6 +744,14 @@ struct slInt *imageList, *image;
 int imageCount, imageIx=0;
 struct captionElement *captionElements;
 
+itemUrl = visiGeneItemUrl(conn, id);
+if (itemUrl != NULL)
+    {
+    printf("<B>source:</B> ");
+    printf("<A HREF=\"");
+    printf(itemUrl, visiGeneSubmitId(conn, id));
+    printf("\" target=_blank>%s</A> ", visiGeneSubmissionSource(conn, id));
+    }
 publication = visiGenePublication(conn,id);
 if (publication != NULL)
     {
@@ -757,6 +765,9 @@ if (publication != NULL)
 	}
     printf("<BR>\n");
     }
+printf("<B>Year:</B> %d ", visiGeneYear(conn,id));
+printf("<B>Contributors:</B> %s<BR>\n", 
+	naForNull(visiGeneContributors(conn,id)));
 if (caption != NULL)
     {
     printf("<B>Notes:</B> %s<BR>\n", caption);
@@ -767,9 +778,7 @@ imageCount = slCount(imageList);
 captionElements = makePaneCaptionElements(conn, imageList);
 printCaptionElements(conn, captionElements, imageList);
 
-printf("<B>Year:</B> %d ", visiGeneYear(conn,id));
-printf("<B>Contributors:</B> %s<BR>\n", 
-	naForNull(visiGeneContributors(conn,id)));
+#ifdef OLD
 setUrl = visiGeneSetUrl(conn, id);
 itemUrl = visiGeneItemUrl(conn, id);
 if (setUrl != NULL || itemUrl != NULL)
@@ -785,6 +794,7 @@ if (setUrl != NULL || itemUrl != NULL)
 	}
     printf("<BR>\n");
     }
+#endif /* OLD */
 copyright = visiGeneCopyright(conn, id);
 if (copyright != NULL)
     printf("<B>Copyright:</B> %s<BR>\n", copyright);
