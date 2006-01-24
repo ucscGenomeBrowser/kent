@@ -627,7 +627,7 @@ puts(
 "    </TR> \n"
 "    <TR><TD VALIGN=Top NOWRAP>hoxa*</TD> \n"
 "        <TD WIDTH=14></TD> \n"
-"        <TD VALIGN=Top>Displays images of all genes in the Hox-A cluster</TD>\n"
+"        <TD VALIGN=Top>Displays images of all genes in the Hox-A cluster. (note: * only works at end of word)</TD>\n"
 "    </TR> \n"
 "    <TR><TD VALIGN=Top NOWRAP>NM_007492</TD> \n"
 "        <TD WIDTH=14></TD> \n"
