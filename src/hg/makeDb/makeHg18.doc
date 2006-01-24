@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.22 2006/01/24 00:42:33 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.23 2006/01/24 21:51:03 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -3002,6 +3002,10 @@ rm -fr /tmp/${root1}_${root2}
 
 # There was some problem with many jobs that files not accessible.  Did chmod +x on 
 # /san/sanvol1/scratch/hg18/noMask/chr*.fa and this seems to fix the problem.
+
+# Per conversation with Kate and Hiram during code review, they think the 
+# above, as suggested by Patrick (if Fan remembered correctly) is a myth.
+
 # Completed: 4802 of 4802 jobs
 # CPU time in finished jobs:     515910s    8598.50m   143.31h    5.97d  0.016 y
 # IO & Wait Time:                 35141s     585.68m     9.76h    0.41d  0.001 y
