@@ -4,27 +4,33 @@
 #include "gbDefs.h"
 #include "gbVerb.h"
 #include "gbFa.h"
+#include "fa.h"
 #include "extFileTbl.h"
 #include "seqTbl.h"
 #include "localmem.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: refPepRepair.c,v 1.8 2006/01/23 06:41:41 markd Exp $";
+static char const rcsid[] = "$Id: refPepRepair.c,v 1.9 2006/01/24 04:51:43 markd Exp $";
+
+/* N.B. 
+ *  - The code for getting an ext file record is based on code in gbSanity/chkSeqTbl.c.
+ *    It should be generalzied at some point.
+ */
 
 struct brokenRefPep
 /* data about a refPep with broken extFile link.  protein acc+ver used in case
  * there ware multiple versions in fasta files */
 {
     struct brokenRefPep *next;
-    unsigned protSeqId;     /* gbSeq id of protein */
-    char *protAcc;          /* protein acc (not alloced here) */
-    short protVer;          /* protein version  */
+    unsigned protSeqId;         /* gbSeq id of protein */
+    char *protAcc;              /* protein acc (not alloced here) */
+    short protVer;              /* protein version  */
     char mrnaAcc[GB_ACC_BUFSZ]; /* mRNA acc, or NULL if not in db */
-    char faPath[PATH_LEN];  /* new path for fasta file */
-    HGID faId;              /* file id of new file, or -1 if not found */
-    off_t faOff;            /* new offset in fasta, or -1 if not found */
-    unsigned seqSize;       /* sequence size from fasta */
-    unsigned recSize;       /* record size in fasta */
+    char newFaPath[PATH_LEN];   /* new path for fasta file */
+    HGID newFaId;               /* file id of new file, or -1 if not found */
+    off_t newFaOff;             /* new offset in fasta, or -1 if not found */
+    unsigned newSeqSize;        /* sequence size from fasta */
+    unsigned newRecSize;        /* record size in fasta */
 };
 
 struct brokenRefPepTbl
@@ -35,6 +41,120 @@ struct brokenRefPepTbl
     int numToRepair;              /* number that need repaired */
     int numToDrop;                /* number that need dropped */
 };
+
+static struct extFile* extFileGet(struct extFileTbl* extFileTbl, char *acc, int extFileId)
+/* get the extFile for an accession given it's id.  Return NULL if id is not
+ * valid */
+{
+struct extFile* extFile = extFileTblFindById(extFileTbl, extFileId);
+if (extFile == NULL)
+    gbVerbMsg(3, "%s: gbExtFile id %d not in gbExtFile table", acc, extFileId);
+return extFile;
+}
+
+/* Check a location of a sequence against bounds of a faFile */
+static boolean extFileChkBounds(char *protAcc, struct extFile* extFile,
+                                off_t faOff, unsigned recSize)
+{
+off_t faSize = fileSize(extFile->path);
+if (faSize < 0)
+    {
+    gbVerbMsg(3, "%s: extFile does not exist or is not readable: %s", protAcc, extFile->path);
+    return FALSE;
+    }
+if (faSize != extFile->size)
+    {
+    gbVerbMsg(3, "%s: extFile size (%lld) does match actual fasta file size (%lld): %s", protAcc, 
+              (long long)extFile->size, (long long)faSize, extFile->path);
+    return FALSE;
+    }
+if ((faOff+recSize) > faSize)
+    {
+    gbVerbMsg(3, "%s: fasta record end (%lld) does past end of (%lld): %s", protAcc, 
+              (long long)(faOff+recSize), (long long)faSize, extFile->path);
+    return FALSE;
+    }
+return TRUE;
+}
+
+/* Check a protein sequence, return FALSE if there is some reason it can't be
+ * obtained or doesn't match */
+static boolean faCheckProtRec(char *protAcc, short protVer, struct extFile* extFile,
+                              off_t faOff, unsigned seqSize, unsigned recSize)
+{
+static const int extraBytes = 8;  /* extra bytes to read to allow checking next record */
+int askSize = recSize+extraBytes;
+int readSize;
+char *faBuf, *p, gotAcc[GB_ACC_BUFSZ];
+short gotVer;
+struct dnaSeq *protSeq;
+FILE *fh = mustOpen(extFile->path, "r");
+
+/* bounds have already been check; so error if we can read the bytes */
+if (fseeko(fh, faOff, SEEK_SET) < 0)
+    errnoAbort("%s: can't seek to %lld in %s", protAcc, (long long)faOff, extFile->path);
+faBuf = needMem(askSize+1);
+readSize = fread(faBuf, 1, askSize, fh);
+if (readSize < 0)
+    errnoAbort("%s: read failed at %lld in %s", protAcc, (long long)faOff, extFile->path);
+if (readSize < recSize)
+    errAbort("%s: can't read %d bytes at %lld in %s", protAcc, recSize, (long long)faOff, extFile->path);
+carefulClose(&fh);
+faBuf[readSize] = '\0';
+
+/* check that it starts with a '>' and that there are no extra bases after the
+ * end of sequence */
+if (faBuf[0] != '>')
+    {
+    gbVerbMsg(3, "%s: fasta record at %lld does not start with a '>': %s", protAcc, 
+              (long long)faOff, extFile->path);
+    freeMem(faBuf);
+    return FALSE;
+    }
+p = skipLeadingSpaces(faBuf+recSize);
+if (!((*p == '>') || (*p == '\0')))
+    {
+    gbVerbMsg(3, "%s: fasta record at %lld for %d has extra characters following the record: %s", protAcc, 
+              (long long)faOff, recSize, extFile->path);
+    freeMem(faBuf);
+    return FALSE;
+    }
+protSeq = faSeqFromMemText(faBuf, FALSE);
+gotVer = gbSplitAccVer(protSeq->name, gotAcc);
+if (!(sameString(gotAcc, protAcc) && (gotVer == protVer)))
+    {
+    gbVerbMsg(3, "%s: expected sequence %s.%d, found %s.%d in fasta record at %lld : %s", protAcc,
+              protAcc, protVer, gotAcc, gotVer, (long long)faOff, extFile->path);
+    dnaSeqFree(&protSeq);
+    return FALSE;
+    }
+
+if (protSeq->size != seqSize)
+    {
+    gbVerbMsg(3, "%s: expected sequence of %d chars, got %d from fasta record at %lld : %s", protAcc,
+              seqSize, protSeq->size, (long long)faOff, extFile->path);
+    dnaSeqFree(&protSeq);
+    return FALSE;
+    }
+
+dnaSeqFree(&protSeq);
+return TRUE;
+}
+
+static struct hash *pepToMrnaLoad(struct sqlConnection *conn)
+/* build a table mapping peptide acc to mrna acc from refLink */
+{
+struct hash *pepMap = hashNew(21);
+char  **row;
+struct sqlResult *sr;
+
+sr= sqlGetResult(conn, "select protAcc, mrnaAcc from refLink where (protAcc != \"\") and (mrnaAcc != \"\")");
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAdd(pepMap, row[0], lmCloneString(pepMap->lm, row[1]));
+sqlFreeResult(&sr);
+
+return pepMap;
+}
 
 static struct brokenRefPep *brokenRefPepObtain(struct brokenRefPepTbl *brpTbl,
                                                char *protAcc, int protSeqId,
@@ -51,8 +171,8 @@ if (brp == NULL)
     brp->protSeqId = protSeqId;
     brp->protAcc = hel->name;
     brp->protVer = protVer;
-    brp->faId = -1;
-    brp->faOff = -1;
+    brp->newFaId = -1;
+    brp->newFaOff = -1;
     }
 else
     {
@@ -120,6 +240,52 @@ for (acc = accs; acc != NULL; acc = acc->next)
     brokenRefPepLoadAcc(conn, brpTbl, acc->name);
 }
 
+static void brokenRefPepSeqCheck(struct sqlConnection *conn,
+                                 struct extFileTbl* extFileTbl,
+                                 struct brokenRefPepTbl *brpTbl,
+                                 int protSeqId, char *protAcc, short protVer,
+                                 unsigned seqSize, int extFileId, off_t faOff,
+                                 unsigned recSize,
+                                 char *mrnaAcc)
+/* check peptide from seq table, add to broken list if there are problems.
+ * check if in extFile, file exists and bounds are sane, and it points to
+ * a sequence. mrna acc is null if it can't be found, which also adds */
+ {
+struct extFile* extFile = extFileGet(extFileTbl, protAcc, extFileId);
+if ((extFile == NULL) || (mrnaAcc == NULL)
+    || !extFileChkBounds(protAcc, extFile, faOff, recSize)
+    || !faCheckProtRec(protAcc, protVer, extFile, faOff, seqSize, recSize))
+    {
+    /* add to table */
+    struct brokenRefPep *brp = brokenRefPepObtain(brpTbl, protAcc, protSeqId, protVer);
+    if (mrnaAcc != NULL)
+        safef(brp->mrnaAcc, sizeof(brp->mrnaAcc), "%s", mrnaAcc);
+    }
+}
+
+static void brokenRefPepGetSeqScan(struct sqlConnection *conn,
+                                   struct extFileTbl* extFileTbl,
+                                   struct brokenRefPepTbl *brpTbl)
+/* load refSeq peps that have seq or extFile problems, including
+ * checking fasta file contents*/
+{
+static char *query = "select id, acc, version, size, gbExtFile, file_offset, file_size "
+    "from gbSeq where (acc like \"NP__%\") or (acc like \"YP__%\")";
+struct hash *pepMap = pepToMrnaLoad(conn);
+struct sqlResult *sr = sqlGetResult(conn, query);
+char **row;
+
+while ((row = sqlNextRow(sr)) != NULL)
+    brokenRefPepSeqCheck(conn, extFileTbl, brpTbl,
+                         sqlSigned(row[0]), row[1], sqlSigned(row[2]),
+                         sqlUnsigned(row[3]), sqlUnsigned(row[4]),
+                         sqlLongLong(row[5]), sqlUnsigned(row[6]),
+                         hashFindVal(pepMap, row[1]));
+sqlFreeResult(&sr);
+hashFree(&pepMap);
+}
+
+
 static void saveProtFastaPath(struct brokenRefPepTbl* brpTbl,
                               struct brokenRefPep* brp,
                               char *mrnaAcc, char *mrnaFa)
@@ -131,7 +297,7 @@ safef(brp->mrnaAcc, sizeof(brp->mrnaAcc), "%s", mrnaAcc);
 chopSuffixAt(mrnaFa, '/');
 safef(protFa, sizeof(protFa), "%s/pep.fa", mrnaFa);
 hel = hashStore(brpTbl->protFaHash, protFa);
-safef(brp->faPath, sizeof(brp->faPath), "%s", protFa);
+safef(brp->newFaPath, sizeof(brp->newFaPath), "%s", protFa);
 brpTbl->numToRepair++;
 }
 
@@ -212,13 +378,13 @@ while (gbFaReadNext(fa))
     /* save only if same acecss, version, and file (to match mrna fa) */
     short ver = gbSplitAccVer(fa->id, acc);
     brp = hashFindVal(brpTbl->protAccHash, acc);
-    if ((brp != NULL) && (ver == brp->protVer) && sameString(faPath, brp->faPath))
+    if ((brp != NULL) && (ver == brp->protVer) && sameString(faPath, brp->newFaPath))
         {
         gbFaGetSeq(fa); /* force read of sequence data */
-        brp->faId = extId;
-        brp->faOff = fa->recOff;
-        brp->seqSize = fa->seqLen;
-        brp->recSize = fa->off-fa->recOff;
+        brp->newFaId = extId;
+        brp->newFaOff = fa->recOff;
+        brp->newSeqSize = fa->seqLen;
+        brp->newRecSize = fa->off-fa->recOff;
         }
     }
 gbFaClose(&fa);
@@ -241,13 +407,13 @@ cookie = hashFirst(brpTbl->protAccHash);
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct brokenRefPep *brp = hel->val;
-    if (strlen(brp->mrnaAcc) && (brp->faOff < 0))
+    if (strlen(brp->mrnaAcc) && (brp->newFaOff < 0))
         {
         /* in one case, this was a pseudoGene mistakenly left in as an
          * mRNA, so make it a warning */
         fprintf(stderr, "Warning: %s: refPep %s (for %s) not found in %s\n",
                 sqlGetDatabase(conn), brp->protAcc, brp->mrnaAcc,
-                brp->faPath);
+                brp->newFaPath);
         }
     }
 }
@@ -261,12 +427,12 @@ static void refPepRepairOne(struct sqlConnection *conn,
 {
 gbVerbPrStart(2, "%s\t%s\trepair", sqlGetDatabase(conn), brp->protAcc);
 gbVerbPrMore(3, "\tsz: %d\toff: %lld\trecSz: %d\tfid: %d\t%s",
-             brp->seqSize, (long long)brp->faOff, brp->recSize,
-             brp->faId, brp->faPath);
+             brp->newSeqSize, (long long)brp->newFaOff, brp->newRecSize,
+             brp->newFaId, brp->newFaPath);
 gbVerbPrMore(2, "\n");
 if (!dryRun)
-    seqTblMod(seqTbl, brp->protSeqId, -1, brp->faId,
-              brp->seqSize, brp->faOff, brp->recSize);
+    seqTblMod(seqTbl, brp->protSeqId, -1, brp->newFaId,
+              brp->newSeqSize, brp->newFaOff, brp->newRecSize);
 }
 
 static void refPepDropOne(struct sqlConnection *conn,
@@ -298,7 +464,7 @@ cookie = hashFirst(brpTbl->protAccHash);
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct brokenRefPep *brp = hel->val;
-    if ((brp->mrnaAcc != NULL) && (brp->faOff >= 0))
+    if ((brp->mrnaAcc != NULL) && (brp->newFaOff >= 0))
         {
         refPepRepairOne(conn, brp, seqTbl, extFileTbl, dryRun);
         repairCnt++;
@@ -349,6 +515,7 @@ struct sqlConnection *conn = sqlConnect(db);
 struct brokenRefPepTbl *brpTbl;
 struct hashCookie cookie;
 struct hashEl *hel;
+struct extFileTbl* extFileTbl = NULL;
 
 if (!checkForRefLink(conn))
     {
@@ -356,9 +523,12 @@ if (!checkForRefLink(conn))
     return;
     }
 
+extFileTbl = extFileTblLoad(conn);
 brpTbl = brokenRefPepTblNew(conn, NULL);
-cookie = hashFirst(brpTbl->protAccHash);
+brokenRefPepGetSeqScan(conn, extFileTbl, brpTbl);
+extFileTblFree(&extFileTbl);
 
+cookie = hashFirst(brpTbl->protAccHash);
 while ((hel = hashNext(&cookie)) != NULL)
     {
     struct brokenRefPep *brp = hel->val;
@@ -388,8 +558,10 @@ if (!checkForRefLink(conn))
 gbVerbMsg(1, "%s: repairing refseq protein gbExtFile entries%s",
           sqlGetDatabase(conn), (dryRun? " (dry run)" : ""));
 
-brpTbl = brokenRefPepTblNew(conn, accs);
 extFileTbl = extFileTblLoad(conn);
+brpTbl = brokenRefPepTblNew(conn, accs);
+brokenRefPepGetSeqScan(conn, extFileTbl, brpTbl);
+
 fillInFastaOffsets(brpTbl, conn, extFileTbl);
 if (brpTbl->numToRepair > 0)
     makeRepairs(brpTbl, conn, extFileTbl, dryRun);
