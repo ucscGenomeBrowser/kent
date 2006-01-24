@@ -19523,8 +19523,90 @@ cat > makeMaf.csh << 'EOF'
          /usr/local/apache/htdocs/goldenPath/bosTau1/axtNet
     # Request push to downloads server
 
+
+# UPDATE hg17 knownToVisiGene (2006-01-21 galt)
 # Create table that maps between known genes and visiGene database 
     # mapping to other species such as mouse, zebrafish, frog
     # requires visiGene probe track vgImageProbes be created first
     knownToVisiGene hg17 -fromProbePsl=vgImageProbes
+
+
+# UPDATE hg17 mmBlastTab (2006-01-22 galt)
+# Make the protein seqs from mm7.knownGenePep
+cd /cluster/data/hg17/bed/geneSorter/blastp
+mkdir mm7
+cd mm7
+pepPredToFa mm7 knownGenePep known.faa
+#       You may need to build this binary in src/hg/near/pepPredToFa
+/cluster/bluearc/blast229/formatdb -i known.faa -t known -n known
+mkdir -p /cluster/panasas/home/store/mm7/blastp/
+cp known.* /cluster/panasas/home/store/mm7/blastp/
+
+# Make parasol run directory
+ssh kk
+cd /cluster/data/hg17/bed/geneSorter/blastp/mm7
+mkdir run
+cd run
+mkdir out
+
+# Make blast script 
+# NOTE!! left off " b 1" from the end of the script because
+#  we wanted to be able to get the near-best, not just the best one.
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+-p blastp -d /cluster/panasas/home/store/mm7/blastp/known \
+-i $1 -o $2 -e 0.001 -m 8
+'_EOF_'
+    # << keep emacs happy
+chmod a+x blastSome
+
+# Make gensub2 file
+cat << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#       this echo trick is used because otherwise the command line is
+#       too long and you can not do a simple ls
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para check
+para push ... etc ...
+
+Completed: 7735 of 7735 jobs
+CPU time in finished jobs:      97096s    1618.26m    26.97h    1.12d  0.003 y
+IO & Wait Time:                564656s    9410.94m   156.85h    6.54d  0.018 y
+Average job time:                  86s       1.43m     0.02h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:             240s       4.00m     0.07h    0.00d
+Submission to last job:          1272s      21.20m     0.35h    0.01d
+
+
+# Load into database.
+ssh hgwdev
+cd /cluster/data/hg17/bed/geneSorter/blastp/mm7/run/out
+hgLoadBlastTab hg17 mmBlastTab -maxPer=1 *.tab
+Scanning through 7735 files
+Loading database with 33306 rows
+
+# changed mm6 to mm7 in src/hg/hgGene/hgGeneData/Human/hg17/otherOrgs.ra
+# and checked it in.
+
+# hgLoadBlastTab hg17 mmBlastTabTopN -maxPer=250 *.tab
+#  (not done, this was only used for research)
+
+# hgLoadBlastTab hg17 mmBlastNearBest -topPercent=5 *.tab > hgMmNearBest.stats
+#  (this will be the new way to go)
+Reading seq lengths from hg17.knownGenePep
+Finding max gene combined-coverage scores in 7735 files
+Scanning through 7735 files
+Loading database with 51520 rows
+
+
 
