@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.62 2006/01/24 21:18:23 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.63 2006/01/25 22:57:04 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1240,7 +1240,7 @@ double       scale     = scaleForPixels(insideWidth);
 int          itemCount = slCount((struct slList *)tg->items);
 Color        shade     = 0, outlineColor = getOutlineColor(itemCount);
 int          a, b, c, d, i; /* chromosome coordinates and counter */
-boolean      drawMap   = ( itemCount<1000 ? TRUE : FALSE );
+boolean      drawMap   = FALSE; /* ( itemCount<1000 ? TRUE : FALSE ); */
 struct hash *ldHash    = newHash(20);
 char         cartInvertVal[32];
 
