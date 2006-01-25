@@ -4,7 +4,7 @@
 #include "gbFileOps.h"
 #include "gbFa.h"
 
-static char const rcsid[] = "$Id: gbFa.c,v 1.3 2005/05/14 19:57:13 markd Exp $";
+static char const rcsid[] = "$Id: gbFa.c,v 1.4 2006/01/25 08:34:57 markd Exp $";
 
 /* 16kb seems like a good size by experiment */
 #define FA_STDIO_BUFSIZ (16*1024)
@@ -86,32 +86,35 @@ boolean gbFaReadNext(struct gbFa *fa)
 boolean atBOLN = TRUE; /* always stops after a line */
 char c, *next;
 unsigned iHdr = 0, hdrCap = fa->headerCap;
+off_t off = fa->off;
 
 fa->seq = NULL;
 
 /* find next header */
 while (((c = getc_unlocked(fa->fh)) != EOF) && !((c == '>') && atBOLN))
     {
+    off++;
     atBOLN = (c == '\n');
     }
+fa->recOff = off; /* offset of '>' */
+fa->off = ++off; /* count '>' */
 if (c == EOF)
     return FALSE;
 
 /* read header */
 while ((c = getc_unlocked(fa->fh)) != EOF)
     {
+    off++;
     if (iHdr == hdrCap)
         hdrCap = expandHeader(fa);
     fa->headerBuf[iHdr++] = c;
     if (c == '\n')
         break; /* got it */
 }
+fa->off = off;
 if (c == EOF)
     errAbort("premature EOF in %s", fa->fileName);
 fa->headerBuf[iHdr-1] = '\0';  /* wack newline */
-
-fa->recOff = fa->off;
-fa->off += iHdr;
 
 next = fa->headerBuf;
 fa->id = next;
@@ -135,34 +138,38 @@ fa->seqCap = newSize;
 return fa->seqCap;
 }
 
+static void faReadSeq(struct gbFa *fa)
+/* read next sequence into buffer */
+{
+char c;
+unsigned iSeq = 0, seqCap = fa->seqCap;
+off_t off = fa->off;
+
+/* read seq */
+while (((c = getc_unlocked(fa->fh)) != EOF) && (c != '>'))
+    {
+    off++;
+    if (iSeq == seqCap)
+        seqCap = expandSeq(fa);
+    if (!isspace(c))
+        fa->seqBuf[iSeq++] = c;
+    }
+if (c == '>')
+    ungetc(c, fa->fh);
+fa->off = off;  /* '>' was put back, so it's not counted */
+fa->seqLen = iSeq;
+if (iSeq == seqCap)
+    seqCap = expandSeq(fa);
+fa->seqBuf[iSeq] = '\0';
+fa->seq = fa->seqBuf;
+}
+
 char* gbFaGetSeq(struct gbFa *fa)
 /* Get the sequence for the current record, reading it if not already
  * buffered */
 {
 if (fa->seq == NULL)
-    {
-    char c;
-    unsigned iSeq = 0, seqCap = fa->seqCap;
-
-    /* read seq */
-    while (((c = getc_unlocked(fa->fh)) != EOF) && (c != '>'))
-        {
-        if (iSeq == seqCap)
-            seqCap = expandSeq(fa);
-        if (isspace(c))
-            fa->off++; 
-        else
-            fa->seqBuf[iSeq++] = c;
-        }
-    if (c == '>')
-        ungetc(c, fa->fh);
-    fa->seqLen = iSeq;
-    fa->off += iSeq;
-    if (iSeq == seqCap)
-        seqCap = expandSeq(fa);
-    fa->seqBuf[iSeq] = '\0';
-    fa->seq = fa->seqBuf;
-    }
+    faReadSeq(fa);
 return fa->seq;
 }
 
