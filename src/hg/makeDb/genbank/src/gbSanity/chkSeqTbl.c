@@ -9,7 +9,7 @@
 #include "metaData.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: chkSeqTbl.c,v 1.1 2006/01/22 08:10:00 markd Exp $";
+static char const rcsid[] = "$Id: chkSeqTbl.c,v 1.2 2006/01/25 20:03:57 genbank Exp $";
 
 /* hash tables used to avoid repeating error messages */
 static struct hash* missingExtFileIds = NULL;  /* missing ext file ids that
@@ -110,8 +110,8 @@ carefulClose(&fh);
 /* verify contents */
 if (faBuf[0] != '>')
     {
-    gbError("%s: gbExtFile offset doesn't start a fasta record: %s",
-            seq->acc, extPath);
+    gbError("%s: gbExtFile offset %lld doesn't start a fasta record: %s",
+            seq->acc, (long long)seq->file_offset, extPath);
     free(faBuf);
     return;
     }

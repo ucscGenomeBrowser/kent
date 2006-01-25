@@ -17,7 +17,7 @@
 #include "jksql.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.9 2006/01/22 08:09:59 markd Exp $";
+static char const rcsid[] = "$Id: chkMetaDataTbls.c,v 1.10 2006/01/25 20:03:57 genbank Exp $";
 
 static char* validRefSeqStatus[] = {
     "Unknown", "Reviewed", "Validated", "Provisional", "Predicted", "Inferred", NULL
@@ -149,20 +149,25 @@ static void loadRefLinkRow(struct metaDataTbls* metaDataTbls,
                            struct sqlConnection* conn, char** row)
 /* load a row of the refLink table */
 {
+/* columns: mrnaAcc,name,product,protAcc,geneName,prodName,locusLinkId,omimId */
 struct metaData* md;
 int iRow = 0;
+char *acc = row[iRow++];
 char *product;
 
-/* columns: mrnaAcc,name,product,protAcc,geneName,prodName,locusLinkId,omimId */
+if (!startsWith("NM_", acc))
+    {
+    gbError("%s: non-NM_ mrnaAcc in refLink", acc);
+    return;
+    }
 
-md = metaDataTblsGet(metaDataTbls, row[iRow++]);
+md = metaDataTblsGet(metaDataTbls, acc);
 if (md->inRefLink)
     gbError("%s: occurs multiple times in the refLink table", md->acc);
 md->inRefLink = TRUE;
 safef(md->rlName, sizeof(md->rlName), "%s", row[iRow++]);
 product = row[iRow++];
 safef(md->rlProtAcc, sizeof(md->rlProtAcc), row[iRow++]);
-md->hasProt = TRUE;
 
 /* check if ids are valid (zero is allowed, so just parse) */
 strToUnsigned(row[iRow++], md->acc, "refLink.geneName", NULL);
@@ -170,7 +175,13 @@ strToUnsigned(row[iRow++], md->acc, "refLink.prodName", NULL);
 strToUnsigned(row[iRow++], md->acc, "refLink.locusLinkId", NULL);
 strToUnsigned(row[iRow++], md->acc, "refLink.omimId", NULL);
 
-metaDataTblsAddProtAcc(metaDataTbls, md);
+if (strlen(md->rlProtAcc) == 0)
+    gbError("%s: empty protein acc in refLink", acc);
+else
+    {
+    metaDataTblsAddProtAcc(metaDataTbls, md);
+    md->hasProt = TRUE;
+    }
 }
 
 static void loadRefLink(struct metaDataTbls* metaDataTbls,
