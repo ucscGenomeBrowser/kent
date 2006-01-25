@@ -817,3 +817,9 @@ shortCircuit 1
 termRegex dme-(mir|let|mir-iab|bantam)(-.+)?
 searchPriority 21.5
 
+searchTable geneMapper
+searchMethod exact
+searchType genePred
+termRegex NM_[0-9]+
+searchPriority 50
+
