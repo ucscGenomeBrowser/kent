@@ -6,7 +6,7 @@
 #include "options.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: ixIxx.c,v 1.2 2006/01/20 17:30:24 kent Exp $";
+static char const rcsid[] = "$Id: ixIxx.c,v 1.3 2006/01/25 22:02:45 kent Exp $";
 
 /* Variables that can be set from command line. */
 int prefixSize = trixPrefixSize;
@@ -208,7 +208,7 @@ if (!lineFileNextReal(lf, &line))
     errAbort("%s is empty", inIx);
 word = nextWord(&line);
 setPrefix(word, writtenPrefix);
-setPrefix(lastPrefix, writtenPrefix);
+strcpy(lastPrefix, writtenPrefix);
 writtenPos = lineFileTell(lf);
 writeIxxEntry(f, writtenPrefix, writtenPos);
 
