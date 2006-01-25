@@ -5,7 +5,7 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpExceptions.c,v 1.6 2006/01/17 19:03:42 heather Exp $";
+static char const rcsid[] = "$Id: snpExceptions.c,v 1.7 2006/01/25 23:06:44 heather Exp $";
 
 char *database = NULL;
 static struct slName *chromList = NULL;
@@ -91,46 +91,55 @@ fprintf(f, "%s\t", exception);
 fprintf(f, "\n");
 }
 
-void writeSizeExceptions(FILE *f)
+int writeSizeExceptions(FILE *f)
 /* size should match locType */
 {
 struct snp125 *el = NULL;
+int count = 0;
 
 for (el = listExact; el != NULL; el = el->next)
-    {
     if (el->chromEnd > el->chromStart + 1) 
-       writeOneException(f, el, "ExactLocTypeWrongSize");
-    }
+        {
+        writeOneException(f, el, "ExactLocTypeWrongSize");
+        count++;
+        }
 
 for (el = listBetween; el != NULL; el = el->next)
-    {
     if (el->chromEnd != el->chromStart) 
+        {
         writeOneException(f, el, "BetweenLocTypeWrongSize");
-    }
+        count++;
+        }
 
 for (el = listRange; el != NULL; el = el->next)
-    {
     if (el->chromEnd <= el->chromStart + 1) 
+        {
         writeOneException(f, el, "RangeLocTypeWrongSize");
-    }
+        count++;
+	}
+return count;
 }
 
-void writeClassExceptions(FILE *f)
+int writeClassExceptions(FILE *f)
 /* check listBetween and listRange for class = single */
 {
 struct snp125 *el = NULL;
+int count = 0;
 
 for (el = listBetween; el != NULL; el = el->next)
-    {
     if (sameString(el->class, "single"))
+        {
         writeOneException(f, el, "SingleClassWrongLocType");
-    }
+	count++;
+	}
 
 for (el = listRange; el != NULL; el = el->next)
-    {
     if (sameString(el->class, "single"))
+        {
         writeOneException(f, el, "SingleClassWrongLocType");
-    }
+	count++;
+        }
+return count;
 }
 
 
@@ -163,11 +172,12 @@ boolean validSingleObserved(char *observed)
 }
 
 
-void writeSingleObservedExceptions(FILE *f)
+int writeSingleObservedExceptions(FILE *f)
 /* There are 3 exceptions here:
    SingleClassWrongObserved, SimpleClassTriAllelic, SimpleClassQuadAllelic */
 {
 struct snp125 *el = NULL;
+int count = 0;
 
 for (el = listExact; el != NULL; el = el->next)
     {
@@ -175,25 +185,32 @@ for (el = listExact; el != NULL; el = el->next)
     if (quadAllelic(el->observed))
         {
         writeOneException(f, el, "SingleClassQuadAllelic");
+	count++;
 	continue;
         }
     if (triAllelic(el->observed))
         {
         writeOneException(f, el, "SingleClassTriAllelic");
+	count++;
 	continue;
         }
     if (!validSingleObserved(el->observed))
+        {
         writeOneException(f, el, "SingleClassWrongObserved");
+	count++;
+	}
     }
+return count;
 }
 
-void writeDeletionObservedExceptions(FILE *f)
+int writeDeletionObservedExceptions(FILE *f)
 /* Read listRange for class = 'deletion'. */ 
 /* Might there be other exceptions in listRange? */
 {
 struct snp125 *el = NULL;
 int rangeSize = 0;
 int observedSize = 0;
+int count = 0;
 
 for (el = listRange; el != NULL; el = el->next)
     {
@@ -202,6 +219,7 @@ for (el = listRange; el != NULL; el = el->next)
     if (strlen(el->observed) < 2)
         {
 	writeOneException(f, el, "DeletionClassWrongObserved");
+	count++;
 	continue;
 	}
     if (el->observed[0] == '-' && el->observed[1] == '/') 
@@ -210,14 +228,19 @@ for (el = listRange; el != NULL; el = el->next)
 	rangeSize = el->chromEnd - el->chromStart;
         observedSize = strlen(el->observed) - 2;
 	if (rangeSize != observedSize)
+	    {
 	    writeOneException(f, el, "DeletionClassWrongObserved");
+	    count++;
+	    }
 	continue;
 	}
     writeOneException(f, el, "DeletionClassWrongObserved");
+    count++;
     }
+return count;
 }
 
-void writeReferenceObservedExceptions(FILE *f)
+int writeReferenceObservedExceptions(FILE *f)
 /* Exceptions RefNCBINotInObserved and RefUCSCNotInObserved for listExact, class = 'single'. */
 /* Also check that refNCBI matches observed for listRange, class = 'deletion'. */
 /* This looks pretty good for positive strand, not so for negative strand. */
@@ -226,15 +249,22 @@ void writeReferenceObservedExceptions(FILE *f)
 {
 struct snp125 *el = NULL;
 char *chopString = NULL;
+int count = 0;
 
 for (el = listExact; el != NULL; el = el->next)
     {
     if (!sameString(el->observed, "single")) continue;
     if (sameString(el->observed, "n/a")) continue;
     if (!sameString(el->refNCBI, "n/a") && !strstr(el->observed, el->refNCBI))
+        {
         writeOneException(f, el, "RefNCBINotInObserved");
+	count++;
+	}
     if (!strstr(el->observed, el->refUCSC))
+        {
         writeOneException(f, el, "RefUCSCNotInObserved");
+	count++;
+	}
     }
 
 for (el = listRange; el != NULL; el = el->next)
@@ -243,8 +273,12 @@ for (el = listRange; el != NULL; el = el->next)
     if (sameString(el->observed, "n/a")) continue;
     chopString = chopPrefixAt(el->observed, '/');
     if (!sameString(chopString, el->refNCBI))
+        {
         writeOneException(f, el, "RefNCBINotInObserved");
+	count++;
+	}
     }
+return count;
 }
 
 void loadDatabase(FILE *f, char *fileName)
@@ -261,6 +295,7 @@ int main(int argc, char *argv[])
 struct slName *chromPtr;
 FILE *f;
 char fileName[64];
+int total = 0;
 
 if (argc != 2)
     usage();
@@ -294,11 +329,13 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     strcat(fileName, "_snp125Exceptions");
     f = hgCreateTabFile(".", fileName);
 
-    writeSizeExceptions(f);
-    writeClassExceptions(f);
-    writeSingleObservedExceptions(f);
-    writeDeletionObservedExceptions(f);
-    writeReferenceObservedExceptions(f);
+    total = 0;
+    total = total + writeSizeExceptions(f);
+    total = total + writeClassExceptions(f);
+    total = total + writeSingleObservedExceptions(f);
+    total = total + writeDeletionObservedExceptions(f);
+    total = total + writeReferenceObservedExceptions(f);
+    verbose(1, "%d exceptions found\n", total);
 
     loadDatabase(f, fileName);
     slFreeList(&listExact);
