@@ -1,13 +1,3 @@
-track clonePos
-priority 14
-shortLabel Coverage
-longLabel Clone Coverage/Fragment Position
-group map
-chromosomes chr22,
-visibility hide
-altColor 180,180,180 
-type clonePos
-
 track chainDanRer3
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
