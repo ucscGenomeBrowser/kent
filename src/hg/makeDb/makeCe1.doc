@@ -1319,6 +1319,9 @@ http://genes.cs.wustl.edu/predictions/worm/C_elegans/WS100/12-15-2003/Celegans_W
 #    20889 gene predictions
     hgPepPred ce1 generic twinscanPep chr_ptx/chr*-fixed.fa
 
+# MYTOUCH FIX - Jen - 2006-01-25
+  sudo mytouch ce1 twinscanPep 0404031400.00
+
 # MRNAORIENT, creating tables for clusterRna operation
 #		(working 2004-02-10 - Hiram)
     mkdir -p /cluster/bluearc/ce1/bed/est
