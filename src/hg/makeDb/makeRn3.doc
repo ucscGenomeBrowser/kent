@@ -5027,3 +5027,12 @@ mkdir -p $3:h
     hgsql rn3 < ~/src/hg/lib/geneNetworkId.sql
     hgsql rn3 -e 'load data local infile "rn3.geneNetworkId.tab" into table geneNetworkId'
 
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch rn3 geneidPep 0404031400.00
+  sudo mytouch rn3 twinscanPep 0404021800.00
+  sudo mytouch rn3 ensGeneXref 0404301100.00
+  sudo mytouch rn3 ensGtp 0404301100.00
+  sudo mytouch rn3 ensPep 0404301100.00
+  sudo mytouch rn3 ensTranscript 0404301100.00
+  sudo mytouch rn3 superfamily 0404301300.00
+

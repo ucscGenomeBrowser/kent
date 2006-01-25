@@ -1402,4 +1402,21 @@ o - Rescuing STS track:
      ln -s /cluster/data/rn2/bed/knownGene/index/knownGene.ix /gbdb/rn2/knownGene.ix
      ln -s /cluster/data/rn2/bed/knownGene/index/knownGene.ixx /gbdb/rn2/knownGene.ixx
 
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch rn2 geneidPep 0403251000.00
+  sudo mytouch rn2 twinscanPep 0403251000.00
+  sudo mytouch rn2 dupSpMrna 0403251000.00
+  sudo mytouch rn2 keggPathway 0403251000.00
+  sudo mytouch rn2 kgAlias 0403251000.00
+  sudo mytouch rn2 kgProtAlias 0403251000.00
+  sudo mytouch rn2 kgXref 0403251000.00
+  sudo mytouch rn2 geneidPep 0404031400.00
+  sudo mytouch rn2 twinscanPep 0404031400.00
+
+  Other fixes at same time:
+  Adjusted all.joiner rule to remove false error
+  added !rn to ensemblTranscriptId
+  $kgDb,!rn2.knownToEnsembl.value chopAfter=.
+  check was comparing an empty table to a track (ensGene) that does
+  not exist for this database.
 

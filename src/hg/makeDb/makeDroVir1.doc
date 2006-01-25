@@ -301,6 +301,8 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     hgPepPred droVir1 generic genscanPep genscan.pep
     hgLoadBed droVir1 genscanSubopt genscanSubopt.bed
 
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch droVir1 genscanPep 0501071300.00
 
 # MAKE DOWNLOADABLE FILES (DONE 11/7/04 angie)
 # FASTA FIXED 3/21/05 angie, see below

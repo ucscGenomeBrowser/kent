@@ -7608,3 +7608,12 @@ origAssembly hg16
     longLabel Riken CAGE Minus Strand - Predicted Gene Start Sites
     priority 2
     color 43,51,109
+
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch mm5 geneidPep 0408071900.00
+  sudo mytouch mm5 genscanPep 0501071300.00
+  sudo mytouch mm5 superfamily 0503011100.00
+  sudo mytouch mm5 ensGtp 0503011100.00
+  sudo mytouch mm5 knownToEnsembl 0503011100.00
+  sudo mytouch mm5 sfDescription 0503011100.00
+

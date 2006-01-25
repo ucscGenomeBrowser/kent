@@ -4392,3 +4392,13 @@ foreach file (`ls -1 *PlusTnFg *MinusTnFg | grep -v '_'`)
  echo Doing $base
  hgLoadBed hg15 $base $base
 end
+
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch hg15 geneidPep 0404031400.00
+  sudo mytouch hg15 twinscanPep 0404031400.00
+  sudo mytouch hg15 dupSpMrna 0402242100.00
+  sudo mytouch hg15 keggPathway 0402242100.00
+  sudo mytouch hg15 kgAlias 0402242100.00
+  sudo mytouch hg15 kgProtAlias 0402242100.00
+  sudo mytouch hg15 kgXref 0402242100.00
+

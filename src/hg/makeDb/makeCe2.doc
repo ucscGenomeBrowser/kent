@@ -680,6 +680,19 @@ close SP;
           set g.proteinID = l.protName where g.name = l.orfName;' ce2
       # check there are 21891 rows with the protName field filled
 
+# MYTOUCH FIX - Jen - 2006-01-24
+  sudo mytouch ce2 orfToGene 0505031600.00
+  sudo mytouch ce2 sangerBlastTab 0505031600.00
+  sudo mytouch ce2 sangerBlastTab 0505031600.00
+  sudo mytouch ce2 sangerCanonical 0505031600.00
+  sudo mytouch ce2 sangerIsoforms 0505031600.00
+  sudo mytouch ce2 sangerLinks 0505031600.00
+  sudo mytouch ce2 sangerPep 0505031600.00
+  sudo mytouch ce2 sangerToKim 0505031600.00
+  sudo mytouch ce2 sangerToPfam 0505031600.00
+  sudo mytouch ce2 sangerToRefSeq 0505031600.00
+
+
 # MAKE WORMBASE GENEFINDER TRACKS (DONE, 2004-04-12, hartera)
     # next machine
     ssh eieio

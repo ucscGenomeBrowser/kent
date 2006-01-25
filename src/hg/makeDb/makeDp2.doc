@@ -355,6 +355,8 @@ popd
     hgPepPred dp2 generic genscanPep genscan.pep
     hgLoadBed dp2 genscanSubopt genscanSubopt.bed
 
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch dp2 genscanPep 0501071300.00
 
 # PUT SEQUENCE ON /ISCRATCH FOR BLASTZ (DONE 8/3/04 angie)
     ssh kkr1u00

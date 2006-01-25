@@ -531,6 +531,8 @@ dm2.downloadDir = dm2
     featureBits dm2 genscan
 #24711981 bases of 131698467 (18.764%) in intersection
 
+# MYTOUCH FIX - Jen - 2006-01-24
+  sudo mytouch dm2 genscanPep 0412141800.00
 
 # MAKE DOWNLOADABLE FILES (DONE 1/26/05 angie)
     ssh kksilo

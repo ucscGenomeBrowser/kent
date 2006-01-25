@@ -333,6 +333,8 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     hgPepPred apiMel1 generic genscanPep genscan.pep
     hgLoadBed apiMel1 genscanSubopt genscanSubopt.bed
 
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch apiMel1 genscanPep 0501071300.00
 
 # MAKE DOWNLOADABLE FILES (DONE 11/8/04 angie)
     ssh kksilo

@@ -601,6 +601,8 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     hgPepPred anoGam1 generic genscanPep genscan.pep
     hgLoadBed anoGam1 genscanSubopt genscanSubopt.bed
 
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch anoGam1 genscanPep 0501071300.00
 
 # SWAP BLASTZ MELANOGASTER-ANOPHELES TO ANOPHELES-MEL (DONE 6/10/04 angie)
     ssh kolossus

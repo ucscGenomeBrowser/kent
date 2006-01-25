@@ -19663,3 +19663,11 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
+
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch hg17 gencodeGeneClassJun05 0508301200.00
+  note - gencodeGeneClassJun05 table on dev only
+  sudo mytouch hg17 knownGeneLink 0506050000.00
+  sudo mytouch hg17 ensGtp 0505241200.00
+  sudo mytouch hg17 ccdsInfo 0505241200.00
+

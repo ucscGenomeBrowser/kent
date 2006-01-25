@@ -11873,4 +11873,14 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
         # Loaded 14224 elements of size 5
     checkTableCoords hg16 nhgriDnaseHs
 
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch hg16 superfamily 0407141100.00
+  sudo mytouch hg16 acemblyPep 0406151200.00
+  sudo mytouch hg16 twinscanPep 0407141200.00
+  sudo mytouch hg16 superfamily 0407141100.00
+  sudo mytouch hg16 ensPep 0407141100.00
+  sudo mytouch hg16 knownToEnsembl 0407141100.00
+  sudo mytouch hg16 sfDescription 0407141100.00
+  sudo mytouch hg16 ensEstGtp 0409081800.00
+  sudo mytouch hg16 ensEstPep 0409081800.00
 
