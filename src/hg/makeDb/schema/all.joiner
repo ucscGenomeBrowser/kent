@@ -1717,6 +1717,16 @@ identifier allenBrainProbe
     $gbd.allenBrainUrl.name
     $gbd.allenBrainAli.qName
 
+identifier jaxAlleleName
+"Jackson Labs/MGI Allele name: concatenated representative transcript ID and allele ID"
+    mm6.jaxAllele.name
+    mm6.jaxAlleleInfo.name
+
+identifier jaxPhenotypeName
+"Jackson Labs/MGI Phenotype name: representative transcript ID"
+    mm6.jaxPhenotype.name
+    mm6.jaxPhenotypeAlias.name
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
@@ -1779,6 +1789,7 @@ type genePred
     $gbd.xenoRefGene
     $gbd.jgiFilteredModels
     $gbd.geneMapper
+    $gbd.jaxRepTranscript
 
 type pepPred
     $hg.acemblyPep
