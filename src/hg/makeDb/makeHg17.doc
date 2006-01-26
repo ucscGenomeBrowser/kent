@@ -19024,16 +19024,68 @@ xenopus_xenTro1:0.782453):0.156067,
     # make output dir and run dir
     ssh pk
     cd /cluster/data/hg17/bed/multiz17way.2005-12-20
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//' 17way.nh > tmp.nh
+    echo `cat tmp.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
     mkdir -p maf run
     cd run
 
     # stash binaries 
     mkdir penn
-    #cp -p /cluster/bin/penn/multiz.v11.1.x86_64/multiz-tba/multiz penn
-    #cp -p /cluster/bin/penn/multiz.v11.1.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.1.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.1.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.1.x86_64/multiz-tba/autoMZ penn
     # using V10 built by Hiram, as V11 has problems -- working out with Minmei
-    cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/multiz penn
-    cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/maf_project penn
+    #cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/multiz penn
+    #cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/maf_project penn
+
+cat > autoMultiz.csh << 'EOF'
+#!/bin/csh -ef
+    set db = hg17
+    set c = $1
+    set out = $2
+    set run = `pwd`
+    set tmp = /scratch/tmp/$db/multiz.$c
+    set pairs = /san/sanvol1/scratch/$db/mafNet
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp ../{tree.nh,species.lst} $tmp
+    pushd $tmp
+    foreach s (`cat species.lst`)
+        set in = $pairs/$s/$c.maf
+        if ($s == hg17) then
+            continue
+        endif
+        if (-e $in.gz) then
+            zcat $in.gz > $db.$s.sing.maf
+        else 
+            cp $in $db.$s.sing.maf
+        endif
+    end
+    set path = ($run/penn $path); rehash
+    $run/penn/autoMZ + E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+    popd
+    cp $tmp/$c.maf $out
+    rm -fr $tmp
+'EOF'
+    chmod +x autoMultiz.csh
+
+cat  << 'EOF' > spec
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz17way.2005-12-20/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+
+    awk '{print $1}' /cluster/data/hg17/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single spec jobList
+    para create jobList
+        # 46 files
+    para try
+    para check
+    para push
 
 cat > oneMultiz.csh << 'EOF'
 #!/bin/csh -fe
@@ -19161,6 +19213,7 @@ $s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1 monDom1 1
 $s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom1 galGal2 1
 $s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom1galGal2 xenTro1 1
 $s $c tetNig1 fr1  0
+# this one's wrong -- should be 0
 $s $c tetNig1fr1 danRer3 1
 $s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom1galGal2xenTro1 tetNig1fr1danRer3 1
 #	 get final alignment file
@@ -19672,6 +19725,14 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
+<<<<<<< makeHg17.doc
+
+# copy net mafs to cluster-friendly storage for multiz run (2006-01-25 kate)
+
+    ssh kkstore01
+    cd /cluster/data/hg17/bed/blastz.monDom2
+    cp -rp mafNet /san/sanvol1/scratch/hg17/mafNet/monDom2
+=======
 
     #	real    1122m44.191s
     #	failed during the load of chr19
@@ -19718,3 +19779,4 @@ XXXX - working 2006-01-25
 	-continue=download -bigClusterHub=pk -chainMinScore=5000 \
 	-chainLinearGap=loose `pwd`/DEF > download.out 2>&1 &
     #	real    2m42.505s
+>>>>>>> 1.331
