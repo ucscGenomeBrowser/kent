@@ -18931,6 +18931,12 @@ TMPDIR=/scratch/tmp
 #############################################################################
 # 17-WAY VAR_MULTIZ - ALIGNMENTS (WORKING - 2005-12-20 kate)
 
+    # copy net mafs to cluster-friendly storage for multiz run (2006-01-25 kate)
+
+    ssh kkstore01
+    cd /cluster/data/hg17/bed/blastz.monDom2
+    cp -rp mafNet /san/sanvol1/scratch/hg17/mafNet/monDom2
+
     ssh kkstore02
     cd /cluster/data/hg17/bed
     mkdir -p multiz17way.2005-12-20
@@ -19725,14 +19731,6 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
-<<<<<<< makeHg17.doc
-
-# copy net mafs to cluster-friendly storage for multiz run (2006-01-25 kate)
-
-    ssh kkstore01
-    cd /cluster/data/hg17/bed/blastz.monDom2
-    cp -rp mafNet /san/sanvol1/scratch/hg17/mafNet/monDom2
-=======
 
     #	real    1122m44.191s
     #	failed during the load of chr19
@@ -19756,6 +19754,7 @@ TMPDIR=/scratch/tmp
     #	now, loading only chr19:
     cd /cluster/data/hg17/bed/blastzMonDom2.2006-01-23/axtChain
     hgLoadChain hg17 chr19_chainMonDom2 chain/chr19.chain
+    #	real    33m31.689s
     #	while that is running, back on hgwdev, get the other chains loaded
     ssh hgwdev
     cd /cluster/data/hg17/bed/blastzMonDom2.2006-01-23/axtChain
@@ -19767,7 +19766,7 @@ TMPDIR=/scratch/tmp
     > foreach f (`ls *.chain | grep -v chr19.chain`)
     #	And then run that script
     time ./loadUp.noChr19.csh > load.noChr19.out 2>&1
-XXXX - working 2006-01-25
+    #	real    76m8.757s
     
     #	When the kolossus load finishes, email to push-request and ask
     #	for the two tables to be pushed from kolossus to hgwdev:
@@ -19779,4 +19778,7 @@ XXXX - working 2006-01-25
 	-continue=download -bigClusterHub=pk -chainMinScore=5000 \
 	-chainLinearGap=loose `pwd`/DEF > download.out 2>&1 &
     #	real    2m42.505s
->>>>>>> 1.331
+
+    #	now, back on kolossus to run a featurebits
+    time featureBits hg17 chainMonDom2Link >fb.hg17.chainMonDom2Link 2>&1
+    #	355119482 bases of 2866216770 (12.390%) in intersection
