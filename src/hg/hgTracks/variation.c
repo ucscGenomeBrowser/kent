@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.63 2006/01/25 22:57:04 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.64 2006/01/26 06:56:33 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -902,20 +902,20 @@ bedLoadLdItemByQuery(tg, table, NULL, loader);
 void ldLoadItems(struct track *tg)
 /* loadItems loads up items for the chromosome range indicated.   */
 {
-int count=0;
+int count = 0;
 
 bedLoadLdItem(tg, tg->mapName, (ItemLoader)ldLoad);
 count = slCount((struct sList *)(tg->items));
 tg->canPack = FALSE;
 if (count>5000)
     {
-    tg->limitedVis=tvDense;
-    tg->limitedVisSet=TRUE;
+    tg->limitedVis    = tvDense;
+    tg->limitedVisSet = TRUE;
     }
 else 
     {
-    tg->limitedVis=tvFull;
-    tg->limitedVisSet=FALSE;
+    tg->limitedVis    = tvFull;
+    tg->limitedVisSet = FALSE;
     }
 }
 
@@ -938,9 +938,9 @@ int ldTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height. Called before and after drawItems. 
  * Must set height, lineHeight, heightPer */ 
 {
-tg->lineHeight = tl.fontHeight+1;
+tg->lineHeight = tl.fontHeight + 1;
 tg->heightPer  = tg->lineHeight - 1;
-if (vis==tvDense||(tg->limitedVisSet&&tg->limitedVis==tvDense))
+if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
     tg->height = tg->lineHeight;
 else if (winEnd-winStart<250000)
     tg->height = insideWidth/2;
@@ -1163,6 +1163,8 @@ void ldDrawDenseValueHash(struct vGfx *vg, struct track *tg, int xOff, int yOff,
 {
 struct hashEl *hashEl, *stats=hashElListHash(ldHash);
 
+printf("yOff:%d<BR>",yOff);
+
 vgBox(vg, insideX, yOff, insideWidth, tg->height-1, shadesOfGray[2]);
 for (hashEl=stats; hashEl!=NULL; hashEl=hashEl->next)
     ldDrawDenseValue(vg, tg, xOff, yOff, scale, outlineColor, hashEl->val);
@@ -1281,9 +1283,9 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	if (notInWindow(a, b, c, d, trim)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
 	    continue;
 	shade = colorLookup[(int)values[i]];
-	if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
+	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
 	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
-	else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
 	    {
 	    ldAddToDenseValueHash(ldHash, a, values[i]);
 	    ldAddToDenseValueHash(ldHash, d, values[i]);
@@ -1292,6 +1294,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
 	i++;
 	}
+    /* reached end of chromosome, so sPtr->next is null; draw last diamond in list */
     if (sPtr->next==NULL)
 	{
 	a = dPtr->chromStart;
@@ -1301,9 +1304,9 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	if (notInWindow(a, b, c, d, trim)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
 	    continue;
 	shade = colorLookup[(int)values[i]];
-	if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
+	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
 	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
-	else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
 	    {
 	    ldAddToDenseValueHash(ldHash, a, values[i]);
 	    ldAddToDenseValueHash(ldHash, d, values[i]);
@@ -1312,6 +1315,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
 	}
     }
+/* starting at last snp on chromosome, so dPtr->next is null; draw this diamond */
 if (dPtr->next==NULL)
     {
     a = dPtr->chromStart;
@@ -1325,9 +1329,9 @@ if (dPtr->next==NULL)
 	else if (isDprime)
 	    values = dPtr->dprime;
 	shade = colorLookup[(int)values[0]];
-	if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
+	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
 	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, a, b, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
-	else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
 	    {
 	    ldAddToDenseValueHash(ldHash, a, values[0]);
 	    ldAddToDenseValueHash(ldHash, b, values[0]);
@@ -1336,7 +1340,7 @@ if (dPtr->next==NULL)
 	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
 	}
     }
-if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
     ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
 }
 
