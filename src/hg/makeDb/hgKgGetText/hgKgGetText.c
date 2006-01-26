@@ -4,9 +4,10 @@
 #include "hash.h"
 #include "options.h"
 #include "jksql.h"
+#include "kgXref.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: hgKgGetText.c,v 1.2 2006/01/20 02:20:58 kent Exp $";
+static char const rcsid[] = "$Id: hgKgGetText.c,v 1.3 2006/01/26 03:10:27 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,32 +28,20 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-struct kgInfo
-/* Basic known gene info. */
-    {
-    struct kgInfo *next;	/* Next in list. */
-    char *name;			/* Known gene id. */
-    char *swissProt;		/* Swiss Prot display id. */
-    };
-
-struct kgInfo *getKgList(struct sqlConnection *conn)
+struct kgXref *getKgList(struct sqlConnection *conn)
 /* Get list of all known genes. */
 {
-struct hash *uniqHash = hashNew(16);
-struct kgInfo *kgList = NULL, *kg;
+struct sqlResult *sr = sqlGetResult(conn, "select * from kgXref");
+struct kgXref *kgList = NULL, *kg;
 char **row;
-/* struct sqlResult *sr = sqlGetResult(conn, "select name,proteinId from knownGene limit 100"); */
-struct sqlResult *sr = sqlGetResult(conn, "select name,proteinId from knownGene");
+struct hash *uniqHash = hashNew(18);
 
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    char *name = row[0];
-    AllocVar(kg);
-    if (!hashLookup(uniqHash, name))
+    kg = kgXrefLoad(row);
+    if (hashLookup(uniqHash, kg->kgID) == NULL)
 	{
-	hashAdd(uniqHash, name, kg);
-	kg->name = cloneString(row[0]);
-	kg->swissProt = cloneString(row[1]);
+	hashAdd(uniqHash, kg->kgID, NULL);
 	slAddHead(&kgList, kg);
 	}
     }
@@ -61,6 +50,24 @@ slReverse(&kgList);
 hashFree(&uniqHash);
 return kgList;
 }
+
+struct hash *getRefSeqSummary(struct sqlConnection *conn)
+/* Return hash keyed by refSeq NM_ id, with description values. */
+{
+struct hash *hash = hashNew(16);
+struct sqlResult *sr = sqlGetResult(conn, 
+	"select mrnaAcc,summary from refSeqSummary");
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    subChar(row[1], '\n', ' ');
+    hashAdd(hash, row[0], cloneString(row[1]));
+    }
+sqlFreeResult(&sr);
+verbose(1, "%d refSeqSummary elements\n", hash->elCount);
+return hash;
+}
+
 
 void addText(char *query, struct sqlConnection *conn, FILE *f)
 /* Add results of query to line.  Convert newlines to spaces. */
@@ -102,7 +109,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void getText(struct kgInfo *kg, struct sqlConnection *conn, 
+void getText(struct kgXref *kg, struct hash *refSeqHash, 
+	struct sqlConnection *conn, 
 	struct sqlConnection *spConn, struct sqlConnection *goConn,
 	FILE *f)
 /* Get loads of text and write it out. */
@@ -110,22 +118,22 @@ void getText(struct kgInfo *kg, struct sqlConnection *conn,
 char query[512], **row;
 struct sqlResult *sr;
 struct hash *uniqHash = hashNew(0);
-char *spAcc = spFindAcc(spConn, kg->swissProt);
+char *spAcc = spFindAcc(spConn, kg->spID);
 
-fprintf(f, "%s", kg->name);
+subChar(kg->description, '\n', ' ');
+fprintf(f, "%s\t%s\t%s\t%s", kg->kgID, 
+	kg->geneSymbol, kg->kgID, kg->description);
+hashAdd(uniqHash, kg->geneSymbol, NULL);
+hashAdd(uniqHash, kg->kgID, NULL);
+addSimple(kg->kgID, "kgAlias", "kgID", "alias", conn, uniqHash, f);
+addSimple(kg->kgID, "kgProtAlias", "kgID", "alias", conn, uniqHash, f);
 
-addSimple(kg->name, "kgXref", "kgID", "geneSymbol", conn, uniqHash, f);
-addSimple(kg->name, "kgAlias", "kgID", "alias", conn, uniqHash, f);
-addSimple(kg->name, "kgProtAlias", "kgID", "alias", conn, uniqHash, f);
-addSimple(kg->name, "kgXref", "kgID", "description", conn, uniqHash, f);
-
-if (gotRefSeqSummary)
+if (refSeqHash != NULL)
     {
-    safef(query, sizeof(query),
-	"select refSeqSummary.summary from kgXref,refSeqSummary "
-	"where kgXref.kgID='%s' and refSeqSummary.mrnaAcc=kgXref.refseq"
-	, kg->name);
-    addText(query, conn, f);
+    char *s = hashFindVal(refSeqHash, kg->refseq);
+    if (s == NULL)
+        s = "";
+    fprintf(f, "\t%s", s);
     }
 
 safef(query, sizeof(query),
@@ -153,17 +161,20 @@ FILE *f = mustOpen(outFile, "w");
 struct sqlConnection *conn = sqlConnect(database);
 struct sqlConnection *spConn = sqlConnect("uniProt");
 struct sqlConnection *goConn = sqlConnect("go");
-struct kgInfo *kgList = NULL, *kg;
+struct kgXref *kgList = NULL, *kg;
+struct hash *refSeqHash = NULL;
+/* Return hash keyed by refSeq NM_ id, with description values. */
 
 gotRefSeqSummary = sqlTableExists(conn, "refSeqSummary");
-if (!gotRefSeqSummary)
+if (gotRefSeqSummary)
+    refSeqHash = getRefSeqSummary(conn);
+else
     warn("No refSeqSummary table in %s, proceeding without...", database);
-
 kgList = getKgList(conn);
 verbose(1, "Read in %d known genes from %s\n", slCount(kgList), database);
 
 for (kg = kgList; kg != NULL; kg = kg->next)
-    getText(kg, conn, spConn, goConn, f);
+    getText(kg, refSeqHash, conn, spConn, goConn, f);
 carefulClose(&f);
 }
 
