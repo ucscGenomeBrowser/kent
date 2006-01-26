@@ -1,50 +1,35 @@
 <H2>Description</H2> 
 <P> 
 
+Linkage Disequilibrium is the association of alleles on chromosomes.
 This track shows three different measures (D', r<sup>2</sup>, and LOD)
 of linkage disequilibrium (LD) between pairs of SNPs as genotyped by
-the HapMap consortium.  Linkage disequilibrium is a measure of the
-association between two markers, which is useful for understanding the
-associations between genetic variants throughout the genome. 
-<!-- See the Recombination Rates and Recombination Hotspots tracks for
-related analyses. -->
-</P>
+the HapMap consortium.  LD is useful for understanding the
+associations between genetic variants throughout the genome.  LD and
+can be used to select SNPs for genotyping.  <!-- See the Recombination
+Rates and Recombination Hotspots tracks for related analyses. --></P>
 <P>
 By default, LOD values are displayed in full mode.  Each diagonal
 represents a different SNP with each square representing a pairwise
 comparison between two SNPs.  Shades are used to indicate linkage
 disequilibrium between the pair of SNPs, with darker shades indicating
-stronger LD.  
-</P>
-<UL>
- <LI>
-  White squares indicate pairwise D' values less than 1 with no
-  statistically significant evidence of LD (LOD < 2).  
- </LI>
- <LI>
-  Blue squares indicate high D' values (>0.99) with low statistical
-  significance (LOD < 2).
- </LI>
- <LI>
-  Light pink squares are drawn when the statistical significance is
-  high (LOD >= 2) but the D' value is low (less than 0.5).
- </LI>
-</UL>
+stronger LD.  <I>White</I> squares indicate pairwise D' values less
+than 1 with no statistically significant evidence of LD (LOD < 2).
+<I>Blue</I> squares indicate high D' values (>0.99) with low
+statistical significance (LOD < 2). <I>Light pink</I> squares are
+drawn when the statistical significance is high (LOD >= 2) but the D'
+value is low (less than 0.5). </P>
 
 <H2>Methods</H2>
 <P>
 Genotypes from HapMap Phase II release 19 were used with HaploView to
-infer phasing and calculate LD values for all SNP pairs within 250 kb.
-</P>
+infer phasing and calculate LD values for all SNP pairs within 250 kb.</P>
 <P>
 Haploview uses a two marker EM (ignoring missing data) to estimate the
 maximum-likelihood values of the four gamete frequencies, from which
-the D', LOD, and r<sup>2</sup> calculations derive. Haplotype phase
-and population frequency are inferred using a standard EM algorithm
-with a partition-ligation approach for blocks with greater than 10
-markers.  Conformance with Hardy-Weinberg equilibrium is computed
-using an exact test.
-</P>
+the D', LOD, and r<sup>2</sup> calculations derive.  Haplotype phase
+is inferred using a standard EM algorithm with a partition-ligation
+approach for blocks with greater than 10 markers.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
@@ -57,9 +42,10 @@ using an exact test.
     mountain plot.<BR>
    </LI>
    <LI>
-    <i>Dense</i> mode shows the pairwise LD values in a single line for
-    each population, where the intensity at each position is the average
-    of all of the LD values for all SNPs within 250 kb.
+    <i>Dense</i> mode shows the pairwise LD values in a single line
+    for each population, where the intensity at each position is the
+    average of all of the LD values between the SNP at that position
+    and all other SNPs within 250 kb.
    </LI>
   </UL>
  </LI>
@@ -67,22 +53,23 @@ using an exact test.
   LD Values: measures of linkage disequilibrium<BR>
   <UL>
    <LI>
-    <i>r<sup>2</sup></i> displays the raw r<sup>2</sup> value for a
-given marker pair.  SNPs that have not been separated by recombination
-have r<sup>2</sup> = 1; in this case, these two markers are said to be
-redundant for genotyping, but may have different functional effects.
-Lower r<sup>2</sup> values show a lower degree of LD, indicating that
-some recombination has occurred in this population.  Please see Hill
-and Robertson (1966) for details.
+    <i>D'</i> displays the raw D' value, which is the normalized
+covariance for a given marker pair.  A D' value of 1 (complete LD)
+indicates that two SNPs have not been separated by recombination,
+while lower values indicate evidence of recombination in the history
+of the sample.  Only D' values near 1 are a reliable measure of LD;
+lower values are difficult to interpret as the magnitude of D' depends
+strongly on sample size.  Please see Lewontin (1988) for more details.
    </LI>
    <LI>
-    <i>D'</i> displays the raw D' value for a given marker pair.  A D'
-value of 1 (complete LD) indicates that two SNPs have not been
-separated by recombination, while lower values indicate evidence of
-recombination in the history of the sample.  Only D' values near 1 are
-a reliable measure of LD; lower values are difficult to interpret as
-the magnitude of D' depends strongly on sample size.  Please see
-Lewontin (1988) for more details.
+    <i>r<sup>2</sup></i> displays the raw r<sup>2</sup> value, or the
+square of the correlation coefficient for a given marker pair.  SNPs
+that have not been separated by recombination have r<sup>2</sup> = 1;
+in this case, these two markers are said to be redundant for
+genotyping, but may have different functional effects.  Lower
+r<sup>2</sup> values show a lower degree of LD, indicating that some
+recombination has occurred in this population.  Please see Hill and
+Robertson (1966) for details.
    </LI>
    <LI>
     <i>LOD</i> displays the log odds score for linkage disequilibrium between a given marker pair, and is shown by default.
