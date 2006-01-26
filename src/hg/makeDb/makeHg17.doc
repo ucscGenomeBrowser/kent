@@ -19610,6 +19610,15 @@ Loading database with 51520 rows
 
 
 ##########################################################################
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch hg17 gencodeGeneClassJun05 0508301200.00
+  note - gencodeGeneClassJun05 table on dev only
+  sudo mytouch hg17 knownGeneLink 0506050000.00
+  sudo mytouch hg17 ensGtp 0505241200.00
+  sudo mytouch hg17 ccdsInfo 0505241200.00
+
+
+##########################################################################
 # BLASTZ OPOSSUM monDom2 (WORKING - 2006-01-23 - Hiram)
 
     ssh kk
@@ -19664,10 +19673,48 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
 
-# MYTOUCH FIX - jen - 2006-01-24
-  sudo mytouch hg17 gencodeGeneClassJun05 0508301200.00
-  note - gencodeGeneClassJun05 table on dev only
-  sudo mytouch hg17 knownGeneLink 0506050000.00
-  sudo mytouch hg17 ensGtp 0505241200.00
-  sudo mytouch hg17 ccdsInfo 0505241200.00
+    #	real    1122m44.191s
+    #	failed during the load of chr19
+    #	hgLoadChain hg17 chr19_chainMonDom2 chr19.chain
+    #	Out of memory needMem - request size 56 bytes
 
+    #	So, go to kolossus:
+    ssh kolossus
+    #	There isn't any hg17 db here yet, get it established with a
+    #	chromInfo and a 2bit sequence:
+    hgsql -e "create database hg17;" mysql
+    cd /cluster/data/hg17
+    twoBitInfo hg17.2bit stdout |
+        awk '{printf "%s\t%s\t/gbdb/hg17/hg17.2bit\n", $1,$2}' \
+		> chromInfo.kolossus.tab
+    hgsql hg17 < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgsql hg17 \
+-e 'load data local infile "chromInfo.kolossus.tab" into table chromInfo;'
+    #	it appears /gbdb/hg17 already exists
+    ln -s /cluster/data/hg17/hg17.2bit /gbdb/hg17/hg17.2bit
+    #	now, loading only chr19:
+    cd /cluster/data/hg17/bed/blastzMonDom2.2006-01-23/axtChain
+    hgLoadChain hg17 chr19_chainMonDom2 chain/chr19.chain
+    #	while that is running, back on hgwdev, get the other chains loaded
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastzMonDom2.2006-01-23/axtChain
+    cp loadUp.csh loadUp.noChr19.csh
+    #	change the foreach line to eliminate the chr19.chain:
+    diff loadUp.csh loadUp.noChr19.csh
+    < foreach f (*.chain)
+    ---
+    > foreach f (`ls *.chain | grep -v chr19.chain`)
+    #	And then run that script
+    time ./loadUp.noChr19.csh > load.noChr19.out 2>&1
+XXXX - working 2006-01-25
+    
+    #	When the kolossus load finishes, email to push-request and ask
+    #	for the two tables to be pushed from kolossus to hgwdev:
+    #	chr19_chainMonDom2
+    #	chr19_chainMonDom2Link
+
+    #	then, continuing:
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=download -bigClusterHub=pk -chainMinScore=5000 \
+	-chainLinearGap=loose `pwd`/DEF > download.out 2>&1 &
+    #	real    2m42.505s
