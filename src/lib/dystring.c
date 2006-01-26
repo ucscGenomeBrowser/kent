@@ -6,7 +6,7 @@
 #include "common.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dystring.c,v 1.20 2005/12/04 07:38:32 markd Exp $";
+static char const rcsid[] = "$Id: dystring.c,v 1.21 2006/01/26 19:56:46 markd Exp $";
 
 struct dyString *newDyString(int initialBufSize)
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */
@@ -112,8 +112,6 @@ ds->stringSize = newSize;
 buf[newSize] = 0;
 }
 
-void dyStringVaPrintf(struct dyString *ds, char *format, va_list args);
-
 void dyStringAppend(struct dyString *ds, char *string)
 /* Append zero terminated string to end of dyString. */
 {
@@ -137,15 +135,17 @@ while ((c = *s++) != 0)
 void dyStringVaPrintf(struct dyString *ds, char *format, va_list args)
 /* VarArgs Printf to end of dyString. */
 {
-/* this doesn't work right on x86_64 (2.6.10-1.766_FC3smp).  Might
- * be a bug in vsnprintf, disable until it's figured out */
-#if 0
 /* attempt to format the string in the current space.  If there
  * is not enough room, increase the buffer size and try again */
+int avail, sz;
 while (TRUE) 
     {
-    int avail = ds->bufSize - ds->stringSize;
-    int sz = vsnprintf(ds->string + ds->stringSize, avail, format, args);
+    va_list argscp;
+    va_copy(argscp, args);
+    avail = ds->bufSize - ds->stringSize;
+    sz = vsnprintf(ds->string + ds->stringSize, avail, format, argscp);
+    va_end(argscp);
+
     /* note that some version return -1 if too small */
     if ((sz < 0) || (sz >= avail))
         dyStringExpandBuf(ds, ds->bufSize*ds->bufSize);
@@ -155,16 +155,6 @@ while (TRUE)
         break;
         }
     }
-#else
-char string[4*1024];	/* Sprintf buffer */
-int size;
-
-size = vsnprintf(string, sizeof(string), format, args);
-if (size >= sizeof(string)-1)
-    errAbort("Sprintf size too long in dyStringVaPrintf");	/* If we're still alive... */
-dyStringAppendN(ds, string, size);
-#endif
-
 }
 
 void dyStringPrintf(struct dyString *ds, char *format, ...)
