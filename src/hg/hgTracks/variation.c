@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.65 2006/01/26 18:27:16 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.66 2006/01/26 23:12:25 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -907,16 +907,6 @@ int count = 0;
 bedLoadLdItem(tg, tg->mapName, (ItemLoader)ldLoad);
 count = slCount((struct sList *)(tg->items));
 tg->canPack = FALSE;
-if (count>5000)
-    {
-    tg->limitedVis    = tvDense;
-    tg->limitedVisSet = TRUE;
-    }
-else 
-    {
-    tg->limitedVis    = tvFull;
-    tg->limitedVisSet = FALSE;
-    }
 }
 
 static void mapDiamondUi(int xl, int yl, int xt, int yt, 
