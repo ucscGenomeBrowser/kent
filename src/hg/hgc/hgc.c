@@ -190,7 +190,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.985 2006/01/17 23:46:34 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.986 2006/01/26 17:06:22 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12328,6 +12328,172 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doJaxAllele(struct trackDb *tdb, char *item)
+/* Show gene prediction position and other info. */
+{
+char *track = tdb->tableName;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+boolean hasBin; 
+char aliasTable[256];
+struct sqlResult *sr = NULL;
+char **row = NULL;
+boolean first = TRUE;
+boolean gotAlias = FALSE;
+
+genericHeader(tdb, item);
+safef(aliasTable, sizeof(aliasTable), "jaxAlleleInfo");
+gotAlias = hTableExists(aliasTable);
+safef(query, sizeof(query), "name = \"%s\"", item);
+sr = hRangeQuery(conn, track, seqName, winStart, winEnd, query, &hasBin);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct bed *bed = bedLoadN(row+hasBin, 12);
+    if (first)
+	first = FALSE;
+    else
+	printf("<BR>");
+    printf("<B>MGI Representative Transcript:</B> ");
+    htmTextOut(stdout, bed->name);
+    puts("<BR>");
+    if (gotAlias)
+	{
+	struct sqlResult *sr2 = NULL;
+	char **row2 = NULL;
+	char query2[1024];
+	safef(query2, sizeof(query2),
+	      "select mgiId,source from %s where name = '%s'",
+	      aliasTable, item);
+	sr2 = sqlGetResult(conn2, query2);
+	if ((row2 = sqlNextRow(sr2)) != NULL)
+	    {
+	    if (isNotEmpty(row2[0]))
+		printCustomUrl(tdb, row2[0], TRUE);
+	    printf("<B>Allele Type:</B> %s<BR>\n", row2[1]);
+	    }
+	sqlFreeResult(&sr2);
+	}
+    printPos(bed->chrom, bed->chromStart, bed->chromEnd, bed->strand,
+	     FALSE, NULL);
+    bedFree(&bed);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn2);
+hFreeConn(&conn);
+}
+
+void doJaxPhenotype(struct trackDb *tdb, char *item)
+/* Show gene prediction position and other info. */
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row = NULL;
+boolean hasBin; 
+char query[512];
+char aliasTable[256];
+struct slName *phenoList = NULL, *pheno = NULL;
+boolean first = TRUE;
+boolean gotAlias = FALSE;
+
+genericHeader(tdb, item);
+safef(aliasTable, sizeof(aliasTable), "%sAlias", tdb->tableName);
+gotAlias = hTableExists(aliasTable);
+safef(query, sizeof(query), "name = \"%s\"", item);
+sr = hRangeQuery(conn, tdb->tableName, seqName, winStart, winEnd, query,
+		 &hasBin);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct bed *bed = bedLoadN(row+hasBin, 12);
+    if (first)
+	{
+	first = FALSE;
+	printf("<B>MGI Representative Transcript:</B> ");
+	htmTextOut(stdout, bed->name);
+	puts("<BR>");
+	if (gotAlias)
+	    {
+	    struct sqlConnection *conn2 = hAllocConn();
+	    char query2[512];
+	    char buf[512];
+	    char *mgiId;
+	    safef(query2, sizeof(query2),
+		  "select alias from %s where name = '%s'", aliasTable, item);
+	    mgiId = sqlQuickQuery(conn2, query2, buf, sizeof(buf));
+	    if (mgiId != NULL)
+		printCustomUrl(tdb, mgiId, TRUE);
+	    hFreeConn(&conn2);
+	    }
+	printPos(bed->chrom, bed->chromStart, bed->chromEnd, bed->strand,
+		 FALSE, NULL);
+	bedFree(&bed);
+	}
+    pheno = slNameNew(row[hasBin+12]);
+    slAddHead(&phenoList, pheno);
+    }
+sqlFreeResult(&sr);
+printf("<B>Phenotype(s):</B> ");
+first = TRUE;
+for (pheno = phenoList;  pheno != NULL;  pheno = pheno->next)
+    {
+    if (first)
+	first = FALSE;
+    else
+	printf(", ");
+    htmTextOut(stdout, pheno->name);
+    }
+puts("<BR>");
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
+void doJaxAliasGenePred(struct trackDb *tdb, char *item)
+/* Show gene prediction position and other info. */
+{
+char *track = tdb->tableName;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct genePred *gpList = NULL, *gp = NULL;
+boolean hasBin; 
+char table[128];
+char aliasTable[256];
+struct sqlResult *sr = NULL;
+char **row = NULL;
+boolean gotAlias = FALSE;
+
+genericHeader(tdb, item);
+safef(aliasTable, sizeof(aliasTable), "%sAlias", track);
+gotAlias = hTableExists(aliasTable);
+hFindSplitTable(seqName, track, table, &hasBin);
+safef(query, sizeof(query), "name = \"%s\"", item);
+gpList = genePredReaderLoadQuery(conn, table, query);
+for (gp = gpList; gp != NULL; gp = gp->next)
+    {
+    if (gotAlias)
+	{
+	char query2[1024];
+	char buf[512];
+	char *mgiId;
+	safef(query2, sizeof(query2),
+	      "select alias from %s where name = '%s'", aliasTable, item);
+	mgiId = sqlQuickQuery(conn2, query2, buf, sizeof(buf));
+	if (mgiId != NULL)
+	    printCustomUrl(tdb, mgiId, TRUE);
+	}
+    printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE, NULL);
+    if (gp->next != NULL)
+        printf("<br>");
+    }
+printTrackHtml(tdb);
+genePredFreeList(&gpList);
+sqlFreeResult(&sr);
+hFreeConn(&conn2);
+hFreeConn(&conn);
+}
+
+
 void doEncodeRegion(struct trackDb *tdb, char *item)
 /* Print region desription, along with generic info */
 {
@@ -18035,6 +18201,18 @@ else if (sameWord(track, "jaxQTL"))
 else if (sameWord(track, "jaxQTL3"))
     {
     doJaxQTL3(tdb, item);
+    }
+else if (sameWord(track, "jaxAllele"))
+    {
+    doJaxAllele(tdb, item);
+    }
+else if (sameWord(track, "jaxPhenotype"))
+    {
+    doJaxPhenotype(tdb, item);
+    }
+else if (sameWord(track, "jaxRepTranscript"))
+    {
+    doJaxAliasGenePred(tdb, item);
     }
 else if (sameWord(track, "wgRna"))
     {
