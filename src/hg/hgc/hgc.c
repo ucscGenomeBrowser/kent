@@ -190,7 +190,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.986 2006/01/26 17:06:22 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.987 2006/01/26 17:11:55 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12460,7 +12460,6 @@ boolean hasBin;
 char table[128];
 char aliasTable[256];
 struct sqlResult *sr = NULL;
-char **row = NULL;
 boolean gotAlias = FALSE;
 
 genericHeader(tdb, item);
