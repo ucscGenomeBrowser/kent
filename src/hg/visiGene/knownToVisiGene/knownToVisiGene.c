@@ -87,6 +87,12 @@ char query[512];
 char **row;
 if (fromProbePsl)
     {
+    /* TODO 2006-01-25 Jim is concerned about alternate splicing, wants to us hgMapToGene
+       or something similar in future that matches exact exon structure in kg.
+       Earlier when I tried it, I found that adding -intronsToo made it pickup up more 
+       probes.  But then it made it so similar to simple overlap query (like only 27 recs dif)
+       that I chose to use just the query.  But for future we will need to handle exons better.
+    */
     safef(query, sizeof(query), 
 	"select distinct kg.%s,ip.%s from %s ip, knownGene kg"
 	" where kg.chrom = ip.tName"
