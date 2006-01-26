@@ -100,7 +100,7 @@
 #include "hgMut.h"
 #include "hgMutUi.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1069 2006/01/18 17:20:27 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1070 2006/01/26 06:55:51 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7834,7 +7834,7 @@ if (!tg->limitedVisSet)
 	{
 	tg->height = 0;
 	tg->limitedVis = tvHide;
-	return tvHide;;
+	return tvHide;
 	}
     if (isCompositeTrack(tg))
         maxHeight = maxHeight * subtrackCount(tg->subtracks);
