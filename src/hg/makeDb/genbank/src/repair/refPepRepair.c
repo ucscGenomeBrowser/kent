@@ -10,7 +10,7 @@
 #include "localmem.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: refPepRepair.c,v 1.10 2006/01/25 08:34:57 markd Exp $";
+static char const rcsid[] = "$Id: refPepRepair.c,v 1.11 2006/01/26 00:40:32 genbank Exp $";
 
 /* N.B. 
  *  - The code for getting an ext file record is based on code in gbSanity/chkSeqTbl.c.
@@ -352,10 +352,10 @@ char acc[GB_ACC_BUFSZ];
 struct brokenRefPep *brp;
 HGID extId = extFileTblGet(extFileTbl, conn, faPath);
 
-fprintf(stderr, "scanning: %s\n", faPath);
+gbVerbMsg(5, "scanning fasta: %s", faPath);
 while (gbFaReadNext(fa))
     {
-    fprintf(stderr, "   %s: %lld\n", fa->id, (long long)fa->recOff);
+    gbVerbMsg(5, "   %s: %lld", fa->id, (long long)fa->recOff);
     /* save only if same acecss, version, and file (to match mrna fa) */
     short ver = gbSplitAccVer(fa->id, acc);
     brp = hashFindVal(brpTbl->protAccHash, acc);
@@ -366,7 +366,7 @@ while (gbFaReadNext(fa))
         brp->newFaOff = fa->recOff;
         brp->newSeqSize = fa->seqLen;
         brp->newRecSize = fa->off-fa->recOff;
-        fprintf(stderr, "      save: %lld %lld\n", (long long)fa->recOff, (long long)fa->off);
+        gbVerbMsg(5, "      save: %s %lld for %lld\n", fa->id, (long long)fa->recOff, (long long)fa->off);
         }
     }
 gbFaClose(&fa);
