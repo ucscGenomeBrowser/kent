@@ -73,6 +73,13 @@ int twoBitSeqSize(struct twoBitFile *tbf, char *name);
 long long twoBitTotalSize(struct twoBitFile *tbf);
 /* Return total size of all sequences in two bit file. */
 
+struct dnaSeq *twoBitReadSeqFragExt(struct twoBitFile *tbf, char *name,
+                                    int fragStart, int fragEnd, boolean doMask, int *retFullSize);
+/* Read part of sequence from .2bit file.  To read full
+ * sequence call with start=end=0.  Sequence will be lower
+ * case if doMask is false, mixed case (repeats in lower)
+ * if doMask is true. */
+
 struct dnaSeq *twoBitReadSeqFrag(struct twoBitFile *tbf, char *name,
 	int fragStart, int fragEnd);
 /* Read part of sequence from .2bit file.  To read full

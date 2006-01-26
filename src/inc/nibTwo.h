@@ -32,6 +32,13 @@ void nibTwoCacheFree(struct nibTwoCache **pNtc);
 struct dnaSeq *nibTwoCacheSeq(struct nibTwoCache *ntc, char *seqName);
 /* Return all of sequence. This will have repeats in lower case. */
 
+struct dnaSeq *nibTwoCacheSeqPartExt(struct nibTwoCache *ntc, char *seqName, int start, int size,
+                                     boolean doMask, int *retFullSeqSize);
+/* Return part of sequence. If *retFullSeqSize is non-null then return full
+ * size of sequence (not just loaded part) there.   Sequence will be lower
+ * case if doMask is false, mixed case (repeats in lower)
+ * if doMask is true. */
+
 struct dnaSeq *nibTwoCacheSeqPart(struct nibTwoCache *ntc, char *seqName, 
 	int start, int size, int *retFullSeqSize);
 /* Return part of sequence. If *retFullSeqSize is non-null then return full size of
