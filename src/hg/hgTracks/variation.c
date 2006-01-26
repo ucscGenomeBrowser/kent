@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.64 2006/01/26 06:56:33 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.65 2006/01/26 18:27:16 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1162,8 +1162,6 @@ void ldDrawDenseValueHash(struct vGfx *vg, struct track *tg, int xOff, int yOff,
 /* Draw all dense LD values */
 {
 struct hashEl *hashEl, *stats=hashElListHash(ldHash);
-
-printf("yOff:%d<BR>",yOff);
 
 vgBox(vg, insideX, yOff, insideWidth, tg->height-1, shadesOfGray[2]);
 for (hashEl=stats; hashEl!=NULL; hashEl=hashEl->next)
