@@ -25,11 +25,12 @@
 #include "hgMutUi.h"
 #include "hgConfig.h"
 
-#define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
-#define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
-#define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
+#define CDS_HELP_PAGE "/goldenPath/help/hgCodonColoring.html"
+#define CDS_MRNA_HELP_PAGE "/goldenPath/help/hgCodonColoringMrna.html"
+#define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
+#define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.248 2006/01/27 18:40:59 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.249 2006/01/27 18:56:38 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1319,8 +1320,8 @@ cgiMakeDoubleVar(&options[12][0], yLineMark, 6);
 printf("&nbsp;&nbsp;");
 wiggleYLineMarkDropDown(&options[13][0], yLineMarkOnOff);
 printf("</TD></TR></TABLE>\n");
-puts("<BR><A HREF=\"/goldenPath/help/hgWiggleTrackHelp.html\" TARGET=_blank>"
-     "Graph configuration help</A>");
+printf("<BR><A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",
+	WIGGLE_HELP_PAGE);
 
 freeMem(typeLine);
 
