@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.71 2005/12/23 08:13:43 kent Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.72 2006/01/27 18:39:43 hiram Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -31,10 +31,16 @@ safef(buf, sizeof(buf), "<FONT COLOR=\"#FFFFFF\">%s</FONT>", s);
 return buf;
 }
 
+char *hDocumentRoot()
+/* get the path to the DocumentRoot, or the default */
+{
+return cfgOptionDefault("browser.documentRoot", DOCUMENT_ROOT);
+}
+
 char *hBackgroundImage()
 /* get the path to the configured background image to use, or the default */
 {
-return cfgOptionDefault("browser.background", "../images/floret.jpg");
+return cfgOptionDefault("browser.background", DEFAULT_BACKGROUND);
 }
 
 /******  Some stuff for tables of controls ******/
