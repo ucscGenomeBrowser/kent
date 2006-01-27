@@ -10,7 +10,8 @@
 #include "hdb.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hgMapToGene.c,v 1.11 2004/05/21 21:25:26 kent Exp $";
+
+static char const rcsid[] = "$Id: hgMapToGene.c,v 1.12 2006/01/27 01:00:45 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -277,7 +278,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     name = gp->name;
     if (!hashLookup(dupeHash, name))	/* Only take first occurrence. */
 	{
-	hashAdd(dupeHash, name, NULL);
 	if (doAll)
 	    {
 	    struct binElement *el, *elList = binKeeperFind(bk, gp->txStart, gp->txEnd);
@@ -285,13 +285,19 @@ while ((row = sqlNextRow(sr)) != NULL)
 		{
 		bed = el->val;
 		if (gpBedOverlap(gp, cdsOnly, intronsToo, bed) > 0)
+		    {
 		    outTwo(f, lookupHash, gp->name, bed->name);
+		    hashAdd(dupeHash, name, NULL);
+		    }
 		}
 	    }
 	else
 	    {
 	    if ((bed = mostOverlappingBed(bk, gp)) != NULL)
+		{
 		outTwo(f, lookupHash, gp->name, bed->name);
+		hashAdd(dupeHash, name, NULL);
+		}
 	    }
 	}
     genePredFree(&gp);
