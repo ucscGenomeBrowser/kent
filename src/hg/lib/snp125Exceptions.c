@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snp125Exceptions.c,v 1.1 2006/01/17 18:14:26 heather Exp $";
+static char const rcsid[] = "$Id: snp125Exceptions.c,v 1.2 2006/01/27 22:43:08 heather Exp $";
 
 void snp125ExceptionsStaticLoad(char **row, struct snp125Exceptions *ret)
 /* Load a row from snp125Exceptions table into ret.  The contents of ret will
@@ -19,7 +19,7 @@ ret->chrom = row[0];
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
-ret->exception = sqlUnsigned(row[4]);
+ret->exception = row[4];
 }
 
 struct snp125Exceptions *snp125ExceptionsLoad(char **row)
@@ -33,7 +33,7 @@ ret->chrom = cloneString(row[0]);
 ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
-ret->exception = sqlUnsigned(row[4]);
+ret->exception = cloneString(row[4]);
 return ret;
 }
 
@@ -86,7 +86,7 @@ ret->chrom = sqlStringComma(&s);
 ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
-ret->exception = sqlUnsignedComma(&s);
+ret->exception = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -100,6 +100,7 @@ struct snp125Exceptions *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
+freeMem(el->exception);
 freez(pEl);
 }
 
@@ -131,11 +132,14 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->exception);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->exception);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
 
 void snp125ExceptionsTableCreate(struct sqlConnection *conn)
 /* create a snp125Exceptions table */

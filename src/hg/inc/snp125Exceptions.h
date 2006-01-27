@@ -15,7 +15,7 @@ struct snp125Exceptions
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
     char *name;	/* Reference SNP identifier or Affy SNP name */
-    unsigned exception;	/* Exception found for this SNP */
+    char *exception;	/* Exception found for this SNP */
     };
 
 void snp125ExceptionsStaticLoad(char **row, struct snp125Exceptions *ret);
