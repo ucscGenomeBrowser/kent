@@ -101,7 +101,7 @@
 #include "hgMutUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1071 2006/01/26 17:06:22 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1072 2006/01/27 21:10:38 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1678,9 +1678,19 @@ boolean highlightItem(struct track *tg, void *item)
 {
 char *mapName = NULL;
 char *name = NULL;
+char *chp;
 boolean highlight = FALSE;
 mapName = tg->mapItemName(tg, item);
 name = tg->mapItemName(tg, item);
+
+/* special process for KG, because of "hgg_prot" piggy back */
+if (sameWord(tg->mapName, "knownGene"))
+    {
+    mapName = strdup(mapName);
+    chp = strstr(mapName, "&hgg_prot");
+    if (chp != NULL) *chp = '\0';
+    }
+
 /* Only highlight if names are in the hgFindMatches hash with
    a 1. */
 highlight = (hgFindMatches != NULL &&
