@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.176 2006/01/24 22:31:46 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.177 2006/01/27 07:13:34 kent Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -333,6 +333,8 @@ if (sameString(table, "description"))
 else if (sameString(table, "productName"))
     return anyStartWith(key, commonProductNameWords, 
     	ArraySize(commonProductNameWords));
+else if (sameString(table, "author"))
+    return sameWord(key, "and");
 else
     return FALSE;
 }
@@ -526,58 +528,6 @@ slAddHead(&hgp->tableList, table);
 return table;
 }
 
-static void addKnownGeneItem(struct hgPosTable *table, char *kgID, struct sqlConnection *conn)
-/* Add known gene of given id to pos table.  Look up gene symbol and description. */
-{
-char *description;
-struct hgPos *pos, *firstPos = NULL;
-struct sqlResult *sr;
-char **row, query[256];
-char nameBuf[256];
-
-/* Get gene symbol and description for known gene from kgXref table. */
-safef(query, sizeof(query), 
-    "select geneSymbol,description from kgXref where kgID='%s'", kgID);
-sr = sqlGetResult(conn, query);
-row = sqlNextRow(sr);
-if (row == NULL)
-    {
-    safef(nameBuf, sizeof(nameBuf), "%s", kgID);
-    description = cloneString("internal err - kgXref out of sync");
-    }
-else
-    {
-    safef(nameBuf, sizeof(nameBuf), "%s (%s)", row[0], kgID);
-    description = cloneString(row[1]);
-    }
-sqlFreeResult(&sr);
-
-/* For each mapping of known gene make a pos. */
-safef(query, sizeof(query),
-    "select chrom,txStart,txEnd from knownGene where name='%s'", kgID);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    AllocVar(pos);
-    pos->chrom = cloneString(row[0]);
-    pos->chromStart = sqlUnsigned(row[1]);
-    pos->chromEnd = sqlUnsigned(row[2]);
-    pos->browserName = cloneString(kgID);
-    pos->name = cloneString(nameBuf);
-    if (firstPos == NULL)
-	{
-	firstPos = pos;
-	pos->description = description;
-	}
-    else
-        {
-	pos->description = cloneString(firstPos->description);
-	}
-    slAddHead(&table->posList, pos);
-    }
-sqlFreeResult(&sr);
-}
-
 static boolean gotFullText()
 /* Return TRUE if we have full text index. */
 {
@@ -592,6 +542,115 @@ else
     }
 }
 
+struct tsrPos
+/* Little helper structure tying together search result
+ * and pos, used by addKnownGeneItems */
+    {
+    struct tsrPos *next;	/* Next in list. */
+    struct trixSearchResult *tsr;	/* Basically a gene symbol */
+    struct hgPos *posList;		/* Associated list of positions. */
+    };
+
+static void addKnownGeneItems(struct hgPosTable *table,
+	struct trixSearchResult *tsrList, struct sqlConnection *conn)
+/* Convert tsrList to posList, and hang posList off of table. */
+{
+/* This code works with just two SQL queries no matter how
+ * big the search result list is.  For cases where the search 
+ * result list is big (say 100 or 1000 items) this is noticably
+ * faster than the simpler-to-code approach that would do two 
+ * queries for each search result.  We pay for this speed tweak
+ * by having to construct a more elaborate query, and by having
+ * to maintain a hash to connect the query results back to the
+ * individual positions. */
+struct dyString *dy = dyStringNew(0);
+struct trixSearchResult *tsr;
+struct hash *hash = hashNew(16);
+struct hgPos *posList = NULL, *pos;
+struct tsrPos *tpList = NULL, *tp;
+struct sqlResult *sr;
+char **row;
+
+/* Make hash of all search results - one for each known gene ID. */
+for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
+    {
+    lmAllocVar(hash->lm, tp);
+    tp->tsr = tsr;
+    slAddHead(&tpList, tp);
+    hashAdd(hash, tsr->itemId, tp);
+    }
+
+/* Stream through knownGenes table and make up a pos
+ * for each mapping of each gene matching search. */
+dyStringAppend(dy, 
+	"select name,chrom,txStart,txEnd from knownGene where name in (");
+for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
+    {
+    dyStringAppendC(dy, '"');
+    dyStringAppend(dy, tsr->itemId);
+    dyStringAppendC(dy, '"');
+    if (tsr->next != NULL)
+        dyStringAppendC(dy, ',');
+    }
+dyStringAppend(dy, ")");
+sr = sqlGetResult(conn, dy->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tp = hashFindVal(hash, row[0]);
+    if (tp == NULL)
+        internalErr();
+    AllocVar(pos);
+    pos->chrom = cloneString(row[1]);
+    pos->chromStart = sqlUnsigned(row[2]);
+    pos->chromEnd = sqlUnsigned(row[3]);
+    slAddHead(&tp->posList, pos);
+    }
+sqlFreeResult(&sr);
+
+/* Stream through kgXref table adding description and geneSymbol */
+dyStringClear(dy);
+dyStringAppend(dy, 
+	"select kgID,geneSymbol,description from kgXref where kgID in (");
+for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
+    {
+    dyStringAppendC(dy, '"');
+    dyStringAppend(dy, tsr->itemId);
+    dyStringAppendC(dy, '"');
+    if (tsr->next != NULL)
+        dyStringAppendC(dy, ',');
+    }
+dyStringAppend(dy, ")");
+sr = sqlGetResult(conn, dy->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tp = hashFindVal(hash, row[0]);
+    if (tp == NULL)
+        internalErr();
+    for (pos = tp->posList; pos != NULL; pos = pos->next)
+        {
+	char nameBuf[256];
+	safef(nameBuf, sizeof(nameBuf), "%s (%s)", row[1], row[0]);
+	pos->name = cloneString(nameBuf);
+	pos->description = cloneString(row[2]);
+	}
+    }
+sqlFreeResult(&sr);
+
+/* Hang all pos onto table. */
+for (tp = tpList; tp != NULL; tp = tp->next)
+    {
+    struct hgPos *next;
+    for (pos = tp->posList; pos != NULL; pos = next)
+        {
+	next = pos->next;
+	slAddHead(&posList, pos);
+	}
+    }
+table->posList = posList;
+hashFree(&hash);
+dyStringFree(&dy);
+}
+
 boolean findKnownGeneFullText(char *term,struct hgPositions *hgp)
 /* Look for position in full text. */
 {
@@ -599,7 +658,7 @@ char *db = hGetDb();
 char path[PATH_LEN];
 boolean gotIt = FALSE;
 struct trix *trix;
-struct trixSearchResult *tsr, *tsrList;
+struct trixSearchResult *tsrList;
 char *lowered = cloneString(term);
 char *keyWords[HGFIND_MAX_KEYWORDS];
 int keyCount;
@@ -613,14 +672,7 @@ if (tsrList != NULL)
     {
     struct hgPosTable *table = addKnownGeneTable(hgp);
     struct sqlConnection *conn = hAllocConn();
-    for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
-	{
-#ifdef DEBUG
-	uglyf("tsr %s,%d,%d,%d,%d<BR>\n", tsr->itemId, tsr->unorderedSpan, tsr->orderedSpan, tsr->leftoverLetters, tsr->wordPos);
-#endif /* DEBUG */
-	addKnownGeneItem(table, tsr->itemId, conn);
-	}
-    slReverse(&table->posList);
+    addKnownGeneItems(table, tsrList, conn);
     hFreeConn(&conn);
     gotIt = TRUE;
     }
