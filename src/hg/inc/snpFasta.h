@@ -65,3 +65,5 @@ void snpFastaOutput(struct snpFasta *el, FILE *f, char sep, char lastSep);
 
 #endif /* SNPFASTA_H */
 
+void snpFastaTableCreate(struct sqlConnection *conn);
+

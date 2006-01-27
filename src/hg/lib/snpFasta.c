@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snpFasta.h"
 
-static char const rcsid[] = "$Id: snpFasta.c,v 1.3 2006/01/26 19:06:03 heather Exp $";
+static char const rcsid[] = "$Id: snpFasta.c,v 1.4 2006/01/27 20:27:00 heather Exp $";
 
 void snpFastaStaticLoad(char **row, struct snpFasta *ret)
 /* Load a row from snpFasta table into ret.  The contents of ret will
@@ -162,8 +162,8 @@ fputc(lastSep,f);
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
-void snpFastaTableCreate(struct sqlConnection *conn, int indexSize)
-/* create a snpFlank table */
+void snpFastaTableCreate(struct sqlConnection *conn)
+/* create a snpFasta table */
 {
 char *createString =
 "CREATE TABLE snpFasta (\n"
@@ -175,11 +175,8 @@ char *createString =
 "    leftFlank longblob not null, \n"
 "    rightFlank longblob not null, \n"
 "    INDEX rsId(rsId(12))\n"
-")\n";
+");\n";
 
-struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, createString, indexSize, indexSize);
-sqlRemakeTable(conn, "snpFasta", dy->string);
-dyStringFree(&dy);
+sqlRemakeTable(conn, "snpFasta", createString);
 }
 
