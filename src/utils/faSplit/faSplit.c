@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.31 2005/10/20 03:19:11 markd Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.32 2006/01/27 13:29:02 fanhsu Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -47,6 +47,7 @@ errAbort(
   "    -maxN=N - Suppress pieces with more than maxN n's.  Only used with size.\n"
   "              default is size-1 (only suppresses pieces that are all N).\n"
   "    -oneFile - Put output in one file. Only used with size\n"
+  "    -extra   - Add extra bytes at the end to form overlapping pieces.  Only used with size.\n"
   "    -out=outFile Get masking from outfile.  Only used with size.\n"
   "    -lift=file.lft Put info on how to reconstruct sequence from\n"
   "                   pieces in file.lft.  Only used with size and gap.\n"
@@ -74,6 +75,7 @@ static struct optionSpec optionSpecs[] = {
     {"noGapDrops", OPTION_BOOLEAN},
     {"outDirDepth", OPTION_INT},
     {"prefixLength", OPTION_INT},
+    {"extra", OPTION_INT},
     {NULL, 0}
 };
 
@@ -408,7 +410,7 @@ for (i=0; i<size; ++i)
     }
 }
 
-void splitByCount(char *inName, int pieceSize, char *outRoot, off_t estSize)
+void splitByCount(char *inName, int pieceSize, char *outRoot, off_t estSize, int extra)
 /* Split up file into pieces pieceSize long. */
 {
 off_t pieces = (estSize + pieceSize-1)/pieceSize;
@@ -455,8 +457,8 @@ while (faMixedSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
         {
 	char numOut[128];
 	int thisSize = seq.size - pos;
-	if (thisSize > pieceSize) 
-	    thisSize = pieceSize;
+	if (thisSize > (pieceSize + extra)) 
+	    thisSize = pieceSize + extra;
 	if (bitCountRange(bits, pos, thisSize) <= maxN)
 	    {
 	    if (!oneFile)
@@ -693,6 +695,7 @@ char *inName = NULL;
 int count;
 char *outRoot;
 int prefixLength = 0;
+int extra = 0;
 
 optionInit(&argc, argv, optionSpecs);
 how = argv[1];
@@ -702,6 +705,7 @@ if (argc < 4 )
     usage();
 outDirDepth = optionInt("outDirDepth", 0);
 prefixLength = optionInt("prefixLength", prefixLength);
+extra = optionInt("extra", extra);
 
 if (sameWord(how, "byname"))
     {
@@ -734,7 +738,7 @@ else
     else if (sameWord(how, "base"))
 	splitByBase(inName, count, outRoot, estSize);
     else if (sameWord(how, "size"))
-	splitByCount(inName, count, outRoot, estSize);
+	splitByCount(inName, count, outRoot, estSize, extra);
     else if (sameWord(how, "about"))
 	splitAbout(inName, count, outRoot);
     else if (sameWord(how, "gap"))
