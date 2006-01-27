@@ -71,6 +71,7 @@
 #include "snp.h"
 #include "snpMap.h"
 #include "snpExceptions.h"
+#include "snp125Exceptions.h"
 #include "cnpIafrate.h"
 #include "cnpSebat.h"
 #include "cnpSharp.h"
@@ -190,7 +191,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.988 2006/01/27 18:40:27 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.989 2006/01/27 22:51:35 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12112,11 +12113,39 @@ printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
 printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n",   snp.molType);
 if (snp.avHet>0)
     printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
-    printf("<BR>\n");
-    }   
+printf("<BR>\n");
+}   
     
 void writeSnp125Exception(char *itemName)
 {
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char   query[256];
+int    start = cartInt(cart, "o");
+struct snp125Exceptions el;
+int count = 0;
+
+safef(query, sizeof(query), 
+      "select count(*) from snp125Exceptions where chrom='%s' and chromStart=%d and name='%s'", 
+      seqName, start, itemName);
+count = sqlQuickNum(conn, query);
+if (count == 0) return;
+
+printf("<BR><BR>Annotations:\n");
+
+safef(query, sizeof(query), 
+      "select * from snp125Exceptions where chrom='%s' and chromStart=%d and name='%s'", 
+      seqName, start, itemName);
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr))!=NULL)
+    {
+    snp125ExceptionsStaticLoad(row, &el);
+    printf("<BR>%s\n", el.exception);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 }
 
 void doSnp125(struct trackDb *tdb, char *itemName)
