@@ -29,7 +29,7 @@
 #define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
 #define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.247 2006/01/25 05:16:10 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.248 2006/01/27 18:40:59 hiram Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -2001,7 +2001,7 @@ tdb->priority = 1.0;
  if (helpdir != NULL)
    safef(htmlFile, 256, "%s/%s.html", helpdir, tableName);
  else
-   safef(htmlFile, 256, "%s/%s.html", HELP_DIR, tableName);
+   safef(htmlFile, 256, "%s%s/%s.html", hDocumentRoot(), HELP_DIR, tableName);
  
 readInGulp(htmlFile, &buf, &size);
 tdb->html = buf;
