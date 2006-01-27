@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.17 2006/01/23 05:29:53 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFromTmp.c,v 1.18 2006/01/27 23:52:03 heather Exp $";
 
 char *snpDb = NULL;
 char *targetDb = NULL;
@@ -220,6 +220,7 @@ hFreeConn(&conn);
 
 void readFromSNPFasta(struct snp125 *list)
 /* get molType, class and observed from snpFasta table */
+/* not including chrom in query */
 {
 struct snp125 *el;
 char query[512];
