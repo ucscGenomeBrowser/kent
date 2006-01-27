@@ -1265,7 +1265,7 @@ getSeqs.csh $(path1)
     # http://www.ensembl.org/Multi/martview
     # Follow this sequence through the pages: (NOTE: this interface has changed
     # a little since danRer2)
-    # Page 1) Select the Ensembl dataset (32 here) and the 
+    # Page 1) Select the Ensembl dataset (35 here) and the 
     # Danio_rerio choice (ZFISH5 here). Hit next. 22877 entries total.
     # Ensembl 35 now (2005-11-23) and this is the same as for the version 32
     # downloaded as above.
@@ -4877,8 +4877,204 @@ TMPDIR=/scratch/tmp
 # featureBits -chrom=chr2 danRer2 refGene:cds chainHg17Link -enrichment 
 # refGene:cds 0.769%, chainHg17Link 4.576%, both 0.605%, cover 78.69%,
 # enrich 17.20x
-# Similar coverage and enrichment as for danRer2 vs hg17.
+# Similar coverage and enrichment as for danRer2 vs hg17 but there are less
+# chains: 7057 for hg18 on danRer3, 1111 for hg17 on danRer2 (chr1).
 
+# 6-WAY VAR_MULTIZ ALIGNMENTS (in progress, 2006-01-24, hartera)
+# Species: zebrafish(danRer3), human (hg18), mouse(mm7), opossum(monDom2),
+# fugu(fr1) and tetraodon(tetNig1)
+
+    ssh kkstore02
+    mkdir -p /cluster/data/danRer3/bed/multiz6way
+    cd /cluster/data/danRer3/bed/multiz6way
+    mkdir mafLinks
+    # set up directories for links to mafs for each pairwise alignment
+    mkdir mafLinks/hg18
+    mkdir mafLinks/mm7
+    mkdir mafLinks/monDom2
+    mkdir mafLinks/fr1
+    mkdir mafLinks/tetNig1
+  
+    set dir=/cluster/data/danRer3/bed
+    # need to make links to all the mafNet files for pairwise blastz 
+    # alignments for each species. Make sure files are all called chrN.maf.gz
+    ln -s $dir/blastz.hg18.swap/mafNet/*.maf.gz ./mafLinks/hg18
+    ln -s $dir/blastz.mm7.swap/mafNet/*.maf.gz ./mafLinks/mm7
+    ln -s $dir/blastz.monDom2.2005-10-07/chromsAndScafsRun/mafNet/*.maf.gz \
+          ./mafLinks/monDom2
+    ln -s $dir/blastz.fr1/mafNet/*.maf.gz ./mafLinks/fr1
+    ln -s $dir/blastz.tetNig1.2005-10-11/chromsAndScafsRun/mafNet/*.maf.gz \
+          ./mafLinks/tetNig1
+    # copy files over to the pitakluster for cluster run
+    ssh pk
+    mkdir /san/sanvol1/scratch/danRer3/multiz6way
+    cd /san/sanvol1/scratch/danRer3/multiz6way
+    rsync -a --copy-links --progress \
+          /cluster/data/danRer3/bed/multiz6way/mafLinks/ .
+    # 310 Mb of data - took less than 1 minute 
+    mkdir penn
+    cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/maf_project penn
+
+#       Progressive alignment up the tree w/o stager,
+#       using multiz.v10 (var_multiz)
+#       Method: align internal subtrees (using 0 flag to var_multiz)
+#               Then, align these to human (using 1 flag to var_multiz)
+#       NOTE: must use maf_project after each multiz run, in order
+#       to order output.  Single-cov guaranteed by use of net MAF's,
+#       so it is not necessary to run single_cov2.
+
+    # make output dir and run dir
+
+    cd /cluster/data/danRer3/bed/multiz6way
+    mkdir -p maf
+    mkdir -p run
+    cd run
+
+    # create scripts to run var_multiz on cluster
+
+cat > oneMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    set c = $1
+    set db = danRer3
+    set multi = /scratch/tmp/$db/multiz6way.$c
+    set pairs = /san/sanvol1/scratch/$db/multiz6way
+    set penn = $pairs/penn
+
+    # special mode --
+    # with 1 arg, cleanup
+    if ($#argv == 1) then
+        echo "cleanup"
+        echo "rm -fr $multi"
+        rm -fr $multi
+        echo "rmdir --ignore-fail-on-non-empty /scratch/tmp/$db"
+        rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+        exit
+    endif
+
+    # special mode --
+    # with 3 args, saves an alignment file
+    if ($#argv == 3) then
+        echo "cp $multi/$2/$c.maf $3"
+        ls -og $multi/$2/$c.maf
+        cp $multi/$2/$c.maf $3
+        exit
+    endif
+
+    set s1 = $2
+    set s2 = $3
+    set flag = $4
+
+    # locate input files -- in pairwise dir, or multiple dir
+    set d1 = $multi
+    set d2 = $multi
+    if (-d $pairs/$s1) then
+        set d1 = $pairs
+        set f1 = $d1/$s1/$c.maf.gz
+        set t1 = /tmp/$s1.$c.maf
+        zcat $f1 > $t1
+    else
+        set f1 = $d1/$s1/$c.maf
+        set t1 = /tmp/$s1.$c.maf
+        cp -p $f1 $t1
+    endif
+    if (-d $pairs/$s2) then
+        set d2 = $pairs
+        set f2 = $d2/$s2/$c.maf.gz
+        set t2 = /tmp/$s2.$c.maf
+        zcat $f2 > $t2
+    else
+        set f2 = $d2/$s2/$c.maf
+        set t2 = /tmp/$s2.$c.maf
+        cp -p $f2 $t2
+    endif
+    # write to output dir
+    set out = $multi/${s1}${s2}
+    mkdir -p $out
+
+    # check for empty input file
+    if (-s $t1 && -s $t2) then
+        echo "Aligning $f1 $f2 $flag"
+        $penn/multiz $t1 $t2 $flag $out/$c.unused1.maf \
+                $out/$c.unused2.maf > $out/$c.full.maf
+        cat $out/$c.full.maf $out/$c.unused1.maf $out/$c.unused2.maf > \
+                $out/$c.tmp.maf
+        echo "Ordering $c.maf"
+        $penn/maf_project $out/$c.tmp.maf $db.$c > $out/$c.maf
+        rm -f $t1 $t2
+    else if (-s $t1) then
+        cp -p $t1 $out/$c.maf
+        rm -f $t1
+    else if (-s $t2) then
+        cp -p $t2 $out/$c.maf
+        rm -f $t2
+    endif
+'EOF'
+# << keep emacs coloring happy
+    chmod +x oneMultiz.csh
+    cp -p oneMultiz.csh \
+         /san/sanvol1/scratch/danRer3/multiz6way/penn/oneMultiz.csh
+    # Create 6way.nh file of tree. This was used in the distant past for 
+    # early versions of phastCons.  Now, this is merely a convenient 
+    # reference to the tree under construction.  This is also used to draw 
+    # a graphic tree as species6way.nh, see below.
+
+    cat << '_EOF_' > /cluster/data/danRer3/bed/multiz6way/6way.nh
+((hg18,mm7),monDom2),((tetNig1,fr1),danRer3))
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    #   using the tree diagram as above, arrange these alignments
+    #   in order of the tree branches
+cat > allMultiz.csh << 'EOF'
+#!/bin/csh -fe
+    # multiple alignment steps:
+set c = $1
+set db = danRer3
+set s = "/san/sanvol1/scratch/$db/multiz6way/penn/oneMultiz.csh"
+
+$s $c hg18 mm7 0
+$s $c monDom2 hg18mm7 0
+$s $c tetNig1 fr1 1
+$s $c tetNig1fr1 monDom2hg18mm7 1
+# get final alignment file
+$s $c tetNig1fr1monDom2hg18mm7 /cluster/data/$db/bed/multiz6way/maf/$c.maf
+#cleanup
+$s $c
+'EOF'
+# happy emacs
+    chmod +x allMultiz.csh
+
+cat  << 'EOF' > template
+#LOOP
+./allMultiz.csh $(root1) {check out line+ /cluster/data/danRer3/bed/multiz6way/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+
+    awk '{print $1}' ../../../chrom.sizes > chrom.lst
+    
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    para try, para check, para push, para check ... etc
+    para time
+# Completed: 28 of 28 jobs
+#CPU time in finished jobs:       4722s      78.69m     1.31h    0.05d  0.000 y
+#IO & Wait Time:                   114s       1.91m     0.03h    0.00d  0.000 y
+#Average job time:                 173s       2.88m     0.05h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             751s      12.52m     0.21h    0.01d
+#Submission to last job:          1214s      20.23m     0.34h    0.01d
+
+    # do not filter mafs as only removes a small fraction of alignments
+    # better to keep them all. check for single column alignments (these
+    # just have a single base for each species in the alignment). There
+    # should be none of these now. Previously had to do a glueing step to 
+    # deal with these. There are none here.
+
+    ssh hgwdev
+    # create tab file for chr1.maf
+    cd /cluster/data/danRer3/bed/multiz6way
+    # cat maf files into one file.
+ 
 # KNOWN GENES BASED ON ENSEMBL GENES (in progress, 2005-11-23, hartera)
     # see ENSEMBL GENES section for documentation of creation of
     # the ensGene, ensGtp and ensPep tables and the track.
@@ -4914,17 +5110,18 @@ TMPDIR=/scratch/tmp
     # compression. Hit export. Save as ensGene35Desc.tsv.gz
     gunzip ensGene35Desc.tsv.gz
     # repeat above and get the Ensembl transcript ID from Ensembl Attributes
-    # and then get EntrezGene ID and RefSeq DNA Accession from the
-    # External References section. Select text, tab-separated for output.
-    # Choose gzip compression. Hit export. Save as ensGene35Desc2.tsv.gz
+    # and then get EntrezGene ID, RefSeq DNA Accession and RefSeq Peptide ID
+    # from the External References section. Select text, tab-separated 
+    # for output. Choose gzip compression. Hit export. 
+    # Save as ensGene35Desc2.tsv.gz
     cd /cluster/data/danRer3/bed/knownGenes
     gunzip ensGene35Desc2.tsv.gz  
     # need to make a table of cross reference information for Ensembl
     # for the Known Genes details pages.
-    # create a table definition for ensXref:
+    # create a table definition for ensGeneXref:
     cd ~/kent/src/hg/lib
-cat << 'EOF' > ensXRef.as
-table ensXRef
+cat << 'EOF' > ensGeneXRef.as
+table ensGeneXRef
 "Link together an Ensembl Transcript ID and a gene alias." 
     (
     string ensId;       "Ensembl Transcript ID"
@@ -4936,18 +5133,50 @@ table ensXRef
     string description; "Description" 
     )
 'EOF'
-    autoSql ensXRef.as ensXRef
-    mv ensXRef.h ../inc
-    # edit ensXRef.sql so that only ensId is not null, add zfinId, uniProtId,
-    # geneSymbol, refSeq and protAcc as keys. ensId is already the
+    autoSql ensGeneXRef.as ensGeneXRef
+    mv ensGeneXRef.h ../inc
+    # edit ensGeneXRef.sql so that only ensId is not null, add zfinId, 
+    # uniProtId, geneSymbol, refSeq and protAcc as keys. ensId is already the
     # primary key.
+    # get the gene2refseq file from NCBI to give the Entrez Gene ID
+    # and symbol for refSeq accessions. Taxonomy ID is 7955 for Danio rerio.
+    # columns in file are tax_id, GeneID, status, 
+    # RNA nucleotide accession.version, RNA nucleotide gi, 
+    # protein accession.version, protein gi, genomic nucleotide 
+    # accession.version, genomic nucleotide gi, start position on the genomic 
+    # accession, end position on the genomic accession, orientation.
+    # for the gene_info file, column headings are:
+    # tax_id, GeneID, Symbol, LocusTag, Synonyms, dbXrefs, chromosome,
+    # map location, description, type of gene, Symbol from nomenclature
+    # authority, Full name from nomenclature authority, Nomenclature status.
+
+    wget --timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz
+    wget --timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene_info.gz
+    gunzip gene2refseq.gz
+    gunzip gene_info.gz
+    wget --timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene_history.gz
+    gunzip gene_history.gz
+    # get records for taxon ID: 7955
+    awk '{if ($1 == 7955) print;}' gene2refseq > zfish.gene2refseq
+    wc -l zfish.gene2refseq
+    # 50476 zfish.gene2refseq 
+    awk '{if ($1 == 7955) print;}' gene_info > zfish.gene_info
+    wc -l zfish.gene_info
+    # 37840 zfish.gene_info
+    # get contents of refLink table
+    hgsql -N -e 'select * from refLink;' danRer3 > refLink.txt
+    # UP TO HERE 
     # write program taking ensGene35Desc.tsv and ensGene35Desc2.tsv as input
+    # and also the refLink table to find Entrez Gene IDs and Gene Symbols.
     # and give the tabbed output for loading into the ensXRef table.
     # hgZfishEnsXRef.c in ~/kent/src/hg/near/hgZfishEnsXRef
-    ~/bin/i386/hgZfishEnsXRef.c ensGeneDesc.tsv ensGeneDesc2.tsv danRer3 \
-               ensGeneXRef.tab >& ensGeneXRef.log
-     # 
-   
+    ~/bin/i386/hgZfishEnsXRef ensGene35Desc.tsv ensGene35Desc2.tsv \
+               refLink.txt ensGeneXRef.tab >& ensGeneXRef.log
+    # load this tabbed file into ensXRef table 
+    
+    hgsql rah < ~/kent/src/hg/lib/ensGeneXRef.sql
+    hgsql -e \
+       'load data local infile "ensGeneXRef.tab" into table ensGeneXRef' rah
 # STS MARKERS (in progress, 2005-10-13, hartera)
     # DOWNLOADED RECENTLY FROM NCBI
     ssh kkstore02
