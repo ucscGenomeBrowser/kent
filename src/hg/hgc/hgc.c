@@ -190,7 +190,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.987 2006/01/26 17:11:55 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.988 2006/01/27 18:40:27 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16607,7 +16607,7 @@ printf("<B>Chromosome:</B> %s<BR>\n", seqName);
 printf("<B>Start:</B> %s<BR>\n", item+1);
 printf("<B>Strand:</B> %c<BR>\n", item[0]);
 htmlHorizontalLine();
-safef(helpName, 256, "%s/%s.html", HELP_DIR, OLIGO_MATCH_TRACK_NAME);
+safef(helpName, 256, "%s%s/%s.html", hDocumentRoot(), HELP_DIR, OLIGO_MATCH_TRACK_NAME);
 readInGulp(helpName, &helpBuf, NULL);
 puts(helpBuf);
 }
@@ -16710,7 +16710,7 @@ if (cut)
 	}    
     }
 htmlHorizontalLine();
-safef(helpName, 256, "%s/%s.html", HELP_DIR, CUTTERS_TRACK_NAME);
+safef(helpName, 256, "%s%s/%s.html", hDocumentRoot(), HELP_DIR, CUTTERS_TRACK_NAME);
 readInGulp(helpName, &helpBuf, NULL);
 puts(helpBuf);
 cutterFree(&cut);
