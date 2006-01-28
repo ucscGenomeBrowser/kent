@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.67 2006/01/18 02:30:23 kent Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.68 2006/01/28 04:21:07 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1292,6 +1292,14 @@ if (pStart >= pEnd)
             pName, pCLabel, pStart, pCLabel, pEnd);
     errCount++;
     }
+if (pEnd > pSize)
+    {
+    if (errCount == 0)
+        printPslDesc(pslDesc, out, psl);
+    fprintf(out, "\t%s %cEnd %u >= %cSize %u\n",
+            pName, pCLabel, pEnd, pCLabel, pSize);
+    errCount++;
+    }
 for (iBlk = 0; iBlk < blockCount; iBlk++)
     {
     unsigned blkStart = pBlockStarts[iBlk];
@@ -1312,7 +1320,7 @@ for (iBlk = 0; iBlk < blockCount; iBlk++)
         {
         if (errCount == 0)
             printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u translated start %u < %cStart %u\n",
+        fprintf(out, "\t%s %s block %u start %u < %cStart %u\n",
                 pName, pLabel, iBlk, gBlkStart, pCLabel, pStart);
         errCount++;
         }
@@ -1320,7 +1328,7 @@ for (iBlk = 0; iBlk < blockCount; iBlk++)
         {
         if (errCount == 0)
             printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u translated start %u >= %cEnd %u\n",
+        fprintf(out, "\t%s %s block %u start %u >= %cEnd %u\n",
                 pName, pLabel, iBlk, gBlkStart, pCLabel, pEnd);
         errCount++;
         }
@@ -1328,7 +1336,7 @@ for (iBlk = 0; iBlk < blockCount; iBlk++)
         {
         if (errCount == 0)
             printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u translated end %u < %cStart %u\n",
+        fprintf(out, "\t%s %s block %u end %u < %cStart %u\n",
                 pName, pLabel, iBlk, gBlkEnd, pCLabel, pStart);
         errCount++;
         }
@@ -1336,7 +1344,7 @@ for (iBlk = 0; iBlk < blockCount; iBlk++)
         {
         if (errCount == 0)
             printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u translated end %u > %cEnd %u\n",
+        fprintf(out, "\t%s %s block %u end %u > %cEnd %u\n",
                 pName, pLabel, iBlk, gBlkEnd, pCLabel, pEnd);
         errCount++;
         }
