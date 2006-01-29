@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.66 2006/01/26 23:12:25 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.67 2006/01/29 21:08:31 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1015,7 +1015,7 @@ Color getOutlineColor(int itemCount)
 /* get outline color from cart and set outlineColor*/
 {
 char *outColor = cartUsualString(cart, "ldOut", ldOutDefault);
-if (itemCount > 1000 || winEnd-winStart > 100000)
+if (itemCount > 1000 || winEnd-winStart > 1000000)
     return 0;
 if (sameString(outColor,"yellow"))
     return MG_YELLOW;
@@ -1269,6 +1269,8 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	c = sPtr->chromStart;
 	d = sPtr->next->chromStart;
 	if (notInWindow(a, b, c, d, trim)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
+	    continue;
+	if ( d-a > 250000 ) /* Check to see if we are trying to reach across a window that is too wide (centromere) */
 	    continue;
 	shade = colorLookup[(int)values[i]];
 	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
