@@ -5,7 +5,7 @@
 #include "linefile.h"
 #include "snpFasta.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.6 2006/01/27 20:28:27 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.7 2006/01/30 22:37:42 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 char *classStrings[] = {
@@ -32,7 +32,7 @@ errAbort(
   "  snpFasta database \n");
 }
 
-void readFasta(char *chromName)
+boolean readFasta(char *chromName)
 /* Parse each line. */
 {
 char fileName[64];
@@ -50,6 +50,8 @@ int count = 0;
 strcpy(fileName, "ch");
 strcat(fileName, chromName);
 strcat(fileName, ".gnl");
+
+if (!fileExists(fileName)) return FALSE;
 
 lf = lineFileOpen(fileName, TRUE);
 
@@ -79,6 +81,7 @@ while (lineFileNext(lf, &line, &lineSize))
     }
 /* could reverse order here */
 verbose(1, "%d elements found\n", count);
+return TRUE;
 }
 
 void createTable()
@@ -108,7 +111,7 @@ for (el = list; el != NULL; el = el->next)
 }
 
 void loadFasta(char *chromName)
-/* write the tab file, create the table and load the tab file */
+/* write the tab file for this chrom, load into the full table */
 {
 struct sqlConnection *conn = hAllocConn();
 FILE *f;
@@ -117,10 +120,9 @@ char fileName[64];
 strcpy(fileName, "chr");
 strcat(fileName, chromName);
 strcat(fileName, "_snpFasta");
+verbose(1, "loadFasta writing to %s\n", fileName);
 f = hgCreateTabFile(".", fileName);
 writeSnpFastaTable(f);
-snpFastaTableCreate(conn);
-
 hgLoadNamedTabFile(conn, ".", "snpFasta", fileName, &f);
 hFreeConn(&conn);
 }
@@ -138,21 +140,26 @@ hSetDb(database);
 verbose(1, "calling createTable\n");
 createTable();
 
+list = NULL;
+
 verbose(1, "getting chroms\n");
 chromList = hAllChromNamesDb(database);
 verbose(1, "got chroms\n");
 
-// for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
-    // {
-    // stripString(chromPtr->name, "chr");
-    // verbose(1, "chrom = %s\n", chromPtr->name);
-    // readFasta(chromPtr->name);
-    // loadFasta(chromPtr->name);
-    // slFreeList(&list);
-    // }
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
+    {
+    stripString(chromPtr->name, "chr");
+    verbose(1, "chrom = %s\n", chromPtr->name);
+    if(readFasta(chromPtr->name))
+        {
+        loadFasta(chromPtr->name);
+        slFreeList(&list);
+        list = NULL;
+	}
+    }
 
-readFasta("1");
-loadFasta("1");
+readFasta("Multi");
+loadFasta("Multi");
 slFreeList(&list);
 
 return 0;
