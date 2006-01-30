@@ -19,28 +19,24 @@
 #  used to dump all the rows from sybase - unfortunately
 #  freebcp does not have a static-compile option handy.
 
+setenv jdb jackson20060125
+
 # make database jackson on dev
-hgsql hg17 -e "create database jackson"
+hgsql hg17 -e "create database $jdb"
 
 # Transferring table structure and data from jackson
-#  this calls gettable
+#  this calls gettable (7 hours)
 getAllTables
 
 # Transferring Index keys from jackson
 #  this calls getindex
-getAllIndexes
+getAllIndexes (took 2days - use kolossus next time)
 
 # Transerring images from jackson
 #  this calls getimage
-getAllImages
-#  creates images-pix-map.tab which maps pixid to imageid 
-#   and images.problems which show possible problems, 
-#   but I checked them and these are just "images" that 
-#   dont have a "pix".  Verify with image.cgi?$imageid
-# Currently these images are saved to /cluster/panasas/home/store/galt/jacksonLab/
-#   later split up into subdirs /1000 ... /8000 because too many files in one dir.
-#
-# Jim has since discovered pixid/imageid relationship! Great!
+getAllImages  (took 3 hours to download almost 8k images)
+# Currently these images are saved to /san/sanvol1/scratch/visiGene/downloads/jackson/$jdb/
+# Now using this relationship uncovered by Jim which is much nicer:
 #> mysql> select accID,_Object_key from ACC_Accession where
 #> accID="PIX:5908";
 #> +----------+-------------+
@@ -52,6 +48,8 @@ getAllImages
 # hgwdev:~jackson>hgsql jackson -BN -e 'select count(*) from ACC_Accession where prefixPart = "PIX:"'
 # 7997
 #
+#hgsql $jdb -BN -e 'select substring(accID,5) from ACC_Accession where prefixPart = "PIX:"' > pixIds.list
+# 
 
 # Of course the data is live and they get new stuff deposited every week,
 #  we don't at this time have a live update process but each table in jackson
@@ -59,4 +57,89 @@ getAllImages
 #  for an incremental db update.
 #
 
+
+# of images from the first jackson download 
+ls /cluster/panasas/home/store/galt/jacksonLab/ | grep '.html' | wc -l
+  12005  (we downloaded this many htmls by imageid rather than pixid)
+
+# of successful pixids from that set
+ls /gbdb/visiGene/full/inSitu/Mouse/jax/ | grep '.jpg' | wc -l
+   7996
+
+# of new pix downloaded using PIX: info that we didn't have before
+ls /san/sanvol1/scratch/visiGene/downloads/jackson/jackson20060125/ | wc -l
+   7949
+
+# attempted - we didn't have any download failures
+hgwdev:~/jackson/2006-01-25> wc -l pix-downloaded.list
+   7949 pix-downloaded.list
+
+# of MB downloaded jpgs
+[hgwdev:/san/sanvol1/scratch/visiGene/downloads/jackson/jackson20060125> 
+du -hs 
+806M
+
+
+create parasol directory and a list of the jpg files.
+ssh pk
+cd /san/sanvol1/scratch/visiGene/downloads/jackson/jackson20060125/
+mkdir prepImageRun
+ls | grep '.jpg$' > prepImageRun/jpg.lst
+cd prepImageRun
+
+# Create script that uses ImageMagick to make tiles and thumbs
+cat << '_EOF_' > vgPrepImage
+#!/bin/tcsh
+if ("$1" == "") then
+    echo "must specify input file on the commandline"
+    exit 1
+endif
+echo "processing $1 ..."
+set filepath="/san/sanvol1/scratch/visiGene/downloads/jackson/jackson20060125/$1"
+cd /cluster/store11/visiGene/gbdb/full/inSitu/Mouse/jax/
+cp $filepath .
+mkdir $1:r
+cd $1:r
+
+set filename=$filepath:t
+set basename=$filename:r
+set ext=$filename:e
+
+convert $filepath               -crop 512x512 -quality 75 ${basename}_0_%03d.$ext
+convert $filepath -resize 50%   -crop 512x512 -quality 75 ${basename}_1_%03d.$ext
+convert $filepath -resize 25%   -crop 512x512 -quality 75 ${basename}_2_%03d.$ext
+convert $filepath -resize 12.5% -crop 512x512 -quality 75 ${basename}_3_%03d.$ext
+convert $filepath -resize 6.25% -crop 512x512 -quality 75 ${basename}_4_%03d.$ext
+
+convert $filepath -resize 200 /cluster/store11/visiGene/gbdb/200/inSitu/Mouse/jax/$1
+'_EOF_'
+# << this line makes emacs coloring happy
+
+chmod a+x vgPrepImage
+
+# Create parasol batch
+cat << '_EOF_' > gsub
+#LOOP
+vgPrepImage $(path1)
+#ENDLOOP
+'_EOF_'
+# << this line makes emacs coloring happy
+
+gensub2 jpg.lst single gsub spec
+para make spec
+
+
+[pk:/san/sanvol1/scratch/visiGene/downloads/jackson/jackson20060125/prepImageRun> /parasol/bin/para time
+7949 jobs in batch
+11728 jobs (including everybody's) in Parasol queue.
+Checking finished jobs
+Completed: 7949 of 7949 jobs
+CPU time in finished jobs:       4519s      75.31m     1.26h    0.05d  0.000 y
+IO & Wait Time:                713345s   11889.09m   198.15h    8.26d  0.023 y
+Average job time:                  90s       1.51m     0.03h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:             260s       4.33m     0.07h    0.00d
+Submission to last job:          3766s      62.77m     1.05h    0.04d
+
+============================================
 
