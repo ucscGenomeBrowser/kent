@@ -10964,12 +10964,8 @@ axtChain $1 \
 
 # QA Note - table ensGtp was updated on 2004-08-18 to remove a header line that
   was included in the actual table data. This was not ever pushed out to the rr.
-  Table fix (push) done on 2006-01-31 (Jen). From the makedoc entry, it looks like 
-  this error was introduced in the sed command 6 lines above. 
-  This:
-        | hgsql hg16
-  should have been:
-        | hgsql -N hg16
+  Table fix (push) done on 2006-01-31 (Jen). Original push on 2004-06. No other
+  pushQ entries exist for table change on 2004-08.
 
 # BLASTZ MOUSE MM5 (DONE 2004-09-10 kate)
     
