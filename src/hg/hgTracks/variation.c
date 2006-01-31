@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.67 2006/01/29 21:08:31 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.68 2006/01/31 02:40:25 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1234,6 +1234,8 @@ boolean      drawMap   = FALSE; /* ( itemCount<1000 ? TRUE : FALSE ); */
 struct hash *ldHash    = newHash(20);
 char         cartInvertVal[32];
 
+if (tg->items==NULL)
+    return;
 safef(cartInvertVal, sizeof(cartInvertVal), "%s_inv", tg->mapName);
 ldInvert = cartUsualBoolean(cart, cartInvertVal, ldInvertDefault);
 
