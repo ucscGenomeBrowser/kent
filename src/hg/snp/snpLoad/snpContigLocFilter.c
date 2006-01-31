@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.4 2006/01/31 20:37:14 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.5 2006/01/31 20:51:37 heather Exp $";
 
 char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -19,7 +19,7 @@ void usage()
 errAbort(
     "snpContigLocFilter - filter the ContigLoc table\n"
     "usage:\n"
-    "    ContigLocFilter snpDb contigGroup\n");
+    "    snpContigLocFilter snpDb contigGroup\n");
 }
 
 
