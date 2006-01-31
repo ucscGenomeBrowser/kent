@@ -11471,6 +11471,10 @@ ldHgGene hg16 vegaPseudoGene -predTab vegaPseudoGeneHg16.gp -gtf
 echo 'truncate table vegaInfo' | hgsql hg16 -N -B
 echo 'load data local infile "vegaInfo.tab" into table vegaInfo' | hgsql hg16 -N -B
 
+# QA note - table vegaPep dropped during this updated. Not dropped from rr at 
+  time of initial push, creating a -times error in joinerCheck. Table vegaPep 
+  dropped from hgwbeta and rr/mgc on 2006-01-31.
+
 #########################################################################
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
