@@ -6,10 +6,11 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.1 2006/01/31 18:35:42 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.2 2006/01/31 19:42:32 heather Exp $";
 
 char *snpDb = NULL;
 static struct hash *contigHash = NULL;
+static struct hash *weightHash = NULL;
 char *contigGroup = NULL;
 
 void usage()
@@ -47,14 +48,41 @@ verbose(1, "contigs found = %d\n", count);
 return ret;
 }
 
+struct hash *loadMapInfo()
+/* hash all snp IDs that have weight = 10 */
+{
+struct hash *ret;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int count = 0;
+
+ret = newHash(0);
+verbose(1, "getting weight = 10 from SNPMapInfo...\n");
+safef(query, sizeof(query), "select snp_id from SNPMapInfo where weight = 10");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hashAdd(ret, row[0], NULL);
+    count++;
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+verbose(1, "SNPs with weight 10 found = %d\n", count);
+return ret;
+}
 
 void filterContigs()
+/* read all rows, relevant columns of ContigLoc into memory. */
+/* Write out rows where ctg_id is in our hash. */
+/* Don't write rows where weight = 10 from MapInfo. */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-struct hashEl *el;
+struct hashEl *el1, *el2;
 FILE *f;
 
 f = hgCreateTabFile(".", "ContigLocFilter");
@@ -65,9 +93,11 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = hashLookup(contigHash,row[1]);
-    if (el != NULL)
+    el1 = hashLookup(contigHash,row[1]);
+    if (el1 != NULL)
         {
+	el2 = hashLookup(weightHash,row[0]);
+	if (el2 != NULL) continue;
 	fprintf(f, "%s\t", row[0]);
 	fprintf(f, "%s\t", row[1]);
 	fprintf(f, "%s\t", row[2]);
@@ -133,11 +163,21 @@ if(!hTableExistsDb(snpDb, "ContigLoc"))
     errAbort("no ContigLoc table in %s\n", snpDb);
 if(!hTableExistsDb(snpDb, "ContigInfo"))
     errAbort("no ContigInfo table in %s\n", snpDb);
+if(!hTableExistsDb(snpDb, "SNPMapInfo"))
+    verbose(1, "no SNPMapInfo table in %s\n", snpDb);
+
 
 contigHash = loadContigs(contigGroup);
 if (contigHash == NULL) 
     {
-    verbose(1, "couldn't get hash\n");
+    verbose(1, "couldn't get ContigInfo hash\n");
+    return 0;
+    }
+
+weightHash = loadMapInfo();
+if (weightHash == NULL)
+    {
+    verbose(1, "couldn't get MapInfo weight hash\n");
     return 0;
     }
 
