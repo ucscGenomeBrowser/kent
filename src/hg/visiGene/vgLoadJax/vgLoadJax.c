@@ -284,9 +284,9 @@ void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, c
 char raName[PATH_LEN], tabName[PATH_LEN], tmpName[PATH_LEN], capName[PATH_LEN];
 FILE *ra = NULL, *tab = NULL, *cap = NULL;
 struct dyString *query = dyStringNew(0);
-struct sqlResult *sr;
+struct sqlResult *sr, *sr2;
 char **row;
-char *copyright, *pubMed;
+char *pubMed;
 struct slName *list, *el;
 boolean gotAny = FALSE;
 struct hash *uniqImageHash = newHash(0);
@@ -294,6 +294,8 @@ struct hash *captionHash = newHash(0);
 int imageWidth = 0, imageHeight = 0;
 char path[PATH_LEN];
 struct dyString *caption = dyStringNew(0);
+struct dyString *copyright = dyStringNew(0);
+boolean lookedForCopyright = FALSE;
 	
 safef(raName, sizeof(raName), "%s.ra", fileRoot);
 safef(tabName, sizeof(tabName), "%s.tab", fileRoot);
@@ -366,18 +368,6 @@ pubMed = sqlQuickStringVerbose(conn, query->string);
 if (pubMed != NULL)
     fprintf(ra, "pubUrl http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=pubmed&dopt=Abstract&list_uids=%s\n", pubMed);
 freez(&pubMed);
-
-/* Add in copyright notice */
-dyStringClear(query);
-dyStringPrintf(query, 
-	"select copyrightNote from IMG_Image where _Refs_key = %s", ref);
-copyright = sqlQuickStringVerbose(conn, query->string);
-if (copyright != NULL)
-    {
-    copyright = fixCopyright(copyright);
-    fprintf(ra, "copyright %s\n", copyright);
-    }
-freez(&copyright);
 
 dyStringClear(query);
 dyStringAppend(query, 
@@ -480,6 +470,33 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     if (age == NULL)
         continue;
+
+    if (!lookedForCopyright)
+	{
+	lookedForCopyright = TRUE;
+
+	dyStringClear(query);
+	dyStringPrintf(query, 
+	     "select note from MGI_NoteChunk,MGI_Note,MGI_NoteType,ACC_MGIType "
+	     "where MGI_Note._Object_key = %s "
+	     "and ACC_MGIType.name = 'Image' "
+	     "and ACC_MGIType._MGIType_key = MGI_Note._MGIType_key "
+	     "and MGI_NoteType.noteType='Copyright' "
+	     "and MGI_Note._NoteType_key = MGI_NoteType._NoteType_key "
+	     "and MGI_Note._Note_key = MGI_NoteChunk._Note_key "
+	     "order by sequenceNum"
+	     , imageKey);
+	sr2 = sqlGetResultVerbose(conn2, query->string);
+	while ((row = sqlNextRow(sr2)) != NULL)
+	   dyStringAppend(copyright, row[0]);
+	sqlFreeResult(&sr2);
+
+	if (copyright->stringSize != 0)
+	    {
+	    char *fixed = fixCopyright(copyright->string);
+	    fprintf(ra, "copyright %s\n", fixed);
+	    }
+	}
 
     /* Massage sex */
         {
@@ -729,15 +746,20 @@ while ((row = sqlNextRow(sr)) != NULL)
 	hashAdd(uniqImageHash, imageKey, NULL);
 	dyStringClear(caption);
 	dyStringClear(query);
-	dyStringPrintf(query,
-	    "select imageNote from IMG_ImageNote "
-	    "where _Image_key = %s "
-	    "order by sequenceNum"
-	    , imageKey);
-	sr = sqlGetResultVerbose(conn2, query->string);
-	while ((row = sqlNextRow(sr)) != NULL)
+	dyStringPrintf(query, 
+	     "select note from MGI_NoteChunk,MGI_Note,MGI_NoteType,ACC_MGIType "
+	     "where MGI_Note._Object_key = %s "
+	     "and ACC_MGIType.name = 'Image' "
+	     "and ACC_MGIType._MGIType_key = MGI_Note._MGIType_key "
+	     "and MGI_NoteType.noteType='Caption' "
+	     "and MGI_Note._NoteType_key = MGI_NoteType._NoteType_key "
+	     "and MGI_Note._Note_key = MGI_NoteChunk._Note_key "
+	     "order by sequenceNum"
+	     , imageKey);
+	sr2 = sqlGetResultVerbose(conn2, query->string);
+	while ((row = sqlNextRow(sr2)) != NULL)
 	   dyStringAppend(caption, row[0]);
-	sqlFreeResult(&sr);
+	sqlFreeResult(&sr2);
 
 	if (caption->stringSize > 0)
 	    {
@@ -796,6 +818,7 @@ else
     remove(capName);
     }
 remove(tmpName);
+dyStringFree(&copyright);
 dyStringFree(&caption);
 dyStringFree(&query);
 hashFree(&uniqImageHash);
