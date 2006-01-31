@@ -7,6 +7,8 @@
 
 #include "element.h"
 
+static char buffer[16*1024];
+
 static struct element *newEdge(struct element *parent, struct element *child);
 
 struct element *newElement(struct genome *g, char *name, char *version)
@@ -223,6 +225,20 @@ for(genome=allGenomes; genome; genome = genome->next)
 return allGenomes;
 }
 
+struct genome *getGenome(char *file, char *name)
+{
+    struct genome *list = readGenomes(file);
+    struct genome *g;
+
+    for(g = list; g ; g = g->next)
+	{
+	if (sameString(g->name, name))
+	    return g;
+	}
+
+    return NULL;
+}
+
 static struct element *getElement(char *name, struct hash *genomeHash)
 {
 char *s = cloneString(name);
@@ -254,7 +270,7 @@ void setElementDist(struct element *e1, struct element *e2, double dist,
     struct distance **distanceList, struct hash **pDistHash, struct hash **pDistEleHash)
 {
 int val = 0;
-char buffer[512];
+// char buffer[512];
 char *str = "%s.%s.%s-%s.%s.%s";
 float *pdist;
 
@@ -284,8 +300,11 @@ if ((pdist = (float *)hashFindVal(*pDistHash, buffer)) != NULL)
     {
 #define EPSILON 0.01
     if (fabs(dist - *pdist) > EPSILON)
+	{
 	errAbort("attempting to set dist for %s to different value (%g) (%g)\n",
 	    buffer, dist, *pdist);
+	return;
+	}
     }
 else
     {
@@ -447,20 +466,20 @@ errAbort("tried to delete non-existant edge");
 
 char *eleFullName(struct element *e, boolean doNeg)
 {
-static char buffer[512];
+// static char buffer[512];
 
 if (e->isFlipped ^ doNeg)
     //safef(buffer,sizeof buffer, "-%s.%s.%s",e->species,e->name, e->version);
-    safef(buffer,sizeof buffer, "-%s",e->name);
+    safef(buffer,sizeof buffer, "-%s.%s",e->name,e->version);
 else
-    safef(buffer,sizeof buffer, "%s",e->name);
+    safef(buffer,sizeof buffer, "%s.%s",e->name,e->version);
 
 return buffer;
 }
 
 char *eleName(struct element *e)
 {
-static char buffer[512];
+// static char buffer[512];
 
 safef(buffer,sizeof buffer, "%s.%s.%s",e->species,e->name, e->version);
 
