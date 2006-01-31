@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: orderNodes.c,v 1.1 2006/01/23 03:49:06 braney Exp $";
+static char const rcsid[] = "$Id: orderNodes.c,v 1.2 2006/01/31 06:36:46 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -14,9 +14,11 @@ void usage()
 errAbort(
   "orderNodes - orders the ancestor nodes in  an element tree\n"
   "usage:\n"
-  "   orderNodes elementTreeFile outTree\n"
+  "   orderNodes elementTreeFile outGroupElems outTree\n"
   "arguments:\n"
   "   elementTreeFile      name of file containing element tree\n"
+  "   outGroupElems        the element list of the outgroup\n"
+  "   outLen               the length of the branch to the out group\n"
   "   outTree              name of file containing ordered element tree\n"
   );
 }
@@ -25,49 +27,103 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void setPair(struct genome *g, struct element *e1, struct element *e2, double val, boolean doNeg)
+struct possibleEdge
 {
-double *pval;
+    double prob;
+    struct element *element;
+};
+
+void addPair( struct hash *hash, struct element *e2, double val,  boolean doNeg)
+{
+struct possibleEdge *edge;
 char *name;
-struct hash *h;
-boolean flipSecond = FALSE;
 
-if (e1->isFlipped)
-    flipSecond = TRUE;
+/*
+if (e1->up.nextHash == NULL)
+    e1->up.nextHash = newHash(5);
+if (e1->up.prevHash == NULL)
+    e1->up.prevHash = newHash(5);
 
-name = eleFullName(e1, doNeg ^ flipSecond);
-if ((h = hashFindVal(g->pairOrders, name)) == NULL)
+hash = e1->up.nextHash;
+if (doPrev)
+    hash = e1->up.prevHash;
+    */
+
+name = eleFullName(e2, doNeg );
+if ((edge = hashFindVal(hash, name)) == NULL)
     {
-    h = newHash(5);
-    hashAdd(g->pairOrders, name, h);
-    }
-
-name = eleFullName(e2, doNeg ^ flipSecond);
-if ((pval = hashFindVal(h, name)) == NULL)
-    {
-    AllocVar(pval);
-    *pval = val;
-    hashAdd(h, name, pval);
+    AllocVar(edge);
+    edge->prob = val;
+    edge->element = e2;
+    hashAdd(hash, name, edge);
     }
 else
     {
-    if (*pval != val)
+    if (edge->element != e2)
+	errAbort("not the same edge");
+
+    edge->prob += val;
+    }
+}
+
+char *eleFullName2(struct element *e, boolean doNeg)
+{
+ static char buffer[512];
+
+if ( doNeg)
+    //safef(buffer,sizeof buffer, "-%s.%s.%s",e->species,e->name, e->version);
+    safef(buffer,sizeof buffer, "-%s.%s",e->name,e->version);
+else
+    safef(buffer,sizeof buffer, "%s.%s",e->name,e->version);
+return buffer;
+}
+
+void setPair( struct element *e1, struct element *e2, double val, boolean doNeg)
+{
+struct possibleEdge *edge = NULL;
+char *name;
+boolean flipE1 = e1->isFlipped ^ doNeg;
+boolean flipE2 = e2->isFlipped ^ doNeg;
+struct hash *hash;
+
+if (e1->up.nextHash == NULL)
+    e1->up.nextHash = newHash(5);
+if (e1->up.prevHash == NULL)
+    e1->up.prevHash = newHash(5);
+
+hash = e1->up.nextHash;
+if (flipE1)
+    hash = e1->up.prevHash;
+
+name = eleFullName(e2, doNeg );
+
+if ((edge = hashFindVal(hash, name)) == NULL)
+    {
+    AllocVar(edge);
+    edge->prob = val;
+    edge->element = e2;
+    hashAdd(hash, name, edge);
+    }
+else
+    {
+    if (edge->prob != val)
 	errAbort("existing value doesn't match");
     }
 }
 
+
+
 void setAllPairs(struct genome *g)
 {
-struct element *e = g->elements;
+struct element *e;
 struct hash *h;
 
-if (g->pairOrders == NULL)
-    g->pairOrders = newHash(5);
-
-for(; e->next; e = e->next)
+for(e = g->elements; e->next; e = e->next)
     {
-    setPair(g, e, e->next, 1.0, FALSE);
-//    setPair(g, e->next, e, 1.0, TRUE);
+    setPair(e, e->next, 1.0, FALSE);
+    setPair(e->next, e, 1.0, TRUE);
+
+    //hashStore(e->adj.up.prevHash, eleFullName(e), e->next);
     }
 }
 
@@ -85,116 +141,206 @@ else
     struct genome *g = node->priv;
 
     setAllPairs(g);
+    //correctAllPairs(g);
     }
 }
 
-void mergeChildHash(struct hash *groupHash, struct hash *childHash, double bLen)
-{
-struct hashCookie cookie = hashFirst(childHash);
-struct hashEl *next;
 
-while(next = hashNext(&cookie))
+void calcDownNodes(struct phyloTree *node, struct genome *out)
+{
+int ii;
+struct element *e;
+
+for(e=g->elements; e; e = e->next)
     {
-    double *pval;
-    double childVal;
+    struct hashCookie cookie;
+    struct hashEl *next;
+    struct element *parent = e->parent;
+    struct element *nextParent;
 
-    childVal = *(double *)next->val;
-    if ((pval = hashFindVal(groupHash, next->name)) == NULL)
+
+    if (e->up.nextHash != NULL)
 	{
-	AllocVar(pval);
-	*pval = 0.0;
-	hashAdd(groupHash, next->name, pval);
+	cookie = hashFirst(e->up.nextHash);
+	while(next = hashNext(&cookie))
+	    {
+	    struct possibleEdge *edge = next->val;
+	    struct element *nextParent = edge->element->parent;
+
+	    printf("ooking at %s->%s\n",eleFullName(e,FALSE), next->name);
+
+	    if (nextParent == NULL)
+		errAbort("next in hash doesn't have parent");
+
+	    if (parent->up.nextHash == NULL)
+		parent->up.nextHash = newHash(4);
+	    addPair(parent->up.nextHash, nextParent, edge->prob * weight, *next->name == '-');
+	    }
 	}
-    *pval += childVal * bLen;
+
+    if (e->up.prevHash != NULL)
+	{
+	cookie = hashFirst(e->up.prevHash);
+	while(next = hashNext(&cookie))
+	    {
+	    struct possibleEdge *edge = next->val;
+	    struct element *nextParent = edge->element->parent;
+
+	    printf("tooking at %s\n",next->name);
+
+	    if (nextParent == NULL)
+		errAbort("next in hash doesn't have parent");
+
+	    if (parent->up.prevHash == NULL)
+		parent->up.prevHash = newHash(5);
+
+	    addPair(parent->up.prevHash, nextParent, edge->prob * weight, *next->name == '-');
+	    }
+	}
     }
-}
 
-void mergeHash(struct hash *groupHash, struct hash *childHash, double bLen)
-{
-struct hashCookie cookie = hashFirst(childHash);
-struct hashEl *next;
-
-while(next = hashNext(&cookie))
+for(ii=0; ii < node->numEdges; ii++)
     {
-    struct hash *h;
-
-    if ((h = hashFindVal(groupHash, next->name)) == NULL)
-	{
-	h = newHash(5);
-	hashAdd(groupHash, next->name, h);
-	}
-
-    mergeChildHash(h, next->val, bLen);
+    calcDownNodes(node->edges[ii], node->priv);
     }
 }
 
-void calcNodes(struct phyloTree *node)
+void calcUpNodes(struct phyloTree *node, double weight)
 {
-if (node->numEdges)
+struct genome *g = node->priv;
+int ii;
+double totalLen = 0.0;
+
+for(ii=0; ii < node->numEdges; ii++)
+    totalLen += node->edges[ii]->ident->length;
+
+for(ii=0; ii < node->numEdges; ii++)
+    //calcUpNodes(node->edges[ii], (totalLen - node->edges[ii]->ident->length)/totalLen);
+    calcUpNodes(node->edges[ii], 1.0 / node->numEdges);
+
+if (node->parent)
     {
-    struct genome *g = node->priv;
-    int ii;
-    double totalLen = 0.0;
+    struct element *e;
 
-    for(ii=0; ii < node->numEdges; ii++)
+    for(e=g->elements; e; e = e->next)
 	{
-	totalLen += node->edges[ii]->ident->length;
-	calcNodes(node->edges[ii]);
-	}
+	struct hashCookie cookie;
+	struct hashEl *next;
+	struct element *parent = e->parent;
+	struct element *nextParent;
 
-    g->pairOrders = newHash(5);
 
-    for(ii=0; ii < node->numEdges; ii++)
-	{
-	struct genome *og = node->edges[ii]->priv;
-	double bLen = node->edges[ii]->ident->length / totalLen; 
+	if (e->up.nextHash != NULL)
+	    {
+	    cookie = hashFirst(e->up.nextHash);
+	    while(next = hashNext(&cookie))
+		{
+		struct possibleEdge *edge = next->val;
+		struct element *nextParent = edge->element->parent;
 
-	mergeHash(g->pairOrders, og->pairOrders, bLen);
+		printf("ooking at %s->%s\n",eleFullName(e,FALSE), next->name);
+
+		if (nextParent == NULL)
+		    errAbort("next in hash doesn't have parent");
+
+		if (parent->up.nextHash == NULL)
+		    parent->up.nextHash = newHash(4);
+		addPair(parent->up.nextHash, nextParent, edge->prob * weight, *next->name == '-');
+		}
+	    }
+
+	if (e->up.prevHash != NULL)
+	    {
+	    cookie = hashFirst(e->up.prevHash);
+	    while(next = hashNext(&cookie))
+		{
+		struct possibleEdge *edge = next->val;
+		struct element *nextParent = edge->element->parent;
+
+		printf("tooking at %s\n",next->name);
+
+		if (nextParent == NULL)
+		    errAbort("next in hash doesn't have parent");
+
+		if (parent->up.prevHash == NULL)
+		    parent->up.prevHash = newHash(5);
+
+		addPair(parent->up.prevHash, nextParent, edge->prob * weight, *next->name == '-');
+		}
+	    }
 	}
     }
 }
 
-void printTransSub(FILE *f, char *name, struct hash *h)
+void printTransSub(FILE *f, struct adjacency *adj, char *name)
 {
-struct hashCookie cookie = hashFirst(h);
 struct hashEl *next;
+struct hashCookie cookie;
+//char name[512];
 
-while(next = hashNext(&cookie))
-    fprintf(f, "%s\t%s\t%g\n",name, next->name, *(double *)next->val);
+if (adj->nextHash != NULL)
+    {
+    //safef(name, sizeof name, "%s", eleFullName2(e, FALSE));
+    cookie = hashFirst(adj->nextHash);
+    while(next = hashNext(&cookie))
+	{
+	struct possibleEdge *edge = next->val;
+	fprintf(f, "%s\t%s\t%g\n",name, eleFullName(edge->element, (*next->name == '-') ^ edge->element->isFlipped), edge->prob);
+	}
+    }
+
+if (adj->prevHash != NULL)
+    {
+    cookie = hashFirst(adj->prevHash);
+    while(next = hashNext(&cookie))
+	{
+	struct possibleEdge *edge = next->val;
+	fprintf(f, "-%s\t%s\t%g\n",name, eleFullName(edge->element, (*next->name == '-') ^ edge->element->isFlipped), edge->prob);
+	}
+    }
 }
 
-void printTrans(FILE *f, struct genome *g)
+void printTrans(FILE *f, struct genome *g, char *which)
 {
-struct hashCookie cookie = hashFirst(g->pairOrders);
-struct hashEl *next;
+struct element *e = g->elements;
+char name[512];
 
 fprintf(f, ">%s\n",g->name);
-while(next = hashNext(&cookie))
+
+for(; e ; e = e->next)
     {
-    printTransSub(f, next->name, next->val);
+    safef(name, sizeof name, "%s", eleFullName2(e, FALSE));
+
+    if (sameString(which, "up"))
+	printTransSub(f, &e->up, name);
     }
 }
 
-void printNodes(FILE *f, struct phyloTree *node)
+void printNodes(FILE *f, struct phyloTree *node, char *which)
 {
 struct genome *g = node->priv;
 int ii;
 
 for(ii=0; ii < node->numEdges; ii++)
-    printNodes(f, node->edges[ii]);
+    printNodes(f, node->edges[ii], which);
 
-printTrans(f, g);
+printTrans(f, g, which);
 }
 
-void orderNodes(char *treeFile, char *outFile)
+void orderNodes(char *treeFile, char *outGroup, char *lenString , char *outFile)
 {
 struct phyloTree *node = eleReadTree(treeFile);
 FILE *f = mustOpen(outFile, "w");
+double branchLen = atof(lenString);
+struct genome *g = getGenome(outGroup, outGroup);
 
 setLeafNodePairs(node);
-calcNodes(node);
+setAllPairs(g);
 
-printNodes(f, node);
+calcUpNodes(node, 0.0);
+calcDownNodes(node, g);
+
+printNodes(f, node, "up");
 
 //printElementTrees(node, 0);
 }
@@ -203,10 +349,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 5)
     usage();
 
 //verboseSetLevel(2);
-orderNodes(argv[1], argv[2]);
+orderNodes(argv[1], argv[2], argv[3], argv[4]);
 return 0;
 }
