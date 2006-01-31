@@ -13172,7 +13172,7 @@ oneMultiz.csh $c panTro1 mm5rn3 1
 oneMultiz.csh $c panTro1mm5rn3 canFam1 1
 oneMultiz.csh $c panTro1mm5rn3canFam1 galGal2 1
 oneMultiz.csh $c panTro1mm5rn3canFam1galGal2 fr1danRer1 1
-# get final alignment file
+#uto get final alignment file
 oneMultiz.csh $c panTro1mm5rn3canFam1galGal2fr1danRer1 /cluster/data/hg17/bed/multiz8way/maf/$c.maf
 #cleanup
 oneMultiz.csh $c
@@ -19041,18 +19041,18 @@ xenopus_xenTro1:0.782453):0.156067,
 
     # stash binaries 
     mkdir penn
-    cp -p /cluster/bin/penn/multiz.v11.1.x86_64/multiz-tba/multiz penn
-    cp -p /cluster/bin/penn/multiz.v11.1.x86_64/multiz-tba/maf_project penn
-    cp -p /cluster/bin/penn/multiz.v11.1.x86_64/multiz-tba/autoMZ penn
+    #cp -p /cluster/bin/penn/multiz.v11.1.x86_64/multiz-tba/multiz penn
+    #cp -p /cluster/bin/penn/multiz.v11.1.x86_64/multiz-tba/maf_project penn
+    #cp -p /cluster/bin/penn/multiz.v11.1.x86_64/multiz-tba/autoMZ penn
     # using V10 built by Hiram, as V11 has problems -- working out with Minmei
-    #cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/multiz penn
-    #cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/maf_project penn
 
 cat > autoMultiz.csh << 'EOF'
 #!/bin/csh -ef
     set db = hg17
     set c = $1
-    set out = $2
+    set maf = $2
     set run = `pwd`
     set tmp = /scratch/tmp/$db/multiz.$c
     set pairs = /san/sanvol1/scratch/$db/mafNet
@@ -19062,19 +19062,22 @@ cat > autoMultiz.csh << 'EOF'
     pushd $tmp
     foreach s (`cat species.lst`)
         set in = $pairs/$s/$c.maf
+        set out = $db.$s.sing.maf
         if ($s == hg17) then
             continue
         endif
         if (-e $in.gz) then
-            zcat $in.gz > $db.$s.sing.maf
-        else 
-            cp $in $db.$s.sing.maf
+            zcat $in.gz > $out
+        else if (-e $in) then
+            cp $in $out
+        else
+            echo "##maf version=1 scoring=autoMZ" > $out
         endif
     end
     set path = ($run/penn $path); rehash
     $run/penn/autoMZ + E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
     popd
-    cp $tmp/$c.maf $out
+    cp $tmp/$c.maf $maf
     rm -fr $tmp
 'EOF'
     chmod +x autoMultiz.csh
@@ -19092,6 +19095,8 @@ cat  << 'EOF' > spec
     para try
     para check
     para push
+
+####### V10 RUN ***********
 
 cat > oneMultiz.csh << 'EOF'
 #!/bin/csh -fe
@@ -19204,9 +19209,7 @@ cat > allMultiz.csh << 'EOF'
 set c = $1
 set s = /cluster/data/hg17/bed/multiz17way/run/oneMultiz.csh
 
-# probably could/should set flag=1 for panTro1 vs rheMac1, but
-# results seem the same -- checking with Minmei on this
-$s $c panTro1 rheMac1 0
+$s $c panTro1 rheMac1 1
 $s $c mm7 rn3 0
 $s $c mm7rn3 oryCun1 0
 $s $c panTro1rheMac1 mm7rn3oryCun1 1
@@ -19219,8 +19222,7 @@ $s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1 monDom1 1
 $s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom1 galGal2 1
 $s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom1galGal2 xenTro1 1
 $s $c tetNig1 fr1  0
-# this one's wrong -- should be 0
-$s $c tetNig1fr1 danRer3 1
+$s $c tetNig1fr1 danRer3 0
 $s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom1galGal2xenTro1 tetNig1fr1danRer3 1
 #	 get final alignment file
 $s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom1galGal2xenTro1tetNig1fr1danRer3 \
@@ -19244,23 +19246,24 @@ cat  << 'EOF' > template
     para try
     para check
     para push
-# CPU time in finished jobs:     386885s    6448.08m   107.47h    4.48d  0.012 y
-# IO & Wait Time:                 87780s    1463.01m    24.38h    1.02d  0.003 y
-# Average job time:               10319s     171.98m     2.87h    0.12d
+# CPU time in finished jobs:    1049186s   17486.43m   291.44h   12.14d  0.033 y
+# IO & Wait Time:                 37333s     622.22m    10.37h    0.43d  0.001 y
+# Average job time:               23620s     393.67m     6.56h    0.27d
 # Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:           65757s    1095.95m    18.27h    0.76d
-# Submission to last job:         65790s    1096.50m    18.27h    0.76d
-    # 18 hrs for chr2
+# Longest finished job:          146893s    2448.22m    40.80h    1.70d
+# Submission to last job:        146916s    2448.60m    40.81h    1.70d
+    # 40 hours running time (chr2)
 
     # Load into database
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way/maf
     mkdir /gbdb/hg17/multiz17way/maf
-    ln -s `pwd`/*.maf /gbdb/hg17/multiz17way/maf
+    ln -s /cluster/data/hg17/bed/multiz17way/maf/*.maf \
+        /gbdb/hg17/multiz17way/maf
 cat > loadMaf.csh << 'EOF'
     time hgLoadMaf -pathPrefix=/gbdb/hg17/multiz17way/maf hg17 multiz17way
     cat *.maf | \
-        hgLoadMafSummary hg17 -minSize=10000 -mergeGap=500 -maxSize=50000 \
+        nice hgLoadMafSummary hg17 -minSize=10000 -mergeGap=500 -maxSize=50000 \
             multiz17waySummary stdin
 'EOF'
 #<< happy emacs
@@ -19336,11 +19339,7 @@ cat > loadMaf.csh << 'EOF'
     para try
     para check
     para push
-# CPU time in finished jobs:       9650s     160.83m     2.68h    0.11d  0.000 y
-# IO & Wait Time:                  4970s      82.83m     1.38h    0.06d  0.000 y
-# Average job time:                 325s       5.41m     0.09h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            1574s      26.23m     0.44h    0.02d
+# started 11am
 # Submission to last job:          1608s      26.80m     0.45h    0.02d
 
     # Run phastCons
@@ -19355,13 +19354,15 @@ cat > loadMaf.csh << 'EOF'
 #!/bin/csh -fe
 set c = $1
 set f = $2
+set len = $3
+set cov = $4
 set tmp = /scratch/tmp/$f
 mkdir -p $tmp
 set san = /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons
 cp -p $san/ss/$c/$f.ss ../elliotsEncode.mod $tmp
 pushd $tmp > /dev/null
 /cluster/bin/phast/$MACHTYPE/phastCons $f.ss elliotsEncode.mod \
-   --rho 0.3 --expected-length 15 --target-coverage 0.10 --quiet \
+   --rho 0.3 --expected-length $len --target-coverage $cov --quiet \
 	--seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
 popd > /dev/null
 mkdir -p $san/pp/$c $san/bed/$c
@@ -19377,7 +19378,7 @@ rm -fr $tmp
     # Create gsub file
     cat > template << 'EOF'
 #LOOP
-doPhast.csh $(root1) $(file1)
+doPhast.csh $(root1) $(file1) 15 .05
 #ENDLOOP
 'EOF'
     #	happy emacs
@@ -19390,7 +19391,7 @@ doPhast.csh $(root1) $(file1)
 
     gensub2 in.list single template jobList
     para create jobList
-        # 624 jobs
+        # 625 jobs
     para try
     para check
     para push
@@ -19423,21 +19424,102 @@ doPhast.csh $(root1) $(file1)
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way/cons
     hgLoadBed -strict hg17 phastConsElements17way mostConserved.bed
-    # Loaded 4124218 elements
-    hgsql hg17 -e "select count(*) from phastConsElements"
-        # 1601903
+        # Loaded 4128309 elements
         # Note >2x increase in # of elements
         # mm6->mm7 doubled element count (2.4M ->4.8M)
         # (due to increased alignment depth ??)
     featureBits hg17 -enrichment refGene:cds phastConsElements17way
-        # refGene:cds 1.062%, phastConsElements17way 8.213%, both 0.770%, cover 72.52%, enrich 8.83x
+        # refGene:cds 1.062%, phastConsElements17way 8.251%, both 0.772%, cover 72.62%, enrich 8.80x
         # NOTE: too high on overall covg., though CDS is nice
         # Need to further tweak --expected-length and --target-coverage params
     featureBits hg17 -enrichment refGene:cds phastConsElements10way
-    # NOTE: the CDS covg is nice, but too high on total coverage -- dial down --target-cov next time
         # refGene:cds 1.062%, phastConsElements10way 5.003%, both 0.734%, cover 69.18%, enrich 13.83x
     featureBits hg17 -enrichment refGene:cds phastConsElements
         # refGene:cds 1.062%, phastConsElements 4.810%, both 0.771%, cover 72.65%, enrich 15.11x
+
+    # experiments
+    # previous tracks
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements
+        # refGene:cds 0.873%, phastConsElements 4.497%, both 0.630%, cover 72.10%, enrich 16.04x
+    hgsql hg17 -e "select count(*) from phastConsElements where chrom='chr7'"
+        # 81785
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements10way
+        # refGene:cds 0.873%, phastConsElements10way 4.700%, both 0.602%, cover 68.94%, enrich 14.67x
+    hgsql hg17 -e "select count(*) from phastConsElements10way where chrom='chr7'"
+        # 102959
+
+    # new track -- try for 5% overall cov, and 70% CDS cov
+    # len=15, cov=.10 
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_15_10
+        # refGene:cds 0.873%, phastConsElements17way 7.989%, both 0.627%, cover 71.77%, enrich 8.98x
+    hgsql hg17 -e "select count(*) from phastConsElements17way_15_10 where chrom='chr7'"
+        # 217767 
+    # => too much overall covg, and too many elements
+
+    # len=15, cov=.05
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_15_05
+        # refGene:cds 0.873%, phastConsElements17way_15_05 6.880%, both 0.627%, cover 71.77%, enrich 10.43x
+    hgsql hg17 -e "select count(*) from phastConsElements17way_15_05 where chrom='chr7'"
+        # 166868
+
+    # len=15, cov=.01
+    # These values were used by Elliott for ENCODE
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_15_01
+        # refGene:cds 0.873%, phastConsElements17way_15_01 5.721%, both 0.628%, cover 71.89%, enrich 12.57x
+    hgsql hg17 -e "select count(*) from phastConsElements17way_15_01 where chrom='chr7'"
+        # 106034
+
+    # len=20, cov=.01
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_20_01
+        # refGene:cds 0.873%, phastConsElements17way_20_01 7.751%, both 0.634%, cover 72.56%, enrich 9.36x
+    hgsql hg17 -e "select count(*) from phastConsElements17way_20_01 where chrom='chr7'"
+        # 106005
+    # -> wrong direction on coverage
+
+    # len=10, cov=.01
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_10_01
+        # refGene:cds 0.873%, phastConsElements17way_10_01 4.653%, both 0.616%, cover 70.48%, enrich 15.15x
+    hgsql hg17 -e "select count(*) from phastConsElements17way_10_01 where chrom='chr7'"
+        # 108279
+    # => looks good on coverage and element count, check smoothness in browser
+    # => undersmoothed
+
+    # len=10, cov=.05
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_10_05
+        # refGene:cds 0.873%, phastConsElements17way_10_05 5.365%, both 0.615%, cover 70.44%, enrich 13.13x 
+    hgsql hg17 -e "select count(*) from phastConsElements17way_10_05 where chrom='chr7'"
+        # 178372
+    # => fragmented elements
+
+    # len=15, cov=.005
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_15_005
+        # refGene:cds 0.873%, phastConsElements17way_15_005 5.444%, both 0.628%, cover 71.93%, enrich 13.21x
+    hgsql hg17 -e "select count(*) from phastConsElements17way_15_005 where chrom='chr7'"
+        # 90855
+
+    # len=20, cov=.005
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_20_005
+        # refGene:cds 0.873%, phastConsElements17way_20_005 7.373%, both 0.634%, cover 72.61%, enrich 9.85x
+    hgsql hg17 -e "select count(*) from phastConsElements17way_20_005 where chrom='chr7'"
+        # 91858
+
+    # len=17, cov=.005 rho=.3
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_17_005
+        # refGene:cds 0.873%, phastConsElements17way_17_005 6.126%, both 0.631%, cover 72.24%, enrich 11.79x
+    hgsql hg17 -e "select count(*) from phastConsElements17way_17_005 where chrom='chr7'"
+        # 91243
+
+    # len=17, cov=.005, rho=.2
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_17_005_2
+        # refGene:cds 0.873%, phastConsElements17way_17_005_2 5.385%, both 0.558%, cover 63.93%, enrich 11.87x
+    hgsql hg17 -e "select count(*) from phastConsElements17way_17_005_2 where chrom='chr7'"
+        # 112995
+
+    # len=17, cov=.005, rho=.4
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_17_005_4
+        # refGene:cds 0.873%, phastConsElements17way_17_005_4 6.695%, both 0.679%, cover 77.72%, enrich 11.61x
+    hgsql hg17 -e "select count(*) from phastConsElements17way_17_005_4 where chrom='chr7'"
+        # 73854
 
     # Create merged posterier probability file and wiggle track data files
     #	pk is currently closer to the san than any other machine
@@ -19450,11 +19532,10 @@ doPhast.csh $(root1) $(file1)
 	sort -k7,7 -k9,9n | \
 	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
 	xargs cat | \
-        wigEncode stdin phastCons17way.wig phastCons17way.wib
+        nice wigEncode stdin phastCons17way.wig phastCons17way.wib
     # about 23 minutes for above
 
-    time rsync -a --progress phastCons17way.wi? \
-	kkstore02:/cluster/data/hg17/bed/multiz17way/cons
+    cp -p phastCons17way.wi? /cluster/data/hg17/bed/multiz17way/cons
 
     # Load gbdb and database with wiggle.
     ssh hgwdev
@@ -19464,6 +19545,46 @@ doPhast.csh $(root1) $(file1)
         phastCons17way phastCons17way.wig
     #  ~ 3 minute load
 
+    # Downloads
+    ssh kkstore02
+    cd /cluster/data/hg17/bed/multiz17way
+    mkdir mafDownloads
+cat > downloads.csh << 'EOF'
+    foreach f (maf/chr*.maf)
+	set c = $f:t:r
+        echo $c
+	nice gzip -c $f > mafDownloads/$c.maf.gz
+    end
+    cd mafDownloads
+    md5sum *.gz > md5sum.txt
+'EOF'
+    csh downloads.csh >&! downloads.log
+
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/hg17/multiz17way
+    mkdir $dir
+    ln -s /cluster/data/hg17/bed/multiz17way/mafDownloads/{*.gz,md5sum.txt} $dir
+
+    # upstream mafs for download
+    # mafFrags takes a while
+cat > maffrags.csh << 'EOF'
+    foreach i (1000 2000 5000)
+        echo "making upstream$i.maf"
+        nice featureBits hg17 refGene:upstream:$i -fa=/dev/null -bed=up.bad
+        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
+        rm up.bad
+        nice mafFrags hg17 multiz10way up.bed upstream$i.maf -orgs=org.txt
+        rm up.bed
+    end
+    ssh eieio
+    cd /cluster/data/hg17/bed/multiz10way.v8
+    nice gzip upstream{1000,2000,5000}.maf
+        # 6 mins.
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/hg17
+    mv /cluster/data/hg17/bed/multiz10way.v8/upstream*.maf.gz multiz10way
+    cd multiz10way
+    md5sum *.gz > md5sum.txt
 
 # UPDATE MONKEY DOWNLOADS (2006-01-12 kate)
 # EXTRACT AXT'S AND MAF'S FROM THE RheMac1 NET
