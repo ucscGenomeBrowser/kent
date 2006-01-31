@@ -33,6 +33,7 @@ set xenTro xenTro1
 set monDom monDom1,monDom2
 set bosTau bosTau1,bosTau2
 set rheMac rheMac1
+set snp125 dbSnpHumanBuild125
 
 # Define all organism/assembly-specific databases.
 set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac
@@ -59,7 +60,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
-databasesChecked $gbd,$otherDb
+databasesChecked $gbd,$otherDb,$snp125
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp040915,sp040515,sp040315,sp040115,proteins040915,proteins040515,proteins040315
 
 # Define various non-self chains
@@ -1542,6 +1543,11 @@ identifier hapmapLdSnpId external=dbSNP fuzzy
     $hg.hapmapLdChb.name unique
     $hg.hapmapLdJpt.name unique
     $hg.hapmapLdYri.name unique
+
+identifier dbSnpMapInfo external=dbSNP
+"SNPMapInfo"
+    $snp125.ContigLoc.snp_id dupeOk
+    $snp125.SNPMapInfo.snp_id
 
 # Other NCBI Identifiers
 
