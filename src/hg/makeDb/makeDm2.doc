@@ -3812,6 +3812,184 @@ BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
     ln -s blastz.droSec1.2005-11-30 /cluster/data/dm2/bed/blastz.droSec1
 
 
+# FLYBASE 4.2 ANNOTATIONS (DONE (except for contacting flybase-help) 1/13/06 angie)
+    ssh kkstore01
+    mkdir /cluster/data/dm2/bed/flybase4.2
+    cd /cluster/data/dm2/bed/flybase4.2
+    foreach c (2L 2R 3L 3R 4 X)
+      wget ftp://flybase.net/genomes/Drosophila_melanogaster/dmel_r4.2_20050909/gff/dmel-$c-r4.2.1.gff.gz
+    end
+    zcat *.gff.gz > flybase.gff3
+    # What data sources are represented in this file?
+    grep -v '^#' flybase.gff3 | awk '{print $2 "\t" $3;}' | sort | uniq -c
+    # excerpt (many other sources, including blastx:... , sim4:... and 
+    # tblastx:...; also various other types for source "."):
+  19178 .       CDS
+  63583 .       exon
+  14380 .       gene
+  19178 .       mRNA
+     66 .       miRNA
+    113 .       ncRNA
+     49 .       pseudogene
+     96 .       rRNA
+     46 .       snRNA
+     63 .       snoRNA
+    294 .       tRNA
+  36921 .       transcription_start_site
+   6006 .       transposable_element
+  33268 .       transposable_element_insertion_site
+    # What keywords are defined in the 9th field?
+    grep -v '^#' flybase.gff3 \
+    | awk '{print $9;}' | perl -wpe 's/=[^;]+;/\n/g; s/=.*$//;' \
+    | sort | uniq -c
+ 117483 Dbxref
+3111982 ID
+1428395 Name
+ 847565 Parent
+  20326 cyto_range
+  46928 dbxref_2nd
+  15705 gbunit
+      6 species
+  92077 synonym
+  10032 synonym_2nd
+    # Wow... for the first time, it looks like the same flavor of GFF3
+    # has been used as last time!
+    cp ../flybase4.1/extractGenes.pl .
+    extractGenes.pl flybase.gff3
+
+    # Get predicted proteins (for main annotations only)
+    wget ftp://flybase.net/genomes/Drosophila_melanogaster/dmel_r4.2_20050909/fasta/dmel-all-translation-r4.2.1.fasta
+    perl -wpe 's/^(>\w+)-P(\w)/$1-R$2/' dmel-all-translation-r4.2.1.fasta \
+      > flybasePep.fa
+
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/flybase4.2
+    # Protein-coding genes:
+    ldHgGene -gtf dm2 flyBaseGene flybase.gtf
+    hgPepPred dm2 generic flyBasePep flybasePep.fa
+    # Noncoding genes:
+    hgLoadBed dm2 flyBaseNoncoding flyBaseNoncoding.bed
+    # Cross-referencing info for both coding and noncoding:
+    hgsql dm2 < $HOME/kent/src/hg/lib/flyBase2004Xref.sql
+    hgsql dm2 -e 'load data local infile "flyBase2004Xref.tab" \
+      into table flyBase2004Xref'
+    # Some featureBits comparisons with refGene which shoudl be pretty much 
+    # like version 4.0 with a few noncoding genes tossed in... but this is 
+    # a bigger difference than we expect:
+    featureBits dm2 refGene \!flyBaseGene -minSize=1000 -bed=stdout
+#516631 bases of 131698467 (0.392%) in intersection
+    # Hmmm, flyBaseGene has nothing on the last 175,000bp of chrX!:
+    # chrX:22,039,591-22,224,390
+    # nor the first 40,000bp of chrX:
+    # chrX:1-102,664
+    # nor the last 270,000bp of chr3L:
+    # chr3L:23,273,167-23,771,897
+    # nor the first 500,000bp of chr2R:
+    # chr2R:1-600,000
+    # Also quite a few on the chr*h but I won't look at all those.
+#TODO: contact flybase-help about the lack of annotations in those ranges...
+
+    # This shows only the dropped isoforms/duplicates (ignores noncoding):
+    featureBits dm2 refGene \!flyBaseGene \!flyBaseNoncoding -minSize=1000 \
+       -bed=stdout
+#chr3R   15620310        15621493        chr3R.1
+#chr2L   4698094 4700940 chr2L.1
+#chrX    3638700 3639895 chrX.1
+#474282 bases of 131698467 (0.360%) in intersection
+
+    # add upstream* downloadable files
+    cd /usr/local/apache/htdocs/goldenPath/dm2/bigZips
+    foreach size (1000 2000 5000)
+      echo upstream$size
+      nice featureBits dm2 flyBaseGene:upstream:$size -fa=stdout \
+      | nice gzip -c > upstream$size.fa.gz
+    end
+    nice md5sum *.zip *.gz > md5sum.txt
+
+
+# FLYBASE ACODE CROSS-REFERENCING DATA (DONE 1/27/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/dm2/bed/flyBase
+    cd /cluster/data/dm2/bed/flyBase
+    wget -O genes.txt.060126 \
+      ftp://flybase.bio.indiana.edu/flybase/genes/genes.txt
+    # Had to edit genes.txt.060126 to get around these two lines that didn't 
+    # start with acode symbols:
+    #line 1609033
+#Spiracle sheaths dark.
+    #line 3664838 (3664839 of original)
+#Ommatidia are no
+    hgFlyBase dm2 genes.txt.060126 -geneTable=flyBaseGene 
+#Processed 57068 records in 4067314 lines
+
+
+# MAP UNIPROT IDS TO CG*-R* IDS (DONE 1/27/06 angie)
+    # The UniProt.description table actually contains the most specific 
+    # mapping of UniProt IDs to CG*-R* transcript IDs.  Use that when 
+    # available, and otherwise use the more generic mapping to gene IDs 
+    # that we extracted from the acode into fbUniProt.
+    ssh hgwdev
+    mkdir /cluster/data/dm2/bed/uniProtToFlyBase
+    cd /cluster/data/dm2/bed/uniProtToFlyBase
+    set taxon = `hgsql -N uniProt -e 'select id from taxon where binomial = "Drosophila melanogaster";'`
+    # Grab UniProt descriptions of all D. mel. proteins so we can parse out
+    # CG*-R* transcript IDs (and CG* gene IDs when -R* not specified).
+    hgsql -N uniProt -e \
+     'select description.* from description,accToTaxon where accToTaxon.taxon = '$taxon' and accToTaxon.acc = description.acc' \
+      > uniProt.description.txt
+    # fbUniProt maps FBgn* IDs to multiple UniProt IDs; use flyBase2004Xref
+    # to map FBgn* to CG* (actually CG*-R* which implies more precision than
+    # there really is).
+    hgsql -N dm2 -e \
+     'select name,uniProtId from flyBase2004Xref,fbUniProt where fbgn=geneId' \
+      | sort > flyBaseMapping.txt
+    # Grab the complete list of CG*-R* transcript IDs:
+    hgsql -N dm2 -e 'select name from flyBaseGene' | sort > transcriptIds.txt
+    ssh kolossus
+    cd /cluster/data/dm2/bed/uniProtToFlyBase
+    # Wrote a perl script, gleanDescription.pl, to parse the various patterns
+    # used to encode real mappings (not mappings to homologs or things that 
+    # look like CG*-P? IDs but aren't really).
+    chmod a+x gleanDescription.pl
+    ./gleanDescription.pl uniProt.description.txt | sort > uniProtMapping.txt
+    # Look for duplicates:
+    awk '{print $1;}' uniProtMapping.txt | uniq -c | awk '$1 != 1 {print;}'
+#       2 CG17131-RA
+#       5 CG32637-RA
+    grep CG17131-PA uniProt.description.txt 
+#Q8MS37  RE15579p (CG17131-PA).
+#Q7PLU3  CG17131-PA.3.
+    # I looked up both Q8MS37 and Q7PLU3 on http://www.pir.uniprot.org/
+    # and both do mention CG17131-PA... Q8MS37 has been updated more recently
+    # so I'll just delete the Q7PLU3 mapping.
+    grep CG32637-PA uniProt.description.txt
+#Q5K354  CG32637-PA protein (Fragment).
+#Q5K356  CG32637-PA protein (Fragment).
+#Q5K357  CG32637-PA protein (Fragment).
+#Q5K361  CG32637-PA protein (Fragment).
+#Q8IR71  CG32637-PA.
+    # Here it's more clear-cut -- delete the fragments.
+    egrep -v '(Q7PLU3|Q5K354|Q5K356|Q5K357|Q5K361)' uniProtMapping.txt \
+      > tmp; mv tmp uniProtMapping.txt
+    # Wrote a perl script, vagueDescription.pl, to parse out CG* without 
+    # isoform specs -- can use those as backups when we don't have a more 
+    # specific mapping for a transcript.
+    chmod a+x vagueDescription.pl
+    ./vagueDescription.pl uniProt.description.txt | sort \
+      > uniProtMappingVague.txt
+    # Write a perl script, combineMappings.pl, to add any additional mappings
+    # available from acode to the UniProt mappings.
+    chmod a+x combineMappings.pl
+    ./combineMappings.pl transcriptIds.txt \
+      uniProtMapping.txt uniProtMappingVague.txt flyBaseMapping.txt \
+      > flyBaseToUniProt.txt
+
+#TODO -  I guess load that into mysql and then figure out how to make 
+# hgNear use it instead of requiring an extra column on flyBaseGene.
+# Or just slap the extra column on flyBaseGene with some arbitrary choice 
+# of which mapping to believe when there are multiple??
+
+
 ##########################################################################
 # HGNEAR TABLES
 
@@ -3878,4 +4056,40 @@ _EOF_
     doHgNearBlastp.pl config.ra >& do.log &
     tail -f do.log
 
+
+# CLUSTER GENES (TODO 1//06 angie)
+    ssh hgwdev
+    # First we have to add a proteinId column to flyBaseGene.
+#*** need to relate flyBaseGene IDs to SwissProt somehow!
+    hgClusterGenes dm2 flyBaseGene flyBaseIsoforms flyBaseCanonical
+    # Create table that maps between flyBase genes and RefSeq
+    hgMapToGene dm2 refGene flyBaseGene flyBaseToRefSeq
+    # Create table that maps between flyBase genes and LocusLink
+    echo "select mrnaAcc,locusLinkId from refLink" | hgsql -N dm2 > refToLl.txt
+### NOT DONE (LocusLink info temporarily missing from genbank)
+    hgMapToGene dm2 refGene flyBaseGene flyBaseToLocusLink -lookup=refToLl.txt
+###
+    # Create table that maps between known genes and Pfam domains
+    hgMapViaSwissProt dm2 flyBaseGene name proteinID Pfam flyBaseToPfam
+
+    # Create a table that maps between flyBase genes and the 
+    # Stanford Microarray Project expression data. (see makeHgFixed.doc)
+    hgExpDistance -lookup=flyBaseToCanonical \
+      dm2 hgFixed.arbFlyLifeMedianRatio dummyArg arbExpDistance
+
+    # Make sure that GO database is up to date.
+    See README in /cluster/store1/geneOntology.
+
+
+# MAKE ORGANISM-SPECIFIC HGNEARDATA FILES (TODO 1//06 angie)
+    cd ~/kent/src/hg/near/hgNear/hgNearData
+    # any updates necessary?
+
+
+# ENABLE HGNEAR FOR DM2 IN HGCENTRALTEST (TODO 1//06 angie)
+    echo "update dbDb set hgNearOk = 1 where name = 'dm2';" \
+      | hgsql -h genome-testdb hgcentraltest
+
+# END OF HGNEAR STUFF
+#############################################################################
 
