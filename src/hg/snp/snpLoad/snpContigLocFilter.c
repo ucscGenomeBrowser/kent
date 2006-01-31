@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.3 2006/01/31 20:16:34 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.4 2006/01/31 20:37:14 heather Exp $";
 
 char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -36,14 +36,14 @@ int orient = 0;
 
 ret = newHash(0);
 verbose(1, "getting contigs...\n");
-safef(query, sizeof(query), "select ctg_id, orient from ContigInfo where group_term = '%s'", contigGroup);
+safef(query, sizeof(query), "select ctg_id, contig_chr, orient from ContigInfo where group_term = '%s'", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    orient = atoi(row[1]);
+    orient = atoi(row[2]);
     if (orient != 0)
         verbose(1, "Contig %s has non-zero orientation!!\n", row[0]);
-    hashAdd(ret, row[0], NULL);
+    hashAdd(ret, cloneString(row[0]), cloneString(row[1]));
     count++;
     }
 sqlFreeResult(&sr);
@@ -88,6 +88,7 @@ struct sqlResult *sr;
 char **row;
 struct hashEl *el1, *el2;
 FILE *f;
+char *chromName;
 
 f = hgCreateTabFile(".", "ContigLocFilter");
 
@@ -110,7 +111,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	fprintf(f, "%s\t", row[5]);
 	fprintf(f, "%s\t", row[6]);
 	fprintf(f, "%s\t", row[7]);
-	fprintf(f, "%s\n", row[8]);
+	fprintf(f, "%s\t", row[8]);
+	chromName = hashFindVal(contigHash,row[1]);
+	fprintf(f, "%s\n", chromName);
 	}
     }
 sqlFreeResult(&sr);
@@ -133,7 +136,8 @@ char *createString =
 "    phys_pos_from int(11) not null,       \n"
 "    phys_pos varchar(32), \n"
 "    orientation tinyint(4) not null, \n"
-"    allele blob\n"
+"    allele blob,\n"
+"    chromName varchar(32)\n"
 ");\n";
 
 sqlRemakeTable(conn, "ContigLocFilter", createString);
