@@ -9635,6 +9635,17 @@ hgLoadSeq -prefix=bz hg17 /gbdb/hg17/mrnaBlastz/hg17Mrna.fa
 #  9639 hg17.pseudoGeneLink.betaOnly
 # 15091 hg17.pseudoGeneLink.common
 
+#  RETROGENE TRACK data update - Robert - 2005-04-08
+   (added by Jen 2006-01-31)
+   - pushQ entry did not include psuedoMrna table. Old table is still
+     present on RR. New data has since been lost on dev. 
+     User impact: ~1000 sequence missing links in browser 
+   - new all.joiner rule needed to link psuedoMrna to pseudoGeneLink table
+   - current all.joiner rule between knownGene to pseudoGeneLink gives errors.
+     the data types appear to be mismatched. pseudoGeneLink.kgName is
+     a gene symbol, not the same identifier as in knownGene.name
+   - data is to be regenerated soon and errors corrected at that time
+
 
 mkdir /cluster/data/hg17/bed/pseudo
 cd /cluster/data/hg17/bed/pseudo
