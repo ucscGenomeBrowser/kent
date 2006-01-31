@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.2 2006/01/31 19:42:32 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.3 2006/01/31 20:16:34 heather Exp $";
 
 char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -32,13 +32,17 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int count = 0;
+int orient = 0;
 
 ret = newHash(0);
 verbose(1, "getting contigs...\n");
-safef(query, sizeof(query), "select ctg_id from ContigInfo where group_term = '%s'", contigGroup);
+safef(query, sizeof(query), "select ctg_id, orient from ContigInfo where group_term = '%s'", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    orient = atoi(row[1]);
+    if (orient != 0)
+        verbose(1, "Contig %s has non-zero orientation!!\n", row[0]);
     hashAdd(ret, row[0], NULL);
     count++;
     }
