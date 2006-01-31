@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: getDist.c,v 1.2 2006/01/19 00:15:53 braney Exp $";
+static char const rcsid[] = "$Id: getDist.c,v 1.3 2006/01/31 06:33:48 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -36,7 +36,7 @@ if (e->numEdges)
 	downToLeaves(distanceList, pDistHash, pDistElemHash, otherElement, e->edges[ii], 
 	    sumBranchLength + e->edges[ii]->genome->node->ident->length);
     }
-else
+else if (e->genome->node->numEdges == 0)
     {
     setElementDist(otherElement, e, sumBranchLength, distanceList,
 		pDistHash, pDistElemHash);
@@ -71,7 +71,7 @@ if (e->numEdges != 0)
     for(ii = 0; ii < e->numEdges; ii++)
 	findAllLeaves(distanceList, pDistHash, pDistElemHash, e->edges[ii]);
     }
-else
+else if (e->genome->node->numEdges == 0)
     {
     getAllSibs(distanceList, pDistHash, pDistElemHash, e, e, e->genome->node->ident->length);
     }
@@ -99,6 +99,9 @@ char **names;
 double *distanceArray;
 
 findAllLeaves(&distanceList, &distHash, &distElemHash, e);
+
+if (distElemHash == NULL)
+    return;
 
 for (ii=0; ii<distElemHash->size; ++ii)
     for (hel = distElemHash->table[ii]; hel != NULL; hel = hel->next)
@@ -166,7 +169,7 @@ void getDist(char *treeFile, char *outFile)
 struct phyloTree *node = eleReadTree(treeFile);
 FILE *f = mustOpen(outFile, "w");
 
-    printElementTrees(node, 0);
+//    printElementTrees(node, 0);
 
     outDistances(node, f);
 }
