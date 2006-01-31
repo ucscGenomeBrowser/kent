@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.24 2006/01/24 22:06:34 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.25 2006/01/31 00:48:33 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -3208,3 +3208,46 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-continue=download -bigClusterHub=pk -chainMinScore=5000 \
 	-chainLinearGap=loose `pwd`/DEF > download.out 2>&1 &
+
+# STS MARKERS (STARTED 2006-01-27 Fan)
+
+   # update from NCBI 
+    ssh kkstore02
+    # use store11 for space
+    mkdir -p /cluster/store11/sts.2006-01
+    ln -s /cluster/store11/sts.2006-01 /cluster/data/ncbi
+    ln -s /cluster/data/ncbi/sts.2006-01 sts.10
+    cd /cluster/data/ncbi/sts.2006-01
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.sts
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
+# old
+#    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.sts
+#    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.aliases
+    wget --timestamping ftp://ftp.ncbi.nih.gov/blast/db/FASTA/sts.gz
+    gunzip sts.gz
+    mv sts dbSTS.fa
+
+    cp -p /cluster/data/ncbi/sts.9/all.STS.fa.prev .
+    cp -p /cluster/data/ncbi/sts.9/stsInfo2.bed.prev .
+
+    # Convert dbSTS.fa file to easier reading format, and get accessions
+    /cluster/bin/scripts/convertGbFaFile dbSTS.fa > UniSTS.convert.fa
+    grep ">" UniSTS.convert.fa | cut -f 2 -d ">" > UniSTS.acc
+
+    # NOTE: updateStsInfo creates new stsInfo2.bed, all.primers, 
+    #   all.STS.fa, stsAlias.bed files 
+    updateStsInfo -verbose=1 -gb=UniSTS.acc stsInfo2.bed.prev all.STS.fa.prev \
+    UniSTS.sts UniSTS.aliases UniSTS.convert.fa new
+
+# Reading current stsInfo file
+# Reading genbank accession file
+# Reading current dbSTS.sts file
+# Segmentation fault
+
+# updateStsInfo blew up while reading UniSTS.aliases.
+# It seems that the program is having problem in readDbstsNames() at:
+
+        /* Determine if all of the names are recorded */
+--->        if (s->si->dbSTSid == dbstsId)
+            s->dbstsIdExists = TRUE;
+
