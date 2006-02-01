@@ -273,6 +273,7 @@ extern Color shadesOfBrown[10+1]; /* 10 shades of brown from tan to tar. */
 extern struct rgbColor brownColor;
 extern struct rgbColor tanColor;
 extern struct rgbColor guidelineColor;
+extern struct rgbColor undefinedYellowColor;
 
 extern Color shadesOfSea[10+1];       /* Ten sea shades. */
 extern struct rgbColor darkSeaColor;

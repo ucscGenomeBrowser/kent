@@ -101,7 +101,7 @@
 #include "hgMutUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1072 2006/01/27 21:10:38 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1073 2006/02/01 21:20:00 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -416,6 +416,7 @@ Color shadesOfBrown[10+1];	/* 10 shades of brown from tan to tar. */
 struct rgbColor brownColor = {100, 50, 0};
 struct rgbColor tanColor = {255, 240, 200};
 struct rgbColor guidelineColor = { 220, 220, 255};
+struct rgbColor undefinedYellowColor = {240,240,180};
 
 Color shadesOfSea[10+1];       /* Ten sea shades. */
 struct rgbColor darkSeaColor = {0, 60, 120};
