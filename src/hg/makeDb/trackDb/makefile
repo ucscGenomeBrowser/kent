@@ -16,7 +16,7 @@ include ../../../inc/common.mk
 
 DBS = 	hg13 hg15 hg16 hg17 hg18\
 	panTro1 \
-	rheMac1 \
+	rheMac1 rheMac2 \
 	canFam1 canFam2 \
 	mm2 mm3 mm4 mm5 mm6 mm7 \
 	rn2 rn3 rn4 \
