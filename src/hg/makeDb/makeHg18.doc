@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.28 2006/02/01 22:37:16 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.29 2006/02/01 23:40:43 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -2277,6 +2277,53 @@ nice featureBits hg17 chainBosTau2Link
     #	ncbi_build36.agp file.  Back in Hg17, this was the only AADB
     #	clone in the sequence.inf file, now there are 400,673 of them in
     #	this Hg18 sequence.inf file marked "for_assembly"
+
+    #	Later after a lot of this was done, it was discovered that some
+    #	of the clones on this allConsidered list are actually obsolete
+    #	and have newer versions in use.  They were identified by the
+    #	following perl script:
+
+    cat << '_EOF_' > ckMultipleVersions.pl
+#!/usr/bin/env perl
+use warnings;
+use strict;
+sub usage() {
+    print "usage: ./ckMultipleVersions.pl allClonesConsidered.list\n";
+    exit 255;
+}
+my $argc = scalar(@ARGV);
+if ($argc != 1) { usage; }
+my $fileName = shift;
+open (FH,"<$fileName") or die "Can not open $fileName";
+my %cloneAcc;   #       key is clone accession major number, value is version
+while (my $clone = <FH>) {
+    chomp $clone;
+    my ($major, $version) = split('\.', $clone);
+    if (exists($cloneAcc{$major})) {
+        my $previousVersion = $cloneAcc{$major};
+        if ($previousVersion >= $version) {
+            printf STDERR "$major.$version - obsolete\n";
+        } else {
+            printf STDERR "$major.$previousVersion - obsolete\n";
+            $cloneAcc{$major} = $version;
+        }
+    } else {
+        $cloneAcc{$major} = $version;
+    }
+}
+close (FH);
+foreach my $major (sort keys %cloneAcc) {
+    printf "$major.$cloneAcc{$major}\n";
+}
+'_EOF_'
+    #	happy emacs
+    chmod +x ckMultipleVersions.pl
+
+    ./ckMultipleVersions.pl allClonesConsidered.list \
+	2> obsoleteClone.list > allClones.notObsolete.list
+    #	After this obsolete list was made, those clone results were
+    #	removed from the kluster run hierarchies of results.
+
     comm -12 allClonesConsidered.list \
 	/cluster/data/hg17/bed/contig_overlaps/sequence.list \
 	    > allClones.InHg17AndHg18.list
@@ -2677,11 +2724,17 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
 # Download information from NCBI
         # point browser at:
 #   http://www.ncbi.nlm.nih.gov/genome/cyto/cytobac.cgi?CHR=all&VERBOSE=ctg
+        # change "Sequence tag:" to "placed on contig"
         # change "Show details on sequence-tag" to "yes"
         # change "Download or Display" to "Download table for UNIX"
         # press Submit - save as
 # /cluster/data/ncbi/fishClones/fishClones.2006-01/hbrc.txt
     chmod 664 /cluster/data/ncbi/fishClones/fishClones.2006-01/hbrc.txt
+#	Unfortunately the format of this hbrc file has changed since
+#	last time.  The columns have been rearranged, and one important
+#	column is missing, the contig information.  So, let's see if we
+#	can recover the original format by putting this together with
+#	some other things we have here.
 
 # Get current clone/accession information
     wget --timestamping http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
@@ -2693,14 +2746,23 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
 
 # Copy previous sts info from fhcrc (take from previous build in future)
     cp -p /cluster/data/ncbi/fishClones/fishClones.2004-07/fhcrc.sts .
+#	This fhcrc.sts listing doesn't change.  It is merely a listing
+#	of aliases that remain in effect.
+
+    #	Create cl_acc_gi_len file form cloneend information:
+    grep -v "^#" /cluster/data/hg18/bed/cloneend/all.txt \
+    | awk '{gsub("\.[0-9]*$", "", $2);
+	printf "%s\t%s\t%s\t%s\t%s\t%s\n", $1,$2,$3,$4,$5,$8}' > cl_acc_gi_len
 
 XXXX - looking for backends business - 2006-01-20 - Hiram
-    fishClones -verbose=1 -fhcrc=fhcrc.sts -noBin hg18 \
-	/cluster/data/ncbi/fishClones/fishClones.2006-01/hbrc.txt \
+
+    fishClones -fhcrc=fhcrc.sts -noBin hg18 \
+	/cluster/data/ncbi/fishClones/fishClones.2006-01/hbrc.fixed \
 	/cluster/data/ncbi/fishClones/fishClones.2006-01/clac.out \
-         /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
-         /cluster/data/hg17/bed/bacends/lifted/bacEnds.lifted.psl \
-            fishClones_initial
+         ./cl_acc_gi_len \
+         /cluster/data/hg18/bed/bacends/bacEnds.psl \
+            fishClones
+
 	     
 ###########################################################################
 # CHROMOSOME BANDS TRACK (WORKING - 2006-01-20 - Hiram)
@@ -3208,7 +3270,114 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-continue=download -bigClusterHub=pk -chainMinScore=5000 \
 	-chainLinearGap=loose `pwd`/DEF > download.out 2>&1 &
+<<<<<<< makeHg18.doc
+    #	real    2m42.505s
 
+    ssh kolossus
+    cd /cluster/data/hg18/bed/blastz.monDom2
+    time HGDB_CONF=~/.hg.conf.read-only featureBits \
+	hg18 chainMonDom2Link > fb.hg18.chainMonDom2Link 2>&1
+    #	real    124m34.435s
+    cat fb.hg18.chainMonDom2Link
+    #	357258631 bases of 2881515245 (12.398%) in intersection
+
+    #	then, to swap
+    ssh pk
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > swap.out 2>&1 &
+    #	running 2006-01-25 17:28
+    #	real    51m27.447s
+    #	this swap failed at:
+    #	startStep: 4, at step 5 net to stopStep 9
+    #	netChains: looks like previous stage was not successful
+    #	(can't find [monDom2.hg18.]all.chain[.gz]).
+    #	This failure does not make any sense.  The end of swapChains
+    #	does an nfsNoodge on this file to verify it exists.
+    #	I don't understand why it wouldn't be in existence
+    #	as netChains starts up.
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=net `pwd`/DEF > net-swap.out 2>&1 &
+    #	running 2006-01-26 09:28
+    #	real    27m57.077s
+    #	This swap failed at the load chain:
+    #	startStep: 5, at step 6 load to stopStep 9
+    #	# chmod a+x
+    #	# /cluster/data/monDom2/bed/blastz.hg18.swap/axtChain/loadUp.csh
+    #	# ssh -x hgwdev nice
+    #	# /cluster/data/monDom2/bed/blastz.hg18.swap/axtChain/loadUp.csh
+    #	cd /cluster/data/monDom2/bed/blastz.hg18.swap/axtChain
+    #	hgLoadChain -tIndex monDom2 chainHg18 monDom2.hg18.all.chain.gz
+    #	Out of memory needMem - request size 56 bytes
+
+    #	So, over to kolossus to give it a try:
+
+    #	There isn't any monDom2 db here yet, get it established with a
+    #	chromInfo and a 2bit sequence:
+    hgsql -e "create database monDom2;" mysql
+    cd /cluster/data/monDom2
+    hgsql monDom2 < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgsql monDom2 \
+-e 'load data local infile "chromInfo.tab" into table chromInfo;'
+    mkdir /gbdb/monDom2
+    ln -s /cluster/data/monDom2/monDom2.2bit /gbdb/monDom2/monDom2.2bit
+    #	now, loading into monDom2
+    cd /cluster/data/monDom2/bed/blastz.hg18.swap/axtChain
+    time hgLoadChain -tIndex monDom2 chainHg18 monDom2.hg18.all.chain.gz \
+	> kolossus.load
+    #	running - 2006-01-26
+
+##########################################################################
+#  test BLASTZ Opossum MonDom1  (WORKING - 2006-01-30 - Hiram)
+#	to see what happened with the blow up of data in monDom2
+#
+
+    ssh kk
+    mkdir /cluster/data/hg18/bed/blastzMonDom1.2006-01-30
+    cd /cluster/data/hg18/bed/blastzMonDom1.2006-01-30
+
+    cat << '_EOF_' > DEF
+# human vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/parasol/bin
+
+BLASTZ=blastz.v7
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human (hg18)
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom1
+SEQ2_DIR=/iscratch/i/monDom1/chunks
+SEQ2_LEN=/iscratch/i/monDom1/chrom.sizes
+SEQ2_IN_CONTIGS=1
+SEQ2_CHUNK=10000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzMonDom1.2006-01-30
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	started 2006-01-30 - 15:40
+
+############################################################################
 # STS MARKERS (STARTED 2006-01-27 Fan)
 
    # update from NCBI 
@@ -3244,13 +3413,7 @@ TMPDIR=/scratch/tmp
 # Reading current dbSTS.sts file
 # Segmentation fault
 
-# updateStsInfo blew up while reading UniSTS.aliases.
-# It seems that the program is having problem in readDbstsNames() at:
-
-        /* Determine if all of the names are recorded */
---->        if (s->si->dbSTSid == dbstsId)
-            s->dbstsIdExists = TRUE;
-
+###########################################################################
 # CREATE HAPLOTYPEPOS TRACK (DONE 1/31/06, Fan)
 
   ssh kkstore02
@@ -3337,6 +3500,7 @@ hgLoadPsl hg18 haplotypePos.psl
 
 # add haplotypePos entry in trackDb.ra
 
+###########################################################################
 # LOAD AFFYRATIO (DONE - 2006-02-01 - Fan)
 #	Copied from Hg17 doc
     # Set up cluster job to align consenesus/exemplars to hg18
@@ -3479,6 +3643,7 @@ hgLoadPsl hg18 haplotypePos.psl
     sed -e 's/affyRatio/affyUclaNorm/' ~/kent/src/hg/lib/affyRatio.sql > affyUclaNorm.sql
     hgLoadBed hg18 affyUclaNorm hg18.affyUcla.bed -sqlTable=affyUclaNorm.sql
 
+############################################################################
 # MAKE AFFY U133 - made after above affyUclaNorm (DONE - 2006-02-01 - Fan)
     #	Someday the names can be fixed.
     ssh hgwdev
@@ -3491,4 +3656,3 @@ hgLoadPsl hg18 haplotypePos.psl
     #	row count in hg17: 44620, in hg18: 45559
     hgLoadSeq hg18 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
     #	44792 sequences
-
