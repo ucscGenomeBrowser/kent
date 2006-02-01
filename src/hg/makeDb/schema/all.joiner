@@ -1003,6 +1003,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.humanNormalDistance.target
     $kgDb.mouseLandscapeDistance.query
     $kgDb.mouseLandscapeDistance.target
+    $kgDb.gladHumESDistance.query
+    $kgDb.gladHumESDistance.target
     $kgDb.keggPathway.kgID
     $kgDb.kgAlias.kgID
     $kgDb.kgProtAlias.kgID
