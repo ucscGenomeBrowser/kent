@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.29 2006/02/01 23:40:43 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.30 2006/02/01 23:55:26 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -3656,3 +3656,67 @@ hgLoadPsl hg18 haplotypePos.psl
     #	row count in hg17: 44620, in hg18: 45559
     hgLoadSeq hg18 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
     #	44792 sequences
+
+# GNF ATLAS 2 (DONE - 2006-02-01 - Fan)
+    # Align probes from GNF1H chip.
+    ssh pk
+    cd /cluster/data/hg18/bed
+    mkdir -p geneAtlas2/run/psl
+    cd geneAtlas2/run
+    #	This bluearc/geneAtlas2 directory already exists
+    # mkdir -p /cluster/bluearc/geneAtlas2
+    # cp /projects/compbio/data/microarray/geneAtlas2/human/gnf1h.fa /cluster/bluearc/geneAtlas2
+    ls -1 /scratch/hg/gs.19/build36/maskedContigs > genome.lst
+    ls -1 /cluster/bluearc/geneAtlas2/gnf1h.fa > mrna.lst
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat -fine -ooc=/scratch/hg/h/11.ooc  /scratch/hg/gs.19/build36/maskedContigs/$(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 genome.lst mrna.lst gsub jobList
+    para create jobList
+    para try
+    para check
+    para push
+    para time
+# Completed: 378 of 378 jobs
+# CPU time in finished jobs:       4038s      67.29m     1.12h    0.05d  0.000 y
+# IO & Wait Time:                  2182s      36.37m     0.61h    0.03d  0.000 y
+# Average job time:                  16s       0.27m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             250s       4.17m     0.07h    0.00d
+# Submission to last job:           322s       5.37m     0.09h    0.00d
+# Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create gnf1h.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    # Processed 79733 alignments
+    liftUp ../affyGnf1h.psl ../../../jkStuff/liftAll.lft warn contig.psl
+    rm -r contig.psl raw.psl psl
+
+    # Load probes and alignments from GNF1H into database.
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/geneAtlas2
+    #	Already symlinked
+    # ln -s /projects/compbio/data/microarray/geneAtlas2/human/gnf1h.fa \
+    #	/gbdb/hgFixed/affyProbes
+    hgLoadPsl hg18 affyGnf1h.psl
+    hgLoadSeq hg18 /gbdb/hgFixed/affyProbes/gnf1h.fa
+
+    grep -v U133B ../affyUclaNorm/hg18.affyU133AB_all.lifted.pslReps.psl \
+	| sed -e "s/exemplar://; s/consensus://; s/U133A://" \
+	| sed -e "s/;//" > affyU133A.psl
+
+    hgMapMicroarray gnfAtlas2.bed hgFixed.gnfHumanAtlas2MedianRatio \
+    	affyU133A.psl  /cluster/data/hg18/bed/geneAtlas2/affyGnf1h.psl
+
+    # Loaded 44696 rows of expression data from hgFixed.gnfHumanAtlas2MedianRatio
+    # Mapped 32926,  multiply-mapped 2000, missed 48, unmapped 11770
+
+    hgLoadBed hg18 gnfAtlas2 gnfAtlas2.bed
+    # Loaded 34926 elements of size 15
+
