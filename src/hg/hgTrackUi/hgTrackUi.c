@@ -30,7 +30,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.249 2006/01/27 18:56:38 hiram Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.250 2006/02/01 10:48:32 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -388,13 +388,13 @@ cgiMakeCheckBox("ldTrim", ldTrim);
 printf("&nbsp;Trim to triangle<BR><BR>&nbsp;&nbsp;\n");
 
 cgiMakeCheckBox("hapmapLdYri_inv", hapmapLdYri_inv); 
-printf("&nbsp;Invert YRI<BR>&nbsp;&nbsp;\n");
+printf("&nbsp;Invert Yoruban display<BR>&nbsp;&nbsp;\n");
 cgiMakeCheckBox("hapmapLdCeu_inv", hapmapLdCeu_inv); 
-printf("&nbsp;Invert CEU<BR>&nbsp;&nbsp;\n");
+printf("&nbsp;Invert CEPH display<BR>&nbsp;&nbsp;\n");
 cgiMakeCheckBox("hapmapLdChb_inv", hapmapLdChb_inv); 
-printf("&nbsp;Invert CHB<BR>&nbsp;&nbsp;\n");
+printf("&nbsp;Invert Chinese display<BR>&nbsp;&nbsp;\n");
 cgiMakeCheckBox("hapmapLdJpt_inv", hapmapLdJpt_inv); 
-printf("&nbsp;Invert JPT<BR>&nbsp;&nbsp;\n");
+printf("&nbsp;Invert Japanese display<BR>&nbsp;&nbsp;\n");
 
 printf("<BR><B>Colors:</B>\n");
 
