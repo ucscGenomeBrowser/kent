@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.6 2006/02/01 08:21:23 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.7 2006/02/01 09:05:54 heather Exp $";
 
 char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -118,7 +118,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 fclose(f);
 }
 
