@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.1 2006/02/01 09:57:58 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.2 2006/02/01 10:14:07 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
@@ -85,7 +85,7 @@ if (locTypeInt == 1)
 	fprintf(errorFileHandle, "Missing quotes in phys_pos for range\n");
         return (-1);
 	}
-    tmpString = tmpString + 1;
+    tmpString = tmpString + 2;
     chromEnd = atoi(tmpString);
     if (chromEnd <= chromStart) 
         {
@@ -170,15 +170,11 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (chromEnd == -1)
         {
 	skipCount++;
-        fprintf(errorFileHandle, "%s\t", tableName);
-        fprintf(errorFileHandle, "%s\t", row[0]);
-        fprintf(errorFileHandle, "%s\t", row[1]);
-        fprintf(errorFileHandle, "%s\t", row[2]);
-        fprintf(errorFileHandle, "%s\t", row[3]);
-        fprintf(errorFileHandle, "%s\t", row[4]);
-        fprintf(errorFileHandle, "%s\t", row[5]);
-        fprintf(errorFileHandle, "%s\t", row[6]);
-        fprintf(errorFileHandle, "%s\n", row[7]);
+        fprintf(errorFileHandle, "snp = %s\t", row[0]);
+        fprintf(errorFileHandle, "locType = %s\t", row[1]);
+        fprintf(errorFileHandle, "chrom = %s\t", chromName);
+        fprintf(errorFileHandle, "chromStart = %s\t", row[4]);
+        fprintf(errorFileHandle, "rangeString = %s\n", row[5]);
 	continue;
 	}
 
@@ -193,7 +189,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 fclose(f);
-verbose(1, "skipping %d rows\n", skipCount);
+if (skipCount > 0)
+    verbose(1, "skipping %d rows\n", skipCount);
 }
 
 
