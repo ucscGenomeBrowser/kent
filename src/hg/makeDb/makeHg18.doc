@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.27 2006/02/01 01:05:58 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.28 2006/02/01 22:37:16 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -3337,4 +3337,158 @@ hgLoadPsl hg18 haplotypePos.psl
 
 # add haplotypePos entry in trackDb.ra
 
+# LOAD AFFYRATIO (DONE - 2006-02-01 - Fan)
+#	Copied from Hg17 doc
+    # Set up cluster job to align consenesus/exemplars to hg18
+    ssh kkstore02
+    mkdir /cluster/bluearc/hg18/affyGnf
+    cp -p /projects/compbio/data/microarray/affyGnf/sequences/HG-U95/HG-U95Av2_all.fa \
+    /cluster/bluearc/hg18/affyGnf
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/affyGnf
+    cp -p /cluster/bluearc/hg18/affyGnf/* /iscratch/i/affyGnf
+    /cluster/bin/iSync
+
+    ssh kki
+    mkdir /cluster/data/hg18/bed/affyGnf.2004-06-09
+    cd /cluster/data/hg18/bed/affyGnf.2004-06-09
+    ls -1 /iscratch/i/affyGnf/* > affy.lst
+    ls -1 /iscratch/i/gs.19/build36/maskedContigs/* > allctg.lst
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/cluster/bluearc/hg18/11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    gensub2 allctg.lst affy.lst template.sub jobList
+    mkdir psl
+    para create jobList
+    para try, push, check
+# Completed: 378 of 378 jobs
+# CPU time in finished jobs:       3055s      50.91m     0.85h    0.04d  0.000 y
+# IO & Wait Time:                  1267s      21.12m     0.35h    0.01d  0.000 y
+# Average job time:                  11s       0.19m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              78s       1.30m     0.02h    0.00d
+# Submission to last job:           367s       6.12m     0.10h    0.00d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyU95.psl
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/affyGnf.2004-06-09
+    pslSort dirs raw.psl tmp psl
+
+    # change filter parameters for these sequences. only use alignments that
+    # cover 30% of sequence and have at least 95% identity in aligned
+    # region. 
+    # minAli = 0.97 too high. low minCover as a lot of n's in these
+    # sequences
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp affyU95.psl ../../jkStuff/liftAll.lft warn contig.psl
+    #   Eliminate the long names
+    sed -e "s/U95Av2://" affyU95.psl | sed -e "s/;//" > affyU95shortQname.psl
+
+    # Merge with spot data and load into database. added -chip flag to 
+    # affyPslAndAtlasToBed to allow correct parsing
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/affyGnf.2004-06-09
+
+    bash
+    /cluster/home/sugnet/bin/i386/affyPslAndAtlasToBed -chip=U95Av2 \
+	affyU95shortQname.psl \
+	/projects/compbio/data/microarray/affyGnf/human_atlas_U95_gnf.noquotes.txt \
+	affyRatio.bed affyRatio.exr > affyPslAndAtlasToBed.log 2>&1
+
+    hgLoadBed -sqlTable=$HOME/src/hg/lib/affyRatio.sql hg18 \
+	affyRatio affyRatio.bed
+    # Loaded 13043 elements of size 15
+
+    mkdir affyU95
+    hgLoadPsl hg18 -table=affyU95 affyU95shortQname.psl
+    # sequences loaded 2006-02-1
+    hgLoadSeq -abbr=U95Av2: hg18 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    #	Advisory lock created
+    #	Creating .tab file
+    #	Adding /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
+    #	12386 sequences
+    #	Updating seq table
+    #	Advisory lock has been released
+    #	All done
+
+# Load AFFYUCLANORM, extended version of affyUcla track. Hopefully
+# final freeze of data set.		(DONE - 2006-02-01 - Fan)
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/affyUclaNorm
+    cd /cluster/data/hg18/bed/affyUclaNorm
+
+    cp -p /projects/compbio/data/microarray/affyUcla/sequences/HG-U133AB_all.fa .
+
+    ssh pk
+    cd /cluster/data/hg18/bed/affyUclaNorm
+    ls -1 /scratch/hg/gs.19/build36/maskedContigs/* > contig.lst
+
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+    mkdir psl
+    ls HG-U133AB_all.fa > affy.lst
+    gensub2 contig.lst affy.lst gsub jobList
+    para create jobList
+    para try
+    para check
+    para push ... etc
+# Completed: 378 of 378 jobs
+# CPU time in finished jobs:       6766s     112.77m     1.88h    0.08d  0.000 y
+# IO & Wait Time:                  1541s      25.68m     0.43h    0.02d  0.000 y
+# Average job time:                  22s       0.37m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             202s       3.37m     0.06h    0.00d
+# Submission to last job:           302s       5.03m     0.08h    0.00d
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/affyUclaNorm
+    pslSort dirs hg18.affyU133AB_all.psl tmp psl
+    wc hg18.affyU133AB_all.psl
+    # 62043  1302842 13163424 hg18.affyU133AB_all.psl
+
+    liftUp hg18.affyU133AB_all.lifted.psl \
+	/cluster/data/hg18/jkStuff/liftAll.lft warn hg18.affyU133AB_all.psl 
+    pslReps -minCover=0.5 -sizeMatters -minAli=0.97 \
+	-nearTop=0.005  hg18.affyU133AB_all.lifted.psl \
+	hg18.affyU133AB_all.lifted.pslReps.psl out.psr
+    # Processed 62038 alignments
+    ~/kent/src/hg/affyGnf/affyUclaMergePslData \
+    -pslFile=hg18.affyU133AB_all.lifted.pslReps.psl \
+	-affyFile=/projects/compbio/data/microarray/affyUcla/data/feature_biomaterial_chip_logratios_formatForTrack.txt \
+	-bedOut=hg18.affyUcla.bed \
+	-expRecordOut=hg18.affyUcla.expRecords \
+	-expFile=/projects/compbio/data/microarray/affyUcla/data/expNames.sorted.txt
+
+    ~/kent/src/hg/affyGnf/addUclaAnnotations.pl hg18.affyUcla.expRecords \
+	/projects/compbio/data/microarray/affyUcla/data/normal_tissue_database_annotations2.txt > hg18.affyUcla.annotations.expRecords
+
+    # Load the databases
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/affyUclaNorm
+    sed -e 's/affyRatio/affyUclaNorm/' ~/kent/src/hg/lib/affyRatio.sql > affyUclaNorm.sql
+    hgLoadBed hg18 affyUclaNorm hg18.affyUcla.bed -sqlTable=affyUclaNorm.sql
+
+# MAKE AFFY U133 - made after above affyUclaNorm (DONE - 2006-02-01 - Fan)
+    #	Someday the names can be fixed.
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/affyU133
+    cd /cluster/data/hg18/bed/affyU133
+    ln -s ../affyUclaNorm/hg18.affyU133AB_all.lifted.pslReps.psl affyU133.psl
+    
+    hgLoadPsl hg18 affyU133.psl
+    hgsql -e "select count(*) from affyU133;" hg18
+    #	row count in hg17: 44620, in hg18: 45559
+    hgLoadSeq hg18 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
+    #	44792 sequences
 
