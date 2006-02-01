@@ -3,10 +3,11 @@
  * ContigLocFilter contains chrom (added by snpContigLocFilter, the first step) */
 #include "common.h"
 
+#include "dystring.h"
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.1 2006/02/01 00:49:39 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.2 2006/02/01 08:21:54 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
@@ -174,17 +175,17 @@ if (chromHash == NULL)
     return 0;
     }
 
-verbose(1, "creating tables...\n");
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
-    createTable(chromName);
-
 writeSplitTables();
 
 verbose(1, "closing files...\n");
 cookie = hashFirst(chromHash);
 while (hel = hashNext(&cookie))
     fclose(hel->val);
+
+verbose(1, "creating tables...\n");
+cookie = hashFirst(chromHash);
+while ((chromName = hashNextName(&cookie)) != NULL)
+    createTable(chromName);
 
 verbose(1, "loading database...\n");
 cookie = hashFirst(chromHash);
