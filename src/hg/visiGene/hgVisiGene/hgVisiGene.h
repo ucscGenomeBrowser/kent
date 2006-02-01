@@ -12,11 +12,14 @@
 #define hgpDoId "hgp_doId"
 #define hgpDoSearch "hgp_doSearch"
 #define hgpDoProbe "hgp_doProbe"
+#define hgpDoConfig "hgp_doConfig"
 
 #define hgpId "hgp_id"	/* ID of image in big frame */
 #define hgpMatchFile "hgp_matchFile"	/* Name of files containing search matches */
 #define hgpListSpec "hgp_listSpec"	/* Contents of search */
 #define hgpStartAt "hgp_startAt"	/* Where in match list to start */
+
+#define hgpIncludeMutants "hgp_includeMutants"  /* Include mutant images. */
 
 /* Global variables (all read-only outside of hgVisiGene). */
 extern struct cart *cart;		/* Current CGI values */

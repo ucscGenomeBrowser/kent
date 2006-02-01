@@ -12,7 +12,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.18 2006/01/25 18:59:14 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.19 2006/02/01 19:35:13 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -121,57 +121,58 @@ bitSetRange(match->wordBits, startWord, wordCount);
 return match;
 }
 
-static struct hash *makePrivateHash(struct sqlConnection *conn)
-/* Build up hash of all submission sets that are private.
- * This is keyed by the ascii version of submissionSet.id */
-{
-struct hash *hash = hashNew(0);
-if (sqlFieldIndex(conn, "submissionSet", "privateUser") >= 0)
-    {
-    struct sqlResult *sr;
-    char **row;
-    sr = sqlGetResult(conn, "select id from submissionSet where privateUser!=0");
-    while ((row = sqlNextRow(sr)) != NULL)
-        hashAdd(hash, row[0], NULL);
-    sqlFreeResult(&sr);
-    }
-return hash;
-}
-
-static boolean isPrivate(struct sqlConnection *conn,
-	struct hash *privateHash, int imageId)
-/* Return TRUE if image is associated with private submissionSet. */
-{
-char *src, buf[16];
-char query[256];
-safef(query, sizeof(query), "select submissionSet from image where id=%d",
-	imageId);
-src = sqlQuickQuery(conn, query, buf, sizeof(buf));
-if (src != NULL && hashLookup(privateHash, src) != NULL)
-    return TRUE;
-return FALSE;
-}
-
 static void visiSearcherWeedResults(struct visiSearcher *searcher,
 	struct sqlConnection *conn)
 /* Get rid of images that are just partial matches, and also
- * images that are private. */
+ * images that are private.  This leaks a little memory - the
+ * matches that are weeded out.*/
 {
-struct visiMatch *newList = NULL, *match, *next;
-struct hash *privateHash = makePrivateHash(conn);
+struct visiMatch *newList = NULL, *match, *next, key;
 int wordCount = searcher->wordCount;
+struct dyString *query = dyStringNew(0);
+struct rbTree *tree = searcher->tree;
+struct sqlResult *sr;
+char **row;
+int passCount = 0;
+
+/* Construct query to fetch all non-private imageId's in matchList. */
+dyStringAppend(query, "select image.id from image,submissionSet "
+                      "where submissionSet.privateUser = 0 "
+		      "and submissionSet.id = image.submissionSet "
+		      "and image.id in (");
 for (match = searcher->matchList; match != NULL; match = next)
     {
     next = match->next;
-    if (bitCountRange(match->wordBits, 0, wordCount) == wordCount
-       && !isPrivate(conn, privateHash, match->imageId))
-        {
-	slAddHead(&newList, match);
+    if (bitCountRange(match->wordBits, 0, wordCount) == wordCount)
+	{
+	if (passCount != 0)
+	    dyStringAppendC(query, ',');
+	dyStringPrintf(query, "%d", match->imageId);
+	++passCount;
 	}
     else
-        visiMatchFree(&match);
+        {
+	visiMatchFree(&match);
+	}
+    }
+dyStringAppendC(query, ')');
+
+/* Execute query, and put corresponding images on newList. */
+if (passCount > 0)
+    {
+    sr = sqlGetResult(conn, query->string);
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	key.imageId = sqlUnsigned(row[0]);
+	match = rbTreeFind(searcher->tree, &key);
+	if (match == NULL)
+	    internalErr();
+	slAddHead(&newList, match);
+	}
+    slReverse(&newList);
     }
 searcher->matchList = newList;
+dyStringFree(&query);
 }
 
 static struct visiMatch *visiSearcherSortResults(struct visiSearcher *searcher,

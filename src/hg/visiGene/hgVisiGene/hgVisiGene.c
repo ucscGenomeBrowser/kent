@@ -16,6 +16,7 @@
 #include "captionElement.h"
 #include "visiSearch.h"
 #include "probePage.h"
+#include "configPage.h"
 #include "printCaption.h"
 
 /* Globals */
@@ -383,6 +384,10 @@ cgiMakeButton(hgpDoSearch, "search");
 printf("</TD>");
 
 printf("<TD>");
+cgiMakeButton(hgpDoConfig, "configure");
+printf("</TD>");
+
+printf("<TD>");
 printf("Zoom: ");
 printf(
 "<INPUT TYPE=SUBMIT NAME=\"hgp_zmOut\" VALUE=\" out \""
@@ -438,6 +443,33 @@ for (match = matchList; match != NULL; match = match->next)
     }
 }
 
+struct visiMatch *removeMutants(struct sqlConnection *conn,
+	struct visiMatch *matchList)
+/* Remove images that are associated with mutant genotypes
+ * from list. */
+{
+struct visiMatch *match, *next, *newList = NULL;
+for (match = matchList; match != NULL; match = next)
+    {
+    char *genotype;
+    char query[256];
+    next = match->next;
+    safef(query, sizeof(query),
+        "select genotype.alleles from image,specimen,genotype "
+	"where image.id=%d and image.specimen=specimen.id "
+	"and specimen.genotype=genotype.id", match->imageId);
+    genotype = sqlQuickString(conn, query);
+    if (genotype == NULL || genotype[0] == 0 || 
+    	startsWith("wild type", genotype))
+	{
+	slAddHead(&newList, match);
+	}
+    freeMem(genotype);
+    }
+slReverse(&newList);
+return newList;
+}
+
 void doFrame(struct sqlConnection *conn, boolean forceImageToList)
 /* Make a html frame page.  Fill frame with thumbnail, control bar,
  * and image panes. */
@@ -450,6 +482,8 @@ struct slName *geneList, *gene;
 struct tempName matchTempName;
 char *matchFile = NULL;
 struct visiMatch *matchList = visiSearch(conn, listSpec);
+if (!cartUsualBoolean(cart, hgpIncludeMutants, FALSE))
+    matchList = removeMutants(conn, matchList);
 matchList = onePerImageFile(conn, matchList);
 weighMatches(conn, matchList);
 slSort(&matchList, visiMatchCmpWeight);
@@ -709,6 +743,8 @@ else if (cartVarExists(cart, hgpDoControls))
     doControls(conn);
 else if (cartVarExists(cart, hgpDoId))
     doId(conn);
+else if (cartVarExists(cart, hgpDoConfig))
+    configPage(conn);
 else if (cartVarExists(cart, hgpDoSearch))
     doDefault(conn, TRUE);
 else 

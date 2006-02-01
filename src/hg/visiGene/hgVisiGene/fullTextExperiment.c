@@ -63,29 +63,63 @@ else
    return 0;
 }
 
-static struct visiMatch *matchGeneName(struct sqlConnection *conn, char *symbol)
+static struct hash *makePrivateHash(struct sqlConnection *conn)
+/* Build up hash of all submission sets that are private.
+ * This is keyed by the ascii version of submissionSet.id */
+{
+struct hash *hash = hashNew(0);
+if (sqlFieldIndex(conn, "submissionSet", "privateUser") >= 0)
+    {
+    struct sqlResult *sr;
+    char **row;
+    sr = sqlGetResult(conn, "select id from submissionSet where privateUser!=0");
+    while ((row = sqlNextRow(sr)) != NULL)
+        hashAdd(hash, row[0], NULL);
+    sqlFreeResult(&sr);
+    }
+return hash;
+}
+
+static boolean isPrivate(struct sqlConnection *conn,
+	struct hash *privateHash, char *imageId)
+/* Return TRUE if image is associated with private submissionSet. */
+{
+char *src, buf[16];
+char query[256];
+safef(query, sizeof(query), "select submissionSet from image where id=%s",
+	imageId);
+src = sqlQuickQuery(conn, query, buf, sizeof(buf));
+if (src != NULL && hashLookup(privateHash, src) != NULL)
+    return TRUE;
+return FALSE;
+}
+
+static struct visiMatch *matchGeneName(struct sqlConnection *conn, 
+	char *symbol, struct hash *privateHash)
 /* Return matching list if it's a gene symbol. */
 {
 struct visiMatch *matchList = NULL, *match;
-struct dyString *dy = dyStringNew(0);
-struct sqlResult *sr;
-char query[256], **row;
-dyStringAppend(dy, "select imageProbe.image from gene,probe,imageProbe where ");
-dyStringPrintf(dy, "gene.name=\"%s\" ", symbol);
-dyStringAppend(dy, "and gene.id = probe.gene ");
-dyStringAppend(dy, "and probe.id = imageProbe.probe ");
-uglyf("%s<BR>\n", dy->string);
-sr = sqlGetResult(conn, dy->string);
-while ((row = sqlNextRow(sr)) != NULL)
+struct slInt *imageList, *image;
+char *sqlPat = sqlLikeFromWild(symbol);
+if (sqlWildcardIn(sqlPat))
+    imageList = visiGeneSelectNamed(conn, sqlPat, vgsLike);
+else
+    imageList = visiGeneSelectNamed(conn, sqlPat, vgsExact);
+for (image = imageList; image != NULL; image = image->next)
     {
-    AllocVar(match);
-    match->imageId = sqlUnsigned(row[0]);
-    slAddHead(&matchList, match);
+    char asciiId[16];
+    safef(asciiId, sizeof(asciiId), "%d", image->val);
+    if (!isPrivate(conn, privateHash, asciiId))
+	{
+	AllocVar(match);
+	match->imageId = image->val;
+	slAddHead(&matchList, match);
+	}
     }
-sqlFreeResult(&sr);
 slReverse(&matchList);
 return matchList;
 }
+
 
 struct visiMatch *visiSearch(struct sqlConnection *conn, char *searchString)
 /* visiSearch - return list of images that match searchString sorted
@@ -98,17 +132,27 @@ struct trixSearchResult *tsrList, *tsr;
 struct visiMatch *matchList = NULL, *match;
 int wordCount = chopByWhite(dupe, NULL, 0);
 char **words;
+boolean hasWild;
+struct hash *privateHash = makePrivateHash(conn);
 
+tolowers(dupe);
+hasWild = (strchr(searchString, '*') != NULL);
+if (hasWild)
+    stripChar(dupe, '*');
 AllocArray(words, wordCount);
 chopByWhite(dupe, words, wordCount);
-if (wordCount != 1 || (matchList = matchGeneName(conn, words[0])) == NULL)
+/* if (wordCount != 1 || 
+	(matchList = matchGeneName(conn, words[0],privateHash)) == NULL) */
     {
-    tsrList = trixSearch(trix, wordCount, words);
+    tsrList = trixSearch(trix, wordCount, words, hasWild);
     for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
 	{
-	AllocVar(match);
-	match->imageId = sqlUnsigned(tsr->itemId);
-	slAddHead(&matchList, match);
+	if (!isPrivate(conn, privateHash, tsr->itemId))
+	    {
+	    AllocVar(match);
+	    match->imageId = sqlUnsigned(tsr->itemId);
+	    slAddHead(&matchList, match);
+	    }
 	}
     trixSearchResultFreeList(&tsrList);
     trixClose(&trix);

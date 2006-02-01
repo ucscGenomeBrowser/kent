@@ -36,6 +36,7 @@ struct sqlConnection *conn = sqlConnect(database);
 struct dyString *search = dyStringNew(0);
 struct visiMatch *matchList, *match;
 int i;
+int maxPrint=3;
 for (i=0; i<wordCount; ++i)
     {
     if (i != 0)
@@ -45,12 +46,12 @@ for (i=0; i<wordCount; ++i)
 matchList = visiSearch(conn, search->string);
 uglyTime("Searched time");
 printf("%d matches to %s\n", slCount(matchList), search->string);
-#ifdef SOON
-for (match = matchList; match != NULL; match = match->next)
+for (i=0, match = matchList; match != NULL && i<maxPrint; match = match->next,++i)
     {
     printf(" %d %f %d\n", match->imageId, match->weight,
     	bitCountRange(match->wordBits, 0, wordCount));
     }
+#ifdef SOON
 #endif /* SOON */
 }
 
