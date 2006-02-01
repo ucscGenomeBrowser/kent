@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.68 2006/01/31 02:40:25 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.69 2006/02/01 10:24:47 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -924,6 +924,19 @@ mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
 }
 
+static void mapTrackBackground(struct track *tg, int xOff, int yOff)
+/* Print out image map rectangle that invokes hgTrackUi. */
+{
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", 
+	xOff, yOff, xOff+insideWidth, yOff+tg->height);
+/* change 'hapmapLd' to use parent composite table name */
+/* move this to hgTracks when finished */
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=hapmapLd&i=hapmapLd\"", hgTrackUiName(), 
+	cartSessionVarName(), cartSessionId(cart), chromName);
+mapStatusMessage("%s controls", tg->mapName);
+hPrintf(">\n");
+}
+
 int ldTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height. Called before and after drawItems. 
  * Must set height, lineHeight, heightPer */ 
@@ -1015,7 +1028,7 @@ Color getOutlineColor(int itemCount)
 /* get outline color from cart and set outlineColor*/
 {
 char *outColor = cartUsualString(cart, "ldOut", ldOutDefault);
-if (itemCount > 1000 || winEnd-winStart > 1000000)
+if (winEnd-winStart > 100000)
     return 0;
 if (sameString(outColor,"yellow"))
     return MG_YELLOW;
@@ -1236,6 +1249,7 @@ char         cartInvertVal[32];
 
 if (tg->items==NULL)
     return;
+mapTrackBackground(tg, xOff, yOff);
 safef(cartInvertVal, sizeof(cartInvertVal), "%s_inv", tg->mapName);
 ldInvert = cartUsualBoolean(cart, cartInvertVal, ldInvertDefault);
 
