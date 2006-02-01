@@ -22,6 +22,10 @@
 #include "hgConfig.h"
 #include "stsInfo2.h"
 
+/*	over time these listings and numbers are growing. */
+#define MAX_ID_LIST	2048
+#define MAX_STS_ID	9000000
+
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"gb", OPTION_STRING},
@@ -136,7 +140,7 @@ boolean inArrayInt(unsigned el, unsigned *array, int size)
 void addElement(char *el, char ***array, int *count)
 /* Add a new element to a array of elements */
 {
-  char *arrayCurr, arrayNew[1024];
+  char *arrayCurr, arrayNew[MAX_ID_LIST];
   int sizeOne, size;
   char **cArray, **rArray=NULL, ***dArray;
 
@@ -145,7 +149,7 @@ void addElement(char *el, char ***array, int *count)
     {
       size = *count;
       arrayCurr = sqlStringArrayToString(*array, *count);
-      sprintf(arrayNew, "%s%s,", arrayCurr, el);
+      safef(arrayNew, ArraySize(arrayNew), "%s%s,", arrayCurr, el);
       size++;
       dArray = array;
       /* if (*dArray) 
@@ -170,7 +174,7 @@ void removeElement(char *el, char ***array, int *count)
     {
       size = *count;
       arrayCurr = sqlStringArrayToString(*array, *count);
-      sprintf(del, "%s,", el);
+      safef(del, ArraySize(del), "%s,", el);
       arrayCurrDel = replaceChars(arrayCurr, del, "");
       if (differentString(arrayCurr, arrayCurrDel))
 	  size--;
@@ -194,7 +198,7 @@ void removeElement(char *el, char ***array, int *count)
 void addElementInt(unsigned el, unsigned **array, int *count)
 /* Add a new element to a array of elements */
 {
-  char *arrayCurr, arrayNew[1024];
+  char *arrayCurr, arrayNew[MAX_ID_LIST];
   int sizeOne, size;
   unsigned *uArray, **dArray;
 
@@ -202,7 +206,7 @@ void addElementInt(unsigned el, unsigned **array, int *count)
     {
       size = *count;
       arrayCurr = sqlUnsignedArrayToString(*array, *count);
-      sprintf(arrayNew, "%s%d,", arrayCurr, el);
+      safef(arrayNew, ArraySize(arrayNew), "%s%d,", arrayCurr, el);
       size++;
       dArray = array;
       /* if (*count > 0)
@@ -217,8 +221,6 @@ void addElementInt(unsigned el, unsigned **array, int *count)
 void addName(struct sts *s, char *name)
 /* Add a name to a sts record */
 {
-    char *namesCurr, namesNew[1024];
-    int sizeOne;
     struct gb *gb;
 
   /* See if it is a genBank record */
@@ -256,7 +258,7 @@ void readStsInfo(struct lineFile *sif)
   struct primer *p;
   struct gb *gb;
   char name[16], *words[52];
-  int i, id;
+  int i;
   
   stsHash = newHash(20);
   dbStsIdHash = newHash(20);
@@ -283,7 +285,7 @@ void readStsInfo(struct lineFile *sif)
 	  s->mapped = isMapped(si);
 	  s->dbstsIdExists = FALSE;
 	  slAddHead(&sList, s);
-	  sprintf(name, "%d", si->identNo);
+	  safef(name, ArraySize(name), "%d", si->identNo);
 	  hashAdd(stsHash, name, s);
 	  
 	  /* Add ids to dbStsIdHash */
@@ -293,12 +295,12 @@ void readStsInfo(struct lineFile *sif)
 	  /* Add sts records to ucscId hash */
 	  if (si->dbSTSid)
 	    {
-	      sprintf(name, "%d", si->dbSTSid);
+	      safef(name, ArraySize(name),  "%d", si->dbSTSid);
 	      hashAdd(ucscIdHash, name, s);
 	    }
 	  for (i = 0; i < si->otherDbstsCount; i++)
 	    {
-	      sprintf(name, "%d", si->otherDbSTS[i]);
+	      safef(name, ArraySize(name), "%d", si->otherDbSTS[i]);
 	      if (!hashLookup(ucscIdHash, name))
 		hashAdd(ucscIdHash, name, s);
 	    }
@@ -330,7 +332,7 @@ void readStsInfo(struct lineFile *sif)
 	      p->right = cloneString(si->rightPrimer);
 	      p->dist = cloneString(si->distance);
 	      p->ucscId = si->identNo;
-	      sprintf(name, "%d", p->dbStsId);
+	      safef(name, ArraySize(name), "%d", p->dbStsId);
 	      hashAdd(primerHash, name, p);
 	    }
 	}
@@ -456,7 +458,7 @@ void readDbstsPrimers(struct lineFile *dsf)
 	      s = hashMustFindVal(nameHash, words[4]);
 
 	      /* Update the marker record with the dbSTS id and primer info if none exists */
-	      if ((s->si->dbSTSid == 0) || (s->si->dbSTSid >= 1000000) || 
+	      if ((s->si->dbSTSid == 0) || (s->si->dbSTSid >= MAX_STS_ID) || 
 		  (sameString(s->si->leftPrimer, "\0")))
 		updatePrimerInfo(p, s);
 	      /* If the record is already linked to another dbSTS id, add this to other list */
@@ -468,19 +470,22 @@ void readDbstsPrimers(struct lineFile *dsf)
 	      hashAdd(ucscIdHash, words[0], s);
 	    }
     }
-}
+}	/*	void readDbstsPrimers(struct lineFile *dsf)	*/
 
 void readDbstsNames(struct lineFile *daf)
 /* Read in dbSTS names and create new stsInfo record, if necessary */
 {
-  struct sts *s, *s2;
+  struct sts *s;
   struct stsInfo2 *si;
   struct primer *p;
-  char *words[4], *names[64], prefix[0], name[64], *org;
-  int dbstsId, ucscId, nameCount, i;
+  char *words[4], *names[64], name[64], *org;
+  int dbstsId, nameCount, i;
+    int lineCount = 0;
+int assigned = 0;
 
   while (lineFileChopNext(daf, words, 2))
     {
+    ++lineCount;
       /* Make sure this is a human marker */
       org = hashFindVal(orgHash, words[0]);
       if (hashLookup(orgHash, words[0]) && !sameString(org, "Homo sapiens\0") && !sameString(org, "\0"))
@@ -491,12 +496,17 @@ void readDbstsNames(struct lineFile *daf)
 	p = hashMustFindVal(primerHash, words[0]);
       /* Determine if this id is already being used */
       if (hashLookup(ucscIdHash, words[0]))
+	{
 	s = hashMustFindVal(ucscIdHash, words[0]);
+	}
       else
+	{
 	s = NULL;
+	}
       /* If the id has not been assigned, see any of the names are being used */
       if (s == NULL) 
 	{
+	++assigned;
 	  nameCount = chopByChar(words[1], ';', names, ArraySize(names));
 	  for (i = 0; i < nameCount; i++) 
 	    {
@@ -506,7 +516,7 @@ void readDbstsNames(struct lineFile *daf)
 		{
 		  s = hashMustFindVal(nameHash, names[i]);
 		  /* See if this record needs an dbSTS id */
-		  if ((s->si->dbSTSid == 0) || (s->si->dbSTSid >= 1000000) ||  
+		  if ((s->si->dbSTSid == 0) || (s->si->dbSTSid >= MAX_STS_ID) ||  
 		      (sameString(s->si->leftPrimer, "\0")))
 		    {
 		      s->si->dbSTSid = dbstsId;
@@ -522,7 +532,9 @@ void readDbstsNames(struct lineFile *daf)
 		      i = nameCount;
 		    }
 		  else
-		      addElementInt(dbstsId, &s->si->otherDbSTS, &s->si->otherDbstsCount);
+		    {
+	    addElementInt(dbstsId, &s->si->otherDbSTS, &s->si->otherDbstsCount);
+		    }
 		}
 	    }
 	}
@@ -611,7 +623,7 @@ void readDbstsNames(struct lineFile *daf)
 	      si->decodeChr = cloneString("");
 	      slAddHead(&sList, s);
 	      hashAdd(ucscIdHash, words[0], s);
-	      sprintf(name, "%d", s->si->identNo);
+	      safef(name, ArraySize(name), "%d", s->si->identNo);
 	      hashAdd(stsHash, name, s);
 	      hashAddInt(dbStsIdHash, name, dbstsId); 
 	      p->ucscId = s->si->identNo;
@@ -662,8 +674,7 @@ void readDbstsFa(FILE *dff)
   struct dnaSeq *ds;
   struct sts *s;
   struct gb *gb;
-  char *id, *words[8], *acc=NULL, name[256], *line;
-  int wordCount;
+  char name[256], *line;
 
   while (faReadMixedNext(dff, 0, "default", TRUE, &line, &ds))
     {
@@ -679,7 +690,7 @@ void readDbstsFa(FILE *dff)
 	      if (s->fa == NULL) 
 		{
 		  s->faAcc = cloneString(ds->name);
-		  sprintf(name, "%d", s->si->identNo);
+		  safef(name, ArraySize(name), "%d", s->si->identNo);
 		  ds->name = cloneString(name);
 		  s->fa = ds;
 		  s->si->sequence = 1;
@@ -716,7 +727,7 @@ void writeOut(FILE *of, FILE *opf, FILE *oaf, FILE *off)
 {
   struct sts *s;
   struct stsInfo2 *si;
-  char name[256], *gb;
+  char name[256];
   int i;
 
   slReverse(&sList);
@@ -727,7 +738,7 @@ void writeOut(FILE *of, FILE *opf, FILE *oaf, FILE *off)
       else
 	s->si->sequence = 0;	
       si = s->si;
-      if ((s->dbstsIdExists) || (si->dbSTSid == 0) || (si->dbSTSid >= 1000000))
+      if ((s->dbstsIdExists)||(si->dbSTSid == 0)||(si->dbSTSid >= MAX_STS_ID))
 	{
 	  fprintf(of, "%d\t%s\t%d\t", si->identNo, si->name, si->gbCount);
 	  for (i = 0; i < si->gbCount; i++) 
@@ -786,7 +797,7 @@ void writeOut(FILE *of, FILE *opf, FILE *oaf, FILE *off)
 	  if (s->fa != NULL)
 	    {
 	      /* gb = sqlStringArrayToString(si->genbank, si->gbCount); */
-	      sprintf(name, "%s %s %s", s->fa->name, si->name, s->faAcc);
+	      safef(name, ArraySize(name), "%s %s %s", s->fa->name, si->name, s->faAcc);
 	      faWriteNext(off, name, s->fa->dna, s->fa->size);
 	    }
 	}
@@ -821,44 +832,44 @@ verboseSetLevel(verb);
  daf = lineFileOpen(argv[4], TRUE);
  dff = mustOpen(argv[5], "r");
 
- sprintf(filename, "%s.info", argv[6]);
+ safef(filename, ArraySize(filename), "%s.info", argv[6]);
  of = mustOpen(filename, "w");
- sprintf(filename, "%s.primers", argv[6]);
+ safef(filename, ArraySize(filename), "%s.primers", argv[6]);
  opf = mustOpen(filename, "w");
- sprintf(filename, "%s.alias", argv[6]);
+ safef(filename, ArraySize(filename), "%s.alias", argv[6]);
  oaf = mustOpen(filename, "w");
- sprintf(filename, "%s.fa", argv[6]);
+ safef(filename, ArraySize(filename), "%s.fa", argv[6]);
  off = mustOpen(filename, "w");
 
  /* Read in current stsInfo file */
- verbose(1, "Reading current stsInfo file\n");
+ verbose(1, "Reading current stsInfo file: %s\n", argv[1]);
  readStsInfo(sif);
 
  /* Read in genbank accessions that have sequences */ 
  if (gbName)
    {
-     verbose(1, "Reading genbank accession file\n");
+     verbose(1, "Reading genbank accession file: %s\n", gbName);
      readGbAcc(gbf);
    }
 
  /* Read in primer and organism information from dbSTS.sts */
- verbose(1, "Reading current dbSTS.sts file\n");
+ verbose(1, "Reading current dbSTS.sts file: %s\n", argv[3]);
  readDbstsPrimers(dsf);
 
  /* Read in names from dbSTS.alias and create new stsInfo records if needed */
- verbose(1, "Reading current dbSTS.aliases file\n");
+ verbose(1, "Reading current dbSTS.aliases file: %s\n", argv[4]);
  readDbstsNames(daf);
 
  /* Read in current sequences for sts markers */
- verbose(1, "Reading current all.STS file\n");
+ verbose(1, "Reading current all.STS file: %s\n", argv[2]);
  readAllSts(asf);
 
  /* Read in new sequences from dbSTS.fa */
- verbose(1, "Reading dbSTS.fa file\n");
+ verbose(1, "Reading dbSTS.fa file: %s\n", argv[5]);
  readDbstsFa(dff);
 
  /* Print out the new files */
- verbose(1, "Creating output files\n");
+ verbose(1, "Creating output files: %s .info .primers .alias .fa\n", argv[6]);
  writeOut(of, opf, oaf, off);
 
  fclose(asf);
