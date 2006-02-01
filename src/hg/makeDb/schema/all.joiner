@@ -442,7 +442,8 @@ identifier gencodeGeneNamePseudoOct05 dependency
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
     $hg.acembly.name
-    $hg.acemblyPep.name unique minCheck=0.90
+    $hg,!hg17.acemblyPep.name unique minCheck=0.90
+    hg17.acemblyPep.name unique minCheck=0.63
     $hg.acemblyClass.name full unique
 
 identifier ECgeneName dependency
