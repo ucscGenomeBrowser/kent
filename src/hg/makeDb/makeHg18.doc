@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.26 2006/01/31 17:20:36 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.27 2006/02/01 01:05:58 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -3250,4 +3250,91 @@ TMPDIR=/scratch/tmp
         /* Determine if all of the names are recorded */
 --->        if (s->si->dbSTSid == dbstsId)
             s->dbstsIdExists = TRUE;
+
+# CREATE HAPLOTYPEPOS TRACK (DONE 1/31/06, Fan)
+
+  ssh kkstore02
+  cd /cluster/data/hg18/bed
+
+  mkdir haplotypePos
+  cd haplotypePos
+
+  cp /cluster/data/hg18/*hap*/*.fa . -p
+  ls *.fa|sed -e 's/chr/split1 chr/' |sed -e 's/.fa//' >splitAll
+
+cat << '_EOF_' > split1
+echo processing $1
+faSplit2 -lift=$1.lft -overlap=500 size $1.fa 3500 split/$1
+'_EOF_'
+
+chmod +x split*
+mkdir split
+mkdir result
+splitAll
+
+ls ./split/*.fa > split.lst
+
+cat << '_EOF_' > gsub
+#LOOP
+/cluster/store11/gs.19/build36/bed/haplotypePos/hblat1 $(file1) {check out line+ /cluster/store11/gs.19/build36/bed/haplotypePos/result/$(root1).psl}
+#ENDLOOP
+'_EOF_'
+
+gensub2 split.lst single gsub jobList
+
+ssh pk
+cd /cluster/data/hg18/bed/haplotypePos
+mkdir result
+
+para create jobList
+para try, push, check ...
+
+# Completed: 3091 of 3092 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:      33164s     552.73m     9.21h    0.38d  0.001 y
+# IO & Wait Time:                172783s    2879.72m    48.00h    2.00d  0.005 y
+# Average job time:                  67s       1.11m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             300s       5.00m     0.08h    0.00d
+# Submission to last job:           743s      12.38m     0.21h    0.01d
+
+# The single job that crashed was due to chr5_h2_hap1368.fa, which
+# does not have a decent alignment on chr5. 
+
+# collect BLAT results
+cat result/*.psl >all.psl
+
+# keep the main alignments
+pslReps -nohead -minCover=0.80 -minAli=0.80 -nearTop=0.002 all.psl all_filtered.psl all.psr
+
+cat chr*.lft > hap.lft
+liftUp lifted.psl hap.lft warn all_filtered.psl -pslQ
+
+mkdir tNibs qNibs
+cp -p /cluster/data/hg18/nib/*hap*.nib qNibs
+
+cp -p /cluster/data/hg18/nib/chr5.nib tNibs
+cp -p /cluster/data/hg18/nib/chr6.nib tNibs
+cp -p /cluster/data/hg18/nib/chr22.nib tNibs
+
+axtChain -psl -linearGap=medium lifted.psl tNibs qNibs out.chain
+
+chainAntiRepeat tNibs qNibs out.chain final.chain
+
+cat << '_EOF_' > hap.chrom.lis
+/cluster/data/hg18/nib/chr5.nib
+/cluster/data/hg18/nib/chr6.nib
+/cluster/data/hg18/nib/chr22.nib
+'_EOF_'
+
+ls *.fa >q.lis
+
+chainToPsl final.chain /cluster/data/hg18/chrom.sizes \
+/cluster/data/hg18/chrom.sizes hap.chrom.lis q.lis haplotypePos.psl
+# took about 20 minutes
+
+hgLoadPsl hg18 haplotypePos.psl
+
+# add haplotypePos entry in trackDb.ra
+
 
