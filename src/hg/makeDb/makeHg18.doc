@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.32 2006/02/02 06:02:14 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.33 2006/02/02 23:29:06 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -3885,4 +3885,84 @@ hgLoadPsl hg18 haplotypePos.psl
 
     hgLoadBed hg18 gnfAtlas2 gnfAtlas2.bed
     # Loaded 34926 elements of size 15
+
+# H-INVITATIONAL GENE ANNOTATION DATABASE (DONE 2006-0202, Fan)
+    # http://www.jbirc.aist.go.jp/hinv/top.html
+    # Create knownGene table to reference HINV gene ID's
+    #  for link on knownGenes details page
+    # Also, create an HINV gene track
+
+    # download CDNA file release 2.2 (Jan 20, 2006) -- got release # from downloads page).
+    ssh kkstore03
+    cd /cluster/data/hinv
+    mkdir 2005-02-02
+    cd 2005-02-02
+    wget --timestamp http://www.jbirc.aist.go.jp/hinv/download/alldata/flatfile/FCDNA.gz
+    gunzip FCDNA.gz
+    mv FCDNA FCDNA.2.2
+
+    # set up assembly work area
+    ssh kkstore02
+    cd /cluster/data/hg18
+    mkdir -p bed/hinv
+    cd bed/hinv
+
+    # extract H-INV ID's and Genbank accessions of mRNAs
+    awk '/CDNA_ACCESSION-NO:/ {print $2}' < /cluster/data/hinv/2005-02-02/FCDNA.2.2 > accessions.txt
+    awk '/CDNA_H-INVITATIONAL-ID:/ {print $2}' < /cluster/data/hinv/2005-02-02/FCDNA.2.2 > ids.txt
+    paste accessions.txt ids.txt > queries.txt
+    wc -l ids.txt
+    #   56419 ids.txt
+
+    # create PSL file from alignments for these mRNA's, extracted from the 
+    #       table of all aligned mRNA's
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/hinv
+    hgsql hg18 -s -e "SELECT * FROM all_mrna"  | cut -f 2- > all_mrna.tab
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/hinv
+    pslReps /dev/null stdout /dev/null | cat - all_mrna.tab > all_mrna.psl
+
+    # using pslReps to generate the PSL file header
+    pslSelect -queryPairs=queries.txt all_mrna.psl hinv_mrna.psl
+
+    # load track of mrna alignments
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/hinv
+    hgLoadPsl hg18 -table=HInvGeneMrna hinv_mrna.psl
+    hgsql hg18 -s -e \
+        "select distinct(qName) from HInvGeneMrna order by qName" > hg18.mrna
+    hgsql hg17 -s -e \
+        "select distinct(qName) from HInvGeneMrna order by qName" > hg17.mrna
+    wc -l hg*.mrna
+        # 41023 hg17.mrna
+        # 54974 hg18.mrna
+
+    comm -1 -3 *.mrna > hg18.aligned
+    wc -l hg18.aligned
+        # 14758 (transcripts newly aligned in hg18)
+    comm -2 -3 *.mrna > hg17.aligned
+    wc -l hg17.aligned
+        # 807 (transcripts no longer aligned in hg18)
+    comm -2 -3 ids.txt hg18.mrna > hg18.notaligned
+    wc -l hg18.notaligned
+        # 1445 (transcripts not aligned in hg18 -- checking on why...)
+
+    # also make a table with various useful items for each transcript
+    ssh hgwdev
+    hgsql hg18 < ~/kent/src/hg/lib/HInv.sql
+    cd /cluster/data/hg18/bed/hinv
+    /cluster/data/hinv/hinvToTable.pl < /cluster/data/hinv/2005-02-02/FCDNA.2.2 > HInv.tab
+    echo 'load data local infile "HInv.tab" into table HInv' | hgsql hg18
+    hgsql hg17 -s -e "select count(*) from HInv"
+        # 41118
+    hgsql hg18 -s -e "select count(*) from HInv"
+        # 56419
+
+    # !!! DO THIS AFTER KG IS BUILD !!!
+    # create table for knownGenes detail page
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/hinv
+    hgMapToGene hg18 HInvGeneMrna knownGene knownToHInv
 
