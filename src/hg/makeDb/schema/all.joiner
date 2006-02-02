@@ -910,7 +910,7 @@ identifier xenoMrnaAccession typeOf=mrnaAccession
 identifier nativeMrnaAccession typeOf=mrnaAccession 
 "Genbank Native (same organism as database) mRNA accession"
     $gbd.all_mrna.qName dupeOk
-    $gbd,!rn2,!ce2.mrnaOrientInfo.name minCheck=0.2
+    $gbd,!ce2.mrnaOrientInfo.name minCheck=0.01
     ce2.mrnaOrientInfo.name minCheck=0.08
     $gbd,!mm6,!mm7,!hg17.dupSpMrna.mrnaID minCheck=0.80
     $gbd,!mm6,!mm7,!hg17.dupSpMrna.dupMrnaID minCheck=0.95
@@ -946,10 +946,7 @@ identifier refSeqId typeOf=mrnaAccession
     $kgDb.ccdsInfo.mrnaAcc chopAfter=. minCheck=0.40
     $gbd,!rn2,!rn3.mrnaRefseq.refseq minCheck=0.25
     rn2,rn3.mrnaRefseq.refseq minCheck=0.03
-    $gbd,!rn2,!mm7,!ce2,!danRer3,!droEre1,!droMoj2,!droVir2,!droAna2.mrnaOrientInfo.name minCheck=0.78
-    mm7.mrnaOrientInfo.name minCheck=0.07
-    ce2.mrnaOrientInfo.name minCheck=0.90
-    danRer3.mrnaOrientInfo.name minCheck=0.40
+    $gbd.mrnaOrientInfo.name minCheck=0.01
     $gbd.refFlat.name
     $gbd.refGene.name
     $gbd.refMrna.name
