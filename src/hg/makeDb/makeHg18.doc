@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.31 2006/02/02 01:23:13 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.32 2006/02/02 06:02:14 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -3485,8 +3485,99 @@ blat $(path1) $(path2) -ooc=/san/sanvol1/scratch/hg18/11.ooc -stepSize=5 {check 
         # 17766 jobs
     para try
     para check
-XXX - running 2006-02-01
     para push
+# Completed: 17766 of 17766 jobs
+# CPU time in finished jobs:     216174s    3602.90m    60.05h    2.50d  0.007 y
+# IO & Wait Time:                152112s    2535.20m    42.25h    1.76d  0.005 y
+# Average job time:                  21s       0.35m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             321s       5.35m     0.09h    0.00d
+# Submission to last job:          1399s      23.32m     0.39h    0.02d
+
+    # Compile sts sequence results
+    ssh kkstore02
+    cd /cluster/bluearc/hg18/sts/sts
+    time pslSort dirs raw.psl temp out/*
+    #	17776 files in 47 dirs
+    #	Got 17776 files 133 files per mid file
+    #	real    4m10.716s
+    #	-rw-rw-r--   1 768850684 Feb  1 21:03 raw.psl
+    rm -rf temp
+    time pslReps -nearTop=0.0001 -minCover=0.6 -minAli=0.8 -noIntrons raw.psl \
+	stsMarkers.psl /dev/null
+    #	Processed 6897264 alignments
+    #	real    0m25.236s
+    #	-rw-rw-r--   1  10710072 Feb  1 21:04 stsMarkers.psl
+    cp -p stsMarkers.psl /cluster/data/hg18/bed/sts/run
+
+    # Lift them and get them ready to combine with primer alignments
+    liftUp -nohead stsMarkers.lifted.psl \
+        /san/sanvol1/scratch/hg18/coverage/maskedContigs/liftContigs.lft \
+	     warn stsMarkers.psl
+
+    /cluster/bin/scripts/extractPslInfo stsMarkers.lifted.psl
+        # creates stsMarkers.lifted.psl.initial
+    wc stsMarkers.lifted.psl.initial
+    #	90216  541296 3977093 stsMarkers.lifted.psl.initial
+    /cluster/bin/scripts/findAccession -agp stsMarkers.lifted.psl.initial \
+	/cluster/data/hg18
+    #	Could not open /cluster/data/hg18/12/chr12_random.agp
+    # Looks like it trys all _randoms (even one's that don't exist/aren't needed
+    # creates <file>.acc
+    # -rw-rw-r--   1   2653127 Feb  1 21:11 stsMarkers.lifted.psl.initial.acc
+    wc stsMarkers.lifted.psl.initial.acc
+    #	49926  349482 2653127 stsMarkers.lifted.psl.initial.acc
+
+    # determine found markers (4th field in file)
+    cut -f 4 stsMarkers.final | sort -n -u > stsMarkers.found
+    wc -l stsMarkers.found
+    #	49307 stsMarkers.found
+    #	out of 89401 total sequences
+
+    # extract sequences for markers not yet found, and
+    # blat w/o ooc to try to place more
+    comm -1 -3  stsMarkers.found /cluster/data/ncbi/sts.2006-01/all.STS.id \
+                > stsMarkers.notFound
+    wc -l stsMarkers.notFound
+    # 45538 stsMarkers.notFound
+
+    faSomeRecords /cluster/bluearc/sts.hg18/all.STS.fa stsMarkers.notFound \
+                notFound.STS.fa
+
+    mkdir /cluster/bluearc/sts.hg18/sts.splitNotFound
+    faSplit sequence notFound.STS.fa 20 \
+                /cluster/bluearc/sts.hg18/sts.splitNotFound/sts
+
+    # blat with 11.ooc misses alignments, so reblat w/o the
+    # sequences that aren't found
+    # NOTE: filtering produces yield of only 149 markers placed (out of 3142).
+    # not enough to justify this step next time
+    ssh kk
+    cd /cluster/data/hg18/bed/sts
+    mkdir run.noOoc
+    cd run.noOoc
+    ls -1S /cluster/bluearc/sts.hg18/maskedContigs/*.fa > contigs.lst
+    ls -1S /cluster/bluearc/sts.hg18/sts.splitNotFound/sts*.fa > sts.lst
+    mkdir -p /cluster/bluearc/hg18/sts/sts/out.noOoc
+
+    foreach f (`cat sts.lst`)
+        set d = $f:t:r
+        mkdir /cluster/bluearc/hg18/sts/sts/out.noOoc/$d
+    end
+
+cat > template << 'EOF'
+#LOOP
+blat $(path1) $(path2) -stepSize=5 {check out line+ /cluster/bluearc/hg18/sts/sts/out.noOoc/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'EOF'
+    # happy emacs
+
+    gensub2 contigs.lst sts.lst template jobList
+    para create jobList
+    # 7182 jobs written to batch
+    para try
+    para check
+XXXX - running 2006-02-01 22:00
 
 ###########################################################################
 # CREATE HAPLOTYPEPOS TRACK (DONE 1/31/06, Fan)
