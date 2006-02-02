@@ -6,7 +6,7 @@
 #include "common.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: dystring.c,v 1.21 2006/01/26 19:56:46 markd Exp $";
+static char const rcsid[] = "$Id: dystring.c,v 1.22 2006/02/02 16:24:24 kent Exp $";
 
 struct dyString *newDyString(int initialBufSize)
 /* Allocate dynamic string with initial buffer size.  (Pass zero for default) */
@@ -143,12 +143,19 @@ while (TRUE)
     va_list argscp;
     va_copy(argscp, args);
     avail = ds->bufSize - ds->stringSize;
+    if (avail <= 0)
+        {
+	/* Don't pass zero sized buffers to vsnprintf, because who knows
+	 * if the library function will handle it. */
+        dyStringExpandBuf(ds, ds->bufSize+ds->bufSize);
+	avail = ds->bufSize - ds->stringSize;
+	}
     sz = vsnprintf(ds->string + ds->stringSize, avail, format, argscp);
     va_end(argscp);
 
     /* note that some version return -1 if too small */
     if ((sz < 0) || (sz >= avail))
-        dyStringExpandBuf(ds, ds->bufSize*ds->bufSize);
+        dyStringExpandBuf(ds, ds->bufSize+ds->bufSize);
     else
         {
         ds->stringSize += sz;
