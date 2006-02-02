@@ -48,7 +48,7 @@
 #include "gbFileOps.h"
 #include "gbProcessed.h"
 
-static char const rcsid[] = "$Id: gbProcess.c,v 1.12 2005/08/22 19:55:36 markd Exp $";
+static char const rcsid[] = "$Id: gbProcess.c,v 1.13 2006/02/02 17:36:11 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -562,18 +562,21 @@ char *getEstDir(char *def, char *com)
 char *three = "3'";
 char *five = "5'";
 char *dir = NULL;
-boolean gotThreePrime, gotFivePrime;
+boolean gotThreeDef = FALSE, gotFiveDef = FALSE;
+boolean gotThreeCom = FALSE, gotFiveCom = FALSE;
 
-gotThreePrime = isThreePrime(def);
-gotFivePrime = isFivePrime(def);
-if (gotThreePrime ^ gotFivePrime)
-    dir = (gotThreePrime ? three : five);
+gotThreeDef = isThreePrime(def);
+gotFiveDef = isFivePrime(def);
+if (gotThreeDef ^ gotFiveDef)
+    dir = (gotThreeDef ? three : five);
 if (dir == NULL)
     {
-    gotThreePrime = isThreePrime(com);
-    gotFivePrime = isFivePrime(com);
-    dir = (gotThreePrime ? three : five);
+    gotThreeCom = isThreePrime(com);
+    gotFiveCom = isFivePrime(com);
+    if (gotThreeCom ^ gotFiveCom)
+        dir = (gotThreeCom ? three : five);
     }
+/* either didn't get 5' or 3' in def and com, or got both */
 return dir;
 }
 
