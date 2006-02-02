@@ -13,7 +13,7 @@
 #include "visiSearch.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.20 2006/02/02 17:15:24 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.21 2006/02/02 17:25:06 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -676,6 +676,31 @@ for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     }
 }
 
+static void visiGeneMatchProbeId(struct visiSearcher *searcher, 
+	struct sqlConnection *conn, struct slName *wordList)
+/* Fold in matches to a probe ID. */
+{
+struct slName *word;
+int wordIx;
+for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
+    {
+    char *name = word->name;
+    char *pat = "vgPrb_";
+    if (startsWith(pat,  name))
+        {
+	struct sqlResult *sr;
+	char **row, query[256];
+	int probeId = atoi(name + strlen(pat));
+	safef(query, sizeof(query),
+	    "select image from imageProbe where probe=%d", probeId);
+	sr = sqlGetResult(conn, query);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    visiSearcherAdd(searcher, sqlUnsigned(row[0]),  1.0, wordIx, 1);
+	sqlFreeResult(&sr);
+	}
+    }
+}
+
 static void addImagesMatchingBinomial(struct visiSearcher *searcher,
 	struct sqlConnection *conn, struct dyString *dy, char *binomial,
 	int startWord, int wordCount)
@@ -754,6 +779,7 @@ int wordCount = slCount(wordList);
 struct visiSearcher *searcher = visiSearcherNew(wordCount);
 visiGeneMatchContributor(searcher, conn, wordList);
 visiGeneMatchYear(searcher, conn, wordList);
+visiGeneMatchProbeId(searcher, conn, wordList);
 visiGeneMatchGene(searcher, conn, wordList);
 visiGeneMatchAccession(searcher, conn, wordList);
 visiGeneMatchBodyPart(searcher, conn, wordList);
