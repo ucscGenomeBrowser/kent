@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.43 2006/01/20 17:32:39 kent Exp $"
+#	"$Id: makeMm7.doc,v 1.44 2006/02/02 16:07:00 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -4686,7 +4686,7 @@ cat out/$1/*.out >>protRefRaw.psl
 
 # Build spMrna table
 
-   hgsql mm7 -N -e 'select name, proteinID from knownGene' >kgSpMrna.tab
+   hgsql mm7 -N -e 'select proteinID, name from knownGene' >kgSpMrna.tab
 
    hgsql mm7 -e  'drop table spMrna'
    hgsql mm7 <~/src/hg/lib/spMrna.sql
