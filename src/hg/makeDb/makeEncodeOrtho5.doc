@@ -4,8 +4,8 @@ exit;
 # Preparations for January 2006 freeze
 # Mercator predictions have been skipped
 # canFam2 is the only assembly being updated
-
-# perviously predicted fr1 sequences were filtered at 1000 bp and renumbered
+# previously predicted fr1 sequences were filtered at 1000 bp and renumbered
+# mm7 was processed so that the regions could be sent to NCBI (Deanna Church) for incorporation of new sequences
 
 set db    = canFam2
 set org   = dog
@@ -232,3 +232,32 @@ mkdir -p /cluster/data/encode/${ortho}/consensus
 cd /cluster/data/encode/${ortho}/consensus
 ln -s ../liftOver/${db}.bed  ${db}.encodeRegionsConsensus.bed
 ln -s ../liftOver/${db}.bed5 ${db}.encodeRegionsConsensus.bed5
+
+
+
+#######################
+set db    = mm7
+set org   = mouse
+set ortho = ortho5
+mkdir -p /cluster/data/encode/${ortho}/liftOver
+cd /cluster/data/encode/${ortho}/liftOver
+
+#hgsql hg17 -e "select chrom, chromStart, chromEnd, name from encodeRegions" | grep -v chromStart >! hg17.bed
+
+time liftOver -minMatch=0.01 -multiple -chainTable=hg17.chain${db:u} hg17.bed /cluster/data/hg17/bed/liftOver/hg17To${db:u}.over.chain.gz $db.unmerged.bed $db.unmapped.bed -verbose=4 >& $db.log
+# 51.760u 10.900s 4:54.00 21.3%   0+0k 0+0io 20583pf+0w
+liftOverMerge -mergeGap=20000 -verbose=2 $db.unmerged.bed $db.unfiltered.bed >>& $db.log
+## these next two steps are to remove small chunks and to renumber the remaining chunks
+awk ' $3-$2 > 30000 {print $0}' < $db.unfiltered.bed | grep -v chrM > $db.filtered.bed
+liftOverMerge -verbose=2 $db.filtered.bed $db.bed5 >>& $db.log 
+
+awk '{printf "%s\t%s\t%s\t%s_%s\n", $1, $2, $3, $4, $5}' ${db}.bed5 > ${db}.bed
+hgLoadBed -noBin ${db} encodeRegionsLiftOver  ${db}.bed >>& ${db}.log
+hgLoadBed -noBin ${db} encodeRegionsConsensus ${db}.bed >>& ${db}.log
+rm -f bed.tab
+
+mkdir -p /cluster/data/encode/${ortho}/consensus
+cd /cluster/data/encode/${ortho}/consensus
+ln -s ../liftOver/${db}.bed  ${db}.encodeRegionsConsensus.bed
+ln -s ../liftOver/${db}.bed5 ${db}.encodeRegionsConsensus.bed5
+
