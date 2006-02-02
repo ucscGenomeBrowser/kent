@@ -4,7 +4,7 @@
 #
 #  01-17-06
 #  determines if table is in split format and returns split name if so
-#  split out of getAssebmlies.csh
+#  pulled out of getAssebmlies.csh
 #  Robert Kuhn
 #
 #######################
@@ -72,7 +72,7 @@ if ( $machine == hgwdev || $machine == hgwbeta ) then
     set split=`hgsql -N $host -e 'SHOW TABLES LIKE "'${chrom}_$tablename'"' \
       $db | wc -l`
     if ( $split == 1 ) then
-      echo "split $chrom"
+      echo "$chrom"
     else 
       echo "unsplit"
     endif
