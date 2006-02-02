@@ -1,14 +1,6 @@
-/* vgGetText - Get text for full text indexing for VisiGene. */
-
-/* Note: this module is a little hacked.  At one point I was hoping
- * to do all the VisiGene search through the free text method.  
- * This ended up not working as well as the existing search methods.
- * So now just a few things * are done thought the full text method.  
- * This file still has some relics from when the full text search was (briefly) 
- * more inclusive. 
- *
- * What *IS* done through the full text is just the gene description.
- */
+/* vgGetText - Get text for full text indexing for VisiGene.
+ * This is just the kgRef.description for known genes associated
+ * with the visiGene genes. */
 
 #include "common.h"
 #include "linefile.h"
@@ -19,7 +11,7 @@
 #include "obscure.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: vgGetText.c,v 1.7 2006/02/02 19:12:02 kent Exp $";
+static char const rcsid[] = "$Id: vgGetText.c,v 1.8 2006/02/02 19:16:48 kent Exp $";
 
 char *db = "visiGene";
 
@@ -83,31 +75,6 @@ char buf[32];
 safef(buf, sizeof(buf), "%d", key);
 return hashMustFindVal(hash, buf);
 }
-
-void fillInTwoColHash(struct sqlConnection *conn, char *query, struct hash *hash)
-/* Fill in a hash from a two-column query.  First column is key,
- * second value. */
-{
-char **row;
-struct sqlResult *sr;
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    hashAdd(hash, row[0], lmCloneString(hash->lm, row[1]));
-sqlFreeResult(&sr);
-}
-
-struct hash *twoColHash(struct sqlConnection *conn, char *table)
-/* Create a hash keyed by first column of table with second column
- * as values. */
-/* Create a hash keyed by keyField, and with valField values */
-{
-struct hash *hash = hashSizedForTable(conn, table);
-char query[256];
-safef(query, sizeof(query), "select * from %s", table);
-fillInTwoColHash(conn, query, hash);
-return hash;
-}
-
 
 void hashComplexTables(struct sqlConnection *conn)
 /* Make hashes for more complicated tables. */
@@ -262,10 +229,7 @@ if (gene->name[0] != 0)
 hashFree(&uniqHash);
 }
 
-void imageText(struct sqlConnection *conn,
-	char *image, char *submissionSet, char *imageFile,
-	char *specimen, char *preparation, 
-	FILE *f)
+void imageText(struct sqlConnection *conn, char *image, FILE *f)
 /* Write out text associated with image to file */
 {
 char query[512], **row;
@@ -306,12 +270,9 @@ char query[512], **row;
 hashComplexTables(conn);
 makeKnownGeneHashes(knownDbCount, knownDbs);
 sr = sqlGetResult(imageConn, 
-    "select id,submissionSet,imageFile,specimen,preparation from image");
+    "select id from image");
 while ((row = sqlNextRow(sr)) != NULL)
-    {
-    imageText(conn, row[0], row[1], row[2], row[3], row[4], f);
-    }
-uglyTime("created saved text");
+    imageText(conn, row[0], f);
 sqlFreeResult(&sr);
 carefulClose(&f);
 }
