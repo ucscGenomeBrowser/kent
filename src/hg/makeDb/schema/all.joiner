@@ -994,7 +994,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.mmBlastTab.query
     $kgDb.rnBlastTab.query
     $kgDb.scBlastTab.query
-    $kgDb.dupSpMrna.mrnaID
+    $kgDb,!rn3,!mm5,!hg15.dupSpMrna.mrnaID
+    rn3,mm5,hg15.dupSpMrna.mrnaID minCheck=0.90
     $kgDb.pseudoGeneLink.kgName
     $kgDb.foldUtr3.name
     $kgDb.foldUtr5.name
