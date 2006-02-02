@@ -445,6 +445,7 @@ for (match = matchList; match != NULL; match = match->next)
     }
 }
 
+#ifdef SOON
 struct visiMatch *removeMutants(struct sqlConnection *conn,
 	struct visiMatch *matchList)
 /* Remove images that are associated with mutant genotypes
@@ -471,6 +472,7 @@ for (match = matchList; match != NULL; match = next)
 slReverse(&newList);
 return newList;
 }
+#endif /* SOON */
 
 void doFrame(struct sqlConnection *conn, boolean forceImageToList)
 /* Make a html frame page.  Fill frame with thumbnail, control bar,
@@ -484,8 +486,10 @@ struct slName *geneList, *gene;
 struct tempName matchTempName;
 char *matchFile = NULL;
 struct visiMatch *matchList = visiSearch(conn, listSpec);
+#ifdef SOON
 if (!cartUsualBoolean(cart, hgpIncludeMutants, FALSE))
     matchList = removeMutants(conn, matchList);
+#endif /* SOON */
 matchList = onePerImageFile(conn, matchList);
 weighMatches(conn, matchList);
 slSort(&matchList, visiMatchCmpWeight);
