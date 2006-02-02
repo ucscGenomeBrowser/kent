@@ -383,9 +383,11 @@ cgiMakeTextVar(hgpListSpec, listSpec, 16);
 cgiMakeButton(hgpDoSearch, "search");
 printf("</TD>");
 
+#ifdef SOON
 printf("<TD>");
 cgiMakeButton(hgpDoConfig, "configure");
 printf("</TD>");
+#endif /* SOON */
 
 printf("<TD>");
 printf("Zoom: ");
@@ -743,8 +745,10 @@ else if (cartVarExists(cart, hgpDoControls))
     doControls(conn);
 else if (cartVarExists(cart, hgpDoId))
     doId(conn);
+#ifdef SOON
 else if (cartVarExists(cart, hgpDoConfig))
     configPage(conn);
+#endif /* SOON */
 else if (cartVarExists(cart, hgpDoSearch))
     doDefault(conn, TRUE);
 else 
