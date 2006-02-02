@@ -58,10 +58,12 @@ void rTokInto(struct pfCompile *pfc, char *baseDir, char *modName,
 {
 struct dyString *pfPath = dyStringNew(0);
 struct dyString *pfhPath = dyStringNew(0);
+struct dyString *oPath = dyStringNew(0);
 char *fileName = NULL;
 struct pfModule *module;
 boolean isPfh = FALSE;
 struct pfToken *tok;
+
 
 /* Create path names, and make sure .pf file exists. */
 dyStringAppend(pfPath, baseDir);
@@ -70,6 +72,9 @@ dyStringAppend(pfPath, ".pf");
 dyStringAppend(pfhPath, baseDir);
 dyStringAppend(pfhPath, modName);
 dyStringAppend(pfhPath, ".pfh");
+dyStringAppend(oPath, baseDir);
+dyStringAppend(oPath, modName);
+dyStringAppend(oPath, ".o");
 if (!fileExists(pfPath->string))
     errAbort("Can't find %s", pfPath->string);
 
@@ -77,7 +82,7 @@ if (!fileExists(pfPath->string))
  * We can if it exists and is newer than module. */
 if (lookForPfh)
     {
-    if (fileExists(pfhPath->string))
+    if (fileExists(pfhPath->string) && fileExists(oPath->string))
 	{
 	if (fileModTime(pfhPath->string) > fileModTime(pfPath->string))
 	    {
@@ -94,7 +99,7 @@ module = tokenizeFile(pfc->tkz, fileName, modName);
 module->isPfh = isPfh;
 hashAdd(pfc->moduleHash, modName, module);
 
-/* Look and see if there are any 'into' to follow. */
+/* Look and see if there are any 'include' to follow. */
 for (tok = module->tokList; tok != NULL; tok = tok->next)
     {
     if (tok->type == pftInclude)
@@ -113,6 +118,7 @@ slAddHead(&pfc->moduleList, module);
 /* Clean up and go home. */
 dyStringFree(&pfPath);
 dyStringFree(&pfhPath);
+dyStringFree(&oPath);
 }
 
 static void addBuiltIn(struct pfCompile *pfc, char *code, char *modName)
