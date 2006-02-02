@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.34 2006/02/02 23:33:43 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.35 2006/02/02 23:41:13 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -4037,3 +4037,88 @@ done > cytobands.bed
     ssh hgwdev
     cd /cluster/data/hg18/bed/hinv
     hgMapToGene hg18 HInvGeneMrna knownGene knownToHInv
+
+# PRODUCE FUGU BLAT ALIGNMENT (DONE - 2006-02-02 - Fan)
+
+    # Use masked scaffolds from fr1 assembly (same sequence as
+    # previous BlatFugu, however it's repeat and TRF-masked).
+
+    ssh kk
+    mkdir /cluster/data/hg18/bed/blatFr1
+    cd /cluster/data/hg18/bed/blatFr1
+    mkdir psl 
+    # next time, use N?_?????? (to pick up NG_ contigs)
+    foreach f ( `cat /cluster/data/hg18/contig.lst` )
+      set c=$f:t:r
+      echo $c
+      mkdir psl/$c
+    end
+
+    # create cluster job
+    mkdir run
+    cd run
+    ls -1S /iscratch/i/fugu/trfFa/*.fa > fugu.lst
+    ls -1S /scratch/hg/gs.19/build36/maskedContigs/*.fa > human.lst
+cat << 'EOF' > gsub
+#LOOP
+/cluster/bin/i386/blat -mask=lower -qMask=lower -q=dnax -t=dnax {check in line+ $(path1)} {check in line+ $(path2)} {check out line+ /cluster/data/hg18/bed/blatFr1/psl/$(root1)/$(root1)_$(root2).psl}
+#ENDLOOP
+'EOF'
+    # << keep emacs happy
+    gensub2 human.lst fugu.lst gsub jobList
+    para create jobList
+    # 218484 jobs written to batch
+    para try
+    para check
+    para push -maxQueue=300000 -maxPush=220000
+    para check
+# Completed: 218484 of 218484 jobs
+# CPU time in finished jobs:    5073329s   84555.48m  1409.26h   58.72d  0.161 y
+# IO & Wait Time:                692572s   11542.87m   192.38h    8.02d  0.022 y
+# Average job time:                  26s       0.44m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             910s      15.17m     0.25h    0.01d
+# Submission to last job:         14753s     245.88m     4.10h    0.17d
+
+        # cd ../psl
+        # count files with aligments
+        # find . -not -size 427c | wc -l
+        # 44458
+        # count files with no aligments
+        # find . -size 427c | wc -l
+        # 174405
+
+   # When cluster run is done, sort alignments
+   # into chrom directory
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/blatFr1
+    pslCat -dir psl/N?_?????? | \
+      liftUp -type=.psl stdout \
+      /cluster/data/hg18/jkStuff/liftAll.lft warn stdin | \
+      pslSortAcc nohead chrom temp stdin
+
+    # Processed 218887 lines into 1 temp files
+
+    # Rename to correspond with tables and load into database:
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blatFr1/chrom
+    foreach i (chr*.psl)
+        set r = $i:r
+        echo mv $i ${r}_blatFr1.psl
+        mv $i ${r}_blatFr1.psl
+    end
+
+    # lift fugu scaffolds to Fugu browser chrUn,
+    # so you can link to other browser.  And don't need to load sequence
+    cd /cluster/data/hg18/bed/blatFr1
+    liftUp -pslQ all.psl /cluster/data/fr1/fugu_v3.masked.lft warn chrom/*.psl
+
+    hgLoadPsl -table=blatFr1 hg18 all.psl
+
+    nice featureBits hg18 blatFr1 refGene:CDS
+    # 14636876 bases of 2881515245 (0.508%) in intersection
+    nice featureBits hg17 blatFr1 refGene:CDS
+    # 14488047 bases of 2866216770 (0.505%) in intersection
+
+
+
