@@ -11,8 +11,9 @@
 #include "jksql.h"
 #include "visiGene.h"
 #include "visiSearch.h"
+#include "trix.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.19 2006/02/01 19:35:13 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.20 2006/02/02 17:15:24 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -720,6 +721,27 @@ visiGeneMatchMultiWord(searcher, conn, wordList, "uniProt.commonName", "val",
     addImagesMatchingCommonName);
 }
 
+static void visiGeneMatchDescription(struct visiSearcher *searcher, 
+	struct sqlConnection *conn, struct slName *wordList)
+/* Fold in matches to description - using full text index. */
+{
+char *ixFile = "/gbdb/visiGene.ix";
+struct trix *trix = trixOpen("/gbdb/visiGene/visiGene.ix");
+struct slName *word;
+int wordIx;
+
+for (word=wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
+    {
+    char *s = word->name;
+    struct trixSearchResult *tsr, *tsrList = trixSearch(trix, 1, &s, TRUE);
+    for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
+        visiSearcherAdd(searcher, sqlUnsigned(tsr->itemId), 1.0, wordIx, 1);
+    trixSearchResultFreeList(&tsrList);
+    }
+
+trixClose(&trix);
+}
+
 struct visiMatch *visiSearch(struct sqlConnection *conn, char *searchString)
 /* visiSearch - return list of images that match searchString sorted
  * by how well they match. This will search most fields in the
@@ -739,6 +761,7 @@ visiGeneMatchSex(searcher, conn, wordList);
 visiGeneMatchStage(searcher, conn, wordList);
 visiGeneMatchSubmitId(searcher, conn, wordList);
 visiGeneMatchOrganism(searcher, conn, wordList);
+visiGeneMatchDescription(searcher, conn, wordList);
 matchList = visiSearcherSortResults(searcher, conn);
 searcher->matchList = NULL; /* Transferring memory ownership to return val. */
 visiSearcherFree(&searcher);
