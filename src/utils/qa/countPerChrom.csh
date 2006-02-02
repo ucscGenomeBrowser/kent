@@ -18,6 +18,7 @@ endif
 set db=""
 set oldDb=""
 set table=""
+set tableName=""
 set machine2=""
 set host2=""
 set chrom="chrom"
@@ -27,6 +28,7 @@ set new=""
 set onlyOne=0
 set machineOut=""
 set ok=0
+set split=""
 
 if ($#argv < 2 ||  $#argv > 4) then
   # no command line args
@@ -43,6 +45,7 @@ if ($#argv < 2 ||  $#argv > 4) then
 else
   set db=$argv[1]
   set table=$argv[2]
+  set tableName=$table
 endif
 
 if ($#argv > 2) then
@@ -63,8 +66,16 @@ endif
 # echo "machine2 = $machine2"
 # echo "table = $table"
 
+set chroms=`hgsql -N -e "SELECT chrom FROM chromInfo" $db`
+set split=`getSplit.csh $db $table`
+
+if ($split != "unsplit") then
+  set tableName=${split}_$table
+  echo "\nsplit tables. e.g., $tableName"
+endif
+
 # check if maybe chrom is called tName
-hgsql -e "DESC $table" $db | egrep -w tName > /dev/null 
+hgsql -e "DESC $tableName" $db | egrep -w tName > /dev/null 
 if (! $status ) then
   set chrom="tName"
   echo 'chrom is "tName"'
@@ -72,7 +83,7 @@ if (! $status ) then
 endif 
 
 # check if maybe chrom is called genoName (prob only rmsk)
-hgsql -e "DESC $table" $db | egrep -w genoName > /dev/null 
+hgsql -e "DESC $tableName" $db | egrep -w genoName > /dev/null 
 if (! $status ) then
   set chrom="genoName"
   echo 'chrom is "genoName"'
@@ -80,7 +91,7 @@ if (! $status ) then
 endif 
 
 # final check to see chrom-like field present
-hgsql -e "DESC $table" $db | egrep -w chrom > /dev/null 
+hgsql -e "DESC $tableName" $db | egrep -w chrom > /dev/null 
 if (! $status ) then
   set ok=1
 endif 
@@ -95,12 +106,13 @@ endif
 
 echo
 
-set chroms=`hgsql -N -e "SELECT chrom FROM chromInfo" $db`
-
 # output header
 echo "chrom \t$db \t$oldDb$machineOut"
 
 foreach x (`echo $chroms | sed -e "s/ /\n/g" | grep -v random`)
+  if ($split != "unsplit") then
+    set table="${x}_$table"
+  endif
   set new=`nice hgsql -N -e 'SELECT COUNT(*) FROM '$table' \
      WHERE '$chrom' = "'$x'"' $db`
   if ($onlyOne == 0) then
@@ -109,10 +121,14 @@ foreach x (`echo $chroms | sed -e "s/ /\n/g" | grep -v random`)
   endif 
   # output
   echo "$x\t$new\t$old"
+  set table=$argv[2]
 end
 
 # do randoms separately
 foreach x (`echo $chroms | sed -e "s/ /\n/g" | grep random`)
+  if ($split != "unsplit") then
+    set table="${x}_$table"
+  endif
   set new=`nice hgsql -N -e 'SELECT COUNT(*) FROM '$table' \
      WHERE '$chrom' = "'$x'"' $db`
   if ($onlyOne == 0) then
@@ -120,5 +136,6 @@ foreach x (`echo $chroms | sed -e "s/ /\n/g" | grep random`)
       WHERE '$chrom' = "'$x'"' $oldDb`
   endif
   echo "$x\t$new\t$old"
+  set table=$argv[2]
 end
 
