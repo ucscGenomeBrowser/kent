@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.177 2006/01/27 07:13:34 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.178 2006/02/02 02:50:30 kent Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -570,6 +570,15 @@ struct hgPos *posList = NULL, *pos;
 struct tsrPos *tpList = NULL, *tp;
 struct sqlResult *sr;
 char **row;
+int maxToReturn = 500;
+
+if (slCount(tsrList) > maxToReturn)
+    {
+    warn("Search terms are not very specific, only showing first %d matching known genes.",
+    	maxToReturn);
+    tsr = slElementFromIx(tsrList, maxToReturn-1);
+    tsr->next = NULL;
+    }
 
 /* Make hash of all search results - one for each known gene ID. */
 for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
