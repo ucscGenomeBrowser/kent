@@ -10,7 +10,7 @@
 #include "gbFileOps.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbParse.c,v 1.13 2005/08/22 19:55:35 markd Exp $";
+static char const rcsid[] = "$Id: gbParse.c,v 1.14 2006/02/02 17:16:37 markd Exp $";
 
 
 /* Some fields we'll want to use directly. */
@@ -231,7 +231,7 @@ slAddTail(&gbs, c0);
 /* FEATURES source */
 c1 = newField("source", NULL, GBF_NONE, 128);
 slAddTail(&c0->children, c1);
-c2 = newField("/clone_lib", "lib", GBF_TRACK_VALS, 128);
+c2 = newField("/clone_lib", "lib", GBF_TRACK_VALS|GBF_MULTI_LINE, 128);
 slAddTail(&c1->children, c2);
 
 gbCloneField = c2 = newField("/clone", "clo", GBF_NONE, 128);
@@ -246,7 +246,7 @@ slAddTail(&c1->children, c2);
 gbDevStageField = c2 = newField("/dev_stage", "dev", GBF_TRACK_VALS|GBF_MULTI_LINE, 128);
 slAddTail(&c1->children, c2);
     
-c2 = newField("/cell_line", "cel", GBF_TRACK_VALS, 128);
+c2 = newField("/cell_line", "cel", GBF_TRACK_VALS|GBF_MULTI_LINE, 128);
 slAddTail(&c1->children, c2);
     
 gbChromosomeField = c2 = newField("/chromosome", "chr", GBF_TRACK_VALS, 16);
