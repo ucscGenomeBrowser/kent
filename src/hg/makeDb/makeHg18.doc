@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.30 2006/02/01 23:55:26 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.31 2006/02/02 01:23:13 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -3407,11 +3407,86 @@ TMPDIR=/scratch/tmp
     #   all.STS.fa, stsAlias.bed files 
     updateStsInfo -verbose=1 -gb=UniSTS.acc stsInfo2.bed.prev all.STS.fa.prev \
     UniSTS.sts UniSTS.aliases UniSTS.convert.fa new
+# 5610    MFD330  1000006 (0) not in dbSTS anymore
+# 5667    D3S4560 1000008 (0) not in dbSTS anymore
+# 5686    ATA92F01        1000007 (0) not in dbSTS anymore
+# 5945    MFD206  1000009 (0) not in dbSTS anymore
+# 6213    D6S109  1000010 (0) not in dbSTS anymore
+# 6591    MFD311  1000011 (0) not in dbSTS anymore
+# 6841    MFD306  1000013 (0) not in dbSTS anymore
+# 6842    MFD310  1000012 (0) not in dbSTS anymore
+# 6844    MFD349  1000026 (0) not in dbSTS anymore
+# 7024    D12S2343        1000015 (0) not in dbSTS anymore
+# 7042    ATA73C05        1000014 (0) not in dbSTS anymore
+# 7226    MFD341  1000016 (0) not in dbSTS anymore
+# 7419    D16S3401        1000017 (0) not in dbSTS anymore
+# 7500    D17S2200        1000018 (0) not in dbSTS anymore
+# 7628    ATA92E03        1000020 (0) not in dbSTS anymore
+# 7642    GATA178F11      1000019 (0) not in dbSTS anymore
+# 7910    MFD338  1000022 (0) not in dbSTS anymore
+# 97723   GATA172D05      1000023 (0) not in dbSTS anymore
+# 129991  SWXD2599        99622   (0) not in dbSTS anymore
+# 166473  D3S3812 154523  (0) not in dbSTS anymore
+# 185776  RH83562 209614  (0) not in dbSTS anymore
+# 205088  CPLA3610        1000000 (0) not in dbSTS anymore
+# 205089  COX_1935        1000001 (0) not in dbSTS anymore
+# 205090  24534CA2        1000002 (0) not in dbSTS anymore
+# 205091  D5S811  1000003 (0) not in dbSTS anymore
+# 205092  AC016604-5      1000004 (0) not in dbSTS anymore
+# 205093  CA-JAP-180      1000005 (0) not in dbSTS anymore
+# 205094  D10S1120        1000025 (0) not in dbSTS anymore
+# 205095  D21S2039        1000024 (0) not in dbSTS anymore
+# 205102  D12S1013        1000028 (0) not in dbSTS anymore
 
-# Reading current stsInfo file
-# Reading genbank accession file
-# Reading current dbSTS.sts file
-# Segmentation fault
+    mv new.info stsInfo2.bed
+    mv new.primers all.primers
+    mv new.alias stsAlias.bed
+    mv new.fa all.STS.fa
+
+    # get list of all STS id's in the fasta file
+    sed -n 's/^>\([0-9][0-9]*\) .*/\1/p' all.STS.fa | sort -n >  all.STS.id
+    wc -l all.STS.id
+        # 89401 total sequences
+    /cluster/bin/scripts/convertPrimerToFA all.primers > all.primers.fa
+
+    # Copy stsInfo2.bed and stsAlias.bed to data directory becuase
+    # these will be loaded into the database later
+    mkdir -p /cluster/data/hg18/bed/sts
+    cp -p stsInfo2.bed /cluster/data/hg18/bed/sts/
+    cp -p stsAlias.bed /cluster/data/hg18/bed/sts/
+
+    # Create sts sequence alignments
+    mkdir -p /cluster/bluearc/sts.hg18/sts.split
+    faSplit sequence all.STS.fa 50 /cluster/bluearc/sts.hg18/sts.split/sts
+    cp -p all.STS.fa /cluster/bluearc/sts.hg18
+
+    ssh kk
+    cd /cluster/data/hg18/bed/sts
+    mkdir run
+    cd run
+    ls -1S /cluster/bluearc/sts.hg18/maskedContigs/*.fa > contigs.lst
+    ls -1S /cluster/bluearc/sts.hg18/sts.split/sts*.fa > sts.lst
+    mkdir -p /cluster/bluearc/hg18/sts/sts/out
+    foreach f (`cat sts.lst`)
+        set d = $f:t:r
+        mkdir /cluster/bluearc/hg18/sts/sts/out/$d
+    end
+
+    # create alignments
+cat > template << 'EOF'
+#LOOP
+blat $(path1) $(path2) -ooc=/san/sanvol1/scratch/hg18/11.ooc -stepSize=5 {check out line+ /cluster/bluearc/hg18/sts/sts/out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'EOF'
+    # happy emacs
+
+    gensub2 contigs.lst sts.lst template jobList
+    para create jobList
+        # 17766 jobs
+    para try
+    para check
+XXX - running 2006-02-01
+    para push
 
 ###########################################################################
 # CREATE HAPLOTYPEPOS TRACK (DONE 1/31/06, Fan)
