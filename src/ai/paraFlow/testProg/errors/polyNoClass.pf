@@ -1,0 +1,4 @@
+polymorphic to hello()
+    {
+    print("Hello");
+    }
