@@ -13,6 +13,7 @@ return
 "to lineIn() into string s;\n"
 "to randNum() into double zeroToOne;\n"
 "to randInit();\n"
+"to sqrt(double x) into double y;\n"
 "to getEnvArray() into array of string envArray;\n"
 "to milliTicks() into long milliseconds;\n"
 "to floatString(double f, int digitsBeforeDecimal=0, \n"
