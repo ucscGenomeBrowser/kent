@@ -9,7 +9,7 @@ table hgnc
 	string prvSymbols;	"Previous Symbols"
 	string prvNames;	"Previous Names"
 	string aliases;		"Aliases"
-	string chrom;		"Chromosome"
+	string chrom;		"Reference sequence chromosome or scaffold"
 	string dateApprv;	"Date Approved"
 	string dateMod;		"Date Modified"
 	string dateChange;	"Date Name Changed"

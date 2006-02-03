@@ -1,7 +1,7 @@
 table tRNAs
 "transfer RNA genes"
   (
-  string chrom;      "chromosome"
+  string chrom;      "Reference sequence chromosome or scaffold"
   uint chromStart;   "Start position in chromosome"
   uint chromEnd;     "End position in chromosome"
   string name;       "transfer RNA gene name"

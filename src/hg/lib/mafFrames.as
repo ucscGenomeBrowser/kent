@@ -1,7 +1,7 @@
 table mafFrames
 "codon frame assignment for MAF components"
     (
-    string chrom;      "Chromosome"
+    string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start range in chromosome"
     uint   chromEnd;   "End range in chromosome"
     string src;        "Name of sequence source in MAF"

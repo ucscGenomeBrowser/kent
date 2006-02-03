@@ -2,7 +2,7 @@ table hgMut
 "track for human mutation data"
     (
     ushort  bin;            "A field to speed indexing"
-    string  chrom;          "Chromosome"
+    string  chrom;          "Reference sequence chromosome or scaffold"
     uint    chromStart;     "Start position in chrom"
     uint    chromEnd;       "End position in chrom"
     string  name;           "HGVS description of mutation."
