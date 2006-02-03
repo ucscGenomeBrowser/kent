@@ -221,14 +221,14 @@ if (endPhase < 5)
     return;
 verbose(2, "Phase 5 - type checking\n");
 pfTypeCheck(pfc, &program);
+pfParseDump(program, 0, typeF);
+carefulClose(&typeF);
 
 if (endPhase < 6)
     return;
 verbose(2, "Phase 6 - polymorphic, para, and flow checks\n");
 pfCheckScopes(pfc, pfc->scopeList);
 pfCheckParaFlow(pfc, program);
-pfParseDump(program, 0, typeF);
-carefulClose(&typeF);
 printScopeInfo(scopeF, 0, program);
 carefulClose(&scopeF);
 
