@@ -14,7 +14,7 @@
 static boolean enclosedScope(struct pfScope *outer, struct pfScope *inner)
 /* Return true if inner is the same or is inside of outer. */
 {
-for ( ; inner != NULL; inner = inner->next)
+for ( ; inner != NULL; inner = inner->parent)
     if (inner == outer)
        return TRUE;
 return FALSE;
@@ -40,6 +40,7 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     checkLocal(outsideOk, localScope, pp);
 }
 
+
 static void checkReadOnlyOutsideLocals(struct hash *outsideWriteOk,
 	struct pfScope *localScope, struct pfParse *pp)
 /* Check that anything on left hand side of an assignment
@@ -54,6 +55,9 @@ switch (pp->type)
     case pptDivEquals:
          {
 	 checkLocal(outsideWriteOk, localScope, pp->children);
+	 /* TODO - make sure that they don't write to
+	  * an outside object that has been assigned to a local
+	  * variable either. */
 	 break;
 	 }
     }
@@ -61,11 +65,41 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     checkReadOnlyOutsideLocals(outsideWriteOk, localScope, pp);
 }
 
+static void checkCalls(struct pfCompile *pfc, struct pfParse *pp, boolean paraOk)
+/* Check that all calls are of type flow, or optionally
+ * of type flow or type para. */
+{
+switch (pp->type)
+    {
+    case pptCall:
+         {
+	 struct pfParse *ppFuncVar = pp->children;
+	 struct pfBaseType *base = ppFuncVar->ty->base;
+	 if (base == pfc->flowType)
+	     ;
+	 else if (paraOk && base == pfc->paraType)
+	     ;
+	 else
+	     {
+	     if (paraOk)
+	         errAt(pp->tok, 
+		    "Only calls to para and flow functions allowed inside a para function");
+	     else
+	         errAt(pp->tok, 
+		    "Only calls to other flow functions allowed inside a flow function");
+	     }
+	 break;
+	 }
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    checkCalls(pfc, pp, paraOk);
+}
+
 static void checkPara(struct pfCompile *pfc, struct pfParse *paraDec)
 /* Make sure that paraDec does not write to anything but
  *   1) It's output.
  *   2) Local variables.
- *   3) It's first input parameter. */
+ */
 {
 struct pfParse *input = paraDec->children->next;
 struct pfParse *output = input->next;
@@ -73,15 +107,12 @@ struct pfParse *body = output->next;
 struct pfParse *pp;
 struct hash *outerWriteOk = hashNew(6);
 
-/* Check that have at least one input parameter. */
-if ((pp = input->children) == NULL)
-    errAt(input->tok, "Para declarations need at least one parameter");
-
+uglyf("checkPara %s\n", paraDec->name);
 /* Build up hash of variables that it's ok to write to. */
-hashAdd(outerWriteOk, pp->name, NULL);
 for (pp = output->children; pp != NULL; pp = pp->next)
     hashAdd(outerWriteOk, pp->name, NULL);
 
+checkCalls(pfc, body, TRUE);
 checkReadOnlyOutsideLocals(outerWriteOk, body->scope, body);
 
 /* Clean up */
