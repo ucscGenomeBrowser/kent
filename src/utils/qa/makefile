@@ -23,7 +23,7 @@ install:
 	cp -p --remove-destination compareWholeTable.csh   ${SCRIPTS}
 	cp -p --remove-destination countPerChrom.csh       ${SCRIPTS}
 	cp -p --remove-destination countRows.csh           ${SCRIPTS}
-        cp -p --remove-destination dbUpdateTimes.csh       ${SCRIPTS}
+	cp -p --remove-destination dbUpdateTimes.csh       ${SCRIPTS}
 	cp -p --remove-destination dropUserTables.csh      ${SCRIPTS}
 	cp -p --remove-destination dumpEmpty.csh           ${SCRIPTS}
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
