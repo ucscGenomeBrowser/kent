@@ -13,7 +13,7 @@
 #include "visiSearch.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.21 2006/02/02 17:25:06 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.22 2006/02/03 21:29:12 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -150,10 +150,6 @@ for (match = searcher->matchList; match != NULL; match = next)
 	    dyStringAppendC(query, ',');
 	dyStringPrintf(query, "%d", match->imageId);
 	++passCount;
-	}
-    else
-        {
-	visiMatchFree(&match);
 	}
     }
 dyStringAppendC(query, ')');
