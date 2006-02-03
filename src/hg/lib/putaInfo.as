@@ -1,13 +1,13 @@
 table putaInfo
 "store the general info for a putative real or pseudo gene"
     (
-     string chrom; "stamp's chrom"
+     string chrom; "stamp's chromosome or scaffold"
      uint chromStart; "stamp's chrom start"
      uint chromEnd; "stamp's chromEnd"
      string name; "stamp's name"
      uint score;  "aligned score"
      string strand; "stamp's strand"
-     string oChrom;    "stamper chrom"
+     string oChrom;    "stamper chromosome or scaffold"
      uint oChromStart; "stamper chrom start"
      uint oChromEnd; "stamper chrom end"
      uint blockCount; "total stamper blocks"
