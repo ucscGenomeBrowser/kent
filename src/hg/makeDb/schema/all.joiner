@@ -498,8 +498,9 @@ identifier pseudoGeneName
 
 identifier mrnaBlastzName
 "Link together mrnaBlastz and pseudoMrna"
-    hg16.mrnaBlastz.qName dupeOk
-    hg16.pseudoMrna.qName
+    $hg.mrnaBlastz.qName dupeOk
+    $hg,!hg16.pseudoMrna.qName
+    hg16.pseudoMrna.qName minCheck=0.76
 
 # Microarray stuff.
 
