@@ -1,0 +1,11 @@
+int a = 1;
+
+para test(int x)
+    {
+    int y=3;
+    y = 5;
+    a = 2;
+    print(a);
+    }
+
+test(3);

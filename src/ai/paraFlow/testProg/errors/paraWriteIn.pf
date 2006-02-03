@@ -1,0 +1,10 @@
+
+
+para test(string in)
+    {
+    in = "hello";
+    print(in);
+    }
+
+
+test("goodbye");
