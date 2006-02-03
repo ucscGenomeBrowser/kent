@@ -1,7 +1,7 @@
 table genMapDb
 "Clones positioned on the assembly by U Penn (V. Cheung)"
     (
-    string chrom;	"Chromosome or 'unknown'"
+    string chrom;	"Reference sequence chromosome or scaffold"
     int chromStart;     "Start position in chrom - negative 1 if unpositioned"
     uint chromEnd;	"End position in chrom"
     string name;	"Name of Clone"
