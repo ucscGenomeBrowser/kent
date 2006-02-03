@@ -1,7 +1,7 @@
 table affyProbe
 "Data about an individual affy probe."
 (
-string chrom;                "Chromosome."
+string chrom;                "Reference sequence chromosome or scaffold"
 uint chromStart;             "Chrom start."
 uint chromEnd;               "End."
 string psName;               "Probe Set name."

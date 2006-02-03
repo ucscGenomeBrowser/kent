@@ -1,7 +1,7 @@
 table shgcTngMap
 "Shows the results of SHGC-TNG radiation hybrid mapping"
 (
-string chrom;	"FPC conting"
+string chrom;	"Reference sequence chromosome or scaffold"
 uint chromStart;	"Start position in chrom;
 uint chromEnd;	"End position in chrom;
 string name;	"Name of STS marker"

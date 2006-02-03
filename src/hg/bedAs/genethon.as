@@ -1,7 +1,7 @@
 table mapGenethon
 "Shows the results of Genethon radiation hybrid mapping"
 (
-string chrom;	"Chromosome"
+string chrom;	"Reference sequence chromosome or scaffold"
 uint chromStart; "Start position in chrom"
 uint chromEnd;	"End position in chrom"
 string name;	"Name of STS marker"

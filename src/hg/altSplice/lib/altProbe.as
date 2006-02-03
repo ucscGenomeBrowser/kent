@@ -1,7 +1,7 @@
 table altProbe
 "Little info about the probe sets for altGraphX."
 (
-    string chrom;             "Chromosome."
+    string chrom;             "Reference sequence chromosome or scaffold"
     int chromStart;          "Chromosome Start."
     int chromEnd;            "Chromosome End."
     int type;                "Type of splicing event 2==cassette."

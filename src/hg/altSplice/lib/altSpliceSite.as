@@ -1,7 +1,7 @@
 table altSpliceSite
 "Structre to hold information about one splice site in graph."
 (
-string chrom;                "Chromosome."
+string chrom;                "Reference sequence chromosome or scaffold"
 uint chromStart;             "Chrom start."
 uint chromEnd;               "End."
 string agName;               "Name of altGraphX that edge is from. Memory not owned here."
