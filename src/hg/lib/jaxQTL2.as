@@ -1,7 +1,7 @@
 table jaxQTL2
 "Quantitative Trait Loci from Jackson Labs / Mouse Genome Informatics"
     (
-    string chrom;      "chromosome"
+    string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"
     uint   chromEnd;   "End position in chromosome"
     string name;       "Name of item"

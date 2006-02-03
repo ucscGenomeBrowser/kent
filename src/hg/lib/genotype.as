@@ -3,7 +3,7 @@ table genotype
 (
 string	rsId;		" rs#		# rs10"
 char[3]	SNPalleles;	" SNPalleles	# A/C"
-string	chrom;		" chrom		# Chr7"
+string	chrom;		"Reference sequence chromosome or scaffold"
 int	chromStart;	" pos		# 91995917"
 char	strand;		" strand	# +"
 string	assembly;	" genome_build	# ncbi_b34"

@@ -2,7 +2,7 @@ table knownGene
 "Protein coding genes based on proteins from SWISS-PROT, TrEMBL, and TrEMBL-NEW and their corresponding mRNAs from GenBank"
 (
 string  name;               "Name of gene"
-string  chrom;              "Chromosome name"
+string  chrom;              "Reference sequence chromosome or scaffold"
 char[1] strand;             "+ or - for strand"
 uint    txStart;            "Transcription start position"
 uint    txEnd;              "Transcription end position"

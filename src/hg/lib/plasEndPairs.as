@@ -2,7 +2,7 @@ table plasEndPairs
 "Standard linked features series table"
    (
    short  bin;        "Bin number for browser speedup"
-   string chrom;      "Human chromosome or FPC contig"
+   string chrom;      "Reference sequence chromosome or scaffold"
    uint   chromStart; "Start position of clone in chromosome"
    uint   chromEnd;   "End position of clone in chromosome"
    string name;       "Name of clone"

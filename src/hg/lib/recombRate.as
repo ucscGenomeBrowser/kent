@@ -1,7 +1,7 @@
 table recombRate
 "Describes the recombination rate in 1Mb intervals based on deCODE map"
    (
-   string chrom;    "Human chromosome number"
+   string chrom;    "Reference sequence chromosome or scaffold"
    uint   chromStart;  "Start position in genoSeq"
    uint   chromEnd;    "End position in genoSeq"
    string name;       "Constant string recombRate"

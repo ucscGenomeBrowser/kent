@@ -1,7 +1,7 @@
 table sample
 "Any track that has samples to display as y-values (first 6 fields are bed6)"
 (
-string chrom;         "Human chromosome or FPC contig"
+string chrom;         "Reference sequence chromosome or scaffold"
 uint chromStart;      "Start position in chromosome"
 uint chromEnd;        "End position in chromosome"
 string name;          "Name of item"

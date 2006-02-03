@@ -1,7 +1,7 @@
 table mcnBreakpoints
 "Chromosomal breakpoints from the MCN Project"
         (
-        string chrom;    "Human chromosome number"
+        string chrom;    "Reference sequence chromosome or scaffold"
         uint   chromStart;  "Start position in genoSeq"
         uint   chromEnd;    "End position in genoSeq"
         string name;       "Shortened Traitgroup Name"

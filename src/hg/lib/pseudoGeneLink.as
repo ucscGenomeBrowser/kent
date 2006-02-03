@@ -1,7 +1,7 @@
 table pseudoGeneLink
 "links a gene/pseudogene prediction to an ortholog or paralog."
     (
-    string chrom;	"Chromosome name for pseudogene"
+    string chrom;	"Reference sequence chromosome or scaffold"
     uint chromStart;	"pseudogene alignment start position"
     uint chromEnd;      "pseudogene alignment end position"
     string name;        "Name of pseudogene"

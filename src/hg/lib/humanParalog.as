@@ -1,7 +1,7 @@
 table humanParalog
 "Human Paralog"
 (
-string chrom;       "Human Chrom"
+string chrom;       "Reference sequence chromosome or scaffold"
 uint chromStart;       "Start on Human"
 uint chromEnd;         "End on Human"
 string name;   "Human Gene Prediction - paralog"
