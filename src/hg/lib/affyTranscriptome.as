@@ -1,7 +1,7 @@
 table affyTranscriptome
 "Affymetrix Transcriptome"
 (
-	string	chrom;		"Chromosome"
+	string	chrom;		"Reference sequence chromosome or scaffold"
 	uint 	chromStart;	"Start in Chromosome"
 	uint	chromEnd;	"End in Chromosome"
 	string	name;		"Name"

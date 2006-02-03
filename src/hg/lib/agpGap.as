@@ -1,7 +1,7 @@
 table agpGap
 "Gaps in golden path"
     (
-    string chrom;	"which chromosome"
+    string chrom;	"Reference sequence chromosome or scaffold"
     uint chromStart;	"start position in chromosome"
     uint chromEnd;	"end position in chromosome"
     int ix;             "ix of this fragment (useless)"

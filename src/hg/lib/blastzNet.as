@@ -1,7 +1,7 @@
 table blastzNet
 "blastz netting file "
 (
-string chrom;       "Human Chrom"
+string chrom;       "Reference sequence chromosome or scaffold"
 uint chromStart;       "Start on Human"
 uint chromEnd;         "End on Human"
 string name;   "Mouse Chromosome"

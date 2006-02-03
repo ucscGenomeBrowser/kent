@@ -3,7 +3,7 @@ table axtInfo
     (
     char[25] species; "long name of species"
     char[35] alignment; "name of alignment"
-    string chrom;	"chromosome name"
+    string chrom;	"Reference sequence chromosome or scaffold"
     string fileName;    "axt  file name "
     int sort;          "sort order"
     )

@@ -2,7 +2,7 @@ table alleleFreqs
 "Allele Frequencies from HapMap"
 (
 string 	rsId; 		" rs			rs2104604"
-string	chrom;		" chrom			Chr1"
+string	chrom;		"Reference sequence chromosome or scaffold"
 int	chromStart;	" pos			101809619"
 char	strand;		" strand		+"
 string	assembly;	" build			ncbi_b34"

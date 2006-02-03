@@ -1,7 +1,7 @@
 table affyTransLifted
 "Data file format for Affymetrix transcriptome data from Simon Cawley which has been normalized and lifted to a new assembly of the human genome."
 (
- string chrom;  "Chromosome in hs.NCBIfreeze.chrom fomat originally"
+ string chrom;  "Reference sequence chromosome or scaffold"
  uint chromPos; "Coordinate in chromosome (location of central base of the 25-mer)"
  int xCoord;    "x-coordinate (column) of PM feature on chip"
  int yCoord;    "y-coordinate (row) of PM feature on chip"

@@ -1,7 +1,7 @@
 table bgiSnp
 "Beijing Genomics Institute SNP information as bed 4 +"
     (
-    string chrom;	"Chromosome"
+    string chrom;	"Reference sequence chromosome or scaffold"
     uint   chromStart;	"Start position in chromosome"
     uint   chromEnd;	"End position in chromosome"
     string name;	"BGI SNP name: snp.superctg.ctg.pos.type.strainID"
