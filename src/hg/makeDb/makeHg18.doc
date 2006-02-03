@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.35 2006/02/02 23:41:13 fanhsu Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.36 2006/02/03 06:20:09 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -2988,131 +2988,144 @@ while (my $line = <>) {
 
 ############################################################################
 # BACEND SEQUENCE ALIGNMENTS (STARTED - 2006-01-11, DONE 2006-01-18 - Fan)
-    ssh kkstore02
-    mkdir /cluster/data/hg18/noMask
-    cd /cluster/data/hg18/
-    #	Need an unmasked sequence for this work
-    bash
-    for CHR in ?/chr?.fa ??/chr??.fa ?/chr?_random.fa ??/chr??_random.fa *hap*/chr*.fa
-    do
-	C=`basename ${CHR}`
-	echo -n "working ${C} ... "
-	head -1 ${CHR} > noMask/${C}
-	tail +2 ${CHR} | tr [:lower:] [:upper:] >> noMask/${C}
-	echo "done"
-    done
-    mkdir ooc
-    ls noMask/chr*.fa > fa.list
-
+#	REDONE 2006-02-02 - Hiram
+    ssh pk
     #	The ooc file was created earlier into /cluster/bluearc/hg18/11.ooc
     cp -p /cluster/bluearc/hg18/11.ooc  /san/sanvol1/scratch/hg18/11.ooc
-
-    ssh pk
-    mkdir /san/sanvol1/scratch/hg18/noMask
-    cd /san/sanvol1/scratch/hg18/noMask
-    bash
-    time cp --verbose -p /cluster/data/hg18/noMask/chr*.fa .
     
-    # allow blat to run politely in /tmp while it writes output, then
-    # copy results to results file:
+    mkdir /san/sanvol1/scratch/hg18/bacends
+    cd /san/sanvol1/scratch/hg18/bacends
+    ls -1S /san/sanvol1/scratch/hg18/maskedContigs/*.fa > contigs.lst
+    ls -1S /san/sanvol1/scratch/hg18/cloneEnds/cloneEnds???.fa > bacends.lst
+        # 378 contigs vs 98 bacends files -> 37,044 jobs
 
-    mkdir /cluster/data/hg18/bed/bacends
-    cd    /cluster/data/hg18/bed/bacends
-
-    cat << '_EOF_' > runBlat.sh
-#!/bin/sh
-path1=$1
-path2=$2
-root1=$3
-root2=$4
-result=$5
-rm -fr /tmp/${root1}_${root2}
-mkdir /tmp/${root1}_${root2}
-pushd /tmp/${root1}_${root2}
-/cluster/bin/x86_64/blat ${path1} ${path2} \
-	-ooc=/san/sanvol1/scratch/hg18/11.ooc ${root1}.${root2}.psl
-popd
-rm -f ${result}
-mv /tmp/${root1}_${root2}/${root1}.${root2}.psl ${result}
-rm -fr /tmp/${root1}_${root2}
-'_EOF_'
-    # << emacs happy
-    chmod +x runBlat.sh
-
-    cat << '_EOF_' > template
+    mkdir out
+cat > template << '_EOF_'
 #LOOP
-./runBlat.sh {check in exists $(path1)} {check in exists $(path2)} $(root1) $(root2) {check out line+ bacEnds.out/$(root2)/$(root1).$(root2).psl}
+/cluster/bin/x86_64/blat $(path1) $(path2) -ooc=/san/sanvol1/scratch/hg18/11.ooc {check out line+ out/$(root2)/$(root1).$(root2).psl}
 #ENDLOOP
 '_EOF_'
-    # << emacs happy
-
-    ls -1S /san/sanvol1/scratch/hg18/cloneEnds/cloneEnds???.fa > bacEnds.lst
-    mkdir bacEnds.out
-    #	create results directories for each to avoid the all result files in
-    #	one directory problem
-    foreach f (`cat bacEnds.lst`)
-	set b = $f:t:r
-	echo $b
-	mkdir bacEnds.out/$b
+    gensub2 contigs.lst bacends.lst template jobList
+    foreach f (`cat bacends.lst`)
+        set d = $f:r:t
+        echo $d
+        mkdir out/$d
     end
 
-    ls -1S /san/sanvol1/scratch/hg18/noMask/chr*.fa > contig.lst
-    gensub2 contig.lst bacEnds.lst template jobList
     para create jobList
-# 4802 jobs in batch
+# 37044 jobs in batch
     para try, check, push, etc ...
 
-# There was some problem with many jobs that files not accessible.  Did chmod +x on 
-# /san/sanvol1/scratch/hg18/noMask/chr*.fa and this seems to fix the problem.
+    # lift alignments
+    ssh pk
+    cd /san/sanvol1/scratch/hg18/bacends
+    pslSort dirs raw.psl temp out/cloneEnds*
+    #	37044 files in 98 dirs
+    #	Got 37044 files 192 files per mid file
+    #	real    32m24.804s
+    #	-rw-rw-r--    1 6487445210 Feb  2 21:08 raw.psl
+    time pslReps -nearTop=0.02 -minCover=0.60 -minAli=0.85 -noIntrons \
+                raw.psl  bacEnds.psl /dev/null > pslReps.out 2>&1 &
+    #	real    6m33.218s
+    #	Processed 51898639 alignments
 
-# Per conversation with Kate and Hiram during code review, they think the 
-# above, as suggested by Patrick (if Fan remembered correctly) is a myth.
+    mkdir lifted
+    time liftUp lifted/bacEnds.lifted.psl ./liftContigs.lft warn bacEnds.psl
+    #	real    0m30.067s
+    pslSort dirs bacEnds.sorted.psl temp lifted
 
-# Completed: 4802 of 4802 jobs
-# CPU time in finished jobs:     515910s    8598.50m   143.31h    5.97d  0.016 y
-# IO & Wait Time:                 35141s     585.68m     9.76h    0.41d  0.001 y
-# Average job time:                 115s       1.91m     0.03h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            1185s      19.75m     0.33h    0.01d
-# Submission to last job:          2304s      38.40m     0.64h    0.03d
+    # cleanup
+    rmdir temp
+    rm -fr out /cluster/store7/kate/hg17/bacends
 
-    ssh kkstore02
+    wc -l *.sorted.psl
+    #	2490892 bacEnds.sorted.psl
+XXXX - working on this 2006-02-02 21:31
+
+    time pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 \
+	-slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+	-mismatch -verbose bacEnds.sorted.psl \
+	/cluster/data/hg18/bed/cloneend/cloneEndPairs.txt \
+	all_bacends bacEnds
+    #	Reading pair file
+    #	Reading psl file
+    #	Creating Pairs
+    #	Writing to files
+    #	real    0m11.221s
+    #	this creates the files:
+    #	-rw-rw-r--    1   16224182 Feb  2 21:36 bacEnds.pairs
+    #	-rw-rw-r--    1    4655633 Feb  2 21:36 bacEnds.orphan
+    #	-rw-rw-r--    1     399525 Feb  2 21:36 bacEnds.slop
+    #	-rw-rw-r--    1     106252 Feb  2 21:36 bacEnds.mismatch
+    #	-rw-rw-r--    1     634909 Feb  2 21:36 bacEnds.short
+    #	-rw-rw-r--    1       4023 Feb  2 21:36 bacEnds.long
+
+    # create header required by "rdb" tools
+    # TODO: replace w/ awk & sort
+    echo -e \
+'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes' > header
+    echo -e '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> header
+    cat header bacEnds.pairs | row score ge 300 | sorttbl chr start \
+	| headchg -del > bacEndPairs.bed
+    cat header bacEnds.slop bacEnds.short bacEnds.long \
+	bacEnds.mismatch bacEnds.orphan \
+        | row score ge 300 | sorttbl chr start | headchg -del \
+	> bacEndPairsBad.bed
+
+    extractPslLoad -noBin bacEnds.sorted.psl bacEndPairs.bed \
+                bacEndPairsBad.bed | \
+                        sorttbl tname tstart | headchg -del > bacEnds.load.psl
+
+    #	Move the previous build out of the way and copy these
+    #	results over to the primary hg18 bed location:
+    mv /cluster/data/hg18/bed/bacends /cluster/data/hg18/bed/bacends.2006-01-18
+    mkdir /cluster/data/hg18/bed/bacends
+    cp -p bacEnd* /cluster/data/hg18/bed/bacends
+
+    #	load them into the database
+    ssh hgwdev
     cd /cluster/data/hg18/bed/bacends
-    screen
+    #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
+    awk '{print $5}' bacEndPairs.bed | sort | uniq -c
+    #	result should be the scores, no extraneous strings:
+    #	156984 1000
+    #	   195 300
+    #	   316 375
+    #	   297 500
+    #	  1476 750
+    #	edit the file and fix it if it has a bad name.
+    hgLoadBed -notItemRgb hg18 bacEndPairs bacEndPairs.bed \
+                 -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql 
+    # Loaded 159268  
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed -notItemRgb hg18 bacEndPairsBad bacEndPairsBad.bed \
+                 -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    # Loaded 69788
+    #hgLoadPsl hg18 -nobin -table=all_bacends bacEnds.load.psl
+    # NOTE: truncates file to 0 if -nobin is used
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl hg18 -table=all_bacends bacEnds.load.psl
+    #	no complaints !  Usually there are, this loaded:
+    hgsql -N -e "select count(*) from all_bacends;" hg18
+    #	1249956
 
-    mv temp temp_old
-    mv split split_old
+    nice featureBits hg18 all_bacends
+# 191078854 bases of 2881515245 (6.631%) in intersection
+    nice featureBits hg17 all_bacends
+# 225763317 bases of 2866216770 (7.877%) in intersection
 
-    mkdir temp
-    bash
-    time pslSort dirs raw.psl temp bacEnds.out/* > pslSort.out 2>&1 &
-# real    8m33.346s
-# user    4m58.200s
-# sys     0m33.400s
+    nice featureBits hg18 bacEndPairs
+# 2842800422 bases of 2881515245 (98.656%) in intersection
+    nice featureBits hg17 bacEndPairs
+# 2846568377 bases of 2866216770 (99.314%) in intersection
 
-    time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons \
-	raw.psl bacEnds.psl /dev/null > pslReps.out 2>&1 &
-
-    cp -p /cluster/data/mm7/bed/bacends/split.pl .
-    cp -p /cluster/data/mm7/bed/bacends/header .
-
-# Commented out line 23 in split.pl to avoid generating extra header in split/...0.psl.
-#print OUT $header;
-
-    time ./split.pl header < bacEnds.psl
-
-    cp -p bacEnds.psl bacEnds.psl.save
-    time pslSort dirs bacEnds.psl temp split
-
-    #	~ 1.5 minutes
-
-    # Copy files to final destination and remove
-    mkdir /cluster/data/hg18/bacends
-    cp -p bacEnds.psl /cluster/data/hg18/bacends
+    nice featureBits hg18 bacEndPairsBad
+# 729313572 bases of 2881515245 (25.310%) in intersection
+    nice featureBits hg17 bacEndPairsBad
+# 797412909 bases of 2866216770 (27.821%) in intersection
 
 ############################################################################
-# BACEND PAIRS TRACK (DONE - 2006-01-18 - Fan)
-
+# BACEND PAIRS TRACK (OBSOLETE - DONE ABOVE) (DONE - 2006-01-18 - Fan)
     ssh kolossus
     cd /cluster/data/hg18/bacends
     bash
@@ -3145,13 +3158,13 @@ cat j2.out | /cluster/bin/scripts/headchg -del > bacEnds.load.psl
 rm j1.out j2.out
 
     #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
-    awk '{print $5}' bacEndPairs.bed | sort -u
+    awk '{print $5}' bacEndPairs.bed | sort | uniq -c
     #	result should be the scores, no extraneous strings:
-#	1000
-#	300
-#	375
-#	500
-#	750
+    #	156984 1000
+    #	   195 300
+    #	   316 375
+    #	   297 500
+    #	  1476 750
     #	edit the file and fix it if it has a bad name.
 
     # load into database
