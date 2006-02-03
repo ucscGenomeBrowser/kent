@@ -134,17 +134,3 @@ void pf_milliTicks(_pf_Stack *stack)
 stack[0].Long = clock1000();
 }
 
-void pf_randInit(_pf_Stack *stack)
-/* Change random number stream by initializing it with the current time. */
-{
-srand(clock1000());
-rand();
-}
-
-void pf_randNum(_pf_Stack *stack)
-/* Return random number between 0 and 1 */
-{
-static double scale = 1.0/RAND_MAX;
-stack[0].Double = rand()*scale;
-}
-
