@@ -1,5 +1,5 @@
 /* defFile - create a file containing the things defined
- * in this file. */
+ * in the file we are compiling. */
 
 #include "common.h"
 // #include "linefile.h"
