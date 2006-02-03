@@ -1,7 +1,7 @@
 table sgdOther
 "Features other than coding genes from yeast genome database"
     (
-    string chrom;	"Chromosome in chrNN format"
+    string chrom;	"Reference sequence chromosome or scaffold"
     int chromStart;	"Start (zero based)"
     int chromEnd;	"End (non-inclusive)"
     string name;	"Feature name"

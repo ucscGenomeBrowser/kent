@@ -1,7 +1,7 @@
 table syntenySanger
 "Sanger Mouse Synteny"
 (
-string chrom;       "Human Chrom"
+string chrom;       "Reference sequence chromosome or scaffold"
 uint chromStart;       "Start on Human"
 uint chromEnd;         "End on Human"
 string name;   "Mouse Chromosome"

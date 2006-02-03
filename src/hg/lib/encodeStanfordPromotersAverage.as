@@ -1,7 +1,7 @@
 table encodeStanfordPromotersAverage
 "Stanford Promoter Activity in ENCODE Regions, average over all cell types (bed 9+)"
     (
-    string chrom;      "chromosome"
+    string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"
     uint   chromEnd;   "End position in chromosome"
     string name;       "accession of mRNA used to predict the promoter"

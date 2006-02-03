@@ -1,7 +1,7 @@
 table ld
 "Linkage Disequilibrium values from SNP genotypes"
     (
-    string   chrom;      "Chromosome"
+    string   chrom;      "Reference sequence chromosome or scaffold"
     uint     chromStart; "chromStart for reference marker"
     uint     chromEnd;   "chromEnd for last marker in list"
     string   name;       "rsId at chromStart"

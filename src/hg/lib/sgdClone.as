@@ -1,7 +1,7 @@
 table sgdClone
 "Clone info from yeast genome database"
     (
-    string chrom;      	"Chromosome in chrN format"
+    string chrom;      	"Reference sequence chromosome or scaffold"
     uint   chromStart; 	"Start position in chromosome"
     uint   chromEnd;   	"End position in chromosome"
     string name;       	"Washington University Name"

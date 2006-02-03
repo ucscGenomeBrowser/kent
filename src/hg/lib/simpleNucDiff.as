@@ -1,7 +1,7 @@
 table simpleNucDiff
 "Simple nucleotide difference"
     (
-    string chrom;      "Target species chromosome"
+    string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"
     uint   chromEnd;   "End position in chromosome"
     string tSeq;	"Sequence in target species"

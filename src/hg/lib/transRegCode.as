@@ -1,7 +1,7 @@
 table transRegCode
 "Transcription factor binding sites from CHIP/CHIP experiments and conservation"
     (
-    string chrom;	"Chromosome binding site is on"
+    string chrom;	"Reference sequence chromosome or scaffold"
     uint chromStart;    "Start position in chromosome"
     uint chromEnd;      "End position in chromosome"
     string name;        "Name of transcription factore"

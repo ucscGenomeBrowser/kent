@@ -1,7 +1,7 @@
 table snpMap
 "SNP positions from various sources"
     (
-    string chrom;	"Chromosome or 'unknown'"
+    string chrom;	"Reference sequence chromosome or scaffold"
     uint   chromStart;  "Start position in chrom"
     uint   chromEnd;	"End position in chrom"
     string name;	"Name of SNP - rsId or Affy name"

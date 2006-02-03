@@ -1,7 +1,7 @@
 TABLE encodeRna
 "Describes RNAs in the encode regions"
 (
-    string   chrom;		"Chromosome gene is on"
+    string   chrom;		"Reference sequence chromosome or scaffold"
     uint     chromStart;	"Start position in chromosome"
     uint     chromEnd;		"End position in chromosome"
     string   name;		"Name of gene"

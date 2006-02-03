@@ -1,7 +1,7 @@
 TABLE encodeHapMapAlleleFreq 
 "HapMap SNPs in ENCODE regions"
 (
-    string chrom;		"Chromosome"
+    string chrom;		"Reference sequence chromosome or scaffold"
     uint chromStart;		"Start position"
     uint chromEnd;		"End position"
     string name;		"rsId or id"

@@ -1,7 +1,7 @@
 table encodePrimateAlleles
 "Primate (chimp and macaque) alleles for ENCODE resequencing SNPs"
     (
-    string chrom;	 "Chromosome"
+    string chrom;	 "Reference sequence chromosome or scaffold"
     uint   chromStart;   "Start position in chrom"
     uint   chromEnd;	 "End position in chrom"
     string name;	 "Name of SNP - rsId or temporary name"

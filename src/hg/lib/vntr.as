@@ -1,7 +1,7 @@
 table vntr
 "Microsatellites from Gerome Breen's VNTR program (bed 4+)"
     (
-    string chrom;      "chrom"
+    string chrom;      "Reference sequence chromosome or scaffold"
     uint   chromStart; "Start position in chromosome"
     uint   chromEnd;   "End position in chromosome"
     string name;       "Name of item (Repeat unit)"
