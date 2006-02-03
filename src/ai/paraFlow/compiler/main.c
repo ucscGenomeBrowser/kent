@@ -316,7 +316,6 @@ verbose(2, "Phase 9 - execution\n");
     }
 }
 
-// int main(int argc, char *argv[])
 int main(int argc, char *argv[], char *environ[])
 /* Process command line. */
 {
