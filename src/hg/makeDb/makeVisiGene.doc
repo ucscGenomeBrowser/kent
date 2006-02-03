@@ -105,3 +105,8 @@ para make spec
 # there just took two hours, with just 100 cpus available.  It took
 # an hour to copy the data over, and eight hours to copy it back though,
 # and some tweaking.
+
+# MAKE FULL TEXT INDEX
+cd /cluster/store11/visiGene/gbdb
+vgGetText visiGene.text mm7 hg17
+ixIxx visiGene.text visiGene.ix visiGene.ixx
