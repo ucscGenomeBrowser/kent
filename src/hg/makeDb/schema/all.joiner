@@ -1734,14 +1734,19 @@ identifier allenBrainProbe
     $gbd.allenBrainUrl.name
     $gbd.allenBrainAli.qName
 
-identifier jaxAlleleName
+identifier jaxRepTranscriptName external=MGI
+"Jackson Labs/MGI Allele name: representative transcript ID"
+    mm6.jaxRepTranscript.name dupeOk
+    mm6.jaxRepTranscriptAlias.name
+
+identifier jaxAlleleName external=MGI
 "Jackson Labs/MGI Allele name: concatenated representative transcript ID and allele ID"
-    mm6.jaxAllele.name
+    mm6.jaxAllele.name dupeOk
     mm6.jaxAlleleInfo.name
 
-identifier jaxPhenotypeName
+identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
-    mm6.jaxPhenotype.name
+    mm6.jaxPhenotype.name dupeOk
     mm6.jaxPhenotypeAlias.name
 
 # Dependencies not already captured in identifiers
@@ -1806,7 +1811,6 @@ type genePred
     $gbd.xenoRefGene
     $gbd.jgiFilteredModels
     $gbd.geneMapper
-    $gbd.jaxRepTranscript
 
 type pepPred
     $hg.acemblyPep
