@@ -82,8 +82,10 @@ else
 	    }
 	fprintf(f, ")");
 	}
-    else if (ty->tyty == tytyFunction)
+    else if (ty->tyty == tytyFunction || ty->tyty == tytyVirtualFunction)
 	{
+	if (ty->tyty == tytyVirtualFunction)
+	   fprintf(f, "polymorphic ");
 	fprintf(f, "%s ", ty->base->name);
 	pfTypeDump(ty->children, f);
 	fprintf(f, " into ");
