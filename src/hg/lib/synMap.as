@@ -1,11 +1,11 @@
 table synMap
 "Synteny map from one genome to another"
 (
-string chromA;  "chromosome in organism A"
-uint chromStartA; "chromosome start in orgainsm A"
-uint chromEndA;   "chromosome end in orgainsm A"
+string chromA;  "Chromosome or scaffold in organism A"
+uint chromStartA; "Chromosome start in organism A"
+uint chromEndA;   "Chromosome end in organism A"
 string strandA;  "Strand information can be things like '-+'"
-string chromB;  "chromosome in organism B"
-uint chromStartB; "chromosome start in orgainsm B"
-uint chromEndB;   "chromosome end in orgainsm B"
+string chromB;  "Chromosome or scaffold in organism B"
+uint chromStartB; "Chromosome start in organism B"
+uint chromEndB;   "Chromosome end in organism B"
 )
