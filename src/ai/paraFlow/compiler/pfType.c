@@ -8,6 +8,7 @@
 #include "pfCompile.h"
 #include "pfType.h"
 
+
 void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp);
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
@@ -372,6 +373,7 @@ else
 	         errAt(tuple->tok, "Need additional elements in list");
 	     else
 	         {
+		 /* Fill in default-value for missing parameter. */
 		 *pos = CloneVar(type->init);
 		 }
 	     }
@@ -502,9 +504,12 @@ static void coerceTupleToClass(struct pfCompile *pfc,
  * as the corresponding members of the class. */
 {
 struct pfParse *tuple = *pPp;
+struct pfParse **pLeftover;
 boolean fillMissingWithZero = (tuple->children == NULL);
-rCoerceTupleToClass(pfc, tuple, &tuple->children, 
+pLeftover = rCoerceTupleToClass(pfc, tuple, &tuple->children, 
 	base, fillMissingWithZero);
+if (*pLeftover != NULL)
+    errAt(tuple->tok, "Type mismatch");
 pfTypeOnTuple(pfc, tuple);
 }
 
@@ -606,9 +611,13 @@ if (pt->base != base)
 		pfTypeOnTuple(pfc, *pPp);
 		}
 	    if (pp->type == pptCall)
+		{
 		coerceCallToClass(pfc, pPp, type);
+		}
 	    else
+		{
 		coerceTupleToClass(pfc, pPp, type->base);
+		}
 	    ok = TRUE;
 	    }
 	}
@@ -1378,8 +1387,7 @@ switch (pp->type)
 }
 
 static void rClassBless(struct pfCompile *pfc, struct pfParse *pp)
-/* Check types (adding conversions where needed) on tree,
- * which should have variables bound already. */
+/* Call blessClass on whole tree. */
 {
 struct pfParse *p;
 
