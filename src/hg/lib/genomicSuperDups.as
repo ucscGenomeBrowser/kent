@@ -1,13 +1,13 @@
 table genomicSuperDups
 "Summary of large genomic Duplications (>1KB >90% similar)"
   (
-  string chrom;       "Human chromosome or FPC contig"
+  string chrom;       "Reference sequence chromosome or scaffold"
   uint chromStart;   "Start position in chromosome"
   uint chromEnd;     "End position in chromosome"
   string name;         "Other chromosome involved"
   uint score;        "Score from 900-1000.  1000 is best"
   char[1] strand;       "Value should be + or -"
-  string otherChrom;   "Other Human chromosome or FPC contig"
+  string otherChrom;   "Other chromosome or scaffold"
   uint otherStart;   "Start in other  sequence"
   uint otherEnd;     "End in other  sequence"
   uint otherSize;    "Total size of other sequence"
