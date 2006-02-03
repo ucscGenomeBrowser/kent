@@ -493,7 +493,8 @@ identifier vegaPseudogeneName typeOf=vegaName
 identifier pseudoGeneName
 "Link together pseudo predicted gene structure and peptide"
     $hg.pseudoMrna.qName dupeOk
-    $hg.pseudoGeneLink.name
+    $hg,!hg15,!hg16.pseudoGeneLink.name
+    hg15,hg16.pseudoGeneLink.name minCheck=0.85
 
 identifier mrnaBlastzName
 "Link together mrnaBlastz and pseudoMrna"
@@ -995,7 +996,8 @@ identifier knownGeneId typeOf=nativeMrnaAccession dependency
     $kgDb.scBlastTab.query
     $kgDb,!rn3,!mm5,!hg15.dupSpMrna.mrnaID
     rn3,mm5,hg15.dupSpMrna.mrnaID minCheck=0.90
-    $kgDb.pseudoGeneLink.kgName
+    $kgDb,!hg15,!hg16.pseudoGeneLink.kgName
+    hg15,hg16..pseudoGeneLink.kgName minCheck=0.85
     $kgDb.foldUtr3.name
     $kgDb.foldUtr5.name
     $kgDb.gnfU95Distance.query
