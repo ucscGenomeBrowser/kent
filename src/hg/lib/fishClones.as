@@ -1,7 +1,7 @@
 table fishClones
 "Describes the positions of fishClones in the assembly"
    (
-   string chrom;                   "Human chromosome number"
+   string chrom;                   "Reference sequence chromosome or scaffold"
    uint   chromStart;              "Start position in chromosome"
    uint   chromEnd;                "End position in chromosome"
    string name;                    "Name of clone"

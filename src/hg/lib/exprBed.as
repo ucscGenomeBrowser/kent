@@ -1,7 +1,7 @@
 table exprBed
 "Expression data information"
     (
-    string chrom; "Chromosome name"
+    string chrom; "Reference sequence chromosome or scaffold"
     uint chromStart; "position in nucleotides where feature starts on chromosome"
     uint chromEnd; "position in nucleotides where featrure stops on chromsome"
     string name; "feature standardized name; can be a gene, exon or other"

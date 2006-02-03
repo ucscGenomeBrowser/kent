@@ -1,7 +1,7 @@
 table cpgIslandExt
 "Describes the CpG Islands (includes observed/expected ratio)"
    (
-   string chrom;      	"Human chromosome or FPC contig"
+   string chrom;      	"Reference sequence chromosome or scaffold"
    uint   chromStart; 	"Start position in chromosome"
    uint   chromEnd;   	"End position in chromosome"
    string name;       	"CpG Island"

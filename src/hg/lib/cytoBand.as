@@ -1,7 +1,7 @@
 table cytoBand
 "Describes the positions of cytogenetic bands with a chromosome"
    (
-   string chrom;    "Human chromosome number"
+   string chrom;    "Reference sequence chromosome or scaffold"
    uint   chromStart;  "Start position in genoSeq"
    uint   chromEnd;    "End position in genoSeq"
    string name;       "Name of cytogenetic band"

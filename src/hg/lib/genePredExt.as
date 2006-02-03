@@ -2,7 +2,7 @@ table genePredExt
 "A gene prediction with some additional info."
     (
     string name;	"Name of gene (usually transcript_id from GTF)"
-    string chrom;	"Chromosome name"
+    string chrom;	"Reference sequence chromosome or scaffold"
     char[1] strand;     "+ or - for strand"
     uint txStart;	"Transcription start position"
     uint txEnd;         "Transcription end position"

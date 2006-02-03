@@ -3,7 +3,7 @@ table ctgPos2
     (
     string contig;      "Name of contig"
     uint size;          "Size of contig"
-    string chrom;       "Chromosome name"
+    string chrom;       "Reference sequence chromosome or scaffold"
     uint chromStart;    "Start in chromosome"
     uint chromEnd;       "End in chromosome"
     char[1] type;       "(W)GS contig, (F)inished, (P)redraft, (D)raft, (O)ther"    )

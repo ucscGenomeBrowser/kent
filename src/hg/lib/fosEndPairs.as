@@ -2,7 +2,7 @@ table fosEndPairs
 "Positions of end pairs for fosmids"
    (
    short  bin;        "Bin number for browser speedup"
-   string chrom;      "Human chromosome"
+   string chrom;      "Reference sequence chromosome or scaffold"
    uint   chromStart; "Start position of fosmid in chromosome"
    uint   chromEnd;   "End position of fosmid in chromosome"
    string name;       "Name of fosmid"

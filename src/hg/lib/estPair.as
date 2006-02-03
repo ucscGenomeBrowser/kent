@@ -1,7 +1,7 @@
 table estPair
 "EST 5'- 3' pairing information"
 	(
-	string chrom;		"Chromosome name"
+	string chrom;		"Reference sequence chromosome or scaffold"
 	uint chromStart;	"Start position in chromosome"
 	uint chromEnd;		"End position in chromosome"
 	string mrnaClone;	"Mrna clone name"

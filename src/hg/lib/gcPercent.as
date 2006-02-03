@@ -1,7 +1,7 @@
 table gcPercent
 "Displays GC percentage in 20Kb blocks for genome"
    (
-   string chrom;      "Human chromosome number"
+   string chrom;      "Reference sequence chromosome or scaffold"
    uint   chromStart;  "Start position in genoSeq"
    uint   chromEnd;    "End position in genoSeq"
    string name;       "Constant string GCpct"

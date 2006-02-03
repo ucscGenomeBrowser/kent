@@ -1,7 +1,7 @@
 table encodeErgeTransTransf
 "ENCODE experimental data from dbERGEII"
    (
-   string           chrom;       "Human chromosome"
+   string           chrom;       "Reference sequence chromosome or scaffold"
    uint             chromStart;  "Start position in chromosome"
    uint             chromEnd;    "End position in chromosome"
    string           name;        "Name of read - up to 255 characters"
