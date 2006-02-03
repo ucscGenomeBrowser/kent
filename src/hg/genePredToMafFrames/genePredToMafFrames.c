@@ -10,7 +10,7 @@
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.5 2005/10/19 22:06:57 markd Exp $";
+static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.6 2006/02/03 22:29:47 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -85,7 +85,7 @@ if (verboseLevel() >= 5)
     dumpGeneInfo("after split", genes);
 finishMafFrames(genes);
 if (verboseLevel() >= 5)
-    dumpGeneInfo("after link", genes);
+    dumpGeneInfo("after finish", genes);
 outputFrames(genes, mafFramesFile, bedFile);
 
 geneBinsFree(&genes);

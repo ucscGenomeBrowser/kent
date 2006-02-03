@@ -4,7 +4,7 @@ DIFF = diff -u
 
 test:   oneExon splitExon revExon negNeg finishIsSplit \
 	queryDel multiMap multiMap2 multiMapMondo \
-	manyExonPos unalignedExonStart lostBlock
+	manyExonPos unalignedExonStart lostBlock splitNegStart
 
 oneExon: mkout
 	genePredToMafFrames hg17 canHg10 input/BC101503.gp output/$@.mafFrames input/BC101503.maf
@@ -62,6 +62,11 @@ unalignedExonStart:
 # part of exon lost in mm6 but not human
 lostBlock:
 	genePredToMafFrames mm6 canHg10 input/NM_145830.gp output/$@.mafFrames input/NM_145830.maf
+	${DIFF} expected/$@.mafFrames output/$@.mafFrames
+
+# start codon on neg strand gene not spliced, but split between two maf blocks
+splitNegStart:
+	genePredToMafFrames mm7 mm7 input/NM_027863.gp output/$@.mafFrames input/NM_027863.maf
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 mkout:

@@ -2,21 +2,16 @@
  * implict inlining */
 #ifndef FRAMEINCR_H
 #define FRAMEINCR_H
-static int frameRev(int fr)
-/* reverse a frame, as if codon was reversed */
-{
-return (fr == 2) ? 0 : ((fr == 0) ? 2 : 1);
+/* Increment a frame by the specified amount, which maybe negative. frame
+ * of -1 always returns -1. */
+static inline int frameIncr(int frame, int amt) {
+    if (frame < 0) {
+        return frame;  /* no frame not changed */
+    } else if (amt >= 0) {
+        return (frame + amt) % 3;
+    } else {
+        int amt3 = ((-amt)%3);
+        return (frame - (amt-amt3)) % 3;
+    }
 }
-
-static int frameIncr(int frame, int amt)
-/* increment the frame by the specified amount.  If amt is positive,
- * the frame is incremented in the direction of transcription, it 
- * it is negative it's incremented in the opposite direction. */
-{
-if (amt >= 0)
-    return (frame + amt) % 3;
-else
-    return frameRev((frameRev(frame) - amt) % 3);
-}
-
 #endif
