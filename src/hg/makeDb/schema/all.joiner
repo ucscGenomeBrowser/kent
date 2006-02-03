@@ -1320,7 +1320,7 @@ identifier bdgpTranscriptId external=BDGP dependency
     dm1.bdgpToCanonical.name
     dm1.bdgpToLocusLink.name minCheck=0.80
     dm1.bdgpToPfam.name
-    dm1.bdgpToRefSeq.name
+    dm1.bdgpToRefSeq.name minCheck=0.97
     dm1.ceBlastTab.query
     dm1.drBlastTab.query
     dm1.hgBlastTab.query
@@ -1334,7 +1334,7 @@ identifier bdgpTranscriptId external=BDGP dependency
 identifier bdgpNonCodingId external=BDGP
 "Berkeley Drosophila Genome Project Noncoding Gene ID"
     dm1.bdgpNonCoding.name chopAfter=- dupeOk
-    dm1.bdgpNonCodingInfo.bdgpName
+    dm1.bdgpNonCodingInfo.bdgpName minCheck=0.89
 
 identifier flyBase2004Id external=FlyBase
 "FlyBase Xref as of 2004"
