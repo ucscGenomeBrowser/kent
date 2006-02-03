@@ -3,7 +3,7 @@ table bacCloneXRef
     (
     string name;                "External name for BAC clone"
     string intName;             "Internal Sanger FPC name"
-    string chroms;              "Chromosome(s) to which at one or both BAC ends are mapped by BLAT"
+    string chroms;              "Reference sequence chromosome(s) or scaffold(s) to which at one or both BAC ends are mapped by BLAT"
     string genbank;             "Genbank accession for the BAC Clone"
     string sangerName;          "Sanger STS name"
     uint relationship;          "Relationship type - method of finding STS"
