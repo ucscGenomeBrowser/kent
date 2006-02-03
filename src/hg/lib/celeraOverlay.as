@@ -1,11 +1,11 @@
 table celeraOverlay
 "Celera assembly overlay in the public (NCBI) assembly"
   (
-  string chrom;      "Human chromosome"
+  string chrom;      "Reference sequence chromosome or scaffold"
   uint chromStart;   "Start position in chromosome"
   uint chromEnd;     "End position in chromosome"
   string name;       "Other chromosome and start"
-  string otherChrom; "Other chromosome"
+  string otherChrom; "Other chromosome or scaffold"
   uint otherStart;   "Start in other chromosome"
   uint otherEnd;     "End in other chromosome"
   char orient;       "Strand/orientation (F or R)"
