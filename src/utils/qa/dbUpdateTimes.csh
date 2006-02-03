@@ -16,7 +16,7 @@ if ($#argv != 1) then
   echo "  checks all tables on beta to see if they have been updated on dev."
   echo "  uses /cluster/data/genbank/etc/genbank.tbls to ignore genbank."
   echo '  will exclude any db.table listed in local file called "excludeTables".'
-  echo '  excludes split tables of them form "chrN_".'
+  echo '  excludes split tables of the form "chrN_".'
   echo
   echo "    usage:  <database | assemblies | all>"
   echo '       "assemblies" checks only databases in dbDb (all organisms, no others).'
