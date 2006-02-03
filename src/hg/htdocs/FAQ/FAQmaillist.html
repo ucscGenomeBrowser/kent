@@ -85,7 +85,7 @@
                         The email address for the mailing list is:         
                         <A HREF="mailto:&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;">&#103;&#101;n&#111;m&#101;&#64;&#115;&#111;&#101;.&#117;&#99;s&#99;.&#101;d&#117;</A>.
                         <!-- above address is genome at soe.ucsc.edu -->
-                        Messages sent to this address will be posted automatically on the genome
+                        Messages sent to this address will be posted to the moderated genome
                         mailing list,  which is also archived on a public Web-accessible
                         pipermail archive. This archive may be indexed by non-UCSC sites such as
                         Google.
@@ -125,8 +125,22 @@
                         "How do I view questions &amp; answers in the Genome Browser mailing list?"
                         <P>
                         <B><FONT COLOR="#006666">Response:</FONT></B><BR>
-                        You can view all of the previous questions
-                        &amp; and answers <A HREF="http://www.cse.ucsc.edu/pipermail/genome/">here</A>. 
+                         All of the questions and answers posted to the mailing
+                         list are archived and available for searching. You can
+                         view all of the archived questions &amp; and answers 
+                         <A HREF="http://www.cse.ucsc.edu/pipermail/genome/">
+                         here</A>.<BR>
+
+                <P>
+                <FORM name="googleForm" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm.q.value=document.googleForm.qq.value+'   inurl:www.cse.ucsc.edu/pipermail/genome';">
+                Or, search the mailing list archives here: &nbsp;
+                <input type="hidden" name="q" value="">
+                <input type="hidden" name="num" value="10">
+                <input type="hidden" name="filter" value="0">
+                <INPUT TYPE=text name=qq size=30 maxlength=255 value="">
+                <input TYPE="submit" VALUE="Submit">
+                </FORM>
+  
                     </TD><TD WIDTH=15></TD>
                 </TR>
             </TABLE>
