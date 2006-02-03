@@ -1,7 +1,7 @@
 table chr18deletions
 "Chromosome 18 deletion"
     (
-    string chrom;	"Chromosome or 'unknown'"
+    string chrom;	"Reference sequence chromosome or scaffold"
     int chromStart;     "Start position in chrom - negative 1 if unpositioned"
     uint chromEnd;	"End position in chrom"
     string name;	"Name of STS marker"
