@@ -1,7 +1,7 @@
 table stsMapMouseNew
 "STS marker and its position on golden path and various maps"
     (
-    string chrom;       "Chromosome or 'unknown'"
+    string chrom;       "Reference sequence chromosome or scaffold"
     int chromStart;     "Start position in chrom - negative 1 if unpositioned"
     uint chromEnd;      "End position in chrom"
     string name;        "Name of STS marker"

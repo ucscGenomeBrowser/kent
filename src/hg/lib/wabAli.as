@@ -5,7 +5,7 @@ table wabAli
     uint qStart;        "Start in query (other species)"
     uint qEnd;          "End in query."
     char[1] strand;     "+ or - relative orientation."
-    string chrom;       "Chromosome (current species)."
+    string chrom;       "Reference sequence chromosome or scaffold."
     uint chromStart;    "Start in chromosome."
     uint chromEnd;      "End in chromosome."
     uint milliScore;    "Base identity in parts per thousand."
