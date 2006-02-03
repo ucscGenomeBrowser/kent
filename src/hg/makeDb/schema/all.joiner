@@ -1563,9 +1563,9 @@ identifier dbSnpMapInfo external=dbSNP
 identifier locusLinkId external=LocusLink
 "NCBI LocusLink ID"
     $gbd.refLink.locusLinkId dupeOk
-    $gbd.keggPathway.locusID minCheck=0.99
+    $gbd.keggPathway.locusID minCheck=0.98
     $kgDb.knownToLocusLink.value minCheck=0.98
-    dm1.bdgpToLocusLink.value minCheck=0.97
+#   dm1.bdgpToLocusLink.value minCheck=0.97
 
 identifier omimId external=OMIM
 "Online Mendelian Inheritance in Man (OMIM) ID"
