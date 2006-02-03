@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.105 2006/01/26 16:38:59 angie Exp $"
+#	"$Id: makeMm6.doc,v 1.106 2006/02/03 18:32:24 angie Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -9060,6 +9060,7 @@ BASE=/cluster/data/mm6/bed/blastz.canFam2.2005-08-11
 
 
 # JACKSON LABS / MGI REPRESENTATIVE TRANSCRIPT (DONE 9/29/05 angie)
+# Genes reloaded 2/4/06 after Kayla found that exon starts were off-by-one.
     ssh kkstore01
     mkdir /cluster/data/mm6/bed/jaxRepTranscript
     cd /cluster/data/mm6/bed/jaxRepTranscript
@@ -9068,6 +9069,7 @@ BASE=/cluster/data/mm6/bed/blastz.canFam2.2005-08-11
 #!/usr/bin/perl -w
 # Parse this particular flavor of GTF into our preferred flavor (stdout) 
 # plus an association file (alias.tab) and a fixit SQL file (fixit.sql).  
+# Note: for the rep transcript files only, must add 1 to each start coord.
 
 use strict;
 
@@ -9115,6 +9117,7 @@ while (<>) {
       }
       $name = $tweakedName;
     }
+    $start++;
     print "$chr\tMGI\t$type\t$start\t$end\t.\t$strand\t.\t" .
           "gene_id \"$mgiID\"; transcript_id \"$name\";\n";
   } else {
