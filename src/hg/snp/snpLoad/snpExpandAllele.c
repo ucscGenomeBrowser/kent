@@ -13,7 +13,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.2 2006/02/04 05:24:28 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.3 2006/02/04 05:29:20 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
@@ -105,11 +105,9 @@ struct dyString *newAllele = newDyString(1024);
 /* copy startAllele into oldAllele, which we consume as we go */
 char *oldAllele = cloneString(startAllele);
 char *leftFlank = NULL;
-char *rightFlank = NULL;
 char nucleotide;
 int repeatCount = 0;
 char *repeatString = NULL;
-int parenPos = 0;
 
 while (oldAllele != NULL)
     {
@@ -118,14 +116,15 @@ while (oldAllele != NULL)
 	dyStringAppend(newAllele, oldAllele);
 	if (!sameString(oldAllele, startAllele))
 	    {
-	    verbose(1, "expandAllele started with %s\n", startAllele);
-	    verbose(1, "expandAllele returning %s\n", newAllele->string);
-	    verbose(1, "---------------------\n");
+	    verbose(5, "expandAllele started with %s\n", startAllele);
+	    verbose(5, "expandAllele returning %s\n", newAllele->string);
+	    verbose(5, "---------------------\n");
 	    }
 	return (newAllele->string);
 	}
     leftFlank = getLeftFlank(oldAllele);
     verbose(5, "leftFlank = %s\n", leftFlank);
+    // perhaps dyStringAppend can handle NULL input?
     if (leftFlank != NULL)
         {
 	dyStringAppend(newAllele, leftFlank);
