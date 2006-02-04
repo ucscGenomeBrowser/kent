@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.36 2006/02/03 06:20:09 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.37 2006/02/04 00:20:47 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -3040,7 +3040,6 @@ cat > template << '_EOF_'
 
     wc -l *.sorted.psl
     #	2490892 bacEnds.sorted.psl
-XXXX - working on this 2006-02-02 21:31
 
     time pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 \
 	-slopval=10000 -hardMax=500000 -slop -short -long -orphan \
@@ -3392,6 +3391,10 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	-continue=cat -stop=load `pwd`/DEF > cat_load.out 2>&1 &
 
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-stop=net `pwd`/DEF > blastz.out 2>&1 &
+
 ############################################################################
 # STS MARKERS (STARTED 2006-01-27 Fan)
 
@@ -3423,15 +3426,10 @@ TMPDIR=/scratch/tmp
     #   all.STS.fa, stsAlias.bed files 
     updateStsInfo -verbose=1 -gb=UniSTS.acc stsInfo2.bed.prev all.STS.fa.prev \
 	UniSTS.sts UniSTS.aliases UniSTS.convert.fa new
-
-25394956 kkr12u33   hiram      02/01/106 11:29:31 /cluster/bin/x86_64/blat /scratch/hg/gs.18/build35/maskedContigs/NT_016354.fa /cluster/bluearc/hg/bacEnds/hs/BACends029.fa -ooc=/scratch/hg/h/11.ooc out/BACends029/NT_016354.BACends029.psl
-25395113 kkr12u33   hiram      02/01/106 11:29:31 /cluster/bin/x86_64/blat /scratch/hg/gs.18/build35/maskedContigs/NT_005612.fa /cluster/bluearc/hg/bacEnds/hs/BACends071.fa -ooc=/scratch/hg/h/11.ooc out/BACends071/NT_005612.BACends071.psl
-
 # 5610    MFD330  1000006 (0) not in dbSTS anymore
 # 5667    D3S4560 1000008 (0) not in dbSTS anymore
 # 5686    ATA92F01        1000007 (0) not in dbSTS anymore
 # 5945    MFD206  1000009 (0) not in dbSTS anymore
-# 6213    D6S109  1000010 (0) not in dbSTS anymore
 # 6591    MFD311  1000011 (0) not in dbSTS anymore
 # 6841    MFD306  1000013 (0) not in dbSTS anymore
 # 6842    MFD310  1000012 (0) not in dbSTS anymore
@@ -3439,15 +3437,11 @@ TMPDIR=/scratch/tmp
 # 7024    D12S2343        1000015 (0) not in dbSTS anymore
 # 7042    ATA73C05        1000014 (0) not in dbSTS anymore
 # 7226    MFD341  1000016 (0) not in dbSTS anymore
-# 7419    D16S3401        1000017 (0) not in dbSTS anymore
 # 7500    D17S2200        1000018 (0) not in dbSTS anymore
 # 7628    ATA92E03        1000020 (0) not in dbSTS anymore
 # 7642    GATA178F11      1000019 (0) not in dbSTS anymore
 # 7910    MFD338  1000022 (0) not in dbSTS anymore
 # 97723   GATA172D05      1000023 (0) not in dbSTS anymore
-# 129991  SWXD2599        99622   (0) not in dbSTS anymore
-# 166473  D3S3812 154523  (0) not in dbSTS anymore
-# 185776  RH83562 209614  (0) not in dbSTS anymore
 # 205088  CPLA3610        1000000 (0) not in dbSTS anymore
 # 205089  COX_1935        1000001 (0) not in dbSTS anymore
 # 205090  24534CA2        1000002 (0) not in dbSTS anymore
@@ -3466,7 +3460,7 @@ TMPDIR=/scratch/tmp
     # get list of all STS id's in the fasta file
     sed -n 's/^>\([0-9][0-9]*\) .*/\1/p' all.STS.fa | sort -n >  all.STS.id
     wc -l all.STS.id
-        # 89401 total sequences
+    # 93698 total sequences
     /cluster/bin/scripts/convertPrimerToFA all.primers > all.primers.fa
 
     # Copy stsInfo2.bed and stsAlias.bed to data directory becuase
@@ -3476,120 +3470,121 @@ TMPDIR=/scratch/tmp
     cp -p stsAlias.bed /cluster/data/hg18/bed/sts/
 
     # Create sts sequence alignments
-    mkdir -p /cluster/bluearc/sts.hg18/sts.split
-    faSplit sequence all.STS.fa 50 /cluster/bluearc/sts.hg18/sts.split/sts
-    cp -p all.STS.fa /cluster/bluearc/sts.hg18
+    mkdir /san/sanvol1/scratch/hg18/sts
+    mkdir /san/sanvol1/scratch/hg18/sts/split
 
-    ssh kk
+    faSplit sequence all.STS.fa 200 /san/sanvol1/scratch/hg18/sts/split/sts
+    cp -p all.STS.fa /san/sanvol1/scratch/hg18/sts
+
+    ssh pk
     cd /cluster/data/hg18/bed/sts
     mkdir run
     cd run
-    ls -1S /cluster/bluearc/sts.hg18/maskedContigs/*.fa > contigs.lst
-    ls -1S /cluster/bluearc/sts.hg18/sts.split/sts*.fa > sts.lst
-    mkdir -p /cluster/bluearc/hg18/sts/sts/out
+    ls -1S /san/sanvol1/scratch/hg18/maskedContigs/*.fa > contigs.lst
+    ls -1S /san/sanvol1/scratch/hg18/sts/split/sts*.fa > sts.lst
+    mkdir /san/sanvol1/scratch/hg18/sts/out
+
     foreach f (`cat sts.lst`)
         set d = $f:t:r
-        mkdir /cluster/bluearc/hg18/sts/sts/out/$d
+        mkdir /san/sanvol1/scratch/hg18/sts/out/$d
     end
 
     # create alignments
-cat > template << 'EOF'
+cat > template << '_EOF_'
 #LOOP
-blat $(path1) $(path2) -ooc=/san/sanvol1/scratch/hg18/11.ooc -stepSize=5 {check out line+ /cluster/bluearc/hg18/sts/sts/out/$(root2)/$(root1).$(root2).psl}
+/cluster/bin/x86_64/blat $(path1) $(path2) -ooc=/san/sanvol1/scratch/hg18/11.ooc -stepSize=5 {check out line+ /san/sanvol1/scratch/hg18/sts/out/$(root2)/$(root1).$(root2).psl}
 #ENDLOOP
-'EOF'
+'_EOF_'
     # happy emacs
 
     gensub2 contigs.lst sts.lst template jobList
     para create jobList
-        # 17766 jobs
-    para try
-    para check
-    para push
-# Completed: 17766 of 17766 jobs
-# CPU time in finished jobs:     216174s    3602.90m    60.05h    2.50d  0.007 y
-# IO & Wait Time:                152112s    2535.20m    42.25h    1.76d  0.005 y
-# Average job time:                  21s       0.35m     0.01h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:             321s       5.35m     0.09h    0.00d
-# Submission to last job:          1399s      23.32m     0.39h    0.02d
+        # 70686 jobs
+XXXX - running 2006-02-03 11:57
+    para try ... check ... push ... etc
+# Completed: 70686 of 70686 jobs
+# CPU time in finished jobs:     117490s    1958.16m    32.64h    1.36d  0.004 y
+# IO & Wait Time:                195274s    3254.57m    54.24h    2.26d  0.006 y
+# Average job time:                   4s       0.07m     0.00h    0.00d
+# Longest finished job:              97s       1.62m     0.03h    0.00d
+# Submission to last job:          8085s     134.75m     2.25h    0.09d
 
     # Compile sts sequence results
-    ssh kkstore02
-    cd /cluster/bluearc/hg18/sts/sts
-    time pslSort dirs raw.psl temp out/*
-    #	17776 files in 47 dirs
-    #	Got 17776 files 133 files per mid file
-    #	real    4m10.716s
-    #	-rw-rw-r--   1 768850684 Feb  1 21:03 raw.psl
+    ssh pk
+    cd /san/sanvol1/scratch/hg18/sts
+    time pslSort dirs raw.psl temp out/sts*
+    #	real    8m50.714s
+    #	-rw-rw-r--    1 810548945 Feb  3 14:19 raw.psl
+    #	70686 files in 187 dirs
+    #	Got 70686 files 266 files per mid file
     rm -rf temp
     time pslReps -nearTop=0.0001 -minCover=0.6 -minAli=0.8 -noIntrons raw.psl \
 	stsMarkers.psl /dev/null
-    #	Processed 6897264 alignments
-    #	real    0m25.236s
-    #	-rw-rw-r--   1  10710072 Feb  1 21:04 stsMarkers.psl
+    #	Processed 7252745 alignments
+    #	real    0m28.102s
+    #	-rw-rw-r--    1  10981952 Feb  3 14:26 stsMarkers.psl
+
     cp -p stsMarkers.psl /cluster/data/hg18/bed/sts/run
 
     # Lift them and get them ready to combine with primer alignments
     liftUp -nohead stsMarkers.lifted.psl \
-        /san/sanvol1/scratch/hg18/coverage/maskedContigs/liftContigs.lft \
+        /cluster/data/hg18/jkStuff/liftContigs.lft \
 	     warn stsMarkers.psl
 
     /cluster/bin/scripts/extractPslInfo stsMarkers.lifted.psl
         # creates stsMarkers.lifted.psl.initial
     wc stsMarkers.lifted.psl.initial
-    #	90216  541296 3977093 stsMarkers.lifted.psl.initial
-    /cluster/bin/scripts/findAccession -agp stsMarkers.lifted.psl.initial \
+    #	93236  559416 4111801 stsMarkers.lifted.psl.initial
+    $HOME/kent/src/utils/findAccession.pl -agp stsMarkers.lifted.psl.initial \
 	/cluster/data/hg18
-    #	Could not open /cluster/data/hg18/12/chr12_random.agp
-    # Looks like it trys all _randoms (even one's that don't exist/aren't needed
-    # creates <file>.acc
-    # -rw-rw-r--   1   2653127 Feb  1 21:11 stsMarkers.lifted.psl.initial.acc
     wc stsMarkers.lifted.psl.initial.acc
-    #	49926  349482 2653127 stsMarkers.lifted.psl.initial.acc
+    #	93236  652652 4947261 stsMarkers.lifted.psl.initial.acc
+
+    sort -k4,4n stsMarkers.lifted.psl.initial.acc > stsMarkers.final
 
     # determine found markers (4th field in file)
     cut -f 4 stsMarkers.final | sort -n -u > stsMarkers.found
     wc -l stsMarkers.found
-    #	49307 stsMarkers.found
-    #	out of 89401 total sequences
+    #	90676 stsMarkers.found
+    #	out of 93698 total sequences
+    #		from wc /cluster/data/ncbi/sts.2006-01/all.STS.id)
 
     # extract sequences for markers not yet found, and
     # blat w/o ooc to try to place more
     comm -1 -3  stsMarkers.found /cluster/data/ncbi/sts.2006-01/all.STS.id \
                 > stsMarkers.notFound
     wc -l stsMarkers.notFound
-    # 45538 stsMarkers.notFound
+    # 3022 stsMarkers.notFound
 
-    faSomeRecords /cluster/bluearc/sts.hg18/all.STS.fa stsMarkers.notFound \
+    faSomeRecords /san/sanvol1/scratch/hg18/sts/all.STS.fa stsMarkers.notFound \
                 notFound.STS.fa
 
-    mkdir /cluster/bluearc/sts.hg18/sts.splitNotFound
+    mkdir /san/sanvol1/scratch/hg18/sts/splitNotFound
     faSplit sequence notFound.STS.fa 20 \
-                /cluster/bluearc/sts.hg18/sts.splitNotFound/sts
+                /san/sanvol1/scratch/hg18/sts/splitNotFound/sts
 
     # blat with 11.ooc misses alignments, so reblat w/o the
     # sequences that aren't found
-    # NOTE: filtering produces yield of only 149 markers placed (out of 3142).
+    # NOTE: filtering produces yield of only 101 markers placed (out of 3022).
     # not enough to justify this step next time
-    ssh kk
-    cd /cluster/data/hg18/bed/sts
-    mkdir run.noOoc
-    cd run.noOoc
-    ls -1S /cluster/bluearc/sts.hg18/maskedContigs/*.fa > contigs.lst
-    ls -1S /cluster/bluearc/sts.hg18/sts.splitNotFound/sts*.fa > sts.lst
-    mkdir -p /cluster/bluearc/hg18/sts/sts/out.noOoc
+    ssh pk
+    mkdir /cluster/data/hg18/bed/sts/run.noOoc
+    cd /cluster/data/hg18/bed/sts/run.noOoc
+    ls -1S /san/sanvol1/scratch/hg18/maskedContigs/*.fa > contigs.lst
+    ls -1S /san/sanvol1/scratch/hg18/sts/splitNotFound/sts*.fa > sts.lst
+
+    mkdir /san/sanvol1/scratch/hg18/sts/out.noOoc
 
     foreach f (`cat sts.lst`)
         set d = $f:t:r
-        mkdir /cluster/bluearc/hg18/sts/sts/out.noOoc/$d
+        mkdir /san/sanvol1/scratch/hg18/sts/out.noOoc/$d
     end
 
-cat > template << 'EOF'
+cat > template << '_EOF_'
 #LOOP
-blat $(path1) $(path2) -stepSize=5 {check out line+ /cluster/bluearc/hg18/sts/sts/out.noOoc/$(root2)/$(root1).$(root2).psl}
+/cluster/bin/x86_64/blat $(path1) $(path2) -stepSize=5 {check out line+ /san/sanvol1/scratch/hg18/sts/out.noOoc/$(root2)/$(root1).$(root2).psl}
 #ENDLOOP
-'EOF'
+'_EOF_'
     # happy emacs
 
     gensub2 contigs.lst sts.lst template jobList
@@ -3597,7 +3592,81 @@ blat $(path1) $(path2) -stepSize=5 {check out line+ /cluster/bluearc/hg18/sts/st
     # 7182 jobs written to batch
     para try
     para check
-XXXX - running 2006-02-01 22:00
+
+    # process this set of alignments
+    cd /san/sanvol1/scratch/hg18/sts
+    pslSort dirs raw.noOoc.psl temp out.noOoc/*
+    #	-rw-rw-r--    1 459858612 Feb  3 15:56 raw.noOoc.psl
+    #	Wow, that is almost half the size of the original raw.psl with
+    #	everything in it.
+
+    rm -rf temp
+    pslReps -nearTop=0.0001 -minCover=0.6 -minAli=0.8 -noIntrons \
+        raw.noOoc.psl stsMarkers.noOoc.psl /dev/null
+    # Processed 4027664 alignments
+
+    # Lift them and get them ready to combine with primer alignments
+    liftUp -nohead stsMarkers.noOoc.lifted.psl \
+        /cluster/data/hg18/jkStuff/liftContigs.lft \
+        warn stsMarkers.noOoc.psl
+
+    /cluster/bin/scripts/extractPslInfo stsMarkers.noOoc.lifted.psl
+        # creates <file>.initial
+    $HOME/kent/src/utils/findAccession.pl -agp \
+        stsMarkers.noOoc.lifted.psl.initial /cluster/data/hg18
+	
+    #rm stsMarkers.lifted.psl.initial
+    mv stsMarkers.final stsMarkers.ooc.final
+    sort -k4,4n stsMarkers.noOoc.lifted.psl.initial.acc > stsMarkers.extra
+    sort -k4,4n stsMarkers.lifted.psl.initial.acc \
+                stsMarkers.noOoc.lifted.psl.initial.acc > stsMarkers.final
+
+    # determine found markers (4th field in file)
+    cut -f 4 stsMarkers.final | sort -n -u > stsMarkers.more.found
+    wc -l stsMarkers.more.found
+        #  90777 stsMarkers.found
+    cut -f 4 stsMarkers.extra | sort -n -u > stsMarkers.extra.found
+    wc -l stsMarkers.extra.found
+        #   101 out of 3022 attempted
+	#  out of 93698 total sequences
+
+    cp -p stsMarkers.final stsMarkers.lifted.psl \
+	stsMarkers.*lifted.psl.initial* stsMarkers.found \
+                /cluster/data/hg18/bed/sts
+
+    # Alignments from noOoc set were not added to all_sts_seq but info for the
+    # markers is in stsMap and stsInfo2. Some of the alignments are bad so
+    # filter by removing all alignments from noOoc psl file where
+    # tBaseInsert >=1000. Add the remaining alignments to the set of final
+    # alignments for stsMarkers. The information for the removed markers
+    # from the filtered set was also removed from stsMap and stsInfo2.
+    ssh pk
+    mkdir /cluster/data/hg18/bed/sts/fix
+    cd /cluster/data/hg18/bed/sts/fix
+    cp /san/sanvol1/scratch/hg18/sts/stsMarkers.noOoc.lifted.psl .
+    awk '{if ($8 < 1000) print}' stsMarkers.noOoc.lifted.psl \
+	> stsMarkers.noOoc.lifted.filt1000.psl
+    wc -l *.filt*.psl
+    # 23   483  4206 stsMarkers.noOoc.lifted.filt1000.psl
+    sort -k4,4n \
+	/san/sanvol1/scratch/hg18/sts/stsMarkers.noOoc.lifted.psl.initial.acc \
+	> stsMarkers.extra
+    awk '{print $4}' stsMarkers.extra | sort -n | uniq >  extra.ids
+    # in psl file, the ids are the 10th field
+    awk '{print $10}' stsMarkers.noOoc.lifted.psl | sort -n | uniq \
+        > noOoc.ids
+    diff extra.ids noOoc.ids
+    # there is no difference as expected
+    # get list of IDs from filtered file, filter < 1000
+    awk '{print $10}' stsMarkers.noOoc.lifted.filt1000.psl \
+        | sort -n | uniq > filt1000.ids
+    for i in `cat filt1000.ids`
+    do
+     awk 'BEGIN {OFS="\t"} \
+         {if ($4 == "'$i'") print $1, $2, $3, $4, $5, $6, $7}' \
+         stsMarkers.extra >> stsMarkers.extra.filt1000
+    done
+XXXX - to here 2006-02-03 16:20
 
 ###########################################################################
 # CREATE HAPLOTYPEPOS TRACK (DONE 1/31/06, Fan)
