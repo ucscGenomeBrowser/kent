@@ -13,7 +13,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.1 2006/02/04 00:27:35 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.2 2006/02/04 05:24:28 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
@@ -62,20 +62,6 @@ if (openParen == NULL) return FALSE;
 return TRUE;
 }
 
-char *safeAppend(char *base, char *extension)
-/* either base or extension could be null */
-{
-if (extension == NULL)
-    return base;
-
-if (base == NULL)
-    base = cloneString(extension);
-else
-    strcat(base, extension);
-
-return base;
-}
-
 char *getLeftFlank(char *allele)
 /* We know allele has an open paren (could assert that). */
 /* The flank will contain all ACGT. */
@@ -114,65 +100,72 @@ return repeatString;
 }
 
 char *expandAllele(char *startAllele)
-/* copy startAllele into oldAllele, which we consume as we go */
 {
-char *newAllele = NULL;
+struct dyString *newAllele = newDyString(1024);
+/* copy startAllele into oldAllele, which we consume as we go */
 char *oldAllele = cloneString(startAllele);
 char *leftFlank = NULL;
 char *rightFlank = NULL;
 char nucleotide;
 int repeatCount = 0;
 char *repeatString = NULL;
+int parenPos = 0;
 
 while (oldAllele != NULL)
     {
     if (!needToSplit(oldAllele))
         {
-	newAllele = safeAppend(newAllele, oldAllele);
-	if (!sameString(startAllele, newAllele))
+	dyStringAppend(newAllele, oldAllele);
+	if (!sameString(oldAllele, startAllele))
 	    {
-            verbose(1, "finalString = %s\n", newAllele);
-            verbose(1, "------------------------------\n");
+	    verbose(1, "expandAllele started with %s\n", startAllele);
+	    verbose(1, "expandAllele returning %s\n", newAllele->string);
+	    verbose(1, "---------------------\n");
 	    }
-	return (newAllele);
+	return (newAllele->string);
 	}
-    verbose(1, "expandAllele working on %s\n", oldAllele);
     leftFlank = getLeftFlank(oldAllele);
-    verbose(1, "leftFlank = %s\n", leftFlank);
-    newAllele = safeAppend(newAllele, leftFlank);
+    verbose(5, "leftFlank = %s\n", leftFlank);
+    if (leftFlank != NULL)
+        {
+	dyStringAppend(newAllele, leftFlank);
+	}
 
-    // is this dangerous?
     oldAllele = strpbrk(oldAllele, "(");
-    verbose(1, "oldAllele = %s\n", oldAllele);
+    verbose(5, "oldAllele = %s\n", oldAllele);
     if (strlen(oldAllele) < 3)
         {
 	verbose(1, "syntax error in %s\n", startAllele);
-	return newAllele;
+	verbose(1, "-----------------------------\n");
+	return newAllele->string;
 	}
 
     nucleotide = oldAllele[1];
-    verbose(1, "nucleotide = %c\n", nucleotide);
     oldAllele = oldAllele + 3;
-    verbose(1, "oldAllele = %s\n", oldAllele);
+    if (strlen(oldAllele) < 1)
+        {
+	verbose(1, "syntax error in %s\n", startAllele);
+	verbose(1, "-----------------------------\n");
+	return newAllele->string;
+	}
+        
     repeatCount = getRepeatCount(oldAllele);
-    verbose(1, "repeatCount = %d\n", repeatCount);
     if (repeatCount == 0)
         {
 	verbose(1, "syntax error in %s\n", startAllele);
-	return newAllele;
+	verbose(1, "-----------------------------\n");
+	return newAllele->string;
 	}
+    verbose(5, "repeatCount = %d\n", repeatCount);
     if (repeatCount <= 9)
         oldAllele = oldAllele + 1;
     else
         oldAllele = oldAllele + 2;
-    verbose(5, "oldAllele = %s\n", oldAllele);
     repeatString = generateRepeatString(nucleotide, repeatCount);
     verbose(5, "repeatString = %s\n", repeatString);
-    newAllele = safeAppend(newAllele, repeatString);
+    dyStringAppend(newAllele, repeatString);
     }
-verbose(1, "finalString = %s\n", newAllele);
-verbose(1, "------------------------------");
-return newAllele;
+return newAllele->string;
 }
 
 void doExpandAllele(char *chromName)
@@ -205,11 +198,18 @@ safef(query, sizeof(query), "select snp_id, allele from %s where loc_type = 1", 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    // verbose(1, "SNP = %s\n", row[0]);
     allele = expandAllele(row[1]);
     fprintf(f, "%s\t", row[0]);
     fprintf(f, "%s\n", allele);
     count++;
-    // if (count == 2000) return;
+    // if (count == 1000) 
+        // {
+        // sqlFreeResult(&sr);
+        // hFreeConn(&conn);
+        // fclose(f);
+        // return;
+	// }
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -290,12 +290,13 @@ if (chromHash == NULL)
     return 0;
     }
 
-doExpandAllele("1");
-return 0;
+// doExpandAllele("22");
+// return 0;
 
 cookie = hashFirst(chromHash);
 while ((chromName = hashNextName(&cookie)) != NULL)
     {
+    verbose(1, "*****************************\n");
     verbose(1, "chrom = %s\n", chromName);
     doExpandAllele(chromName);
     // I'm not changing the table format, I could just do a 'delete from table'
