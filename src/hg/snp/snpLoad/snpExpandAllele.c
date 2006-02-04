@@ -13,7 +13,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.3 2006/02/04 05:29:20 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.4 2006/02/04 05:41:10 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
@@ -192,7 +192,7 @@ f = mustOpen(fileName, "w");
 
 // start with loc_type = 1
 // need to read all columns if I'm dumping to .tab file
-safef(query, sizeof(query), "select snp_id, allele from %s where loc_type = 1", tableName);
+safef(query, sizeof(query), "select snp_id, allele from %s where loc_type != 2 and loc_type != 3", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
