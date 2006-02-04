@@ -1285,7 +1285,6 @@ struct pfParse *left = pp->children;
 struct pfParse *right = left->next;
 if (left->type == pptTuple && right->type == pptTuple)
     {
-    uglyf("Trying to flatten assignment\n");
     assert(slCount(left->children) == slCount(right->children));
     left = left->children;
     right = right->children;
