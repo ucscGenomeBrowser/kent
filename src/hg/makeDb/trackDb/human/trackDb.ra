@@ -546,11 +546,11 @@ type bed 12 .
 
 track hapmapSnps
 shortLabel HapMap SNPs
-longLabel HapMap Genotyped SNPs
+longLabel HapMap Genotyped SNPs, Primate Alleles, and Derived Allele Frequencies
 group varRep
 priority 144.48
 visibility hide
-type bed 4 .
+type bed 6 +
 
 track hapmapLd
 compositeTrack on
