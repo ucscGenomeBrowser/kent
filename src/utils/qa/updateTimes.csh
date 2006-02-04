@@ -87,6 +87,11 @@ if ( $status ) then
   exit 1
 endif
 
+checkMachineName.csh $mach3
+if ( $status ) then
+  exit 1
+endif
+
 if ( $mach1 == "hgwbeta" ) then
   set host1="-h hgwbeta"
 endif
