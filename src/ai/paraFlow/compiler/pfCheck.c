@@ -20,16 +20,16 @@ for ( ; inner != NULL; inner = inner->parent)
 return FALSE;
 }
 
-static boolean isOutsideObj(struct hash *outsideOk, struct pfScope *localScope,
+static boolean isOutsideObj(struct hash *outputVars, struct pfScope *localScope,
 	struct pfParse *pp)
 /* Return TRUE if pp (which must be of type pptVarUse) is outside of local
- * scope, and also outside the outsideOk hash (which typically is used for
+ * scope, and also outside the outputVars hash (which typically is used for
  * a function's return values. */
 {
-return !(enclosedScope(localScope, pp->var->scope) || hashLookup(outsideOk, pp->name));
+return !(enclosedScope(localScope, pp->var->scope) || hashLookup(outputVars, pp->name));
 }
 
-static void checkLocal(struct hash *outsideOk, struct pfScope *localScope,
+static void checkLocal(struct hash *outputVars, struct pfScope *localScope,
 	struct pfParse *pp)
 /* Make sure that any pptVarUse's are local or function calls */
 {
@@ -40,13 +40,13 @@ switch (pp->type)
 	if (pp->var->paraTainted)
 	    errAt(pp->tok, "%s may contain a non-local value, so you can no longer write to it here",
 	    	pp->name); 
-	if (isOutsideObj(outsideOk, localScope, pp))
+	if (isOutsideObj(outputVars, localScope, pp))
 	    errAt(pp->tok, "write to non-local variable illegal in this context");
         break;
 	}
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    checkLocal(outsideOk, localScope, pp);
+    checkLocal(outputVars, localScope, pp);
 }
 
 struct pfParse *firstVarInTree(struct pfParse *pp)
@@ -65,22 +65,22 @@ return NULL;
 }
 
 
-static boolean usesOutsideObj(struct hash *outsideWriteOk,
+static boolean usesOutsideObj(struct hash *outputVars,
 	struct pfScope *localScope, struct pfParse *pp)
 /* Return TRUE if any non-local objects are involved under pp. */
 {
 switch (pp->type)
     {
     case pptVarUse:
-        return isOutsideObj(outsideWriteOk, localScope, pp);
+        return isOutsideObj(outputVars, localScope, pp);
     case pptDot:
     case pptIndex:
-        return usesOutsideObj(outsideWriteOk, localScope, pp->children);
+        return usesOutsideObj(outputVars, localScope, pp->children);
     case pptTuple:
         {
 	for (pp = pp->children; pp != NULL; pp = pp->next)
 	    {
-	    if (usesOutsideObj(outsideWriteOk, localScope, pp))
+	    if (usesOutsideObj(outputVars, localScope, pp))
 	        return TRUE;
 	    }
 	return FALSE;
@@ -89,7 +89,7 @@ switch (pp->type)
 return FALSE;
 }
 
-static void markParaTainted(struct hash *outsideWriteOk,
+static void markParaTainted(struct hash *outputVars,
 	struct pfScope *localScope, struct pfParse *pp)
 /* If we're storing a non-local object or string inside a
  * a local object or a string var, then mark that local variable
@@ -104,7 +104,7 @@ if (pp->ty->base->needsCleanup)
 	struct pfParse *init = name->next;
 	if (init != NULL)
 	    {
-	    if (usesOutsideObj(outsideWriteOk, localScope, init))
+	    if (usesOutsideObj(outputVars, localScope, init))
 	        pp->var->paraTainted = TRUE;
 	    }
 	}
@@ -113,19 +113,24 @@ if (pp->ty->base->needsCleanup)
 	struct pfParse *left = pp->children;
 	struct pfParse *init = left->next;
 	struct pfParse *leftVar = firstVarInTree(left);
-	if (!isOutsideObj(outsideWriteOk, localScope, leftVar))
+	if (hashLookup(outputVars, leftVar->name))
 	    {
-	    if (usesOutsideObj(outsideWriteOk, localScope, init))
+	    if (usesOutsideObj(outputVars, localScope, init))
+	        errAt(pp->tok, "Can't assign a para or flow output to something non-local.");
+	    }
+	else if (!isOutsideObj(outputVars, localScope, leftVar))
+	    {
+	    if (usesOutsideObj(outputVars, localScope, init))
 	        leftVar->var->paraTainted = TRUE;
 	    }
 	}
     }
 }
 
-static void checkReadOnlyOutsideLocals(struct hash *outsideWriteOk,
+static void checkReadOnlyOutsideLocals(struct hash *outputVars,
 	struct pfScope *localScope, struct pfParse *pp)
 /* Check that anything on left hand side of an assignment
- * is local or in the outsideWriteOk hash. */
+ * is local or in the outputVars hash. */
 {
 switch (pp->type)
     {
@@ -135,18 +140,18 @@ switch (pp->type)
     case pptMulEquals:
     case pptDivEquals:
          {
-	 checkLocal(outsideWriteOk, localScope, pp->children);
-	 markParaTainted(outsideWriteOk, localScope, pp);
+	 checkLocal(outputVars, localScope, pp->children);
+	 markParaTainted(outputVars, localScope, pp);
 	 break;
 	 }
     case pptVarInit:
         {
-	markParaTainted(outsideWriteOk, localScope, pp);
+	markParaTainted(outputVars, localScope, pp);
 	break;
 	}
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    checkReadOnlyOutsideLocals(outsideWriteOk, localScope, pp);
+    checkReadOnlyOutsideLocals(outputVars, localScope, pp);
 }
 
 static void checkCalls(struct pfCompile *pfc, struct pfParse *pp, boolean paraOk)
@@ -189,18 +194,17 @@ struct pfParse *input = paraDec->children->next;
 struct pfParse *output = input->next;
 struct pfParse *body = output->next;
 struct pfParse *pp;
-struct hash *outerWriteOk = hashNew(6);
+struct hash *outputVars = hashNew(6);
 
-uglyf("checkPara %s\n", paraDec->name);
 /* Build up hash of variables that it's ok to write to. */
 for (pp = output->children; pp != NULL; pp = pp->next)
-    hashAdd(outerWriteOk, pp->name, pp->var);
+    hashAdd(outputVars, pp->name, pp->var);
 
 checkCalls(pfc, body, TRUE);
-checkReadOnlyOutsideLocals(outerWriteOk, body->scope, body);
+checkReadOnlyOutsideLocals(outputVars, body->scope, body);
 
 /* Clean up */
-hashFree(&outerWriteOk);
+hashFree(&outputVars);
 }
 
 void pfCheckParaFlow(struct pfCompile *pfc, struct pfParse *pp)
