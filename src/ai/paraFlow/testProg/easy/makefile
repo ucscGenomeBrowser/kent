@@ -20,6 +20,8 @@ test:
 	diff expected/emptyFlow $O/emptyFlow
 	paraFlow emptyFunc.pf > $O/emptyFunc
 	diff expected/emptyFunc $O/emptyFunc
+	paraFlow foreach.pf > $O/foreach
+	diff expected/foreach $O/foreach
 	paraFlow genericSwap.pf > $O/genericSwap
 	diff expected/genericSwap $O/genericSwap
 	paraFlow hello.pf > $O/hello
