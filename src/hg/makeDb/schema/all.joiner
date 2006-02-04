@@ -1219,8 +1219,9 @@ identifier mouseStsTrueName typeOf=stsName
 
 identifier ratStsTrueName typeOf=stsName
 "Rat STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
-    $rn.stsInfoRat.name
-    $rn.stsMapRat.name
+    $rn.stsInfoRat.name dupeOk
+    $rn.!rn3.stsMapRat.name
+    rn3.stsMapRat.name minCheck=0.99
 
 # "Biological" Gene Names
 
