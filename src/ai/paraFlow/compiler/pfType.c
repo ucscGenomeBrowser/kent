@@ -1292,6 +1292,7 @@ if (left->type == pptTuple && right->type == pptTuple)
     if (left != NULL)
 	{
 	struct pfParse *aList = NULL, *a = NULL, *lNext, *rNext;
+	struct pfParse *lastChild, *oldEnd = pp->next;
 	while (left != NULL)
 	    {
 	    lNext = left->next;
@@ -1307,9 +1308,19 @@ if (left->type == pptTuple && right->type == pptTuple)
 	    left = lNext;
 	    right = rNext;
 	    }
+	lastChild = a;
 	slReverse(&aList);
-	a->next = pp->next;
+	lastChild->next = oldEnd;
 	*pPp = aList;
+
+	/* Handle case where we have to flatten children too. */
+	for (;;)
+	    {
+	    flattenAssign(pfc, pPp);
+	    pPp = &((*pPp)->next);
+	    if (*pPp == oldEnd)
+	        break;
+	    }
 	}
     }
 }
