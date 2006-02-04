@@ -1276,6 +1276,44 @@ if (*pBody != NULL)
 hashFree(&outputHash);
 }
 
+static void flattenAssign(struct pfCompile *pfc, struct pfParse **pPp)
+/* If it's an assignment of a tuple to a tuple, turn it into
+ * a bunch of individual assignments. */
+{
+struct pfParse *pp = *pPp;
+struct pfParse *left = pp->children;
+struct pfParse *right = left->next;
+if (left->type == pptTuple && right->type == pptTuple)
+    {
+    uglyf("Trying to flatten assignment\n");
+    assert(slCount(left->children) == slCount(right->children));
+    left = left->children;
+    right = right->children;
+    if (left != NULL)
+	{
+	struct pfParse *aList = NULL, *a = NULL, *lNext, *rNext;
+	while (left != NULL)
+	    {
+	    lNext = left->next;
+	    rNext = right->next;
+
+	    a = pfParseNew(pptAssignment, pp->tok, pp->parent, pp->scope);
+	    a->children = left;
+	    left->next = right;
+	    right->next = NULL;
+	    a->ty = CloneVar(left->ty);
+	    slAddHead(&aList, a);
+
+	    left = lNext;
+	    right = rNext;
+	    }
+	slReverse(&aList);
+	a->next = pp->next;
+	*pPp = aList;
+	}
+    }
+}
+
 void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
@@ -1358,6 +1396,7 @@ switch (pp->type)
         break;
     case pptAssignment:
         coerceAssign(pfc, pp, FALSE, FALSE);
+	flattenAssign(pfc, pPp);
 	break;
     case pptPlusEquals:
         coerceAssign(pfc, pp, TRUE, FALSE);
