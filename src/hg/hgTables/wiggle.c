@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.56 2005/07/10 06:34:09 angie Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.57 2006/02/04 01:23:45 angie Exp $";
 
 extern char *maxOutMenu[];
 
@@ -318,10 +318,11 @@ static void intersectDataVector(char *table, struct dataVector *dataVector1,
  * Otherwise, handle intersection here. */
 if (anyIntersection() && !isWiggle(database, table))
     {
+    char *track2 = cartString(cart, hgtaIntersectTrack);
     char *table2 = cartString(cart, hgtaIntersectTable);
     if (table2 && differentWord(table2, table))
 	{
-	struct trackDb *tdb2 = hTrackDbForTrack(table2);
+	struct trackDb *tdb2 = hTrackDbForTrack(track2);
 	struct trackTable *tt2 = trackTableNew(tdb2, table2, conn);
 	struct dataVector *dataVector2 = dataVectorFetchOneRegion(tt2, region,
 								  conn);
@@ -693,7 +694,7 @@ else
 return dv;
 }
 
-struct dataVector *wiggleDataVector(char *table,
+struct dataVector *wiggleDataVector(struct trackDb *tdb, char *table,
 	struct sqlConnection *conn, struct region *region)
 /* Read in wiggle as dataVector and return it.  Filtering, subtrack merge 
  * and intersection are handled. */
@@ -704,7 +705,6 @@ if (anySubtrackMerge(database, table))
     dv = mergedWigDataVector(table, conn, region);
 else
     {
-    struct trackDb *tdb = hTrackDbForTrack(table);
     struct trackTable *tt1 = trackTableNew(tdb, table, conn);
     dv = dataVectorFetchOneRegion(tt1, region, conn);
     }

@@ -19,7 +19,7 @@
 #include "wiggle.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.42 2005/10/28 16:38:54 kent Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.43 2006/02/04 01:23:44 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -500,7 +500,7 @@ for (region = regionList; region != NULL; region = region->next)
 	{
 	if (needSubtrackMerge)
 	    {
-	    dv = wiggleDataVector(curTable, conn, region);
+	    dv = wiggleDataVector(curTrack, curTable, conn, region);
 	    if (dv != NULL)
 		slAddHead(&dataVectorList, dv);
 	    }
@@ -532,7 +532,7 @@ for (region = regionList; region != NULL; region = region->next)
 	}
     else if (isWig)
 	{
-	dv = wiggleDataVector(curTable, conn, region);
+	dv = wiggleDataVector(curTrack, curTable, conn, region);
 	bedList = dataVectorToBedList(dv);
 	dataVectorFree(&dv);
 	}
