@@ -29,6 +29,7 @@ struct pfVar
      struct pfType *ty;			/* Variable type. */
      struct pfParse *parse;		/* Declaration spot in parse tree. */
      bool isExternal;			/* Variable in an external file? */
+     bool paraTainted;			/* If true then no writing to var allowed. */
      };
 
 struct pfTokenizer;
