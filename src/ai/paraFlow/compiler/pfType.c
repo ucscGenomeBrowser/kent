@@ -139,12 +139,23 @@ switch (tok->type)
     }
 }
 
+static boolean isNumerical(struct pfCompile *pfc, struct pfParse *pp)
+/* Return TRUE if numerical (or var) type. */
+{
+return pp->ty->base == pfc->varType || pp->ty->base->parent == pfc->numType;
+}
+
+static boolean isNumOrString(struct pfCompile *pfc, struct pfParse *pp)
+/* Return TRUE if numerical or string type. */
+{
+return pp->ty->base == pfc->stringType || isNumerical(pfc, pp);
+}
+
 static void enforceNumber(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure type of pp is numberic. */
 {
-if (pp->ty->base != pfc->varType)
-    if (pp->ty->base->parent != pfc->numType)
-	expectingGot("number", pp->tok);
+if (!isNumerical(pfc, pp))
+    expectingGot("number", pp->tok);
 }
 
 static void enforceInt(struct pfCompile *pfc, struct pfParse *pp)
@@ -1297,6 +1308,8 @@ switch (pp->type)
     case pptPlus:
         coerceBinaryOp(pfc, pp, TRUE, TRUE, TRUE, FALSE);
 	coerceStringCat(pfc, pp);
+	if (!isNumOrString(pfc, pp))
+	    errAt(pp->tok, "This operation only works on numbers and strings.");
 	break;
     case pptSame:
     case pptNotSame:
@@ -1314,6 +1327,8 @@ switch (pp->type)
     case pptDiv:
     case pptMinus:
         coerceBinaryOp(pfc, pp, TRUE, FALSE, FALSE, FALSE);
+	if (!isNumerical(pfc, pp))
+	    errAt(pp->tok, "This operation only works on numbers");
 	break;
     case pptMod:
         coerceBinaryOp(pfc, pp, FALSE, FALSE, FALSE, FALSE);
