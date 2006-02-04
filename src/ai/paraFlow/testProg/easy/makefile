@@ -34,6 +34,8 @@ test:
 	diff expected/memberForeach $O/memberForeach
 	paraFlow mixedDeclare.pf > $O/mixedDeclare
 	diff expected/mixedDeclare $O/mixedDeclare
+	paraFlow multiAssign.pf > $O/multiAssign
+	diff expected/multiAssign $O/multiAssign
 	paraFlow neg.pf > $O/neg
 	diff expected/neg $O/neg
 	paraFlow numExp.pf > $O/numExp
