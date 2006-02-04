@@ -35,11 +35,15 @@ flow distance(point a, point b) into double d
     d = sqrt(dSquared);
     }
 
+array of int arr = (1,2,3,4);
+
 to printInfo(animal a)
     {
+    int b = 3;
     prin(a.name());
     prin(" ");
     print(a.dims());
+    arr[b] = 666;
     }
 
 printInfo(animal);
@@ -47,3 +51,5 @@ printInfo(frog);
 printInfo(zebra);
 prin("frog to zebra difference ");
 print(distance(frog.dims(), zebra.dims()));
+
+
