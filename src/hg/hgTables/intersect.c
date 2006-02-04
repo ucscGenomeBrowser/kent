@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.32 2005/11/04 18:09:39 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.33 2006/02/04 01:18:28 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -30,10 +30,29 @@ static char *nextVars[] = {hgtaNextIntersectGroup, hgtaNextIntersectTrack,
 	hgtaNextInvertTable, hgtaNextInvertTable2,
 	};
 
+/* This is already duplicated in correlate.c and is handy -- should be 
+ * libified, probably in cart.h. */
+void removeCartVars(struct cart *cart, char **vars, int varCount);
+
 boolean anyIntersection()
 /* Return TRUE if there's an intersection to do. */
 {
-return cartVarExists(cart, hgtaIntersectTrack);
+boolean specd = (cartVarExists(cart, hgtaIntersectTrack) &&
+		 cartVarExists(cart, hgtaIntersectTable));
+if (specd)
+    {
+    if (hTableExists(cartString(cart, hgtaIntersectTable)))
+	return TRUE;
+    else
+	{
+	/* If the specified intersect table doesn't exist (e.g. if we
+	 * just changed databases), clear the settings. */
+	removeCartVars(cart, curVars, ArraySize(curVars));
+	return FALSE;
+	}
+    }
+else
+    return FALSE;
 }
 
 boolean intersectionIsBpWise()
