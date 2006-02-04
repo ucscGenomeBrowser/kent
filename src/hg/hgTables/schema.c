@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.33 2005/10/27 03:34:22 hartera Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.34 2006/02/04 00:41:31 angie Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -302,19 +302,18 @@ slFreeList(&chain);
 return retVal;
 }
 
-static void printTrackHtml(char *table)
+static void printTrackHtml(struct trackDb *tdb)
 /* If trackDb has html for table, print it out in a new section. */
 {
-struct trackDb *tdb = hTrackDbForTrack(table);
-if (tdb != NULL && tdb->html != NULL && tdb->html[0] != 0)
+if (tdb != NULL && isNotEmpty(tdb->html))
     {
-    webNewSection("%s (%s) Track Description", tdb->shortLabel, table);
+    webNewSection("%s (%s) Track Description", tdb->shortLabel, tdb->tableName);
     puts(tdb->html);
     }
 }
 
 
-static void showSchemaDb(char *db, char *table)
+static void showSchemaDb(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
 struct sqlConnection *conn = sqlConnect(db);
@@ -384,7 +383,7 @@ if (jpList != NULL)
     }
 webNewSection("Sample Rows");
 printSampleRows(10, conn, splitTable);
-printTrackHtml(table);
+printTrackHtml(tdb);
 }
 
 static void showSchemaCtWiggle(char *table, struct customTrack *ct)
@@ -435,34 +434,58 @@ else
     showSchemaCtBed(table, ct);
 }
 
-static void showSchema(char *db, char *table)
+static void showSchema(char *db, struct trackDb *tdb, char *table)
 /* Show schema to open html page. */
 {
 if (isCustomTrack(table))
     showSchemaCt(table);
 else
-    showSchemaDb(db, table);
+    showSchemaDb(db, tdb, table);
 }
 
 void doTableSchema(char *db, char *table, struct sqlConnection *conn)
-/* Show schema around table. */
+/* Show schema around table (which is not described by curTrack). */
 {
+struct trackDb *tdb = NULL;
 char parseBuf[256];
 dbOverrideFromTable(parseBuf, &db, &table);
 htmlOpen("Schema for %s", table);
-showSchema(db, table);
+tdb = hTrackDbForTrack(table);
+showSchema(db, tdb, table);
 htmlClose();
+}
+
+static boolean curTrackDescribesCurTable()
+/* Return TRUE if curTable is curTrack or its subtrack. */ 
+{
+if (curTrack == NULL)
+    return FALSE;
+if (sameString(curTrack->tableName, curTable))
+    return TRUE;
+else if (startsWith("wigMaf", curTrack->type) &&
+	 sameString(curTable, trackDbSetting(curTrack, "wiggle")))
+    return TRUE;
+else if (curTrack->subtracks != NULL)
+    {
+    struct trackDb *sTdb = NULL;
+    for (sTdb = curTrack->subtracks;  sTdb != NULL;  sTdb = sTdb->next)
+	{
+	if (sameString(sTdb->tableName, curTable))
+	    return TRUE;
+	}
+    }
+return FALSE;
 }
 
 void doSchema(struct sqlConnection *conn)
 /* Show schema around current track. */
 {
-if (curTrack != NULL && sameString(curTrack->tableName, curTable))
+if (curTrackDescribesCurTable())
     {
     struct trackDb *track = curTrack;
     char *table = connectingTableForTrack(curTable);
     htmlOpen("Schema for %s - %s", track->shortLabel, track->longLabel);
-    showSchema(database, table);
+    showSchema(database, curTrack, table);
     htmlClose();
     }
 else
