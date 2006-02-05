@@ -806,6 +806,7 @@ switch (tok->type)
 return pp;
 }
 
+
 struct pfParse *parseCallOrIndex(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse out function call. */
@@ -858,9 +859,124 @@ else if (tok->type == '[')
 return pp;
 }
 
+static struct pfParse *parseParaInvoke(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope, boolean isStatement)
+/* Parse para invokation.  This is of general form:
+ *    'para' type var 'in' collection action expression
+ * where action can be do, add, multiply or, and, min, max, top intExpression,
+ * sample intExpression, filter, or get.  In the case where the action is 'do'
+ * then the action is followed by a statement rather than an expression. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp;
+struct pfParse *element;
+struct pfParse *collection;
+struct pfParse *body;
+struct pfParse *number = NULL;
+boolean actionNeedsNum = FALSE;
+boolean actionNeedsStatement = FALSE;
+char *action = NULL;
+enum pfParseType paraType = pptNone;
+
+/* Preliminaries, scope and as of yet untyped parse node for para. */
+scope = pfScopeNew(pfc, scope, 1, FALSE);
+tok = tok->next;	/* Skip over para. */
+skipRequiredCharType('(', &tok);
+pp = pfParseNew(pptNone, tok, parent, scope);
+
+/* Parse out the element in collection */
+element = pfParseExpression(pfc, pp, &tok, scope);
+skipRequiredName("in", &tok);
+collection = pfParseExpression(pfc, pp, &tok, scope);
+skipRequiredCharType(')', &tok);
+
+/* Parse out the action keyword, and figure out what to do depending on
+ * action.  Determine parse node type from action. */
+action = pfTokenAsString(tok);
+if (sameString("do", action))
+    {
+    paraType = pptParaDo;
+    actionNeedsStatement = TRUE;
+    }
+else if (sameString("add", action))
+    paraType = pptParaAdd;
+else if (sameString("multiply", action))
+    paraType = pptParaMultiply;
+else if (sameString("and", action))
+    paraType = pptParaAnd;
+else if (sameString("or", action))
+    paraType = pptParaOr;
+else if (sameString("min", action))
+    paraType = pptParaMin;
+else if (sameString("max", action))
+    paraType = pptParaMax;
+else if (sameString("top", action))
+    {
+    paraType = pptParaTop;
+    actionNeedsNum = TRUE;
+    }
+else if (sameString("sample", action))
+    {
+    paraType = pptParaSample;
+    actionNeedsNum = TRUE;
+    }
+else if (sameString("get", action))
+    paraType = pptParaGet;
+else if (sameString("filter", action))
+    paraType = pptParaFilter;
+else
+    errAt(tok, "unrecognized para action");
+if (isStatement != actionNeedsStatement)
+    {
+    if (isStatement)
+        errAt(tok, "para action \"%s\" has a value that needs to be used", action);
+    else
+        errAt(tok, "para action \"%s\" has no value", action);
+    }
+freez(&action);
+tok = tok->next;
+pp->type = paraType;
+
+/* If action is followed by a number get that. */
+if (actionNeedsNum)
+    number = pfParseExpression(pfc, pp, &tok, scope);
+
+/* Get expression or statement that gets executed in parallel. */
+if (actionNeedsStatement)
+    body = pfParseStatement(pfc, pp, &tok, scope);
+else
+    {
+    body = pfParseExpression(pfc, pp, &tok, scope);
+    if (isStatement)
+	eatSemi(&tok);
+    }
+
+/* Hang various things off of para parse node. */
+pp->children = number;	/* A no-op if number not required. */
+slAddHead(&pp->children, body);
+slAddHead(&pp->children, collection);
+slAddHead(&pp->children, element);
+*pTokList = tok;
+return pp;
+}
+
+struct pfParse *parseParaExp(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse expression that might include 'para' */
+{
+struct pfToken *tok = *pTokList;
+if (tok->type == pftPara)
+    {
+    return parseParaInvoke(pfc, parent, pTokList, scope, FALSE);
+    }
+else
+    return parseCallOrIndex(pfc, parent, pTokList, scope);
+}
+
 struct pfParse *parseNegation(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse unary minus. */
+/* Parse unary minus, and other things at that level. */
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp;
@@ -884,7 +1000,7 @@ else if (tok->type == '~')
     }
 else
     {
-    pp = parseCallOrIndex(pfc, parent, &tok, scope);
+    pp = parseParaExp(pfc, parent, &tok, scope);
     }
 *pTokList = tok;
 return pp;
@@ -1203,6 +1319,7 @@ else
     return pp;
 }
 
+
 struct pfParse *pfParseExpression(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse expression. */
@@ -1511,102 +1628,6 @@ return pp;
 }
 
 
-static struct pfParse *parseParaInvoke(struct pfCompile *pfc, 
-	struct pfParse *parent, struct pfToken **pTokList, 
-	struct pfScope *scope, boolean isStatement)
-/* Parse para invokation.  This is of general form:
- *    'para' type var 'in' collection action expression
- * where action can be do, add, multiply or, and, min, max, top intExpression,
- * sample intExpression, filter, or get.  In the case where the action is 'do'
- * then the action is followed by a statement rather than an expression. */
-{
-struct pfToken *tok = *pTokList;
-struct pfParse *pp;
-struct pfParse *element;
-struct pfParse *collection;
-struct pfParse *body;
-struct pfParse *number = NULL;
-boolean actionNeedsNum = FALSE;
-boolean actionNeedsStatement = FALSE;
-char *action = NULL;
-enum pfParseType paraType = pptNone;
-
-/* Preliminaries, scope and as of yet untyped parse node for para. */
-scope = pfScopeNew(pfc, scope, 1, FALSE);
-tok = tok->next;	/* Skip over para. */
-skipRequiredCharType('(', &tok);
-pp = pfParseNew(pptNone, tok, parent, scope);
-
-/* Parse out the element in collection */
-element = pfParseExpression(pfc, pp, &tok, scope);
-skipRequiredName("in", &tok);
-collection = pfParseExpression(pfc, pp, &tok, scope);
-skipRequiredCharType(')', &tok);
-
-/* Parse out the action keyword, and figure out what to do depending on
- * action.  Determine parse node type from action. */
-action = pfTokenAsString(tok);
-if (sameString("do", action))
-    {
-    if (!isStatement)
-        errAt(tok, "para ... do can only be a statement, not an expression");
-    paraType = pptParaDo;
-    actionNeedsStatement = TRUE;
-    }
-else if (sameString("add", action))
-    paraType = pptParaAdd;
-else if (sameString("multiply", action))
-    paraType = pptParaMultiply;
-else if (sameString("and", action))
-    paraType = pptParaAnd;
-else if (sameString("or", action))
-    paraType = pptParaOr;
-else if (sameString("min", action))
-    paraType = pptParaMin;
-else if (sameString("max", action))
-    paraType = pptParaMax;
-else if (sameString("top", action))
-    {
-    paraType = pptParaTop;
-    actionNeedsNum = TRUE;
-    }
-else if (sameString("sample", action))
-    {
-    paraType = pptParaSample;
-    actionNeedsNum = TRUE;
-    }
-else if (sameString("get", action))
-    paraType = pptParaGet;
-else if (sameString("filter", action))
-    paraType = pptParaFilter;
-else
-    errAt(tok, "unrecognized para action");
-freez(&action);
-tok = tok->next;
-pp->type = paraType;
-
-/* If action is followed by a number get that. */
-if (actionNeedsNum)
-    number = pfParseExpression(pfc, pp, &tok, scope);
-
-/* Get expression or statement that gets executed in parallel. */
-if (actionNeedsStatement)
-    body = pfParseStatement(pfc, pp, &tok, scope);
-else
-    {
-    body = pfParseExpression(pfc, pp, &tok, scope);
-    eatSemi(&tok);
-    }
-
-/* Hang various things off of para parse node. */
-pp->children = number;	/* A no-op if number not required. */
-slAddHead(&pp->children, body);
-slAddHead(&pp->children, collection);
-slAddHead(&pp->children, element);
-*pTokList = tok;
-return pp;
-}
-
 static struct pfParse *parseParaStatement(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse when it starts with 'para' - will either be a para function declaration
@@ -1724,7 +1745,6 @@ struct pfParse *pfParseStatement(struct pfCompile *pfc, struct pfParse *parent,
 struct pfToken *tok = *pTokList;
 struct pfParse *statement;
 
-//  pfTokenDump(tok, uglyOut, TRUE);
 switch (tok->type)
     {
     case pftInclude:
