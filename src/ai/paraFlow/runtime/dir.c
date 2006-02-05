@@ -38,7 +38,7 @@ freeMem(dir);
 }
 
 
-struct _pf_dir *_pf_dir_new(int estimatedSize, struct _pf_type *type)
+static struct _pf_dir *pfDirNew(int estimatedSize, struct _pf_type *type)
 /* Create a dir.  The estimatedSize is just a guideline.
  * Generally you want this to be about the same as the
  * number of things going into the dir for optimal
@@ -56,13 +56,31 @@ dir->hash = hashNew(sizeLog2);
 return dir;
 }
 
+struct _pf_dir *_pf_dir_new(int estimatedSize, int elTypeId)
+/* Create a dir.  The estimatedSize is just a guideline.
+ * Generally you want this to be about the same as the
+ * number of things going into the dir for optimal
+ * performance.  If it's too small it will go slower.
+ * If it's too big it will use up more memory.
+ * Still, it's fine to be pretty approximate with it. */
+{
+return pfDirNew(estimatedSize, _pf_type_table[elTypeId]);
+}
+
+
+int _pf_dir_size(struct _pf_dir *dir)
+/* Return size of dir. */
+{
+return dir->hash->elCount;
+}
+
 struct _pf_dir *_pf_int_dir_from_tuple(_pf_Stack *stack, int count, int typeId,
 	int elTypeId)
 /* Return a directory of ints from a tuple of key/val pairs.  Note the count
  * is twice the number of elements.  (It represents the number of items put
  * on the stack, and we have one each for key and value. */
 {
-struct _pf_dir *dir = _pf_dir_new(0, _pf_type_table[elTypeId]);
+struct _pf_dir *dir = pfDirNew(0, _pf_type_table[elTypeId]);
 int i, elCount = (count>>1);
 struct hash *hash = dir->hash;
 
@@ -84,7 +102,7 @@ struct _pf_dir *_pf_string_dir_from_tuple(_pf_Stack *stack, int count, int typeI
  * is twice the number of elements.  (It represents the number of items put
  * on the stack, and we have one each for key and value. */
 {
-struct _pf_dir *dir = _pf_dir_new(0, _pf_type_table[elTypeId]);
+struct _pf_dir *dir = pfDirNew(0, _pf_type_table[elTypeId]);
 int i, elCount = (count>>1);
 struct hash *hash = dir->hash;
 
@@ -235,7 +253,7 @@ _pf_Dir _pf_r_tuple_to_dir(_pf_Stack *stack, struct _pf_type *elType,
 struct _pf_base *base = elType->base;
 int elSize = elType->base->size;
 int i, count = _pf_countOurLevel(encoding);
-struct _pf_dir *dir = _pf_dir_new(count, elType);
+struct _pf_dir *dir = pfDirNew(count, elType);
 
 if (encoding[0] != '(')
     errAbort("Expecting ( in array tuple encoding, got %c", encoding[0]);

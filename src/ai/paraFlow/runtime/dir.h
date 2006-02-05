@@ -10,16 +10,18 @@ struct _pf_dir
     void (*_pf_cleanup)(struct _pf_dir *dir, int id); /* Called when refCount <= 0 */
     struct _pf_type *elType;	/* Type of each element. */
     struct hash *hash;
-    int size;
     };
 
-struct _pf_dir *_pf_dir_new(int estimatedSize, struct _pf_type *type);
+struct _pf_dir *_pf_dir_new(int estimatedSize, int elTypeId);
 /* Create a dir.  The estimatedSize is just a guideline.
  * Generally you want this to be about the same as the
  * number of things going into the dir for optimal
  * performance.  If it's too small it will go slower.
  * If it's too big it will use up more memory.
  * Still, it's fine to be pretty approximate with it. */
+
+int _pf_dir_size(struct _pf_dir *dir);
+/* Return size of dir. */
 
 struct _pf_object *_pf_dir_lookup_object(_pf_Stack *stack, _pf_Bit addRef);
 /* Stack contains directory, keyword.  Return value associated
