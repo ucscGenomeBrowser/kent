@@ -1256,9 +1256,7 @@ tok = tok->next;	/* Skip something (implicit in type) */
 name = parseNameUse(parent, &tok, scope);
 pp->name = name->name;
 
-if (tok->type != '(')
-    expectingGot("(", tok);
-tok = tok->next;
+skipRequiredCharType('(', &tok);
 if (tok->type == ')')
     {
     input = emptyTuple(pp, tok, scope);
@@ -1510,7 +1508,7 @@ return pp;
 
 
 static struct pfParse *parseParaInvoke(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope, boolean doOk)
+	struct pfToken **pTokList, struct pfScope *scope, boolean isStatement)
 /* Parse para invokation.  This is of general form:
  *    'para' type var 'in' collection action expression
  * where action can be do, add, multiply or, and, min, max, top intExpression,
@@ -1528,23 +1526,24 @@ boolean actionNeedsStatement = FALSE;
 char *action = NULL;
 enum pfParseType paraType = pptNone;
 
-
 /* Preliminaries, scope and as of yet untyped parse node for para. */
 scope = pfScopeNew(pfc, scope, 1, FALSE);
 tok = tok->next;	/* Skip over para. */
+skipRequiredCharType('(', &tok);
 pp = pfParseNew(pptNone, tok, parent, scope);
 
 /* Parse out the element in collection */
 element = pfParseExpression(pp, &tok, scope);
 skipRequiredName("in", &tok);
 collection = pfParseExpression(pp, &tok, scope);
+skipRequiredCharType(')', &tok);
 
 /* Parse out the action keyword, and figure out what to do depending on
  * action.  Determine parse node type from action. */
 action = pfTokenAsString(tok);
 if (sameString("do", action))
     {
-    if (!doOk)
+    if (!isStatement)
         errAt(tok, "para ... do can only be a statement, not an expression");
     paraType = pptParaDo;
     actionNeedsStatement = TRUE;
@@ -1589,7 +1588,10 @@ if (actionNeedsNum)
 if (actionNeedsStatement)
     body = pfParseStatement(pfc, pp, &tok, scope);
 else
-    body = parseExpressionAndSemi(pp, &tok, scope);
+    {
+    body = pfParseExpression(pp, &tok, scope);
+    eatSemi(&tok);
+    }
 
 /* Hang various things off of para parse node. */
 pp->children = number;	/* A no-op if number not required. */
@@ -1600,7 +1602,7 @@ slAddHead(&pp->children, element);
 return pp;
 }
 
-static struct pfParse *parsePara(struct pfCompile *pfc, struct pfParse *parent,
+static struct pfParse *parseParaStatement(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse when it starts with 'para' - will either be a para function declaration
  * or a para invokation. */
@@ -1758,7 +1760,7 @@ switch (tok->type)
 	statement = parseTo(pfc, parent, &tok, scope);
 	break;
     case pftPara:
-	statement = parsePara(pfc, parent, &tok, scope);
+	statement = parseParaStatement(pfc, parent, &tok, scope);
 	break;
     case pftFlow:
 	statement = parseFlow(pfc, parent, &tok, scope);
