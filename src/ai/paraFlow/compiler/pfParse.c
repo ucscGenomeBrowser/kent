@@ -160,6 +160,29 @@ switch (type)
 	return "pptTypeTuple";
     case pptStringCat:
 	return "pptStringCat";
+    case pptParaDo:
+	return "pptParaDo";
+    case pptParaAdd:
+	return "pptParaAdd";
+    case pptParaMultiply:
+	return "pptParaMultiply";
+    case pptParaAnd:
+	return "pptParaAnd";
+    case pptParaOr:
+	return "pptParaOr";
+    case pptParaMin:
+	return "pptParaMin";
+    case pptParaMax:
+	return "pptParaMax";
+    case pptParaTop:
+	return "pptParaTop";
+    case pptParaSample:
+	return "pptParaSample";
+    case pptParaGet:
+	return "pptParaGet";
+    case pptParaFilter:
+	return "pptParaFilter";
+
     case pptCastBitToBit:
         return "pptCastBitToBit";
     case pptCastBitToByte:
@@ -476,6 +499,20 @@ static void skipRequiredName(char *name, struct pfToken **pTokList)
 struct pfToken *tok = *pTokList;
 if (tok->type != pftName || !sameString(tok->val.s, name))
     expectingGot(name, tok);
+*pTokList = tok->next;
+}
+
+static void skipRequiredCharType(enum pfTokType type, struct pfToken **pTokList)
+/* Make sure next token is of given type simple char type, and then skip it. */
+{
+struct pfToken *tok = *pTokList;
+if (tok->type != type)
+    {
+    char sym[2];
+    sym[0] = type;
+    sym[1] = 0;
+    expectingGot(sym, tok);
+    }
 *pTokList = tok->next;
 }
 
@@ -1276,13 +1313,6 @@ static struct pfParse *parseTo(struct pfCompile *pfc, struct pfParse *parent,
 return parseFunction(pfc, parent, pTokList, scope, pptToDec);
 }
 
-static struct pfParse *parsePara(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse para (...) [into (...)] */
-{
-return parseFunction(pfc, parent, pTokList, scope, pptParaDec);
-}
-
 
 static struct pfParse *parseFlow(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
@@ -1450,9 +1480,11 @@ struct pfParse *statement;
 scope = pfScopeNew(pfc, scope, 1, FALSE);
 pp = pfParseNew(pptForeach, tok, parent, scope);
 tok = tok->next;	/* Skip over 'foreach' */
+skipRequiredCharType('(', &tok);
 element = pfParseExpression(pp, &tok, scope);
 skipRequiredName("in", &tok);
 collection = pfParseExpression(pp, &tok, scope);
+skipRequiredCharType(')', &tok);
 statement = pfParseStatement(pfc, pp, &tok, scope);
 slAddHead(&pp->children, statement);
 slAddHead(&pp->children, collection);
@@ -1461,7 +1493,7 @@ slAddHead(&pp->children, element);
 return pp;
 }
 
-static struct pfParse * parseExpressionAndSemi(struct pfParse *parent,
+static struct pfParse *parseExpressionAndSemi(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse expression and following semicolon if any. */
 {
@@ -1475,6 +1507,114 @@ eatSemi(&tok);
 *pTokList = tok;
 return pp;
 }
+
+
+static struct pfParse *parseParaInvoke(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope, boolean doOk)
+/* Parse para invokation.  This is of general form:
+ *    'para' type var 'in' collection action expression
+ * where action can be do, add, multiply or, and, min, max, top intExpression,
+ * sample intExpression, filter, or get.  In the case where the action is 'do'
+ * then the action is followed by a statement rather than an expression. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp;
+struct pfParse *element;
+struct pfParse *collection;
+struct pfParse *body;
+struct pfParse *number = NULL;
+boolean actionNeedsNum = FALSE;
+boolean actionNeedsStatement = FALSE;
+char *action = NULL;
+enum pfParseType paraType = pptNone;
+
+
+/* Preliminaries, scope and as of yet untyped parse node for para. */
+scope = pfScopeNew(pfc, scope, 1, FALSE);
+tok = tok->next;	/* Skip over para. */
+pp = pfParseNew(pptNone, tok, parent, scope);
+
+/* Parse out the element in collection */
+element = pfParseExpression(pp, &tok, scope);
+skipRequiredName("in", &tok);
+collection = pfParseExpression(pp, &tok, scope);
+
+/* Parse out the action keyword, and figure out what to do depending on
+ * action.  Determine parse node type from action. */
+action = pfTokenAsString(tok);
+if (sameString("do", action))
+    {
+    if (!doOk)
+        errAt(tok, "para ... do can only be a statement, not an expression");
+    paraType = pptParaDo;
+    actionNeedsStatement = TRUE;
+    }
+else if (sameString("add", action))
+    paraType = pptParaAdd;
+else if (sameString("multiply", action))
+    paraType = pptParaMultiply;
+else if (sameString("and", action))
+    paraType = pptParaAnd;
+else if (sameString("or", action))
+    paraType = pptParaOr;
+else if (sameString("min", action))
+    paraType = pptParaMin;
+else if (sameString("max", action))
+    paraType = pptParaMax;
+else if (sameString("top", action))
+    {
+    paraType = pptParaTop;
+    actionNeedsNum = TRUE;
+    }
+else if (sameString("sample", action))
+    {
+    paraType = pptParaSample;
+    actionNeedsNum = TRUE;
+    }
+else if (sameString("get", action))
+    paraType = pptParaGet;
+else if (sameString("filter", action))
+    paraType = pptParaFilter;
+else
+    errAt(tok, "unrecognized para action");
+freez(&action);
+tok = tok->next;
+pp->type = paraType;
+
+/* If action is followed by a number get that. */
+if (actionNeedsNum)
+    number = pfParseExpression(pp, &tok, scope);
+
+/* Get expression or statement that gets executed in parallel. */
+if (actionNeedsStatement)
+    body = pfParseStatement(pfc, pp, &tok, scope);
+else
+    body = parseExpressionAndSemi(pp, &tok, scope);
+
+/* Hang various things off of para parse node. */
+pp->children = number;	/* A no-op if number not required. */
+slAddHead(&pp->children, body);
+slAddHead(&pp->children, collection);
+slAddHead(&pp->children, element);
+*pTokList = tok;
+return pp;
+}
+
+static struct pfParse *parsePara(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse when it starts with 'para' - will either be a para function declaration
+ * or a para invokation. */
+{
+struct pfToken *paraTok = *pTokList;	/* "para" */
+struct pfToken *nameTok = paraTok->next; 	/* some symbol name */
+struct pfToken *decidingTok = nameTok->next;	/* either '(' or 'in' */
+if (decidingTok->type == '(')
+    return parseFunction(pfc, parent, pTokList, scope, pptParaDec);
+else
+    return parseParaInvoke(pfc, parent, pTokList, scope, TRUE);
+}
+
+
 
 static struct pfParse *parseFor(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)

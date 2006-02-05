@@ -193,18 +193,21 @@ static void checkPara(struct pfCompile *pfc, struct pfParse *paraDec)
 struct pfParse *input = paraDec->children->next;
 struct pfParse *output = input->next;
 struct pfParse *body = output->next;
-struct pfParse *pp;
-struct hash *outputVars = hashNew(6);
+if (body != NULL)
+    {
+    struct pfParse *pp;
+    struct hash *outputVars = hashNew(6);
 
-/* Build up hash of variables that it's ok to write to. */
-for (pp = output->children; pp != NULL; pp = pp->next)
-    hashAdd(outputVars, pp->name, pp->var);
+    /* Build up hash of variables that it's ok to write to. */
+    for (pp = output->children; pp != NULL; pp = pp->next)
+	hashAdd(outputVars, pp->name, pp->var);
 
-checkCalls(pfc, body, TRUE);
-checkReadOnlyOutsideLocals(outputVars, body->scope, body);
+    checkCalls(pfc, body, TRUE);
+    checkReadOnlyOutsideLocals(outputVars, body->scope, body);
 
-/* Clean up */
-hashFree(&outputVars);
+    /* Clean up */
+    hashFree(&outputVars);
+    }
 }
 
 void pfCheckParaFlow(struct pfCompile *pfc, struct pfParse *pp)

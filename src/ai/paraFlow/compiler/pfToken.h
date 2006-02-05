@@ -147,6 +147,10 @@ void errAt(struct pfToken *tok, char *format, ...);
 void expectingGot(char *expecting, struct pfToken *got);
 /* Complain about unexpected stuff and quit. */
 
+char *pfTokenAsString(struct pfToken *tok);
+/* Return string representation of token.  FreeMem the string
+ * when done. */
+
 #define internalErrAt(tok)  errAt(tok, "paraFlow compiler error at %s %d", __FILE__, __LINE__)
 /* Generic internal error message */
 

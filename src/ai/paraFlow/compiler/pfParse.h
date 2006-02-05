@@ -84,6 +84,17 @@ enum pfParseType
     pptTypeName,
     pptTypeTuple,
     pptStringCat,
+    pptParaDo,
+    pptParaAdd,
+    pptParaMultiply,
+    pptParaAnd,
+    pptParaOr,
+    pptParaMin,
+    pptParaMax,
+    pptParaTop,
+    pptParaSample,
+    pptParaGet,
+    pptParaFilter,
 
     /* Note the casts must be in this order relative to pptCastBitToBit */
     pptCastBitToBit,	/* Never emitted. */
