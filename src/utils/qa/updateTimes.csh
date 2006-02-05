@@ -77,17 +77,7 @@ if ($#argv == 5) then
 endif
 
 # confirm that machine names are legit
-checkMachineName.csh $mach1
-if ( $status ) then
-  exit 1
-endif
-
-checkMachineName.csh $mach2
-if ( $status ) then
-  exit 1
-endif
-
-checkMachineName.csh $mach3
+checkMachineName.csh $mach1 $mach2 $mach3
 if ( $status ) then
   exit 1
 endif
