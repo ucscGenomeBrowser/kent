@@ -524,6 +524,7 @@ fprintf(f, "{\n");
 
 if (collectBase == pfc->arrayType)
     {
+    fprintf(f, "int _pf_resElSize, _pf_resEndOffset, _pf_resOffset = 0;\n");
     fprintf(f, "_pf_Array _pf_coll, _pf_result;\n");
     codeExpression(pfc, f, collection, stack, TRUE);
     fprintf(f, "_pf_coll = ");
@@ -532,6 +533,19 @@ if (collectBase == pfc->arrayType)
     fprintf(f, "_pf_result = _pf_dim_array(_pf_coll->size, ");
     codeForType(pfc, f, element->ty);
     fprintf(f, ");\n");
+    fprintf(f, "_pf_resElSize = _pf_result->elSize;\n");
+    startElInCollectionIteration(pfc, f, para->scope, element, 
+    	collection, FALSE);
+    codeExpression(pfc, f, expression, stack, FALSE);
+    fprintf(f, "*((");
+    printType(pfc, f, expression->ty->base);
+    fprintf(f, "*)(_pf_result->elements + _pf_resOffset)) =");
+    codeParamAccess(pfc, f, expression->ty->base, stack);
+    fprintf(f, ";\n");
+    fprintf(f, "_pf_resOffset += _pf_resElSize;\n");
+
+    endElInCollectionIteration(pfc, f, para->scope, element, 
+    	collection, FALSE);
     }
 else if (collectBase == pfc->stringType)
     {
@@ -545,6 +559,8 @@ else
     {
     internalErr();
     }
+
+
 codeParamAccess(pfc, f, collectBase, stack);
 fprintf(f, " = _pf_result;\n");
 fprintf(f, "}\n");
