@@ -11,17 +11,26 @@
 
 set db=""
 set table=""
-set column=""
 
+set mach1="hgwdev"
+set mach2="hgwbeta"
+set host1=""
+set host2=""
+set rr1="false"
+set rr2="false"
 
-if ($#argv != 2) then
-  # no command line args
+set first=""
+set second=""
+
+if ($#argv != 2 && $#argv != 4) then
   echo
-  echo "  gets an entire table from dev and beta and checks diffs."
+  echo "  gets an entire table from two machines and checks diffs."
   echo "  reports numbers of rows unique to each and common."
   echo "  writes files of everything."
+  echo "  not real-time on RR -- uses genome-mysql."
   echo
-  echo "    usage:  database, table"
+  echo "    usage:  database table [machine1] [machine2]"
+  echo "      (defaults to dev and beta)"
   echo
   exit
 else
@@ -31,12 +40,56 @@ endif
 
 # --------------------------------------------
 
-hgsql -N -e "SELECT * FROM $table" $db | sort  > $db.$table.dev
-hgsql -N -h hgwbeta -e "SELECT * FROM $table" $db | sort  > $db.$table.beta
-comm -23 $db.$table.dev $db.$table.beta >$db.$table.devOnly
-comm -13 $db.$table.dev $db.$table.beta >$db.$table.betaOnly
-comm -12 $db.$table.dev $db.$table.beta >$db.$table.common
-echo
-wc -l $db.$table.devOnly $db.$table.betaOnly $db.$table.common | grep -v "total"
-echo
+if ( "$HOST" != "hgwdev" ) then
+ echo "\n error: you must run this script on dev!\n"
+ exit 1
+endif
+
+if ( $#argv == 4) then
+  set mach1=$argv[3]
+  set mach2=$argv[4]
+endif
+
+# confirm that machine names are legit
+checkMachineName.csh $mach1 $mach2
+if ( $status ) then
+  exit 1
+endif
+
+if ( $mach1 == "hgwbeta" ) then
+  set host1="-h hgwbeta"
+endif
+
+if ( $mach2 == "hgwbeta" ) then
+  set host2="-h hgwbeta"
+endif
+ 
+# set flags for RR queries
+if ( $mach1 != "hgwdev" &&  $mach1 != "hgwbeta" ) then
+  set rr1="true"
+endif
+
+if ( $mach2 != "hgwdev" &&  $mach2 != "hgwbeta" ) then
+  set rr2="true"
+endif
+
+set outfile1=$db.$table.$mach1
+set outfile2=$db.$table.$mach2
+if ( $rr1 == "true" ) then
+  nice mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A \
+    -N -e "SELECT * FROM $table" $db | sort > $outfile1
+else
+  nice hgsql $host1 -N -e "SELECT * FROM $table" $db | sort > $outfile1
+endif
+
+if ( $rr2 == "true" ) then
+  nice mysql --user=genome --host=genome-mysql.cse.ucsc.edu -A \
+    -N -e "SELECT * FROM $table" $db | sort > $outfile2
+else
+  nice hgsql $host2 -N -e "SELECT * FROM $table" $db | sort > $outfile2
+endif
+
+commTrio.csh $outfile1 $outfile2 | grep -v "output files" \
+  | sed -e "s/$outfile1.$outfile2.Only/$outfile1.$mach2.Only/"
+mv $outfile1.$outfile2.Only $outfile1.$mach2.Only
 
