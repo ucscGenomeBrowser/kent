@@ -77,6 +77,13 @@ static void codeLocalTypeTableName(FILE *f, char *module)
 fprintf(f, "struct %s %s_%s", localTypeTableType, localTypeTableName, module);
 }
 
+static void codeForType(struct pfCompile *pfc, FILE *f, struct pfType *type)
+/* Print out code to access type ID */
+{
+codeLocalTypeRef(f, recodedTypeId(pfc, type));
+}
+
+
 static char *typeKey(struct pfCompile *pfc, struct pfBaseType *base)
 /* Return key for type if available, or NULL */
 {
@@ -500,6 +507,51 @@ fprintf(f, "}\n");
 return 1;
 }
 
+static int codeParaGet(struct pfCompile *pfc, FILE *f,
+	struct pfParse *para, int stack)
+/* Generate code for a para get expression */
+{
+struct pfParse *element = para->children;
+struct pfParse *collection = element->next;
+struct pfParse *expression = collection->next;
+struct pfBaseType *collectBase = collection->ty->base;
+
+uglyf("Theoretically generating code for para action get.\n");
+uglyf("collection is:\n");
+pfParseDump(collection, 2,  uglyOut);
+fprintf(f, "/* start para get */\n");
+fprintf(f, "{\n");
+
+if (collectBase == pfc->arrayType)
+    {
+    fprintf(f, "_pf_Array _pf_coll, _pf_result;\n");
+    codeExpression(pfc, f, collection, stack, TRUE);
+    fprintf(f, "_pf_coll = ");
+    codeParamAccess(pfc, f, collectBase, stack);
+    fprintf(f, ";\n");
+    fprintf(f, "_pf_result = _pf_dim_array(_pf_coll->size, ");
+    codeForType(pfc, f, element->ty);
+    fprintf(f, ");\n");
+    }
+else if (collectBase == pfc->stringType)
+    {
+    fprintf(f, "_pf_String _pf_collection, _pf_result;\n");
+    }
+else if (collectBase == pfc->dirType)
+    {
+    fprintf(f, "_pf_Dir _pf_collection, _pf_result;\n");
+    }
+else
+    {
+    internalErr();
+    }
+codeParamAccess(pfc, f, collectBase, stack);
+fprintf(f, " = _pf_result;\n");
+fprintf(f, "}\n");
+fprintf(f, "/* end para get */\n");
+return 1;
+}
+
 static void codeRunTimeError(struct pfCompile *pfc, FILE *f,
 	struct pfToken *tok, char *message)
 /* Print code for a run time error message. */
@@ -515,12 +567,6 @@ static void startCleanTemp(FILE *f)
 /* Declare a temp variable to assist in cleanup */
 {
 fprintf(f, " {\n struct _pf_object *_pf_tmp = (struct _pf_object *)\n  ");
-}
-
-static void codeForType(struct pfCompile *pfc, FILE *f, struct pfType *type)
-/* Print out code to access type ID */
-{
-codeLocalTypeRef(f, recodedTypeId(pfc, type));
 }
 
 static void endCleanTemp(struct pfCompile *pfc, FILE *f, struct pfType *type)
@@ -1362,6 +1408,8 @@ switch (pp->type)
     case pptParaAdd:
     case pptParaMultiply:
         return codeParaExpSingle(pfc, f, pp, stack);
+    case pptParaGet:
+        return codeParaGet(pfc, f, pp, stack);
     case pptCall:
 	return codeCall(pfc, f, pp, stack);
     case pptAssignment:

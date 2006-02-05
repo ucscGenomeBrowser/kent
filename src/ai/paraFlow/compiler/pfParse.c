@@ -174,10 +174,6 @@ switch (type)
 	return "pptParaMin";
     case pptParaMax:
 	return "pptParaMax";
-    case pptParaTop:
-	return "pptParaTop";
-    case pptParaSample:
-	return "pptParaSample";
     case pptParaGet:
 	return "pptParaGet";
     case pptParaFilter:
@@ -873,8 +869,6 @@ struct pfParse *pp;
 struct pfParse *element;
 struct pfParse *collection;
 struct pfParse *body;
-struct pfParse *number = NULL;
-boolean actionNeedsNum = FALSE;
 boolean actionNeedsStatement = FALSE;
 char *action = NULL;
 enum pfParseType paraType = pptNone;
@@ -911,16 +905,6 @@ else if (sameString("min", action))
     paraType = pptParaMin;
 else if (sameString("max", action))
     paraType = pptParaMax;
-else if (sameString("top", action))
-    {
-    paraType = pptParaTop;
-    actionNeedsNum = TRUE;
-    }
-else if (sameString("sample", action))
-    {
-    paraType = pptParaSample;
-    actionNeedsNum = TRUE;
-    }
 else if (sameString("get", action))
     paraType = pptParaGet;
 else if (sameString("filter", action))
@@ -938,10 +922,6 @@ freez(&action);
 tok = tok->next;
 pp->type = paraType;
 
-/* If action is followed by a number get that. */
-if (actionNeedsNum)
-    number = pfParseExpression(pfc, pp, &tok, scope);
-
 /* Get expression or statement that gets executed in parallel. */
 if (actionNeedsStatement)
     body = pfParseStatement(pfc, pp, &tok, scope);
@@ -953,7 +933,6 @@ else
     }
 
 /* Hang various things off of para parse node. */
-pp->children = number;	/* A no-op if number not required. */
 slAddHead(&pp->children, body);
 slAddHead(&pp->children, collection);
 slAddHead(&pp->children, element);
