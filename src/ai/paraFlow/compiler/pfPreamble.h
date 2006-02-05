@@ -90,6 +90,12 @@ struct _pf_iterator _pf_list_iterator_init(_pf_List list);
 struct _pf_iterator _pf_tree_iterator_init(_pf_Tree tree);
 struct _pf_iterator _pf_dir_iterator_init(_pf_Dir dir);
 
+void *_pf_need_mem(int size);
+/* Allocate memory, which is initialized to zero. */
+
+void _pf_free_mem(void *pt);
+/* Free memory. */
+
 #include "../runtime/runType.h"
 #include "../runtime/object.h"
 #include "../runtime/string.h"

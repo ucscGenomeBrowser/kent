@@ -12,6 +12,18 @@
 
 static char **cl_env;
 
+void *_pf_need_mem(int size)
+/* Allocate memory, which is initialized to zero. */
+{
+return needMem(size);
+}
+
+void _pf_free_mem(void *pt)
+/* Free memory. */
+{
+return freeMem(pt);
+}
+
 void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArgs, 
 	char *environ[])
 /* Set up command line arguments. */
