@@ -406,8 +406,9 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 struct pfParse *pfParseStatement(struct pfCompile *pfc, struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope);
 
-struct pfParse *pfParseExpression(struct pfParse *parent, 
-	struct pfToken **pTokList, struct pfScope *scope);
+struct pfParse *pfParseExpression(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope);
 
 static void syntaxError(struct pfToken *tok, int code)
 /* Complain about syntax error and quit. */
@@ -615,7 +616,7 @@ slReverse(&dots->children);
 return dots;
 }
 
-struct pfParse *parseTypeDotsAndBraces(struct pfParse *parent, 
+struct pfParse *parseTypeDotsAndBraces(struct pfCompile *pfc, struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse this.that.the.other[expression] */
 {
@@ -624,7 +625,7 @@ struct pfToken *tok = *pTokList;
 if (tok->type == '[')
     {
     tok = tok->next;
-    dotted->children = pfParseExpression(dotted, &tok, scope);
+    dotted->children = pfParseExpression(pfc, dotted, &tok, scope);
     if (tok->type != ']')
         expectingGot("]", tok);
     else
@@ -634,11 +635,11 @@ if (tok->type == '[')
 return dotted;
 }
 
-struct pfParse *parseOfs(struct pfParse *parent,
+struct pfParse *parseOfs(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse of separated expression. */
 {
-struct pfParse *pp = parseTypeDotsAndBraces(parent, pTokList, scope);
+struct pfParse *pp = parseTypeDotsAndBraces(pfc, parent, pTokList, scope);
 struct pfToken *tok = *pTokList;
 struct pfParse *ofs = NULL;
 if (tok->type == pftOf)
@@ -649,7 +650,7 @@ if (tok->type == pftOf)
     while (tok->type == pftOf)
 	{
 	tok = tok->next;
-	pp = parseTypeDotsAndBraces(ofs, &tok, scope);
+	pp = parseTypeDotsAndBraces(pfc, ofs, &tok, scope);
 	slAddHead(&ofs->children, pp);
 	}
     }
@@ -673,7 +674,7 @@ for (tok = tokList; tok != NULL; tok = tok->next)
 return tok;
 }
 
-struct pfParse *varUseOrDeclare(struct pfParse *parent, 
+struct pfParse *varUseOrDeclare(struct pfCompile *pfc, struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Make sure have a name, and create a varUse type node
  * based on it. */
@@ -695,7 +696,7 @@ if (baseType != NULL)
 	{
 	struct pfParse *name, *type;
 	struct pfParse *pp = pfParseNew(pptVarDec, tok, parent, scope);
-	type = parseOfs(pp, &tok, scope);
+	type = parseOfs(pfc, pp, &tok, scope);
 	name = parseDottedNames(pp, &tok, scope);
 	pp->children = type;
 	pp->name = name->name;
@@ -719,8 +720,9 @@ while (pp != NULL)
 return FALSE;
 }
 
-static struct pfParse *varStorageOrUse(struct pfParse *parent, 
-	struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *varStorageOrUse(struct pfCompile *pfc,
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
 /* Parse out storage class if any, and then rest of function. */
 {
 struct pfToken *tok = *pTokList;
@@ -732,7 +734,7 @@ if (tok->type == pftStatic)
     if (!inFunction(parent))
         errAt(tok, "'static' outside of 'to'");
     tok = tok->next;
-    pp = varUseOrDeclare(parent, &tok, scope);
+    pp = varUseOrDeclare(pfc, parent, &tok, scope);
     if (pp->type != pptVarDec)
         errAt(staticTok, 
 		"'static' only allowed in front of a variable declaration");
@@ -741,10 +743,11 @@ if (tok->type == pftStatic)
     return pp;
     }
 else
-    return varUseOrDeclare(parent, pTokList, scope);
+    return varUseOrDeclare(pfc, parent, pTokList, scope);
 }
 
-struct pfParse *constUse(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
+struct pfParse *constUse(struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
 /* Create constant use */
 {
 struct pfToken *tok = *pTokList;
@@ -754,7 +757,7 @@ return pp;
 }
 
 
-static struct pfParse *parseAtom(struct pfParse *parent,
+static struct pfParse *parseAtom(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse atomic expression - const, variable, or parenthesized expression. */
 {
@@ -769,7 +772,7 @@ switch (tok->type)
     case pftUser:
     case pftSysOrUser:
     case pftStatic:
-	pp = varStorageOrUse(parent, &tok, scope);
+	pp = varStorageOrUse(pfc, parent, &tok, scope);
 	break;
     case pftString:
     case pftInt:
@@ -788,7 +791,7 @@ switch (tok->type)
 	    }
 	else
 	    {
-	    pp = pfParseExpression(parent, &tok, scope);
+	    pp = pfParseExpression(pfc, parent, &tok, scope);
 	    if (tok->type != ')')
 		errAt(tok, "Unclosed parenthesis.");
 	    }
@@ -803,11 +806,11 @@ switch (tok->type)
 return pp;
 }
 
-struct pfParse *parseCallOrIndex(struct pfParse *parent,
+struct pfParse *parseCallOrIndex(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse out function call. */
 {
-struct pfParse *pp = parseAtom(parent, pTokList, scope);
+struct pfParse *pp = parseAtom(pfc, parent, pTokList, scope);
 struct pfToken *tok = *pTokList;
 if (tok->type == '(')
     {
@@ -819,7 +822,7 @@ if (tok->type == '(')
     tok = tok->next;
     if (tok->type != ')')
         {
-	parameters = pfParseExpression(pp, &tok, scope);
+	parameters = pfParseExpression(pfc, pp, &tok, scope);
 	if (parameters->type != pptTuple)
 	    {
 	    struct pfParse *tuple = pfSingleTuple(pp, tok, parameters);
@@ -845,7 +848,7 @@ else if (tok->type == '[')
 	pp = pfParseNew(pptIndex, tok, parent, scope);
 	pp->children = collection;
 	tok = tok->next;
-	collection->next = pfParseExpression(pp, &tok, scope);
+	collection->next = pfParseExpression(pfc, pp, &tok, scope);
 	if (tok->type != ']')
 	    expectingGot("]", tok);
 	tok = tok->next;
@@ -855,7 +858,7 @@ else if (tok->type == '[')
 return pp;
 }
 
-struct pfParse *parseNegation(struct pfParse *parent,
+struct pfParse *parseNegation(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse unary minus. */
 {
@@ -865,34 +868,34 @@ if (tok->type == '-')
     {
     pp = pfParseNew(pptNegate, tok, parent, scope);
     tok = tok->next;
-    pp->children = parseNegation(pp, &tok, scope);
+    pp->children = parseNegation(pfc, pp, &tok, scope);
     }
 else if (tok->type == '!')
     {
     pp = pfParseNew(pptNot, tok, parent, scope);
     tok = tok->next;
-    pp->children = parseNegation(pp, &tok, scope);
+    pp->children = parseNegation(pfc, pp, &tok, scope);
     }
 else if (tok->type == '~')
     {
     pp = pfParseNew(pptFlipBits, tok, parent, scope);
     tok = tok->next;
-    pp->children = parseNegation(pp, &tok, scope);
+    pp->children = parseNegation(pfc, pp, &tok, scope);
     }
 else
     {
-    pp = parseCallOrIndex(parent, &tok, scope);
+    pp = parseCallOrIndex(pfc, parent, &tok, scope);
     }
 *pTokList = tok;
 return pp;
 }
 
-struct pfParse *parseProduct(struct pfParse *parent,
+struct pfParse *parseProduct(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse things separated by '*' or '/' or '%'. */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = parseNegation(parent, &tok, scope);
+struct pfParse *pp = parseNegation(pfc, parent, &tok, scope);
 while (tok->type == '*' || tok->type == '/' || tok->type == '%'
 	|| tok->type == pftShiftLeft || tok->type == pftShiftRight
 	|| tok->type == '&')
@@ -923,7 +926,7 @@ while (tok->type == '*' || tok->type == '/' || tok->type == '%'
     pp = pfParseNew(tt, tok, parent, scope);
     left->parent = pp;
     tok = tok->next;
-    right = parseNegation(pp, &tok, scope);
+    right = parseNegation(pfc, pp, &tok, scope);
     pp->children = left;
     left->next = right;
     }
@@ -931,12 +934,12 @@ while (tok->type == '*' || tok->type == '/' || tok->type == '%'
 return pp;
 }
 
-struct pfParse *parseSum(struct pfParse *parent,
+struct pfParse *parseSum(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse + and - part of expression. */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = parseProduct(parent, &tok, scope);
+struct pfParse *pp = parseProduct(pfc, parent, &tok, scope);
 while (tok->type == '+' || tok->type == '-' || tok->type == '|' || tok->type == '^')
     {
     struct pfParse *left = pp, *right;
@@ -959,7 +962,7 @@ while (tok->type == '+' || tok->type == '-' || tok->type == '|' || tok->type == 
     pp = pfParseNew(tt, tok, parent, scope);
     left->parent = pp;
     tok = tok->next;
-    right = parseProduct(pp, &tok, scope);
+    right = parseProduct(pfc, pp, &tok, scope);
     pp->children = left;
     left->next = right;
     }
@@ -967,12 +970,12 @@ while (tok->type == '+' || tok->type == '-' || tok->type == '|' || tok->type == 
 return pp;
 }
 
-struct pfParse *parseCmp(struct pfParse *parent,
+struct pfParse *parseCmp(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse == >=, <= > < and != part of expression. */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = parseSum(parent, &tok, scope);
+struct pfParse *pp = parseSum(pfc, parent, &tok, scope);
 if (tok->type == pftEqualsEquals || tok->type == pftNotEquals 
 	|| tok->type == pftGreaterOrEquals || tok->type == pftLessOrEquals
 	|| tok->type == '<' || tok->type == '>')
@@ -1003,7 +1006,7 @@ if (tok->type == pftEqualsEquals || tok->type == pftNotEquals
     pp = pfParseNew(tt, tok, parent, scope);
     left->parent = pp;
     tok = tok->next;
-    right = parseSum(pp, &tok, scope);
+    right = parseSum(pfc, pp, &tok, scope);
     pp->children = left;
     left->next = right;
     }
@@ -1011,19 +1014,19 @@ if (tok->type == pftEqualsEquals || tok->type == pftNotEquals
 return pp;
 }
 
-struct pfParse *parseLogAnd(struct pfParse *parent,
+struct pfParse *parseLogAnd(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse logical and. */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = parseCmp(parent, &tok, scope);
+struct pfParse *pp = parseCmp(pfc, parent, &tok, scope);
 while (tok->type == pftLogAnd)
     {
     struct pfParse *left = pp, *right;
     pp = pfParseNew(pptLogAnd, tok, parent, scope);
     left->parent = pp;
     tok = tok->next;
-    right = parseCmp(pp, &tok, scope);
+    right = parseCmp(pfc, pp, &tok, scope);
     pp->children = left;
     left->next = right;
     }
@@ -1031,19 +1034,19 @@ while (tok->type == pftLogAnd)
 return pp;
 }
 
-struct pfParse *parseLogOr(struct pfParse *parent,
+struct pfParse *parseLogOr(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse logical and. */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = parseLogAnd(parent, &tok, scope);
+struct pfParse *pp = parseLogAnd(pfc, parent, &tok, scope);
 while (tok->type == pftLogOr)
     {
     struct pfParse *left = pp, *right;
     pp = pfParseNew(pptLogOr, tok, parent, scope);
     left->parent = pp;
     tok = tok->next;
-    right = parseLogAnd(pp, &tok, scope);
+    right = parseLogAnd(pfc, pp, &tok, scope);
     pp->children = left;
     left->next = right;
     }
@@ -1051,12 +1054,12 @@ while (tok->type == pftLogOr)
 return pp;
 }
 
-struct pfParse *parseAssign(struct pfParse *parent,
+struct pfParse *parseAssign(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse '=' separated expression */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = parseLogOr(parent, &tok, scope);
+struct pfParse *pp = parseLogOr(pfc, parent, &tok, scope);
 struct pfParse *assign = NULL;
 enum pfParseType type = pptNone;
 
@@ -1090,7 +1093,7 @@ if (type != pptNone)
     for (;;)
 	{
 	tok = tok->next;
-	pp = parseLogOr(assign, &tok, scope);
+	pp = parseLogOr(pfc, assign, &tok, scope);
 	slAddHead(&assign->children, pp);
 	if (tok->type != '=' || type != pptAssignment)
 	    break;
@@ -1168,12 +1171,12 @@ if (vars != NULL)
 }
 
 
-struct pfParse *parseTuple(struct pfParse *parent,
+struct pfParse *parseTuple(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse , separated expression. */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = parseAssign(parent, &tok, scope);
+struct pfParse *pp = parseAssign(pfc, parent, &tok, scope);
 struct pfParse *tuple = NULL;
 if (tok->type == ',')
     {
@@ -1185,7 +1188,7 @@ if (tok->type == ',')
 	tok = tok->next;
 	if (tok->type == ')')
 	    break;
-	pp = parseAssign(tuple, &tok, scope);
+	pp = parseAssign(pfc, tuple, &tok, scope);
 	slAddHead(&tuple->children, pp);
 	}
     }
@@ -1200,11 +1203,11 @@ else
     return pp;
 }
 
-struct pfParse *pfParseExpression(struct pfParse *parent,
+struct pfParse *pfParseExpression(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse expression. */
 {
-return parseTuple(parent, pTokList, scope);
+return parseTuple(pfc, parent, pTokList, scope);
 }
 
 static struct pfParse *parseCompound(struct pfCompile *pfc,
@@ -1265,7 +1268,7 @@ if (tok->type == ')')
     }
 else
     {
-    input = pfParseExpression(pp, &tok, scope);
+    input = pfParseExpression(pfc, pp, &tok, scope);
     if (input->type != pptTuple)
 	input = pfSingleTuple(pp, tok, input);
     if (tok->type != ')')
@@ -1277,7 +1280,7 @@ if (tok->type == pftInto)
     {
     tok = tok->next;
     outToken = tok;
-    output = pfParseExpression(pp, &tok, scope);
+    output = pfParseExpression(pfc, pp, &tok, scope);
     if (output->type != pptTuple)
 	output = pfSingleTuple(pp, outToken, output);
     }
@@ -1413,7 +1416,7 @@ tok = tok->next;	/* Skip 'if' */
 if (tok->type != '(')
     expectingGot("(", tok);
 tok = tok->next;
-conditional = pfParseExpression(pp, &tok, scope);
+conditional = pfParseExpression(pfc, pp, &tok, scope);
 if (tok->type != ')')
     expectingGot(")", tok);
 tok = tok->next;
@@ -1449,7 +1452,7 @@ tok = tok->next;	/* Skip 'while' */
 if (tok->type != '(')
     expectingGot("(", tok);
 tok = tok->next;
-conditional = pfParseExpression(pp, &tok, scope);
+conditional = pfParseExpression(pfc, pp, &tok, scope);
 if (tok->type != ')')
     expectingGot(")", tok);
 tok = tok->next;
@@ -1479,9 +1482,9 @@ scope = pfScopeNew(pfc, scope, 1, FALSE);
 pp = pfParseNew(pptForeach, tok, parent, scope);
 tok = tok->next;	/* Skip over 'foreach' */
 skipRequiredCharType('(', &tok);
-element = pfParseExpression(pp, &tok, scope);
+element = pfParseExpression(pfc, pp, &tok, scope);
 skipRequiredName("in", &tok);
-collection = pfParseExpression(pp, &tok, scope);
+collection = pfParseExpression(pfc, pp, &tok, scope);
 skipRequiredCharType(')', &tok);
 statement = pfParseStatement(pfc, pp, &tok, scope);
 slAddHead(&pp->children, statement);
@@ -1491,8 +1494,9 @@ slAddHead(&pp->children, element);
 return pp;
 }
 
-static struct pfParse *parseExpressionAndSemi(struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *parseExpressionAndSemi(struct pfCompile *pfc,
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
 /* Parse expression and following semicolon if any. */
 {
 struct pfToken *tok = *pTokList;
@@ -1500,15 +1504,16 @@ struct pfParse *pp;
 if (tok->type == ';')
     pp = emptyStatement(parent, tok, scope);
 else
-    pp = pfParseExpression(parent, &tok, scope);
+    pp = pfParseExpression(pfc, parent, &tok, scope);
 eatSemi(&tok);
 *pTokList = tok;
 return pp;
 }
 
 
-static struct pfParse *parseParaInvoke(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope, boolean isStatement)
+static struct pfParse *parseParaInvoke(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope, boolean isStatement)
 /* Parse para invokation.  This is of general form:
  *    'para' type var 'in' collection action expression
  * where action can be do, add, multiply or, and, min, max, top intExpression,
@@ -1533,9 +1538,9 @@ skipRequiredCharType('(', &tok);
 pp = pfParseNew(pptNone, tok, parent, scope);
 
 /* Parse out the element in collection */
-element = pfParseExpression(pp, &tok, scope);
+element = pfParseExpression(pfc, pp, &tok, scope);
 skipRequiredName("in", &tok);
-collection = pfParseExpression(pp, &tok, scope);
+collection = pfParseExpression(pfc, pp, &tok, scope);
 skipRequiredCharType(')', &tok);
 
 /* Parse out the action keyword, and figure out what to do depending on
@@ -1582,14 +1587,14 @@ pp->type = paraType;
 
 /* If action is followed by a number get that. */
 if (actionNeedsNum)
-    number = pfParseExpression(pp, &tok, scope);
+    number = pfParseExpression(pfc, pp, &tok, scope);
 
 /* Get expression or statement that gets executed in parallel. */
 if (actionNeedsStatement)
     body = pfParseStatement(pfc, pp, &tok, scope);
 else
     {
-    body = pfParseExpression(pp, &tok, scope);
+    body = pfParseExpression(pfc, pp, &tok, scope);
     eatSemi(&tok);
     }
 
@@ -1636,14 +1641,14 @@ if (tok->type != '(')
     expectingGot("(", tok);
 tok = tok->next;
 
-init = parseExpressionAndSemi(pp, &tok, scope);
-check = parseExpressionAndSemi(pp, &tok, scope);
+init = parseExpressionAndSemi(pfc, pp, &tok, scope);
+check = parseExpressionAndSemi(pfc, pp, &tok, scope);
 
 /* Parse advance statment and closing ')' */
 if (tok->type == ')')
     advance = emptyStatement(pp, tok, scope);
 else
-    advance = pfParseExpression(pp, &tok, scope);
+    advance = pfParseExpression(pfc, pp, &tok, scope);
 if (tok->type != ')')
     expectingGot(")", tok);
 tok = tok->next;
@@ -1771,7 +1776,7 @@ switch (tok->type)
     case pftStatic:
     case pftName:
     case '(':
-	statement = pfParseExpression(parent, &tok, scope);
+	statement = pfParseExpression(pfc, parent, &tok, scope);
 	eatSemi(&tok);
 	break;
     default:
