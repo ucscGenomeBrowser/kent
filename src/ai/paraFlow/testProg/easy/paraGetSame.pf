@@ -1,0 +1,6 @@
+dir of string d = ();
+string s = "Hi";
+array of int a = (1,2,3);
+array of int aSquared = para (int i in a) get i*i;
+print(a);
+print(aSquared);

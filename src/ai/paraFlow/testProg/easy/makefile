@@ -48,10 +48,18 @@ test:
 	diff expected/oneParam $O/oneParam
 	paraFlow oneVar.pf > $O/oneVar
 	diff expected/oneVar $O/oneVar
+	paraFlow paraAdd.pf > $O/paraAdd
+	diff expected/paraAdd $O/paraAdd
+	paraFlow paraGetSame.pf > $O/paraGetSame
+	diff expected/paraGetSame $O/paraGetSame
+	paraFlow paraGetAa.pf > $O/paraGetAa
+	diff expected/paraGetAa $O/paraGetAa
 	paraFlow paraMax.pf > $O/paraMax
 	diff expected/paraMax $O/paraMax
 	paraFlow paraMin.pf > $O/paraMin
 	diff expected/paraMin $O/paraMin
+	paraFlow paraMultiply.pf > $O/paraMultiply
+	diff expected/paraMultiply $O/paraMultiply
 	paraFlow parenAndMinus.pf > $O/parenAndMinus
 	diff expected/parenAndMinus $O/parenAndMinus
 	paraFlow polymorphic.pf > $O/polymorphic
