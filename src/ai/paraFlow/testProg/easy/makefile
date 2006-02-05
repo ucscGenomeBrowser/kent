@@ -50,10 +50,12 @@ test:
 	diff expected/oneVar $O/oneVar
 	paraFlow paraAdd.pf > $O/paraAdd
 	diff expected/paraAdd $O/paraAdd
-	paraFlow paraGetSame.pf > $O/paraGetSame
-	diff expected/paraGetSame $O/paraGetSame
 	paraFlow paraGetAa.pf > $O/paraGetAa
 	diff expected/paraGetAa $O/paraGetAa
+	paraFlow paraGetDir.pf > $O/paraGetDir
+	diff expected/paraGetDir $O/paraGetDir
+	paraFlow paraGetSame.pf > $O/paraGetSame
+	diff expected/paraGetSame $O/paraGetSame
 	paraFlow paraMax.pf > $O/paraMax
 	diff expected/paraMax $O/paraMax
 	paraFlow paraMin.pf > $O/paraMin

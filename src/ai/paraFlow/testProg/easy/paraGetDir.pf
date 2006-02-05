@@ -1,0 +1,8 @@
+dir of int numVals = ( "one" to 1, "two" to 2, "three" to 3);
+print(numVals);
+
+dir of int numSquared = para (int i in numVals) get i*i;
+print(numSquared);
+
+dir of string numPaired = para (int i in numVals) get i + " " + i;
+print(numPaired);
