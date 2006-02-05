@@ -589,6 +589,80 @@ fprintf(f, "/* end para get */\n");
 return 1;
 }
 
+static int codeParaFilter(struct pfCompile *pfc, FILE *f,
+	struct pfParse *para, int stack)
+/* Generate code for a para filter expression */
+{
+struct pfParse *element = para->children;
+struct pfParse *collection = element->next;
+struct pfParse *expression = collection->next;
+struct pfBaseType *collectBase = collection->ty->base;
+struct dyString *elName = varName(pfc, element->var);
+
+fprintf(f, "/* start para filter */\n");
+fprintf(f, "{\n");
+if (collectBase == pfc->arrayType)
+    {
+    /* Generate code that will create an array of chars
+     * filled with 1's where filter is passed, and 0's elsewhere. */
+    fprintf(f, "int _pf_ix=0,_pf_passCount=0,_pf_passOne,_pf_resOffset=0;\n");
+    fprintf(f, "_pf_Array _pf_coll, _pf_result;\n");
+    fprintf(f, "char *_pf_passed;\n");
+    codeExpression(pfc, f, collection, stack, FALSE);
+    fprintf(f, "_pf_coll = ");
+    codeParamAccess(pfc, f, collectBase, stack);
+    fprintf(f, ";\n");
+    fprintf(f, "_pf_passed = _pf_need_mem(_pf_coll->size);\n");
+    startElInCollectionIteration(pfc, f, para->scope, element, 
+    	collection, FALSE);
+    codeExpression(pfc, f, expression, stack, FALSE);
+    fprintf(f, "_pf_passOne = ");
+    codeParamAccess(pfc, f, pfc->bitType, stack);
+    fprintf(f, ";\n");
+    fprintf(f, "_pf_passed[_pf_ix++] = _pf_passOne;\n");
+    fprintf(f, "_pf_passCount += _pf_passOne;\n");
+    endElInCollectionIteration(pfc, f, para->scope, element, 
+    	collection, FALSE);
+
+    /* Allocate results array. */
+    fprintf(f, "_pf_result = _pf_dim_array(_pf_passCount, ");
+    codeForType(pfc, f, collection->ty->children);
+    fprintf(f, ");\n");
+
+    /* Generate code that will copy passing elements to results */
+    fprintf(f, "_pf_passCount = 0;\n");
+    fprintf(f, "_pf_ix = 0;\n");
+    startElInCollectionIteration(pfc, f, para->scope, element, 
+    	collection, FALSE);
+    fprintf(f, "if (_pf_passed[_pf_ix++])\n");
+    fprintf(f, "{\n");
+    if (element->ty->base->needsCleanup)
+        fprintf(f, "%s->_pf_refCount+=1;\n", elName->string);
+    fprintf(f, "*((");
+    printType(pfc, f, element->ty->base);
+    fprintf(f, "*)(_pf_result->elements + _pf_resOffset))");
+    fprintf(f, "=%s;\n", elName->string);
+    fprintf(f, "_pf_resOffset += _pf_elSize;\n");
+    fprintf(f, "}\n");
+    endElInCollectionIteration(pfc, f, para->scope, element, 
+    	collection, FALSE);
+
+    /* Generate clean up code. */
+    fprintf(f, "_pf_free_mem(_pf_passed);\n");
+    }
+else if (collectBase == pfc->dirType)
+    {
+    }
+else
+    internalErr();
+codeParamAccess(pfc, f, collectBase, stack);
+fprintf(f, " = _pf_result;\n");
+fprintf(f, "}\n");
+fprintf(f, "/* end para filter */\n");
+dyStringFree(&elName);
+return 1;
+}
+
 static void codeRunTimeError(struct pfCompile *pfc, FILE *f,
 	struct pfToken *tok, char *message)
 /* Print code for a run time error message. */
@@ -1447,6 +1521,8 @@ switch (pp->type)
         return codeParaExpSingle(pfc, f, pp, stack);
     case pptParaGet:
         return codeParaGet(pfc, f, pp, stack);
+    case pptParaFilter:
+        return codeParaFilter(pfc, f, pp, stack);
     case pptCall:
 	return codeCall(pfc, f, pp, stack);
     case pptAssignment:
