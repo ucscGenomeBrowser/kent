@@ -410,12 +410,17 @@ else if (base == pfc->stringType)
     fprintf(f, "{\n");
     fprintf(f, "%s = %s->s[_pf_offset];\n", elName->string, collectionName);
     }
-else
+else if (base == pfc->dirType)
     {
+    fprintf(f, "char *_pf_key;\n");
     fprintf(f, "struct _pf_iterator _pf_ix = _pf_%s_iterator_init(%s);\n",
     	base->name, collectionName);
-    fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s))\n", elName->string);
+    fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s, &_pf_key))\n", elName->string);
     fprintf(f, "{\n");
+    }
+else
+    {
+    internalErr();
     }
 dyStringFree(&elName);
 }
@@ -533,7 +538,7 @@ if (collectBase == pfc->arrayType)
     fprintf(f, "_pf_resElSize = _pf_result->elSize;\n");
     startElInCollectionIteration(pfc, f, para->scope, element, 
     	collection, FALSE);
-    codeExpression(pfc, f, expression, stack, FALSE);
+    codeExpression(pfc, f, expression, stack, TRUE);
     fprintf(f, "*((");
     printType(pfc, f, expression->ty->base);
     fprintf(f, "*)(_pf_result->elements + _pf_resOffset)) = ");
@@ -544,13 +549,32 @@ if (collectBase == pfc->arrayType)
     endElInCollectionIteration(pfc, f, para->scope, element, 
     	collection, FALSE);
     }
-else if (collectBase == pfc->stringType)
-    {
-    fprintf(f, "_pf_String _pf_collection, _pf_result;\n");
-    }
 else if (collectBase == pfc->dirType)
     {
-    fprintf(f, "_pf_Dir _pf_collection, _pf_result;\n");
+    fprintf(f, "_pf_Dir _pf_coll, _pf_result;\n");
+    codeExpression(pfc, f, collection, stack, FALSE);
+    fprintf(f, "_pf_coll = ");
+    codeParamAccess(pfc, f, collectBase, stack);
+    fprintf(f, ";\n");
+    fprintf(f, "_pf_result = _pf_dir_new(_pf_dir_size(_pf_coll), ");
+    codeForType(pfc, f, expression->ty);
+    fprintf(f, ");\n");
+
+    startElInCollectionIteration(pfc, f, para->scope, element, 
+    	collection, FALSE);
+    codeExpression(pfc, f, expression, stack, TRUE);
+    if (expression->ty->base->needsCleanup)
+	{
+	fprintf(f, "_pf_dir_add_obj(_pf_result, _pf_key, %s+%d);\n",  
+		stackName, stack);
+	}
+    else 
+	{
+	fprintf(f, "_pf_dir_add_num(_pf_result, _pf_key, %s+%d);\n",  
+		stackName, stack);
+	}
+    endElInCollectionIteration(pfc, f, para->scope, element, 
+    	collection, FALSE);
     }
 else
     {

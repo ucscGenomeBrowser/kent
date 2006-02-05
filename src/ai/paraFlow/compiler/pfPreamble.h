@@ -80,7 +80,7 @@ struct _pf_iterator
 /* Something to iterate over a collection */
     {
     	/* Get next item into *pItem.  Return FALSE if no more items.  */
-    int (*next)(struct _pf_iterator *it, void *pItem);
+    int (*next)(struct _pf_iterator *it, void *pItem, void *pKey);
     	/* Clean up iterator. */
     void (*cleanup)(struct _pf_iterator *it);
     void *data;	/* Iterator specific pointer data. */

@@ -12,13 +12,16 @@ struct _pf_dir
     struct hash *hash;
     };
 
-struct _pf_dir *_pf_dir_new(int estimatedSize, int elTypeId);
+struct _pf_dir *pfDirNew(int estimatedSize, struct _pf_type *type);
 /* Create a dir.  The estimatedSize is just a guideline.
  * Generally you want this to be about the same as the
  * number of things going into the dir for optimal
  * performance.  If it's too small it will go slower.
  * If it's too big it will use up more memory.
  * Still, it's fine to be pretty approximate with it. */
+
+struct _pf_dir *_pf_dir_new(int estimatedSize, int elTypeId);
+/* Like pfDirNew, but takes typeId instead of type. */
 
 int _pf_dir_size(struct _pf_dir *dir);
 /* Return size of dir. */
@@ -30,9 +33,17 @@ struct _pf_object *_pf_dir_lookup_object(_pf_Stack *stack, _pf_Bit addRef);
  * decrementing the ref counts on the input side.  The output
  * does get an extra refcount though. */
 
+void _pf_dir_add_num(struct _pf_dir  *dir, char *key, _pf_Stack *stack);
+/* Add numerical object to directory.  Here stack[0] contains numerical
+ * value. */
+
 void _pf_dir_lookup_number(_pf_Stack *stack);
 /* Stack contains directory, keyword.  Return number of
  * some sort back on the stack. */
+
+void _pf_dir_add_obj(struct _pf_dir  *dir, char *key, _pf_Stack *stack);
+/* Add non-numerical object to directory.  Here stack[0] contains object
+ * value. */
 
 void _pf_dir_add_object(_pf_Stack *stack, int dirOffset);
 /* Stack contains object, directory, keyword.  Add object to

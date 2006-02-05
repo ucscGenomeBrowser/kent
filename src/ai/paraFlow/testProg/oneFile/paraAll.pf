@@ -1,0 +1,22 @@
+print ("hi");
+array of string names = ("John", "Bob", "Susan", "Mary");
+para (string s in names) do
+    {
+    print(s);
+    }
+print("bye");
+
+int i = para (string x in names) add x.size;
+i = para (string x in names) min x.size;
+i = para (string x in names) max x.size;
+
+array of string someNames = para (string x in names) and x.size >= 4;
+someNames = para (string x in names) or x.size >= 4;
+
+array of double nums = (1.0, 2.0, 3.0);
+double y = para (double x in nums) multiply x;
+array of double ay = para (double x in nums) top 2 x;
+
+someNames = para (string s in names) filter s.size >= 4;
+array of int sizes = para (string s in names) get s.size;
+

@@ -38,7 +38,7 @@ freeMem(dir);
 }
 
 
-static struct _pf_dir *pfDirNew(int estimatedSize, struct _pf_type *type)
+struct _pf_dir *pfDirNew(int estimatedSize, struct _pf_type *type)
 /* Create a dir.  The estimatedSize is just a guideline.
  * Generally you want this to be about the same as the
  * number of things going into the dir for optimal
@@ -57,12 +57,7 @@ return dir;
 }
 
 struct _pf_dir *_pf_dir_new(int estimatedSize, int elTypeId)
-/* Create a dir.  The estimatedSize is just a guideline.
- * Generally you want this to be about the same as the
- * number of things going into the dir for optimal
- * performance.  If it's too small it will go slower.
- * If it's too big it will use up more memory.
- * Still, it's fine to be pretty approximate with it. */
+/* Like pfDirNew, but takes typeId instead of type. */
 {
 return pfDirNew(estimatedSize, _pf_type_table[elTypeId]);
 }
@@ -175,18 +170,16 @@ switch (base->singleType)
     }
 }
 
-void _pf_dir_add_object(_pf_Stack *stack, int dirOffset)
-/* Stack contains object, directory, keyword.  Add object to
- * directory. */
+void _pf_dir_add_obj(struct _pf_dir  *dir, char *key, _pf_Stack *stack)
+/* Add non-numerical object to directory.  Here stack[0] contains object
+ * value. */
 {
 struct _pf_object *obj = stack[0].Obj;
-struct _pf_dir *dir = stack[dirOffset].Dir;
-struct _pf_string *string = stack[dirOffset+1].String;
 struct hash *hash = dir->hash;
 struct hashEl *hel;
 struct _pf_object *oldObj;
 
-hel = hashLookup(hash, string->s);
+hel = hashLookup(hash, key);
 if (hel != NULL)
     {
     oldObj = hel->val;
@@ -196,8 +189,18 @@ if (hel != NULL)
     }
 else
     {
-    hashAdd(hash, string->s, obj);
+    hashAdd(hash, key, obj);
     }
+}
+
+void _pf_dir_add_object(_pf_Stack *stack, int dirOffset)
+/* Stack contains object, directory, keyword.  Add object to
+ * directory. */
+{
+struct _pf_dir *dir = stack[dirOffset].Dir;
+struct _pf_string *string = stack[dirOffset+1].String;
+
+_pf_dir_add_obj(dir, string->s, stack);
 }
 
 static void *cloneStackNum(_pf_Stack *stack, struct _pf_type *type)
@@ -225,25 +228,31 @@ switch (type->base->singleType)
     }
 }
 
-void _pf_dir_add_number(_pf_Stack *stack, int dirOffset)
-/* Stack contains number, directory, keyword.  Add number to
- * directory. */
+void _pf_dir_add_num(struct _pf_dir  *dir, char *key, _pf_Stack *stack)
+/* Add numerical object to directory.  Here stack[0] contains numerical
+ * value. */
 {
-struct _pf_dir *dir = stack[dirOffset].Dir;
-struct _pf_string *string = stack[dirOffset+1].String;
 struct hash *hash = dir->hash;
 struct hashEl *hel;
-struct _pf_object *oldObj;
 void *clonedNum = cloneStackNum(&stack[0], dir->elType);
 
-hel = hashLookup(hash, string->s);
+hel = hashLookup(hash, key);
 if (hel != NULL)
     {
     freeMem(hel->val);
     hel->val = clonedNum;
     }
 else
-    hashAdd(hash, string->s, clonedNum);
+    hashAdd(hash, key, clonedNum);
+}
+
+void _pf_dir_add_number(_pf_Stack *stack, int dirOffset)
+/* Stack contains number, directory, keyword.  Add number to
+ * directory. */
+{
+struct _pf_dir *dir = stack[dirOffset].Dir;
+struct _pf_string *string = stack[dirOffset+1].String;
+_pf_dir_add_num(dir, string->s, stack);
 }
 
 _pf_Dir _pf_r_tuple_to_dir(_pf_Stack *stack, struct _pf_type *elType, 
@@ -356,13 +365,20 @@ struct dir_iterator
     struct _pf_base *base;
     };
 
-static int dir_iterator_next(struct _pf_iterator *it, void *output)
+static int dir_iterator_next(struct _pf_iterator *it, void *output, void *key)
 /* Fetch next value. */
 {
 struct dir_iterator *dit = it->data;
-void *val = hashNextVal(&dit->cookie);
-if (val == NULL)
+struct hashEl *hel = hashNext(&dit->cookie);
+void *val;
+if (hel == NULL)
     return FALSE;
+val = hel->val;
+if (key != NULL)
+    {
+    char **typedKey = key;
+    *typedKey = hel->name;
+    }
 if (dit->base->needsCleanup)
     {
     struct _pf_object **pObj = output;

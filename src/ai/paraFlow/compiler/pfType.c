@@ -1355,6 +1355,8 @@ struct pfParse *el = pp->children;
 struct pfParse *collection = el->next;
 struct pfParse *body = collection->next;
 
+if (collection->ty->base == pfc->stringType)
+    errAt(collection->tok, "strings not allowed as para collections.");
 checkElInCollection(pfc, el, collection, "para");
 switch (pp->type)
     {

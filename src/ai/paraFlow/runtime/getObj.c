@@ -261,7 +261,7 @@ if (!gotNil(f))
 	char toBuf[5];
 	void *v;
 
-	dir = _pf_dir_new(0, elType);
+	dir = pfDirNew(0, elType);
 	idAdd(idHash, dir);
 	for (;;)
 	    {
