@@ -312,6 +312,194 @@ else
 return outCount;
 }
 
+static void expandDottedName(struct pfCompile *pfc,
+	char *fullName, int maxSize, struct pfParse *pp)
+/* Fill in fullName with this.that.whatever. */
+{
+switch (pp->type)
+    {
+    case pptVarUse:
+	{
+	struct dyString *name = varName(pfc, pp->var);
+        safef(fullName, maxSize, "%s", name->string);
+	dyStringFree(&name);
+	break;
+	}
+    case pptDot:
+        {
+	int curSize = 0, itemSize;
+	boolean isFirst = TRUE;
+	for (pp = pp->children; pp != NULL; pp = pp->next)
+	    {
+	    if (isFirst)
+	        {
+		struct dyString *name = varName(pfc, pp->var);
+		safef(fullName, maxSize, "%s", name->string);
+		curSize = name->stringSize;
+		if (curSize >= maxSize)
+		    errAt(pp->tok, "Dotted name too long");
+		strcpy(fullName, name->string);
+		dyStringFree(&name);
+		isFirst = FALSE;
+		}
+	    else
+		{
+		itemSize = strlen(pp->name);
+		if (itemSize + curSize + 2 >= maxSize)
+		    errAt(pp->tok, "Dotted name too long");
+		fullName[curSize] = '-';
+		fullName[curSize+1] = '>';
+		curSize += 2;
+		strcpy(fullName + curSize, pp->name);
+		curSize += itemSize;
+		}
+	    }
+	fullName[curSize] = 0;
+	break;
+	}
+    default:
+        internalErr();
+	break;
+    }
+}
+
+static void startElInCollectionIteration(struct pfCompile *pfc, FILE *f,
+	struct pfScope *scope, struct pfParse *elPp, 
+	struct pfParse *collectionPp, boolean reverse)
+/* This highly technical routine generates some of the code for
+ * foreach and para actions.  */
+{
+struct pfBaseType *base = collectionPp->ty->base;
+char collectionName[512];
+struct dyString *elName = varName(pfc, elPp->var);
+
+/* Print element variable in a new scope. */
+expandDottedName(pfc, collectionName, sizeof(collectionName), collectionPp);
+fprintf(f, "{\n");
+codeScopeVars(pfc, f, scope, FALSE);
+if (base == pfc->arrayType)
+    {
+    struct pfBaseType *elBase = collectionPp->ty->children->base;
+    fprintf(f, "int _pf_offset;\n");
+    fprintf(f, "int _pf_elSize = %s->elSize;\n", collectionName);
+    fprintf(f, "int _pf_endOffset = %s->size * _pf_elSize;\n", collectionName);
+    if (reverse)	/* To help simulate parallelism, do it in reverse. */
+	fprintf(f, "for (_pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; _pf_offset -= _pf_elSize)\n");
+    else
+	fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize)\n");
+    fprintf(f, "{\n");
+    fprintf(f, "%s = *((", elName->string);
+    printType(pfc, f, elBase);
+    fprintf(f, "*)(%s->elements + _pf_offset));\n", collectionName);
+    }
+else if (base == pfc->stringType)
+    {
+    fprintf(f, "int _pf_offset;\n");
+    fprintf(f, "int _pf_endOffset = %s->size;\n", collectionName);
+    if (reverse)	/* To help simulate parallelism, do it in reverse. */
+	fprintf(f, "for (_pf_offset=_pf_endOffset-1; _pf_offset>=0; _pf_offset -= 1)\n");
+    else
+	fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += 1)\n");
+    fprintf(f, "{\n");
+    fprintf(f, "%s = %s->s[_pf_offset];\n", elName->string, collectionName);
+    }
+else
+    {
+    fprintf(f, "struct _pf_iterator _pf_ix = _pf_%s_iterator_init(%s);\n",
+    	base->name, collectionName);
+    fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s))\n", elName->string);
+    fprintf(f, "{\n");
+    }
+dyStringFree(&elName);
+}
+
+static void endElInCollectionIteration(struct pfCompile *pfc, FILE *f,
+	struct pfScope *scope, struct pfParse *elPp, 
+	struct pfParse *collectionPp, boolean reverse)
+/* This highly technical routine generates some of the code for
+ * foreach and para actions.  */
+{
+struct pfBaseType *base = collectionPp->ty->base;
+fprintf(f, "}\n");
+if (base != pfc->arrayType && base != pfc->stringType)
+    {
+    fprintf(f, "_pf_ix.cleanup(&_pf_ix);\n");
+    }
+fprintf(f, "}\n");
+}
+
+static int codeParaExpSingle(struct pfCompile *pfc, FILE *f,
+	struct pfParse *para, int stack)
+/* Generate code for a para expression that just has a single
+ * value as a result. */
+{
+struct pfParse *elPp = para->children;
+struct pfParse *collectionPp = elPp->next;
+struct pfParse *body = collectionPp->next;
+struct pfBaseType *base = para->ty->base;
+fprintf(f, "{\n");
+fprintf(f, "int _pf_first = 1;\n");
+printType(pfc, f, base);
+fprintf(f, " _pf_acc = 0;\n");
+
+startElInCollectionIteration(pfc, f, para->scope, elPp, collectionPp, TRUE);
+
+/* Calculate expression */
+codeExpression(pfc, f, body, stack, FALSE);
+
+/* In all cases first time through we just initialize accumalator with
+ * expression value. */
+fprintf(f, "if (_pf_first)\n");
+fprintf(f, "{\n");
+fprintf(f, "_pf_first = 0;\n");
+fprintf(f, "_pf_acc = ");
+codeParamAccess(pfc, f,base, stack);
+fprintf(f, ";\n");
+fprintf(f, "}\n");
+
+/* What we do rest of time depends on the type of para. */
+fprintf(f, "else\n");
+fprintf(f, "{\n");
+switch (para->type)
+    {
+    case pptParaMin:
+	 fprintf(f, "if (");
+	 codeParamAccess(pfc, f, base, stack);
+	 fprintf(f, " < _pf_acc) _pf_acc = ");
+	 codeParamAccess(pfc, f, base, stack);
+	 fprintf(f, ";\n");
+         break;
+    case pptParaMax:
+	 fprintf(f, "if (");
+	 codeParamAccess(pfc, f, base, stack);
+	 fprintf(f, " > _pf_acc) _pf_acc = ");
+	 codeParamAccess(pfc, f, base, stack);
+	 fprintf(f, ";\n");
+         break;
+    case pptParaAdd:
+	 fprintf(f, "_pf_acc += ");
+	 codeParamAccess(pfc, f, base, stack);
+	 fprintf(f, ";\n");
+         break;
+    case pptParaMultiply:
+	 fprintf(f, "_pf_acc *= ");
+	 codeParamAccess(pfc, f, base, stack);
+	 fprintf(f, ";\n");
+         break;
+    default:
+        internalErr();
+	break;
+    }
+fprintf(f, "}\n");
+
+endElInCollectionIteration(pfc, f, para->scope, elPp, collectionPp, TRUE);
+
+codeParamAccess(pfc, f, base, stack);
+fprintf(f, " = _pf_acc;\n");
+fprintf(f, "}\n");
+return 1;
+}
+
 static void codeRunTimeError(struct pfCompile *pfc, FILE *f,
 	struct pfToken *tok, char *message)
 /* Print code for a run time error message. */
@@ -1169,6 +1357,11 @@ switch (pp->type)
 	    total += codeExpression(pfc, f, p, stack+total, addRef);
 	return total;
 	}
+    case pptParaMin:
+    case pptParaMax:
+    case pptParaAdd:
+    case pptParaMultiply:
+        return codeParaExpSingle(pfc, f, pp, stack);
     case pptCall:
 	return codeCall(pfc, f, pp, stack);
     case pptAssignment:
@@ -1363,57 +1556,6 @@ switch (pp->type)
     }
 }
 
-static void expandDottedName(struct pfCompile *pfc,
-	char *fullName, int maxSize, struct pfParse *pp)
-/* Fill in fullName with this.that.whatever. */
-{
-switch (pp->type)
-    {
-    case pptVarUse:
-	{
-	struct dyString *name = varName(pfc, pp->var);
-        safef(fullName, maxSize, "%s", name->string);
-	dyStringFree(&name);
-	break;
-	}
-    case pptDot:
-        {
-	int curSize = 0, itemSize;
-	boolean isFirst = TRUE;
-	for (pp = pp->children; pp != NULL; pp = pp->next)
-	    {
-	    if (isFirst)
-	        {
-		struct dyString *name = varName(pfc, pp->var);
-		safef(fullName, maxSize, "%s", name->string);
-		curSize = name->stringSize;
-		if (curSize >= maxSize)
-		    errAt(pp->tok, "Dotted name too long");
-		strcpy(fullName, name->string);
-		dyStringFree(&name);
-		isFirst = FALSE;
-		}
-	    else
-		{
-		itemSize = strlen(pp->name);
-		if (itemSize + curSize + 2 >= maxSize)
-		    errAt(pp->tok, "Dotted name too long");
-		fullName[curSize] = '-';
-		fullName[curSize+1] = '>';
-		curSize += 2;
-		strcpy(fullName + curSize, pp->name);
-		curSize += itemSize;
-		}
-	    }
-	fullName[curSize] = 0;
-	break;
-	}
-    default:
-        internalErr();
-	break;
-    }
-}
-
 
 static void codeForeach(struct pfCompile *pfc, FILE *f,
 	struct pfParse *foreach, boolean reverse)
@@ -1421,62 +1563,11 @@ static void codeForeach(struct pfCompile *pfc, FILE *f,
 {
 struct pfParse *elPp = foreach->children;
 struct pfParse *collectionPp = elPp->next;
-struct pfBaseType *base = collectionPp->ty->base;
 struct pfParse *body = collectionPp->next;
-struct dyString *elName = varName(pfc, elPp->var);
-char collectionName[512];
 
-/* Print element variable in a new scope. */
-expandDottedName(pfc, collectionName, sizeof(collectionName), collectionPp);
-fprintf(f, "{\n");
-codeScopeVars(pfc, f, foreach->scope, FALSE);
-
-/* Also print some iteration stuff. */
-if (base == pfc->arrayType)
-    {
-    struct pfBaseType *elBase = collectionPp->ty->children->base;
-    fprintf(f, "int _pf_offset;\n");
-    fprintf(f, "int _pf_elSize = %s->elSize;\n", collectionName);
-    fprintf(f, "int _pf_endOffset = %s->size * _pf_elSize;\n", collectionName);
-    if (reverse)	/* To help simulate parallelism, do it in reverse. */
-	fprintf(f, "for (_pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; _pf_offset -= _pf_elSize)\n");
-    else
-	fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize)\n");
-    fprintf(f, "{\n");
-    fprintf(f, "%s = *((", elName->string);
-    printType(pfc, f, elBase);
-    fprintf(f, "*)(%s->elements + _pf_offset));\n", collectionName);
-    codeStatement(pfc, f, body);
-    fprintf(f, "}\n");
-    }
-else if (base == pfc->stringType)
-    {
-    fprintf(f, "int _pf_offset;\n");
-    fprintf(f, "int _pf_endOffset = %s->size;\n", collectionName);
-    if (reverse)	/* To help simulate parallelism, do it in reverse. */
-	fprintf(f, "for (_pf_offset=_pf_endOffset-1; _pf_offset>=0; _pf_offset -= 1)\n");
-    else
-	fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += 1)\n");
-    fprintf(f, "{\n");
-    fprintf(f, "%s = %s->s[_pf_offset];\n", elName->string, collectionName);
-    codeStatement(pfc, f, body);
-    fprintf(f, "}\n");
-    }
-else
-    {
-    fprintf(f, "struct _pf_iterator _pf_ix = _pf_%s_iterator_init(%s);\n",
-    	base->name, collectionName);
-    fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s))\n", elName->string);
-    fprintf(f, "{\n");
-    codeStatement(pfc, f, body);
-    fprintf(f, "}\n");
-    fprintf(f, "_pf_ix.cleanup(&_pf_ix);\n");
-    }
-#ifdef NEVER
-cleanupScopeVars(pfc, f, foreach->scope);
-#endif /* NEVER */
-fprintf(f, "}\n");
-dyStringFree(&elName);
+startElInCollectionIteration(pfc, f, foreach->scope, elPp, collectionPp, reverse);
+codeStatement(pfc, f, body);
+endElInCollectionIteration(pfc, f, foreach->scope, elPp, collectionPp, reverse);
 }
 
 static void codeFor(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
