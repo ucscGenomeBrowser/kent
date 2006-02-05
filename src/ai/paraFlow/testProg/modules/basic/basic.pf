@@ -48,7 +48,7 @@ codeLine startLine, endLine;
 
 file f = fileOpen(args[0], "r");
 int lineCount = 0;
-foreach string line in f.readLine()
+foreach (string line in f.readLine())
     {
     (string label, int pos) = line.nextWord(pos);
     if (label)

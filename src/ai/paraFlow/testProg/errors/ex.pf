@@ -10,3 +10,10 @@ int a,b;
 (a,b) = (1,2);
 print(a);
 print(b);
+
+para pointFactory(double x) into point p
+    {
+    p = (x,x);
+    }
+
+print(pointFactory(1.23));

@@ -1,4 +1,4 @@
 array of int a = (1,2,3,4,5);
-foreach int el in a
+foreach (int el in a)
     prin(el + " ");
 print("");

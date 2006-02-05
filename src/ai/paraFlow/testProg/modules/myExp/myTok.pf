@@ -25,7 +25,7 @@ class tokenizer
 		{
 		for (;;)
 		    {
-		    foreach (word,pos) in self.lineBuf.nextWord(pos)
+		    foreach ((word,pos) in self.lineBuf.nextWord(pos))
 			{
 			/*-OLDWAY
 			if (word == "(" || word == ")" || word == "+"

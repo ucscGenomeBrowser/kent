@@ -17,7 +17,7 @@ to stringToInt(string s) into int val
     {
     string zero = "0";
     byte zeroInAscii = zero[0];
-    foreach byte b in s
+    foreach (byte b in s)
         {
 	if (!isnum(b))
 	    break;

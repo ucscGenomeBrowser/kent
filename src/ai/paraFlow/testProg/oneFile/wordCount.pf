@@ -15,7 +15,7 @@ if (args.size < 1)
     usage();
 
 long totalChars, totalWords, totalLines;
-foreach string fileName in args
+foreach (string fileName in args)
     {
     file f = fileOpen(fileName, "r");
     long chars, words, lines;
