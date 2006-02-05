@@ -1,0 +1,4 @@
+
+array of int a = (4,3,1,2);
+int sum = para (int x in a) add x;
+print(sum);

@@ -1,0 +1,4 @@
+
+array of int a = (2,8,3,0);
+int maxSquare = para (int x in a) max x*x;
+print(maxSquare);
