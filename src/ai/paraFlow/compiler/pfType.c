@@ -1347,22 +1347,6 @@ if (left->type == pptTuple && right->type == pptTuple)
     }
 }
 
-static void checkParaGet(struct pfCompile *pfc, struct pfParse *para,
-	struct pfParse *el, struct pfParse *collection, struct pfParse *body)
-/* Do get-specific part of para action checking.  Assumes el/collection
- * type relationship already verified. This sets the type of the para
- * node, which is going to be a collection of the same type as collection
- * filled with elements the same type as body. */
-{
-struct pfType *ty = pfTypeNew(collection->ty->base);
-uglyf("checkParaGet - collection base is %s\n", ty->base->name);
-ty->children = body->ty;
-para->ty = ty;
-uglyf("Para type now: ");
-pfTypeDump(ty, uglyOut);
-uglyf("\n");
-}
-
 static void checkPara(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check one of the para invocation type nodes. */
 {
@@ -1385,7 +1369,9 @@ switch (pp->type)
 	}
     case pptParaGet:
         {
-	checkParaGet(pfc, pp, el, collection, body);
+	struct pfType *ty = pfTypeNew(collection->ty->base);
+	ty->children = body->ty;
+	pp->ty = ty;
 	break;
 	}
     }

@@ -516,22 +516,19 @@ struct pfParse *collection = element->next;
 struct pfParse *expression = collection->next;
 struct pfBaseType *collectBase = collection->ty->base;
 
-uglyf("Theoretically generating code for para action get.\n");
-uglyf("collection is:\n");
-pfParseDump(collection, 2,  uglyOut);
 fprintf(f, "/* start para get */\n");
 fprintf(f, "{\n");
 
 if (collectBase == pfc->arrayType)
     {
-    fprintf(f, "int _pf_resElSize, _pf_resEndOffset, _pf_resOffset = 0;\n");
+    fprintf(f, "int _pf_resElSize, _pf_resOffset = 0;\n");
     fprintf(f, "_pf_Array _pf_coll, _pf_result;\n");
-    codeExpression(pfc, f, collection, stack, TRUE);
+    codeExpression(pfc, f, collection, stack, FALSE);
     fprintf(f, "_pf_coll = ");
     codeParamAccess(pfc, f, collectBase, stack);
     fprintf(f, ";\n");
     fprintf(f, "_pf_result = _pf_dim_array(_pf_coll->size, ");
-    codeForType(pfc, f, element->ty);
+    codeForType(pfc, f, expression->ty);
     fprintf(f, ");\n");
     fprintf(f, "_pf_resElSize = _pf_result->elSize;\n");
     startElInCollectionIteration(pfc, f, para->scope, element, 
@@ -539,7 +536,7 @@ if (collectBase == pfc->arrayType)
     codeExpression(pfc, f, expression, stack, FALSE);
     fprintf(f, "*((");
     printType(pfc, f, expression->ty->base);
-    fprintf(f, "*)(_pf_result->elements + _pf_resOffset)) =");
+    fprintf(f, "*)(_pf_result->elements + _pf_resOffset)) = ");
     codeParamAccess(pfc, f, expression->ty->base, stack);
     fprintf(f, ";\n");
     fprintf(f, "_pf_resOffset += _pf_resElSize;\n");
