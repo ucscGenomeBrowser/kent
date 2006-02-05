@@ -1378,6 +1378,8 @@ switch (pp->type)
 	}
     case pptParaFilter:
 	{
+	struct pfParse **pBody = &collection->next;
+        coerceToBit(pfc, pBody);
 	pp->ty = CloneVar(collection->ty);
 	break;
 	}
