@@ -258,16 +258,30 @@ static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
 /* Make sure that a single variable is of the required type. 
  * Add casts if necessary */
 
-static void coerceToBit(struct pfCompile *pfc, struct pfParse **pPp)
-/* Make sure that pPp is a bit. */
+static void coerceToBaseType(struct pfCompile *pfc, struct pfBaseType *baseType,
+	struct pfParse **pPp)
+/* Coerce to a particular base type */
 {
 struct pfParse *pp = *pPp;
-if (pp->ty->base != pfc->bitType)
+if (pp->ty->base != baseType)
     {
-    struct pfType *type = pfTypeNew(pfc->bitType);
+    struct pfType *type = pfTypeNew(baseType);
     coerceOne(pfc, pPp, type, FALSE);
     }
 }
+
+static void coerceToBit(struct pfCompile *pfc, struct pfParse **pPp)
+/* Make sure that pPp is a bit. */
+{
+coerceToBaseType(pfc, pfc->bitType, pPp);
+}
+
+static void coerceToInt(struct pfCompile *pfc, struct pfParse **pPp)
+/* Make sure that pPp is a bit. */
+{
+coerceToBaseType(pfc, pfc->intType, pPp);
+}
+
 
 boolean pfTypesAllSame(struct pfType *aList, struct pfType *bList)
 /* Return TRUE if all elements of aList and bList have the same
@@ -687,6 +701,29 @@ static void coerceIf(struct pfCompile *pfc, struct pfParse *pp)
 coerceToBit(pfc, &pp->children);
 }
 
+static void checkElInCollection(struct pfCompile *pfc, struct pfParse *el, 
+	struct pfParse *collection, char *statementName)
+/* Make sure that collection is indeed a collection, and
+ * that the type of el agrees with the types in the collection */
+{
+boolean ok = TRUE;
+if (!collection->ty->base->isCollection)
+    expectingGot("collection", collection->tok);
+if (collection->ty->base == pfc->stringType)
+    {
+    if (el->ty->base != pfc->byteType)
+	ok = FALSE;
+    }
+else
+    {
+    if (!pfTypeSame(el->ty, collection->ty->children))
+	ok = FALSE;
+    }
+if (!ok)
+    errAt(collection->tok, "type mismatch between element and collection in %s", 
+    		statementName);
+}
+
 static void checkForeach(struct pfCompile *pfc, struct pfParse *pp)
 /* Figure out if looping through a collection, or over
  * repeated uses of function, and type check accordingly. */
@@ -696,7 +733,6 @@ struct pfParse *el = pp->children;
 struct pfParse *source = el->next;
 struct pfParse *body = source->next;
 struct pfParse *cast, *castStart;
-boolean ok = TRUE;
 if (source->type == pptCall)
     {
     /* Coerce call to be same type as element. */
@@ -724,20 +760,7 @@ if (source->type == pptCall)
     }
 else
     {
-    if (!source->ty->base->isCollection)
-	expectingGot("collection", source->tok);
-    if (source->ty->base == pfc->stringType)
-	{
-	if (el->ty->base != pfc->byteType)
-	    ok = FALSE;
-	}
-    else
-	{
-	if (!pfTypeSame(el->ty, source->ty->children))
-	    ok = FALSE;
-	}
-    if (!ok)
-	errAt(pp->tok, "type mismatch between element and collection in foreach");
+    checkElInCollection(pfc, el, source, "foreach");
     }
 }
 
@@ -1324,6 +1347,25 @@ if (left->type == pptTuple && right->type == pptTuple)
     }
 }
 
+static void checkPara(struct pfCompile *pfc, struct pfParse **pPp)
+/* Check one of the para invocation type nodes. */
+{
+struct pfParse *pp = *pPp;
+struct pfParse *el = pp->children;
+struct pfParse *collection = el->next;
+struct pfParse *body = collection->next;
+struct pfParse *number = body->next;	/* May be NULL */
+
+checkElInCollection(pfc, el, collection, "para");
+if (number != NULL)
+    {
+    enforceInt(pfc, number);
+    }
+switch (pp->type)
+    {
+    }
+}
+
 void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
@@ -1349,6 +1391,19 @@ switch (pp->type)
 	break;
     case pptForeach:
         checkForeach(pfc, pp);
+	break;
+    case pptParaDo:
+    case pptParaAdd:
+    case pptParaMultiply:
+    case pptParaAnd:
+    case pptParaOr:
+    case pptParaMin:
+    case pptParaMax:
+    case pptParaTop:
+    case pptParaSample:
+    case pptParaGet:
+    case pptParaFilter:
+        checkPara(pfc, pPp);
 	break;
     case pptIf:
         coerceIf(pfc, pp);

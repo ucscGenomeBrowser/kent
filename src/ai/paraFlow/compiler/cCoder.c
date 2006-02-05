@@ -1416,7 +1416,7 @@ switch (pp->type)
 
 
 static void codeForeach(struct pfCompile *pfc, FILE *f,
-	struct pfParse *foreach)
+	struct pfParse *foreach, boolean reverse)
 /* Emit C code for foreach statement. */
 {
 struct pfParse *elPp = foreach->children;
@@ -1438,7 +1438,10 @@ if (base == pfc->arrayType)
     fprintf(f, "int _pf_offset;\n");
     fprintf(f, "int _pf_elSize = %s->elSize;\n", collectionName);
     fprintf(f, "int _pf_endOffset = %s->size * _pf_elSize;\n", collectionName);
-    fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize)\n");
+    if (reverse)	/* To help simulate parallelism, do it in reverse. */
+	fprintf(f, "for (_pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; _pf_offset -= _pf_elSize)\n");
+    else
+	fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize)\n");
     fprintf(f, "{\n");
     fprintf(f, "%s = *((", elName->string);
     printType(pfc, f, elBase);
@@ -1450,7 +1453,10 @@ else if (base == pfc->stringType)
     {
     fprintf(f, "int _pf_offset;\n");
     fprintf(f, "int _pf_endOffset = %s->size;\n", collectionName);
-    fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += 1)\n");
+    if (reverse)	/* To help simulate parallelism, do it in reverse. */
+	fprintf(f, "for (_pf_offset=_pf_endOffset-1; _pf_offset>=0; _pf_offset -= 1)\n");
+    else
+	fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += 1)\n");
     fprintf(f, "{\n");
     fprintf(f, "%s = %s->s[_pf_offset];\n", elName->string, collectionName);
     codeStatement(pfc, f, body);
@@ -1466,7 +1472,9 @@ else
     fprintf(f, "}\n");
     fprintf(f, "_pf_ix.cleanup(&_pf_ix);\n");
     }
+#ifdef NEVER
 cleanupScopeVars(pfc, f, foreach->scope);
+#endif /* NEVER */
 fprintf(f, "}\n");
 dyStringFree(&elName);
 }
@@ -1593,8 +1601,11 @@ switch (pp->type)
     case pptVarInit:
 	codeVarInit(pfc, f, pp, 0);
         break;
+    case pptParaDo:
+        codeForeach(pfc, f, pp, TRUE);
+	break;
     case pptForeach:
-	codeForeach(pfc, f, pp);
+	codeForeach(pfc, f, pp, FALSE);
 	break;
     case pptForEachCall:
         codeForEachCall(pfc, f, pp);
