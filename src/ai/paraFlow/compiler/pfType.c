@@ -1376,6 +1376,11 @@ switch (pp->type)
 	pp->ty = ty;
 	break;
 	}
+    case pptParaFilter:
+	{
+	pp->ty = CloneVar(collection->ty);
+	break;
+	}
     }
 }
 
