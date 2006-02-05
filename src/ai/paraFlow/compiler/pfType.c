@@ -1363,6 +1363,15 @@ if (number != NULL)
     }
 switch (pp->type)
     {
+    case pptParaAdd:
+    case pptParaMultiply:
+    case pptParaMin:
+    case pptParaMax:
+        {
+	enforceNumber(pfc, body);
+	pp->ty = body->ty;
+	break;
+	}
     }
 }
 
