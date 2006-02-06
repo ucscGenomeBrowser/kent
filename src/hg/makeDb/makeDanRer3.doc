@@ -5188,3 +5188,55 @@ table ensGeneXRef
     # these map, a subset that are STSs and with available primers sequences
     # were imported to UniSTS. These include submitted maps and those from
     # the Zebrafish Information Network (ZFIN).
+
+# Build maf annotation and load database
+cd /cluster/data/danRer3/bed/multiz5way
+mkdir anno 
+cd anno
+cat ../../maf/chr1.maf | awk "/^s/ {print \$2}" | sed "s/\..*$//"  | sort -u > species.names
+mkdir maf run
+cd run
+rm sizes nBeds
+for i in `cat species.names`
+do
+    ln -s  /cluster/data/$i/chrom.sizes $i.len
+    ln -s  /cluster/data/$i/$i.N.bed $i.bed
+    echo $i.bed  >> nBeds
+    echo $i.len  >> sizes
+done 
+
+for i in ../../maf/*.maf
+do
+    echo mafAddIRows -nBeds=nBeds -sizes=sizes $i /cluster/data/danRer3/danRer3.2bit ../maf/`basename $i`
+done > jobs
+sh -x jobs
+
+ssh hgwdev
+
+cd /cluster/data/danRer3/bed/multiz5way/anno/mafs
+cat *.maf | hgLoadMafSummary danRer3 multiz5way stdin       
+
+mkdir /gbdb/danRer3/multiz5way
+for i in *.maf
+do
+    ln -s `pwd`/$i /gbdb/danRer3/multiz5way
+done
+hgLoadMaf danRer3 multiz5way
+rm *.tab
+
+cd /cluster/data/danRer3/bed/multiz5way
+mkdir frames
+cd frames
+cp /cluster/data/mm7/bed/multiz17wayFrames/mkMafFrames .
+cp /cluster/data/mm7/bed/multiz17wayFrames/Makefile .
+
+#edit Makefile to correct species names 
+
+mkdir -p /san/sanvol1/scratch/danRer3/multiz5wayFrames/maf
+for i in ../../maf/*.maf; do echo $i; cp $i /san/sanvol1/scratch/danRer3/multiz5wayFrames/maf/$i; done  
+
+make getGenes
+make getFrames
+make loadDb
+
+#end of multiz5way annotation and load
