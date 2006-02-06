@@ -652,6 +652,40 @@ if (collectBase == pfc->arrayType)
     }
 else if (collectBase == pfc->dirType)
     {
+    struct pfType *elType = element->ty;
+    fprintf(f, "_pf_Dir _pf_coll, _pf_result;\n");
+    codeExpression(pfc, f, collection, stack, FALSE);
+    fprintf(f, "_pf_coll = ");
+    codeParamAccess(pfc, f, collectBase, stack);
+    fprintf(f, ";\n");
+    fprintf(f, "_pf_result = _pf_dir_new(_pf_dir_size(_pf_coll), ");
+    codeForType(pfc, f, elType);
+    fprintf(f, ");\n");
+
+    startElInCollectionIteration(pfc, f, para->scope, element, 
+    	collection, FALSE);
+    codeExpression(pfc, f, expression, stack, TRUE);
+    fprintf(f, "if (");
+    codeParamAccess(pfc, f, pfc->bitType, stack);
+    fprintf(f, ")\n");
+    fprintf(f, "{\n");
+    codeParamAccess(pfc, f, elType->base, stack);
+    fprintf(f, "=%s;\n", elName->string);
+    if (elType->base->needsCleanup)
+	{
+        fprintf(f, "%s->_pf_refCount+=1;\n", elName->string);
+	fprintf(f, "_pf_dir_add_obj(_pf_result, _pf_key, %s+%d);\n",  
+		stackName, stack);
+	}
+    else 
+	{
+	fprintf(f, "_pf_dir_add_num(_pf_result, _pf_key, %s+%d);\n",  
+		stackName, stack);
+	}
+    fprintf(f, "}\n");
+
+    endElInCollectionIteration(pfc, f, para->scope, element, 
+    	collection, FALSE);
     }
 else
     internalErr();
