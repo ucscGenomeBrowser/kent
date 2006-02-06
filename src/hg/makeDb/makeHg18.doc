@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.37 2006/02/04 00:20:47 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.38 2006/02/06 06:37:54 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -3666,7 +3666,197 @@ cat > template << '_EOF_'
          {if ($4 == "'$i'") print $1, $2, $3, $4, $5, $6, $7}' \
          stsMarkers.extra >> stsMarkers.extra.filt1000
     done
-XXXX - to here 2006-02-03 16:20
+    cp -p ../stsMarkers.final stsMarkers.final
+     # need to filter stsMarkers.final not just cat this on the end
+    # get list of alignments with tBaseInsert >= 1000 and remove these
+    cd /cluster/data/hg18/bed/sts/fix
+    awk '{if ($8 >= 1000) print;}' stsMarkers.noOoc.lifted.psl \
+	> stsMarkers.noOoc.lifted.filtToRemove.psl
+    wc -l *.filt*.psl
+    #	 23 stsMarkers.noOoc.lifted.filt1000.psl
+    #	175 stsMarkers.noOoc.lifted.filtToRemove.psl
+    # get list of IDs that need to be removed
+    awk '{print $10;}' stsMarkers.noOoc.lifted.filtToRemove.psl | sort -n \
+        | uniq  > noOoc.IdsToRemove.txt
+    # get chrom and co-ordinates for IDs to be removed 
+    awk 'BEGIN {OFS = "\t"} {print $14,$16,$17,$10}' \
+        stsMarkers.noOoc.lifted.filtToRemove.psl | sort | uniq \
+        > sts.noOoc.filtToRemove.coords
+    # checked that the stsMarkers.final contain the noOoc alignments
+    # use this perl script to remove lines with these IDs from stsMarkers.final
+cat << '_EOF_' > removeIds.pl
+#!/usr/bin/env perl
+use warnings;
+use strict;
+
+my $ids = $ARGV[0];
+my $file = $ARGV[1];
+# list of IDs with chrom and coords to remove
+open(IDS, $ids) || die "Can not open $ids: $!\n";
+# file for removal of IDs
+open(FILE, $file) || die "Can not open $file: $!\n";
+open(OUT, ">removed.txt") || die "Can not create removed.txt: $!\n";
+
+my %idsHash;
+
+while (<IDS>) {
+   chomp;
+   my @a = split(/\t/);
+
+   my $chr = $a[0];
+   my $st = $a[1];
+   my $end = $a[2];
+   my $id = $a[3];
+   my $key = $id."_".$chr . "_" . $st . "_" . $end;
+   $idsHash{$key}->{chrom} = $chr;
+   $idsHash{$key}->{start} = $st;
+   $idsHash{$key}->{end} = $end;
+}
+close IDS;
+
+while (<FILE>) {
+   chomp;
+   my $l = $_;
+   my $found = "FALSE";
+   my @f = split(/\t/, $l);
+   foreach my $k (keys(%idsHash)) {
+      # if the id is contained in the key
+      if ($k =~ /^$f[3]/) {
+         my $c = $idsHash{$k}->{chrom};
+         my $s = $idsHash{$k}->{start};
+         my $e = $idsHash{$k}->{end};
+         if ($f[0] eq $c && $f[1] == $s && $f[2] == $e) {
+             print OUT "$c\t$s\t$e\t$f[3]\n";
+             $found = "TRUE";
+         }
+      }
+   }
+   if ($found eq "FALSE") {
+      print "$l\n";
+   }
+}
+'_EOF_'
+    chmod +x removeIds.pl
+    ./removeIds.pl sts.noOoc.filtToRemove.coords stsMarkers.final \
+         > stsMarkers.final.new
+    wc -l stsMarkers.final*
+    wc stsMarkers.final*
+    #	93434  654038 4957784 stsMarkers.final
+    #	93259  652813 4948484 stsMarkers.final.new
+
+    # There are 175 ids and sets of co-ordinates in list of Ids to remove
+    #	175 stsMarkers.noOoc.lifted.filtToRemove.psl
+    # check that stsMarkers.final.new contains all the alignments that
+    # are in filtered set: stsMarkers.noOoc.lifted.filt1000.psl
+    awk 'BEGIN {OFS = "\t"} {print $14,$16,$17,$10}' \
+        stsMarkers.noOoc.lifted.filt1000.psl | sort | uniq \
+        > sts.noOoc.filt1000.coords
+    awk 'BEGIN {OFS = "\t"} {print $1,$2,$3,$4}' \
+        stsMarkers.final.new | sort | uniq \
+        > sts.finalnew.coords
+    diff sts.finalnew.coords sts.noOoc.filt1000.coords > finalnewvsfilt1000
+    grep '>' finalnewvsfilt1000
+    # there is nothing in sts.noOoc.filt1000.coords not found in the 
+    # sts.finalnew.coords file therefore this contains all the alignments
+    # from the filtered noOoc file.
+    cp ../primers/primers.final .
+    awk '{print $4}' stsMarkers.final.new | sort | uniq > stsfinal.new.ids
+XXXX - to here 2006-02-04 14:48
+XXXX This primers thing needs to happen after the primers build below
+    awk '{print $4}' primers.final | sort | uniq > primers.ids
+
+    # primers
+    ssh eieio
+    cd /cluster/data/ncbi/sts.10
+    # strip out N's and wobbles (KS) from primers, as isPcr
+    # can't currently handle them
+    # strip out primers < 10 as isPcr can't handle them
+    awk '$0 !~ /[^ACGT0-9\-\t]/ && (length($2) > 10) && (length($3) > 10) {printf "dbSTS_%s\t%s\t%s\n", $1,$2,$3}' \
+                all.primers > all.primers.ispcr
+    mkdir -p /san/sanvol1/scratch/hg18/sts.10/primers
+    cd /san/sanvol1/scratch/hg18/sts.10/primers
+    split -l 4000 /cluster/data/ncbi/sts.10/all.primers.ispcr primers_
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/sts/primers
+    cd /cluster/data/hg18/bed/sts/primers
+    mkdir run
+    cd run
+    ls -1S /san/sanvol1/scratch/hg18/maskedContigs/*.fa > contigs.lst
+    ls -1S /san/sanvol1/scratch/hg18/sts.10/primers/primers_* > primers.lst
+    mkdir /san/sanvol1/scratch/hg18/sts.10/primers/out
+
+cat > template << '_EOF_'
+#LOOP
+/cluster/bin/x86_64/isPcr -out=psl -minPerfect=2 -maxSize=5000 -tileSize=10 -ooc=/san/sanvol1/scratch/hg18/10ooc/$(root1).10.ooc  -stepSize=5 $(path1) $(path2) {check out line /san/sanvol1/scratch/hg18/sts.10/primers/out/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # happy emacs
+
+    gensub2 contigs.lst primers.lst template jobList
+    para create jobList
+	# 29106 jobs
+    para try ... check ... push ... etc ...
+# Completed: 29106 of 29106 jobs
+# CPU time in finished jobs:     658245s   10970.76m   182.85h    7.62d  0.021 y
+# IO & Wait Time:                 82764s    1379.39m    22.99h    0.96d  0.003 y
+# Average job time:                  25s       0.42m     0.01h    0.00d
+# Longest finished job:             534s       8.90m     0.15h    0.01d
+# Submission to last job:          2282s      38.03m     0.63h    0.03d
+
+
+    # Filter output file quickly based on simple parameters
+    ssh pk
+    cd /san/sanvol1/scratch/hg18/sts.10/primers
+    mkdir filter
+    pslQuickFilter -minMatch=26 -maxMismatch=5 \
+	-maxTinsert=5000 -verbose out/ filter/
+    # Note: there will be many messages saying files are empty - this is OK
+    time pslSort dirs ../primers.psl.unlifted temp filter
+    #	Got 29106 files 171 files per mid file
+    #	real    3m31.401s
+    # filter primer alignments and create not found primer file for ePCR run
+    cd /san/sanvol1/scratch/hg18/sts.10
+    pslFilterPrimers primers.psl.unlifted  \
+	/cluster/data/ncbi/sts.10/all.primers primers.filter.unlifted.psl
+    # creates primers.filter.unlifted.psl.notfound.primers
+    wc -l primers.filter.unlifted.psl.notfound.primers                   
+    # 22943  primers.filter.unlifted.psl.notfound.primers
+
+    # use Greg Schuler's ePCR to attempt alignment of primers missed
+    # by isPcr
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/sts.10/epcr
+    mkdir /san/sanvol1/scratch/hg18/sts.10/epcr/out
+    cd /san/sanvol1/scratch/hg18/sts.10/epcr
+    split -l 3000 ../primers.filter.unlifted.psl.notfound.primers  primers_
+    mkdir /cluster/data/hg18/bed/sts/primers/run.epcr
+    cd /cluster/data/hg18/bed/sts/primers/run.epcr
+    ls -1S /san/sanvol1/scratch/hg18/sts.10/epcr/primers_* > primers.lst
+    #  These jobs are going to go quickly, make sure all I/O comes and
+    #  goes from something that can handle it.
+    ls -1S /san/sanvol1/scratch/hg18/maskedContigs/*.fa > contig.lst
+
+XXXX - running 2006-02-05 21:40
+
+
+cat > template << '_EOF_'
+#LOOP
+/cluster/bin/scripts/runEpcr64 $(path1) $(path2) {check out line /san/sanvol1/scratch/hg18/sts.10/epcr/out/$(root1).$(root2).epcr}
+#ENDLOOP
+'_EOF_'
+    # happy emacs
+    gensub2 primers.lst contig.lst template jobList
+    para create jobList
+	# 3420 jobs
+    para try ... check ... push ... etc ...
+
+# CPU time in finished jobs:      78897s    1314.95m    21.92h    0.91d  0.003 y
+# IO & Wait Time:                254582s    4243.03m    70.72h    2.95d  0.008 y
+# Average job time:                  98s       1.63m     0.03h    0.00d
+# Longest job:                      647s      10.78m     0.18h    0.01d
+# Submission to last job:          1112s      18.53m     0.31h    0.01d
+
 
 ###########################################################################
 # CREATE HAPLOTYPEPOS TRACK (DONE 1/31/06, Fan)
