@@ -13,12 +13,13 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.4 2006/02/04 05:41:10 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.5 2006/02/06 19:56:51 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
 static struct hash *chromHash = NULL;
-
+FILE *errorFileHandle = NULL;
+FILE *tabFileHandle = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -100,6 +101,11 @@ return repeatString;
 }
 
 char *expandAllele(char *startAllele)
+/* look for substrings such as (A)2, (C)3, (G)4, (T)5 etc. */
+/* expand to AA, CCC, GGGG, TTTTT etc. */
+/* can handle multiple substitutions in one string */
+/* if syntax error detected, log to errorFile and return startAllele */
+/* only called if at least one expansion is required */
 {
 struct dyString *newAllele = newDyString(1024);
 /* copy startAllele into oldAllele, which we consume as we go */
@@ -132,29 +138,20 @@ while (oldAllele != NULL)
 
     oldAllele = strpbrk(oldAllele, "(");
     verbose(5, "oldAllele = %s\n", oldAllele);
-    if (strlen(oldAllele) < 3)
-        {
-	verbose(1, "syntax error in %s\n", startAllele);
-	verbose(1, "-----------------------------\n");
-	return newAllele->string;
-	}
+
+    /* if syntax error, give up */
+    if (strlen(oldAllele) < 3) return startAllele;
 
     nucleotide = oldAllele[1];
     oldAllele = oldAllele + 3;
-    if (strlen(oldAllele) < 1)
-        {
-	verbose(1, "syntax error in %s\n", startAllele);
-	verbose(1, "-----------------------------\n");
-	return newAllele->string;
-	}
+
+    /* if syntax error, give up */
+    if (strlen(oldAllele) < 1) return startAllele;
         
     repeatCount = getRepeatCount(oldAllele);
-    if (repeatCount == 0)
-        {
-	verbose(1, "syntax error in %s\n", startAllele);
-	verbose(1, "-----------------------------\n");
-	return newAllele->string;
-	}
+    /* if syntax error, give up */
+    if (repeatCount == 0) return startAllele;
+
     verbose(5, "repeatCount = %d\n", repeatCount);
     if (repeatCount <= 9)
         oldAllele = oldAllele + 1;
@@ -167,8 +164,29 @@ while (oldAllele != NULL)
 return newAllele->string;
 }
 
+void writeToTabFile(char *snp_id, char *start, char *end, char *loc_type, char *orientation, char *allele)
+{
+fprintf(tabFileHandle, "%s\t", snp_id);
+fprintf(tabFileHandle, "%s\t", start);
+fprintf(tabFileHandle, "%s\t", end);
+fprintf(tabFileHandle, "%s\t", loc_type);
+fprintf(tabFileHandle, "%s\t", orientation);
+fprintf(tabFileHandle, "%s\n", allele);
+}
+
+void writeToErrorFile(char *snp_id, char *start, char *end, char *loc_type, char *orientation, char *allele)
+{
+fprintf(errorFileHandle, "snp_id = %s\n", snp_id);
+fprintf(errorFileHandle, "chromStart = %s\n", start);
+fprintf(errorFileHandle, "chromEnd = %s\n", end);
+fprintf(errorFileHandle, "loc_type = %s\n", loc_type);
+fprintf(errorFileHandle, "orientation = %s\n", orientation);
+fprintf(errorFileHandle, "allele = %s\n", allele);
+fprintf(errorFileHandle, "---------------------------------------\n");
+}
+
 void doExpandAllele(char *chromName)
-/* call expandAllele for all rows */
+/* call expandAllele for all rows for this chrom */
 /* don't do for loc_type 2 (exact) and loc_type 3 (between) */
 {
 char query[512];
@@ -177,10 +195,9 @@ struct sqlResult *sr;
 char **row;
 char tableName[64];
 char fileName[64];
-FILE *f;
 char *allele = NULL;
-// for short-circuit
 int count = 0;
+int errorCount = 0;
 
 strcpy(tableName, "chr");
 strcat(tableName, chromName);
@@ -188,20 +205,36 @@ strcat(tableName, "_snpTmp");
 strcpy(fileName, tableName);
 strcat(fileName, ".tab");
 
-f = mustOpen(fileName, "w");
-
-// start with loc_type = 1
-// need to read all columns if I'm dumping to .tab file
-safef(query, sizeof(query), "select snp_id, allele from %s where loc_type != 2 and loc_type != 3", tableName);
-
+tabFileHandle = mustOpen(fileName, "w");
+safef(query, sizeof(query), "select snp_id, chromStart, chromEnd, loc_type, orientation, allele from %s ", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    // verbose(1, "SNP = %s\n", row[0]);
-    allele = expandAllele(row[1]);
-    fprintf(f, "%s\t", row[0]);
-    fprintf(f, "%s\n", allele);
+
+    if (sameString(row[3], "2") || sameString(row[3], "3"))
+        {
+	writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5]);
+	continue;
+	}
+
+    if (!needToSplit(row[5]))
+	{
+	writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5]);
+	continue;
+	}
+
+    allele = expandAllele(row[5]);
+    /* detect errors but not removing from data set */
+    if (sameString(allele, row[5]))
+        {
+        errorCount++;
+	writeToErrorFile(row[0], row[1], row[2], row[3], row[4], row[5]);
+        }
+
+    writeToTabFile(row[0], row[1], row[2], row[3], row[4], allele);
+
     count++;
+    // short-circuit
     // if (count == 1000) 
         // {
         // sqlFreeResult(&sr);
@@ -212,9 +245,23 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-fclose(f);
+fclose(tabFileHandle);
+printf("%d rows written\n", count);
+printf("%d errors found\n", errorCount);
 }
 
+
+void cleanDatabaseTable(char *chromName)
+/* do a 'delete from tableName' */
+{
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+strcpy(query, "delete from chr");
+strcat(query, chromName);
+strcat(query, "_snpTmp");
+sqlUpdate(conn, query);
+hFreeConn(&conn);
+}
 
 void recreateDatabaseTable(char *chromName)
 /* create a new chrN_snpTmp table with new definition */
@@ -261,6 +308,7 @@ strcat(fileName, chromName);
 strcat(fileName, "_snpTmp.tab");
 
 f = mustOpen(fileName, "r");
+/* hgLoadTabFile closes the file handle */
 hgLoadTabFile(conn, ".", tableName, &f);
 
 hFreeConn(&conn);
@@ -289,19 +337,23 @@ if (chromHash == NULL)
     return 0;
     }
 
+errorFileHandle = mustOpen("snpExpandAllele.errors", "w");
+
 // doExpandAllele("22");
 // return 0;
 
 cookie = hashFirst(chromHash);
 while ((chromName = hashNextName(&cookie)) != NULL)
     {
-    verbose(1, "*****************************\n");
     verbose(1, "chrom = %s\n", chromName);
     doExpandAllele(chromName);
-    // I'm not changing the table format, I could just do a 'delete from table'
+    /* this step doesn't change the table format, so just delete old rows */
+    cleanDatabaseTable(chromName);
     // recreateDatabaseTable(chromName);
-    // loadDatabase(chromName);
+    loadDatabase(chromName);
+    verbose(1, "------------------------------\n");
     }
 
+fclose(errorFileHandle);
 return 0;
 }
