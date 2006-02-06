@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.13 2005/07/22 22:58:10 braney Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.14 2006/02/06 20:20:52 kate Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -27,6 +27,7 @@ int mergeGap = 500;
 int minSize = 10000;
 int maxSize = 50000;
 char *database = NULL;
+int summaryCount = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -83,6 +84,7 @@ void outputSummary(FILE *f, struct mafSummary *ms)
 {
 fprintf(f, "%u\t", hFindBin(ms->chromStart, ms->chromEnd));
 mafSummaryTabOut(ms, f);
+summaryCount++;
 }
 
 double mergeScores(struct mafSummary *ms1, struct mafSummary *ms2)
@@ -258,13 +260,16 @@ while ((maf = mafNext(mf)) != NULL)
     }
 mafFileFree(&mf);
 flushSummaryBlocks(componentHash, f);
-verbose(1, "Processed %ld components in %ld mafs from %s\n", 
-                componentCount, mafCount, fileName);
+verbose(1, 
+    "Created %ld summary blocks from %ld components and %ld mafs from %s\n",
+        summaryCount, componentCount, mafCount, fileName);
 if (test)
     return;
-verbose(1, "Loading %s into database %s\n", table, database);
+verbose(1, "Loading into %s table %s...\n", database, table);
 hgLoadTabFile(conn, ".", table, &f);
-sqlDisconnect(&conn);
+verbose(1, "Loading complete");
+hgEndUpdate(&conn, "Add %ld maf summary blocks from %s\n", 
+                        summaryCount, fileName);
 }
 
 int main(int argc, char *argv[])
