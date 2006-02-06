@@ -1047,8 +1047,6 @@ for (hel = helList; hel != NULL; hel = hel->next)
 	gotVar = TRUE;
 	}
     }
-if (gotVar)
-    fprintf(f, "\n");
 }
 
 static void codeCleanupVarsInHelList(struct pfCompile *pfc, FILE *f,
