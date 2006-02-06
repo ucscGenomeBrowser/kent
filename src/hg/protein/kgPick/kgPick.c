@@ -15,47 +15,10 @@ errAbort(
   "   kgPick tempDb outfile\n"
   "      tempDb is the temp KG DB name\n"
   "      roDb   is the read only genome DB name\n"
-  "      proteinsDb is the proteinsYYMMDDt DB name\n"
+  "      spDb   is the proteinsYYMMDDt DB name\n"
   "      outfile is the output file name\n"
   "      dupOutfile is the duplicate mrna/prot output file name\n"
   "example: kgPick kgHg17ETemp hg17 proteins050415 kg2.tmp dupSpMrna.tmp\n");
-}
-
-void printKg(struct sqlConnection *conn, struct sqlConnection *conn2, 
-             char *kgTempDb, char *proteinsDb, char *cdsId, char *mrnaID, char *protAcc, 
-	     char *alignID, FILE *outf)
-{
-char query[256];
-struct sqlResult *sr;
-char **row;
-int i;
-char condStr[256];
-char *displayId;
-
-safef(query, sizeof(query), "select * from %s.kgCandidate where alignID='%s'", kgTempDb, alignID);
-sr = sqlMustGetResult(conn, query);
-row = sqlNextRow(sr);
-while (row != NULL)
-    {
-    for (i=0; i<10; i++) 
-    	{
-	fprintf(outf, "%s\t", row[i]);
-	}
-    
-    /* get protein display ID */
-    sprintf(condStr, "accession='%s'", protAcc);
-    displayId = sqlGetField(conn2, proteinsDb, "spXref3", "displayID", condStr);
-    if (displayId == NULL) displayId = protAcc;
-    
-    fprintf(outf, "%s\t%s\t%s\n", displayId, alignID, cdsId);
-    
-    /* remember what have been printed */
-    safef(printedCds, sizeof(printedCds), cdsId);
-    safef(printedMrna, sizeof(printedCds), row[0]);
-    safef(printedProt, sizeof(printedProt), displayId);
-    row = sqlNextRow(sr);
-    }
-sqlFreeResult(&sr);
 }
 
 /* convert a possible compund mrnaID ("protID_mrnaID") to just the mrnaID. */
@@ -78,6 +41,44 @@ else
 return chp;
 }	
     
+void printKg(struct sqlConnection *conn, struct sqlConnection *conn2, 
+             char *kgTempDb, char *spDb, char *cdsId, char *mrnaID, char *protAcc, 
+	     char *alignID, FILE *outf)
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+int i;
+char condStr[256];
+char *displayId;
+
+safef(query, sizeof(query), "select * from %s.kgCandidate where alignID='%s'", kgTempDb, alignID);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+while (row != NULL)
+    {
+    fprintf(outf, "%s\t", convert(row[0]));
+    for (i=1; i<10; i++) 
+    	{
+	fprintf(outf, "%s\t", row[i]);
+	}
+    
+    /* get protein display ID */
+    sprintf(condStr, "acc='%s'", protAcc);
+    displayId = sqlGetField(conn2, spDb, "displayId", "val", condStr);
+    if (displayId == NULL) displayId = protAcc;
+    
+    fprintf(outf, "%s\t%s\t%s\n", displayId, alignID, cdsId);
+    
+    /* remember what have been printed */
+    safef(printedCds, sizeof(printedCds), cdsId);
+    safef(printedMrna, sizeof(printedCds), row[0]);
+    safef(printedProt, sizeof(printedProt), displayId);
+    row = sqlNextRow(sr);
+    }
+sqlFreeResult(&sr);
+}
+
 int main(int argc, char *argv[])
 {
 struct sqlConnection *conn2, *conn3, *conn4, *conn5;
@@ -94,7 +95,7 @@ char *protAcc;
 char *ranking;
 char *cdsId, *mrnaID, *alignID;
 char *protDbId;
-char *proteinsDb;
+char *spDb;
 boolean gotRefseq, gotNonRef;
 boolean isRefseq;
 int printCnt;
@@ -104,7 +105,7 @@ char *refseqId;
 if (argc != 6) usage();
 kgTempDb       = argv[1];
 roDb           = argv[2];
-proteinsDb     = argv[3];
+spDb           = argv[3];
 outfileName    = argv[4];
 dupOutfileName = argv[5];
 
@@ -172,7 +173,7 @@ while (row2 != NULL)
 		    {
 		    if (printCnt < 1)
 		    	{
-		    	printKg(conn4, conn5, kgTempDb, proteinsDb, cdsId, mrnaID, protAcc, 
+		    	printKg(conn4, conn5, kgTempDb, spDb, cdsId, mrnaID, protAcc, 
 		    		alignID, outf);
 		    	printCnt++;
 		    	gotRefseq = TRUE;
@@ -189,7 +190,7 @@ while (row2 != NULL)
 	    /* print out only one non-RefSeq entry for this CDS structure */
 	    if (!gotRefseq && (!gotNonRef))
 	    	{
-	        printKg(conn4, conn5, kgTempDb, proteinsDb, cdsId, mrnaID, protAcc, alignID, outf);
+	        printKg(conn4, conn5, kgTempDb, spDb, cdsId, mrnaID, protAcc, alignID, outf);
 		printCnt++;
 		gotNonRef = TRUE;
 		}
