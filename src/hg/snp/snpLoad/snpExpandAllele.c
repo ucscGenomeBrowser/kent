@@ -13,7 +13,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.5 2006/02/06 19:56:51 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.6 2006/02/06 20:42:50 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
@@ -246,8 +246,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 fclose(tabFileHandle);
-printf("%d rows written\n", count);
-printf("%d errors found\n", errorCount);
+verbose(2, "%d alleles expanded\n", count);
+verbose(2, "%d errors found\n", errorCount);
 }
 
 
@@ -347,11 +347,11 @@ while ((chromName = hashNextName(&cookie)) != NULL)
     {
     verbose(1, "chrom = %s\n", chromName);
     doExpandAllele(chromName);
-    /* this step doesn't change the table format, so just delete old rows */
+    /* snpExpandAllele doesn't change the table format, so just delete old rows */
     cleanDatabaseTable(chromName);
     // recreateDatabaseTable(chromName);
     loadDatabase(chromName);
-    verbose(1, "------------------------------\n");
+    verbose(2, "------------------------------\n");
     }
 
 fclose(errorFileHandle);
