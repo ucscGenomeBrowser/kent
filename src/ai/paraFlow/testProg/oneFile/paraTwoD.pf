@@ -1,0 +1,45 @@
+para dimTwoD(int xSize, int ySize) into (array of array of int aa)
+    {
+    array[ySize] of array of int res;
+    aa = res;
+    for (int i=0; i<ySize; i += 1)
+        {
+	array [xSize] of int a;
+	aa[i] = a;
+	}
+    }
+
+array of array of int a4x3 = dimTwoD(4,3);
+for (int y=0; y<3; y += 1)
+    for (int x=0; x<4; x += 1)
+        a4x3[y][x] = (y+1)*10 + (x+1);
+print(a4x3);
+
+array of int ix3 = (0,1,2);
+
+for (int i=0; i<3; i += 1)
+    {
+    prin("row " + i + ": ");
+    prin("max of ");
+    prin(a4x3[i]);
+    prin(" = ");
+    print( para (int x in a4x3[i]) max x );
+    }
+
+int maxAll = para (array of int ii in a4x3) max para (int i in ii) max i;
+print("maxAll = " + maxAll);
+print("minAll = " + para (array of int ii in a4x3) min para (int i in ii) min i);
+for (int i=0; i<3; i += 1)
+    {
+    prin("row " + i + ": ");
+    prin("sum of ");
+    prin(a4x3[i]);
+    prin(" = ");
+    print( para (int x in a4x3[i]) add x );
+    }
+
+print("addAll = " + para (array of int ii in a4x3) add para (int i in ii) add i);
+print("all>10 = " + para (array of int ii in a4x3) and para (int i in ii) and i > 10);
+print("all>20 = " + para (array of int ii in a4x3) and para (int i in ii) and i > 20);
+print("any>20 = " + para (array of int ii in a4x3) or para (int i in ii) or i > 20);
+print("any>100 = " + para (array of int ii in a4x3) or para (int i in ii) or i > 100);

@@ -7,6 +7,8 @@ test:
 	diff expected/houses output/houses
 	paraFlow paraAll.pf > output/paraAll
 	diff expected/paraAll output/paraAll
+	paraFlow paraTwoD.pf > output/paraTwoD
+	diff expected/paraTwoD output/paraTwoD
 	paraFlow printRef.pf > output/printRef
 	diff expected/printRef output/printRef
 	paraFlow printScan.pf foo > output/printScan
