@@ -43,3 +43,15 @@ print("all>10 = " + para (array of int ii in a4x3) and para (int i in ii) and i 
 print("all>20 = " + para (array of int ii in a4x3) and para (int i in ii) and i > 20);
 print("any>20 = " + para (array of int ii in a4x3) or para (int i in ii) or i > 20);
 print("any>100 = " + para (array of int ii in a4x3) or para (int i in ii) or i > 100);
+
+array of array of int doubled = 
+    para (array of int ii in a4x3) get
+    	para (int i in ii) get 
+	   i+i;
+print(doubled);
+
+array of array of int oddOnly =
+    para (array of int ii in a4x3) get
+    	para (int i in ii) filter 
+	   i&1;
+print(oddOnly);
