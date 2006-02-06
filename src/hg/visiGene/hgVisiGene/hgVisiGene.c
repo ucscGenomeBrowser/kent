@@ -648,7 +648,7 @@ printf("<BR>\n");
 printf("</CENTER>");
 puts(
 "<P>Good search terms include gene symbols, authors, years, body parts,\n"
-"organisms, GenBank and UniProt accessions,\n"
+"organisms, GenBank and UniProt accessions, Known Gene descriptive terms,\n"
 "<A HREF=\"http://genex.hgu.mrc.ac.uk/Atlas/intro.html\" \n"
 "TARGET=_blank>Theiler</A> stages for mice, and \n"
 "<A HREF=\"http://www.xenbase.org/atlas/NF/NF-all.html\" \n"
@@ -676,6 +676,10 @@ puts(
 "    <TR><TD VALIGN=Top NOWRAP>theiler 22</TD> \n"
 "        <TD WIDTH=14></TD> \n"
 "        <TD VALIGN=Top>Displays all images that show Theiler stage 22</TD> \n"
+"    </TR> \n"
+"    <TR><TD VALIGN=Top NOWRAP>vgPrb_16</TD> \n"
+"        <TD WIDTH=14></TD> \n"
+"        <TD VALIGN=Top>Displays images associated with VisiGene probe ID 16</TD> \n"
 "    </TR> \n"
 "    <TR><TD VALIGN=Top NOWRAP>mouse</TD> \n"
 "        <TD WIDTH=14></TD> \n"
