@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.38 2006/02/06 06:37:54 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.39 2006/02/06 22:32:58 hiram Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -3396,7 +3396,12 @@ TMPDIR=/scratch/tmp
 	-stop=net `pwd`/DEF > blastz.out 2>&1 &
 
 ############################################################################
-# STS MARKERS (STARTED 2006-01-27 Fan)
+############################################################################
+# STS MARKERS (STARTED 2006-01-27 Fan - DONE 2006-02-06 - Hiram)
+#	FOR NEXT TIME - a lot of the perl scripts used in this process
+#	need to be placed into the source tree and cleaned up to modern
+#	perl warnings and strict standards.  In particular, one script
+#	was placed into the source tree this time: src/utils/findAccession.pl
 
    # update from NCBI 
     ssh kkstore02
@@ -3500,7 +3505,6 @@ cat > template << '_EOF_'
     gensub2 contigs.lst sts.lst template jobList
     para create jobList
         # 70686 jobs
-XXXX - running 2006-02-03 11:57
     para try ... check ... push ... etc
 # Completed: 70686 of 70686 jobs
 # CPU time in finished jobs:     117490s    1958.16m    32.64h    1.36d  0.004 y
@@ -3761,9 +3765,6 @@ while (<FILE>) {
     # from the filtered noOoc file.
     cp ../primers/primers.final .
     awk '{print $4}' stsMarkers.final.new | sort | uniq > stsfinal.new.ids
-XXXX - to here 2006-02-04 14:48
-XXXX This primers thing needs to happen after the primers build below
-    awk '{print $4}' primers.final | sort | uniq > primers.ids
 
     # primers
     ssh eieio
@@ -3837,8 +3838,11 @@ cat > template << '_EOF_'
     #  goes from something that can handle it.
     ls -1S /san/sanvol1/scratch/hg18/maskedContigs/*.fa > contig.lst
 
-XXXX - running 2006-02-05 21:40
-
+    #	This runEpcr64 script was made from the existing runEpcr script
+    #	and from the looks of it, I doubt the original script works in
+    #	the way this was set up here.  It appears to be reading the
+    #	second argument $(path2) line by line and sending that as
+    #	arguments to e-PCR.  That wouldn't be right here.
 
 cat > template << '_EOF_'
 #LOOP
@@ -3851,12 +3855,141 @@ cat > template << '_EOF_'
 	# 3420 jobs
     para try ... check ... push ... etc ...
 
-# CPU time in finished jobs:      78897s    1314.95m    21.92h    0.91d  0.003 y
-# IO & Wait Time:                254582s    4243.03m    70.72h    2.95d  0.008 y
-# Average job time:                  98s       1.63m     0.03h    0.00d
-# Longest job:                      647s      10.78m     0.18h    0.01d
-# Submission to last job:          1112s      18.53m     0.31h    0.01d
+# Completed: 3024 of 3024 jobs
+# CPU time in finished jobs:      31802s     530.04m     8.83h    0.37d  0.001 y
+# IO & Wait Time:                 12804s     213.40m     3.56h    0.15d  0.000 y
+# Average job time:                  15s       0.25m     0.00h    0.00d
+# Longest finished job:             193s       3.22m     0.05h    0.00d
+# Submission to last job:           372s       6.20m     0.10h    0.00d
 
+    # merge output
+    ssh pk
+    cd /cluster/bluearc/hg17/sts/primers/epcr
+    cd /san/sanvol1/scratch/hg18/sts.10/epcr
+    cat out/*.epcr > all.epcr
+    wc -l all.epcr
+    # 3792 
+
+    #	should be on the fileserver (kkstore02) for the following heavy
+    #	I/O operations.  Didn't do that here, was on pk instead.
+    # use all.epcr file to re-filter alignemnts and determine which
+    # ePCR records to keep
+    cp all.epcr /cluster/data/hg18/bed/sts/primers
+    cd /cluster/data/hg18/bed/sts/primers
+    pslFilterPrimers -epcr=all.epcr -verbose=1 \
+	/san/sanvol1/scratch/hg18/sts.10/primers.psl.unlifted \
+	/cluster/data/ncbi/sts.10/all.primers primers.unlifted.epcr.psl
+    #	creates three files:
+# -rw-rw-r-  1   148528 Feb  6 10:39 epcr.not.found
+# -rw-rw-r-  1 51632003 Feb  6 10:39 primers.unlifted.epcr.psl
+# -rw-rw-r-  1  1189756 Feb  6 10:39 primers.unlifted.epcr.psl.notfound.primers
+
+    # convert to PSL and combine with other psl file
+    time /cluster/bin/scripts/epcrToHgPsl epcr.not.found \
+        /cluster/data/ncbi/sts.10/all.primers /cluster/data/hg18
+    #	real    81m24.041s  (on pk, may have been better on kkstore02
+    #	where all of the data is)
+    cat primers.unlifted.epcr.psl epcr.not.found.psl \
+                | sort -k 10n > primers.final.unlifted.psl
+    wc -l primers.final.unlifted.psl
+    #	454869 primers.final.unlifted.psl
+
+    #	should have been on kkstore02 already
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/sts/primers
+    # Fix the query gap lengths so that they match the all.primers.fa 
+    #   file lengths
+    time /cluster/bin/scripts/fixPrimersQueryGaps \
+        /cluster/data/ncbi/sts.10/all.primers primers.final.unlifted.psl \
+                > primers.final.unlifted.fix.psl
+    #	real    0m19.814s
+    wc -l primers.final.unlifted.fix.psl
+    #	454869 primers.final.unlifted.fix.psl
+
+    # lift results from contigs to chrom coordinates, and create final file
+    time liftUp -nohead primers.psl \
+            /cluster/data/hg18/jkStuff/liftContigs.lft warn \
+            primers.final.unlifted.fix.psl
+    #	real    0m2.897s
+    wc -l primers.psl
+    #	454869 primers.psl
+
+    # Extract relevant info, make alignments unique, and create final file to
+    #	be merged with full sequence alignments
+    time /cluster/bin/scripts/extractPslInfo primers.psl
+    #	real    0m15.303s
+    wc -l primers.psl.initial
+    #	451023 primers.psl.initial
+    $HOME/kent/src/utils/findAccession.pl -agp primers.psl.initial \
+                /cluster/data/hg18
+    wc -l primers.psl.initial.acc
+    #	451023 primers.psl.initial.acc
+
+    /cluster/bin/scripts/getStsId /cluster/data/hg18/bed/sts/stsInfo2.bed \
+	primers.psl.initial.acc \
+        | sort -k 4n > primers.final
+    #rm primers.psl.initial.acc
+    wc -l primers.final
+    # 451023 primers.final
+    #	There doesn't appear to be any use for this primers.ids list
+    #	except for curiosity.  Check the head and tail of this list to
+    #	verify no garbage is in here.  There should just be numbers.
+    awk '{print $4}' primers.final | sort -n | uniq > primers.ids
+    wc -l primers.ids
+    #	287465 primers.ids
+
+    # Merge primer and sequence files to create final bed file
+    # Merge (combineSeqPrimerPos) takes about an hour to run
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/sts
+    time /cluster/bin/scripts/combineSeqPrimerPos stsMarkers.final \
+	primers/primers.final
+    #	real    55m33.254so
+    wc -l stsMarkers_pos.rdb
+    #	307082 stsMarkers_pos.rdb
+
+    time /cluster/bin/scripts/createSTSbed \
+	/cluster/data/ncbi/sts.10/stsInfo2.bed stsMarkers_pos.rdb > stsMap.bed
+    #	real    0m13.351s
+    wc -l stsMap.bed
+    #	300492 stsMap.bed
+
+    # Set up sequence files
+    ssh hgwdev
+    mkdir /gbdb/hg18/sts.10/
+    ln -s /cluster/data/ncbi/sts.10/all.STS.fa /gbdb/hg18/sts.10/all.STS.fa
+    ln -s /cluster/data/ncbi/sts.10/all.primers.fa \
+        /gbdb/hg18/sts.10/all.primers.fa
+
+    # Load all files
+    cd /cluster/data/hg18/bed/sts
+    hgLoadSeq hg18 /gbdb/hg18/sts.10/all.STS.fa /gbdb/hg18/sts.10/all.primers.fa
+    #	Advisory lock created
+    #	Creating .tab file
+    #	Adding /gbdb/hg18/sts.10/all.STS.fa
+    #	93698 sequences
+    #	Adding /gbdb/hg18/sts.10/all.primers.fa
+    #	306885 sequences
+    #	Updating seq table
+    #	Advisory lock has been released
+    #	All done
+    #	real    1m25.459s
+
+
+    hgsql hg18 < $HOME/kent/src/hg/lib/stsInfo2.sql
+    hgsql hg18 < $HOME/kent/src/hg/lib/stsAlias.sql
+    #	these two files are already here from previous operations above
+    # cp /cluster/data/ncbi/sts.10/{stsInfo2.bed,stsAlias.bed} .
+    hgsql hg18 -e 'load data local infile "stsInfo2.bed" into table stsInfo2'
+    hgsql hg18 -e 'load data local infile "stsAlias.bed" into table stsAlias'
+    #	a couple minutes for each load above
+    hgLoadBed -notItemRgb -noBin -tab \
+	-sqlTable=$HOME/kent/src/hg/lib/stsMap.sql \
+	    hg18 stsMap stsMap.bed
+    hgLoadPsl -nobin -table=all_sts_primer hg18 primers/primers.psl
+    #	load of all_sts_primer did not go as planned: 454869 record(s),
+    #	0 row(s) skipped, 10 warning(s) loading primers/primers.psl
+    hgLoadPsl -nobin -table=all_sts_seq hg18 stsMarkers.lifted.psl
 
 ###########################################################################
 # CREATE HAPLOTYPEPOS TRACK (DONE 1/31/06, Fan)
