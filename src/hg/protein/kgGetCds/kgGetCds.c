@@ -7,7 +7,7 @@
 #include "bits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: kgGetCds.c,v 1.2 2005/06/04 15:57:23 fanhsu Exp $";
+static char const rcsid[] = "$Id: kgGetCds.c,v 1.3 2006/02/06 21:16:39 fanhsu Exp $";
 
 char cdsBloc[2000][30];
 void usage(char *msg)
@@ -27,7 +27,7 @@ errAbort(
     );
 }
 
-void processAlign(char *kgTempDb, char *alignID, int cdsCnt, FILE *outf)
+void processAlign(char *kgTempDb, char *spDb, char *alignID, int cdsCnt, FILE *outf)
 {
 struct sqlConnection *conn2, *conn3, *conn4;
 char query2[256], query3[256];
@@ -38,12 +38,13 @@ char *chrom;
 char *protAcc;
 char *mrnaID;
 char *ranking;
-char *protDbId;
+int  protDbId;
 char condStr[255];
 int  i;
 char *parProtAcc;
 boolean first;
 char *chp;
+char *isCurated;
 
 conn2= hAllocConn();
 conn3= hAllocConn();
@@ -86,17 +87,28 @@ while (row2 != NULL)
 	protAcc = row3[0];
 	score   = row3[1];
 
-        safef(condStr, sizeof(condStr), "accession='%s'", protAcc);
-	protDbId = sqlGetField(conn4, "proteins050415", "spXref3", "biodatabaseID", condStr);
-
-	if (protDbId == NULL)
+	chp = strstr(protAcc, "-");
+	if (chp == NULL)
 	    {
-	    fprintf(stderr, "Can't find protId for %s\n", protAcc);fflush(stdout);exit(1);
+            safef(condStr, sizeof(condStr), "acc='%s'", protAcc);
+	    isCurated = sqlGetField(conn4, spDb, "info", "isCurated", condStr);
+	    if (sameWord(isCurated, "1"))
+	    	{
+		protDbId = 1;
+		}
+	    else
+	    	{
+		protDbId = 2;
+		}
 	    }
-
+   	else
+	    {
+	    protDbId = 4;
+	    }
+	    
 	fprintf(outf, "%s:", chrom);
 	for (i=0; i<cdsCnt; i++) fprintf(outf, "%s", cdsBloc[i]);
-	fprintf(outf, "\t%s\t%s\t%8s\t%s\t%s\t%s\n", 
+	fprintf(outf, "\t%s\t%d\t%8s\t%s\t%s\t%s\n", 
 		ranking, protDbId, score, mrnaID, protAcc, alignID);
 
 	/* for composite type, process just one record */ 
@@ -112,7 +124,7 @@ hFreeConn(&conn3);
 hFreeConn(&conn4);
 }
 
-void kgGetCds(char *db, char *geneTable, FILE *outf)
+void kgGetCds(char *db, char *spDb, char *geneTable, FILE *outf)
 /* get CDS info */
 {
 struct sqlConnection *conn = NULL;
@@ -139,7 +151,7 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
     	}
     if (cdsCnt > 0) 
     	{
-	processAlign(db, gp->name, cdsCnt, outf);
+	processAlign(db, spDb, gp->name, cdsCnt, outf);
 	}
     else
     	{
@@ -156,20 +168,23 @@ char *kgTempDb;
 char *kgCandidateTable;
 char *outFileName;
 FILE *outf;
+char *spDbDate, spDb[100];
 
-if (argc != 4)
+if (argc != 5)
     {
     usage("wrong number of args");
     }
 else
     {
     kgTempDb         = argv[1];
-    kgCandidateTable = argv[2];
-    outFileName	     = argv[3];
+    spDbDate   	     = argv[2];
+    kgCandidateTable = argv[3];
+    outFileName	     = argv[4];
 
+    sprintf(spDb, "sp%s", spDbDate);
     outf = mustOpen(outFileName, "w");
 
-    kgGetCds(kgTempDb, kgCandidateTable, outf);
+    kgGetCds(kgTempDb, spDb, kgCandidateTable, outf);
     fclose(outf);
     }
 return 0;
