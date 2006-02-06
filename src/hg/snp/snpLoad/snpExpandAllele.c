@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.7 2006/02/06 21:42:10 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.8 2006/02/06 21:54:35 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
@@ -258,34 +258,6 @@ sqlUpdate(conn, query);
 hFreeConn(&conn);
 }
 
-void recreateDatabaseTable(char *chromName)
-/* create a new chrN_snpTmp table with new definition */
-/* could use enum for loc_type here */
-{
-struct sqlConnection *conn = hAllocConn();
-char tableName[64];
-char *createString =
-"CREATE TABLE %s (\n"
-"    snp_id int(11) not null,\n"
-"    chromStart int(11) not null,\n"
-"    chromEnd int(11) not null,\n"
-"    loc_type tinyint(4) not null,\n"
-"    orientation tinyint(4) not null,\n"
-"    allele blob\n"
-");\n";
-
-struct dyString *dy = newDyString(1024);
-
-strcpy(tableName, "chr");
-strcat(tableName, chromName);
-strcat(tableName, "_snpTmp");
-
-dyStringPrintf(dy, createString, tableName);
-sqlRemakeTable(conn, tableName, dy->string);
-dyStringFree(&dy);
-hFreeConn(&conn);
-}
-
 
 void loadDatabase(char *chromName)
 /* load one table into database */
@@ -344,7 +316,6 @@ while ((chromName = hashNextName(&cookie)) != NULL)
     doExpandAllele(chromName);
     /* snpExpandAllele doesn't change the table format, so just delete old rows */
     cleanDatabaseTable(chromName);
-    // recreateDatabaseTable(chromName);
     loadDatabase(chromName);
     verbose(2, "------------------------------\n");
     }
