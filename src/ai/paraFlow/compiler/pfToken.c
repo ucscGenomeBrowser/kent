@@ -39,7 +39,7 @@ for (;;)
     }
 }
 
-void pfTokenFileLineCol(struct pfToken *tok, 
+static void pfTokenFileLineCol(struct pfToken *tok, 
     char **retFileName, int *retLine, int *retCol)
 /* Return file name, line, and column (zero based) of token start. */
 {
