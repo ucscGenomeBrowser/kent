@@ -1,11 +1,6 @@
 /* snpExpandAllele - fourth step in dbSNP processing.
  * Read the chrN_snpTmp tables created by snpLocType and expand allele.
- * Rewrite to new chrN_snpTmp tables.  Get chromInfo from ContigInfo. 
-
- * Do I need to write a whole new tab file?  Or could I just do updates?
- * See what the counts are.
-
- * May need to adjust chromEnd for locType 4,5 and 6!! */
+ * Rewrite to new chrN_snpTmp tables.  Get chromInfo from ContigInfo. */
 
 #include "common.h"
 
@@ -13,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.6 2006/02/06 20:42:50 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.7 2006/02/06 21:42:10 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
