@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.55 2005/11/24 00:58:07 braney Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.56 2006/02/06 18:45:36 braney Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -511,7 +511,6 @@ int midY = yOff + (height>>1);
 int midY1 = midY - (height>>2);
 int midY2 = midY + (height>>2) - 1;
 Color gray = shadesOfGray[5];
-//Color fuzz1 = shadesOfGray[2];
 midY--;
 
 /* tweaking end pixels, as done in chainTrack.c */
@@ -609,8 +608,8 @@ for (full = mafList; full != NULL; full = full->next)
             /* no alignment here -- just a gap/break annotation */
             if ((mc->leftStatus == MAF_MISSING_STATUS ) && (mc->rightStatus == MAF_MISSING_STATUS))
 		{
-		Color fuzz = shadesOfGray[2];
-		vgBox(vg, x1, yOff+2, w, height-5, fuzz);
+		Color yellow = vgFindRgb(vg, &undefinedYellowColor);
+		vgBox(vg, x1, yOff, w, height - 1, yellow);
 		}
             else if ((mc->leftStatus == MAF_INSERT_STATUS ||  mc->leftStatus == MAF_NEW_NESTED_STATUS)  &&
                 (mc->rightStatus == MAF_INSERT_STATUS ||  mc->rightStatus == MAF_NEW_NESTED_STATUS))
@@ -630,7 +629,7 @@ for (full = mafList; full != NULL; full = full->next)
             AllocArray(pixelScores, w);
             mafFillInPixelScores(maf, mcMaster, pixelScores, w);
             if (vis != tvFull && mc->leftStatus == MAF_NEW_STATUS)
-		vgBox(vg, x1-3, yOff, 2, height-1, getBlueColor());
+		vgBox(vg, x1-3, yOff, 2, height, getBlueColor());
             for (i=0; i<w; ++i)
                 {
                 if (vis == tvFull)
@@ -652,18 +651,18 @@ for (full = mafList; full != NULL; full = full->next)
                 }
             if (vis != tvFull && mc->leftStatus == MAF_NEW_NESTED_STATUS)
 		{
-		vgBox(vg, x1-1, yOff, 2, 1, getOrangeColor());
-		vgBox(vg, x1-1, yOff, 1, height-1, getOrangeColor());
-		vgBox(vg, x1-1, yOff + height-2, 2, 1, getOrangeColor());
+		vgBox(vg, x1-1, yOff, 2, 1, getGreenColor());
+		vgBox(vg, x1-1, yOff, 1, height, getGreenColor());
+		vgBox(vg, x1-1, yOff + height-1, 2, 1, getGreenColor());
 		}
             if (vis != tvFull && mc->rightStatus == MAF_NEW_NESTED_STATUS)
 		{
-		vgBox(vg, i+x1-1, yOff, 2, 1, getOrangeColor());
-		vgBox(vg, i+x1, yOff, 1, height-1, getOrangeColor());
-		vgBox(vg, i+x1-1, yOff + height-2, 2, 1, getOrangeColor());
+		vgBox(vg, i+x1-1, yOff, 2, 1, getGreenColor());
+		vgBox(vg, i+x1, yOff, 1, height, getGreenColor());
+		vgBox(vg, i+x1-1, yOff + height-1, 2, 1, getGreenColor());
 		}
             if (vis != tvFull && mc->rightStatus == MAF_NEW_STATUS) 
-		vgBox(vg, i+x1+1, yOff, 2, height-1, getBlueColor());
+		vgBox(vg, i+x1+1, yOff, 2, height, getBlueColor());
             freez(&pixelScores);
             }
 	}
