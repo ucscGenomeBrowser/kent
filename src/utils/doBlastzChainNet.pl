@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.29 2006/01/05 23:48:25 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.30 2006/02/06 23:32:12 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -484,7 +484,9 @@ sub checkDef {
   verbose(1, "$DEF looks OK!\n" .
 	  "\ttDb=$tDb\n\tqDb=$qDb\n\ts1d=$defVars{SEQ1_DIR}\n" .
 	  "\tisSelf=$isSelf\n");
-  if ($defVars{'BLASTZ_ABRIDGE_REPEATS'}) {
+  if ($defVars{'SEQ1_SMSK'} || $defVars{'SEQ2_SMSK'} ||
+      $defVars{'BLASTZ_ABRIDGE_REPEATS'}) {
+    &requireVar('BLASTZ_ABRIDGE_REPEATS');
     foreach my $s ('SEQ1_', 'SEQ2_') {
       my $var = $s. 'SMSK';
       &requireVar($var);
