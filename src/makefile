@@ -1,4 +1,4 @@
-all: cgi blatSuite utils
+all: utils cgi blatSuite
 
 alpha: clean cgi-alpha blatSuite
 
@@ -90,8 +90,8 @@ utils: libs
                 x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
             fi ;\
 	done
-	cd hg && ${MAKE} utils
 	cd utils && ${MAKE}
+	cd hg && ${MAKE} utils
 
 DIRS = ameme blat cdnaAli index reformat xenoAli \
        dnaDust protDust idbQuery scanIntrons tracks weblet \
