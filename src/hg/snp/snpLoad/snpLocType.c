@@ -2,8 +2,8 @@
  * Read the chrN_snpTmp tables created by snpSplitSimple and handle locType.
  * Rewrite to new chrN_snpTmp tables.  Get chromInfo from ContigInfo. 
 
- * This also uses chromInfo from assembly to check coords? 
- * Or should I check ContigInfo earlier??!! */
+ * This could use chromInfo from assembly to check coords, or I could check 
+ * ContigInfo earlier. */
 
 #include "common.h"
 
@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.2 2006/02/01 10:14:07 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.3 2006/02/06 18:12:34 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
