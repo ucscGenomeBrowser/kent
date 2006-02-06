@@ -12,6 +12,7 @@ all:
 USE_DIRS = $(DIRS)
 
 DIRS = \
+	mafAddIRows \
 	mafFilter \
 	mafFrag \
 	mafFrags \
