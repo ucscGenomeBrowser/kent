@@ -4,14 +4,6 @@ include dimTwoD
 
 array of array of string board = dimTwoD(3,3);
 
-to printLine()
-/* Print out horizontal line. */
-    {
-    for(int i=0; i<5; i+=1)
-       prin("-");
-    print("");
-    }
-
 to printRow(array of string a)
 /* Print out X and O's with | between them */
    {
@@ -27,12 +19,11 @@ to printBoard()
 /* Print out tick-tack-toe board with X's and O's */
     {
     printRow(board[0]);
-    printLine();
+    print("-----");
     printRow(board[1]);
-    printLine();
+    print("-----");
     printRow(board[2]);
     }
-
 
 to won(array of array of string b, string mark) into bit won
 /* Return true if the given mark has won. */
@@ -70,7 +61,6 @@ to parseInput(string s) into (bit ok, int x, int y)
     (yAscii, pos) = s.nextWord(pos);
     if (xAscii && yAscii)
 	{
-	print("x: " + xAscii + " y: " + yAscii);
 	x = atoi(xAscii) - 1;
 	y = atoi(yAscii) - 1;
 	if (x >= 0 && x <= 2 && y >= 0 && y <= 2)
@@ -146,7 +136,7 @@ for (;;)
 	(ok,x,y) = parseInput(input);
 	if (ok)
 	    {
-	    if (board[y][x] != " ")
+	    if (board[x][y] != " ")
 	        {
 		print("That space is already taken.");
 		ok = 0;
@@ -155,7 +145,7 @@ for (;;)
 	else
 	    print("Please put in two numbers, both between 1 and 3.");
 	}
-    board[y][x] = "X";
+    board[x][y] = "X";
     printBoard();
     print("");
     if (won(board, "X"))
