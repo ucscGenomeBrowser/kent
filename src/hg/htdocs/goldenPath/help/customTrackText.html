@@ -387,11 +387,11 @@ throughout any single set of data in an annotation track.
 <P>The first three required BED fields are:</P>
 <OL>
 	<LI><B>chrom</B> - The name of the chromosome (e.g. chr3, chrY,
-	chr2_random) or contig (e.g. ctgY1).
+	chr2_random) or scaffold (e.g. scaffold10671).
 	<LI><B>chromStart</B> - The starting position of the feature in the
-	chromosome or contig. The first base in a chromosome is numbered 0.
+	chromosome or scaffold. The first base in a chromosome is numbered 0.
 	<LI><B>chromEnd</B> - The ending position of the feature in the
-	chromosome or contig. The <I>chromEnd</I> base is not included in the
+	chromosome or scaffold. The <I>chromEnd</I> base is not included in the
 	display of the feature. For example, the first 100 bases of a
 	chromosome are defined as <I>chromStart=0, chromEnd=100</I>, and span
 	the bases numbered 0-99.
@@ -595,7 +595,7 @@ TARGET=_blank>http://www.sanger.ac.uk/Software/formats/GFF</A>. </P>
 Here is a brief description of the GFF fields:</P>
 
 <OL>
-	<LI><B>seqname</B> - The name of the sequence.  Must be a chromosome or a contig.
+	<LI><B>seqname</B> - The name of the sequence.  Must be a chromosome or scaffold.
 	<LI><B>source</B> - The program that generated this feature.
 	<LI><B>feature</B> - The name of this type of feature. Some examples of
 	standard feature types are "CDS", "start_codon", "stop_codon", and
