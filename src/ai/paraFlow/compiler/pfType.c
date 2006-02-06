@@ -1369,6 +1369,14 @@ switch (pp->type)
 	pp->ty = body->ty;
 	break;
 	}
+    case pptParaAnd:
+    case pptParaOr:
+        {
+	struct pfParse **pBody = &collection->next;
+        coerceToBit(pfc, pBody);
+	pp->ty = pfTypeNew(pfc->bitType);
+	break;
+	}
     case pptParaGet:
         {
 	struct pfType *ty = pfTypeNew(collection->ty->base);
