@@ -371,25 +371,32 @@ switch (pp->type)
 }
 
 static void startElInCollectionIteration(struct pfCompile *pfc, FILE *f,
-	struct pfScope *scope, struct pfParse *elPp, 
+	int stack, struct pfScope *scope, struct pfParse *elPp, 
 	struct pfParse *collectionPp, boolean reverse)
 /* This highly technical routine generates some of the code for
  * foreach and para actions.  */
 {
 struct pfBaseType *base = collectionPp->ty->base;
-char collectionName[512];
 struct dyString *elName = varName(pfc, elPp->var);
 
+/* Get local copy of collection in new scope. */
+fprintf(f, "{\n");
+printType(pfc, f, collectionPp->ty->base);
+fprintf(f, " _pf_collection;\n");
+codeExpression(pfc, f, collectionPp, stack, FALSE);
+fprintf(f, "_pf_collection = ");
+codeParamAccess(pfc, f, collectionPp->ty->base, stack);
+fprintf(f, ";\n");
+
 /* Print element variable in a new scope. */
-expandDottedName(pfc, collectionName, sizeof(collectionName), collectionPp);
 fprintf(f, "{\n");
 codeScopeVars(pfc, f, scope, FALSE);
 if (base == pfc->arrayType)
     {
     struct pfBaseType *elBase = collectionPp->ty->children->base;
     fprintf(f, "int _pf_offset;\n");
-    fprintf(f, "int _pf_elSize = %s->elSize;\n", collectionName);
-    fprintf(f, "int _pf_endOffset = %s->size * _pf_elSize;\n", collectionName);
+    fprintf(f, "int _pf_elSize = _pf_collection->elSize;\n");
+    fprintf(f, "int _pf_endOffset = _pf_collection->size * _pf_elSize;\n");
     if (reverse)	/* To help simulate parallelism, do it in reverse. */
 	fprintf(f, "for (_pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; _pf_offset -= _pf_elSize)\n");
     else
@@ -397,24 +404,25 @@ if (base == pfc->arrayType)
     fprintf(f, "{\n");
     fprintf(f, "%s = *((", elName->string);
     printType(pfc, f, elBase);
-    fprintf(f, "*)(%s->elements + _pf_offset));\n", collectionName);
+    fprintf(f, "*)(_pf_collection->elements + _pf_offset));\n");
     }
 else if (base == pfc->stringType)
     {
     fprintf(f, "int _pf_offset;\n");
-    fprintf(f, "int _pf_endOffset = %s->size;\n", collectionName);
+    fprintf(f, "int _pf_endOffset = _pf_collection->size;\n");
     if (reverse)	/* To help simulate parallelism, do it in reverse. */
 	fprintf(f, "for (_pf_offset=_pf_endOffset-1; _pf_offset>=0; _pf_offset -= 1)\n");
     else
 	fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += 1)\n");
     fprintf(f, "{\n");
-    fprintf(f, "%s = %s->s[_pf_offset];\n", elName->string, collectionName);
+    fprintf(f, "%s = _pf_collection->s[_pf_offset];\n", elName->string);
     }
 else if (base == pfc->dirType)
     {
     fprintf(f, "char *_pf_key;\n");
-    fprintf(f, "struct _pf_iterator _pf_ix = _pf_%s_iterator_init(%s);\n",
-    	base->name, collectionName);
+    fprintf(f, 
+    	"struct _pf_iterator _pf_ix = _pf_%s_iterator_init(_pf_collection);\n",
+    	base->name);
     fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s, &_pf_key))\n", elName->string);
     fprintf(f, "{\n");
     }
@@ -438,6 +446,7 @@ if (base != pfc->arrayType && base != pfc->stringType)
     fprintf(f, "_pf_ix.cleanup(&_pf_ix);\n");
     }
 fprintf(f, "}\n");
+fprintf(f, "}\n");
 }
 
 static int codeParaExpSingle(struct pfCompile *pfc, FILE *f,
@@ -454,7 +463,8 @@ fprintf(f, "int _pf_first = 1;\n");
 printType(pfc, f, base);
 fprintf(f, " _pf_acc = 0;\n");
 
-startElInCollectionIteration(pfc, f, para->scope, elPp, collectionPp, TRUE);
+startElInCollectionIteration(pfc, f, stack, 
+	para->scope, elPp, collectionPp, TRUE);
 
 /* Calculate expression */
 codeExpression(pfc, f, body, stack, FALSE);
@@ -498,6 +508,16 @@ switch (para->type)
 	 codeParamAccess(pfc, f, base, stack);
 	 fprintf(f, ";\n");
          break;
+    case pptParaAnd:
+         fprintf(f, "_pf_acc &= ");
+	 codeParamAccess(pfc, f, base, stack);
+	 fprintf(f, ";\n");
+	 break;
+    case pptParaOr:
+         fprintf(f, "_pf_acc |= ");
+	 codeParamAccess(pfc, f, base, stack);
+	 fprintf(f, ";\n");
+	 break;
     default:
         internalErr();
 	break;
@@ -536,7 +556,7 @@ if (collectBase == pfc->arrayType)
     codeForType(pfc, f, expression->ty);
     fprintf(f, ");\n");
     fprintf(f, "_pf_resElSize = _pf_result->elSize;\n");
-    startElInCollectionIteration(pfc, f, para->scope, element, 
+    startElInCollectionIteration(pfc, f, stack, para->scope, element, 
     	collection, FALSE);
     codeExpression(pfc, f, expression, stack, TRUE);
     fprintf(f, "*((");
@@ -560,7 +580,7 @@ else if (collectBase == pfc->dirType)
     codeForType(pfc, f, expression->ty);
     fprintf(f, ");\n");
 
-    startElInCollectionIteration(pfc, f, para->scope, element, 
+    startElInCollectionIteration(pfc, f, stack, para->scope, element, 
     	collection, FALSE);
     codeExpression(pfc, f, expression, stack, TRUE);
     if (expression->ty->base->needsCleanup)
@@ -613,7 +633,7 @@ if (collectBase == pfc->arrayType)
     codeParamAccess(pfc, f, collectBase, stack);
     fprintf(f, ";\n");
     fprintf(f, "_pf_passed = _pf_need_mem(_pf_coll->size);\n");
-    startElInCollectionIteration(pfc, f, para->scope, element, 
+    startElInCollectionIteration(pfc, f, stack, para->scope, element, 
     	collection, FALSE);
     codeExpression(pfc, f, expression, stack, FALSE);
     fprintf(f, "_pf_passOne = ");
@@ -632,7 +652,7 @@ if (collectBase == pfc->arrayType)
     /* Generate code that will copy passing elements to results */
     fprintf(f, "_pf_passCount = 0;\n");
     fprintf(f, "_pf_ix = 0;\n");
-    startElInCollectionIteration(pfc, f, para->scope, element, 
+    startElInCollectionIteration(pfc, f, stack, para->scope, element, 
     	collection, FALSE);
     fprintf(f, "if (_pf_passed[_pf_ix++])\n");
     fprintf(f, "{\n");
@@ -662,7 +682,7 @@ else if (collectBase == pfc->dirType)
     codeForType(pfc, f, elType);
     fprintf(f, ");\n");
 
-    startElInCollectionIteration(pfc, f, para->scope, element, 
+    startElInCollectionIteration(pfc, f, stack, para->scope, element, 
     	collection, FALSE);
     codeExpression(pfc, f, expression, stack, TRUE);
     fprintf(f, "if (");
@@ -1552,6 +1572,8 @@ switch (pp->type)
     case pptParaMax:
     case pptParaAdd:
     case pptParaMultiply:
+    case pptParaAnd:
+    case pptParaOr:
         return codeParaExpSingle(pfc, f, pp, stack);
     case pptParaGet:
         return codeParaGet(pfc, f, pp, stack);
@@ -1760,7 +1782,8 @@ struct pfParse *elPp = foreach->children;
 struct pfParse *collectionPp = elPp->next;
 struct pfParse *body = collectionPp->next;
 
-startElInCollectionIteration(pfc, f, foreach->scope, elPp, collectionPp, reverse);
+startElInCollectionIteration(pfc, f, 0, 
+	foreach->scope, elPp, collectionPp, reverse);
 codeStatement(pfc, f, body);
 endElInCollectionIteration(pfc, f, foreach->scope, elPp, collectionPp, reverse);
 }
