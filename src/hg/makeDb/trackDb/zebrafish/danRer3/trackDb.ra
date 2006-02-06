@@ -211,6 +211,28 @@ spectrum on
 type netAlign danRer3 chainSelf
 otherDb danRer3
 
+track multiz5way
+shortLabel 5-Way Conservation
+longLabel 5-Way Vertebrate Multiz Alignment & Conservation
+group compGeno
+priority 104
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons5way
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz5waySummary
+speciesGroups vertebrate mammal
+sGroup_mammal hg18 mm7
+sGroup_vertebrate tetNig1 fr1
+treeImage phylo/DanRer3_5way.jpg
+irows on
+frames multiz5wayFrames
+speciesCodonDefault danRer3
+
 searchTable ctgPos2
 searchMethod exact
 searchTable ctgPos2
