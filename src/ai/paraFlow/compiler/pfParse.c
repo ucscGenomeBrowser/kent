@@ -1614,11 +1614,10 @@ static struct pfParse *parseParaStatement(struct pfCompile *pfc, struct pfParse 
 {
 struct pfToken *paraTok = *pTokList;	/* "para" */
 struct pfToken *nameTok = paraTok->next; 	/* some symbol name */
-struct pfToken *decidingTok = nameTok->next;	/* either '(' or 'in' */
-if (decidingTok->type == '(')
-    return parseFunction(pfc, parent, pTokList, scope, pptParaDec);
-else
+if (nameTok->type == '(')
     return parseParaInvoke(pfc, parent, pTokList, scope, TRUE);
+else
+    return parseFunction(pfc, parent, pTokList, scope, pptParaDec);
 }
 
 

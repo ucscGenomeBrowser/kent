@@ -172,10 +172,10 @@ switch (pp->type)
 	     {
 	     if (paraOk)
 	         errAt(pp->tok, 
-		    "Only calls to para and flow functions allowed inside a para function");
+		    "Only calls to para and flow functions allowed inside para");
 	     else
 	         errAt(pp->tok, 
-		    "Only calls to other flow functions allowed inside a flow function");
+		    "Only calls to flow functions allowed inside flow");
 	     }
 	 break;
 	 }
@@ -184,11 +184,19 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     checkCalls(pfc, pp, paraOk);
 }
 
-static void checkPara(struct pfCompile *pfc, struct pfParse *paraDec)
-/* Make sure that paraDec does not write to anything but
- *   1) It's output.
- *   2) Local variables.
+static void checkParaBody(struct pfCompile *pfc, struct hash *outputVars,
+	struct pfScope *scope, struct pfParse *body)
+/* Make sure that body does not write to anything but
+ *   1) Output vars.
+ *   2) Local vars..
  */
+{
+checkCalls(pfc, body, TRUE);
+checkReadOnlyOutsideLocals(outputVars, scope, body);
+}
+
+static void checkParaDec(struct pfCompile *pfc, struct pfParse *paraDec)
+/* Make sure para function declaration is ok. */
 {
 struct pfParse *input = paraDec->children->next;
 struct pfParse *output = input->next;
@@ -202,12 +210,22 @@ if (body != NULL)
     for (pp = output->children; pp != NULL; pp = pp->next)
 	hashAdd(outputVars, pp->name, pp->var);
 
-    checkCalls(pfc, body, TRUE);
-    checkReadOnlyOutsideLocals(outputVars, body->scope, body);
+    checkParaBody(pfc, outputVars, body->scope, body);
 
     /* Clean up */
     hashFree(&outputVars);
     }
+}
+
+static void checkParaAction(struct pfCompile *pfc, struct pfParse *para)
+/* Make sure para action is ok. */
+{
+struct pfParse *element = para->children;
+struct pfParse *collection = element->next;
+struct pfParse *body = collection->next;
+struct hash *emptyHash = hashNew(2);
+checkParaBody(pfc, emptyHash, para->scope, body);
+hashFree(&emptyHash);
 }
 
 void pfCheckParaFlow(struct pfCompile *pfc, struct pfParse *pp)
@@ -215,8 +233,19 @@ void pfCheckParaFlow(struct pfCompile *pfc, struct pfParse *pp)
 {
 switch (pp->type)
     {
+    case pptParaDo:
+    case pptParaAdd:
+    case pptParaMultiply:
+    case pptParaAnd:
+    case pptParaOr:
+    case pptParaMin:
+    case pptParaMax:
+    case pptParaGet:
+    case pptParaFilter:
+	checkParaAction(pfc, pp);
+        break;
     case pptParaDec:
-	checkPara(pfc, pp);
+	checkParaDec(pfc, pp);
         break;
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
