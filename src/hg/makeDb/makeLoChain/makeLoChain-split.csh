@@ -6,7 +6,7 @@
 #
 # Author:       angie
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh,v 1.2 2004/09/27 22:15:11 angie Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh,v 1.3 2006/02/07 23:13:08 angie Exp $
 
 if ( $#argv != 2 ) then
     echo "$0 usage: <new-assembly> <new-nibdir>"
@@ -22,7 +22,7 @@ if ( ! -e $newNibDir ) then
     exit 1
 endif
 
-if ( $HOST != "kkr1u00" ) then
+if ( $HOST != "kkr1u00" && $HOST != "kkr1u00.kilokluster.ucsc.edu" ) then
     echo "Run this on kkr1u00"
     exit 1
 endif
