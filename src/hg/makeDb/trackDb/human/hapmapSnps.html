@@ -1,0 +1,46 @@
+<PRE>
+
+Strand issues can be rather confusing here, so it's nice to clarify
+the strand usage in advance.  In these files, the strand has already
+been accounted for the human alleles can be compared to the chimp
+nucleotide directly.  Also, the strand info is the same between the
+genotype data and the new files.  To help me explain the situation
+clearly, I'm using a real from hg16 example to illustrate.
+
+  # This example shows the two human bases ('T' and 'A') and the chimp allele ('a')
+  name      humanChrom humanPos  hStrand hRef hOth chimpChrom chimpPos  cStrand cAllele
+  rs4970776 chr1       109570184 +       T    A    chr1       112470519 -       a
+
+From this point, the SNP is marked the SNP with a caret ('^'), and the
+flanking sequences are included.  Also note the revComp state, which
+is an indicator of the strand.  (The 'DNA' button at the top of the
+Genome Browser browser will provide the DNA directly.)
+
+  Assembly  chr   pos         strand   range (+/- 5 bp)
+  hg16      chr1  109570184   +        chr1:109570179-109570189
+  panTro1   chr1  112470519   -        chr1:112470514-112470524
+
+  >hg16_dna range=chr1:109570179-109570189 revComp=FALSE
+  TTCAGTGGCTT                                      ^^^^^  ==> '+' strand
+       ^   ==> 'T' is the reference allele
+
+  >panTro1_dna range=chr1:112470514-112470524 revComp=FALSE  (needs to be reverse complemented to see '-' strand)
+  AAGCCTCTGAA
+  >panTro1_dna range=chr1:112470514-112470524 revComp=TRUE
+  TTCAGAGGCTT                                         ^^^^  ==> '-' strand
+       ^   ==> 'A' is the orthologous base in chimp
+
+This means that the 'A' allele is shared between chimp and humans.
+Without additional outgroup information, the term 'ancestral' is a bit
+premature here.
+
+As input I used the genotype data directly from the release 16b
+allele_freq* files and have not processed it (strand flipping)
+further, the human alleles in my output should be the same as the
+reported genotype data.
+
+DATA SOURCE: 
+sftp://www.hapmap.org/hapmap-data/ftp/private/common/data_freezes/2005-04_rel16b_patched/full/frequencies/non-redundant/allele_freqs_chr*_*.txt.gz
+
+- Daryl
+</PRE>
