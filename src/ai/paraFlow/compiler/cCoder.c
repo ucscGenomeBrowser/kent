@@ -2034,8 +2034,6 @@ if (body == NULL)
 
 declareStaticVars(pfc, f, funcDec, body, class);
 printPrototype(f, funcDec, class);
-if (class)
-    pfScopeAddVar(funcDec->scope, "self", class->ty, NULL);
 fprintf(f, "\n{\n");
 
 
