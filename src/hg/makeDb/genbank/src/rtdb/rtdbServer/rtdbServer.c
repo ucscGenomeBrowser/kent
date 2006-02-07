@@ -1,5 +1,4 @@
-/* rtdbServer - set up a server 
- * respond to search requests. */
+/* rtdbServer - server udpates RTDB when it gets update requests. */
 
 #include "common.h"
 #include <signal.h>
@@ -14,19 +13,22 @@
 #include "memalloc.h"
 #include "options.h"
 #include "log.h"
+#include "linefile.h"
+
+/* Globals */
 
 static struct optionSpec optionSpecs[] = {
-    {"canStop", OPTION_BOOLEAN},
     {"log", OPTION_STRING},
     {"logFacility", OPTION_STRING},
     {"syslog", OPTION_BOOLEAN},
+    {"noVerbose", OPTION_BOOLEAN},
+    {"noForce", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
-boolean canStop = FALSE;
+boolean force = TRUE;
+boolean verBose = TRUE;
 int warnCount = 0;
-struct sockaddr_in sai;		/* Some system socket info. */
-volatile boolean pipeBroke = FALSE;	/* Flag broken pipes here. */
 
 void usage()
 /* Explain usage and exit. */
@@ -34,18 +36,17 @@ void usage()
 errAbort("rtdbServer - Server to run an update to the RTDB.\n"
 	 "Options:\n"
 	 "   -log=logFile keep a log file that records server requests.\n"
-	 "   -seqLog    Include sequences in log file (not logged with -syslog)\n"
 	 "   -syslog    Log to syslog\n"
 	 "   -logFacility=facility log to the specified syslog facility - default local0.\n"
-	 "   -canStop If set then a quit message will actually take down the\n"
-	 "            server");
+	 "   -noVerbose   Run ./bin/rtdbUpdate script without the -verbose option.\n"
+	 "                (not recommened)\n"
+	 "   -noForce     Run ./bin/rtdbUpdate script without the -force option.\n"
+	 "                (not recommened)\n"
+	 "*NOTE* Start server in parent dir of where the data/logs go\n"
+	 "       e.g. /cluster/data/genbank");
 }
 
-static void rtdbPipeHandler(int sigNum)
-/* Set broken pipe flag. */
-{
-pipeBroke = TRUE;
-}
+/*** Various functions for making things easier. ***/
 
 void rtdbWarning(char *format, ...)
 /* Simplify the warning calls that also update counter. */
@@ -55,24 +56,6 @@ va_start(args, format);
 warn(format, args);
 va_end(args);
 ++warnCount;
-}
-
-void rtdbCatchPipes()
-/* Set up to catch broken pipe signals. */
-{
-signal(SIGPIPE, rtdbPipeHandler);
-}
-
-void update()
-/* Run the update. First fork off a child and deal with it there. */
-{
-logInfo("Beginning update in child");
-/* This part is still pretty weak. */
-/* It'll be a system() mostly, writing the information to stdout, */
-/* which should then be picked up by the read end of the pipe in */
-/* the parent process. */
-sleep(20);
-logInfo("Ended update in child");
 }
 
 int getSocket(char *hostName, int port)
@@ -105,57 +88,44 @@ if (connectionHandle < 0)
 return connectionHandle;
 }
 
-char *getCommandFromSocket(int connectionHandle)
-/* Just return the command from the client or NULL if unrecognized. */
-/* Free this later. */
+/*** Update/child process related functions ***/
+
+void update(char *database, int connectionHandle)
+/* Run the update. This is only stuff that the child process executes. */
+/* Basically, run the script and capture the script's output. */
 {
-char buf[256], *line;
-int readSize = read(connectionHandle, buf, sizeof(buf)-1);
-if (readSize < 0)
+FILE *scriptOutput = NULL;
+char command[256], buf[2048];
+char *curChar = command;
+char *words[2];
+/* Build the rtdbUpdate command. */
+safef(command, ArraySize(command), "./bin/rtdbUpdate ");
+curChar += strlen(command);
+if (verBose)
     {
-    rtdbWarning("Error reading from socket: %s", strerror(errno));
-    close(connectionHandle);
-    return NULL;
+    safef(curChar, ArraySize(command)-(curChar-command), "-verbose ");
+    curChar = command + strlen(command);
     }
-if (readSize == 0)
+if (force)
     {
-    rtdbWarning("Zero sized query");
-    close(connectionHandle);
-    return NULL;
+    safef(curChar, ArraySize(command)-(curChar-command), "-force ");
+    curChar = command + strlen(command);
     }
-buf[readSize] = 0;
-logDebug("%s", buf);
-line = buf;
-return cloneString(nextWord(&line));
+safef(curChar, ArraySize(command)-(curChar-command), "%s", database);
+/* Run the command and save the output. */
+scriptOutput = popen(command, "r");
+fgets(buf, ArraySize(buf), scriptOutput);
+if (chopLine(buf, words) != 2)
+    logError("For some reason the script didn't create a log like it should.  Check to be sure the server was started correctly.");
+else
+    {
+    netSendString(connectionHandle, "Update successful!");
+    netSendString(connectionHandle, "$end$");
+    }
+pclose(scriptOutput);
 }
 
-void doStatus(int connectionHandle, char *hostName, int port)
-/* Return some status information to the client. */
-{
-char buf[256];
-netSendString(connectionHandle, "RTDB Server");
-safef(buf, 256, "host %s", hostName);
-netSendString(connectionHandle, buf);
-safef(buf, 256, "port %d", port);
-netSendString(connectionHandle, buf);
-safef(buf, 256, "warnings %d", warnCount);
-netSendString(connectionHandle, buf);
-netSendString(connectionHandle, "end");
-}
-
-boolean canQuit(int childPipe)
-/* Quit if possible and log things. */
-{
-if (childPipe == -1)
-    rtdbWarning("Attempted to quit server while updating");
-else if (canStop == FALSE)
-    rtdbWarning("Attempted to quit while canStop=FALSE.  Ignoring.");
-else 
-    return TRUE;
-return FALSE;
-}
-
-int doUpdate(int connectionHandle)
+int doUpdate(int connectionHandle, char *command)
 /* fork off a child to run update. */
 {
 int pid, childPipe[2];
@@ -166,75 +136,103 @@ if (pid < 0)
     errAbort("Couldn't fork()!");
 if (pid  == 0)
     {
+    char *database = chopPrefix(command);
     close(childPipe[0]);
-    update();
-    exit(0);
+    update(database, connectionHandle);
+    _exit(0);
     }
+else
+    logInfo("Starting update...");
 close(childPipe[1]);
 return childPipe[0];
 }
 
+void waitStatus()
+/* Wait for the child and deal with errors. */
+{
+int status = 0;
+pid_t child = wait(&status);
+if (child == -1)
+    logError("child process didn't finish like it should.  SIGCHILD not caught.  Or something.");
+
+else if (!WIFEXITED(status))
+    logError("SIGCHILD caught but child didn't exit normally.");
+}
+
+/*** Server functions ***/
+
+void doStatus(int connectionHandle, char *hostName, int port)
+/* Return some status information to the client. */
+{
+char buf[256];
+logInfo("Status requested.");
+netSendString(connectionHandle, "RTDB Server");
+safef(buf, ArraySize(buf), "host %s", hostName);
+netSendString(connectionHandle, buf);
+safef(buf, ArraySize(buf), "port %d", port);
+netSendString(connectionHandle, buf);
+safef(buf, ArraySize(buf), "warnings %d", warnCount);
+netSendString(connectionHandle, buf);
+netSendString(connectionHandle, "end");
+}
+
 void startServer(char *hostName, char *portName)
-/* Load up index and hang out in RAM. */
+/* This is the main part of the server and it runs this until it's killed. 
+ * Process commands from a client.  */
 {
 int socketHandle = 0;
 int port = atoi(portName);
 int childPipe = -1;
+logDaemonize("rtdbServer");
 socketHandle = getSocket(hostName, port);
 for (;;)
     {
     fd_set filedes;
     int maxfd;
+    int error = 0;
     FD_ZERO(&filedes);
     FD_SET(socketHandle, &filedes);
     if (childPipe > -1)
 	FD_SET(childPipe, &filedes);
     maxfd = max(childPipe, socketHandle) + 1;    
-    select(maxfd, &filedes, NULL, NULL, NULL);
-    if (FD_ISSET(socketHandle, &filedes))
+    error = select(maxfd, &filedes, NULL, NULL, NULL);
+    if (error == -1)
+	errAbort("select() failed!!");
+    else 
 	{
-	int connectionHandle = getConnection(socketHandle);
-	char *command = getCommandFromSocket(connectionHandle);
-	if (command == NULL)
-	    continue;
-	if (sameString(command, "quit") && canQuit(childPipe))
-	    break;
-	else if (sameString(command, "status"))
-	    doStatus(connectionHandle, hostName, port);
-	else if (sameString(command, "update"))
+	if (FD_ISSET(socketHandle, &filedes))
 	    {
-	    if (childPipe != -1)
-		rtdbWarning("Attempted to update while updating.");
-	    else 
-		childPipe = doUpdate(connectionHandle);
+	    int connectionHandle = getConnection(socketHandle);
+	    char command[256];
+	    if (netGetString(connectionHandle, command) == NULL)
+		continue;	
+	    else if (sameString(command, "status"))
+		doStatus(connectionHandle, hostName, port);
+	    else if (startsWith("update", command))
+		{
+		logInfo("Update requested.");
+		if (childPipe != -1)
+		    rtdbWarning("Attempted to update while updating.");
+		else 
+		    childPipe = doUpdate(connectionHandle, command);
+		}
+	    else
+		rtdbWarning("Unknown command %s", command);
+	    close(connectionHandle);
 	    }
-	else
-	    rtdbWarning("Unknown command %s", command);
-	freeMem(command);
-	close(connectionHandle);
-	}
-    /* Handles pipe's EOF signal when child process ends. */
-    if ((childPipe != -1) && FD_ISSET(childPipe, &filedes))
-	{
-	logInfo("Completed update, received EOF from child pipe, reset pipe.");
-	childPipe = -1;
+	/* Handles pipe's EOF signal when child process ends. */
+	if ((childPipe != -1) && FD_ISSET(childPipe, &filedes))
+	    {
+	    waitStatus();	
+	    logInfo("Completed update.");
+	    childPipe = -1;
+	    }
 	}
     }
 close(socketHandle);
 }
 
-void stopServer(char *hostName, char *portName)
-/* Send stop message to server. */
-{
-char buf[256];
-int sd = 0;
-
-sd = netMustConnectTo(hostName, portName);
-safef(buf, 256, "quit");
-write(sd, buf, strlen(buf));
-close(sd);
-printf("sent stop message to server\n");
-}
+/**** Client functions ****/
 
 int statusServer(char *hostName, char *portName)
 /* Send status message to server arnd report result. */
@@ -242,12 +240,10 @@ int statusServer(char *hostName, char *portName)
 char buf[256];
 int sd = 0;
 int ret = 0;
-
 /* Put together command. */
 sd = netMustConnectTo(hostName, portName);
-safef(buf, 256, "status");
-write(sd, buf, strlen(buf));
-
+safef(buf, ArraySize(buf), "status");
+netSendString(sd, buf);
 for (;;)
     {
     if (netGetString(sd, buf) == NULL)
@@ -265,14 +261,26 @@ close(sd);
 return(ret); 
 }
 
-void updateServer(char *hostName, char *portName)
-/* Send stop message to server. */
+void updateServer(char *hostName, char *portName, char *command)
+/* Send update.database message to server from the client. */
 {
 char buf[256];
 int sd = 0;
 sd = netMustConnectTo(hostName, portName);
-safef(buf, 256, "update");
-write(sd, buf, strlen(buf));
+safef(buf, ArraySize(buf), command);
+netSendString(sd, buf);
+for (;;)
+    {
+    if (netGetString(sd, buf) == NULL)
+	{
+	rtdbWarning("Error reading update information from %s:%s",hostName,portName);
+	break;
+	}
+    if (sameString(buf, "$end$"))
+        break;
+    else
+        printf("%s\n", buf);
+    }
 close(sd);
 printf("sent update message to server\n");
 }
@@ -281,12 +289,14 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *command;
-rtdbCatchPipes();
 optionInit(&argc, argv, optionSpecs);
 command = argv[1];
-canStop = optionExists("canStop");
 if (argc < 2)
     usage();
+if (optionExists("noVerbose"))
+    verBose = FALSE;
+if (optionExists("noForce"))
+    force = FALSE;
 if (optionExists("log"))
     logOpenFile(argv[0], optionVal("log", NULL));
 if (optionExists("syslog"))
@@ -297,17 +307,11 @@ else if (sameWord(command, "start"))
         usage();
     startServer(argv[2], argv[3]);
     }
-else if (sameWord(command, "stop"))
+else if (startsWith("update", command))
     {
     if (argc != 4)
 	usage();
-    stopServer(argv[2], argv[3]);
-    }
-else if (sameWord(command, "update"))
-    {
-    if (argc != 4)
-	usage();
-    updateServer(argv[2], argv[3]);
+    updateServer(argv[2], argv[3], command);
     }
 else if (sameWord(command, "status"))
     {
@@ -319,8 +323,6 @@ else if (sameWord(command, "status"))
 	}
     }
 else
-    {
     usage();
-    }
 return 0;
 }

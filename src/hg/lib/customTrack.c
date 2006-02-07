@@ -21,14 +21,14 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.69 2005/11/07 23:59:47 galt Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.70 2006/01/26 06:55:09 daryl Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
  *  name - any text up to 15 letters.  
  *  description - any text up to 60 letters. 
  *  url - URL.  If it contains '$$' this will be substituted with itemName.
- *  visibility - 0=hide, 1=dense, 2=full
+ *  visibility - 0=hide, 1=dense, 2=full, 3=pack, 4=squish
  *  useScore - 0=use colors. 1=use grayscale based on score.
  *  color = R,G,B,  main color, should be dark.  Components from 0-255.
  *  altColor = R,G,B secondary color.
@@ -47,7 +47,7 @@ tdb->longLabel = cloneString("User Supplied Track");
 tdb->shortLabel = cloneString("User Track");
 sprintf(buf, "ct_%d", ++count);
 tdb->tableName = cloneString(buf);
-tdb->visibility = 1;
+tdb->visibility = tvDense;
 tdb->grp = cloneString("user");
 tdb->type = (char *)NULL;
 return tdb;
@@ -248,7 +248,7 @@ if ((val = hashFindVal(hash, "visibility")) != NULL)
     if (isdigit(val[0]))
 	{
 	tdb->visibility = atoi(val);
-	if (tdb->visibility > 4)
+	if (tdb->visibility > tvSquish)
 	    errAbort("line %d of custom input: Expecting visibility 0 to 4 got %s", lineIx, val);
 	}
     else

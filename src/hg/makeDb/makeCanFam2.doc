@@ -2102,3 +2102,48 @@ cd ../..
     hgsql canFam2 -Nse "SELECT COUNT(*) FROM contigAcc"
         # 35696
 
+############################################################################
+# BLASTZ BOSTAU2 (DONE - 2006-01-17 - 2006-01-18 - Hiram)
+
+    ssh kk
+    mkdir /cluster/data/canFam2/bed/blastzBosTau2.2006-01-17
+    cd /cluster/data/canFam2/bed/blastzBosTau2.2006-01-17
+
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/parasol/bin
+
+BLASTZ=blastz.v7
+BLASTZ_M=50
+
+# dog vs. cow
+# TARGET: Dog
+SEQ1_DIR=/iscratch/i/canFam2/nib
+SEQ1_LEN=/iscratch/i/canFam2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow (bosTau2)
+SEQ2_DIR=/scratch/hg/bosTau2/bosTau2.noBin0.2bit
+SEQ2_LEN=/scratch/hg/bosTau2/noBin0.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LIMIT=300
+
+BASE=/cluster/data/canFam2/bed/blastzBosTau2.2006-01-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	running 2006-01-17 13:58
+    #	done 2005-01-18 03:40
+    #	real    823m27.169s
+
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/blastzBosTau2.2006-01-17
+    time featureBits canFam2 chainBosTau2Link \
+	> fb.canFam2.chainBosTau2Link 2>&1 &
+    #	real    32m3.460s
+    #	1376066425 bases of 2384996543 (57.697%) in intersection

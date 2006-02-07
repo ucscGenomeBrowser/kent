@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "scoredRef.h"
 
-static char const rcsid[] = "$Id: scoredRef.c,v 1.7 2005/04/13 06:25:56 markd Exp $";
+static char const rcsid[] = "$Id: scoredRef.c,v 1.8 2006/01/17 21:43:16 kent Exp $";
 
 void scoredRefStaticLoad(char **row, struct scoredRef *ret)
 /* Load a row from scoredRef table into ret.  The contents of ret will
@@ -135,9 +135,12 @@ static char *createString =
 "    offset bigint not null,	# Offset in MAF file\n"
 "    score double not null,	# Score\n"
 "              #Indices\n"
+"    INDEX(chrom(%d),bin)\n"
+#ifdef OLD	/* The other two indexes actually slow things down these days. */
 "    INDEX(chrom(%d),bin),\n"
 "    INDEX(chrom(%d),chromStart),\n"
 "    INDEX(chrom(%d),chromEnd)\n"
+#endif /* OLD */
 ")\n";
 struct dyString *dy = newDyString(1024);
 dyStringPrintf(dy, createString, tableName, indexSize, indexSize, indexSize);

@@ -5,21 +5,21 @@
 #include "gbVerb.h"
 #include "refPepRepair.h"
 
-static char const rcsid[] = "$Id: repairExtFile.c,v 1.1 2005/05/14 19:57:14 markd Exp $";
+static char const rcsid[] = "$Id: repairExtFile.c,v 1.5 2006/01/26 00:40:33 genbank Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"dryRun", OPTION_BOOLEAN},
+    {"accFile", OPTION_STRING},
     {"verbose", OPTION_INT},
     {NULL, 0}
 };
-boolean gDryRun = FALSE;  /* don't actually update database */
 
 void usage(char *msg)
 /* Explain usage and exit. */
 {
 errAbort("%s\n\n"
-         "repairExtFile [options] db repairTask\n"
+         "repairExtFile [options] repairTask db [db2 ...]\n"
          "\n"
          "Repair the gbSeq and gbExtFile tables\n"
          "repairTask is one of:\n"
@@ -29,29 +29,46 @@ errAbort("%s\n\n"
          "                  valid gbExtFile entries.\n"
          "\n"
          "Options:\n"
-         "  -verbose=n\n"
-         "  -dryRun - don't actually update the database\n",
+         "  -dryRun - don't actually update the database\n"
+         "  -accFile=file - file with list of accessions to operate on\n"
+         "  -verbose=1\n"
+         "           1 - stats only\n"
+         "           2 - sequences repaired\n"
+         "           3 - more details\n"
+         "           4 - sql trace\n"
+         "           5 - fasta scan\n",
          msg);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-char *repairTask;
-struct sqlConnection *conn;
+char *repairTask, **dbs, *accFile = NULL;;
+boolean dryRun;
+int ndbs, i;
 optionInit(&argc, argv, optionSpecs);
-if (argc != 3)
+if (argc < 3)
     usage("wrong # args");
-gbVerbInit(optionInt("verbose", 0));
-gDryRun = optionExists("dryRun");
+gbVerbInit(optionInt("verbose", 1));
+dryRun = optionExists("dryRun");
+accFile = optionVal("accFile", NULL);
 
-conn = sqlConnect(argv[1]);
-repairTask = argv[2];
+repairTask = argv[1];
+dbs = argv+2;
+ndbs = argc-2;
 
 if (sameString(repairTask, "refPepList"))
-    refPepList(conn, stdout);
+    {
+    if (accFile != NULL)
+        errAbort("-accFile is not valid for refPepList");
+    for (i = 0; i < ndbs; i++)
+        refPepList(dbs[i], stdout);
+    }
 else if (sameString(repairTask, "refPepRepair"))
-    refPepRepair(conn, gDryRun);
+    {
+    for (i = 0; i < ndbs; i++)
+        refPepRepair(dbs[i], accFile, dryRun);
+    }
 else
     errAbort("invalid repairTask: %s", repairTask);
 

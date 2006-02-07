@@ -99,8 +99,9 @@
 #include "hgConfig.h"
 #include "hgMut.h"
 #include "hgMutUi.h"
+#include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1067 2006/01/16 06:58:48 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1073 2006/02/01 21:20:00 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -415,6 +416,7 @@ Color shadesOfBrown[10+1];	/* 10 shades of brown from tan to tar. */
 struct rgbColor brownColor = {100, 50, 0};
 struct rgbColor tanColor = {255, 240, 200};
 struct rgbColor guidelineColor = { 220, 220, 255};
+struct rgbColor undefinedYellowColor = {240,240,180};
 
 Color shadesOfSea[10+1];       /* Ten sea shades. */
 struct rgbColor darkSeaColor = {0, 60, 120};
@@ -1677,9 +1679,19 @@ boolean highlightItem(struct track *tg, void *item)
 {
 char *mapName = NULL;
 char *name = NULL;
+char *chp;
 boolean highlight = FALSE;
 mapName = tg->mapItemName(tg, item);
 name = tg->mapItemName(tg, item);
+
+/* special process for KG, because of "hgg_prot" piggy back */
+if (sameWord(tg->mapName, "knownGene"))
+    {
+    mapName = strdup(mapName);
+    chp = strstr(mapName, "&hgg_prot");
+    if (chp != NULL) *chp = '\0';
+    }
+
 /* Only highlight if names are in the hgFindMatches hash with
    a 1. */
 highlight = (hgFindMatches != NULL &&
@@ -7834,7 +7846,7 @@ if (!tg->limitedVisSet)
 	{
 	tg->height = 0;
 	tg->limitedVis = tvHide;
-	return tvHide;;
+	return tvHide;
 	}
     if (isCompositeTrack(tg))
         maxHeight = maxHeight * subtrackCount(tg->subtracks);
@@ -9792,6 +9804,74 @@ tg->itemColor = humPhenColor;
 tg->itemNameColor = humPhenColor;
 }
 
+void loadBed12Source(struct track *tg)
+/* Load bed 12 with extra "source" column as lf with extra value. */
+{
+struct linkedFeatures *list = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr = NULL;
+char **row = NULL;
+int rowOffset = 0;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+                 NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct bed12Source *el = bed12SourceLoad(row+rowOffset);
+    struct linkedFeatures *lf = lfFromBed((struct bed *)el);
+    lf->extra = (void *)cloneString(el->source);
+    bed12SourceFree(&el);
+    slAddHead(&list, lf);
+    }
+sqlFreeResult(&sr);
+tg->items = list;
+}
+
+char *jaxAlleleName(struct track *tg, void *item)
+/* Strip off initial NM_\d+ from jaxAllele item name. */
+{
+static char truncName[128];
+struct linkedFeatures *lf = item;
+/* todo: make this check a cart variable so it can be hgTrackUi-tweaked. */
+assert(lf->name);
+if (startsWith("NM_", lf->name) || startsWith("XM_", lf->name))
+    {
+    char *ptr = lf->name + 3;
+    while (isdigit(ptr[0]))
+	ptr++;
+    if (ptr[0] == '_')
+	ptr++;
+    safef(truncName, sizeof(truncName), "%s", ptr);
+    return truncName;
+    }
+else
+    return lf->name;
+}
+
+void jaxAlleleMethods(struct track *tg)
+/* Fancy name fetcher for jaxAllele. */
+{
+linkedFeaturesMethods(tg);
+tg->loadItems = loadBed12Source;
+tg->itemName = jaxAlleleName;
+}
+
+char *jaxPhenotypeName(struct track *tg, void *item)
+/* Return name (or source) of jaxPhenotype item. */
+{
+struct linkedFeatures *lf = item;
+/* todo: make this check a cart variable so it can be hgTrackUi-tweaked. */
+return (char *)lf->extra;
+}
+
+void jaxPhenotypeMethods(struct track *tg)
+/* Fancy name fetcher for jaxPhenotype. */
+{
+linkedFeaturesMethods(tg);
+tg->loadItems = loadBed12Source;
+tg->itemName = jaxPhenotypeName;
+}
+
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
 {
@@ -10872,6 +10952,8 @@ registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("humanPhenotype", humanPhenotypeMethods);
 registerTrackHandler("hgMut", hgMutMethods);
+registerTrackHandler("jaxAllele", jaxAlleleMethods);
+registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
@@ -11231,8 +11313,9 @@ if (showTrackControls)
                 }
             else 
                 {
-	        hPrintf("%s, %d, %d<BR>\n", 
-			track->shortLabel, track->loadTime, track->drawTime);
+	        hPrintf("%s, %d, %d, %d<BR>\n", 
+			track->shortLabel, track->loadTime, track->drawTime,
+			track->loadTime + track->drawTime);
                 if (startsWith("wigMaf", track->tdb->type))
                   if (track->subtracks)
                       if (track->subtracks->loadTime)

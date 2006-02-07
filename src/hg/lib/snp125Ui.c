@@ -181,13 +181,13 @@ char *snp125ClassIncludeStrings[] = {
     "snp125ClassSingleInclude",
     "snp125ClassIn-delInclude",
     "snp125ClassHetInclude",
-    "snp125ClassMicrosateliteInclude"
-    "snp125ClassNamedInclude"
-    "snp125ClassNoVarInclude"
-    "snp125ClassMixedInclude"
-    "snp125ClassMnpInclude"
-    "snp125ClassInsertionInclude"
-    "snp125ClassDeletionInclude"
+    "snp125ClassMicrosateliteInclude",
+    "snp125ClassNamedInclude",
+    "snp125ClassNoVarInclude",
+    "snp125ClassMixedInclude",
+    "snp125ClassMnpInclude",
+    "snp125ClassInsertionInclude",
+    "snp125ClassDeletionInclude",
 };
 boolean snp125ClassIncludeDefault[] = {
     TRUE,  // unknown
@@ -415,18 +415,18 @@ char *snp125LocTypeLabels[] = {
     "Range",
     "Exact",
     "Between",
-    "RangeInsertion"
-    "RangeSubstitution"
-    "RangeDeletion"
+    "RangeInsertion",
+    "RangeSubstitution",
+    "RangeDeletion",
 };
 char *snp125LocTypeStrings[] = {
     "snp125LocTypeUnknown",
     "snp125LocTypeRange",
     "snp125LocTypeExact",
     "snp125LocTypeBetween",
-    "snp125LocType",
-    "snp125LocType",
-    "snp125LocType",
+    "snp125LocTypeRangeInsertion",
+    "snp125LocTypeRangeSubstitution",
+    "snp125LocTypeDeletion",
 };
 char *snp125LocTypeDataName[] = {
     "unknown",

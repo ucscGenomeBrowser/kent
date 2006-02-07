@@ -106,6 +106,31 @@
 /* Default size of directory path string buffers */
 #define PATH_LEN 512
 
+/* stdargs compatibility: in a unix universe a long time ago, types of va_list
+ * were passed by value.  It was assume one could do things like:
+ *
+ *     va_start(args);
+ *     vfprintf(fh1, fmt, args);
+ *     vfprintf(fh2, fmt, args);
+ *     va_end(args);
+ *
+ * and life would good.  However this is not true on some modern systems (for
+ * instance gcc/glibc on x86_64), where va_args can be a pointer to some type
+ * of object).  The second call to vfprintf() would then crash, since the
+ * first call modified the object that va_args was pointing to. C99 adds a
+ * va_copy macro that to address this issue.  Many non-C99 system include this
+ * macro, sometimes called __va_copy.  Here we ensure that va_copy is defined.
+ * If if doesn't exist, we try to define it in terms of __va_copy.  If that is
+ * not available, we make the assumption that va_list can be copied by value
+ * and create our own.  Our implementation is the same as used on Solaris.
+ */
+#if defined(__va_copy) && !defined(va_copy)
+#   define va_copy __va_copy
+#endif
+#if !defined(va_copy)
+#   define va_copy(to, from) ((to) = (from))
+#endif
+
 /* Cast a pointer to a long long. Use to printf format points as long-longs
  * in a 32/64bit portable manner.  Format should use %llx for the result.
  * Needed because casting a pointer to a different sized number cause a
@@ -448,6 +473,10 @@ struct slName *slNameListFromString(char *s, char delimiter);
 
 #define slNameListFromComma(s) slNameListFromString(s, ',')
 /* Parse out comma-separated list. */
+
+struct slName *slNameLoadReal(char *fileName);
+/* load file lines that are not blank or start with a '#' into a slName
+ * list */
 
 struct slRef
 /* Singly linked list of generic references. */

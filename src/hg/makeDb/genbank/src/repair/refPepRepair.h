@@ -2,11 +2,12 @@
 #ifndef REFPEPREPAIR_H
 #define REFPEPREPAIR_H
 
-void refPepList(struct sqlConnection *conn,
+void refPepList(char *db,
                 FILE* outFh);
 /* list of sequences needing repair */
 
-void refPepRepair(struct sqlConnection *conn,
+void refPepRepair(char *db,
+                  char *accFile,
                   boolean dryRun);
 /* fix dangling repPep gbSeq entries. */
 

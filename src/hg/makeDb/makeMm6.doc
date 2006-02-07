@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.102 2005/12/10 00:42:31 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.105 2006/01/26 16:38:59 angie Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -4970,6 +4970,21 @@ Submission to last job:           565s       9.42m     0.16h    0.01d
 # foldUtr3
 # foldUtr5
 
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.  The hgKgGetText takes
+# about 5 minutes when the database is not too busy.  The rest
+# is real quick.
+     ssh hgwdev
+     cd /cluster/data/mm6/bed/kgMm6B
+     mkdir index
+     cd index
+     hgKgGetText mm6 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/data/mm6/bed/kgMm6B/index/knownGene.ix /gbdb/mm6/knownGene.ix
+     ln -s /cluster/data/mm6/bed/kgMm6B/index/knownGene.ixx /gbdb/mm6/knownGene.ixx
+
+
 ############################################################################
 
 # CYTOBAND TRACK (DONE - 2005-04-14 - Hiram)
@@ -6448,6 +6463,9 @@ time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
     hgPepPred mm6 generic sgpPep sgpPep.fa
     featureBits mm6 -enrichment refGene:CDS sgpGene
 #refGene:CDS 0.983%, sgpGene 1.421%, both 0.841%, cover 85.57%, enrich 60.21x
+ 
+# SGP GENES (UPDATE 1/18/2006)
+    sgpPep table dropped, replaced by hgc generated protein seq in browser
 
 ############################################################################
 # RE-BUILD KNOWN GENES RELATED TABLES for mm6 (STARTED 5/26/05, DONE6/1/05. Fan)
@@ -9122,7 +9140,7 @@ close(SQL);
       'load data local infile "alias.tab" into table jaxRepTranscriptAlias'
 
 
-# JACKSON LABS / MGI ALLELE TRANSCRIPTS (DONE 9/30/05 angie)
+# JACKSON LABS / MGI ALLELE TRANSCRIPTS (DONE 11/15/05 angie)
     ssh kkstore01
     mkdir /cluster/data/mm6/bed/jaxAllele
     cd /cluster/data/mm6/bed/jaxAllele
@@ -9207,33 +9225,27 @@ close(SQL);
       set g = `echo $f | perl -wpe 's/allele_//; s/\.gff//; s/^(\w)/jaxAllele\u$1/;'`
       ./parseJaxGFF.pl $g $f > $g.gtf
     end
-    # trackDb helper:
-    set i = 1
-    foreach f (*.gff)
-      set g = `echo $f | perl -wpe 's/allele_//; s/\.gff//; s/^(\w)/jaxAllele\u$1/;'`
-      set short = `echo $f | perl -wpe 's/allele_//; s/\.gff//; s/^(\w)/\u$1/; s/(\w\w\w\w\w\w)\w\w.*/$1./'`
-      set long = `echo $f | perl -wpe 's/allele_//; s/\.gff//; s/^(\w)/\u$1/;'`
-      echo "    track $g"
-      echo "    subTrack jaxAllele"
-      echo "    shortLabel Jax Al $short"
-      echo "    longLabel Jax Allele $long"
-      echo "    priority $i"
-      echo ""
-      set i = `expr $i + 1`
-    end
-    # Load up the subtrack tables and aliases, and use script-generated .sql's
-    # to remove our uniquifying suffixes from the duplicated transcripts.
-    ssh hgwdev
-    cd /cluster/data/mm6/bed/jaxAllele
-    foreach f (jax*.gtf)
-      ldHgGene mm6 $f:t:r $f
-    end
-    cat jaxAllele*.sql | hgsql mm6
+    # Load info table
     hgsql mm6 < $HOME/kent/src/hg/lib/jaxAlleleInfo.sql
     hgsql mm6 -e 'load data local infile "alias.tab" into table jaxAlleleInfo'
+    # Make a single bed file with Allele type as extra column, for 
+    # single track / Gene Sorter.
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/jaxAllele
+    cp /dev/null jaxAllele.bed
+    foreach f (jax*.gtf)
+      set type = `echo $f | sed -e 's/jaxAllele//; s/\.gtf//;'`
+      ldHgGene mm6 $f:t:r $f -out=stdout \
+      | /cluster/bin/scripts/genePredToBed \
+      | sed -e 's/$/'"\t$type"'/' \
+      >> jaxAllele.bed
+    end
+    sed -e 's/bed12Source/jaxAllele/g' \
+      $HOME/kent/src/hg/lib/bed12Source.sql > jaxAllele.sql
+    hgLoadBed -sqlTable=jaxAllele.sql mm6 jaxAllele jaxAllele.bed
 
 
-# JACKSON LABS / MGI PHENOTYPE (DONE 9/29/05 angie)
+# JACKSON LABS / MGI PHENOTYPE (DONE 11/15/05 angie)
     ssh kkstore01
     mkdir /cluster/data/mm6/bed/jaxPhenotype
     cd /cluster/data/mm6/bed/jaxPhenotype
@@ -9316,34 +9328,54 @@ close(SQL);
       ./parseJaxGFF.pl $g $f > $g.gtf
     end
     sort -u alias.tab > alias.unique.tab
-    # trackDb helper:
-    set i = 1
-    foreach f (*.gff)
-      set g = `echo $f | perl -wpe 's/(_phenotype)?\.gff//; s/[_-](\w)/\u$1/g; s/^(\w)/jaxPhenotype\u$1/;'`
-      set short = `echo $f | perl -wpe 's/(_phenotype)?\.gff//; s/[_-].*//; s/^(\w)/\u$1/; s/(\w\w\w\w\w\w)\w\w.*/$1./'`
-      set long = `echo $f | perl -wpe 's/(_phenotype)?\.gff//; s/[_-](\w)/ \u$1/g; s/^(\w)/\u$1/;'`
-      echo "    track $g"
-      echo "    subTrack jaxPhenotype"
-      echo "    shortLabel Jax Phen $short"
-      echo "    longLabel Jax Phenotype $long"
-      echo "    priority $i"
-      echo ""
-      set i = `expr $i + 1`
-    end
-    # Load up the subtrack tables and aliases, and use script-generated .sql's
-    # to remove our uniquifying suffixes from the duplicated transcripts.
+    # Load up the aliases:
     ssh hgwdev
     cd /cluster/data/mm6/bed/jaxPhenotype
-    foreach f (jax*.gtf)
-      ldHgGene mm6 $f:t:r $f
-    end
-    cat jaxPheno*.sql | hgsql mm6
     sed -e 's/genericAlias/jaxPhenotypeAlias/' \
       $HOME/kent/src/hg/lib/genericAlias.sql \
     | hgsql mm6
     hgsql mm6 -e \
       'load data local infile "alias.unique.tab" into table jaxPhenotypeAlias'
-
+    # Make a single bed file with phenotype as extra column, for single track 
+    # / Gene Sorter.  Use Jim's abbreviations.
+    ssh hgwdev
+    cd /cluster/data/mm6/bed/jaxPhenotype
+    cp /dev/null jaxPhenotype.bed
+    foreach f (jax*.gtf)
+      set type = `echo $f | sed -e 's@jaxPhenotype@@; s@\.gtf@@; \
+                    s@AdiposeTissue@Adipose@; \
+                    s@BehaviorNeurological@Behavior@; \
+                    s@CardiovascularSystem@Cardiovascular@; \
+                    s@DigestiveAlimentary@Digestive@; \
+                    s@EndocrineExocrineGland@Gland@; \
+                    s@GrowthSize@Growth Size@; \
+                    s@HearingEar@Hearing/Ear@; \
+                    s@HematopoieticSystem@Hematopoietic@; \
+                    s@HomeostasisMetabolism@Homeostasis@; \
+                    s@ImmuneSystem@Immune@; \
+                    s@LethalityEmbryonicPerinatal@Embryonic Lethal@; \
+                    s@LethalityPostnatal@Postnatal Lethal@; \
+                    s@LifeSpanPostWeaningAging@Life Span@; \
+                    s@LimbsDigitsTail@Limbs and Tail@; \
+                    s@LiverBiliarySystem@Liver and Bile@; \
+                    s@NervousSystem@Nervous System@; \
+                    s@RenalUrinarySystem@Renal/Urinary@; \
+                    s@ReproductiveSystem@Reproductive@; \
+                    s@RespiratorySystem@Respiratory@; \
+                    s@SkinCoatNails@Skin/Coat/Nails@; \
+                    s@TasteOlfaction@Taste/Smell@; \
+                    s@TouchVibrissae@Touch@; \
+                    s@Tumorigenesis@Tumorigenesis@; \
+                    s@VisionEye@Vision/Eye@;'`
+      ldHgGene mm6 $f:t:r $f -out=stdout \
+      | /cluster/bin/scripts/genePredToBed \
+      | sed -e 's@$@'"\t$type"'@' \
+      >> jaxPhenotype.bed
+    end
+    sed -e 's/bed12Source/jaxPhenotype/g' \
+      $HOME/kent/src/hg/lib/bed12Source.sql > jaxPhenotype.sql
+    hgLoadBed -tab -sqlTable=jaxPhenotype.sql mm6 jaxPhenotype \
+      jaxPhenotype.bed
 
 
 ##########################################################################

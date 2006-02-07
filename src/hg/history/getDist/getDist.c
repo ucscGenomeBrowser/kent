@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: getDist.c,v 1.1 2006/01/15 22:22:07 braney Exp $";
+static char const rcsid[] = "$Id: getDist.c,v 1.2 2006/01/19 00:15:53 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -57,7 +57,7 @@ if (parent = currentElement->parent)
 	    downToLeaves(distanceList, pDistHash, pDistElemHash, otherElement, parent->edges[ii],  
 		sumBranchLength + parent->edges[ii]->genome->node->ident->length);
 	}
-    getAllSibs(distanceList, pDistHash, pDistElemHash, otherElement, parent, sumBranchLength + currentElement->genome->node->ident->length);
+    getAllSibs(distanceList, pDistHash, pDistElemHash, otherElement, parent, sumBranchLength + parent->genome->node->ident->length);
     }
 }
 

@@ -1,42 +1,45 @@
-<H2>Description</H2> <P>
+<H2>Description</H2> 
+<P>
 This track shows a measure of evolutionary conservation in 
-three Drosophila species and mosquito (A. gambiae), 
+three Drosophila species and mosquito (<em>A. gambiae</em>), 
 based on a phylogenetic hidden Markov model (phastCons).
 Multiz alignments of the following assemblies were used to generate this
 annotation: 
-<em>$organism</em> $date ($db), 
-<em>D. yakuba</em> Apr. 2004 (droYak1),
-<em>D. pseudoobscura</em> Aug. 2003 (dp2),
-and <EM>A. gambiae</EM> Sep. 2003 (anoGam1).  
+<UL>
+<LI><em>$Organism</em> $date ($db)
+<LI><em>D. yakuba</em> Apr. 2004 (droYak1)
+<LI><em>D. pseudoobscura</em> Aug. 2003 (dp2)
+<LI><em>A. gambiae</em> Sep. 2003 (anoGam1)
+</UL></P>
 <P>
 In full display mode, this track shows the overall conservation score 
 across all species as well as pairwise alignments of 
 <em>D. yakuba</em>, <em>D. pseudoobscura</em>, and <em>A. gambiae</em>,
-each aligned to the <EM>$organism </EM> genome.  The pairwise alignments are
+each aligned to the <em>$Organism</em> genome.  The pairwise alignments are
 shown in dense display mode using a grayscale density gradient.  
 The checkboxes in the track configuration section allow
 the exclusion of species from the pairwise display; however, this does not
 remove them from the conservation score display.  </P>
 <P>
 When zoomed-in to the base-display level, the track shows the base 
-composition of each alignment. The numbers and symbols on the &quot;$organism 
-gap&quot; line indicate the lengths of gaps in the <em>$organism</em>
-sequence at those alignment positions, relative to the longest non-<EM>$organism</EM>
-sequence at that spot. If the gap size is greater than
-9, the &quot;+&quot; symbol is displayed. To view detailed information
-about the alignments at a specific position, zoom in the display to
-30,000 or fewer bases, then click on the alignment.  </P>
+composition of each alignment. The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the <em>$Organism</em> sequence at those 
+alignment positions relative to the longest non-<em>$organism</em> sequence. 
+If the gap 
+size is greater than 9, a non-numeric symbol is shown: a &quot;*&quot if the 
+gap size is a multiple of 3; otherwise &quot;+&quot;. 
+To view detailed information about the alignments at a specific position,
+zoom in the display to 30,000 or fewer bases, then click on the alignment.</P>
 <P>
-This track may be configured in a variety of ways to highlight
-different aspects of the displayed information. Click the &quot;Graph
-configuration help&quot; link for an explanation of the configuration
-options.</P>
+This track may be configured in a variety of ways to highlight different aspects
+of the displayed information. Click the &quot;Graph configuration help&quot; 
+link for an explanation of the configuration options.</P>
 
 <H2>Methods</H2>
 <P> 
 Best-in-genome blastz pairwise alignments 
 were multiply aligned using multiz, beginning with 
-<em>$organism</em>-<em>D. yakuba</em> alignments
+<em>$Organism</em>-<em>D. yakuba</em> alignments
 and subsequently adding in <em>D. pseudoobscura</em> and <em>A. gambiae</em>.  
 The resulting multiple alignments were then assigned 
 conservation scores by phastCons.</P>

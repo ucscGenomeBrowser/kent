@@ -5,7 +5,7 @@
 #ifndef SNPTMP_H
 #define SNPTMP_H
 
-#define SNPTMP_NUM_COLS 7
+#define SNPTMP_NUM_COLS 9
 
 struct snpTmp
 /* Polymorphism data subset used during processing */
@@ -18,6 +18,8 @@ struct snpTmp
     char strand[2];	/* Which DNA strand contains the observed alleles */
     char *refNCBI;	/* Reference genomic from dbSNP */
     char *locType;	/* range, exact, between */
+    char *func;	/* set for function */
+    char *contigName;	/* contig name */
     };
 
 void snpTmpStaticLoad(char **row, struct snpTmp *ret);
@@ -64,6 +66,7 @@ void snpTmpOutput(struct snpTmp *el, FILE *f, char sep, char lastSep);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 #endif /* SNPTMP_H */
+
 
 void snpTmpTableCreate(struct sqlConnection *conn, char *chromName);
 /* Create a chrN_snpTmp table. */

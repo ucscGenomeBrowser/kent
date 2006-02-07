@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.16 2006/01/13 17:11:16 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.25 2006/01/31 00:48:33 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
@@ -903,6 +903,74 @@ warn trf/*.bed  > lu.out 2>&1
 #	After fixing up hgCtgPos to accept the -chromLst argument, simply:
     cd /cluster/data/hg18
     hgCtgPos -chromLst=chrom.lst hg18 .
+
+# GOLD AND GAP TRACKS (DONE - 2005-12-10 - Fan)
+
+    ssh hgwdev
+    cd /cluster/data/hg18
+    hgGoldGapGl -noGl -chromLst=chrom.lst hg18 /cluster/data/hg18 .
+    #	Disappointing to see this create so many tables ...
+    #	_gap and _gold for each chrom
+
+# contig.gl ... section skipped for the time being.  (Fan 2005-12-13).
+
+#############################################################################
+# GC5BASE (DONE - 2005-12-13 - Fan)
+    ssh kkstore02
+    mkdir -p /cluster/data/hg18/bed/gc5Base
+    cd /cluster/data/hg18/bed/gc5Base
+    hgGcPercent -wigOut -doGaps -file=stdout -win=5 hg18 \
+        /cluster/data/hg18/nib | wigEncode stdin gc5Base.wig gc5Base.wib
+
+    #   runs for about 17 minutes
+
+    #   load database
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/gc5Base
+    mkdir /gbdb/hg18/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/hg18/wib
+    hgLoadWiggle -pathPrefix=/gbdb/hg18/wib hg18 gc5Base gc5Base.wig
+
+    #   verify index is correct:
+    hgsql hg18 -e "show index from gc5Base;"
+    #   should see good numbers in Cardinality column
+
+#########################################################################
+# GENBANK auto update (DONE 2005-12-13 Fan)
+    # align with revised genbank process. drop xeno ESTs.
+    cd ~/kent/src/hg/makeDb/genbank
+    cvs update -d etc
+    # edit etc/genbank.conf to add hg18
+
+# hg18
+hg18.serverGenome = /cluster/data/hg18/nib/chr*.nib
+hg18.clusterGenome = /scratch/hg/gs.18/build36/bothMaskedNibs/chr*.nib
+hg18.ooc = /scratch/hg/h/11.ooc
+hg18.lift = /cluster/store11/gs.19/build36/jkStuff/liftAll.lft
+hg18.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+hg18.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+hg18.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+hg18.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+#hg18.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+#hg18.genbank.est.xeno.pslCDnaFilter    = ${finished.genbank.est.xeno.pslCDnaFilter}
+#hg18.genbank.est.xeno.load = yes
+hg18.refseq.mrna.xeno.load  = yes
+hg18.refseq.mrna.xeno.loadDesc = yes
+hg18.mgcTables.default = full
+hg18.mgcTables.mgc = all
+hg18.downloadDir = hg18
+
+    # update /cluster/data/genbank/
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial hg18 &
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad  hg18&
 
 # PRODUCING GENSCAN PREDICTIONS (DONE - 2005-12-16 - Fan)
     
@@ -2195,12 +2263,40 @@ nice featureBits hg17 chainBosTau2Link
     wc -l placed_in_assembly.list
     #	27093 placed_in_assembly.list
 
+    #	And all possible clones considered for assembly.
+    #	The AADB clones are the Celera assembly, don't want them.
+    sed -e "/^#.*/d" /cluster/store11/gs.19/ncbi/sequence.inf | \
+	grep for_assembly | grep -v AADB | awk '{print $1}' | sort -u \
+	    > allButOneClonesConsidered.list
+    (grep AADB01066164.1 \
+	/cluster/store11/gs.19/ncbi/sequence.inf | awk '{print $1}'; \
+	cat allButOneClonesConsidered.list) | sort -u \
+	    > allClonesConsidered.list
+    #	The grep for AADB eliminates a single clone: AADB01066164.1
+    #	Which actually should be in the list since it is in the
+    #	ncbi_build36.agp file.  Back in Hg17, this was the only AADB
+    #	clone in the sequence.inf file, now there are 400,673 of them in
+    #	this Hg18 sequence.inf file marked "for_assembly"
+    comm -12 allClonesConsidered.list \
+	/cluster/data/hg17/bed/contig_overlaps/sequence.list \
+	    > allClones.InHg17AndHg18.list
+    comm -23 allClonesConsidered.list \
+	/cluster/data/hg17/bed/contig_overlaps/sequence.list \
+	    > allClones.InHg18NotHg17.list
+    comm -13 allClonesConsidered.list \
+	/cluster/data/hg17/bed/contig_overlaps/sequence.list \
+	    > allClones.InHg17NotHg18.list
+
     #	how many are the same as previous build:
     comm -12 /cluster/data/hg17/bed/contig_overlaps/placed_in_assembly.list \
 	placed_in_assembly.list > sameAsHg17.list
     wc sameAsHg17.list
     #	26775  26775 300641 sameAsHg17.list
-    #	and unique to hg17, not in hg18:
+    #	There is one clone: AADB01066164.1
+    #	Which is listed in allClones.InHg17NotHg18.list
+    #	But it is on the Hg18 placed_in_assembly.list
+    #	And it is on the Hg17 placed_in_assembly.list but it isn't
+    #	actually found in Hg17 ?  Perhaps it didn't align good enough.
     comm -23 /cluster/data/hg17/bed/contig_overlaps/placed_in_assembly.list \
 	placed_in_assembly.list > uniqueToHg17.list
     wc uniqueToHg17.list
@@ -2213,3 +2309,945 @@ nice featureBits hg17 chainBosTau2Link
     #	make a list of these new contigs:
     #	using the previous perl scripts:
     cp -p /cluster/data/hg17/bed/contig_overlaps/*.pl .
+
+    #	Now, we need to distribute the clone sequence files in a
+    #	directory hierarchy by chrom name.  Using the contigAcc.pl file
+    #	from the previous release:
+    cp /cluster/data/hg17/bed/contig_overlaps/contigAcc.pl .
+    #	This newer version is generalized a bit better to take command
+    #	line arguments for the two files it is to read instead of having
+    #	them explicitly in the code, then:
+    ./contigAcc.pl /cluster/data/hg18/ncbi_build36.agp \
+	/cluster/data/hg18/seq_contig.md > cloneToChrom.list 2>&1
+    #	And now, since most of the clone sequence already exists in the
+    #	Hg17 work directory, we only need to make symlinks to the
+    #	existing ones, and move only the new ones.  The following script
+    #	will find an existing copy and symlink it correctly.
+
+    cat << '_EOF_' > createPlacedHierarchy.sh
+#!/bin/sh
+
+mkdir -p placedClones
+
+sed -e "/^#.*/d" cloneToChrom.list | while read L
+do
+    CHROM=`echo "${L}" | awk '{print $1}'`
+    CLONE=`echo "${L}" | awk '{print $2}'`
+    if [ ! -d "placedClones/${CHROM}" ]; then
+	mkdir placedClones/${CHROM}
+    fi
+    HG17_version="/cluster/data/hg17/bed/contig_overlaps/${CHROM}/${CLONE}"
+    HG18_version_0="/cluster/data/hg18/bed/coverage/newToHg18/${CLONE}"	    
+  HG18_version_1="/cluster/data/hg18/bed/coverage/allClones.newToHg18/${CLONE}"	    
+    if [ -f "${HG17_version}" ]; then
+	if [ -f "${HG18_version_0}" -o -f "${HG18_version_1}" ]; then
+	  echo "ERROR: Why is there both an Hg17 and Hg18 version for ${CLONE}"
+	  exit 255
+	fi
+	ln -s "/cluster/data/hg17/bed/contig_overlaps/${CHROM}/${CLONE}" \
+		"./placedClones/${CHROM}/${CLONE}"
+    else
+	if [ -f "${HG18_version_0}" -a -f "${HG18_version_1}" ]; then
+	    echo "ERROR: Why are there two Hg18 copies for ${CLONE}"
+	    exit 255
+	fi
+	if [ -f "${HG18_version_0}" ]; then
+	    ln -s "${HG18_version_0}" "./placedClones/${CHROM}/${CLONE}"
+	else
+	    if [ -f "${HG18_version_1}" ]; then
+		ln -s "${HG18_version_1}" "./placedClones/${CHROM}/${CLONE}"
+	    else
+		# must be on a different chrom in hg17
+		HG17_chrom=`grep -v "^#" \
+	/cluster/data/hg17/bed/contig_overlaps/disburseEm.list \
+	| grep "^${L}$" | awk '{print $1}'`
+    HG17_version="/cluster/data/hg17/bed/contig_overlaps/${HG17_chrom}/${CLONE}"
+		if [ -f "${HG17_version}" ]; then
+		    echo "ERROR: Why is there no version for ${CLONE}"
+		    exit 255
+		fi
+		ln -s "${HG17_version}" "./placedClones/${CHROM}/${CLONE}"
+	    fi
+	fi
+    fi
+done
+'_EOF_'
+    #	happy emacs
+    chmod +x createPlacedHierarchy.sh
+    ./createPlacedHierarchy.sh
+    #	There should be no errors
+
+    #	We need masked contigs for the psLayout alignments
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/coverage/maskedContigs
+    cd /cluster/data/hg18/bed/coverage/maskedContigs
+    hgsql -N \
+	-e "select chrom,chromStart,chromEnd,contig,size from ctgPos;" hg18 \
+	> ctgPos.txt
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/coverage/maskedContigs
+    #	verify each contig only listed once:
+    awk '{print $4}' ctgPos.txt | sort | uniq -c | sort -n | less
+    #	should all have a count of one
+    #	verify all chrom sizes match the contig sizes:
+    awk '{print $3-$2}' ctgPos.txt > chrSize.list
+    awk '{print $5}' ctgPos.txt > ctgSize.list
+    diff ctgSize.list chrSize.list
+    #	should be no difference
+    #	OK, now fetch the contigs from the twoBit file:
+    
+    cat << '_EOF_' > 2bitToFa.pl
+#!/usr/bin/env perl
+use warnings;
+use strict;
+while (my $line=<>) {
+chomp $line;
+my ($chrom, $start, $end, $contig, $size) = split('\s',$line);
+$chrom =~ s/chr//;
+printf "echo -n 'working $contig ...'; mkdir -p $chrom; twoBitToFa /cluster/data/hg18/hg18.2bit:chr$chrom:$start-$end stdout | sed -e 's/^>.*/>$contig/' > $chrom/$contig.fa; gzip $chrom/$contig.fa; echo 'done'\n";
+}
+'_EOF_'
+    # happy emacs
+    chmod +x 2bitToFa.pl
+    cat ctgPos.txt | ./2bitToFa.pl > 2bitToFa.sh
+    chmod +x 2bitToFa.sh
+    time ./2bitToFa.sh
+
+    #	and create a lift file for these contigs
+    cat << '_EOF_' > mkCtgLift.pl
+#!/usr/bin/env perl
+use warnings;
+use strict;
+while (my $line=<>)
+{
+chomp $line;
+my ($start, $chrCtg, $size, $chrom, $chrLen) = split('\s',$line);
+$chrCtg =~ s#.*/##;
+printf "%s\t%s\t%s\t%s\t%s\n", $start, $chrCtg, $size, $chrom, $chrLen;
+}
+'_EOF_'
+    #	happy emacs
+    chmod +x mkCtgLift.pl
+    cat /cluster/data/hg18/jkStuff/liftAll.lft \
+	| ./mkCtgLift.pl > liftContigs.lft
+
+    #	Create individual ooc files for each contig
+    mkdir ooc
+    for C in `ls */*.fa.gz | sed -e "s/.fa.gz//"`
+    do
+	CONTIG=`basename ${C}`
+	CHR=`dirname ${C}`
+	mkdir -p ooc/${CHR}
+	zcat ${C}.fa.gz | blat -repMatch=256 \
+	    -makeOoc=ooc/${CHR}/${CONTIG}.10.ooc -tileSize=10 \
+	    stdin /dev/null /dev/null
+	echo "done: ${CONTIG}"
+    done
+
+    #	Copy everything to san filesystem for kluster run:
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/coverage
+    cd /san/sanvol1/scratch/hg18/coverage
+    rsync -a --progress --copy-links \
+	/cluster/data/hg18/bed/coverage/placedClones/ ./placedClones/
+    rsync -a --progress --copy-links \
+	/cluster/data/hg18/bed/coverage/maskedContigs/ ./maskedContigs/
+
+    mkdir /san/sanvol1/scratch/hg18/coverage/runPlaced
+    cd /san/sanvol1/scratch/hg18/coverage/runPlaced
+
+    cat << '_EOF_' > runPsLayout.sh
+#!/bin/sh
+#   runPsLayout.sh <chrom> <clone> <contig>
+#     where <chrom> is the chrom this contig is on
+#      <clone> is one of the .fa.gz files in
+#	  /san/sanvol1/scratch/hg18/coverage/placedClones/<chrom>/<clone>.fa.gz
+#      <contig> is one of the contigs found in:
+#	/san/sanvol1/scratch/hg18/coverage/maskedContigs/<chrom>/<contig>.fa.gz
+#
+HERE=`pwd`
+CHROM=$1
+CLONE=$2
+CONTIG=$3
+TARGET=/san/sanvol1/scratch/hg18/coverage/maskedContigs/$CHROM/$CONTIG.fa.gz
+CLONESRC=/san/sanvol1/scratch/hg18/coverage/placedClones/$CHROM/$CLONE.fa.gz
+OOC=/san/sanvol1/scratch/hg18/coverage/maskedContigs/ooc/$CHROM/$CONTIG.10.ooc
+RESULT="${HERE}/psl/${CHROM}/${CONTIG}/${CLONE}.psl"
+mkdir -p psl/${CHROM}/${CONTIG}
+if [ ! -s ${CLONESRC} ]; then
+        echo "Can not find: ${CLONESRC}" 1>/dev/stderr
+        exit 255
+fi
+if [ ! -s ${TARGET} ]; then
+        echo "Can not find: ${TARGET}" 1>/dev/stderr
+        exit 255
+fi
+if [ ! -s ${OOC} ]; then
+        echo "Can not find: ${OOC}" 1>/dev/stderr
+        exit 255
+fi
+WRKDIR="/scratch/tmp/hg18_${CHROM}/${CONTIG}/${CLONE}"
+mkdir -p "${WRKDIR}"
+cd ${WRKDIR}
+zcat ${CLONESRC} > ${CLONE}.fa
+zcat ${TARGET} > ${CONTIG}.fa
+cp -p ${OOC} ./10.ooc
+/cluster/bin/x86_64/psLayout ${CONTIG}.fa ${CLONE}.fa genomic 10.ooc ${RESULT}
+RET=$?
+cd ${HERE}
+rm -fr ${WRKDIR}
+rmdir --ignore-fail-on-non-empty "/scratch/tmp/hg18_${CHROM}/${CONTIG}"
+rmdir --ignore-fail-on-non-empty "/scratch/tmp/hg18_${CHROM}"
+exit ${RET}
+'_EOF_'
+    #	happy emacs
+    chmod +x runPsLayout.sh
+
+    #	create jobList from cloneToChrom.list:
+    grep -v "^#" /cluster/data/hg18/bed/coverage/cloneToChrom.list \
+	| sed -e "s/.fa.gz//" \
+	| awk '{
+printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
+        $1, $2, $3, $1, $3, $2
+}' > masterJobList
+
+    #	To do a quick test, run just chrM:
+    grep " M " masterJobList > jobList
+s
+    para create jobList
+    para try ... check ... etc ...
+
+
+    #	Then, the whole run:
+    rm -fr psl err
+    para create masterJobList
+    para try ... check ... push ... etc ...
+    #	running 2006-01-17  16:41
+
+    #	We need the phase information from the sequence.inf file:
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/coverage
+    cp /cluster/data/hg17/phase.pl .
+    #	this script was fixed up for hg18 to take an argument to the
+    #	sequence.inf file:
+    ./phase.pl /cluster/data/hg18/ncbi/sequence.inf > phase.txt
+    #	what kind of phases do we have:
+    awk '{print $2}' phase.txt | sort | uniq -c
+    #	  1134 D
+    #	562513 F
+    #	 17270 P
+    #	Compared to hg17 we had:
+    awk '{print $2}' /cluster/data/hg17/phase.txt | sort | uniq -c
+    #	  1088 D
+    #	146900 F
+    #	 17300 P
+
+    #	Back in the kluster runPlaced directory, we put together the
+    #	kluster run results with:
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/coverage/runPlaced/filteredLifted
+    cd /san/sanvol1/scratch/hg18/coverage/runPlaced/filteredLifted
+
+    cat << '_EOF_' > filterLift.sh
+#!/bin/sh
+
+for C in 22
+do
+    echo -n "chr${C} working ... "
+    mkdir -p ${C}
+    OUT="${C}/filterLift.out"
+    pslSort dirs ${C}/raw.psl tmp ../psl/${C}/N* > ${OUT} 2>&1
+    pslReps -singleHit -nearTop=0.001 ${C}/raw.psl ${C}/repsSingle.psl \
+        /dev/null >> ${OUT} 2>&1
+    liftUp ${C}/chr${C}.psl ../../maskedContigs/liftContigs.lft warn \
+        ${C}/repsSingle.psl >> ${OUT} 2>&1
+    clusterClone -agp -minCover=80 -maxGap=60000 ${C}/repsSingle.psl \
+        > ${C}/single.agp 2>> ${OUT} 2>&1
+    liftUp ${C}/rawLifted.psl ../../maskedContigs/liftContigs.lft warn \
+        ${C}/raw.psl >> ${OUT} 2>&1
+    clusterClone -agp -minCover=80 -maxGap=60000 ${C}/chr${C}.psl \
+        > ${C}/chr${C}.bed 2>> ${OUT}
+    echo "done"
+done
+'_EOF_'
+    #	happy emacs
+    chmod +x filterLift.sh
+    time ./filterLift.sh
+
+    cp /cluster/data/hg17/fixPhase.pl .
+    #	fixed up the script to take an argument pointing to the phase.txt file
+
+    ssh kkstore02
+    cd /cluster/data/hg18
+    grep "for_assembly" ncbi/sequence.inf \
+	| sed -e "s/\tW\t/\t3\t/;" > sequence.inf
+    cd /cluster/store11/gs.19/ffa
+    ln -s ../build36/sequence.inf .
+
+    ssh hgwdev
+    cd /cluster/data/hg18
+    #	currently working only on chr22
+    echo "22" > clonePos.list
+    #	need to reload gold gap *and* gl at this time.  gl wasn't loaded
+    #	before this.  It is required for the clonePos track.
+    hgGoldGapGl -chrom=chr22 hg18 /cluster/store11/gs.19 build36
+    hgClonePos  -maxErr=3 -maxWarn=2000 -chromLst=clonePos.list \
+        hg18 /cluster/data/hg18 ./sequence.inf /cluster/store11/gs.19 \
+        2> clone.pos.errors
+
+
+    #	OK, now for the hard part.  The unplaced clones.
+    #	First we will make an attempt to determine which clones they
+    #	belong to by using information from the previous build, the
+    #	sequence.inf file, the seq_contig.md file, and the
+    #	ncbi_build36.agp file.
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/coverage
+    comm -13 placed_in_assembly.list allClonesConsidered.list \
+	> unplaced.clone.list
+    comm -12 unplaced.clone.list allClones.InHg17AndHg18.list \
+	> common.to.hg17.unplaced.list
+    comm -23 unplaced.clone.list allClones.InHg17AndHg18.list \
+	> unique.to.hg18.unplaced.list
+ 
+    awk '{print $1,$6}' /cluster/data/hg17/contig_overlaps.agp \
+	| sed -e "s/_[0-9]*$//" | sort -u > hg17.contig.clone.list
+
+    awk '{print $1,$6}' ../../sequence.inf | sed -e "s/(//; s/)//" \
+	> cloneToChrom.from.seq.inf.txt
+
+    #	using the contig to clone information from Hg17, attempt to
+    #	locate the common.to.hg17.unplaced.list in terms of chrom and
+    #	contig.  Along with the ncbi_build36.agp, seq_contig.md and
+    #	cloneToChrom.from.seq.inf.txt infomation, we can attempt to
+    #	place clones that have perhaps moved, or don't have entries in
+    #	one file or another.  The relationships obtained from the
+    #	various files:
+    #   ncbi_build36.agp - gives clone to contig name and clone to chr name
+    #			but for placed clones only, not useful here
+    #			unless they moved from hg17 (try this with the
+    #			placed list)
+    #   seq_contig.md - gives contig to chrom relationship
+
+    ./chrCloneContig.pl /cluster/data/hg18/ncbi_build36.agp \
+	hg17.contig.clone.list /cluster/data/hg18/seq_contig.md \
+	    common.to.hg17.unplaced.list cloneToChrom.from.seq.inf.txt \
+		> chrCloneContigCommonToHg17.list \
+		    2> common.to.hg17.unplaced.stderr
+
+    #	With this chrCloneContigCommonToHg17.list list in hand, can now
+    #	create a hierarchy of ./unPlacedClones/
+    ./createUnplacedHierarchy.sh
+
+    #	Then, copy them to the san for kluster run
+    ssh pk
+    cd /san/sanvol1/scratch/hg18/coverage
+    rsync -a --progress --copy-links \
+	/cluster/data/hg18/bed/coverage/unPlacedClones/ ./unPlacedClones/
+
+
+    mkdir runUnPlaced
+    cd runUnPlaced
+    #	create jobList from the chrCloneContigCommonToHg17.list
+    egrep -v "^#|XX_000" \
+	/cluster/data/hg18/bed/coverage/chrCloneContigCommonToHg17.list \
+	| sed -e "s/.fa.gz//" \
+	| awk '{
+printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
+        $1, $2, $3, $1, $3, $2
+}' > masterJobList
+
+    #	Test a subset:
+    grep " Y " masterJobList > jobListY
+
+    para create jobListY
+    para try ... check ... etc ...
+
+###########################################################################
+# FISH CLONES (WORKING - 2006-01-13 - Hiram)
+# The STS Marker, Coverage, and BAC End Pairs tracks must be completed prior to 
+# creating this track  (and why is this ?)
+
+    ssh kkstore01
+    mkdir /cluster/data/ncbi/fishClones/fishClones.2006-01/
+    cd /cluster/data/ncbi/fishClones/fishClones.2006-01/
+
+# Download information from NCBI
+        # point browser at:
+#   http://www.ncbi.nlm.nih.gov/genome/cyto/cytobac.cgi?CHR=all&VERBOSE=ctg
+        # change "Show details on sequence-tag" to "yes"
+        # change "Download or Display" to "Download table for UNIX"
+        # press Submit - save as
+# /cluster/data/ncbi/fishClones/fishClones.2006-01/hbrc.txt
+    chmod 664 /cluster/data/ncbi/fishClones/fishClones.2006-01/hbrc.txt
+
+# Get current clone/accession information
+    wget --timestamping http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
+
+# Create initial Fish Clones bed file
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/fishClones
+    cd /cluster/data/hg18/bed/fishClones
+
+# Copy previous sts info from fhcrc (take from previous build in future)
+    cp -p /cluster/data/ncbi/fishClones/fishClones.2004-07/fhcrc.sts .
+
+XXXX - looking for backends business - 2006-01-20 - Hiram
+    fishClones -verbose=1 -fhcrc=fhcrc.sts -noBin hg18 \
+	/cluster/data/ncbi/fishClones/fishClones.2006-01/hbrc.txt \
+	/cluster/data/ncbi/fishClones/fishClones.2006-01/clac.out \
+         /cluster/data/ncbi/bacends/human/bacends.4/cl_acc_gi_len \
+         /cluster/data/hg17/bed/bacends/lifted/bacEnds.lifted.psl \
+            fishClones_initial
+	     
+###########################################################################
+# CHROMOSOME BANDS TRACK (WORKING - 2006-01-20 - Hiram)
+# This must wait until the Fish Clones tracks is done
+    ssh kolossus
+    mkdir /cluster/data/hg18/bed/cytoband
+    cd /cluster/data/hg18/bed/cytoband
+
+# Copy in some necessary files (usually from previous version)
+    cp -p /cluster/data/hg17/bed/cytoband/pctSetBands.txt .
+    cp -p /cluster/data/hg17/bed/cytoband/ISCN800.txt .
+
+# Create some preliminary information files
+    /cluster/bin/scripts/createSetBands pctSetBands.txt \
+	/cluster/data/hg18/inserts /cluster/data/hg18  100 > setBands.txt
+    /cluster/bin/scripts/makeBands ISCN800.txt \
+        /cluster/data/hg18 > cytobands.pct.bed
+    /cluster/bin/scripts/makeBandRanges cytobands.pct.bed \
+        > cytobands.pct.ranges
+XXXX - how do we get this fishClones file ? - 2006-01-20
+# Reformat fishClones file
+    /cluster/bin/scripts/createBanderMarkers \
+	/cluster/data/hg18/bed/fishClones/fishClones.bed > fishClones.txt
+
+# Create bed file
+    ssh eieio
+    cd /cluster/data/hg18/bed/cytoband.kate
+    /cluster/bin/scripts/runBander fishClones.txt \
+	ISCN800.txt setBands.txt /cluster/data/hg18
+    # NOTE: fails on kolossus (C++ compiler different ??)
+
+    # Should be 862 bands
+    wc  -l cytobands.bed
+    # 862    cytobands.bed
+
+###########################################################################
+#  BLASTZ SELF (DONE - 2006-01-17 - 2006-01-20 - Hiram)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzSelf.2006-01-17
+    cd /cluster/data/hg18/bed/blastzSelf.2006-01-17
+
+    cat << '_EOF_' > DEF
+# human vs human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_M=400
+
+# TARGET: Human Hg18
+SEQ1_DIR=/san/sanvol1/scratch/hg18/selfNib
+SEQ1_LEN=/san/sanvol1/scratch/hg18/self.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_IN_CONTIGS=0
+
+# QUERY: Human Hg18
+SEQ2_DIR=/san/sanvol1/scratch/hg18/selfNib
+SEQ2_LEN=/san/sanvol1/scratch/hg18/self.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_IN_CONTIGS=0
+
+BASE=/cluster/data/hg18/bed/blastzSelf.2006-01-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    cd /cluster/data/hg18/bed/blastzSelf.2006-01-17
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	real    640m37.637s
+
+    ssh kolossus
+    cd /cluster/data/hg18/bed/blastzSelf.2006-01-17
+    time HGDB_CONF=~/.hg.conf.read-only featureBits \
+	-noRandom -noHap hg18 chainSelfLink > fb.chainSelfLink 2>&1 &
+    #	real    21m52.697s
+    #	324067552 bases of 2858034764 (11.339%) in intersection
+
+    #	compared to Hg17:
+    cd /cluster/data/hg17/bed/blastzSelf.2004-07-01
+    time HGDB_CONF=~/.hg.conf.read-only featureBits \
+	-noRandom -noHap hg17 chainSelfLink > fb.chainSelfLink 2>&1 &
+    #	real    56m34.802s
+    #	240976607 bases of 2851352871 (8.451%) in intersection
+
+    #	reloaded these chains to add normalized score column
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastzSelf.2006-01-17/axtChain
+    chainSplit chain hg18.hg18.all.chain.gz
+    cd /cluster/data/hg18/bed/blastzSelf.2006-01-17/axtChain/chain
+    foreach f (*.chain)
+	set c = $f:r
+	hgLoadChain -normScore hg18 ${c}_chainSelf $f
+    end
+    cd ..
+    rm -fr chain
+
+##############################################################################
+# CLONE ENDS - BACEND TRACK (DONE - 2006-01-11 - Fan)
+
+    ssh kkstore02
+    cd /cluster/data/hg18
+    # check disk space: 73Gb free
+    df -h .
+# Filesystem            Size  Used Avail Use% Mounted on
+# /export/cluster/store11
+                      1.8T  1.4T  323G  82% /cluster/store11
+
+    mkdir -p bed/cloneend/ncbi
+    cd bed/cloneend/ncbi
+
+    wget --timestamping ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/homo_sapiens/*
+
+# Somehow the wget did not work.  Did it by hand. 
+
+    cd /cluster/data/hg18/bed/cloneend
+    # seems like the *.mfa files were split just for convenience
+    # concatenate
+    
+    bash
+    for F in ncbi/*.mfa.gz
+    do
+	zcat ${F}
+    done | gzip > all.mfa.gz
+
+    exit
+
+    # Convert the title line of the all.mfa file
+    cat << '_EOF_' > convert.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+while (my $line = <>) {
+    if ($line !~ m/^>/) {
+	print $line
+    } else {
+        my @fields = split('\|', $line);
+	my $fieldCount = scalar(@fields);
+        my $printed = 0;
+        for (my $i = 0; $i < $fieldCount; $i++) {
+                if ($fields[$i] eq "gb" || $fields[$i] eq "dbj" || $fields[$i] eq "emb") {
+                        (my $name, my $vers) = split(/\./,$fields[$i+1]);
+                        print ">$name\n";
+                        $i= $fieldCount;
+                        $printed = 1;
+                }
+        }
+        if (!$printed) {
+                die("Failed for $line\n");
+        }
+    }
+}
+'_EOF_'
+    # < happy emacs
+    chmod +x convert.pl
+    zcat all.mfa | ./convert.pl | gzip > cloneEnds.fa.gz
+
+    #	make sure nothing got broken:
+    faSize all.mfa.gz
+# 400704107 bases (5941742 N's 394762365 real 255711893 upper 139050472 lower) in 832860 sequences in 1 files
+    faSize cloneEnds.fa.gz
+# 400704107 bases (5941742 N's 394762365 real 255711893 upper 139050472 lower) in 832860 sequences in 1 files
+    #	identical numbers
+
+    # concatenate the text files, too
+    bash
+    for F in ncbi/*.txt.gz
+    do
+	zcat ${F}
+    done | gzip > all.txt.gz
+
+    # generate cloneEndPairs.txt and cloneEndSingles.txt
+    cp -p /cluster/data/mm6/bed/cloneend/ncbi/convertTxt.pl .
+    zcat all.txt.gz >all.txt
+    ./convertTxt.pl all.txt
+
+
+    # Reading in end info
+    # Writing out pair info
+    # Writing out singleton info
+    # 249619 pairs and 318500 singles
+    
+    #	faSplit does not function correctly if given a .gz source file
+    #	AND, we need the unzipped file for sequence loading below
+    gunzip cloneEnds.fa.gz
+    # split
+    mkdir splitdir
+    cd splitdir
+    faSplit sequence ../cloneEnds.fa 100 cloneEnds
+    #	Check to ensure no breakage:
+    cat *.fa | faSize stdin
+# 400704107 bases (5941742 N's 394762365 real 255711893 upper 139050472 lower) in 832860 sequences in 1 files
+    #	same numbers as before
+
+    #	Copy to san for cluster runs
+    ssh pk
+    cd /cluster/data/hg18/bed/cloneend/splitdir
+    mkdir /san/sanvol1/scratch/hg18/cloneEnds
+    cp -p *.fa /san/sanvol1/scratch/hg18/cloneEnds
+    rm *
+    cd ..
+    rmdir splitdir
+
+    # load sequences
+    ssh hgwdev
+    mkdir /gbdb/hg18/cloneend
+    cd /gbdb/hg18/cloneend
+      ln -s /cluster/data/hg18/bed/cloneend/cloneEnds.fa .
+    cd /tmp
+    hgLoadSeq hg18 /gbdb/hg18/cloneend/cloneEnds.fa
+    #  Advisory lock created
+    # Creating .tab file
+    # Adding /gbdb/hg18/cloneend/cloneEnds.fa
+    # 832860 sequences
+    # Updating seq table
+    # Advisory lock has been released
+    # All done
+
+############################################################################
+# BACEND SEQUENCE ALIGNMENTS (STARTED - 2006-01-11, DONE 2006-01-18 - Fan)
+    ssh kkstore02
+    mkdir /cluster/data/hg18/noMask
+    cd /cluster/data/hg18/
+    #	Need an unmasked sequence for this work
+    bash
+    for CHR in ?/chr?.fa ??/chr??.fa ?/chr?_random.fa ??/chr??_random.fa *hap*/chr*.fa
+    do
+	C=`basename ${CHR}`
+	echo -n "working ${C} ... "
+	head -1 ${CHR} > noMask/${C}
+	tail +2 ${CHR} | tr [:lower:] [:upper:] >> noMask/${C}
+	echo "done"
+    done
+    mkdir ooc
+    ls noMask/chr*.fa > fa.list
+
+    #	The ooc file was created earlier into /cluster/bluearc/hg18/11.ooc
+    cp -p /cluster/bluearc/hg18/11.ooc  /san/sanvol1/scratch/hg18/11.ooc
+
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/noMask
+    cd /san/sanvol1/scratch/hg18/noMask
+    bash
+    time cp --verbose -p /cluster/data/hg18/noMask/chr*.fa .
+    
+    # allow blat to run politely in /tmp while it writes output, then
+    # copy results to results file:
+
+    mkdir /cluster/data/hg18/bed/bacends
+    cd    /cluster/data/hg18/bed/bacends
+
+    cat << '_EOF_' > runBlat.sh
+#!/bin/sh
+path1=$1
+path2=$2
+root1=$3
+root2=$4
+result=$5
+rm -fr /tmp/${root1}_${root2}
+mkdir /tmp/${root1}_${root2}
+pushd /tmp/${root1}_${root2}
+/cluster/bin/x86_64/blat ${path1} ${path2} \
+	-ooc=/san/sanvol1/scratch/hg18/11.ooc ${root1}.${root2}.psl
+popd
+rm -f ${result}
+mv /tmp/${root1}_${root2}/${root1}.${root2}.psl ${result}
+rm -fr /tmp/${root1}_${root2}
+'_EOF_'
+    # << emacs happy
+    chmod +x runBlat.sh
+
+    cat << '_EOF_' > template
+#LOOP
+./runBlat.sh {check in exists $(path1)} {check in exists $(path2)} $(root1) $(root2) {check out line+ bacEnds.out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << emacs happy
+
+    ls -1S /san/sanvol1/scratch/hg18/cloneEnds/cloneEnds???.fa > bacEnds.lst
+    mkdir bacEnds.out
+    #	create results directories for each to avoid the all result files in
+    #	one directory problem
+    foreach f (`cat bacEnds.lst`)
+	set b = $f:t:r
+	echo $b
+	mkdir bacEnds.out/$b
+    end
+
+    ls -1S /san/sanvol1/scratch/hg18/noMask/chr*.fa > contig.lst
+    gensub2 contig.lst bacEnds.lst template jobList
+    para create jobList
+# 4802 jobs in batch
+    para try, check, push, etc ...
+
+# There was some problem with many jobs that files not accessible.  Did chmod +x on 
+# /san/sanvol1/scratch/hg18/noMask/chr*.fa and this seems to fix the problem.
+
+# Per conversation with Kate and Hiram during code review, they think the 
+# above, as suggested by Patrick (if Fan remembered correctly) is a myth.
+
+# Completed: 4802 of 4802 jobs
+# CPU time in finished jobs:     515910s    8598.50m   143.31h    5.97d  0.016 y
+# IO & Wait Time:                 35141s     585.68m     9.76h    0.41d  0.001 y
+# Average job time:                 115s       1.91m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1185s      19.75m     0.33h    0.01d
+# Submission to last job:          2304s      38.40m     0.64h    0.03d
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/bacends
+    screen
+
+    mv temp temp_old
+    mv split split_old
+
+    mkdir temp
+    bash
+    time pslSort dirs raw.psl temp bacEnds.out/* > pslSort.out 2>&1 &
+# real    8m33.346s
+# user    4m58.200s
+# sys     0m33.400s
+
+    time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons \
+	raw.psl bacEnds.psl /dev/null > pslReps.out 2>&1 &
+
+    cp -p /cluster/data/mm7/bed/bacends/split.pl .
+    cp -p /cluster/data/mm7/bed/bacends/header .
+
+# Commented out line 23 in split.pl to avoid generating extra header in split/...0.psl.
+#print OUT $header;
+
+    time ./split.pl header < bacEnds.psl
+
+    cp -p bacEnds.psl bacEnds.psl.save
+    time pslSort dirs bacEnds.psl temp split
+
+    #	~ 1.5 minutes
+
+    # Copy files to final destination and remove
+    mkdir /cluster/data/hg18/bacends
+    cp -p bacEnds.psl /cluster/data/hg18/bacends
+
+############################################################################
+# BACEND PAIRS TRACK (DONE - 2006-01-18 - Fan)
+
+    ssh kolossus
+    cd /cluster/data/hg18/bacends
+    bash
+
+time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
+-max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+-mismatch -verbose bacEnds.psl \
+../bed/cloneend/cloneEndPairs.txt all_bacends bacEnds
+
+    # create header required by "rdb" tools
+echo -e \
+"chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes" > header
+echo -e "10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10" >> header
+
+cat header bacEnds.pairs | \
+/cluster/bin/scripts/row score ge 300 | \
+/cluster/bin/scripts/sorttbl chr start | \
+/cluster/bin/scripts/headchg -del > bacEndPairs.bed
+
+cat header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+bacEnds.orphan | /cluster/bin/scripts/row score ge 300 | \
+/cluster/bin/scripts/sorttbl chr start | \
+/cluster/bin/scripts/headchg -del > bacEndPairsBad.bed
+
+/cluster/bin/scripts/extractPslLoad -noBin bacEnds.psl bacEndPairs.bed \
+bacEndPairsBad.bed >j1.out
+cat j1.out| /cluster/bin/scripts/sorttbl tname tstart >j2.out
+cat j2.out | /cluster/bin/scripts/headchg -del > bacEnds.load.psl
+
+rm j1.out j2.out
+
+    #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
+    awk '{print $5}' bacEndPairs.bed | sort -u
+    #	result should be the scores, no extraneous strings:
+#	1000
+#	300
+#	375
+#	500
+#	750
+    #	edit the file and fix it if it has a bad name.
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/hg18/bacends
+    hgLoadBed -strict -notItemRgb hg18 bacEndPairs bacEndPairs.bed \
+	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    # Loaded 146284 elements of size 11
+
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed -strict -notItemRgb hg18 bacEndPairsBad bacEndPairsBad.bed \
+	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    # Loaded 75995 elements of size 11
+
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl hg18 -table=all_bacends bacEnds.load.psl
+
+    nice featureBits hg18 all_bacends
+# 162081172 bases of 2881515245 (5.625%) in intersection
+    nice featureBits hg17 all_bacends
+# 225763317 bases of 2866216770 (7.877%) in intersection
+
+    nice featureBits hg18 bacEndPairs
+# 2835522069 bases of 2881515245 (98.404%) in intersection
+    nice featureBits hg17 bacEndPairs
+# 2846568377 bases of 2866216770 (99.314%) in intersection
+
+    nice featureBits hg18 bacEndPairsBad
+# 781697678 bases of 2881515245 (27.128%) in intersection
+    nice featureBits hg17 bacEndPairsBad
+# 797412909 bases of 2866216770 (27.821%) in intersection
+
+##########################################################################
+# BLASTZ OPOSSUM monDom2 (STARTED - 2006-01-23 - Hiram)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+
+    cat << '_EOF_' > DEF
+# human vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human (hg18)
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom2
+SEQ2_DIR=/san/sanvol1/scratch/monDom2/monDom2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/monDom2/chrom.sizes
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	real    912m22.818s
+
+    #	This failed during the load of the chains due to the size of
+    #	chr19.chain.  So, go to kolossus:
+    ssh kolossus
+    #	There isn't any hg18 db here yet, get it established with a
+    #	chromInfo and a 2bit sequence:
+    hgsql -e "create database hg18;" mysql
+    cd /cluster/data/hg18
+    twoBitInfo hg18.2bit stdout |
+        awk '{printf "%s\t%s\t/gbdb/hg18/hg18.2bit\n", $1,$2}' \
+		> chromInfo.kolossus.tab
+    hgsql hg18 < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgsql hg18 \
+-e 'load data local infile "chromInfo.kolossus.tab" into table chromInfo;'
+    mkdir /gbdb/hg18
+    ln -s /cluster/data/hg18/hg18.2bit /gbdb/hg18/hg18.2bit
+    #	now, loading only chr19:
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-01-23/axtChain
+    hgLoadChain hg18 chr19_chainMonDom2 chain/chr19.chain
+    #	while that is running, back on hgwdev, get the other chains loaded
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-01-23/axtChain
+    cp loadUp.csh loadUp.noChr19.csh
+    #	change the foreach line to eliminate the chr19.chain:
+    diff loadUp.csh loadUp.noChr19.csh
+    < foreach f (*.chain)
+    ---
+    > foreach f (`ls *.chain | grep -v chr19.chain`)
+    #	And then run that script
+    time ./loadUp.noChr19.csh > load.noChr19.out 2>&1
+    
+    #	When the kolossus load finishes, email to push-request and ask
+    #	for the two tables to be pushed from kolossus to hgwdev:
+    #	chr19_chainMonDom2
+    #	chr19_chainMonDom2Link
+
+    #	then, continuing:
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=download -bigClusterHub=pk -chainMinScore=5000 \
+	-chainLinearGap=loose `pwd`/DEF > download.out 2>&1 &
+
+# STS MARKERS (STARTED 2006-01-27 Fan)
+
+   # update from NCBI 
+    ssh kkstore02
+    # use store11 for space
+    mkdir -p /cluster/store11/sts.2006-01
+    ln -s /cluster/store11/sts.2006-01 /cluster/data/ncbi
+    ln -s /cluster/data/ncbi/sts.2006-01 sts.10
+    cd /cluster/data/ncbi/sts.2006-01
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.sts
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
+# old
+#    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.sts
+#    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/dbSTS/dbSTS.aliases
+    wget --timestamping ftp://ftp.ncbi.nih.gov/blast/db/FASTA/sts.gz
+    gunzip sts.gz
+    mv sts dbSTS.fa
+
+    cp -p /cluster/data/ncbi/sts.9/all.STS.fa.prev .
+    cp -p /cluster/data/ncbi/sts.9/stsInfo2.bed.prev .
+
+    # Convert dbSTS.fa file to easier reading format, and get accessions
+    /cluster/bin/scripts/convertGbFaFile dbSTS.fa > UniSTS.convert.fa
+    grep ">" UniSTS.convert.fa | cut -f 2 -d ">" > UniSTS.acc
+
+    # NOTE: updateStsInfo creates new stsInfo2.bed, all.primers, 
+    #   all.STS.fa, stsAlias.bed files 
+    updateStsInfo -verbose=1 -gb=UniSTS.acc stsInfo2.bed.prev all.STS.fa.prev \
+    UniSTS.sts UniSTS.aliases UniSTS.convert.fa new
+
+# Reading current stsInfo file
+# Reading genbank accession file
+# Reading current dbSTS.sts file
+# Segmentation fault
+
+# updateStsInfo blew up while reading UniSTS.aliases.
+# It seems that the program is having problem in readDbstsNames() at:
+
+        /* Determine if all of the names are recorded */
+--->        if (s->si->dbSTSid == dbstsId)
+            s->dbstsIdExists = TRUE;
+

@@ -17,7 +17,9 @@ errAbort(
   "   knownToVisiGene database\n"
   "options:\n"
   "   -table=XXX - give another name to table other than knownToVisiGene\n"
-  "   -visiDb=XXX - used a VisiGene database other than 'visiGene'\n"
+  "   -visiDb=XXX - use a VisiGene database other than 'visiGene'\n"
+  "   -fromProbePsl=XXX - use a probe track psl table for mapping,\n"
+  "      e.g. vgImageProbes for human.\n"
   );
   /*
   "options:\n"
@@ -27,10 +29,12 @@ errAbort(
 
 char *outTable = "knownToVisiGene";
 char *visiDb = "visiGene";
+char *fromProbePsl = NULL;
 
 static struct optionSpec options[] = {
    {"table", OPTION_STRING},
    {"visiDb", OPTION_STRING},
+   {"fromProbePsl", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -79,9 +83,27 @@ void foldIntoHash(struct sqlConnection *conn, char *table, char *keyField, char 
 /* Add key/value pairs from table into hash */
 {
 struct sqlResult *sr;
-char query[256];
+char query[512];
 char **row;
-safef(query, sizeof(query), "select %s,%s from %s", keyField, valField, table);
+if (fromProbePsl)
+    {
+    /* TODO 2006-01-25 Jim is concerned about alternate splicing, wants to us hgMapToGene
+       or something similar in future that matches exact exon structure in kg.
+       Earlier when I tried it, I found that adding -intronsToo made it pickup up more 
+       probes.  But then it made it so similar to simple overlap query (like only 27 recs dif)
+       that I chose to use just the query.  But for future we will need to handle exons better.
+    */
+    safef(query, sizeof(query), 
+	"select distinct kg.%s,ip.%s from %s ip, knownGene kg"
+	" where kg.chrom = ip.tName"
+	"   and kg.strand = ip.strand"
+	"   and ((kg.txStart < ip.tEnd) and (ip.tStart < kg.txEnd))"
+	, keyField, valField, table);
+    }
+else
+    {
+    safef(query, sizeof(query), "select %s,%s from %s", keyField, valField, table);
+    }
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -104,15 +126,23 @@ int bestImage(char *kgId, struct hash *kgToHash, struct hash *imageHash)
 /* Return best image id if possible, otherwise 0 */
 {
 struct hashEl *extId = hashLookup(kgToHash, kgId);
+int best = 0;
+float bestPri = 1000000.0;
 
 while (extId != NULL)
     {
     struct prioritizedImage *pi = hashFindVal(imageHash, extId->val);
     if (pi != NULL)
-	return pi->imageId;
+	{
+	if (bestPri > pi->priority)
+	    {
+	    bestPri = pi->priority;
+	    best = pi->imageId;
+	    }
+	}
     extId = hashLookupNext(extId);
     }
-return 0;
+return best;
 }
 
 void knownToVisiGene(char *database)
@@ -129,16 +159,18 @@ struct hash *geneImageHash = newHash(18);
 struct hash *locusLinkImageHash = newHash(18);
 struct hash *refSeqImageHash = newHash(18);
 struct hash *genbankImageHash = newHash(18);
+struct hash *probeImageHash = newHash(18);
 struct hash *knownToLocusLinkHash = newHash(18);
 struct hash *knownToRefSeqHash = newHash(18);
 struct hash *knownToGeneHash = newHash(18);
 struct hash *favorHugoHash = newHash(18);
+struct hash *knownToProbeHash = newHash(18);
 struct slName *knownList = NULL, *known;
 struct hash *dupeHash = newHash(17);
 
 /* Go through and make up hashes of images keyed by various fields. */
 sr = sqlGetResult(iConn,
-        "select image.id,imageFile.priority,gene.name,gene.locusLink,gene.refSeq,gene.genbank,submissionSet.privateUser "
+        "select image.id,imageFile.priority,gene.name,gene.locusLink,gene.refSeq,gene.genbank,probe.id,submissionSet.privateUser "
 	"from image,imageFile,imageProbe,probe,gene,submissionSet "
 	"where image.imageFile = imageFile.id "
 	"and image.id = imageProbe.image "
@@ -150,16 +182,28 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     int id = sqlUnsigned(row[0]);
     float priority = atof(row[1]);
-    int privateUser = sqlSigned(row[6]);
+    int privateUser = sqlSigned(row[7]);
     if (privateUser == 0)
 	{
-	addPrioritizedImage(geneImageHash, id, priority, row[2]);
-	addPrioritizedImage(locusLinkImageHash, id, priority, row[3]);
-	addPrioritizedImage(refSeqImageHash, id, priority, row[4]);
-	addPrioritizedImage(genbankImageHash, id, priority, row[5]);
+	if (fromProbePsl)
+	    {
+	    char vgPrb_Id[256];
+	    safef(vgPrb_Id, sizeof(vgPrb_Id), "vgPrb_%s",row[6]);
+	    addPrioritizedImage(probeImageHash, id, priority, vgPrb_Id);
+	    }
+	else
+	    {
+	    addPrioritizedImage(geneImageHash, id, priority, row[2]);
+	    addPrioritizedImage(locusLinkImageHash, id, priority, row[3]);
+	    addPrioritizedImage(refSeqImageHash, id, priority, row[4]);
+	    addPrioritizedImage(genbankImageHash, id, priority, row[5]);
+	    }
 	}
     }
-verbose(2, "Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSeqImageHash %d, genbankImageHash %d\n", geneImageHash->elCount, locusLinkImageHash->elCount, refSeqImageHash->elCount, genbankImageHash->elCount);
+verbose(2, "Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSeqImageHash %d"
+           ", genbankImageHash %d probeImageHash %d\n", 
+            geneImageHash->elCount, locusLinkImageHash->elCount, refSeqImageHash->elCount, 
+	    genbankImageHash->elCount, probeImageHash->elCount);
 sqlFreeResult(&sr);
 
 /* Build up list of known genes. */
@@ -178,34 +222,50 @@ slReverse(&knownList);
 sqlFreeResult(&sr);
 
 /* Build up hashes from knownGene to other things. */
-foldIntoHash(hConn, "knownToLocusLink", "name", "value", knownToLocusLinkHash, NULL, FALSE);
-foldIntoHash(hConn, "knownToRefSeq", "name", "value", knownToRefSeqHash, NULL, FALSE);
-foldIntoHash(hConn, "kgXref", "kgID", "geneSymbol", knownToGeneHash, favorHugoHash, FALSE);
-foldIntoHash(hConn, "kgAlias", "kgID", "alias", knownToGeneHash, favorHugoHash, TRUE);
-foldIntoHash(hConn, "kgProtAlias", "kgID", "alias", knownToGeneHash, favorHugoHash, TRUE);
-verbose(2, "knownToLocusLink %d, knownToRefSeq %d, knownToGene %d\n", knownToLocusLinkHash->elCount, knownToRefSeqHash->elCount, knownToGeneHash->elCount);
+if (fromProbePsl)
+    {
+    foldIntoHash(hConn, fromProbePsl, "name", "qName", knownToProbeHash, NULL, FALSE);
+    }
+else
+    {
+    foldIntoHash(hConn, "knownToLocusLink", "name", "value", knownToLocusLinkHash, NULL, FALSE);
+    foldIntoHash(hConn, "knownToRefSeq", "name", "value", knownToRefSeqHash, NULL, FALSE);
+    foldIntoHash(hConn, "kgXref", "kgID", "geneSymbol", knownToGeneHash, favorHugoHash, FALSE);
+    foldIntoHash(hConn, "kgAlias", "kgID", "alias", knownToGeneHash, favorHugoHash, TRUE);
+    foldIntoHash(hConn, "kgProtAlias", "kgID", "alias", knownToGeneHash, favorHugoHash, TRUE);
+    }
+verbose(2, "knownToLocusLink %d, knownToRefSeq %d, knownToGene %d knownToProbe %d\n", 
+   knownToLocusLinkHash->elCount, knownToRefSeqHash->elCount, knownToGeneHash->elCount,
+   knownToProbeHash->elCount);
 
 /* Try and find an image for each gene. */
 for (known = knownList; known != NULL; known = known->next)
     {
     char *name = known->name;
     int imageId = 0;
-
-    imageId = bestImage(name, knownToLocusLinkHash, locusLinkImageHash);
-    if (imageId == 0)
-        imageId = bestImage(name, knownToRefSeqHash, refSeqImageHash);
-    if (imageId == 0)
+    if (fromProbePsl)
 	{
-	struct prioritizedImage *pi = hashFindVal(genbankImageHash, name);
-	if (pi != NULL)
-	    imageId = pi->imageId;
+	imageId = bestImage(name, knownToProbeHash, probeImageHash);
 	}
-    if (imageId == 0)
-        imageId = bestImage(name, knownToGeneHash, geneImageHash);
+    else
+	{
+	imageId = bestImage(name, knownToLocusLinkHash, locusLinkImageHash);
+	if (imageId == 0)
+	    imageId = bestImage(name, knownToRefSeqHash, refSeqImageHash);
+	if (imageId == 0)
+	    {
+	    struct prioritizedImage *pi = hashFindVal(genbankImageHash, name);
+	    if (pi != NULL)
+		imageId = pi->imageId;
+	    }
+	if (imageId == 0)
+	    imageId = bestImage(name, knownToGeneHash, geneImageHash);
+	}	    
     if (imageId != 0)
         {
 	fprintf(f, "%s\t%d\n", name, imageId);
 	}
+	
     }
 
 createTable(hConn, outTable);
@@ -219,6 +279,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 outTable = optionVal("table", outTable);
 visiDb = optionVal("visiDb", visiDb);
+fromProbePsl = optionVal("fromProbePsl", fromProbePsl);
 if (argc != 2)
     usage();
 knownToVisiGene(argv[1]);

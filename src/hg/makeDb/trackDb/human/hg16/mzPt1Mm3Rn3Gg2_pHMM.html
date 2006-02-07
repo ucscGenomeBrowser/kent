@@ -1,39 +1,48 @@
 <H2>Description</H2> 
 <P>
-This track shows a measure of evolutionary conservation in human, chimp, mouse, 
+This track shows a measure of evolutionary conservation in $organism, chimp, mouse, 
 rat, and chicken based on a phylogenetic hidden Markov model (phylo-HMM).
-The multiz alignments of the human Jul. 2003 (hg16), chimpanzee Nov. 2003 
-(panTro1), mouse Feb. 2003 (mm3), rat Jun. 2003 (rn3), and chicken Feb. 2004 
-(galGal2) assemblies were used to generate the annotation.</P>
+The following multiz alignments were used to generate the annotation:
+<UL>
+<LI>$organism $date ($db)
+<LI>chimpanzee Nov. 2003 (panTro1)
+<LI>mouse Feb. 2003 (mm3)
+<LI>rat Jun. 2003 (rn3)
+<LI>chicken Feb. 2004 (galGal2) 
+</UL></P>
 <P>
 In &quot;full&quot; visibility mode, this track displays pairwise alignments 
-of chimp, mouse, rat, and chicken, each aligned to the human genome. The pairwise 
+of chimp, mouse, rat, and chicken, each aligned to the $organism genome. The 
+pairwise 
 alignments are displayed in the standard UCSC browser &quot;dense&quot; mode 
 using a greyscale 
 density gradient.  The checkboxes in the track configuration section allow
 the exclusion of species from the pairwise display; however, this does not
 remove them from the conservation score display.  </P>
 <P>
-When zoomed-in to the base display level, the track shows the base 
-composition of each alignment. The numbers and symbols on the &quot;human 
-gap&quot; line indicate the lengths of gaps in the human sequence at those
-alignment positions. If the gap size is greater than 9, the &quot;+&quot; 
-symbol is displayed. To view detailed information about the 
-alignments at a specific position, zoom the display in to 30,000 or fewer bases, 
-then click on the alignment.  </P>
+When zoomed-in to the base-display level, the track shows the base 
+composition of each alignment. The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $organism sequence at those 
+alignment positions relative to the longest non-$organism sequence. If the gap 
+size is greater than 9, a non-numeric symbol is shown: a &quot;*&quot if the 
+gap size is a multiple of 3; otherwise &quot;+&quot;. 
+To view detailed information about the alignments at a specific position,
+zoom in the display to 30,000 or fewer bases, then click on the alignment.</P>
 <P>
-This track may be configured in a variety of ways to highlight different aspects 
-of the displayed information. Click the &quot;Graph configuration help&quot; link
-for an explanation of the configuration options.</P>
+This track may be configured in a variety of ways to highlight different aspects
+of the displayed information. Click the &quot;Graph configuration help&quot; 
+link for an explanation of the configuration options.</P>
 
 <H2>Methods</H2>
 <P> 
-Best-in-genome blastz pairwise alignments of human-mouse and
-human-rat were multiply aligned using a program called humor
+Best-in-genome blastz pairwise alignments of $organism-mouse and
+$organism-rat were multiply aligned using a program called humor
 (HUman-MOuse-Rat), which is a special variant of the <em>Multiz</em>
 program.  Multiz was used first to align the humor results with
-reciprocal best human-chimp alignments, and then to align the human-chimp-mouse-rat multiple alignment with best-in-genome blastz human-chicken alignments.  The resulting
-human-chimp-mouse-rat-chicken multiple alignments were then assigned 
+reciprocal best $organism-chimp alignments, and then to align the 
+$organism-chimp-mouse-rat multiple alignment with best-in-genome blastz 
+$organism-chicken alignments.  The resulting
+$organism-chimp-mouse-rat-chicken multiple alignments were then assigned 
 conservation scores by phylo-HMM.</P>
 <P>
 A phylo-HMM is a probabilistic model that describes both the process

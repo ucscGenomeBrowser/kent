@@ -11,6 +11,7 @@
 #define SPECIES_HTML_TARGET	"sT"
 #define SPECIES_CODON_DEFAULT	"speciesCodonDefault"
 #define PAIRWISE_VAR            "pairwise"
+#define PAIRWISE_HEIGHT         "pairwiseHeight"
 #define SUMMARY_VAR             "summary"
 #define BASE_COLORS_VAR         "baseColors"
 #define BASE_COLORS_OFFSET_VAR  "baseColorsOffset"

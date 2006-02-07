@@ -5,12 +5,13 @@
 
 #Polymorphism data from dbSnp rs_fasta files
 CREATE TABLE snpFasta (
-    rsId varchar(255) not null,	# Reference SNP identifier
+    rsId varchar(255) not null,		# Reference SNP identifier
+    chrom varchar(255) not null,        # Chromosome (can be 'multi')
     molType varchar(255) not null,	# Sample type from exemplar ss
     class varchar(255) not null,	# Single, in-del, heterozygous, microsatelite, named, etc.
-    observed longblob not null,	# The sequences of the observed alleles from rs-fasta files
+    observed longblob not null,		# The sequences of the observed alleles from rs-fasta files
     leftFlank longblob not null,	# Left flanking sequence
     rightFlank longblob not null,	# Right flanking sequence
               #Indices
-    INDEX rsId (rsId(10))
+    INDEX rsId (rsId(12))
 );

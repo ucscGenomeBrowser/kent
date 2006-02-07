@@ -364,6 +364,8 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     hgPepPred dp3 generic genscanPep genscan.pep
     hgLoadBed dp3 genscanSubopt genscanSubopt.bed
 
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch dp3 genscanPep 0501071300.00
 
 # PUT SEQUENCE ON /ISCRATCH FOR BLASTZ (DONE 11/15/04 angie)
     # OK, for this we still need nibs so build those...

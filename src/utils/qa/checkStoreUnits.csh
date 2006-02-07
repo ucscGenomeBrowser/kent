@@ -29,7 +29,7 @@ if ($#argv < 1 || $#argv > 1) then
 endif
 
 rm -f storefile
-df -kh | egrep "store|bluearc" \
+df -kh | egrep "store|bluearc|home" \
   | sed -e "s/10.1.1.3:\/bluearc/                 /" \
   | egrep % | sort -k4 -r >> storefile
 set fullunit=`awk '$4 == "100%" || $4 == "99%" || $4 == "98%" {print $5}' \
@@ -59,10 +59,20 @@ else
     set machine=`df | grep export$unit | awk -F- '{print $1}'`
     ssh $machine du -m --max-depth=4 $unit | sort -nr \
       > du.$storeName.$date
+
+    # add names of file owners
+    cat du.$storeName.$date | awk '{print $1}' > sizeFile
+    cat du.$storeName.$date | awk '{print $2}' | xargs ls -ld \
+       | awk '{print $3 "\t" $9}' > nameFile
+    paste sizeFile nameFile >  outFile
+    mv outFile du.$storeName.$date
+
+    # put output on the storeUnit itself
     cp du.$storeName.$date $unit/du.$date
     echo "full du list at $unit/du.$date\n" 
     head -40 du.$storeName.$date
     echo
+    rm -f sizeFile nameFile
   end
 endif
 

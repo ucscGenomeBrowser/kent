@@ -2244,6 +2244,9 @@ SGP GENE PREDICTIONS (DONE - 2003-07-30 - Hiram)
     ldHgGene rn3 sgpGene download/*.gtf -exon=CDS
     hgPepPred rn3 generic sgpPep download/*-fixed.prot
 
+SGP GENES (UPDATE 1/18/2006)
+    sgpPep table dropped, replaced by hgc generated protein seq in browser
+
 LOAD STS MAP (TO DO )
      - login to hgwdev
       cd ~/rn3/bed
@@ -4968,6 +4971,20 @@ mkdir -p $3:h
 #########################################################################
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.  The hgKgGetText takes
+# about 5 minutes when the database is not too busy.  The rest
+# is real quick.
+     ssh hgwdev
+     cd /cluster/data/rn3/bed/knownGene
+     mkdir index
+     cd index
+     hgKgGetText rn3 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/data/rn3/bed/knownGene/index/knownGene.ix /gbdb/rn3/knownGene.ix
+     ln -s /cluster/data/rn3/bed/knownGene/index/knownGene.ixx /gbdb/rn3/knownGene.ixx
+
 
 # BUILD KNOWN GENE LIST FOR GOOGLE.  DONE 6/27/05 Fan.
 
@@ -5009,4 +5026,13 @@ mkdir -p $3:h
     hgsql rn3 -e 'drop table geneNetworkId'
     hgsql rn3 < ~/src/hg/lib/geneNetworkId.sql
     hgsql rn3 -e 'load data local infile "rn3.geneNetworkId.tab" into table geneNetworkId'
+
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch rn3 geneidPep 0404031400.00
+  sudo mytouch rn3 twinscanPep 0404021800.00
+  sudo mytouch rn3 ensGeneXref 0404301100.00
+  sudo mytouch rn3 ensGtp 0404301100.00
+  sudo mytouch rn3 ensPep 0404301100.00
+  sudo mytouch rn3 ensTranscript 0404301100.00
+  sudo mytouch rn3 superfamily 0404301300.00
 

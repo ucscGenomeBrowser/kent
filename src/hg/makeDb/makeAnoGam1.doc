@@ -601,6 +601,8 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     hgPepPred anoGam1 generic genscanPep genscan.pep
     hgLoadBed anoGam1 genscanSubopt genscanSubopt.bed
 
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch anoGam1 genscanPep 0501071300.00
 
 # SWAP BLASTZ MELANOGASTER-ANOPHELES TO ANOPHELES-MEL (DONE 6/10/04 angie)
     ssh kolossus
@@ -1145,5 +1147,14 @@ chainSome $(path1)
       wget http://genome.imim.es/genepredictions/A.gambiae/golden_path_200302/geneidv1.2/$chr.gtf
     end
     ldHgGene -gtf -genePredExt anoGam1 geneid *.gtf
+
+
+# SWAP/CHAIN/NET DM2 (DONE 1/13/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/anoGam1/bed/blastz.dm2.swap
+    cd /cluster/data/anoGam1/bed/blastz.dm2.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.anoGam1/DEF >& do.log &
+    tail -f do.log
+    ln -s blastz.dm2.swap /cluster/data/anoGam1/bed/blastz.dm2
 
 

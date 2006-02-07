@@ -25,11 +25,12 @@
 #include "hgMutUi.h"
 #include "hgConfig.h"
 
-#define CDS_HELP_PAGE "../goldenPath/help/hgCodonColoring.html"
-#define CDS_MRNA_HELP_PAGE "../goldenPath/help/hgCodonColoringMrna.html"
-#define CDS_BASE_HELP_PAGE "../goldenPath/help/hgBaseLabel.html"
+#define CDS_HELP_PAGE "/goldenPath/help/hgCodonColoring.html"
+#define CDS_MRNA_HELP_PAGE "/goldenPath/help/hgCodonColoringMrna.html"
+#define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
+#define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.246 2006/01/19 22:22:46 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.250 2006/02/01 10:48:32 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -386,14 +387,14 @@ printf("<BR><B>Track Geometry:</B><BR>&nbsp;&nbsp;\n");
 cgiMakeCheckBox("ldTrim", ldTrim); 
 printf("&nbsp;Trim to triangle<BR><BR>&nbsp;&nbsp;\n");
 
-cgiMakeCheckBox("hapmapLdCeu_inv", hapmapLdCeu_inv); 
-printf("&nbsp;Invert CEU<BR>&nbsp;&nbsp;\n");
-cgiMakeCheckBox("hapmapLdChb_inv", hapmapLdChb_inv); 
-printf("&nbsp;Invert CHB<BR>&nbsp;&nbsp;\n");
-cgiMakeCheckBox("hapmapLdJpt_inv", hapmapLdJpt_inv); 
-printf("&nbsp;Invert JPT<BR>&nbsp;&nbsp;\n");
 cgiMakeCheckBox("hapmapLdYri_inv", hapmapLdYri_inv); 
-printf("&nbsp;Invert YRI<BR>&nbsp;&nbsp;\n");
+printf("&nbsp;Invert Yoruban display<BR>&nbsp;&nbsp;\n");
+cgiMakeCheckBox("hapmapLdCeu_inv", hapmapLdCeu_inv); 
+printf("&nbsp;Invert CEPH display<BR>&nbsp;&nbsp;\n");
+cgiMakeCheckBox("hapmapLdChb_inv", hapmapLdChb_inv); 
+printf("&nbsp;Invert Chinese display<BR>&nbsp;&nbsp;\n");
+cgiMakeCheckBox("hapmapLdJpt_inv", hapmapLdJpt_inv); 
+printf("&nbsp;Invert Japanese display<BR>&nbsp;&nbsp;\n");
 
 printf("<BR><B>Colors:</B>\n");
 
@@ -1319,8 +1320,8 @@ cgiMakeDoubleVar(&options[12][0], yLineMark, 6);
 printf("&nbsp;&nbsp;");
 wiggleYLineMarkDropDown(&options[13][0], yLineMarkOnOff);
 printf("</TD></TR></TABLE>\n");
-puts("<BR><A HREF=\"/goldenPath/help/hgWiggleTrackHelp.html\" TARGET=_blank>"
-     "Graph configuration help</A>");
+printf("<BR><A HREF=\"%s\" TARGET=_blank>Graph configuration help</A>",
+	WIGGLE_HELP_PAGE);
 
 freeMem(typeLine);
 
@@ -2001,7 +2002,7 @@ tdb->priority = 1.0;
  if (helpdir != NULL)
    safef(htmlFile, 256, "%s/%s.html", helpdir, tableName);
  else
-   safef(htmlFile, 256, "%s/%s.html", HELP_DIR, tableName);
+   safef(htmlFile, 256, "%s%s/%s.html", hDocumentRoot(), HELP_DIR, tableName);
  
 readInGulp(htmlFile, &buf, &size);
 tdb->html = buf;

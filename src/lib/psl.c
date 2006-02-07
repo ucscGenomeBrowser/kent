@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.66 2005/12/12 04:02:53 kent Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.68 2006/01/28 04:21:07 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -48,9 +48,7 @@ static char *createString =
 static char *indexString = 
 	  "#Indices\n"
     "%s"                            /* Optional bin. */
-    "INDEX(%stStart),\n"
-    "INDEX(qName(12)),\n"
-    "INDEX(%stEnd)\n"
+    "INDEX(qName(12))\n"
 ")\n";
 
 
@@ -1236,10 +1234,8 @@ char* pslGetCreateSql(char* table, unsigned options, int tNameIdxLen)
 {
 struct dyString *sqlCmd = newDyString(2048);
 char *sqlCmdStr;
-char extraIx[32];
 char binIx[32];
 
-extraIx[0] = '\0';
 binIx[0] = '\0';
 
 /* check and default tNameIdxLen */
@@ -1249,8 +1245,6 @@ if ((options & PSL_TNAMEIX) && (tNameIdxLen == 0))
     tNameIdxLen = 8;
 
 /* setup tName and bin index fields */
-if (options & PSL_TNAMEIX)
-    safef(extraIx, sizeof(extraIx), "tName(%d),", tNameIdxLen);
 if (options & PSL_WITH_BIN)
     {
     if (options & PSL_TNAMEIX)
@@ -1265,7 +1259,7 @@ if (options & PSL_XA_FORMAT)
     dyStringPrintf(sqlCmd, "qSeq longblob not null,\n");
     dyStringPrintf(sqlCmd, "tSeq longblob not null,\n");
     }
-dyStringPrintf(sqlCmd, indexString, binIx, extraIx, extraIx);
+dyStringPrintf(sqlCmd, indexString, binIx);
 sqlCmdStr = cloneString(sqlCmd->string);
 dyStringFree(&sqlCmd);
 return sqlCmdStr;
@@ -1298,6 +1292,14 @@ if (pStart >= pEnd)
             pName, pCLabel, pStart, pCLabel, pEnd);
     errCount++;
     }
+if (pEnd > pSize)
+    {
+    if (errCount == 0)
+        printPslDesc(pslDesc, out, psl);
+    fprintf(out, "\t%s %cEnd %u >= %cSize %u\n",
+            pName, pCLabel, pEnd, pCLabel, pSize);
+    errCount++;
+    }
 for (iBlk = 0; iBlk < blockCount; iBlk++)
     {
     unsigned blkStart = pBlockStarts[iBlk];
@@ -1318,7 +1320,7 @@ for (iBlk = 0; iBlk < blockCount; iBlk++)
         {
         if (errCount == 0)
             printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u translated start %u < %cStart %u\n",
+        fprintf(out, "\t%s %s block %u start %u < %cStart %u\n",
                 pName, pLabel, iBlk, gBlkStart, pCLabel, pStart);
         errCount++;
         }
@@ -1326,7 +1328,7 @@ for (iBlk = 0; iBlk < blockCount; iBlk++)
         {
         if (errCount == 0)
             printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u translated start %u >= %cEnd %u\n",
+        fprintf(out, "\t%s %s block %u start %u >= %cEnd %u\n",
                 pName, pLabel, iBlk, gBlkStart, pCLabel, pEnd);
         errCount++;
         }
@@ -1334,7 +1336,7 @@ for (iBlk = 0; iBlk < blockCount; iBlk++)
         {
         if (errCount == 0)
             printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u translated end %u < %cStart %u\n",
+        fprintf(out, "\t%s %s block %u end %u < %cStart %u\n",
                 pName, pLabel, iBlk, gBlkEnd, pCLabel, pStart);
         errCount++;
         }
@@ -1342,7 +1344,7 @@ for (iBlk = 0; iBlk < blockCount; iBlk++)
         {
         if (errCount == 0)
             printPslDesc(pslDesc, out, psl);
-        fprintf(out, "\t%s %s block %u translated end %u > %cEnd %u\n",
+        fprintf(out, "\t%s %s block %u end %u > %cEnd %u\n",
                 pName, pLabel, iBlk, gBlkEnd, pCLabel, pEnd);
         errCount++;
         }

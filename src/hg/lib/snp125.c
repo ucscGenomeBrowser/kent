@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snp125.c,v 1.11 2006/01/17 23:06:10 heather Exp $";
+static char const rcsid[] = "$Id: snp125.c,v 1.15 2006/01/23 05:27:19 heather Exp $";
 
 void snp125StaticLoad(char **row, struct snp125 *ret)
 /* Load a row from snp125 table into ret.  The contents of ret will
@@ -227,11 +227,11 @@ fputc(lastSep,f);
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
 
-void snp125TableCreate(struct sqlConnection *conn, int indexSize)
+void snp125TableCreate(struct sqlConnection *conn, char *tableName)
 /* create a snp125 table */
 {
 char *createString =
-"CREATE TABLE snp125 (\n"
+"CREATE TABLE %s (\n"
 "    bin           smallint(5) unsigned not null,\n"
 
 "    chrom      enum(\n"
@@ -268,7 +268,7 @@ char *createString =
 "    refUCSC       blob not null,\n"
 "    observed      blob not null,\n"
 "    molType       enum('unknown', 'genomic', 'cDNA') DEFAULT 'unknown' not null,\n"
-"    class         enum('unknown', 'single', 'in-del', 'het', 'microsatelite',"
+"    class         enum('unknown', 'single', 'in-del', 'het', 'microsatellite',"
 "                  'named', 'no var', 'mixed', 'mnp', 'insertion', 'deletion') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
 "    valid         set('unknown', 'by-frequency', 'by-cluster', 'by-submitter', \n"
@@ -276,36 +276,20 @@ char *createString =
 "                  DEFAULT 'unknown' NOT NULL,\n"
 "    avHet 	   float not null,\n"
 "    avHetSE 	   float not null,\n"
-"    func          enum( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', \n"
+"    func          set( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', \n"
 "                  'untranslated', 'intron','splice-site', 'cds-reference') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
 "    locType enum ('unknown', 'range', 'exact', 'between',\n"
 "                  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL,\n"
 "    source enum ('dbSNP125', 'Affy500k'),	# Source of the data - dbSnp, Affymetrix, ...\n"
-"    exception enum ('SimpleTriAllelic,'\n"
-"			'SimpleQuadAllelic',\n"
-"			'NegativeSize',\n"
-"    			'SimpleClassWrongSize',\n"
-"			'RangeClassWrongSize',\n"
-"			'InsertionClassWrongSize',\n"
-"			'DeletionClassWrongSize',\n"
-"			'SimpleClassWrongObserved',\n"
-"			'DeletionClassWrongObserved',\n"
-"			'RefNCBINotInObserved',\n"
-"			'RefUCSCNotInObserved',\n"
-"			'AlignTwoPlaces',\n"
-"			'AlignThreePlaces',\n"
-"			'AlignFourPlusPlaces',\n"
-"			'BadAlignmentFlanks',\n"
-"			'StrandIssue'),	# List of exceptionIds for 'invariant' conditions\n"
-"    INDEX         chrom(chrom(%d),bin),\n"
-"    INDEX         chromStart(chrom(%d),chromStart),\n"
+"    INDEX         chrom(chrom,bin),\n"
+"    INDEX         chromStart(chrom,chromStart),\n"
 "    INDEX         name(name)\n"
 ")\n";
 
 struct dyString *dy = newDyString(1024);
-dyStringPrintf(dy, createString, indexSize, indexSize);
-sqlRemakeTable(conn, "snp125", dy->string);
+dyStringPrintf(dy, createString, tableName);
+sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
 

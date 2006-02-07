@@ -199,7 +199,7 @@ struct dataVector *bedGraphDataVector(char *table,
 /* Read in bedGraph as dataVector and return it.  Filtering, subtrack merge 
  * and intersection are handled. */
 
-struct dataVector *wiggleDataVector(char *table,
+struct dataVector *wiggleDataVector(struct trackDb *tdb, char *table,
 	struct sqlConnection *conn, struct region *region);
 /* Read in wiggle as dataVector and return it.  Filtering, subtrack merge 
  * and intersection are handled. */

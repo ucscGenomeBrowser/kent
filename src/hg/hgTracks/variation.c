@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.55 2006/01/19 07:22:26 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.70 2006/02/01 21:20:00 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -152,7 +152,7 @@ int i;
 
 for (i=0; i<snp125ValidLabelsSize; i++)
     {
-    if (!sameString(snp125ValidDataName[i], el->class)) continue;
+    if (!sameString(snp125ValidDataName[i], el->valid)) continue;
     return snp125ValidIncludeCart[i];
     }
 return TRUE;
@@ -179,7 +179,7 @@ int i;
 
 for (i=0; i<snp125FuncLabelsSize; i++)
     {
-    if (!sameString(snp125FuncDataName[i], el->class)) continue;
+    if (!sameString(snp125FuncDataName[i], el->func)) continue;
     return snp125FuncIncludeCart[i];
     }
 return TRUE;
@@ -206,7 +206,7 @@ int i;
 
 for (i=0; i<snp125LocTypeLabelsSize; i++)
     {
-    if (!sameString(snp125LocTypeDataName[i], el->class)) continue;
+    if (!sameString(snp125LocTypeDataName[i], el->locType)) continue;
     return snp125LocTypeIncludeCart[i];
     }
 return TRUE;
@@ -376,7 +376,9 @@ enum   snp125ColorEnum thisSnpColor = snp125ColorBlack;
 char  *snpColorSource = cartUsualString(cart, 
 			snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
 char  *validString = NULL;
+char  *funcString = NULL;
 int    snpValid = 0;
+int    snpFunc = 0;
 int    index1 = 0;
 int    index2 = 0;
 
@@ -398,12 +400,15 @@ switch (stringArrayIx(snpColorSource, snp125ColorSourceLabels, snp125ColorSource
 	    if (containsStringNoCase(validString, snp125ValidDataName[snpValid]))
 		thisSnpColor = (enum snp125ColorEnum) stringArrayIx(snp125ValidCart[snpValid],snp125ColorLabel,snp125ColorLabelSize);
 	break;
+    /* func is a set */
     case snp125ColorSourceFunc:
-	index2 = stringArrayIx(el->func,snp125FuncDataName,snp125FuncDataNameSize);
-	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125FuncCart[index2],snp125ColorLabel,snp125ColorLabelSize);
+        funcString = cloneString(el->func);
+	for (snpFunc=0; snpFunc<snp125FuncCartSize; snpFunc++)
+	    if (containsStringNoCase(funcString, snp125FuncDataName[snpFunc]))
+	        thisSnpColor = (enum snp125ColorEnum) stringArrayIx(snp125FuncCart[snpFunc],snp125ColorLabel,snp125ColorLabelSize);
 	break;
     case snp125ColorSourceLocType:
-	index2 = stringArrayIx(el->func,snp125LocTypeDataName,snp125LocTypeDataNameSize);
+	index2 = stringArrayIx(el->locType,snp125LocTypeDataName,snp125LocTypeDataNameSize);
 	thisSnpColor=(enum snp125ColorEnum)stringArrayIx(snp125LocTypeCart[index2],snp125ColorLabel,snp125ColorLabelSize);
 	break;
     default:
@@ -740,7 +745,7 @@ tg->itemNameColor = snpColor;
 void snp125Methods(struct track *tg)
 {
 tg->drawItems     = snpDrawItems;
-tg->drawItemAt    = snpDrawItemAt;
+tg->drawItemAt    = snp125DrawItemAt;
 tg->loadItems = loadSnp125;
 tg->freeItems     = freeSnp125;
 tg->itemColor = snp125Color;
@@ -897,21 +902,11 @@ bedLoadLdItemByQuery(tg, table, NULL, loader);
 void ldLoadItems(struct track *tg)
 /* loadItems loads up items for the chromosome range indicated.   */
 {
-int count=0;
+int count = 0;
 
 bedLoadLdItem(tg, tg->mapName, (ItemLoader)ldLoad);
 count = slCount((struct sList *)(tg->items));
 tg->canPack = FALSE;
-if (count>5000)
-    {
-    tg->limitedVis=tvDense;
-    tg->limitedVisSet=TRUE;
-    }
-else 
-    {
-    tg->limitedVis=tvFull;
-    tg->limitedVisSet=FALSE;
-    }
 }
 
 static void mapDiamondUi(int xl, int yl, int xt, int yt, 
@@ -929,26 +924,37 @@ mapStatusMessage("%s controls", shortLabel);
 hPrintf(">\n");
 }
 
+static void mapTrackBackground(struct track *tg, int xOff, int yOff)
+/* Print out image map rectangle that invokes hgTrackUi. */
+{
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", 
+	xOff, yOff, xOff+insideWidth, yOff+tg->height);
+/* change 'hapmapLd' to use parent composite table name */
+/* move this to hgTracks when finished */
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=hapmapLd&i=hapmapLd\"", hgTrackUiName(), 
+	cartSessionVarName(), cartSessionId(cart), chromName);
+mapStatusMessage("%s controls", tg->mapName);
+hPrintf(">\n");
+}
+
 int ldTotalHeight(struct track *tg, enum trackVisibility vis)
 /* Return total height. Called before and after drawItems. 
  * Must set height, lineHeight, heightPer */ 
 {
-tg->lineHeight = tl.fontHeight+1;
+tg->lineHeight = tl.fontHeight + 1;
 tg->heightPer  = tg->lineHeight - 1;
-if (vis==tvDense||(tg->limitedVisSet&&tg->limitedVis==tvDense))
+if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
     tg->height = tg->lineHeight;
 else if (winEnd-winStart<250000)
     tg->height = insideWidth/2;
 else
-    tg->height = (int)(insideWidth*(250000.0/2.0)/(winEnd-winStart));
+    tg->height = max((int)(insideWidth*(250000.0/2.0)/(winEnd-winStart)),tg->lineHeight);
 return tg->height;
 }
 
 void initColorLookup(struct vGfx *vg, boolean isDprime)
 {
 ldShadesInit(vg, isDprime);
-colorLookup[(int)'y'] = ldHighLodLowDprime; /* LOD error case */
-colorLookup[(int)'z'] = ldHighDprimeLowLod; /* LOD error case */
 colorLookup[(int)'a'] = ldShadesPos[0];
 colorLookup[(int)'b'] = ldShadesPos[1];
 colorLookup[(int)'c'] = ldShadesPos[2];
@@ -959,6 +965,8 @@ colorLookup[(int)'g'] = ldShadesPos[6];
 colorLookup[(int)'h'] = ldShadesPos[7];
 colorLookup[(int)'i'] = ldShadesPos[8];
 colorLookup[(int)'j'] = ldShadesPos[9];
+colorLookup[(int)'y'] = ldHighLodLowDprime; /* LOD error case */
+colorLookup[(int)'z'] = ldHighDprimeLowLod; /* LOD error case */
 }
 
 
@@ -1020,7 +1028,7 @@ Color getOutlineColor(int itemCount)
 /* get outline color from cart and set outlineColor*/
 {
 char *outColor = cartUsualString(cart, "ldOut", ldOutDefault);
-if (itemCount > 1000 || winEnd-winStart > 100000)
+if (winEnd-winStart > 100000)
     return 0;
 if (sameString(outColor,"yellow"))
     return MG_YELLOW;
@@ -1157,8 +1165,9 @@ void ldDrawDenseValueHash(struct vGfx *vg, struct track *tg, int xOff, int yOff,
 /* Draw all dense LD values */
 {
 struct hashEl *hashEl, *stats=hashElListHash(ldHash);
+Color yellow = vgFindRgb(vg, &undefinedYellowColor);
 
-vgBox(vg, insideX, yOff, insideWidth, tg->height-1, shadesOfGray[2]);
+vgBox(vg, insideX, yOff, insideWidth, tg->height-1, yellow);
 for (hashEl=stats; hashEl!=NULL; hashEl=hashEl->next)
     ldDrawDenseValue(vg, tg, xOff, yOff, scale, outlineColor, hashEl->val);
 hashElFreeList(&stats);
@@ -1209,6 +1218,8 @@ vgSetClip(vg, insideX, yOff, insideWidth, tg->height);
    means that two pointers are necessary: a data pointer (dPtr) to
    keep track of the current data, and a second pointer (sPtr) to
    retrieve the second coordinate.
+ * The length of each of the three value vectors (rsquared, dprime,
+   and lod) is the same and is stored in the score field.
  * The ascii values are mapped to colors in the colorLookup[] array.
  * The four points of each diamond are calculated from the chromosomal 
    coordinates of four SNPs:
@@ -1233,10 +1244,13 @@ double       scale     = scaleForPixels(insideWidth);
 int          itemCount = slCount((struct slList *)tg->items);
 Color        shade     = 0, outlineColor = getOutlineColor(itemCount);
 int          a, b, c, d, i; /* chromosome coordinates and counter */
-boolean      drawMap   = ( itemCount<1000 ? TRUE : FALSE );
+boolean      drawMap   = FALSE; /* ( itemCount<1000 ? TRUE : FALSE ); */
 struct hash *ldHash    = newHash(20);
 char         cartInvertVal[32];
 
+if (tg->items==NULL)
+    return;
+mapTrackBackground(tg, xOff, yOff);
 safef(cartInvertVal, sizeof(cartInvertVal), "%s_inv", tg->mapName);
 ldInvert = cartUsualBoolean(cart, cartInvertVal, ldInvertDefault);
 
@@ -1273,10 +1287,12 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	d = sPtr->next->chromStart;
 	if (notInWindow(a, b, c, d, trim)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
 	    continue;
+	if ( d-a > 250000 ) /* Check to see if we are trying to reach across a window that is too wide (centromere) */
+	    continue;
 	shade = colorLookup[(int)values[i]];
-	if ( vis==tvFull && tg->limitedVisSet && tg->limitedVis==tvFull )
+	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
 	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
-	else if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
 	    {
 	    ldAddToDenseValueHash(ldHash, a, values[i]);
 	    ldAddToDenseValueHash(ldHash, d, values[i]);
@@ -1285,13 +1301,54 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
 	i++;
 	}
+    /* reached end of chromosome, so sPtr->next is null; draw last diamond in list */
+    if (sPtr->next==NULL)
+	{
+	a = dPtr->chromStart;
+	b = dPtr->chromEnd;
+	c = sPtr->chromStart;
+	d = sPtr->chromEnd;
+	if (notInWindow(a, b, c, d, trim)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
+	    continue;
+	shade = colorLookup[(int)values[i]];
+	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
+	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
+	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+	    {
+	    ldAddToDenseValueHash(ldHash, a, values[i]);
+	    ldAddToDenseValueHash(ldHash, d, values[i]);
+	    }
+	else
+	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
+	}
     }
-if ( vis==tvDense || (tg->limitedVisSet && tg->limitedVis==tvDense) )
+/* starting at last snp on chromosome, so dPtr->next is null; draw this diamond */
+if (dPtr->next==NULL)
     {
-    ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
-    ldDrawLeftLabels(tg, seqStart, seqEnd, vg, xOff, yOff, width, tg->lineHeight, 
-		     withCenterLabels, font, color, vis);
+    a = dPtr->chromStart;
+    b = dPtr->chromEnd;
+    if (!notInWindow(a, b, a, b, trim)) /* Continue only if this diamond needs to be drawn */
+	{
+	if (isLod) /* point to the right data values to be drawn.  'values' variable is reused */
+	    values = dPtr->lod;
+	else if (isRsquared)
+	    values = dPtr->rsquared;
+	else if (isDprime)
+	    values = dPtr->dprime;
+	shade = colorLookup[(int)values[0]];
+	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
+	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, a, b, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
+	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+	    {
+	    ldAddToDenseValueHash(ldHash, a, values[0]);
+	    ldAddToDenseValueHash(ldHash, b, values[0]);
+	    }
+	else
+	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
+	}
     }
+if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+    ldDrawDenseValueHash(vg, tg, xOff, yOff, scale, outlineColor, ldHash);
 }
 
 void ldFreeItems(struct track *tg)

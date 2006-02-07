@@ -33,7 +33,7 @@ Therefore you will want to create three different MySQL users
 for these purposes.
 
 	(The examples listed below are implemented in the
-	    shell script: example/MySQLUserPerms.sh
+	    shell script: ex.MySQLUserPerms.sh
 	    You can execute that script to set up these example users.)
 
 An example full read/write access user: "browser",  is created with
@@ -165,4 +165,4 @@ To test this access with your ~/.hg.conf file in place:
 $ hgsql -e "show tables;" hgcentral
 
 ====================================================================
-This file last updated: $Date: 2005/03/07 18:31:56 $
+This file last updated: $Date: 2006/01/19 17:46:30 $

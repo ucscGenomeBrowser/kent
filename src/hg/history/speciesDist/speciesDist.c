@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: speciesDist.c,v 1.3 2006/01/15 22:24:31 braney Exp $";
+static char const rcsid[] = "$Id: speciesDist.c,v 1.5 2006/01/23 20:43:10 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,17 +16,26 @@ errAbort(
   "     that represent the species tree.  Ouputs distance matrix with species names in rows \n"
   "     suitable for input to neighbor joining algorithm.\n"
   "usage:\n"
-  "   speciesDist genomes distances outTree\n"
+  "   speciesDist genomes distances outDist\n"
   "arguments:\n"
   "   genomes        file with element lists\n"
   "   distances      file with distance matrices\n"
-  "   outTree        file to output species tree\n"
+  "   outDist        file to output species distance matrix\n"
   );
 }
 
 static struct optionSpec options[] = {
    {NULL, 0},
 };
+
+int compar(const void *one, const void *two)
+{
+char *s1 = *(char **)one;
+char *s2 = *(char **)two;
+
+return strcmp(s1, s2);
+}
+
 
 void speciesDist(char *genomeFileName, char *distanceFileName, char *outFileName)
 {
@@ -56,9 +65,13 @@ genomeNames = (char **)needMem(numSpecies * sizeof(char *));
 for(genome=genomes, ii=0; genome; ii++,genome=genome->next)
     {
     hashAdd(genomeHash, genome->name, (void *)genome);
-    hashAdd(genomeNumHash, genome->name, (void *)ii);
     genomeNames[ii] = genome->name;
     }
+
+qsort(genomeNames, ii, sizeof(char *), compar);
+
+for(ii = 0; ii < numSpecies; ii++)
+    hashAdd(genomeNumHash, genomeNames[ii], (void *)ii);
 
 distanceList = readDistances(distanceFileName, genomeHash, &distHash, &distElemHash);
 

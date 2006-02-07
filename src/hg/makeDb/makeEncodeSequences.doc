@@ -2,149 +2,162 @@
 exit;
 
 ############################################################
-# make metadata file - not automated yet.  
-# This file was put together in pieces from multiple sources
-#    - hgcentraltest.dbDb
-#    - http://www.nisc.nih.gov/open_page.html?/projects/encode/index.cgi
-#    - http://www.ncbi.nlm.nih.gov/IEB/Research/Schuler/ENCODE/ENCODE_seqids.txt
+# get metadata.txt file and non-accessioned sequences
+# from Elliott Margulies
 # /cluster/bluearc/encode/metadata.txt
 ############################################################
-# get sequences
+
+# Check to make sure there are no redundant lines in the metadata file
+# These should return the same number
+cut -f1-2,16 metadata.txt | sort    | wc -l
+cut -f1-2,16 metadata.txt | sort -u | wc -l
+
+# make sure that the metadata.txt file has a header:
+head -2 metadata.txt
+#niscOrganism    encodeRegion    freezeDate      ncbiTaxonId     assemblyProvider        assemblyDate    assemblyId      chromosome      chrom_start     chrom_end       chromLength     strand  accessionVersion   numBases        numN    thisContigNum   totalNumContigs comment
+#armadillo       ENm001  JAN-2006        9361    NISC    08-NOV-2005     .       .       0       0       0       +       NT_086518.3     1930245 100000  1       1       .
+
+
+# Check to verify that coverage is as expected, that no species or
+# targets were omitted:
+
+cut -f1,2,5 metadata.txt | tail +2 | sort -u | cut -f1,3 | sort | uniq -c
+#      1 armadillo       Broad Assisted Assembly v 1.0
+#     43 armadillo       NISC
+#     44 baboon  NISC
+#     41 cat     Mullikin Phusion Assembly of Agencourt Traces
+#      3 cat     NISC
+#     43 chicken CGSC Feb. 2004
+#      1 chicken NCBI
+#      1 chimp   NCBI
+#     43 chimp   NCBI Build 1 v1
+#      1 colobus_monkey  NISC
+#     40 cow     BCM
+#      1 cow     NCBI
+#     43 dog     Broad Institute v. 2.0
+#      1 dog     NCBI
+#      1 dusky_titi      NISC
+#     44 eehedgehog      Mullikin Phusion Assembly of Broad Traces
+#      2 elephant        Broad Assisted Assembly v 1.0
+#     42 elephant        NISC
+#     36 fugu    IMCB/JGI
+#     44 galago  NISC
+#      8 hedgehog        NISC
+#     44 human   NCBI Build 35
+#     44 macaque BCM
+#     44 marmoset        NISC
+#     43 monodelphis     Broad Institute
+#      1 monodelphis     NCBI
+#     44 mouse   NCBI
+#      3 mouse_lemur     NISC
+#      1 owl_monkey      NISC
+#     29 platypus        Mullikin Phusion Assembly of WUGSC Traces
+#     15 platypus        NISC
+#     16 rabbit  Broad Assisted Assembly v 1.0
+#     28 rabbit  NISC
+#     43 rat     Baylor HGSC v3.1
+#      1 rat     NCBI
+#     44 rfbat   NISC
+#     24 shrew   Mullikin Phusion Assembly of Broad Traces
+#     20 shrew   NISC
+#     44 tenrec  Mullikin Phusion Assembly of Broad Traces
+#     42 tetraodon       Genoscope V7
+#      1 tetraodon       NCBI
+#     39 xenopus JGI
+#     43 zebrafish       Sanger Zv4
+
 
 cd /cluster/bluearc/encode
-rm -rf makeLists.pl >& /dev/null
-cat > makeLists.pl << 'EOF'
+cat >! makeLists.pl << '_EOF_'
 #!/usr/bin/perl -W
 
-%libOptions = 
+%libOptions =
     (
-	"armadillo"      => "-mam    ",
-	"baboon"         => "        ",
-	"cat"            => "-cat    ",
-	"chicken"        => "-chicken",
-	"chimp"          => "        ",
-	"cow"            => "-cow    ",
-	"colobus_monkey" => "        ",
-	"dog"            => "-dog    ",
-	"dusky_titi"     => "-cow    ",
-	"elephant"       => "-mam    ",
-	"fugu"           => "-fugu   ",
-	"galago"         => "        ",
-	"hedgehog"       => "-mam    ",
-	"human"          => "        ",
-	"monodelphis"    => "-mam    ",
-	"macaque"        => "        ",
-	"marmoset"       => "        ",
-	"mouse"          => "-mus    ",
-	"mouse_lemur"    => "        ",
-	"owl_monkey"     => "        ",
-	"pig"            => "-pig    ",
-	"platypus"       => "-mam    ",
-	"rat"            => "-rat    ",
-	"rabbit"         => "-mam    ",
-	"rfbat"          => "-mam    ",
-	"shrew"          => "-mam    ",
-	"tenrec"         => "-mam    ",
-	"tetraodon"      => "-danio  ",
-	"zebrafish"      => "-danio  ",
-	"xenopus"        => "        ",
-	);
+     "armadillo"      => "-mam    ",
+     "baboon"         => "        ",
+     "cat"            => "-cat    ",
+     "chicken"        => "-chicken",
+     "chimp"          => "        ",
+     "cow"            => "-cow    ",
+     "colobus_monkey" => "        ",
+     "dog"            => "-dog    ",
+     "dusky_titi"     => "-cow    ",
+     "elephant"       => "-mam    ",
+     "fugu"           => "-fugu   ",
+     "galago"         => "        ",
+     "eehedgehog"     => "-mam    ",
+     "hedgehog"       => "-mam    ",
+     "human"          => "        ",
+     "macaque"        => "        ",
+     "monodelphis"    => "-mam    ",
+     "marmoset"       => "        ",
+     "mouse"          => "-mus    ",
+     "mouse_lemur"    => "        ",
+     "owl_monkey"     => "        ",
+     "pig"            => "-pig    ",
+     "platypus"       => "-mam    ",
+     "rat"            => "-rat    ",
+     "rabbit"         => "-mam    ",
+     "rfbat"          => "-mam    ",
+     "shrew"          => "-mam    ",
+     "tenrec"         => "-mam    ",
+     "tetraodon"      => "-danio  ",
+     "zebrafish"      => "-danio  ",
+     "xenopus"        => "        ",
+     );
 
-$efetchURL  = "http://www.ncbi.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta";
+$efetchURL  = "http://www.ncbi.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta&id=";
 $bluearc    = "/cluster/bluearc/encode";
-$msaDir     = "/usr/local/apache/htdocs/encode/downloads/msa";
-$freezeDate = shift;
-$metadata   = "${msaDir}/${freezeDate}/metadata.txt";
-$wgetList   = "${bluearc}/wgetList";
-$maskList   = "${bluearc}/para/maskList";
-$testDir    = "${bluearc}/${freezeDate}.test";
-$nibFragF   = "${testDir}/runNibFragDiff";
+$metadata   = "$bluearc/metadata.txt";
+$wgetList   = "$bluearc/wgetList";
+$maskList   = "$bluearc/para/maskList";
 
-open(METADATA, " < ${metadata}") or die "can't open ${metadata} for reading.\n";
-open(WGETLIST, " > ${wgetList}") or die "can't open ${wgetList}";
-open(MASKLIST, " > ${maskList}") or die "can't open ${maskList}";
-open(NIBFRAG,  " > ${nibFragF}") or die "can't open ${nibFragF}";
+open(METADATA, " < $metadata") or die "can't open $metadata for reading.\n";
+open(WGETLIST, " > $wgetList") or die "can't open $wgetList";
+open(MASKLIST, " > $maskList") or die "can't open $maskList";
 
 print(WGETLIST "cd $bluearc\n");
 
-while (<METADATA>)
+while (<METADATA>) 
 {
     if (/niscOrganism/) { next; }
     @fields     = split /\t/;
     $species    = $fields[0];
+    $region     = $fields[1];
     $db         = $fields[6];
-    $chrom      = $fields[7];
-    $chromStart = $fields[8];
-    $chromEnd   = $fields[9];
-    $acc        = $fields[10];
+    $acc        = $fields[12];
+    $index      = $fields[15];
 
-    print(WGETLIST "wget -O ${bluearc}/original/$acc \"${efetchURL}&id=${acc}\"\n");
-    if (${db} ne ".")
+    if ($acc =~ /^\w{2}\_\d+/) { print(WGETLIST "wget -O $bluearc/original/$acc \"${efetchURL}$acc\"\n"); }
+    if ($db ne ".") 
     {
-	${chromStart} -= 1;
-	print(NIBFRAG  "nibFrag -masked /cluster/data/${db}/nib/${chrom}.nib ${chromStart} ${chromEnd} + ${testDir}/${acc}.nibFrag;\n");
-	print(NIBFRAG  "diff -biB ${bluearc}/masked/${acc} ${testDir}/${acc}.nibFrag;\n");
+	$dest_file = $acc;
+	if ($acc eq '.') { $dest_file = "$species.$region.$index.fa"; }
     }
-    die ("Missing species: ". lc(${species}) . "\n") unless (defined $libOptions{lc($species)});
+    die ("Missing species: ". lc($species) . "\n") unless (defined $libOptions{lc($species)});
+    if ($acc !~ /NT_/) { $acc="$species.$region.$index.fa"; }
     print(MASKLIST "/cluster/bin/scripts/maskOne.csh $acc $libOptions{lc($species)}\n");
-} 
-'EOF'
-#
-chmod ug+x makeLists.pl
-
-set bluearc = /cluster/bluearc/encode
-set freezeDate = "SEP-2005"
-
-## Elliott addition:
-mkdir /usr/local/apache/htdocs/encode/downloads/msa/$freezeDate
-## from my machine, scp apollo:/data/projects/encode/SEP-2005/prep/metadata.txt hgwdev.cse.ucsc.edu:/usr/local/apache/htdocs/encode/downloads/msa/SEP-2005/
-
-mkdir para
-mkdir $freezeDate.test
-
-
-./makeLists.pl $freezeDate
-chmod ug+x $bluearc/wgetList $bluearc/para/maskList $bluearc/$freezeDate.test/runNibFragDiff
-
-$bluearc/wgetList
-
-############################################################
-# update metadata file with correct seq lengths, N count
-# This is still done manually and needs to be updated
-
-rm -rf getLengths.pl >& /dev/null
-cat > getLengths.pl << 'EOF'
-#!/usr/bin/perl -W
-
-opendir(DIR,"/cluster/bluearc/encode/original");
-@files= grep /NT/, readdir DIR;
-closedir(DIR);
-foreach $file (@files)
-{
-    $seq="";
-    open(FASTA,"/cluster/bluearc/encode/original/$file") or die "Ha! $file ";
-    <FASTA>; # ignore header line;
-    while (<FASTA>) { $seq .= $_; }
-    close(FASTA);
-    $a = ($seq =~ tr/aA//);
-    $c = ($seq =~ tr/cC//);
-    $g = ($seq =~ tr/gG//);
-    $t = ($seq =~ tr/tT//);
-    $n = ($seq =~ tr/nN//);
-    print "$file\t" . ($a+$c+$g+$t+$n) . "\t$n\n";
 }
-'EOF'
+'_EOF_'
 #
-chmod ug+x getLengths.pl
+    
+set freezeDate = "JAN-2006"
+cd /cluster/bluearc/encode
+mkdir -p original para masked trf RepeatMasker
+chmod ug+x makeLists.pl
+./makeLists.pl
+chmod ug+x wgetList
 
-rm -f lengths
-# ./getLengths.pl < metadata.txt > lengths
+./wgetList
+# check for network error
+grep -i error original/NT_*
+# should return nothing
+
 
 ############################################################
 # mask sequences
 
-rm -f /cluster/bin/scripts/maskOne.csh
-cat > /cluster/bin/scripts/maskOne.csh << 'EOF'
+cat >! /cluster/bin/scripts/maskOne.csh << '_EOF_'
 #!/bin/csh
 
 if ( $#argv < 1 ) then
@@ -166,74 +179,132 @@ cd /tmp
 /cluster/bin/i386/maskOutFa $acc $acc.out $acc.RM -soft
 /cluster/bin/i386/maskOutFa $acc.RM $acc.bed $acc -softAdd
 
-/bin/mv -f $acc     /cluster/bluearc/encode/masked
-/bin/mv -f $acc.out /cluster/bluearc/encode/RepeatMasker
-/bin/mv -f $acc.bed /cluster/bluearc/encode/trf
+/bin/mv -f $acc     /cluster/bluearc/encode/masked/
+/bin/mv -f $acc.out /cluster/bluearc/encode/RepeatMasker/
+/bin/mv -f $acc.bed /cluster/bluearc/encode/trf/
 /bin/rm -f $acc*
-echo
-'EOF'
+
+'_EOF_'
+
 #
 chmod ug+x /cluster/bin/scripts/maskOne.csh
 
-#ssh kk
-#cd /cluster/bluearc/encode/para
-#para create maskList
-#para push, para check, ...
+## check that all of the sequences are present in the original
+## directory to avoid crashed jobs
+> wc -l /cluster/bluearc/encode/para/maskList 
+#  10709 /cluster/bluearc/encode/para/maskList
+> ls -1 /cluster/bluearc/encode/original/| wc -l
+#  10709
+
+
+ssh kk
+cd /cluster/bluearc/encode/para
+para create maskList
+para push
+para check
+
+para time
+#10709 jobs in batch
+#0 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 10709 of 10709 jobs
+#CPU time in finished jobs:    3111337s   51855.62m   864.26h   36.01d  0.099 y
+#IO & Wait Time:                 41641s     694.01m    11.57h    0.48d  0.001 y
+#Average job time:                 294s       4.91m     0.08h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:           16313s     271.88m     4.53h    0.19d
+#Submission to last job:         17875s     297.92m     4.97h    0.21d
 
 ############################################################
 # rewrite files with new headers
 
-rm -f writeEncodeFasta.pl >& /dev/null
-cat > writeEncodeFasta.pl << 'EOF'
+cat >! writeEncodeFasta.pl << '_EOF_'
 #!/usr/bin/perl -W
 
-# echo "select * from encodeOrthology where release_date='releaseDate'"|mysql $database > metadata
-if ( $#ARGV < 1 ) {die "usage: writeEncodeFasta.pl OCT-2004 metadata.txt";}
-$releaseDate = shift;
-$metadata = shift;
+$releaseDate = shift || die "usage: writeEncodeFasta.pl $releaseDate metadata.txt\n$#ARGV";
+$metadata    = shift || "metadata.txt";
 
-open(HEADERLIST," < $metadata") or die "Can't open $metadata";
-while (<HEADERLIST>)
+($sec,$min,$hour,$mday,$mon,$year)=localtime(time);
+printf "%4d-%02d-%02d %02d:%02d:%02d Started\n",
+	$year+1900,$mon+1,$mday,$hour,$min,$sec;
+
+$outDir  = "/cluster/bluearc/encode/$releaseDate";
+system "mkdir -p $outDir";
+
+# niscOrganism encodeRegion freezeDate ncbiTaxonId assemblyProvider assemblyDate assemblyId chromosome chrom_start chrom_end chromLength strand accessionVersion numBases numN thisContigNum totalNumContigs comment
+# 000000000000 111111111111 2222222222 33333333333 4444444444444444 555555555555 6666666666 7777777777 88888888888 999999999 10 10 10 10 11 11  12 12 12 12 12   13 13 13 14   15 15 15 15   16 16 16 16 16  17 17
+
+$processAll = 1;
+
+if( $processAll==1 ) 
 {
-    if ( /niscOrganism/ ) { next; } # ignore header
-    @row     = split;
-    if ( $#row < 14 ) { die "Bad input format: $_"; }
-    $header  = ">";
-    $header .= join "|", @row;
-    $org     = $row[0];
-    $region  = $row[1];
-    $acc     = $row[10];
-    $source  = "/cluster/bluearc/encode/masked/$acc";
-    open (SOURCE, " < $source") or die ("Can't open $source");
-    $outDir  = "/cluster/bluearc/encode/$releaseDate/$region";
-    $outFile = "$outDir/$org.$region.fa";
-    system ("mkdir -p $outDir"); # or die ("Failed: mkdir $outDir");
-    system ("touch $outFile");
-    open (DEST, " >> $outFile") or die "Can't open $outFile";
-    print DEST "$header\n";
-    <SOURCE>; # ignore header
-    while (<SOURCE>) { print DEST; }
-    close(SOURCE);
-    close(DEST);
+    if (-e "$outDir/") { system "mv -i $outDir/ $outDir.old/"; }
+    system "mkdir -p $outDir/";
+    open(METADATA," < $metadata") or die "Can't open $metadata";
+    while (<METADATA>) 
+    {
+	chomp();
+	$org=$region=$acc=$source=$outFile=".";
+	if ( /niscOrganism/ ) { next; } # ignore header
+	@row = split /\t/;
+	if ( $#row != 17 ) { die "Bad input format: $_"; }
+
+	$header        = ">";
+	$header       .= join "|", @row;
+	$org           = $row[0];
+	$region        = $row[1];
+	$acc           = $row[12];
+	$thisContigNum = $row[15];
+
+	$outFile = "$outDir/$region/$org.$region.fa";
+	system ("mkdir -p $outDir/$region");
+	system ("touch $outFile");
+
+	open (DEST, " >> $outFile") or die "Can't open $outFile";
+	print DEST "$header\n";
+	$source = "/cluster/bluearc/encode/masked/$acc";
+	unless ( -e $source && $acc ne '.') 
+	    { $source = "/cluster/bluearc/encode/masked/$org.$region.$thisContigNum.fa"; }
+	open (SOURCE, " < $source") or die ("Can't open $source");
+	<SOURCE>; # ignore header
+	while (<SOURCE>) { print DEST; }
+	close(SOURCE);
+	close(DEST);
+    }
 }
-'EOF'
+
+($sec,$min,$hour,$mday,$mon,$year)=localtime(time);
+printf "%4d-%02d-%02d %02d:%02d:%02d Finished writing files\n",
+	$year+1900,$mon+1,$mday,$hour,$min,$sec;
+
+system "cd $outDir/..; cp $metadata $outDir/; tar -h cfz $releaseDate.tgz $metadata $releaseDate/EN*/*";
+
+($sec,$min,$hour,$mday,$mon,$year)=localtime(time);
+printf "%4d-%02d-%02d %02d:%02d:%02d Finished creating tarball\n",
+	$year+1900,$mon+1,$mday,$hour,$min,$sec;
+
+system "mkdir -p /usr/local/apache/htdocs/encode/downloads/msa/$releaseDate";
+system "chmod o+rx /usr/local/apache/htdocs/encode/downloads/msa/$releaseDate";
+system "chmod -R o+r  $outDir/ $outDir/../$releaseDate.tgz";
+system "chmod o+rx $outDir $outDir/EN*";
+system "rsync -a $outDir/ /usr/local/apache/htdocs/encode/downloads/msa/$releaseDate/sequences";
+system "cp -p  $outDir/../$metadata        /usr/local/apache/htdocs/encode/downloads/msa/";
+system "rsync -a $outDir/../$metadata        /usr/local/apache/htdocs/encode/downloads/msa/$releaseDate";
+system "rsync -a $outDir/../$releaseDate.tgz /usr/local/apache/htdocs/encode/downloads/msa/$releaseDate/";
+
+($sec,$min,$hour,$mday,$mon,$year)=localtime(time);
+printf "%4d-%02d-%02d %02d:%02d:%02d End\n",
+	$year+1900,$mon+1,$mday,$hour,$min,$sec;
+
+'_EOF_'
+
 #
+
 chmod ug+x writeEncodeFasta.pl
-
-set downloadDir = /usr/local/apache/htdocs/encode/downloads/msa
-set releaseDate = OCT-2004
-set releaseDir  = $downloadDir/$releaseDate
-exit;
-
+set releaseDate = JAN-2006
 ./writeEncodeFasta.pl $releaseDate metadata.txt
+# 2006-01-21 08:11:36 Started
+# 2006-01-21 08:16:06 Finished writing files
+# 2006-01-21 08:25:06 Finished creating tarball
+# 2006-01-21 08:26:12 End
 
-ssh hgwdev
-rm -rf $releaseDir/EN*
-cp -rf metadata.txt /cluster/bluearc/encode/$releaseDate/EN* $releaseDir
-
-chmod 775 $downloadDir $releaseDir $releaseDir/EN* $releaseDir/RepeatMasker $releaseDir/trf
-chmod 664 $releaseDir/EN*/* $freezeDir/RepeatMasker/* $releaseDir/trf/*  $releaseDir/metadata.txt
-
-# update htdocs/encode/orthoAll.html
-
-# loadOrthology.pl < ~/htdocs/encode/downloads/msa/OCT-2004/metadata.txt | hg16 |& more

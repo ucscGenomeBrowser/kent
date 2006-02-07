@@ -1,6 +1,7 @@
 /* check gbIndex entries */
 #include "chkGbIndex.h"
 #include "gbIndex.h"
+#include "chkCommon.h"
 #include "metaData.h"
 #include "chkMetaDataTbls.h"
 #include "gbRelease.h"
@@ -12,7 +13,7 @@
 #include "gbFileOps.h"
 #include "gbVerb.h"
 
-static char const rcsid[] = "$Id: chkGbIndex.c,v 1.2 2004/02/23 09:07:20 kent Exp $";
+static char const rcsid[] = "$Id: chkGbIndex.c,v 1.3 2006/01/22 08:09:59 markd Exp $";
 
 static void chkProcessed(struct gbEntry* entry, struct gbProcessed* processed)
 /* check a single processed object */

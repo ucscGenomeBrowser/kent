@@ -1598,4 +1598,6 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     hgPepPred bosTau2 generic sgpGenePep sgpGene.fa
     #Processing sgpGene.fa
 
+# SGP GENES (UPDATE 1/18/2006)
+    sgpPep table dropped, replaced by hgc generated protein seq in browser
 

@@ -305,7 +305,115 @@ done
     hgLoadWiggle monDom2 gc5Base gc5Base.wig
 
 #######################################################################
-# RUN REPEAT MASKER (DONE - 2005-08-19 - Hiram)
+# RUN REPEAT MASKER second time (WORKING - 2006-01-20 - Hiram)
+    ssh pk
+    #	move the older RM directories aside, then start anew:
+    mkdir /cluster/data/monDom2/RMRun
+    cd /cluster/data/monDom2/RMRun
+    #	Initialize the RM libraries for this species on this new repeat
+    #	masker
+    /cluster/bluearc/RepeatMasker060120/RepeatMasker \
+	-species "Monodelphis domestica" /dev/null
+
+# RepeatMasker version development-$Id: RepeatMasker,v 1.11
+#	2006/01/20 21:10:59 hiram Exp $
+# Search engine: Crossmatch
+# Using Master Database:
+#	/cluster/bluearc/RepeatMasker060120/Libraries/RepeatMaskerLib.embl
+# Using general libraries in:
+# /cluster/bluearc/RepeatMasker060120/Libraries/20060120/general
+# Building species libraries in:
+#  /cluster/bluearc/RepeatMasker060120/Libraries/20060120/monodelphis_domestica
+# 
+    #	That creates these five files:
+    ls -og \
+  /cluster/bluearc/RepeatMasker060120/Libraries/20060120/monodelphis_domestica
+    #	-rw-rw-r--    1    57952 Jan 20 14:22 shortcutlib
+    #	-rw-rw-r--    1    20772 Jan 20 14:22 cutlib
+    #	-rw-rw-r--    1    86793 Jan 20 14:22 shortlib
+    #	-rw-rw-r--    1    89451 Jan 20 14:22 longlib
+    #	-rw-rw-r--    1   194233 Jan 20 14:22 retrolib
+
+    cd /cluster/data/monDom2
+
+    cat << '_EOF_' > scripts/RMOpossumV3
+#!/bin/csh -fe
+
+cd $1
+/bin/mkdir -p /scratch/tmp/monDom2/$2
+/bin/cp /san/sanvol1/scratch/monDom2/chunks500k/$2 /scratch/tmp/monDom2/$2/
+pushd /scratch/tmp/monDom2/$2
+/cluster/bluearc/RepeatMasker060120/RepeatMasker -s \
+        -species "Monodelphis domestica" $2
+popd
+/bin/cp -p /scratch/tmp/monDom2/$2/$2.out ./$2.out
+/bin/rm -fr /scratch/tmp/monDom2/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/monDom2/$2
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/monDom2
+'_EOF_'
+    # happy emacs
+    chmod +x scripts/RMOpossumV3
+
+    mkdir RMRun RMOut
+    ls chunks500k | while read chunk
+    do
+        echo ../scripts/RMOpossumV3 /cluster/data/monDom2/RMOut $chunk \
+           '{'check in line+ /san/sanvol1/scratch/monDom2/chunks500k/$chunk'}' \
+         '{'check out line+ /cluster/data/monDom2/RMOut/$chunk.out'}'
+    done > RMRun/jobList
+
+    cd RMRun
+    para create jobList
+    para try ... check ... push ... etc ...
+XXXX - running 2006-01-20
+Completed: 7344 of 7344 jobs
+CPU time in finished jobs:   26250196s  437503.27m  7291.72h  303.82d  0.832 y
+IO & Wait Time:               1295145s   21585.75m   359.76h   14.99d  0.041 y
+Average job time:                3751s      62.51m     1.04h    0.04d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:            7619s     126.98m     2.12h    0.09d
+Submission to last job:        248204s    4136.73m    68.95h    2.87d
+    #	There were two failures that pushed out the total time
+    #	Without any failures it would take about 12 hours
+
+    ssh kkstore01
+    cd /cluster/data/monDom2
+    #	Place all these results together into a single file
+    #	Start with just the header
+    head -3 RMOut/chunk_00.fa.out > RMRun/scaffolds.fa.RM.out
+    #	Then everything but the header
+    time find ./RMOut -type f | sort -t_ -k2,2n | while read F
+    do
+	tail +4 ${F} >> RMRun/scaffolds.fa.RM.out
+    done
+    #	real    2m23.526s
+    #	7 Million lines, 900 Mb file
+    wc RMRun/scaffolds.fa.RM.out
+    #	7239721 108831708 933301569 RMRun/scaffolds.fa.RM.out
+    #	lift the split scaffolds to scaffold coordinates
+    cd RMRun
+    time liftUp -type=.out rmsk.out \
+		../scripts/scaffoldsSplit.lft warn scaffolds.fa.RM.out
+
+    #	And now, load them up
+    ssh hgwdev
+    cd /cluster/data/monDom2/RMRun
+    time hgLoadOut -verbose=2 -nosplit monDom2 rmsk.out > load.out 2>&1
+    #	note: 75 records dropped due to repStart > repEnd
+    #	15 minutes
+
+    time featureBits monDom2 rmsk
+    #	1811406819 bases of 3496445653 (51.807%) in intersection
+    #	real    6m19.242s
+
+    #	the first RM run had a featureBits of:
+    #	1770704342 bases of 3496445653 (50.643%) in intersection
+    #	the second RM run had a featureBits of:
+    #	1769890042 bases of 3496445653 (50.620%) in intersection
+    #	real    13m1.867s
+
+#######################################################################
+# RUN REPEAT MASKER (DONE - 2005-08-19 - Hiram)(OBSOLETE, see above)
     #	Reusing the special repeat masker addition from monDom1
     #   Will run both -mammal and this one, and combine the results.
     #   the library is a copy from monDom1/jkStuff/monDom1.novel.RM.lib
@@ -551,6 +659,8 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
 
 #######################################################################
 # MASK FA USING REPEATMASKER AND FILTERED TRF FILES (DONE - 2005-08-22 - Hiram)
+#	RE-DONE with new RM output 2006-01-23
+#	RE-DONE with new RM output 2005-12-16
     #	maskOutFa is trying to read in the entire input sequence to get
     #	it ready for masking.  This doesn't work on the ordinary memory
     #	machines since scaffolds.fa is the whole thing.
@@ -559,15 +669,24 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     cd /scratch/monDom2
     cp -p /cluster/store1/monDom2/broad.mit.edu/scaffolds.fa.gz .
     cp -p /cluster/store1/monDom2/bed/simpleRepeat/trfMask.bed .
-    cp -p /cluster/store1/monDom2/RMRun/scaffolds.fa.RM.out .
+    rsync -a --progress kkstore01:/cluster/store1/monDom2/RMRun/rmsk.out .
 
     maskOutFa -soft scaffolds.fa.gz trfMask.bed maskedScaffolds.fa
-    maskOutFa -clip -softAdd maskedScaffolds.fa scaffolds.fa.RM.out \
-	maskedScaffolds.fa
-    #	those two mask operations each take 2 to 3 minutes.
-    #	There are a number negative rEnd warnings.
-    #	There were no warnings about Mask record out of range
-    #	(which is what the -clip option will work-around)
+    maskOutFa -clip -softAdd maskedScaffolds.fa rmsk.out maskedScaffolds.fa
+    #	looks good:
+# WARNING: negative rEnd: -15 scaffold_0:42772383-42772698 L1_Mars1
+# WARNING: negative rEnd: -569 scaffold_1:112455185-112455386 L1_Mars1
+# WARNING: negative rEnd: -27 scaffold_8:83916755-83916961 L1_Mars1
+# WARNING: negative rEnd: -679 scaffold_8:83917313-83917408 L1_Mars1
+# WARNING: negative rEnd: -16 scaffold_12:60303711-60303766 L3
+# WARNING: negative rEnd: -1 scaffold_23:22193902-22193931 L1_Mdo1
+# WARNING: negative rEnd: -289 scaffold_28:5288792-5288941 L1_Mars1a
+# WARNING: negative rEnd: -501 scaffold_28:5289048-5290587 L1_Mars1a
+# WARNING: negative rEnd: -67 scaffold_39:3078357-3078508 L1_Mdo5
+# WARNING: negative rEnd: -76 scaffold_116:2053077-2053119 L1_Mdo5
+# WARNING: negative rEnd: -322 scaffold_127:944681-944774 HAL1_Opos1
+
+# real    3m45.815s
 
     #	May as well create a 2bit while we are here:
     time faToTwoBit maskedScaffolds.fa masked.2bit
@@ -586,10 +705,13 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     #	Copy the masked 2bit file back to kksilo
     ssh kkstore01
     cd /cluster/data/monDom2
-    scp -p kolossus:/scratch/monDom2/masked.2bit .
-    rm monDom2.2bit
-    mv masked.2bit monDom2.2bit
-    scp -p kolossus:/scratch/monDom2/maskedScaffolds.fa.gz .
+    time rsync -a --progress kolossus:/scratch/monDom2/masked.2bit .
+    #	22 seconds
+    #	Since this 2bit file is pointed to from /gbdb/monDom2
+    #	replace it quickly:
+    rm monDom2.2bit; mv masked.2bit monDom2.2bit
+    time rsync -a --progress kolossus:/scratch/monDom2/maskedScaffolds.fa .
+    #	1m 20s
     #	clean up unneeded .fa
     rm scaffoldsSplit.fa
 
@@ -599,6 +721,10 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     rm -fr *
     cd
     rmdir /scratch/monDom2
+
+    #	Copy it to bluearc scratch/hg for rsync to kluster nodes:
+    ssh kkstore01
+    cd /cluster/data/monDom2
 
 #######################################################################
 # MAKE 11.OOC FILE FOR BLAT (DONE - 2005-08-22 - Hiram)
@@ -618,7 +744,54 @@ rmdir --ignore-fail-on-non-empty /tmp/$outputFN
     cp -p /cluster/data/monDom2/monDom2.2bit .
 
 ##########################################################################
-# BLASTZ HUMAN hg17 (STARTED - 2005-08-22 - Hiram)
+# BLASTZ HUMAN hg18 (STARTED - 2006-01-23 - Hiram)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+
+    cat << '_EOF_' > DEF
+# human vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human (hg18)
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom2
+SEQ2_DIR=/san/sanvol1/scratch/monDom2/monDom2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/monDom2/chrom.sizes
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-01-23
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+
+
+##########################################################################
+# BLASTZ HUMAN hg17 (OBSOLETE - 2006-01-23 see above - 2005-08-22 - Hiram)
     ssh pk
     mkdir /cluster/data/hg17/bed/blastzMonDom2.2005_08_22
     cd /cluster/data/hg17/bed/blastzMonDom2.2005_08_22
@@ -848,27 +1021,28 @@ my $AGP_FILE="/cluster/data/monDom2/broad.mit.edu/assembly.agp";
 
 ##########################################################################
 # PRODUCING GENSCAN PREDICTIONS (DONE - 2005-08-23 - Hiram)
-# genscanPep table touched by alisq to satisfy joinerCheck 2005-03-32 - kuhn)
+#	RE-DONE with new masked sequence 2006-01-23 - Hiram
 
     #	Need a hard masked file
     ssh kolossus
     mkdir /scratch/monDom2
     cd /scratch/monDom2
-    time scp -p kkstore01:/cluster/data/monDom2/maskedScaffolds.fa.gz .
-    time maskOutFa maskedScaffolds.fa.gz hard stdout | gzip \
-	> hardMaskedScaffolds.fa.gz
-    #	12 minutes
-    #	send the result back  (these scp operations are faster than
+    rsync -a --progress kkstore01:/cluster/data/monDom2/maskedScaffolds.fa .
+    time maskOutFa maskedScaffolds.fa hard hardMaskedScaffolds.fa
+    #	1m 25sec
+    #	send the result back  (these rsync operations are faster than
     #	simply copying over NFS)
-    time scp -p hardMaskedScaffolds.fa.gz kkstore01:/cluster/data/monDom2
-    #	1 minute
+    ssh kkstore01
+    cd /cluster/data/monDom2
+    time rsync -a --progress kolossus:/scratch/monDom2/hardMaskedScaffolds.fa .
     #	break all these hard masked scaffolds at 5,000,000 boundaries,
     #	result is to a single file.  The tiny scaffolds under that
     #	size remain intact.
-    time faSplit size hardMaskedScaffolds.fa.gz 5000000 -oneFile \
-          genscan_ -lift=genscan.lft
+    time faSplit -lift=genscan.lft -oneFile size \
+	hardMaskedScaffolds.fa 5000000 genscan_ 
     #	5677 pieces of 5677 written
-    #	real    5m6.844s
+    #	real    2m1.146s
+
     #	save lift file for later liftUp
     cp -p genscan.lft /cluster/data/monDom2/scripts
     #	Now split that single file into 200,000 chunks, keeping fa record
@@ -877,17 +1051,16 @@ my $AGP_FILE="/cluster/data/monDom2/broad.mit.edu/assembly.agp";
     #	chunks will be their own separate files.
     mkdir hardMasked200K
     time faSplit about genscan_.fa 200000 hardMasked200K/c_
-    #	2 minutes, makes 1169 files:
-    ls chunks200k | wc
+    #	real    2m5.636s
+    #	makes 1169 files:
+    ls hardMasked200K | wc
     #	1169    1169   10590
 
     #	Clean out the /cluster/bluearc/monDom2/ files that were used
     #	during repeat masking, then, this copy
-    cd /cluster/bluearc/monDom2
-    rm -fr chunks500k
-    mkdir hardMasked200K
-    cd hardMasked200K
-    cp -p /scratch/monDom2/hardMasked200K/* 
+    mkdir /san/sanvol1/scratch/monDom2/hardMasked200K/
+    cd /san/sanvol1/scratch/monDom2/hardMasked200K/
+    rsync -a --progress /cluster/data/monDom2/hardMasked200K/ .
 
     ssh hgwdev
     mkdir /cluster/data/monDom2/bed/genscan
@@ -897,23 +1070,24 @@ my $AGP_FILE="/cluster/data/monDom2/broad.mit.edu/assembly.agp";
     # Make 3 subdirectories for genscan to place output files
     mkdir gtf pep subopt
 
-    #	This should not be done on the kk - these 5,000,000 sized chunks
-    #	cause too much memory to be used.
-    ssh kk
+    #	This should not be done on the pk - these 5,000,000 sized chunks
+    #	cause too much memory to be used for the kk nodes.
+    #	These jobs are too large to run on the kk - they occupy about 1 Gb
+    #	of memory which is the memory size of a kk node, two of them on
+    #	the same node cause too much swapping.
+    ssh pk
     cd /cluster/data/monDom2/bed/genscan
-    ls -1S /cluster/bluearc/monDom2/hardMasked200K/c*.fa > chunks.list
-    cat << '_EOF_' > gsub
+    ls -1S /san/sanvol1/scratch/monDom2/hardMasked200K/c*.fa > chunks.list
+    cat << '_EOF_' > template
 #LOOP
 gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
 #ENDLOOP
 '_EOF_'
     # << this line keeps emacs coloring happy
-    gensub2 chunks.list single gsub jobList
+    gensub2 chunks.list single template jobList
     para create jobList
     para try, check, push, check, ...
-    #	These jobs are too large to run on the kk - they occupy about 1 Gb
-    #	of memory which is the memory size of a kk node, two of them on
-    #	the same node cause too much swapping.
+XXX running 2006-01-23
 # Completed: 1169 of 1169 jobs
 # CPU time in finished jobs:     228087s    3801.45m    63.36h    2.64d  0.007 y
 # IO & Wait Time:               1300618s   21676.96m   361.28h   15.05d  0.041 y
@@ -934,20 +1108,19 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/monDom2/bed/genscan
-    # Reloaded without -genePredExt 1/6/05:
     ldHgGene -gtf monDom2 genscan genscan.gtf
-    #	39815 gene predictions
+    #	40051 gene predictions
     hgPepPred monDom2 generic genscanPep genscan.pep
     hgLoadBed monDom2 genscanSubopt genscanSubopt.bed
-    #	Loaded 490601 elements of size 6
+    #	Loaded 492210 elements of size 6
 
     #	Compare with other assemblies:
     featureBits monDom2 genscan
-    #	49606440 bases of 3496445653 (1.419%) in intersection
+    #	48628209 bases of 3496445653 (1.391%) in intersection
     featureBits monDom1 genscan
     #	47170795 bases of 3492108230 (1.351%) in intersection
     featureBits monDom2 genscanSubopt
-    #	53320977 bases of 3496445653 (1.525%) in intersection
+    #	52714123 bases of 3496445653 (1.508%) in intersection
     featureBits monDom1 genscanSubopt
     #	51805835 bases of 3492108230 (1.484%) in intersection
     featureBits hg17 genscan
@@ -956,14 +1129,15 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     #	55986178 bases of 2866216770 (1.953%) in intersection
 
     # Clean up
-    cd /cluster/bluearc/monDom2
-    rm -fr hardChunks hardMaskedScaffolds.fa
+    cd /san/sanvol1/scratch/monDom2
+    rm -fr hardMasked200K
     #	This kolossus clean up was actually left until much later.
     #	I found these copies here to be useful later on.
     ssh kolossus
     cd /scratch/monDom2
     rm -f *
-
+    cd ..
+    rmdir monDom2
 
 ##########################################################################
 # MAKE Human Proteins track (WORKING - 2005-08-24 - Hiram)

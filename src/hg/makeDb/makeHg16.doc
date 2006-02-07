@@ -3650,6 +3650,9 @@ http://genome.imim.es/genepredictions/H.sapiens/golden_path_200307_x_mm4/SGP/rea
 #  featureBits hg15 sgpGene
 #  40395614 bases of 2866466359 (1.409%) in intersection
 
+# SGP GENES (UPDATE 1/18/2006)
+    sgpPep table dropped, replaced by hgc generated protein seq in browser
+
 LOAD NCI60 (DONE: Fan 10/20/2003)
 o - # ssh hgwdev
     cd /projects/cc/hg/mapplots/data/NCI60/dross_arrays_nci60/
@@ -6438,6 +6441,20 @@ sys     16m13.770s
 	VALUES ("hg16","proteins040115");' \
 	-h genome-testdb hgcentraltest
 
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.  The hgKgGetText takes
+# about 5 minutes when the database is not too busy.  The rest
+# is real quick.
+     ssh hgwdev
+     cd /cluster/data/hg16/bed/knownGenes.2004-01-29
+     mkdir index
+     cd index
+     hgKgGetText hg16 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/data/hg16/bed/knownGenes.2004-01-29/index/knownGene.ix /gbdb/hg16/knownGene.ix
+     ln -s /cluster/data/hg16/bed/knownGenes.2004-01-29/index/knownGene.ixx /gbdb/hg16/knownGene.ixx
+
 
 # VEGA GENES UPDATE from 2004/01/15 below  (2004-02-04 - Hiram)
     mv ~/hg16/bed/vega ~/hg16/bed/vega.badcds
@@ -7972,6 +7989,9 @@ EOF
     sed 's/hapmapLd/hapmapLdChb/' ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql hg16
     sed 's/hapmapLd/hapmapLdJpt/' ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql hg16
     sed 's/hapmapLd/hapmapLdYri/' ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql hg16
+
+    # The length of each of the three value vectors (rsquared, dprime,
+    # and lod) is the same and is stored in the score field.
 
     # 30-40 minutes
     foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X)
@@ -11853,4 +11873,14 @@ echo "load data local infile 'affyHuEx1.annot.tab' into table affyHuEx1Annot;" |
         # Loaded 14224 elements of size 5
     checkTableCoords hg16 nhgriDnaseHs
 
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch hg16 superfamily 0407141100.00
+  sudo mytouch hg16 acemblyPep 0406151200.00
+  sudo mytouch hg16 twinscanPep 0407141200.00
+  sudo mytouch hg16 superfamily 0407141100.00
+  sudo mytouch hg16 ensPep 0407141100.00
+  sudo mytouch hg16 knownToEnsembl 0407141100.00
+  sudo mytouch hg16 sfDescription 0407141100.00
+  sudo mytouch hg16 ensEstGtp 0409081800.00
+  sudo mytouch hg16 ensEstPep 0409081800.00
 

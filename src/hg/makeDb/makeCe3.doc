@@ -1936,3 +1936,278 @@ total 25024
     #	21985 groups 7 seqs 1 sources 3 feature types
     #	21985 gene predictions
     hgPepPred ce3 generic twinscanPep chr_ptx/CHROMOSOME_*.ptx
+
+########################################################################
+# MAKE ALT. SPLICING TRACK (DONE - 2006-01-12 - Hiram)
+    # create rnaCluster table and Gene Bounds track
+    ssh hgwdev
+    mkdir /cluster/data/ce3/bed/rnaCluster
+    cd /cluster/data/ce3/bed/rnaCluster
+    for C in I II III IV V X
+    do
+        echo "clusterRna ce3 /dev/null chr${C}.bed -chrom=${C}"
+        clusterRna ce3 /dev/null chr${C}.bed -chrom=chr${C}
+    done
+    #	Are we getting about the same numbers as before ?
+    #	Do a wc on these bed files, should be something like:
+    wc *.bed | sort -n
+    #	2628   31536  193683 chrIII.bed
+    #	2767   33204  194963 chrX.bed
+    #	2878   34536  202197 chrI.bed
+    #	3245   38940  235165 chrIV.bed
+    #	3506   42072  251726 chrII.bed
+    #	4981   59772  353344 chrV.bed
+    #  20005  240060 1431078 total
+
+    hgLoadBed -strict ce3 rnaCluster *.bed
+
+    hgsql -N -e "select chrom from chromInfo" ce3 > chrom.list
+
+    (perl -e 'print "#\!/bin/sh\n"; while(<>) {chomp($_); printf "hgsql -A -e =select * from rnaCluster where chrom like \"$_\" order by chromStart, name= ce3 | egrep -v chromStart | cut -f2\-13 > $_.ce3.rnaCluster.bed\n";}' | sed -e "s/=/'/g") < chrom.list > rnaCluster.sh
+
+    chmod a+x rnaCluster.sh
+    ./rnaCluster.sh
+    #	And the result of that should look like:
+    wc *.rnaCluster.bed | sort -n
+    #	   0       0       0 chrM.ce3.rnaCluster.bed
+    #	2628   31536  193683 chrIII.ce3.rnaCluster.bed
+    #	2767   33204  194963 chrX.ce3.rnaCluster.bed
+    #	2878   34536  202197 chrI.ce3.rnaCluster.bed
+    #	3245   38940  235165 chrIV.ce3.rnaCluster.bed
+    #	3506   42072  251726 chrII.ce3.rnaCluster.bed
+    #	4981   59772  353344 chrV.ce3.rnaCluster.bed
+    #  20005  240060 1431078 total
+
+    mkdir /cluster/data/ce3/bed/altSplice
+    cd /cluster/data/ce3/bed/altSplice
+
+    hgsql -N -e "select chrom from chromInfo" ce3 > chrom.list
+    perl -e 'while(<>) {chomp($_); print "altSplice -db=ce3 -beds=../rnaCluster/$_.ce3.rnaCluster.bed -agxOut=agx/$_.ce3.rnaCluster.agx -consensus -weightMrna\n";}' < chrom.list > altSplice.para.spec
+    # these jobs are no big deal on the worm, just run this file:
+    chmod +x altSplice.para.spec
+    mkdir agx
+    time ./altSplice.para.spec
+    #	real    6m55.219s
+    #	The result of that should look like:
+    wc agx/*.agx | sort -n
+    #	2579   46422 2379008 agx/chrIII.ce3.rnaCluster.agx
+    #	2681   48258 2320195 agx/chrX.ce3.rnaCluster.agx
+    #	2817   50706 2516155 agx/chrI.ce3.rnaCluster.agx
+    #	3121   56178 2420981 agx/chrIV.ce3.rnaCluster.agx
+    #	3388   60984 2454789 agx/chrII.ce3.rnaCluster.agx
+    #	4873   87714 2939995 agx/chrV.ce3.rnaCluster.agx
+
+    cat agx/*.agx > altSplice.agx
+    agxToBed altSplice.agx altSplice.bed
+
+    hgLoadBed -strict -notItemRgb \
+	-sqlTable=$HOME/kent/src/hg/lib/altGraphX.sql ce3 \
+	    altGraphX altSplice.agx
+    #	Loaded 19459 elements of size 18
+
+########################################################################
+# Create frames based page views of alt splice areas of interest
+#	(DONE - 2005-01-12 - Hiram)
+#	A link to this business was added to the description page
+#	on each of the ce1 ce2 and ce3 browsers and all their
+#	frames based viewpoints were placed in goldenPath to you can
+#	click through from the description page
+    ssh hgwdev
+    mkdir /cluster/data/ce3/bed/altSplice/altAnalysis
+    cd /cluster/data/ce3/bed/altSplice/altAnalysis
+    altAnalysis ce3 ../altSplice.agx altSummary.txt links.html \
+	frame.html -bedName=all
+    # creates files, (as well as several .bed files):
+    #	-rw-rw-r--    1      282 May 16 09:19 frame.html
+    #	-rw-rw-r--    1   391029 May 16 09:19 links.html
+    #	Copy these to the Intronerator WS120 location, change
+    #	default opening location:
+
+    mkdir /usr/local/apache/htdocs/goldenPath/ce3/altGraphX
+    sed -e "s#http://hgwdev-sugnet.cse.ucsc.edu##" links.html \
+	> /usr/local/apache/htdocs/goldenPath/ce3/altGraphX/links.html
+
+    sed -e \
+    "s/Human Alt Splicing Conserved in Mouse/Alt Splicing in C. elegans/" \
+	-e "s/NM_005487/chrII:14689493-14690232/" \
+	-e "s#http://hgwdev-sugnet.cse.ucsc.edu##" \
+	 frame.html \
+	    > /usr/local/apache/htdocs/goldenPath/ce3/altGraphX/frame.html
+
+########################################################################
+# HGNEAR PROTEIN BLAST TABLES (DONE - 2005-01-12 - Hiram)
+    ssh pk
+
+    #	Fetch WormBase peptides for this release
+    mkdir /cluster/data/ce3/bed/blastp
+    cd /cluster/data/ce3/bed/blastp
+    wget --timestamping -O wormPep140.faa \
+	ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep140/wormpep140
+
+    mkdir /cluster/data/ce3/bed/hgNearBlastp
+    cd /cluster/data/ce3/bed/hgNearBlastp
+    cat << _EOF_ > config.ra
+# This elegans release vs. other Gene Sorter orgs:
+# self, human, mouse, rat, zebrafish, yeast
+
+targetGenesetPrefix wormBase
+targetDb ce3
+queryDbs ce3 hg17 mm7 rn3 danRer3 sacCer1
+
+ce3Fa /cluster/data/ce3/bed/blastp/wormPep140.faa
+hg17Fa /cluster/data/hg17/bed/blastp/known.faa
+mm7Fa /cluster/data/mm7/bed/geneSorter/blastp/known.faa
+rn3Fa /cluster/data/rn3/bed/blastp/known.faa
+danRer3Fa /cluster/data/danRer3/bed/blastp/ensembl.faa
+sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
+
+buildDir /cluster/data/ce3/bed/hgNearBlastp
+scratchDir /san/sanvol1/scratch/ce3HgNearBlastp
+_EOF_
+    doHgNearBlastp.pl config.ra >& do.log &
+    tail -f do.log
+
+    cat << _EOF_ > config.ra
+# This elegans release vs. other Gene Sorter orgs:
+# self, human, mouse, rat, zebrafish, yeast
+
+targetGenesetPrefix wormBase
+targetDb ce3
+queryDbs ce3
+
+ce3Fa /cluster/data/ce3/bed/blastp/wormPep140.faa
+
+buildDir /cluster/data/ce3/bed/hgNearBlastp
+scratchDir /san/sanvol1/scratch/ce3HgNearBlastp
+_EOF_
+    doHgNearBlastp.pl config.ra >& do.log &
+    tail -f do.log
+
+#########################################################################
+# Waba alignment with briggsae  (WORKING - 2006-01-12 - Hiram)
+    ssh pk
+    #	We need some unmasked FA for these things
+    mkdir /san/sanvol1/scratch/worms/Celegans3/unmaskedFa
+    cd /san/sanvol1/scratch/worms/Celegans3/unmaskedFa
+    for C in I II III IV V X M
+    do
+	echo -n "chr${C}: "
+	twoBitToFa -seq=chr${C} ../ce3.2bit stdout | \
+		tr [a-z] [A-Z] | sed -e "s/CHR${C}/chr${C}/" > chr${C}.fa
+	faSize chr${C}.fa
+    done
+
+    mkdir /cluster/data/ce3/bed/cb2.waba
+    cd /cluster/data/ce3/bed/cb2.waba
+    for C in I II III IV V X I_random II_random III_random IV_random \
+	V_random X_random Un
+    do
+	ls -1S /san/sanvol1/scratch/worms/cb2/split/${C}/*.fa
+    done > cb2.list
+
+    ls -1S /san/sanvol1/scratch/worms/Celegans3/unmaskedFa/chr*.fa \
+	> elegans.list
+    mkdir out
+    cat elegans.list | while read FN
+    do
+	b=`basename ${FN}`
+	mkdir out/${b%%.fa}
+    done
+    # create scripts to be used here
+    cat << '_EOF_' > wabaRun
+#!/bin/csh -fe
+#
+#	$1 - full pathname to a briggsae contig
+#	$2 - file path to an elegans chrom.fa
+#	$3 - result file full pathname
+#
+set f = $1:t
+set chr = $2:t
+set d = $chr:r
+mkdir -p /scratch/tmp/$d/$f
+cp $1 /scratch/tmp/$d/$f
+pushd .
+cd /scratch/tmp/$d/$f
+set t = $f:r
+/cluster/bin/x86_64/waba 1 $f $2 $t.1
+/cluster/bin/x86_64/waba 2 $t.1 $t.2
+/cluster/bin/x86_64/waba 3 $t.2 $t.wab
+popd
+cp -p /scratch/tmp/$d/$f/$t.wab $3
+rm -f /scratch/tmp/$d/$f/$t.*
+rmdir --ignore-fail-on-non-empty /scratch/tmp/$d/$f
+rmdir --ignore-fail-on-non-empty /scratch/tmp/$d
+'_EOF_'
+    #	happy emacs
+    chmod +x wabaRun
+
+    cat << '_EOF_' > jobTemplate
+#LOOP
+./wabaRun {check in exists+ $(path1)} {check in exists+ $(path2)} {check out exists out/$(root2)/$(root1).wab}
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+
+    gensub2 cb2.list elegans.list jobTemplate jobList
+    para create jobList
+    para try
+    para check
+    para push
+    # one of the jobs takes quite a while.  Most of the others are OK:
+Completed: 6950 of 6951 jobs
+Crashed: 1 jobs
+CPU time in finished jobs:   19284472s  321407.87m  5356.80h  223.20d  0.612 y
+IO & Wait Time:                 63556s    1059.26m    17.65h    0.74d  0.002 y
+Average job time:                2784s      46.40m     0.77h    0.03d
+Longest job:                    47017s     783.62m    13.06h    0.54d
+Submission to last job:         58555s     975.92m    16.27h    0.68d
+
+    #	The failed job is:
+    # /cluster/store5/worm/ce3/bed/waba/wabaRun \
+    #	/iscratch/i/worms/Cbriggsae/contigs/c0907.fa \
+    #	/iscratch/i/worms/Celegans2/unmaskedFa/chrI.fa \
+    #	/cluster/store5/worm/ce3/bed/waba/out/chrI/c0907.wab
+XXXX - running 2004-04-07 - retrying this stand-along on kkr1u00
+    # after about 1.5 hours fails with the error:
+    # waba: xenbig.c:550: mergeTwo: Assertion `c->qStart == qStart &&
+    #	c->qEnd == qEnd' failed.
+    # Abort
+
+    # Ignoring that error, and moving on
+
+    # next machine
+    ssh hgwdev
+
+    cd /cluster/data/ce3/bed/waba
+    mkdir Load
+    cd Load
+    #  The cat through the pipe to hgWaba will avoid making large files
+    # 	that are not needed.
+    cat << '_EOF_' > loadEm.sh
+#!/bin/sh
+#
+for c in I II III IV V X M
+do
+	echo -n "${c} "
+        cat /cluster/store/data/ce3/bed/waba/out/chr${c}/c*.wab |
+        hgWaba ce3 Cbr chr${c} 0 stdin > proc${c}.out 2>&1
+done
+
+exit 0
+'_EOF_'
+    chmod +x loadEm.sh
+
+    # run it to load the waba track:
+    ./loadEm.sh
+    # remove garbage temp file:
+    rm full_waba.tab chrom_waba.tab
+
+    # worm/ce3/trackDb.ra entry:
+#   track cbrWaba
+#   shortLabel Briggsae Waba
+#   longLabel C. briggsae Waba Alignments
+#   group compGeno
+#   priority 20
+#   visibility dense
+#   color 140,0,200
+#   altColor 210,140,250

@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.32 2004/12/06 22:56:09 hiram Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.33 2006/01/30 21:56:57 daryl Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -83,11 +83,16 @@ dasHead(200);
 dasHelp("UCSC DAS Server.\n"
     "See http://www.biodas.org for more info on DAS.\n"
     "Try http://genome.ucsc.edu/cgi-bin/das/dsn for a list of databases.\n"
+    "See our DAS FAQ (http://genome.ucsc.edu/FAQ/FAQdownloads#download23)\n"
+    "for more information.  Alternatively, we also provide query capability\n"
+    "through our MySQL server; please see our FAQ for details\n"
+    "(http://genome.ucsc.edu/FAQ/FAQdownloads#download29).\n\n"
     "Note that DAS is an inefficient protocol which does not support\n"
     "all types of annotation in our database.  We recommend you\n"
     "access the UCSC database by downloading the tab-separated files in\n"
-    "the downloads section or by using the table browser instead of using\n"
-    "DAS in most circumstances.");
+    "the downloads section (http://hgdownload.cse.ucsc.edu/downloads.html)\n"
+    "or by using the table browser (http://genome.ucsc.edu/cgi-bin/hgTables)\n"
+    "instead of using DAS in most circumstances.");
 exit(0);
 }
 

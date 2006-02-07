@@ -1,5 +1,6 @@
 /* hgFind.c - Find things in human genome annotations. */
 #include "common.h"
+#include <regex.h>
 #include "obscure.h"
 #include "hCommon.h"
 #include "portable.h"
@@ -20,7 +21,6 @@
 #include "snp.h"
 #include "refLink.h"
 #include "kgAlias.h"
-#include "kgAlias.h"
 #include "kgProtAlias.h"
 #include "findKGAlias.h"
 #include "findKGProtAlias.h"
@@ -28,9 +28,9 @@
 #include "minGeneInfo.h"
 #include "pipeline.h"
 #include "hgConfig.h"
-#include <regex.h>
+#include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.173 2005/12/13 19:06:16 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.178 2006/02/02 02:50:30 kent Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -333,6 +333,8 @@ if (sameString(table, "description"))
 else if (sameString(table, "productName"))
     return anyStartWith(key, commonProductNameWords, 
     	ArraySize(commonProductNameWords));
+else if (sameString(table, "author"))
+    return sameWord(key, "and");
 else
     return FALSE;
 }
@@ -515,6 +517,180 @@ hFreeConn(&conn);
 return ok;
 }
 
+static struct hgPosTable *addKnownGeneTable(struct hgPositions *hgp)
+/* Create new table for known genes matches, add it to hgp, and return it. */
+{
+struct hgPosTable *table;
+AllocVar(table);
+table->description = cloneString("Known Genes");
+table->name = cloneString("knownGene");
+slAddHead(&hgp->tableList, table);
+return table;
+}
+
+static boolean gotFullText()
+/* Return TRUE if we have full text index. */
+{
+char path[PATH_LEN];
+safef(path, sizeof(path), "/gbdb/%s/knownGene.ix", hGetDb());
+if (fileExists(path))
+    return TRUE;
+else
+    {
+    warn("%s doesn't exist", path);
+    return FALSE;
+    }
+}
+
+struct tsrPos
+/* Little helper structure tying together search result
+ * and pos, used by addKnownGeneItems */
+    {
+    struct tsrPos *next;	/* Next in list. */
+    struct trixSearchResult *tsr;	/* Basically a gene symbol */
+    struct hgPos *posList;		/* Associated list of positions. */
+    };
+
+static void addKnownGeneItems(struct hgPosTable *table,
+	struct trixSearchResult *tsrList, struct sqlConnection *conn)
+/* Convert tsrList to posList, and hang posList off of table. */
+{
+/* This code works with just two SQL queries no matter how
+ * big the search result list is.  For cases where the search 
+ * result list is big (say 100 or 1000 items) this is noticably
+ * faster than the simpler-to-code approach that would do two 
+ * queries for each search result.  We pay for this speed tweak
+ * by having to construct a more elaborate query, and by having
+ * to maintain a hash to connect the query results back to the
+ * individual positions. */
+struct dyString *dy = dyStringNew(0);
+struct trixSearchResult *tsr;
+struct hash *hash = hashNew(16);
+struct hgPos *posList = NULL, *pos;
+struct tsrPos *tpList = NULL, *tp;
+struct sqlResult *sr;
+char **row;
+int maxToReturn = 500;
+
+if (slCount(tsrList) > maxToReturn)
+    {
+    warn("Search terms are not very specific, only showing first %d matching known genes.",
+    	maxToReturn);
+    tsr = slElementFromIx(tsrList, maxToReturn-1);
+    tsr->next = NULL;
+    }
+
+/* Make hash of all search results - one for each known gene ID. */
+for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
+    {
+    lmAllocVar(hash->lm, tp);
+    tp->tsr = tsr;
+    slAddHead(&tpList, tp);
+    hashAdd(hash, tsr->itemId, tp);
+    }
+
+/* Stream through knownGenes table and make up a pos
+ * for each mapping of each gene matching search. */
+dyStringAppend(dy, 
+	"select name,chrom,txStart,txEnd from knownGene where name in (");
+for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
+    {
+    dyStringAppendC(dy, '"');
+    dyStringAppend(dy, tsr->itemId);
+    dyStringAppendC(dy, '"');
+    if (tsr->next != NULL)
+        dyStringAppendC(dy, ',');
+    }
+dyStringAppend(dy, ")");
+sr = sqlGetResult(conn, dy->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tp = hashFindVal(hash, row[0]);
+    if (tp == NULL)
+        internalErr();
+    AllocVar(pos);
+    pos->chrom = cloneString(row[1]);
+    pos->chromStart = sqlUnsigned(row[2]);
+    pos->chromEnd = sqlUnsigned(row[3]);
+    slAddHead(&tp->posList, pos);
+    }
+sqlFreeResult(&sr);
+
+/* Stream through kgXref table adding description and geneSymbol */
+dyStringClear(dy);
+dyStringAppend(dy, 
+	"select kgID,geneSymbol,description from kgXref where kgID in (");
+for (tsr = tsrList; tsr != NULL; tsr = tsr->next)
+    {
+    dyStringAppendC(dy, '"');
+    dyStringAppend(dy, tsr->itemId);
+    dyStringAppendC(dy, '"');
+    if (tsr->next != NULL)
+        dyStringAppendC(dy, ',');
+    }
+dyStringAppend(dy, ")");
+sr = sqlGetResult(conn, dy->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    tp = hashFindVal(hash, row[0]);
+    if (tp == NULL)
+        internalErr();
+    for (pos = tp->posList; pos != NULL; pos = pos->next)
+        {
+	char nameBuf[256];
+	safef(nameBuf, sizeof(nameBuf), "%s (%s)", row[1], row[0]);
+	pos->name = cloneString(nameBuf);
+	pos->description = cloneString(row[2]);
+	}
+    }
+sqlFreeResult(&sr);
+
+/* Hang all pos onto table. */
+for (tp = tpList; tp != NULL; tp = tp->next)
+    {
+    struct hgPos *next;
+    for (pos = tp->posList; pos != NULL; pos = next)
+        {
+	next = pos->next;
+	slAddHead(&posList, pos);
+	}
+    }
+table->posList = posList;
+hashFree(&hash);
+dyStringFree(&dy);
+}
+
+boolean findKnownGeneFullText(char *term,struct hgPositions *hgp)
+/* Look for position in full text. */
+{
+char *db = hGetDb();
+char path[PATH_LEN];
+boolean gotIt = FALSE;
+struct trix *trix;
+struct trixSearchResult *tsrList;
+char *lowered = cloneString(term);
+char *keyWords[HGFIND_MAX_KEYWORDS];
+int keyCount;
+
+safef(path, sizeof(path), "/gbdb/%s/knownGene.ix", db);
+trix = trixOpen(path);
+tolowers(lowered);
+keyCount = chopLine(lowered, keyWords);
+tsrList = trixSearch(trix, keyCount, keyWords, TRUE);
+if (tsrList != NULL)
+    {
+    struct hgPosTable *table = addKnownGeneTable(hgp);
+    struct sqlConnection *conn = hAllocConn();
+    addKnownGeneItems(table, tsrList, conn);
+    hFreeConn(&conn);
+    gotIt = TRUE;
+    }
+freez(&lowered);
+trixSearchResultFreeList(&tsrList);
+trixClose(&trix);
+return gotIt;
+}
+
 static boolean findKnownGeneDescLike(char *spec, struct hgPositions *hgp,
 				 char *tableName)
 /* Look for position in gene prediction table. */
@@ -544,14 +720,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (ok == FALSE)
         {
 	ok = TRUE;
-	AllocVar(table);
-	dyStringClear(query);
-	table->description = cloneString("Known Genes");
-	dyStringPrintf(query, "%s", tableName);
-	table->name = cloneString("knownGene");
-	slAddHead(&hgp->tableList, table);
+	table = addKnownGeneTable(hgp);
 	}
-
     AllocVar(pos);
     pos->chrom = hgOfficialChromName(row[0]);
     pos->chromStart = atoi(row[1]);
@@ -597,11 +767,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (ok == FALSE)
         {
 	ok = TRUE;
-	AllocVar(table);
-	dyStringClear(query);
-	table->description = cloneString("Known Genes");
-	dyStringPrintf(query, "%s", tableName);
-	table->name = cloneString("knownGene");
+	table = addKnownGeneTable(hgp);
 	slAddHead(&hgp->tableList, table);
 	}
 
@@ -2376,12 +2542,17 @@ char *upcTerm = cloneString(term);
 touppers(upcTerm);
 if (sameString(hfs->searchType, "knownGene"))
     {
-    if (hTableExists("kgAlias"))
-	found = findKgGenesByAlias(term, hgp);
-    if (!found && hTableExists("kgProtAlias"))
-	found = findKgGenesByProtAlias(term, hgp);
-    if (!found)
-    	found = findKnownGene(term, hgp, hfs->searchTable);
+    if (gotFullText())
+	found = findKnownGeneFullText(term, hgp);
+    else	/* NOTE, in a few months (say by April 1 2006) get rid of else -JK */
+	{
+	if (!found && hTableExists("kgAlias"))
+	    found = findKgGenesByAlias(term, hgp);
+	if (!found && hTableExists("kgProtAlias"))
+	    found = findKgGenesByProtAlias(term, hgp);
+	if (!found)
+	    found = findKnownGene(term, hgp, hfs->searchTable);
+	}
     }
 else if (sameString(hfs->searchType, "refGene"))
     {
@@ -2594,8 +2765,7 @@ boolean found = FALSE;
 if (hfs == NULL || term == NULL || hgp == NULL)
     errAbort("NULL passed to hgFindUsingSpec.\n");
 
-if (strlen(term)<2)
-    return FALSE;
+if (strlen(term)<2 && !sameString(hfs->searchName, "knownGene")) return FALSE;
 
 if (isNotEmpty(hfs->termRegex) && ! matchRegex(term, hfs->termRegex))
     return(FALSE);

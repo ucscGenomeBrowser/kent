@@ -11,9 +11,9 @@ while ("$tables" != "")
     shift tables
     echo $table
     # I already loaded this big table, don't need to do it again.
-    if ("$table" != "ACC_Accession") then
-    	gettable $table
-    endif
+    #if ("$table" != "ACC_Accession") then
+    	getTable $table
+    #endif
 end
 
 	

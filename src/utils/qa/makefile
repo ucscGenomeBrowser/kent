@@ -27,15 +27,16 @@ install:
 	cp -p --remove-destination findColumn.csh          ${SCRIPTS}
 	cp -p --remove-destination findTableSize.csh       ${SCRIPTS}
 	cp -p --remove-destination gc-stats.pl             ${SCRIPTS}
-	cp -p --remove-destination getJoinerKeyErrors.pl   ${SCRIPTS}
-	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
 	cp -p --remove-destination genbankRun.csh          ${SCRIPTS}
 	cp -p --remove-destination generic_range_check.csh ${SCRIPTS} 
+	cp -p --remove-destination getAssemblies.csh       ${SCRIPTS}
 	cp -p --remove-destination getGbdbBeta.csh         ${SCRIPTS}
+	cp -p --remove-destination getJoinerKeyErrors.pl   ${SCRIPTS}
 	cp -p --remove-destination getRRdatabases.csh      ${SCRIPTS}
 	cp -p --remove-destination getRRdumpfile.csh       ${SCRIPTS}
 	cp -p --remove-destination getRRtableStatus.csh    ${SCRIPTS}
 	cp -p --remove-destination getRRtables.csh         ${SCRIPTS}
+	cp -p --remove-destination getSplit.csh            ${SCRIPTS}
 	cp -p --remove-destination getYield.csh            ${SCRIPTS}
 	cp -p --remove-destination proteins.csh            ${SCRIPTS}
 	cp -p --remove-destination retirePushQ.csh         ${SCRIPTS}

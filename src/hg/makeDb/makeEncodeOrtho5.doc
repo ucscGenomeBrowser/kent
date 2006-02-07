@@ -5,6 +5,8 @@ exit;
 # Mercator predictions have been skipped
 # canFam2 is the only assembly being updated
 
+# perviously predicted fr1 sequences were filtered at 1000 bp and renumbered
+
 set db    = canFam2
 set org   = dog
 set ortho = ortho5
@@ -204,3 +206,29 @@ foreach f (../${db}/*.agp)
 end            
 'EOF'
 # << for emacs
+
+
+
+############################
+set db    = fr1
+set org   = fugu
+set ortho = ortho5
+
+set dir = /cluster/data/encode/${ortho}/${db}
+mkdir -p $dir
+cd $dir
+cp -p /cluster/data/encode/ortho/ortho4/mercatorInput/${db}.bed5 ./${db}.unmerged.bed
+
+touch ${db}.log
+liftOverMerge -mergeGap=2000 -verbose=2 $db.unmerged.bed $db.unfiltered.bed >>& $db.log
+## these next two steps are to remove small chunks and to renumber the remaining chunks
+awk ' $3-$2 > 1000 {print $0}' < $db.unfiltered.bed | grep -v chrM > $db.filtered.bed
+liftOverMerge -mergeGap=20000 -verbose=2 $db.filtered.bed $db.bed5 >>& $db.log 
+
+awk '{printf "%s\t%s\t%s\t%s_%s\n", $1, $2, $3, $4, $5}' ${db}.bed5 > ${db}.bed
+hgLoadBed -noBin ${db} encodeRegionsConsensus ${db}.bed >>& ${db}.log
+
+mkdir -p /cluster/data/encode/${ortho}/consensus
+cd /cluster/data/encode/${ortho}/consensus
+ln -s ../liftOver/${db}.bed  ${db}.encodeRegionsConsensus.bed
+ln -s ../liftOver/${db}.bed5 ${db}.encodeRegionsConsensus.bed5

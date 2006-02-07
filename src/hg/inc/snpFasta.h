@@ -5,13 +5,14 @@
 #ifndef SNPFASTA_H
 #define SNPFASTA_H
 
-#define SNPFASTA_NUM_COLS 6
+#define SNPFASTA_NUM_COLS 7
 
 struct snpFasta
 /* Polymorphism data from dbSnp rs_fasta files */
     {
     struct snpFasta *next;  /* Next in singly linked list. */
     char *rsId;	/* Reference SNP identifier */
+    char *chrom;	/* Chromosome (can be 'multi') */
     char *molType;	/* Sample type from exemplar ss */
     char *class;	/* Single, in-del, heterozygous, microsatelite, named, etc. */
     char *observed;	/* The sequences of the observed alleles from rs-fasta files */
@@ -64,5 +65,5 @@ void snpFastaOutput(struct snpFasta *el, FILE *f, char sep, char lastSep);
 
 #endif /* SNPFASTA_H */
 
-void snpFastaTableCreate(struct sqlConnection *conn, int indexSize);
+void snpFastaTableCreate(struct sqlConnection *conn);
 

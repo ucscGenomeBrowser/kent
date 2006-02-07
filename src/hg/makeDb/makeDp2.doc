@@ -355,6 +355,8 @@ popd
     hgPepPred dp2 generic genscanPep genscan.pep
     hgLoadBed dp2 genscanSubopt genscanSubopt.bed
 
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch dp2 genscanPep 0501071300.00
 
 # PUT SEQUENCE ON /ISCRATCH FOR BLASTZ (DONE 8/3/04 angie)
     ssh kkr1u00
@@ -802,3 +804,17 @@ chainSome $(path1)
     echo "create index tName_3 on blastDm1FB  (tName(9), tEnd);" | hgsql dp2
 
 # End tblastn
+
+
+# GENEMAPPER PREDICTIONS FROM UCB (DONE 1/24/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/dp2/bed/geneMapper
+    cd /cluster/data/dp2/bed/geneMapper
+    wget http://bio.math.berkeley.edu/genemapper/GFF/rel0.2/DroPse_1.gff
+    # Don't use -genePredExt... there are no start/stop_codon items, so 
+    # all get marked "incmpl", and name2 always gets the same value as name.
+    # Get rid of custom track header lines:
+    egrep -v '^(track|browser) ' DroPse_1.gff \
+    | ldHgGene -gtf dp2 geneMapper stdin
+
+

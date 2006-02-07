@@ -3,6 +3,10 @@ if ("$1" == "") then
     echo "error: no table name specified"
     exit 1
 endif
+if ("$jdb" == "") then
+    echo "env var jdb not set.  should be something like jackson20060125"
+    exit 1
+endif
 set table = "$1"
 set sql = "select c.name, t.name, c.length from syscolumns c, sysobjects o, systypes t where o.id=c.id and o.type='U' and t.usertype=c.usertype and o.name='"$table"'order by o.name, colid"
 
@@ -40,7 +44,7 @@ echo "); " >> tempsqldef
 cat tempsqldef
 
 #create table in jackson db
-hgsql jackson -e "source tempsqldef"
+hgsql $jdb -e "source tempsqldef"
 
 #fetch rows of table using bcp
 set cmd = "freebcp $table out $table.tab -S gondor.informatics.jax.org:4025 -U kent -PJKent01 -c"
@@ -48,7 +52,7 @@ echo $cmd
 $cmd
 
 #load data into jackson db
-hgsql jackson -e 'load data local infile "'$1'.tab" into table '$1
+hgsql $jdb -e 'load data local infile "'$1'.tab" into table '$1
 
 #save space
 rm -f $table.tab

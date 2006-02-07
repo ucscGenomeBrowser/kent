@@ -69,7 +69,7 @@ set chainDest Hg15,Hg16,Hg17,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Rn2,Rn3,Cb1,Dm1,Dm2,Dp1
 set kgDb $hg,$mm,$rn
 set pbDb hg17,hg16,mm4,rn3
 set pbDb2 mm4,rn3
-set pbDb3 hg16
+set pbDb3 hg16,hg17
 
 # Define databases that support family browser (gene sorter)
 set familyDb $hg,$mm,$ce,$sacCer,$dm
@@ -463,11 +463,6 @@ identifier jgiName dependency
 "Link together jgi predicted gene structure and peptide"
     $gbd.jgiGene.name
     $gbd.jgiPep.name unique minCheck=0.9
-
-identifier sgpGeneName dependency
-"Link together sgp predicted gene structure and peptide"
-    $gbd.sgpGene.name
-    $gbd.sgpPep.name full unique
 
 identifier softberryGeneName dependency
 "Link together Fshgene++ gene structure, pepdide, and homolog"
@@ -1199,7 +1194,8 @@ identifier mouseStsTrueName typeOf=stsName
 "Mouse STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
     $mm.stsInfoMouseNew.name
     $mm.stsAlias.trueName minCheck=0.99
-    $mm.all_sts_primer.qName chopBefore=_ minCheck=0.99
+    $mm,!mm7.all_sts_primer.qName chopBefore=_ minCheck=0.99
+    mm7.all_sts_primer.qName chopBefore=_ minCheck=0.98
     $mm.stsMapMouseNew.name
     $mm.jaxQTL3.marker exclude= minCheck=0.99
     $mm.jaxQTL3.flank1 exclude= minCheck=0.95
@@ -1442,7 +1438,7 @@ identifier ensemblTranscriptId external=Ensembl dependency
     $gbd,!mm4.ensPep.name chopAfter=. minCheck=0.96
     mm4.ensPep.name chopAfter=. minCheck=0.94
     $gbd.ensTranscript.transcript_name chopAfter=. minCheck=0.20
-    $kgDb.knownToEnsembl.value chopAfter=.
+    $kgDb,!rn2.knownToEnsembl.value chopAfter=.
     $gbd.sfDescription.name chopAfter=.
     mm3.superfamily.name chopAfter=.
     $kgDb.ccdsInfo.mrnaAcc minCheck=0.30
@@ -1539,6 +1535,13 @@ identifier dbSnpRnId typeOf=dbSnpId
 "Rat dbSNP ID"
     hgFixed.dbSnpRsRn.rsId
     $rn.snpMap.name
+
+identifier hapmapLdSnpId external=dbSNP fuzzy
+"HapMap dbSNP ID"
+    $hg.hapmapLdCeu.name unique
+    $hg.hapmapLdChb.name unique
+    $hg.hapmapLdJpt.name unique
+    $hg.hapmapLdYri.name unique
 
 # Other NCBI Identifiers
 
@@ -1714,6 +1717,16 @@ identifier allenBrainProbe
     $gbd.allenBrainUrl.name
     $gbd.allenBrainAli.qName
 
+identifier jaxAlleleName
+"Jackson Labs/MGI Allele name: concatenated representative transcript ID and allele ID"
+    mm6.jaxAllele.name
+    mm6.jaxAlleleInfo.name
+
+identifier jaxPhenotypeName
+"Jackson Labs/MGI Phenotype name: representative transcript ID"
+    mm6.jaxPhenotype.name
+    mm6.jaxPhenotypeAlias.name
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
@@ -1775,6 +1788,8 @@ type genePred
     $gbd.refGene
     $gbd.xenoRefGene
     $gbd.jgiFilteredModels
+    $gbd.geneMapper
+    $gbd.jaxRepTranscript
 
 type pepPred
     $hg.acemblyPep
@@ -2013,6 +2028,7 @@ tablesIgnored $gbd
     sangerGenefinder
     sangamoDnaseHs
     simpleRepeat
+    sgpGene
     tableDescriptions
     tigrGeneIndex
     trackDb%

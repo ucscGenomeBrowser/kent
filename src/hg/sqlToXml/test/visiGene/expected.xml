@@ -127,7 +127,7 @@
       </imageFile>
     </submissionSet>
   </submissionSource>
-  <submissionSource name="Jackson Labs" acknowledgement="Thanks to the Gene Expression Database group at Jackson Labs for collecting, annotating and sharing this image." setUrl="http://www.informatics.jax.org/" itemUrl="http://www.informatics.jax.org/searches/image.cgi?%s">
+  <submissionSource name="MGI" acknowledgement="Thanks to the Gene Expression Database group at Mouse Genome Informatics (MGI) for collecting, annotating and sharing this image. The MGI images were last updated in VisiGene on June 17, 2005. Additional and more up to date annotations and images may be available directly at <A HREF=&quot;http://www.informatics.jax.org&quot; target=_BLANK>MGI.</A>" setUrl="http://www.informatics.jax.org/" itemUrl="http://www.informatics.jax.org/searches/image.cgi?%s">
     <submissionSet name="jax10719" contributors="Gaunt S.J.,Coletta P.L.,Pravtcheva D.,Sharpe P.T.," year="1990" publication="Mouse Hox-3.4: homeobox sequence and embryonic expression patterns compared with other members of the Hox gene network." pubUrl="http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&amp;db=pubmed&amp;dopt=Abstract&amp;list_uids=1976088" privateUser="0">
       <journal name="Development" url=""/>
       <copyright notice="This image is from Gaunt SJ, Development 1990 Jun;109(2):329-39, and is"/>

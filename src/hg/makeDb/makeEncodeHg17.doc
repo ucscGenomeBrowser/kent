@@ -1859,3 +1859,22 @@ cat > load.csh << 'EOF'
         # Loaded 18784 elements of size 5
 
     
+##########################################################################
+# UW/Regulome Chromatin Accessibility Profiling (CAP)
+#  Submitted 2006-1-17 by Scott Kuehn
+
+    cd /cluster/data/encode/Regulome
+    mkdir -p 2006-01-17/lab
+    cd 2006-01-17/lab
+    awk '{printf("%s\t%s\t%s\t%.3f\n", $1, $2, $3, $5)}' \
+                lab/Encode.hs-baseline.hg17.bed | \
+        sort -k1,1 -k2,2n  | \
+        /cluster/data/encode/bin/scripts/trimOverlap.pl > sens.bed
+    hgLoadBed -strict -bedGraph=4 hg17 encodeRegulomeCapSensGM06990 sens.bed
+
+    sort -k1,1 -k2,2n lab/Encode.dhs.hg17.bed | \
+        hgLoadBed -strict hg17 encodeRegulomeCapSitesGM06990 stdin
+    
+    
+
+    

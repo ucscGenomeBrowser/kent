@@ -1319,6 +1319,9 @@ http://genes.cs.wustl.edu/predictions/worm/C_elegans/WS100/12-15-2003/Celegans_W
 #    20889 gene predictions
     hgPepPred ce1 generic twinscanPep chr_ptx/chr*-fixed.fa
 
+# MYTOUCH FIX - Jen - 2006-01-25
+  sudo mytouch ce1 twinscanPep 0404031400.00
+
 # MRNAORIENT, creating tables for clusterRna operation
 #		(working 2004-02-10 - Hiram)
     mkdir -p /cluster/bluearc/ce1/bed/est
@@ -1445,6 +1448,21 @@ CREATE TABLE altGraphX (
 	visibility pack
 	type bed 3
 	canPack off
+
+    #	copy frame based view to goldenPath 2006-01-12 - Hiram
+    cd /usr/local/apache/htdocs/goldenPath
+    ln -s ceMay2003 ce1
+    cd /cluster/data/ce1/bed/altSites
+    mkdir /usr/local/apache/htdocs/goldenPath/ce1/altGraphX
+    sed -e "s#http://hgwdev-sugnet.cse.ucsc.edu##" links.html \
+	> /usr/local/apache/htdocs/goldenPath/ce1/altGraphX/links.html
+
+    sed -e \
+    "s/Human Alt Splicing Conserved in Mouse/Alt Splicing in C. elegans/" \
+	-e "s/NM_005487/chrII:14689493-14690232/" \
+	-e "s#http://hgwdev-sugnet.cse.ucsc.edu##" \
+	 frame.html \
+	    > /usr/local/apache/htdocs/goldenPath/ce1/altGraphX/frame.html
 
 #  GC 5 BASE WIGGLE TRACK (DONE - 2004-02-13 - Hiram)
     #    working on eieio, the fileserver for this data.

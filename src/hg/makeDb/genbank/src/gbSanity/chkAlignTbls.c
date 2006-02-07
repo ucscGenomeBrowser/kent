@@ -1,5 +1,6 @@
 /* validation of all alignment-based tables */
 #include "chkAlignTbls.h"
+#include "chkCommon.h"
 #include "metaData.h"
 #include "localmem.h"
 #include "gbFileOps.h"
@@ -12,7 +13,7 @@
 #include "gbGenome.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.8 2005/08/22 19:55:34 markd Exp $";
+static char const rcsid[] = "$Id: chkAlignTbls.c,v 1.9 2006/01/22 08:09:59 markd Exp $";
 
 /* FIXME: check native vs xeno, flag in metaData. */
 /* FIXME: check OI tables */
@@ -227,6 +228,9 @@ struct sqlResult *sr;
 char **row;
 char *geneName = NULL;
 int rowOff = (isRefFlat ? 1 : 0);  /* columns to skip to genePred */
+if (sqlFieldIndex(conn, table, "bin") >= 0)
+    rowOff++;
+
 
 gbVerbEnter(3, "chkGenePredTable %s", table);
 

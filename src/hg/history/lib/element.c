@@ -9,6 +9,20 @@
 
 static struct element *newEdge(struct element *parent, struct element *child);
 
+struct element *newElement(struct genome *g, char *name, char *version)
+{
+struct element *e;
+
+AllocVar(e);
+e->genome = g;
+e->species = g->name;
+e->name = name;
+e->version = version;
+slAddHead(&g->elements, e);
+
+return e;
+}
+
 void printGenomes(struct genome *genomes)
 {
 struct genome *genome;
@@ -54,7 +68,9 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	numChildren = atoi(words[2]);
 	node->ident->length =  atof(words[3]);
 	needGenome = FALSE;
-	elements = needMem(elementsLeft * sizeof(struct element *));
+	elements = NULL;
+	if (elementsLeft)
+	    elements = needMem(elementsLeft * sizeof(struct element *));
 
 	verbose(2, "adding genome %s\n",genome->name);
 	}
@@ -429,6 +445,19 @@ for (ii=0; ii < tree->numEdges; ii++)
 errAbort("tried to delete non-existant edge");
 }
 
+char *eleFullName(struct element *e, boolean doNeg)
+{
+static char buffer[512];
+
+if (e->isFlipped ^ doNeg)
+    //safef(buffer,sizeof buffer, "-%s.%s.%s",e->species,e->name, e->version);
+    safef(buffer,sizeof buffer, "-%s",e->name);
+else
+    safef(buffer,sizeof buffer, "%s",e->name);
+
+return buffer;
+}
+
 char *eleName(struct element *e)
 {
 static char buffer[512];
@@ -457,4 +486,45 @@ printf("\n");
 
 for(ii=0; ii < node->numEdges; ii++)
     printElementTrees(node->edges[ii], depth+1);
+}
+
+static void assignElemNums(struct phyloTree *node)
+{
+struct genome *g = node->priv;
+struct element *e;
+int ii;
+
+for(ii=0, e = g->elements; e ; ii++, e= e->next)
+    e->count = ii;
+
+for(ii=0; ii < node->numEdges; ii++)
+    assignElemNums(node->edges[ii]);
+}
+
+static void outElems(FILE *f, struct phyloTree *node)
+{
+struct genome *g = node->priv;
+struct element *e;
+int ii;
+
+//for(ii = 0, e = g->elements; e; ii++,e = e->next)
+    //;
+fprintf(f, ">%s %d %d %g\n",g->name, slCount(g->elements), node->numEdges, node->ident->length);
+
+for(e = g->elements; e; e = e->next)
+    {
+    if (e->isFlipped)
+	fprintf(f, "-");
+    fprintf(f,"%s.%s %d ",e->name,e->version, (e->parent) ? e->parent->count + 1 : 0 );
+    }
+fprintf(f,"\n");
+
+for(ii=0; ii < node->numEdges; ii++)
+    outElems(f, node->edges[ii]);
+}
+
+void outElementTrees(FILE *f, struct phyloTree *node)
+{
+assignElemNums(node);
+outElems(f, node);
 }

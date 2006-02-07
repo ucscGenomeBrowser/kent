@@ -8,7 +8,7 @@
 #include "twoBit.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: nibTwo.c,v 1.3 2004/12/11 17:17:34 markd Exp $";
+static char const rcsid[] = "$Id: nibTwo.c,v 1.4 2006/01/26 21:32:44 markd Exp $";
 
 struct nibTwoCache *nibTwoCacheNew(char *pathName)
 /* Get something that will more or less transparently get sequence from 
@@ -62,24 +62,34 @@ else
     }
 }
 
+struct dnaSeq *nibTwoCacheSeqPartExt(struct nibTwoCache *ntc, char *seqName, int start, int size,
+                                     boolean doMask, int *retFullSeqSize)
+/* Return part of sequence. If *retFullSeqSize is non-null then return full
+ * size of sequence (not just loaded part) there.   Sequence will be lower
+ * case if doMask is false, mixed case (repeats in lower)
+ * if doMask is true. */
+{
+if (ntc->isTwoBit)
+    {
+    return twoBitReadSeqFragExt(ntc->tbf, seqName, start, start+size,
+                                doMask, retFullSeqSize);
+    }
+else
+    {
+    struct nibInfo *nib = nibInfoFromCache(ntc->nibHash, ntc->pathName, seqName);
+    int opts = (doMask ? NIB_MASK_MIXED : 0);
+    if (retFullSeqSize != NULL)
+        *retFullSeqSize = nib->size;
+    return nibLdPartMasked(opts, nib->fileName, nib->f, nib->size, start, size);
+    }
+}
+
 struct dnaSeq *nibTwoCacheSeqPart(struct nibTwoCache *ntc, char *seqName, int start, int size,
 	int *retFullSeqSize)
 /* Return part of sequence. If *retFullSeqSize is non-null then return full size of
  * sequence (not just loaded part) there. This will have repeats in lower case. */
 {
-if (ntc->isTwoBit)
-    {
-    if (retFullSeqSize != NULL)
-        *retFullSeqSize = twoBitSeqSize(ntc->tbf, seqName);
-    return twoBitReadSeqFrag(ntc->tbf, seqName, start, start+size);
-    }
-else
-    {
-    struct nibInfo *nib = nibInfoFromCache(ntc->nibHash, ntc->pathName, seqName);
-    if (retFullSeqSize != NULL)
-        *retFullSeqSize = nib->size;
-    return nibLdPartMasked(NIB_MASK_MIXED, nib->fileName, nib->f, nib->size, start, size);
-    }
+return nibTwoCacheSeqPartExt(ntc, seqName, start, size, TRUE, retFullSeqSize);
 }
 
 struct dnaSeq *nibTwoLoadOne(char *pathName, char *seqName)

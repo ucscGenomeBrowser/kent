@@ -12,10 +12,21 @@ char *hUserCookie();
 char *wrapWhiteFont(char *s);
 /* Write white font around s */
 
+#define HELP_DIR "/goldenPath/help"
+/*	will be appended to DOCUMENT_ROOT	*/
+
+#define DOCUMENT_ROOT	"/usr/local/apache/htdocs"
+/*	default DocumentRoot as configured in Apache httpd.conf	*/
+/*	DocumentRoot can be set in hg.conf as browser.documentRoot */
+#define DEFAULT_BACKGROUND	"/images/floret.jpg"
+/*	full path is determined by Apache's DocumentRoot since this is a
+ *	relative URL reference
+ */
+
+char *hDocumentRoot();
+/* get the path to the DocumentRoot, or the default */
 char *hBackgroundImage();
 /* get the path to the configured background image to use, or the default */
-
-#define HELP_DIR "/usr/local/apache/htdocs/goldenPath/help" 
 
 /* Definitions for ruler pseudo-track.  It's not yet a full-fledged
  * track, so it can't appear in trackDb. */

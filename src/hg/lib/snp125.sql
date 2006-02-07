@@ -43,7 +43,7 @@ CREATE TABLE snp125 (
     observed      blob not null,	# The sequences of the observed alleles
     molType       enum( 'unknown', 'genomic', 'cDNA') DEFAULT 'unknown' not null,
     					# Sample type from exemplar ss
-    class         enum('unknown', 'single', 'in-del', 'het', 'microsatelite',
+    class         enum('unknown', 'single', 'in-del', 'het', 'microsatellite',
                   'named', 'no var', 'mixed', 'mnp', 'insertion', 'deletion')  DEFAULT 'unknown' NOT NULL,
     					# The class of variant
 
@@ -54,7 +54,7 @@ CREATE TABLE snp125 (
     avHet 	float not null,	# The average heterozygosity from all observations
     avHetSE 	float not null,	# The Standard Error for the average heterozygosity
 
-    func       enum( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', 
+    func       set( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', 
     		     'untranslated', 'intron', 'splice-site', 'cds-reference') 
 		     DEFAULT 'unknown' NOT NULL,
     			# The functional category of the SNP

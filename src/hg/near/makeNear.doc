@@ -508,6 +508,11 @@ hgExpDistance hg17 hgFixed.humanNormalRatio hgFixed.humanNormalExps humanNormalD
 # Mouse landscape data.
 hgExpDistance mm6 hgFixed.mouseLandscape hgFixed.mouseLandscapeExps mouseLandscapeDistance -lookup=knownToXM
 
+# Remaking some distance tables after the knownGene updates (DONE 01/24/2006 Andy)
+# (current working directory irrelevant... it's all database)
+hgExpDistance mm6 hgFixed.mouseLandscape hgFixed.mouseLandscapeExps mouseLandscapeDistance -lookup=knownToXM
+hgExpDistance hg17 hgFixed.gladHumES hgFixed.gladHumESExps gladHumESDistance -lookup=knownToGnfAtlas2
+
 #---------
 
 ## (galt 2005-06-03)

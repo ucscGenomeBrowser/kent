@@ -680,6 +680,19 @@ close SP;
           set g.proteinID = l.protName where g.name = l.orfName;' ce2
       # check there are 21891 rows with the protName field filled
 
+# MYTOUCH FIX - Jen - 2006-01-24
+  sudo mytouch ce2 orfToGene 0505031600.00
+  sudo mytouch ce2 sangerBlastTab 0505031600.00
+  sudo mytouch ce2 sangerBlastTab 0505031600.00
+  sudo mytouch ce2 sangerCanonical 0505031600.00
+  sudo mytouch ce2 sangerIsoforms 0505031600.00
+  sudo mytouch ce2 sangerLinks 0505031600.00
+  sudo mytouch ce2 sangerPep 0505031600.00
+  sudo mytouch ce2 sangerToKim 0505031600.00
+  sudo mytouch ce2 sangerToPfam 0505031600.00
+  sudo mytouch ce2 sangerToRefSeq 0505031600.00
+
+
 # MAKE WORMBASE GENEFINDER TRACKS (DONE, 2004-04-12, hartera)
     # next machine
     ssh eieio
@@ -1947,7 +1960,7 @@ CREATE TABLE altGraphX (
         type bed 3
         canPack off
 
-
+##################################################################
 # Create frames based page views of alt splice areas of interest
 #	(DONE - 2004-05-16 - Hiram)
     ssh hgwdev
@@ -1967,6 +1980,18 @@ CREATE TABLE altGraphX (
 	-e "s/NM_005487/chrII:14689493-14690232/" \
 	-e "s/hgwdev-sugnet/genome-test/" \
 	 frame.html > /usr/local/apache/htdocs/IntronWS120/frame.html
+
+    #	Better location is in the goldenPath itself 2006-01-12:
+    mkdir /usr/local/apache/htdocs/goldenPath/ce2/altGraphX
+    sed -e "s#http://hgwdev-sugnet.cse.ucsc.edu##" links.html \
+	> /usr/local/apache/htdocs/goldenPath/ce2/altGraphX/links.html
+
+    sed -e \
+    "s/Human Alt Splicing Conserved in Mouse/Alt Splicing in C. elegans/" \
+	-e "s/NM_005487/chrII:14689493-14690232/" \
+	-e "s#http://hgwdev-sugnet.cse.ucsc.edu##" \
+	 frame.html \
+	    > /usr/local/apache/htdocs/goldenPath/ce2/altGraphX/frame.html
 
 # MAKE single coverage BEST track from blastz axt's (DONE - 2004-05-11 - Hiram)
 #	This data is for use with the phyloHMM construction, below.

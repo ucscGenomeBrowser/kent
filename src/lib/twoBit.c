@@ -9,7 +9,7 @@
 #include "twoBit.h"
 #include <limits.h>
 
-static char const rcsid[] = "$Id: twoBit.c,v 1.20 2005/12/06 18:26:07 kent Exp $";
+static char const rcsid[] = "$Id: twoBit.c,v 1.21 2006/01/26 21:32:44 markd Exp $";
 
 static int countBlocksOfN(char *s, int size)
 /* Count number of blocks of N's (or n's) in s. */
@@ -367,7 +367,7 @@ if (index == NULL)
 fseek(tbf->f, index->offset, SEEK_SET);
 }
 
-static struct dnaSeq *twoBitReadSeqFragExt(struct twoBitFile *tbf, char *name,
+struct dnaSeq *twoBitReadSeqFragExt(struct twoBitFile *tbf, char *name,
 	int fragStart, int fragEnd, boolean doMask, int *retFullSize)
 /* Read part of sequence from .2bit file.  To read full
  * sequence call with start=end=0.  Sequence will be lower

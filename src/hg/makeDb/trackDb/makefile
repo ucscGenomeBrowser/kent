@@ -19,7 +19,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	rheMac1 \
 	canFam1 canFam2 \
 	mm2 mm3 mm4 mm5 mm6 mm7 \
-	rn2 rn3 \
+	rn2 rn3 rn4 \
 	oryCun1 \
 	bosTau1 \
 	bosTau2 \

@@ -13,13 +13,15 @@
 #
 #CREATE INDEX part_of_name ON customer (name(10),age(4));
 
-# note: Galt, you may have to use perl if this crap is too hard to parse with tcsh script
-
-
 if ("$1" == "") then
     echo "error: no table name specified"
     exit 1
 endif
+if ("$jdb" == "") then
+    echo "env var jdb not set.  should be something like jackson20060125"
+    exit 1
+endif
+
 set table = "$1"
 set sql = "sp_helpindex $table; -m bcp"
 
@@ -56,7 +58,7 @@ while ("$fields" != "")
     #drop index on table in jackson db
     echo "" > tempsqlidx
     echo "DROP INDEX $idxname on $table;" >> tempsqlidx
-    hgsql jackson -e "source tempsqlidx"
+    hgsql $jdb -e "source tempsqlidx"
     #create index on table in jackson db
     echo "" > tempsqlidx
     echo "CREATE INDEX $idxname on $table ("  >> tempsqlidx
@@ -76,6 +78,6 @@ while ("$fields" != "")
     cat tempsqlidx
 
     #create index on table in jackson db
-    hgsql jackson -e "source tempsqlidx"
+    hgsql $jdb -e "source tempsqlidx"
 
 end

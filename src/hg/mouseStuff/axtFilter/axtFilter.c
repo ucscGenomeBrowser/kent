@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtFilter.c,v 1.12 2005/08/18 07:26:27 baertsch Exp $";
+static char const rcsid[] = "$Id: axtFilter.c,v 1.13 2006/01/26 22:08:36 lowec Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -30,6 +30,10 @@ errAbort(
   "   -qStartMax=N - restrict to those with qStart less than N\n"
   "   -tStartMin=N - restrict to those with tStart at least N\n"
   "   -tStartMax=N - restrict to those with tStart less than N\n"
+  "   -qEndMin=N - restrict to those with qEnd at least N\n"
+  "   -qEndMax=N - restrict to those with qEnd less than N\n"
+  "   -tEndMin=N - restrict to those with tEnd at least N\n"
+  "   -tEndMax=N - restrict to those with tEnd less than N\n"
   "   -strand=?    -restrict strand (to + or -)\n"
   "   -qStartsWith=?  -restrict query side sequence to those starting with\n"
   "   -tStartsWith=?  -restrict target side sequence to those starting with\n"
@@ -76,6 +80,10 @@ int qStartMin = optionInt("qStartMin", -BIGNUM);
 int qStartMax = optionInt("qStartMax", BIGNUM);
 int tStartMin = optionInt("tStartMin", -BIGNUM);
 int tStartMax = optionInt("tStartMax", BIGNUM);
+int qEndMin = optionInt("qEndMin", -BIGNUM);
+int qEndMax = optionInt("qEndMax", BIGNUM);
+int tEndMin = optionInt("tEndMin", -BIGNUM);
+int tEndMax = optionInt("tEndMax", BIGNUM);
 char *strand = optionVal("strand", NULL);
 char *qStartsWith = optionVal("qStartsWith", NULL);
 char *tStartsWith = optionVal("tStartsWith", NULL);
@@ -121,6 +129,10 @@ for (i=0; i<inCount; ++i)
 	if (axt->qStart < qStartMin || axt->qStart >= qStartMax)
 	    writeIt = FALSE;
 	if (axt->tStart < tStartMin || axt->tStart >= tStartMax)
+	    writeIt = FALSE;
+	if (axt->qEnd < qEndMin || axt->qEnd >= qEndMax)
+	    writeIt = FALSE;
+	if (axt->tEnd < tEndMin || axt->tEnd >= tEndMax)
 	    writeIt = FALSE;
 	if (strand != NULL && strand[0] != axt->qStrand)
 	    writeIt = FALSE;

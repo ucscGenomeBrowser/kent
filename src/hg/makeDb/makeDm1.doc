@@ -1031,6 +1031,29 @@ PRODUCING GENSCAN PREDICTIONS (TODO 11/14/03 angie)
     hgsql dm1 -e 'drop table bdgpGene; rename table bdgpGene2 to bdgpGene;'
     # and check the new bdgpGene manually.
 
+# MYTOUCH FIX - Jen - 2006-01-24
+  sudo mytouch dm1 arbExpDistance 0501081700.00
+  sudo mytouch dm1 arbExpDistance 0501081700.00
+  sudo mytouch dm1 arbExpDistance 0501081700.00
+  sudo mytouch dm1 bdgpBlastTab 0501081700.00
+  sudo mytouch dm1 bdgpBlastTab 0501081700.00
+  sudo mytouch dm1 bdgpCanonical 0501081700.00
+  sudo mytouch dm1 bdgpIsoforms 0501081700.00
+  sudo mytouch dm1 bdgpGenePep 0501081700.00
+  sudo mytouch dm1 bdgpSwissProt 0501081700.00
+  sudo mytouch dm1 bdgpToCanonical 0501081700.00
+  sudo mytouch dm1 bdgpToLocusLink 0501081700.00
+  sudo mytouch dm1 bdgpToPfam 0501081700.00
+  sudo mytouch dm1 bdgpToRefSeq 0501081700.00
+  sudo mytouch dm1 ceBlastTab 0501081700.00
+  sudo mytouch dm1 drBlastTab 0501081700.00
+  sudo mytouch dm1 hgBlastTab 0501081700.00
+  sudo mytouch dm1 mmBlastTab 0501081700.00
+  sudo mytouch dm1 scBlastTab 0501081700.00
+  sudo mytouch dm1 fbTranscript 0501081700.00
+  sudo mytouch dm1 hgBlastTab 0501081700.00
+  sudo mytouch dm1 blastFBPep00 0501081700.00
+
 
 #############################################################################
 # MAKE HGNEAR

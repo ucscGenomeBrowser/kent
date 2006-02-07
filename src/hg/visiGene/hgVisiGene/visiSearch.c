@@ -12,7 +12,7 @@
 #include "visiGene.h"
 #include "visiSearch.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.16 2006/01/14 02:31:29 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.18 2006/01/25 18:59:14 kent Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */

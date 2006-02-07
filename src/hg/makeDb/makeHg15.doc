@@ -3155,6 +3155,9 @@ end
     cd ..
     ldHgGene hg15 sgpGene download/*.gtf -exon=CDS
     hgPepPred hg15 generic sgpPep download/*-fixed.prot
+ 
+# SGP GENES (UPDATE 1/18/2006)
+    sgpPep table dropped, replaced by hgc generated protein seq in browser
 
 # ALIGNED ANCIENT REPEATS FROM MOUSE BLASTZ (TODO)
     ssh eieio
@@ -3732,6 +3735,21 @@ done
 
 
 #	continue with the FAMILY BROWSER UPDATE to complete this process
+
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 1/19/2006 JK)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.  The hgKgGetText takes
+# about 5 minutes when the database is not too busy.  The rest
+# is real quick.
+     ssh hgwdev
+     cd /cluster/data/hg15/bed/knownGene
+     mkdir index
+     cd index
+     hgKgGetText hg15 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/data/hg15/bed/knownGene/index/knownGene.ix /gbdb/hg15/knownGene.ix
+     ln -s /cluster/data/hg15/bed/knownGene/index/knownGene.ixx /gbdb/hg15/knownGene.ixx
+
 
 #	FAMILY BROWSER UPDATE	(DONE - 2004-02-24 - Hiram)
 #	to be done after knownGene tables are complete from known gene
@@ -4374,3 +4392,13 @@ foreach file (`ls -1 *PlusTnFg *MinusTnFg | grep -v '_'`)
  echo Doing $base
  hgLoadBed hg15 $base $base
 end
+
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch hg15 geneidPep 0404031400.00
+  sudo mytouch hg15 twinscanPep 0404031400.00
+  sudo mytouch hg15 dupSpMrna 0402242100.00
+  sudo mytouch hg15 keggPathway 0402242100.00
+  sudo mytouch hg15 kgAlias 0402242100.00
+  sudo mytouch hg15 kgProtAlias 0402242100.00
+  sudo mytouch hg15 kgXref 0402242100.00
+

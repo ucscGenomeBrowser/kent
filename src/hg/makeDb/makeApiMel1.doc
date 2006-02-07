@@ -333,6 +333,8 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     hgPepPred apiMel1 generic genscanPep genscan.pep
     hgLoadBed apiMel1 genscanSubopt genscanSubopt.bed
 
+# MYTOUCH FIX - jen - 2006-01-24
+  sudo mytouch apiMel1 genscanPep 0501071300.00
 
 # MAKE DOWNLOADABLE FILES (DONE 11/8/04 angie)
     ssh kksilo
@@ -719,77 +721,29 @@ chainSome $(path1)
 
 
 # SWAP DM2-APIMEL1 BLASTZ (DONE 1/31/05 angie)
-    ssh kksilo
-    mkdir /cluster/data/apiMel1/bed/blastz.dm2.swap.2005-01-28
-    ln -s blastz.dm2.swap.2005-01-28 /cluster/data/apiMel1/bed/blastz.dm2
-    cd /cluster/data/apiMel1/bed/blastz.dm2
-    set aliDir = /cluster/data/dm2/bed/blastz.apiMel1
-    cp $aliDir/S1.len S2.len
-    cp $aliDir/S2.len S1.len
-    # With 11k scaffolds, we don't want a directory with one file per 
-    # scaffold.  So just make one .axt with everything -- not too huge 
-    # anyway, given these little insect genomes.
-    zcat $aliDir/pslChrom/chr*.psl.gz \
-    | pslSwap stdin stdout \
-    | sort -k 14,14 -k 16n,17n \
-    | gzip -c \
-    > dm2.psl.gz
-
+# OBSOLETED 1/13/06 angie -- see SWAP/CHAIN/NET DM2 below...
 
 # CHAIN MELANOGASTER BLASTZ (DONE 1/31/05 angie)
-    # Run axtChain on kolossus (one big dm2.axt input)
-    ssh kolossus
-    mkdir /cluster/data/apiMel1/bed/blastz.dm2/axtChain
-    cd /cluster/data/apiMel1/bed/blastz.dm2/axtChain
-    axtChain -psl -scoreScheme=/cluster/data/blastz/HoxD55.q \
-         -linearGap=/cluster/data/blastz/chickenHumanTuned.gap \
-         -verbose=0 ../dm2.psl.gz /cluster/data/apiMel1/apiMel1.2bit \
-      /cluster/data/dm2/nib stdout \
-    | chainAntiRepeat /cluster/data/apiMel1/apiMel1.2bit \
-      /cluster/data/dm2/nib stdin stdout \
-    | chainMergeSort stdin > all.chain
-    # Load chains into database
-    ssh hgwdev
-    cd /cluster/data/apiMel1/bed/blastz.dm2/axtChain
-    hgLoadChain -tIndex apiMel1 chainDm2 all.chain
-
+# OBSOLETED 1/13/06 angie -- see SWAP/CHAIN/NET DM2 below...
 
 # NET MELANOGASTER BLASTZ (DONE 1/31/05 angie)
-    ssh kolossus
-    cd /cluster/data/apiMel1/bed/blastz.dm2/axtChain
-    chainPreNet all.chain ../S1.len ../S2.len stdout \
-    | chainNet stdin -minSpace=1 ../S1.len ../S2.len stdout /dev/null \
-    | netSyntenic stdin noClass.net
-
-    # Add classification info using db tables:
-    ssh hgwdev
-    cd /cluster/data/apiMel1/bed/blastz.dm2/axtChain
-    netClass -noAr noClass.net apiMel1 dm2 melanogaster.net
-    rm noClass.net
-    # Load the nets into database 
-    netFilter -minGap=10 melanogaster.net |  hgLoadNet apiMel1 netDm2 stdin
-
+# OBSOLETED 1/13/06 angie -- see SWAP/CHAIN/NET DM2 below...
 
 # MAKE AXTNET (DONE 1/31/05 angie)
-    ssh kksilo
-    cd /cluster/data/apiMel1/bed/blastz.dm2/axtChain
-    netToAxt melanogaster.net all.chain /cluster/data/apiMel1/apiMel1.2bit \
-        /cluster/data/dm2/nib stdout \
-    | axtSort stdin melanogasterNet.axt
-
+# OBSOLETED 1/13/06 angie -- see SWAP/CHAIN/NET DM2 below...
 
 # MAKE VSDM2 DOWNLOADABLES (DONE 2/2/05 angie)
-    ssh kksilo
-    cd /cluster/data/apiMel1/bed/blastz.dm2/axtChain
-    nice gzip *.{chain,net,axt}
+# OBSOLETED 1/13/06 angie -- see SWAP/CHAIN/NET DM2 below...
+
+
+# SWAP/CHAIN/NET DM2 (DONE 1/17/06 angie)
+    # Get the latest file conventions...
     ssh hgwdev
-    mkdir /usr/local/apache/htdocs/goldenPath/apiMel1/vsDm2
-    cd /usr/local/apache/htdocs/goldenPath/apiMel1/vsDm2
-    cp -p /cluster/data/apiMel1/bed/blastz.dm2/axtChain/all.chain.gz \
-      melanogaster.chain.gz
-    cp -p /cluster/data/apiMel1/bed/blastz.dm2/axtChain/melanogaster.net.gz .
-    cp -p /cluster/data/apiMel1/bed/blastz.dm2/axtChain/melanogasterNet.axt.gz .
-    # Make a README.txt which explains the files & formats.
-    md5sum *.gz */*.gz > md5sum.txt
+    rm /cluster/data/apiMel1/bed/blastz.dm2
+    mkdir /cluster/data/apiMel1/bed/blastz.dm2.swap
+    cd /cluster/data/apiMel1/bed/blastz.dm2.swap
+    doBlastzChainNet.pl -swap /cluster/data/dm2/bed/blastz.apiMel1/DEF >& do.log &
+    tail -f do.log
+    ln -s blastz.dm2.swap /cluster/data/apiMel1/bed/blastz.dm2
 
 

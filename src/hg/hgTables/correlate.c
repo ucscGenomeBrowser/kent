@@ -20,7 +20,7 @@
 #include "correlate.h"	/* our structure defns and the corrHelpText string */
 #include "bedGraph.h"
 
-static char const rcsid[] = "$Id: correlate.c,v 1.50 2005/07/13 22:35:50 hiram Exp $";
+static char const rcsid[] = "$Id: correlate.c,v 1.51 2006/02/04 01:23:44 angie Exp $";
 
 static char *maxResultsMenu[] =
 {
@@ -382,6 +382,8 @@ struct trackTable *trackTableNew(struct trackDb *tdb, char *tableName,
 /* Allocate, fill in and return a trackTable. */
 {
 struct trackTable *tt = allocTrackTable();
+if (tdb == NULL)
+    errAbort("Program error: NULL tdb passed to trackTableNew");
 tt->tdb = tdb;
 tt->tableName = cloneString(tableName);
 fillInTrackTable(tt, conn);
@@ -1357,7 +1359,7 @@ struct dataVector *dv = NULL;
  * dataVectorFetchOneRegion.  For bed-able tables, it's handled below 
  * dataVectorFetchOneRegion (under cookedBedList). */
 if (isWiggle(database, tt->tableName))
-    dv = wiggleDataVector(tt->tableName, conn, region);
+    dv = wiggleDataVector(tt->tdb, tt->tableName, conn, region);
 else if (isBedGraph(tt->tableName))
     dv = bedGraphDataVector(tt->tableName, conn, region);
 else

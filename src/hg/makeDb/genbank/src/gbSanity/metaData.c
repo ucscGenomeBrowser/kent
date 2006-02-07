@@ -7,44 +7,23 @@
 #include "localmem.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: metaData.c,v 1.2 2004/02/23 07:38:56 markd Exp $";
+static char const rcsid[] = "$Id: metaData.c,v 1.3 2006/01/22 08:10:00 markd Exp $";
 
 struct metaDataTbls
 /* Object with metadata collect from various tables */
 {
     struct hash* accHash;
-    struct hashCookie cookie;
+    struct hashCookie accCookie;
+    struct hash* protAccHash;
 };
-
-int errorCnt = 0;  /* count of errors */
-boolean testMode = FALSE; /* Ignore errors that occure in test db */
-
-static char *gbDatabase = NULL;
-
-void gbErrorSetDb(char *database)
-/* set database to use in error messages */
-{
-gbDatabase = cloneString(database);
-}
-
-void gbError(char *format, ...)
-/* print and count an error */
-{
-va_list args;
-fprintf(stderr, "Error: %s: ", gbDatabase);
-va_start(args, format);
-vfprintf(stderr, format, args);
-va_end(args);
-fputc('\n', stderr);
-errorCnt++;
-}
 
 struct metaDataTbls* metaDataTblsNew()
 /* create a metaData table object */
 {
 struct metaDataTbls* mdt;
 AllocVar(mdt);
-mdt->accHash = hashNew(12);
+mdt->accHash = hashNew(22);
+mdt->protAccHash = hashNew(18);
 return mdt;
 }
 
@@ -58,13 +37,13 @@ return hashFindVal(mdt->accHash, acc);
 struct metaData* metaDataTblsGet(struct metaDataTbls* mdt, char* acc)
 /* Get or create metadata table entry for an acc. */
 {
-struct hashEl* hel = hashLookup(mdt->accHash, acc);
-if (hel == NULL)
+struct hashEl* hel = hashStore(mdt->accHash, acc);
+if (hel->val == NULL)
     {
     struct lm* lm = mdt->accHash->lm;
     struct metaData* md;
     lmAllocVar(lm, md);
-    hel = hashAdd(mdt->accHash, acc, md);
+    hel->val = md;
     safef(md->acc, sizeof(md->acc), "%s", hel->name);
     /* guess source database from accession */
     md->typeFlags |= gbGuessSrcDb(acc);
@@ -72,17 +51,32 @@ if (hel == NULL)
 return (struct metaData*)hel->val;
 }
 
+void metaDataTblsAddProtAcc(struct metaDataTbls* mdt, struct metaData* md)
+/* Add protein accession to protAccHash */
+{
+struct hashEl* hel = hashStore(mdt->protAccHash, md->rlProtAcc);
+if (hel->val != NULL)
+    errAbort("protein %s already entered", md->rlProtAcc);
+hel->val = md;
+}
+
+struct metaData* metaDataTblsGetByPep(struct metaDataTbls* mdt, char* pepAcc)
+/* Get metadata table entry for an peptide acc, or NULL if not found */
+{
+return hashFindVal(mdt->protAccHash, pepAcc);
+}
+
 void metaDataTblsFirst(struct metaDataTbls* mdt)
 /* Set the pointer so the next call to metaDataTblsNext returns the first
  * entry */
 {
-mdt->cookie = hashFirst(mdt->accHash);
+mdt->accCookie = hashFirst(mdt->accHash);
 }
 
 struct metaData* metaDataTblsNext(struct metaDataTbls* mdt)
 /* Get the next entry on serial reading of the table, */
 {
-struct hashEl* hel = hashNext(&mdt->cookie);
+struct hashEl* hel = hashNext(&mdt->accCookie);
 if (hel == NULL)
     return NULL;
 else
@@ -94,6 +88,7 @@ void metaDataTblsFree(struct metaDataTbls** mdtPtr)
 {
 struct metaDataTbls* mdt = *mdtPtr;
 hashFree(&mdt->accHash);
+hashFree(&mdt->protAccHash);
 freez(mdtPtr);
 }
 

@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.88 2006/01/12 23:50:14 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.89 2006/01/17 23:15:47 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -312,6 +312,10 @@ char *settings;
 struct track *wigTrack = track->subtracks;
 int pairwiseHeight = tl.fontHeight;
 int consWigHeight = 0;
+
+settings = cloneString(trackDbSetting(track->tdb, PAIRWISE_HEIGHT));
+if (settings != NULL)
+    return(atoi(firstWordInLine(settings)));
 
 if (wigTrack)
     {

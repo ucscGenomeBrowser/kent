@@ -51,7 +51,7 @@ struct hashEl *hashLookupUpperCase(struct hash *hash, char *name);
 
 struct hashEl *hashLookupNext(struct hashEl *hashEl);
 /* Find the next occurance of name that may occur in the table multiple times,
- * or NULL if not found. */
+ * or NULL if not found.  Use hashLookup to find the first occurence. */
 
 struct hashEl *hashAdd(struct hash *hash, char *name, void *val);
 /* Add new element to hash table. */
