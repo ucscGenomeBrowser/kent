@@ -260,7 +260,7 @@ switch (pp->type)
     case pptParaMax:
     case pptParaGet:
     case pptParaFilter:
-	checkParaAction(pfc, pp, classScope);
+	checkParaAction(pfc, pp, NULL);
         break;
     case pptParaDec:
 	checkParaDec(pfc, pp, classScope);
