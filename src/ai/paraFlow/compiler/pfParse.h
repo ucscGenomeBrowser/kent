@@ -75,9 +75,9 @@ enum pfParseType
     pptLogOr,
     pptRoot,
     pptParent,
-    pptSys,
-    pptUser,
-    pptSysOrUser,
+    pptSys,		/* (Unused) Represents system include path. */
+    pptUser,		/* (Unused) Represents user include path. */
+    pptSysOrUser,	/* (Unused) Represent either include path. */
     pptVarInit,
     pptPlaceholder,
     pptSymName,
@@ -93,6 +93,7 @@ enum pfParseType
     pptParaMax,
     pptParaGet,
     pptParaFilter,
+    pptUntypedElInCollection,	
 
     /* Note the casts must be in this order relative to pptCastBitToBit */
     pptCastBitToBit,	/* Never emitted. */

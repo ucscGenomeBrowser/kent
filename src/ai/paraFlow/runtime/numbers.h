@@ -12,5 +12,8 @@ void pf_randNum(_pf_Stack *stack);
 void pf_sqrt(_pf_Stack *stack);
 /* Return square root of number. */
 
+void pf_atoi(_pf_Stack *stack);
+/* Return binary representation of ascii-encoded number. */
+
 #endif /* NUMBERS_H */
 

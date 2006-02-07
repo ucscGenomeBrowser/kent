@@ -1,8 +1,14 @@
+In para actions and foreach swap order of el and collection in tree.
+Then put handling of implicit el type in case pptUntypedName
+(which should be renames pptUntypedElement) in rTypeCheck switch
+instead of in pptParaAdd/pptForeach etc. part of switch.  This
+should cause it to be evaluated before the body, sidestepping
+the 'no nil allowed in this operation' error.
+
+
   - Rework code generator so that a type is kept alongside the
     data on the expression stack.
   - Do a sort function (need function pointer?)
-  - Doing parallel checking for para and flow statements.
-  - Implement "para into" statement.
   - Read-only and private variables.
         Make it so that class.new() is only legal way to
 	make something with private or read-only var.
@@ -18,14 +24,18 @@
   - Implement lists.
   - Implementing trees.
 
-Check system:
-	blessPara - Also makes sure that there are no writes
-	    outside of local variables, either direct or indirect.
-	blessFlow - Also makes sure that there are no assignments
-	    outside of initializations, and no += -= etc.
 
 -----------
 DONE
+  - Eliminate need for type in constructs like
+       (type element in collection)
+  - Implement "para into" statement.  Actually did this as
+    para (el in collection) action.
+  - Doing parallel checking for para and flow statements.
+  - blessPara - Makes sure that there are no writes
+	outside of local variables and i/o pameters, either direct or indirect.
+  - blessFlow - Make sure there are no reads or writes outside
+        of local variables and input/output parameters.
   - Reconsider where reference counting is done.  In particular
     what if instead of bumping the refcount when it goes on the
     expression stack, have system where strings and objects are

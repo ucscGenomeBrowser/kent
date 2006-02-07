@@ -454,9 +454,9 @@ static int codeParaExpSingle(struct pfCompile *pfc, FILE *f,
 /* Generate code for a para expression that just has a single
  * value as a result. */
 {
-struct pfParse *elPp = para->children;
-struct pfParse *collectionPp = elPp->next;
-struct pfParse *body = collectionPp->next;
+struct pfParse *collectionPp = para->children;
+struct pfParse *elPp = collectionPp->next;
+struct pfParse *body = elPp->next;
 struct pfBaseType *base = para->ty->base;
 fprintf(f, "{\n");
 fprintf(f, "int _pf_first = 1;\n");
@@ -536,9 +536,9 @@ static int codeParaGet(struct pfCompile *pfc, FILE *f,
 	struct pfParse *para, int stack)
 /* Generate code for a para get expression */
 {
-struct pfParse *element = para->children;
-struct pfParse *collection = element->next;
-struct pfParse *expression = collection->next;
+struct pfParse *collection = para->children;
+struct pfParse *element = collection->next;
+struct pfParse *expression = element->next;
 struct pfBaseType *collectBase = collection->ty->base;
 
 fprintf(f, "/* start para get */\n");
@@ -613,9 +613,9 @@ static int codeParaFilter(struct pfCompile *pfc, FILE *f,
 	struct pfParse *para, int stack)
 /* Generate code for a para filter expression */
 {
-struct pfParse *element = para->children;
-struct pfParse *collection = element->next;
-struct pfParse *expression = collection->next;
+struct pfParse *collection = para->children;
+struct pfParse *element = collection->next;
+struct pfParse *expression = element->next;
 struct pfBaseType *collectBase = collection->ty->base;
 struct dyString *elName = varName(pfc, element->var);
 
@@ -1793,9 +1793,9 @@ static void codeForeach(struct pfCompile *pfc, FILE *f,
 	struct pfParse *foreach, boolean reverse)
 /* Emit C code for foreach statement. */
 {
-struct pfParse *elPp = foreach->children;
-struct pfParse *collectionPp = elPp->next;
-struct pfParse *body = collectionPp->next;
+struct pfParse *collectionPp = foreach->children;
+struct pfParse *elPp = collectionPp->next;
+struct pfParse *body = elPp->next;
 
 startElInCollectionIteration(pfc, f, 0, 
 	foreach->scope, elPp, collectionPp, reverse);
@@ -1832,11 +1832,11 @@ fprintf(f, "}\n");
 static void codeForEachCall(struct pfCompile *pfc, FILE *f, struct pfParse *foreach)
 /* Emit C code for foreach call statement. */
 {
-struct pfParse *elPp = foreach->children;
-struct pfParse *callPp = elPp->next;
-struct pfBaseType *base = callPp->ty->base;
-struct pfParse *body = callPp->next;
+struct pfParse *callPp = foreach->children;
+struct pfParse *elPp = callPp->next;
+struct pfParse *body = elPp->next;
 struct pfParse *cast = body->next;
+struct pfBaseType *base = callPp->ty->base;
 int expSize;
 
 /* Print element variable in a new scope. */

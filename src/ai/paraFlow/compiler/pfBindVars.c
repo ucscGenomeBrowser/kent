@@ -1,4 +1,5 @@
-/* pfBindVars - bind variables into parse tree. */
+/* pfBindVars - bind variables into parse tree. Fill in types of
+ * nodes containing variables. */
 /* Copyright 2005 Jim Kent.  All rights reserved. */
 
 #include "common.h"
@@ -53,11 +54,35 @@ switch (pp->type)
     case pptFlowDec:
         evalFunctionType(pp, pfc->flowType);
 	break;
+    case pptForeach:
+    case pptParaDo:
+    case pptParaAdd:
+    case pptParaMultiply:
+    case pptParaAnd:
+    case pptParaOr:
+    case pptParaMin:
+    case pptParaMax:
+    case pptParaGet:
+    case pptParaFilter:
+        {
+	/* Allow users to skip the type declaration of the
+	 * element in a (el in collection) phrase. */
+	struct pfParse *collection = pp->children;
+	struct pfParse *element = collection->next;
+	if (element->type == pptNameUse)
+	    {
+	    struct pfType *dummyType = pfTypeNew(pfc->nilType);
+	    element->type = pptUntypedElInCollection;
+	    element->var = pfScopeAddVar(element->scope, element->name, 
+	    	dummyType, element);
+	    }
+	break;
+	}
     case pptOf:
         {
-	/* The symbols 'tree of dir of string' get converted
-	 * into a 'pptOf' parse tree with children tree,dir,string.
-	 * We convert this into a type heirachy with tree at top,
+	/* The symbols 'array of dir of string' get converted
+	 * into a 'pptOf' parse array with children array,dir,string.
+	 * We convert this into a type heirachy with array at top,
 	 * then dir, then string.  To do this we mix child and 
 	 * next pointers in a somewhat unholy fashion. */
 	struct pfParse *type = pp->children;
@@ -173,7 +198,7 @@ switch (pp->type)
 	    {
 	    pp->var = var;
 	    pp->type = pptVarUse;
-	    pp->ty = CloneVar(var->ty);
+	    pp->ty = var->ty;
 	    }
 	else
 	    errAt(pp->tok, "%s used but not defined", pp->name);

@@ -23,30 +23,30 @@ for (int i=0; i<3; i += 1)
     prin("max of ");
     prin(a4x3[i]);
     prin(" = ");
-    print( para (int x in a4x3[i]) max x );
+    print( para (x in a4x3[i]) max x );
     }
 
-int maxAll = para (array of int ii in a4x3) max para (int i in ii) max i;
+int maxAll = para (ii in a4x3) max para (i in ii) max i;
 print("maxAll = " + maxAll);
-print("minAll = " + para (array of int ii in a4x3) min para (int i in ii) min i);
+print("minAll = " + para (ii in a4x3) min para (i in ii) min i);
 for (int i=0; i<3; i += 1)
     {
     prin("row " + i + ": ");
     prin("sum of ");
     prin(a4x3[i]);
     prin(" = ");
-    print( para (int x in a4x3[i]) add x );
+    print( para (x in a4x3[i]) add x );
     }
 
-print("addAll = " + para (array of int ii in a4x3) add para (int i in ii) add i);
-print("all>10 = " + para (array of int ii in a4x3) and para (int i in ii) and i > 10);
-print("all>20 = " + para (array of int ii in a4x3) and para (int i in ii) and i > 20);
-print("any>20 = " + para (array of int ii in a4x3) or para (int i in ii) or i > 20);
-print("any>100 = " + para (array of int ii in a4x3) or para (int i in ii) or i > 100);
+print("addAll = " + para (ii in a4x3) add para (i in ii) add i);
+print("all>10 = " + para (ii in a4x3) and para (i in ii) and i > 10);
+print("all>20 = " + para (ii in a4x3) and para (i in ii) and i > 20);
+print("any>20 = " + para (ii in a4x3) or para (i in ii) or i > 20);
+print("any>100 = " + para (ii in a4x3) or para (i in ii) or i > 100);
 
 array of array of int doubled = 
-    para (array of int ii in a4x3) get
-    	para (int i in ii) get 
+    para (ii in a4x3) get
+    	para (i in ii) get 
 	   i+i;
 print(doubled);
 

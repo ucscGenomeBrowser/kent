@@ -13,8 +13,8 @@ to countDown() into int c
    }
 
 
-foreach (pos in countDown())
+foreach (int pos in countDown())
     print(pos);
 
-foreach ((w,pos) in s.nextWord(pos))
+foreach ((string w,int pos) in s.nextWord(pos))
     print(w);

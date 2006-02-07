@@ -1,5 +1,13 @@
-flow swap(var a, var b) into (var x, var y)
+to swap(var a, var b) into (var x, var y)
 {
 x = b;
 y = a;
 }
+
+int x = 1, y = 2;
+print(x);
+(x,y) = swap(x,y);
+print(x);
+
+(string a,b) = swap("B","A");
+print(a+b);

@@ -24,3 +24,14 @@ void pf_sqrt(_pf_Stack *stack)
 {
 stack[0].Double = sqrt(stack[0].Double);
 }
+
+void pf_atoi(_pf_Stack *stack)
+/* Return binary representation of ascii-encoded number. */
+{
+int result = 0;
+char *s = stack[0].String->s;
+if (s != NULL)
+    result = atoi(s);
+stack[0].Int = result;
+}
+

@@ -8,7 +8,7 @@ to wordCount(string s) into int count
    count = 0;
    for (;;)
        {
-       (pos,w) = s.nextWord(pos);
+       (w, pos) = s.nextWord(pos);
        if (!w)
            break;
        count += 1;
@@ -22,7 +22,7 @@ to split(string s) into array of string words
    int i, pos, string word;
    for (i=0; i<count; i += 1)
        {
-       (pos,word) = s.nextWord(pos);
+       (word,pos) = s.nextWord(pos);
        a[i] = word;
        }
    words = a;

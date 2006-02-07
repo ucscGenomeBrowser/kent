@@ -724,21 +724,45 @@ if (!ok)
     		statementName);
 }
 
+static void typeElInCollection(struct pfCompile *pfc, struct pfParse **pPp)
+/* Fill in type of el from type of collection.  Collection is the
+ * elder (and in fact eldest) sibling of el in parse tree. 
+ * Filling in the type involves changing the type of the el
+ * to varInit, putting in the type and symbol children of the
+ * varInit, and filling in the real type of the variable
+ * associated with the element, which at the moment is filled
+ * in with a dummy nilType. */
+{
+struct pfParse *el = *pPp;
+struct pfParse *collection = el->parent->children;
+struct pfParse *type = pfParseNew(pptTypeName, el->tok, el, el->scope);
+struct pfParse *sym = pfParseNew(pptSymName, el->tok, el, el->scope);
+struct pfType *ty = collection->ty->children;
+struct pfVar *var = pfScopeFindVar(el->scope, el->name);
+*(var->ty) = *ty;
+sym->name = el->name;
+type->ty = el->ty = var->ty;
+el->type = pptVarInit;
+el->children = type;
+type->next = sym;
+}
+
 static void checkForeach(struct pfCompile *pfc, struct pfParse *pp)
 /* Figure out if looping through a collection, or over
  * repeated uses of function, and type check accordingly. */
 {
 /* Make sure have agreement between element and collection vars */
-struct pfParse *el = pp->children;
-struct pfParse *source = el->next;
-struct pfParse *body = source->next;
+struct pfParse *source = pp->children;
+struct pfParse *el = source->next;
+struct pfParse *body = el->next;
 struct pfParse *cast, *castStart;
+
 if (source->type == pptCall)
     {
     /* Coerce call to be same type as element. */
+    struct pfParse **pSource = &pp->children;
     pp->type = pptForEachCall;
-    coerceOne(pfc, &source, el->ty, FALSE);
-    el->next = source;
+    coerceOne(pfc, pSource, el->ty, FALSE);
 
     /* Coerce element to bit, and save cast node if
      * any after body.  Handle tuples here as a special case,
@@ -1351,9 +1375,9 @@ static void checkPara(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check one of the para invocation type nodes. */
 {
 struct pfParse *pp = *pPp;
-struct pfParse *el = pp->children;
-struct pfParse *collection = el->next;
-struct pfParse *body = collection->next;
+struct pfParse *collection = pp->children;
+struct pfParse *el = collection->next;
+struct pfParse *body = el->next;
 
 if (collection->ty->base == pfc->stringType)
     errAt(collection->tok, "strings not allowed as para collections.");
@@ -1372,7 +1396,7 @@ switch (pp->type)
     case pptParaAnd:
     case pptParaOr:
         {
-	struct pfParse **pBody = &collection->next;
+	struct pfParse **pBody = &el->next;
         coerceToBit(pfc, pBody);
 	pp->ty = pfTypeNew(pfc->bitType);
 	break;
@@ -1386,7 +1410,7 @@ switch (pp->type)
 	}
     case pptParaFilter:
 	{
-	struct pfParse **pBody = &collection->next;
+	struct pfParse **pBody = &el->next;
         coerceToBit(pfc, pBody);
 	pp->ty = CloneVar(collection->ty);
 	break;
@@ -1430,6 +1454,9 @@ switch (pp->type)
     case pptParaGet:
     case pptParaFilter:
         checkPara(pfc, pPp);
+	break;
+    case pptUntypedElInCollection:
+        typeElInCollection(pfc, pPp);
 	break;
     case pptIf:
         coerceIf(pfc, pp);

@@ -178,6 +178,8 @@ switch (type)
 	return "pptParaGet";
     case pptParaFilter:
 	return "pptParaFilter";
+    case pptUntypedElInCollection:
+	return "pptUntypedElInCollection";
 
     case pptCastBitToBit:
         return "pptCastBitToBit";
@@ -934,8 +936,8 @@ else
 
 /* Hang various things off of para parse node. */
 slAddHead(&pp->children, body);
-slAddHead(&pp->children, collection);
 slAddHead(&pp->children, element);
+slAddHead(&pp->children, collection);
 *pTokList = tok;
 return pp;
 }
@@ -1584,8 +1586,8 @@ collection = pfParseExpression(pfc, pp, &tok, scope);
 skipRequiredCharType(')', &tok);
 statement = pfParseStatement(pfc, pp, &tok, scope);
 slAddHead(&pp->children, statement);
-slAddHead(&pp->children, collection);
 slAddHead(&pp->children, element);
+slAddHead(&pp->children, collection);
 *pTokList = tok;
 return pp;
 }
