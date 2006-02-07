@@ -4489,9 +4489,6 @@ done > cytobands.bed
 
 # PRODUCE FUGU BLAT ALIGNMENT (DONE - 2006-02-02 - Fan)
 
-    # Use masked scaffolds from fr1 assembly (same sequence as
-    # previous BlatFugu, however it's repeat and TRF-masked).
-
     ssh kk
     mkdir /cluster/data/hg18/bed/blatFr1
     cd /cluster/data/hg18/bed/blatFr1
