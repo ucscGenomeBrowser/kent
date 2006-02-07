@@ -191,7 +191,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.989 2006/01/27 22:51:35 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.990 2006/02/07 23:18:08 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -7674,7 +7674,7 @@ while ((row = sqlNextRow(sr)) != NULL)
                 hinv->mrnaAcc, hinv->geneId );
         printf("<B> Cluster ID: </B> <A HREF=\"http://www.jbirc.aist.go.jp/hinv/soup/pub_Locus.pl?locus_id=%s\" TARGET=_blank> %s <BR></A>", 
                 hinv->clusterId, hinv->clusterId );
-        printf("<B> CDNA Accession: </B> <A HREF=\"http://getentry.ddbj.nig.ac.jp/cgi-bin/get_entry.pl?%s\" TARGET=_blank> %s <BR></A>", 
+        printf("<B> cDNA Accession: </B> <A HREF=\"http://getentry.ddbj.nig.ac.jp/cgi-bin/get_entry.pl?%s\" TARGET=_blank> %s <BR></A>", 
                 hinv->mrnaAcc, hinv->mrnaAcc );
         }
     }
