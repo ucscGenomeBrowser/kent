@@ -402,7 +402,7 @@ exit
 	defaultPos, active, orderKey, genome, scientificName, \
 	htmlPath, hgNearOk, hgPbOk, sourceName) \
 	VALUES("hg18", "Feb. 2006", "/gbdb/hg18/nib", "Human", \
-	"chr4:56214201-56291736", 1, 10, "Human", "Homo sapiens", \
+	"chr7:127,664,479-127,689,005", 1, 10, "Human", "Homo sapiens", \
 	"/gbdb/hg18/html/description.html", 0, 0, "NCBI Build 36.1");' \
 	-h genome-testdb hgcentraltest
 # Make trackDb table so browser knows what tracks to expect:
@@ -431,7 +431,7 @@ ls -l /cluster/bluearc/RepeatMasker
 # lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
 
 /cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.39 2006/02/06 22:32:58 hiram Exp $
+# RepeatMasker version development-$Id: makeHg18.doc,v 1.40 2006/02/07 17:50:10 fanhsu Exp $
 
 #	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
