@@ -4880,18 +4880,22 @@ TMPDIR=/scratch/tmp
 # Similar coverage and enrichment as for danRer2 vs hg17 but there are less
 # chains: 7057 for hg18 on danRer3, 1111 for hg17 on danRer2 (chr1).
 
-# 6-WAY VAR_MULTIZ ALIGNMENTS (in progress, 2006-01-24, hartera)
-# Species: zebrafish(danRer3), human (hg18), mouse(mm7), opossum(monDom2),
+# 5-WAY VAR_MULTIZ ALIGNMENTS (DONE, 2006-02-06, hartera)
+# MAF ANNOTATION ADDED (DONE, 2006-02-6, braney)
+# Species: zebrafish(danRer3), human (hg18), mouse(mm7), 
 # fugu(fr1) and tetraodon(tetNig1)
+# Opossum (monDom2) was dropped since there were many more alignments
+# for monDom2 than monDom1 and the chains were shorter on average. The
+# reason for this is unknown so they will not be included in the 
+# conservation track at this time.
 
     ssh kkstore02
-    mkdir -p /cluster/data/danRer3/bed/multiz6way
-    cd /cluster/data/danRer3/bed/multiz6way
+    mkdir -p /cluster/data/danRer3/bed/multiz5way
+    cd /cluster/data/danRer3/bed/multiz5way
     mkdir mafLinks
     # set up directories for links to mafs for each pairwise alignment
     mkdir mafLinks/hg18
     mkdir mafLinks/mm7
-    mkdir mafLinks/monDom2
     mkdir mafLinks/fr1
     mkdir mafLinks/tetNig1
   
@@ -4900,18 +4904,16 @@ TMPDIR=/scratch/tmp
     # alignments for each species. Make sure files are all called chrN.maf.gz
     ln -s $dir/blastz.hg18.swap/mafNet/*.maf.gz ./mafLinks/hg18
     ln -s $dir/blastz.mm7.swap/mafNet/*.maf.gz ./mafLinks/mm7
-    ln -s $dir/blastz.monDom2.2005-10-07/chromsAndScafsRun/mafNet/*.maf.gz \
-          ./mafLinks/monDom2
     ln -s $dir/blastz.fr1/mafNet/*.maf.gz ./mafLinks/fr1
     ln -s $dir/blastz.tetNig1.2005-10-11/chromsAndScafsRun/mafNet/*.maf.gz \
           ./mafLinks/tetNig1
-    # copy files over to the pitakluster for cluster run
+    # copy files over to the san for the pitakluster cluster run
     ssh pk
-    mkdir /san/sanvol1/scratch/danRer3/multiz6way
-    cd /san/sanvol1/scratch/danRer3/multiz6way
+    mkdir /san/sanvol1/scratch/danRer3/multiz5way
+    cd /san/sanvol1/scratch/danRer3/multiz5way
     rsync -a --copy-links --progress \
-          /cluster/data/danRer3/bed/multiz6way/mafLinks/ .
-    # 310 Mb of data - took less than 1 minute 
+          /cluster/data/danRer3/bed/multiz5way/mafLinks/ .
+    # 277 Mb of data - took less than 1 minute 
     mkdir penn
     cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/multiz penn
     cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/maf_project penn
@@ -4926,7 +4928,7 @@ TMPDIR=/scratch/tmp
 
     # make output dir and run dir
 
-    cd /cluster/data/danRer3/bed/multiz6way
+    cd /cluster/data/danRer3/bed/multiz5way
     mkdir -p maf
     mkdir -p run
     cd run
@@ -4937,8 +4939,8 @@ cat > oneMultiz.csh << 'EOF'
 #!/bin/csh -fe
     set c = $1
     set db = danRer3
-    set multi = /scratch/tmp/$db/multiz6way.$c
-    set pairs = /san/sanvol1/scratch/$db/multiz6way
+    set multi = /scratch/tmp/$db/multiz5way.$c
+    set pairs = /san/sanvol1/scratch/$db/multiz5way
     set penn = $pairs/penn
 
     # special mode --
@@ -5013,14 +5015,14 @@ cat > oneMultiz.csh << 'EOF'
 # << keep emacs coloring happy
     chmod +x oneMultiz.csh
     cp -p oneMultiz.csh \
-         /san/sanvol1/scratch/danRer3/multiz6way/penn/oneMultiz.csh
+         /san/sanvol1/scratch/danRer3/multiz5way/penn/oneMultiz.csh
     # Create 6way.nh file of tree. This was used in the distant past for 
     # early versions of phastCons.  Now, this is merely a convenient 
     # reference to the tree under construction.  This is also used to draw 
     # a graphic tree as species6way.nh, see below.
 
-    cat << '_EOF_' > /cluster/data/danRer3/bed/multiz6way/6way.nh
-((hg18,mm7),monDom2),((tetNig1,fr1),danRer3))
+    cat << '_EOF_' > /cluster/data/danRer3/bed/multiz5way/5way.nh
+(hg18,mm7),((tetNig1,fr1),danRer3))
 '_EOF_'
     # << this line keeps emacs coloring happy
     #   using the tree diagram as above, arrange these alignments
@@ -5030,14 +5032,13 @@ cat > allMultiz.csh << 'EOF'
     # multiple alignment steps:
 set c = $1
 set db = danRer3
-set s = "/san/sanvol1/scratch/$db/multiz6way/penn/oneMultiz.csh"
+set s = "/san/sanvol1/scratch/$db/multiz5way/penn/oneMultiz.csh"
 
 $s $c hg18 mm7 0
-$s $c monDom2 hg18mm7 0
 $s $c tetNig1 fr1 1
-$s $c tetNig1fr1 monDom2hg18mm7 1
+$s $c tetNig1fr1 hg18mm7 1
 # get final alignment file
-$s $c tetNig1fr1monDom2hg18mm7 /cluster/data/$db/bed/multiz6way/maf/$c.maf
+$s $c tetNig1fr1hg18mm7 /cluster/data/$db/bed/multiz5way/maf/$c.maf
 #cleanup
 $s $c
 'EOF'
@@ -5046,7 +5047,7 @@ $s $c
 
 cat  << 'EOF' > template
 #LOOP
-./allMultiz.csh $(root1) {check out line+ /cluster/data/danRer3/bed/multiz6way/maf/$(root1).maf}
+./allMultiz.csh $(root1) {check out line+ /cluster/data/danRer3/bed/multiz5way/maf/$(root1).maf}
 #ENDLOOP
 'EOF'
 
@@ -5057,12 +5058,12 @@ cat  << 'EOF' > template
     para try, para check, para push, para check ... etc
     para time
 # Completed: 28 of 28 jobs
-#CPU time in finished jobs:       4722s      78.69m     1.31h    0.05d  0.000 y
-#IO & Wait Time:                   114s       1.91m     0.03h    0.00d  0.000 y
-#Average job time:                 173s       2.88m     0.05h    0.00d
-#Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:             751s      12.52m     0.21h    0.01d
-#Submission to last job:          1214s      20.23m     0.34h    0.01d
+#CPU time in finished jobs:       3546s      59.10m     0.98h    0.04d  0.000 y
+# IO & Wait Time:                   115s       1.92m     0.03h    0.00d  0.000 y
+# Average job time:                 131s       2.18m     0.04h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             553s       9.22m     0.15h    0.01d
+# Submission to last job:           709s      11.82m     0.20h    0.01d
 
     # do not filter mafs as only removes a small fraction of alignments
     # better to keep them all. check for single column alignments (these
@@ -5070,126 +5071,7 @@ cat  << 'EOF' > template
     # should be none of these now. Previously had to do a glueing step to 
     # deal with these. There are none here.
 
-    ssh hgwdev
-    # create tab file for chr1.maf
-    cd /cluster/data/danRer3/bed/multiz6way
-    # cat maf files into one file.
- 
-# KNOWN GENES BASED ON ENSEMBL GENES (in progress, 2005-11-23, hartera)
-    # see ENSEMBL GENES section for documentation of creation of
-    # the ensGene, ensGtp and ensPep tables and the track.
-    # compare the Ensembl and Human Proteins tracks
-    featureBits danRer3 refGene:cds ensGene:cds -enrichment
-# refGene:cds 0.658%, ensGene:cds 1.994%, both 0.589%, cover 89.60%, 
-# enrich 44.94x
-    featureBits danRer3 refGene:cds blastHg17KG -enrichment
-# refGene:cds 0.658%, blastHg17KG 1.292%, both 0.385%, cover 58.52%, 
-# enrich 45.30x
-    # little difference in enrichment and less coverage for Human Proteins so
-    # it seems like Ensembl is the best choice in terms of genome coverage
-    # and intersection with RefSeq CDS regions.
-    ssh kkstore02
-    mkdir -p /cluster/data/danRer3/bed/knownGenes
-    cd /cluster/data/danRer3/bed/knownGenes
-    # use Ensembl's BioMart to download the Ensembl Genes UniProt IDs and
-    # descriptions. For genes with no description, use the InterPro domain.
-    # Go to http://www.ensembl.org/Multi/martview
-    # Follow this sequence through the pages: 
-    # Page 1) Select the Ensembl dataset (35 here) and the 
-    # Danio_rerio choice (ZFISH5 here). Hit next. 22877 entries total.
-    # Ensembl 35 now (2005-11-23) - this dataset is the same as for the 
-    # version 32 downloaded as above for the Ensembl Genes track.
-    # Page 2) Then hit next.
-    # Page 3) Choose the "Features" Attribute Page from the pulldown menu
-    # at the top. Make sure that under the GENE section, the Ensembl 
-    # Attributes checked are the Ensembl Gene ID, (Ensembl Transcript ID),
-    # Description. Under External References, select Unified UniProt 
-    # accession, and ZFIN Primary ID. Under the Protein section, select 
-    # InterPro Description and InterPro ID under InterPro 
-    # Attributes. Select text, tab-separated for output. Choose gzip 
-    # compression. Hit export. Save as ensGene35Desc.tsv.gz
-    gunzip ensGene35Desc.tsv.gz
-    # repeat above and get the Ensembl transcript ID from Ensembl Attributes
-    # and then get EntrezGene ID, RefSeq DNA Accession and RefSeq Peptide ID
-    # from the External References section. Select text, tab-separated 
-    # for output. Choose gzip compression. Hit export. 
-    # Save as ensGene35Desc2.tsv.gz
-    cd /cluster/data/danRer3/bed/knownGenes
-    gunzip ensGene35Desc2.tsv.gz  
-    # need to make a table of cross reference information for Ensembl
-    # for the Known Genes details pages.
-    # create a table definition for ensGeneXref:
-    cd ~/kent/src/hg/lib
-cat << 'EOF' > ensGeneXRef.as
-table ensGeneXRef
-"Link together an Ensembl Transcript ID and a gene alias." 
-    (
-    string ensId;       "Ensembl Transcript ID"
-    string zfinId;      "ZFIN ID"
-    string uniProtId;   "Unified UniProt protein accession"
-    string geneSymbol;  "Gene Symbol"
-    string refSeq;      "RefSeq DNA Accession"
-    string protAcc;     "RefSeq Protein Accession"
-    string description; "Description" 
-    )
-'EOF'
-    autoSql ensGeneXRef.as ensGeneXRef
-    mv ensGeneXRef.h ../inc
-    # edit ensGeneXRef.sql so that only ensId is not null, add zfinId, 
-    # uniProtId, geneSymbol, refSeq and protAcc as keys. ensId is already the
-    # primary key.
-    # get the gene2refseq file from NCBI to give the Entrez Gene ID
-    # and symbol for refSeq accessions. Taxonomy ID is 7955 for Danio rerio.
-    # columns in file are tax_id, GeneID, status, 
-    # RNA nucleotide accession.version, RNA nucleotide gi, 
-    # protein accession.version, protein gi, genomic nucleotide 
-    # accession.version, genomic nucleotide gi, start position on the genomic 
-    # accession, end position on the genomic accession, orientation.
-    # for the gene_info file, column headings are:
-    # tax_id, GeneID, Symbol, LocusTag, Synonyms, dbXrefs, chromosome,
-    # map location, description, type of gene, Symbol from nomenclature
-    # authority, Full name from nomenclature authority, Nomenclature status.
-
-    wget --timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz
-    wget --timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene_info.gz
-    gunzip gene2refseq.gz
-    gunzip gene_info.gz
-    wget --timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene_history.gz
-    gunzip gene_history.gz
-    # get records for taxon ID: 7955
-    awk '{if ($1 == 7955) print;}' gene2refseq > zfish.gene2refseq
-    wc -l zfish.gene2refseq
-    # 50476 zfish.gene2refseq 
-    awk '{if ($1 == 7955) print;}' gene_info > zfish.gene_info
-    wc -l zfish.gene_info
-    # 37840 zfish.gene_info
-    # get contents of refLink table
-    hgsql -N -e 'select * from refLink;' danRer3 > refLink.txt
-    # UP TO HERE 
-    # write program taking ensGene35Desc.tsv and ensGene35Desc2.tsv as input
-    # and also the refLink table to find Entrez Gene IDs and Gene Symbols.
-    # and give the tabbed output for loading into the ensXRef table.
-    # hgZfishEnsXRef.c in ~/kent/src/hg/near/hgZfishEnsXRef
-    ~/bin/i386/hgZfishEnsXRef ensGene35Desc.tsv ensGene35Desc2.tsv \
-               refLink.txt ensGeneXRef.tab >& ensGeneXRef.log
-    # load this tabbed file into ensXRef table 
-    
-    hgsql rah < ~/kent/src/hg/lib/ensGeneXRef.sql
-    hgsql -e \
-       'load data local infile "ensGeneXRef.tab" into table ensGeneXRef' rah
-# STS MARKERS (in progress, 2005-10-13, hartera)
-    # DOWNLOADED RECENTLY FROM NCBI
-    ssh kkstore02
-    mkdir -p /cluster/data/danRer3/bed/stsMarkers
-    cd /cluster/data/danRer3/bed/stsMarkers
-    # UniSTS is the a unique subset of markers that are STS markers from the
-    # six zebrafish mapping panels: GAT, HS, LN54, MGH, MOP, T51, and also
-    # ZMAP which contains markers from the other panels. Among markers in 
-    # these map, a subset that are STSs and with available primers sequences
-    # were imported to UniSTS. These include submitted maps and those from
-    # the Zebrafish Information Network (ZFIN).
-
-# Build maf annotation and load database
+# Build maf annotation and load database (braney, 2006-02-06)
 cd /cluster/data/danRer3/bed/multiz5way
 mkdir anno 
 cd anno
@@ -5240,3 +5122,465 @@ make getFrames
 make loadDb
 
 #end of multiz5way annotation and load
+
+    # create tree image - like tree.nh but with common names
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/multiz5way
+    cat << '_EOF_' > species5.nh
+((human,mouse),((tetraodon,fugu),zebrafish))
+'_EOF_'
+    /cluster/bin/phast/$MACHTYPE/draw_tree -b -s species5.nh > species5.ps
+    convert 5way.ps > 5way.jpg
+    # may need to edit tree and remove whitespace
+# check for all.joiner entry for multiz5way - ok
+# add trackDb.ra entry in ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer3:
+# track multiz5way
+# shortLabel 5-Way Conservation
+# longLabel 5-Way Vertebrate Multiz Alignment & Conservation
+# group compGeno
+# priority 104
+# visibility pack
+# color 0, 10, 100
+# altColor 0,90,10
+# type wigMaf 0.0 1.0
+# maxHeightPixels 100:40:11
+# yLineOnOff Off
+# autoScaleDefault Off
+# summary multiz5waySummary
+# speciesGroups vertebrate mammal
+# sGroup_mammal hg18 mm7
+# sGroup_vertebrate tetNig1 fr1
+
+# PHYLO-HMM (PHASTCONS) CONSERVATION TRACK FOR 6-WAY ALIGNMENT 
+# (DONE, 2006-02-06, hartera)
+    ssh kkstore02
+    mkdir /cluster/data/danRer3/bed/multiz5way/cons
+    cd /cluster/data/danRer3/bed/multiz5way/cons
+    # create a starting-tree.mod based on chr5 (73Mb - largest chrom)
+    # chr5 is the largest chrom apart from NA and Un
+    /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chr5.maf \
+        --refseq ../../../5/chr5.fa --in-format MAF \
+        --windows 100000000,1000 --out-format SS \
+        --between-blocks 5000 --out-root s1
+    # takes about 30 seconds
+    /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+        --tree "((danRer3,(tetNig1,fr1)),(mm7,hg18))" \
+        --out-root starting-tree
+    # took less than 1 minute
+    rm s1.*ss
+    # Get genome-wide average GC content (for all species together,
+    # not just the reference genome).  If you have a globally
+    # estimated tree model, as above, you can get this from the
+    # BACKGROUND line in the .mod file.  E.g.,
+# ALPHABET: A C G T
+# ...
+# BACKGROUND: 0.307629 0.191708 0.192177 0.308486
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    # 0.384 is the GC content. This is used in the -gc argument below.
+    # If you do *not* have a global tree model and you do not know your
+    # GC content, you can get it directly from the MAFs with a command
+    # like:
+    # /cluster/bin/phast/$MACHTYPE/msa_view \
+    # --aggregate danRer3,tetNig1,fr1,mm7,hg18 -i MAF \ 
+    # -S /cluster/data/danRer3/bed/multiz5way/maf/chr*.maf > maf_summary.txt
+    # This gives a GC content of 0.438
+    # break up the genome-wide MAFs into pieces on the san filesystem
+    ssh kkstore02
+    mkdir -p /san/sanvol1/scratch/danRer3/cons/ss
+    cd /san/sanvol1/scratch/danRer3/cons/ss
+    bash
+    for C in `awk '{print $1}' /cluster/data/danRer3/chrom.sizes`
+    do
+      if [ -s /cluster/data/danRer3/bed/multiz5way/maf/${C}.maf ]; then
+        mkdir ${C}
+        echo msa_split $C
+        chrN=${C/chr/}
+        /cluster/bin/phast/$MACHTYPE/msa_split \
+            /cluster/data/danRer3/bed/multiz5way/maf/${C}.maf \
+            --refseq /cluster/data/danRer3/${chrN}/${C}.fa \
+            --in-format MAF --windows 1000000,0 --between-blocks 5000 \
+            --out-format SS -I 1000 --out-root ${C}/${C}
+      fi
+    done
+    # took about 20 minutes to run
+    # Create a random list of 50 1 mb regions (do not use chrNA and chrUn)
+
+    ls -1l chr*/chr*.ss | grep -v NA | grep -v Un | \
+       awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs.list
+    
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh pk
+    mkdir /san/sanvol1/scratch/danRer3/cons/treeRun1
+    cd /san/sanvol1/scratch/danRer3/cons/treeRun1
+    mkdir tree log
+    
+    # now set up cluster job to estimate model parameters.  Parameters
+    # will be estimated separately for each alignment fragment then
+    # will be combined across fragments. Tuning this loop should come 
+    # back to here to recalculate. Tuning target-coverage and expected-length.
+    # Create little script that calls phastCons with right arguments
+cat > makeTree << '_EOF_'
+#!/bin/csh -fe
+set C=$1:h
+mkdir -p log/${C} tree/${C}
+/cluster/bin/phast/x86_64/phastCons ../ss/$1 \
+   /cluster/data/danRer3/bed/multiz5way/cons/starting-tree.mod \
+   --gc 0.438 --nrates 1,1 --no-post-probs --ignore-missing \
+   --expected-lengths 12 --target-coverage 0.17 \
+   --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+    #   emacs happy
+    chmod a+x makeTree
+
+    # Make sure that the correct GC content is subsituted in here. Notice 
+    # the target coverage of 0.17. Here we are going to aim 
+    # for 65% coverage of coding regions by conserved elements.
+    # Create gensub file
+    cat > template << '_EOF_'
+#LOOP
+makeTree $(path1)
+#ENDLOOP
+'_EOF_'
+    #   happy emacs
+    # Make cluster job and run it
+    gensub2 ../randomSs.list single template jobList
+    para create jobList
+    para try,check,push,check etc.
+# para time
+# Completed: 50 of 50 jobs
+# CPU time in finished jobs:        714s      11.90m     0.20h    0.01d  0.000 y
+# IO & Wait Time:                   132s       2.20m     0.04h    0.00d  0.000 y
+# Average job time:                  17s       0.28m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              26s       0.43m     0.01h    0.00d
+# Submission to last job:           353s       5.88m     0.10h    0.00d
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    ssh kkstore02
+    cd /san/sanvol1/scratch/danRer3/cons/treeRun1
+    ls tree/chr*/*.cons.mod > cons.txt
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.txt' \
+        --output-average ../ave.cons.mod > cons_summary.txt
+    ls tree/chr*/*.noncons.mod > noncons.txt
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.txt' \
+        --output-average ../ave.noncons.mod > noncons_summary.txt
+    cd ..
+    cp -p ave.*.mod /cluster/data/danRer3/bed/multiz5way/cons
+    #   measuring entropy
+    #   consEntropy <target coverage> <expected lengths>
+    #            ave.cons.mod ave.noncons.mod --NH 9.78
+    #   never stops with the --NH argument
+    # target entropy should be L_min*H=9.8 bits, (between 9.5 to 10.5 is ok)
+    # the expected length that produces this entropy is the one 
+    # to use for phastCons.
+    /cluster/bin/phast/$MACHTYPE/consEntropy 0.17 12 \
+                        ave.cons.mod ave.noncons.mod
+
+# -target-coverage=0.17 -expected-lengths 12
+#Transition parameters:gamma=0.170000,omega=12.000000, mu=0.083333, nu=0.017068
+# Relative entropy: H=0.618383 bits/site
+# Expected min. length: L_min=17.978234 sites
+# Expected max. length: L_max=10.983828 sites
+# Phylogenetic information threshold: PIT=L_min*H=11.117434 bits
+
+# then the above steps from creating the treeRun directory onwards were
+# repeated with the target coverage and expected lengths parameters set as
+# below:
+
+# -target-coverage=0.25 -expected-lengths 12
+#Transition parameters:gamma=0.250000, omega=12.000000, mu=0.083333,nu=0.027778
+#Relative entropy: H=0.637721 bits/site
+#Expected min. length: L_min=15.535855 sites
+#Expected max. length: L_max=10.157133 sites
+#Phylogenetic information threshold: PIT=L_min*H=9.907536 bits
+
+#### !!! THESE PARAMETERS BELOW WERE THOSE THAT WERE FINALLY USED ####
+
+# Parameters used for danRer2 6-way conservation track:
+# -target-coverage=0.35 -expected-lengths 18
+#Transition parameters:gamma=0.350000,omega=18.000000, mu=0.055556, nu=0.029915
+# Relative entropy: H=0.592725 bits/site
+# Expected min. length: L_min=16.435656 sites
+# Expected max. length: L_max=12.564154 sites
+# Phylogenetic information threshold: PIT=L_min*H=9.741828 bits
+
+# need to iterate and get the right coverage and parameters
+# try running phastCons below with parameters used above and check the 
+# coverage of coding regions by the most conserved elements
+    # Create cluster dir to do main phastCons run
+    ssh pk
+    mkdir -p /san/sanvol1/scratch/danRer3/cons/consRun1
+    cd /san/sanvol1/scratch/danRer3/cons/consRun1
+    mkdir ppRaw bed
+    cp -p /san/sanvol1/scratch/danRer3/cons/ave.*.mod .
+    # Create script to run phastCons with right parameters
+    #   This job is I/O intensive in its output files, thus it is all
+    #   working over in /scratch/tmp/
+    cat > doPhast.csh << '_EOF_'
+#!/bin/csh -fe
+mkdir /scratch/tmp/${2}
+cp -p ../ss/${1}/${2}.ss ave.*.mod /scratch/tmp/${2}
+pushd /scratch/tmp/${2} > /dev/null
+/cluster/bin/phast/x86_64/phastCons ${2}.ss ave.cons.mod,ave.noncons.mod \
+   --expected-length 18 --target-coverage 0.35 --quiet \
+        --seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
+popd > /dev/null
+mkdir -p ppRaw/${1}
+mkdir -p bed/${1}
+mv /scratch/tmp/${2}/${2}.pp ppRaw/${1}
+mv /scratch/tmp/${2}/${2}.bed bed/${1}
+rm /scratch/tmp/${2}/ave.*.mod
+rm /scratch/tmp/${2}/${2}.ss
+rmdir /scratch/tmp/${2}
+'_EOF_'
+    # emacs happy
+    chmod a+x doPhast.csh
+
+    #   root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create gsub file
+cat > template << '_EOF_'
+#LOOP
+doPhast $(root1) $(file1)
+#ENDLOOP
+'_EOF_'
+    #   happy emacs
+
+    # Create parasol batch and run it
+    ls -1 ../ss/chr*/chr*.ss | sed 's/.ss$//' > in.list
+
+    gensub2 in.list single template jobList
+    para create jobList
+    para try/check/push/etc.
+
+# combine predictions and transform scores to be in 0-1000 interval
+    ssh kkstore02
+    cd /san/sanvol1/scratch/danRer3/cons/consRun1
+
+    #   The sed's and the sort get the file names in chrom,start order
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+        | sort -k7,7 -k9,9n \
+        | sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+        | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+        | /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #   ~ 1 minute
+    cp -p mostConserved.bed /cluster/data/danRer3/bed/multiz5way
+# Figure out how much is actually covered by the mostConserved data as so:
+    cd /cluster/data/danRer3
+    faSize */chr*.fa  
+    # 1644032962 bases (48201758 N's 1595831204 real 816464533 upper 
+    # 779366671 lower) in 28 sequences in 28 files
+    # The non-N size is 1595831204 bases
+    cd /cluster/data/danRer3/bed/multiz5way
+    awk '{sum+=$3-$2}
+END{printf "%% %.2f = 100.0*%d/1595831204\n",100.0*sum/1595831204,sum}' \
+        mostConserved.bed
+    -target-coverage 0.35: % 3.06 = 100.0*48883581/1595831204 length=18
+    -target-coverage 0.
+    
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/multiz5way
+    # get an or of refGene and mgcGenes CDS regions 
+    featureBits danRer3 refGene:cds mgcGenes:cds -or -bed=refSeqOrMgcCds.bed
+    # 11338034 bases of 1630323462 (0.695%) in intersection
+    featureBits danRer3 refSeqOrMgcCds.bed mostConserved.bed -enrichment
+    # refSeqOrMgcCds.bed 0.695%, mostConserved.bed 2.998%, both 0.464%, 
+    # cover 66.71%, enrich 22.25x 
+    # so use this result for -target-coverage=0.35 -expected-lengths=18
+    # with entropy (PIT) value of 9.74 (aiming for around 9.8) and 
+    # 66.7% coverage of coding regions with most conserved elements 
+    # (aiming for about 65%)
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/multiz5way
+    hgLoadBed danRer3 phastConsElements mostConserved.bed
+    # Loaded 552331 elements of size 5
+    featureBits danRer3 mgcGenes:cds phastConsElements -enrichment
+    # mgcGenes:cds 0.531%, phastConsElements 2.998%, both 0.363%, 
+    # cover 68.39%, enrich 22.81x
+    featureBits danRer3 refGene:cds phastConsElements -enrichment
+    # refGene:cds 0.658%, phastConsElements 2.998%, both 0.440%, cover 66.82%,
+    # enrich 22.28x
+    # Create merged posterier probability file and wiggle track data files
+    # the sed business gets the names sorted by chromName, chromStart
+    # so that everything goes in numerical order into wigEncode
+    ssh kkstore02
+    cd /san/sanvol1/scratch/danRer3/cons/consRun1
+    find ./ppRaw -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+        | sort -k7,7 -k9,9n \
+        | sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+        | wigEncode stdin phastCons5way.wig phastCons5way.wib
+    # takes a few minutes
+    ls -l phastCons*
+    # -rw-rw-r--  1 hartera protein 198399845 Feb  6 16:05 phastCons5way.wib
+    # -rw-rw-r--  1 hartera protein  45304940 Feb  6 16:05 phastCons5way.wig
+    cp -p phastCons5way.wi? /cluster/data/danRer3/bed/multiz5way/cons
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/multiz5way/cons
+    mkdir -p /gbdb/danRer3/wib
+    ln -s `pwd`/phastCons5way.wib /gbdb/danRer3/wib/phastCons5way.wib
+    # use this if need to reload table
+    hgsql -e 'drop table phastCons5way;' danRer3
+    # load table
+    hgLoadWiggle danRer3 phastCons5way phastCons5way.wig
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/multiz5way/cons
+    bash
+    time hgWiggle -doHistogram \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+            -db=danRer3 phastCons5way > histogram.data 2>&1
+# real    2m33.069s
+# user    1m58.310s
+# sys     0m16.170s
+
+        #   create plot of histogram:
+    cat << '_EOF_' > histo.gp
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Zebrafish danRer3 Histogram phastCons5 track"
+set xlabel " phastCons5 score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+     "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+
+    #   happy emacs
+    gnuplot histo.gp > histo.png
+    display histo.png &
+
+# add line: wiggle phastCons5way to trackDb.ra for multiz5way to display the 
+# wiggle for the conservation track.
+# check all.joiner for entries for phastCons5way and phastConsElements5way -ok
+# copy over html for multiz and edit.
+
+# KNOWN GENES BASED ON ENSEMBL GENES (in progress, 2005-11-23, hartera)
+    # see ENSEMBL GENES section for documentation of creation of
+    # the ensGene, ensGtp and ensPep tables and the track.
+    # compare the Ensembl and Human Proteins tracks
+    featureBits danRer3 refGene:cds ensGene:cds -enrichment
+# refGene:cds 0.658%, ensGene:cds 1.994%, both 0.589%, cover 89.60%, 
+# enrich 44.94x
+    featureBits danRer3 refGene:cds blastHg17KG -enrichment
+# refGene:cds 0.658%, blastHg17KG 1.292%, both 0.385%, cover 58.52%, 
+# enrich 45.30x
+    # little difference in enrichment and less coverage for Human Proteins so
+    # it seems like Ensembl is the best choice in terms of genome coverage
+    # and intersection with RefSeq CDS regions.
+    ssh kkstore02
+    mkdir -p /cluster/data/danRer3/bed/knownGenes
+    cd /cluster/data/danRer3/bed/knownGenes
+    # use Ensembl's BioMart to download the Ensembl Genes UniProt IDs and
+    # descriptions. For genes with no description, use the InterPro domain.
+    # Go to http://www.ensembl.org/Multi/martview
+    # Follow this sequence through the pages: 
+    # Page 1) Select the Ensembl dataset (35 here) and the 
+    # Danio_rerio choice (ZFISH5 here). Hit next. 22877 entries total.
+    # Ensembl 35 now (2005-11-23) - this dataset is the same as for the 
+    # version 32 downloaded as above for the Ensembl Genes track.
+    # Page 2) Then hit next.
+    # Page 3) Choose the "Features" Attribute Page from the pulldown menu
+    # at the top. Make sure that under the GENE section, the Ensembl 
+    # Attributes checked are the Ensembl Gene ID, (Ensembl Transcript ID),
+    # Description. Under External References, select Unified UniProt 
+    # accession, and ZFIN Primary ID. Under the Protein section, select 
+    # InterPro Description and InterPro ID under InterPro 
+    # Attributes. Select text, tab-separated for output. Choose gzip 
+    # compression. Hit export. Save as ensGene35Desc.tsv.gz
+    gunzip ensGene35Desc.tsv.gz
+    # repeat above and get the Ensembl transcript ID from Ensembl Attributes
+    # and then get EntrezGene ID, RefSeq DNA Accession and RefSeq Peptide ID
+    # from the External References section. Select text, tab-separated 
+    # for output. Choose gzip compression. Hit export. 
+    # Save as ensGene35Desc2.tsv.gz
+    cd /cluster/data/danRer3/bed/knownGenes
+    gunzip ensGene35Desc2.tsv.gz  
+    # need to make a table of cross reference information for Ensembl
+    # for the Known Genes details pages.
+    # create a table definition for ensGeneXref:
+    cd ~/kent/src/hg/lib
+cat << 'EOF' > ensGeneXRef.as
+table ensGeneXRef
+"Link together an Ensembl Transcript ID and a gene alias."
+    (
+    string ensGeneId;   "Ensembl Transcript ID"
+    string zfinId;      "ZFIN ID"
+    string uniProtId;   "Unified UniProt protein accession"
+    string geneId;      "NCBI Entrez Gene (formerly LocusLink) ID"
+    string geneSymbol;  "NCBI Entrez Gene (formerly LocusLink) Symbol"
+    string refSeq;      "RefSeq DNA Accession"
+    string protAcc;     "RefSeq Protein Accession"
+    string description; "Description"
+    )
+'EOF'
+    autoSql ensGeneXRef.as ensGeneXRef
+    mv ensGeneXRef.h ../inc
+    # edit ensGeneXRef.sql so that only ensId is not null, add zfinId, 
+    # uniProtId, geneSymbol, refSeq and protAcc as keys. ensId is already the
+    # primary key.
+    # get the gene2refseq file from NCBI to give the Entrez Gene ID
+    # and symbol for refSeq accessions. Taxonomy ID is 7955 for Danio rerio.
+    # columns in file are tax_id, GeneID, status, 
+    # RNA nucleotide accession.version, RNA nucleotide gi, 
+    # protein accession.version, protein gi, genomic nucleotide 
+    # accession.version, genomic nucleotide gi, start position on the genomic 
+    # accession, end position on the genomic accession, orientation.
+    # for the gene_info file, column headings are:
+    # tax_id, GeneID, Symbol, LocusTag, Synonyms, dbXrefs, chromosome,
+    # map location, description, type of gene, Symbol from nomenclature
+    # authority, Full name from nomenclature authority, Nomenclature status.
+
+    wget --timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz
+    wget --timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene_info.gz
+    gunzip gene2refseq.gz
+    gunzip gene_info.gz
+    wget --timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene_history.gz
+    gunzip gene_history.gz
+    # get records for taxon ID: 7955
+    awk '{if ($1 == 7955) print;}' gene2refseq > zfish.gene2refseq
+    wc -l zfish.gene2refseq
+    # 50476 zfish.gene2refseq 
+    awk '{if ($1 == 7955) print;}' gene_info > zfish.gene_info
+    wc -l zfish.gene_info
+    # 37840 zfish.gene_info
+    # get contents of refLink table
+    hgsql -N -e 'select * from refLink;' danRer3 > refLink.txt
+    # UP TO HERE 
+    # write program taking ensGene35Desc.tsv and ensGene35Desc2.tsv as input
+    # and also the refLink table to find Entrez Gene IDs and Gene Symbols.
+    # and give the tabbed output for loading into the ensXRef table.
+    # hgZfishEnsXRef.c in ~/kent/src/hg/near/hgZfishEnsXRef
+    /cluster/home/hartera/bin/i386/hgZfishEnsXRef \
+         ensGene35Desc.tsv ensGene35Desc2.tsv \
+         zfish.gene_info zfish.gene2refseq ensGeneXRef.tab >& ensGeneXRef.log
+    # load this tabbed file into ensXRef table 
+    
+    hgsql rah < ~/kent/src/hg/lib/ensGeneXRef.sql
+    hgsql -e \
+       'load data local infile "ensGeneXRef.tab" into table ensGeneXRef' rah
+# STS MARKERS (in progress, 2005-10-13, hartera)
+    # DOWNLOADED RECENTLY FROM NCBI
+    ssh kkstore02
+    mkdir -p /cluster/data/danRer3/bed/stsMarkers
+    cd /cluster/data/danRer3/bed/stsMarkers
+    # UniSTS is the a unique subset of markers that are STS markers from the
+    # six zebrafish mapping panels: GAT, HS, LN54, MGH, MOP, T51, and also
+    # ZMAP which contains markers from the other panels. Among markers in 
+    # these map, a subset that are STSs and with available primers sequences
+    # were imported to UniSTS. These include submitted maps and those from
+    # the Zebrafish Information Network (ZFIN).
