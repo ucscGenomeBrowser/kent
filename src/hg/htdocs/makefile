@@ -16,5 +16,5 @@ beta:
 # this queries CVS to find out the list of files to install, so
 # avoid the usual crud that collects in directories.
 doInstall:
-	rsync -r --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}
+	rsync -t -r --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}
 	#ln -sf ENCODE ${DEST}/encode
