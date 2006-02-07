@@ -1,5 +1,3 @@
-2) Implement array.append pseudo-method.
-
 3) Implement dimensioning of multi-dimensional arrays as in:
       array[8] of array[8] of square checkerboard;
 

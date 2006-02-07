@@ -180,6 +180,10 @@ switch (type)
 	return "pptParaFilter";
     case pptUntypedElInCollection:
 	return "pptUntypedElInCollection";
+    case pptOperatorDec:
+	return "pptOperatorDec";
+    case pptArrayAppend:
+	return "pptArrayAppend";
 
     case pptCastBitToBit:
         return "pptCastBitToBit";
@@ -1420,6 +1424,20 @@ static struct pfParse *parseFlow(struct pfCompile *pfc, struct pfParse *parent,
 return parseFunction(pfc, parent, pTokList, scope, pptFlowDec);
 }
 
+static struct pfParse *parseOperator(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse to (...) [into (...)] */
+{
+if (!pfc->isSys)
+    {
+    struct pfToken *tok = *pTokList;
+    errAt(tok, "the word '%s' is reserved for system use", 
+    	pfTokenAsString(tok));
+    }
+return parseFunction(pfc, parent, pTokList, scope, pptOperatorDec);
+}
+
+
 static struct pfParse *parsePolymorphic(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse flow (...) [into (...)] */
@@ -1763,6 +1781,9 @@ switch (tok->type)
 	break;
     case pftTo:
 	statement = parseTo(pfc, parent, &tok, scope);
+	break;
+    case pftOperator:
+        statement = parseOperator(pfc, parent, &tok, scope);
 	break;
     case pftPara:
 	statement = parseParaStatement(pfc, parent, &tok, scope);

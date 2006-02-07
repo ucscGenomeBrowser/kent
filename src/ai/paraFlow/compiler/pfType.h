@@ -60,6 +60,7 @@ enum pfTyty
     tytyFunction,
     tytyVirtualFunction,
     tytyModule,
+    tytyOperator,
     };
 
 struct pfType

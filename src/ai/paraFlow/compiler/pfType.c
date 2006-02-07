@@ -82,7 +82,8 @@ else
 	    }
 	fprintf(f, ")");
 	}
-    else if (ty->tyty == tytyFunction || ty->tyty == tytyVirtualFunction)
+    else if (ty->tyty == tytyFunction || ty->tyty == tytyVirtualFunction
+       || ty->tyty == tytyOperator)
 	{
 	if (ty->tyty == tytyVirtualFunction)
 	   fprintf(f, "polymorphic ");
@@ -415,6 +416,101 @@ else
     }
 }
 
+static void coerceArrayAppend(struct pfCompile *pfc,
+	struct pfParse *pp, struct pfParse *arrayTypePp)
+/* Turn pptCall subtree into a pptArrayAppend subtree.
+ * The structure of this subtree is just:
+ *     pptArrayAppend
+ *        array expression
+ *        element expression
+ * The input subtree is
+ *     pptCall
+ *        pptDot
+ *           dot-element
+ *        pptTuple
+ *           element-list
+ * Also check that we are adding something that can
+ * get turned into type of array elements. */
+{
+struct pfType *arrayType = arrayTypePp->ty;
+struct pfParse *inDot = pp->children;
+struct pfParse *inTuple = inDot->next;
+struct pfParse *outArray = NULL, *outElement = NULL;
+struct pfType *elType = arrayType->children;
+int dotCount;
+outElement = inTuple->children;
+if (outElement->next != NULL)
+    errAt(inTuple->tok, "array append only takes a single argument");
+
+/* Force element to be same type as elements of array,
+ * inserting casts if necessary. */
+coerceOne(pfc, &outElement, elType, FALSE);
+
+/* Get rid of the 'append' field, which happens to be right
+ * after the arrayType field, and count up remaining dots. */
+arrayTypePp->next = NULL;
+dotCount = slCount(inDot->children);
+
+if (dotCount == 1)
+    {
+    /* In this case we can get rid of the pptDot, and just
+     * replace it with the first child. */
+    outArray = inDot->children;
+    }
+else
+    {
+    outArray = inDot;
+    }
+
+/* Now rework the base of the subtree, changing it's type, ty,
+ * and children. */
+pp->type = pptArrayAppend;
+pp->children = outArray;
+outArray->next = outElement;
+}
+
+static void coerceCallToOperator(struct pfCompile *pfc, struct pfParse *pp)
+/* Check and make type casts for operators, which are
+ * built-in function with type-checking not easily handled
+ * by the usual methods. 
+ *    At some point we'll probably want to generalize the code here.
+ * At the moment the only operator is array.append(). */
+{
+struct pfParse *function = pp->children;
+struct pfParse *input = function->next;
+if (function->type == pptDot)
+    {
+    /* It's a method of some sort. */
+    struct pfParse *typePp, *fieldPp;
+    char *operatorName;
+
+    /* Seek to penultimate field, which contains the type
+     * we are applying stuff to. */
+    for (typePp=function->children; typePp->next->next != NULL; 
+    	typePp = typePp->next)
+	;
+
+    /* Get field. */
+    fieldPp = typePp->next;
+    assert(fieldPp->type == pptFieldUse);
+    operatorName = fieldPp->name;
+
+    if (typePp->ty->base == pfc->arrayType)
+        {
+	if (sameString(operatorName, "append"))
+	    coerceArrayAppend(pfc, pp, typePp);
+	}
+    else
+        {
+	internalErr();
+	}
+    }
+else 
+    {
+    internalErr();
+    }
+}
+
 static void coerceCall(struct pfCompile *pfc, struct pfParse **pPp)
 /* Make sure that parameters to call are right.  Then
  * set pp->type to call's return type. */
@@ -423,6 +519,11 @@ struct pfParse *pp = *pPp;
 struct pfParse *function = pp->children;
 switch(function->ty->tyty)
     {
+    case tytyOperator:
+        {
+	coerceCallToOperator(pfc, pp);
+	break;
+	}
     case tytyFunction:
     case tytyVirtualFunction:
 	{
@@ -1080,6 +1181,7 @@ for (p = compound->children; p != NULL; p = p->next)
 	case pptToDec:
 	case pptParaDec:
 	case pptFlowDec:
+	case pptOperatorDec:
 	    addFunctionToClass(base, p);
 	    break;
 	case pptTuple:

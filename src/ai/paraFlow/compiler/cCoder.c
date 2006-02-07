@@ -1894,6 +1894,19 @@ if (falseBody != NULL)
     }
 }
 
+static void codeArrayAppend(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
+/* Emit C code for array append . */
+{
+struct pfParse *array = pp->children;
+struct pfParse *element = array->next;
+int stack;
+stack = codeExpression(pfc, f, array, 0, FALSE);
+codeExpression(pfc, f, element, stack, TRUE);
+fprintf(f, "_pf_array_append(%s[0].Array, &", stackName);
+codeParamAccess(pfc, f, element->ty->base, stack);
+fprintf(f, ");\n");
+}
+
 static void codeStatement(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp)
 /* Emit C code for one statement. */
@@ -1942,6 +1955,9 @@ switch (pp->type)
 	break;
     case pptIf:
         codeIf(pfc, f, pp);
+	break;
+    case pptArrayAppend:
+	codeArrayAppend(pfc, f, pp);
 	break;
     case pptNop:
         break;

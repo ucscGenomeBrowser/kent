@@ -9,14 +9,15 @@
 #include "pfCompile.h"
 #include "pfBindVars.h"
 
-static void evalFunctionType(struct pfParse *pp, struct pfBaseType *base)
+static void evalFunctionType(struct pfParse *pp, struct pfBaseType *base,
+	enum pfTyty tyty)
 /* Fill in type info on to/para/flow node. */
 {
 struct pfParse *name = pp->children;
 struct pfParse *input = name->next;
 struct pfParse *output = input->next;
 struct pfType *ty = pfTypeNew(base);
-ty->tyty = tytyFunction;
+ty->tyty = tyty;
 pp->ty = ty;
 ty->children = input->ty;
 if (output->ty == NULL)
@@ -46,13 +47,16 @@ switch (pp->type)
 	break;
 	}
     case pptToDec:
-        evalFunctionType(pp, pfc->toType);
+        evalFunctionType(pp, pfc->toType, tytyFunction);
 	break;
     case pptParaDec:
-        evalFunctionType(pp, pfc->paraType);
+        evalFunctionType(pp, pfc->paraType, tytyFunction);
 	break;
     case pptFlowDec:
-        evalFunctionType(pp, pfc->flowType);
+        evalFunctionType(pp, pfc->flowType, tytyFunction);
+	break;
+    case pptOperatorDec:
+        evalFunctionType(pp, pfc->operatorType, tytyOperator);
 	break;
     case pptForeach:
     case pptParaDo:
@@ -144,6 +148,7 @@ switch (pp->type)
     case pptToDec:
     case pptParaDec:
     case pptFlowDec:
+    case pptOperatorDec:
 	{
 	struct pfParse *name = pp->children;
 	struct pfParse *input = name->next;

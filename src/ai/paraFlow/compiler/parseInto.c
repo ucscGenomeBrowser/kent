@@ -250,12 +250,15 @@ for (mod = pfc->moduleList; mod != NULL; mod = mod->next)
 for (mod = pfc->moduleList; mod != NULL; mod = mod->next)
     {
     struct pfParse *modPp;
-    struct pfScope *scope = (mod->name[0] == '<' ? sysScope : userScope);
+    boolean isSys = (mod->name[0] == '<');
+    struct pfScope *scope = (isSys ? sysScope : userScope);
     enum pfParseType type = pptMainModule;
     if (mod != pfc->moduleList)
 	type = (mod->isPfh ? pptModuleRef : pptModule);
+    pfc->isSys = isSys;
     modPp = pfParseModule(pfc, mod, program, scope, type);
     modPp->name = mod->name;
+    /* Exclude string module since code generator can't handle it. */
     if (mod != stringModule)
 	slAddHead(&program->children, modPp);
     if (type != pptModuleRef)

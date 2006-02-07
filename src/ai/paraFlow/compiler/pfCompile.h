@@ -38,6 +38,7 @@ struct pfCompile
     char *baseDir;		/* Base directory. */
     struct hash *moduleHash;	/* Module hash.  pfModule valued, name keyed. */
     struct pfModule *moduleList;/* List of all modules. */
+    boolean isSys;		/* True if compiling built-in module. */
     struct pfTokenizer *tkz;	/* Tokenizer. */
     struct hash *reservedWords;	/* Reserved words, can't be used for type or symbols */
     struct pfScope *scope;	/* Outermost scope - for built in types and symbols */
@@ -58,6 +59,7 @@ struct pfCompile
     struct pfBaseType *toType;		/* Type for to functions */
     struct pfBaseType *paraType;	/* Type for para declarations */
     struct pfBaseType *flowType;	/* Type for flow declarations */
+    struct pfBaseType *operatorType;	/* Type for operator declarations */
     struct pfBaseType *classType;	/* Type for class declarations. */
 
     struct pfBaseType *bitType;

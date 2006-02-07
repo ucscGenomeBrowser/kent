@@ -68,6 +68,7 @@ hashAddInt(hash, "polymorphic", pftPolymorphic);
 hashAddInt(hash, "static", pftStatic);
 hashAddInt(hash, "nil", pftNil);
 hashAddInt(hash, "include", pftInclude);
+hashAddInt(hash, "_operator_", pftOperator);
 return hash;
 }
 
@@ -137,6 +138,7 @@ pfc->functionType = pfScopeAddType(scope, "<function>", FALSE, pfc->varType, 0, 
 pfc->toType = pfScopeAddType(scope, "to", FALSE, pfc->functionType, 0, FALSE);
 pfc->paraType = pfScopeAddType(scope, "para", FALSE, pfc->functionType, 0, FALSE);
 pfc->flowType = pfScopeAddType(scope, "flow", FALSE, pfc->functionType, 0, FALSE);
+pfc->operatorType = pfScopeAddType(scope, "_operator_", FALSE, pfc->functionType, 0, FALSE);
 
 pfc->bitType = pfScopeAddType(scope, "bit", FALSE, pfc->numType, sizeof(_pf_Bit), FALSE);
 pfc->byteType = pfScopeAddType(scope, "byte", FALSE, pfc->numType, sizeof(_pf_Byte), FALSE);
@@ -168,6 +170,16 @@ pfc->scope = pfScopeNew(pfc, NULL, 8, FALSE);
 addBuiltInTypes(pfc);
 pfc->tkz = pfTokenizerNew(pfc->reservedWords);
 return pfc;
+}
+
+static void dumpParseTree(struct pfCompile *pfc, 
+	struct pfParse *program, FILE *f)
+/* Dump out parse tree, including string module, which for 
+ * technical reasons is not linked onto main parse tree. */
+{
+struct pfModule *stringModule = hashMustFindVal(pfc->moduleHash, "<string>");
+pfParseDump(program, 0, f);
+pfParseDump(stringModule->pp, 1, f);
 }
 
 void paraFlow(char *fileName, int pfArgc, char **pfArgv)
@@ -204,7 +216,7 @@ if (endPhase < 2)
     return;
 verbose(2, "Phase 2 - parsing\n");
 program = pfParseInto(pfc);
-pfParseDump(program, 0, parseF);
+dumpParseTree(pfc, program, parseF);
 carefulClose(&parseF);
 
 if (endPhase < 3)
@@ -215,14 +227,14 @@ if (endPhase < 4)
     return;
 verbose(2, "Phase 4 - binding names\n");
 pfBindVars(pfc, program);
-pfParseDump(program, 0, boundF);
+dumpParseTree(pfc, program, boundF);
 carefulClose(&boundF);
 
 if (endPhase < 5)
     return;
 verbose(2, "Phase 5 - type checking\n");
 pfTypeCheck(pfc, &program);
-pfParseDump(program, 0, typeF);
+dumpParseTree(pfc, program, typeF);
 carefulClose(&typeF);
 
 if (endPhase < 6)

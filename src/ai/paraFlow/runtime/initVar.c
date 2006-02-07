@@ -241,6 +241,25 @@ if (size > 0)
 return array_of_type(size, size, elType, elSize, elements);
 }
 
+void _pf_array_append(_pf_Array array, void *elBuf)
+/* Contains array, element-to-append on stack. */
+{
+if (array->size >= array->allocated)
+    {
+    size_t oldSize = array->size * array->elSize;
+    size_t newSize, newAllocated;
+    if (array->allocated == 0)
+	array->allocated = newAllocated = 4;
+    else
+        array->allocated = newAllocated = (array->allocated + array->allocated);
+    newSize = newAllocated * array->elSize;
+    array->elements = needMoreMem(array->elements, oldSize, newSize);
+    }
+memcpy(array->elements + array->size * array->elSize,  elBuf, array->elSize);
+array->size += 1;
+}
+
+
 _pf_Array _pf_bit_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */

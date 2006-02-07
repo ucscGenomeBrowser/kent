@@ -62,6 +62,7 @@ return
 "class _pf_array\n"
 "    {\n"
 "    int size;\n"
+"    _operator_ append(var el);\n"
 "    }\n"
 ;
 }

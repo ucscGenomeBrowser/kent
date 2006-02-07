@@ -9,24 +9,25 @@ the 'no nil allowed in this operation' error.
   - Rework code generator so that a type is kept alongside the
     data on the expression stack.
   - Do a sort function (need function pointer?)
-  - Read-only and private variables.
+  - ?Read-only and private variables.
         Make it so that class.new() is only legal way to
 	make something with private or read-only var.
-  - Implement ++ and maybe --.
+  - Implement ++ and maybe -- (as a statement, not an expression).
   - Implement case statement.
   - Create 'serial' function - that is gauranteed only to be 
     executed by one thread at a time.  Can be called from a para.
-  - Exceptions.
-  - Prevent memory leakage in expressions that don't get assigned to anything
+  - ?Exceptions.
+  - ?Prevent memory leakage in expressions that don't get assigned to anything
     (including function calls).
   - More file i/o.
-  - Adding named parameters.
+  - ?Adding named parameters.
   - Implement lists.
   - Implementing trees.
 
 
 -----------
 DONE
+  - Implement array.append pseudo-method.
   - Eliminate need for type in constructs like
        (type element in collection)
   - Implement "para into" statement.  Actually did this as
