@@ -57,10 +57,12 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgFlyBase.c,v 1.6 2004/06/29 17:37:44 angie Exp $";
+static char const rcsid[] = "$Id: hgFlyBase.c,v 1.7 2006/02/07 18:29:01 angie Exp $";
 
 char *tabDir = ".";
 boolean doLoad;
+char *geneTable = "bdgpGene";
+boolean doTranscript = TRUE;
 
 void usage()
 /* Explain usage and exit. */
@@ -70,14 +72,17 @@ errAbort(
   "usage:\n"
   "   hgFlyBase database genes.txt\n"
   "options:\n"
+  "   -geneTable=tbl - Use tbl instead of default %s\n"
   "   -tab=dir - Output tab-separated files to directory.\n"
   "   -noLoad  - If true don't load database and don't clean up tab files\n"
+  , geneTable
   );
 }
 
 static struct optionSpec options[] = {
    {"tab", OPTION_STRING},
    {"noLoad", OPTION_BOOLEAN},
+   {"geneTable", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -287,6 +292,16 @@ sqlRemakeTable(conn, "fbGo",
 "    INDEX(geneId(11)),\n"
 "    INDEX(goId(10))\n"
 ")\n");
+
+sqlRemakeTable(conn, "fbUniProt", 
+"#Links FlyBase gene IDs and UniProt IDs/aspects\n"
+"CREATE TABLE fbUniProt (\n"
+"    geneId varchar(255) not null,	# FlyBase ID\n"
+"    uniProtId varchar(255) not null,	# UniProt ID\n"
+"              #Indices\n"
+"    INDEX(geneId(11)),\n"
+"    INDEX(uniProtId(6))\n"
+")\n");
 }
 
 struct geneAlt
@@ -299,8 +314,12 @@ struct geneAlt
     };
 
 void getAllSplices(char *database, FILE *f)
-/* Write out table linking flybase genes with BDGP
- * transcripts. */
+/* Write out table linking flybase genes with BDGP transcripts --
+ * unfortunately bdgpGeneInfo lacks -R* transcript/isoform identifiers,
+ * so strip those off of bdgpGene.name. 
+ * This is not necessary with flyBaseGene/flyBase2004Xref where -R*'s 
+ * are preserved.
+*/
 {
 struct slName *geneList = NULL, *gene;
 struct sqlConnection *conn = sqlConnect(database);
@@ -325,7 +344,7 @@ sqlFreeResult(&sr);
 slReverse(&altList);
 
 /* Now associate splicing variants. */
-safef(query, sizeof(query), "select name from bdgpGene");
+safef(query, sizeof(query), "select name from %s", geneTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -365,14 +384,16 @@ char *tRole = "fbRole";
 char *tPhenotype = "fbPhenotype";
 char *tTranscript = "fbTranscript";
 char *tGo = "fbGo";
+char *tUniProt = "fbUniProt";
 FILE *fGene = hgCreateTabFile(tabDir, tGene);
 FILE *fSynonym = hgCreateTabFile(tabDir, tSynonym);
 FILE *fAllele = hgCreateTabFile(tabDir, tAllele);
 FILE *fRef = hgCreateTabFile(tabDir, tRef);
 FILE *fRole = hgCreateTabFile(tabDir, tRole);
 FILE *fPhenotype = hgCreateTabFile(tabDir, tPhenotype);
-FILE *fTranscript = hgCreateTabFile(tabDir, tTranscript);
+FILE *fTranscript = NULL;
 FILE *fGo = hgCreateTabFile(tabDir, tGo);
+FILE *fUniProt = hgCreateTabFile(tabDir, tUniProt);
 struct lineFile *lf = lineFileOpen(genesFile, TRUE);
 struct hash *refHash = newHash(19);
 int nextRefId = 0;
@@ -387,7 +408,11 @@ struct sqlConnection *conn;
 struct hash *goUniqHash = newHash(18);
 
 /* Make table from flybase genes to BGDP transcripts. */
-getAllSplices(database, fTranscript);
+if (doTranscript)
+    {
+    fTranscript = hgCreateTabFile(tabDir, tTranscript);
+    getAllSplices(database, fTranscript);
+    }
 
 /* Make dummy reference for flybase itself. */
 fprintf(fRef, "0\tFlyBase\n");
@@ -473,6 +498,22 @@ while (lineFileNext(lf, &line, NULL))
 	    slNameStore(&synList, rest);
 	    }
 	}
+    else if (sub == '*' && type == 'm')
+	{
+	if (geneId == NULL)
+	    errAbort("*m protein ID before geneId line %d of %s", 
+	    	lf->lineIx, lf->fileName);
+	if (startsWith("UniProt", rest))
+	    {
+	    char *ptr = strchr(rest, ':');
+	    if (ptr != NULL)
+		ptr++;
+	    else
+		errAbort("Trouble parsing UniProt ID %s like %d of %s",
+			 rest, lf->lineIx, lf->fileName);
+	    fprintf(fUniProt, "%s\t%s\n", geneId, ptr);
+	    }
+	}
     else if (type == 'E')
         {
 	ref = hashFindVal(refHash, rest);
@@ -526,8 +567,11 @@ if (doLoad)
     {
     printf("Loading %s\n", tGene);
     hgLoadTabFile(conn, tabDir, tGene, &fGene);
-    printf("Loading %s\n", tTranscript);
-    hgLoadTabFile(conn, tabDir, tTranscript, &fTranscript);
+    if (doTranscript)
+	{
+	printf("Loading %s\n", tTranscript);
+	hgLoadTabFile(conn, tabDir, tTranscript, &fTranscript);
+	}
     printf("Loading %s\n", tSynonym);
     hgLoadTabFile(conn, tabDir, tSynonym, &fSynonym);
     printf("Loading %s\n", tAllele);
@@ -540,14 +584,18 @@ if (doLoad)
     hgLoadTabFile(conn, tabDir, tPhenotype, &fPhenotype);
     printf("Loading %s\n", tGo);
     hgLoadTabFile(conn, tabDir, tGo, &fGo);
+    printf("Loading %s\n", tUniProt);
+    hgLoadTabFile(conn, tabDir, tUniProt, &fUniProt);
     hgRemoveTabFile(tabDir, tGene);
-    hgRemoveTabFile(tabDir, tTranscript);
+    if (doTranscript)
+	hgRemoveTabFile(tabDir, tTranscript);
     hgRemoveTabFile(tabDir, tSynonym);
     hgRemoveTabFile(tabDir, tAllele);
     hgRemoveTabFile(tabDir, tRef);
     hgRemoveTabFile(tabDir, tRole);
     hgRemoveTabFile(tabDir, tPhenotype);
     hgRemoveTabFile(tabDir, tGo);
+    hgRemoveTabFile(tabDir, tUniProt);
     }
 }
 
@@ -564,6 +612,8 @@ if (optionExists("tab"))
     tabDir = optionVal("tab", tabDir);
     makeDir(tabDir);
     }
+geneTable = optionVal("geneTable", geneTable);
+doTranscript = sameString(geneTable, "bdgpGene");
 hgFlyBase(argv[1], argv[2]);
 return 0;
 }
