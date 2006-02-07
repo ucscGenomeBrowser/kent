@@ -2092,11 +2092,14 @@ dataVersion ENCODE Oct 2005 Freeze
     subTrack encodeTbaCons
     shortLabel TBA GERP Cons
     longLabel TBA GERP Conservation
-    type wig 0.0 3.0
+    type wig -25.74 4.48
+    viewLimits -5:3
+    yLineOnOff on
     noInherit on
     maxHeightPixels 100:25:11
     autoScaleDefault Off
     windowingFunction mean
+    smoothingWindow 3
     color 120,80,120
     priority 3
 
@@ -2225,12 +2228,14 @@ dataVersion ENCODE Oct 2005 Freeze
     subTrack encodeMlaganCons
     shortLabel MLAGAN GERP Cons
     longLabel MLAGAN GERP Conservation
-    type wig 0.0 3.0
+    type wig -25.74 4.48
+    viewLimits -5:3
+    yLineOnOff on
     noInherit on
     maxHeightPixels 100:25:11
     autoScaleDefault Off
     windowingFunction mean
-# smoothingWindow 3
+    smoothingWindow 3
     color 120,80,120
     priority 3
 
@@ -2344,12 +2349,14 @@ dataVersion ENCODE Oct 2005 Freeze
     subTrack encodeMavidCons
     shortLabel MAVID GERP Cons
     longLabel MAVID GERP Conservation
-    type wig 0.0 3.0
+    type wig -22.58 4.48
+    viewLimits -5:3
+    yLineOnOff on
     noInherit on
     maxHeightPixels 100:25:11
     autoScaleDefault Off
     windowingFunction mean
-# smoothingWindow 3
+    smoothingWindow 3
     color 120,80,120
     priority 3
 
