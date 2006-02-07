@@ -123,7 +123,7 @@ treeImage phylo/Mm6_10way.jpg
 
 track jaxRepTranscript
 shortLabel Jax Rep Transcript
-longLabel Jackson Laboratories / Mouse Genome Informatics Representative Transcript
+longLabel Jackson Laboratory / Mouse Genome Informatics Representative Transcript
 group phenoAllele
 visibility hide
 color 0,0,150
@@ -134,7 +134,7 @@ urlLabel MGI Gene Detail:
 
 track jaxPhenotype
 shortLabel Jax Phenotype
-longLabel Jackson Laboratories / Mouse Genome Informatics Phenotype
+longLabel Jackson Laboratory / Mouse Genome Informatics Phenotype
 group phenoAllele
 visibility hide
 color 190,110,0
@@ -145,7 +145,7 @@ urlLabel MGI Phenotypic Allele(s):
 
 track jaxAllele
 shortLabel Jax Allele
-longLabel Jackson Laboratories / Mouse Genome Informatics Allele
+longLabel Jackson Laboratory / Mouse Genome Informatics Allele
 group phenoAllele
 visibility hide
 color 200, 0, 110
