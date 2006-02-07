@@ -1,0 +1,19 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+#	Creating the assembly for Monodelphis domestica
+#	South American, Short-tailed Opossum
+#	http://www.genome.gov/11510687
+#	http://www.genome.gov/12512285
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2005-08-18 - Hiram)
+    ssh kkstore01
+    mkdir -p /cluster/store9/monDom4/broad.mit.edu
+    ln -s /cluster/store9/monDom4 /cluster/data/monDom4
+    cd /cluster/data/monDom4/broad.mit.edu
+    time wget --timestamping --force-directories --directory-prefix=. \
+        --dont-remove-listing --recursive --level=2 --no-parent \
+        --no-host-directories --cut-dirs=5 \
+ ftp://ftp.broad.mit.edu/distribution/assemblies/mammals/monodelphis/monDom4/*
+    #	That takes a number of hours, ending up with:
