@@ -12,7 +12,8 @@
 #include "pfCompile.h"
 #include "pfParse.h"
 #include "pfBindVars.h"
-#include "pfCheck.h"
+#include "checkPoly.h"
+#include "checkPara.h"
 #include "cCoder.h"
 #include "pfPreamble.h"
 #include "defFile.h"
@@ -227,8 +228,8 @@ carefulClose(&typeF);
 if (endPhase < 6)
     return;
 verbose(2, "Phase 6 - polymorphic, para, and flow checks\n");
-pfCheckScopes(pfc, pfc->scopeList);
-pfCheckParaFlow(pfc, program);
+checkPolymorphic(pfc, pfc->scopeList);
+checkParaFlow(pfc, program);
 printScopeInfo(scopeF, 0, program);
 carefulClose(&scopeF);
 
@@ -311,7 +312,7 @@ verbose(2, "Phase 9 - execution\n");
 	}
     err = system(dy->string);
     if (err != 0)
-	errnoAbort("problem running %s", baseName);
+	errAbort("problem running %s", baseName);
     dyStringFree(&dy);
     }
 }

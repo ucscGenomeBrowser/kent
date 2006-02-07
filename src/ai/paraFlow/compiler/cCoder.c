@@ -717,15 +717,28 @@ dyStringFree(&elName);
 return 1;
 }
 
-static void codeRunTimeError(struct pfCompile *pfc, FILE *f,
-	struct pfToken *tok, char *message)
+static void codeRunTimeError(FILE *f, struct pfParse *pp, char *message)
 /* Print code for a run time error message. */
 {
 char *file;
+struct pfToken *tok = pp->tok;
 int line, col;
 pfSourcePos(tok->source, tok->text, &file, &line, &col);
 fprintf(f, "errAbort(\"\\nRun time error line %d col %d of %s: %s\");\n", 
 	line+1, col+1, file, message);
+}
+
+static void codeUseOfNil(FILE *f, struct pfParse *pp)
+/* Print code for use of nil message. */
+{
+codeRunTimeError(f, pp, "using uninitialized variable");
+}
+
+static void codeNilCheck(FILE *f, struct pfParse *pp, int stack)
+/* Print code to check stack for nil. */
+{
+fprintf(f, "if (%s[%d].v == 0) ", stackName, stack);
+codeUseOfNil(f, pp);
 }
 
 static void startCleanTemp(FILE *f)
@@ -779,6 +792,7 @@ struct pfParse *index = collection->next;
 
 /* Push array and index onto expression stack */
 int offset = codeExpression(pfc, f, collection, stack, FALSE);
+codeNilCheck(f, collection, stack);
 codeExpression(pfc, f, index, stack+offset, FALSE);
 
 /* Do bounds checking */
@@ -789,7 +803,7 @@ codeParamAccess(pfc, f, pfc->intType, stack+offset);
 fprintf(f, " >= ");
 codeParamAccess(pfc, f, colBase, stack);
 fprintf(f, "->size)\n  ");
-codeRunTimeError(pfc, f, pp->tok, "array access out of bounds");
+codeRunTimeError(f, pp, "array access out of bounds");
 return offset;
 }
 
@@ -955,6 +969,7 @@ static int codeDotRval(struct pfCompile *pfc, FILE *f,
 struct pfType *outType = pp->ty;
 struct pfParse *class = pp->children;
 codeExpression(pfc, f, class, stack, FALSE);
+codeNilCheck(f, class, stack);
 codeParamAccess(pfc, f, outType->base, stack);
 fprintf(f, " = ");
 codeDotAccess(pfc, f, pp, stack);
@@ -962,6 +977,7 @@ fprintf(f, ";\n");
 bumpStackRefCount(pfc, f, outType, stack);
 return 1;
 }
+
 
 static void codeDotLval(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack, char *op, int expSize, 
@@ -973,6 +989,7 @@ struct pfParse *class = pp->children;
 struct pfParse *field = class->next;
 int emptyStack = stack + expSize;
 codeExpression(pfc, f, class, emptyStack, FALSE);
+codeNilCheck(f, class, emptyStack);
 if (outType->base->needsCleanup)
     {
     startCleanTemp(f);
@@ -1516,7 +1533,7 @@ switch(pp->type)
 	fprintf(f, ", ");
         codeParamAccess(pfc, f, pfc->varType, stack);
 	fprintf(f, ".typeId))\n");
-	codeRunTimeError(pfc, f, pp->tok, "run-time type mismatch");
+	codeRunTimeError(f, pp, "run-time type mismatch");
         codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = ");
         codeParamAccess(pfc, f, pfc->varType, stack);
@@ -1543,7 +1560,7 @@ struct pfParse *rval = lval->next;
 
 codeExpression(pfc, f, lval, stack, FALSE);
 fprintf(f, "if (%s[%d].String == 0)\n", stackName, stack);
-codeRunTimeError(pfc, f, lval->tok, "string is nil");
+codeRunTimeError(f, lval, "string is nil");
 codeExpression(pfc, f, rval, stack+1, TRUE);
 fprintf(f, "_pf_cm_string_append(%s+%d);\n", stackName, stack);
 return 0;

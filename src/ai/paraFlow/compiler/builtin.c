@@ -14,6 +14,7 @@ return
 "to randNum() into double zeroToOne;\n"
 "to randInit();\n"
 "para sqrt(double x) into double y;\n"
+"para atoi(string a) into int i;\n"
 "to getEnvArray() into array of string envArray;\n"
 "para milliTicks() into long milliseconds;\n"
 "para floatString(double f, int digitsBeforeDecimal=0, \n"
