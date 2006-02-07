@@ -2034,3 +2034,9 @@ chainSome $(path1)
     rm -rf blastOut
 
 # End tblastn
+
+# BLASTZ DANRER1 CLEANUP (DONE, 2006-02-07, hartera)
+    ssh kkstore02
+    cd /cluster/data/fr1/bed/blastz.danRer1.swap.2004-06-16
+    rm pslChrom/psl.tab
+    nice gzip axtChrom/* pslChrom/* &
