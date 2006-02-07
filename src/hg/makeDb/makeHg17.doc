@@ -19941,7 +19941,7 @@ sh -x jobs
 
 ssh hgwdev
 
-cd /cluster/data/danRer3/bed/multiz5way
+cd /cluster/data/hg17/bed/multiz17way
 mkdir frames
 cd frames
 cp /cluster/data/mm7/bed/multiz17wayFrames/mkMafFrames .
