@@ -11,12 +11,13 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.3 2006/02/06 18:12:34 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.4 2006/02/07 23:44:43 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
 static struct hash *chromHash = NULL;
 FILE *errorFileHandle = NULL;
+FILE *exceptionFileHandle = NULL;
 
 /* these are described in b125_mapping.doc */
 /* Also snpFixed.LocTypeCode */
@@ -65,16 +66,37 @@ hFreeConn(&conn);
 return ret;
 }
 
-int getChromEnd(char *locTypeString, char *chromStartString, char *rangeString, char *leftNeighbor, char *rightNeighbor, char *allele)
+boolean needToExpand(char *allele)
+/* return true if allele contains open paren */
+{
+char *openParen = NULL;
+openParen = strchr(allele, '(');
+if (openParen == NULL) return FALSE;
+return TRUE;
+}
+
+void writeToExceptionFile(char *chrom, int start, int end, char *name, char *exception)
+{
+fprintf(exceptionFileHandle, "%s\t", chrom);
+fprintf(exceptionFileHandle, "%d\t", start);
+fprintf(exceptionFileHandle, "%d\t", end);
+fprintf(exceptionFileHandle, "%s\t", name);
+fprintf(exceptionFileHandle, "%s\n", exception);
+}
+
+
+int getChromEnd(char *chromName, char *snpId, char *locTypeString, char *chromStartString, char *rangeString, char *allele)
 /* calculate chromEnd based on locType */
 /* return -1 if any problems */
+/* rangeString is not provided for locType 4,5,6 */
+/* calculate here, but return 0 (defer calculation) if allele needs to be expanded */
 {
 int locTypeInt = atoi(locTypeString);
 int chromStart = atoi(chromStartString);
 int alleleSize = strlen(allele);
 int chromEnd = 0;
 char *tmpString;
-int rangeInContig = 0;
+int size = 0;
 
 /* range */
 if (locTypeInt == 1)
@@ -92,6 +114,16 @@ if (locTypeInt == 1)
 	fprintf(errorFileHandle, "Chrom end <= chrom start for range\n");
         return (-1);
 	}
+    size = chromEnd - chromStart;
+    if (alleleSize != size)
+        {
+        /* distinguish large alleles because rs_fasta should have correct data for them */
+        if (size > 256)
+            writeToExceptionFile(chromName, chromStart, chromEnd, snpId, "RangeLocTypeWrongSizeLargeAllele");
+        else
+            writeToExceptionFile(chromName, chromStart, chromEnd, snpId, "RangeLocTypeWrongSize");
+        }
+
     return chromEnd;
     }
 
@@ -102,6 +134,7 @@ if (locTypeInt == 2)
     if (chromEnd != chromStart + 1) 
         {
 	fprintf(errorFileHandle, "Wrong size for exact\n");
+	writeToExceptionFile(chromName, chromStart, chromEnd, snpId, "ExactLocTypeWrongSize");
         return (-1);
 	}
     return chromEnd;
@@ -114,17 +147,10 @@ if (locTypeInt == 3)
     return chromStart;
     }
 
-/* rangeInsertion or rangeDeletion */
-if (locTypeInt == 4 || locTypeInt == 6)
+/* rangeInsertion, rangeSubstitution, or rangeDeletion */
+if (locTypeInt == 4 || locTypeInt == 5 || locTypeInt == 6)
     {
-    rangeInContig = atoi(rightNeighbor) - atoi(leftNeighbor) - alleleSize;
-    chromEnd = chromStart + rangeInContig;
-    return chromEnd;
-    }
-
-/* rangeSubstitution */
-if (locTypeInt == 5)
-    {
+    if (needToExpand(allele)) return 0;
     chromEnd = chromStart + alleleSize;
     return chromEnd;
     }
@@ -156,34 +182,34 @@ strcat(fileName, ".tab");
 f = mustOpen(fileName, "w");
 
 safef(query, sizeof(query), 
-    "select snp_id, loc_type, lc_ngbr, rc_ngbr, phys_pos_from, phys_pos, orientation, allele from %s", tableName);
+    "select snp_id, loc_type, phys_pos_from, phys_pos, orientation, allele from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    chromEnd = getChromEnd(cloneString(row[1]), 
-                           cloneString(row[4]), 
-			   cloneString(row[5]), 
-			   cloneString(row[2]), 
+    chromEnd = getChromEnd(chromName,
+                           cloneString(row[0]),
+                           cloneString(row[1]), 
+                           cloneString(row[2]), 
 			   cloneString(row[3]), 
-			   cloneString(row[7]));
+			   cloneString(row[5]));
     if (chromEnd == -1)
         {
 	skipCount++;
         fprintf(errorFileHandle, "snp = %s\t", row[0]);
         fprintf(errorFileHandle, "locType = %s\t", row[1]);
         fprintf(errorFileHandle, "chrom = %s\t", chromName);
-        fprintf(errorFileHandle, "chromStart = %s\t", row[4]);
-        fprintf(errorFileHandle, "rangeString = %s\n", row[5]);
+        fprintf(errorFileHandle, "chromStart = %s\t", row[2]);
+        fprintf(errorFileHandle, "rangeString = %s\n", row[3]);
 	continue;
 	}
 
     fprintf(f, "%s\t", row[0]);
-    fprintf(f, "%s\t", row[4]);
+    fprintf(f, "%s\t", row[2]);
     fprintf(f, "%d\t", chromEnd);
     fprintf(f, "%s\t", row[1]);
-    fprintf(f, "%s\t", row[6]);
-    fprintf(f, "%s\n", row[7]);
+    fprintf(f, "%s\t", row[4]);
+    fprintf(f, "%s\n", row[5]);
 
     }
 sqlFreeResult(&sr);
@@ -268,6 +294,7 @@ if (chromHash == NULL)
     }
 
 errorFileHandle = mustOpen("snpLocType.errors", "w");
+exceptionFileHandle = mustOpen("snpLocType.exceptions", "w");
 
 cookie = hashFirst(chromHash);
 while ((chromName = hashNextName(&cookie)) != NULL)
@@ -279,5 +306,6 @@ while ((chromName = hashNextName(&cookie)) != NULL)
     }
 
 fclose(errorFileHandle);
+fclose(exceptionFileHandle);
 return 0;
 }
