@@ -10,7 +10,7 @@
 #include "fbTables.h"
 #include "bdgpExprLink.h"
 
-static char const rcsid[] = "$Id: flyBaseInfo.c,v 1.6 2004/06/29 17:45:04 angie Exp $";
+static char const rcsid[] = "$Id: flyBaseInfo.c,v 1.7 2006/02/07 18:14:34 angie Exp $";
 
 boolean isFly()
 /* Return true if organism is D. melanogaster. */
@@ -21,17 +21,26 @@ return(sameWord(hOrganism(database), "D. melanogaster"));
 char *getFlyBaseId(struct sqlConnection *conn, char *geneId)
 /* Return flyBase ID of gene if any. */
 {
-char query[256];
-char *cutId = cloneString(geneId);
-char *e = strchr(cutId, '-');
-if (e != NULL) 
-    *e = 0;
-if (!sqlTableExists(conn, "bdgpGeneInfo"))
-    return NULL;
-safef(query, sizeof(query), 
-	"select flyBaseId from bdgpGeneInfo where bdgpName = '%s'", cutId);
-freeMem(cutId);
-return sqlQuickString(conn, query);
+if (sqlTableExists(conn, "bdgpGeneInfo"))
+    {
+    char query[256];
+    char *cutId = cloneString(geneId);
+    char *e = strchr(cutId, '-');
+    if (e != NULL) 
+	*e = 0;
+    safef(query, sizeof(query), 
+	  "select flyBaseId from bdgpGeneInfo where bdgpName = '%s'", cutId);
+    freeMem(cutId);
+    return sqlQuickString(conn, query);
+    }
+else if (sqlTableExists(conn, "flyBase2004Xref"))
+    {
+    char query[256];
+    safef(query, sizeof(query),
+	  "select fbgn from flyBase2004Xref where name = '%s'", geneId);
+    return sqlQuickString(conn, query);
+    }
+return NULL;
 }
 
 static boolean flyBaseInfoExists(struct section *section, 
@@ -353,7 +362,7 @@ static boolean bdgpExprInSituExists(struct section *section,
 {
 char *flyBaseId = getFlyBaseId(conn, geneId);
 boolean exists = FALSE;
-if (flyBaseId != NULL)
+if (flyBaseId != NULL && sqlTableExists(conn, "bdgpExprLink"))
     {
     char query[256], **row;
     struct sqlResult *sr;
