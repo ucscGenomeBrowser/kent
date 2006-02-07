@@ -1,0 +1,2 @@
+array[4] of array of int aa;
+int i = aa[2][1];
