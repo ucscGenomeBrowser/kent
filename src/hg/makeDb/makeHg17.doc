@@ -19914,3 +19914,46 @@ TMPDIR=/scratch/tmp
     #	now, back on kolossus to run a featurebits
     time featureBits hg17 chainMonDom2Link >fb.hg17.chainMonDom2Link 2>&1
     #	355119482 bases of 2866216770 (12.390%) in intersection
+
+# Build maf annotation for multiz17way  (DONE braney 2/7/2006)
+cd /cluster/data/hg17/bed/multiz17way
+mkdir anno 
+cd anno
+cat ../maf/chr22.maf | awk "/^s/ {print \$2}" | sed "s/\..*$//"  | sort -u > species.names
+mkdir maf run
+cd run
+rm sizes nBeds
+for i in `cat ../species.names`
+do
+    ln -s  /cluster/data/$i/chrom.sizes $i.len
+    ln -s  /cluster/data/$i/$i.N.bed $i.bed
+    echo $i.bed  >> nBeds
+    echo $i.len  >> sizes
+done 
+
+for i in ../../maf/*.maf
+do
+    echo mafAddIRows -nBeds=nBeds -sizes=sizes $i /cluster/data/hg17/hg17.2bit ../maf/`basename $i`
+done > jobs
+
+screen
+sh -x jobs
+
+ssh hgwdev
+
+cd /cluster/data/danRer3/bed/multiz5way
+mkdir frames
+cd frames
+cp /cluster/data/mm7/bed/multiz17wayFrames/mkMafFrames .
+cp /cluster/data/mm7/bed/multiz17wayFrames/Makefile .
+
+#edit Makefile to correct species names 
+
+mkdir -p /san/sanvol1/scratch/hg17/multiz17wayFrames/maf
+for i in ../../maf/*.maf; do echo $i; cp $i /san/sanvol1/scratch/hg17/multiz17wayFrames/maf/$i; done  
+
+make getGenes
+make getFrames
+make loadDb
+
+#end of multiz5way annotation and load
