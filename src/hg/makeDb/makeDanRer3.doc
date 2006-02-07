@@ -4455,6 +4455,9 @@ TMPDIR=/scratch/tmp
     mkdir -p /cluster/data/danRer3/bed/ZonLab/rhMap/seq
     cd /cluster/data/danRer3/bed/ZonLab/rhMap/seq
     # download data from e-mail to this directory
+    # new sequences (2006-02-06) are available
+    # rhSequenceSubmitNew.zip
+    unzip rhSequenceSubmitNew.zip
     # sequences are in rhSequenceFasta082905.zip
     unzip rhSequenceFasta082905.zip
     # sequences are now in rhSequence092105.zip
@@ -5468,6 +5471,48 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 # wiggle for the conservation track.
 # check all.joiner for entries for phastCons5way and phastConsElements5way -ok
 # copy over html for multiz and edit.
+
+# PHASTCONS SCORES DOWNLOADABLES (DONE, 2006-02-07, hartera)
+    #   prepare compressed copy of ascii data values for downloads
+    ssh kkstore02
+    cd /san/sanvol1/scratch/danRer3/cons/consRun1
+cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p phastCons5Scores
+
+for D in ppRaw/chr*
+do
+    C=${D/ppRaw\/}
+    out=phastCons5Scores/${C}.data.gz
+    echo "========================== ${C} ${D}"
+    find ./${D} -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+        | sort -k7,7 -k9,9n \
+        | sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat |
+            gzip > ${out}
+done
+'_EOF_'
+    chmod +x gzipAscii.sh
+    time ./gzipAscii.sh
+    # 192.852u 8.835s 4:04.05 82.6%   0+0k 0+0io 1pf+0w
+    # creates 331 Mb of data.
+    # copy data for downloads
+    ssh kkstore02
+    mkdir /cluster/data/danRer3/bed/multiz5way/phastCons5wayScores
+    cd /cluster/data/danRer3/bed/multiz5way/phastCons5wayScores
+    rsync -a --progress \
+        pk:/san/sanvol1/scratch/danRer3/cons/consRun1/phastCons5Scores/ .
+
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/danRer3/phastCons5wayScores
+    cd /usr/local/apache/htdocs/goldenPath/danRer3/phastCons5wayScores
+    ln -s /cluster/data/danRer3/bed/multiz5way/phastCons5wayScores/*.gz .
+    md5sum *.gz > md5sum.txt
+    # copy over and edit README.txt from the hg17 phastCons.
+
 
 # KNOWN GENES BASED ON ENSEMBL GENES (in progress, 2005-11-23, hartera)
     # see ENSEMBL GENES section for documentation of creation of
