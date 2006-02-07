@@ -14,7 +14,7 @@
 #include "featureBits.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: intersect.c,v 1.34 2006/02/07 19:06:21 angie Exp $";
+static char const rcsid[] = "$Id: intersect.c,v 1.35 2006/02/07 20:38:12 angie Exp $";
 
 /* We keep two copies of variables, so that we can
  * cancel out of the page. */
@@ -41,7 +41,9 @@ boolean specd = (cartVarExists(cart, hgtaIntersectTrack) &&
 		 cartVarExists(cart, hgtaIntersectTable));
 if (specd)
     {
-    if (hTableOrSplitExists(cartString(cart, hgtaIntersectTable)))
+    char *table = cartString(cart, hgtaIntersectTable);
+    if ((isCustomTrack(table) && lookupCt(table) != NULL) ||
+	hTableOrSplitExists(table))
 	return TRUE;
     else
 	{
