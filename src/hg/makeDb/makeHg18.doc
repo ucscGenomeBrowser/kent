@@ -427,14 +427,21 @@ exit
 # REPEAT MASKING (DONE - 2005-12-09 - Fan)
 
 #	Record the RM version here:
-ls -l /cluster/bluearc/RepeatMasker
-# lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40 /cluster/bluearc/RepeatMasker -> RepeatMasker051101
-
-/cluster/bluearc/RepeatMasker/RepeatMasker | head -1
-# RepeatMasker version development-$Id: makeHg18.doc,v 1.40 2006/02/07 17:50:10 fanhsu Exp $
-
-#	RepBase Update 8.12, RM database version 20040130  ??? don't know where this came from. Fan???
 #	as this changes over time and there is no record in the results
+ls -l /cluster/bluearc/RepeatMasker
+# lrwxrwxrwx    1 angie    protein        18 Nov  3 10:40
+#	/cluster/bluearc/RepeatMasker -> RepeatMasker051101
+
+#	beware that you can not actually include the precise single line output
+#	by this command since it is a CVS ident line and it will get
+#	changed as this file is checked into CVS.  Remove the Id and
+#	dollar sign business to allow it to stay as it is here.
+/cluster/bluearc/RepeatMasker/RepeatMasker | head -1
+# RepeatMasker version development-:
+#	RepeatMasker,v 1.10 2005/11/03 18:39:27 angie Exp
+
+    cat /cluster/bluearc/RepeatMasker051101/Libraries/version
+    #	RepBase Update 9.11, RM database version 20050112
 
 # Split contigs, run RepeatMasker, lift results
 #	This split takes a few minutes
@@ -2735,6 +2742,12 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
 #	column is missing, the contig information.  So, let's see if we
 #	can recover the original format by putting this together with
 #	some other things we have here.
+    $HOME/kent/src/hg/fishClones/fixup.hbrc.pl hbrc.txt \
+	/cluster/data/hg18/bed/fishClones/seq_clone.pmd > fixed.hbrc.txt \
+	    2> dbg
+    #	the seq_clone.pmd file was obtained via email from Wonhee Jang
+    #	jang@ncbi.nlm.nih.gov - I have asked for clarification where
+    #	such a file can be fetched without resorting to email.
 
 # Get current clone/accession information
     wget --timestamping http://www.ncbi.nlm.nih.gov/genome/clone/DATA/clac.out
@@ -2754,49 +2767,77 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
     | awk '{gsub("\.[0-9]*$", "", $2);
 	printf "%s\t%s\t%s\t%s\t%s\t%s\n", $1,$2,$3,$4,$5,$8}' > cl_acc_gi_len
 
-XXXX - looking for backends business - 2006-01-20 - Hiram
 
-    fishClones -fhcrc=fhcrc.sts -noBin hg18 \
-	/cluster/data/ncbi/fishClones/fishClones.2006-01/hbrc.fixed \
+    ssh hgwdev
+    #	have to be on hgwdev for this since it is going to read from the
+    #	database.  Had to work on this program to get it past what is
+    #	evidently a bad entry in hbrc.fixed where columns of information
+    #	are missing for one clone in particular
+    time fishClones -verbose=2 -fhcrc=fhcrc.sts -noBin hg18 \
+	/cluster/data/ncbi/fishClones/fishClones.2006-01/fixed.hbrc.txt \
 	/cluster/data/ncbi/fishClones/fishClones.2006-01/clac.out \
          ./cl_acc_gi_len \
-         /cluster/data/hg18/bed/bacends/bacEnds.psl \
+         /cluster/data/hg18/bed/bacends/bacEnds.lifted.psl \
             fishClones
+    #	real    2m4.708s
+# Reading Fish Clones file /cluster/data/ncbi/fishClones/fishClones.2006-01/hbrc.fixed
+# reading fishInfo file /cluster/data/ncbi/fishClones/fishClones.2006-01/fixed.hbrc.txt
+# Reading Clone/Acc (clac.out) file /cluster/data/ncbi/fishClones/fishClones.2006-01/clac.out
+# Reading BAC Ends file ./cl_acc_gi_len
+# Reading BAC Ends psl file /cluster/data/hg18/bed/bacends/bacEnds.lifted.psl
+# Reading additional STS Marker links fhcrc.sts
+# Determining good positions
+#	findClonePos: determining positions of fish clones
+# Writing output file
+# ERROR: at line # 170, no cytoband info for chrX:104048913-104206974
+# RP11-79L11
+# ERROR: at line # 171, no cytoband info for chrX:104048913-104206974
+# RP11-79L11
 
-	     
+    # Load the track
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/fishClones
+    hgLoadBed -notItemRgb -noBin -tab \
+        -sqlTable=$HOME/kent/src/hg/lib/fishClones.sql \
+	hg18 fishClones fishClones.bed
+    #	Loaded 9461 elements of size 16
+
 ###########################################################################
-# CHROMOSOME BANDS TRACK (WORKING - 2006-01-20 - Hiram)
+# CHROMOSOME BANDS TRACK (DONE - 2006-01-20 - 2006-02-07 - Hiram)
 # This must wait until the Fish Clones tracks is done
-    ssh kolossus
+#	This was loaded in place of the previously loaded ideoband data
+#	created from NCBI information, see below for "ideogram"
+    ssh hgwdev
     mkdir /cluster/data/hg18/bed/cytoband
     cd /cluster/data/hg18/bed/cytoband
 
-# Copy in some necessary files (usually from previous version)
+    # Copy in some necessary files (usually from previous version)
     cp -p /cluster/data/hg17/bed/cytoband/pctSetBands.txt .
     cp -p /cluster/data/hg17/bed/cytoband/ISCN800.txt .
 
-# Create some preliminary information files
+    # Create some preliminary information files
     /cluster/bin/scripts/createSetBands pctSetBands.txt \
 	/cluster/data/hg18/inserts /cluster/data/hg18  100 > setBands.txt
     /cluster/bin/scripts/makeBands ISCN800.txt \
         /cluster/data/hg18 > cytobands.pct.bed
     /cluster/bin/scripts/makeBandRanges cytobands.pct.bed \
         > cytobands.pct.ranges
-XXXX - how do we get this fishClones file ? - 2006-01-20
-# Reformat fishClones file
+
+    # Reformat fishClones file
     /cluster/bin/scripts/createBanderMarkers \
 	/cluster/data/hg18/bed/fishClones/fishClones.bed > fishClones.txt
 
-# Create bed file
-    ssh eieio
-    cd /cluster/data/hg18/bed/cytoband.kate
     /cluster/bin/scripts/runBander fishClones.txt \
 	ISCN800.txt setBands.txt /cluster/data/hg18
-    # NOTE: fails on kolossus (C++ compiler different ??)
-
     # Should be 862 bands
     wc  -l cytobands.bed
     # 862    cytobands.bed
+
+    hgLoadBed -noBin -tab -sqlTable=${HOME}/src/hg/lib/cytoBand.sql \
+        hg18 cytoBand cytobands.bed
+
+    hgLoadBed -noBin -tab -sqlTable=${HOME}/src/hg/lib/cytoBandIdeo.sql \
+        hg18 cytoBandIdeo cytobands.bed
 
 ###########################################################################
 #  BLASTZ SELF (DONE - 2006-01-17 - 2006-01-20 - Hiram)
@@ -3080,6 +3121,7 @@ cat > template << '_EOF_'
     mv /cluster/data/hg18/bed/bacends /cluster/data/hg18/bed/bacends.2006-01-18
     mkdir /cluster/data/hg18/bed/bacends
     cp -p bacEnd* /cluster/data/hg18/bed/bacends
+    cp -p lifted/bacEnds.lifted.psl /cluster/data/hg18/bed/bacends
 
     #	load them into the database
     ssh hgwdev
@@ -4300,6 +4342,8 @@ hgLoadPsl hg18 haplotypePos.psl
 
 ########################################################################
 #  Creating the ideoband data track  (DONE - 2006-02-02 - Hiram)
+#	This was reloaded upon completion of the cytoband sequence
+#	mentioned above.
 #  Received the following files in email from Wonhee Jang from NCBI:
 # -rw-rw-r--    1     1917 Feb  2 14:01 setBands.txt
 # -rw-rw-r--    1    39058 Feb  2 14:01 human_ideogram.dat
