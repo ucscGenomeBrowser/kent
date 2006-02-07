@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.155 2005/06/10 23:16:23 galt Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.156 2006/02/07 01:19:11 angie Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -1695,6 +1695,9 @@ static struct genePos *curGenePos()
 struct genePos *gp;
 AllocVar(gp);
 gp->name = cloneString(cartString(cart, idVarName));
+/* Update cart's searchVarName to idVarName so that subsequent clicks will 
+ * have the right value in orgForm's searchVarName. */
+cartSetString(cart, searchVarName, gp->name);
 if (cartVarExists(cart, idPosVarName))
     {
     hgParseChromRange(cartString(cart, idPosVarName),
