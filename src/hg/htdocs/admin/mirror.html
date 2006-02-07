@@ -587,12 +587,15 @@ database is restricted to read-only.
 <h4><a NAME="step6"></A>6. Get executable files</h4>
 <OL type="a">
 
-<LI>The cgi-bin binaries are available via:
-<BR>
-<PRE>
-rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGIBIN/
-</PRE>
-<BR>
+<LI>Pre-compiled Red-Hat (2.6.12-1.1381_FC3smp) AMD Opteron x86_64 64-bit
+binaries can be fetched with the rsync command:<BR><BR>
+<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ $CGIBIN/ </TT><BR><BR>
+There are a number of data files that are also used in this directory.
+This rsync will fetch them all.  If you need i386 (x86) 32-bit binaries, please
+use the following rsync in addition to and after the above rsync,
+to replace the 64 bit binaries:<BR><BR>
+<TT> rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin-i386/ $CGIBIN/ </TT>
+<BR><BR>
 
 <LI>In the CGIBIN directory, make a <A HREF="sample.html">hg.conf</A> file, in which, $USERNAME,$HOSTNAME and $PASSWORD used for the "$DBVERSION" database should be specified. Remember, variables should not be used in this file.
 <BR><BR>
