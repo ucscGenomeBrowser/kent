@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.4 2006/02/07 23:44:43 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.5 2006/02/07 23:59:58 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
@@ -115,7 +115,9 @@ if (locTypeInt == 1)
         return (-1);
 	}
     size = chromEnd - chromStart;
-    if (alleleSize != size)
+
+    /* only check size if we don't need to expand (that is next step in processing */
+    if (!needToExpand(allele) && alleleSize != size)
         {
         /* distinguish large alleles because rs_fasta should have correct data for them */
         if (size > 256)
