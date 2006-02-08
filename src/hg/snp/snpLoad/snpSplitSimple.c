@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.5 2006/02/08 22:47:35 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.6 2006/02/08 22:49:34 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -33,7 +33,7 @@ struct sqlResult *sr;
 char **row;
 char *chromName;
 FILE *f;
-char fileName[32];
+char fileName[64];
 
 ret = newHash(0);
 verbose(1, "getting chroms...\n");
