@@ -3795,6 +3795,8 @@ LOAD AffyUclaRatio [in progress jk Sept 19, 2003]
     hgLoadSeq -abbr=U95Av2: hg16 /gbdb/hgFixed/affyProbes/HG-U95Av2_all.fa
     hgLoadSeq hg16 /gbdb/hgFixed/affyProbes/HG-U133AB_all.fa
 
+# QA repush 2006-02-08 seq/extFile to correct mismatched ID for affyU133 alignment data (Jen)
+
 # Load AFFYUCLANORM, extended version of affyUcla track. Hopefully
 # final freeze of data set.
     mkdir ~sugnet/store1/
