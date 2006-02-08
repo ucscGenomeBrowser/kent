@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.10 2006/02/08 21:19:06 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.11 2006/02/08 21:21:29 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -272,14 +272,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     writeToTabFile(row[0], row[1], row[2], row[3], row[4], allele);
 
     count++;
-    // short-circuit
-    // if (count == 1000) 
-        // {
-        // sqlFreeResult(&sr);
-        // hFreeConn(&conn);
-        // fclose(f);
-        // return;
-	// }
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -344,14 +336,11 @@ chromHash = loadChroms(contigGroup);
 if (chromHash == NULL) 
     {
     verbose(1, "couldn't get chrom info\n");
-    return 0;
+    return 1;
     }
 
 errorFileHandle = mustOpen("snpExpandAllele.errors", "w");
 exceptionFileHandle = mustOpen("snpExpandAllele.exceptions", "w");
-
-// doExpandAllele("22");
-// return 0;
 
 cookie = hashFirst(chromHash);
 while ((chromName = hashNextName(&cookie)) != NULL)
