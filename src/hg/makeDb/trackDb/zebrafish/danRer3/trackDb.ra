@@ -55,8 +55,7 @@ shortLabel 5-Way Conservation
 longLabel 5-Way Vertebrate Multiz Alignment & Conservation
 group compGeno
 priority 104
-# visibility pack
-visibility hide
+visibility pack
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
