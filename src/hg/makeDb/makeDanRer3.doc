@@ -4885,6 +4885,8 @@ TMPDIR=/scratch/tmp
 
 # 5-WAY VAR_MULTIZ ALIGNMENTS (DONE, 2006-02-06, hartera)
 # MAF ANNOTATION ADDED (DONE, 2006-02-6, braney)
+# FINISHED MAKING TREE IMAGE FOR TRACK DESCRIPTION PAGE 
+# (DONE, 2006-02-07, hartera)
 # Species: zebrafish(danRer3), human (hg18), mouse(mm7), 
 # fugu(fr1) and tetraodon(tetNig1)
 # Opossum (monDom2) was dropped since there were many more alignments
@@ -5022,7 +5024,7 @@ cat > oneMultiz.csh << 'EOF'
     # Create 6way.nh file of tree. This was used in the distant past for 
     # early versions of phastCons.  Now, this is merely a convenient 
     # reference to the tree under construction.  This is also used to draw 
-    # a graphic tree as species6way.nh, see below.
+    # a graphic tree as species5.nh, see below.
 
     cat << '_EOF_' > /cluster/data/danRer3/bed/multiz5way/5way.nh
 (hg18,mm7),((tetNig1,fr1),danRer3))
@@ -5127,14 +5129,20 @@ make loadDb
 #end of multiz5way annotation and load
 
     # create tree image - like tree.nh but with common names
+    # (hartera, 2006-02-07)
     ssh hgwdev
     cd /cluster/data/danRer3/bed/multiz5way
     cat << '_EOF_' > species5.nh
 ((human,mouse),((tetraodon,fugu),zebrafish))
 '_EOF_'
     /cluster/bin/phast/$MACHTYPE/draw_tree -b -s species5.nh > species5.ps
-    convert 5way.ps > 5way.jpg
-    # may need to edit tree and remove whitespace
+    convert species5.ps 5way.jpg
+    # using GIMP, edit tree and remove whitespace
+    # Photoshop used to edit the image (kuhn, 2006-02-07)
+    cp 5way.jpg /usr/local/apache/htdocs/images/phylo/danRer3_5way.jpg 
+    # change permissions for display
+    chmod +r /usr/local/apache/htdocs/images/phylo/danRer3_5way.jpg
+
 # check for all.joiner entry for multiz5way - ok
 # add trackDb.ra entry in ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer3:
 # track multiz5way
@@ -5153,6 +5161,9 @@ make loadDb
 # speciesGroups vertebrate mammal
 # sGroup_mammal hg18 mm7
 # sGroup_vertebrate tetNig1 fr1
+
+# add this line to trackDb entry as above for the tree image (2006-02-07):
+# treeImage phylo/danRer3_5way.jpg
 
 # PHYLO-HMM (PHASTCONS) CONSERVATION TRACK FOR 6-WAY ALIGNMENT 
 # (DONE, 2006-02-06, hartera)
