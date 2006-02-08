@@ -74,6 +74,8 @@ test:
 	diff expected/parenAndMinus $O/parenAndMinus
 	paraFlow polymorphic.pf > $O/polymorphic
 	diff expected/polymorphic $O/polymorphic
+	paraFlow preInc.pf > $O/preInc
+	diff expected/preInc $O/preInc
 	paraFlow printFile.pf printFile.pf > $O/printFile
 	diff expected/printFile $O/printFile
 	paraFlow static.pf > $O/static
