@@ -82,11 +82,13 @@ mv v1.edit4.chrome.scfs.agp.corr v1.edit4.chrome.scfs.corr.agp
 
 # change numeric contigs to have a prefix
 
+
  cat v1.edit4.chrome.scfs.corr.agp | sed -e 's/109921/contig/' |sed 's/W      109921/W        contig/' |  sed -e 's/10995/contih/' | sed 's/W      10995/W        contih/' > v1.edit4.fix.agp 
  sed -e 's/109921/contig/g' rheMac2.scf.fa  |  sed -e 's/10995/contih/g' > rheMac2.scf.fix.fa &
  sed -e 's/109921/contig/g' v1.edit3.noContam.ctg.qv |  sed -e 's/10995/contih/g' >v1.edit3.noContam.ctg.fix.qv &
 
- cat v1.edit4.chrome.scfs.agp.final | sed -e 's/109921/contig/' |sed 's/W      109921/W        contig/' |  sed -e 's/10995/contih/' | sed 's/W      10995/W        contih/' |sed -e 's/Chr/chr/' > v1.edit4.final.fix.agp 
+cat v1.edit4.chrome.scfs.agp.final |sed -e 's/Chr/chr/' > v1.edit4.final.fix2.agp
+hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.agp
 
   /cluster/bin/i386/checkAgpAndFa v1.edit4.final.fix.agp rheMac2.fa > check.out   
 
