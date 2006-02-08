@@ -1,3 +1,10 @@
+track ctgPos2
+shortLabel Contigs
+longLabel Assembly Contigs
+group map
+priority 12
+visibility hide
+
 track chainHg18
 shortLabel $o_Organism hg18 Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
