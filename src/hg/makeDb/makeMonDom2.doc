@@ -1426,3 +1426,19 @@ XXX - STARTED - 2005-08-25 16:32
 # Add entries for danRer3 chains and net to trackDb.ra for monDom2 and
 # modify descriptions to describe the process using scaffolds for danRer3
 # chrNA and chrUn.
+
+############################################################################
+# PREP FOR LIFTOVER CHAINS TO THIS ASSEMBLY (2006-02-07 kate)
+#       Split sequence into 10K chunks for blatting
+
+    ssh kkstore01
+    cd /cluster/data/monDom2
+    mkdir liftSplits
+    cd liftSplits
+    mkdir split
+    faSplit size -lift=scaffolds.lft -oneFile \
+            ../maskedScaffolds.fa 10000 split10K
+    faSplit sequence split10K.fa 50 split/x.
+    rm split10K.fa
+    cd ..
+    cp -r liftSplits/ /san/sanvol1/scratch/monDom2
