@@ -7,10 +7,10 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.2 2006/02/01 08:21:54 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.3 2006/02/08 21:18:25 heather Exp $";
 
-char *snpDb = NULL;
-char *contigGroup = NULL;
+static char *snpDb = NULL;
+static char *contigGroup = NULL;
 static struct hash *chromHash = NULL;
 
 void usage()

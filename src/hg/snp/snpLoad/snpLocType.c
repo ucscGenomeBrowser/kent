@@ -11,10 +11,10 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.5 2006/02/07 23:59:58 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.6 2006/02/08 21:18:47 heather Exp $";
 
-char *snpDb = NULL;
-char *contigGroup = NULL;
+static char *snpDb = NULL;
+static char *contigGroup = NULL;
 static struct hash *chromHash = NULL;
 FILE *errorFileHandle = NULL;
 FILE *exceptionFileHandle = NULL;

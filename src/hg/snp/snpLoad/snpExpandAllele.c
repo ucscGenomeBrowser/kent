@@ -8,10 +8,10 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.9 2006/02/08 00:31:40 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.10 2006/02/08 21:19:06 heather Exp $";
 
-char *snpDb = NULL;
-char *contigGroup = NULL;
+static char *snpDb = NULL;
+static char *contigGroup = NULL;
 static struct hash *chromHash = NULL;
 FILE *errorFileHandle = NULL;
 FILE *tabFileHandle = NULL;
