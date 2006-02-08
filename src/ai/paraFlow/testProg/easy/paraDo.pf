@@ -8,3 +8,10 @@ foreach (string s in names)
     {
     print(s);
     }
+print(names);
+print("And again with modifications");
+para (string s in names) do
+    {
+    s[0] = 'X';
+    }
+print(names);

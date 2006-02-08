@@ -1,0 +1,19 @@
+array of int a = (1,2,3,4);
+print(a);
+para (i in a) do
+    i = i+i;
+print(a);
+
+string s = "abcd";
+print(s);
+foreach (c in s)
+    c += 'A' - 'a';
+print(s);
+
+
+dir of int nn = ("one" to 1, "two" to 2, "three" to 3);
+print(nn);
+para (int i in nn) do
+   i *= i;
+print(nn);
+    
