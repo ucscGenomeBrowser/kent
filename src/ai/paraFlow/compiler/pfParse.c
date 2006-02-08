@@ -961,41 +961,65 @@ else
     return parseCallOrIndex(pfc, parent, pTokList, scope);
 }
 
-struct pfParse *parsePreIncrement(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse ++exp or --exp */
+static void makeIncrementNode(struct pfParse *pp,
+	struct pfParse *exp, struct pfToken *incTok, struct pfScope *scope)
+/* Add children to pp, which is a += node, so as to
+ * make it into an increment/decrement operation. */
 {
-struct pfToken *tok = *pTokList;
 struct pfToken *constantTok;
-struct pfParse *exp, *constant, *pp;
-int dir = 0;
-if (tok->type == pftPlusPlus)
-    dir = 1;
-else if (tok->type == pftMinusMinus)
-    dir = -1;
-else
-    return parseParaExp(pfc, parent, pTokList, scope);
-    
-/* Create a plusEquals node to represent this. */
-pp = pfParseNew(pptPlusEquals, tok, parent, scope);
+struct pfParse *constant;
 
 /* We have to fake a token because of the way the constant
  * handling code works. */
-constantTok = CloneVar(tok);
+constantTok = CloneVar(incTok);
 constantTok->type = pftInt;
-constantTok->val.i = dir;
+constantTok->val.i = (incTok->type == pftPlusPlus ? 1 : -1);
 constant = pfParseNew(pptConstUse, constantTok, pp, scope);
-
-/* Grab expression after ++/-- */
-tok = tok->next;
-exp = parseParaExp(pfc, pp, &tok, scope);
 
 /* Hook everything onto pp. */
 pp->children = exp;
 exp->next = constant;
+}
 
-*pTokList = tok;
-return pp;
+static struct pfParse *parseIncrement(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
+/* Parse ++exp or --exp */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *exp, *pp;
+struct pfToken *incTok;
+
+switch (tok->type)
+    {
+    case pftPlusPlus:
+    case pftMinusMinus:
+	{
+	incTok = tok;
+	tok = tok->next;
+	pp = pfParseNew(pptPlusEquals, tok, parent, scope);
+	exp = parseParaExp(pfc, pp, &tok, scope);
+	makeIncrementNode(pp, exp, incTok, scope);
+	*pTokList = tok;
+	return pp;
+	}
+    }
+exp = parseParaExp(pfc, parent, pTokList, scope);
+tok = *pTokList;
+switch (tok->type)
+    {
+    case pftPlusPlus:
+    case pftMinusMinus:
+	{
+	incTok = tok;
+	tok = tok->next;
+	pp = pfParseNew(pptPlusEquals, tok, parent, scope);
+	makeIncrementNode(pp, exp, incTok, scope);
+	*pTokList = tok;
+	return pp;
+	}
+    }
+return exp;
 }
 
 struct pfParse *parseNegation(struct pfCompile *pfc, struct pfParse *parent,
@@ -1024,7 +1048,7 @@ else if (tok->type == '~')
     }
 else
     {
-    pp = parsePreIncrement(pfc, parent, &tok, scope);
+    pp = parseIncrement(pfc, parent, &tok, scope);
     }
 *pTokList = tok;
 return pp;
