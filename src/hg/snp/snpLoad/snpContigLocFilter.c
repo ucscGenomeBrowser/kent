@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.9 2006/02/08 21:13:08 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.10 2006/02/08 21:21:52 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -180,14 +180,14 @@ contigHash = loadContigs(contigGroup);
 if (contigHash == NULL) 
     {
     verbose(1, "couldn't get ContigInfo hash\n");
-    return 0;
+    return 1;
     }
 
 weightHash = loadMapInfo();
 if (weightHash == NULL)
     {
     verbose(1, "couldn't get MapInfo weight hash\n");
-    return 0;
+    return 2;
     }
 
 filterContigs();

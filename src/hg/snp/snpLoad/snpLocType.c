@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.6 2006/02/08 21:18:47 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.7 2006/02/08 21:21:52 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -292,7 +292,7 @@ chromHash = loadChroms(contigGroup);
 if (chromHash == NULL) 
     {
     verbose(1, "couldn't get chrom info\n");
-    return 0;
+    return 1;
     }
 
 errorFileHandle = mustOpen("snpLocType.errors", "w");
