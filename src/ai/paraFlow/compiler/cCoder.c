@@ -433,6 +433,45 @@ else
 dyStringFree(&elName);
 }
 
+static void saveBackToCollection(struct pfCompile *pfc, FILE *f,
+	int stack, struct pfParse *elPp, struct pfParse *collectionPp)
+/* Save altered value of element back to collection. */
+{
+struct pfBaseType *base = collectionPp->ty->base;
+struct dyString *elName = varName(pfc, elPp->var);
+if (base == pfc->arrayType)
+    {
+    fprintf(f, "*((");
+    printType(pfc, f, elPp->ty->base);
+    fprintf(f, "*)(_pf_collection->elements + _pf_offset)) = %s;\n",
+    	elName->string);
+    }
+else if (base == pfc->stringType)
+    {
+    fprintf(f, "_pf_collection->s[_pf_offset] = %s;\n", elName->string);
+    }
+else if (base == pfc->dirType)
+    {
+    codeParamAccess(pfc, f, elPp->ty->base, stack);
+    fprintf(f, " = %s;\n", elName->string);
+    if (elPp->ty->base->needsCleanup)
+	{
+	fprintf(f, "_pf_dir_add_obj(_pf_collection, _pf_key, %s+%d);\n",  
+		stackName, stack);
+	}
+    else 
+	{
+	fprintf(f, "_pf_dir_add_num(_pf_collection, _pf_key, %s+%d);\n",  
+		stackName, stack);
+	}
+    }
+else
+    {
+    internalErr();
+    }
+}
+
+
 static void endElInCollectionIteration(struct pfCompile *pfc, FILE *f,
 	struct pfScope *scope, struct pfParse *elPp, 
 	struct pfParse *collectionPp, boolean reverse)
@@ -1788,6 +1827,45 @@ switch (pp->type)
     }
 }
 
+static boolean varUsed(struct pfVar *var, struct pfParse *pp)
+/* Return TRUE if parse subtree uses var. */
+{
+switch (pp->type)
+    {
+    case pptVarUse:
+	if (pp->var == var)
+	    return TRUE;
+	break;
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    {
+    if (varUsed(var, pp))
+        return TRUE;
+    }
+return FALSE;
+}
+
+static boolean varWritten(struct pfVar *var, struct pfParse *pp)
+/* Return TRUE if parse subtree  writes to var. */
+{
+switch (pp->type)
+    {
+    case pptAssignment:
+    case pptPlusEquals:
+    case pptMinusEquals:
+    case pptMulEquals:
+    case pptDivEquals:
+        if (varUsed(var, pp->children))
+	    return TRUE;
+	break;
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    {
+    if (varWritten(var, pp))
+        return TRUE;
+    }
+return FALSE;
+}
 
 static void codeForeach(struct pfCompile *pfc, FILE *f,
 	struct pfParse *foreach, boolean reverse)
@@ -1800,6 +1878,8 @@ struct pfParse *body = elPp->next;
 startElInCollectionIteration(pfc, f, 0, 
 	foreach->scope, elPp, collectionPp, reverse);
 codeStatement(pfc, f, body);
+if (varWritten(elPp->var, body))
+    saveBackToCollection(pfc, f, 0, elPp, collectionPp);
 endElInCollectionIteration(pfc, f, foreach->scope, elPp, collectionPp, reverse);
 }
 

@@ -1,10 +1,3 @@
-In para actions and foreach swap order of el and collection in tree.
-Then put handling of implicit el type in case pptUntypedName
-(which should be renames pptUntypedElement) in rTypeCheck switch
-instead of in pptParaAdd/pptForeach etc. part of switch.  This
-should cause it to be evaluated before the body, sidestepping
-the 'no nil allowed in this operation' error.
-
 
   - Rework code generator so that a type is kept alongside the
     data on the expression stack.
@@ -27,6 +20,12 @@ the 'no nil allowed in this operation' error.
 
 -----------
 DONE
+  - In para do, allow writing to element, which will be kept.  As in
+      array[8] of int a = (1,2,3,4,5,6,7,8)
+      para (i in a) do
+          i = i*i
+      print(a)
+    > (1,4,9,16,25,36,49,64)
   - Implement array.append pseudo-method.
   - Eliminate need for type in constructs like
        (type element in collection)

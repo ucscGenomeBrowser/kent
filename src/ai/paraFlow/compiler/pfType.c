@@ -838,8 +838,12 @@ struct pfParse *el = *pPp;
 struct pfParse *collection = el->parent->children;
 struct pfParse *type = pfParseNew(pptTypeName, el->tok, el, el->scope);
 struct pfParse *sym = pfParseNew(pptSymName, el->tok, el, el->scope);
-struct pfType *ty = collection->ty->children;
 struct pfVar *var = pfScopeFindVar(el->scope, el->name);
+struct pfType *ty;
+if (collection->ty->base == pfc->stringType)
+    ty = pfTypeNew(pfc->byteType);
+else
+    ty = collection->ty->children;
 *(var->ty) = *ty;
 sym->name = el->name;
 type->ty = el->ty = var->ty;
