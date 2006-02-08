@@ -5229,6 +5229,10 @@ CAACCAGCTCAC    1825, 1025BP    0       MUS MUSCULUS
 #  32232 sequences
    # DONE - 2004-08-24 17:02
 
+# QA repush 2006-02-08 seq table to remove old STS sequences with no extFile reference (Jen)
+  Heather found problem found on rr. RR table matched dev and beta was correct, so no 
+  joinerCheck errors for the mismatch were flagged for review.
+
 #  BLASTZ RAT RN3 (RE-DONE - 2004-08-30 - Fan)
 
 #  !!! PLEASE NOTE AS OF 9/2/04, THE 8/30/04-8/31/04 REBUILD OF BLASTZ, CHAIN, AND NET 
