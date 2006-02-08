@@ -51,3 +51,11 @@ spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
 
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
