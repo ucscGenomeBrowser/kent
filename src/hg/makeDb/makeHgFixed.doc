@@ -353,3 +353,6 @@ _EOF_
    done
    echo "~Bone Marrow RhoLo~Bone Marrow RhoHi~Bone Marrow Sca-~Bone Marrow Lin+~Fetal Liver Sca+~Fetal Liver Sca-~Fetal Liver Lin+~Neural Stem Cells~Embryonic Stem Cells" | tr '~' '\t' | cat - tmp.txt > princeton.txt
    rm tmp.txt
+
+# QA push cghNci60Exps on 2006-02-07 to rr. Table/data previously missing (Jen)
+# QA re-push rosChr22Dat on 2006-02-08 to fix table formatting/timestamps (Jen)
