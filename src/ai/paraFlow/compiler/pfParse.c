@@ -946,6 +946,8 @@ slAddHead(&pp->children, collection);
 return pp;
 }
 
+
+
 struct pfParse *parseParaExp(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse expression that might include 'para' */
@@ -957,6 +959,43 @@ if (tok->type == pftPara)
     }
 else
     return parseCallOrIndex(pfc, parent, pTokList, scope);
+}
+
+struct pfParse *parsePreIncrement(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse ++exp or --exp */
+{
+struct pfToken *tok = *pTokList;
+struct pfToken *constantTok;
+struct pfParse *exp, *constant, *pp;
+int dir = 0;
+if (tok->type == pftPlusPlus)
+    dir = 1;
+else if (tok->type == pftMinusMinus)
+    dir = -1;
+else
+    return parseParaExp(pfc, parent, pTokList, scope);
+    
+/* Create a plusEquals node to represent this. */
+pp = pfParseNew(pptPlusEquals, tok, parent, scope);
+
+/* We have to fake a token because of the way the constant
+ * handling code works. */
+constantTok = CloneVar(tok);
+constantTok->type = pftInt;
+constantTok->val.i = dir;
+constant = pfParseNew(pptConstUse, constantTok, pp, scope);
+
+/* Grab expression after ++/-- */
+tok = tok->next;
+exp = parseParaExp(pfc, pp, &tok, scope);
+
+/* Hook everything onto pp. */
+pp->children = exp;
+exp->next = constant;
+
+*pTokList = tok;
+return pp;
 }
 
 struct pfParse *parseNegation(struct pfCompile *pfc, struct pfParse *parent,
@@ -985,7 +1024,7 @@ else if (tok->type == '~')
     }
 else
     {
-    pp = parseParaExp(pfc, parent, &tok, scope);
+    pp = parsePreIncrement(pfc, parent, &tok, scope);
     }
 *pTokList = tok;
 return pp;
@@ -1155,6 +1194,23 @@ while (tok->type == pftLogOr)
 return pp;
 }
 
+static void checkNoNestedAssigns(struct pfParse *pp)
+/* Make sure that there are no assignments inside of subtree. */
+{
+switch (pp->type)
+    {
+    case pptAssignment:
+    case pptPlusEquals:
+    case pptMinusEquals:
+    case pptMulEquals:
+    case pptDivEquals:
+        errAt(pp->tok, "nested assignments not allowed in paraFlow");
+	break;
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    checkNoNestedAssigns(pp);
+}
+
 struct pfParse *parseAssign(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse '=' separated expression */
@@ -1195,6 +1251,7 @@ if (type != pptNone)
 	{
 	tok = tok->next;
 	pp = parseLogOr(pfc, assign, &tok, scope);
+	checkNoNestedAssigns(pp);
 	slAddHead(&assign->children, pp);
 	if (tok->type != '=' || type != pptAssignment)
 	    break;
@@ -1796,6 +1853,8 @@ switch (tok->type)
 	break;
     case pftStatic:
     case pftName:
+    case pftPlusPlus:
+    case pftMinusMinus:
     case '(':
 	statement = pfParseExpression(pfc, parent, &tok, scope);
 	eatSemi(&tok);
