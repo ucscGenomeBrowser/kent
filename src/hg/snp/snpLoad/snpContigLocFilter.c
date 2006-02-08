@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.10 2006/02/08 21:21:52 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.11 2006/02/08 21:23:11 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -68,7 +68,7 @@ safef(query, sizeof(query), "select snp_id from SNPMapInfo where weight = 10");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hashAdd(ret, row[0], NULL);
+    hashAdd(ret, cloneString(row[0]), NULL);
     count++;
     }
 sqlFreeResult(&sr);
