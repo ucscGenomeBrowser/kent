@@ -48,6 +48,7 @@ if ( "$HOST" != "hgwdev" ) then
  exit 1
 endif
 
+
 if ($#argv == 3) then
   set allThree=$argv[3]
   if ($allThree == 3 || $allThree == "all") then
@@ -66,6 +67,10 @@ endif
 if ( $#argv == 4  || $#argv == 5) then
   set mach1=$argv[3]
   set mach2=$argv[4]
+  checkMachineName.csh $mach1 $mach2
+  if ( $status ) then
+    exit 1
+  endif
 endif
 
 if ($#argv == 5) then
@@ -74,12 +79,6 @@ if ($#argv == 5) then
   if ( $status ) then
     exit 1
   endif
-endif
-
-# confirm that machine names are legit
-checkMachineName.csh $mach1 $mach2 $mach3
-if ( $status ) then
-  exit 1
 endif
 
 if ( $mach1 == "hgwbeta" ) then
@@ -93,7 +92,7 @@ endif
 if ( $mach3 == "hgwbeta" ) then
   set host3="-h hgwbeta"
 endif
- 
+
 # set flags for RR queries
 if ( $mach1 != "hgwdev" &&  $mach1 != "hgwbeta" ) then
   set rr1="true"
@@ -132,11 +131,13 @@ foreach table (`cat $tablelist`)
       | awk '{print $13, $14}'`
   endif
 
-  if ( $rr3 == "true" ) then
-    set third=`getRRtableStatus.csh $db $table update_time $mach3`
-  else
-    set third=`hgsql $host3 -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
-      | awk '{print $13, $14}'`
+  if ( $mach3 != "" ) then
+    if ( $rr3 == "true" ) then
+      set third=`getRRtableStatus.csh $db $table update_time $mach3`
+    else
+      set third=`hgsql $host3 -N -e 'SHOW TABLE STATUS LIKE "'$table'"' $db \
+        | awk '{print $13, $14}'`
+    endif
   endif
 
   echo "."$first
