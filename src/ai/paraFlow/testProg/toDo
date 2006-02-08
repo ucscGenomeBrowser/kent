@@ -1,5 +1,9 @@
+2) Implement 1..8 notation (here specifying numbers between 1 and 8).
+
 3) Implement dimensioning of multi-dimensional arrays as in:
       array[8] of array[8] of square checkerboard;
+   or alternatively implement multidimensional arrays as in:
+      array[3,5] of int;
 
 5) Make it so that there's a para function that returns the key as well
    as the value for max and min.
@@ -16,3 +20,4 @@ B) Make para actions use p-threads.
 C) Put in "coalesce and copy on return" style memory
    management that makes heavy use of stack.
 D) Function pointers.
+E) Interfaces.

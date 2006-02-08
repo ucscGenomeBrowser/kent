@@ -1,0 +1,3 @@
+int i = 1, j;
+j = ++i;
+print(j);
