@@ -5,6 +5,14 @@ group map
 priority 12
 visibility hide
 
+track gap
+shortLabel Gap
+longLabel Gap Locations
+priority 11
+group map
+visibility dense
+type bed 3 +
+
 track chainHg18
 shortLabel $o_Organism hg18 Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
