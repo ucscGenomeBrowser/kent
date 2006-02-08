@@ -32,7 +32,7 @@ set tetNig tetNig1
 set xenTro xenTro1
 set monDom monDom1,monDom2
 set bosTau bosTau1,bosTau2
-set rheMac rheMac1 rheMac2
+set rheMac rheMac1,rheMac2
 set snp125 dbSnpHumanBuild125
 
 # Define all organism/assembly-specific databases.
@@ -1220,7 +1220,7 @@ identifier mouseStsTrueName typeOf=stsName
 identifier ratStsTrueName typeOf=stsName
 "Rat STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
     $rn.stsInfoRat.name dupeOk
-    $rn.!rn3.stsMapRat.name
+    $rn,!rn3.stsMapRat.name
     rn3.stsMapRat.name minCheck=0.99
 
 # "Biological" Gene Names
