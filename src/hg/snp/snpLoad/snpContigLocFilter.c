@@ -6,12 +6,12 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.7 2006/02/01 09:05:54 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.8 2006/02/08 20:40:58 heather Exp $";
 
-char *snpDb = NULL;
+static char *snpDb = NULL;
 static struct hash *contigHash = NULL;
 static struct hash *weightHash = NULL;
-char *contigGroup = NULL;
+static char *contigGroup = NULL;
 
 void usage()
 /* Explain usage and exit. */
