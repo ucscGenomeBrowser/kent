@@ -2093,7 +2093,7 @@ dataVersion ENCODE Oct 2005 Freeze
     shortLabel TBA GERP Cons
     longLabel TBA GERP Conservation
     type wig -25.74 4.48
-    viewLimits 0:3
+    viewLimits 0:1
     noInherit on
     maxHeightPixels 100:25:11
     autoScaleDefault Off
@@ -2228,7 +2228,7 @@ dataVersion ENCODE Oct 2005 Freeze
     shortLabel MLAGAN GERP Cons
     longLabel MLAGAN GERP Conservation
     type wig -25.74 4.48
-    viewLimits 0:3
+    viewLimits 0:1
     noInherit on
     maxHeightPixels 100:25:11
     autoScaleDefault Off
@@ -2348,7 +2348,7 @@ dataVersion ENCODE Oct 2005 Freeze
     shortLabel MAVID GERP Cons
     longLabel MAVID GERP Conservation
     type wig -22.58 4.48
-    viewLimits 0:3
+    viewLimits 0:1
     noInherit on
     maxHeightPixels 100:25:11
     autoScaleDefault Off
