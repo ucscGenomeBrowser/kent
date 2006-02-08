@@ -39,7 +39,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.45 2006/02/01 01:10:58 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.46 2006/02/08 01:58:57 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -555,7 +555,7 @@ if (qIsNib && psl->strand[0] == '-')
     qOffset = psl->qSize - psl->qEnd;
 else
     qOffset = 0;
-verbose(5,"qString len = %d qOffset = %d\n",strlen(qSeq->dna),qOffset);
+verbose(6,"qString len = %d qOffset = %d\n",strlen(qSeq->dna),qOffset);
 if (tName == NULL || !sameString(tName, psl->tName) || tIsNib)
     {
     freeDnaSeq(&tSeq);
@@ -566,7 +566,7 @@ if (tName == NULL || !sameString(tName, psl->tName) || tIsNib)
     }
 if (tIsNib && psl->strand[1] == '-')
     tOffset = psl->tSize - psl->tEnd;
-verbose(5,"tString len = %d tOffset = %d\n",strlen(tSeq->dna),tOffset);
+verbose(6,"tString len = %d tOffset = %d\n",strlen(tSeq->dna),tOffset);
 if (psl->strand[0] == '-')
     reverseComplement(qSeq->dna, qSeq->size);
 if (psl->strand[1] == '-')
@@ -978,7 +978,7 @@ for (blockIx = 0; blockIx < psl->blockCount; ++blockIx)
     verbose(5,"block %d threshold=%d s-e:%d-%d. ",blockIx, threshold, start, end);
     for (i=start; i<end; ++i)
 	{
-        verbose(5,"s=%d tc=%d ",scoreTrack[i],topCount);
+        verbose(6,"s=%d tc=%d ",scoreTrack[i],topCount);
 	if (scoreTrack[i] <= threshold)
 	    {
 	    if (++topCount >= minNearTopSize)
@@ -1021,7 +1021,7 @@ for (i=0 ; i<size ; i++)
                 break;
                 }
         }
-    verbose(5,"max is %d %d - %d score=%d i=%d\n",max, *start, *end, score[i],i);
+    verbose(6,"max is %d %d - %d score=%d i=%d\n",max, *start, *end, score[i],i);
     if (score[i] < 0) 
         score[i] = 0;
     }
@@ -1140,42 +1140,39 @@ assert(outPsl!=NULL);
 outPsl->qStarts = needMem(psl->blockCount*sizeof(unsigned));
 outPsl->tStarts = needMem(psl->blockCount*sizeof(unsigned));
 outPsl->blockSizes = needMem(psl->blockCount*sizeof(unsigned));
-verbose(5,"match %d misMatch %d %s %s\n",
-        psl->match, psl->misMatch, psl->qName, psl->tName);
-
-//if (psl->strand[1] == '-')
-//    {
-//    startIdx = psl->blockCount-1;
-//    stopIdx = -1;
-//    idxIncr = -1;
-//    }
-//else
-//    {
+verbose(5,"match %d misMatch %d %s %s blocks %d \n",
+        psl->match, psl->misMatch, psl->qName, psl->tName, psl->blockCount);
     startIdx = 0;
     stopIdx = psl->blockCount;
     idxIncr = 1;
-//    }
 
 for (iBlk = startIdx; iBlk != stopIdx; iBlk += idxIncr)
     {
     unsigned tStart = psl->tStarts[iBlk];
     unsigned qStart = psl->qStarts[iBlk];
     unsigned size = psl->blockSizes[iBlk];
-//    if (psl->strand[1] == '-')
-//        reverseIntRange(&tStart, &tEnd, psl->tSize);
-    if ((iExon < 0) || ((tStart - (outPsl->tStarts[iExon]+outPsl->blockSizes[iExon])) > insertMergeSize))
+    int tdiff = abs(tStart - (outPsl->tStarts[iExon]+outPsl->blockSizes[iExon]));
+    int qdiff = abs(qStart - (outPsl->qStarts[iExon]+outPsl->blockSizes[iExon]));
+    if (iExon < 0 || (tdiff > insertMergeSize))
         {
         iExon++;
+        verbose(5, "tdiff %d qdiff %d tStart %d out tStarts[%d] %d outPsl->size %d\n",
+                tdiff, qdiff, tStart, iExon, outPsl->tStarts[iExon], outPsl->blockSizes[iExon]);
+        verbose(6,"init or Not merge %s[%d] new q %d t %s %d %d size %d to %d \n", 
+            psl->qName, iExon, qStart,
+            psl->tName, psl->tStarts[iBlk], tStart, outPsl->blockSizes, size);
         outPsl->tStarts[iExon] = tStart;
         outPsl->qStarts[iExon] = qStart;
-        verbose(5,"merge %s old q %d new q %d t %s %d %d\n", 
-            psl->qName, psl->qStarts[iBlk], qStart,
-            psl->tName, psl->tStarts[iBlk], tStart);
-        outPsl->blockSizes[iExon] = size;
+        outPsl->blockSizes[iExon] = size; 
 	}
     else
-        outPsl->blockSizes[iExon] += size;
+        {
+        outPsl->blockSizes[iExon] += size + qdiff ;
+        verbose(5, "tdiff %d tStart %d out.tStarts[%d] %d size %d outPsl->blkSmize %d tdiff %d qdiff %d tStart %d\n",
+                tdiff, tStart, iExon, outPsl->tStarts[iExon], size, outPsl->blockSizes[iExon], tdiff, qdiff, psl->tStart);
+        }
     }
+
 outPsl->blockCount = iExon+1;
 outPsl->match = psl->match;
 outPsl->misMatch = psl->misMatch;
@@ -1194,6 +1191,19 @@ outPsl->tName = cloneString(psl->tName);
 outPsl->tSize = psl->tSize;
 outPsl->tStart = psl->tStart;
 outPsl->tEnd = psl->tEnd;
+for (iBlk = 0; iBlk != psl->blockCount; iBlk += 1)
+    verbose(5, "%d,",psl->qStarts[iBlk]);
+verbose(5,"  ");
+for (iBlk = 0; iBlk != psl->blockCount; iBlk += 1)
+    verbose(5, "%d,",psl->blockSizes[iBlk]);
+verbose(5," to ");
+for (iBlk = 0; iBlk != outPsl->blockCount; iBlk += 1)
+    verbose(5, "%d,",outPsl->qStarts[iBlk]);
+verbose(5,"  ");
+for (iBlk = 0; iBlk != outPsl->blockCount; iBlk += 1)
+    verbose(5, "%d,",outPsl->blockSizes[iBlk]);
+verbose(5,"\n");
+
 }
 
 int interpolateStart(struct psl *gene, struct psl *pseudo)
@@ -1254,7 +1264,7 @@ if (rmskHash != NULL)
     for (el = elist; el != NULL ; el = el->next)
         {
         reps += positiveRangeIntersection(is, ie, el->start, el->end);
-        verbose(5,"    isRep? chkRep %s:%d-%d reps %d ratio %f > 0.7\n",chrom,is, ie, reps,(float)reps/(float)(ie-is) );
+        verbose(6,"    isRep? chkRep %s:%d-%d reps %d ratio %f > 0.7\n",chrom,is, ie, reps,(float)reps/(float)(ie-is) );
         }
     slFreeList(&elist);
     if (reps > ie-is)
@@ -1519,7 +1529,7 @@ for (i = 0 ; i < gene->blockCount ; i++)
             }
         else
             {
-            verbose(5," gt %d-%d %d pt %d-%d %d  >> gq %d-%d pq %d-%d <<\n",
+            verbose(6," gt %d-%d %d pt %d-%d %d  >> gq %d-%d pq %d-%d <<\n",
                     gts,gte,gte-gts,pts,pte,pte-pts,gqs,gqe,pqs,pqe);
             verbose(3," NO \n");
             }
@@ -1562,8 +1572,10 @@ for (i = 0 ; i < targetM->blockCount-1 ; i++)
         int qqs = queryM->qStarts[j] ;
         int qte = queryM->tStarts[j] + queryM->blockSizes[j];
         int qts = queryM->tStarts[j] ;
+        verbose(3, "q before %d %d ",qqs, qqe);
         if (queryM->strand[0] == '-')
             reverseIntRange(&qqs, &qqe, queryM->qSize);
+        verbose(3, "q after %d %d ",qqs, qqe);
         if ((abs(qqe - qe) <= spliceDrift) ||
             (abs(qqs - qe) <= spliceDrift))
             {
@@ -1762,8 +1774,8 @@ if (mrnaHash != NULL)
                 else
                     {
                     mrnaBases += positiveRangeIntersection(psl->tStart, psl->tEnd, mPsl->tStart, mPsl->tEnd);
-                    verbose(5,"blk %d %s %d ec %d\n",mPsl->blockCount, mPsl->qName, mrnaBases, *exonCount);
-                    verbose(5,"blk merge %d %s %d ec %d\n",mPslMerge->blockCount, mPsl->qName, mrnaBases, *exonCount);
+                    verbose(6,"blk %d %s %d ec %d\n",mPsl->blockCount, mPsl->qName, mrnaBases, *exonCount);
+                    verbose(6,"blk merge %d %s %d ec %d\n",mPslMerge->blockCount, mPsl->qName, mrnaBases, *exonCount);
                     }
                 verbose(3,"MRNABASES %d cnt %d %s %s %d-%d\n",
                         mrnaBases, mPslMerge->blockCount, mPslMerge->qName, mPsl->qName, mPsl->tStart, mPsl->tEnd);
