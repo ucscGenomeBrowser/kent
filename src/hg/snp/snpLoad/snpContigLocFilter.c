@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.8 2006/02/08 20:40:58 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.9 2006/02/08 21:13:08 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -173,7 +173,7 @@ if(!hTableExistsDb(snpDb, "ContigLoc"))
 if(!hTableExistsDb(snpDb, "ContigInfo"))
     errAbort("no ContigInfo table in %s\n", snpDb);
 if(!hTableExistsDb(snpDb, "SNPMapInfo"))
-    verbose(1, "no SNPMapInfo table in %s\n", snpDb);
+    errAbort("no SNPMapInfo table in %s\n", snpDb);
 
 
 contigHash = loadContigs(contigGroup);
