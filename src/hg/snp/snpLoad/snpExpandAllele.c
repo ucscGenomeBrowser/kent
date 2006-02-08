@@ -8,13 +8,14 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.8 2006/02/06 21:54:35 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.9 2006/02/08 00:31:40 heather Exp $";
 
 char *snpDb = NULL;
 char *contigGroup = NULL;
 static struct hash *chromHash = NULL;
 FILE *errorFileHandle = NULL;
 FILE *tabFileHandle = NULL;
+FILE *exceptionFileHandle = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -48,6 +49,16 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 return ret;
 }
+
+void writeToExceptionFile(char *chrom, int start, int end, char *name, char *exception)
+{
+fprintf(exceptionFileHandle, "%s\t", chrom);
+fprintf(exceptionFileHandle, "%d\t", start);
+fprintf(exceptionFileHandle, "%d\t", end);
+fprintf(exceptionFileHandle, "%s\t", name);
+fprintf(exceptionFileHandle, "%s\n", exception);
+}
+
 
 boolean needToSplit(char *allele)
 /* return true if allele contains open paren */
@@ -193,6 +204,10 @@ char fileName[64];
 char *allele = NULL;
 int count = 0;
 int errorCount = 0;
+int start = 0;
+int end = 0;
+int size = 0;
+char newEndString[64];
 
 strcpy(tableName, "chr");
 strcat(tableName, chromName);
@@ -206,12 +221,14 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
 
+    /* no possible candidates in exact and between */
     if (sameString(row[3], "2") || sameString(row[3], "3"))
         {
 	writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5]);
 	continue;
 	}
 
+    /* pass through alleles with no parens */
     if (!needToSplit(row[5]))
 	{
 	writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5]);
@@ -225,6 +242,32 @@ while ((row = sqlNextRow(sr)) != NULL)
         errorCount++;
 	writeToErrorFile(row[0], row[1], row[2], row[3], row[4], row[5]);
         }
+
+    /* calculate end for locType 4, 5, 6 */
+    if (sameString(row[3], "4") || sameString(row[3], "5") || sameString(row[3], "6"))
+        {
+	start = atoi(row[1]);
+        end = start + strlen(allele);
+	verbose(5, "setting end coord for %s, locType = %s, startAllele = %s\n", row[0], row[3], row[5]);
+	sprintf(newEndString, "%d", end);
+        writeToTabFile(row[0], row[1], newEndString, row[3], row[4], allele);
+	continue;
+	}
+
+    /* check for exceptions in locType 1 */
+    if (sameString(row[3], "1"))
+        {
+	start = atoi(row[1]);
+	end = atoi(row[2]);
+	size = end - start;
+	if (size != strlen(allele))
+	    {
+	    if (size > 256)
+	        writeToExceptionFile(chromName, start, end, row[0], "RangeLocTypeWrongSizeLargeAllele");
+            else
+	        writeToExceptionFile(chromName, start, end, row[0], "RangeLocTypeWrongSize");
+	    }
+	}
 
     writeToTabFile(row[0], row[1], row[2], row[3], row[4], allele);
 
@@ -305,6 +348,7 @@ if (chromHash == NULL)
     }
 
 errorFileHandle = mustOpen("snpExpandAllele.errors", "w");
+exceptionFileHandle = mustOpen("snpExpandAllele.exceptions", "w");
 
 // doExpandAllele("22");
 // return 0;
@@ -321,5 +365,6 @@ while ((chromName = hashNextName(&cookie)) != NULL)
     }
 
 fclose(errorFileHandle);
+fclose(exceptionFileHandle);
 return 0;
 }
