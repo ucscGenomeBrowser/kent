@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 all:
 
-test: base frame allCds header noGapMerge gapMerge cds3GapMerge
+test: base frame allCds header noGapMerge gapMerge cds3GapMerge trans
 
 # basic set of tests
 base: mkdirs
@@ -45,6 +45,12 @@ gapMerge: mkdirs
 # test merging CDS mod 3 gaps, and UTR
 cds3GapMerge: mkdirs
 	mrnaToGene -cdsMergeSize=6 -cdsMergeMod3 -utrMergeSize=10 -genePredExt -cdsFile=input/gaps.cds input/gaps.psl output/$@.gp
+	genePredCheck output/$@.gp
+	diff -u expected/$@.gp output/$@.gp
+
+# translated psls; -+ and -- cases are faked
+trans:
+	mrnaToGene -cdsMergeSize=6 -cdsMergeMod3 -utrMergeSize=10 -cdsFile=input/trans.cds input/trans.psl output/$@.gp
 	genePredCheck output/$@.gp
 	diff -u expected/$@.gp output/$@.gp
 
