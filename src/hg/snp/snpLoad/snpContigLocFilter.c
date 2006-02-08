@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.11 2006/02/08 21:23:11 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.12 2006/02/08 22:47:35 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -104,17 +104,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (sameString(row[5], "0")) continue;
 	el2 = hashLookup(weightHash,row[0]);
 	if (el2 != NULL) continue;
-	fprintf(f, "%s\t", row[0]);
-	fprintf(f, "%s\t", row[1]);
-	fprintf(f, "%s\t", row[2]);
-	fprintf(f, "%s\t", row[3]);
-	fprintf(f, "%s\t", row[4]);
-	fprintf(f, "%s\t", row[5]);
-	fprintf(f, "%s\t", row[6]);
-	fprintf(f, "%s\t", row[7]);
-	fprintf(f, "%s\t", row[8]);
+	/* could check for missing chrom here */
 	chromName = hashFindVal(contigHash,row[1]);
-	fprintf(f, "%s\n", chromName);
+	fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+	            row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], chromName);
 	}
     }
 sqlFreeResult(&sr);

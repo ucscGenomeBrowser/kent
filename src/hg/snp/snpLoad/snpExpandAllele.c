@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.11 2006/02/08 21:21:29 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.12 2006/02/08 22:47:35 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -52,11 +52,7 @@ return ret;
 
 void writeToExceptionFile(char *chrom, int start, int end, char *name, char *exception)
 {
-fprintf(exceptionFileHandle, "%s\t", chrom);
-fprintf(exceptionFileHandle, "%d\t", start);
-fprintf(exceptionFileHandle, "%d\t", end);
-fprintf(exceptionFileHandle, "%s\t", name);
-fprintf(exceptionFileHandle, "%s\n", exception);
+fprintf(exceptionFileHandle, "%s\t%d\t%d\t%s\t%s\n", chrom, start, end, name, exception);
 }
 
 
@@ -172,22 +168,14 @@ return newAllele->string;
 
 void writeToTabFile(char *snp_id, char *start, char *end, char *loc_type, char *orientation, char *allele)
 {
-fprintf(tabFileHandle, "%s\t", snp_id);
-fprintf(tabFileHandle, "%s\t", start);
-fprintf(tabFileHandle, "%s\t", end);
-fprintf(tabFileHandle, "%s\t", loc_type);
-fprintf(tabFileHandle, "%s\t", orientation);
-fprintf(tabFileHandle, "%s\n", allele);
+fprintf(tabFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\n", snp_id, start, end, loc_type, orientation, allele);
 }
 
 void writeToErrorFile(char *snp_id, char *start, char *end, char *loc_type, char *orientation, char *allele)
 {
-fprintf(errorFileHandle, "snp_id = %s\n", snp_id);
-fprintf(errorFileHandle, "chromStart = %s\n", start);
-fprintf(errorFileHandle, "chromEnd = %s\n", end);
-fprintf(errorFileHandle, "loc_type = %s\n", loc_type);
-fprintf(errorFileHandle, "orientation = %s\n", orientation);
-fprintf(errorFileHandle, "allele = %s\n", allele);
+fprintf(errorFileHandle, 
+        "snp_id = %s\nchromStart = %s\nchromEnd = %s\nloc_type = %s\norientation=%s\nallele = %s\n", 
+        snp_id, start, end, loc_type, orientation, allele);
 fprintf(errorFileHandle, "---------------------------------------\n");
 }
 

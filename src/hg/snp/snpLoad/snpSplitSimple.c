@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.4 2006/02/08 21:21:52 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.5 2006/02/08 22:47:35 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -79,15 +79,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	verbose(1, "%s not found\n", row[8]);
 	continue;
 	}
-    fprintf(hel->val, "%s\t", row[0]);
-    fprintf(hel->val, "%s\t", row[8]);
-    fprintf(hel->val, "%s\t", row[1]);
-    fprintf(hel->val, "%s\t", row[2]);
-    fprintf(hel->val, "%s\t", row[3]);
-    fprintf(hel->val, "%s\t", row[4]);
-    fprintf(hel->val, "%s\t", row[5]);
-    fprintf(hel->val, "%s\t", row[6]);
-    fprintf(hel->val, "%s\n", row[7]);
+    fprintf(hel->val, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+                      row[0], row[8], row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
     }
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);

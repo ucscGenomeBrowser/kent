@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.7 2006/02/08 21:21:52 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.8 2006/02/08 22:47:35 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -77,11 +77,7 @@ return TRUE;
 
 void writeToExceptionFile(char *chrom, int start, int end, char *name, char *exception)
 {
-fprintf(exceptionFileHandle, "%s\t", chrom);
-fprintf(exceptionFileHandle, "%d\t", start);
-fprintf(exceptionFileHandle, "%d\t", end);
-fprintf(exceptionFileHandle, "%s\t", name);
-fprintf(exceptionFileHandle, "%s\n", exception);
+fprintf(exceptionFileHandle, "%s\t%d\t%d\t%s\t%s\n", chrom, start, end, name, exception);
 }
 
 
@@ -198,20 +194,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (chromEnd == -1)
         {
 	skipCount++;
-        fprintf(errorFileHandle, "snp = %s\t", row[0]);
-        fprintf(errorFileHandle, "locType = %s\t", row[1]);
-        fprintf(errorFileHandle, "chrom = %s\t", chromName);
-        fprintf(errorFileHandle, "chromStart = %s\t", row[2]);
-        fprintf(errorFileHandle, "rangeString = %s\n", row[3]);
+        fprintf(errorFileHandle, "snp = %s\tlocType = %s\tchrom = %s\tchromStart = %s\trangeString=%s\n", 
+	                          row[0], row[1], chromName, row[2], row[3]);
 	continue;
 	}
 
-    fprintf(f, "%s\t", row[0]);
-    fprintf(f, "%s\t", row[2]);
-    fprintf(f, "%d\t", chromEnd);
-    fprintf(f, "%s\t", row[1]);
-    fprintf(f, "%s\t", row[4]);
-    fprintf(f, "%s\n", row[5]);
+    fprintf(f, "%s\t%s\t%d\t%s\t%s\t%s\n", 
+               row[0], row[2], chromEnd, row[1], row[4], row[5]);
 
     }
 sqlFreeResult(&sr);
