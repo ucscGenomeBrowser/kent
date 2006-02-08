@@ -3135,3 +3135,51 @@ cat > makeMaf.csh << 'EOF'
     cd /cluster/data/monDom1/bed/blastz.monDom1.to.danRer2
     nice gzip axtNet/*.axt mafNet/*.maf &
 
+
+# LIFTOVER CHAINS TO MONDOM2 (WORKING 2006-02-07 kate)
+    # NOTE: split monDom2 is doc'ed in makeMonDom2.doc
+
+    ssh kkstore01
+    cd /cluster/data/monDom1
+
+    # split scaffolds and convert to 2bit, as done for cow
+    mkdir split2bit
+    cd split2bit
+    faSplit sequence ../maskedScaffolds.fa 50 x.
+    foreach f (*.fa)
+        echo $f
+        faToTwoBit $f $f:r.2bit
+        rm $f
+    end
+    cd ..
+    mkdir -p /san/sanvol1/scratch/monDom1
+    cp -r split2bit /san/sanvol1/scratch/monDom1
+    rm -fr split2bit
+    cp /cluster/bluearc/monDom1/11.ooc /san/sanvol1/scratch/monDom1/
+
+    # run alignment
+    ssh pk
+    cd /cluster/data/monDom1
+    makeLoChain-align monDom1 /san/sanvol1/scratch/monDom1/split2bit \
+                      monDom2 /san/sanvol1/scratch/monDom2/liftSplits/split \
+                        /san/sanvol1/scratch/monDom1/11.ooc
+    cd bed
+    rm blat.monDom2
+    ln -s blat.monDom2.2006-02-07 blat.monDom2
+    cd blat.monDom2/run
+    para try
+    para check
+    para push
+
+    # 2500 jobs
+
+    # All jobs crash when run via cluster, though a test
+    # manual job on a cluster job ran successfully:
+#   blat /san/sanvol1/scratch/monDom1/split2bit/x18.2bit /san/sanvol1/scratch/monDom2/liftSplits/split/x19.fa ../raw/x18_x19.psl  -tileSize=11 -ooc=/san/sanvol1/scratch/monDom1/11.ooc -minScore=100 -minIdentity=98 -fastMap
+# Loaded 83749395 letters in 35 sequences
+# Searched 71987986 bases in 7199 sequences
+
+    # the job took ~7 hours -- 
+    # this needs to be broken up into much smaller jobs.
+
+
