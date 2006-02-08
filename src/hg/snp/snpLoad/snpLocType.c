@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.9 2006/02/08 23:49:16 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.10 2006/02/08 23:54:12 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -202,7 +202,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-fclose(f);
+carefulClose(&f);
 if (skipCount > 0)
     verbose(1, "skipping %d rows\n", skipCount);
 }
@@ -285,7 +285,7 @@ while ((chromName = hashNextName(&cookie)) != NULL)
     loadDatabase(chromName);
     }
 
-fclose(errorFileHandle);
-fclose(exceptionFileHandle);
+carefulClose(&errorFileHandle);
+carefulClose(&exceptionFileHandle);
 return 0;
 }

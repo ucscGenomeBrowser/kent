@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.13 2006/02/08 23:49:16 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.14 2006/02/08 23:54:12 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -260,7 +260,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-fclose(tabFileHandle);
+carefulClose(&tabFileHandle);
 verbose(2, "%d alleles expanded\n", count);
 verbose(2, "%d errors found\n", errorCount);
 }
@@ -332,7 +332,7 @@ while ((chromName = hashNextName(&cookie)) != NULL)
     verbose(2, "------------------------------\n");
     }
 
-fclose(errorFileHandle);
-fclose(exceptionFileHandle);
+carefulClose(&errorFileHandle);
+carefulClose(&exceptionFileHandle);
 return 0;
 }
