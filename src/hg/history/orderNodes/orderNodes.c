@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: orderNodes.c,v 1.2 2006/01/31 06:36:46 braney Exp $";
+static char const rcsid[] = "$Id: orderNodes.c,v 1.3 2006/02/08 20:34:31 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -49,9 +49,13 @@ if (doPrev)
     hash = e1->up.prevHash;
     */
 
+if (val > 1.0)
+    errAbort("prob greater than 1");
 name = eleFullName(e2, doNeg );
+//printf("checking for %s ",name);
 if ((edge = hashFindVal(hash, name)) == NULL)
     {
+    //printf("creating\n");
     AllocVar(edge);
     edge->prob = val;
     edge->element = e2;
@@ -59,8 +63,9 @@ if ((edge = hashFindVal(hash, name)) == NULL)
     }
 else
     {
+    //printf("found\n");
     if (edge->element != e2)
-	errAbort("not the same edge");
+	errAbort("not the same element");
 
     edge->prob += val;
     }
@@ -146,62 +151,104 @@ else
 }
 
 
-void calcDownNodes(struct phyloTree *node, struct genome *out)
+void doUpHash(struct hash *hash, struct hash **parentHash, double weight)
 {
-int ii;
-struct element *e;
+struct hashCookie cookie;
+struct hashEl *next;
 
-for(e=g->elements; e; e = e->next)
+if (hash != NULL)
     {
-    struct hashCookie cookie;
-    struct hashEl *next;
-    struct element *parent = e->parent;
-    struct element *nextParent;
-
-
-    if (e->up.nextHash != NULL)
+    cookie = hashFirst(hash);
+    while(next = hashNext(&cookie))
 	{
-	cookie = hashFirst(e->up.nextHash);
-	while(next = hashNext(&cookie))
-	    {
-	    struct possibleEdge *edge = next->val;
-	    struct element *nextParent = edge->element->parent;
+	struct possibleEdge *edge = next->val;
+	struct element *nextParent = edge->element->parent;
 
-	    printf("ooking at %s->%s\n",eleFullName(e,FALSE), next->name);
+	if (nextParent == NULL)
+	    errAbort("next in hash doesn't have parent");
 
-	    if (nextParent == NULL)
-		errAbort("next in hash doesn't have parent");
+	//printf("looking at %s\n",eleName(edge->element));
+	//printf("parent is %s\n",eleName(edge->element->parent));
+	if (*parentHash == NULL)
+	    *parentHash = newHash(4);
 
-	    if (parent->up.nextHash == NULL)
-		parent->up.nextHash = newHash(4);
-	    addPair(parent->up.nextHash, nextParent, edge->prob * weight, *next->name == '-');
-	    }
-	}
-
-    if (e->up.prevHash != NULL)
-	{
-	cookie = hashFirst(e->up.prevHash);
-	while(next = hashNext(&cookie))
-	    {
-	    struct possibleEdge *edge = next->val;
-	    struct element *nextParent = edge->element->parent;
-
-	    printf("tooking at %s\n",next->name);
-
-	    if (nextParent == NULL)
-		errAbort("next in hash doesn't have parent");
-
-	    if (parent->up.prevHash == NULL)
-		parent->up.prevHash = newHash(5);
-
-	    addPair(parent->up.prevHash, nextParent, edge->prob * weight, *next->name == '-');
-	    }
+	addPair(*parentHash, nextParent, edge->prob * weight , *next->name == '-');
 	}
     }
+}
 
-for(ii=0; ii < node->numEdges; ii++)
+void doDownHash(struct hash *hash, struct hash **setHash, double weight, int childNum, struct element *e)
+{
+struct hashCookie cookie;
+struct hashEl *next;
+
+if (hash != NULL)
     {
-    calcDownNodes(node->edges[ii], node->priv);
+    cookie = hashFirst(hash);
+    while(next = hashNext(&cookie))
+	{
+	struct possibleEdge *edge = next->val;
+	struct element *ne = edge->element;
+	struct element *nextChild = NULL;
+
+	if (ne->numEdges ==1)
+	    {
+	    if (sameString(edge->element->edges[0]->species, e->species))
+		nextChild = edge->element->edges[0];
+	    else
+		return ;
+		//errAbort("single child isn't right");
+	    }
+	else
+	    {
+	    if (sameString(edge->element->edges[0]->species, e->species))
+		nextChild = edge->element->edges[0];
+	    else if (sameString(edge->element->edges[1]->species, e->species))
+		nextChild = edge->element->edges[1];
+	    else
+		errAbort("neither child is right\n");
+	    }
+
+	if (nextChild == NULL)
+	    errAbort("next in hash doesn't have child");
+
+	//printf("looking at %s\n",eleName(edge->element));
+	//printf("child is %s\n",eleName(edge->element->edges[childNum]));
+	if (*setHash == NULL)
+	    *setHash = newHash(4);
+
+	if (!sameString(e->species, nextChild->species))
+	    errAbort("not same species");
+	printf("setting edge from %s to %s w %g p %g\n",eleName(e), eleName(nextChild), weight, edge->prob);
+	addPair(*setHash, nextChild, edge->prob * weight , *next->name == '-');
+	}
+    }
+}
+
+void doSibHash(struct hash *hash, struct hash **setHash, double weight, int childNum)
+{
+struct hashCookie cookie;
+struct hashEl *next;
+
+if (hash != NULL)
+    {
+    cookie = hashFirst(hash);
+    while(next = hashNext(&cookie))
+	{
+	struct possibleEdge *edge = next->val;
+	struct element *nextParent = edge->element->parent;
+	struct element *nextChild = edge->element->parent;
+
+	if (nextParent == NULL)
+	    errAbort("next in hash doesn't have parent");
+	if (nextChild == NULL)
+	    errAbort("next in hash doesn't have child");
+
+	if (*setHash == NULL)
+	    *setHash = newHash(4);
+
+	addPair(*setHash, nextChild, edge->prob * weight , *next->name == '-');
+	}
     }
 }
 
@@ -224,52 +271,93 @@ if (node->parent)
 
     for(e=g->elements; e; e = e->next)
 	{
-	struct hashCookie cookie;
-	struct hashEl *next;
 	struct element *parent = e->parent;
-	struct element *nextParent;
+	double useWeight = weight;
 
+	if (node->parent->numEdges == 1)
+	    useWeight /= parent->numEdges;
 
-	if (e->up.nextHash != NULL)
+	doUpHash(e->up.nextHash, &parent->up.nextHash, useWeight);
+	doUpHash(e->up.prevHash, &parent->up.prevHash, useWeight);
+	}
+    }
+}
+
+void calcDownNodes(struct phyloTree *node, double weight)
+{
+struct genome *g = node->priv;
+int ii;
+//double totalLen = 0.0;
+
+if (node->parent == NULL)
+    {
+    struct element *e;
+
+    for(e=g->elements; e; e = e->next)
+	{
+	//printf("topnode working on %s\n",eleName(e));
+	if (e->numEdges == 1)
 	    {
-	    cookie = hashFirst(e->up.nextHash);
-	    while(next = hashNext(&cookie))
-		{
-		struct possibleEdge *edge = next->val;
-		struct element *nextParent = edge->element->parent;
-
-		printf("ooking at %s->%s\n",eleFullName(e,FALSE), next->name);
-
-		if (nextParent == NULL)
-		    errAbort("next in hash doesn't have parent");
-
-		if (parent->up.nextHash == NULL)
-		    parent->up.nextHash = newHash(4);
-		addPair(parent->up.nextHash, nextParent, edge->prob * weight, *next->name == '-');
-		}
 	    }
-
-	if (e->up.prevHash != NULL)
+	else
 	    {
-	    cookie = hashFirst(e->up.prevHash);
-	    while(next = hashNext(&cookie))
-		{
-		struct possibleEdge *edge = next->val;
-		struct element *nextParent = edge->element->parent;
+	    doUpHash(e->edges[1]->up.prevHash, &e->down[0].prevHash, weight);
+	    doUpHash(e->edges[0]->up.prevHash, &e->down[1].prevHash, weight);
 
-		printf("tooking at %s\n",next->name);
-
-		if (nextParent == NULL)
-		    errAbort("next in hash doesn't have parent");
-
-		if (parent->up.prevHash == NULL)
-		    parent->up.prevHash = newHash(5);
-
-		addPair(parent->up.prevHash, nextParent, edge->prob * weight, *next->name == '-');
-		}
+	    doUpHash(e->edges[1]->up.nextHash, &e->down[0].nextHash, weight);
+	    doUpHash(e->edges[0]->up.nextHash, &e->down[1].nextHash, weight);
 	    }
 	}
     }
+else if (node->numEdges)
+    {
+    struct element *e;
+
+    for(e=g->elements; e; e = e->next)
+	{
+	struct element *parent = e->parent;
+	double useUpWeight = weight;
+	double useDownWeight = weight;
+	int num;
+
+	if (node->parent->numEdges == 1)
+	    useDownWeight /= parent->numEdges;
+	if (node->numEdges == 1)
+	    useUpWeight /= e->numEdges;
+
+	//printf("working on %s\n",eleName(e));
+	num = 0;
+	if (e == parent->edges[1])
+	    num = 1;
+
+	if (e->numEdges == 1)
+	    {
+	    doDownHash(parent->down[num].prevHash, &e->down[0].prevHash, useDownWeight, num, e);
+	    doDownHash(parent->down[num].nextHash, &e->down[0].nextHash, useDownWeight, num, e);
+	    }
+	else
+	    {
+	    doUpHash(e->edges[0]->up.prevHash,&e->down[1].prevHash, useUpWeight);
+	    doDownHash(parent->down[num].prevHash, &e->down[1].prevHash, useDownWeight, num, e);
+	
+	    doUpHash(e->edges[1]->up.prevHash,&e->down[0].prevHash, useUpWeight);
+	    doDownHash(parent->down[num].prevHash,&e->down[0].prevHash, useDownWeight, num, e);
+
+	    doUpHash(e->edges[0]->up.nextHash,&e->down[1].nextHash, useUpWeight);
+	    doDownHash(parent->down[num].nextHash, &e->down[1].nextHash, useDownWeight, num, e);
+	
+	    doUpHash(e->edges[1]->up.nextHash,&e->down[0].nextHash, useUpWeight);
+	    doDownHash(parent->down[num].nextHash,&e->down[0].nextHash, useDownWeight, num, e);
+	    }
+	}
+    } 
+for(ii=0; ii < node->numEdges; ii++)
+    {
+    calcDownNodes(node->edges[ii], 1.0 / node->numEdges);
+    }
+//for(ii=0; ii < node->numEdges; ii++)
+    //totalLen += node->edges[ii]->ident->length;
+
 }
 
 void printTransSub(FILE *f, struct adjacency *adj, char *name)
@@ -305,6 +393,7 @@ void printTrans(FILE *f, struct genome *g, char *which)
 struct element *e = g->elements;
 char name[512];
 
+fprintf(f,which);
 fprintf(f, ">%s\n",g->name);
 
 for(; e ; e = e->next)
@@ -313,6 +402,14 @@ for(; e ; e = e->next)
 
     if (sameString(which, "up"))
 	printTransSub(f, &e->up, name);
+    else if (sameString(which, "down0"))
+	{
+	printTransSub(f, &e->down[0], name);
+	}
+    else if (sameString(which, "down1"))
+	{
+	printTransSub(f, &e->down[1], name);
+	}
     }
 }
 
@@ -327,20 +424,22 @@ for(ii=0; ii < node->numEdges; ii++)
 printTrans(f, g, which);
 }
 
-void orderNodes(char *treeFile, char *outGroup, char *lenString , char *outFile)
+void orderNodes(char *treeFile, char *outFile)
 {
 struct phyloTree *node = eleReadTree(treeFile);
 FILE *f = mustOpen(outFile, "w");
-double branchLen = atof(lenString);
-struct genome *g = getGenome(outGroup, outGroup);
+//double branchLen = atof(lenString);
+//struct genome *g = getGenome(outGroup, outGroup);
 
 setLeafNodePairs(node);
-setAllPairs(g);
+//setAllPairs(g);
 
 calcUpNodes(node, 0.0);
-calcDownNodes(node, g);
+calcDownNodes(node, 1.0);
 
 printNodes(f, node, "up");
+printNodes(f, node, "down0");
+printNodes(f, node, "down1");
 
 //printElementTrees(node, 0);
 }
@@ -349,10 +448,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 5)
+if (argc != 3)
     usage();
 
 //verboseSetLevel(2);
-orderNodes(argv[1], argv[2], argv[3], argv[4]);
+orderNodes(argv[1], argv[2]);
 return 0;
 }
