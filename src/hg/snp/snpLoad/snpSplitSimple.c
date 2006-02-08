@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.6 2006/02/08 22:49:34 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.7 2006/02/08 23:49:16 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -42,10 +42,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     chromName = cloneString(row[0]);
-    strcpy(fileName, "chr");
-    strcat(fileName, chromName);
-    strcat(fileName, "_snpTmp");
-    strcat(fileName, ".tab");
+    safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
     f = mustOpen(fileName, "w");
     hashAdd(ret, chromName, f);
     }
@@ -107,10 +104,7 @@ char *createString =
 
 struct dyString *dy = newDyString(1024);
 
-strcpy(tableName, "chr");
-strcat(tableName, chromName);
-strcat(tableName, "_snpTmp");
-
+safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
 dyStringPrintf(dy, createString, tableName);
 sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
@@ -125,13 +119,8 @@ FILE *f;
 struct sqlConnection *conn = hAllocConn();
 char tableName[64], fileName[64];
 
-strcpy(tableName, "chr");
-strcat(tableName, chromName);
-strcat(tableName, "_snpTmp");
-
-strcpy(fileName, "chr");
-strcat(fileName, chromName);
-strcat(fileName, "_snpTmp.tab");
+safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
+safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
 
 f = mustOpen(fileName, "r");
 hgLoadTabFile(conn, ".", tableName, &f);

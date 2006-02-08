@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.12 2006/02/08 22:47:35 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.13 2006/02/08 23:49:16 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -197,11 +197,8 @@ int end = 0;
 int size = 0;
 char newEndString[64];
 
-strcpy(tableName, "chr");
-strcat(tableName, chromName);
-strcat(tableName, "_snpTmp");
-strcpy(fileName, tableName);
-strcat(fileName, ".tab");
+safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
+safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
 
 tabFileHandle = mustOpen(fileName, "w");
 safef(query, sizeof(query), "select snp_id, chromStart, chromEnd, loc_type, orientation, allele from %s ", tableName);
@@ -274,9 +271,8 @@ void cleanDatabaseTable(char *chromName)
 {
 struct sqlConnection *conn = hAllocConn();
 char query[256];
-strcpy(query, "delete from chr");
-strcat(query, chromName);
-strcat(query, "_snpTmp");
+
+safef(query, ArraySize(query), "delete from chr%s_snpTmp", chromName);
 sqlUpdate(conn, query);
 hFreeConn(&conn);
 }
@@ -289,13 +285,8 @@ FILE *f;
 struct sqlConnection *conn = hAllocConn();
 char tableName[64], fileName[64];
 
-strcpy(tableName, "chr");
-strcat(tableName, chromName);
-strcat(tableName, "_snpTmp");
-
-strcpy(fileName, "chr");
-strcat(fileName, chromName);
-strcat(fileName, "_snpTmp.tab");
+safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
+safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
 
 f = mustOpen(fileName, "r");
 /* hgLoadTabFile closes the file handle */
