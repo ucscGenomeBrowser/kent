@@ -13,12 +13,17 @@
 #include "common.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: binRange.c,v 1.14 2005/04/10 14:41:20 markd Exp $";
+static char const rcsid[] = "$Id: binRange.c,v 1.15 2006/02/09 22:28:38 hiram Exp $";
+
+/* add one new level to get coverage past chrom sizes of 512 Mb
+ *	effective limit is now the size of an integer since chrom start
+ *	and end coordinates are always being used in int's == 2Gb-1 */
+static int extendedBinOffsets[] =
+	{4096+512+64+8+1, 512+64+8+1, 64+8+1, 8+1, 1, 0};
 
 static int binOffsets[] = {512+64+8+1, 64+8+1, 8+1, 1, 0};
 #define _binFirstShift 17	/* How much to shift to get to finest bin. */
 #define _binNextShift 3		/* How much to shift to get to next larger bin. */
-
 
 
 int binLevels()
@@ -46,7 +51,7 @@ assert(level >= 0 && level < ArraySize(binOffsets));
 return binOffsets[level];
 }
 
-int binFromRange(int start, int end)
+static int standardBinFromRange(int start, int end)
 /* Given start,end in chromosome coordinates assign it
  * a bin.   There's a bin for each 128k segment, for each
  * 1M segment, for each 8M segment, for each 64M segment,
@@ -67,6 +72,38 @@ errAbort("start %d, end %d out of range in findBin (max is 512M)", start, end);
 return 0;
 }
 
+static int extendedBinFromRange(int start, int end)
+/* Given start,end in chromosome coordinates assign it
+ * a bin.   There's a bin for each 128k segment, for each
+ * 1M segment, for each 8M segment, for each 64M segment,
+ * for each 512M segment, and one top level bin for 4Gb.
+ *	Note, since start and end are int's, the practical limit
+ *	is up to 2Gb-1, and thus, only four result bins on the second
+ *	level.
+ * A range goes into the smallest bin it will fit in. */
+{
+int startBin = start, endBin = end-1, i;
+startBin >>= _binFirstShift;
+endBin >>= _binFirstShift;
+for (i=0; i<ArraySize(extendedBinOffsets); ++i)
+    {
+    if (startBin == endBin)
+	return 4681 + extendedBinOffsets[i] + startBin;
+    startBin >>= _binNextShift;
+    endBin >>= _binNextShift;
+    }
+errAbort("start %d, end %d out of range in findBin (max is 2Gb)", start, end);
+return 0;
+}
+
+int binFromRange(int start, int end)
+/* return bin that this start-end segment is in */
+{
+if (end < 1+(512*1024*1024))
+    return standardBinFromRange(start, end);
+else
+    return extendedBinFromRange(start, end);
+}
 
 struct binKeeper *binKeeperNew(int minPos, int maxPos)
 /* Create new binKeeper that can cover range. */
