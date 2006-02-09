@@ -1362,6 +1362,81 @@ SEQ2_LEN=$BASE/S2.len
     cp -p /cluster/data/rn3/bed/blastz.rn3/axtChrom/*.axt.gz .
 	
 
+# CHAIN SELF BLASTZ (DONE 2/28/05 angie)
+    ssh kki
+    mkdir -p /cluster/data/rn3/bed/blastz.rn3/axtChain/run1
+    cd /cluster/data/rn3/bed/blastz.rn3/axtChain/run1
+    mkdir out chain
+
+    ls -1S /cluster/data/rn3/bed/blastz.rn3/axtChrom/*.axt.gz > input.lst
+    cat << '_EOF_' > gsub
+#LOOP
+doChain {check in exists $(path1)} {check out line+ chain/$(root1).chain}
+#ENDLOOP
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+    cat << '_EOF_' > doChain
+#!/bin/csh -ef
+axtChain -verbose=0 $1 \
+    /iscratch/i/rn3/bothMaskedNibs /iscratch/i/rn3/bothMaskedNibs stdout \
+| chainAntiRepeat \
+    /iscratch/i/rn3/bothMaskedNibs /iscratch/i/rn3/bothMaskedNibs stdin $2
+'_EOF_'
+    # << this line makes emacs coloring happy
+    chmod a+x doChain
+    gensub2 input.lst single gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+    # Both chrUn and chr1 crashed with out-of-mem....
+#Completed: 42 of 44 jobs
+#Crashed: 2 jobs
+#Average job time:                 342s       5.70m     0.09h    0.00d
+#Longest job:                     1205s      20.08m     0.33h    0.01d
+#Submission to last job:          1205s      20.08m     0.33h    0.01d
+
+    # We can tolerate the lack of chrUn self chains, but not chr1.
+    # Try to split it in half around a large gap and chain halves, then merge.
+    # chr1's largest assembly gap is 664000bp [68333401, 68997401), 
+    # but that doesn't divide it very evenly in half (chr1 is 268Mbp).
+    # There is a 316000bp gap [129715113, 130031113), use that.
+    ssh kolossus
+    cd /cluster/data/rn3/bed/blastz.rn3/axtChain
+    axtFilter ../axtChrom/chr1.axt.gz -tStartMax=129873113 > chr1_1.axt
+    axtFilter ../axtChrom/chr1.axt.gz -tStartMin=129873113 > chr1_2.axt
+    # line count sanity check: original == total new:
+    zcat ../axtChrom/chr1.axt.gz | wc -l
+#21602304
+    wc -l chr1_?.axt
+#  11973760 chr1_1.axt
+#   9628544 chr1_2.axt
+#  21602304 total
+    # Chain the two halves independently, assuming no self chain would 
+    # span such a large gap:
+    axtChain -verbose=0 chr1_1.axt \
+      /iscratch/i/rn3/bothMaskedNibs /iscratch/i/rn3/bothMaskedNibs stdout \
+    | chainAntiRepeat \
+      /iscratch/i/rn3/bothMaskedNibs /iscratch/i/rn3/bothMaskedNibs stdin \
+      run1/chain/chr1_1.chain
+    axtChain -verbose=0 chr1_2.axt \
+      /iscratch/i/rn3/bothMaskedNibs /iscratch/i/rn3/bothMaskedNibs stdout \
+    | chainAntiRepeat \
+      /iscratch/i/rn3/bothMaskedNibs /iscratch/i/rn3/bothMaskedNibs stdin \
+      run1/chain/chr1_2.chain
+    rm chr1_1.axt chr1_2.axt
+
+    # Sort and split:
+    ssh kolossus
+    cd /cluster/data/rn3/bed/blastz.rn3/axtChain
+    chainMergeSort run1/chain/*.chain > all.chain
+    rm run1/chain/*
+    ssh eieio
+    cd /cluster/data/rn3/bed/blastz.rn3/axtChain
+    chainSplit chain all.chain
+# DONE TO HERE 2/28/05 angie
+ Looks like Brian filtered -minScore=20000 and netted, 10/19/05.
+
+
 # BLASTZ Human hg15 (IN PROGRESS 2003-07-20 kate) 
 
     # Extract lineage-specific repeats vs. human
@@ -2511,53 +2586,6 @@ AXTBEST
     set tbl="blastzBestHg15"
     cd $base/pslBest
     hgLoadPsl -noTNameIx hg15 chr*_${tbl}.psl
-
-                                                                                
-# LIFTING REPEATMASKER .ALIGN FILES (TODO)
-foreach f (~/rn3/?{,?}/chr?{,?}{,_random}.fa)
-
-ssh kkstore
-cd rn3
-foreach c (?{,?})
-  foreach d ($c/chr${c}_?{,?} $c/chr${c}_random_?{,?})
-    pushd . > /dev/null
-    set contig=$d:t
-    cd $d
-    echo $contig to $contig.fa.align
-    /cluster/bin/scripts/liftRMAlign.pl ${contig}.lft > ${contig}.fa.align
-    popd > /dev/null
-    end
-end
-#  There are some FYI warnings from the above script, but they
-#	are for contigs that RepeatMasker said there was nothing
-#	to work with in those contigs so it did not make an align file.
-
-foreach chr (?{,?})
-  cd $chr
-  echo making symbolic links for chr$chr .fa.align files
-  foreach ctg (chr${chr}_?{,?} chr${chr}_random_?{,?})
-    ln -s $ctg/$ctg.fa.align .
-  end
-  cd ..
-  if (-e $chr/lift/ordered.lft) then
-    echo making $chr/chr$chr.fa.align
-    ls -og $chr/lift/ordered.lft
-    /cluster/bin/scripts/liftRMAlign.pl $chr/lift/ordered.lft \
-      > $chr/chr$chr.fa.align
-  endif
-  if (-e $chr/lift/random.lft) then
-    echo making $chr/chr${chr}_random.fa.align
-    ls -og $chr/lift/random.lft
-    /cluster/bin/scripts/liftRMAlign.pl $chr/lift/random.lft \
-      > $chr/chr${chr}_random.fa.align
-  endif
-  echo removing symbolic links for chr$chr .fa.align files
-  cd $chr
-  foreach ctg (chr${chr}_?{,?} chr${chr}_random_?{,?})
-    echo rm $ctg/$ctg.fa.align
-  end
-  cd ..
-end
 
 
 # TBA ALIGNMENT - NON-MAMMAL SPECIES INCLUDED (Fugu & Chicken)  2003-10-20 kate
@@ -4338,6 +4366,19 @@ cat > makeMaf.csh << 'EOF'
 #44021003 bases of 2571104688 (1.712%) in intersection
     featureBits rn3 cpgIslandGgfAndyOnlyRMAlu.bed
 #68483127 bases of 2571104688 (2.664%) in intersection
+    # 1/26/05: Make better island names in cpgIslandGgfAndyMasked,
+    # for Dave Burt's cross-species island comparisons.
+    ssh eieio
+    cd /cluster/data/rn3/bed/cpgIslandGgfAndy
+    mv cpgIslandGgfAndyMasked.bed cpgIslandGgfAndyMasked.bed.orig
+    perl -wpe '@w=split("\t"); $w[3] = "rn3.$w[0]." . ($w[1]+1) . ".$w[2]"; \
+               $_ = join("\t", @w);' \
+      cpgIslandGgfAndyMasked.bed.orig \
+    > cpgIslandGgfAndyMasked.bed
+    ssh hgwdev
+    cd /cluster/data/rn3/bed/cpgIslandGgfAndy
+    hgLoadBed -noBin -tab -sqlTable=cpgIslandGgfAndyMasked.sql \
+      rn3 cpgIslandGgfAndyMasked cpgIslandGgfAndyMasked.bed
 
 
 ######## GENE SORTER BUILD #######  (DONE - 2004-06-01 - Fan)
@@ -4939,6 +4980,37 @@ mkdir -p $3:h
     cp -p Rattus_norvegicus.jpg /usr/local/apache/htdocs/images
     #	add links to this image in the description.html page, request push
 
+
+# MAKE RN3-HG17 OVER.CHAIN FOR LIFTOVER  (DONE 1/25/05 angie)
+    ssh kolossus
+    set chainDir = /cluster/data/rn3/bed/blastz.hg17/axtChain
+    mkdir -p /cluster/data/rn3/bed/bedOver
+    netChainSubset $chainDir/human.net $chainDir/all.chain \
+      /cluster/data/rn3/bed/bedOver/rn3ToHg17.over.chain
+    
+
+# MAKE RN3-MM5 OVER.CHAIN FOR LIFTOVER  (DONE 1/25/05 angie)
+    ssh kolossus
+    set chainDir = /cluster/data/rn3/bed/blastz.mm5/axtChain
+    mkdir -p /cluster/data/rn3/bed/bedOver
+    netChainSubset $chainDir/mouse.net $chainDir/all.chain \
+      /cluster/data/rn3/bed/bedOver/rn3ToMm5.over.chain
+    
+
+# MAKE LINEAGE-SPECIFIC REPEATS FOR CHICKEN (DONE 1/26/05/04 angie)
+    # In an email 2/13/04, Arian said we could treat all human repeats as 
+    # lineage-specific for human-chicken blastz.  Do the same for rat.  
+    # Scripts expect *.out.spec filenames, so set that up:
+    ssh kkr1u00
+    cd /cluster/data/rn3
+    mkdir /iscratch/i/rn3/linSpecRep.notInChicken
+    foreach f (/cluster/data/rn3/?{,?}/chr*.fa.out)
+      cp -p $f /iscratch/i/rn3/linSpecRep.notInChicken/$f:t:r:r.out.spec
+    end
+    iSync
+    # Use these the next time we run human-chicken blastz.
+
+
 # UPDATE kgSpAlias TABLE WITH NEW UNIPROT DISPLAY ID ENTRIES (done 2/11/05 Fan)
 # Add new rn3 protein display IDs to the alias table to support user search
     
@@ -5027,6 +5099,65 @@ mkdir -p $3:h
     hgsql rn3 < ~/src/hg/lib/geneNetworkId.sql
     hgsql rn3 -e 'load data local infile "rn3.geneNetworkId.tab" into table geneNetworkId'
 
+
+# EXTRACT LINEAGE-SPECIFIC REPEATS FOR DOG (DONE 8/12/05 angie)
+    ssh kolossus
+    cd /panasas/store/rn3/rmsk
+    # Run Arian's DateRepsinRMoutput.pl to add extra columns telling 
+    # whether repeats in -query are also expected in -comp species.  
+    foreach outfl ( *.out )
+        echo "$outfl"
+        /cluster/bluearc/RepeatMasker/DateRepeats \
+          ${outfl} -query rat -comp dog
+    end
+    # Now extract dog (extra column 1):
+    cd ..
+    mkdir linSpecRep.notInDog
+    foreach f (rmsk/*.out_canis-familiaris)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractRepeats 1 $f > \
+		linSpecRep.notInDog/$base.out.spec
+    end
+    # Clean up.
+    rm rmsk/*.out_canis*
+
+
+# BLASTZ/CHAIN/NET CANFAM2 (DONE 8/15/05 angie)
+    ssh kkstore01
+    mkdir /cluster/data/rn3/bed/blastz.canFam2.2005-08-12
+    cd /cluster/data/rn3/bed/blastz.canFam2.2005-08-12
+    cat << '_EOF_' > DEF
+# rat vs. dog
+# TARGET: Rat
+SEQ1_DIR=/panasas/store/rn3/nib
+SEQ1_RMSK=/panasas/store/rn3/rmsk
+SEQ1_SMSK=/panasas/store/rn3/linSpecRep.notInDog
+SEQ1_LEN=/cluster/data/rn3/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Dog
+SEQ2_DIR=/scratch/hg/canFam2/nib
+#SEQ2_DIR=/iscratch/i/canFam2/nib
+SEQ2_RMSK=/panasas/store/canFam2/rmsk
+SEQ2_SMSK=/panasas/store/canFam2/linSpecRep.notInRat
+SEQ2_LEN=/cluster/data/canFam2/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn3/bed/blastz.canFam2.2005-08-12
+'_EOF_'
+    # << for emacs
+    doBlastzChainNet.pl DEF \
+      -blastzOutRoot /panasas/store/blastzRn3CanFam2Out >& do.log &
+    # Bummer -- small cluster can't see /scratch/hg/canFam2 so edit 
+    # DEF to use SEQ2_DIR=/iscratch/i/canFam2/nib, then continue:
+    doBlastzChainNet.pl DEF -continue=chainRun \
+      >>& do.log &
+    ln -s blastz.canFam2.2005-08-12 /cluster/data/rn3/bed/blastz.canFam2 
+
+
 # MYTOUCH FIX - jen - 2006-01-24
   sudo mytouch rn3 geneidPep 0404031400.00
   sudo mytouch rn3 twinscanPep 0404021800.00
@@ -5035,4 +5166,62 @@ mkdir -p $3:h
   sudo mytouch rn3 ensPep 0404301100.00
   sudo mytouch rn3 ensTranscript 0404301100.00
   sudo mytouch rn3 superfamily 0404301300.00
+
+
+# LIFTOVER TO RN4 (DONE 2/9/06 angie)
+    ssh kkr1u00
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh \
+      rn4 /cluster/data/rn4/nib
+    # Do what its output says to do next:
+    ssh kk (or kk9)
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh \
+      rn3 /iscratch/i/rn3/bothMaskedNibs rn4 /iscratch/i/rn4/split10k \
+      /scratch/hg/h/rat11.ooc
+    # Do what its output says to do next:
+    cd /cluster/data/rn3/bed/blat.rn4.2006-02-07/run
+    para make spec
+    para time
+#Completed: 1980 of 1980 jobs
+#CPU time in finished jobs:    4111620s   68526.99m  1142.12h   47.59d  0.130 y
+#IO & Wait Time:                 32154s     535.91m     8.93h    0.37d  0.001 y
+#Average job time:                2093s      34.88m     0.58h    0.02d
+#Longest finished job:           24496s     408.27m     6.80h    0.28d
+#Submission to last job:         24496s     408.27m     6.80h    0.28d
+
+    ssh eieio
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh rn3 rn4 \
+      /iscratch/i/rn4/split10k
+    # Do what its output says to do next:
+    ssh kki
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh \
+     rn3 /iscratch/i/rn3/bothMaskedNibs rn4 /cluster/bluearc/scratch/hg/rn4/nib
+    # Do what its output says to do next:
+    cd /cluster/data/rn3/bed/blat.rn4.2006-02-07/chainRun
+    para make spec
+#Completed: 45 of 45 jobs
+#CPU time in finished jobs:       6512s     108.53m     1.81h    0.08d  0.000 y
+#IO & Wait Time:                  3369s      56.15m     0.94h    0.04d  0.000 y
+#Average job time:                 220s       3.66m     0.06h    0.00d
+#Longest finished job:             919s      15.32m     0.26h    0.01d
+#Submission to last job:         14449s     240.82m     4.01h    0.17d
+    ssh eieio
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-net.csh rn3 rn4
+    # Do what its output says to do next:
+    ssh hgwdev
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-load.csh rn3 rn4
+    # Hmmm.. the scripts should be updated to follow the new convention 
+    # for placement of files, but I didn't realize that until this was 
+    # done.  We use bed/liftOver/ now instead of bed/bedOver; the files 
+    # should be compressed everywhere;  and goldenPath should have a 
+    # link not a real file.  This was sufficient for now, though:
+    # on eieio (this should be worked into the previous scripts):
+    rm /cluster/data/rn3/bed/bedOver/rn3ToRn4.over.chain
+    nice gzip /cluster/data/rn3/bed/blat.rn4.2006-02-07/rn3ToRn4.over.chain
+    # on hgwdev (this should be worked into -load):
+    rm /gbdb/rn3/liftOver/rn3ToRn4.over.chain
+    ln -s /cluster/data/rn3/bed/blat.rn4.2006-02-07/rn3ToRn4.over.chain.gz \
+      /gbdb/rn3/liftOver/
+    hgAddLiftOverChain rn3 rn4 hgcentraltest \
+      /gbdb/rn3/liftOver/rn3ToRn4.over.chain.gz
+
 
