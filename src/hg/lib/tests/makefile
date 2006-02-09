@@ -14,7 +14,7 @@ test: spDbTest hdbTest genePredTest pslReaderTest
 	echo tested all
 
 mkdirs:
-	${MKDIR} output ${BIN_DIR}
+	@${MKDIR} output ${BIN_DIR}
 
 spDbTest: spDbTest.o ${MYLIBS} mkdirs
 	${CC} ${COPT} -o ${BIN_DIR}/spDbTest spDbTest.o ${MYLIBS} $L
@@ -33,11 +33,18 @@ genePredTest: ${BIN_DIR}/genePredTester mkdirs
 pslReaderTest: ${BIN_DIR}/pslReaderTester mkdirs
 	${MAKE} -f pslReaderTests.mk test
 
+binTest: mkdirs ${BIN_DIR}/binTest
+	@./binTest.sh
+
 ${BIN_DIR}/genePredTester: genePredTester.o ${MYLIBS}
 	@${MKDIR} ${BIN_DIR}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 
 ${BIN_DIR}/pslReaderTester: pslReaderTester.o ${MYLIBS}
+	@${MKDIR} ${BIN_DIR}
+	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
+
+${BIN_DIR}/binTest: binTest.o ${MYLIBS}
 	@${MKDIR} ${BIN_DIR}
 	${CC} ${COPT} ${CFLAGS} -o $@ $< ${MYLIBS} ${L}
 
