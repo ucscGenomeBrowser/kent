@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.10 2006/02/08 23:54:12 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.11 2006/02/09 23:57:24 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -87,8 +87,8 @@ int getChromEnd(char *chromName, char *snpId, char *locTypeString, char *chromSt
 /* rangeString is not provided for locType 4,5,6 */
 /* calculate here, but return 0 (defer calculation) if allele needs to be expanded */
 {
-int locTypeInt = atoi(locTypeString);
-int chromStart = atoi(chromStartString);
+int locTypeInt = sqlUnsigned(locTypeString);
+int chromStart = sqlUnsigned(chromStartString);
 int alleleSize = strlen(allele);
 int chromEnd = 0;
 char *tmpString;
@@ -104,7 +104,7 @@ if (locTypeInt == 1)
         return (-1);
 	}
     tmpString = tmpString + 2;
-    chromEnd = atoi(tmpString);
+    chromEnd = sqlUnsigned(tmpString);
     if (chromEnd <= chromStart) 
         {
 	fprintf(errorFileHandle, "Chrom end <= chrom start for range\n");
@@ -128,7 +128,7 @@ if (locTypeInt == 1)
 /* exact */
 if (locTypeInt == 2)
     {
-    chromEnd = atoi(rangeString);
+    chromEnd = sqlUnsigned(rangeString);
     if (chromEnd != chromStart + 1) 
         {
 	fprintf(errorFileHandle, "Wrong size for exact\n");
@@ -169,6 +169,7 @@ char tableName[64];
 char fileName[64];
 FILE *f;
 int chromEnd = 0;
+int chromStart = 0;
 int skipCount = 0;
 
 safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
@@ -196,6 +197,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	continue;
 	}
 
+    if (sameString(row[1], "1"))
+        {
+	chromStart = sqlUnsigned(row[2]);
+	chromStart++;
+	chromEnd++;
+        fprintf(f, "%s\t%d\t%d\t%s\t%s\t%s\n", 
+               row[0], chromStart, chromEnd, row[1], row[4], row[5]);
+	continue;
+	}
     fprintf(f, "%s\t%s\t%d\t%s\t%s\t%s\n", 
                row[0], row[2], chromEnd, row[1], row[4], row[5]);
 
