@@ -1,9 +1,10 @@
-track ctgPos2
+track ctgPos
 shortLabel Contigs
 longLabel Assembly Contigs
 group map
-priority 12
+priority 9
 visibility hide
+color 150,0,0
 
 track gap
 shortLabel Gap
