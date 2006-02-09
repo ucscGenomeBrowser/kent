@@ -52,11 +52,11 @@ while (!bothDone)
     {
     if (doingAlias)
 	{
-    	sprintf(query2,"select symbol, aliases from %s.hugo;", proteinDB);
+    	sprintf(query2,"select symbol, aliases from %s.hgnc;", proteinDB);
 	}
     else
 	{
-        sprintf(query2,"select symbol, withdraws from %s.hugo;", proteinDB);
+        sprintf(query2,"select symbol, prvSymbols from %s.hgnc;", proteinDB);
     	}
     
     sr2 = sqlMustGetResult(conn2, query2);
@@ -119,12 +119,13 @@ while (!bothDone)
 fclose(o1);
 fclose(o2);
 
-// geneAlias.tab has 3 columns, the 2nd is HUGO.symbol 
-// and 3rd contains aliases and withdraws 
+/* geneAlias.tab has 3 columns, the 2nd is HUGO.symbol 
+   and 3rd contains aliases and withdraws */
+
 system("cat  j.dat|sort|uniq  >geneAlias.tab");
 
-// kgAliasM.tab has 2 columns, all entries from HUGO.symbol, HUGO.aliass, 
-// and HUGO.withdraws are listed in the 2nd column.
+/*  kgAliasM.tab has 2 columns, all entries from HUGO.symbol, HUGO.aliass, 
+    and HUGO.withdraws are listed in the 2nd column. */
 system("cat jj.dat|sort|uniq  >kgAliasM.tab");
 system("rm j.dat");
 system("rm jj.dat");
