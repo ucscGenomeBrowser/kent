@@ -80,13 +80,9 @@ mv v1.edit4.chrome.scfs.agp.corr v1.edit4.chrome.scfs.corr.agp
   grep ">" *.qv > id.qual
   diff id.fa id.qual
 
-# change numeric contigs to have a prefix
+# change chromosomes to lower case
 
-
- cat v1.edit4.chrome.scfs.corr.agp | sed -e 's/109921/contig/' |sed 's/W      109921/W        contig/' |  sed -e 's/10995/contih/' | sed 's/W      10995/W        contih/' > v1.edit4.fix.agp 
- sed -e 's/109921/contig/g' rheMac2.scf.fa  |  sed -e 's/10995/contih/g' > rheMac2.scf.fix.fa &
- sed -e 's/109921/contig/g' v1.edit3.noContam.ctg.qv |  sed -e 's/10995/contih/g' >v1.edit3.noContam.ctg.fix.qv &
-
+sed -e 's/Chr/chr/' v1.edit4.chrome.ctgs.agp.final > v1.edit4.chrome.ctgs.final.fix2.agp
 cat v1.edit4.chrome.scfs.agp.final |sed -e 's/Chr/chr/' > v1.edit4.final.fix2.agp
 hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.agp
 
@@ -132,14 +128,20 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   # add rows to hgcentraltest on hgwbeta in dbDb and defaultDb
   # set orderKey past dog, before chimp
 
-# CREATE GAP TABLE
+# LOAD GAP & GOLD TABLES FROM AGP 
+    ssh hgwdev
+    hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.chrome.scfs.final.fix.agp
+
+
+# CREATE GAP TABLE  from v1.edit4.chrome.ctgs.final.fix.agp to get gaps
 
   ssh hgwdev
   cd kent/src/hg/lib
   # remove bin column for now
   hgsql rheMac2 < gap2.sql
-  cd /cluster/data/rheMac2/downloads/contigs
-  grep clone v1.edit4.final.fix.agp > fragment.txt
+  cd /cluster/data/rheMac2/downloads
+  grep fragment v1.edit4.chrome.ctgs.final.fix.agp > fragment.txt
+  grep clone v1.edit4.chrome.ctgs.final.fix.agp >> fragment.txt 
   hgsql rheMac2
   load data local infile 'fragment.txt' into table gap
   # create trackDb/monkey/rheMac2/gap.html
@@ -149,21 +151,22 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   ssh hgwdev
   cd kent/src/hg/lib
   # this doesn't include strand or contig start/end
-  hgsql rheMac2 < ctgPos2.sql
+  hgsql rheMac2 < ctgPos.sql
   cd /cluster/data/rheMac2/downloads
-  grep -v clone v1.edit4.final.fix.agp > Contig.out
+  grep -v clone v1.edit4.chrome.ctgs.final.fix.agp |grep -v fragment > Contig.out
+
   ssh kkstore02
   cd /cluster/data/rheMac2/downloads
-  getContig.pl < Contig.out > ctgPos2
+  getContig.pl < Contig.out > ctgPos
   ssh hgwdev
-  load data local infile 'ctgPos2' into table ctgPos2
+  load data local infile 'ctgPos' into table ctgPos
 
 # CREATE CHROMINFO TABLE 
 # an improvement here would be to have getMaxCoord output the 2bit file name
   ssh hgwdev
   cd /cluster/data/rheMac2
   # get coordinates from agp and put in database table
-  getcoords.pl < downloads/contigs/v1.fix.agp > scaffolds.coords
+  getcoords.pl < downloads/v1.edit4.chrome.scfs.agp.final> scaffolds.coords
   hgsql rheMac2 < /cluster/data/bosTau1/coords.sql
   load data local infile 'scaffolds.coords' into table scaffoldCoords
   faSize rheMac2.fa -detailed=on > chrom.sizes
@@ -177,9 +180,6 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
    load data local infile 'chrom.sizes' into table chromInfo
    update chromInfo set fileName = "/gbdb/rheMac2/rheMac2.2bit"
 
-# LOAD GAP & GOLD TABLES FROM AGP 
-    ssh hgwdev
-    hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix.agp
 
 # REPEATMASKER 
 # using the split scaffold fa files generated earlier
