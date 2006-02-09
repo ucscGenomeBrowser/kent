@@ -72,3 +72,12 @@ spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
 
+track xenoRefGene
+shortLabel Other RefSeq
+longLabel Non-$Organism RefSeq Genes
+group genes
+priority 35.1
+visibility pack
+color 12,12,120
+type genePred xenoRefPep xenoRefMrna
+
