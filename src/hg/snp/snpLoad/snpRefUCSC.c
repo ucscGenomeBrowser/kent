@@ -15,7 +15,7 @@
 
 #define MAX_SNP_SIZE 1024
 
-static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.1 2006/02/09 22:51:29 heather Exp $";
+static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.2 2006/02/09 23:24:21 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -102,11 +102,11 @@ int count = 0;
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 if (!hTableExists(tableName)) return;
-verbose(1, "tableName = %s\n", tableName);
+verbose(3, "tableName = %s\n", tableName);
 safef(fileName, ArraySize(fileName), "%s_snpTmp.tab", chromName);
-verbose(1, "fileName = %s\n", fileName);
+verbose(3, "fileName = %s\n", fileName);
 chromSize = getChromSize(chromName);
-verbose(1, "chromSize = %d\n", chromSize);
+verbose(3, "chromSize = %d\n", chromSize);
 
 f = mustOpen(fileName, "w");
 hNibForChrom(chromName, nibName);
