@@ -20,4 +20,10 @@ priority 86
 name ensembl
 url http://www.ensembl.org/Rattus_norvegicus/geneview?transcript=%s
 
+name geneNetwork
+shortLabel GeneNetwork
+tables geneNetworkId
+idSql select Id from geneNetworkId, knownToRefSeq where Id = value and name='%s'
+url http://www.genenetwork.org/cgi-bin/WebQTL.py?cmd=sch&refseq=%s&species=rat
+priority 140
 
