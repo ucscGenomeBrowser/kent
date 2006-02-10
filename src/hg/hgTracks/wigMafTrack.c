@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.91 2006/02/10 03:57:33 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.92 2006/02/10 16:18:32 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -440,14 +440,17 @@ track->customPt = (char *)-1;   /* no maf's loaded or attempted to load */
 /* Load up mafs and store in track so drawer doesn't have
  * to do it again. */
 /* Make up tracks for display. */
-if (isBaseLevel)
+if (track->visibility == tvFull || track->visibility == tvPack)
     {
-    miList = loadBaseByBaseItems(track);
-    }
-/* zoomed out */
-else if (track->visibility == tvFull || track->visibility == tvPack)
-    {
-    miList = loadPairwiseItems(track);
+    if (isBaseLevel)
+	{
+	miList = loadBaseByBaseItems(track);
+	}
+    /* zoomed out */
+    else 
+	{
+	miList = loadPairwiseItems(track);
+	}
     }
 else if (track->visibility == tvSquish)
     {
@@ -1979,19 +1982,19 @@ static void wigMafDraw(struct track *track, int seqStart, int seqEnd,
 int y = yOff;
 y = wigMafDrawScoreGraph(track, seqStart, seqEnd, vg, xOff, y, width,
                                 font, color, vis);
-if (zoomedToBaseLevel)
+if (vis == tvFull || vis == tvPack)
     {
-    struct wigMafItem *wiList = track->items;
-    if (track->subtracks != NULL)
-        wiList = wiList->next;
-    y = wigMafDrawBases(track, seqStart, seqEnd, vg, xOff, y, width, font,
-                                color, vis, wiList);
-    }
-else 
-    {
-    if (vis == tvFull || vis == tvPack)
-        wigMafDrawPairwise(track, seqStart, seqEnd, vg, xOff, y, 
-                                width, font, color, vis);
+    if (zoomedToBaseLevel)
+	{
+	struct wigMafItem *wiList = track->items;
+	if (track->subtracks != NULL)
+	    wiList = wiList->next;
+	y = wigMafDrawBases(track, seqStart, seqEnd, vg, xOff, y, width, font,
+				    color, vis, wiList);
+	}
+    else 
+	wigMafDrawPairwise(track, seqStart, seqEnd, vg, xOff, y, 
+				width, font, color, vis);
     }
 mapBoxHc(seqStart, seqEnd, xOff, yOff, width, track->height, track->mapName, 
             track->mapName, NULL);
