@@ -289,6 +289,12 @@ static void coerceToLong(struct pfCompile *pfc, struct pfParse **pPp)
 coerceToBaseType(pfc, pfc->longType, pPp);
 }
 
+static void coerceToDouble(struct pfCompile *pfc, struct pfParse **pPp)
+/* Make sure type of pp is double. */
+{
+coerceToBaseType(pfc, pfc->doubleType, pPp);
+}
+
 
 
 boolean pfTypesAllSame(struct pfType *aList, struct pfType *bList)
@@ -964,7 +970,7 @@ switch (type->type)
 	    {
 	    if (type->ty->base != pfc->arrayType)
 	        errAt(type->children->tok, "[ illegal here except for arrays");
-	    coerceOne(pfc, &type->children, pfc->intFullType, FALSE);
+	    coerceOne(pfc, &type->children, pfc->longFullType, FALSE);
 	    }
         break;
     default:
@@ -1621,8 +1627,12 @@ switch (pp->type)
 	coerceBinaryOp(pfc, pp, TRUE, TRUE, FALSE, FALSE);
 	pp->ty = pfTypeNew(pfc->bitType);
 	break;
-    case pptMul:
     case pptDiv:
+	coerceToDouble(pfc, &pp->children);
+	coerceToDouble(pfc, &pp->children->next);
+        coerceBinaryOp(pfc, pp, TRUE, FALSE, FALSE, FALSE);
+        break;
+    case pptMul:
     case pptMinus:
         coerceBinaryOp(pfc, pp, TRUE, FALSE, FALSE, FALSE);
 	if (!isNumerical(pfc, pp))

@@ -1315,32 +1315,85 @@ errAt(pp->tok, "Don't know how to deal with this parameterized type (code %d)",
 	code);
 }
 
-static void codeParameterizedType(struct pfCompile *pfc, FILE *f, struct pfParse *varInit,
-	struct pfParse *type, boolean isInitialized, int stack)
-/* Deal with things like array[10] of ... */
+static boolean isArraysOnAcross(struct pfCompile *pfc, struct pfParse *ppOf)
+/* Chase children of a pptOf node.  If these are all pptTypeNames,
+ * and all but the last is base type array, then return TRUE. */
 {
-boolean gotOne = FALSE;
-if (type->type != pptOf)
-    cantCopeParamType(type, 1);
-for (type = type->children; type != NULL; type = type->next)
+struct pfParse *type;
+for (type = ppOf->children; type != NULL; type = type->next)
     {
-    if (type->children != NULL)
-	{
-	if (isInitialized)
-	    errAt(type->tok, "Sorry right now you can't both dimension an array and initialize it.");
-	if (type->type != pptTypeName)
-	    cantCopeParamType(type, 2);
-	if (type->ty->base != pfc->arrayType)
-	    cantCopeParamType(type, 3);
-	if (gotOne)
-	    errAt(type->tok, "Sorry right now you can only parameterize simple arrays");
-	gotOne = TRUE;
-	codeExpression(pfc, f, type->children, stack, FALSE);
-	fprintf(f, "%s[%d].Array = ", stackName, stack);
-	fprintf(f, "_pf_dim_array(%s[%d].Int, ", stackName, stack);
-	codeForType(pfc, f, type->next->ty);
-	fprintf(f, ");\n");
-	lvalOffStack(pfc, f, varInit, stack, "=", 1, FALSE);
+    if (type->next == NULL)
+	break;
+    if (type->ty->base != pfc->arrayType)
+        return FALSE;
+    }
+return TRUE;
+}
+
+static boolean checkIfNeedsDims(struct pfCompile *pfc, struct pfParse *type)
+/* Return TRUE if it looks like we need to generate initialzation code 
+ * for an array even if it isn't assigned anything. */
+{
+if (type->children == NULL)
+    return FALSE;
+if (type->type != pptOf)
+    internalErr();
+if (type->children->children == NULL)
+    return FALSE;
+if (!isArraysOnAcross(pfc, type))
+    errAt(type->tok, "Sorry right now you can only parameterize arrays");
+return TRUE;
+}
+
+
+static void codeCheckDims(struct pfCompile *pfc, FILE *f,
+        struct pfParse *lval, struct pfParse *rval, int stack)
+/* Generate code that checks that the dimensions of the array
+ * in the tuple is the same as the dimensions of the arrayas
+ * declared. */
+{
+uglyf("Theoretically doing codeCheckDims.\n");
+}
+
+void codeInitDims(struct pfCompile *pfc, FILE *f, struct pfParse *pp, int stack)
+/* Generate code that creates an array that is initialized to
+ * zero (as opposed to the empty array). */
+{
+struct pfParse *ppOf = pp->children;
+struct pfParse *sym = ppOf->next;
+int dimCount = slCount(ppOf->children) - 1;
+if (dimCount == 1)
+    {
+    struct pfParse *type = ppOf->children;
+    codeExpression(pfc, f, type->children, stack, FALSE);
+    fprintf(f, "%s[%d].Array = ", stackName, stack);
+    fprintf(f, "_pf_dim_array(%s[%d].Long, ", stackName, stack);
+    codeForType(pfc, f, type->next->ty);
+    fprintf(f, ");\n");
+    lvalOffStack(pfc, f, pp, stack, "=", 1, FALSE);
+    }
+else
+    {
+    int offset = 0;
+    int inittedDims = 0;
+    struct pfParse *type;
+    for (type = ppOf->children; type != NULL; type = type->next)
+        {
+	if (type->next == NULL || type->children == NULL)
+	    {
+	    /* Final type - contains type of array cell.  Here we output call. */
+	    fprintf(f, "%s[%d].Array = ", stackName, stack);
+	    fprintf(f, "_pf_multi_dim_array(%s+%d, %d, ", 
+	    	stackName, stack, inittedDims);
+	    codeForType(pfc, f, ppOf->ty);
+	    fprintf(f, ");\n");
+	    lvalOffStack(pfc, f, pp, stack, "=", 1, FALSE);
+	    }
+	else
+	    {
+	    offset += codeExpression(pfc, f, type->children, stack+offset, FALSE);
+	    inittedDims += 1;
+	    }
 	}
     }
 }
@@ -1353,13 +1406,16 @@ struct pfParse *lval = pp;
 struct pfParse *type = pp->children;
 struct pfParse *name = type->next;
 struct pfParse *rval = name->next;
-if (type->children != NULL)
-    codeParameterizedType(pfc, f, lval, type, rval != NULL, stack);
+boolean gotDims = checkIfNeedsDims(pfc, type);
 if (rval != NULL)
     {
     int count = codeInitOrAssign(pfc, f, lval, rval, stack);
     lvalOffStack(pfc, f, lval, stack, "=", count, FALSE);
+    if (gotDims)
+	codeCheckDims(pfc, f, lval, rval, stack);
     }
+else if (gotDims)
+    codeInitDims(pfc, f, pp, stack);
 }
 
 static int codeAssignment(struct pfCompile *pfc, FILE *f,

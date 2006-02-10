@@ -1,4 +1,4 @@
-("five" to 5,"four" to 4,"one" to 1,"three" to 3,"two" to 2)
-("five" to 5,"one" to 1,"three" to 3)
-("A" to "a","B" to "ab","C" to "abc","D" to "abcd","E" to "abcde","F" to "abcdef")
-("A" to "a","C" to "abc","E" to "abcde")
+("five":5,"four":4,"one":1,"three":3,"two":2)
+("five":5,"one":1,"three":3)
+("A":"a","B":"ab","C":"abc","D":"abcd","E":"abcde","F":"abcdef")
+("A":"a","C":"abc","E":"abcde")

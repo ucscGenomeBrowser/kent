@@ -249,7 +249,7 @@ case (errCode)
     default: message = "Error code #" + errCode;
     }
 if (message)
-    die(message);
+    punt(message);
 
 Only a single statement is allowed after each label.
 A comma-separated list of labels can share the same

@@ -230,7 +230,7 @@ array->elType = elType;
 return array;
 }
 
-_pf_Array _pf_dim_array(int size, int elTypeId)
+_pf_Array _pf_dim_array(long size, int elTypeId)
 /* Return array of given type and size, initialized to zeroes. */
 {
 struct _pf_type *elType = _pf_type_table[elTypeId];
@@ -239,6 +239,34 @@ char *elements = NULL;
 if (size > 0)
     elements = needLargeZeroedMem(elSize*size);
 return array_of_type(size, size, elType, elSize, elements);
+}
+
+static _pf_Array rMultiDimArray(_pf_Stack *stack, int dimCount, 
+	struct _pf_type *type)
+/* Return multidimensional array initialized to zero, recursively
+ * constructed if need be. */
+{
+_pf_Array a;
+struct _pf_type *elType = type->children;
+long elCount = stack[0].Long;
+a = _pf_dim_array(elCount,  elType->typeId);
+if (dimCount > 1)
+    {
+    long i;
+    _pf_Array *elements = (_pf_Array *)a->elements;
+    for (i=0; i<elCount; ++i)
+	elements[i] = rMultiDimArray(stack+1, dimCount-1, type->children);
+    }
+return a;
+}
+
+
+_pf_Array _pf_multi_dim_array(_pf_Stack *stack, int dimCount,
+    int typeId)
+/* Return multi-dimensional array where individual dimensions are on stack */
+{
+struct _pf_type *type = _pf_type_table[typeId];
+return rMultiDimArray(stack, dimCount, type);
 }
 
 void _pf_array_append(_pf_Array array, void *elBuf)

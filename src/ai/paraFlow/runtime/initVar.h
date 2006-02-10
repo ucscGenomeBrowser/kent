@@ -29,8 +29,12 @@ void _pf_class_cleanup(struct _pf_object *obj, int typeId);
 void _pf_array_cleanup(struct _pf_array *array, int id);
 /* Clean up all elements of array, and then array itself. */
 
-_pf_Array _pf_dim_array(int size, int elTypeId);
+_pf_Array _pf_dim_array(long size, int elTypeId);
 /* Return array of given type and size, initialized to zeroes. */
+
+_pf_Array _pf_multi_dim_array(_pf_Stack *stack, int dimCount,
+    int typeId);
+/* Return multi-dimensional array where individual dimensions are on stack */
 
 void _pf_array_append(_pf_Array array, void *elBuf);
 /* Append element to array.   elBuf points to first byte of element. */

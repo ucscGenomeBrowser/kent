@@ -92,6 +92,8 @@ test:
 	diff expected/stringAppend $O/stringAppend
 	paraFlow toInOut.pf > $O/toInOut
 	diff expected/toInOut $O/toInOut
+	paraFlow twoDee.pf > $O/twoDee
+	diff expected/twoDee $O/twoDee
 	paraFlow twoParam.pf > $O/twoParam
 	diff expected/twoParam $O/twoParam
 	paraFlow unitCircle.pf > $O/unitCircle
