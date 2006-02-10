@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.283 2006/02/10 00:58:27 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.284 2006/02/10 18:08:04 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2924,14 +2924,15 @@ return binFromRange(start, end);
 }
 
 static void hAddBinToQueryStandard(char *binField, int start, int end, 
-	struct dyString *query)
+	struct dyString *query, boolean selfContained)
 /* Add clause that will restrict to relevant bins to query. */
 {
 int bFirstShift = binFirstShift(), bNextShift = binNextShift();
 int startBin = (start>>bFirstShift), endBin = ((end-1)>>bFirstShift);
 int i, levels = binLevels();
 
-dyStringAppend(query, "(");
+if (selfContained)
+    dyStringAppend(query, "(");
 for (i=0; i<levels; ++i)
     {
     int offset = binOffset(i);
@@ -2945,8 +2946,11 @@ for (i=0; i<levels; ++i)
     startBin >>= bNextShift;
     endBin >>= bNextShift;
     }
-dyStringAppend(query, ")");
-dyStringAppend(query, " and ");
+if (selfContained)
+    {
+    dyStringPrintf(query, " or %s=%u )", binField, _binOffsetOldToExtended);
+    dyStringAppend(query, " and ");
+    }
 }
 
 static void hAddBinToQueryExtended(char *binField, int start, int end, 
@@ -2957,15 +2961,19 @@ int bFirstShift = binFirstShift(), bNextShift = binNextShift();
 int startBin = (start>>bFirstShift), endBin = ((end-1)>>bFirstShift);
 int i, levels = binLevelsExtended();
 
-if (start < BINRANGE_MAXEND_512M)
-    hAddBinToQueryStandard(binField, start, BINRANGE_MAXEND_512M, query);
-
 dyStringAppend(query, "(");
+
+if (start < BINRANGE_MAXEND_512M)
+    {
+    hAddBinToQueryStandard(binField, start, BINRANGE_MAXEND_512M, query, FALSE);
+    dyStringAppend(query, " or ");
+    }
+
 for (i=0; i<levels; ++i)
     {
     int offset = binOffsetExtended(i);
     if (i != 0)
-        dyStringAppend(query, " or ");
+	dyStringAppend(query, " or ");
     if (startBin == endBin)
         dyStringPrintf(query, "%s=%u", binField, startBin + offset);
     else
@@ -2982,8 +2990,8 @@ void hAddBinToQueryGeneral(char *binField, int start, int end,
 	struct dyString *query)
 /* Add clause that will restrict to relevant bins to query. */
 {
-if (end < BINRANGE_MAXEND_512M)
-    hAddBinToQueryStandard(binField, start, end, query);
+if (end <= BINRANGE_MAXEND_512M)
+    hAddBinToQueryStandard(binField, start, end, query, TRUE);
 else
     hAddBinToQueryExtended(binField, start, end, query);
 }
