@@ -13,7 +13,7 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
-#define BINRANGE_MAXEND_512M (1+(512*1024*1024))
+#define BINRANGE_MAXEND_512M (512*1024*1024)
 #define _binOffsetOldToExtended  4681
 
 int binLevelsExtended();
