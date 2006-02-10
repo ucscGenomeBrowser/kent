@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.90 2006/02/06 18:27:23 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.91 2006/02/10 03:57:33 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1750,7 +1750,7 @@ for(offset=startSub2*2; offset < winBaseCount + startSub2 * 2; offset++)
 	if (label->stringSize > haveRoomFor)
 	    {
 	    dyStringClear(label);
-	    dyStringPrintf(label, "%c",(insertCounts[offset] % 3) ? '*' : '+');
+	    dyStringPrintf(label, "%c",(insertCounts[offset] % 3) == 0 ? '*' : '+');
 	    }
 	vgTextCentered(vg, x1+x - (width/winBaseCount)/2, y, x2-x1, mi->height, 
 		getOrangeColor(), font, label->string);
