@@ -22,6 +22,7 @@ enum pfTokType
     pftInt,
     pftLong,
     pftFloat,
+    pftDotDotDot,	/* ... */
     pftPlusPlus,        /* ++ */
     pftMinusMinus,      /* -- */
     pftPlusEquals,      /* += */

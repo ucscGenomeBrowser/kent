@@ -280,9 +280,9 @@ if (!gotNil(f))
 		}
 	    dyStringClear(dy);
 	    scanDyString(f, dy);
-	    if (fread(toBuf, 1, 4, f) != 4)
+	    if (fread(toBuf, 1, 1, f) != 1)
 		runErr("Unexpected end of file");
-	    if (memcmp(toBuf, " to ", 4) != 0)
+	    if (memcmp(toBuf, ":", 1) != 0)
 		runErr("Expecting 'to'");
 	    switch (elBase->singleType)
 		{

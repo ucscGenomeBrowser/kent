@@ -379,56 +379,83 @@ static void startElInCollectionIteration(struct pfCompile *pfc, FILE *f,
 struct pfBaseType *base = collectionPp->ty->base;
 struct dyString *elName = varName(pfc, elPp->var);
 
-/* Get local copy of collection in new scope. */
-fprintf(f, "{\n");
-printType(pfc, f, collectionPp->ty->base);
-fprintf(f, " _pf_collection;\n");
-codeExpression(pfc, f, collectionPp, stack, FALSE);
-fprintf(f, "_pf_collection = ");
-codeParamAccess(pfc, f, collectionPp->ty->base, stack);
-fprintf(f, ";\n");
-
-/* Print element variable in a new scope. */
-fprintf(f, "{\n");
-codeScopeVars(pfc, f, scope, FALSE);
-if (base == pfc->arrayType)
+if (base == pfc->indexRangeType)
     {
-    struct pfBaseType *elBase = collectionPp->ty->children->base;
-    fprintf(f, "int _pf_offset;\n");
-    fprintf(f, "int _pf_elSize = _pf_collection->elSize;\n");
-    fprintf(f, "int _pf_endOffset = _pf_collection->size * _pf_elSize;\n");
-    if (reverse)	/* To help simulate parallelism, do it in reverse. */
-	fprintf(f, "for (_pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; _pf_offset -= _pf_elSize)\n");
-    else
-	fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize)\n");
+    struct pfParse *fromPp = collectionPp->children;
+    struct pfParse *toPp = fromPp->next;
     fprintf(f, "{\n");
-    fprintf(f, "%s = *((", elName->string);
-    printType(pfc, f, elBase);
-    fprintf(f, "*)(_pf_collection->elements + _pf_offset));\n");
-    }
-else if (base == pfc->stringType)
-    {
-    fprintf(f, "int _pf_offset;\n");
-    fprintf(f, "int _pf_endOffset = _pf_collection->size;\n");
-    if (reverse)	/* To help simulate parallelism, do it in reverse. */
-	fprintf(f, "for (_pf_offset=_pf_endOffset-1; _pf_offset>=0; _pf_offset -= 1)\n");
+    fprintf(f, "{\n");	/* Extra brace so compatible with other collections */
+    codeScopeVars(pfc, f, scope, FALSE);
+    fprintf(f, "long _pf_offset, _pf_endOffset;\n");
+    codeExpression(pfc, f, fromPp, stack, FALSE);
+    fprintf(f, "_pf_offset = ");
+    codeParamAccess(pfc, f, pfc->longType, stack);
+    fprintf(f, ";\n");
+    codeExpression(pfc, f, toPp, stack, FALSE);
+    fprintf(f, "_pf_endOffset = ");
+    codeParamAccess(pfc, f, pfc->longType, stack);
+    fprintf(f, ";\n");
+    if (reverse)
+        fprintf(f, "for (%s=_pf_endOffset-1; %s>=_pf_offset; --%s)\n",
+	    elName->string, elName->string, elName->string);
     else
-	fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += 1)\n");
-    fprintf(f, "{\n");
-    fprintf(f, "%s = _pf_collection->s[_pf_offset];\n", elName->string);
-    }
-else if (base == pfc->dirType)
-    {
-    fprintf(f, "char *_pf_key;\n");
-    fprintf(f, 
-    	"struct _pf_iterator _pf_ix = _pf_%s_iterator_init(_pf_collection);\n",
-    	base->name);
-    fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s, &_pf_key))\n", elName->string);
+	fprintf(f, "for (%s=_pf_offset; %s<_pf_endOffset; ++%s)\n",
+	    elName->string, elName->string, elName->string);
     fprintf(f, "{\n");
     }
 else
     {
-    internalErr();
+    /* Get local copy of collection in new scope. */
+    fprintf(f, "{\n");
+    printType(pfc, f, collectionPp->ty->base);
+    fprintf(f, " _pf_collection;\n");
+    codeExpression(pfc, f, collectionPp, stack, FALSE);
+    fprintf(f, "_pf_collection = ");
+    codeParamAccess(pfc, f, collectionPp->ty->base, stack);
+    fprintf(f, ";\n");
+
+    /* Print element variable in a new scope. */
+    fprintf(f, "{\n");
+    codeScopeVars(pfc, f, scope, FALSE);
+    if (base == pfc->arrayType)
+	{
+	struct pfBaseType *elBase = collectionPp->ty->children->base;
+	fprintf(f, "int _pf_offset;\n");
+	fprintf(f, "int _pf_elSize = _pf_collection->elSize;\n");
+	fprintf(f, "int _pf_endOffset = _pf_collection->size * _pf_elSize;\n");
+	if (reverse)	/* To help simulate parallelism, do it in reverse. */
+	    fprintf(f, "for (_pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; _pf_offset -= _pf_elSize)\n");
+	else
+	    fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize)\n");
+	fprintf(f, "{\n");
+	fprintf(f, "%s = *((", elName->string);
+	printType(pfc, f, elBase);
+	fprintf(f, "*)(_pf_collection->elements + _pf_offset));\n");
+	}
+    else if (base == pfc->stringType)
+	{
+	fprintf(f, "int _pf_offset;\n");
+	fprintf(f, "int _pf_endOffset = _pf_collection->size;\n");
+	if (reverse)	/* To help simulate parallelism, do it in reverse. */
+	    fprintf(f, "for (_pf_offset=_pf_endOffset-1; _pf_offset>=0; _pf_offset -= 1)\n");
+	else
+	    fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += 1)\n");
+	fprintf(f, "{\n");
+	fprintf(f, "%s = _pf_collection->s[_pf_offset];\n", elName->string);
+	}
+    else if (base == pfc->dirType)
+	{
+	fprintf(f, "char *_pf_key;\n");
+	fprintf(f, 
+	    "struct _pf_iterator _pf_ix = _pf_%s_iterator_init(_pf_collection);\n",
+	    base->name);
+	fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s, &_pf_key))\n", elName->string);
+	fprintf(f, "{\n");
+	}
+    else
+	{
+	internalErr();
+	}
     }
 dyStringFree(&elName);
 }
@@ -465,6 +492,10 @@ else if (base == pfc->dirType)
 		stackName, stack);
 	}
     }
+else if (base == pfc->indexRangeType)
+    {
+    /* Do nothing. */
+    }
 else
     {
     internalErr();
@@ -480,7 +511,8 @@ static void endElInCollectionIteration(struct pfCompile *pfc, FILE *f,
 {
 struct pfBaseType *base = collectionPp->ty->base;
 fprintf(f, "}\n");
-if (base != pfc->arrayType && base != pfc->stringType)
+if (base != pfc->arrayType && base != pfc->stringType && 
+	base != pfc->indexRangeType)
     {
     fprintf(f, "_pf_ix.cleanup(&_pf_ix);\n");
     }

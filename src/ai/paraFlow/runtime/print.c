@@ -124,7 +124,7 @@ else
 	fprintf(f, "(");
 	for (hel = helList; hel != NULL; hel = hel->next)
 	    {
-	    fprintf(f, "\"%s\" to ", hel->name);
+	    fprintf(f, "\"%s\":", hel->name);
 	    if (base->needsCleanup)
 		printField(f, &hel->val, base, idHash);
 	    else

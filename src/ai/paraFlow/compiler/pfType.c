@@ -13,6 +13,11 @@ void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp);
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
 
+static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
+	struct pfType *type, boolean numToString);
+/* Make sure that a single variable is of the required type. 
+ * Add casts if necessary */
+
 static int baseTypeCount = 0;
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
@@ -254,11 +259,6 @@ pp->ty = typeFromChildren(pfc, pp, pfc->tupleType);
 pp->ty->tyty = tytyTuple;
 }
 
-static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
-	struct pfType *type, boolean numToString);
-/* Make sure that a single variable is of the required type. 
- * Add casts if necessary */
-
 static void coerceToBaseType(struct pfCompile *pfc, struct pfBaseType *baseType,
 	struct pfParse **pPp)
 /* Coerce to a particular base type */
@@ -282,6 +282,13 @@ static void coerceToInt(struct pfCompile *pfc, struct pfParse **pPp)
 {
 coerceToBaseType(pfc, pfc->intType, pPp);
 }
+
+static void coerceToLong(struct pfCompile *pfc, struct pfParse **pPp)
+/* Make sure type of pp is long integer. */
+{
+coerceToBaseType(pfc, pfc->longType, pPp);
+}
+
 
 
 boolean pfTypesAllSame(struct pfType *aList, struct pfType *bList)
@@ -815,6 +822,11 @@ if (collection->ty->base == pfc->stringType)
     if (el->ty->base != pfc->byteType)
 	ok = FALSE;
     }
+else if (collection->ty->base == pfc->indexRangeType)
+    {
+    if (el->ty->base != pfc->longType)
+	ok = FALSE;
+    }
 else
     {
     if (!pfTypeSame(el->ty, collection->ty->children))
@@ -842,6 +854,8 @@ struct pfVar *var = pfScopeFindVar(el->scope, el->name);
 struct pfType *ty;
 if (collection->ty->base == pfc->stringType)
     ty = pfTypeNew(pfc->byteType);
+else if (collection->ty->base == pfc->indexRangeType)
+    ty = pfTypeNew(pfc->longType);
 else
     ty = collection->ty->children;
 *(var->ty) = *ty;
@@ -1524,6 +1538,28 @@ switch (pp->type)
     }
 }
 
+static void checkRangeInContext(struct pfParse *pp)
+/* Check that parent is foreach or para action statement. */
+{
+struct pfParse *parent = pp->parent;
+switch (parent->type)
+    {
+    case pptForeach:
+    case pptParaDo:
+    case pptParaAdd:
+    case pptParaMultiply:
+    case pptParaAnd:
+    case pptParaOr:
+    case pptParaMin:
+    case pptParaMax:
+    case pptParaGet:
+    case pptParaFilter:
+        break;
+    default:
+        errAt(pp->tok, "Use of 'to' not allowed in this context.");
+    }
+}
+
 void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
@@ -1605,6 +1641,12 @@ switch (pp->type)
     case pptLogAnd:
     case pptLogOr:
         coerceBinaryLogicOp(pfc, pp);
+	break;
+    case pptIndexRange:
+        coerceToLong(pfc, &pp->children);
+	coerceToLong(pfc, &pp->children->next);
+	pp->ty = pfTypeNew(pfc->indexRangeType);
+	checkRangeInContext(pp);
 	break;
     case pptNegate:
 	enforceNumber(pfc, pp->children);

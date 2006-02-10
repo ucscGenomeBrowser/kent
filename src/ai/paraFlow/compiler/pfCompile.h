@@ -55,6 +55,7 @@ struct pfCompile
     struct pfBaseType *numType;		/* Ancestor for float/int etc. */
     struct pfBaseType *collectionType;	/* Ancestor for tree, list etc. */
     struct pfBaseType *tupleType;	/* Type for tuples */
+    struct pfBaseType *indexRangeType;	/* Type for index ranges. */
     struct pfBaseType *functionType;	/* Ancestor of to/para/flow */
     struct pfBaseType *toType;		/* Type for to functions */
     struct pfBaseType *paraType;	/* Type for para declarations */
@@ -79,6 +80,7 @@ struct pfCompile
     struct pfType *stringFullType;	/* String type info including .size etc. */
     struct pfType *arrayFullType;	/* Array type info including .size etc. */
     struct pfType *intFullType;		/* This is handy to have around. */
+    struct pfType *longFullType;	/* This is handy to have around. */
     };
 
 struct pfCompile *pfCompileNew();

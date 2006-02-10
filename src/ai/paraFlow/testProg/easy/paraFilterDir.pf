@@ -1,11 +1,11 @@
 
-dir of int a = ("one" to 1, "two" to 2, "three" to 3, "four" to 4, "five" to 5);
+dir of int a = ("one" : 1, "two" : 2, "three" : 3, "four" : 4, "five" : 5);
 dir of int odds = para (int i in a) filter i&1;
 print(a);
 print(odds);
 
-dir of string sa = ("A" to "a", "B" to "ab", "C" to "abc", 
-	"D" to "abcd", "E" to "abcde", "F" to "abcdef");
+dir of string sa = ("A" : "a", "B" : "ab", "C" : "abc", 
+	"D" : "abcd", "E" : "abcde", "F" : "abcdef");
 dir of string sOdds = para (string s in sa) filter s.size & 1;
 print(sa);
 print(sOdds);

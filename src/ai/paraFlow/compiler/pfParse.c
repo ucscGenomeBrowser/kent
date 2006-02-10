@@ -184,6 +184,8 @@ switch (type)
 	return "pptOperatorDec";
     case pptArrayAppend:
 	return "pptArrayAppend";
+    case pptIndexRange:
+	return "pptIndexRange";
 
     case pptCastBitToBit:
         return "pptCastBitToBit";
@@ -1218,6 +1220,26 @@ while (tok->type == pftLogOr)
 return pp;
 }
 
+struct pfParse *parseIndexRange(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse range (X to Y) */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *pp = parseLogOr(pfc, parent, &tok, scope);
+if (tok->type == pftTo)
+     {
+     struct pfParse *left = pp, *right;
+     pp = pfParseNew(pptIndexRange, tok, parent, scope);
+     left->parent = pp;
+     tok = tok->next;
+     right = parseLogOr(pfc, parent, &tok, scope);
+     pp->children = left;
+     left->next = right;
+     }
+*pTokList = tok;
+return pp;
+}
+
 static void checkNoNestedAssigns(struct pfParse *pp)
 /* Make sure that there are no assignments inside of subtree. */
 {
@@ -1240,7 +1262,7 @@ struct pfParse *parseAssign(struct pfCompile *pfc, struct pfParse *parent,
 /* Parse '=' separated expression */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = parseLogOr(pfc, parent, &tok, scope);
+struct pfParse *pp = parseIndexRange(pfc, parent, &tok, scope);
 struct pfParse *assign = NULL;
 enum pfParseType type = pptNone;
 
@@ -1261,7 +1283,7 @@ switch (tok->type)
     case pftDivEquals:
 	type = pptDivEquals;
 	break;
-    case pftTo:
+    case ':':
         type = pptKeyVal;
 	break;
     }
@@ -1274,7 +1296,7 @@ if (type != pptNone)
     for (;;)
 	{
 	tok = tok->next;
-	pp = parseLogOr(pfc, assign, &tok, scope);
+	pp = parseIndexRange(pfc, assign, &tok, scope);
 	checkNoNestedAssigns(pp);
 	slAddHead(&assign->children, pp);
 	if (tok->type != '=' || type != pptAssignment)

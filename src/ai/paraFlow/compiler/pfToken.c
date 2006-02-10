@@ -104,6 +104,7 @@ switch (type)
     case pftString: return "pftString";
     case pftInt: return "pftInt";
     case pftFloat: return "pftFloat";
+    case pftDotDotDot:    return "...";
     case pftPlusPlus:        return "++";
     case pftMinusMinus:      return "--";
     case pftPlusEquals:      return "+=";
@@ -218,6 +219,15 @@ static void tokTwoChar(struct pfTokenizer *tkz, struct pfToken *tok,
 tok->type = type;
 tok->textSize = 2;
 tkz->pos += 2;
+}
+
+static void tokThreeChar(struct pfTokenizer *tkz, struct pfToken *tok,
+     int type)
+/* Create three character token of given type */
+{
+tok->type = type;
+tok->textSize = 3;
+tkz->pos += 3;
 }
   
 static void skipWhiteSpace(struct pfTokenizer *tkz)
@@ -699,6 +709,12 @@ switch (c)
 	    tokTwoChar(tkz, tok, pftPlusEquals);
 	else if (c2 == '.')
 	    tokTwoChar(tkz, tok, pftUser);
+	else
+	    tokSingleChar(tkz, tok, c);
+	break;
+    case '.':
+        if (c2 == '.' && pos[2] == '.')
+	    tokThreeChar(tkz, tok, pftDotDotDot);
 	else
 	    tokSingleChar(tkz, tok, c);
 	break;
