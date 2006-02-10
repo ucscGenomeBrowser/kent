@@ -16,7 +16,7 @@
 #
 # Obtains other parameters from etc/genbank.conf
 #
-# $Id: gbAlignFinish,v 1.13 2005/08/29 23:43:39 markd Exp $
+# $Id: gbAlignFinish,v 1.14 2006/02/10 18:44:44 markd Exp $
 #
 use strict;
 use warnings;
@@ -219,7 +219,7 @@ sub combineOISet($$$$$) {
     my($queryDir, $outPsl, $pslQueryOffsets, $outOI, $outRawOI) = @_;
 
     my($startOff, $endOff) =  getPslQueryOffsets($queryDir, $pslQueryOffsets);
-    if (($startOff == $endOff) && !define($outRawOI)) {
+    if (($startOff == $endOff) && !defined($outRawOI)) {
         return; # nothing to do
     }
     my $cmd = "find $queryDir -name '*.oi' | xargs cat ";
