@@ -13,7 +13,7 @@
 #include "common.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: binRange.c,v 1.18 2006/02/10 18:07:36 hiram Exp $";
+static char const rcsid[] = "$Id: binRange.c,v 1.19 2006/02/10 20:59:16 hiram Exp $";
 
 /* add one new level to get coverage past chrom sizes of 512 Mb
  *	effective limit is now the size of an integer since chrom start
@@ -117,15 +117,36 @@ else
     return binFromRangeExtended(start, end);
 }
 
+static int binFromRangeBinKeeperExtended(int start, int end)
+/* This is just like binFromRangeExtended() above, but it doesn't limit
+ * the answers to the range from _binOffsetOldToExtended and up.
+ *	It simply uses the whole new bin scheme as if it was the only
+ *	one.
+ */
+{
+int startBin = start, endBin = end-1, i;
+startBin >>= _binFirstShift;
+endBin >>= _binFirstShift;
+for (i=0; i<ArraySize(binOffsetsExtended); ++i)
+    {
+    if (startBin == endBin)
+	return binOffsetsExtended[i] + startBin;
+    startBin >>= _binNextShift;
+    endBin >>= _binNextShift;
+    }
+errAbort("start %d, end %d out of range in findBin (max is 2Gb)", start, end);
+return 0;
+}
+
 struct binKeeper *binKeeperNew(int minPos, int maxPos)
 /* Create new binKeeper that can cover range. */
 {
 int binCount;
 struct binKeeper *bk;
-if (minPos < 0 || maxPos < 0 || minPos > maxPos || maxPos > 512*1024*1024)
+if (minPos < 0 || maxPos < 0 || minPos > maxPos)
     errAbort("bad range %d,%d in binKeeperNew", minPos, maxPos);
 
-binCount = binFromRange(maxPos-1, maxPos) + 1;
+binCount = binFromRangeBinKeeperExtended(maxPos-1, maxPos) + 1;
 AllocVar(bk);
 bk->minPos = minPos;
 bk->maxPos = maxPos;
@@ -156,7 +177,7 @@ struct binElement *el;
 if (start < bk->minPos || end > bk->maxPos || start > end)
     errAbort("(%d %d) out of range (%d %d) in binKeeperAdd", 
     	start, end, bk->minPos, bk->maxPos);
-bin = binFromRange(start, end);
+bin = binFromRangeBinKeeperExtended(start, end);
 assert(bin < bk->binCount);
 AllocVar(el);
 el->start = start;
@@ -186,9 +207,9 @@ if (end > bk->maxPos) end = bk->maxPos;
 if (start >= end) return NULL;
 startBin = (start>>_binFirstShift);
 endBin = ((end-1)>>_binFirstShift);
-for (i=0; i<ArraySize(binOffsets); ++i)
+for (i=0; i<ArraySize(binOffsetsExtended); ++i)
     {
-    int offset = binOffsets[i];
+    int offset = binOffsetsExtended[i];
     for (j=startBin+offset; j<=endBin+offset; ++j)
         {
 	for (el=bk->binLists[j]; el != NULL; el = el->next)
@@ -219,9 +240,9 @@ if (end > bk->maxPos) end = bk->maxPos;
 if (start >= end) return;
 startBin = (start>>_binFirstShift);
 endBin = ((end-1)>>_binFirstShift);
-for (i=0; i<ArraySize(binOffsets); ++i)
+for (i=0; i<ArraySize(binOffsetsExtended); ++i)
     {
-    int offset = binOffsets[i];
+    int offset = binOffsetsExtended[i];
     for (j=startBin+offset; j<=endBin+offset; ++j)
         {
 	for (el=bk->binLists[j]; el != NULL; el = el->next)
@@ -265,9 +286,9 @@ int i,j;
 /* Search the possible range of bins at each level, looking for lowest.  Once
  * an overlaping range is found at a level, continue with next level, however
  * must search an entire bin as they are not ordered. */
-for (i=0; i<ArraySize(binOffsets); ++i)
+for (i=0; i<ArraySize(binOffsetsExtended); ++i)
     {
-    int offset = binOffsets[i];
+    int offset = binOffsetsExtended[i];
     boolean foundOne = FALSE;
     for (j=startBin+offset; (j<=endBin+offset) && (!foundOne); ++j)
         {
@@ -293,7 +314,7 @@ return first;
 void binKeeperRemove(struct binKeeper *bk, int start, int end, void *val)
 /* Remove item from binKeeper. */ 
 {
-int bin = binFromRange(start, end);
+int bin = binFromRangeBinKeeperExtended(start, end);
 struct binElement **pList = &bk->binLists[bin], *newList = NULL, *el, *next;
 for (el = *pList; el != NULL; el = next)
     {
