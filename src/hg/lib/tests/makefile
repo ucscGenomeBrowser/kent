@@ -7,9 +7,10 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
 all: 	${BIN_DIR}/genePredTester \
-	${BIN_DIR}/pslReaderTester
+	${BIN_DIR}/pslReaderTester \
+	${BIN_DIR}/binTest
 
-test: spDbTest hdbTest genePredTest pslReaderTest
+test: binTest spDbTest hdbTest genePredTest pslReaderTest
 	rm -r output
 	echo tested all
 
