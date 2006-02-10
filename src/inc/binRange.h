@@ -14,6 +14,7 @@
  * granted for all use - public, private or commercial. */
 
 #define BINRANGE_MAXEND_512M (1+(512*1024*1024))
+#define _binOffsetOldToExtended  4681
 
 int binLevelsExtended();
 /* Return number of levels to bins. */
