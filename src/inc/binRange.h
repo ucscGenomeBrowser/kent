@@ -21,9 +21,6 @@ int binLevelsExtended();
 int binLevels();
 /* Return number of levels to bins. */
 
-int binFirstShiftExtended();
-/* Return amount to shift a number to get to finest bin. */
-
 int binFirstShift();
 /* Return amount to shift a number to get to finest bin. */
 
