@@ -13,14 +13,25 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
+#define BINRANGE_MAXEND_512M (1+(512*1024*1024))
+
+int binLevelsExtended();
+/* Return number of levels to bins. */
+
 int binLevels();
 /* Return number of levels to bins. */
+
+int binFirstShiftExtended();
+/* Return amount to shift a number to get to finest bin. */
 
 int binFirstShift();
 /* Return amount to shift a number to get to finest bin. */
 
 int binNextShift();
 /* Return amount to shift a number to get to next coarser bin. */
+
+int binOffsetExtended(int level);
+/* Return offset for bins of a given level. */
 
 int binOffset(int level);
 /* Return offset for bins of a given level. */
