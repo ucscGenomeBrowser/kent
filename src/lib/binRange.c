@@ -13,7 +13,7 @@
 #include "common.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: binRange.c,v 1.17 2006/02/10 17:54:00 hiram Exp $";
+static char const rcsid[] = "$Id: binRange.c,v 1.18 2006/02/10 18:07:36 hiram Exp $";
 
 /* add one new level to get coverage past chrom sizes of 512 Mb
  *	effective limit is now the size of an integer since chrom start
@@ -111,7 +111,7 @@ return 0;
 int binFromRange(int start, int end)
 /* return bin that this start-end segment is in */
 {
-if (end < BINRANGE_MAXEND_512M)
+if (end <= BINRANGE_MAXEND_512M)
     return binFromRangeStandard(start, end);
 else
     return binFromRangeExtended(start, end);
