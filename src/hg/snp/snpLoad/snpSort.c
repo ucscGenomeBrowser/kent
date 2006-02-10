@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSort.c,v 1.1 2006/02/09 01:02:24 heather Exp $";
+static char const rcsid[] = "$Id: snpSort.c,v 1.2 2006/02/10 22:08:00 heather Exp $";
 
 struct snpTmp
     {
@@ -40,8 +40,6 @@ struct snpTmp *snpTmpLoad(char **row)
  * in database.  Dispose of this with snpTmpFree(). */
 {
 struct snpTmp *ret;
-int obsLen, i;
-char *obsComp;
 
 AllocVar(ret);
 ret->snp_id = atoi(row[0]);
