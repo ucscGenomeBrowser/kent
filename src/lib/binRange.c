@@ -13,18 +13,24 @@
 #include "common.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: binRange.c,v 1.15 2006/02/09 22:28:38 hiram Exp $";
+static char const rcsid[] = "$Id: binRange.c,v 1.16 2006/02/10 00:56:29 hiram Exp $";
 
 /* add one new level to get coverage past chrom sizes of 512 Mb
  *	effective limit is now the size of an integer since chrom start
  *	and end coordinates are always being used in int's == 2Gb-1 */
-static int extendedBinOffsets[] =
+static int binOffsetsExtended[] =
 	{4096+512+64+8+1, 512+64+8+1, 64+8+1, 8+1, 1, 0};
+#define _binOffsetOldToExtended  4681
 
 static int binOffsets[] = {512+64+8+1, 64+8+1, 8+1, 1, 0};
 #define _binFirstShift 17	/* How much to shift to get to finest bin. */
 #define _binNextShift 3		/* How much to shift to get to next larger bin. */
 
+int binLevelsExtended()
+/* Return number of levels to bins. */
+{
+return ArraySize(binOffsetsExtended);
+}
 
 int binLevels()
 /* Return number of levels to bins. */
@@ -44,6 +50,13 @@ int binNextShift()
 return _binNextShift;
 }
 
+int binOffsetExtended(int level)
+/* Return offset for bins of a given level. */
+{
+assert(level >= 0 && level < ArraySize(binOffsetsExtended));
+return binOffsetsExtended[level] + _binOffsetOldToExtended;
+}
+
 int binOffset(int level)
 /* Return offset for bins of a given level. */
 {
@@ -51,7 +64,7 @@ assert(level >= 0 && level < ArraySize(binOffsets));
 return binOffsets[level];
 }
 
-static int standardBinFromRange(int start, int end)
+static int binFromRangeStandard(int start, int end)
 /* Given start,end in chromosome coordinates assign it
  * a bin.   There's a bin for each 128k segment, for each
  * 1M segment, for each 8M segment, for each 64M segment,
@@ -72,7 +85,7 @@ errAbort("start %d, end %d out of range in findBin (max is 512M)", start, end);
 return 0;
 }
 
-static int extendedBinFromRange(int start, int end)
+static int binFromRangeExtended(int start, int end)
 /* Given start,end in chromosome coordinates assign it
  * a bin.   There's a bin for each 128k segment, for each
  * 1M segment, for each 8M segment, for each 64M segment,
@@ -85,10 +98,10 @@ static int extendedBinFromRange(int start, int end)
 int startBin = start, endBin = end-1, i;
 startBin >>= _binFirstShift;
 endBin >>= _binFirstShift;
-for (i=0; i<ArraySize(extendedBinOffsets); ++i)
+for (i=0; i<ArraySize(binOffsetsExtended); ++i)
     {
     if (startBin == endBin)
-	return 4681 + extendedBinOffsets[i] + startBin;
+	return _binOffsetOldToExtended + binOffsetsExtended[i] + startBin;
     startBin >>= _binNextShift;
     endBin >>= _binNextShift;
     }
@@ -99,10 +112,10 @@ return 0;
 int binFromRange(int start, int end)
 /* return bin that this start-end segment is in */
 {
-if (end < 1+(512*1024*1024))
-    return standardBinFromRange(start, end);
+if (end < BINRANGE_MAXEND_512M)
+    return binFromRangeStandard(start, end);
 else
-    return extendedBinFromRange(start, end);
+    return binFromRangeExtended(start, end);
 }
 
 struct binKeeper *binKeeperNew(int minPos, int maxPos)
