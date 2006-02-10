@@ -191,7 +191,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.990 2006/02/07 23:18:08 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.991 2006/02/10 00:08:16 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2233,9 +2233,10 @@ if (otherDb != NULL)
 
 chain = chainLoadIdRange(database, track, seqName, winStart, winEnd, atoi(item));
 chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
+
 if (subChain == NULL)
     nullSubset = TRUE;
-else
+else if (hDbExists(otherDb)) 
     {
     struct gapCalc *gapCalc = gapCalcDefault();
     struct axtScoreScheme *scoreScheme = axtScoreSchemeDefault();
@@ -2269,32 +2270,39 @@ else
     if (subChain->qStrand == '-')
         reverseComplement(qSeq->dna, qSeq->size);
     subChain->score = chainCalcScoreSubChain(subChain, scoreScheme, gapCalc,
-    	qSeq, tSeq);
+        qSeq, tSeq);
     subSetScore = subChain->score;
     }
 chainFree(&toFree);
 
 printf("<B>%s position:</B> %s:%d-%d</a>  size: %d <BR>\n",
-       thisOrg, chain->tName, chain->tStart+1, chain->tEnd, chain->tEnd-chain->tStart);
+       thisOrg, chain->tName, chain->tStart+1, chain->tEnd, 
+       chain->tEnd-chain->tStart);
 printf("<B>Strand:</B> %c<BR>\n", chain->qStrand);
 qChainRangePlusStrand(chain, &qs, &qe);
 if (sameWord(otherDb, "seq"))
     {
     printf("<B>%s position:</B> %s:%d-%d  size: %d<BR>\n",
-	   otherOrg, chain->qName, qs, qe, chain->qEnd - chain->qStart);
+	otherOrg, chain->qName, qs, qe, chain->qEnd - chain->qStart);
     }
-else
+else 
     {
-    printf("<B>%s position:</B> <A target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">%s:%d-%d</A>  size: %d<BR>\n",
-	   otherOrg, hgTracksName(), otherDb, chain->qName, qs, qe, chain->qName,
-	   qs, qe, chain->qEnd - chain->qStart);
+    /* prints link to other db browser only if db exists and is active */
+    /* else just print position with no link for the other db */
+    printf("<B>%s position: </B>", otherOrg);
+    if (hDbExists(otherDb) && hDbIsActive(otherDb))
+        printf(" <A target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">", hgTracksName(), otherDb, chain->qName, qs, qe); 
+    printf("%s:%d-%d", chain->qName, qs, qe);
+    if (hDbExists(otherDb) && hDbIsActive(otherDb))
+        printf("</A>");   
+    printf(" size: %d<BR>\n", chain->qEnd - chain->qStart);
     }
 printf("<B>Chain ID:</B> %s<BR>\n", item);
 printf("<B>Score:</B> %1.0f\n", chain->score);
 
 if (nullSubset)
     printf("<B>Score within browser window:</B> N/A (no aligned bases)<BR>\n");
-else
+else if (hDbExists(otherDb))
     printf("<B>Approximate Score within browser window:</B> %1.0f<BR>\n",
 	   subSetScore);
 printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
@@ -2317,21 +2325,24 @@ if (chainDbNormScoreAvailable(chain->tName, track, &foundTable))
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
-if (chainWinSize < 1000000)
+if (hDbExists(otherDb) && hDbIsActive(otherDb))
     {
-    hgcAnchorSomewhere("htcChainAli", item, track, chain->tName);
-    printf("View details of parts of chain within browser window</A>.<BR>\n");
-    }
-else
-    {
-    printf("Zoom so that browser window covers 1,000,000 bases or less "
+    if (chainWinSize < 1000000) 
+        {
+        hgcAnchorSomewhere("htcChainAli", item, track, chain->tName);
+        printf("View details of parts of chain within browser "
+           "window</A>.<BR>\n");
+        }
+    else
+        {
+        printf("Zoom so that browser window covers 1,000,000 bases or less "
            "and return here to see alignment details.<BR>\n");
+        }
+    if (! sameWord(otherDb, "seq"))
+        {
+        chainToOtherBrowser(chain, otherDb, otherOrg);
+        }
     }
-if (! sameWord(otherDb, "seq"))
-    {
-    chainToOtherBrowser(chain, otherDb, otherOrg);
-    }
-
 chainFree(&chain);
 }
 
@@ -2445,30 +2456,34 @@ if (net->chainId != 0)
     {
     netWinSize = min(winEnd-winStart, net->tEnd - net->tStart);
     printf("<BR>\n");
-    if (netWinSize < 1000000)
-	{
-	int ns = max(winStart, net->tStart);
-	int ne = min(winEnd, net->tEnd);
-	if (ns < ne)
+    if (hDbExists(otherDb) && hDbIsActive(otherDb))
+        {
+        if (netWinSize < 1000000)
 	    {
-	    char id[20];
-	    snprintf(id, sizeof(id), "%d", net->chainId);
-	    hgcAnchorWindow("htcChainAli", id, ns, ne, chainTrack, seqName);
-	    printf("View alignment details of parts of net within browser window</A>.<BR>\n");
+	    int ns = max(winStart, net->tStart);
+	    int ne = min(winEnd, net->tEnd);
+	    if (ns < ne)
+	        {
+	        char id[20];
+	        snprintf(id, sizeof(id), "%d", net->chainId);
+	        hgcAnchorWindow("htcChainAli", id, ns, ne, chainTrack, seqName);
+	        printf("View alignment details of parts of net within browser window</A>.<BR>\n");
+	        }
+	    else
+	        {
+	        printf("Odd, net not in window<BR>\n");
+	        }
 	    }
-	else
+        else
 	    {
-	    printf("Odd, net not in window<BR>\n");
+	    printf("To see alignment details zoom so that the browser window covers 1,000,000 bases or less.<BR>\n");
 	    }
-	}
-    else
-	{
-	printf("To see alignment details zoom so that the browser window covers 1,000,000 bases or less.<BR>\n");
-	}
+        }
     chain = chainDbLoad(conn, database, chainTrack, seqName, net->chainId);
     if (chain != NULL)
         {
-	chainToOtherBrowser(chain, otherDb, otherOrgBrowser);
+        if (hDbExists(otherDb) && hDbIsActive(otherDb))
+	    chainToOtherBrowser(chain, otherDb, otherOrgBrowser);
 	chainFree(&chain);
 	}
     htmlHorizontalLine();
