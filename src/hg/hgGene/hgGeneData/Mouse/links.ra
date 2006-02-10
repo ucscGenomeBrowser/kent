@@ -27,3 +27,11 @@ priority 86
 name ensembl
 url http://www.ensembl.org/Mus_musculus/geneview?transcript=%s
 
+name geneNetwork
+shortLabel GeneNetwork
+tables geneNetworkId
+idSql select Id from geneNetworkId, knownToRefSeq where Id = value and name='%s'
+url http://www.genenetwork.org/cgi-bin/WebQTL.py?cmd=sch&refseq=%s&species=mouse
+priority 140
+
+
