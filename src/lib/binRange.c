@@ -13,14 +13,13 @@
 #include "common.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: binRange.c,v 1.16 2006/02/10 00:56:29 hiram Exp $";
+static char const rcsid[] = "$Id: binRange.c,v 1.17 2006/02/10 17:54:00 hiram Exp $";
 
 /* add one new level to get coverage past chrom sizes of 512 Mb
  *	effective limit is now the size of an integer since chrom start
  *	and end coordinates are always being used in int's == 2Gb-1 */
 static int binOffsetsExtended[] =
 	{4096+512+64+8+1, 512+64+8+1, 64+8+1, 8+1, 1, 0};
-#define _binOffsetOldToExtended  4681
 
 static int binOffsets[] = {512+64+8+1, 64+8+1, 8+1, 1, 0};
 #define _binFirstShift 17	/* How much to shift to get to finest bin. */
