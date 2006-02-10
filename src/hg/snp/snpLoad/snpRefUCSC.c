@@ -15,10 +15,9 @@
 
 #define MAX_SNP_SIZE 1024
 
-static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.2 2006/02/09 23:24:21 heather Exp $";
+static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.3 2006/02/10 19:31:22 heather Exp $";
 
 static char *snpDb = NULL;
-static char *contigGroup = NULL;
 static struct hash *chromHash = NULL;
 FILE *errorFileHandle = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -30,7 +29,7 @@ void usage()
 errAbort(
     "snpRefUCSC - read nib files\n"
     "usage:\n"
-    "    snpRefUCSC snpDb contigGroup\n");
+    "    snpRefUCSC snpDb\n");
 }
 
 
@@ -133,8 +132,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (start == end)
         {
 	/* copy whatever convention dbSNP uses for insertion */
-        fprintf(f, "%s\t%d\t%d\t%s\t%s\t%s\t%s\n", 
-                row[0], start, end, row[3], row[4], row[5], row[5]);
+        fprintf(f, "%s\t%d\t%d\t%s\t%s\t%s\t%s\t%s\n", 
+                row[0], start, end, row[3], row[4], row[5], row[5], row[5]);
 	continue;
 	}
     verbose(5, "building refUCSC for rs%s at %s:%d-%d\n", row[0], chromName, start, end);
@@ -142,10 +141,10 @@ while ((row = sqlNextRow(sr)) != NULL)
         refUCSC[pos - start] = seqPtr[pos];
     refUCSC[snpSize] = '\0';
     verbose(5, "refUCSC = %s\n", refUCSC);
-    if (sameString(row[4], "1"))
-        reverseComplement(refUCSC, snpSize);
     
-    fprintf(f, "%s\t%d\t%d\t%s\t%s\t%s\t%s\n", row[0], start, end, row[3], row[4], row[5], refUCSC);
+    fprintf(f, "%s\t%d\t%d\t%s\t%s\t%s\t%s\t", row[0], start, end, row[3], row[4], row[5], refUCSC);
+    reverseComplement(refUCSC, snpSize);
+    fprintf(f, "%s\n", refUCSC);
 
     }
 sqlFreeResult(&sr);
@@ -170,7 +169,8 @@ char *createString =
 "    loc_type tinyint(4) not null,\n"
 "    orientation tinyint(4) not null,\n"
 "    allele blob,\n"
-"    refUCSC blob\n"
+"    refUCSC blob,\n"
+"    refUCSCReverseComp blob\n"
 ");\n";
 
 struct dyString *dy = newDyString(1024);
@@ -207,14 +207,13 @@ struct hashCookie cookie;
 struct hashEl *hel;
 char *chromName;
 
-if (argc != 3)
+if (argc != 2)
     usage();
 
 snpDb = argv[1];
-contigGroup = argv[2];
 hSetDb(snpDb);
 
-chromHash = loadChroms(contigGroup);
+chromHash = loadChroms();
 if (chromHash == NULL) 
     {
     verbose(1, "couldn't get chrom info\n");
