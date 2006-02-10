@@ -1,0 +1,21 @@
+table hapmapSnp
+"HapMap primate alleles and population specific derived allele frequencies"
+    (
+    string  chrom;      "Chromosome"
+    uint    chromStart; "Start position in chrom"
+    uint    chromEnd;   "End position in chrom"
+    string  name;       "Reference SNP identifier or Affy SNP name"
+    uint    score;      "Not used"
+    char[1] strand;     "Which DNA strand contains the observed alleles"
+    char[1] hReference; "Human reference base"
+    char[1] hOther;     "Human other base"
+    char[1] cBase;      "chimp base"
+    char[1] rBase;      "rhesus base"
+    uint    cQual;      "chimp quality score"
+    uint    rQual;      "rhesus quality score"
+    float   ceu;        "Derived allele frequency for the CEU population"
+    float   chb;        "Derived allele frequency for the CHB population"
+    float   jpt;        "Derived allele frequency for the JPT population"
+    float   jptchb;     "Derived allele frequency for the JPT+CHB population"
+    float   yri;        "Derived allele frequency for the YRI population"
+    )

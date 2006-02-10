@@ -155,6 +155,7 @@
 #include "encodeStanfordPromotersAverage.h"
 #include "encodeIndels.h"
 #include "encodeHapMapAlleleFreq.h"
+#include "hapmapSnps.h"
 #include "sgdDescription.h"
 #include "sgdClone.h"
 #include "tfbsCons.h"
@@ -191,7 +192,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.991 2006/02/10 00:08:16 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.992 2006/02/10 04:12:21 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16584,6 +16585,42 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void doHapmapSnps(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct hapmapSnp hms;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int rowOffset = hOffsetPastBin(seqName, table);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hapmapSnpStaticLoad(row+rowOffset, &hms);
+    bedPrintPos((struct bed *)&hms, 3);
+    printf("<BR>\n");
+    printf("<B>Human Alleles and strand:</B> %s/%s (%s)<BR>\n", hms.hReference, hms.hOther, hms.strand);
+    printf("<B>Chimp Base and Quality Score:</B> %s (%u)<BR>\n", hms.cBase, hms.cQual);
+    printf("<B>Rhesus Base and Quality Score:</B> %s (%u)<BR><BR>\n", hms.rBase, hms.rQual);
+    printf("<B>DAF in YRI:</B> %.2f<BR>\n", hms.yri);
+    printf("<B>DAF in CEU:</B> %.2f<BR>\n", hms.ceu);
+    printf("<B>DAF in CHB:</B> %.2f<BR>\n", hms.chb);
+    printf("<B>DAF in JPT:</B> %.2f<BR>\n", hms.jpt);
+    printf("<B>DAF in JPT+CHB:</B> %.2f<BR>\n", hms.jptchb);
+    }
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
 
 static void doPscreen(struct trackDb *tdb, char *item)
 /* P-Screen (BDGP Gene Disruption Project) P el. insertion locations/genes. */
@@ -18378,6 +18415,10 @@ else if (sameString("anoEstTcl", track))
 else if (sameString("dvBed", track))
     {
     doDv(tdb, item);
+    }
+else if (startsWith("hapmapSnps", track))
+    {
+    doHapmapSnps(tdb, item);
     }
 else if (startsWith("humanPhenotype", track))
     {
