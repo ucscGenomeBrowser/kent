@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.282 2006/01/20 23:57:32 markd Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.283 2006/02/10 00:58:27 hiram Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2923,7 +2923,7 @@ int hFindBin(int start, int end)
 return binFromRange(start, end);
 }
 
-void hAddBinToQueryGeneral(char *binField, int start, int end, 
+static void hAddBinToQueryStandard(char *binField, int start, int end, 
 	struct dyString *query)
 /* Add clause that will restrict to relevant bins to query. */
 {
@@ -2947,6 +2947,45 @@ for (i=0; i<levels; ++i)
     }
 dyStringAppend(query, ")");
 dyStringAppend(query, " and ");
+}
+
+static void hAddBinToQueryExtended(char *binField, int start, int end, 
+	struct dyString *query)
+/* Add clause that will restrict to relevant bins to query. */
+{
+int bFirstShift = binFirstShift(), bNextShift = binNextShift();
+int startBin = (start>>bFirstShift), endBin = ((end-1)>>bFirstShift);
+int i, levels = binLevelsExtended();
+
+if (start < BINRANGE_MAXEND_512M)
+    hAddBinToQueryStandard(binField, start, BINRANGE_MAXEND_512M, query);
+
+dyStringAppend(query, "(");
+for (i=0; i<levels; ++i)
+    {
+    int offset = binOffsetExtended(i);
+    if (i != 0)
+        dyStringAppend(query, " or ");
+    if (startBin == endBin)
+        dyStringPrintf(query, "%s=%u", binField, startBin + offset);
+    else
+        dyStringPrintf(query, "%s>=%u and %s<=%u", 
+		binField, startBin + offset, binField, endBin + offset);
+    startBin >>= bNextShift;
+    endBin >>= bNextShift;
+    }
+dyStringAppend(query, ")");
+dyStringAppend(query, " and ");
+}
+
+void hAddBinToQueryGeneral(char *binField, int start, int end, 
+	struct dyString *query)
+/* Add clause that will restrict to relevant bins to query. */
+{
+if (end < BINRANGE_MAXEND_512M)
+    hAddBinToQueryStandard(binField, start, end, query);
+else
+    hAddBinToQueryExtended(binField, start, end, query);
 }
 
 void hAddBinToQuery(int start, int end, struct dyString *query)
