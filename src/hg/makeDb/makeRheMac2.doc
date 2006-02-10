@@ -144,6 +144,8 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   grep clone v1.edit4.chrome.ctgs.final.fix.agp >> fragment.txt 
   hgsql rheMac2
   load data local infile 'fragment.txt' into table gap
+#convert to half open
+  hgsql rheMac2 -e "update gap set chromStart = chromStart -1 "
   # create trackDb/monkey/rheMac2/gap.html
 
 # CREATE CONTIG TABLE 
@@ -160,6 +162,9 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   getContig.pl < Contig.out > ctgPos
   ssh hgwdev
   load data local infile 'ctgPos' into table ctgPos
+  #convert to half open and fix bug in agp file
+  hgsql rheMac2 -e "update ctgPos set chromStart = chromStart -1 "
+  hgsql rheMac2 -e "update ctgPos set size = size -1 "
 
 # CREATE CHROMINFO TABLE 
 # an improvement here would be to have getMaxCoord output the 2bit file name
