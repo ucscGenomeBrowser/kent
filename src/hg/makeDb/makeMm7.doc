@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.44 2006/02/02 16:07:00 fanhsu Exp $"
+#	"$Id: makeMm7.doc,v 1.45 2006/02/11 00:57:39 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -2574,7 +2574,77 @@ TMPDIR=/scratch/tmp
     #   70542788 bases of 1054197620 (6.692%) in intersection
 
 #############################################################################
-# BLASTZ OPOSSUM (WORKING - 2005-10-03 - Hiram)
+# BLASTZ OPOSSUM second time (WORKING - 2006-01-24 - Hiram)
+    #	With opossum sequence now properly repeat masked
+
+    ssh pk
+    mkdir /cluster/data/mm7/bed/blastzMonDom2.2006-01-24
+    cd /cluster/data/mm7/bed/blastzMonDom2.2006-01-24
+
+    cat << '_EOF_' > DEF
+# Mouse vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Mouse (mm7)
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom2
+SEQ2_DIR=/scratch/hg/monDom2/monDom2.2bit
+SEQ2_LEN=/scratch/hg/monDom2/chrom.sizes
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastzMonDom2.2006-01-24
+'_EOF_'
+    #	happy emacs
+
+    cd /cluster/data/mm7/bed/blastzMonDom2.2006-01-24
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF >blastz.out 2>&1
+    #	real    570m27.849s
+
+    #	ran into difficulty during install downloads because the
+    #	previous results exists.  So, go to hgwdev
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/mm7
+    rm -fr vsMonDom2
+    rm liftOver/mm7ToMonDom2.over.chain.gz
+
+    #	then, repeat the downloads step
+    cd /cluster/data/mm7/bed/blastzMonDom2.2006-01-24
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-continue=download \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > download.out 2>&1
+
+    #	And a featureBits measurement:
+    ssh kolossus
+    time featureBits mm7 chainMonDom2Link > fb.mm7.chainMonDom2Link 2>&1 &
+    #	real    61m59.651s
+    #	215440797 bases of 2583394090 (8.339%) in intersection
+
+    #	before you can do the swap, you need to remove the existing swap
+    
+
+#############################################################################
+# BLASTZ OPOSSUM (DONE - 2005-10-03 - 2005-11-24 - Hiram)
     ssh pk
     mkdir /cluster/data/mm7/bed/blastzMonDom2.2005-10-03
     cd /cluster/data/mm7/bed
