@@ -19914,7 +19914,21 @@ TMPDIR=/scratch/tmp
     #	now, back on kolossus to run a featurebits
     time featureBits hg17 chainMonDom2Link >fb.hg17.chainMonDom2Link 2>&1
     #	355119482 bases of 2866216770 (12.390%) in intersection
+    featureBits hg17 chainMonDom1Link
+    #	456069062 bases of 2866216770 (15.912%) in intersection
 
+    #	Then, to swap the results:
+    ssh kk
+    cd /cluster/data/hg17/bed/blastz.monDom2
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -chainMinScore=5000 \
+	-chainLinearGap=loose `pwd`/DEF > swap.out 2>&1 &
+    #	running 2006-01-30 11:25
+    #	real    47m27.082s
+    #	failed during the load - as with the Hg18 experiment, something
+    #	is really huge about these results.
+
+#########################################################################
 # Build maf annotation for multiz17way  (DONE braney 2/7/2006)
 cd /cluster/data/hg17/bed/multiz17way
 mkdir anno 
