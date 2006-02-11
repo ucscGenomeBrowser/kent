@@ -18248,6 +18248,244 @@ ldHgGene -predTab hg17 exonWalk hg17.mm5.exonWalk.gp
 ### hapmapRecombHotspot (Daryl; September 19, 2005)
     Lifted from hg16; see makeHg16.doc for details
 
+### HapMap SNPs (Daryl; February 4, 2006)
+  # most of this work was done in October and November 2005 for the ENCODE workshop
+    cd /cluster/store4/gs.17/build34/bed/hapmap/frequencies/2005-10/non-redundant/hapmapSnps
+    ln -sf ../hg17.daf.all/daf.txt.gz .
+    ln -sf ../hg17.panTro1.rheMac1.txt.gz .
+    zcat hg17.panTro1.rheMac1.txt | grep -v chrom | sort >! hg17.panTro1.rheMac1.sort.txt
+    zcat daf.txt                  | grep -v chrom | sort >! daf.sort.txt
+    # check that order matches; should be empty
+    paste hg17.panTro1.rheMac1.sort.txt daf.sort.txt | awk '$1!=$17||$2!=$18||$3!=$19||$4!=$20||$5!=$21||$6!=$22||$7!=$23||$8!=$24||$11!=$25||$12!=$27||$15!=$26||$16!=$28{print $0;}'
+    paste hg17.panTro1.rheMac1.sort.txt daf.sort.txt | awk '{printf "%s\t%d\t%d\t%s\t0\t%c\t%c\t%c\t%c\t%c\t%d\t%d\t%.3f\t%.3f\t%.3f\t%.3f\t%.3f\n",$1,$2,$3,$4,$6,$7,$8,$11,$15,$12,$16,$29,$30,$31,$32,$33}' >! hapmapSnps.bed
+    hgLoadBed hg17 hapmapSnps -sqlTable=hapmapSnps.sql hapmapSnps.bed
+
+### HapMap LD (Daryl; February 11, 2006)
+    ## start from the genotypes files, run Haploview, reformat, and load
+    mkdir -p /san/sanvol1/hg17/bed/hapmap/genotypes/2006-01/non-redundant/para
+    cd /san/sanvol1/hg17/bed/hapmap/genotypes/2006-01/non-redundant
+    # wget all genotype data:
+    # ftp://www.hapmap.org/genotypes/2006-01/non-redundant/genotypes_chr*_*.b35.txt.gz
+
+    # Haploview had to be recompiled because there was a missing JPT sample in the ped file
+    ##runHaploview.csh
+    #!/bin/csh
+    if ( $#argv < 2 ) then
+	echo "usage: $0 <absolutePath> <genotypeFileName.gz> [<javaMaxMem>]"
+	echo "       $0 /cluster/bin/foo bar.gz 2G"
+	exit 1
+    endif
+    set path = $1
+    set file = $2
+    set root = $file:r
+    set memFlag = ""
+    if ( $#argv >= 3  ) then
+	set memFlag = "-Xmx$3"
+    endif
+    cd /scratch
+    /bin/cp     -f $path/$file .
+    /bin/gunzip -f $file
+    /usr/java/jre1.5.0_06/bin/java -d64 $memFlag -jar /cluster/home/daryl/haploview/haploview/Haploview.jar -c -d -n -maxDistance 250 -a $root >&! $root.log
+    /bin/gzip   -f $root.LD    $root.CHECK >>& $root.log
+    /bin/mv     -f $root.LD.gz $root.CHECK.gz  $root.log $path/
+    /bin/rm     -f $root*
+    ###
+
+    cd para
+    set hv = /cluster/home/daryl/scripts/runHaploview.csh
+    set ldDir = /cluster/store5/gs.18/build35/bed/hapmap/genotypes/2006-01/non-redundant
+    
+    foreach pop (YRI CEU CHB JPT JPT+CHB)
+	foreach chrom (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X)
+	    echo $hv $ldDir genotypes_chr${chrom}_{$pop}.b35.txt.gz 4G >> jobList
+	end
+    end
+    ssh pk
+    # para create, para try, para push -maxNode=25 ...
+    #Completed: 120 of 120 jobs
+    #CPU time in finished jobs:    1564915s   26081.91m   434.70h   18.11d  0.050 y
+    #IO & Wait Time:                 21862s     364.37m     6.07h    0.25d  0.001 y
+    #Average job time:               13223s     220.39m     3.67h    0.15d
+    #Longest running job:                0s       0.00m     0.00h    0.00d
+    #Longest finished job:           40742s     679.03m    11.32h    0.47d
+    #Submission to last job:        104809s    1746.82m    29.11h    1.21d
+
+    #### makeDcc.pl 
+    #!/usr/bin/perl -W
+    $pop   = shift || die "usage: makeDcc.pl <pop> <chr>\n";
+    $chrom = shift || die "usage: makeDcc.pl <pop> <chr>\n";
+    $geno  = "geno/genotypes_${chrom}_${pop}.b35.txt.gz";
+    $ld    = "ld/genotypes_${chrom}_${pop}.b35.txt.LD.gz";
+    $txt   = "dcc/ld_${chrom}_${pop}.b35.txt";
+    open(GENO,"zcat $geno | " ) || die "can't open $geno";
+    open(LD,  "zcat $ld   | " ) || die "can't open $ld";
+    open(TXT, " > $txt      " ) || die "can't open $txt";
+    <GENO>;#ignore header
+    while (<GENO>) { @fields = split / /; $pos{$fields[0]} = $fields[3]; }
+    close(GENO);
+    <LD>;#ignore header;
+    while (<LD>) { @fields     = split /\t/; $chromStart = $pos{$fields[0]}; $chromEnd   = $pos{$fields[1]};
+	print TXT "$chromStart $chromEnd $pop $fields[0] $fields[1] $fields[2] $fields[4] $fields[3]\n"; }
+    close(LD);
+    close(TXT);
+    system("gzip $txt");
+    ####
+
+    #### makeDcc.csh
+    #!/bin/csh
+    #set path = "/cluster/home/daryl/scripts";
+    set path = ".";
+    foreach pop (CEU CHB JPT YRI JPT+CHB)
+	foreach chr (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y)
+	    echo $path/makeDcc.pl $pop chr$chr
+	end
+    end
+    ####
+
+    #### makeLdBed.pl
+    #!/usr/bin/perl -W
+    sub min ($$)
+    {
+	my $a = shift @_;
+	my $b = shift @_;
+	if ($a<$b) {return $a;}
+	return $b;
+    }
+    sub encodeDprime($)
+    {
+	my $val = shift @_;
+	if    ( ($val > 1) || ($val < -1) ) { die "Dprime value ($val) is out of range [-1,1]";}
+	elsif ($val>=0) { $ret = ord('a') + $val*9;}
+	else         { $ret = ord('A') - $val*9;}
+	return chr($ret);
+    }
+    sub encodeRsquared($)
+    {
+	my $val = shift @_;
+	if ( ($val > 1) || ($val < 0) ) { die "R^2 value ($val) is out of range [0,1]";}
+	return encodeDprime($val);
+    }
+    sub encodeLod($$)
+    {
+	my $lod    = shift @_;
+	my $dPrime = shift @_;
+	$ret = ord('a');
+	if ($lod>=2) # high LOD
+	{
+	if (abs($dPrime)<0.5) { $ret = ord('y'); } # high LOD, low D'  -> pink
+	else { $ret += min((int($lod-abs($dPrime)-1.5)), 9) ;}
+	}
+	elsif (abs($dPrime)>0.99) { $ret = ord('z'); } # high D', low LOD  -> blue
+	return chr($ret); 
+    }
+    $inDir  = shift||"data"; 
+    $outDir = shift||"bed";
+    $foo    = "";
+    $bar    = ""; 
+    @rest   = (); 
+    @pops   = ("CEU", "CHB", "JPT", "YRI", "JPT+CHB");
+    printf("> Starting        \t" . `date` . "\n");
+    foreach $pop (@pops)
+    {
+	opendir(DIR, $inDir) || die "can't open $inDir";
+	if ($pop eq "JPT+CHB") { @hmFiles = grep {/^ld_/ && /_JPT/ && /CHB.b35.txt.gz$/} readdir(DIR); }
+	else { @hmFiles = grep {/^ld_/ && /_${pop}.b35.txt.gz$/} readdir(DIR); }
+	closedir(DIR);
+	printf "POP:\t$pop\t$#hmFiles\n";
+	foreach $hmFile (sort @hmFiles)
+	{
+	    ($foo, $chrom, $bar) = split /_/, $hmFile;
+	    $chrom =~ s/chrx/chrX/;
+	    $chrom =~ s/chry/chrY/;
+	    $outfile = "$outDir/${pop}_${chrom}.hg17.bed";
+	    if ((-e $outfile)||(-e "$outfile.gz")) { next; }
+	    $tmpFile = "/tmp/${pop}_${chrom}.hg17.bed";
+	    printf("$inDir/$hmFile => $outfile.gz\t" . `date`);
+	    open(OUT, "> $tmpFile" ) || die "can't open $tmpFile";
+	    open(IN, "zcat $inDir/$hmFile | " ) || die "can't open $inDir/$hmFile";
+	    $line = <IN>;
+	    if (!defined $line){next;}
+	    chomp($line);
+	    ($chromStart, $chromEnd, $pop, $name, $marker2, $dprime, $rsquared, $lod, @rest) = split / /, $line;
+	    $ldCount = 1;
+	    while (<IN>)
+	    {
+	        chomp();
+		($chromStartNew, $chromEndNew, $pop, $nameNew, $marker2, $dprime, $rsquared, $lod, @rest) = split / /;
+		if ($chromStart ne $chromStartNew)
+		{
+		    $chromStart--;
+		    printf(OUT "$chrom\t$chromStart\t$chromEnd\t$name\t$ldCount\t$dprimeList\t$rsquaredList\t$lodList\n");
+		    $chromStart   = $chromStartNew;
+		    $chromEnd     = $chromEndNew;
+		    $name         = $nameNew;
+		    $ldCount      = 1;
+		    $dprimeList   = encodeDprime($dprime);
+		    $rsquaredList = encodeRsquared($rsquared);
+		    $lodList      = encodeLod($lod, $dprime);
+		}
+		elsif ($chromEndNew-$chromStartNew<250000)
+		{
+		    $chromEnd     = $chromEndNew;
+		    $ldCount++;
+		    $dprimeList   .= encodeDprime($dprime);
+		    $rsquaredList .= encodeRsquared($rsquared);
+		    $lodList      .= encodeLod($lod, $dprime);
+		}
+	    }
+	    close(IN);
+	    $chromStart--;
+	    printf(OUT "$chrom\t$chromStart\t$chromEnd\t$name\t$ldCount\t$dprimeList\t$rsquaredList\t$lodList\n");
+	    close(OUT);
+	    system("gzip $tmpFile");
+	    system("mv $tmpFile.gz $outDir");
+	}
+    }
+    printf("> Finished        \t" . `date` . "\n");
+    ####
+
+    #### getMax.csh -- check for consistency by chrom and population
+    #!/bin/csh
+    set out = maxDist.txt
+    rm -f $out
+    touch $out
+    echo this takes about 4 hours to run completely >> $out
+    foreach f (dcc/ld_*.b35.txt.gz)
+	echo -n "$f    " >> $out
+	zcat $f | awk '{if ($2-$1>max) max=$2-$1} END {print max}' >> $out
+    end
+
+    #### getSizes.csh -- should all be 249999
+    #!/bin/csh
+    set out = wcList.txt
+    rm -f $out
+    touch $out
+    echo "this takes about 2 hours to run completely"
+    foreach f (dcc/*.txt.gz) 
+	echo -n $f:r:r "    " | sed 's/ld_//;s/chr//;s/_/\t/' >> $out
+	zcat $f | cut -f1 -d " " | uniq | wc -l >> $out
+    end
+
+    #### load.csh
+    #!/bin/csh
+    set db = hg17
+    sed 's/hapmapLd/hapmapLdCeu/'    ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql ${db}
+    sed 's/hapmapLd/hapmapLdChb/'    ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql ${db}
+    sed 's/hapmapLd/hapmapLdJpt/'    ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql ${db}
+    sed 's/hapmapLd/hapmapLdYri/'    ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql ${db}
+    sed 's/hapmapLd/hapmapLdChbJpt/' ${HOME}/kent/src/hg/lib/hapmapLd.sql | hgsql ${db}
+    # about half an hour to an hour per population
+    foreach c (1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X)
+	hgLoadBed -noSort -oldTable -strict ${db} hapmapLdCeu CEU_chr${c}.${db}.bed.gz
+	hgLoadBed -noSort -oldTable -strict ${db} hapmapLdChb CHB_chr${c}.${db}.bed.gz
+	hgLoadBed -noSort -oldTable -strict ${db} hapmapLdJpt JPT_chr${c}.${db}.bed.gz
+	hgLoadBed -noSort -oldTable -strict ${db} hapmapLdYri YRI_chr${c}.${db}.bed.gz
+	hgLoadBed -noSort -oldTable -strict ${db} hapmapLdChbJpt JPT+CHB_chr${c}.${db}.bed.gz
+    end
+    rm -f bed.tab
+    ###
+
+
 # AFFYHUEX1 TRACK (sugnet Wed Oct  5 12:16:42 PDT 2005)
 
 mkdir hg17
