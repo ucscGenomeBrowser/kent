@@ -982,6 +982,7 @@ identifier knownToRefSeqId typeOf=mrnaAccession
 "RefSeq mRNA accession in knownToRefSeq table"
     $kgDb.knownToRefSeq.value dupeOk
     mm6.geneNetworkId.id minCheck=0.70
+    mm7.geneNetworkId.id minCheck=0.80
     rn3.geneNetworkId.id minCheck=0.40
 
 identifier knownGeneId typeOf=nativeMrnaAccession dependency
