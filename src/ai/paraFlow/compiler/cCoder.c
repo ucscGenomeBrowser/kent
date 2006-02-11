@@ -2257,7 +2257,6 @@ switch (pp->type)
         class = pp;
 	break;
     case pptToDec:
-    case pptParaDec:
     case pptFlowDec:
 	printPrototype(f, pp, class);
 	fprintf(f, ";\n");
@@ -2386,7 +2385,6 @@ for (statement = classCompound->children; statement != NULL;
     switch (statement->type)
         {
 	case pptToDec:
-	case pptParaDec:
 	case pptFlowDec:
 	    codeFunction(pfc, f, statement, class);
 	    break;
@@ -2497,7 +2495,6 @@ for (p = pp->children; p != NULL; p = p->next)
     switch (p->type)
         {
 	case pptToDec:
-	case pptParaDec:
 	case pptFlowDec:
 	    codeFunction(pfc, f, p, NULL);
 	    break;
@@ -2523,7 +2520,6 @@ for (p = pp->children; p != NULL; p = p->next)
     switch (p->type)
         {
 	case pptToDec:
-	case pptParaDec:
 	case pptFlowDec:
 	case pptNop:
 	case pptClass:

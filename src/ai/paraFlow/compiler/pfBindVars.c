@@ -49,9 +49,6 @@ switch (pp->type)
     case pptToDec:
         evalFunctionType(pp, pfc->toType, tytyFunction);
 	break;
-    case pptParaDec:
-        evalFunctionType(pp, pfc->paraType, tytyFunction);
-	break;
     case pptFlowDec:
         evalFunctionType(pp, pfc->flowType, tytyFunction);
 	break;
@@ -148,7 +145,6 @@ switch (pp->type)
 	break;
 	}
     case pptToDec:
-    case pptParaDec:
     case pptFlowDec:
     case pptOperatorDec:
 	{

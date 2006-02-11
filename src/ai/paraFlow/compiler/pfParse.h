@@ -42,7 +42,6 @@ enum pfParseType
     pptPolymorphic,
     pptToDec,
     pptFlowDec,
-    pptParaDec,
     pptReturn,
     pptCall,
     pptAssignment,

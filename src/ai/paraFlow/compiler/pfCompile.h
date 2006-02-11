@@ -58,7 +58,6 @@ struct pfCompile
     struct pfBaseType *indexRangeType;	/* Type for index ranges. */
     struct pfBaseType *functionType;	/* Ancestor of to/para/flow */
     struct pfBaseType *toType;		/* Type for to functions */
-    struct pfBaseType *paraType;	/* Type for para declarations */
     struct pfBaseType *flowType;	/* Type for flow declarations */
     struct pfBaseType *operatorType;	/* Type for operator declarations */
     struct pfBaseType *classType;	/* Type for class declarations. */

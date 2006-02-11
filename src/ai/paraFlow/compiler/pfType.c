@@ -1203,7 +1203,6 @@ for (p = compound->children; p != NULL; p = p->next)
 	    addVarToClass(base, p);
 	    break;
 	case pptToDec:
-	case pptParaDec:
 	case pptFlowDec:
 	case pptOperatorDec:
 	    addFunctionToClass(base, p);
@@ -1356,7 +1355,6 @@ struct pfParse **pos;
 switch (pp->type)
     {
     case pptToDec:
-    case pptParaDec:
     case pptFlowDec:
         errAt(pp->tok, "sorry, can't declare functions inside of functions");
 	break;
@@ -1413,7 +1411,6 @@ for (p = pp->parent; p != NULL; p = p->parent)
     switch (p->type)
         {
 	case pptToDec:
-	case pptParaDec:
 	case pptFlowDec:
 	    return;	/* We're good. */
 	}
@@ -1718,7 +1715,6 @@ switch (pp->type)
     case pptPolymorphic:
         pfParsePutChildrenInPlaceOfSelf(pPp);
 	break;
-    case pptParaDec:
     case pptToDec:
     case pptFlowDec:
         blessFunction(pfc, pp);

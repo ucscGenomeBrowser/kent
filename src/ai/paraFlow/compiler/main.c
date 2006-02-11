@@ -100,7 +100,6 @@ switch (pp->type)
     case pptForEachCall:
     case pptToDec:
     case pptFlowDec:
-    case pptParaDec:
     case pptCompound:
 	{
 	char *name = pp->name;
@@ -137,7 +136,6 @@ pfc->indexRangeType = pfScopeAddType(scope, "<indexRange>", TRUE, pfc->collectio
 pfc->classType = pfScopeAddType(scope, "<class>", FALSE, pfc->varType, 0, FALSE);
 pfc->functionType = pfScopeAddType(scope, "<function>", FALSE, pfc->varType, 0, FALSE);
 pfc->toType = pfScopeAddType(scope, "to", FALSE, pfc->functionType, 0, FALSE);
-pfc->paraType = pfScopeAddType(scope, "para", FALSE, pfc->functionType, 0, FALSE);
 pfc->flowType = pfScopeAddType(scope, "flow", FALSE, pfc->functionType, 0, FALSE);
 pfc->operatorType = pfScopeAddType(scope, "_operator_", FALSE, pfc->functionType, 0, FALSE);
 

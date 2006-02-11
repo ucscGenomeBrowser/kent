@@ -76,8 +76,6 @@ switch (type)
 	return "pptToDec";
     case pptFlowDec:
 	return "pptFlowDec";
-    case pptParaDec:
-	return "pptParaDec";
     case pptReturn:
 	return "pptReturn";
     case pptCall:
@@ -1743,12 +1741,11 @@ static struct pfParse *parseParaStatement(struct pfCompile *pfc, struct pfParse 
 /* Parse when it starts with 'para' - will either be a para function declaration
  * or a para invokation. */
 {
-struct pfToken *paraTok = *pTokList;	/* "para" */
-struct pfToken *nameTok = paraTok->next; 	/* some symbol name */
-if (nameTok->type == '(')
-    return parseParaInvoke(pfc, parent, pTokList, scope, TRUE);
-else
-    return parseFunction(pfc, parent, pTokList, scope, pptParaDec);
+struct pfToken *tok = *pTokList;	/* "para" */
+tok = tok->next;
+if (tok->type != '(')
+    expectingGot("(", tok);
+return parseParaInvoke(pfc, parent, pTokList, scope, TRUE);
 }
 
 

@@ -153,8 +153,7 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     checkReadOnlyOutsideLocals(outputVars, localScope, pp);
 }
 
-static void checkCalls(struct pfCompile *pfc, struct pfParse *pp, 
-	boolean paraOk)
+static void checkCalls(struct pfCompile *pfc, struct pfParse *pp)
 /* Check that all calls are of type flow, or optionally
  * of type flow or type para. */
 {
@@ -166,37 +165,31 @@ switch (pp->type)
 	 struct pfBaseType *base = ppFuncVar->ty->base;
 	 if (base == pfc->flowType)
 	     ;
-	 else if (paraOk && base == pfc->paraType)
-	     ;
 	 else
 	     {
-	     if (paraOk)
-	         errAt(pp->tok, 
-		    "Only calls to para and flow functions allowed inside para");
-	     else
-	         errAt(pp->tok, 
-		    "Only calls to flow functions allowed inside flow");
+	     errAt(pp->tok, 
+		"Only calls to flow functions allowed inside flow");
 	     }
 	 break;
 	 }
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    checkCalls(pfc, pp, paraOk);
+    checkCalls(pfc, pp);
 }
 
-static void checkParaBody(struct pfCompile *pfc, struct hash *outputVars,
+static void checkParaFlowBody(struct pfCompile *pfc, struct hash *outputVars,
 	struct pfScope *scope, struct pfParse *body)
 /* Make sure that body does not write to anything but
  *   1) Output vars.
  *   2) Local vars..
  */
 {
-checkCalls(pfc, body, TRUE);
+checkCalls(pfc, body);
 checkReadOnlyOutsideLocals(outputVars, scope, body);
 }
 
-static void checkParaDec(struct pfCompile *pfc, struct pfParse *paraDec)
-/* Make sure para function declaration is ok. */
+static void checkFlowDec(struct pfCompile *pfc, struct pfParse *paraDec)
+/* Make sure flow function declaration is ok - no side effects. */
 {
 struct pfParse *input = paraDec->children->next;
 struct pfParse *output = input->next;
@@ -210,7 +203,7 @@ if (body != NULL)
     for (pp = output->children; pp != NULL; pp = pp->next)
 	hashAdd(outputVars, pp->name, pp->var);
 
-    checkParaBody(pfc, outputVars, body->scope, body);
+    checkParaFlowBody(pfc, outputVars, body->scope, body);
 
     /* Clean up */
     hashFree(&outputVars);
@@ -234,37 +227,6 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     checkNoOutsideRefs(outputVars, inputVars, localScope, pp);
 }
 
-static void checkFlowDec(struct pfCompile *pfc, struct pfParse *paraDec)
-/* Make sure para function declaration is ok - no references to 
- * objects outside of local scope except for reads from parameters
- * and writes to output. */
-{
-struct pfParse *input = paraDec->children->next;
-struct pfParse *output = input->next;
-struct pfParse *body = output->next;
-if (body != NULL)
-    {
-    struct hash *outputVars = hashNew(6);
-    struct hash *inputVars = hashNew(6);
-    struct pfParse *pp;
-
-    /* Build up hash of extra variables that it's ok to write to. */
-    for (pp = output->children; pp != NULL; pp = pp->next)
-	hashAdd(outputVars, pp->name, pp->var);
-
-    /* Build up hash of extra variables that it's ok to read to. */
-    for (pp = input->children; pp != NULL; pp = pp->next)
-	hashAdd(inputVars, pp->name, pp->var);
-
-    checkCalls(pfc, body, FALSE);
-    checkReadOnlyOutsideLocals(outputVars, body->scope, body);
-    checkNoOutsideRefs(outputVars,inputVars, body->scope, body);
-
-    hashFree(&outputVars);
-    hashFree(&inputVars);
-    }
-}
-
 static void checkParaAction(struct pfCompile *pfc, struct pfParse *para)
 /* Make sure para action is ok. */
 {
@@ -272,7 +234,7 @@ struct pfParse *collection = para->children;
 struct pfParse *element = collection->next;
 struct pfParse *body = element->next;
 struct hash *emptyHash = hashNew(2);
-checkParaBody(pfc, emptyHash, para->scope, body);
+checkParaFlowBody(pfc, emptyHash, para->scope, body);
 hashFree(&emptyHash);
 }
 
@@ -291,9 +253,6 @@ switch (pp->type)
     case pptParaGet:
     case pptParaFilter:
 	checkParaAction(pfc, pp);
-        break;
-    case pptParaDec:
-	checkParaDec(pfc, pp);
         break;
     case pptFlowDec:
         checkFlowDec(pfc, pp);

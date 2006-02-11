@@ -152,7 +152,6 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
 	    printVarDef(f, pp, printInit);
 	    break;
 	case pptToDec:
-	case pptParaDec:
 	case pptFlowDec:
 	    printFuncDef(f, pp);
 	    break;
