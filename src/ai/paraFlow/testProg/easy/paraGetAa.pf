@@ -1,5 +1,5 @@
 
-para getFactorials(int n) into array of int res
+flow getFactorials(int n) into array of int res
     {
     array[n+1] of int r;
     int acc = 1;
@@ -12,6 +12,6 @@ para getFactorials(int n) into array of int res
     }
 
 array of int a = (1,2,3,4);
-array of array of int manyFac = para (int i in a) get getFactorials(i);
+array of array of int manyFac = para (i in a) get getFactorials(i);
 print(a);
 print(manyFac);

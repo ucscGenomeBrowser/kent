@@ -168,7 +168,7 @@ switch (pp->type)
 	 else
 	     {
 	     errAt(pp->tok, 
-		"Only calls to flow functions allowed inside flow");
+		"Only calls to flow functions allowed inside para constructs or flows.");
 	     }
 	 break;
 	 }

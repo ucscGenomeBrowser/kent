@@ -890,9 +890,10 @@ skipRequiredCharType('(', &tok);
 pp = pfParseNew(pptNone, tok, parent, scope);
 
 /* Parse out the element in collection */
-element = pfParseExpression(pfc, pp, &tok, scope);
+element = parseNameUse(pp, &tok, scope);
 skipRequiredName("in", &tok);
 collection = pfParseExpression(pfc, pp, &tok, scope);
+
 skipRequiredCharType(')', &tok);
 
 /* Parse out the action keyword, and figure out what to do depending on
@@ -903,13 +904,13 @@ if (sameString("do", action))
     paraType = pptParaDo;
     actionNeedsStatement = TRUE;
     }
-else if (sameString("add", action))
+else if (sameString("+", action))
     paraType = pptParaAdd;
-else if (sameString("multiply", action))
+else if (sameString("*", action))
     paraType = pptParaMultiply;
-else if (sameString("and", action))
+else if (sameString("&&", action))
     paraType = pptParaAnd;
-else if (sameString("or", action))
+else if (sameString("||", action))
     paraType = pptParaOr;
 else if (sameString("min", action))
     paraType = pptParaMin;
@@ -1070,7 +1071,7 @@ struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseNegation(pfc, parent, &tok, scope);
 while (tok->type == '*' || tok->type == '/' || tok->type == '%'
 	|| tok->type == pftShiftLeft || tok->type == pftShiftRight
-	|| tok->type == '&')
+	|| tok->type == '&' && tok->next->type != ')')
     {
     struct pfParse *left = pp, *right;
     enum pfTokType tt = pptNone;
@@ -1112,7 +1113,7 @@ struct pfParse *parseSum(struct pfCompile *pfc, struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseProduct(pfc, parent, &tok, scope);
-while (tok->type == '+' || tok->type == '-' || tok->type == '|' || tok->type == '^')
+while (tok->type == '+' || tok->type == '-' || tok->type == '|' || tok->type == '^' && tok->next->type != ')')
     {
     struct pfParse *left = pp, *right;
     enum pfTokType tt = pptNone;
@@ -1192,7 +1193,7 @@ struct pfParse *parseLogAnd(struct pfCompile *pfc, struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseCmp(pfc, parent, &tok, scope);
-while (tok->type == pftLogAnd)
+while (tok->type == pftLogAnd && tok->next->type != ')')
     {
     struct pfParse *left = pp, *right;
     pp = pfParseNew(pptLogAnd, tok, parent, scope);
@@ -1212,7 +1213,7 @@ struct pfParse *parseLogOr(struct pfCompile *pfc, struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseLogAnd(pfc, parent, &tok, scope);
-while (tok->type == pftLogOr)
+while (tok->type == pftLogOr && tok->next->type != ')')
     {
     struct pfParse *left = pp, *right;
     pp = pfParseNew(pptLogOr, tok, parent, scope);
@@ -1642,9 +1643,7 @@ if (tok->type != '(')
     expectingGot("(", tok);
 tok = tok->next;
 conditional = pfParseExpression(pfc, pp, &tok, scope);
-if (tok->type != ')')
-    expectingGot(")", tok);
-tok = tok->next;
+skipRequiredCharType(')', &tok);
 
 /* Body */
 trueBody = pfParseStatement(pfc, pp, &tok, scope);
@@ -1708,6 +1707,7 @@ pp = pfParseNew(pptForeach, tok, parent, scope);
 tok = tok->next;	/* Skip over 'foreach' */
 skipRequiredCharType('(', &tok);
 element = pfParseExpression(pfc, pp, &tok, scope);
+
 skipRequiredName("in", &tok);
 collection = pfParseExpression(pfc, pp, &tok, scope);
 skipRequiredCharType(')', &tok);

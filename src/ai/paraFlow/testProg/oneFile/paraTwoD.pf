@@ -1,4 +1,4 @@
-para dimTwoD(int xSize, int ySize) into (array of array of int aa)
+flow dimTwoD(int xSize, int ySize) into (array of array of int aa)
     {
     array[ySize] of array of int res;
     aa = res;
@@ -35,14 +35,14 @@ for (int i=0; i<3; i += 1)
     prin("sum of ");
     prin(a4x3[i]);
     prin(" = ");
-    print( para (x in a4x3[i]) add x );
+    print( para (x in a4x3[i]) + x );
     }
 
-print("addAll = " + para (ii in a4x3) add para (i in ii) add i);
-print("all>10 = " + para (ii in a4x3) and para (i in ii) and i > 10);
-print("all>20 = " + para (ii in a4x3) and para (i in ii) and i > 20);
-print("any>20 = " + para (ii in a4x3) or para (i in ii) or i > 20);
-print("any>100 = " + para (ii in a4x3) or para (i in ii) or i > 100);
+print("addAll = " + para (ii in a4x3) + para (i in ii) + i);
+print("all>10 = " + para (ii in a4x3) && para (i in ii) && i > 10);
+print("all>20 = " + para (ii in a4x3) && para (i in ii) && i > 20);
+print("any>20 = " + para (ii in a4x3) || para (i in ii) || i > 20);
+print("any>100 = " + para (ii in a4x3) || para (i in ii) || i > 100);
 
 array of array of int doubled = 
     para (ii in a4x3) get
@@ -51,7 +51,7 @@ array of array of int doubled =
 print(doubled);
 
 array of array of int oddOnly =
-    para (array of int ii in a4x3) get
-    	para (int i in ii) filter 
+    para (ii in a4x3) get
+    	para (i in ii) filter 
 	   i&1;
 print(oddOnly);

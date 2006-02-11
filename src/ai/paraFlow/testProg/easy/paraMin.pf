@@ -1,4 +1,4 @@
 
 array of int a = (2,8,3,9);
-double minSquare = para (int x in a) min sqrt(x);
+double minSquare = para (x in a) min sqrt(x);
 print(minSquare);

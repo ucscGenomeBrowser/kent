@@ -1,9 +1,9 @@
 /* This contains some example code in the ParaFlow langauge.
  * ParaFlow is syntactically related to C with some elements
  * of Python and a few new elements.  Two of the most important
- * new elements are 'para' and 'flow' type functions which
- * express parallelism.
- */
+ * new elements are the 'para' constructs which enable parallel
+ * execution, and the 'flow' type functions which are guaranteed
+ * to be free of side effects. */
 
 to printHello()
 // Simple no parameter or return result declaration
@@ -14,7 +14,7 @@ to printHello()
 to printWordLots(string word, int count)
 // Declaration with a couple of parameters, no return value.
     {
-    for (int i=0; i<count; i += 1)
+    foreach (i in 0 to count)
        prin(word + " ");	// prin does not print a line break.
     print("");
     }
@@ -24,7 +24,7 @@ to factorial(int n) into (float result)
 // Declaration with an integer parameter that returns floating point result
     {
     result = 1;
-    for (int i=2; i<=n; i += 1)
+    foreach (i in 2 to n+1)
 	result *= i;    
     }
 
@@ -45,28 +45,62 @@ to swap(var a,var b) into (var c,var d)
     }
 
 flow reverseRange(int oldStart,int oldEnd,int seqSize) into (int newStart,int newEnd)
-// Flow declarations can be implemented in hardware without latches.
-// Effectively therefore all statements in the function execute in parallel.
-// The rule is that there can only be one assignment to each variable
-// (and no assignments to the input parameters).  Possibly this can
-// exclude access to global variables too.  Functions can be called,
-// but only if they are also flow functions.  No loops.
-// NB: currently flows are not checked for all this, just are synonyms for 'to'
+// Flow function have no side effects.  The compiler checks this.
+// Flow functions can read from anywhere, but can only write to
+// local variables and their output.   Calls to "flow" functions are 
+// allowed  inside of para statements, while calls to "to"
+// functions are not.
     {
     newStart = seqSize - oldEnd;
     newEnd = seqSize - oldStart;
     }
 
-para reverseAll(rangeClass range, int seqSize)
-// Para functions are parallelizable.  They can be invoked on all elements
-// of a collection simultaniously.  The element is passed in as the first
-// parameter.  Para functions can read from anywhere, but can only write
-// to local variables, their output, and the first input parameter.
-// NB: currently flows are not checked for all this, just are synonyms for 'to'
-    {
-    (range.start, range.end) = reverseRange(range.start, range.end, seqSize);
-    range.midPoint = (range.start + range.end)/2;
-    }
+// The actual parallelism is done via the "para" construct.  The
+// general form of this construct is:
+//      para (element in collection) action expression
+// where collection is something like an array or dir,
+// element is a variable that refers to something in the
+// collection, and action is a key word such as 'do' 'get', 'add', 'max'
+// 'filter', etc.
+
+// Most para actions return a result.  The following example
+// sums up all the elements in an array.
+     int sum = para (i in a) + i;
+
+// This example creates a new array containing only the even numbers
+// in an larger array
+     array of int evens = para (i in a) filter a%2 == 0;
+
+// This creates a table of sine values indexed by degrees, assuming that
+// the sin() math library function takes radians.  In general the para
+// action get returns a collection of the same type and size as the
+// input collection.
+     array of double sinLookup = para (i in 0 to 360) get math.sin(i*2*math.pi/360);
+
+// Other para actions include 
+//     multiply - returns the product of all expressions
+//     min - returns the smallest expression
+//     max - returns the largest
+//     argmin -  returns the index of the element that produced the smallest 
+//           expression.   If the collection is an array then the index is of 
+//           type long,  if the collection is a dir then the index is a string.
+//     argmax - returns the index  of the element producing largest expression.
+
+// The 'do' action does not produce a value.  It can be used to change
+// the values of the items in the collection.  A 'do' action is followed
+// by a statement rather than an expression.  The statement can be 
+// compound. Here's an example of a para statement that squares every member
+// of an array:
+     array of int a = (1,2,3,4,5,6,7,8,9,10);
+     para (i in a do)
+         i = i*i;
+
+// Within a para do statement only the  element, and any 
+// local variables declared within the statement
+// may be modified.  When the element is modified, the corresponding
+// value in the collection is updated.
+
+
 
 /* ParaFlow is object oriented, but not in your face about it.
  * It does not support multiple inheritance.  It does support
@@ -105,12 +139,12 @@ class circle
     point center;
     double radius;
 
-    to diameter() into (double result)
+    flow diameter() into (double result)
 	{
         result = 2 * 3.14 * self.radius;  // Instance variables are accessed via "self"
 	}
 
-    to area() into (double result)
+    flow area() into (double result)
 	{
         result = 3.14 * self.radius * self.radius;
 	}
@@ -134,7 +168,7 @@ class hash implements collection
    array[1024] of list of element buckets;
    // NB list isn't working at the moment either.
 
-   to func(string name) into (int result)
+   flow func(string name) into (int result)
    // We use a simple but effective hash function, since 5 is coprime to 1024
        {
        result = 0
@@ -155,7 +189,7 @@ class hash implements collection
        buckets[func(name)].add(el);
        }
 
-  to find(string name) into (class val)
+  flow find(string name) into (class val)
   // Find element
       {
       foreach el in buckets[func(name)]
@@ -174,7 +208,7 @@ class hash implements collection
        {
        val = find(name);
        if (!val)
-           throw errNotFound(name);
+           punt(errNotFound(name));
        }
   
    class hashIterator implements iterator
@@ -256,6 +290,3 @@ A comma-separated list of labels can share the same
 statement.  Multiple statements enclosed in braces are
 considered a single statment.
 
-A simple case would be:
-
-case

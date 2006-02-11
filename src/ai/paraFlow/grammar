@@ -109,8 +109,10 @@ foreachStatement: 'foreach' variableDef 'in' dottedName statement
 parameterList: '(' ')'
 	| '(' variableDefList ')'
 
-functionDef: 'to' NAME parameterList compoundStatement  
-	| 'to' NAME parameterList 'into' parameterList compoundStatement
+functionType: 'to' 
+	| 'flow'
+functionDef: functionType NAME parameterList compoundStatement  
+	| functionType NAME parameterList 'into' parameterList compoundStatement
 
 classDef: 'class' TYPENAME compoundStatement
 	| 'class' TYPENAME 'extends' TYPENAME compoundStatement

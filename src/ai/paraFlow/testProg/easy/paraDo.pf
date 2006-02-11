@@ -1,16 +1,16 @@
 array of string names = ("John", "Bob", "Susan", "Mary");
-para (string s in names) do
+para (s in names) do
     {
     print(s);
     }
 print("And again serially:");
-foreach (string s in names) 
+foreach (s in names) 
     {
     print(s);
     }
 print(names);
 print("And again with modifications");
-para (string s in names) do
+para (s in names) do
     {
     s[0] = 'X';
     }
