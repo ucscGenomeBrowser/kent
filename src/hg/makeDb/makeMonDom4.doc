@@ -585,4 +585,50 @@ done
 
     ssh pk
     mkdir /san/sanvol1/scratch/monDom4
+    cd /san/sanvol1/scratch/monDom4
+    cp -p /cluster/data/monDom4/monDom4.2bit .
+    cp -p /cluster/data/monDom4/chrom.sizes .
+
+#######################################################################
+#  HUMAN BLASTZ - this time with masked sequence (WORKING - 2006-02-10 - Hiram)
+    ssh pk
+    mkdir /cluster/data/monDom4/bed/blastzHg18.2006-02-10
+    cd /cluster/data/monDom4/bed/blastzHg18.2006-02-10
+
+    cat << '_EOF_' > DEF
+# opossum vs. human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Opossum monDom4
+SEQ1_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+SEQ1_LEN=/san/sanvol1/scratch/monDom4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Human (hg18)
+SEQ2_DIR=/scratch/hg/hg18/nib
+SEQ2_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom4/bed/blastzHg18.2006-02-10
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-stop=net `pwd`/DEF > blastz.out 2>&1 &
+    #	running 2006-02-10
 
