@@ -91,6 +91,8 @@ enum pfParseType
     pptParaOr,
     pptParaMin,
     pptParaMax,
+    pptParaArgMin,
+    pptParaArgMax,
     pptParaGet,
     pptParaFilter,
     pptUntypedElInCollection,	

@@ -66,6 +66,8 @@ switch (pp->type)
     case pptParaOr:
     case pptParaMin:
     case pptParaMax:
+    case pptParaArgMin:
+    case pptParaArgMax:
     case pptParaGet:
     case pptParaFilter:
         {

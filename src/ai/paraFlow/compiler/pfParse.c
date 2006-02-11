@@ -174,6 +174,10 @@ switch (type)
 	return "pptParaMin";
     case pptParaMax:
 	return "pptParaMax";
+    case pptParaArgMin:
+	return "pptParaArgMin";
+    case pptParaArgMax:
+	return "pptParaArgMax";
     case pptParaGet:
 	return "pptParaGet";
     case pptParaFilter:
@@ -915,6 +919,10 @@ else if (sameString("max", action))
     paraType = pptParaMax;
 else if (sameString("get", action))
     paraType = pptParaGet;
+else if (sameString("argmax", action))
+    paraType = pptParaArgMax;
+else if (sameString("argmin", action))
+    paraType = pptParaArgMin;
 else if (sameString("filter", action))
     paraType = pptParaFilter;
 else

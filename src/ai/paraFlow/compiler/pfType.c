@@ -1504,8 +1504,9 @@ struct pfParse *pp = *pPp;
 struct pfParse *collection = pp->children;
 struct pfParse *el = collection->next;
 struct pfParse *body = el->next;
+struct pfBaseType *colBase = collection->ty->base;
 
-if (collection->ty->base == pfc->stringType)
+if (colBase == pfc->stringType)
     errAt(collection->tok, "strings not allowed as para collections.");
 checkElInCollection(pfc, el, collection, "para");
 switch (pp->type)
@@ -1517,6 +1518,16 @@ switch (pp->type)
         {
 	enforceNumber(pfc, body);
 	pp->ty = body->ty;
+	break;
+	}
+    case pptParaArgMin:
+    case pptParaArgMax:
+        {
+	enforceNumber(pfc, body);
+	if (colBase == pfc->dirType)
+	    pp->ty = pfTypeNew(pfc->stringType);
+	else
+	    pp->ty = pfTypeNew(pfc->longType);
 	break;
 	}
     case pptParaAnd:
@@ -1558,6 +1569,8 @@ switch (parent->type)
     case pptParaOr:
     case pptParaMin:
     case pptParaMax:
+    case pptParaArgMin:
+    case pptParaArgMax:
     case pptParaGet:
     case pptParaFilter:
         break;
@@ -1599,6 +1612,8 @@ switch (pp->type)
     case pptParaOr:
     case pptParaMin:
     case pptParaMax:
+    case pptParaArgMin:
+    case pptParaArgMax:
     case pptParaGet:
     case pptParaFilter:
         checkPara(pfc, pPp);

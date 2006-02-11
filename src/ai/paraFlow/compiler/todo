@@ -1,24 +1,30 @@
 
-  - Rework code generator so that a type is kept alongside the
-    data on the expression stack.
+  - Rip out reference counting.  Put in "coalesce and copy on 
+    return" style memory management that makes heavy use of stack.
+  - Make para actions use p-threads.
+  - Function pointers.
+  - Interfaces.
   - Do a sort function (need function pointer?)
   - ?Read-only and private variables.
         Make it so that class.new() is only legal way to
 	make something with private or read-only var.
   - Implement case statement.
-  - Create 'serial' function - that is gauranteed only to be 
+  - ?Create 'serial' function - that is gauranteed only to be 
     executed by one thread at a time.  Can be called from a para.
   - ?Exceptions.
-  - ?Prevent memory leakage in expressions that don't get assigned to anything
-    (including function calls).
   - More file i/o.
   - ?Adding named parameters.
   - Implement lists.
   - Implementing trees.
+  - Rework code generator so that a type is kept alongside the
+    data on the expression stack.
+  - ?Prevent memory leakage in expressions that don't get assigned to anything
+    (including function calls).
 
 
 -----------
 DONE
+  - implement para actions argmin and argmax.
   - implement dimensioning of multi-dimensional arrays as in:
       array[8] of array[8] of square checkerboard;
   - Implement 1 to 8 notation (here specifying numbers between 1 and 8, 

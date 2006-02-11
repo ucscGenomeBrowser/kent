@@ -1,17 +1,1 @@
 
-5) Make it so that there's a para function that returns the key as well
-   as the value for max and min.
-
-6) Allow a tuple of expressions all of the same type to be used
-   in a para expression.   Arrange it so that each expression in the
-   tuple is evaluated in parallel:
-        (double a,b,c) = para (double i in (sqrt(2), sin(2), cos(2)) get
-
-And larger projects:
-
-A) Rip out reference counting.
-B) Make para actions use p-threads.
-C) Put in "coalesce and copy on return" style memory
-   management that makes heavy use of stack.
-D) Function pointers.
-E) Interfaces.

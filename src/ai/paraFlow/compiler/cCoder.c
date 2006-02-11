@@ -520,6 +520,49 @@ fprintf(f, "}\n");
 fprintf(f, "}\n");
 }
 
+static void setBestIx(struct pfCompile *pfc, FILE *f,
+    struct pfParse *elPp, struct pfBaseType *colBase)
+{
+fprintf(f, "_pf_best_ix = ");
+if (colBase == pfc->dirType)
+    fprintf(f, "_pf_key;\n");
+else if (colBase == pfc->indexRangeType)
+    {
+    struct dyString *elName = varName(pfc, elPp->var);
+    fprintf(f, " %s;\n", elName->string);
+    dyStringFree(&elName);
+    }
+else if (colBase == pfc->arrayType)
+    {
+    fprintf(f, " (_pf_offset/_pf_elSize);\n");
+    }
+else
+    {
+    internalErr();
+    }
+}
+
+static void updateArgMinMax(struct pfCompile *pfc, FILE *f,
+    struct pfParse *elPp, struct pfBaseType *base, struct pfBaseType *colBase,
+    int stack, enum pfParseType paraType)
+/* Generate code for paraArgMin/paraArgMax */
+{
+fprintf(f, "if (");
+codeParamAccess(pfc, f, base, stack);
+if (paraType == pptParaArgMin)
+    fprintf(f, " < ");
+else
+    fprintf(f, " > ");
+fprintf(f, "_pf_acc)\n");
+fprintf(f, "{\n");
+fprintf(f, "_pf_acc = ");
+codeParamAccess(pfc, f, base, stack);
+fprintf(f, ";\n");
+setBestIx(pfc, f, elPp, colBase);
+
+fprintf(f, "}\n");
+}
+
 static int codeParaExpSingle(struct pfCompile *pfc, FILE *f,
 	struct pfParse *para, int stack)
 /* Generate code for a para expression that just has a single
@@ -529,10 +572,32 @@ struct pfParse *collectionPp = para->children;
 struct pfParse *elPp = collectionPp->next;
 struct pfParse *body = elPp->next;
 struct pfBaseType *base = para->ty->base;
+struct pfBaseType *colBase = collectionPp->ty->base;
+boolean isArgType = FALSE;
+
+switch (para->type)
+    {
+    case pptParaArgMin:
+    case pptParaArgMax:
+        isArgType = TRUE;
+	base = elPp->ty->base;
+	break;
+    }
+
+fprintf(f, "/* Start %s */\n", pfParseTypeAsString(para->type));
 fprintf(f, "{\n");
 fprintf(f, "int _pf_first = 1;\n");
 printType(pfc, f, base);
 fprintf(f, " _pf_acc = 0;\n");
+
+if (isArgType)
+     {
+     struct pfBaseType *colBase = collectionPp->ty->base;
+     if (colBase == pfc->dirType)
+	 fprintf(f, "char *_pf_best_ix = 0;\n");
+     else
+	 fprintf(f, "long _pf_best_ix = -1;\n");
+     }
 
 startElInCollectionIteration(pfc, f, stack, 
 	para->scope, elPp, collectionPp, TRUE);
@@ -548,6 +613,8 @@ fprintf(f, "_pf_first = 0;\n");
 fprintf(f, "_pf_acc = ");
 codeParamAccess(pfc, f,base, stack);
 fprintf(f, ";\n");
+if (isArgType)
+    setBestIx(pfc, f, elPp, colBase);
 fprintf(f, "}\n");
 
 /* What we do rest of time depends on the type of para. */
@@ -569,6 +636,10 @@ switch (para->type)
 	 codeParamAccess(pfc, f, base, stack);
 	 fprintf(f, ";\n");
          break;
+    case pptParaArgMin:
+    case pptParaArgMax:
+	 updateArgMinMax(pfc, f, elPp, base, colBase, stack, para->type);
+	 break;
     case pptParaAdd:
 	 fprintf(f, "_pf_acc += ");
 	 codeParamAccess(pfc, f, base, stack);
@@ -597,9 +668,22 @@ fprintf(f, "}\n");
 
 endElInCollectionIteration(pfc, f, para->scope, elPp, collectionPp, TRUE);
 
-codeParamAccess(pfc, f, base, stack);
-fprintf(f, " = _pf_acc;\n");
+codeParamAccess(pfc, f, para->ty->base, stack);
+if (isArgType)
+     {
+     struct pfBaseType *colBase = collectionPp->ty->base;
+     if (colBase == pfc->dirType)
+	 fprintf(f, " = _pf_string_from_const(_pf_best_ix);\n");
+     else
+	 fprintf(f, " = _pf_best_ix;\n");
+     }
+else
+    {
+    fprintf(f, " = _pf_acc;\n");
+    }
 fprintf(f, "}\n");
+fprintf(f, "/* End %s */\n", pfParseTypeAsString(para->type));
+
 return 1;
 }
 
@@ -1712,6 +1796,8 @@ switch (pp->type)
 	}
     case pptParaMin:
     case pptParaMax:
+    case pptParaArgMin:
+    case pptParaArgMax:
     case pptParaAdd:
     case pptParaMultiply:
     case pptParaAnd:

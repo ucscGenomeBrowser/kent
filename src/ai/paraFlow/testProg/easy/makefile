@@ -52,6 +52,8 @@ test:
 	diff expected/oneVar $O/oneVar
 	paraFlow paraAdd.pf > $O/paraAdd
 	diff expected/paraAdd $O/paraAdd
+	paraFlow paraArgMin.pf > $O/paraArgMin
+	diff expected/paraArgMin $O/paraArgMin
 	paraFlow paraDoMod.pf > $O/paraDoMod
 	diff expected/paraDoMod $O/paraDoMod
 	paraFlow paraFilterDir.pf > $O/paraFilterDir
