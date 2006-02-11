@@ -4567,4 +4567,45 @@ cat << 'EOF' > gsub
     # 14488047 bases of 2866216770 (0.505%) in intersection
 
 
+#######################################################################
+#  OPOSSUM BLASTZ - (WORKING - 2006-02-10 - Hiram)
+    ssh kk
+    mkdir /cluster/data/hg18/bed/blastzMonDom4.2006-02-10
+    cd /cluster/data/hg18/bed/blastzMonDom4.2006-02-10
 
+    cat << '_EOF_' > DEF
+# human vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/parasol/bin
+
+BLASTZ=blastz.v7
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human (hg18)
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom4
+SEQ2_DIR=/iscratch/i/monDom4/monDom4.2bit
+SEQ2_LEN=/iscratch/i/monDom4/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzMonDom4.2006-02-10
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-stop=net `pwd`/DEF > blastz.out 2>&1 &
+    #	running 2006-02-10
