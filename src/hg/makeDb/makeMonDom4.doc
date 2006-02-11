@@ -17,3 +17,572 @@ exit; # don't actually run this like a script :)
         --no-host-directories --cut-dirs=5 \
  ftp://ftp.broad.mit.edu/distribution/assemblies/mammals/monodelphis/monDom4/*
     #	That takes a number of hours, ending up with:
+# -rw-rw-r--  1    7492963 Jan  5 18:10 Monodelphis4.0.agp
+# -rw-rw-r--  1       1160 Jan  5 18:10 MappedAssembly.Table
+# -rw-rw-r--  1        716 Jan  5 18:10 ForDistribution.command
+# -rw-rw-r--  1       1215 Jan  5 18:10 BasicStats.out
+# -rw-rw-r--  1       1512 Jan  5 18:11 ReadUsage.Table
+# -rw-rw-r--  1  474573344 Jan  5 18:11 Monodelphis4.0.agp.chromosome.qual.gz
+# -rw-rw-r--  1 1201437533 Jan  5 18:11 Monodelphis4.0.agp.chromosome.fasta.gz
+# -rw-rw-r--  1    7647098 Jan  5 18:12 assembly.agp
+# -rw-rw-r--  1   14841256 Jan  5 18:13 assembly.markup
+# -rw-rw-r--  1    2838523 Jan  5 18:13 assembly.links
+# -rw-rw-r--  1  474281414 Jan  5 18:13 assembly.agp.qual.gz
+# -rw-rw-r--  1 1201095284 Jan  5 18:13 assembly.agp.fasta.gz
+# -rw-rw-r--  1  176159300 Jan  5 18:14 assembly.unplaced
+# -rw-rw-r--  1 1151905015 Jan  5 18:14 assembly.reads.gz
+# -rw-rw-r--  1         43 Jan  5 18:15 source
+# -rw-rw-r--  1  471180166 Jan  5 18:15 contigs.quals.gz
+# -rw-rw-r--  1 1198813602 Jan  5 18:15 contigs.bases.gz
+# -rw-rw-r--  1  757582328 Jan  5 18:16 unplaced.fasta.gz
+# -rw-rw-r--  1 2083924258 Jan  5 18:18 unplaced.qual.gz
+# -rw-rw-r--  1 1159288222 Jan  5 19:17 softmasked_monDom3.tgz
+
+    zcat broad.mit.edu/Monodelphis4.0.agp.chromosome.fasta.gz \
+	| faSplit -verbose=2 byname stdin broadSplit/
+
+    #	combine the Broad split files into single chroms
+for C in 1 2 3 4 5 6 7 8 X Un
+do
+    mkdir -p ${C}
+    rm -f ${C}/chr${C}.fa
+    echo ">chr${C}" > ${C}/chr${C}.fa
+    echo -n "${C}/chr${C}.fa working ... "
+    ls broadSplit/${C}.*-*.fa | sort -t"." -k2,2n | while read F
+    do
+        grep -v "^>" ${F} >> ${C}/chr${C}.fa
+    done
+    echo "done"
+done
+
+    #	create a 2bit file to get a blastz hg18 started
+    #	this will be replaced later after RepeatMasker with masked
+    #	sequence
+    faToTwoBit ?/chr?.fa Un/chrUn.fa monDom4.2bit
+    #   generate chrom.sizes list in order by size, biggest first
+    #   This listing is going to be used in a variety of procedures
+    #   below
+    twoBitInfo monDom4.2bit stdout | sort -rn +1 > chrom.sizes
+    mkdir /san/sanvol1/scratch/monDom4
+    cp -p monDom4.2bit /san/sanvol1/scratch/monDom4
+    cp -p chrom.sizes /san/sanvol1/scratch/monDom4
+    #	split into 500K chunks for RepeatMasker
+    mkdir split500K
+for C in 1 2 3 4 5 6 7 8 X Un
+do
+    mkdir split500K/${C}
+    faSplit -verbose=2 size ${C}/chr${C}.fa 500000 split500K/${C}/chr${C}_ \
+        -lift=split500K/${C}.lft
+done
+    mkdir lifts
+    cat split500K/*.lft > lifts/lift500K.lft
+
+###########################################################################
+#  RepeatMasker run (WORKING 2006-02-06 - Hiram)
+    ssh kk
+    mkdir /cluster/data/monDom4/RMRun
+    mkdir /cluster/data/monDom4/RMOut
+    mkdir /cluster/data/monDom4/scripts
+    cd /cluster/data/monDom4/split500K
+for C in 1 2 3 4 5 6 7 8 X Un
+do
+    ls -1S ${C}/*.fa
+done > ../RMRun/split.list
+
+    cd /cluster/data/monDom4/RMRun
+    cat << '_EOF_' > template
+#LOOP
+../scripts/RMOpossum $(dir1) $(root1) {check out line ../RMOut/$(dir1)/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+
+    cat << '_EOF_' > ../scripts/RMOpossum
+#!/bin/csh -fe
+/bin/mkdir -p /scratch/tmp/monDom4/$1/$2
+/bin/mkdir -p ../RMOut/$1
+/bin/cp ../split500K/$1/$2.fa /scratch/tmp/monDom4/$1/$2/$2.fa
+pushd /scratch/tmp/monDom4/$1/$2
+/cluster/bluearc/RepeatMasker060120/RepeatMasker -s \
+        -species "Monodelphis domestica" $2.fa
+popd
+/bin/cp -p /scratch/tmp/monDom4/$1/$2/$2.fa.out $3
+/bin/rm -fr /scratch/tmp/monDom4/$1/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/monDom4/$1/$2
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/monDom4/$1
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/monDom4
+'_EOF_'
+    # happy emacs
+    chmod +x ../scripts/RMOpossum
+
+    gensub2 split.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+# Completed: 7170 of 7170 jobs
+# CPU time in finished jobs:   26375191s  439586.52m  7326.44h  305.27d  0.836 y
+# IO & Wait Time:               1584329s   26405.48m   440.09h   18.34d  0.050 y
+# Average job time:                3900s      64.99m     1.08h    0.05d
+# Longest finished job:           12608s     210.13m     3.50h    0.15d
+# Submission to last job:        162734s    2712.23m    45.20h    1.88d
+
+    #	lift results up to chrom coordinates
+    ssh kkstore01
+    cd /cluster/data/monDom4/RMOut
+    for C in 1 2 3 4 5 6 7 8 X Un
+    do
+	echo "chr${C} working ... "
+	(cat ${C}/chr${C}_000.out ${C}/chr${C}_0000.out 2> /dev/null; \
+	    ls ${C}/chr${C}_*.out | egrep -v "_000.out|_0000.out" \
+		| xargs tail --quiet --lines=+4) | \
+	    liftUp ../${C}/chr${C}.fa.out ../lifts/lift500K.lft error stdin
+	echo "chr${C} done"
+    done
+    #	the seemingly duplicate mention of _000.out and _0000.out takes
+    #	care of the case where one or the other exists, but both never
+    #	exist.  One will not exist and the cat will complain to stderr, hence
+    #	the redirection of cat complaints to dev null.
+
+###########################################################################
+# BLASTZ HUMAN hg18 - to quickly investigate monDom4 to see if it has the same
+# pile up problem that was in monDom2.  Got this started right after the
+# monDom4.2bit file was made from the original Broad chrom fasta
+    ssh pk
+    mkdir /cluster/store9/monDom4/bed/blastzHg18.2006-02-08
+    cd /cluster/store9/monDom4/bed/blastzHg18.2006-02-08
+
+    cat << '_EOF_' > DEF
+# human vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human (hg18)
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_IN_CONTIGS=0
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom4
+SEQ2_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+SEQ2_LEN=/san/sanvol1/scratch/monDom4/chrom.sizes
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom4/bed/blastzHg18.2006-02-08
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+XXXX - running 2006-02-08 10:06
+
+###########################################################################
+#	Initial database setup (DONE - 2006-02-06 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/monDom4
+    mkdir /gbdb/monDom4
+    ln -s /cluster/data/monDom4/monDom4.2bit /gbdb/monDom4
+    twoBitInfo monDom4.2bit stdout \
+        | awk '{printf "%s\t%s\t/gbdb/monDom4/monDom4.2bit\n", $1, $2}' \
+        > chromInfo.tab
+
+    hgsql -e "create database monDom4;" mysql
+    hgsql -e "create table grp (PRIMARY KEY(NAME)) select * from hg17.grp;" \
+                monDom4
+    hgsql monDom4 < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgsql -e 'load data local infile "chromInfo.tab" into table chromInfo;' \
+        monDom4
+    hgsql monDom4 -N -e 'select chrom from chromInfo' > chrom.lst
+
+    # Enter monDom4 into dbDb and defaultDb so test browser knows about
+    # it:
+    hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
+        defaultPos, active, orderKey, genome, scientificName, \
+        htmlPath, hgNearOk, hgPbOk, sourceName) \
+        VALUES("monDom4", "Jan 2006", "/gbdb/monDom4", "Opossum", \
+        "chr1:1000000-1100000", 1, 34, "Opossum", \
+        "Monodelphis domestica", \
+        "/gbdb/monDom4/html/description.html", 0, 0, \
+        "Broad Inst. monDom4 Jan06");' \
+        -h localhost hgcentraltest
+    #	do this update later when it is time to make this be the default
+    hgsql -e 'update defaultDb set name="monDom4" where genome="Opossum";' \
+	hgcentraltest
+
+    # Make trackDb table so browser knows what tracks to expect
+    mkdir /cluster/data/monDom4/html
+    ln -s /cluster/data/monDom4/html /gbdb/monDom4/html
+    mkdir $HOME/kent/src/hg/makeDb/trackDb/opossum/monDom4
+    cd $HOME/kent/src/hg/makeDb/trackDb/opossum
+    cvs add monDom4
+    cd monDom4
+    cp -p /cluster/data/monDom2/html/description.html ./description.html
+    #	edit that description to update
+    cvs add description.html
+    cvs commit
+    cd $HOME/kent/src/hg/makeDb/trackDb
+    #	add monDom4 to the makefile, then
+    make DBS=monDom4
+    #	or
+    make DBS=monDom4 alpha
+    #	to place it on the genome-test browser
+
+#######################################################################
+# SIMPLE REPEAT [TRF] TRACK (DONE - 2006-02-08 - Hiram)
+#   This can be done while the above repeat masker run is working
+    ssh kkstore01
+    mkdir /cluster/data/monDom4/bed/simpleRepeat
+    cd /cluster/data/monDom4
+    #	split into 50M chunks for trfBig
+    mkdir split50M
+for C in 1 2 3 4 5 6 7 8 X Un
+do
+    mkdir split50M/${C}
+    faSplit -verbose=2 size ${C}/chr${C}.fa 50000000 split50M/${C}/chr${C}_ \
+        -lift=split50M/${C}.lft
+done
+    cat split50M/*.lft > lifts/lift50M.lft
+    cd split50M
+    ls -1S */*.fa > ../bed/simpleRepeat/split.list
+
+    #	small kluster for these larger jobs
+    ssh kki
+    cd /cluster/data/monDom4/bed/simpleRepeat
+    mkdir trf
+
+    cat << '_EOF_' > template
+#LOOP
+./runTrf.csh $(dir1) $(root1) {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+
+    cat << '_EOF_' > runTrf.csh
+#!/bin/csh -fe
+set workDir = /scratch/tmp/monDom4TRF/$1/$2
+set inputFN = ../../split50M/$1/$2.fa
+set outputFN = $3
+mkdir -p $workDir
+cp -p $inputFN $workDir
+pushd $workDir
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $2.fa /dev/null -bedAt=$2.bed -tempDir=/scratch/tmp
+popd
+rm -f $outputFN
+cp -p $workDir/$2.bed $outputFN
+rm -fr $workDir/*
+rmdir --ignore-fail-on-non-empty $workDir
+rmdir --ignore-fail-on-non-empty /scratch/tmp/monDom4TRF/$1
+rmdir --ignore-fail-on-non-empty /scratch/tmp/monDom4TRF
+'_EOF_'
+    #	happy emacs
+    chmod +x runTrf.csh
+
+    gensub2 split.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+# Completed: 77 of 77 jobs
+# CPU time in finished jobs:      16109s     268.48m     4.47h    0.19d  0.001 y
+# IO & Wait Time:                  1199s      19.99m     0.33h    0.01d  0.000 y
+# Average job time:                 225s       3.75m     0.06h    0.00d
+# Longest finished job:            1322s      22.03m     0.37h    0.02d
+# Submission to last job:          1870s      31.17m     0.52h    0.02d
+
+    #	lift to chrom coordinates
+    ssh kkstore01
+    cd /cluster/data/monDom4/bed/simpleRepeat
+    find ./trf -type f | xargs cat | \
+        liftUp simpleRepeat.bed \
+	    /cluster/data/monDom4/lifts/lift50M.lft \
+		error stdin
+
+     # Load into the database:
+    ssh hgwdev
+    cd /cluster/data/monDom4/bed/simpleRepeat
+    hgLoadBed -strict monDom4 simpleRepeat simpleRepeat.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    #	Loaded 710087 elements of size 16
+
+    #   Compare with previous assembly
+    time featureBits monDom4 simpleRepeat
+    #	68337838 bases of 3501643220 (1.952%) in intersection
+    #	real    0m42.137s
+    time featureBits monDom2 simpleRepeat
+    #	69239555 bases of 3496445653 (1.980%) in intersection
+    #	real    1m5.716s
+    time featureBits monDom1 simpleRepeat
+    #	55000238 bases of 3492108230 (1.575%) in intersection
+    #	real    1m49.240s
+
+#######################################################################
+# PROCESS SIMPLE REPEATS INTO MASK (DONE - 2006-02-10 - Hiram)
+# After the simpleRepeats track has been built, make a filtered
+# version 
+# of the trf output: keep trf's with period <= 12:
+#	need these mask files on a per-chrom basis
+    ssh kkstore01
+    cd /cluster/data/monDom4/bed/simpleRepeat
+
+    mkdir chromMask
+    for C in 1 2 3 4 5 6 7 8 X Un
+    do
+	echo "chr${C} working ..."
+	cat trf/chr${C}_*.bed | liftUp chromMask/chr${C}.bed \
+	    /cluster/data/monDom4/lifts/lift50M.lft \
+		error stdin
+	awk '{if ($5 <= 12) print;}' chromMask/chr${C}.bed \
+		> chromMask/chr${C}_Mask.bed
+	echo "chr${C} done"
+    done
+
+    #	should be same result as if we had done the whole thing as a
+    #	single piece:
+    cat chromMask/*_Mask.bed | wc -l
+    #	485364
+    awk '{if ($5 <= 12) print;}' simpleRepeat.bed | wc -l
+    #	485364
+
+#######################################################################
+# MASK FA USING REPEATMASKER AND FILTERED TRF FILES (DONE - 2006-02-10 - Hiram)
+    #	the new style binRange was in development at this time, so using
+    #	binaries built today with that new functionality.  Next time
+    #	these will be the standard commands
+    ssh kkstore01
+    cd /cluster/data/monDom4
+    #	verify sequence before and after masking to ensure it doesn't
+    #	get broken
+    time faCount ?/chr?.fa Un/chrUn.fa
+#seq    len     A       C       G       T       N       cpg
+# chr1  748055161 227831941 138649610 138661137 228270299 14642174 3225777
+# chr2  541556283 163736285 100133171 100127159 163985111 13574557 2505214
+# chr3  526135210 161221343  95632761  95680478 160815407 12785221 2208210
+# chr4  430141050 130190442  78748372  78684824 130210194 12307218 1877031
+# chr5  308900514  94866760  56126597  56061671  94769331  7076155 1311015
+# chr6  244784211  73686567  45271636  45267221  73515529  7043258 1216115
+# chr7  262624689  81219469  47052213  47076531  81079019  6197457 1127925
+# chr8  308469712  93087343  56578139  56466687  93245129  9092414 1427329
+# chrX   60718501  16286269  11251258  11264518  16304629  5611827  371051
+# chrUn 174229318 46556476  32785341  32891615  46354738 15641148 1620662
+# total 3605614649 1088682895 662229098 662181841 1088549386 103971429 16890329
+    #	real    1m51.555s
+
+    cat << '_EOF_' > scripts/maskChroms.sh
+#!/bin/sh
+
+for C in 1 2 3 4 5 6 7 8 X Un
+do
+    echo "chr${C} working ..."
+    $HOME/bin/x86_64/maskOutFa -soft ${C}/chr${C}.fa \
+        bed/simpleRepeat/chromMask/chr${C}_Mask.bed ${C}/chr${C}_masked.fa
+    $HOME/bin/x86_64/maskOutFa -softAdd ${C}/chr${C}_masked.fa \
+        ${C}/chr${C}.fa.out ${C}/chr${C}_masked.fa
+    echo "done"
+done
+'_EOF_'
+    #	happy emacs
+    chmod +x scripts/maskChroms.sh
+    time ./scripts/maskChroms.sh
+
+    #	should have the same sequence still
+    time faCount ?/chr?_masked.fa Un/chrUn_masked.fa
+#seq    len     A       C       G       T       N       cpg
+chr1  748055161 227831941 138649610 138661137 228270299 14642174  3225777
+chr2  541556283 163736285 100133171 100127159 163985111 13574557  2505214
+chr3  526135210 161221343  95632761  95680478 160815407 12785221  2208210
+chr4  430141050 130190442  78748372  78684824 130210194 12307218  1877031
+chr5  308900514  94866760  56126597  56061671  94769331  7076155  1311015
+chr6  244784211  73686567  45271636  45267221  73515529  7043258  1216115
+chr7  262624689  81219469  47052213  47076531  81079019  6197457  1127925
+chr8  308469712  93087343  56578139  56466687  93245129  9092414  1427329
+chrX   60718501  16286269  11251258  11264518  16304629  5611827   371051
+chrUn 174229318  46556476  32785341  32891615  46354738 15641148  1620662
+total 3605614649 1088682895 662229098 662181841 1088549386 103971429 16890329
+
+    #	after verifying they are the same, remove the old unmasked sequence
+for C in 1 2 3 4 5 6 7 8 X Un
+do
+    rm ${C}/chr${C}.fa
+    mv ${C}/chr${C}_masked.fa ${C}/chr${C}.fa
+done
+
+    #	Create new 2bit file with this masked sequence
+    ls -og *.2bit
+    #	-rw-rw-r--  1 901986358 Feb  8 09:29 monDom4.2bit
+    #	browser will not function while this 2bit file does not exist
+    rm monDom4.2bit
+    faToTwoBit ?/chr?.fa Un/chrUn.fa monDom4.2bit
+    #	the file becomes larger:
+    ls -og *.2bit
+    #	-rw-rw-r--  1 950060406 Feb 10 13:53 monDom4.2bit
+
+    #	and load the rmsk tables
+    ssh hgwdev
+    cd /cluster/data/monDom4
+    time $HOME/bin/i386/hgLoadOut -verbose=2 monDom4 \
+	?/chr?.fa.out Un/chrUn.fa.out
+#       hgLoadOut: connected to database: monDom4
+# Processing 1/chr1.fa.out
+# Strange perc. field -460.2 line 561938 of 1/chr1.fa.out
+# Strange perc. field -395.6 line 561938 of 1/chr1.fa.out
+# Loading up table chr1_rmsk
+# Processing 2/chr2.fa.out
+# Strange perc. field -160.2 line 234960 of 2/chr2.fa.out
+# Strange perc. field -238.7 line 234960 of 2/chr2.fa.out
+# bad rep range [1723, 73] line 451681 of 2/chr2.fa.out 
+# Strange perc. field -6.0 line 1104797 of 2/chr2.fa.out
+# Loading up table chr2_rmsk
+# Processing 3/chr3.fa.out
+# bad rep range [2344, 191] line 648571 of 3/chr3.fa.out 
+# Loading up table chr3_rmsk
+# Processing 4/chr4.fa.out
+# Strange perc. field -7.0 line 7733 of 4/chr4.fa.out
+# Loading up table chr4_rmsk
+# Processing 5/chr5.fa.out
+# Strange perc. field -6.9 line 34415 of 5/chr5.fa.out
+# Strange perc. field -1.1 line 44716 of 5/chr5.fa.out
+# Strange perc. field -1.1 line 44720 of 5/chr5.fa.out
+# Strange perc. field -1.1 line 44722 of 5/chr5.fa.out
+# Strange perc. field -1.1 line 44724 of 5/chr5.fa.out
+# Strange perc. field -38.3 line 146729 of 5/chr5.fa.out
+# Strange perc. field -38.3 line 146732 of 5/chr5.fa.out
+# Strange perc. field -38.3 line 146734 of 5/chr5.fa.out
+# Strange perc. field -38.3 line 146737 of 5/chr5.fa.out
+# Strange perc. field -42.5 line 239189 of 5/chr5.fa.out
+# Loading up table chr5_rmsk
+# Processing 6/chr6.fa.out
+# Strange perc. field -0.2 line 87360 of 6/chr6.fa.out
+# Strange perc. field -0.1 line 87360 of 6/chr6.fa.out
+# Strange perc. field -3960.1 line 507698 of 6/chr6.fa.out
+# Strange perc. field -1856.3 line 507698 of 6/chr6.fa.out
+# Loading up table chr6_rmsk
+# Processing 7/chr7.fa.out
+# Loading up table chr7_rmsk
+# Processing 8/chr8.fa.out
+# Loading up table chr8_rmsk
+# Processing X/chrX.fa.out
+# Loading up table chrX_rmsk
+# Processing Un/chrUn.fa.out
+# Strange perc. field -27.6 line 129404 of Un/chrUn.fa.out
+# Strange perc. field -1.8 line 129404 of Un/chrUn.fa.out
+# Strange perc. field -27.6 line 129407 of Un/chrUn.fa.out
+# Strange perc. field -1.8 line 129407 of Un/chrUn.fa.out
+# Strange perc. field -27.6 line 129409 of Un/chrUn.fa.out
+# Strange perc. field -1.8 line 129409 of Un/chrUn.fa.out
+# Strange perc. field -27.6 line 129411 of Un/chrUn.fa.out
+# Strange perc. field -1.8 line 129411 of Un/chrUn.fa.out
+# Strange perc. field -27.6 line 129413 of Un/chrUn.fa.out
+# Strange perc. field -1.8 line 129413 of Un/chrUn.fa.out
+# Loading up table chrUn_rmsk
+# note: 2 records dropped due to repStart > repEnd
+
+    #	Note the interesting coincidence of the exact same % for monDom4
+    #	and monDom2
+    time featureBits monDom4 rmsk
+    #	1814099592 bases of 3501643220 (51.807%) in intersection
+    #	real    3m57.193s
+    time featureBits monDom2 rmsk
+    #	1811406819 bases of 3496445653 (51.807%) in intersection
+    #	real    5m31.388s
+    time featureBits monDom1 rmsk
+    #	1775646140 bases of 3492108230 (50.847%) in intersection
+
+#######################################################################
+# GC5BASE (DONE - 2006-02-08 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/monDom4/bed/gc5Base
+    cd /cluster/data/monDom4/bed/gc5Base
+    time hgGcPercent -verbose=2 -wigOut -doGaps -file=stdout -win=5 monDom4 \
+        /cluster/data/monDom4 | wigEncode stdin gc5Base.wig gc5Base.wib
+
+    ssh hgwdev
+    cd /cluster/data/monDom4/bed/gc5Base
+    mkdir /gbdb/monDom4/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/monDom4/wib
+    hgLoadWiggle -verbose=2 monDom4 gc5Base gc5Base.wig
+
+#######################################################################
+# LOAD GAP & GOLD TABLES FROM AGP (DONE - 2006-02-10 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/monDom4
+    hgGoldGapGl -noGl monDom4 broad.mit.edu/Monodelphis4.0.agp
+    #   Verify sanity of indexes
+    hgsql -e "show index from gold;" monDom4
+    hgsql -e "show index from gap;" monDom4
+    #   Look at the Cardinality column, it should have some healthy
+    #   numbers for all indices
+    # For some reason, the indices do not get built correctly --
+    # "show index from gap/gold" shows NULL cardinalities for chrom.  
+    # Rebuild indices with "analyze table".
+    hgsql -e "analyze table gold; analyze table gap;" monDom4
+
+#######################################################################
+#	LINEAGE SPECIFIC REPEATS (DONE - 2006-02-10 - Hiram)
+#	Let's see if DateRepeats can do anything with this Opossum
+#	business.  This was tried, but it doesn't make anything special
+#	for any of the organisms and a -comp of opossum isn't allowed at
+#	this time so we couldn't do this on the other organisms either to 
+#	obtain any specific repeats there.
+    ssh kki
+    mkdir /cluster/data/monDom4/linSpecRep
+    cd /cluster/data/monDom4/linSpecRep
+    
+    for C in 1 2 3 4 5 6 7 8 X Un
+    do
+	ln -s ../${C}/chr${C}.fa.out ./chr${C}.rmsk.out
+    done
+
+    #	This takes a long time to run as a script, to speed it up it has
+    #	been converted to a mini cluster run
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bluearc/RepeatMasker060120/DateRepeats $(path1) -query opossum -comp human -comp mouse -comp rat -comp dog -comp dog
+#ENDLOOP
+'_EOF_'
+
+    ls *.out > out.list
+
+    gensub2 out.list single template jobList
+
+    ssh kki
+    cd /cluster/bluearc/scratch/hg/gs.18/build35/rmsk.spec
+    ./runArian.sh > jobList
+    para create jobList
+    para try, ... check ... push ... etc ...
+    #	To check if any difference is noted in the various comparison
+    #	organisms:
+    awk '{if(NF>10){a=NF-4;b=NF-3;c=NF-2;d=NF-1; print $a,$b,$c,$d,$NF}}' \
+	chr2.rmsk.out_homo-sapiens_mus-musculus_rattus_canis-familiaris_canis-familiaris \
+	    | sort | uniq -c
+    #	187651 - - - - -
+    #	113100 0 0 0 0 0
+    #	210909 ? ? ? ? ?
+    #	602832 X X X X X
+    #	always the same mark for each comp organism
+
+#######################################################################
+#	Distribute files to filesystems for kluster runs
+    ssh kkr1u00
+    mkdir /iscratch/i/monDom4
+    cd /iscratch/i/monDom4
+    cp -p /cluster/data/monDom4/monDom4.2bit .
+    cp -p /cluster/data/monDom4/chrom.sizes .
+for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress /iscratch/i/monDom4/ kkr${R}u00:/iscratch/i/monDom4/
+done
+
+    ssh pk
+    mkdir /san/sanvol1/scratch/monDom4
+
