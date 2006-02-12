@@ -263,6 +263,7 @@ else
     }
 }
 
+
 static int codeCall(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
 /* Generate code for a function call. */
@@ -1622,6 +1623,66 @@ for (cast = castList; cast != NULL; cast = cast->next)
     }
 }
 
+static void printLocalInterfaceMethodAssignments(struct pfCompile *pfc, 
+	FILE *f, struct pfParse *pp, struct pfBaseType *classBase, 
+	struct pfToken *tok, int stack)
+/* Print assignments of methods declared in this interface. */
+{
+switch (pp->type)
+    {
+    case pptFlowDec:
+    case pptToDec:
+	fprintf(f, "_pf_face->%s = ", pp->name);
+	codeMethodName(pfc, tok, f, classBase, pp->name, stack);
+	fprintf(f, ";\n");
+        break;
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    printLocalInterfaceMethodAssignments(pfc, f, pp, classBase, tok, stack);
+}
+
+static void printInterfaceMethodAssignments(struct pfCompile *pfc, FILE *f,
+	struct pfBaseType *faceBase, struct pfBaseType *classBase, 
+	struct pfToken *tok, int stack)
+/* Print assignments of methods to interface, starting with
+ * parent interface. */
+{
+if (faceBase->parent != NULL && faceBase->parent->def != NULL)
+    {
+    printInterfaceMethodAssignments(pfc, f, faceBase->parent, classBase, 
+    	tok, stack);
+    }
+printLocalInterfaceMethodAssignments(pfc, f, faceBase->def, classBase, 
+	tok, stack);
+}
+
+static void castClassToInterface(struct pfCompile *pfc, FILE *f, 
+	struct pfParse *pp, int stack)
+/* Generate code to allocate an interface type, fill in it's methods
+ * and fill in it's object pointer with what's on the stack. */
+{
+struct pfBaseType *faceBase = pp->ty->base;
+char *faceName = faceBase->name;
+struct pfParse *classPp = pp->children;
+struct pfBaseType *classBase = classPp->ty->base;
+char *className = classBase->name;
+fprintf(f, "{\n");
+fprintf(f, "struct %s *_pf_face = _pf_need_mem(sizeof(struct %s));\n", 
+	faceName, faceName);
+fprintf(f, "struct _pf_object *_pf_obj = %s[%d].Obj;\n", stackName, stack);
+fprintf(f, "if (_pf_obj == 0)\n");
+codeUseOfNil(f, pp);
+fprintf(f, "_pf_face->_pf_refCount = 1;\n");
+fprintf(f, "_pf_face->_pf_cleanup = _pf_cleanup_interface;\n");
+fprintf(f, "_pf_face->_pf_obj = _pf_obj;\n");
+fprintf(f, "_pf_face->_pf_objTypeId = ");
+codeForType(pfc, f, classPp->ty);
+fprintf(f, ";\n");
+printInterfaceMethodAssignments(pfc, f, faceBase, classBase, pp->tok, stack);
+fprintf(f, "%s[%d].v = _pf_face;\n", stackName, stack);
+fprintf(f, "}\n");
+}
+
 static void castStack(struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
 	int stack)
 /* Cast stack location. */
@@ -1753,6 +1814,9 @@ switch(pp->type)
 	}
     case pptCastCallToTuple:
         castCallToTuple(pfc, f, pp, stack);
+	break;
+    case pptCastClassToInterface:
+        castClassToInterface(pfc, f, pp, stack);
 	break;
     default:
 	{
@@ -1988,6 +2052,7 @@ switch (pp->type)
     case pptCastTypedToVar:
     case pptCastVarToTyped:
     case pptCastCallToTuple:
+    case pptCastClassToInterface:
 	{
 	codeExpression(pfc, f, pp->children, stack, addRef);
 	castStack(pfc, f, pp, stack);
@@ -2429,14 +2494,6 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     codeStaticAssignments(pfc, f, pp);
 }
 
-static void printStructRefCleanup(FILE *f, char *name)
-/* Print the first part of the structure associated with a class or interface. */
-{
-fprintf(f, "struct %s {\n", name);
-fprintf(f, "int _pf_refCount;\n");
-fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", name);
-}
-
 
 static void rPrintClasses(struct pfCompile *pfc, FILE *f, struct pfParse *pp,
 	boolean printPolyFun)
@@ -2445,7 +2502,10 @@ static void rPrintClasses(struct pfCompile *pfc, FILE *f, struct pfParse *pp,
 if (pp->type == pptClass)
     {
     struct pfBaseType *base = pp->ty->base;
-    printStructRefCleanup(f, base->name);
+    fprintf(f, "struct %s {\n", base->name);
+    fprintf(f, "int _pf_refCount;\n");
+    fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", 
+    	base->name);
     fprintf(f, "_pf_polyFunType *_pf_polyFun;\n");
     rPrintFields(pfc, f, base); 
     fprintf(f, "};\n");
@@ -2485,12 +2545,14 @@ static void rPrintInterfaces(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
 {
 if (pp->type == pptInterface)
      {
-     uglyf("rPrintInterfaces on %s.  pp->ty = %p\n", pp->name, pp->ty);
      struct pfBaseType *base = pp->ty->base;
      struct pfParse *ppType = pp->children;
      struct pfParse *ppCompound = ppType->next;
-     printStructRefCleanup(f, base->name);
+     fprintf(f, "struct %s {\n", base->name);
+     fprintf(f, "int _pf_refCount;\n");
+     fprintf(f, "void (*_pf_cleanup)(void *obj, int typeId);\n");
      fprintf(f, "void *_pf_obj;\n");
+     fprintf(f, "int _pf_objTypeId;\n");
      rPrintInterfaceElements(pfc, f, base);
      fprintf(f, "};\n\n");
      }

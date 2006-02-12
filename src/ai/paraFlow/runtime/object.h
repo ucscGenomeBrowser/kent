@@ -42,5 +42,8 @@ void _pf_var_cleanup(_pf_Var var);
 /* If variable needs cleanup decrement _pf_refCount and if necessary 
  * call _pf_cleanup */
 
+void _pf_cleanup_interface(void *v, int typeId);
+/* Clean up interface of some sort. */
+
 #endif /* OBJECT_H */
 

@@ -44,6 +44,7 @@ interface circleFace extends boxFace
 
 to redCircle(circleFace screen, int x,y, double radius)
     {
+    print("redCircle");
     }
 
 redCircle(gfx, 3, 3, 2.5);

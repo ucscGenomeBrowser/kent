@@ -115,7 +115,7 @@ for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
 	    subObj->_pf_cleanup(subObj, fieldType->typeId);
 	}
     }
-free(obj);
+freeMem(obj);
 }
 
 _pf_Object tuple_to_class(_pf_Stack *stack, struct _pf_type *type,
@@ -210,7 +210,7 @@ else if (elType->base->needsCleanup)
 	}
     }
 freeMem(array->elements);
-free(array);
+freeMem(array);
 }
 
 static _pf_Array array_of_type(int count, int allocated, 

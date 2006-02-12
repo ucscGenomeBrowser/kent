@@ -738,7 +738,6 @@ static void coerceClassToInterface(struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfBaseType *classBase, struct pfBaseType *interfaceBase)
 /* Make sure class and interface are compatable, and then generate cast to interface. */
 {
-uglyf("Attempting to coerce class %s to interface %s\n", classBase->name, interfaceBase->name);
 /* Looks like we're ok, go ahead and put int cast. */
 checkClassHasInterfaceMethods(pfc, (*pPp)->tok, classBase, interfaceBase);
 insertCast(pptCastClassToInterface, pfTypeNew(interfaceBase), pPp);
@@ -843,7 +842,6 @@ if (pt->base != destBase)
 	}
     else if (destBase->isInterface)
         {
-	uglyf("Coercing %s to interface\n", pt->base->name);
 	if (pt->base->isInterface)
 	    {
 	    /* Check to see if we're just coercing to a parent interface, which is ok. */
