@@ -2429,6 +2429,15 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     codeStaticAssignments(pfc, f, pp);
 }
 
+static void printStructRefCleanup(FILE *f, char *name)
+/* Print the first part of the structure associated with a class or interface. */
+{
+fprintf(f, "struct %s {\n", name);
+fprintf(f, "int _pf_refCount;\n");
+fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", name);
+}
+
+
 static void rPrintClasses(struct pfCompile *pfc, FILE *f, struct pfParse *pp,
 	boolean printPolyFun)
 /* Print out class definitions. */
@@ -2436,9 +2445,7 @@ static void rPrintClasses(struct pfCompile *pfc, FILE *f, struct pfParse *pp,
 if (pp->type == pptClass)
     {
     struct pfBaseType *base = pp->ty->base;
-    fprintf(f, "struct %s {\n", base->name);
-    fprintf(f, "int _pf_refCount;\n");
-    fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", base->name);
+    printStructRefCleanup(f, base->name);
     fprintf(f, "_pf_polyFunType *_pf_polyFun;\n");
     rPrintFields(pfc, f, base); 
     fprintf(f, "};\n");
@@ -2448,6 +2455,47 @@ if (pp->type == pptClass)
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
     rPrintClasses(pfc, f, pp, printPolyFun);
+}
+
+static void rPrintFuncPointersInInterface(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
+/* Print out function declarations in parse tree as function pointers. */
+{
+switch (pp->type)
+    {
+    case pptToDec:
+    case pptFlowDec:
+	fprintf(f, "void (*%s)(%s *%s);\n", pp->name, stackType, stackName);
+        break;
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    rPrintFuncPointersInInterface(pfc, f, pp);
+}
+
+static void rPrintInterfaceElements(struct pfCompile *pfc, FILE *f, struct pfBaseType *base)
+/* Print out function pointer declarations for all elements in interface and it's parents. */
+{
+/* Print out elements from parent interfaces if any first. */
+if (base->parent != NULL && base->parent->def != NULL)
+    rPrintInterfaceElements(pfc, f, base->parent);
+rPrintFuncPointersInInterface(pfc, f, base->def);
+}
+
+static void rPrintInterfaces(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
+/* Print out interface definition. */
+{
+if (pp->type == pptInterface)
+     {
+     uglyf("rPrintInterfaces on %s.  pp->ty = %p\n", pp->name, pp->ty);
+     struct pfBaseType *base = pp->ty->base;
+     struct pfParse *ppType = pp->children;
+     struct pfParse *ppCompound = ppType->next;
+     printStructRefCleanup(f, base->name);
+     fprintf(f, "void *_pf_obj;\n");
+     rPrintInterfaceElements(pfc, f, base);
+     fprintf(f, "};\n\n");
+     }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    rPrintInterfaces(pfc, f, pp);
 }
 
 static boolean isInside(struct pfParse *outside, struct pfParse *inside)
@@ -2523,6 +2571,7 @@ for (p = pp->children; p != NULL; p = p->next)
 	case pptFlowDec:
 	case pptNop:
 	case pptClass:
+	case pptInterface:
 	    break;
 	case pptTuple:
 	case pptVarInit:
@@ -2667,7 +2716,8 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 	    fprintf(f, "\n");
 	    fprintf(f, "/* Class definitions in ParaFlow module %s */\n\n", module->name);
 	    rPrintClasses(pfc, f, module, toCode == module);
-	    fprintf(f, "\n");
+	    fprintf(f, "/* Interface definitions in ParaFlow module %s */\n\n", module->name);
+	    rPrintInterfaces(pfc, f, module);
 	    }
 
 	for (module = program->children; module != NULL; module = module->next)

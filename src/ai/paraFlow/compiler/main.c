@@ -49,25 +49,26 @@ static struct hash *createReservedWords()
 /* Create reserved words table. */
 {
 struct hash *hash = hashNew(7);
-hashAddInt(hash, "class", pftClass);
-hashAddInt(hash, "to", pftTo);
-hashAddInt(hash, "para", pftPara);
-hashAddInt(hash, "flow", pftFlow);
-hashAddInt(hash, "into", pftInto);
-hashAddInt(hash, "for", pftFor);
-hashAddInt(hash, "foreach", pftForeach);
-hashAddInt(hash, "while", pftWhile);
-hashAddInt(hash, "of", pftOf);
-hashAddInt(hash, "if", pftIf);
-hashAddInt(hash, "else", pftElse);
 hashAddInt(hash, "break", pftBreak);
 hashAddInt(hash, "continue", pftContinue);
-hashAddInt(hash, "return", pftReturn);
+hashAddInt(hash, "class", pftClass);
+hashAddInt(hash, "else", pftElse);
 hashAddInt(hash, "extends", pftExtends);
-hashAddInt(hash, "polymorphic", pftPolymorphic);
-hashAddInt(hash, "static", pftStatic);
-hashAddInt(hash, "nil", pftNil);
+hashAddInt(hash, "if", pftIf);
 hashAddInt(hash, "include", pftInclude);
+hashAddInt(hash, "interface", pftInterface);
+hashAddInt(hash, "into", pftInto);
+hashAddInt(hash, "flow", pftFlow);
+hashAddInt(hash, "for", pftFor);
+hashAddInt(hash, "foreach", pftForeach);
+hashAddInt(hash, "of", pftOf);
+hashAddInt(hash, "nil", pftNil);
+hashAddInt(hash, "para", pftPara);
+hashAddInt(hash, "polymorphic", pftPolymorphic);
+hashAddInt(hash, "return", pftReturn);
+hashAddInt(hash, "static", pftStatic);
+hashAddInt(hash, "to", pftTo);
+hashAddInt(hash, "while", pftWhile);
 hashAddInt(hash, "_operator_", pftOperator);
 return hash;
 }
@@ -134,6 +135,7 @@ pfc->collectionType = pfScopeAddType(scope, "<collection>", TRUE, pfc->varType, 
 pfc->tupleType = pfScopeAddType(scope, "<tuple>", FALSE, pfc->varType, 0, FALSE);
 pfc->indexRangeType = pfScopeAddType(scope, "<indexRange>", TRUE, pfc->collectionType, 0, FALSE);
 pfc->classType = pfScopeAddType(scope, "<class>", FALSE, pfc->varType, 0, FALSE);
+pfc->interfaceType = pfScopeAddType(scope, "<interface>", FALSE, pfc->varType, 0, FALSE);
 pfc->functionType = pfScopeAddType(scope, "<function>", FALSE, pfc->varType, 0, FALSE);
 pfc->toType = pfScopeAddType(scope, "to", FALSE, pfc->functionType, 0, FALSE);
 pfc->flowType = pfScopeAddType(scope, "flow", FALSE, pfc->functionType, 0, FALSE);

@@ -44,26 +44,28 @@ enum pfTokType
     pftSysOrUser,       /* *. */
 
     /* - reserved words - */
-    pftClass,
-    pftTo,
-    pftPara,
-    pftFlow,
-    pftInto,
-    pftFor,
-    pftForeach,
-    pftWhile,
-    pftOf,
-    pftIf,
-    pftElse,
     pftBreak,
     pftContinue,
-    pftReturn,
+    pftClass,
+    pftElse,
     pftExtends,
-    pftPolymorphic,
-    pftStatic,
-    pftNil,
+    pftIf,
     pftInclude,
+    pftInterface,
+    pftInto,
+    pftFlow,
+    pftFor,
+    pftForeach,
+    pftOf,
+    pftNil,
+    pftPara,
+    pftPolymorphic,
+    pftReturn,
+    pftStatic,
+    pftTo,
+    pftWhile,
     pftOperator,
+
     };
 
 char *pfTokTypeAsString(enum pfTokType type);

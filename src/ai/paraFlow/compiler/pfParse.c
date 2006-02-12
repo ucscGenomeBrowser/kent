@@ -58,6 +58,8 @@ switch (type)
     	return "pptContinue";
     case pptClass:
 	return "pptClass";
+    case pptInterface:
+	return "pptInterface";
     case pptVarDec:
 	return "pptVarDec";
     case pptNameUse:
@@ -1586,16 +1588,17 @@ while (parent != NULL)
     }
 }
 
-static struct pfParse *parseClass(struct pfCompile *pfc,
-	struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *parseClassOrInterface(struct pfCompile *pfc,
+	struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope,
+	enum pfParseType pptType)
 /* Parse class declaration statement. */
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp;
 struct pfParse *name, *body, *extends = NULL;
 struct pfBaseType *myBase;
-pp = pfParseNew(pptClass, tok, parent, scope);
-tok = tok->next;	/* Skip 'class' token */
+pp = pfParseNew(pptType, tok, parent, scope);
+tok = tok->next;	/* Skip 'class' or 'interface' token */
 name = parseNameUse(pp, &tok, scope);
 name->type = pptTypeName;
 pp->name = name->name;
@@ -1608,10 +1611,12 @@ if (tok->type == pftExtends)
     struct pfBaseType *parentBase;
     tok = tok->next;
     if (tok->type != pftName)
-        expectingGot("class name", tok);
+        expectingGot("name", tok);
     parentBase = pfScopeFindType(scope, tok->val.s);
     if (parentBase == NULL)
-	errAt(tok, "undefined parent class %s", tok->val.s);
+	errAt(tok, "undefined parent %s", tok->val.s);
+    if (parentBase->isClass != myBase->isClass)
+        errAt(tok, "can't mix classes and interfaces in extensions");
     extends = pfParseNew(pptTypeName, tok, pp, scope);
     extends->ty = pfTypeNew(parentBase);
     extends->name = tok->val.s;
@@ -1627,6 +1632,21 @@ slAddHead(&pp->children, name);
 *pTokList = tok;
 return pp;
 }
+
+static struct pfParse *parseClass(struct pfCompile *pfc,
+	struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
+/* Parse class declaration statement. */
+{
+return parseClassOrInterface(pfc, parent, pTokList, scope, pptClass);
+}
+
+static struct pfParse *parseInterface(struct pfCompile *pfc,
+	struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
+/* Parse interface declaration statement. */
+{
+return parseClassOrInterface(pfc, parent, pTokList, scope, pptInterface);
+}
+
 
 
 static struct pfParse *parseIf(struct pfCompile *pfc, struct pfParse *parent,
@@ -1886,6 +1906,9 @@ switch (tok->type)
 	break;
     case pftClass:
 	statement = parseClass(pfc, parent, &tok, scope);
+	break;
+    case pftInterface:
+        statement = parseInterface(pfc, parent, &tok, scope);
 	break;
     case pftTo:
 	statement = parseTo(pfc, parent, &tok, scope);

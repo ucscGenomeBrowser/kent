@@ -33,6 +33,7 @@ enum pfParseType
     pptBreak,
     pptContinue,
     pptClass,
+    pptInterface,
     pptVarDec,
     pptNameUse,
     pptVarUse,

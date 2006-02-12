@@ -61,6 +61,7 @@ struct pfCompile
     struct pfBaseType *flowType;	/* Type for flow declarations */
     struct pfBaseType *operatorType;	/* Type for operator declarations */
     struct pfBaseType *classType;	/* Type for class declarations. */
+    struct pfBaseType *interfaceType;	/* Type for interface declarations. */
 
     struct pfBaseType *bitType;
     struct pfBaseType *byteType;

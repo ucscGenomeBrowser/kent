@@ -213,7 +213,7 @@ for (tok = tokList; tok->type != pftEnd; tok = tok->next)
 	{
         scope = tok->val.scope;
 	}
-    if (tok->type == pftClass)
+    else if (tok->type == pftClass)
 	{
 	struct pfBaseType *base;
 	tok = tok->next;
@@ -222,6 +222,14 @@ for (tok = tokList; tok->type != pftEnd; tok = tok->next)
 	base = pfScopeAddType(scope, tok->val.s, FALSE, 
 		pfc->classType, sizeof(void *), TRUE);
 	base->isClass = TRUE;
+	}
+    else if (tok->type == pftInterface)
+	{
+	tok = tok->next;
+	if (tok->type != pftName)
+	    expectingGot("interface name", tok);
+	pfScopeAddType(scope, tok->val.s, FALSE,
+	    pfc->interfaceType, sizeof(void *), TRUE);
 	}
     }
 }

@@ -1178,7 +1178,7 @@ slAddHead(&class->methods, type);
 }
 
 
-static void blessClass(struct pfCompile *pfc, struct pfParse *pp)
+static void blessClassOrInterface(struct pfCompile *pfc, struct pfParse *pp, boolean isInterface)
 /* Make sure that there are only variable , class declarations and
  * function declarations in class.  Flatten out nested declarative
  * tuples.  Add definitions to class symbol table. */
@@ -1206,6 +1206,12 @@ for (p = compound->children; p != NULL; p = p->next)
 	case pptFlowDec:
 	case pptOperatorDec:
 	    addFunctionToClass(base, p);
+	    if (isInterface)
+	        {
+		struct pfParse *body = p->children->next->next->next;
+		if (body != NULL)
+		    errAt(body->tok, "function body inside of an interface");
+		}
 	    break;
 	case pptTuple:
 	    {
@@ -1236,6 +1242,7 @@ for (p = compound->children; p != NULL; p = p->next)
 slReverse(&base->fields);
 slReverse(&base->methods);
 }
+
 
 static void typeConstant(struct pfCompile *pfc, struct pfParse *pp)
 /* Create type for constant. */
@@ -1740,7 +1747,10 @@ for (p = pp->children; p != NULL; p = p->next)
 switch (pp->type)
     {
     case pptClass:
-        blessClass(pfc, pp);
+        blessClassOrInterface(pfc, pp, FALSE);
+	break;
+    case pptInterface:
+        blessClassOrInterface(pfc, pp, TRUE);
 	break;
     }
 }
