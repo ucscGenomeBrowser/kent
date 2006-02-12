@@ -17,10 +17,13 @@ struct geneBins
 
 struct gene
 /* A gene, one per source gene, however it maybe mapped to multiple
- * target locations*/
+ * target locations */
 {
     struct gene *next;
     char *name;              /* gene name */
+    char *chrom;             /* source chrom and strand */
+    char strand;
+    int chromSize;           /* zero until first MAF hit */
     struct cdsExon *exons;   /* list of CDS exons, in transcription order */
     int numExonFrames;       /* count of associated exonFrames objects */
     struct geneBins *genes;  /* link back to geneBins object */
@@ -31,12 +34,10 @@ struct cdsExon
 {
     struct cdsExon* next; /* link for gene's exons */
     struct gene *gene;    /* gene object */
-    char *chrom;          /* source chromosome range */
-    int chromStart;
+    int chromStart;       /* source chromosome range (genomic coords) */
     int chromEnd;
-    char strand;
     char frame;                 /* frame number */
-    int exonNum;               /* exon number, in transcription order */
+    int exonNum;                /* exon number, in transcription order */
     int cdsOff;                 /* location within CDS (after splicing) */
     struct exonFrames *frames;  /* frames associated with the exon */
 };
@@ -47,13 +48,14 @@ struct exonFrames
 {
     struct exonFrames *next;
     struct cdsExon *exon;     /* associated exon */
-    int srcStart;             /* range in src organism MAF coordinates */
+    int srcStart;             /* range in src organism MAF coordinates (stand coords) */
     int srcEnd;
+    char srcStrand;
     int cdsStart;             /* location within CDS (after splicing)
                                * in direction of transcription */
     int cdsEnd;
     struct mafFrames mf;      /* MAF frames object being created, this is in
-                               * the target coordinates */
+                               * the target genomic coordinates */
 };
 
 struct geneBins *geneBinsNew(char *genePredFile);
@@ -83,10 +85,13 @@ void geneSortFramesOffTarget(struct gene *gene);
 /* sort the exonFrames in each exon into gene offset then target transcription
  * order */
 
+void geneCheck(struct gene *gene);
+/* sanity check a gene object */
+
 struct exonFrames *cdsExonAddFrames(struct cdsExon *exon,
-                                    char *src, int qStart, int qEnd,
+                                    char *src, int qStart, int qEnd, char qStrand,
                                     char *tName, int tStart, int tEnd,
-                                    char frame, char strand, int cdsOff);
+                                    char frame, char geneStrand, int cdsOff);
 /* allocate a new mafFrames object and link it exon */
 
 struct exonFrames *geneFirstExonFrames(struct gene *gene);

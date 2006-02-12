@@ -10,7 +10,7 @@
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.6 2006/02/03 22:29:47 markd Exp $";
+static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.7 2006/02/12 07:08:37 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -42,6 +42,7 @@ struct gene *gene;
 struct cdsExon *exon;
 for (gene = genes->genes; gene != NULL; gene = gene->next)
     {
+    geneCheck(gene);
     for (exon = gene->exons; exon != NULL; exon = exon->next)
         outputExonFrames(exon, frameFh, bedFh);
     }

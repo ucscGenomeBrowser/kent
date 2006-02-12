@@ -37,12 +37,10 @@ struct cdsExon *exon;
 checkOverlap(gene->genes, chrBins, gp, start, end);
 lmAllocVar(gene->genes->memPool, exon);
 exon->gene = gene;
-exon->chrom = chromStrAlloc(gene->genes, gp->chrom);
 exon->chromStart = start;
 exon->chromEnd = end;
-exon->strand = gp->strand[0];
 exon->frame = gp->exonFrames[iExon];
-if (exon->strand == '+')
+if (exon->gene->strand == '+')
     exon->exonNum = iExon;
 else
     exon->exonNum = (gp->exonCount-1) - iExon;
@@ -62,6 +60,8 @@ int cdsOff = 0;
 
 lmAllocVar(genes->memPool, gene);
 gene->genes = genes;
+gene->chrom = chromStrAlloc(genes, gp->chrom);
+gene->strand = gp->strand[0];
 slAddHead(&genes->genes, gene);
 gene->name = lmCloneString(genes->memPool, gp->name);
 
@@ -181,10 +181,8 @@ static void cdsExonClone(struct cdsExon *exon, struct gene *gene2)
 struct cdsExon *exon2;
 lmAllocVar(gene2->genes->memPool, exon2);
 exon2->gene = gene2;
-exon2->chrom = exon->chrom;
 exon2->chromStart = exon->chromStart;
 exon2->chromEnd = exon->chromEnd;
-exon2->strand = exon->strand;
 exon2->frame = exon->frame;
 exon2->exonNum = exon->exonNum;
 exon2->cdsOff = exon->cdsOff;
@@ -199,6 +197,9 @@ struct gene *gene2;
 struct cdsExon *exon;
 lmAllocVar(gene->genes->memPool, gene2);
 gene2->genes = gene->genes;
+gene2->chrom = gene->chrom;
+gene2->strand = gene->strand;
+gene2->chromSize = gene->chromSize;
 slAddHead(&gene->genes->genes, gene2);
 gene2->name = gene->name; /* memory is in pool */
 
@@ -206,6 +207,51 @@ for (exon = gene->exons; exon != NULL; exon = exon->next)
     cdsExonClone(exon, gene2);
 slReverse(&gene2->exons);
 return gene2;
+}
+
+static void exonFramesCheck(struct cdsExon *exon, struct exonFrames *ef)
+/* sanity check an exonFrames object */
+{
+/* convert to genomic coords */
+int efStart = ef->srcStart, efEnd = ef->srcEnd;
+if (ef->srcStrand == '-')
+    reverseIntRange(&efStart, &efEnd, exon->gene->chromSize);
+
+if (ef->exon != exon)
+    errAbort("%s: exonFrames linked to wrong exon", exon->gene->name);
+if ((efStart < exon->chromStart) || (efStart >= exon->chromEnd))
+    errAbort("%s: exonFrames srcStart not in the range of it's exon", exon->gene->name);
+if ((efEnd <= exon->chromStart) || (efEnd > exon->chromEnd))
+    errAbort("%s: exonFrames srcEnd not in the range of it's exon", exon->gene->name);
+if (efStart >= efEnd)
+    errAbort("%s: exonFrames srcStart>=srcEnd", exon->gene->name);
+}
+
+static void cdsExonCheck(struct gene *gene, struct cdsExon *prevExon, struct cdsExon *exon)
+/* sanity check an exon of a gene */
+{
+struct exonFrames *ef;
+if (exon->gene != gene)
+    errAbort("%s: exon linked to wrong gene", gene->name);
+if (prevExon != NULL)
+    {
+    if (((exon->gene->strand == '+') && (prevExon->chromEnd > exon->chromStart))
+        || ((exon->gene->strand == '-') && (prevExon->chromEnd < exon->chromStart)))
+        errAbort("%s: gene not in transcription order", gene->name);
+    }
+for (ef = exon->frames; ef != NULL; ef = ef->next)
+    exonFramesCheck(exon, ef);
+}
+
+void geneCheck(struct gene *gene)
+/* sanity check a gene object */
+{
+struct cdsExon *exon, *prevExon = NULL;
+for (exon = gene->exons; exon != NULL; exon = exon->next)
+    {
+    cdsExonCheck(gene, prevExon, exon);
+    prevExon = exon;
+    }
 }
 
 struct cdsExon *geneGetExon(struct gene *gene, int exonNum)
@@ -277,9 +323,9 @@ for (exon = gene->exons; exon != NULL; exon = exon->next)
 }
 
 struct exonFrames *cdsExonAddFrames(struct cdsExon *exon,
-                                    char *src, int qStart, int qEnd,
+                                    char *src, int qStart, int qEnd, char qStrand,
                                     char *tName, int tStart, int tEnd,
-                                    char frame, char strand, int cdsOff)
+                                    char frame, char geneStrand, int cdsOff)
 /* allocate a new mafFrames object and link it exon */
 {
 struct exonFrames *ef;
@@ -290,6 +336,7 @@ ef->exon = exon;
 ef->mf.src = lmCloneString(exon->gene->genes->memPool, src);
 ef->srcStart = qStart;
 ef->srcEnd = qEnd;
+ef->srcStrand = qStrand;
 ef->cdsStart = cdsOff;
 ef->cdsEnd = cdsOff + (qEnd - qStart);
 
@@ -298,7 +345,7 @@ ef->mf.chrom = lmCloneString(exon->gene->genes->memPool, tName);
 ef->mf.chromStart = tStart;
 ef->mf.chromEnd = tEnd;
 ef->mf.frame = frame;
-ef->mf.strand[0] = strand;
+ef->mf.strand[0] = geneStrand;
 ef->mf.name = exon->gene->name;
 ef->mf.prevFramePos = -1;
 ef->mf.nextFramePos = -1;
@@ -355,8 +402,8 @@ void cdsExonDump(FILE *fh, struct cdsExon *exon)
 {
 struct exonFrames *ef;
 fprintf(fh, "  exon %d src: %s:%d-%d(%c) fr: %d off: %d\n",
-        exon->exonNum, exon->chrom, exon->chromStart, exon->chromEnd,
-        exon->strand, exon->frame, exon->cdsOff);
+        exon->exonNum, exon->gene->chrom, exon->chromStart, exon->chromEnd,
+        exon->gene->strand, exon->frame, exon->cdsOff);
 for (ef = exon->frames; ef != NULL; ef = ef->next)
     exonFramesDump(fh, ef);
 }

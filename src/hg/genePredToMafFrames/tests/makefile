@@ -3,8 +3,9 @@ include ../../../inc/common.mk
 DIFF = diff -u
 
 test:   oneExon splitExon revExon negNeg finishIsSplit \
-	queryDel multiMap multiMap2 multiMapMondo \
-	manyExonPos unalignedExonStart lostBlock splitNegStart
+	queryDel multiMap multiMap2 multiMap3 multiMapMondo \
+	manyExonPos unalignedExonStart lostBlock splitNegStart \
+	dupFrames
 
 oneExon: mkout
 	genePredToMafFrames hg17 canHg10 input/BC101503.gp output/$@.mafFrames input/BC101503.maf
@@ -45,6 +46,11 @@ multiMap2:
 	genePredToMafFrames hg17 canHg10 input/NM_001452.gp output/$@.mafFrames input/NM_001452.maf
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
+# another multiMap trouble maker
+multiMap3:
+	genePredToMafFrames panTro1 mm7 input/multMap3.gp output/$@.mafFrames input/multMap3.maf
+	${DIFF} expected/$@.mafFrames output/$@.mafFrames
+
 # multiple mappings, this one is ugly.
 multiMapMondo:
 	genePredToMafFrames hg17 canHg10 input/NM_020185.gp output/$@.mafFrames input/NM_020185.maf
@@ -67,6 +73,11 @@ lostBlock:
 # start codon on neg strand gene not spliced, but split between two maf blocks
 splitNegStart:
 	genePredToMafFrames mm7 mm7 input/NM_027863.gp output/$@.mafFrames input/NM_027863.maf
+	${DIFF} expected/$@.mafFrames output/$@.mafFrames
+
+# case that generated duplicate mafFrames rows
+dupFrames:
+	genePredToMafFrames panTro1 mm7 input/dupFrames.gp output/$@.mafFrames input/dupFrames.maf
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 mkout:

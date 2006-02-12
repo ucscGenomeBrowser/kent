@@ -54,7 +54,7 @@ else
 
 static boolean isAdjacentFrames(struct exonFrames *ef0, struct exonFrames *ef1) 
 /* check if exonFrames objects are adjacent and should be joined. ef0 preceeds
- * ef1 in the direction of transcription */
+ * ef1 in the direction of transcription.  Must be i */
 {
 if (ef0->mf.strand[0] == '+')
     return (ef1->mf.chromStart == ef0->mf.chromEnd)
@@ -67,7 +67,6 @@ else
 static void joinFrames(struct exonFrames *ef0, struct exonFrames *ef1) 
 /* join if exonFrames objects that are adjacent */
 {
-ef0->next = ef1->next;
 ef0->mf.nextFramePos = ef1->mf.nextFramePos;
 if (ef0->mf.strand[0] == '+')
     ef0->mf.chromEnd = ef1->mf.chromEnd;
@@ -75,47 +74,54 @@ else
     ef0->mf.chromStart = ef1->mf.chromStart;
 }
 
-static struct exonFrames *processFrames(struct exonFrames *prevEf, struct exonFrames *ef)
-/* process a pair of exonFrames, possibly linking or joining them.  Return
- * the next prevEf. */
+static void joinExonFrames(struct cdsExon *exon) 
+/* join adjacent exonFrames objects for an exon, removing ones that were
+ * split due to maf block splits.  */
 {
-if (prevEf == NULL)
-    return ef;
-else if (isAdjacentFrames(prevEf, ef))
+/* rebuild frames list, seed with first */
+struct exonFrames *frames = slPopHead(&exon->frames);
+struct exonFrames *prevEf = frames, *ef;
+
+while ((ef = slPopHead(&exon->frames)) != NULL)
     {
-    joinFrames(prevEf, ef);
-    return prevEf;
+    if (isAdjacentFrames(prevEf, ef))
+        joinFrames(prevEf, ef);
+    else
+        {
+        slAddHead(&frames, ef);
+        prevEf = ef;
+        }
     }
-else if (isSplitCodon(prevEf, ef))
-    {
-    linkFrames(prevEf, ef);
-    return ef;
-    }
-else
-    return ef;
+slReverse(&frames);
+exon->frames = frames;
 }
 
-static void finishExon(struct cdsExon *prevExon, struct cdsExon *exon)
-/* finish exonFrames for an exon.  Assumes this is called in transcription
- * order, so preceeding exon frames for this gene have been linked. */
+static struct exonFrames *linkExonFrames(struct exonFrames *prevEf, struct cdsExon *exon)
+/* link split frames for an exon, if needed.  Assumes this is called in
+ * transcription order, so preceeding exon frames for this gene have been
+ * linked. Return new prefEf. */
 {
-struct exonFrames *prevEf = (prevExon == NULL) ? NULL
-    : slLastEl(prevExon->frames);
 struct exonFrames *ef;
 for (ef = exon->frames; ef != NULL; ef = ef->next)
-    prevEf = processFrames(prevEf, ef);
+    {
+    if ((prevEf != NULL) && isSplitCodon(prevEf, ef))
+        linkFrames(prevEf, ef);
+    prevEf = ef;
+    }
+return prevEf;
 }
 
 static void finishGene(struct gene *gene)
 /* finish mafFrames for one gene. */
 {
-struct cdsExon *prevExon = NULL, *exon;
+struct cdsExon *exon;
+struct exonFrames *prevEf = NULL;
 geneSortFramesTargetOff(gene);
 
 for (exon = gene->exons; exon != NULL; exon = exon->next)
     {
-    finishExon(prevExon, exon);
-    prevExon = exon;
+    joinExonFrames(exon);
+    prevEf = linkExonFrames(prevEf, exon);
     }
 }
 

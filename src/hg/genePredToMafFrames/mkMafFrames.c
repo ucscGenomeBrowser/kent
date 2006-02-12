@@ -103,9 +103,9 @@ static void traceFrameDef(int level, struct scanInfo *si, struct exonFrames *ef)
 {
 verbose(level, "exon %s[%d] %s:%d-%d [%d] %c fm: %d; ",
         si->exon->gene->name, si->exon->exonNum,
-        si->exon->chrom, si->exon->chromStart, si->exon->chromEnd,
+        si->exon->gene->chrom, si->exon->chromStart, si->exon->chromEnd,
         (si->exon->chromEnd - si->exon->chromStart),
-        si->exon->strand, si->exon->frame);
+        si->exon->gene->strand, si->exon->frame);
 verbose(level, "subQuery %s:%d-%d [%d] %c fm: %d-%d; ",
         si->sc->query.comp->src, si->subQStart, si->sc->query.pos,
         (si->sc->query.pos - si->subQStart),
@@ -135,7 +135,7 @@ else
     frame = si->subEndFrame;
 
 /* project strand to target */
-strand = (si->exon->strand == si->sc->query.comp->strand) ? '+' : '-';
+strand = (si->exon->gene->strand == si->sc->query.comp->strand) ? '+' : '-';
 if (si->sc->target.comp->strand == '-')
     strand = (strand == '+') ? '-' : '+';
 
@@ -152,7 +152,7 @@ else
     cdsOff = si->exon->cdsOff + (si->exonQEnd - si->sc->query.pos);
 
 /* create and link exon */
-ef = cdsExonAddFrames(si->exon, src, si->subQStart, si->sc->query.pos,
+ef = cdsExonAddFrames(si->exon, src, si->subQStart, si->sc->query.pos, si->sc->query.comp->strand,
                       tName, si->subTStart, si->sc->target.pos,
                       frame, strand, cdsOff);
 
@@ -184,14 +184,14 @@ si.subEndFrame = -1;
 
 /* direction frame will increment */
 assert(sc->target.comp->strand == '+');
-si.frScanDir = (exon->strand == sc->query.comp->strand) ? 1 : -1;
+si.frScanDir = (exon->gene->strand == sc->query.comp->strand) ? 1 : -1;
 
 /* get coordinates and frame at each end of the exon */
 si.exonQStart = exon->chromStart;
 si.exonQEnd = exon->chromEnd;
-frameStart = (exon->strand == '+')
+frameStart = (exon->gene->strand == '+')
     ? exon->frame : frameIncr(exon->frame, (si.exonQEnd - si.exonQStart)-1);
-frameEnd = (exon->strand == '+')
+frameEnd = (exon->gene->strand == '+')
     ? frameIncr(exon->frame, (si.exonQEnd - si.exonQStart)-1) : exon->frame;
 
 /* genePred coordinates are always on the positive strand, we need to reverse
@@ -221,6 +221,14 @@ if (si.blkQEnd > queryEnd)
     frameEnd = frameIncr(frameEnd, -1*si.frScanDir*delta);
     }
 si.frame = frameStart;
+
+/* Ugly side-affect: record src chrom size for gene the first time it's
+ * encounter, since it was available when gene is read in */
+if (exon->gene->chromSize == 0)
+    exon->gene->chromSize = sc->query.comp->srcSize;
+else if (exon->gene->chromSize != sc->query.comp->srcSize)
+    errAbort("srcSize for %s differes in MAF; previous found as, %d, now %d",
+             sc->query.comp->src, exon->gene->chromSize, sc->query.comp->srcSize);
 return si;
 }
 
@@ -263,8 +271,7 @@ else
     }
 }
 
-static void mkCompExonFrames(struct geneBins *genes, struct scanCursor *sc,
-                             struct cdsExon *exon)
+static void mkCompExonFrames(struct scanCursor *sc, struct cdsExon *exon)
 /* create mafFrames objects for a mafComp and an exon. */
 {
 struct scanInfo si = scanInfoInit(sc, exon);
@@ -299,9 +306,8 @@ int sortDir =  (queryComp->strand == targetComp->strand) ? 1 : -1;
 struct binElement *exonRefs = geneBinsFind(genes, queryComp, sortDir);
 struct binElement *exonRef;
 
-
 for (exonRef = exonRefs; exonRef != NULL; exonRef = exonRef->next)
-    mkCompExonFrames(genes, &sc, (struct cdsExon*)exonRef->val);
+    mkCompExonFrames(&sc, (struct cdsExon*)exonRef->val);
 
 slFreeList(&exonRefs);
 }
