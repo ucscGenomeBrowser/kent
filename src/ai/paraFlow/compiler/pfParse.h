@@ -166,6 +166,7 @@ enum pfParseType
 
     pptCastStringToBit,
     pptCastObjectToBit,
+    pptCastClassToInterface,
     pptCastTypedToVar,		
     pptCastVarToTyped,
     pptCastCallToTuple,

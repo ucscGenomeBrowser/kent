@@ -4,16 +4,19 @@ class animal
     string name;
     polymorphic to speak() {print("???");}
     to sleep() {print("zzz");}
+    polymorphic to eat(string food) {print("eat " + food);}
     }
 
 class dog extends animal
     {
     polymorphic to speak() {print("bark");}
+    polymorphic to eat(string food) {print("slurp " + food);}
     }
 
 class cat extends animal
     {
     polymorphic to speak() {print("meow");}
+    polymorphic to eat(string food) {print("nibble " + food);}
     }
 
 class toyPoodle extends dog
@@ -31,6 +34,10 @@ dog.speak();
 cat.speak();
 poodle.speak();
 
+animal.eat("food");
+dog.eat("food");
+cat.eat("food");
+poodle.eat("food");
 
 animal pet = dog;
 print(pet.name);

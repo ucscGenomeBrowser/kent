@@ -23,6 +23,7 @@ struct pfBaseType
     struct pfParse *def;	/* Parse node for class definition */
     bool isCollection;		/* TRUE if it's a collection type */
     bool isClass;		/* TRUE if it's a class */
+    bool isInterface;		/* TRUE if it's a interface  */
     bool needsCleanup;		/* TRUE if it needs refCount/cleanup */
     bool reserved;		/* Currently zero. */
     int id;			/* Unique id. */

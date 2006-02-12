@@ -299,6 +299,8 @@ switch (type)
         return "pptCastStringToBit";
     case pptCastObjectToBit:
         return "pptCastObjectToBit";
+    case pptCastClassToInterface:
+    	return "pptCastClassToInterface";
     case pptCastTypedToVar:
         return "pptCastTypedToVar";
     case pptCastVarToTyped:

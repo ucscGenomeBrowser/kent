@@ -665,36 +665,114 @@ if (type->base->parent != pfc->numType)
 numericCast(pfc, stringType, pPp);
 }
 
+static void foldLocalMethodsIntoHash(struct hash *hash, struct pfParse *pp)
+/* Assuming parse tree is a class declaration, fold all methods declared in it
+ * into hash.  Doesn't handle methods in parent class. */
+{
+switch (pp->type)
+    {
+    case pptToDec:
+    case pptFlowDec:
+	hashAdd(hash, pp->name, pp);
+        break;
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    foldLocalMethodsIntoHash(hash, pp);
+}
+
+static void foldMethodsIntoHash(struct hash *hash, struct pfBaseType *base)
+/* Fold methods of parents and self into hash. */
+{
+if (base->parent != NULL && base->parent->def != NULL)
+    foldMethodsIntoHash(hash, base->parent);
+foldLocalMethodsIntoHash(hash, base->def);
+}
+
+static void checkLocalMethodsAreInHash(struct hash *hash, struct pfParse *pp,
+    char *className, char *interfaceName, struct pfToken *tok)
+/* Assuming parse tree is a interface declaration, make sure all methods 
+ * declared in it are in hash.  Doesn't handle methods in parent interface. */
+{
+switch (pp->type)
+    {
+    case pptToDec:
+    case pptFlowDec:
+	{
+	struct pfParse *methodDef = hashFindVal(hash, pp->name);
+	if (methodDef == NULL)
+	    errAt(tok, "class %s doesn't implement %s method", 
+	    	className, pp->name);
+	if (!pfTypeSame(pp->ty, methodDef->ty))
+	    errAt(tok, 
+	    	"method %s is not the same in class %s as in interface %s",
+	    	pp->name, className, interfaceName);
+        break;
+	}
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    checkLocalMethodsAreInHash(hash, pp, className, interfaceName, tok);
+}
+
+static void checkMethodsAreInHash(struct hash *hash, struct pfBaseType *base, 
+	char *className, struct pfToken *tok)
+/* Check methods of parents and self are in hash. */
+{
+if (base->parent != NULL && base->parent->def != NULL)
+    checkMethodsAreInHash(hash, base->parent, className, tok);
+checkLocalMethodsAreInHash(hash, base->def, className, base->name, tok);
+}
+
+static void checkClassHasInterfaceMethods(struct pfCompile *pfc, struct pfToken *tok,
+	struct pfBaseType *classBase, struct pfBaseType *interfaceBase)
+/* Make sure that class implements all methods of interface, and that they are the
+ * same type. */
+{
+struct hash *classMethodsHash = hashNew(8);
+struct pfParse *methodDef;
+foldMethodsIntoHash(classMethodsHash, classBase);
+checkMethodsAreInHash(classMethodsHash, interfaceBase, classBase->name, tok);
+hashFree(&classMethodsHash);
+}
+
+static void coerceClassToInterface(struct pfCompile *pfc, struct pfParse **pPp,
+	struct pfBaseType *classBase, struct pfBaseType *interfaceBase)
+/* Make sure class and interface are compatable, and then generate cast to interface. */
+{
+uglyf("Attempting to coerce class %s to interface %s\n", classBase->name, interfaceBase->name);
+/* Looks like we're ok, go ahead and put int cast. */
+checkClassHasInterfaceMethods(pfc, (*pPp)->tok, classBase, interfaceBase);
+insertCast(pptCastClassToInterface, pfTypeNew(interfaceBase), pPp);
+}
 
 static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
-	struct pfType *type, boolean numToString)
+	struct pfType *destType, boolean numToString)
 /* Make sure that a single variable is of the required type.  
  * Add casts if necessary.  This is a gnarly function! */
 {
 struct pfParse *pp = *pPp;
+struct pfBaseType *destBase = destType->base;
 struct pfType *pt = pp->ty;
-struct pfBaseType *base;
 if (pt == NULL)
     internalErrAt(pp->tok);
-base = type->base;
-verbose(3, "coercingOne %s (tyty=%d) to %s\n", pt->base->name, pt->tyty, base->name);
-if (pt->base != base)
+verbose(3, "coercingOne %s (tyty=%d) to %s\n", pt->base->name, pt->tyty, 
+	destBase->name);
+if (pt->base != destBase)
     {
     boolean ok = FALSE;
     verbose(3, "coercing from %s (%s)  to %s\n", pt->base->name, 
-    	(pt->base->isCollection ? "collection" : "single"), base->name);
+    	(pt->base->isCollection ? "collection" : "single"), destBase->name);
     if (pt->base == pfc->nilType)
         {
-	pp->ty = CloneVar(type);
+	pp->ty = CloneVar(destType);
 	ok = TRUE;
 	}
-    else if (base == pfc->bitType && pt->base == pfc->stringType)
+    else if (destBase == pfc->bitType && pt->base == pfc->stringType)
 	{
 	struct pfType *tt = pfTypeNew(pfc->bitType);
 	insertCast(pptCastStringToBit, tt, pPp);
 	ok = TRUE;
 	}
-    else if (base == pfc->bitType && pt->base->needsCleanup)
+    else if (destBase == pfc->bitType && pt->base->needsCleanup)
 	{
 	struct pfType *tt = pfTypeNew(pfc->bitType);
 	if (pt->base == pfc->varType)
@@ -703,12 +781,12 @@ if (pt->base != base)
 	    insertCast(pptCastObjectToBit, tt, pPp);
 	ok = TRUE;
 	}
-    else if (numToString && base == pfc->stringType && pt->base->parent == pfc->numType)
+    else if (numToString && destBase == pfc->stringType && pt->base->parent == pfc->numType)
         {
-	castNumToString(pfc, pPp, type);
+	castNumToString(pfc, pPp, destType);
 	ok = TRUE;
 	}
-    else if (base == pfc->varType)
+    else if (destBase == pfc->varType)
 	{
 	struct pfType *tt = pfTypeNew(pfc->varType);
 	insertCast(pptCastTypedToVar, tt, pPp);
@@ -716,28 +794,29 @@ if (pt->base != base)
 	}
     else if (pt->base == pfc->varType)
 	{
-	struct pfType *tt = CloneVar(type);
+	struct pfType *tt = CloneVar(destType);
 	insertCast(pptCastVarToTyped, tt, pPp);
 	ok = TRUE;
 	}
-    else if (base->isCollection && base != pfc->stringType)
+    else if (destBase->isCollection && destBase != pfc->stringType)
 	{
 	if (pt->tyty != tytyTuple)
 	    {
 	    insertCast(pptTuple, NULL, pPp);  /* In this case not just a cast. */
 	    pfTypeOnTuple(pfc, *pPp);
 	    }
-	coerceTupleToCollection(pfc, pPp, type);
+	coerceTupleToCollection(pfc, pPp, destType);
 	ok = TRUE;
 	}
-    else if (base->isClass)
+    else if (destBase->isClass)
         {
 	if (pt->base->isClass)
 	    {
+	    /* Check to see if we're just coercing to a parent class, which is ok. */
 	    struct pfBaseType *b;
 	    for (b = pt->base->parent; b != NULL; b = b->parent)
 	        {
-		if (b == base)
+		if (b == destBase)
 		    {
 		    ok = TRUE;
 		    break;
@@ -753,12 +832,34 @@ if (pt->base != base)
 		}
 	    if (pp->type == pptCall)
 		{
-		coerceCallToClass(pfc, pPp, type);
+		coerceCallToClass(pfc, pPp, destType);
 		}
 	    else
 		{
-		coerceTupleToClass(pfc, pPp, type->base);
+		coerceTupleToClass(pfc, pPp, destBase);
 		}
+	    ok = TRUE;
+	    }
+	}
+    else if (destBase->isInterface)
+        {
+	uglyf("Coercing %s to interface\n", pt->base->name);
+	if (pt->base->isInterface)
+	    {
+	    /* Check to see if we're just coercing to a parent interface, which is ok. */
+	    struct pfBaseType *b;
+	    for (b = pt->base->parent; b != NULL; b = b->parent)
+	        {
+		if (b == destBase)
+		    {
+		    ok = TRUE;
+		    break;
+		    }
+		}
+	    }
+	else if (pt->base->isClass)
+	    {
+	    coerceClassToInterface(pfc, pPp, pt->base, destBase);
 	    ok = TRUE;
 	    }
 	}
@@ -772,26 +873,26 @@ if (pt->base != base)
 	}
     else
 	{
-	if (base->parent == pfc->numType && pt->base->parent == pfc->numType)
+	if (destBase->parent == pfc->numType && pt->base->parent == pfc->numType)
 	    {
-	    numericCast(pfc, type, pPp);
+	    numericCast(pfc, destType, pPp);
 	    ok = TRUE;
 	    }
 	}
     if (!ok)
 	{
-	typeMismatch(pp, type);
+	typeMismatch(pp, destType);
 	}
     }
-else if (base == pfc->keyValType)
+else if (destBase == pfc->keyValType)
     {
-    coerceOne(pfc, &pp->children, type->children, FALSE);
-    coerceOne(pfc, &pp->children->next, type->children->next, FALSE);
+    coerceOne(pfc, &pp->children, destType->children, FALSE);
+    coerceOne(pfc, &pp->children->next, destType->children->next, FALSE);
     }
-else if (type->tyty == tytyTuple)
+else if (destType->tyty == tytyTuple)
     {
     assert(pt->tyty == tytyTuple);
-    coerceTuple(pfc, pPp, type);
+    coerceTuple(pfc, pPp, destType);
     }
 }
 
