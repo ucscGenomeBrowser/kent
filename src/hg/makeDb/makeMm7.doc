@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.45 2006/02/11 00:57:39 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.46 2006/02/12 15:35:35 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -11774,4 +11774,13 @@ EOF
     #	chainHg17noLSR 89,196,048 bytes 990,397 rows
 
 ############################################################################
+# ADD LINK TO GENENETWORK (DONE. 2/9/06 Fan).
 
+# Copy data from mm6
+
+    hgsql mm6 -N -e 'select * from geneNetworkId' > geneNetworkId.tab
+
+    hgsql mm7 -e 'drop table geneNetworkId'
+    hgsql mm7 < ~/src/hg/lib/geneNetworkId.sql
+    hgsql mm7 -e 'load data local infile "geneNetworkId.tab" into table geneNetworkId'
+		    
