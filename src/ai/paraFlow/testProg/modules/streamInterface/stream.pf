@@ -1,0 +1,72 @@
+
+interface stream
+    {
+    to read(int size) into string s;
+    to write(string s);
+    to close();
+    }
+
+class stringStream
+    {
+    string buf;
+
+    to read(int size) into string s
+        {
+	if (buf.size <= size)
+	    {
+	    s = buf;
+	    buf = "";
+	    }
+	else
+	    {
+	    s = buf.start(size);
+	    buf = buf.rest(size);
+	    }
+	}
+
+    to write(string s)
+        {
+	buf += s;
+	}
+
+    to close()
+        {
+	buf = nil;
+	}
+    }
+
+to openStringStream(string string) into (stream stream)
+    {
+    stringStream ss = (string);
+    stream = ss;
+    }
+
+class fileStream
+    {
+    file f;
+
+    to read(int size) into string s
+        {
+	s = f.readBytes(size);
+	}
+
+    to write(string s)
+        {
+	f.writeString(s);
+	}
+
+    to close()
+        {
+	if (f)
+	    {
+	    f.close();
+	    f = nil;
+	    }
+	}
+    }
+
+to openFileStream(string fileName, string mode="r") into stream stream
+    {
+    fileStream fs = (fileOpen(fileName, mode));
+    stream = fs;
+    }

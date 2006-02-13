@@ -18,3 +18,5 @@ test:
 	diff expected/oneCall output/oneCall
 	paraFlow oneCall/main.pf > output/oneCall
 	diff expected/oneCall output/oneCall
+	paraFlow streamInterface/testStream.pf > output/streamInterface
+	diff expected/streamInterface output/streamInterface
