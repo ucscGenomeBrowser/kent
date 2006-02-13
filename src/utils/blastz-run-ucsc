@@ -7,7 +7,7 @@
 # rewritten in perl and extended to handle .2bit inputs and 
 # multi-record fasta for target as well as query by Angie Hinrichs.
 
-# $Id: blastz-run-ucsc,v 1.16 2006/02/07 07:12:17 angie Exp $
+# $Id: blastz-run-ucsc,v 1.17 2006/02/13 20:14:49 angie Exp $
 
 use Getopt::Long;
 use strict;
@@ -78,8 +78,8 @@ my $TMP;
 my %tSizes = ();
 my %qSizes = ();
 my $machType = $ENV{'MACHTYPE'} || 'i386';
-my $defaultPath = ("/cluster/bin/penn/$machType:/cluster/bin/scripts:" .
-		   "/cluster/bin/$machType:" .
+my $defaultPath = ("/cluster/bin/penn/$machType:/cluster/bin/penn:" .
+		   "/cluster/bin/scripts:/cluster/bin/$machType:" .
 		   '/bin:/usr/bin');
 
 sub cleanDie {
