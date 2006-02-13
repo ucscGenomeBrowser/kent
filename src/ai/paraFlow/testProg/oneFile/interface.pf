@@ -7,12 +7,13 @@ class textGfx
     to getColor() into string color {color = self.color;}
     to box(int x, int y, int width, int height)
         {
-	print("box(" + x + " " + y + " " + width + " " + height + ")");
+	print(color + " " + "box(" + x + " " + y + " " + width + " " + height + ")");
 	}
     to circle(int x,y, double radius)
         {
-	print("circle(" + x + " " + y + " " + radius + ")");
+	print(color + " " + "circle(" + x + " " + y + " " + radius + ")");
 	}
+    polymorphic to specialShape(int x,y) {print("special text at " + x + " " + y);}
     }
 
 class fontGfx extends textGfx
@@ -20,13 +21,8 @@ class fontGfx extends textGfx
     string font = "times";
     to getFont() into string font {font = self.font;}
     to setFont(string font) {self.font = font;}
+    polymorphic to specialShape(int x,y) {print("special font at " + x + " " + y);}
     }
-
-fontGfx gfx = ();
-print(gfx.getColor());
-gfx.setColor("red");
-print(gfx.getColor());
-gfx.box(10,20, 100, 200);
 
 
 interface boxFace
@@ -34,6 +30,7 @@ interface boxFace
     to setColor(string color);
     to getColor() into string color;
     to box(int x, int y, int width, int height);
+    to specialShape(int x,y);
     }
 
 interface circleFace extends boxFace
@@ -44,12 +41,27 @@ interface circleFace extends boxFace
 
 to redCircle(circleFace screen, int x,y, double radius)
     {
-    print("redCircle");
+    screen.setColor("red");
+    screen.circle(x,y,radius);
     }
+
+to blueCircle(textGfx screen, int x,y, double radius)
+    {
+    screen.setColor("blue");
+    screen.circle(x,y,radius);
+    }
+
+fontGfx gfx = ();
+gfx.box(10,20, 100, 200);
+gfx.setColor("orange");
+gfx.box(15,25,90,190);
 
 redCircle(gfx, 3, 3, 2.5);
 circleFace iGfx = gfx;
 redCircle(iGfx, 6, 6, 2.5);
+blueCircle(gfx, 9,9,2.55);
+gfx.specialShape(0,1);
+iGfx.specialShape(1,2);
 
 /*-
 -*/

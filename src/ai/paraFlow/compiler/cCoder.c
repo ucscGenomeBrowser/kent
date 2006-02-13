@@ -250,13 +250,18 @@ else
 	}
     if (base != NULL)
 	{
-	if (method->tyty == tytyVirtualFunction)
+	if (base->isClass)
 	    {
-	    fprintf(f, "%s[%d].Obj->_pf_polyTable[%d]",
-	    	stackName, stack, method->polyOffset);
+	    if (method->tyty == tytyVirtualFunction)
+		{
+		fprintf(f, "%s[%d].Obj->_pf_polyTable[%d]",
+		    stackName, stack, method->polyOffset);
+		}
+	    else
+		fprintf(f, "_pf_cm%d_%s_%s", base->scope->id, base->name, name);
 	    }
 	else
-	    fprintf(f, "_pf_cm%d_%s_%s", base->scope->id, base->name, name);
+	    internalErrAt(tok);
 	}
     else
 	internalErrAt(tok);
@@ -278,6 +283,7 @@ if (function->type == pptDot)
     {
     struct pfParse *dotList = function->children;
     struct pfParse *class = NULL, *method = NULL;
+    struct pfBaseType *base = NULL;
     int dotCount = slCount(dotList);
     assert(dotCount >= 2);
 
@@ -303,10 +309,25 @@ if (function->type == pptDot)
 	codeExpression(pfc, f, function, stack, FALSE);
 	class->next = method;
 	}
+    base = class->ty->base;
+
     /* Put rest of input on the stack, and print call with mangled function name. */
     codeExpression(pfc, f, inTuple, stack+1, TRUE);
-    codeMethodName(pfc, pp->tok, f, class->ty->base, method->name, stack);
-    fprintf(f, "(%s+%d);\n", stackName, stack);
+    if (base->isInterface)
+        {
+	fprintf(f, "{\n");
+	fprintf(f, "struct %s *_pf_face = %s[%d].v;\n",
+		base->name, stackName, stack);
+	fprintf(f, "%s[%d].v = _pf_face->_pf_obj;\n", stackName, stack);
+	fprintf(f, "_pf_face->%s(%s+%d);\n", method->name, 
+		stackName, stack);
+	fprintf(f, "}\n");
+	}
+    else
+	{
+	codeMethodName(pfc, pp->tok, f, base, method->name, stack);
+	fprintf(f, "(%s+%d);\n", stackName, stack);
+	}
     }
 else
     {

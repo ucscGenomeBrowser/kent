@@ -1394,7 +1394,7 @@ for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)
 	type = pfc->stringFullType;
     else if (type->base == pfc->arrayType)
 	type = pfc->arrayFullType;
-    if (!type->base->isClass)
+    if (!type->base->isClass && !type->base->isInterface)
 	errAt(pp->tok, "dot after non-class variable");
     struct pfType *fieldType = findField(type->base, fieldUse->name);
     if (fieldType == NULL)
@@ -1428,26 +1428,55 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     markUsedVars(scope, hash, pp);
 }
 
+static struct pfParse *makeSelfVarUse(struct pfBaseType *class, 
+	struct pfScope *scope, struct pfParse *parent, struct pfToken *tok)
+/* Create a parse node for class self variable inside a method. */
+{
+struct pfParse *pp = pfParseNew(pptVarUse,  tok, parent, scope);
+pp->ty = pfTypeNew(class);
+pp->var = pfScopeFindVar(scope, "self");
+return pp;
+}
+
 static void addDotSelf(struct pfParse **pPp, struct pfBaseType *class)
-/* Add self. in front of a method or member access. */
+/* Add self. in front of a method or member access, positioning the
+ * dot in place of self in tree, and hanging children on tree. */
 {
 struct pfParse *old = *pPp;
 struct pfParse *dot = pfParseNew(pptDot, old->tok, old->parent, old->scope);
-struct pfParse *newVarUse = pfParseNew(pptVarUse, old->tok, dot, old->scope);
+struct pfParse *selfPp = makeSelfVarUse(class, old->scope, dot, old->tok);
 
 dot->ty = CloneVar(old->ty);
 dot->next = old->next;
-dot->children = newVarUse;
-
-newVarUse->ty = pfTypeNew(class);
-newVarUse->name = "self";
-newVarUse->var = pfScopeFindVar(old->scope, "self");
-newVarUse->next = old;
+dot->children = selfPp;
+selfPp->next = old;
 
 old->parent = dot;
 old->type = pptFieldUse;
 old->next = NULL;
 *pPp = dot;
+}
+
+
+static void addSelfBefore(struct pfParse **pPp, struct pfBaseType *class)
+/* We are in a situation like so:
+ *      pptDot
+ *        pptVarUse memberName
+ *        pptFieldUse memberFieldName
+ * We want to transform it to
+ *      pptDot
+ *        pptVarUse self
+ *        pptFieldUse memberName
+ *        pptFieldUse memberFieldName
+ * Where pPp is  &pptDot->children
+ */
+{
+struct pfParse *member = *pPp;
+struct pfParse *dot = member->parent;
+struct pfParse *selfPp = makeSelfVarUse(class, member->scope, dot, member->tok);
+member->type = pptFieldUse;
+dot->children = selfPp;
+selfPp->next = member;
 }
 
 static void rBlessFunction(struct pfScope *outputScope,
@@ -1465,11 +1494,20 @@ switch (pp->type)
         errAt(pp->tok, "sorry, can't declare functions inside of functions");
 	break;
     case pptVarUse:
-	if (pp->var->scope == classScope && pp->parent->type != pptDot)
+	if (pp->var->scope == classScope)
 	    {
-	    addDotSelf(pPp, classScope->class);
+	    if (pp->parent->type == pptDot)
+		{
+		if (!sameString(pp->name, "self"))
+		    addSelfBefore(pPp, classScope->class);
+		}
+	    else
+		{
+		addDotSelf(pPp, classScope->class);
+		}
 	    pp = *pPp;
 	    }
+	return;
         break;
     case pptAssignment:
         markUsedVars(outputScope, outputHash, pp);

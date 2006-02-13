@@ -153,8 +153,7 @@ class circle
  
 class hash implements collection
 // Here we implement a hash table, which can be used as a collection.
-// (NB currently interfaces are not implemented, and only built-in
-// collections are available.)
+// NB - there are many things about this not yet implemented...
    {
    class element
    // This is an element in our hash list
@@ -289,4 +288,27 @@ Only a single statement is allowed after each label.
 A comma-separated list of labels can share the same
 statement.  Multiple statements enclosed in braces are
 considered a single statment.
+
+// Related to case maybe have a cond expression.  
+
+string message = cond (errCode)
+     {
+     0: nil,
+     1: "File not found",
+     2: "Write protected",
+     3,4: "Privacy violation",
+     18: "Hull breech",
+     default: message = "Error code #" + errCode;
+     }
+
+// or maybe instead
+
+string message = cond
+     (
+     errCode == 0 : nil,
+     errCode == 1 : "File not found",
+     2 < errCode && errCode < 12 : "System errCode " + errCode,
+     errCode == 18: "Hull breech",
+     default : "Error code #" + errcode
+     )
 

@@ -5,6 +5,8 @@ test:
 	diff expected/serialMath output/serialMath
 	paraFlow houses.pf > output/houses
 	diff expected/houses output/houses
+	paraFlow interface.pf > output/interface
+	diff expected/interface output/interface
 	paraFlow paraAll.pf > output/paraAll
 	diff expected/paraAll output/paraAll
 	paraFlow paraTwoD.pf > output/paraTwoD
