@@ -88,7 +88,8 @@ else
 	fprintf(f, ")");
 	}
     else if (ty->tyty == tytyFunction || ty->tyty == tytyVirtualFunction
-       || ty->tyty == tytyOperator)
+       || ty->tyty == tytyOperator || sameString(ty->base->name, toPtTypeName) 
+       || sameString(ty->base->name, flowPtTypeName))
 	{
 	if (ty->tyty == tytyVirtualFunction)
 	   fprintf(f, "polymorphic ");
