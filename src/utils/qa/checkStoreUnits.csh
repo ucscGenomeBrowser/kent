@@ -54,6 +54,7 @@ else
     echo "$unit\n"
     set storeName=`echo $unit | awk -F/ '{print $NF}'`
     if (-e du.$storeName.$date) then
+      # don't run du again. simply display current totals
       continue
     endif
     set machine=`df | grep export$unit | awk -F- '{print $1}'`
@@ -62,17 +63,19 @@ else
 
     # add names of file owners
     cat du.$storeName.$date | awk '{print $1}' > sizeFile
-    cat du.$storeName.$date | awk '{print $2}' | xargs ls -ld \
-       | awk '{print $3 "\t" $9}' > nameFile
+    rm -f nameFile
+    foreach file (`cat du.$storeName.$date | awk '{print $2}'`) 
+       ls -ld $file | awk '{print $3 "\t" $9}' >> nameFile
+    end
     paste sizeFile nameFile >  outFile
-    mv outFile du.$storeName.$date
 
     # put output on the storeUnit itself
-    cp du.$storeName.$date $unit/du.$date
+    cp outFile $unit/du.$date
+    cp outFile du.$storeName.$date
     echo "full du list at $unit/du.$date\n" 
-    head -40 du.$storeName.$date
+    head -40 outFile
     echo
-    rm -f sizeFile nameFile
+    # rm -f sizeFile nameFile outFile
   end
 endif
 
