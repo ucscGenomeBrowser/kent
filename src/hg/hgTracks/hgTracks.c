@@ -101,7 +101,7 @@
 #include "hgMutUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1073 2006/02/01 21:20:00 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1074 2006/02/13 22:05:20 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11208,6 +11208,8 @@ if (!hideControls)
 	hButton("hgt.hideAll", "hide all");
 	}
 
+    hPrintf(" ");
+    hButton("customTrackPage", "custom tracks");
     hPrintf(" ");
     hButton("hgTracksConfigPage", "configure");
     hPrintf(" ");
