@@ -707,7 +707,7 @@ if (baseType != NULL)
 	struct pfParse *name, *type;
 	struct pfParse *pp = pfParseNew(pptVarDec, tok, parent, scope);
 	type = parseOfs(pfc, pp, &tok, scope);
-	name = parseDottedNames(pp, &tok, scope);
+	name = parseNameUse(pp, &tok, scope);
 	pp->children = type;
 	pp->name = name->name;
 	type->next = name;
