@@ -1,6 +1,8 @@
 /* pfPreamble - this gets included at the start of
  * paraFlow-generated C code. */
 
+union _pf_stack;
+typedef union _pf_stack _pf_Stack;
 
 struct _pf_object;
 struct _pf_string;
@@ -17,6 +19,7 @@ typedef struct _pf_list *_pf_List;
 typedef struct _pf_tree *_pf_Tree;
 typedef struct _pf_dir *_pf_Dir;
 typedef struct _pf_var _pf_Var;
+typedef void (*_pf_FunctionPt)(_pf_Stack *stack);
 
 typedef char _pf_Bit;
 typedef unsigned char _pf_Byte;
@@ -43,6 +46,7 @@ union _pf_varless
     _pf_List List;
     _pf_Tree Tree;
     _pf_Dir Dir;
+    _pf_FunctionPt FunctionPt;
     void *v;
     };
 
@@ -69,10 +73,10 @@ union _pf_stack
     _pf_List List;
     _pf_Tree Tree;
     _pf_Dir Dir;
+    _pf_FunctionPt FunctionPt;
     void *v;
     _pf_Var Var;
     };
-typedef union _pf_stack _pf_Stack;
 
 typedef void (*_pf_polyFunType)(_pf_Stack *stack);
 

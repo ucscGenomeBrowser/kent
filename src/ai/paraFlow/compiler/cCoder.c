@@ -113,6 +113,10 @@ else if (base == pfc->dirType)
     return "Dir";
 else if (base == pfc->treeType)
     return "Tree";
+else if (base == pfc->toPtType)
+    return "FunctionPt";
+else if (base == pfc->flowPtType)
+    return "FunctionPt";
 else 
     return NULL;
 }
@@ -1440,9 +1444,9 @@ static boolean checkIfNeedsDims(struct pfCompile *pfc, struct pfParse *type)
 /* Return TRUE if it looks like we need to generate initialzation code 
  * for an array even if it isn't assigned anything. */
 {
-if (type->children == NULL)
-    return FALSE;
 if (type->type != pptOf)
+    return FALSE;
+if (type->children == NULL)
     internalErr();
 if (type->children->children == NULL)
     return FALSE;
