@@ -217,7 +217,7 @@ free(l);
 }			
 
 
-void writeScanlineToThumb(UINT8 *pRGBTriplets)
+void writeScanlineToThumb(UINT8 *pRGBTriplets, int nHeight) 
 /* This is in effect a stretch-blt */
 {
 int i,j,jj,jjj,r,R,G,B;
@@ -261,6 +261,8 @@ if (newH)
     newH = FALSE;
     accH += dh;	    
     kk = (int)accH;
+    if (kk>=nHeight)   
+	kk = nHeight-1;
     if (k>kk)
 	k = kk;
     rr = kk - k + 1;
@@ -372,7 +374,7 @@ for(nLine = 0; nLine < nHeight; nLine++)
 	if (makeFullSize)
 	    (void) jpeg_write_scanlines(&cinfo, &pRGBTriplets, num_scanlines);
 	writeScanlineToTiles(0, pRGBTriplets);
-	writeScanlineToThumb(pRGBTriplets);
+	writeScanlineToThumb(pRGBTriplets,nHeight);
 	} 
     else 
 	{
