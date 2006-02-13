@@ -744,7 +744,6 @@ if (tok->type == pftName && sameString(tok->val.s, "var"))
     if (ofTok->type == pftOf)
         {
 	struct pfToken *funcTok = ofTok->next;
-	uglyf("got of\n");
 	if (funcTok->type == pftFlow || funcTok->type == pftTo)
 	    {
 	    *pTokList = funcTok;

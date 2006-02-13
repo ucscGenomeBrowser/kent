@@ -8,12 +8,10 @@ test:
 	paraFlow dumpEnv/dumpEnv.pf > /dev/null
 	paraFlow lib/testLib.pf > output/testLib
 	diff expected/testLib output/testLib
-	rm -f myExp/*.pfh
 	paraFlow myExp/myExp.pf myExp/testExp.in > output/myExp
 	diff expected/myExp output/myExp
 	paraFlow myExp/myExp.pf myExp/testExp.in > output/myExp
 	diff expected/myExp output/myExp
-	rm -f oneCall/*.pfh
 	paraFlow oneCall/main.pf > output/oneCall
 	diff expected/oneCall output/oneCall
 	paraFlow oneCall/main.pf > output/oneCall

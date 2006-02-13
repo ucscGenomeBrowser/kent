@@ -25,8 +25,21 @@ if (output->ty == NULL)
 ty->children->next = output->ty;
 }
 
+static void evalFunctionPtType(struct pfCompile *pfc, struct pfParse *pp,
+	struct pfBaseType *base)
+/* Fill in pp->ty for a function pointer node */
+{
+struct pfParse *input = pp->children;
+struct pfParse *output = input->next;
+struct pfType *ty = pfTypeNew(base);
+ty->tyty = tytyFunction;
+pp->ty = ty;
+ty->children = input->ty;
+ty->children->next = output->ty;
+}
+
 static void evalDeclarationTypes(struct pfCompile *pfc, struct pfParse *pp)
-/* Go through and fill in pp->ct field on type expressions related
+/* Go through and fill in pp->ty field on type expressions related
  * to function and variable declarations. */
 {
 struct pfParse *p;
@@ -54,6 +67,12 @@ switch (pp->type)
 	break;
     case pptOperatorDec:
         evalFunctionType(pp, pfc->operatorType, tytyOperator);
+	break;
+    case pptTypeToPt:
+	evalFunctionPtType(pfc, pp, pfc->toPtType);
+	break;
+    case pptTypeFlowPt:
+	evalFunctionPtType(pfc, pp, pfc->flowPtType);
 	break;
     case pptForeach:
     case pptParaDo:
