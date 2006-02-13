@@ -30,7 +30,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.250 2006/02/01 10:48:32 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.251 2006/02/13 22:08:24 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1837,7 +1837,7 @@ else if (startsWith("wig", tdb->type))
         else
             wigUi(tdb);
         }
-else if (sameString(track, "affyRatio"))
+else if (sameString(track, "affyRatio") || sameString(track, "gnfAtlas2") )
         affyUi(tdb);
 else if (sameString(track, "ancientR"))
         ancientRUi(tdb);
