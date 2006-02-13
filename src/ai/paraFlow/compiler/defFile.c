@@ -155,7 +155,12 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
 	case pptFlowDec:
 	    printFuncDef(f, pp);
 	    break;
+	case pptPolymorphic:
+	    fprintf(f, "polymorphic ");
+	    rPrintDefs(f, pp, printInit);
+	    break;
 	case pptClass:
+	case pptInterface:
 	    printClassDef(f, pp);
 	    break;
 	case pptTuple:
