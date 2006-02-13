@@ -24,7 +24,7 @@ priority 80
 name hugo
 shortLabel HGNC
 tables kgXref
-idSql select geneSymbol from kgXref,proteome.hugo where kgID = '%s' and geneSymbol=symbol
+idSql select geneSymbol from kgXref,proteome.hgncXref where kgID = '%s' and geneSymbol=symbol
 url http://www.gene.ucl.ac.uk/nomenclature/data/get_data.php?match=%s
 priority 81
 
