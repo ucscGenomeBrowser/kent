@@ -1,9 +1,9 @@
-
-  - Rip out reference counting.  Put in "coalesce and copy on 
-    return" style memory management that makes heavy use of stack.
-  - Make para actions use p-threads.
+TO DO:
   - Function pointers.
+  - keyword function arguments as in python
+  - optional new() method.
   - Do a sort function (need function pointer?)
+  - Make para actions use p-threads.
   - ?Read-only and private variables.
         Make it so that class.new() is only legal way to
 	make something with private or read-only var.
@@ -20,6 +20,10 @@
   - ?Prevent memory leakage in expressions that don't get assigned to anything
     (including function calls).
 
+TO CONSIDER:
+
+  - Rip out reference counting.  Put in "coalesce and copy on 
+    return" style memory management that makes heavy use of stack.
 
 -----------
 DONE

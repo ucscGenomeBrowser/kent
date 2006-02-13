@@ -68,6 +68,8 @@ struct pfParse *init = name->next;
 
 start = end = type->tok;
 findSpanningTokens(type, &start, &end);
+if (end->next->type == ')')
+    end = end->next;	// Hack for function pointers... */
 printTokenRange(f, start, end);
 fprintf(f, " ");
 start = end = name->tok;
@@ -170,30 +172,79 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
     }
 }
 
+static void appendType(struct dyString *dy, struct pfParse *p);
+
+static void appendTypeTuple(struct dyString *dy, struct pfParse *p)
+/* Append something that looks like (int int int) to dy */
+{
+dyStringAppendC(dy, '(');
+for (p = p->children; p != NULL; p = p->next)
+    {
+    struct pfParse *type = p->children;
+    if (p->type != pptVarInit)
+         internalErr();
+    appendType(dy, type);
+    if (p->next != NULL)
+	dyStringAppendC(dy, ',');
+    }
+dyStringAppendC(dy, ')');
+}
+
+static void appendVarOf(struct dyString *dy, struct pfParse *pp)
+/* Append something looking like var of to (int int) into () 
+ * to dy. */
+{
+switch (pp->type)
+    {
+    case pptTypeToPt:
+         dyStringAppend(dy, "var of to ");
+	 break;
+    case pptTypeFlowPt:
+         dyStringAppend(dy, "var of flow ");
+	 break;
+    default:
+         internalErr();
+	 break;
+    }
+appendTypeTuple(dy, pp->children);
+dyStringAppend(dy, " into ");
+appendTypeTuple(dy, pp->children->next);
+}
+
+static void appendType(struct dyString *dy, struct pfParse *p)
+/* Append type to dy. */
+{
+if (p->type == pptTypeName)
+    dyStringAppend(dy, p->name);
+else if (p->type == pptOf)
+    {
+    p = p->children;
+    dyStringAppend(dy, p->name);
+    while ((p = p->next) != NULL)
+	{
+	dyStringAppend(dy, " of ");
+	appendType(dy, p);
+	}
+    }
+else if (p->type == pptTypeToPt || p->type == pptTypeFlowPt)
+    {
+    appendVarOf(dy, p);
+    }
+else
+    {
+    internalErr();
+    }
+}
+
 void rPrintTypesUsed(FILE *f, struct pfParse *pp, 
 	struct dyString *dy, struct hash *hash)
 /* Make up a dummy variable for each type that is used. */
 {
 if (pp->type == pptVarInit)
     {
-    struct pfParse *p = pp->children;
+    struct pfParse *type = pp->children;
     dyStringClear(dy);
-    if (p->type == pptTypeName)
-	dyStringAppend(dy, p->name);
-    else if (p->type == pptOf)
-        {
-	p = p->children;
-	dyStringAppend(dy, p->name);
-	while ((p = p->next) != NULL)
-	    {
-	    dyStringAppend(dy, " of ");
-	    dyStringAppend(dy, p->name);
-	    }
-	}
-    else
-        {
-	internalErr();
-	}
+    appendType(dy, type);
     if (!hashLookup(hash, dy->string))
         {
 	hashAdd(hash, dy->string, NULL);

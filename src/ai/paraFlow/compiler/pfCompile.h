@@ -62,6 +62,7 @@ struct pfCompile
     struct pfBaseType *operatorType;	/* Type for operator declarations */
     struct pfBaseType *classType;	/* Type for class declarations. */
     struct pfBaseType *interfaceType;	/* Type for interface declarations. */
+    struct pfBaseType *functionPtType;	/* Function pointer type. */
 
     struct pfBaseType *bitType;
     struct pfBaseType *byteType;

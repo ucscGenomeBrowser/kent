@@ -82,6 +82,8 @@ switch (type)
 	return "pptReturn";
     case pptCall:
 	return "pptCall";
+    case pptIndirectCall:
+	return "pptIndirectCall";
     case pptAssignment:
 	return "pptAssignment";
     case pptPlusEquals:
@@ -158,6 +160,10 @@ switch (type)
 	return "pptTypeName";
     case pptTypeTuple:
 	return "pptTypeTuple";
+    case pptTypeToPt:
+	return "pptTypeToPt";
+    case pptTypeFlowPt:
+	return "pptTypeFlowPt";
     case pptStringCat:
 	return "pptStringCat";
     case pptParaDo:
@@ -645,11 +651,115 @@ if (tok->type == '[')
 return dotted;
 }
 
+void parseFunctionIo(struct pfCompile *pfc,
+    struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope, 
+    struct pfParse **retInput, struct pfParse **retOutput)
+/* Parse out something like (int x, int y) into (int z)
+ * into input and output, both of which will be (possibly empty)
+ * pptTuples. */
+{
+struct pfToken *tok = *pTokList;
+struct pfToken *outToken;
+struct pfParse *input, *output = NULL;
+skipRequiredCharType('(', &tok);
+if (tok->type == ')')
+    {
+    input = emptyTuple(parent, tok, scope);
+    outToken = tok;
+    tok = tok->next;
+    }
+else
+    {
+    input = pfParseExpression(pfc, parent, &tok, scope);
+    if (input->type != pptTuple)
+	input = pfSingleTuple(parent, tok, input);
+    if (tok->type != ')')
+	expectingGot(")", tok);
+    outToken = tok;
+    tok = tok->next;
+    }
+if (tok->type == pftInto)
+    {
+    tok = tok->next;
+    outToken = tok;
+    output = pfParseExpression(pfc, parent, &tok, scope);
+    if (output->type != pptTuple)
+	output = pfSingleTuple(parent, outToken, output);
+    }
+else
+    output = emptyTuple(parent, outToken, scope);
+input->type  = pptTypeTuple;
+output->type  = pptTypeTuple;
+
+*pTokList = tok;
+*retInput = input;
+*retOutput = output;
+}
+	
+
+struct pfParse *parseShortFuncType(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse out something like:
+ *      to (int x,y=2) into (int f) 
+ * Into a parse tree that looks like
+ *      pptTypeToPt	 (or pptTypeFlowPt)
+ *         pptTypeTuple
+ *            pptVarInit x
+ *               pptTypeName int
+ *               pptSymName x
+ *            pptVarInit y
+ *               pptTypeName int
+ *               pptSymName y
+ *               pptConstUse 2 
+ *         pptTypeTuple
+ *            pptVarInit f
+ *               pptTypeName int
+ *               pptSymName f
+ */
+{
+struct pfToken *tok = *pTokList;
+enum pfParseType ppt = (tok->type == pftTo ? pptTypeToPt : pptTypeFlowPt);
+struct pfScope *funcScope = pfScopeNew(pfc, scope, 0, FALSE);
+struct pfParse *pp = pfParseNew(ppt, tok, parent, funcScope);
+struct pfParse *input, *output;
+
+tok = tok->next;	/* Skip over 'to' or 'flow' */
+parseFunctionIo(pfc, pp, &tok, funcScope, &input, &output);
+pp->children = input;
+input->next = output;
+*pTokList = tok;
+return pp;
+}
+
+
+struct pfParse *parseVarOfFunc(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* If it starts with 'var of to/flow' then parse out a function pointer
+ * declaration.  Else ust parseTypeDotsAndBraces. */
+{
+struct pfToken *tok = *pTokList;
+if (tok->type == pftName && sameString(tok->val.s, "var"))
+    {
+    struct pfToken *ofTok = tok->next;
+    if (ofTok->type == pftOf)
+        {
+	struct pfToken *funcTok = ofTok->next;
+	uglyf("got of\n");
+	if (funcTok->type == pftFlow || funcTok->type == pftTo)
+	    {
+	    *pTokList = funcTok;
+	    return parseShortFuncType(pfc, parent, pTokList, scope);
+	    }
+	}
+    }
+return parseTypeDotsAndBraces(pfc, parent, pTokList, scope);
+}
+
 struct pfParse *parseOfs(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse of separated expression. */
 {
-struct pfParse *pp = parseTypeDotsAndBraces(pfc, parent, pTokList, scope);
+struct pfParse *pp = parseVarOfFunc(pfc, parent, pTokList, scope);
 struct pfToken *tok = *pTokList;
 struct pfParse *ofs = NULL;
 if (tok->type == pftOf)
@@ -660,7 +770,7 @@ if (tok->type == pftOf)
     while (tok->type == pftOf)
 	{
 	tok = tok->next;
-	pp = parseTypeDotsAndBraces(pfc, ofs, &tok, scope);
+	pp = parseVarOfFunc(pfc, ofs, &tok, scope);
 	slAddHead(&ofs->children, pp);
 	}
     }
@@ -1466,42 +1576,16 @@ static struct pfParse *parseFunction(struct pfCompile *pfc,
 /* Parse something (...) [into (...)] */
 {
 struct pfToken *tok = *pTokList;
-struct pfToken *outToken;
 struct pfParse *pp;
 struct pfParse *name, *input, *output = NULL, *body = NULL;
+
 scope = pfScopeNew(pfc, scope, 0, FALSE);
 pp = pfParseNew(type, tok, parent, scope);
-tok = tok->next;	/* Skip something (implicit in type) */
+tok = tok->next;	/* Skip to/flow (implicit in type) */
 name = parseNameUse(parent, &tok, scope);
 pp->name = name->name;
 
-skipRequiredCharType('(', &tok);
-if (tok->type == ')')
-    {
-    input = emptyTuple(pp, tok, scope);
-    outToken = tok;
-    tok = tok->next;
-    }
-else
-    {
-    input = pfParseExpression(pfc, pp, &tok, scope);
-    if (input->type != pptTuple)
-	input = pfSingleTuple(pp, tok, input);
-    if (tok->type != ')')
-	expectingGot(")", tok);
-    outToken = tok;
-    tok = tok->next;
-    }
-if (tok->type == pftInto)
-    {
-    tok = tok->next;
-    outToken = tok;
-    output = pfParseExpression(pfc, pp, &tok, scope);
-    if (output->type != pptTuple)
-	output = pfSingleTuple(pp, outToken, output);
-    }
-else
-    output = emptyTuple(pp, outToken, scope);
+parseFunctionIo(pfc, pp, &tok, scope, &input, &output);
 
 if (tok->type == ';')
     {
@@ -1512,9 +1596,6 @@ else
     body = parseCompound(pfc, pp, &tok, scope);
     slAddHead(&pp->children, body);
     }
-
-input->type  = pptTypeTuple;
-output->type  = pptTypeTuple;
 
 slAddHead(&pp->children, output);
 slAddHead(&pp->children, input);

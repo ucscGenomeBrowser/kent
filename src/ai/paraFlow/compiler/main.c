@@ -137,6 +137,7 @@ pfc->indexRangeType = pfScopeAddType(scope, "<indexRange>", TRUE, pfc->collectio
 pfc->classType = pfScopeAddType(scope, "<class>", FALSE, pfc->varType, 0, FALSE);
 pfc->interfaceType = pfScopeAddType(scope, "<interface>", FALSE, pfc->varType, 0, FALSE);
 pfc->functionType = pfScopeAddType(scope, "<function>", FALSE, pfc->varType, 0, FALSE);
+pfc->functionPtType = pfScopeAddType(scope, "<functionPt>", FALSE, pfc->varType, 0, FALSE);
 pfc->toType = pfScopeAddType(scope, "to", FALSE, pfc->functionType, 0, FALSE);
 pfc->flowType = pfScopeAddType(scope, "flow", FALSE, pfc->functionType, 0, FALSE);
 pfc->operatorType = pfScopeAddType(scope, "_operator_", FALSE, pfc->functionType, 0, FALSE);
