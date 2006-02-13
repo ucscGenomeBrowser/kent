@@ -5222,6 +5222,7 @@ BASE=/cluster/data/rn3/bed/blastz.canFam2.2005-08-12
     ln -s /cluster/data/rn3/bed/blat.rn4.2006-02-07/rn3ToRn4.over.chain.gz \
       /gbdb/rn3/liftOver/
     hgAddLiftOverChain rn3 rn4 hgcentraltest \
-      /gbdb/rn3/liftOver/rn3ToRn4.over.chain.gz
+      /gbdb/rn3/liftOver/rn3ToRn4.over.chain.gz \
+      -path=/gbdb/rn3/liftOver/rn3ToRn4.over.chain.gz
 
 
