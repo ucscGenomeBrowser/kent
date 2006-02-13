@@ -15,6 +15,8 @@ test:
 	diff expected/func2func2 output/func2func2
 	paraFlow func2in2class.pf > output/func2in2class
 	diff expected/func2in2class output/func2in2class
+	paraFlow memberDotInClass.pf > output/memberDotInClass
+	diff expected/memberDotInClass output/memberDotInClass
 	paraFlow nilStuff.pf > output/nilStuff
 	diff expected/nilStuff output/nilStuff
 	paraFlow oneIntoClass.pf oneIntoClass.pf > output/oneIntoClass
