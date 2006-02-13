@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.10 2004/02/23 09:07:22 kent Exp $";
+static char const rcsid[] = "$Id: hgClusterGenes.c,v 1.11 2006/02/13 20:12:08 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,16 +27,19 @@ errAbort(
   "   -verbose=N - Print copious debugging info. 0 for none, 3 for loads\n"
   "   -noProt - Skip protein field\n"
   "   -sangerLinks - Use sangerLinks table for protein\n"
+  "   -protAccQuery='query' - Use query to retrieve gene->protein map\n"
   );
 }
 
 boolean noProt = FALSE;
 boolean sangerLinks = FALSE;
+char *protAccQuery = NULL;
 
 static struct optionSpec options[] = {
    {"chrom", OPTION_STRING},
    {"noProt", OPTION_BOOLEAN},
    {"sangerLinks", OPTION_BOOLEAN},
+   {"protAccQuery", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -325,6 +328,8 @@ if (!noProt)
     protHash = newHash(16);
     if (sangerLinks)
 	safef(query, sizeof(query), "select orfName,protName from sangerLinks");
+    else if (isNotEmpty(protAccQuery))
+	safef(query, sizeof(query), protAccQuery);
     else
 	safef(query, sizeof(query), "select name, proteinId from %s", geneTable);
     sr = sqlGetResult(conn, query);
@@ -407,6 +412,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 noProt = optionExists("noProt");
 sangerLinks = optionExists("sangerLinks");
+protAccQuery = optionVal("protAccQuery", protAccQuery);
 if (argc != 5)
     usage();
 hgClusterGenes(argv[1], argv[2], argv[3], argv[4]);
