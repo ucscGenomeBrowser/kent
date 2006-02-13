@@ -6,7 +6,11 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: vgPrepImage.c,v 1.2 2005/11/24 03:34:50 kent Exp $";
+#include "jpgTiles.h"
+#include "jpgDec.h"
+#include "jp2Dec.h"
+
+static char const rcsid[] = "$Id: vgPrepImage.c,v 1.3 2006/02/13 06:57:05 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,8 +26,6 @@ errAbort(
 }
 
 boolean noLink = FALSE;
-
-int thumbSize=200;
 
 static struct optionSpec options[] = {
    {"noLink", OPTION_BOOLEAN},
@@ -51,43 +53,6 @@ safef(command, sizeof(command), "mkdir -p %s", dir);
 execute(command, 0);
 }
 
-void makeThumbnail(char *source, char *dest)
-/* Make a thumbnail-sized copy of source in dest. */
-{
-struct dyString *command = dyStringNew(0);
-dyStringPrintf(command, "convert %s -resize %d %s", source, thumbSize, dest);
-execute(command->string, 0);
-dyStringFree(&command);
-}
-
-void pyramid1(char *source, char *subdir, char *name, struct dyString *dy,
-	char *sizeFlag, int level)
-/* Call image magick convert program to produce scaled tiles. */
-{
-dyStringClear(dy);
-dyStringPrintf(dy, 
-	"convert %s %s -crop 512x512 -quality 75 %s/%s_%d_%%03d.jpg",
-	source, sizeFlag, subdir, name, level);
-execute(dy->string, 139);  /* convert will return 139 when ok.  Weird. */
-}
-
-void makePyramid(char *source, char *destDir)
-/* Make a directory in dest full of tiled versions of
- * source image at various levels of zoom. */
-{
-struct dyString *dy = dyStringNew(0);
-char name[PATH_LEN];
-
-splitPath(destDir, NULL, name, NULL);
-makeDir(destDir);
-pyramid1(source, destDir, name, dy, "", 0);
-pyramid1(source, destDir, name, dy, "-resize 50%", 1);
-pyramid1(source, destDir, name, dy, "-resize 25%", 2);
-pyramid1(source, destDir, name, dy, "-resize 12.5%", 3);
-pyramid1(source, destDir, name, dy, "-resize 6.25%", 4);
-dyStringFree(&dy);
-}
-
 void makeLink(char *source, char *link)
 /* Create symbolic link. */
 {
@@ -103,20 +68,49 @@ void vgPrepImage(char *sourceDir, char *thumbDir, char *fullDir, char *fileName)
  * also link in full sized image. */
 {
 char source[PATH_LEN], thumb[PATH_LEN], full[PATH_LEN], pyramid[PATH_LEN];
+char outFullDir[PATH_LEN],  outFullRoot[PATH_LEN]; 
+int nWidth, nHeight;
+int quality[5];
+boolean makeFullSize = FALSE;
+unsigned char *(*readScanline)() = NULL;
 
 /* Figure out full paths. */
 safef(source, sizeof(source), "%s/%s", sourceDir, fileName);
 safef(thumb, sizeof(thumb), "%s/%s", thumbDir, fileName);
 safef(full, sizeof(full), "%s/%s", fullDir, fileName);
-strcpy(pyramid, full);
+splitPath(full, outFullDir, outFullRoot, NULL);
+outFullDir[strlen(outFullDir)-1]=0;  /* knock off trailing slash */
+strcpy(pyramid,full);
 chopSuffix(pyramid);
 
 makeDirForFile(thumb);
 makeDirForFile(full);
+makeDir(pyramid);
 
-/* Make copies at various sizes. */
-makeThumbnail(source, thumb);
-makePyramid(source, pyramid);
+if (endsWith(source,".jp2"))
+    {
+    thumb[strlen(thumb)-1]='g';  /* convert the extension */
+    noLink = TRUE;   /* for jp2, symlink to source automatically suppressed */
+    makeFullSize = TRUE;  /* instead we'll have the tile-maker make a fullsize jpg for us */
+    quality[0] = 50;
+    quality[1] = 60;
+    quality[2] = 70;
+    quality[3] = 80;
+    quality[4] = 85;
+    jp2DecInit(source, &nWidth, &nHeight);
+    readScanline = &jp2ReadScanline;
+    jpgTiles(nWidth, nHeight, outFullDir, outFullRoot, thumb, readScanline, quality, makeFullSize);
+    jp2Destroy();
+    }
+else if (endsWith(source,".jpg"))
+    {
+    jpgDecInit(source, &nWidth, &nHeight);
+    readScanline = &jpgReadScanline;
+    jpgTiles(nWidth, nHeight, outFullDir, outFullRoot, thumb, readScanline, NULL, makeFullSize);
+	/* NULL quality will default to 75 for all */
+    jpgDestroy();
+    }
+
 if (!noLink)
     makeLink(source, full);
 }
