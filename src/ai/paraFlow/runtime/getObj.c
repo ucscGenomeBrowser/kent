@@ -430,6 +430,10 @@ switch (type->base->singleType)
         *p = scanDir(f, type, idHash);
 	break;
 	}
+    case pf_stToPt:
+    case pf_stFlowPt:
+	runErr("Can't scan data containing var of (function pointer) types.");
+	break;
     case pf_stVar:
 	runErr("Can't scan data containing var types.");
 	break;
@@ -495,6 +499,13 @@ switch (base->singleType)
     case pf_stDir:
 	idHash = newHash(18);
 	stack[0].Dir = scanDir(f, type, idHash);
+	break;
+    case pf_stToPt:
+    case pf_stFlowPt:
+	runErr("Can't scan data containing var of (function pointer) types.");
+	break;
+    case pf_stVar:
+	runErr("Can't scan data containing var types.");
 	break;
     default:
 	runErr("unknown type");

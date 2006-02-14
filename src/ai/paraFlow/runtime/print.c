@@ -212,6 +212,18 @@ switch (base->singleType)
         printDir(f, *p, base, idHash);
 	break;
 	}
+    case pf_stToPt:
+	{
+	_pf_FunctionPt **p = data;
+	fprintf(f, "<toPt %p>", *p);
+        break;
+	}
+    case pf_stFlowPt:
+	{
+	_pf_FunctionPt **p = data;
+	fprintf(f, "<flowPt %p>", *p);
+        break;
+	}
     case pf_stVar:
         {
 	struct _pf_var *var = data;
@@ -279,6 +291,12 @@ switch (base->singleType)
 	idHash = newHash(18);
         printDir(f, val.Dir, base, idHash);
 	break;
+    case pf_stToPt:
+	fprintf(f, "<toPt %p>\n", val.FunctionPt);
+        break;
+    case pf_stFlowPt:
+	fprintf(f, "<flowPt %p>\n", val.FunctionPt);
+        break;
     default:
         fprintf(f, "<type %d>\n", base->singleType);
 	internalErr();

@@ -91,6 +91,10 @@ switch (st)
 	    *((_pf_Object *)output) = stack->Obj;
 	break;
 	}
+    case pf_stFlowPt:
+    case pf_stToPt:
+	*((_pf_FunctionPt *)output) = stack->FunctionPt;
+        break;
     default:
         internalErr();
 	break;

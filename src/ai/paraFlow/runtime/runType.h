@@ -23,8 +23,9 @@ enum _pf_single_type
     pf_stVar,		/* Variable type. Actual type determined at run time. */
     pf_stClass,		/* A type containing multiple fields, and/or methods. */
     pf_stTo,		/* A regular function declaration. */
-    pf_stPara,		/* A parallelizable function declaration. */
-    pf_stFlow,		/* A pure flow (no latch required) function. */
+    pf_stFlow,		/* A pure flow (no side effects) function. */
+    pf_stToPt,		/* A pointer to a regular function */
+    pf_stFlowPt,	/* A pointer to a flow function */
     };
 
 struct _pf_type

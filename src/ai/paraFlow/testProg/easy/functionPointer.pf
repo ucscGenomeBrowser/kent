@@ -1,3 +1,4 @@
+// Test out function pointers. 
 
 flow add(int x,y) into (int f) 
     {
@@ -29,7 +30,13 @@ prin(sub(9,5));
 prin(" vs ");
 print(subOp(9,5));
 
-/*-someday
+class employee
+    {
+    int id;
+    long ssn;
+    string lastName, firstName;
+    };
+
 class jumpTable
     {
     int version = 2;
@@ -39,5 +46,9 @@ class jumpTable
     }
 
 jumpTable jump = (1, add, sub, mul, div);
-someday-*/
 
+print("10, 5: add, sub, mul, div via jump table");
+print(jump.add(10,5));
+print(jump.sub(10,5));
+print(jump.mul(10,5));
+print(jump.div(10,5));

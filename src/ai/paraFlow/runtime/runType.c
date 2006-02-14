@@ -31,8 +31,9 @@ hashAddInt(hash, "tree", pf_stTree);
 hashAddInt(hash, "var", pf_stVar);
 hashAddInt(hash, "class", pf_stClass);
 hashAddInt(hash, "to", pf_stTo);
-hashAddInt(hash, "para", pf_stPara);
 hashAddInt(hash, "flow", pf_stFlow);
+hashAddInt(hash, "<toPt>", pf_stToPt);
+hashAddInt(hash, "<flowPt>", pf_stFlowPt);
 return hash;
 }
 
@@ -178,19 +179,20 @@ for (i=0; i<baseCount; ++i)
     base->needsCleanup = info->needsCleanup;
     base->size = info->size;
     hashAdd(baseHash, base->name, base);
-    if (s[0] != '<')
+    base->singleType = hashIntValDefault(singleIds, s, 0);
+    if (base->singleType == 0)
 	{
-	base->singleType = hashIntValDefault(singleIds, s, 0);
-	if (base->singleType == 0)
-	    {
+	if (s[0] != '<')
 	    base->singleType = pf_stClass;
-	    }
+	}
+    if (base->singleType != 0)
+	{
 	switch (base->singleType)
 	    {
 	    case pf_stBit:
 		{
 		static struct x {char b1; _pf_Bit var;} x;
-	        base->size = sizeof(_pf_Bit);
+		base->size = sizeof(_pf_Bit);
 		base->alignment = (char *)&x.var - (char *)&x;
 		break;
 		}
@@ -285,10 +287,20 @@ for (i=0; i<baseCount; ++i)
 		base->alignment = (char *)&x.var - (char *)&x;
 		break;
 		}
+	    case pf_stToPt:
+	    case pf_stFlowPt:
+		{
+		static struct x {char b1; void (*var)();} x;
+		base->size = sizeof(void *);
+		base->alignment = (char *)&x.var - (char *)&x;
+		break;
+		}
 	    case pf_stTo:
-	    case pf_stPara:
 	    case pf_stFlow:
-	        break;
+		break;
+	    default:
+		internalErr();
+		break;
 	    }
 	base->aliAdd = base->alignment-1;
 	base->aliMask = ~base->aliAdd;
