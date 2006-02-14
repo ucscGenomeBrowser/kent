@@ -305,19 +305,6 @@ switch (st)
 _pf_array_append(array, v);
 }
 
-static _pf_FunctionPt paraFlowCmp;
-static _pf_Stack *paraFlowStack;
-
-static int cCmpInt(const void *va, const void *vb)
-/* Comparison function for int. */
-{
-const int *a = va, *b = vb;
-paraFlowStack[0].Int = *a;
-paraFlowStack[1].Int = *b;
-paraFlowCmp(paraFlowStack);
-return paraFlowStack[0].Int;
-}
-
 static int qCmpBit(const void *va, const void *vb)
 /* Quick, no ParaFlow callback sort function for byte. */
 {
@@ -385,8 +372,6 @@ else
     return 0;
 }
 
-
-
 static int qCmpString(const void *va, const void *vb)
 /* Quick, no ParaFlow callback sort function for string. */
 {
@@ -401,6 +386,106 @@ else if (b == NULL)
 return strcmp(a->s, b->s);
 }
 
+struct pfCmpState
+/* Info we need to communicate with paraFlow in our
+ * cmp function. */
+     {
+     _pf_Stack *stack;
+     _pf_FunctionPt cmp;
+     };
+
+static int pCmpBit(void *thunk, const void *va, const void *vb)
+/* Comparison function for Bit using paraFlow callback. */
+{
+struct pfCmpState *pf = thunk;
+const _pf_Bit *a = va, *b = vb;
+pf->stack[0].Bit = *a;
+pf->stack[1].Bit = *b;
+pf->cmp(pf->stack);
+return pf->stack[0].Int;
+}
+
+static int pCmpByte(void *thunk, const void *va, const void *vb)
+/* Comparison function for Byte using paraFlow callback. */
+{
+struct pfCmpState *pf = thunk;
+const _pf_Byte *a = va, *b = vb;
+pf->stack[0].Byte = *a;
+pf->stack[1].Byte = *b;
+pf->cmp(pf->stack);
+return pf->stack[0].Int;
+}
+
+static int pCmpShort(void *thunk, const void *va, const void *vb)
+/* Comparison function for Short using paraFlow callback. */
+{
+struct pfCmpState *pf = thunk;
+const _pf_Short *a = va, *b = vb;
+pf->stack[0].Short = *a;
+pf->stack[1].Short = *b;
+pf->cmp(pf->stack);
+return pf->stack[0].Int;
+}
+
+static int pCmpInt(void *thunk, const void *va, const void *vb)
+/* Comparison function for Int using paraFlow callback. */
+{
+struct pfCmpState *pf = thunk;
+const _pf_Int *a = va, *b = vb;
+pf->stack[0].Int = *a;
+pf->stack[1].Int = *b;
+pf->cmp(pf->stack);
+return pf->stack[0].Int;
+}
+
+static int pCmpLong(void *thunk, const void *va, const void *vb)
+/* Comparison function for Long using paraFlow callback. */
+{
+struct pfCmpState *pf = thunk;
+const _pf_Long *a = va, *b = vb;
+pf->stack[0].Long = *a;
+pf->stack[1].Long = *b;
+pf->cmp(pf->stack);
+return pf->stack[0].Int;
+}
+
+static int pCmpFloat(void *thunk, const void *va, const void *vb)
+/* Comparison function for Float using paraFlow callback. */
+{
+struct pfCmpState *pf = thunk;
+const _pf_Float *a = va, *b = vb;
+pf->stack[0].Float = *a;
+pf->stack[1].Float = *b;
+pf->cmp(pf->stack);
+return pf->stack[0].Int;
+}
+
+static int pCmpDouble(void *thunk, const void *va, const void *vb)
+/* Comparison function for Double using paraFlow callback. */
+{
+struct pfCmpState *pf = thunk;
+const _pf_Double *a = va, *b = vb;
+pf->stack[0].Double = *a;
+pf->stack[1].Double = *b;
+pf->cmp(pf->stack);
+return pf->stack[0].Int;
+}
+
+static int pCmpObj(void *thunk, const void *va, const void *vb)
+/* Comparison function for Obj using paraFlow callback. */
+{
+struct pfCmpState *pf = thunk;
+struct _pf_object *a = *((struct _pf_object **)va);
+struct _pf_object *b = *((struct _pf_object **)vb);
+a->_pf_refCount += 1;
+b->_pf_refCount += 1;
+pf->stack[0].Obj = a;
+pf->stack[1].Obj = b;
+pf->cmp(pf->stack);
+return pf->stack[0].Int;
+}
+
+
 void _pf_cm_array_sort(_pf_Stack *stack)
 /* Sort array using a user-supplied compare function. */
 {
@@ -408,7 +493,6 @@ _pf_Array array = stack[0].Array;
 _pf_FunctionPt cmp = stack[1].FunctionPt;
 enum _pf_single_type st = array->elType->base->singleType;
 
-uglyf("Theoretically sorting %p using function %p - should work on ints now\n", array, cmp);
 if (cmp == NULL)
     {
     int (*compare)(const void *, const void *) = NULL;
@@ -446,8 +530,37 @@ if (cmp == NULL)
     }
 else
     {
-    paraFlowCmp = cmp;
-    paraFlowStack = stack;
-    qsort(array->elements, array->size, array->elSize, cCmpInt);
+    int (*compare)(void *,const void *, const void *) = NULL;
+    struct pfCmpState pf;
+    pf.stack = stack;
+    pf.cmp = cmp;
+    switch (st)
+        {
+	case pf_stBit:
+	    compare = pCmpBit;
+	    break;
+	case pf_stByte:
+	    compare = pCmpByte;
+	    break;
+	case pf_stShort:
+	    compare = pCmpShort;
+	    break;
+	case pf_stInt:
+	    compare = pCmpInt;
+	    break;
+	case pf_stLong:
+	    compare = pCmpLong;
+	    break;
+	case pf_stFloat:
+	    compare = pCmpFloat;
+	    break;
+	case pf_stDouble:
+	    compare = pCmpDouble;
+	    break;
+	default:
+	    compare = pCmpObj;
+	    break;
+	}
+    qsort_r(array->elements, array->size, array->elSize, &pf, compare);
     }
 }
