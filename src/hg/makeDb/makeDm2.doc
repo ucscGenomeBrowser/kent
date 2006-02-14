@@ -3906,6 +3906,10 @@ BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
     end
     nice md5sum *.zip *.gz > md5sum.txt
 
+    # 2/6/06: fill in missing symbol values with accession so hgNear
+    # has something to draw a link on...
+    hgsql dm2 -e 'update flyBase2004Xref set symbol = name where symbol = ""'
+
 
 # FLYBASE ACODE CROSS-REFERENCING DATA (DONE 1/27/06 angie)
     ssh hgwdev
@@ -3983,12 +3987,14 @@ BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
     ./combineMappings.pl transcriptIds.txt \
       uniProtMapping.txt uniProtMappingVague.txt flyBaseMapping.txt \
       > flyBaseToUniProt.txt
-
-#TODO -  I guess load that into mysql and then figure out how to make 
-# hgNear use it instead of requiring an extra column on flyBaseGene.
-# Or just slap the extra column on flyBaseGene with some arbitrary choice 
-# of which mapping to believe when there are multiple??
-
+    # Load into a genericAlias-type table (this ignores the third column).
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/uniProtToFlyBase
+    sed -e 's/genericAlias/flyBaseToUniProt/' \
+      ~/kent/src/hg/lib/genericAlias.sql > flyBaseToUniProt.sql
+    hgsql dm2 < flyBaseToUniProt.sql
+    hgsql dm2 -e \
+     'load data local infile "flyBaseToUniProt.txt" into table flyBaseToUniProt'
 
 ##########################################################################
 # HGNEAR TABLES
@@ -4030,7 +4036,7 @@ BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
     zcat orf_trans.fasta.gz > sgdPep.faa
 
 
-# HGNEAR PROTEIN BLAST TABLES (DONE 1/10/06 angie)
+# HGNEAR PROTEIN BLAST TABLES (DONE 1/31/06 angie)
     ssh hgwdev
     mkdir /cluster/data/dm2/bed/hgNearBlastp
     cd /cluster/data/dm2/bed/hgNearBlastp
@@ -4042,7 +4048,7 @@ targetGenesetPrefix flyBase
 targetDb dm2
 queryDbs hg17 mm7 rn3 danRer3 ce2 sacCer1
 
-dm2Fa /cluster/data/dm2/bed/flybase4.1/flybasePep.fa
+dm2Fa /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
 hg17Fa /cluster/data/hg17/bed/blastp/known.faa
 mm7Fa /cluster/data/mm7/bed/geneSorter/blastp/known.faa
 rn3Fa /cluster/data/rn3/bed/blastp/known.faa
@@ -4055,40 +4061,67 @@ scratchDir /san/sanvol1/scratch/dm2HgNearBlastp
 _EOF_
     doHgNearBlastp.pl config.ra >& do.log &
     tail -f do.log
+# *** Check these tables in dm2:
+# *** flyBaseBlastTab hgBlastTab mmBlastTab rnBlastTab drBlastTab ceBlastTab scBlastTab 
+# *** and dmBlastTab in these databases:
+# *** hg17 mm7 rn3 danRer3 ce2 sacCer1 
 
 
-# CLUSTER GENES (TODO 1//06 angie)
+# CLUSTER GENES AND MAP TO OTHER DATA (DONE 2/6/06 angie)
     ssh hgwdev
     # First we have to add a proteinId column to flyBaseGene.
-#*** need to relate flyBaseGene IDs to SwissProt somehow!
-    hgClusterGenes dm2 flyBaseGene flyBaseIsoforms flyBaseCanonical
+    hgClusterGenes dm2 flyBaseGene flyBaseIsoforms flyBaseCanonical \
+      -protAccQuery='select name,alias from flyBaseToUniProt'
     # Create table that maps between flyBase genes and RefSeq
     hgMapToGene dm2 refGene flyBaseGene flyBaseToRefSeq
-    # Create table that maps between flyBase genes and LocusLink
-    echo "select mrnaAcc,locusLinkId from refLink" | hgsql -N dm2 > refToLl.txt
-### NOT DONE (LocusLink info temporarily missing from genbank)
-    hgMapToGene dm2 refGene flyBaseGene flyBaseToLocusLink -lookup=refToLl.txt
-###
     # Create table that maps between known genes and Pfam domains
-    hgMapViaSwissProt dm2 flyBaseGene name proteinID Pfam flyBaseToPfam
+    hgMapViaSwissProt dm2 flyBaseToUniProt name alias Pfam flyBaseToPfam
 
     # Create a table that maps between flyBase genes and the 
     # Stanford Microarray Project expression data. (see makeHgFixed.doc)
-    hgExpDistance -lookup=flyBaseToCanonical \
-      dm2 hgFixed.arbFlyLifeMedianRatio dummyArg arbExpDistance
+    hgsql dm2 -e 'create table flyBaseToCG \
+      select name,SUBSTRING_INDEX(name,"-",1) as value from flyBaseGene'
+    hgsql dm2 -e 'create index name on flyBaseToCG(name(12))'
+    hgExpDistance dm2 hgFixed.arbFlyLifeMedianRatio dummyArg \
+      arbExpDistance -lookup=flyBaseToCG
+#TODO: add the yale expr data too (feep)
 
     # Make sure that GO database is up to date.
     See README in /cluster/store1/geneOntology.
 
 
-# MAKE ORGANISM-SPECIFIC HGNEARDATA FILES (TODO 1//06 angie)
+# MAKE A DESCRIPTION TABLE FOR HGNEAR KNOWNDETAILS (DONE 2/6/06)
+    # hgNear's knownDetails column type expects a single table that links 
+    # transcript ID with uniProt description, so whip one up here:
+    # (used by hgGene too though hgGene could join on the fly)
+    ssh hgwdev
+    hgsql dm2 -e 'create table flyBaseToDescription \
+      select flyBaseToUniProt.name,uniProt.description.val \
+      from flyBaseToUniProt,uniProt.description 
+      where flyBaseToUniProt.alias = uniProt.description.acc'
+    hgsql dm2 -e 'create index name on flyBaseToDescription(name(12))'
+
+
+# FLYP2P (DONE 2/6/06 angie)
+    # See Galt's hgNetDist notes in hg/near/makeHgNear.doc...
+    ssh hgwdev
+    mkdir /cluster/data/dm2/bed/p2p
+    cd /cluster/data/dm2/bed/p2p
+    cp /cluster/data/dm1/p2p/flyP2P.tab .
+    hgNetDist flyP2P.tab dm2 flyP2P \
+      -sqlRemap='select fbgn,name from flyBase2004Xref'
+
+
+# MAKE ORGANISM-SPECIFIC HGNEARDATA AND HGGENEDATA FILES (DONE 2/7/06 angie)
     cd ~/kent/src/hg/near/hgNear/hgNearData
-    # any updates necessary?
+    # Made dm1 and dm2 subdirs of D_melanogaster with separate sets of 
+    # .ra files... see cvs revision history.
+    # Similarly for hgGene/hgGeneData.
 
 
-# ENABLE HGNEAR FOR DM2 IN HGCENTRALTEST (TODO 1//06 angie)
-    echo "update dbDb set hgNearOk = 1 where name = 'dm2';" \
-      | hgsql -h genome-testdb hgcentraltest
+# ENABLE HGNEAR FOR DM2 IN HGCENTRALTEST (DONE 2/7/06 angie)
+    hgsql -h genome-testdb hgcentraltest \
+      -e  "update dbDb set hgNearOk = 1 where name = 'dm2';"
 
 # END OF HGNEAR STUFF
 #############################################################################
