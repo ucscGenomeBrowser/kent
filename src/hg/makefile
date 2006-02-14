@@ -134,9 +134,10 @@ UTIL_DIRS = \
 	gbToFaRa \
 	geneBounds \
 	genePredCheck \
-	genePredToGtf \
-	genePredSingleCover \
 	genePredHisto \
+	genePredSingleCover \
+	genePredToGtf \
+	genePredToFakePsl \
 	genePredToMafFrames \
 	getFeatDna \
 	getRna \
