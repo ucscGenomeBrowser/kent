@@ -67,6 +67,8 @@ summary multiz5waySummary
 speciesGroups vertebrate mammal
 sGroup_mammal hg18 mm7 
 sGroup_vertebrate tetNig1 fr1
+irows on
+frames multiz5wayFrames
 treeImage phylo/danRer3_5way.jpg
 
 track chainHg18
