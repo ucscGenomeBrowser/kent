@@ -28,7 +28,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.2 2006/02/14 20:20:47 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.3 2006/02/14 20:36:06 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -130,7 +130,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	alleleLen = alleleLen - 2;
 	span = sqlUnsigned(row[2]) - sqlUnsigned(row[1]);
 	if (alleleLen != span)
+	    {
             writeToExceptionFile(chromName, row[1], row[2], row[0], "DeletionClassWrongObservedSize");
+	    continue;
+	    }
 
 	/* DeletionClassWrongObserved */
         subString = cloneString(row[5]);
