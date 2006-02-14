@@ -2289,6 +2289,7 @@ switch (pp->type)
 	break;
 	}
     case pptCall:
+    case pptIndirectCall:
     case pptAssignment:
     case pptPlusEquals:
     case pptMinusEquals:

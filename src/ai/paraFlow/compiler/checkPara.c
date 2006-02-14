@@ -160,10 +160,11 @@ static void checkCalls(struct pfCompile *pfc, struct pfParse *pp)
 switch (pp->type)
     {
     case pptCall:
+    case pptIndirectCall:
          {
 	 struct pfParse *ppFuncVar = pp->children;
 	 struct pfBaseType *base = ppFuncVar->ty->base;
-	 if (base == pfc->flowType)
+	 if (base == pfc->flowType || base == pfc->flowPtType)
 	     ;
 	 else
 	     {

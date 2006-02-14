@@ -560,7 +560,7 @@ switch(functionType->tyty)
 	struct pfParse *paramTuple = function->next;
 	struct pfParse *firstParam = paramTuple->children;
 
-	if (firstParam != NULL && firstParam->type == pptCall && firstParam->next == NULL && slCount(inputType->children) != 1)
+	if (firstParam != NULL && (firstParam->type == pptCall || firstParam->type == pptIndirectCall) && firstParam->next == NULL && slCount(inputType->children) != 1)
 	    {
 	    coerceCallToTupleOfTypes(pfc, &paramTuple->children, inputType->children);
 	    }
@@ -870,7 +870,7 @@ if (pt->base != destBase)
 		insertCast(pptTuple, NULL, pPp);  /* Also not just a cast. */
 		pfTypeOnTuple(pfc, *pPp);
 		}
-	    if (pp->type == pptCall)
+	    if (pp->type == pptCall || pp->type == pptIndirectCall)
 		{
 		coerceCallToClass(pfc, pPp, destType);
 		}
@@ -1022,7 +1022,7 @@ struct pfParse *el = source->next;
 struct pfParse *body = el->next;
 struct pfParse *cast, *castStart;
 
-if (source->type == pptCall)
+if (source->type == pptCall || source->type == pptIndirectCall)
     {
     /* Coerce call to be same type as element. */
     struct pfParse **pSource = &pp->children;
@@ -1776,6 +1776,7 @@ if (verboseLevel() >= 3)
 switch (pp->type)
     {
     case pptCall:
+    case pptIndirectCall:
 	coerceCall(pfc, pPp);
         break;
     case pptWhile:
