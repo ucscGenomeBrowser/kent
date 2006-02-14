@@ -649,8 +649,9 @@ canFam2.downloadDir = canFam2
     rm -rf work/initial.canFam2
 
 
-# SWAP CHAINS FROM HG17, BUILD NETS ETC. (DONE 8/3/05 angie - REDONE 12/13/05)
+# SWAP CHAINS FROM HG17, BUILD NETS ETC. (DONE 8/3/05 angie - REDONE 12/13/05 - REDONE 2/8/06)
 # hg17-canFam2 was redone 12/12/05 (makeHg17.doc) so re-running this...
+# and again 2/8/06, sheesh...
     mkdir /cluster/data/canFam2/bed/blastz.hg17.swap
     cd /cluster/data/canFam2/bed/blastz.hg17.swap
     doBlastzChainNet.pl -swap /cluster/data/hg17/bed/blastz.canFam2/DEF \
