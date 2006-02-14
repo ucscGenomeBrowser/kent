@@ -15,7 +15,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.2 2006/02/14 19:21:31 heather Exp $";
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.3 2006/02/14 20:17:58 heather Exp $";
 
 struct snpTmp
     {
@@ -268,8 +268,8 @@ FILE *f;
 struct sqlConnection *conn = hAllocConn();
 char tableName[64], fileName[64];
 
-safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
-safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
+safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+safef(fileName, ArraySize(fileName), "%s_snpTmp.tab", chromName);
 
 f = mustOpen(fileName, "r");
 /* hgLoadTabFile closes the file handle */
@@ -323,6 +323,7 @@ while ((chromName = hashNextName(&cookie)) != NULL)
     safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
     if (!hTableExists(tableName)) continue;
     recreateDatabaseTable(chromName);
+    verbose(1, "loading chrom = %s\n", chromName);
     loadDatabase(chromName);
     }
 
