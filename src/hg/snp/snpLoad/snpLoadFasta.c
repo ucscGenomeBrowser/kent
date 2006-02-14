@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.9 2006/02/14 04:02:46 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.10 2006/02/14 04:30:40 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 /* The vast majority are single. */
@@ -26,6 +26,7 @@ char *classStrings[] = {
 };
 
 static char *database = NULL;
+FILE *exceptionFileHandle = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -35,6 +36,75 @@ errAbort(
   "usage:\n"
   "  snpLoadFasta database \n");
 }
+
+boolean triAllelic(char *observed)
+{
+    if (sameString(observed, "A/C/G")) return TRUE;
+    if (sameString(observed, "A/C/T")) return TRUE;
+    if (sameString(observed, "A/G/T")) return TRUE;
+    if (sameString(observed, "C/G/T")) return TRUE;
+    return FALSE;
+}
+
+boolean quadAllelic(char *observed)
+{
+    if (sameString(observed, "A/C/G/T")) return TRUE;
+    return FALSE;
+}
+
+boolean validSingleObserved(char *observed)
+{
+    if (sameString(observed, "A/C")) return TRUE;
+    if (sameString(observed, "A/G")) return TRUE;
+    if (sameString(observed, "A/T")) return TRUE;
+    if (sameString(observed, "C/G")) return TRUE;
+    if (sameString(observed, "C/T")) return TRUE;
+    if (sameString(observed, "G/T")) return TRUE;
+    return FALSE;
+}
+
+void checkSingleObserved(char *chromName, char *rsId, char *observed)
+/* check for exceptions in single class */
+/* this is not full exceptions format */
+{
+    if (quadAllelic(observed))
+        {
+	fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "SingleClassQuadAllelic", observed);
+	return;
+	}
+
+    if (triAllelic(observed))
+        {
+	fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "SingleClassTriAllelic", observed);
+	return;
+	}
+
+    if (validSingleObserved(observed)) return;
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "SingleClassWrongObserved", observed);
+}
+
+void checkIndelObserved(char *chromName, char *rsId, char *observed)
+/* check for exceptions in in-del class */
+/* lengthTooLong */
+/* first char should be dash, second char should be forward slash */
+/* To do: no IUPAC */
+{
+    if (sameString(observed, "lengthTooLong"))
+        {
+	fprintf(exceptionFileHandle, "chr%s\t%s\t%s\n", chromName, rsId, "IndelClassMissingObserved");
+	return;
+	}
+
+    if (strlen(observed) < 2)
+        {
+	fprintf(exceptionFileHandle, "chr%s\t%s\t%s\n", chromName, rsId, "IndelClassTruncatedObserved");
+	return;
+	}
+
+    if (observed[0] != '-' || observed[1] != '/')
+	fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "IndelClassObservedWrongFormat", observed);
+}
+
 
 boolean readFasta(char *chromName)
 /* Parse each line in chrN.gnl, write to chrN_snpFasta.tab. */
@@ -49,6 +119,7 @@ char *chopAtMolType;
 char *chopAtAllele;
 int wordCount9, wordCount2;
 char *row[9], *rsId[2], *molType[2], *class[2], *allele[2];
+int classVal = 0;
 
 safef(inputFileName, ArraySize(inputFileName), "ch%s.gnl", chromName);
 if (!fileExists(inputFileName)) return FALSE;
@@ -68,8 +139,13 @@ while (lineFileNext(lf, &line, &lineSize))
 
     stripChar(molType[1], '"');
     stripChar(allele[1], '"');
+    classVal = sqlUnsigned(class[1]);
 
-    fprintf(f, "%s\t%s\t%s\t%s\n", rsId[0], molType[1], classStrings[sqlUnsigned(class[1])], allele[1]);
+    fprintf(f, "%s\t%s\t%s\t%s\n", rsId[0], molType[1], classStrings[classVal], allele[1]);
+    if (classVal == 1)
+	checkSingleObserved(chromName, rsId[0], allele[1]);
+    if (classVal == 2)
+	checkIndelObserved(chromName, rsId[0], allele[1]);
     }
 carefulClose(&f);
 // close the lineFile pointer?
@@ -143,6 +219,8 @@ database = argv[1];
 hSetDb(database);
 chromList = hAllChromNamesDb(database);
 
+exceptionFileHandle = mustOpen("snpLoadFasta.exceptions", "w");
+
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
     stripString(chromPtr->name, "chr");
@@ -160,5 +238,6 @@ createTable("Multi");
 loadDatabase("Multi");
 addIndex("Multi");
 
+carefulClose(&exceptionFileHandle);
 return 0;
 }
