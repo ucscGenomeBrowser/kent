@@ -1,7 +1,7 @@
 <H2>Description</H2>
 <P>
 This track shows a measure of evolutionary conservation in $organism, 
-Tetraodon, Fugu, mouse, human and opossum based on a phylogenetic hidden 
+Tetraodon, Fugu, mouse and human based on a phylogenetic hidden 
 Markov model (phastCons). Multiz alignments of the following assemblies 
 were used to generate this annotation: 
 <UL>
@@ -14,22 +14,85 @@ were used to generate this annotation:
 
 <H2>Display Conventions and Configuration</H2> <P>
 <P>
-In full display mode, this track shows the overall conservation score across 
-all species, as well as pairwise alignments of human, mouse, Fugu and 
-Tetraodon each aligned to the $organism genome.  The pairwise alignments are 
-shown in dense display mode using a grayscale density gradient.  The 
-checkboxes in the track configuration section allow the exclusion of species 
-from the pairwise display; however, this does not remove them from the 
-conservation score display.  </P>
+There are four different display modes for the information in this 
+track: dense, squish, pack, and full. In dense mode, a grayscale 
+gradient is shown in which the darker values represent higher levels of 
+overall conservation as scored by phastCons. In squish, pack, and full 
+modes, the phastCons scores are shown as a wiggle graph where higher 
+conservation scores are shown as taller bars.
+<P>
+In full or pack display mode, the pairwise aliginments of human, mouse, 
+Fugu and Tetraodon to zebrafish are shown. In pack mode, the pairwise 
+alignments are shown in dense display mode using a grayscale density 
+gradient. In full mode, the aligning blocks are shown as wiggles where 
+the height of the bar represents the level of conservation found between 
+zebrafish and the aligned species.
+<P>
+Whenever the pairwise alignments are being displayed, the gaps between 
+the aligned blocks are annotated with information about what is 
+happening in the aligned species in this region. (1) If in the aligned 
+species there are no bases between the aligned blocks, this will be 
+shown as a single line between the aligned blocks. (2) When there are 
+one or more unalignable bases in the aligned species between the 
+bounding aligned regions, two lines are drawn between the aligned 
+blocks. (3) If there are N's in the aligned species between the bounding 
+aligned regions, then the space between the alignment blocks is filled 
+with a yellowish-white color. Evolutionarily, situation (1) suggests 
+either a lineage-specific insertion between the aligned blocks in the 
+zebrafish genome or a lineage-specific deletion between the aligned 
+blocks in the aligned species, situation (2) suggests either excessive 
+evolutionary distance or independent indels in the region between the 
+aligned blocks in both the zebrafish and the aligning species, and 
+situation (3) reflects uncertaintly in the relationship between the 
+zebrafish DNA and the DNA of the aligned species because relevant 
+portions of the aligned species are not yet sequenced.
+<P>
+In addition, the track shows places in the alignment where there is a 
+discontinuity in the location (genomic context) of the aligned DNA in 
+the aligned species. The genomic context can be defined as a chromosome, 
+scaffold or region of the aligned species. Discontinuities are shown 
+either by a vertical blue bar, representing a discontinuity that 
+persists indefinitely on either side (e.g. when DNA for a very long 
+region on either side of the bar comes from a different chromosome in 
+the aligned species due to a large scale rearrangement), or green square 
+brackets, which enclose shorter alignments consisting of DNA from one 
+genomic context in the aligned species that sit inside a larger chain of 
+alignments from a different genomic context.  The alignment between the 
+green square brackets might represent a short mis-alignment, a 
+lineage-specific insertion of a transposon in the zebrafish genome that 
+is aligning to a paralogous copy somewhere else in the aligning species, 
+or any number of other similar things.
 <P>
 When zoomed-in to the base-display level, the track shows the base 
-composition of each alignment. The numbers and symbols on the Gaps
-line indicate the lengths of gaps in the $organism sequence at those 
-alignment positions relative to the longest non-$organism sequence. If the gap 
-size is greater than 9, a non-numeric symbol is shown: a &quot;*&quot if the 
-gap size is a multiple of 3; otherwise &quot;+&quot;. 
-To view detailed information about the alignments at a specific position,
-zoom in the display to 30,000 or fewer bases, then click on the alignment.</P>
+composition of each alignment. The numbers and symbols on the Gaps line 
+indicate the lengths of gaps in the zebrafish sequence at those 
+alignment positions relative to the longest non-zebrafish sequence. If 
+the gap size is greater than 9, a non-numeric symbol is shown: a "*" if 
+the gap size is a multiple of 3; otherwise "+".
+<P>
+Codon translation is also available in base mode if there exists 
+annotation identifying the displayed region as being in a coding 
+segment. There are four different modes controlling how this annotation 
+is displayed. In "No codon translation" mode, the gene annotation is not 
+used so the bases are displayed without translation. In "Use default 
+species for translation" mode, the annotations from the genome displayed 
+in the "Default species for translation" pull-down are used to translate 
+all the aligned species present in the alignment. In "Use frames for 
+species if available, otherwise no translation" mode, codon translation 
+will only be done on those species that are annotated as being coding 
+over the aligned region. In "Use frames for species if available, 
+otherwise use default species" mode, codon translation will be done on 
+those species that are annotated as being coding over the aligned region 
+using their particular species specific annotation while all the rest of 
+the species will be translated using the default species annotation.
+<P>
+To view detailed information about the alignments at a specific 
+position, zoom in the display to 30,000 or fewer bases, then click on 
+the alignment.
+<P>
+The checkboxes in the track configuration section allow the exclusion of 
+species from the pairwise display; however, this does not remove them 
+from the conservation score display.
 <P>
 This track may be configured in a variety of ways to highlight different aspects
 of the displayed information. Click the &quot;Graph configuration help&quot; 
@@ -79,6 +142,7 @@ AxtBest, axtChain, chainNet, netSyntenic, and netClass
 by Jim Kent at UCSC. 
 <LI> PhastCons by Adam Siepel at UCSC. 
 <LI>"Wiggle track" plotting software by Hiram Clawson at UCSC.
+<LI>Gap annotation software by Brian Raney at UCSC.
 </UL>
 </P>
 
