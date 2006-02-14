@@ -735,6 +735,14 @@ checkMethodsAreInHash(classMethodsHash, interfaceBase, classBase->name, tok);
 hashFree(&classMethodsHash);
 }
 
+static boolean compatibleInputOutput(struct pfType *a, struct pfType *b)
+/* Make sure that the input and output (first two children) of a and b
+ * are compatable. */
+{
+return pfTypeSame(a->children, b->children) && 
+       pfTypeSame(a->children->next, b->children->next);
+}
+
 static void coerceClassToInterface(struct pfCompile *pfc, struct pfParse **pPp,
 	struct pfBaseType *classBase, struct pfBaseType *interfaceBase)
 /* Make sure class and interface are compatable, and then generate cast to interface. */
@@ -797,6 +805,23 @@ if (pt->base != destBase)
 	struct pfType *tt = CloneVar(destType);
 	insertCast(pptCastVarToTyped, tt, pPp);
 	ok = TRUE;
+	}
+    else if (destBase == pfc->flowPtType && pt->base == pfc->flowType)
+        {
+	if (compatibleInputOutput(destType, pt))
+	    {
+	    insertCast(pptCastFunctionToPointer, CloneVar(destType), pPp);
+	    ok = TRUE;
+	    }
+	}
+    else if (destBase == pfc->toPtType && 
+    	(pt->base == pfc->flowType || pt->base == pfc->toType))
+        {
+	if (compatibleInputOutput(destType, pt))
+	    {
+	    insertCast(pptCastFunctionToPointer, CloneVar(destType), pPp);
+	    ok = TRUE;
+	    }
 	}
     else if (destBase->isCollection && destBase != pfc->stringType)
 	{

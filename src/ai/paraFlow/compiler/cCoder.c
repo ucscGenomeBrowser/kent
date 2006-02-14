@@ -2083,6 +2083,12 @@ switch (pp->type)
 	castStack(pfc, f, pp, stack);
 	return 1;
 	}
+    case pptCastFunctionToPointer:
+        {
+        codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = %s%s;\n", prefix, pp->children->name);
+	return 1;
+	}
     default:
 	{
 	fprintf(f, "(%s expression)\n", pfParseTypeAsString(pp->type));
