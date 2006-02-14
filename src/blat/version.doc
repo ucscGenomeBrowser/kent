@@ -1,7 +1,8 @@
 34:
-     o (in x1) Put in check for two bit files with more than 4 gig.
-     o (in x2) Allowing -maxGap in gfServer.  (Forgot to add it to
+     o (in 33x1) Put in check for two bit files with more than 4 gig.
+     o (in 33x2) Allowing -maxGap in gfServer.  (Forgot to add it to
        options table.)
+     o (in 33x3) Making -maxIntron work better.
 
 33:
      o Fixed problem with out=blast8 and out=blast9 output using
