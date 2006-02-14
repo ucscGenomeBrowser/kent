@@ -1,11 +1,4 @@
-/* hgZfishEnsXRef - Create table that links Ensembl Transcript ID to IDs */
-/* */
-/* */
-/* */
-/* */
-/* */
-/* */
-/* */
+/* hgEnsGeneXRef - Create table that links Ensembl Transcript ID to IDs */
 /* from other databases and a gene description. */
 #include "common.h"
 #include "linefile.h"
@@ -22,13 +15,13 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "hgZfishEnsXRef - Create table that links zebrafish Ensembl Transcript ID\n"
+  "hgEnsGeneXRef - Create table that links zebrafish Ensembl Transcript ID\n"
   "to ZFIN ID, UniProt ID, Gene Symbol, RefSeq accession, RefSeq protein\n" 
   "accession and a gene description.\n"
   "Input is from two files of database dumps from Ensembl's BioMart.\n"
   "Database is required to query refLink table for the Gene Symbol.\n"
   "usage:\n"
-  "   hgZfishXRef file1 file2 gene_info gene2refseq output.tab\n"
+  "   hgEnsGeneXRef file1 file2 gene_info gene2refseq output.tab\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
