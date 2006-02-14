@@ -18,7 +18,7 @@
 #include "trans3.h"
 
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.20 2005/12/16 20:17:38 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.21 2006/02/14 21:54:23 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -498,8 +498,10 @@ for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
 	t3List = hashMustFindVal(t3Hash, tSeq->name);
     score = scoreAli(ff, bun->isProt, stringency, tSeq, t3List);
     if (score >= minMatch)
+	{
 	out->out(chromName, chromSize, chromOffset, ff, tSeq, t3Hash, qSeq, 
 	    qIsRc, tIsRc, stringency, minMatch, out);
+	}
     }
 }
 

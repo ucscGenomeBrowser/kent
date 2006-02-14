@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.33 2005/11/20 19:24:57 kent Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.34 2006/02/14 21:54:23 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -1278,7 +1278,7 @@ struct ssBundle *ffSeedExtInMem(struct genoFind *gf, struct dnaSeq *qSeq, Bits *
 /* Do seed and extend type alignment */
 {
 struct ssBundle *bunList = NULL, *bun;
-int hitCount, aliCount;
+int hitCount;
 struct gfClump *clumpList, *clump;
 struct gfRange *rangeList = NULL, *range;
 struct dnaSeq *tSeq;
@@ -1300,7 +1300,7 @@ for (range = rangeList; range != NULL; range = range->next)
     bun->ffList = gfRangesToFfItem(range->components, qSeq);
     bun->isProt = FALSE;
     bun->avoidFuzzyFindKludge = TRUE;
-    aliCount = ssStitch(bun, ffCdna, 16, 10);
+    ssStitch(bun, ffCdna, 16, 10);
     refineBundle(gf, qSeq, qMaskBits, qOffset, tSeq, lm, bun, isRc);
     slAddHead(&bunList, bun);
     }

@@ -60,11 +60,10 @@ void ssBundleFreeList(struct ssBundle **pList);
 /* Free up list of ssBundles */
 
 
-int ssStitch(struct ssBundle *bundle, enum ffStringency stringency, 
+void ssStitch(struct ssBundle *bundle, enum ffStringency stringency, 
 	int minScore, int maxToReturn);
-/* Glue together mrnas in bundle as much as possible. Returns number of
- * alignments after stitching. Updates bundle->ffList with stitched
- * together version. */
+/* Glue together mrnas in bundle as much as possible. 
+ * Updates bundle->ffList with stitched together version. */
 
 struct ssBundle *ssFindBundles(struct patSpace *ps, struct dnaSeq *cSeq, 
 	char *cName, enum ffStringency stringency, boolean avoidSelfSelf);

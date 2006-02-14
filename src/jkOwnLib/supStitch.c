@@ -15,7 +15,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.34 2005/12/16 20:17:38 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.35 2006/02/14 21:54:23 kent Exp $";
 
 static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
@@ -724,8 +724,36 @@ else
     }
 }
 
+struct ffAli *cutAtBigIntrons(struct ffAli *ffList, int maxIntron, 
+	int *pScore, enum ffStringency stringency,
+	struct ffAli **returnLeftovers)
+/* Return ffList up to the first intron that's too big.
+ * Put the rest of the blocks back onto the leftovers list. */
+{
+struct ffAli *prevFf, *ff, *cutFf = NULL;
+prevFf = ffList;
+for (ff = prevFf->right; ff != NULL; ff = ff->right)
+    {
+    int dt = ff->hStart - prevFf->hEnd;
+    if (dt > maxIntron)
+        {
+	cutFf = prevFf;
+	break;
+	}
+    prevFf = ff;
+    }
+if (cutFf != NULL)
+    {
+    ff = cutFf->right;
+    cutFf->right = NULL;
+    ff->left = NULL;
+    ffCat(returnLeftovers, &ff);
+    *pScore = ffScore(ffList, stringency);
+    }
+return ffList;
+}
 
-int ssStitch(struct ssBundle *bundle, enum ffStringency stringency, 
+void ssStitch(struct ssBundle *bundle, enum ffStringency stringency, 
 	int minScore, int maxToReturn)
 /* Glue together mrnas in bundle as much as possible. Returns number of
  * alignments after stitching. Updates bundle->ffList with stitched
@@ -737,12 +765,11 @@ struct ffAli *ff, *ffList = NULL;
 struct ssFfItem *ffl;
 struct ffAli *bestPath, *leftovers;
 int score;
-int newAliCount = 0;
 int totalFfCount = 0;
 boolean firstTime = TRUE;
 
 if (bundle->ffList == NULL)
-    return 0;
+    return;
 
 /* The score may improve when we stitch together more alignments,
  * so don't let minScore be too harsh at this stage. */
@@ -779,6 +806,11 @@ while (ffList != NULL)
 	bestPath = smallMiddleExons(bestPath, bundle, stringency);
 	}
     bestPath = ffMergeNeedleAlis(bestPath, TRUE);
+    if (ffIntronMax != ffIntronMaxDefault)
+	{
+	bestPath = cutAtBigIntrons(bestPath, ffIntronMax, &score, stringency,
+		&ffList);
+	}
     if (!bundle->isProt)
 	ffSlideIntrons(bestPath);
     bestPath = ffRemoveEmptyAlis(bestPath, TRUE);
@@ -787,7 +819,6 @@ while (ffList != NULL)
 	AllocVar(ffl);
 	ffl->ff = bestPath;
 	slAddHead(&bundle->ffList, ffl);
-	++newAliCount;
 	}
     else
 	{
@@ -803,7 +834,7 @@ while (ffList != NULL)
 	}
     }
 slReverse(&bundle->ffList);
-return newAliCount;
+return;
 }
 
 static struct ssBundle *findBundle(struct ssBundle *list,  
