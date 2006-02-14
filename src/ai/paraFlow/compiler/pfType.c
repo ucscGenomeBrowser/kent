@@ -67,61 +67,74 @@ if (a1 != NULL || b1 != NULL)	/* Different number of children - can't match */
 return a->base == b->base;
 }
 
-void pfTypeDump(struct pfType *ty, FILE *f)
-/* Write out info on ty to file.  (No newlines written) */
+void dumpTypeToDyString(struct pfType *ty, struct dyString *dy)
+/*  Append info on type to dy */
 {
 if (ty == NULL)
-    fprintf(f, "void");
+    dyStringPrintf(dy, "void");
 else
     {
     if (ty->isStatic)
-        fprintf(f, "static ");
+        dyStringPrintf(dy, "static ");
     if (ty->tyty == tytyTuple)
 	{
-	fprintf(f, "(");
+	dyStringPrintf(dy, "(");
 	for (ty = ty->children; ty != NULL; ty = ty->next)
 	    {
-	    pfTypeDump(ty, f);
+	    dumpTypeToDyString(ty, dy);
 	    if (ty->next != NULL)
-		fprintf(f, " ");
+		dyStringPrintf(dy, " ");
 	    }
-	fprintf(f, ")");
+	dyStringPrintf(dy, ")");
 	}
     else if (ty->tyty == tytyFunction || ty->tyty == tytyVirtualFunction
        || ty->tyty == tytyOperator || ty->tyty == tytyFunctionPointer)
 	{
 	if (ty->tyty == tytyVirtualFunction)
-	   fprintf(f, "polymorphic ");
-	fprintf(f, "%s ", ty->base->name);
-	pfTypeDump(ty->children, f);
-	fprintf(f, " into ");
-	pfTypeDump(ty->children->next, f);
+	   dyStringPrintf(dy, "polymorphic ");
+	dyStringPrintf(dy, "%s ", ty->base->name);
+	dumpTypeToDyString(ty->children, dy);
+	dyStringPrintf(dy, " into ");
+	dumpTypeToDyString(ty->children->next, dy);
 	}
     else
 	{
-	fprintf(f, "%s", ty->base->name);
+	dyStringPrintf(dy, "%s", ty->base->name);
 	ty = ty->children;
 	if (ty != NULL)
 	    {
-	    fprintf(f, " of ");
-	    pfTypeDump(ty, f);
+	    dyStringPrintf(dy, " of ");
+	    dumpTypeToDyString(ty, dy);
 	    for (ty = ty->next; ty != NULL; ty = ty->next)
 		{
-		fprintf(f, ",");
-		pfTypeDump(ty, f);
+		dyStringPrintf(dy, ",");
+		dumpTypeToDyString(ty, dy);
 		}
 	    }
 	}
     }
 }
 
+void pfTypeDump(struct pfType *ty, FILE *f)
+/* Write out info on ty to file.  (No newlines written) */
+{
+struct dyString *dy = dyStringNew(0);
+dumpTypeToDyString(ty, dy);
+fprintf(f, "%s", dy->string);
+dyStringFree(&dy);
+}
+
+
 static void typeMismatch(struct pfParse *pp, struct pfType *type)
 /* Complain about type mismatch at node. */
 {
+struct dyString *dy = dyStringNew(0);
+dumpTypeToDyString(type, dy);
 if (pp->name)
-    errAt(pp->tok, "Type mismatch:  %s not %s.", pp->name, type->base->name);
+    errAt(pp->tok, "Type mismatch:  %s not %s.", pp->name, dy->string);
 else
-    errAt(pp->tok, "Type mismatch: expecting %s.", type->base->name);
+    errAt(pp->tok, "Type mismatch: expecting %s.", dy->string);
+dyStringFree(&dy);
 }
 
 static enum pfParseType pptFromTokType(struct pfToken *tok)
