@@ -71,10 +71,11 @@ cd /cluster/bluearc/encode
 cat >! makeLists.pl << '_EOF_'
 #!/usr/bin/perl -W
 
+$encodeLibDir = "/cluster/data/encode/ortho/reconLibs";
 %libOptions =
     (
-     "armadillo"      => "-mam    ",
-     "baboon"         => "        ",
+     "armadillo"      => "-lib $encodeLibDir/armadillo ",
+     "baboon"         => "-lib $encodeLibDir/baboon ",
      "cat"            => "-cat    ",
      "chicken"        => "-chicken",
      "chimp"          => "        ",
@@ -82,25 +83,25 @@ cat >! makeLists.pl << '_EOF_'
      "colobus_monkey" => "        ",
      "dog"            => "-dog    ",
      "dusky_titi"     => "-cow    ",
-     "elephant"       => "-mam    ",
+     "elephant"       => "-lib $encodeLibDir/elephant ",
      "fugu"           => "-fugu   ",
-     "galago"         => "        ",
+     "galago"         => "-lib $encodeLibDir/galago ",
      "eehedgehog"     => "-mam    ",
      "hedgehog"       => "-mam    ",
      "human"          => "        ",
      "macaque"        => "        ",
-     "monodelphis"    => "-mam    ",
-     "marmoset"       => "        ",
+     "marmoset"       => "-lib $encodeLibDir/marmoset ",
+     "monodelphis"    => "-lib $encodeLibDir/monodelphis ",
      "mouse"          => "-mus    ",
      "mouse_lemur"    => "        ",
      "owl_monkey"     => "        ",
      "pig"            => "-pig    ",
-     "platypus"       => "-mam    ",
+     "platypus"       => "-lib $encodeLibDir/platypus ",
      "rat"            => "-rat    ",
-     "rabbit"         => "-mam    ",
-     "rfbat"          => "-mam    ",
+     "rabbit"         => "-lib $encodeLibDir/rabbit ",
+     "rfbat"          => "-lib $encodeLibDir/rfbat ",
      "shrew"          => "-mam    ",
-     "tenrec"         => "-mam    ",
+     "tenrec"         => "-lib $encodeLibDir/tenrec ",
      "tetraodon"      => "-danio  ",
      "zebrafish"      => "-danio  ",
      "xenopus"        => "        ",
@@ -136,7 +137,7 @@ while (<METADATA>)
     }
     die ("Missing species: ". lc($species) . "\n") unless (defined $libOptions{lc($species)});
     if ($acc !~ /NT_/) { $acc="$species.$region.$index.fa"; }
-    print(MASKLIST "/cluster/bin/scripts/maskOne.csh $acc $libOptions{lc($species)}\n");
+    print(MASKLIST "/cluster/bin/scripts/encodeMaskOne.csh $acc $libOptions{lc($species)}\n");
 }
 '_EOF_'
 #
@@ -157,7 +158,7 @@ grep -i error original/NT_*
 ############################################################
 # mask sequences
 
-cat >! /cluster/bin/scripts/maskOne.csh << '_EOF_'
+cat >! /cluster/bin/scripts/encodeMaskOne.csh << '_EOF_'
 #!/bin/csh
 
 if ( $#argv < 1 ) then
@@ -187,7 +188,7 @@ cd /tmp
 '_EOF_'
 
 #
-chmod ug+x /cluster/bin/scripts/maskOne.csh
+chmod ug+x /cluster/bin/scripts/encodeMaskOne.csh
 
 ## check that all of the sequences are present in the original
 ## directory to avoid crashed jobs
