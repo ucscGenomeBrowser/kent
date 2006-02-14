@@ -71,47 +71,64 @@ cd /cluster/bluearc/encode
 cat >! makeLists.pl << '_EOF_'
 #!/usr/bin/perl -W
 
-$encodeLibDir = "/cluster/data/encode/ortho/reconLibs";
-%libOptions =
+%speciesOptions =
     (
-     "armadillo"      => "-lib $encodeLibDir/armadillo ",
-     "baboon"         => "-lib $encodeLibDir/baboon ",
-     "cat"            => "-cat    ",
-     "chicken"        => "-chicken",
-     "chimp"          => "        ",
-     "cow"            => "-cow    ",
-     "colobus_monkey" => "        ",
-     "dog"            => "-dog    ",
-     "dusky_titi"     => "-cow    ",
-     "elephant"       => "-lib $encodeLibDir/elephant ",
-     "fugu"           => "-fugu   ",
-     "galago"         => "-lib $encodeLibDir/galago ",
-     "eehedgehog"     => "-mam    ",
-     "hedgehog"       => "-mam    ",
-     "human"          => "        ",
-     "macaque"        => "        ",
-     "marmoset"       => "-lib $encodeLibDir/marmoset ",
-     "monodelphis"    => "-lib $encodeLibDir/monodelphis ",
-     "mouse"          => "-mus    ",
-     "mouse_lemur"    => "        ",
-     "owl_monkey"     => "        ",
-     "pig"            => "-pig    ",
-     "platypus"       => "-lib $encodeLibDir/platypus ",
-     "rat"            => "-rat    ",
-     "rabbit"         => "-lib $encodeLibDir/rabbit ",
-     "rfbat"          => "-lib $encodeLibDir/rfbat ",
-     "shrew"          => "-mam    ",
-     "tenrec"         => "-lib $encodeLibDir/tenrec ",
-     "tetraodon"      => "-danio  ",
-     "zebrafish"      => "-danio  ",
-     "xenopus"        => "        ",
+     "armadillo"      => "mammal ",
+     "baboon"         => "human ",
+     "cat"            => "cat ",
+     "chicken"        => "chicken ",
+     "chimp"          => "human ",
+     "cow"            => "cow ",
+     "colobus_monkey" => "human ",
+     "dog"            => "dog ",
+     "dusky_titi"     => "cow ",
+     "elephant"       => "mammal ",
+     "fugu"           => "fugu ",
+     "galago"         => "human ",
+     "eehedgehog"     => "mammal ",
+     "hedgehog"       => "mammal ",
+     "human"          => "human ",
+     "macaque"        => "macaca ",
+     "marmoset"       => "human ",
+     "monodelphis"    => "mammal ",
+     "mouse"          => "mouse ",
+     "mouse_lemur"    => "human ",
+     "owl_monkey"     => "human ",
+     "pig"            => "pig ",
+     "platypus"       => "mammal ",
+     "rat"            => "rattus ",
+     "rabbit"         => "mammal ",
+     "rfbat"          => "mammal ",
+     "shrew"          => "mammal ",
+     "tenrec"         => "mammal ",
+     "tetraodon"      => "fugu ",
+     "xenopus"        => "xenops ",
+     "zebrafish"      => "danio ",
      );
 
+$encodeLibDir = "/cluster/data/encode/ortho/reconLibs";
+$reconLibrary = "supplemental.lib";
+
+%libOptions =
+    (
+     "armadillo"      => "$encodeLibDir/armadillo/$reconLibrary ",
+     "baboon"         => "$encodeLibDir/baboon/$reconLibrary ",
+     "elephant"       => "$encodeLibDir/elephant/$reconLibrary ",
+     "galago"         => "$encodeLibDir/galago/$reconLibrary ",
+     "marmoset"       => "$encodeLibDir/marmoset/$reconLibrary ",
+     "mouse_lemur"    => "$encodeLibDir/mouse_lemur/$reconLibrary ",
+     "platypus"       => "$encodeLibDir/platypus/$reconLibrary ",
+     "rabbit"         => "$encodeLibDir/rabbit/$reconLibrary ",
+     "rfbat"          => "$encodeLibDir/rfbat/$reconLibrary ",
+     "tenrec"         => "$encodeLibDir/tenrec/$reconLibrary ",
+     );
 $efetchURL  = "http://www.ncbi.nih.gov/entrez/eutils/efetch.fcgi?db=nucleotide&rettype=fasta&id=";
 $bluearc    = "/cluster/bluearc/encode";
 $metadata   = "$bluearc/metadata.txt";
 $wgetList   = "$bluearc/wgetList";
 $maskList   = "$bluearc/para/maskList";
+
+system ("mkdir -p $bluearc/trf $bluearc/RepeatMasker $bluearc/masked $bluearc/para");
 
 open(METADATA, " < $metadata") or die "can't open $metadata for reading.\n";
 open(WGETLIST, " > $wgetList") or die "can't open $wgetList";
@@ -125,22 +142,33 @@ while (<METADATA>)
     @fields     = split /\t/;
     $species    = $fields[0];
     $region     = $fields[1];
-    $db         = $fields[6];
     $acc        = $fields[12];
     $index      = $fields[15];
 
-    if ($acc =~ /^\w{2}\_\d+/) { print(WGETLIST "wget -O $bluearc/original/$acc \"${efetchURL}$acc\"\n"); }
-    if ($db ne ".") 
+    $how = "none";
+    if (defined $speciesOptions{lc($species)}) 
     {
-	$dest_file = $acc;
-	if ($acc eq '.') { $dest_file = "$species.$region.$index.fa"; }
+	$spcOpt="$speciesOptions{lc($species)}";
+	$how="speciesDefault";
     }
-    die ("Missing species: ". lc($species) . "\n") unless (defined $libOptions{lc($species)});
+    else { $spcOpt=""; }
+    if (defined     $libOptions{lc($species)}) 
+    {
+	$libOpt=    "$libOptions{lc($species)}";
+	if ($spcOpt eq "") { $how="speciesDefault"; }
+	else { $how="defaultAndCustom";	}
+    }
+    else { $libOpt=""; }
+    if ($acc =~ /^\w{2}\_\d+/) { print(WGETLIST "wget -O $bluearc/original/$acc \"${efetchURL}$acc\"\n"); }
     if ($acc !~ /NT_/) { $acc="$species.$region.$index.fa"; }
-    print(MASKLIST "/cluster/bin/scripts/encodeMaskOne.csh $acc $libOptions{lc($species)}\n");
+    print(MASKLIST "/cluster/bin/scripts/encodeMask.csh $how $acc $spcOpt $libOpt\n");
 }
+
 '_EOF_'
+
 #
+
+    #
     
 set freezeDate = "JAN-2006"
 cd /cluster/bluearc/encode
@@ -158,37 +186,64 @@ grep -i error original/NT_*
 ############################################################
 # mask sequences
 
-cat >! /cluster/bin/scripts/encodeMaskOne.csh << '_EOF_'
+cat >! /cluster/bin/scripts/encodeMask.csh << '_EOF_'
 #!/bin/csh
-
-if ( $#argv < 1 ) then
-    echo "usage: $0 <accession> [<species option>]"
+if ( $#argv < 2 ) then
+    echo " usage: $0 <how>            <seqFileName> [<species>] [<customLib>] "
+    echo "        $0 none             <seqFileName> "
+    echo "        $0 speciesDefault   <seqFileName> <species> "
+    echo "        $0 custom           <seqFileName> <customLibPath> "
+    echo "        $0 defaultAndCustom <seqFileName> <species> <customLibPath> " 
     exit 1
 endif
-set acc = $1
-set specOpt = " "
-if ( $#argv >= 2  ) then
-    set specOpt = $2
-end
+
+set rm  = /cluster/bluearc/RepeatMasker/RepeatMasker
+set trf = /cluster/bin/i386/trfBig
+set mof = /cluster/bin/i386/maskOutFa
+set opt = $1
+set seqFileName = $2
 
 cd /tmp
-/bin/cp -f /cluster/bluearc/encode/original/$acc .
+/bin/rm -f $seqFileName*
+/bin/cp -f /cluster/bluearc/encode/original/$seqFileName .
+$trf $seqFileName $seqFileName.TRF -bed -trf=/cluster/bin/i386/trf
+$mof $seqFileName $seqFileName.bed $seqFileName.trf -soft
 
-/cluster/bluearc/RepeatMasker031217/RepeatMasker -nocut $specOpt $acc
-/cluster/bin/i386/trfBig $acc $acc.TRF -bed -trf=/cluster/bin/i386/trf
-
-/cluster/bin/i386/maskOutFa $acc $acc.out $acc.RM -soft
-/cluster/bin/i386/maskOutFa $acc.RM $acc.bed $acc -softAdd
-
-/bin/mv -f $acc     /cluster/bluearc/encode/masked/
-/bin/mv -f $acc.out /cluster/bluearc/encode/RepeatMasker/
-/bin/mv -f $acc.bed /cluster/bluearc/encode/trf/
-/bin/rm -f $acc*
-
+if ( $opt == "none" ) then
+    $rm  -nocut $seqFileName
+    $mof $seqFileName.trf $seqFileName.out $seqFileName.fin -softAdd
+else if ( $opt == "speciesDefault" ) then
+    $rm  -nocut -species $3 $seqFileName
+    $mof $seqFileName.trf $seqFileName.out $seqFileName.fin -softAdd
+else if ( $opt == "custom" ) then
+    $rm  -nocut -lib $3 $seqFileName
+    $mof $seqFileName.trf $seqFileName.out $seqFileName.fin -softAdd
+else if ( $opt == "defaultAndCustom" ) then
+    $rm  -nocut -species $3 $seqFileName
+    $mof $seqFileName.trf $seqFileName.out $seqFileName.default -softAdd
+    mv $seqFileName.out $seqFileName.$3.out
+    $rm  -nocut -lib $4 $seqFileName
+    $mof $seqFileName.default $seqFileName.out $seqFileName.fin -softAdd
+    mv $seqFileName.out $seqFileName.custom.out
+else
+    echo " usage: $0 <how>            <seqFileName> [<species>] [<customLib>] "
+    echo "        $0 none             <seqFileName> "
+    echo "        $0 speciesDefault   <seqFileName> <species> "
+    echo "        $0 custom           <seqFileName> <customLibPath> "
+    echo "        $0 defaultAndCustom <seqFileName> <species> <customLibPath> " 
+    rm -rf $acc*
+    exit 1
+endif
+    
+/bin/mv -f $seqFileName.default /cluster/bluearc/encode/default/$seqFileName
+/bin/mv -f $seqFileName.fin /cluster/bluearc/encode/masked/$seqFileName
+/bin/mv -f $seqFileName.bed /cluster/bluearc/encode/trf/
+/bin/mv -f $seqFileName.*out /cluster/bluearc/encode/RepeatMasker/
+/bin/rm -rf $seqFileName*
 '_EOF_'
 
 #
-chmod ug+x /cluster/bin/scripts/encodeMaskOne.csh
+chmod ug+x /cluster/bin/scripts/encodeMask.csh
 
 ## check that all of the sequences are present in the original
 ## directory to avoid crashed jobs
@@ -196,7 +251,6 @@ chmod ug+x /cluster/bin/scripts/encodeMaskOne.csh
 #  10709 /cluster/bluearc/encode/para/maskList
 > ls -1 /cluster/bluearc/encode/original/| wc -l
 #  10709
-
 
 ssh kk
 cd /cluster/bluearc/encode/para
@@ -222,80 +276,63 @@ para time
 cat >! writeEncodeFasta.pl << '_EOF_'
 #!/usr/bin/perl -W
 
-$releaseDate = shift || die "usage: writeEncodeFasta.pl $releaseDate metadata.txt\n$#ARGV";
+$releaseDate = shift || die "usage: writeEncodeFasta.pl releaseDate [metadata.txt]";
 $metadata    = shift || "metadata.txt";
 
 ($sec,$min,$hour,$mday,$mon,$year)=localtime(time);
-printf "%4d-%02d-%02d %02d:%02d:%02d Started\n",
-	$year+1900,$mon+1,$mday,$hour,$min,$sec;
+printf "%4d-%02d-%02d %02d:%02d:%02d Started\n",$year+1900,$mon+1,$mday,$hour,$min,$sec;
 
 $outDir  = "/cluster/bluearc/encode/$releaseDate";
 system "mkdir -p $outDir";
 
-# niscOrganism encodeRegion freezeDate ncbiTaxonId assemblyProvider assemblyDate assemblyId chromosome chrom_start chrom_end chromLength strand accessionVersion numBases numN thisContigNum totalNumContigs comment
-# 000000000000 111111111111 2222222222 33333333333 4444444444444444 555555555555 6666666666 7777777777 88888888888 999999999 10 10 10 10 11 11  12 12 12 12 12   13 13 13 14   15 15 15 15   16 16 16 16 16  17 17
-
-$processAll = 1;
-
-if( $processAll==1 ) 
+if (-e "$outDir") { system "mv -i $outDir/ $outDir.old/"; }
+system "mkdir -p $outDir/";
+open(METADATA," < $metadata") or die "Can't open $metadata";
+while (<METADATA>) 
 {
-    if (-e "$outDir/") { system "mv -i $outDir/ $outDir.old/"; }
-    system "mkdir -p $outDir/";
-    open(METADATA," < $metadata") or die "Can't open $metadata";
-    while (<METADATA>) 
-    {
-	chomp();
-	$org=$region=$acc=$source=$outFile=".";
-	if ( /niscOrganism/ ) { next; } # ignore header
-	@row = split /\t/;
-	if ( $#row != 17 ) { die "Bad input format: $_"; }
-
-	$header        = ">";
-	$header       .= join "|", @row;
-	$org           = $row[0];
-	$region        = $row[1];
-	$acc           = $row[12];
-	$thisContigNum = $row[15];
-
-	$outFile = "$outDir/$region/$org.$region.fa";
-	system ("mkdir -p $outDir/$region");
-	system ("touch $outFile");
-
-	open (DEST, " >> $outFile") or die "Can't open $outFile";
-	print DEST "$header\n";
-	$source = "/cluster/bluearc/encode/masked/$acc";
-	unless ( -e $source && $acc ne '.') 
-	    { $source = "/cluster/bluearc/encode/masked/$org.$region.$thisContigNum.fa"; }
-	open (SOURCE, " < $source") or die ("Can't open $source");
-	<SOURCE>; # ignore header
-	while (<SOURCE>) { print DEST; }
-	close(SOURCE);
-	close(DEST);
-    }
+    chomp();
+    $org=$region=$acc=$source=$outFile=".";
+    if ( /niscOrganism/ ) { next; } # ignore header
+    @row = split /\t/;
+    if ( $#row != 17 ) { die "Bad input format: $_"; }
+    $header        = ">";
+    $header       .= join "|", @row;
+    $org           = $row[0];
+    $region        = $row[1];
+    $acc           = $row[12];
+    $thisContigNum = $row[15];
+    $outFile = "$outDir/$region/$org.$region.fa";
+    system ("mkdir -p $outDir/$region");
+    system ("touch $outFile");
+    open (DEST, " >> $outFile") or die "Can't open $outFile";
+    print DEST "$header\n";
+    $source = "/cluster/bluearc/encode/masked/$acc";
+    unless ( -e $source && $acc ne '.') { $source = "/cluster/bluearc/encode/masked/$org.$region.$thisContigNum.fa";}
+    open (SOURCE, " < $source") or die ("Can't open $source");
+    <SOURCE>; # ignore header
+    while (<SOURCE>) { print DEST; }
+    close(SOURCE);
+    close(DEST);
 }
 
 ($sec,$min,$hour,$mday,$mon,$year)=localtime(time);
-printf "%4d-%02d-%02d %02d:%02d:%02d Finished writing files\n",
-	$year+1900,$mon+1,$mday,$hour,$min,$sec;
+printf "%4d-%02d-%02d %02d:%02d:%02d Finished writing files\n",$year+1900,$mon+1,$mday,$hour,$min,$sec;
 
-system "cd $outDir/..; cp $metadata $outDir/; tar -h cfz $releaseDate.tgz $metadata $releaseDate/EN*/*";
+system "cd $outDir/..; chmod o+x $metadata; cp -L $metadata $outDir/; tar cfz $releaseDate.tgz $metadata $releaseDate/EN*/*";
 
 ($sec,$min,$hour,$mday,$mon,$year)=localtime(time);
-printf "%4d-%02d-%02d %02d:%02d:%02d Finished creating tarball\n",
-	$year+1900,$mon+1,$mday,$hour,$min,$sec;
+printf "%4d-%02d-%02d %02d:%02d:%02d Finished creating tarball\n",$year+1900,$mon+1,$mday,$hour,$min,$sec;
 
 system "mkdir -p /usr/local/apache/htdocs/encode/downloads/msa/$releaseDate";
 system "chmod o+rx /usr/local/apache/htdocs/encode/downloads/msa/$releaseDate";
-system "chmod -R o+r  $outDir/ $outDir/../$releaseDate.tgz";
+system "chmod -R o+r  $metadata $outDir/ $outDir/../$releaseDate.tgz";
 system "chmod o+rx $outDir $outDir/EN*";
-system "rsync -a $outDir/ /usr/local/apache/htdocs/encode/downloads/msa/$releaseDate/sequences";
-system "cp -p  $outDir/../$metadata        /usr/local/apache/htdocs/encode/downloads/msa/";
-system "rsync -a $outDir/../$metadata        /usr/local/apache/htdocs/encode/downloads/msa/$releaseDate";
+system "rsync -a $outDir/                    /usr/local/apache/htdocs/encode/downloads/msa/$releaseDate/sequences";
+system "rsync -a $outDir/../$metadata        /usr/local/apache/htdocs/encode/downloads/msa/$releaseDate/";
 system "rsync -a $outDir/../$releaseDate.tgz /usr/local/apache/htdocs/encode/downloads/msa/$releaseDate/";
 
 ($sec,$min,$hour,$mday,$mon,$year)=localtime(time);
-printf "%4d-%02d-%02d %02d:%02d:%02d End\n",
-	$year+1900,$mon+1,$mday,$hour,$min,$sec;
+printf "%4d-%02d-%02d %02d:%02d:%02d End\n",$year+1900,$mon+1,$mday,$hour,$min,$sec;
 
 '_EOF_'
 
