@@ -85,8 +85,6 @@ struct pfCompile
     struct pfType *longFullType;	/* This is handy to have around. */
     };
 
-#define toPtTypeName "<toPt>"
-#define flowPtTypeName "<flowPt>"
 
 struct pfCompile *pfCompileNew();
 /* Create new pfCompile.  */

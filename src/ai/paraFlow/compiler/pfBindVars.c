@@ -32,7 +32,7 @@ static void evalFunctionPtType(struct pfCompile *pfc, struct pfParse *pp,
 struct pfParse *input = pp->children;
 struct pfParse *output = input->next;
 struct pfType *ty = pfTypeNew(base);
-ty->tyty = tytyVariable;
+ty->tyty = tytyFunctionPointer;
 pp->ty = ty;
 ty->children = input->ty;
 ty->children->next = output->ty;

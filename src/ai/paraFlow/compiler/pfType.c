@@ -88,8 +88,7 @@ else
 	fprintf(f, ")");
 	}
     else if (ty->tyty == tytyFunction || ty->tyty == tytyVirtualFunction
-       || ty->tyty == tytyOperator || sameString(ty->base->name, toPtTypeName) 
-       || sameString(ty->base->name, flowPtTypeName))
+       || ty->tyty == tytyOperator || ty->tyty == tytyFunctionPointer)
 	{
 	if (ty->tyty == tytyVirtualFunction)
 	   fprintf(f, "polymorphic ");
@@ -531,7 +530,8 @@ static void coerceCall(struct pfCompile *pfc, struct pfParse **pPp)
 {
 struct pfParse *pp = *pPp;
 struct pfParse *function = pp->children;
-switch(function->ty->tyty)
+struct pfType *functionType = function->ty;
+switch(functionType->tyty)
     {
     case tytyOperator:
         {
@@ -540,8 +540,8 @@ switch(function->ty->tyty)
 	}
     case tytyFunction:
     case tytyVirtualFunction:
+    case tytyFunctionPointer:
 	{
-	struct pfType *functionType = function->ty;
 	struct pfType *inputType = functionType->children;
 	struct pfType *outputType = inputType->next;
 	struct pfParse *paramTuple = function->next;
@@ -561,6 +561,8 @@ switch(function->ty->tyty)
 	else
 	    pp->ty = CloneVar(outputType);
 	pp->name = function->name;
+	if (functionType->tyty == tytyFunctionPointer)
+	    pp->type = pptIndirectCall;
 	break;
 	}
     default:

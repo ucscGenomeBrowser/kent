@@ -345,6 +345,21 @@ else
 return outCount;
 }
 
+static int codeIndirectCall(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code for a function call through a function pointer. */
+{
+struct pfParse *function = pp->children;
+struct pfParse *inTuple = function->next;
+struct pfType *outTuple = function->ty->children->next;
+int outCount = slCount(outTuple->children);
+int paramSize = codeExpression(pfc, f, inTuple, stack, TRUE);
+codeExpression(pfc, f, function, stack + paramSize, FALSE);
+codeParamAccess(pfc, f, function->ty->base, stack+paramSize);
+fprintf(f, "(%s+%d);\n", stackName, stack);
+return outCount;
+}
+
 static void expandDottedName(struct pfCompile *pfc,
 	char *fullName, int maxSize, struct pfParse *pp)
 /* Fill in fullName with this.that.whatever. */
@@ -1230,7 +1245,8 @@ for (hel = helList; hel != NULL; hel = hel->next)
     {
     struct pfVar *var = hel->val;
     struct pfType *type = var->ty;
-    if (type->tyty == tytyVariable && !type->isStatic)
+    if ((type->tyty == tytyVariable || type->tyty == tytyFunctionPointer)
+    	&& !type->isStatic)
         {
 	if (var->isExternal)
 	    fprintf(f, "extern ");
@@ -1898,6 +1914,8 @@ switch (pp->type)
         return codeParaFilter(pfc, f, pp, stack);
     case pptCall:
 	return codeCall(pfc, f, pp, stack);
+    case pptIndirectCall:
+        return codeIndirectCall(pfc, f, pp, stack);
     case pptAssignment:
 	return codeAssignment(pfc, f, pp, stack, "=");
     case pptPlusEquals:
