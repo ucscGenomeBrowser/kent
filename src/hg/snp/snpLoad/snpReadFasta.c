@@ -15,7 +15,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.1 2006/02/14 19:05:19 heather Exp $";
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.2 2006/02/14 19:21:31 heather Exp $";
 
 struct snpTmp
     {
@@ -168,7 +168,7 @@ safef(fastaTableName, ArraySize(fastaTableName), "%s_snpFasta", chromName);
 safef(fileName, ArraySize(fileName), "%s_snpTmp.tab", chromName);
 f = mustOpen(fileName, "w");
 
-verbose(1, "query snpFasta for molType, class, observed...\n");
+verbose(5, "query snpFasta for molType, class, observed...\n");
 for (el = list; el != NULL; el = el->next)
     {
     safef(query, sizeof(query), 
