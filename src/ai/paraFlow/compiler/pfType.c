@@ -406,7 +406,7 @@ if (tupSize > typeSize)
     }
 if (typeSize == 0)
     return;
-if (tuple->type == pptCall)
+if (tuple->type == pptCall || tuple->type == pptIndirectCall)
     {
     if (tupSize != typeSize)
 	{
