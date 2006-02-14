@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.106 2006/02/03 18:32:24 angie Exp $"
+#	"$Id: makeMm6.doc,v 1.107 2006/02/14 19:20:34 ann Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -9761,6 +9761,16 @@ TMPDIR=/scratch/tmp
     #	/usr/local/apache/htdocs/goldenPath/hg17/vsMm6
     #	Use that information to place the matrix definition in the
     #	trackDb chain html files
+
+# QA UPDATE: (2-14-2006 ASZ)
+# the tables from this run were originally named with a "u1"
+# e.g. chr1_chainMm6u1 (in the hg17 database)
+# I have deleted the old chain and net tables (from the original blastz run)
+# > DROP TABLE netMm6;
+# and renamed the new chain and net tables from this new blastz run
+# > RENAME TABLE netMm6u1 TO netMm6;
+
+
 
 ###########################################################################
 # BLASTZ CHICKEN GalGal2 second time correctly
