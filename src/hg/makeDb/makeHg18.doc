@@ -4609,3 +4609,793 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	-stop=net `pwd`/DEF > blastz.out 2>&1 &
     #	running 2006-02-10
+
+####################################################################################
+# BUILD KNOWN GENES TABLES (STARTED 2/1/06, DONE 2/13/06 Fan)
+
+# First build protein databases, sp060115 and proteins060115
+# See makeProteins060115.doc for details.
+
+# Create working subdirectories and temporary databases (kgHg18A)
+
+  ssh hgwdev
+  cd /cluster/store11/kg
+  mkdir kgHg18A  
+  ln -s /cluster/store11/kg/kgHg18A /cluster/store6/kgDB/bed/kgHg18A
+  ln -s /cluster/store11/kg/kgHg18A /cluster/data/hg18/bed/kgHg18A
+
+  hgsql hg18 -e "create database kgHg18A"   
+  hgsql hg18 -e "create database kgHg18ATemp"
+
+  mkdir /cluster/bluearc/kgDB/kgHg18A
+  mkdir /cluster/bluearc/kgDB/kgHg18A/protBlat
+  ln -s /cluster/bluearc/kgDB/kgHg18A/protBlat /cluster/store11/kg/kgHg18A/protBlat
+  cd /cluster/store11/kg/kgHg18A/protBlat
+
+# Get all human protein sequences
+
+  hgsql -N sp060115 -e \
+  'select p.acc, p.val from protein p, accToTaxon x where x.taxon=9606 and p.acc=x.acc'\
+  |awk '{print ">" $1;print $2}' >humanProt.fa
+
+  hgsql -N sp060115 -e \
+  'select v.varAcc, p.val from varAcc v, protein p, accToTaxon x where v.parAcc = p.acc and x.taxon=9606   and v.parAcc=x.acc'\
+  |awk '{print ">" $1;print $2}' \
+  >humanVarProt.fa
+
+# append var proteins to humanProt.fa
+  cat humanVarProt.fa >>humanProt.fa
+
+# Prepare and perform cluster run for protein/genome alignment
+
+  ssh pk
+  cd /cluster/data/hg18/bed/kgHg18A/protBlat
+  mkdir prot
+  faSplit sequence humanProt.fa 2000 prot/prot
+  ls /cluster/bluearc/kgDB/kgHg18A/protBlat/prot/* > prot.lis
+
+  ssh hgwdev
+  cd /cluster/data/hg18/bed/kgHg18A/protBlat
+  hgsql hg18 -N -e 'select chrom from chromInfo' > chrom.lis
+  exit
+  
+  cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat -t=dnax -q=prot /cluster/data/hg18/nib/$(path1).nib $(path2) {check out line+ /cluster/bluearc/kgDB/kgHg18A/protBlat/result/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+  mkdir result
+  gensub2 chrom.lis prot.lis gsub jobList
+
+  para create jobList
+  para try
+  para check
+  para push
+  para check ...
+# Completed: 97020 of 97020 jobs
+# CPU time in finished jobs:   16070335s  267838.92m  4463.98h  186.00d  0.510 y
+# IO & Wait Time:                279789s    4663.15m    77.72h    3.24d  0.009 y
+# Average job time:                 169s       2.81m     0.05h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:          152051s    2534.18m    42.24h    1.76d
+# Submission to last job:        152235s    2537.25m    42.29h    1.76d
+
+# This cluster run took a little less than 2 days.  
+
+# collect BLAT results
+
+   pslSort -nohead dirs raw.psl temp result
+   pslReps -nohead -minCover=0.80 -minAli=0.80 -nearTop=0.002 raw.psl protBlat.psl /dev/null
+
+   ssh hgwdev
+   cd /cluster/bluearc/kgDB/kgHg18A/protBlat
+   hgLoadPsl hg18 protBlat.psl
+
+# create all_mrna.psl and tight_mrna.psl
+
+   hgsql hg18 -N -e "select * from all_mrna" |cut -f 2-22 >all_mrna.psl
+
+   pslReps -minCover=0.40 -minAli=0.97 -nearTop=0.002 \
+           all_mrna.psl tight_mrna.psl /dev/null
+
+# Save a copy of the following hg18 tables:
+
+all_mrna
+gbCdnaInfo
+gbExtFile
+gbLoaded
+gbSeq
+gbStatus
+genbank.lis
+refFlat
+refGene
+refLink
+refSeqAli
+refSeqStatus
+refSeqSummary
+xenoMrna
+xenoRefFlat
+xenoRefGene
+xenoRefSeqAli
+
+# Use overlapSelect to get protein and mRNA alignment overlaps   
+   overlapSelect  -statsOutput  -dropped=protOut.psl -overlapThreshold=0.90 \
+   -selectFmt=psl -inFmt=psl tight_mrna.psl  protBlat.psl protMrna.stat
+
+   overlapSelect  -mergeOutput  -dropped=protOut.psl -overlapThreshold=0.90 -selectFmt=psl \
+   -inFmt=psl tight_mrna.psl  protBlat.psl protMrna.out
+
+# Create protein/mRNA pair and protein lists
+   cut -f 10,31 protMrna.out|sort -u >spMrna.tab
+   cut -f 10    protMrna.out|sort -u >protein.lis
+   mv protein.lis ..
+
+# Load spMrna.tab into spMrna table in temp DB.
+   hgsql kgHg18ATemp < ~/src/hg/lib/spMrna.sql
+   hgsql kgHg18ATemp -e 'load data local infile "spMrna.tab" into table spMrna'
+   hgsql kgHg18ATemp -e 'create index mrnaID on spMrna(mrnaID)'
+
+# Prepare and perform cluster run of protein/mRNA alignment
+
+# Get mRNA fa file.
+   cd /cluster/data/hg18/bed/kgHg18A
+   /cluster/data/genbank/bin/i386/gbGetSeqs -native -db=hg18 \
+   -gbRoot=/cluster/data/genbank genbank mrna mrna.fa
+
+# Create mrnaSeq table in kgHg18ATemp DB.
+
+   faToTab mrna.fa mrnaSeq.tab
+
+   hgsql kgHg18ATemp -e 'drop table mrnaSeq'
+   hgsql kgHg18ATemp <~/src/hg/lib/mrnaSeq.sql
+   hgsql kgHg18ATemp -e 'load data local infile "mrnaSeq.tab" into table mrnaSeq'
+
+# Prepare files for cluster run
+
+   cd /cluster/bluearc/kgDB/kgHg18A
+   ~/src/hg/protein/KG2B.sh kgHg18A hg18 060115
+
+# Perform cluster run of protein/mRNA alignment
+   ~/src/hg/protein/KG3.sh kgHg18A hg18 060115
+
+# Collect cluster run results
+   cd kgBestMrna
+
+   ls out | sed -e 's/prot/do1 prot/g' >doall
+
+# create do1 with the following 2 lines:
+   cat << '_EOF_' > do1
+echo processing $1
+cat out/$1/*.out >>protMrnaRaw.psl
+'_EOF_'
+
+   chmod +x do*
+   doall
+
+# Filter out low quality alignments
+   pslReps -nohead -singleHit -minAli=0.9 protMrnaRaw.psl protMrnaBlat.psl /dev/null
+   cut -f 10,14 protMrnaBlat.psl |sort -u >protMrna.lis
+   wc protMrna.lis
+
+# Load BLAT results into temp DB.
+   ssh hgwdev
+   cd /cluster/store11/kg/kgHg18A/kgBestMrna
+   hgsql kgHg18ATemp < ~/src/hg/lib/protMrnaBlat.sql
+   hgsql kgHg18ATemp -e 'load data local infile "protMrnaBlat.psl" into table protMrnaBlat'
+   hgsql kgHg18ATemp -e 'create index tName on protMrnaBlat(tName)'
+
+# Create CDS files from protein/mRNA alignment results.
+   hgsql kgHg18ATemp -N -e \
+   'select qName,"_",tName,tStart+1,":",tEnd+3 from protMrnaBlat order by qName,tName,tEnd-tStart desc'\
+   |sed 's/\t_\t/_/g'|sed 's/\t:\t/../g' >protMrna.cds
+
+# Create protMrna.psl with proteinID_mrnaID as query ID.
+   cut -f 22-30 ../protBlat/protMrna.out > j1.tmp
+   cut -f 32-42 ../protBlat/protMrna.out > j2.tmp
+   cut -f 10,31 ../protBlat/protMrna.out|sed -e 's/\t/_/g' >j3.tmp
+   paste j1.tmp j3.tmp j2.tmp >protMrna.psl
+   rm j1.tmp j2.tmp j3.tmp
+
+# Run mrnaToGene to create protMrna.gp
+   bash
+   mrnaToGene -cdsFile=protMrna.cds protMrna.psl protMrna.gp 2>protMrna.err >protMrna.log
+   exit
+
+# move kgBestMrna to /san/sanvol1 to save space on store11
+
+   mv /cluster/store11/kg/kgHg18A/kgBestMrna/clusterRun /san/sanvol1/scratch/fan/hg18/kgHg18A/kgBestMrna
+   ln -s /san/sanvol1/scratch/fan/hg18/kgHg18A/kgBestMrna/clusterRun \
+   /cluster/store11/kg/kgHg18A/kgBestMrna/clusterRun
+
+# Prepare refGene and all_mrna gp files.
+
+   cd ..
+   cp -p base/refGene.tab ref.gp
+
+#   hgsql hg18 -N -e 'select * from refGene' >ref.gp
+
+   hgsql hg18 -N -e \
+   'select gbCdnaInfo.acc,cds.name from gbCdnaInfo,cds,all_mrna where all_mrna.qName=gbCdnaInfo.acc and   gbCdnaInfo.cds=cds.id' \
+   |sort -u > all_mrna.cds
+
+   cat base/all_mrna.tab |cut -f 2-22 >all_mrna.psl
+   bash
+   mrnaToGene -cdsFile=all_mrna.cds all_mrna.psl all_mrna.gp 2>all_mrna.err > all_mrna.log
+   exit
+
+# Align proteins to RefSeq.
+
+   overlapSelect -inCds -statsOutput -overlapThreshold=0.90 -selectFmt=psl -inFmt=genePred\
+   protBlat/protBlat.psl ref.gp ref.stat
+   overlapSelect -inCds -dropped=refOut1.gp -overlapThreshold=0.90 -selectFmt=psl -inFmt=genePred\
+   protBlat/protBlat.psl ref.gp protRef.gp
+
+   overlapSelect -mergeOutput -selectCds -dropped=protOut1.psl -overlapThreshold=0.80 -inFmt=psl\
+   -selectFmt=genePred ref.gp protBlat/protBlat.psl protRef.out
+
+   cut -f 10,22 protRef.out | sort -u >spRef.tab
+   cut -f 10 protRef.out    | sort -u >protRef.lis
+
+   hgsql kgHg18ATemp -e 'drop table spRef'
+   hgsql kgHg18ATemp <~/src/hg/lib/spRef.sql
+   hgsql kgHg18ATemp -e 'load data local infile "spRef.tab" into table spRef'
+
+# Prepare and perform cluster runs for protein/RefSeq alignments
+
+   ~/src/hg/protein/KGRef2.sh kgHg18A hg18 060115
+# Took 7 hours.  This step should be investigated and improved.
+
+   ~/src/hg/protein/KGRef3.sh kgHg18A hg18 060115
+
+   cd kgBestRef
+   ls out | sed -e 's/prot/do1 prot/g' >doall
+
+   cat << '_EOF_' > do1
+echo processing $1
+cat out/$1/*.out >>protRefRaw.psl
+'_EOF_'
+
+   chmod +x do*
+   doall
+
+# Filter out low quality alignments.
+   pslReps -nohead -singleHit -minAli=0.9 protRefRaw.psl protRefBlat.psl /dev/null
+   cut -f 10,14 protRefBlat.psl |sort -u >protRef.lis
+   wc protRef.lis
+
+   hgsql kgHg18ATemp -e 'drop table protRefBlat'
+   hgsql kgHg18ATemp < ~/src/hg/lib/protRefBlat.sql
+   hgsql kgHg18ATemp -e 'load data local infile "protRefBlat.psl" into table protRefBlat'
+   hgsql kgHg18ATemp -e 'create index tName on protRefBlat(tName)'
+
+# Run gene-check to filter out invalid gp entries
+   cd /cluster/data/hg18/bed/kgHg18A
+   cat ref.gp kgBestMrna/protMrna.gp all_mrna.gp >kgCandidate0.gp
+   gene-check  -incl-ok -ok-genepred-out kgCandidate0.passed.gp -nib-dir /cluster/data/hg18/nib kgCandidate0.gp kgCandidate0.check
+
+   hgsql kgHg18ATemp -e 'drop table kgCandidate0'
+   hgsql kgHg18ATemp < ~/src/hg/lib/kgCandidate0.sql 
+   hgsql kgHg18ATemp -e  'load data local infile "kgCandidate0.gp" into table kgCandidate0'
+
+   hgsql kgHg18ATemp -e 'drop table geneCheck'
+   hgsql kgHg18ATemp < ~/src/hg/lib/geneCheck.sql
+   hgsql kgHg18ATemp -e  'load data local infile "kgCandidate0.check" into table geneCheck ignore 2 lines'
+
+# Run kgCheck to get all KG candidates that pass the KG gene check criteria
+
+   kgCheck kgHg18ATemp hg18 kgCandidate0 geneCheck kgCandidate.tab
+   hgsql kgHg18ATemp -e  'drop table kgCandidate'
+   hgsql kgHg18ATemp < ~/src/hg/lib/kgCandidate.sql
+   hgsql kgHg18ATemp -e  'load data local infile "kgCandidate.tab" into table kgCandidate'
+   hgsql kgHg18ATemp -e 'create index alignID on kgCandidate(alignID)'
+
+# ####### NEXT TIME AROUND PUT IN AN EXTRA STEP TO BRING IN ITEMS ON A "PUT BACK" LIST
+# FOR SPECIAL CASES LIKE SELENOCYSTEINE, NON-AUG INITIATION CODON, RIBOSOMAL SLIPPAGE, ETC.
+# #######
+
+# Construct the kgCandidateX table that has alignID in the name field. 
+   cut -f 2-10 kgCandidate.tab >j2.tmp
+   cut -f 11 kgCandidate.tab >j1.tmp
+   paste j1.tmp j2.tmp >kgCandidateX.tab
+
+   hgsql kgHg18ATemp -e  'drop table kgCandidateX'
+   hgsql kgHg18ATemp < ~/src/hg/lib/kgCandidateX.sql
+   hgsql kgHg18ATemp -e  'load data local infile "kgCandidateX.tab" into table kgCandidateX'
+
+# Score protein/mRna and protein/RefSeq alignments
+
+   ln -s protBlat/protein.lis protein.lis
+   kgResultBestMrna2 060115 kgHg18ATemp hg18 protMrnaBlat|sort -u >protMrnaBlatScore.tab
+   kgResultBestRef2  060115 kgHg18ATemp hg18 protRefBlat|sort -u >protRefScore.tab
+
+# Combine scoring results and load them into temp DB.
+   cat protMrnaBlatScore.tab protRefScore.tab >protMrnaScore.tab
+   hgsql kgHg18ATemp -e 'drop table protMrnaScore'
+   hgsql kgHg18ATemp < ~/src/hg/lib/protMrnaScore.sql
+   hgsql kgHg18ATemp -e 'load data local infile "protMrnaScore.tab" into table protMrnaScore'
+   hgsql kgHg18ATemp -e 'create index mrnaAcc on protMrnaScore(mrnaAcc)'
+
+# Run kgGetCds to get CDS structure of each gene
+
+   kgGetCds kgHg18ATemp 060115 kgCandidateX jY.tmp
+   cat jY.tmp |sort -u >kgCandidateY.tab
+   rm jY.tmp
+   hgsql kgHg18ATemp -e  'drop table kgCandidateY'
+   hgsql kgHg18ATemp < ~/src/hg/lib/kgCandidateY.sql
+   hgsql kgHg18ATemp -e  'load data local infile "kgCandidateY.tab" into table kgCandidateY'
+
+# Run kgPickPrep to replace long cds structure string with cdsId.
+   kgPickPrep kgHg18ATemp kgCandidateZ.tab
+   hgsql kgHg18ATemp -e  'drop table kgCandidateZ'
+   hgsql kgHg18ATemp < ~/src/hg/lib/kgCandidateZ.sql
+   hgsql kgHg18ATemp -e  'load data local infile "kgCandidateZ.tab" into table kgCandidateZ'
+   hgsql kgHg18ATemp -e 'create index cdsId on kgCandidateZ(cdsId)'
+
+# Run kgPick to pick the representative a mrna/protein pair for each unique CDS structure.
+
+   kgPick kgHg18ATemp hg18 sp060115 kg3.tmp dupSpMrna.tmp
+   sort -u dupSpMrna.tmp >dupSpMrna.tab
+
+# Create put back list
+
+# gbGetSeqs2, a modified version of gbGetSeqs output the RefSeq IDs at the beginning of each output line.
+
+   gbGetSeqs2 -gbRoot=/cluster/data/genbank db=hg18 -get=ra RefSeq mrna ref.ra
+   cat ref.ra | sed -e 's/ /\t/' | sort -u >refRa.tab
+
+   hgsql hg18 -e  'drop table refRa'
+   hgsql hg18 < ~/src/hg/lib/refRa.sql
+   hgsql hg18 -e  'load data local infile "refRa.tab" into table refRa ignore 1 lines'
+
+    hgsql hg18 -N -e \
+'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="selenocysteine" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and  r3.val="Homo sapiens"' \
+    >kgPutBack2.tab
+
+    hgsql hg18 -N -e \
+'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="cno" and r.val like "%ribosomal frameshift%" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and r3.val="Homo sapiens"' \
+    >>kgPutBack2.tab
+
+    hgsql hg18 -N -e \
+'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="cno" and r.val like "%non-AUG%" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and r3.val="Homo sapiens"' \
+    >>kgPutBack2.tab
+
+    hgsql hg18 -N -e \
+    'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="translExcept" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and r3.val="Homo sapiens"' \
+    >>kgPutBack2.tab 
+
+    hgsql hg18 -N -e \
+'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="exception" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and r3.val="Homo sapiens"' \
+    >>kgPutBack2.tab
+
+   hgsql kgHg18ATemp -e 'drop table kgPutBack2'
+   hgsql kgHg18ATemp < ~/src/hg/lib/kgPutBack2.sql
+   hgsql kgHg18ATemp -e  'load data local infile "kgPutBack2.tab" into table kgPutBack2'
+
+   kgPutBack kgHg18ATemp hg18 sp060115 kgPutBack2 kgPutBack2.gp
+
+# No matching protein found for NM_201397.
+# No matching protein found for NM_203341.
+# No matching protein found for NM_213593.
+# No matching protein found for NM_052987.
+# No matching protein found for NM_201397.
+# No matching protein found for NM_203341.
+# No matching protein found for NM_213593.
+
+# Sort KG genes to make the kg4.gp table file.
+   cat kgPutBack2.gp kg3.tmp > kg4.tmp
+   ~/kent/src/hg/protein/sortKg.pl kg4.tmp >knownGene.tab
+
+   hgsql kgHg18ATemp -e  'drop table knownGene'
+   hgsql kgHg18ATemp < ~/src/hg/lib/knownGene.sql
+   hgsql kgHg18ATemp -e  'load data local infile "knownGene.tab" into table knownGene'
+
+# Load data into hg18 knownGene table.
+   hgsql hg18 -e  'drop table knownGene'
+   hgsql hg18 < ~/src/hg/lib/knownGene.sql
+   hgsql hg18 -e  'load data local infile "knownGene.tab" into table knownGene'
+  
+# Load dupSpMrna table after knownGene table is loaded so that joinerCheck does not complain.
+
+   hgsql hg18 -e  'drop table dupSpMrna'
+   hgsql hg18 < ~/src/hg/lib/dupSpMrna.sql
+   hgsql hg18 -e  'load data local infile "dupSpMrna.tab" into table dupSpMrna'
+
+# Perform analysis on KG
+
+# Build knownGeneMrna and knownGenePep tables.
+
+   kgPepMrna kgHg18ATemp hg18 060115
+   hgsql hg18 -e  'drop table knownGeneMrna'
+   hgsql hg18 < ~/src/hg/lib/knownGeneMrna.sql
+   hgsql hg18 -e  'load data local infile "knownGeneMrna.tab" into table knownGeneMrna'
+   hgsql hg18 -e  'drop table knownGenePep'
+   hgsql hg18 < ~/src/hg/lib/knownGenePep.sql
+   hgsql hg18 -e  'load data local infile "knownGenePep.tab" into table knownGenePep'
+
+# Build kgXref table
+
+   kgXref2 kgHg18ATemp 060115 hg18
+
+   hgsql hg18 -e  'drop table kgXref'
+   hgsql hg18 < ~/src/hg/lib/kgXref.sql
+   hgsql hg18 -e  'load data local infile "kgXref.tab" into table kgXref'
+
+# Build spMrna table
+
+   hgsql hg18 -N -e 'select name, proteinID from knownGene' >kgSpMrna.tab
+
+   hgsql hg18 -e  'drop table spMrna'
+   hgsql hg18 <~/src/hg/lib/spMrna.sql
+   hgsql hg18 -e 'load data local infile "kgSpMrna.tab" into table spMrna'
+
+# Build kgProtMap table
+
+    ~/src/hg/protein/kgProtMap2.sh kgHg18A hg18 060115
+
+# Found the number of kgProtMap table was less than 20,000,
+# indicating missing a lot of entries.  The problem was
+# due to that tight_mrna.psl was now in ~/hg18Kg/protBlat.
+# Manually ran the following to correct the problem:
+
+cd ~/hg18Kg/kgProtMap/psl.tmp
+cat ~/hg18Kg/protBlat/tight_mrna.psl refSeqAli.psl > both.psl
+
+pslMap kgProtMrna.psl both.psl stdout | sort -u| \
+        sort -k 14,14 -k 16,16n -k 17,17n > kgProtMap.psl
+
+hgsql hg18 -e "drop table kgProtMap;" 
+hgLoadPsl -tNameIx hg18 kgProtMap.psl
+
+#####################################
+# Build alias tables.		
+
+   kgAliasM hg18 proteins060115
+
+#	kgAliasKgXref reads from hg18.knownGene.proteinID,
+#	hg18.knownGene.name, hg18.kgXref.geneSymbol
+#	to create kgAliasKgXref.tab
+
+   kgAliasKgXref hg18
+
+#	kgAliasRefseq reads from hg18.knownGene.name,
+#	hg18.knownGene.proteinID, hg18.kgXref.refseq
+#	to create kgAliasRefseq.tab
+
+   kgAliasRefseq hg18
+
+   hgsql sp060115 -N -e 'select name,gene.val from hg18.knownGene,displayId,gene where displayId.val=proteinID and displayId.acc=gene.acc' \
+   | sort -u  > kgAliasP.tab
+
+   hgsql hg18 -N -e 'select name, name from knownGene' >kgAliasDup.tab
+   hgsql hg18 -N -e 'select mrnaID, dupMrnaID from dupSpMrna' >>kgAliasDup.tab
+   
+   cat kgAliasM.tab kgAliasRefseq.tab kgAliasKgXref.tab kgAliasP.tab kgAliasDup.tab| \
+   sort |uniq > kgAlias.tab
+
+   hgsql -e "drop table kgAlias;" hg18 
+   hgsql hg18 < ~/kent/src/hg/lib/kgAlias.sql
+   hgsql hg18 -e 'LOAD DATA local INFILE "kgAlias.tab" into table kgAlias' 
+
+#	kgProtAlias reads from hg18.knownGene.name,
+#	hg18.knownGene.proteinID, hg18.knownGene.alignID,
+#	proteins060115.spXref3.accession, proteins060115.spSecondaryID, proteins060115.pdbSP.pdb
+#	to create kgProtAlias.tab#
+
+   kgProtAlias hg18 060115
+
+   hgsql hg18 -N -e \
+   'select kgID, spDisplayID, protAcc from kgXref where protAcc != ""'\
+   | sort -u >kgProtAliasNCBI.tab
+
+# include variant splice protein IDs
+   
+   hgsql hg18 -N -e \
+   'select name, proteinID, parAcc from knownGene,sp060115.varAcc where varAcc=proteinID'\
+   |sort -u >kgProtAliasDup.tab
+
+# include duplicate protein IDs from dupSpMrna table
+   hgsql hg18 -N -e \
+   'select name, knownGene.proteinID, dupProteinID from knownGene, dupSpMrna where name=mrnaID'\
+   |sort -u >>kgProtAliasDup.tab
+
+# catch parent acc from dupProteinID too
+   hgsql hg18 -N -e\
+   'select name, knownGene.proteinID, parAcc from knownGene,dupSpMrna,sp060115.varAcc where name=mrnaID and dupProteinID=varAcc.varAcc'\
+   |sort -u >>kgProtAliasDup.tab
+    cat kgProtAliasNCBI.tab kgProtAlias.tab kgProtAliasDup.tab | sort -u > kgProtAliasAll.tab
+
+    echo "`date` creating table kgProtAlias"
+    hgsql hg18 -e "drop table kgProtAlias;"
+    hgsql hg18 <~/src/hg/lib/kgProtAlias.sql; 
+    hgsql hg18 -e 'LOAD DATA local INFILE "kgProtAliasAll.tab" into table kgProtAlias;'  
+
+# Build kgSpAlias table
+
+    hgsql hg18 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql hg18 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >hg18.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql hg18 -e 'drop table kgSpAlias';
+    hgsql hg18 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql hg18 -e 'load data local infile "hg18.kgSpAlias.tab" into table kgSpAlias'
+
+# MAKE FOLDUTR TABLES (DONE 2006-02-09, Fan)
+# First set up directory structure and extract UTR sequence on hgwdev
+    ssh hgwdev
+    cd /cluster/data/hg18/bed
+    mkdir rnaStruct.2006-02-09
+    rm rnaStruct
+    ln -s rnaStruct.2006-02-09 rnaStruct
+    cd rnaStruct
+    mkdir -p utr3/split utr5/split utr3/fold utr5/fold
+    utrFa hg18 knownGene utr3 utr3/utr.fa
+    utrFa hg18 knownGene utr5 utr5/utr.fa
+
+# Split up files and make files that define job.
+    ssh pk
+    cd /cluster/data/hg18/bed/rnaStruct
+    faSplit sequence utr3/utr.fa 50000 utr3/split/s
+    faSplit sequence utr5/utr.fa 50000 utr5/split/s
+    ls -1 utr3/split > utr3/in.lst
+    ls -1 utr5/split > utr5/in.lst
+    cd utr3
+    cat > gsub <<end
+#LOOP
+rnaFoldBig split/\$(path1) fold
+#ENDLOOP
+end
+    cp gsub ../utr5
+
+# Do cluster run for 3' UTRs
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+# Completed: 36097 of 36097 jobs
+# CPU time in finished jobs:     335580s    5593.00m    93.22h    3.88d  0.011 y
+# IO & Wait Time:                653230s   10887.16m   181.45h    7.56d  0.021 y
+# Average job time:                  27s       0.46m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1730s      28.83m     0.48h    0.02d
+# Submission to last job:          6007s     100.12m     1.67h    0.07d
+
+# Do cluster run for 5' UTRs 
+    cd ../utr5
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+# Completed: 34011 of 34011 jobs
+# CPU time in finished jobs:      78543s    1309.05m    21.82h    0.91d  0.002 y
+# IO & Wait Time:                938250s   15637.50m   260.62h   10.86d  0.030 y
+# Average job time:                  30s       0.50m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            5873s      97.88m     1.63h    0.07d
+# Submission to last job:          6139s     102.32m     1.71h    0.07d
+
+# Load database
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/rnaStruct/utr5
+    hgLoadRnaFold hg18 foldUtr5 fold
+    cd ../utr3
+    hgLoadRnaFold hg18 foldUtr3 fold
+
+# Clean up
+    rm -r split fold err batch.bak
+    cd ../utr5
+    rm -r split fold err batch.bak
+
+# Build KEGG pathway tables.  DONE 5/19/05.  Fan.
+   ssh hgwdev
+   cd /cluster/store11/kg/kgHg18A
+   md kegg
+   cd kegg
+
+   ~/src/hg/protein/KGpath.sh kgHg18A hg18 060115
+
+   hgsql hg18 -e "drop table keggMapDesc"
+   hgsql hg18 -e "drop table keggPathway"
+   hgsql hg18 <~/src/hg/lib/keggMapDesc.sql
+   hgsql hg18 <~/src/hg/lib/keggPathway.sql
+   hgsql hg18 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
+   hgsql hg18 -e 'load data local infile "keggPathway.tab" into table keggPathway'
+  
+# Build CGAP pathway tables
+# RELOAD cgapAlias TABLE AFTER REMOVING REPLICATE ROWS (hartera, 2005-07-26)
+# duplicate rows. (hartera, 2005-07-26)
+# RELOADED cgapAlias AGAIN AS TOO MANY ROWS REMOVED BEFORE (hartera, 2005-10-06)
+
+   cd ..
+   mkdir cgap
+   cd cgap
+   ~/src/hg/protein/KGcgap.sh kgHg18A hg18 060115
+
+   cat cgapBIOCARTAdesc.tab |sort -u > cgapBIOCARTAdescSorted.tab
+   hgsql hg18 -e "drop table cgapAlias"
+   hgsql hg18 -e "drop table cgapBiocDesc"
+   hgsql hg18 -e "drop table cgapBiocPathway"
+   hgsql hg18 <~/src/hg/lib/cgapAlias.sql
+   hgsql hg18 <~/src/hg/lib/cgapBiocDesc.sql
+   hgsql hg18 <~/src/hg/lib/cgapBiocPathway.sql
+
+   hgsql hg18 -e 'load data local infile "cgapAlias.tab" \
+                 into table cgapAlias'
+   hgsql hg18 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
+   hgsql hg18 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
+
+
+
+# Build hg18 PROTEOME BROWSER TABLES 
+
+# These are instructions for building tables 
+# needed for the Proteome Browser. 
+ 
+# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
+# ARE REBUILT.  
+# This build is based on proteins DBs dated 060115.
+
+# Create the working directory
+
+    ssh hgwdev
+    mkdir /cluster/store11/kg/kgHg18A/pb-2006-02-10
+    cd /cluster/data/hg18/bed
+    rm pb
+    ln -s /cluster/store11/kg/kgHg18A/pb-2006-02-10 pb
+    cd pb
+
+# Define pep* tables in hg18 DB
+
+	cat ~/kent/src/hg/lib/pep*.sql > pepAll.sql
+
+#  First edit out pepPred table definition, then
+
+	hgsql hg18 < pepAll.sql
+
+# Build the pepMwAa table
+
+  hgsql proteins060115 -N -e \
+"select info.acc, molWeight, aaSize from sp060115.info, sp060115.accToTaxon where accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > pepMwAa.tab
+
+hgsql hg18 -e 'load data local infile "pepMwAa.tab" into table pepMwAa'
+
+o Build the pepPi table
+
+    hgsql proteins060115 -e \
+    "select info.acc from sp060115.info, sp060115.accToTaxon where accToTaxon.taxon=9606 and accToTaxon.acc = info.acc" > protAcc.lis
+
+    hgsql hg18 -N -e 'select proteinID from knownGene where proteinID like "%-%"' | sort -u >> protAcc.lis
+
+    pbCalPi protAcc.lis sp060115 pepPi.tab
+    hgsql hg18 -e 'delete from pepPi'
+    hgsql hg18 -e 'load data local infile "pepPi.tab" into table hg18.pepPi'
+
+# Calculate and load pep distributions
+
+    pbCalDist sp060115 proteins060115 9606 hg18 >pbCalDist.out
+    wc  pbCalDist.out
+
+    hgsql hg18
+    load data local infile "pepExonCntDist.tab" into table hg18.pepExonCntDist;
+    load data local infile "pepCCntDist.tab" into table hg18.pepCCntDist;
+    load data local infile "pepHydroDist.tab" into table hg18.pepHydroDist;
+    load data local infile "pepMolWtDist.tab" into table hg18.pepMolWtDist;
+    load data local infile "pepResDist.tab" into table hg18.pepResDist;
+    load data local infile "pepIPCntDist.tab" into table hg18.pepIPCntDist;
+    load data local infile "pepPiDist.tab" into table hg18.pepPiDist;
+    quit
+
+# Calculate frequency distributions
+
+    pbCalResStd sp060115 9606 hg18
+
+# Create pbAnomLimit and pbResAvgStd tables
+
+   hgsql hg18 -e "drop table pbAnomLimit"
+   hgsql hg18 -e "drop table pbResAvgStd"
+   hgsql hg18 < ~/src/hg/lib/pbAnomLimit.sql
+   hgsql hg18 < ~/src/hg/lib/pbResAvgStd.sql
+
+   hgsql hg18 -e 'load data local infile "pbResAvgStd.tab" into table hg18.pbResAvgStd;'
+   hgsql hg18 -e 'load data local infile "pbAnomLimit.tab" into table hg18.pbAnomLimit;'
+
+# Create pbStamp table for PB
+  hgsql hg18 -e "drop table pbStamp"
+  hgsql hg18 < ~/src/hg/lib/pbStamp.sql
+  hgsql hg17 -N -e 'select * from pbStamp' > pbStamp.tab
+  hgsql hg18 -e 'load data local infile "pbStamp.tab" into table hg18.pbStamp'
+
+# Turn on Proteome Browser for hg18.
+
+  hgsql -e 'delete from dbDb where name="hg18"' \
+        -h genome-testdb hgcentraltest
+
+  hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
+        defaultPos, active, orderKey, genome, scientificName, \
+        htmlPath, hgNearOk, hgPbOk, sourceName) \
+        VALUES("hg18", "Feb. 2006", "/gbdb/hg18/nib", "Human", \
+        "chr7:127,664,479-127,689,005", 1, 10, "Human", "Homo sapiens", \
+        "/gbdb/hg18/html/description.html", 0, 1, "NCBI Build 36.1");' \
+        -h genome-testdb hgcentraltest
+
+# Adjust drawing parameters for Proteome Browser stamps
+
+  Now invoke Proteome Browser and adjust various drawing parameters
+  (mostly the ymax of each stamp) if necessary, by updating the 
+  pbStamp.tab file and then delete and reload the pbStamp table. 
+
+  hgsql hg18 -e "drop table pbStamp"
+  hgsql hg18 < ~/src/hg/lib/pbStamp.sql
+  hgsql hg18 -e 'load data local infile "pbStamp.tab" into table hg18.pbStamp'
+
+# Perform preliminary review of Proteome Browser for hg18, then
+  notify QA for formal review.
+
+
+# First build entrez DB tables.
+
+   cd /cluster/store10/entrez
+   mkdir 060208
+   ln -s /cluster/store10/entrez/060208 /cluster/data/entrez/060208
+   cd /cluster/data/entrez/060208
+
+   wget -- timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2accession.gz
+   wget -- timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene_info.gz
+   wget -- timestamp ftp://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2refseq.gz
+   gzip -d *.gz
+
+   cut -f 2,4 gene2accession | sort -u | grep -v "-" | grep -v "NM_" | sed -e 's/\./\t/g' > entrezMrna.tab
+   cut -f 2,4 gene2refseq | grep "NM_"| sort -u | grep -v "-" | sed -e 's/\./\t/g' > entrezRefseq.tab
+   cut -f 2,4,6 gene2accession | grep "NM_"| grep "NP_"|sort -u | sed -e 's/\./\t/g' > entrezRefProt.tab
+   
+   hgsql entrez -e 'drop table entrezRefseq'
+   hgsql entrez -e 'drop table entrezMrna'
+   hgsql entrez -e 'drop table entrezRefProt'
+
+   hgsql entrez < ~/src/hg/lib/entrezRefseq.sql
+   hgsql entrez < ~/src/hg/lib/entrezMrna.sql
+   hgsql entrez < ~/src/hg/lib/entrezRefProt.sql
+
+   hgsql entrez -e 'load data local infile "entrezRefseq.tab" into table entrezRefseq'
+   hgsql entrez -e 'load data local infile "entrezMrna.tab" into table entrezMrna'
+   hgsql entrez -e 'load data local infile "entrezRefProt.tab" into table entrezRefProt'
+
+   hgsql entrez -N -e \
+   'select mrna, refseq from entrezRefseq, entrezMrna where entrezRefseq.geneID=entrezMrna.geneID' \
+   >mrnaRefseq1.tab
+
+#   hgsql hg18 < ~/src/hg/lib/mrnaRefseq.sql
+#   hgsql hg18 -e 'load data local infile "mrnaRefseq.tab" into table mrnaRefseq'
+
+# Include RefSeq as valid mRNA too.
+    hgsql hg18 -N -e 'select name, name from refGene' >mrnaRefseq2.tab
+
+    cat mrnaRefseq1.tab mrnaRefseq2.tab |sort -u >mrnaRefseq.tab
+
+    hgsql hg18 -e 'drop table mrnaRefseq'
+    hgsql hg18 < ~/src/hg/lib/mrnaRefseq.sql
+    hgsql hg18 -e 'load data local infile "mrnaRefseq.tab" into table mrnaRefseq'
+
+# BUILD KNOWN GENE LIST FOR GOOGLE.  
+# make knownGeneLists.html hg18GeneList.html mm5GeneList.html rm3GeneList.html
+
+    cd /cluster/data/hg18/bed
+    rm -rf knownGeneList/hg18
+
+# Run hgKnownGeneList to generate the tree of HTML pages
+# under ./knownGeneList/hg18
+
+    hgKnownGeneList hg18
+
+# copy over to /usr/local/apache/htdocs
+
+    rm -rf /usr/local/apache/htdocs/knownGeneList/hg18
+    mkdir -p /usr/local/apache/htdocs/knownGeneList/hg18
+    cp -Rfp knownGeneList/hg18/* /usr/local/apache/htdocs/knownGeneList/hg18
+
+##################################################################################
+
