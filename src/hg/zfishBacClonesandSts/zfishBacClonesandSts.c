@@ -47,6 +47,8 @@
 #define NUMPREFIXES 9
 #define MAXSANGER 50
 
+static char const rcsid[] = "$Id: zfishBacClonesandSts.c,v 1.11 2006/02/14 21:45:18 hartera Exp $";
+
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"verbose", OPTION_STRING},
