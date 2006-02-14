@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.42 2006/01/13 18:59:15 hiram Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.43 2006/02/14 01:01:26 daryl Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -844,7 +844,7 @@ if (!faIndependent)
 	bedRegionOutFile = mustOpen(bedRegionOutName, "w");
 	while (lineFileRow(lf, row))
 	    {
-	    if (startsWith(row[0],"#"))
+	    if (startsWith(row[0],"#")||startsWith(row[0],"chrom"))
 		continue;
 	    bed = bedLoad3(row);
 	    slAddHead(&bedRegionList, bed);
