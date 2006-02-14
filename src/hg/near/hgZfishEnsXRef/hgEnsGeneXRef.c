@@ -10,6 +10,8 @@
 #include "sqlNum.h"
 #include "hdb.h"
 
+static char const rcsid[] = "$Id: hgEnsGeneXRef.c,v 1.4 2006/02/14 21:32:31 hartera Exp $";
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -111,7 +113,6 @@ while (lineFileChopNextTab(lf, words, 6))
     /* skip over header line */
     if (!startsWith("Ensembl", words[0]))
         {
-        fflush(stdout);
         tId = cloneString(words[0]);
         desc = cloneString(words[1]);
         uniProtId = cloneString(words[2]);
@@ -180,7 +181,6 @@ while (lineFileChopNextTab(lf, words, 9))
         {
         /* allocate memory for xRef structure */
         AllocVar(g);
-        AllocVar(g2);
         g->geneId = cloneString(geneId);
         g->geneSymbol = cloneString(symbol);
         g->description = cloneString(desc);
@@ -224,8 +224,8 @@ lineFileClose(&rf);
 }
 
 void readNcbiFile(char *ncbiFile, struct hash **hash, struct hash *geneByIdHash, struct hash *geneByRefSeqHash)
-/* Read file with Entrez Gene ID, and RefSeq nucleotide and peptide */
-/* accessions and add to the appropriate value in the hash. */
+/* Read file from Ensembl containing Entrez Gene ID, and RefSeq nucleotide */
+/* and peptide accessions and add to the hash keyed by the appropriate ID. */
 {
 struct lineFile *lf = lineFileOpen(ncbiFile, TRUE);
 char *words[4], *tId, *refSeqId, *refSeqPepId, *geneSymbol, *lLinkId;
@@ -322,7 +322,7 @@ else
 hashElFreeList(&geneHashList);
 }
 
-void hgZfishEnsXRef(char *idAndDescFile, char *ncbiFile, char *geneFile, char *refSeqFile, char *outFile)
+void hgEnsGeneXRef(char *idAndDescFile, char *ncbiFile, char *geneFile, char *refSeqFile, char *outFile)
 /* Parse out the correct columns from the file to simple column format. */
 {
 struct hash *geneInfoHash = readIdAndDescFile(idAndDescFile);
@@ -345,6 +345,6 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 6)
     usage();
-hgZfishEnsXRef(argv[1],argv[2], argv[3], argv[4], argv[5]);
+hgEnsGeneXRef(argv[1],argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
