@@ -1,0 +1,43 @@
+
+flow add(int x,y) into (int f) 
+    {
+    f = x + y;
+    }
+
+flow sub(int x,y) into (int f) 
+    {
+    f = x - y;
+    }
+
+flow mul(int x,y) into (int f) 
+    {
+    f = x * y;
+    }
+
+flow div(int x,y) into (int f) 
+    {
+    f = x / y;
+    }
+
+
+var of flow (int x,y) into (int f) addOp = add, subOp = sub;
+
+prin(add(1,2));
+prin(" vs ");
+print(addOp(1,2));
+prin(sub(9,5));
+prin(" vs ");
+print(subOp(9,5));
+
+/*-someday
+class jumpTable
+    {
+    int version = 2;
+    var of flow (int a,b) into int c add;
+    var of flow (int a,b) into int c sub;
+    var of flow (int a,b) into (int c) mul,div;	
+    }
+
+jumpTable jump = (1, add, sub, mul, div);
+someday-*/
+
