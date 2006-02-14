@@ -1,6 +1,6 @@
 /* snpCheckClassAndObserved
  *
- * Log exceptions:
+ * Log 4 exceptions:
  *
  * 1) SingleClassWrongLocType
  *    loc_type = 3 (between)
@@ -10,7 +10,10 @@
  *    for class = 'deletion', compare the length 
  *    of the observed string to chromRange
  *
- * 3) NamedClassWrongLocType
+ * 3) DeletionClassWrongObserved
+ *    observed doesn't match refUCSC or refUCSCReverseComp
+ *
+ * 4) NamedClassWrongLocType
  *    for class = 'named'
  *    if observed like "LARGEDELETION" then expect loc_type = 1
  *    if observed like "LARGEINSERTION" then expect loc_type = 3
@@ -25,7 +28,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.1 2006/02/14 19:48:27 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.2 2006/02/14 20:20:47 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -97,7 +100,7 @@ if (!hTableExists(tableName)) return;
 
 verbose(1, "chrom = %s\n", chromName);
 safef(query, sizeof(query), 
-    "select snp_id, chromStart, chromEnd, loc_type, class, observed from %s", tableName);
+    "select snp_id, chromStart, chromEnd, loc_type, class, observed, refUCSC, refUCSCReverseComp from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -107,16 +110,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* SingleClassWrongLocType */
     if (loc_type == 3 && sameString(row[4], "single"))
         writeToExceptionFile(chromName, row[1], row[2], row[0], "SingleClassWrongLocType");
-
-    /* DeletionClassWrongObservedSize */
-    if (sameString(row[4], "deletion"))
-        {
-	alleleLen = strlen(row[5]);
-	alleleLen = alleleLen - 2;
-	span = sqlUnsigned(row[2]) - sqlUnsigned(row[1]);
-	if (alleleLen != span)
-            writeToExceptionFile(chromName, row[1], row[2], row[0], "DeletionClassWrongObservedSize");
-	}
 
     /* NamedClassWrongLocType */
     if (sameString(row[4], "named"))
@@ -128,6 +121,27 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (subString != NULL && loc_type != 1)
             writeToExceptionFile(chromName, row[1], row[2], row[0], "NamedClassWrongLocType");
         }
+
+    /* DeletionClass */
+    if (sameString(row[4], "deletion"))
+        {
+        /* DeletionClassWrongObservedSize */
+	alleleLen = strlen(row[5]);
+	alleleLen = alleleLen - 2;
+	span = sqlUnsigned(row[2]) - sqlUnsigned(row[1]);
+	if (alleleLen != span)
+            writeToExceptionFile(chromName, row[1], row[2], row[0], "DeletionClassWrongObservedSize");
+
+	/* DeletionClassWrongObserved */
+        subString = cloneString(row[5]);
+	if (strlen(subString) < 2) continue;
+	if (subString[0] != '-' || subString[1] != '/') continue;
+	subString = subString + 2;
+	if (!sameString(subString, row[6]) && !sameString(subString, row[7]))
+            writeToExceptionFile(chromName, row[1], row[2], row[0], "DeletionClassWrongObserved");
+	}
+
+
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
