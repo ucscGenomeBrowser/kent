@@ -2,7 +2,6 @@
 /* from other databases and a gene description. */
 #include "common.h"
 #include "linefile.h"
-#include "jksql.h"
 #include "hash.h"
 #include "options.h"
 #include "dystring.h"
@@ -18,8 +17,8 @@ errAbort(
   "hgEnsGeneXRef - Create table that links zebrafish Ensembl Transcript ID\n"
   "to ZFIN ID, UniProt ID, Gene Symbol, RefSeq accession, RefSeq protein\n" 
   "accession and a gene description.\n"
-  "Input is from two files of database dumps from Ensembl's BioMart.\n"
-  "Database is required to query refLink table for the Gene Symbol.\n"
+  "Input is from two files of database dumps from Ensembl's BioMart,\n"
+  "and RefSeq gene_info and gene2refseq files from NCBI.\n"
   "usage:\n"
   "   hgEnsGeneXRef file1 file2 gene_info gene2refseq output.tab\n"
   "options:\n"
