@@ -133,9 +133,10 @@ exit; # don't actually run this like a script :)
     mkdir M/chrM_1
     sed -e 's/chrM/chrM_1/' M/chrM.fa > M/chrM_1/chrM_1.fa
     mkdir M/lift
+    set mSize=`faSize M/chrM.fa | awk '{print $1;}'`
     echo "chrM_1/chrM_1.fa.out" > M/lift/oOut.lst
     echo "chrM_1" > M/lift/ordered.lst
-    echo "0	M/chrM_1	16775	chrM	16775" > M/lift/ordered.lft
+    echo "0	M/chrM_1	"$mSize"	chrM	"$mSize"" > M/lift/ordered.lft
 
 
 # MAKE JKSTUFF AND BED DIRECTORIES (DONE 1/27/06 angie)
@@ -241,6 +242,11 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
     # That is risky -- Robert might provide a fix that has a slightly 
     # different effect, in which case I'll have to redo everything at least 
     # for chr1.  But I'd like to make some progress at least....
+
+    # Update 2/7/06 -- Robert sent a patch for ProcessRepeats (and for 
+    # DateRepeats, see below).  Although the patch was not identical to 
+    # my patch, the results of ProcessRepeats run on the .cat were identical.
+    # So I don't have to redo subsequent steps, whew!
 
     #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
     ssh kkstore01
@@ -535,7 +541,7 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
                 defaultPos, active, orderKey, genome, scientificName, \
                 htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("rn4", "Nov. 2004", "/gbdb/rn4/rn4.2bit", "Rat", \
-               "chr2:809001-825000", 1, 30, "Rat", \
+               "chr2:22845558-23004134", 1, 30, "Rat", \
                 "Rattus norvegicus", "/gbdb/rn4/html/description.html", \
                 0, 0, "Baylor HGSC v. 3.4");'
 
@@ -585,15 +591,24 @@ cd ../..
     # Create README.txt files in database/ to explain the files.
 
 
-# GENBANK AUTO UPDATE (TODO 1/30/06 angie)
+# MAKE 11.OOC (DONE 2/10/06 angie)
+    ssh kolossus
+    cd /cluster/data/rn4
+    mkdir /cluster/bluearc/rn4
+    blat rn4.2bit /dev/null /dev/null \
+      -tileSize=11 -makeOoc=/cluster/bluearc/rn4/11.ooc -repMatch=1024
+#Wrote 25608 overused 11-mers to /cluster/bluearc/rn4/11.ooc
+
+
+# GENBANK AUTO UPDATE (IN PROGRESS 2/10/06 angie)
     # align with revised genbank process. drop xeno ESTs.
     cd ~/kent/src/makeDb/genbank
     cvsup
     # edit etc/genbank.conf to add rn4
 
 # rn4
-rn4.serverGenome = /cluster/data/rn4/nib
-rn4.clusterGenome = /scratch/hg/rn4/nib
+rn4.serverGenome = /cluster/data/rn4/rn4.2bit
+rn4.clusterGenome = /iscratch/i/rn4/rn4.2bit
 rn4.ooc = /cluster/bluearc/rn4/11.ooc
 rn4.align.unplacedChroms = chrUn,chr*_random
 rn4.lift = /cluster/data/rn4/jkStuff/liftAll.lft
@@ -608,19 +623,20 @@ rn4.refseq.mrna.xeno.loadDesc = yes
 rn4.mgcTables.default = full
 rn4.mgcTables.mgc = all
 
+    cvs ci etc/genbank.conf
     # update /cluster/data/genbank/
     make etc-update
 
     ssh kkstore02
     cd /cluster/data/genbank
     nice bin/gbAlignStep -initial rn4 &
-
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
-    nice ./bin/gbDbLoadStep -drop -initialLoad  rn4&
+    nice ./bin/gbDbLoadStep -drop -initialLoad rn4 &
 
     # enable daily alignment and update of hgwdev
+#TODO
     cd ~/kent/src/makeDb/genbank
     cvsup
     # add rn4 to:
@@ -630,7 +646,7 @@ rn4.mgcTables.mgc = all
     make etc-update
 
 
-# PRODUCING GENSCAN PREDICTIONS (TODO 1/30/06 angie)
+# PRODUCING GENSCAN PREDICTIONS (DONE 1/31/06 angie)
     ssh hgwdev
     mkdir /cluster/data/rn4/bed/genscan
     cd /cluster/data/rn4/bed/genscan
@@ -659,11 +675,21 @@ rn4.mgcTables.mgc = all
     # << this line makes emacs coloring happy
     gensub2 genome.list single gsub jobList
     para make jobList
-#TODO
     para time
-    # If there are crashes, diagnose with "para problems".  
+#Completed: 589 of 591 jobs
+#Crashed: 2 jobs
+#CPU time in finished jobs:     110813s    1846.88m    30.78h    1.28d  0.004 y
+#IO & Wait Time:                  8627s     143.79m     2.40h    0.10d  0.000 y
+#Average job time:                 203s       3.38m     0.06h    0.00d
+#Longest finished job:            4230s      70.50m     1.18h    0.05d
+#Submission to last job:         11260s     187.67m     3.13h    0.13d
+    # If there are crashes, diagnose with "para problems" / "para crashed".  
     # If a job crashes due to genscan running out of memory, re-run it 
     # manually with "-window=1200000" instead of "-window=2400000".
+    ssh kkr5u00
+    cd /cluster/data/rn4/bed/genscan
+    /cluster/bin/x86_64/gsBig /cluster/data/rn4/10/chr10_3/chr10_3.fa.masked gtf/chr10_3.fa.gtf -trans=pep/chr10_3.fa.pep -subopt=subopt/chr10_3.fa.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=1200000
+    /cluster/bin/x86_64/gsBig /cluster/data/rn4/9/chr9_21/chr9_21.fa.masked gtf/chr9_21.fa.gtf -trans=pep/chr9_21.fa.pep -subopt=subopt/chr9_21.fa.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=1200000
 
     # Convert these to chromosome level files as so:
     ssh kkstore01
@@ -736,7 +762,7 @@ rn4.mgcTables.mgc = all
     hgPepPred rn4 generic ensPep ensPep.fa
 
 
-# CPGISSLANDS (WUSTL) (TODO 1/30/06 angie)
+# CPGISSLANDS (WUSTL) (DONE 1/30/06 angie)
     ssh hgwdev
     mkdir /cluster/data/rn4/bed/cpgIsland
     cd /cluster/data/rn4/bed/cpgIsland
@@ -751,7 +777,7 @@ rn4.mgcTables.mgc = all
     foreach f (../../*/chr*.fa.masked)
       set fout=$f:t:r:r.cpg
       echo running cpglh on $f to $fout
-      ./cpglh.exe $f > $fout
+      nice ./cpglh.exe $f > $fout
     end
     # Transform cpglh output to bed +
     cat << '_EOF_' > filter.awk
@@ -779,7 +805,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
 
 
-# CPGISLANDS (ANDY LAW) (TODO 1/30/06 angie)
+# CPGISLANDS (ANDY LAW) (DONE 1/30/06 angie)
     # See notes in makeGalGal2.doc
     ssh kolossus
     mkdir /cluster/data/rn4/bed/cpgIslandGgfAndy
@@ -791,7 +817,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     foreach f (../../*/chr*.fa.masked)
       set chr = $f:t:r:r
       echo preproc and run on masked $chr
-      /cluster/home/angie/bin/i386/preProcGgfAndy $f \
+      ~/bin/x86_64/preProcGgfAndy $f \
       | /cluster/home/angie/ggf-andy-cpg-island.pl \
       | perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g,$oE) = split("\t"); $s--; \
                    $gc = $c + $g;  $pCpG = (100.0 * 2 * $cpg / $n); \
@@ -807,17 +833,88 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
       $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndyMasked.sql
     hgLoadBed rn4 cpgIslandGgfAndyMasked -tab -noBin \
       -sqlTable=cpgIslandGgfAndyMasked.sql cpgIslandGgfAndyMasked.bed
-    #	Loaded 67616 elements of size 10
+#Loaded 91097 elements of size 10
     featureBits rn4 cpgIslandExt
-    #	10439328 bases of 2583394090 (0.404%) in intersection
+#9629809 bases of 2571531505 (0.374%) in intersection
     featureBits rn4 cpgIslandGgfAndyMasked
-    #	38774242 bases of 2583394090 (1.501%) in intersection
+#43899646 bases of 2571531505 (1.707%) in intersection
     wc -l ../cpgIsland/cpgIsland.bed *bed
-    #	16030 ../cpgIsland/cpgIsland.bed
-    #	67616 cpgIslandGgfAndyMasked.bed
+#  15809 ../cpgIsland/cpgIsland.bed
+#  91097 cpgIslandGgfAndyMasked.bed
 
 
-# MAKE LINEAGE-SPECIFIC REPEATS VS. HUMAN, MOUSE (TODO 1/30/06 angie)
+# LIFTOVER RGD (DONE 2/9/06 angie)
+    # ftp://rgd.mcw.edu/pub/RGD_genome_annotations/ still has 3.1 (rn3) not 
+    # 3.4 (rn4).  Jim said these are interesting enough that we should lift 
+    # over at least the QTLs.
+    ssh kolossus
+    mkdir /cluster/data/rn4/bed/rgdLiftover
+    cd /cluster/data/rn4/bed/rgdLiftover
+    wget ftp://rgd.mcw.edu/pub/RGD_genome_annotations/V3.1/GFF_files/rgd_rat_qtl_12052005.gff
+    awk '{print $1"\t"$4-1"\t"$5"\t"$10}' rgd_rat_qtl_12052005.gff \
+    | sed -e 's/Chr/chr/g; s/"//g; s/RGD://g; s/;//g' \
+      > rgdQtl_rn3.bed
+    awk '{printf "%s\t%s\t", $12, $10; \
+          for (i = 14;i <= NF; ++i ) {printf "%s ", $i} printf "\n"} ' \
+      rgd_rat_qtl_12052005.gff \
+    | sed -e 's/"//g; s/RGD://g; s/;\t/\t/g' \
+      > rgdQtlLink.tab
+    # liftOver rgdQtl_rn3.bed \
+    #   /cluster/data/rn3/bed/blat.rn4.2006-02-07/rn3ToRn4.over.chain.gz \
+    #   rgdQtl.bed rgdQtl.unmapped
+    # liftOver of rgdQtl_rn3.bed did not go well -- out of 903 qtls,
+    # only 95 were successfully mapped.  772 got "Partially split in new."
+    # Since these are enormous, presumably fuzzy-edged regions, just lift 
+    # start and end.  If the start and end of each feature seems to be 
+    # liftOver'd coherently, "chain" those back up into big regions in rn4.
+    perl -we 'while (<>) { \
+                chomp;  ($chr, $start, $end, $name) = split; \
+                print "$chr\t$start\t" . ($start+100) . "\tstart_$name\n"; \
+                print "$chr\t" . ($end-100) . "\t$end\tend_$name\n"; \
+              }' \
+      rgdQtl_rn3.bed > rgdQtl_rn3_endpoints.bed
+    liftOver rgdQtl_rn3_endpoints.bed \
+      /cluster/data/rn3/bed/blat.rn4.2006-02-07/rn3ToRn4.over.chain.gz \
+      rgdQtl_endpoints.bed rgdQtl_endpoints.unmapped
+    # Now 1706 out of 1806 survive... but 100 are deleted in new?!
+    # I manually checked 10 of them and they all are either in a gap 
+    # or off the end of a chrom.  Makes me wonder if these really are 
+    # rn3 coords...  oh well, I guess we can load them up and ask 
+    # RGD about them in the meantime.  I submitted a question using their 
+    # online form -- my message ID is 439 and I can email rgd@rgd.mcw.edu 
+    # with that ID if I don't hear from them in 3 biz days.
+    perl -we 'while (<>) { \
+                chomp;  ($chr, $start, $end, $name) = split; \
+                if ($name =~ /^start_(\S+)/) { \
+                  $starts{$1} = [$chr, $start]; \
+                } elsif ($name =~ /^end_(\S+)/) { \
+                  $ends{$1} = [$chr, $end]; \
+                } else { die "parse error line $.: name $name\n"; } \
+              } \
+              foreach my $name (keys %starts) { \
+                if (defined $ends{$name}) { \
+                  my ($sChr, $start) = @{$starts{$name}}; \
+                  my ($eChr, $end)   = @{$ends{$name}}; \
+                  if (($sChr eq $eChr) && $end > $start) { \
+                    print "$sChr\t$start\t$end\t$name\n"; \
+                  } else { \
+                    print STDERR "reject: [$sChr, $start] / [$eChr, $end] / $name\n"; \
+                  } \
+                } \
+              }' \
+      rgdQtl_endpoints.bed \
+      | sort -k 1,1 -k 2n,2n > rgdQtl.bed
+    wc -l rgdQtl.bed
+#806 rgdQtl.bed
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/rgdLiftover
+    hgLoadBed rn4 rgdQtl rgdQtl.bed
+    hgsql rn4 < ~/kent/src/hg/lib/rgdQtlLink.sql
+    hgsql rn4 -e \
+      'load data local infile "rgdQtlLink.tab" into table rn4.rgdQtlLink;'
+ 
+
+# MAKE LINEAGE-SPECIFIC REPEATS VS. HUMAN, MOUSE (DONE 2/8/06 angie)
     ssh kolossus
     mkdir /cluster/data/rn4/rmsk
     cd /cluster/data/rn4/rmsk
@@ -827,7 +924,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     # Human in extra column 1, Mouse in extra column 2
     foreach outfl ( *.out )
         echo "$outfl"
-        /cluster/bluearc/RepeatMasker/DateRepeats \
+        nice /cluster/bluearc/RepeatMasker/DateRepeats \
           ${outfl} -query rat -comp human -comp mouse
     end
     # Now extract human (extra column 1), mouse (extra column).
@@ -843,23 +940,88 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
                         linSpecRep.notInMouse/$base.out.spec
     end
     wc -l rmsk/*.out
-#4533630 total
+#  4417757 total
     wc -l linSpecRep.notInHuman/*
-#1542788 total
+#  2676056 total
     wc -l linSpecRep.notInMouse/*
-#1546408 total
+#  471417 total
     # Clean up.
     rm -r rmsk
     # Distribute linSpecRep.* for cluster run
     ssh kkstore01
     mkdir /san/sanvol1/scratch/rn4
     rsync -av /cluster/data/rn4/linSpecRep.notInHuman/* \
-      /san/sanvol1/scratch/rn4/linSpecRepl.notInHuman/
+      /san/sanvol1/scratch/rn4/linSpecRep.notInHuman/
     rsync -av /cluster/data/rn4/linSpecRep.notInMouse/* \
-      /san/sanvol1/scratch/rn4/linSpecRepl.notInMouse/
+      /san/sanvol1/scratch/rn4/linSpecRep.notInMouse/
 
 
-# BLASTZ
+# SWAP/CHAIN/NET HG17 (DONE 2/10/06 angie)
+    mkdir /cluster/data/rn4/bed/blastz.hg17.swap
+    cd /cluster/data/rn4/bed/blastz.hg17.swap
+    doBlastzChainNet.pl -swap /cluster/data/hg17/bed/blastz.rn4/DEF \
+      -workhorse=kkr5u00 >& do.log & tail -f do.log
+
+
+# MAKE LINEAGE-SPECIFIC REPEATS FOR NON-MAMMALS (DONE 2/13/06 angie)
+    # In an email 2/13/04 to Angie, Arian said we could treat all 
+    # human repeats as lineage-specific for human-chicken blastz.  
+    # Extrapolate to any mammal vs. anything at least as distant as chicken.
+    ssh kkr1u00
+    mkdir /iscratch/i/rn4/linSpecRep.notInNonMammal
+    foreach f (/cluster/data/rn4/*/chr*.fa.out)
+      cp -p $f /iscratch/i/rn4/linSpecRep.notInNonMammal/$f:t:r:r.out.spec
+    end
+    iSync
+
+
+# BLASTZ CHICKEN (GALGAL2) (IN PROGRESS 2/13/06 angie)
+    ssh kk
+    mkdir /cluster/data/hg17/bed/blastz.galGal2.2006-02-13
+    cd /cluster/data/hg17/bed/blastz.galGal2.2006-02-13
+    # Set L=10000 (higher threshold on blastz's outer loop) and abridge 
+    # repeats.
+    cat << '_EOF_' > DEF
+#rat vs. chicken
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Rat
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_SMSK=/iscratch/i/rn4/linSpecRep.notInNonMammal
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+
+# QUERY: Chicken
+SEQ2_DIR=/iscratch/i/galGal2/nib
+SEQ2_SMSK=/iscratch/i/galGal2/linSpecRep
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+SEQ2_LEN=/cluster/data/galGal2/chrom.sizes
+
+BASE=/cluster/data/hg17/bed/blastz.galGal2.2006-02-13
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    doBlastzChainNet.pl DEF \
+      -blastzOutRoot=/cluster/bluearc/blastzRn4GalGal2Out \
+      > do.log & tail -f do.log
+#TODO
+    cd /cluster/data/hg17/bed
+    ln -s /cluster/data/hg17/bed/blastz.galGal2.2006-02-13 blastz.galGal2
+
+
+# STS MARKERS -- Yontao made stsInfoRat.  TODO: figure out what he did,
+# redo it (checking scripts into kent/src/ tree), document it here.
+# Align sequences and primers to the genome, load up.
+
+
 # MULTIZ
 # PHASTCONS
 
@@ -868,10 +1030,9 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 # KNOWN GENES
 # do we need a self chains track??
 
-# STS MARKERS - ?? - makeRn3.doc just has the loading step -- 
-# all of the history is in a directory which has been removed.
+# MGC
+
+
 # BACTIGPOS - in rn3 this was a download from baylor, but I don't see it now -?
-# RGD: I looked at ftp://rgd.mcw.edu/pub/RGD_genome_annotations
-# and it still has 3.1 (rn3) not 3.4 (rn4)
 # MGI?
 # SNPS?
