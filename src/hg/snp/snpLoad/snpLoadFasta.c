@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.10 2006/02/14 04:30:40 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.11 2006/02/14 04:45:35 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 /* The vast majority are single. */
@@ -39,70 +39,102 @@ errAbort(
 
 boolean triAllelic(char *observed)
 {
-    if (sameString(observed, "A/C/G")) return TRUE;
-    if (sameString(observed, "A/C/T")) return TRUE;
-    if (sameString(observed, "A/G/T")) return TRUE;
-    if (sameString(observed, "C/G/T")) return TRUE;
-    return FALSE;
+if (sameString(observed, "A/C/G")) return TRUE;
+if (sameString(observed, "A/C/T")) return TRUE;
+if (sameString(observed, "A/G/T")) return TRUE;
+if (sameString(observed, "C/G/T")) return TRUE;
+return FALSE;
 }
 
 boolean quadAllelic(char *observed)
 {
-    if (sameString(observed, "A/C/G/T")) return TRUE;
-    return FALSE;
+if (sameString(observed, "A/C/G/T")) return TRUE;
+return FALSE;
 }
 
 boolean validSingleObserved(char *observed)
 {
-    if (sameString(observed, "A/C")) return TRUE;
-    if (sameString(observed, "A/G")) return TRUE;
-    if (sameString(observed, "A/T")) return TRUE;
-    if (sameString(observed, "C/G")) return TRUE;
-    if (sameString(observed, "C/T")) return TRUE;
-    if (sameString(observed, "G/T")) return TRUE;
-    return FALSE;
+if (sameString(observed, "A/C")) return TRUE;
+if (sameString(observed, "A/G")) return TRUE;
+if (sameString(observed, "A/T")) return TRUE;
+if (sameString(observed, "C/G")) return TRUE;
+if (sameString(observed, "C/T")) return TRUE;
+if (sameString(observed, "G/T")) return TRUE;
+return FALSE;
 }
 
 void checkSingleObserved(char *chromName, char *rsId, char *observed)
 /* check for exceptions in single class */
 /* this is not full exceptions format */
 {
-    if (quadAllelic(observed))
-        {
-	fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "SingleClassQuadAllelic", observed);
-	return;
-	}
+if (quadAllelic(observed))
+    {
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "SingleClassQuadAllelic", observed);
+    return;
+    }
 
-    if (triAllelic(observed))
-        {
-	fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "SingleClassTriAllelic", observed);
-	return;
-	}
+if (triAllelic(observed))
+    {
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "SingleClassTriAllelic", observed);
+    return;
+    }
 
-    if (validSingleObserved(observed)) return;
-    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "SingleClassWrongObserved", observed);
+if (validSingleObserved(observed)) return;
+fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "SingleClassWrongObserved", observed);
 }
 
 void checkIndelObserved(char *chromName, char *rsId, char *observed)
-/* check for exceptions in in-del class */
-/* lengthTooLong */
-/* first char should be dash, second char should be forward slash */
+/* Check for exceptions in in-del class. */
+/* lengthTooLong: this is temporary.  Can get from full read of rs_fasta file. */
+/* First char should be dash, second char should be forward slash. */
 /* To do: no IUPAC */
 {
-    if (sameString(observed, "lengthTooLong"))
-        {
-	fprintf(exceptionFileHandle, "chr%s\t%s\t%s\n", chromName, rsId, "IndelClassMissingObserved");
-	return;
-	}
+if (sameString(observed, "lengthTooLong"))
+    {
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\n", chromName, rsId, "IndelClassMissingObserved");
+    return;
+    }
 
-    if (strlen(observed) < 2)
-        {
-	fprintf(exceptionFileHandle, "chr%s\t%s\t%s\n", chromName, rsId, "IndelClassTruncatedObserved");
-	return;
-	}
+if (strlen(observed) < 2)
+    {
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\n", chromName, rsId, "IndelClassTruncatedObserved");
+    return;
+    }
 
-    if (observed[0] != '-' || observed[1] != '/')
-	fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "IndelClassObservedWrongFormat", observed);
+if (observed[0] != '-' || observed[1] != '/')
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "IndelClassObservedWrongFormat", observed);
+}
+
+void checkMixedObserved(char *chromName, char *rsId, char *observed)
+/* Check for exceptions in mixed class. */
+/* should be multi-allelic */
+/* lengthTooLong: this is temporary.  Can get from full read of rs_fasta file. */
+/* To do: no IUPAC */
+{
+int slashCount = 0;
+
+if (sameString(observed, "lengthTooLong"))
+    {
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\n", chromName, rsId, "MixedClassMissingObserved");
+    return;
+    }
+
+if (strlen(observed) < 2)
+    {
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\n", chromName, rsId, "MixedClassTruncatedObserved");
+    return;
+    }
+
+if (observed[0] != '-' || observed[1] != '/')
+    {
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "MixedClassObservedWrongFormat", observed);
+    return;
+    }
+
+slashCount = chopString(observed, "/", NULL, 0);
+if (slashCount < 2)
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "MixedClassObservedWrongFormat", observed);
+
 }
 
 
@@ -146,6 +178,8 @@ while (lineFileNext(lf, &line, &lineSize))
 	checkSingleObserved(chromName, rsId[0], allele[1]);
     if (classVal == 2)
 	checkIndelObserved(chromName, rsId[0], allele[1]);
+    if (classVal == 3)
+        checkMixedObserved(chromName, rsId[0], allele[1]);
     }
 carefulClose(&f);
 // close the lineFile pointer?
