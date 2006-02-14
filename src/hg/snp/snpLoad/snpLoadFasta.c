@@ -6,7 +6,7 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.11 2006/02/14 04:45:35 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.12 2006/02/14 05:07:46 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 /* The vast majority are single. */
@@ -137,6 +137,33 @@ if (slashCount < 2)
 
 }
 
+void checkNamedObserved(char *chromName, char *rsId, char *observed)
+/* Check for exceptions in named class. */
+/* lengthTooLong: this is temporary.  Can get from full read of rs_fasta file. */
+/* Should be (name). */
+{
+if (sameString(observed, "lengthTooLong"))
+    {
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\n", chromName, rsId, "NamedClassMissingObserved");
+    return;
+    }
+
+if (observed[0] != '(')
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "NamedClassObservedWrongFormat", observed);
+}
+
+void checkMicrosatObserved(char *chromName, char *rsId, char *observed)
+/* Check for exceptions in microsat class. */
+/* lengthTooLong: this is temporary.  Can get from full read of rs_fasta file. */
+/* This is bare minimum check for now. */
+{
+if (sameString(observed, "lengthTooLong"))
+    {
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\n", chromName, rsId, "MicrosatClassMissingObserved");
+    return;
+    }
+}
+
 
 boolean readFasta(char *chromName)
 /* Parse each line in chrN.gnl, write to chrN_snpFasta.tab. */
@@ -178,8 +205,12 @@ while (lineFileNext(lf, &line, &lineSize))
 	checkSingleObserved(chromName, rsId[0], allele[1]);
     if (classVal == 2)
 	checkIndelObserved(chromName, rsId[0], allele[1]);
-    if (classVal == 3)
+    if (classVal == 7)
         checkMixedObserved(chromName, rsId[0], allele[1]);
+    if (classVal == 5)
+        checkNamedObserved(chromName, rsId[0], allele[1]);
+    if (classVal == 4)
+        checkMicrosatObserved(chromName, rsId[0], allele[1]);
     }
 carefulClose(&f);
 // close the lineFile pointer?
