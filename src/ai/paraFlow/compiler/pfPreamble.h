@@ -104,6 +104,7 @@ void _pf_free_mem(void *pt);
 #include "../runtime/object.h"
 #include "../runtime/string.h"
 #include "../runtime/dir.h"
+#include "../runtime/array.h"
 #include "../runtime/initVar.h"
 
 
