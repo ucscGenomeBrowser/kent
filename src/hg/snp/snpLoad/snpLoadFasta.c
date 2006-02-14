@@ -1,13 +1,18 @@
 /* snpLoadFasta - Read fasta files with flank sequences.   Load into database.  */
 
 #include "common.h"
+
+#include "dystring.h"
 #include "hdb.h"
 #include "linefile.h"
-#include "snpFasta.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.7 2006/01/30 22:37:42 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.8 2006/02/14 03:57:30 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
+/* The vast majority are single. */
+/* Expect about 500k in-del. */
+/* Expect about 50k mixed. */
+/* Expect about 5k named and microsatellite. */
 char *classStrings[] = {
     "unknown",
     "single",
@@ -21,7 +26,6 @@ char *classStrings[] = {
 };
 
 static char *database = NULL;
-struct snpFasta *list;
 
 void usage()
 /* Explain usage and exit. */
@@ -29,17 +33,17 @@ void usage()
 errAbort(
   "snpLoadFasta - Read SNP fasta files and load into database.\n"
   "usage:\n"
-  "  snpFasta database \n");
+  "  snpLoadFasta database \n");
 }
 
 boolean readFasta(char *chromName)
-/* Parse each line. */
+/* Parse each line in chrN.gnl, write to chrN_snpFasta.tab. */
 {
-char fileName[64];
+char inputFileName[64], outputFileName[64];
 struct lineFile *lf;
+FILE *f;
 char *line;
 int lineSize;
-struct snpFasta *el;
 char *chopAtRs;
 char *chopAtMolType;
 char *chopAtAllele;
@@ -47,85 +51,93 @@ int wordCount9, wordCount2;
 char *row[9], *rsId[2], *molType[2], *class[2], *allele[2];
 int count = 0;
 
-strcpy(fileName, "ch");
-strcat(fileName, chromName);
-strcat(fileName, ".gnl");
+safef(inputFileName, ArraySize(inputFileName), "ch%s.gnl", chromName);
+if (!fileExists(inputFileName)) return FALSE;
 
-if (!fileExists(fileName)) return FALSE;
+safef(outputFileName, ArraySize(outputFileName), "chr%s_snpFasta.tab", chromName);
 
-lf = lineFileOpen(fileName, TRUE);
+lf = lineFileOpen(inputFileName, TRUE);
+f = mustOpen(outputFileName, "w");
 
 while (lineFileNext(lf, &line, &lineSize))
     {
-    AllocVar(el);
-    el->chrom = cloneString(chromName);
+    count++;
     wordCount9 = chopString(line, "|", row, ArraySize(row));
     wordCount2 = chopString(row[2], " ", rsId, ArraySize(rsId));
     wordCount2 = chopString(row[6], "=", molType, ArraySize(molType));
     wordCount2 = chopString(row[7], "=", class, ArraySize(class));
     wordCount2 = chopString(row[8], "=", allele, ArraySize(allele));
-    // verbose(5, "%s ", rsId[0]);
-    // verbose(5, "%s ", molType[1]);
-    // verbose(5, "%s ", class[1]);
-    // verbose(5, "%s\n", allele[1]);
 
-    el->rsId = cloneString(rsId[0]);
-    el->molType = cloneString(molType[1]);
-    stripChar(el->molType, '"');
-    el->observed = cloneString(allele[1]);
-    stripChar(el->observed, '"');
-    el->class = classStrings[atoi(class[1])];
-    el->next = list;
-    list = el;
-    count++;
+    fprintf(f, "%s\t", rsId[0]);
+    
+    stripChar(molType[1], '"');
+    fprintf(f, "%s\t", molType[1]);
+
+    fprintf(f, "%s\t", classStrings[atoi(class[1])]);
+
+    stripChar(allele[1], '"');
+    fprintf(f, "%s\n", allele[1]);
     }
-/* could reverse order here */
 verbose(1, "%d elements found\n", count);
+carefulClose(&f);
+// close the lineFile pointer?
 return TRUE;
 }
 
-void createTable()
-/* create the table one time, load each time */
+void createTable(char *chromName)
+/* create a chrN_snpFasta table */
 {
 struct sqlConnection *conn = hAllocConn();
-snpFastaTableCreate(conn);
+char tableName[64];
+char *createString =
+"CREATE TABLE %s (\n"
+"    rsId varchar(255) not null,\n"
+"    molType varchar(255) not null,\n"
+"    class varchar(255) not null,\n"
+"    observed blob\n"
+");\n";
+
+struct dyString *dy = newDyString(1024);
+
+safef(tableName, ArraySize(tableName), "chr%s_snpFasta", chromName);
+dyStringPrintf(dy, createString, tableName);
+sqlRemakeTable(conn, tableName, dy->string);
+dyStringFree(&dy);
 hFreeConn(&conn);
 }
 
-void writeSnpFastaTable(FILE *f)
-{
-/* write tab separated file */
-struct snpFasta *el;
-
-for (el = list; el != NULL; el = el->next)
-    {
-    fprintf(f, "%s\t", el->rsId);
-    fprintf(f, "%s\t", el->chrom);
-    fprintf(f, "%s\t", el->molType);
-    fprintf(f, "%s\t", el->class);
-    fprintf(f, "%s\t", el->observed);
-    fprintf(f, "n/a\t");
-    fprintf(f, "n/a\t");
-    fprintf(f, "\n");
-    }
-}
-
-void loadFasta(char *chromName)
-/* write the tab file for this chrom, load into the full table */
+void addIndex(char *chromName)
+/* add the index after table is created */
 {
 struct sqlConnection *conn = hAllocConn();
+char tableName[64];
+char *alterString = "ALTER TABLE %s add index rsId(rsId(12))";
+struct dyString *dy = newDyString(512);
+
+safef (tableName, ArraySize(tableName), "chr%s_snpFasta", chromName);
+dyStringPrintf(dy, alterString, tableName);
+sqlUpdate(conn, dy->string);
+dyStringFree(&dy);
+hFreeConn(&conn);
+}
+
+
+void loadDatabase(char *chromName)
+/* load one table into database */
+{
 FILE *f;
-char fileName[64];
+struct sqlConnection *conn = hAllocConn();
+char tableName[64], fileName[64];
 
-strcpy(fileName, "chr");
-strcat(fileName, chromName);
-strcat(fileName, "_snpFasta");
-verbose(1, "loadFasta writing to %s\n", fileName);
-f = hgCreateTabFile(".", fileName);
-writeSnpFastaTable(f);
-hgLoadNamedTabFile(conn, ".", "snpFasta", fileName, &f);
+safef(tableName, ArraySize(tableName), "chr%s_snpFasta", chromName);
+safef(fileName, ArraySize(fileName), "chr%s_snpFasta.tab", chromName);
+
+f = mustOpen(fileName, "r");
+hgLoadTabFile(conn, ".", tableName, &f);
+
 hFreeConn(&conn);
 }
+
 
 int main(int argc, char *argv[])
 {
@@ -137,10 +149,6 @@ if (argc != 2)
 
 database = argv[1];
 hSetDb(database);
-verbose(1, "calling createTable\n");
-createTable();
-
-list = NULL;
 
 verbose(1, "getting chroms\n");
 chromList = hAllChromNamesDb(database);
@@ -149,18 +157,19 @@ verbose(1, "got chroms\n");
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
     stripString(chromPtr->name, "chr");
+    safef(fileName, ArraySize(fileName), "ch%s.gnl", chromPtr->name);
+    if (!fileExists(fileName)) continue;
     verbose(1, "chrom = %s\n", chromPtr->name);
-    if(readFasta(chromPtr->name))
-        {
-        loadFasta(chromPtr->name);
-        slFreeList(&list);
-        list = NULL;
-	}
+    readFasta(chromPtr->name);
+    createTable(chromPtr->name);
+    loadDatabase(chromPtr->name);
+    addIndex(chromPtr->name);
     }
 
 readFasta("Multi");
-loadFasta("Multi");
-slFreeList(&list);
+createTable("Multi");
+loadDatabase("Multi");
+addIndex("Multi");
 
 return 0;
 }
