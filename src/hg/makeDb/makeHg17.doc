@@ -17658,21 +17658,26 @@ EOF
    (spLoadPsiBlast hg17 spPsiBlast  /cluster/bluearc/markd/rankprop/results/hs.sw+tr.eval.gz) >&pslBlast.hg17.out 
 
 
-# BLASTZ/CHAIN/NET CANFAM2 (DONE 8/2/05 angie - REDONE 12/12/05 angie)
+# BLASTZ/CHAIN/NET CANFAM2 (DONE 8/2/05 angie - REDONE 12/12/05 angie - REDONE 2/6/06 angie)
 # Unfortunately, this was done with a corrupted 
 # /san/sanvol1/scratch/hg17/nib/chr5.nib the first time around; 
 # also, a linSpecRep bug in blastz-run-ucsc has been fixed since then.
-# Therefore I'm moving aside the original August run:
+# Doh, then Kate pointed out that linSpecReps were not snipped properly --
+# I had omitted the BLASTZ_ABRIDGE_REPEATS line from the DEF!!!  
+# Added an error message to doBlastzChainNet.pl to catch that next time.
+# Therefore I'm moving aside the previous run:
     mv /usr/local/apache/htdocs/goldenPath/hg17/vsCanFam2{,.bak}
 # And rerunning...
     ssh kkstore02
-    mkdir /cluster/data/hg17/bed/blastz.canFam2.2005-12-12
-    cd /cluster/data/hg17/bed/blastz.canFam2.2005-12-12
+    mkdir /cluster/data/hg17/bed/blastz.canFam2.2006-02-06
+    cd /cluster/data/hg17/bed/blastz.canFam2.2006-02-06
     cat << '_EOF_' > DEF
 # human vs. dog
+
+BLASTZ_ABRIDGE_REPEATS=1
+
 # TARGET: Human
 SEQ1_DIR=/san/sanvol1/scratch/hg17/nib
-SEQ1_RMSK=/san/sanvol1/scratch/hg17/rmsk
 SEQ1_SMSK=/san/sanvol1/scratch/hg17/linSpecRep.notInDog
 SEQ1_LEN=/cluster/data/hg17/chrom.sizes
 SEQ1_CHUNK=10000000
@@ -17680,20 +17685,20 @@ SEQ1_LAP=10000
 
 # QUERY: Dog
 SEQ2_DIR=/san/sanvol1/scratch/canFam2/nib
-SEQ2_RMSK=/san/sanvol1/scratch/canFam2/rmsk
 SEQ2_SMSK=/san/sanvol1/scratch/canFam2/linSpecRep.notInHuman
 SEQ2_LEN=/cluster/data/canFam2/chrom.sizes
 SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/hg17/bed/blastz.canFam2.2005-12-12
+BASE=/cluster/data/hg17/bed/blastz.canFam2.2006-02-06
 '_EOF_'
     # << for emacs
     doBlastzChainNet.pl DEF -bigClusterHub pk -smallClusterHub pk \
       -workhorse pk \
       -blastzOutRoot /san/sanvol1/scratch/blastzHg17CanFam2Out >& do.log &
+    tail -f do.log
     rm -f /cluster/data/hg17/bed/blastz.canFam2
-    ln -s blastz.canFam2.2005-12-12 /cluster/data/hg17/bed/blastz.canFam2
+    ln -s blastz.canFam2.2006-02-06 /cluster/data/hg17/bed/blastz.canFam2
 
 # RE-RUN NETTOAXT, AXTTOMAF FOR CANFAM2 (DONE 10/26/05 angie)
     # Kate fixed netToAxt to avoid duplicated blocks, which is important 
@@ -20095,7 +20100,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/hg17/bed/blastzMonDom2.2006-01-23
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     cd /cluster/data/hg17/bed/blastzMonDom2.2006-01-23
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
@@ -20209,3 +20214,69 @@ make getFrames
 make loadDb
 
 #end of multiz5way annotation and load
+
+
+# EXTRACT LINEAGE-SPECIFIC REPEATS FOR RAT (DONE 2/8/06 angie)
+    ssh kolossus
+    mkdir /cluster/data/hg17/rmsk
+    cd /cluster/data/hg17/rmsk
+    ln -s ../*/chr*.fa.out .
+    # Run Arian's DateRepsinRMoutput.pl to add extra columns telling 
+    # whether repeats in -query are also expected in -comp species.  
+    # Even though we already have the human-mouse linSpecReps,
+    # extractLinSpecReps requires two columns of DateRepsinRMoutput.pl
+    # additions.  So add mouse, then ignore it.  
+    # Rat in extra column 1, Mouse in extra column 2
+    foreach outfl ( *.out )
+        echo "$outfl"
+        /cluster/bluearc/RepeatMasker/DateRepeats \
+          ${outfl} -query human -comp rat -comp mouse
+    end
+    # Now extract rat (extra column 1), ignore mouse.
+    cd ..
+    mkdir linSpecRep.notInRat
+    foreach f (rmsk/*.out_rat*_mus-musculus)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractLinSpecReps 1 $f > \
+                        linSpecRep.notInRat/$base.out.spec
+    end
+    # Distribute and clean up.
+    rsync -av linSpecRep.notInRat /san/sanvol1/scratch/hg17/
+    rm -r rmsk
+
+
+# BLASTZ/CHAIN/NET RN4 (DONE 2/10/06 angie)
+    ssh kkstore01
+    mkdir /cluster/data/hg17/bed/blastz.rn4.2006-02-08
+    cd /cluster/data/hg17/bed/blastz.rn4.2006-02-08
+    cat << '_EOF_' > DEF
+# human vs. rat
+
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human
+SEQ1_DIR=/san/sanvol1/scratch/hg17/nib
+SEQ1_SMSK=/san/sanvol1/scratch/hg17/linSpecRep.notInRat
+SEQ1_LEN=/cluster/data/hg17/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rat
+SEQ2_DIR=/san/sanvol1/scratch/rn4/nib
+SEQ2_SMSK=/san/sanvol1/scratch/rn4/linSpecRep.notInHuman
+SEQ2_LEN=/cluster/data/rn4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastz.rn4.2006-02-08
+'_EOF_'
+    # << for emacs
+    doBlastzChainNet.pl DEF -chainLinearGap medium \
+      -bigClusterHub pk -smallClusterHub pk -workhorse pk \
+      -blastzOutRoot /san/sanvol1/scratch/blastzHg17Rn4Out >& do.log &
+    tail -f do.log
+    rm -f /cluster/data/hg17/bed/blastz.rn4
+    ln -s blastz.rn4.2006-02-08 /cluster/data/hg17/bed/blastz.rn4
+
+
