@@ -8,7 +8,7 @@ aaSize: 472
 molWeight: 52595
 createDate: 1990-04-01
 seqDate: 2003-02-28
-annDate: 2004-10-25
+annDate: 2006-01-24
 description: 12S seed storage protein CRA1 precursor [Contains: 12S seed storage protein CRA1 alpha chain (12S seed storage protein CRA1 acidic chain); 12S seed storage protein CRA1 beta chain (12S seed storage protein CRA1 basic chain)].
 taxon: 3702
 first scientific name: Arabidopsis thaliana
@@ -19,16 +19,16 @@ all scientific names: Arabidopsis thaliana,
 gene(s): CRA1, At5g44120, MLN1.4,
  any CRA1: P15455,
  Mouse-ear cress CRA1: P15455,
- any At5g44120: P15455,
- Mouse-ear cress At5g44120: P15455,
+ any At5g44120: P15455, Q56Z11, Q3E711,
+ Mouse-ear cress At5g44120: P15455, Q56Z11, Q3E711,
  any MLN1.4: P15455,
  Mouse-ear cress MLN1.4: P15455,
-keyword(s): Alternative splicing, Multigene family, Seed storage protein, Signal,
-Mouse-ear cress Alternative splicing (149): P15455 P48348 P48347 Q06402...
-all Alternative splicing (6031): P15455 P48348 P48347 P92177...
-all Multigene family (10933): P19084 P15455 P15456 O23878...
-all Seed storage protein (231): P19084 P13744 P15455 P15456...
-all Signal (28197): Q43495 P18646 P19084 P13744...
+keyword(s): Alternative splicing, Seed storage protein, Signal, Storage protein,
+Mouse-ear cress Alternative splicing (216): P15455 P48347 P48348 Q06402...
+all Alternative splicing (8180): P15455 P48347 P48348 P92177...
+all Seed storage protein (234): Q9XHP0 P19084 P13744 P15455...
+all Signal (101429): Q43495 P18646 Q9XHP0 P19084...
+all Storage protein (294): Q9XHP0 P19084 P13744 P15455...
 All comments:
  This is a seed storage protein.
  Hexamer; each subunit is composed of an acidic and a basic chain derived from a single precursor and linked by a disulfide bond.
@@ -49,7 +49,7 @@ All features:
 SIGNAL	0	24	Potential
 CHAIN	24	282	12S seed storage protein CRA1 alpha chain(By similarity)
 CHAIN	282	472	12S seed storage protein CRA1 beta chain(By similarity)
-DISULFID	111	289	Interchain (alpha-beta) (Potential)
+DISULFID	111	289	Interchain (between alpha and betachains) (Potential)
 CONFLICT	166	167	E -> Q (in Ref. 1)
 CONFLICT	355	356	V -> E (in Ref. 1)
 CONFLICT class features:
@@ -59,8 +59,8 @@ V -> E (in Ref. 1) type features:
 CONFLICT	355	356	V -> E (in Ref. 1)
 same class & type features:
 CONFLICT	355	356	V -> E (in Ref. 1)
-class loop: 8->CONFLICT->8
-type loop: 39->V -> E (in Ref. 1)->39
+class loop: 9->CONFLICT->9
+type loop: 44->V -> E (in Ref. 1)->44
 title: Molecular cloning, genome organization, expression and evolution of 12S seed storage protein genes of Arabidopsis thaliana.
 authors: Pang P.P.,  Pruitt R.E.,  Meyerowitz E.M., 
 location: Plant Mol. Biol. 11:805-820(1988).
@@ -81,7 +81,7 @@ other accs associated with last reference:
 	  (67): P15455 P15456 P15458 P15459 P15460 P28297...
 input: P29312
 primary accession: P63103
-SwissProt id: 143Z_BOVIN
+SwissProt id: 1433Z_BOVIN
 acc from id: P63103
 organelle: (null)
 isCurated: 1
@@ -89,8 +89,8 @@ aaSize: 245
 molWeight: 27745
 createDate: 1992-12-01
 seqDate: 1992-12-01
-annDate: 2004-10-25
-description: 14-3-3 protein zeta/delta (Protein kinase C inhibitor protein-1) (KCIP-1) (Factor activating exoenzyme S) (FAS).
+annDate: 2006-01-24
+description: 14-3-3 protein zeta/delta (Protein kinase C inhibitor protein 1) (KCIP-1) (Factor activating exoenzyme S) (FAS).
 taxon: 9913
 first scientific name: Bos taurus
 first common name: Bovine
@@ -98,63 +98,56 @@ taxon from sci: 9913
 taxon from common: 9913
 all scientific names: Bos taurus,
 gene(s): YWHAZ,
- any YWHAZ: P63103, P63104, P63101, P63102, P29361, Q6IRF4, Q8BWN0, Q803M8,
+ any YWHAZ: P63103, Q5ZKC9, P63104, P63101, Q5R651, P63102, P29361, Q91896, Q6P4Z5, Q32P43, Q3KRV6, Q3UA58, Q8BWN0, Q803M8,
  Bovine YWHAZ: P63103,
-keyword(s): 3D-structure, Acetylation, Direct protein sequencing, , Multigene family, Phosphorylation,
-Bovine 3D-structure (190): P63103 P07107 P20004 P60712...
-all 3D-structure (6810): P93343 P63103 P63104 P01892...
-all Acetylation (2105): P68250 P31946 Q9CQV8 P35213...
-all Direct protein sequencing (17673): P13744 P21215 P80438 P83004...
-all  (221654): P13744 P68250 P31946 Q9CQV8...
-all Multigene family (10933): P19084 P15455 P15456 O23878...
-all Phosphorylation (15285): P68250 P31946 Q9CQV8 P35213...
+keyword(s): 3D-structure, Acetylation, Direct protein sequencing, Phosphorylation,
+Bovine 3D-structure (200): P63103 Q7SIH1 P07107 P20004...
+all 3D-structure (8598): Q8GBW6 P31946 P93343 P62258...
+all Acetylation (2890): P68250 Q5ZLQ6 P31946 Q4R572...
+all Direct protein sequencing (19517): P13744 P21215 P80438 Q8GBW6...
+all Phosphorylation (20916): P68250 Q5ZLQ6 P31946 Q4R572...
 All comments:
- Activates tyrosine and tryptophan hydroxylases in the presence of Ca(2+)/calmodulin-dependent protein kinase II, and strongly activates protein kinase C. Is probably a multifunctional regulator of the cell signaling processes mediated by both kinases. Activates the ADP-ribosyltransferase (exoS) activity of bacterial origin.
- Homodimer. Interacts with PCTK1 (By similarity).
- Cytoplasmic.
- 14-3-3 proteins are localized in neurons, and are axonally transported to the nerve terminals. They may be also present, at lower levels, in various other eukaryotic tissues.
+ Adapter protein implicated in the regulation of a large spectrum of both general and specialized signaling pathway. Binds to a large number of partners, usually by recognition of a phosphoserine or phosphothreonine motif. Binding generally results in the modulation of the activity of the binding partner. Activates the ADP-ribosyltransferase (exoS) activity of bacterial origin.
+ Homodimer. Interacts with PCTK1 and SSH1. Binds to the C- terminal part of WEE1 (By similarity).
+ Cytoplasm.
  Isoform delta differs from isoform zeta in being phosphorylated (By similarity).
  Belongs to the 14-3-3 family.
 SUBCELLULAR LOCATION comments:
- Cytoplasmic.
-TISSUE SPECIFICITY comments:
- 14-3-3 proteins are localized in neurons, and are axonally transported to the nerve terminals. They may be also present, at lower levels, in various other eukaryotic tissues.
+ Cytoplasm.
 SIMILARITY comments:
  Belongs to the 14-3-3 family.
 FUNCTION comments:
- Activates tyrosine and tryptophan hydroxylases in the presence of Ca(2+)/calmodulin-dependent protein kinase II, and strongly activates protein kinase C. Is probably a multifunctional regulator of the cell signaling processes mediated by both kinases. Activates the ADP-ribosyltransferase (exoS) activity of bacterial origin.
+ Adapter protein implicated in the regulation of a large spectrum of both general and specialized signaling pathway. Binds to a large number of partners, usually by recognition of a phosphoserine or phosphothreonine motif. Binding generally results in the modulation of the activity of the binding partner. Activates the ADP-ribosyltransferase (exoS) activity of bacterial origin.
 SUBUNIT comments:
- Homodimer. Interacts with PCTK1 (By similarity).
+ Homodimer. Interacts with PCTK1 and SSH1. Binds to the C- terminal part of WEE1 (By similarity).
 PTM comments:
  Isoform delta differs from isoform zeta in being phosphorylated (By similarity).
-GenBank/EMBL: L07955,
+GenBank/EMBL: L07955, BC102382,
 acc from L07955: P63103
 PDB: 1A37, 1A38, 1A4O,
 All features:
 MOD_RES	0	1	N-acetylmethionine (By similarity)
 MOD_RES	183	184	Phosphoserine (By similarity)
 CONFLICT	24	25	C -> A (in Ref. 1)
-HELIX	2	16	n/a
-TURN	16	17	n/a
-HELIX	18	31	n/a
-TURN	31	32	n/a
-HELIX	37	68	n/a
-TURN	68	71	n/a
-HELIX	72	103	n/a
-TURN	103	104	n/a
-HELIX	104	108	n/a
-HELIX	111	131	n/a
-TURN	131	132	n/a
-TURN	139	140	n/a
-HELIX	140	159	n/a
-TURN	161	163	n/a
-HELIX	164	180	n/a
-TURN	180	181	n/a
-HELIX	184	200	n/a
-TURN	200	202	n/a
-HELIX	202	205	n/a
-TURN	207	210	n/a
-HELIX	210	228	n/a
+HELIX	2	15	n/a
+TURN	15	17	n/a
+HELIX	18	30	n/a
+TURN	30	31	n/a
+STRAND	31	33	n/a
+HELIX	37	67	n/a
+HELIX	73	103	n/a
+TURN	103	107	n/a
+HELIX	112	131	n/a
+STRAND	131	132	n/a
+STRAND	134	135	n/a
+HELIX	135	154	n/a
+TURN	154	159	n/a
+HELIX	166	175	n/a
+TURN	175	177	n/a
+HELIX	188	197	n/a
+TURN	197	199	n/a
+HELIX	199	202	n/a
+HELIX	216	227	n/a
 title: Activation of protein kinase C by the 14-3-3 proteins homologous with Exo1 protein that stimulates calcium-dependent exocytosis.
 authors: Isobe T.,  Hiyane Y.,  Ichimura T.,  Okuyama T.,  Takahashi N.,  Nakajo S.,  Nakaya K., 
 location: FEBS Lett. 308:121-124(1992).
@@ -163,6 +156,14 @@ title: The eukaryotic host factor that activates exoenzyme S of Pseudomonas aeru
 authors: Fu H.,  Coburn J.,  Collier R.J., 
 location: Proc. Natl. Acad. Sci. U.S.A. 90:2320-2324(1993).
 pubMed: 8460141
+title: 
+authors:
+location: Submitted (AUG-2005) to the EMBL/GenBank/DDBJ databases.
+pubMed: 
+title: Activation of protein kinase C by purified bovine brain 14-3-3: comparison with tyrosine hydroxylase activation.
+authors: Tanji M.,  Horwitz R.,  Rosenfeld G.,  Waymire J.C., 
+location: J. Neurochem. 63:1908-1916(1994).
+pubMed: 7931346
 title: Crystal structure of the zeta isoform of the 14-3-3 protein.
 authors: Liu D.,  Blenkowska J.,  Petosa C.,  Collier R.J.,  Fu H.,  Liddington R., 
 location: Nature 376:191-194(1995).
