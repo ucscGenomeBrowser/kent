@@ -1,0 +1,26 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# This file describes browser build for the mouse
+# genome, February 2006, ncbi mouse_36 - Mm8
+#
+#	"$Id: makeMm8.doc,v 1.1 2006/02/14 19:30:00 hiram Exp $"
+#
+#######################################################################
+# DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
+#
+#	Examine disk space issues, find some goodly amount of space
+    ssh kkstore01
+    mkdir /cluster/store9/mm8
+    ln -s /cluster/store9/mm8 /cluster/data/mm8
+    cd /cluster/data/mm8
+    mkdir ncbi
+    cd ncbi
+    cp -p /cluster/data/mm7/ncbi/.wgetrc .
+    WGETRC=`pwd`/.wgetrc
+    export WGETRC
+    wget --timestamping --force-directories --directory-prefix=. \
+	--dont-remove-listing --recursive --level=4 --no-parent \
+	--no-host-directories --cut-dirs=1 \
+	ftp://ftp-private.ncbi.nih.gov/mouse_36
+XXXX - running 2006-02-14 11:26
