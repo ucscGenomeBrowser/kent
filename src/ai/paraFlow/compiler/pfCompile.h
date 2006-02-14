@@ -81,6 +81,7 @@ struct pfCompile
 
     struct pfType *stringFullType;	/* String type info including .size etc. */
     struct pfType *arrayFullType;	/* Array type info including .size etc. */
+    struct pfType *elTypeFullType;	/* Generic element of collection type. */
     struct pfType *intFullType;		/* This is handy to have around. */
     struct pfType *longFullType;	/* This is handy to have around. */
     };

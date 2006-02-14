@@ -63,5 +63,18 @@ blueCircle(gfx, 9,9,2.55);
 gfx.specialShape(0,1);
 iGfx.specialShape(1,2);
 
+class userInterface
+    {
+    circleFace screen;
+    int mousePort;
+    string keyUrl;
+    }
+
+userInterface ui = (gfx, 8, "http://keyStuff.com");
+ui.screen.circle(10,20,30);
+
+/*-soon
+soon-*/
+
 /*-
 -*/

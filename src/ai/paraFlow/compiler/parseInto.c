@@ -172,6 +172,8 @@ pfBindVars(pfc, stringModule);
 pfTypeCheck(pfc, &stringModule);
 pfc->stringFullType = findTypeInModule(stringModule, "_pf_string");
 pfc->arrayFullType = findTypeInModule(stringModule, "_pf_array");
+pfc->elTypeFullType = findTypeInModule(stringModule, "_pf_elType");
+pfc->arrayType->methods = pfc->arrayFullType->base->methods;
 }
 
 static void addCompoundScopes(struct pfCompile *pfc, struct pfToken *tokList,

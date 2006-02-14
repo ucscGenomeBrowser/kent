@@ -1422,25 +1422,74 @@ while (base != NULL)
 return NULL;
 }
 
+static boolean hasBaseEl(struct pfType *type, struct pfBaseType *base)
+/* Return TRUE if type or any of it's children has same base type as
+ * pfc->elTypeFullType. */
+{
+if (type->base == base)
+    return TRUE;
+for (type = type->children; type != NULL; type = type->next)
+    if (hasBaseEl(type, base))
+        return TRUE;
+return FALSE;
+}
+
+static struct pfType *pfTypeClone(struct pfType *orig)
+/* Return clone of original type */
+{
+struct pfType *type = CloneVar(orig);
+if (type->children != NULL)
+    type->children = pfTypeClone(type->children);
+if (type->next != NULL)
+    type->next = pfTypeClone(type->next);
+return type;
+}
+
+static void subBase(struct pfType *type, 
+	struct pfBaseType *oldBase, struct pfBaseType *newBase)
+/* Substitute newBase for oldBase throught type sub-tree. */
+{
+if (type->base == oldBase)
+    type->base = newBase;
+if (type->children != NULL)
+    subBase(type->children, oldBase, newBase);
+if (type->next != NULL)
+    subBase(type->next, oldBase, newBase);
+}
+
 static void typeDot(struct pfCompile *pfc, struct pfParse *pp)
 /* Create type for dotted set of symbols. */
 {
 struct pfParse *varUse = pp->children;
 struct pfParse *fieldUse;
 struct pfType *type = varUse->var->ty;
+struct pfBaseType *genericBase = pfc->elTypeFullType->base;
 
 for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)
     {
+    struct pfType *fieldType;
+    struct pfType *elType = type->children;
     if (type->base == pfc->stringType)
+	{
 	type = pfc->stringFullType;
+	}
     else if (type->base == pfc->arrayType)
+	{
 	type = pfc->arrayFullType;
+    // TODO - some testing on array.push and array.sort.
+	}
     if (!type->base->isClass && !type->base->isInterface)
 	errAt(pp->tok, "dot after non-class variable");
-    struct pfType *fieldType = findField(type->base, fieldUse->name);
+    fieldType = findField(type->base, fieldUse->name);
     if (fieldType == NULL)
 	errAt(pp->tok, "No field %s in class %s", fieldUse->name, 
 		type->base->name);
+    if (elType != NULL && hasBaseEl(fieldType, genericBase))
+	{
+        fieldType = pfTypeClone(fieldType);
+	// TODO
+	subBase(fieldType, genericBase, elType->base);
+	}
     fieldUse->ty = fieldType;
     type = fieldType;
     }

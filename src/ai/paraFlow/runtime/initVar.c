@@ -291,6 +291,45 @@ memcpy(array->elements + array->size * array->elSize,  elBuf, array->elSize);
 array->size += 1;
 }
 
+void _pf_cm_array_push(_pf_Stack *stack)
+/* Push one on stack. */
+{
+_pf_Array array = stack[0].Array;
+enum _pf_single_type st = array->elType->base->singleType;
+void *v = NULL;
+switch (st)
+    {
+    case pf_stBit:
+	v = &stack[1].Bit;
+	break;
+    case pf_stByte:
+	v = &stack[1].Byte;
+	break;
+    case pf_stShort:
+	v = &stack[1].Short;
+	break;
+    case pf_stInt:
+	v = &stack[1].Int;
+	break;
+    case pf_stLong:
+	v = &stack[1].Long;
+	break;
+    case pf_stFloat:
+	v = &stack[1].Float;
+	break;
+    case pf_stDouble:
+	v = &stack[1].Double;
+	break;
+    case pf_stVar:
+        v = &stack[1].Var;
+	break;
+    default:
+	v = &stack[1].v;
+	break;
+    }
+_pf_array_append(array, v);
+}
+
 
 _pf_Array _pf_bit_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)

@@ -238,8 +238,13 @@ if (base == pfc->stringType)
     {
     fprintf(f, "_pf_cm_string_%s", name);
     }
+else if (base == pfc->arrayType)
+    {
+    fprintf(f, "_pf_cm_array_%s", name);
+    }
 else
     {
+    // TODO - some testing on array.push and array.sort.
     struct pfType *method = NULL;
     while (base != NULL)
 	{
@@ -268,7 +273,9 @@ else
 	    internalErrAt(tok);
 	}
     else
+	{
 	internalErrAt(tok);
+	}
     }
 }
 

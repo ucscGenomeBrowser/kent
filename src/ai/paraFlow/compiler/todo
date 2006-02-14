@@ -1,8 +1,7 @@
 TO DO:
-  - Function pointers.
+  - Do a sort function (need function pointer?)
   - keyword function arguments as in python
   - optional new() method.
-  - Do a sort function (need function pointer?)
   - Make para actions use p-threads.
   - ?Read-only and private variables.
         Make it so that class.new() is only legal way to
@@ -27,6 +26,7 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Function pointers.
   - Interfaces.
   - implement para actions argmin and argmax.
   - implement dimensioning of multi-dimensional arrays as in:
@@ -202,6 +202,17 @@ Runtime system:
     with arrays as well as classes.
 
 
-        
+UCSC Vacation Days for Working on ParaFlow
+   Feb 2, 2006
+   Feb 6, 2006
+   Feb 7, 2006
+   Feb 10, 2006
+   Feb 13, 2006
+   Feb 14, 2006?
+   Feb 15, 2006?
+   Feb 16, 2006?
+   Feb 17, 2006?
+   Feb 22, 2006?
+
 
 

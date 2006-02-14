@@ -59,10 +59,15 @@ return
 "    flow fitLeft(int size) into (string s);\n"
 "    flow fitRight(int size) into (string s);\n"
 "    }\n"
+"class _pf_elType\n"
+"    {\n"
+"    }\n"
 "class _pf_array\n"
 "    {\n"
 "    int size;\n"
-"    _operator_ append(var el);\n"
+"    _operator_ append(_pf_elType el);\n"
+"    to sort(var of flow (_pf_elType a, _pf_elType b) into (int i) cmp);\n"
+"    to push(_pf_elType el);\n"
 "    }\n"
 ;
 }
