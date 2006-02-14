@@ -50,6 +50,7 @@ DONE
 	outside of local variables and i/o pameters, either direct or indirect.
   - blessFlow - Make sure there are no reads or writes outside
         of local variables and input/output parameters.
+-------work in 2005-------
   - Reconsider where reference counting is done.  In particular
     what if instead of bumping the refcount when it goes on the
     expression stack, have system where strings and objects are

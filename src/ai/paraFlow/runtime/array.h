@@ -36,4 +36,7 @@ void _pf_array_append(_pf_Array array, void *elBuf);
 void _pf_cm_array_push(_pf_Stack *stack);
 /* Push one element onto stack. */
 
+void _pf_cm_array_sort(_pf_Stack *stack);
+/* Sort array using a user-supplied compare function. */
+
 #endif /* ARRAY_H */

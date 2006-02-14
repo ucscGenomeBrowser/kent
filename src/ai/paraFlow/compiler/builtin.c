@@ -66,7 +66,7 @@ return
 "    {\n"
 "    int size;\n"
 "    _operator_ append(_pf_elType el);\n"
-"    to sort(var of flow (_pf_elType a, _pf_elType b) into (int i) cmp);\n"
+"    to sort(var of flow (_pf_elType a, _pf_elType b) into (int i) cmp = nil);\n"
 "    to push(_pf_elType el);\n"
 "    }\n"
 ;

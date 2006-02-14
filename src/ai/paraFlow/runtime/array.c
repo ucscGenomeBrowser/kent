@@ -244,26 +244,30 @@ for (i=0; i<count; ++i)
 return array;
 }
 
+static void expandArray(_pf_Array array)
+/* Double alloated size of array. */
+{
+size_t oldSize = array->size * array->elSize;
+size_t newSize, newAllocated;
+if (array->allocated == 0)
+    array->allocated = newAllocated = 4;
+else
+    array->allocated = newAllocated = (array->allocated + array->allocated);
+newSize = newAllocated * array->elSize;
+array->elements = needMoreMem(array->elements, oldSize, newSize);
+}
+
 void _pf_array_append(_pf_Array array, void *elBuf)
 /* Contains array, element-to-append on stack. */
 {
 if (array->size >= array->allocated)
-    {
-    size_t oldSize = array->size * array->elSize;
-    size_t newSize, newAllocated;
-    if (array->allocated == 0)
-	array->allocated = newAllocated = 4;
-    else
-        array->allocated = newAllocated = (array->allocated + array->allocated);
-    newSize = newAllocated * array->elSize;
-    array->elements = needMoreMem(array->elements, oldSize, newSize);
-    }
+    expandArray(array);
 memcpy(array->elements + array->size * array->elSize,  elBuf, array->elSize);
 array->size += 1;
 }
 
 void _pf_cm_array_push(_pf_Stack *stack)
-/* Push one on stack. */
+/* Push one element on array treating it as a stack. */
 {
 _pf_Array array = stack[0].Array;
 enum _pf_single_type st = array->elType->base->singleType;
@@ -301,3 +305,149 @@ switch (st)
 _pf_array_append(array, v);
 }
 
+static _pf_FunctionPt paraFlowCmp;
+static _pf_Stack *paraFlowStack;
+
+static int cCmpInt(const void *va, const void *vb)
+/* Comparison function for int. */
+{
+const int *a = va, *b = vb;
+paraFlowStack[0].Int = *a;
+paraFlowStack[1].Int = *b;
+paraFlowCmp(paraFlowStack);
+return paraFlowStack[0].Int;
+}
+
+static int qCmpBit(const void *va, const void *vb)
+/* Quick, no ParaFlow callback sort function for byte. */
+{
+const _pf_Bit *a = va, *b = vb;
+return *a-*b;
+}
+
+static int qCmpByte(const void *va, const void *vb)
+/* Quick, no ParaFlow callback sort function for byte. */
+{
+const _pf_Byte *a = va, *b = vb;
+return *a-*b;
+}
+
+static int qCmpShort(const void *va, const void *vb)
+/* Quick, no ParaFlow callback sort function for short. */
+{
+const _pf_Short *a = va, *b = vb;
+return *a-*b;
+}
+
+static int qCmpInt(const void *va, const void *vb)
+/* Quick, no ParaFlow callback sort function for int. */
+{
+const _pf_Int *a = va, *b = vb;
+return *a-*b;
+}
+
+static int qCmpLong(const void *va, const void *vb)
+/* Quick, no ParaFlow callback sort function for long. */
+{
+const _pf_Long *a = va, *b = vb;
+_pf_Long diff = *a-*b;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else 
+    return 0;
+}
+
+static int qCmpFloat(const void *va, const void *vb)
+/* Quick, no ParaFlow callback sort function for float. */
+{
+const _pf_Float *a = va, *b = vb;
+_pf_Float diff = *a-*b;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else 
+    return 0;
+}
+
+static int qCmpDouble(const void *va, const void *vb)
+/* Quick, no ParaFlow callback sort function for double. */
+{
+const _pf_Double *a = va, *b = vb;
+_pf_Double diff = *a-*b;
+if (diff < 0)
+    return -1;
+else if (diff > 0)
+    return 1;
+else 
+    return 0;
+}
+
+
+
+static int qCmpString(const void *va, const void *vb)
+/* Quick, no ParaFlow callback sort function for string. */
+{
+const struct _pf_string *a = *((struct _pf_string **)va);
+const struct _pf_string *b = *((struct _pf_string **)vb);
+if (a == b)
+    return 0;
+else if (a == NULL)
+    return -1;
+else if (b == NULL)
+    return 1;
+return strcmp(a->s, b->s);
+}
+
+void _pf_cm_array_sort(_pf_Stack *stack)
+/* Sort array using a user-supplied compare function. */
+{
+_pf_Array array = stack[0].Array;
+_pf_FunctionPt cmp = stack[1].FunctionPt;
+enum _pf_single_type st = array->elType->base->singleType;
+
+uglyf("Theoretically sorting %p using function %p - should work on ints now\n", array, cmp);
+if (cmp == NULL)
+    {
+    int (*compare)(const void *, const void *) = NULL;
+    switch (st)
+        {
+	case pf_stBit:
+	    compare = qCmpBit;
+	    break;
+	case pf_stByte:
+	    compare = qCmpByte;
+	    break;
+	case pf_stShort:
+	    compare = qCmpShort;
+	    break;
+	case pf_stInt:
+	    compare = qCmpInt;
+	    break;
+	case pf_stLong:
+	    compare = qCmpLong;
+	    break;
+	case pf_stFloat:
+	    compare = qCmpFloat;
+	    break;
+	case pf_stDouble:
+	    compare = qCmpDouble;
+	    break;
+	case pf_stString:
+	    compare = qCmpString;
+	    break;
+	default:
+	    errAbort("Need to supply a comparison function to sort array of complex type.");
+	    break;
+	}
+    qsort(array->elements, array->size, array->elSize, compare);
+    }
+else
+    {
+    paraFlowCmp = cmp;
+    paraFlowStack = stack;
+    qsort(array->elements, array->size, array->elSize, cCmpInt);
+    }
+}
