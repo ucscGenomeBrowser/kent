@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.70 2006/02/01 21:20:00 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.71 2006/02/14 00:01:05 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1184,8 +1184,8 @@ char *valueString = cartUsualString(cart, "ldValues", ldValueDefault);
 char *pop         = tg->mapName;
 int   yVisOffset  = ( vis == tvDense ? 0 : tg->heightPer );
 
-if (strlen(tg->mapName)>3)
-    pop += strlen(tg->mapName) - 3;
+if (startsWith("hapmapLd",pop)&&strlen(tg->mapName)>8)
+    pop += 8;
 
 if (sameString(valueString,"lod"))
     valueString = cloneString("LOD");

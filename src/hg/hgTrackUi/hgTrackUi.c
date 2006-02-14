@@ -30,7 +30,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.251 2006/02/13 22:08:24 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.252 2006/02/14 00:01:05 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -368,6 +368,7 @@ ldOut           = cartUsualString(cart,  "ldOut",           ldOutDefault);
 ldTrim          = cartUsualBoolean(cart, "ldTrim",          ldTrimDefault);
 hapmapLdCeu_inv = cartUsualBoolean(cart, "hapmapLdCeu_inv", ldInvertDefault);
 hapmapLdChb_inv = cartUsualBoolean(cart, "hapmapLdChb_inv", ldInvertDefault);
+hapmapLdChbJpt_inv = cartUsualBoolean(cart, "hapmapLdChbJpt_inv", ldInvertDefault);
 hapmapLdJpt_inv = cartUsualBoolean(cart, "hapmapLdJpt_inv", ldInvertDefault);
 hapmapLdYri_inv = cartUsualBoolean(cart, "hapmapLdYri_inv", ldInvertDefault);
 
@@ -395,6 +396,8 @@ cgiMakeCheckBox("hapmapLdChb_inv", hapmapLdChb_inv);
 printf("&nbsp;Invert Chinese display<BR>&nbsp;&nbsp;\n");
 cgiMakeCheckBox("hapmapLdJpt_inv", hapmapLdJpt_inv); 
 printf("&nbsp;Invert Japanese display<BR>&nbsp;&nbsp;\n");
+cgiMakeCheckBox("hapmapLdChbJpt_inv", hapmapLdChbJpt_inv); 
+printf("&nbsp;Invert combined Chinese and Japanese display<BR>&nbsp;&nbsp;\n");
 
 printf("<BR><B>Colors:</B>\n");
 

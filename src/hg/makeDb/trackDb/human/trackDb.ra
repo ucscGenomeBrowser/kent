@@ -587,6 +587,12 @@ type bed 4 +
     longLabel HapMap Linkage Disequilibrium for the Japanese population (45 unrelated)
     priority 4
 
+    track hapmapLdChbJpt
+    subTrack hapmapLd off
+    shortLabel LD C+J
+    longLabel HapMap Linkage Disequilibrium for the combined Chinese and Japanese population
+    priority 5
+
 track haplotype
 shortLabel Haplotype Blocks
 longLabel Common Haplotype Blocks

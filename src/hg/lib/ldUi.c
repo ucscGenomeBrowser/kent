@@ -9,5 +9,6 @@ char   *ldOut   = ldOutDefault;
 boolean ldTrim  = ldTrimDefault;
 boolean hapmapLdCeu_inv = ldInvertDefault;
 boolean hapmapLdChb_inv = ldInvertDefault;
+boolean hapmapLdChbJpt_inv = ldInvertDefault;
 boolean hapmapLdJpt_inv = ldInvertDefault;
 boolean hapmapLdYri_inv = ldInvertDefault;

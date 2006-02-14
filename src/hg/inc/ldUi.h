@@ -19,6 +19,7 @@ extern boolean  ldTrim;
 
 extern boolean hapmapLdCeu_inv;
 extern boolean hapmapLdChb_inv;
+extern boolean hapmapLdChbJpt_inv;
 extern boolean hapmapLdJpt_inv;
 extern boolean hapmapLdYri_inv;
 
