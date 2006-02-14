@@ -181,7 +181,7 @@ dyStringAppendC(dy, '(');
 for (p = p->children; p != NULL; p = p->next)
     {
     struct pfParse *type = p->children;
-    if (p->type != pptVarInit)
+    if (p->type != pptVarInit && p->type != pptFormalParameter)
          internalErr();
     appendType(dy, type);
     if (p->next != NULL)
@@ -232,6 +232,8 @@ else if (p->type == pptTypeToPt || p->type == pptTypeFlowPt)
     }
 else
     {
+    uglyf("Hmm. \n");
+    pfParseDump(p, 1, uglyOut);
     internalErr();
     }
 }

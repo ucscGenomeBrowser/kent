@@ -152,6 +152,8 @@ switch (type)
 	return "pptSysOrUser";
     case pptVarInit:
         return "pptVarInit";
+    case pptFormalParameter:
+        return "pptFormalParameter";
     case pptPlaceholder:
         return "pptPlaceholder";
     case pptSymName:
@@ -160,10 +162,10 @@ switch (type)
 	return "pptTypeName";
     case pptTypeTuple:
 	return "pptTypeTuple";
-    case pptTypeToPt:
-	return "pptTypeToPt";
     case pptTypeFlowPt:
 	return "pptTypeFlowPt";
+    case pptTypeToPt:
+	return "pptTypeToPt";
     case pptStringCat:
 	return "pptStringCat";
     case pptParaDo:
@@ -698,23 +700,33 @@ output->type  = pptTypeTuple;
 *retOutput = output;
 }
 	
+static void decsToFormal(struct pfParse *pp)
+/* Convert pptVarInits to pptFormalParameters on children */
+{
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    {
+    if (pp->type != pptVarDec)
+        errAt(pp->tok, "expecting formal parameter");
+    pp->type = pptFormalParameter;
+    }
+}
 
-struct pfParse *parseShortFuncType(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *parseShortFuncType(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
 /* Parse out something like:
  *      to (int x,y=2) into (int f) 
  * Into a parse tree that looks like
  *      pptTypeToPt	 (or pptTypeFlowPt)
  *         pptTypeTuple
- *            pptVarInit x
+ *            pptFormalParameter x
  *               pptTypeName int
  *               pptSymName x
- *            pptVarInit y
+ *            pptFormalParameter y
  *               pptTypeName int
  *               pptSymName y
  *               pptConstUse 2 
  *         pptTypeTuple
- *            pptVarInit f
+ *            pptFormalParameter f
  *               pptTypeName int
  *               pptSymName f
  */
@@ -727,6 +739,8 @@ struct pfParse *input, *output;
 
 tok = tok->next;	/* Skip over 'to' or 'flow' */
 parseFunctionIo(pfc, pp, &tok, funcScope, &input, &output);
+decsToFormal(input);
+decsToFormal(output);
 pp->children = input;
 input->next = output;
 *pTokList = tok;
@@ -2079,7 +2093,7 @@ else if (pp->type == pptAssignment)
 	slAddTail(&pp->children, right);
 	}
     }
-if (pp->type == pptVarInit)
+if (pp->type == pptVarInit || pp->type == pptFormalParameter)
     {
     struct pfParse *type = pp->children;
     struct pfParse *name = type->next;
@@ -2100,6 +2114,7 @@ struct pfParse *pfParseModule(struct pfCompile *pfc, struct pfModule *module,
 {
 struct pfParse *modParse = pfParseNew(modType, NULL, parent, scope);
 pfParseTokens(pfc, module->tokList, scope, modParse);
+if (modType == pptMainModule) {FILE *f = mustOpen("out.preParse", "w"); pfParseDump(modParse, 0, f); carefulClose(&f);}
 varDecAndAssignToVarInit(modParse);
 module->pp = modParse;
 return modParse;

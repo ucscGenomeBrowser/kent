@@ -80,12 +80,13 @@ enum pfParseType
     pptUser,		/* (Unused) Represents user include path. */
     pptSysOrUser,	/* (Unused) Represent either include path. */
     pptVarInit,
+    pptFormalParameter,
     pptPlaceholder,
     pptSymName,
     pptTypeName,
     pptTypeTuple,
-    pptTypeToPt,
     pptTypeFlowPt,
+    pptTypeToPt,
     pptStringCat,
     pptParaDo,
     pptParaAdd,

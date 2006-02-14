@@ -51,6 +51,7 @@ switch (pp->type)
     	internalErr();
 	break;
     case pptVarInit:
+    case pptFormalParameter:
 	{
 	struct pfParse *type = pp->children;
 	struct pfParse *name = type->next;
