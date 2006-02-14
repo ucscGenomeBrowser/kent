@@ -1,12 +1,24 @@
 /* snpLoadFasta - Read fasta files with flank sequences.   Load into database.  */
 
+/* Check for:
+
+   "SingleClassQuadAllelic" and "SingleClassTriAllelic" 
+   "SingleClassWrongObserved" 
+   "IndelClassTruncatedObserved"
+   "IndelClassObservedWrongFormat" 
+   "MixedClassTruncatedObserved"
+   "MixedClassObservedWrongFormat" 
+   "NamedClassObservedWrongFormat" 
+
+*/
+
 #include "common.h"
 
 #include "dystring.h"
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.12 2006/02/14 05:07:46 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.13 2006/02/14 20:50:27 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 /* The vast majority are single. */
