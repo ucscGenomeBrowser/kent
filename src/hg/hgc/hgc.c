@@ -192,7 +192,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.992 2006/02/10 04:12:21 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.993 2006/02/15 22:07:09 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -2237,7 +2237,7 @@ chainSubsetOnT(chain, winStart, winEnd, &subChain, &toFree);
 
 if (subChain == NULL)
     nullSubset = TRUE;
-else if (hDbExists(otherDb)) 
+else if (hDbIsActive(otherDb)) 
     {
     struct gapCalc *gapCalc = gapCalcDefault();
     struct axtScoreScheme *scoreScheme = axtScoreSchemeDefault();
@@ -2291,10 +2291,10 @@ else
     /* prints link to other db browser only if db exists and is active */
     /* else just print position with no link for the other db */
     printf("<B>%s position: </B>", otherOrg);
-    if (hDbExists(otherDb) && hDbIsActive(otherDb))
+    if (hDbIsActive(otherDb))
         printf(" <A target=\"_blank\" href=\"%s?db=%s&position=%s%%3A%d-%d\">", hgTracksName(), otherDb, chain->qName, qs, qe); 
     printf("%s:%d-%d", chain->qName, qs, qe);
-    if (hDbExists(otherDb) && hDbIsActive(otherDb))
+    if (hDbIsActive(otherDb))
         printf("</A>");   
     printf(" size: %d<BR>\n", chain->qEnd - chain->qStart);
     }
@@ -2303,7 +2303,7 @@ printf("<B>Score:</B> %1.0f\n", chain->score);
 
 if (nullSubset)
     printf("<B>Score within browser window:</B> N/A (no aligned bases)<BR>\n");
-else if (hDbExists(otherDb))
+else if (hDbIsActive(otherDb))
     printf("<B>Approximate Score within browser window:</B> %1.0f<BR>\n",
 	   subSetScore);
 printf("<BR>Fields above refer to entire chain or gap, not just the part inside the window.<BR>\n");
@@ -2326,7 +2326,7 @@ if (chainDbNormScoreAvailable(chain->tName, track, &foundTable))
 printf("<BR>\n");
 
 chainWinSize = min(winEnd-winStart, chain->tEnd - chain->tStart);
-if (hDbExists(otherDb) && hDbIsActive(otherDb))
+if (hDbIsActive(otherDb))
     {
     if (chainWinSize < 1000000) 
         {
@@ -2457,7 +2457,7 @@ if (net->chainId != 0)
     {
     netWinSize = min(winEnd-winStart, net->tEnd - net->tStart);
     printf("<BR>\n");
-    if (hDbExists(otherDb) && hDbIsActive(otherDb))
+    if (hDbIsActive(otherDb))
         {
         if (netWinSize < 1000000)
 	    {
@@ -2483,7 +2483,7 @@ if (net->chainId != 0)
     chain = chainDbLoad(conn, database, chainTrack, seqName, net->chainId);
     if (chain != NULL)
         {
-        if (hDbExists(otherDb) && hDbIsActive(otherDb))
+        if (hDbIsActive(otherDb))
 	    chainToOtherBrowser(chain, otherDb, otherOrgBrowser);
 	chainFree(&chain);
 	}
