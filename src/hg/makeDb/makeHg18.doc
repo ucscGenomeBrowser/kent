@@ -5398,4 +5398,18 @@ o Build the pepPi table
     cp -Rfp knownGeneList/hg18/* /usr/local/apache/htdocs/knownGeneList/hg18
 
 ##################################################################################
+# Create description.html for hg18
+
+mkdir -p ~/kent/src/hg/makeDb/trackDb/human/hg18
+cd ~/kent/src/hg/makeDb/trackDb/human/hg18
+cp ../hg17/description.html .
+
+vi description.html
+# Change release date and build number and change hg17 to hg18
+# Check it into CVS
+
+cp -p description.html /cluster/data/hg18/html
+
+ln -s /cluster/data/hg18/html/description.html /gbdb/hg18/html/description.html
+
 
