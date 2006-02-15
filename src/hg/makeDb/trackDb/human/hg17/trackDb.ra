@@ -1256,8 +1256,8 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
-type chain rheMac1
-otherDb rheMac1
+type chain rheMac2
+otherDb rheMac2
 
 track netRheMac2
 shortLabel $o_Organism (rheMac2) Net
@@ -1266,8 +1266,8 @@ group compGeno
 priority 189.5
 visibility hide
 spectrum on
-type netAlign rheMac1 chainRheMac1
-otherDb rheMac1
+type netAlign rheMac2 chainRheMac2
+otherDb rheMac2
 
 track chainRheMac1
 shortLabel $o_Organism Chain 
