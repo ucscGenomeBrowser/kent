@@ -296,16 +296,19 @@ if (function->type == pptDot)
     struct pfParse *class = NULL, *method = NULL;
     struct pfBaseType *base = NULL;
     int dotCount = slCount(dotList);
-    assert(dotCount >= 2);
+    assert(dotCount == 2);
+#ifdef OLD
 
     /* Push object pointer on stack. */
     if (dotCount == 2)
+#endif /* OLD */
         {
 	/* Slightly optimize simple case. */
 	class = dotList;
 	method = dotList->next;
 	codeExpression(pfc, f, class, stack, FALSE);
 	}
+#ifdef OLD
     else
         {
 	/* More general case here. */
@@ -320,6 +323,7 @@ if (function->type == pptDot)
 	codeExpression(pfc, f, function, stack, FALSE);
 	class->next = method;
 	}
+#endif /* OLD */
     base = class->ty->base;
 
     /* Put rest of input on the stack, and print call with mangled function name. */
@@ -365,57 +369,6 @@ codeExpression(pfc, f, function, stack + paramSize, FALSE);
 codeParamAccess(pfc, f, function->ty->base, stack+paramSize);
 fprintf(f, "(%s+%d);\n", stackName, stack);
 return outCount;
-}
-
-static void expandDottedName(struct pfCompile *pfc,
-	char *fullName, int maxSize, struct pfParse *pp)
-/* Fill in fullName with this.that.whatever. */
-{
-switch (pp->type)
-    {
-    case pptVarUse:
-	{
-	struct dyString *name = varName(pfc, pp->var);
-        safef(fullName, maxSize, "%s", name->string);
-	dyStringFree(&name);
-	break;
-	}
-    case pptDot:
-        {
-	int curSize = 0, itemSize;
-	boolean isFirst = TRUE;
-	for (pp = pp->children; pp != NULL; pp = pp->next)
-	    {
-	    if (isFirst)
-	        {
-		struct dyString *name = varName(pfc, pp->var);
-		safef(fullName, maxSize, "%s", name->string);
-		curSize = name->stringSize;
-		if (curSize >= maxSize)
-		    errAt(pp->tok, "Dotted name too long");
-		strcpy(fullName, name->string);
-		dyStringFree(&name);
-		isFirst = FALSE;
-		}
-	    else
-		{
-		itemSize = strlen(pp->name);
-		if (itemSize + curSize + 2 >= maxSize)
-		    errAt(pp->tok, "Dotted name too long");
-		fullName[curSize] = '-';
-		fullName[curSize+1] = '>';
-		curSize += 2;
-		strcpy(fullName + curSize, pp->name);
-		curSize += itemSize;
-		}
-	    }
-	fullName[curSize] = 0;
-	break;
-	}
-    default:
-        internalErr();
-	break;
-    }
 }
 
 static void startElInCollectionIteration(struct pfCompile *pfc, FILE *f,
@@ -1156,7 +1109,10 @@ else
     fprintf(f, "((struct %s *)", base->name);
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, ")");
+assert(field->next == NULL);
+#ifdef OLD
 while (field != NULL)
+#endif /* OLD */
     {
     fprintf(f, "->%s", field->name);
     field = field->next;

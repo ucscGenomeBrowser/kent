@@ -1550,18 +1550,35 @@ static void addSelfBefore(struct pfParse **pPp, struct pfBaseType *class)
  *        pptFieldUse memberFieldName
  * We want to transform it to
  *      pptDot
- *        pptVarUse self
- *        pptFieldUse memberName
+ *        pptDot
+ *           pptVarUse self
+ *           pptFieldUse memberName
  *        pptFieldUse memberFieldName
  * Where pPp is  &pptDot->children
  */
 {
+/* Get pointers to all the nodes involved. */
 struct pfParse *member = *pPp;
-struct pfParse *dot = member->parent;
-struct pfParse *selfPp = makeSelfVarUse(class, member->scope, dot, member->tok);
+struct pfParse *memberField = member->next;
+struct pfParse *outerDot = member->parent;
+struct pfParse *innerDot = pfParseNew(pptDot, member->tok, outerDot,
+	member->scope);
+struct pfParse *selfPp = makeSelfVarUse(class, member->scope, innerDot, 
+	member->tok);
+
+/* Flip type of member from var to field. */
 member->type = pptFieldUse;
-dot->children = selfPp;
+
+/* Fill in type field for inner dot - conveniently it's the 
+ * same as the type of the old member. */
+innerDot->ty = CloneVar(member->ty);
+
+/* Rearrange tree as diagrammed above. */
+outerDot->children = innerDot;
+innerDot->next = memberField;
+innerDot->children = selfPp;
 selfPp->next = member;
+member->next = NULL;
 }
 
 static void rBlessFunction(struct pfScope *outputScope,
