@@ -717,93 +717,57 @@ switch (tok->type)
 return pp;
 }
 
-struct pfParse *parseDot(struct pfCompile *pfc, struct pfParse *parent,
+struct pfParse *parseArrayCallDot(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse out this.that . */
+/* Parse out this.that()[].other[]().more and the like. */
 {
 struct pfParse *pp = parseAtom(pfc, parent, pTokList, scope);
 struct pfToken *tok = *pTokList;
-
-if (tok->type == '.')
+while (tok->type == '(' || tok->type == '[' || tok->type == '.')
     {
-    struct pfParse *dots = pfParseNew(pptDot, tok, parent, scope);
-    pp->parent = dots;
-    dots->children = pp;
-    while (tok->type == '.')
+    enum pfTokType tokType = tok->type;
+    struct pfParse *left = pp, *right;
+    tok = tok->next;
+    switch (tokType)
         {
-	tok = tok->next;
-	pp = parseAtom(pfc, dots, &tok, scope);
-	slAddHead(&dots->children, pp);
+	case '(':
+	    pp = pfParseNew(pptCall, tok, parent, scope);
+	    if (tok->type == ')')
+	        right = emptyTuple(pp, tok, scope);
+	    else
+	        {
+		right = pfParseExpression(pfc, pp, &tok, scope);
+		if (right->type != pptTuple)
+		    {
+		    struct pfParse *tuple = pfSingleTuple(pp, tok, right);
+		    right->parent = tuple;
+		    right = tuple;
+		    }
+		}
+	    skipRequiredCharType(')', &tok);
+	    break;
+	case '[':
+	    pp = pfParseNew(pptIndex, tok, parent, scope);
+	    right = pfParseExpression(pfc, pp, &tok, scope);
+	    skipRequiredCharType(']', &tok);
+	    break;
+	case '.':
+	    pp = pfParseNew(pptDot, tok, parent, scope);
+	    right = parseAtom(pfc, pp, &tok, scope);
+	    break;
+	default:
+	    internalErr();
+	    right = NULL;
+	    break;
 	}
-    slReverse(&dots->children);
-    *pTokList= tok;
-    return dots;
+    left->parent = pp;
+    pp->children = left;
+    left->next = right;
     }
-else
-    return pp;
-}
-
-
-struct pfParse *parseIndex(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse out array index call. */
-{
-struct pfParse *pp = parseDot(pfc, parent, pTokList, scope);
-struct pfToken *tok = *pTokList;
-if (tok->type == '[')
-    {
-    while (tok->type == '[')
-	{
-	struct pfParse *collection = pp;
-	pp = pfParseNew(pptIndex, tok, parent, scope);
-	pp->children = collection;
-	tok = tok->next;
-	collection->next = pfParseExpression(pfc, pp, &tok, scope);
-	if (tok->type != ']')
-	    expectingGot("]", tok);
-	tok = tok->next;
-	}
-    *pTokList = tok;
-    }
+*pTokList = tok;
 return pp;
 }
 
-struct pfParse *parseCall(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse out function call. */
-{
-struct pfParse *pp = parseIndex(pfc, parent, pTokList, scope);
-struct pfToken *tok = *pTokList;
-if (tok->type == '(')
-    {
-    struct pfParse *func = pp;
-    struct pfParse *parameters = NULL;
-    pp = pfParseNew(pptCall, tok, parent, scope);
-    func->parent = pp;
-    pp->children = func;
-    tok = tok->next;
-    if (tok->type != ')')
-        {
-	parameters = pfParseExpression(pfc, pp, &tok, scope);
-	if (parameters->type != pptTuple)
-	    {
-	    struct pfParse *tuple = pfSingleTuple(pp, tok, parameters);
-	    parameters->parent = tuple;
-	    parameters = tuple;
-	    }
-	}
-    else
-        {
-	parameters = emptyTuple(pp, tok, scope);
-	}
-    func->next = parameters;
-    if (tok->type != ')')
-        expectingGot(")", tok);
-    tok = tok->next;
-    *pTokList = tok;
-    }
-return pp;
-}
 
 static struct pfParse *parseParaInvoke(struct pfCompile *pfc, 
 	struct pfParse *parent, struct pfToken **pTokList, 
@@ -907,7 +871,7 @@ if (tok->type == pftPara)
     return parseParaInvoke(pfc, parent, pTokList, scope, FALSE);
     }
 else
-    return parseCall(pfc, parent, pTokList, scope);
+    return parseArrayCallDot(pfc, parent, pTokList, scope);
 }
 
 static void makeIncrementNode(struct pfParse *pp,

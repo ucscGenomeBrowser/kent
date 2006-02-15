@@ -187,12 +187,6 @@ switch (pp->type)
         {
 	struct pfParse *name = pp->children;
 	name->type = pptSymName;
-#ifdef BAD
-	// TODO - probably want to just eliminate this.
-	if (hashLookup(pp->scope->vars, name->name))
-	    errAt(pp->tok, "%s redefined", name->name);
-	pfScopeAddVar(pp->scope, name->name, pp->ty, pp);
-#endif /* BAD */
 	break;
 	}
     }
@@ -210,8 +204,7 @@ switch (pp->type)
     {
     case pptDot:
         {
-	for (p = pp->children->next; p != NULL; p = p->next)
-	    p->type = pptFieldUse;
+	pp->children->next->type = pptFieldUse;
 	break;
 	}
     case pptNameUse:

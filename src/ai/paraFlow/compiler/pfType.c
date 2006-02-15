@@ -1461,39 +1461,33 @@ if (type->next != NULL)
 static void typeDot(struct pfCompile *pfc, struct pfParse *pp)
 /* Create type for dotted set of symbols. */
 {
-struct pfParse *varUse = pp->children;
-struct pfParse *fieldUse;
-struct pfType *type = varUse->var->ty;
+struct pfParse *classUse = pp->children;
+struct pfParse *fieldUse = classUse->next;
+struct pfType *type = classUse->ty;
 struct pfBaseType *genericBase = pfc->elTypeFullType->base;
-
-for (fieldUse = varUse->next; fieldUse != NULL; fieldUse = fieldUse->next)
+struct pfType *fieldType;
+struct pfType *elType = type->children; /* For collections */
+if (type->base == pfc->stringType)
     {
-    struct pfType *fieldType;
-    struct pfType *elType = type->children;
-    if (type->base == pfc->stringType)
-	{
-	type = pfc->stringFullType;
-	}
-    else if (type->base == pfc->arrayType)
-	{
-	type = pfc->arrayFullType;
-    // TODO - some testing on array.push and array.sort.
-	}
-    if (!type->base->isClass && !type->base->isInterface)
-	errAt(pp->tok, "dot after non-class variable");
-    fieldType = findField(type->base, fieldUse->name);
-    if (fieldType == NULL)
-	errAt(pp->tok, "No field %s in class %s", fieldUse->name, 
-		type->base->name);
-    if (elType != NULL && hasBaseEl(fieldType, genericBase))
-	{
-        fieldType = pfTypeClone(fieldType);
-	// TODO
-	subBase(fieldType, genericBase, elType->base);
-	}
-    fieldUse->ty = fieldType;
-    type = fieldType;
+    type = pfc->stringFullType;
     }
+else if (type->base == pfc->arrayType)
+    {
+    type = pfc->arrayFullType;
+    }
+if (!type->base->isClass && !type->base->isInterface)
+    errAt(pp->tok, "dot after non-class variable");
+fieldType = findField(type->base, fieldUse->name);
+if (fieldType == NULL)
+    errAt(pp->tok, "No field %s in class %s", fieldUse->name, 
+	    type->base->name);
+if (elType != NULL && hasBaseEl(fieldType, genericBase))
+    {
+    fieldType = pfTypeClone(fieldType);
+    subBase(fieldType, genericBase, elType->base);
+    }
+fieldUse->ty = fieldType;
+type = fieldType;
 pp->ty = CloneVar(type);
 pp->ty->next = NULL;
 }
