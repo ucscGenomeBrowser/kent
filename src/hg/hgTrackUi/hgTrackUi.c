@@ -30,7 +30,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.254 2006/02/15 21:38:50 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.255 2006/02/15 23:20:11 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1920,7 +1920,8 @@ else if (tdb->type != NULL)
             else if (startsWith("encodeGencode", track))
                 gencodeUI(tdb);
             nmdFilterOptions(tdb);
-	    cdsColorOptions(tdb, 2);
+            if (! sameString(track, "tigrGeneIndex"))
+	        cdsColorOptions(tdb, 2);
             }
 	
 	/* if bed has score then show optional filter based on score */
