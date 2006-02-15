@@ -1,0 +1,18 @@
+name mouse
+db mm7
+
+name rat
+db rn3
+
+name zebrafish
+db danRer3
+
+name drosophila
+db dm2
+#idSql select dm2.bdgpToCanonical.name from dmBlastTab,dm2.bdgpGeneInfo,dm2.bdgpToCanonical where dmBlastTab.query='%s' and dmBlastTab.target = dm2.bdgpGeneInfo.flyBaseId and dm2.bdgpGeneInfo.bdgpName=bdgpToCanonical.value
+
+name cElegans
+db ce2
+
+name yeast
+db sacCer1
