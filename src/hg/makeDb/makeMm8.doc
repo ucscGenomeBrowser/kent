@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.1 2006/02/14 19:30:00 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.2 2006/02/15 00:26:01 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -23,4 +23,482 @@ exit; # don't actually run this like a script :)
 	--dont-remove-listing --recursive --level=4 --no-parent \
 	--no-host-directories --cut-dirs=1 \
 	ftp://ftp-private.ncbi.nih.gov/mouse_36
+    #	Downloaded: 2,201,934,141 bytes in 50 files
+    #	real    44m48.975s
+
 XXXX - running 2006-02-14 11:26
+
+#  Fixup the agp and seq_contig.md files to add chrM
+#  No chrM or chrMT was delivered.  Copy from previous assembly
+    ssh kkstore01
+    cd /cluster/data/mm8/ncbi/chrfasta
+    cp -p /cluster/data/mm7/ncbi/chrfasta/chrM.fa.gz .
+    cd ../contigfasta
+    cp -p /cluster/data/mm7/ncbi/contigfasta/chrM.fa.gz .
+#	with a fixed up header line to be like all the others:
+#	>lcl|chrM.fa gi|34538597|ref|NC_005089.1| Mus musculus mitochondrion, complete genome
+
+    cd /cluster/data/mm8
+    zcat ncbi/allrefcontig.chr.agp.gz > allrefcontig.chr.agp
+    echo -e "chrM\t1\t16299\t1\tF\tAY172335.1\t1\t16299\t+" >> \
+	allrefcontig.chr.agp
+    gzip allrefcontig.chr.agp
+    zcat ncbi/allcontig.agp.gz > allcontig.agp
+    echo -e "NC_005089\t1\t16299\t1\tF\tAY172335\t\t1\t16299\t+" >> \
+	allcontig.agp
+    gzip allcontig.agp
+    zcat ncbi/seq_contig.md.gz | egrep -v "Celera|129_substrain" \
+	| sed -e "238i\
+10090\tM\t0\t0\t+\tstart\t-1\tCONTIG\tC57BL/6J\t10\n\
+10090\tM\t1\t16299\t+\tNC_005089\tGI:34538597\tCONTIG\tC57BL/6J\tna\n\
+10090\tM\t16299\t16299\t+\tend\t-2\tCONTIG\tC57BL/6J\t10" > seq_contig.md
+    #	(curiously, this sed command would not work on hgwdev,
+    #	only when logged into kkstore01 ?)
+    #	The line number 238 was found by checking the contents of
+    #	ncbi/seq_contig.md.gz (after the egrep filter) and it was
+    #	the line starting with:
+    #	10090   Un|NT_039877    1       35798
+    #	Wanted this chrM information before that line.
+    #   summarize sequence counts
+
+    mkdir faCounts
+    time faCount ncbi/chrfasta/chr*.fa.gz > faCounts/chrfasta.faCount 2>&1 &
+    #	about 1.5 minutes
+    time faCount ncbi/contigfasta/chr*.fa.gz > \
+	faCounts/contigfasta.faCount 2>&1 &
+    #	about 3 minutes
+    time zcat ncbi/chrfasta/chr*.fa.gz | grep "^>" > \
+	faCounts/chrfasta.headers 2>&1 &
+    time zcat ncbi/contigfasta/chr*.fa.gz | grep "^>" > \
+	faCounts/contigfasta.headers 2>&1 &
+    #	about 2 minutes each for the above two zcat/greps
+
+#############################################################################
+#  BREAK UP SEQUENCE INTO 5 MB CHUNKS at NON-BRIDGED CONTIGS
+#			(DONE - 2006-02-14 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/mm8
+    for F in ncbi/chrfasta/chr*.fa.gz
+    do
+	CHR=`basename ${F} | sed -e "s/.fa.gz//; s/chr//"`
+	echo ${CHR} ${F}
+	mkdir -p "${CHR}"
+	zcat allrefcontig.chr.agp.gz | \
+	    perl -we "while(<>){if (/^chr${CHR}\t/) {print;}}" > \
+		${CHR}/chr${CHR}.agp
+	zcat ncbi/chrfasta/chr${CHR}.fa.gz | \
+	    perl -wpe 's/^>lcl\|(chr\w+)\.fa.*/>$1/' | \
+		splitFaIntoContigs ${CHR}/chr${CHR}.agp \
+		    stdin /cluster/data/mm8 -nSize=5000000
+    done
+    #	The above loop takes about 5 minutes
+
+#############################################################################
+# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 2005-08-26 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/mm8/jkStuff
+    cd /cluster/data/mm8
+    mkdir Un tmp
+    cp -p /cluster/data/mm7/jkStuff/ncbiFixAgp ./jkStuff
+    zcat allrefcontig.chr.agp.gz | ./jkStuff/ncbiFixAgp /dev/stdin > \
+	allrefcontig.chr.ordered.agp
+    #	Set the appropriate release number here, this one is 35
+    #	Fetch the script from the previous assembly
+    sed -e "s/buildNum = 35/buildNum = 36/" \
+	/cluster/data/mm7/jkStuff/ncbiToRandomAgps > \
+	    jkStuff/ncbiToRandomAgps
+    chmod +x jkStuff/ncbiToRandomAgps
+    #	NOTE ! * ! This mm8 contig.idmap now includes the celera assembly
+    #	Filter that out for use here.
+    #	There were two broken lines that began _36 - they were removed
+    #	after I reported them and the contig.idmap.gz file here was
+    #	updated later.
+    zcat ncbi/contig.idmap.gz | grep ref_strain | grep -v "^_36" \
+	| ./jkStuff/ncbiToRandomAgps seq_contig.md \
+		allrefcontig.chr.ordered.agp \
+                        /dev/stdin . 2> dbg
+    for C in ? ??
+    do
+	if [ -s ${C}/chr${C}_random.ctg.agp ]; then
+	    echo "building ${C}/chr${C}_random.fa"
+	    rm -f ./tmp.fa
+	    zcat ncbi/contigfasta/chr${C}.fa.gz | \
+		perl -wpe 's/^>lcl\|(Mm\w+)\s+.*$/>$1/' > ./tmp.fa
+	    agpToFa -verbose=2 -simpleMulti \
+		${C}/chr${C}_random.ctg.agp chr${C}_random \
+		    ${C}/chr${C}_random.fa ./tmp.fa
+	    rm -f ./tmp.fa
+	fi
+    done > tmp/agpToFa.out 2>&1
+    #	the above loop takes about 3 minutes, examine the tmp/agpToFa.out
+    #	record for any errors
+
+    #	We need the lift information from these random.ctg.agp files
+    cp -p /cluster/data/mm7/jkStuff/agpToLift.pl ./jkStuff
+    for AGP in ?/*_random.ctg.agp ??/*_random.ctg.agp
+do
+    CHR=`dirname ${AGP}`
+    echo ${CHR}
+    mkdir -p ${CHR}/lift
+    ./jkStuff/agpToLift.pl ${AGP} > ${CHR}/lift/ctg_random.lft
+done
+    # Clean these up to avoid confusion later... they're easily rebuilt
+    #   with the ncbiToRandomAgps script above
+    rm ?/*_random.ctg.agp ??/*_random.ctg.agp
+    gzip seq_contig.md allrefcontig.chr.ordered.agp
+
+#############################################################################
+# BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS
+#					(DONE 2005-08-26 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/mm8
+    for C in ? ??
+    do
+	if [ -s ${C}/chr${C}_random.fa ]; then
+	    splitFaIntoContigs  -nSize=5000000 ${C}/chr${C}_random.agp \
+		${C}/chr${C}_random.fa .
+	    mkdir -p ${C}/lift
+	    rm -f ${C}/lift/rOut.lst ${C}/lift/random.lft ${C}/lift/random.lst
+	    mv ${C}_random/lift/oOut.lst ${C}/lift/rOut.lst
+	    mv ${C}_random/lift/ordered.lft ${C}/lift/random.lft
+	    mv ${C}_random/lift/ordered.lst ${C}/lift/random.lst
+	    rmdir ${C}_random/lift
+	    rm ${C}_random/chr${C}_random.agp ${C}_random/chr${C}_random.fa
+	    rm -rf ${C}/chr${C}_random_*
+	    mv ${C}_random/chr${C}_random_* ${C}
+	    rmdir ${C}_random
+	fi
+    done > tmp/split.out 2>&1
+    #	the above loop takes less than a minute
+    #	scan the tmp/split.out file for possible errors
+
+#############################################################################
+# MAKE LIFTALL.LFT (DONE - 2006-02-14 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/mm8
+    cat ?/lift/*.lft ??/lift/*.lft > jkStuff/liftAll.lft
+
+#############################################################################
+# CREATING DATABASE (DONE - 2006-02-14 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/mm8
+    faToTwoBit ?/chr?.fa ??/chr??.fa ?/chr?_random.fa ??/chr??_random.fa \
+	mm8.2bit
+    twoBitInfo mm8.2bit stdout | sort -rn +1 > chrom.sizes
+    grep -v random chrom.sizes | cut -f1 | sed -e "s/chr//" > chrom.lst
+    twoBitInfo mm8.2bit stdout |
+        awk '{printf "%s\t%s\t/gbdb/mm8/mm8.2bit\n", $1,$2}' > chromInfo.tab
+
+    ssh hgwdev
+    cd /cluster/data/mm8
+    hgsql -e "create database mm8;" mysql
+    #	Make sure we have enough room (eventually ~ 70Gb) for mysql tables:
+    df -h | grep mysql
+    #	/dev/sda1             472G  225G  223G  51% /var/lib/mysql2
+    #	/dev/sdc1             1.8T  1.5T  190G  89% /var/lib/mysql
+
+    # CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2005-08-26 - Hiram)
+    #   Use any of the newest databases to ensure that the organization
+    #   of the grp table is up to date
+    ssh hgwdev
+    hgsql mm8 -e "create table grp (PRIMARY KEY(NAME)) select * from hg18.grp"
+    hgsql mm8 < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgsql mm8 -e 'load data local infile "chromInfo.tab" into table chromInfo;'
+
+    # Enter mm8 into dbDb and defaultDb so test browser knows about it:
+    hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
+        defaultPos, active, orderKey, genome, scientificName, \
+        htmlPath, hgNearOk, hgPbOk, sourceName) \
+        VALUES("mm8", "Feb 2006", "/gbdb/mm8", "Mouse", \
+        "chr6:28912411-28925620", 1, 22, "Mouse", \
+        "Mus musculus", "/gbdb/mm8/html/description.html", 0, 0, \
+        "NCBI Build 36");' -h localhost hgcentraltest
+    #	Do *NOT* set default genome on genome-test until ready for release
+    # hgsql hgcentraltest \
+    #	-e 'update defaultDb set name="mm8" where genome="Mouse";'
+    # start a new entry in the trackDb hierarchy
+    cd $HOME/kent/src/hg/makeDb/trackDb/mouse
+    mkdir mm8
+    cvs add mm8
+    cd mm8
+    cp ../mm7/description.html .
+    vi description.html - fixup text for this assembly
+    cvs add description.html
+    cvs commit
+    cd ../..
+    vi makefile - add mm8 to the list
+    mkdir /cluster/data/mm8/html
+    mkdir /gbdb/mm8
+    ln -s /cluster/data/mm8/html /gbdb/mm8/html
+    ln -s /cluster/data/mm8/mm8.2bit /gbdb/mm8/mm8.2bit
+    cp -p mouse/mm8/description.html /gbdb/mm8/html
+    make DBS=mm8
+
+#############################################################################
+#  GOLD GAP tracks (DONE - 2006-02-14 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/mm8
+    #	make sure these tmp contig agp files are gone, easily generated
+    #	as above with jkStuff/ncbiToRandomAgps
+    mkdir ffa
+    zcat ncbi/sequence.inf.gz > ffa/sequence.inf
+    hgGoldGapGl -chromLst=chrom.lst mm8 /cluster/data/mm8 .
+    featureBits mm8 gold
+    #	2567283971 bases of 2567283971 (100.000%) in intersection
+    featureBits mm7 gold
+    #	2583394090 bases of 2583394090 (100.000%) in intersection
+    featureBits mm6 gold
+    #	2597150411 bases of 2597150411 (100.000%) in intersection
+    featureBits mm5 gold
+    #	2615483787 bases of 2615483787 (100.000%) in intersection
+    featureBits mm4 gold
+    #	2627444668 bases of 2627444668 (100.000%) in intersection
+
+    featureBits mm8 gap
+    #	97171117 bases of 2567283971 (3.785%) in intersection
+    featureBits mm7 gap
+    #	264323239 bases of 2583394090 (10.232%) in intersection
+    featureBits mm6 gap
+    #	482483041 bases of 2597150411 (18.577%) in intersection
+    featureBits mm5 gap
+    #	549468286 bases of 2615483787 (21.008%) in intersection
+    featureBits mm4 gap
+    #	325167539 bases of 2627444668 (12.376%) in intersection
+
+#############################################################################
+# GC5BASE (DONE - 2006-02-14 - Hiram)
+    ssh kkstore01
+    mkdir -p /cluster/data/mm8/bed/gc5Base
+    cd /cluster/data/mm8/bed/gc5Base
+    time hgGcPercent -wigOut -doGaps -file=stdout -win=5 mm8 \
+        /cluster/data/mm8 | wigEncode stdin gc5Base.wig gc5Base.wib
+
+    #       Calculating gcPercent with window size 5
+    #       Using twoBit: /cluster/data/mm8/mm7.2bit
+    #       File stdout created
+    #	Converted stdin, upper limit 100.00, lower limit 0.00
+
+    #	runs for about 14 minutes
+
+    #	load database
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/gc5Base
+    mkdir /gbdb/mm8/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/mm8/wib
+    time hgLoadWiggle -pathPrefix=/gbdb/mm8/wib mm8 gc5Base gc5Base.wig
+    #	29 second load time
+
+    #	verify index is correct:
+    hgsql mm8 -e "show index from gc5Base;"
+    #	should see good numbers in Cardinality column
+
+#############################################################################
+#  DISTRIBUTE SEQUENCE TO INTERMEDIATE SERVERS FOR KLUSTER RUNS
+#	(DONE - 2006-02-14 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/mm8
+
+    # break up into 500,000 sized chunks for repeat masker runs
+TOP=`pwd`
+export TOP
+for CTG_DIR in ?/chr?_[0-9]* ??/chr??_[0-9]* ?/chr?_random_[0-9]* \
+        ??/chr??_random_[0-9]*
+do
+    ctg=`basename ${CTG_DIR}`
+    cd ${CTG_DIR}
+    faSplit size ${ctg}.fa 500000 ${ctg}_ -lift=${ctg}.lft -maxN=500000
+    cd ${TOP}
+done > tmp/ctg_split.out 2>&1
+    #	about 3 minutes, check the tmp/ctg_split.out for anything unusual
+
+    #	make a list of the contigs
+TOP=`pwd`
+export TOP
+for CTG_DIR in ?/chr?_[0-9]* ??/chr??_[0-9]* ?/chr?_random_[0-9]* \
+        ??/chr??_random_[0-9]*
+do
+    ctg=`basename ${CTG_DIR}`
+    cd ${CTG_DIR}
+    ls ${ctg}_* | while read F
+    do
+        echo ${CTG_DIR}/${F}
+    done
+    cd ${TOP}
+done > contig500K.lst
+    #	count 'em
+    wc -l contig500K.lst
+    #	5772   contig500K.lst
+
+    mkdir /cluster/bluearc/scratch/hg/mm8
+    mkdir /cluster/bluearc/scratch/hg/mm8/contigs
+    rsync -a --progress --files-from=contig500K.lst . \
+        /cluster/bluearc/scratch/hg/mm8/contigs/
+
+    #	verify the contig copy above functioned OK
+    cd /cluster/bluearc/scratch/hg/mm8
+    find ./contigs -type f | wc -l
+    #	 5772
+
+#############################################################################
+# SIMPLE REPEAT TRACK (DONE - 2006-02-14 Hiram)
+    # TRF can be run in parallel with RepeatMasker
+    #   since it doesn't require masked input sequence.
+    ssh kkr1u00
+    mkdir /iscratch/i/mm8
+    cd /iscratch/i/mm8
+    mkdir fa
+    cd fa
+    cp -p /cluster/data/mm8/?/*.fa .
+    cp -p /cluster/data/mm8/??/*.fa .
+
+    for R in 2 3 4 5 6 7 8
+    do
+	rsync -a --progress /iscratch/i/mm8/ kkr${R}u00:/iscratch/i/mm8/
+    done
+
+    ssh kki 
+    mkdir /cluster/data/mm8/bed/simpleRepeat
+    cd /cluster/data/mm8/bed/simpleRepeat
+
+    mkdir trf
+    cat << '_EOF_' > runTrf
+#!/bin/csh -fe 
+#
+set path1 = /iscratch/i/mm8/fa/$1
+set inputFN = $1  
+set outpath = $2
+set outputFN = $2:t
+mkdir -p /scratch/tmp/$outputFN
+cp $path1 /scratch/tmp/$outputFN
+pushd .
+cd /scratch/tmp/$outputFN
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $inputFN /dev/null -bedAt=$outputFN -tempDir=/scratch/tmp
+popd
+rm -f $outpath
+cp -p /scratch/tmp/$outputFN/$outputFN $outpath
+rm -fr /scratch/tmp/$outputFN/*
+rmdir --ignore-fail-on-non-empty /scratch/tmp/$outputFN
+'_EOF_'
+    # happy emacs
+    chmod +x runTrf
+
+    cat << '_EOF_' > template
+#LOOP
+./runTrf $(path1) {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs coloring happy
+
+    ls -1S /iscratch/i/mm8/fa > genome.lst
+    gensub2 genome.lst single template jobList
+    para create jobList
+    para try ... check ... push ... etc
+    para time
+# Completed: 34 of 34 jobs
+# CPU time in finished jobs:      14385s     239.75m     4.00h    0.17d  0.000 y
+# IO & Wait Time:                   794s      13.24m     0.22h    0.01d  0.000 y
+# Average job time:                 446s       7.44m     0.12h    0.01d
+# Longest finished job:            1437s      23.95m     0.40h    0.02d
+# Submission to last job:          1685s      28.08m     0.47h    0.02d
+
+    # Load into the database
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/simpleRepeat
+    cat trf/chr*.bed > simpleRepeat.bed
+    hgLoadBed -strict mm8 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/src/hg/lib/simpleRepeat.sql
+    #	Loaded 1141941 elements of size 16
+
+    featureBits mm8 simpleRepeat
+    # 77752377 bases of 2567283971 (3.029%) in intersection
+    featureBits mm7 simpleRepeat
+    # 77021175 bases of 2583394090 (2.981%) in intersection
+    featureBits mm6 simpleRepeat
+    # 83220723 bases of 2597150411 (3.204%) in intersection
+    featureBits mm5 simpleRepeat
+    # 81414259 bases of 2615483787 (3.113%) in intersection
+    featureBits mm4 simpleRepeat
+    # 82600648 bases of 2627444668 (3.144%) in intersection
+    featureBits mm3 simpleRepeat
+    # 75457193 bases of 2505900260 (3.011%) in intersection
+
+#############################################################################
+# PROCESS SIMPLE REPEATS INTO MASK (DONE - 2006-02-14 - Hiram)
+
+    # After the simpleRepeats track has been built, make a filtered version
+    # of the trf output: keep trf's with period <= 12:
+    ssh kkstore01
+    cd /cluster/data/mm8/bed/simpleRepeat
+    mkdir trfMask
+    for F in trf/chr*.bed
+    do
+	echo "${F} -> ${F/trf\//}"
+	awk '{if ($5 <= 12) print;}' ${F} > trfMask/${F/trf\//}
+    done
+
+#############################################################################
+# REPEATMASKER RUN (after contigs have been distributed to bluearc FS)
+#	(DONE - 2006-02-14 - 2006-02-15 - Hiram)
+#	Record RM version used:
+    cat /cluster/bluearc/RepeatMasker060120/Libraries/version
+#   RM database version 20060120
+    ssh pk
+
+    #- Make the run directory and job list:
+    mkdir /cluster/data/mm8/RMRun
+    cd /cluster/data/mm8/RMRun
+    cat << '_EOF_' > ../jkStuff/RMMouse
+#!/bin/csh -fe
+set C = $1:h
+set F = $1:t
+set R = $F:r
+cd /cluster/data/mm8/$C
+/bin/mkdir -p /scratch/tmp/mm8/$R
+/bin/cp /cluster/bluearc/scratch/hg/mm8/contigs/$1 /scratch/tmp/mm8/$R
+pushd /scratch/tmp/mm8/$R
+/cluster/bluearc/RepeatMasker060120/RepeatMasker -ali -s -species mus $F
+popd
+/bin/cp /scratch/tmp/mm8/$R/$R.fa.out ./
+if (-e /scratch/tmp/mm8/$R/$R.fa.align) /bin/cp /scratch/tmp/mm8/$R/$R.fa.align ./
+if (-e /scratch/tmp/mm8/$R/$R.fa.tbl) /bin/cp /scratch/tmp/mm8/$R/$R.fa.tbl ./
+if (-e /scratch/tmp/mm8/$R/$R.fa.cat) /bin/cp /scratch/tmp/mm8/$R/$R.fa.cat ./
+/bin/rm -fr /scratch/tmp/mm8/$R/*
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/mm8/$R
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/mm8
+'_EOF_'
+    #	happy emacs
+    chmod +x ../jkStuff/RMMouse
+
+    cat << '_EOF_' > template
+#LOOP
+../jkStuff/RMMouse $(path1) {check out line ../$(dir1)/$(root1).fa.out}
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+
+    gensub2 ../contig500K.lst single template jobList
+    para create jobList
+    wc -l jobList
+    #	5772 jobList
+    para try ... check ... push ... etc
+XXX - running - 2006-02-14 15:40
+
+# Completed: 6172 of 6172 jobs
+# CPU time in finished jobs:   26381042s  439684.03m  7328.07h  305.34d  0.837 y
+# IO & Wait Time:                 46088s     768.13m    12.80h    0.53d  0.001 y
+# Average job time:                4282s      71.36m     1.19h    0.05d
+# Longest finished job:            6370s     106.17m     1.77h    0.07d
+# Submission to last job:        127318s    2121.97m    35.37h    1.47d
+
+    #- Lift up the split-contig .out's to contig-level .out's
+    ssh kkstore02
+    cd /cluster/data/mm8
+    for D in ?/chr?_[0-9]* ??/chr??_[0-9]* ?/chr?_random_[0-9]* \
+	??/chr??_random_[0-9]*
+    do
+	CONTIG=`basename ${D}`
+	liftUp ${D}/${CONTIG}.fa.out ${D}/${CONTIG}.lft warn \
+		${D}/${CONTIG}_[0-9]*.fa.out
+    done > tmp/RM.lift.outs 2>&1
+    #	scan tmp/RM.lift.outs for unusual errors or difficulties
+
