@@ -44,12 +44,14 @@ enum pfTokType
     pftSysOrUser,       /* *. */
 
     /* - reserved words - */
+    pftReservedWordStart,
     pftBreak,
     pftContinue,
     pftClass,
     pftElse,
     pftExtends,
     pftIf,
+    pftIn,
     pftInclude,
     pftInterface,
     pftInto,

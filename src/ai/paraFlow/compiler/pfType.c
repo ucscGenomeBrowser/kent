@@ -1339,6 +1339,7 @@ for (p = compound->children; p != NULL; p = p->next)
 	case pptNop:
 	    break;
 	case pptClass:
+	    break;
 	case pptVarInit:
 	    addVarToClass(base, p);
 	    break;

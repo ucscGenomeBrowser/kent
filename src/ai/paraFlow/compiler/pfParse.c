@@ -514,11 +514,11 @@ single->next = NULL;
 return tuple;
 }
 
-static void skipRequiredName(char *name, struct pfToken **pTokList)
+static void skipRequiredWord(char *name, struct pfToken **pTokList)
 /* Make sure next token matches name, and then skip it. */
 {
 struct pfToken *tok = *pTokList;
-if (tok->type != pftName || !sameString(tok->val.s, name))
+if (tok->type < pftReservedWordStart || !sameString(tok->val.s, name))
     expectingGot(name, tok);
 *pTokList = tok->next;
 }
@@ -552,109 +552,6 @@ pp->name = tok->val.s;
 return pp;
 }
 
-struct pfParse *parseDottedNames(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
-/* Parse this.that.the.other */
-{
-struct pfToken *tok = *pTokList;
-struct pfParse *dots, *first = NULL, *pp;
-boolean startsSpecial = FALSE;
-
-/* If it's a name try and take shortcut if there's no
- * following dot,  otherwise set up first from name. */
-if (tok->type == pftName)
-    {
-    first = parseNameUse(parent, &tok, scope);
-    if (tok->type != '.')
-	{
-	*pTokList = tok;
-	return first;
-	}
-    else
-        tok = tok->next;
-    }
-/* Eat through special token at front of name. */
-else
-    {
-    enum pfParseType type = pptNone;
-    startsSpecial = TRUE;
-    switch (tok->type)
-	{
-	case pftRoot:
-	    type = pptRoot;
-	    break;
-	case pftParent:
-	    type = pptParent;
-	    break;
-	case pftSys:
-	    type = pptSys;
-	    break;
-	case pftUser:
-	    type = pptUser;
-	    break;
-	case pftSysOrUser:
-	    type = pptSysOrUser;
-	    break;
-	default:
-	    expectingGot("name", tok);
-	    break;
-	}
-    first = pfParseNew(type, tok, NULL, scope);
-    tok = tok->next;
-    }
-
-/* Create dot list parse and add first element to it. */
-dots = pfParseNew(pptDot, tok, parent, scope);
-first->parent = dots;
-slAddHead(&dots->children, first);
-
-/* In some cases there may be additional parents to add in front. */
-if (startsSpecial)
-    {
-    while (tok->type == pftParent)
-	{
-	tok = tok->next;
-	pp = pfParseNew(pptParent, tok, dots, scope);
-	slAddHead(&dots->children, pp);
-	}
-    }
-
-/* Keep adding names until we run out of dots. */
-for (;;)
-    {
-    if (tok->type != pftName)
-        expectingGot("name", tok);
-    pp = parseNameUse(dots, &tok, scope);
-    slAddHead(&dots->children, pp);
-    if (tok->type != '.')
-        break;
-    tok = tok->next;
-    }
-
-/* Clean up and go home. */
-slReverse(&dots->children);
-*pTokList = tok;
-return dots;
-}
-
-struct pfParse *parseTypeDotsAndBraces(struct pfCompile *pfc, struct pfParse *parent, 
-	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse this.that.the.other[expression] */
-{
-struct pfParse *dotted = parseDottedNames(parent, pTokList, scope);
-struct pfToken *tok = *pTokList;
-if (tok->type == '[')
-    {
-    tok = tok->next;
-    dotted->children = pfParseExpression(pfc, dotted, &tok, scope);
-    if (tok->type != ']')
-        expectingGot("]", tok);
-    else
-        tok = tok->next;
-    *pTokList = tok;
-    }
-return dotted;
-}
-
 void parseFunctionIo(struct pfCompile *pfc,
     struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope, 
     struct pfParse **retInput, struct pfParse **retOutput)
@@ -684,9 +581,19 @@ else
     }
 if (tok->type == pftInto)
     {
+    boolean gotParen = FALSE;
     tok = tok->next;
     outToken = tok;
+    /* To handle function pointer declarations need to parse
+     * out parens here rather than leaving it to parse expression */
+    if (tok->type == '(')
+        {
+	gotParen = TRUE;
+	tok = tok->next;
+	}
     output = pfParseExpression(pfc, parent, &tok, scope);
+    if (gotParen)
+	skipRequiredCharType(')', &tok);
     if (output->type != pptTuple)
 	output = pfSingleTuple(parent, outToken, output);
     }
@@ -747,58 +654,6 @@ input->next = output;
 return pp;
 }
 
-
-struct pfParse *parseVarOfFunc(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
-/* If it starts with 'var of to/flow' then parse out a function pointer
- * declaration.  Else ust parseTypeDotsAndBraces. */
-{
-struct pfToken *tok = *pTokList;
-if (tok->type == pftName && sameString(tok->val.s, "var"))
-    {
-    struct pfToken *ofTok = tok->next;
-    if (ofTok->type == pftOf)
-        {
-	struct pfToken *funcTok = ofTok->next;
-	if (funcTok->type == pftFlow || funcTok->type == pftTo)
-	    {
-	    *pTokList = funcTok;
-	    return parseShortFuncType(pfc, parent, pTokList, scope);
-	    }
-	}
-    }
-return parseTypeDotsAndBraces(pfc, parent, pTokList, scope);
-}
-
-struct pfParse *parseOfs(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse of separated expression. */
-{
-struct pfParse *pp = parseVarOfFunc(pfc, parent, pTokList, scope);
-struct pfToken *tok = *pTokList;
-struct pfParse *ofs = NULL;
-if (tok->type == pftOf)
-    {
-    ofs = pfParseNew(pptOf, tok, parent, scope);
-    ofs->children = pp;
-    pp->parent = ofs;
-    while (tok->type == pftOf)
-	{
-	tok = tok->next;
-	pp = parseVarOfFunc(pfc, ofs, &tok, scope);
-	slAddHead(&ofs->children, pp);
-	}
-    }
-*pTokList = tok;
-if (ofs != NULL)
-    {
-    slReverse(&ofs->children);
-    return ofs;
-    }
-else
-    return pp;
-}
-
 struct pfToken *nextMatchingTok(struct pfToken *tokList, enum pfTokType type)
 /* Return next token of type,  NULL if not found. */
 {
@@ -807,78 +662,6 @@ for (tok = tokList; tok != NULL; tok = tok->next)
     if (tok->type == type)
         break;
 return tok;
-}
-
-struct pfParse *varUseOrDeclare(struct pfCompile *pfc, struct pfParse *parent, 
-	struct pfToken **pTokList, struct pfScope *scope)
-/* Make sure have a name, and create a varUse type node
- * based on it. */
-{
-struct pfToken *tok = *pTokList;
-struct pfBaseType *baseType = NULL;
-
-if (tok->type == pftName)
-    baseType = pfScopeFindType(scope, tok->val.s);
-if (baseType != NULL)
-    {
-    struct pfToken *nextTok = tok->next;
-    if (nextTok->type == '[')
-        {
-	struct pfToken *matchTok = nextMatchingTok(nextTok->next, ']');
-	nextTok = matchTok->next;
-	}
-    if (nextTok->type == pftName || nextTok->type == pftOf)
-	{
-	struct pfParse *name, *type;
-	struct pfParse *pp = pfParseNew(pptVarDec, tok, parent, scope);
-	type = parseOfs(pfc, pp, &tok, scope);
-	name = parseNameUse(pp, &tok, scope);
-	pp->children = type;
-	pp->name = name->name;
-	type->next = name;
-	*pTokList = tok;
-	return pp;
-	}
-    }
-return parseDottedNames(parent, pTokList, scope);
-}
-
-boolean inFunction(struct pfParse *pp)
-/* Return TRUE if pp or one of it's parents is a function. */
-{
-while (pp != NULL)
-    {
-    if (pp->type == pptToDec)
-	return TRUE;
-    pp = pp->parent;
-    }
-return FALSE;
-}
-
-static struct pfParse *varStorageOrUse(struct pfCompile *pfc,
-	struct pfParse *parent, struct pfToken **pTokList, 
-	struct pfScope *scope)
-/* Parse out storage class if any, and then rest of function. */
-{
-struct pfToken *tok = *pTokList;
-
-if (tok->type == pftStatic)
-    {
-    struct pfToken *staticTok = tok;
-    struct pfParse *pp;
-    if (!inFunction(parent))
-        errAt(tok, "'static' outside of 'to'");
-    tok = tok->next;
-    pp = varUseOrDeclare(pfc, parent, &tok, scope);
-    if (pp->type != pptVarDec)
-        errAt(staticTok, 
-		"'static' only allowed in front of a variable declaration");
-    pp->isStatic = TRUE;
-    *pTokList = tok;
-    return pp;
-    }
-else
-    return varUseOrDeclare(pfc, parent, pTokList, scope);
 }
 
 struct pfParse *constUse(struct pfParse *parent, struct pfToken **pTokList, 
@@ -891,7 +674,6 @@ struct pfParse *pp = pfParseNew(pptConstUse, tok, parent, scope);
 return pp;
 }
 
-
 static struct pfParse *parseAtom(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse atomic expression - const, variable, or parenthesized expression. */
@@ -901,14 +683,8 @@ struct pfParse *pp = NULL;
 switch (tok->type)
     {
     case pftName:
-    case pftRoot:
-    case pftParent:
-    case pftSys:
-    case pftUser:
-    case pftSysOrUser:
-    case pftStatic:
-	pp = varStorageOrUse(pfc, parent, &tok, scope);
-	break;
+	pp = parseNameUse(parent, &tok, scope);
+        break;
     case pftString:
     case pftInt:
     case pftLong:
@@ -941,12 +717,62 @@ switch (tok->type)
 return pp;
 }
 
+struct pfParse *parseDot(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse out this.that . */
+{
+struct pfParse *pp = parseAtom(pfc, parent, pTokList, scope);
+struct pfToken *tok = *pTokList;
 
-struct pfParse *parseCallOrIndex(struct pfCompile *pfc, struct pfParse *parent,
+if (tok->type == '.')
+    {
+    struct pfParse *dots = pfParseNew(pptDot, tok, parent, scope);
+    pp->parent = dots;
+    dots->children = pp;
+    while (tok->type == '.')
+        {
+	tok = tok->next;
+	pp = parseAtom(pfc, dots, &tok, scope);
+	slAddHead(&dots->children, pp);
+	}
+    slReverse(&dots->children);
+    *pTokList= tok;
+    return dots;
+    }
+else
+    return pp;
+}
+
+
+struct pfParse *parseIndex(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse out array index call. */
+{
+struct pfParse *pp = parseDot(pfc, parent, pTokList, scope);
+struct pfToken *tok = *pTokList;
+if (tok->type == '[')
+    {
+    while (tok->type == '[')
+	{
+	struct pfParse *collection = pp;
+	pp = pfParseNew(pptIndex, tok, parent, scope);
+	pp->children = collection;
+	tok = tok->next;
+	collection->next = pfParseExpression(pfc, pp, &tok, scope);
+	if (tok->type != ']')
+	    expectingGot("]", tok);
+	tok = tok->next;
+	}
+    *pTokList = tok;
+    }
+return pp;
+}
+
+struct pfParse *parseCall(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse out function call. */
 {
-struct pfParse *pp = parseAtom(pfc, parent, pTokList, scope);
+struct pfParse *pp = parseIndex(pfc, parent, pTokList, scope);
 struct pfToken *tok = *pTokList;
 if (tok->type == '(')
     {
@@ -974,21 +800,6 @@ if (tok->type == '(')
     if (tok->type != ')')
         expectingGot(")", tok);
     tok = tok->next;
-    *pTokList = tok;
-    }
-else if (tok->type == '[')
-    {
-    while (tok->type == '[')
-	{
-	struct pfParse *collection = pp;
-	pp = pfParseNew(pptIndex, tok, parent, scope);
-	pp->children = collection;
-	tok = tok->next;
-	collection->next = pfParseExpression(pfc, pp, &tok, scope);
-	if (tok->type != ']')
-	    expectingGot("]", tok);
-	tok = tok->next;
-	}
     *pTokList = tok;
     }
 return pp;
@@ -1020,7 +831,7 @@ pp = pfParseNew(pptNone, tok, parent, scope);
 
 /* Parse out the element in collection */
 element = parseNameUse(pp, &tok, scope);
-skipRequiredName("in", &tok);
+skipRequiredWord("in", &tok);
 collection = pfParseExpression(pfc, pp, &tok, scope);
 
 skipRequiredCharType(')', &tok);
@@ -1096,7 +907,7 @@ if (tok->type == pftPara)
     return parseParaInvoke(pfc, parent, pTokList, scope, FALSE);
     }
 else
-    return parseCallOrIndex(pfc, parent, pTokList, scope);
+    return parseCall(pfc, parent, pTokList, scope);
 }
 
 static void makeIncrementNode(struct pfParse *pp,
@@ -1376,6 +1187,173 @@ if (tok->type == pftTo)
 return pp;
 }
 
+struct pfParse *parseVarOfFunc(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* If it starts with 'var of to/flow' then parse out a function pointer
+ * declaration.  Else use parseIndexRange. */
+{
+struct pfToken *tok = *pTokList;
+if (tok->type == pftName && sameString(tok->val.s, "var"))
+    {
+    struct pfToken *ofTok = tok->next;
+    if (ofTok->type == pftOf)
+        {
+	struct pfToken *funcTok = ofTok->next;
+	if (funcTok->type == pftFlow || funcTok->type == pftTo)
+	    {
+	    *pTokList = funcTok;
+	    return parseShortFuncType(pfc, parent, pTokList, scope);
+	    }
+	}
+    }
+return parseIndexRange(pfc, parent, pTokList, scope);
+}
+
+
+struct pfParse *parseOf(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse out this.that . */
+{
+struct pfParse *pp = parseVarOfFunc(pfc, parent, pTokList, scope);
+struct pfToken *tok = *pTokList;
+
+if (tok->type == pftOf)
+    {
+    struct pfParse *of = pfParseNew(pptOf, tok, parent, scope);
+    pp->parent = of;
+    of->children = pp;
+    while (tok->type == pftOf)
+        {
+	tok = tok->next;
+	pp = parseVarOfFunc(pfc, of, &tok, scope);
+	slAddHead(&of->children, pp);
+	}
+    slReverse(&of->children);
+    *pTokList= tok;
+    return of;
+    }
+else
+    return pp;
+}
+
+static void checkIsTypeExp(struct pfCompile *pfc, 
+	struct pfParse *pp, struct pfScope *scope)
+/* Make sure that subtree is all type expression. */
+{
+switch (pp->type)
+    {
+    case pptNameUse:
+        if (!pfScopeFindType(scope, pp->name))
+	     errAt(pp->tok, "%s is not a type name.", pp->name);
+	break;
+    case pptIndex:
+        checkIsTypeExp(pfc, pp->children, scope);
+	break;
+    case pptOf:
+        for (pp = pp->children; pp != NULL; pp = pp->next)
+	    checkIsTypeExp(pfc, pp, scope);
+	break;
+    case pptTypeFlowPt:
+    case pptTypeToPt:
+        break;
+    default:
+	{
+	pfParseDump(pp, 3, uglyOut);
+	syntaxError(pp->tok, 2);
+	break;
+	}
+    }
+}
+
+static void submergeTypeIndex(struct pfParse **pPp)
+/* Convert a subtree that looks like so:
+ *        pptIndex
+ *           pptName
+ *           expressionTree
+ * to something that looks like so:
+ *       pptName
+ *          expressionTree
+ * Why to do this?  Well it's what the rest of the typing
+ * system expects from an earlier design of the type expression
+ * parse. */
+{
+struct pfParse *pp = *pPp;
+if (pp->type == pptIndex)
+    {
+    struct pfParse *name = pp->children;
+    struct pfParse *exp = name->next;
+    name->next = pp->next;
+    name->children = exp;
+    *pPp = name;
+    }
+else
+    {
+    for (pPp = &pp->children; *pPp != NULL; pPp = &(*pPp)->next)
+        submergeTypeIndex(pPp);
+    }
+}
+
+boolean inToFunction(struct pfParse *pp)
+/* Return TRUE if pp or one of it's parents is a function. */
+{
+while (pp != NULL)
+    {
+    if (pp->type == pptToDec)
+	return TRUE;
+    pp = pp->parent;
+    }
+return FALSE;
+}
+
+
+static struct pfParse *parseVarDec(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
+/* Parse something of the form [static] typeExp varName */
+{
+struct pfToken *tok = *pTokList;
+struct pfToken *staticTok = NULL;
+struct pfParse *pp;
+
+if (tok->type == pftStatic)
+    {
+    if (!inToFunction(parent))
+        errAt(tok, "'static' outside of 'to'");
+    staticTok = tok;
+    tok = tok->next;
+    }
+pp = parseOf(pfc, parent, &tok, scope);
+if (tok->type == pftName)
+    {
+    struct pfParse *dec = pfParseNew(pptVarDec, tok, parent, scope);
+    struct pfParse *type = pp;
+    struct pfParse *name = parseNameUse(dec, &tok, scope);
+    checkIsTypeExp(pfc, type, scope);
+    submergeTypeIndex(&type);
+    pp->parent = dec;
+    dec->children = type;
+    type->next = name;
+    if (staticTok != NULL)
+	 dec->isStatic = TRUE;
+    pp = dec;
+    }
+else
+    {
+    if (staticTok != NULL)
+        errAt(pp->tok, "misplaced static");
+    switch (pp->type)
+        {
+	case pptOf:
+	case pptTypeToPt:
+	case pptTypeFlowPt:
+	    errAt(pp->tok, "misplaced 'of'");
+	    break;
+	}
+    }
+*pTokList = tok;
+return pp;
+}
+
 static void checkNoNestedAssigns(struct pfParse *pp)
 /* Make sure that there are no assignments inside of subtree. */
 {
@@ -1398,7 +1376,8 @@ struct pfParse *parseAssign(struct pfCompile *pfc, struct pfParse *parent,
 /* Parse '=' separated expression */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = parseIndexRange(pfc, parent, &tok, scope);
+// struct pfParse *pp = parseIndexRange(pfc, parent, &tok, scope);
+struct pfParse *pp = parseVarDec(pfc, parent, &tok, scope);
 struct pfParse *assign = NULL;
 enum pfParseType type = pptNone;
 
@@ -1826,7 +1805,7 @@ tok = tok->next;	/* Skip over 'foreach' */
 skipRequiredCharType('(', &tok);
 element = pfParseExpression(pfc, pp, &tok, scope);
 
-skipRequiredName("in", &tok);
+skipRequiredWord("in",  &tok);
 collection = pfParseExpression(pfc, pp, &tok, scope);
 skipRequiredCharType(')', &tok);
 statement = pfParseStatement(pfc, pp, &tok, scope);
@@ -1953,8 +1932,8 @@ struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNew(pptInclude, tok, parent, scope);
 
 tok = tok->next;	/* Have covered 'into' */
-pp->children = parseDottedNames(pp, &tok, scope);
-pp->name = pp->children->name;	/* Need to make this cope with dots FIXME */
+pp->children = parseNameUse(pp, &tok, scope);
+pp->name = pp->children->name;	
 
 *pTokList = tok;
 return pp;

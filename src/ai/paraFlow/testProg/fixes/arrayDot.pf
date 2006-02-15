@@ -1,0 +1,8 @@
+class pair
+   {
+   int a,b;
+   }
+
+array of pair pairs = ((10,20),(30,40),(50,60));
+int a = pairs[1].a;
+

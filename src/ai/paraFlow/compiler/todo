@@ -1,5 +1,4 @@
 TO DO:
-  - Do a sort function (need function pointer?)
   - keyword function arguments as in python
   - optional new() method.
   - Make para actions use p-threads.
@@ -26,6 +25,7 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Do a sort function (need function pointer?)
   - Function pointers.
   - Interfaces.
   - implement para actions argmin and argmax.

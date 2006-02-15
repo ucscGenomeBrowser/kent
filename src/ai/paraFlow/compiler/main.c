@@ -55,6 +55,7 @@ hashAddInt(hash, "class", pftClass);
 hashAddInt(hash, "else", pftElse);
 hashAddInt(hash, "extends", pftExtends);
 hashAddInt(hash, "if", pftIf);
+hashAddInt(hash, "in", pftIn);
 hashAddInt(hash, "include", pftInclude);
 hashAddInt(hash, "interface", pftInterface);
 hashAddInt(hash, "into", pftInto);
