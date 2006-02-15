@@ -228,7 +228,7 @@ shortLabel Hg18 Net
 longLabel Hg18 ($o_date/$o_db) Alignment Net
 group compGeno
 priority 153.8
-visibility hide
+visibility full
 spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
