@@ -6,8 +6,10 @@
 /* Could drop refUCSCReverseComp here */
 
 /* This program is fairly slow.  Takes about an hour.
-   It might be faster to sort the snpTmp list by snp_id.
+   It would probably be good to use a hash.
+   It might also be somewhat faster to sort the snpTmp list by snp_id.
    The rs_fasta files are sorted by rsId. */
+
 
 #include "common.h"
 
@@ -15,7 +17,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.3 2006/02/14 20:17:58 heather Exp $";
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.4 2006/02/15 21:15:03 heather Exp $";
 
 struct snpTmp
     {

@@ -8,7 +8,10 @@
  *    orientation = 0
  *    and allele != refUCSC
  *
- *    These are also logged as RangeLocTypeWrongSizeLargeAllele
+ *    Note an assymetry here: we are not checking
+ *    allele against refUCSCReverseComp
+
+ *    Note: these are also logged as RangeLocTypeWrongSizeLargeAllele
  *
  * 2) WrongRefAlleleNegativeStrand
  *    orientation = 1
@@ -39,7 +42,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.1 2006/02/10 19:32:12 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.2 2006/02/15 21:17:27 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
