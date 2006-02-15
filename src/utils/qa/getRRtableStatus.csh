@@ -21,10 +21,10 @@ if ( $#argv < 3 | $#argv > 4 ) then
   echo "    warning:  not in real time.  uses overnight dump."
   echo
   echo "    usage: database, table, field, [RRmachine] (defaults to hgw1)"
-  echo "    fields available: Name, Type, Row_format, Rows, Avg_row_length, "
-  echo "        Data_length, Max_data_length, Index_length, Data_free, "
-  echo "        Auto_increment, Create_time, Update_time, Check_time, "
-  echo "        Create_options, Comment"
+  echo "      fields available: Name, Type, Row_format, Rows, Avg_row_length, "
+  echo "         Data_length, Max_data_length, Index_length, Data_free, "
+  echo "         Auto_increment, Create_time, Update_time, Check_time, "
+  echo "         Create_options, Comment"
   echo
   exit
 else
