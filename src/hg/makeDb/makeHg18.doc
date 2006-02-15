@@ -2719,6 +2719,76 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
     para create jobListY
     para try ... check ... etc ...
 
+# RECOMBINATION RATES (DONE 2006-02-15 Fan)
+
+# The STS MArkers track must be completed prior to creating this track
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed
+    mkdir -p recombRate
+    cd recombRate
+
+# Copy other necessary files here (in future, can take from previous version)
+# NOTE: these are stable, and could be saved in a permanent spot
+
+    cp -p /projects/hg2/booch/psl/info/decode_all .
+    cp -p /projects/hg2/booch/psl/info/marshfield_all .
+    cp -p /projects/hg2/booch/psl/info/genethon_all .
+
+# Compared these 3 files with the 3 files of hg17, they are identical.
+	
+# Determine maximum concordant set of markers for each of the maps
+    /cluster/bin/scripts/assignGPsts -full -maxcon \
+        /cluster/data/ncbi/sts.10/stsAlias.bed \
+        /cluster/data/hg18/bed/sts/stsMarkers_pos.rdb \
+        decode_all > decode.marker.rdb
+    /cluster/bin/scripts/assignGPsts -full -maxcon \
+        /cluster/data/ncbi/sts.10/stsAlias.bed \
+        /cluster/data/hg18/bed/sts/stsMarkers_pos.rdb \
+        marshfield_all > marshfield.marker.rdb
+    /cluster/bin/scripts/assignGPsts -full -maxcon \
+        /cluster/data/ncbi/sts.10/stsAlias.bed \
+        /cluster/data/hg18/bed/sts/stsMarkers_pos.rdb \
+        genethon_all > genethon.marker.rdb
+
+# Determine the rates for each of the maps
+    /cluster/bin/scripts/markers_to_recomb_rate.terry.pl decode.marker.rdb \
+            /cluster/data/hg18/chrom.sizes 1000000 1000000 \
+                > decode_1mb_slide_1mb
+    /cluster/bin/scripts/markers_to_recomb_rate.terry.pl genethon.marker.rdb \
+            /cluster/data/hg18/chrom.sizes 1000000 1000000 \
+* genethon_1mb_slide_1mb
+# got 338 "... DISCARDING" messages.
+
+    /cluster/bin/scripts/markers_to_recomb_rate.terry.pl marshfield.marker.rdb \
+            /cluster/data/hg18/chrom.sizes 1000000 1000000 \
+* marshfield_1mb_slide_1mb
+# Got 424 "... DISCARDING" messages.
+
+# Convert files to proper format
+    /cluster/bin/scripts/convertRecombRate decode_1mb_slide_1mb \
+        /cluster/data/hg18/inserts \
+        /cluster/data/hg18 1000 > decode_1mb_slide_1mb_conv
+    /cluster/bin/scripts/convertRecombRate marshfield_1mb_slide_1mb \
+        /cluster/data/hg18/inserts \
+         /cluster/data/hg18 1000 > marshfield_1mb_slide_1mb_conv
+    /cluster/bin/scripts/convertRecombRate genethon_1mb_slide_1mb \
+        /cluster/data/hg18/inserts \
+	    /cluster/data/hg18 1000 > genethon_1mb_slide_1mb_conv
+
+# Create bed file and load
+    /cluster/bin/scripts/createRRbed decode_1mb_slide_1mb_conv \
+        marshfield_1mb_slide_1mb_conv genethon_1mb_slide_1mb_conv \
+                > recombRate.bed
+
+    ssh hgwdev
+    cd /cluster/store11/gs.19/build36/bed/recombRate
+    hgLoadBed -noBin -tab \
+        -sqlTable=/cluster/home/kent/src/hg/lib/recombRate.sql \
+	    hg18 recombRate recombRate.bed
+	   
+
+
 ###########################################################################
 # FISH CLONES (WORKING - 2006-01-13 - Hiram)
 # The STS Marker, Coverage, and BAC End Pairs tracks must be completed prior to 
