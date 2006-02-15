@@ -246,9 +246,9 @@ visibility hide
 color 100,30,150
 type bed 5 .
 
-track multiz17way
-shortLabel 17-Way Conservation
-longLabel Vertebrate Multiz Alignment & Conservation (17 Species)
+track multiz17wayV10
+shortLabel 17-Way V10 Conservation
+longLabel Vertebrate Multiz V10 Alignment & Conservation (17 Species)
 group compGeno
 priority 104.2
 visibility hide
@@ -256,7 +256,7 @@ color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-wiggle phastCons17way
+wiggle phastCons17wayV10
 pairwiseHeight 12
 spanList 1
 yLineOnOff Off
