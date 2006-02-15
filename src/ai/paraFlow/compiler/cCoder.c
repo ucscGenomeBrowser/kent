@@ -2452,6 +2452,7 @@ fprintf(f, "_pf_cleanup: ;\n");
 fprintf(f, "}\n\n");
 }
 
+#ifdef OLD
 static void codeMethods(struct pfCompile *pfc, FILE *f, struct pfParse *class)
 /* Print out methods in class. */
 {
@@ -2469,6 +2470,7 @@ for (statement = classCompound->children; statement != NULL;
 	}
     }
 }
+#endif /* OLD */
 
 
 static void printPolyFunTable(struct pfCompile *pfc, FILE *f, 
@@ -2585,6 +2587,23 @@ while (inside != NULL)
 return FALSE;
 }
 
+static void rPrintFuncDeclarations(struct pfCompile *pfc, FILE *f, 
+	struct pfParse *pp, struct pfParse *class)
+/* Print out function declarations. */
+{
+switch (pp->type)
+    {
+    case pptToDec:
+    case pptFlowDec:
+	codeFunction(pfc, f, pp, class);
+	break;
+    case pptClass:
+        class = pp;
+	break;
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    rPrintFuncDeclarations(pfc, f, pp, class);
+}
 
 static void codeScope(
 	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
@@ -2613,19 +2632,7 @@ if (checkForExterns)
 codeVarsInHelList(pfc, f, helList, !scope->isModule);
 
 /* Print out function declarations */
-for (p = pp->children; p != NULL; p = p->next)
-    {
-    switch (p->type)
-        {
-	case pptToDec:
-	case pptFlowDec:
-	    codeFunction(pfc, f, p, NULL);
-	    break;
-	case pptClass:
-	    codeMethods(pfc, f, p);
-	    break;
-	}
-    }
+rPrintFuncDeclarations(pfc, f, pp, NULL);
 
 /* Print out other statements */
 if (printMain)
