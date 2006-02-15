@@ -5412,4 +5412,344 @@ cp -p description.html /cluster/data/hg18/html
 
 ln -s /cluster/data/hg18/html/description.html /gbdb/hg18/html/description.html
 
+# BUILD GENE SORTER TABLES (AKA: FAMILY BROWSER) (STARTED 2006-02-11, DONE 2006-02-14 - Fan)
+#	This should be done after KG tables are complete from known genes build
+#	process.
+#
+# Cluster together various alt-splicing isoforms.
+#	Creates the knownIsoforms and knownCanonical tables
+ssh hgwdev
+mkdir /cluster/data/hg18/bed/geneSorter.2006-02-11
+# remove old symbolic link
+rm /cluster/data/hg18/bed/geneSorter
+ln -s /cluster/data/hg18/bed/geneSorter.2006-02-11 /cluster/data/hg18/bed/geneSorter
+cd /cluster/data/hg18/bed/geneSorter
+hgClusterGenes hg18 knownGene knownIsoforms knownCanonical
+
+# Extract peptides from knownGenes into fasta file
+# and create a blast database out of them.
+mkdir /cluster/data/hg18/bed/geneSorter/blastp
+cd /cluster/data/hg18/bed/geneSorter/blastp
+pepPredToFa hg18 knownGenePep known.faa
+#	You may need to build this binary in src/hg/near/pepPredToFa
+/scratch/blast/formatdb -i known.faa -t known -n known
+#	This command is in /projects/compbio/bin/$MACH/formatdb
+
+# Copy over database to bluearc
+rm -fr /cluster/bluearc/hg18/blastp
+mkdir -p /cluster/bluearc/hg18/blastp
+cp -p /cluster/data/hg18/bed/geneSorter/blastp/known.* /cluster/bluearc/hg18/blastp
+
+# Split up fasta file into bite sized chunks for cluster
+cd /cluster/data/hg18/bed/geneSorter/blastp
+mkdir split
+faSplit sequence known.faa 8000 split/kg
+
+# Make parasol run directory
+ssh pk
+mkdir /cluster/data/hg18/bed/geneSorter/blastp/self
+cd /cluster/data/hg18/bed/geneSorter/blastp/self
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+-p blastp -d /cluster/bluearc/hg18/blastp/known -i $1 -o $2 \
+-e 0.01 -m 8 -b 1000
+'_EOF_'
+    # << keep emacs happy
+chmod +x blastSome
+
+# Make gensub2 file
+cat  << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#	'ls ../../split/*.fa' is too much, hence the echo
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para push
+para check
+# Completed: 7733 of 7733 jobs
+# CPU time in finished jobs:      56608s     943.47m    15.72h    0.66d  0.002 y
+# IO & Wait Time:                467120s    7785.33m   129.76h    5.41d  0.015 y
+# Average job time:                  68s       1.13m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             119s       1.98m     0.03h    0.00d
+# Submission to last job:          1433s      23.88m     0.40h    0.02d
+
+# Load into database.  This takes about 20 minutes
+ssh hgwdev
+cd /cluster/data/hg18/bed/geneSorter/blastp/self/run/out
+bash
+time hgLoadBlastTab hg18 knownBlastTab *.tab
+# Scanning through 7733 files
+# Loading database with 9647176 rows
+# real    21m51.039s
+
+cd /cluster/data/hg18/bed/geneSorter
+# Create table that maps between known genes and RefSeq
+hgMapToGene hg18 refGene knownGene knownToRefSeq
+#	may need to build this command in src/hg/near/hgMapToGene
+#	hgsql -e "select count(*) from knownToRefSeq;" hg18
+#	row count changed 34267
+
+# Create table that maps between known genes and LocusLink
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" hg18 > refToLl.txt
+hgMapToGene hg18 refGene knownGene knownToLocusLink -lookup=refToLl.txt
+#	hgsql -e "select count(*) from knownToLocusLink;" hg18
+#	row count changed to 34267
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt hg18 knownGene name proteinID Pfam knownToPfam
+#	hgsql -e "select count(*) from knownToPfam;" hg18
+#	row count changed to 34177 
+
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene hg18 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+#	hgsql -e "select count(*) from knownToGnfAtlas2;" hg18
+#	row count changed to 32015
+
+# Create expression distance table - takes about an hour
+    hgExpDistance hg18 hgFixed.gnfHumanAtlas2MedianRatio \
+    	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnfAtlas2 &
+# Have 44696 elements in hgFixed.gnfHumanAtlas2MedianRatio
+# Got 32015 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
+#	hgsql -e "select count(*) from gnfAtlas2Distance;" hg18
+#	row count changed to 32015000 
+
+# Create a table that maps between known genes and 
+# the nice affy expression data.
+hgMapToGene "-type=bed 12" hg18 affyUclaNorm knownGene knownToU133
+#	hgsql -e "select count(*) from knownToU133;" hg18
+#	row count changed to 32632
+
+# Create expression distance table.  This will take about 2.5 hours
+cd /tmp
+cp -p ~/kent/src/hg/near/hgExpDistance/affyUcla.weight .
+time hgExpDistance hg18 affyUclaNorm affyUclaExp knownExpDistance \
+	-weights=affyUcla.weight -lookup=knownToU133 &
+# Have 43039 elements in affyUclaNorm
+# 211 genes, 42 weights, 26.500000 total wieght
+# Got 32965 unique elements in affyUclaNorm
+
+# Create table that maps between known genes and 
+# the GNF data.
+cd /tmp
+hgMapToGene hg18 affyU95 knownGene knownToU95
+#	row count changed to 17401
+#	hgFixed.gnfHumanU95Exps argument is unused, no need to exist
+hgExpDistance hg18 hgFixed.gnfHumanU95MedianRatio \
+	hgFixed.gnfHumanU95Exps gnfU95Distance  -lookup=knownToU95 &
+# Have 11545 elements in hgFixed.gnfHumanU95MedianRatio
+# Got 16378 unique elements in hgFixed.gnfHumanU95MedianRatio
+#	row count changed to 16378000  
+
+# Create known gene mapping table and expression distance tables
+# for GNF Atlas 2.  (The hgExpDistance takes only 10 minutes.)
+
+hgMapToGene hg18 affyGnf1h knownGene knownToGnf1h
+hgExpDistance hg18 hgFixed.gnfHumanAtlas2MedianRatio \
+	hgFixed.gnfHumanAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnf1h &
+# Have 44696 elements in hgFixed.gnfHumanAtlas2MedianRatio
+# Got 8739 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
+
+# AFFYMETRIX HG-U133 PLUS TRACK (DONE, 2006-02-11, Fan)
+
+# The below was already done.
+# vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+     ssh hgwdev
+     mkdir -p /projects/compbio/data/microarray/affyHuman/HG-U133Plus2
+     # Go to http://www.affymetrix.com/support/technical/byproduct.affx?product=hg-u133-plus 
+     # and download the consensus and exemplar sequences to this directory
+     cd /projects/compbio/data/microarray/affyHuman/HG-U133Plus2
+     unzip HG-U133_Plus_2_consensus.zip
+     unzip HG-U133_Plus_2_exemplar.zip
+     cat HG-U133_Plus_2_consensus HG-U133_Plus_2_exemplar >> U133Plus2_all.fa
+     perl -pi.bak -e "s/(consensus|exemplar):HG-U133_Plus_2:/U133+2:/" \
+                     U133Plus2_all.fa
+     # remove ";" from probe set names
+     perl -pi.bak -e "s/;//" U133Plus2_all.fa
+     # clean up
+     rm *.zip *.bak
+
+     # Set up cluster job to align consensus/exemplars to hg16
+     ssh kkr1u00
+     mkdir -p /iscratch/i/affy
+     mv /cluster/data/hg18/bed/affyU133Plus2.2006-02-11/U133Plus2_all.fa \
+        /iscratch/i/affy
+     iSync
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# The above is already done by Rachel during hg17 build.
+
+     ssh hgwdev
+     cd /projects/compbio/data/microarray/affyHuman/HG-U133Plus2
+     mkdir -p /cluster/data/hg18/bed/affyU133Plus2.2006-02-11
+     cp -p U133Plus2_all.fa /cluster/data/hg18/bed/affyU133Plus2.2006-02-11
+
+     cd /projects/compbio/data/microarray/affyHuman/HG-U133Plus2
+     mkdir -p /cluster/data/hg18/bed/affyU133Plus2.2006-02-11
+     cp -p U133Plus2_all.fa /cluster/data/hg18/bed/affyU133Plus2.2006-02-11
+
+     ssh kk
+     cd /cluster/data/hg18/bed/affyU133Plus2.2006-02-11
+     ls -1 /iscratch/i/affy/U133Plus2_all.fa > affy.lst
+     ls -1 /iscratch/i/gs.19/build36/maskedContigs/* > allctg.lst
+
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/cluster/bluearc/hg18/11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << for emacs
+    gensub2 allctg.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+    para try, para check, para push ...
+# Completed: 378 of 378 jobs
+# CPU time in finished jobs:      24764s     412.74m     6.88h    0.29d  0.001 y
+# IO & Wait Time:                 13823s     230.38m     3.84h    0.16d  0.000 y
+# Average job time:                 102s       1.70m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             782s      13.03m     0.22h    0.01d
+# Submission to last job:           827s      13.78m     0.23h    0.01d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyU133Plus2.psl
+    pslSort dirs raw.psl tmp psl
+                                                                                
+    # use filter parameters for these sequences. only use alignments that
+    # cover 30% of sequence and have at least 95% identity in aligned region.
+    # minAli = 0.97 too high. low minCover as a lot of n's in these sequences
+
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp affyU133Plus2.psl ../../jkStuff/liftAll.lft warn contig.psl
+    perl -pi.bak -e "s/U133\+2://" affyU133Plus2.psl
+    # load into the database
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/affyU133Plus2.2006-02-11
+    hgLoadPsl hg18 affyU133Plus2.psl
+
+# The below was already done.
+# vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+    # Add sequence data to database
+        # Copy probe sequence to /gbdb if it isn't already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    cd /gbdb/hgFixed/affyProbes
+    ln -s /projects/compbio/data/microarray/affyHuman/HG-U133Plus2/U133Plus2_all.fa .
+    cd /cluster/data/hg18/bed/affyU133Plus2.2006-02-11
+    hgLoadSeq -abbr=U133+2: hg18 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# The above is already done by Rachel during hg17 build.
+    
+    # clean up
+    rm -r psl tmp err contig.psl raw.psl *.bak psl.tab seq.tab
+
+# Added knownToU133Plus2 track 
+
+cd /cluster/data/hg18/bed/geneSorter
+hgMapToGene hg18 affyU133Plus2 knownGene knownToU133Plus2
+#	row count changed to 34745  
+
+# UPDATE GO DATABASE 
+# Download the terms and make the database.
+ssh hgwdev
+mkdir /cluster/store1/geneOntology/20060211
+cd /cluster/store1/geneOntology/20060211
+
+wget --timestamping http://www.godatabase.org/dev/database/archive/latest/go_200601-assocdb-data.gz
+
+hgsql mysql <<end
+create database go060211;
+end
+zcat go_*data.gz | sed -e 's/ENGINE=MyISAM DEFAULT CHARSET=latin1/TYPE=MyISAM/g' >j.tmp
+hgsql go060211 <j.tmp
+rm j.tmp
+
+wget --timestamping ftp://ftp.geneontology.org/pub/go/gene-associations/gene_association.goa_uniprot.gz
+
+# The format of gene_association.goa_uniprot.gz changed, there is 6 comment lines at the head now.
+# Updated hgGoAssociation.c to skip first 6 lines.
+
+zcat gene_association.goa_uniprot.gz | /cluster/home/fanhsu/bin/i386/hgGoAssociation go060211 goaPart stdin
+# Passed 6832447 of 7933823 of 7933823, 86.12%
+
+# Ask sys-admin to switch the database pointer go to point to go060211.
+
+# HGNEAR PROTEIN BLAST TABLES (DONE 2/12/06 Fan)
+
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/hgNearBlastp
+    cd /cluster/data/hg18/bed/hgNearBlastp
+    cat << _EOF_ > config.ra
+# Latest human vs. other Gene Sorter orgs:
+# mouse, rat, zebrafish, worm, yeast, fly
+
+targetGenesetPrefix human
+targetDb hg18
+queryDbs mm7 rn3 danRer3 ce2 sacCer1 dm2
+
+hg18Fa /cluster/data/hg18/bed/blastp/known.faa
+mm7Fa /cluster/data/mm7/bed/geneSorter/blastp/known.faa
+rn3Fa /cluster/data/rn3/bed/blastp/known.faa
+danRer3Fa /cluster/data/danRer3/bed/blastp/ensembl.faa
+ce2Fa /cluster/data/ce2/bed/blastp/wormPep154.faa
+sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
+dm2Fa /cluster/data/dm2/bed/flybase4.1/flybasePep.fa
+
+buildDir /cluster/data/hg18/bed/hgNearBlastp
+scratchDir /san/sanvol1/scratch/hg18HgNearBlastp
+_EOF_
+#    doHgNearBlastp.pl config.ra >& do.log &
+
+    doHgNearBlastp.pl config.ra >do3.log 
+#    tail -f do.log
+0657.tab dm2_0658.tab dm2_0659.tab dm2_0660.tab dm2_0661.tab dm2_0662.tab dm2_0663.tab dm2_0664.tab dm2_0665.tab dm2_0666.tab dm2_0667.tab dm2_0668.tab dm2_0669.tab dm2_0670.tab
+Scanning through 671 files
+Loading database with 14488 rows
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/hg18.split
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/hg18.formatdb
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/mm7.split
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/mm7.formatdb
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/rn3.split
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/rn3.formatdb
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/danRer3.split
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/danRer3.formatdb
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/ce2.split
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/ce2.formatdb
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/sacCer1.split
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/sacCer1.formatdb
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/dm2.split
+# ssh -x pk rm -rf /san/sanvol1/scratch/hg18HgNearBlastp/dm2.formatdb
+# ssh -x pk rmdir /san/sanvol1/scratch/hg18HgNearBlastp
+
+ *** All done!
+ *** Check these tables in hg18:
+ *** humanBlastTab mmBlastTab rnBlastTab drBlastTab ceBlastTab scBlastTab dmBlastTab 
+ *** and hgBlastTab in these databases:
+ *** mm7 rn3 danRer3 ce2 sacCer1 dm2
+
+# MAKE ORGANISM-SPECIFIC HGNEARDATA FILES 
+    cd ~/kent/src/hg/near/hgNear/hgNearData
+# any updates necessary?
+
+# ENABLE HGNEAR FOR HG18 IN HGCENTRALTEST 
+    echo "update dbDb set hgNearOk = 1 where name = 'hg18';" \
+      | hgsql -h genome-testdb hgcentraltest
+
+# END OF HGNEAR STUFF
+#############################################################################
 
