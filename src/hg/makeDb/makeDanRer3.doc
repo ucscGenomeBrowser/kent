@@ -1265,10 +1265,11 @@ getSeqs.csh $(path1)
     # http://www.ensembl.org/Multi/martview
     # Follow this sequence through the pages: (NOTE: this interface has changed
     # a little since danRer2)
-    # Page 1) Select the Ensembl dataset (35 here) and the 
+    # Page 1) Select the Ensembl dataset (v32 here) and the 
     # Danio_rerio choice (ZFISH5 here). Hit next. 22877 entries total.
     # Ensembl 35 now (2005-11-23) and this is the same as for the version 32
-    # downloaded as above.
+    # downloaded as above. Ensembl 36 (Dec 2005) is the same as for 32 for
+    # Zebrafish.
     # Page 2) Then hit next.
     # Page 3) Choose the "Structures" Attribute Page from the pulldown menu
     # at the top. Make sure that under the GENE section, the Ensembl 
@@ -2065,6 +2066,54 @@ danRer3.mgcTables.mgc = all
         etc/hgwdev.dbs 
     cvs commit
     make etc-update
+
+# TIGR GENE INDEX (DONE, 2005-08-24, hartera)
+# Data from Razvan Sultana (rsultana@jimmy.harvard.edu or rsultana@tigr.org)
+# Includes data for chr1-25 and chrM, NOT chrNA and chrUn. Asked for these
+# on scaffolds and not on the virtual chroms - harder to generate. 
+    ssh kkstore02
+    mkdir -p /cluster/data/danRer3/bed/tigr
+    cd /cluster/data/danRer3/bed/tigr
+    wget --timestamping \
+ftp://ftp.tigr.org/pub/data/tgi/Danio_rerio/TGI_track_danRer3_chr1-25.tgz
+    tar xvzf TGI*.tgz
+    # this is data for just chr1-25 and chrM. Data for NA and Un are to follow.
+    ls chr1_*
+    # chr1_drosophTCs  chr1_g_gallusTCs  chr1_mouseTCs  chr1_zfishTCs
+    # chr1_elegansTCs  chr1_humanTCs     chr1_ratTCs
+    # so species are fly, chicken, mouse, zebrafish, C. elegans, human and rat
+    foreach f (*g_gallus*)
+       set f1 = `echo $f | sed -e 's/g_gallus/chicken/g'`
+       mv $f $f1
+    end 
+
+    foreach f (*drosoph*)
+    set f1 = `echo $f | sed -e 's/drosoph/Dmelano/g'`
+       mv $f $f1
+    end
+
+    foreach o (Dmelano chicken elegans human mouse rat zfish)
+      echo $o
+      setenv O $o
+      foreach f (chr*_$o*s)
+        tail +2 $f | perl -wpe 's /THC/TC/; s/(TH?C\d+)/$ENV{O}_$1/;' > $f.gff
+      end
+    end
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/tigr
+    hgsql danRer3 -e "drop table tigrGeneIndex"
+
+    nice ldHgGene -exon=TC danRer3 tigrGeneIndex *.gff
+    # Read 75388 transcripts in 288032 lines in 182 files
+    # 75388 groups 26 seqs 1 sources 1 feature types
+    # 75388 gene predictions
+    checkTableCoords danRer3 tigrGeneIndex
+    /cluster/bin/scripts/runGeneCheck /cluster/data/danRer3/bed/tigr
+    # no CDS in these gene predictions so fix this:
+    hgsql danRer3 -e "update tigrGeneIndex set cdsStart = txStart;"
+    hgsql danRer3 -e "update tigrGeneIndex set cdsEnd = txEnd;"
+    # compress all files
+    gzip chr*
 
 # MAKE Human Proteins track  (DONE 2005-09-21 braney)
     ssh kkstore02
@@ -4451,245 +4500,66 @@ TMPDIR=/scratch/tmp
 # RADIATION HYBRID (RH) MAP TRACK (in progress, 2005-09-06, hartera)
     # Data from Leonard Zon's lab at the Childrens Hospital, Boston
     # Provided by Anhua Song: asong@enders.tch.harvard.edu
+    # Updated data provided on 2006-02-09
     ssh kkstore02
     mkdir -p /cluster/data/danRer3/bed/ZonLab/rhMap/seq
     cd /cluster/data/danRer3/bed/ZonLab/rhMap/seq
     # download data from e-mail to this directory
-    # new sequences (2006-02-06) are available
-    # rhSequenceSubmitNew.zip
-    unzip rhSequenceSubmitNew.zip
-    # sequences are in rhSequenceFasta082905.zip
-    unzip rhSequenceFasta082905.zip
-    # sequences are now in rhSequence092105.zip
-    unzip rhSequence092105.zip
-    # get rhSequenceFastaNewNotMapped.txt, rhSequenceFastaOld092005.txt,
-    # rhSequenceFastaNewNotMapped.txt
-    cat rhSequenceFastaOld092005.txt rhSequenceFastaNewMapped.txt \
-        rhSequenceFastaNewNotMapped.txt > rhMap092105.fa
+    # new sequences (2006-02-09) are available
+    # rhSequenceSubmit020906.zip
+    unzip rhSequenceSubmit020906.zip
+    # sequences are in rhSequenceSeqSubmit020906/rhSequenceSubmitSeq020906.txt
+    # primer information is in rhSequenceSubmit020906/rhSequenceSubmit020906.txt
+    mv rhSequenceSubmitSeq020906.txt rhMap020906.fa
+    mv rhSequenceSubmit020906.txt rhMapPrimers020906.txt
     # first remove ^M from end of lines
-    dos2unix rhMap092105.fa
-    dos2unix rhSequenceFasta082905.txt
-    # those sequences in rhSequenceFasta082905.fa but not in the latest
-    # set of sequences are those that have been RH typed but did not
-    # make it on to the current map. 
-    grep '>' rhSequenceFastaOld092005.txt | wc -l
-    # 10945
-    grep '>' rhSequenceFastaNewMapped.txt | wc -l
-    # 272
-    grep '>' rhSequenceFastaNewNotMapped.txt | wc -l
-    # 257
-    grep '>' rhMap092105.fa > rhMap092105.names
-    wc -l rhMap092105.names
-    # 11474
-    grep '>' rhSequenceFasta082905.txt > rhMap082905.names
-    wc -l rhMap082905.names
+    dos2unix rhMap020906.fa
+    dos2unix rhMapPrimers020906.txt
+    grep '>' rhMap020906.fa | wc -l
+    # 11616
+    wc -l rhMapPrimers020906.txt
+    # 13556
+    
+    grep '>' rhMap020906.fa > rhMap.names
+   
     # remove '>' from names and grab first field
-    perl -pi.bak -e 's/>//' *.names
-    awk 'BEGIN {FS="|"} {print $1;}' rhMap092105.names | sort | uniq \
-        > rhMap092105.namesOnly.sort
-    awk 'BEGIN {FS="|"} {print $1;}' rhMap082905.names | sort | uniq \
-        > rhMap082905.namesOnly.sort
+    perl -pi.bak -e 's/>//' rhMap.names
+    awk 'BEGIN {FS="|"} {print $1;}' rhMap.names | sort | uniq \
+        > rhMap.namesOnly.sort
+    awk 'BEGIN {FS="|"} {print $1;}' rhMapPrimers020906.txt | sort | uniq \
+        > rhMapPrimers.namesOnly.sort
     wc -l *.sort
-    # 12127 rhMap082905.namesOnly.sort
-    # 11470 rhMap092105.namesOnly.sort
-    # so some replicates names
-    awk 'BEGIN {FS="|"} {print $1;}' rhMap092105.names | sort | uniq -c \
-        | sort -nr | less
-    # 2 hi2479 - insertion sites, appears in New Mapped and in New Not Mapped
-    # 2 GA897T7 - ThisseClone, in New Mapped and New Not Mapped
-    # 2 GA476T3 - ThisseClone, in New Mapped and New Not Mapped
-    # 2 AJH1 - GeneCustom, appears twice in New Not Mapped
-    # in all cases, sequence is the same. asked Anhua Song and Yi Zhou
-    # about this as Boston Children's Hospital - they said to keep just
-    # one copy of each hi2479, GA897T7 and GA476T3 are all now Mapped.
-    # so remove the New Not Mapped versions from rhMap092105.fa and from
-    # rhSequenceFastaNewNotMapped.txt. For AJH1, just remove one copy.
-    awk 'BEGIN {FS="|"} {print $1;}' rhMap082905.names | sort | uniq -c \
-        | sort -nr | less
-    # 2 GA476 - 2 copies, sequence identical, CHZF0040579 and CHZF0040580
-    # 2 GA3542 - 2 copies, sequence identical, CHZF0040582 and CHZF0040583
-    # 2 CHUNP6983 - 2 copies, sequence identical, CHZF0006983 and CHZF0006984
-    # compare the 2 sets of names:
-    comm -12 rhMap082905.namesOnly.sort rhMap092105.namesOnly.sort \
-         > bothSets.names
-    comm -23 rhMap082905.namesOnly.sort rhMap092105.namesOnly.sort \
-         > rhMap082905Only.names
-    wc -l *.names
-    # 11205 bothSets.names
-    # 12130 rhMap082905.names
-    # 922 rhMap082905Only.names
-    # 11474 rhMap092105.names
-    # this set of 922 sequences in rhMap082905Only.names are those that 
-    # were RH typed but do not appear on the current map.
-    # However, some of these do appear in rhMap092105.fa but with a slightly
-    # different name but the same CHZF ID e.g. 1005f11 is 
-    # Zfish35940-1005f11.q1c in rhMap092105.fa and CHZF0035421
-    # write a script to match these up:
-    # get list of sequence names and CHZF IDs
-    # 8200/12130 have CHZF IDs for rhSequenceFasta082905.txt
-    awk 'BEGIN {FS="|"} {OFS="\t"} {if ($2 ~ /CHZF/) print $1,$2; \
-        else if ($3 ~ /CHZF/) print $1,$3;}' rhMap082905.names \
-        > rhMap082905.namesAndIds
-    wc -l rhMap082905.namesAndIds
-    # 8200 rhMap082905.namesAndIds
-    # 7544/11474 have CHZF IDs for rhMap092105.fa
-    awk 'BEGIN {FS="|"} {OFS="\t"} {if ($3 ~ /CHZF/) print $1,$3; \
-        else if ($5 ~ /CHZF/) print $1,$5;}' rhMap092105.names \
-        > rhMap092105.namesAndIds
-    wc -l rhMap092105.namesAndIds
-    # 7544 rhMap092105.namesAndIds
-    # write script to store names and IDs from both sets and use list of 
-    # names from rhMap082905Only.names to find these in rhMap092105 through
-    # the common CHZF ID if there is one.
-    # remove extra space after name in list of names
-    perl -pi.bak -e 's/\s//' rhMap082905Only.names
-    chmod +x matchIds.pl
-    perl matchIds.pl rhMap082905Only.names rhMap082905.namesAndIds \
-         rhMap092105.namesAndIds > rhMap082905FoundIn092105.names
-    # looked at a few of these and the sequences look the same in the 2 files
-    # just different names. there are 468 of these.
-    # get this list of names and subtract from rhMap082905Only.names
-    awk '{print $1}' rhMap082905FoundIn092105.names | sort > namesList
-    sort rhMap082905Only.names | uniq > rhMap082905Only.names.sort
-    wc -l rhMap082905Only.names.sort
-    # 922 rhMap082905Only.names.sort
-    comm -23 rhMap082905Only.names.sort namesList \
-         > rhMap082905Only.names.reduced
-    wc -l rhMap082905Only.names.reduced
-    # 454 rhMap082905Only.names.reduced 
-    # can use faSomeRecords to get these sequences from the 
-    # rhSequenceFasta082905.txt file.
-    faSomeRecords rhSequenceFasta082905.txt rhMap082905Only.names.reduced \
-                  rhMap082905Only.fa
-    grep '>' rhMap082905Only.fa | wc -l
-    # 454
-    # so all sequences were retrieved - this is the set of sequences from 
-    # rhSequenceFasta082905.txt that are NOT in the rhSequence092105 set and 
-    # are therefore unmapped in the current RH map and they are mostly CHUNPs.
-    # They are Children's Hospital Unpublished markers. There are only 15 that
-    # are not CHUNPs in this set. 
-    # For the moment, just align those sequences from the rhMap092105.fa set.
     
-    awk 'BEGIN {FS="|"} {if ($1 ~ />/) print $1"."$2; else print;}' \
-        rhMap092105.fa > rhMapFormat.fa
-    # remove space between name and extension
-    perl -pi.bak -e 's/\s\./\./' rhMapFormat.fa
-    # get all names and sequence into upper case. 
-    tr '[a-z]' '[A-Z]' < rhMapFormat.fa > rhMapUpperNames.fa
+    # 11431 rhMap.namesOnly.sort
+    # 13314 rhMapPrimers.namesOnly.sort
+    # so some replicate names
+    awk 'BEGIN {FS="|"} {print $1;}' rhMap.names | sort | uniq -c \
+        | sort -nr > rhMap.replicates
+    awk '{if ($1 == 2) print;}' rhMap.replicates > rhMap.duplicates
+    wc -l rhMap.duplicates
+    # 185 rhMap.duplicates
+    # there are 185 duplicates - they appear to have the same sequences too
+    comm -13 rhMap.namesOnly.sort rhMapPrimers.namesOnly.sort > rhPrimersOnly
+    comm -23 rhMap.namesOnly.sort rhMapPrimers.namesOnly.sort > rhMapFastaOnly
+    # 0 rhMapFastaOnly
+    # 1882 rhPrimersOnly
+    sort rhMap.names | uniq > rhMap.names.sort
+    wc -l rhMap.names.sort
+    # 11453 rhMap.names.sort
+    # get single copies of the sequences:
+    faSomeRecords rhMap020906.fa rhMap.namesOnly.sort rhMap020906UniqSeq.fa
+
+    # there are 185 duplicates - they appear to have the same sequences too
     
-    # previous version of RH map (on danRer1 and danRer2) had the following 
-    # suffixes: SHORTGUN, WU_ZFEST, WZ and CLONEEND and then some 
-    # EMBL sequences e.g. EMB:BI896341
-    # Rename some of the sequences and make sure names are similar to those 
-    # for the previous version of RH map.
-    # Rename ncbiZfEst to other_zfEst
-    perl -pi.bak -e 's/NCBIZFEST/OTHER_ZFEST/' rhMapUpperNames.fa
-    # Need to change WU_EST=Wu_EST=wu_zfEst
-    # Rename WU_EST to WU_ZFEST
-    perl -pi.bak -e 's/WU_EST/WU_ZFEST/' rhMapUpperNames.fa
-    # change SANGER SHOTGUN to SHOTGUN
-    perl -pi.bak -e 's/SANGER SHOTGUN/SHOTGUN/' rhMapUpperNames.fa
-    # remove numbering at beginning of some lines like in 
-    # Z35723-A297H08.Q1C.SANGER SHOTGUN and returns at end of those lines
-    # write a C program to do this and put in OneShot dir.
-    # reformat the FASTA file:
-    formatFastaSeq rhMapUpperNames.fa rhMap.fa
-    # There are 11470 sequences in the FASTA file.
-    # check that it is formatted correctly
-cat << '_EOF_' > checkFaFormat.pl
-#!/usr/bin/perl -w
-use strict;
-
-my ($faFile, $found, $lineCt);
-
-$found = "FALSE";
-$lineCt = 0;
-
-$faFile = $ARGV[0];
-open (FAFILE, $faFile) || die "Can not open $faFile : $!\n";
-open (STDERR, ">error.log") || die "Can not create error.log : $!\n";
-
-# check the file format
-while (<FAFILE>)
-{
-my ($l);
-$lineCt++;
-chomp;
-$l = $_;
-
-if ($l =~ /^>.+/)
-   {
-   # first line should have a ">" and then description
-   if ($lineCt == 1)
-      {
-      print STDERR "First line is in FASTA format as expected.\n";
-      }
-   $found = "TRUE";
-   } 
-elsif ($found eq "TRUE")
-   {
-   # then next line should be DNA sequence
-   if ($l !~ /^[ACGTN]/i)
-      {
-      print STDERR "Line: $lineCt is not DNA sequence.\n";
-      }
-   $found = "FALSE";
-   }
-else
-   {
-   print STDERR "Line: $lineCt is in unexpected format\n";
-   }
-}
-close FAFILE;
-close STDERR;
-'_EOF_'
-    chmod +x checkFaFormat.pl
-    perl checkFaFormat.pl rhMap.fa
-    # check error.log and the format is good.
-    
-   # awk 'BEGIN {FS="|"} {if ($1 ~ />/) print $1; else print;}' \
-    #    rhSequenceFasta082905.txt > rhMap.fa
-    ssh pk
-    cd /cluster/data/danRer3/bed/ZonLab/rhMap/seq
-    mkdir -p /san/sanvol1/scratch/danRer3/rhMap
-    cp rhMap.fa /san/sanvol1/scratch/danRer3/rhMap/ 
-    # for running and output:
-    mkdir -p /san/sanvol1/scratch/danRer3/rhMap/chromsRun
-    mkdir -p /san/sanvol1/scratch/danRer3/rhMap/chromsPsl
-    # link to cluster dir
-    cd /cluster/data/danRer3/bed/ZonLab/rhMap
-    ln -s /san/sanvol1/scratch/danRer3/rhMap/chromsRun
-    ln -s /san/sanvol1/scratch/danRer3/rhMap/chromsPsl
-    # run soft-masked chroms 1-25 and M and soft-masked scaffolds
-    mv /san/sanvol1/scratch/danRer3/trfFaChroms \
-       /san/sanvol1/scratch/danRer3/trfFaChromsAndScafs 
-    foreach c (NA Un)
-       foreach f (/cluster/data/danRer3/${c}/scaffoldsSoftMask/*.fa)
-           rsync -a --progress $f \
-                 /san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/
-       end
-    end
-    cd /cluster/data/danRer3/bed/ZonLab/rhMap/chromsRun
-    ls -1 /san/sanvol1/scratch/danRer3/rhMap/*.fa > seqs.lst
-    foreach f (/san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/*.fa)
-        ls -1 $f >> genome.lst
-    end
-    wc -l genome.lst
-    # 15151 genome.lst 
-    echo '#LOOP\n/cluster/bin/x86_64/blat -mask=lower -minIdentity=95 -ooc=/san/sanvol1/scratch/danRer3/danRer3_11.ooc $(path1) $(path2) {check out line+ /san/sanvol1/scratch/danRer3/rhMap/chromsPsl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
-
-    gensub2 genome.lst seqs.lst template.sub para.spec
-    para create para.spec
-    para try, check, push ... etc.
-# para time
-# Completed: 15151 of 15151 jobs
-# CPU time in finished jobs:      21540s     358.99m     5.98h    0.25d  0.001 y
-# IO & Wait Time:                 38720s     645.34m    10.76h    0.45d  0.001 y
-# Average job time:                   4s       0.07m     0.00h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            1369s      22.82m     0.38h    0.02d
-# Submission to last job:          3150s      52.50m     0.88h    0.04d
-
+    # need to reformat FASTA headers so they are in the format: NAME.SOURCE.TYPE
+    # Insertion_Mutant=Insertion_Mutants; Thisse_Clone=ThisseClone
+    # so change these.
+    # write program parseRhMap.c in ~/kent/src/hg/oneShot/parseRhMap/
+    # to rewrite FASTA file with FASTA headers reformated with the sequence
+    # name, source and type as above and generate a tabbed file that has
+    # this sequence name and the corresponding primers from the original 
+    # FASTA headers.
+ 
 # SELF BLASTZ, CHAIN, NET, AXTNET, MAFNET AND DOWNLOADS
 # (DONE, 2005-12-02, hartera)
     ssh pk
@@ -5524,8 +5394,77 @@ done
     md5sum *.gz > md5sum.txt
     # copy over and edit README.txt from the hg17 phastCons.
 
+##################################################################
+# HGNEAR TABLES (also used by the Known Genes details page links)
+# GET LATEST PROTEIN SEQUENCE FOR ALL HGNEAR SPECIES (DONE, 2005-02-10, hartera)
+#   # For species with knownGene, use that; otherwise, download the latest 
+    # version of the main model organism database for this species.
+    # Human: use knownGene proteins.
+# need to get hg18 peptide sequence:
+     mkdir -p /cluster/data/hg18/bed/blastp
+     cd /cluster/data/hg18/bed/blastp
+     pepPredToFa hg18 knownGenePep known.faa
+# # Mouse: use knownGene proteins.
+# already done:
+#    mkdir -p  /cluster/data/mm7/bed/geneSorter/blastp
+#    cd /cluster/data/mm7/bed/geneSorter/blastp
+#    pepPredToFa mm7 knownGenePep known.faa
+    # Rat: use knownGene proteins.
+# already done:
+#    mkdir /cluster/data/rn3/bed/blastp
+#    cd /cluster/data/rn3/bed/blastp
+#    pepPredToFa rn3 knownGenePep known.faa
+    # Fly: use FlyBase proteins - already done 
+    # /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
+    # Worm: use WormBase proteins.
+    mkdir -p /cluster/data/ce2/bed/blastp
+    cd /cluster/data/ce2/bed/blastp
+    # Point a web browser at ftp://ftp.sanger.ac.uk/pub/databases/wormpep/
+    # to find out the latest version. It is WormPep 154 so use that.
+    wget --timestamping -O wormPep154.faa \
+       ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep154/wormpep154
+    # Yeast: use SGD proteins.
+    mkdir -p /cluster/data/sacCer1/bed/blastp
+    cd /cluster/data/sacCer1/bed/blastp
+    # get latest version - from Jan 26, 2006
+    wget -O orf_trans.fasta.jan26.gz \
+         ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/orf_protein/orf_trans.fasta.gz
+    # rename old version of peptide sequences
+    mv sgdPep.faa sgdPep.jan9.faa
+    zcat orf_trans.fasta.jan26.gz > sgdPep.faa
 
-# KNOWN GENES BASED ON ENSEMBL GENES (in progress, 2005-11-23, hartera)
+# HGNEAR PROTEIN BLAST TABLES (DONE, 2006-02-10, hartera)
+    ssh hgwdev
+    mkdir -p /cluster/data/danRer3/bed/hgNearBlastp
+    cd /cluster/data/danRer3/bed/hgNearBlastp
+    # zebrafish vs fly table has already been created as a result of 
+    # creating the blastp table for dm1 (see makeDm1.doc)
+cat << _EOF_ > config.ra
+# Latest zebrafish vs. other Gene Sorter orgs:
+# human, mouse, rat, worm, yeast
+# zebrafish vs fly already done
+
+targetGenesetPrefix flyBase
+targetDb danRer3
+queryDbs hg18 mm7 rn3 ce2 sacCer1
+
+danRer3Fa /cluster/data/danRer3/bed/blastp/ensembl.faa
+hg18Fa /cluster/data/hg18/bed/blastp/known.faa
+mm7Fa /cluster/data/mm7/bed/geneSorter/blastp/known.faa
+rn3Fa /cluster/data/rn3/bed/blastp/known.faa
+ce2Fa /cluster/data/ce2/bed/blastp/wormPep154.faa
+sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
+
+buildDir /cluster/data/danRer3/bed/hgNearBlastp
+scratchDir /san/sanvol1/scratch/danRer3HgNearBlastp
+_EOF_
+     # << this line makes emacs coloring happy
+    nice doHgNearBlastp.pl config.ra >& do.log &
+    tail -f do.log
+    # Took about 2 hours to finish.
+# END OF HGNEAR STUFF
+####################################################
+# KNOWN GENES SET BASED ON ENSEMBL GENES (in progress, 2005-11-23, hartera)
     # see ENSEMBL GENES section for documentation of creation of
     # the ensGene, ensGtp and ensPep tables and the track.
     # compare the Ensembl and Human Proteins tracks
@@ -5545,27 +5484,31 @@ done
     # descriptions. For genes with no description, use the InterPro domain.
     # Go to http://www.ensembl.org/Multi/martview
     # Follow this sequence through the pages: 
-    # Page 1) Select the Ensembl dataset (35 here) and the 
-    # Danio_rerio choice (ZFISH5 here). Hit next. 22877 entries total.
-    # Ensembl 35 now (2005-11-23) - this dataset is the same as for the 
+    # Page 1) Select the Ensembl dataset (v35 here, v36 is the same for 
+    # Zv5 Danio rerio genes) and the Danio_rerio choice (ZFISH5 here). 
+    # Hit next. 22877 entries total.
+    # Ensembl 36 from Dec 2005 - this dataset is the same as for the 
     # version 32 downloaded as above for the Ensembl Genes track.
+    # (Checked on 2006-02-08, hartera)
     # Page 2) Then hit next.
     # Page 3) Choose the "Features" Attribute Page from the pulldown menu
     # at the top. Make sure that under the GENE section, the Ensembl 
-    # Attributes checked are the Ensembl Gene ID, (Ensembl Transcript ID),
+    # Attributes checked are the Ensembl Transcript ID and the
     # Description. Under External References, select Unified UniProt 
     # accession, and ZFIN Primary ID. Under the Protein section, select 
     # InterPro Description and InterPro ID under InterPro 
     # Attributes. Select text, tab-separated for output. Choose gzip 
-    # compression. Hit export. Save as ensGene35Desc.tsv.gz
-    gunzip ensGene35Desc.tsv.gz
+    # compression. Hit export. Save as ensGene36Desc.tsv.gz. Same as for
+    # Ensembl v35 so update to this.
+    gunzip ensGene36Desc.tsv.gz
     # repeat above and get the Ensembl transcript ID from Ensembl Attributes
     # and then get EntrezGene ID, RefSeq DNA Accession and RefSeq Peptide ID
     # from the External References section. Select text, tab-separated 
-    # for output. Choose gzip compression. Hit export. 
-    # Save as ensGene35Desc2.tsv.gz
+    # for output. Choose gzip compression. Hit export. Again Ensembl v36 gives
+    # the same result for Danio rerio. 
+    # Save as ensGene36Desc2.tsv.gz
     cd /cluster/data/danRer3/bed/knownGenes
-    gunzip ensGene35Desc2.tsv.gz  
+    gunzip ensGene36Desc2.tsv.gz  
     # need to make a table of cross reference information for Ensembl
     # for the Known Genes details pages.
     # create a table definition for ensGeneXref:
@@ -5614,21 +5557,124 @@ table ensGeneXRef
     awk '{if ($1 == 7955) print;}' gene_info > zfish.gene_info
     wc -l zfish.gene_info
     # 37840 zfish.gene_info
-    # get contents of refLink table
-    hgsql -N -e 'select * from refLink;' danRer3 > refLink.txt
-    # UP TO HERE 
-    # write program taking ensGene35Desc.tsv and ensGene35Desc2.tsv as input
-    # and also the refLink table to find Entrez Gene IDs and Gene Symbols.
+    # checked that the Ensembl 36 genes for zebrafish are the same as 
+    # for Ensembl 35 for which these files were downloaded (see above - updated
+    # file names to reflect v36).
+    # write program taking ensGene36Desc.tsv and ensGene36Desc2.tsv as input
+    # and also the RefSeq files to find Entrez Gene IDs and Gene Symbols.
     # and give the tabbed output for loading into the ensXRef table.
-    # hgZfishEnsXRef.c in ~/kent/src/hg/near/hgZfishEnsXRef
-    /cluster/home/hartera/bin/i386/hgZfishEnsXRef \
-         ensGene35Desc.tsv ensGene35Desc2.tsv \
-         zfish.gene_info zfish.gene2refseq ensGeneXRef.tab >& ensGeneXRef.log
-    # load this tabbed file into ensXRef table 
-    
-    hgsql rah < ~/kent/src/hg/lib/ensGeneXRef.sql
+    # hgEnsGeneXRef.c in ~/kent/src/hg/near/hgEnsGeneXRef
+    /cluster/home/hartera/bin/i386/hgEnsGeneXRef \
+       ensGene36Desc.tsv ensGene36Desc2.tsv \
+       zfish.gene_info zfish.gene2refseq ensGene36XRef.tab >& ensGene36XRef.log
+    # load this tabbed file into ensGeneXRef table 
+    ssh hgwdev 
+    cd /cluster/data/danRer3/bed/knownGenes
+    hgsql danRer3 < ~/kent/src/hg/lib/ensGeneXRef.sql
     hgsql -e \
-       'load data local infile "ensGeneXRef.tab" into table ensGeneXRef' rah
+    'load data local infile "ensGene36XRef.tab" into table ensGeneXRef' danRer3
+    # edit ~/kent/src/hg/hgGene/hgGeneData/Zebrafish/genome.ra to give 
+    # mySQL queries to ensGtp and ensGeneXRef to retrieve name, protein and
+    # description.
+    # created blastp hgNear tables by alignment of Zebrafish Ensembl peptide
+    # sequences to the equivalent "Known Genes" peptide sets for other species
+    # - see hgNear sections above. Then create an otherOrg.ra file for 
+    # zebrafish specifying the species and databases for these organisms 
+    # with blastp homolog tables. 
+cat << _EOF_ > ~/kent/src/hg/hgGene/hgGeneData/Zebrafish/otherOrgs.ra
+name human
+db hg18
+
+name mouse
+db mm7
+
+name rat
+db rn3
+
+name drosophila
+db dm1
+
+name cElegans
+db ce2
+
+name yeast
+db sacCer1
+_EOF_
+     # << this line makes emacs coloring happy
+     # then make my to visualize in own sandbox
+     cd ~/kent/src/hg/hgGene
+     make my
+     # NEED TO CHECK THIS INTO CVS 
+ 
+##################################################################
+# HGNEAR TABLES (also used by the Known Genes details page links)
+# GET LATEST PROTEIN SEQUENCE FOR ALL HGNEAR SPECIES (DONE, 2005-02-10, hartera)
+#   # For species with knownGene, use that; otherwise, download the latest 
+    # version of the main model organism database for this species.
+    # Human: use knownGene proteins.
+# need to get hg18 peptide sequence:
+     mkdir -p /cluster/data/hg18/bed/blastp
+     cd /cluster/data/hg18/bed/blastp
+     pepPredToFa hg18 knownGenePep known.faa
+# # Mouse: use knownGene proteins.
+# already done:
+#    mkdir -p  /cluster/data/mm7/bed/geneSorter/blastp
+#    cd /cluster/data/mm7/bed/geneSorter/blastp
+#    pepPredToFa mm7 knownGenePep known.faa
+    # Rat: use knownGene proteins.
+# already done:
+#    mkdir /cluster/data/rn3/bed/blastp
+#    cd /cluster/data/rn3/bed/blastp
+#    pepPredToFa rn3 knownGenePep known.faa
+    # Fly: use FlyBase proteins - already done 
+    # /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
+    # Worm: use WormBase proteins.
+    mkdir -p /cluster/data/ce2/bed/blastp
+    cd /cluster/data/ce2/bed/blastp
+    # Point a web browser at ftp://ftp.sanger.ac.uk/pub/databases/wormpep/
+    # to find out the latest version. It is WormPep 154 so use that.
+    wget --timestamping -O wormPep154.faa \
+       ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep154/wormpep154
+    # Yeast: use SGD proteins.
+    mkdir -p /cluster/data/sacCer1/bed/blastp
+    cd /cluster/data/sacCer1/bed/blastp
+    # get latest version - from Jan 26, 2006
+    wget -O orf_trans.fasta.jan26.gz \
+         ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/orf_protein/orf_trans.fasta.gz
+    # rename old version of peptide sequences
+    mv sgdPep.faa sgdPep.jan9.faa
+    zcat orf_trans.fasta.jan26.gz > sgdPep.faa
+
+# HGNEAR PROTEIN BLAST TABLES (DONE, 2006-02-10, hartera)
+    ssh hgwdev
+    mkdir -p /cluster/data/danRer3/bed/hgNearBlastp
+    cd /cluster/data/danRer3/bed/hgNearBlastp
+    # zebrafish vs fly table has already been created as a result of 
+    # creating the blastp table for dm1 (see makeDm1.doc)
+cat << _EOF_ > config.ra
+# Latest zebrafish vs. other Gene Sorter orgs:
+# human, mouse, rat, worm, yeast
+# zebrafish vs fly already done
+
+targetGenesetPrefix flyBase
+targetDb danRer3
+queryDbs hg18 mm7 rn3 ce2 sacCer1
+
+danRer3Fa /cluster/data/danRer3/bed/blastp/ensembl.faa
+hg18Fa /cluster/data/hg18/bed/blastp/known.faa
+mm7Fa /cluster/data/mm7/bed/geneSorter/blastp/known.faa
+rn3Fa /cluster/data/rn3/bed/blastp/known.faa
+ce2Fa /cluster/data/ce2/bed/blastp/wormPep154.faa
+sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
+
+buildDir /cluster/data/danRer3/bed/hgNearBlastp
+scratchDir /san/sanvol1/scratch/danRer3HgNearBlastp
+_EOF_
+     # << this line makes emacs coloring happy
+    nice doHgNearBlastp.pl config.ra >& do.log &
+    tail -f do.log
+    # Took about 2 hours to finish.
+
 # STS MARKERS (in progress, 2005-10-13, hartera)
     # DOWNLOADED RECENTLY FROM NCBI
     ssh kkstore02
