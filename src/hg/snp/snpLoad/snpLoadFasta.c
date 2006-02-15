@@ -18,7 +18,7 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.13 2006/02/14 20:50:27 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.14 2006/02/15 21:23:31 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 /* The vast majority are single. */
@@ -101,6 +101,8 @@ void checkIndelObserved(char *chromName, char *rsId, char *observed)
 /* First char should be dash, second char should be forward slash. */
 /* To do: no IUPAC */
 {
+int slashCount = 0;
+
 if (sameString(observed, "lengthTooLong"))
     {
     fprintf(exceptionFileHandle, "chr%s\t%s\t%s\n", chromName, rsId, "IndelClassMissingObserved");
@@ -112,6 +114,10 @@ if (strlen(observed) < 2)
     fprintf(exceptionFileHandle, "chr%s\t%s\t%s\n", chromName, rsId, "IndelClassTruncatedObserved");
     return;
     }
+
+slashCount = chopString(observed, "/", NULL, 0);
+if (slashCount > 1)
+    fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "IndelClassObservedWrongFormat", observed);
 
 if (observed[0] != '-' || observed[1] != '/')
     fprintf(exceptionFileHandle, "chr%s\t%s\t%s\t%s\n", chromName, rsId, "IndelClassObservedWrongFormat", observed);
