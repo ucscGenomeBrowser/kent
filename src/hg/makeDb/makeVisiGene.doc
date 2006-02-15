@@ -110,3 +110,74 @@ para make spec
 cd /cluster/store11/visiGene/gbdb
 vgGetText visiGene.text mm7 hg17
 ixIxx visiGene.text visiGene.ix visiGene.ixx
+
+
+# Allen Brain Atlas jp2 image prep (Galt 2006-02-12)
+# Create parasol directory and a list of the jpg files.
+ssh pk
+cd /san/sanvol1/visiGene/offline/allenBrain
+mkdir prepImageRun
+find imageDisk -name '*.jp2' -print | sed 's/imageDisk\///' > prepImageRun/jpg.lst
+cd prepImageRun
+# Create parasol batch
+cat << '_EOF_' > gsub
+#LOOP
+vgPrepImage /san/sanvol1/visiGene/offline/allenBrain/imageDisk /san/sanvol1/visiGene/gbdb/200/inSitu/Mouse/allenBrain /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain $(path1)
+#ENDLOOP
+'_EOF_'
+# << this line makes emacs coloring happy
+gensub2 jpg.lst single gsub spec
+para make spec -maxNode=50
+
+[pk:/san/sanvol1/visiGene/offline/allenBrain/prepImageRun> /parasol/bin/para time
+11748 jobs in batch
+4291 jobs (including everybody's) in Parasol queue.
+Checking finished jobs
+Completed: 11748 of 11748 jobs
+CPU time in finished jobs:     474919s    7915.32m   131.92h    5.50d  0.015 y
+IO & Wait Time:               5029116s   83818.60m  1396.98h   58.21d  0.159 y
+Average job time:                 469s       7.81m     0.13h    0.01d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:           41811s     696.85m    11.61h    0.48d
+Submission to last job:        172301s    2871.68m    47.86h    1.99d
+
+
+# -maxNode=50 was needed. 
+# Note that because it opens up to 40 output files at the same time, it overwhelms NFS
+# when a lot of nodes are running, it can bring down the SAN.  Because I was nearly
+# done when it came back up, I just re-pushed with -maxNode=50 to keep it under control.
+# However in the future, something like this should be done to keep the file access local
+# as much as possible.
+# Here is the proposed new way:
+# -----------------------
+cat << '_EOF_' > gsub
+#LOOP
+./vgPrep.csh $(path1) $(root1) $(file1)
+#ENDLOOP
+'_EOF_'
+# << this line makes emacs coloring happy
+
+cat << '_EOF_' > vgPrep.csh
+#!/bin/tcsh
+mkdir -p /san/sanvol1/visiGene/gbdb/200/inSitu/Mouse/allenBrain/$1
+mkdir -p /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain/$1
+cp /san/sanvol1/visiGene/offline/allenBrain/imageDisk/$1 /scratch/tmp/$3
+vgPrepImage /san/sanvol1/visiGene/offline/allenBrain/imageDisk /scratch/tmp/vg200$2 /scratch/tmp/vgfull$2 $1
+set err = $status
+if (! $err ) then
+    cp -r /scratch/tmp/vg200$2/* /san/sanvol1/visiGene/gbdb/200/inSitu/Mouse/allenBrain
+    cp -r /scratch/tmp/vgfull$2/* /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain
+endif
+rm -f  /scratch/tmp/$3
+rm -fr /scratch/tmp/vg200$2
+rm -fr /scratch/tmp/vgfull$2
+if ( $err ) then
+    exit 1
+endif
+'_EOF_'
+# << this line makes emacs coloring happy
+
+# -----------------------
+
+
+
