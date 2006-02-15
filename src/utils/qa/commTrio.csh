@@ -94,7 +94,6 @@ if ($#argv == 3) then
   endif
 endif
 
-echo "output files are named: $left.Only, $right.Only, $left.$rightFile.Only"
 echo
 
 
