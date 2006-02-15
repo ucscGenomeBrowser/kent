@@ -38,6 +38,12 @@ if ( $#argv == 4 ) then
 endif
 
 set dumpfile=`getRRdumpfile.csh $database $machine`
+if ( $status ) then
+  echo
+  echo "  $dumpfile"
+  echo
+  exit 1
+endif
 
 # check that table exists in dump of this database
 cat $dumpfile | grep -w "^$table" > /dev/null
