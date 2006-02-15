@@ -20279,4 +20279,21 @@ BASE=/cluster/data/hg17/bed/blastz.rn4.2006-02-08
     rm -f /cluster/data/hg17/bed/blastz.rn4
     ln -s blastz.rn4.2006-02-08 /cluster/data/hg17/bed/blastz.rn4
 
+# UPDATE WGRNA TRACK (DONE, 2006-02-15, Fan)
+
+  ssh hgwdev
+  cd /cluster/data/hg17/bed
+
+  mkdir wgRna-2006-02-15
+  cd wgRna-2006-02-15
+
+# Received the data file, wg_track_hg17_feb2006_completed.txt, from Michel Weber's email
+# (Michel.Weber@ibcg.biotoul.fr)
+# and place it under cd /cluster/data/hg17/bed/wgRna-2006-02-15.
+
+  cp -p wg_track_hg17_feb2006_completed.txt wgRna.tab
+  hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg17 wgRna wgRna.tab
+
+# Compared to previous data, 2 records deleted, 27 records added.
+
 
