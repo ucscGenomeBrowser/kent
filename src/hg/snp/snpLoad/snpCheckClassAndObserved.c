@@ -2,10 +2,13 @@
  *
  * Log 4 exceptions:
  *
- * 1) SingleClassWrongLocType
+ * 1) SingleClassBetweenLocType
  *    loc_type = 3 (between)
  *    and class = 'single'
  *
+ *    Daryl tells me dbSNP wants to leave these as is.
+ *    Probably due to submitters leaving off a base on a flank sequence.
+ *    
  * 2) DeletionClassWrongObservedSize
  *    for class = 'deletion', compare the length 
  *    of the observed string to chromRange
@@ -28,7 +31,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.4 2006/02/14 20:42:02 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.5 2006/02/15 21:37:26 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -94,6 +97,7 @@ int loc_type = 0;
 int alleleLen = 0;
 int span = 0;
 char *subString = NULL;
+int slashCount = 0;
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 if (!hTableExists(tableName)) return;
@@ -107,11 +111,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     loc_type = sqlUnsigned(row[3]);
 
-    /* SingleClassWrongLocType */
+    /* SingleClassBetweenLocType */
     if (loc_type == 3 && sameString(row[4], "single"))
-        writeToExceptionFile(chromName, row[1], row[2], row[0], "SingleClassWrongLocType");
+        writeToExceptionFile(chromName, row[1], row[2], row[0], "SingleClassBetweenLocType");
 
     /* NamedClassWrongLocType */
+    /* need to reconsider this */
     if (sameString(row[4], "named"))
         {
 	subString = strstr(row[5], "LARGEINSERTION");
@@ -139,6 +144,8 @@ while ((row = sqlNextRow(sr)) != NULL)
         subString = cloneString(row[5]);
 	if (strlen(subString) < 2) continue;
 	if (subString[0] != '-' || subString[1] != '/') continue;
+	slashCount = chopString(subString, "/", NULL, 0);
+	if (slashCount > 1) continue;
 	subString = subString + 2;
 	if (!sameString(subString, row[6]) && !sameString(subString, row[7]))
             writeToExceptionFile(chromName, row[1], row[2], row[0], "DeletionClassWrongObserved");
