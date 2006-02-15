@@ -1,6 +1,8 @@
 
 test:
 	mkdir -p output
+	paraFlow arrayDot.pf > output/arrayDot
+	diff expected/arrayDot output/arrayDot
 	paraFlow badDefault.pf > output/badDefault
 	diff expected/badDefault output/badDefault
 	paraFlow defaultAhead.pf > output/defaultAhead
