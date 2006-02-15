@@ -131,8 +131,6 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
 # LOAD GAP & GOLD TABLES FROM AGP 
     ssh hgwdev
     hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.chrome.scfs.final.fix.agp
-
-
 # CREATE GAP TABLE  from v1.edit4.chrome.ctgs.final.fix.agp to get gaps
 
   ssh hgwdev
@@ -144,14 +142,14 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   grep clone v1.edit4.chrome.ctgs.final.fix.agp >> fragment.txt 
   hgsql rheMac2
   load data local infile 'fragment.txt' into table gap
-#convert to half open
-  hgsql rheMac2 -e "update gap set chromStart = chromStart -1 "
   # create trackDb/monkey/rheMac2/gap.html
 
 # CREATE CONTIG TABLE 
 
   ssh hgwdev
   cd kent/src/hg/lib
+  cp ~/kent/src/hg/lib/ctgPos.sql .
+  # edit ctgPos.sql to increase size of primary key to 20
   # this doesn't include strand or contig start/end
   hgsql rheMac2 < ctgPos.sql
   cd /cluster/data/rheMac2/downloads
@@ -165,13 +163,12 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   #convert to half open and fix bug in agp file
   hgsql rheMac2 -e "update ctgPos set chromStart = chromStart -1 "
   hgsql rheMac2 -e "update ctgPos set size = size -1 "
-
 # CREATE CHROMINFO TABLE 
 # an improvement here would be to have getMaxCoord output the 2bit file name
   ssh hgwdev
   cd /cluster/data/rheMac2
   # get coordinates from agp and put in database table
-  getcoords.pl < downloads/v1.edit4.chrome.scfs.agp.final> scaffolds.coords
+  getcoords.pl < downloads/v1.edit4.chrome.scfs.final.fix.agp > scaffolds.coords
   hgsql rheMac2 < /cluster/data/bosTau1/coords.sql
   load data local infile 'scaffolds.coords' into table scaffoldCoords
   faSize rheMac2.fa -detailed=on > chrom.sizes
@@ -184,6 +181,7 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
    hgsql rheMac2 < chromInfo.sql
    load data local infile 'chrom.sizes' into table chromInfo
    update chromInfo set fileName = "/gbdb/rheMac2/rheMac2.2bit"
+
 
 
 # REPEATMASKER 
