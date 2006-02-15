@@ -30,7 +30,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.252 2006/02/14 00:01:05 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.255 2006/02/15 23:20:11 hartera Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -388,17 +388,34 @@ printf("<BR><B>Track Geometry:</B><BR>&nbsp;&nbsp;\n");
 cgiMakeCheckBox("ldTrim", ldTrim); 
 printf("&nbsp;Trim to triangle<BR><BR>&nbsp;&nbsp;\n");
 
-cgiMakeCheckBox("hapmapLdYri_inv", hapmapLdYri_inv); 
-printf("&nbsp;Invert Yoruban display<BR>&nbsp;&nbsp;\n");
-cgiMakeCheckBox("hapmapLdCeu_inv", hapmapLdCeu_inv); 
-printf("&nbsp;Invert CEPH display<BR>&nbsp;&nbsp;\n");
-cgiMakeCheckBox("hapmapLdChb_inv", hapmapLdChb_inv); 
-printf("&nbsp;Invert Chinese display<BR>&nbsp;&nbsp;\n");
-cgiMakeCheckBox("hapmapLdJpt_inv", hapmapLdJpt_inv); 
-printf("&nbsp;Invert Japanese display<BR>&nbsp;&nbsp;\n");
-cgiMakeCheckBox("hapmapLdChbJpt_inv", hapmapLdChbJpt_inv); 
-printf("&nbsp;Invert combined Chinese and Japanese display<BR>&nbsp;&nbsp;\n");
-
+if (startsWith("hapmapLd", tdb->tableName))
+    {
+    if (hTableExists("hapmapLdYri"))
+	{
+	cgiMakeCheckBox("hapmapLdYri_inv", hapmapLdYri_inv); 
+	printf("&nbsp;Invert Yoruban display<BR>&nbsp;&nbsp;\n");
+	}
+    if (hTableExists("hapmapLdCeu"))
+	{
+	cgiMakeCheckBox("hapmapLdCeu_inv", hapmapLdCeu_inv); 
+	printf("&nbsp;Invert CEPH display<BR>&nbsp;&nbsp;\n");
+	}
+    if (hTableExists("hapmapLdChb"))
+	{
+	cgiMakeCheckBox("hapmapLdChb_inv", hapmapLdChb_inv); 
+	printf("&nbsp;Invert Chinese display<BR>&nbsp;&nbsp;\n");
+	}
+    if (hTableExists("hapmapLdJpt"))
+	{
+	cgiMakeCheckBox("hapmapLdJpt_inv", hapmapLdJpt_inv); 
+	printf("&nbsp;Invert Japanese display<BR>&nbsp;&nbsp;\n");
+	}
+    if (hTableExists("hapmapLdChbJpt"))
+	{
+	cgiMakeCheckBox("hapmapLdChbJpt_inv", hapmapLdChbJpt_inv); 
+	printf("&nbsp;Invert combined Chinese and Japanese display<BR>&nbsp;&nbsp;\n");
+	}
+    }
 printf("<BR><B>Colors:</B>\n");
 
 printf("<TABLE>\n ");
@@ -426,6 +443,7 @@ printf("</TD>\n  <TD>");
 radioButton("ldOut", ldOut, "none");
 printf("</TD>\n </TR>\n ");
 printf("</TABLE>\n");
+printf("<BR><B>Populations:</B>\n");
 }
 
 void hgMutIdControls (struct trackDb *tdb) 
@@ -1902,7 +1920,8 @@ else if (tdb->type != NULL)
             else if (startsWith("encodeGencode", track))
                 gencodeUI(tdb);
             nmdFilterOptions(tdb);
-	    cdsColorOptions(tdb, 2);
+            if (! sameString(track, "tigrGeneIndex"))
+	        cdsColorOptions(tdb, 2);
             }
 	
 	/* if bed has score then show optional filter based on score */

@@ -595,6 +595,42 @@ sGroup_placental rabbit rn3 mm3 cow pig horse cat dog ajbat cpbat hedgehog
 sGroup_mammal opossum dunnart platypus 
 sGroup_vertebrate chicken zfish tetra fr1
 
+track hapmapLd
+compositeTrack on
+shortLabel HapMap LD
+longLabel HapMap Linkage Disequilibrium - Phase II
+group varRep
+priority 144.49
+visibility hide
+canPack off
+chromosomes chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX
+dataVersion HapMap release 19
+type bed 4 +
+
+    track hapmapLdYri
+    subTrack hapmapLd off
+    shortLabel LD YRI
+    longLabel HapMap Linkage Disequilibrium for the Yoruban
+    priority 1
+
+    track hapmapLdCeu
+    subTrack hapmapLd
+    shortLabel LD CEU
+    longLabel HapMap Linkage Disequilibrium for the CEPH
+    priority 2
+
+    track hapmapLdChb
+    subTrack hapmapLd off
+    shortLabel LD CHB
+    longLabel HapMap Linkage Disequilibrium for the Chinese Han population
+    priority 3
+
+    track hapmapLdJpt
+    subTrack hapmapLd off
+    shortLabel LD JPT
+    longLabel HapMap Linkage Disequilibrium for the Japanese population
+    priority 4
+
 track lineageMutations
 shortLabel LineageMutations
 longLabel Lineage Specific Mutations
