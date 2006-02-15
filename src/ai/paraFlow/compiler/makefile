@@ -12,6 +12,8 @@ paraFlow: $(O)
 test:
 	cd ../testProg && ${MAKE}
 
+q:  quickTest
+
 quickTest:
 	cd ../testProg && ${MAKE} quickTest
 
