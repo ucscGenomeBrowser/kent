@@ -920,6 +920,11 @@ if (pt->base != destBase)
 	}
     if (!ok)
 	{
+	uglyf("Couldn't convert:\n");
+	pfParseDump(pp, 1, uglyOut);
+	uglyf("To:\n   ");
+	pfTypeDump(destType, uglyOut);
+	uglyf("\n");
 	typeMismatch(pp, destType);
 	}
     }

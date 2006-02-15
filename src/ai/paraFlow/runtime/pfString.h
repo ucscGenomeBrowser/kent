@@ -1,6 +1,6 @@
 /* Built in string handling. */
 
-#ifndef STRING_H
+#ifndef PFSTRING_H
 
 struct _pf_string *_pf_string_new(char *s, int size);
 /* Wrap string buffer of given size. */
@@ -52,4 +52,4 @@ int _pf_strcmp(_pf_Stack *stack);
  * of stack.  Does not put result on stack because
  * the code generator may use it in different ways. */
 
-#endif /* STRING_H */
+#endif /* PFSTRING_H */

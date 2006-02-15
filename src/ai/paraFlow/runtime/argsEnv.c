@@ -7,7 +7,7 @@
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 #include "object.h"
-#include "string.h"
+#include "pfString.h"
 #include "initVar.h"
 
 static char **cl_env;

@@ -3,7 +3,7 @@
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 #include "object.h"
-#include "string.h"
+#include "pfString.h"
 
 
 static void _pf_string_cleanup(struct _pf_string *string, int typeId)
