@@ -13,9 +13,10 @@
 #include "hash.h"
 #include "hdb.h"
 
+/* errAbort if larger SNP found */
 #define MAX_SNP_SIZE 1024
 
-static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.3 2006/02/10 19:31:22 heather Exp $";
+static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.4 2006/02/15 21:05:30 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -55,9 +56,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     safef(tableName, ArraySize(tableName), "%s_snpTmp", row[0]);
     if (!hTableExists(tableName)) continue;
     el = chromInfoLoad(row);
-    // verbose(1, "chrom = %s\n", row[0]);
     hashAdd(ret, el->chrom, (void *)(& el->size));
-    // hashAdd(ret, cloneString(row[0]), sqlUnsigned(row[1]));
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -86,26 +85,19 @@ char tableName[64];
 char fileName[64];
 char nibName[HDB_MAX_PATH_STRING];
 FILE *f;
-// do I need an include for this?
 struct dnaSeq *seq;
 char *seqPtr = NULL;
 int start = 0;
 int end = 0;
 int chromSize = 0;
-// figure out maximum SNP size
 char refUCSC[MAX_SNP_SIZE];
 int pos = 0;
 int snpSize = 0;
-// for short-circuit
-int count = 0;
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 if (!hTableExists(tableName)) return;
-verbose(3, "tableName = %s\n", tableName);
 safef(fileName, ArraySize(fileName), "%s_snpTmp.tab", chromName);
-verbose(3, "fileName = %s\n", fileName);
 chromSize = getChromSize(chromName);
-verbose(3, "chromSize = %d\n", chromSize);
 
 f = mustOpen(fileName, "w");
 hNibForChrom(chromName, nibName);
@@ -119,16 +111,11 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    count++;
-    // if (count == 100) return;
-    start = atoi(row[1]);
-    end = atoi(row[2]);
+    start = sqlUnsigned(row[1]);
+    end = sqlUnsigned(row[2]);
     snpSize = end - start;
     if (snpSize > MAX_SNP_SIZE)
-        {
-	verbose(1, "maximum size exceeded %s, %s:%d-%d\n", row[0], chromName, start, end);
-	continue;
-	}
+	errAbort("maximum size exceeded %s, %s:%d-%d\n", row[0], chromName, start, end);
     if (start == end)
         {
 	/* copy whatever convention dbSNP uses for insertion */
@@ -137,6 +124,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	continue;
 	}
     verbose(5, "building refUCSC for rs%s at %s:%d-%d\n", row[0], chromName, start, end);
+    // could potentially use memcpy here
     for (pos = start; pos < end; pos++)
         refUCSC[pos - start] = seqPtr[pos];
     refUCSC[snpSize] = '\0';
