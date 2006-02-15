@@ -1,0 +1,51 @@
+class polygon
+   {
+   class point
+       {
+       double x,y,z;
+       to zoom(double amount=2.0)
+           {
+	   x *= amount;
+	   y *= amount;
+	   z *= amount;
+	   }
+       }
+   array of point points;
+   
+   to init()
+       {
+       points = ((1,2,3),(4,5,6));
+       }
+
+   to printPoint(int i)
+       {
+       print(points[i]);
+       }
+
+   to experiment()
+       {
+       print(points);
+       foreach (p in points)
+           p.zoom(10);
+       print(points);
+       }
+   }
+
+
+polygon p = ();
+print(p);
+p.init();
+print(p);
+print(p.points[0]);
+p.printPoint(1);
+print(p.points[0].x);
+p.experiment();
+
+to dream()
+    {
+    class star {string name, double salary;}
+    star a = ("willy nelson", 1000000.0);
+    print(a);
+    }
+
+dream();
