@@ -12,6 +12,9 @@ paraFlow: $(O)
 test:
 	cd ../testProg && ${MAKE}
 
+quickTest:
+	cd ../testProg && ${MAKE} quickTest
+
 ret:
 	gcc -c t.c 
 	gcc -c out.c

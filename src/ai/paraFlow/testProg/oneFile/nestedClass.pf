@@ -47,12 +47,9 @@ to dream()
         {
 	string name;
 	double salary;
-//	to raise(double amount) {salary += raise;}
 	}
     star a = ("Willy Nelson", 1000000.0);
     print(a);
- //   a.raise(23456.0);
-  //  print(a);
     }
 
 dream();
