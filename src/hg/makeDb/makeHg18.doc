@@ -5478,6 +5478,7 @@ vi description.html
 # Change release date and build number and change hg17 to hg18
 # Check it into CVS
 
+mkdir -p /cluster/data/hg18/html
 cp -p description.html /cluster/data/hg18/html
 
 ln -s /cluster/data/hg18/html/description.html /gbdb/hg18/html/description.html
