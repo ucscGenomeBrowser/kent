@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.284 2006/02/10 18:08:04 hiram Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.285 2006/02/15 21:53:43 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -98,7 +98,7 @@ struct hash *infoHash = NULL;
 struct hashEl *dHel = NULL;
 struct chromInfo *ci = NULL;
 char upcName[HDB_MAX_CHROM_STRING];
-safef(upcName, sizeof(upcName), chrom);
+safef(upcName, sizeof(upcName), "%s", chrom);
 touppers(upcName);
 
 if (dbToInfo == NULL)
