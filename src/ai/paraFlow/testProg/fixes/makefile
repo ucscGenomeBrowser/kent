@@ -23,3 +23,5 @@ test:
 	diff expected/nilStuff output/nilStuff
 	paraFlow oneIntoClass.pf oneIntoClass.pf > output/oneIntoClass
 	diff expected/oneIntoClass output/oneIntoClass
+	paraFlow parentFieldInParam.pf parentFieldInParam.pf > output/parentFieldInParam
+	diff expected/parentFieldInParam output/parentFieldInParam

@@ -1318,21 +1318,43 @@ for (type = type->children; type != NULL; type = type->next)
     rCheckTypeWellFormed(pfc, type);
 }
 
-static void checkRedefinitionInParent(struct pfCompile *pfc, struct pfParse *varInit)
+static boolean isFunctionIo(struct pfParse *varInit)
+/* Return TRUE if varInit is part of function input or output. */
+{
+/* Can safely take grandparent without NULL check because there
+ * is always a module and program at the least ahead of us. */
+struct pfParse *grandParent = varInit->parent->parent; 
+switch (grandParent->type)
+    {
+    case pptToDec:
+    case pptFlowDec:
+    case pptOperatorDec:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
+static void checkRedefinitionInParent(struct pfCompile *pfc, 
+	struct pfParse *varInit)
 /* Make sure that variable is not defined as a public member of parent class. */
 {
-struct pfBaseType *base;
-char *name = varInit->name;
-struct pfParse *classDef = pfParseEnclosingClass(varInit->parent);
-if (classDef != NULL)
+if (!isFunctionIo(varInit))
     {
-    for (base = classDef->ty->base->parent; base != NULL; base = base->parent)
+    struct pfBaseType *base;
+    char *name = varInit->name;
+    struct pfParse *classDef = pfParseEnclosingClass(varInit->parent);
+    if (classDef != NULL)
 	{
-	struct pfType *field;
-	for (field = base->fields; field != NULL; field = field->next)
+	for (base = classDef->ty->base->parent; base != NULL; base = base->parent)
 	    {
-	    if (sameString(name, field->fieldName))
-		errAt(varInit->tok, "%s already defined in parent class %s", name, base->name);
+	    struct pfType *field;
+	    for (field = base->fields; field != NULL; field = field->next)
+		{
+		if (sameString(name, field->fieldName))
+		    errAt(varInit->tok, 
+		    	"%s already defined in parent class %s", name, base->name);
+		}
 	    }
 	}
     }
