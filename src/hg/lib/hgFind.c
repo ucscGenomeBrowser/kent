@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.179 2006/02/16 16:38:53 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.180 2006/02/16 18:26:25 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -641,6 +641,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	safef(nameBuf, sizeof(nameBuf), "%s (%s)", row[1], row[0]);
 	pos->name = cloneString(nameBuf);
 	pos->description = cloneString(row[2]);
+	pos->browserName = cloneString(row[0]);
 	}
     }
 sqlFreeResult(&sr);
