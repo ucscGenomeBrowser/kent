@@ -667,21 +667,38 @@ struct pfParse *initMethod = base->initMethod;
 if (initMethod)
     {
     /* convert parse tree from
-     *     pptTuple
-     *         ...
+     *     pptTuple 
+     *         (input-to-init)
      * to
      *     pptAllocInit <classType>
-     *        pptTuple     <init-params>
-     *          ...
+     *        pptTuple   
+     *          (default-values-and-zeroes)
+     *        pptTuple
+     *          (input-to-init)
      */
-    struct pfType *functionType = initMethod->ty;
-    struct pfType *inputType = functionType->children;
+    struct pfType *initType = initMethod->ty;
+    struct pfType *initInputType = initType->children;
     struct pfParse *allocInit= pfParseNew(pptAllocInit, tuple->tok,
     	tuple->parent, tuple->scope);
-    coerceTuple(pfc, &tuple, inputType);
+    struct pfParse *defaultValTuple = pfParseNew(pptTuple, tuple->tok,
+    	tuple->parent, tuple->scope);
+
+    /* Coerce the new empty tuple into something that will contain
+     * default values for all fields. */
+    rCoerceTupleToClass(pfc, defaultValTuple, &defaultValTuple->children, 
+	    base, TRUE);
+    /* Also type cast and fill in default arguments for init method. */
+    coerceTuple(pfc, &tuple, initInputType);
+
+    /* Set up types on everything. */
     allocInit->ty = pfTypeNew(base);
+    pfTypeOnTuple(pfc, tuple);
+    pfTypeOnTuple(pfc, defaultValTuple);
+
+    /* Arrange the parse tree. */
     allocInit->next = tuple->next;
-    allocInit->children = tuple;
+    allocInit->children = defaultValTuple;
+    defaultValTuple->next = tuple;
     tuple->next = NULL;
     tuple->parent = allocInit;
     *pPp = allocInit;

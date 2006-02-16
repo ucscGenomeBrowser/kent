@@ -1486,8 +1486,8 @@ else
 	}
     }
 }
-
-static int codeAllocInit(struct pfCompile *pfc, FILE *f,
+#ifdef OLD
+static int oldCodeAllocInit(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
 /* Generate code to allocate memory and initialize a class
  * via init method. */
@@ -1502,6 +1502,32 @@ fprintf(f, "_pf_obj->_pf_refCount = 1;\n");
 fprintf(f, "_pf_obj->_pf_cleanup = _pf_class_cleanup;\n");
 fprintf(f, "%s[%d].Obj = _pf_obj;\n", stackName, stack); 
 codeExpression(pfc, f, inTuple, stack+1, TRUE);
+codeMethodName(pfc, pp->tok, f, base, "init", stack);
+fprintf(f, "(%s+%d);\n", stackName, stack);
+fprintf(f, "%s[%d].Obj = _pf_obj;\n", stackName, stack);
+fprintf(f, "}\n");
+return 1;
+}
+#endif /* OLD */
+
+static int codeAllocInit(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code to allocate memory and initialize a class
+ * first by default values in tuple, and then by init method. */
+{
+struct pfParse *defaultTuple = pp->children;
+struct pfParse *initTuple = defaultTuple->next;
+struct pfBaseType *base = pp->ty->base;
+int offset = codeExpression(pfc, f, defaultTuple, stack, TRUE);
+fprintf(f, "{\n");
+fprintf(f, "struct _pf_object *_pf_obj = ");
+fprintf(f, "_pf_tuple_to_class(%s+%d, ", stackName, stack);
+codeForType(pfc, f, pp->ty);
+fprintf(f, ", \"");
+rCodeTupleType(pfc, f, defaultTuple->ty);
+fprintf(f, "\");\n");
+fprintf(f, "%s[%d].Obj = _pf_obj;\n", stackName, stack);
+codeExpression(pfc, f, initTuple, stack+1, TRUE);
 codeMethodName(pfc, pp->tok, f, base, "init", stack);
 fprintf(f, "(%s+%d);\n", stackName, stack);
 fprintf(f, "%s[%d].Obj = _pf_obj;\n", stackName, stack);
