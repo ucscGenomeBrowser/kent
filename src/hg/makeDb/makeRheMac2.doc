@@ -144,7 +144,7 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   load data local infile 'fragment.txt' into table gap
   # create trackDb/monkey/rheMac2/gap.html
 
-# CREATE CONTIG TABLE 
+# CREATE CONTIG TABLE  (DONE Feb 15,2006 Robert)
 
   ssh hgwdev
   cd kent/src/hg/lib
@@ -204,7 +204,7 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
 
   # /bin/csh makeJoblist-RM.csh
 
-  # do the run  (DONE Sep 7, 2005 Robert)
+  # do the run  (DONE Jan 30, 2006 Robert)
   ssh pk
   cd /cluster/data/rheMac2/RMRun
   para create RMJobs.2
@@ -261,7 +261,7 @@ note: 997 records dropped due to repStart > repEnd
 
   # select count(*) from rmsk;
 
-# SIMPLE REPEATS 
+# SIMPLE REPEATS (DONE Jan 30, 2006 Robert)
 # put the results throughout the scaffold 0/0/0 directories,
 # same as RepeatMasker, to avoid too many files in the same directory
   ssh kkstore01
@@ -463,7 +463,7 @@ WARNING: negative rEnd: -939 chrX:153527918-153528288 L1M4
   nice gzip rheMac2.softmask2.fa
   nice gzip rheMac2.hardmask.fa
 
-# REGENERATE 2BIT NIB 
+# REGENERATE 2BIT NIB (DONE Jan 30, 2006 Robert)
   ssh kkstore02
   cd /cluster/data/rheMac2
   /cluster/bin/i386/faToTwoBit rheMac2.softmask2.fa rheMac2.softmask.2bit
