@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.178 2006/02/02 02:50:30 kent Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.179 2006/02/16 16:38:53 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2443,6 +2443,8 @@ multiTerm = (termCount > 1);
 
 for (i = 0;  i < termCount;  i++)
     {
+    if (isEmpty(terms[i]))
+	continue;
     hgp = hgPositionsFind(terms[i], "", hgAppName, cart, multiTerm);
     if (hgp == NULL || hgp->posCount == 0)
 	{
