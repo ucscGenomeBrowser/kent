@@ -113,7 +113,7 @@ if (c == '(')
     if (*s == ')')
         s += 1;
     else
-        errAbort("Problem in paren code '%s'", *parenCode);
+        _pf_run_err("Problem in paren code '%s'", *parenCode);
     slReverse(&type->children);
     }
 return type;

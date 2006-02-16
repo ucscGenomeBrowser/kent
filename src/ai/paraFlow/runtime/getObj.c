@@ -16,12 +16,6 @@ static void scanField(FILE *f, void *data, struct _pf_type *type,
 static _pf_Int  scanInt(FILE *f);
 /* Read integer or die trying */
 
-static void runErr(char *message)
-/* Print runtime error. */
-{
-errAbort(message);
-}
-
 static void *idLookup(struct hash *idHash, int id)
 /* Look up object in hash.  */
 {
@@ -30,7 +24,7 @@ struct _pf_object *obj;
 safef(buf, sizeof(buf), "%X", id);
 obj = hashFindVal(idHash, buf);
 if (obj == NULL)
-    runErr("no such ID");
+    _pf_run_err("no such ID");
 obj->_pf_refCount += 1;
 return obj;
 }
@@ -56,7 +50,7 @@ if (c == '$')
     return idLookup(idHash, id);
     }
 else if (c != '(')
-    runErr("Expecting parenthesis");
+    _pf_run_err("Expecting parenthesis");
 return NULL;
 }
 
@@ -65,7 +59,7 @@ _pf_Int  scanInt(FILE *f)
 {
 _pf_Int  i;
 if (fscanf(f, "%d", &i) != 1)
-    runErr("Not an int");
+    _pf_run_err("Not an int");
 return i;
 }
 
@@ -74,7 +68,7 @@ _pf_Long scanLong(FILE *f)
 {
 _pf_Long i;
 if (fscanf(f, "%lld", &i) != 1)
-    runErr("Not a long");
+    _pf_run_err("Not a long");
 return i;
 }
 
@@ -83,7 +77,7 @@ _pf_Double scanDouble(FILE *f)
 {
 _pf_Double i;
 if (fscanf(f, "%lf", &i) != 1)
-    runErr("Not a long");
+    _pf_run_err("Not a long");
 return i;
 }
 
@@ -93,7 +87,7 @@ static void scanDyString(FILE *f, struct dyString *dy)
 boolean isEscaped = FALSE;
 int c = fgetc(f);
 if (c != '"')
-   runErr("Not a string");
+   _pf_run_err("Not a string");
 for (;;)
    {
    c = fgetc(f);
@@ -143,7 +137,7 @@ if (c == 'n')
     int c1 = getc(f);
     int c2 = getc(f);
     if (c1 != 'i' || c2 != 'l')
-        runErr("expecting nil");
+        _pf_run_err("expecting nil");
     return TRUE;
     }
 else
@@ -181,12 +175,12 @@ else
 		{
 		c = fgetc(f);
 		if (c != ',')
-		    runErr("Expecting comma");
+		    _pf_run_err("Expecting comma");
 		}
 	    }
 	c = fgetc(f);
 	if (c != ')')
-	    runErr("Expecting )");
+	    _pf_run_err("Expecting )");
 	}
     return obj;
     }
@@ -217,7 +211,7 @@ if (!gotNil(f))
 	    if (needComma)
 		{
 		if (c != ',')
-		    runErr("Expecting comma");
+		    _pf_run_err("Expecting comma");
 		}
 	    else
 		{
@@ -271,7 +265,7 @@ if (!gotNil(f))
 	    if (needComma)
 		{
 		if (c != ',')
-		    runErr("Expecting comma");
+		    _pf_run_err("Expecting comma");
 		}
 	    else
 		{
@@ -281,9 +275,9 @@ if (!gotNil(f))
 	    dyStringClear(dy);
 	    scanDyString(f, dy);
 	    if (fread(toBuf, 1, 1, f) != 1)
-		runErr("Unexpected end of file");
+		_pf_run_err("Unexpected end of file");
 	    if (memcmp(toBuf, ":", 1) != 0)
-		runErr("Expecting 'to'");
+		_pf_run_err("Expecting 'to'");
 	    switch (elBase->singleType)
 		{
 		case pf_stArray:
@@ -344,7 +338,7 @@ if (!gotNil(f))
 		    break;
 		    }
 		case pf_stVar:
-		    runErr("Can't scan data containing var types.");
+		    _pf_run_err("Can't scan data containing var types.");
 		    break;
 		default:
 		    internalErr();
@@ -432,10 +426,10 @@ switch (type->base->singleType)
 	}
     case pf_stToPt:
     case pf_stFlowPt:
-	runErr("Can't scan data containing var of (function pointer) types.");
+	_pf_run_err("Can't scan data containing var of (function pointer) types.");
 	break;
     case pf_stVar:
-	runErr("Can't scan data containing var types.");
+	_pf_run_err("Can't scan data containing var types.");
 	break;
     default:
 	internalErr();
@@ -463,7 +457,7 @@ switch (base->singleType)
 	else if (c == '1')
 	    stack[0].Bit = 1;
 	else
-	    runErr("Not a bit");
+	    _pf_run_err("Not a bit");
 	break;
     case pf_stByte:
 	{
@@ -502,13 +496,13 @@ switch (base->singleType)
 	break;
     case pf_stToPt:
     case pf_stFlowPt:
-	runErr("Can't scan data containing var of (function pointer) types.");
+	_pf_run_err("Can't scan data containing var of (function pointer) types.");
 	break;
     case pf_stVar:
-	runErr("Can't scan data containing var types.");
+	_pf_run_err("Can't scan data containing var types.");
 	break;
     default:
-	runErr("unknown type");
+	_pf_run_err("unknown type");
 	break;
     }
 
