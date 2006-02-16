@@ -431,8 +431,7 @@ else
 		 *pos = CloneVar(type->init);
 		 }
 	     }
-	 else
-	     coerceOne(pfc, pos, type, FALSE);
+	 coerceOne(pfc, pos, type, FALSE);
 	 pos = &(*pos)->next;
 	 type = type->next;
 	 if (type == NULL)
@@ -609,10 +608,7 @@ else
 		 pp = CloneVar(type->init);
 		 }
 	    }
-	else
-	    {
-	    coerceOne(pfc, &pp, type, FALSE);
-	    }
+	coerceOne(pfc, &pp, type, FALSE);
 	slAddHead(&orderedList, pp);
 	}
     slReverse(&orderedList);
@@ -774,7 +770,6 @@ struct pfParse *tuple = *pPp;
 struct pfParse **pLeftover;
 boolean fillMissingWithZero = (tuple->children == NULL);
 struct pfParse *initMethod = base->initMethod;
-// uglyf("Here would need to be dealing with named parameters....\n");
 if (initMethod)
     {
     /* convert parse tree from
@@ -798,8 +793,7 @@ if (initMethod)
      * default values for all fields. */
     rCoerceTupleToClass(pfc, defaultValTuple, &defaultValTuple->children, 
 	    base, TRUE);
-    /* Also type cast and fill in default arguments for init method. */
-    coerceTuple(pfc, &tuple, initInputType);
+    coerceNamedTuple(pfc, &tuple, initInputType);
 
     /* Set up types on everything. */
     allocInit->ty = pfTypeNew(base);
@@ -816,6 +810,7 @@ if (initMethod)
     }
 else
     {
+// uglyf("Here would need to be dealing with named parameters....\n");
     pLeftover = rCoerceTupleToClass(pfc, tuple, &tuple->children, 
 	    base, fillMissingWithZero);
     if (*pLeftover != NULL)
