@@ -1,5 +1,8 @@
 TO DO:
   - Adding named parameters.
+  - Way to call parent methods in an object.  (An automatically
+    declared parent variable to go with the automatically declared
+    self variable.)
   - Exceptions.
   - Make para actions use p-threads.
   - ?Read-only and private variables.

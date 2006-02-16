@@ -1,0 +1,34 @@
+/*
+class point {int x,y,z, string s="wooga";}
+point pt1 = (1,2,3,"ok");
+point pt2 = (x:1,y:2,z:3,"ok");
+print(pt2);
+*/
+
+to liftIntoSpace(string payload, double grams, double kilometersHigh,
+	string sponsor="Lockheed", int id=3)
+    {
+    print("Attempting to lift " + grams + " gram cargo into an orbit of ");
+    print(kilometersHigh + " kilometers.  Sponsored by " + sponsor + ". ");
+    print("Launch id code " + id);
+    }
+
+liftIntoSpace("10 frisbees", 298.1, 12.3, "UC Santa Cruz", 689);
+liftIntoSpace("10 frisbees", grams:298.1, kilometersHigh:12.3, 
+	sponsor:"UC Santa Cruz", id:689);
+liftIntoSpace(
+	sponsor:"UC Santa Cruz", 
+	grams:298.1, 
+	kilometersHigh:12.3, 
+	payload:"10 frisbees", 
+	id:689);
+liftIntoSpace(
+	grams:298.1, 
+	kilometersHigh:12.3, 
+	payload:"10 frisbees", 
+	id:689);
+liftIntoSpace(
+	sponsor:"UC Santa Cruz", 
+	grams:298.1, 
+	kilometersHigh:12.3, 
+	payload:"10 frisbees");

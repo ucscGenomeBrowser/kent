@@ -7,6 +7,8 @@ test:
 	diff expected/houses output/houses
 	paraFlow interface.pf > output/interface
 	diff expected/interface output/interface
+	paraFlow namedParam.pf > output/namedParam
+	diff expected/namedParam output/namedParam
 	paraFlow nestedClass.pf > output/nestedClass
 	diff expected/nestedClass output/nestedClass
 	paraFlow paraAll.pf > output/paraAll

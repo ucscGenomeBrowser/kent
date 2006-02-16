@@ -85,6 +85,7 @@ switch (pp->type)
 	    	"The key in a key : val expression must be string or name.");
 	key->type = pptKeyName;
 	key->tok->type = pftString;
+	key->name = key->tok->val.s;
         break;
 	}
     case pptForeach:

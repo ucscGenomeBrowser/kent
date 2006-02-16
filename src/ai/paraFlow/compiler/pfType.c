@@ -537,6 +537,90 @@ else
     }
 }
 
+static void coerceNamedTuple(struct pfCompile *pfc, 
+	struct pfParse **pTuple, struct pfType *types)
+/* Here we are either a function parameter list, or we are
+ * a class being initialized.  It's possible that we'll be
+ * specified positionally, or by name.  Deal with it. */
+{
+struct pfParse *tuple = *pTuple, *pp;
+boolean gotKeyVal = FALSE;
+for (pp = tuple->children; pp != NULL; pp = pp->next)
+    {
+    if (pp->type == pptKeyVal)
+        gotKeyVal = TRUE;
+    else
+        {
+	if (gotKeyVal)
+	    errAt(pp->tok, 
+	    	"Positional parameters can't follow named parameters.");
+	}
+     }
+if (!gotKeyVal)
+    {
+    coerceTuple(pfc, pTuple, types);
+    return;
+    }
+else
+    {
+    struct hash *fieldHash = hashNew(8);
+    struct hash *hash = hashNew(8);
+    struct pfType *type;
+    struct pfParse *orderedList = NULL;
+
+    /* Create a hash of all fields (or for functions parameters.
+     * This is just to make sure that all named parameters actually
+     * refer to a real field. */
+    for (type = types->children; type != NULL; type = type->next)
+        hashAdd(fieldHash, type->fieldName, NULL);
+
+    /* Create a hash keyed by the field name. */
+    for (pp = tuple->children, type = types->children;
+         pp != NULL && type != NULL;
+	 pp = pp->next, type = type->next)
+	 {
+	 if (pp->type == pptKeyVal)
+	     {
+	     struct pfParse *key = pp->children;
+	     struct pfParse *val = key->next;
+	     if (!hashLookup(fieldHash, key->name))
+	         errAt(key->tok, "%s seems misspelled or misplaced", key->name);
+	     hashAdd(hash, key->tok->val.s, val);
+	     }
+	 else
+	     {
+	     hashAdd(hash, type->fieldName, pp);
+	     }
+	 }
+
+    for (type = types->children; type != NULL; type = type->next)
+        {
+	pp = hashFindVal(hash, type->fieldName);
+	if (pp == NULL)
+	    {
+	    if (type->init == NULL)
+		 {
+	         errAt(tuple->tok, "missing %s:value", type->fieldName);
+		 }
+	    else
+	         {
+		 pp = CloneVar(type->init);
+		 }
+	    }
+	else
+	    {
+	    coerceOne(pfc, &pp, type, FALSE);
+	    }
+	slAddHead(&orderedList, pp);
+	}
+    slReverse(&orderedList);
+    tuple->children = orderedList;
+    tuple->ty = CloneVar(types);
+    hashFree(&hash);
+    hashFree(&fieldHash);
+    }
+}
+
 static void coerceCall(struct pfCompile *pfc, struct pfParse **pPp)
 /* Make sure that parameters to call are right.  Then
  * set pp->type to call's return type. */
@@ -560,14 +644,20 @@ switch(functionType->tyty)
 	struct pfParse *paramTuple = function->next;
 	struct pfParse *firstParam = paramTuple->children;
 
-	if (firstParam != NULL && (firstParam->type == pptCall || firstParam->type == pptIndirectCall) && firstParam->next == NULL && slCount(inputType->children) != 1)
+	if (firstParam != NULL && 
+	    (firstParam->type == pptCall || firstParam->type == pptIndirectCall)
+	    && firstParam->next == NULL && slCount(inputType->children) != 1)
 	    {
-	    coerceCallToTupleOfTypes(pfc, &paramTuple->children, inputType->children);
+	    /* Here we attempt to handle the case of a function
+	     * with multiple outputs being fed into a function
+	     * with multiple inputs. */
+	    coerceCallToTupleOfTypes(pfc, &paramTuple->children, 
+	    	inputType->children);
 	    }
 	else
 	    {
 	    struct pfParse **pParamTuple = &function->next;
-	    coerceTuple(pfc, pParamTuple, inputType);
+	    coerceNamedTuple(pfc, pParamTuple, inputType);
 	    }
 	if (outputType->children != NULL && outputType->children->next == NULL)
 	    pp->ty = CloneVar(outputType->children);
