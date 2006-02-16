@@ -10,7 +10,7 @@
 #include "twoBit.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: mafAddIRows.c,v 1.8 2005/11/24 17:13:55 braney Exp $";
+static char const rcsid[] = "$Id: mafAddIRows.c,v 1.9 2006/02/16 02:17:03 braney Exp $";
 
 char *masterSpecies;
 char *masterChrom;
@@ -575,9 +575,13 @@ while (lineFileRow(lf, row))
     hel = hashLookup(hash, row[0]);
     if (hel == NULL)
        {
+	char *ptr;
+
 	if (sizeHash == NULL)
 	    errAbort("reading %s don't have size for %s\n",fileName,row[0]);
-	size = atoi(hashFindVal(sizeHash, row[0]));
+	if ((ptr = hashFindVal(sizeHash, row[0])) == NULL)
+	    errAbort("reading %s don't have size for %s\n",fileName,row[0]);
+	size = atoi(ptr);
 	//printf("got %d for %s\n",size,row[0]);
 	bk = binKeeperNew(0, size);
 	hel = hashAdd(hash, row[0], bk);
