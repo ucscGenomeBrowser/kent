@@ -78,5 +78,5 @@ if ( $debug == "true" ) then
   # exit
 endif
 
-exit 1
+exit
 
