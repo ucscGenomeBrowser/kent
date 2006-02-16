@@ -93,8 +93,8 @@ struct _pf_functionFixedInfo
 struct _pf_activation
 /* Function activation record. */
     {
-    struct _pf_activation *parent;	/* Caller's activation record. */
-    struct _pfFunctionFixedInfo *fixed;	/* Information valid for all calls.. */
+    struct _pf_activation *parent;		/* Caller's activation record. */
+    struct _pf_functionFixedInfo *fixed;	/* Information valid for all calls.. */
     };
 extern struct _pf_activation *_pf_activation_stack;
 
@@ -111,6 +111,9 @@ struct _pf_iterator
 struct _pf_iterator _pf_list_iterator_init(_pf_List list);
 struct _pf_iterator _pf_tree_iterator_init(_pf_Tree tree);
 struct _pf_iterator _pf_dir_iterator_init(_pf_Dir dir);
+
+void _pf_run_err(char *format, ...);
+/* Run time error.  Prints message, dumps stack, and aborts. */
 
 void *_pf_need_mem(int size);
 /* Allocate memory, which is initialized to zero. */

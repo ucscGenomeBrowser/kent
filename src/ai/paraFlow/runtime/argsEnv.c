@@ -2,6 +2,7 @@
  * environment dir. */
 
 #include "common.h"
+#include "errabort.h"
 #include "dystring.h"
 #include "portable.h"
 #include "../compiler/pfPreamble.h"
@@ -11,6 +12,30 @@
 #include "initVar.h"
 
 static char **cl_env;
+
+static void stackDump()
+/* Print stack dump. */
+{
+struct _pf_activation *s;
+for (s = _pf_activation_stack; s != NULL; s = s->parent)
+    {
+    fprintf(stderr, "%s\n", s->fixed->name);
+    }
+}
+
+void _pf_run_err(char *format, ...)
+/* Run time error.  Prints message, dumps stack, and aborts. */
+{
+va_list args;
+va_start(args, format);
+
+fprintf(stderr, "\n----------start stack dump---------\n");
+stackDump();
+fprintf(stderr, "-----------end stack dump----------\n");
+vaErrAbort(format, args);
+
+va_end(args);
+}
 
 void *_pf_need_mem(int size)
 /* Allocate memory, which is initialized to zero. */

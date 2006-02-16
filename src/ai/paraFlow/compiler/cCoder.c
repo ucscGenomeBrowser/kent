@@ -225,7 +225,7 @@ static boolean isInitialized(struct pfVar *var)
 {
 struct pfParse *pp = var->parse;
 if (pp->type != pptVarInit)
-    errAbort("Expecting pptVarInit got %s for var %s",
+    errAt(pp->tok, "Expecting pptVarInit got %s for var %s",
     	pfParseTypeAsString(pp->type), var->name);
 return pp->children->next->next != NULL;
 }
@@ -858,7 +858,7 @@ char *file;
 struct pfToken *tok = pp->tok;
 int line, col;
 pfSourcePos(tok->source, tok->text, &file, &line, &col);
-fprintf(f, "errAbort(\"\\nRun time error line %d col %d of %s: %s\");\n", 
+fprintf(f, "_pf_run_err(\"Run time error line %d col %d of %s: %s\");\n", 
 	line+1, col+1, file, message);
 }
 
@@ -2388,6 +2388,20 @@ declareStaticVars(pfc, f, funcDec, body, class);
 printPrototype(f, funcDec, class);
 fprintf(f, "\n{\n");
 
+/* Print out activation record. */
+    {
+    fprintf(f, "static struct _pf_functionFixedInfo _pf_fixedInfo = {\"");
+    if (class)
+        fprintf(f, "%s.", class->name);
+    fprintf(f, "%s\", 0};\n", funcVar->name);
+    fprintf(f, "struct _pf_activation _pf_act;\n");
+    fprintf(f, "_pf_fixedInfo.typeId = ");
+    codeForType(pfc, f, funcType);
+    fprintf(f, ";\n");
+    fprintf(f, "_pf_act.parent = _pf_activation_stack;\n");
+    fprintf(f, "_pf_act.fixed = &_pf_fixedInfo;\n");
+    fprintf(f, "_pf_activation_stack = &_pf_act;\n");
+    }
 
 /* Print out input parameters. */
     {
@@ -2454,6 +2468,7 @@ fprintf(f, "_pf_cleanup: ;\n");
     }
 
 /* Close out function. */
+fprintf(f, "_pf_activation_stack = _pf_activation_stack->parent;\n");
 fprintf(f, "}\n\n");
 }
 
