@@ -444,10 +444,13 @@ void eatSemi(struct pfToken **pTokList)
 /* Make sure there's a semicolon, and eat it. */
 {
 struct pfToken *tok = *pTokList;
-if (tok->type != ';')
-    expectingGot(";", tok);
-tok = tok->next;
-*pTokList = tok;
+if (tok->type != '}')
+    {
+    if (tok->type != ';')
+	expectingGot(";", tok);
+    tok = tok->next;
+    *pTokList = tok;
+    }
 }
     	
 struct pfParse *pfParseNew(enum pfParseType type,

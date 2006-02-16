@@ -1,9 +1,8 @@
 TO DO:
-  - Adding named parameters.
+  - Exceptions.
   - Way to call parent methods in an object.  (An automatically
     declared parent variable to go with the automatically declared
     self variable.)
-  - Exceptions.
   - Make para actions use p-threads.
   - ?Read-only and private variables.
         Make it so that class.new() is only legal way to
@@ -26,6 +25,8 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Make it so don't need trailing ';' before a '}'
+  - Adding named parameters.
   - optional init() method.
   - Do a sort function (need function pointer?)
   - Function pointers.

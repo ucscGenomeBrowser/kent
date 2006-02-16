@@ -88,6 +88,10 @@ struct _pf_functionFixedInfo
     {
     char *name;	 /* Function name. */
     int typeId;	 /* Index into types table describing function i/o etc. */
+    int varCount;	/* Includes i/o parameters. */
+    int *varTypes;	/* Types of all locals. */
+    char **varNames;	/* Names of all locals. */
+    int *varOffsets;	/* Variable offsets within local struct. */
     };
 
 struct _pf_activation
