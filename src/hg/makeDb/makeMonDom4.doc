@@ -138,6 +138,7 @@ popd
 	echo "chr${C} done"
     done
     #	the seemingly duplicate mention of _000.out and _0000.out takes
+    #	the seemingly duplicate mention of _000.out and _0000.out takes
     #	care of the case where one or the other exists, but both never
     #	exist.  One will not exist and the cat will complain to stderr, hence
     #	the redirection of cat complaints to dev null.
@@ -188,6 +189,9 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
 XXXX - running 2006-02-08 10:06
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=chainMerge `pwd`/DEF > chainMerge.out 2>&1 &
 
 ###########################################################################
 #	Initial database setup (DONE - 2006-02-06 - Hiram)
@@ -213,7 +217,7 @@ XXXX - running 2006-02-08 10:06
         defaultPos, active, orderKey, genome, scientificName, \
         htmlPath, hgNearOk, hgPbOk, sourceName) \
         VALUES("monDom4", "Jan 2006", "/gbdb/monDom4", "Opossum", \
-        "chr1:1000000-1100000", 1, 34, "Opossum", \
+        "chr4:344283621-363415496", 1, 34, "Opossum", \
         "Monodelphis domestica", \
         "/gbdb/monDom4/html/description.html", 0, 0, \
         "Broad Inst. monDom4 Jan06");' \
@@ -356,6 +360,8 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/monDom4TRF
 
 #######################################################################
 # MASK FA USING REPEATMASKER AND FILTERED TRF FILES (DONE - 2006-02-10 - Hiram)
+#	Additional masking was added later to use Damian Keefe's repeat
+#	libraries.
     #	the new style binRange was in development at this time, so using
     #	binaries built today with that new functionality.  Next time
     #	these will be the standard commands
@@ -492,6 +498,9 @@ done
     time featureBits monDom4 rmsk
     #	1814099592 bases of 3501643220 (51.807%) in intersection
     #	real    3m57.193s
+    #	time featureBits -countGaps monDom4 rmsk
+    #	1814099592 bases of 3605614649 (50.313%) in intersection
+
     time featureBits monDom2 rmsk
     #	1811406819 bases of 3496445653 (51.807%) in intersection
     #	real    5m31.388s
@@ -632,3 +641,118 @@ TMPDIR=/scratch/tmp
 	-stop=net `pwd`/DEF > blastz.out 2>&1 &
     #	running 2006-02-10
 
+#######################################################################
+#	Additional RepeatMasking - this sequence needs to be
+#	additionally masked with Damian Keefe's libraries
+#		(DONE - 2006-02-11 - Hiram)
+    ssh kkr1u00
+    mkdir /cluster/data/monDom4/RMExtra
+    cd /cluster/data/monDom4/RMExtra
+    wget --timestamping --force-directories --directory-prefix=. \
+        --dont-remove-listing --recursive --level=2 --no-parent \
+        --no-host-directories --cut-dirs=6 \
+ftp://ftp.ebi.ac.uk/pub/databases/ensembl/encode/repeat_libraries/monodelphis/*
+    #	picks up:
+    #	-rw-r--r--  1  679203 May  9  2005 supplemental.lib
+    #	-rw-r--r--  1  737274 May  9  2005 ab_initio.lib
+    #	-rw-r--r--  1     452 May  9  2005 README
+    cp -p supplemental.lib /iscratch/i/monDom4
+    cd /iscratch/i/monDom4
+    for R in 2 3 4 5 6 7 8
+    do
+	rsync -a --progress /iscratch/i/monDom4/ kkr${R}u00:/iscratch/i/monDom4/
+    done
+
+    ssh kk
+    cd /cluster/data/monDom4/RMExtra
+    cat << '_EOF_' > RMExtra.csh
+#!/bin/csh -fe
+/bin/mkdir -p /scratch/tmp/monDom4/$1/$2
+/bin/mkdir -p ../RMOutExtra/$1
+/bin/cp ../split500K/$1/$2.fa /scratch/tmp/monDom4/$1/$2/$2.fa
+pushd /scratch/tmp/monDom4/$1/$2
+/cluster/bluearc/RepeatMasker060120/RepeatMasker -s \
+        -lib /iscratch/i/monDom4/supplemental.lib $2.fa
+popd
+/bin/cp -p /scratch/tmp/monDom4/$1/$2/$2.fa.out $3
+/bin/rm -fr /scratch/tmp/monDom4/$1/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/monDom4/$1/$2
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/monDom4/$1
+'_EOF_'
+    #	happy emacs
+    chmod +x RMExtra.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./RMExtra.csh $(dir1) $(root1) {check out line ../RMOutExtra/$(dir1)/$(root1).out}
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+
+    mkdir ../RMOutExtra
+    gensub2 ../RMRun/split.list single template jobList
+    para create jobList
+    para try ... check ... push ... etc...
+    para time
+# Completed: 7170 of 7170 jobs
+# CPU time in finished jobs:    8540127s  142335.45m  2372.26h   98.84d  0.271 y
+# IO & Wait Time:                103372s    1722.87m    28.71h    1.20d  0.003 y
+# Average job time:                1206s      20.09m     0.33h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            2326s      38.77m     0.65h    0.03d
+# Submission to last job:         22083s     368.05m     6.13h    0.26d
+    cd /cluster/data/monDom4/RMOutExtra
+    for C in 1 2 3 4 5 6 7 8 X Un
+    do
+	echo "chr${C} working ... "
+	(cat ${C}/chr${C}_000.out ${C}/chr${C}_0000.out 2> /dev/null; \
+	    ls ${C}/chr${C}_*.out | egrep -v "_000.out|_0000.out" \
+		| xargs tail --quiet --lines=+4) | \
+	    liftUp ./chr${C}.fa.out ../lifts/lift500K.lft error stdin
+	echo "chr${C} done"
+    done
+
+    #	Add the two results together
+    cd /cluster/data/monDom4/RMOut
+    cp -p /cluster/data/monDom2/scripts/uniqueRMOut.csh ../scripts
+    for C in 1 2 3 4 5 6 7 8 X Un
+do
+    echo "${C} working ..."
+    cp -p ../${C}/chr${C}.fa.out ./chr${C}.tmp.out
+    tail +4 ../RMOutExtra/chr${C}.fa.out >> ./chr${C}.tmp.out
+    ../scripts/uniqueRMOut.csh ./chr${C}.tmp.out > chr${C}.fa.out
+    rm -f ./chr${C}.tmp.out &
+    echo "done"
+done
+    #	and then add this mask to the existing masked sequence
+    for C in 1 2 3 4 5 6 7 8 X Un
+do
+    echo "chr${C} working ..."
+    rm -f ./chr${C}.added.fa
+    maskOutFa -softAdd ../${C}/chr${C}.fa ./chr${C}.fa.out ./chr${C}.added.fa
+    echo "done"
+done
+
+    #	verify they are not broken compared to what was previous
+    #	note the additional masked sequence in the lower case counts
+    ssh kkstore01
+    cd /cluster/data/monDom4/RMOut
+    faSize chr?.added.fa chrUn.added.fa
+    # 3605614649 bases (103971429 N's 3501643220 real 1551686450 upper
+    # 1949956770 lower) in 10 sequences in 10 files
+    faSize ../?/chr?.fa ../Un/chrUn.fa
+    # 3605614649 bases (103971429 N's 3501643220 real 1687813668 upper
+    # 1813829552 lower) in 10 sequences in 10 files
+
+    #	If that is OK, replace the current sequence
+    for C in 1 2 3 4 5 6 7 8 X Un
+    do
+	rm ../${C}/chr${C}.fa
+	mv chr${C}.added.fa ../${C}/chr${C}.fa
+    done
+
+    #	And rebuild the 2bit file:
+    faToTwoBit ?/chr?.fa Un/chrUn.fa monDom4RMExtra.2bit
+    #	and switch it out from under the browser
+    rm monDom4.2bit; mv monDom4RMExtra.2bit monDom4.2bit
+    #	distribute to /iscratch/i/monDom4 ...
