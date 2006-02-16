@@ -1,9 +1,32 @@
-/*
-class point {int x,y,z, string s="wooga";}
-point pt1 = (1,2,3,"ok");
-point pt2 = (x:1,y:2,z:3,"ok");
-print(pt2);
-*/
+class named {string name;}
+class pt3 extends named{int x,y,z;}
+pt3 a = ("forward", 1,2,3);
+pt3 b = ("reverse", z:1, y:2, x:3);
+pt3 c = (y:1, x:2, z:3, name:"mixed");
+print(a);
+print(b);
+print(c);
+
+class iNamed {string name;}
+class iPt3 extends iNamed
+    {
+    int x,y,z;
+    to init(string n, int x,y,z)
+    // Curiously if  make parameter n here "name" you get error
+    // message about name being redefined.
+        {
+	self.name = n + "100";
+	self.x = x + 100;
+	self.y = y + 100;
+	self.z = z + 100;
+	}
+    }
+iPt3 ia = ("forward", 1,2,3);
+iPt3 ib = ("reverse", z:1, y:2, x:3);
+iPt3 ic = (y:1, x:2, z:3, n:"mixed");
+print(ia);
+print(ib);
+print(ic);
 
 to liftIntoSpace(string payload, double grams, double kilometersHigh,
 	string sponsor="Lockheed", int id=3)

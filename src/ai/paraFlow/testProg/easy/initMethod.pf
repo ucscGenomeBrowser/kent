@@ -6,16 +6,17 @@ class withInit
     string name = "Doug";
     double val;
 
-    to init(string name = "Mike")
+    to init(string name = "Mike", double val=0.123, double i=9)
 	{
 	self.name = name;
-	val = 0.123;
+	self.val = val;
+	self.i = i;
 	}
     }
 
 withInit a = ();
 print(a);
-withInit b = ("Harry");
+withInit b = ("Harry", i:19);
 print(b);
 
 class noInit

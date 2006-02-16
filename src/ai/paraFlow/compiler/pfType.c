@@ -428,6 +428,8 @@ else
 	     else
 	         {
 		 /* Fill in default-value for missing parameter. */
+		 if (type->init->ty == NULL)  /* Handle forward reference */
+		     rTypeCheck(pfc, &type->init);
 		 *pos = CloneVar(type->init);
 		 }
 	     }
@@ -536,14 +538,13 @@ else
     }
 }
 
-static void coerceNamedTuple(struct pfCompile *pfc, 
-	struct pfParse **pTuple, struct pfType *types)
-/* Here we are either a function parameter list, or we are
- * a class being initialized.  It's possible that we'll be
- * specified positionally, or by name.  Deal with it. */
+static boolean tupleKeyValsPresentOk(struct pfParse *tuple)
+/* Return true if tuple has any keyVals.  Also ensures that
+ * if it has keyVals, that once an element is key val, so
+ * are all the remaining elements. */
 {
-struct pfParse *tuple = *pTuple, *pp;
 boolean gotKeyVal = FALSE;
+struct pfParse *pp;
 for (pp = tuple->children; pp != NULL; pp = pp->next)
     {
     if (pp->type == pptKeyVal)
@@ -555,6 +556,17 @@ for (pp = tuple->children; pp != NULL; pp = pp->next)
 	    	"Positional parameters can't follow named parameters.");
 	}
      }
+return gotKeyVal;
+}
+
+static void coerceNamedTuple(struct pfCompile *pfc, 
+	struct pfParse **pTuple, struct pfType *types)
+/* Here we are either a function parameter list, or we are
+ * a class being initialized.  It's possible that we'll be
+ * specified positionally, or by name.  Deal with it. */
+{
+struct pfParse *tuple = *pTuple, *pp;
+boolean gotKeyVal = tupleKeyValsPresentOk(tuple);
 if (!gotKeyVal)
     {
     coerceTuple(pfc, pTuple, types);
@@ -605,6 +617,8 @@ else
 		 }
 	    else
 	         {
+		 if (type->init->ty == NULL) /* Handle forward reference */
+		     rTypeCheck(pfc, &type->init);
 		 pp = CloneVar(type->init);
 		 }
 	    }
@@ -737,7 +751,7 @@ for (field = base->fields; field != NULL; field = field->next)
 	{
 	if (field->init != NULL)
 	    {
-	    if (field->init->ty == NULL)	/* Handle forward use */
+	    if (field->init->ty == NULL)	/* Handle forward reference */
 		rTypeCheck(pfc, &field->init);
 	    *pos = CloneVar(field->init);
 	    coerceOne(pfc, pos, field, FALSE);
@@ -757,6 +771,34 @@ for (field = base->fields; field != NULL; field = field->next)
     pos = &(*pos)->next;
     }
 return pos;
+}
+
+static struct pfType *rClassFieldTypes(struct pfBaseType *base)
+/* Return list of field types. */
+{
+struct pfType *field, *el, *list = NULL;
+if (base->parent)
+    list = rClassFieldTypes(base->parent);
+for (field = base->fields; field != NULL; field = field->next)
+    {
+    el = CloneVar(field);
+    slAddHead(&list, el);
+    }
+return list;
+}
+
+static void coerceNamedTupleToClass(struct pfCompile *pfc, 
+	struct pfParse **pTuple, struct pfBaseType *base)
+/* Here there is a named parameter in the initialization set.
+ * Our strategy will be to create a flattened pfType, and
+ * then call coerceNamedTuple with it. */
+{
+struct pfParse *tuple = *pTuple;
+struct pfType *type = CloneVar(tuple->ty);
+struct pfType *typeList = rClassFieldTypes(base);
+slReverse(&typeList);
+type->children = typeList;
+coerceNamedTuple(pfc, pTuple, type);
 }
 
 static void coerceTupleToClass(struct pfCompile *pfc, 
@@ -810,12 +852,19 @@ if (initMethod)
     }
 else
     {
-// uglyf("Here would need to be dealing with named parameters....\n");
-    pLeftover = rCoerceTupleToClass(pfc, tuple, &tuple->children, 
-	    base, fillMissingWithZero);
-    if (*pLeftover != NULL)
-	errAt(tuple->tok, "Type mismatch");
-    pfTypeOnTuple(pfc, tuple);
+    boolean gotKeyVal = tupleKeyValsPresentOk(tuple);
+    if (gotKeyVal)
+	{
+        coerceNamedTupleToClass(pfc, pPp, base);
+	}
+    else
+	{
+	pLeftover = rCoerceTupleToClass(pfc, tuple, &tuple->children, 
+		base, fillMissingWithZero);
+	if (*pLeftover != NULL)
+	    errAt(tuple->tok, "Type mismatch");
+	pfTypeOnTuple(pfc, tuple);
+	}
     }
 }
 
