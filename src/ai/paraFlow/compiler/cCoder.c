@@ -57,6 +57,7 @@ fprintf(f, "\n");
 static void printSysVarsAndPrototypes(FILE *f)
 /* Print stuff needed for main() */
 {
+fprintf(f, "struct _pf_activation *_pf_activation_stack;\n");
 fprintf(f, 
 "void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArgs, char *environ[]);\n");
 fprintf(f, "\n");
@@ -297,33 +298,10 @@ if (function->type == pptDot)
     struct pfBaseType *base = NULL;
     int dotCount = slCount(dotList);
     assert(dotCount == 2);
-#ifdef OLD
 
-    /* Push object pointer on stack. */
-    if (dotCount == 2)
-#endif /* OLD */
-        {
-	/* Slightly optimize simple case. */
-	class = dotList;
-	method = dotList->next;
-	codeExpression(pfc, f, class, stack, FALSE);
-	}
-#ifdef OLD
-    else
-        {
-	/* More general case here. */
-	struct pfParse *p;
-	for (p = dotList->next; p->next != NULL; p = p->next)
-	    class = p;
-	method = class->next;
-
-	/* Swap out method for null in dot-chain so that codeExpression
-	 * will end up pushing class on stack. */
-	class->next = NULL;
-	codeExpression(pfc, f, function, stack, FALSE);
-	class->next = method;
-	}
-#endif /* OLD */
+    class = dotList;
+    method = dotList->next;
+    codeExpression(pfc, f, class, stack, FALSE);
     base = class->ty->base;
 
     /* Put rest of input on the stack, and print call with mangled function name. */
@@ -1486,29 +1464,6 @@ else
 	}
     }
 }
-#ifdef OLD
-static int oldCodeAllocInit(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp, int stack)
-/* Generate code to allocate memory and initialize a class
- * via init method. */
-{
-struct pfParse *inTuple = pp->children;
-struct pfBaseType *base = pp->ty->base;
-char *className = base->name;
-fprintf(f, "{\n");
-fprintf(f, "struct _pf_object *_pf_obj = _pf_need_mem(sizeof(struct %s));\n", 
-	className);
-fprintf(f, "_pf_obj->_pf_refCount = 1;\n");
-fprintf(f, "_pf_obj->_pf_cleanup = _pf_class_cleanup;\n");
-fprintf(f, "%s[%d].Obj = _pf_obj;\n", stackName, stack); 
-codeExpression(pfc, f, inTuple, stack+1, TRUE);
-codeMethodName(pfc, pp->tok, f, base, "init", stack);
-fprintf(f, "(%s+%d);\n", stackName, stack);
-fprintf(f, "%s[%d].Obj = _pf_obj;\n", stackName, stack);
-fprintf(f, "}\n");
-return 1;
-}
-#endif /* OLD */
 
 static int codeAllocInit(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
@@ -2502,27 +2457,6 @@ fprintf(f, "_pf_cleanup: ;\n");
 fprintf(f, "}\n\n");
 }
 
-#ifdef OLD
-static void codeMethods(struct pfCompile *pfc, FILE *f, struct pfParse *class)
-/* Print out methods in class. */
-{
-struct pfParse *classCompound = class->children->next;
-struct pfParse *statement;
-for (statement = classCompound->children; statement != NULL; 
-     statement = statement->next)
-    {
-    switch (statement->type)
-        {
-	case pptToDec:
-	case pptFlowDec:
-	    codeFunction(pfc, f, statement, class);
-	    break;
-	}
-    }
-}
-#endif /* OLD */
-
-
 static void printPolyFunTable(struct pfCompile *pfc, FILE *f, 
 	struct pfBaseType *base)
 /* Print polymorphic function table. */
@@ -2810,7 +2744,8 @@ fprintf(f, "int _pf_module_info_count = %d;\n\n", moduleCount);
 }
 
 
-void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *baseDir, char *mainName)
+void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *baseDir, 
+	char *mainName)
 /* Generate C code for program. */
 {
 FILE *f;

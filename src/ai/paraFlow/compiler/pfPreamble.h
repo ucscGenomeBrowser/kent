@@ -80,6 +80,24 @@ union _pf_stack
 
 typedef void (*_pf_polyFunType)(_pf_Stack *stack);
 
+struct _pf_functionFixedInfo
+/* Information on a function that doesn't change from
+ * invocation to another.  This includes function name,
+ * type, and (hopefully soon) names and types of all
+ * the local variables. */
+    {
+    char *name;	 /* Function name. */
+    int typeId;	 /* Index into types table describing function i/o etc. */
+    };
+
+struct _pf_activation
+/* Function activation record. */
+    {
+    struct _pf_activation *parent;	/* Caller's activation record. */
+    struct _pfFunctionFixedInfo *fixed;	/* Information valid for all calls.. */
+    };
+extern struct _pf_activation *_pf_activation_stack;
+
 struct _pf_iterator
 /* Something to iterate over a collection */
     {
