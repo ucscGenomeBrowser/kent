@@ -39,7 +39,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.6 2006/02/16 23:32:28 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.7 2006/02/16 23:34:31 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -130,9 +130,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (loc_type == 2)
 	    {
 	    allele = cloneString(row[8]);
-	    // allele from NCBI should be reverse complemented already
-	    // if (sameString(row[9], "1"))
-	        // reverseComplement(allele, 1);
+	    /* allele from NCBI should be reverse complemented already */
 	    subString = strstr(row[5], allele);
             if (subString == NULL)
 	        {
