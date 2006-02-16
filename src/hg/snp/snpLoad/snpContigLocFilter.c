@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.13 2006/02/08 23:54:12 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.14 2006/02/16 23:58:18 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -33,16 +33,19 @@ struct sqlResult *sr;
 char **row;
 int count = 0;
 int orient = 0;
+int end = 0;
 
 ret = newHash(0);
 verbose(1, "getting contigs...\n");
-safef(query, sizeof(query), "select ctg_id, contig_chr, orient from ContigInfo where group_term = '%s'", contigGroup);
+safef(query, sizeof(query), "select ctg_id, contig_chr, contig_end, orient from ContigInfo where group_term = '%s'", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    orient = atoi(row[2]);
+    end = sqlUnsigned(row[2]);
+    if (end == 0) continue;
+    orient = sqlUnsigned(row[3]);
     if (orient != 0)
-        verbose(1, "Contig %s has non-zero orientation!!\n", row[0]);
+        errAbort("Contig %s has non-zero orientation!!\n", row[0]);
     hashAdd(ret, cloneString(row[0]), cloneString(row[1]));
     count++;
     }
@@ -93,7 +96,7 @@ char *chromName;
 f = hgCreateTabFile(".", "ContigLocFilter");
 
 safef(query, sizeof(query), 
-    "select snp_id, ctg_id, loc_type, lc_ngbr, rc_ngbr, phys_pos_from, phys_pos, orientation, allele from ContigLoc");
+    "select snp_id, ctg_id, loc_type, phys_pos_from, phys_pos, orientation, allele from ContigLoc");
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -101,13 +104,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     el1 = hashLookup(contigHash,row[1]);
     if (el1 != NULL)
         {
-	if (sameString(row[5], "0")) continue;
+	if (sameString(row[3], "0")) continue;
 	el2 = hashLookup(weightHash,row[0]);
 	if (el2 != NULL) continue;
 	/* could check for missing chrom here */
 	chromName = hashFindVal(contigHash,row[1]);
-	fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
-	            row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], chromName);
+	fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+	            row[0], row[1], row[2], row[3], row[4], row[5], row[6], chromName);
 	}
     }
 sqlFreeResult(&sr);
@@ -125,8 +128,6 @@ char *createString =
 "    snp_id int(11) not null,       \n"
 "    ctg_id int(11) not null,       \n"
 "    loc_type tinyint(4) not null,       \n"
-"    lc_ngbr int(11) not null,       \n"
-"    rc_ngbr int(11) not null,       \n"
 "    phys_pos_from int(11) not null,       \n"
 "    phys_pos varchar(32), \n"
 "    orientation tinyint(4) not null, \n"
