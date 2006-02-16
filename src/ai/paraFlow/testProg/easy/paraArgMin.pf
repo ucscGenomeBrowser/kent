@@ -9,7 +9,7 @@ print("argmin: " + l);
 l = para(x in -5 to 6) argmin x*x;
 print("argmin of x*x in -5 to 6: " + l);
 
-dir of int numNames = ("one" : 1, "two" : 2, "zero" : 0, "minusOne" : -1);
+dir of int numNames = (one : 1, two : 2, zero : 0, minusOne : -1);
 print(numNames);
 string s = para (x in numNames) argmin x*x;
 print("argmin x*x: " + s);

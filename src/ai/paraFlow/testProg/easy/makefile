@@ -34,6 +34,8 @@ test:
 	diff expected/if $O/if
 	paraFlow impliedSelf.pf > $O/impliedSelf
 	diff expected/impliedSelf $O/impliedSelf
+	paraFlow initMethod.pf > $O/initMethod
+	diff expected/initMethod $O/initMethod
 	paraFlow initVars.pf > $O/initVars
 	diff expected/initVars $O/initVars
 	paraFlow memberForeach.pf > $O/memberForeach

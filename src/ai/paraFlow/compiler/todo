@@ -1,16 +1,14 @@
 TO DO:
-  - keyword function arguments as in python
-  - optional new() method.
+  - Adding named parameters.
+  - Exceptions.
   - Make para actions use p-threads.
   - ?Read-only and private variables.
         Make it so that class.new() is only legal way to
 	make something with private or read-only var.
   - Implement case statement.
   - ?Create 'serial' function - that is gauranteed only to be 
-    executed by one thread at a time.  Can be called from a para.
-  - ?Exceptions.
+    executed by one thread at a time.  Can be called from a flow.
   - More file i/o.
-  - ?Adding named parameters.
   - Implement lists.
   - Implementing trees.
   - Rework code generator so that a type is kept alongside the
@@ -25,6 +23,7 @@ TO CONSIDER:
 
 -----------
 DONE
+  - optional init() method.
   - Do a sort function (need function pointer?)
   - Function pointers.
   - Interfaces.

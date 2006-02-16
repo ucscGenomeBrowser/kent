@@ -12,7 +12,7 @@ class polygon
        }
    array of point points;
    
-   to init()
+   to initialize()
        {
        points = ((1,2,3),(4,5,6));
        }
@@ -34,7 +34,7 @@ class polygon
 
 polygon p = ();
 print(p);
-p.init();
+p.initialize();
 print(p);
 print(p.points[0]);
 p.printPoint(1);

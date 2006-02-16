@@ -4,10 +4,12 @@ class withInit
     {
     int i = 2;
     string name = "Doug";
+    double val;
 
     to init(string name = "Mike")
 	{
 	self.name = name;
+	val = 0.123;
 	}
     }
 
@@ -20,6 +22,7 @@ class noInit
     {
     int i = 2;
     string name = "Doug";
+    double val;
     }
 
 noInit c = ();

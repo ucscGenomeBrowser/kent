@@ -200,6 +200,8 @@ switch (type)
 	return "pptIndexRange";
     case pptAllocInit:
 	return "pptAllocInit";
+    case pptKeyName:
+	return "pptKeyName";
 
     case pptCastBitToBit:
         return "pptCastBitToBit";

@@ -594,13 +594,31 @@ static void coerceTupleToCollection(struct pfCompile *pfc,
 struct pfParse *tuple = *pPp;
 struct pfType *elType;
 struct pfParse **pos;
-if (type->base->keyedBy)
+ struct pfBaseType *keyBase = type->base->keyedBy;
+if (keyBase)
      {
-     struct pfType *key = pfTypeNew(type->base->keyedBy);
+     struct pfType *key = pfTypeNew(keyBase);
      struct pfType *val = type->children;
      elType = pfTypeNew(pfc->keyValType);
      elType->children = key;
      key->next = val;
+     if (keyBase == pfc->stringType)
+         {
+	 struct pfParse *pp;
+	 /* Convert keys in key-val pairs from pptKeyType to
+	  * pptConstString. */
+	 for (pp = tuple->children; pp != NULL; pp = pp->next)
+	     {
+	     struct pfParse *key, *val;
+	     if (pp->type != pptKeyVal)
+	        errAt(pp->tok, "Expecting key:val here.");
+	     key = pp->children;
+	     val = key->children;
+	     key->type = pptConstString;
+	     key->ty = pfTypeNew(pfc->stringType);
+	     pp->ty = typeFromChildren(pfc, pp, pfc->keyValType);
+	     }
+	 }
      }
 else
      {
@@ -1994,7 +2012,10 @@ switch (pp->type)
 	pfTypeOnTuple(pfc, pp);
 	break;
     case pptKeyVal:
+#ifdef OLD
          pp->ty = typeFromChildren(pfc, pp, pfc->keyValType);
+#endif /* OLD */
+         pp->ty = pp->children->next->ty; /* Get type from val of key/val */
 	 break;
     case pptConstUse:
         typeConstant(pfc, pp);

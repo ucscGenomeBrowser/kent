@@ -75,6 +75,18 @@ switch (pp->type)
     case pptTypeFlowPt:
 	evalFunctionPtType(pfc, pp, pfc->flowPtType);
 	break;
+    case pptKeyVal:
+	{
+	/* Here we allow either strings or naked names on the
+	 * left of a pptKeyVal.  */
+	struct pfParse *key = pp->children;
+	if (key->type != pptNameUse && key->type != pptConstUse)
+	    errAt(pp->tok, 
+	    	"The key in a key : val expression must be string or name.");
+	key->type = pptKeyName;
+	key->tok->type = pftString;
+        break;
+	}
     case pptForeach:
     case pptParaDo:
     case pptParaAdd:
