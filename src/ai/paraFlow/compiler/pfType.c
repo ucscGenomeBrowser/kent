@@ -585,7 +585,9 @@ else
 	     struct pfParse *val = key->next;
 	     if (!hashLookup(fieldHash, key->name))
 	         errAt(key->tok, "%s seems misspelled or misplaced", key->name);
-	     hashAdd(hash, key->tok->val.s, val);
+	     if (hashLookup(hash, key->name) != NULL)
+	         errAt(key->tok, "%s is a duplicate", key->name);
+	     hashAdd(hash, key->name, val);
 	     }
 	 else
 	     {
@@ -772,6 +774,7 @@ struct pfParse *tuple = *pPp;
 struct pfParse **pLeftover;
 boolean fillMissingWithZero = (tuple->children == NULL);
 struct pfParse *initMethod = base->initMethod;
+// uglyf("Here would need to be dealing with named parameters....\n");
 if (initMethod)
     {
     /* convert parse tree from
