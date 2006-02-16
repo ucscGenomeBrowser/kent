@@ -103,6 +103,7 @@ enum pfParseType
     pptOperatorDec,
     pptArrayAppend,
     pptIndexRange,
+    pptAllocInit,
 
     /* Note the casts must be in this order relative to pptCastBitToBit */
     pptCastBitToBit,	/* Never emitted. */

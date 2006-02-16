@@ -198,6 +198,8 @@ switch (type)
 	return "pptArrayAppend";
     case pptIndexRange:
 	return "pptIndexRange";
+    case pptAllocInit:
+	return "pptAllocInit";
 
     case pptCastBitToBit:
         return "pptCastBitToBit";

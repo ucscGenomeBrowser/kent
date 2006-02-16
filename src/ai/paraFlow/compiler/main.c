@@ -303,6 +303,7 @@ verbose(2, "Phase 8 - compiling C code\n");
     dyStringAppend(dy, "~/kent/src/ai/paraFlow/runtime/runtime.a ");
     dyStringPrintf(dy, "~/kent/src/lib/%s/jkweb.a", getenv("MACHTYPE"));
     verbose(3, "%s\n", dy->string);
+    uglyf("%s\n", dy->string);
     err = system(dy->string);
     if (err != 0)
 	errnoAbort("problem compiling:\n", dy->string);

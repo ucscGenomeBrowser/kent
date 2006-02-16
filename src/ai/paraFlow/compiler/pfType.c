@@ -663,11 +663,37 @@ static void coerceTupleToClass(struct pfCompile *pfc,
 struct pfParse *tuple = *pPp;
 struct pfParse **pLeftover;
 boolean fillMissingWithZero = (tuple->children == NULL);
-pLeftover = rCoerceTupleToClass(pfc, tuple, &tuple->children, 
-	base, fillMissingWithZero);
-if (*pLeftover != NULL)
-    errAt(tuple->tok, "Type mismatch");
-pfTypeOnTuple(pfc, tuple);
+struct pfParse *initMethod = base->initMethod;
+if (initMethod)
+    {
+    /* convert parse tree from
+     *     pptTuple
+     *         ...
+     * to
+     *     pptAllocInit <classType>
+     *        pptTuple     <init-params>
+     *          ...
+     */
+    struct pfType *functionType = initMethod->ty;
+    struct pfType *inputType = functionType->children;
+    struct pfParse *allocInit= pfParseNew(pptAllocInit, tuple->tok,
+    	tuple->parent, tuple->scope);
+    coerceTuple(pfc, &tuple, inputType);
+    allocInit->ty = pfTypeNew(base);
+    allocInit->next = tuple->next;
+    allocInit->children = tuple;
+    tuple->next = NULL;
+    tuple->parent = allocInit;
+    *pPp = allocInit;
+    }
+else
+    {
+    pLeftover = rCoerceTupleToClass(pfc, tuple, &tuple->children, 
+	    base, fillMissingWithZero);
+    if (*pLeftover != NULL)
+	errAt(tuple->tok, "Type mismatch");
+    pfTypeOnTuple(pfc, tuple);
+    }
 }
 
 static void castNumToString(struct pfCompile *pfc, struct pfParse **pPp, 
@@ -920,11 +946,6 @@ if (pt->base != destBase)
 	}
     if (!ok)
 	{
-	uglyf("Couldn't convert:\n");
-	pfParseDump(pp, 1, uglyOut);
-	uglyf("To:\n   ");
-	pfTypeDump(destType, uglyOut);
-	uglyf("\n");
 	typeMismatch(pp, destType);
 	}
     }

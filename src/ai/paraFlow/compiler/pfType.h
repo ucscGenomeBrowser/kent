@@ -33,6 +33,7 @@ struct pfBaseType
     short selfPolyCount;	/* Count of polymorphic functions. */
     struct pfPolyFunRef *polyList;	/* List of polymorphic functions
                                            (Including in parents) */
+    struct pfParse *initMethod; /* Initialization method if any. */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 

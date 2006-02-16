@@ -1487,6 +1487,28 @@ else
     }
 }
 
+static int codeAllocInit(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code to allocate memory and initialize a class
+ * via init method. */
+{
+struct pfParse *inTuple = pp->children;
+struct pfBaseType *base = pp->ty->base;
+char *className = base->name;
+fprintf(f, "{\n");
+fprintf(f, "struct _pf_object *_pf_obj = _pf_need_mem(sizeof(struct %s));\n", 
+	className);
+fprintf(f, "_pf_obj->_pf_refCount = 1;\n");
+fprintf(f, "_pf_obj->_pf_cleanup = _pf_class_cleanup;\n");
+fprintf(f, "%s[%d].Obj = _pf_obj;\n", stackName, stack); 
+codeExpression(pfc, f, inTuple, stack+1, TRUE);
+codeMethodName(pfc, pp->tok, f, base, "init", stack);
+fprintf(f, "(%s+%d);\n", stackName, stack);
+fprintf(f, "%s[%d].Obj = _pf_obj;\n", stackName, stack);
+fprintf(f, "}\n");
+return 1;
+}
+
 static void codeVarInit(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack)
 /* Generate code for an assignment. */
@@ -1862,6 +1884,8 @@ switch (pp->type)
 	    total += codeExpression(pfc, f, p, stack+total, addRef);
 	return total;
 	}
+    case pptAllocInit:
+	return codeAllocInit(pfc, f, pp, stack);
     case pptParaMin:
     case pptParaMax:
     case pptParaArgMin:

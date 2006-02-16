@@ -1,0 +1,27 @@
+// Test new handling.
+
+class withInit
+    {
+    int i = 2;
+    string name = "Doug";
+
+    to init(string name = "Mike")
+	{
+	self.name = name;
+	}
+    }
+
+withInit a = ();
+print(a);
+withInit b = ("Harry");
+print(b);
+
+class noInit
+    {
+    int i = 2;
+    string name = "Doug";
+    }
+
+noInit c = ();
+print(c);
+

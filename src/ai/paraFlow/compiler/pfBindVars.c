@@ -145,6 +145,23 @@ switch (pp->type)
     }
 }
 
+static void checkNoOutput(struct pfParse *pp)
+/* The pp parse tree for the method looks like so:
+ *      pptFlowDec (or pptToDec)
+ *         pptSymName
+ *         pptTuple (input parameters)
+ *            ...
+ *         pptTuple (output parameters)
+ *            ...
+ * This function makes sure that the output parameters are empty. */
+{
+struct pfParse *name = pp->children;
+struct pfParse *input = name->next;
+struct pfParse *output = input->next;
+if (output->children != NULL)
+    errAt(output->tok, "create method can't have any output.");
+}
+
 static void addDeclaredVarsToScopes(struct pfParse *pp)
 /* Go through and put declared variables into symbol table
  * for scope. */
@@ -179,7 +196,14 @@ switch (pp->type)
 	pp->var = pfScopeAddVar(pp->scope->parent, name->name, pp->ty, pp);
 	if (class != NULL)
 	    {
-	    pfScopeAddVar(pp->scope, "self", class->children->ty, class);
+	    struct pfType *classType = class->children->ty;
+	    pfScopeAddVar(pp->scope, "self", classType, class);
+	    if (sameString(name->name, "init"))
+	        {
+		struct pfBaseType *classBase = classType->base;
+		classBase->initMethod = pp;
+		checkNoOutput(pp);
+		}
 	    }
 	break;
 	}
