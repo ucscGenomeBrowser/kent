@@ -45,7 +45,7 @@ complex disulfide knots, are intractable to homology methods.
 <P>
 Certain protein domains have characteristic disulfide motifs, for example,
 the CxxxCxxC 4Fe­4S clusters in 
-<A HREF="http://embojournal.npgjournals.com/cgi/ijlink?linkType=ABST&journalCode=nar&resid=29/5/1097" 
+<A HREF="http://nar.oxfordjournals.org/cgi/content/full/29/5/1097" 
 TARGET=_blank>radical SAM enzymes</A>. These are often preserved
 even as the domain finds itself in a much larger protein with many
 additional cysteines. The domain tool 
