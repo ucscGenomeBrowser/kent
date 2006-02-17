@@ -16,13 +16,10 @@
 /* errAbort if larger SNP found */
 #define MAX_SNP_SIZE 1024
 
-static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.5 2006/02/17 21:36:39 heather Exp $";
+static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.6 2006/02/17 21:58:36 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
-FILE *errorFileHandle = NULL;
-FILE *exceptionFileHandle = NULL;
-
 
 void usage()
 /* Explain usage and exit. */
@@ -209,9 +206,6 @@ if (chromHash == NULL)
     return 1;
     }
 
-errorFileHandle = mustOpen("snpRefUCSC.errors", "w");
-exceptionFileHandle = mustOpen("snpRefUCSC.exceptions", "w");
-
 cookie = hashFirst(chromHash);
 while ((chromName = hashNextName(&cookie)) != NULL)
     {
@@ -221,7 +215,5 @@ while ((chromName = hashNextName(&cookie)) != NULL)
     loadDatabase(chromName);
     }
 
-carefulClose(&errorFileHandle);
-carefulClose(&exceptionFileHandle);
 return 0;
 }
