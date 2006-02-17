@@ -1,8 +1,20 @@
 
+struct element;
+
+struct possibleEdge
+{
+    struct possibleEdge *next;
+    int count;
+    boolean doFlip;
+    struct element *element;
+};
+
 struct adjacency
 {
-    struct hash *prevHash;  
-    struct hash *nextHash;
+    struct possibleEdge *prev;
+    struct possibleEdge *next;
+ //   struct hash *prevHash;  
+  //  struct hash *nextHash;
 };
 
 
@@ -41,8 +53,9 @@ struct element
     int count;
     int isFlipped;
     struct adjacency up;
-    struct adjacency down;
+    struct adjacency down[2];
     struct adjacency mix;
+    struct adjacency calced;
     struct eleDistance *dist;
     //struct hash *nextHash;
     //struct hash *prevHash;
@@ -67,3 +80,5 @@ extern void printElementTrees(struct phyloTree *node, int depth);
 extern struct element *newElement(struct genome *g, char *name, char *version);
 extern void outElementTrees(FILE *f, struct phyloTree *node);
 extern struct genome *getGenome(char *file, char *name);
+extern char *nextVersion();
+extern char *nextGenome();
