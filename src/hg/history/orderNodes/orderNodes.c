@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: orderNodes.c,v 1.6 2006/02/16 23:43:45 braney Exp $";
+static char const rcsid[] = "$Id: orderNodes.c,v 1.7 2006/02/17 01:13:42 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -183,10 +183,11 @@ for(p = inList; p ; p = p->next)
     if (nextParent == NULL)
 	errAbort("next in hash doesn't have parent");
 
-if ((findEdge(*outList, p->element, p->doFlip)) != NULL)
-    errAbort("in doUp , already on list");
-if (e == p->element)
-    errAbort("n doUpadding edge to itself");
+    if ((findEdge(*outList, p->element, p->doFlip)) != NULL)
+	errAbort("in doUp , already on list");
+    if (e == p->element->parent)
+	continue;
+    //errAbort("n doUpadding edge to itself");
 //if (*outList != NULL)
     //errAbort("in doUp edge should be alone");
 
@@ -994,12 +995,18 @@ else
 
 fprintf(f, ">%s\n",g->name);
 
+
+g->elements = saveE;
+saveE->next = NULL;
 for(e = saveE ; e ; )
     {
     struct possibleEdge *p;
 
     if (!inFront)
+	{
 	fprintf(f, "-");
+	e->isFlipped = TRUE;
+	}
     fprintf(f, "%s ",eleName(e));
     if (inFront == TRUE)
 	p = e->calced.next;
@@ -1011,7 +1018,10 @@ for(e = saveE ; e ; )
 
     inFront = !p->doFlip ; //? (inFront ? FALSE : TRUE) : inFront;
     e = p->element;
+    e->next = NULL;
+    slAddHead(&g->elements, e);
     }
+slReverse(&g->elements);
 fprintf(f,"\n");
 }
 
@@ -1198,6 +1208,7 @@ for(;;)
     }
 
 printOrderedTree(f, node);
+outElementTrees(f, node);
 }
 
 int main(int argc, char *argv[])
