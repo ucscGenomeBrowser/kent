@@ -27,12 +27,15 @@ char *proteinDataDate;
  
 FILE   *o2, *o3;
 char *swissID, *pdb;
+char *entrez;
 
 char *chp;
 char *hgncId, *name, *symbol, *refSeqIds, *uniProt;
 int j;
+char *locusType;
 
 char *refseq;
+boolean gotRefseq;
 
 if (argc != 2) usage();
 proteinDataDate = argv[1];
@@ -40,9 +43,9 @@ proteinDataDate = argv[1];
 o2 = fopen("j.dat", "w");
 conn2= hAllocConn();
 conn3= hAllocConn();
-	
+
 sprintf(query2,
-	"select hgncId, symbol, name, refSeqIds, uniProt from proteins%s.hgnc where status not like '%cWithdrawn%c'", 
+	"select hgncId, symbol, name, refSeqMapped, refSeqIds, uniProt, entrezMapped, locusType from proteins%s.hgnc where status not like '%cWithdrawn%c'", 
 	proteinDataDate, '%', '%');
 sr2 = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
@@ -52,34 +55,59 @@ while (row2 != NULL)
     hgncId 	= row2[j];j++;
     symbol 	= row2[j];j++;
     name	= row2[j];j++;
+    refseq 	= row2[j];j++;
     refSeqIds 	= row2[j];j++;
     uniProt   	= row2[j];j++;
+    entrez   	= row2[j];j++;
+    locusType  	= row2[j];j++;
     
     chp = strstr(hgncId, "HGNC:");
     hgncId = chp+5;
 
-    refseq = refSeqIds;
+    gotRefseq = FALSE;
+
+    /* process refSeqMapped first */
+
+    if (!sameWord(refseq, ""))
+    	{
+    	fprintf(o2, "%s\t%s\t%s\t%s\t%s\t%s\n", symbol, refseq, uniProt, hgncId, entrez, name);
+	gotRefseq = TRUE;
+	}
+
+    /* process refSeqIds next */
+
     chp = strstr(refSeqIds, ",");
     if (chp != NULL) 
     	{
-	//printf("%s\t%s\t%s\n", symbol, refseq, uniProt);fflush(stdout);
     	*chp = '\0';
         while (chp != NULL)
 	    {    
-	    fprintf(o2, "%s\t%s\t%s\t%s\t%s\n", symbol, refseq, uniProt, hgncId, name);
+	    fprintf(o2, "%s\t%s\t%s\t%s\t%s\t%s\n", symbol, refseq, uniProt, hgncId, entrez, name);
 	    chp++;
  	    while (*chp == ' ') chp++;
 	    refseq = chp;
             chp = strstr(refseq, ",");
 	    if (chp != NULL) *chp = '\0';
 	    }
-	fprintf(o2, "%s\t%s\t%s\t%s\t%s\n", symbol, refseq, uniProt, hgncId, name);
+	fprintf(o2, "%s\t%s\t%s\t%s\t%s\t%s\n", symbol, refseq, uniProt, hgncId, entrez, name);
+	gotRefseq = TRUE;
 	}
     else
     	{
-	fprintf(o2, "%s\t%s\t%s\t%s\t%s\n", symbol, refseq, uniProt, hgncId, name);
+	if (!sameWord(refseq,""))
+	    {
+	    fprintf(o2, "%s\t%s\t%s\t%s\t%s\t%s\n", symbol, refseq, uniProt, hgncId, entrez, name);
+	    }
+	else
+	    {
+	    /* output the record if no RefSeq in either refSeqIds or refSeqMapped */
+	    if (!gotRefseq)
+	    	{
+	    	fprintf(o2, 
+		"%s\t%s\t%s\t%s\t%s\t%s\n", symbol, refseq, uniProt, hgncId, entrez, name);
+		}
+	    }
 	}
-
     row2 = sqlNextRow(sr2);
     }
 sqlFreeResult(&sr2);
