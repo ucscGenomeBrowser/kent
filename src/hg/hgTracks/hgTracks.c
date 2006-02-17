@@ -101,7 +101,7 @@
 #include "hgMutUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1075 2006/02/13 22:07:02 hartera Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1076 2006/02/17 15:25:20 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3464,7 +3464,7 @@ struct hashEl *refGeneLabels = cartFindPrefix(cart, (isNative ? "refGene.label" 
 struct hashEl *label;
 int omimAvail = 0;
 char query[128];
-safef(query, sizeof(query), "select count(*) from refLink where refLink.omimId != 0");
+safef(query, sizeof(query), "select omimId from refLink where refLink.omimId != 0 limit 1");
 omimAvail = sqlQuickNum(conn, query);
 
 if (refGeneLabels == NULL)
