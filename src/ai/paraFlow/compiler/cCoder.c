@@ -11,6 +11,7 @@
 #include "pfParse.h"
 #include "recodedType.h"
 #include "codedType.h"
+#include "activate.h"
 #include "cCoder.h"
 
 #define prefix "pf_"
@@ -245,7 +246,6 @@ else if (base == pfc->arrayType)
     }
 else
     {
-    // TODO - some testing on array.push and array.sort.
     struct pfType *method = NULL;
     while (base != NULL)
 	{
@@ -2319,7 +2319,9 @@ switch (pp->type)
 static void printPrototype(FILE *f, struct pfParse *funcDec, struct pfParse *class)
 /* Print prototype for function call. */
 {
-/* Put out function prototype and opening brace.  */
+/* Put out function prototype.  */
+fprintf(f, "void %s(%s *%s)", funcDec->var->ctar->cName, stackType, stackName);
+#ifdef OLD
 if (class)
     {
     fprintf(f, "void _pf_cm%d_%s_%s(", class->scope->id, 
@@ -2329,6 +2331,7 @@ if (class)
 else
     fprintf(f, "void %s%s(%s *%s)", prefix, funcDec->name, 
     	stackType, stackName);
+#endif /* OLD */
 }
 
 static void rPrintPrototypes(FILE *f, struct pfParse *pp, struct pfParse *class)
@@ -2376,6 +2379,7 @@ static void codeFunction(struct pfCompile *pfc, FILE *f,
  * then decorate it with 'self' so as to be a method. */
 {
 struct pfVar *funcVar = funcDec->var;
+struct comTimeActRec *ctar = funcDec->var->ctar;
 struct pfType *funcType = funcVar->ty;
 struct pfType *inTuple = funcType->children;
 struct pfType *outTuple = inTuple->next;
@@ -2390,16 +2394,9 @@ fprintf(f, "\n{\n");
 
 /* Print out activation record. */
     {
-    fprintf(f, "static struct _pf_functionFixedInfo _pf_fixedInfo = {\"");
-    if (class)
-        fprintf(f, "%s.", class->name);
-    fprintf(f, "%s\", 0};\n", funcVar->name);
     fprintf(f, "struct _pf_activation _pf_act;\n");
-    fprintf(f, "_pf_fixedInfo.typeId = ");
-    codeForType(pfc, f, funcType);
-    fprintf(f, ";\n");
     fprintf(f, "_pf_act.parent = _pf_activation_stack;\n");
-    fprintf(f, "_pf_act.fixed = &_pf_fixedInfo;\n");
+    fprintf(f, "_pf_act.fixed = &_pf_ctar%d_fixed;\n", ctar->id);
     fprintf(f, "_pf_activation_stack = &_pf_act;\n");
     }
 
@@ -2758,6 +2755,20 @@ fprintf(f, "};\n");
 fprintf(f, "int _pf_module_info_count = %d;\n\n", moduleCount);
 }
 
+static void rAddCompileTimeActivationRecords(struct pfParse *pp)
+/* Print out function declarations. */
+{
+switch (pp->type)
+    {
+    case pptToDec:
+    case pptFlowDec:
+	comTimeActRecOnFunction(pp);
+	break;
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    rAddCompileTimeActivationRecords(pp);
+}
+
 
 void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *baseDir, 
 	char *mainName)
@@ -2769,6 +2780,7 @@ struct pfScope *scope;
 struct pfParse *mainModule = NULL;
 
 pfc->runTypeHash = hashNew(0);
+rAddCompileTimeActivationRecords(program);
 
 /* Generate code for each module that is not already compiled. */
 for (toCode = program->children; toCode != NULL; toCode = toCode->next)
@@ -2808,6 +2820,8 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 		{
 		verbose(3, "Coding %s\n", module->name);
 		fprintf(f, "/* ParaFlow module %s */\n\n", module->name);
+		fprintf(f, "\n");
+		actRecCodeFixedParts(pfc, f, module);
 		fprintf(f, "\n");
 		codeScope(pfc, f, module, TRUE, TRUE);
 		fprintf(f, "\n");

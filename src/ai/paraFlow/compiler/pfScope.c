@@ -80,6 +80,7 @@ var->scope = scope;
 var->ty = ty;
 var->parse = pp;
 hashAddSaveName(scope->vars, name, var, &var->name);
+var->cName = var->name;
 return var;
 }
 

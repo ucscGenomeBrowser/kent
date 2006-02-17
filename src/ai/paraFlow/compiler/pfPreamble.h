@@ -80,18 +80,25 @@ union _pf_stack
 
 typedef void (*_pf_polyFunType)(_pf_Stack *stack);
 
+struct _pf_localVarInfo
+/* Information about a local variable for the run-time system. */
+     {
+     char *name;	/* Variable name */
+     int type;		/* initially lti index, converted to typeId at startup */
+     int offset;	/* Offset in local var data structure. Set at startup. */
+     };
+
 struct _pf_functionFixedInfo
 /* Information on a function that doesn't change from
  * invocation to another.  This includes function name,
  * type, and (hopefully soon) names and types of all
  * the local variables. */
     {
-    char *name;	 /* Function name. */
-    int typeId;	 /* Index into types table describing function i/o etc. */
-    int varCount;	/* Includes i/o parameters. */
-    int *varTypes;	/* Types of all locals. */
-    char **varNames;	/* Names of all locals. */
-    int *varOffsets;	/* Variable offsets within local struct. */
+    int classType; /* Local type id, converted to typeId at startup, or -1 */
+    char *name;	   /* Function name. */
+    int typeId;	   /* Index into types table describing function i/o etc. */
+    int varCount;  /* Includes i/o parameters. */
+    struct _pf_localVarInfo *vars; /* Info on each variable. */
     };
 
 struct _pf_activation
