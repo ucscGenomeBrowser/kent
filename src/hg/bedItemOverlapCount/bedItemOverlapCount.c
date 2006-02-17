@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.3 2006/02/17 19:30:26 hiram Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.4 2006/02/17 19:47:11 hiram Exp $";
 
 /* Command line switches. */
 //static char *strand = (char *)NULL;	/* strand to process, default +	*/
@@ -141,6 +141,7 @@ for (i=0; i<fileCount; ++i)
 {
     struct lineFile *bf = lineFileOpen(fileList[i] , TRUE);
     unsigned chromSize = 0;
+    unsigned thisChromSize = 0;
     struct bed *bed = (struct bed *)NULL;
     char *row[3];
     while (lineFileNextRow(bf,row,ArraySize(row)))
@@ -157,13 +158,19 @@ for (i=0; i<fileCount; ++i)
 		sizeof(unsigned short)*(size_t)maxChromSize); /* zero counts */
 	    freeMem(prevChrom);
 	    prevChrom = cloneString(bed->chrom);
+	    thisChromSize = chromosomeSize(prevChrom);
+	    verbose(2,"#\tchrom %s starting, size %d\n", prevChrom,
+		thisChromSize);
 	    }
 	else if ((char *)NULL == prevChrom)
 	    {
 	    prevChrom = cloneString(bed->chrom);
 	    chromSize = chromosomeSize(prevChrom);
+	    thisChromSize = chromosomeSize(prevChrom);
+	    verbose(2,"#\tchrom %s starting, size %d\n", prevChrom,
+		thisChromSize);
 	    }
-	if (bed->chromEnd > chromSize)
+	if (bed->chromEnd > thisChromSize)
 	    {
 	    warn("ERROR: %s\t%d\t%d", bed->chrom, bed->chromStart,
 		bed->chromEnd);
@@ -173,6 +180,7 @@ for (i=0; i<fileCount; ++i)
 	for (i = bed->chromStart; i < bed->chromEnd; ++i)
 	    counts[i]++;	    
 	}
+    verbose(2,"#\tchrom %s done, size %d\n", prevChrom, thisChromSize);
     lineFileClose(&bf);
 }
 }
