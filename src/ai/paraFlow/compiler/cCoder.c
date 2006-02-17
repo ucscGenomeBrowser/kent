@@ -2148,7 +2148,7 @@ struct pfParse *next = end->next;
 struct pfParse *body = next->next;
 
 fprintf(f, "{\n");
-codeScopeVars(pfc, f, pp->scope, FALSE);
+codeScopeVars(pfc, f, pp->scope, TRUE);
 codeStatement(pfc, f, init);
 fprintf(f, "for(;;)\n");
 fprintf(f, "{\n");
