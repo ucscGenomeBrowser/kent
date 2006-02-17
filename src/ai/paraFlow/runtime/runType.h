@@ -121,7 +121,14 @@ void _pf_init_types( struct _pf_base_info *baseInfo, int baseCount,
 		     struct _pf_type_info *typeInfo, int typeCount,
 		     struct _pf_field_info *fieldInfo, int fieldCount,
 		     struct _pf_module_info *moduleInfo, int moduleCount);
-/* Build up run-time type information from initialization. */
+/* Build up run-time type information from initialization.  Called
+ * at startup for whole program. */
+
+void _pf_rtar_init_tables(struct _pf_functionFixedInfo **table,
+	int tableSize, struct _pf_local_type_info *lti);
+/* Convert local type IDs to global type IDs, and fill in local
+ * var field offset in fixed part of run-time activation records. 
+ * Called at startup of each module. */
 
 extern struct _pf_type **_pf_type_table;	
 /* Table of all types we'll see during run time. Created by _pf_init_types. */

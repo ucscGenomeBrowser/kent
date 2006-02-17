@@ -37,6 +37,7 @@ hashAddInt(hash, "<flowPt>", pf_stFlowPt);
 return hash;
 }
 
+
 static struct _pf_type *findChildTypeInHash(struct hash *typeHash, char **parenCode)
 /* Find type in hash */
 {
@@ -75,6 +76,7 @@ if (type == NULL)
 return type;
 }
 
+
 struct _pf_type *_pf_type_from_paren_code(struct hash *typeHash, 
 	char *parenCode, struct hash *baseHash, struct dyString *dy)
 /* Create a little tree of type from parenCode.  Here's an example of the paren code:
@@ -104,6 +106,7 @@ if (c == '(')
     for (;;)
 	{
 	child = findChildTypeInHash(typeHash, &s);
+	child = CloneVar(child);
 	slAddHead(&type->children, child);
 	if (*s == ',')
 	    s += 1;
@@ -423,3 +426,33 @@ for (;;)
     }
 }
 
+void _pf_rtar_init_tables(struct _pf_functionFixedInfo **table,
+	int tableSize, struct _pf_local_type_info *lti)
+/* Convert local type IDs to global type IDs, and fill in local
+ * var field offset in fixed part of run-time activation records. 
+ * Called at startup of each module. */
+{
+int tableIx;
+struct _pf_functionFixedInfo *fixed;
+for (tableIx=0; tableIx<tableSize; ++tableIx)
+    {
+    int i;
+    int offset = 0;
+    fixed = table[tableIx];
+    if (fixed->classType >= 0)
+        fixed->classType = lti[fixed->classType].id;
+    fixed->typeId = lti[fixed->typeId].id;
+    for (i=0; i<fixed->varCount; ++i)
+        {
+	struct _pf_localVarInfo *var = &fixed->vars[i];
+	struct _pf_type *type;
+	struct _pf_base *b;
+	var->type = lti[var->type].id;
+	type = _pf_type_table[var->type];
+	b = type->base;
+	offset = ((offset + b->aliAdd) & b->aliMask);
+	var->offset = offset;
+	offset += b->size;
+	}
+    }
+}

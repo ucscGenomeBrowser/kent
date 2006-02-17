@@ -25,8 +25,8 @@ static int codeExpression(struct pfCompile *pfc, FILE *f,
 /* Emit code for one expression.  Returns how many items added
  * to stack. */
 
-static void codeScope( struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean printPfInit, boolean checkForExterns);
+static void codeScope(struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
+	boolean printMain, struct comTimeActRec *ctarList);
 /* Print types and then variables from scope. */
 
 static void codeScopeVars(struct pfCompile *pfc, FILE *f, 
@@ -2252,7 +2252,7 @@ switch (pp->type)
     case pptCompound:
         {
 	fprintf(f, "{\n");
-	codeScope(pfc, f, pp, FALSE, FALSE);
+	codeScope(pfc, f, pp, FALSE, NULL);
 	fprintf(f, "}\n");
 	break;
 	}
@@ -2319,9 +2319,6 @@ switch (pp->type)
 static void printPrototype(FILE *f, struct pfParse *funcDec, struct pfParse *class)
 /* Print prototype for function call. */
 {
-/* Put out function prototype.  */
-fprintf(f, "void %s(%s *%s)", funcDec->var->ctar->cName, stackType, stackName);
-#ifdef OLD
 if (class)
     {
     fprintf(f, "void _pf_cm%d_%s_%s(", class->scope->id, 
@@ -2331,7 +2328,6 @@ if (class)
 else
     fprintf(f, "void %s%s(%s *%s)", prefix, funcDec->name, 
     	stackType, stackName);
-#endif /* OLD */
 }
 
 static void rPrintPrototypes(FILE *f, struct pfParse *pp, struct pfParse *class)
@@ -2396,7 +2392,7 @@ fprintf(f, "\n{\n");
     {
     fprintf(f, "struct _pf_activation _pf_act;\n");
     fprintf(f, "_pf_act.parent = _pf_activation_stack;\n");
-    fprintf(f, "_pf_act.fixed = &_pf_ctar%d_fixed;\n", ctar->id);
+    fprintf(f, "_pf_act.fixed = &_pf_rtar%d_fixed;\n", ctar->id);
     fprintf(f, "_pf_activation_stack = &_pf_act;\n");
     }
 
@@ -2601,9 +2597,8 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     rPrintFuncDeclarations(pfc, f, pp, class);
 }
 
-static void codeScope(
-	struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean printMain, boolean checkForExterns)
+static void codeScope(struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
+	boolean printMain, struct comTimeActRec *ctarList)
 /* Print types and then variables from scope. */
 {
 struct pfScope *scope = pp->scope;
@@ -2617,7 +2612,7 @@ helList = hashElListHash(scope->vars);
 slSort(&helList, hashElCmp);
 
 /* Print out variables. */
-if (checkForExterns)
+if (printMain)
     {
     for (hel = helList; hel != NULL; hel = hel->next)
         {
@@ -2639,6 +2634,7 @@ if (printMain)
     fprintf(f, "if (firstTime)\n");
     fprintf(f, "{\n");
     fprintf(f, "firstTime = 0;\n");
+    actRecCodeStartupCall(pfc, f, ctarList);
     codeStaticAssignments(pfc, f, pp);
     }
 for (p = pp->children; p != NULL; p = p->next)
@@ -2755,18 +2751,22 @@ fprintf(f, "};\n");
 fprintf(f, "int _pf_module_info_count = %d;\n\n", moduleCount);
 }
 
-static void rAddCompileTimeActivationRecords(struct pfParse *pp)
+static void rAddCompileTimeActivationRecords(struct pfParse *pp, 
+	struct comTimeActRec **pCtar)
 /* Print out function declarations. */
 {
 switch (pp->type)
     {
     case pptToDec:
     case pptFlowDec:
-	comTimeActRecOnFunction(pp);
+	{
+	struct comTimeActRec *ctar = comTimeActRecOnFunction(pp);
+	slAddHead(pCtar, ctar);
 	break;
+	}
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    rAddCompileTimeActivationRecords(pp);
+    rAddCompileTimeActivationRecords(pp, pCtar);
 }
 
 
@@ -2780,11 +2780,11 @@ struct pfScope *scope;
 struct pfParse *mainModule = NULL;
 
 pfc->runTypeHash = hashNew(0);
-rAddCompileTimeActivationRecords(program);
 
 /* Generate code for each module that is not already compiled. */
 for (toCode = program->children; toCode != NULL; toCode = toCode->next)
     {
+    struct comTimeActRec *ctarList = NULL;
     if (toCode->type == pptModule || toCode->type == pptMainModule)
 	{
 	char fileName[PATH_LEN];
@@ -2818,12 +2818,14 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 	    {
 	    if (module == toCode)
 		{
+		rAddCompileTimeActivationRecords(module, &ctarList);
+		slReverse(&ctarList);
 		verbose(3, "Coding %s\n", module->name);
 		fprintf(f, "/* ParaFlow module %s */\n\n", module->name);
 		fprintf(f, "\n");
-		actRecCodeFixedParts(pfc, f, module);
+		actRecCodeFixedParts(pfc, f, ctarList);
 		fprintf(f, "\n");
-		codeScope(pfc, f, module, TRUE, TRUE);
+		codeScope(pfc, f, module, TRUE, ctarList);
 		fprintf(f, "\n");
 		printPolyFuncConnections(pfc, pfc->scopeList, module, f);
 		}

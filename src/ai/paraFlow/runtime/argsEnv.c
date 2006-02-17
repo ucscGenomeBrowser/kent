@@ -19,7 +19,29 @@ static void stackDump()
 struct _pf_activation *s;
 for (s = _pf_activation_stack; s != NULL; s = s->parent)
     {
-    fprintf(stderr, "%s\n", s->fixed->name);
+    struct _pf_functionFixedInfo *ffi = s->fixed;
+    struct _pf_type *funcType = _pf_type_table[ffi->typeId];
+    struct _pf_type *classType = NULL;
+    struct _pf_type *inputTypeTuple = funcType->children;
+    int inputCount = slCount(inputTypeTuple->children);
+    int i;
+    struct _pf_localVarInfo *vars = ffi->vars;
+    if (ffi->classType >= 0)
+        classType = _pf_type_table[ffi->classType];
+    if (classType != NULL)
+        fprintf(stderr, "%s.", classType->base->name);
+    fprintf(stderr, "%s(", ffi->name);
+    for (i=0; i<inputCount; ++i)
+	{
+	struct _pf_localVarInfo *var = &vars[i];
+	struct _pf_type *paramType = _pf_type_table[var->type];
+	if (i != 0)
+	    fprintf(stderr, ", ");
+	fprintf(stderr, "%s %s = ", paramType->base->name, var->name);
+	/* Here is where we put value one day... */
+	fprintf(stderr, "?");
+	}
+    fprintf(stderr, ")\n");
     }
 }
 
