@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: synthElemTree.c,v 1.2 2006/01/31 06:37:26 braney Exp $";
+static char const rcsid[] = "$Id: synthElemTree.c,v 1.3 2006/02/17 01:15:00 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -51,6 +51,7 @@ int DelWt = 0;
 int NoWt = 0;
 int InverseWt = 0;
 
+
 void speciate(struct genome **list, struct genome *g)
 {
 struct genome *g1, *g2;
@@ -61,6 +62,7 @@ char buffer[512];
 AllocVar(t1);
 AllocVar(t1->ident);
 safef(buffer, sizeof(buffer), "%s0",g->name);
+//safef(buffer, sizeof(buffer), "%s",nextGenome());
 t1->ident->name = cloneString(buffer);
 t1->ident->length = 0; //1 + random() % 7;
 AllocVar(g1);
@@ -75,6 +77,7 @@ phyloAddEdge(g->node, t1);
 AllocVar(t2);
 AllocVar(t2->ident);
 safef(buffer, sizeof(buffer), "%s1",g->name);
+//safef(buffer, sizeof(buffer), "%s",nextGenome());
 t2->ident->name = cloneString(buffer);
 t2->ident->length = 0; //1 + random() % 7;
 AllocVar(g2);
@@ -92,7 +95,9 @@ for(p = g->elements; p; p=p->next)
     slAddHead(&g1->elements, e);
     e->species = g1->name;
     e->name = p->name;
-    safef(buffer, sizeof(buffer), "%s0",p->version);
+    e->isFlipped = p->isFlipped;
+    //safef(buffer, sizeof(buffer), "%s0",p->version);
+    safef(buffer, sizeof(buffer), "%s",nextVersion());
     e->version = cloneString(buffer);
     eleAddEdge(p, e);
 
@@ -100,7 +105,9 @@ for(p = g->elements; p; p=p->next)
     slAddHead(&g2->elements, e);
     e->species = g2->name;
     e->name = p->name;
-    safef(buffer, sizeof(buffer), "%s1",p->version);
+    e->isFlipped = p->isFlipped;
+    //safef(buffer, sizeof(buffer), "%s1",p->version);
+    safef(buffer, sizeof(buffer), "%s",nextVersion());
     e->version = cloneString(buffer);
     eleAddEdge(p, e);
     }
@@ -111,7 +118,54 @@ slReverse(&g2->elements);
 
 void invert(struct genome **list, struct genome *g)
 {
-slAddHead(list, g);
+struct genome *g1;
+struct phyloTree *t1;
+struct element *p;
+char buffer[512];
+int r = random() % slCount(g->elements);
+int n = 1;//random() % (slCount(g->elements) - r ) + 1;
+int didIt = 0;
+
+AllocVar(t1);
+AllocVar(t1->ident);
+safef(buffer, sizeof(buffer), "%sI",g->name);
+//safef(buffer, sizeof(buffer), "%s",nextGenome());
+t1->ident->name = cloneString(buffer);
+printf("inverting %d to %d in %s\n",r,r+n, buffer);
+t1->ident->length = 0; //1 + random() % 7;
+AllocVar(g1);
+slAddHead(list, g1);
+g1->node = t1;
+t1->priv = g1;
+g1->name = t1->ident->name;
+phyloAddEdge(g->node, t1);
+
+didIt = 0;
+for(p = g->elements; p; p=p->next)
+    {
+    struct element *e;
+
+    AllocVar(e);
+    slAddHead(&g1->elements, e);
+    e->species = g1->name;
+    e->name = p->name;
+    e->isFlipped = p->isFlipped;
+    safef(buffer, sizeof(buffer), "%s",nextVersion());
+    //safef(buffer, sizeof(buffer), "%s",p->version);
+    e->version = cloneString(buffer);
+    eleAddEdge(p, e);
+
+    if ((r <= 0) && (r > -n))
+	{
+	didIt = 1;
+	e->isFlipped ^= TRUE;
+	}
+    r--;
+    }
+if (!didIt)
+    errAbort("didn't do it");
+
+slReverse(&g1->elements);
 }
 
 void duplicate(struct genome **list, struct genome *g)
@@ -126,6 +180,7 @@ int didIt = 0;
 AllocVar(t1);
 AllocVar(t1->ident);
 safef(buffer, sizeof(buffer), "%sD",g->name);
+//safef(buffer, sizeof(buffer), "%s",nextGenome());
 t1->ident->name = cloneString(buffer);
 t1->ident->length = 0; //1 + random() % 7;
 AllocVar(g1);
@@ -147,15 +202,19 @@ for(p = g->elements; p; p=p->next)
 	slAddHead(&g1->elements, e);
 	e->species = g1->name;
 	e->name = p->name;
-	safef(buffer, sizeof(buffer), "%s.0",p->version);
+	e->isFlipped = p->isFlipped;
+	//safef(buffer, sizeof(buffer), "%s.0",p->version);
+	safef(buffer, sizeof(buffer), "%s",nextVersion());
 	e->version = cloneString(buffer);
 	eleAddEdge(p, e);
 
 	AllocVar(e);
 	slAddHead(&g1->elements, e);
 	e->species = g1->name;
+	e->isFlipped = p->isFlipped;
 	e->name = p->name;
-	safef(buffer, sizeof(buffer), "%s.1",p->version);
+	safef(buffer, sizeof(buffer), "%s",nextVersion());
+	//safef(buffer, sizeof(buffer), "%s.1",p->version);
 	e->version = cloneString(buffer);
 	eleAddEdge(p, e);
 	}
@@ -165,7 +224,9 @@ for(p = g->elements; p; p=p->next)
 	slAddHead(&g1->elements, e);
 	e->species = g1->name;
 	e->name = p->name;
-	safef(buffer, sizeof(buffer), "%s",p->version);
+	e->isFlipped = p->isFlipped;
+	safef(buffer, sizeof(buffer), "%s",nextVersion());
+	//safef(buffer, sizeof(buffer), "%s",p->version);
 	e->version = cloneString(buffer);
 	eleAddEdge(p, e);
 	}
@@ -188,6 +249,7 @@ int didIt = 0;
 AllocVar(t1);
 AllocVar(t1->ident);
 safef(buffer, sizeof(buffer), "%sD",g->name);
+//safef(buffer, sizeof(buffer), "%s",nextGenome());
 t1->ident->name = cloneString(buffer);
 t1->ident->length = 0; //1 + random() % 7;
 AllocVar(g1);
@@ -213,7 +275,8 @@ for(p = g->elements; p; p=p->next)
 	slAddHead(&g1->elements, e);
 	e->species = g1->name;
 	e->name = p->name;
-	safef(buffer, sizeof(buffer), "%s",p->version);
+//	safef(buffer, sizeof(buffer), "%s",p->version);
+	safef(buffer, sizeof(buffer), "%s",nextVersion());
 	e->version = cloneString(buffer);
 	eleAddEdge(p, e);
 	}
@@ -249,18 +312,20 @@ g->name = root->ident->name;
 for (ii=0; ii < NumElements; ii++)
     {
     safef(name, sizeof(name), "%d",ii);
-    newElement(g, cloneString(name), cloneString("0"));
+    newElement(g, cloneString(name), cloneString(nextVersion()));
     }
 slReverse(&g->elements);
 
 speciate(&gList, g);
 
-g = gList;
+g = gList->next;
 node = g->node;
 node->ident->name = g->name = cloneString("Out");
 node->ident->length = OutLength;
+gList->next = 0;
 
-gList = g = g->next;
+//gList = g = g->next;
+g = gList;
 node = g->node;
 node->ident->name = g->name = cloneString("R");
 
