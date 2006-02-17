@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.7 2006/02/08 23:49:16 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.8 2006/02/17 00:34:42 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -37,7 +37,7 @@ char fileName[64];
 
 ret = newHash(0);
 verbose(1, "getting chroms...\n");
-safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s'", contigGroup);
+safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -64,20 +64,18 @@ char *chromName;
 verbose(1, "reading ContigLocFilter...\n");
 
 safef(query, sizeof(query), 
-    "select snp_id, loc_type, lc_ngbr, rc_ngbr, phys_pos_from, phys_pos, orientation, allele, chromName "
-    "from ContigLocFilter");
+    "select snp_id, ctg_id, chromName, loc_type, phys_pos_from, phys_pos, orientation, allele from ContigLocFilter");
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hel = hashLookup(chromHash,row[8]);
+    hel = hashLookup(chromHash,row[2]);
     if (hel == NULL)
         {
-	verbose(1, "%s not found\n", row[8]);
+	verbose(1, "%s not found\n", row[2]);
 	continue;
 	}
-    fprintf(hel->val, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
-                      row[0], row[8], row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
+    fprintf(hel->val, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
     }
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
@@ -92,10 +90,9 @@ char tableName[64];
 char *createString =
 "CREATE TABLE %s (\n"
 "    snp_id int(11) not null,\n"
+"    ctg_id int(11) not null,\n"
 "    chromName char(32) not null,\n"
 "    loc_type tinyint(4) not null,\n"
-"    lc_ngbr int(11) not null,\n"
-"    rc_ngbr int(11) not null,\n"
 "    phys_pos_from int(11) not null,\n"
 "    phys_pos varchar(32),\n"
 "    orientation tinyint(4) not null,\n"
