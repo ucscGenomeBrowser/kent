@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSort.c,v 1.2 2006/02/10 22:08:00 heather Exp $";
+static char const rcsid[] = "$Id: snpSort.c,v 1.3 2006/02/17 20:54:50 heather Exp $";
 
 struct snpTmp
     {
@@ -42,11 +42,11 @@ struct snpTmp *snpTmpLoad(char **row)
 struct snpTmp *ret;
 
 AllocVar(ret);
-ret->snp_id = atoi(row[0]);
-ret->start = atoi(row[1]);
-ret->end = atoi(row[2]);
-ret->loc_type = atoi(row[3]);
-ret->orientation = atoi(row[4]);
+ret->snp_id = sqlUnsigned(row[0]);
+ret->start = sqlUnsigned(row[1]);
+ret->end = sqlUnsigned(row[2]);
+ret->loc_type = sqlUnsigned(row[3]);
+ret->orientation = sqlUnsigned(row[4]);
 ret->allele   = cloneString(row[5]);
 
 return ret;
@@ -97,7 +97,7 @@ char **row;
 char *chromName;
 
 ret = newHash(0);
-safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s'", contigGroup);
+safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
