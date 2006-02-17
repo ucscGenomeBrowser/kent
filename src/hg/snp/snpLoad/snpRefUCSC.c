@@ -1,8 +1,8 @@
 /* snpRefUCSC - sixth step in dbSNP processing.
  * Read the nib file for a chrom into memory.
  * Lookup sequence at coordinates. 
- * Enhancement: switch to using 2bit.
  * Rewrite to new chrN_snpTmp tables.  
+ * Rename chrMT_snpTmp to chrM_snpTmp before running this.
  * Use UCSC chromInfo.  */
 
 
@@ -16,7 +16,7 @@
 /* errAbort if larger SNP found */
 #define MAX_SNP_SIZE 1024
 
-static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.4 2006/02/15 21:05:30 heather Exp $";
+static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.5 2006/02/17 21:36:39 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -106,21 +106,21 @@ touppers(seq->dna);
 seqPtr = seq->dna;
 
 safef(query, sizeof(query), 
-    "select snp_id, chromStart, chromEnd, loc_type, orientation, allele from %s", tableName);
+    "select snp_id, ctg_id, chromStart, chromEnd, loc_type, orientation, allele from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    start = sqlUnsigned(row[1]);
-    end = sqlUnsigned(row[2]);
+    start = sqlUnsigned(row[2]);
+    end = sqlUnsigned(row[3]);
     snpSize = end - start;
     if (snpSize > MAX_SNP_SIZE)
 	errAbort("maximum size exceeded %s, %s:%d-%d\n", row[0], chromName, start, end);
     if (start == end)
         {
 	/* copy whatever convention dbSNP uses for insertion */
-        fprintf(f, "%s\t%d\t%d\t%s\t%s\t%s\t%s\t%s\n", 
-                row[0], start, end, row[3], row[4], row[5], row[5], row[5]);
+        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\t%s\t%s\n", 
+                row[0], row[1], start, end, row[4], row[5], row[6], row[6], row[6]);
 	continue;
 	}
     verbose(5, "building refUCSC for rs%s at %s:%d-%d\n", row[0], chromName, start, end);
@@ -130,7 +130,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     refUCSC[snpSize] = '\0';
     verbose(5, "refUCSC = %s\n", refUCSC);
     
-    fprintf(f, "%s\t%d\t%d\t%s\t%s\t%s\t%s\t", row[0], start, end, row[3], row[4], row[5], refUCSC);
+    fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\t%s\t", row[0], row[1], start, end, row[4], row[5], row[6], refUCSC);
     reverseComplement(refUCSC, snpSize);
     fprintf(f, "%s\n", refUCSC);
 
@@ -152,6 +152,7 @@ char tableName[64];
 char *createString =
 "CREATE TABLE %s (\n"
 "    snp_id int(11) not null,\n"
+"    ctg_id int(11) not null,\n"
 "    chromStart int(11) not null,\n"
 "    chromEnd int(11) not null,\n"
 "    loc_type tinyint(4) not null,\n"
