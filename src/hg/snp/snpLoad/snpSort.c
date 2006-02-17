@@ -8,12 +8,13 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSort.c,v 1.3 2006/02/17 20:54:50 heather Exp $";
+static char const rcsid[] = "$Id: snpSort.c,v 1.4 2006/02/17 21:12:41 heather Exp $";
 
 struct snpTmp
     {
     struct snpTmp *next;  	        
     int snp_id;			
+    int ctg_id;			
     int start;            
     int end;
     int loc_type;
@@ -43,11 +44,12 @@ struct snpTmp *ret;
 
 AllocVar(ret);
 ret->snp_id = sqlUnsigned(row[0]);
-ret->start = sqlUnsigned(row[1]);
-ret->end = sqlUnsigned(row[2]);
-ret->loc_type = sqlUnsigned(row[3]);
-ret->orientation = sqlUnsigned(row[4]);
-ret->allele   = cloneString(row[5]);
+ret->ctg_id = sqlUnsigned(row[1]);
+ret->start = sqlUnsigned(row[2]);
+ret->end = sqlUnsigned(row[3]);
+ret->loc_type = sqlUnsigned(row[4]);
+ret->orientation = sqlUnsigned(row[5]);
+ret->allele   = cloneString(row[6]);
 
 return ret;
 
@@ -121,7 +123,7 @@ char **row;
 char tableName[64];
 
 safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
-safef(query, sizeof(query), "select snp_id, chromStart, chromEnd, loc_type, orientation, allele from %s ", tableName);
+safef(query, sizeof(query), "select snp_id, ctg_id, chromStart, chromEnd, loc_type, orientation, allele from %s ", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -146,8 +148,8 @@ safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
 f = mustOpen(fileName, "w");
 
 for (el = list; el != NULL; el = el->next)
-    fprintf(f, "%d\t%d\t%d\t%d\t%d\t%s\n", 
-            el->snp_id, el->start, el->end, el->loc_type, el->orientation, el->allele);
+    fprintf(f, "%d\t%d\t%d\t%d\t%d\t%d\t%s\n", 
+            el->snp_id, el->ctg_id, el->start, el->end, el->loc_type, el->orientation, el->allele);
 
 carefulClose(&f);
 }
