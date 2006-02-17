@@ -5838,3 +5838,41 @@ Loading database with 14488 rows
 # END OF HGNEAR STUFF
 #############################################################################
 
+# UPDATE BIOCYCTABLES NEEDED BY hgGene (DONE 2/16/06 Fan)
+
+# First register with BioCyc to download their HumanCyc database
+# The site will email you the URL for download
+
+    wget --timestamping http://bioinformatics.ai.sri.com/ecocyc/dist/pdff-XXXXXX/humancyc-flatfiles.zip
+    unzip  humancyc-flatfiles.zip
+
+    cp genes.col genes.tab
+    cp pathways.col pathways.tab
+
+# delete the first 20 or so header lines from these two files.
+    vi genes.tab
+    vi pathways.tab
+
+    hgsql hg18 -e 'create database bioCyc060216'
+    hgsql bioCyc060216 < ~/src/hg/lib/bioCycGenes.sql
+    hgsql bioCyc060216 -e 'load data local infile "genes.tab" into table genes'
+
+    hgsql bioCyc060216 < ~/src/hg/lib/bioCycPathways.sql
+    hgsql bioCyc060216 -e 'load data local infile "pathways.tab" into table pathways'
+
+# Create bioCycMapDesc.tab
+    hgsql bioCyc060216 -N -e 'select UNIQUE_ID, NAME from pathways' |sort -u >  bioCycMapDesc.tab
+
+# Create bioCycPathway.tab
+    kgBioCyc0 bioCyc060216 hg18 hg17
+
+    hgsql hg18 -e 'delete from bioCycPathway'
+    hgsql hg18 -e 'delete from bioCycMapDesc'
+    hgsql hg18 < ~/src/hg/lib/bioCycPathway.sql
+    hgsql hg18 < ~/src/hg/lib/bioCycMapDesc.sql
+
+# Load results into hg18.
+
+   hgsql hg18 -e 'LOAD DATA local INFILE "bioCycMapDesc.tab" into table bioCycMapDesc'
+   hgsql hg18 -e 'LOAD DATA local INFILE "bioCycPathway.tab" into table bioCycPathway'
+
