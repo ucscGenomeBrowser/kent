@@ -30,12 +30,12 @@ spectrum on
 type netAlign hg18 chainHg18
 otherDb hg18
 
-track repeatScout
-shortLabel RepeatScout
-longLabel RepeatMasker using RepeatScout denovo library 
-group varRep
-priority 149.3
-visibility hide
-spectrum on
-type rmsk
-canPack off
+#track repeatScout
+#shortLabel RepeatScout
+#longLabel RepeatMasker using RepeatScout denovo library 
+#group varRep
+#priority 149.3
+#visibility hide
+#spectrum on
+#type rmsk
+#canPack off
