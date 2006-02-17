@@ -7,7 +7,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: elTreeBuild.c,v 1.6 2006/01/31 06:35:47 braney Exp $";
+static char const rcsid[] = "$Id: elTreeBuild.c,v 1.7 2006/02/17 01:10:58 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -244,8 +244,8 @@ for(e=g->elements; e ; e = e->next)
 
 	did = TRUE;
 	//printf("filling parent for %s\n",eleName(e));
-	safef(buffer, sizeof(buffer), "%s(%s)",e->species,e->version); 
-	e1 = newElement(pg, e->name, cloneString(buffer));
+	//safef(buffer, sizeof(buffer), "%s(%s)",e->species,e->version); 
+	e1 = newElement(pg, e->name, cloneString(nextVersion()));
 	eleAddEdge(e1, e);
 	    ///printf("bringing up %s to %s.%s\n",eleName(e),pg->name,buffer);
 	    fixDistances(e1, e, node->ident->length, distHash, distElemHash, pdistanceList);
@@ -398,8 +398,8 @@ for(e = g->elements; e; e = e->next)
 	    else
 		e->dist = d->next;
 
-	    safef(buffer, sizeof(buffer), "%s(%s)",e->species,e->version); 
-	    eNew = newElement(node->parent->priv, e->name, cloneString(buffer));
+	    //safef(buffer, sizeof(buffer), "%s(%s)",e->species,e->version); 
+	    eNew = newElement(node->parent->priv, e->name, cloneString(nextVersion()));
 	    eleAddEdge(eNew, e);
 	    eleAddEdge(eNew, other);
 
@@ -411,8 +411,8 @@ for(e = g->elements; e; e = e->next)
     if (d == NULL)
 	{
 	printf("need to push up\n");
-	safef(buffer, sizeof(buffer), "%s(%s)",e->species,e->version); 
-	eNew = newElement(node->parent->priv, e->name, cloneString(buffer));
+	//safef(buffer, sizeof(buffer), "%s(%s)",e->species,e->version); 
+	eNew = newElement(node->parent->priv, e->name, cloneString(nextVersion()));
 	eleAddEdge(eNew, e);
 	mergeDists(eNew, e, node->ident->length);
 	}
@@ -562,7 +562,7 @@ if (SpecialNames)
     {
     nameNodes(newRoot);
     checkTree(newRoot);
-    phyloDebugTree(newRoot, stdout);
+    //phyloDebugTree(newRoot, stdout);
     }
 
 //phyloDebugTree(newRoot, stdout);
@@ -699,9 +699,9 @@ do
 		dist1 += node1->ident->length;
 		if (node1 == d->e1->genome->node)
 		    continue;
-		safef(buffer, sizeof(buffer), "%s(%s)",topE1->species,topE1->version); 
+		//safef(buffer, sizeof(buffer), "%s(%s)",topE1->species,topE1->version); 
 		//safef(buffer, sizeof(buffer), "%s0",topE2->version); 
-		e = newElement(g, d->e1->name, cloneString(buffer));
+		e = newElement(g, d->e1->name, cloneString(nextVersion()));
 		//printf("add node1 element %s\n",g->name);
 		eleAddEdge(e, topE1);
 		topE1 = e;
@@ -713,9 +713,9 @@ do
 		dist2 += node2->ident->length;
 		if (node2 == d->e2->genome->node)
 		    continue;
-		safef(buffer, sizeof(buffer), "%s(%s)",topE2->species,topE2->version); 
+		//safef(buffer, sizeof(buffer), "%s(%s)",topE2->species,topE2->version); 
 		//safef(buffer, sizeof(buffer), "%s1",topE2->version); 
-		e = newElement(g, d->e2->name, cloneString(buffer));
+		e = newElement(g, d->e2->name, cloneString(nextVersion()));
 		//printf("add node2 element %s\n",g->name);
 		eleAddEdge(e, topE2);
 		topE2 = e;
@@ -728,10 +728,10 @@ do
 		{
 		struct genome *g = mergeNode->priv;
 		struct element *e;
-		safef(buffer, sizeof(buffer), "%s(%s)",topE1->species,topE1->version); 
+		//safef(buffer, sizeof(buffer), "%s(%s)",topE1->species,topE1->version); 
 		if (!sameString(d->e1->name, d->e2->name))
 		    errAbort("should be same name");
-		e = newElement(g, d->e1->name, cloneString(buffer));
+		e = newElement(g, d->e1->name, cloneString(nextVersion()));
 		//printf("extra add node1 element %s\n",eleName(e));
 		eleAddEdge(e, topE1);
 		topE1 = e;
@@ -754,16 +754,16 @@ do
 		continue;
 
 	    //printf("bot %g \n",node->ident->length);
-	    safef(buffer, sizeof(buffer), "%s(%s)",topE1->species,topE1->version); 
+	    //safef(buffer, sizeof(buffer), "%s(%s)",topE1->species,topE1->version); 
 	    //safef(buffer, sizeof(buffer), "%s0",topE1->version); 
-	    e = newElement(g, d->e1->name, cloneString(buffer));
+	    e = newElement(g, d->e1->name, cloneString(nextVersion()));
 	    //printf("adding %s\n",eleName(e));
 	    eleAddEdge(e, topE1);
 	    topE1 = e;
 
-	    safef(buffer, sizeof(buffer), "%s(%s)",topE2->species,topE2->version); 
+	    //safef(buffer, sizeof(buffer), "%s(%s)",topE2->species,topE2->version); 
 	    //safef(buffer, sizeof(buffer), "%s1",topE2->version); 
-	    e = newElement(g, d->e2->name, cloneString(buffer));
+	    e = newElement(g, d->e2->name, cloneString(nextVersion()));
 	    //printf("adding %s\n",eleName(e));
 	    eleAddEdge(e, topE2);
 	    topE2 = e;
@@ -786,11 +786,13 @@ do
 	    if (!sameString(d->e1->name, d->e2->name))
 		errAbort("merging elements with different names");
 
+	    /*
 	    if (sameString(topE1->species, topE2->species))
 		safef(buffer, sizeof(buffer), "%s(%s+%s)",topE1->species,topE1->version,topE2->version); 
 	    else
 		safef(buffer, sizeof(buffer), "(%s(%s)+%s(%s))",topE1->species,topE1->version,topE2->species,topE2->version); 
-	    e = newElement(genome, d->e1->name, cloneString(buffer));
+		*/
+	    e = newElement(genome, d->e1->name, cloneString(nextVersion()));
 	    //e->version = cloneString(buffer);
 
 	    //printf("new element %s.%s.%s genome %s\n",e->species, e->name, e->version,genome->name);
