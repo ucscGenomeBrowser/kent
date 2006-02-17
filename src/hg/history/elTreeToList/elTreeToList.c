@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: elTreeToList.c,v 1.1 2006/01/19 00:12:45 braney Exp $";
+static char const rcsid[] = "$Id: elTreeToList.c,v 1.2 2006/02/17 01:11:29 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -41,6 +41,8 @@ else
     fprintf(f, ">%s %d\n",g->name,slCount(g->elements));
     for(e=g->elements; e ; e= e->next)
 	{
+	if (e->isFlipped)
+	    fprintf(f, "-");
 	fprintf(f, "%s.%s ",e->name, e->version);
 	}
     fprintf(f, "\n");
@@ -51,7 +53,7 @@ void elTreeToList(char *treeFile, char *outFileName)
 {
 struct phyloTree *node = eleReadTree(treeFile);
 FILE *f = mustOpen(outFileName, "w");
-    printElementTrees(node, 0);
+    //printElementTrees(node, 0);
 
 printLeafElements(f, node);
 }
