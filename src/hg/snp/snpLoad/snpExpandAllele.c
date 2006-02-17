@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.15 2006/02/17 20:22:14 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.16 2006/02/17 20:47:03 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -86,7 +86,7 @@ char *localAllele = cloneString(allele);
 int size = strspn(localAllele, "0123456789");
 if (size != 1 && size != 2) return 0;
 localAllele[size] = '\0';
-return (atoi(localAllele));
+return (sqlUnsigned(localAllele));
 }
 
 char *generateRepeatString(char nucleotide, int count)
@@ -166,16 +166,16 @@ while (oldAllele != NULL)
 return newAllele->string;
 }
 
-void writeToTabFile(char *snp_id, char *start, char *end, char *loc_type, char *orientation, char *allele)
+void writeToTabFile(char *snp_id, char *ctg_id, char *start, char *end, char *loc_type, char *orientation, char *allele)
 {
-fprintf(tabFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\n", snp_id, start, end, loc_type, orientation, allele);
+fprintf(tabFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", snp_id, ctg_id, start, end, loc_type, orientation, allele);
 }
 
-void writeToErrorFile(char *snp_id, char *start, char *end, char *loc_type, char *orientation, char *allele)
+void writeToErrorFile(char *snp_id, char *ctg_id, char *start, char *end, char *loc_type, char *orientation, char *allele)
 {
 fprintf(errorFileHandle, 
-        "snp_id = %s\nchromStart = %s\nchromEnd = %s\nloc_type = %s\norientation=%s\nallele = %s\n", 
-        snp_id, start, end, loc_type, orientation, allele);
+        "snp_id = %s\nctg=%s\nchromStart = %s\nchromEnd = %s\nloc_type = %s\norientation=%s\nallele = %s\n", 
+        snp_id, ctg_id, start, end, loc_type, orientation, allele);
 fprintf(errorFileHandle, "---------------------------------------\n");
 }
 
@@ -201,49 +201,50 @@ safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
 safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
 
 tabFileHandle = mustOpen(fileName, "w");
-safef(query, sizeof(query), "select snp_id, chromStart, chromEnd, loc_type, orientation, allele from %s ", tableName);
+safef(query, sizeof(query), "select snp_id, ctg_id, chromStart, chromEnd, loc_type, orientation, allele from %s ", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
 
     /* no possible candidates in exact and between */
-    if (sameString(row[3], "2") || sameString(row[3], "3"))
+    if (sameString(row[4], "2") || sameString(row[4], "3"))
         {
-	writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5]);
+	writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
 	continue;
 	}
 
     /* pass through alleles with no parens */
-    if (!needToSplit(row[5]))
+    if (!needToSplit(row[6]))
 	{
-	writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5]);
+	writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
 	continue;
 	}
 
-    allele = expandAllele(row[5]);
+    allele = expandAllele(row[6]);
+    /* expandAllele returns original allele if syntax error detected */
     /* detect errors but not removing from data set */
-    if (sameString(allele, row[5]))
+    if (sameString(allele, row[6]))
         {
         errorCount++;
-	writeToErrorFile(row[0], row[1], row[2], row[3], row[4], row[5]);
+	writeToErrorFile(row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
         }
 
     /* calculate end for locType 4, 5, 6 */
-    if (sameString(row[3], "4") || sameString(row[3], "5") || sameString(row[3], "6"))
+    if (sameString(row[4], "4") || sameString(row[4], "5") || sameString(row[4], "6"))
         {
-	start = atoi(row[1]);
+	start = sqlUnsigned(row[2]);
         end = start + strlen(allele);
-	verbose(5, "setting end coord for %s, locType = %s, startAllele = %s\n", row[0], row[3], row[5]);
+	verbose(5, "setting end coord for %s, locType = %s, startAllele = %s\n", row[0], row[4], row[6]);
 	sprintf(newEndString, "%d", end);
-        writeToTabFile(row[0], row[1], newEndString, row[3], row[4], allele);
+        writeToTabFile(row[0], row[1], row[2], newEndString, row[4], row[5], allele);
 	continue;
 	}
 
     /* check for exceptions in locType 1 */
-    if (sameString(row[3], "1"))
+    if (sameString(row[4], "1"))
         {
-	start = atoi(row[1]);
-	end = atoi(row[2]);
+	start = sqlUnsigned(row[2]);
+	end = sqlUnsigned(row[3]);
 	size = end - start;
 	if (size != strlen(allele))
 	    {
@@ -254,7 +255,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	}
 
-    writeToTabFile(row[0], row[1], row[2], row[3], row[4], allele);
+    writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5], allele);
 
     count++;
     }
