@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.8 2006/02/17 00:34:42 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitSimple.c,v 1.9 2006/02/17 00:40:02 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -53,6 +53,8 @@ return ret;
 
 void writeSplitTables()
 /* sequentially read ContigLocFilter, writing to appropriate chrom file */
+/* we are storing chromName in the table just as a sanity check */
+/* It is dropped in the next step of the pipeline */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
