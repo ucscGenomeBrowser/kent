@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.2 2005/06/22 23:00:11 hiram Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.3 2006/02/17 19:30:26 hiram Exp $";
 
 /* Command line switches. */
 //static char *strand = (char *)NULL;	/* strand to process, default +	*/
@@ -162,6 +162,13 @@ for (i=0; i<fileCount; ++i)
 	    {
 	    prevChrom = cloneString(bed->chrom);
 	    chromSize = chromosomeSize(prevChrom);
+	    }
+	if (bed->chromEnd > chromSize)
+	    {
+	    warn("ERROR: %s\t%d\t%d", bed->chrom, bed->chromStart,
+		bed->chromEnd);
+	    errAbort("chromEnd > chromSize ?  %d > %d", bed->chromEnd,
+		chromSize);
 	    }
 	for (i = bed->chromStart; i < bed->chromEnd; ++i)
 	    counts[i]++;	    
