@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.14 2006/02/08 23:54:12 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.15 2006/02/17 20:22:14 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -38,7 +38,7 @@ char **row;
 char *chromName;
 
 ret = newHash(0);
-safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s'", contigGroup);
+safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
