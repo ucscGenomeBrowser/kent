@@ -756,3 +756,116 @@ done
     #	and switch it out from under the browser
     rm monDom4.2bit; mv monDom4RMExtra.2bit monDom4.2bit
     #	distribute to /iscratch/i/monDom4 ...
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2006-02-16 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("monDom4", "blat17", "17786", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("monDom4", "blat17", "17787", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+#########################################################################
+# CPGISLANDS (DONE - 2006-02-16 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/monDom4/bed/cpgIsland
+    cd /cluster/data/monDom4/bed/cpgIsland
+
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    #	gcc readseq.c cpg_lh.c -o cpglh.exe
+    cd ../..
+    ln -s hg3rdParty/cpgIslands/cpglh.exe .
+    
+    ssh kkstore01
+    cd /cluster/data/monDom4
+    mkdir tmp
+    # cpglh.exe requires hard-masked (N) .fa's.  
+    time for CHR in ?/chr?.fa ??/chr??.fa
+    do
+	echo "maskOutFa ${CHR} hard ${CHR}.masked"
+	maskOutFa ${CHR} hard ${CHR}.masked
+    done > tmp/hardMask.out 2>&1
+    #	about 3 minutes 20 seconds
+
+    # There may be warnings about "bad character" for IUPAC ambiguous 
+    # characters like R, S, etc.  Ignore the warnings.  
+    cd /cluster/data/monDom4/bed/cpgIsland
+    for F in ../../*/chr*.fa.masked
+    do
+	FA=${F/*\/}
+	C=${FA/.fa.masked/}
+	echo "./cpglh.exe ${FA} > ${C}.cpg"
+	./cpglh.exe ${F} > ${C}.cpg
+    done > cpglh.out 2>&1 &
+    #	about 4 minutes, there were no warnings
+
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
+'_EOF_'
+    #	happy emacs
+    awk -f filter.awk chr*.cpg | sort -k1,1 -k2,2n > cpgIsland.bed
+
+    ssh hgwdev
+    cd /cluster/data/monDom4/bed/cpgIsland
+    hgLoadBed -strict monDom4 cpgIslandExt -tab -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    #	Reading cpgIsland.bed
+    #	Loaded 22409 elements of size 10
+    featureBits monDom4 cpgIslandExt
+    #	14526908 bases of 3501643220 (0.415%) in intersection
+
+#########################################################################
+# ANDY LAW CPGISSLANDS (DONE - 2006-02-16 - Hiram)
+    # See notes in makeGalGal2.doc and makeCanFam2.doc
+    ssh kkstore01
+    mkdir /cluster/data/monDom4/bed/cpgIslandGgfAndy
+    cd /cluster/data/monDom4/bed/cpgIslandGgfAndy
+
+    #	Build the preProcGgfAndy program in
+    #	kent/src/oneShot/preProcGgfAndy into your ~/bin/$MACHTYPE
+
+    # Use masked sequence since this is a mammal...
+    for F in ../../*/chr*.fa.masked
+    do
+	FA=${F/*\/}
+	C=${FA/.fa.masked/}
+	echo preproc and run on masked "${C} ${F}" 1>/dev/stderr
+	~/bin/$MACHTYPE/preProcGgfAndy ${F} \
+	| /cluster/home/angie/ggf-andy-cpg-island.pl \
+	| perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g1,$oE) = split("\t"); $s--;
+                   $gc=$c+$g1;  $pCpG=(100.0 * 2 * $cpg / $n);
+                   $pGc=(100.0 * $gc / $n);
+                   $_="'${C}'\t$s\t$e\tCpG: $cpg\t$n\t$cpg\t$gc\t" .
+                        "$pCpG\t$pGc\t$oE\n";'
+    done | sort -k1,1 -k2,2n > cpgIslandGgfAndyMasked.bed
+    #	about 3 minutes
+
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/monDom4/bed/cpgIslandGgfAndy
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndyMasked/g' \
+      $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndyMasked.sql
+    hgLoadBed -strict monDom4 cpgIslandGgfAndyMasked -tab -noBin \
+      -sqlTable=cpgIslandGgfAndyMasked.sql cpgIslandGgfAndyMasked.bed
+    #	Loaded 67504 elements of size 10
+    featureBits monDom4 cpgIslandExt
+    #	14526908 bases of 3501643220 (0.415%) in intersection
+    featureBits monDom4 cpgIslandGgfAndyMasked
+    #	41042229 bases of 3501643220 (1.172%) in intersection
+    wc -l ../cpgIsland/cpgIsland.bed *bed
+    #	22409 ../cpgIsland/cpgIsland.bed
+    #	67504 cpgIslandGgfAndyMasked.bed

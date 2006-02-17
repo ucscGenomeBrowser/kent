@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.2 2006/02/15 00:26:01 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.3 2006/02/17 00:02:40 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -94,7 +94,7 @@ XXXX - running 2006-02-14 11:26
     #	The above loop takes about 5 minutes
 
 #############################################################################
-# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 2005-08-26 - Hiram)
+# CREATE CHROM-LEVEL AGP AND FASTA FOR _RANDOMS (DONE 2006-02-14 - Hiram)
     ssh kkstore01
     mkdir /cluster/data/mm8/jkStuff
     cd /cluster/data/mm8
@@ -149,7 +149,7 @@ done
 
 #############################################################################
 # BREAK UP _RANDOMS INTO 5 MB CHUNKS AT NON-BRIDGED CONTIGS
-#					(DONE 2005-08-26 - Hiram)
+#					(DONE 2006-02-14 - Hiram)
     ssh kkstore01
     cd /cluster/data/mm8
     for C in ? ??
@@ -197,7 +197,7 @@ done
     #	/dev/sda1             472G  225G  223G  51% /var/lib/mysql2
     #	/dev/sdc1             1.8T  1.5T  190G  89% /var/lib/mysql
 
-    # CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2005-08-26 - Hiram)
+    # CREATING GRP TABLE FOR TRACK GROUPING (DONE - 2006-02-14 - Hiram)
     #   Use any of the newest databases to ensure that the organization
     #   of the grp table is up to date
     ssh hgwdev
@@ -491,14 +491,437 @@ XXX - running - 2006-02-14 15:40
 # Submission to last job:        127318s    2121.97m    35.37h    1.47d
 
     #- Lift up the split-contig .out's to contig-level .out's
-    ssh kkstore02
+    ssh kkstore01
     cd /cluster/data/mm8
     for D in ?/chr?_[0-9]* ??/chr??_[0-9]* ?/chr?_random_[0-9]* \
 	??/chr??_random_[0-9]*
     do
 	CONTIG=`basename ${D}`
-	liftUp ${D}/${CONTIG}.fa.out ${D}/${CONTIG}.lft warn \
+	liftUp ${D}/${CONTIG}.fa.out ${D}/${CONTIG}.lft error \
 		${D}/${CONTIG}_[0-9]*.fa.out
     done > tmp/RM.lift.outs 2>&1
+    #	real    2m32.275s
     #	scan tmp/RM.lift.outs for unusual errors or difficulties
 
+    cat << '_EOF_' > jkStuff/liftRM_out_to_chr.sh
+#!/bin/sh
+for C in ? ??
+do
+    echo "lifting ${C}"
+    cd ${C}
+    if [ -s lift/ordered.lft ]; then
+	liftUp chr${C}.fa.out lift/ordered.lft error `cat lift/oOut.lst`
+    else
+	echo "WARNING: Can not find ${C}/lift/ordered.lft"
+    fi
+    if [ -s lift/random.lft ]; then
+	liftUp chr${C}_random.fa.out lift/random.lft error `cat lift/rOut.lst`
+    fi
+    cd ..
+done
+'_EOF_'
+    # happy emacs
+    chmod +x jkStuff/liftRM_out_to_chr.sh
+    ./jkStuff/liftRM_out_to_chr.sh > tmp/liftRM_out_to_chr.out 2>&1
+    #	real    0m24.873s
+    #	scan the results tmp/liftRM_out_to_chr.out
+    #	there is a single: WARNING: Can not find Un/lift/ordered.lft
+    #	which is OK
+    #	List the final .out files, nothing should be size 0:
+    ls -og */*.fa.out | sort -k3,3nr
+
+    #- Load the .out files into the database with:
+    ssh hgwdev
+    cd /cluster/data/mm8
+    hgLoadOut mm8 ?/chr?.fa.out ??/chr??.fa.out ?/chr?_random.fa.out \
+	??/chr??_random.fa.out > tmp/hgLoadOut.out 2>&1
+    #	about 7 minutes, there are always a few of these errors:
+
+    #	verify everything seems normal compared with previous builds
+
+    featureBits mm8 rmsk
+    #	1087735582 bases of 2567283971 (42.369%) in intersection
+    featureBits mm7 rmsk
+    #	1092611581 bases of 2583394090 (42.294%) in intersection
+    featureBits mm6 rmsk
+    #	1110222842 bases of 2597150411 (42.748%) in intersection
+    featureBits mm5 rmsk
+    #	1137310280 bases of 2615483787 (43.484%) in intersection
+    featureBits mm4 rmsk
+    #	1130883581 bases of 2627444668 (43.041%) in intersection
+    featureBits mm3 rmsk
+    #	1080265553 bases of 2505900260 (43.109%) in intersection
+
+#############################################################################
+# PROCESS REPEAT MASKER AND SIMPLE REPEATS INTO MASKED SEQUENCE
+#		(DONE - 2006-02-16 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/mm8
+    time for CHR in ?/chr?.fa ??/chr??.fa ?/chr?_random.fa ??/chr??_random.fa
+    do
+	FA=${CHR#*\/}
+	C=${FA%.fa}
+	echo -n "repeat masking ${C} ... "
+	/cluster/bin/i386/maskOutFa -soft ${CHR} ${CHR}.out ${CHR}
+	echo -n "adding simpleRepeats ... "
+	/cluster/bin/i386/maskOutFa -softAdd ${CHR} \
+		bed/simpleRepeat/trfMask/${C}.bed ${CHR}
+	echo "done - ${CHR}"
+    done > tmp/addRM_and_Simple.out 2>&1
+    #	about 4 minutes
+
+    # you will note the usual warnings about troublesome coordinates
+    # in the repeat masker outputs - even more than when they were lifted.
+
+    #	and make the hard masked sequences from these soft masked sequences
+    time for CHR in ?/chr?.fa ??/chr??.fa ?/chr?_random.fa ??/chr??_random.fa
+    do
+	echo "maskOutFa ${CHR} hard ${CHR}.masked"
+	/cluster/bin/i386/maskOutFa ${CHR} hard ${CHR}.masked
+    done > tmp/hardMask.out 2>&1
+    #	about 2 minutes
+
+    #	rebuild the nib file
+    time faToTwoBit ?/chr?.fa ??/chr??.fa ?/chr?_random.fa ??/chr??_random.fa \
+	mm8Soft.2bit
+    #	2 minutes
+    #	verify the sequence is still the same size as before:
+    twoBitInfo mm8Soft.2bit stdout | sort -rn +1 | sum -r
+    #	20673     1
+    sum -r chrom.sizes
+    #	20673     1
+    #	Let's see how much is masked:
+    time twoBitToFa mm8Soft.2bit stdout | faSize stdin
+    #	2664455088 bases (97171400 N's 2567283688 real 1477933003 upper
+    #	1089350685 lower) in 34 sequences in 1 files
+    # and bc says:
+    #	1089350685/2664455088 = .408845
+    #	1089350685/2567283688 = .424320
+
+    #	replace the former unmasked 2bit file with this new one:
+    rm mm8.2bit; mv mm8Soft.2bit mm8.2bit
+    #	check the browser, make sure it is functioning OK
+
+    #	Generate fasta file for random contigs
+    #	THIS IS OPTIONAL STUFF, not really needed
+    cp -p /cluster/data/mm7/jkStuff/lft2BitToFa.pl ./jkStuff
+
+    mkdir randomContigs
+    for L in ?/lift/ctg_random.lft ??/lift/ctg_random.lft
+do
+    D=${L/\/lift*}
+    echo $L $D
+    ./jkStuff/lft2BitToFa.pl mm8.2bit ${L} \
+	> randomContigs/chr${D}_random.ctg.fa
+done
+    #
+    #	Verify these *.ctg.fa files have the same bases as the ordinary
+    #	chr*_random.fa files:
+    faSize ?/chr?_random.fa ??/chr??_random.fa
+    # 20361100 bases (3250000 N's 17111100 real 7094373 upper 10016727 lower)
+    #	in 12 sequences in 12 files
+
+    faSize randomContigs/*.ctg.fa
+    # 17111100 bases (0 N's 17111100 real 7094373 upper 10016727 lower)
+    #	in 77 sequences in 12 files
+    #	Note the number of real, upper and lower bases are the same
+
+    #	This random contig business isn't actually needed
+    #	Create a 2bit file with the full chrom sequences and these
+    #	random contigs for use in blastz:
+    # faToTwoBit ?/chr?.fa ??/chr??.fa randomContigs/chr*.ctg.fa \
+    #	    mm8Chroms_RandomContigs.2bit
+
+    #	Copy to bluearc unit for kluster runs
+    # cp -p mm8.2bit /cluster/bluearc/mm8
+    # cp -p mm8Chroms_RandomContigs.2bit /cluster/bluearc/mm8
+    #	And the lift file to go with it
+    # cat ?/lift/ctg_random.lft ??/lift/ctg_random.lft \
+    #	    > jkStuff/Chroms_RandomContigs.lft
+    #	cp -p jkStuff/Chroms_RandomContigs.lft /cluster/bluearc/mm8
+
+    #	create full chrom nibs for blastz SEQ1 target with Lin Spec Repeats
+    mkdir nib
+    for FA in ?/chr?.fa ??/chr??.fa ?/chr?_random.fa ??/chr??_random.fa
+do
+    B=${FA/*\/}
+    B=${B/.fa/}
+    echo faToNib -softMask ${FA} nib/${B}.nib
+    rm -f nib/${B}.nib
+    faToNib -softMask ${FA} nib/${B}.nib
+done
+    
+    mkdir /cluster/bluearc/scratch/hg/mm8/nib
+    cp -p nib/*.nib /cluster/bluearc/scratch/hg/mm8/nib
+    cp -p chrom.sizes /cluster/bluearc/scratch/hg/mm8
+    cp -p mm8.2bit /cluster/bluearc/scratch/hg/mm8
+    #	The contigs over there are no longer needed
+    rm -fr /cluster/bluearc/scratch/hg/mm8/contigs
+    #	after lineage specific repeats are created below, this business
+    #	can be pushed to the kluster kk nodes and over to the Iservers
+
+#############################################################################
+# PREPARE "bigZips" files for public release
+#	(DONE 2006-02-16 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/mm8/downloads
+    mkdir /cluster/data/mm8/downloads/bigZips
+    mkdir /cluster/data/mm8/downloads/chromosomes
+    cd /cluster/data/mm8/downloads/chromosomes
+    gzip chr*.fa
+    #	12 minutes
+    #	copy previous release README.txt
+    scp hgwdev:/usr/local/apache/htdocs/goldenPath/mm8/chromosomes/README.txt .
+    #	edit it to bring it up to date
+    cd /cluster/data/mm8/downloads/bigZips
+    #	copy previous release README.txt
+    scp hgwdev:/usr/local/apache/htdocs/goldenPath/mm8/bigZips/README.txt .
+    # edit README.txt to indicate proper version of sequence and
+    #	RepeatMasker
+    cd /cluster/data/mm8
+    cp -p ?/chr*.fa ??/chr*.fa downloads/chromosomes
+    tar cvzf downloads/bigZips/chromAgp.tar.gz ?/chr*.agp ??/chr*.agp
+    tar cvzf downloads/bigZips/chromFa.tar.gz ?/chr*.fa ??/chr*.fa
+    #	12 minutes
+    tar cvzf downloads/bigZips/chromFaMasked.tar.gz ?/chr*.fa.masked \
+	??/chr*.fa.masked
+    tar cvzf downloads/bigZips/chromOut.tar.gz ?/chr*.fa.out ??/chr*.fa.out
+    cd /cluster/data/mm8/bed/simpleRepeat
+    tar cvzf ../../downloads/bigZips/chromTrf.tar.gz ./trfMask
+
+    # get GenBank native mRNAs  (XXX - NOT DONE 2006-02-16)
+    ssh hgwdev
+    cd /cluster/data/genbank
+    ./bin/i386/gbGetSeqs -db=mm8 -native GenBank mrna \
+	/cluster/data/mm8/bigZips/mrna.fa
+    cd /cluster/data/mm8/bigZips
+    gzip mrna.fa
+    
+    ssh kkstore01
+    cd /cluster/data/mm8/downloads/bigZips
+    cp -p ../../mm8.2bit .
+    md5sum *.gz > md5sum.txt
+
+    ssh hgwdev
+    mkdir -p /usr/local/apache/htdocs/goldenPath/mm8
+    ln -s /cluster/data/mm8/downloads/bigZips \
+	/usr/local/apache/htdocs/goldenPath/mm8/bigZips
+    ln -s /cluster/data/mm8/downloads/chromosomes \
+	/usr/local/apache/htdocs/goldenPath/mm8/chromosomes
+
+#############################################################################
+# PREPARE LINEAGE SPECIFIC REPEAT FILES FOR BLASTZ (DONE - 2006-02-16 - Hiram)
+
+    ssh kkr1u00
+    mkdir /iscratch/i/mm8/rmsk
+    cd /cluster/data/mm8
+    cp -p */chr*.fa.out /iscratch/i/mm8/rmsk
+    cd /iscratch/i/mm8
+    for R in 2 3 4 5 6 7 8
+    do
+	rsync -a --progress /iscratch/i/mm8/ kkr${R}u00:/iscratch/i/mm8/
+    done
+    cd rmsk
+
+    ssh kki
+    mkdir /cluster/data/mm8/linSpecRep
+    cd /cluster/data/mm8/linSpecRep
+    ls -1S /iscratch/i/mm8/rmsk > fa.list
+    
+    cat << '_EOF_' > mkLSR.csh
+#!/bin/csh -fe
+pushd /iscratch/i/mm8/rmsk
+/cluster/bluearc/RepeatMasker060120/DateRepeats \
+	    $1 -query mouse -comp human -comp rat -comp dog -comp cow \
+		-comp rabbit
+popd
+/bin/cp -p /iscratch/i/mm8/rmsk/$1_homo-sapiens_rattus_canis-familiaris_bos-taurus_oryctolagus-cuniculus .
+'_EOF_'
+    #	happy emacs
+    chmod +x mkLSR.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./mkLSR.csh $(path1) {check out line+ $(path1)_homo-sapiens_rattus_canis-familiaris_bos-taurus_oryctolagus-cuniculus}
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+
+    gensub2 fa.list single template jobList
+    para try ... check ... push ... etc...
+    para time
+# Completed: 34 of 34 jobs
+# CPU time in finished jobs:       1338s      22.29m     0.37h    0.02d  0.000 y
+# IO & Wait Time:                   112s       1.87m     0.03h    0.00d  0.000 y
+# Average job time:                  43s       0.71m     0.01h    0.00d
+# Longest finished job:              92s       1.53m     0.03h    0.00d
+# Submission to last job:           181s       3.02m     0.05h    0.00d
+
+    ssh kkstore01
+    cd /cluster/data/mm8/linSpecRep
+    mkdir notInHuman notInRat notInDog notInCow notInRabbit
+    for F in chr*.out_homo-sapiens*
+    do
+	B=${F/.fa.out*/}
+	echo $B 
+        /cluster/bin/scripts/extractRepeats 1 ${F} > \
+		notInHuman/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 2 ${F} > \
+		notInRat/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 3 ${F} > \
+		notInDog/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 4 ${F} > \
+		notInCow/${B}.out.spec
+        /cluster/bin/scripts/extractRepeats 4 ${F} > \
+		notInRabbit/${B}.out.spec
+    done
+    #	the notInHuman, notInDog, notInCow and notInRabit ended up being
+    #	identical.  Only the notInRat was different than them
+    #	To check identical
+    find . -name "*.out.spec" | \
+	while read FN; do echo `cat ${FN} | sum -r` ${FN}; done \
+	| sort -k1,1n | sort -t"/" -k3,3
+    #	Copy to scratch/hg for use in kluster runs
+    mkdir /cluster/bluearc/scratch/hg/mm8/linSpecRep
+    mkdir /cluster/bluearc/scratch/hg/mm8/linSpecRep/notInRat
+    mkdir /cluster/bluearc/scratch/hg/mm8/linSpecRep/notInOthers
+    cp -p notInHuman/* /cluster/bluearc/scratch/hg/mm8/linSpecRep/notInOthers
+    cp -p notInRat/* /cluster/bluearc/scratch/hg/mm8/linSpecRep/notInRat
+    #	Request this scratch/hg/mm8 directory push to the kk nodes
+
+    #	and we can do the Iservers simply:
+    ssh kkr1u00
+    cd /iscratch/i/mm8
+    #	no longer need these two directories
+    rm -fr fa rmsk
+    rsync -a --progress /cluster/bluearc/scratch/hg/mm8/ .
+    for R in 2 3 4 5 6 7 8
+    do
+	rsync -a --progress /iscratch/i/mm8/ kkr${R}u00:/iscratch/i/mm8/
+    done
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2006-02-16 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("mm8", "blat17", "17784", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("mm8", "blat17", "17785", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+#########################################################################
+# CPGISLANDS (DONE - 2006-02-16 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/mm8/bed/cpgIsland
+    cd /cluster/data/mm8/bed/cpgIsland
+
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    #	gcc readseq.c cpg_lh.c -o cpglh.exe
+    cd ../..
+    ln -s hg3rdParty/cpgIslands/cpglh.exe .
+    
+    # cpglh.exe requires hard-masked (N) .fa's.  
+    # There may be warnings about "bad character" for IUPAC ambiguous 
+    # characters like R, S, etc.  Ignore the warnings.  
+    ssh kkstore01
+    cd /cluster/data/mm8/bed/cpgIsland
+    for F in ../../*/chr*.fa.masked
+    do
+	FA=${F/*\/}
+	C=${FA/.fa.masked/}
+	echo "./cpglh.exe ${FA} > ${C}.cpg"
+	./cpglh.exe ${F} > ${C}.cpg
+    done > cpglh.out 2>&1 &
+    #	about 3 minutes 20 seconds
+
+    #	Several chroms have 0 results:
+    #	-rw-rw-r--  1     0 Feb 16 15:19 chr10_random.cpg
+    #	-rw-rw-r--  1     0 Feb 16 15:20 chr15_random.cpg
+    #	-rw-rw-r--  1     0 Feb 16 15:22 chr8_random.cpg
+    #	-rw-rw-r--  1     0 Feb 16 15:22 chr9_random.cpg
+    #	-rw-rw-r--  1     0 Feb 16 15:22 chrM.cpg
+    #	-rw-rw-r--  1     0 Feb 16 15:22 chrX_random.cpg
+    #	-rw-rw-r--  1     0 Feb 16 15:22 chrY.cpg
+
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
+'_EOF_'
+    #	happy emacs
+    awk -f filter.awk chr*.cpg | sort -k1,1 -k2,2n > cpgIsland.bed
+
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/cpgIsland
+    hgLoadBed -strict mm8 cpgIslandExt -tab -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    #	Reading cpgIsland.bed
+    #	Loaded 15963 elements of size 10
+    featureBits mm8 cpgIslandExt
+    #	10456823 bases of 2567283971 (0.407%) in intersection
+    featureBits mm7 cpgIslandExt
+    #	10439328 bases of 2583394090 (0.404%) in intersection
+    featureBits mm6 cpgIslandExt
+    #	10432360 bases of 2597150411 (0.402%) in intersection
+    featureBits mm5 cpgIslandExt
+    #	10422989 bases of 2615483787 (0.399%) in intersection
+    featureBits mm4 cpgIsland
+    #	11109692 bases of 2627444668 (0.423%) in intersection
+    featureBits mm3 cpgIsland
+    #	10102968 bases of 2505900260 (0.403%) in intersection
+
+#########################################################################
+# ANDY LAW CPGISSLANDS (DONE - 2006-02-16 - Hiram)
+    # See notes in makeGalGal2.doc and makeCanFam2.doc
+    ssh kkstore01
+    mkdir /cluster/data/mm8/bed/cpgIslandGgfAndy
+    cd /cluster/data/mm8/bed/cpgIslandGgfAndy
+
+    #	Build the preProcGgfAndy program in
+    #	kent/src/oneShot/preProcGgfAndy into your ~/bin/$MACHTYPE
+
+    # Use masked sequence since this is a mammal...
+    for F in ../../*/chr*.fa.masked
+    do
+	FA=${F/*\/}
+	C=${FA/.fa.masked/}
+	echo preproc and run on masked "${C} ${F}" 1>/dev/stderr
+	~/bin/$MACHTYPE/preProcGgfAndy ${F} \
+	| /cluster/home/angie/ggf-andy-cpg-island.pl \
+	| perl -wpe 'chomp; ($s,$e,$cpg,$n,$c,$g1,$oE) = split("\t"); $s--;
+                   $gc=$c+$g1;  $pCpG=(100.0 * 2 * $cpg / $n);
+                   $pGc=(100.0 * $gc / $n);
+                   $_="'${C}'\t$s\t$e\tCpG: $cpg\t$n\t$cpg\t$gc\t" .
+                        "$pCpG\t$pGc\t$oE\n";'
+    done | sort -k1,1 -k2,2n > cpgIslandGgfAndyMasked.bed
+
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/cpgIslandGgfAndy
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndyMasked/g' \
+      $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndyMasked.sql
+    hgLoadBed -strict mm8 cpgIslandGgfAndyMasked -tab -noBin \
+      -sqlTable=cpgIslandGgfAndyMasked.sql cpgIslandGgfAndyMasked.bed
+    #	Loaded 67442 elements of size 10
+    featureBits mm8 cpgIslandExt
+    #	10456823 bases of 2567283971 (0.407%) in intersection
+    featureBits mm7 cpgIslandExt
+    #	10439328 bases of 2583394090 (0.404%) in intersection
+    featureBits mm8 cpgIslandGgfAndyMasked
+    #	38850121 bases of 2567283971 (1.513%) in intersection
+    featureBits mm7 cpgIslandGgfAndyMasked
+    #	38774242 bases of 2583394090 (1.501%) in intersection
+    wc -l ../cpgIsland/cpgIsland.bed *bed
+    #	15963 ../cpgIsland/cpgIsland.bed
+    #	67442 cpgIslandGgfAndyMasked.bed
