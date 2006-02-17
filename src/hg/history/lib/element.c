@@ -47,7 +47,7 @@ struct genome *genome = NULL;
 int wordsRead, elementsLeft = 0, numChildren = 0;
 boolean needGenome = TRUE;
 int count = 0;
-char *words[512];
+char *words[2048];
 struct element **elements;
 
 while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
@@ -86,7 +86,7 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	if (wordsRead /2> elementsLeft)
 	    errAbort("too many elements in genome %s",genome->name);
 	if ( (words[0][0] == '>'))
-	    errAbort("too few elements in genome %s\n",genome->name);
+	    errAbort("too few elements in genome %s elementsLeft %d\n",genome->name,elementsLeft);
 	elementsLeft -= wordsRead/2;
 
 	for(ii=0; ii < wordsRead; ii+=2)
@@ -154,7 +154,7 @@ struct genome *readGenomes(char *fileName)
 {
 struct genome *allGenomes = NULL, *genome = NULL;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *words[256];
+char *words[2048];
 int wordsRead, wordsLeft = 0;
 boolean needGenome = TRUE;
 
@@ -535,6 +535,7 @@ for(e = g->elements; e; e = e->next)
     if (e->isFlipped)
 	fprintf(f, "-");
     fprintf(f,"%s.%s %d ",e->name,e->version, (e->parent) ? e->parent->count + 1 : 0 );
+    //fprintf(f,"%s ",e->name);
     }
 fprintf(f,"\n");
 
@@ -546,4 +547,30 @@ void outElementTrees(FILE *f, struct phyloTree *node)
 {
 assignElemNums(node);
 outElems(f, node);
+}
+
+char *nextVersion()
+{
+static int count = 0;
+static char buffer[4];
+
+buffer[0] = count / (26*26) + 'A';
+buffer[1] = (count % (26 * 26)) / 26 + 'A';
+buffer[2] = count % 26 + 'A';
+buffer[3] = 0;
+
+count++;
+return buffer;
+}
+
+char *nextGenome()
+{
+static int count = 0;
+static char buffer[3];
+
+buffer[0] = count / 26 + 'A';
+buffer[1] = count % 26 + 'A';
+buffer[2] = 0;
+count++;
+return buffer;
 }
