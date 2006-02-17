@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.14 2006/02/16 23:58:18 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.15 2006/02/17 00:24:44 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -110,7 +110,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	/* could check for missing chrom here */
 	chromName = hashFindVal(contigHash,row[1]);
 	fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
-	            row[0], row[1], row[2], row[3], row[4], row[5], row[6], chromName);
+	            row[0], row[1], chromName, row[2], row[3], row[4], row[5], row[6]);
 	}
     }
 sqlFreeResult(&sr);
@@ -127,12 +127,12 @@ char *createString =
 "CREATE TABLE ContigLocFilter (\n"
 "    snp_id int(11) not null,       \n"
 "    ctg_id int(11) not null,       \n"
+"    chromName varchar(32) not null,\n"
 "    loc_type tinyint(4) not null,       \n"
 "    phys_pos_from int(11) not null,       \n"
 "    phys_pos varchar(32), \n"
 "    orientation tinyint(4) not null, \n"
-"    allele blob,\n"
-"    chromName varchar(32)\n"
+"    allele blob\n"
 ");\n";
 
 sqlRemakeTable(conn, "ContigLocFilter", createString);
