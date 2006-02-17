@@ -30,7 +30,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.255 2006/02/15 23:20:11 hartera Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.256 2006/02/17 15:23:23 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -921,7 +921,7 @@ int omimAvail = 0;
 char query[128];
 if (sameString(tdb->tableName, "refGene"))
     {
-    safef(query, sizeof(query), "select count(*) from refLink where omimId != 0");
+    safef(query, sizeof(query), "select omimId from refLink where omimId != 0 limit 1");
     omimAvail = sqlQuickNum(conn, query);
     }
 hFreeConn(&conn);
@@ -951,7 +951,7 @@ int omimAvail = 0;
 char query[128];
 if (sameString(tdb->tableName, "refGene"))
     {
-    safef(query, sizeof(query), "select count(*) from refLink where omimId != 0");
+    safef(query, sizeof(query), "select omimId from refLink where omimId != 0 limit 1");
     omimAvail = sqlQuickNum(conn, query);
     }
 hFreeConn(&conn);
