@@ -34,7 +34,7 @@ foreach (string fileName in args)
 	int pos, string word;
 	for (;;)
 	    {
-	    (word, pos) = line.nextWord(pos);
+	    (word, pos) = line.nextToken(pos);
 	    if (!word)
 	        break;
 	    wordUse use = wordDir[word];

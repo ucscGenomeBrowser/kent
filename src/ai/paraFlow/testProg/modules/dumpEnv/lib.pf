@@ -63,40 +63,24 @@ class lib
 	paths = results;
 	}
 
-    to countSpacedWords(string s) into int count
-        {
-	foreach (string w,int pos in s.nextSpaced(pos))
-	    count += 1;
-	}
-
     to countWords(string s) into int count
         {
-	foreach (string w,int pos in s.nextWord(pos))
-	    count += 1;
+	count = s.words().size;
 	}
 
-    to splitSpaced(string s) into array of string result
+    to countTokens(string s) into int count
         {
-	array[lib.countSpacedWords(s)] of string a;
-	int wordIx;
-	foreach (string w,int pos in s.nextSpaced(pos))
-	    {
-	    a[wordIx] = w;
-	    wordIx += 1;
-	    }
-	result = a;
+	count = s.tokens().size;
 	}
 
     to splitWords(string s) into array of string result
         {
-	array[lib.countWords(s)] of string a;
-	int wordIx;
-	foreach (string w,int pos in s.nextWord(pos))
-	    {
-	    a[wordIx] = w;
-	    wordIx += 1;
-	    }
-	result = a;
+	result = s.words();
+	}
+
+    to splitTokens(string s) into array of string result
+        {
+	result = s.tokens();
 	}
 
     to findLastUseOfChar(string s, byte c) into int pos
@@ -109,7 +93,7 @@ class lib
 	pos = -1;
 	}
 
-    to findFirstUseOfChar(string x, byte c) into int pos
+    to findFirstUseOfChar(string s, byte c) into int pos
     // Return first occurence of c in string or -1 if none.
         {
 	for (pos=0; pos < s.size; pos += 1)

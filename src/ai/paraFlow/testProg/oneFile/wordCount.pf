@@ -29,7 +29,7 @@ foreach (string fileName in args)
 	int pos, string word;
 	for (;;)
 	    {
-	    (word, pos) = line.nextSpaced(pos);
+	    (word, pos) = line.nextWord(pos);
 	    if (!word)
 	        break;
 	    words += 1;

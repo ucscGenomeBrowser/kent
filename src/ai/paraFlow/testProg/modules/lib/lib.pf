@@ -67,41 +67,25 @@ class lib
     to countSpacedWords(string s) into int count
     // Count number of space separated words.
         {
-	foreach ((string w,int pos) in s.nextSpaced(pos))
-	    count += 1;
+	count = s.words().size;
 	}
 
     to countWords(string s) into int count
     // Count number of words and punctuation.
         {
-	foreach (string w,int pos in s.nextWord(pos))
-	    count += 1;
+	count = s.tokens().size;
 	}
 
     to splitSpaced(string s) into array of string result
     // Return an array of space separated words.
         {
-	array[lib.countSpacedWords(s)] of string a;
-	int wordIx;
-	foreach (string w,int pos in s.nextSpaced(pos))
-	    {
-	    a[wordIx] = w;
-	    wordIx += 1;
-	    }
-	result = a;
+	result = s.words();
 	}
 
     to splitWords(string s) into array of string result
     // Return an array of words and punctuation (no spaces).
         {
-	array[lib.countWords(s)] of string a;
-	int wordIx;
-	foreach ((string w,int pos) in s.nextWord(pos))
-	    {
-	    a[wordIx] = w;
-	    wordIx += 1;
-	    }
-	result = a;
+	result = s.tokens();
 	}
 
     to findFirstUseOfChar(string s, byte c) into int pos

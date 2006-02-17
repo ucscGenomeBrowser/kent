@@ -45,5 +45,11 @@ void _pf_var_cleanup(_pf_Var var);
 void _pf_cleanup_interface(void *v, int typeId);
 /* Clean up interface of some sort. */
 
+void _pf_nil_use();
+/* Complain about use of undefined object and punt. */
+
+void _pf_nil_check(void *v);
+/* Punt if v is nil. */
+
 #endif /* OBJECT_H */
 

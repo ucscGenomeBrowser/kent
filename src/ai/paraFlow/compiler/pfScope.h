@@ -29,7 +29,7 @@ struct pfVar
      struct pfScope *scope;		/* Scope we're declared in. */
      struct pfType *ty;			/* Variable type. */
      struct pfParse *parse;		/* Declaration spot in parse tree. */
-     struct comTimeActRec *ctar;	/* Compile-time Activation record for functions  */
+     struct ctar *ctar;	/* Compile-time Activation record for functions  */
      bool isExternal;			/* Variable in an external file? */
      bool paraTainted;			/* If true then no writing to var allowed. */
      };

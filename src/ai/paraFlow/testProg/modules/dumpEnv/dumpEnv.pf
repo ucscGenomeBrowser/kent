@@ -8,7 +8,7 @@ print(lib.getPathArray());
 
 string s = "This is a little sentence.  Ok?";
 print(s);
-print(lib.countSpacedWords(s));
-print(lib.splitSpaced(s));
 print(lib.countWords(s));
 print(lib.splitWords(s));
+print(lib.countTokens(s));
+print(lib.splitTokens(s));

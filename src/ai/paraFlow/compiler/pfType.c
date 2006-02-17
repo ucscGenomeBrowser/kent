@@ -1158,27 +1158,10 @@ static void checkElInCollection(struct pfCompile *pfc, struct pfParse *el,
 /* Make sure that collection is indeed a collection, and
  * that the type of el agrees with the types in the collection */
 {
-boolean ok = TRUE;
+if (el->type != pptVarInit)
+    errAt(el->tok, "element must be just a name");
 if (!collection->ty->base->isCollection)
     expectingGot("collection", collection->tok);
-if (collection->ty->base == pfc->stringType)
-    {
-    if (el->ty->base != pfc->byteType)
-	ok = FALSE;
-    }
-else if (collection->ty->base == pfc->indexRangeType)
-    {
-    if (el->ty->base != pfc->longType)
-	ok = FALSE;
-    }
-else
-    {
-    if (!pfTypeSame(el->ty, collection->ty->children))
-	ok = FALSE;
-    }
-if (!ok)
-    errAt(collection->tok, "type mismatch between element and collection in %s", 
-    		statementName);
 }
 
 static void typeElInCollection(struct pfCompile *pfc, struct pfParse **pPp)
@@ -1196,12 +1179,21 @@ struct pfParse *type = pfParseNew(pptTypeName, el->tok, el, el->scope);
 struct pfParse *sym = pfParseNew(pptSymName, el->tok, el, el->scope);
 struct pfVar *var = pfScopeFindVar(el->scope, el->name);
 struct pfType *ty;
-if (collection->ty->base == pfc->stringType)
-    ty = pfTypeNew(pfc->byteType);
-else if (collection->ty->base == pfc->indexRangeType)
-    ty = pfTypeNew(pfc->longType);
+if (collection->type == pptCall || collection->type == pptIndirectCall)
+    {
+    ty = collection->ty;
+    if (ty->children != NULL)
+        errAt(collection->tok, "functions in foreach can only return a single value");
+    }
 else
-    ty = collection->ty->children;
+    {
+    if (collection->ty->base == pfc->stringType)
+	ty = pfTypeNew(pfc->byteType);
+    else if (collection->ty->base == pfc->indexRangeType)
+	ty = pfTypeNew(pfc->longType);
+    else
+	ty = collection->ty->children;
+    }
 *(var->ty) = *ty;
 sym->name = el->name;
 type->ty = el->ty = var->ty;
@@ -1210,46 +1202,74 @@ el->children = type;
 type->next = sym;
 }
 
+static void foreachIntoForeachCall(struct pfCompile *pfc, struct pfParse *pp)
+/* Rework parse tree from:
+ *     pptForeach
+ *        <function call>
+ *        pptVarInit
+ *           pptTypeName <function-type>
+ *           pptSymName <element name>
+ *        <loop body>
+ * Into
+ *     pptFor
+ *        pptVarInit
+ *           pptTypeName <function-type>
+ *           pptSymName <element name>
+ *           <function call>
+ *        <pptCastXxxToBit>
+ *           pptVarUse <element var>
+ *        <pptAssignment>
+ *           pptVarUse <element var>
+ *           <function call>
+ *        <loop body>
+ */
+{
+struct pfParse *call = pp->children;
+struct pfParse *elInit = call->next;
+struct pfParse *body = elInit->next;
+struct pfVar *elVar = elInit->var;
+
+if (elInit->type != pptVarInit)
+    errAt(elInit->tok, "element must be just a name");
+/* Create new parse nodes. */
+struct pfParse *firstVarUse = pfParseNew(pptVarUse, elInit->tok, pp, pp->scope);
+struct pfParse *assignment = pfParseNew(pptAssignment, elInit->tok, pp, pp->scope);
+struct pfParse *secondVarUse = pfParseNew(pptVarUse, elInit->tok, pp, pp->scope);
+firstVarUse->var = secondVarUse->var = elVar;
+firstVarUse->ty = secondVarUse->ty = elVar->ty;
+coerceToBit(pfc, &firstVarUse);		/* This inserts cast. */
+
+/* Turn foreach into for, and rearrange rearrange parse tree incorperating
+ * new nodes. */
+pp->type = pptFor;
+pp->children = elInit;
+call->next = NULL;
+elInit->children->next->next = call;
+elInit->next = firstVarUse;
+firstVarUse->next = assignment;
+assignment->children = secondVarUse;
+secondVarUse->next = call;
+assignment->next = body;
+}
+
 static void checkForeach(struct pfCompile *pfc, struct pfParse *pp)
 /* Figure out if looping through a collection, or over
  * repeated uses of function, and type check accordingly. */
 {
 /* Make sure have agreement between element and collection vars */
 struct pfParse *source = pp->children;
-struct pfParse *el = source->next;
-struct pfParse *body = el->next;
-struct pfParse *cast, *castStart;
 
 if (source->type == pptCall || source->type == pptIndirectCall)
     {
-    /* Coerce call to be same type as element. */
-    struct pfParse **pSource = &pp->children;
-    pp->type = pptForEachCall;
-    coerceOne(pfc, pSource, el->ty, FALSE);
-
-    /* Coerce element to bit, and save cast node if
-     * any after body.  Handle tuples here as a special case,
-     * generating cast for first element. */
-    if (el->type == pptTuple)
-	cast = castStart = el->children;
-    else
-        cast = castStart = el;
-    coerceToBit(pfc, &cast);
-    if (cast != castStart)
-        {
-	cast->children = CloneVar(castStart);
-	castStart->next = cast->next;
-	castStart->parent = cast->parent;
-	cast->next = NULL;
-	cast->parent = pp;
-	body->next = cast;
-	}
+    foreachIntoForeachCall(pfc, pp);
     }
 else
     {
+    struct pfParse *el = source->next;
     checkElInCollection(pfc, el, source, "foreach");
     }
 }
+
 
 struct pfType *coerceLval(struct pfCompile *pfc, struct pfParse *pp)
 /* Ensure that pp can be assigned.  Return it's type */

@@ -1,7 +1,7 @@
 include ../../../inc/common.mk
 
-O = activate.o builtin.o cCoder.o checkPara.o checkPoly.o codedType.o \
-    defFile.o main.o pfBindVars.o \
+O = builtin.o cCoder.o checkPara.o checkPoly.o codedType.o \
+    ctar.o defFile.o main.o pfBindVars.o \
     pfParse.o pfScope.o pfToken.o pfType.o parseInto.o \
     recodedType.o tokInto.o util.o
 

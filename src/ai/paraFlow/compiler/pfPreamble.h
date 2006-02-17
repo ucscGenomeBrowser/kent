@@ -105,7 +105,8 @@ struct _pf_activation
 /* Function activation record. */
     {
     struct _pf_activation *parent;		/* Caller's activation record. */
-    struct _pf_functionFixedInfo *fixed;	/* Information valid for all calls.. */
+    struct _pf_functionFixedInfo *fixed;	/* Information valid for all calls. */
+    void *data;			            /* Points to Data structure for locals. */
     };
 extern struct _pf_activation *_pf_activation_stack;
 

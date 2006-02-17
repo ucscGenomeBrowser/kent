@@ -97,18 +97,26 @@ string.findNext(string s, int startingPos) into int pos
     Returns the next occurence of s in string that occurs at the starting pos
     or later.
 
-string.nextSpaced(int pos) into (string word, int nextPos)
-    Returns next white-space-delimited word starting at pos or later.
-    The characters space, tab, and newline are considered white space.
-    Does not return any of the white space.  Also returns nextPos,
-    which should be used in the next call to nextWord.  The pos
-    initially should be 0.
+string.words() into (array of string words)
+    Returns the white-space-delimited words in the string.
+    The characters space, tab, and newline are considered white space,
+    and the white space is not included in the output words.
+
+string.tokens() into (array of string words)
+    Returns the words in the string dilimited by white space or
+    punctuation.  The punctuation is returned as a single character
+    word.  The white space is skipped.  The character '_' is not
+    considered punctuation, and may be included in a word.
 
 string.nextWord(int pos) into (string word, int nextPos)
-    Returns next word deliminated by white space or punctuation.
-    The punctuation is returned as a single character word.
-    The character '_' is not considered punctuation, and can be
-    included in a word.
+    Returns next white-space-delimited word starting at pos or later,
+    where white space is the same as in string.words.  When there
+    are no more words the return word will be nil, and the nextPos -1.
+    The pos should be 0 in the first call to this method, and
+    the same as the previous nextPos in subsequent calls.
+
+string.nextToken(int pos) into (string word, int nextPos)
+    Returns next word deliminated by the same rules as string.tokens.
 
 floatString(double f, int digitsBeforeDecimal, int digitsAfterDecimal, 
             bit scientific) into string s

@@ -274,38 +274,40 @@ if (--sub->_pf_refCount <= 0)
 }
 
 
-void _pf_cm_string_nextSpaced(_pf_Stack *stack)
-/* Return next white-space separated word. */
+static int tokenSpan(char *s)
+/* Count up number of characters in word starting at s. */
 {
-_pf_String string = stack[0].String;
-int pos = stack[1].Int;
-char *s;
-
-if (string == NULL)
+int count = 0;
+if (s != NULL && s[0] != 0)
     {
-    stack[0].Int = 0;
-    stack[1].String = NULL;
-    return;
+    char *e = s;
+    char c = *e++;
+    if (isalnum(c) || c == '_')
+        {
+	for (;;)
+	    {
+	    c = *e;
+	    if (!isalnum(c) && c != '_')
+		break;
+	    e += 1;
+	    }
+	}
+    count = e - s;
     }
-if (pos > string->size) pos = string->size;
-s = skipLeadingSpaces(string->s + pos);
-if (s[0] == 0)
-    {
-    stack[0].String = NULL;
-    stack[1].Int = string->size;
-    }
-else
-    {
-    char *e = skipToSpaces(s);
-    if (e == NULL)
-        e = string->s + string->size;
-    stack[0].String = _pf_string_new(s, e - s);
-    stack[1].Int = e - string->s;
-    }
+return count;
 }
 
-void _pf_cm_string_nextWord(_pf_Stack *stack)
-/* Return next white space or punctuation separated word. */
+static int wordSpan(char *s)
+/* Count up number of characters in space-delimited word starting at s. */
+{
+char *e = skipToSpaces(s);
+if (e == NULL)
+    return strlen(s);
+else
+    return e - s;
+}
+
+static void nextSkippingWhite(_pf_Stack *stack, int (*calcSpan)(char *s))
 {
 _pf_String string = stack[0].String;
 int pos = stack[1].Int;
@@ -317,7 +319,6 @@ if (string == NULL || pos < 0)
     stack[1].String = NULL;
     return;
     }
-if (pos > string->size) pos = string->size;
 s = skipLeadingSpaces(string->s + pos);
 c = s[0];
 if (c == 0)
@@ -327,23 +328,76 @@ if (c == 0)
     }
 else
     {
-    char *e;
-    if (isalnum(c) || c == '_')
-        {
-	e = s + 1;
-	for (;;)
-	   {
-	   c = *e;
-	   if (!isalnum(c) && c != '_')
-	       break;
-	   e += 1;
-	   }
-	}
-    else
-        e = s + 1;
-    stack[0].String = _pf_string_new(s, e - s);
-    stack[1].Int = e - string->s;
+    int span = calcSpan(s);
+    stack[0].String = _pf_string_new(s, span);
+    stack[1].Int = s + span - string->s;
     }
+}
+
+void _pf_cm_string_nextToken(_pf_Stack *stack)
+/* Return next white space or punctuation separated word. */
+{
+nextSkippingWhite(stack, tokenSpan);
+}
+
+void _pf_cm_string_nextWord(_pf_Stack *stack)
+/* Return next white-space separated word. */
+{
+nextSkippingWhite(stack, wordSpan);
+}
+
+static int countWordsSkippingWhite(char *s, int (*calcSpan)(char *s))
+/* Count words - not in the space-delimited sense, but in the
+ * paraFlow word since - where punctuation also separates words,
+ * and punctuation marks are returned as a separate word. */
+{
+int count = 0, span;
+char c;
+for (;;)
+    {
+    s = skipLeadingSpaces(s);
+    span = calcSpan(s);
+    if (span == 0)
+        break;
+    count += 1;
+    s += span;
+    }
+return count;
+}
+
+static void stringSplitSkippingWhite(_pf_Stack *stack, int (*calcSpan)(char *s))
+/* Implements flow string.words() into array of string words */
+{
+_pf_String string = stack[0].String, *strings;
+_pf_Array words;
+int i, wordCount, span;
+char *s;
+
+_pf_nil_check(string);
+s = string->s;
+wordCount = countWordsSkippingWhite(s, calcSpan);
+words = _pf_dim_array(wordCount, _pf_find_string_type_id());
+strings =  (_pf_String *)words->elements;
+for (i=0; i<wordCount; ++i)
+    {
+    s = skipLeadingSpaces(s);
+    span = calcSpan(s);
+    strings[i] = _pf_string_new(s, span);
+    s += span;
+    }
+stack[0].Array = words;
+}
+
+void _pf_cm_string_tokens(_pf_Stack *stack)
+/* Implements flow string.tokens() into array of string words */
+{
+stringSplitSkippingWhite(stack, tokenSpan);
+}
+
+void _pf_cm_string_words(_pf_Stack *stack)
+/* Implements flow string.words() into array of string words */
+{
+stringSplitSkippingWhite(stack, wordSpan);
 }
 
 static void fitString(_pf_Stack *stack, boolean right)

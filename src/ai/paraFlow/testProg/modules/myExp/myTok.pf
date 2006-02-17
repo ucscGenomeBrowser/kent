@@ -25,22 +25,11 @@ class tokenizer
 		{
 		for (;;)
 		    {
-		    foreach ((word,pos) in self.lineBuf.nextWord(pos))
-			{
-			/*-OLDWAY
-			if (word == "(" || word == ")" || word == "+"
-				|| word == "-" || word == "*" || word == "/"
-				|| isnum(word[0]))
-			    {
-			    self.column = pos;
-			    s = word;
-			    return;
-			    }
-			else
-			    {
-			    print("Skipping strange token " + word);
-			    }
-			OLDWAY-*/
+		    for (;;)
+		        {
+			(word,pos) = lineBuf.nextToken(pos);
+			if (!word)
+			    break;
 			self.column = pos;
 			s = word;
 			return;

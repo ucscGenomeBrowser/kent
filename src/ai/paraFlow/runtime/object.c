@@ -45,3 +45,16 @@ if ((obj->_pf_refCount -= 1) <= 0)
 freeMem(face);
 }
 
+void _pf_nil_use()
+/* Complain about use of undefined object and punt. */
+{
+_pf_run_err("using uninitialized object");
+}
+
+void _pf_nil_check(void *v)
+/* Punt if v is nil. */
+{
+if (v == NULL)
+    _pf_nil_use();
+}
+

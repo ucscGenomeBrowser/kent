@@ -4,3 +4,24 @@ Hello there, I'm Tisa
 ("Mimi","dog",1)
 grunt
 5.66
+This is  a  test sentence.
+spaces: 6
+words: 5
+tokens: 6
+("This","is","a","test","sentence.")
+("This","is","a","test","sentence",".")
+Individial words
+  This
+  is
+  a
+  test
+  sentence.
+Individual tokens
+  This
+  is
+  a
+  test
+  sentence
+  .
+Mary had a little lamb, little lamb, little lamb.
+Mary had a little lamb whose fleece was white as snow.
