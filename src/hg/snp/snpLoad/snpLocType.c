@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.11 2006/02/09 23:57:24 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.12 2006/02/17 00:48:21 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -54,7 +54,7 @@ char **row;
 char *chromName;
 
 ret = newHash(0);
-safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s'", contigGroup);
+safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -178,36 +178,36 @@ safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
 f = mustOpen(fileName, "w");
 
 safef(query, sizeof(query), 
-    "select snp_id, loc_type, phys_pos_from, phys_pos, orientation, allele from %s", tableName);
+    "select snp_id, ctg_id, loc_type, phys_pos_from, phys_pos, orientation, allele from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     chromEnd = getChromEnd(chromName,
                            cloneString(row[0]),
-                           cloneString(row[1]), 
                            cloneString(row[2]), 
-			   cloneString(row[3]), 
-			   cloneString(row[5]));
+                           cloneString(row[3]), 
+			   cloneString(row[4]), 
+			   cloneString(row[6]));
     if (chromEnd == -1)
         {
 	skipCount++;
         fprintf(errorFileHandle, "snp = %s\tlocType = %s\tchrom = %s\tchromStart = %s\trangeString=%s\n", 
-	                          row[0], row[1], chromName, row[2], row[3]);
+	                          row[0], row[2], chromName, row[3], row[4]);
 	continue;
 	}
 
-    if (sameString(row[1], "1"))
+    if (sameString(row[2], "1"))
         {
-	chromStart = sqlUnsigned(row[2]);
+	chromStart = sqlUnsigned(row[3]);
 	chromStart++;
 	chromEnd++;
-        fprintf(f, "%s\t%d\t%d\t%s\t%s\t%s\n", 
-               row[0], chromStart, chromEnd, row[1], row[4], row[5]);
+        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\n", 
+               row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6]);
 	continue;
 	}
-    fprintf(f, "%s\t%s\t%d\t%s\t%s\t%s\n", 
-               row[0], row[2], chromEnd, row[1], row[4], row[5]);
+    fprintf(f, "%s\t%s\t%s\t%d\t%s\t%s\t%s\n", 
+               row[0], row[1], row[3], chromEnd, row[2], row[5], row[6]);
 
     }
 sqlFreeResult(&sr);
@@ -227,6 +227,7 @@ char tableName[64];
 char *createString =
 "CREATE TABLE %s (\n"
 "    snp_id int(11) not null,\n"
+"    ctg_id int(11) not null,\n"
 "    chromStart int(11) not null,\n"
 "    chromEnd int(11) not null,\n"
 "    loc_type tinyint(4) not null,\n"
