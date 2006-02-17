@@ -137,3 +137,14 @@ hgsql proteins051015 -e 'load data local infile "spXref3Var.tab" into table spXr
 
 hgsql sp051015 -e 'drop table varProtTemp'
 
+# Update hgncXref table.
+# A deficiency in pbHgnc was found and fixed.  Reran it again and
+# load the new data into proteins051015.hgncXref too.
+
+pbHgnc 060115
+
+hgsql proteins051015
+delete from hgncXref;
+load data local infile "hgncXref.tab" into table hgncXref;
+quit;
+

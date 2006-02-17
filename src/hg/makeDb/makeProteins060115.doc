@@ -352,3 +352,14 @@ hgsql proteome -N -e \
     
 # Release to QA for formal testing.
 
+# Update hgncXref table.
+# A deficiency in pbHgnc was found and fixed.  Reran it again and
+# load the new data into proteins051015.hgncXref too.
+
+pbHgnc 060115
+
+hgsql proteins060115
+delete from hgncXref;
+load data local infile "hgncXref.tab" into table hgncXref;
+quit;
+
