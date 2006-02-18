@@ -3,6 +3,7 @@
 #include "hash.h"
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
+#include "print.h"
 
 void printEscapedString(FILE *f, char *s);
 /* Print string in such a way that C can use it. */
@@ -42,9 +43,6 @@ else
     }
 }
 
-static void printField(FILE *f, void *data, struct _pf_base *base, 
-	struct hash *idHash);
-
 static void printClass(FILE *f, struct _pf_object *obj, struct _pf_base *base,
 	struct hash *idHash)
 /* Print out each field of class. */
@@ -60,7 +58,7 @@ else
 	fprintf(f, "(");
 	for (field = base->fields; field != NULL; field = field->next)
 	    {
-	    printField(f, s+field->offset, field->base, idHash);
+	    _pf_printField(f, s+field->offset, field->base, idHash);
 	    if (field->next != NULL)
 		 fprintf(f, ",");
 	    }
@@ -99,7 +97,7 @@ else
 	    if (needsComma)
 		 fprintf(f, ",");
 	    needsComma = TRUE;
-	    printField(f, s, elType->base, idHash);
+	    _pf_printField(f, s, elType->base, idHash);
 	    s += array->elSize;
 	    }
 	fprintf(f, ")");
@@ -126,9 +124,9 @@ else
 	    {
 	    fprintf(f, "\"%s\":", hel->name);
 	    if (base->needsCleanup)
-		printField(f, &hel->val, base, idHash);
+		_pf_printField(f, &hel->val, base, idHash);
 	    else
-		printField(f, hel->val, base, idHash);
+		_pf_printField(f, hel->val, base, idHash);
 	    if (hel->next != NULL)
 		 fprintf(f, ",");
 	    }
@@ -139,7 +137,7 @@ else
 }
 
 
-static void printField(FILE *f, void *data, struct _pf_base *base, 
+void _pf_printField(FILE *f, void *data, struct _pf_base *base, 
 	struct hash *idHash)
 /* Print out a data from a single field of given type. */
 {
@@ -228,7 +226,7 @@ switch (base->singleType)
         {
 	struct _pf_var *var = data;
 	struct _pf_type *type = _pf_type_table[var->typeId];
-	printField(f, &var->val, type->base, idHash);
+	_pf_printField(f, &var->val, type->base, idHash);
 	break;
 	}
     default:
@@ -323,3 +321,4 @@ void pf_print(_pf_Stack *stack)
 pf_prin(stack);
 fputc('\n', stdout);
 }
+
