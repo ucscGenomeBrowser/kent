@@ -1270,7 +1270,6 @@ else
     }
 }
 
-
 struct pfType *coerceLval(struct pfCompile *pfc, struct pfParse *pp)
 /* Ensure that pp can be assigned.  Return it's type */
 {

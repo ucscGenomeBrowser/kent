@@ -43,8 +43,9 @@ void _pf_err_catch_end(struct _pf_err_catch *err);
 void _pf_err_catch_free(struct _pf_err_catch **pErr);
 /* Free up memory associated with error catcher. */
 
-void _pf_run_err(char *format, ...);
-/* Hard run-time error, like array access out of bounds or
+void _pf_run_err(char *message);
+/* Run time error.  Prints message, dumps stack, and aborts. 
+ * Hard run-time error, like array access out of bounds or
  * something.  This is level -1. */
 
 void _pf_punt_init();

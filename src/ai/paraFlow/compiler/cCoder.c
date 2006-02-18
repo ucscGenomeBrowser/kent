@@ -2262,9 +2262,16 @@ struct dyString *levelVarName = varName(pfc, levelVar->var);
 
 fprintf(f, "/* Start of try/catch - ugly */\n");
 fprintf(f, "{\n");
+if (!pfc->isFunc)
+    fprintf(f, "int pf_catchLevel;\n");
 codeStatement(pfc, f, levelVar);
-fprintf(f, "_pf_Err_catch _pf_err = _pf_err_catch_new(&_pf_act, %s);\n",
-	levelVarName->string);
+if (pfc->isFunc)
+    fprintf(f, "_pf_Err_catch _pf_err = _pf_err_catch_new(&_pf_act, %s);\n",
+	    levelVarName->string);
+else
+    fprintf(f, "_pf_Err_catch _pf_err = _pf_err_catch_new(0, %s);\n",
+	    levelVarName->string);
+
 fprintf(f, "if (_pf_err_catch_start(_pf_err))\n");
 fprintf(f, "{\n");
 codeStatement(pfc, f, tryBody);
@@ -2273,8 +2280,11 @@ fprintf(f, "_pf_err_catch_end(_pf_err);\n");
 fprintf(f, "if (_pf_err_catch_got_err(_pf_err))\n");
 fprintf(f, "{\n");
 fprintf(f, "  /* catch block should start here. */\n");
-codeStatement(pfc, f, messageVar);
-codeStatement(pfc, f, sourceVar);
+if (!pfc->isFunc)
+    {
+    fprintf(f, "_pf_String %s = 0;\n", messageVarName->string);
+    fprintf(f, "_pf_String %s = 0;\n", sourceVarName->string);
+    }
 fprintf(f, "{\n");
 fprintf(f, "%s = _pf_string_from_const(_pf_err->message);\n",
 	messageVarName->string);

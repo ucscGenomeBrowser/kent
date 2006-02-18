@@ -86,7 +86,7 @@ struct _pf_punt_info
     {
     int level;		/* Punt level.  0 normal, -1 program error */
     struct dyString *message;	/* Punt message. */
-    char *source;		/* Source of punt. */
+    struct dyString *source;	/* Punt source. */
     };
 struct _pf_punt_info punter;
 
@@ -109,8 +109,9 @@ for (s = _pf_activation_stack; s != act; s = s->parent)
 	    void *v = data + var->offset;
 	    struct _pf_object **pObj = v;
 	    struct _pf_object *obj = *pObj;
-	    if (--obj->_pf_refCount == 0)
-	    	obj->_pf_cleanup(obj, var->type);
+	    if (obj != NULL)
+		if (--obj->_pf_refCount == 0)
+		    obj->_pf_cleanup(obj, var->type);
 	    }
 	}
     }
@@ -130,7 +131,7 @@ if (catcher)
     {
     catcher->gotError = TRUE;
     catcher->message = punter.message->string;
-    catcher->source = punter.source;
+    catcher->source = punter.source->string;
     unwindStackTo(catcher->act);
     errCatchStack = catcher;
     longjmp(catcher->jmpBuf, -1);
@@ -158,7 +159,8 @@ static void puntWarnHandler(char *format, va_list args)
 dyStringClear(punter.message);
 dyStringVaPrintf(punter.message, format, args);
 punter.level = 0;
-punter.source = "lib";
+dyStringClear(punter.source);
+dyStringAppend(punter.source, "lib");
 }
 
 void _pf_punt_init()
@@ -166,20 +168,34 @@ void _pf_punt_init()
  * errAbort handler. */
 {
 punter.message = dyStringNew(0);
+punter.source = dyStringNew(0);
 pushWarnHandler(puntWarnHandler);
 pushAbortHandler(puntAbortHandler);
 }
 
-void _pf_run_err(char *format, ...)
+void _pf_run_err(char *message)
 /* Run time error.  Prints message, dumps stack, and aborts. */
 {
-va_list args;
-va_start(args, format);
 dyStringClear(punter.message);
-dyStringVaPrintf(punter.message, format, args);
-va_end(args);
+dyStringAppend(punter.message, message);
 punter.level = -1;
-punter.source = "runtime";
+dyStringClear(punter.source);
+dyStringAppend(punter.source, "runtime");
+puntCatcher();
+}
+
+void pf_punt(_pf_Stack *stack)
+/* Print  message and die. */
+{
+_pf_String message = stack[0].String;
+_pf_String source = stack[1].String;
+_pf_Int level = stack[2].Int;
+
+dyStringClear(punter.message);
+dyStringAppend(punter.message, message->s);
+dyStringClear(punter.source);
+dyStringAppend(punter.source, source->s);
+punter.level = level;
 puntCatcher();
 }
 

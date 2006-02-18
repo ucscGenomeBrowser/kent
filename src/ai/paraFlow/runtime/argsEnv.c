@@ -73,13 +73,6 @@ for (i=0; i<envSize; ++i)
 stack[0].Array = envArray;
 }
 
-void pf_punt(_pf_Stack *stack)
-/* Print  message and die. */
-{
-_pf_String string = stack[0].String;
-errAbort(string->s);
-}
-
 void pf_keyIn(_pf_Stack *stack)
 /* Get next key press. */
 {

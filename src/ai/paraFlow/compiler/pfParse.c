@@ -1918,9 +1918,9 @@ struct pfToken *tok = *pTokList;
 struct pfParse *tryPp = pfParseNew(pptTry, tok, parent, scope);
 struct pfParse *tryBody, *catchPp, *catchBody;
 struct pfParse *messagePp, *sourcePp;
-struct pfParse *levelAssignment, *levelVarDec, *levelConst;
+struct pfParse *levelAssignment, *levelVarDec, *levelExp = NULL;
 char *message, *source = "catchSource";
-struct pfToken *levelTok = NULL, *catchTok;
+struct pfToken *catchTok;
 int level = 0;
 struct pfScope *catchScope;	/* Scope for catch vars. */
 
@@ -1959,12 +1959,10 @@ if (tok->type != ')')
 if (tok->type != ')')
     {
     skipRequiredCharType(',', &tok);
-    if (tok->type != pftInt)
-        expectingGot("integer level", tok);
-    level = tok->val.i;
-    levelTok = tok;
-    tok = tok->next;
+    levelExp = pfParseExpression(pfc, catchPp, &tok, catchScope);
     }
+if (levelExp == NULL)
+    levelExp = pfParseNew(pptConstZero, tok, catchPp, catchScope);
 skipRequiredCharType(')', &tok);
 
 /* Fake up parse nodes for the three catch parameters. */
@@ -1973,13 +1971,9 @@ sourcePp = fakeVarDec(source, pfc->stringType, catchTok, catchPp, catchScope);
 levelAssignment = pfParseNew(pptAssignment, catchTok, catchPp, catchScope);
 levelVarDec = fakeVarDec("catchLevel", pfc->intType, 
 	catchTok, levelAssignment, catchScope);
-if (levelTok != NULL)
-    levelConst = constUse(levelAssignment, &levelTok, catchScope);
-else
-    levelConst = pfParseNew(pptConstZero, catchTok, 
-    	levelAssignment, catchScope);
+levelExp->parent = levelAssignment;
 levelAssignment->children = levelVarDec;
-levelVarDec->next = levelConst;
+levelVarDec->next = levelExp;
 
 /* And get body of catch. */
 catchBody = pfParseStatement(pfc, tryPp, &tok, catchScope);
