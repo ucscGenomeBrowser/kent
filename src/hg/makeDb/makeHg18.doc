@@ -5876,3 +5876,43 @@ Loading database with 14488 rows
    hgsql hg18 -e 'LOAD DATA local INFILE "bioCycMapDesc.tab" into table bioCycMapDesc'
    hgsql hg18 -e 'LOAD DATA local INFILE "bioCycPathway.tab" into table bioCycPathway'
 
+# BLASTZ/CHAIN/NET RN4 (DONE 2/17/06 Fan)
+    ssh kkstore02
+
+    cd /cluster/store11/gs.19/build36
+    cp -Rp linSpecRep /san/sanvol1/scratch/hg18
+    cp -Rp nib /san/sanvol1/scratch/hg18
+
+    mkdir /cluster/data/hg18/bed/blastz.rn4.2006-02-17
+    cd /cluster/data/hg18/bed/blastz.rn4.2006-02-17
+
+    cat << '_EOF_' > DEF
+# human vs. rat
+
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human
+SEQ1_DIR=/san/sanvol1/scratch/hg18/nib
+SEQ1_SMSK=/san/sanvol1/scratch/hg18/linSpecRep/notInRat
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rat
+SEQ2_DIR=/san/sanvol1/scratch/rn4/nib
+SEQ2_SMSK=/san/sanvol1/scratch/rn4/linSpecRep.notInHuman
+SEQ2_LEN=/cluster/data/rn4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastz.rn4.2006-02-17
+'_EOF_'
+    # << for emacs
+    doBlastzChainNet.pl DEF -chainLinearGap medium \
+      -bigClusterHub pk -smallClusterHub pk -workhorse pk \
+      -blastzOutRoot /san/sanvol1/scratch/blastzHg17Rn4Out >& do.log &
+    tail -f do.log
+    rm -f /cluster/data/hg18/bed/blastz.rn4
+    ln -s blastz.rn4.2006-02-17 /cluster/data/hg18/bed/blastz.rn4
+
+
