@@ -77,7 +77,7 @@ void pf_punt(_pf_Stack *stack)
 /* Print  message and die. */
 {
 _pf_String string = stack[0].String;
-_pf_run_err(string->s);
+errAbort(string->s);
 }
 
 void pf_keyIn(_pf_Stack *stack)

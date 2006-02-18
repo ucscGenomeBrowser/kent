@@ -2226,7 +2226,7 @@ fprintf(f, "}\n");
 }
 
 static void codeIf(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
-/* Emit C code for for statement. */
+/* Emit C code for if statement. */
 {
 struct pfParse *cond = pp->children;
 struct pfParse *trueBody = cond->next;
@@ -2245,6 +2245,52 @@ if (falseBody != NULL)
     codeStatement(pfc, f, falseBody);
     fprintf(f, "}\n");
     }
+}
+
+static void codeTry(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
+/* Emit C code for try statement. */
+{
+struct pfParse *tryBody = pp->children;
+struct pfParse *catchVars = tryBody->next;
+struct pfParse *catchBody = catchVars->next;
+struct pfParse *messageVar = catchVars->children;
+struct pfParse *sourceVar = messageVar->next;
+struct pfParse *levelVar = sourceVar->next;
+struct dyString *messageVarName = varName(pfc, messageVar->var);
+struct dyString *sourceVarName = varName(pfc, sourceVar->var);
+struct dyString *levelVarName = varName(pfc, levelVar->var);
+
+fprintf(f, "/* Start of try/catch - ugly */\n");
+fprintf(f, "{\n");
+fprintf(f, "_pf_Err_catch _pf_err = _pf_err_catch_new();\n");
+fprintf(f, "if (_pf_err_catch_start(_pf_err))\n");
+fprintf(f, "{\n");
+codeStatement(pfc, f, tryBody);
+fprintf(f, "}\n");
+fprintf(f, "_pf_err_catch_end(_pf_err);\n");
+fprintf(f, "if (_pf_err_catch_got_err(_pf_err))\n");
+fprintf(f, "{\n");
+fprintf(f, "  /* catch block should start here. */\n");
+codeStatement(pfc, f, messageVar);
+codeStatement(pfc, f, sourceVar);
+codeStatement(pfc, f, levelVar);
+fprintf(f, "_pf_err_check_level_and_unwind(_pf_err, %s, &_pf_act);\n", 
+	levelVarName->string);
+fprintf(f, "{\n");
+fprintf(f, "%s = _pf_string_from_const(_pf_err->message->string);\n",
+	messageVarName->string);
+fprintf(f, "%s = _pf_string_from_const(_pf_err->source);\n",
+	sourceVarName->string);
+codeStatement(pfc, f, catchBody);
+fprintf(f, "}\n");
+fprintf(f, "  /* catch block should end here. */\n");
+fprintf(f, "}\n");
+fprintf(f, "_pf_err_catch_free(&_pf_err);\n");
+fprintf(f, "}\n");
+fprintf(f, "/* End of try/catch - ugly */\n");
+dyStringFree(&levelVarName);
+dyStringFree(&sourceVarName);
+dyStringFree(&messageVarName);
 }
 
 static void codeArrayAppend(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
@@ -2309,6 +2355,9 @@ switch (pp->type)
 	break;
     case pptIf:
         codeIf(pfc, f, pp);
+	break;
+    case pptTry:
+        codeTry(pfc, f, pp);
 	break;
     case pptArrayAppend:
 	codeArrayAppend(pfc, f, pp);

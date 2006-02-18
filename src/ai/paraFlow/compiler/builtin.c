@@ -9,6 +9,7 @@ return
 "flow punt(string message, string source=\"application\", int level=0);\n"
 "flow print(var v);\n"
 "to prin(var v);\n"
+"to stackDump();\n"
 "to keyIn() into string s;\n"
 "to lineIn() into string s;\n"
 "to randNum() into double zeroToOne;\n"

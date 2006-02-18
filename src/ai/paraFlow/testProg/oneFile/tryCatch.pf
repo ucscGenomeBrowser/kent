@@ -1,0 +1,29 @@
+
+to flakeOut()
+    {
+    punt("I can't help it, I'm a failure.");
+    }
+
+to doSomethingFlaky(string when)
+    {
+    foreach (i in 0 to 3)
+        print("So far so good...");
+    flakeOut();
+    }
+
+to doSomething()
+    {
+    string mess,src;
+    int lev=2;
+    try  // consider adding an optional time-out here.
+	{
+	doSomethingFlaky("now");
+	}
+    catch (message,source,0)
+	{
+        print("I guess it really was a flaky " + source + ". Here's the error message:");
+	print(message);
+	}
+    }
+
+doSomething();
