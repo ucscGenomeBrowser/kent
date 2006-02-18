@@ -52,13 +52,16 @@ if (obj == NULL)
     fprintf(f, "nil");
 else
     {
-    if (!reuseObject(f, idHash, obj))
+    if (idHash == NULL || !reuseObject(f, idHash, obj))
 	{
 	char *s = (char *)obj;
 	fprintf(f, "(");
 	for (field = base->fields; field != NULL; field = field->next)
 	    {
-	    _pf_printField(f, s+field->offset, field->base, idHash);
+	    if (idHash == NULL || field->base->fields == NULL)
+		_pf_printField(f, s+field->offset, field->base, idHash);
+	    else
+	        fprintf(f, "<%s>", field->base->name);
 	    if (field->next != NULL)
 		 fprintf(f, ",");
 	    }
@@ -85,22 +88,29 @@ if (array == NULL)
     fprintf(f, "nil");
 else
     {
-    if (!reuseObject(f, idHash, array))
+    if (idHash)
 	{
-	struct _pf_type *elType = array->elType;
-	int i;
-	boolean needsComma = FALSE;
-	char *s = array->elements;
-	fprintf(f, "(");
-	for (i=0; i<array->size; ++i)
+	if (!reuseObject(f, idHash, array))
 	    {
-	    if (needsComma)
-		 fprintf(f, ",");
-	    needsComma = TRUE;
-	    _pf_printField(f, s, elType->base, idHash);
-	    s += array->elSize;
+	    struct _pf_type *elType = array->elType;
+	    int i;
+	    boolean needsComma = FALSE;
+	    char *s = array->elements;
+	    fprintf(f, "(");
+	    for (i=0; i<array->size; ++i)
+		{
+		if (needsComma)
+		     fprintf(f, ",");
+		needsComma = TRUE;
+		_pf_printField(f, s, elType->base, idHash);
+		s += array->elSize;
+		}
+	    fprintf(f, ")");
 	    }
-	fprintf(f, ")");
+	}
+    else
+        {
+	fprintf(f, "<%d elements>", array->size);
 	}
     }
 }
@@ -113,25 +123,32 @@ if (dir == NULL)
     fprintf(f, "()");
 else
     {
-    if (!reuseObject(f, idHash, dir))
+    if (idHash)
 	{
-	struct hash *hash = dir->hash;
-	struct hashEl *hel, *helList = hashElListHash(hash);
-	struct _pf_base *base = dir->elType->base;
-	slSort(&helList, hashElCmp);
-	fprintf(f, "(");
-	for (hel = helList; hel != NULL; hel = hel->next)
+	if (!reuseObject(f, idHash, dir))
 	    {
-	    fprintf(f, "\"%s\":", hel->name);
-	    if (base->needsCleanup)
-		_pf_printField(f, &hel->val, base, idHash);
-	    else
-		_pf_printField(f, hel->val, base, idHash);
-	    if (hel->next != NULL)
-		 fprintf(f, ",");
+	    struct hash *hash = dir->hash;
+	    struct hashEl *hel, *helList = hashElListHash(hash);
+	    struct _pf_base *base = dir->elType->base;
+	    slSort(&helList, hashElCmp);
+	    fprintf(f, "(");
+	    for (hel = helList; hel != NULL; hel = hel->next)
+		{
+		fprintf(f, "\"%s\":", hel->name);
+		if (base->needsCleanup)
+		    _pf_printField(f, &hel->val, base, idHash);
+		else
+		    _pf_printField(f, hel->val, base, idHash);
+		if (hel->next != NULL)
+		     fprintf(f, ",");
+		}
+	    hashElFreeList(&helList);
+	    fprintf(f, ")");
 	    }
-	hashElFreeList(&helList);
-	fprintf(f, ")");
+	}
+    else
+        {
+	fprintf(f, "<%d elements>", dir->hash->elCount);
 	}
     }
 }
@@ -201,7 +218,7 @@ switch (base->singleType)
     case pf_stArray:
         {
 	struct _pf_array **p = data;
-        printArray(f, *p, base, idHash);
+	printArray(f, *p, base, idHash);
 	break;
 	}
     case pf_stDir:

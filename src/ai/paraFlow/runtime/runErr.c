@@ -11,9 +11,9 @@ static void stackDump()
 /* Print stack dump. */
 {
 struct _pf_activation *s;
-struct hash *idHash = hashNew(0);
 for (s = _pf_activation_stack; s != NULL; s = s->parent)
     {
+    struct hash *idHash = hashNew(0);
     struct _pf_functionFixedInfo *ffi = s->fixed;
     struct _pf_type *funcType = _pf_type_table[ffi->typeId];
     struct _pf_type *classType = NULL;
@@ -33,12 +33,12 @@ for (s = _pf_activation_stack; s != NULL; s = s->parent)
 	struct _pf_type *paramType = _pf_type_table[var->type];
 	if (i != 0)
 	    fprintf(stderr, ", ");
-	fprintf(stderr, "%s %s = ", paramType->base->name, var->name);
+	fprintf(stderr, "%s:", var->name);
 	_pf_printField(stderr, data + var->offset, paramType->base, idHash);
 	}
     fprintf(stderr, ")\n");
+    hashFree(&idHash);
     }
-hashFree(&idHash);
 }
 
 void _pf_run_err(char *format, ...)
