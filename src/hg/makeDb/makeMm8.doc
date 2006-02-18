@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.3 2006/02/17 00:02:40 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.4 2006/02/18 00:41:49 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -650,7 +650,7 @@ do
     rm -f nib/${B}.nib
     faToNib -softMask ${FA} nib/${B}.nib
 done
-    
+ 
     mkdir /cluster/bluearc/scratch/hg/mm8/nib
     cp -p nib/*.nib /cluster/bluearc/scratch/hg/mm8/nib
     cp -p chrom.sizes /cluster/bluearc/scratch/hg/mm8
@@ -925,3 +925,426 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     wc -l ../cpgIsland/cpgIsland.bed *bed
     #	15963 ../cpgIsland/cpgIsland.bed
     #	67442 cpgIslandGgfAndyMasked.bed
+
+#########################################################################
+# BLASTZ HUMAN Hg18 (DONE - 2006-02-16 - 2006-02-18 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastzHg18.2006-02-16
+    cd /cluster/data/mm8/bed
+    ln -s blastzHg18.2006-02-16 blastz.hg18
+    cd blastzHg18.2006-02-16
+    #	Started this before the rsync to /scratch/hg/mm8/ had completed,
+    #	hence the /cluster/bluearc/scratch/hg/mm8/ location is used
+    #	here.
+
+    cat << '_EOF_' > DEF
+# mouse vs human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/cluster/bluearc/scratch/hg/mm8/nib
+SEQ1_SMSK=/cluster/bluearc/scratch/hg/mm8/linSpecRep/notInOthers
+SEQ1_LEN=/cluster/bluearc/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Human Hg18 - single chunk big enough to run each chrom by itself
+SEQ2_DIR=/scratch/hg/hg18/nib
+SEQ2_SMSK=/scratch/hg/hg18/linSpecRep/notInMouse
+SEQ2_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ2_CHUNK=300000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzHg18.2006-02-16
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	Started 2006-02-16 16:15
+    #	failed due to pk node difficulties, finish the run.blastz
+    #	manually
+# Completed: 3724 of 3724 jobs
+# CPU time in finished jobs:    5190293s   86504.89m  1441.75h   60.07d  0.165 y
+# IO & Wait Time:                259150s    4319.16m    71.99h    3.00d  0.008 y
+# Average job time:                1463s      24.39m     0.41h    0.02d
+# Longest finished job:           10621s     177.02m     2.95h    0.12d
+# Submission to last job:         74153s    1235.88m    20.60h    0.86d
+
+    #	continuing
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=cat `pwd`/DEF > cat.out 2>&1 &
+    #	Done 2006-02-17 15:02
+
+    #	Then to swap over to Hg18
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > swap.out 2>&1 &
+    #	Started 2006-02-17 15:30
+
+#########################################################################
+# BLASTZ RAT Rn4 (DONE - 2006-02-16 - 2006-02-18 - Hiram)
+    ssh kkr1u00
+    cd /iscratch/i/rn4
+    rsync -a --progress /cluster/data/rn4/linSpecRep.notInMouse/ \
+	./linSpecRep.notInMouse
+    rsync -a --progress /cluster/data/rn4/nib/ ./nib/
+    cp -p /cluster/data/rn4/chrom.sizes .
+    for R in 2 3 4 5 6 7 8
+    do
+	rsync -a --progress /iscratch/i/rn4/ kkr${R}u00:/iscratch/i/rn4/
+    done
+
+    ssh kk
+    mkdir /cluster/data/mm8/bed/blastzRn4.2006-02-16
+    cd /cluster/data/mm8/bed
+    ln -s blastzRn4.2006-02-16 blastz.rn4
+    cd blastzRn4.2006-02-16
+    #	Started this before the rsync to /scratch/hg/mm8/ had completed,
+    #	hence the /cluster/bluearc/scratch/hg/mm8/ location is used
+    #	here.
+
+    cat << '_EOF_' > DEF
+# mouse vs rat
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/cluster/bluearc/scratch/hg/mm8/nib
+SEQ1_SMSK=/cluster/bluearc/scratch/hg/mm8/linSpecRep/notInRat
+SEQ1_LEN=/cluster/bluearc/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn4 - single chunk big enough to run each chrom by itself
+SEQ2_DIR=/iscratch/i/rn4/nib
+SEQ2_SMSK=/iscratch/i/rn4/linSpecRep.notInMouse
+SEQ2_LEN=/iscratch/i/rn4/chrom.sizes
+SEQ2_CHUNK=300000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzRn4.2006-02-16
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	Started 2006-02-16 16:15
+
+##############################################################################
+# CLONE ENDS - BACEND TRACK (DONE - 2006-02-17 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/mm8
+    # check disk space: 73Gb free
+    df -h .
+# Filesystem            Size  Used Avail Use% Mounted on
+# /export/cluster/store5
+#                       1.5T  1.3T   73G  95% /cluster/store5
+    mkdir -p bed/cloneend/ncbi
+    cd bed/cloneend/ncbi
+
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/mus_musculus/*
+
+    cd /cluster/data/mm8/bed/cloneend
+    # seems like the *.mfa files were split just for convenience
+    # concatenate
+    for F in ncbi/*.mfa.gz
+    do
+	zcat ${F}
+    done | gzip > all.mfa.gz
+
+    # Convert the title line of the all.mfa file
+    cat << '_EOF_' > convert.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+while (my $line = <>) {
+    if ($line !~ m/^>/) {
+	print $line
+    } else {
+        my @fields = split('\|', $line);
+	my $fieldCount = scalar(@fields);
+        my $printed = 0;
+        for (my $i = 0; $i < $fieldCount; $i++) {
+                if ($fields[$i] eq "gb" || $fields[$i] eq "dbj") {
+                        (my $name, my $vers) = split(/\./,$fields[$i+1]);
+                        print ">$name\n";
+                        $i= $fieldCount;
+                        $printed = 1;
+                }
+        }
+        if (!$printed) {
+                die("Failed for $line\n");
+        }
+    }
+}
+'_EOF_'
+    # < happy emacs
+    chmod +x convert.pl
+    zcat all.mfa.gz | ./convert.pl | gzip > cloneEnds.fa.gz
+
+    #	make sure nothing got broken:
+    faSize all.mfa.gz
+# 498162791 bases (16779168 N's 481383623 real 304962409 upper 176421214
+# lower) in 789466 sequences in 1 files
+
+    faSize cloneEnds.fa.gz
+# 498162791 bases (16779168 N's 481383623 real 304962409 upper 176421214
+# lower) in 789466 sequences in 1 files
+    #	identical numbers, curiously, these are exactly the same numbers
+    #	as were seen during the build of Mm7.  Do these things not
+    #	change with time ?
+
+    # concatenate the text files, too
+    for F in ncbi/*.txt.gz
+    do
+	zcat ${F}
+    done | gzip > all.txt.gz
+
+    # generate cloneEndPairs.txt and cloneEndSingles.txt
+    cp -p /cluster/data/mm7/bed/cloneend/convertTxt.pl .
+    zcat all.txt.gz | ./convertTxt.pl stdin
+    # Reading in end info
+    # Writing out pair info
+    # Writing out singleton info
+    # 354485 pairs and 78423 singles
+
+    #	faSplit does not function correctly if given a .gz source file
+    #	AND, we need the unzipped file for sequence loading below
+    gunzip cloneEnds.fa.gz
+    # split
+    mkdir splitdir
+    cd splitdir
+    faSplit sequence ../cloneEnds.fa 100 cloneEnds
+    #	Check to ensure no breakage:
+    cat *.fa | faSize stdin
+# 498162791 bases (16779168 N's 481383623 real 304962409 upper 176421214
+# lower) in 789466 sequences in 1 files
+    #	same numbers as before
+
+    #	Copy to san for cluster runs
+    mkdir /san/sanvol1/scratch/mm8/cloneEnds
+    cp -p *.fa /san/sanvol1/scratch/mm8/cloneEnds
+    rm *
+    cd ..
+    rmdir splitdir
+    #	may as well remove the previous assembly copy:
+    rm -fr /san/sanvol1/scratch/mm7/cloneEnds
+
+    # load sequences
+    ssh hgwdev
+    mkdir /gbdb/mm8/cloneend
+    cd /gbdb/mm8/cloneend
+    ln -s /cluster/data/mm8/bed/cloneend/cloneEnds.fa .
+    cd /tmp
+    hgLoadSeq mm8 /gbdb/mm8/cloneend/cloneEnds.fa
+    #  Advisory lock created
+    # Creating .tab file
+    # Adding /gbdb/mm8/cloneend/cloneEnds.fa
+    # 789466 sequences
+    # Updating seq table
+    # Advisory lock has been released
+    # All done
+
+############################################################################
+# BACEND SEQUENCE ALIGNMENTS (DONE - 2006-02-17 - Hiram)
+    ssh kkstore01
+    mkdir /cluster/data/mm8/noMask
+    cd /cluster/data/mm8/
+    #	Need an unmasked sequence for this work
+    for CHR in ?/chr?.fa ??/chr??.fa ?/chr?_random.fa ??/chr??_random.fa
+    do
+	C=`basename ${CHR}`
+	echo -n "working ${C} ... "
+	head -1 ${CHR} > noMask/${C}
+	tail +2 ${CHR} | tr [:lower:] [:upper:] >> noMask/${C}
+	echo "done"
+    done
+    mkdir /san/sanvol1/scratch/mm8/noMask
+    time cp --verbose -p noMask/chr*.fa /san/sanvol1/scratch/mm8/noMask
+
+    #	Size of mouse non-gap genome: 2567283971
+    #	Size of  Hg18 non-gap genome: 2881515245
+    #	Adjusting the 1024 number from typical human ooc generation:
+    #	1024 * (2567283971 / 2881515245) = 912
+
+    time blat mm8.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=11.ooc -repMatch=912
+    #	Wrote 29643 overused 11-mers to 11.ooc
+    #	real    2m13.206
+    # Copy over to the san
+    cp -p 11.ooc /san/sanvol1/scratch/mm8
+
+    
+    #	and for the kluster run
+    ssh pk
+    mkdir /cluster/data/mm8/bed/bacends
+    cd /cluster/data/mm8/bed/bacends
+    mkdir out
+
+    # allow blat to run politely in /tmp while it writes output, then
+    # copy results to results file:
+    cat << '_EOF_' > runBlat.sh
+#!/bin/sh
+root1=$1
+root2=$2
+result=$3
+rm -fr /scratch/tmp/${root1}_${root2}
+mkdir /scratch/tmp/${root1}_${root2}
+pushd /scratch/tmp/${root1}_${root2}
+/cluster/bin/x86_64/blat /san/sanvol1/scratch/mm8/noMask/${root1}.fa \
+	/san/sanvol1/scratch/mm8/cloneEnds/${root2}.fa \
+	-ooc=/san/sanvol1/scratch/mm8/11.ooc ${root1}.${root2}.psl
+popd
+mkdir -p out/${root2}
+rm -f ${result}
+mv /scratch/tmp/${root1}_${root2}/${root1}.${root2}.psl ${result}
+rm -fr /scratch/tmp/${root1}_${root2}
+'_EOF_'
+    #	happy emacs
+    chmod +x runBlat.sh
+
+    cat << '_EOF_' > template
+#LOOP
+./runBlat.sh $(root1) $(root2) {check out line+ out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << emacs happy
+
+    ls -1S /san/sanvol1/scratch/mm8/cloneEnds/cloneEnds???.fa > bacEnds.lst
+    ls -1S /san/sanvol1/scratch/mm8/noMask/chr*.fa > contig.lst
+    gensub2 contig.lst bacEnds.lst template jobList
+    para create jobList
+    # 3322 jobs written to batch
+    para try, check, push, etc ...
+    XXX - STARTED - 2006-02-17 - Hiram
+
+# Completed: 3920 of 3920 jobs
+# CPU time in finished jobs:     683325s   11388.75m   189.81h    7.91d  0.022 y
+# IO & Wait Time:                 51220s     853.67m    14.23h    0.59d  0.002 y
+# Average job time:                 187s       3.12m     0.05h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1388s      23.13m     0.39h    0.02d
+# Submission to last job:         65899s    1098.32m    18.31h    0.76d
+
+    ssh kkstore01
+    cd /cluster/data/mm8/bed/bacends
+    screen
+
+    mkdir temp
+    time pslSort dirs raw.psl temp bacEnds.out/* > pslSort.out 2>&1 &
+    #	real    27m20.352s
+    #	user    20m10.329s
+    #	sys     1m55.287s
+
+    time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons \
+	raw.psl bacEnds.psl /dev/null > pslReps.out 2>&1 &
+    #	real    8m15.671s
+    #	user    7m18.229s
+    #	sys     0m20.554s
+
+    cp -p ~booch/clusterJobs/bacends/split.pl .
+    cp -p ~booch/clusterJobs/bacends/header .
+    time ./split.pl header < bacEnds.psl
+
+    cp -p bacEnds.psl bacEnds.psl.save
+    time pslSort dirs bacEnds.psl temp split
+    #	~ 3 minutes
+
+    # Copy files to final destination and remove
+    mkdir /cluster/data/mm8/bacends
+    cp -p bacEnds.psl /cluster/data/mm8/bacends
+
+#########################################################################
+# GENBANK auto update (WORKING - 2006-02-17 - Hiram)
+    # align with revised genbank process. drop xeno ESTs.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvs update -d -P etc
+    # edit etc/genbank.conf to add mm8, it is a copy of mm7 with changes:
+
+# mm8
+mm8.serverGenome = /cluster/data/mm8/mm8.2bit
+mm8.clusterGenome = /scratch/hg/mm8/mm8.2bit
+mm8.ooc = /cluster/data/mm8/11.ooc
+mm8.align.unplacedChroms = chrUn_random
+mm8.lift = /cluster/data/mm8/jkStuff/liftAll.lft
+mm8.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+mm8.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+mm8.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+mm8.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+mm8.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+mm8.downloadDir = mm8
+mm8.refseq.mrna.xeno.load  = yes
+mm8.refseq.mrna.xeno.loadDesc = yes
+mm8.mgcTables.default = full
+mm8.mgcTables.mgc = all
+
+    #	check that into CVS, then
+    # update /cluster/data/genbank/
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial mm8 &
+    #	var/build/logs/2006.02.17-16:10:17.mm8.initalign.log
+XXXX - working 2006-02-17 16:10
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad  mm8 &
+
+#########################################################################
+# BLASTZ rheMac2 (WORKING - 2006-02-17 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastz.rheMac2.2006-02-17
+    cd /cluster/data/mm8/bed
+    ln -s blastz.rheMac2.2006-02-17 blastz.rheMac2
+    cd blastz.rheMac2
+
+    cat << '_EOF_' > DEF
+# mouse vs macaca mulatta
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn/x86_64:/cluster/bin/x86_64:/parasol/bin
+
+ALIGN=blastz-run
+BLASTZ=blastz.v7.x86_64
+
+# TARGET - mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY - macaca mulatta - big enough chunk to do whole chroms at once
+SEQ2_DIR=/san/sanvol1/scratch/rheMac2/rheMac2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/rheMac2/rheMac2.sizes 
+SEQ2_CHUNK=250000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastz.rheMac2.2006-02-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	Started 2006-02-17 16:42
