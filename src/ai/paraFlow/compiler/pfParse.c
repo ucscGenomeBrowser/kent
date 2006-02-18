@@ -202,6 +202,10 @@ switch (type)
 	return "pptAllocInit";
     case pptKeyName:
 	return "pptKeyName";
+    case pptTry:
+	return "pptTry";
+    case pptCatch:
+	return "pptCatch";
 
     case pptCastBitToBit:
         return "pptCastBitToBit";
@@ -544,7 +548,8 @@ if (tok->type != type)
 *pTokList = tok->next;
 }
 
-struct pfParse *parseNameUse(struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
+struct pfParse *parseNameUse(struct pfParse *parent, 
+	struct pfToken **pTokList, struct pfScope *scope)
 /* Make sure have a name, and create a varUse type node
  * based on it. */
 {
@@ -552,7 +557,7 @@ struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNew(pptNameUse, tok, parent, scope);
 if (tok->type != pftName)
     {
-    errAt(tok, "Expecting variable.");
+    errAt(tok, "Expecting variable name.");
     }
 pp->name = tok->val.s;
 *pTokList = tok->next;
@@ -1862,6 +1867,133 @@ slAddHead(&pp->children, init);
 return pp;
 }
 
+static struct pfParse *fakeNameUse(char *name, struct pfToken *tok,
+	struct pfParse *parent, struct pfScope *scope)
+/* Create a pptNameUse, using the given string value rather than
+ * the one from the token. */
+{
+struct pfParse *pp = pfParseNew(pptNameUse, tok, parent, scope);
+pp->name = name;
+return pp;
+}
+
+static struct pfParse *fakeVarDec(char *string, struct pfBaseType *base,
+	struct pfToken *tok, struct pfParse *parent, struct pfScope *scope)
+/* Create a little parse tree like so:
+ *        pptVarDec
+ *           pptNameUse <base-type-name>
+ *           pptNameUse name
+ */
+{
+struct pfParse *varDec = pfParseNew(pptVarDec, tok, parent, scope);
+struct pfParse *type = fakeNameUse(base->name, tok, parent, scope);
+struct pfParse *name = fakeNameUse(string, tok, parent, scope);
+varDec->children = type;
+type->next = name;
+return varDec;
+}
+
+static struct pfParse *parseTry(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse try {statements} catch (message,[source],[level])  statement 
+ * into:
+ *      pptTry
+ *         <try body>
+ *         pptCatch
+ *            pptVarDec 
+ *               pptNameUse string
+ *               pptNameUse message
+ *            pptVarDec
+ *               pptNameUse string
+ *               pptNameUse source (or catchSource if not declared)
+ *            pptAssignment
+ *               pptVarDec
+ *                  pptNameUse int
+ *                  pptNameUse catchLevel
+ *                  pptConstUse [or pptConstZero if not declared)
+ *         <catch body>
+ */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *tryPp = pfParseNew(pptTry, tok, parent, scope);
+struct pfParse *tryBody, *catchPp, *catchBody;
+struct pfParse *messagePp, *sourcePp;
+struct pfParse *levelAssignment, *levelVarDec, *levelConst;
+char *message, *source = "catchSource";
+struct pfToken *levelTok = NULL, *catchTok;
+int level = 0;
+struct pfScope *catchScope;	/* Scope for catch vars. */
+
+tok = tok->next;  /* Skip "try" */
+
+/* We require the statement after try to be compound.
+ * This is just in case some day in the future we want
+ * to add something (like a time-out maybe) as a parameter
+ * to try. */
+if (tok->type != '{')
+    expectingGot("{", tok);
+tryBody = pfParseStatement(pfc, tryPp, &tok, scope);
+
+/* Parse out the catch.   */
+if (tok->type != pftCatch)
+    expectingGot("catch", tok);
+catchTok = tok;
+catchScope = pfScopeNew(pfc, scope, 2, FALSE);
+catchPp = pfParseNew(pptCatch, tok, tryPp, catchScope);
+tok = tok->next;
+
+/* Get catch parameters, there may be one to three. */
+skipRequiredCharType('(', &tok);
+if (tok->type != pftName)
+    expectingGot("message variable name", tok);
+message = tok->val.s;
+tok = tok->next;
+if (tok->type != ')')
+    {
+    skipRequiredCharType(',', &tok);
+    if (tok->type != pftName)
+	expectingGot("source variable name", tok);
+    source = tok->val.s;
+    tok = tok->next;
+    }
+if (tok->type != ')')
+    {
+    skipRequiredCharType(',', &tok);
+    if (tok->type != pftInt)
+        expectingGot("integer level", tok);
+    level = tok->val.i;
+    levelTok = tok;
+    tok = tok->next;
+    }
+skipRequiredCharType(')', &tok);
+
+/* Fake up parse nodes for the three catch parameters. */
+messagePp = fakeVarDec(message, pfc->stringType, catchTok, catchPp, catchScope);
+sourcePp = fakeVarDec(source, pfc->stringType, catchTok, catchPp, catchScope);
+levelAssignment = pfParseNew(pptAssignment, catchTok, catchPp, catchScope);
+levelVarDec = fakeVarDec("catchLevel", pfc->intType, 
+	catchTok, levelAssignment, catchScope);
+if (levelTok != NULL)
+    levelConst = constUse(levelAssignment, &levelTok, catchScope);
+else
+    levelConst = pfParseNew(pptConstZero, catchTok, 
+    	levelAssignment, catchScope);
+levelAssignment->children = levelVarDec;
+levelVarDec->next = levelConst;
+
+/* And get body of catch. */
+catchBody = pfParseStatement(pfc, tryPp, &tok, catchScope);
+
+/* Arrange parse tree under try. */
+tryPp->children = tryBody;
+tryBody->next = catchPp;
+catchPp->children = messagePp;
+messagePp->next = sourcePp;
+sourcePp->next = levelAssignment;
+catchPp->next = catchBody;
+*pTokList = tok;
+return tryPp;
+}
 
 static struct pfParse *parseWordStatement(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope, enum pfParseType type)
@@ -1974,6 +2106,9 @@ switch (tok->type)
 	break;
     case pftPolymorphic:
     	statement = parsePolymorphic(pfc, parent, &tok, scope);
+	break;
+    case pftTry:
+        statement = parseTry(pfc, parent, &tok, scope);
 	break;
     case pftStatic:
     case pftName:

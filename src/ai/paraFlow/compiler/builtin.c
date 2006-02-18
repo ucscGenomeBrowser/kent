@@ -6,7 +6,7 @@ return
 "string programName;\n"
 "array of string args;\n"
 "\n"
-"flow punt(string message);\n"
+"flow punt(string message, string source=\"application\", int level=0);\n"
 "flow print(var v);\n"
 "to prin(var v);\n"
 "to keyIn() into string s;\n"

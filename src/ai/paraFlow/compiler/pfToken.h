@@ -66,6 +66,8 @@ enum pfTokType
     pftStatic,
     pftTo,
     pftWhile,
+    pftTry,
+    pftCatch,
     pftOperator,
 
     };

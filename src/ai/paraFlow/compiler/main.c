@@ -70,6 +70,8 @@ hashAddInt(hash, "return", pftReturn);
 hashAddInt(hash, "static", pftStatic);
 hashAddInt(hash, "to", pftTo);
 hashAddInt(hash, "while", pftWhile);
+hashAddInt(hash, "try", pftTry);
+hashAddInt(hash, "catch", pftCatch);
 hashAddInt(hash, "_operator_", pftOperator);
 return hash;
 }

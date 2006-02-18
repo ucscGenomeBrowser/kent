@@ -105,6 +105,8 @@ enum pfParseType
     pptIndexRange,
     pptAllocInit,
     pptKeyName,
+    pptTry,
+    pptCatch,
 
     /* Note the casts must be in this order relative to pptCastBitToBit */
     pptCastBitToBit,	/* Never emitted. */
