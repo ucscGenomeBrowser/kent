@@ -129,7 +129,6 @@ if (localCount > 0)
     {
     struct slRef *ref;
     struct pfVar *var;
-    int offset = 0;
     fprintf(f, "static struct _pf_localVarInfo _pf_rtar%d_vars[%d] = {\n", id, localCount);
     for (ref = ctar->varRefList; ref != NULL; ref = ref->next)
         {

@@ -29,15 +29,15 @@ to won(array of array of string b, string mark) into bit won
 /* Return true if the given mark has won. */
     {
     static array of int ix3 = (0,1,2);
-    bit wonByRow = para (row in b) or 
-		       para (square in row) and 
+    bit wonByRow = para (row in b) || 
+		       para (square in row) && 
 			   square == mark;
-    bit wonByCol = para (j in ix3) or
-                      para (i in ix3) and
+    bit wonByCol = para (j in ix3) ||
+                      para (i in ix3) &&
 		           b[i][j] == mark;
-    bit wonDiag = para (i in ix3) and
+    bit wonDiag = para (i in ix3) &&
                      b[i][i] == mark;
-    bit wonSlash = para (i in ix3) and
+    bit wonSlash = para (i in ix3) &&
                      b[2-i][i] == mark;
     won = wonByRow || wonByCol || wonDiag || wonSlash;
     }
@@ -45,8 +45,8 @@ to won(array of array of string b, string mark) into bit won
 to full() into bit full
 /* Return true if the board is full. */
     {
-    full = para (row in board) and 
-	       para (square in row) and 
+    full = para (row in board) && 
+	       para (square in row) && 
 		   square != " ";
     }
 

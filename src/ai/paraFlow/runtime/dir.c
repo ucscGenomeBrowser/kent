@@ -265,7 +265,7 @@ int i, count = _pf_countOurLevel(encoding);
 struct _pf_dir *dir = pfDirNew(count, elType);
 
 if (encoding[0] != '(')
-    _pf_run_err("Expecting ( in array tuple encoding, got %c", encoding[0]);
+    errAbort("Expecting ( in array tuple encoding, got %c", encoding[0]);
 encoding += 1;
 for (i=0; i<count; ++i)
     {

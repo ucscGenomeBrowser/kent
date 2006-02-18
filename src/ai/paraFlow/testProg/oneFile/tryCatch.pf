@@ -24,6 +24,9 @@ to doSomething()
         print("I guess it really was a flaky " + source + ". Here's the error message:");
 	print(message);
 	}
+    print("And again without the catch");
+    doSomethingFlaky("then");
     }
 
 doSomething();
+print("All done");

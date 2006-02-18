@@ -40,52 +40,146 @@ for (s = _pf_activation_stack; s != NULL; s = s->parent)
     }
 }
 
+void pf_stackDump()
+/* Handle user-requested stack dump. */
+{
+fprintf(stdout, "----------application requested stack dump---------\n");
+stackDump(stdout);
+fprintf(stdout, "----------end application user requesed stack dump----------\n");
+}
+
+static struct _pf_err_catch *errCatchStack = NULL;
+
+struct _pf_err_catch *_pf_err_catch_new(struct _pf_activation *act, int level)
+/* Create a new error catcher. */
+{
+struct _pf_err_catch *err;
+AllocVar(err);
+err->act = act;
+err->level = level;
+return err;
+}
+
+int _pf_err_catch_push(struct _pf_err_catch *err)
+/* Pushes catcher on catch stack and returns TRUE. Not typically
+ * used directly, but called vi _pf_err_catch_start macro. */
+{
+slAddHead(&errCatchStack, err);
+return TRUE;
+}
+
+void _pf_err_catch_end(struct _pf_err_catch *err)
+/* Pop error catcher off of stack.  Don't free it up yet, because
+ * we want to examine gotErr still. */
+{
+errCatchStack = errCatchStack->next;
+}
+
+void _pf_err_catch_free(struct _pf_err_catch **pErr)
+/* Free up memory associated with error catcher. */
+{
+freez(pErr);
+}
+
+struct _pf_punt_info
+/* Information associated with a punt. */
+    {
+    int level;		/* Punt level.  0 normal, -1 program error */
+    struct dyString *message;	/* Punt message. */
+    char *source;		/* Source of punt. */
+    };
+struct _pf_punt_info punter;
+
+static void unwindStackTo(struct _pf_activation *act)
+/* Call destructors on data in stack. */
+{
+struct _pf_activation *s;
+for (s = _pf_activation_stack; s != act; s = s->parent)
+    {
+    struct _pf_functionFixedInfo *ffi = s->fixed;
+    struct _pf_localVarInfo *vars = ffi->vars;
+    char *data = s->data;
+    int i;
+    for (i=0; i<ffi->varCount; ++i)
+        {
+	struct _pf_localVarInfo *var = &vars[i];
+	struct _pf_type *varType = _pf_type_table[var->type];
+	if (varType->base->needsCleanup)
+	    {
+	    void *v = data + var->offset;
+	    struct _pf_object **pObj = v;
+	    struct _pf_object *obj = *pObj;
+	    if (--obj->_pf_refCount == 0)
+	    	obj->_pf_cleanup(obj, var->type);
+	    }
+	}
+    }
+_pf_activation_stack = act;
+}
+
+static void puntCatcher()
+/* Try and catch the punt. */
+{
+struct _pf_err_catch *catcher;
+for (catcher = errCatchStack; catcher != NULL; catcher = catcher->next)
+    {
+    if (catcher->level <= punter.level)
+        break;
+    }
+if (catcher)
+    {
+    catcher->gotError = TRUE;
+    catcher->message = punter.message->string;
+    catcher->source = punter.source;
+    unwindStackTo(catcher->act);
+    errCatchStack = catcher;
+    longjmp(catcher->jmpBuf, -1);
+    }
+else
+    {
+    fprintf(stderr, "\n----------start stack dump---------\n");
+    stackDump(stderr);
+    fprintf(stderr, "-----------end stack dump----------\n");
+    fprintf(stderr, "%s\n", punter.message->string);
+    exit(-1);
+    }
+}
+
+static void puntAbortHandler()
+/* Our handler for errAbort. */
+{
+puntCatcher();
+}
+
+static void puntWarnHandler(char *format, va_list args)
+/* Our handler for warn - which would be coming from a library
+ * function, not from ParaFlow application. */
+{
+dyStringClear(punter.message);
+dyStringVaPrintf(punter.message, format, args);
+punter.level = 0;
+punter.source = "lib";
+}
+
+void _pf_punt_init()
+/* Initialize punt/catch system.  Mostly just redirects the
+ * errAbort handler. */
+{
+punter.message = dyStringNew(0);
+pushWarnHandler(puntWarnHandler);
+pushAbortHandler(puntAbortHandler);
+}
+
 void _pf_run_err(char *format, ...)
 /* Run time error.  Prints message, dumps stack, and aborts. */
 {
 va_list args;
 va_start(args, format);
-
-fprintf(stderr, "\n----------start stack dump---------\n");
-stackDump(stderr);
-fprintf(stderr, "-----------end stack dump----------\n");
-vaErrAbort(format, args);
-
+dyStringClear(punter.message);
+dyStringVaPrintf(punter.message, format, args);
 va_end(args);
-}
-
-void _pf_err_check_level_and_unwind(_pf_Err_catch err, int level,
-	struct _pf_activation *curActivation)
-/* Check level against err->level.  If err is deeper then we
- * just throw to next level handler if any.  Otherwise we
- * unwind stack and return. */
-{
-if (err->level < level)	/* Can't catch.  Just throw it again. */
-    {
-    errAbort(err->message->string);
-    }
-else
-    {
-    uglyf("Theoretically unwinding stack here. \n");
-#ifdef STACK_ALREADY_EATEN
-    struct _pf_activation *s;
-    for (s = _pf_activation_stack; s != curActivation; s = s->parent)
-        {
-	uglyf("s = %p\n", s);
-	struct _pf_functionFixedInfo *ffi = s->fixed;
-	uglyf("unwinding %s\n", ffi->name);
-	}
-#endif /* STACK_ALREADY_EATEN */
-    _pf_activation_stack = curActivation;
-    }
-}
-
-void pf_stackDump()
-{
-uglyf("_pf_activation_stack %p\n", _pf_activation_stack);
-uglyf("_pf_activation_stack->parent %p\n", _pf_activation_stack->parent);
-fprintf(uglyOut, "----------application requested stack dump---------\n");
-stackDump(uglyOut);
-fprintf(uglyOut, "----------end application user requesed stack dump----------\n");
+punter.level = -1;
+punter.source = "runtime";
+puntCatcher();
 }
 

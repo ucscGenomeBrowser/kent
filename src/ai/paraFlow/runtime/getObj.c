@@ -24,7 +24,7 @@ struct _pf_object *obj;
 safef(buf, sizeof(buf), "%X", id);
 obj = hashFindVal(idHash, buf);
 if (obj == NULL)
-    _pf_run_err("no such ID");
+    errAbort("no such ID");
 obj->_pf_refCount += 1;
 return obj;
 }
@@ -50,7 +50,7 @@ if (c == '$')
     return idLookup(idHash, id);
     }
 else if (c != '(')
-    _pf_run_err("Expecting parenthesis");
+    errAbort("Expecting parenthesis");
 return NULL;
 }
 
@@ -59,7 +59,7 @@ _pf_Int  scanInt(FILE *f)
 {
 _pf_Int  i;
 if (fscanf(f, "%d", &i) != 1)
-    _pf_run_err("Not an int");
+    errAbort("Not an int");
 return i;
 }
 
@@ -68,7 +68,7 @@ _pf_Long scanLong(FILE *f)
 {
 _pf_Long i;
 if (fscanf(f, "%lld", &i) != 1)
-    _pf_run_err("Not a long");
+    errAbort("Not a long");
 return i;
 }
 
@@ -77,7 +77,7 @@ _pf_Double scanDouble(FILE *f)
 {
 _pf_Double i;
 if (fscanf(f, "%lf", &i) != 1)
-    _pf_run_err("Not a long");
+    errAbort("Not a long");
 return i;
 }
 
@@ -87,7 +87,7 @@ static void scanDyString(FILE *f, struct dyString *dy)
 boolean isEscaped = FALSE;
 int c = fgetc(f);
 if (c != '"')
-   _pf_run_err("Not a string");
+   errAbort("Not a string");
 for (;;)
    {
    c = fgetc(f);
@@ -137,7 +137,7 @@ if (c == 'n')
     int c1 = getc(f);
     int c2 = getc(f);
     if (c1 != 'i' || c2 != 'l')
-        _pf_run_err("expecting nil");
+        errAbort("expecting nil");
     return TRUE;
     }
 else
@@ -175,12 +175,12 @@ else
 		{
 		c = fgetc(f);
 		if (c != ',')
-		    _pf_run_err("Expecting comma");
+		    errAbort("Expecting comma");
 		}
 	    }
 	c = fgetc(f);
 	if (c != ')')
-	    _pf_run_err("Expecting )");
+	    errAbort("Expecting )");
 	}
     return obj;
     }
@@ -211,7 +211,7 @@ if (!gotNil(f))
 	    if (needComma)
 		{
 		if (c != ',')
-		    _pf_run_err("Expecting comma");
+		    errAbort("Expecting comma");
 		}
 	    else
 		{
@@ -265,7 +265,7 @@ if (!gotNil(f))
 	    if (needComma)
 		{
 		if (c != ',')
-		    _pf_run_err("Expecting comma");
+		    errAbort("Expecting comma");
 		}
 	    else
 		{
@@ -275,9 +275,9 @@ if (!gotNil(f))
 	    dyStringClear(dy);
 	    scanDyString(f, dy);
 	    if (fread(toBuf, 1, 1, f) != 1)
-		_pf_run_err("Unexpected end of file");
+		errAbort("Unexpected end of file");
 	    if (memcmp(toBuf, ":", 1) != 0)
-		_pf_run_err("Expecting 'to'");
+		errAbort("Expecting 'to'");
 	    switch (elBase->singleType)
 		{
 		case pf_stArray:
@@ -338,7 +338,7 @@ if (!gotNil(f))
 		    break;
 		    }
 		case pf_stVar:
-		    _pf_run_err("Can't scan data containing var types.");
+		    errAbort("Can't scan data containing var types.");
 		    break;
 		default:
 		    internalErr();
@@ -426,10 +426,10 @@ switch (type->base->singleType)
 	}
     case pf_stToPt:
     case pf_stFlowPt:
-	_pf_run_err("Can't scan data containing var of (function pointer) types.");
+	errAbort("Can't scan data containing var of (function pointer) types.");
 	break;
     case pf_stVar:
-	_pf_run_err("Can't scan data containing var types.");
+	errAbort("Can't scan data containing var types.");
 	break;
     default:
 	internalErr();
@@ -457,7 +457,7 @@ switch (base->singleType)
 	else if (c == '1')
 	    stack[0].Bit = 1;
 	else
-	    _pf_run_err("Not a bit");
+	    errAbort("Not a bit");
 	break;
     case pf_stByte:
 	{
@@ -496,13 +496,13 @@ switch (base->singleType)
 	break;
     case pf_stToPt:
     case pf_stFlowPt:
-	_pf_run_err("Can't scan data containing var of (function pointer) types.");
+	errAbort("Can't scan data containing var of (function pointer) types.");
 	break;
     case pf_stVar:
-	_pf_run_err("Can't scan data containing var types.");
+	errAbort("Can't scan data containing var types.");
 	break;
     default:
-	_pf_run_err("unknown type");
+	errAbort("unknown type");
 	break;
     }
 

@@ -48,7 +48,7 @@ freeMem(face);
 void _pf_nil_use()
 /* Complain about use of undefined object and punt. */
 {
-_pf_run_err("using uninitialized object");
+errAbort("using uninitialized object");
 }
 
 void _pf_nil_check(void *v)

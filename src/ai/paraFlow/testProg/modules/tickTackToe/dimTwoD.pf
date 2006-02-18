@@ -1,5 +1,5 @@
 
-para dimTwoD(int xSize, int ySize) into (array of array of string aa)
+to dimTwoD(int xSize, int ySize) into (array of array of string aa)
 /* Return a two-dimensional array of given size initialized to zero.
  * Hopefully at some point the language will make this easier. */
     {

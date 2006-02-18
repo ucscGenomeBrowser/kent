@@ -137,7 +137,7 @@ obj->_pf_refCount = 1;
 obj->_pf_cleanup = _pf_class_cleanup;
 obj->_pf_polyTable = base->polyTable;
 if (encoding[0] != '(')
-    _pf_run_err("Expecting ( in class tuple encoding, got %c", encoding[0]);
+    errAbort("Expecting ( in class tuple encoding, got %c", encoding[0]);
 if (encoding[1] == ')')	/* Empty tuple are just requests for all zero. */
     return obj;
 encoding += 1;
@@ -147,7 +147,7 @@ for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
     _pf_suckItemOffStack(&stack, &encoding, fieldType, s + offset);
     }
 if (encoding[0] != ')')
-    _pf_run_err("Expecting ) in class tuple encoding, got %c", encoding[0]);
+    errAbort("Expecting ) in class tuple encoding, got %c", encoding[0]);
 encoding += 1;
 *retStack = stack;
 *retEncoding = encoding;
@@ -206,7 +206,7 @@ if (count > 0)
 array = _pf_array_of_type(count, count, elType, elSize, buf);
 
 if (encoding[0] != '(')
-    _pf_run_err("Expecting ( in array tuple encoding, got %c", encoding[0]);
+    errAbort("Expecting ( in array tuple encoding, got %c", encoding[0]);
 encoding += 1;
 for (i=0; i<count; ++i)
     {
@@ -214,7 +214,7 @@ for (i=0; i<count; ++i)
     buf += elSize;
     }
 if (encoding[0] != ')')
-    _pf_run_err("Expecting ) in array tuple encoding, got %c", encoding[0]);
+    errAbort("Expecting ) in array tuple encoding, got %c", encoding[0]);
 encoding += 1;
 *retStack = stack;
 *retEncoding = encoding;

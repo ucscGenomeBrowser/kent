@@ -102,6 +102,7 @@ struct _pf_functionFixedInfo
     int typeId;	   /* Index into types table describing function i/o etc. */
     int varCount;  /* Includes i/o parameters. */
     struct _pf_localVarInfo *vars; /* Info on each variable. */
+    int dataSize;	/* Size of local data structure. */
     };
 
 struct _pf_activation

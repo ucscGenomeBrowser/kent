@@ -40,7 +40,8 @@ array of string words =
 /* Pick our word randomly from list. */
 randInit();
 string word = words[lib.randomIx(words.size)];
-int maxWrong = 9;
+// This is a comment.
+int maxWrong = 11;
 
 /* Print out instructions. */
 print("Let's play hangman. You can get " + maxWrong + " letters wrong:");

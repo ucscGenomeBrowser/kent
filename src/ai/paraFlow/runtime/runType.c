@@ -116,7 +116,7 @@ if (c == '(')
     if (*s == ')')
         s += 1;
     else
-        _pf_run_err("Problem in paren code '%s'", *parenCode);
+        errAbort("Problem in paren code '%s'", *parenCode);
     slReverse(&type->children);
     }
 return type;
@@ -454,5 +454,6 @@ for (tableIx=0; tableIx<tableSize; ++tableIx)
 	var->offset = offset;
 	offset += b->size;
 	}
+    fixed->dataSize = offset;
     }
 }
