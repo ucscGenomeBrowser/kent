@@ -49,7 +49,6 @@ submitId - an ID to substitute into itemUrl for image.
 REQUIRED FIELDS THAT CAN BE IN EITHER .RA or .TAB FILE
 
 fullDir - The directory where the full-sized version of image lives.
-screenDir - Directory where the screen-sized version of image lives.
 thumbDir - Directory where thumbnail-sized version of image lives.
 age - days since conception embryo.
 probeColor - color of probe.
