@@ -58,7 +58,7 @@ else
 	fprintf(f, "(");
 	for (field = base->fields; field != NULL; field = field->next)
 	    {
-	    if (idHash == NULL || field->base->fields == NULL)
+	    if (idHash != NULL || field->base->fields == NULL)
 		_pf_printField(f, s+field->offset, field->base, idHash);
 	    else
 	        fprintf(f, "<%s>", field->base->name);

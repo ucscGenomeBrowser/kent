@@ -13,7 +13,6 @@ static void stackDump()
 struct _pf_activation *s;
 for (s = _pf_activation_stack; s != NULL; s = s->parent)
     {
-    struct hash *idHash = hashNew(0);
     struct _pf_functionFixedInfo *ffi = s->fixed;
     struct _pf_type *funcType = _pf_type_table[ffi->typeId];
     struct _pf_type *classType = NULL;
@@ -34,10 +33,9 @@ for (s = _pf_activation_stack; s != NULL; s = s->parent)
 	if (i != 0)
 	    fprintf(stderr, ", ");
 	fprintf(stderr, "%s:", var->name);
-	_pf_printField(stderr, data + var->offset, paramType->base, idHash);
+	_pf_printField(stderr, data + var->offset, paramType->base, NULL);
 	}
     fprintf(stderr, ")\n");
-    hashFree(&idHash);
     }
 }
 
