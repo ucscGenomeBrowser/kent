@@ -30,7 +30,11 @@ scope->vars = hashNew(varSize);
 scope->parent = parent;
 scope->id = ++id;
 scope->isModule = isModule;
-slAddHead(&pfc->scopeList, scope);
+if (parent != NULL)
+    {
+    slAddHead(&parent->children, scope);
+    }
+refAdd(&pfc->scopeRefList, scope);
 return scope;
 }
 
@@ -110,3 +114,10 @@ while (scope != NULL)
 return NULL;
 }
 
+void pfScopeMarkLocal(struct pfScope *scope)
+/* Mark scope, and all of it's children, as local. */
+{
+scope->isLocal = TRUE;
+for (scope = scope->children; scope != NULL; scope = scope->next)
+    pfScopeMarkLocal(scope);
+}

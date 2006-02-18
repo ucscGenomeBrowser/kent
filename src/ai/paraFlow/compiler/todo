@@ -1,5 +1,7 @@
 TO DO:
   - Exceptions.
+  - Make it for (el in collection) rather than foreach (el in collection).
+    Distinguish from for ( ;; ) by presence of 'in'?
   - Way to call parent methods in an object.  (An automatically
     declared parent variable to go with the automatically declared
     self variable.)

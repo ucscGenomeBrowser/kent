@@ -1545,6 +1545,7 @@ struct pfParse *pp;
 struct pfParse *name, *input, *output = NULL, *body = NULL;
 
 scope = pfScopeNew(pfc, scope, 0, FALSE);
+pfScopeMarkLocal(scope);
 pp = pfParseNew(type, tok, parent, scope);
 tok = tok->next;	/* Skip to/flow (implicit in type) */
 name = parseNameUse(parent, &tok, scope);
@@ -1559,6 +1560,7 @@ if (tok->type == ';')
 else
     {
     body = parseCompound(pfc, pp, &tok, scope);
+    pfScopeMarkLocal(body->scope);
     slAddHead(&pp->children, body);
     }
 

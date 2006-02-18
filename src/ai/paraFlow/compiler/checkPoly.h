@@ -5,7 +5,7 @@
 #define CHECKPOLY_H
 
 
-void checkPolymorphic(struct pfCompile *pfc, struct pfScope *scopeList);
+void checkPolymorphic(struct pfCompile *pfc, struct slRef *scopeRefs);
 /* Check for polymorphism consistency */
 
 #endif /* CHECKPOLY_H */

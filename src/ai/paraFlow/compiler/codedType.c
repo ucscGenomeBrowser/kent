@@ -191,10 +191,12 @@ struct pfScope *scope;
 struct hash *compTypeHash;
 struct dyString *dy = dyStringNew(0);
 struct codedBaseType *cbtList = NULL, *cbt;
+struct slRef *ref;
 
 /* Get list of base types sorted by id. */
-for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
+for (ref = pfc->scopeRefList; ref != NULL; ref = ref->next)
     {
+    struct pfScope *scope = ref->val;
     struct hashEl *hel, *helList = hashElListHash(scope->types);
     int scopeId = scope->id;
     for (hel = helList; hel != NULL; hel = hel->next)
@@ -239,8 +241,9 @@ fprintf(f, "int _pf_type_info_count = sizeof(_pf_type_info)/sizeof(_pf_type_info
 
 fprintf(f, "/* All field lists. */\n");
 fprintf(f, "struct _pf_field_info _pf_field_info[] = {\n");
-for (scope = pfc->scopeList; scope != NULL; scope = scope->next)
+for (ref = pfc->scopeRefList; ref != NULL; ref = ref->next)
     {
+    struct pfScope *scope = ref->val;
     struct hashEl *hel, *helList = hashElListHash(scope->types);
     int scopeId = scope->id;
     slSort(&helList, hashElCmp);

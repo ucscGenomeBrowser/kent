@@ -50,7 +50,7 @@ file f = fileOpen(args[0], "r");
 int lineCount = 0;
 foreach (string line in f.readLine())
     {
-    (string label, int pos) = line.nextWord(pos);
+    (string label, int pos) = line.nextToken(pos);
     if (label)
         {
 	codeLine code = (nil, label, line.rest(pos));
@@ -78,7 +78,7 @@ codeLine ip = startLine;
 int val;
 while (ip)
     {
-    (string first, int pos) = ip.statement.nextWord(pos);
+    (string first, int pos) = ip.statement.nextToken(pos);
     if (first == "print")
 	{
 	(pos,val) = evalExp(ip.statement, pos);
@@ -87,7 +87,7 @@ while (ip)
 	}
     else if (first == "goto")
         {
-	(string where, int newPos) = ip.statement.nextWord(pos);
+	(string where, int newPos) = ip.statement.nextToken(pos);
 	ip = program[where];
 	if (!ip)
 	    punt("Can't find label " + where);
@@ -97,10 +97,10 @@ while (ip)
 	(pos,val) = evalExp(ip.statement, pos);
 	if (val)
 	    {
-	    (string gt, int newPos) = ip.statement.nextWord(pos);
+	    (string gt, int newPos) = ip.statement.nextToken(pos);
 	    if (gt != "goto")
 	        punt("Expecting goto after if");
-	    (string label, int np) = ip.statement.nextWord(newPos);
+	    (string label, int np) = ip.statement.nextToken(newPos);
 	    ip = program[label];
 	    if (!ip)
 		punt("Can't find label " + label);
@@ -123,14 +123,14 @@ while (ip)
     else if (first == "gosub")
         {
 	retStack = (retStack, ip.next);
-	(string label, int newPos) = ip.statement.nextWord(pos);
+	(string label, int newPos) = ip.statement.nextToken(pos);
 	ip = program[label];
 	if (!ip)
 	    punt("Can't find label " + label);
 	}
     else if (isalpha(first[0]))
         {
-	(string eq, int newPos) = ip.statement.nextWord(pos);
+	(string eq, int newPos) = ip.statement.nextToken(pos);
 	if (eq != "=")
 	    punt("Expecting equals at " + ip.label + " " + ip.statement);
 	int val;
@@ -154,7 +154,7 @@ to evalTerm(string s, int pos) into int newPos,val
     (newPos,val) = evalFactor(s, pos);
     for (;;)
 	{
-	(string w, int np) = s.nextWord(newPos);
+	(string w, int np) = s.nextToken(newPos);
 	if (w == "+")
 	    {
 	    int v2;
@@ -178,7 +178,7 @@ to evalFactor(string s, int pos) into int newPos,val
     (newPos,val) = evalAtom(s, pos);
     for (;;)
 	{
-	(string w, int np) = s.nextWord(newPos);
+	(string w, int np) = s.nextToken(newPos);
 	if (w == "*")
 	    {
 	    int v2;
@@ -199,11 +199,11 @@ to evalFactor(string s, int pos) into int newPos,val
 to evalAtom(string s, int pos) into int newPos,val
     {
     string w;
-    (w, newPos) = s.nextWord(pos);
+    (w, newPos) = s.nextToken(pos);
     if (w == "(")
         {
 	(newPos,val) = evalExp(s, newPos);
-	(w, newPos) = s.nextWord(newPos);
+	(w, newPos) = s.nextToken(newPos);
 	if (w != ")")
 	    punt("Unclosed parenthesis");
 	}

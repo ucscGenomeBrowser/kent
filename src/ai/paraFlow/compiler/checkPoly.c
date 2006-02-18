@@ -132,12 +132,13 @@ if (polyCount > 0)
     }
 }
 
-void checkPolymorphic(struct pfCompile *pfc, struct pfScope *scopeList)
+void checkPolymorphic(struct pfCompile *pfc, struct slRef *scopeRefs)
 /* Check for polymorphism consistency */
 {
-struct pfScope *scope;
-for (scope = scopeList; scope != NULL; scope = scope->next)
+struct slRef *ref;
+for (ref = scopeRefs; ref != NULL; ref = ref->next)
     {
+    struct pfScope *scope = ref->val;
     struct pfBaseType *class = scope->class;
     if (class != NULL)
         {

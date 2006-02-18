@@ -96,6 +96,7 @@ struct ctar *ctar;
 struct hash *aliasHash = hashNew(8);
 int aliasNum = 1;
 static int id=0;
+struct pfBaseType *class = funcDec->var->scope->class;
 
 AllocVar(ctar);
 ctar->id = ++id;
@@ -103,6 +104,12 @@ ctar->name = funcDec->name;
 ctar->cName = cNameForFunction(funcDec);
 ctar->pp = funcDec;
 rAddVars(ctar, funcDec, aliasHash, &aliasNum);
+if (class != NULL)
+    {
+    struct pfVar *selfVar = pfScopeFindVar(funcDec->scope, "self");
+    assert(selfVar != NULL);
+    refAdd(&ctar->varRefList, selfVar);
+    }
 slReverse(&ctar->varRefList);
 hashFree(&aliasHash);
 funcDec->var->ctar = ctar;
@@ -172,7 +179,8 @@ fprintf(f, "_pf_rtar_init_tables(_pf_rtar_fixed, %d, _pf_lti);\n", slCount(ctarL
 }
 
 void ctarCodeLocalStruct(struct ctar *ctar, struct pfCompile *pfc, FILE *f)
-/* Write out a structure that has all of the local variables for a function. */
+/* Write out a structure that has all of the local variables for a function. 
+ * Initialize it to zero. */
 {
 struct slRef *ref;
 if (ctar->varRefList)
@@ -186,6 +194,7 @@ if (ctar->varRefList)
 	fprintf(f, " %s;\n", var->cName);
 	}
     fprintf(f, "} _pf_l;\n");
+    fprintf(f, "memset(&_pf_l, 0, sizeof(_pf_l));\n");
     }
 }
 

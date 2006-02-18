@@ -245,7 +245,7 @@ carefulClose(&typeF);
 if (endPhase < 6)
     return;
 verbose(2, "Phase 6 - polymorphic, para, and flow checks\n");
-checkPolymorphic(pfc, pfc->scopeList);
+checkPolymorphic(pfc, pfc->scopeRefList);
 checkParaFlow(pfc, program);
 printScopeInfo(scopeF, 0, program);
 carefulClose(&scopeF);

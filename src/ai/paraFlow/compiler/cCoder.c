@@ -14,7 +14,8 @@
 #include "ctar.h"
 #include "cCoder.h"
 
-#define prefix "pf_"
+#define globalPrefix "pf_"
+#define localPrefix "_pf_l."
 
 static void codeStatement(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp);
@@ -47,11 +48,11 @@ fprintf(f, "_pf_Var _pf_var_zero;   /* Helps initialize vars to zero. */\n");
 if (doExtern)
    fprintf(f, "extern ");
 fprintf(f, "_pf_Array %sargs;	    /* Command line arguments go here. */\n",
-	prefix);
+	globalPrefix);
 if (doExtern)
    fprintf(f, "extern ");
 fprintf(f, "_pf_String %sprogramName; /* Name of program (argv[0]) */\n",
-	prefix);
+	globalPrefix);
 fprintf(f, "\n");
 }
 
@@ -174,9 +175,13 @@ if (type->isStatic)
     }
 else
     {
-    dyStringAppend(name, prefix);
-    dyStringAppend(name, var->name);
+    if (var->scope->isLocal)
+	dyStringAppend(name, "_pf_l.");
+    else
+	dyStringAppend(name, globalPrefix);
+    dyStringAppend(name, var->cName);
     }
+// uglyf("var %s, moduleScope %d, name %s\n", var->name, var->scope->isModule, name->string);
 return name;
 }
 
@@ -327,9 +332,9 @@ else
     codeExpression(pfc, f, inTuple, stack, TRUE);
     assert(function->type == pptVarUse);
     if (stack == 0)
-	fprintf(f, "%s%s(%s);\n", prefix, pp->name, stackName);
+	fprintf(f, "%s%s(%s);\n", globalPrefix, pp->name, stackName);
     else
-	fprintf(f, "%s%s(%s+%d);\n", prefix, pp->name, stackName, stack);
+	fprintf(f, "%s%s(%s+%d);\n", globalPrefix, pp->name, stackName, stack);
     }
 return outCount;
 }
@@ -1187,18 +1192,30 @@ for (hel = helList; hel != NULL; hel = hel->next)
     struct pfVar *var = hel->val;
     struct pfType *type = var->ty;
     if ((type->tyty == tytyVariable || type->tyty == tytyFunctionPointer)
-    	&& !type->isStatic)
-        {
+	&& !type->isStatic)
+	{
 	if (var->isExternal)
 	    fprintf(f, "extern ");
-	codeBaseType(pfc, f, type->base);
-	fprintf(f, " ");
-	printVarName(pfc, f, var);
-	if (zeroUninit && !var->isExternal && !isInitialized(var))
+	if (pfc->isFunc)
 	    {
-	    codeInitOfType(pfc, f, type);
+	    if (zeroUninit && !var->isExternal && !isInitialized(var))
+		{
+		printVarName(pfc, f, var);
+		codeInitOfType(pfc, f, type);
+		fprintf(f, ";\n");
+		}
 	    }
-	fprintf(f, ";\n");
+	else
+	    {
+	    codeBaseType(pfc, f, type->base);
+	    fprintf(f, " ");
+	    printVarName(pfc, f, var);
+	    if (zeroUninit && !var->isExternal && !isInitialized(var))
+		{
+		codeInitOfType(pfc, f, type);
+		}
+	    fprintf(f, ";\n");
+	    }
 	gotVar = TRUE;
 	}
     }
@@ -2072,7 +2089,7 @@ switch (pp->type)
     case pptCastFunctionToPointer:
         {
         codeParamAccess(pfc, f, pp->ty->base, stack);
-	fprintf(f, " = %s%s;\n", prefix, pp->children->name);
+	fprintf(f, " = %s%s;\n", globalPrefix, pp->children->name);
 	return 1;
 	}
     default:
@@ -2326,7 +2343,7 @@ if (class)
     fprintf(f, "%s *%s)",  stackType, stackName);
     }
 else
-    fprintf(f, "void %s%s(%s *%s)", prefix, funcDec->name, 
+    fprintf(f, "void %s%s(%s *%s)", globalPrefix, funcDec->name, 
     	stackType, stackName);
 }
 
@@ -2380,87 +2397,82 @@ struct pfType *funcType = funcVar->ty;
 struct pfType *inTuple = funcType->children;
 struct pfType *outTuple = inTuple->next;
 struct pfParse *body = funcDec->children->next->next->next;
+bool oldIsFunc = pfc->isFunc;
 
-if (body == NULL)
-    return;
-
-declareStaticVars(pfc, f, funcDec, body, class);
-printPrototype(f, funcDec, class);
-fprintf(f, "\n{\n");
-
-/* Print out activation record. */
+if (body != NULL)
     {
-    ctarCodeLocalStruct(ctar, pfc, f);
-    ctarCodePush(ctar, pfc, f);
-    }
+    pfc->isFunc = TRUE;
+    declareStaticVars(pfc, f, funcDec, body, class);
+    printPrototype(f, funcDec, class);
+    fprintf(f, "\n{\n");
 
-/* Print out input parameters. */
-    {
-    struct pfType *in;
-    int inIx = 0;
-    if (class)
-        {
-	fprintf(f, "struct %s *%sself = ", class->name, prefix);
-	codeParamAccess(pfc, f, class->ty->base, 0);
-	fprintf(f, ";\n");
-	inIx += 1;
-	}
-    for (in = inTuple->children; in != NULL; in = in->next)
-        {
-	codeBaseType(pfc, f, in->base);
-	fprintf(f, " %s%s = ", prefix, in->fieldName);
-	codeParamAccess(pfc, f, in->base, inIx);
-	fprintf(f, ";\n");
-	inIx += 1;
-	}
-    }
-
-/* Print out output parameters. */
-    {
-    struct pfType *out;
-    for (out = outTuple->children; out != NULL; out = out->next)
-        {
-	codeBaseType(pfc, f, out->base);
-	fprintf(f, " %s%s", prefix, out->fieldName);
-	codeInitOfType(pfc, f, out);
-	fprintf(f, ";\n");
-	}
-    }
-
-/* Print out body (which is a compound statement) */
-codeStatement(pfc, f, body);
-
-/* Print exit label for returns. */
-fprintf(f, "_pf_cleanup: ;\n");
-
-/* Decrement ref counts on input variables. */
-    {
-    struct pfType *in;
-    struct dyString *name = dyStringNew(0);
-    for (in = inTuple->children; in != NULL; in = in->next)
+    /* Print out activation record. */
 	{
-	dyStringClear(name);
-	dyStringPrintf(name, "%s%s", prefix, in->fieldName);
-	codeCleanupVarNamed(pfc, f, in, name->string);
+	ctarCodeLocalStruct(ctar, pfc, f);
+	ctarCodePush(ctar, pfc, f);
 	}
-    dyStringFree(&name);
-    }
 
-/* Save the output. */
-    {
-    int outIx = 0;
-    struct pfType *out;
-    for (out = outTuple->children; out != NULL; out = out->next)
-        {
-	codeParamAccess(pfc, f, out->base, outIx);
-	fprintf(f, " = %s%s;\n", prefix, out->fieldName);
-	outIx += 1;
+    /* Print out input parameters. */
+	{
+	struct pfType *in;
+	int inIx = 0;
+	if (class)
+	    {
+	    fprintf(f, "%sself = ", localPrefix);
+	    codeParamAccess(pfc, f, class->ty->base, 0);
+	    fprintf(f, ";\n");
+	    inIx += 1;
+	    }
+	for (in = inTuple->children; in != NULL; in = in->next)
+	    {
+	    fprintf(f, " %s%s = ", localPrefix, in->fieldName);
+	    codeParamAccess(pfc, f, in->base, inIx);
+	    fprintf(f, ";\n");
+	    inIx += 1;
+	    }
 	}
-    }
 
-/* Close out function. */
-ctarCodePop(ctar, pfc, f);
-fprintf(f, "}\n\n");
+    /* Print out output parameters. */
+	{
+	/* Nothing to do here, since did bulk local zero init. */
+	}
+
+    /* Print out body (which is a compound statement) */
+    codeStatement(pfc, f, body);
+
+    /* Print exit label for returns. */
+    fprintf(f, "_pf_cleanup: ;\n");
+
+    /* Decrement ref counts on input variables. */
+	{
+	struct pfType *in;
+	struct dyString *name = dyStringNew(0);
+	for (in = inTuple->children; in != NULL; in = in->next)
+	    {
+	    dyStringClear(name);
+	    dyStringPrintf(name, "%s%s", localPrefix, in->fieldName);
+	    codeCleanupVarNamed(pfc, f, in, name->string);
+	    }
+	dyStringFree(&name);
+	}
+
+    /* Save the output. */
+	{
+	int outIx = 0;
+	struct pfType *out;
+	for (out = outTuple->children; out != NULL; out = out->next)
+	    {
+	    codeParamAccess(pfc, f, out->base, outIx);
+	    fprintf(f, " = %s%s;\n", localPrefix, out->fieldName);
+	    outIx += 1;
+	    }
+	}
+
+    /* Close out function. */
+    ctarCodePop(ctar, pfc, f);
+    fprintf(f, "}\n\n");
+    pfc->isFunc = oldIsFunc;
+    }
 }
 
 static void printPolyFunTable(struct pfCompile *pfc, FILE *f, 
@@ -2670,14 +2682,15 @@ hashElFreeList(&helList);
 }
 
 static void printPolyFuncConnections(struct pfCompile *pfc,
-	struct pfScope *scopeList, struct pfParse *module, FILE *f)
+	struct slRef *scopeRefs, struct pfParse *module, FILE *f)
 /* Print out poly_info table that connects polymorphic function
  * tables to the classes they belong to. */
 {
-struct pfScope *scope;
+struct slRef *ref;
 fprintf(f, "struct _pf_poly_info _pf_poly_info_%s[] = {\n", module->name);
-for (scope = scopeList; scope != NULL; scope = scope->next)
+for (ref = scopeRefs; ref != NULL; ref = ref->next)
     {
+    struct pfScope *scope = ref->val;
     struct pfBaseType *class = scope->class;
     if (class != NULL && class->polyList != NULL && isInside(module, class->def))
         {
@@ -2703,7 +2716,7 @@ fprintf(f,
 "_pf_init_args(argc, argv, &%sprogramName, &%sargs, environ);\n"
 "_pf_entry_%s(stack);\n"
 "return 0;\n"
-"}\n", prefix, prefix, mainModule->name);
+"}\n", globalPrefix, globalPrefix, mainModule->name);
 }
 
 static void printLocalTypeInfo(struct pfCompile *pfc, char *moduleName, FILE *f)
@@ -2758,8 +2771,12 @@ switch (pp->type)
     case pptToDec:
     case pptFlowDec:
 	{
-	struct ctar *ctar = ctarOnFunction(pp);
-	slAddHead(pCtar, ctar);
+	struct pfParse *body = pp->children->next->next->next;
+	if (body)
+	    {
+	    struct ctar *ctar = ctarOnFunction(pp);
+	    slAddHead(pCtar, ctar);
+	    }
 	break;
 	}
     }
@@ -2825,7 +2842,7 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 		fprintf(f, "\n");
 		codeScope(pfc, f, module, TRUE, ctarList);
 		fprintf(f, "\n");
-		printPolyFuncConnections(pfc, pfc->scopeList, module, f);
+		printPolyFuncConnections(pfc, pfc->scopeRefList, module, f);
 		}
 	    }
 	printLocalTypeInfo(pfc, toCode->name, f);

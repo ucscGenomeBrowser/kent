@@ -12,12 +12,14 @@ struct pfScope
 /* The symbol tables for this scope and a pointer to the
  * parent scope. */
      {
-     struct pfScope *next;	/* Next in scope list. */
+     struct pfScope *next;	/* Sibling scope if any. */
+     struct pfScope *children;	/* Child scopes if any. */
      struct pfScope *parent;	/* Parent scope if any. */
      struct hash *types;	/* Types defined in this scope. */
      struct hash *vars;		/* Variables defined in this scope (including functions) */
      int id;			/* Unique ID for this scope. */
      boolean isModule;		/* True if it's a module scope. */
+     boolean isLocal;		/* True local in function. */
      struct pfBaseType *class;	/* If it's a class scope this is set. */
      };
 
@@ -60,6 +62,9 @@ struct pfBaseType *pfScopeFindType(struct pfScope *scope, char *name);
 
 struct pfVar *pfScopeFindVar(struct pfScope *scope, char *name);
 /* Find variable associated with name in scope and it's parents. */
+
+void pfScopeMarkLocal(struct pfScope *scope);
+/* Mark scope, and all of it's children, as local. */
 
 #endif /* PFSCOPE_H */
 

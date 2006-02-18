@@ -284,7 +284,7 @@ slReverse(&program->children);
 attachStringsAndThings(pfc, stringModule->pp);
 
 /* Restore order of scopes. */
-slReverse(&pfc->scopeList);
+slReverse(&pfc->scopeRefList);
 
 return program;
 }

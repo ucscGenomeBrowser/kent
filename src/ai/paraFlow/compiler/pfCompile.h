@@ -38,11 +38,12 @@ struct pfCompile
     char *baseDir;		/* Base directory. */
     struct hash *moduleHash;	/* Module hash.  pfModule valued, name keyed. */
     struct pfModule *moduleList;/* List of all modules. */
-    boolean isSys;		/* True if compiling built-in module. */
+    bool	isSys;		/* True if compiling built-in module. */
+    bool	isFunc;		/* True if compiling a function. */
     struct pfTokenizer *tkz;	/* Tokenizer. */
     struct hash *reservedWords;	/* Reserved words, can't be used for type or symbols */
     struct pfScope *scope;	/* Outermost scope - for built in types and symbols */
-    struct pfScope *scopeList;	/* List of all scopes. */
+    struct slRef *scopeRefList;	/* List of refences to all scopes. */
     struct hash *runTypeHash;	/* Hash of run time types for code generator */
     struct hash *moduleTypeHash;/* Hash of run time types for just one module. */
 

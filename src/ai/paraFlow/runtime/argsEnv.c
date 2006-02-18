@@ -71,6 +71,12 @@ void _pf_free_mem(void *pt)
 return freeMem(pt);
 }
 
+void _pf_clear_mem(void *pt, int size)
+/* Clear memory. */
+{
+memset(pt, 0, size);
+}
+
 void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArgs, 
 	char *environ[])
 /* Set up command line arguments. */

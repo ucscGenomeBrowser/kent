@@ -1,6 +1,9 @@
 /* pfPreamble - this gets included at the start of
  * paraFlow-generated C code. */
 
+#include <stdio.h>
+#include <string.h>
+
 union _pf_stack;
 typedef union _pf_stack _pf_Stack;
 
