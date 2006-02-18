@@ -38,7 +38,7 @@ boolean done = FALSE;
 boolean foundJFIF = FALSE;
 /* Scan the JPEG headers. */
 if (fgetc(infile) != 0xff || fgetc(infile) != M_SOI)
-    errAbort("error reading jpg header");
+    errAbort("error reading jpg header: %s",fileName);
 while(!done)
     {
     int itemlen;
@@ -48,7 +48,7 @@ while(!done)
     uchar * data;
 
     if (sectionsRead >= MAX_SECTIONS)
-	errAbort("Too many sections in jpg file");
+	errAbort("Too many sections in jpg file: %s",fileName);
 
     for (a=0;a<7;a++)
 	{
@@ -56,12 +56,12 @@ while(!done)
 	if (marker != 0xff) 
 	    break;
 	if (a >= 6)
-	    errAbort("too many padding bytes\n");
+	    errAbort("too many padding bytes: %s",fileName);
 	}
 
     /* 0xff is legal padding, but if we get that many, something's wrong. */
     if (marker == 0xff)
-	errAbort("too many padding bytes!");
+	errAbort("too many padding bytes: %s",fileName);
 
     /* Read the length of the section. */
     lh = fgetc(infile);
@@ -70,7 +70,7 @@ while(!done)
     itemlen = (lh << 8) | ll;
 
     if (itemlen < 2)
-	errAbort("invalid jpeg marker");
+	errAbort("invalid jpeg marker: %s",fileName);
 
     data = (uchar *)needMem(itemlen);
     if (data == NULL)
@@ -82,7 +82,7 @@ while(!done)
 
     got = fread(data+2, 1, itemlen-2, infile); /* Read the whole section. */
     if (got != itemlen-2)
-	errAbort("Premature end of file?");
+	errAbort("Premature end of file?: %s",fileName);
     
     ++sectionsRead;
 
@@ -92,7 +92,7 @@ while(!done)
 	    done = TRUE;
 	    break;
 	case M_EOI:   /* in case it's a tables-only JPEG stream */
-	    errAbort("No image in jpeg!\n");
+	    errAbort("No image in jpeg!: %s",fileName);
 	case M_JFIF:
 	    /* Regular jpegs always have this tag, 
 	       exif images have the exif marker instead or in addition 
@@ -128,7 +128,7 @@ while(!done)
     }
 fclose(infile);
 if (!foundJFIF)
-    errAbort("JFIF marker not found jpeg!\n");
+    errAbort("JFIF marker not found jpeg: %s",fileName);
 return;
 }
 
