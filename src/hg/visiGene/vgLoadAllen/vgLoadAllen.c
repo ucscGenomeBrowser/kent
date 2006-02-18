@@ -9,7 +9,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: vgLoadAllen.c,v 1.1 2006/02/17 09:08:20 galt Exp $";
+static char const rcsid[] = "$Id: vgLoadAllen.c,v 1.2 2006/02/18 22:57:49 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -31,8 +31,8 @@ errAbort(
 
 /*  
  vgLoadAllen 
-   sourceImageDir = /cluster/store11/visiGene/offline/allenBrain/imageDisk
-     (san is down right now, should be = /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain )
+   sourceImageDir = /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain 
+     (if san is down can use /cluster/store11/visiGene/offline/allenBrain/imageDisk with .jp2)
    parsed.tab     = /cluster/store11/visiGene/offline/allenBrain/probesAndData/allen20051021.tab 
    probes.fa      = /cluster/data/mm7/bed/allenBrain/allProbes.fa 
    name.tab       = /cluster/data/mm7/bed/allenBrain/allProbes.tab
@@ -73,7 +73,7 @@ for (dEntry = dList; dEntry != NULL; dEntry = dEntry->next)
 	char newDir[256];
 	struct fileInfo *fList = NULL, *fEntry;
 	safef(newDir,sizeof(newDir),"%s/%s",sourceImageDir,dEntry->name);
-	fList = listDirX(newDir, "*.jp2", FALSE);   // DEBUG only jp2 until san comes back, then jpg!
+	fList = listDirX(newDir, "*.jpg", FALSE);   
 	for (fEntry = fList; fEntry != NULL; fEntry = fEntry->next)
 	    {
 	    char newPath[256];
@@ -129,7 +129,7 @@ fprintf(f, "genotype wild type\n");
 fprintf(f, "strain C57BL/6\n");
 fprintf(f, "age 56\n");
 fprintf(f, "sex male\n");
-fprintf(f, "bodyPart brain\t");
+fprintf(f, "bodyPart brain\n");
 fprintf(f, "acknowledgement Thanks to Susan Sunkin and colleagues at ABA for helping make these images available in VisiGene\n");
 /* Still need to fill in contributor, publication, journal, journalUrl */
 fprintf(f, "contributor Sunkin S., Sunkin S.\n");
@@ -190,7 +190,7 @@ while (lineFileRowTab(lf, row))
 	{
 	safef(sourceImage, sizeof(sourceImage), "%s/%s", 
 	    sourceImageDir, relPath);
-	//jpegSize(sourceImage, &width, &height);  //debug: restore, disabled while SAN is down
+	jpegSize(sourceImage, &width, &height);
 
 	fprintf(f, "%s\t", gene);
 	fprintf(f, "%s\t", refSeq);
