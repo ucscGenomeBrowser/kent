@@ -110,7 +110,7 @@ else
 	}
     else
         {
-	fprintf(f, "<%d elements>", array->size);
+	fprintf(f, "<array of %d>", array->size);
 	}
     }
 }
@@ -148,7 +148,7 @@ else
 	}
     else
         {
-	fprintf(f, "<%d elements>", dir->hash->elCount);
+	fprintf(f, "<dir of %d>", dir->hash->elCount);
 	}
     }
 }
