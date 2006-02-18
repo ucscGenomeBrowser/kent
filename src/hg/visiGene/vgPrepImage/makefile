@@ -25,5 +25,11 @@ ${A}: $O ${MYLIBS}
 install:
 	cp ${HOME}/bin/${MACHTYPE}/${A} /cluster/bin/${MACHTYPE}/
 
+example:
+	vgPrepImage /san/sanvol1/visiGene/offline/allenBrain/imageDisk \
+	/san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain \
+	/san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain \
+	prod3/LOC432413_124_0205042191_D.jp2
+
 clean:
 	rm -f $O
