@@ -19392,166 +19392,6 @@ cat  << 'EOF' > spec
 # Longest finished job:           52274s     871.23m    14.52h    0.61d
 # Submission to last job:         52294s     871.57m    14.53h    0.61d
 
-
-####### V10 RUN ***********
-
-cat > oneMultiz.csh << 'EOF'
-#!/bin/csh -fe
-    set c = $1
-    set db = hg17
-    set tmp = /scratch/tmp
-    set multi = $tmp/$db/multiz17way.$c
-    set pairs = /san/sanvol1/scratch/$db/mafNet
-    set penn = /cluster/data/hg17/bed/multiz17way/run/penn
-
-    # for tracking purposes
-    date
-
-    # special mode --
-    # with 1 arg, cleanup
-    if ($#argv == 1) then
-        echo "cleanup"
-        echo "rm -fr $multi"
-        rm -fr $multi
-        echo "rmdir --ignore-fail-on-non-empty $tmp/$db"
-        rmdir --ignore-fail-on-non-empty $tmp/$db
-        exit
-    endif
-
-    # special mode --
-    # with 3 args, saves an alignment file
-    if ($#argv == 3) then
-        echo "cp $multi/$2/$c.maf $3"
-        ls -og $multi/$2/$c.maf
-        cp $multi/$2/$c.maf $3
-        exit
-    endif
-
-    set s1 = $2
-    set s2 = $3
-    set flag = $4
-
-    # locate input files -- in pairwise dir, or multiple dir
-    set d1 = $multi
-    set d2 = $multi
-    if (-d $pairs/$s1) then
-        set d1 = $pairs
-        set t1 = $tmp/$s1.$c.maf
-        set nonomatch
-        set f1 =  $d1/$s1/$c.*maf*
-        if ("$f1:e" == gz) then
-             zcat $f1 > $t1
-        else if (-e $f1) then
-            cp -p $f1 $t1
-        else
-            touch $t1
-        endif
-        unset nonomatch
-    else
-        set f1 = $d1/$s1/$c.maf
-        set t1 = $tmp/$s1.$c.maf
-        cp -p $f1 $t1
-    endif
-   if (-d $pairs/$s2) then
-        set d2 = $pairs
-        set t2 = $tmp/$s2.$c.maf
-        set nonomatch
-        set f2 =  $d2/$s2/$c.*maf*
-        if ("$f2:e" == gz) then
-             zcat $f2 > $t2
-        else if (-e $f2) then
-            cp -p $f2 $t2
-        else
-            touch $t2
-        endif
-        unset nonomatch
-    else
-        set f2 = $d2/$s2/$c.maf
-        set t2 = $tmp/$s2.$c.maf
-        cp -p $f2 $t2
-    endif
-    # write to output dir
-    set out = $multi/${s1}${s2}
-    mkdir -p $out
-
-    # check for empty input file(s)
-    if (-s $t1 && -s $t2) then
-        echo "Aligning $f1 $f2 $flag"
-        $penn/multiz $t1 $t2 $flag > $out/$c.tmp.maf
-        echo "Ordering $c.maf"
-        $penn/maf_project $out/$c.tmp.maf $db.$c > $out/$c.maf
-        # next time, add the "nohead" argument
-        rm -f $t1 $t2
-    else if (-s $t1) then
-        cp -p $t1 $out/$c.maf
-        rm -f $t1
-    else if (-s $t2) then
-        cp -p $t2 $out/$c.maf
-        rm -f $t2
-    else
-        touch $out/$c.maf
-    endif
-
-    # remove output dirs from previous alignment (input to this one)
-    rm -fr $multi/$s1 $multi/$s2
-'EOF'
-# << keep emacs coloring happy
-    chmod +x oneMultiz.csh
-
-    #	using your tree diagram printed above, arrange these alignments
-    #	in order of the tree branches
-
-cat > allMultiz.csh << 'EOF'
-#!/bin/csh -fe
-    # multiple alignment steps:
-set c = $1
-set s = /cluster/data/hg17/bed/multiz17way/run/oneMultiz.csh
-
-$s $c panTro1 rheMac1 1
-$s $c mm7 rn3 0
-$s $c mm7rn3 oryCun1 0
-$s $c panTro1rheMac1 mm7rn3oryCun1 1
-$s $c canFam2 bosTau2 0
-$s $c panTro1rheMac1mm7rn3oryCun1 canFam2bosTau2 1
-$s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2 dasNov1 1
-$s $c loxAfr1 echTel1 0
-$s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1 loxAfr1echTel1 1
-$s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1 monDom1 1
-$s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom1 galGal2 1
-$s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom1galGal2 xenTro1 1
-$s $c tetNig1 fr1  0
-$s $c tetNig1fr1 danRer3 0
-$s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom1galGal2xenTro1 tetNig1fr1danRer3 1
-#	 get final alignment file
-$s $c panTro1rheMac1mm7rn3oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom1galGal2xenTro1tetNig1fr1danRer3 \
-	/cluster/data/hg17/bed/multiz17way/maf/$c.maf
-#cleanup
-$s $c
-'EOF'
-# << keep emacs coloring happy
-    chmod +x allMultiz.csh
-
-cat  << 'EOF' > template
-#LOOP
-./allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz17way/maf/$(root1).maf}
-#ENDLOOP
-'EOF'
-
-    awk '{print $1}' /cluster/data/hg17/chrom.sizes > chrom.lst
-    gensub2 chrom.lst single template jobList
-    para create jobList
-        # 46 files
-    para try
-    para check
-    para push
-# CPU time in finished jobs:    1049186s   17486.43m   291.44h   12.14d  0.033 y
-# IO & Wait Time:                 37333s     622.22m    10.37h    0.43d  0.001 y
-# Average job time:               23620s     393.67m     6.56h    0.27d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:          146893s    2448.22m    40.80h    1.70d
-# Submission to last job:        146916s    2448.60m    40.81h    1.70d
-    # 40 hours running time (chr2)
-
     # Load into database
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way/maf
@@ -19772,8 +19612,12 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
     hgsql hg17 -e "select count(*) from phastConsElements10way where chrom='chr7'"
         # 102959
 
-    # For this track, used len=13, rho=.28, cov=.005
-    # This had similar coverage and element count to previous tracks
+    # len=13, cov=.007, rho=.27
+    # looks best -- similar chr7 measurements to previous tracks
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_13_007_27
+        # refGene:cds 0.874%, phastConsElements17way_13_007_27 4.854%, both 0.607%, cover 69.43%, enrich 14.31x
+    hgsql hg17 -e "select count(*) from phastConsElements17way_13_007_27 where chrom='chr7'"
+
     featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_13_005_28
        # refGene:cds 0.873%, phastConsElements17way_13_005_28 4.802%, both 0.612%, cover 70.12%, enrich 14.60x
     hgsql hg17 -e "select count(*) from phastConsElements17way_13_005_28 where chrom='chr7'"
@@ -19840,36 +19684,11 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
     hgsql hg17 -e "select count(*) from phastConsElements17way_17_005 where chrom='chr7'"
         # 91243
 
-    # len=17, cov=.005, rho=.2
-    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_17_005_2
-        # refGene:cds 0.873%, phastConsElements17way_17_005_2 5.385%, both 0.558%, cover 63.93%, enrich 11.87x
-    hgsql hg17 -e "select count(*) from phastConsElements17way_17_005_2 where chrom='chr7'"
-        # 112995
-
-    # len=17, cov=.005, rho=.4
-    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_17_005_4
-        # refGene:cds 0.873%, phastConsElements17way_17_005_4 6.695%, both 0.679%, cover 77.72%, enrich 11.61x
-    hgsql hg17 -e "select count(*) from phastConsElements17way_17_005_4 where chrom='chr7'"
-        # 73854
-
-    # len=12, cov=.01, rho=.28
-    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_12_01_28
-        # refGene:cds 0.873%, phastConsElements17way_12_01_28 4.847%, both 0.612%, cover 70.02%, enrich 14.45x
-    hgsql hg17 -e "select count(*) from phastConsElements17way_12_01_28 where chrom='chr7'"
-        # 123702
-
     # len=12, cov=.01, rho=.28 -panTro1
     featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_12_01_28_p
         # refGene:cds 0.873%, phastConsElements17way_12_01_28_p 4.829%, both 0.612%, cover 70.02%, enrich 14.50x
     hgsql hg17 -e "select count(*) from phastConsElements17way_12_01_28_p where chrom='chr7'"
         # 123638
-
-
-    # len=13, cov=.01, rho=.28 -panTro1
-    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_13_01_28_p
-        # refGene:cds 0.873%, phastConsElements17way_13_01_28_p 5.031%, both 0.614%, cover 70.25%, enrich 13.96x
-    hgsql hg17 -e "select count(*) from phastConsElements17way_13_01_28_p where chrom='chr7'"
-        # 122643
 
     # len=13, cov=.01, rho=.25 -panTro1
     featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_13_01_25_p
@@ -19882,12 +19701,6 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
        # refGene:cds 0.874%, phastConsElements17way_14_008_28 5.227%, both 0.615%, cover 70.37%, enrich 13.46x
     hgsql hg17 -e "select count(*) from phastConsElements17way_14_008_28 where chrom='chr7'"
         # 106071
-
-    # len=13, cov=.007, rho=.27
-    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way_13_007_27
-        # refGene:cds 0.874%, phastConsElements17way_13_007_27 4.854%, both 0.607%, cover 69.43%, enrich 14.31x
-    hgsql hg17 -e "select count(*) from phastConsElements17way_13_007_27 where chrom='chr7'"
-
 
     # Create merged posterier probability file and wiggle track data files
     #	pk is currently closer to the san than any other machine
@@ -19953,6 +19766,7 @@ cat > maffrags.csh << 'EOF'
     mv /cluster/data/hg17/bed/multiz17way/upstream*.maf.gz multiz17way
     cd multiz17way
     md5sum *.gz > md5sum.txt
+
 
 # UPDATE MONKEY DOWNLOADS (2006-01-12 kate)
 # EXTRACT AXT'S AND MAF'S FROM THE RheMac1 NET
