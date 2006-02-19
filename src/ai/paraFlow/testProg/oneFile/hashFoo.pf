@@ -30,7 +30,7 @@ to split(string s) into array of string words
 
 to hashFunc(string s) into int val
     {
-    foreach (byte c in s)
+    for (byte c in s)
         {
 	val *= 5;
 	val += c;
@@ -109,7 +109,7 @@ for (;;)
    if (!line)
        break;
    array of string words = split(line);
-   foreach (string s in words)
+   for (string s in words)
        hash.addCount(s);
    }
 

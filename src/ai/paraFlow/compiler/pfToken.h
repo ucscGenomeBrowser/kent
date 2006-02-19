@@ -46,6 +46,8 @@ enum pfTokType
     /* - reserved words - */
     pftReservedWordStart,
     pftBreak,
+    pftCase,
+    pftCatch,
     pftContinue,
     pftClass,
     pftElse,
@@ -57,7 +59,6 @@ enum pfTokType
     pftInto,
     pftFlow,
     pftFor,
-    pftForeach,
     pftOf,
     pftNil,
     pftPara,
@@ -67,9 +68,7 @@ enum pfTokType
     pftTo,
     pftWhile,
     pftTry,
-    pftCatch,
     pftOperator,
-
     };
 
 char *pfTokTypeAsString(enum pfTokType type);

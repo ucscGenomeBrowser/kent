@@ -23,7 +23,7 @@ class wordUse
 
 dir of wordUse wordDir = ();
 
-foreach (string fileName in args)
+for (fileName in args)
     {
     file f = fileOpen(fileName, "r");
     for (;;)
@@ -48,5 +48,5 @@ foreach (string fileName in args)
 	}
     }
 
-foreach (wordUse use in wordDir)
+for (use in wordDir)
     print(use);

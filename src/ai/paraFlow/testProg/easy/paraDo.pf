@@ -4,7 +4,7 @@ para (s in names) do
     print(s);
     }
 print("And again serially:");
-foreach (s in names) 
+for (s in names) 
     {
     print(s);
     }

@@ -6,6 +6,6 @@ class chair
     }
 chair as = ("desk", 5, ("w1", "w2", "w3", "w4", "w5"));
 print(as);
-foreach (string str in as.wheelNames)
+for (str in as.wheelNames)
     print(str);
 

@@ -21,7 +21,7 @@ array of var of to () punters = (punt1, punt0, hardErr);
 
 to doSomethingFlaky(string when, var of to() punter)
     {
-    foreach (i in 0 to 3)
+    for (i in 0 to 3)
         print("Testing " + i);
     print("oh rats...");
     punter();
@@ -31,7 +31,7 @@ to flakarelli(int level)
     {
     int i = 0;
     print("welcome to flakarelli level " + level);
-    foreach (v in punters)
+    for (v in punters)
 	{
 	try 
 	   {

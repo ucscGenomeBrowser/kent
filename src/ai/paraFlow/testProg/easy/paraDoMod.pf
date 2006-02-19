@@ -6,7 +6,7 @@ print(a);
 
 string s = "abcd";
 print(s);
-foreach (c in s)
+for (c in s)
     c += 'A' - 'a';
 print(s);
 

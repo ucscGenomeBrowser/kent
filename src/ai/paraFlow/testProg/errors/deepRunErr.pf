@@ -29,7 +29,7 @@ to eat(string s, array of int iBuf)
 
 to eatArray(array of string a, array of int iBuf)
    {
-   foreach (s in a)
+   for (s in a)
        eat(s, iBuf);
    }
 

@@ -1,7 +1,6 @@
 TO DO:
-  - Exceptions.
-  - Make it for (el in collection) rather than foreach (el in collection).
-    Distinguish from for ( ;; ) by presence of 'in'?
+  - Test exceptions in classes.  (Make sure they don't free up 
+    self!).
   - Way to call parent methods in an object.  (An automatically
     declared parent variable to go with the automatically declared
     self variable.)
@@ -27,6 +26,9 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Exceptions.
+  - Make it for (el in collection) rather than foreach (el in collection).
+    Distinguish from for ( ;; ) by presence of 'in'?
   - Make it so don't need trailing ';' before a '}'
   - Adding named parameters.
   - optional init() method.

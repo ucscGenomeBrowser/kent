@@ -1767,9 +1767,9 @@ return pp;
 }
 
 
-static struct pfParse *parseForeach(struct pfCompile *pfc, 
+static struct pfParse *parseForIn(struct pfCompile *pfc, 
 	struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope)
-/* Parse foreach statement */
+/* Parse for (el in collection)  statement */
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp;
@@ -1825,9 +1825,10 @@ return parseParaInvoke(pfc, parent, pTokList, scope, TRUE);
 
 
 
-static struct pfParse *parseFor(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse for statement */
+static struct pfParse *parseForLikeC(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
+/* Parse for (;;) statement */
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp;
@@ -1865,6 +1866,20 @@ slAddHead(&pp->children, check);
 slAddHead(&pp->children, init);
 *pTokList = tok;
 return pp;
+}
+
+static struct pfParse *parseFor(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
+/* Parse for statement.  Figure out whether it's for (;;) or
+ * for (el in array) type and go to it. */
+{
+struct pfToken *forTok = *pTokList;
+struct pfToken *inTok = forTok->next->next->next;
+if (inTok->type == pftIn)
+    return parseForIn(pfc, parent, pTokList, scope);
+else
+    return parseForLikeC(pfc, parent, pTokList, scope);
 }
 
 static struct pfParse *fakeNameUse(char *name, struct pfToken *tok,
@@ -2064,9 +2079,6 @@ switch (tok->type)
 	break;
     case pftWhile:
         statement = parseWhile(pfc, parent, &tok, scope);
-	break;
-    case pftForeach:
-	statement = parseForeach(pfc, parent, &tok, scope);
 	break;
     case pftFor:
 	statement = parseFor(pfc, parent, &tok, scope);

@@ -13,9 +13,9 @@ to countDown() into int c
    c = count;
    }
 
-foreach (pos in countDown())
+for (pos in countDown())
     print(pos);
 
 array of string a = s.tokens();
-foreach (w in a)
+for (w in a)
     print(w);

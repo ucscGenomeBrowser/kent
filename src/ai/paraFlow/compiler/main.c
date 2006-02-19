@@ -50,6 +50,8 @@ static struct hash *createReservedWords()
 {
 struct hash *hash = hashNew(7);
 hashAddInt(hash, "break", pftBreak);
+hashAddInt(hash, "case", pftCase);
+hashAddInt(hash, "catch", pftCatch);
 hashAddInt(hash, "continue", pftContinue);
 hashAddInt(hash, "class", pftClass);
 hashAddInt(hash, "else", pftElse);
@@ -61,7 +63,6 @@ hashAddInt(hash, "interface", pftInterface);
 hashAddInt(hash, "into", pftInto);
 hashAddInt(hash, "flow", pftFlow);
 hashAddInt(hash, "for", pftFor);
-hashAddInt(hash, "foreach", pftForeach);
 hashAddInt(hash, "of", pftOf);
 hashAddInt(hash, "nil", pftNil);
 hashAddInt(hash, "para", pftPara);
@@ -69,9 +70,8 @@ hashAddInt(hash, "polymorphic", pftPolymorphic);
 hashAddInt(hash, "return", pftReturn);
 hashAddInt(hash, "static", pftStatic);
 hashAddInt(hash, "to", pftTo);
-hashAddInt(hash, "while", pftWhile);
 hashAddInt(hash, "try", pftTry);
-hashAddInt(hash, "catch", pftCatch);
+hashAddInt(hash, "while", pftWhile);
 hashAddInt(hash, "_operator_", pftOperator);
 return hash;
 }

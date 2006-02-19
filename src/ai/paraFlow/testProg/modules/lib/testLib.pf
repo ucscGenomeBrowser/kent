@@ -33,7 +33,7 @@ array of string wilds = ("*", "?", "**", "??", "???????????", "*?????",
 	"test*", "best*", "tes*ng", "test*?g", "test*n?", "test**n",
 	"*ing", "???*ing", "t?s? s?r?n?", "test string", "widget",
 	"*est*????", "test******r???", "tes*t strin*g");
-foreach (string wild in wilds)
+for (wild in wilds)
     testMatch(wild, testString1);
 
 to testMatch(string wild, string s)
@@ -44,7 +44,7 @@ to testMatch(string wild, string s)
 string oopsie = "yabba dabba dabba doo";
 array of string subs = ("yabba", "dabba", "abba", "oo", " ");
 print(oopsie);
-foreach (string s in subs)
+for (s in subs)
     testSub(oopsie, s, "<deleted>");
     
 to testSub(string s, string oldString, string newString)

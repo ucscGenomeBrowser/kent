@@ -21,7 +21,7 @@ class lib
 	    {
 	    array of string envArray = getEnvArray();
 	    env = ();
-	    foreach (string s in envArray)
+	    for (s in envArray)
 		{
 		int eqPos = s.find("=");
 		string key = s.start(eqPos);
@@ -36,7 +36,7 @@ class lib
     to countChars(string s, byte c) into int count
     /* Count the number of times c is in s. */
         {
-	foreach (byte b in s)
+	for (b in s)
 	    if (c == b)
 	        count += 1;
 	}

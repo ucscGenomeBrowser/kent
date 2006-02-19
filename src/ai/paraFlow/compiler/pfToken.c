@@ -124,25 +124,27 @@ switch (type)
     case pftSys:             return "%.";
     case pftUser:            return "+.";
     case pftSysOrUser:       return "*.";
-    case pftClass: 	     return "pftClass";
-    case pftTo: 	     return "pftTo";
-    case pftPara: 	     return "pftPara";
-    case pftFlow: 	     return "pftFlow";
-    case pftInto: 	     return "pftInto";
-    case pftFor: 	     return "pftFor";
-    case pftForeach: 	     return "pftForeach";
-    case pftWhile: 	     return "pftWhile";
-    case pftOf: 	     return "pftOf";
-    case pftIf: 	     return "pftIf";
-    case pftElse: 	     return "pftElse";
     case pftBreak: 	     return "pftBreak";
+    case pftClass: 	     return "pftClass";
+    case pftCase:	     return "pftCase";
+    case pftCatch:	     return "pftCatch";
     case pftContinue: 	     return "pftContinue";
-    case pftReturn: 	     return "pftReturn";
+    case pftElse: 	     return "pftElse";
     case pftExtends: 	     return "pftExtends";
-    case pftPolymorphic:     return "pftPolymorphic";
-    case pftStatic:          return "pftStatic";
-    case pftNil:             return "pftNil";
+    case pftFor: 	     return "pftFor";
+    case pftFlow: 	     return "pftFlow";
     case pftInclude:         return "pftInclude";
+    case pftIf: 	     return "pftIf";
+    case pftInto: 	     return "pftInto";
+    case pftNil:             return "pftNil";
+    case pftOf: 	     return "pftOf";
+    case pftPara: 	     return "pftPara";
+    case pftPolymorphic:     return "pftPolymorphic";
+    case pftReturn: 	     return "pftReturn";
+    case pftStatic:          return "pftStatic";
+    case pftTo: 	     return "pftTo";
+    case pftTry:             return "pftTry";
+    case pftWhile: 	     return "pftWhile";
     default:
 	if (type < 256)
 	    {
