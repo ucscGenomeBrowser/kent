@@ -100,7 +100,15 @@ for (s = _pf_activation_stack; s != act; s = s->parent)
     struct _pf_localVarInfo *vars = ffi->vars;
     char *data = s->data;
     int i;
-    for (i=0; i<ffi->varCount; ++i)
+    int varCount = ffi->varCount;
+    if (ffi->classType >= 0)
+	{
+	/* For a class function (aka method) the self is
+	 * always the last variable.  We don't want to
+	 * clean it up, so take one off of varCount */
+	varCount -= 1;
+	}
+    for (i=0; i<varCount; ++i)
         {
 	struct _pf_localVarInfo *var = &vars[i];
 	struct _pf_type *varType = _pf_type_table[var->type];
@@ -110,8 +118,12 @@ for (s = _pf_activation_stack; s != act; s = s->parent)
 	    struct _pf_object **pObj = v;
 	    struct _pf_object *obj = *pObj;
 	    if (obj != NULL)
+		{
 		if (--obj->_pf_refCount == 0)
+		    {
 		    obj->_pf_cleanup(obj, var->type);
+		    }
+		}
 	    }
 	}
     }
