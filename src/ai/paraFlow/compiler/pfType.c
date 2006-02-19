@@ -2190,13 +2190,13 @@ switch (pp->type)
 	pfTypeOnTuple(pfc, pp);
 	break;
     case pptKeyVal:
-#ifdef OLD
-         pp->ty = typeFromChildren(pfc, pp, pfc->keyValType);
-#endif /* OLD */
          pp->ty = pp->children->next->ty; /* Get type from val of key/val */
 	 break;
     case pptConstUse:
         typeConstant(pfc, pp);
+	break;
+    case pptConstZero:
+        pp->ty = pfTypeNew(pfc->intType);
 	break;
     case pptDot:
 	typeDot(pfc,pp);

@@ -1,26 +1,48 @@
 
 
 to hardErr()
+/* Access undefined object to cause a hard error. */
     {
     string s;
     s[0] = 'H';
     }
 
-to softErr()
+to punt1()
     {
     punt("I'm not doing this for fun, but here goes.", "crashOut", 1);
     }
 
-to flakeOut()
+to punt0()
     {
     punt("I can't help it, I'm a failure.");
     }
 
-to doSomethingFlaky(string when)
+array of var of to () punters = (punt1, punt0, hardErr);
+
+to doSomethingFlaky(string when, var of to() punter)
     {
     foreach (i in 0 to 3)
-        print("So far so good...");
-    hardErr();
+        print("Testing " + i);
+    print("oh rats...");
+    punter();
+    }
+
+to flakarelli(int level)
+    {
+    int i = 0;
+    print("welcome to flakarelli level " + level);
+    foreach (v in punters)
+	{
+	try 
+	   {
+	   doSomethingFlaky("flaky test " + level, v);
+	   }
+	catch (m,s,level)
+	   {
+	   print("Caught punter " + i + ". I'm at level " + level);
+	   }
+	i += 1;
+	}
     }
 
 to doSomething()
@@ -29,7 +51,7 @@ to doSomething()
     int lev=2;
     try  // consider adding an optional time-out here.
 	{
-	doSomethingFlaky("now");
+	doSomethingFlaky("now", hardErr);
 	}
     catch (message,source,-1)
 	{
@@ -39,7 +61,19 @@ to doSomething()
 	}
     print("**********************");
     print("And again with no catch");
-    doSomethingFlaky("then");
+    doSomethingFlaky("then", hardErr);
     }
-doSomething();
-print("All done");
+
+flakarelli(-1);
+
+try
+   {
+   print("Bravely running away.");
+   punt("I just got scared");
+   }
+catch (m)
+   {
+   print("problem: " + m);
+   }
+
+
