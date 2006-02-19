@@ -210,7 +210,14 @@ switch (pp->type)
 	if (class != NULL)
 	    {
 	    struct pfType *classType = class->children->ty;
+	    struct pfBaseType *classBase = classType->base;
 	    pfScopeAddVar(pp->scope, "self", classType, class);
+	    if (pfBaseIsDerivedClass(classBase))
+	        {
+		struct pfBaseType *parentBase = classBase->parent;
+		pfScopeAddVar(pp->scope, "parent", pfTypeNew(parentBase), 
+			class);
+		}
 	    if (sameString(name->name, "init"))
 	        {
 		struct pfBaseType *classBase = classType->base;

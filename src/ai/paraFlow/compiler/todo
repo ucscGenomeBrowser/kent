@@ -1,13 +1,8 @@
 TO DO:
-  - Test exceptions in classes.  (Make sure they don't free up 
-    self!).
-  - Way to call parent methods in an object.  (An automatically
-    declared parent variable to go with the automatically declared
-    self variable.)
-  - Make para actions use p-threads.
   - ?Read-only and private variables.
         Make it so that class.new() is only legal way to
 	make something with private or read-only var.
+  - Make para actions use p-threads.
   - Implement case statement.
   - ?Create 'serial' function - that is gauranteed only to be 
     executed by one thread at a time.  Can be called from a flow.
@@ -18,6 +13,7 @@ TO DO:
     data on the expression stack.
   - ?Prevent memory leakage in expressions that don't get assigned to anything
     (including function calls).
+  - Prevent memory leak when casting string or object to bit.
 
 TO CONSIDER:
 
@@ -26,6 +22,11 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Way to call parent methods in an object.  (An automatically
+    declared parent variable to go with the automatically declared
+    self variable.)
+  - Test exceptions in classes.  (Make sure they don't free up 
+    self!).
   - Exceptions.
   - Make it for (el in collection) rather than foreach (el in collection).
     Distinguish from for ( ;; ) by presence of 'in'?

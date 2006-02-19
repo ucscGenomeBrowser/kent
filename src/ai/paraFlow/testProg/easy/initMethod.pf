@@ -14,6 +14,24 @@ class withInit
 	}
     }
 
+class extraInit extends withInit
+    {
+    int x;
+    to init(int x)
+        {
+	parent.init("extended", 0.666, 666);
+	}
+    to crash()
+        {
+	punt("bye now");
+	}
+    to setUpCrash(string s)
+        {
+	print("setting up crash");
+	crash();
+	}
+    }
+
 withInit a = ();
 print(a);
 withInit b = ("Harry", i:19);
@@ -29,3 +47,7 @@ class noInit
 noInit c = ();
 print(c);
 
+extraInit x = (3);
+print(x);
+try { x.setUpCrash("bugga!");}
+catch (m) print("caught " + m);

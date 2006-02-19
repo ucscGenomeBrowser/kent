@@ -109,6 +109,12 @@ if (class != NULL)
     struct pfVar *selfVar = pfScopeFindVar(funcDec->scope, "self");
     assert(selfVar != NULL);
     refAdd(&ctar->varRefList, selfVar);
+    if (pfBaseIsDerivedClass(class))
+        {
+	struct pfVar *parentVar = pfScopeFindVar(funcDec->scope, "parent");
+	assert(parentVar != NULL);
+	refAdd(&ctar->varRefList, parentVar);
+	}
     }
 slReverse(&ctar->varRefList);
 hashFree(&aliasHash);

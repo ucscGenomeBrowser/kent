@@ -20,8 +20,11 @@ while (parent != NULL && parent->name[0] != '<')
         {
 	if (sameString(m->fieldName, method->fieldName))
 	    {
-	    errAbort("%s defined in class %s and ancestor %s, but %s isn't polymorphic",
-	    	method->fieldName, class->name, parent->name, method->fieldName);
+	    if (!sameString(m->fieldName, "init"))
+		{
+		errAbort("%s defined in class %s and ancestor %s, but %s isn't polymorphic",
+		    method->fieldName, class->name, parent->name, method->fieldName);
+		}
 	    }
 	}
     parent = parent->parent;

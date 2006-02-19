@@ -2480,10 +2480,17 @@ if (body != NULL)
 	    codeParamAccess(pfc, f, class->ty->base, 0);
 	    fprintf(f, ";\n");
 	    inIx += 1;
+	    if (pfBaseIsDerivedClass(class->ty->base))
+		{
+		fprintf(f, "%sparent = ", localPrefix);
+		codeParamAccess(pfc, f, class->ty->base, 0);
+		fprintf(f, ";\n");
+		/* No +1 here, we just reuse self as parent. */
+		}
 	    }
 	for (in = inTuple->children; in != NULL; in = in->next)
 	    {
-	    fprintf(f, " %s%s = ", localPrefix, in->fieldName);
+	    fprintf(f, "%s%s = ", localPrefix, in->fieldName);
 	    codeParamAccess(pfc, f, in->base, inIx);
 	    fprintf(f, ";\n");
 	    inIx += 1;

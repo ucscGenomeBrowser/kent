@@ -50,6 +50,13 @@ ty->base = base;
 return ty;
 }
 
+boolean pfBaseIsDerivedClass(struct pfBaseType *base)
+/* Return TRUE if we have a parent class. */
+{
+struct pfBaseType *parentBase = base->parent;
+return (parentBase != NULL && parentBase->isClass);
+}
+
 boolean pfTypeSame(struct pfType *a, struct pfType *b)
 /* Return TRUE if a and b are same type logically */
 {
@@ -1556,6 +1563,53 @@ type->fieldName = funcPp->name;
 slAddHead(&class->methods, type);
 }
 
+static boolean rFindParentInit(struct pfParse *pp)
+/* Look for pptCall
+ *             pptDot
+ *                pptVarUse parent
+ *                pptFieldUse init
+ */
+{
+switch (pp->type)
+     {
+     case pptCall:
+	 {
+	 struct pfParse *dot = pp->children;
+	 if (dot->type == pptDot)
+	     {
+	     struct pfParse *var = dot->children;
+	     if (var->type == pptVarUse)
+	         {
+		 struct pfParse *field = var->next;
+		 if (field->type == pptFieldUse)
+		     {
+		     if (sameString(var->name, "parent") 
+		        && sameString(field->name, "init"))
+			 return TRUE;
+		     }
+		 }
+	     }
+         break;
+	 }
+     default:
+         break;
+     }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    if (rFindParentInit(pp))
+        return TRUE;
+return FALSE;
+}
+
+static void insureCallsParentInit(struct pfParse *initMethod,
+	struct pfBaseType *parent)
+{
+struct pfParse *parentInit = parent->initMethod;
+if (parentInit)
+    {
+    if (!rFindParentInit(initMethod))
+         errAt(initMethod->tok, "Need a call to parent init here.");
+    }
+}
 
 static void blessClassOrInterface(struct pfCompile *pfc, struct pfParse *pp, boolean isInterface)
 /* Make sure that there are only variable , class declarations and
@@ -1569,6 +1623,8 @@ struct pfBaseType *base = pfScopeFindType(pp->scope, pp->name);
 
 if (base == NULL)
     internalErrAt(pp->tok);
+if (pfBaseIsDerivedClass(base) && base->initMethod != NULL)
+    insureCallsParentInit(base->initMethod, base->parent);
 pp->ty = type->ty;
 p2p = &compound->children;
 for (p = compound->children; p != NULL; p = p->next)

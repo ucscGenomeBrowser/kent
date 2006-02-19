@@ -103,10 +103,15 @@ for (s = _pf_activation_stack; s != act; s = s->parent)
     int varCount = ffi->varCount;
     if (ffi->classType >= 0)
 	{
+	struct _pf_type *classType = _pf_type_table[ffi->classType];
 	/* For a class function (aka method) the self is
 	 * always the last variable.  We don't want to
 	 * clean it up, so take one off of varCount */
 	varCount -= 1;
+	if (classType->base->parent != NULL)
+	    {
+	    varCount -= 1;	/* Want to skip parent variable too. */
+	    }
 	}
     for (i=0; i<varCount; ++i)
         {

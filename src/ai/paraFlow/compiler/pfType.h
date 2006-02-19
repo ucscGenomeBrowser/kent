@@ -44,6 +44,9 @@ struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name,
 int pfBaseTypeCount();
 /* Return base type count. */
 
+boolean pfBaseIsDerivedClass(struct pfBaseType *base);
+/* Return TRUE if we have a parent class. */
+
 struct pfPolyFunRef
 /* A reference to a polymorphic function.  This helps
  * us sort out whether to use functions from the base
