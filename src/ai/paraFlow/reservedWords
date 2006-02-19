@@ -2,13 +2,16 @@ Here are the reserved words in ParaFlow.  Reserved words can't
 be used as variable, class, or function names.
 
 break - breaks out of a loop
+case - do one of a number of things depending on the value of an expression.
+       Serves same purpose as C switch, but syntax is cleaner.
+catch - catch an error.  See also try.  Note use punt instead of throw
+       to raise an error, but this is just a function, not a reserved word.
 class - definition of object type
 continue - skips to next iteration of loop
-else - execute following statement when if condition false
+else - execute following statement when if condition false or at end of case
 extends - specifies class heirarchy
 flow - data flow function definition
-for - C style for loop
-foreach - loop that iterates over all items in a collection
+for - loop - either for (el in collection) or for (;;) like C.
 if - execute following statement if condition is true
 in - used in para and foreach constructs.  "foreach (el in collection)"
 into - defines output, used in invocation of para functions
@@ -20,6 +23,7 @@ polymorphic - indicates that a class method can be overridden
 return - exit from a function
 static - makes local variable persist between calls to a function.
 to - start of function definition.  Links keys to values for dirs.
+try - surrounds a block of code that might encounter an error.
 while - loop as long as condition is true
 
 Some other words being considered to add to this list:

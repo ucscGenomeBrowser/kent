@@ -204,7 +204,7 @@ toyPoodle fifi = ("Fifi");
 array of animals pets = (fido, bruiser, rags, fifi)
 
 We could then ask each animal in the array to speak as so:
-     foreach animal a in pets
+     for (a in pets)
          a.speak()
 This would print the result:
      Fido says bark

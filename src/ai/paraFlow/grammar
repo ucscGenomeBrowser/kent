@@ -76,7 +76,7 @@ statement:  ';'
 	| ifStatement
 	| whileStatement
 	| forStatement
-	| foreachStatement
+	| forInStatement
 	| 'break' ';'	   # Only allowed inside of a loop
 	| 'continue' ';'   # Only allowed inside of a loop
 	| functionDef
@@ -104,7 +104,7 @@ whileStatement: 'while' '(' expression ')' statement
 
 forStatement: 'for' '(' expression ';' expression ';' expression')' statement
 
-foreachStatement: 'foreach' variableDef 'in' dottedName statement
+forInStatement: 'for' '(' NAME 'in' dottedName statement ')'
 
 parameterList: '(' ')'
 	| '(' variableDefList ')'

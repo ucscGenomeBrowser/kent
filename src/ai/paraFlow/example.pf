@@ -14,7 +14,7 @@ to printHello()
 to printWordLots(string word, int count)
 // Declaration with a couple of parameters, no return value.
     {
-    foreach (i in 0 to count)
+    for (i in 0 to count)
        prin(word + " ");	// prin does not print a line break.
     print("");
     }
@@ -24,7 +24,7 @@ to factorial(int n) into (float result)
 // Declaration with an integer parameter that returns floating point result
     {
     result = 1;
-    foreach (i in 2 to n+1)
+    for (i in 2 to n+1)
 	result *= i;    
     }
 
@@ -171,7 +171,7 @@ class hash implements collection
    // We use a simple but effective hash function, since 5 is coprime to 1024
        {
        result = 0
-       foreach c in name
+       for (c in name)
 	   {
            result *= 5;
 	   result += c;
@@ -191,7 +191,7 @@ class hash implements collection
   flow find(string name) into (class val)
   // Find element
       {
-      foreach el in buckets[func(name)]
+      for (el in buckets[func(name)])
 	  {
           if (el.name == name)
 	      {
