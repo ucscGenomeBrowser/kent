@@ -390,6 +390,8 @@ else
     for (;;)
         {
 	c = *pos++;
+	if (c == 0)
+	    break;
 	if (c == quoteC)
 	    {
 	    tkz->pos = pos;
