@@ -506,3 +506,102 @@ if (commas)
 else
     stack[0].String = _pf_string_new(buf, strlen(buf));
 }
+
+void _pf_string_substitute(_pf_Stack *stack)
+/* Create new string on top of stack based on all of the
+ * substitution parameters already on the stack.  The
+ * first param is the string with the $ signs. The rest
+ * of the parameters are strings  to substitute in, in the
+ * same order as the $'s in the first param.  */
+{
+_pf_String sourceString = stack[0].String;
+_pf_String destString = NULL;
+_pf_String varString;
+int varCount = 0, varIx = 0;
+int estimatedSize = 0;  /*  Estimate will be a little high. */
+int destSize = 0;
+char *destBuf;
+char *s, *e, *d, *sEnd;
+
+/* Count up number of substitutions, and estimate the resulting
+ * string size.  Make a buffer big enough to hold substituted result. */
+s = sourceString->s;
+e = s + sourceString->size;
+while (s < e)
+    {
+    if (s[0] == '$')
+        {
+	if (s[1] == '$')
+	    s += 1;
+	else
+	    {
+	    varCount += 1;
+	    varString = stack[varCount].String;
+	    estimatedSize += varString->size;
+	    }
+	}
+    s += 1;
+    }
+estimatedSize += sourceString->size;
+destBuf = needMem(estimatedSize+1);
+
+/* Loop through copying source with substitutions to dest. */
+s = sourceString->s;
+sEnd = s + sourceString->size;
+d = destBuf;
+while (s < sEnd)
+    {
+    char c = *s;
+    if (c == '$')
+        {
+	s += 1;
+	c = *s;
+	if (c == '$')
+	    {
+	    *d++ = '$';
+	    s += 1;
+	    }
+	else 
+	    {
+	    if (c == '(')
+		{
+		/* Skip to closing paren in s */
+		s = strchr(s, ')');
+		assert(s != NULL);
+		s += 1;
+		}
+	    else
+	        {
+		/* Skip to character after var name. */
+		while ((isalnum(c) || c == '_') && s < sEnd)
+		    {
+		    c = *(++s);
+		    }
+		}
+	    ++varIx;
+	    varString = stack[varIx].String;
+	    memcpy(d, varString->s, varString->size);
+	    d += varString->size;
+	    }
+	}
+    else
+        {
+	*d++ = c;
+	s += 1;
+	}
+    }
+assert(varIx == varCount);
+destSize = d - destBuf;
+
+/* Clean up all the input references on stack. */
+for (varIx=0; varIx <= varCount; ++varIx)  /* <= intentional here */
+    {
+    struct _pf_string *s = stack[varIx].String;
+    if (--s->_pf_refCount <= 0)
+	s->_pf_cleanup(s, 0);
+    }
+
+/* Create a string object to return and put it on stack. */
+stack[0].String = _pf_string_new(destBuf, destSize);
+freeMem(destBuf);
+}

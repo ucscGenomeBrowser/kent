@@ -69,8 +69,82 @@ int _pf_dir_size(struct _pf_dir *dir)
 return dir->hash->elCount;
 }
 
-struct _pf_dir *_pf_int_dir_from_tuple(_pf_Stack *stack, int count, int typeId,
-	int elTypeId)
+/* The next 7 functions are all of the form
+ *    _pf_XXX_dir from tuple
+ * where XXX is bit,byte,short,int,long,float,double
+ * They are virtually identical, and if I were clever
+ * I'd figure out a macro that could reduce them
+ * to one declaration and k macro uses. */
+
+struct _pf_dir *_pf_bit_dir_from_tuple(_pf_Stack *stack, int count, 
+	int typeId, int elTypeId)
+/* Return a directory of ints from a tuple of key/val pairs.  Note the count
+ * is twice the number of elements.  (It represents the number of items put
+ * on the stack, and we have one each for key and value. */
+{
+struct _pf_dir *dir = pfDirNew(0, _pf_type_table[elTypeId]);
+int i, elCount = (count>>1);
+struct hash *hash = dir->hash;
+
+for (i=0; i<elCount; ++i)
+    {
+    _pf_String key = stack[0].String;
+    _pf_Bit val = stack[1].Bit;
+    stack += 2;
+    hashAdd(hash, key->s, CloneVar(&val) );
+    if (--key->_pf_refCount <= 0)
+         key->_pf_cleanup(key, 0);
+    }
+return dir;
+}
+
+struct _pf_dir *_pf_byte_dir_from_tuple(_pf_Stack *stack, int count, 
+	int typeId, int elTypeId)
+/* Return a directory of ints from a tuple of key/val pairs.  Note the count
+ * is twice the number of elements.  (It represents the number of items put
+ * on the stack, and we have one each for key and value. */
+{
+struct _pf_dir *dir = pfDirNew(0, _pf_type_table[elTypeId]);
+int i, elCount = (count>>1);
+struct hash *hash = dir->hash;
+
+for (i=0; i<elCount; ++i)
+    {
+    _pf_String key = stack[0].String;
+    _pf_Byte val = stack[1].Byte;
+    stack += 2;
+    hashAdd(hash, key->s, CloneVar(&val) );
+    if (--key->_pf_refCount <= 0)
+         key->_pf_cleanup(key, 0);
+    }
+return dir;
+}
+
+struct _pf_dir *_pf_short_dir_from_tuple(_pf_Stack *stack, int count, 
+	int typeId, int elTypeId)
+/* Return a directory of ints from a tuple of key/val pairs.  Note the count
+ * is twice the number of elements.  (It represents the number of items put
+ * on the stack, and we have one each for key and value. */
+{
+struct _pf_dir *dir = pfDirNew(0, _pf_type_table[elTypeId]);
+int i, elCount = (count>>1);
+struct hash *hash = dir->hash;
+
+for (i=0; i<elCount; ++i)
+    {
+    _pf_String key = stack[0].String;
+    _pf_Short val = stack[1].Short;
+    stack += 2;
+    hashAdd(hash, key->s, CloneVar(&val) );
+    if (--key->_pf_refCount <= 0)
+         key->_pf_cleanup(key, 0);
+    }
+return dir;
+}
+
+
+struct _pf_dir *_pf_int_dir_from_tuple(_pf_Stack *stack, int count, 
+	int typeId, int elTypeId)
 /* Return a directory of ints from a tuple of key/val pairs.  Note the count
  * is twice the number of elements.  (It represents the number of items put
  * on the stack, and we have one each for key and value. */
@@ -90,6 +164,76 @@ for (i=0; i<elCount; ++i)
     }
 return dir;
 }
+
+struct _pf_dir *_pf_long_dir_from_tuple(_pf_Stack *stack, int count, 
+	int typeId, int elTypeId)
+/* Return a directory of ints from a tuple of key/val pairs.  Note the count
+ * is twice the number of elements.  (It represents the number of items put
+ * on the stack, and we have one each for key and value. */
+{
+struct _pf_dir *dir = pfDirNew(0, _pf_type_table[elTypeId]);
+int i, elCount = (count>>1);
+struct hash *hash = dir->hash;
+
+for (i=0; i<elCount; ++i)
+    {
+    _pf_String key = stack[0].String;
+    _pf_Long val = stack[1].Long;
+    stack += 2;
+    hashAdd(hash, key->s, CloneVar(&val) );
+    if (--key->_pf_refCount <= 0)
+         key->_pf_cleanup(key, 0);
+    }
+return dir;
+}
+
+struct _pf_dir *_pf_float_dir_from_tuple(_pf_Stack *stack, int count, 
+	int typeId, int elTypeId)
+/* Return a directory of ints from a tuple of key/val pairs.  Note the count
+ * is twice the number of elements.  (It represents the number of items put
+ * on the stack, and we have one each for key and value. */
+{
+struct _pf_dir *dir = pfDirNew(0, _pf_type_table[elTypeId]);
+int i, elCount = (count>>1);
+struct hash *hash = dir->hash;
+
+for (i=0; i<elCount; ++i)
+    {
+    _pf_String key = stack[0].String;
+    _pf_Float val = stack[1].Float;
+    stack += 2;
+    hashAdd(hash, key->s, CloneVar(&val) );
+    if (--key->_pf_refCount <= 0)
+         key->_pf_cleanup(key, 0);
+    }
+return dir;
+}
+
+struct _pf_dir *_pf_double_dir_from_tuple(_pf_Stack *stack, int count, 
+	int typeId, int elTypeId)
+/* Return a directory of ints from a tuple of key/val pairs.  Note the count
+ * is twice the number of elements.  (It represents the number of items put
+ * on the stack, and we have one each for key and value. */
+{
+struct _pf_dir *dir = pfDirNew(0, _pf_type_table[elTypeId]);
+int i, elCount = (count>>1);
+struct hash *hash = dir->hash;
+
+for (i=0; i<elCount; ++i)
+    {
+    _pf_String key = stack[0].String;
+    _pf_Double val = stack[1].Double;
+    stack += 2;
+    hashAdd(hash, key->s, CloneVar(&val) );
+    if (--key->_pf_refCount <= 0)
+         key->_pf_cleanup(key, 0);
+    }
+return dir;
+}
+
+
+/* Done with the block of 7 nearly identical functions.
+ * Try to get your eyes to unglaze now.... */
 
 struct _pf_dir *_pf_string_dir_from_tuple(_pf_Stack *stack, int count, int typeId,
 	int elTypeId)

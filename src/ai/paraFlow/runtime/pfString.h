@@ -14,6 +14,13 @@ struct _pf_string *_pf_string_from_const(char *s);
 struct _pf_string *_pf_string_cat(_pf_Stack *stack, int count);
 /* Create new string that's a concatenation of the above strings. */
 
+void _pf_string_substitute(_pf_Stack *stack);
+/* Create new string on top of stack based on all of the
+ * substitution parameters already on the stack.  The
+ * first param is the string with the $ signs. The rest
+ * of the parameters are strings  to substitute in, in the
+ * same order as the $'s in the first param.  */
+
 struct _pf_string *_pf_string_from_long(_pf_Long ll);
 /* Wrap string around Long. */
 
@@ -51,5 +58,6 @@ int _pf_strcmp(_pf_Stack *stack);
 /* Return comparison between strings.  Cleans them off
  * of stack.  Does not put result on stack because
  * the code generator may use it in different ways. */
+
 
 #endif /* PFSTRING_H */
