@@ -156,6 +156,7 @@ switch (tok->type)
     case pftFloat:
 	return pptConstDouble;
     case pftString:
+    case pftSubstitute:
 	return pptConstString;
     case pftNil:
         return pptConstZero;
@@ -163,6 +164,16 @@ switch (tok->type)
 	internalErrAt(tok);
 	return 0;
     }
+}
+
+static struct pfVar *findVar(struct pfScope *scope, char *name, 
+	struct pfToken *tok)
+/* Find variable in scope or abort with error message. */
+{
+struct pfVar *var = pfScopeFindVar(scope, name);
+if (var == NULL)
+    errAt(tok, "%s is undefined.", name);
+return var;
 }
 
 static boolean isNumerical(struct pfCompile *pfc, struct pfParse *pp)
@@ -314,8 +325,6 @@ static void coerceToDouble(struct pfCompile *pfc, struct pfParse **pPp)
 {
 coerceToBaseType(pfc, pfc->doubleType, pPp);
 }
-
-
 
 boolean pfTypesAllSame(struct pfType *aList, struct pfType *bList)
 /* Return TRUE if all elements of aList and bList have the same
@@ -1184,7 +1193,7 @@ struct pfParse *el = *pPp;
 struct pfParse *collection = el->parent->children;
 struct pfParse *type = pfParseNew(pptTypeName, el->tok, el, el->scope);
 struct pfParse *sym = pfParseNew(pptSymName, el->tok, el, el->scope);
-struct pfVar *var = pfScopeFindVar(el->scope, el->name);
+struct pfVar *var = findVar(el->scope, el->name, el->tok);
 struct pfType *ty;
 if (collection->type == pptCall || collection->type == pptIndirectCall)
     {
@@ -1684,7 +1693,7 @@ static void typeConstant(struct pfCompile *pfc, struct pfParse *pp)
 /* Create type for constant. */
 {
 struct pfToken *tok = pp->tok;
-if (tok->type == pftString)
+if (tok->type == pftString || tok->type == pftSubstitute)
     pp->ty = pfTypeNew(pfc->stringType);
 else if (tok->type == pftInt)
     pp->ty = pfTypeNew(pfc->intType);
@@ -1808,15 +1817,35 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     markUsedVars(scope, hash, pp);
 }
 
+static struct pfParse *makeVarUse(char *name, struct pfScope *scope,
+	struct pfToken *tok, struct pfParse *parent)
+{
+struct pfParse *pp = pfParseNew(pptVarUse,  tok, parent, scope);
+struct pfVar *var = findVar(scope, name, tok);
+pp->var = var;
+pp->ty = var->ty;
+pp->name = var->name;
+return pp;
+}
+
+static struct pfParse *makeSelfVarUse(struct pfBaseType *class, 
+	struct pfScope *scope, struct pfParse *parent, struct pfToken *tok)
+/* Create a parse node for class self variable inside a method. */
+{
+return makeVarUse("self", scope, tok, parent);
+}
+
+#ifdef OLD
 static struct pfParse *makeSelfVarUse(struct pfBaseType *class, 
 	struct pfScope *scope, struct pfParse *parent, struct pfToken *tok)
 /* Create a parse node for class self variable inside a method. */
 {
 struct pfParse *pp = pfParseNew(pptVarUse,  tok, parent, scope);
 pp->ty = pfTypeNew(class);
-pp->var = pfScopeFindVar(scope, "self");
+pp->var = findVar(scope, "self", tok);
 return pp;
 }
+#endif /* OLD */
 
 static void addDotSelf(struct pfParse **pPp, struct pfBaseType *class)
 /* Add self. in front of a method or member access, positioning the
@@ -2117,6 +2146,77 @@ switch (parent->type)
     }
 }
 
+void coerceSubstitute(struct pfCompile *pfc, struct pfParse **pPp)
+/* Deal with strings with embedded variables, as in
+*  "Hello $name!".  The parse tree on the way in looks like:
+*      pptConstString 
+*   On the way out it looks like
+*      pptSubstitute
+*         pptConstString
+*         pptTuple
+*            pptVarUse(s)  
+*/
+{
+/* Get all of the parse nodes except for the varUses. */
+struct pfParse *con = *pPp;
+struct pfToken *tok = con->tok;
+struct pfScope *scope = con->scope;
+struct pfParse *sub = pfParseNew(pptSubstitute, tok, con->parent, scope);
+struct pfParse *tuple = pfParseNew(pptTuple, tok, sub, scope);
+struct pfParse *varList = NULL, *varPp;
+char *s;
+
+/* Put the parse tree together except, again, for the varUses. */
+sub->ty = con->ty;
+*pPp = sub;
+sub->next = con->next;
+con->parent = sub;
+sub->children = con;
+con->next = tuple;
+
+/* Now loop through the actual string, looking for $'s and generating
+ * varUses where you find them. */
+for (s = strchr(tok->val.s, '$'); s != NULL; s = strchr(s, '$') )
+    {
+    char *e, c;
+    char *varName;
+    s += 1;
+    e = s;
+    c = *e;
+    if (c == '(')
+        {
+	s += 1;
+	e = strchr(e, ')');
+	if (e == NULL)
+	    errAt(tok, "Missing closing parenthesis after $(");
+	}
+    else if (c == '$')
+        {
+	s += 1;
+	continue;	/* A $$ is just converted to $. */
+	}
+    else
+        {
+	if (!isalpha(c) && c != '_')
+	    errAt(tok, "Must have a variable name after $");
+	while (isalnum(c) || c == '_')
+	    c = *(++e);
+	}
+    varName = cloneStringZ(s, e-s);
+    varPp = makeVarUse(varName, scope, tok, tuple);
+    if (varPp->var->ty->base != pfc->stringType)
+	coerceOne(pfc, &varPp, pfTypeNew(pfc->stringType), TRUE);
+    slAddHead(&varList, varPp);
+
+    freez(&varName);
+    }
+slReverse(&varList);
+
+/* Finally attatch vars to parse tree. */
+tuple->children = varList;
+pfTypeOnTuple(pfc, tuple);
+}
+
 void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
@@ -2250,6 +2350,8 @@ switch (pp->type)
 	 break;
     case pptConstUse:
         typeConstant(pfc, pp);
+	if (pp->tok->type == pftSubstitute)
+	   coerceSubstitute(pfc, pPp);
 	break;
     case pptConstZero:
         pp->ty = pfTypeNew(pfc->intType);

@@ -1,4 +1,6 @@
 TO DO:
+  - Allow variable substitutions in constant strings.  Things like
+       print("Hello $name, are you $(verb)ing now?");
   - ?Read-only and private variables.
         Make it so that class.new() is only legal way to
 	make something with private or read-only var.

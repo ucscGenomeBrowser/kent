@@ -102,6 +102,7 @@ switch (type)
     case pftComment: return "pftComment";
     case pftName: return "pftName";
     case pftString: return "pftString";
+    case pftSubstitute: return "pftSubstitute";
     case pftInt: return "pftInt";
     case pftFloat: return "pftFloat";
     case pftDotDotDot:    return "...";
@@ -338,16 +339,20 @@ switch (inchar = *in_str++)
 return outchar;
 }
 
-static void finishQuote(struct pfTokenizer *tkz, struct pfToken *tok)
+static void finishQuote(struct pfTokenizer *tkz, struct pfToken *tok,
+	boolean isSubstitute)
 /* Finish up a quoted string */
 {
-tok->type = pftString;
+if (!isSubstitute || strchr(tkz->dy->string, '$') == NULL)
+    tok->type = pftString;
+else
+    tok->type = pftSubstitute;
 tok->val.s = hashStoreName(tkz->strings, tkz->dy->string);
 tok->textSize = tkz->pos - tok->text;
 }
 
 static void tokMultiLineQuote(struct pfTokenizer *tkz, struct pfToken *tok,
-	char *endSym, boolean addLf)
+	char *endSym, boolean addLf, boolean isSubstitute)
 /* Do multiple line quote.  There is no escaping in these. */
 {
 int endSymSize = strlen(endSym);
@@ -360,14 +365,14 @@ if (pos != NULL)
     if (addLf)
         dyStringAppendC(tkz->dy, '\n');
     tkz->pos = pos + endSymSize;
-    finishQuote(tkz, tok);
+    finishQuote(tkz, tok, isSubstitute);
     }
 else
     errAt(tok, "Unterminated line quote.");
 }
 
 static void tokString(struct pfTokenizer *tkz, struct pfToken *tok,
-	char quoteC)
+	char quoteC, boolean isSubstitute)
 /* Create token up to end quote.  If quote is immediately
  * followed by a newline (or whitespace/newline) then
  * treat quote as line oriented. */
@@ -382,7 +387,7 @@ if (nextLine != NULL)
     endSym[1] = quoteC;
     endSym[2] = 0;
     tkz->pos = nextLine;
-    tokMultiLineQuote(tkz, tok, endSym, TRUE);
+    tokMultiLineQuote(tkz, tok, endSym, TRUE, isSubstitute);
     }
 else
     {
@@ -395,7 +400,7 @@ else
 	if (c == quoteC)
 	    {
 	    tkz->pos = pos;
-	    finishQuote(tkz, tok);
+	    finishQuote(tkz, tok, isSubstitute);
 	    return;
 	    }
 	if (c == '\\')
@@ -433,22 +438,24 @@ static void tokNameOrComplexQuote(struct pfTokenizer *tkz,
  * special delimited quotation handler. */
 {
 char *pos = tkz->pos;
+struct dyString *dy = tkz->dy;
 char c;
 
-dyStringClear(tkz->dy);
+dyStringClear(dy);
 for (;;)
     {
     c = *pos;
     if (c != '_' && !isalnum(c))
         break;
-    dyStringAppendC(tkz->dy, c);
+    dyStringAppendC(dy, c);
     pos += 1;
     }
 tkz->pos = pos;
 
-if (sameString(tkz->dy->string, "quote"))
+if (sameString(dy->string, "quote") || sameString(dy->string, "quot"))
     {
-    struct dyString *dy = dyStringNew(0);
+    boolean isSubstitute = sameString(dy->string, "quote");
+    struct dyString *q = dyStringNew(0);
     skipWhiteSpace(tkz);  /* Skip spaces between "quote" and "to". */
     pos = tkz->pos;
     if (!(pos[0] == 't' && pos[1] == 'o' 
@@ -457,25 +464,25 @@ if (sameString(tkz->dy->string, "quote"))
     tkz->pos = pos + 2;
     skipWhiteSpace(tkz); /* Skip spaces between "to" and marker. */
     pos = tkz->pos;
-    dyStringClear(dy);
+    dyStringClear(q);
     for (;;)
         {
 	c = *pos++;
 	if (isspace(c))
 	    break;
-	dyStringAppendC(dy, c);
+	dyStringAppendC(q, c);
 	}
     tkz->pos = pos;
-    if (dy->stringSize < 1)
+    if (q->stringSize < 1)
 	errAt(tok, "quote without delimator string");
-    dyStringClear(tkz->dy);
-    tokMultiLineQuote(tkz, tok, dy->string, FALSE);
-    dyStringFree(&dy);
+    dyStringClear(dy);
+    tokMultiLineQuote(tkz, tok, q->string, FALSE, isSubstitute);
+    dyStringFree(&q);
     }
 else
     {
     tok->type = pftName;
-    tok->val.s = hashStoreName(tkz->symbols, tkz->dy->string);
+    tok->val.s = hashStoreName(tkz->symbols, dy->string);
     }
 tok->textSize = tkz->pos - tok->text;
 }
@@ -583,6 +590,35 @@ tok->textSize = pos - tkz->pos;
 tkz->pos = pos;
 }
 
+static void tokBinaryNumber(struct pfTokenizer *tkz, struct pfToken *tok)
+/* Skip 0b, and suck up binary digits. */
+{
+char *pos = tkz->pos + 2;
+unsigned long long l = 0;
+int v;
+char c;
+
+for (;;)
+   {
+   c = *pos;
+   switch (c)
+       {
+       case '0':
+           v = 0; break;
+       case '1':
+           v = 1; break;
+       default:
+	   tok->val.i = l;
+	   tok->type = pftInt;
+	   tkz->pos = pos;
+	   return;
+       }
+    l <<= 1;
+    l += v;
+    pos += 1;
+    }
+}
+
 static void tokHexNumber(struct pfTokenizer *tkz, struct pfToken *tok)
 /* Skip 0x, and suck up hex digits. */
 {
@@ -648,6 +684,7 @@ for (;;)
 
 
 
+
 struct pfToken *pfTokenizerNext(struct pfTokenizer *tkz)
 /* Puts next token in token.  Returns token type. For single
  * character tokens, token type is just the char value,
@@ -693,10 +730,10 @@ tok->text = tkz->pos;
 switch (c)
     {
     case '\'':
-        tokLiteralChar(tkz, tok, c);
+        tokString(tkz, tok, c, FALSE);
 	break;
     case '"':
-	tokString(tkz, tok, c);
+	tokString(tkz, tok, c, TRUE);
 	break;
     case '/':
 	if (c2 == '=')
@@ -845,6 +882,8 @@ switch (c)
     case '0':
 	if (c2 == 'x')
 	    tokHexNumber(tkz, tok);
+	else if (c2 == 'b')
+	    tokBinaryNumber(tkz, tok);
 	else
 	    tokNumber(tkz, tok, c);
 	break;
@@ -900,6 +939,7 @@ switch (tok->type)
 	fprintf(f, "%s", tok->val.s);
 	break;
     case pftString:
+    case pftSubstitute:
 	fprintf(f, "\"%s\"", tok->val.s);
 	break;
     case pftLong:

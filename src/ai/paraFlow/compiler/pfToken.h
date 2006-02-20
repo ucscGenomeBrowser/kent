@@ -18,7 +18,8 @@ enum pfTokType
     pftWhitespace,
     pftComment,
     pftName,
-    pftString,
+    pftString,		/* Single quoted string */
+    pftSubstitute,	/* Double quoted string */
     pftInt,
     pftLong,
     pftFloat,

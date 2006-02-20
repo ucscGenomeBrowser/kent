@@ -206,6 +206,8 @@ switch (type)
 	return "pptTry";
     case pptCatch:
 	return "pptCatch";
+    case pptSubstitute:
+        return "pptSubstitute";
 
     case pptCastBitToBit:
         return "pptCastBitToBit";
@@ -358,6 +360,7 @@ static void pfDumpConst(struct pfToken *tok, FILE *f)
 switch (tok->type)
     {
     case pftString:
+    case pftSubstitute:
 	{
 	#define MAXLEN 32
 	char buf[MAXLEN+4];
@@ -415,6 +418,7 @@ switch (pp->type)
     case pptConstDouble:
     case pptConstString:
     case pptConstZero:
+    case pptSubstitute:
 	fprintf(f, " ");
 	pfDumpConst(pp->tok, f);
 	break;
@@ -698,6 +702,7 @@ switch (tok->type)
 	pp = parseNameUse(parent, &tok, scope);
         break;
     case pftString:
+    case pftSubstitute:
     case pftInt:
     case pftLong:
     case pftFloat:

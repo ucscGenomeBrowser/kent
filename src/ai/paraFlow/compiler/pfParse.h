@@ -107,6 +107,7 @@ enum pfParseType
     pptKeyName,
     pptTry,
     pptCatch,
+    pptSubstitute,
 
     /* Note the casts must be in this order relative to pptCastBitToBit */
     pptCastBitToBit,	/* Never emitted. */

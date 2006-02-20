@@ -181,7 +181,6 @@ else
 	dyStringAppend(name, globalPrefix);
     dyStringAppend(name, var->cName);
     }
-// uglyf("var %s, moduleScope %d, name %s\n", var->name, var->scope->isModule, name->string);
 return name;
 }
 
@@ -1994,7 +1993,7 @@ switch (pp->type)
 	}
     case pptConstString:
         {
-	assert(pp->tok->type == pftString);
+	assert(pp->tok->type == pftString || pp->tok->type == pftSubstitute);
 	codeParamAccess(pfc, f, pp->ty->base, stack);
 	fprintf(f, " = _pf_string_from_const(");
 	printEscapedString(f, pp->tok->val.s);
@@ -2013,6 +2012,16 @@ switch (pp->type)
 	    codeParamAccess(pfc, f, pp->ty->base, stack);
 	    fprintf(f, " = 0;\n");
 	    }
+	return 1;
+	}
+    case pptSubstitute:
+        {
+	struct pfParse *source = pp->children;
+	struct pfParse *varTuple = source->next;
+	int offset;
+	offset = codeExpression(pfc, f, source, stack, TRUE);
+	codeExpression(pfc, f, varTuple, stack+offset, TRUE);
+	fprintf(f, "_pf_string_substitute(%s+%d);\n", stackName, stack);
 	return 1;
 	}
     case pptStringCat:
@@ -2260,7 +2269,6 @@ struct dyString *messageVarName = varName(pfc, messageVar->var);
 struct dyString *sourceVarName = varName(pfc, sourceVar->var);
 struct dyString *levelVarName = varName(pfc, levelVar->var);
 
-fprintf(f, "/* Start of try/catch - ugly */\n");
 fprintf(f, "{\n");
 if (!pfc->isFunc)
     fprintf(f, "int pf_catchLevel;\n");
@@ -2296,7 +2304,6 @@ fprintf(f, "  /* catch block should end here. */\n");
 fprintf(f, "}\n");
 fprintf(f, "_pf_err_catch_free(&_pf_err);\n");
 fprintf(f, "}\n");
-fprintf(f, "/* End of try/catch - ugly */\n");
 dyStringFree(&levelVarName);
 dyStringFree(&sourceVarName);
 dyStringFree(&messageVarName);
