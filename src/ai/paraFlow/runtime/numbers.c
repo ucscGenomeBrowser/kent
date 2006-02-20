@@ -12,7 +12,7 @@ srand(clock1000());
 rand();
 }
 
-void pf_randNum(_pf_Stack *stack)
+void pf_random(_pf_Stack *stack)
 /* Return random number between 0 and 1 */
 {
 static double scale = 1.0/RAND_MAX;
