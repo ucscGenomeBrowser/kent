@@ -20,7 +20,9 @@ char *functionStrings[] = {
 "cds-reference",
 };
 
-static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.1 2006/02/18 01:14:11 heather Exp $";
+boolean functionFound[ArraySize(functionStrings)];
+
+static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.2 2006/02/20 19:53:18 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -33,6 +35,26 @@ errAbort(
     "    snpContigLocusIdCondense snpDb\n");
 }
 
+void initArray()
+{
+int i;
+for (i=0; i<ArraySize(functionStrings); i++)
+    functionFound[i] = FALSE;
+}
+
+void printArray(FILE *f)
+{
+int i;
+boolean first = TRUE;
+for (i=0; i<ArraySize(functionStrings); i++)
+    if (functionFound[i])
+        {
+        if (!first) fprintf(f, ",");
+        fprintf(f, "%d", i);
+	first = FALSE;
+	}
+fprintf(f, "\n");
+}
 
 void condenseFunctionValues()
 /* combine function values for single snp */
@@ -51,6 +73,7 @@ f = hgCreateTabFile(".", "ContigLocusIdCondense");
 
 safef(query, sizeof(query), "select snp_id, fxn_class from ContigLocusIdFilter");
 
+initArray();
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -58,15 +81,12 @@ while ((row = sqlNextRow(sr)) != NULL)
         currentSnp = cloneString(row[0]);
     if (!sameString(row[0], currentSnp))
         {
-	finalString = cloneString(functionList->string);
-	len = strlen(finalString);
-	finalString[len] = '\0';
-	fprintf(f, "%s\t%s\n", currentSnp, finalString);
+	fprintf(f, "%s\t", currentSnp);
+	printArray(f);
+	initArray();
 	currentSnp = cloneString(row[0]);
-	dyStringResize(functionList, 0);
 	}
-    dyStringAppend(functionList, row[1]);
-    dyStringAppend(functionList, ",");
+    functionFound[sqlUnsigned(row[1])] = TRUE;
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
