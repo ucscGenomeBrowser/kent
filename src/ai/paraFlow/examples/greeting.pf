@@ -1,0 +1,3 @@
+print("What is your name?");
+string name = lineIn();
+print("Hello " + name + "!");
