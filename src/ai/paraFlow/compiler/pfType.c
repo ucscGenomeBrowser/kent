@@ -2171,6 +2171,29 @@ if (left->type == pptTuple && right->type == pptTuple)
     }
 }
 
+static struct pfType *makeCompatableCollection(struct pfCompile *pfc, 
+	struct pfParse *coll, struct pfType *elType)
+/* Return a copy of collection type in most situations.  If collection
+ * is a range or a function call though return an array instead. */
+{
+struct pfBaseType *base;
+struct pfType *ty;
+switch (coll->type)
+    {
+    case pptIndexRange:
+    case pptCall:
+    case pptIndirectCall:
+        base = pfc->arrayType;
+	break;
+    default:
+        base = coll->ty->base;
+	break;
+    }
+ty = pfTypeNew(base);
+ty->children = elType;
+return ty;
+}
+
 static void checkPara(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check one of the para invocation type nodes. */
 {
@@ -2216,16 +2239,20 @@ switch (pp->type)
 	}
     case pptParaGet:
         {
-	struct pfType *ty = pfTypeNew(collection->ty->base);
-	ty->children = body->ty;
-	pp->ty = ty;
+	pp->ty = makeCompatableCollection(pfc, collection, body->ty);
 	break;
 	}
     case pptParaFilter:
 	{
 	struct pfParse **pBody = &el->next;
+	enum pfParseType collType = collection->type;
+	struct pfType *elTy;
         coerceToBit(pfc, pBody);
-	pp->ty = CloneVar(collection->ty);
+	if (collType == pptIndexRange)
+	    elTy = pfTypeNew(pfc->intType);
+	else
+	    elTy = collection->ty->children;
+	pp->ty = makeCompatableCollection(pfc, collection, elTy);
 	break;
 	}
     }

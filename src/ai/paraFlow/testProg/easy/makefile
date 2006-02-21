@@ -78,6 +78,8 @@ test:
 	diff expected/paraMin $O/paraMin
 	paraFlow paraMultiply.pf > $O/paraMultiply
 	diff expected/paraMultiply $O/paraMultiply
+	paraFlow paraOnRange.pf > $O/paraOnRange
+	diff expected/paraOnRange $O/paraOnRange
 	paraFlow parenAndMinus.pf > $O/parenAndMinus
 	diff expected/parenAndMinus $O/parenAndMinus
 	paraFlow polymorphic.pf > $O/polymorphic

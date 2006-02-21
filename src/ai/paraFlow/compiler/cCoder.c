@@ -737,6 +737,31 @@ fprintf(f, "/* End %s */\n", pfParseTypeAsString(para->type));
 return 1;
 }
 
+static void codeRunTimeError(FILE *f, struct pfParse *pp, char *message)
+/* Print code for a run time error message. */
+{
+char *file;
+struct pfToken *tok = pp->tok;
+int line, col;
+pfSourcePos(tok->source, tok->text, &file, &line, &col);
+fprintf(f, "_pf_run_err(\"Run time error line %d col %d of %s: %s\");\n", 
+	line+1, col+1, file, message);
+}
+
+static void codeUseOfNil(FILE *f, struct pfParse *pp)
+/* Print code for use of nil message. */
+{
+codeRunTimeError(f, pp, "using uninitialized variable");
+}
+
+static void codeNilCheck(FILE *f, struct pfParse *pp, int stack)
+/* Print code to check stack for nil. */
+{
+fprintf(f, "if (%s[%d].v == 0) ", stackName, stack);
+codeUseOfNil(f, pp);
+}
+
+
 static int codeParaGet(struct pfCompile *pfc, FILE *f,
 	struct pfParse *para, int stack)
 /* Generate code for a para get expression */
@@ -749,17 +774,38 @@ struct pfBaseType *collectBase = collection->ty->base;
 fprintf(f, "/* start para get */\n");
 fprintf(f, "{\n");
 
-if (collectBase == pfc->arrayType)
+if (collectBase == pfc->arrayType || collectBase == pfc->indexRangeType)
     {
-    fprintf(f, "int _pf_resElSize, _pf_resOffset = 0;\n");
-    fprintf(f, "_pf_Array _pf_coll, _pf_result;\n");
-    codeExpression(pfc, f, collection, stack, FALSE);
-    fprintf(f, "_pf_coll = ");
-    codeParamAccess(pfc, f, collectBase, stack);
-    fprintf(f, ";\n");
-    fprintf(f, "_pf_result = _pf_dim_array(_pf_coll->size, ");
-    codeForType(pfc, f, expression->ty);
-    fprintf(f, ");\n");
+    if (collectBase == pfc->arrayType)
+	{
+	fprintf(f, "int _pf_resElSize, _pf_resOffset = 0;\n");
+	fprintf(f, "_pf_Array _pf_coll, _pf_result;\n");
+	codeExpression(pfc, f, collection, stack, FALSE);
+	fprintf(f, "_pf_coll = ");
+	codeParamAccess(pfc, f, collectBase, stack);
+	fprintf(f, ";\n");
+	fprintf(f, "_pf_result = _pf_dim_array(_pf_coll->size, ");
+	codeForType(pfc, f, expression->ty);
+	fprintf(f, ");\n");
+	}
+    else
+	{
+	struct pfParse *startPp = collection->children;
+	struct pfParse *endPp = startPp->next;
+	fprintf(f, "int _pf_resElSize, _pf_resOffset = 0;\n");
+	fprintf(f, "long _pf_start, _pf_end, _pf_size;\n");
+	fprintf(f, "_pf_Array _pf_result;\n");
+	codeExpression(pfc, f, startPp, stack, FALSE);
+	fprintf(f, "_pf_start = %s[%d].Long;\n", stackName, stack);
+	codeExpression(pfc, f, endPp, stack, FALSE);
+	fprintf(f, "_pf_end = %s[%d].Long;\n", stackName, stack);
+	fprintf(f, "_pf_size = _pf_end - _pf_start;\n");
+	fprintf(f, "if (_pf_size <= 0)\n");
+	codeRunTimeError(f, collection, "no items in range");
+	fprintf(f, "_pf_result = _pf_dim_array(_pf_size, ");
+	codeForType(pfc, f, expression->ty);
+	fprintf(f, ");\n");
+	}
     fprintf(f, "_pf_resElSize = _pf_result->elSize;\n");
     startElInCollectionIteration(pfc, f, stack, para->scope, element, 
     	collection, FALSE);
@@ -770,7 +816,6 @@ if (collectBase == pfc->arrayType)
     codeParamAccess(pfc, f, expression->ty->base, stack);
     fprintf(f, ";\n");
     fprintf(f, "_pf_resOffset += _pf_resElSize;\n");
-
     endElInCollectionIteration(pfc, f, para->scope, element, 
     	collection, FALSE);
     }
@@ -920,30 +965,6 @@ fprintf(f, "}\n");
 fprintf(f, "/* end para filter */\n");
 dyStringFree(&elName);
 return 1;
-}
-
-static void codeRunTimeError(FILE *f, struct pfParse *pp, char *message)
-/* Print code for a run time error message. */
-{
-char *file;
-struct pfToken *tok = pp->tok;
-int line, col;
-pfSourcePos(tok->source, tok->text, &file, &line, &col);
-fprintf(f, "_pf_run_err(\"Run time error line %d col %d of %s: %s\");\n", 
-	line+1, col+1, file, message);
-}
-
-static void codeUseOfNil(FILE *f, struct pfParse *pp)
-/* Print code for use of nil message. */
-{
-codeRunTimeError(f, pp, "using uninitialized variable");
-}
-
-static void codeNilCheck(FILE *f, struct pfParse *pp, int stack)
-/* Print code to check stack for nil. */
-{
-fprintf(f, "if (%s[%d].v == 0) ", stackName, stack);
-codeUseOfNil(f, pp);
 }
 
 static void startCleanTemp(FILE *f)
