@@ -2,7 +2,7 @@
 
 #include "common.h"
 #include "hash.h"
-#include "errAbort.h"
+#include "errabort.h"
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 #include "print.h"
