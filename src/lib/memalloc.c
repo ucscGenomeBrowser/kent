@@ -9,10 +9,11 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+#include "obscure.h"
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.27 2005/12/05 22:22:02 kent Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.28 2006/02/21 22:09:01 hiram Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -291,7 +292,14 @@ size_t newAlloced = size + carefulAlloced;
 size_t aliSize;
 
 if (newAlloced > carefulMaxToAlloc)
-    errAbort("Allocated too much memory - more than %llu bytes (%llu)", (unsigned long long)carefulMaxToAlloc, (unsigned long long)newAlloced);
+    {
+    char maxAlloc[32];
+    char allocRequest[32];
+    sprintLongWithCommas(maxAlloc, (long long)carefulMaxToAlloc);
+    sprintLongWithCommas(allocRequest, (long long)newAlloced);
+    errAbort("Allocated too much memory - more than %s bytes (%s)",
+	maxAlloc, allocRequest);
+    }
 carefulAlloced = newAlloced;
 aliSize = ((size + sizeof(*cmb) + 4 + carefulAlignAdd)&carefulAlignMask);
 cmb = carefulParent->alloc(aliSize);
