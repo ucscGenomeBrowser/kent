@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.74 2006/01/09 22:04:20 heather Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.75 2006/02/21 22:41:28 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -635,7 +635,8 @@ int cgiOptionalInt(char *varName, int defaultVal)
  * and it's not just the empty string otherwise it returns defaultVal. */
 {
 char *s = cgiOptionalString(varName);
-if ((s == NULL) || (s[0] == 0))
+s = skipLeadingSpaces(s);
+if (isEmpty(s))
     return defaultVal;
 return cgiInt(varName);
 }
@@ -1073,6 +1074,7 @@ boolean needAnd = TRUE;
 boolean gotAny = FALSE;
 boolean startDash;
 boolean gotEq;
+static char hostLine[512];
 
 if (preferWeb && cgiIsOnWeb())
     return TRUE;	/* No spoofing required! */
@@ -1105,6 +1107,8 @@ if (gotAny)
     }
 putenv("REQUEST_METHOD=GET");
 putenv(queryString);
+safef(hostLine, sizeof(hostLine), "SERVER_NAME=%s", getenv("HOST"));
+putenv(hostLine);
 initCgiInput();
 return gotAny;
 }
