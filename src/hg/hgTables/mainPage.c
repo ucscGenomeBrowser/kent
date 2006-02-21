@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.89 2005/11/13 18:15:11 donnak Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.90 2006/02/21 23:18:16 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -230,6 +230,87 @@ if (startsWith("chr", table))
 return table;
 }
 
+
+static char *chopAtFirstDot(char *string)
+/* Terminate string at first '.' if found.  Return string for convenience. */
+{
+char *ptr = strchr(string, '.');
+if (ptr != NULL)
+    *ptr = '\0';
+return string;
+}
+
+static struct hash *accessControlInit(char *db, struct sqlConnection *conn)
+/* Return a hash associating restricted table/track names in the given db/conn
+ * with virtual hosts, or NULL if there is no tableAccessControl table. */
+{
+struct hash *acHash = NULL;
+if (sqlTableExists(conn, "tableAccessControl"))
+    {
+    struct sqlResult *sr = NULL;
+    char **row = NULL;
+    acHash = newHash(8);
+    sr = sqlGetResult(conn, "select name,host from tableAccessControl");
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	struct slName *sln = slNameNew(chopAtFirstDot(row[1]));
+	struct hashEl *hel = hashLookup(acHash, row[0]);
+	if (hel == NULL)
+	    hashAdd(acHash, row[0], sln);
+	else
+	    slAddHead(&(hel->val), sln);
+	}
+    sqlFreeResult(&sr);
+    }
+return acHash;
+}
+
+static boolean accessControlDenied(struct hash *acHash, char *table)
+/* Return TRUE if table access is restricted to some host(s) other than 
+ * the one we're running on. */
+{
+static char *currentHost = NULL;
+struct slName *enabledHosts = NULL;
+struct slName *sln = NULL;
+
+if (acHash == NULL)
+    return FALSE;
+enabledHosts = (struct slName *)hashFindVal(acHash, table);
+if (enabledHosts == NULL)
+    return FALSE;
+if (currentHost == NULL)
+    {
+    currentHost = cloneString(cgiServerName());
+    if (currentHost == NULL)
+	{
+	warn("accessControl: unable to determine current host");
+	return FALSE;
+	}
+    else
+	chopAtFirstDot(currentHost);
+    }
+for (sln = enabledHosts;  sln != NULL;  sln = sln->next)
+    {
+    if (sameString(currentHost, sln->name))
+	return FALSE;
+    }
+return TRUE;
+}
+
+static void freeHelSlNameList(struct hashEl *hel)
+/* Helper function for hashTraverseEls, to free slNameList vals. */
+{
+slNameFreeList(&(hel->val));
+}
+
+static void accessControlFree(struct hash **pAcHash)
+/* Free up access control hash. */
+{
+hashTraverseEls(*pAcHash, freeHelSlNameList);
+freeHash(pAcHash);
+}
+
+
 struct slName *tablesForDb(char *db)
 /* Find tables associated with database. */
 {
@@ -238,6 +319,7 @@ struct sqlConnection *conn = sqlConnect(db);
 struct slName *raw, *rawList = sqlListTables(conn);
 struct slName *cooked, *cookedList = NULL;
 struct hash *uniqHash = newHash(0);
+struct hash *accessCtlHash = accessControlInit(db, conn);
 
 sqlDisconnect(&conn);
 for (raw = rawList; raw != NULL; raw = raw->next)
@@ -246,6 +328,9 @@ for (raw = rawList; raw != NULL; raw = raw->next)
 	{
 	/* Deal with tables split across chromosomes. */
 	char *root = unsplitTableName(raw->name);
+	if (accessControlDenied(accessCtlHash, root) ||
+	    accessControlDenied(accessCtlHash, raw->name))
+	    continue;
 	if (!hashLookup(uniqHash, root))
 	    {
 	    hashAdd(uniqHash, root, NULL);
@@ -256,12 +341,15 @@ for (raw = rawList; raw != NULL; raw = raw->next)
     else
         {
 	char dbTable[256];
+	if (accessControlDenied(accessCtlHash, raw->name))
+	    continue;
 	safef(dbTable, sizeof(dbTable), "%s.%s", db, raw->name);
 	cooked = slNameNew(dbTable);
 	slAddHead(&cookedList, cooked);
 	}
     }
 hashFree(&uniqHash);
+accessControlFree(&accessCtlHash);
 slFreeList(&rawList);
 slSort(&cookedList, slNameCmp);
 return cookedList;
