@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.121 2005/08/12 21:19:43 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.122 2006/02/21 23:03:00 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -390,6 +390,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&regionList, region);
     }
 slSort(&regionList, regionCmp);
+sqlFreeResult(&sr);
 hFreeConn(&conn);
 return regionList;
 }
