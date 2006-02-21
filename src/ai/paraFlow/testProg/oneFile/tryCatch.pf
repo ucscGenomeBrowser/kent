@@ -3,7 +3,7 @@
 to hardErr()
 /* Access undefined object to cause a hard error. */
     {
-    string s;
+    array of string s;
     s[0] = 'H';
     }
 

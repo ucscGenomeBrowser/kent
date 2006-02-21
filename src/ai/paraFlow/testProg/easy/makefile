@@ -38,6 +38,8 @@ test:
 	diff expected/initMethod $O/initMethod
 	paraFlow initVars.pf > $O/initVars
 	diff expected/initVars $O/initVars
+	paraFlow keyVal.pf > $O/keyVal
+	diff expected/keyVal $O/keyVal
 	paraFlow memberForeach.pf > $O/memberForeach
 	diff expected/memberForeach $O/memberForeach
 	paraFlow mixedDeclare.pf > $O/mixedDeclare

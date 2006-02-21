@@ -33,12 +33,15 @@ class lib
 	env = cached;
 	}
 
-    to countChars(string s, byte c) into int count
+    to countChars(string s, string c) into int count
     /* Count the number of times c is in s. */
         {
-	for (b in s)
-	    if (c == b)
+	while (s)
+	    {
+	    if (s.start(1) == c)
 	        count += 1;
+	    s = s.rest(1);
+	    }
 	}
 
     to getPathArray() into array of string paths
@@ -83,32 +86,15 @@ class lib
 	result = s.tokens();
 	}
 
-    to findLastUseOfChar(string s, byte c) into int pos
+    to findLastUseOfChar(string s, string c) into int pos
     // Return position in string of last occurence of char,
     // or -1 if none
         {
-	for (pos = s.size-1; pos >= 0; pos -= 1)
-	    if (s[pos] == c)
-	        return;
 	pos = -1;
+	for (int p=0; p>=0; p=s.findNext(c,p))
+	    pos=p;
 	}
 
-    to findFirstUseOfChar(string s, byte c) into int pos
-    // Return first occurence of c in string or -1 if none.
-        {
-	for (pos=0; pos < s.size; pos += 1)
-	    if (s[pos] == c)
-	        return;
-	pos = -1;
-	}
-
-    to subChar(string s, byte oldChar, byte newChar)
-    // Substitute newChar for oldChar throughout string s
-        {
-	for (int i=0; i<s.size; i += 1)
-	    if (s[i] == oldChar)
-	        s[i] = newChar;
-	}
 
     to splitPath(string path) into (string dir, string name, string extension)
     // Split "some/dirs/and/file.ext" into "some/dirs/and/" "file" ".ext"

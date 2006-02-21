@@ -6,8 +6,7 @@ print(a);
 
 string s = "abcd";
 print(s);
-for (c in s)
-    c += 'A' - 'a';
+s.upper();
 print(s);
 
 

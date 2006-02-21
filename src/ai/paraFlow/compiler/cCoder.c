@@ -353,14 +353,56 @@ fprintf(f, "(%s+%d);\n", stackName, stack);
 return outCount;
 }
 
+
+static void codeCleanupVarNamed(struct pfCompile *pfc, FILE *f, 
+	struct pfType *type, char *name)
+/* Emit cleanup code for variable of given type and name. */
+{
+if (type->base->needsCleanup)
+    {
+    if (type->base == pfc->varType)
+	fprintf(f, "_pf_var_cleanup(%s);\n", name);
+    else
+	{
+	fprintf(f, "if (0!=%s && (%s->_pf_refCount-=1) <= 0)\n", name, name);
+	fprintf(f, "   %s->_pf_cleanup(%s, ", name, name);
+	codeForType(pfc, f, type);
+	fprintf(f, ");\n");
+	}
+    }
+}
+
+static void codeCleanupVar(struct pfCompile *pfc, FILE *f, 
+        struct pfVar *var)
+/* Emit cleanup code for variable of given type and name. */
+{
+struct dyString *name = varName(pfc, var);
+codeCleanupVarNamed(pfc, f, var->ty, name->string);
+dyStringFree(&name);
+}
+
 static void startElInCollectionIteration(struct pfCompile *pfc, FILE *f,
-	int stack, struct pfScope *scope, struct pfParse *elPp, 
+	int stack, struct pfScope *scope, struct pfParse *elIxPp, 
 	struct pfParse *collectionPp, boolean reverse)
 /* This highly technical routine generates some of the code for
  * foreach and para actions.  */
 {
 struct pfBaseType *base = collectionPp->ty->base;
-struct dyString *elName = varName(pfc, elPp->var);
+struct dyString *elName;
+struct dyString *keyName = NULL;
+struct pfParse *elPp, *ixPp = NULL;
+
+if (elIxPp->type == pptKeyVal)
+    {
+    ixPp = elIxPp->children;
+    elPp = ixPp->next;
+    keyName = varName(pfc,ixPp->var);
+    assert(base != pfc->indexRangeType);  /* Type checker prevents this */
+    }
+else
+    elPp = elIxPp;
+
+elName = varName(pfc, elPp->var);
 
 if (base == pfc->indexRangeType)
     {
@@ -399,17 +441,28 @@ else
 
     /* Print element variable in a new scope. */
     fprintf(f, "{\n");
-    codeScopeVars(pfc, f, scope, FALSE);
+    codeScopeVars(pfc, f, scope, TRUE);
     if (base == pfc->arrayType)
 	{
 	struct pfBaseType *elBase = collectionPp->ty->children->base;
 	fprintf(f, "int _pf_offset;\n");
 	fprintf(f, "int _pf_elSize = _pf_collection->elSize;\n");
 	fprintf(f, "int _pf_endOffset = _pf_collection->size * _pf_elSize;\n");
-	if (reverse)	/* To help simulate parallelism, do it in reverse. */
-	    fprintf(f, "for (_pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; _pf_offset -= _pf_elSize)\n");
+	if (keyName != NULL)
+	    {
+	    if (reverse)	/* To help simulate parallelism, do it in reverse. */
+		fprintf(f, "for (%s = _pf_collection->elsize-1, _pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; %s -= 1; _pf_offset -= _pf_elSize)\n", keyName->string, keyName->string);
+	    else
+		fprintf(f, "for (%s=0, _pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize, %s+=1)\n", keyName->string, keyName->string);
+	    }
 	else
-	    fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize)\n");
+	    {
+	    if (reverse)	/* To help simulate parallelism, do it in reverse. */
+		fprintf(f, "for (_pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; _pf_offset -= _pf_elSize)\n");
+	    else
+		fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize)\n");
+	    }
+
 	fprintf(f, "{\n");
 	fprintf(f, "%s = *((", elName->string);
 	codeBaseType(pfc, f, elBase);
@@ -417,14 +470,18 @@ else
 	}
     else if (base == pfc->stringType)
 	{
-	fprintf(f, "int _pf_offset;\n");
+	char *ixName = "_pf_offset";
+	if (keyName != NULL)
+	    ixName = keyName->string;
+	else
+	    fprintf(f, "int %s;\n", ixName);
 	fprintf(f, "int _pf_endOffset = _pf_collection->size;\n");
 	if (reverse)	/* To help simulate parallelism, do it in reverse. */
-	    fprintf(f, "for (_pf_offset=_pf_endOffset-1; _pf_offset>=0; _pf_offset -= 1)\n");
+	    fprintf(f, "for (%s=_pf_endOffset-1; %s>=0; %s -= 1)\n", ixName, ixName, ixName);
 	else
-	    fprintf(f, "for (_pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += 1)\n");
+	    fprintf(f, "for (%s=0; %s<_pf_endOffset; %s += 1)\n", ixName, ixName, ixName);
 	fprintf(f, "{\n");
-	fprintf(f, "%s = _pf_collection->s[_pf_offset];\n", elName->string);
+	fprintf(f, "%s = _pf_collection->s[%s];\n", elName->string, ixName);
 	}
     else if (base == pfc->dirType)
 	{
@@ -434,6 +491,11 @@ else
 	    base->name);
 	fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s, &_pf_key))\n", elName->string);
 	fprintf(f, "{\n");
+	if (keyName != NULL)
+	    {
+	    codeCleanupVar(pfc, f, ixPp->var);
+	    fprintf(f, "%s = _pf_string_from_const(_pf_key);\n", keyName->string);
+	    }
 	}
     else
 	{
@@ -441,6 +503,7 @@ else
 	}
     }
 dyStringFree(&elName);
+dyStringFree(&keyName);
 }
 
 static void saveBackToCollection(struct pfCompile *pfc, FILE *f,
@@ -1141,34 +1204,6 @@ codeDotAccess(pfc, f, pp, emptyStack);
 fprintf(f, " %s ", op);
 codeParamAccess(pfc, f, outType->base, stack);
 fprintf(f, ";\n");
-}
-
-
-static void codeCleanupVarNamed(struct pfCompile *pfc, FILE *f, 
-	struct pfType *type, char *name)
-/* Emit cleanup code for variable of given type and name. */
-{
-if (type->base->needsCleanup)
-    {
-    if (type->base == pfc->varType)
-	fprintf(f, "_pf_var_cleanup(%s);\n", name);
-    else
-	{
-	fprintf(f, "if (0!=%s && (%s->_pf_refCount-=1) <= 0)\n", name, name);
-	fprintf(f, "   %s->_pf_cleanup(%s, ", name, name);
-	codeForType(pfc, f, type);
-	fprintf(f, ");\n");
-	}
-    }
-}
-
-static void codeCleanupVar(struct pfCompile *pfc, FILE *f, 
-        struct pfVar *var)
-/* Emit cleanup code for variable of given type and name. */
-{
-struct dyString *name = varName(pfc, var);
-codeCleanupVarNamed(pfc, f, var->ty, name->string);
-dyStringFree(&name);
 }
 
 static void codeInitOfType(struct pfCompile *pfc, FILE *f, struct pfType *type)

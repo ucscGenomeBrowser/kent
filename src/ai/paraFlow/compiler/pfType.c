@@ -1237,7 +1237,13 @@ if (foreach->type == pptKeyVal)
     }
 collection = foreach->children;
 if (collection->type == pptIndexRange)
+    {
     keyBaseType = pfc->longType;
+    if (keyVal != NULL)
+        {
+	errAt(keyVal->tok, "key:val not allowed in collections specified by a range of numbers. The key and val are the same in this case!");
+	}
+    }
 else if (collection->ty->base->keyedBy != NULL)
     keyBaseType = collection->ty->base->keyedBy;
 else if (collection->type != pptCall && collection->type != pptIndirectCall)
