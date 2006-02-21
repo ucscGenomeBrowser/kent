@@ -1,0 +1,8 @@
+
+flow factorial(int i) into (double f)
+    {
+    if (i <= 1)
+        f = 1;
+    else
+        f = i*factorial(i-1);
+    }
