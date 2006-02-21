@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.30 2006/02/06 23:32:12 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.31 2006/02/21 05:28:58 hiram Exp $
 
 # to-do items:
 # - lots of testing
@@ -666,7 +666,7 @@ _EOF_
     || die "Couldn't open $runDir/cat.csh for writing: $!\n";
   print CAT <<_EOF_
 #!/bin/csh -ef
-cat $outRoot/\$1/*.psl | gzip -c > \$2
+find $outRoot/\$1/ -name "*.psl" | xargs cat | gzip -c > \$2
 _EOF_
   ;
   close(CAT);
