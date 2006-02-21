@@ -958,3 +958,38 @@ switch (tok->type)
 fprintf(f, "\n");
 }
 
+struct pfToken *pfTokenGetClosingTok(struct pfToken *openTok,
+	enum pfTokType openType, enum pfTokType closeType)
+/* Given a token that represents an open glyph such as (, [ or {,
+ * find token that represents the closing glyph ) ] or } .
+ * This does handle nesting. */
+{
+struct pfToken *tok;
+int depth = 0;
+assert(openTok->type == openType);
+for (tok = openTok; tok != NULL; tok = tok->next)
+    {
+    if (tok->type == openType)
+        ++depth;
+    else if (tok->type == closeType)
+        {
+	--depth;
+	if (depth == 0)
+	    return tok;
+	}
+    }
+errAt(openTok, "Couldn't find closing %c", closeType);
+return NULL;
+}
+
+struct pfToken *pfTokenFirstBetween(struct pfToken *start,
+	struct pfToken *end, enum pfTokType type)
+/* Return first token of given type between start and end.
+ * End is not inclusive. */
+{
+struct pfToken *tok;
+for (tok = start; tok != end; tok = tok->next)
+    if (tok->type == type)
+        return tok;
+return NULL;
+}

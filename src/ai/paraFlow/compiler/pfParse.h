@@ -100,6 +100,7 @@ enum pfParseType
     pptParaGet,
     pptParaFilter,
     pptUntypedElInCollection,	
+    pptUntypedKeyInCollection,	
     pptOperatorDec,
     pptArrayAppend,
     pptIndexRange,

@@ -1,6 +1,22 @@
 TO DO:
-  - Allow variable substitutions in constant strings.  Things like
-       print("Hello $name, are you $(verb)ing now?");
+  - Let people access keys as well as values in a for or para ... do.
+    Syntax would be
+         for (key:val in collection)
+	      print("$key $val");
+  - It turns out we need three levels of parallelizability for
+    methods:
+        1) flow - no side effects even to members.
+	2) ?? - side effects on members only.
+	3) to - general side effects.
+    What to name #2?   I'm tempted to make it
+        1) flow
+	2) to - side effects on members only
+	3) clob - general side effects (clobbering time)
+    Hmm.  Actually I'm not so wild about that.   How about
+       1) flow  2) para 3) to
+  - Defining exceptions, and implementing exception chaining.
+  - Check that can call a function taking an object with a tuple
+    and that it all works ok. [Nope, it doesn't...]
   - ?Read-only and private variables.
         Make it so that class.new() is only legal way to
 	make something with private or read-only var.
@@ -24,6 +40,8 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Allow variable substitutions in constant strings.  Things like
+       print("Hello $name, are you $(verb)ing now?");
   - Way to call parent methods in an object.  (An automatically
     declared parent variable to go with the automatically declared
     self variable.)

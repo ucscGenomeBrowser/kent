@@ -102,16 +102,35 @@ switch (pp->type)
     case pptParaFilter:
         {
 	/* Allow users to skip the type declaration of the
-	 * element in a (el in collection) phrase. */
+	 * element in a (el in collection) phrase. 
+	 * I wonder if we could move this to pfParse
+	 * actually.  WOrks here though. */
 	struct pfParse *collection = pp->children;
 	struct pfParse *element = collection->next;
 	if (element->type == pptNameUse)
 	    {
-	    struct pfType *dummyType = pfTypeNew(pfc->nilType);
-	    element->type = pptUntypedElInCollection;
-	    element->var = pfScopeAddVar(element->scope, element->name, 
-	    	dummyType, element);
 	    }
+	else if (element->type == pptKeyVal)
+	    {
+	    struct pfParse *keyVal = element;
+	    struct pfParse *key = keyVal->children;
+	    element = key->next;
+	    if (element->type != pptNameUse || key->type != pptKeyName)
+	         errAt(keyVal->tok, 
+		 	"Expecting simple name on either side of ':'");
+	    if (sameString(key->name, element->name))
+	        errAt(keyVal->tok, "Key and value must have different name.");
+	    key->var = pfScopeAddVar(key->scope, key->name, 
+		pfTypeNew(pfc->nilType), key);
+	    }
+	else
+	    {
+	    errAt(element->tok, "Can't handle this construct before 'in.' \n"
+		  "Expecting variable name with no type, or key:val.");
+	    }
+	element->type = pptUntypedElInCollection;
+	element->var = pfScopeAddVar(element->scope, element->name, 
+	    pfTypeNew(pfc->nilType), element);
 	break;
 	}
     case pptOf:

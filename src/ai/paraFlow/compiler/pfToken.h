@@ -159,6 +159,17 @@ char *pfTokenAsString(struct pfToken *tok);
 /* Return string representation of token.  FreeMem the string
  * when done. */
 
+struct pfToken *pfTokenGetClosingTok(struct pfToken *openTok,
+	enum pfTokType openType, enum pfTokType closeType);
+/* Given a token that represents an open glyph such as (, [ or {,
+ * find token that represents the closing glyph ) ] or } .
+ * This does handle nesting. */
+
+struct pfToken *pfTokenFirstBetween(struct pfToken *start,
+	struct pfToken *end, enum pfTokType type);
+/* Return first token of given type between start and end.
+ * End is not inclusive. */
+
 #define internalErrAt(tok)  errAt(tok, "paraFlow compiler error at %s %d", __FILE__, __LINE__)
 /* Generic internal error message */
 

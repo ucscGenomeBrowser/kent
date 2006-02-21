@@ -157,9 +157,12 @@ pfc->floatType = pfScopeAddType(scope, "float", FALSE, pfc->numType, sizeof(_pf_
 pfc->doubleType = pfScopeAddType(scope, "double", FALSE, pfc->numType, sizeof(_pf_Double), FALSE);
 
 pfc->stringType = pfScopeAddType(scope, "string", TRUE, pfc->streamType, sizeof(_pf_String), TRUE);
+pfc->stringType->keyedBy = pfc->longType;
 
 pfc->arrayType = pfScopeAddType(scope, "array", TRUE, pfc->collectionType, sizeof(_pf_Array), TRUE);
+pfc->arrayType->keyedBy = pfc->longType;
 pfc->listType = pfScopeAddType(scope, "list", TRUE, pfc->collectionType, sizeof(_pf_List), TRUE);
+pfc->listType->keyedBy = pfc->longType;
 pfc->treeType = pfScopeAddType(scope, "tree", TRUE, pfc->collectionType, sizeof(_pf_Tree), TRUE);
 pfc->treeType->keyedBy = pfc->doubleType;
 pfc->dirType = pfScopeAddType(scope, "dir", TRUE, pfc->collectionType, sizeof(_pf_Dir), TRUE);

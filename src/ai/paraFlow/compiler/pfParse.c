@@ -192,6 +192,8 @@ switch (type)
 	return "pptParaFilter";
     case pptUntypedElInCollection:
 	return "pptUntypedElInCollection";
+    case pptUntypedKeyInCollection:
+	return "pptUntypedKeyInCollection";
     case pptOperatorDec:
 	return "pptOperatorDec";
     case pptArrayAppend:
@@ -1880,11 +1882,14 @@ static struct pfParse *parseFor(struct pfCompile *pfc,
  * for (el in array) type and go to it. */
 {
 struct pfToken *forTok = *pTokList;
-struct pfToken *inTok = forTok->next->next->next;
-if (inTok->type == pftIn)
-    return parseForIn(pfc, parent, pTokList, scope);
-else
+struct pfToken *openTok = forTok->next, *closeTok;
+if (openTok->type != '(')
+    expectingGot("(", openTok);
+closeTok = pfTokenGetClosingTok(openTok, '(', ')');
+if (pfTokenFirstBetween(openTok->next, closeTok, ';'))
     return parseForLikeC(pfc, parent, pTokList, scope);
+else
+    return parseForIn(pfc, parent, pTokList, scope);
 }
 
 static struct pfParse *fakeNameUse(char *name, struct pfToken *tok,

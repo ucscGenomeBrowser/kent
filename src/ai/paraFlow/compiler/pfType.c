@@ -712,9 +712,9 @@ static void coerceTupleToCollection(struct pfCompile *pfc,
 struct pfParse *tuple = *pPp;
 struct pfType *elType;
 struct pfParse **pos;
- struct pfBaseType *keyBase = type->base->keyedBy;
-if (keyBase)
+if (type->base == pfc->dirType)
      {
+     struct pfBaseType *keyBase = type->base->keyedBy;
      struct pfType *key = pfTypeNew(keyBase);
      struct pfType *val = type->children;
      elType = pfTypeNew(pfc->keyValType);
@@ -736,6 +736,10 @@ if (keyBase)
 	     key->ty = pfTypeNew(pfc->stringType);
 	     pp->ty = typeFromChildren(pfc, pp, pfc->keyValType);
 	     }
+	 }
+     else
+         {
+	 internalErr();
 	 }
      }
 else
@@ -1169,6 +1173,7 @@ static void coerceIf(struct pfCompile *pfc, struct pfParse *pp)
 coerceToBit(pfc, &pp->children);
 }
 
+#ifdef OLD
 static void checkElInCollection(struct pfCompile *pfc, struct pfParse *el, 
 	struct pfParse *collection, char *statementName)
 /* Make sure that collection is indeed a collection, and
@@ -1179,15 +1184,104 @@ if (el->type != pptVarInit)
 if (!collection->ty->base->isCollection)
     expectingGot("collection", collection->tok);
 }
+#endif /* OLD */
+
+
+static void turnSelfToVarOfType(struct pfParse *pp, struct pfType *ty)
+/* Turn parse node into pptVarInit type with two children (type and symbol).
+ * The variable is actually expected to be in the symbol table already
+ * but it doesn't yet have a type.  We make up a type and update
+ * the symbol table with it as well as hanging the type on ourself. */
+{
+struct pfVar *var = findVar(pp->scope, pp->name, pp->tok);
+struct pfParse *typePp = pfParseNew(pptTypeName, pp->tok, pp, pp->scope);
+struct pfParse *symPp = pfParseNew(pptSymName, pp->tok,pp, pp->scope);
+*(var->ty) = *ty;
+symPp->name = pp->name;
+typePp->ty = pp->ty = var->ty;
+pp->type = pptVarInit;
+pp->children = typePp;
+typePp->next = symPp;
+}
 
 static void typeElInCollection(struct pfCompile *pfc, struct pfParse **pPp)
-/* Fill in type of el from type of collection.  Collection is the
- * elder (and in fact eldest) sibling of el in parse tree. 
- * Filling in the type involves changing the type of the el
- * to varInit, putting in the type and symbol children of the
- * varInit, and filling in the real type of the variable
- * associated with the element, which at the moment is filled
- * in with a dummy nilType. */
+/* Fill in type of el from type of collection.  Possibly fill in key type
+ * as well.  The parse tree we are concerned with looks either like:
+ *      pptForeach/pptPara
+ *         pptVarUse <collection>
+ *         pptUntypedElInCollection 
+ * or
+ *      pptForeach/pptPara
+ *         pptVarUse <collection>
+ *         pptKeyVal
+ *            pptKeyName
+ *            pptUntypedElInCollection
+ * In either case *pPp points to the pptUntypedElInCollection.
+ * We want to convert the pptUntypeElInCollection into a
+ *        pptVarInit
+ *           pptTypeName
+ *           pptSymName
+ * If the pptKeyVal is present we want to do the same thing to it.
+ * In addition to flipping around the parse tree, we also need to
+ * set up the types rigt on the pptVarInits. */
+{
+struct pfParse *el = *pPp, *keyVal = NULL, *collection, *foreach;
+struct pfBaseType *keyBaseType = NULL;
+
+/* Figure out where the parts of the input tree we need are. */
+foreach = el->parent;
+if (foreach->type == pptKeyVal)
+    {
+    keyVal = foreach;
+    foreach = foreach->parent;
+    }
+collection = foreach->children;
+if (collection->type == pptIndexRange)
+    keyBaseType = pfc->longType;
+else if (collection->ty->base->keyedBy != NULL)
+    keyBaseType = collection->ty->base->keyedBy;
+else if (collection->type != pptCall && collection->type != pptIndirectCall)
+    errAt(collection->tok, "%s isn't a collection, it's a %s", collection->name, collection->ty->base->name);
+
+/* Covert pptUntypedElement into a pptVarInit that is typed to
+ * match the collection. */
+    {
+    struct pfType *ty;
+    if (collection->type == pptCall || collection->type == pptIndirectCall)
+	{
+	ty = collection->ty;
+	if (ty->children != NULL)
+	    errAt(collection->tok, 
+	    	"functions here can only return a single value");
+	if (keyVal != NULL)
+	    errAt(keyVal->tok, "key:values aren't allowed when collection is a call.");
+	}
+    else
+	{
+	if (collection->ty->base == pfc->stringType)
+	    ty = pfTypeNew(pfc->byteType);
+	else if (collection->ty->base == pfc->indexRangeType)
+	    ty = pfTypeNew(pfc->longType);
+	else
+	    ty = collection->ty->children;
+	}
+    turnSelfToVarOfType(el, ty);
+    }
+
+/* If we're doing key:value, then turn the pptKeyName into a pptVarInit
+ * that is typed to match the collection key. */
+if (keyVal != NULL)
+    {
+    struct pfParse *key = keyVal->children;
+    struct pfType *ty = pfTypeNew(keyBaseType);
+    assert(key->type == pptKeyName);
+    assert(key->next == el);
+    turnSelfToVarOfType(key, ty);
+    keyVal->ty = typeFromChildren(pfc, keyVal, pfc->keyValType);
+    }
+}
+
+#ifdef OLD
 {
 struct pfParse *el = *pPp;
 struct pfParse *collection = el->parent->children;
@@ -1217,6 +1311,7 @@ el->type = pptVarInit;
 el->children = type;
 type->next = sym;
 }
+#endif /* OLD */
 
 static void foreachIntoForeachCall(struct pfCompile *pfc, struct pfParse *pp)
 /* Rework parse tree from:
@@ -1282,7 +1377,9 @@ if (source->type == pptCall || source->type == pptIndirectCall)
 else
     {
     struct pfParse *el = source->next;
-    checkElInCollection(pfc, el, source, "foreach");
+#ifdef OLD
+    // checkElInCollection(pfc, el, source, "foreach");
+#endif /* OLD */
     }
 }
 
@@ -2075,7 +2172,9 @@ struct pfBaseType *colBase = collection->ty->base;
 
 if (colBase == pfc->stringType)
     errAt(collection->tok, "strings not allowed as para collections.");
-checkElInCollection(pfc, el, collection, "para");
+#ifdef OLD
+// checkElInCollection(pfc, el, collection, "para");
+#endif /* OLD */
 switch (pp->type)
     {
     case pptParaAdd:
