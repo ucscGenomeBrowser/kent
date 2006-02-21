@@ -12,5 +12,8 @@ clean:
 test:
 	cd testProg && ${MAKE}
 
+q:
+	cd testProg && ${MAKE} q
+
 quickTest:
 	cd testProg && ${MAKE} quickTest

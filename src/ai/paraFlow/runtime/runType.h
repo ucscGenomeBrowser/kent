@@ -15,6 +15,7 @@ enum _pf_single_type
     pf_stLong,		/* A 64-bit signed number. */
     pf_stFloat,		/* Single precision floating point. */
     pf_stDouble,	/* Double precision floating point. */
+    pf_stChar,		/* A character. */
     pf_stString,	/* A text string. */
     pf_stArray,		/* A dynamically sized array of something. */
     pf_stList,		/* A doubly-linked list (fast add head/tail remove). */

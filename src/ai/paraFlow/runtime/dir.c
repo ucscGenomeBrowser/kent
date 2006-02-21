@@ -232,7 +232,30 @@ return dir;
 }
 
 
-/* Done with the block of 7 nearly identical functions.
+struct _pf_dir *_pf_char_dir_from_tuple(_pf_Stack *stack, int count, 
+	int typeId, int elTypeId)
+/* Return a directory of ints from a tuple of key/val pairs.  Note the count
+ * is twice the number of elements.  (It represents the number of items put
+ * on the stack, and we have one each for key and value. */
+{
+struct _pf_dir *dir = pfDirNew(0, _pf_type_table[elTypeId]);
+int i, elCount = (count>>1);
+struct hash *hash = dir->hash;
+
+for (i=0; i<elCount; ++i)
+    {
+    _pf_String key = stack[0].String;
+    _pf_Char val = stack[1].Char;
+    stack += 2;
+    hashAdd(hash, key->s, CloneVar(&val) );
+    if (--key->_pf_refCount <= 0)
+         key->_pf_cleanup(key, 0);
+    }
+return dir;
+}
+
+
+/* Done with the block of 8 nearly identical functions.
  * Try to get your eyes to unglaze now.... */
 
 struct _pf_dir *_pf_string_dir_from_tuple(_pf_Stack *stack, int count, int typeId,
@@ -311,6 +334,10 @@ switch (base->singleType)
 	if (v == NULL) stack[0].Double = 0;
 	else stack[0].Double = *((_pf_Double *)v);
         break;
+    case pf_stChar:
+	if (v == NULL) stack[0].Char = 0;
+	else stack[0].Char = *((_pf_Char *)v);
+        break;
     }
 }
 
@@ -366,6 +393,8 @@ switch (type->base->singleType)
 	return CloneVar(&stack[0].Float);
     case pf_stDouble:
 	return CloneVar(&stack[0].Double);
+    case pf_stChar:
+	return CloneVar(&stack[0].Char);
     default:
     	internalErr();
 	return NULL;
@@ -474,6 +503,13 @@ for (i=0; i<count; ++i)
 		hashAdd(dir->hash, key->s, CloneVar(&x));
 		break;
 		}
+	    case pf_stChar:
+		{
+	        _pf_Char x;
+		_pf_suckItemOffStack(&stack, &encoding, elType, &x);
+		hashAdd(dir->hash, key->s, CloneVar(&x));
+		break;
+		}
 	    default:
 		internalErr();
 	    }
@@ -552,6 +588,9 @@ else
 	    break;
 	case pf_stDouble:
 	    memcpy(output, val, sizeof(_pf_Double));
+	    break;
+	case pf_stChar:
+	    memcpy(output, val, sizeof(_pf_Char));
 	    break;
 	default:
 	    internalErr();

@@ -24,13 +24,14 @@ typedef struct _pf_dir *_pf_Dir;
 typedef struct _pf_var _pf_Var;
 typedef void (*_pf_FunctionPt)(_pf_Stack *stack);
 
-typedef char _pf_Bit;
-typedef unsigned char _pf_Byte;
+typedef unsigned char _pf_Bit;
+typedef signed char _pf_Byte;
 typedef short _pf_Short;
 typedef int _pf_Int;
 typedef long long _pf_Long;
 typedef float _pf_Float;
 typedef double _pf_Double;
+typedef unsigned char _pf_Char;
 
 union _pf_varless
 /* All the types a variable can take except the
@@ -43,8 +44,9 @@ union _pf_varless
     _pf_Long Long;
     _pf_Float Float;
     _pf_Double Double;
-    _pf_Object Obj;
+    _pf_Char Char;
     _pf_String String;
+    _pf_Object Obj;
     _pf_Array Array;
     _pf_List List;
     _pf_Tree Tree;
@@ -70,8 +72,9 @@ union _pf_stack
     _pf_Long Long;
     _pf_Float Float;
     _pf_Double Double;
-    _pf_Object Obj;
+    _pf_Char Char;
     _pf_String String;
+    _pf_Object Obj;
     _pf_Array Array;
     _pf_List List;
     _pf_Tree Tree;

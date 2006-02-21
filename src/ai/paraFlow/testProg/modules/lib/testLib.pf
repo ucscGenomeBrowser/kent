@@ -26,7 +26,8 @@ print("Does prefix start with pre? " + lib.startsWith("pre", "prefix"));
 print("Does prefix start with post? " + lib.startsWith("post", "prefix"));
 print("Does suffix end with fix? " + lib.endsWith("suffix", "fix"));
 print("Does suffix end with mix? " + lib.endsWith("suffix", "mix"));
-print("Last char of 'space ' is (in ascii) " + lib.lastChar("space "));
+byte casb = lib.lastChar("space ");
+print("Last char of 'space ' is (in ascii) " + casb);
 
 string testString1 = "test string";
 array of string wilds = ("*", "?", "**", "??", "???????????", "*?????",

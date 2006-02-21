@@ -104,18 +104,20 @@ else if (base == pfc->floatType)
     return "Float";
 else if (base == pfc->doubleType)
     return "Double";
+else if (base == pfc->charType)
+    return "Char";
 else if (base == pfc->stringType)
     return "String";
 else if (base == pfc->varType)
     return "Var";
 else if (base == pfc->arrayType)
     return "Array";
-else if (base == pfc->listType)
-    return "List";
 else if (base == pfc->dirType)
     return "Dir";
-else if (base == pfc->treeType)
-    return "Tree";
+//else if (base == pfc->listType)
+//   return "List";
+//else if (base == pfc->treeType)
+//    return "Tree";
 else if (base == pfc->toPtType)
     return "FunctionPt";
 else if (base == pfc->flowPtType)
@@ -1406,13 +1408,14 @@ static void codeTupleIntoCollection(struct pfCompile *pfc, FILE *f,
 struct pfBaseType *base = type->base;
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, " = ");
-if (base == pfc->arrayType || base == pfc->listType || base == pfc->treeType
+if (base == pfc->arrayType // ||  base == pfc->listType || base == pfc->treeType
 	|| base == pfc->dirType)
     {
     struct pfBaseType *base = type->children->base;
     if (base == pfc->bitType || base == pfc->byteType || base == pfc->shortType
 	|| base == pfc->intType || base == pfc->longType || base == pfc->floatType
-	|| base == pfc->doubleType || base == pfc->stringType || base == pfc->varType)
+	|| base == pfc->doubleType || base == pfc->charType || base == pfc->stringType 
+	|| base == pfc->varType)
 	{
 	fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d, ",
 		base->name, type->base->name, stackName, stack, tupleSize);
@@ -1794,42 +1797,56 @@ switch(pp->type)
     {
     case pptCastBitToBit:
     case pptCastBitToByte:
+    case pptCastBitToChar:
     case pptCastBitToShort:
     case pptCastBitToInt:
     case pptCastBitToLong:
     case pptCastBitToFloat:
     case pptCastBitToDouble:
     case pptCastByteToByte:
+    case pptCastByteToChar:
     case pptCastByteToShort:
     case pptCastByteToInt:
     case pptCastByteToLong:
     case pptCastByteToFloat:
     case pptCastByteToDouble:
+    case pptCastCharToByte:
+    case pptCastCharToChar:
+    case pptCastCharToShort:
+    case pptCastCharToInt:
+    case pptCastCharToLong:
+    case pptCastCharToFloat:
+    case pptCastCharToDouble:
     case pptCastShortToByte:
+    case pptCastShortToChar:
     case pptCastShortToShort:
     case pptCastShortToInt:
     case pptCastShortToLong:
     case pptCastShortToFloat:
     case pptCastShortToDouble:
     case pptCastIntToByte:
+    case pptCastIntToChar:
     case pptCastIntToShort:
     case pptCastIntToInt:
     case pptCastIntToLong:
     case pptCastIntToFloat:
     case pptCastIntToDouble:
     case pptCastLongToByte:
+    case pptCastLongToChar:
     case pptCastLongToShort:
     case pptCastLongToInt:
     case pptCastLongToLong:
     case pptCastLongToFloat:
     case pptCastLongToDouble:
     case pptCastFloatToByte:
+    case pptCastFloatToChar:
     case pptCastFloatToShort:
     case pptCastFloatToInt:
     case pptCastFloatToLong:
     case pptCastFloatToFloat:
     case pptCastFloatToDouble:
     case pptCastDoubleToByte:
+    case pptCastDoubleToChar:
     case pptCastDoubleToShort:
     case pptCastDoubleToInt:
     case pptCastDoubleToLong:
@@ -1841,6 +1858,7 @@ switch(pp->type)
 	fprintf(f, ";\n");
 	break;
     case pptCastByteToBit:
+    case pptCastCharToBit:
     case pptCastShortToBit:
     case pptCastIntToBit:
     case pptCastLongToBit:
@@ -1882,6 +1900,14 @@ switch(pp->type)
 	fprintf(f, " = _pf_string_from_%s(", dest);
         codeParamAccess(pfc, f, pp->children->ty->base, stack);
 	fprintf(f, ");\n");
+	break;
+	}
+    case pptCastCharToString:
+        {
+        codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = _pf_string_new((char*)&");
+        codeParamAccess(pfc, f, pp->children->ty->base, stack);
+	fprintf(f, ",1);\n");
 	break;
 	}
     case pptCastTypedToVar:
@@ -2071,6 +2097,13 @@ switch (pp->type)
 	    }
 	return 1;
 	}
+    case pptConstChar:
+        {
+	assert(pp->tok->type == pftString || pp->tok->type == pftSubstitute);
+	codeParamAccess(pfc, f, pp->ty->base, stack);
+	fprintf(f, " = %d;\n", pp->tok->val.s[0]);
+	return 1;
+	}
     case pptConstString:
         {
 	assert(pp->tok->type == pftString || pp->tok->type == pftSubstitute);
@@ -2110,6 +2143,7 @@ switch (pp->type)
 	}
     case pptCastBitToBit:
     case pptCastBitToByte:
+    case pptCastBitToChar:
     case pptCastBitToShort:
     case pptCastBitToInt:
     case pptCastBitToLong:
@@ -2117,13 +2151,23 @@ switch (pp->type)
     case pptCastBitToDouble:
     case pptCastByteToBit:
     case pptCastByteToByte:
+    case pptCastByteToChar:
     case pptCastByteToShort:
     case pptCastByteToInt:
     case pptCastByteToLong:
     case pptCastByteToFloat:
     case pptCastByteToDouble:
+    case pptCastCharToBit:
+    case pptCastCharToByte:
+    case pptCastCharToChar:
+    case pptCastCharToShort:
+    case pptCastCharToInt:
+    case pptCastCharToLong:
+    case pptCastCharToFloat:
+    case pptCastCharToDouble:
     case pptCastShortToBit:
     case pptCastShortToByte:
+    case pptCastShortToChar:
     case pptCastShortToShort:
     case pptCastShortToInt:
     case pptCastShortToLong:
@@ -2131,6 +2175,7 @@ switch (pp->type)
     case pptCastShortToDouble:
     case pptCastIntToBit:
     case pptCastIntToByte:
+    case pptCastIntToChar:
     case pptCastIntToShort:
     case pptCastIntToInt:
     case pptCastIntToLong:
@@ -2138,6 +2183,7 @@ switch (pp->type)
     case pptCastIntToDouble:
     case pptCastLongToBit:
     case pptCastLongToByte:
+    case pptCastLongToChar:
     case pptCastLongToShort:
     case pptCastLongToInt:
     case pptCastLongToLong:
@@ -2145,6 +2191,7 @@ switch (pp->type)
     case pptCastLongToDouble:
     case pptCastFloatToBit:
     case pptCastFloatToByte:
+    case pptCastFloatToChar:
     case pptCastFloatToShort:
     case pptCastFloatToInt:
     case pptCastFloatToLong:
@@ -2152,6 +2199,7 @@ switch (pp->type)
     case pptCastFloatToDouble:
     case pptCastDoubleToBit:
     case pptCastDoubleToByte:
+    case pptCastDoubleToChar:
     case pptCastDoubleToShort:
     case pptCastDoubleToInt:
     case pptCastDoubleToLong:
@@ -2161,6 +2209,7 @@ switch (pp->type)
     case pptCastStringToBit:
     case pptCastBitToString:
     case pptCastByteToString:
+    case pptCastCharToString:
     case pptCastShortToString:
     case pptCastIntToString:
     case pptCastLongToString:

@@ -166,6 +166,13 @@ switch (base->singleType)
         fprintf(f, "%d", *p);
 	break;
 	}
+    case pf_stChar:
+	{
+        _pf_Char *p = data;
+	_pf_Char b = *p;
+	fprintf(f, "%c", b);
+	break;
+	}
     case pf_stByte:
 	{
         _pf_Byte *p = data;
@@ -266,6 +273,9 @@ switch (base->singleType)
 	break;
     case pf_stByte:
 	fprintf(f, "%d", val.Byte);
+	break;
+    case pf_stChar:
+	fprintf(f, "%c", val.Char);
 	break;
     case pf_stShort:
         fprintf(f, "%d", val.Short);

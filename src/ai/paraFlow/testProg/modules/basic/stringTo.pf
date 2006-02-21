@@ -1,13 +1,13 @@
 // Convert string to integer
 
-to isalpha(byte b) into bit isalpha
+to isalpha(char b) into bit isalpha
     {
     string az = "az";
     string AZ = "AZ";
     isalpha =  (b >= az[0] && b <= az[1] || b >= AZ[0] && b <= AZ[1]);
     }
 
-to isnum(byte b) into bit isnum
+to isnum(char b) into bit isnum
     {
     string nums = "09";
     isnum = (b >= nums[0] && b <= nums[1]);
@@ -16,7 +16,7 @@ to isnum(byte b) into bit isnum
 to stringToInt(string s) into int val
     {
     string zero = "0";
-    byte zeroInAscii = zero[0];
+    char zeroInAscii = zero[0];
     for (b in s)
         {
 	if (!isnum(b))

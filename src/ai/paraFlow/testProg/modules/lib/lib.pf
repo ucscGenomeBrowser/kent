@@ -33,7 +33,7 @@ class lib
 	env = cached;
 	}
 
-    to countChars(string s, byte c) into int count
+    to countChars(string s, char c) into int count
     /* Count the number of times c is in s. */
         {
 	for (b in s)
@@ -88,7 +88,7 @@ class lib
 	result = s.tokens();
 	}
 
-    to findFirstUseOfChar(string s, byte c) into int pos
+    to findFirstUseOfChar(string s, char c) into int pos
     // Return first occurence of c in string or -1 if none.
         {
 	for (pos=0; pos < s.size; pos += 1)
@@ -97,7 +97,7 @@ class lib
 	pos = -1;
 	}
 
-    to findLastUseOfChar(string s, byte c) into int pos
+    to findLastUseOfChar(string s, char c) into int pos
     // Return position in string of last occurence of char,
     // or -1 if none
         {
@@ -107,7 +107,7 @@ class lib
 	pos = -1;
 	}
 
-    to subChar(string s, byte oldChar, byte newChar)
+    to subChar(string s, char oldChar, char newChar)
     // Substitute newChar for oldChar throughout string s
         {
 	for (int i=0; i<s.size; i += 1)
@@ -187,7 +187,7 @@ class lib
 	    }
 	}
     
-    to lastChar(string s) into byte c
+    to lastChar(string s) into char c
         {
 	c = s[s.size-1];
 	}
@@ -205,7 +205,7 @@ class lib
 		}
 	    else if (wPos == wild.size)
 	        return;
-	    byte c = wild[wPos];
+	    char c = wild[wPos];
 	    if (c == '?')
 	        {
 		sPos += 1;

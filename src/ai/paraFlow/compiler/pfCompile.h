@@ -1,5 +1,5 @@
 /* pfCompile - High level structures and routines for paraFlow compiler. */
-/* Copyright 2005 Jim Kent.  All rights reserved. */
+/* Copyright 2005-2006 Jim Kent.  All rights reserved. */
 
 #ifndef PFCOMPILE_H
 #define PFCOMPILE_H
@@ -32,23 +32,23 @@ struct pfModule
     };
 
 struct pfCompile
-/* Paraflow compiler */
+/* Paraflow compiler. */
     {
     struct pfCompile *next;
     char *baseDir;		/* Base directory. */
     struct hash *moduleHash;	/* Module hash.  pfModule valued, name keyed. */
     struct pfModule *moduleList;/* List of all modules. */
-    bool	isSys;		/* True if compiling built-in module. */
+    bool	isSys;		/* True if compiling a built-in module. */
     bool	isFunc;		/* True if compiling a function. */
     struct pfTokenizer *tkz;	/* Tokenizer. */
-    struct hash *reservedWords;	/* Reserved words, can't be used for type or symbols */
-    struct pfScope *scope;	/* Outermost scope - for built in types and symbols */
+    struct hash *reservedWords;	/* Reserved words, can't be used for user data */
+    struct pfScope *scope;	/* Outermost scope - for built in symbols */
     struct slRef *scopeRefList;	/* List of refences to all scopes. */
     struct hash *runTypeHash;	/* Hash of run time types for code generator */
     struct hash *moduleTypeHash;/* Hash of run time types for just one module. */
 
     /* Some called out types parser needs to know about. */
-    struct pfBaseType *moduleType;	/* Base type for separate compilation units. */
+    struct pfBaseType *moduleType;	/* Base type for separate source files. */
     struct pfBaseType *varType;		/* Base type for all variables/functions */
     struct pfBaseType *nilType;		/* Object/string with no value. */
     struct pfBaseType *keyValType;	/* Used for tree/dir initializations */
@@ -66,28 +66,43 @@ struct pfCompile
     struct pfBaseType *toPtType;	/* "to" function pointer type. */
     struct pfBaseType *flowPtType;	/* "flow" function pointer type. */
 
-    struct pfBaseType *bitType;
-    struct pfBaseType *byteType;
-    struct pfBaseType *shortType;
-    struct pfBaseType *intType;
-    struct pfBaseType *longType;
-    struct pfBaseType *floatType;
-    struct pfBaseType *doubleType;
-    struct pfBaseType *stringType;
+    /* Base types for the simple types that need no dynamic memory. */
+    struct pfBaseType *bitType;		/* A single bit.  0 or 1 */
+    struct pfBaseType *byteType;	/* A signed 8 bit quantity. */
+    struct pfBaseType *shortType;	/* Signed 16 bit number. */
+    struct pfBaseType *intType;		/* Signed 32 bit number. */
+    struct pfBaseType *longType;	/* Signed 64 bit number. */
+    struct pfBaseType *floatType;	/* Single precision floating point */
+    struct pfBaseType *doubleType;	/* Double precision floating point */
+    struct pfBaseType *charType;	/* An 8-bit char.  */
+    //struct pfBaseType *unicharType;	/* Will implement 32 bit unicode here */
 
-    struct pfBaseType *arrayType;
-    struct pfBaseType *listType;
-    struct pfBaseType *treeType;
-    struct pfBaseType *dirType;
+    /* Base types for the built-in types that do need dynamic memory */
+    struct pfBaseType *stringType;	/* A string.  See also unistring. */
+    //struct pfBaseType *unistringType;	/* Will implement 32 bit unicode here */
+    struct pfBaseType *arrayType;	/* Arrays of another type. */
+    struct pfBaseType *dirType;		/* Hash tables - arrays indexed by string */
+    // struct pfBaseType *listType;	/* A doubly-linked list someday? */
+    // struct pfBaseType *treeType;	/* A binary tree someday? */
 
-    struct pfType *stringFullType;	/* String type info including .size etc. */
+    /* It's handy to have simple instances of the higher order types built
+     * on top of the base types here.  The higher order types can include
+     * things like array of dir of string.  These are all just simple ones. */
+    struct pfType *bitFullType;	
+    struct pfType *byteFullType;
+    struct pfType *charFullType;
+    struct pfType *shortFullType;
+    struct pfType *intFullType;
+    struct pfType *longFullType;
+    struct pfType *floatFullType;
+    struct pfType *doubleFullType;
+
+    /* These next ones are initialized after compiling the <builtin> module */
+    struct pfType *stringFullType;
     struct pfType *arrayFullType;	/* Array type info including .size etc. */
     struct pfType *dirFullType;		/* Dir full type including .keys() */
     struct pfType *elTypeFullType;	/* Generic element of collection type. */
-    struct pfType *intFullType;		/* This is handy to have around. */
-    struct pfType *longFullType;	/* This is handy to have around. */
     };
-
 
 struct pfCompile *pfCompileNew();
 /* Create new pfCompile.  */

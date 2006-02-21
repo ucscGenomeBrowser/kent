@@ -210,6 +210,24 @@ for (i=0; i<count; ++i)
 return array;
 }
 
+_pf_Array _pf_char_array_from_tuple(_pf_Stack *stack, int count, 
+	int typeId, int elTypeId)
+/* Create an array of string initialized from tuple on stack. */
+{
+struct _pf_type *elType = _pf_type_table[elTypeId];
+struct _pf_array *array;
+_pf_Char *elements = NULL;
+int i;
+
+if (count > 0) AllocArray(elements, count);
+array = _pf_array_of_type(count, count, elType, sizeof(elements[0]), elements);
+
+for (i=0; i<count; ++i)
+    elements[i] = stack[i].Char;
+return array;
+}
+
+
 _pf_Array _pf_string_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */
@@ -295,6 +313,9 @@ switch (st)
     case pf_stDouble:
 	v = &stack[1].Double;
 	break;
+    case pf_stChar:
+	v = &stack[1].Char;
+	break;
     case pf_stVar:
         v = &stack[1].Var;
 	break;
@@ -370,6 +391,13 @@ else if (diff > 0)
     return 1;
 else 
     return 0;
+}
+
+static int qCmpChar(const void *va, const void *vb)
+/* Quick, no ParaFlow callback sort function for byte. */
+{
+const _pf_Char *a = va, *b = vb;
+return *a-*b;
 }
 
 static int qCmpString(const void *va, const void *vb)
@@ -471,6 +499,17 @@ pf->cmp(pf->stack);
 return pf->stack[0].Int;
 }
 
+static int pCmpChar(void *thunk, const void *va, const void *vb)
+/* Comparison function for Char using paraFlow callback. */
+{
+struct pfCmpState *pf = thunk;
+const _pf_Char *a = va, *b = vb;
+pf->stack[0].Char = *a;
+pf->stack[1].Char = *b;
+pf->cmp(pf->stack);
+return pf->stack[0].Int;
+}
+
 static int pCmpObj(void *thunk, const void *va, const void *vb)
 /* Comparison function for Obj using paraFlow callback. */
 {
@@ -503,6 +542,9 @@ if (cmp == NULL)
 	    break;
 	case pf_stByte:
 	    compare = qCmpByte;
+	    break;
+	case pf_stChar:
+	    compare = qCmpChar;
 	    break;
 	case pf_stShort:
 	    compare = qCmpShort;
@@ -556,6 +598,9 @@ else
 	    break;
 	case pf_stDouble:
 	    compare = pCmpDouble;
+	    break;
+	case pf_stChar:
+	    compare = pCmpChar;
 	    break;
 	default:
 	    compare = pCmpObj;

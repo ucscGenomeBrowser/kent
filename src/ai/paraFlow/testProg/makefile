@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-test: quickTest
+test: q
 	cd oneFile && ${MAKE}
 	cd easy && ${MAKE}
 	rm -f modules/*/*.pfh
@@ -8,7 +8,7 @@ test: quickTest
 	cd modules && ${MAKE}
 	cd fixes && ${MAKE}
 
-quickTest:
+q:
 	cd quick && ${MAKE}
 	
 clean:

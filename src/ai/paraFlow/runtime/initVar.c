@@ -55,6 +55,9 @@ switch (st)
     case pf_stDouble:
 	*((_pf_Double *)output) = stack->Double;
 	break;
+    case pf_stChar:
+	*((_pf_Char *)output) = stack->Char;
+	break;
     case pf_stString:
 	*((_pf_String *)output) = stack->String;
 	break;

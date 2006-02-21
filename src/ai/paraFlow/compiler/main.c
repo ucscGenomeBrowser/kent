@@ -147,26 +147,32 @@ pfc->flowType = pfScopeAddType(scope, "flow", FALSE, pfc->functionType, 0, FALSE
 pfc->operatorType = pfScopeAddType(scope, "_operator_", FALSE, pfc->functionType, 0, FALSE);
 
 pfc->bitType = pfScopeAddType(scope, "bit", FALSE, pfc->numType, sizeof(_pf_Bit), FALSE);
+pfc->bitFullType = pfTypeNew(pfc->bitType);
 pfc->byteType = pfScopeAddType(scope, "byte", FALSE, pfc->numType, sizeof(_pf_Byte), FALSE);
+pfc->byteFullType = pfTypeNew(pfc->byteType);
 pfc->shortType = pfScopeAddType(scope, "short", FALSE, pfc->numType, sizeof(_pf_Short), FALSE);
+pfc->shortFullType = pfTypeNew(pfc->shortType);
 pfc->intType = pfScopeAddType(scope, "int", FALSE, pfc->numType, sizeof(_pf_Int), FALSE);
 pfc->intFullType = pfTypeNew(pfc->intType);
 pfc->longType = pfScopeAddType(scope, "long", FALSE, pfc->numType, sizeof(_pf_Long), FALSE);
 pfc->longFullType = pfTypeNew(pfc->longType);
 pfc->floatType = pfScopeAddType(scope, "float", FALSE, pfc->numType, sizeof(_pf_Float), FALSE);
+pfc->floatFullType = pfTypeNew(pfc->floatType);
 pfc->doubleType = pfScopeAddType(scope, "double", FALSE, pfc->numType, sizeof(_pf_Double), FALSE);
+pfc->doubleFullType = pfTypeNew(pfc->doubleType);
+pfc->charType = pfScopeAddType(scope, "char", FALSE, pfc->numType, sizeof(_pf_Char), FALSE);
+pfc->charFullType = pfTypeNew(pfc->charType);
 
 pfc->stringType = pfScopeAddType(scope, "string", TRUE, pfc->streamType, sizeof(_pf_String), TRUE);
 pfc->stringType->keyedBy = pfc->longType;
-
 pfc->arrayType = pfScopeAddType(scope, "array", TRUE, pfc->collectionType, sizeof(_pf_Array), TRUE);
 pfc->arrayType->keyedBy = pfc->longType;
-pfc->listType = pfScopeAddType(scope, "list", TRUE, pfc->collectionType, sizeof(_pf_List), TRUE);
-pfc->listType->keyedBy = pfc->longType;
-pfc->treeType = pfScopeAddType(scope, "tree", TRUE, pfc->collectionType, sizeof(_pf_Tree), TRUE);
-pfc->treeType->keyedBy = pfc->doubleType;
 pfc->dirType = pfScopeAddType(scope, "dir", TRUE, pfc->collectionType, sizeof(_pf_Dir), TRUE);
 pfc->dirType->keyedBy = pfc->stringType;
+//pfc->listType = pfScopeAddType(scope, "list", TRUE, pfc->collectionType, sizeof(_pf_List), TRUE);
+//pfc->listType->keyedBy = pfc->longType;
+//pfc->treeType = pfScopeAddType(scope, "tree", TRUE, pfc->collectionType, sizeof(_pf_Tree), TRUE);
+//pfc->treeType->keyedBy = pfc->doubleType;
 }
 
 struct pfCompile *pfCompileNew()

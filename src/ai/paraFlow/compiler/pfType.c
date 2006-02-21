@@ -211,18 +211,20 @@ if (base == pfc->bitType)
     return 0;
 else if (base == pfc->byteType)
     return 1;
-else if (base == pfc->shortType)
+else if (base == pfc->charType)
     return 2;
-else if (base == pfc->intType)
+else if (base == pfc->shortType)
     return 3;
-else if (base == pfc->longType)
+else if (base == pfc->intType)
     return 4;
-else if (base == pfc->floatType)
+else if (base == pfc->longType)
     return 5;
-else if (base == pfc->doubleType)
+else if (base == pfc->floatType)
     return 6;
-else if (base == pfc->stringType)
+else if (base == pfc->doubleType)
     return 7;
+else if (base == pfc->stringType)
+    return 8;
 else
     {
     internalErr();
@@ -254,7 +256,7 @@ static void numericCast(struct pfCompile *pfc,
 struct pfBaseType *newBase = newType->base;
 struct pfParse *pp = *pPp;
 struct pfBaseType *oldBase = pp->ty->base;
-int numTypeCount = 8;
+int numTypeCount = 9;
 enum pfParseType castType = pptCastBitToBit;
 if (oldBase == pfc->stringType && newBase != pfc->stringType)
     expectingGot("string", pp->tok);
@@ -1004,7 +1006,31 @@ if (pt->base != destBase)
     	(pt->base->isCollection ? "collection" : "single"), destBase->name);
     if (pt->base == pfc->nilType)
         {
+	/* Nil just gets converted to any type.  */
 	pp->ty = CloneVar(destType);
+	ok = TRUE;
+	}
+    else if (destBase == pfc->charType && pt->base == pfc->stringType
+    	&& pp->type == pptConstString)
+        {
+	/* We catch character initializations with string constants here. */
+	struct pfToken *tok = pp->tok;
+	if (tok->type == pftString || tok->type == pftSubstitute)
+	    {
+	    if (strlen(tok->val.s) != 1)
+	        errAt(tok, "You can only initialze chars with single character strings.");
+	    pp->type = pptConstChar;
+	    pp->ty = pfTypeNew(pfc->charType);
+	    }
+	else
+	    {
+	    internalErr();
+	    }
+	ok = TRUE;
+	}
+    else if (destBase == pfc->stringType && pt->base == pfc->charType)
+        {
+	insertCast(pptCastCharToString, CloneVar(destType), pPp);
 	ok = TRUE;
 	}
     else if (destBase == pfc->bitType && pt->base == pfc->stringType)
@@ -1265,7 +1291,7 @@ else if (collection->type != pptCall && collection->type != pptIndirectCall)
     else
 	{
 	if (collection->ty->base == pfc->stringType)
-	    ty = pfTypeNew(pfc->byteType);
+	    ty = pfTypeNew(pfc->charType);
 	else if (collection->ty->base == pfc->indexRangeType)
 	    ty = pfTypeNew(pfc->longType);
 	else
@@ -1304,7 +1330,7 @@ if (collection->type == pptCall || collection->type == pptIndirectCall)
 else
     {
     if (collection->ty->base == pfc->stringType)
-	ty = pfTypeNew(pfc->byteType);
+	ty = pfTypeNew(pfc->charType);
     else if (collection->ty->base == pfc->indexRangeType)
 	ty = pfTypeNew(pfc->longType);
     else
@@ -1536,7 +1562,7 @@ if (indexPp->ty->base != keyBase)
     coerceOne(pfc, &collectionPp->next, ty, FALSE);
     }
 if (collectionBase == pfc->stringType)
-    pp->ty = pfTypeNew(pfc->byteType);
+    pp->ty = pfTypeNew(pfc->charType);
 else
     pp->ty = CloneVar(collectionType->children);
 }

@@ -77,9 +77,19 @@ _pf_Double scanDouble(FILE *f)
 {
 _pf_Double i;
 if (fscanf(f, "%lf", &i) != 1)
-    errAbort("Not a long");
+    errAbort("Not a double");
 return i;
 }
+
+_pf_Char scanChar(FILE *f)
+/* Read char or die trying */
+{
+_pf_Char i;
+if (fscanf(f, "%c", &i) != 1)
+    errAbort("Not a char");
+return i;
+}
+
 
 static void scanDyString(FILE *f, struct dyString *dy)
 /* Scan between quotes into dy. */
@@ -337,6 +347,13 @@ if (!gotNil(f))
 		    v = CloneVar(&b);
 		    break;
 		    }
+		case pf_stChar:
+		    {
+		    _pf_Char b;
+		    scanField(f, &b, elType, idHash);
+		    v = CloneVar(&b);
+		    break;
+		    }
 		case pf_stVar:
 		    errAbort("Can't scan data containing var types.");
 		    break;
@@ -398,6 +415,12 @@ switch (type->base->singleType)
 	{
         _pf_Double *p = data;
 	*p = scanDouble(f);
+	break;
+	}
+    case pf_stChar:
+	{
+        _pf_Char *p = data;
+	*p = scanChar(f);
 	break;
 	}
     case pf_stString:
@@ -478,6 +501,9 @@ switch (base->singleType)
 	break;
     case pf_stDouble:
 	stack[0].Double = scanDouble(f);
+	break;
+    case pf_stChar:
+	stack[0].Char = scanChar(f);
 	break;
     case pf_stString:
 	stack[0].String = scanString(f);

@@ -23,6 +23,7 @@ hashAddInt(hash, "int", pf_stInt);
 hashAddInt(hash, "long", pf_stLong);
 hashAddInt(hash, "float", pf_stFloat);
 hashAddInt(hash, "double", pf_stDouble);
+hashAddInt(hash, "char", pf_stChar);
 hashAddInt(hash, "string", pf_stString);
 hashAddInt(hash, "array", pf_stArray);
 hashAddInt(hash, "list", pf_stList);
@@ -130,7 +131,10 @@ while ((parenCode = lti->parenCode) != NULL)
     {
     struct _pf_type *type = hashFindVal(typeHash, parenCode);
     if (type == NULL)
+	{
+	uglyf("parenCode = %s\n", parenCode);
         internalErr();
+	}
     lti->id = type->typeId;
     lti += 1;
     }
@@ -203,6 +207,13 @@ for (i=0; i<baseCount; ++i)
 		{
 		static struct x {char b1; _pf_Byte var;} x;
 		base->size = sizeof(_pf_Byte);
+		base->alignment = (char *)&x.var - (char *)&x;
+		break;
+		}
+	    case pf_stChar:
+		{
+		static struct x {char b1; _pf_Char var;} x;
+		base->size = sizeof(_pf_Char);
 		base->alignment = (char *)&x.var - (char *)&x;
 		break;
 		}
