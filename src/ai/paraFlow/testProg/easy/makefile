@@ -92,8 +92,8 @@ test:
 	diff expected/printFile $O/printFile
 	paraFlow range.pf > $O/range
 	diff expected/range $O/range
-	paraFlow sort.pf > $O/sort
-	diff expected/sort $O/sort
+#	paraFlow sort.pf > $O/sort
+#	diff expected/sort $O/sort
 	paraFlow static.pf > $O/static
 	diff expected/static $O/static
 	paraFlow shift.pf > $O/shift

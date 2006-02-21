@@ -606,6 +606,10 @@ else
 	    compare = pCmpObj;
 	    break;
 	}
+#ifdef MACHTYPE_i386
+    uglyAbort("Dang, hgwdev doesn't seem to have qsort_r like my Mac does.");
+#else
     qsort_r(array->elements, array->size, array->elSize, &pf, compare);
+#endif
     }
 }

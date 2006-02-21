@@ -2,7 +2,7 @@ include ../../inc/common.mk
 
 all:
 	cd compiler && ${MAKE}
-	cd runTime && ${MAKE}
+	cd runtime && ${MAKE}
 	cd testProg && ${MAKE}
 
 clean:
