@@ -761,6 +761,23 @@ fprintf(f, "if (%s[%d].v == 0) ", stackName, stack);
 codeUseOfNil(f, pp);
 }
 
+static void codeRangeIntoStartEndSize(struct pfCompile *pfc,
+	FILE *f, struct pfParse *indexRange, int stack)
+/* Generate code to created _pf_start/_pf_end/_pf_size variables
+ * with values filled in */
+{
+struct pfParse *startPp = indexRange->children;
+struct pfParse *endPp = startPp->next;
+fprintf(f, "long _pf_start, _pf_end, _pf_size;\n");
+fprintf(f, "_pf_Array _pf_result;\n");
+codeExpression(pfc, f, startPp, stack, FALSE);
+fprintf(f, "_pf_start = %s[%d].Long;\n", stackName, stack);
+codeExpression(pfc, f, endPp, stack, FALSE);
+fprintf(f, "_pf_end = %s[%d].Long;\n", stackName, stack);
+fprintf(f, "_pf_size = _pf_end - _pf_start;\n");
+fprintf(f, "if (_pf_size <= 0)\n");
+codeRunTimeError(f, indexRange, "no items in range");
+}
 
 static int codeParaGet(struct pfCompile *pfc, FILE *f,
 	struct pfParse *para, int stack)
@@ -776,9 +793,9 @@ fprintf(f, "{\n");
 
 if (collectBase == pfc->arrayType || collectBase == pfc->indexRangeType)
     {
+    fprintf(f, "int _pf_resElSize, _pf_resOffset = 0;\n");
     if (collectBase == pfc->arrayType)
 	{
-	fprintf(f, "int _pf_resElSize, _pf_resOffset = 0;\n");
 	fprintf(f, "_pf_Array _pf_coll, _pf_result;\n");
 	codeExpression(pfc, f, collection, stack, FALSE);
 	fprintf(f, "_pf_coll = ");
@@ -790,18 +807,7 @@ if (collectBase == pfc->arrayType || collectBase == pfc->indexRangeType)
 	}
     else
 	{
-	struct pfParse *startPp = collection->children;
-	struct pfParse *endPp = startPp->next;
-	fprintf(f, "int _pf_resElSize, _pf_resOffset = 0;\n");
-	fprintf(f, "long _pf_start, _pf_end, _pf_size;\n");
-	fprintf(f, "_pf_Array _pf_result;\n");
-	codeExpression(pfc, f, startPp, stack, FALSE);
-	fprintf(f, "_pf_start = %s[%d].Long;\n", stackName, stack);
-	codeExpression(pfc, f, endPp, stack, FALSE);
-	fprintf(f, "_pf_end = %s[%d].Long;\n", stackName, stack);
-	fprintf(f, "_pf_size = _pf_end - _pf_start;\n");
-	fprintf(f, "if (_pf_size <= 0)\n");
-	codeRunTimeError(f, collection, "no items in range");
+	codeRangeIntoStartEndSize(pfc, f, collection, stack);
 	fprintf(f, "_pf_result = _pf_dim_array(_pf_size, ");
 	codeForType(pfc, f, expression->ty);
 	fprintf(f, ");\n");
@@ -871,18 +877,29 @@ struct dyString *elName = varName(pfc, element->var);
 
 fprintf(f, "/* start para filter */\n");
 fprintf(f, "{\n");
-if (collectBase == pfc->arrayType)
+if (collectBase == pfc->arrayType || collectBase == pfc->indexRangeType)
     {
     /* Generate code that will create an array of chars
      * filled with 1's where filter is passed, and 0's elsewhere. */
     fprintf(f, "int _pf_ix=0,_pf_passCount=0,_pf_passOne,_pf_resOffset=0;\n");
-    fprintf(f, "_pf_Array _pf_coll, _pf_result;\n");
     fprintf(f, "char *_pf_passed;\n");
-    codeExpression(pfc, f, collection, stack, FALSE);
-    fprintf(f, "_pf_coll = ");
-    codeParamAccess(pfc, f, collectBase, stack);
-    fprintf(f, ";\n");
-    fprintf(f, "_pf_passed = _pf_need_mem(_pf_coll->size);\n");
+    if (collectBase == pfc->arrayType)
+	{
+	fprintf(f, "_pf_Array _pf_result;\n");
+	fprintf(f, "_pf_Array _pf_coll;\n");
+	codeExpression(pfc, f, collection, stack, FALSE);
+	fprintf(f, "_pf_coll = ");
+	codeParamAccess(pfc, f, collectBase, stack);
+	fprintf(f, ";\n");
+	fprintf(f, "_pf_passed = _pf_need_mem(_pf_coll->size);\n");
+	}
+    else
+        {
+	fprintf(f, "int _pf_elSize = sizeof(_pf_Long);\n");
+	codeRangeIntoStartEndSize(pfc, f, collection, stack);
+	fprintf(f, "_pf_passed = _pf_need_mem(_pf_size);\n");
+	}
+
     startElInCollectionIteration(pfc, f, stack, para->scope, element, 
     	collection, FALSE);
     codeExpression(pfc, f, expression, stack, FALSE);
@@ -896,7 +913,10 @@ if (collectBase == pfc->arrayType)
 
     /* Allocate results array. */
     fprintf(f, "_pf_result = _pf_dim_array(_pf_passCount, ");
-    codeForType(pfc, f, collection->ty->children);
+    if (collectBase == pfc->arrayType)
+	codeForType(pfc, f, collection->ty->children);
+    else
+        codeForType(pfc, f, pfc->longFullType);
     fprintf(f, ");\n");
 
     /* Generate code that will copy passing elements to results */
