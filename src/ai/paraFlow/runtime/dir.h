@@ -53,4 +53,7 @@ void _pf_dir_add_number(_pf_Stack *stack, int dirOffset);
 /* Stack contains number, directory, keyword.  Add number to
  * directory. */
 
+void _pf_cm_dir_keys(_pf_Stack *stack);
+/* implements to dir.keys() into array of string . */
+
 #endif /* DIR_H */

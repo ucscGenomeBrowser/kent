@@ -1882,6 +1882,10 @@ else if (type->base == pfc->arrayType)
     {
     type = pfc->arrayFullType;
     }
+else if (type->base == pfc->dirType)
+    {
+    type = pfc->dirFullType;
+    }
 if (!type->base->isClass && !type->base->isInterface)
     errAt(pp->tok, "dot after non-class variable");
 fieldType = findField(type->base, fieldUse->name);

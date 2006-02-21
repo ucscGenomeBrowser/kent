@@ -574,3 +574,28 @@ it.cleanup = dir_iterator_cleanup;
 it.data = dit;
 return it;
 }
+
+void _pf_cm_dir_keys(_pf_Stack *stack)
+/* implements to dir.keys() into array of string . */
+{
+struct _pf_dir *dir = stack[0].Dir;
+if (dir == NULL)
+    _pf_nil_use();
+else
+    {
+    struct hash *hash = dir->hash;
+    int elIx = 0;
+    struct hashCookie cookie = hashFirst(dir->hash);
+    struct hashEl *el;
+    _pf_String *elements;
+    _pf_Array a = _pf_dim_array(hash->elCount, _pf_find_string_type_id());
+    elements = (_pf_String*)(a->elements);
+    while ((el = hashNext(&cookie)) != NULL)
+         {
+	 _pf_String string = _pf_string_from_const(el->name);
+	 elements[elIx] = string;
+	 elIx += 1;
+	 }
+    stack[0].Array = a;
+    }
+}

@@ -165,15 +165,18 @@ return pfTypeNew(base);
 
 static void attachStringsAndThings(struct pfCompile *pfc, 
 	struct pfParse *stringModule)
-/* Finish parsing, binding and type checking the string module.  Rummage around for 
- * string class in it and attach it to pfc->stringFullType. */
+/* Finish parsing, binding and type checking the string module.  
+ * Rummage around for string class and some other things we need
+ * and attach them to the pfCompile struct. */
 {
 pfBindVars(pfc, stringModule);
 pfTypeCheck(pfc, &stringModule);
+pfc->elTypeFullType = findTypeInModule(stringModule, "_pf_elType");
 pfc->stringFullType = findTypeInModule(stringModule, "_pf_string");
 pfc->arrayFullType = findTypeInModule(stringModule, "_pf_array");
-pfc->elTypeFullType = findTypeInModule(stringModule, "_pf_elType");
 pfc->arrayType->methods = pfc->arrayFullType->base->methods;
+pfc->dirFullType = findTypeInModule(stringModule, "_pf_dir");
+pfc->dirType->methods = pfc->dirFullType->base->methods;
 }
 
 static void addCompoundScopes(struct pfCompile *pfc, struct pfToken *tokList,

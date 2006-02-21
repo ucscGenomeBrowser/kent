@@ -248,6 +248,10 @@ else if (base == pfc->arrayType)
     {
     fprintf(f, "_pf_cm_array_%s", name);
     }
+else if (base == pfc->dirType)
+    {
+    fprintf(f, "_pf_cm_dir_%s", name);
+    }
 else
     {
     struct pfType *method = NULL;
