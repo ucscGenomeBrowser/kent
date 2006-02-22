@@ -19726,46 +19726,45 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
         phastCons17way phastCons17way.wig
     #  ~ 3 minute load
 
-    # Downloads
-    ssh kkstore02
+    # Downloads  (2006-02-22 kate)
+    ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way
     mkdir mafDownloads
-cat > downloads.csh << 'EOF'
-    foreach f (maf/chr*.maf)
-	set c = $f:t:r
-        echo $c
-	nice gzip -c $f > mafDownloads/$c.maf.gz
-    end
     cd mafDownloads
-    md5sum *.gz > md5sum.txt
-'EOF'
-    csh downloads.csh >&! downloads.log
-
-    ssh hgwdev
-    set dir = /usr/local/apache/htdocs/goldenPath/hg17/multiz17way
-    mkdir $dir
-    ln -s /cluster/data/hg17/bed/multiz17way/mafDownloads/{*.gz,md5sum.txt} $dir
-
-    # upstream mafs for download
-    # mafFrags takes a while
-cat > maffrags.csh << 'EOF'
+    # upstream mafs (mafFrags takes a while)
+cat > mafFrags.csh << 'EOF'
+    date
     foreach i (1000 2000 5000)
         echo "making upstream$i.maf"
         nice featureBits hg17 refGene:upstream:$i -fa=/dev/null -bed=up.bad
         awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
         rm up.bad
-        nice mafFrags hg17 multiz17way up.bed upstream$i.maf -orgs=org.txt
+        nice mafFrags hg17 multiz17way up.bed upstream$i.maf \
+                -orgs=../species.lst
         rm up.bed
     end
-    ssh eieio
-    cd /cluster/data/hg17/bed/multiz17way
-    nice gzip upstream{1000,2000,5000}.maf
-        # 6 mins.
-    ssh hgwdev
-    cd /usr/local/apache/htdocs/goldenPath/hg17
-    mv /cluster/data/hg17/bed/multiz17way/upstream*.maf.gz multiz17way
-    cd multiz17way
+    date
+'EOF'
+    time csh mafFrags.csh >&! mafFrags.log &
+
+    ssh kkstore02
+    cd cluster/data/hg17/bed/multiz17way/mafDownloads
+cat > downloads.csh << 'EOF'
+    date
+    foreach f (../maf/chr*.maf)
+	set c = $f:t:r
+        echo $c
+	nice gzip -c $f > mafDownloads/$c.maf.gz
+    end
     md5sum *.gz > md5sum.txt
+    date
+'EOF'
+    time csh downloads.csh >&! downloads.log
+
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/hg17/multiz17way
+    mkdir $dir
+    ln -s /cluster/data/hg17/bed/multiz17way/mafDownloads/{*.gz,md5sum.txt} $dir
 
 
 # UPDATE MONKEY DOWNLOADS (2006-01-12 kate)
