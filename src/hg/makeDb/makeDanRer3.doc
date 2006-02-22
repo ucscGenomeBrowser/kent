@@ -5394,6 +5394,20 @@ done
     md5sum *.gz > md5sum.txt
     # copy over and edit README.txt from the hg17 phastCons.
 
+# MULTIZ 5-WAY DOWNLOADABLES (DONE, 2006-02-22, hartera)
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/danRer3
+    mkdir -p multiz5way
+    cd multiz5way
+    foreach f (/cluster/data/danRer3/bed/multiz5way/maf/*.maf)
+        set c = $f:r:t
+        echo $c
+        nice gzip $f
+        ln -s $f.gz .
+    end
+    md5sum *.gz > md5sum.txt
+    # copy over README and edit for this 5-way multiple alignment
+
 ##################################################################
 # HGNEAR TABLES (also used by the Known Genes details page links)
 # GET LATEST PROTEIN SEQUENCE FOR ALL HGNEAR SPECIES (DONE, 2005-02-10, hartera)
