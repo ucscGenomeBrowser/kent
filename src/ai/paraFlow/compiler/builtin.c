@@ -65,8 +65,6 @@ return
 "    flow nextToken(int pos) into (string s, int newPos);\n"
 "    flow fitLeft(int size) into (string s);\n"
 "    flow fitRight(int size) into (string s);\n"
-"\n"
-"    flow findPrevious(string s, int pos) into int foundPos;\n"
 "    flow startsWith(string prefix) into bit bool;\n"
 "    flow endsWith(string suffix) into bit bool;\n"
 "    }\n"

@@ -621,3 +621,31 @@ for (varIx=0; varIx <= varCount; ++varIx)  /* <= intentional here */
 stack[0].String = _pf_string_new(destBuf, destSize);
 freeMem(destBuf);
 }
+
+void _pf_cm_string_startsWith(_pf_Stack *stack)
+/*  string.startsWith(string prefix) into bit b */
+{
+_pf_String string = stack[0].String;
+_pf_String prefix = stack[1].String;
+_pf_nil_check(prefix);
+stack[0].Bit = startsWith(prefix->s, string->s);
+
+/* Clean up references on stack.  (Not first param since it's a method). */
+if (--prefix->_pf_refCount <= 0)
+    prefix->_pf_cleanup(prefix, 0);
+}
+
+
+void _pf_cm_string_endsWith(_pf_Stack *stack)
+/*  string.endsWith(string prefix) into bit b */
+{
+_pf_String string = stack[0].String;
+_pf_String suffix = stack[1].String;
+_pf_nil_check(suffix);
+stack[0].Bit = endsWith(string->s, suffix->s);
+
+/* Clean up references on stack.  (Not first param since it's a method). */
+if (--suffix->_pf_refCount <= 0)
+    suffix->_pf_cleanup(suffix, 0);
+}
+
