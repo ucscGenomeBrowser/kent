@@ -69,6 +69,7 @@ sGroup_mammal hg18 mm7
 sGroup_vertebrate tetNig1 fr1
 irows on
 frames multiz5wayFrames
+speciesCodonDefault danRer3
 treeImage phylo/danRer3_5way.jpg
 
 track chainHg18
@@ -231,28 +232,6 @@ visibility hide
 spectrum on
 type netAlign danRer3 chainSelf
 otherDb danRer3
-
-track multiz5way
-shortLabel Conservation
-longLabel Vertebrate Multiz Alignment & Conservation
-group compGeno
-priority 104
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons5way
-yLineOnOff Off
-autoScaleDefault Off
-summary multiz5waySummary
-speciesGroups vertebrate mammal
-sGroup_mammal hg18 mm7
-sGroup_vertebrate tetNig1 fr1
-treeImage phylo/danRer3_5way.jpg
-irows on
-frames multiz5wayFrames
-speciesCodonDefault danRer3
 
 searchTable ctgPos2
 searchMethod exact
