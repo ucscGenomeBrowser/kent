@@ -8,6 +8,17 @@ spectrum on
 type psl .
 cdsDrawOptions enabled
 
+track blastHg17KG
+shortLabel Hg17  Proteins
+longLabel Hg17 Proteins
+group compGeno
+priority 142
+visibility pack
+colorChromDefault off
+type psl protein
+pred hg17.blastKGPep02
+blastRef hg17.blastKGRef02
+
 track chainHg18
 shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
