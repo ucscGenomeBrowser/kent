@@ -3,44 +3,18 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Polymorphism data from dbSnp database or genotyping arrays
+#Polymorphism data from dbSnp database 
 CREATE TABLE snp125 (
     bin           smallint(5) unsigned not null,
-
-    chrom      enum(
-                   'chr1',  'chr1_random',
-                   'chr2',  'chr2_random',
-                   'chr3',  'chr3_random',
-                   'chr4',  'chr4_random',
-                   'chr5',  'chr5_random',
-                   'chr6',  'chr6_random',
-                   'chr7',  'chr7_random',
-                   'chr8',  'chr8_random',
-                   'chr9',  'chr9_random',
-                   'chr10', 'chr10_random',
-                   'chr11', 'chr11_random',
-                   'chr12', 'chr12_random',
-                   'chr13', 'chr13_random',
-                   'chr14', 'chr14_random',
-                   'chr15', 'chr15_random',
-                   'chr16', 'chr16_random',
-                   'chr17', 'chr17_random',
-                   'chr18', 'chr18_random',
-                   'chr19', 'chr19_random',
-                   'chr20', 'chr20_random',
-                   'chr21', 'chr21_random',
-                   'chr22', 'chr22_random',
-                   'chrX',  'chrY'
-               ) ,
-
-    chromStart    int unsigned not null,	# Start position in chrom
-    chromEnd      int unsigned not null,	# End position in chrom
-    name          varchar(255) not null,	# Reference SNP identifier or Affy SNP name
-    score         int unsigned not null,	# Not used
-    strand        char(1) not null,	# Which DNA strand contains the observed alleles
-    refNCBI     blob not null,	# Reference genomic
-    refUCSC     blob not null,	# Reference genomic
-    observed      blob not null,	# The sequences of the observed alleles
+    chrom         varchar(15) not null,			# Chromosome
+    chromStart    int(10) unsigned not null,		# Start position in chrom
+    chromEnd      int(10) unsigned not null,		# End position in chrom
+    name          varchar(15) not null,			# Reference SNP identifier 
+    score         smallint(5) unsigned not null,	# Not used
+    strand        enum('?','+','-') default '?' not null,	# Which DNA strand contains the observed alleles
+    refNCBI       blob not null,			# Reference genomic
+    refUCSC       blob not null,			# Reference genomic
+    observed      varchar(255) not null,		# The sequences of the observed alleles
     molType       enum( 'unknown', 'genomic', 'cDNA') DEFAULT 'unknown' not null,
     					# Sample type from exemplar ss
     class         enum('unknown', 'single', 'in-del', 'het', 'microsatellite',
@@ -60,8 +34,6 @@ CREATE TABLE snp125 (
     			# The functional category of the SNP
 
    locType  enum( 'unknown', 'range', 'exact', 'between', 
-   		  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL,
-
-    source enum ('dbSNP125', 'Affy500k')	# Source of the data - dbSnp, Affymetrix, ...
+   		  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL
 
 );
