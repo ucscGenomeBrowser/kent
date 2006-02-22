@@ -249,7 +249,7 @@ summary multiz5waySummary
 speciesGroups vertebrate mammal
 sGroup_mammal hg18 mm7
 sGroup_vertebrate tetNig1 fr1
-treeImage phylo/DanRer3_5way.jpg
+treeImage phylo/danRer3_5way.jpg
 irows on
 frames multiz5wayFrames
 speciesCodonDefault danRer3
