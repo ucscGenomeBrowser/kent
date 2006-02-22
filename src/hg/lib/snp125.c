@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snp125.c,v 1.15 2006/01/23 05:27:19 heather Exp $";
+static char const rcsid[] = "$Id: snp125.c,v 1.16 2006/02/22 23:35:26 heather Exp $";
 
 void snp125StaticLoad(char **row, struct snp125 *ret)
 /* Load a row from snp125 table into ret.  The contents of ret will
@@ -20,7 +20,7 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = row[3];
 ret->score = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
+ret->strand = row[5];
 ret->refNCBI = row[6];
 ret->refUCSC = row[7];
 ret->observed = row[8];
@@ -31,7 +31,6 @@ ret->avHet = atof(row[12]);
 ret->avHetSE = atof(row[13]);
 ret->func = row[14];
 ret->locType = row[15];
-ret->source = row[16];
 }
 
 struct snp125 *snp125Load(char **row)
@@ -46,7 +45,7 @@ ret->chromStart = sqlUnsigned(row[1]);
 ret->chromEnd = sqlUnsigned(row[2]);
 ret->name = cloneString(row[3]);
 ret->score = sqlUnsigned(row[4]);
-strcpy(ret->strand, row[5]);
+ret->strand = cloneString(row[5]);
 ret->refNCBI = cloneString(row[6]);
 ret->refUCSC = cloneString(row[7]);
 ret->observed = cloneString(row[8]);
@@ -57,7 +56,6 @@ ret->avHet = atof(row[12]);
 ret->avHetSE = atof(row[13]);
 ret->func = cloneString(row[14]);
 ret->locType = cloneString(row[15]);
-ret->source = cloneString(row[16]);
 return ret;
 }
 
@@ -67,7 +65,7 @@ struct snp125 *snp125LoadAll(char *fileName)
 {
 struct snp125 *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[16];
 
 while (lineFileRow(lf, row))
     {
@@ -85,7 +83,7 @@ struct snp125 *snp125LoadAllByChar(char *fileName, char chopper)
 {
 struct snp125 *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[17];
+char *row[16];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -111,7 +109,7 @@ ret->chromStart = sqlUnsignedComma(&s);
 ret->chromEnd = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
 ret->score = sqlUnsignedComma(&s);
-sqlFixedStringComma(&s, ret->strand, sizeof(ret->strand));
+ret->strand = sqlStringComma(&s);
 ret->refNCBI = sqlStringComma(&s);
 ret->refUCSC = sqlStringComma(&s);
 ret->observed = sqlStringComma(&s);
@@ -122,7 +120,6 @@ ret->avHet = sqlFloatComma(&s);
 ret->avHetSE = sqlFloatComma(&s);
 ret->func = sqlStringComma(&s);
 ret->locType = sqlStringComma(&s);
-ret->source = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -136,6 +133,7 @@ struct snp125 *el;
 if ((el = *pEl) == NULL) return;
 freeMem(el->chrom);
 freeMem(el->name);
+freeMem(el->strand);
 freeMem(el->refNCBI);
 freeMem(el->refUCSC);
 freeMem(el->observed);
@@ -144,7 +142,6 @@ freeMem(el->class);
 freeMem(el->valid);
 freeMem(el->func);
 freeMem(el->locType);
-freeMem(el->source);
 freez(pEl);
 }
 
@@ -217,10 +214,6 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->locType);
 if (sep == ',') fputc('"',f);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
-fprintf(f, "%s", el->source);
-if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
@@ -233,40 +226,15 @@ void snp125TableCreate(struct sqlConnection *conn, char *tableName)
 char *createString =
 "CREATE TABLE %s (\n"
 "    bin           smallint(5) unsigned not null,\n"
-
-"    chrom      enum(\n"
-"                   'chr1',  'chr1_random',\n"
-"                   'chr2',  'chr2_random',\n"
-"                   'chr3',  'chr3_random',\n"
-"                   'chr4',  'chr4_random',\n"
-"                   'chr5',  'chr5_random',\n"
-"                   'chr6',  'chr6_random',\n"
-"                   'chr7',  'chr7_random',\n"
-"                   'chr8',  'chr8_random',\n"
-"                   'chr9',  'chr9_random',\n"
-"                   'chr10', 'chr10_random',\n"
-"                   'chr11', 'chr11_random',\n"
-"                   'chr12', 'chr12_random',\n"
-"                   'chr13', 'chr13_random',\n"
-"                   'chr14', 'chr14_random',\n"
-"                   'chr15', 'chr15_random',\n"
-"                   'chr16', 'chr16_random',\n"
-"                   'chr17', 'chr17_random',\n"
-"                   'chr18', 'chr18_random',\n"
-"                   'chr19', 'chr19_random',\n"
-"                   'chr20', 'chr20_random',\n"
-"                   'chr21', 'chr21_random',\n"
-"                   'chr22', 'chr22_random',\n"
-"                   'chrX',  'chrY'\n"
-"               ) ,\n"
-"    chromStart    int unsigned not null,\n"
-"    chromEnd      int unsigned not null,\n"
-"    name          varchar(255) not null,\n"
-"    score         int unsigned not null,\n"
-"    strand        char(1) not null,\n"
+"    chrom         varchar(15) not null,\n"
+"    chromStart    int(10) unsigned not null,\n"
+"    chromEnd      int(10) unsigned not null,\n"
+"    name          varchar(15) not null,\n"
+"    score         smallint(5) unsigned not null,\n"
+"    strand        enum('?','+','-') default '?' not null,\n"
 "    refNCBI       blob not null,\n"
 "    refUCSC       blob not null,\n"
-"    observed      blob not null,\n"
+"    observed      varchar(255) not null,\n"
 "    molType       enum('unknown', 'genomic', 'cDNA') DEFAULT 'unknown' not null,\n"
 "    class         enum('unknown', 'single', 'in-del', 'het', 'microsatellite',"
 "                  'named', 'no var', 'mixed', 'mnp', 'insertion', 'deletion') \n"
@@ -280,11 +248,7 @@ char *createString =
 "                  'untranslated', 'intron','splice-site', 'cds-reference') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
 "    locType enum ('unknown', 'range', 'exact', 'between',\n"
-"                  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL,\n"
-"    source enum ('dbSNP125', 'Affy500k'),	# Source of the data - dbSnp, Affymetrix, ...\n"
-"    INDEX         chrom(chrom,bin),\n"
-"    INDEX         chromStart(chrom,chromStart),\n"
-"    INDEX         name(name)\n"
+"                  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL\n"
 ")\n";
 
 struct dyString *dy = newDyString(1024);
