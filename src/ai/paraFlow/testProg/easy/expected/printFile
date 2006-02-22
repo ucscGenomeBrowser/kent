@@ -1,3 +1,13 @@
 file f = fileOpen(args[0], "r");
 for (s in f.readLine())
     prin(s);
+print("----- and again all at once ----");
+f = fileOpen(args[0], "r");
+prin(f.readAll());
+----- and again all at once ----
+file f = fileOpen(args[0], "r");
+for (s in f.readLine())
+    prin(s);
+print("----- and again all at once ----");
+f = fileOpen(args[0], "r");
+prin(f.readAll());
