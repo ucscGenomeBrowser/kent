@@ -197,8 +197,6 @@ flow htmlTagsParse(string text, int pos) into (array of htmlTag tags)
 		    continue;
 		    }
 
-		/*-soon
-		soon-*/
 		// Process name/value pairs until we get end tag.
 		for (;;)
 		    {
@@ -255,6 +253,7 @@ flow htmlTagsParse(string text, int pos) into (array of htmlTag tags)
 				c = text[end];
 				if (c == '>' || isSpace(c))
 				    break;
+				end++;
 				}
 			    val = text.middle(p, end-p);
 			    p = end;
@@ -262,9 +261,9 @@ flow htmlTagsParse(string text, int pos) into (array of htmlTag tags)
 			}
 
 		    // Create attribute dir if it doesn't exist yet.
-		    if (!tags.attributes)
-		        tags.attributes = ();
-		    tags.attributes[name] = val;
+		    if (!tag.attributes)
+		        tag.attributes = ();
+		    tag.attributes[name] = val;
 		    }
 		}
 	    }
@@ -302,7 +301,10 @@ to test(string fileName = "gb.html")
 	print(page.status);
 	print(page.header);
 	print(page.cookies);
-	print(page.tags);
+	print(page.tags.size + " tags in $fileName");
+	print(page.tags[0]);
+	print(page.tags[page.tags.size-1]);
+	// print(page.tags);
 	}
     catch(m)
         {
