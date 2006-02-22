@@ -5,18 +5,18 @@
 #ifndef SNP125_H
 #define SNP125_H
 
-#define SNP125_NUM_COLS 17
+#define SNP125_NUM_COLS 16
 
 struct snp125
 /* Polymorphism data from dbSnp database or genotyping arrays */
     {
     struct snp125 *next;  /* Next in singly linked list. */
-    char *chrom;	/* Chromosome */
+    char *chrom;	/* Reference sequence chromosome or scaffold */
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
     char *name;	/* Reference SNP identifier or Affy SNP name */
     unsigned score;	/* Not used */
-    char strand[2];	/* Which DNA strand contains the observed alleles */
+    char *strand;	/* Which DNA strand contains the observed alleles */
     char *refNCBI;	/* Reference genomic from dbSNP */
     char *refUCSC;	/* Reference genomic from nib lookup */
     char *observed;	/* The sequences of the observed alleles from rs-fasta files */
@@ -27,7 +27,6 @@ struct snp125
     float avHetSE;	/* The Standard Error for the average heterozygosity */
     char *func;	/* The functional category of the SNP (coding-synon, coding-nonsynon, intron, etc.) */
     char *locType;	/* How the variant affects the reference sequence */
-    char *source;	/* Source of the data - dbSnp, Affymetrix, ... */
     };
 
 void snp125StaticLoad(char **row, struct snp125 *ret);
@@ -72,7 +71,6 @@ void snp125Output(struct snp125 *el, FILE *f, char sep, char lastSep);
 /* Print out snp125 as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
-
 
 void snp125TableCreate(struct sqlConnection *conn, char *tableName);
 /* create a snp125 table */
