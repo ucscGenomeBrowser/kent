@@ -4,6 +4,7 @@
 #include "runType.h"
 #include "object.h"
 #include "pfString.h"
+#include "sqlNum.h"
 
 
 static void _pf_string_cleanup(struct _pf_string *string, int typeId)
@@ -649,3 +650,23 @@ if (--suffix->_pf_refCount <= 0)
     suffix->_pf_cleanup(suffix, 0);
 }
 
+void _pf_cm_string_asInt(_pf_Stack *stack)
+/* Convert string to int. */
+{
+_pf_String string = stack[0].String;
+stack[0].Int = sqlSigned(string->s);
+}
+
+void _pf_cm_string_asLong(_pf_Stack *stack)
+/* Convert string to long. */
+{
+_pf_String string = stack[0].String;
+stack[0].Long = sqlLongLong(string->s);
+}
+
+void _pf_cm_string_asDouble(_pf_Stack *stack)
+/* Convert string to double. */
+{
+_pf_String string = stack[0].String;
+stack[0].Double = sqlDouble(string->s);
+}
