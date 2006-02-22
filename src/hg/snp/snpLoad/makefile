@@ -4,8 +4,54 @@ L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-X = snpLoad
-O = ${X}.o
+O = snpContigLocFilter.o snpContigLocusIdFilter.o snpContigLocusIdCondense.o \
+    snpSplitByChrom.o snpLocType.o snpExpandAllele.o snpSort.o snpRefUCSC.o \
+    snpCheckAlleles.o snpLoadFasta.o snpReadFasta.o snpCheckClassAndObserved.o \
+    snpFunction.o snpSNP.o
 
-${X}: $O ${MYLIBS}
-	${CC} ${COPT} -o ${X} $O ${MYLIBS} $L
+all: snpContigLocFilter snpContigLocusIdFilter snpContigLocusIdCondense \
+     snpSplitByChrom snpLocType snpExpandAllele snpSort snpRefUCSC \
+     snpCheckAlleles snpLoadFasta snpReadFasta snpCheckClassAndObserved \
+     snpFunction snpSNP
+
+snpContigLocFilter: snpContigLocFilter.o ${MYLIBS}
+	${CC} -O -o snpContigLocFilter snpContigLocFilter.o ${MYLIBS} $L
+
+snpContigLocusIdFilter: snpContigLocusIdFilter.o ${MYLIBS}
+	${CC} -O -o snpContigLocusIdFilter snpContigLocusIdFilter.o ${MYLIBS} $L
+
+snpContigLocusIdCondense: snpContigLocusIdCondense.o ${MYLIBS}
+	${CC} -O -o snpContigLocusIdCondense snpContigLocusIdCondense.o ${MYLIBS} $L
+
+snpSplitByChrom: snpSplitByChrom.o ${MYLIBS}
+	${CC} -O -o snpSplitByChrom snpSplitByChrom.o ${MYLIBS} $L
+
+snpLocType: snpLocType.o ${MYLIBS}
+	${CC} -O -o snpLocType snpLocType.o ${MYLIBS} $L
+
+snpExpandAllele: snpExpandAllele.o ${MYLIBS}
+	${CC} -O -o snpExpandAllele snpExpandAllele.o ${MYLIBS} $L
+
+snpSort: snpSort.o ${MYLIBS}
+	${CC} -O -o snpSort snpSort.o ${MYLIBS} $L
+
+snpRefUCSC: snpRefUCSC.o ${MYLIBS}
+	${CC} -O -o snpRefUCSC snpRefUCSC.o ${MYLIBS} $L
+
+snpCheckAlleles: snpCheckAlleles.o ${MYLIBS}
+	${CC} -O -o snpCheckAlleles snpCheckAlleles.o ${MYLIBS} $L
+
+snpLoadFasta: snpLoadFasta.o ${MYLIBS}
+	${CC} -O -o snpLoadFasta snpLoadFasta.o ${MYLIBS} $L
+
+snpReadFasta: snpReadFasta.o ${MYLIBS}
+	${CC} -O -o snpReadFasta snpReadFasta.o ${MYLIBS} $L
+
+snpCheckClassAndObserved: snpCheckClassAndObserved.o ${MYLIBS}
+	${CC} -O -o snpCheckClassAndObserved snpCheckClassAndObserved.o ${MYLIBS} $L
+
+snpFunction: snpFunction.o ${MYLIBS}
+	${CC} -O -o snpFunction snpFunction.o ${MYLIBS} $L
+
+snpSNP: snpSNP.o ${MYLIBS}
+	${CC} -O -o snpSNP snpSNP.o ${MYLIBS} $L
