@@ -825,3 +825,11 @@ void _pf_cm_string_asDouble(_pf_Stack *stack)
 _pf_String string = stack[0].String;
 stack[0].Double = sqlDouble(string->s);
 }
+
+void pf_isSpace(_pf_Stack *stack)
+/* Return TRUE if it's a space character. */
+{
+_pf_Char c = stack[0].Char;
+stack[0].Bit = isspace(c);
+}
+

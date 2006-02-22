@@ -203,7 +203,7 @@ puntCatcher();
 }
 
 void pf_punt(_pf_Stack *stack)
-/* Print  message and die. */
+/* Print  message and bail out. */
 {
 _pf_String message = stack[0].String;
 _pf_String source = stack[1].String;
@@ -217,3 +217,10 @@ punter.level = level;
 puntCatcher();
 }
 
+void pf_warn(_pf_Stack *stack)
+/* Print warning message, but don't bail out. */
+{
+_pf_String message = stack[0].String;
+_pf_nil_check(message);
+warn(message->s);
+}

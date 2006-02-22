@@ -5,14 +5,16 @@ test:
 	diff expected/arrayDot output/arrayDot
 	paraFlow badDefault.pf > output/badDefault
 	diff expected/badDefault output/badDefault
+	paraFlow castMultiReturn.pf > output/castMultiReturn
+	diff expected/castMultiReturn output/castMultiReturn
 	paraFlow defaultAhead.pf > output/defaultAhead
 	diff expected/defaultAhead output/defaultAhead
 	paraFlow dirAddTuple.pf > output/dirAddTuple
 	diff expected/dirAddTuple output/dirAddTuple
 	paraFlow dotStringDotMethod.pf > output/dotStringDotMethod
 	diff expected/dotStringDotMethod output/dotStringDotMethod
-	paraFlow castMultiReturn.pf > output/castMultiReturn
-	diff expected/castMultiReturn output/castMultiReturn
+	paraFlow errOnEmptyMemberDir.pf > output/errOnEmptyMemberDir
+	diff expected/errOnEmptyMemberDir output/errOnEmptyMemberDir
 	paraFlow func2func2.pf > output/func2func2
 	diff expected/func2func2 output/func2func2
 	paraFlow func2in2class.pf > output/func2in2class

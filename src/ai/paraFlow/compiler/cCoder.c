@@ -1362,8 +1362,10 @@ switch (pp->type)
 	int total = 0;
 	struct pfParse *p;
 	for (p = pp->children; p != NULL; p = p->next)
+            {
 	    total += lvalOffStack(pfc, f, p, stack+total, op, expSize-total,
 	    	cleanupOldVal);
+	    }
 	return total;
 	}
     case pptIndex:
@@ -1470,7 +1472,7 @@ else
     if (rval->type == pptUniformTuple)
 	codeTupleIntoCollection(pfc, f, lval->ty, rval, stack, count);
     }
-return count;
+return 1;
 }
 
 static void cantCopeParamType(struct pfParse *pp, int code)

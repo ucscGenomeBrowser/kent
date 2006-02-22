@@ -1284,7 +1284,6 @@ switch (pp->type)
         break;
     default:
 	{
-	pfParseDump(pp, 3, uglyOut);
 	syntaxError(pp->tok, 2);
 	break;
 	}

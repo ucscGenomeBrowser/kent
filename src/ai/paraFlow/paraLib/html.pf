@@ -22,18 +22,11 @@ class htmlCookie
     bit secure;		// Is it a secure coookie?
     }
 
-class htmlAttribute
-// An HTML attribute - part of a set of name=value pairs in a tag
-    {
-    string name;	// Attribute name
-    string value;	// Attribute value
-    }
-
 class htmlTag
 // An HTML tag - includes attribute list but no text.
     {
     string name;			// Tag name.
-    array of htmlAttribute attributes;  // All attributes.
+    dir of string attributes;		// All attributes. May be nil
     int start;			// Start position within htmlPage.fullText
     int end;			// End position (one past closing '>')
     }
@@ -85,13 +78,41 @@ flow htmlStatusParse(string text, int pos) into (htmlStatus status, int newPos)
     if (!status.version.startsWith("HTTP/")) punt("No HTTP in status line");
     }
 
+flow htmlCookieParse(string line) into (htmlCookie cookie)
+    {
+    array of string parts = line.split(';');
+    for (part in parts)
+	{
+	part = part.trim();
+	int equals = part.find('=');
+	if (equals < 0) punt("missing equals in cookie $part");
+	string field = part.start(equals);
+	string val = part.rest(equals+1);
+	if (!cookie) // first time through, alloc self and set name
+	    {
+	    cookie = ();
+	    cookie.name = field;
+	    cookie.value = val;
+	    }
+	else if (field == 'domain')
+	    cookie.domain = val;
+	else if (field == 'path')
+	    cookie.path = val;
+	else if (field == 'expires')
+	    cookie.expires = val;
+	else if (field == 'secure')
+	    cookie.secure = 1;
+	}
+    }
+
 flow htmlHeaderParse(string text, int pos) 
-into (dir of string header, int newPos)
+into (dir of string header, dir of htmlCookie cookies, int newPos)
 // Read lines until get a blank one.  Put the lines into a hash.
 // The lines are of the format key: value.  We strip the colon.
     {
     string line;
     header = ();
+    cookies = ();
     newPos = pos;
     for (;;)
         {
@@ -100,25 +121,92 @@ into (dir of string header, int newPos)
 	(string key, int p) = line.nextWord(0);
 	if (!key)
 	    break;
-	header[key] = line.rest(p).trim();
-	}
-    }
-
-to htmlCookieParse(string line) into (dir of string cookies)
-    {
-    cookies = ();
-    if (line)
-        {
-	array of string parts = line.split(';');
-	for (part in parts)
+	// Check for trailing colon and then trim it.
+	if (!key.endsWith(':')) punt("Missing : in HTTP header line\n\t$line");
+	key = key.start(key.size-1);
+	string val = line.rest(p).trim();
+	header[key] = val;
+	if (key == "Set-Cookie")
 	    {
-	    part = part.trim();
-	    int equals = part.find('=');
-	    if (equals < 0) punt("missing equals in cookie $part");
-	    cookies[part.start(equals)] = part.rest(equals+1);
+	    htmlCookie cookie = htmlCookieParse(val);
+	    cookies[cookie.name] = cookie;
 	    }
 	}
     }
+
+flow htmlTagsParse(string text, int pos) into (array of htmlTag tags)
+// Scan text starting at pos for HTML tags and return an array of them.
+    {
+    int p = pos;	 // Current position in text
+    tags = ();		 // Allocate results array
+
+    while (p < text.size)
+	{
+	char c = text[p];
+	p++;
+	if (c == '<')
+	    {
+	    if (text[p] == '!') // HTML comment
+		{
+		p++;
+		if (text[p] == '-' && text[p+1] == '-')
+		    p = text.findNext('-->', p);
+		else
+		    p = text.findNext('>', p);
+		if (p < 0) 
+		    {
+		    warn("End of file in comment");
+		    break;
+		    }
+		}
+	    else  // It's a real tag, let's process it.
+	        {
+		// Make up tag and set start position to <
+		htmlTag tag = ();
+		tag.start = p-1;
+		tag.attributes = ();
+		string s = "uglyduck";
+
+		// Grab first word into tagName.
+		int end = p;
+		for (;;)
+		    {
+		    c = text[end];
+		    if (c == '>'  || isSpace(c))
+			break;
+		    end++;
+		    if (end  >= text.size)
+		        {
+			warn("unclosed tag " + text.rest(tag.start));
+			break;
+			}
+		    }
+		tag.name = text.middle(p, end-p);
+		p = end;
+
+		// If we're at end of tag already fill in a few
+		// fields and bail on rest of loop
+		if (p >= text.size)
+		    {
+		    tag.end = text.size;
+		    continue;
+		    }
+		else if (c == '>')
+		    {
+		    tag.end = end+1;
+		    continue;
+		    }
+
+		/*-soon
+		// Process name/value pairs until we get end tag.
+		for (;;)
+		    {
+		    }
+		soon-*/
+		}
+	    }
+	}
+   }
 
 to htmlPageParse(string fileName) into (htmlPage page)
     {
@@ -128,11 +216,19 @@ to htmlPageParse(string fileName) into (htmlPage page)
     page.text = f.readAll();
     int pos = 0;
     (page.status, pos) = htmlStatusParse(page.text, pos);
-    print(page.status);
-    (page.header, pos) = htmlHeaderParse(page.text, pos);
-    print(page.header);
-    page.cookies = htmlCookieParse(page.header["Set-Cookie:"]);
-    print(page.cookies);
+    (page.header, page.cookies, pos) = htmlHeaderParse(page.text, pos);
+    string contentType = page.header["Content-Type"];
+    if (!contentType)
+        {
+	warn("No contentType, assuming test/html");
+	contentType = 'text/html';
+	page.header['Content-Type'] = contentType;
+	}
+    page.htmlStart = pos;
+    if (contentType.startsWith('text/html'))
+        {
+	page.tags  = htmlTagsParse(page.text, pos);
+	}
     }
 
 
@@ -140,6 +236,9 @@ to test(string fileName = "gb.html")
     {
     try {
 	htmlPage page = htmlPageParse(fileName);
+	print(page.status);
+	print(page.header);
+	print(page.cookies);
 	}
     catch(m)
         {
