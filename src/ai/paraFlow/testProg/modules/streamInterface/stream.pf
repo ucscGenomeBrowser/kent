@@ -47,12 +47,12 @@ class fileStream
 
     to read(int size) into string s
         {
-	s = f.readBytes(size);
+	s = f.read(size);
 	}
 
     to write(string s)
         {
-	f.writeString(s);
+	f.write(s);
 	}
 
     to close()

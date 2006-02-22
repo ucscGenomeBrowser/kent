@@ -1,8 +1,4 @@
 TO DO:
-  - Let people access keys as well as values in a for or para ... do.
-    Syntax would be
-         for (key:val in collection)
-	      print("$key $val");
   - It turns out we need three levels of parallelizability for
     methods:
         1) flow - no side effects even to members.
@@ -40,6 +36,10 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Let people access keys as well as values in a for or para ... do.
+    Syntax would be
+         for (key:val in collection)
+	      print("$key $val");
   - Allow variable substitutions in constant strings.  Things like
        print("Hello $name, are you $(verb)ing now?");
   - Way to call parent methods in an object.  (An automatically

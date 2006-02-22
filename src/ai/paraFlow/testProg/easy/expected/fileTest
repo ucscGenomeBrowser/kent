@@ -1,0 +1,13 @@
+There are 10 numbers and 26 letters.
+The letters are abcdefghijklmnopqrstuvwxyz
+The numbers are 0123456789
+Every other number and letter: 13579bdfhjlnprtvxz
+The last five letters are vwxyz
+I've got 30 punctuation marks:  ~!@#$%^&*()_+=-}{,./?.,;:'"\|`
+I like upper case better too.
+0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ~!@#$%^&*()_+=-}{,./?.,;:'"\|`
+That's better, it's more like Perl now.
+Let's start over.
+How does this look?
+abcdefghijklmnopqrstuvwxyz0123456789KLMNOPQRSTUVWXYZ
+Ok, I'm done now.

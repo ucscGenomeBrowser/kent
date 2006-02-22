@@ -5,6 +5,10 @@
 struct _pf_string *_pf_string_new(char *s, int size);
 /* Wrap string buffer of given size. */
 
+struct _pf_string *_pf_string_new_empty(int bufSize);
+/* Create string with given bufSize, but no actual
+ * contents. */
+
 struct _pf_string *_pf_string_dupe(char *s, int size);
 /* Clone string of given size and wrap string around it. */
 
@@ -13,6 +17,9 @@ struct _pf_string *_pf_string_from_const(char *s);
 
 struct _pf_string *_pf_string_cat(_pf_Stack *stack, int count);
 /* Create new string that's a concatenation of the above strings. */
+
+void _pf_strcat(_pf_String a, char *b, int bSize);
+/* Concatenate b onto the end of a. */
 
 void _pf_string_substitute(_pf_Stack *stack);
 /* Create new string on top of stack based on all of the

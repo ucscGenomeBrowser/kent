@@ -2,7 +2,7 @@
 #include "common.h"
 #include "dystring.h"
 #include "../compiler/pfPreamble.h"
-#include "runType.h"
+#include "pfString.h"
 
 void _pf_prin(FILE *f, _pf_Stack *stack, boolean quoteString);
 /* Print out single variable where type is determined at run time. */
@@ -57,7 +57,7 @@ struct file *file = stack[0].v;
 carefulClose(&file->f);
 }
 
-void _pf_cm1_file_writeString(_pf_Stack *stack)
+void _pf_cm1_file_write(_pf_Stack *stack)
 /* paraFlow run time support routine to write string to file. */
 {
 struct file *file = stack[0].v;
@@ -69,6 +69,7 @@ mustWrite(file->f, string->s, string->size);
 if (--string->_pf_refCount <= 0)
     string->_pf_cleanup(string, 0);
 }
+
 
 void _pf_cm1_file_put(_pf_Stack *stack)
 /* Print to file with line feed. */
@@ -113,7 +114,7 @@ for (;;)
 stack[0].String = _pf_string_from_const(dy->string);
 }
 
-void _pf_cm1_file_readBytes(_pf_Stack *stack)
+void _pf_cm1_file_read(_pf_Stack *stack)
 /* Read in a fixed number of bytes to string.
  * This will return a string of length zero at
  * EOF, and a string smaller than what is asked
@@ -131,3 +132,46 @@ string->s[bytesRead] = 0;
 stack[0].String = string;
 }
 
+void _pf_cm1_file_readAll(_pf_Stack *stack)
+/* Read in whole file to string. */
+{
+struct file *file = stack[0].v;
+char buf[4*1024];
+int bytesRead;
+struct _pf_string *string = _pf_string_new_empty(sizeof(buf));
+for (;;)
+    {
+    bytesRead = fread(buf, 1, sizeof(buf), file->f);
+    if (bytesRead <= 0)
+        break;
+    _pf_strcat(string, buf, bytesRead);
+    }
+stack[0].String = string;
+}
+
+void _pf_cm1_file_seek(_pf_Stack *stack)
+/* Seek to a position. */
+{
+struct file *file = stack[0].v;
+_pf_Long pos = stack[1].Long;
+_pf_Bit fromEnd = stack[2].Bit;
+int whence = (fromEnd ? SEEK_END : SEEK_SET);
+if (fseek(file->f, pos, whence) < 0)
+    errnoAbort("seek error on %s", file->name);
+}
+
+void _pf_cm1_file_skip(_pf_Stack *stack)
+/* Seek relative to current position. */
+{
+struct file *file = stack[0].v;
+_pf_Long pos = stack[1].Long;
+if (fseek(file->f, pos, SEEK_CUR) < 0)
+    errnoAbort("skip error on %s", file->name);
+}
+
+void _pf_cm1_file_tell(_pf_Stack *stack)
+/* Return current file position. */
+{
+struct file *file = stack[0].v;
+stack[0].Long = ftell(file->f);
+}

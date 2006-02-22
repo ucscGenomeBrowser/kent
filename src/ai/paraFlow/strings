@@ -118,7 +118,7 @@ string.nextWord(int pos) into (string word, int nextPos)
 string.nextToken(int pos) into (string word, int nextPos)
     Returns next word deliminated by the same rules as string.tokens.
 
-floatString(double f, int digitsBeforeDecimal, int digitsAfterDecimal, 
+floatToString(double f, int digitsBeforeDecimal, int digitsAfterDecimal, 
             bit scientific) into string s
     This returns a floating point number formatted just how you like it.
     Here's some examples:
@@ -126,7 +126,7 @@ floatString(double f, int digitsBeforeDecimal, int digitsAfterDecimal,
 	 floatString(12.3456, 0, 3, 0) = "12.346"
 	 floatString(12.3456, 0, 3, 1) = "1.234e+01"
 
-intString(long l, int minWidth, bit zeroPad, bit commas)
+intToString(long l, int minWidth, bit zeroPad, bit commas)
     This returns an integer or long number formatted various
     ways.  Here's some examples 
     	intString(1234, 0, 0, 0) = "1234"

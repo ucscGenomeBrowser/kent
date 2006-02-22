@@ -9,22 +9,31 @@
 static void _pf_string_cleanup(struct _pf_string *string, int typeId)
 /* Clean up string->s and string itself. */
 {
-// uglyf("_pf_string_cleanup %s\n", string->s);
 verbose(2, "_pf_string_cleanup %s\n", string->s);
 if (string->allocated != 0)
     freeMem(string->s);
 freeMem(string);
 }
 
-struct _pf_string *_pf_string_new(char *s, int size)
-/* Wrap string buffer of given size. */
+struct _pf_string *_pf_string_new_empty(int bufSize)
+/* Create string with given bufSize, but no actual
+ * contents. */
 {
 struct _pf_string *string;
 AllocVar(string);
 string->_pf_refCount = 1;
 string->_pf_cleanup = _pf_string_cleanup;
-string->s = cloneStringZ(s, size);
-string->size = string->allocated = size;
+string->s = needMem(bufSize);
+string->allocated = bufSize;
+return string;
+}
+
+struct _pf_string *_pf_string_new(char *s, int size)
+/* Wrap string buffer of given size. */
+{
+struct _pf_string *string = _pf_string_new_empty(size+1);
+memcpy(string->s, s, size);
+string->size = size;
 return string;
 }
 
@@ -204,6 +213,26 @@ if (start > string->size) start = string->size;
 stack[0].String = _pf_string_new(string->s + start, string->size - start);
 }
 
+void _pf_strcat(_pf_String a, char *b, int bSize)
+/* Concatenate b onto the end of a. */
+{
+if (b != NULL)
+    {
+    int newSize = a->size + bSize;
+    if (newSize >= a->allocated)
+	{
+	char *s;
+	if (newSize <= 64*1024)
+	    a->allocated = 2*newSize;
+	else
+	    a->allocated = newSize + 64*1024;
+	a->s = needLargeMemResize(a->s, a->allocated);
+	}
+    memcpy(a->s + a->size, b, bSize);
+    a->s[newSize] = 0;
+    a->size = newSize;
+    }
+}
 
 void _pf_cm_string_append(_pf_Stack *stack)
 /* Put something on end of string. */
@@ -212,20 +241,7 @@ _pf_String start = stack[0].String;
 _pf_String end = stack[1].String;
 if (end != NULL)
     {
-    int newSize = start->size + end->size;
-    if (newSize > start->allocated)
-	{
-	char *s;
-	if (newSize <= 64*1024)
-	    start->allocated = 2*newSize;
-	else
-	    start->allocated = newSize + 64*1024;
-	start->s = needLargeMemResize(start->s, start->allocated);
-	}
-    memcpy(start->s + start->size, end->s, end->size);
-    start->s[newSize] = 0;
-    start->size = newSize;
-
+    _pf_strcat(start, end->s, end->size);
     /* Clean up references on stack.  (Not first param since it's a method). */
     if (--end->_pf_refCount <= 0)
 	end->_pf_cleanup(end, 0);

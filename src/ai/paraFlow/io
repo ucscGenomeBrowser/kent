@@ -8,7 +8,7 @@ print(var v)
 prin(var v)
     Like print but with no line feed at end.
 
-die(string message)
+punt(string message)
     Abort program after printing message to error output.
 
 fileOpen(string fileName, string mode) into (file f)

@@ -22,6 +22,8 @@ test:
 	diff expected/emptyFlow $O/emptyFlow
 	paraFlow emptyFunc.pf > $O/emptyFunc
 	diff expected/emptyFunc $O/emptyFunc
+	paraFlow fileTest.pf > $O/fileTest
+	diff expected/fileTest $O/fileTest
 	paraFlow foreach.pf > $O/foreach
 	diff expected/foreach $O/foreach
 	paraFlow functionPointer.pf > $O/functionPointer
@@ -92,8 +94,8 @@ test:
 	diff expected/printFile $O/printFile
 	paraFlow range.pf > $O/range
 	diff expected/range $O/range
-#	paraFlow sort.pf > $O/sort
-#	diff expected/sort $O/sort
+	paraFlow sort.pf > $O/sort
+	diff expected/sort $O/sort
 	paraFlow static.pf > $O/static
 	diff expected/static $O/static
 	paraFlow shift.pf > $O/shift

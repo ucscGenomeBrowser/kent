@@ -1,0 +1,80 @@
+// Test several of the file functions.
+
+string tmp = "fileTest.tmp";
+string numbers = "0123456789";
+string letters = "abcdefghijklmnopqrstuvwxyz";
+string punctuation = "~!@#$$%^&*()_+=-}{,./?.,;:'\"\\|`";
+
+/* Create file with numbers followed by letters */
+file f = fileOpen(tmp, "w");
+f.write(numbers);
+int numCount = f.tell();
+f.write(letters);
+int letCount = f.tell() - numCount;
+f.close();
+print("There are $numCount numbers and $letCount letters.");
+
+/* Reopen file to read, and seek to get letters and numbers. */
+f = fileOpen(tmp, "r");
+f.seek(numCount);
+string let = f.read(letCount);
+print("The letters are $let");
+f.seek(0);
+string num = f.read(numCount);
+print("The numbers are $num");
+
+/* Rewind file, and then do a print/skip loop. */
+f.seek(0);
+prin("Every other number and letter: ");
+for (i in 0 to (numbers.size+letters.size)/2)
+    {
+    f.skip(1);
+    string c = f.read(1);
+    prin(c);
+    }
+print("");
+
+/* Seek from end too. */
+f.seek(-5, 1);
+string last5 = f.read(5);
+print("The last five letters are $last5");
+
+/* Now we implicitly close the file, just by reusing the f
+ * var in a new file-open call, this time to append. 
+ * We add the punctuation marks. */
+ 
+f = fileOpen(tmp, "a");
+print("I've got " + punctuation.size + " punctuation marks:  $punctuation");
+f.write(punctuation);
+
+/*
+f.write(letters);
+f.close();
+*/
+
+
+f = fileOpen(tmp, "r+");
+print("I like upper case better too.");
+f.seek(10);
+string LETTERS = f.read(letters.size);
+LETTERS.upper();
+f.skip(-letters.size);
+f.write(LETTERS);
+f.seek(0);
+string perlish = f.readAll();
+print(perlish);
+print("That's better, it's more like Perl now.");
+
+// print("Are these lower case: $letters?");
+
+print("Let's start over.");
+f = fileOpen(tmp, "w+");
+f.write(letters+LETTERS);
+f.skip(-LETTERS.size);
+f.write(numbers);
+print("How does this look?");
+f.seek(0);
+print(f.readAll());
+f.close();
+print("Ok, I'm done now.");
+
