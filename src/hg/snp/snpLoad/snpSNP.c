@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.1 2006/02/21 05:52:17 heather Exp $";
+static char const rcsid[] = "$Id: snpSNP.c,v 1.2 2006/02/22 03:43:52 heather Exp $";
 
 struct snpTmp
     {
@@ -287,7 +287,7 @@ while ((chromName = hashNextName(&cookie)) != NULL)
     {
     safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
     if (!hTableExists(tableName)) continue;
-
+ 
     verbose(1, "chrom = %s\n", chromName);
 
     snpList = readSnps(chromName);
@@ -297,16 +297,15 @@ while ((chromName = hashNextName(&cookie)) != NULL)
 
 carefulClose(&errorFileHandle);
 
-// cookie = hashFirst(chromHash);
-// while ((chromName = hashNextName(&cookie)) != NULL)
-    // {
-    // safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
-    // if (!hTableExists(tableName)) continue;
-    // recreateDatabaseTable(chromName);
-    // verbose(1, "loading chrom = %s\n", chromName);
-    // loadDatabase(chromName);
-    // }
-
+cookie = hashFirst(chromHash);
+while ((chromName = hashNextName(&cookie)) != NULL)
+    {
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+    if (!hTableExists(tableName)) continue;
+    recreateDatabaseTable(chromName);
+    verbose(1, "loading chrom = %s\n", chromName);
+    loadDatabase(chromName);
+    }
 
 return 0;
 }
