@@ -5604,77 +5604,7 @@ _EOF_
      # then make my to visualize in own sandbox
      cd ~/kent/src/hg/hgGene
      make my
-     # NEED TO CHECK THIS INTO CVS 
  
-##################################################################
-# HGNEAR TABLES (also used by the Known Genes details page links)
-# GET LATEST PROTEIN SEQUENCE FOR ALL HGNEAR SPECIES (DONE, 2005-02-10, hartera)
-#   # For species with knownGene, use that; otherwise, download the latest 
-    # version of the main model organism database for this species.
-    # Human: use knownGene proteins.
-# need to get hg18 peptide sequence:
-     mkdir -p /cluster/data/hg18/bed/blastp
-     cd /cluster/data/hg18/bed/blastp
-     pepPredToFa hg18 knownGenePep known.faa
-# # Mouse: use knownGene proteins.
-# already done:
-#    mkdir -p  /cluster/data/mm7/bed/geneSorter/blastp
-#    cd /cluster/data/mm7/bed/geneSorter/blastp
-#    pepPredToFa mm7 knownGenePep known.faa
-    # Rat: use knownGene proteins.
-# already done:
-#    mkdir /cluster/data/rn3/bed/blastp
-#    cd /cluster/data/rn3/bed/blastp
-#    pepPredToFa rn3 knownGenePep known.faa
-    # Fly: use FlyBase proteins - already done 
-    # /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
-    # Worm: use WormBase proteins.
-    mkdir -p /cluster/data/ce2/bed/blastp
-    cd /cluster/data/ce2/bed/blastp
-    # Point a web browser at ftp://ftp.sanger.ac.uk/pub/databases/wormpep/
-    # to find out the latest version. It is WormPep 154 so use that.
-    wget --timestamping -O wormPep154.faa \
-       ftp://ftp.sanger.ac.uk/pub/databases/wormpep/wormpep154/wormpep154
-    # Yeast: use SGD proteins.
-    mkdir -p /cluster/data/sacCer1/bed/blastp
-    cd /cluster/data/sacCer1/bed/blastp
-    # get latest version - from Jan 26, 2006
-    wget -O orf_trans.fasta.jan26.gz \
-         ftp://genome-ftp.stanford.edu/pub/yeast/data_download/sequence/genomic_sequence/orf_protein/orf_trans.fasta.gz
-    # rename old version of peptide sequences
-    mv sgdPep.faa sgdPep.jan9.faa
-    zcat orf_trans.fasta.jan26.gz > sgdPep.faa
-
-# HGNEAR PROTEIN BLAST TABLES (DONE, 2006-02-10, hartera)
-    ssh hgwdev
-    mkdir -p /cluster/data/danRer3/bed/hgNearBlastp
-    cd /cluster/data/danRer3/bed/hgNearBlastp
-    # zebrafish vs fly table has already been created as a result of 
-    # creating the blastp table for dm1 (see makeDm1.doc)
-cat << _EOF_ > config.ra
-# Latest zebrafish vs. other Gene Sorter orgs:
-# human, mouse, rat, worm, yeast
-# zebrafish vs fly already done
-
-targetGenesetPrefix flyBase
-targetDb danRer3
-queryDbs hg18 mm7 rn3 ce2 sacCer1
-
-danRer3Fa /cluster/data/danRer3/bed/blastp/ensembl.faa
-hg18Fa /cluster/data/hg18/bed/blastp/known.faa
-mm7Fa /cluster/data/mm7/bed/geneSorter/blastp/known.faa
-rn3Fa /cluster/data/rn3/bed/blastp/known.faa
-ce2Fa /cluster/data/ce2/bed/blastp/wormPep154.faa
-sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
-
-buildDir /cluster/data/danRer3/bed/hgNearBlastp
-scratchDir /san/sanvol1/scratch/danRer3HgNearBlastp
-_EOF_
-     # << this line makes emacs coloring happy
-    nice doHgNearBlastp.pl config.ra >& do.log &
-    tail -f do.log
-    # Took about 2 hours to finish.
-
 # STS MARKERS (in progress, 2005-10-13, hartera)
     # DOWNLOADED RECENTLY FROM NCBI
     ssh kkstore02
