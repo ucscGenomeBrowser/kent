@@ -67,8 +67,7 @@ for (;;)
    print(wrongCount + " " + s + " (" + guesses + ")");
 
    /* Wait for keypress, and convert key to lower case. */
-   string key = keyIn();
-   key.lower();
+   string key = keyIn().lower();
    guesses += key;
 
    /* Mark spot on words that use this letter, and count

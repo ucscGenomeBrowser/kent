@@ -6,7 +6,7 @@ print(a);
 
 string s = "abcd";
 print(s);
-s.upper();
+s = s.upper();
 print(s);
 
 

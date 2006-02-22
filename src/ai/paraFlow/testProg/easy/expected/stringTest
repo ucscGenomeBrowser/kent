@@ -1,6 +1,5 @@
 ABC abc
 abc ABC
-ABC ABC - the same no?
 'ab' 'ab'
 'abc  ' '  abc'
 buggaMUGwugga
@@ -15,3 +14,12 @@ got ending wugga
 1000 == 1000?
 123456789123 == 123456789123?
 1.23e3 == 1230.00?
+This is a string with 	 tabs and spaces.
+("This","is","a","string","with","tabs","and","spaces.")
+("This","is","a","string","with","tabs","and","spaces",".")
+("This","is","a","string","with","	","tabs","and","spaces.")
+("This","is","a","string","with","","","tabs","and","spaces.")
+This is a 
+multiline
+string here.
+("This is a ","multiline","string here.")

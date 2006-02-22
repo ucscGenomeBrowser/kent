@@ -5,5 +5,5 @@ class keyVal
    }
 keyVal kv = (1, "one");
 print(kv);
-kv.val.upper();
+kv.val = kv.val.upper();
 print(kv);

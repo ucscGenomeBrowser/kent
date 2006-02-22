@@ -148,17 +148,23 @@ return string;
 }
 
 void _pf_cm_string_upper(_pf_Stack *stack)
-/* Uppercase existing string */
+/* to string.upper() into (string s) */
 {
 _pf_String string = stack[0].String;
+_pf_nil_check(string);
+string = _pf_string_new(string->s, string->size);
 toUpperN(string->s, string->size);
+stack[0].String = string;
 }
 
 void _pf_cm_string_lower(_pf_Stack *stack)
-/* Lowercase existing string */
+/* to string.lower() into (string s) */
 {
 _pf_String string = stack[0].String;
+_pf_nil_check(string);
+string = _pf_string_new(string->s, string->size);
 toLowerN(string->s, string->size);
+stack[0].String = string;
 }
 
 void _pf_cm_string_dupe(_pf_Stack *stack)
@@ -332,8 +338,8 @@ char *s, c;
 
 if (string == NULL || pos < 0)
     {
-    stack[0].Int = -1;
-    stack[1].String = NULL;
+    stack[0].String = NULL;
+    stack[1].Int = -1;
     return;
     }
 s = skipLeadingSpaces(string->s + pos);
@@ -362,6 +368,32 @@ void _pf_cm_string_nextWord(_pf_Stack *stack)
 {
 nextSkippingWhite(stack, wordSpan);
 }
+
+void _pf_cm_string_nextLine(_pf_Stack *stack)
+/*   flow string.nextLine(int pos) into (string line, int nextPos) */
+{
+_pf_String string = stack[0].String;
+int pos = stack[1].Int;
+char *s, *e, c;
+
+if (string == NULL || pos < 0 || pos > string->size)
+    {
+    stack[0].String = NULL;
+    stack[1].Int = -1;
+    return;
+    }
+s = string->s + pos;
+e = strchr(s, '\n');
+if (e == NULL)
+    {
+    e = string->s + string->size;
+    stack[1].Int = string->size;
+    }
+else
+    stack[1].Int = e - string->s + 1;
+stack[0].String = _pf_string_new(s, e-s);
+}
+
 
 static int countWordsSkippingWhite(char *s, int (*calcSpan)(char *s))
 /* Count words - not in the space-delimited sense, but in the
@@ -416,6 +448,129 @@ void _pf_cm_string_words(_pf_Stack *stack)
 {
 stringSplitSkippingWhite(stack, wordSpan);
 }
+
+static void stringSplitOnChar(_pf_Stack *stack, char c, 
+	boolean includeTrailingEmpty)
+/* Used by flow string.lines() into array of string lines
+ * and     flow string.split() into arrray of string parts */
+{
+_pf_String string = stack[0].String, *strings;
+_pf_Array words;
+int i, charCount, lastSize;
+char *s;
+
+_pf_nil_check(string);
+s = string->s;
+charCount = countChars(s, c);
+words = _pf_dim_array(charCount+1, _pf_find_string_type_id());
+strings =  (_pf_String *)words->elements;
+for (i=0; i<charCount; ++i)
+    {
+    char *e = strchr(s, c);
+    strings[i] = _pf_string_new(s, e-s);
+    s = e+1;
+    }
+lastSize = string->size - (s - string->s);
+if (includeTrailingEmpty || lastSize > 0)
+    strings[charCount] = _pf_string_new(s, lastSize);
+else
+    words->size -= 1;
+stack[0].Array = words;
+}
+
+void _pf_cm_string_lines(_pf_Stack *stack)
+/* flow line() into (array of string lines) 
+ * Creates an array of lines from string */
+{
+stringSplitOnChar(stack, '\n', FALSE);
+}
+
+static boolean charInSplitter(char c, _pf_String splitter)
+/* Return TRUE if c is in splitter. */
+{
+int i;
+char *s = splitter->s;
+for (i = splitter->size-1; i>=0; i-=1)
+    if (c == s[i])
+        return TRUE;
+return FALSE;
+}
+
+static void stringSplitOnMultiChars(_pf_Stack *stack, _pf_String splitter)
+/* Split when see any of the strings in splitter. */
+{
+_pf_String string = stack[0].String, *strings;
+_pf_Array words;
+int i, divCount=0, size;
+char *s;
+
+_pf_nil_check(string);
+s = string->s;
+size = string->size;
+for (i=0; i<size; ++i)
+    if (charInSplitter(s[i], splitter))
+        ++divCount;
+words = _pf_dim_array(divCount+1, _pf_find_string_type_id());
+strings =  (_pf_String *)words->elements;
+for (i=0; i<divCount; ++i)
+    {
+    char *e = s;
+    while (!charInSplitter(*e, splitter))
+        e += 1;
+    strings[i] = _pf_string_new(s, e-s);
+    s = e+1;
+    }
+strings[divCount] = _pf_string_new(s, string->size - (s - string->s));
+stack[0].Array = words;
+}
+
+void _pf_cm_string_split(_pf_Stack *stack)
+/* flow split(string splitter) into (array of string parts)  */
+{
+_pf_String splitter = stack[1].String;
+_pf_nil_check(splitter);
+if (splitter->size == 1)
+    stringSplitOnChar(stack, splitter->s[0], TRUE);
+else
+    stringSplitOnMultiChars(stack, splitter);
+
+/* Clean up references on stack.  (Not first param since it's a method). */
+if (--splitter->_pf_refCount <= 0)
+    splitter->_pf_cleanup(splitter, 0);
+}
+ 
+
+void _pf_cm_string_trim(_pf_Stack *stack)
+/* Trim away leading and trailing spaces. */
+{
+int size, startReal, endReal, realSize;
+char *s;
+_pf_String string = stack[0].String;
+_pf_nil_check(string);
+size = string->size;
+s = string->s;
+for (startReal = 0; startReal < size; ++startReal)
+    {
+    if (!isspace(s[startReal]))
+	break;
+    }
+if (startReal == size)
+    {
+    endReal = size;
+    realSize = 0;
+    }
+else
+    {
+    for (endReal = size-1; ; --endReal)  /* we know we'll hit something. */
+	{
+	if (!isspace(s[endReal]))
+	    break;
+	}
+    realSize = endReal - startReal + 1;
+    }
+stack[0].String = _pf_string_new(s + startReal, realSize);
+}
+
 
 static void fitString(_pf_Stack *stack, boolean right)
 /* Fit string on either side. */

@@ -1,0 +1,151 @@
+flow ugly(string s)
+    {
+    print(s);
+    }
+
+class htmlStatus
+// HTTP version and status code.
+    {
+    string version="HTTP/1.1";	// HTTP protocal version
+    int status=200;		// HTTP status code. 200 means A-OK.
+    }
+
+class htmlCookie
+// A cookie - stored by the browser usually.  We need to
+// echo it back when we post forms.
+    {
+    string name;	// Cookie name.
+    string value;	// Cookie value.
+    string domain;	// The set of web domains the cookie applies to.
+    string path;	// The cookie applies below this path I guess.
+    string expires;	// Expiration date.
+    bit secure;		// Is it a secure coookie?
+    }
+
+class htmlAttribute
+// An HTML attribute - part of a set of name=value pairs in a tag
+    {
+    string name;	// Attribute name
+    string value;	// Attribute value
+    }
+
+class htmlTag
+// An HTML tag - includes attribute list but no text.
+    {
+    string name;			// Tag name.
+    array of htmlAttribute attributes;  // All attributes.
+    int start;			// Start position within htmlPage.fullText
+    int end;			// End position (one past closing '>')
+    }
+
+class htmlFormVar
+// A variable within an html form. Associated with a button, input tag etc.
+    {
+    string name;	// Variable name.
+    string type;	// Variable type.
+    string value;	// Current value if any. May be nil.
+    array of string values;  // Available values for some types, nil for others.
+    string tagName;	     // Name of associated tag.
+    array of htmlTag tags;   // Associated html tags.
+    }
+
+class htmlForm
+// A form within an html page.
+    {
+    string name;	 // Name (nil if not defined)
+    string action;	 // URL to call when they press submit
+    string method="GET"; // Could also be POST.
+    htmlTag startTag;	 // Tag that holds <FORM>
+    htmlTag endTag;	 // Tag one past </FORM>
+    array of htmlFormVar vars;	// Variables defined in form.
+    }
+
+class htmlPage
+// A complete parsed-out html page.
+    {
+    string url;		// URL or file where we got the page.
+    string text;	  // Full unparsed text including headers
+    htmlStatus status;	// Version and status info
+    dir of string header; // Header lines including cookies
+    dir of htmlCookie cookies;  // Cookies
+    int htmlStart;	  // Start of html code within fullText
+    array of htmlTag tags;// All the tags in order
+    array of htmlForm forms;  // Possibly empty array of forms.
+    }
+
+flow htmlStatusParse(string text, int pos) into (htmlStatus status, int newPos)
+// Read in status line.
+    {
+    string line;
+    (line, newPos) = text.nextLine(pos);
+    if (!line) punt("Empty HTML file");
+    array of string words = line.words();   // Chop line into words
+    if (words.size < 2) punt("bad HTTP status line");  // Check for two words
+    status = (words[0], words[1].asInt());  // Initialize status object
+    if (!status.version.startsWith("HTTP/")) punt("No HTTP in status line");
+    }
+
+flow htmlHeaderParse(string text, int pos) 
+into (dir of string header, int newPos)
+// Read lines until get a blank one.  Put the lines into a hash.
+// The lines are of the format key: value.  We strip the colon.
+    {
+    string line;
+    header = ();
+    newPos = pos;
+    for (;;)
+        {
+	(line,newPos) = text.nextLine(newPos);
+	if (!line) punt("End of file in HTTP header");
+	(string key, int p) = line.nextWord(0);
+	if (!key)
+	    break;
+	header[key] = line.rest(p).trim();
+	}
+    }
+
+to htmlCookieParse(string line) into (dir of string cookies)
+    {
+    cookies = ();
+    if (line)
+        {
+	array of string parts = line.split(';');
+	for (part in parts)
+	    {
+	    part = part.trim();
+	    int equals = part.find('=');
+	    if (equals < 0) punt("missing equals in cookie $part");
+	    cookies[part.start(equals)] = part.rest(equals+1);
+	    }
+	}
+    }
+
+to htmlPageParse(string fileName) into (htmlPage page)
+    {
+    file f = fileOpen(fileName, "r");
+    page = ();
+    page.url = fileName;
+    page.text = f.readAll();
+    int pos = 0;
+    (page.status, pos) = htmlStatusParse(page.text, pos);
+    print(page.status);
+    (page.header, pos) = htmlHeaderParse(page.text, pos);
+    print(page.header);
+    page.cookies = htmlCookieParse(page.header["Set-Cookie:"]);
+    print(page.cookies);
+    }
+
+
+to test(string fileName = "gb.html")
+    {
+    try {
+	htmlPage page = htmlPageParse(fileName);
+	}
+    catch(m)
+        {
+	print("Error: $m");
+	}
+    }
+
+test();
+

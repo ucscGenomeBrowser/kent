@@ -1,14 +1,8 @@
 string abc = "abc";
-string ABC = abc.dupe();
-ABC.upper();
+string ABC = abc.upper();
 print("$ABC $abc");
-abc.upper();
-ABC.lower();
-print("$ABC $abc");
-abc.lower();
-string refABC = ABC;
-ABC.upper();
-print("$ABC $refABC - the same no?");
+abc = ABC.lower();
+print("$abc $ABC");
 string ab = abc.fitLeft(2);
 string bc = abc.fitRight(2);
 print("'$ab' '$bc'");
@@ -38,3 +32,18 @@ print("$aLong == $iLong?");
 string aNum = "1.23e3";
 double iNum = aNum.asDouble();
 print("$aNum == $iNum?");
+string space = "This is a string with \t tabs and spaces.";
+print(space);
+print(space.words());
+print(space.tokens());
+print(space.split(' '));
+print(space.split(' \t'));
+string multiLine = "
+This is a 
+multiline
+string here.
+";
+prin(multiLine);
+print(multiLine.lines());
+/*-end
+end-*/

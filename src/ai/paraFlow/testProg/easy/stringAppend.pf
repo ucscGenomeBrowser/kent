@@ -23,7 +23,7 @@ print(names);
 
 string test = "test";
 print(test);
-test.upper();
+test = test.upper();
 print(test);
 test.append("test2");
 print(test);

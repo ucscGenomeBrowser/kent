@@ -57,7 +57,7 @@ f = fileOpen(tmp, "r+");
 print("I like upper case better too.");
 f.seek(10);
 string LETTERS = f.read(letters.size);
-LETTERS.upper();
+LETTERS = LETTERS.upper();
 f.skip(-letters.size);
 f.write(LETTERS);
 f.seek(0);
