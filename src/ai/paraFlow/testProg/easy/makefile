@@ -98,6 +98,8 @@ test:
 	diff expected/sort $O/sort
 	paraFlow static.pf > $O/static
 	diff expected/static $O/static
+	paraFlow stringTest.pf > $O/stringTest
+	diff expected/stringTest $O/stringTest
 	paraFlow shift.pf > $O/shift
 	diff expected/shift $O/shift
 	paraFlow stringInit.pf > $O/stringInit
