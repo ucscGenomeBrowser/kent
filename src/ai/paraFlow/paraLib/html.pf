@@ -165,7 +165,6 @@ flow htmlTagsParse(string text, int pos) into (array of htmlTag tags)
 		htmlTag tag = ();
 		tag.start = p-1;
 		tag.attributes = ();
-		string s = "uglyduck";
 
 		// Grab first word into tagName.
 		int end = p;
@@ -182,6 +181,7 @@ flow htmlTagsParse(string text, int pos) into (array of htmlTag tags)
 			}
 		    }
 		tag.name = text.middle(p, end-p);
+		tags.append(tag);
 		p = end;
 
 		// If we're at end of tag already fill in a few
@@ -239,6 +239,7 @@ to test(string fileName = "gb.html")
 	print(page.status);
 	print(page.header);
 	print(page.cookies);
+	print(page.tags);
 	}
     catch(m)
         {

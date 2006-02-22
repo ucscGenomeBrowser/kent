@@ -1472,7 +1472,10 @@ else
     if (rval->type == pptUniformTuple)
 	codeTupleIntoCollection(pfc, f, lval->ty, rval, stack, count);
     }
-return 1;
+if (lval->type == pptTuple)
+    return slCount(lval->children);
+else
+    return 1;
 }
 
 static void cantCopeParamType(struct pfParse *pp, int code)
