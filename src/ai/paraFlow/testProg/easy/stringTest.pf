@@ -45,5 +45,25 @@ string here.
 ";
 prin(multiLine);
 print(multiLine.lines());
+string leadSpace = "   123";
+print("'$leadSpace' has " + leadSpace.leadingSpaces() + " leading spaces");
+print("'$leadSpace' has " + leadSpace.leadingSpaces(1) + " leading spaces starting at 1");
+leadSpace = "  ";
+print("'$leadSpace' has " + leadSpace.leadingSpaces() + " leading spaces");
+leadSpace = "";
+print("'$leadSpace' has " + leadSpace.leadingSpaces() + " leading spaces");
+leadSpace = "xyz";
+print("'$leadSpace' has " + leadSpace.leadingSpaces() + " leading spaces");
 /*-end
 end-*/
+string withQuotes = "  'This has a quote' inside of it";
+print(withQuotes);
+int pos = withQuotes.leadingSpaces();
+(string quoted, int newPos) = withQuotes.betweenQuotes(pos);
+print("'$quoted', $newPos");
+print(withQuotes.rest(newPos));
+withQuotes='""';
+(quoted,newPos) = withQuotes.betweenQuotes(0);
+print("'$quoted', $newPos");
+
+

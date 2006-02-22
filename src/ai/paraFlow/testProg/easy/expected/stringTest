@@ -23,3 +23,12 @@ This is a
 multiline
 string here.
 ("This is a ","multiline","string here.")
+'   123' has 3 leading spaces
+'   123' has 2 leading spaces starting at 1
+'  ' has 2 leading spaces
+'' has 0 leading spaces
+'xyz' has 0 leading spaces
+  'This has a quote' inside of it
+Looks like it's a quote of size 16
+'This has a quote', 20
+ inside of it

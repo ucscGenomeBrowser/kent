@@ -394,6 +394,61 @@ else
 stack[0].String = _pf_string_new(s, e-s);
 }
 
+void _pf_cm_string_betweenQuotes(_pf_Stack *stack)
+/* flow string.betweenQuotes(int pos) into (string line, int nextPos) 
+ * The initial string position is at the opening quote.  This
+ * will find the closing quote of the same type, put what is between
+ * the quotes into line, and put nextPos to just past the closing quote. */
+{
+_pf_String string = stack[0].String, result;
+int pos = stack[1].Int, size = 0;
+char *startQuote, *endQuote = NULL, *endString, quoteC, c, lastC, *s, *d;
+
+_pf_nil_check(string);
+startQuote = string->s + pos;
+endString = string->s + string->size;
+lastC = quoteC = *startQuote;
+startQuote += 1;
+if (string->size < 1)
+    errAbort("empty string passed to string.betweenQuotes");
+
+/* Find end quote and count how big we need to be. */
+for (s = startQuote; s<endString; ++s)
+    {
+    c = *s;
+    if (c == quoteC)
+        {
+	if (lastC == '\\')
+	    --size;
+	else
+	    {
+	    endQuote = s;
+	    break;
+	    }
+	}
+    lastC = c;
+    size += 1;
+    }
+if (!endQuote)
+    errAbort("Unterminated %c quote", quoteC);
+
+/* Create string for result and fill it */
+result = _pf_string_new_empty(size+1);
+d = result->s;
+for (s = startQuote; s<endQuote; ++s)
+    {
+    c = *s;
+    if (c == quoteC)  /* we know previous char was escape */
+       d[-1] = c;
+    else
+       *d++ = c;
+    }
+result->size = size;
+
+stack[0].String = result;
+stack[1].Int = (pos + (endQuote-startQuote) + 2);
+}
+
 
 static int countWordsSkippingWhite(char *s, int (*calcSpan)(char *s))
 /* Count words - not in the space-delimited sense, but in the
@@ -831,5 +886,22 @@ void pf_isSpace(_pf_Stack *stack)
 {
 _pf_Char c = stack[0].Char;
 stack[0].Bit = isspace(c);
+}
+
+void _pf_cm_string_leadingSpaces(_pf_Stack *stack)
+/* Return number of leading spaces. */
+{
+int count = 0;
+char *s;
+_pf_String string = stack[0].String;
+int pos = stack[1].Int;
+_pf_nil_check(string);
+s = string->s+pos;
+while (isspace(*s))
+    {
+    count++;
+    s++;
+    }
+stack[0].Int = count;
 }
 

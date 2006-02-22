@@ -198,11 +198,74 @@ flow htmlTagsParse(string text, int pos) into (array of htmlTag tags)
 		    }
 
 		/*-soon
+		soon-*/
 		// Process name/value pairs until we get end tag.
 		for (;;)
 		    {
+		    string name,val;
+		    bit gotEnd=0;
+
+		    // Check for end tag.
+		    p += text.leadingSpaces(p);
+		    if (p >= text.size)
+		        {
+			warn("unclosed tag " + text.rest(tag.start));
+			tag.end = text.size;
+			break;
+			}
+		    if (text[p] == '>')
+		        {
+			p++;
+			tag.end = p;
+			break;
+			}
+
+		    // Get name - everything up to equals.
+		    end = p;
+		    while (end < text.size)
+		        {
+			c = text[end];
+			if (c == '=')
+			   break;
+			else if (c == '>')
+			   break;
+			else if (isSpace(c))
+			   break;
+			end += 1;
+			}
+
+		    // Save name and advance our position 
+		    name = text.middle(p, end-p);
+		    p = end;
+		    if (p >= text.size)
+			continue;  // Error message will happen at start of loop
+		    else if (c == '>' || isSpace(c))
+			val = "";
+		    else	// case c == '='
+		        {
+			p++;
+			p += text.leadingSpaces(p);
+			if (text[p] == '"')
+			    (val,p) = text.betweenQuotes(p);
+			else
+			    {
+			    end = p;
+			    while (end < text.size)
+			        {
+				c = text[end];
+				if (c == '>' || isSpace(c))
+				    break;
+				}
+			    val = text.middle(p, end-p);
+			    p = end;
+			    }
+			}
+
+		    // Create attribute dir if it doesn't exist yet.
+		    if (!tags.attributes)
+		        tags.attributes = ();
+		    tags.attributes[name] = val;
 		    }
-		soon-*/
 		}
 	    }
 	}
