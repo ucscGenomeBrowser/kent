@@ -48,6 +48,7 @@ extern struct mgcStatusType MGC_NO_DECISION;
 /*** these are full-length status ***/
 extern struct mgcStatusType MGC_FULL_LENGTH;
 extern struct mgcStatusType MGC_FULL_LENGTH_SHORT;
+extern struct mgcStatusType MGC_FULL_LENGTH_SYNTHETIC;
 
 /*** these are error status ***/
 extern struct mgcStatusType MGC_INCOMPLETE;
@@ -98,12 +99,12 @@ struct mgcStatusTbl
     struct hash *accHash;        /* optional hash of acc to mgcStatus. */
 };
 
-/* SQL to create status table. Should have table name sprinted into it. */
-extern char *mgcStatusCreateSql;
-
 char *mgcOrganismNameToCode(char *organism, char *whereFound);
 /* convert a MGC organism name to a two-letter code.  An error with
  * whereFound is generated if it can't be mapped */
+
+void mgcStatusTblCreate(struct sqlConnection *conn, char *tblName);
+/* create/recreate an MGC status table */
 
 struct mgcStatusTbl *mgcStatusTblNew(unsigned opts);
 /* Create an mgcStatusTbl object */

@@ -3,9 +3,10 @@
 #include "localmem.h"
 #include "linefile.h"
 #include "jksql.h"
+#include "dystring.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.12 2005/04/03 00:23:10 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.13 2006/02/23 05:22:05 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -38,36 +39,38 @@ struct mgcStatusType MGC_FULL_LENGTH = {
     "fullLength", 6, "full length", MGC_STATE_FULL_LENGTH};
 struct mgcStatusType MGC_FULL_LENGTH_SHORT = {
     "fullLengthShort", 7, "full length (short isoform)", MGC_STATE_FULL_LENGTH};
+struct mgcStatusType MGC_FULL_LENGTH_SYNTHETIC = {
+    "fullLengthSynthetic", 8, "full length (synthetic, expression ready, no stop)", MGC_STATE_FULL_LENGTH};
 
 /*** these are error status ***/
 struct mgcStatusType MGC_INCOMPLETE = {
-    "incomplete", 8, "incomplete", MGC_STATE_PROBLEM};
+    "incomplete", 9, "incomplete", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CHIMERIC = {
-    "chimeric", 9, "chimeric", MGC_STATE_PROBLEM};
+    "chimeric", 10, "chimeric", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_FRAME_SHIFTED = {
-    "frameShift", 10, "frame shifted", MGC_STATE_PROBLEM};
+    "frameShift", 11, "frame shifted", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CONTAMINATED = {
-    "contaminated", 11, "contaminated", MGC_STATE_PROBLEM};
+    "contaminated", 12, "contaminated", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_RETAINED_INTRON = {
-    "retainedIntron", 12, "retained intron", MGC_STATE_PROBLEM};
+    "retainedIntron", 13, "retained intron", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_MIXED_WELLS = {
-    "mixedWells", 13, "mixed wells", MGC_STATE_PROBLEM};
+    "mixedWells", 14, "mixed wells", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_GROWTH = {
-    "noGrowth", 14, "no growth", MGC_STATE_PROBLEM};
+    "noGrowth", 15, "no growth", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_INSERT = {
-    "noInsert", 15, "no insert", MGC_STATE_PROBLEM};
+    "noInsert", 16, "no insert", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_5_EST_MATCH = {
-    "no5est", 16, "no 5' EST match", MGC_STATE_PROBLEM};
+    "no5est", 17, "no 5' EST match", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_MICRODELETION = {
-    "microDel", 17, "no cloning site / microdeletion", MGC_STATE_PROBLEM};
+    "microDel", 18, "no cloning site / microdeletion", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_LIBRARY_ARTIFACTS = {
-    "artifact", 18, "library artifacts", MGC_STATE_PROBLEM};
+    "artifact", 19, "library artifacts", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_NO_POLYA_TAIL = {
-    "noPolyATail", 19, "no polyA-tail", MGC_STATE_PROBLEM};
+    "noPolyATail", 20, "no polyA-tail", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CANT_SEQUENCE = {
-    "cantSequence", 20, "unable to sequence", MGC_STATE_PROBLEM};
+    "cantSequence", 21, "unable to sequence", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_INCONSISTENT_WITH_GENE = {
-    "inconsistentWithGene", 21, "inconsistent with known gene structure", MGC_STATE_PROBLEM};
+    "inconsistentWithGene", 22, "inconsistent with known gene structure", MGC_STATE_PROBLEM};
 
 /* null terminated, ordered list of mgcStatusType constants */
 static struct mgcStatusType *mgcStatusList[] = {
@@ -78,6 +81,7 @@ static struct mgcStatusType *mgcStatusList[] = {
     &MGC_NO_DECISION,
     &MGC_FULL_LENGTH,
     &MGC_FULL_LENGTH_SHORT,
+    &MGC_FULL_LENGTH_SYNTHETIC,
     &MGC_INCOMPLETE,
     &MGC_CHIMERIC,
     &MGC_FRAME_SHIFTED,
@@ -120,38 +124,14 @@ static char *organismNameMap[][2] =
 #define MGCSTATUS_MIN_NUM_COLS 5
 #define MGCSTATUS_NUM_COLS 6
 
-/* SQL to create status table. Should have table name sprinted into it.  The
- * values of the status enum are order such that values less than fullLength
- * are in progress and ones great than fullLength have some kind of error.
- * Note that you must compare to the numeric index, not the symbolic string.
+/* SQL to create status table. Should have table name and status enum list
+ * sprintfed into it.
  */
-char *mgcStatusCreateSql =
+static char *mgcStatusCreateSql =
 "CREATE TABLE %s ("
 "   imageId INT UNSIGNED NOT NULL,"  /* IMAGE id for clone */
-"   status ENUM("                    /* MGC status code */
-"       'unpicked',"
-"       'candidate',"
-"       'picked',"
-"       'notBack',"
-"       'noDecision',"
-"       'fullLength',"
-"       'fullLengthShort',"
-"       'incomplete',"
-"       'chimeric',"
-"       'frameShift',"
-"       'contaminated',"
-"       'retainedIntron',"
-"       'mixedWells',"
-"       'noGrowth',"
-"       'noInsert',"
-"       'no5est',"
-"       'microDel',"
-"       'artifact',"
-"       'noPolyATail',"
-"       'cantSequence',"
-"       'inconsistentWithGene'"
-"   ) NOT NULL,"
-"   state ENUM("                    /* MGC state code, matches C enum */
+"   status ENUM(%s) NOT NULL,"       /* MGC status code */
+"   state ENUM("                     /* MGC state code, matches C enum */
 "       'unpicked',"
 "       'pending',"
 "       'fullLength',"
@@ -165,6 +145,25 @@ char *mgcStatusCreateSql =
 "   INDEX(state),"
 "   INDEX(acc),"
 "   INDEX(organism))";
+
+
+void mgcStatusTblCreate(struct sqlConnection *conn, char *tblName)
+/* create/recreate an MGC status table */
+{
+int i;
+struct dyString *statusVals = dyStringNew(0);
+char query[1024];
+
+for (i = 0; mgcStatusList[i] != NULL; i++)
+    {
+    if (i > 0)
+        dyStringAppendC(statusVals, ',');
+    dyStringPrintf(statusVals, "'%s'", mgcStatusList[i]->dbValue);
+    }
+safef(query, sizeof(query), mgcStatusCreateSql, tblName, statusVals->string);
+sqlRemakeTable(conn, tblName, query);
+dyStringFree(&statusVals);
+}
 
 static void makeKey(unsigned imageId, char *key)
 {

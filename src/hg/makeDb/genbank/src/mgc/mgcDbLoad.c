@@ -15,7 +15,7 @@
 #include "gbFileOps.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.13 2005/04/06 22:00:26 markd Exp $";
+static char const rcsid[] = "$Id: mgcDbLoad.c,v 1.14 2006/02/23 05:22:05 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -185,7 +185,6 @@ char *loadMgcStatus(struct sqlConnection *conn, char *mgcStatusTab)
 struct lineFile* inLf;
 FILE *outFh;
 char tmpFile[PATH_LEN];
-char sql[1024];
 char *statusTblName = allMgcTables ? MGC_STATUS_TMP : MGC_FULL_STATUS_TMP;
 gbVerbEnter(2, "loading %s", statusTblName);
 
@@ -201,8 +200,7 @@ while (mgcStatusTblCopyRow(inLf, outFh))
 gzClose(&outFh);
 gzLineFileClose(&inLf);
 
-safef(sql, sizeof(sql), mgcStatusCreateSql, statusTblName);
-sqlRemakeTable(conn, statusTblName, sql);
+mgcStatusTblCreate(conn, statusTblName);
 
 sqlLoadTabFile(conn, tmpFile, statusTblName, SQL_TAB_FILE_ON_SERVER);
 unlink(tmpFile);
