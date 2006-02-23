@@ -6389,3 +6389,15 @@ cat > downloads.csh << 'EOF'
     mkdir $dir
     ln -s /cluster/data/hg18/bed/multiz17way/mafDownloads/{*.gz,md5sum.txt} $dir
 
+# SET DEFAULT POSITION TO chrX:151,073,054-151,383,976, TO SHOW GENE GABRA3
+
+  hgsql -e 'delete from dbDb where name="hg18"' \
+          -h genome-testdb hgcentraltest
+
+  hgsql -e 'INSERT INTO dbDb (name, description, nibPath, organism, \
+	    defaultPos, active, orderKey, genome, scientificName, \
+            htmlPath, hgNearOk, hgPbOk, sourceName) \
+            VALUES("hg18", "Feb. 2006", "/gbdb/hg18/nib", "Human", \
+	    "chrX:151,073,054-151,383,976", 1, 9, "Human", "Homo sapiens", \
+	    "/gbdb/hg18/html/description.html", 1, 1, "NCBI Build 36.1");' \
+	    -h genome-testdb hgcentraltest
