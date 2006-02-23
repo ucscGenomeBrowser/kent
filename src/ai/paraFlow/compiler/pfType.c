@@ -204,7 +204,8 @@ if (base == pfc->floatType || base == pfc->doubleType)
      expectingGot("integer", pp->tok);
 }
 
-static int baseTypeLogicalSize(struct pfCompile *pfc, struct pfBaseType *base)
+static int baseTypeLogicalSize(struct pfCompile *pfc, struct pfBaseType *base,
+	struct pfToken *tok)
 /* Return logical size of type - 0 for smallest, 1 for next smallest, etc. */
 {
 if (base == pfc->bitType)
@@ -227,7 +228,7 @@ else if (base == pfc->stringType)
     return 8;
 else
     {
-    internalErr();
+    errAt(tok, "Can't convert %s to number or string", base->name);
     return 0;
     }
 }
@@ -260,8 +261,8 @@ int numTypeCount = 9;
 enum pfParseType castType = pptCastBitToBit;
 if (oldBase == pfc->stringType && newBase != pfc->stringType)
     expectingGot("string", pp->tok);
-castType += numTypeCount * baseTypeLogicalSize(pfc, oldBase);
-castType += baseTypeLogicalSize(pfc, newBase);
+castType += numTypeCount * baseTypeLogicalSize(pfc, oldBase, pp->tok);
+castType += baseTypeLogicalSize(pfc, newBase, pp->tok);
 insertCast(castType, newType, pPp);
 }
 
@@ -1568,10 +1569,11 @@ else
 }
 
 static struct pfType *largerNumType(struct pfCompile *pfc,
-	struct pfType *a, struct pfType *b)
+	struct pfType *a, struct pfType *b, struct pfToken *tok)
 /* Return a or b, whichever can hold the larger range. */
 {
-if (baseTypeLogicalSize(pfc, a->base) > baseTypeLogicalSize(pfc, b->base))
+if (baseTypeLogicalSize(pfc, a->base, tok) > 
+	baseTypeLogicalSize(pfc, b->base, tok))
     return a;
 else
     return b;
@@ -1605,7 +1607,7 @@ if (!pfTypeSame(lTy, rTy))
 	}
     else
 	{
-	struct pfType *ty = largerNumType(pfc, lTy, rTy);
+	struct pfType *ty = largerNumType(pfc, lTy, rTy, pp->tok);
 	coerceOne(pfc, &lval, ty, numToString);
 	coerceOne(pfc, &rval, ty, numToString);
 	}
