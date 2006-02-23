@@ -18,8 +18,9 @@
 #include "hdb.h"
 #include "jksql.h"
 #include "snp125.h"
+#include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpFinalTable.c,v 1.2 2006/02/23 01:30:06 heather Exp $";
+static char const rcsid[] = "$Id: snpFinalTable.c,v 1.3 2006/02/23 02:29:15 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -42,6 +43,13 @@ char *locTypeStrings[] = {
     "rangeDeletion",
 };
 
+char *exceptionTables[] = {
+    "snpCheckAlleles",
+    "snpCheckClassAndObserved",
+    "snpExpandAllele",
+    "snpLoadFasta",
+    "snpLocType",
+};
 
 
 void usage()
@@ -192,7 +200,6 @@ int bin = 0;
 char *s;
 FILE *f;
 
-// this is a kludge
 char *observedString = NULL;
 char *molTypeString = NULL;
 char *classString = NULL;
@@ -220,8 +227,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(f, "%d\t%s\t%d\t%d\trs%s\t", bin, chromName, start, end, row[0]);
     alleleString = cloneString(row[11]);
     refUCSCString = cloneString(row[12]);
-    stripChar(alleleString, ' ');
-    stripChar(refUCSCString, ' ');
+    // stripChar(alleleString, ' ');
+    // stripChar(refUCSCString, ' ');
     fprintf(f, "%d\t%s\t%s\t%s\t", 
             score, strandStrings[sqlUnsigned(row[5])], alleleString, refUCSCString);
 
@@ -229,13 +236,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     observedString = cloneString(row[14]);
     molTypeString = cloneString(row[6]);
     classString = cloneString(row[4]);
-    stripChar(observedString, ' ');
-    stripChar(molTypeString, ' ');
-    stripChar(classString, ' ');
+    // stripChar(observedString, ' ');
+    // stripChar(molTypeString, ' ');
+    // stripChar(classString, ' ');
     fprintf(f, "%s\t%s\t%s\t%s\t", observedString, molTypeString, classString, s);
 
     functionString = cloneString(row[7]);
-    stripChar(functionString, ' ');
+    // stripChar(functionString, ' ');
     fprintf(f, "%s\t%s\t%s\t%s\n", row[9], row[10], functionString, locTypeStrings[sqlUnsigned(row[3])]);
     }
 sqlFreeResult(&sr);
@@ -261,6 +268,22 @@ hgLoadTabFile(conn, ".", tableName, &f);
 hFreeConn(&conn);
 }
 
+void doExceptions()
+/* write snp125Exceptions table */
+{
+struct sqlConnection *conn = hAllocConn();
+int i = 0;
+FILE *exceptionFileHandle = NULL;
+
+snp125ExceptionsTableCreate(conn);
+
+for (i = 0; i < ArraySize(exceptionTables); i++)
+    {
+    exceptionFileHandle = mustOpen(exceptionTables[i], "r");
+    hgLoadNamedTabFile(conn, ".", "snp125Exceptions", exceptionTables[i], &exceptionFileHandle);
+    }
+hFreeConn(&conn);
+}
 
 int main(int argc, char *argv[])
 /* Query all chrN_snpTmp tables; write to snp125.tab. */
@@ -278,32 +301,28 @@ hSetDb(snpDb);
 
 chromHash = loadChroms();
 
-// outputFileHandle = mustOpen("snp125.tab", "w");
+outputFileHandle = mustOpen("snp125.tab", "w");
 
-// cookie = hashFirst(chromHash);
-// while ((chromName = hashNextName(&cookie)) != NULL)
-    // {
-    // safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
-    // if (!hTableExists(tableName)) continue;
-	        // 
-    // verbose(1, "chrom = %s\n", chromName);
-    // readSnps(chromName);
-    // }
+cookie = hashFirst(chromHash);
+while ((chromName = hashNextName(&cookie)) != NULL)
+    {
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+    if (!hTableExists(tableName)) continue;
+    verbose(1, "chrom = %s\n", chromName);
+    readSnps(chromName);
+    }
 
-// carefulClose(&outputFileHandle);
+carefulClose(&outputFileHandle);
 
-readSnps("chr10");
-loadDatabase("chr10");
+cookie = hashFirst(chromHash);
+while ((chromName = hashNextName(&cookie)) != NULL)
+    {
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+    if (!hTableExists(tableName)) continue;
+    loadDatabase(chromName);
+    }
 
-// cookie = hashFirst(chromHash);
-// while ((chromName = hashNextName(&cookie)) != NULL)
-    // {
-    // safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
-    // if (!hTableExists(tableName)) continue;
-	        // 
-    // loadDatabase(chromName);
-    // }
-
+doExceptions();
 
 return 0;
 }
