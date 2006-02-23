@@ -10,11 +10,12 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMultiple.c,v 1.5 2006/02/23 07:07:06 heather Exp $";
+static char const rcsid[] = "$Id: snpMultiple.c,v 1.6 2006/02/23 07:10:29 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *nameHash = NULL;
 FILE *outputFileHandle = NULL;
+FILE *logFileHandle = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -70,6 +71,7 @@ while ((name = hashNextName(&cookie)) != NULL)
           "select count(*) from snp125 where name = '%s'", name);
     count = sqlQuickNum(conn, query);
     if (count == 1) continue;
+    fprintf(logFileHandle, "%s\t%d\n", name, count);
     safef(query, sizeof(query), 
           "select chrom, chromStart, chromEnd from snp125 where name = '%s'", name);
     sr = sqlGetResult(conn, query);
@@ -93,10 +95,12 @@ if (argc != 2)
 snpDb = argv[1];
 hSetDb(snpDb);
 outputFileHandle = mustOpen("snpMultiple.tab", "w");
+logFileHandle = mustOpen("snpMultiple.log", "w");
 readSnps();
 getCount();
 // free hash
 carefulClose(&outputFileHandle);
+carefulClose(&logFileHandle);
 
 return 0;
 }
