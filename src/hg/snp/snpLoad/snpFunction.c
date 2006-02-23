@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpFunction.c,v 1.1 2006/02/21 02:51:48 heather Exp $";
+static char const rcsid[] = "$Id: snpFunction.c,v 1.2 2006/02/23 05:31:01 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -108,7 +108,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
     el1 = hashLookup(functionHash,row[0]);
     if (el1 == NULL)
-	fprintf(f, "0\t");
+	fprintf(f, "unknown\t");
     else
         fprintf(f, "%s\t", (char *)el1->val);
     fprintf(f, "%s\t%s\t%s\t%s\n", row[7], row[8], row[9], row[10]);
