@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpFunction.c,v 1.2 2006/02/23 05:31:01 heather Exp $";
+static char const rcsid[] = "$Id: snpFunction.c,v 1.3 2006/02/23 19:41:37 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -63,7 +63,7 @@ char *snpString = NULL;
 char *functionString = NULL;
 
 verbose(1, "building function hash...\n");
-ret = newHash(0);
+ret = newHash(20);
 safef(query, sizeof(query), "select snp_id, fxn_class from ContigLocusIdCondense");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
