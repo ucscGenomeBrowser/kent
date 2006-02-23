@@ -30,6 +30,16 @@ type genePred knownGenePep knownGeneMrna
 hgGene on
 cdsDrawDefault genomic\ codons
 
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl (Build 37) Gene Predictions
+group genes
+priority 40
+visibility hide
+color 150,0,0
+type genePred ensPep
+url http://www.ensembl.org/perl/transview?transcript=$$
+
 track acembly
 shortLabel AceView Genes
 longLabel AceView Gene Models With Alt-Splicing
