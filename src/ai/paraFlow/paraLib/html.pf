@@ -356,6 +356,10 @@ to formParseVars(htmlPage page, htmlForm form) into (dir of htmlFormVar vars)
 	        {
 		if (tag.attribute("CHECKED") != nil)
 		    var.value = value;
+		if (!var.values)
+		    var.values = (value);
+		else
+		    var.values.append(value);
 		}
 	    else if (type.same("RESET") || type.same("BUTTON") ||
 	             type.same("SUBMIT") || type.same("IMAGE"))
@@ -470,7 +474,7 @@ to htmlPageParse(string fileName) into (htmlPage page)
     }
 
 
-to test(string fileName = "gb.html")
+to test(string fileName)
     {
     try {
 	htmlPage page = htmlPageParse(fileName);
@@ -480,8 +484,17 @@ to test(string fileName = "gb.html")
 	print(page.tags.size + " tags in $fileName");
 	print(page.tags[0]);
 	print(page.tags[page.tags.size-1]);
-	// print(page.tags);
-	print(page.forms);
+	for (form in page.forms)
+	    {
+	    print(form.name + " " + form.method + " " + form.action);
+	    for (var in form.vars)
+		{
+		prin("  " + var.name + " " );
+		prin(var.type + " " );
+		prin(var.value + " " );
+		print(var.values);
+		}
+	    }
 	}
     catch(m)
         {
@@ -489,5 +502,7 @@ to test(string fileName = "gb.html")
 	}
     }
 
-test();
-
+string fileName = "gb.html";
+if (args.size > 0)
+    fileName = args[0];
+test(fileName);
