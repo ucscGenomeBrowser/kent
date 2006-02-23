@@ -3,6 +3,7 @@
 #include "dystring.h"
 #include "../compiler/pfPreamble.h"
 #include "pfString.h"
+#include "net.h"
 
 void _pf_prin(FILE *f, _pf_Stack *stack, boolean quoteString);
 /* Print out single variable where type is determined at run time. */
@@ -28,6 +29,26 @@ dyStringFree(&file->dy);
 _pf_class_cleanup((struct _pf_object *)file, typeId);
 }
 
+static FILE *openUrlOrFile(char *spec, char *mode)
+/* If it's a URL call the fancy net opener, otherwise
+ * call the regular file opener. */
+{
+if (startsWith("http://", spec) || startsWith("ftp://", spec))
+    {
+    FILE *f;
+    int fd;
+    if (mode[0] != 'r')
+        errAbort("Can't open %s in mode %s", spec, mode);
+    fd = netUrlOpen(spec);
+    f = fdopen(fd, mode);
+    if (f == NULL)
+        errnoAbort("Couldn't open %s", spec);
+    return f;
+    }
+else
+    return mustOpen(spec, mode);
+}
+
 void pf_fileOpen(_pf_Stack *stack)
 /* paraFlow run time support routine to open file. */
 {
@@ -35,11 +56,13 @@ struct _pf_string *name = stack[0].String;
 struct _pf_string *mode = stack[1].String;
 struct file *file;
 
+_pf_nil_check(name);
+_pf_nil_check(mode);
 AllocVar(file);
 file->_pf_refCount = 1;
 file->_pf_cleanup = fileCleanup;
 file->name = name;
-file->f = mustOpen(name->s, mode->s);
+file->f = openUrlOrFile(name->s, mode->s);
 file->dy = dyStringNew(0);
 
 /* Remove mode reference. (We'll keep the name). */
