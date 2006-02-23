@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.4 2006/02/18 00:41:49 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.5 2006/02/23 00:44:28 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -1044,6 +1044,13 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
 	`pwd`/DEF > blastz.out 2>&1 &
     #	Started 2006-02-16 16:15
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=cat `pwd`/DEF > cat.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap `pwd`/DEF > swap.out 2>&1 &
 
 ##############################################################################
 # CLONE ENDS - BACEND TRACK (DONE - 2006-02-17 - Hiram)
@@ -1164,7 +1171,7 @@ while (my $line = <>) {
     # All done
 
 ############################################################################
-# BACEND SEQUENCE ALIGNMENTS (DONE - 2006-02-17 - Hiram)
+# BACEND SEQUENCE ALIGNMENTS (DONE - 2006-02-17 - 2006-02-22 - Hiram)
     ssh kkstore01
     mkdir /cluster/data/mm8/noMask
     cd /cluster/data/mm8/
@@ -1235,42 +1242,143 @@ rm -fr /scratch/tmp/${root1}_${root2}
     # 3322 jobs written to batch
     para try, check, push, etc ...
     XXX - STARTED - 2006-02-17 - Hiram
-
-# Completed: 3920 of 3920 jobs
-# CPU time in finished jobs:     683325s   11388.75m   189.81h    7.91d  0.022 y
-# IO & Wait Time:                 51220s     853.67m    14.23h    0.59d  0.002 y
-# Average job time:                 187s       3.12m     0.05h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:            1388s      23.13m     0.39h    0.02d
-# Submission to last job:         65899s    1098.32m    18.31h    0.76d
+# Completed: 3332 of 3332 jobs
+# CPU time in finished jobs:     649465s   10824.42m   180.41h    7.52d  0.021 y
+# IO & Wait Time:                 11633s     193.88m     3.23h    0.13d  0.000 y
+# Average job time:                 198s       3.31m     0.06h    0.00d
+# Longest finished job:            1326s      22.10m     0.37h    0.02d
+# Submission to last job:        429201s    7153.35m   119.22h    4.97d
 
     ssh kkstore01
     cd /cluster/data/mm8/bed/bacends
     screen
 
     mkdir temp
-    time pslSort dirs raw.psl temp bacEnds.out/* > pslSort.out 2>&1 &
-    #	real    27m20.352s
-    #	user    20m10.329s
-    #	sys     1m55.287s
+    time pslSort dirs raw.psl temp out/* > pslSort.out 2>&1 &
+    #	real    22m4.019s
+    #	-rw-rw-r--    1 8422362557 Feb 22 15:35 raw.psl
 
     time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons \
 	raw.psl bacEnds.psl /dev/null > pslReps.out 2>&1 &
-    #	real    8m15.671s
-    #	user    7m18.229s
-    #	sys     0m20.554s
+    #	real    6m15.981s
+    #	-rw-rw-r--    1  197029888 Feb 22 15:37 bacEnds.psl
 
-    cp -p ~booch/clusterJobs/bacends/split.pl .
-    cp -p ~booch/clusterJobs/bacends/header .
+    cp -p /cluster/data/mm7/bed/bacends/split.pl .
+    cp -p /cluster/data/mm7/bed/bacends/header .
+
     time ./split.pl header < bacEnds.psl
+    #	real    0m26.983s
 
-    cp -p bacEnds.psl bacEnds.psl.save
+
+    mv bacEnds.psl bacEnds.psl.save
     time pslSort dirs bacEnds.psl temp split
-    #	~ 3 minutes
+    #	real    2m19.131s
+    #	-rw-rw-r--    1 1227866614 Feb 22 15:48 bacEnds.psl
 
     # Copy files to final destination and remove
     mkdir /cluster/data/mm8/bacends
     cp -p bacEnds.psl /cluster/data/mm8/bacends
+
+############################################################################
+# BACEND PAIRS TRACK (DONE - 2006-02-22 - Hiram)
+
+    ssh kolossus
+    cd /cluster/data/mm8/bacends
+
+time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
+-max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+-mismatch -verbose bacEnds.psl \
+	../bed/cloneend/cloneEndPairs.txt all_bacends bacEnds
+    #	real    0m47.401s
+
+
+    # create header required by "rdb" tools
+    echo -e \
+"chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes" > header
+    echo -e "10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10" >> header
+
+    cat header bacEnds.pairs | \
+	/cluster/bin/scripts/row score ge 300 | \
+	/cluster/bin/scripts/sorttbl chr start | \
+	/cluster/bin/scripts/headchg -del > bacEndPairs.bed
+    #	-rw-rw-r--  1   23816801 Feb 22 15:52 bacEndPairs.bed
+
+
+    cat header bacEnds.slop bacEnds.short bacEnds.long bacEnds.mismatch \
+	bacEnds.orphan | /cluster/bin/scripts/row score ge 300 | \
+	/cluster/bin/scripts/sorttbl chr start | \
+	/cluster/bin/scripts/headchg -del > bacEndPairsBad.bed
+    #	-rw-rw-r--  1    6843775 Feb 22 15:54 bacEndPairsBad.bed
+
+    /cluster/bin/scripts/extractPslLoad -noBin bacEnds.psl bacEndPairs.bed \
+	bacEndPairsBad.bed >j1.out
+    cat j1.out| /cluster/bin/scripts/sorttbl tname tstart >j2.out
+    cat j2.out | /cluster/bin/scripts/headchg -del > bacEnds.load.psl
+    #	-rw-rw-r--  1  983668200 Feb 22 16:04 bacEnds.load.psl
+
+    rm j1.out j2.out
+
+    #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
+    awk '{print $5}' bacEndPairs.bed | sort -u
+    #	result should be the scores, no extraneous strings:
+#	1000
+#	300
+#	375
+#	500
+#	750
+    #	edit the file and fix it if it has a bad name.
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/mm8/bacends
+    hgLoadBed -strict -notItemRgb mm8 bacEndPairs bacEndPairs.bed \
+	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+    #	Loaded 235440 elements of size 11
+
+    # note - this track isn't pushed to RR, just used for assembly QA
+    hgLoadBed -strict -notItemRgb mm8 bacEndPairsBad bacEndPairsBad.bed \
+	-sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+    #	Loaded 95099 elements of size 11
+
+    # NOTE: truncates file to 0 if -nobin is used
+    time hgLoadPsl mm8 -table=all_bacends bacEnds.load.psl
+# load of all_bacends did not go as planned: 8132116 record(s), 0 row(s)
+# skipped, 1 warning(s) loading psl.tab
+#	skipped, 1 warning(s) loading psl.tab
+#	real    20m45.055s
+
+    featureBits mm8 all_bacends
+# 327086559 bases of 2567283971 (12.741%) in intersection
+    featureBits mm7 all_bacends
+# 334161740 bases of 2583394090 (12.935%) in intersection
+    featureBits mm6 all_bacends
+# 336981828 bases of 2597150411 (12.975%) in intersection
+    featureBits mm5 all_bacends
+# 268502414 bases of 2615483787 (10.266%) in intersection
+    featureBits mm4 all_bacends
+# 243096171 bases of 2627444668 (9.252%) in intersection
+
+    featureBits mm8 bacEndPairs
+# 2572527283 bases of 2567283971 (100.204%) in intersection
+    featureBits mm7 bacEndPairs
+# 2578837424 bases of 2583394090 (99.824%) in intersection
+    featureBits mm6 bacEndPairs
+# 2570768812 bases of 2597150411 (98.984%) in intersection
+    featureBits mm5 bacEndPairs
+# 2567958504 bases of 2615483787 (98.183%) in intersection
+    featureBits mm4 bacEndPairs
+# 2549945356 bases of 2627444668 (97.050%) in intersection
+
+    featureBits mm8 bacEndPairsBad
+# 879222026 bases of 2567283971 (34.247%) in intersection
+    featureBits mm7 bacEndPairsBad
+# 954662115 bases of 2583394090 (36.954%) in intersection
+    featureBits mm6 bacEndPairsBad
+# 1006314997 bases of 2597150411 (38.747%) in intersection
+    featureBits mm5 bacEndPairsBad
+# 541027882 bases of 2615483787 (20.686%) in intersection
+    featureBits mm4 bacEndPairsBad
+# 1074505863 bases of 2627444668 (40.895%) in intersection
 
 #########################################################################
 # GENBANK auto update (WORKING - 2006-02-17 - Hiram)
@@ -1306,6 +1414,9 @@ mm8.mgcTables.mgc = all
     nice bin/gbAlignStep -initial mm8 &
     #	var/build/logs/2006.02.17-16:10:17.mm8.initalign.log
 XXXX - working 2006-02-17 16:10
+    #	the parasol batch job on kk broke down in:
+    #	/cluster/bluearc/genbank/work/initial.mm8/align
+    #	go to kk and this directory and get the batch finished
 
     # load database when finished
     ssh hgwdev
@@ -1348,3 +1459,116 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	`pwd`/DEF > blastz.out 2>&1 &
     #	Started 2006-02-17 16:42
+    #	crashed due to no copies of mm8 in /scratch/hg/mm8/ on the
+    #	Iservers.  Fix that up and get the chain run done.  Continuing.
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainMerge `pwd`/DEF > chainMerge.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+
+canFam2 on pk
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+bosTau2 on pk
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+galGal2 on kk
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=cat `pwd`/DEF > cat.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=net `pwd`/DEF > net.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+
+rheMac2 on pk
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=net `pwd`/DEF > swap.net.out 2>&1 &
+    #	failed during a san hiccup,  finish that off, then:
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=load `pwd`/DEF > swap.load.out 2>&1 &
+
+dasNov1 on pk 2006-02-19
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=cat `pwd`/DEF > cat.out 2>&1 &
+echTel1 on pk 2006-02-19
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=cat `pwd`/DEF > cat.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=chainRun `pwd`/DEF > chain.out 2>&1 &
+fr1 on pk 2006-02-19 (started on kk)
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -continue=net `pwd`/DEF > swap.net.out 2>&1 &
+loxAfr1 on kk 2006-02-19
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	failed during the cat, fixed the script
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainRun `pwd`/DEF > chain.out 2>&1 &
+tetNig1 on kk 2006-02-10
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=net `pwd`/DEF > net.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -continue=net `pwd`/DEF > swap-net.out 2>&1 &
+
+oryCun1 on pk 2006-02-21
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+
+xenTro1 on kk 2006-02-21
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+
