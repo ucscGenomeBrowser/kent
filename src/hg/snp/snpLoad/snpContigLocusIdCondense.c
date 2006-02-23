@@ -22,7 +22,7 @@ char *functionStrings[] = {
 
 boolean functionFound[ArraySize(functionStrings)];
 
-static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.2 2006/02/20 19:53:18 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.3 2006/02/23 01:05:01 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -50,7 +50,7 @@ for (i=0; i<ArraySize(functionStrings); i++)
     if (functionFound[i])
         {
         if (!first) fprintf(f, ",");
-        fprintf(f, "%d", i);
+        fprintf(f, "%s", functionStrings[i]);
 	first = FALSE;
 	}
 fprintf(f, "\n");
