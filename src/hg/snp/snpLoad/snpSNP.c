@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.2 2006/02/22 03:43:52 heather Exp $";
+static char const rcsid[] = "$Id: snpSNP.c,v 1.3 2006/02/23 00:50:42 heather Exp $";
 
 struct snpTmp
     {
@@ -189,7 +189,7 @@ for (el = list; el != NULL; el = el->next)
             fprintf(errorFileHandle, "unexpected validation_status %s for snp_id %d\n", row[0], el->snp_id);
 	    validInt = 0;
 	    }
-        fprintf(f, "%d\t %d\t %d\t %d\t %s\t %d\t %s\t %s\t %d\t %s\t %s\t %s\t %s\t %s\t %s\t\n", 
+        fprintf(f, "%d\t%d\t%d\t%d\t%s\t%d\t%s\t%s\t%d\t%s\t%s\t%s\t%s\t%s\t%s\t\n", 
             el->snp_id, el->start, el->end, el->loc_type, el->class, el->orientation, el->molType, el->fxn_class,
 	    validInt, row[1], row[2],
 	    el->allele, el->refUCSC, el->refUCSCReverseComp, el->observed);
