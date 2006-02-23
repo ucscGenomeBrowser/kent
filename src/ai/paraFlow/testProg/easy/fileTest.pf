@@ -1,6 +1,8 @@
 // Test several of the file functions.
 
 string tmp = "fileTest.tmp";
+string tmp2 = "fileTest.tmp2";
+
 string numbers = "0123456789";
 string letters = "abcdefghijklmnopqrstuvwxyz";
 string punctuation = "~!@#$$%^&*()_+=-}{,./?.,;:'\"\\|`";
@@ -76,5 +78,17 @@ print("How does this look?");
 f.seek(0);
 print(f.readAll());
 f.close();
+
+bit t1Exists = fileExists(tmp), t2Exists = fileExists(tmp2);
+print("exists: $tmp $t1Exists, $tmp2 $t2Exists");
+fileRename(tmp, tmp2);
+t1Exists = fileExists(tmp), t2Exists = fileExists(tmp2);
+print("After renaming $tmp to $tmp2");
+print("exists: $tmp $t1Exists, $tmp2 $t2Exists");
+fileRemove(tmp2);
+t1Exists = fileExists(tmp), t2Exists = fileExists(tmp2);
+print("After removing $tmp2");
+print("exists: $tmp $t1Exists, $tmp2 $t2Exists");
+
 print("Ok, I'm done now.");
 

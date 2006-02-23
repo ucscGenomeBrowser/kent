@@ -198,3 +198,52 @@ void _pf_cm1_file_tell(_pf_Stack *stack)
 struct file *file = stack[0].v;
 stack[0].Long = ftell(file->f);
 }
+
+void pf_fileExists(_pf_Stack *stack)
+/* Returns true if file exists. */
+{
+_pf_String string = stack[0].v;
+_pf_nil_check(string);
+stack[0].Bit = fileExists(string->s);
+/* Clean up references on stack. */
+if (--string->_pf_refCount <= 0)
+    string->_pf_cleanup(string, 0);
+}
+
+void pf_fileRemove(_pf_Stack *stack)
+/* Remove file. Punt if there's a problem. */
+{
+int err;
+_pf_String string = stack[0].v;
+
+_pf_nil_check(string);
+err = remove(string->s);
+
+/* Clean up references on stack. */
+if (--string->_pf_refCount <= 0)
+    string->_pf_cleanup(string, 0);
+
+if (err < 0)
+    errnoAbort("Couldn't remove file %s", string->s);
+}
+
+void pf_fileRename(_pf_Stack *stack)
+/* Rename file. */
+{
+int err;
+_pf_String oldName = stack[0].v;
+_pf_String newName = stack[1].v;
+_pf_nil_check(oldName);
+_pf_nil_check(newName);
+
+err = rename(oldName->s, newName->s);
+
+/* Clean up references on stack. */
+if (--oldName->_pf_refCount <= 0)
+    oldName->_pf_cleanup(oldName, 0);
+if (--newName->_pf_refCount <= 0)
+    newName->_pf_cleanup(newName, 0);
+
+if (err < 0)
+    errnoAbort("Couldn't rename file %s to %s", oldName->s, newName->s);
+}

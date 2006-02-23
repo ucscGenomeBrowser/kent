@@ -10,4 +10,9 @@ That's better, it's more like Perl now.
 Let's start over.
 How does this look?
 abcdefghijklmnopqrstuvwxyz0123456789KLMNOPQRSTUVWXYZ
+exists: fileTest.tmp 1, fileTest.tmp2 0
+After renaming fileTest.tmp to fileTest.tmp2
+exists: fileTest.tmp 0, fileTest.tmp2 1
+After removing fileTest.tmp2
+exists: fileTest.tmp 0, fileTest.tmp2 0
 Ok, I'm done now.

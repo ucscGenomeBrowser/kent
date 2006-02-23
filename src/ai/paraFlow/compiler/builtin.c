@@ -41,6 +41,9 @@ return
 "    }\n"
 "\n"
 "to fileOpen(string name, string mode) into file f;\n"
+"flow fileExists(string name) into bit exists;\n"
+"to fileRename(string oldName, string newName);\n"
+"to fileRemove(string name);\n"
 ;
 }
 
