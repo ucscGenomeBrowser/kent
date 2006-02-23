@@ -29,6 +29,24 @@ class htmlTag
     dir of string attributes;		// All attributes. May be nil
     int start;			// Start position within htmlPage.fullText
     int end;			// End position (one past closing '>')
+
+    flow attribute(string attName, string usual=nil) into (string val)
+    // Return value of attribute if it exists, or usual val if it doesn't
+        {
+	if (attributes)
+	    val = attributes[attName].dupe();
+	if (!val)
+	    val = usual.dupe();
+	}
+
+    flow requiredAttribute(string attName) into (string val)
+    // Return attribute value. Punt if it doesn't exist
+        {
+	if (attributes)
+	    val = attributes[attName].dupe();
+	if (!val)
+	    punt("Missing required $attName attribute in $name");
+	}
     }
 
 class htmlFormVar
@@ -48,9 +66,9 @@ class htmlForm
     string name;	 // Name (nil if not defined)
     string action;	 // URL to call when they press submit
     string method="GET"; // Could also be POST.
-    htmlTag startTag;	 // Tag that holds <FORM>
-    htmlTag endTag;	 // Tag one past </FORM>
-    array of htmlFormVar vars;	// Variables defined in form.
+    int startTagIx;	 // Index of start tag in page.tags
+    int endTagIx;	 // Index just past end tag in page.tags
+    dir of htmlFormVar vars;	// Variables defined in form.
     }
 
 class htmlPage
@@ -61,7 +79,7 @@ class htmlPage
     htmlStatus status;	// Version and status info
     dir of string header; // Header lines including cookies
     dir of htmlCookie cookies;  // Cookies
-    int htmlStart;	  // Start of html code within fullText
+    int htmlStartPos;	  // Start of html code within text
     array of htmlTag tags;// All the tags in order
     array of htmlForm forms;  // Possibly empty array of forms.
     }
@@ -180,7 +198,7 @@ flow htmlTagsParse(string text, int pos) into (array of htmlTag tags)
 			break;
 			}
 		    }
-		tag.name = text.middle(p, end-p);
+		tag.name = text.middle(p, end-p).upper();
 		tags.append(tag);
 		p = end;
 
@@ -263,12 +281,169 @@ flow htmlTagsParse(string text, int pos) into (array of htmlTag tags)
 		    // Create attribute dir if it doesn't exist yet.
 		    if (!tag.attributes)
 		        tag.attributes = ();
-		    tag.attributes[name] = val;
+		    tag.attributes[name.upper()] = val;
 		    }
 		}
 	    }
 	}
    }
+
+to findOrMakeVar(dir of htmlFormVar vars, string name, htmlTag tag) 
+into (htmlFormVar var)
+// Find a variable of existing name if it exists, other wise
+// make a new one.  Add reference to this tag to var, and return it.
+    {
+    var = vars[name];
+    if (!var)
+        {
+	var = ();
+	var.name = name;
+	var.tagName = tag.name;
+	var.tags = (tag);
+	vars[name] = var;
+	}
+    else
+        {
+	if (var.tagName != tag.name)
+	    punt("Mixing types " + var.tagName +
+	         " and " + tag.name + " in FORM variable $name");
+	var.tags.append(tag);
+	}
+    }
+
+flow isMixableInputType(string type) into (bit ok)
+// Return TRUE if this as an INPUT type you can mix with other
+// types ok
+    {
+    ok = type == "BUTTON" || type == "SUBMIT" || type == "IMAGE";
+    }
+
+to formParseVars(htmlPage page, htmlForm form) into (dir of htmlFormVar vars)
+// Figure out the variables used in a form.  Variables may be constructed
+// from buttons, INPUT tags, OPTION lists, or TEXTAREAS.
+    {
+    vars = ();
+    for (tagIx in form.startTagIx to form.endTagIx)
+        {
+	htmlTag tag = page.tags[tagIx];
+	if (tag.name == "INPUT")
+	    {
+	    string type = tag.attribute("TYPE", "TEXT");
+	    string varName = tag.attribute("NAME");
+	    string value = tag.attribute("VALUE");
+	    if (!varName)
+		{
+		if (!type.same("SUBMIT")  && !type.same("CLEAR") 
+		    && !type.same("BUTTON") && !type.same("RESET")
+		    && !type.same("IMAGE"))
+		     punt("Missing NAME attribute in INPUT $type");
+		continue;
+		}
+	    htmlFormVar var = findOrMakeVar(vars, varName, tag);
+	    if (var.type && var.type != type)
+	        if (!isMixableInputType(var.type) || !isMixableInputType(type))
+		    punt("Mising input types $type and " + var.type);
+	    var.type = type;
+	    if (type.same("TEXT") || type.same("PASSWORD") || type.same("FILE")
+	       || type.same("HIDDEN") || type.same("IMAGE"))
+	        var.value = value;
+	    else if (type.same("CHECKBOX"))
+	        {
+		if (tag.attribute("CHECKED") != nil)
+		    var.value = "on";
+		}
+	    else if (type.same("RADIO"))
+	        {
+		if (tag.attribute("CHECKED") != nil)
+		    var.value = value;
+		}
+	    else if (type.same("RESET") || type.same("BUTTON") ||
+	             type.same("SUBMIT") || type.same("IMAGE"))
+		{
+		// do nothing
+		}
+	    else
+	        punt("Unrecognized input type $type");
+	    }
+	else if (tag.name == "SELECT")
+	    {
+	    string varName = tag.requiredAttribute("NAME");
+	    htmlFormVar var = findOrMakeVar(vars, varName, tag);
+	    for (subIx in tagIx+1 to form.endTagIx)
+	        {
+		htmlTag subTag = page.tags[subIx];
+		if (subTag.name == "/SELECT")
+		    {
+		    if (!var.value && var.values)
+		        var.value = var.values[0];
+		    break;
+		    }
+		else if (subTag.name == "OPTION")
+		    {
+		    string val = tag.attribute("VALUE");
+		    if (!val)
+		        {
+			// We use what is between this tag and next for value
+			int start = subTag.end;
+			int end = page.text.findNext('<', start);
+			if (end > 0)
+			    val = page.text.middle(start, end-start);
+			}
+		    if (val)
+		        {
+			if (!var.values)
+			    var.values = (val);
+			else
+			    var.values.append(val);
+			if (tag.attribute("SELECTED"))
+			    var.value = val;
+			}
+		    }
+		}
+	    }
+	else if (tag.name == "TEXTAREA")
+	    {
+	    string varName = tag.requiredAttribute("NAME");
+	    htmlFormVar var = findOrMakeVar(vars, varName, tag);
+	    // We use what is between this tag and next for value
+	    int start = tag.end;
+	    int end = page.text.findNext('<', start);
+	    if (end > 0)
+		var.value = page.text.middle(start, end-start);
+	    }
+	}
+    }
+
+to htmlFormsParse(htmlPage page) into (array of htmlForm forms)
+// Assuming that page.tags is already present, rummage through
+// it and return forms.
+    {
+    forms = ();
+    htmlForm form = nil;
+    for (tagIx:tag in page.tags)
+        {
+	if (tag.name == "FORM")
+	    {
+	    if (form) punt("FORM inside of FORM");
+	    form = ();
+	    form.startTagIx = tagIx;
+	    forms.append(form);
+	    form.name = tag.attribute("NAME", "");
+	    form.action = tag.requiredAttribute("ACTION");
+	    form.method = tag.attribute("METHOD", "GET");
+	    }
+	else if (tag.name == "/FORM")
+	    {
+	    if (!tag) punt("/FORM without FORM");
+	    form.endTagIx = tagIx;
+	    form = nil;
+	    }
+	}
+    for (form in forms)
+        {
+	form.vars = formParseVars(page,form);
+	}
+    }
 
 to htmlPageParse(string fileName) into (htmlPage page)
     {
@@ -286,10 +461,11 @@ to htmlPageParse(string fileName) into (htmlPage page)
 	contentType = 'text/html';
 	page.header['Content-Type'] = contentType;
 	}
-    page.htmlStart = pos;
+    page.htmlStartPos = pos;
     if (contentType.startsWith('text/html'))
         {
 	page.tags  = htmlTagsParse(page.text, pos);
+	page.forms = htmlFormsParse(page);
 	}
     }
 
@@ -305,6 +481,7 @@ to test(string fileName = "gb.html")
 	print(page.tags[0]);
 	print(page.tags[page.tags.size-1]);
 	// print(page.tags);
+	print(page.forms);
 	}
     catch(m)
         {
