@@ -10,7 +10,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMultiple.c,v 1.2 2006/02/23 06:43:11 heather Exp $";
+static char const rcsid[] = "$Id: snpMultiple.c,v 1.3 2006/02/23 07:00:44 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *nameHash = NULL;
@@ -35,7 +35,7 @@ struct sqlResult *sr;
 char **row;
 struct hashEl *el = NULL;
 
-nameHash = newHash(0);
+nameHash = newHash(22);
 verbose(1, "getting names...\n");
 safef(query, sizeof(query), "select name from snp125");
 sr = sqlGetResult(conn, query);
@@ -66,10 +66,12 @@ verbose(1, "checking counts...\n");
 cookie = hashFirst(nameHash);
 while ((name = hashNextName(&cookie)) != NULL) 
     {
-    safef(query, sizeof(query), "select count(*) from snp125 where name = %s", name);
+    safef(query, sizeof(query), 
+          "select count(*) from snp125 where name = '%s'", name);
     count = sqlQuickNum(conn, query);
     if (count == 0) continue;
-    safef(query, sizeof(query), "select chrom, chromStart, chromEnd from snp125 where name = %s", name);
+    safef(query, sizeof(query), 
+          "select chrom, chromStart, chromEnd from snp125 where name = '%s'", name);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
