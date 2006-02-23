@@ -12,13 +12,15 @@
 
 */
 
+/* Should be checking for duplicates here. */
+
 #include "common.h"
 
 #include "dystring.h"
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.14 2006/02/15 21:23:31 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.15 2006/02/23 04:09:31 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 /* The vast majority are single. */

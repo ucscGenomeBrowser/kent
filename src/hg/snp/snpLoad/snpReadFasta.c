@@ -10,6 +10,8 @@
    It might also be somewhat faster to sort the snpTmp list by snp_id.
    The rs_fasta files are sorted by rsId. */
 
+/* Look in chrMulti_snpFasta if no match found in chrN_snpFasta. */
+/* Write to error file if no match found in chrN_snpFasta or chrMulti_snpFasta. */
 
 #include "common.h"
 
@@ -17,7 +19,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.4 2006/02/15 21:15:03 heather Exp $";
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.5 2006/02/23 04:08:52 heather Exp $";
 
 struct snpTmp
     {
