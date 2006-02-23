@@ -10,7 +10,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMultiple.c,v 1.4 2006/02/23 07:03:10 heather Exp $";
+static char const rcsid[] = "$Id: snpMultiple.c,v 1.5 2006/02/23 07:07:06 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *nameHash = NULL;
@@ -76,9 +76,7 @@ while ((name = hashNextName(&cookie)) != NULL)
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	fprintf(outputFileHandle, "%s\t%s\t%s\t%s\n", name, row[0], row[1], row[2]);
-	verbose(1, "%s\t%s\t%s\t%s\n", name, row[0], row[1], row[2]);
 	}
-    verbose(1, "----------------------------\n");
     sqlFreeResult(&sr);
     }
 hFreeConn(&conn);
