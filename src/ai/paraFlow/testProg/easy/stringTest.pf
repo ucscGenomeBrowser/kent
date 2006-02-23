@@ -1,5 +1,7 @@
 string abc = "abc";
 string ABC = abc.upper();
+prin(abc.same(ABC));
+print(abc.same("AXY"));
 print("$ABC $abc");
 abc = ABC.lower();
 print("$abc $ABC");
@@ -65,5 +67,9 @@ print(withQuotes.rest(newPos));
 withQuotes='""';
 (quoted,newPos) = withQuotes.betweenQuotes(0);
 print("'$quoted', $newPos");
-
-
+withQuotes = "'That\\\'s right.' More quotes.";
+print(withQuotes);
+(quoted,newPos) = withQuotes.betweenQuotes(0);
+print("'$quoted', $newPos");
+print(withQuotes.rest(newPos));
+withQuotes='""';

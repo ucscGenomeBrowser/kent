@@ -171,8 +171,26 @@ void _pf_cm_string_dupe(_pf_Stack *stack)
 /* Return duplicate of string */
 {
 _pf_String string = stack[0].String;
-stack[0].String = _pf_string_new(string->s, string->size);
+if (string)
+    stack[0].String = _pf_string_new(string->s, string->size);
 }
+
+void _pf_cm_string_same(_pf_Stack *stack)
+/* Find occurence of substring within string.  Return -1 if
+ * not found, otherwise start location within string. */
+{
+_pf_String string = stack[0].String;
+_pf_String other = stack[1].String;
+if (!other)
+    stack[0].Bit = FALSE;
+else
+    {
+    stack[0].Bit = sameWord(string->s, other->s);
+    if (--other->_pf_refCount <= 0)
+	other->_pf_cleanup(other, 0);
+    }
+}
+
 
 void _pf_cm_string_start(_pf_Stack *stack)
 /* Return start of string */
@@ -271,6 +289,7 @@ else
 if (--sub->_pf_refCount <= 0)
     sub->_pf_cleanup(sub, 0);
 }
+
 
 void _pf_cm_string_findNext(_pf_Stack *stack)
 /* Find occurence of substring within string.  Return -1 if

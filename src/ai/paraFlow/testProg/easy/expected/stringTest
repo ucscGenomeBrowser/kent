@@ -1,3 +1,4 @@
+10
 ABC abc
 abc ABC
 'ab' 'ab'
@@ -29,6 +30,9 @@ string here.
 '' has 0 leading spaces
 'xyz' has 0 leading spaces
   'This has a quote' inside of it
-Looks like it's a quote of size 16
 'This has a quote', 20
  inside of it
+'', 2
+'That\'s right.' More quotes.
+'That's right.', 16
+ More quotes.
