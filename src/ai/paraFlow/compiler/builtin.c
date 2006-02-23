@@ -52,6 +52,7 @@ return
 "    {\n"
 "    int size;\n"
 "    flow dupe() into string dupe;\n"
+"    flow same(string other) into bit sameExceptForCase;\n"
 "    flow start(int size) into string start;\n"
 "    flow rest(int start) into string rest;\n"
 "    flow middle(int start, int size) into string part;\n"

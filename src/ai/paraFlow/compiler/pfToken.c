@@ -395,7 +395,7 @@ else
     for (;;)
         {
 	c = *pos++;
-	if (c == 0)
+	if (c == 0 || c == '\n')
 	    break;
 	if (c == quoteC)
 	    {
