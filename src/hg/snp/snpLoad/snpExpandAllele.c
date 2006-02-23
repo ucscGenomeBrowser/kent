@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.17 2006/02/23 02:37:45 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.18 2006/02/23 05:58:26 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -52,7 +52,7 @@ return ret;
 
 void writeToExceptionFile(char *chrom, int start, int end, char *name, char *exception)
 {
-fprintf(exceptionFileHandle, "chr%s\t%d\t%d\t%s\t%s\n", chrom, start, end, name, exception);
+fprintf(exceptionFileHandle, "chr%s\t%d\t%d\trs%s\t%s\n", chrom, start, end, name, exception);
 }
 
 

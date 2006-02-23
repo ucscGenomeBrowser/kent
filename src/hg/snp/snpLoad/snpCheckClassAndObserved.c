@@ -39,7 +39,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.7 2006/02/16 23:34:31 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.8 2006/02/23 05:58:26 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -88,7 +88,7 @@ return ret;
 
 void writeToExceptionFile(char *chrom, char *start, char *end, char *name, char *exception)
 {
-fprintf(exceptionFileHandle, "%s\t%s\t%s\t%s\t%s\n", chrom, start, end, name, exception);
+fprintf(exceptionFileHandle, "%s\t%s\t%s\trs%s\t%s\n", chrom, start, end, name, exception);
 }
 
 
