@@ -14,7 +14,7 @@
 #include "chainDb.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: chainTrack.c,v 1.26 2004/12/07 02:01:02 kent Exp $";
+static char const rcsid[] = "$Id: chainTrack.c,v 1.27 2006/02/23 01:41:31 baertsch Exp $";
 
 
 struct cartOptions
@@ -48,8 +48,8 @@ if (chainId == NULL)
 	fullName, force);
 else
     dyStringPrintf(query, 
-	"select chainId, tStart,tEnd,qStart from %sLink %s where chainId=%s and ",
-	fullName, force, chainId);
+	"select chainId, tStart,tEnd,qStart from %sLink where chainId=%s and ",
+	fullName, chainId);
 if (!isSplit)
     dyStringPrintf(query, "tName='%s' and ", chromName);
 hAddBinToQuery(start, end, query);
