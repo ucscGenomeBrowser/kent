@@ -5,12 +5,9 @@
 /* Reorder columns. */
 /* Add bin. */
 /* Add 'rs' in front of snp_id. */
-/* Decrease chromStart and chromEnd from int(11) to int(10). */
+/* Orientation --> strandStrings. */
 /* Add score for BED format (always 0). */
-/* Rename orientation --> strand. */
-/* Observed can be varchar(32). */
 /* Expand validation_status. */
-/* Func okay as is??!! */
 /* Drop refUCSCReverseComp. */
 
 #include "common.h"
@@ -22,7 +19,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snpFinalTable.c,v 1.1 2006/02/23 01:10:00 heather Exp $";
+static char const rcsid[] = "$Id: snpFinalTable.c,v 1.2 2006/02/23 01:30:06 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -32,6 +29,19 @@ char *strandStrings[] = {
 "+",
 "-",
 };
+
+/* these are described in b125_mapping.doc */
+/* Also snpFixed.LocTypeCode */
+char *locTypeStrings[] = {
+    "unknown",
+    "range",
+    "exact",
+    "between",
+    "rangeInsertion",
+    "rangeSubstitution",
+    "rangeDeletion",
+};
+
 
 
 void usage()
@@ -74,6 +84,7 @@ return ret;
 }
 
 char *validString(int validCode)
+/* These are from snpFixed.SnpValidationCode */
 {
 switch (validCode)
     {
@@ -225,7 +236,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     functionString = cloneString(row[7]);
     stripChar(functionString, ' ');
-    fprintf(f, "%s\t%s\t%s\t%s\n", row[9], row[10], functionString, row[3]);
+    fprintf(f, "%s\t%s\t%s\t%s\n", row[9], row[10], functionString, locTypeStrings[sqlUnsigned(row[3])]);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
