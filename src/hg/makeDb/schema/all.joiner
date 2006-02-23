@@ -8,7 +8,7 @@
 # Define databases used for various organisms
 set hg hg15,hg16,hg17
 set mm mm3,mm4,mm5,mm6,mm7
-set rn rn2,rn3
+set rn rn2,rn3,rn4
 set fr fr1
 set ce ce1,ce2
 set cb cb1
@@ -37,7 +37,7 @@ set snp125 dbSnpHumanBuild125
 set strPur strPur1
 
 # Define all organism/assembly-specific databases.
-set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur1
+set gbd $hg,$mm,$rn,$fr,$ce,$cb,$dm,$dp,$sacCer,$panTro,$galGal,$ci,$danRer,$canFam,$droYak,$droMult,$anoGam,$apiMel,$cioSav,$tetNig,$xenTro,$monDom,$bosTau,$rheMac,$strPur
 
 # Define organism databases based on whole-genome shotgun projects 
 # (Assembly based on WGS project contigs accessioned in Genbank)
@@ -65,7 +65,7 @@ databasesChecked $gbd,$otherDb,$snp125
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp040915,sp040515,sp040315,sp040115,proteins040915,proteins040515,proteins040315
 
 # Define various non-self chains
-set chainDest Hg15,Hg16,Hg17,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Rn2,Rn3,Cb1,Dm1,Dm2,Dp1,Dp2,Dp3,PanTro1,GalGal2,Fr1,DanRer1,DanRer2,DanRer3,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSim1,droGri1,DroPer1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,MonDom1,RheMac1,BosTau1,BosTau2
+set chainDest Hg15,Hg16,Hg17,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dp1,Dp2,Dp3,PanTro1,GalGal2,Fr1,DanRer1,DanRer2,DanRer3,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSim1,droGri1,DroPer1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,MonDom1,RheMac1,BosTau1,BosTau2
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
