@@ -192,7 +192,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.994 2006/02/23 04:51:26 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.995 2006/02/23 05:34:59 markd Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4180,6 +4180,7 @@ static char *mgcStatusDesc[][2] =
     {"noDecision", "no decision yet"},
     {"fullLength", "full length"},
     {"fullLengthShort", "full length (short isoform)"},
+    {"fullLengthSynthetic", "full length (synthetic, expression ready, no stop)"},
     {"incomplete", "incomplete"},
     {"chimeric", "chimeric"},
     {"frameShift", "frame shifted"},
