@@ -325,7 +325,7 @@
             <embedding description="Cryosection"/>
           </preparation>
           <probe fPrimer="" rPrimer="" seq="">
-            <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
+            <gene name="Pax2" locusLink="18504" refSeq="NM_011037" genbank="NM_011037" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
           </probe>
           <expressionLevel level="1">
@@ -349,7 +349,7 @@
             <embedding description="Cryosection"/>
           </preparation>
           <probe fPrimer="" rPrimer="" seq="">
-            <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
+            <gene name="Pax2" locusLink="18504" refSeq="NM_011037" genbank="NM_011037" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
           </probe>
           <expressionLevel level="1">
@@ -373,7 +373,7 @@
             <embedding description="Cryosection"/>
           </preparation>
           <probe fPrimer="" rPrimer="" seq="">
-            <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
+            <gene name="Pax2" locusLink="18504" refSeq="NM_011037" genbank="NM_011037" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
           </probe>
           <expressionLevel level="1">
@@ -400,7 +400,7 @@
             <embedding description="Cryosection"/>
           </preparation>
           <probe fPrimer="" rPrimer="" seq="">
-            <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
+            <gene name="Pax2" locusLink="18504" refSeq="NM_011037" genbank="NM_011037" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
           </probe>
           <expressionLevel level="1">
@@ -424,7 +424,7 @@
             <embedding description="Cryosection"/>
           </preparation>
           <probe fPrimer="" rPrimer="" seq="">
-            <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
+            <gene name="Pax2" locusLink="18504" refSeq="NM_011037" genbank="NM_011037" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
           </probe>
           <expressionLevel level="1">
@@ -448,7 +448,7 @@
             <embedding description="Cryosection"/>
           </preparation>
           <probe fPrimer="" rPrimer="" seq="">
-            <gene name="Pax2" locusLink="18504" refSeq="" genbank="NM_011037" uniProt="" taxon="10090"/>
+            <gene name="Pax2" locusLink="18504" refSeq="NM_011037" genbank="NM_011037" uniProt="" taxon="10090"/>
             <probeType name="RNA"/>
           </probe>
           <expressionLevel level="1">
