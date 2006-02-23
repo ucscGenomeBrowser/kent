@@ -7,12 +7,12 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = snpContigLocFilter.o snpContigLocusIdFilter.o snpContigLocusIdCondense.o \
     snpSplitByChrom.o snpLocType.o snpExpandAllele.o snpSort.o snpRefUCSC.o \
     snpCheckAlleles.o snpLoadFasta.o snpReadFasta.o snpCheckClassAndObserved.o \
-    snpFunction.o snpSNP.o
+    snpFunction.o snpSNP.o snpFinalTable.o
 
 all: snpContigLocFilter snpContigLocusIdFilter snpContigLocusIdCondense \
      snpSplitByChrom snpLocType snpExpandAllele snpSort snpRefUCSC \
      snpCheckAlleles snpLoadFasta snpReadFasta snpCheckClassAndObserved \
-     snpFunction snpSNP
+     snpFunction snpSNP snpFinalTable
 
 snpContigLocFilter: snpContigLocFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocFilter snpContigLocFilter.o ${MYLIBS} $L
@@ -55,3 +55,6 @@ snpFunction: snpFunction.o ${MYLIBS}
 
 snpSNP: snpSNP.o ${MYLIBS}
 	${CC} -O -o snpSNP snpSNP.o ${MYLIBS} $L
+
+snpFinalTable: snpFinalTable.o ${MYLIBS}
+	${CC} -O -o snpFinalTable snpFinalTable.o ${MYLIBS} $L
