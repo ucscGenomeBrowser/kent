@@ -3053,6 +3053,7 @@ elsif ($l =~ /<trace_end>(F|R)/)
    }
 }
 EOF
+    # << for emacs
     chmod +x getBacInfo.pl
     perl getBacInfo.pl < CHORI82BacEnds.xml > bacEndInfo.txt
     # check all the names are there 
@@ -3207,3 +3208,76 @@ EOF
 # add trackDb entry and html
 # Changes were made to hgc.c so that the BAC clone and end name links 
 # go to the relevant entries in the NCBI Trace Archive.
+
+
+# BROAD(/ENSEMBL/OXFORD) GENE ANNOTATIONS (DONE 2/15/06 angie)
+    # These do not look good enough to push -- I just loaded them because 
+    # David and Mark were interested.  They do not include CDS annotation 
+    # and don't look very good compared to xenoRefGene.
+    ssk kkstore03
+    mkdir /cluster/data/canFam1/bed/broadGenes
+    cd /cluster/data/canFam1/bed/broadGenes
+    wget --timestamping http://www.broad.mit.edu/ftp/pub/papers/dog_genome/suppinfo/DogGenes_CanFam1.zip
+    # Translate the three GFF-like formats in this file into vanilla GFF 
+    # with transcript IDs for grouping:
+    perl -wpe 's/ENSCAFE\d+\s+ENSCAFG\d+\s+(ENSCAFT\d+)\s+\w+\s*$/$1\n/; \
+               s/\d+\.\d+\.\d+\s+\d+\s+// if /broad/; \
+               s/\d+\s+\d+\s+(\d+)\s+\w+\s*$/$1\n/ if /oxford/; \
+               s/^/chr/;' \
+      dog_final.cdna.gff > cleaned.gff
+    grep ensembl cleaned.gff > ensemblExons.gff
+    grep broad cleaned.gff > broadExons.gff
+    grep oxford cleaned.gff > oxfordExons.gff
+
+    ssh hgwdev
+    cd /cluster/data/canFam1/bed/broadGenes
+    ldHgGene canFam1 ensemblExons ensemblExons.gff
+    ldHgGene canFam1 broadExons broadExons.gff
+    ldHgGene canFam1 oxfordExons oxfordExons.gff
+
+
+# ENSEMBL GENES (DONE 2/22/06 angie)
+    mkdir /cluster/data/canFam1/bed/ensembl
+    cd /cluster/data/canFam1/bed/ensembl
+    # Get the ensembl gene data from 
+    # http://www.ensembl.org/Canis_familiaris/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Canis_familiaris choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Structures" box. 
+    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
+    # Save as ensembl.gff.gz
+    # Add "chr" to front of each line in the gene data gtf file to make 
+    # it compatible with our software.
+    gunzip -c ensembl.gff.gz \
+    | perl -wpe 's/^([0-9]+|X|Y|M|Un(_random)?)/chr$1/ \
+                 || die "Line $. doesnt start with rat chrom:\n$_"' \
+    > ensGene.gtf
+    ssh hgwdev
+    ldHgGene -gtf -genePredExt canFam1 ensGene \
+      /cluster/data/canFam1/bed/ensembl/ensGene.gtf
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.txt.gz
+    #-- Normally the versioned accs are available, to match what we get in 
+    #-- the GTF.  However, this time the versions are missing... fortunately 
+    #-- everything is version .1 this time so we can just fudge it in:
+    gunzip -c ensGtp.txt.gz \
+    | perl -wpe 's/(ENSCAF[GTP]\d+)/$1.1/g' > ensGtp.tab
+    hgLoadSqlTab canFam1 ensGtp ~/kent/src/hg/lib/ensGtp.sql ensGtp.tab
+
+    # Load Ensembl peptides:
+    # Get them from ensembl as above in the gene section except for
+    # Page 3) Choose the "Sequences" box. 
+    # Page 4) Transcripts/Proteins.  Peptide.  Format = FASTA.
+    # Save file as ensemblPep.fa.gz
+    gunzip -c ensemblPep.fa.gz \
+    | perl -wpe 's/^>.*\|(ENSCAFT\d+\.\d+).*/>$1/' \
+    > ensPep.fa
+    hgPepPred canFam1 generic ensPep ensPep.fa
+
+
