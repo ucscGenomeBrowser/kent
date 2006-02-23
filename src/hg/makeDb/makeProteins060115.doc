@@ -363,3 +363,34 @@ delete from hgncXref;
 load data local infile "hgncXref.tab" into table hgncXref;
 quit;
 
+# CREATE REACTOME TABLES (DONE, Fan 2/23/06)
+
+# Obtain the ucsc_events14.dat.txt and ucsc_entity14.dat from Reactome.
+# Contact: Gopinathrao, Gopal [gopinath@cshl.edu]
+# ...14.dat is actually a typo.  They should be 16 (for ver.16).
+
+mkdir /cluster/store10/reactome/reactome060223
+rm /cluster/data/reactome
+ln -s /cluster/store10/reactome/reactome060223 /cluster/data/reactome
+cd /cluster/data/reactome
+
+# save these two .dat files to this subdirectory.
+
+hgsql proteome -e 'drop table spReactomeEvent'
+hgsql proteome < ~/hg/lib/spReactomeEvent.sql
+hgsql proteome -e 'load data local infile "ucsc_events14.dat" into table spReactomeEvent ignore 4 lines'
+
+hgsql proteome -e 'drop table spReactomeId'
+hgsql proteome < ~/hg/lib/spReactomeId.sql
+hgsql proteome -e 'load data local infile "ucsc_entity14.dat" into table spReactomeId ignore 6 lines'
+
+# Generate lists for Reactome to link back to UCSC site.
+
+hgsql hg18 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg18.lis
+
+hgsql mm7 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >mm7.lis
+
+hgsql hg17 -N -e 'select kgId, kgXref.spId from kgXref, proteome.spReactomeId,proteome.spVariant where kgXref.spID=proteome.spVariant.variant and spReactomeId.spId=parent' |sort -u >hg17.lis
+
+# Email the above 3 list files to Gopinathrao, Gopal [gopinath@cshl.edu]
+
