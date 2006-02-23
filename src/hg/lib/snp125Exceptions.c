@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snp125Exceptions.c,v 1.2 2006/01/27 22:43:08 heather Exp $";
+static char const rcsid[] = "$Id: snp125Exceptions.c,v 1.3 2006/02/23 02:38:35 heather Exp $";
 
 void snp125ExceptionsStaticLoad(char **row, struct snp125Exceptions *ret)
 /* Load a row from snp125Exceptions table into ret.  The contents of ret will
@@ -146,20 +146,11 @@ void snp125ExceptionsTableCreate(struct sqlConnection *conn)
 {
 char *createString =
 "CREATE TABLE snp125Exceptions (\n"
-"   chrom varchar(255) not null,\n"
-"    chromStart int unsigned not null,\n"
-"    chromEnd int unsigned not null,\n"
-"    name varchar(255) not null,\n"
-"    exception enum ('NegativeSize',\n"
-
-"                    'ExactLocTypeWrongSize','BetweenLocTypeWrongSize',\n"
-"		     'RangeLocTypeWrongSize','DeletionClassWrongSize',\n"
-"                    'SingleClassWrongLocType',\n"
-"                    'SingleClassTriAllelic', 'SingleClassQuadAllelic',\n"
-"                    'SingleClassWrongObserved','DeletionClassWrongObserved',\n"
-"                    'RefNCBINotInObserved','RefUCSCNotInObserved',\n"
-"                    'AlignTwoPlaces','AlignThreePlaces','AlignFourPlusPlaces',\n"
-"                    'BadAlignmentFlanks', 'StrandIssue')\n"
+"    chrom varchar(15) not null,\n"
+"    chromStart int(10) unsigned not null,\n"
+"    chromEnd int(10) unsigned not null,\n"
+"    name varchar(15) not null,\n"
+"    exception varchar(64) not null \n"
 
 ")\n";
 
