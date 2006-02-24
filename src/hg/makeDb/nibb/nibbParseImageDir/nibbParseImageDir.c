@@ -1,3 +1,22 @@
+/* NOTE!!! 
+ 
+ last time we got files with embedded spaces in them.
+ /san/sanvol1/visiGene/gbdb/full/inSitu/XenopusLaevis/nibb/XL013p16_W-2-1b10_r45_28/XL013p16_ St17_dorsal.jpg
+ There is a space just before "St17_dorsal.jpg" and there were several other files like this that 
+ had to be manually fixed.
+
+ Also, for next time we should make the structure be the same.
+ Right now, there are 4 extra directory levels in offline/nibbFrog (XL001-018  XL019-043  XL044-095  XL095-500)
+ which are NOT reflected under visiGene/gbdb/{full|200}/inSitu/XenopusLaevis/nibb/
+ Had we made the structure the same, then we could use the standard vgPrepImage utility,
+ and we wouldn't need the nibbPrepImage utility at all.
+
+ I may just go ahead and get rid of (XL001-018  XL019-043  XL044-095  XL095-500) 
+ and put all their contents into their parent dir offline/nibbFrog/.
+ 
+*/
+
+
 /* nibbParseImageDir - Look through nibb image directory and allowing for 
  * typos and the like create a table that maps a file name to clone name, 
  * developmental stage, and view of body part. */
@@ -8,7 +27,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: nibbParseImageDir.c,v 1.2 2005/11/10 21:29:45 kent Exp $";
+static char const rcsid[] = "$Id: nibbParseImageDir.c,v 1.3 2006/02/24 03:35:22 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
