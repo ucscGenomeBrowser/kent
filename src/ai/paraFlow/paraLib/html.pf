@@ -55,8 +55,8 @@ class htmlFormVar
 // A variable within an html form. Associated with a button, input tag etc.
     {
     string name;	// Variable name.
-    string type;	// Variable type.
     string value;	// Current value if any. May be nil.
+    string type;	// Variable type.
     array of string values;  // Available values for some types, nil for others.
     string tagName;	     // Name of associated tag.
     array of htmlTag tags;   // Associated html tags.
@@ -482,7 +482,33 @@ to httpCookiesToString(dir of htmlCookie cookies) into (string out)
 	out += ' ' + cookie.name + '=' + cookie.value + ';'
     }
 
-to httpGetUnforwarded(string url, dir of htmlCookie cookies=nil) 
+to httpForwardingAddress(string text) into (string url)
+// Look through text for signs that it is just a forwarding
+// message.  The big clue for this is the 301 that is the
+// second word in the text right after the HTTP version.
+// If we find it then try and find the forwarding address
+// and stick it in URL.  If we fail for any reason, or if
+// the page doesn't need forwarding to begin with, url will be nil.
+    {
+    (string line,int pos) = text.nextLine(0);
+    if (line)
+	{
+	if (line.startsWith("HTTP/"))
+	    {
+	    array of string words = line.words();
+	    if (words.size >= 2)
+		{
+		if (words[1] == "301")
+		    {
+		    url = text.between('<A HREF="', '"');
+		    }
+		}
+	    }
+	}
+    }
+
+to httpGetUnforwarded(string url, dir of string vars=nil, 
+	dir of htmlCookie cookies=nil) 
 into (string text)
 // Get http text from server, but don't deal with forwarding.
     {
@@ -493,6 +519,50 @@ into (string text)
     s += '\r\n';
     f.write(s);
     text = f.readAll();
+    }
+
+to httpGet(string url, dir of string vars=nil, dir of htmlCookie cookies=nil)
+into (string text)
+// Get http text from server.
+    {
+    /* Here we deal with forwarding up to 10 levels
+     * (If more levels than that, hmm, could be a trap!) */
+    for (i in 0 to 10)
+        {
+	text = httpGetUnforwarded(url, cookies);
+	url = httpForwardingAddress(text);
+	if (!url)
+	    break;
+	}
+    }
+
+to httpPostUnforwarded(string url, dir of string vars, 
+	dir of htmlCookie cookies=nil) 
+	into (string text)
+// Post vars and get http text from server, but don't deal with forwarding.
+    {
+    file f = httpConnect(url, 'POST');
+    string s = "";
+    if (cookies)
+	s += httpCookiesToString(cookies);
+    s += '\r\n';
+    f.write(s);
+    text = f.readAll();
+    }
+
+to httpPost(string url, dir of string vars, dir of htmlCookie cookies=nil)
+into (string text)
+// Get http text from server.
+    {
+    /* Here we deal with forwarding up to 10 levels
+     * (If more levels than that, hmm, could be a trap!) */
+    for (i in 0 to 10)
+        {
+	text = httpGetUnforwarded(url, cookies);
+	url = httpForwardingAddress(text);
+	if (!url)
+	    break;
+	}
     }
 
 to htmlPageFetch(string url, dir of htmlCookie cookies=nil) 

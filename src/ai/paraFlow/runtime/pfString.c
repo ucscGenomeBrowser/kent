@@ -5,6 +5,7 @@
 #include "object.h"
 #include "pfString.h"
 #include "sqlNum.h"
+#include "cheapcgi.h"
 
 
 static void _pf_string_cleanup(struct _pf_string *string, int typeId)
@@ -35,6 +36,21 @@ struct _pf_string *_pf_string_new(char *s, int size)
 struct _pf_string *string = _pf_string_new_empty(size+1);
 memcpy(string->s, s, size);
 string->size = size;
+return string;
+}
+
+struct _pf_string *_pf_string_on_existing_c(char *cString)
+/* Wrap string around existing c-style string that is in
+ * dynamic memory. */
+{
+int len = strlen(cString);
+_pf_String string;
+AllocVar(string);
+string->_pf_refCount = 1;
+string->_pf_cleanup = _pf_string_cleanup;
+string->s = cString;
+string->allocated = len+1;
+string->size = len;
 return string;
 }
 
@@ -1001,5 +1017,30 @@ while (isspace(*s))
     s++;
     }
 stack[0].Int = count;
+}
+
+
+void _pf_cm_string_cgiEncode(_pf_Stack *stack)
+/* Return cgi-encoded version of string */
+{
+_pf_String string = stack[0].String;
+if (string)
+    {
+    char *encoded = cgiEncode(string->s);
+    stack[0].String = _pf_string_on_existing_c(encoded);
+    }
+}
+
+void _pf_cm_string_cgiDecode(_pf_Stack *stack)
+/* Return cgi-decoded version of string */
+{
+_pf_String string = stack[0].String;
+if (string)
+    {
+    _pf_String d = _pf_string_new_empty(string->size);
+    cgiDecode(string->s, d->s, string->size);
+    d->size = strlen(d->s);
+    stack[0].String = d;
+    }
 }
 

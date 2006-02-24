@@ -91,4 +91,9 @@ withQuotes='""';
     print("match $b, pos $pos");
     (b,pos) = s.nextBetween(" my ", " string", pos);
     print("match $b, pos $pos");
+    string encoded = s.cgiEncode();
+    string decoded = encoded.cgiDecode();
+    print(s);
+    print(encoded);
+    print(decoded);
     }

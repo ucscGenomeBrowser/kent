@@ -87,6 +87,8 @@ return
 "    flow fitRight(int size) into (string s);\n"
 "    flow startsWith(string prefix) into (bit bool);\n"
 "    flow endsWith(string suffix) into (bit bool);\n"
+"    flow cgiEncode() into (string encoded);\n"
+"    flow cgiDecode() into (string decoded);\n"
 "    flow asInt() into (int x);\n"
 "    flow asLong() into (long x);\n"
 "    flow asDouble() into (double x);\n"

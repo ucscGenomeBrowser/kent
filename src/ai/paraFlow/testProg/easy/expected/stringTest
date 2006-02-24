@@ -44,3 +44,6 @@ match (nil), pos -1
 match (nil), pos -1
 match is, pos 7
 match test, pos 15
+This is my test string.  How do you like it?
+This+is+my+test+string.++How+do+you+like+it%3F
+This is my test string.  How do you like it?
