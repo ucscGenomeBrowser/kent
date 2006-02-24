@@ -14,7 +14,7 @@
 #include "hgMaf.h"
 #include "mafTrack.h"
 
-static char const rcsid[] = "$Id: mafTrack.c,v 1.56 2006/02/06 18:45:36 braney Exp $";
+static char const rcsid[] = "$Id: mafTrack.c,v 1.57 2006/02/24 01:20:45 kate Exp $";
 
 struct mafItem
 /* A maf track item. */
@@ -629,7 +629,7 @@ for (full = mafList; full != NULL; full = full->next)
             AllocArray(pixelScores, w);
             mafFillInPixelScores(maf, mcMaster, pixelScores, w);
             if (vis != tvFull && mc->leftStatus == MAF_NEW_STATUS)
-		vgBox(vg, x1-3, yOff, 2, height, getBlueColor());
+		vgBox(vg, x1-3, yOff, 2, height, getChromBreakBlueColor());
             for (i=0; i<w; ++i)
                 {
                 if (vis == tvFull)
@@ -651,18 +651,20 @@ for (full = mafList; full != NULL; full = full->next)
                 }
             if (vis != tvFull && mc->leftStatus == MAF_NEW_NESTED_STATUS)
 		{
-		vgBox(vg, x1-1, yOff, 2, 1, getGreenColor());
-		vgBox(vg, x1-1, yOff, 1, height, getGreenColor());
-		vgBox(vg, x1-1, yOff + height-1, 2, 1, getGreenColor());
+		vgBox(vg, x1-1, yOff, 2, 1, getChromBreakGreenColor());
+		vgBox(vg, x1-1, yOff, 1, height, getChromBreakGreenColor());
+		vgBox(vg, x1-1, yOff + height-1, 2, 1, 
+                                getChromBreakGreenColor());
 		}
             if (vis != tvFull && mc->rightStatus == MAF_NEW_NESTED_STATUS)
 		{
-		vgBox(vg, i+x1-1, yOff, 2, 1, getGreenColor());
-		vgBox(vg, i+x1, yOff, 1, height, getGreenColor());
-		vgBox(vg, i+x1-1, yOff + height-1, 2, 1, getGreenColor());
+		vgBox(vg, i+x1-1, yOff, 2, 1, getChromBreakGreenColor());
+		vgBox(vg, i+x1, yOff, 1, height, getChromBreakGreenColor());
+		vgBox(vg, i+x1-1, yOff + height-1, 2, 1, 
+                                getChromBreakGreenColor());
 		}
             if (vis != tvFull && mc->rightStatus == MAF_NEW_STATUS) 
-		vgBox(vg, i+x1+1, yOff, 2, height, getBlueColor());
+		vgBox(vg, i+x1+1, yOff, 2, height, getChromBreakBlueColor());
             freez(&pixelScores);
             }
 	}

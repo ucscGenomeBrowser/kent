@@ -101,7 +101,7 @@
 #include "hgMutUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1076 2006/02/17 15:25:20 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1077 2006/02/24 01:20:44 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -126,7 +126,9 @@ Color shadesOfBlue[EXPR_DATA_SHADES];
 Color orangeColor = 0;
 Color brickColor = 0;
 Color blueColor = 0;
+Color darkBlueColor = 0;
 Color greenColor = 0;
+Color darkGreenColor = 0;
 boolean exprBedColorsMade = FALSE; /* Have the shades of Green, Red, and Blue been allocated? */
 int maxRGBShade = EXPR_DATA_SHADES - 1;
 
@@ -1219,6 +1221,21 @@ return blueColor;
 Color getGreenColor()
 {
 return greenColor;
+}
+
+/* at windows >250Kbp, darken chrom break colors on MAF display */
+#define CHROM_BREAK_DARK_COLOR_ZOOM 200000
+
+Color getChromBreakGreenColor()
+{
+return (winEnd-winStart > CHROM_BREAK_DARK_COLOR_ZOOM ?
+            darkGreenColor : greenColor);
+}
+
+Color getChromBreakBlueColor()
+{
+return (winEnd-winStart > CHROM_BREAK_DARK_COLOR_ZOOM ?
+            darkBlueColor : blueColor);
 }
 
 /*	See inc/chromColors.h for color defines	*/
@@ -8016,7 +8033,9 @@ makeSeaShades(vg);
 orangeColor = vgFindColorIx(vg, 230, 130, 0);
 brickColor = vgFindColorIx(vg, 230, 50, 110);
 blueColor = vgFindColorIx(vg, 0,114,198);
+darkBlueColor = vgFindColorIx(vg, 0,70,140);
 greenColor = vgFindColorIx(vg, 28,206,40);
+darkGreenColor = vgFindColorIx(vg, 28,140,40);
 
 if (rulerCds && !cdsColorsMade)
     {

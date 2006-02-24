@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.92 2006/02/10 16:18:32 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.93 2006/02/24 01:20:45 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1884,7 +1884,7 @@ tryagain:
 	int x1;
 
 	x1 = x + (mi->seqEnds[offset] -1 - startSub2 * 2) * width/winBaseCount;
-	vgBox(vg, x1, y-1, 1, mi->height-1, getBlueColor());
+	vgBox(vg, x1, y-1, 1, mi->height-1, getChromBreakBlueColor());
 	}
     for(offset = 0; offset < mi->insertsSize; offset++)
 	{
@@ -1898,18 +1898,18 @@ tryagain:
 	int x1;
 
 	x1 = x + (mi->brackStarts[offset] -1- startSub2 * 2) * width/winBaseCount;
-	vgBox(vg, x1, y-1, 2, 1, getGreenColor());
-	vgBox(vg, x1, y-1, 1, mi->height-1, getGreenColor());
-	vgBox(vg, x1, y + mi->height-3, 2, 1, getGreenColor());
+	vgBox(vg, x1, y-1, 2, 1, getChromBreakGreenColor());
+	vgBox(vg, x1, y-1, 1, mi->height-1, getChromBreakGreenColor());
+	vgBox(vg, x1, y + mi->height-3, 2, 1, getChromBreakGreenColor());
 	}
     for(offset = 0; offset < mi->brackEndsSize; offset++)
 	{
 	int x1;
 
 	x1 = x + (mi->brackEnds[offset] -1- startSub2 * 2) * width/winBaseCount;
-	vgBox(vg, x1-1, y-1, 2, 1, getGreenColor());
-	vgBox(vg, x1, y-1, 1, mi->height-1, getGreenColor());
-	vgBox(vg, x1-1, y + mi->height-3, 2, 1, getGreenColor());
+	vgBox(vg, x1-1, y-1, 2, 1, getChromBreakGreenColor());
+	vgBox(vg, x1, y-1, 1, mi->height-1, getChromBreakGreenColor());
+	vgBox(vg, x1-1, y + mi->height-3, 2, 1, getChromBreakGreenColor());
 	}
 
     vgUnclip(vg);

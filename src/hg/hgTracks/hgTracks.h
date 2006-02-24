@@ -794,7 +794,10 @@ Color getOrangeColor();
 
 Color getBrickColor();
 Color getBlueColor();
-Color getGreenColor();
+Color getDarkBlueColor();
+Color getDarkGreenColor();
+Color getChromBreakBlueColor();
+Color getChromBreakGreenColor();
 
 void linkedFeaturesDrawAt(struct track *tg, void *item,
 				 struct vGfx *vg, int xOff, int y, double scale, 
