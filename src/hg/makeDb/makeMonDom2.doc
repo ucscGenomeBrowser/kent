@@ -414,6 +414,11 @@ Submission to last job:        248204s    4136.73m    68.95h    2.87d
     #	1769890042 bases of 3496445653 (50.620%) in intersection
     #	real    13m1.867s
 
+    head -3 RMOutExtra/chunk_00.fa.out > RMExtra1/extra.out
+    time find ./RMOutExtra -type f | sort -t_ -k2,2n | while read F
+    do
+	tail +4 ${F} >> RMExtra1/extra.out
+    done
 #######################################################################
 # RUN REPEAT MASKER (DONE - 2005-08-19 - Hiram)(OBSOLETE, see above)
     #	Reusing the special repeat masker addition from monDom1
