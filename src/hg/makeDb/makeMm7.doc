@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.46 2006/02/12 15:35:35 fanhsu Exp $"
+#	"$Id: makeMm7.doc,v 1.47 2006/02/24 23:35:22 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -11783,4 +11783,4 @@ EOF
     hgsql mm7 -e 'drop table geneNetworkId'
     hgsql mm7 < ~/src/hg/lib/geneNetworkId.sql
     hgsql mm7 -e 'load data local infile "geneNetworkId.tab" into table geneNetworkId'
-		    
+
