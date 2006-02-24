@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.2 2006/01/11 21:38:29 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.3 2006/02/24 17:51:27 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -21,6 +21,7 @@ use vars qw/
     $opt_distrHost
     $opt_dbHost
     $opt_blastPath
+    $opt_noSelf
     $opt_debug
     $opt_verbose
     $opt_help
@@ -52,6 +53,7 @@ options:
 			(should also be compiled for the same architecture as
 			cluster hosts).
 			Default: $blastPath
+    -noSelf		Don't do self alignments (update pairwise only).
     -debug		Don't actually run commands, just display them.
     -verbose num	Set verbose level to num.  Default $defaultVerbose
     -help		Show detailed help (config.ra variables) and exit.
@@ -103,6 +105,7 @@ sub checkOptions {
 		      "distrHost=s",
 		      "dbHost=s",
 		      "verbose=n",
+		      "noSelf",
 		      "debug",
 		      "help");
   &usage(1) if (!$ok);
@@ -354,8 +357,10 @@ sub celebrate {
 verbose(1,
 	"\n *** All done!\n");
 verbose(1,
-	" *** Check these tables in $tDb:\n *** " .
-	$tGenesetPrefix . "BlastTab ");
+	" *** Check these tables in $tDb:\n *** ");
+if (! $opt_noSelf) {
+  verbose(1, $tGenesetPrefix . 'BlastTab ');
+}
 foreach my $qDb (@qDbs) {
   my $qPrefix = &dbToPrefix($qDb);
   verbose(1, $qPrefix . 'BlastTab ');
@@ -388,8 +393,10 @@ my $tFasta = $dbToFasta{$tDb};
 
 # Self blastp.
 &formatSequence($tDb, $tFasta);
-&runPairwiseBlastp($tDb, $tDb, $selfMaxPer);
-&loadPairwise($tDb, $tDb, $tGenesetPrefix, $selfMaxPer);
+if (! $opt_noSelf) {
+  &runPairwiseBlastp($tDb, $tDb, $selfMaxPer);
+  &loadPairwise($tDb, $tDb, $tGenesetPrefix, $selfMaxPer);
+}
 
 # For each query db, pairwise blastp.
 my $tPrefix = &dbToPrefix($tDb);
