@@ -4679,6 +4679,37 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	-stop=net `pwd`/DEF > blastz.out 2>&1 &
     #	running 2006-02-10
+# Completed: 43469 of 43470 jobs
+# Crashed: 1 jobs
+# CPU time in finished jobs:   25745592s  429093.20m  7151.55h  297.98d  0.816 y
+# IO & Wait Time:               8466642s  141110.70m  2351.85h   97.99d  0.268 y
+# Average job time:                 787s      13.12m     0.22h    0.01d
+# Longest finished job:           51561s     859.35m    14.32h    0.60d
+# Submission to last job:        103470s    1724.50m    28.74h    1.20d
+    #	There wasn't actually an outstanding job, it had been completed.
+# Completed: 345 of 345 jobs
+# CPU time in finished jobs:        620s      10.33m     0.17h    0.01d  0.000 y
+# IO & Wait Time:                  1631s      27.19m     0.45h    0.02d  0.000 y
+# Average job time:                   7s       0.11m     0.00h    0.00d
+# Longest finished job:              69s       1.15m     0.02h    0.00d
+# Submission to last job:           255s       4.25m     0.07h    0.00d
+
+# Completed: 49 of 49 jobs
+# CPU time in finished jobs:     224697s    3744.94m    62.42h    2.60d  0.007 y
+# IO & Wait Time:                  4790s      79.84m     1.33h    0.06d  0.000 y
+# Average job time:                4683s      78.06m     1.30h    0.05d
+# Longest finished job:          115041s    1917.35m    31.96h    1.33d
+# Submission to last job:        115147s    1919.12m    31.99h    1.33d
+
+
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=cat -stop=net `pwd`/DEF > cat-net.out 2>&1 &
+    #	running 2006-02-11
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=load -stop=load `pwd`/DEF > load.out 2>&1 &
 
 ####################################################################################
 # BUILD KNOWN GENES TABLES (STARTED 2/1/06, DONE 2/13/06 Fan)
@@ -5836,8 +5867,8 @@ Loading database with 14488 rows
       | hgsql -h genome-testdb hgcentraltest
 
 # END OF HGNEAR STUFF
-#############################################################################
 
+#############################################################################
 # UPDATE BIOCYCTABLES NEEDED BY hgGene (DONE 2/16/06 Fan)
 
 # First register with BioCyc to download their HumanCyc database
@@ -5876,6 +5907,7 @@ Loading database with 14488 rows
    hgsql hg18 -e 'LOAD DATA local INFILE "bioCycMapDesc.tab" into table bioCycMapDesc'
    hgsql hg18 -e 'LOAD DATA local INFILE "bioCycPathway.tab" into table bioCycPathway'
 
+#############################################################################
 # BLASTZ/CHAIN/NET RN4 (DONE 2/17/06 Fan)
     ssh kkstore02
 
@@ -6389,6 +6421,7 @@ cat > downloads.csh << 'EOF'
     mkdir $dir
     ln -s /cluster/data/hg18/bed/multiz17way/mafDownloads/{*.gz,md5sum.txt} $dir
 
+##############################################################################
 # SET DEFAULT POSITION TO chrX:151,073,054-151,383,976, TO SHOW GENE GABRA3
 
   hgsql -e 'delete from dbDb where name="hg18"' \
