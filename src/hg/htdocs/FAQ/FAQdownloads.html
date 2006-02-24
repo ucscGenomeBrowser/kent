@@ -25,6 +25,7 @@
                 <TR><TD>&nbsp;</TD><TD>
 		<UL>
                 <LI><A HREF="#download1">Downloading sequence and annotation data</A>
+                <LI><A HREF="#download32">Extracting sequence in batch from an assembly</A>
                 <LI><A HREF="#download23">Downloading data from the UCSC DAS server</A>
                 <LI><A HREF="#download27">Downloading the UCSC Genome Browser source</A>
                 <LI><A HREF="#download2">Download restrictions</A>
@@ -39,7 +40,6 @@
                 <LI><A HREF="#download11">Chromosome Un</A>
                 <LI><A HREF="#download12">Chromosome M</A>
                 <LI><A HREF="#download13">N characters at beginning of human chr22</A>
-                <LI><A HREF="#download15">100K bp discrepancy in human Build 31 chr22</A>
                 <LI><A HREF="#download30">Erroneous duplicated chrY_random region on Mouse Build 34 (mm6)</A>
                 <LI><A HREF="#download26">Problems with Mouse Build 32 (mm4)</A>
                 <LI><A HREF="#download25">Mapping chimp chromosome numbers to human chromsomes numbers</A>
@@ -103,10 +103,87 @@
 			page or our <A HREF="../cgi-bin/das/dsn" TARGET=_blank>DAS 
 		 	server</A>. To download a specific subset of the data or to configure the output
 			format of the data, use the <A HREF="../cgi-bin/hgTables">Table 
-			Browser</A>.
+			Browser</A>. For information on extracting a large set 
+			of sequences from an assembly, see 	
+			<A HREF="#download32">Extracting sequence in batch from
+		    	an assembly</A>. 
 			<P>
 			For more information on using the UCSC DAS server, see 
 			<A HREF="#downloads">Downloading data from the UCSC DAS server</A>.
+		    </TD><TD WIDTH=15></TD>
+		</TR>
+	    </TABLE>
+	    <br></TD></TR>
+	</TABLE>
+	</TD></TR>
+    </TABLE>
+<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="download32"></A>
+<TABLE BORDER=0 WIDTH="100%">
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; Extracting sequence in batch from an assembly</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
+			"I have a lot of coordinates for an assembly and want to
+			extract the corresponding sequences. What is the best 
+		   	way to proceed? 
+			<P>
+			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
+			<P>
+			There are two ways to extract genomic sequence in batch 
+			from an assembly:</P>
+			<P>
+			A. Download the appropriate fasta files from our 
+			<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/">ftp server</A>
+			and extract sequence data using your own tools or the
+		 	tools from our source tree. This is the recommended
+		 	method when you have very large sequence datasets or 
+			will be extracting data frequently.
+			Sequence data for most assemblies is located in the 
+			assembly's &quot;chromosomes&quot; subdirectory on the
+			downloads server. For example, the sequence for human
+			assembly hg17 can be found in 
+			<A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg17/chromosomes/">ftp://hgdownload.cse.ucsc.edu/goldenPath/hg17/chromosomes/</A>.
+			You'll find instructions for obtaining our source 
+			programs and utilities 
+			<A HREF="FAQlicense#license3">here</A>. Some programs 
+		   	that you may find useful are nibFrag, twoBitToFa and 
+			other fa* programs in /cluster/bin/i386. To obtain
+			usage information about most programs, execute it 
+			without arguments.</P>
+			<P>
+			B. Use the Table browser to extract sequence. This is a 
+			convenient way to obtain small amounts of sequence. 
+			<OL>
+			<LI>Create a 
+			<A HREF="../goldenPath/help/hgTracksHelp.html#CustomTracks">custom 
+			track</A> of the genomic coordinates in 
+			<A HREF="FAQformat#format1">BED format</A> and upload 
+			into the Genome Browser. 
+			<LI>Select the custom track in the Table browser, then 
+			select the &quot;sequence&quot; output format to 
+			retrieve data. We recommend that you save the file 
+			locally as gzip. 
+			</OL></P>
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
@@ -478,7 +555,7 @@
 			aligns non-contiguously (i.e. an intron has been spliced out), it is also a candidate 
 			for the Spliced EST track, provided it meets various quality controls for intron and 
 			exon length and match quality.  Start and stop coordinates of each alignment block are 
-			available from the appropriate positional table within the 
+			available from the appropriate table within the 
 			<A HREF="../cgi-bin/hgTables">Table Browser</A>.</P>
 			<P>
 			Note that only 250 EST tracks can be viewed at a time within the browser. If more 
@@ -838,61 +915,6 @@
 <BR>
 
 <!--Content Table------------------------------------------------------------>
-<A NAME="download15"></A>
-    <!--outer table is for border purposes-->        
-    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
-        <TR><TD>            
-        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
-	    <TR><TD>                
-  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
-	        <TR><TD>                
-	        <!--cheap trick to get background on row to be continuous-->
-	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
-		    <TR><TD ALIGN="left">
-	   	    <FONT SIZE="4"><b>&nbsp; 100K bp discrepancy in human Build 31 chr22</b></FONT></TD> 
-		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
-	            </TD></TR>
-  	        </TABLE>                
-	        </TD></TR>
-  	    </TABLE>                
-   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
-	        <TR><TH HEIGHT=10></TH></TR>
-                <TR><TD WIDTH=10>&nbsp;</TD>
-		    <TD>
-	            <P>
-			<B><FONT COLOR="#006666">Question: </FONT></B><BR>
-			"The chr22 download file for human Build 31 is 47748585 bp long, but 
-			the browser shows the length as 47848585 bp. Which is correct?" 
-			<P>
-			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
-			This is a ~100K bp gap inserted into chr22 just after the centromere.
-			<P>
-			There are 5 chromosomes (13, 14, 15, 21, 22) which are termed 
-			<em>acrocentric</em>, meaning that one of their arms is very 
-			short, and thus the centromere is very off-center. The short 
-			arms for these chromosomes 
-			consist primarily of heterochromatin combined with a 
-			&quot;stalk&quot; that mainly 
-			consists of RNA genes. These regions are very hard to sequence,
-			similar to the centromeres.
-			<P>
-			We try to represent the true lengths of each chromosome. 
-			Therefore, <em>N</em>'s are inserted to represent bases in 
-			regions that cannot be sequenced.  For these 5 chromosomes, 
-			the short arms consist entirely of <em>N</em>'s.  This 
-			is the ~13Mb of <em>N</em>'s that you see at the beginning of 
-			chr22.  The remaining sequence is the q-arm for chr22, the 
-			only part that has been sequenced.
-		    </TD><TD WIDTH=15></TD>
-		</TR>
-	    </TABLE>
-	    <br></TD></TR>
-	</TABLE>
-	</TD></TR>
-    </TABLE>
-<BR>
-
-<!--Content Table------------------------------------------------------------>
 <A NAME="download30"></A>
     <!--outer table is for border purposes-->        
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
@@ -1174,10 +1196,10 @@
 			<B><FONT COLOR="#006666">Response:</FONT></B><BR> 
 			If you are looking at the RefSeq Genes, the 
 			<em>refFlat</em> 
-			positional table contains both the gene name (usually a 
+			table contains both the gene name (usually a 
 			HUGO Gene Nomenclature Committee ID) and its accession 
 		    	number. For the Known Genes, 
-			use the non-positional <em>kgAlias</em> table.
+			use the <em>kgAlias</em> table.
 		    </TD><TD WIDTH=15></TD>
 		</TR>
 	    </TABLE>
@@ -1417,7 +1439,7 @@
 			To fetch the upstream sequence for a specific gene, use the 
 			<A HREF="../cgi-bin/hgTables">Table Browser</A>. 
 			Enter the genome, assembly, and gene in which you're interested, 
-			select the refGene positional table, then click the Advanced query button. 
+			select the refGene table, then click the Advanced query button. 
 			On the next page, select the output type &quot;FASTA&quot; and click the Get Results 
 			button. You will then have the opportunity to configure the amount of upstream promoter
 			sequence to fetch, along with several other display options. Click Get Sequence
