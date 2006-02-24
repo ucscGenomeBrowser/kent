@@ -37,7 +37,7 @@ class htmlTag
         {
 	if (attributes)
 	    val = attributes[attName].dupe();
-	if (!val)
+	if (val == nil)
 	    val = usual.dupe();
 	}
 
@@ -46,7 +46,7 @@ class htmlTag
         {
 	if (attributes)
 	    val = attributes[attName].dupe();
-	if (!val)
+	if (val == nil)
 	    punt("Missing required $attName attribute in $name");
 	}
     }
@@ -386,7 +386,7 @@ to formParseVars(htmlPage page, htmlForm form) into (dir of htmlFormVar vars)
 		    }
 		else if (subTag.name == "OPTION")
 		    {
-		    string val = tag.attribute("VALUE");
+		    string val = subTag.attribute("VALUE");
 		    if (!val)
 		        {
 			// We use what is between this tag and next for value
@@ -401,7 +401,7 @@ to formParseVars(htmlPage page, htmlForm form) into (dir of htmlFormVar vars)
 			    var.values = (val);
 			else
 			    var.values.append(val);
-			if (tag.attribute("SELECTED"))
+			if (subTag.attribute("SELECTED") != nil)
 			    var.value = val;
 			}
 		    }
@@ -482,6 +482,25 @@ to httpCookiesToString(dir of htmlCookie cookies) into (string out)
 	out += ' ' + cookie.name + '=' + cookie.value + ';'
     }
 
+to cgiVarsToString(dir of string vars) into (string out)
+// Make up a string with the cgi variables all encoded.
+    {
+    if (vars)
+	{
+	out = "";
+	for (key:val in vars)
+	    {
+	    if (out.size == 0)
+		out.append('?');
+	    else
+		out.append('&');
+	    out += key;
+	    out += '=';
+	    out += val.cgiEncode();
+	    }
+	}
+    }
+
 to httpForwardingAddress(string text) into (string url)
 // Look through text for signs that it is just a forwarding
 // message.  The big clue for this is the 301 that is the
@@ -512,6 +531,8 @@ to httpGetUnforwarded(string url, dir of string vars=nil,
 into (string text)
 // Get http text from server, but don't deal with forwarding.
     {
+    url += cgiVarsToString(vars);
+    ugly("GETTING $url");
     file f = httpConnect(url, 'GET');
     string s = "";
     if (cookies)
@@ -529,7 +550,7 @@ into (string text)
      * (If more levels than that, hmm, could be a trap!) */
     for (i in 0 to 10)
         {
-	text = httpGetUnforwarded(url, cookies);
+	text = httpGetUnforwarded(url, vars, cookies);
 	url = httpForwardingAddress(text);
 	if (!url)
 	    break;
@@ -545,8 +566,11 @@ to httpPostUnforwarded(string url, dir of string vars,
     string s = "";
     if (cookies)
 	s += httpCookiesToString(cookies);
+    string cgiVars = cgiVarsToString(vars);
+    s += "Content-length: " + cgiVars.size + '\r\n';
     s += '\r\n';
     f.write(s);
+    f.write(cgiVars);
     text = f.readAll();
     }
 
@@ -558,19 +582,25 @@ into (string text)
      * (If more levels than that, hmm, could be a trap!) */
     for (i in 0 to 10)
         {
-	text = httpGetUnforwarded(url, cookies);
+	text = httpPostUnforwarded(url, vars, cookies);
 	url = httpForwardingAddress(text);
 	if (!url)
 	    break;
 	}
     }
 
-to htmlPageFetch(string url, dir of htmlCookie cookies=nil) 
+to htmlPageFetch(string url, dir of string vars=nil, 
+string method="GET", dir of htmlCookie cookies=nil) 
 into (htmlPage page)
     {
     string text;
     if (url.start(7).same('http://'))
-        text = httpGet(url);
+	{
+	if (method.same("GET"))
+	    text = httpGet(url, vars, cookies);
+	else if (method.same("POST"))
+	    text=httpPost(url, vars, cookies);
+	}
     else
         text = fileReadAll(url);
     page = htmlPageParse(text,url);
@@ -579,24 +609,27 @@ into (htmlPage page)
 to test(string fileName)
     {
     try {
-	htmlPage page = htmlPageFetch(fileName);
+	dir of string vars = ("db" : "mm7");
+	htmlPage page = htmlPageFetch(fileName, vars, "POST");
 	print(page.status);
 	print(page.header);
 	print(page.cookies);
 	print(page.tags.size + " tags in $fileName");
-	print(page.tags[0]);
-	print(page.tags[page.tags.size-1]);
 	for (form in page.forms)
 	    {
 	    print(form.name + " " + form.method + " " + form.action);
-	    for (var in form.vars)
+	    array of string keys = form.vars.keys();
+	    keys.sort();
+	    for (key in keys)
 		{
+		htmlFormVar var = form.vars[key];
 		prin("  " + var.name + " " );
 		prin(var.type + " " );
 		prin(var.value + " " );
 		print(var.values);
 		}
 	    }
+	print("All done");
 	}
     catch(m)
         {
