@@ -958,6 +958,7 @@ identifier refSeqId typeOf=mrnaAccession
     $gbd.refSeqAli.qName
     $gbd.refSeqSummary.mrnaAcc minCheck=0.99
     dm1.bdgpToRefSeq.value minCheck=0.95
+    $dm,!dm1.flyBaseToRefSeq.value
     mm6.mrnaRefseq.mrna minCheck=0.10
     mm6.spMrna.mrnaID minCheck=0.50
     mm6.dupSpMrna.mrnaID minCheck=0.60
@@ -1347,10 +1348,29 @@ identifier bdgpNonCodingId external=BDGP
 
 identifier flyBase2004Id external=FlyBase
 "FlyBase Xref as of 2004"
-    dm2.flyBase2004Xref.name
-    dm2.flyBaseGene.name minCheck=0.99
-    dm2.flyBasePep.name
-    dm2.flyBaseNoncoding.name minCheck=0.90
+    $dm,!dm1.flyBase2004Xref.name
+    $dm,!dm1.flyBaseGene.name minCheck=0.99
+    $dm,!dm1.flyBasePep.name
+    $dm,!dm1.flyBaseNoncoding.name minCheck=0.90
+    $dm,!dm1.arbExpDistance.query
+    $dm,!dm1.arbExpDistance.target
+    $dm,!dm1.ceBlastTab.query
+    $dm,!dm1.drBlastTab.query
+    $dm,!dm1.hgBlastTab.query
+    $dm,!dm1.mmBlastTab.query
+    $dm,!dm1.rnBlastTab.query
+    $dm,!dm1.scBlastTab.query
+    $dm,!dm1.flyBaseBlastTab.query
+    $dm,!dm1.flyBaseBlastTab.target
+    $dm,!dm1.flyBaseCanonical.transcript
+    $dm,!dm1.flyBaseIsoforms.transcript
+    $dm,!dm1.flyBaseToRefSeq.name
+    $dm,!dm1.flyBaseToUniProt.name
+    $dm,!dm1.flyBaseToPfam.name
+    $dm,!dm1.flyBaseToCG.name
+    $dm,!dm1.flyBaseToDescription.name
+    $dm,!dm1.flyP2P.query
+    $dm,!dm1.flyP2P.target
     dp3.flyBase2004Xref.name
     dp3.flyBaseGene.name
 
@@ -1766,6 +1786,7 @@ dependency $hg.gnfU95Distance $hg.knownToU95 hgFixed.gnfHumanU95MedianRatio
 dependency $hg.gnfAtlas2Distance $hg.knownToGnfAtlas2 hgFixed.gnfHumanAtlas2MedianRatio
 dependency $ce.kimExpDistance hgFixed.kimWormLifeMedianRatio
 dependency dm1.arbExpDistance dm1.bdgpToCanonical hgFixed.arbFlyLifeMedianRatio 
+dependency $dm,!dm1.arbExpDistance $dm,!dm1.flyBaseToCG hgFixed.arbFlyLifeMedianRatio 
 dependency $sacCer.choExpDistance hgFixed.yeastChoCellCycle
 dependency $pbDb.pbAnomLimit $pbDb.kgProtMap
 dependency $pbDb.pbResAvgStd $pbDb.kgProtMap
@@ -2117,7 +2138,9 @@ tablesIgnored $ci
 
 tablesIgnored $dm
     anophelesEcores
+    fbGo
     fbRole
+    fbUniProt
     flyreg
     flyreg2
 
