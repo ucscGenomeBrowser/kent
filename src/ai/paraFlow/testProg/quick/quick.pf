@@ -74,7 +74,7 @@ to countSpaces(string s) into int count
     {
     while (s)
         {
-	if (s.start(1) == " ")
+	if (s.first(1) == " ")
 	    count += 1;
 	s = s.rest(1);
 	}

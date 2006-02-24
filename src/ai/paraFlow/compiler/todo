@@ -20,7 +20,6 @@ TO DO:
   - Implement case statement.
   - ?Create 'serial' function - that is gauranteed only to be 
     executed by one thread at a time.  Can be called from a flow.
-  - More file i/o.
   - Implement lists.
   - Implementing trees.
   - Rework code generator so that a type is kept alongside the
@@ -36,6 +35,9 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Beefing up string class.
+  - Adding htmlFetch library.
+  - More file i/o.
   - Let people access keys as well as values in a for or para ... do.
     Syntax would be
          for (key:val in collection)
@@ -237,11 +239,12 @@ UCSC Vacation Days for Working on ParaFlow
    Feb 7, 2006
    Feb 10, 2006
    Feb 13, 2006
-   Feb 14, 2006?
-   Feb 15, 2006?
-   Feb 16, 2006?
-   Feb 17, 2006?
-   Feb 22, 2006?
+   Feb 14, 2006
+   Feb 15, 2006
+   Feb 16, 2006
+   Feb 17, 2006
+   Feb 22, 2006
+   Feb 24, 2006
 
 
 

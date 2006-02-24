@@ -504,12 +504,21 @@ to htmlPageParse(string text, string name) into (htmlPage page)
     page.url = name;
     page.text = text;
     int pos = 0;
-    (page.status, pos) = htmlStatusParse(page.text, pos);
-    (page.header, page.cookies, pos) = htmlHeaderParse(page.text, pos);
-    string contentType = page.header["Content-Type"];
-    if (!contentType)
+    string contentType;
+    if (text.startsWith("HTTP/"))
+	{
+	(page.status, pos) = htmlStatusParse(page.text, pos);
+	(page.header, page.cookies, pos) = htmlHeaderParse(page.text, pos);
+	contentType = page.header["Content-Type"];
+	}
+    else
         {
-	warn("No contentType, assuming test/html");
+	page.status = ();
+	page.header = ();
+	page.header['Content-Type'] = contentType;
+	}
+    if (!contentType)
+	{
 	contentType = 'text/html';
 	page.header['Content-Type'] = contentType;
 	}
@@ -573,15 +582,7 @@ to expandRelativeUrl(string baseUrl, string relUrl) into (string fullUrl)
 	   }
        else 
 	   {
-	   // TODO: replace this with findLast when impemented.
-	   slash = baseUrl.findNext('/', 'http://'.size);
-	   int pos = slash;
-	   while (pos >= 0)
-	       {
-	       pos = baseUrl.findNext('/', pos);
-	       if (pos >= 0)
-		   slash = pos;
-	       }
+	   slash = baseUrl.findLast('/');
 	   }
        if (slash >= 0)
 	   fullUrl = baseUrl.start(slash+1) + relUrl;
@@ -725,11 +726,6 @@ to test(string fileName)
 	}
     }
 
-string fileName = "gb.html";
-if (args.size > 0)
-    fileName = args[0];
-// test(fileName);
-
 to jimLinks()
     {
     htmlPage myPage = htmlPageFetch("http://www.soe.ucsc.edu/~kent");
@@ -755,4 +751,8 @@ to googleQuery()
     print("Google found $resultCount pages on parallel processing.");
     }
 
-googleQuery();
+string fileName = "gb.html";
+if (args.size > 0)
+    fileName = args[0];
+test(fileName);
+

@@ -12,11 +12,6 @@
 
 include stringTo
 
-to ugly(var v)
-    {
-    print(v);
-    }
-
 string usage = "
 This is a little horrible basic patterned after
 microsoft basic of 1983.  This is just a test program

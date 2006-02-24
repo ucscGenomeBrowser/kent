@@ -19,7 +19,7 @@ class stringStream
 	    }
 	else
 	    {
-	    s = buf.start(size);
+	    s = buf.first(size);
 	    buf = buf.rest(size);
 	    }
 	}

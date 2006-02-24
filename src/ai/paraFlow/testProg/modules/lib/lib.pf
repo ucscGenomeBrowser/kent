@@ -24,7 +24,7 @@ class lib
 	    for (s in envArray)
 		{
 		int eqPos = s.find("=");
-		string key = s.start(eqPos);
+		string key = s.first(eqPos);
 		string val = s.rest(eqPos+1);
 		env[key] = val;
 		}
@@ -142,7 +142,7 @@ class lib
 	if (dirEnd >= 0)
 	     {
 	     dirEnd += 1;
-	     dir = path.start(dirEnd);
+	     dir = path.first(dirEnd);
 	     path = path.rest(dirEnd);
 	     }
 	else
@@ -152,7 +152,7 @@ class lib
 	int extStart = lib.findLastUseOfChar(path, '.');
 	if (extStart >= 0)
 	     {
-	     name = path.start(extStart);
+	     name = path.first(extStart);
 	     extension = path.rest(extStart);
 	     }
 	else

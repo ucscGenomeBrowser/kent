@@ -49,6 +49,7 @@ if (doExtern)
    fprintf(f, "extern ");
 fprintf(f, "_pf_Array %sargs;	    /* Command line arguments go here. */\n",
 	globalPrefix);
+fprintf(f, "static _pf_Bit %strue=1, %sfalse=0;\n", globalPrefix, globalPrefix);
 if (doExtern)
    fprintf(f, "extern ");
 fprintf(f, "_pf_String %sprogramName; /* Name of program (argv[0]) */\n",

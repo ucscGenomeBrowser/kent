@@ -349,3 +349,10 @@ pf_prin(stack);
 fputc('\n', stdout);
 }
 
+void pf_ugly(_pf_Stack *stack)
+/* This is just a synonym for print to distinguish debugging statement
+ * from real prints. */
+{
+pf_print(stack);
+}
+

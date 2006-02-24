@@ -208,7 +208,7 @@ else
 }
 
 
-void _pf_cm_string_start(_pf_Stack *stack)
+void _pf_cm_string_first(_pf_Stack *stack)
 /* Return start of string */
 {
 _pf_String string = stack[0].String;
@@ -220,7 +220,7 @@ if (size > string->size)
 stack[0].String = _pf_string_new(string->s, size);
 }
 
-void _pf_cm_string_end(_pf_Stack *stack)
+void _pf_cm_string_last(_pf_Stack *stack)
 /* Return end of string */
 {
 _pf_String string = stack[0].String;
@@ -295,7 +295,9 @@ void _pf_cm_string_find(_pf_Stack *stack)
 {
 _pf_String string = stack[0].String;
 _pf_String sub = stack[1].String;
-char *loc = stringIn(sub->s, string->s);
+char *loc;
+_pf_nil_check(sub);
+loc = stringIn(sub->s, string->s);
 if (loc == NULL)
     stack[0].Int = -1;
 else
@@ -329,6 +331,56 @@ else
 if (--sub->_pf_refCount <= 0)
     sub->_pf_cleanup(sub, 0);
 }
+
+static int findLast(_pf_String pattern, _pf_String string)
+/* Find last occurence of pattern in string */
+{
+int found = -1;
+if (pattern->size <= string->size && pattern->size > 0)
+    {
+    int pos = string->size - pattern->size;
+    char *s = string->s;
+    char c = pattern->s[0];
+    int patSizeMinusOne = pattern->size-1;
+    while (pos >= 0)
+        {
+	if (s[pos] == c)
+	    {
+	    if (patSizeMinusOne==0)
+	        {
+		found = pos;
+		break;
+		}
+	    else
+	        {
+		if (memcmp(s+1, pattern->s+1, patSizeMinusOne) == 0)
+		    {
+		    found = pos;
+		    break;
+		    }
+		}
+	    }
+	pos -= 1;
+	}
+    }
+return found;
+}
+
+void _pf_cm_string_findLast(_pf_Stack *stack)
+/* Find last occurence of substring within string.  Return -1 if
+ * not found, otherwise start location within string. */
+{
+_pf_String string = stack[0].String;
+_pf_String sub = stack[1].String;
+_pf_nil_check(sub);
+
+stack[0].Int = findLast(sub, string);
+
+/* Clean up references on stack.  (Not first param since it's a method). */
+if (--sub->_pf_refCount <= 0)
+    sub->_pf_cleanup(sub, 0);
+}
+
 
 static void nextBetween(_pf_String string, _pf_String start, _pf_String end, 
     int pos, _pf_String *retBetween, _pf_Int *retNextPos)

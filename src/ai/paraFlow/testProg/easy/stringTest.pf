@@ -13,9 +13,9 @@ string aR5 = abc.fitRight(5);
 print("'$aL5' '$aR5'");
 string bmw = "buggaMUGwugga";
 print(bmw);
-print(bmw.start(5));
+print(bmw.first(5));
 print(bmw.middle(5,3));
-print(bmw.end(5));
+print(bmw.last(5));
 print(bmw.rest(5));
 int at = bmw.find('ugga');
 print(bmw.rest(at));
@@ -56,8 +56,6 @@ leadSpace = "";
 print("'$leadSpace' has " + leadSpace.leadingSpaces() + " leading spaces");
 leadSpace = "xyz";
 print("'$leadSpace' has " + leadSpace.leadingSpaces() + " leading spaces");
-/*-end
-end-*/
 string withQuotes = "  'This has a quote' inside of it";
 print(withQuotes);
 int pos = withQuotes.leadingSpaces();
@@ -97,3 +95,9 @@ withQuotes='""';
     print(encoded);
     print(decoded);
     }
+string path = "this/is/some/path";
+int fPos = path.find('/');
+int rPos = path.findLast('/');
+print(path);
+print(path.rest(fPos));
+print(path.rest(rPos));
