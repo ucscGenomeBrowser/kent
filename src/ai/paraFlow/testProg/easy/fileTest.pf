@@ -62,8 +62,9 @@ string LETTERS = f.read(letters.size);
 LETTERS = LETTERS.upper();
 f.skip(-letters.size);
 f.write(LETTERS);
-f.seek(0);
-string perlish = f.readAll();
+f.flush();
+f.close();
+string perlish = fileReadAll(tmp);
 print(perlish);
 print("That's better, it's more like Perl now.");
 
@@ -73,11 +74,10 @@ print("Let's start over.");
 f = fileOpen(tmp, "w+");
 f.write(letters+LETTERS);
 f.skip(-LETTERS.size);
-f.write(numbers);
+f.writeNow(numbers);
 print("How does this look?");
-f.seek(0);
-print(f.readAll());
 f.close();
+print(fileReadAll(tmp));
 
 bit t1Exists = fileExists(tmp), t2Exists = fileExists(tmp2);
 print("exists: $tmp $t1Exists, $tmp2 $t2Exists");

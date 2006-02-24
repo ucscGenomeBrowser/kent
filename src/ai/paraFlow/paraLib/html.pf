@@ -451,12 +451,10 @@ to htmlFormsParse(htmlPage page) into (array of htmlForm forms)
 	}
     }
 
-to htmlPageParse(string fileName) into (htmlPage page)
+to htmlPageParse(string text, string name) into (htmlPage page)
     {
-    file f = fileOpen(fileName, "r");
-    page = ();
-    page.url = fileName;
-    page.text = f.readAll();
+    page.url = name;
+    page.text = text;
     int pos = 0;
     (page.status, pos) = htmlStatusParse(page.text, pos);
     (page.header, page.cookies, pos) = htmlHeaderParse(page.text, pos);
@@ -475,6 +473,12 @@ to htmlPageParse(string fileName) into (htmlPage page)
 	}
     }
 
+to htmlPageFetch(string url, dir of htmlCookie cookies=nil) 
+into (htmlPage page)
+    {
+    string text = fileReadAll(url);
+    page = htmlPageParse(text,url);
+    }
 
 to test(string fileName)
     {

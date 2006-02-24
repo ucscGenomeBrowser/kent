@@ -29,10 +29,11 @@ return
 "    {\n"
 "    string name;\n"
 "    to close();\n"
-"    to write(string s);\n"
 "    to read(int count) into (string s);\n"
 "    to readLine() into (string s);\n"
-"    to readAll() into (string s);\n"
+"    to write(string s);\n"
+"    to flush();\n"
+"    to writeNow(string s);\n"
 "    to put(var v);\n"
 "    to get(var justForType) into var x;\n"
 "    to seek(long pos, bit fromEnd=0);\n"
@@ -40,11 +41,13 @@ return
 "    to tell() into long pos;\n"
 "    }\n"
 "\n"
-"to fileOpen(string name, string mode) into file f;\n"
+"flow fileOpen(string name, string mode) into file f;\n"
+"flow fileReadAll(string name) into (string s);\n"
 "flow fileExists(string name) into bit exists;\n"
 "to fileRename(string oldName, string newName);\n"
 "to fileRemove(string name);\n"
-;
+"to httpConnect(string url, string method='GET', string agent='ParaFlow',
+	string protocol='HTTP/1.0') info (file f);\n"
 }
 
 char *fetchStringDef()

@@ -29,24 +29,42 @@ dyStringFree(&file->dy);
 _pf_class_cleanup((struct _pf_object *)file, typeId);
 }
 
+static FILE *mustFdopen(int fd, char *name, char *mode)
+/* fdopen a file (wrap FILE around it) or die trying */
+{
+FILE *f = fdopen(fd, mode);
+if (f == NULL)
+    errnoAbort("Couldn't fdopen %s", name);
+return f;
+}
+
 static FILE *openUrlOrFile(char *spec, char *mode)
 /* If it's a URL call the fancy net opener, otherwise
  * call the regular file opener. */
 {
 if (startsWith("http://", spec) || startsWith("ftp://", spec))
     {
-    FILE *f;
     int fd;
     if (mode[0] != 'r')
         errAbort("Can't open %s in mode %s", spec, mode);
     fd = netUrlOpen(spec);
-    f = fdopen(fd, mode);
-    if (f == NULL)
-        errnoAbort("Couldn't open %s", spec);
-    return f;
+    return mustFdopen(fd, spec, mode);
     }
 else
     return mustOpen(spec, mode);
+}
+
+static struct file *fileFromFILE(FILE *f, _pf_String name)
+/* Convert a FILE to a ParaFlow file. */
+{
+struct file *file;
+AllocVar(file);
+file->_pf_refCount = 1;
+file->_pf_cleanup = fileCleanup;
+file->name = name;
+file->f = f;
+file->dy = dyStringNew(0);
+return file;
 }
 
 void pf_fileOpen(_pf_Stack *stack)
@@ -58,12 +76,7 @@ struct file *file;
 
 _pf_nil_check(name);
 _pf_nil_check(mode);
-AllocVar(file);
-file->_pf_refCount = 1;
-file->_pf_cleanup = fileCleanup;
-file->name = name;
-file->f = openUrlOrFile(name->s, mode->s);
-file->dy = dyStringNew(0);
+file = fileFromFILE(openUrlOrFile(name->s, mode->s), name);
 
 /* Remove mode reference. (We'll keep the name). */
 if (--mode->_pf_refCount <= 0)
@@ -72,6 +85,33 @@ if (--mode->_pf_refCount <= 0)
 /* Save result on stack. */
 stack[0].v = file;
 }
+
+void pf_fileReadAll(_pf_Stack *stack)
+/* Read in whole file to string. */
+{
+_pf_String name = stack[0].String;
+_pf_String string;
+char buf[4*1024];
+int bytesRead;
+FILE *f;
+_pf_nil_check(name);
+
+f = mustOpen(name->s, "r");
+string = _pf_string_new_empty(sizeof(buf));
+for (;;)
+    {
+    bytesRead = fread(buf, 1, sizeof(buf), f);
+    if (bytesRead <= 0)
+        break;
+    _pf_strcat(string, buf, bytesRead);
+    }
+carefulClose(&f);
+
+stack[0].String = string;
+if (--name->_pf_refCount <= 0)
+    name->_pf_cleanup(name, 0);
+}
+
 
 void _pf_cm1_file_close(_pf_Stack *stack)
 /* Close file explicitly. */
@@ -87,6 +127,36 @@ struct file *file = stack[0].v;
 struct _pf_string *string = stack[1].String;
 
 mustWrite(file->f, string->s, string->size);
+
+/* Clean up references on stack. */
+if (--string->_pf_refCount <= 0)
+    string->_pf_cleanup(string, 0);
+}
+
+static void mustFlush(struct file *file)
+/* Flush file or die trying */
+{
+if (fflush(file->f) < 0)
+    errnoAbort("Couldn't flush file %s.", file->name);
+}
+
+void _pf_cm1_file_flush(_pf_Stack *stack)
+/* Flush file */
+{
+struct file *file = stack[0].v;
+_pf_nil_check(file);
+mustFlush(file);
+}
+
+void _pf_cm1_file_writeNow(_pf_Stack *stack)
+/* paraFlow run time support routine to write string to file
+ * and then flush. */
+{
+struct file *file = stack[0].v;
+struct _pf_string *string = stack[1].String;
+
+mustWrite(file->f, string->s, string->size);
+mustFlush(file);
 
 /* Clean up references on stack. */
 if (--string->_pf_refCount <= 0)
@@ -152,23 +222,6 @@ if (bytesRead <= 0)
     bytesRead = 0;
 string->size = bytesRead;
 string->s[bytesRead] = 0;
-stack[0].String = string;
-}
-
-void _pf_cm1_file_readAll(_pf_Stack *stack)
-/* Read in whole file to string. */
-{
-struct file *file = stack[0].v;
-char buf[4*1024];
-int bytesRead;
-struct _pf_string *string = _pf_string_new_empty(sizeof(buf));
-for (;;)
-    {
-    bytesRead = fread(buf, 1, sizeof(buf), file->f);
-    if (bytesRead <= 0)
-        break;
-    _pf_strcat(string, buf, bytesRead);
-    }
 stack[0].String = string;
 }
 
@@ -247,3 +300,38 @@ if (--newName->_pf_refCount <= 0)
 if (err < 0)
     errnoAbort("Couldn't rename file %s to %s", oldName->s, newName->s);
 }
+
+void pf_httpConnect(_pf_Stack *stack)
+/* Return an open HTTP connection in a file, with
+ * most of the header sent.  Doesn't send the
+ * last part though, so you can put out cookies. 
+ * Implements:
+ *   to httpConnect(string url, method, protocol, agent) into (file f) */
+{
+/* Fetch input from stack. */
+_pf_String url = stack[0].String;
+_pf_String method = stack[1].String;
+_pf_String protocol = stack[2].String;
+_pf_String agent = stack[3].String;
+int fd;
+
+/* The usual null checks on input. */
+_pf_nil_check(url);
+_pf_nil_check(method);
+_pf_nil_check(protocol);
+_pf_nil_check(agent);
+
+/* Do the real work of opening network connection and saving
+ * result on return stack. */
+fd = netHttpConnect(url->s, method->s, protocol->s, agent->s);
+stack[0].v = fileFromFILE(mustFdopen(fd, url->s, "r+"), url);
+
+/* Clean up input, except for URL which got moved to file. */
+if (--method->_pf_refCount <= 0)
+    method->_pf_cleanup(method, 0);
+if (--protocol->_pf_refCount <= 0)
+    protocol->_pf_cleanup(protocol, 0);
+if (--agent->_pf_refCount <= 0)
+    agent->_pf_cleanup(agent, 0);
+}
+

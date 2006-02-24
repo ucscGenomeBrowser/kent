@@ -17,6 +17,9 @@ while ((c = *s++) != 0)
 	case '\n':
 	    fputs("\\n", f);
 	    break;
+	case '\r':
+	    fputs("\\r", f);
+	    break;
 	case '\\':
 	    fputs("\\\\", f);
 	    break;
