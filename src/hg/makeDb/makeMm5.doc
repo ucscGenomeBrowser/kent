@@ -7621,3 +7621,188 @@ origAssembly hg16
   sudo mytouch mm5 knownToEnsembl 0503011100.00
   sudo mytouch mm5 sfDescription 0503011100.00
 
+############################################################################
+#	Mm7 to Mm5 liftOver creation (DONE - 2006-02-22 - 2006-02-24 - Hiram)
+#	instructions lifted from Andy's sequence in makeMm7.doc
+######## LIFTOVER PREPARATION
+    # Split up mm5
+    ssh kkr1u00
+    cd /iscratch/i/mm5
+    mkdir liftSplits
+    mkdir liftSplits/split
+    mkdir liftSplits/lift
+    for fa in /cluster/data/mm5/?/*.fa /cluster/data/mm5/??/*.fa
+    do
+      c=`basename $fa .fa`
+      echo $c
+      faSplit -lift=liftSplits/lift/${c}.lft size $fa -oneFile 10000 \
+	liftSplits/split/$c
+    done
+    mkdir biggerSplits
+    mkdir biggerSplits/split
+    cd biggerSplits/
+    ln -s ../liftSplits/lift
+    cd split/
+    ln -s ../../liftSplits/split/* .
+    faSplit sequence chr1.fa 5 chr1_
+    faSplit sequence chrX.fa 10 chrX_
+    rm chr{1,X}.fa
+    for R in 2 3 4 5 6 7 8
+    do
+	rsync -a --progress /iscratch/i/mm5/ kkr${R}u00:/iscratch/i/mm5/
+    done
+
+    ######## LIFTOVER BLATING    
+    # MM7
+    ssh kk
+    cd /cluster/data/mm7
+    /cluster/bin/scripts/makeLoChain-align mm7 /scratch/hg/mm7/nib mm5 \
+	/iscratch/i/mm5/biggerSplits/split
+    cd bed/blat.mm5.2006-02-22/run
+
+    #	target is Mm7
+    #	query is Mm5
+    cat << '_EOF_' > blat.csh
+#!/bin/csh -fe
+
+set target=$1
+set query=$2
+set output=$3
+set chain=$4
+
+set tPart=$target:t:r
+set qPart=$query:t:r
+
+set tmpDir=/scratch/tmp/${chain}.${tPart}_${qPart}
+set tmpOutput=$tmpDir/$output:t
+
+mkdir -p $tmpDir
+sleep 2
+/cluster/bin/$MACHTYPE/blat $target $query $tmpOutput \
+        -tileSize=11 -minScore=100 -minIdentity=98 -fastMap \
+	-ooc=/iscratch/i/mm5/11.ooc
+mkdir -p `dirname $output`
+cp $tmpOutput $output
+rm $tmpOutput
+rmdir --ignore-fail-on-non-empty $tmpDir
+'_EOF_'
+    #	happy emacs
+    chmod +x blat.csh
+
+    sed 's#^blat#./blat.csh#; s/\}.*$/}/; s/$/ mm7ToMm5/' spec > jobList
+
+    para create jobList
+    para -maxNode=200 -priority=25 push
+    para time
+# Completed: 2451 of 2451 jobs
+# CPU time in finished jobs:    1266001s   21100.02m   351.67h   14.65d  0.040 y
+# IO & Wait Time:                 13972s     232.87m     3.88h    0.16d  0.000 y
+# Average job time:                 522s       8.70m     0.15h    0.01d
+# Longest finished job:            6769s     112.82m     1.88h    0.08d
+# Submission to last job:         26506s     441.77m     7.36h    0.31d
+
+    ######## LIFTOVER CHAINING
+    # LIFTING
+    ssh kki
+    cd /cluster/data/mm7/bed/blat.mm5.2006-02-22
+    cat << '_EOF_' > mm5SplitLift.sh
+#!/bin/bash
+for C in chr1 chrX
+do
+    echo joining $C
+    for P in `ls *_${C}_[0-9]*.psl | sed -e "s/_chr.*//" | sort -u`
+    do
+	echo "${P}_${C}.psl"
+	tail --lines=+6 -q "${P}_${C}_[0-9]*.psl"  > ${P}_${C}.psl
+   done
+   for f in *_${C}.psl; do
+      cat /san/sanvol1/scratch/andy/psl.header $f > tmp
+      mv tmp $f
+   done
+done
+echo Lifting...
+for C in `awk '{print $1}' /cluster/data/mm5/chrom.sizes`; do
+   echo "lifting $C ... "
+   liftUp -pslQ ../psl/${C}.psl \
+	/iscratch/i/mm5/biggerSplits/lift/${C}.lft error chr*_${C}.psl
+   echo done $C
+done    
+'_EOF_'
+    #	happy emacs
+    chmod +x mm5SplitLift.sh
+
+    cat << "EOF" > mm5ChainMergeSplit.sh
+#!/bin/bash
+cp -r chainRaw/ /scratch/andy/mm5Lifts
+pushd /scratch/andy/mm5Lifts
+mkdir chain
+/cluster/bin/x86_64/chainMergeSort chainRaw/*.chain | /cluster/bin/x86_64/chainSplit chain stdin
+cp -r chain `dirs +1`
+rm -rf chain chainRaw
+EOF
+    chmod +x mm5ChainMergeSplit.sh
+
+    cd /cluster/data/mm7/bed/blat.mm5.2006-02-22/raw
+    ../mm5SplitLift.sh
+
+    cd ../    
+    mkdir chainRun chainRaw
+    cd chainRun
+    cat << '_EOF_' > template
+#LOOP
+axtChain -linearGap=medium -verbose=0 -psl $(path1) /scratch/hg/mm7/nib /cluster/data/mm5/nib {check out line+ ../chainRaw/$(root1).chain}
+#ENDLOOP
+'_EOF_'
+    ls -1S ../psl/*.psl > in.lst
+    gensub2 in.lst single template jobList
+    para create jobList
+    para push
+    para time
+# Completed: 43 of 43 jobs
+# CPU time in finished jobs:       7259s     120.98m     2.02h    0.08d  0.000 y
+# IO & Wait Time:                  1086s      18.10m     0.30h    0.01d  0.000 y
+# Average job time:                 194s       3.23m     0.05h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1088s      18.13m     0.30h    0.01d
+# Submission to last job:          2289s      38.15m     0.64h    0.03d
+
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blat.mm5.2006-02-22
+    mkdir chain
+    time chainMergeSort chainRaw/* | chainSplit chain stdin
+    #	real    29m42.365s
+
+    mkdir net over
+    cd chain
+    for c in *.chain
+    do
+       echo ${c%.chain}; 
+       nice chainNet $c /cluster/data/mm7/chrom.sizes \
+        /cluster/data/mm5/chrom.sizes ../net/${c%.chain}.net /dev/null
+       echo done $c
+    done
+    #	real    15m33.593s
+    for chain in *.chain
+    do 
+       c=${chain%.chain}
+       nice netChainSubset ../net/$c.net $chain ../over/$c.over 
+    done
+    #	real    10m48.898s
+
+    ########## FINISHING
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/blat.mm5.2006-02-22/over
+    cat * > ../mm7ToMm5.over.chain
+    cd ..
+    gzip mm7ToMm5.over.chain
+    rm -rf psl net chain chainRaw over
+    ssh hgwdev
+    cd /cluster/data/mm7/bed
+    ln -s blat.mm5.2006-02-22 blat.mm5
+    ln -s `pwd`/blat.mm5/mm7ToMm5.over.chain.gz liftOver/mm7ToMm5.over.chain.gz
+    ln -s `pwd`/liftOver/mm7ToMm5.over.chain.gz \
+	/gbdb/mm7/liftOver/mm7ToMm5.over.chain.gz
+    ln -s `pwd`/liftOver/mm7ToMm5.over.chain.gz \
+	/usr/local/apache/htdocs/goldenPath/mm7/liftOver/mm7ToMm5.over.chain.gz
+    #	How is this done with a gzipped file ?
+    hgAddLiftOverChain mm7 mm5 /gbdb/mm7/liftOver/mm7ToMm5.over.chain.gz
