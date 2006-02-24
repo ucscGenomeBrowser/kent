@@ -73,3 +73,22 @@ print(withQuotes);
 print("'$quoted', $newPos");
 print(withQuotes.rest(newPos));
 withQuotes='""';
+    {
+    string s = "This is my test string.  How do you like it?";
+    print(s);
+    string b = s.between("is my", "string");
+    print(b);
+    b = s.between("How do", "This is");
+    print(b);
+    int pos;
+    (b,pos) = s.nextBetween("is my", "string", 3);
+    print("match $b, pos $pos");
+    (b,pos) = s.nextBetween("is my", "string", 20);
+    print("match $b, pos $pos");
+    (b,pos) = s.nextBetween("is my", "bugga", 0);
+    print("match $b, pos $pos");
+    (b,pos) = s.nextBetween("This ", " my", 0);
+    print("match $b, pos $pos");
+    (b,pos) = s.nextBetween(" my ", " string", pos);
+    print("match $b, pos $pos");
+    }

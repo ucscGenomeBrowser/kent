@@ -290,7 +290,6 @@ if (--sub->_pf_refCount <= 0)
     sub->_pf_cleanup(sub, 0);
 }
 
-
 void _pf_cm_string_findNext(_pf_Stack *stack)
 /* Find occurence of substring within string.  Return -1 if
  * not found, otherwise start location within string. */
@@ -314,6 +313,73 @@ else
 if (--sub->_pf_refCount <= 0)
     sub->_pf_cleanup(sub, 0);
 }
+
+static void nextBetween(_pf_String string, _pf_String start, _pf_String end, 
+    int pos, _pf_String *retBetween, _pf_Int *retNextPos)
+/* Find start and then end in string, and if find both,
+ * return string between them. */
+{
+char *s, *e = NULL;
+_pf_nil_check(start);
+_pf_nil_check(end);
+if (pos >= 0 && pos + start->size + end->size <= string->size)
+    {
+    s = stringIn(start->s, string->s + pos);
+    if (s != NULL && (s + start->size + end->size - string->s) <= string->size)
+	{
+	s += start->size;
+	e = stringIn(end->s, s);
+	}
+    }
+if (e != NULL)
+    {
+    *retBetween = _pf_string_new(s, e-s);
+    *retNextPos = e - string->s;
+    }
+else
+    {
+    *retBetween = NULL;
+    *retNextPos = -1;
+    }
+}
+
+void _pf_cm_string_between(_pf_Stack *stack)
+/* Find occurence of substring within string.  Return -1 if
+ * not found, otherwise start location within string. */
+{
+_pf_String string = stack[0].String;
+_pf_String start = stack[1].String;
+_pf_String end = stack[2].String;
+_pf_Int nextPos;
+
+nextBetween(string, start, end, 0, &stack[0].String, &nextPos);
+
+/* Clean up references on stack.  (Not first param since it's a method). */
+if (--start->_pf_refCount <= 0)
+    start->_pf_cleanup(start, 0);
+if (--end->_pf_refCount <= 0)
+    end->_pf_cleanup(end, 0);
+}
+
+void _pf_cm_string_nextBetween(_pf_Stack *stack)
+/* Find occurence of substring within string.  Return -1 if
+ * not found, otherwise start location within string. */
+{
+_pf_String string = stack[0].String;
+_pf_String start = stack[1].String;
+_pf_String end = stack[2].String;
+int pos = stack[3].Int;
+int nextPos;
+
+nextBetween(string, start, end, pos, &stack[0].String, &stack[1].Int);
+
+/* Clean up references on stack.  (Not first param since it's a method). */
+if (--start->_pf_refCount <= 0)
+    start->_pf_cleanup(start, 0);
+if (--end->_pf_refCount <= 0)
+    end->_pf_cleanup(end, 0);
+}
+
 
 
 static int tokenSpan(char *s)
@@ -768,6 +834,8 @@ int estimatedSize = 0;  /*  Estimate will be a little high. */
 int destSize = 0;
 char *destBuf;
 char *s, *e, *d, *sEnd;
+char *nil = "(nil)";
+int nilSize = 5;
 
 /* Count up number of substitutions, and estimate the resulting
  * string size.  Make a buffer big enough to hold substituted result. */
@@ -783,7 +851,10 @@ while (s < e)
 	    {
 	    varCount += 1;
 	    varString = stack[varCount].String;
-	    estimatedSize += varString->size;
+	    if (varString)
+		estimatedSize += varString->size;
+	    else
+	        estimatedSize += nilSize;
 	    }
 	}
     s += 1;
@@ -826,8 +897,16 @@ while (s < sEnd)
 		}
 	    ++varIx;
 	    varString = stack[varIx].String;
-	    memcpy(d, varString->s, varString->size);
-	    d += varString->size;
+	    if (varString)
+		{
+		memcpy(d, varString->s, varString->size);
+		d += varString->size;
+		}
+	    else
+	        {
+		memcpy(d, nil, nilSize);
+		d += nilSize;
+		}
 	    }
 	}
     else
@@ -843,7 +922,7 @@ destSize = d - destBuf;
 for (varIx=0; varIx <= varCount; ++varIx)  /* <= intentional here */
     {
     struct _pf_string *s = stack[varIx].String;
-    if (--s->_pf_refCount <= 0)
+    if (s != NULL && --s->_pf_refCount <= 0)
 	s->_pf_cleanup(s, 0);
     }
 

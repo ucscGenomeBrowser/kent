@@ -31,6 +31,7 @@ return
 "    to close();\n"
 "    to read(int count) into (string s);\n"
 "    to readLine() into (string s);\n"
+"    to readAll() into (string s);\n"
 "    to write(string s);\n"
 "    to flush();\n"
 "    to writeNow(string s);\n"
@@ -46,8 +47,9 @@ return
 "flow fileExists(string name) into bit exists;\n"
 "to fileRename(string oldName, string newName);\n"
 "to fileRemove(string name);\n"
-"to httpConnect(string url, string method='GET', string agent='ParaFlow',
-	string protocol='HTTP/1.0') info (file f);\n"
+"to httpConnect(string url, string method='GET', string agent='ParaFlow',"
+	"string protocol='HTTP/1.0') into (file f);\n"
+;
 }
 
 char *fetchStringDef()
@@ -62,6 +64,9 @@ return
 "    flow start(int size) into string start;\n"
 "    flow rest(int start) into string rest;\n"
 "    flow middle(int start, int size) into string part;\n"
+"    flow between(string start,end) into (string between);\n"
+"    flow nextBetween(string start,end, int pos)\n"
+"    into (string between, int nextPos);\n"
 "    flow end(int size) into string end;\n"
 "    flow upper() into (string uppered);\n"
 "    flow lower() into (string lowered);\n"

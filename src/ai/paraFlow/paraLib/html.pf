@@ -453,6 +453,7 @@ to htmlFormsParse(htmlPage page) into (array of htmlForm forms)
 
 to htmlPageParse(string text, string name) into (htmlPage page)
     {
+    page = ();
     page.url = name;
     page.text = text;
     int pos = 0;
@@ -473,17 +474,42 @@ to htmlPageParse(string text, string name) into (htmlPage page)
 	}
     }
 
+to httpCookiesToString(dir of htmlCookie cookies) into (string out)
+// Convert cookie directory into a string that we can send.
+    {
+    out = "Cookie:";
+    for (cookie in cookies)
+	out += ' ' + cookie.name + '=' + cookie.value + ';'
+    }
+
+to httpGetUnforwarded(string url, dir of htmlCookie cookies=nil) 
+into (string text)
+// Get http text from server, but don't deal with forwarding.
+    {
+    file f = httpConnect(url, 'GET');
+    string s = "";
+    if (cookies)
+	s += httpCookiesToString(cookies);
+    s += '\r\n';
+    f.write(s);
+    text = f.readAll();
+    }
+
 to htmlPageFetch(string url, dir of htmlCookie cookies=nil) 
 into (htmlPage page)
     {
-    string text = fileReadAll(url);
+    string text;
+    if (url.start(7).same('http://'))
+        text = httpGet(url);
+    else
+        text = fileReadAll(url);
     page = htmlPageParse(text,url);
     }
 
 to test(string fileName)
     {
     try {
-	htmlPage page = htmlPageParse(fileName);
+	htmlPage page = htmlPageFetch(fileName);
 	print(page.status);
 	print(page.header);
 	print(page.cookies);

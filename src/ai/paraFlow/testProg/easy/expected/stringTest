@@ -36,3 +36,11 @@ string here.
 'That\'s right.' More quotes.
 'That's right.', 16
  More quotes.
+This is my test string.  How do you like it?
+ test 
+nil
+match  test , pos 16
+match (nil), pos -1
+match (nil), pos -1
+match is, pos 7
+match test, pos 15
