@@ -272,6 +272,7 @@ spanList 1
 yLineOnOff Off
 autoScaleDefault Off
 summary multiz17waySummary
+frames multiz17wayFrames
 irows on
 speciesGroups mammal vertebrate
 sGroup_mammal panTro1 rheMac2 mm7 rn3 oryCun1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom2
@@ -288,28 +289,6 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
-
-track multiz17wayV10
-shortLabel 17-Way V10 Conservation
-longLabel Vertebrate Multiz V10 Alignment & Conservation (17 Species)
-group compGeno
-priority 104.4
-visibility hide
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons17wayV10
-pairwiseHeight 12
-spanList 1
-yLineOnOff Off
-autoScaleDefault Off
-summary multiz17wayV10Summary
-speciesGroups mammal vertebrate
-sGroup_mammal panTro1 rheMac1 mm7 rn3 oryCun1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom1
-sGroup_vertebrate galGal2 xenTro1 tetNig1 fr1 danRer3 
-speciesDefaultOff panTro1 rheMac1 bosTau2 echTel1 danRer3 fr1
-treeImage phylo/Mm7_17way.jpg
 
 track multiz10way
 shortLabel 10-Way Conservation
