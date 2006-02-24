@@ -1,10 +1,4 @@
 
-flow ugly(string s)
-// Debugging print.
-    {
-    print(s);
-    }
-
 class htmlStatus
 // HTTP version and status code.
     {
@@ -35,8 +29,9 @@ class htmlTag
     flow attribute(string attName, string usual=nil) into (string val)
     // Return value of attribute if it exists, or usual val if it doesn't
         {
+	string key = attName.upper();
 	if (attributes)
-	    val = attributes[attName].dupe();
+	    val = attributes[key].dupe();
 	if (val == nil)
 	    val = usual.dupe();
 	}
@@ -44,8 +39,9 @@ class htmlTag
     flow requiredAttribute(string attName) into (string val)
     // Return attribute value. Punt if it doesn't exist
         {
+	string key = attName.upper();
 	if (attributes)
-	    val = attributes[attName].dupe();
+	    val = attributes[key].dupe();
 	if (val == nil)
 	    punt("Missing required $attName attribute in $name");
 	}
@@ -71,6 +67,36 @@ class htmlForm
     int startTagIx;	 // Index of start tag in page.tags
     int endTagIx;	 // Index just past end tag in page.tags
     dir of htmlFormVar vars;	// Variables defined in form.
+
+    to varsToStringDir() into (dir of string strings)
+	// Convert our CGI vars into a simple dir of string.
+        {
+	dir of string cgiVars = ();
+	strings = ();
+	for (var in vars)
+	    {
+	    bit gotIt = false;
+	    string val = var.value;
+	    string type = var.type;
+	    if (var.tagName == "SELECT" || var.tagName == "TEXTAREA")
+	        gotIt = true;
+            else if (type)
+	        {
+		if (type.same("RADIO") || type.same("TEXTBOX") 
+		   || type.same("PASSWORD") || type.same("HIDDEN")
+		   || type.same("TEXT") || type.same("FILE"))
+		   gotIt = true;
+		else if (type.same("CHECKBOX") && val)
+		    gotIt = true;
+		}
+	    if (gotIt)
+	        {
+		if (val == nil)
+		    val = "";
+		strings[var.name] = val;
+		}
+	    }
+	}
     }
 
 class htmlPage
@@ -84,6 +110,27 @@ class htmlPage
     int htmlStartPos;	  // Start of html code within text
     array of htmlTag tags;// All the tags in order
     array of htmlForm forms;  // Possibly empty array of forms.
+
+    to submit(htmlForm form=nil, string button="submit", string value="submit")
+    into (htmlPage page)
+    // Submit form and get response from server.
+        {
+	if (!form)
+	    {
+	    if (!forms)
+	        punt("Can't submit $url because forms is nil.");
+	    if (forms.size < 1)
+	        punt("Can't submit $url because forms is embly.");
+	    form = forms[0];
+	    if (!form)
+	        punt("Can't submit $url because forms[0] is nil.");
+	    }
+	dir of string cgiVars = form.varsToStringDir();
+	if (button)
+	    cgiVars[button] = value;
+	string dest = expandRelativeUrl(url, form.action);
+	page = htmlPageFetch(dest, cgiVars, form.method, cookies);
+	}
     }
 
 flow htmlStatusParse(string text, int pos) into (htmlStatus status, int newPos)
@@ -479,7 +526,8 @@ to httpCookiesToString(dir of htmlCookie cookies) into (string out)
     {
     out = "Cookie:";
     for (cookie in cookies)
-	out += ' ' + cookie.name + '=' + cookie.value + ';'
+	out += ' ' + cookie.name + '=' + cookie.value + ';';
+    out += '\r\n';
     }
 
 to cgiVarsToString(dir of string vars) into (string out)
@@ -500,6 +548,47 @@ to cgiVarsToString(dir of string vars) into (string out)
 	    }
 	}
     }
+
+flow urlIsHttp(string url) into (bit b)
+// Return true if url starts with http://
+    {
+    b = url.start(7).same('http://');
+    }
+
+to expandRelativeUrl(string baseUrl, string relUrl) into (string fullUrl)
+// Unless relUrl starts with "http://" then it needs to be expanded
+// relative to the base url.
+   {
+   if (!urlIsHttp(baseUrl))
+       punt("Can't expandRelativeUrl from $baseUrl, no http://");
+   if (urlIsHttp(relUrl))
+       fullUrl = baseUrl;
+   else
+       {
+       int slash;
+       if (relUrl.startsWith('/'))
+	   {
+	   slash = baseUrl.findNext('/', 'http://'.size);
+	   relUrl = relUrl.rest(1);
+	   }
+       else 
+	   {
+	   // TODO: replace this with findLast when impemented.
+	   slash = baseUrl.findNext('/', 'http://'.size);
+	   int pos = slash;
+	   while (pos >= 0)
+	       {
+	       pos = baseUrl.findNext('/', pos);
+	       if (pos >= 0)
+		   slash = pos;
+	       }
+	   }
+       if (slash >= 0)
+	   fullUrl = baseUrl.start(slash+1) + relUrl;
+       else
+	   fullUrl = baseUrl + '/' + relUrl;
+       }
+   }
 
 to httpForwardingAddress(string text) into (string url)
 // Look through text for signs that it is just a forwarding
@@ -532,7 +621,6 @@ into (string text)
 // Get http text from server, but don't deal with forwarding.
     {
     url += cgiVarsToString(vars);
-    ugly("GETTING $url");
     file f = httpConnect(url, 'GET');
     string s = "";
     if (cookies)
@@ -594,7 +682,7 @@ string method="GET", dir of htmlCookie cookies=nil)
 into (htmlPage page)
     {
     string text;
-    if (url.start(7).same('http://'))
+    if (urlIsHttp(url))
 	{
 	if (method.same("GET"))
 	    text = httpGet(url, vars, cookies);
@@ -640,4 +728,31 @@ to test(string fileName)
 string fileName = "gb.html";
 if (args.size > 0)
     fileName = args[0];
-test(fileName);
+// test(fileName);
+
+to jimLinks()
+    {
+    htmlPage myPage = htmlPageFetch("http://www.soe.ucsc.edu/~kent");
+    for (tag in myPage.tags)
+        {
+	if (tag.attributes)
+	    {
+	    string link = tag.attribute("href");
+	    if (link)
+	        print(link);
+	    }
+	}
+    }
+
+to googleQuery()
+    {
+    htmlPage queryPage = htmlPageFetch("http://www.google.com");
+    htmlForm form = queryPage.forms[0];
+    htmlFormVar queryVar = form.vars['q'];
+    queryVar.value = 'parallel processing';
+    htmlPage resultsPage = queryPage.submit();
+    string resultCount = resultsPage.text.between('of about <b>', '</b> for');
+    print("Google found $resultCount pages on parallel processing.");
+    }
+
+googleQuery();
