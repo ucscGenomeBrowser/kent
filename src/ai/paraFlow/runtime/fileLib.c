@@ -86,17 +86,12 @@ if (--mode->_pf_refCount <= 0)
 stack[0].v = file;
 }
 
-void pf_fileReadAll(_pf_Stack *stack)
-/* Read in whole file to string. */
+static _pf_String readAll(FILE *f)
+/* Return a string that contains the whole file. */
 {
-_pf_String name = stack[0].String;
 _pf_String string;
 char buf[4*1024];
 int bytesRead;
-FILE *f;
-_pf_nil_check(name);
-
-f = mustOpen(name->s, "r");
 string = _pf_string_new_empty(sizeof(buf));
 for (;;)
     {
@@ -105,6 +100,19 @@ for (;;)
         break;
     _pf_strcat(string, buf, bytesRead);
     }
+return string;
+}
+
+void pf_fileReadAll(_pf_Stack *stack)
+/* Read in whole file to string. */
+{
+_pf_String name = stack[0].String;
+_pf_String string;
+FILE *f;
+_pf_nil_check(name);
+
+f = mustOpen(name->s, "r");
+string = readAll(f);
 carefulClose(&f);
 
 stack[0].String = string;
@@ -112,6 +120,13 @@ if (--name->_pf_refCount <= 0)
     name->_pf_cleanup(name, 0);
 }
 
+void _pf_cm1_file_readAll(_pf_Stack *stack)
+/* Read all of file. */
+{
+struct file *file = stack[0].v;
+_pf_nil_check(file);
+stack[0].String = readAll(file->f);
+}
 
 void _pf_cm1_file_close(_pf_Stack *stack)
 /* Close file explicitly. */
@@ -323,7 +338,7 @@ _pf_nil_check(agent);
 
 /* Do the real work of opening network connection and saving
  * result on return stack. */
-fd = netHttpConnect(url->s, method->s, protocol->s, agent->s);
+fd = netHttpConnect(url->s, method->s, agent->s, protocol->s);
 stack[0].v = fileFromFILE(mustFdopen(fd, url->s, "r+"), url);
 
 /* Clean up input, except for URL which got moved to file. */
