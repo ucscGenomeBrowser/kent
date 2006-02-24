@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.43 2006/02/14 01:01:26 daryl Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.44 2006/02/24 22:05:40 hiram Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -293,7 +293,7 @@ char *chromFileName(char *track, char *chrom, char fileName[512])
 {
 if (fileExists(track))
     {
-    strcpy(fileName, track);
+    strncpy(fileName, track, 512);
     }
 else
     {
@@ -304,11 +304,11 @@ else
     len = strlen(dir);
     if (len > 0 && dir[len-1] == '/')
         dir[len-1] = 0;
-    sprintf(fileName, "%s/%s%s%s", dir, chrom, root, ext);
+    safef(fileName, 512, "%s/%s%s%s", dir, chrom, root, ext);
     if (!fileExists(fileName))
 	{
         warn("Couldn't find %s or %s", track, fileName);
-	strcpy(fileName, track);
+	strncpy(fileName, track, 512);
 	}
     }
 return fileName;
@@ -425,7 +425,7 @@ void isolateTrackPartOfSpec(char *spec, char track[512])
 /* Convert something like track:exon to just track */
 {
 char *s;
-strcpy(track, spec);
+strncpy(track, spec, 512);
 s = strchr(track, ':');
 if (s != NULL) *s = 0;
 }
@@ -454,7 +454,7 @@ void orTable(Bits *acc, char *track, char *chrom,
 /* Or in table if it exists.  Else do nothing. */
 {
 char t[512], *s;
-char table[512];
+char table[HDB_MAX_TABLE_STRING];
 
 isolateTrackPartOfSpec(track, t);
 s = strrchr(t, '.');
@@ -464,9 +464,14 @@ if (s != NULL)
     }
 else
     {
+    char *db=hGetDb();
     boolean hasBin;
     int minFeatureSize = optionInt("minFeatureSize", 0);
-    boolean isFound = hFindSplitTable(chrom, t, table, &hasBin);
+    boolean isSplit = hFindSplitTable(chrom, t, table, &hasBin);
+    boolean isFound = hTableExistsDb(db, table);
+    verbose(3,"orTable: db: %s isFound: %s isSplit: %s %s %s %s\n", db,
+	isFound ? "TRUE" : "FALSE",
+	    isSplit ? "TRUE" : "FALSE", chrom, t, table );
     if (isFound)
 	fbOrTableBitsQueryMinSize(acc, track, chrom, chromSize, conn, where,
 		   TRUE, TRUE, minFeatureSize);
@@ -552,7 +557,7 @@ void chromFeatureSeq(struct sqlConnection *conn,
 {
 boolean hasBin;
 char t[512], *s = NULL;
-char table[512];
+char table[HDB_MAX_TABLE_STRING];
 boolean isSplit;
 struct featureBits *fbList = NULL, *fb;
 
@@ -697,9 +702,7 @@ if (sameWord(clChrom,"all"))
     }
 else
     {
-    verbose(2,"countBases: calling hChromQuery()\n");
     sr = hChromQuery(conn, "gap", chrom, NULL, &rowOffset);
-    verbose(2,"countBases: back from hChromQuery()\n");
     while ((row = sqlNextRow(sr)) != NULL)
 	{
 	int gapSize;
@@ -720,9 +723,10 @@ void checkInputExists(struct sqlConnection *conn,
 char *track=NULL;
 int i = 0, missing=0;
 char t[512], *s=NULL;
-char table[512];
+char table[HDB_MAX_TABLE_STRING];
 char fileName[512];
 boolean found = FALSE;
+
 for (i=0; i<tableCount; ++i)
     {
     struct chromInfo *cInfo;
@@ -858,6 +862,7 @@ if (!faIndependent)
 	    {
 	    int chromBitSize;
 	    int chromSize = cInfo->size;
+	    verbose(3,"chromFeatureBits(%s)\n", cInfo->chrom);
 	    chromFeatureBits(conn, cInfo->chrom, tableCount, tables,
 		bedFile, faFile, binFile, bedRegionList, bedRegionOutFile, 
 		chromSize, &chromBitSize, pFirstTableBits, pSecondTableBits
