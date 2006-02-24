@@ -60,7 +60,7 @@ else
     endif
     set machine=`df | grep export$unit | awk -F- '{print $1}'`
     # get disk usage 4 dirs deep and sort by size
-    ssh $machine du -m --max-depth=1 $unit | sort -nr > tempfile
+    ssh $machine du -m --max-depth=4 $unit | sort -nr > tempfile
     # when du value is the same, "-k2,2" flag puts subdir second
     sort -k1,1nr -k2,2 tempfile  > du.$storeName.$date.temp
     rm -f tempfile
