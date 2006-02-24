@@ -35,6 +35,8 @@
                 		<LI><A HREF="#format4">GTF format</A>
                 		<LI><A HREF="#format5">MAF format</A>
                 		<LI><A HREF="#format6">WIG format</A>
+                		<LI><A HREF="#format7">.2bit format</A>
+                		<LI><A HREF="#format8">.nib format</A>
 				</UL>
 				<P>
 				<A HREF="index.html">Return to FAQ Table of Contents</A>
@@ -591,6 +593,141 @@ information.</P>
      	     </TD></TR>
     	</TABLE>
 	<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="format7"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; .2bit format</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+<P>
+A .2bit file stores multiple DNA sequences (up to 4 Gb total) in a compact 
+randomly-accessible format. The file contains masking information as well 
+as the DNA itself.</P>
+<P>
+The file begins with a 16-byte header containing the 
+following fields:
+<UL>
+<LI>signature - the number 0x1A412743 in the architecture of the machine that 
+created the file
+<LI>version - zero for now. Readers should abort if they see a version number 
+higher than 0.
+<LI>sequenceCount - the number of sequences in the file.
+<LI>reserved - always zero for now
+</UL></P>
+<P>
+All fields are 32 bits unless noted. If the signature value is not as given, 
+the reader program should byte-swap the signature and check if the swapped 
+version matches. If so, all multiple-byte entities in the file will have to be 
+byte-swapped. This enables these binary files to be used unchanged on 
+different architectures.</P>
+<P>
+The header is followed by a file index, which contains one entry for 
+each sequence. Each index entry contains three fields:
+<UL>
+<LI>nameSize - a byte containing the length of the name field
+<LI>name - the sequence name itself, of variable length depending on nameSize
+<LI>offset - the 32-bit offset of the sequence data relative to the start of the
+file
+</UL></P>
+<P>
+The index is followed by the sequence records, which contain nine fields:
+<UL>
+<LI>dnaSize - number of bases of DNA in the sequence
+<LI>nBlockCount - the number of blocks of Ns in the file (representing unknown 
+sequence)
+<LI>nBlockStarts - the starting position for each block of Ns
+<LI>nBlockSizes - the size of each block of Ns
+<LI>maskBlockCount - the number of masked (lower-case) blocks
+<LI>maskBlockStarts - the starting position for each masked block
+<LI>maskBlockSizes - the size of each masked block
+<LI>packedDna - the DNA packed to two bits per base, represented as so: 
+T - 00, C - 01, A - 10, G - 11.  The first base is in the most significant 
+2-bit byte; the last base is in the least significant 2 bits. For example, the
+sequence TCAG is represented as 00011011. The packedDna field is padded with 0 
+bits as necessary to take an even multiple of 32 bits in the file, which 
+improves I/O performance on some machines.
+</UL></P>
+			    </TD><TD WIDTH=15></TD></TR>
+	    		</TABLE><BR>
+		     </TD></TR>
+		</TABLE>
+     	     </TD></TR>
+    	</TABLE>
+	<BR>
+
+<!--Content Table------------------------------------------------------------>
+<A NAME="format8"></A>
+    <!--outer table is for border purposes-->        
+    <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+        <TR><TD>            
+        <TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+	    <TR><TD>                
+  	    <TABLE BGCOLOR="D9E4F8" BACKGROUND="../images/hr.gif" WIDTH=100%>
+	        <TR><TD>                
+	        <!--cheap trick to get background on row to be continuous-->
+	   	<TABLE CELLPADDING=0 CELLSPACING=0 MARGIN=0 WIDTH="100%">
+		    <TR><TD ALIGN="left">
+	   	    <FONT SIZE="4"><b>&nbsp; .nib format</b></FONT></TD> 
+		    <TD ALIGN="right"><A HREF="#TOP"><IMG SRC="../images/index.gif" ALT="" ALIGN="right" BORDER=0></A>
+	            </TD></TR>
+  	        </TABLE>                
+	        </TD></TR>
+  	    </TABLE>                
+   	    <TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+	        <TR><TH HEIGHT=10></TH></TR>
+                <TR><TD WIDTH=10>&nbsp;</TD>
+		    <TD>
+	            <P>
+<P>
+The .nib format pre-dates the .2bit format and is less compact. It 
+describes a DNA sequence by packing two bases into each byte. 
+Each .nib file contains only a single sequence.  The file begins with a 32-bit 
+signature that is 0x6BE93D3A in the architecture of the machine that created 
+the file (or possibly a byte-swapped version of the same number on another 
+machine). This is followed by a 32-bit number in the same format that describes 
+the number of bases in the file. Next, the bases themselves are listed, packed 
+two bases to the byte. The first base is packed in the high-order 4 bits 
+(nibble); the second base is packed in the low-order four bits:
+<BLOCKQUOTE><TT>
+byte = (base1<<4) + base2
+</TT></BLOCKQUOTE></P>
+<P>
+The numerical representations for the bases are:
+<UL>
+<LI>0 - T
+<LI>1 - C
+<LI>2 - A
+<LI>3 - G
+<LI>4 - N (unknown)
+</UL></P>
+<P>
+The most significant bit in a nibble is set if the base is masked. </P>
+			    </TD><TD WIDTH=15></TD></TR>
+	    		</TABLE><BR>
+		     </TD></TR>
+		</TABLE>
+     	     </TD></TR>
+    	</TABLE>
+	<BR>
     </TD><TD WIDTH=15></TD></TR>
 </TABLE>
 </BODY></HTML>
+
