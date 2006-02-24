@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.5 2006/02/23 00:44:28 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.6 2006/02/24 23:33:53 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -689,18 +689,29 @@ done
     cd /cluster/data/mm8/bed/simpleRepeat
     tar cvzf ../../downloads/bigZips/chromTrf.tar.gz ./trfMask
 
-    # get GenBank native mRNAs  (XXX - NOT DONE 2006-02-16)
+    # get GenBank native mRNAs and refGene (DONE 2006-02-23)
+    #	after the genbank run was complete
     ssh hgwdev
     cd /cluster/data/genbank
-    ./bin/i386/gbGetSeqs -db=mm8 -native GenBank mrna \
-	/cluster/data/mm8/bigZips/mrna.fa
-    cd /cluster/data/mm8/bigZips
+    time ./bin/i386/gbGetSeqs -db=mm8 -native GenBank mrna \
+	/cluster/data/mm8/downloads/bigZips/mrna.fa
+    #	2 minutes
+    cd /cluster/data/mm8/downloads/bigZips
     gzip mrna.fa
-    
+    cd /cluster/data/mm8/downloads/bigZips
+    for I in 1000 2000 5000
+    do
+	echo "upstream${I} working ... "
+	featureBits mm8 refGene:upstream:${I} -fa=stdout \
+		| gzip -c > upstream${I}.fa.gz
+	echo "upstream${I} done"
+    done
+    #	real    11m25.493s
+
     ssh kkstore01
     cd /cluster/data/mm8/downloads/bigZips
     cp -p ../../mm8.2bit .
-    md5sum *.gz > md5sum.txt
+    md5sum *.gz *.2bit README.txt > md5sum.txt
 
     ssh hgwdev
     mkdir -p /usr/local/apache/htdocs/goldenPath/mm8
@@ -1381,7 +1392,7 @@ time /cluster/bin/x86_64/pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 \
 # 1074505863 bases of 2627444668 (40.895%) in intersection
 
 #########################################################################
-# GENBANK auto update (WORKING - 2006-02-17 - Hiram)
+# GENBANK auto update (DONE - 2006-02-17 - 2006-02-23 - Hiram)
     # align with revised genbank process. drop xeno ESTs.
     ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -1413,15 +1424,18 @@ mm8.mgcTables.mgc = all
     cd /cluster/data/genbank
     nice bin/gbAlignStep -initial mm8 &
     #	var/build/logs/2006.02.17-16:10:17.mm8.initalign.log
-XXXX - working 2006-02-17 16:10
     #	the parasol batch job on kk broke down in:
     #	/cluster/bluearc/genbank/work/initial.mm8/align
     #	go to kk and this directory and get the batch finished
+    nice bin/gbAlignStep -continue=finish -initial mm8 &
+    #	var/build/logs/2006.02.22-20:26:54.mm8.initalign.log
 
     # load database when finished
     ssh hgwdev
     cd /cluster/data/genbank
     nice ./bin/gbDbLoadStep -drop -initialLoad  mm8 &
+    #	var/dbload/hgwdev/logs/2006.02.23-10:21:36.dbload.log
+    #	real    228m59.734s
 
 #########################################################################
 # BLASTZ rheMac2 (WORKING - 2006-02-17 - Hiram)
@@ -1571,4 +1585,638 @@ xenTro1 on kk 2006-02-21
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=cat `pwd`/DEF > cat.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+monDom4 on pk 2006-02-23
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+panTro1 on pk 2006-02-23
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+
+#############################################################################
+# STS MARKERS DATA DOWNLOAD (DONE - 2005-09-29 - 2005-10-07 - Hiram)
+#	Applied a filter to primers.psl - 2005-10-20 - Hiram
+    ssh kkstore01
+    mkdir -p /cluster/data/mm8/bed/STSmarkers/downloads
+    cd /cluster/data/mm8/bed/STSmarkers/downloads
+    # these files appear to be new almost every day
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_mouse.sts
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
+
+    #	The new feature in the .aliases file this time are names with
+    #	spaces in them !  This changes our parsing business below,
+    #	hopefully the spaces in the names won't cause trouble elsewhere.
+
+    wget --timestamping \
+ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Mus_musculus/*
+
+    # these reports from jax.org appear to be changing daily
+    wget --timestamping \
+	ftp://ftp.informatics.jax.org/pub/reports/MRK_Dump2.rpt
+    wget --timestamping \
+	ftp://ftp.informatics.jax.org/pub/reports/MRK_Sequence.rpt
+    wget --timestamping \
+	ftp://ftp.informatics.jax.org/pub/reports/PRB_PrimerSeq.rpt
+    ls -ogrt
+#	-rw-rw-r--  1      676 Mar 11  2004 README
+#	-rw-rw-r--  1   396858 Jan 28  2005 10090.MGI.txt
+#	-rw-rw-r--  1   390139 Mar 16  2005 10090.WI_MRC_RH.txt
+#	-rw-rw-r--  1   240688 Mar 16  2005 10090.WI-YAC.txt
+#	-rw-rw-r--  1   173344 Mar 16  2005 10090.WI-Genetic.txt
+#	-rw-rw-r--  1 25691253 Jan 13 16:42 UniSTS.aliases
+#	-rw-rw-r--  1  4140920 Feb 22 18:43 UniSTS_mouse.sts
+#	-rw-rw-r--  1  4576611 Feb 23 02:22 MRK_Dump2.rpt
+#	-rw-rw-r--  1  2549974 Feb 23 02:23 PRB_PrimerSeq.rpt
+#	-rw-rw-r--  1  4531489 Feb 23 02:23 MRK_Sequence.rpt
+    #	 I note the UniSTS.aliases file is over twice as big as was in
+    #	 Mm7 build.  I wonder what got into it ...
+    #	What got into it was that it was completely broken.  It appeared
+    #	to have a vast section of itself duplicated again in the file.
+    #	It was cleaned up via:
+    echo -e "#Unique ID\tAliases" > uniqueSTS.aliases
+    grep -v "^#" UniSTS.aliases | sort -n | uniq >> uniqueSTS.aliases
+    mv UniSTS.aliases UniSTS.aliases.broken
+    mv uniqueSTS.aliases UniSTS.aliases
+
+    # back to our work area, update the bed file
+    #	to do this we need a new UniSTS_mouse.alias file
+    # it is created by a combination of information from several
+    # of the above files ! AND ! the previous stsInfoMouse.bed file
+
+    cd /cluster/data/mm8/bed/STSmarkers/downloads
+    cp -p /cluster/data/mm7/bed/STSmarkers/downloads/*.sh .
+    cp -p /cluster/data/mm7/bed/STSmarkers/downloads/*.pl .
+    #	There is a line in the fetchAllAliases.sh script that needs to
+    #	be updated, it must point to the previous bed file:
+    #   BEDFile=/cluster/data/mm7/bed/STSmarkers/stsInfoMouse.bed
+    #	Next time, this should read:
+    #   BEDFile=/cluster/data/mm8/bed/STSmarkers/stsInfoMouse.bed
+
+    #	This process has been captured in the script:
+    #	/cluster/data/mm5/bed/STSmarkers/downloads/fetchAllAliases.sh
+    # which uses a couple of perl scripts in that same directory.
+    # briefly it is:
+    
+    # ./UniSTSParse.pl UniSTS_mouse.sts UniSTS.aliases > UniSTS_mouse_alias.0
+    # grep MGI: UniSTS.aliases > MGI.aliases
+    # ./stsInfoMouseParse.pl /cluster/store5/mouseMarker/stsInfoMouse.bed > \
+    #	stsInfoAliases.txt
+    # ./UniSTSParse.pl stsInfoAliases.txt UniSTS.aliases > stsInfo.aliases
+    # cat UniSTS_mouse_alias.0 MGI.aliases stsInfo.aliases | sort -u \
+    #    | sort -n > UniSTS_mouse.alias
+
+    time ./fetchAllAliases.sh > fetchAllAliases.out 2>&1
+
+    #	Here is a normal set of errors:
+# processing UniSTS_mouse.sts to find aliases
+# #       ERROR: KNOWN(==OK) duplicate ID: '108991' encountered at line
+# #       2384
+# processing MGI.aliases
+# fetching existing aliases from previous stsInfoMouse.bed file
+# found 27648 potential errors in
+#	/cluster/data/mm7/bed/STSmarkers/stsInfoMouse.bed
+# to see the errors: grep ERROR stsInfoAliases.txt
+# verify those stsInfoMouse.bed aliases with UniSTS.aliases
+
+    #	those errors in the previous stsInfoMouse.bed file are an
+    #	accumulation of errors from a long long time ago in this chain
+    #	of processing.  Some day it might be nice to fix them, but they
+    #	don't seem to bother anything, so they continue to be carried
+    #	forward, and a couple of new ones are added with each assembly.
+
+    # with that, we can create a new stsInfoMouse.bed file:
+    #	Update the m m 7 directory name here to m m 8
+    #	for the next build of m m 9
+    cd /cluster/data/mm8/bed/STSmarkers
+    /cluster/store5/mouseMarker/code/updateBed.pl \
+	/cluster/data/mm7/bed/STSmarkers/stsInfoMouse.bed \
+	downloads/MRK_Dump2.rpt downloads/PRB_PrimerSeq.rpt \
+	downloads/MRK_Sequence.rpt downloads/UniSTS_mouse.alias \
+	downloads/UniSTS_mouse.sts | sed -e "s/\t*$//" > newbedfile
+
+    # Yontao updated /cluster/store5/mouseMarker/code/cleanInfo.pl 8/10/04
+    /cluster/store5/mouseMarker/code/cleanInfo.pl newbedfile > stsInfoMouse.bed
+	
+    # copy the stsInfoMouse.bed file from working dir to the marker
+    #	info storage fold.  added 2 new steps by Yontao	
+    #	be wary of the archive name here, check the directory and get
+    #	the name right here.
+    mv /cluster/store5/mouseMarker/stsInfoMouse.bed \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm7
+    cp -p stsInfoMouse.bed /cluster/store5/mouseMarker/stsInfoMouse.bed
+
+    # comparing to previous, numbers increase slightly each time
+    wc /cluster/store5/mouseMarker/stsInfoMouse.bed \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm7 \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm6 \
+	/cluster/store5/mouseMarker/stsInfoMouse.bed_mm5
+    #	60440   801181  6871232 /cluster/store5/mouseMarker/stsInfoMouse.bed
+    #	59843   794642  6802825 /cluster/store5/mouseMarker/stsInfoMouse.bed_mm7
+    #	58980   784786  6690105 /cluster/store5/mouseMarker/stsInfoMouse.bed_mm6
+    #	58493   778055  6524821 /cluster/store5/mouseMarker/stsInfoMouse.bed_mm5
+
+    # and from that, create new primer fa, epcr, etc:
+    /cluster/store5/mouseMarker/code/luConvertPrimerToFa \
+	stsInfoMouse.bed mouseP.fa mouseC.fa mouseP.info
+    # the mouseC.fa file will be empty, should be more than last time
+    wc mouse?.*
+    #	     0       0       0 mouseC.fa
+    #	305991  305937 6910111 mouseP.fa
+    #	 34475  172467 2195057 mouseP.info
+    #	340466  478404 9105168 total
+
+    #	the equivalent Mm7 files:
+    #      0       0       0 mouseC.fa
+    # 300968  300914 6798466 mouseP.fa
+    #  33838  169275 2153113 mouseP.info
+    # 334806  470189 8951579 total
+    #	the equivalent Mm6 files:
+    #	     0       0       0 mouseC.fa
+    #	293305  293251 6624638 mouseP.fa
+    #	 32890  164528 2087271 mouseP.info
+    #	326195  457779 8711909 total
+    #	the equivalent Mm5 files:
+    #	     0       0       0 mouseC.fa
+    #	286740  286686 6474893 mouseP.fa
+    #	 32232  161234 2044810 mouseP.info
+    #	318972  447920 8519703 total
+
+    #	copy the primers over to some filesystem close to the klusters
+    #	and split them up to have a small number of sequences in one file
+    
+
+    mkdir /cluster/bluearc/mm8/stsMarkers
+    cp -p mouseP.fa /cluster/bluearc/mm8/stsMarkers
+    cd /cluster/bluearc/mm8/stsMarkers
+    cp -p /cluster/data/mm8/11.ooc .
+    mkdir split
+    #	400 files for 34,475 sequences, == about 80 sequences per file
+    faSplit sequence mouseP.fa 400 split/mm_
+
+
+    # PLEASE NOTE /cluster/bin/i386/blat.2 SPECIFICALLY IS USED HERE. 
+    #	This process could convert to a modern version of blat with the
+    #	filters as described, for example, in the STS markers build in Hg18
+
+    #  CLUSTER RUN FOR THE STS PRIMERS
+    ssh kk
+    mkdir /cluster/data/mm8/bed/STSmarkers/primer
+    mkdir /cluster/data/mm8/bed/STSmarkers/ePCR
+    cd /cluster/data/mm8/bed/STSmarkers/primer
+    mkdir out
+
+    ls -1S /cluster/bluearc/mm8/stsMarkers/split > primers.list
+    ls -1S /scratch/hg/mm8/nib > nib.list
+
+    cat << '_EOF_' > runBlat2.csh
+#!/bin/csh -fe
+set primer = /cluster/bluearc/mm8/stsMarkers/split/$1
+set nib = /scratch/hg/mm8/nib/$2
+set ooc = /cluster/bluearc/mm8/stsMarkers/11.ooc
+set root2 = $2:r
+mkdir -p out/${root2}
+set out = $3
+
+/cluster/bin/i386/blat.2 ${nib} ${primer} -ooc=${ooc} \
+	-minMatch=1 -minScore=0 -minIdentity=80 -oneOff ${out}
+'_EOF_'
+    #	happy emacs
+    chmod +x runBlat2.csh
+
+
+    cat << '_EOF_' > template
+#LOOP
+./runBlat2.csh $(path1) $(path2) {check out line+ out/$(root2)/$(root1).psl}
+#ENDLOOP
+'_EOF_'
+    #	happy emacs
+
+    gensub2 primers.list nib.list template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+# Completed: 12104 of 12104 jobs
+# CPU time in finished jobs:     358835s    5980.59m    99.68h    4.15d  0.011 y
+# IO & Wait Time:                 39162s     652.69m    10.88h    0.45d  0.001 y
+# Average job time:                  33s       0.55m     0.01h    0.00d
+# Longest finished job:             162s       2.70m     0.04h    0.00d
+# Submission to last job:           864s      14.40m     0.24h    0.01d
+
+
+    # on the file server
+    ssh kkstore01
+    cd /cluster/data/mm8/bed/STSmarkers/primer
+    time pslSort dirs primers.raw.psl temp out/chr*
+    #	12104 files in 34 dirs
+    #	Got 12104 files 110 files per mid file
+
+    #	filter alignments for (qEnd-qStart) vs. (tEnd-tStart)
+    #	should not be more than 100 bases different.
+    #	This filters out about 1,028,202 alignments, or
+    #	%17.4 = 100.0 * 1028202 / 5921712
+    pslSort dirs stdout temp out/chr* | awk -F"\t" '
+{ if (((($13 - $12) - ($17 - $16)) > -100) &&
+	((($13 - $12) - ($17 - $16)) < 100)) {print}
+}
+' > primers.psl.100
+
+    rmdir temp
+
+    wc -l *.100 *.psl
+    #	1079936 primers.psl.100
+    #	1346128 primers.raw.psl
+    #    266192 difference
+
+
+    # a rough comparison with previous results:
+    wc -l /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.100
+    #	4893510  102763628  510563575 primers.psl.100
+    wc primers.psl  (unfiltered, Mm7)
+    #	5921712 124355891 636898117 primers.psl
+    wc /cluster/data/mm7/bed/STSmarkers/primer/primers.psl
+    #	5724127 120206606 615248041
+    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl
+    #	5719969 120119288 590806241
+    wc /cluster/data/mm4/bed/STSmarkers/primer/primers.psl
+    #	5745617 120657896 592135728 
+
+    # another kluster run for the ePCR
+    ssh pk
+    cd /cluster/data/mm8/bed/STSmarkers/ePCR
+    ls -1S /san/sanvol1/scratch/mm8/fasta/chr*.fa > contig.lst
+
+    #	pick up e-PCR source from
+    #	ftp://ftp.ncbi.nlm.nih.gov/pub/schuler/e-PCR/
+    #	version 2.3.1 11 Feb 2005
+    #	Had to add the following to both re-PCR_main.cpp and
+    #	e-PCR_main.cpp to get them to compile on kolossus:
+// max and min Copied from /usr/include/mysql/my_global.h
+#define max(a, b)       ((a) >? (b))
+#define min(a, b)       ((a) <? (b))
+
+    mkdir epcr.out
+    cat << '_EOF_' > runPCR.csh
+#!/bin/csh -fe
+/cluster/bin/x86_64/e-PCR $1 $2 N=1 M=50 W=5 > $3
+'_EOF_'
+    # emacs happy ?
+    chmod +x runPCR.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./runPCR.csh /san/sanvol1/scratch/mm8//STSmarkers/mouseP.info $(path1) {check out line+ epcr.out/$(num1).epcr}
+#ENDLOOP
+'_EOF_'
+    # the mouseP.info was created above
+    gensub2 contig.lst single template jobList
+    para create jobList
+    para try
+    para check
+    para push
+    ... etc ...
+    # STARTED 2005-09-30 11:45
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:      62439s    1040.64m    17.34h    0.72d  0.002 y
+# IO & Wait Time:                   180s       3.01m     0.05h    0.00d  0.000 y
+# Average job time:                1565s      26.09m     0.43h    0.02d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            4582s      76.37m     1.27h    0.05d
+# Submission to last job:          4608s      76.80m     1.28h    0.05d
+
+    ssh kkstore01
+    cd /cluster/data/mm8/bed/STSmarkers/ePCR
+    # all those results become all.epcr
+    cat epcr.out/*.epcr > all.epcr
+
+    # comparing to previous results:
+    wc all.epcr
+    #	57709  230836 3185188 all.epcr
+    wc /cluster/data/mm7/bed/STSmarkers/ePCR/all.epcr
+    #	55871  223484 3086148 all.epcr
+    wc /cluster/data/mm5/bed/STSmarkers/ePCR/all.epcr
+    #	55677  222708 2945623 /cluster/data/mm5/bed/STSmarkers/ePCR/all.epcr
+    wc /cluster/data/mm4/bed/STSmarkers/ePCR/all.epcr
+    #	74705  298820 3971712 /cluster/data/mm4/bed/STSmarkers/ePCR/all.epcr
+    #	Mm4 seems to be out of whack
+
+    cd /cluster/data/mm8/bed/STSmarkers/primer
+
+    /cluster/bin/scripts/filterSTSPrimers \
+    -mouse ../stsInfoMouse.bed primers.psl.100 \
+        ../mouseP.info ../ePCR/all.epcr > primers.psl.filter.blat
+
+    #  The output should show an increasing count:
+    #	Reading name info
+    #	Reading primer info
+    #	Processing file
+    #	100000
+    #	200000
+    #	300000
+    #	...
+    #	5700000
+    #	Determining ePCR not found
+    #
+    wc primers.psl.filter.blat  (after filter applied above to primers.psl)
+    #	33986  713706 3637462 primers.psl.filter.blat
+    wc primers.psl.filter.blat  (before filter applied above to primers.psl)
+    #	34674  728154 3718714 primers.psl.filter.blat
+    wc /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter.blat
+    #	33662  706902 3605847 primers.psl.filter.blat
+    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.blat
+    #	33476  702996 3442402 
+    wc /cluster/data/mm4/bed/STSmarkers/primer/primers.psl.filter.blat
+    #	32729  687309 3331894
+    #	It appears Mm4 became sane after the filter
+
+    # create accession_info.rdb
+    touch empty_sequence.inf
+    /cluster/bin/scripts/compileAccInfo -mouse \
+	/cluster/data/mm8 empty_sequence.inf
+    # works with errors on missing randoms, etc...:
+    # cat: /cluster/data/mm5/11/chr11_random.agp: No such file or directory
+    # cat: /cluster/data/mm5/M/chrM_random.agp: No such file or directory
+    mv accession_info.rdb accession_info.rdb.tmp
+    /cluster/bin/scripts/sorttbl Chr Ord Start < accession_info.rdb.tmp > \
+	accession_info.rdb
+    rm accession_info.rdb.tmp
+    # comparing results to previous
+    #	There is a dramatic decrease in Mm7 - this appears to be due to
+    #	the lower numbers of fragments in the agp files.
+    #	e.g.:
+    [hiram@pk /cluster/data] wc mm7/*/chr*.agp | tail -1
+    #	170812 1459570 9240332 total
+    [hiram@pk /cluster/data] wc mm8/*/chr*.agp | tail -1
+    #	70125  605050 3696903 total
+
+    wc accession_info.rdb
+    #	44046  484510 3112816 accession_info.rdb
+    wc /cluster/data/mm7/bed/STSmarkers/primer/accession_info.rdb
+    #	93052 1023576 6824900 accession_info.rdb
+    wc /cluster/data/mm5/bed/STSmarkers/primer/accession_info.rdb
+    #	131845 1450299 9681940
+    wc /cluster/data/mm4/bed/STSmarkers/primer/accession_info.rdb
+    #	86935  956289 6374930 
+
+    # creates epcr.not.found.nomatch and epcr.not.found.psl
+    #	/cluster/bin/scripts/epcrToPsl
+    #	Fixed this script (in mm7) to make it not look for contigs in the usual
+    #	manner, we don't have those for this assembly	
+    sed -e "s/mm7/mm8/g" /cluster/data/mm7/bed/STSmarkers/primer/epcrToPsl \
+	> ./epcrToPsl
+    ./epcrToPsl -mouse \
+	epcr.not.found ../mouseP.info \
+	accession_info.rdb /cluster/data/mm8
+
+    # Comparing results to previous:
+    wc epcr*
+    #	 474  1896 17400 epcr.not.found
+    #	   0     0     0 epcr.not.found.nomatch
+    #	 474  9954 47288 epcr.not.found.psl
+    #	 158   535  4308 epcrToPsl
+    #	1106 12385 68996 total
+
+    # Mm6 wc epcr*
+    wc /cluster/data/mm7/bed/STSmarkers/primer/epcr*
+    #	 467    1868   17135 epcr.not.found
+    #	  63     756    6041 epcr.not.found.nomatch
+    #	 404    8484   40254 epcr.not.found.psl
+    #	 158     535    4308 epcrToPsl
+    #	1092   11643   67738 total
+
+    # Mm5 wc epcr*
+    wc /cluster/data/mm5/bed/STSmarkers/primer/epcr*
+    #	 463    1852   17080 epcr.not.found
+    #	  61     732    5845 epcr.not.found.nomatch
+    #	 398    8358   38591 epcr.not.found.psl
+    #	 402    8442   39011 epcr.not.found.psl.orig
+    #	1324   19384  100527 total
+
+    # Mm4 wc epcr*
+    wc /cluster/data/mm4/bed/STSmarkers/primer/epcr*
+    #	328    1312   12011 epcr.not.found
+    #	 57     684    5474 epcr.not.found.nomatch
+    #	266    5586   25711 epcr.not.found.psl
+    #	163     552    4370 epcrToPsl
+    #	814    8134   47566 total
+
+    cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
+    wc primers.psl.filter  (after filter applied above to primers.psl)
+    #	34460  723660 3684750 primers.psl.filter
+    wc primers.psl.filter  (before filter applied above to primers.psl)
+    #	35148  738108 3766002 primers.psl.filter
+
+    wc /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter
+    #	34066  715386 3646101 primers.psl.filter
+
+    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.lifted
+    # 33691  707511 3601164 primers.psl.filter.lifted
+
+    # create primers.psl.filter.lifted.initial
+    PATH=/cluster/bin/scripts:$PATH /cluster/bin/scripts/extractPslInfo \
+	primers.psl.filter
+    wc primers.psl.filter.initial (after filter applied above to primers.psl)
+    #	34443  206658 1833793 primers.psl.filter.initial
+    wc primers.psl.filter.initial (before filter applied above to primers.psl)
+    #	35131  210786 1870800 primers.psl.filter.initial
+    wc /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter.initial
+    #	34048  204288 1815222 primers.psl.filter.initial
+    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.lifted.initial
+    # 33689  202134 1799016 primers.psl.filter.lifted.initial
+
+    # create primers.psl.filter.lifted.initial.acc
+    /cluster/bin/scripts/findAccession -agp \
+	-mouse primers.psl.filter.initial /cluster/data/mm8
+    #	it complains about missing _random items, it is OK
+    wc primers.psl.filter.initial.acc (after filter applied above to primers.psl)
+    #	34443  241101 2160540 primers.psl.filter.initial.acc
+    wc primers.psl.filter.initial.acc (before filter applied above to primers.psl)
+    #	35131  245917 2204115 primers.psl.filter.initial.acc
+    wc /cluster/data/mm7/bed/STSmarkers/primer/primers.psl.filter.initial.acc
+    #	34048  238336 2154798 primers.psl.filter.initial.acc
+
+    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.psl.filter.lifted.initial.acc
+    # 33689  235823 2158029 primers.psl.filter.lifted.initial.acc
+
+    # this needs to be -rat as that specifies how to scan the
+    # stsInfoMouse.bed file and it does not work if you use -mouse
+    /cluster/bin/scripts/getStsId -rat \
+	../stsInfoMouse.bed  primers.psl.filter.initial.acc \
+	> primers.initial.acc.trans
+    wc primers.initial.acc.trans  (after filter applied above to primers.psl)
+    #	34443  241101 1830431 primers.initial.acc.trans
+    wc primers.initial.acc.trans  (before filter applied above to primers.psl)
+    #	35131  245917 1867180 primers.initial.acc.trans
+    wc /cluster/data/mm7/bed/STSmarkers/primer/primers.initial.acc.trans
+    wc primers.initial.acc.trans
+    #	34041  238287 1829724 primers.initial.acc.trans
+    #	I don't see any of these errors in the Mm7 build:
+    #	No id for 61645_RH126840
+    #	No id for 4187_D10MIT171.2
+    #	No id for 63449_RH125771
+    #	No id for 67188_PMC99911P4
+    #	No id for 8839_D6MIT360.1
+    #	No id for 62732_RH126829
+    #	No id for 63746_RH127126
+
+    sort -k 4n primers.initial.acc.trans > primers.final
+    wc primers.final  (after filter applied above to primers.psl)
+    #	34443  241101 1830431 primers.final
+    wc primers.final  (before filter applied above to primers.psl)
+    #	35131  245917 1867180 primers.final
+    wc /cluster/data/mm7/bed/STSmarkers/primer/primers.final 
+    #	34041  238287 1829724 primers.final
+    wc /cluster/data/mm5/bed/STSmarkers/primer/primers.final 
+    #	33689  235823 1834889 /cluster/data/mm5/bed/STSmarkers/primer/primers.final
+
+    rm primers.initial.acc.trans
+
+    cd /cluster/data/mm8/bed/STSmarkers
+    # stsMarkers.final is empty for mouse
+    touch stsMarkers.final dummy
+    PATH=/cluster/bin/scripts:$PATH /cluster/bin/scripts/combineSeqPrimerPos \
+	stsMarkers.final primer/primers.final > stsMarkers_pos.rdb
+    wc stsMarkers_pos.rdb  (after filter applied to primers.psl above)
+    #	32869  230083 1868276 stsMarkers_pos.rdb
+    wc stsMarkers_pos.rdb  (before filter applied to primers.psl above)
+    #	33421  233947 1903951 stsMarkers_pos.rdb
+    wc /cluster/data/mm7/bed/STSmarkers/stsMarkers_pos.rdb
+    #	32350  226450 1909506 stsMarkers_pos.rdb
+    wc /cluster/data/mm5/bed/STSmarkers/stsMarkers_pos.rdb
+    # 32085  224595 1862816 /cluster/data/mm5/bed/STSmarkers/stsMarkers_pos.rdb
+    wc /cluster/data/mm4/bed/STSmarkers/stsMarkers_pos.rdb
+    # 31270  218890 1869417 /cluster/data/mm4/bed/STSmarkers/stsMarkers_pos.rdb
+
+    /projects/cc/hg/ytlu/bin/script/perl/createStsBed \
+	stsInfoMouse.bed  stsMarkers_pos.rdb 500 > stsMapMouse.bed
+    wc stsMapMouse.bed  (after filter applied to primers.psl above)
+    #	29842  308123 2135776 stsMapMouse.bed
+    wc stsMapMouse.bed  (before filter applied to primers.psl above)
+    #	30296  312257 2166725 stsMapMouse.bed
+    wc /cluster/data/mm7/bed/STSmarkers/stsMapMouse.bed
+    #	29079  301678 2097544 stsMapMouse.bed
+    wc /cluster/data/mm5/bed/STSmarkers/stsMapMouse.bed
+    #	29069  301535 2123622 /cluster/data/mm5/bed/STSmarkers/stsMapMouse.bed
+
+    #  loading STS markers tables
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/STSmarkers
+    cp -p /cluster/data/mm7/bed/STSmarkers/ucscAlias.pl .
+    ./ucscAlias.pl stsInfoMouse.bed > ucscStsAlias.tab 2> ucscStsAlias.warnings
+    #	this does leave messages in ucscStsAlias.warnings but they seem
+    #	to be very similar to Mm6 with just a few new ones
+     
+    wc ucscStsAlias.tab  (after applying filter to primers.psl above)
+    #	144570  433667 3366815 ucscStsAlias.tab
+    wc ucscStsAlias.tab  (before applying filter to primers.psl above)
+    #	144570  433667 3366815 ucscStsAlias.tab
+    wc /cluster/data/mm7/bed/STSmarkers/ucscStsAlias.tab
+    #	141585  424725 3284106 ucscStsAlias.tab
+    wc /cluster/store6/mm5/bed/STSmarkers/ucscStsAlias.tab
+    # 126624  379859 3037850 /cluster/store6/mm5/bed/STSmarkers/ucscStsAlias.tab
+     
+    hgsql -e "drop table stsAlias;" mm8
+    hgsql mm8 < ~/kent/src/hg/lib/stsAlias.sql
+    hgsql -e \
+	'load data local infile "ucscStsAlias.tab" into table stsAlias;' mm8
+    hgsql -e "drop table stsMapMouseNew;" mm8
+    hgsql mm8 < ~/kent/src/hg/lib/stsMapMouseNew.sql
+    hgsql -e \
+'load data local infile "stsMapMouse.bed" into table stsMapMouseNew;' mm8
+    hgsql -e "drop table stsInfoMouseNew;" mm8
+    hgsql mm8 < ~/kent/src/hg/lib/stsInfoMouseNew.sql
+    hgsql -e \
+     'load data local infile "stsInfoMouse.bed" into table stsInfoMouseNew;' mm8
+
+    hgLoadPsl -nobin -table=all_sts_primer mm8 primer/primers.psl.filter
+    #	load of all_sts_primer did not go as planned: 34460 record(s),
+    #	0 row(s) skipped, 21 warning(s) loading primer/primers.psl.filter
+
+    #	load of all_sts_primer did not go as planned: 35148 record(s), 0
+    #	row(s) skipped, 21 warning(s) loading primer/primers.psl.filter
+
+    # load primer sequences	
+    mkdir /gbdb/mm8/stsMarker
+    ln -s /cluster/data/mm8/bed/STSmarkers/mouseP.fa \
+	/gbdb/mm8/stsMarker/mouseP.fa
+    # PLEASE NOTE THAT THE If you are going to reload this business, use the
+    #	-replace option on this hgLoadSeq
+    #	hgLoadSeq -replace mm8 /gbdb/mm8/stsMarker/mouseP.fa
+    # otherwise there will be a problem that the seq and extFile tables 
+    # will be out of sync. 
+    hgLoadSeq mm8 /gbdb/mm8/stsMarker/mouseP.fa
+    #  Adding /gbdb/mm8/stsMarker/mouseP.fa
+    #  33838 sequences
+
+    #	After applying the filter to primers.psl above  (and in mm7 too)
+    featureBits mm8 all_sts_primer
+    #	3757119 bases of 2583394090 (0.145%) in intersection
+    featureBits mm7 all_sts_primer
+    #	3706406 bases of 2597150411 (0.143%) in intersection
+    featureBits mm8 stsMapMouseNew
+    #	4805958 bases of 2583394090 (0.186%) in intersection
+    featureBits mm7 stsMapMouseNew
+    #	4638338 bases of 2597150411 (0.179%) in intersection
+
+    #	Before applying the filter to primers.psl above
+    featureBits mm8 all_sts_primer
+    #	3794153 bases of 2583394090 (0.147%) in intersection
+    featureBits mm7 all_sts_primer
+    #	3735649 bases of 2597150411 (0.144%) in intersection
+    featureBits mm5 all_sts_primer
+    #	3727268 bases of 2615483787 (0.143%) in intersection
+    featureBits mm8 stsMapMouseNew
+    #	4917456 bases of 2583394090 (0.190%) in intersection
+    featureBits mm7 stsMapMouseNew
+    #	4736039 bases of 2597150411 (0.182%) in intersection
+    featureBits mm5 stsMapMouseNew
+    #	4719679 bases of 2615483787 (0.180%) in intersection
+
+    hgsql -N mm8 -e "select count(*) from stsAlias;"
+    #	140649
+    hgsql -N mm7 -e "select count(*) from stsAlias;"
+    #	137738
+    hgsql -N mm5 -e "select count(*) from stsAlias;"
+    #	122944
+    hgsql -N mm8 -e "select count(*) from stsInfoMouseNew;"
+    #	59843
+    hgsql -N mm7 -e "select count(*) from stsInfoMouseNew;"
+    #	58980
+    hgsql -N mm5 -e "select count(*) from stsInfoMouseNew;"
+    #	58493
+
+    #	compare old and new name lists:
+    awk '{print $4}' /cluster/data/mm7/bed/STSmarkers/stsMapMouse.bed | \
+	sort -u > mm7.nameList
+    awk '{print $4}' stsMapMouse.bed | sort -u > mm8.nameList
+    #	After applying the filter to primers.psl above  (and in mm7 too)
+    comm -12 mm?.nameList | wc
+    #	27320   27320  265970		<- 27,320 names in common
+    comm -23 mm7.nameList mm8.nameList | wc
+    #	188     188    1695		<- 188 unique to mm7 list
+    comm -13 mm7.nameList mm8.nameList | wc
+    #	1107    1107   12626		<- 1,107 unique to mm8 list
+
+    #	Before applying the filter to primers.psl above
+    comm -12 mm?.nameList | wc
+    #	27658   27658  268827		<- 27,658 names in commmon
+    comm -23 mm7.nameList mm8.nameList | wc
+    #	197     197    1781		<- 197 unique to mm7 list
+    comm -13 mm7.nameList mm8.nameList | wc
+    #	1184    1184   13480		<- 1,184 unique to mm8 list
+
+    #	Mm6 vs Mm5:
+    #	27454   27454  266951		<- 27,545 names in common
+    #	182     182    1685		<- 182 unique to mm5 list
+    #	1625    1625   15090		<- 1,625 unique to mm7 list
 
