@@ -1019,6 +1019,9 @@ if (hTableExistsDb(database, "ensemblXref3"))
     }
 else
     {
+    if (! (hTableExistsDb(database, "ensemblXref") || hTableExistsDb(database, "ensTranscript") ) )
+       return(0);
+    
     /* two steps query needed because the recent Ensembl gene_xref 11/2003 table does not have 
        valid translation_name */
     safef(cond_str, sizeof(cond_str), "external_name='%s'", protDisplayID);
