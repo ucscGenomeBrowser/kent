@@ -6434,3 +6434,265 @@ cat > downloads.csh << 'EOF'
 	    "chrX:151,073,054-151,383,976", 1, 9, "Human", "Homo sapiens", \
 	    "/gbdb/hg18/html/description.html", 1, 1, "NCBI Build 36.1");' \
 	    -h genome-testdb hgcentraltest
+
+############################################################################
+# HG16/HG17 -> HG18 LIFTOVER CHAINS (DONE 2/24/06 Fan)
+    # These chains hopefully don't suck.
+    # Sorry I only used the makeLoChain-align script from the set of scripts 
+    # already created for this task.  I wanted more control.  I should mention 
+    # I used a size of 10kb instead of 3kb for the split (blat query) sizes in
+    # hg18.  This had a huge affect on the amount of hits in the blat, which
+    # then had a huge effect on the amount of chains.  I should also mention 
+    # that hg18 chromosomes chr1 and chr2 were split further 
+    # into more than a single query file.  This helped a LOT in avoiding 
+    # cluster hippos classically associated with those chroms.
+    ######## LIFTOVER PREPARATION
+    # Split up hg18
+    ssh pk
+    cd /san/sanVol1/scratch/hg18
+    mkdir -p liftSplits/{split,lift}
+    bash
+    for fa in /cluster/data/hg18/?{,?,*hap*}/*.fa; do
+      c=`basename $fa .fa`
+      echo $c
+      faSplit -lift=liftSplits/lift/${c}.lft size $fa -oneFile 10000 liftSplits/split/$c
+    done
+    mkdir -p biggerSplits/split
+    cd biggerSplits/
+    ln -s ../liftSplits/lift
+    cd split/
+    ln -s ../../liftSplits/split/* .
+    faSplit sequence chr1.fa 5 chr1_
+    faSplit sequence chr2.fa 5 chr2_
+    rm chr{1,2}.fa
+
+    # Make some dirs
+    cd /san/sanVol1/scratch
+    mkdir -p hg{15,16,17}
+
+    # Copy 11.ooc files to each of hg15, hg16, hg17 dirs.
+    cp -p /cluster/store5/gs.16/build33/11.ooc hg15
+    cp -p /cluster/store4/gs.17/build34/11.ooc hg16
+    cp -p /cluster/store5/gs.18/build35/11.ooc hg17
+
+    ## First, copy over Andy's scripts.
+
+    mkdir -p /san/sanVol1/scratch/fan
+    cp -p /san/sanVol1/scratch/fan/*.sh /san/sanVol1/scratch/fan
+    cp /san/sanVol1/scratch/andy/psl.header /san/sanVol1/scratch/fan
+
+    ######## LIFTOVER BLATING  
+
+    # HG16
+    ssh pk
+    cd /cluster/data/hg16
+    makeLoChain-align hg16 /scratch/hg/hg16/bothMaskedNibs hg18 \
+    /san/sanVol1/scratch/hg18/biggerSplits/split
+    cd bed/
+    mv blat.hg18.2006-02-24 /san/sanVol1/scratch/hg16 
+    cd /san/sanVol1/scratch/hg16/blat.hg18.2006-02-24/run/
+    sed 's/^blat/blat.sh/; s/\}.*$/}/' spec | awk '{print "/san/sanVol1/scratch/fan/" $0 " hg16ToHg18"}' > newspec
+    para create newspec
+    para try
+    para push
+# Completed: 2394 of 2394 jobs
+# CPU time in finished jobs:     623927s   10398.79m   173.31h    7.22d  0.020 y
+# IO & Wait Time:                 13255s     220.91m     3.68h    0.15d  0.000 y
+# Average job time:                 266s       4.44m     0.07h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            3613s      60.22m     1.00h    0.04d
+# Submission to last job:          4112s      68.53m     1.14h    0.05d
+
+    # HG17
+    ssh pk
+    cd /cluster/data/hg17
+    makeLoChain-align hg17 /scratch/hg/hg17/bothMaskedNibs hg18 /san/sanVol1/scratch/hg18/biggerSplits/split
+    cd bed/
+    mv blat.hg18.2006-02-24/ /san/sanVol1/scratch/hg17 
+    cd /san/sanVol1/scratch/hg17/blat.hg18.2006-02-24/run/
+    sed 's/^blat/blat.sh/; s/\}.*$/}/' spec | awk '{print "/san/sanVol1/scratch/fan/" $0 " hg17ToHg18"}' > newspec
+    para create newspec
+    para try
+    para push
+# Completed: 2622 of 2622 jobs
+# CPU time in finished jobs:     618557s   10309.28m   171.82h    7.16d  0.020 y
+# IO & Wait Time:                 13735s     228.92m     3.82h    0.16d  0.000 y
+# Average job time:                 241s       4.02m     0.07h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            3655s      60.92m     1.02h    0.04d
+# Submission to last job:          4228s      70.47m     1.17h    0.05d
+
+    ######## LIFTOVER CHAINING
+    # LIFTING
+    ssh pk
+    cd /san/sanVol1/scratch/fan
+    cp mm7SplitLift.sh hg18SplitLift.sh
+
+    # change andy to fan, mm7 to hg18, and chrX to chr2, and remove chrUn_random 
+    vi hg18SplitLift.sh
+
+    cat << 'EOF' > hg18ChainMergeSplit.sh
+#!/bin/bash
+cp -r chainRaw/ /scratch/fan/hg18Lifts
+pushd /scratch/fan/hg18Lifts
+mkdir chain
+/cluster/bin/x86_64/chainMergeSort chainRaw/*.chain | /cluster/bin/x86_64/chainSplit chain stdin
+cp -r chain `dirs +1`
+rm -rf chain chainRaw
+'EOF'
+
+    chmod +x hg18ChainMergeSplit.sh
+
+    # HG16
+    cd /san/sanVol1/scratch/hg16/blat.hg18.2006-02-24/raw
+    /san/sanVol1/scratch/fan/hg18SplitLift.sh
+    cd ../    
+    mkdir chainRun chainRaw
+    cd chainRun
+    cat > gsub << 'EOF'
+#LOOP
+/cluster/bin/x86_64/axtChain -verbose=0 -linearGap=medium -psl $(path1) /scratch/hg/hg16/bothMaskedNibs /san/sanVol1/scratch/hg18/nib {check out line+ ../chainRaw/$(root1).chain}
+#ENDLOOP
+'EOF'
+    ls -1S ../psl/*.psl > in.lst
+    gensub2 in.lst single gsub spec
+    para create spec
+    para push
+    para time
+# Completed: 49 of 49 jobs
+# CPU time in finished jobs:       3599s      59.98m     1.00h    0.04d  0.000 y
+# IO & Wait Time:                  1040s      17.34m     0.29h    0.01d  0.000 y
+# Average job time:                  95s       1.58m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             303s       5.05m     0.08h    0.00d
+# Submission to last job:           303s       5.05m     0.08h    0.00d
+
+    # HG17
+    cd /san/sanVol1/scratch/hg17/blat.hg18.2006-02-24/raw
+    /san/sanVol1/scratch/fan/hg18SplitLift.sh 
+
+    cd ../    
+    mkdir chainRun chainRaw
+    cd chainRun
+
+    cat > gsub << 'EOF'
+#LOOP
+/cluster/bin/x86_64/axtChain -verbose=0 -linearGap=medium -psl $(path1) /scratch/hg/hg17/bothMaskedNibs /san/sanVol1/scratch/hg18/nib {check out line+ ../chainRaw/$(root1).chain}
+#ENDLOOP
+'EOF'
+    ls -1S ../psl/*.psl > in.lst
+    gensub2 in.lst single gsub spec
+    para create spec
+    para try
+    para push
+    para time
+# Completed: 49 of 49 jobs
+# CPU time in finished jobs:       3671s      61.19m     1.02h    0.04d  0.000 y
+# IO & Wait Time:                  1186s      19.76m     0.33h    0.01d  0.000 y
+# Average job time:                  99s       1.65m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             282s       4.70m     0.08h    0.00d
+# Submission to last job:           282s       4.70m     0.08h    0.00d
+
+    ######### CHAINMERGE/NET/NETSUBSET
+    ssh kolossus
+    mkdir -p /scratch/fan/hg18Lifts
+    cd /scratch/fan/hg18Lifts
+    cp -rp /san/sanvol1/scratch/hg17/blat.hg18.2006-02-24/chainRaw/ .
+    mkdir chain
+    time /cluster/bin/x86_64/chainMergeSort chainRaw/* | /cluster/bin/x86_64/chainSplit chain stdin
+
+    cp -rp chain /san/sanvol1/scratch/hg17/blat.hg18.2006-02-24/
+
+    mv chain chain.17
+# remove it later
+    rm -rf chain.17
+
+    cp -r /san/sanvol1/scratch/hg16/blat.hg18.2006-02-24/chainRaw/ .
+    mkdir chain
+    /cluster/bin/x86_64/chainMergeSort chainRaw/* | /cluster/bin/x86_64/chainSplit chain stdin
+# about 30 minutes.
+
+    cp -rp chain /san/sanvol1/scratch/hg16/blat.hg18.2006-02-24/
+    rm -rf chain*
+
+    ssh pk
+    cd /san/sanvol1/scratch/fan
+    cat << 'EOF' > netOver.sh 
+#!/bin/bash
+
+chain=$1
+chrom=`basename $chain .chain`
+sizesHGOld=$2
+sizesHG18=/cluster/data/hg18/chrom.sizes
+chainDir=`dirname $chain`
+blatDir=`dirname $chainDir`
+net=${blatDir}/net/${chrom}.net
+over=${blatDir}/over/${chrom}.over
+
+mkdir -p ${blatDir}/{over,net}
+/cluster/bin/x86_64/chainNet $chain $sizesHGOld $sizesHG18 $net /dev/null
+/cluster/bin/x86_64/netChainSubset $net $chain $over
+'EOF'
+    chmod +x netOver.sh
+    mkdir netRun
+
+    cd netRun/
+
+    find /san/sanVol1/scratch/hg16/blat.hg18.2006-02-24/chain -name "*.chain" \
+     | awk '{print "/san/sanVol1/scratch/fan/netOver.sh " $1 " /cluster/data/hg16/chrom.sizes"}' >> spec
+    find /san/sanVol1/scratch/hg17/blat.hg18.2006-02-24/chain -name "*.chain" \
+     | awk '{print "/san/sanVol1/scratch/fan/netOver.sh " $1 " /cluster/data/hg17/chrom.sizes"}' >> spec
+    para create spec
+    para push
+    para time
+# Completed: 88 of 88 jobs
+# CPU time in finished jobs:        881s      14.68m     0.24h    0.01d  0.000 y
+# IO & Wait Time:                   284s       4.74m     0.08h    0.00d  0.000 y
+# Average job time:                  13s       0.22m     0.00h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:              33s       0.55m     0.01h    0.00d
+# Submission to last job:            73s       1.22m     0.02h    0.00d
+
+# seems much faster than mm7.
+
+    ########## FINISHING
+    ssh hgwdev
+
+    # HG16
+    cd /san/sanvol1/scratch/hg16/blat.hg18.2006-02-24/over
+    cat * >> ../hg16ToHg18.over.chain
+    cd ../
+    rm -rf psl/ net/ chain/ chainRaw/ over/
+    cd ../
+    cp -rp blat.hg18.2006-02-24/ /cluster/data/hg16/bed
+
+    cd /cluster/data/hg16/bed
+    ln -s blat.hg18.2006-02-24 blat.hg18
+    ln -s `pwd`/blat.hg18/hg16ToHg18.over.chain liftOver/hg16ToHg18.over.chain
+    ln -s `pwd`/liftOver/hg16ToHg18.over.chain /gbdb/hg16/liftOver/hg16ToHg18.over.chain
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg16/liftOver
+    cd /usr/local/apache/htdocs/goldenPath/hg16/liftOver
+    cp /gbdb/hg16/liftOver/hg16ToHg18.over.chain .
+    gzip hg16ToHg18.over.chain
+    hgAddLiftOverChain hg16 hg18 /gbdb/hg16/liftOver/hg16ToHg18.over.chain
+
+    # HG17
+    cd /san/sanvol1/scratch/hg17/blat.hg18.2006-02-24/over
+    cat * >> ../hg17ToHg18.over.chain
+    cd ../
+    rm -rf psl/ net/ chain/ chainRaw/ over/
+    cd ../
+    cp -r blat.hg18.2006-02-24/ /cluster/data/hg17/bed
+    cd /cluster/data/hg17/bed
+    ln -s blat.hg18.2006-02-24 blat.hg18
+    ln -s `pwd`/blat.hg18/hg17ToHg18.over.chain liftOver/hg17ToHg18.over.chain
+    ln -s `pwd`/liftOver/hg17ToHg18.over.chain /gbdb/hg17/liftOver/hg17ToHg18.over.chain
+    mkdir -p /usr/local/apache/htdocs/goldenPath/hg17/liftOver
+    cd /usr/local/apache/htdocs/goldenPath/hg17/liftOver
+    cp /gbdb/hg17/liftOver/hg17ToHg18.over.chain .
+    gzip hg17ToHg18.over.chain
+    hgAddLiftOverChain hg17 hg18 /gbdb/hg17/liftOver/hg17ToHg18.over.chain
+
+############################################################################
+
