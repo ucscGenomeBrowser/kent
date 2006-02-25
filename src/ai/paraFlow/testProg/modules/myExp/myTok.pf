@@ -2,7 +2,6 @@
 // numbers and punctuation, and converting to lower case.
 
 include stringTo
-include myTok
 
 class tokenizer
     {

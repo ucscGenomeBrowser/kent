@@ -31,9 +31,9 @@ class htmlTag
         {
 	string key = attName.upper();
 	if (attributes)
-	    val = attributes[key].dupe();
+	    val = attributes[key];
 	if (val == nil)
-	    val = usual.dupe();
+	    val = usual;
 	}
 
     flow requiredAttribute(string attName) into (string val)
@@ -41,7 +41,7 @@ class htmlTag
         {
 	string key = attName.upper();
 	if (attributes)
-	    val = attributes[key].dupe();
+	    val = attributes[key];
 	if (val == nil)
 	    punt("Missing required $attName attribute in $name");
 	}

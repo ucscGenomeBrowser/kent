@@ -2099,9 +2099,20 @@ static struct pfParse *parseInclude(struct pfCompile *pfc,
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNew(pptInclude, tok, parent, scope);
 
-tok = tok->next;	/* Have covered 'into' */
-pp->children = parseNameUse(pp, &tok, scope);
-pp->name = pp->children->name;	
+switch (parent->type)
+    {
+    case pptMainModule:
+    case pptModuleRef:
+    case pptModule:
+         break;
+    default:
+        errAt(tok, "include only allowed at highest level of a module, not inside of any functions, classes, loops, etc.");
+	break;
+    }
+tok = tok->next;	/* Have covered 'include' */
+pp->children = pfParseNew(pptNameUse, tok, pp, scope);
+pp->name = pp->children->name = tok->val.s;
+tok = tok->next;
 
 *pTokList = tok;
 return pp;

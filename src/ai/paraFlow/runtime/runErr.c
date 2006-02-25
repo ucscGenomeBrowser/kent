@@ -156,9 +156,12 @@ if (catcher)
     }
 else
     {
-    fprintf(stderr, "\n----------start stack dump---------\n");
-    stackDump(stderr);
-    fprintf(stderr, "-----------end stack dump----------\n");
+    if (_pf_activation_stack != NULL)
+	{
+	fprintf(stderr, "\n----------start stack dump---------\n");
+	stackDump(stderr);
+	fprintf(stderr, "-----------end stack dump----------\n");
+	}
     fprintf(stderr, "%s\n", punter.message->string);
     exit(-1);
     }

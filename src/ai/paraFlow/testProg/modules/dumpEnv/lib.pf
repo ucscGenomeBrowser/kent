@@ -3,6 +3,7 @@
 class lib
     {
     int version = 1;	// Library version number.  Should change very slowly.
+    int subversion = 1;
 
     to randomIx(int size) into int ix
     /* Return a random number in range 0 <= num < size */

@@ -103,6 +103,34 @@ for (tok = tokList; tok->type != pftEnd; tok = tok->next)
     }
 }
 
+static void linkInTypes(struct hash *types, struct pfScope *scope)
+/* Types hash is full of baseType.  Add these to scope. */
+{
+struct hashCookie it = hashFirst(types);
+struct hashEl *el;
+while ((el = hashNext(&it)) != NULL)
+    hashAdd(scope->types, el->name, el->val);
+}
+
+static void addIncludedClasses(struct pfCompile *pfc, struct pfToken *tokList, 
+	struct pfScope *scope)
+/* Add included classes to scope. */
+{
+struct pfToken *tok;
+for (tok = tokList; tok->type != pftEnd; tok = tok->next)
+    {
+    if (tok->type == pftInclude)
+	{
+	char *moduleName;
+	struct pfModule *module;
+	tok = tok->next;	
+	moduleName = tok->val.s; /* tokInto has already checked tok->type */
+	module = hashMustFindVal(pfc->moduleHash, moduleName);
+	linkInTypes(module->scope->types, scope);
+	}
+    }
+}
+
 struct pfParse *pfParseInto(struct pfCompile *pfc)
 /* Parse file.  Also parse .pfh files for any modules the main file goes into.
  * If the .pfh files don't exist then create them.  Returns parse tree
@@ -112,15 +140,26 @@ struct pfParse *program = pfParseNew(pptProgram, NULL, NULL, pfc->scope);
 struct pfModule *stringModule = hashMustFindVal(pfc->moduleHash, "<string>");
 struct pfModule *builtInModule = hashMustFindVal(pfc->moduleHash, "<builtIn>");
 struct pfScope *sysScope = pfc->scope;
-struct pfScope *userScope  = pfScopeNew(pfc, pfc->scope, 16, TRUE);
 struct pfModule *mod;
 
 /* Loop through assigning scopes and recording classes. */
 for (mod = pfc->moduleList; mod != NULL; mod = mod->next)
     {
-    struct pfScope *scope = (mod->name[0] == '<' ? sysScope : userScope);
+    struct pfScope *scope;
+    if (mod->name[0] == '<')
+        scope = sysScope;
+    else
+        scope = pfScopeNew(pfc, sysScope, 16, TRUE);
+    mod->scope = scope;
     addCompoundScopes(pfc, mod->tokList, scope);
     addClasses(pfc, mod->tokList, scope);
+    }
+
+/* If module includes other modules we have to import the classes
+ * it contains. */
+for (mod = pfc->moduleList; mod != NULL; mod = mod->next)
+    {
+    addIncludedClasses(pfc, mod->tokList, mod->scope);
     }
 
 /* Compile everything. */
@@ -128,7 +167,7 @@ for (mod = pfc->moduleList; mod != NULL; mod = mod->next)
     {
     struct pfParse *modPp;
     boolean isSys = (mod->name[0] == '<');
-    struct pfScope *scope = (isSys ? sysScope : userScope);
+    struct pfScope *scope = mod->scope;
     enum pfParseType type = pptMainModule;
     if (mod != pfc->moduleList)
 	type = (mod->isPfh ? pptModuleRef : pptModule);

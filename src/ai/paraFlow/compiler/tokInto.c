@@ -107,6 +107,8 @@ for (tok = module->tokList; tok != NULL; tok = tok->next)
 	struct pfToken *modTok = tok->next;
 	if (modTok->type != pftName)
 	   expectingGot("module name", modTok); 
+	if (sameString(modTok->val.s, modName))
+	    errAt(modTok, "A module can't include/import itself.");
 	if (!hashLookup(pfc->moduleHash, modTok->val.s))
 	    rTokInto(pfc, baseDir, modTok->val.s, TRUE);
 	}

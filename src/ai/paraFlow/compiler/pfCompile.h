@@ -28,6 +28,7 @@ struct pfModule
     struct pfToken *tokList;	/* All modules's tokens. */
     struct pfParse *pp;		/* Parse tree for module. */
     struct pfSource *source;	/* Source file associated with module. */
+    struct pfScope *scope;	/* Scope associated with module. */
     boolean isPfh;		/* True if it's just a .pfh rather than .pf */
     };
 

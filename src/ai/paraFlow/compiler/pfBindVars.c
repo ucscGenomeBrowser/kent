@@ -257,6 +257,33 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     addDeclaredVarsToScopes(pp);
 }
 
+static void linkInVars(struct hash *vars, struct pfScope *scope)
+/* Types hash is full of pfVar.  Add these to scope. */
+{
+struct hashCookie it = hashFirst(vars);
+struct hashEl *el;
+while ((el = hashNext(&it)) != NULL)
+    hashAdd(scope->vars, el->name, el->val);
+}
+
+static void addIncludedSymbols(struct pfCompile *pfc, struct pfParse *pp,
+	int level)
+/* Add symbols from included files. */
+{
+if (pp->type == pptInclude)
+    {
+    struct pfModule *module;
+    module = hashMustFindVal(pfc->moduleHash, pp->name);
+    linkInVars(module->scope->vars, pp->scope);
+    }
+level += 1;
+if (level <= 2)  /* Include at pptProgram->pptModule->pptInclude, no deeper */
+    {
+    for (pp = pp->children; pp != NULL; pp = pp->next)
+	addIncludedSymbols(pfc, pp, level);
+    }
+}
+
 static void checkVarsDefined(struct pfParse *pp)
 /* Attach variable name to pfVar in appropriate scope.
  * Complain and die if not found. */
@@ -298,5 +325,6 @@ void pfBindVars(struct pfCompile *pfc, struct pfParse *pp)
 {
 evalDeclarationTypes(pfc, pp);
 addDeclaredVarsToScopes(pp);
+addIncludedSymbols(pfc, pp, 0);
 checkVarsDefined(pp);
 }

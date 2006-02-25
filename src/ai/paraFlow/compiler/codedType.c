@@ -204,16 +204,19 @@ for (ref = pfc->scopeRefList; ref != NULL; ref = ref->next)
     for (hel = helList; hel != NULL; hel = hel->next)
         {
 	struct pfBaseType *base = hel->val;
-	AllocVar(cbt);
-	slAddHead(&cbtList, cbt);
-	cbt->id = base->id;
-	cbt->scope = scopeId;
-	cbt->name = base->name;
-	if (base->parent != NULL)
-	    cbt->parentId = base->parent->id;
-	cbt->needsCleanup = base->needsCleanup;
-	cbt->size = base->size;
-	cbt->base = base;
+	if (base->scope == scope)  /* Avoid included ones. */
+	    {
+	    AllocVar(cbt);
+	    slAddHead(&cbtList, cbt);
+	    cbt->id = base->id;
+	    cbt->scope = scopeId;
+	    cbt->name = base->name;
+	    if (base->parent != NULL)
+		cbt->parentId = base->parent->id;
+	    cbt->needsCleanup = base->needsCleanup;
+	    cbt->size = base->size;
+	    cbt->base = base;
+	    }
 	}
     hashElFreeList(&helList);
     }
@@ -254,11 +257,14 @@ for (ref = pfc->scopeRefList; ref != NULL; ref = ref->next)
 	struct pfBaseType *base = hel->val;
 	if (base->isClass)
 	    {
-	    fprintf(f, "  {%d, ", base->id);
-	    fprintf(f, "\"");
-	    rPrintTypedFields(f, compTypeHash, dy, base, FALSE);
-	    fprintf(f, "\"");
-	    fprintf(f, "},\n");
+	    if (base->scope == scope)
+		{
+		fprintf(f, "  {%d, ", base->id);
+		fprintf(f, "\"");
+		rPrintTypedFields(f, compTypeHash, dy, base, FALSE);
+		fprintf(f, "\"");
+		fprintf(f, "},\n");
+		}
 	    }
 	}
     hashElFreeList(&helList);
