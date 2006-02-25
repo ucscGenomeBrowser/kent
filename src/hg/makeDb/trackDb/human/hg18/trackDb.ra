@@ -507,7 +507,7 @@ otherDb hg18
 
 track monDom4PileUp
 shortLabel monDom4 Pile Ups
-longLabel Pile Ups of Opossum chains to Hg18 chr22
+longLabel Pile Ups of Opossum chains to Hg18
 group x
 priority 23.5
 visibility hide
