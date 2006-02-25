@@ -123,7 +123,7 @@ else if (base == pfc->doubleType)
     return "Double";
 else if (base == pfc->charType)
     return "Char";
-else if (base == pfc->strType || base == pfc->dyStrType)
+else if (base == pfc->stringType || base == pfc->dyStringType)
     return "String";
 else if (base == pfc->varType)
     return "Var";
@@ -256,7 +256,7 @@ static void codeMethodName(struct pfCompile *pfc, struct pfToken *tok,
 /* Find method in current class or one of it's parents, and print
  * call to it */
 {
-if (base == pfc->strType || base == pfc->dyStrType)
+if (base == pfc->stringType || base == pfc->dyStringType)
     {
     fprintf(f, "_pf_cm_string_%s", name);
     }
@@ -488,7 +488,7 @@ else
 	codeBaseType(pfc, f, elBase);
 	fprintf(f, "*)(_pf_collection->elements + _pf_offset));\n");
 	}
-    else if (base == pfc->strType || base == pfc->dyStrType)
+    else if (base == pfc->stringType || base == pfc->dyStringType)
 	{
 	char *ixName = "_pf_offset";
 	if (keyName != NULL)
@@ -539,11 +539,11 @@ if (base == pfc->arrayType)
     fprintf(f, "*)(_pf_collection->elements + _pf_offset)) = %s;\n",
     	elName->string);
     }
-else if (base == pfc->strType)
+else if (base == pfc->stringType)
     {
     internalErr();	/* Type check module should prevent this */
     }
-else if (base == pfc->dyStrType)
+else if (base == pfc->dyStringType)
     {
     fprintf(f, "_pf_collection->s[_pf_offset] = %s;\n", elName->string);
     }
@@ -581,8 +581,8 @@ static void endElInCollectionIteration(struct pfCompile *pfc, FILE *f,
 {
 struct pfBaseType *base = collectionPp->ty->base;
 fprintf(f, "}\n");
-if (base != pfc->arrayType && base != pfc->strType && 
-	base != pfc->dyStrType && base != pfc->indexRangeType)
+if (base != pfc->arrayType && base != pfc->stringType && 
+	base != pfc->dyStringType && base != pfc->indexRangeType)
     {
     fprintf(f, "_pf_ix.cleanup(&_pf_ix);\n");
     }
@@ -1091,7 +1091,7 @@ static void codeAccessToByteInString(struct pfCompile *pfc, FILE *f,
 	struct pfBaseType *base, int stack, int indexOffset)
 /* Print out code to a byte in string. */
 {
-codeParamAccess(pfc, f, pfc->strType, stack);
+codeParamAccess(pfc, f, pfc->stringType, stack);
 fprintf(f, "->s[");
 codeParamAccess(pfc, f, pfc->intType, stack+indexOffset);
 fprintf(f, "]");
@@ -1117,7 +1117,7 @@ if (colBase == pfc->arrayType)
     if (addRef) 
     	bumpStackRefCount(pfc, f, outType, stack);
     }
-else if (colBase == pfc->strType || colBase == pfc->dyStrType)
+else if (colBase == pfc->stringType || colBase == pfc->dyStringType)
     {
     int indexOffset = pushArrayIndexAndBoundsCheck(pfc, f, pp, stack);
     codeParamAccess(pfc, f, outType->base, stack);
@@ -1178,7 +1178,7 @@ if (colBase == pfc->arrayType)
     codeParamAccess(pfc, f, outType->base, stack);
     fprintf(f, ";\n");
     }
-else if (colBase == pfc->dyStrType)
+else if (colBase == pfc->dyStringType)
     {
     int indexOffset = pushArrayIndexAndBoundsCheck(pfc, f, pp, emptyStack);
     codeAccessToByteInString(pfc, f, outType->base, emptyStack, indexOffset);
@@ -1186,7 +1186,7 @@ else if (colBase == pfc->dyStrType)
     codeParamAccess(pfc, f, outType->base, stack);
     fprintf(f, ";\n");
     }
-else if (colBase == pfc->strType)
+else if (colBase == pfc->stringType)
     {
     internalErr();  /* Type checker prevents this. */
     }
@@ -1217,7 +1217,7 @@ static void codeDotAccess(struct pfCompile *pfc, FILE *f,
 struct pfParse *class = pp->children;
 struct pfParse *field = class->next;
 struct pfBaseType *base = class->ty->base;
-if (base == pfc->strType || base == pfc->dyStrType || base == pfc->arrayType)
+if (base == pfc->stringType || base == pfc->dyStringType || base == pfc->arrayType)
     fprintf(f, "(");
 else
     fprintf(f, "((struct %s *)", base->name);
@@ -1439,7 +1439,7 @@ if (base == pfc->arrayType // ||  base == pfc->listType || base == pfc->treeType
     if (base == pfc->bitType || base == pfc->byteType || base == pfc->shortType
 	|| base == pfc->intType || base == pfc->longType || base == pfc->floatType
 	|| base == pfc->doubleType || base == pfc->charType 
-	|| base == pfc->strType  || base == pfc->dyStrType
+	|| base == pfc->stringType  || base == pfc->dyStringType
 	|| base == pfc->varType)
 	{
 	fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d, ",
@@ -1693,7 +1693,7 @@ codeExpression(pfc, f, lval, stack, TRUE);
 codeExpression(pfc, f, rval, stack+1, TRUE);
 codeParamAccess(pfc, f, pp->ty->base, stack);
 fprintf(f, " = ");
-if (lval->ty->base == pfc->strType || lval->ty->base == pfc->dyStrType)
+if (lval->ty->base == pfc->stringType || lval->ty->base == pfc->dyStringType)
     {
     fprintf(f, " (_pf_strcmp(%s+%d) %s 0);\n", stackName, stack, op);
     }
@@ -2037,9 +2037,9 @@ switch (pp->type)
     case pptAssignment:
 	return codeAssignment(pfc, f, pp, stack, "=");
     case pptPlusEquals:
-	if (pp->ty->base == pfc->dyStrType)
+	if (pp->ty->base == pfc->dyStringType)
 	    return codeStringAppend(pfc, f, pp, stack);
-	else if (pp->ty->base == pfc->strType)
+	else if (pp->ty->base == pfc->stringType)
 	    internalErr();  /* Type checker should prevent this. */
 	else
 	    return codeAssignment(pfc, f, pp, stack, "+=");

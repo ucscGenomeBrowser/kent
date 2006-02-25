@@ -78,8 +78,8 @@ struct pfCompile
     //struct pfBaseType *unicharType;	/* Will implement 32 bit unicode here */
 
     /* Base types for the built-in types that do need dynamic memory */
-    struct pfBaseType *strType;	        /* A string.  See also unistring. */
-    struct pfBaseType *dyStrType;	/* A dynamic string (can write to it) */
+    struct pfBaseType *stringType;	        /* A string.  See also unistring. */
+    struct pfBaseType *dyStringType;	/* A dynamic string (can write to it) */
     //struct pfBaseType *unistringType;	/* Will implement 32 bit unicode here */
     struct pfBaseType *arrayType;	/* Arrays of another type. */
     struct pfBaseType *dirType;		/* Hash tables - arrays indexed by string */

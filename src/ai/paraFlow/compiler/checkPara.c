@@ -94,7 +94,7 @@ static void markParaTainted(struct pfCompile *pfc, struct hash *outputVars,
  * a local object or a string var, then mark that local variable
  * as tainted so we no longer allow writes to it. */
 {
-if (pp->ty->base->needsCleanup && pp->ty->base != pfc->strType)
+if (pp->ty->base->needsCleanup && pp->ty->base != pfc->stringType)
     {
     if (pp->type == pptVarInit)
         {
