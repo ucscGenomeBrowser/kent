@@ -1,20 +1,21 @@
 /* snpMultiple - eleventh step in dbSNP processing.
  * Run on hgwdev.
  * Read snp125.
- * Load unique names into hash.
- * Check count per name. 
- * Log count > 1. */
+ * Report coords for all SNPs that align more than once.
+ * Also report counts. */
 
 #include "common.h"
 
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMultiple.c,v 1.7 2006/02/24 21:15:31 heather Exp $";
+static char const rcsid[] = "$Id: snpMultiple.c,v 1.8 2006/02/25 00:27:51 heather Exp $";
 
 static char *snpDb = NULL;
-static struct hash *snpHash = NULL;
-static struct slName *nameList = NULL;
+
+static struct hash *coordHash = NULL;
+static struct hash *nameHash = NULL;
+
 FILE *outputFileHandle = NULL;
 FILE *logFileHandle = NULL;
 
@@ -37,65 +38,69 @@ errAbort(
 
 
 void readSnps()
-/* put all coords in hash */
-/* use hash to generate list of snp names with multiple hashes (store in nameList) */
+/* put all coords in coordHash */
+/* put names of SNPs that appear 2x or more in nameHash */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-struct hashEl *hel = NULL;
-struct slName *sel = NULL;
+struct hashEl *helCoord, *helName = NULL;
 struct coords *cel = NULL;
 
-snpHash = newHash(22);
-verbose(1, "getting name list and coords hash...\n");
+coordHash = newHash(22);
+nameHash = newHash(0);
+verbose(1, "creating hashes...\n");
 safef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from snp125");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     /* have we already seen this snp name? */
     /* if so, save it in nameList */
-    hel = hashLookup(snpHash, row[0]);
-    if (hel != NULL) 
+    helCoord = hashLookup(coordHash, row[0]);
+    if (helCoord != NULL) 
         {
-	sel = newSlName(row[0]);
-	slAddHead(&nameList, sel);
+	helName = hashLookup(nameHash, row[0]);
+	if (helName == NULL)
+	    {
+	    hashAdd(nameHash, cloneString(row[0]), NULL);
+	    }
 	}
     /* store all coords */
     AllocVar(cel);
     cel->chrom = cloneString(row[1]);
     cel->start = sqlUnsigned(row[2]);
     cel->end = sqlUnsigned(row[3]);
-    hashAdd(snpHash, cloneString(row[0]), cel);
+    hashAdd(coordHash, cloneString(row[0]), cel);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
 
-void getCount()
-/* loop through list of names with multiple matches */
-/* print all coords from snpHash to outputFileHandle */
+void writeResults()
+/* loop through nameHash */
+/* print all coords from coordHash to outputFileHandle */
 /* also print count per SNP to logFileHandle */
 {
-struct slName *namePtr = NULL;
-struct hashEl *hel = NULL;
+struct hashCookie cookie;
+struct hashEl *hel= NULL;
 struct coords *cel = NULL;
 int count = 0;
+char *name;
 
-verbose(1, "checking counts...\n");
-for (namePtr = nameList; namePtr != NULL; namePtr = namePtr->next)
+verbose(1, "writing results...\n");
+cookie = hashFirst(nameHash);
+while ((name = hashNextName(&cookie)) != NULL)
     {
     count = 0;
-    for (hel = hashLookup(snpHash, namePtr->name); hel != NULL; hel = hashLookupNext(hel))
+    for (hel = hashLookup(coordHash, name); hel != NULL; hel= hashLookupNext(hel))
         {
 	cel = (struct coords *)hel->val;
-	fprintf(outputFileHandle, "%s\t%s\t%d\t%d\n", 
-	        namePtr->name, cel->chrom, cel->start, cel->end);
+	fprintf(outputFileHandle, "%s\t%s\t%d\t%d\n", name, cel->chrom, cel->start, cel->end);
 	count++;
 	}
-    fprintf(logFileHandle, "%s\t%d\n", namePtr->name, count);
+    fprintf(logFileHandle, "%s\t%d\n", name, count);
     }
 }
 
@@ -111,11 +116,15 @@ if (argc != 2)
 
 snpDb = argv[1];
 hSetDb(snpDb);
+
 outputFileHandle = mustOpen("snpMultiple.tab", "w");
 logFileHandle = mustOpen("snpMultiple.log", "w");
+
 readSnps();
-getCount();
-// free hash
+writeResults();
+
+// free hashes
+
 carefulClose(&outputFileHandle);
 carefulClose(&logFileHandle);
 
