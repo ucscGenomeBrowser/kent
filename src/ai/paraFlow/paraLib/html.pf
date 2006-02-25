@@ -153,7 +153,7 @@ flow htmlCookieParse(string line) into (htmlCookie cookie)
 	part = part.trim();
 	int equals = part.find('=');
 	if (equals < 0) punt("missing equals in cookie $part");
-	string field = part.start(equals);
+	string field = part.first(equals);
 	string val = part.rest(equals+1);
 	if (!cookie) // first time through, alloc self and set name
 	    {
@@ -190,7 +190,7 @@ into (dir of string header, dir of htmlCookie cookies, int newPos)
 	    break;
 	// Check for trailing colon and then trim it.
 	if (!key.endsWith(':')) punt("Missing : in HTTP header line\n\t$line");
-	key = key.start(key.size-1);
+	key = key.first(key.size-1);
 	string val = line.rest(p).trim();
 	header[key] = val;
 	if (key == "Set-Cookie")
@@ -533,10 +533,11 @@ to htmlPageParse(string text, string name) into (htmlPage page)
 to httpCookiesToString(dir of htmlCookie cookies) into (string out)
 // Convert cookie directory into a string that we can send.
     {
-    out = "Cookie:";
+    dyString tmp = "Cookie:";
     for (cookie in cookies)
-	out += ' ' + cookie.name + '=' + cookie.value + ';';
-    out += '\r\n';
+	tmp += ' ' + cookie.name + '=' + cookie.value + ';';
+    tmp += '\r\n';
+    out = tmp;
     }
 
 to cgiVarsToString(dir of string vars) into (string out)
@@ -544,24 +545,25 @@ to cgiVarsToString(dir of string vars) into (string out)
     {
     if (vars)
 	{
-	out = "";
+	dyString tmp = "";
 	for (key:val in vars)
 	    {
-	    if (out.size == 0)
-		out.append('?');
+	    if (tmp.size == 0)
+		tmp.append('?');
 	    else
-		out.append('&');
-	    out += key;
-	    out += '=';
-	    out += val.cgiEncode();
+		tmp.append('&');
+	    tmp += key;
+	    tmp += '=';
+	    tmp += val.cgiEncode();
 	    }
+	out = tmp;
 	}
     }
 
 flow urlIsHttp(string url) into (bit b)
 // Return true if url starts with http://
     {
-    b = url.start(7).same('http://');
+    b = url.first(7).same('http://');
     }
 
 to expandRelativeUrl(string baseUrl, string relUrl) into (string fullUrl)
@@ -585,7 +587,7 @@ to expandRelativeUrl(string baseUrl, string relUrl) into (string fullUrl)
 	   slash = baseUrl.findLast('/');
 	   }
        if (slash >= 0)
-	   fullUrl = baseUrl.start(slash+1) + relUrl;
+	   fullUrl = baseUrl.first(slash+1) + relUrl;
        else
 	   fullUrl = baseUrl + '/' + relUrl;
        }
@@ -621,9 +623,9 @@ to httpGetUnforwarded(string url, dir of string vars=nil,
 into (string text)
 // Get http text from server, but don't deal with forwarding.
     {
-    url += cgiVarsToString(vars);
-    file f = httpConnect(url, 'GET');
-    string s = "";
+    string fullUrl = url + cgiVarsToString(vars);
+    file f = httpConnect(fullUrl, 'GET');
+    dyString s = "";
     if (cookies)
 	s += httpCookiesToString(cookies);
     s += '\r\n';
@@ -652,7 +654,7 @@ to httpPostUnforwarded(string url, dir of string vars,
 // Post vars and get http text from server, but don't deal with forwarding.
     {
     file f = httpConnect(url, 'POST');
-    string s = "";
+    dyString s = "";
     if (cookies)
 	s += httpCookiesToString(cookies);
     string cgiVars = cgiVarsToString(vars);
