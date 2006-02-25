@@ -100,6 +100,13 @@ for (tok = tokList; tok->type != pftEnd; tok = tok->next)
 	    pfc->interfaceType, sizeof(void *), TRUE);
 	base->isInterface = TRUE;
 	}
+    else if (tok->type == pftImport)
+        {
+	struct pfModule *module;
+	tok = tok->next;
+	module = hashMustFindVal(pfc->moduleHash, tok->val.s);
+	pfScopeAddModule(scope, module);
+	}
     }
 }
 

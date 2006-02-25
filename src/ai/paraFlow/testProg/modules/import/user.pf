@@ -1,0 +1,9 @@
+import animal;
+
+string s = animal.zebra;
+print(s);
+print(animal.cat);
+animal.stutter("hello");
+animal.zebra = "ZEEBRAH";
+print(animal.zebra);
+

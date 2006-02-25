@@ -16,7 +16,8 @@ struct pfScope
      struct pfScope *children;	/* Child scopes if any. */
      struct pfScope *parent;	/* Parent scope if any. */
      struct hash *types;	/* Types defined in this scope. */
-     struct hash *vars;		/* Variables defined in this scope (including functions) */
+     struct hash *vars;		/* Variables and functions defined in this scope */
+     struct hash *modules;	/* Imported modules (may be nil) */
      int id;			/* Unique ID for this scope. */
      boolean isModule;		/* True if it's a module scope. */
      boolean isLocal;		/* True local in function. */
@@ -36,8 +37,11 @@ struct pfVar
      bool paraTainted;			/* If true then no writing to var allowed. */
      };
 
+/* Forward declarations so compiler doesn't squawk */
 struct pfTokenizer;
 struct pfCompile;
+struct pfModule;	
+
 
 struct pfScope *pfScopeNew(struct pfCompile *pfc, 
 	struct pfScope *parent, int size, boolean isModule);
@@ -48,6 +52,9 @@ struct pfScope *pfScopeNew(struct pfCompile *pfc,
 void pfScopeDump(struct pfScope *scope, FILE *f);
 /* Write out line of info about scope. */
 
+void pfScopeAddModule(struct pfScope *scope, struct pfModule *module);
+/* Add module to scope. */
+
 struct pfBaseType *pfScopeAddType(struct pfScope *scope, char *name, 
 	boolean isCollection, struct pfBaseType *parentType, int size, 
 	boolean needsCleanup);
@@ -56,6 +63,9 @@ struct pfBaseType *pfScopeAddType(struct pfScope *scope, char *name,
 struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name, 
 	struct pfType *ty, struct pfParse *pp);
 /* Add variable to scope. */
+
+struct pfModule *pfScopeFindModule(struct pfScope *scope, char *name);
+/* Find module in scope or parent scope. */
 
 struct pfBaseType *pfScopeFindType(struct pfScope *scope, char *name);
 /* Find type associated with name in scope and it's parents. */

@@ -2556,6 +2556,7 @@ switch (pp->type)
         fprintf(f, "goto _pf_cleanup;\n");
         break;
     case pptInclude:
+    case pptImport:
         fprintf(f, "_pf_entry_%s(%s);\n", pp->name, stackName);
 	break;
     default:
@@ -2815,6 +2816,7 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     rPrintInterfaces(pfc, f, pp);
 }
 
+
 static boolean isInside(struct pfParse *outside, struct pfParse *inside)
 /* Return TRUE if inside is a child of outside. */
 {
@@ -3040,6 +3042,28 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     rAddCompileTimeActivationRecords(pp, pCtar);
 }
 
+static void printGlobalVarsInScope(struct pfCompile *pfc, FILE *f, 
+	struct pfScope *scope)
+/* Print all the global variables in scope. */
+{
+struct hashEl *hel = hel, *varList = hashElListHash(scope->vars);
+
+slSort(&varList, hashElCmp);
+for (hel = varList; hel != NULL; hel = hel->next)
+    {
+    struct pfVar *var = hel->val;
+    struct pfType *type = var->ty;
+    if (type->tyty == tytyVariable)
+        {
+	fprintf(f, "extern ");
+	codeBaseType(pfc, f, type->base);
+	fprintf(f, " ");
+	printVarName(pfc, f, var);
+	fprintf(f, ";\n");
+	}
+    }
+slFreeList(&varList);
+}
 
 void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *baseDir, 
 	char *mainName)
@@ -3080,16 +3104,23 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 	/* Print function prototypes and class definitions for all modules */
 	for (module = program->children; module != NULL; module = module->next)
 	    {
-	    fprintf(f, "/* Prototypes in ParaFlow module %s */\n\n", module->name);
+	    fprintf(f, "/* Prototypes in ParaFlow module %s */\n", module->name);
 	    if (module->name[0] != '<')
 		fprintf(f, "void _pf_entry_%s(%s *stack);\n", module->name, stackType);
 	    rPrintPrototypes(f, module, NULL);
 	    fprintf(f, "\n");
-	    fprintf(f, "/* Class definitions in ParaFlow module %s */\n\n", module->name);
+	    fprintf(f, "/* Class definitions in module %s */\n", module->name);
 	    rPrintClasses(pfc, f, module, toCode == module);
-	    fprintf(f, "/* Interface definitions in ParaFlow module %s */\n\n", module->name);
+	    fprintf(f, "/* Interface definitions in module %s */\n", module->name);
 	    rPrintInterfaces(pfc, f, module);
+	    if (module != toCode)
+		{
+		fprintf(f, "/* Global variables in module %s */\n", module->name);
+		printGlobalVarsInScope(pfc, f, module->scope);
+		}
+	    fprintf(f, "\n");
 	    }
+
 
 	for (module = program->children; module != NULL; module = module->next)
 	    {

@@ -1902,47 +1902,123 @@ if (type->next != NULL)
     subBase(type->next, oldBase, newBase);
 }
 
+
+static void swapOutModuleDot(struct pfCompile *pfc, struct pfParse *dotPp)
+/* Swap out module.something in current scope for just plain
+ * something in module's scope.  The parse tree look like so on input:
+ *     pptDot
+ *        pptModuleUse
+ *        <otherStuff>
+ *            <childrenOfOther>
+ * where *pPp points to pptModuleUse.
+ * We transform this to be just
+ *     <otherStuff>
+ *         <childrenOfOther> */
+{
+struct pfParse *modPp = dotPp->children;
+struct pfParse *otherPp = modPp->next;
+struct pfParse *dotNext = dotPp->next;
+
+/* Do some sanity checking. */
+if (modPp->type != pptModuleUse)
+    internalErrAt(dotPp->tok);
+if (otherPp == NULL)
+    internalErrAt(dotPp->tok);
+if (otherPp->next != NULL)
+    internalErrAt(dotPp->tok);
+
+*dotPp = *otherPp;
+dotPp->next = dotNext;
+}
+
 static void typeDot(struct pfCompile *pfc, struct pfParse *pp)
 /* Create type for dotted set of symbols. */
 {
 struct pfParse *classUse = pp->children;
-struct pfParse *fieldUse = classUse->next;
-struct pfType *type = classUse->ty;
-struct pfBaseType *genericBase = pfc->elTypeFullType->base;
-struct pfType *fieldType;
-struct pfType *elType = type->children; /* For collections */
-if (type->base == pfc->stringType)
+if (classUse->type == pptModuleUse)
     {
-    type = pfc->strFullType;
+    swapOutModuleDot(pfc, pp);
     }
-else if (type->base == pfc->dyStringType)
+else
     {
-    type = pfc->dyStrFullType;
+    struct pfParse *fieldUse = classUse->next;
+    struct pfType *type = classUse->ty;
+    struct pfBaseType *genericBase = pfc->elTypeFullType->base;
+    struct pfType *fieldType;
+    struct pfType *elType = type->children; /* For collections */
+    if (type->base == pfc->stringType)
+	{
+	type = pfc->strFullType;
+	}
+    else if (type->base == pfc->dyStringType)
+	{
+	type = pfc->dyStrFullType;
+	}
+    else if (type->base == pfc->arrayType)
+	{
+	type = pfc->arrayFullType;
+	}
+    else if (type->base == pfc->dirType)
+	{
+	type = pfc->dirFullType;
+	}
+    if (!type->base->isClass && !type->base->isInterface)
+	errAt(pp->tok, "dot after non-class variable");
+    fieldType = findField(type->base, fieldUse->name);
+    if (fieldType == NULL)
+	errAt(pp->tok, "No field %s in class %s", fieldUse->name, 
+		type->base->name);
+    if (elType != NULL && hasBaseEl(fieldType, genericBase))
+	{
+	fieldType = pfTypeClone(fieldType);
+	subBase(fieldType, genericBase, elType->base);
+	}
+    fieldUse->ty = fieldType;
+    type = fieldType;
+    pp->ty = CloneVar(type);
+    pp->ty->next = NULL;
     }
-else if (type->base == pfc->arrayType)
-    {
-    type = pfc->arrayFullType;
-    }
-else if (type->base == pfc->dirType)
-    {
-    type = pfc->dirFullType;
-    }
-if (!type->base->isClass && !type->base->isInterface)
-    errAt(pp->tok, "dot after non-class variable");
-fieldType = findField(type->base, fieldUse->name);
-if (fieldType == NULL)
-    errAt(pp->tok, "No field %s in class %s", fieldUse->name, 
-	    type->base->name);
-if (elType != NULL && hasBaseEl(fieldType, genericBase))
-    {
-    fieldType = pfTypeClone(fieldType);
-    subBase(fieldType, genericBase, elType->base);
-    }
-fieldUse->ty = fieldType;
-type = fieldType;
-pp->ty = CloneVar(type);
-pp->ty->next = NULL;
 }
+
+static void rSetVarScope(struct pfParse *pp, struct pfScope *scope)
+/* Set scope for the variable to module in construct like:
+ *    module.variable
+ *    module.variable[index]
+ *    module.variable()
+ */
+{
+// TODO - move this to pfBindVars
+pp->scope = scope;
+switch (pp->type)
+    {
+    case pptDot:
+    case pptIndex:
+    case pptCall:
+        rSetVarScope(pp->children, scope);
+	break;
+    case pptVarUse:
+        pp->scope = scope;
+	break;
+    }
+}
+
+static void swapInScopeFromModule(struct pfCompile *pfc, struct pfParse **pPp)
+/* Swap in module scope for this node, it's siblings, and their children. 
+ * Parse tree looks something like so, with pPp pointing to pptModuleUse.
+ *     pptDot
+ *        pptModuleUse
+ *        <otherStuff> */
+{
+		// TODO - figure out whether this belongs here or in pfType.
+		// I think it needs to go in pfBindVars.
+struct pfParse *modPp = *pPp;
+struct pfModule *module;
+if (modPp->parent->type != pptDot)
+    internalErrAt(modPp->tok);
+module = hashMustFindVal(pfc->moduleHash, modPp->name);
+rSetVarScope(modPp->next, module->scope);
+}
+
 
 static void markUsedVars(struct pfScope *scope, 
 	struct hash *hash, struct pfParse *pp)
@@ -2536,6 +2612,9 @@ switch (pp->type)
     case pptDot:
 	typeDot(pfc,pp);
         break;
+    case pptModuleUse:
+        swapInScopeFromModule(pfc, pPp);
+	break;
     case pptPolymorphic:
         pfParsePutChildrenInPlaceOfSelf(pPp);
 	break;

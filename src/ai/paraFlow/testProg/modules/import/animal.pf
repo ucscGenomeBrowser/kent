@@ -1,0 +1,9 @@
+string zebra = 'zebra';
+string monkey = 'monkey';
+string dog = 'dog';
+string cat = 'cat';
+
+to stutter(string s)
+    {
+    print("$s $s");
+    }

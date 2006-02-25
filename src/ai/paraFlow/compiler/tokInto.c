@@ -99,7 +99,7 @@ module = tokenizeFile(pfc->tkz, fileName, modName);
 module->isPfh = isPfh;
 hashAdd(pfc->moduleHash, modName, module);
 
-/* Look and see if there are any 'include' to follow. */
+/* Look and see if there are any 'include' or 'import' to follow. */
 for (tok = module->tokList; tok != NULL; tok = tok->next)
     {
     if (tok->type == pftInclude || tok->type == pftImport)

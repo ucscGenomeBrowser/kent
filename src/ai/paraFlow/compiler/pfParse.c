@@ -22,6 +22,8 @@ switch (type)
         return "pptScope";
     case pptInclude:
         return "pptInclude";
+    case pptImport:
+        return "pptImport";
     case pptModule:
         return "pptModule";
     case pptModuleRef:
@@ -70,6 +72,8 @@ switch (type)
 	return "pptSelfUse";
     case pptVarUse:
 	return "pptVarUse";
+    case pptModuleUse:
+	return "pptModuleUse";
     case pptConstUse:
 	return "pptConstUse";
     case pptPolymorphic:
@@ -2091,13 +2095,13 @@ static struct pfParse *parseReturn(struct pfParse *parent,
 return parseWordStatement(parent, pTokList, scope, pptReturn);
 }
 
-static struct pfParse *parseInclude(struct pfCompile *pfc, 
+static struct pfParse *parseIncludeOrImport(struct pfCompile *pfc, 
 	struct pfParse *parent, struct pfToken **pTokList, 
-	struct pfScope *scope)
-/* Parse into statement */
+	struct pfScope *scope, enum pfParseType ppt)
+/* Parse include or import statement (depending on ppt parameter) */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = pfParseNew(pptInclude, tok, parent, scope);
+struct pfParse *pp = pfParseNew(ppt, tok, parent, scope);
 
 switch (parent->type)
     {
@@ -2106,11 +2110,11 @@ switch (parent->type)
     case pptModule:
          break;
     default:
-        errAt(tok, "include only allowed at highest level of a module, not inside of any functions, classes, loops, etc.");
+        errAt(tok, "includes and imports only allowed at highest level of a module, not inside of any functions, classes, loops, etc.");
 	break;
     }
 tok = tok->next;	/* Have covered 'include' */
-pp->children = pfParseNew(pptNameUse, tok, pp, scope);
+pp->children = pfParseNew(pptSymName, tok, pp, scope);
 pp->name = pp->children->name = tok->val.s;
 tok = tok->next;
 
@@ -2130,7 +2134,10 @@ struct pfParse *statement;
 switch (tok->type)
     {
     case pftInclude:
-        statement = parseInclude(pfc, parent, &tok, scope);
+        statement = parseIncludeOrImport(pfc, parent, &tok, scope, pptInclude);
+	break;
+    case pftImport:
+        statement = parseIncludeOrImport(pfc, parent, &tok, scope, pptImport);
 	break;
     case ';':
 	statement = emptyStatement(parent, tok, scope);

@@ -232,7 +232,6 @@ else if (p->type == pptTypeToPt || p->type == pptTypeFlowPt)
     }
 else
     {
-    pfParseDump(p, 1, uglyOut);
     internalErr();
     }
 }

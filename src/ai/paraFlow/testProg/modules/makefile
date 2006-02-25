@@ -6,6 +6,8 @@ test:
 	paraFlow crossRef/a.pf > output/crossRef
 	diff expected/crossRef output/crossRef
 	paraFlow dumpEnv/dumpEnv.pf > /dev/null
+	paraFlow import/user.pf > output/import
+	diff expected/import output/import
 	paraFlow lib/testLib.pf > output/testLib
 	diff expected/testLib output/testLib
 	paraFlow myExp/myExp.pf myExp/testExp.in > output/myExp

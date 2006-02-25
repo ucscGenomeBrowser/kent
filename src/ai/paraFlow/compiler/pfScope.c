@@ -3,9 +3,9 @@
 
 #include "common.h"
 #include "hash.h"
-#include "pfScope.h"
 #include "pfType.h"
 #include "pfCompile.h"
+#include "pfScope.h"
 
 
 struct pfScope *pfScopeNew(struct pfCompile *pfc,
@@ -62,6 +62,30 @@ if (scope->vars->elCount > 0)
     }
 }
 
+void pfScopeAddModule(struct pfScope *scope, struct pfModule *module)
+/* Add module to scope. */
+{
+if (scope->modules == NULL)
+    scope->modules = hashNew(8);
+hashAdd(scope->modules, module->name, module);
+}
+
+struct pfModule *pfScopeFindModule(struct pfScope *scope, char *name)
+/* Find module in scope or parent scope. */
+{
+struct pfModule *module = NULL;
+while (scope != NULL)
+    {
+    if (scope->modules)
+        {
+	module = hashFindVal(scope->modules, name);
+	if (module)
+	    break;
+	}
+    scope = scope->parent;
+    }
+return module;
+}
 
 struct pfBaseType *pfScopeAddType(struct pfScope *scope, char *name, 
 	boolean isCollection, struct pfBaseType *parentType, int size, 

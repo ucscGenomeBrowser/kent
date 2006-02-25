@@ -168,12 +168,14 @@ switch (pp->type)
 	pfTypeOnTuple(pfc, pp);
 	break;
 	}
+#ifdef OLD
     case pptInclude:
         {
 	pp->ty = pfTypeNew(pfc->moduleType);
 	pp->ty->tyty = tytyModule;
 	break;
 	}
+#endif /* OLD */
     }
 }
 
@@ -294,7 +296,32 @@ switch (pp->type)
     {
     case pptDot:
         {
-	pp->children->next->type = pptFieldUse;
+	struct pfParse *leftOfDot = pp->children;
+	struct pfParse *rightOfDot = leftOfDot->next;
+	if (leftOfDot->type == pptNameUse)
+	    {
+	    char *name = leftOfDot->name;
+	    struct pfVar *var = pfScopeFindVar(leftOfDot->scope, name);
+	    if (var)
+		{
+		rightOfDot->type = pptFieldUse;
+		}
+	    else 
+	        {
+		struct pfModule *module = pfScopeFindModule(pp->scope, name);
+		// TODO - figure out whether this belongs here or in pfType.
+		// I guess it has to go here but hmmm....
+		if (module)
+		    {
+		    leftOfDot->type = pptModuleUse;
+		    rightOfDot->scope = module->scope;
+		    }
+		}
+	    }
+	else
+	    {
+	    rightOfDot->type = pptFieldUse;
+	    }
 	break;
 	}
     case pptNameUse:
