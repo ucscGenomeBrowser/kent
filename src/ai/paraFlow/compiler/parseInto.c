@@ -14,145 +14,6 @@
 #include "defFile.h"
 #include "parseInto.h"
 
-#ifdef OLD_BUT_KEEP_FOR_REFERENCE
-static void collectDots(struct dyString *dy, struct pfParse *pp)
-/* Make sure that pp is really a pptDots or a pptName. 
- * Output name plus any necessary dots into dy. */
-{
-if (pp->type == pptNameUse)
-    {
-    dyStringAppend(dy, pp->name);
-    return;
-    }
-else if (pp->type == pptDot)
-    {
-    for (pp = pp->children; pp != NULL; pp = pp->next)
-        {
-	switch (pp->type)
-	    {
-	    case pptNameUse:
-		dyStringAppend(dy, pp->name);
-		if (pp->next != NULL)
-		    dyStringAppend(dy, ".");
-		break;
-	    case pptRoot:
-	        dyStringAppend(dy, "/");
-		break;
-	    case pptParent:
-	        dyStringAppend(dy, "../");
-		break;
-	    case pptSys:
-	    case pptUser:
-	    case pptSysOrUser:
-	        break;
-	    }
-	}
-    }
-else
-    expectingGot("name", pp->tok);
-}
-#endif /* OLD_BUT_KEEP_FOR_REFERENCE */
-
-#ifdef OLD_BUT_KEEP_FOR_REFERENCE
-static struct pfParse *createAndParseDef(struct pfCompile *pfc, 
-	struct pfToken *tok, char *module, struct pfScope *scope)
-/* If .pfh file exists and is more recent than .pf then parse it.  
- * Otherwise parse .pf file and save .pfh for next time. */
-{
-/* Get tokenizer and save it's current state. */
-struct pfTokenizer *tkz = pfc->tkz;
-struct pfSource *oldSource = tkz->source;
-char *oldPos = tkz->pos;
-char *oldEndPos = tkz->endPos;
-struct pfSource *source;
-struct pfParse *mod;
-char pfName[PATH_LEN], pfhName[PATH_LEN];
-boolean needRemake = TRUE;
-char *modName;
-enum pfParseType modType;
-
-safef(pfName, sizeof(pfName), "%s%s.pf", pfc->baseDir, module);
-safef(pfhName, sizeof(pfhName), "%s%s.pfh", pfc->baseDir, module);
-if (!fileExists(pfName))
-    errAt(tok, "%s doesn't exist", pfName);
-if (fileExists(pfhName))
-    {
-    unsigned long pfTime = fileModTime(pfName);
-    unsigned long pfhTime = fileModTime(pfhName);
-    needRemake = (pfTime >= pfhTime);
-    }
-
-if (needRemake)
-    {
-    modName = pfName;
-    modType = pptModule;
-    }
-else
-    {
-    modName = pfhName;
-    modType = pptModuleRef;
-    }
-    
-source = tkz->source = pfSourceOnFile(modName);
-tkz->pos = source->contents;
-tkz->endPos = tkz->pos + source->contentSize;
-mod = pfParseSource(pfc, source, NULL, scope, modType);
-
-if (needRemake)
-    pfMakeDefFile(pfc, mod, pfhName);
-else
-    mod->type = pptModuleRef;
-
-/* Restore tokenizer state. */
-tkz->source = oldSource;
-tkz->pos = oldPos;
-tkz->endPos = oldEndPos;
-return mod;
-}
-#endif /* OLD_BUT_KEEP_FOR_REFERENCE */
-
-#ifdef OLD
-static void expandInclude(struct pfParse *program, 
-	struct pfCompile *pfc, struct pfParse *pp, struct pfScope *scope)
-/* Go through program walking into modules. */
-{
-if (pp->type == pptInclude)
-    {
-    struct dyString *dy = dyStringNew(0);
-    struct hashEl *hel;
-    char *module = NULL;
-    collectDots(dy, pp->children);
-
-    hel = hashLookup(pfc->moduleHash, dy->string);
-    if (hel != NULL)
-        module = hel->name;
-
-    if (module == NULL)
-        {
-	struct pfParse *mod = createAndParseDef(pfc, 
-		pp->children->tok, dy->string, scope);
-	mod->parent = program;
-	module = hashStoreName(pfc->moduleHash, dy->string);
-	expandInclude(program, pfc, mod, scope);
-	slAddHead(&program->children, mod);
-	}
-    pp->name = module;
-    dyStringFree(&dy);
-    }
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    expandInclude(program, pfc, pp, scope);
-}
-
-void pfParseTypeSub(struct pfParse *pp, enum pfParseType oldType,
-        enum pfParseType newType)
-/* Convert type of pp and any children that are of oldType to newType */
-{
-if (pp->type == oldType)
-    pp->type = newType;
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    pfParseTypeSub(pp, oldType, newType);
-}
-#endif /* OLD */
 
 static struct pfType *findTypeInModule(struct pfParse *module, char *typeName)
 /* Return base type in module or die. */
@@ -172,7 +33,8 @@ static void attachStringsAndThings(struct pfCompile *pfc,
 pfBindVars(pfc, stringModule);
 pfTypeCheck(pfc, &stringModule);
 pfc->elTypeFullType = findTypeInModule(stringModule, "_pf_elType");
-pfc->stringFullType = findTypeInModule(stringModule, "_pf_string");
+pfc->strFullType = findTypeInModule(stringModule, "_pf_string");
+pfc->dyStrFullType = findTypeInModule(stringModule, "_pf_dyString");
 pfc->arrayFullType = findTypeInModule(stringModule, "_pf_array");
 pfc->arrayType->methods = pfc->arrayFullType->base->methods;
 pfc->dirFullType = findTypeInModule(stringModule, "_pf_dir");

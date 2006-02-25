@@ -88,13 +88,13 @@ switch (pp->type)
 return FALSE;
 }
 
-static void markParaTainted(struct hash *outputVars,
+static void markParaTainted(struct pfCompile *pfc, struct hash *outputVars,
 	struct pfScope *localScope, struct pfParse *pp)
 /* If we're storing a non-local object or string inside a
  * a local object or a string var, then mark that local variable
  * as tainted so we no longer allow writes to it. */
 {
-if (pp->ty->base->needsCleanup)
+if (pp->ty->base->needsCleanup && pp->ty->base != pfc->strType)
     {
     if (pp->type == pptVarInit)
         {
@@ -126,8 +126,9 @@ if (pp->ty->base->needsCleanup)
     }
 }
 
-static void checkReadOnlyOutsideLocals(struct hash *outputVars,
-	struct pfScope *localScope, struct pfParse *pp)
+static void checkReadOnlyOutsideLocals(struct pfCompile *pfc,
+	struct hash *outputVars, struct pfScope *localScope, 
+	struct pfParse *pp)
 /* Check that anything on left hand side of an assignment
  * is local or in the outputVars hash. */
 {
@@ -140,17 +141,17 @@ switch (pp->type)
     case pptDivEquals:
          {
 	 checkLocal(outputVars, localScope, pp->children);
-	 markParaTainted(outputVars, localScope, pp);
+	 markParaTainted(pfc, outputVars, localScope, pp);
 	 break;
 	 }
     case pptVarInit:
         {
-	markParaTainted(outputVars, localScope, pp);
+	markParaTainted(pfc, outputVars, localScope, pp);
 	break;
 	}
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    checkReadOnlyOutsideLocals(outputVars, localScope, pp);
+    checkReadOnlyOutsideLocals(pfc, outputVars, localScope, pp);
 }
 
 static void checkCalls(struct pfCompile *pfc, struct pfParse *pp)
@@ -186,7 +187,7 @@ static void checkParaFlowBody(struct pfCompile *pfc, struct hash *outputVars,
  */
 {
 checkCalls(pfc, body);
-checkReadOnlyOutsideLocals(outputVars, scope, body);
+checkReadOnlyOutsideLocals(pfc, outputVars, scope, body);
 }
 
 static void checkFlowDec(struct pfCompile *pfc, struct pfParse *paraDec)

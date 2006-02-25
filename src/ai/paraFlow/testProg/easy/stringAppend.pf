@@ -1,5 +1,5 @@
-array of string names = ("Jim", "Joe", "Jack");
-string s = "Oh.";
+array of dyString names = ("Jim", "Joe", "Jack");
+dyString s = "Oh.";
 print(s);
 s += " Hiya ";
 print(s);
@@ -12,7 +12,7 @@ names[2] += badNews();
 class keyVal
    {
    int key;
-   string val;
+   dyString val;
    }
 keyVal kv = (1, "one");
 names[0] += kv.val;
@@ -21,7 +21,7 @@ kv.val += " and a two";
 print(kv);
 print(names);
 
-string test = "test";
+dyString test = "test";
 print(test);
 test = test.upper();
 print(test);

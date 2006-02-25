@@ -15,6 +15,11 @@ struct _pf_string *_pf_string_dupe(char *s, int size);
 struct _pf_string *_pf_string_from_const(char *s);
 /* Wrap string around zero-terminated string. */
 
+void _pf_string_make_independent_copy(_pf_Stack *stack);
+/* Make it so that string on stack is an indepent copy of
+ * what is already on stack.  As an optimization this routine
+ * can do nothing if the refCount is exactly 1. */
+
 struct _pf_string *_pf_string_cat(_pf_Stack *stack, int count);
 /* Create new string that's a concatenation of the above strings. */
 

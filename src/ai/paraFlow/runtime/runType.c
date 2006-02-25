@@ -25,6 +25,7 @@ hashAddInt(hash, "float", pf_stFloat);
 hashAddInt(hash, "double", pf_stDouble);
 hashAddInt(hash, "char", pf_stChar);
 hashAddInt(hash, "string", pf_stString);
+hashAddInt(hash, "dyString", pf_stString);
 hashAddInt(hash, "array", pf_stArray);
 hashAddInt(hash, "list", pf_stList);
 hashAddInt(hash, "dir", pf_stDir);

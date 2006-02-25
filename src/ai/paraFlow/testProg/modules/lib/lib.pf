@@ -107,7 +107,7 @@ class lib
 	pos = -1;
 	}
 
-    to subChar(string s, char oldChar, char newChar)
+    to subChar(dyString s, char oldChar, char newChar)
     // Substitute newChar for oldChar throughout string s
         {
 	for (int i=0; i<s.size; i += 1)
@@ -115,7 +115,7 @@ class lib
 	        s[i] = newChar;
 	}
 
-    to subString(string s, string oldString, string newString) into string r
+    to subString(string s, string oldString, string newString) into dyString r
     // Create a string r that is a copy of s except with each
     // occurence of oldString replaced with newString.
         {

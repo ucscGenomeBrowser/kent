@@ -163,6 +163,19 @@ string->size = string->allocated = total;
 return string;
 }
 
+void _pf_string_make_independent_copy(_pf_Stack *stack)
+/* Make it so that string on stack is an indepent copy of
+ * what is already on stack.  As an optimization this routine
+ * can do nothing if the refCount is exactly 1. */
+{
+_pf_String string = stack[0].String;
+if (string != NULL && string->_pf_refCount != 1)
+    {
+    stack[0].String = _pf_string_new(string->s, string->size);
+    string->_pf_refCount -= 1;
+    }
+}
+
 void _pf_cm_string_upper(_pf_Stack *stack)
 /* to string.upper() into (string s) */
 {

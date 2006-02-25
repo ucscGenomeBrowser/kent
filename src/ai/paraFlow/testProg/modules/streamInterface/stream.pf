@@ -8,7 +8,7 @@ interface stream
 
 class stringStream
     {
-    string buf;
+    dyString buf;
 
     to read(int size) into string s
         {

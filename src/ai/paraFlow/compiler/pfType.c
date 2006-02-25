@@ -185,7 +185,8 @@ return pp->ty->base == pfc->varType || pp->ty->base->parent == pfc->numType;
 static boolean isNumOrString(struct pfCompile *pfc, struct pfParse *pp)
 /* Return TRUE if numerical or string type. */
 {
-return pp->ty->base == pfc->stringType || isNumerical(pfc, pp);
+return pp->ty->base == pfc->dyStrType || pp->ty->base == pfc->strType 
+	|| isNumerical(pfc, pp);
 }
 
 static void enforceNumber(struct pfCompile *pfc, struct pfParse *pp)
@@ -224,7 +225,7 @@ else if (base == pfc->floatType)
     return 6;
 else if (base == pfc->doubleType)
     return 7;
-else if (base == pfc->stringType)
+else if (base == pfc->strType || base == pfc->dyStrType)	// TODO - dyStr?
     return 8;
 else
     {
@@ -259,7 +260,8 @@ struct pfParse *pp = *pPp;
 struct pfBaseType *oldBase = pp->ty->base;
 int numTypeCount = 9;
 enum pfParseType castType = pptCastBitToBit;
-if (oldBase == pfc->stringType && newBase != pfc->stringType)
+if ((oldBase == pfc->strType || oldBase == pfc->dyStrType)  
+	&& (newBase != pfc->strType && newBase != pfc->dyStrType))
     expectingGot("string", pp->tok);
 castType += numTypeCount * baseTypeLogicalSize(pfc, oldBase, pp->tok);
 castType += baseTypeLogicalSize(pfc, newBase, pp->tok);
@@ -723,7 +725,7 @@ if (type->base == pfc->dirType)
      elType = pfTypeNew(pfc->keyValType);
      elType->children = key;
      key->next = val;
-     if (keyBase == pfc->stringType)
+     if (keyBase == pfc->strType)
          {
 	 struct pfParse *pp;
 	 /* Convert keys in key-val pairs from pptKeyType to
@@ -736,7 +738,7 @@ if (type->base == pfc->dirType)
 	     key = pp->children;
 	     val = key->children;
 	     key->type = pptConstString;
-	     key->ty = pfTypeNew(pfc->stringType);
+	     key->ty = pfTypeNew(pfc->strType);
 	     pp->ty = typeFromChildren(pfc, pp, pfc->keyValType);
 	     }
 	 }
@@ -1011,7 +1013,18 @@ if (pt->base != destBase)
 	pp->ty = CloneVar(destType);
 	ok = TRUE;
 	}
-    else if (destBase == pfc->charType && pt->base == pfc->stringType
+    else if (destBase == pfc->strType && pt->base == pfc->dyStrType)
+        {
+	insertCast(pptStringDupe, pfTypeNew(destBase), pPp);
+	ok = TRUE;
+	}
+    else if (destBase == pfc->dyStrType && pt->base == pfc->strType)
+        {
+	insertCast(pptStringDupe, pfTypeNew(destBase), pPp);
+	ok = TRUE;
+	}
+    else if (destBase == pfc->charType 
+    	&& (pt->base == pfc->strType || pt->base == pfc->dyStrType)
     	&& pp->type == pptConstString)
         {
 	/* We catch character initializations with string constants here. */
@@ -1029,12 +1042,13 @@ if (pt->base != destBase)
 	    }
 	ok = TRUE;
 	}
-    else if (destBase == pfc->stringType && pt->base == pfc->charType)
+    else if ((destBase == pfc->strType || destBase == pfc->dyStrType)
+    	&& pt->base == pfc->charType)
         {
 	insertCast(pptCastCharToString, CloneVar(destType), pPp);
 	ok = TRUE;
 	}
-    else if (destBase == pfc->bitType && pt->base == pfc->stringType)
+    else if (destBase == pfc->bitType && (pt->base == pfc->strType || pt->base == pfc->dyStrType))
 	{
 	struct pfType *tt = pfTypeNew(pfc->bitType);
 	insertCast(pptCastStringToBit, tt, pPp);
@@ -1049,7 +1063,8 @@ if (pt->base != destBase)
 	    insertCast(pptCastObjectToBit, tt, pPp);
 	ok = TRUE;
 	}
-    else if (numToString && destBase == pfc->stringType && pt->base->parent == pfc->numType)
+    else if (numToString && (destBase == pfc->strType || destBase == pfc->dyStrType)
+    	&& pt->base->parent == pfc->numType)
         {
 	castNumToString(pfc, pPp, destType);
 	ok = TRUE;
@@ -1083,7 +1098,8 @@ if (pt->base != destBase)
 	    ok = TRUE;
 	    }
 	}
-    else if (destBase->isCollection && destBase != pfc->stringType)
+    else if (destBase->isCollection && 
+    	(destBase != pfc->strType && destBase != pfc->dyStrType))
 	{
 	if (pt->tyty != tytyTuple)
 	    {
@@ -1291,7 +1307,7 @@ else if (collection->type != pptCall && collection->type != pptIndirectCall)
 	}
     else
 	{
-	if (collection->ty->base == pfc->stringType)
+	if (collection->ty->base == pfc->strType || collection->ty->base == pfc->dyStrType)
 	    ty = pfTypeNew(pfc->charType);
 	else if (collection->ty->base == pfc->indexRangeType)
 	    ty = pfTypeNew(pfc->longType);
@@ -1314,37 +1330,6 @@ if (keyVal != NULL)
     }
 }
 
-#ifdef OLD
-{
-struct pfParse *el = *pPp;
-struct pfParse *collection = el->parent->children;
-struct pfParse *type = pfParseNew(pptTypeName, el->tok, el, el->scope);
-struct pfParse *sym = pfParseNew(pptSymName, el->tok, el, el->scope);
-struct pfVar *var = findVar(el->scope, el->name, el->tok);
-struct pfType *ty;
-if (collection->type == pptCall || collection->type == pptIndirectCall)
-    {
-    ty = collection->ty;
-    if (ty->children != NULL)
-        errAt(collection->tok, "functions in foreach can only return a single value");
-    }
-else
-    {
-    if (collection->ty->base == pfc->stringType)
-	ty = pfTypeNew(pfc->charType);
-    else if (collection->ty->base == pfc->indexRangeType)
-	ty = pfTypeNew(pfc->longType);
-    else
-	ty = collection->ty->children;
-    }
-*(var->ty) = *ty;
-sym->name = el->name;
-type->ty = el->ty = var->ty;
-el->type = pptVarInit;
-el->children = type;
-type->next = sym;
-}
-#endif /* OLD */
 
 static void foreachIntoForeachCall(struct pfCompile *pfc, struct pfParse *pp)
 /* Rework parse tree from:
@@ -1424,8 +1409,15 @@ switch (pp->type)
     case pptVarInit:
     case pptVarUse:
     case pptDot:
-    case pptIndex:
         return pp->ty;
+    case pptIndex:
+	{
+	struct pfParse *collection = pp->children;
+	if (collection->ty->base == pfc->strType)
+	     errAt(collection->tok, 
+	    "Can't assign to a character in a string, use a dyString instead");
+        return pp->ty;
+	}
     case pptTuple:
 	{
 	struct pfParse *p;
@@ -1440,26 +1432,42 @@ switch (pp->type)
 }
 
 static void coerceAssign(struct pfCompile *pfc, struct pfParse *pp, 
-	boolean numOrStringOnly, boolean numOnly)
+	boolean numOnly)
 /* Make sure that left half of assigment is a valid l-value,
  * and that right half of assignment can be coerced into a
  * compatible type.  Set pp->type to l-value type. */
 {
 struct pfParse *lval = pp->children;
 struct pfType *destType = coerceLval(pfc, lval);
-if (numOrStringOnly)
+if (numOnly)
     {
-    boolean isNum = (destType->base->parent == pfc->numType);
-    boolean isString = (destType->base == pfc->stringType);
-    if (!isNum && !isString)
-	expectingGot("number or string to left of assignment", lval->tok);
-    if (numOnly)
-	{
-	if (!isNum)
-	    expectingGot("numerical variable to left of assignment", lval->tok);
-	}
+    if (destType->base->parent != pfc->numType)
+	expectingGot("numerical variable to left of assignment", lval->tok);
     }
 coerceOne(pfc, &lval->next, destType, FALSE);
+pp->ty = CloneVar(destType);
+}
+
+static void coercePlusEquals(struct pfCompile *pfc, struct pfParse *pp)
+/* Make sure that left hand of assignment is a valid l-value of
+ * num or dyString type.  Coerce right hand side to same type. Set
+ * pp->type to l-value type*/
+{
+struct pfParse *lval = pp->children;
+struct pfType *destType = coerceLval(pfc, lval);
+struct pfBaseType *destBase = destType->base;
+if (destBase == pfc->dyStrType)
+    {
+    coerceOne(pfc, &lval->next, pfTypeNew(pfc->dyStrType), TRUE);
+    }
+else if (destBase->parent == pfc->numType)
+    {
+    coerceOne(pfc, &lval->next, destType, FALSE);
+    }
+else
+    {
+    expectingGot("numerical or dyString variable to left of assignment", lval->tok);
+    }
 pp->ty = CloneVar(destType);
 }
 
@@ -1549,7 +1557,8 @@ struct pfType *collectionType = collectionPp->ty;
 struct pfBaseType *collectionBase = collectionType->base;
 struct pfBaseType *keyBase;
 
-if (collectionBase == pfc->arrayType || collectionBase == pfc->stringType)
+if (collectionBase == pfc->arrayType || collectionBase == pfc->strType
+	|| collectionBase == pfc->dyStrType)
     keyBase = pfc->intType;
 else
     {
@@ -1562,7 +1571,7 @@ if (indexPp->ty->base != keyBase)
     struct pfType *ty = pfTypeNew(keyBase);
     coerceOne(pfc, &collectionPp->next, ty, FALSE);
     }
-if (collectionBase == pfc->stringType)
+if (collectionBase == pfc->strType || collectionBase == pfc->dyStrType)
     pp->ty = pfTypeNew(pfc->charType);
 else
     pp->ty = CloneVar(collectionType->children);
@@ -1632,7 +1641,7 @@ if (!floatOk)
 if (!stringOk)
     {
     struct pfBaseType *base = pp->ty->base;
-    if (base == pfc->stringType)
+    if (base == pfc->strType || base == pfc->dyStrType)
 	 errAt(pp->tok, "Strings not allowed here");
     }
 }
@@ -1662,7 +1671,7 @@ static void coerceStringCat(struct pfCompile *pfc, struct pfParse *plusOp)
  *      pptVarUse string
  * though this will happen over two calls to this routine. */
 {
-if (plusOp->ty->base == pfc->stringType)
+if (plusOp->ty->base == pfc->strType || plusOp->ty->base == pfc->dyStrType)
     {
     struct pfParse *left = plusOp->children;
     struct pfParse *right = left->next;
@@ -1825,7 +1834,7 @@ static void typeConstant(struct pfCompile *pfc, struct pfParse *pp)
 {
 struct pfToken *tok = pp->tok;
 if (tok->type == pftString || tok->type == pftSubstitute)
-    pp->ty = pfTypeNew(pfc->stringType);
+    pp->ty = pfTypeNew(pfc->strType);
 else if (tok->type == pftInt)
     pp->ty = pfTypeNew(pfc->intType);
 else if (tok->type == pftLong)
@@ -1902,9 +1911,13 @@ struct pfType *type = classUse->ty;
 struct pfBaseType *genericBase = pfc->elTypeFullType->base;
 struct pfType *fieldType;
 struct pfType *elType = type->children; /* For collections */
-if (type->base == pfc->stringType)
+if (type->base == pfc->strType)
     {
-    type = pfc->stringFullType;
+    type = pfc->strFullType;
+    }
+else if (type->base == pfc->dyStrType)
+    {
+    type = pfc->dyStrFullType;
     }
 else if (type->base == pfc->arrayType)
     {
@@ -2231,7 +2244,7 @@ struct pfParse *el = collection->next;
 struct pfParse *body = el->next;
 struct pfBaseType *colBase = collection->ty->base;
 
-if (colBase == pfc->stringType)
+if (colBase == pfc->strType || colBase == pfc->dyStrType)
     errAt(collection->tok, "strings not allowed as para collections.");
 #ifdef OLD
 // checkElInCollection(pfc, el, collection, "para");
@@ -2252,7 +2265,7 @@ switch (pp->type)
         {
 	enforceNumber(pfc, body);
 	if (colBase == pfc->dirType)
-	    pp->ty = pfTypeNew(pfc->stringType);
+	    pp->ty = pfTypeNew(pfc->strType);
 	else
 	    pp->ty = pfTypeNew(pfc->longType);
 	break;
@@ -2368,8 +2381,8 @@ for (s = strchr(tok->val.s, '$'); s != NULL; s = strchr(s, '$') )
 	}
     varName = cloneStringZ(s, e-s);
     varPp = makeVarUse(varName, scope, tok, tuple);
-    if (varPp->var->ty->base != pfc->stringType)
-	coerceOne(pfc, &varPp, pfTypeNew(pfc->stringType), TRUE);
+    if (varPp->var->ty->base != pfc->strType)
+	coerceOne(pfc, &varPp, pfTypeNew(pfc->strType), TRUE);
     slAddHead(&varList, varPp);
 
     freez(&varName);
@@ -2489,16 +2502,16 @@ switch (pp->type)
 	pp->ty = pp->children->ty;
         break;
     case pptAssignment:
-        coerceAssign(pfc, pp, FALSE, FALSE);
+        coerceAssign(pfc, pp, FALSE);
 	flattenAssign(pfc, pPp);
 	break;
     case pptPlusEquals:
-        coerceAssign(pfc, pp, TRUE, FALSE);
+	coercePlusEquals(pfc, pp);
 	break;
     case pptMinusEquals:
     case pptMulEquals:
     case pptDivEquals:
-        coerceAssign(pfc, pp, TRUE, TRUE);
+        coerceAssign(pfc, pp, TRUE);
 	break;
     case pptVarInit:
         coerceVarInit(pfc, pp);

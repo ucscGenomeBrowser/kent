@@ -245,6 +245,14 @@ for (i=0; i<count; ++i)
 return array;
 }
 
+_pf_Array _pf_dyString_array_from_tuple(_pf_Stack *stack, int count, 
+	int typeId, int elTypeId)
+/* Just call pf_string_array_from_tuple since outside of type-checker
+ * strings and dyStrings are the same thing. */
+{
+return _pf_string_array_from_tuple(stack, count, typeId, elTypeId);
+}
+
 _pf_Array _pf_var_array_from_tuple(_pf_Stack *stack, int count, 
 	int typeId, int elTypeId)
 /* Create an array of string initialized from tuple on stack. */

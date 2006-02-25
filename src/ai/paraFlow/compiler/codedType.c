@@ -145,11 +145,13 @@ struct hash *hash = hashNew(0);
 struct codedBaseType *cbt;
 struct codedBaseType *intCbt = cbtFind(cbtList, 1, "int");
 struct codedBaseType *stringCbt = cbtFind(cbtList, 1, "string");
+struct codedBaseType *dyStringCbt = cbtFind(cbtList, 1, "dyString");
 
 /* Make up int and string types. The runtime depends on these
  * being first and second in the type array. */
 saveSimpleTypes(f, hash, dy, intCbt);
 saveSimpleTypes(f, hash, dy, stringCbt);
+saveSimpleTypes(f, hash, dy, dyStringCbt);
 
 rFillCompHash(f, hash, dy, program);
 return hash;

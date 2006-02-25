@@ -210,6 +210,8 @@ switch (type)
 	return "pptCatch";
     case pptSubstitute:
         return "pptSubstitute";
+    case pptStringDupe:
+        return "pptStringDupe";
 
     case pptCastBitToBit:
         return "pptCastBitToBit";
@@ -2033,8 +2035,8 @@ if (levelExp == NULL)
 skipRequiredCharType(')', &tok);
 
 /* Fake up parse nodes for the three catch parameters. */
-messagePp = fakeVarDec(message, pfc->stringType, catchTok, catchPp, catchScope);
-sourcePp = fakeVarDec(source, pfc->stringType, catchTok, catchPp, catchScope);
+messagePp = fakeVarDec(message, pfc->strType, catchTok, catchPp, catchScope);
+sourcePp = fakeVarDec(source, pfc->strType, catchTok, catchPp, catchScope);
 levelAssignment = pfParseNew(pptAssignment, catchTok, catchPp, catchScope);
 levelVarDec = fakeVarDec("catchLevel", pfc->intType, 
 	catchTok, levelAssignment, catchScope);

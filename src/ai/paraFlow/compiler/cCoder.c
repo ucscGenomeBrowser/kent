@@ -107,7 +107,7 @@ else if (base == pfc->doubleType)
     return "Double";
 else if (base == pfc->charType)
     return "Char";
-else if (base == pfc->stringType)
+else if (base == pfc->strType || base == pfc->dyStrType)
     return "String";
 else if (base == pfc->varType)
     return "Var";
@@ -243,7 +243,7 @@ static void codeMethodName(struct pfCompile *pfc, struct pfToken *tok,
 /* Find method in current class or one of it's parents, and print
  * call to it */
 {
-if (base == pfc->stringType)
+if (base == pfc->strType || base == pfc->dyStrType)
     {
     fprintf(f, "_pf_cm_string_%s", name);
     }
@@ -475,7 +475,7 @@ else
 	codeBaseType(pfc, f, elBase);
 	fprintf(f, "*)(_pf_collection->elements + _pf_offset));\n");
 	}
-    else if (base == pfc->stringType)
+    else if (base == pfc->strType || base == pfc->dyStrType)
 	{
 	char *ixName = "_pf_offset";
 	if (keyName != NULL)
@@ -526,7 +526,11 @@ if (base == pfc->arrayType)
     fprintf(f, "*)(_pf_collection->elements + _pf_offset)) = %s;\n",
     	elName->string);
     }
-else if (base == pfc->stringType)
+else if (base == pfc->strType)
+    {
+    internalErr();	/* Type check module should prevent this */
+    }
+else if (base == pfc->dyStrType)
     {
     fprintf(f, "_pf_collection->s[_pf_offset] = %s;\n", elName->string);
     }
@@ -564,8 +568,8 @@ static void endElInCollectionIteration(struct pfCompile *pfc, FILE *f,
 {
 struct pfBaseType *base = collectionPp->ty->base;
 fprintf(f, "}\n");
-if (base != pfc->arrayType && base != pfc->stringType && 
-	base != pfc->indexRangeType)
+if (base != pfc->arrayType && base != pfc->strType && 
+	base != pfc->dyStrType && base != pfc->indexRangeType)
     {
     fprintf(f, "_pf_ix.cleanup(&_pf_ix);\n");
     }
@@ -1074,7 +1078,7 @@ static void codeAccessToByteInString(struct pfCompile *pfc, FILE *f,
 	struct pfBaseType *base, int stack, int indexOffset)
 /* Print out code to a byte in string. */
 {
-codeParamAccess(pfc, f, pfc->stringType, stack);
+codeParamAccess(pfc, f, pfc->strType, stack);
 fprintf(f, "->s[");
 codeParamAccess(pfc, f, pfc->intType, stack+indexOffset);
 fprintf(f, "]");
@@ -1100,7 +1104,7 @@ if (colBase == pfc->arrayType)
     if (addRef) 
     	bumpStackRefCount(pfc, f, outType, stack);
     }
-else if (colBase == pfc->stringType)
+else if (colBase == pfc->strType || colBase == pfc->dyStrType)
     {
     int indexOffset = pushArrayIndexAndBoundsCheck(pfc, f, pp, stack);
     codeParamAccess(pfc, f, outType->base, stack);
@@ -1161,13 +1165,17 @@ if (colBase == pfc->arrayType)
     codeParamAccess(pfc, f, outType->base, stack);
     fprintf(f, ";\n");
     }
-else if (colBase == pfc->stringType)
+else if (colBase == pfc->dyStrType)
     {
     int indexOffset = pushArrayIndexAndBoundsCheck(pfc, f, pp, emptyStack);
     codeAccessToByteInString(pfc, f, outType->base, emptyStack, indexOffset);
     fprintf(f, " %s ", op);
     codeParamAccess(pfc, f, outType->base, stack);
     fprintf(f, ";\n");
+    }
+else if (colBase == pfc->strType)
+    {
+    internalErr();  /* Type checker prevents this. */
     }
 else if (colBase == pfc->dirType)
     {
@@ -1196,7 +1204,7 @@ static void codeDotAccess(struct pfCompile *pfc, FILE *f,
 struct pfParse *class = pp->children;
 struct pfParse *field = class->next;
 struct pfBaseType *base = class->ty->base;
-if (base == pfc->stringType || base == pfc->arrayType)
+if (base == pfc->strType || base == pfc->dyStrType || base == pfc->arrayType)
     fprintf(f, "(");
 else
     fprintf(f, "((struct %s *)", base->name);
@@ -1417,7 +1425,8 @@ if (base == pfc->arrayType // ||  base == pfc->listType || base == pfc->treeType
     struct pfBaseType *base = type->children->base;
     if (base == pfc->bitType || base == pfc->byteType || base == pfc->shortType
 	|| base == pfc->intType || base == pfc->longType || base == pfc->floatType
-	|| base == pfc->doubleType || base == pfc->charType || base == pfc->stringType 
+	|| base == pfc->doubleType || base == pfc->charType 
+	|| base == pfc->strType  || base == pfc->dyStrType
 	|| base == pfc->varType)
 	{
 	fprintf(f, "_pf_%s_%s_from_tuple(%s+%d, %d, ",
@@ -1671,7 +1680,7 @@ codeExpression(pfc, f, lval, stack, TRUE);
 codeExpression(pfc, f, rval, stack+1, TRUE);
 codeParamAccess(pfc, f, pp->ty->base, stack);
 fprintf(f, " = ");
-if (lval->ty->base == pfc->stringType)
+if (lval->ty->base == pfc->strType || lval->ty->base == pfc->dyStrType)
     {
     fprintf(f, " (_pf_strcmp(%s+%d) %s 0);\n", stackName, stack, op);
     }
@@ -2015,8 +2024,10 @@ switch (pp->type)
     case pptAssignment:
 	return codeAssignment(pfc, f, pp, stack, "=");
     case pptPlusEquals:
-	if (pp->ty->base == pfc->stringType)
+	if (pp->ty->base == pfc->dyStrType)
 	    return codeStringAppend(pfc, f, pp, stack);
+	else if (pp->ty->base == pfc->strType)
+	    internalErr();  /* Type checker should prevent this. */
 	else
 	    return codeAssignment(pfc, f, pp, stack, "+=");
     case pptMinusEquals:
@@ -2146,6 +2157,13 @@ switch (pp->type)
     case pptStringCat:
         {
 	return codeStringCat(pfc, f, pp, stack, addRef);
+	}
+    case pptStringDupe:
+        {
+	codeExpression(pfc, f, pp->children, stack, TRUE);
+	fprintf(f, "_pf_string_make_independent_copy(%s+%d);\n", 
+		stackName, stack);
+	return 1;
 	}
     case pptCastBitToBit:
     case pptCastBitToByte:

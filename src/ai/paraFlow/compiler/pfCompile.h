@@ -78,7 +78,8 @@ struct pfCompile
     //struct pfBaseType *unicharType;	/* Will implement 32 bit unicode here */
 
     /* Base types for the built-in types that do need dynamic memory */
-    struct pfBaseType *stringType;	/* A string.  See also unistring. */
+    struct pfBaseType *strType;	        /* A string.  See also unistring. */
+    struct pfBaseType *dyStrType;	/* A dynamic string (can write to it) */
     //struct pfBaseType *unistringType;	/* Will implement 32 bit unicode here */
     struct pfBaseType *arrayType;	/* Arrays of another type. */
     struct pfBaseType *dirType;		/* Hash tables - arrays indexed by string */
@@ -98,7 +99,8 @@ struct pfCompile
     struct pfType *doubleFullType;
 
     /* These next ones are initialized after compiling the <builtin> module */
-    struct pfType *stringFullType;
+    struct pfType *strFullType;
+    struct pfType *dyStrFullType;
     struct pfType *arrayFullType;	/* Array type info including .size etc. */
     struct pfType *dirFullType;		/* Dir full type including .keys() */
     struct pfType *elTypeFullType;	/* Generic element of collection type. */
