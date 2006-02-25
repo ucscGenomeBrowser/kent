@@ -1,6 +1,6 @@
-track chr22PileUp
-shortLabel hg18 chr22 Pile Ups
-longLabel Pile Ups of Opossum bits to Hg18 chr22
+track hg18PileUps
+shortLabel hg18 Pile Ups
+longLabel Pile Ups of Opossum chains to Hg18
 group x
 priority 23.5
 visibility hide
@@ -11,6 +11,6 @@ gridDefault OFF
 windowingFunction Maximum
 color 0,0,0
 altColor 128,128,128
-defaultViewLimits 10:60
+defaultViewLimits 0:500
 spanList 1
-type wig 0 60 
+type wig 0 6590
