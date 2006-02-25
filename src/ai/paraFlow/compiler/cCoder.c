@@ -57,14 +57,30 @@ fprintf(f, "_pf_String %sprogramName; /* Name of program (argv[0]) */\n",
 fprintf(f, "\n");
 }
 
+static char *moduleRuntimeType = "_pf_moduleRuntime";
+static char *moduleRuntimeList = "_pf_moduleList";
+static char *moduleRuntimeName = "_pf_lmodule";
+static char *moduleCleanupName = "_pf_moduleCleanup";
+
 static void printSysVarsAndPrototypes(FILE *f)
 /* Print stuff needed for main() */
 {
 fprintf(f, "struct _pf_activation *_pf_activation_stack;\n");
-fprintf(f, 
-"void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArgs, char *environ[]);\n");
+fprintf(f, "struct %s *%s;\n", moduleRuntimeType, moduleRuntimeList);
+fprintf(f, "void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_Array *retArgs, char *environ[]);\n");
 fprintf(f, "\n");
 }
+
+static char *stackName = "_pf_stack";
+static char *stackType = "_pf_Stack";
+
+static void printModuleCleanupPrototype(FILE *f)
+/* Print function prototype for module cleanup routine. */
+{
+fprintf(f, "static void %s(struct %s *module, %s *stack)",
+	moduleCleanupName, moduleRuntimeType, stackType);
+}
+
 
 static char *localTypeTableType = "_pf_local_type_info";
 static char *localTypeTableName = "_pf_lti";
@@ -136,9 +152,6 @@ if (s == NULL)
 else
     fprintf(f, "_pf_%s", s);
 }
-
-static char *stackName = "_pf_stack";
-static char *stackType = "_pf_Stack";
 
 static void codeStackAccess(FILE *f, int offset)
 /* Print out code to access stack at offset. */
@@ -2869,6 +2882,8 @@ if (printMain)
     fprintf(f, "if (firstTime)\n");
     fprintf(f, "{\n");
     fprintf(f, "firstTime = 0;\n");
+    fprintf(f, "%s.next = %s;\n", moduleRuntimeName, moduleRuntimeList);
+    fprintf(f, "%s = &%s;\n", moduleRuntimeList, moduleRuntimeName);
     ctarCodeStartupCall(ctarList, pfc, f);
     codeStaticAssignments(pfc, f, pp);
     }
@@ -2892,15 +2907,22 @@ for (p = pp->children; p != NULL; p = p->next)
 	    break;
 	}
     }
-/* Print out any needed cleanups. */
-codeCleanupVarsInHelList(pfc, f, helList);
-if (printMain)
-    codeStaticCleanups(pfc, f, pp);
 
 if (printMain)
     {
     fprintf(f, "}\n");
+    fprintf(f, "}\n\n");
+
+    printModuleCleanupPrototype(f);
+    fprintf(f,"\n{\n");
+    codeCleanupVarsInHelList(pfc, f, helList);
+    codeStaticCleanups(pfc, f, pp);
     fprintf(f, "}\n");
+    }
+else
+    {
+    /* Print out any needed cleanups. */
+    codeCleanupVarsInHelList(pfc, f, helList);
     }
 
 hashElFreeList(&helList);
@@ -2941,8 +2963,16 @@ fprintf(f,
 "_pf_init_args(argc, argv, &%sprogramName, &%sargs, environ);\n"
 "_pf_punt_init();\n"
 "_pf_entry_%s(stack);\n"
+"while (%s != 0)\n"
+"    {\n"
+"    %s->cleanup(%s, stack);\n"
+"    %s = %s->next;\n"
+"    }\n"
 "return 0;\n"
-"}\n", globalPrefix, globalPrefix, mainModule->name);
+"}\n", 
+globalPrefix, globalPrefix, mainModule->name,
+moduleRuntimeList, moduleRuntimeList, moduleRuntimeList,
+moduleRuntimeList, moduleRuntimeList);
 }
 
 static void printLocalTypeInfo(struct pfCompile *pfc, char *moduleName, FILE *f)
@@ -3040,6 +3070,12 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 		toCode->name);
 	fprintf(f, "static struct %s *%s = %s_%s;\n\n",
 		localTypeTableType, localTypeTableName, localTypeTableName, toCode->name);
+	printModuleCleanupPrototype(f);
+	fprintf(f, ";\n");
+	fprintf(f, "static struct %s %s = {0, \"%s\", %s};\n",
+		moduleRuntimeType, moduleRuntimeName, toCode->name,
+		moduleCleanupName);
+	fprintf(f, "\n");
 
 	/* Print function prototypes and class definitions for all modules */
 	for (module = program->children; module != NULL; module = module->next)

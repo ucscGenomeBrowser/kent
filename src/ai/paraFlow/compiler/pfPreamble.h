@@ -131,6 +131,15 @@ struct _pf_iterator _pf_list_iterator_init(_pf_List list);
 struct _pf_iterator _pf_tree_iterator_init(_pf_Tree tree);
 struct _pf_iterator _pf_dir_iterator_init(_pf_Dir dir);
 
+struct _pf_moduleRuntime
+/* Run time module information. */
+    {
+    struct _pf_moduleRuntime *next;	/* Next in list. */
+    char *name;				/* Module name. */
+    void (*cleanup)(struct _pf_moduleRuntime *module, _pf_Stack *stack);
+    };
+extern struct _pf_moduleRuntime *_pf_moduleList;
+
 void *_pf_need_mem(int size);
 /* Allocate memory, which is initialized to zero. */
 

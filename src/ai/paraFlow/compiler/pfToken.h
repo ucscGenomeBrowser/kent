@@ -54,6 +54,7 @@ enum pfTokType
     pftElse,
     pftExtends,
     pftIf,
+    pftImport,
     pftIn,
     pftInclude,
     pftInterface,

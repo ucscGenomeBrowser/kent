@@ -102,7 +102,7 @@ hashAdd(pfc->moduleHash, modName, module);
 /* Look and see if there are any 'include' to follow. */
 for (tok = module->tokList; tok != NULL; tok = tok->next)
     {
-    if (tok->type == pftInclude)
+    if (tok->type == pftInclude || tok->type == pftImport)
         {
 	struct pfToken *modTok = tok->next;
 	if (modTok->type != pftName)

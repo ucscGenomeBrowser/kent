@@ -134,8 +134,10 @@ switch (type)
     case pftExtends: 	     return "pftExtends";
     case pftFor: 	     return "pftFor";
     case pftFlow: 	     return "pftFlow";
-    case pftInclude:         return "pftInclude";
     case pftIf: 	     return "pftIf";
+    case pftImport:	     return "pftImport";
+    case pftIn:	             return "pftIn";
+    case pftInclude:         return "pftInclude";
     case pftInto: 	     return "pftInto";
     case pftNil:             return "pftNil";
     case pftOf: 	     return "pftOf";

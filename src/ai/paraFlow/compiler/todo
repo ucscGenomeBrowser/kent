@@ -35,6 +35,7 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Make strings immutable.  Implement a mutable dyString class.
   - Beefing up string class.
   - Adding htmlFetch library.
   - More file i/o.

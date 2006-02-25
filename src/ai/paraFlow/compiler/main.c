@@ -57,6 +57,7 @@ hashAddInt(hash, "class", pftClass);
 hashAddInt(hash, "else", pftElse);
 hashAddInt(hash, "extends", pftExtends);
 hashAddInt(hash, "if", pftIf);
+hashAddInt(hash, "import", pftImport);
 hashAddInt(hash, "in", pftIn);
 hashAddInt(hash, "include", pftInclude);
 hashAddInt(hash, "interface", pftInterface);
@@ -129,6 +130,7 @@ struct pfScope *scope = pfc->scope;
 /* Declare some basic types.  Types with names in parenthesis
  * are never declared by user directly */
 pfc->moduleType = pfScopeAddType(scope, "<module>", FALSE, NULL, 0, FALSE);
+pfc->moduleFullType = pfTypeNew(pfc->moduleType);
 pfc->varType = pfScopeAddType(scope, "var", FALSE, NULL, sizeof(_pf_Var), TRUE);
 pfc->nilType = pfScopeAddType(scope, "nil", FALSE, NULL, sizeof(_pf_String), FALSE);
 pfc->keyValType = pfScopeAddType(scope, "<keyVal>", FALSE, pfc->varType, 0, FALSE);
