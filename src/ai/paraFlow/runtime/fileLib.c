@@ -111,7 +111,7 @@ _pf_String string;
 FILE *f;
 _pf_nil_check(name);
 
-f = mustOpen(name->s, "r");
+f = openUrlOrFile(name->s, "r");
 string = readAll(f);
 carefulClose(&f);
 
