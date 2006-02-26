@@ -334,6 +334,53 @@ switch (st)
 _pf_array_append(array, v);
 }
 
+void _pf_cm_array_pop(_pf_Stack *stack)
+/* Pop one element from array. */
+{
+_pf_Array array = stack[0].Array;
+enum _pf_single_type st = array->elType->base->singleType;
+void *dest, *source;
+if (array->size <= 0)
+    errAbort("Popping from an empty array");
+array->size -= 1;
+switch (st)
+    {
+    case pf_stBit:
+	dest = &stack[0].Bit;
+	break;
+    case pf_stByte:
+	dest = &stack[0].Byte;
+	break;
+    case pf_stShort:
+	dest = &stack[0].Short;
+	break;
+    case pf_stInt:
+	dest = &stack[0].Int;
+	break;
+    case pf_stLong:
+	dest = &stack[0].Long;
+	break;
+    case pf_stFloat:
+	dest = &stack[0].Float;
+	break;
+    case pf_stDouble:
+	dest = &stack[0].Double;
+	break;
+    case pf_stChar:
+	dest = &stack[0].Char;
+	break;
+    case pf_stVar:
+        dest = &stack[0].Var;
+	break;
+    default:
+	dest = &stack[0].v;
+	break;
+    }
+source = array->elements + array->elSize * array->size;
+memcpy(dest, source, array->elSize);
+}
+
+
 static int qCmpBit(const void *va, const void *vb)
 /* Quick, no ParaFlow callback sort function for byte. */
 {

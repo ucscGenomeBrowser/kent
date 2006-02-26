@@ -5,8 +5,34 @@
 #include "runType.h"
 #include "print.h"
 
-void printEscapedString(FILE *f, char *s);
+static void printEscapedString(FILE *f, char *s)
 /* Print string in such a way that C can use it. */
+{
+char c;
+fputc('\'', f);
+while ((c = *s++) != 0)
+    {
+    switch (c)
+        {
+	case '\n':
+	    fputs("\\n", f);
+	    break;
+	case '\r':
+	    fputs("\\r", f);
+	    break;
+	case '\\':
+	    fputs("\\\\", f);
+	    break;
+	case '\'':
+	    fputs("\\'", f);
+	    break;
+	default:
+	    fputc(c, f);
+	    break;
+	}
+    }
+fputc('\'', f);
+}
 
 static int idLookup(struct hash *hash, void *obj)
 /* Look up object in hash.  Return 0 if can't find it.

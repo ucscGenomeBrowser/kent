@@ -254,6 +254,8 @@ int size = stack[2].Int;
 int end = start + size;
 if (start < 0) start = 0;
 if (end > string->size) end = string->size;
+if (size < 0)
+    errAbort("Negative size (%d) in string.middle", size);
 stack[0].String = _pf_string_new(string->s + start, end - start);
 }
 
