@@ -54,7 +54,7 @@ else
     set unit=$fullunit[$j]
     echo "$unit\n"
     set storeName=`echo $unit | awk -F/ '{print $NF}'`
-    if (-e $unit/du.$storeName.$date) then
+    if (-e $unit/du.$date) then
       # don't run du again. simply display current totals
       continue
     endif
