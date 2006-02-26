@@ -56,6 +56,13 @@ switch (pp->type)
 	struct pfParse *type = pp->children;
 	struct pfParse *name = type->next;
 	struct pfParse *init = name->next;
+	if (type->type == pptDot)
+	    {
+	    struct pfParse *modPp = type->children;
+	    if (modPp->type != pptModuleUse)
+	        internalErrAt(type->tok);
+	    type = modPp->next;
+	    }
 	pp->ty = CloneVar(type->ty);
 	pp->ty->init = init;
 	break;

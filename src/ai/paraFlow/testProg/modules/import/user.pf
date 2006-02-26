@@ -1,4 +1,10 @@
+import num
 import animal;
+
+num.numType x = ();
+print(x);
+x = ("twenty", 20);
+print(x);
 
 string s = animal.zebra;
 print(s);
@@ -6,4 +12,3 @@ print(animal.cat);
 animal.stutter("hello");
 animal.zebra = "ZEEBRAH";
 print(animal.zebra);
-

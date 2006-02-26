@@ -1,4 +1,10 @@
+class numType
+    {
+    string name;
+    int num;
+    };
+
 string zero = "zero";
-string one = "one":
+string one = "one";
 string two = "two";
 string three = "three";

@@ -1268,6 +1268,56 @@ else
     return pp;
 }
 
+
+#ifdef OLD
+static void subTypeForName(struct pfParse *pp)
+/* Substititute pptTypeName for pptName use where appropriate. */
+{
+if (pp->type == pptNameUse)
+    pp->type = pptTypeName;
+else if (pp->type == pptOf)
+    {
+    for (pp = pp->children; pp != NULL; pp = pp->next)
+	{
+	subTypeForName(pp);
+	}
+    }
+}
+#endif /* OLD */
+
+static void checkTypeDot(struct pfCompile *pfc, struct pfParse *pp)
+/* Make sure that the left side of dot is a module name
+ * and the right side is the name of a  class in that module. */
+{
+struct pfParse *left = pp->children;
+struct pfParse *right = left->next;
+if (left->type == pptNameUse && right->type == pptNameUse)
+    {
+    struct pfModule *module = hashFindVal(pfc->moduleHash, left->name);
+    if (module != NULL)
+        {
+	if (!pfScopeFindType(module->scope, right->name))
+	    {
+	    errAt(right->tok, "%s isn't a class in module %s",
+	    	right->name, module->name);
+	    }
+	else
+	    {
+	    left->type = pptModuleUse;
+	    right->type = pptTypeName;
+	    right->scope = module->scope;
+	    pp->ty = right->ty;
+	    }
+	}
+    else
+	errAt(left->tok, "%s isn't a module in type expression", left->name);
+    }
+else
+    {
+    errAt(pp->tok, "misplaced dot in type expression");
+    }
+}
+
 static void checkIsTypeExp(struct pfCompile *pfc, 
 	struct pfParse *pp, struct pfScope *scope)
 /* Make sure that subtree is all type expression. */
@@ -1277,6 +1327,7 @@ switch (pp->type)
     case pptNameUse:
         if (!pfScopeFindType(scope, pp->name))
 	     errAt(pp->tok, "%s is not a type name.", pp->name);
+	pp->type = pptTypeName;
 	break;
     case pptIndex:
         checkIsTypeExp(pfc, pp->children, scope);
@@ -1288,9 +1339,12 @@ switch (pp->type)
     case pptTypeFlowPt:
     case pptTypeToPt:
         break;
+    case pptDot:
+	checkTypeDot(pfc, pp);
+        break;
     default:
 	{
-	syntaxError(pp->tok, 2);
+	expectingGot("type expression", pp->tok);
 	break;
 	}
     }
@@ -1407,7 +1461,6 @@ struct pfParse *parseAssign(struct pfCompile *pfc, struct pfParse *parent,
 /* Parse '=' separated expression */
 {
 struct pfToken *tok = *pTokList;
-// struct pfParse *pp = parseIndexRange(pfc, parent, &tok, scope);
 struct pfParse *pp = parseVarDec(pfc, parent, &tok, scope);
 struct pfParse *assign = NULL;
 enum pfParseType type = pptNone;
@@ -1961,6 +2014,7 @@ static struct pfParse *fakeVarDec(char *string, struct pfBaseType *base,
 struct pfParse *varDec = pfParseNew(pptVarDec, tok, parent, scope);
 struct pfParse *type = fakeNameUse(base->name, tok, parent, scope);
 struct pfParse *name = fakeNameUse(string, tok, parent, scope);
+type->type = pptTypeName;
 varDec->children = type;
 type->next = name;
 return varDec;
@@ -1974,14 +2028,14 @@ static struct pfParse *parseTry(struct pfCompile *pfc, struct pfParse *parent,
  *         <try body>
  *         pptCatch
  *            pptVarDec 
- *               pptNameUse string
+ *               pptTypeName string
  *               pptNameUse message
  *            pptVarDec
- *               pptNameUse string
+ *               pptTypeName string
  *               pptNameUse source (or catchSource if not declared)
  *            pptAssignment
  *               pptVarDec
- *                  pptNameUse int
+ *                  pptTypeName int
  *                  pptNameUse catchLevel
  *                  pptConstUse [or pptConstZero if not declared)
  *         <catch body>
@@ -2223,20 +2277,6 @@ return program;
 }
 
 
-static void subTypeForName(struct pfParse *pp)
-/* Substititute pptTypeName for pptName use where appropriate. */
-{
-if (pp->type == pptNameUse)
-    pp->type = pptTypeName;
-else if (pp->type == pptOf)
-    {
-    for (pp = pp->children; pp != NULL; pp = pp->next)
-	{
-	subTypeForName(pp);
-	}
-    }
-}
-
 void varDecAndAssignToVarInit(struct pfParse *pp)
 /* Convert pptVarDec and when appropriate pptAssignment to pptVarInit. */
 {
@@ -2262,7 +2302,9 @@ if (pp->type == pptVarInit || pp->type == pptFormalParameter)
     {
     struct pfParse *type = pp->children;
     struct pfParse *name = type->next;
+#ifdef OLD
     subTypeForName(type);
+#endif /* OLD */
     name->type = pptSymName;
     pp->name = name->name;
     }

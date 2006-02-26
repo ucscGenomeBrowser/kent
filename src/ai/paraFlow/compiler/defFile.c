@@ -51,6 +51,8 @@ static void rPrintIncludes(FILE *f, struct pfParse *pp)
 {
 if (pp->type == pptInclude)
     fprintf(f, "include %s;\n", pp->children->name);
+else if (pp->type == pptImport)
+    fprintf(f, "import %s;\n", pp->children->name);
 for (pp = pp->children; pp != NULL; pp = pp->next)
     rPrintIncludes(f, pp);
 }
@@ -230,9 +232,17 @@ else if (p->type == pptTypeToPt || p->type == pptTypeFlowPt)
     {
     appendVarOf(dy, p);
     }
+else if (p->type == pptDot)
+    {
+    struct pfParse *left = p->children;
+    struct pfParse *right = left->next;
+    dyStringAppend(dy, left->name);
+    dyStringAppendC(dy, '.');
+    appendType(dy, right);
+    }
 else
     {
-    internalErr();
+    internalErrAt(p->tok);
     }
 }
 
@@ -273,12 +283,12 @@ void pfMakeDefFile(struct pfCompile *pfc, struct pfParse *module,
 {
 FILE *f = mustOpen(defFile, "w");
 fprintf(f, "// ParaFlow definition and type file  for %s module\n", module->name);
+fprintf(f, "   // Modules referenced\n");
+rPrintIncludes(f, module);
 fprintf(f, "   // Types used\n");
 fprintf(f, "{\n");
 printTypesUsed(f, module);
 fprintf(f, "}\n");
-fprintf(f, "   // Modules referenced\n");
-rPrintIncludes(f, module);
 fprintf(f, "   // Symbols defined\n");
 rPrintDefs(f, module, FALSE);
 carefulClose(&f);
