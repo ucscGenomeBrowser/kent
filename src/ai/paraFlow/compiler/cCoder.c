@@ -1200,6 +1200,23 @@ else if (colBase == pfc->dirType)
 	}
     else 
 	{
+	/* We're doing something like:
+	 *     wordCount['the'] += 1;
+	 * or more abstractly:
+	 *     collection[index] op expression;
+	 * The stack currently contains:
+	 *     expression collection index. */
+	if (!sameString(op, "="))
+	    {
+	    fprintf(f, "_pf_dir_lookup_number(%s+%d);\n", stackName, 
+	    	emptyStack);
+	    codeParamAccess(pfc, f, outType->base, stack);
+	    fprintf(f, " %s ", op);
+	    codeParamAccess(pfc, f, outType->base, emptyStack);
+	    fprintf(f, ";\n");
+	    offset = codeExpression(pfc, f, collection, emptyStack, FALSE);
+	    codeExpression(pfc, f, index, emptyStack+offset, FALSE);
+	    }
 	fprintf(f, "_pf_dir_add_number(%s+%d, %d);\n",  stackName, stack, expSize);
 	}
     }
