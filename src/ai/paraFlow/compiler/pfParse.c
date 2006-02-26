@@ -1269,22 +1269,6 @@ else
 }
 
 
-#ifdef OLD
-static void subTypeForName(struct pfParse *pp)
-/* Substititute pptTypeName for pptName use where appropriate. */
-{
-if (pp->type == pptNameUse)
-    pp->type = pptTypeName;
-else if (pp->type == pptOf)
-    {
-    for (pp = pp->children; pp != NULL; pp = pp->next)
-	{
-	subTypeForName(pp);
-	}
-    }
-}
-#endif /* OLD */
-
 static void checkTypeDot(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure that the left side of dot is a module name
  * and the right side is the name of a  class in that module. */
@@ -2302,9 +2286,6 @@ if (pp->type == pptVarInit || pp->type == pptFormalParameter)
     {
     struct pfParse *type = pp->children;
     struct pfParse *name = type->next;
-#ifdef OLD
-    subTypeForName(type);
-#endif /* OLD */
     name->type = pptSymName;
     pp->name = name->name;
     }

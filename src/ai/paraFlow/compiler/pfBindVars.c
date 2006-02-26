@@ -293,6 +293,28 @@ if (level <= 2)  /* Include at pptProgram->pptModule->pptInclude, no deeper */
     }
 }
 
+static void rSetVarScope(struct pfParse *pp, struct pfScope *scope)
+/* Set scope for the variable to module in construct like:
+ *    module.variable
+ *    module.variable[index]
+ *    module.variable()
+ */
+{
+// TODO - move this to pfBindVars
+pp->scope = scope;
+switch (pp->type)
+    {
+    case pptDot:
+    case pptIndex:
+    case pptCall:
+        rSetVarScope(pp->children, scope);
+	break;
+    case pptVarUse:
+        pp->scope = scope;
+	break;
+    }
+}
+
 static void checkVarsDefined(struct pfParse *pp)
 /* Attach variable name to pfVar in appropriate scope.
  * Complain and die if not found. */
@@ -316,12 +338,10 @@ switch (pp->type)
 	    else 
 	        {
 		struct pfModule *module = pfScopeFindModule(pp->scope, name);
-		// TODO - figure out whether this belongs here or in pfType.
-		// I guess it has to go here but hmmm....
 		if (module)
 		    {
 		    leftOfDot->type = pptModuleUse;
-		    rightOfDot->scope = module->scope;
+		    rSetVarScope(rightOfDot, module->scope);
 		    }
 		}
 	    }

@@ -1224,13 +1224,8 @@ else
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, ")");
 assert(field->next == NULL);
-#ifdef OLD
-while (field != NULL)
-#endif /* OLD */
-    {
-    fprintf(f, "->%s", field->name);
-    field = field->next;
-    }
+fprintf(f, "->%s", field->name);
+field = field->next;
 }
 	
 

@@ -225,7 +225,7 @@ else if (base == pfc->floatType)
     return 6;
 else if (base == pfc->doubleType)
     return 7;
-else if (base == pfc->stringType || base == pfc->dyStringType)	// TODO - dyStr?
+else if (base == pfc->stringType || base == pfc->dyStringType)	
     return 8;
 else
     {
@@ -1216,20 +1216,6 @@ static void coerceIf(struct pfCompile *pfc, struct pfParse *pp)
 coerceToBit(pfc, &pp->children);
 }
 
-#ifdef OLD
-static void checkElInCollection(struct pfCompile *pfc, struct pfParse *el, 
-	struct pfParse *collection, char *statementName)
-/* Make sure that collection is indeed a collection, and
- * that the type of el agrees with the types in the collection */
-{
-if (el->type != pptVarInit)
-    errAt(el->tok, "element must be just a name");
-if (!collection->ty->base->isCollection)
-    expectingGot("collection", collection->tok);
-}
-#endif /* OLD */
-
-
 static void turnSelfToVarOfType(struct pfParse *pp, struct pfType *ty)
 /* Turn parse node into pptVarInit type with two children (type and symbol).
  * The variable is actually expected to be in the symbol table already
@@ -1395,9 +1381,6 @@ if (source->type == pptCall || source->type == pptIndirectCall)
 else
     {
     struct pfParse *el = source->next;
-#ifdef OLD
-    // checkElInCollection(pfc, el, source, "foreach");
-#endif /* OLD */
     }
 }
 
@@ -1980,46 +1963,6 @@ else
     }
 }
 
-static void rSetVarScope(struct pfParse *pp, struct pfScope *scope)
-/* Set scope for the variable to module in construct like:
- *    module.variable
- *    module.variable[index]
- *    module.variable()
- */
-{
-// TODO - move this to pfBindVars
-pp->scope = scope;
-switch (pp->type)
-    {
-    case pptDot:
-    case pptIndex:
-    case pptCall:
-        rSetVarScope(pp->children, scope);
-	break;
-    case pptVarUse:
-        pp->scope = scope;
-	break;
-    }
-}
-
-static void swapInScopeFromModule(struct pfCompile *pfc, struct pfParse **pPp)
-/* Swap in module scope for this node, it's siblings, and their children. 
- * Parse tree looks something like so, with pPp pointing to pptModuleUse.
- *     pptDot
- *        pptModuleUse
- *        <otherStuff> */
-{
-		// TODO - figure out whether this belongs here or in pfType.
-		// I think it needs to go in pfBindVars.
-struct pfParse *modPp = *pPp;
-struct pfModule *module;
-if (modPp->parent->type != pptDot)
-    internalErrAt(modPp->tok);
-module = hashMustFindVal(pfc->moduleHash, modPp->name);
-rSetVarScope(modPp->next, module->scope);
-}
-
-
 static void markUsedVars(struct pfScope *scope, 
 	struct hash *hash, struct pfParse *pp)
 /* Mark any pptVarUse inside scope as 1's in hash */
@@ -2058,18 +2001,6 @@ static struct pfParse *makeSelfVarUse(struct pfBaseType *class,
 {
 return makeVarUse("self", scope, tok, parent);
 }
-
-#ifdef OLD
-static struct pfParse *makeSelfVarUse(struct pfBaseType *class, 
-	struct pfScope *scope, struct pfParse *parent, struct pfToken *tok)
-/* Create a parse node for class self variable inside a method. */
-{
-struct pfParse *pp = pfParseNew(pptVarUse,  tok, parent, scope);
-pp->ty = pfTypeNew(class);
-pp->var = findVar(scope, "self", tok);
-return pp;
-}
-#endif /* OLD */
 
 static void addDotSelf(struct pfParse **pPp, struct pfBaseType *class)
 /* Add self. in front of a method or member access, positioning the
@@ -2322,9 +2253,6 @@ struct pfBaseType *colBase = collection->ty->base;
 
 if (colBase == pfc->stringType || colBase == pfc->dyStringType)
     errAt(collection->tok, "strings not allowed as para collections.");
-#ifdef OLD
-// checkElInCollection(pfc, el, collection, "para");
-#endif /* OLD */
 switch (pp->type)
     {
     case pptParaAdd:
@@ -2612,9 +2540,6 @@ switch (pp->type)
     case pptDot:
 	typeDot(pfc,pp);
         break;
-    case pptModuleUse:
-        swapInScopeFromModule(pfc, pPp);
-	break;
     case pptPolymorphic:
         pfParsePutChildrenInPlaceOfSelf(pPp);
 	break;
@@ -2629,6 +2554,8 @@ switch (pp->type)
     case pptReturn:
         checkInFunction(pfc, pp);
 	break;
+    default:
+        break;
     }
 }
 

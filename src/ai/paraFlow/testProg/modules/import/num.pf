@@ -4,7 +4,24 @@ class numType
     int num;
     };
 
+class abc {int a,b,c;}
+class def {int d,e,f;}
+class ad {abc abc, def def;}
+
 string zero = "zero";
 string one = "one";
 string two = "two";
 string three = "three";
+
+to getNumType(int num, string name) into numType x
+    {
+    x = (name,num);
+    }
+
+to addNumType(numType a, b) into numType c
+    {
+    c = ();
+    c.name = a.name + " + "  + b.name;
+    c.num = a.num + b.num;
+    }
+    

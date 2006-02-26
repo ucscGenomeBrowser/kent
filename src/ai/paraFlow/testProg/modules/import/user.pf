@@ -12,3 +12,15 @@ print(animal.cat);
 animal.stutter("hello");
 animal.zebra = "ZEEBRAH";
 print(animal.zebra);
+
+num.ad ad = ((),());
+ad.abc.a = 1;
+ad.def.f = 6;
+print(ad);
+
+num.numType a = num.getNumType(11, "eleven");
+num.numType b = num.getNumType(7, "seven");
+print(a);
+print(b);
+num.numType c = num.addNumType(a,b);
+print(c);

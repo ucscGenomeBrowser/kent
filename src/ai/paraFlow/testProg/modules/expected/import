@@ -4,3 +4,7 @@ zebra
 cat
 hello hello
 ZEEBRAH
+((1,0,0),(0,0,6))
+("eleven",11)
+("seven",7)
+("eleven + seven",18)
