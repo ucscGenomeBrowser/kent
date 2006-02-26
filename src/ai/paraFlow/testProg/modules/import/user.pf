@@ -24,3 +24,13 @@ print(a);
 print(b);
 num.numType c = num.addNumType(a,b);
 print(c);
+
+to subNumType(num.numType a, b) into num.numType c
+    {
+    c = ();
+    c.num = a.num - b.num;
+    c.name = a.name + " - " + b.name;
+    }
+
+c = subNumType(a, b);
+print(c);
