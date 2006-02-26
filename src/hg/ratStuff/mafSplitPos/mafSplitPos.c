@@ -11,7 +11,7 @@
 #include "sqlNum.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mafSplitPos.c,v 1.1 2006/02/19 05:35:29 kate Exp $";
+static char const rcsid[] = "$Id: mafSplitPos.c,v 1.2 2006/02/26 16:32:46 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,18 +19,24 @@ void usage()
 errAbort(
   "mafSplitPos - Pick positions to split multiple alignment input files\n"
   "usage:\n"
-  "   mafSplitPos database size(Mbp)\n"
+  "   mafSplitPos database size(Mbp) out.bed\n"
   "options:\n"
-  "   -chrom=chrN  Restrict to one chromosome\n"
+  "   -chrom=chrN   Restrict to one chromosome\n"
+  "   -minGap=N     Split only on gaps >N bp\n"
+  "   -minRepeat=N  Split only on repeats >N bp\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"chrom", OPTION_STRING},
+   {"minGap", OPTION_INT},
+   {"minRepeat", OPTION_INT},
    {NULL, 0},
 };
 
 char *chrom = NULL;
+int minGap = 100;
+int minRepeat = 100;
 
 int nextGapPos(char *chrom, int desiredPos, struct sqlConnection *conn)
 {
@@ -42,12 +48,12 @@ int pos = -1;
 int start, end;
 
 safef(where, sizeof where, 
-    "chromStart >= %d \
+    "chromStart >= %d and chromEnd-chromStart > %d\
     order by chromStart limit 1",
-        desiredPos);
+        desiredPos, minGap);
 sr = hExtendedChromQuery(conn, "gap", chrom, where, FALSE,
         "chromStart, chromEnd", NULL);
-if (row = sqlNextRow(sr))
+if ((row = sqlNextRow(sr)) != NULL)
     {
     start = sqlSigned(row[0]);
     end = sqlSigned(row[1]);
@@ -70,8 +76,8 @@ safef(where, sizeof where,
     "genoStart >= %d and \
     milliDiv=0 and \
     repClass<>'Simple_repeat' and repClass<>'Low_complexity' and \
-    genoEnd-genoStart>100 order by genoStart limit 1",
-        desiredPos);
+    genoEnd-genoStart>%d order by genoStart limit 1",
+        desiredPos, minRepeat);
 sr = hExtendedChromQuery(conn, "rmsk", chrom, where, FALSE,
         "genoStart, genoEnd", NULL);
 if (row = sqlNextRow(sr))
@@ -85,7 +91,7 @@ return pos;
 }
 
 void chromSplits(char *chrom, int chromSize, int splitSize, 
-                        struct sqlConnection *conn)
+                        struct sqlConnection *conn, FILE *f)
 /* determine positions on a single chromosome */
 {
 int desiredPos = splitSize;
@@ -93,7 +99,6 @@ int splitPos = -1;
 int gapPos = -1;
 int prevPos = 0;
 
-verbose(1, "    %s\t%d\n", chrom, chromSize);
 while (desiredPos < chromSize)
     {
     splitPos = gapPos = nextGapPos(chrom, desiredPos, conn);
@@ -108,7 +113,7 @@ while (desiredPos < chromSize)
     if (splitPos < 0)
         /* no places to split on this chrom */
         return;
-    printf("%s\t%d\t%d\n", chrom, splitPos, splitPos+1), 
+    fprintf(f, "%s\t%d\t%d\n", chrom, splitPos, splitPos+1), 
     verbose(2, "      %s\t%d\n", splitPos == gapPos ? "gap" : "repeat", 
            (splitPos - prevPos)/1000000);
     prevPos = splitPos;
@@ -116,7 +121,7 @@ while (desiredPos < chromSize)
     }
 }
 
-void mafSplitPos(char *database, char *size)
+void mafSplitPos(char *database, char *size, char *outFile)
 /* Pick best positions for split close to size.
  * Use middle of a gap as preferred site.
  * If not gaps are in range, use recent repeats (0% diverged) */
@@ -127,10 +132,11 @@ struct hash *chromHash;
 struct hashCookie hc;
 struct hashEl *hel;
 struct sqlConnection *conn = sqlConnect(database);
+FILE *f;
 
-splitSize = atoi(size) * 1000000;
-verbose(1, "Finding split positions for %s at ~%d Mbp intervals\n", 
-                database, splitSize);
+verbose(1, "Finding split positions for %s at ~%s Mbp intervals\n", 
+                database, size);
+splitSize = sqlSigned(size) * 1000000;
 if (chrom == NULL)
     {
     chromHash = hChromSizeHash(database);
@@ -140,18 +146,17 @@ else
     chromHash = hashNew(6);
     hashAddInt(chromHash, chrom, hChromSize(chrom));
     }
-/*chrSlNameCmp(1,2);
-chrNameCmp(1,2);
-*/
 conn = sqlConnect(database);
+f = mustOpen(outFile, "w");
 hc = hashFirst(chromHash);
-while (hel = hashNext(&hc))
+while ((hel = hashNext(&hc)) != NULL)
     {
     chrom = hel->name;
     chromSize = (int)hel->val;
-    chromSplits(chrom, chromSize, splitSize, conn);
+    chromSplits(chrom, chromSize, splitSize, conn, f);
     }
 sqlDisconnect(&conn);
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
@@ -159,8 +164,10 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 chrom = optionVal("chrom", NULL);
-if (argc != 3)
+minGap = optionInt("minGap", minGap);
+minRepeat = optionInt("minRepeat", minRepeat);
+if (argc != 4)
     usage();
-mafSplitPos(argv[1], argv[2]);
+mafSplitPos(argv[1], argv[2], argv[3]);
 return 0;
 }

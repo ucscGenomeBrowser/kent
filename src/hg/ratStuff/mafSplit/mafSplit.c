@@ -8,7 +8,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafSplit.c,v 1.1 2006/02/26 16:29:03 kate Exp $";
+static char const rcsid[] = "$Id: mafSplit.c,v 1.2 2006/02/26 16:31:23 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -86,7 +86,6 @@ while (1)
     if (!chrom || differentString(chrom, chromFromSrc(mc->src)))
         /* new chrom */
         {
-        char *p;
         chrom = cloneString(chromFromSrc(mc->src));
         bedList = (struct bed *)hashFindVal(splitHash, chrom);
         if (bedList)
@@ -142,7 +141,6 @@ mafFileFree(&mf);
 void mafSplit(char *splitFile, char *outRoot, int mafCount, char *mafFiles[])
 /* Split MAF files at breaks in split file */
 {
-struct hashEl *hel;
 char dir[256], file[128];
 int i = 0;
 struct hash *bedHash = NULL;
