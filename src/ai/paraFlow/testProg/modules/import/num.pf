@@ -1,3 +1,5 @@
+import animal
+
 class numType
     {
     string name;
@@ -25,3 +27,7 @@ to addNumType(numType a, b) into numType c
     c.num = a.num + b.num;
     }
     
+to zebraNumType() into numType c
+    {
+    c = (animal.zebra, animal.zebra.size);
+    }

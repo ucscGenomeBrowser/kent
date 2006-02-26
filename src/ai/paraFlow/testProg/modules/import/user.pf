@@ -34,3 +34,5 @@ to subNumType(num.numType a, b) into num.numType c
 
 c = subNumType(a, b);
 print(c);
+print(num.zebraNumType());
+print(animal.abc);

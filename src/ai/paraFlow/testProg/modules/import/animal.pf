@@ -1,3 +1,5 @@
+import num
+
 string zebra = 'zebra';
 string monkey = 'monkey';
 string dog = 'dog';
@@ -7,3 +9,5 @@ to stutter(string s)
     {
     print("$s $s");
     }
+
+num.abc abc = (1,2,3);
