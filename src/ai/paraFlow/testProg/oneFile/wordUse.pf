@@ -50,3 +50,21 @@ for (fileName in args)
 
 for (use in wordDir)
     print(use);
+
+/* Now try it again without the structure, just using a dir of int */
+print("---- And again using library more heavily ----");
+dir of int counts = ();
+
+for (fileName in args)
+    {
+    string s = fileReadAll(fileName);
+    array of string words = s.tokens();
+    for (word in words)
+        counts[word] += 1;
+    }
+array of string keys = counts.keys();
+keys.sort();
+for (key in keys)
+    {
+    print("$key: " + counts[key]);
+    }
