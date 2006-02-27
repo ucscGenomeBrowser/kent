@@ -33,8 +33,12 @@ cases:
 <H2>Methods</H2>
 <P>
 Genotypes from HapMap Phase II release 19 were used with Haploview to
-infer phasing and calculate LD values for all SNP pairs within 250
-kb.</P>
+infer phasing and calculate LD values for all SNP pairs within 250 kb.
+As the children in the trios are not independent samples, Haploview
+uses only the parents from those populations.  The YRI and CEU tracks
+each use 60 unrelated individuals (parents from the trios), the CHB
+and JPT tracks use 45 unrelated individuals each.
+</P>
 <P>
 Haploview uses a two marker EM (ignoring missing data) to estimate the
 maximum-likelihood values of the four gamete frequencies, from which
@@ -104,10 +108,10 @@ approach for blocks with greater than 10 markers.</P>
  <LI>Population Selection<BR>
      The HapMap populations can be individually displayed or hidden.
      <UL>
-      <LI>Yoruban - Yoruba people in Ibadan, Nigeria (30 both-parent-and-adult-child trios)</LI>
-      <LI>CEPH - European samples from the Centre d'Etude du Polymorphisme Humain (30 trios)</LI>
-      <LI>Chinese - Han Chinese in Beijing (45 unrelated individuals)</LI>
-      <LI>Japanese - Japanese in Tokyo (45 unrelated individuals)</LI>
+      <LI>YRI: Yoruba people in Ibadan, Nigeria (30 parent-and-adult-child trios)</LI>
+      <LI>CEU: European samples from the Centre d'Etude du Polymorphisme Humain (CEPH) (30 trios)</LI>
+      <LI>CHB: Han Chinese in Beijing (45 unrelated individuals)</LI>
+      <LI>JPT: Japanese in Tokyo (45 unrelated individuals)</LI>
      </UL>
   </LI>
 </UL>

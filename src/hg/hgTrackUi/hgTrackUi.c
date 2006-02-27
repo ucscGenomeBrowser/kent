@@ -30,7 +30,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.256 2006/02/17 15:23:23 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.257 2006/02/27 05:03:53 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -393,27 +393,27 @@ if (startsWith("hapmapLd", tdb->tableName))
     if (hTableExists("hapmapLdYri"))
 	{
 	cgiMakeCheckBox("hapmapLdYri_inv", hapmapLdYri_inv); 
-	printf("&nbsp;Invert Yoruban display<BR>&nbsp;&nbsp;\n");
+	printf("&nbsp;Invert display for the YRI sample - Yoruba in Ibadan, Nigeria <BR>&nbsp;&nbsp;\n");
 	}
     if (hTableExists("hapmapLdCeu"))
 	{
 	cgiMakeCheckBox("hapmapLdCeu_inv", hapmapLdCeu_inv); 
-	printf("&nbsp;Invert CEPH display<BR>&nbsp;&nbsp;\n");
+	printf("&nbsp;Invert display for the CEU sample - CEPH (Utah residents with ancestry from northern and western Europe) <BR>&nbsp;&nbsp;\n");
 	}
     if (hTableExists("hapmapLdChb"))
 	{
 	cgiMakeCheckBox("hapmapLdChb_inv", hapmapLdChb_inv); 
-	printf("&nbsp;Invert Chinese display<BR>&nbsp;&nbsp;\n");
+	printf("&nbsp;Invert display for the CHB sample - Han Chinese in Beijing, China <BR>&nbsp;&nbsp;\n");
 	}
     if (hTableExists("hapmapLdJpt"))
 	{
 	cgiMakeCheckBox("hapmapLdJpt_inv", hapmapLdJpt_inv); 
-	printf("&nbsp;Invert Japanese display<BR>&nbsp;&nbsp;\n");
+	printf("&nbsp;Invert display for the JPT sample - Japanese in Tokyo, Japan <BR>&nbsp;&nbsp;\n");
 	}
     if (hTableExists("hapmapLdChbJpt"))
 	{
 	cgiMakeCheckBox("hapmapLdChbJpt_inv", hapmapLdChbJpt_inv); 
-	printf("&nbsp;Invert combined Chinese and Japanese display<BR>&nbsp;&nbsp;\n");
+	printf("&nbsp;Invert display for the combined JPT+CHB sample - Japanese in Tokyo, Japan and Han Chinese in Beijing, China <BR>&nbsp;&nbsp;\n");
 	}
     }
 printf("<BR><B>Colors:</B>\n");
