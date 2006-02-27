@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.72 2006/02/27 05:03:53 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.73 2006/02/27 07:18:19 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1004,7 +1004,6 @@ int yt = round((double)(scale*(d-a)/2)) + yOff;
 int yr = round((double)(scale*(d-b)/2)) + yOff;
 int yb = round((double)(scale*(c-b)/2)) + yOff;
 
-/* correct bottom coordinate if necessary */
 if (!ldInvert)
     {
     yl = yMax - yl + yOff;
@@ -1012,6 +1011,7 @@ if (!ldInvert)
     yr = yMax - yr + yOff;
     yb = yMax - yb + yOff;
     }
+/* correct bottom coordinate if necessary */
 if (yb<=0)
     yb=1;
 if (yt>yMax && trim)
@@ -1053,9 +1053,15 @@ if ((b+d)/2 <= winStart)        /* outside window on the left */
     return TRUE;
 if ((a+c)/2 >= winEnd)          /* outside window on the right */
     return TRUE;
+if ((c-b)/2 >= winEnd-winStart) /* bottom is outside window */
+    return TRUE;
 if (trim && d >= winEnd)        /* trim right edge */
     return TRUE;
-if ((c-b)/2 >= winEnd-winStart) /* bottom is outside window */
+if (trim && a <= winStart)      /* trim left edge */
+    return TRUE;
+if (!trim && b <= winStart-(winEnd-winStart))
+    return TRUE;
+if (!trim && c >= winEnd+(winEnd-winStart))
     return TRUE;
 return FALSE;
 }
@@ -1198,7 +1204,7 @@ else if (sameString(valueString,"dprime"))
 else
     errAbort("%s values are not recognized", valueString);
 
-safef(label, sizeof(label), "LD: %s; %s", pop, valueString);
+safef(label, sizeof(label), "LD %s %s", pop, valueString);
 
 toUpperN(label, sizeof(label));
 vgUnclip(vg);
@@ -1274,7 +1280,7 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
     a = dPtr->chromStart;
     b = dPtr->next->chromStart;
     i = 0;
-    if (trim && a <=winStart) /* return if this item is not to be drawn (when the left edge is trimed) */
+    if ((trim && a <=winStart)||(!trim && b <=winStart-(winEnd-winStart))) /* return if this item is not to be drawn */
 	continue;
     if (isLod) /* point to the right data values to be drawn.  'values' variable is reused */
 	values = dPtr->lod;
