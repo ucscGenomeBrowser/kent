@@ -6,35 +6,38 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: elTreeToList.c,v 1.2 2006/02/17 01:11:29 braney Exp $";
+static char const rcsid[] = "$Id: elTreeToList.c,v 1.3 2006/02/27 16:54:37 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "elTreeToList - prints an element tree\n"
+  "elTreeToList - converts an elTree to an element list\n"
   "usage:\n"
   "   elTreeToList elementTreeFile outFile\n"
   "arguments:\n"
   "   elementTreeFile      name of file containing element tree\n"
   "   outFile              name of file to write element lists\n"
+  "options:\n"
+  "   -leaf      just print out leaf species\n"
+  "   -noVers    don't print out the version strings\n"
   );
 }
 
 static struct optionSpec options[] = {
+    {"leaf", OPTION_BOOLEAN},
+    {"noVers", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-void printLeafElements(FILE *f, struct phyloTree *node)
-{
-if (node->numEdges)
-    {
-    int ii;
+boolean JustLeaf = FALSE;
+boolean NoVers = FALSE;
 
-    for(ii=0; ii < node->numEdges; ii++)
-	printLeafElements(f, node->edges[ii]);
-    }
-else
+void printElements(FILE *f, struct phyloTree *node)
+{
+int ii;
+
+if ((node->numEdges == 0) || !JustLeaf)
     {
     struct genome *g = node->priv;
     struct element *e;
@@ -43,10 +46,16 @@ else
 	{
 	if (e->isFlipped)
 	    fprintf(f, "-");
-	fprintf(f, "%s.%s ",e->name, e->version);
+	if (NoVers)
+	    fprintf(f, "%s ",e->name);
+	else
+	    fprintf(f, "%s.%s ",e->name, e->version);
 	}
     fprintf(f, "\n");
     }
+
+for(ii=0; ii < node->numEdges; ii++)
+    printElements(f, node->edges[ii]);
 }
 
 void elTreeToList(char *treeFile, char *outFileName)
@@ -55,7 +64,7 @@ struct phyloTree *node = eleReadTree(treeFile);
 FILE *f = mustOpen(outFileName, "w");
     //printElementTrees(node, 0);
 
-printLeafElements(f, node);
+printElements(f, node);
 }
 
 int main(int argc, char *argv[])
@@ -64,6 +73,11 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+
+if (optionExists("leaf"))
+    JustLeaf = TRUE;
+if (optionExists("noVers"))
+    NoVers = TRUE;
 
 //verboseSetLevel(2);
 elTreeToList(argv[1], argv[2]);
