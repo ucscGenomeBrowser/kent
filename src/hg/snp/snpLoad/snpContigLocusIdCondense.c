@@ -1,6 +1,7 @@
 /* snpContigLocusIdCondense 
  * Condense the ContigLocusIdFilter table to contain one row per snp_id,
    with unique, comma separated fxn_class values. */
+/* This assumes that the SNPs are in order!!! */
 #include "common.h"
 
 #include "hdb.h"
@@ -20,7 +21,7 @@ char *functionStrings[] = {
 
 boolean functionFound[ArraySize(functionStrings)];
 
-static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.4 2006/02/27 21:25:13 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.5 2006/02/27 23:05:16 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -63,9 +64,10 @@ struct sqlResult *sr;
 char **row;
 FILE *f;
 struct dyString *functionList = newDyString(255);
-char *currentSnp = NULL;
+char *currentSnpString = NULL;
 int len = 0;
 char *finalString = NULL;
+int currentSnpNum = 0;
 
 f = hgCreateTabFile(".", "ContigLocusIdCondense");
 
@@ -75,18 +77,24 @@ initArray();
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (currentSnp == NULL) 
-        currentSnp = cloneString(row[0]);
-    if (!sameString(row[0], currentSnp))
+    if (currentSnpString == NULL) 
         {
-	fprintf(f, "%s\t", currentSnp);
+        currentSnpString = cloneString(row[0]);
+	currentSnpNum = sqlUnsigned(row[0]);
+	}
+    if (!sameString(row[0], currentSnpString))
+        {
+	fprintf(f, "%s\t", currentSnpString);
 	printArray(f);
 	initArray();
-	currentSnp = cloneString(row[0]);
+	if (currentSnpNum > sqlUnsigned(row[0]))
+	    errAbort("snps out of order: %d before %s\n", currentSnpNum, row[0]);
+	currentSnpString = cloneString(row[0]);
+	currentSnpNum = sqlUnsigned(row[0]);
 	}
     functionFound[sqlUnsigned(row[1])] = TRUE;
     }
-fprintf(f, "%s\t", currentSnp);
+fprintf(f, "%s\t", currentSnpString);
 printArray(f);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
