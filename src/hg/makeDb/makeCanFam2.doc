@@ -582,6 +582,7 @@ if (-e /tmp/canFam2/$2/$2.cat) /bin/cp /tmp/canFam2/$2/$2.cat ./
 
 
 # AUTO UPDATE GENBANK MRNA RUN  (DONE 8/8/05 angie)
+    # 2/22/06: added refGene
     ssh hgwdev
     # Update genbank config and source in CVS:
     cd ~/kent/src/hg/makeDb/genbank
@@ -647,6 +648,23 @@ canFam2.downloadDir = canFam2
 #41719045 bases of 2384996543 (1.749%) in intersection
     # Clean up:
     rm -rf work/initial.canFam2
+
+    # 2/22/06: add native refseq
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    # genbank.conf: canFam2.refseq.mrna.native.load = yes
+    make etc-update
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -srcDb=refseq -type=mrna -orgCat=native -initial \
+      canFam2 &
+    tail -f var/build/logs/2006.02.22-21:03:48.canFam2.initalign.log
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice bin/gbDbLoadStep -verbose=1 -drop -initialLoad canFam2 &
+    tail -f var/dbload/hgwdev/logs/2006.02.22-21:19:53.dbload.log
+    featureBits canFam2 refGene
+#1222436 bases of 2384996543 (0.051%) in intersection
 
 
 # SWAP CHAINS FROM HG17, BUILD NETS ETC. (DONE 8/3/05 angie - REDONE 12/13/05 - REDONE 2/8/06)
@@ -2133,7 +2151,7 @@ SEQ2_LIMIT=300
 BASE=/cluster/data/canFam2/bed/blastzBosTau2.2006-01-17
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	 << happy emacs
 
     time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
@@ -2148,3 +2166,15 @@ TMPDIR=/scratch/tmp
 	> fb.canFam2.chainBosTau2Link 2>&1 &
     #	real    32m3.460s
     #	1376066425 bases of 2384996543 (57.697%) in intersection
+
+
+# SWAP CHAINS FROM RN4, BUILD NETS ETC. (DONE 2/25/06 angie)
+    mkdir /cluster/data/canFam2/bed/blastz.rn4.swap
+    cd /cluster/data/canFam2/bed/blastz.rn4.swap
+    doBlastzChainNet.pl -swap /cluster/data/rn4/bed/blastz.canFam2/DEF \
+      >& do.log
+    echo "check /cluster/data/canFam2/bed/blastz.rn4.swap/do.log" \
+    | mail -s "check do.log" $USER
+    ln -s blastz.rn4.swap /cluster/data/canFam2/bed/blastz.rn4
+
+
