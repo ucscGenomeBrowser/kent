@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.10 2006/02/26 20:06:10 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.11 2006/02/27 06:47:01 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -71,26 +71,6 @@ mapAln->id = id;
 return mapAln;
 }
 
-/* macro to swap to variables */
-#define swapVars(a, b, tmp) ((tmp) = (a), (a) = (b), (b) = (tmp))
-
-static void swapPsl(struct psl *psl)
-/* swap query and target in psl */
-{
-int i, itmp;
-unsigned utmp;
-char ctmp, *stmp; 
-if (psl->strand[1] == '\0')
-    psl->strand[1] = '+';  /* explict strand */
-swapVars(psl->strand[0], psl->strand[1], ctmp);
-swapVars(psl->qName, psl->tName, stmp);
-swapVars(psl->qSize, psl->tSize, utmp);
-swapVars(psl->qStart, psl->tStart, itmp);
-swapVars(psl->qEnd, psl->tEnd, itmp);
-for (i = 0; i < psl->blockCount; i++)
-    swapVars(psl->qStarts[i], psl->tStarts[i], utmp);
-}
-
 static struct mapAln *chainToPsl(struct chain *ch)
 /* convert a chain to a psl, ignoring match counts, etc */
 {
@@ -113,7 +93,7 @@ for (cBlk = ch->blockList, iBlk = 0; cBlk != NULL; cBlk = cBlk->next, iBlk++)
     }
 psl->blockCount = iBlk;
 if (swapMap)
-    swapPsl(psl);
+    pslSwap(psl);
 return mapAlnNew(psl, ch->id);
 }
 
@@ -148,7 +128,7 @@ struct hashEl *hel;
 while ((psl = pslNext(pslLf)) != NULL)
     {
     if (swapMap)
-        swapPsl(psl);
+        pslSwap(psl);
     hel = hashStore(mapAlns, psl->qName);
     slSafeAddHead((struct mapAln**)&hel->val, mapAlnNew(psl, id));
     id++;
