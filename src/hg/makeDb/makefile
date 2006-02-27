@@ -45,6 +45,7 @@ DIRS = \
 	hgLoadPsl \
 	hgLoadSeq \
 	hgLoadSample \
+	hgLoadSqlTab \
 	hgLoadWiggle \
 	hgMapMicroarray \
 	hgMedianMicroarray \
