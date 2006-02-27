@@ -46,19 +46,21 @@ set number=`echo $fullunit | awk -F" " '{print NF}'`
 if ($number == 0) then
   exit
 else
-  echo "sizes in megabytes:\n"
   set j=0
   while ($number - $j)
     # get them in order, most full unit first
     set j=`echo $j | awk '{print $1 + 1}'`
     set unit=$fullunit[$j]
-    echo "$unit\n"
     set storeName=`echo $unit | awk -F/ '{print $NF}'`
+    set machine=`df | grep export$unit | awk -F- '{print $1}'`
     if (-e $unit/du.$date) then
       # don't run du again. simply display current totals
+      echo "full du list at $unit/du.$date\n" 
       continue
     endif
-    set machine=`df | grep export$unit | awk -F- '{print $1}'`
+    echo "sizes in megabytes:\n"
+    echo "$unit\n"
+
     # get disk usage 4 dirs deep and sort by size
     ssh $machine du -m --max-depth=4 $unit | sort -nr > tempfile
     # when du value is the same, "-k2,2" flag puts subdir second
