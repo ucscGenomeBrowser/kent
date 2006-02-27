@@ -610,25 +610,25 @@ type bed 4 +
     track hapmapLdYri
     subTrack hapmapLd off
     shortLabel LD YRI
-    longLabel HapMap Linkage Disequilibrium for the Yoruban
+    longLabel HapMap Linkage Disequilibrium for the Yoruba population (YRI)
     priority 1
 
     track hapmapLdCeu
     subTrack hapmapLd
     shortLabel LD CEU
-    longLabel HapMap Linkage Disequilibrium for the CEPH
+    longLabel HapMap Linkage Disequilibrium for the CEPH population (CEU)
     priority 2
 
     track hapmapLdChb
     subTrack hapmapLd off
     shortLabel LD CHB
-    longLabel HapMap Linkage Disequilibrium for the Chinese Han population
+    longLabel HapMap Linkage Disequilibrium for the Han Chinese population (CHB)
     priority 3
 
     track hapmapLdJpt
     subTrack hapmapLd off
     shortLabel LD JPT
-    longLabel HapMap Linkage Disequilibrium for the Japanese population
+    longLabel HapMap Linkage Disequilibrium for the Japanese from Tokyo (JPT)
     priority 4
 
 track lineageMutations
