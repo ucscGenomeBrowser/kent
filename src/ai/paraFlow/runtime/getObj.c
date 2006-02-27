@@ -96,7 +96,7 @@ static void scanDyString(FILE *f, struct dyString *dy)
 {
 boolean isEscaped = FALSE;
 int c = fgetc(f);
-if (c != '"')
+if (c != '\'')
    errAbort("Not a string");
 for (;;)
    {
@@ -118,7 +118,7 @@ for (;;)
 	{
 	if (c == '\\')
 	    isEscaped = TRUE;
-	else if (c == '"')
+	else if (c == '\'')
 	    break;
 	else
 	    dyStringAppendC(dy, c);
