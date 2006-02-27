@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.47 2006/02/24 23:35:22 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.48 2006/02/27 16:00:53 angie Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -1490,7 +1490,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm7/bed/blastzRn3.2005-11-14
 TMPDIR=/scratch/tmp
 '_EOF_'
-    # happy emacs
+    # << happy emacs
 
     #	establish a screen to control this job
     screen
@@ -1583,7 +1583,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm7/bed/blastzRn3.2005-09-16
 TMPDIR=/scratch/tmp
 '_EOF_'
-    # happy emacs
+    # << happy emacs
 
     #	establish a screen to control this job
     screen
@@ -3053,7 +3053,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm7/bed/blastzPanTro1.2005-10-05
 TMPDIR=/scratch/tmp
 '_EOF_'
-    # happy emacs
+    # << happy emacs
 
     screen
     time $HOME/bin/scripts/doBlastzChainNet.pl \
@@ -3337,6 +3337,7 @@ cat << '_EOF_' > template
 /cluster/bin/i386/blat.2 $(path1) /san/sanvol1/scratch/mm7/STSmarkers/mouseP.fa -ooc=/scratch/hg/h/mouse11.ooc  -minMatch=1 -minScore=0 -minIdentity=80 -oneOff {check out line+ primers.out/$(root1).psl}
 #ENDLOOP
 '_EOF_'
+    # << emacs
     mkdir primers.out
 
     ls -1S /san/sanvol1/scratch/mm7/fasta/chr*.fa > contig.lst
@@ -3400,7 +3401,7 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
 #!/bin/csh -fe
 /cluster/bin/x86_64/e-PCR $1 $2 N=1 M=50 W=5 > $3
 '_EOF_'
-    # emacs happy ?
+    # << emacs
     chmod +x runPCR.csh
 
     cat << '_EOF_' > template
@@ -3408,7 +3409,7 @@ Submission to last job:         42051s     700.85m    11.68h    0.49d
 ./runPCR.csh /san/sanvol1/scratch/mm7//STSmarkers/mouseP.info $(path1) {check out line+ epcr.out/$(num1).epcr}
 #ENDLOOP
 '_EOF_'
-    # the mouseP.info was created above
+    # << the mouseP.info was created above
     gensub2 contig.lst single template jobList
     para create jobList
     para try
@@ -11585,6 +11586,7 @@ mkdir -p ${blatDir}/{over,net}
 /cluster/bin/x86_64/chainNet $chain $sizesMMOld $sizesMM7 $net /dev/null
 /cluster/bin/x86_64/netChainSubset $net $chain $over
 EOF
+    # << for emacs
     chmod +x netOver.sh
     mkdir netRun
     cd netRun/
@@ -11773,6 +11775,7 @@ EOF
     #	chainHg17 267,023,452 bytes 3,073,210 rows
     #	chainHg17noLSR 89,196,048 bytes 990,397 rows
 
+
 ############################################################################
 # ADD LINK TO GENENETWORK (DONE. 2/9/06 Fan).
 
@@ -11783,4 +11786,41 @@ EOF
     hgsql mm7 -e 'drop table geneNetworkId'
     hgsql mm7 < ~/src/hg/lib/geneNetworkId.sql
     hgsql mm7 -e 'load data local infile "geneNetworkId.tab" into table geneNetworkId'
+		    
+
+# BLASTZ/CHAIN/NET RN4 (DONE 2/23/06 angie)
+    ssh pk
+    mkdir /cluster/data/mm7/bed/blastz.rn4.2006-02-23
+    cd /cluster/data/mm7/bed/blastz.rn4.2006-02-23
+    cat << '_EOF_' > DEF
+# mouse vs rat
+
+BLASTZ=/cluster/bin/penn/x86_64/blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm7
+SEQ1_DIR=/scratch/hg/mm7/nib
+SEQ1_SMSK=/scratch/hg/mm7/linSpecRep/notInRat
+SEQ1_LEN=/scratch/hg/mm7/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn4 - single chunk big enough to run each chrom by itself
+SEQ2_DIR=/scratch/hg/rn4/nib
+SEQ2_SMSK=/cluster/bluearc/scratch/hg/rn4/linSpecRep.notInMouse
+SEQ2_LEN=/cluster/data/rn4/chrom.sizes
+SEQ2_CHUNK=300000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm7/bed/blastz.rn4.2006-02-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << for emacs
+    doBlastzChainNet.pl DEF -chainMinScore 3000 -chainLinearGap medium \
+      -bigClusterHub pk \
+      -blastzOutRoot /cluster/bluearc/blastzMm7Rn4Out >& do.log &
+    tail -f do.log
+    rm -f /cluster/data/mm7/bed/blastz.rn4
+    ln -s blastz.rn4.2006-02-23 /cluster/data/mm7/bed/blastz.rn4
+
 
