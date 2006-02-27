@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.15 2006/02/17 00:24:44 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.16 2006/02/27 21:19:41 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -34,6 +34,7 @@ char **row;
 int count = 0;
 int orient = 0;
 int end = 0;
+char chromName[64];
 
 ret = newHash(0);
 verbose(1, "getting contigs...\n");
@@ -41,12 +42,17 @@ safef(query, sizeof(query), "select ctg_id, contig_chr, contig_end, orient from 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    end = sqlUnsigned(row[2]);
-    if (end == 0) continue;
     orient = sqlUnsigned(row[3]);
     if (orient != 0)
         errAbort("Contig %s has non-zero orientation!!\n", row[0]);
-    hashAdd(ret, cloneString(row[0]), cloneString(row[1]));
+
+    end = sqlUnsigned(row[2]);
+    if (end == 0) 
+	safef(chromName, ArraySize(chromName), "%s_random", row[1]);
+    else
+	safef(chromName, ArraySize(chromName), "%s", row[1]);
+
+    hashAdd(ret, cloneString(row[0]), chromName);
     count++;
     }
 sqlFreeResult(&sr);
