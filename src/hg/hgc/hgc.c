@@ -192,7 +192,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.995 2006/02/23 05:34:59 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.996 2006/02/27 16:46:06 daryl Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16590,34 +16590,63 @@ hFreeConn(&conn);
 void doHapmapSnps(struct trackDb *tdb, char *itemName)
 {
 char *table = tdb->tableName;
-struct hapmapSnp hms;
+struct hapmapSnps hms;
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
 int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
+int derivedAllele=0;
 
 genericHeader(tdb, itemName);
 
+if (sameString(hms.cState,hms.rState))
+    {
+    if (sameString(hms.cState,hms.hReference))
+	derivedAllele=1;
+    if (sameString(hms.cState,hms.hOther))
+	derivedAllele=2;
+    }
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
       "chromStart=%d and name = '%s'", table, seqName, start, itemName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hapmapSnpStaticLoad(row+rowOffset, &hms);
+    hapmapSnpsStaticLoad(row+rowOffset, &hms);
     bedPrintPos((struct bed *)&hms, 3);
     printf("<BR>\n");
     printf("<B>Human Alleles and strand:</B> %s/%s (%s)<BR>\n", hms.hReference, hms.hOther, hms.strand);
-    printf("<B>Chimp Base and Quality Score:</B> %s (%u)<BR>\n", hms.cBase, hms.cQual);
-    printf("<B>Rhesus Base and Quality Score:</B> %s (%u)<BR><BR>\n", hms.rBase, hms.rQual);
-    printf("<B>DAF in YRI:</B> %.2f<BR>\n", hms.yri);
-    printf("<B>DAF in CEU:</B> %.2f<BR>\n", hms.ceu);
-    printf("<B>DAF in CHB:</B> %.2f<BR>\n", hms.chb);
-    printf("<B>DAF in JPT:</B> %.2f<BR>\n", hms.jpt);
-    printf("<B>DAF in JPT+CHB:</B> %.2f<BR>\n", hms.jptchb);
+    printf("<B>Chimp Base and Quality Score:</B> %s (%u)<BR>\n", hms.cState, hms.cQual);
+    printf("<B>Rhesus Base and Quality Score:</B> %s (%u)<BR><BR>\n", hms.rState, hms.rQual);
+    printf("<BR><table><th><td>Population</td><td>Reference</td><td>Other</td><td>MAF</td><td>DAF</td></th>\n");
+    if (derivedAllele==0)
+	{
+	printf("<tr><td>YRI</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>-</td></tr>\n",hms.rYri,hms.oYri,1.0*(hms.rYri<hms.oYri?hms.rYri:hms.oYri)/(hms.rYri+hms.oYri));
+	printf("<tr><td>CEU</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>-</td></tr>\n",hms.rCeu,hms.oCeu,1.0*(hms.rCeu<hms.oCeu?hms.rCeu:hms.oCeu)/(hms.rCeu+hms.oCeu));
+	printf("<tr><td>CHB</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>-</td></tr>\n",hms.rChb,hms.oChb,1.0*(hms.rChb<hms.oChb?hms.rChb:hms.oChb)/(hms.rChb+hms.oChb));
+	printf("<tr><td>JPT</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>-</td></tr>\n",hms.rJpt,hms.oJpt,1.0*(hms.rJpt<hms.oJpt?hms.rJpt:hms.oJpt)/(hms.rJpt+hms.oJpt));
+	printf("<tr><td>JPT+CHB</td><td>%d</td><td>%d</td><td>%.3f</td><td>-</td></tr>\n",hms.rJptChb,hms.oJptChb,1.0*(hms.rJptChb<hms.oJptChb?hms.rJptChb:hms.oJptChb)/(hms.rJptChb+hms.oJptChb));
+	}
+    if (derivedAllele==1)
+	{
+	printf("<tr><td>YRI</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rYri,hms.oYri,1.0*(hms.rYri<hms.oYri?hms.rYri:hms.oYri)/(hms.rYri+hms.oYri),1.0*hms.oYri/(hms.rYri+hms.oYri));
+	printf("<tr><td>CEU</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rCeu,hms.oCeu,1.0*(hms.rCeu<hms.oCeu?hms.rCeu:hms.oCeu)/(hms.rCeu+hms.oCeu),1.0*hms.oCeu/(hms.rCeu+hms.oCeu));
+	printf("<tr><td>CHB</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rChb,hms.oChb,1.0*(hms.rChb<hms.oChb?hms.rChb:hms.oChb)/(hms.rChb+hms.oChb),1.0*hms.oChb/(hms.rChb+hms.oChb));
+	printf("<tr><td>JPT</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rJpt,hms.oJpt,1.0*(hms.rJpt<hms.oJpt?hms.rJpt:hms.oJpt)/(hms.rJpt+hms.oJpt),1.0*hms.oJpt/(hms.rJpt+hms.oJpt));
+	printf("<tr><td>JPT+CHB</td><td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rJptChb,hms.oJptChb,1.0*(hms.rJptChb<hms.oJptChb?hms.rJptChb:hms.oJptChb)/(hms.rJptChb+hms.oJptChb),1.0*hms.oJptChb/(hms.rJptChb+hms.oJptChb));
+	}
+    if (derivedAllele==2)
+	{
+	printf("<tr><td>YRI</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rYri,hms.oYri,1.0*(hms.rYri<hms.oYri?hms.rYri:hms.oYri)/(hms.rYri+hms.oYri),1.0*hms.rYri/(hms.rYri+hms.oYri));
+	printf("<tr><td>CEU</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rCeu,hms.oCeu,1.0*(hms.rCeu<hms.oCeu?hms.rCeu:hms.oCeu)/(hms.rCeu+hms.oCeu),1.0*hms.rCeu/(hms.rCeu+hms.oCeu));
+	printf("<tr><td>CHB</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rChb,hms.oChb,1.0*(hms.rChb<hms.oChb?hms.rChb:hms.oChb)/(hms.rChb+hms.oChb),1.0*hms.rChb/(hms.rChb+hms.oChb));
+	printf("<tr><td>JPT</td>    <td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rJpt,hms.oJpt,1.0*(hms.rJpt<hms.oJpt?hms.rJpt:hms.oJpt)/(hms.rJpt+hms.oJpt),1.0*hms.rJpt/(hms.rJpt+hms.oJpt));
+	printf("<tr><td>JPT+CHB</td><td>%d</td><td>%d</td><td>%.3f</td><td>%.3f</td></tr>\n",hms.rJptChb,hms.oJptChb,1.0*(hms.rJptChb<hms.oJptChb?hms.rJptChb:hms.oJptChb)/(hms.rJptChb+hms.oJptChb),1.0*hms.rJptChb/(hms.rJptChb+hms.oJptChb));
+	}
     }
+printf("</table>");
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
