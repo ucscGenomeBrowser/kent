@@ -1285,7 +1285,6 @@ if (left->type == pptNameUse && right->type == pptNameUse)
     }
 else
     {
-    pfParseDump(pp, 3, uglyOut);
     errAt(pp->tok, "misplaced dot in type expression");
     }
 }
@@ -2121,6 +2120,28 @@ static struct pfParse *parseReturn(struct pfParse *parent,
 return parseWordStatement(parent, pTokList, scope, pptReturn);
 }
 
+static boolean isGoodSymName(char *s)
+/* Return TRUE if it looks like a good symbol name - starting
+ * with '_' or alphabet, and continuing with '_' or alphnum. */
+{
+char c = *s++;
+if (c != '_' && !isalpha(c))
+    return FALSE;
+while ((c = *s++) != 0)
+    {
+    if (c != '_' && !isalnum(c))
+	return FALSE;
+    }
+return TRUE;
+}
+
+static void checkModuleNameSimple(struct pfToken *tok, char *modName)
+/* Make sure nothing but alphanumerics and _ in module name. */
+{
+if (!isGoodSymName(modName))
+    errAt(tok, "Module names (after the path component) must follow rules for variable names");
+}
+
 static struct pfParse *parseIncludeOrImport(struct pfCompile *pfc, 
 	struct pfParse *parent, struct pfToken **pTokList, 
 	struct pfScope *scope, enum pfParseType ppt)
@@ -2129,6 +2150,7 @@ static struct pfParse *parseIncludeOrImport(struct pfCompile *pfc,
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNew(ppt, tok, parent, scope);
 struct pfParse *modPp;
+char *pathName, *moduleName;
 
 switch (parent->type)
     {
@@ -2142,7 +2164,8 @@ switch (parent->type)
     }
 tok = tok->next;	/* Have covered 'include' */
 pp->children = modPp = pfParseNew(pptSymName, tok, pp, scope);
-pp->name = pp->children->name = tok->val.s;
+pathName = tok->val.s;
+pp->name = pp->children->name = pathName;
 tok = tok->next;
 
 if (ppt == pptImport)
@@ -2156,12 +2179,24 @@ if (ppt == pptImport)
 	    errAt(tok, "Expecting symbol name after \"import as\"");
 	localName = pfParseNew(pptSymName, tok, pp, scope);
 	tok = tok->next;
+	localName->name = localName->tok->val.s;
 	}
     else
         {
-	localName = pfParseNew(pptSymName, pp->children->tok, pp, scope);
+	struct pfToken *pathTok = pp->children->tok;
+	moduleName = strrchr(pathName, '/');
+	if (moduleName == NULL)
+	    moduleName = pathName;
+	else
+	    moduleName += 1;
+	if (!isGoodSymName(moduleName))
+	    errAt(tok, 
+	    	"Module names (after the path component) must follow rules "
+		"for variable names unless you include an 'as'.");
+	checkModuleNameSimple(pathTok, moduleName);
+	localName = pfParseNew(pptSymName, pathTok, pp, scope);
+	localName->name = moduleName;
 	}
-    localName->name = localName->tok->val.s;
     slAddTail(&pp->children, localName);
     type = pfTypeNew(pfc->moduleType);
     type->tyty = tytyModule;

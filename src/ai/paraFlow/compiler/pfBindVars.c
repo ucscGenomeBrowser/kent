@@ -160,7 +160,10 @@ switch (pp->type)
 	struct pfType *ty;
 	if (var == NULL)
 	    internalErrAt(pp->tok);
+#ifdef OLD
 	moduleName = var->parse->name;
+#endif /* OLD */
+	moduleName = var->parse->children->name;
 	module = hashFindVal(pfc->moduleHash, moduleName);
 	if (module == NULL)
 	    internalErrAt(modPp->tok);
@@ -286,7 +289,7 @@ static void addIncludedSymbols(struct pfCompile *pfc, struct pfParse *pp,
 if (pp->type == pptInclude)
     {
     struct pfModule *module;
-    module = hashMustFindVal(pfc->moduleHash, pp->name);
+    module = hashMustFindVal(pfc->moduleHash, pp->children->name);
     linkInVars(module->scope->vars, pp->scope);
     }
 level += 1;
@@ -334,7 +337,7 @@ switch (pp->type)
 	    {
 	    char *name = leftOfDot->name;
 	    struct pfVar *var = pfScopeFindVar(leftOfDot->scope, name);
-	    if (var->ty->base == pfc->moduleType)
+	    if (var != NULL && var->ty->base == pfc->moduleType)
 	        {
 		char *modName = var->parse->name;
 		struct pfModule *module = pfScopeFindModule(pp->scope, modName);

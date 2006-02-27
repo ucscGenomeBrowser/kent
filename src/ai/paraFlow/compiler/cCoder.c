@@ -81,6 +81,18 @@ fprintf(f, "static void %s(struct %s *module, %s *stack)",
 	moduleCleanupName, moduleRuntimeType, stackType);
 }
 
+static char *mangledModuleName(char *modName)
+/* Return mangled version of module name that hopefully someday
+ * will be unique across directories, but for now is just the last
+ * bit. */
+{
+char *name = strrchr(modName, '/');
+if (name == NULL)
+    name = modName;
+else
+    name += 1;
+return name;
+}
 
 static char *localTypeTableType = "_pf_local_type_info";
 static char *localTypeTableName = "_pf_lti";
@@ -91,10 +103,11 @@ static void codeLocalTypeRef(FILE *f, int ref)
 fprintf(f, "%s[%d].id", localTypeTableName, ref);
 }
 
-static void codeLocalTypeTableName(FILE *f, char *module)
+static void codeLocalTypeTableName(FILE *f, char *moduleName)
 /* Print out local type table name. */
 {
-fprintf(f, "struct %s %s_%s", localTypeTableType, localTypeTableName, module);
+fprintf(f, "struct %s %s_%s", localTypeTableType, localTypeTableName, 
+	mangledModuleName(moduleName));
 }
 
 static void codeForType(struct pfCompile *pfc, FILE *f, struct pfType *type)
@@ -2569,7 +2582,8 @@ switch (pp->type)
         break;
     case pptInclude:
     case pptImport:
-        fprintf(f, "_pf_entry_%s(%s);\n", pp->name, stackName);
+        fprintf(f, "_pf_entry_%s(%s);\n", mangledModuleName(pp->name), 
+		stackName);
 	break;
     default:
         fprintf(f, "[%s statement];\n", pfParseTypeAsString(pp->type));
@@ -2890,7 +2904,7 @@ rPrintFuncDeclarations(pfc, f, pp, NULL);
 /* Print out other statements */
 if (printMain)
     {
-    fprintf(f, "void _pf_entry_%s(%s *%s)\n{\n", pp->name, 
+    fprintf(f, "void _pf_entry_%s(%s *%s)\n{\n", mangledModuleName(pp->name), 
     	stackType, stackName);
     fprintf(f, "static int firstTime = 1;\n");
     fprintf(f, "if (firstTime)\n");
@@ -2948,7 +2962,8 @@ static void printPolyFuncConnections(struct pfCompile *pfc,
  * tables to the classes they belong to. */
 {
 struct slRef *ref;
-fprintf(f, "struct _pf_poly_info _pf_poly_info_%s[] = {\n", module->name);
+fprintf(f, "struct _pf_poly_info _pf_poly_info_%s[] = {\n", 
+	mangledModuleName(module->name));
 for (ref = scopeRefs; ref != NULL; ref = ref->next)
     {
     struct pfScope *scope = ref->val;
@@ -2984,7 +2999,7 @@ fprintf(f,
 "    }\n"
 "return 0;\n"
 "}\n", 
-globalPrefix, globalPrefix, mainModule->name,
+globalPrefix, globalPrefix, mangledModuleName(mainModule->name),
 moduleRuntimeList, moduleRuntimeList, moduleRuntimeList,
 moduleRuntimeList, moduleRuntimeList);
 }
@@ -3008,12 +3023,13 @@ for (module = program->children; module != NULL; module = module->next)
     {
     if (module->name[0] != '<')
         {
+	char *mangledName = mangledModuleName(module->name);
 	fprintf(f, "extern struct %s %s_%s[];\n", 
-	    localTypeTableType, localTypeTableName, module->name);
+	    localTypeTableType, localTypeTableName, mangledName);
         fprintf(f, "extern struct _pf_poly_info _pf_poly_info_%s[];\n",
-		module->name);
-	fprintf(f, "void _pf_entry_%s(%s *%s);\n", module->name, 
-	    stackType, stackName);
+		mangledName);
+	fprintf(f, "void _pf_entry_%s(%s *%s);\n", 
+		mangledName, stackType, stackName);
 	}
     }
 fprintf(f, "\n");
@@ -3022,9 +3038,10 @@ for (module = program->children; module != NULL; module = module->next)
     {
     if (module->name[0] != '<')
         {
+	char *mangledName = mangledModuleName(module->name);
 	fprintf(f, "  {\"%s\", %s_%s, _pf_poly_info_%s, _pf_entry_%s,},\n",
-	    module->name, localTypeTableName, module->name, module->name,
-	    module->name);
+	    mangledName, localTypeTableName, mangledName, mangledName,
+	    mangledName);
 	++moduleCount;
 	}
     }
@@ -3095,6 +3112,7 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
     if (toCode->type == pptModule || toCode->type == pptMainModule)
 	{
 	char fileName[PATH_LEN];
+	char *moduleName = mangledModuleName(toCode->name);
 	if (toCode->type == pptMainModule)
 	    mainModule = toCode;
 	safef(fileName, sizeof(fileName), "%s%s.c", baseDir, toCode->name);
@@ -3103,13 +3121,13 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 	pfc->moduleTypeHash = hashNew(0);
 	printPreamble(pfc, f, fileName, TRUE);
 	fprintf(f, "extern struct %s %s_%s[];\n", localTypeTableType, localTypeTableName,
-		toCode->name);
+		moduleName);
 	fprintf(f, "static struct %s *%s = %s_%s;\n\n",
-		localTypeTableType, localTypeTableName, localTypeTableName, toCode->name);
+		localTypeTableType, localTypeTableName, localTypeTableName, moduleName);
 	printModuleCleanupPrototype(f);
 	fprintf(f, ";\n");
 	fprintf(f, "static struct %s %s = {0, \"%s\", %s};\n",
-		moduleRuntimeType, moduleRuntimeName, toCode->name,
+		moduleRuntimeType, moduleRuntimeName, moduleName,
 		moduleCleanupName);
 	fprintf(f, "\n");
 
@@ -3118,7 +3136,8 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 	    {
 	    fprintf(f, "/* Prototypes in ParaFlow module %s */\n", module->name);
 	    if (module->name[0] != '<')
-		fprintf(f, "void _pf_entry_%s(%s *stack);\n", module->name, stackType);
+		fprintf(f, "void _pf_entry_%s(%s *stack);\n", 
+			mangledModuleName(module->name), stackType);
 	    rPrintPrototypes(f, module, NULL);
 	    fprintf(f, "\n");
 	    fprintf(f, "/* Class definitions in module %s */\n", module->name);
