@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.47 2005/12/12 04:02:53 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.48 2006/02/27 03:39:02 kent Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -516,12 +516,15 @@ dyStringFree(&rs);
 return sd;
 }
 
-
-
-int netOpenHttpExt(char *url, char *method, boolean end)
-/* Return a file handle that will read the url.  If end is not
- * set then can send cookies and other info to returned file 
- * handle before reading. */
+int netHttpConnect(char *url, char *method, char *protocol, char *agent)
+/* Parse URL, connect to associated server on port,
+ * and send most of the request to the server.  If
+ * specified in the url send user name and password
+ * too.  This does not send the final \r\n to finish
+ * off the request, so that you can send cookies. 
+ * Typically the "method" will be "GET" or "POST"
+ * and the agent will be the name of your program or
+ * library. */
 {
 struct netParsedUrl npu;
 struct dyString *dy = newDyString(512);
@@ -534,8 +537,8 @@ if (!sameString(npu.protocol, "http"))
 sd = netMustConnect(npu.host, atoi(npu.port));
 
 /* Ask remote server for a file. */
-dyStringPrintf(dy, "%s %s HTTP/1.0\r\n", method, npu.file);
-dyStringPrintf(dy, "User-Agent: genome.ucsc.edu/net.c\r\n");
+dyStringPrintf(dy, "%s %s %s\r\n", method, npu.file, protocol);
+dyStringPrintf(dy, "User-Agent: %s\r\n", agent);
 dyStringPrintf(dy, "Host: %s:%s\r\n", npu.host, npu.port);
 dyStringPrintf(dy, "Accept: */*\r\n");
 if (!sameString(npu.user,""))
@@ -548,12 +551,21 @@ if (!sameString(npu.user,""))
     freez(&b64up);
     }
 dyStringAppend(dy, "Accept: */*\r\n");
-if (end)
-    dyStringPrintf(dy, "\r\n");
 write(sd, dy->string, dy->stringSize);
 
 /* Clean up and return handle. */
 dyStringFree(&dy);
+return sd;
+}
+
+int netOpenHttpExt(char *url, char *method, boolean end)
+/* Return a file handle that will read the url.  If end is not
+ * set then can send cookies and other info to returned file 
+ * handle before reading. */
+{
+int sd =  netHttpConnect(url, method, "HTTP/1.0", "genome.ucsc.edu/net.c");
+if (end)
+    write(sd, "\r\n", 2);
 return sd;
 }
 
