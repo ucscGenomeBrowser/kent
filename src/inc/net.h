@@ -158,6 +158,16 @@ int netOpenHttpExt(char *url, char *method, boolean end);
 /* Return a file handle that will read the url.  If end is not
  * set then can send cookies and other info to returned file  */
 
+int netHttpConnect(char *url, char *method, char *protocol, char *agent);
+/* Parse URL, connect to associated server on port,
+ * and send most of the request to the server.  If
+ * specified in the url send user name and password
+ * too.  This does not send the final \r\n to finish
+ * off the request, so that you can send cookies. 
+ * Typically the "method" will be "GET" or "POST"
+ * and the agent will be the name of your program or
+ * library.  Protocol is usually HTTP/1.0. */
+
 int netHttpGetMultiple(char *url, struct slName *queries, void *userData,
 		       void (*responseCB)(void *userData, char *req,
 					  char *hdr, struct dyString *body));
