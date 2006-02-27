@@ -232,16 +232,17 @@ else if (p->type == pptTypeToPt || p->type == pptTypeFlowPt)
     {
     appendVarOf(dy, p);
     }
-else if (p->type == pptDot)
+else if (p->type == pptModuleDotType)
     {
     struct pfParse *left = p->children;
     struct pfParse *right = left->next;
     dyStringAppend(dy, left->name);
     dyStringAppendC(dy, '.');
-    appendType(dy, right);
+    dyStringAppend(dy, right->name);
     }
 else
     {
+    pfParseDump(p, 3, uglyOut);
     internalErrAt(p->tok);
     }
 }

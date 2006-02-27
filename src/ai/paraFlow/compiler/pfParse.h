@@ -23,6 +23,7 @@ enum pfParseType
     pptCompound,
     pptTuple,
     pptDot,
+    pptModuleDotType,
     pptKeyVal,
     pptOf,
     pptIf,

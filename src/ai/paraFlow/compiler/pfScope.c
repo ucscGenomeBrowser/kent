@@ -5,6 +5,7 @@
 #include "hash.h"
 #include "pfType.h"
 #include "pfCompile.h"
+#include "pfParse.h"
 #include "pfScope.h"
 
 
@@ -103,6 +104,8 @@ struct pfVar *pfScopeAddVar(struct pfScope *scope, char *name,
 /* Add variable to scope. */
 {
 struct pfVar *var;
+if (hashLookup(scope->vars, name))
+    errAt(pp->tok, "%s redefined", name);
 AllocVar(var);
 var->scope = scope;
 var->ty = ty;

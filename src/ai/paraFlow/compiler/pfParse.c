@@ -40,6 +40,8 @@ switch (type)
         return "pptOf";
     case pptDot:
         return "pptDot";
+    case pptModuleDotType:
+	return "pptModuleDotType";
     case pptKeyVal:
         return "pptKeyVal";
     case pptIf:
@@ -1269,35 +1271,21 @@ else
 }
 
 
-static void checkTypeDot(struct pfCompile *pfc, struct pfParse *pp)
-/* Make sure that the left side of dot is a module name
- * and the right side is the name of a  class in that module. */
+static void markModuleDotType(struct pfCompile *pfc, struct pfParse *pp)
+/* This type dot is in a context where it better be module.type.
+ * We mark it as such.  We leave it to a later pass to make sure
+ * that the module really is a module and the type really is a type
+ * in that module. */
 {
 struct pfParse *left = pp->children;
 struct pfParse *right = left->next;
 if (left->type == pptNameUse && right->type == pptNameUse)
     {
-    struct pfModule *module = hashFindVal(pfc->moduleHash, left->name);
-    if (module != NULL)
-        {
-	if (!pfScopeFindType(module->scope, right->name))
-	    {
-	    errAt(right->tok, "%s isn't a class in module %s",
-	    	right->name, module->name);
-	    }
-	else
-	    {
-	    left->type = pptModuleUse;
-	    right->type = pptTypeName;
-	    right->scope = module->scope;
-	    pp->ty = right->ty;
-	    }
-	}
-    else
-	errAt(left->tok, "%s isn't a module in type expression", left->name);
+    pp->type = pptModuleDotType;
     }
 else
     {
+    pfParseDump(pp, 3, uglyOut);
     errAt(pp->tok, "misplaced dot in type expression");
     }
 }
@@ -1324,7 +1312,7 @@ switch (pp->type)
     case pptTypeToPt:
         break;
     case pptDot:
-	checkTypeDot(pfc, pp);
+	markModuleDotType(pfc, pp);
         break;
     default:
 	{
@@ -2140,6 +2128,7 @@ static struct pfParse *parseIncludeOrImport(struct pfCompile *pfc,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = pfParseNew(ppt, tok, parent, scope);
+struct pfParse *modPp;
 
 switch (parent->type)
     {
@@ -2152,9 +2141,32 @@ switch (parent->type)
 	break;
     }
 tok = tok->next;	/* Have covered 'include' */
-pp->children = pfParseNew(pptSymName, tok, pp, scope);
+pp->children = modPp = pfParseNew(pptSymName, tok, pp, scope);
 pp->name = pp->children->name = tok->val.s;
 tok = tok->next;
+
+if (ppt == pptImport)
+    {
+    struct pfParse *localName;
+    struct pfType *type;
+    if (tok->type == pftName && sameString(tok->val.s, "as"))
+        {
+	tok = tok->next;
+	if (tok->type != pftName)
+	    errAt(tok, "Expecting symbol name after \"import as\"");
+	localName = pfParseNew(pptSymName, tok, pp, scope);
+	tok = tok->next;
+	}
+    else
+        {
+	localName = pfParseNew(pptSymName, pp->children->tok, pp, scope);
+	}
+    localName->name = localName->tok->val.s;
+    slAddTail(&pp->children, localName);
+    type = pfTypeNew(pfc->moduleType);
+    type->tyty = tytyModule;
+    pp->var = pfScopeAddVar(pp->scope, localName->name, type, pp);
+    }
 
 *pTokList = tok;
 return pp;

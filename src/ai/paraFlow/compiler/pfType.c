@@ -1454,7 +1454,39 @@ else
 pp->ty = CloneVar(destType);
 }
 
-static void rCheckTypeWellFormed(struct pfCompile *pfc, struct pfParse *type)
+/* TODO - move this to pfBindVars. */
+static void checkTypeDot(struct pfCompile *pfc, struct pfParse *pp)
+/* Make sure that the left side of dot is a module name
+ * and the right side is the name of a  class in that module. */
+{
+struct pfParse *left = pp->children;
+struct pfParse *right = left->next;
+struct pfModule *module = hashFindVal(pfc->moduleHash, left->name);
+
+uglyf("checkTypeDot\n");
+pfParseDump(pp, 3, uglyOut);
+if (left->type != pptModuleUse || right->type != pptTypeName)
+    internalErrAt(pp->tok);
+if (module != NULL)
+    {
+    if (!pfScopeFindType(module->scope, right->name))
+	{
+	errAt(right->tok, "%s isn't a class in module %s",
+	    right->name, module->name);
+	}
+    else
+	{
+	left->type = pptModuleUse;
+	right->type = pptTypeName;
+	right->scope = module->scope;
+	pp->ty = right->ty;
+	}
+    }
+else
+    errAt(left->tok, "%s isn't a module in type expression", left->name);
+}
+
+static void rCheckKidsAreDims(struct pfCompile *pfc, struct pfParse *type)
 /* Make sure that if pptTypeNames have children that they are arrays. */
 {
 switch (type->type)
@@ -1471,7 +1503,21 @@ switch (type->type)
         break;
     }
 for (type = type->children; type != NULL; type = type->next)
-    rCheckTypeWellFormed(pfc, type);
+    rCheckKidsAreDims(pfc, type);
+}
+
+static void checkTypeWellFormed(struct pfCompile *pfc, struct pfParse *type)
+/* Make sure that a type expression is a-ok. */
+{
+if (type->type == pptDot)
+    {
+    struct pfParse *left = type->children;
+    struct pfParse *right = left->next;
+    checkTypeDot(pfc, type);
+    rCheckKidsAreDims(pfc, right);
+    }
+else
+    rCheckKidsAreDims(pfc, type);
 }
 
 static boolean isFunctionIo(struct pfParse *varInit)
@@ -1526,7 +1572,7 @@ struct pfParse *init = symbol->next;
 
 if (init != NULL)
     coerceOne(pfc, &symbol->next, type->ty, FALSE);
-rCheckTypeWellFormed(pfc, type);
+checkTypeWellFormed(pfc, type);
 checkRedefinitionInParent(pfc, pp);
 }
 

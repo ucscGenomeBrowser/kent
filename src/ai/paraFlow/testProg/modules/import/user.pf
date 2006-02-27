@@ -1,7 +1,7 @@
-import num
-import animal;
+import num as NumStuff
+import animal
 
-num.numType x = ();
+NumStuff.numType x = ();
 print(x);
 x = ("twenty", 20);
 print(x);
@@ -13,19 +13,19 @@ animal.stutter("hello");
 animal.zebra = "ZEEBRAH";
 print(animal.zebra);
 
-num.ad ad = ((),());
+NumStuff.ad ad = ((),());
 ad.abc.a = 1;
 ad.def.f = 6;
 print(ad);
 
-num.numType a = num.getNumType(11, "eleven");
-num.numType b = num.getNumType(7, "seven");
+NumStuff.numType a = NumStuff.getNumType(11, "eleven");
+NumStuff.numType b = NumStuff.getNumType(7, "seven");
 print(a);
 print(b);
-num.numType c = num.addNumType(a,b);
+NumStuff.numType c = NumStuff.addNumType(a,b);
 print(c);
 
-to subNumType(num.numType a, b) into num.numType c
+to subNumType(NumStuff.numType a, b) into NumStuff.numType c
     {
     c = ();
     c.num = a.num - b.num;
@@ -34,5 +34,5 @@ to subNumType(num.numType a, b) into num.numType c
 
 c = subNumType(a, b);
 print(c);
-print(num.zebraNumType());
+print(NumStuff.zebraNumType());
 print(animal.abc);

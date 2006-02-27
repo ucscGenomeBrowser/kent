@@ -38,13 +38,13 @@ ty->children = input->ty;
 ty->children->next = output->ty;
 }
 
-static void evalDeclarationTypes(struct pfCompile *pfc, struct pfParse *pp)
+static void evalDeclarationTypes(struct pfCompile *pfc, struct pfParse *pp, int level)
 /* Go through and fill in pp->ty field on type expressions related
  * to function and variable declarations. */
 {
 struct pfParse *p;
 for (p = pp->children; p != NULL; p = p->next)
-    evalDeclarationTypes(pfc, p);
+    evalDeclarationTypes(pfc, p, level+1);
 switch (pp->type)
     {
     case pptVarDec:
@@ -56,13 +56,6 @@ switch (pp->type)
 	struct pfParse *type = pp->children;
 	struct pfParse *name = type->next;
 	struct pfParse *init = name->next;
-	if (type->type == pptDot)
-	    {
-	    struct pfParse *modPp = type->children;
-	    if (modPp->type != pptModuleUse)
-	        internalErrAt(type->tok);
-	    type = modPp->next;
-	    }
 	pp->ty = CloneVar(type->ty);
 	pp->ty->init = init;
 	break;
@@ -125,8 +118,6 @@ switch (pp->type)
 	    if (element->type != pptNameUse || key->type != pptKeyName)
 	         errAt(keyVal->tok, 
 		 	"Expecting simple name on either side of ':'");
-	    if (sameString(key->name, element->name))
-	        errAt(keyVal->tok, "Key and value must have different name.");
 	    key->var = pfScopeAddVar(key->scope, key->name, 
 		pfTypeNew(pfc->nilType), key);
 	    }
@@ -158,6 +149,31 @@ switch (pp->type)
 	     }
 	break;
 	}
+    case pptModuleDotType:
+        {
+	struct pfParse *modPp = pp->children;
+	struct pfParse *typePp = modPp->next;
+	struct pfVar *var = pfScopeFindVar(pp->scope, modPp->name);
+	char *moduleName;
+	struct pfModule *module;
+	struct pfBaseType *base;
+	struct pfType *ty;
+	if (var == NULL)
+	    internalErrAt(pp->tok);
+	moduleName = var->parse->name;
+	module = hashFindVal(pfc->moduleHash, moduleName);
+	if (module == NULL)
+	    internalErrAt(modPp->tok);
+	base = pfScopeFindType(module->scope, typePp->name);
+	if (base == NULL)
+	    errAt(typePp->tok, "Class %s not defined in module %s", typePp->name, moduleName);
+	ty = pfTypeNew(base);
+	pp->ty = ty;
+	modPp->type = pptModuleUse;
+	typePp->type = pptTypeName;
+	typePp->scope = module->scope;
+	break;
+	}
     case pptTypeName:
         {
 	struct pfBaseType *base = pfScopeFindType(pp->scope, pp->name);
@@ -175,14 +191,6 @@ switch (pp->type)
 	pfTypeOnTuple(pfc, pp);
 	break;
 	}
-#ifdef OLD
-    case pptInclude:
-        {
-	pp->ty = pfTypeNew(pfc->moduleType);
-	pp->ty->tyty = tytyModule;
-	break;
-	}
-#endif /* OLD */
     }
 }
 
@@ -203,7 +211,7 @@ if (output->children != NULL)
     errAt(output->tok, "create method can't have any output.");
 }
 
-static void addDeclaredVarsToScopes(struct pfParse *pp)
+static void addDeclaredVarsToScopes(struct pfCompile *pfc, struct pfParse *pp)
 /* Go through and put declared variables into symbol table
  * for scope. */
 {
@@ -216,8 +224,6 @@ switch (pp->type)
 	{
 	struct pfParse *type = pp->children;
 	struct pfParse *name = type->next;
-	if (hashLookup(pp->scope->vars, name->name))
-	    errAt(pp->tok, "%s redefined", name->name);
 	pp->var = pfScopeAddVar(pp->scope, name->name, pp->ty, pp);
 	pp->ty->isStatic = pp->isStatic;
 	break;
@@ -232,8 +238,6 @@ switch (pp->type)
 	struct pfParse *body = output->next;
 	struct pfParse *class = pfParseEnclosingClass(pp->parent);
 	name->type = pptSymName;
-	if (hashLookup(pp->scope->parent->vars, name->name))
-	    errAt(pp->tok, "%s redefined", name->name);
 	pp->var = pfScopeAddVar(pp->scope->parent, name->name, pp->ty, pp);
 	if (class != NULL)
 	    {
@@ -263,7 +267,7 @@ switch (pp->type)
 	}
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    addDeclaredVarsToScopes(pp);
+    addDeclaredVarsToScopes(pfc, pp);
 }
 
 static void linkInVars(struct hash *vars, struct pfScope *scope)
@@ -300,7 +304,6 @@ static void rSetVarScope(struct pfParse *pp, struct pfScope *scope)
  *    module.variable()
  */
 {
-// TODO - move this to pfBindVars
 pp->scope = scope;
 switch (pp->type)
     {
@@ -315,7 +318,7 @@ switch (pp->type)
     }
 }
 
-static void checkVarsDefined(struct pfParse *pp)
+static void checkVarsDefined(struct pfCompile *pfc, struct pfParse *pp)
 /* Attach variable name to pfVar in appropriate scope.
  * Complain and die if not found. */
 {
@@ -331,18 +334,18 @@ switch (pp->type)
 	    {
 	    char *name = leftOfDot->name;
 	    struct pfVar *var = pfScopeFindVar(leftOfDot->scope, name);
-	    if (var)
-		{
-		rightOfDot->type = pptFieldUse;
+	    if (var->ty->base == pfc->moduleType)
+	        {
+		char *modName = var->parse->name;
+		struct pfModule *module = pfScopeFindModule(pp->scope, modName);
+		if (!module)
+		    internalErrAt(leftOfDot->tok);
+		leftOfDot->type = pptModuleUse;
+		rSetVarScope(rightOfDot, module->scope);
 		}
 	    else 
-	        {
-		struct pfModule *module = pfScopeFindModule(pp->scope, name);
-		if (module)
-		    {
-		    leftOfDot->type = pptModuleUse;
-		    rSetVarScope(rightOfDot, module->scope);
-		    }
+		{
+		rightOfDot->type = pptFieldUse;
 		}
 	    }
 	else
@@ -366,7 +369,7 @@ switch (pp->type)
 	}
     }
 for (p = pp->children; p != NULL; p = p->next)
-    checkVarsDefined(p);
+    checkVarsDefined(pfc, p);
 }
 
 
@@ -377,8 +380,8 @@ void pfBindVars(struct pfCompile *pfc, struct pfParse *pp)
  * calls to the appropriate declaration.  This will complain
  * about undefined symbols. */
 {
-evalDeclarationTypes(pfc, pp);
-addDeclaredVarsToScopes(pp);
+evalDeclarationTypes(pfc, pp, 0);
+addDeclaredVarsToScopes(pfc, pp);
 addIncludedSymbols(pfc, pp, 0);
-checkVarsDefined(pp);
+checkVarsDefined(pfc, pp);
 }
