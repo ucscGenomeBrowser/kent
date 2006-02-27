@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.73 2006/02/27 07:18:19 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.74 2006/02/27 08:34:08 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1255,10 +1255,13 @@ int          a, b, c, d, i; /* chromosome coordinates and counter */
 boolean      drawMap   = FALSE; /* ( itemCount<1000 ? TRUE : FALSE ); */
 struct hash *ldHash    = newHash(20);
 char         cartInvertVal[32];
+Color        yellow    = vgFindRgb(vg, &undefinedYellowColor);
 
+if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
+    vgBox(vg, insideX, yOff, insideWidth, tg->height-1, yellow);
+mapTrackBackground(tg, xOff, yOff);
 if (tg->items==NULL)
     return;
-mapTrackBackground(tg, xOff, yOff);
 safef(cartInvertVal, sizeof(cartInvertVal), "%s_inv", tg->mapName);
 ldInvert = cartUsualBoolean(cart, cartInvertVal, ldInvertDefault);
 
@@ -1294,7 +1297,11 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	c = sPtr->chromStart;
 	d = sPtr->next->chromStart;
 	if (notInWindow(a, b, c, d, trim)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
+	    {
+	    if ((c-b)/2 >= winEnd-winStart || (trim&&d>=winEnd) || (!trim&&c>=winEnd+(winEnd-winStart)))
+		i=dPtr->score;
 	    continue;
+	    }
 	if ( d-a > 250000 ) /* Check to see if we are trying to reach across a window that is too wide (centromere) */
 	    continue;
 	shade = colorLookup[(int)values[i]];
