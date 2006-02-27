@@ -3,8 +3,6 @@
    with unique, comma separated fxn_class values. */
 #include "common.h"
 
-#include "dystring.h"
-#include "hash.h"
 #include "hdb.h"
 
 char *functionStrings[] = {
@@ -22,7 +20,7 @@ char *functionStrings[] = {
 
 boolean functionFound[ArraySize(functionStrings)];
 
-static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.3 2006/02/23 01:05:01 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.4 2006/02/27 21:25:13 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -88,6 +86,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     functionFound[sqlUnsigned(row[1])] = TRUE;
     }
+fprintf(f, "%s\t", currentSnp);
+printArray(f);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 carefulClose(&f);
