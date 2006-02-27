@@ -231,9 +231,7 @@ struct pfParse
     {
     struct pfParse *next;	/* Next in list */
     UBYTE type;			/* Node type */
-    UBYTE isConst;		/* Is this all constant? */
-    UBYTE isStatic;		/* Is this a static declaration?. */
-    UBYTE reserved2;		/* For expansion 2. */
+    UBYTE access;		/* a pfAccessType */
     char *name;			/* Node name - not allocated here */
     struct pfToken *tok;	/* Token associated with node. */
     struct pfScope *scope;	/* Associated scope. */

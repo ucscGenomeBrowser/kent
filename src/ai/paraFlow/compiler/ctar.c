@@ -38,7 +38,7 @@ switch (pp->type)
     case pptVarInit:
 	{
 	struct pfVar *var = pp->var;
-	if (!var->ty->isStatic)
+	if (var->ty->access != paStatic)
 	    {
 	    char *name = var->cName;
 

@@ -64,10 +64,13 @@ hashAddInt(hash, "interface", pftInterface);
 hashAddInt(hash, "into", pftInto);
 hashAddInt(hash, "flow", pftFlow);
 hashAddInt(hash, "for", pftFor);
-hashAddInt(hash, "of", pftOf);
+hashAddInt(hash, "global", pftGlobal);
+hashAddInt(hash, "local", pftLocal);
 hashAddInt(hash, "nil", pftNil);
+hashAddInt(hash, "of", pftOf);
 hashAddInt(hash, "para", pftPara);
 hashAddInt(hash, "polymorphic", pftPolymorphic);
+hashAddInt(hash, "readable", pftReadable);
 hashAddInt(hash, "return", pftReturn);
 hashAddInt(hash, "static", pftStatic);
 hashAddInt(hash, "to", pftTo);
@@ -75,6 +78,27 @@ hashAddInt(hash, "try", pftTry);
 hashAddInt(hash, "while", pftWhile);
 hashAddInt(hash, "_operator_", pftOperator);
 return hash;
+}
+
+char *pfAccessTypeAsString(enum pfAccessType pa)
+/* Return string representation of access qualifier. */
+{
+switch (pa)
+    {
+    case paUsual:
+	return "paUsual";
+    case paGlobal:
+	return "paGlobal";
+    case paReadable:
+	return "paReadable";
+    case paLocal:
+	return "paLocal";
+    case paStatic:
+	return "paStatic";
+    default:
+        internalErr();
+	return NULL;
+    }
 }
 
 static void rParseCount(int *pCount, struct pfParse *pp)

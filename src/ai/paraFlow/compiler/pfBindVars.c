@@ -228,7 +228,7 @@ switch (pp->type)
 	struct pfParse *type = pp->children;
 	struct pfParse *name = type->next;
 	pp->var = pfScopeAddVar(pp->scope, name->name, pp->ty, pp);
-	pp->ty->isStatic = pp->isStatic;
+	pp->ty->access = pp->access;
 	break;
 	}
     case pptToDec:

@@ -1,7 +1,7 @@
 /* Try reading and writing data structure from file. */
 
 if (args.size < 1)
-    punt("usage: t fileName.  This will write something to file");
+    punt("usage: $programName fileName.  This will write something to file");
 file f = fileOpen(args[0], "w");
 
 class namedNumber

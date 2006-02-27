@@ -171,7 +171,7 @@ struct dyString *varName(struct pfCompile *pfc, struct pfVar *var)
 {
 struct dyString *name = dyStringNew(256);
 struct pfType *type = var->ty;
-if (type->isStatic)
+if (type->access == paStatic)
     {
     /* Find enclosing function. */
     struct pfParse *toDec, *classDec;
@@ -1307,7 +1307,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
     struct pfVar *var = hel->val;
     struct pfType *type = var->ty;
     if ((type->tyty == tytyVariable || type->tyty == tytyFunctionPointer)
-	&& !type->isStatic)
+	&& type->access != paStatic)
 	{
 	if (var->isExternal)
 	    fprintf(f, "extern ");
@@ -1344,7 +1344,7 @@ struct hashEl *hel;
 for (hel = helList; hel != NULL; hel = hel->next)
     {
     struct pfVar *var = hel->val;
-    if (!var->isExternal && !var->ty->isStatic)
+    if (!var->isExternal && var->ty->access != paStatic)
 	codeCleanupVar(pfc, f, var);
     }
 }
@@ -2621,7 +2621,7 @@ static void declareStaticVars(struct pfCompile *pfc, FILE *f,
 if (pp->type == pptVarInit)
     {
     struct pfType *type = pp->ty;
-    if (type->isStatic)
+    if (type->access == paStatic)
         {
 	fprintf(f, "static ");
 	codeBaseType(pfc, f, type->base);
@@ -2755,7 +2755,7 @@ if (base->polyList != NULL)
 static void codeStaticCleanups(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
 /* Print out any static assignments in parse tree. */
 {
-if (pp->type == pptVarInit && pp->ty->isStatic)
+if (pp->type == pptVarInit && pp->ty->access == paStatic)
     codeCleanupVar(pfc, f, pp->var);
 for (pp = pp->children; pp != NULL; pp = pp->next)
     codeStaticCleanups(pfc, f, pp);
@@ -2764,7 +2764,7 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 static void codeStaticAssignments(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
 /* Print out any static assignments in parse tree. */
 {
-if (pp->type == pptVarInit && pp->ty->isStatic)
+if (pp->type == pptVarInit && pp->ty->access == paStatic)
     codeStatement(pfc, f, pp);
 for (pp = pp->children; pp != NULL; pp = pp->next)
     codeStaticAssignments(pfc, f, pp);
@@ -2921,7 +2921,7 @@ for (p = pp->children; p != NULL; p = p->next)
 	    break;
 	case pptTuple:
 	case pptVarInit:
-	    if (!p->isStatic)
+	    if (p->access != paStatic)
 		codeStatement(pfc, f, p);
 	    break;
 	default:

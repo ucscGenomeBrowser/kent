@@ -1,6 +1,4 @@
 TO DO:
-  - Allow paths in includes and imports.  Make it so that the names
-    are quoted.
   - ?Read-only and private variables.
         Make it so that class.new() is only legal way to
 	make something with private or read-only var.
@@ -40,6 +38,8 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Allow paths in includes and imports.  Make it so that the names
+    are quoted.
   - Add "import module [as xxx] statement, and then let you use
     things from the module as xxx.callFunc(), xxx.useVar,
     xxx.type var1,var2. Etc.

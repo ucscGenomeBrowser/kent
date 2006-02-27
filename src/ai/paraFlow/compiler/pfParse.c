@@ -449,8 +449,8 @@ void pfParseDumpOne(struct pfParse *pp, int level, FILE *f)
 {
 spaceOut(f, level*3);
 fprintf(f, "%s", pfParseTypeAsString(pp->type));
-if (pp->isStatic)
-    fprintf(f, " s");
+if (pp->access != paUsual)
+    fprintf(f, " %s", pfAccessTypeAsString(pp->access));
 if (pp->ty != NULL)
     {
     fprintf(f, " ");
@@ -1390,7 +1390,7 @@ if (tok->type == pftName)
     dec->children = type;
     type->next = name;
     if (staticTok != NULL)
-	 dec->isStatic = TRUE;
+	 dec->access = paStatic;
     pp = dec;
     }
 else
@@ -1461,7 +1461,7 @@ if (type != pptNone)
     {
     assign = pfParseNew(type, tok, parent, scope);
     assign->children = pp;
-    assign->isStatic = pp->isStatic;
+    assign->access = pp->access;
     pp->parent = assign;
     for (;;)
 	{
@@ -1510,19 +1510,19 @@ if (vars != NULL)
 	{
 	struct pfParse *type = NULL;
 	struct pfParse *pp;
-	boolean isStatic = vars->isStatic;
+	enum pfAccessType access = vars->access;
 	for (pp = vars; pp != NULL; pp = pp->next)
 	    {
 	    if (pp->type == pptVarDec)
 		{
 	        type = pp->children;
 		pp->name = type->next->name;
-		pp->isStatic = isStatic;
+		pp->access = access;
 		}
 	    else if (pp->type == pptNameUse)
 	        {
 		flipNameUseToVarDec(pp, type, tuple);
-		pp->isStatic = isStatic;
+		pp->access = access;
 		}
 	    else if (pp->type == pptAssignment)
 	        {
@@ -1536,10 +1536,10 @@ if (vars != NULL)
 		    {
 		    flipNameUseToVarDec(sub, type, pp);
 		    }
-		sub->isStatic = pp->isStatic = isStatic;
+		sub->access = pp->access = access;
 		}
 	    }
-	tuple->isStatic = isStatic;
+	tuple->access = access;
 	}
     }
 }
@@ -2323,7 +2323,7 @@ else if (pp->type == pptAssignment)
         {
 	struct pfParse *right = left->next;
 	pp->type = pptVarInit;
-	pp->isStatic = left->isStatic;
+	pp->access = left->access;
 	pp->children = left->children;
 	pp->name = left->name;
 	slAddTail(&pp->children, right);

@@ -33,8 +33,11 @@ struct pfVar
      struct pfType *ty;			/* Variable type. */
      struct pfParse *parse;		/* Declaration spot in parse tree. */
      struct ctar *ctar;	/* Compile-time Activation record for functions  */
-     bool isExternal;			/* Variable in an external file? */
      bool paraTainted;			/* If true then no writing to var allowed. */
+     bool isExternal;			/* Variable in an external file? */
+     bool isGlobal;			/* True if globally readable/writable/executable. */
+     bool isReadable;			/* True if globally readable */
+     bool isLocal;			/* True if explicitly local. */
      };
 
 /* Forward declarations so compiler doesn't squawk */

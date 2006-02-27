@@ -81,8 +81,8 @@ if (ty == NULL)
     dyStringPrintf(dy, "void");
 else
     {
-    if (ty->isStatic)
-        dyStringPrintf(dy, "static ");
+    if (ty->access != paUsual)
+        dyStringPrintf(dy, "%s ", pfAccessTypeAsString(ty->access));
     if (ty->tyty == tytyTuple)
 	{
 	dyStringPrintf(dy, "(");

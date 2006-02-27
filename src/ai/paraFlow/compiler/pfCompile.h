@@ -108,6 +108,18 @@ struct pfCompile
     struct pfType *moduleFullType;
     };
 
+enum pfAccessType
+/* Access type for variables, members, and functions */
+    {
+    paUsual=0,	/* Nothing special. */
+    paGlobal,
+    paReadable,
+    paLocal,
+    paStatic,
+    };
+char *pfAccessTypeAsString(enum pfAccessType pa);
+/* Return string representation of access qualifier. */
+
 struct pfCompile *pfCompileNew();
 /* Create new pfCompile.  */
 
