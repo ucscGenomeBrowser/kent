@@ -117,6 +117,11 @@ char *fetchBuiltInCode();
 char *fetchStringDef();
 /* Return a string with definition of string. */
 
+char *mangledModuleName(char *modName);
+/* Return mangled version of module name that hopefully someday
+ * will be unique across directories, but for now is just the last
+ * bit. */
+
 /* --- utility functions --- */
 void printEscapedString(FILE *f, char *s);
 /* Print string in such a way that C can use it. */

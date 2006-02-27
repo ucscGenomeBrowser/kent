@@ -81,19 +81,6 @@ fprintf(f, "static void %s(struct %s *module, %s *stack)",
 	moduleCleanupName, moduleRuntimeType, stackType);
 }
 
-static char *mangledModuleName(char *modName)
-/* Return mangled version of module name that hopefully someday
- * will be unique across directories, but for now is just the last
- * bit. */
-{
-char *name = strrchr(modName, '/');
-if (name == NULL)
-    name = modName;
-else
-    name += 1;
-return name;
-}
-
 static char *localTypeTableType = "_pf_local_type_info";
 static char *localTypeTableName = "_pf_lti";
 
@@ -305,7 +292,7 @@ else
 		    stackName, stack, method->polyOffset);
 		}
 	    else
-		fprintf(f, "_pf_cm%d_%s_%s", base->scope->id, base->name, name);
+		fprintf(f, "%s_%s", base->methodPrefix, name);
 	    }
 	else
 	    internalErrAt(tok);
@@ -2596,8 +2583,11 @@ static void printPrototype(FILE *f, struct pfParse *funcDec, struct pfParse *cla
 {
 if (class)
     {
+#ifdef OLD
     fprintf(f, "void _pf_cm%d_%s_%s(", class->scope->id, 
     	class->name, funcDec->name);
+#endif /* OLD */
+    fprintf(f, "void %s_%s(", class->ty->base->methodPrefix, funcDec->name);
     fprintf(f, "%s *%s)",  stackType, stackName);
     }
 else
@@ -2751,8 +2741,12 @@ if (base->polyList != NULL)
     for (pfr = base->polyList; pfr != NULL; pfr = pfr->next)
         {
 	struct pfBaseType *b = pfr->class;
+	fprintf(f, "  %s_%s,\n", b->methodPrefix,
+		pfr->method->fieldName);
+#ifdef OLD
 	fprintf(f, "  _pf_cm%d_%s_%s,\n", b->scope->id, b->name, 
 		pfr->method->fieldName);
+#endif /* OLD */
 	}
     fprintf(f, "};\n");
     }

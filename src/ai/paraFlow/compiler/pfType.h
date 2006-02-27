@@ -34,6 +34,7 @@ struct pfBaseType
     struct pfPolyFunRef *polyList;	/* List of polymorphic functions
                                            (Including in parents) */
     struct pfParse *initMethod; /* Initialization method if any. */
+    char *methodPrefix;		/* Suggested method prefix for code generator. */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 

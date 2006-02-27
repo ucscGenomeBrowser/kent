@@ -120,7 +120,7 @@ if (--name->_pf_refCount <= 0)
     name->_pf_cleanup(name, 0);
 }
 
-void _pf_cm1_file_readAll(_pf_Stack *stack)
+void _pf_cm_file_readAll(_pf_Stack *stack)
 /* Read all of file. */
 {
 struct file *file = stack[0].v;
@@ -128,14 +128,14 @@ _pf_nil_check(file);
 stack[0].String = readAll(file->f);
 }
 
-void _pf_cm1_file_close(_pf_Stack *stack)
+void _pf_cm_file_close(_pf_Stack *stack)
 /* Close file explicitly. */
 {
 struct file *file = stack[0].v;
 carefulClose(&file->f);
 }
 
-void _pf_cm1_file_write(_pf_Stack *stack)
+void _pf_cm_file_write(_pf_Stack *stack)
 /* paraFlow run time support routine to write string to file. */
 {
 struct file *file = stack[0].v;
@@ -155,7 +155,7 @@ if (fflush(file->f) < 0)
     errnoAbort("Couldn't flush file %s.", file->name);
 }
 
-void _pf_cm1_file_flush(_pf_Stack *stack)
+void _pf_cm_file_flush(_pf_Stack *stack)
 /* Flush file */
 {
 struct file *file = stack[0].v;
@@ -163,7 +163,7 @@ _pf_nil_check(file);
 mustFlush(file);
 }
 
-void _pf_cm1_file_writeNow(_pf_Stack *stack)
+void _pf_cm_file_writeNow(_pf_Stack *stack)
 /* paraFlow run time support routine to write string to file
  * and then flush. */
 {
@@ -179,7 +179,7 @@ if (--string->_pf_refCount <= 0)
 }
 
 
-void _pf_cm1_file_put(_pf_Stack *stack)
+void _pf_cm_file_put(_pf_Stack *stack)
 /* Print to file with line feed. */
 {
 struct file *file = stack[0].v;
@@ -188,7 +188,7 @@ _pf_prin(f, stack+1, TRUE);
 fputc('\n', f);
 }
 
-void _pf_cm1_file_get(_pf_Stack *stack)
+void _pf_cm_file_get(_pf_Stack *stack)
 /* Read in variable from file, and then make sure have
  * a newline. */
 {
@@ -201,7 +201,7 @@ if (c != '\n')
 }
 
 
-void _pf_cm1_file_readLine(_pf_Stack *stack)
+void _pf_cm_file_readLine(_pf_Stack *stack)
 /* Read next line from file. */
 {
 struct file *file = stack[0].v;
@@ -222,7 +222,7 @@ for (;;)
 stack[0].String = _pf_string_from_const(dy->string);
 }
 
-void _pf_cm1_file_read(_pf_Stack *stack)
+void _pf_cm_file_read(_pf_Stack *stack)
 /* Read in a fixed number of bytes to string.
  * This will return a string of length zero at
  * EOF, and a string smaller than what is asked
@@ -240,7 +240,7 @@ string->s[bytesRead] = 0;
 stack[0].String = string;
 }
 
-void _pf_cm1_file_seek(_pf_Stack *stack)
+void _pf_cm_file_seek(_pf_Stack *stack)
 /* Seek to a position. */
 {
 struct file *file = stack[0].v;
@@ -251,7 +251,7 @@ if (fseek(file->f, pos, whence) < 0)
     errnoAbort("seek error on %s", file->name);
 }
 
-void _pf_cm1_file_skip(_pf_Stack *stack)
+void _pf_cm_file_skip(_pf_Stack *stack)
 /* Seek relative to current position. */
 {
 struct file *file = stack[0].v;
@@ -260,7 +260,7 @@ if (fseek(file->f, pos, SEEK_CUR) < 0)
     errnoAbort("skip error on %s", file->name);
 }
 
-void _pf_cm1_file_tell(_pf_Stack *stack)
+void _pf_cm_file_tell(_pf_Stack *stack)
 /* Return current file position. */
 {
 struct file *file = stack[0].v;

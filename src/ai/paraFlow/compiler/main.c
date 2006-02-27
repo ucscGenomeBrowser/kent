@@ -202,6 +202,19 @@ pfParseDump(program, 0, f);
 pfParseDump(stringModule->pp, 1, f);
 }
 
+char *mangledModuleName(char *modName)
+/* Return mangled version of module name that hopefully someday
+ * will be unique across directories, but for now is just the last
+ * bit. */
+{
+char *name = strrchr(modName, '/');
+if (name == NULL)
+    name = modName;
+else
+    name += 1;
+return name;
+}
+
 void paraFlow(char *fileName, int pfArgc, char **pfArgv)
 /* parse and dump. */
 {

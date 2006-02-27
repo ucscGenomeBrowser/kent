@@ -1792,7 +1792,7 @@ if (parentInit)
 static void blessClassOrInterface(struct pfCompile *pfc, struct pfParse *pp, boolean isInterface)
 /* Make sure that there are only variable , class declarations and
  * function declarations in class.  Flatten out nested declarative
- * tuples.  Add definitions to class symbol table. */
+ * tuples.  Add definitions to class symbol table.   */
 {
 struct pfParse *type = pp->children;
 struct pfParse *compound = type->next;
@@ -1856,6 +1856,7 @@ for (p = compound->children; p != NULL; p = p->next)
 slReverse(&base->fields);
 slReverse(&base->methods);
 }
+
 
 
 static void typeConstant(struct pfCompile *pfc, struct pfParse *pp)
@@ -2605,6 +2606,40 @@ switch (pp->type)
     }
 }
 
+static void rFillInClassMethodsPrefix(struct pfParse *pp, struct dyString *dy)
+/* Recurse mostly just to reverse order, so parent appears first... */
+{
+if (pp->parent)
+    rFillInClassMethodsPrefix(pp->parent, dy);
+switch (pp->type)
+    {
+    case pptModule:
+    case pptMainModule:
+    case pptModuleRef:
+	if (pp->name[0] != '<')
+	    {
+	    dyStringAppendC(dy, '_');
+	    dyStringAppend(dy, mangledModuleName(pp->name));
+	    }
+        break;
+    case pptClass:
+	dyStringAppendC(dy, '_');
+        dyStringAppend(dy, pp->name);
+        break;
+    }
+}
+
+static void fillInClassMethodsPrefix(struct pfCompile *pfc, struct pfParse *class)
+/* Fill in prefix to user for class methods. */
+{
+struct dyString *dy = dyStringNew(0);
+dyStringAppend(dy, "_pf_cm");
+rFillInClassMethodsPrefix(class, dy);
+class->ty->base->methodPrefix = cloneString(dy->string);
+dyStringFree(&dy);
+}
+
+
 static void rClassBless(struct pfCompile *pfc, struct pfParse *pp)
 /* Call blessClass on whole tree. */
 {
@@ -2617,6 +2652,7 @@ switch (pp->type)
     {
     case pptClass:
         blessClassOrInterface(pfc, pp, FALSE);
+	fillInClassMethodsPrefix(pfc, pp);
 	break;
     case pptInterface:
         blessClassOrInterface(pfc, pp, TRUE);

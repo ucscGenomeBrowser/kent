@@ -1,8 +1,10 @@
 import 'num' as NumStuff
 import 'animal'
-// import '../lib/lib'
+import '../lib/lib'
 
-// print("lib.version is " + lib.version);
+print("lib.version is " + lib.lib.version);
+string uggh = "ugggh";
+print("There are " + lib.lib.countChars(uggh, 'g') + " g's in $uggh");
 NumStuff.numType x = ();
 print(x);
 x = ("twenty", 20);
