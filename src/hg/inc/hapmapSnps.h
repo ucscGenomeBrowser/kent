@@ -9,96 +9,106 @@
 #include "jksql.h"
 #endif
 
-#define HAPMAPSNP_NUM_COLS 17
+#define HAPMAPSNPS_NUM_COLS 27
 
-struct hapmapSnp
-/* HapMap primate alleles and population specific derived allele frequencies */
+struct hapmapSnps
+/* HapMap allele counts by population and derived alleles */
     {
-    struct hapmapSnp *next;  /* Next in singly linked list. */
+    struct hapmapSnps *next;  /* Next in singly linked list. */
     char *chrom;	/* Chromosome */
-    unsigned chromStart;	/* Start position in chrom */
-    unsigned chromEnd;	/* End position in chrom */
-    char *name;	/* Reference SNP identifier or Affy SNP name */
+    unsigned chromStart;	/* Start position in chrom (0 based) */
+    unsigned chromEnd;	/* End position in chrom (1 based) */
+    char *name;	/* Reference SNP identifier from dbSnp */
     unsigned score;	/* Not used */
-    char strand[2];	/* Which DNA strand contains the observed alleles */
-    char hReference[2];	/* Human reference base */
-    char hOther[2];	/* Human other base */
-    char cBase[2];	/* chimp base */
-    char rBase[2];	/* rhesus base */
+    char strand[2];	/* Which genomic strand contains the observed alleles */
+    char hReference[2];	/* Reference allele for human */
+    char hOther[2];	/* Other allele for human */
+    char cState[2];	/* Chimp state */
+    char rState[2];	/* Rhesus state */
     unsigned cQual;	/* chimp quality score */
     unsigned rQual;	/* rhesus quality score */
-    float ceu;	/* Derived allele frequency for the CEU population */
-    float chb;	/* Derived allele frequency for the CHB population */
-    float jpt;	/* Derived allele frequency for the JPT population */
-    float jptchb;	/* Derived allele frequency for the JPT+CHB population */
-    float yri;	/* Derived allele frequency for the YRI population */
+    unsigned rYri;	/* Reference allele count for the YRI population */
+    unsigned rCeu;	/* Reference allele count for the CEU population */
+    unsigned rChb;	/* Reference allele count for the CHB population */
+    unsigned rJpt;	/* Reference allele count for the JPT population */
+    unsigned rJptChb;	/* Reference allele count for the JPT+CHB population */
+    unsigned oYri;	/* Other allele count for the YRI population */
+    unsigned oCeu;	/* Other allele count for the CEU population */
+    unsigned oChb;	/* Other allele count for the CHB population */
+    unsigned oJpt;	/* Other allele count for the JPT population */
+    unsigned oJptChb;	/* Other allele count for the JPT+CHB population */
+    unsigned nYri;	/* Sample Size for the YRI population */
+    unsigned nCeu;	/* Sample Size for the CEU population */
+    unsigned nChb;	/* Sample Size for the CHB population */
+    unsigned nJpt;	/* Sample Size for the JPT population */
+    unsigned nJptChb;	/* Sample Size for the JPT+CHB population */
     };
 
-void hapmapSnpStaticLoad(char **row, struct hapmapSnp *ret);
-/* Load a row from hapmapSnp table into ret.  The contents of ret will
+void hapmapSnpsStaticLoad(char **row, struct hapmapSnps *ret);
+/* Load a row from hapmapSnps table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 
-struct hapmapSnp *hapmapSnpLoad(char **row);
-/* Load a hapmapSnp from row fetched with select * from hapmapSnp
- * from database.  Dispose of this with hapmapSnpFree(). */
+struct hapmapSnps *hapmapSnpsLoad(char **row);
+/* Load a hapmapSnps from row fetched with select * from hapmapSnps
+ * from database.  Dispose of this with hapmapSnpsFree(). */
 
-struct hapmapSnp *hapmapSnpLoadAll(char *fileName);
-/* Load all hapmapSnp from whitespace-separated file.
- * Dispose of this with hapmapSnpFreeList(). */
+struct hapmapSnps *hapmapSnpsLoadAll(char *fileName);
+/* Load all hapmapSnps from whitespace-separated file.
+ * Dispose of this with hapmapSnpsFreeList(). */
 
-struct hapmapSnp *hapmapSnpLoadAllByChar(char *fileName, char chopper);
-/* Load all hapmapSnp from chopper separated file.
- * Dispose of this with hapmapSnpFreeList(). */
+struct hapmapSnps *hapmapSnpsLoadAllByChar(char *fileName, char chopper);
+/* Load all hapmapSnps from chopper separated file.
+ * Dispose of this with hapmapSnpsFreeList(). */
 
-#define hapmapSnpLoadAllByTab(a) hapmapSnpLoadAllByChar(a, '\t');
-/* Load all hapmapSnp from tab separated file.
- * Dispose of this with hapmapSnpFreeList(). */
+#define hapmapSnpsLoadAllByTab(a) hapmapSnpsLoadAllByChar(a, '\t');
+/* Load all hapmapSnps from tab separated file.
+ * Dispose of this with hapmapSnpsFreeList(). */
 
-struct hapmapSnp *hapmapSnpLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all hapmapSnp from table that satisfy the query given.  
+struct hapmapSnps *hapmapSnpsLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all hapmapSnps from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
  * anotherTable.something'.
- * Dispose of this with hapmapSnpFreeList(). */
+ * Dispose of this with hapmapSnpsFreeList(). */
 
-void hapmapSnpSaveToDb(struct sqlConnection *conn, struct hapmapSnp *el, char *tableName, int updateSize);
-/* Save hapmapSnp as a row to the table specified by tableName. 
+void hapmapSnpsSaveToDb(struct sqlConnection *conn, struct hapmapSnps *el, char *tableName, int updateSize);
+/* Save hapmapSnps as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size
  * of a string that would contain the entire query. Arrays of native types are
  * converted to comma separated strings and loaded as such, User defined types are
  * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
  * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use hapmapSnpSaveToDbEscaped() */
+ * If worried about this use hapmapSnpsSaveToDbEscaped() */
 
-void hapmapSnpSaveToDbEscaped(struct sqlConnection *conn, struct hapmapSnp *el, char *tableName, int updateSize);
-/* Save hapmapSnp as a row to the table specified by tableName. 
+void hapmapSnpsSaveToDbEscaped(struct sqlConnection *conn, struct hapmapSnps *el, char *tableName, int updateSize);
+/* Save hapmapSnps as a row to the table specified by tableName. 
  * As blob fields may be arbitrary size updateSize specifies the approx size.
  * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than hapmapSnpSaveToDb().
+ * escapes all simple strings (not arrays of string) but may be slower than hapmapSnpsSaveToDb().
  * For example automatically copies and converts: 
  * "autosql's features include" --> "autosql\'s features include" 
  * before inserting into database. */ 
 
-struct hapmapSnp *hapmapSnpCommaIn(char **pS, struct hapmapSnp *ret);
-/* Create a hapmapSnp out of a comma separated string. 
+struct hapmapSnps *hapmapSnpsCommaIn(char **pS, struct hapmapSnps *ret);
+/* Create a hapmapSnps out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
- * return a new hapmapSnp */
+ * return a new hapmapSnps */
 
-void hapmapSnpFree(struct hapmapSnp **pEl);
-/* Free a single dynamically allocated hapmapSnp such as created
- * with hapmapSnpLoad(). */
+void hapmapSnpsFree(struct hapmapSnps **pEl);
+/* Free a single dynamically allocated hapmapSnps such as created
+ * with hapmapSnpsLoad(). */
 
-void hapmapSnpFreeList(struct hapmapSnp **pList);
-/* Free a list of dynamically allocated hapmapSnp's */
+void hapmapSnpsFreeList(struct hapmapSnps **pList);
+/* Free a list of dynamically allocated hapmapSnps's */
 
-void hapmapSnpOutput(struct hapmapSnp *el, FILE *f, char sep, char lastSep);
-/* Print out hapmapSnp.  Separate fields with sep. Follow last field with lastSep. */
+void hapmapSnpsOutput(struct hapmapSnps *el, FILE *f, char sep, char lastSep);
+/* Print out hapmapSnps.  Separate fields with sep. Follow last field with lastSep. */
 
-#define hapmapSnpTabOut(el,f) hapmapSnpOutput(el,f,'\t','\n');
-/* Print out hapmapSnp as a line in a tab-separated file. */
+#define hapmapSnpsTabOut(el,f) hapmapSnpsOutput(el,f,'\t','\n');
+/* Print out hapmapSnps as a line in a tab-separated file. */
 
-#define hapmapSnpCommaOut(el,f) hapmapSnpOutput(el,f,',',',');
-/* Print out hapmapSnp as a comma separated list including final comma. */
+#define hapmapSnpsCommaOut(el,f) hapmapSnpsOutput(el,f,',',',');
+/* Print out hapmapSnps as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 

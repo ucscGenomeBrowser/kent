@@ -3,13 +3,13 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#HapMap primate alleles and population specific derived allele frequencies
+#HapMap allele counts by population and derived alleles
 CREATE TABLE hapmapSnps (
     bin        smallint(5) unsigned NOT NULL,
     chrom      enum( 'unknown', 'chr1', 'chr2', 'chr3', 'chr4', 'chr5', 
 		'chr6', 'chr7', 'chr8', 'chr9', 'chr10', 'chr11', 'chr12', 
 		'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 
-		'chr19', 'chr20', 'chr21', 'chr22', 'chrM', 'chrX', 'chrY'
+		'chr19', 'chr20', 'chr21', 'chr22', 'chrX', 'chrY', 'chrM'
                ) DEFAULT 'unknown' NOT NULL, # Chromosome
     chromStart int unsigned not null,	# Start position in chrom
     chromEnd   int unsigned not null,	# End position in chrom
@@ -22,11 +22,21 @@ CREATE TABLE hapmapSnps (
     rBase      char(1)      not null,	# rhesus base
     cQual      int unsigned not null,	# chimp quality score
     rQual      int unsigned not null,	# rhesus quality score
-    ceu        float        not null,	# Derived allele frequency for the CEU population
-    chb        float        not null,	# Derived allele frequency for the CHB population
-    jpt        float        not null,	# Derived allele frequency for the JPT population
-    jptchb     float        not null,	# Derived allele frequency for the JPT+CHB population
-    yri        float        not null,	# Derived allele frequency for the YRI population
+    rYri       int unsigned not null,	# Reference allele count for the YRI population
+    rCeu       int unsigned not null,	# Reference allele count for the CEU population
+    rChb       int unsigned not null,	# Reference allele count for the CHB population
+    rJpt       int unsigned not null,	# Reference allele count for the JPT population
+    rJptChb    int unsigned not null,	# Reference allele count for the JPT+CHB population
+    oYri       int unsigned not null,	# Other allele count for the YRI population
+    oCeu       int unsigned not null,	# Other allele count for the CEU population
+    oChb       int unsigned not null,	# Other allele count for the CHB population
+    oJpt       int unsigned not null,	# Other allele count for the JPT population
+    oJptChb    int unsigned not null,	# Other allele count for the JPT+CHB population
+    nYri       int unsigned not null,	# Sample Size for the YRI population
+    nCeu       int unsigned not null,	# Sample Size for the CEU population
+    nChb       int unsigned not null,	# Sample Size for the CHB population
+    nJpt       int unsigned not null,	# Sample Size for the JPT population
+    nJptChb    int unsigned not null,	# Sample Size for the JPT+CHB population
               #Indices
     INDEX      chrom      (chrom,bin),
     INDEX      name       (name)
