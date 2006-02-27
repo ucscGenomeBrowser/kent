@@ -4123,6 +4123,27 @@ _EOF_
     hgsql -h genome-testdb hgcentraltest \
       -e  "update dbDb set hgNearOk = 1 where name = 'dm2';"
 
+# REDO DM2-HG18 PAIRWISE BLAST (DONE 2/24/06 angie)
+    # Oops, hgBlastTab got overwritten with dm2 4.1 genes by the 
+    # hg18 build process.  Tweak back to 4.2:
+    ssh hgwdev
+    mkdir /cluster/data/dm2/bed/hgNearBlastp
+    cd /cluster/data/dm2/bed/hgNearBlastp
+    cat << _EOF_ > config.ra.hg18redo
+# Redo vs. hg18 with 4.2 genes:
+
+targetGenesetPrefix flyBase
+targetDb dm2
+queryDbs hg18
+
+dm2Fa /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
+hg18Fa /cluster/data/hg18/bed/blastp/known.faa
+
+buildDir /cluster/data/dm2/bed/hgNearBlastp
+scratchDir /san/sanvol1/scratch/dm2HgNearBlastp
+_EOF_
+    doHgNearBlastp.pl -noSelf config.ra.hg18redo >& do.log & tail -f do.log
+
 # END OF HGNEAR STUFF
 #############################################################################
 
