@@ -12,8 +12,9 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.22 2005/08/17 16:48:03 hiram Exp $";
+static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.23 2006/02/27 22:52:40 hiram Exp $";
 
+static boolean noLoad = FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -30,6 +31,7 @@ errAbort(
   "   -noGl  - don't do gl bits\n"
   "   -chrom=chrN - just do a single chromosome.  Don't delete old tables.\n"
   "   -chromLst=chrom.lst - chromosomes subdirs are named in chrom.lst (1, 2, ...)\n"
+  "   -noLoad - do not load tables, leave SQL files instead.\n"
   "example:\n"
   "   hgGoldGapGl -noGl hg16 /cluster/data/hg16 .\n");
 }
@@ -163,10 +165,18 @@ char dir[256], chrom[128], ext[64];
 char goldName[128], gapName[128];
 char *agpName;
 char *ptr;
+char goldFileName[128];
+char gapFileName[128];
 
+if (! noLoad)
+    {
+    safef(goldFileName, ArraySize(goldFileName), "%s", goldTabName);
+    safef(gapFileName, ArraySize(gapFileName), "%s", gapTabName);
+    }
 fiList = listDirX(chromDir, "*.agp", TRUE);
 for (fi = fiList; fi != NULL; fi = fi->next)
     {
+
     /* Get full path name of .agp file and process it
      * into table names. */
     agpName = fi->name;
@@ -177,31 +187,47 @@ for (fi = fiList; fi != NULL; fi = fi->next)
     sprintf(goldName, "%s_gold", chrom);
     sprintf(gapName, "%s_gap", chrom);
 
+    if (noLoad)
+	{
+	safef(goldFileName, ArraySize(goldFileName), "%s_gold.tab", chrom);
+	safef(gapFileName, ArraySize(gapFileName), "%s_gap.tab", chrom);
+	}
+
     /* Create gold & gap tab separated files. */
-    splitAgp(fi->name, goldTabName, gapTabName);
+    splitAgp(fi->name, goldFileName, gapFileName);
 
     /* Create gold table and load it up. */
     dyStringClear(ds);
     dyStringPrintf(ds, createGold, goldName);
     dyStringAppend(ds, goldSplitIndex);
-    sqlRemakeTable(conn, goldName, ds->string);
+    if (! noLoad)
+	sqlRemakeTable(conn, goldName, ds->string);
     dyStringClear(ds);
     dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
-        goldTabName, goldName);
-    sqlUpdate(conn, ds->string);
-    remove(goldTabName);
+        goldFileName, goldName);
+    if (! noLoad)
+	{
+	sqlUpdate(conn, ds->string);
+	remove(goldFileName);
+	}
 
     /* Create gap table and load it up. */
     dyStringClear(ds);
     dyStringPrintf(ds, createGap, gapName);
     dyStringAppend(ds, gapSplitIndex);
-    sqlRemakeTable(conn, gapName, ds->string);
-    sqlMaybeMakeTable(conn, gapName, ds->string);
+    if (! noLoad)
+	{
+	sqlRemakeTable(conn, gapName, ds->string);
+	sqlMaybeMakeTable(conn, gapName, ds->string);
+	}
     dyStringClear(ds);
     dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
-        gapTabName, gapName);
-    sqlUpdate(conn, ds->string);
-    remove(gapTabName);
+        gapFileName, gapName);
+    if (! noLoad)
+	{
+	sqlUpdate(conn, ds->string);
+	remove(gapFileName);
+	}
     }
 freeDyString(&ds);
 }
@@ -247,7 +273,7 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 
     splitPath(glFileName, dir, chrom, ext);
     sprintf(glTable, "%s_gl", chrom);
-    if (sqlTableExists(conn, glTable))
+    if ( (! noLoad) && sqlTableExists(conn, glTable))
 	{
 	dyStringClear(ds);
 	dyStringPrintf(ds, "DROP table %s", glTable);
@@ -255,12 +281,14 @@ for (fi = fiList; fi != NULL; fi = fi->next)
 	}
     dyStringClear(ds);
     dyStringPrintf(ds, createGl, glTable);
-    sqlMaybeMakeTable(conn, glTable, ds->string);
+    if (! noLoad)
+	sqlMaybeMakeTable(conn, glTable, ds->string);
     dyStringClear(ds);
     addGlBin(glFileName, tab);
     dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
         tab, glTable);
-    sqlUpdate(conn, ds->string);
+    if (! noLoad)
+	sqlUpdate(conn, ds->string);
     }
 freeDyString(&ds);
 }
@@ -286,13 +314,18 @@ void hgGoldGapGl(char *database, char *gsDir, char *ooSubDir, boolean doGl, char
 /* hgGoldGapGl - Put chromosome .agp and .gl files into browser database.. */
 { 
 struct fileInfo *chrFiList, *chrFi; 
-struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn = NULL;
 char ooDir[512];
 char pathName[512];
 struct hash *cloneVerHash = newHash(0);
 boolean gotAny = FALSE;
 struct hash *chromDirHash = newHash(4);
 char *chromLst = optionVal("chromLst", NULL);
+
+if (! noLoad)
+    conn = sqlConnect(database);
+
+verbose(2,"#\tcomplete gold, gap and .gl files produced\n");
 
 if (chromLst != NULL)
     {
@@ -336,7 +369,8 @@ for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
         }
     }
 slFreeList(&chrFiList);
-sqlDisconnect(&conn);
+if (! noLoad)
+    sqlDisconnect(&conn);
 hashFree(&chromDirHash);
 if (!gotAny)
     errAbort("No contig agp and gold files found");
@@ -347,7 +381,13 @@ void hgGoldGap(char *database, char *agpFile)
 /* hgGoldGap - Put chromosome .agp file into browser database.. */
 {
 struct dyString *ds = dyStringNew(0);
-struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn = NULL;
+
+if (! noLoad)
+    conn = sqlConnect(database);
+
+verbose(2,"#\tsimple gold gap, no .gl files produced, from agp file: %s\n",
+	agpFile);
 
 splitAgp(agpFile, goldTabName, gapTabName);
 
@@ -355,37 +395,54 @@ splitAgp(agpFile, goldTabName, gapTabName);
 dyStringClear(ds);
 dyStringPrintf(ds, createGold, "gold");
 dyStringAppend(ds, goldIndex);
-sqlRemakeTable(conn, "gold", ds->string);
+if (! noLoad)
+    sqlRemakeTable(conn, "gold", ds->string);
 dyStringClear(ds);
 dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
     goldTabName, "gold");
-sqlUpdate(conn, ds->string);
-remove(goldTabName);
+if (! noLoad)
+    {
+    sqlUpdate(conn, ds->string);
+    remove(goldTabName);
+    }
 
 /* Create gap table and load it up. */
 dyStringClear(ds);
 dyStringPrintf(ds, createGap, "gap");
 dyStringAppend(ds, gapIndex);
-sqlRemakeTable(conn, "gap", ds->string);
-sqlMaybeMakeTable(conn, "gap", ds->string);
+if (! noLoad)
+    {
+    sqlRemakeTable(conn, "gap", ds->string);
+    sqlMaybeMakeTable(conn, "gap", ds->string);
+    }
 dyStringClear(ds);
 dyStringPrintf(ds, "LOAD data local infile '%s' into table %s", 
     gapTabName, "gap");
-sqlUpdate(conn, ds->string);
-remove(gapTabName);
-
-sqlDisconnect(&conn);
+if (! noLoad)
+    {
+    sqlUpdate(conn, ds->string);
+    remove(gapTabName);
+    sqlDisconnect(&conn);
+    }
 dyStringFree(&ds);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-boolean doGl;
+boolean doGl = FALSE;
+
 optionHash(&argc, argv);
+
 if (argc != 4 && argc != 3)
     usage();
+
+noLoad = optionExists("noLoad");
+if (noLoad)
+    verbose(2,"#\tnoLoad option, leaving SQL files, no table loading\n");
+
 doGl = !(optionExists("noGl") || optionExists("nogl"));
+
 if (argc == 3)
     hgGoldGap(argv[1], argv[2]);
 else
