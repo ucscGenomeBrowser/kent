@@ -1,7 +1,6 @@
 O = output
 
 test:
-	mkdir -p output
 	paraFlow arrayAppend.pf > $O/arrayAppend
 	diff expected/arrayAppend $O/arrayAppend
 	paraFlow assign.pf > $O/assign
@@ -66,6 +65,7 @@ test:
 	diff expected/paraDoMod $O/paraDoMod
 	paraFlow paraFilterDir.pf > $O/paraFilterDir
 	diff expected/paraFilterDir $O/paraFilterDir
+	mkdir -p output
 	paraFlow paraFilterOdd.pf > $O/paraFilterOdd
 	diff expected/paraFilterOdd $O/paraFilterOdd
 	paraFlow paraGetAa.pf > $O/paraGetAa

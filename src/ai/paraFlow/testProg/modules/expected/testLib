@@ -4,9 +4,9 @@ There are 5 '/' in string.
 There are 1 spaced words in string
 There are 12 words & punctuation in string
 Split into spaced words thats:
-   ("/usr/local/apache/htdocs/index.html")
+   ('/usr/local/apache/htdocs/index.html')
 Split into words thats:
-   ("/","usr","/","local","/","apache","/","htdocs","/","index",".","html")
+   ('/','usr','/','local','/','apache','/','htdocs','/','index','.','html')
 The first 's' is at position 2
 The last '/' is at 24
 The dir is /usr/local/apache/htdocs/

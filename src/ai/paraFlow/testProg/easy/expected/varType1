@@ -3,10 +3,10 @@
 Hi
 123
 0.99
-("Hi",123,0.987000)
+('Hi',123,0.987000)
 345
-("some animal")("Sniffy")("Sniffy")
-("Sniffy",7,"rabbit")("Sniffy",7,"rabbit")
-("some animal")("some animal")("Sniffy")
-("Sniffy",7,"rabbit")
+('some animal')('Sniffy')('Sniffy')
+('Sniffy',7,'rabbit')('Sniffy',7,'rabbit')
+('some animal')('some animal')('Sniffy')
+('Sniffy',7,'rabbit')
 Looks like a lot of types went ok

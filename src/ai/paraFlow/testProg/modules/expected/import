@@ -1,13 +1,13 @@
 (nil,0)
-("twenty",20)
+('twenty',20)
 zebra
 cat
 hello hello
 ZEEBRAH
 ((1,0,0),(0,0,6))
-("eleven",11)
-("seven",7)
-("eleven + seven",18)
-("eleven - seven",4)
-("ZEEBRAH",7)
+('eleven',11)
+('seven',7)
+('eleven + seven',18)
+('eleven - seven',4)
+('ZEEBRAH',7)
 (1,2,3)

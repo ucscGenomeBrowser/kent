@@ -16,14 +16,14 @@ got ending wugga
 123456789123 == 123456789123?
 1.23e3 == 1230.00?
 This is a string with 	 tabs and spaces.
-("This","is","a","string","with","tabs","and","spaces.")
-("This","is","a","string","with","tabs","and","spaces",".")
-("This","is","a","string","with","	","tabs","and","spaces.")
-("This","is","a","string","with","","","tabs","and","spaces.")
+('This','is','a','string','with','tabs','and','spaces.')
+('This','is','a','string','with','tabs','and','spaces','.')
+('This','is','a','string','with','	','tabs','and','spaces.')
+('This','is','a','string','with','','','tabs','and','spaces.')
 This is a 
 multiline
 string here.
-("This is a ","multiline","string here.")
+('This is a ','multiline','string here.')
 '   123' has 3 leading spaces
 '   123' has 2 leading spaces starting at 1
 '  ' has 2 leading spaces
