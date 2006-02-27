@@ -12,8 +12,9 @@
 #include "jksql.h"
 #include "dystring.h"
 #include "options.h"
+#include "sqlNum.h"
 
-static char const rcsid[] = "$Id: pbToAlleleCounts.c,v 1.1 2006/02/14 00:16:53 daryl Exp $";
+static char const rcsid[] = "$Id: pbToAlleleCounts.c,v 1.2 2006/02/27 07:21:11 daryl Exp $";
 
 static int ssnpId=0;
 boolean strictSnp=FALSE;
@@ -31,7 +32,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort("pbToAlleleCounts -- reformat Seattle SNP data from prettybase format to bed with alleles and counts\n"
-	 "Usage:   pbToAlleleCounts prettybaseFile bedFile\n"
+	 "Usage:   pbToAlleleCounts prettybaseFile strandFile bedFile\n"
 	 "Options: strictSnp - ignore loci with non-SNP mutations\n"
 	 "         strictBiallelic - ignore loci with more than two alleles \n");
 }
@@ -52,10 +53,19 @@ struct locus
     int     chromStart;
     int     chromEnd;
     char   *name; /* unique locus id */
+    char   *strand;
+    char   *hugoId;
     int     sampleSize;
     int     alleleCount;
     boolean strictSnp;
     struct  alleleInfo *alleles;
+};
+
+struct strand
+{
+    struct strand *next;
+    char *name;
+    char *strand;
 };
 
 void convertToUppercase(char *ptr)
@@ -82,7 +92,7 @@ if (strictSnp&&!l->strictSnp)
     return;
 if (strictBiallelic&&l->alleleCount!=2)
     return;
-fprintf(f,"%s\t%d\t%d\t%s\t0\t+\t%d\t%d", l->chrom, l->chromStart, l->chromEnd, l->name, l->sampleSize, l->alleleCount);
+fprintf(f,"%s\t%d\t%d\t%s\t0\t%s\t%d\t%d", l->chrom, l->chromStart, l->chromEnd, l->name, l->strand, l->sampleSize, l->alleleCount);
 printAlleles(f, l->alleles);
 }
 
@@ -96,11 +106,33 @@ for (l=head; l!=NULL; l=l->next)
     printLocus(f, l);
 }
 
-struct locus *readSs(char *input)
+struct hash *readStrand(char *strandFile)
+/* read the strands from a file */
+{
+struct hash *strandHash = newHash(4);
+struct lineFile  *lf = lineFileOpen(strandFile, TRUE); /* input file */
+char             *row[2]; /* number of fields in input file */
+
+while (lineFileRow(lf, row)) /* process one snp at a time */
+    {
+    struct strand *strand;
+
+    AllocVar(strand);
+    strand->name   = cloneString(row[0]);
+    strand->strand = cloneString(row[1]);
+    hashAddSaveName(strandHash, strand->name, strand, &strand->name);
+    }
+return strandHash;
+}
+
+struct locus *readSs(char *pbFile, char *strandFile)
 /* determine which allele matches assembly and store in details file */
 {
-struct locus     *l  = NULL;
-struct lineFile  *lf1 = lineFileOpen(input, TRUE), *lf2; /* input file */
+struct hash *strandHash = readStrand(strandFile);
+struct strand *strand = NULL;
+struct locus     *l  = NULL, *lPtr = NULL;
+struct alleleInfo *aPtr = NULL;
+struct lineFile  *lf = lineFileOpen(pbFile, TRUE); /* input file */
 char             *row[4], *row2[3]; /* number of fields in input file */
 char  *pbName;
 char   chrom[32];
@@ -109,36 +141,35 @@ int    chromEnd;
 char   name[32];
 char  *allele;
 
-while (lineFileRow(lf1, row)) /* process one snp at a time */
+while (lineFileRow(lf, row)) /* process one snp at a time */
     {
     struct alleleInfo *ai1 = NULL, *ai2 = NULL, *aiPtr;
     struct locus *m        = NULL;
 
-    pbName = replaceChars(row[0], "-", "\t");
-    lf2 = lineFileOnString("pbName", TRUE, pbName);
-    lineFileRow(lf2, row2);
-    chromEnd       = atoi(row2[0]);
-    chromStart     = chromEnd-1;
+    if (stringIn("N",row[2])||stringIn("N",row[3]))
+	continue;
+    chopString(row[0], "-", row2, 3);
+    chromStart = sqlUnsigned(row2[0]);
+    chromEnd   = chromStart+1;
     safef(chrom, sizeof(chrom), "chr%s", row2[2]);
 
     if(l==NULL||l->chrom==NULL||l->chromStart!=chromStart||!(sameString(l->chrom,chrom)))
 	{
 	AllocVar(m);
-	safef(name, sizeof(name), "ssnp%d", ++ssnpId);
+	safef(name, sizeof(name), "%s_%d", row2[1], ++ssnpId);
 	m->chrom       = cloneString(chrom);
 	m->chromStart  = chromStart;
 	m->chromEnd    = chromEnd;
 	m->name        = cloneString(name);
+	m->hugoId      = cloneString(row2[1]);
 	m->strictSnp   = TRUE;
 	slAddHead(&l, m);
 	}
 
-    convertToUppercase(row[2]);
     allele=cloneString(row[2]);
-    if ( differentString(allele,"A") && 
-	 differentString(allele,"C") && 
-	 differentString(allele,"G") && 
-	 differentString(allele,"T") )
+    convertToUppercase(allele);
+    if ( differentString(allele,"A") && differentString(allele,"C") && 
+	 differentString(allele,"G") && differentString(allele,"T") )
 	l->strictSnp = FALSE;
     for (aiPtr=l->alleles; aiPtr!=NULL; aiPtr=aiPtr->next)
 	if (sameString(aiPtr->allele, allele))
@@ -149,16 +180,15 @@ while (lineFileRow(lf1, row)) /* process one snp at a time */
 	ai1->allele=cloneString(allele);
 	slAddHead(&(l->alleles), ai1);
 	l->alleleCount++;
+	aiPtr=l->alleles;
 	}
+    aiPtr->count++;
     l->sampleSize++;
-    l->alleles->count++;
 
-    convertToUppercase(row[3]);
     allele=cloneString(row[3]);
-    if ( differentString(allele,"A") && 
-	 differentString(allele,"C") && 
-	 differentString(allele,"G") && 
-	 differentString(allele,"T") )
+    convertToUppercase(allele);
+    if ( differentString(allele,"A") && differentString(allele,"C") && 
+	 differentString(allele,"G") && differentString(allele,"T") )
 	l->strictSnp = FALSE;
     for (aiPtr=l->alleles; aiPtr!=NULL; aiPtr=aiPtr->next)
 	if (sameString(aiPtr->allele, allele))
@@ -169,11 +199,17 @@ while (lineFileRow(lf1, row)) /* process one snp at a time */
 	ai2->allele=cloneString(allele);
 	slAddHead(&(l->alleles), ai2);
 	l->alleleCount++;
+	aiPtr=l->alleles;
 	}
+    aiPtr->count++;
     l->sampleSize++;
-    l->alleles->count++;
     }
 slReverse(&l);
+for(lPtr=l; lPtr!=NULL; lPtr=lPtr->next)
+    {
+    strand = hashFindVal(strandHash, lPtr->hugoId);
+    lPtr->strand = cloneString(strand->strand);
+    }
 return l;
 }
 
@@ -185,9 +221,9 @@ struct locus *l = NULL;
 optionInit(&argc, argv, optionSpecs);
 strictSnp = optionExists("strictSnp");
 strictBiallelic = optionExists("strictBiallelic");
-if (argc != 3)
+if (argc != 4)
     usage();
-l = readSs(argv[1]);
-printLoci(argv[2], l);
+l = readSs(argv[1], argv[2]);
+printLoci(argv[3], l);
 return 0;
 }
