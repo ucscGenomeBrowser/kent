@@ -7,7 +7,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: swissProtComments.c,v 1.10 2005/12/08 19:02:24 fanhsu Exp $";
+static char const rcsid[] = "$Id: swissProtComments.c,v 1.11 2006/02/27 17:05:35 fanhsu Exp $";
 
 struct spComment
 /* Swiss prot comment. */
@@ -23,18 +23,20 @@ static boolean swissProtCommentsExists(struct section *section,
  * on this gene.  This does first part of database lookup and
  * stores it in section->items as a spComment list. */
 {
+char query[512], **row;
+struct sqlResult *sr;
+boolean commentFound = FALSE;
+
 struct spComment *list = NULL, *com;
 char *acc = swissProtAcc;
 if (acc != NULL)
     {
-    char query[512], **row;
-    struct sqlResult *sr;
-
     safef(query, sizeof(query),
 	"select commentType,commentVal from comment where acc='%s'" , acc);
     sr = sqlGetResult(spConn, query);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
+	commentFound = TRUE;
 	AllocVar(com);
 	com->typeId = atoi(row[0]);
 	com->valId = atoi(row[1]);
@@ -43,6 +45,32 @@ if (acc != NULL)
     slReverse(&list);
     section->items = list;
     }
+if (!commentFound)
+    {
+    /* check if the acc has become a secondary ID */
+    safef(query, sizeof(query),
+	"select accession from proteome.spSecondaryID where accession2='%s'" , acc);
+    sr = sqlGetResult(spConn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+    	{
+	acc = strdup(row[0]);
+	sqlFreeResult(&sr);
+	safef(query, sizeof(query),
+	      "select commentType,commentVal from comment where acc='%s'" , acc);
+    	sr = sqlGetResult(spConn, query);
+    	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    AllocVar(com);
+	    com->typeId = atoi(row[0]);
+	    com->valId = atoi(row[1]);
+	    slAddHead(&list, com);
+	    }
+        slReverse(&list);
+        section->items = list;
+	}
+    }
+
 return list != NULL;
 }
 
@@ -91,12 +119,16 @@ static void swissProtCommentsPrint(struct section *section,
 {
 struct spComment *com;
 char *acc = swissProtAcc;
-char *description = spDescription(spConn, acc);
+char *description;
 char *id = spAnyAccToId(spConn, acc);
 if (id == NULL)
     {
     errAbort("<br>%s seems no longer a valid protein ID in our latest UniProt DB.", acc);
     }
+    
+/* the new logic below is to handle the situation that an accession may have
+   become a secondary accession number in a newer UniProt DB release */
+description = spDescription(spConn, spFindAcc(spConn, acc));
 			    
 hPrintf("<B>ID:</B> ");
 hPrintf("<A HREF=\"http://us.expasy.org/cgi-bin/niceprot.pl?%s\" TARGET=_blank>", acc);
