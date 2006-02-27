@@ -957,5 +957,20 @@ Warning: NR_001874: malformed RefSeq CDS:
 - gbExtFile YP_ proteins are included from daily updates
 
 - danRer1 NP_ files got dropped from gbExtFile, but not updated in
-  gbSeq.
+  gbSeq *******
 
+- YP_ sequences get added to gbSeq, but are not used.
+
+- add bin column to genepreds
+
+- do experiments to determine effect of incremental additions 
+  leaving est tables unsorted (see ~/compbio/genbank/gbTblOrder/).
+
+
+- repeat filter axes ESTs, etc for endogenous retroviruses; see
+         ERVWE1  NM_014590
+          hg16:chr7:91710112-91711730
+          hg17:chr7:91742734-91744352
+
+
+- increase mrnaToGene merge size.
