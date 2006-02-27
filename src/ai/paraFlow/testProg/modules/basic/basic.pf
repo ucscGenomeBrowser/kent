@@ -10,7 +10,7 @@
  *    return
  */
 
-include stringTo
+include 'stringTo'
 
 string usage = "
 This is a little horrible basic patterned after

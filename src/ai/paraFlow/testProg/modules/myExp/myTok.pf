@@ -1,7 +1,7 @@
 // myTok - returns next word from input stream, discarding
 // numbers and punctuation, and converting to lower case.
 
-include stringTo
+include 'stringTo'
 
 class tokenizer
     {

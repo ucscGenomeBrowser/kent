@@ -2,8 +2,8 @@
  * I must have compilers on my mind if this is the
  * only test case I can think of! */
 
-include stringTo
-include myTok
+include 'stringTo'
+include 'myTok'
 
 dir of int symbols = ("nil" : 0);
 

@@ -1,4 +1,4 @@
-import animal
+import 'animal'
 
 class numType
     {

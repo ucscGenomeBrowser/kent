@@ -1,6 +1,6 @@
 /* A little tick-tack-toe game.  Makes some use of para statement. */
 
-include dimTwoD
+include 'dimTwoD'
 
 array of array of string board = dimTwoD(3,3);
 

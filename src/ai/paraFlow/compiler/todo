@@ -1,4 +1,15 @@
 TO DO:
+  - Allow paths in includes and imports.  Make it so that the names
+    are quoted.
+  - ?Read-only and private variables.
+        Make it so that class.new() is only legal way to
+	make something with private or read-only var.
+  - Add 'loco' parameter types to flow functions.  These reference
+    local objects in the caller, so it's ok to return references
+    to them.
+  - Defining exceptions, and implementing exception chaining.
+  - Check that can call a function taking an object with a tuple
+    and that it all works ok. [Nope, it doesn't...]
   - It turns out we need three levels of parallelizability for
     methods:
         1) flow - no side effects even to members.
@@ -10,12 +21,6 @@ TO DO:
 	3) clob - general side effects (clobbering time)
     Hmm.  Actually I'm not so wild about that.   How about
        1) flow  2) para 3) to
-  - Defining exceptions, and implementing exception chaining.
-  - Check that can call a function taking an object with a tuple
-    and that it all works ok. [Nope, it doesn't...]
-  - ?Read-only and private variables.
-        Make it so that class.new() is only legal way to
-	make something with private or read-only var.
   - Make para actions use p-threads.
   - Implement case statement.
   - ?Create 'serial' function - that is gauranteed only to be 
@@ -35,6 +40,10 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Add "import module [as xxx] statement, and then let you use
+    things from the module as xxx.callFunc(), xxx.useVar,
+    xxx.type var1,var2. Etc.
+  - Add word use analyser and xml parser to docs.
   - Make strings immutable.  Implement a mutable dyString class.
   - Beefing up string class.
   - Adding htmlFetch library.
@@ -246,6 +255,7 @@ UCSC Vacation Days for Working on ParaFlow
    Feb 17, 2006
    Feb 22, 2006
    Feb 24, 2006
+   Feb 27, 2006
 
 
 

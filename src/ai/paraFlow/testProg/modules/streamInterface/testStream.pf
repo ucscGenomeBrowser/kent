@@ -1,4 +1,4 @@
-include stream
+include 'stream'
 
 stream st = openStringStream("This is a test.");
 st.write(" Ok?");

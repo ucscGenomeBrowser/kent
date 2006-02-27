@@ -1,6 +1,6 @@
 // Test many of the functions in the library.
 
-include lib
+include 'lib'
 
 string s = "/usr/local/apache/htdocs/index.html";
 print(s);

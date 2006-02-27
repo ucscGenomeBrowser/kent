@@ -1,5 +1,5 @@
-import num as NumStuff
-import animal
+import 'num' as NumStuff
+import 'animal'
 
 NumStuff.numType x = ();
 print(x);

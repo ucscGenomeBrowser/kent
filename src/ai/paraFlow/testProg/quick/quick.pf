@@ -1,7 +1,7 @@
 // Just a relatively quick single test to verify most of 
 // the compiler is working.
 
-include lib
+include 'lib'
 
 to nextId() into int id
     {

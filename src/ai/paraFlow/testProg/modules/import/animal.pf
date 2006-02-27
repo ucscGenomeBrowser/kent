@@ -1,4 +1,4 @@
-import num
+import 'num'
 
 string zebra = 'zebra';
 string monkey = 'monkey';

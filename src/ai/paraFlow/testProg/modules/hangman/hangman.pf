@@ -1,6 +1,6 @@
 // A simple ascii game of hangman.
 
-include lib
+include 'lib'
 
 array of string words = 
    (

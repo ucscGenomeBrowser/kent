@@ -50,9 +50,13 @@ static void rPrintIncludes(FILE *f, struct pfParse *pp)
 /* Print into statements. */
 {
 if (pp->type == pptInclude)
-    fprintf(f, "include %s;\n", pp->children->name);
+    fprintf(f, "include '%s';\n", pp->children->name);
 else if (pp->type == pptImport)
-    fprintf(f, "import %s;\n", pp->children->name);
+    {
+    struct pfParse *modPp = pp->children;
+    struct pfParse *asPp = modPp->next;
+    fprintf(f, "import '%s' as %s;\n", modPp->name, asPp->name);
+    }
 for (pp = pp->children; pp != NULL; pp = pp->next)
     rPrintIncludes(f, pp);
 }
