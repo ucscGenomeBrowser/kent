@@ -161,7 +161,8 @@ while (row != NULL)
     if ((float)match/(float)protSize > 0.3)
     	{
         sprintf(condStr, "acc='%s'", mrnaAcc);
-        mrnaDate = sqlGetField(conn3, "hg17", "gbCdnaInfo", "moddate", condStr);
+        mrnaDate = sqlGetField(conn3, genomeReadOnly, "gbCdnaInfo", "moddate",
+			       condStr);
 	if (mrnaDate != NULL)
 	   {
            months = cal_months(mrnaDate);
