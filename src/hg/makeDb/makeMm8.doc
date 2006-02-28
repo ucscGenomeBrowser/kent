@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.6 2006/02/24 23:33:53 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.7 2006/02/28 00:26:11 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -2219,4 +2219,444 @@ set out = $3
     #	27454   27454  266951		<- 27,545 names in common
     #	182     182    1685		<- 182 unique to mm5 list
     #	1625    1625   15090		<- 1,625 unique to mm7 list
+
+####################################################################################
+# BUILD KNOWN GENES TABLES (STARTED 2/25/06, PART I DONE 2/27/06 Fan)
+
+# First build protein databases, sp060115 and proteins060115
+# See makeProteins060115.doc for details.
+
+# Create working subdirectories and temporary databases (kgMm8A)
+
+  ssh hgwdev
+  mkdir /cluster/store9/kg
+  cd /cluster/store9/kg
+  mkdir kgMm8A  
+  ln -s /cluster/store9/kg/kgMm8A /cluster/store6/kgDB/bed/kgMm8A
+  ln -s /cluster/store9/kg/kgMm8A /cluster/data/mm8/bed/kgMm8A
+
+  hgsql mm8 -e "create database kgMm8A"   
+  hgsql mm8 -e "create database kgMm8ATemp"
+
+  mkdir /cluster/bluearc/kgDB/kgMm8A
+  mkdir /cluster/bluearc/kgDB/kgMm8A/protBlat
+  ln -s /cluster/bluearc/kgDB/kgMm8A/protBlat /cluster/store9/kg/kgMm8A/protBlat
+  cd /cluster/store9/kg/kgMm8A/protBlat
+
+# Get all mouse protein sequences
+
+  hgsql -N sp060115 -e \
+  'select p.acc, p.val from protein p, accToTaxon x where x.taxon=10090 and p.acc=x.acc'\
+  |awk '{print ">" $1;print $2}' >mouseProt.fa
+
+  hgsql -N sp060115 -e \
+  'select v.varAcc, p.val from varAcc v, protein p, accToTaxon x where v.parAcc = p.acc and x.taxon=10090   and v.parAcc=x.acc'\
+  |awk '{print ">" $1;print $2}' \
+  >mouseVarProt.fa
+
+# append var proteins to mouseProt.fa
+  cat mouseVarProt.fa >>mouseProt.fa
+
+# Prepare and perform cluster run for protein/genome alignment
+
+  ssh pk
+  cd /cluster/data/mm8/bed/kgMm8A/protBlat
+  mkdir prot
+  faSplit sequence mouseProt.fa 2000 prot/prot
+  ls /cluster/bluearc/kgDB/kgMm8A/protBlat/prot/* > prot.lis
+
+  ssh hgwdev
+  cd /cluster/data/mm8/bed/kgMm8A/protBlat
+  hgsql mm8 -N -e 'select chrom from chromInfo' > chrom.lis
+  exit
+  
+  cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat -t=dnax -q=prot /cluster/data/mm8/nib/$(path1).nib $(path2) {check out line+ /cluster/bluearc/kgDB/kgMm8A/protBlat/result/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+  mkdir result
+  gensub2 chrom.lis prot.lis gsub jobList
+
+  para create jobList
+  para try
+  para check
+  para push
+  para check ...
+
+# started 8:15 AM 2/25/06, done 3:12 AM 2/26/06.
+# Two jobs crashed due to empty result, push again and finished OK in a few minutes.
+
+# Completed: 67354 of 67354 jobs
+# CPU time in finished jobs:   12580047s  209667.46m  3494.46h  145.60d  0.399 y
+# IO & Wait Time:                237270s    3954.49m    65.91h    2.75d  0.008 y
+# Average job time:                 190s       3.17m     0.05h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           19991s     333.18m     5.55h    0.23d
+# Submission to last job:         68128s    1135.47m    18.92h    0.79d
+
+# collect BLAT results
+
+   pslSort -nohead dirs raw.psl temp result
+   pslReps -nohead -minCover=0.80 -minAli=0.80 -nearTop=0.002 raw.psl protBlat.psl /dev/null
+
+   ssh hgwdev
+   cd /cluster/bluearc/kgDB/kgMm8A/protBlat
+   hgLoadPsl mm8 protBlat.psl
+
+# create all_mrna.psl and tight_mrna.psl
+
+   hgsql mm8 -N -e "select * from all_mrna" |cut -f 2-22 >all_mrna.psl
+
+   pslReps -minCover=0.40 -minAli=0.97 -nearTop=0.002 \
+           all_mrna.psl tight_mrna.psl /dev/null
+
+# Save a copy of the following mm8 tables, to be used later to construct 
+# kgMore and kgEvenmore
+
+all_mrna
+gbCdnaInfo
+gbExtFile
+gbLoaded
+gbSeq
+gbStatus
+refFlat
+refGene
+refLink
+refSeqAli
+refSeqStatus
+refSeqSummary
+xenoMrna
+xenoRefFlat
+xenoRefGene
+xenoRefSeqAli
+
+# Use overlapSelect to get protein and mRNA alignment overlaps   
+   overlapSelect  -statsOutput  -dropped=protOut.psl -overlapThreshold=0.90 \
+   -selectFmt=psl -inFmt=psl tight_mrna.psl  protBlat.psl protMrna.stat
+
+   overlapSelect  -mergeOutput  -dropped=protOut.psl -overlapThreshold=0.90 -selectFmt=psl \
+   -inFmt=psl tight_mrna.psl  protBlat.psl protMrna.out
+
+# Create protein/mRNA pair and protein lists
+   cut -f 10,31 protMrna.out|sort -u >spMrna.tab
+   cut -f 10    protMrna.out|sort -u >protein.lis
+   cp -p protein.lis /cluster/data/mm8/bed/kgMm8A
+
+# Load spMrna.tab into spMrna table in temp DB.
+   hgsql kgMm8ATemp < ~/src/hg/lib/spMrna.sql
+   hgsql kgMm8ATemp -e 'load data local infile "spMrna.tab" into table spMrna'
+   hgsql kgMm8ATemp -e 'create index mrnaID on spMrna(mrnaID)'
+
+# Prepare and perform cluster run of protein/mRNA alignment
+
+# Get mRNA fa file.
+   cd /cluster/data/mm8/bed/kgMm8A
+   /cluster/data/genbank/bin/i386/gbGetSeqs -native -db=mm8 \
+   -gbRoot=/cluster/data/genbank genbank mrna mrna.fa
+
+# Create mrnaSeq table in kgMm8ATemp DB.
+
+   faToTab mrna.fa mrnaSeq.tab
+
+   hgsql kgMm8ATemp -e 'drop table mrnaSeq'
+   hgsql kgMm8ATemp <~/src/hg/lib/mrnaSeq.sql
+   hgsql kgMm8ATemp -e 'load data local infile "mrnaSeq.tab" into table mrnaSeq'
+
+# Prepare files for cluster run
+
+   cd /cluster/bluearc/kgDB/kgMm8A
+   ~/src/hg/protein/KG2.sh kgMm8A mm8 060115
+
+# Perform cluster run of protein/mRNA alignment
+   ~/src/hg/protein/KG3.sh kgMm8A mm8 060115
+
+# Collect cluster run results
+   cd kgBestMrna
+
+   ls out | sed -e 's/prot/do1 prot/g' >doall
+
+# create do1 with the following 2 lines:
+   cat << '_EOF_' > do1
+echo processing $1
+cat out/$1/*.out >>protMrnaRaw.psl
+'_EOF_'
+
+   chmod +x do*
+   doall
+
+# Filter out low quality alignments
+   pslReps -nohead -singleHit -minAli=0.9 protMrnaRaw.psl protMrnaBlat.psl /dev/null
+   cut -f 10,14 protMrnaBlat.psl |sort -u >protMrna.lis
+   wc protMrna.lis
+
+# Load BLAT results into temp DB.
+   ssh hgwdev
+   cd /cluster/store9/kg/kgMm8A/kgBestMrna
+   hgsql kgMm8ATemp < ~/src/hg/lib/protMrnaBlat.sql
+   hgsql kgMm8ATemp -e 'load data local infile "protMrnaBlat.psl" into table protMrnaBlat'
+   hgsql kgMm8ATemp -e 'create index tName on protMrnaBlat(tName)'
+
+# Create CDS files from protein/mRNA alignment results.
+   hgsql kgMm8ATemp -N -e \
+   'select qName,"_",tName,tStart+1,":",tEnd+3 from protMrnaBlat order by qName,tName,tEnd-tStart desc'\
+   |sed 's/\t_\t/_/g'|sed 's/\t:\t/../g' >protMrna.cds
+
+# Create protMrna.psl with proteinID_mrnaID as query ID.
+   cut -f 22-30 ../protBlat/protMrna.out > j1.tmp
+   cut -f 32-42 ../protBlat/protMrna.out > j2.tmp
+   cut -f 10,31 ../protBlat/protMrna.out|sed -e 's/\t/_/g' >j3.tmp
+   paste j1.tmp j3.tmp j2.tmp >protMrna.psl
+   rm j1.tmp j2.tmp j3.tmp
+
+# Run mrnaToGene to create protMrna.gp
+   bash
+   mrnaToGene -cdsFile=protMrna.cds protMrna.psl protMrna.gp 2>protMrna.err >protMrna.log
+   exit
+
+# move kgBestMrna to /san/sanvol1 to save space on store9
+
+   mv /cluster/store9/kg/kgMm8A/kgBestMrna/clusterRun /san/sanvol1/scratch/fan/mm8/kgMm8A/kgBestMrna
+   ln -s /san/sanvol1/scratch/fan/mm8/kgMm8A/kgBestMrna/clusterRun \
+   /cluster/store9/kg/kgMm8A/kgBestMrna/clusterRun
+
+# Prepare refGene and all_mrna gp files.
+
+   cd ..
+   cp -p base/refGene.tab ref.gp
+
+   hgsql mm8 -N -e \
+   'select gbCdnaInfo.acc,cds.name from gbCdnaInfo,cds,all_mrna where all_mrna.qName=gbCdnaInfo.acc and   gbCdnaInfo.cds=cds.id' \
+   |sort -u > all_mrna.cds
+
+   cat base/all_mrna.tab |cut -f 2-22 >all_mrna.psl
+   bash
+   mrnaToGene -cdsFile=all_mrna.cds all_mrna.psl all_mrna.gp 2>all_mrna.err > all_mrna.log
+   exit
+
+# Align proteins to RefSeq.
+
+   overlapSelect -inCds -statsOutput -overlapThreshold=0.90 -selectFmt=psl -inFmt=genePred\
+   protBlat/protBlat.psl ref.gp ref.stat
+   overlapSelect -inCds -dropped=refOut1.gp -overlapThreshold=0.90 -selectFmt=psl -inFmt=genePred\
+   protBlat/protBlat.psl ref.gp protRef.gp
+
+   overlapSelect -mergeOutput -selectCds -dropped=protOut1.psl -overlapThreshold=0.80 -inFmt=psl\
+   -selectFmt=genePred ref.gp protBlat/protBlat.psl protRef.out
+
+   cut -f 10,22 protRef.out | sort -u >spRef.tab
+   cut -f 10 protRef.out    | sort -u >protRef.lis
+
+   hgsql kgMm8ATemp -e 'drop table spRef'
+   hgsql kgMm8ATemp <~/src/hg/lib/spRef.sql
+   hgsql kgMm8ATemp -e 'load data local infile "spRef.tab" into table spRef'
+
+# Prepare and perform cluster runs for protein/RefSeq alignments
+
+   ~/src/hg/protein/KGRef2.sh kgMm8A mm8 060115
+   ~/src/hg/protein/KGRef3.sh kgMm8A mm8 060115
+
+   cd kgBestRef
+   ls out | sed -e 's/prot/do1 prot/g' >doall
+
+   cat << '_EOF_' > do1
+echo processing $1
+cat out/$1/*.out >>protRefRaw.psl
+'_EOF_'
+
+   chmod +x do*
+   doall
+
+# Filter out low quality alignments.
+   pslReps -nohead -singleHit -minAli=0.9 protRefRaw.psl protRefBlat.psl /dev/null
+   cut -f 10,14 protRefBlat.psl |sort -u >protRef.lis
+   wc protRef.lis
+
+   hgsql kgMm8ATemp -e 'drop table protRefBlat'
+   hgsql kgMm8ATemp < ~/src/hg/lib/protRefBlat.sql
+   hgsql kgMm8ATemp -e 'load data local infile "protRefBlat.psl" into table protRefBlat'
+   hgsql kgMm8ATemp -e 'create index tName on protRefBlat(tName)'
+
+# Run gene-check to filter out invalid gp entries
+   cd /cluster/data/mm8/bed/kgMm8A
+   cat ref.gp kgBestMrna/protMrna.gp all_mrna.gp >kgCandidate0.gp
+   gene-check  -incl-ok -ok-genepred-out kgCandidate0.passed.gp -nib-dir /cluster/data/mm8/nib kgCandidate0.gp kgCandidate0.check
+
+   hgsql kgMm8ATemp -e 'drop table kgCandidate0'
+   hgsql kgMm8ATemp < ~/src/hg/lib/kgCandidate0.sql 
+   hgsql kgMm8ATemp -e  'load data local infile "kgCandidate0.gp" into table kgCandidate0'
+
+   hgsql kgMm8ATemp -e 'drop table geneCheck'
+   hgsql kgMm8ATemp < ~/src/hg/lib/geneCheck.sql
+   hgsql kgMm8ATemp -e  'load data local infile "kgCandidate0.check" into table geneCheck ignore 2 lines'
+
+# Run kgCheck to get all KG candidates that pass the KG gene check criteria
+
+   kgCheck kgMm8ATemp mm8 kgCandidate0 geneCheck kgCandidate.tab
+   hgsql kgMm8ATemp -e  'drop table kgCandidate'
+   hgsql kgMm8ATemp < ~/src/hg/lib/kgCandidate.sql
+   hgsql kgMm8ATemp -e  'load data local infile "kgCandidate.tab" into table kgCandidate'
+   hgsql kgMm8ATemp -e 'create index alignID on kgCandidate(alignID)'
+
+# Construct the kgCandidateX table that has alignID in the name field. 
+   cut -f 2-10 kgCandidate.tab >j2.tmp
+   cut -f 11 kgCandidate.tab >j1.tmp
+   paste j1.tmp j2.tmp >kgCandidateX.tab
+
+   hgsql kgMm8ATemp -e  'drop table kgCandidateX'
+   hgsql kgMm8ATemp < ~/src/hg/lib/kgCandidateX.sql
+   hgsql kgMm8ATemp -e  'load data local infile "kgCandidateX.tab" into table kgCandidateX'
+
+# Score protein/mRna and protein/RefSeq alignments
+
+   kgResultBestMrna2 060115 kgMm8ATemp mm8 protMrnaBlat|sort -u >protMrnaBlatScore.tab
+   kgResultBestRef2  060115 kgMm8ATemp mm8 protRefBlat|sort -u >protRefScore.tab
+
+# Combine scoring results and load them into temp DB.
+   cat protMrnaBlatScore.tab protRefScore.tab >protMrnaScore.tab
+   hgsql kgMm8ATemp -e 'drop table protMrnaScore'
+   hgsql kgMm8ATemp < ~/src/hg/lib/protMrnaScore.sql
+   hgsql kgMm8ATemp -e 'load data local infile "protMrnaScore.tab" into table protMrnaScore'
+   hgsql kgMm8ATemp -e 'create index mrnaAcc on protMrnaScore(mrnaAcc)'
+
+# Run kgGetCds to get CDS structure of each gene
+
+   kgGetCds kgMm8ATemp 060115 kgCandidateX jY.tmp
+# G171564 does not have cds.
+# G171565 does not have cds.
+   cat jY.tmp |sort -u >kgCandidateY.tab
+   rm jY.tmp
+   hgsql kgMm8ATemp -e  'drop table kgCandidateY'
+   hgsql kgMm8ATemp < ~/src/hg/lib/kgCandidateY.sql
+   hgsql kgMm8ATemp -e  'load data local infile "kgCandidateY.tab" into table kgCandidateY'
+
+# Run kgPickPrep to replace long cds structure string with cdsId.
+   kgPickPrep kgMm8ATemp kgCandidateZ.tab
+   hgsql kgMm8ATemp -e  'drop table kgCandidateZ'
+   hgsql kgMm8ATemp < ~/src/hg/lib/kgCandidateZ.sql
+   hgsql kgMm8ATemp -e  'load data local infile "kgCandidateZ.tab" into table kgCandidateZ'
+   hgsql kgMm8ATemp -e 'create index cdsId on kgCandidateZ(cdsId)'
+
+# Run kgPick to pick the representative a mrna/protein pair for each unique CDS structure.
+
+   kgPick kgMm8ATemp mm8 sp060115 kg3.tmp dupSpMrna.tmp
+   sort -u dupSpMrna.tmp >dupSpMrna.tab
+
+# Create put back list
+
+# gbGetSeqs2, a modified version of gbGetSeqs output the RefSeq IDs at the beginning of each output line.
+
+   gbGetSeqs2 -gbRoot=/cluster/data/genbank db=mm8 -get=ra RefSeq mrna ref.ra
+   cat ref.ra | sed -e 's/ /\t/' | sort -u >refRa.tab
+
+   hgsql mm8 -e  'drop table refRa'
+   hgsql mm8 < ~/src/hg/lib/refRa.sql
+   hgsql mm8 -e  'load data local infile "refRa.tab" into table refRa ignore 1 lines'
+
+    hgsql mm8 -N -e \
+'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="selenocysteine" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and  r3.val="Mus musculus"' \
+    >kgPutBack2.tab
+
+    hgsql mm8 -N -e \
+'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="cno" and r.val like "%ribosomal frameshift%" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and r3.val="Mus musculus"' \
+    >>kgPutBack2.tab
+
+    hgsql mm8 -N -e \
+'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="cno" and r.val like "%non-AUG%" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and r3.val="Mus musculus"' \
+    >>kgPutBack2.tab
+
+    hgsql mm8 -N -e \
+    'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="translExcept" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and r3.val="Mus musculus"' \
+    >>kgPutBack2.tab 
+
+    hgsql mm8 -N -e \
+'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 where r.attr="exception" and r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and r3.val="Mus musculus"' \
+    >>kgPutBack2.tab
+
+   hgsql kgMm8ATemp -e 'drop table kgPutBack2'
+   hgsql kgMm8ATemp < ~/src/hg/lib/kgPutBack2.sql
+   hgsql kgMm8ATemp -e  'load data local infile "kgPutBack2.tab" into table kgPutBack2'
+
+   kgPutBack kgMm8ATemp mm8 sp060115 kgPutBack2 kgPutBack2.gp
+# No matching protein found for NM_008523.
+# No matching protein found for NM_194444.
+# No matching protein found for NM_206941.
+
+# Sort KG genes to make the kg4.gp table file.
+   cat kgPutBack2.gp kg3.tmp > kg4.tmp
+   ~/kent/src/hg/protein/sortKg.pl kg4.tmp >knownGene.tab
+
+   hgsql kgMm8ATemp -e  'drop table knownGene'
+   hgsql kgMm8ATemp < ~/src/hg/lib/knownGene.sql
+   hgsql kgMm8ATemp -e  'load data local infile "knownGene.tab" into table knownGene'
+
+# Load data into mm8 knownGene table.
+   hgsql mm8 -e  'drop table knownGene'
+   hgsql mm8 < ~/src/hg/lib/knownGene.sql
+   hgsql mm8 -e  'load data local infile "knownGene.tab" into table knownGene'
+  
+# Load dupSpMrna table after knownGene table is loaded so that joinerCheck does not complain.
+
+   hgsql mm8 -e  'drop table dupSpMrna'
+   hgsql mm8 < ~/src/hg/lib/dupSpMrna.sql
+   hgsql mm8 -e  'load data local infile "dupSpMrna.tab" into table dupSpMrna'
+
+# Perform analysis on KG
+
+nice featureBits mm8 knownGene
+# 54684224 bases of 2567283971 (2.130%) in intersection
+nice featureBits mm8 knownGene:cds
+# 28459053 bases of 2567283971 (1.109%) in intersection
+  
+nice featureBits mm8 refGene
+# 46256526 bases of 2567283971 (1.802%) in intersection
+nice featureBits mm8 refGene:cds
+# 27221018 bases of 2567283971 (1.060%) in intersection
+  
+nice featureBits mm8 refGene knownGene
+# 43441486 bases of 2567283971 (1.692%) in intersection
+nice featureBits mm8 refGene:cds knownGene:cds
+# 25164531 bases of 2567283971 (0.980%) in intersection
+
+nice featureBits mm7 knownGene
+# 53165921 bases of 2583394090 (2.058%) in intersection
+nice featureBits mm7 knownGene:cds
+# 27531524 bases of 2583394090 (1.066%) in intersection
+ 
+nice featureBits mm7 refGene
+# 46425940 bases of 2583394090 (1.797%) in intersection
+nice featureBits mm7 refGene:cds
+# 27319308 bases of 2583394090 (1.057%) in intersection
+ 
+nice featureBits mm7 refGene knownGene
+# 41777202 bases of 2583394090 (1.617%) in intersection
+nice featureBits mm7 refGene:cds knownGene:cds
+# 24297646 bases of 2583394090 (0.941%) in intersection
+
+# Build knownGeneMrna and knownGenePep tables.
+
+   kgPepMrna kgMm8ATemp mm8 060115
+   hgsql mm8 -e  'drop table knownGeneMrna'
+   hgsql mm8 < ~/src/hg/lib/knownGeneMrna.sql
+   hgsql mm8 -e  'load data local infile "knownGeneMrna.tab" into table knownGeneMrna'
+   hgsql mm8 -e  'drop table knownGenePep'
+   hgsql mm8 < ~/src/hg/lib/knownGenePep.sql
+   hgsql mm8 -e  'load data local infile "knownGenePep.tab" into table knownGenePep'
+
+# Build kgXref table
+
+   kgXref2 kgMm8ATemp 060115 mm8
+
+   hgsql mm8 -e  'drop table kgXref'
+   hgsql mm8 < ~/src/hg/lib/kgXref.sql
+   hgsql mm8 -e  'load data local infile "kgXref.tab" into table kgXref'
+
+# Build spMrna table
+
+   hgsql mm8 -N -e 'select name, proteinID from knownGene' >kgSpMrna.tab
+
+   hgsql mm8 -e  'drop table spMrna'
+   hgsql mm8 <~/src/hg/lib/spMrna.sql
+   hgsql mm8 -e 'load data local infile "kgSpMrna.tab" into table spMrna'
 
