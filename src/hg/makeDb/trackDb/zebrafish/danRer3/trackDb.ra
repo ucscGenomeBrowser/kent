@@ -23,6 +23,14 @@ group map
 visibility dense
 type bed 3 +
 
+track rhMap
+shortLabel Radiation Hybrid Map
+longLabel Alignments of Sequences for Radiaton Hybrid Map (RH map)
+group map
+priority 14
+visibility hide
+type psl .
+
 track bacEndPairs
 shortLabel BAC End Pairs
 longLabel BAC End Pairs
@@ -307,6 +315,12 @@ xrefTable bacCloneXRef
 xrefQuery select name,sangerName from %s where sangerName like '%s'
 termRegex (et|st)ID[0-9]+\.[0-9]+
 searchPriority 10
+
+searchTable rhMap
+searchMethod prefix
+searchType psl
+termRegex [[:alnum:]]*-?[[:alnum:]\._:]+
+searchPriority 11
 
 track blastHg17KG
 shortLabel $o_Organism Proteins
