@@ -105,4 +105,5 @@ while (fgets(line, 1000, inf) != NULL)
     one_done: id = id;
     }
 fclose(outf);
+return 0;
 }
