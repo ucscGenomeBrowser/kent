@@ -52,7 +52,7 @@ for (tok = tokList; tok != NULL; tok = tok->next)
     if (tok->type == '{')
         {
 	++braceDepth;
-	scope = pfScopeNew(pfc, scope, 0, FALSE);
+	scope = pfScopeNew(pfc, scope, 0, NULL);
 	tok->val.scope = scope;
 	}
     else if (tok->type == '}')
@@ -156,7 +156,7 @@ for (mod = pfc->moduleList; mod != NULL; mod = mod->next)
     if (mod->name[0] == '<')
         scope = sysScope;
     else
-        scope = pfScopeNew(pfc, sysScope, 16, TRUE);
+        scope = pfScopeNew(pfc, sysScope, 16, mod);
     mod->scope = scope;
     addCompoundScopes(pfc, mod->tokList, scope);
     addClasses(pfc, mod->tokList, scope);

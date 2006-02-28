@@ -160,9 +160,6 @@ switch (pp->type)
 	struct pfType *ty;
 	if (var == NULL)
 	    internalErrAt(pp->tok);
-#ifdef OLD
-	moduleName = var->parse->name;
-#endif /* OLD */
 	moduleName = var->parse->children->name;
 	module = hashFindVal(pfc->moduleHash, moduleName);
 	if (module == NULL)
@@ -327,7 +324,8 @@ switch (pp->type)
     }
 }
 
-static void checkVarsDefined(struct pfCompile *pfc, struct pfParse *pp)
+static void checkVarsDefined(struct pfCompile *pfc, struct pfParse *pp,
+	struct pfModule *module)
 /* Attach variable name to pfVar in appropriate scope.
  * Complain and die if not found. */
 {
@@ -335,6 +333,11 @@ struct pfParse *p;
 
 switch (pp->type)
     {
+    case pptModule:
+    case pptModuleRef:
+    case pptMainModule:
+	module = pp->scope->module;
+        break;
     case pptDot:
         {
 	struct pfParse *leftOfDot = pp->children;
@@ -368,6 +371,14 @@ switch (pp->type)
 	struct pfVar *var = pfScopeFindVar(pp->scope, pp->name);
 	if (var != NULL)
 	    {
+	    struct pfModule *varModule = var->scope->module;
+	    if (varModule != NULL && varModule != module)
+	        {
+		enum pfAccessType access = var->ty->access;
+		if (access != paGlobal && access != paReadable)
+		    errAt(pp->tok, "%s is private to module %s", 
+		    	var->name, varModule->name);
+		}
 	    pp->var = var;
 	    pp->type = pptVarUse;
 	    pp->ty = var->ty;
@@ -378,7 +389,7 @@ switch (pp->type)
 	}
     }
 for (p = pp->children; p != NULL; p = p->next)
-    checkVarsDefined(pfc, p);
+    checkVarsDefined(pfc, p, module);
 }
 
 
@@ -392,5 +403,5 @@ void pfBindVars(struct pfCompile *pfc, struct pfParse *pp)
 evalDeclarationTypes(pfc, pp, 0);
 addDeclaredVarsToScopes(pfc, pp);
 addIncludedSymbols(pfc, pp, 0);
-checkVarsDefined(pfc, pp);
+checkVarsDefined(pfc, pp, NULL);
 }

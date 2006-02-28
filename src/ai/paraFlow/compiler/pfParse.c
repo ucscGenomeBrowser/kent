@@ -709,7 +709,7 @@ static struct pfParse *parseShortFuncType(struct pfCompile *pfc,
 {
 struct pfToken *tok = *pTokList;
 enum pfParseType ppt = (tok->type == pftTo ? pptTypeToPt : pptTypeFlowPt);
-struct pfScope *funcScope = pfScopeNew(pfc, scope, 0, FALSE);
+struct pfScope *funcScope = pfScopeNew(pfc, scope, 0, NULL);
 struct pfParse *pp = pfParseNew(ppt, tok, parent, funcScope);
 struct pfParse *input, *output;
 
@@ -858,7 +858,7 @@ char *action = NULL;
 enum pfParseType paraType = pptNone;
 
 /* Preliminaries, scope and as of yet untyped parse node for para. */
-scope = pfScopeNew(pfc, scope, 1, FALSE);
+scope = pfScopeNew(pfc, scope, 1, NULL);
 tok = tok->next;	/* Skip over para. */
 skipRequiredCharType('(', &tok);
 pp = pfParseNew(pptNone, tok, parent, scope);
@@ -1660,7 +1660,7 @@ struct pfToken *tok = *pTokList;
 struct pfParse *pp;
 struct pfParse *name, *input, *output = NULL, *body = NULL;
 
-scope = pfScopeNew(pfc, scope, 0, FALSE);
+scope = pfScopeNew(pfc, scope, 0, NULL);
 pfScopeMarkLocal(scope);
 pp = pfParseNew(type, tok, parent, scope);
 tok = tok->next;	/* Skip to/flow (implicit in type) */
@@ -1888,7 +1888,7 @@ struct pfParse *element;
 struct pfParse *collection;
 struct pfParse *statement;
 
-scope = pfScopeNew(pfc, scope, 1, FALSE);
+scope = pfScopeNew(pfc, scope, 1, NULL);
 pp = pfParseNew(pptForeach, tok, parent, scope);
 tok = tok->next;	/* Skip over 'foreach' */
 skipRequiredCharType('(', &tok);
@@ -1948,7 +1948,7 @@ struct pfParse *check;
 struct pfParse *advance;
 struct pfParse *statement;
 
-scope = pfScopeNew(pfc, scope, 1, FALSE);
+scope = pfScopeNew(pfc, scope, 1, NULL);
 pp = pfParseNew(pptFor, tok, parent, scope);
 tok = tok->next;	/* Skip over 'for' */
 if (tok->type != '(')
@@ -2068,7 +2068,7 @@ tryBody = pfParseStatement(pfc, tryPp, &tok, scope);
 if (tok->type != pftCatch)
     expectingGot("catch", tok);
 catchTok = tok;
-catchScope = pfScopeNew(pfc, scope, 2, FALSE);
+catchScope = pfScopeNew(pfc, scope, 2, NULL);
 catchPp = pfParseNew(pptCatch, tok, tryPp, catchScope);
 tok = tok->next;
 

@@ -210,7 +210,7 @@ struct pfCompile *pfc;
 AllocVar(pfc);
 pfc->moduleHash = hashNew(0);
 pfc->reservedWords = createReservedWords();
-pfc->scope = pfScopeNew(pfc, NULL, 8, FALSE);
+pfc->scope = pfScopeNew(pfc, NULL, 8, NULL);
 addBuiltInTypes(pfc);
 pfc->tkz = pfTokenizerNew(pfc->reservedWords);
 return pfc;

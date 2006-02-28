@@ -19,7 +19,7 @@ struct pfScope
      struct hash *vars;		/* Variables and functions defined in this scope */
      struct hash *modules;	/* Imported modules (may be nil) */
      int id;			/* Unique ID for this scope. */
-     boolean isModule;		/* True if it's a module scope. */
+     struct pfModule *module;	/* If scope is module level, this is set. */
      boolean isLocal;		/* True local in function. */
      struct pfBaseType *class;	/* If it's a class scope this is set. */
      };
@@ -44,7 +44,7 @@ struct pfModule;
 
 
 struct pfScope *pfScopeNew(struct pfCompile *pfc, 
-	struct pfScope *parent, int size, boolean isModule);
+	struct pfScope *parent, int size, struct pfModule *module);
 /* Create new scope with given parent.  Size is just a hint
  * of what to make the size of the symbol table as a power of
  * two.  Pass in 0 if you don't care. */

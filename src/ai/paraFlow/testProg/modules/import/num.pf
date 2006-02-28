@@ -10,7 +10,7 @@ class abc {int a,b,c;}
 class def {int d,e,f;}
 class ad {abc abc, def def;}
 
-string zero = "zero";
+global string zero = "zero";
 string one = "one";
 string two = "two";
 string three = "three";
