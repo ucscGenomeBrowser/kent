@@ -127,7 +127,7 @@ struct visiMatch *visiSearch(struct sqlConnection *conn, char *searchString)
  * database. */
 {
 char *dupe = cloneString(searchString);
-struct trix *trix = trixOpen("/gbdb/visiGene/visiGene.ix");
+struct trix *trix = trixOpen("visiGeneData/visiGene.ix");
 struct trixSearchResult *tsrList, *tsr;
 struct visiMatch *matchList = NULL, *match;
 int wordCount = chopByWhite(dupe, NULL, 0);
