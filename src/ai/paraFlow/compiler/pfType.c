@@ -1454,7 +1454,6 @@ else
 pp->ty = CloneVar(destType);
 }
 
-/* TODO - move this to pfBindVars. */
 static void checkTypeDot(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure that the left side of dot is a module name
  * and the right side is the name of a  class in that module. */
@@ -1463,8 +1462,6 @@ struct pfParse *left = pp->children;
 struct pfParse *right = left->next;
 struct pfModule *module = hashFindVal(pfc->moduleHash, left->name);
 
-uglyf("checkTypeDot\n");
-pfParseDump(pp, 3, uglyOut);
 if (left->type != pptModuleUse || right->type != pptTypeName)
     internalErrAt(pp->tok);
 if (module != NULL)

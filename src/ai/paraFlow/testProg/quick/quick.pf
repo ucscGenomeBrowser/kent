@@ -3,6 +3,8 @@
 
 include 'lib'
 
+int x,y,z, string foo;
+
 to nextId() into int id
     {
     static int lId;
@@ -130,7 +132,7 @@ to checkStrings()
 
     }
 
-to checkFile()
+global to checkFile()
     {
     file f = fileOpen("input.txt", "r");
     for (s in f.readLine())

@@ -262,7 +262,6 @@ else if (p->type == pptModuleDotType)
     }
 else
     {
-    pfParseDump(p, 3, uglyOut);
     internalErrAt(p->tok);
     }
 }

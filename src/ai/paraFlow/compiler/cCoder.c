@@ -27,7 +27,7 @@ static int codeExpression(struct pfCompile *pfc, FILE *f,
  * to stack. */
 
 static void codeScope(struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean printMain, struct ctar *ctarList);
+	boolean isModuleScope, struct ctar *ctarList);
 /* Print types and then variables from scope. */
 
 static void codeScopeVars(struct pfCompile *pfc, FILE *f, 
@@ -1287,7 +1287,7 @@ codeParamAccess(pfc, f, outType->base, stack);
 fprintf(f, ";\n");
 }
 
-static void codeInitOfType(struct pfCompile *pfc, FILE *f, struct pfType *type)
+static void codeZeroInitOfType(struct pfCompile *pfc, FILE *f, struct pfType *type)
 /* Print out default initialization of type. */
 {
 if (type->base == pfc->varType)
@@ -1297,7 +1297,7 @@ else
 }
 
 static void codeVarsInHelList(struct pfCompile *pfc, FILE *f,
-	struct hashEl *helList, boolean zeroUninit)
+	struct hashEl *helList, boolean zeroUninit, boolean isModuleScope)
 /* Print out variable declarations in helList. */
 {
 struct hashEl *hel;
@@ -1316,18 +1316,21 @@ for (hel = helList; hel != NULL; hel = hel->next)
 	    if (zeroUninit && !var->isExternal && !isInitialized(var))
 		{
 		printVarName(pfc, f, var);
-		codeInitOfType(pfc, f, type);
+		codeZeroInitOfType(pfc, f, type);
 		fprintf(f, ";\n");
 		}
 	    }
 	else
 	    {
+	    enum pfAccessType access = var->ty->access;
+	    if (access != paGlobal && access != paReadable && isModuleScope)
+	         fprintf(f, "static ");
 	    codeBaseType(pfc, f, type->base);
 	    fprintf(f, " ");
 	    printVarName(pfc, f, var);
 	    if (zeroUninit && !var->isExternal && !isInitialized(var))
 		{
-		codeInitOfType(pfc, f, type);
+		codeZeroInitOfType(pfc, f, type);
 		}
 	    fprintf(f, ";\n");
 	    }
@@ -1355,7 +1358,7 @@ static void codeScopeVars(struct pfCompile *pfc, FILE *f, struct pfScope *scope,
 {
 struct hashEl *helList = hashElListHash(scope->vars);
 slSort(&helList, hashElCmp);
-codeVarsInHelList(pfc, f, helList, zeroUninitialized);
+codeVarsInHelList(pfc, f, helList, zeroUninitialized, FALSE);
 hashElFreeList(&helList);
 }
 
@@ -2578,24 +2581,34 @@ switch (pp->type)
     }
 }
 
-static void printPrototype(FILE *f, struct pfParse *funcDec, struct pfParse *class)
+static void printPrototype(FILE *f, struct pfParse *funcDec, struct pfParse *class,
+	boolean activeModule, boolean printSemi)
 /* Print prototype for function call. */
 {
 if (class)
     {
-#ifdef OLD
-    fprintf(f, "void _pf_cm%d_%s_%s(", class->scope->id, 
-    	class->name, funcDec->name);
-#endif /* OLD */
     fprintf(f, "void %s_%s(", class->ty->base->methodPrefix, funcDec->name);
     fprintf(f, "%s *%s)",  stackType, stackName);
     }
 else
+    {
+    enum pfAccessType access = funcDec->ty->access;
+    if (access != paGlobal)
+	{
+	if (activeModule)
+	    fprintf(f, "static ");
+	else
+	    return;
+	}
     fprintf(f, "void %s%s(%s *%s)", globalPrefix, funcDec->name, 
     	stackType, stackName);
+    }
+if (printSemi)
+    fprintf(f, ";\n");
 }
 
-static void rPrintPrototypes(FILE *f, struct pfParse *pp, struct pfParse *class)
+static void rPrintPrototypes(FILE *f, struct pfParse *pp, struct pfParse *class,
+	boolean activeModule)
 /* Recursively print out function prototypes in C. */
 {
 switch (pp->type)
@@ -2605,12 +2618,11 @@ switch (pp->type)
 	break;
     case pptToDec:
     case pptFlowDec:
-	printPrototype(f, pp, class);
-	fprintf(f, ";\n");
+	printPrototype(f, pp, class, activeModule, TRUE);
         break;
     }
 for (pp=pp->children; pp != NULL; pp = pp->next)
-    rPrintPrototypes(f, pp, class);
+    rPrintPrototypes(f, pp, class, activeModule);
 }
 
 static void declareStaticVars(struct pfCompile *pfc, FILE *f, 
@@ -2651,7 +2663,7 @@ if (body != NULL)
     {
     pfc->isFunc = TRUE;
     declareStaticVars(pfc, f, funcDec, body, class);
-    printPrototype(f, funcDec, class);
+    printPrototype(f, funcDec, class, TRUE, FALSE);
     fprintf(f, "\n{\n");
 
     /* Print out activation record. */
@@ -2868,7 +2880,7 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 }
 
 static void codeScope(struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
-	boolean printMain, struct ctar *ctarList)
+	boolean isModuleScope, struct ctar *ctarList)
 /* Print types and then variables from scope. */
 {
 struct pfScope *scope = pp->scope;
@@ -2882,7 +2894,7 @@ helList = hashElListHash(scope->vars);
 slSort(&helList, hashElCmp);
 
 /* Print out variables. */
-if (printMain)
+if (isModuleScope)
     {
     for (hel = helList; hel != NULL; hel = hel->next)
         {
@@ -2890,13 +2902,13 @@ if (printMain)
 	var->isExternal = !isInside(pp, var->parse);
 	}
     }
-codeVarsInHelList(pfc, f, helList, !scope->isModule);
+codeVarsInHelList(pfc, f, helList, !isModuleScope, isModuleScope);
 
 /* Print out function declarations */
 rPrintFuncDeclarations(pfc, f, pp, NULL);
 
 /* Print out other statements */
-if (printMain)
+if (isModuleScope)
     {
     fprintf(f, "void _pf_entry_%s(%s *%s)\n{\n", mangledModuleName(pp->name), 
     	stackType, stackName);
@@ -2930,7 +2942,7 @@ for (p = pp->children; p != NULL; p = p->next)
 	}
     }
 
-if (printMain)
+if (isModuleScope)
     {
     fprintf(f, "}\n");
     fprintf(f, "}\n\n");
@@ -3078,11 +3090,15 @@ for (hel = varList; hel != NULL; hel = hel->next)
     struct pfType *type = var->ty;
     if (type->tyty == tytyVariable)
         {
-	fprintf(f, "extern ");
-	codeBaseType(pfc, f, type->base);
-	fprintf(f, " ");
-	printVarName(pfc, f, var);
-	fprintf(f, ";\n");
+	enum pfAccessType access = var->ty->access;
+	if (access == paGlobal || access == paReadable)
+	    {
+	    fprintf(f, "extern ");
+	    codeBaseType(pfc, f, type->base);
+	    fprintf(f, " ");
+	    printVarName(pfc, f, var);
+	    fprintf(f, ";\n");
+	    }
 	}
     }
 slFreeList(&varList);
@@ -3128,14 +3144,15 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 	/* Print function prototypes and class definitions for all modules */
 	for (module = program->children; module != NULL; module = module->next)
 	    {
+	    boolean activeModule = (toCode == module);
 	    fprintf(f, "/* Prototypes in ParaFlow module %s */\n", module->name);
 	    if (module->name[0] != '<')
 		fprintf(f, "void _pf_entry_%s(%s *stack);\n", 
 			mangledModuleName(module->name), stackType);
-	    rPrintPrototypes(f, module, NULL);
+	    rPrintPrototypes(f, module, NULL, activeModule);
 	    fprintf(f, "\n");
 	    fprintf(f, "/* Class definitions in module %s */\n", module->name);
-	    rPrintClasses(pfc, f, module, toCode == module);
+	    rPrintClasses(pfc, f, module, activeModule);
 	    fprintf(f, "/* Interface definitions in module %s */\n", module->name);
 	    rPrintInterfaces(pfc, f, module);
 	    if (module != toCode)

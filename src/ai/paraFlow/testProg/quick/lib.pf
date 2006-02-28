@@ -6,3 +6,5 @@ global flow factorial(int i) into (double f)
     else
         f = i*factorial(i-1);
     }
+
+global int pi = 3.14;
