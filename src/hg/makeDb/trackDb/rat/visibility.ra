@@ -19,12 +19,6 @@ visibility	dense
 track	softberryGene
 visibility	dense
 
-track	geneid
-visibility	dense
-
-track	genscan
-visibility	dense
-
 track	mrna
 visibility	pack
 
