@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.7 2006/02/28 00:26:11 fanhsu Exp $"
+#	"$Id: makeMm8.doc,v 1.8 2006/02/28 17:07:19 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -2659,4 +2659,11 @@ nice featureBits mm7 refGene:cds knownGene:cds
    hgsql mm8 -e  'drop table spMrna'
    hgsql mm8 <~/src/hg/lib/spMrna.sql
    hgsql mm8 -e 'load data local infile "kgSpMrna.tab" into table spMrna'
+
+# Build kgProtMap table
+
+    ssh hgwdev
+    cd /cluster/store9/kg/kgMm8A
+    ln -s protBlat/tight_mrna.psl .
+    ~/src/hg/protein/kgProtMap2.sh kgMm8A mm8 060115
 
