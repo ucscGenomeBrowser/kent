@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.27 2005/08/21 04:29:10 markd Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.28 2006/02/28 01:33:09 aamp Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -241,6 +241,23 @@ struct hashEl *hashAddInt(struct hash *hash, char *name, int val)
 {
 char *pt = NULL;
 return hashAdd(hash, name, pt + val);
+}
+
+long long hashIntSum(struct hash *hash)
+/* Return sum of all the ints in a hash of ints. */
+{
+long long sum = 0;
+int i;
+struct hashEl *hel;
+for (i=0; i<hash->size; ++i)
+    {
+    for (hel = hash->table[i]; hel != NULL; hel = hel->next)
+	{
+	int num = (int)hel->val;
+	sum += (long long)num;
+	}
+    }
+return sum;
 }
 
 struct hash *newHash(int powerOfTwoSize)

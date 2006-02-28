@@ -101,6 +101,9 @@ int hashIntValDefault(struct hash *hash, char *name, int defaultInt);
 /* Return integer value associated with name in a simple 
  * hash of ints or defaultInt if not found. */
 
+long long hashIntSum(struct hash *hash);
+/* Return sum of all the ints in a hash of ints. */
+
 void hashTraverseEls(struct hash *hash, void (*func)(struct hashEl *hel));
 /* Apply func to every element of hash with hashEl as parameter. */
 
