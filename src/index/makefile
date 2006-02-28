@@ -6,3 +6,4 @@ all:
 	cd ixword3 && ${MAKE}
 	cd makepgo && ${MAKE}
 	cd stToXao && ${MAKE}
+	cd ixIxx && ${MAKE}
