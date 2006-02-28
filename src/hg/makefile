@@ -183,6 +183,7 @@ UTIL_DIRS = \
 	orthoMap \
 	overlapSelect \
 	patCount \
+	protein \
 	pslCDnaFilter \
 	pslCat \
 	pslCheck \
