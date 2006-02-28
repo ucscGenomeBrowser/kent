@@ -212,8 +212,9 @@ void pslRcBoth(struct psl *psl);
 void pslRc(struct psl *psl);
 /* reverse-complement a PSL alignment.  This makes target strand explicit. */
 
-void pslSwap(struct psl *psl);
-/* swap query and target in psl */
+void pslSwap(struct psl *psl, boolean noRc);
+/* swap query and target in psl.  If noRc is TRUE, don't reverse-complement
+ * PSL if needed, instead make target strand explict. */
 
 void pslTargetOffset(struct psl *psl, int offset);
 /* Add offset to target positions in psl. */

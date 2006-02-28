@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.69 2006/02/27 06:47:00 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.70 2006/02/28 21:04:51 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1096,21 +1096,118 @@ reverseUnsigned(psl->blockSizes, psl->blockCount);
 /* macro to swap to variables */
 #define swapVars(a, b, tmp) ((tmp) = (a), (a) = (b), (b) = (tmp))
 
-void pslSwap(struct psl *psl)
-/* swap query and target in psl */
+static void swapBlocks(struct psl *psl)
+/* Swap the blocks in a psl without reverse complementing them. */
 {
-int i, itmp;
+int i;
+unsigned utmp;
+char *stmp; 
+for (i = 0; i < psl->blockCount; i++)
+    {
+    swapVars(psl->qStarts[i], psl->tStarts[i], utmp);
+    if (psl->qSequence != NULL)
+        swapVars(psl->qSequence[i], psl->tSequence[i], stmp);
+    }
+}
+
+static void swapRcSeqs(char **seqs, int blockCount, int *blockSizes)
+/* swap order of sequences in list, maintain property that all strings
+ * are in one malloc block.  seqs should have old order, while blockSizes
+ * are already reversed */
+{
+char *buf, *next;
+int i, memSz = 0;
+
+/* get a new memory block for strings */
+for (i = 0; i < blockCount; i++)
+    memSz += blockSizes[i]+1;
+next = buf = needLargeMem(memSz);
+
+/* reverse compliment and copy to new memory block */
+for (i = blockCount-1; i >= 0; i--)
+    {
+    int len = strlen(seqs[i]);
+    reverseComplement(seqs[i], len);
+    memcpy(next, seqs[i], len+1);
+    next += len+1;
+    }
+
+/* swap memory and update pointers */
+freeMem(seqs[0]);
+seqs[0] = buf;
+next = buf;
+
+for (i = 0; i < blockCount; i++)
+    {
+    seqs[i] = next;
+    next += blockSizes[i]+1;
+    }
+}
+
+static void swapRCBlocks(struct psl *psl)
+/* Swap and reverse complement blocks in a psl. Other psl fields must
+ * be modified first */
+{
+int i;
+unsigned *uatmp;
+char **satmp;
+reverseUnsigned(psl->tStarts, psl->blockCount);
+reverseUnsigned(psl->qStarts, psl->blockCount);
+reverseUnsigned(psl->blockSizes, psl->blockCount);
+swapVars(psl->tStarts, psl->qStarts, uatmp);
+
+/* qSize and tSize have already been swapped */
+for (i = 0; i < psl->blockCount; i++)
+    {
+    psl->qStarts[i] = psl->qSize - (psl->qStarts[i] + psl->blockSizes[i]);
+    psl->tStarts[i] = psl->tSize - (psl->tStarts[i] + psl->blockSizes[i]);
+    }
+if (psl->qSequence != NULL)
+    {
+    /* note: all block sequences are stored in one malloc block, which is
+     * entry zero */
+    swapRcSeqs(psl->qSequence, psl->blockCount, psl->blockSizes);
+    swapRcSeqs(psl->tSequence, psl->blockCount, psl->blockSizes);
+    swapVars(psl->qSequence, psl->tSequence, satmp);
+    }
+}
+
+void pslSwap(struct psl *psl, boolean noRc)
+/* swap query and target in psl.  If noRc is TRUE, don't reverse-complement
+ * PSL if needed, instead make target strand explict. */
+{
+int itmp;
 unsigned utmp;
 char ctmp, *stmp; 
-if (psl->strand[1] == '\0')
-    psl->strand[1] = '+';  /* explict strand */
-swapVars(psl->strand[0], psl->strand[1], ctmp);
+swapVars(psl->qBaseInsert, psl->tBaseInsert, utmp);
+swapVars(psl->tNumInsert, psl->qNumInsert, utmp);
 swapVars(psl->qName, psl->tName, stmp);
 swapVars(psl->qSize, psl->tSize, utmp);
 swapVars(psl->qStart, psl->tStart, itmp);
 swapVars(psl->qEnd, psl->tEnd, itmp);
-for (i = 0; i < psl->blockCount; i++)
-    swapVars(psl->qStarts[i], psl->tStarts[i], utmp);
+
+/* handle strand and block copy */
+if (psl->strand[1] != '\0')
+    {
+    /* translated */
+    swapVars(psl->strand[0], psl->strand[1], ctmp);
+    swapBlocks(psl);
+    }
+else if (noRc)
+    {
+    /* untranslated with no reverse complement */
+    psl->strand[1] = psl->strand[0];
+    psl->strand[0] = '+';
+    swapBlocks(psl);
+    }
+else
+    {
+    /* untranslated */
+    if (psl->strand[0] == '+')
+        swapBlocks(psl);
+    else
+        swapRCBlocks(psl);
+    }
 }
 
 void pslTargetOffset(struct psl *psl, int offset)
