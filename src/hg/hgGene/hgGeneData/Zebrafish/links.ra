@@ -13,18 +13,37 @@ name ensemblGenes
 shortLabel Ensembl Genes
 tables ensGene
 idSql select name from ensGene where name = '%s'
-url http://www.ensembl.org/perl/transview?transcript=$$
+url http://dec2005.archive.ensembl.org/Danio_rerio/transview?transcript=%s
 priority 25
 
 name uniProt
-hide
-# add later
+shortLabel UniProt
+tables ensGeneXRef
+idSql select uniProtId from ensGeneXRef where ensGeneId = '%s'
+nameSql select uniProtId from ensGeneXRef where ensGeneId = '%s'
+url http://us.expasy.org/cgi-bin/niceprot.pl?%s
+priority 30
 
 name refSeq
-hide
+shortLabel RefSeq
+tables ensGeneXRef
+idSql select refseq from ensGeneXRef where ensGeneId = '%s'
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+priority 40
 
-name locusLink
-hide
+name entrezGene
+shortLabel Entrez Gene
+tables ensGeneXref 
+idSql select geneId from ensGeneXRef where ensGeneID = '%s'
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
+priority 45.1
+
+name zfin
+shortLabel ZFIN
+tables ensGeneXRef
+idSql select zfinId from ensGeneXRef where ensGeneId = '%s'
+url http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=%s
+priority 50
 
 name genBank
 hide

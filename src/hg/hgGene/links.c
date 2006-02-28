@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.21 2005/12/02 23:55:25 fanhsu Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.22 2006/02/28 22:20:59 hartera Exp $";
 
 struct link
 /* A link to another web site. */
@@ -157,7 +157,7 @@ geneId = cloneAndCut(geneId, link->preCutAt);
 safef(query, sizeof(query), link->idSql, geneId);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
-if (row != NULL)
+if (row != NULL && row[0][0] != 0) /* If not null or empty */
     {
     struct dyString *dy = newDyString(0);
     char *name = cloneAndCut(row[0], link->postCutAt);

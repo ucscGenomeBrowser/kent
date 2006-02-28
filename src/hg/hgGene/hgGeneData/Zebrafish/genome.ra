@@ -2,5 +2,5 @@ name global
 knownGene ensGene
 knownGenePep ensPep
 nameSql select gene from ensGtp where transcript = '%s'
-# descriptionSql select description from sangerLinks where orfName = '%s'
-proteinSql select protein from ensGtp where transcript = '%s'
+descriptionSql select description from ensGeneXRef where ensGeneId = '%s'
+proteinSql select uniProtId from ensGeneXRef where ensGeneId = '%s'
