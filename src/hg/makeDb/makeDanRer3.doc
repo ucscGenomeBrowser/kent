@@ -4496,70 +4496,177 @@ TMPDIR=/scratch/tmp
     # remake the md5sum file
     rm md5sum.txt
     md5sum *.gz */*.gz > md5sum.txt
-    
+   
 # RADIATION HYBRID (RH) MAP TRACK (in progress, 2005-09-06, hartera)
     # Data from Leonard Zon's lab at the Childrens Hospital, Boston
     # Provided by Anhua Song: asong@enders.tch.harvard.edu
-    # Updated data provided on 2006-02-09
+    # Updated data provided on 2006-02-23
     ssh kkstore02
     mkdir -p /cluster/data/danRer3/bed/ZonLab/rhMap/seq
     cd /cluster/data/danRer3/bed/ZonLab/rhMap/seq
     # download data from e-mail to this directory
-    # new sequences (2006-02-09) are available
-    # rhSequenceSubmit020906.zip
-    unzip rhSequenceSubmit020906.zip
-    # sequences are in rhSequenceSeqSubmit020906/rhSequenceSubmitSeq020906.txt
-    # primer information is in rhSequenceSubmit020906/rhSequenceSubmit020906.txt
-    mv rhSequenceSubmitSeq020906.txt rhMap020906.fa
-    mv rhSequenceSubmit020906.txt rhMapPrimers020906.txt
+    # new sequences (2006-02-23) are available
+    unzip rhSequenceSubmit022306.zip
+    # sequences are in rhSequenceSeqSubmit022306/rhSequenceSubmitSeq022306.txt
+    # primer information is in rhSequenceSubmit022306/rhSequenceSubmit022306.txt
+    mv rhSequenceSubmitSeq022306.txt rhMap022306.fa
+    mv rhSequenceSubmit022306.txt rhMapPrimers022306.txt
     # first remove ^M from end of lines
-    dos2unix rhMap020906.fa
-    dos2unix rhMapPrimers020906.txt
-    grep '>' rhMap020906.fa | wc -l
-    # 11616
-    wc -l rhMapPrimers020906.txt
-    # 13556
-    
-    grep '>' rhMap020906.fa > rhMap.names
+    dos2unix rhMap022306.fa
+    dos2unix rhMapPrimers022306.txt
+    grep '>' rhMap022306.fa | wc -l
+    # 11514
+    wc -l rhMapPrimers022306.txt
+    # 13438 rhMapPrimers022306.txt
+    grep '>' rhMap022306.fa > rhMap.names
    
     # remove '>' from names and grab first field
     perl -pi.bak -e 's/>//' rhMap.names
     awk 'BEGIN {FS="|"} {print $1;}' rhMap.names | sort | uniq \
         > rhMap.namesOnly.sort
-    awk 'BEGIN {FS="|"} {print $1;}' rhMapPrimers020906.txt | sort | uniq \
+    awk 'BEGIN {FS="|"} {print $1;}' rhMapPrimers022306.txt | sort | uniq \
         > rhMapPrimers.namesOnly.sort
     wc -l *.sort
-    
-    # 11431 rhMap.namesOnly.sort
-    # 13314 rhMapPrimers.namesOnly.sort
-    # so some replicate names
-    awk 'BEGIN {FS="|"} {print $1;}' rhMap.names | sort | uniq -c \
-        | sort -nr > rhMap.replicates
-    awk '{if ($1 == 2) print;}' rhMap.replicates > rhMap.duplicates
-    wc -l rhMap.duplicates
-    # 185 rhMap.duplicates
-    # there are 185 duplicates - they appear to have the same sequences too
-    comm -13 rhMap.namesOnly.sort rhMapPrimers.namesOnly.sort > rhPrimersOnly
-    comm -23 rhMap.namesOnly.sort rhMapPrimers.namesOnly.sort > rhMapFastaOnly
-    # 0 rhMapFastaOnly
-    # 1882 rhPrimersOnly
-    sort rhMap.names | uniq > rhMap.names.sort
-    wc -l rhMap.names.sort
-    # 11453 rhMap.names.sort
-    # get single copies of the sequences:
-    faSomeRecords rhMap020906.fa rhMap.namesOnly.sort rhMap020906UniqSeq.fa
+    # 11514 rhMap.namesOnly.sort
+    # 13436 rhMapPrimers.namesOnly.sort (after removing blank line)
+    # There are no replicates this time for rhMap sequences but there are for
+    # the primers set:
+    awk 'BEGIN {FS="|"} {print $1;}' rhMapPrimers022306.txt | sort | uniq -c \
+        | sort -nr > rhMapPrimers.names.count
+    # These replicates are blank lines so there are no replicates
+    # Total 11514 sequences in rhMap, but 13436 primer sets
 
-    # there are 185 duplicates - they appear to have the same sequences too
+    # 11527 rhMap.namesOnly.sort
+    # 13436 rhMapPrimers.namesOnly.sort
+
+    # get a list of headers from the FASTA file
+    grep '>' rhMap022306.fa > rhMap.headers
+    awk 'BEGIN {FS="|"} {print $5;}' rhMap.headers | sort | uniq
+    # BAC_END
+    # EST
+    # GENE
+    # SSLP
+    # STS
+    # 5 types of sequence
+    awk 'BEGIN {FS="|"} {print $9;}' rhMap.headers | sort | uniq
+    # BACends
+    # Custom
+    # Insertion_Mutant
+    # Insertion_Mutants
+    # MGH
+    # NCBI
+    # Sanger SG
+    # Sequencing_Project
+    # ThisseClone
+    # Thisse_Clone
+    # other_zfEst
+    # wu_zfEst
+    # wz
+    # Insertion_Mutant = Insertion_Mutants; ThisseClone = Thisse_Clone;
+    # So there are 11 different sources.
+    awk 'BEGIN {FS="|"} {print $10;}' rhMap.headers | sort | uniq
+    # CHBG
+    # MPIEB
     
-    # need to reformat FASTA headers so they are in the format: NAME.SOURCE.TYPE
+    # There are 2 sequences with problem primers. E-mailed Peter Song about
+    # these and he suggested to delete thoser primers:
+    # >fb33f01.u1|5|388|5615|EST|f|cR|f|wu_zfEst|CHBG|+++33333333333333333333.|
+    # >zfishb-a976e04.p1c|14|16|158|STS|f|cR|f|Sequencing_Project|CHBG|A|A| 
+    # edit rhMap022306.fa and rhMapPrimers022306.txt and delete these primers.
+    # need to reformat FASTA headers so they are in the format: 
+    # NAME.SOURCE.TYPE.ORIGIN
     # Insertion_Mutant=Insertion_Mutants; Thisse_Clone=ThisseClone
-    # so change these.
-    # write program parseRhMap.c in ~/kent/src/hg/oneShot/parseRhMap/
-    # to rewrite FASTA file with FASTA headers reformated with the sequence
-    # name, source and type as above and generate a tabbed file that has
-    # this sequence name and the corresponding primers from the original 
-    # FASTA headers.
- 
+    # so change these to have the same name. Also shorten Sanger SG to Shotgun.
+
+    perl -pi.bak -e 's/Insertion_Mutant/InsertMut/' rhMap022306.fa
+    perl -pi.bak -e 's/Insertion_Mutants/InsertMut/' rhMap022306.fa
+    perl -pi.bak -e 's/Sanger SG/Shotgun/' rhMap022306.fa
+    perl -pi.bak -e 's/ThisseClone/Thisse/' rhMap022306.fa
+    perl -pi.bak -e 's/Thisse_Clone/Thisse/' rhMap022306.fa
+    perl -pi.bak -e 's/Sequencing_Project/Seqproj/' rhMap022306.fa
+   
+    # use a script to reformat the names for the FASTA headers to the format 
+    # >NAME where name is the first field separated by "|".
+    # and make the name upper case. 
+cat << '_EOF_' > rhFix
+#!/usr/bin/awk -f 
+
+#>z1396|14|418|5707|SSLP|f|cR|f|MGH|MPIEB|ATCCTTCAGCCACTCCTTCA|TGGAACCTGAAAAACACACG|
+/^>/ {
+    split(toupper($0), a, "\\|");
+    print a[1];
+    next;
+}
+
+/^[0-9]+ / {
+    $0 = $2;
+}
+
+{
+    print $0;
+}
+
+'_EOF_'
+# << keep emacs coloring happy
+    chmod +x rhFix
+    rhFix rhMap022306.fa > rhMap.fa
+    # Blat sequences vs danRer3 genome
+    ssh pk
+    mkdir -p /cluster/data/danRer3/bed/ZonLab/rhMap/blatRun
+    # make output directory
+    mkdir -p /san/sanvol1/scratch/danRer3/rhMap/psl
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap/blatRun
+    ln -s /san/sanvol1/scratch/danRer3/rhMap/psl .
+    # copy input to the san
+    cp \
+  /cluster/data/danRer3/bed/ZonLab/rhMap/seq/rhSequenceSubmit022306/rhMap.fa \
+    /san/sanvol1/scratch/danRer3/rhMap/
+    # do the blat run to align RH map sequences to danRer3 and do separate
+    # runs for chroms and scaffolds from chrUn and chrNA
+    ls -1S /san/sanvol1/scratch/danRer3/rhMap/rhMap.fa > rhMap.lst
+#    ls -1S /san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/chr[0-9M]*.fa \
+ #          > genome.lst
+    # test run, do just chr2, see what this looks like and compare to using
+    # same parameters as for STS markers
+
+  #  foreach f (/san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/Zv5_*.fa)
+   #     ls -1S $f >> genome.lst
+  #  end
+    ls -1S /san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/chr2*.fa \
+           > chr2.lst
+    cp -p /cluster/data/danRer3/bed/ooc/danRer3_10.ooc \
+          /san/sanvol1/scratch/danRer3
+# try same parameters as for BAC ends
+cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat {check in line+ $(path1)} {check in line+ $(path2)} -tileSize=10 -ooc=/san/sanvol1/scratch/danRer3/danRer3_10.ooc {check out line+ /san/sanvol1/scratch/danRer3/rhMap/psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    # gensub2 genome.lst rhmap.lst gsub spec
+    gensub2 chr2.lst rhMap.lst gsub spec
+    para create spec
+    para try, check, push, check etc.
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap/blatRun
+    # Make & check the psl table
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create rhmap.psl
+    pslSort dirs raw.psl tmp psl
+    pslReps -nearTop=0.0001 -minAli=0.96 -minCover=0.40 raw.psl \
+            contig.psl /dev/null
+    liftUp rhMap.psl /cluster/data/danRer3/jkStuff/liftAll.lft warn contig.psl
+    pslCheck rhMap.psl
+    # psl is ok
+    # Load sequence alignments into database.
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap/blatRun
+    echo "drop table rhMap;" | hgsql danRer3
+    hgLoadPsl danRer3 rhMap.psl
+    # 2193 sequences aligned
+    
+     
+
 # SELF BLASTZ, CHAIN, NET, AXTNET, MAFNET AND DOWNLOADS
 # (DONE, 2005-12-02, hartera)
     ssh pk
