@@ -32,7 +32,7 @@ public class DBTarget {
     
   public void setDefaults() {
     sourceMachine = "localhost";
-    sourceDB = "hg17";
+    sourceDB = "hg18";
  }
 
 }
