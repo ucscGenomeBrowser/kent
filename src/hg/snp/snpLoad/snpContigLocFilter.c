@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.18 2006/02/28 20:57:35 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.19 2006/02/28 22:13:35 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -199,9 +199,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    start = sqlUnsigned(row[5]) + cel->start;
 	    endNum = sqlUnsigned(row[6]) + cel->start;
 	    safef(endString, sizeof(endString), "%d", endNum);
-	    /* not sure what to expect for phys_pos when loc_type != 2 */
-	    if (loc_type != 2)
-	        verbose(1, "%s\t%s\t%d\t%d\t%s\n", row[0], cel->chrom, loc_type, start, endString);
 	    }
 	
 	fprintf(f, "%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\n", 
