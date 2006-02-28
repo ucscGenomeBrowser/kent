@@ -178,5 +178,6 @@ while (fgets(line, 1000, inf) != NULL)
     	} while (fgets(line, 1000, inf) != NULL);
     }
 fclose(o1);
+return(0);
 }
 
