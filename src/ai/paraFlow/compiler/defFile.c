@@ -124,8 +124,6 @@ static void printFuncDef(FILE *f, struct pfParse *funcDef, boolean printLocals)
 /* Print function definition - just name and parameters */
 {
 if (printLocals || funcDef->access == paGlobal)
-#ifdef SOON
-#endif /* SOON */
     {
     struct pfToken *start, *end;
     struct pfParse *name = funcDef->children;
@@ -152,19 +150,16 @@ struct pfParse *body = name->next;
 struct pfParse *extends = body->next;
 struct pfBaseType *base = pfScopeFindType(class->scope, class->name);
 
-#ifdef SOON
+start = end = class->tok;
 if (base->access == paGlobal)
-#endif /* SOON */
-    {
-    start = end = class->tok;
-    findSpanningTokens(name, &start, &end);
-    if (extends != NULL)
-	findSpanningTokens(extends, &start, &end);
-    printTokenRange(f, start, end);
-    fprintf(f, "\n{\n");
-    rPrintDefs(f, body, TRUE, TRUE);
-    fprintf(f, "}\n");
-    }
+    fprintf(f, "global ");
+findSpanningTokens(name, &start, &end);
+if (extends != NULL)
+    findSpanningTokens(extends, &start, &end);
+printTokenRange(f, start, end);
+fprintf(f, "\n{\n");
+rPrintDefs(f, body, TRUE, TRUE);
+fprintf(f, "}\n");
 }
 
 static void rPrintDefs(FILE *f, struct pfParse *parent, 
@@ -277,17 +272,12 @@ void rPrintTypesUsed(FILE *f, struct pfParse *pp,
 if (pp->type == pptVarInit)
     {
     struct pfParse *type = pp->children;
-#ifdef SOON
-    if (type->ty->base->access == paGlobal)
-#endif /* SOON */
+    dyStringClear(dy);
+    appendType(dy, type);
+    if (!hashLookup(hash, dy->string))
 	{
-	dyStringClear(dy);
-	appendType(dy, type);
-	if (!hashLookup(hash, dy->string))
-	    {
-	    hashAdd(hash, dy->string, NULL);
-	    fprintf(f, "%s t%d;\n", dy->string, hash->elCount);
-	    }
+	hashAdd(hash, dy->string, NULL);
+	fprintf(f, "%s t%d;\n", dy->string, hash->elCount);
 	}
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)

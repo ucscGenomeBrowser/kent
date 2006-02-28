@@ -38,8 +38,8 @@ struct pfBaseType
     struct pfPolyFunRef *polyList;	/* List of polymorphic functions
                                            (Including in parents) */
     struct pfParse *initMethod; /* Initialization method if any. */
-    char *methodPrefix;		/* Suggested method prefix for code generator. */
-    enum pfAccessType access;	/* Is class usable outside module? */
+    char *methodPrefix;	/* Suggested method prefix for code generator. */
+    UBYTE access;	/* Is class usable outside module? */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 

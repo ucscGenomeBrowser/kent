@@ -168,7 +168,7 @@ switch (pp->type)
 	if (base == NULL)
 	    errAt(typePp->tok, "Class %s not defined in module %s", typePp->name, moduleName);
 	ty = pfTypeNew(base);
-	pp->ty = ty;
+	pp->ty = typePp->ty = ty;
 	modPp->type = pptModuleUse;
 	typePp->type = pptTypeName;
 	typePp->scope = module->scope;

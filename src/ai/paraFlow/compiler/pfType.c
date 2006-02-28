@@ -4,8 +4,8 @@
 #include "common.h"
 #include "hash.h"
 #include "obscure.h"
-#include "pfParse.h"
 #include "pfCompile.h"
+#include "pfParse.h"
 #include "pfType.h"
 
 
@@ -129,6 +129,24 @@ struct dyString *dy = dyStringNew(0);
 dumpTypeToDyString(ty, dy);
 fprintf(f, "%s", dy->string);
 dyStringFree(&dy);
+}
+
+static struct pfModule *findEnclosingModule(struct pfParse *pp)
+/* Find module that we are in. */
+{
+for (;pp != NULL; pp = pp->parent)
+    {
+    switch (pp->type)
+        {
+	case pptModule:
+	case pptModuleRef:
+	case pptMainModule:
+	    return pp->scope->module;
+	    break;
+	}
+    }
+internalErr();
+return NULL;
 }
 
 
@@ -1384,24 +1402,6 @@ else
     }
 }
 
-static struct pfModule *findEnclosingModule(struct pfParse *pp)
-/* Find module that we are in. */
-{
-for (;pp != NULL; pp = pp->parent)
-    {
-    switch (pp->type)
-        {
-	case pptModule:
-	case pptModuleRef:
-	case pptMainModule:
-	    return pp->scope->module;
-	    break;
-	}
-    }
-internalErr();
-return NULL;
-}
-
 static void checkLvalWritable(struct pfParse *pp)
 /* Make sure that lVal is writable. */
 {
@@ -1513,6 +1513,7 @@ else
 pp->ty = CloneVar(destType);
 }
 
+#ifdef UNUSED
 static void checkTypeDot(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure that the left side of dot is a module name
  * and the right side is the name of a  class in that module. */
@@ -1521,6 +1522,7 @@ struct pfParse *left = pp->children;
 struct pfParse *right = left->next;
 struct pfModule *module = hashFindVal(pfc->moduleHash, left->name);
 
+uglyf("checkTypeDot %p\n", pp);
 if (left->type != pptModuleUse || right->type != pptTypeName)
     internalErrAt(pp->tok);
 if (module != NULL)
@@ -1536,44 +1538,66 @@ if (module != NULL)
 	right->type = pptTypeName;
 	right->scope = module->scope;
 	pp->ty = right->ty;
+	uglyf("set right (%p) in checkTypeDot", right);
 	}
     }
 else
     errAt(left->tok, "%s isn't a module in type expression", left->name);
 }
+#endif /* UNUSED */
 
-static void rCheckKidsAreDims(struct pfCompile *pfc, struct pfParse *type)
-/* Make sure that if pptTypeNames have children that they are arrays. */
+static void rCheckDimsAndModules(struct pfCompile *pfc, struct pfParse *type)
+/* Do a double check on all pptTypeName nodes. Make sure that any
+ * child nodes are array dimensions. Check that if type is defined
+ * in another module that it is global. */
 {
 switch (type->type)
     {
     case pptTypeName:
+	{
+	struct pfBaseType *base = type->ty->base;
+	struct pfModule *typeModule = base->scope->module;
+	if (typeModule != NULL)
+	    {
+	    enum pfAccessType access = base->access;
+	    if (access != paGlobal)
+	        {
+		struct pfModule *myModule = findEnclosingModule(type);
+		if (myModule != typeModule)
+		    errAt(type->tok, 
+		    "class %s in %s is not global, so it can't be used in %s",
+		    base->name, typeModule->name, myModule->name);
+		}
+	    }
 	if (type->children != NULL)
 	    {
-	    if (type->ty->base != pfc->arrayType)
+	    if (base != pfc->arrayType)
 	        errAt(type->children->tok, "[ illegal here except for arrays");
 	    coerceOne(pfc, &type->children, pfc->longFullType, FALSE);
 	    }
         break;
+	}
     default:
         break;
     }
 for (type = type->children; type != NULL; type = type->next)
-    rCheckKidsAreDims(pfc, type);
+    rCheckDimsAndModules(pfc, type);
 }
 
 static void checkTypeWellFormed(struct pfCompile *pfc, struct pfParse *type)
 /* Make sure that a type expression is a-ok. */
 {
-if (type->type == pptDot)
+#ifdef UNUSED
+if (type->type == pptModuleDotType)
     {
     struct pfParse *left = type->children;
     struct pfParse *right = left->next;
     checkTypeDot(pfc, type);
-    rCheckKidsAreDims(pfc, right);
+    rCheckDimsAndModules(pfc, right);
     }
 else
-    rCheckKidsAreDims(pfc, type);
+#endif /* UNUSED */
+    rCheckDimsAndModules(pfc, type);
 }
 
 static boolean isFunctionIo(struct pfParse *varInit)

@@ -14,3 +14,9 @@ global num.abc abc = (1,2,3);
 
 readable string mouse = "mouse";
 string moose = "moose";
+
+class secretAnimalStuff
+    {
+    string magicName;
+    int secretCode;
+    }
