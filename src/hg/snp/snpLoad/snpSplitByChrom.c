@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitByChrom.c,v 1.1 2006/02/17 20:52:38 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitByChrom.c,v 1.2 2006/02/28 21:43:43 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -31,7 +31,7 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char *chromName;
+char chromName[64];
 FILE *f;
 char fileName[64];
 
@@ -41,12 +41,24 @@ safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where g
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    chromName = cloneString(row[0]);
+    safef(chromName, sizeof(chromName), "%s", row[0]);
     safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
     f = mustOpen(fileName, "w");
     hashAdd(ret, chromName, f);
     }
 sqlFreeResult(&sr);
+
+safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end = 0", contigGroup);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    safef(chromName, sizeof(chromName), "%s_random", row[0]);
+    safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
+    f = mustOpen(fileName, "w");
+    hashAdd(ret, chromName, f);
+    }
+sqlFreeResult(&sr);
+
 hFreeConn(&conn);
 return ret;
 }
