@@ -1262,7 +1262,8 @@ identifier wormBaseIsoformCluster
 identifier wormBaseId external=WormBase dependency
 "WormBase (C. elegans) ORF ID"
     $ce.sangerGene.name
-    $gbd.ceBlastTab.target minCheck=0.95
+    $gbd,!hg18.ceBlastTab.target minCheck=0.95
+    hg18.ceBlastTab.target minCheck=0.90
     #$ce.kimExpDistance.query
     #$ce.kimExpDistance.target
     $ce.orfToGene.name
@@ -1350,7 +1351,7 @@ identifier bdgpNonCodingId external=BDGP
 
 identifier flyBase2004Id external=FlyBase
 "FlyBase Xref as of 2004"
-    $dm,!dm1.flyBase2004Xref.name
+    $dm.flyBase2004Xref.name
     $dm,!dm1.flyBaseGene.name minCheck=0.99
     $dm,!dm1.flyBasePep.name
     $dm,!dm1.flyBaseNoncoding.name minCheck=0.90
