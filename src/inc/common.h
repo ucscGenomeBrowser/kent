@@ -284,6 +284,9 @@ void reverseUnsigned(unsigned *a, int length);
 void reverseDoubles(double *a, int length);
 /* Reverse the order of the double array. */
 
+void reverseStrings(char **a, int length);
+/* Reverse the order of the char* array. */
+
 void swapBytes(char *a, char *b, int length);
 /* Swap buffers a and b. */
 

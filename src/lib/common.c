@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.86 2006/01/22 16:39:24 markd Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.87 2006/02/28 21:03:52 markd Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -101,6 +101,20 @@ void reverseDoubles(double *a, int length)
 int halfLen = (length>>1);
 double *end = a+length;
 double c;
+while (--halfLen >= 0)
+    {
+    c = *a;
+    *a++ = *--end;
+    *end = c;
+    }
+}
+
+void reverseStrings(char **a, int length)
+/* Reverse the order of the char* array. */
+{
+int halfLen = (length>>1);
+char **end = a+length;
+char *c;
 while (--halfLen >= 0)
     {
     c = *a;
