@@ -112,6 +112,12 @@ vgGetText visiGene.text mm7 hg17
 ixIxx visiGene.text visiGene.ix visiGene.ixx
 
 
+# (Galt 2006-02)
+# RSYNC'd from /cluster/store11/visiGene to /san/sanvol1/visiGene
+# and moved the /gbdb/visiGene symlink to point to the new location.
+# I also had to manually run a script to find symlinks pointing from full/ over to 
+# /cluster/store11/offline and remake them to point correctly to /san/sanvol1/visiGene/offline.
+
 # Allen Brain Atlas jp2 image prep (Galt 2006-02-12)
 # Create parasol directory and a list of the jpg files.
 ssh pk
@@ -179,5 +185,47 @@ endif
 
 # -----------------------
 
+# ADDED TWO ADDITIONAL ZOOM-OUT LEVELS 5 AND 6:
+# Ran /san/sanvol1/offline/level56Run/ cluster jog on a list of all files dumped
+#  from the visiGene.imageFile table so that we made new zoom out levels 5 and 6
+#  for all pictures.  Since it was a special one-time deal, I just used ImageMagick.
+# vgPrepImage.c has been modified to do the 2 new zoomout levels so that they
+#  will be built automatically in future.
+
+# Ran several checks to make sure no files were missing, fixed any errors.
+# Found embedded space in some nibb filenames, found a couple of gensat 
+# images which had previously failed to download and redownloaded them ok.
+# Found a few missing things and 0 bytes jpgs and re-ran them.  
+# It should be pretty clean right now.
+
+# LOAD ALLEN BRAIN DATA
+vgLoadAllen \
+ /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain \
+ /san/sanvol1/visiGene/offline/allenBrain/probesAndData/allen20051021.tab \
+ /cluster/data/mm7/bed/allenBrain/allProbes.fa \
+ /cluster/data/mm7/bed/allenBrain/allProbes.tab \
+ output
+#backed-up data in case of trouble:
+mkdir /san/sanvol1/visiGene/dump/visiGene.20060220
+hgsqldump visiGene -T /san/sanvol1/visiGene/dump/visiGene.20060220
+#load into visiGene db
+visiGeneLoad -database=visiGene output/aba.ra output/aba.tab /dev/null
+
+# RE-MAKE knownToVisiGene tables 
+knownToVisiGene hg17
+knownToVisiGene mm7
+
+# Manually added several researchers names to the contributor and submissionContributor tables
+# at the request of Susan Sunkin as well as updating the text for contributor, copyright, acknowledgements.
+# I manually also updated aba.ra and vgLoadAllen.c to reflect her changes.  The manual mods
+# to contributor which work great in the visiGene search are not currently automatically
+# supported, and would thus be lost if we ever nuke it and start fresh.
+# At some point, we will probably add an additional field to the .ra structure
+# and have visiGeneLoad support it.
+
+# RE-MAKE FULL TEXT INDEX
+cd /gbdb/visiGene
+vgGetText visiGene.text mm7 hg17
+ixIxx visiGene.text visiGene.ix visiGene.ixx
 
 
