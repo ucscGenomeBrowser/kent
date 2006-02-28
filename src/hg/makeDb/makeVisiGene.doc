@@ -224,8 +224,10 @@ knownToVisiGene mm7
 # and have visiGeneLoad support it.
 
 # RE-MAKE FULL TEXT INDEX
-cd /gbdb/visiGene
-vgGetText visiGene.text mm7 hg17
-ixIxx visiGene.text visiGene.ix visiGene.ixx
-
+cd hg/visiGene/vgGetText
+make alpha
+# basically does this, but puts it in cgi-bin/visiGeneData/:
+#vgGetText visiGene.text mm7 hg17
+#ixIxx visiGene.text visiGene.ix visiGene.ixx
+# (hgVisiGene cgi v128 now knows about this new location)
 
