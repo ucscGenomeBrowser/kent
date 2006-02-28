@@ -17,10 +17,16 @@ struct adjacency
   //  struct hash *nextHash;
 };
 
+struct chromBreak
+{
+    struct chromBreak *next;
+    struct element *element;
+};
 
 struct genome
 {
     struct genome *next;
+    struct chromBreak *breaks;
     struct hash *elementHash;
     struct phyloTree *node;
     char *name;
