@@ -10,7 +10,7 @@
 #	are created.  See also, scripts:
 #	mkSwissProtDB.sh and mkProteinsDB.sh
 #
-#	"$Id: KGRef2.sh,v 1.1 2006/02/27 15:47:57 fanhsu Exp $"
+#	"$Id: KGRef2.sh,v 1.2 2006/02/28 18:55:40 angie Exp $"
 #
 #	Thu Nov 20 11:16:16 PST 2003 - Created - Hiram
 #		Initial version is a translation of makeKgMm3.doc
@@ -197,7 +197,7 @@ ln -s ../protRef.lis . 2> /dev/null
 #	of data directories to be used in the cluster run.
 if [ ! -d clusterRun ]; then
     echo "`date` Preparing kgPrepBestRef2 cluster run data and jobList"
-    kgPrepBestRef2 ${DATE} ${DB}Temp > Prep.out
+    kgPrepBestRef2 ${DATE} ${DB}Temp ${RO_DB} > Prep.out
     sed -e \
 	"s#./clusterRun#/iscratch/i/kgDB/${DB}/kgBestRef/clusterRun#g" \
 	rawJobList > jobList
