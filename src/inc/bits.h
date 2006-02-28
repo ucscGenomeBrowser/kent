@@ -11,6 +11,9 @@ typedef unsigned char Bits;
 Bits *bitAlloc(int bitCount);
 /* Allocate bits. */
 
+Bits *bitRealloc(Bits *b, int bitCount, int newBitCount);
+/* Resize a bit array.  If b is null, allocate a new array */
+
 Bits *bitClone(Bits* orig, int bitCount);
 /* Clone bits. */
 

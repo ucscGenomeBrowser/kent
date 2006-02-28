@@ -6,7 +6,7 @@
 #include "common.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: bits.c,v 1.18 2005/06/30 16:49:03 angie Exp $";
+static char const rcsid[] = "$Id: bits.c,v 1.19 2006/02/28 05:40:46 markd Exp $";
 
 
 static Bits oneBit[8] = { 0x80, 0x40, 0x20, 0x10, 0x8, 0x4, 0x2, 0x1};
@@ -53,6 +53,14 @@ Bits *bitAlloc(int bitCount)
 {
 int byteCount = ((bitCount+7)>>3);
 return needLargeZeroedMem(byteCount);
+}
+
+Bits *bitRealloc(Bits *b, int bitCount, int newBitCount)
+/* Resize a bit array.  If b is null, allocate a new array */
+{
+int byteCount = ((bitCount+7)>>3);
+int newByteCount = ((newBitCount+7)>>3);
+return needLargeZeroedMemResize(b, byteCount, newByteCount);
 }
 
 Bits *bitClone(Bits* orig, int bitCount)
