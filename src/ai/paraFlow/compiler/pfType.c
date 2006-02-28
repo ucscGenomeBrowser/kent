@@ -1895,7 +1895,7 @@ slReverse(&base->fields);
 slReverse(&base->methods);
 if (base->access == paGlobal)
     {
-    struct pfType *field;
+    struct pfType *field, *method;
     for (field = base->fields; field != NULL; field = field->next)
         {
 	if (field->base->access != paGlobal)
@@ -2047,6 +2047,15 @@ else
     if (fieldType == NULL)
 	errAt(pp->tok, "No field %s in class %s", fieldUse->name, 
 		type->base->name);
+    if (fieldType->access == paLocal)
+        {
+	struct pfModule *fieldModule, *myModule;
+	fieldModule = type->base->scope->module;
+	myModule = findEnclosingModule(pp);
+	if (fieldModule != myModule)
+	    errAt(fieldUse->tok, "%s.%s can't be accessed in module %s",
+	    	type->base->name, fieldUse->name, myModule->name);
+	}
     if (elType != NULL && hasBaseEl(fieldType, genericBase))
 	{
 	fieldType = pfTypeClone(fieldType);
