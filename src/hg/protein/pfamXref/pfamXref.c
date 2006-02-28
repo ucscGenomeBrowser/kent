@@ -34,7 +34,7 @@ char *answer;
 char *outputFileName, *outputFileName2;
 char *desc;
 char *id;
-char *chp0, *chp1, *chp2, *chp;
+char *chp0, *chp1, *chp2, *chp=NULL;
 char *pfamID, *pfamAC;
 char *swissAC, *swissDisplayID;
 char emptyString[10] = {""};
