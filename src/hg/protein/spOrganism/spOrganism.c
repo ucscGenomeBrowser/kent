@@ -102,7 +102,7 @@ while (fgets(line, 1000, inf) != NULL)
     	if (ox != NULL) goto again1;
     	}
     goto again;
-    one_done:
+    one_done: id = id;
     }
 fclose(outf);
 }
