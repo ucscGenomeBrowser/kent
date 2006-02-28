@@ -1930,12 +1930,33 @@ slReverse(&base->fields);
 slReverse(&base->methods);
 if (base->access == paGlobal)
     {
-    struct pfType *field, *method;
+    struct pfType *field;
+    boolean anyPrivate = FALSE;
     for (field = base->fields; field != NULL; field = field->next)
         {
 	if (field->base->access != paGlobal)
 	    errAt(pp->tok, "%s is a global type, but it's component %s isn't",
 	    	base->name, field->fieldName);
+	if (field->access == paLocal || field->access == paReadable)
+	    anyPrivate = TRUE;
+	}
+    if (anyPrivate)
+        {
+	struct pfType *method;
+	boolean anyInit = FALSE;
+	for (method = base->methods; method != NULL; method = method->next)
+	    {
+	    if (sameString(method->fieldName, "init"))
+		{
+	        anyInit = TRUE;
+		break;
+		}
+	    }
+	if (!anyInit)
+	    {
+	    errAt(pp->tok, "%s has local or readable data but no init method",
+	    	base->name);
+	    }
 	}
     }
 }
