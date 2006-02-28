@@ -32,6 +32,7 @@ DIRS = \
 	kgProtAliasNCBI \
 	kgBestMrna2 \
 	kgBestRef2 \
+	kgCheck \
 	kgGetPep \
 	kgXref \
 	pfamXref \
