@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: orderNodes.c,v 1.8 2006/02/18 17:31:32 braney Exp $";
+static char const rcsid[] = "$Id: orderNodes.c,v 1.9 2006/02/28 16:27:12 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -180,6 +180,9 @@ for(p = inList; p ; p = p->next)
     {
     struct element *nextParent = p->element->parent;
 
+//    if (p->element->version == NULL) 
+//	continue;
+
     if (nextParent == NULL)
 	errAbort("next in hash doesn't have parent");
 
@@ -281,6 +284,9 @@ for(p = inList; p ; p = p->next)
     struct possibleEdge *edge = p;
     struct element *ne = edge->element;
     struct element *nextChild = NULL;
+
+    if (ne->numEdges == 0)
+	continue;
 
     if (ne->numEdges ==1)
 	{
@@ -394,6 +400,9 @@ if (node->numEdges)
 	struct element *parent = e->parent;
 	//double useWeight = weight;
 
+	if (e->numEdges == 0)
+	    errAbort("element should have children");
+
 	//if (node->parent->numEdges == 1)
 	    //useWeight /= parent->numEdges;
 
@@ -445,6 +454,9 @@ if (node->parent == NULL)
     for(e=g->elements; e; e = e->next)
 	{
 	//printf("topnode working on %s\n",eleName(e));
+	//if (e->numEdges == 0)
+	    //break;
+
 	if (e->numEdges == 1)
 	    {
 	    if (e->calced.prev == NULL)
@@ -497,6 +509,9 @@ else if (node->numEdges)
 	//    useDownWeight /= parent->numEdges;
 	//if (node->numEdges == 1)
 	//    useUpWeight /= e->numEdges;
+
+	//if (parent == NULL)
+	 //   continue;
 
 	//printf("working on %s\n",eleName(e));
 	num = 0;
@@ -698,6 +713,9 @@ if (node->parent == NULL)
     for(e=g->elements; e; e = e->next)
 	{
 	//printf("topnode working on %s\n",eleName(e));
+//	if (e->numEdges == 0)
+//	    continue;
+
 	if (e->numEdges == 1)
 	    {
 	    if (e->edges[0]->calced.next)
@@ -760,6 +778,9 @@ else if (node->numEdges)
 	struct possibleEdge *topListNext = NULL;
 	struct possibleEdge *rightListNext = NULL;
 	struct possibleEdge *leftListNext = NULL;
+
+	//if (e->numEdges == 0)
+	    //continue;
 
 	num = 0;
 	if (e == parent->edges[1])
@@ -959,45 +980,29 @@ for(ii=0; ii < node->numEdges; ii++)
 printTrans(f, g, which);
 }
 
-void printOrderedNode(FILE *f, struct genome *g)
+void reOrderNode(FILE *f, struct genome *g)
 {
-struct element *e, *saveE;
-boolean inFront;
-
-for(e=g->elements; e; e = e->next)
-    if (e->calced.prev == NULL)
-	break;
-
-if (e)
-    {
-    saveE = e;
-    inFront = TRUE;
-
-    for(e = e->next; e; e = e->next)
-	if (e->calced.prev == NULL)
-	    printf("list isn't fully ordered");
-    }
-
-else
-    {
-    for(e=g->elements; e; e = e->next)
-	if (e->calced.next == NULL)
-	    break;
-
-    saveE = e;
-    inFront = FALSE;
-
-    for(e = e->next; e; e = e->next)
-	if (e->calced.prev == NULL)
-	    printf("list isn't fully ordered");
-    }
-
+struct element *e, *saveE = NULL;
+boolean inFront = TRUE;
 
 //fprintf(f, ">%s\n",g->name);
 
 
-g->elements = saveE;
-saveE->next = NULL;
+saveE =  g->breaks->element;
+if (!sameString(saveE->name, "START"))
+    {
+    saveE =  g->breaks->next->element;
+    if (!sameString(saveE->name, "START"))
+	errAbort("no START");
+    }
+
+
+inFront = TRUE;
+g->elements = NULL;
+//saveE =  g->breaks->element->calced.next->element;
+//inFront = g->breaks->element->calced.next->doFlip;
+//g->elements = saveE;
+//saveE->next = NULL;
 for(e = saveE ; e ; )
     {
     struct possibleEdge *p;
@@ -1018,6 +1023,9 @@ for(e = saveE ; e ; )
 
     inFront = !p->doFlip ; //? (inFront ? FALSE : TRUE) : inFront;
     e = p->element;
+    if (sameString("END", e->name))
+	break;
+
     e->next = NULL;
     slAddHead(&g->elements, e);
     }
@@ -1025,18 +1033,44 @@ slReverse(&g->elements);
 //fprintf(f,"\n");
 }
 
-void printOrderedTree(FILE *f, struct phyloTree *node)
+void removeStartStop(struct genome *g)
+{
+struct element *e = g->elements;
+struct element *prev = NULL;
+
+if (!sameString(e->name, "START"))
+    errAbort("first element not START");
+
+g->elements = e->next;
+
+prev = NULL;
+for(e = g->elements; e->next ; prev = e, e = e->next)
+    ;
+
+if (!sameString(e->name, "END"))
+    errAbort("last element not END");
+
+if (prev == NULL)
+    g->elements = NULL;
+else
+    prev->next = NULL;
+}
+
+void reOrderTree(FILE *f, struct phyloTree *node)
 {
 int ii;
 struct genome *g = node->priv;
 
 if (node->numEdges)
-    printOrderedNode(f, g);
+    reOrderNode(f, g);
 else
+    {
+    removeStartStop(g);
+    }
     ;//outElems(f, node);
 
 for(ii=0; ii < node->numEdges; ii++)
-    printOrderedTree(f, node->edges[ii]);
+    reOrderTree(f, node->edges[ii]);
 }
 
 
@@ -1223,7 +1257,7 @@ for(;;)
     fflush(stdout);
     }
 
-printOrderedTree(f, node);
+reOrderTree(f, node);
 outElementTrees(f, node);
 }
 
