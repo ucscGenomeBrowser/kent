@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.11 2006/02/27 06:47:01 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.12 2006/02/28 21:07:10 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -93,7 +93,7 @@ for (cBlk = ch->blockList, iBlk = 0; cBlk != NULL; cBlk = cBlk->next, iBlk++)
     }
 psl->blockCount = iBlk;
 if (swapMap)
-    pslSwap(psl);
+    pslSwap(psl, FALSE);
 return mapAlnNew(psl, ch->id);
 }
 
@@ -128,7 +128,7 @@ struct hashEl *hel;
 while ((psl = pslNext(pslLf)) != NULL)
     {
     if (swapMap)
-        pslSwap(psl);
+        pslSwap(psl, FALSE);
     hel = hashStore(mapAlns, psl->qName);
     slSafeAddHead((struct mapAln**)&hel->val, mapAlnNew(psl, id));
     id++;
