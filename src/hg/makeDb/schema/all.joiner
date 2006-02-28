@@ -1644,6 +1644,7 @@ identifier extFileId
     $gbd.multiz10way.extFile
     $gbd.multiz11way.extFile
     $gbd.multiz12way.extFile
+    $gbd.multiz17way.extFile
     $sacCer.multizYeast.extFile
     $dm.a_gambiae_mypa.extFile
     $dm.d_pseudoobscura_mypa.extFile
@@ -2102,6 +2103,8 @@ tablesIgnored $gbd
     multiz10waySummary
     multiz11waySummary
     multiz12waySummary
+    multiz17waySummary
+    multiz17wayFrames
     phastCons4way
     phastConsElements4way
     phastCons5way
@@ -2120,6 +2123,8 @@ tablesIgnored $gbd
     phastConsElements11way
     phastCons12way
     phastConsElements12way
+    phastCons17way
+    phastConsElements17way
 
 tablesIgnored $kgDb
     pbAaDist_
