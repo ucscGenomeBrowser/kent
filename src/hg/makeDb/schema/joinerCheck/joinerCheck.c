@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.34 2005/12/14 19:42:12 kent Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.35 2006/02/28 01:02:42 hartera Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -630,7 +630,7 @@ if ((keyField = js->fieldList) == NULL)
     return;
 if (slCount(keyField->dbList) == 1)
     {
-    if (sameString(keyField->dbList->name, preferredDb))
+    if ((preferredDb == NULL) || (sameString(keyField->dbList->name, preferredDb)))
 	keyHash = readKeyHash(keyField->dbList->name, joiner, keyField, &khiList);
     else
         return;
