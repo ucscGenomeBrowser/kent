@@ -241,6 +241,7 @@ switch (pp->type)
 	struct pfParse *body = output->next;
 	struct pfParse *class = pfParseEnclosingClass(pp->parent);
 	name->type = pptSymName;
+	pp->ty->access = pp->access;
 	pp->var = pfScopeAddVar(pp->scope->parent, name->name, pp->ty, pp);
 	if (class != NULL)
 	    {
@@ -279,7 +280,12 @@ static void linkInVars(struct hash *vars, struct pfScope *scope)
 struct hashCookie it = hashFirst(vars);
 struct hashEl *el;
 while ((el = hashNext(&it)) != NULL)
-    hashAdd(scope->vars, el->name, el->val);
+    {
+    struct pfVar *var = el->val;
+    enum pfAccessType access = var->ty->access;
+    if (access == paGlobal || access == paReadable)
+	hashAdd(scope->vars, el->name, var);
+    }
 }
 
 static void addIncludedSymbols(struct pfCompile *pfc, struct pfParse *pp,
