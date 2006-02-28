@@ -39,7 +39,7 @@ for(genome=genomes; genome; genome = genome->next)
     }
 }
 
-struct phyloTree *readEleTree(struct lineFile *lf, struct element **parents)
+struct phyloTree *readEleTree(struct lineFile *lf, struct element **parents, int numParents)
 {
 int ii;
 struct phyloTree *node = NULL;
@@ -49,7 +49,10 @@ boolean needGenome = TRUE;
 int count = 0;
 char *words[2048];
 struct element **elements;
+struct possibleEdge *p;
+struct element *element = NULL;
 
+printf("numParents %d\n",numParents);
 while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
     {
     if (needGenome)
@@ -72,13 +75,14 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	needGenome = FALSE;
 	elements = NULL;
 	if (elementsLeft)
-	    elements = needMem(elementsLeft * sizeof(struct element *));
+	    elements = needMem((elementsLeft + 2) * sizeof(struct element *));
 
 	verbose(2, "adding genome %s\n",genome->name);
 	}
     else
 	{
 	int ii;
+	struct chromBreak *chromBreak;
 
 	if (genome == NULL)
 	    errAbort("must specify genome name before listing elements");
@@ -89,10 +93,24 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    errAbort("too few elements in genome %s elementsLeft %d\n",genome->name,elementsLeft);
 	elementsLeft -= wordsRead/2;
 
+	AllocVar(chromBreak);
+	AllocVar(element);
+	chromBreak->element = element;
+	slAddHead(&genome->breaks, chromBreak);
+	slAddHead(&genome->elements, element);
+	element->genome = genome;
+	element->species = genome->name;
+	element->name = cloneString("START");
+	elements[count++] = element;
+	if (parents)
+	    {
+	    element->parent = parents[0];
+	    newEdge(element->parent, element);
+	    }
+
 	for(ii=0; ii < wordsRead; ii+=2)
 	    {
 	    char *ptr;
-	    struct element *element;
 
 	    AllocVar(element);
 	    slAddHead(&genome->elements, element);
@@ -103,7 +121,7 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    element->name = cloneString(words[ii]);
 	    if (parents)
 		{
-		element->parent = parents[atoi(words[ii+1]) - 1];
+		element->parent = parents[atoi(words[ii+1]) ];
 		newEdge(element->parent, element);
 
 		if (element->parent == NULL)
@@ -127,17 +145,62 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    verbose(2, "added element %s.%s\n",element->name,element->version);
 	    }
 	if (elementsLeft == 0)
+	    {
+	    AllocVar(chromBreak);
+	    AllocVar(element);
+	    elements[count++] = element;
+	//    AllocVar(p);
+	 //   p->count = 1;
+	  //  p->element = genome->elements;
+	   // element->calced.prev = p;
+
+	   // AllocVar(p);
+	   // p->count = 1;
+	   // p->element = element;
+	   // genome->elements->calced.next = p;
+
+	    chromBreak->element = element;
+	    slAddHead(&genome->breaks, chromBreak);
+	    slAddHead(&genome->elements, element);
+	    element->genome = genome;
+	    element->species = genome->name;
+	    element->name = cloneString("END");
+	    if (parents)
+		{
+		element->parent = parents[numParents-1];
+		newEdge(element->parent, element);
+		}
 	    break;
+	    }
 	}
     }
+    slReverse(&genome->breaks);
     slReverse(&genome->elements);
+    //AllocVar(p);
+    //p->element = genome->elements->next;
+    //p->count = 1;
+    //genome->elements->calced.next = p;
+    //AllocVar(p);
+    //p->count = 1;
+    //p->element = genome->elements;
+    //genome->elements->next->calced.prev = p;
+
+    AllocVar(p);
+    p->element = element;
+    p->count = 1;
+    genome->elements->calced.prev = p;
+
+    AllocVar(p);
+    p->count = 1;
+    p->element = genome->elements;
+    element->calced.next = p;
 
     for(ii=0; ii < count; ii++)
 	if (elements[ii] == NULL)
 	    errAbort("elemen %d isnull\n",ii);
 
     for(ii=0; ii < numChildren; ii++)
-	phyloAddEdge(node, readEleTree(lf,elements));
+	phyloAddEdge(node, readEleTree(lf,elements, count));
 
     freez(&elements);
     return node;
@@ -147,7 +210,7 @@ struct phyloTree *eleReadTree(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 
-return readEleTree(lf, NULL);
+return readEleTree(lf, NULL, 0);
 }
 
 struct genome *readGenomes(char *fileName)
