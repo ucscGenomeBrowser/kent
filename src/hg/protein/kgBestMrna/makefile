@@ -4,10 +4,10 @@ L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  $(MYLIBDIR)/jkOwnLib.a $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-A1 = kgPrepBestMrna2
+A1 = kgPrepBestMrna
 O1 = ${A1}.o
 
-A2 = kgResultBestMrna2
+A2 = kgResultBestMrna
 O2 = ${A2}.o
 
 all::
