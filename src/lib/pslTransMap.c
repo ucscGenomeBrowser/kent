@@ -152,13 +152,13 @@ static struct block getBeforeBlockMapping(unsigned mqStart, unsigned mqEnd,
 /* map part of an ungapped psl block that occurs before a mapPsl block */
 {
 struct block mappedBlk;
-ZeroVar(&mappedBlk);
 
 /* mRNA start in genomic gap before this block, this will
  * be an inPsl insert */
 unsigned size = (align1Blk->tEnd < mqStart)
     ? (align1Blk->tEnd - align1Blk->tStart)
     : (mqStart - align1Blk->tStart);
+ZeroVar(&mappedBlk);
 mappedBlk.qStart = align1Blk->qStart;
 mappedBlk.qEnd = align1Blk->qStart + size;
 return mappedBlk;
@@ -169,7 +169,6 @@ static struct block getOverBlockMapping(unsigned mqStart, unsigned mqEnd,
 /* map part of an ungapped psl block that overlapps a mapPsl block. */
 {
 struct block mappedBlk;
-ZeroVar(&mappedBlk);
 
 /* common sequence start contained in this block, this handles aligned
  * and genomic inserts */
@@ -177,6 +176,7 @@ unsigned off = align1Blk->tStart - mqStart;
 unsigned size = (align1Blk->tEnd > mqEnd)
     ? (mqEnd - align1Blk->tStart)
     : (align1Blk->tEnd - align1Blk->tStart);
+ZeroVar(&mappedBlk);
 mappedBlk.qStart = align1Blk->qStart;
 mappedBlk.qEnd = align1Blk->qStart + size;
 mappedBlk.tStart = mtStart + off;
