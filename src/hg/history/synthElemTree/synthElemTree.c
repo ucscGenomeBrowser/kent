@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: synthElemTree.c,v 1.3 2006/02/17 01:15:00 braney Exp $";
+static char const rcsid[] = "$Id: synthElemTree.c,v 1.4 2006/02/28 16:58:30 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -197,6 +197,9 @@ for(p = g->elements; p; p=p->next)
 
     if (r-- == 0)
 	{
+	int t, ii;
+	struct element *ptr;
+
 	didIt = 1;
 	AllocVar(e);
 	slAddHead(&g1->elements, e);
@@ -208,8 +211,20 @@ for(p = g->elements; p; p=p->next)
 	e->version = cloneString(buffer);
 	eleAddEdge(p, e);
 
+	t = rand() % (slCount(g1->elements) ) ;
 	AllocVar(e);
-	slAddHead(&g1->elements, e);
+	if ((t == 0) || (g1->elements == NULL))
+	    slAddHead(&g1->elements, e);
+	else
+	    {
+	    printf("t is %d\n",t);
+	    ptr = g1->elements;
+	    for(ii=0; ptr->next && (ii< t) ; ii++)
+	        ptr = ptr->next;
+	    e->next = ptr->next;
+	    ptr->next = e;
+	    }
+
 	e->species = g1->name;
 	e->isFlipped = p->isFlipped;
 	e->name = p->name;
@@ -380,7 +395,7 @@ for (; generation < MaxGeneration ;generation++)
 for(g = gList ; g; g = g->next)
     g->node->ident->length += 1;
 
-phyloPrintTreeNoDups(root, stdout);
+//phyloPrintTreeNoDups(root, stdout);
 outElementTrees(f, root);
 }
 
