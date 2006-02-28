@@ -1,17 +1,28 @@
 /* snpContigLocFilter - first step in dbSNP processing.
- * Filter the ContigLoc table in 2 ways: remove contigs that aren't the reference assembly,
+ * Filter the ContigLoc table in 2 ways: remove contigs that aren't in the reference assembly,
    and remove SNPs that have weight = 10 */
+/* Translate to N_random, using ctgPos table (must exist). */ 
+/* Create ContigLocFilter table. */
 #include "common.h"
 
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.17 2006/02/27 22:21:33 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.18 2006/02/28 20:57:35 heather Exp $";
 
 static char *snpDb = NULL;
-static struct hash *contigHash = NULL;
-static struct hash *weightHash = NULL;
 static char *contigGroup = NULL;
+
+static struct hash *ctgPosHash = NULL;
+static struct hash *contigCoords = NULL;
+static struct hash *weightHash = NULL;
+
+struct coords
+    {
+    char *chrom;
+    int start;
+    int end;
+    };
 
 void usage()
 /* Explain usage and exit. */
@@ -22,11 +33,38 @@ errAbort(
     "    snpContigLocFilter snpDb contigGroup\n");
 }
 
-
-struct hash *loadContigs(char *contigGroup)
-/* hash all ctg IDs that match contigGroup */
+void loadCtgPos()
+/* store the coords for each contig_acc */
 {
-struct hash *ret;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+struct coords *cel = NULL;
+
+ctgPosHash = newHash(0);
+verbose(1, "reading ctgPos...\n");
+safef(query, sizeof(query), "select contig, chrom, chromStart, chromEnd from ctgPos");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(cel);
+    cel->chrom = cloneString(row[1]);
+    cel->start = sqlUnsigned(row[2]);
+    cel->end = sqlUnsigned(row[3]);
+    hashAdd(ctgPosHash, cloneString(row[0]), cel);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
+void loadContigCoords(char *contigGroup)
+/* store the coords for each ctg_id */
+/* lookup in ctgPosHash via contigAccHash */
+/* if contig_end == 0 append _random to chromName */
+/* Also check that orientation is always positive! */
+{
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -35,88 +73,139 @@ int count = 0;
 int orient = 0;
 int end = 0;
 char chromName[64];
+struct hashEl *hel = NULL;
+struct coords *celOld, *celNew = NULL;
 
-ret = newHash(0);
-verbose(1, "getting contigs...\n");
-safef(query, sizeof(query), "select ctg_id, contig_chr, contig_end, orient from ContigInfo where group_term = '%s'", contigGroup);
+contigCoords = newHash(0);
+
+verbose(1, "reading ContigInfo...\n");
+safef(query, sizeof(query), 
+      "select ctg_id, contig_acc, contig_chr, contig_end, orient from ContigInfo where group_term = '%s'", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    orient = sqlUnsigned(row[3]);
+    orient = sqlUnsigned(row[4]);
     if (orient != 0)
         errAbort("Contig %s has non-zero orientation!!\n", row[0]);
 
-    end = sqlUnsigned(row[2]);
+    /* detect randoms */
+    end = sqlUnsigned(row[3]);
     if (end == 0) 
-	safef(chromName, ArraySize(chromName), "%s_random", row[1]);
+	safef(chromName, ArraySize(chromName), "%s_random", row[2]);
     else
-	safef(chromName, ArraySize(chromName), "%s", row[1]);
+	safef(chromName, ArraySize(chromName), "%s", row[2]);
 
-    hashAdd(ret, cloneString(row[0]), cloneString(chromName));
+    /* use the contig_acc to get the coords */
+    /* don't need to save contig_acc */
+    AllocVar(celNew);
+    // hel = hashLookup(ctgPosHash, row[1]);
+    // if (hel == NULL)
+        // errAbort("Can't find %s in ctgPos\n", row[1]);
+    // celOld = (struct coords *)hel->val;
+    celOld = hashFindVal(ctgPosHash, row[1]);
+    if (celOld == NULL)
+        errAbort("Can't find %s in ctgPos\n", row[1]);
+
+    celNew->chrom = cloneString(chromName);
+    celNew->start = celOld->start;
+    celNew->end =  celOld->end;
+    hashAdd(contigCoords, cloneString(row[0]), celNew);
+    verbose(1, "%s chr%s:%d-%d\n", row[0], chromName, celNew->start, celNew->end);
     count++;
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 verbose(1, "contigs found = %d\n", count);
-return ret;
+verbose(1, "-------------\n");
 }
 
-struct hash *loadMapInfo()
-/* hash all snp IDs that have weight = 10 */
+void getPoorlyAlignedSNPs()
+/* hash all snp IDs that have weight = 10 into global weightHash */
 {
-struct hash *ret;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int count = 0;
 
-ret = newHash(0);
+weightHash = newHash(0);
 verbose(1, "getting weight = 10 from SNPMapInfo...\n");
 safef(query, sizeof(query), "select snp_id from SNPMapInfo where weight = 10");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hashAdd(ret, cloneString(row[0]), NULL);
+    hashAdd(weightHash, cloneString(row[0]), NULL);
     count++;
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 verbose(1, "SNPs with weight 10 found = %d\n", count);
-return ret;
 }
 
-void filterContigs()
-/* read all rows, relevant columns of ContigLoc into memory. */
-/* Write out rows where ctg_id is in our hash. */
-/* Don't write rows where weight = 10 from MapInfo. */
+
+void filterSnps()
+/* Do a serial read through ContigLoc. */
+/* For each SNP, get loc_type (1-6), orientation (strand) and allele (refNCBI). */
+/* Output to ContigLocFilter table (tableName hard-coded). */
+/* Use ctg_id to filter: only save rows where ctg_id is in our hash. */
+/* Also, skip whenever weight = 10 from MapInfo weightHash. */
+
+/* phys_pos_from (start) is always an integer. */
+/* If phys_pos_from is 0, this is a random contig and we generate lifted coords. */
+
+/* Format of phys_pos is based on loc_type: */
+/* 1: num..num */
+/* 2: num */
+/* 3: num^num */
+/* 4-6: NULL */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct hashEl *el1, *el2;
+struct hashEl *helRandom;
 FILE *f;
-char *chromName;
+struct coords *cel = NULL;
+int start = 0;
+char endString[32];
+int endNum = 0;
+int loc_type = 0;
 
 f = hgCreateTabFile(".", "ContigLocFilter");
 
 safef(query, sizeof(query), 
-    "select snp_id, ctg_id, loc_type, phys_pos_from, phys_pos, orientation, allele from ContigLoc");
+    "select snp_id, ctg_id, loc_type, phys_pos_from, phys_pos, asn_from, asn_to, orientation, allele from ContigLoc");
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el1 = hashLookup(contigHash,row[1]);
+    el1 = hashLookup(contigCoords, row[1]);
     if (el1 != NULL)
         {
-	if (sameString(row[3], "0")) continue;
-	el2 = hashLookup(weightHash,row[0]);
+	el2 = hashLookup(weightHash, row[0]);
 	if (el2 != NULL) continue;
-	/* could check for missing chrom here */
-	chromName = hashFindVal(contigHash,row[1]);
-	fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
-	            row[0], row[1], chromName, row[2], row[3], row[4], row[5], row[6]);
+
+	cel = hashFindVal(contigCoords, row[1]);
+
+	loc_type = sqlUnsigned(row[2]);
+
+	start = sqlUnsigned(row[3]);
+	safef(endString, sizeof(endString), "%s", row[4]);
+
+        /* handle randoms */
+	if (start == 0)
+	    {
+	    start = sqlUnsigned(row[5]) + cel->start;
+	    endNum = sqlUnsigned(row[6]) + cel->start;
+	    safef(endString, sizeof(endString), "%d", endNum);
+	    /* not sure what to expect for phys_pos when loc_type != 2 */
+	    if (loc_type != 2)
+	        verbose(1, "%s\t%s\t%d\t%d\t%s\n", row[0], cel->chrom, loc_type, start, endString);
+	    }
+	
+	fprintf(f, "%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\n", 
+	            row[0], row[1], cel->chrom, row[2], start, endString, row[7], row[8]);
 	}
     }
 sqlFreeResult(&sr);
@@ -174,23 +263,32 @@ if(!hTableExistsDb(snpDb, "ContigInfo"))
     errAbort("no ContigInfo table in %s\n", snpDb);
 if(!hTableExistsDb(snpDb, "SNPMapInfo"))
     errAbort("no SNPMapInfo table in %s\n", snpDb);
+if(!hTableExistsDb(snpDb, "ctgPos"))
+    errAbort("no ctgPos table in %s\n", snpDb);
 
 
-contigHash = loadContigs(contigGroup);
-if (contigHash == NULL) 
+loadCtgPos();
+if (ctgPosHash == NULL) 
     {
-    verbose(1, "couldn't get ContigInfo hash\n");
+    verbose(1, "couldn't get ctgPos hash\n");
     return 1;
     }
 
-weightHash = loadMapInfo();
-if (weightHash == NULL)
+loadContigCoords(contigGroup);
+if (contigCoords == NULL) 
     {
-    verbose(1, "couldn't get MapInfo weight hash\n");
+    verbose(1, "couldn't get contigCoords hash\n");
     return 2;
     }
 
-filterContigs();
+getPoorlyAlignedSNPs();
+if (weightHash == NULL)
+    {
+    verbose(1, "couldn't get MapInfo weight hash\n");
+    return 3;
+    }
+
+filterSnps();
 createTable();
 loadDatabase();
 
