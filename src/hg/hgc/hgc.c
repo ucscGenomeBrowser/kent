@@ -192,7 +192,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.996 2006/02/27 16:46:06 daryl Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.997 2006/02/28 22:11:50 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -18498,7 +18498,7 @@ cart = theCart;
 doMiddle();
 }
 
-char *excludeVars[] = {"bool.hcg.dna.rc", "Submit", "submit", "g", "i", "aliTrack", "addp", "pred", NULL};
+char *excludeVars[] = {"hgSeq.revComp", "bool.hcg.dna.rc", "Submit", "submit", "g", "i", "aliTrack", "addp", "pred", NULL};
 
 int main(int argc, char *argv[])
 {
