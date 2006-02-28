@@ -148,7 +148,7 @@ void codeBaseType(struct pfCompile *pfc, FILE *f, struct pfBaseType *base)
 {
 char *s = typeKey(pfc, base);
 if (s == NULL)
-    fprintf(f, "struct %s*", base->name);
+    fprintf(f, "struct %s*", base->cName);
 else
     fprintf(f, "_pf_%s", s);
 }
@@ -334,7 +334,7 @@ if (function->type == pptDot)
         {
 	fprintf(f, "{\n");
 	fprintf(f, "struct %s *_pf_face = %s[%d].v;\n",
-		base->name, stackName, stack);
+		base->cName, stackName, stack);
 	fprintf(f, "%s[%d].v = _pf_face->_pf_obj;\n", stackName, stack);
 	fprintf(f, "_pf_face->%s(%s+%d);\n", method->name, 
 		stackName, stack);
@@ -507,8 +507,7 @@ else
 	{
 	fprintf(f, "char *_pf_key;\n");
 	fprintf(f, 
-	    "struct _pf_iterator _pf_ix = _pf_%s_iterator_init(_pf_collection);\n",
-	    base->name);
+	    "struct _pf_iterator _pf_ix = _pf_dir_iterator_init(_pf_collection);\n");
 	fprintf(f, "while (_pf_ix.next(&_pf_ix, &%s, &_pf_key))\n", elName->string);
 	fprintf(f, "{\n");
 	if (keyName != NULL)
@@ -1237,7 +1236,7 @@ struct pfBaseType *base = class->ty->base;
 if (base == pfc->stringType || base == pfc->dyStringType || base == pfc->arrayType)
     fprintf(f, "(");
 else
-    fprintf(f, "((struct %s *)", base->name);
+    fprintf(f, "((struct %s *)", base->cName);
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, ")");
 assert(field->next == NULL);
@@ -1811,10 +1810,10 @@ static void castClassToInterface(struct pfCompile *pfc, FILE *f,
  * and fill in it's object pointer with what's on the stack. */
 {
 struct pfBaseType *faceBase = pp->ty->base;
-char *faceName = faceBase->name;
+char *faceName = faceBase->cName;
 struct pfParse *classPp = pp->children;
 struct pfBaseType *classBase = classPp->ty->base;
-char *className = classBase->name;
+char *className = classBase->cName;
 fprintf(f, "{\n");
 fprintf(f, "struct %s *_pf_face = _pf_need_mem(sizeof(struct %s));\n", 
 	faceName, faceName);
@@ -2749,16 +2748,12 @@ static void printPolyFunTable(struct pfCompile *pfc, FILE *f,
 if (base->polyList != NULL)
     {
     struct pfPolyFunRef *pfr;
-    fprintf(f, "_pf_polyFunType _pf_pf%d_%s[] = {\n", base->scope->id, base->name);
+    fprintf(f, "static _pf_polyFunType _pf_pf%d_%s[] = {\n", base->scope->id, base->name);
     for (pfr = base->polyList; pfr != NULL; pfr = pfr->next)
         {
 	struct pfBaseType *b = pfr->class;
 	fprintf(f, "  %s_%s,\n", b->methodPrefix,
 		pfr->method->fieldName);
-#ifdef OLD
-	fprintf(f, "  _pf_cm%d_%s_%s,\n", b->scope->id, b->name, 
-		pfr->method->fieldName);
-#endif /* OLD */
 	}
     fprintf(f, "};\n");
     }
@@ -2790,10 +2785,10 @@ static void rPrintClasses(struct pfCompile *pfc, FILE *f, struct pfParse *pp,
 if (pp->type == pptClass)
     {
     struct pfBaseType *base = pp->ty->base;
-    fprintf(f, "struct %s {\n", base->name);
+    fprintf(f, "struct %s {\n", base->cName);
     fprintf(f, "int _pf_refCount;\n");
     fprintf(f, "void (*_pf_cleanup)(struct %s *obj, int typeId);\n", 
-    	base->name);
+    	base->cName);
     fprintf(f, "_pf_polyFunType *_pf_polyFun;\n");
     rPrintFields(pfc, f, base); 
     fprintf(f, "};\n");
@@ -2836,7 +2831,7 @@ if (pp->type == pptInterface)
      struct pfBaseType *base = pp->ty->base;
      struct pfParse *ppType = pp->children;
      struct pfParse *ppCompound = ppType->next;
-     fprintf(f, "struct %s {\n", base->name);
+     fprintf(f, "struct %s {\n", base->cName);
      fprintf(f, "int _pf_refCount;\n");
      fprintf(f, "void (*_pf_cleanup)(void *obj, int typeId);\n");
      fprintf(f, "void *_pf_obj;\n");

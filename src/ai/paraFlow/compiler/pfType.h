@@ -29,6 +29,7 @@ struct pfBaseType
     bool isClass;		/* TRUE if it's a class */
     bool isInterface;		/* TRUE if it's a interface  */
     bool needsCleanup;		/* TRUE if it needs refCount/cleanup */
+    UBYTE access;	/* Is class usable outside module? */
     bool reserved;		/* Currently zero. */
     int id;			/* Unique id. */
     struct pfType *fields;	/* List of (data) fields. */
@@ -39,7 +40,7 @@ struct pfBaseType
                                            (Including in parents) */
     struct pfParse *initMethod; /* Initialization method if any. */
     char *methodPrefix;	/* Suggested method prefix for code generator. */
-    UBYTE access;	/* Is class usable outside module? */
+    char *cName;	/* Name for code generator to use for C structure. */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 

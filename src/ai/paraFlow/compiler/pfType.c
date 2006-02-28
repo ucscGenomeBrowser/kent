@@ -1513,38 +1513,6 @@ else
 pp->ty = CloneVar(destType);
 }
 
-#ifdef UNUSED
-static void checkTypeDot(struct pfCompile *pfc, struct pfParse *pp)
-/* Make sure that the left side of dot is a module name
- * and the right side is the name of a  class in that module. */
-{
-struct pfParse *left = pp->children;
-struct pfParse *right = left->next;
-struct pfModule *module = hashFindVal(pfc->moduleHash, left->name);
-
-uglyf("checkTypeDot %p\n", pp);
-if (left->type != pptModuleUse || right->type != pptTypeName)
-    internalErrAt(pp->tok);
-if (module != NULL)
-    {
-    if (!pfScopeFindType(module->scope, right->name))
-	{
-	errAt(right->tok, "%s isn't a class in module %s",
-	    right->name, module->name);
-	}
-    else
-	{
-	left->type = pptModuleUse;
-	right->type = pptTypeName;
-	right->scope = module->scope;
-	pp->ty = right->ty;
-	uglyf("set right (%p) in checkTypeDot", right);
-	}
-    }
-else
-    errAt(left->tok, "%s isn't a module in type expression", left->name);
-}
-#endif /* UNUSED */
 
 static void rCheckDimsAndModules(struct pfCompile *pfc, struct pfParse *type)
 /* Do a double check on all pptTypeName nodes. Make sure that any
@@ -1587,17 +1555,7 @@ for (type = type->children; type != NULL; type = type->next)
 static void checkTypeWellFormed(struct pfCompile *pfc, struct pfParse *type)
 /* Make sure that a type expression is a-ok. */
 {
-#ifdef UNUSED
-if (type->type == pptModuleDotType)
-    {
-    struct pfParse *left = type->children;
-    struct pfParse *right = left->next;
-    checkTypeDot(pfc, type);
-    rCheckDimsAndModules(pfc, right);
-    }
-else
-#endif /* UNUSED */
-    rCheckDimsAndModules(pfc, type);
+rCheckDimsAndModules(pfc, type);
 }
 
 static boolean isFunctionIo(struct pfParse *varInit)
@@ -2687,11 +2645,11 @@ switch (pp->type)
     }
 }
 
-static void rFillInClassMethodsPrefix(struct pfParse *pp, struct dyString *dy)
+static void rFillInClassPrefix(struct pfParse *pp, struct dyString *dy)
 /* Recurse mostly just to reverse order, so parent appears first... */
 {
 if (pp->parent)
-    rFillInClassMethodsPrefix(pp->parent, dy);
+    rFillInClassPrefix(pp->parent, dy);
 switch (pp->type)
     {
     case pptModule:
@@ -2704,20 +2662,26 @@ switch (pp->type)
 	    }
         break;
     case pptClass:
+    case pptInterface:
 	dyStringAppendC(dy, '_');
         dyStringAppend(dy, pp->name);
         break;
     }
 }
 
-static void fillInClassMethodsPrefix(struct pfCompile *pfc, struct pfParse *class)
+static void fillInClassMethodsPrefixAndCName(struct pfCompile *pfc, struct pfParse *class)
 /* Fill in prefix to user for class methods. */
 {
-struct dyString *dy = dyStringNew(0);
-dyStringAppend(dy, "_pf_cm");
-rFillInClassMethodsPrefix(class, dy);
-class->ty->base->methodPrefix = cloneString(dy->string);
-dyStringFree(&dy);
+struct dyString *methodPrefix = dyStringNew(0);
+struct dyString *cName = dyStringNew(0);
+dyStringAppend(methodPrefix, "_pf_cm");
+dyStringAppend(cName, "pf");
+rFillInClassPrefix(class, methodPrefix);
+rFillInClassPrefix(class, cName);
+class->ty->base->methodPrefix = cloneString(methodPrefix->string);
+class->ty->base->cName = cloneString(cName->string);
+dyStringFree(&methodPrefix);
+dyStringFree(&cName);
 }
 
 
@@ -2732,11 +2696,9 @@ for (p = pp->children; p != NULL; p = p->next)
 switch (pp->type)
     {
     case pptClass:
-        blessClassOrInterface(pfc, pp, FALSE);
-	fillInClassMethodsPrefix(pfc, pp);
-	break;
     case pptInterface:
-        blessClassOrInterface(pfc, pp, TRUE);
+        blessClassOrInterface(pfc, pp, FALSE);
+	fillInClassMethodsPrefixAndCName(pfc, pp);
 	break;
     }
 }
