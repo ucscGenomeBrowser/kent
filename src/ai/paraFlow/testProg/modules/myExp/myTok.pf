@@ -55,7 +55,7 @@ class tokenizer
 	}
     }
 
-to tokenizerNew(string fileName) into tokenizer tkz
+global to tokenizerNew(string fileName) into tokenizer tkz
 {
 tkz = ();
 tkz.f = fileOpen(fileName, "r");

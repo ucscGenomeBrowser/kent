@@ -2305,10 +2305,28 @@ switch (tok->type)
     case pftTry:
         statement = parseTry(pfc, parent, &tok, scope);
 	break;
-    case pftStatic:
-    case pftReadable:
     case pftLocal:
     case pftGlobal:
+        {
+	enum pfTokType thisType = tok->type;
+	enum pfTokType nextType = tok->next->type;
+	if (nextType == pftTo || nextType == pftFlow)
+	    {
+	    struct pfParse *funcPp;
+	    tok = tok->next;
+	    statement = pfParseStatement(pfc, parent, &tok, scope);
+	    statement->access = (thisType == pftGlobal ? paGlobal : paLocal);
+	    break;
+	    }
+	else
+	    {
+	    statement = pfParseExpression(pfc, parent, &tok, scope);
+	    eatSemi(&tok);
+	    break;
+	    }
+	}
+    case pftStatic:
+    case pftReadable:
     case pftName:
     case pftPlusPlus:
     case pftMinusMinus:

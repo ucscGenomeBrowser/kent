@@ -69,8 +69,8 @@ static void printVarDef(FILE *f, struct pfParse *pp, boolean printInit,
 	boolean printLocals)
 /* Print variable statement and optionally initialization. */
 {
-#ifdef SOON
 if (printLocals || pp->access == paReadable || pp->access == paGlobal)
+#ifdef SOON
 #endif /* SOON */
     {
     struct pfToken *start = NULL, *end = NULL;
@@ -122,11 +122,11 @@ while (parenBalance > 0)
 return tok;
 }
 
-static void printFuncDef(FILE *f, struct pfParse *funcDef)
+static void printFuncDef(FILE *f, struct pfParse *funcDef, boolean printLocals)
 /* Print function definition - just name and parameters */
 {
+if (printLocals || funcDef->access == paGlobal)
 #ifdef SOON
-if (funcDef->access == paGlobal)
 #endif /* SOON */
     {
     struct pfToken *start, *end;
@@ -135,6 +135,7 @@ if (funcDef->access == paGlobal)
     struct pfParse *output = input->next;
     struct pfParse *body = output->next;
     start = end = funcDef->tok;
+    fprintf(f, "global ");
     findSpanningTokens(name, &start, &end);
     findSpanningTokens(input, &start, &end);
     findSpanningTokens(output, &start, &end);
@@ -176,7 +177,7 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
 	    break;
 	case pptToDec:
 	case pptFlowDec:
-	    printFuncDef(f, pp);
+	    printFuncDef(f, pp, printLocals);
 	    break;
 	case pptPolymorphic:
 	    fprintf(f, "polymorphic ");

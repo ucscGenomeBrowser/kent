@@ -279,4 +279,4 @@ class lib
 
     }
 
-lib lib = ();
+global lib lib = ();

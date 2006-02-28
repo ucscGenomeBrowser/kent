@@ -1,13 +1,13 @@
 import 'num'
 
-string zebra = 'zebra';
-string monkey = 'monkey';
-string dog = 'dog';
-string cat = 'cat';
+global string zebra = 'zebra';
+global string monkey = 'monkey';
+global string dog = 'dog';
+global string cat = 'cat';
 
-to stutter(string s)
+global to stutter(string s)
     {
     print("$s $s");
     }
 
-num.abc abc = (1,2,3);
+global num.abc abc = (1,2,3);

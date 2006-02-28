@@ -1,6 +1,6 @@
 include 'a'
 
-to printB()
+global to printB()
 {
 print("Hello from module B");
 }

@@ -15,19 +15,19 @@ string one = "one";
 string two = "two";
 string three = "three";
 
-to getNumType(int num, string name) into numType x
+global to getNumType(int num, string name) into numType x
     {
     x = (name,num);
     }
 
-to addNumType(numType a, b) into numType c
+global to addNumType(numType a, b) into numType c
     {
     c = ();
     c.name = a.name + " + "  + b.name;
     c.num = a.num + b.num;
     }
     
-to zebraNumType() into numType c
+global to zebraNumType() into numType c
     {
     c = (animal.zebra, animal.zebra.size);
     }

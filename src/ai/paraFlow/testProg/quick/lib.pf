@@ -1,5 +1,5 @@
 
-flow factorial(int i) into (double f)
+global flow factorial(int i) into (double f)
     {
     if (i <= 1)
         f = 1;

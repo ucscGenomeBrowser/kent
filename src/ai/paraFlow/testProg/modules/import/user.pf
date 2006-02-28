@@ -20,6 +20,8 @@ print(animal.zebra);
 NumStuff.ad ad = ((),());
 ad.abc.a = 1;
 ad.def.f = 6;
+/*-SOON
+SOON-*/
 print(ad);
 
 NumStuff.numType a = NumStuff.getNumType(11, "eleven");

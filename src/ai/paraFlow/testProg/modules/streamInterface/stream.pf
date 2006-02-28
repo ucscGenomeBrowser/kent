@@ -35,7 +35,7 @@ class stringStream
 	}
     }
 
-to openStringStream(string string) into (stream stream)
+global to openStringStream(string string) into (stream stream)
     {
     stringStream ss = (string);
     stream = ss;
@@ -65,7 +65,7 @@ class fileStream
 	}
     }
 
-to openFileStream(string fileName, string mode="r") into stream stream
+global to openFileStream(string fileName, string mode="r") into stream stream
     {
     fileStream fs = (fileOpen(fileName, mode));
     stream = fs;

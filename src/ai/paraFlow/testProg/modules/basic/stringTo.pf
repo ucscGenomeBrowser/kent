@@ -1,19 +1,19 @@
 // Convert string to integer
 
-to isalpha(char b) into bit isalpha
+global to isalpha(char b) into bit isalpha
     {
     string az = "az";
     string AZ = "AZ";
     isalpha =  (b >= az[0] && b <= az[1] || b >= AZ[0] && b <= AZ[1]);
     }
 
-to isnum(char b) into bit isnum
+global to isnum(char b) into bit isnum
     {
     string nums = "09";
     isnum = (b >= nums[0] && b <= nums[1]);
     }
 
-to stringToInt(string s) into int val
+global to stringToInt(string s) into int val
     {
     string zero = "0";
     char zeroInAscii = zero[0];
