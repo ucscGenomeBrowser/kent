@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.90 2006/02/21 23:18:16 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.91 2006/02/28 17:56:04 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -306,8 +306,11 @@ slNameFreeList(&(hel->val));
 static void accessControlFree(struct hash **pAcHash)
 /* Free up access control hash. */
 {
-hashTraverseEls(*pAcHash, freeHelSlNameList);
-freeHash(pAcHash);
+if (*pAcHash != NULL)
+    {
+    hashTraverseEls(*pAcHash, freeHelSlNameList);
+    freeHash(pAcHash);
+    }
 }
 
 
