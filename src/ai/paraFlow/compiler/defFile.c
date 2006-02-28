@@ -61,29 +61,38 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     rPrintIncludes(f, pp);
 }
 
-static void rPrintDefs(FILE *f, struct pfParse *parent, boolean printInit);
+static void rPrintDefs(FILE *f, struct pfParse *parent, boolean printInit,
+	boolean printLocals);
 /* Print definitions. */
 
-static void printVarDef(FILE *f, struct pfParse *pp, boolean printInit)
+static void printVarDef(FILE *f, struct pfParse *pp, boolean printInit,
+	boolean printLocals)
 /* Print variable statement and optionally initialization. */
 {
-struct pfToken *start = NULL, *end = NULL;
-struct pfParse *type = pp->children;
-struct pfParse *name = type->next;
-struct pfParse *init = name->next;
+#ifdef SOON
+if (printLocals || pp->access == paReadable || pp->access == paGlobal)
+#endif /* SOON */
+    {
+    struct pfToken *start = NULL, *end = NULL;
+    struct pfParse *type = pp->children;
+    struct pfParse *name = type->next;
+    struct pfParse *init = name->next;
 
-start = end = type->tok;
-findSpanningTokens(type, &start, &end);
-if (end->next->type == ')')
-    end = end->next;	// Hack for function pointers... */
-printTokenRange(f, start, end);
-fprintf(f, " ");
-start = end = name->tok;
-findSpanningTokens(name, &start, &end);
-if (printInit && init != NULL)
-    findSpanningTokens(init, &start, &end);
-printTokenRange(f, start, end);
-fprintf(f, ";\n");
+    start = end = type->tok;
+    if (pp->access != paUsual)
+	fprintf(f, "%s ", pfAccessTypeAsString(pp->access));
+    findSpanningTokens(type, &start, &end);
+    if (end->next->type == ')')
+	end = end->next;	// Hack for function pointers... */
+    printTokenRange(f, start, end);
+    fprintf(f, " ");
+    start = end = name->tok;
+    findSpanningTokens(name, &start, &end);
+    if (printInit && init != NULL)
+	findSpanningTokens(init, &start, &end);
+    printTokenRange(f, start, end);
+    fprintf(f, ";\n");
+    }
 }
 
 static struct pfToken *addClosingParens(struct pfToken *start, 
@@ -116,18 +125,23 @@ return tok;
 static void printFuncDef(FILE *f, struct pfParse *funcDef)
 /* Print function definition - just name and parameters */
 {
-struct pfToken *start, *end;
-struct pfParse *name = funcDef->children;
-struct pfParse *input = name->next;
-struct pfParse *output = input->next;
-struct pfParse *body = output->next;
-start = end = funcDef->tok;
-findSpanningTokens(name, &start, &end);
-findSpanningTokens(input, &start, &end);
-findSpanningTokens(output, &start, &end);
-end = addClosingParens(start, end);
-printTokenRange(f, start, end);
-fprintf(f, ";\n");
+#ifdef SOON
+if (funcDef->access == paGlobal)
+#endif /* SOON */
+    {
+    struct pfToken *start, *end;
+    struct pfParse *name = funcDef->children;
+    struct pfParse *input = name->next;
+    struct pfParse *output = input->next;
+    struct pfParse *body = output->next;
+    start = end = funcDef->tok;
+    findSpanningTokens(name, &start, &end);
+    findSpanningTokens(input, &start, &end);
+    findSpanningTokens(output, &start, &end);
+    end = addClosingParens(start, end);
+    printTokenRange(f, start, end);
+    fprintf(f, ";\n");
+    }
 }
 
 static void printClassDef(FILE *f, struct pfParse *class)
@@ -144,11 +158,12 @@ if (extends != NULL)
     findSpanningTokens(extends, &start, &end);
 printTokenRange(f, start, end);
 fprintf(f, "\n{\n");
-rPrintDefs(f, body, TRUE);
+rPrintDefs(f, body, TRUE, TRUE);
 fprintf(f, "}\n");
 }
 
-static void rPrintDefs(FILE *f, struct pfParse *parent, boolean printInit)
+static void rPrintDefs(FILE *f, struct pfParse *parent, 
+	boolean printInit, boolean printLocals)
 /* Print definitions . */
 {
 struct pfParse *pp;
@@ -157,7 +172,7 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
     switch (pp->type)
         {
 	case pptVarInit:
-	    printVarDef(f, pp, printInit);
+	    printVarDef(f, pp, printInit, printLocals);
 	    break;
 	case pptToDec:
 	case pptFlowDec:
@@ -165,14 +180,14 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
 	    break;
 	case pptPolymorphic:
 	    fprintf(f, "polymorphic ");
-	    rPrintDefs(f, pp, printInit);
+	    rPrintDefs(f, pp, printInit, printLocals);
 	    break;
 	case pptClass:
 	case pptInterface:
 	    printClassDef(f, pp);
 	    break;
 	case pptTuple:
-	    rPrintDefs(f, pp, printInit);
+	    rPrintDefs(f, pp, printInit, printLocals);
 	    break;
 	}
     }
@@ -295,7 +310,7 @@ fprintf(f, "{\n");
 printTypesUsed(f, module);
 fprintf(f, "}\n");
 fprintf(f, "   // Symbols defined\n");
-rPrintDefs(f, module, FALSE);
+rPrintDefs(f, module, FALSE, FALSE);
 carefulClose(&f);
 }
 

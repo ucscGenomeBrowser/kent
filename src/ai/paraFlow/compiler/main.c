@@ -86,15 +86,15 @@ char *pfAccessTypeAsString(enum pfAccessType pa)
 switch (pa)
     {
     case paUsual:
-	return "paUsual";
+	return "usual";
     case paGlobal:
-	return "paGlobal";
+	return "global";
     case paReadable:
-	return "paReadable";
+	return "readable";
     case paLocal:
-	return "paLocal";
+	return "local";
     case paStatic:
-	return "paStatic";
+	return "static";
     default:
         internalErr();
 	return NULL;

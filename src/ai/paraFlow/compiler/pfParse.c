@@ -1349,12 +1349,12 @@ else
     }
 }
 
-boolean inToFunction(struct pfParse *pp)
+static boolean inFunction(struct pfParse *pp)
 /* Return TRUE if pp or one of it's parents is a function. */
 {
 while (pp != NULL)
     {
-    if (pp->type == pptToDec)
+    if (pp->type == pptToDec || pp->type == pptFlowDec)
 	return TRUE;
     pp = pp->parent;
     }
@@ -1368,15 +1368,50 @@ static struct pfParse *parseVarDec(struct pfCompile *pfc,
 /* Parse something of the form [static] typeExp varName */
 {
 struct pfToken *tok = *pTokList;
-struct pfToken *staticTok = NULL;
 struct pfParse *pp;
+bool inAccessSection = TRUE;
+enum pfAccessType access = paUsual;
 
-if (tok->type == pftStatic)
+while (inAccessSection)
     {
-    if (!inToFunction(parent))
-        errAt(tok, "'static' outside of 'to'");
-    staticTok = tok;
-    tok = tok->next;
+    enum pfTokType tokType = tok->type;
+    switch (tokType)
+        {
+	case pftStatic:
+	case pftReadable:
+	case pftLocal:
+	case pftGlobal:
+	    {
+	    boolean inFunc = inFunction(parent);
+	    if (access != paUsual)
+	        errAt(tok, "Only one of global/readable/local/static allowed.");
+	    if (tokType == pftStatic)
+		{
+	        access = paStatic;
+		if (!inFunc)
+		    errAt(tok, "'static' outside of function");
+		}
+	    else if (tokType == pftReadable)
+		{
+	        access = paReadable;
+		if (inFunc)
+		    errAt(tok, "'readable' inside function");
+		}
+	    else if (tokType == pftLocal)
+	        access = paLocal;
+	    else if (tokType == pftGlobal)
+		{
+	        access = paGlobal;
+		if (inFunc)
+		    errAt(tok, "'global' inside function");
+		}
+	    tok = tok->next;
+	    break;
+	    }
+	default:
+	    inAccessSection = FALSE;
+	    break;
+	}
     }
 pp = parseOf(pfc, parent, &tok, scope);
 if (tok->type == pftName)
@@ -1389,14 +1424,11 @@ if (tok->type == pftName)
     pp->parent = dec;
     dec->children = type;
     type->next = name;
-    if (staticTok != NULL)
-	 dec->access = paStatic;
+    dec->access = access;
     pp = dec;
     }
 else
     {
-    if (staticTok != NULL)
-        errAt(pp->tok, "misplaced static");
     switch (pp->type)
         {
 	case pptOf:
@@ -2274,6 +2306,9 @@ switch (tok->type)
         statement = parseTry(pfc, parent, &tok, scope);
 	break;
     case pftStatic:
+    case pftReadable:
+    case pftLocal:
+    case pftGlobal:
     case pftName:
     case pftPlusPlus:
     case pftMinusMinus:

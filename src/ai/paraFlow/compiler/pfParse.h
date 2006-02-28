@@ -216,10 +216,6 @@ enum pfParseType
     pptConstString,
     pptConstZero,
 
-#ifdef OLD
-    pptStatic,
-#endif /* OLD */
-
     pptTypeCount,
     };
 
