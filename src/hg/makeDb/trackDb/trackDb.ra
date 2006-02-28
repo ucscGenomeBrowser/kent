@@ -365,7 +365,7 @@ shortLabel MGC Genes
 longLabel Mammalian Gene Collection Full ORF mRNAs
 group genes
 priority 36
-visibility hide
+visibility pack
 color 34,139,34
 type genePred
 

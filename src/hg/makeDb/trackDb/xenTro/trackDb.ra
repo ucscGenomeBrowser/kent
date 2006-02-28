@@ -8,15 +8,6 @@ color 12,120,12
 type genePred
 url http://genome.jgi-psf.org/cgi-bin/dispGeneModel.v4?db=Xentr3&id=$$
 
-track mgcGenes
-shortLabel MGC Genes
-longLabel Mammalian Gene Collection Full ORF mRNAs
-group genes
-priority 36
-visibility hide
-color 34,139,34
-type genePred
-
 track intronEst
 shortLabel Spliced ESTs
 longLabel $Organism ESTs That Have Been Spliced
