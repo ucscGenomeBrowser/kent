@@ -70,8 +70,6 @@ static void printVarDef(FILE *f, struct pfParse *pp, boolean printInit,
 /* Print variable statement and optionally initialization. */
 {
 if (printLocals || pp->access == paReadable || pp->access == paGlobal)
-#ifdef SOON
-#endif /* SOON */
     {
     struct pfToken *start = NULL, *end = NULL;
     struct pfParse *type = pp->children;
@@ -152,15 +150,21 @@ struct pfToken *start, *end;
 struct pfParse *name = class->children;
 struct pfParse *body = name->next;
 struct pfParse *extends = body->next;
+struct pfBaseType *base = pfScopeFindType(class->scope, class->name);
 
-start = end = class->tok;
-findSpanningTokens(name, &start, &end);
-if (extends != NULL)
-    findSpanningTokens(extends, &start, &end);
-printTokenRange(f, start, end);
-fprintf(f, "\n{\n");
-rPrintDefs(f, body, TRUE, TRUE);
-fprintf(f, "}\n");
+#ifdef SOON
+if (base->access == paGlobal)
+#endif /* SOON */
+    {
+    start = end = class->tok;
+    findSpanningTokens(name, &start, &end);
+    if (extends != NULL)
+	findSpanningTokens(extends, &start, &end);
+    printTokenRange(f, start, end);
+    fprintf(f, "\n{\n");
+    rPrintDefs(f, body, TRUE, TRUE);
+    fprintf(f, "}\n");
+    }
 }
 
 static void rPrintDefs(FILE *f, struct pfParse *parent, 
@@ -273,12 +277,17 @@ void rPrintTypesUsed(FILE *f, struct pfParse *pp,
 if (pp->type == pptVarInit)
     {
     struct pfParse *type = pp->children;
-    dyStringClear(dy);
-    appendType(dy, type);
-    if (!hashLookup(hash, dy->string))
-        {
-	hashAdd(hash, dy->string, NULL);
-	fprintf(f, "%s t%d;\n", dy->string, hash->elCount);
+#ifdef SOON
+    if (type->ty->base->access == paGlobal)
+#endif /* SOON */
+	{
+	dyStringClear(dy);
+	appendType(dy, type);
+	if (!hashLookup(hash, dy->string))
+	    {
+	    hashAdd(hash, dy->string, NULL);
+	    fprintf(f, "%s t%d;\n", dy->string, hash->elCount);
+	    }
 	}
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)

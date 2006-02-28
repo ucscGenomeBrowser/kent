@@ -1,6 +1,6 @@
 // lib - A fledgling library in paraFlow
 
-class lib
+global class lib
     {
     int version = 1;	// Library version number.  Should change very slowly.
     int subversion = 1;

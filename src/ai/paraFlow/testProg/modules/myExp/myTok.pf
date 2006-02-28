@@ -3,7 +3,7 @@
 
 include 'stringTo'
 
-class tokenizer
+global class tokenizer
     {
     file f;		// Associated file
     string lineBuf = "";// Current line in file

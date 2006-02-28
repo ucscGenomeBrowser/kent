@@ -1,5 +1,5 @@
 
-class lib
+global class lib
     {
     int version = 1;	// Library version number.  Should change very slowly.
     to printHi() {print("hi");}

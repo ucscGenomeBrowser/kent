@@ -2310,20 +2310,28 @@ switch (tok->type)
         {
 	enum pfTokType thisType = tok->type;
 	enum pfTokType nextType = tok->next->type;
+	enum pfAccessType access = (thisType == pftGlobal ? paGlobal : paLocal);
 	if (nextType == pftTo || nextType == pftFlow)
 	    {
-	    struct pfParse *funcPp;
 	    tok = tok->next;
 	    statement = pfParseStatement(pfc, parent, &tok, scope);
-	    statement->access = (thisType == pftGlobal ? paGlobal : paLocal);
-	    break;
+	    statement->access = access;
+	    }
+	else if (nextType == pftClass || nextType == pftInterface)
+	    {
+	    struct pfParse *classPp;
+	    struct pfBaseType *base;
+	    tok = tok->next;
+	    statement = classPp = pfParseStatement(pfc, parent, &tok, scope);
+	    base = pfScopeFindType(scope, classPp->name);
+	    base->access = access;
 	    }
 	else
 	    {
 	    statement = pfParseExpression(pfc, parent, &tok, scope);
 	    eatSemi(&tok);
-	    break;
 	    }
+	break;
 	}
     case pftStatic:
     case pftReadable:

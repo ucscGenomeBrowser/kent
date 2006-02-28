@@ -3,8 +3,6 @@ import 'animal'
 import '../lib/lib'
 
 print(NumStuff.zero);
-NumStuff.zero = "zip, zilch";
-print(NumStuff.zero);
 print("lib.version is " + lib.lib.version);
 string uggh = "ugggh";
 print("There are " + lib.lib.countChars(uggh, 'g') + " g's in $uggh");

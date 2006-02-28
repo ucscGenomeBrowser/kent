@@ -4,6 +4,10 @@
 #ifndef PFTYPE_H
 #define PFTYPE_H
 
+#ifndef PFCOMPILE_H
+#include "pfCompile.h"
+#endif
+
 #ifndef PFSCOPE_H
 #include "pfScope.h"
 #endif
@@ -35,6 +39,7 @@ struct pfBaseType
                                            (Including in parents) */
     struct pfParse *initMethod; /* Initialization method if any. */
     char *methodPrefix;		/* Suggested method prefix for code generator. */
+    enum pfAccessType access;	/* Is class usable outside module? */
     };
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 

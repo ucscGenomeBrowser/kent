@@ -1,5 +1,5 @@
 
-interface stream
+global interface stream
     {
     to read(int size) into string s;
     to write(string s);

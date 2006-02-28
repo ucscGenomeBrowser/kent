@@ -27,7 +27,7 @@ return
 "into (string s);\n"
 "global flow intToString(long l, int minWidth, bit zeroPad, bit commas) into (string s);\n"
 "\n"
-"class file\n"
+"global class file\n"
 "    {\n"
 "    string name;\n"
 "    to close();\n"

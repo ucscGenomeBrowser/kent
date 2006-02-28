@@ -1,14 +1,14 @@
 import 'animal'
 
-class numType
+global class numType
     {
     string name;
     int num;
     };
 
-class abc {int a,b,c;}
-class def {int d,e,f;}
-class ad {abc abc, def def;}
+global class abc {int a,b,c;}
+global class def {int d,e,f;}
+global class ad {abc abc, def def;}
 
 readable string zero = "zero";
 global string one = "one";

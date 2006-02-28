@@ -146,6 +146,17 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     printScopeInfo(f, level+1, pp);
 }
 
+struct pfBaseType *addGlobalType(struct pfScope *scope, char *name, 
+	boolean isCollection, struct pfBaseType *parentType, int size, 
+	boolean needsCleanup)
+/* Add type to scope, and make it globally accessible. */
+{
+struct pfBaseType *base = pfScopeAddType(scope, name, isCollection, parentType,
+	size, needsCleanup);
+base->access = paGlobal;
+return base;
+}
+
 static void addBuiltInTypes(struct pfCompile *pfc)
 /* Add built in types . */
 {
@@ -153,53 +164,53 @@ struct pfScope *scope = pfc->scope;
 
 /* Declare some basic types.  Types with names in parenthesis
  * are never declared by user directly */
-pfc->moduleType = pfScopeAddType(scope, "<module>", FALSE, NULL, 0, FALSE);
+pfc->moduleType = addGlobalType(scope, "<module>", FALSE, NULL, 0, FALSE);
 pfc->moduleFullType = pfTypeNew(pfc->moduleType);
-pfc->varType = pfScopeAddType(scope, "var", FALSE, NULL, sizeof(_pf_Var), TRUE);
-pfc->nilType = pfScopeAddType(scope, "nil", FALSE, NULL, sizeof(_pf_String), FALSE);
-pfc->keyValType = pfScopeAddType(scope, "<keyVal>", FALSE, pfc->varType, 0, FALSE);
-pfc->streamType = pfScopeAddType(scope, "<stream>", FALSE, pfc->varType, 0, FALSE);
-pfc->numType = pfScopeAddType(scope, "<number>", FALSE, pfc->varType, 0, FALSE);
-pfc->collectionType = pfScopeAddType(scope, "<collection>", TRUE, pfc->varType, 0, FALSE);
-pfc->tupleType = pfScopeAddType(scope, "<tuple>", FALSE, pfc->varType, 0, FALSE);
-pfc->indexRangeType = pfScopeAddType(scope, "<indexRange>", TRUE, pfc->collectionType, 0, FALSE);
-pfc->classType = pfScopeAddType(scope, "<class>", FALSE, pfc->varType, 0, FALSE);
-pfc->interfaceType = pfScopeAddType(scope, "<interface>", FALSE, pfc->varType, 0, FALSE);
-pfc->functionType = pfScopeAddType(scope, "<function>", FALSE, pfc->varType, 0, FALSE);
-pfc->toPtType = pfScopeAddType(scope, "<toPt>", FALSE, pfc->varType, 0, FALSE);
-pfc->flowPtType = pfScopeAddType(scope, "<flowPt>", FALSE, pfc->varType, 0, FALSE);
-pfc->toType = pfScopeAddType(scope, "to", FALSE, pfc->functionType, 0, FALSE);
-pfc->flowType = pfScopeAddType(scope, "flow", FALSE, pfc->functionType, 0, FALSE);
-pfc->operatorType = pfScopeAddType(scope, "_operator_", FALSE, pfc->functionType, 0, FALSE);
+pfc->varType = addGlobalType(scope, "var", FALSE, NULL, sizeof(_pf_Var), TRUE);
+pfc->nilType = addGlobalType(scope, "nil", FALSE, NULL, sizeof(_pf_String), FALSE);
+pfc->keyValType = addGlobalType(scope, "<keyVal>", FALSE, pfc->varType, 0, FALSE);
+pfc->streamType = addGlobalType(scope, "<stream>", FALSE, pfc->varType, 0, FALSE);
+pfc->numType = addGlobalType(scope, "<number>", FALSE, pfc->varType, 0, FALSE);
+pfc->collectionType = addGlobalType(scope, "<collection>", TRUE, pfc->varType, 0, FALSE);
+pfc->tupleType = addGlobalType(scope, "<tuple>", FALSE, pfc->varType, 0, FALSE);
+pfc->indexRangeType = addGlobalType(scope, "<indexRange>", TRUE, pfc->collectionType, 0, FALSE);
+pfc->classType = addGlobalType(scope, "<class>", FALSE, pfc->varType, 0, FALSE);
+pfc->interfaceType = addGlobalType(scope, "<interface>", FALSE, pfc->varType, 0, FALSE);
+pfc->functionType = addGlobalType(scope, "<function>", FALSE, pfc->varType, 0, FALSE);
+pfc->toPtType = addGlobalType(scope, "<toPt>", FALSE, pfc->varType, 0, FALSE);
+pfc->flowPtType = addGlobalType(scope, "<flowPt>", FALSE, pfc->varType, 0, FALSE);
+pfc->toType = addGlobalType(scope, "to", FALSE, pfc->functionType, 0, FALSE);
+pfc->flowType = addGlobalType(scope, "flow", FALSE, pfc->functionType, 0, FALSE);
+pfc->operatorType = addGlobalType(scope, "_operator_", FALSE, pfc->functionType, 0, FALSE);
 
-pfc->bitType = pfScopeAddType(scope, "bit", FALSE, pfc->numType, sizeof(_pf_Bit), FALSE);
+pfc->bitType = addGlobalType(scope, "bit", FALSE, pfc->numType, sizeof(_pf_Bit), FALSE);
 pfc->bitFullType = pfTypeNew(pfc->bitType);
-pfc->byteType = pfScopeAddType(scope, "byte", FALSE, pfc->numType, sizeof(_pf_Byte), FALSE);
+pfc->byteType = addGlobalType(scope, "byte", FALSE, pfc->numType, sizeof(_pf_Byte), FALSE);
 pfc->byteFullType = pfTypeNew(pfc->byteType);
-pfc->shortType = pfScopeAddType(scope, "short", FALSE, pfc->numType, sizeof(_pf_Short), FALSE);
+pfc->shortType = addGlobalType(scope, "short", FALSE, pfc->numType, sizeof(_pf_Short), FALSE);
 pfc->shortFullType = pfTypeNew(pfc->shortType);
-pfc->intType = pfScopeAddType(scope, "int", FALSE, pfc->numType, sizeof(_pf_Int), FALSE);
+pfc->intType = addGlobalType(scope, "int", FALSE, pfc->numType, sizeof(_pf_Int), FALSE);
 pfc->intFullType = pfTypeNew(pfc->intType);
-pfc->longType = pfScopeAddType(scope, "long", FALSE, pfc->numType, sizeof(_pf_Long), FALSE);
+pfc->longType = addGlobalType(scope, "long", FALSE, pfc->numType, sizeof(_pf_Long), FALSE);
 pfc->longFullType = pfTypeNew(pfc->longType);
-pfc->floatType = pfScopeAddType(scope, "float", FALSE, pfc->numType, sizeof(_pf_Float), FALSE);
+pfc->floatType = addGlobalType(scope, "float", FALSE, pfc->numType, sizeof(_pf_Float), FALSE);
 pfc->floatFullType = pfTypeNew(pfc->floatType);
-pfc->doubleType = pfScopeAddType(scope, "double", FALSE, pfc->numType, sizeof(_pf_Double), FALSE);
+pfc->doubleType = addGlobalType(scope, "double", FALSE, pfc->numType, sizeof(_pf_Double), FALSE);
 pfc->doubleFullType = pfTypeNew(pfc->doubleType);
-pfc->charType = pfScopeAddType(scope, "char", FALSE, pfc->numType, sizeof(_pf_Char), FALSE);
+pfc->charType = addGlobalType(scope, "char", FALSE, pfc->numType, sizeof(_pf_Char), FALSE);
 pfc->charFullType = pfTypeNew(pfc->charType);
 
-pfc->stringType = pfScopeAddType(scope, "string", TRUE, pfc->streamType, sizeof(_pf_String), TRUE);
+pfc->stringType = addGlobalType(scope, "string", TRUE, pfc->streamType, sizeof(_pf_String), TRUE);
 pfc->stringType->keyedBy = pfc->longType;
-pfc->dyStringType = pfScopeAddType(scope, "dyString", TRUE, pfc->stringType, sizeof(_pf_String), TRUE);
+pfc->dyStringType = addGlobalType(scope, "dyString", TRUE, pfc->stringType, sizeof(_pf_String), TRUE);
 pfc->dyStringType->keyedBy = pfc->longType;
-pfc->arrayType = pfScopeAddType(scope, "array", TRUE, pfc->collectionType, sizeof(_pf_Array), TRUE);
+pfc->arrayType = addGlobalType(scope, "array", TRUE, pfc->collectionType, sizeof(_pf_Array), TRUE);
 pfc->arrayType->keyedBy = pfc->longType;
-pfc->dirType = pfScopeAddType(scope, "dir", TRUE, pfc->collectionType, sizeof(_pf_Dir), TRUE);
+pfc->dirType = addGlobalType(scope, "dir", TRUE, pfc->collectionType, sizeof(_pf_Dir), TRUE);
 pfc->dirType->keyedBy = pfc->stringType;
-//pfc->listType = pfScopeAddType(scope, "list", TRUE, pfc->collectionType, sizeof(_pf_List), TRUE);
+//pfc->listType = addGlobalType(scope, "list", TRUE, pfc->collectionType, sizeof(_pf_List), TRUE);
 //pfc->listType->keyedBy = pfc->longType;
-//pfc->treeType = pfScopeAddType(scope, "tree", TRUE, pfc->collectionType, sizeof(_pf_Tree), TRUE);
+//pfc->treeType = addGlobalType(scope, "tree", TRUE, pfc->collectionType, sizeof(_pf_Tree), TRUE);
 //pfc->treeType->keyedBy = pfc->doubleType;
 }
 
