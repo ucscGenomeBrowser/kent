@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.8 2006/02/28 17:07:19 fanhsu Exp $"
+#	"$Id: makeMm8.doc,v 1.9 2006/02/28 17:09:06 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -2667,3 +2667,83 @@ nice featureBits mm7 refGene:cds knownGene:cds
     ln -s protBlat/tight_mrna.psl .
     ~/src/hg/protein/kgProtMap2.sh kgMm8A mm8 060115
 
+#####################################
+# Build alias tables. (DONE 2/28/06, Fan)		
+
+   ssh hgwdev
+   cd /cluster/store9/kg/kgMm8A
+   mkdir alias
+   cd alias
+   kgAliasM mm8 proteins060115
+
+#	kgAliasKgXref reads from mm8.knownGene.proteinID,
+#	mm8.knownGene.name, mm8.kgXref.geneSymbol
+#	to create kgAliasKgXref.tab
+
+   kgAliasKgXref mm8
+
+#	kgAliasRefseq reads from mm8.knownGene.name,
+#	mm8.knownGene.proteinID, mm8.kgXref.refseq
+#	to create kgAliasRefseq.tab
+
+   kgAliasRefseq mm8
+
+   hgsql sp060115 -N -e 'select name,gene.val from mm8.knownGene,displayId,gene where displayId.val=proteinID and displayId.acc=gene.acc' \
+   | sort -u  > kgAliasP.tab
+
+   hgsql mm8 -N -e 'select name, name from knownGene' >kgAliasDup.tab
+   hgsql mm8 -N -e 'select mrnaID, dupMrnaID from dupSpMrna' >>kgAliasDup.tab
+   
+   cat kgAliasM.tab kgAliasRefseq.tab kgAliasKgXref.tab kgAliasP.tab kgAliasDup.tab| \
+   sort |uniq > kgAlias.tab
+
+   hgsql -e "drop table kgAlias;" mm8 
+   hgsql mm8 < ~/kent/src/hg/lib/kgAlias.sql
+   hgsql mm8 -e 'LOAD DATA local INFILE "kgAlias.tab" into table kgAlias' 
+
+#	kgProtAlias reads from mm8.knownGene.name,
+#	mm8.knownGene.proteinID, mm8.knownGene.alignID,
+#	proteins060115.spXref3.accession, proteins060115.spSecondaryID, proteins060115.pdbSP.pdb
+#	to create kgProtAlias.tab#
+
+   kgProtAlias mm8 060115
+
+   hgsql mm8 -N -e \
+   'select kgID, spDisplayID, protAcc from kgXref where protAcc != ""'\
+   | sort -u >kgProtAliasNCBI.tab
+
+# include variant splice protein IDs
+   
+   hgsql mm8 -N -e \
+   'select name, proteinID, parAcc from knownGene,sp060115.varAcc where varAcc=proteinID'\
+   |sort -u >kgProtAliasDup.tab
+
+# include duplicate protein IDs from dupSpMrna table
+   hgsql mm8 -N -e \
+   'select name, knownGene.proteinID, dupProteinID from knownGene, dupSpMrna where name=mrnaID'\
+   |sort -u >>kgProtAliasDup.tab
+
+# catch parent acc from dupProteinID too
+   hgsql mm8 -N -e\
+   'select name, knownGene.proteinID, parAcc from knownGene,dupSpMrna,sp060115.varAcc where name=mrnaID and dupProteinID=varAcc.varAcc'\
+   |sort -u >>kgProtAliasDup.tab
+    cat kgProtAliasNCBI.tab kgProtAlias.tab kgProtAliasDup.tab | sort -u > kgProtAliasAll.tab
+
+    echo "`date` creating table kgProtAlias"
+    hgsql mm8 -e "drop table kgProtAlias;"
+    hgsql mm8 <~/src/hg/lib/kgProtAlias.sql; 
+    hgsql mm8 -e 'LOAD DATA local INFILE "kgProtAliasAll.tab" into table kgProtAlias;'  
+
+# Build kgSpAlias table
+
+    hgsql mm8 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias where kgXref.kgID=kgAlias.kgID' >j.tmp
+    hgsql mm8 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias where kgXref.kgID=kgProtAlias.kgID'\
+    >>j.tmp
+    cat j.tmp|sort -u |grep -v 'kgID' >mm8.kgSpAlias.tab
+    rm j.tmp
+
+    hgsql mm8 -e 'drop table kgSpAlias';
+    hgsql mm8 < ~/src/hg/lib/kgSpAlias.sql
+    hgsql mm8 -e 'load data local infile "mm8.kgSpAlias.tab" into table kgSpAlias'
