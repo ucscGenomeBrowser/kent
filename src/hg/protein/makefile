@@ -19,7 +19,6 @@ clean:
 	done
 
 # no makefile for:
-#	kgGetPep
 #       pfamXref
 #	spXref2
 
@@ -27,11 +26,13 @@ clean:
 DIRS = \
 	kgAliasM \
 	kgAliasP \
+	kgAliasKgXref \
 	kgAliasRefseq \
 	kgProtAlias \
 	kgProtAliasNCBI \
 	kgBestMrna2 \
 	kgBestRef2 \
+	kgGetPep \
 	kgXref \
 	pfamXref \
 	rmKGPepMrna \
