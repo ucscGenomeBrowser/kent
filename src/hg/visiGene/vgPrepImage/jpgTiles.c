@@ -8,14 +8,14 @@
 **              a full-size jpg for downloading as well.
 **		Call jpgTiles with image width and height and outdir and outpath 
 **              Quality settings can also be optionally specified.
-**                 [-quality N|-variable 50 60 70 80 85]
+**                 [-quality N|-variable 50 60 70 80 85 85 85]
 **              Currently just operates on one output image tileset and stops,
 **              so run the program again for each input image.
 **
 ** NOTES:
 **      Keeps the same size image as input and uses RGB 3-band 24-bit color
 **      with default quality 75%. Caller must create a subdir under outdir with the root name of
-**      the infile, i.e. infile/  and it puts the tiles for levels 0-4 there, 
+**      the infile, i.e. infile/  and it puts the tiles for levels 0-6 there, 
 **      each higher level zooms out by 2 in both dimensions.
 **      N is % quality, from 3 to 95 and is optional, otherwise uses libjpeg default (75%).
 **
@@ -47,9 +47,9 @@ int thHeight;
 float accW, dw;
 float accH, dh;
 
-int qualityLevels[5];
+int qualityLevels[7];
 
-levelInfo *levels[5];  /* 0 to 4 */
+levelInfo *levels[7];  /* 0 to 6 */
 
 jpegTile *newTile(char *fileName, int width, int height, int level)
 /* new tile constructor */
@@ -140,7 +140,7 @@ if ( (((l->scanline+1) % TILESIZE)==0) || (l->scanline+1==l->imgHeight) )
 ++l->scanline;
 
 /* condense data */
-if (level == 4)
+if (level == 6)
     return;
 pix = (l->imgWidth >> 1);
 size = pix*3;
@@ -305,7 +305,7 @@ void jpgTiles(int nWidth, int nHeight,
     )
 /* encode jpg tiles and thumbnail for given image, 
  * optionally create fullsize image too (e.g. when input is from jp2 source)
- * optionally specify jpg quality for each of 5 levels in int array */
+ * optionally specify jpg quality for each of 7 levels in int array */
 {
 int i;
 
@@ -319,7 +319,7 @@ UINT8 *pRGBTriplets;
 thWidth = THUMBWIDTH;
 thHeight = (nHeight*THUMBWIDTH)/nWidth;
 
-for(i=0;i<5;++i)
+for(i=0;i<7;++i)
     {
     qualityLevels[i] = inQuality ? inQuality[i] : 75;
     }
@@ -349,7 +349,7 @@ if (makeFullSize)
     }
 
     
-thumb = newTile(outThumbPath, thWidth, thHeight, 4);
+thumb = newTile(outThumbPath, thWidth, thHeight, 6);
 accW = 0;
 accH = 0;
 dw=(float)nWidth/thWidth;
@@ -357,12 +357,14 @@ dh=(float)nHeight/thHeight;
 
 /* ================================ */
 
-/* start level 0-4 tiles */
+/* start level 0-6 tiles */
 levels[0] = newLevel(0, nWidth, nHeight);
 levels[1] = newLevel(1, nWidth, nHeight);
 levels[2] = newLevel(2, nWidth, nHeight);
 levels[3] = newLevel(3, nWidth, nHeight);
 levels[4] = newLevel(4, nWidth, nHeight);
+levels[5] = newLevel(5, nWidth, nHeight);
+levels[6] = newLevel(6, nWidth, nHeight);
 
 
 /* Read all scanlines */

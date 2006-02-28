@@ -10,7 +10,7 @@
 #include "jpgDec.h"
 #include "jp2Dec.h"
 
-static char const rcsid[] = "$Id: vgPrepImage.c,v 1.3 2006/02/13 06:57:05 galt Exp $";
+static char const rcsid[] = "$Id: vgPrepImage.c,v 1.4 2006/02/28 19:06:14 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -70,7 +70,7 @@ void vgPrepImage(char *sourceDir, char *thumbDir, char *fullDir, char *fileName)
 char source[PATH_LEN], thumb[PATH_LEN], full[PATH_LEN], pyramid[PATH_LEN];
 char outFullDir[PATH_LEN],  outFullRoot[PATH_LEN]; 
 int nWidth, nHeight;
-int quality[5];
+int quality[7];
 boolean makeFullSize = FALSE;
 unsigned char *(*readScanline)() = NULL;
 
@@ -97,6 +97,8 @@ if (endsWith(source,".jp2"))
     quality[2] = 70;
     quality[3] = 80;
     quality[4] = 85;
+    quality[5] = 85;
+    quality[6] = 85;
     jp2DecInit(source, &nWidth, &nHeight);
     readScanline = &jp2ReadScanline;
     jpgTiles(nWidth, nHeight, outFullDir, outFullRoot, thumb, readScanline, quality, makeFullSize);
