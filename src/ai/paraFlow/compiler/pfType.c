@@ -149,6 +149,27 @@ internalErr();
 return NULL;
 }
 
+static struct pfType *findField(struct pfBaseType *base, char *name)
+/* Find named field in class or return NULL */
+{
+struct pfType *field;
+while (base != NULL)
+    {
+    for (field = base->methods; field != NULL; field = field->next)
+	{
+	if (sameString(name, field->fieldName))
+	    return field;
+	}
+    for (field = base->fields; field != NULL; field = field->next)
+	{
+	if (sameString(name, field->fieldName))
+	    return field;
+	}
+    base = base->parent;
+    }
+return NULL;
+}
+
 
 static void typeMismatch(struct pfParse *pp, struct pfType *type)
 /* Complain about type mismatch at node. */
@@ -1429,14 +1450,28 @@ switch (pp->type)
 	checkLvalWritable(collection);
 	break;
 	}
+    case pptFieldUse:
+        {
+	struct pfParse *classPp = pp->parent->children;
+	struct pfBaseType *classBase = classPp->ty->base;
+	struct pfType *fieldType = findField(classBase, pp->name);
+	if (fieldType->access == paReadable)
+	   errAt(pp->tok, "You can't write to field %s of class %s in this module",
+	       fieldType->fieldName, classBase->name);
+	break;
+	}
     case pptDot:
         {
 	struct pfParse *left = pp->children;
 	struct pfParse *right = left->next;
+
 	if (left->type == pptModuleUse)
 	    checkLvalWritable(right);
 	else
+	    {
+	    checkLvalWritable(right);
 	    checkLvalWritable(left);
+	    }
 	break;
 	}
     }
@@ -1922,27 +1957,6 @@ else if (tok->type == pftFloat)
 else if (tok->type == pftNil)
     pp->ty = pfTypeNew(pfc->nilType);
 pp->type = pptFromTokType(pp->tok);
-}
-
-static struct pfType *findField(struct pfBaseType *base, char *name)
-/* Find named field in class or return NULL */
-{
-struct pfType *field;
-while (base != NULL)
-    {
-    for (field = base->methods; field != NULL; field = field->next)
-	{
-	if (sameString(name, field->fieldName))
-	    return field;
-	}
-    for (field = base->fields; field != NULL; field = field->next)
-	{
-	if (sameString(name, field->fieldName))
-	    return field;
-	}
-    base = base->parent;
-    }
-return NULL;
 }
 
 static boolean hasBaseEl(struct pfType *type, struct pfBaseType *base)
