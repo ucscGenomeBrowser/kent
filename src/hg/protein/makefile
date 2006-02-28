@@ -35,6 +35,7 @@ DIRS = \
 	kgCheck \
 	kgGetCds \
 	kgGetPep \
+	kgPick \
 	kgXref \
 	pfamXref \
 	rmKGPepMrna \
