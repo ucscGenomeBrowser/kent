@@ -1893,6 +1893,16 @@ for (p = compound->children; p != NULL; p = p->next)
     }
 slReverse(&base->fields);
 slReverse(&base->methods);
+if (base->access == paGlobal)
+    {
+    struct pfType *field;
+    for (field = base->fields; field != NULL; field = field->next)
+        {
+	if (field->base->access != paGlobal)
+	    errAt(pp->tok, "%s is a global type, but it's component %s isn't",
+	    	base->name, field->fieldName);
+	}
+    }
 }
 
 
