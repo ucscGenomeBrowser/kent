@@ -1384,9 +1384,68 @@ else
     }
 }
 
+static struct pfModule *findEnclosingModule(struct pfParse *pp)
+/* Find module that we are in. */
+{
+for (;pp != NULL; pp = pp->parent)
+    {
+    switch (pp->type)
+        {
+	case pptModule:
+	case pptModuleRef:
+	case pptMainModule:
+	    return pp->scope->module;
+	    break;
+	}
+    }
+internalErr();
+return NULL;
+}
+
+static void checkLvalWritable(struct pfParse *pp)
+/* Make sure that lVal is writable. */
+{
+switch (pp->type)
+    {
+    case pptVarUse:
+        {
+	struct pfVar *var = pp->var;
+	struct pfModule *varModule = var->scope->module;
+	if (varModule)
+	    {
+	    enum pfAccessType access = var->ty->access;
+	    if (access == paReadable)
+	        {
+		struct pfModule *myModule = findEnclosingModule(pp);
+		if (myModule != varModule)
+		    errAt(pp->tok, "%s is not writable in this module", var->name);
+		}
+	    }
+	break;
+	}
+    case pptIndex:
+        {
+	struct pfParse *collection = pp->children;
+	checkLvalWritable(collection);
+	break;
+	}
+    case pptDot:
+        {
+	struct pfParse *left = pp->children;
+	struct pfParse *right = left->next;
+	if (left->type == pptModuleUse)
+	    checkLvalWritable(right);
+	else
+	    checkLvalWritable(left);
+	break;
+	}
+    }
+}
+
 struct pfType *coerceLval(struct pfCompile *pfc, struct pfParse *pp)
 /* Ensure that pp can be assigned.  Return it's type */
 {
+checkLvalWritable(pp);
 switch (pp->type)
     {
     case pptVarInit:
@@ -1954,6 +2013,7 @@ if (otherPp == NULL)
 if (otherPp->next != NULL)
     internalErrAt(dotPp->tok);
 
+otherPp->parent = dotPp->parent;
 *dotPp = *otherPp;
 dotPp->next = dotNext;
 }

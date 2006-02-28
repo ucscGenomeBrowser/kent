@@ -10,8 +10,8 @@ class abc {int a,b,c;}
 class def {int d,e,f;}
 class ad {abc abc, def def;}
 
-global string zero = "zero";
-string one = "one";
+readable string zero = "zero";
+global string one = "one";
 string two = "two";
 string three = "three";
 
@@ -30,4 +30,9 @@ global to addNumType(numType a, b) into numType c
 global to zebraNumType() into numType c
     {
     c = (animal.zebra, animal.zebra.size);
+    }
+
+to fishForSticks(int count) into string s
+    {
+    s = "I fish for $count sticks";
     }
