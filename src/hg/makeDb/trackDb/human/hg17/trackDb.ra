@@ -1259,6 +1259,15 @@ visibility hide
 color 150,0,150
 type bed 4 +
 
+track Landmark
+shortLabel Landmarks
+longLabel Compilation of landmarks from locus experts
+group varRep
+priority 144.75
+visibility hide
+color 150,0,150
+type bed 4 +
+
 track chainRheMac2
 shortLabel $o_Organism (rheMac2) Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
