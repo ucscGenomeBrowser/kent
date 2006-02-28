@@ -34,7 +34,7 @@ int  diffIdent[500];
 
 char *proteinDataDate;
 char *kgTempDb;
-char *genomeDBname;
+char *db;
 char proteinsDB[100];
 char spDB[100];
 char gbTempDB[100];
@@ -44,14 +44,15 @@ char *clusterDir = "./clusterRun";
 void usage()
     {
     errAbort(
-  	"usage:\tkgPrepBestRef YYMMDD db 2> jobList\n"
+  	"usage:\tkgPrepBestRef YYMMDD tempDb db\n"
   	"\tYYMMDD is the release date of SWISS-PROT data, eg: 031117\n"
+	"\ttempDb is the temporary db for kg construction, eg: kgMm4ATemp\n"
   	"\tdb is the genome under construction, eg: mm4\n"
   	"kgPrepBestRef - read a list of proteins from protRef.lis and get\n"
 	"\tcorresponding mRNAs from dbTemp.refRef to prepare input files\n"
 	"\tfor blat run.  Creates files ./clusterRun/protN/[mp]NNNN.fa\n"
 	"\tand result directories: ./out/protN/  (2000 results per directory)\n"
-	"\tOutputs the jobList for 'para create jobList' to stderr");
+	"\tCreates files rawJobList and protRef.lis.");
     }
 
 int cal_months(char *date)
@@ -117,15 +118,14 @@ FILE *aaOut, *mrnaOut;
 char *aaSeq, *mrnaSeq;
 char cond_str[200];
 
-if (argc != 3) usage();
+if (argc != 4) usage();
     
 proteinDataDate = argv[1];
 kgTempDb = argv[2];
+db = argv[3];
 
-// make sure db connection goes to correct genome
-// hRnaSeqAndIdx() needs this.
-//hSetDb(kgTempDb);
-hSetDb("hg17");
+/* Genome db needed for hRnaSeqAndIdx(): */
+hSetDb(db);
 
 sprintf(spDB, "sp%s", proteinDataDate);
 sprintf(proteinsDB, "proteins%s", proteinDataDate);
