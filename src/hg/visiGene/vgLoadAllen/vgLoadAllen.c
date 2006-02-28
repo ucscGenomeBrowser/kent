@@ -9,7 +9,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: vgLoadAllen.c,v 1.2 2006/02/18 22:57:49 galt Exp $";
+static char const rcsid[] = "$Id: vgLoadAllen.c,v 1.3 2006/02/28 19:00:54 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -130,12 +130,17 @@ fprintf(f, "strain C57BL/6\n");
 fprintf(f, "age 56\n");
 fprintf(f, "sex male\n");
 fprintf(f, "bodyPart brain\n");
-fprintf(f, "acknowledgement Thanks to Susan Sunkin and colleagues at ABA for helping make these images available in VisiGene\n");
+fprintf(f, "acknowledgement "
+    "Thanks to the Allen Institute for Brain "
+    "Science, particularly to Andrew Boe, Chinh Dang, Darren Jeung, Lon "
+    "Luong, Susan Sunkin, Madhavi Sutram, and Brian Youngstrom for helping "
+    "make these images available in VisiGene."
+);
 /* Still need to fill in contributor, publication, journal, journalUrl */
-fprintf(f, "contributor Sunkin S., Sunkin S.\n");
+fprintf(f, "contributor Allen Institute for Brain Science\n");
 fprintf(f, "year 2006\n");
 fprintf(f, "setUrl http://www.brainatlas.org/\n");
-fprintf(f, "copyright ©2006 Allen Brain Atlas\n");
+fprintf(f, "copyright &copy; 2004-2006 Allen Institute for Brain Science\n");
 fprintf(f, "probeColor blue/purple\n");
 carefulClose(&f);
 }
@@ -159,7 +164,7 @@ char *row[5];
 fprintf(f, "#");
 fprintf(f, "gene\t");
 fprintf(f, "refSeq\t");
-fprintf(f, "locusLinkId\t"); 
+fprintf(f, "locusLink\t"); 
 fprintf(f, "submitId\t");    /* egeneid=68323 or genesym=1110003F05Rik */
 fprintf(f, "fileName\t");
 fprintf(f, "imageWidth\t");

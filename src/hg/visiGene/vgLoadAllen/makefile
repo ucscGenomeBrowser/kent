@@ -11,7 +11,7 @@ vgLoadAllen: $O ${MYLIBS}
 	strip ${HOME}/bin/${MACHTYPE}/vgLoadAllen
 
 test:
-	vgLoadAllen /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain /cluster/store11/visiGene/offline/allenBrain/probesAndData/allen20051021.tab /cluster/data/mm7/bed/allenBrain/allProbes.fa /cluster/data/mm7/bed/allenBrain/allProbes.tab output
+	vgLoadAllen /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/allenBrain /san/sanvol1/visiGene/offline/allenBrain/probesAndData/allen20051021.tab /cluster/data/mm7/bed/allenBrain/allProbes.fa /cluster/data/mm7/bed/allenBrain/allProbes.tab output
 
 clean:
 	rm -f $O
