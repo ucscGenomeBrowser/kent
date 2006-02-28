@@ -402,7 +402,7 @@ static void nextBetween(_pf_String string, _pf_String start, _pf_String end,
 /* Find start and then end in string, and if find both,
  * return string between them. */
 {
-char *s, *e = NULL;
+char *s=NULL, *e = NULL;
 _pf_nil_check(start);
 _pf_nil_check(end);
 if (pos >= 0 && pos + start->size + end->size <= string->size)
