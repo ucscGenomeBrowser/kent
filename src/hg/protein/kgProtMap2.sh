@@ -11,7 +11,7 @@
 # 	See also, scripts: 
 #	mkSwissProtDB.sh, mkProteinsDB.sh, and KGprocess.sh
 #
-#	"$Id: kgProtMap2.sh,v 1.1 2006/02/27 21:16:55 fanhsu Exp $"
+#	"$Id: kgProtMap2.sh,v 1.2 2006/03/01 19:30:25 angie Exp $"
 #
 #	April 2004 - Separted the kgProtMap build process part from
 #		     KGprocess.sh
@@ -22,6 +22,9 @@
 #	ensure usage of latest binaries no matter what PATH the user may have
 PATH=/cluster/bin/i386:$PATH
 export PATH
+# If BLAST_DIR is already defined in the environment, use that, otherwise 
+# provide a default value:
+echo BLAST_DIR is ${BLAST_DIR:=/scratch/blast}
 
 #	see if a table exists and it has rows
 #	returns 1 for NOT EXISTS 0 for EXISTS
@@ -81,7 +84,8 @@ for i in hgsql kgXref rmKGPepMrna \
 	hgMrnaRefseq kgGetPep pslReps hgKgMrna kgPrepBestMrna spm3 spm7 \
 	kgResultBestMrna rmKGPepMrna kgXref kgAliasM kgAliasP \
 	kgProtAlias kgAliasKgXref kgAliasRefseq kgProtAliasNCBI \
-	$HOME/kent/src/hg/protein/getKeggList.pl hgKegg hgCGAP
+	$HOME/kent/src/hg/protein/getKeggList.pl hgKegg hgCGAP \
+	${BLAST_DIR}/formatdb
 do
     type ${i} > /dev/null 2> /dev/null
     if [ "$?" -ne 0 ]; then
@@ -187,7 +191,7 @@ if [ ! -s kgMrna.fa ]; then
 fi
 if [ ! -s formatdb.log ]; then
     echo "`date` creating blast database"
-    /scratch/blast/formatdb -i kgMrna.fa -p F
+    ${BLAST_DIR}/formatdb -i kgMrna.fa -p F
 fi
 
 if [ ! -s kgPep.fa ]; then
