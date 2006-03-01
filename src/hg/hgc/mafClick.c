@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.31 2006/03/01 04:01:01 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.32 2006/03/01 04:10:12 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -214,11 +214,11 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		    if (mc->strand == '-')
 			reverseIntRange(&s, &e, mc->srcSize);
 
-		    dyStringPrintf(dy, "Browser %s:%d-%d %s %c %dbps Unaligned",chrom, s+1, e, hOrganism(dbOnly),mc->strand, e-s);
+		    dyStringPrintf(dy, "%s Browser %s:%d-%d %c %d bps Unaligned",hOrganism(dbOnly),chrom, s+1, e, mc->strand, e-s);
 		    linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
 		    
 		    dyStringClear(dy);
-		    dyStringPrintf(dy, "GetDNA %s:%d-%d %s %c %dbps Unaligned",chrom, s+1, e, hOrganism(dbOnly),mc->strand, e-s);
+		    dyStringPrintf(dy, "Get %s DNA %s:%d-%d %c %d bps Unaligned",hOrganism(dbOnly),chrom, s+1, e, mc->strand, e-s);
 		    fprintf(f,"B</A> ");
 
 		    printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A>  ", dy->string,  hgcName(),
