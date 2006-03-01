@@ -1052,20 +1052,9 @@ if (tok->type == pftName)
     pp->parent = dec;
     dec->children = type;
     type->next = name;
-    dec->access = access;
+    type->access = dec->access = access;
     dec->name = name->name;
     pp = dec;
-    }
-else
-    {
-    switch (pp->type)
-        {
-	case pptOf:
-	case pptTypeToPt:
-	case pptTypeFlowPt:
-	    errAt(pp->tok, "misplaced 'of'");
-	    break;
-	}
     }
 *pTokList = tok;
 return pp;
@@ -1145,7 +1134,8 @@ else
     return pp;
 }
 
-static void flipNameUseToVarDec(struct pfParse *pp, struct pfParse *type, struct pfParse *parent)
+static void flipNameUseToVarDec(struct pfParse *pp, struct pfParse *type, 
+	struct pfParse *parent)
 {
 struct pfParse *dupeType, *dupeName;
 
@@ -1158,52 +1148,76 @@ pp->children = dupeType;
 dupeType->next = dupeName;
 dupeName->next = NULL;
 pp->type = pptVarDec;
+pp->access = type->access;
 }
+
+static boolean anyVarDecs(struct pfParse *pp)
+/* Return TRUE if there are any varDecs in subtree */
+{
+if (pp->type == pptVarDec)
+    return TRUE;
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    {
+    if (anyVarDecs(pp))
+        return TRUE;
+    }
+return FALSE;
+}
+
 
 static void addMissingTypesInDeclareTuple(struct pfParse *tuple)
 /* If first element of tuple is typed, then make sure rest
  * is typed too. */
 {
 struct pfParse *vars = tuple->children, *next;
-if (vars != NULL)
+struct pfParse *type = NULL;
+struct pfParse *pp;
+enum pfAccessType access = vars->access; // TODO remove var.
+
+/* Make sure first item in tuple is a var dec. */
+if (! (vars->type == pptVarDec 
+	|| (vars->type == pptAssignment && vars->children->type == pptVarDec)))
+    errAt(vars->tok, "Missing type information.");
+
+/* Make sure everything is either a varDec or an assignment */
+for (pp = vars; pp != NULL; pp = pp->next)
     {
-    if (vars->type == pptVarDec || 
-        vars->type == pptAssignment && vars->children->type == pptVarDec)
+    if (pp->type != pptVarDec && pp->type != pptAssignment && 
+    	pp->type != pptNameUse)
 	{
-	struct pfParse *type = NULL;
-	struct pfParse *pp;
-	enum pfAccessType access = vars->access;
-	for (pp = vars; pp != NULL; pp = pp->next)
-	    {
-	    if (pp->type == pptVarDec)
-		{
-	        type = pp->children;
-		pp->name = type->next->name;
-		pp->access = access;
-		}
-	    else if (pp->type == pptNameUse)
-	        {
-		flipNameUseToVarDec(pp, type, tuple);
-		pp->access = access;
-		}
-	    else if (pp->type == pptAssignment)
-	        {
-		struct pfParse *sub = pp->children;
-		if (sub->type == pptVarDec)
-		    {
-		    type = pp->children->children;
-		    sub->name = type->next->name;
-		    }
-		else if (sub->type == pptNameUse)
-		    {
-		    flipNameUseToVarDec(sub, type, pp);
-		    }
-		sub->access = pp->access = access;
-		}
-	    }
-	tuple->access = access;
+	pfParseDump(pp, 3, uglyOut);
+        errAt(pp->tok, "Expecting variable declaration");
 	}
     }
+
+/* Fill in any missing types from type of previous one in list.
+ * We've guaranteed now that first one will have a type. */
+for (pp = vars; pp != NULL; pp = pp->next)
+    {
+    if (pp->type == pptVarDec)
+	{
+	type = pp->children;
+	pp->name = type->next->name;
+	}
+    else if (pp->type == pptNameUse)
+	{
+	flipNameUseToVarDec(pp, type, tuple);
+	}
+    else if (pp->type == pptAssignment)
+	{
+	struct pfParse *sub = pp->children;
+	if (sub->type == pptVarDec)
+	    {
+	    type = sub->children;
+	    }
+	else if (sub->type == pptNameUse)
+	    {
+	    flipNameUseToVarDec(sub, type, pp);
+	    }
+	}
+    }
+// TODO - remove this line.  Tuple shouldn't have access type.
+tuple->access = access;
 }
 
 
@@ -1232,7 +1246,8 @@ if (tok->type == ',')
 if (tuple != NULL)
     {
     slReverse(&tuple->children);
-    addMissingTypesInDeclareTuple(tuple);
+    if (anyVarDecs(tuple))
+	addMissingTypesInDeclareTuple(tuple);
     return tuple;
     }
 else
