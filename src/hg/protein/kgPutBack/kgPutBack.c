@@ -49,6 +49,7 @@ char *genomeDb;
 char *geneName;
 char srcType;
 int  alignCnt = 0;
+int  iAlign = 0;
 
 char *putBackTable, *chkTable;
 int  orfStop, cdsGap, cdsSplice, numCdsIntrons;
@@ -91,7 +92,8 @@ while (row2 != NULL)
 	    proteinID = row[0];	    
 	
 	    for (i=0; i<10; i++) fprintf(outf, "%s\t", row3[i]);
-	    fprintf(outf, "%s\n", proteinID);
+	    iAlign++;
+	    fprintf(outf, "%s\tR%dP\n", proteinID, iAlign);
 	    icnt++;
     	    row = sqlNextRow(sr);
 	    }
