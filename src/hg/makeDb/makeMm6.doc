@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.107 2006/02/14 19:20:34 ann Exp $"
+#	"$Id: makeMm6.doc,v 1.108 2006/03/01 20:51:05 ann Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -9894,6 +9894,16 @@ TMPDIR=/scratch/tmp
 	-chainMinScore=5000 -chainLinearGap=loose \
 	   -swap -continue=download `pwd`/DEF > swap.download.out 2>&1
 
+
+# QA UPDATE: (3-1-2006 ASZ)
+# the tables from this run were originally named with a "u1"
+# e.g. chr1_chainMm6u1 (in the galGal2 database)
+# I have deleted the old chain and net tables (from the original blastz run)
+# > DROP TABLE netMm6;
+# and renamed the new chain and net tables from this new blastz run
+# > RENAME TABLE netMm6u1 TO netMm6;
+
+
 ###########################################################################
 # BLASTZ Rat Rn3 second time correctly
 #	The initial run was done at a time when there was an error in
@@ -10001,6 +10011,16 @@ TMPDIR=/scratch/tmp
     /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
 	-chainMinScore=3000 -chainLinearGap=medium \
 	   -swap -continue=download `pwd`/DEF > swap.download.out 2>&1
+
+
+# QA UPDATE: (3-1-2006 ASZ)
+# the tables from this run were originally named with a "u1"
+# e.g. chr1_chainMm6u1 (in the rn3 database)
+# I have deleted the old chain and net tables (from the original blastz run)
+# > DROP TABLE netMm6;
+# and renamed the new chain and net tables from this new blastz run
+# > RENAME TABLE netMm6u1 TO netMm6;
+
 
 ###########################################################################
 # BLASTZ DOG canFam2 second time correctly
