@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.29 2006/02/28 05:04:56 aamp Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.30 2006/03/01 03:10:01 hartera Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -154,6 +154,18 @@ struct hashEl *hashAddUnique(struct hash *hash, char *name, void *val)
 {
 if (hashLookup(hash, name) != NULL)
     errAbort("%s duplicated, aborting", name);
+return hashAdd(hash, name, val);
+}
+
+struct hashEl *hashAddReplace(struct hash *hash, char *name, void *val)
+/* Add an element to hash table. If there is already an element stored */
+/* for this key (name), then replace the existing element.*/
+/* Avoids having several entries for one name in the hash table. */
+{
+if (hashLookup(hash, name) != NULL)
+    /* If item is in the hash already, remove first. */
+    hashRemove(hash, name);
+/* Then add element to hash table. */
 return hashAdd(hash, name, val);
 }
 
