@@ -149,7 +149,7 @@ shortLabel U1 mm6 Net
 longLabel U1 $o_db ($o_date/$o_db) Alignment Net
 group compGeno
 priority 210.1
-visibility dense
+visibility hide 
 spectrum on
 type netAlign mm6 chainMm6u1
 otherDb mm6
@@ -183,7 +183,7 @@ shortLabel mm5 Net
 longLabel $o_db ($o_date/$o_db) Alignment Net
 group compGeno
 priority 216
-visibility dense
+visibility hide
 spectrum on
 type netAlign mm5 chainMm5
 otherDb mm5
@@ -299,7 +299,7 @@ shortLabel Mm4 Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 216.1
-visibility dense
+visibility hide 
 spectrum on
 type netAlign mm4 chainMm4
 otherDb mm4
