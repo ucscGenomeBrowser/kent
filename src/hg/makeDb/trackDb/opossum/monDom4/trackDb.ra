@@ -26,8 +26,8 @@ longLabel Pile Ups of Opossum chains to Hg18
 group x
 priority 23.5
 visibility hide
-autoScaleDefault Off
-maxHeightPixels 128:36:16
+autoScaleDefault On
+maxHeightPixels 128:64:16
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Maximum
@@ -43,8 +43,8 @@ longLabel Pile Ups of Opossum chains to Hg17
 group x
 priority 24.5
 visibility hide
-autoScaleDefault Off
-maxHeightPixels 128:36:16
+autoScaleDefault On
+maxHeightPixels 128:64:16
 graphTypeDefault Bar
 gridDefault OFF
 windowingFunction Maximum
