@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.29.8.5 2006/03/01 00:04:54 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.29.8.6 2006/03/01 01:49:44 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -175,10 +175,10 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 	    {
 	    if ((lineStart == 0) && (hDbIsActive(dbOnly)))
 		{
-		dyStringPrintf(dy, "Browser %s:%d-%d %s %c %*dbps",chrom, s+1, e, hOrganism(dbOnly),mc->strand,sizeChars, mc->size);
+		dyStringPrintf(dy, "%s Browser %s:%d-%d %c %*dbps",hOrganism(dbOnly),chrom, s+1, e, mc->strand,sizeChars, mc->size);
 		linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
 		dyStringClear(dy);
-		dyStringPrintf(dy, "GetDNA %s:%d-%d %s %c %*dbps",chrom, s+1, e, hOrganism(dbOnly),mc->strand,sizeChars, mc->size);
+		dyStringPrintf(dy, "Get %s DNA %s:%d-%d %c %*dbps",hOrganism(dbOnly),chrom, s+1, e, mc->strand,sizeChars, mc->size);
 		fprintf(f, "B</A> ");
 		printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A> ",  dy->string,hgcName(),
 		   s, cgiEncode(chrom),
@@ -618,13 +618,16 @@ else
 	printf("bases");
 	printf("<BR>\n");
 	printf("</FORM>\n");
-	printf("<TT><PRE>");
 
 #ifdef REVERSESTRAND
         /* notify if bases are complemented (hgTracks is on reverse strand) */
         if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
             puts("<EM>Alignment displayed on reverse strand</EM><BR>");
 #endif
+	puts("Place cursor over species for alignment detail. Click on 'B' to link to browser ");
+	puts("for aligned species, click on 'D' to get DNA for aligned species.<BR>");
+
+	printf("<TT><PRE>");
 
         /* notify if species removed from alignment */
         if (speciesOffHash)
@@ -637,9 +640,6 @@ else
             puts("<BR>");
             }
 
-	puts("<B>Place cursor over species for alignment detail. Click on 'B' to link to browser ");
-	puts("for aligned species, click on 'D' to get DNA for aligned species.\n</B>");
-
 
 	for (maf = subList; maf != NULL; maf = maf->next)
 	    {
@@ -648,7 +648,9 @@ else
 	    if (capTrack != NULL)
 	    	capMafOnTrack(maf, capTrack, onlyCds);
 #endif
-	    printf("<B>Alignment block %d of %d in window, %d - %d </B>\n",++aliIx,realCount,maf->components->start + 1,maf->components->start + maf->components->size);
+	    printf("<B>Alignment block %d of %d in window, %d - %d, %d bps </B>\n",
+		++aliIx,realCount,maf->components->start + 1,maf->components->start + maf->components->size, 
+		maf->components->size);
 	    mafPrettyOut(stdout, maf, 70,onlyDiff, aliIx);
 	    }
 	mafAliFreeList(&subList);
