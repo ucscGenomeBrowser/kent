@@ -113,6 +113,7 @@ enum pfParseType
     pptCatch,
     pptSubstitute,
     pptStringDupe,
+    pptNew,
 
     /* Note the casts must be in this order relative to pptCastBitToBit */
     pptCastBitToBit,	/* Never emitted. */

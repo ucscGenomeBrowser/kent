@@ -1,7 +1,6 @@
 TO DO:
-  - ?Read-only and private variables.
-        Make it so that class.new() is only legal way to
-	make something with private or read-only var.
+  - Add "new" keyword, and use it for dynamically creating things
+    in calls to functions and assigns to objects of parent type.
   - Add 'loco' parameter types to flow functions.  These reference
     local objects in the caller, so it's ok to return references
     to them.
@@ -38,6 +37,9 @@ TO CONSIDER:
 
 -----------
 DONE
+  - ?Read-only and private variables.
+        Make it so that class.new() is only legal way to
+	make something with private or read-only var.
   - Allow paths in includes and imports.  Make it so that the names
     are quoted.
   - Add "import module [as xxx] statement, and then let you use
@@ -256,6 +258,7 @@ UCSC Vacation Days for Working on ParaFlow
    Feb 22, 2006
    Feb 24, 2006
    Feb 27, 2006
+   March 1, 2006
 
 
 

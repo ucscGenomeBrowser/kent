@@ -66,6 +66,7 @@ hashAddInt(hash, "flow", pftFlow);
 hashAddInt(hash, "for", pftFor);
 hashAddInt(hash, "global", pftGlobal);
 hashAddInt(hash, "local", pftLocal);
+hashAddInt(hash, "new", pftNew);
 hashAddInt(hash, "nil", pftNil);
 hashAddInt(hash, "of", pftOf);
 hashAddInt(hash, "para", pftPara);

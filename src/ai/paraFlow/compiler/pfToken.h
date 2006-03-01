@@ -38,11 +38,6 @@ enum pfTokType
     pftLogOr,           /* || */
     pftShiftLeft,       /* << */
     pftShiftRight,      /* >> */
-    pftRoot,            /* /. */
-    pftParent,          /* <. */
-    pftSys,             /* %. */
-    pftUser,            /* +. */
-    pftSysOrUser,       /* *. */
 
     /* - reserved words - */
     pftReservedWordStart,
@@ -63,17 +58,18 @@ enum pfTokType
     pftInterface,
     pftInto,
     pftLocal,
+    pftNew,
     pftNil,
     pftOf,
+    pftOperator,
     pftPara,
     pftPolymorphic,
     pftReadable,
     pftReturn,
     pftStatic,
     pftTo,
-    pftWhile,
     pftTry,
-    pftOperator,
+    pftWhile,
     };
 
 char *pfTokTypeAsString(enum pfTokType type);

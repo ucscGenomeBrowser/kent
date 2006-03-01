@@ -218,6 +218,8 @@ switch (type)
         return "pptSubstitute";
     case pptStringDupe:
         return "pptStringDupe";
+    case pptNew:
+        return "pptNew";
 
     case pptCastBitToBit:
         return "pptCastBitToBit";
@@ -495,6 +497,10 @@ struct pfParse *pfParseExpression(struct pfCompile *pfc,
 	struct pfParse *parent, struct pfToken **pTokList, 
 	struct pfScope *scope);
 
+static struct pfParse *parseOf(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope);
+/* Parse out name of name . */
+
 static void syntaxError(struct pfToken *tok, int code)
 /* Complain about syntax error and quit. */
 {
@@ -621,6 +627,36 @@ pp->name = tok->val.s;
 return pp;
 }
 
+static struct pfParse *parseInputTuple(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope, struct pfToken **pCloseParenTok)
+/* Parse input/output tuple.  Similar to a regular tuple, but
+ * () can be an empty tuple, and (x) is interpreted as a tuple
+ * of one rather than just x. */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *tuple;
+
+skipRequiredCharType('(', &tok);
+if (tok->type == ')')
+    {
+    *pCloseParenTok = tok;
+    tuple = emptyTuple(parent, tok, scope);
+    tok = tok->next;
+    }
+else
+    {
+    tuple = pfParseExpression(pfc, parent, &tok, scope);
+    if (tuple->type != pptTuple)
+	tuple = pfSingleTuple(parent, tok, tuple);
+    *pCloseParenTok = tok;
+    skipRequiredCharType(')', &tok);
+    }
+tuple->type = pptTypeTuple;
+*pTokList = tok;
+return tuple;
+}
+
 void parseFunctionIo(struct pfCompile *pfc,
     struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope, 
     struct pfParse **retInput, struct pfParse **retOutput)
@@ -629,25 +665,9 @@ void parseFunctionIo(struct pfCompile *pfc,
  * pptTuples. */
 {
 struct pfToken *tok = *pTokList;
-struct pfToken *outToken;
 struct pfParse *input, *output = NULL;
-skipRequiredCharType('(', &tok);
-if (tok->type == ')')
-    {
-    input = emptyTuple(parent, tok, scope);
-    outToken = tok;
-    tok = tok->next;
-    }
-else
-    {
-    input = pfParseExpression(pfc, parent, &tok, scope);
-    if (input->type != pptTuple)
-	input = pfSingleTuple(parent, tok, input);
-    if (tok->type != ')')
-	expectingGot(")", tok);
-    outToken = tok;
-    tok = tok->next;
-    }
+struct pfToken *outToken;
+input = parseInputTuple(pfc, parent, &tok, scope, &outToken);
 if (tok->type == pftInto)
     {
     boolean gotParen = FALSE;
@@ -667,8 +687,9 @@ if (tok->type == pftInto)
 	output = pfSingleTuple(parent, outToken, output);
     }
 else
+    {
     output = emptyTuple(parent, outToken, scope);
-input->type  = pptTypeTuple;
+    }
 output->type  = pptTypeTuple;
 
 *pTokList = tok;
@@ -929,19 +950,126 @@ slAddHead(&pp->children, collection);
 return pp;
 }
 
+static void markModuleDotType(struct pfCompile *pfc, struct pfParse *pp)
+/* This type dot is in a context where it better be module.type.
+ * We mark it as such.  We leave it to a later pass to make sure
+ * that the module really is a module and the type really is a type
+ * in that module. */
+{
+struct pfParse *left = pp->children;
+struct pfParse *right = left->next;
+if (left->type == pptNameUse && right->type == pptNameUse)
+    {
+    pp->type = pptModuleDotType;
+    }
+else
+    {
+    errAt(pp->tok, "misplaced dot in type expression");
+    }
+}
+
+static void checkIsTypeExp(struct pfCompile *pfc, 
+	struct pfParse *pp, struct pfScope *scope)
+/* Make sure that subtree is all type expression. */
+{
+switch (pp->type)
+    {
+    case pptNameUse:
+        if (!pfScopeFindType(scope, pp->name))
+	     errAt(pp->tok, "%s is not a type name.", pp->name);
+	pp->type = pptTypeName;
+	break;
+    case pptIndex:
+        checkIsTypeExp(pfc, pp->children, scope);
+	break;
+    case pptOf:
+        for (pp = pp->children; pp != NULL; pp = pp->next)
+	    checkIsTypeExp(pfc, pp, scope);
+	break;
+    case pptTypeFlowPt:
+    case pptTypeToPt:
+        break;
+    case pptDot:
+	markModuleDotType(pfc, pp);
+        break;
+    default:
+	{
+	expectingGot("type expression", pp->tok);
+	break;
+	}
+    }
+}
+
+static void submergeTypeIndex(struct pfParse **pPp)
+/* Convert a subtree that looks like so:
+ *        pptIndex
+ *           pptName
+ *           expressionTree
+ * to something that looks like so:
+ *       pptName
+ *          expressionTree
+ * Why to do this?  Well it's what the rest of the typing
+ * system expects from an earlier design of the type expression
+ * parse. */
+{
+struct pfParse *pp = *pPp;
+if (pp->type == pptIndex)
+    {
+    struct pfParse *name = pp->children;
+    struct pfParse *exp = name->next;
+    name->next = pp->next;
+    name->children = exp;
+    *pPp = name;
+    }
+else
+    {
+    for (pPp = &pp->children; *pPp != NULL; pPp = &(*pPp)->next)
+        submergeTypeIndex(pPp);
+    }
+}
+
+static void massageIntoType(struct pfCompile *pfc, struct pfParse **pPp,
+	struct pfScope *scope)
+/* Given a parse tree that is just known to be some sort of expression,
+ * make sure it's a type expression, and do any necessary reworking
+ * of the subtree that that entails. */
+{
+checkIsTypeExp(pfc, *pPp, scope);
+submergeTypeIndex(pPp);
+}
+
+struct pfParse *parseNewObject(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Parse things of form  new type(init parameters) */
+{
+struct pfToken *tok = *pTokList, *endInputTok;
+struct pfParse *pp = pfParseNew(pptNew, tok, parent, scope);
+struct pfParse *type, *input;
+tok = tok->next;   /* We covered 'new' */
+type = parseOf(pfc, pp, &tok, scope);
+massageIntoType(pfc, &type, scope);
+input = parseInputTuple(pfc, pp, &tok, scope, &endInputTok);
+pp->children = type;
+type->next = input;
+*pTokList = tok;
+return pp;
+}
 
 
-struct pfParse *parseParaExp(struct pfCompile *pfc, struct pfParse *parent,
+struct pfParse *parseParaOrNew(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse expression that might include 'para' */
 {
 struct pfToken *tok = *pTokList;
-if (tok->type == pftPara)
+switch (tok->type)
     {
-    return parseParaInvoke(pfc, parent, pTokList, scope, FALSE);
+    case pftPara:
+	return parseParaInvoke(pfc, parent, pTokList, scope, FALSE);
+    case pftNew:
+        return parseNewObject(pfc, parent, pTokList, scope);
+    default:
+	return parseArrayCallDot(pfc, parent, pTokList, scope);
     }
-else
-    return parseArrayCallDot(pfc, parent, pTokList, scope);
 }
 
 static void makeIncrementNode(struct pfParse *pp,
@@ -981,13 +1109,13 @@ switch (tok->type)
 	incTok = tok;
 	tok = tok->next;
 	pp = pfParseNew(pptPlusEquals, tok, parent, scope);
-	exp = parseParaExp(pfc, pp, &tok, scope);
+	exp = parseParaOrNew(pfc, pp, &tok, scope);
 	makeIncrementNode(pp, exp, incTok, scope);
 	*pTokList = tok;
 	return pp;
 	}
     }
-exp = parseParaExp(pfc, parent, pTokList, scope);
+exp = parseParaOrNew(pfc, parent, pTokList, scope);
 tok = *pTokList;
 switch (tok->type)
     {
@@ -1244,9 +1372,9 @@ return parseIndexRange(pfc, parent, pTokList, scope);
 }
 
 
-struct pfParse *parseOf(struct pfCompile *pfc, struct pfParse *parent,
+static struct pfParse *parseOf(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse out this.that . */
+/* Parse out name of name . */
 {
 struct pfParse *pp = parseVarOfFunc(pfc, parent, pTokList, scope);
 struct pfToken *tok = *pTokList;
@@ -1268,85 +1396,6 @@ if (tok->type == pftOf)
     }
 else
     return pp;
-}
-
-
-static void markModuleDotType(struct pfCompile *pfc, struct pfParse *pp)
-/* This type dot is in a context where it better be module.type.
- * We mark it as such.  We leave it to a later pass to make sure
- * that the module really is a module and the type really is a type
- * in that module. */
-{
-struct pfParse *left = pp->children;
-struct pfParse *right = left->next;
-if (left->type == pptNameUse && right->type == pptNameUse)
-    {
-    pp->type = pptModuleDotType;
-    }
-else
-    {
-    errAt(pp->tok, "misplaced dot in type expression");
-    }
-}
-
-static void checkIsTypeExp(struct pfCompile *pfc, 
-	struct pfParse *pp, struct pfScope *scope)
-/* Make sure that subtree is all type expression. */
-{
-switch (pp->type)
-    {
-    case pptNameUse:
-        if (!pfScopeFindType(scope, pp->name))
-	     errAt(pp->tok, "%s is not a type name.", pp->name);
-	pp->type = pptTypeName;
-	break;
-    case pptIndex:
-        checkIsTypeExp(pfc, pp->children, scope);
-	break;
-    case pptOf:
-        for (pp = pp->children; pp != NULL; pp = pp->next)
-	    checkIsTypeExp(pfc, pp, scope);
-	break;
-    case pptTypeFlowPt:
-    case pptTypeToPt:
-        break;
-    case pptDot:
-	markModuleDotType(pfc, pp);
-        break;
-    default:
-	{
-	expectingGot("type expression", pp->tok);
-	break;
-	}
-    }
-}
-
-static void submergeTypeIndex(struct pfParse **pPp)
-/* Convert a subtree that looks like so:
- *        pptIndex
- *           pptName
- *           expressionTree
- * to something that looks like so:
- *       pptName
- *          expressionTree
- * Why to do this?  Well it's what the rest of the typing
- * system expects from an earlier design of the type expression
- * parse. */
-{
-struct pfParse *pp = *pPp;
-if (pp->type == pptIndex)
-    {
-    struct pfParse *name = pp->children;
-    struct pfParse *exp = name->next;
-    name->next = pp->next;
-    name->children = exp;
-    *pPp = name;
-    }
-else
-    {
-    for (pPp = &pp->children; *pPp != NULL; pPp = &(*pPp)->next)
-        submergeTypeIndex(pPp);
-    }
 }
 
 static boolean inFunction(struct pfParse *pp)
@@ -1419,8 +1468,7 @@ if (tok->type == pftName)
     struct pfParse *dec = pfParseNew(pptVarDec, tok, parent, scope);
     struct pfParse *type = pp;
     struct pfParse *name = parseNameUse(dec, &tok, scope);
-    checkIsTypeExp(pfc, type, scope);
-    submergeTypeIndex(&type);
+    massageIntoType(pfc, &type, scope);
     pp->parent = dec;
     dec->children = type;
     type->next = name;
@@ -1577,7 +1625,7 @@ if (vars != NULL)
 }
 
 
-struct pfParse *parseTuple(struct pfCompile *pfc, struct pfParse *parent,
+static struct pfParse *parseTuple(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse , separated expression. */
 {

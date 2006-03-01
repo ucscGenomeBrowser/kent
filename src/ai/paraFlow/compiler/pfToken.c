@@ -120,11 +120,6 @@ switch (type)
     case pftLogOr:           return "||";
     case pftShiftLeft:       return "<<";
     case pftShiftRight:      return ">>";
-    case pftRoot:            return "/.";
-    case pftParent:          return "<.";
-    case pftSys:             return "%.";
-    case pftUser:            return "+.";
-    case pftSysOrUser:       return "*.";
     case pftBreak: 	     return "pftBreak";
     case pftClass: 	     return "pftClass";
     case pftCase:	     return "pftCase";
@@ -141,8 +136,10 @@ switch (type)
     case pftInclude:         return "pftInclude";
     case pftInto: 	     return "pftInto";
     case pftLocal:	     return "pftLocal";
+    case pftNew:	     return "pftNew";
     case pftNil:             return "pftNil";
     case pftOf: 	     return "pftOf";
+    case pftOperator:	     return "pftOperator";
     case pftPara: 	     return "pftPara";
     case pftPolymorphic:     return "pftPolymorphic";
     case pftReadable:        return "pftReadable";
@@ -743,8 +740,6 @@ switch (c)
     case '/':
 	if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftDivEquals);
-	else if (c2 == '.')
-	    tokTwoChar(tkz, tok, pftRoot);
 	else
 	    tokSingleChar(tkz, tok, c);
 	break;
@@ -753,8 +748,6 @@ switch (c)
 	    tokTwoChar(tkz, tok, pftPlusPlus);
 	else if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftPlusEquals);
-	else if (c2 == '.')
-	    tokTwoChar(tkz, tok, pftUser);
 	else
 	    tokSingleChar(tkz, tok, c);
 	break;
@@ -775,14 +768,6 @@ switch (c)
     case '*':
 	if (c2 == '=')
 	    tokTwoChar(tkz, tok, pftMulEquals);
-	else if (c2 == '.')
-	    tokTwoChar(tkz, tok, pftSysOrUser);
-	else
-	    tokSingleChar(tkz, tok, c);
-	break;
-    case '%':
-	if (c2 == '.')
-	    tokTwoChar(tkz, tok, pftSys);
 	else
 	    tokSingleChar(tkz, tok, c);
 	break;
@@ -811,8 +796,6 @@ switch (c)
 	    tokTwoChar(tkz, tok, pftLessOrEquals);
 	else if (c2 == '<')
 	    tokTwoChar(tkz, tok, pftShiftLeft);
-	else if (c2 == '.')
-	    tokTwoChar(tkz, tok, pftParent);
 	else
 	    tokSingleChar(tkz, tok, c);
         break;
