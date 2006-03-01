@@ -4147,3 +4147,43 @@ _EOF_
 # END OF HGNEAR STUFF
 #############################################################################
 
+
+# RECIPROCAL BEST DM2-DROSIM1 (DONE 2/28/06 angie)
+    # Special request for user...
+    ssh kolossus
+    cd /cluster/data/dm2/bed/blastz.droSim1/axtChain
+    # Run chainNet again, this time keeping its second output:
+    chainPreNet dm2.droSim1.all.chain.gz \
+      /cluster/data/{dm2,droSim1}/chrom.sizes stdout \
+    | chainNet stdin /cluster/data/{dm2,droSim1}/chrom.sizes /dev/null stdout \
+    | netSyntenic stdin droSim1.dm2_ref.net
+    # Get the droSim1 chains from the droSim1-referenced (but dm2-centric) net:
+    chainSwap dm2.droSim1.all.chain.gz droSim1.dm2.all.chain
+    netChainSubset droSim1.dm2_ref.net droSim1.dm2.all.chain stdout \
+    | chainSort stdin droSim1.dm2_ref.subset.chain
+    # Net those (sorted) dm2 chains, and keep both outputs, to get 
+    # reciprocal best nets referenced to both species:
+    chainPreNet droSim1.dm2_ref.subset.chain \
+      /cluster/data/{droSim1,dm2}/chrom.sizes stdout \
+    | chainNet stdin /cluster/data/{droSim1,dm2}/chrom.sizes \
+      tmp1 tmp2
+    netSyntenic tmp1 droSim1.dm2.rbest.net
+    netSyntenic tmp2 dm2.droSim1.rbest.net
+    rm tmp1 tmp2
+    # Get the chains from the recip-best nets for stringent liftOver:
+    netChainSubset droSim1.dm2.rbest.net droSim1.dm2.all.chain \
+      droSim1ToDm2.rbest.over.chain
+    netChainSubset dm2.droSim1.rbest.net dm2.droSim1.all.chain.gz \
+      dm2ToDroSim1.rbest.over.chain
+    nice gzip droSim1* dm2.droSim1.rbest.net dm2ToDroSim1.rbest.over.chain
+    # Put out for download (hgwdev-only)
+    ssh hgwdev
+    mkdir /usr/local/apache/htdocs/goldenPath/dm2/vsDroSim1/reciprocalBest
+    cd /usr/local/apache/htdocs/goldenPath/dm2/vsDroSim1/reciprocalBest
+    ln -s /cluster/data/dm2/bed/blastz.droSim1/axtChain/dm2.droSim1.rbest.net.gz .
+    ln -s /cluster/data/dm2/bed/blastz.droSim1/axtChain/dm2ToDroSim1.rbest.over.chain.gz .
+    ln -s /cluster/data/dm2/bed/blastz.droSim1/axtChain/droSim1.dm2.rbest.net.gz .
+    ln -s /cluster/data/dm2/bed/blastz.droSim1/axtChain/droSim1ToDm2.rbest.over.chain.gz .
+    # Make a README.txt.
+
+
