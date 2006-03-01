@@ -179,6 +179,7 @@ for (mod = pfc->moduleList; mod != NULL; mod = mod->next)
     if (mod != pfc->moduleList)
 	type = (mod->isPfh ? pptModuleRef : pptModule);
     pfc->isSys = isSys;
+    pfc->isPfh = mod->isPfh;
     modPp = pfParseModule(pfc, mod, program, scope, type);
     modPp->name = mod->name;
     /* Exclude string module since code generator can't handle it. */

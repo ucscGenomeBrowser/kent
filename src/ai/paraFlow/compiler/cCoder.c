@@ -1480,17 +1480,19 @@ else
 }
 
 static void codeTupleIntoClass(struct pfCompile *pfc, FILE *f,
-	struct pfParse *lval, struct pfParse *rval, int stack, int tupleSize)
+	struct pfParse *typePp, struct pfParse *tuplePp, 
+	int stack, int tupleSize)
 /* Shovel tuple into class. */
 {
-struct pfBaseType *base = lval->ty->base;
+// TODO - add this to function call as well? 
+struct pfBaseType *base = typePp->ty->base;
 codeParamAccess(pfc, f, base, stack);
 fprintf(f, " = ");
 fprintf(f, "_pf_tuple_to_class(%s+%d, ",
 	stackName, stack);
-codeForType(pfc, f, lval->ty);
+codeForType(pfc, f, typePp->ty);
 fprintf(f, ", \"");
-rCodeTupleType(pfc, f, rval->ty);
+rCodeTupleType(pfc, f, tuplePp->ty);
 fprintf(f, "\");\n");
 }
 
@@ -1628,6 +1630,24 @@ codeMethodName(pfc, pp->tok, f, base, "init", stack);
 fprintf(f, "(%s+%d);\n", stackName, stack);
 fprintf(f, "%s[%d].Obj = _pf_obj;\n", stackName, stack);
 fprintf(f, "}\n");
+return 1;
+}
+
+static int codeNewOp(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack)
+/* Generate code for new operator. */
+{
+struct pfParse *typePp = pp->children;
+struct pfParse *initPp = typePp->next;
+if (initPp->type == pptClassAllocFromInit)
+    codeAllocInit(pfc, f, initPp, stack);
+else if (initPp->type == pptTuple)
+    {
+    int count = codeExpression(pfc, f, initPp, stack, TRUE);
+    codeTupleIntoClass(pfc, f, typePp, initPp, stack, count);
+    }
+else
+    internalErrAt(pp->tok);
 return 1;
 }
 
@@ -2029,8 +2049,10 @@ switch (pp->type)
 	    total += codeExpression(pfc, f, p, stack+total, addRef);
 	return total;
 	}
-    case pptAllocInit:
+    case pptClassAllocFromInit:
 	return codeAllocInit(pfc, f, pp, stack);
+    case pptNew:
+        return codeNewOp(pfc, f, pp, stack);
     case pptParaMin:
     case pptParaMax:
     case pptParaArgMin:

@@ -1,5 +1,65 @@
-/* pfParse build up parse tree from token stream */
-/* Copyright 2005 Jim Kent.  All rights reserved. */
+/* pfParse build up parse tree from token stream.  */
+/* Copyright 2005-6 Jim Kent.  All rights reserved. */
+/* This is a pretty standard recursive descent parser.  The expression
+ * parsing is handled with a function at each operator precedence level 
+ * that handles all the operators at that level, and which calls the 
+ * function that * handles operators at the next higher expression level 
+ * for input.  The highest precedence level also looks for parenthesis,
+ * and if it finds them, then calls back to the lowest level to handle
+ * what's inside the parenthesis.
+ *
+ * At the statement level, all statements begin with a key word.
+ * If no key word is found then the statement is passed off to the
+ * expression level.  The "key word" '{' indicates the start of a
+ * block of code, and works similarly to the parenthesis, but at
+ * the statement rather than the expression level.
+ *
+ * The trickiest thing here is the handling of variable declarations.
+ * Comma separated lists of variable declarations can occur in a
+ * number of places - in the input and output declarations of a 
+ * function, in declaring member variables of a class, and in
+ * handling normal variable declarations. The grammar for a variable
+ * declaration list should be:
+ *     varDecList: typedList
+ *          varDecList ',' typedList
+ *     typedList: qualifiedType nameList
+ *     qualifiedType: qualifier typeExpression
+ *     qualifier: 'static' | 'local' | 'readable' | 'global'
+ *     typeExpression: typeName
+ *          array '[' expression ']' 'of' typeExpression
+ *          array 'of' typeExpression
+ *          dir 'of' typeExpression
+ *     nameList: name
+ *          nameList ',' name
+ *     typeName: name
+ *          module '.' name
+ * Currently it's not exactly this, but it should be soon.
+ *
+ * A problem the compiler faces is how does it tell a type name
+ * from any other name, particularly since variables and types
+ * can both user the same name.  In particular if 'obj' is a type
+ * name then you can declare a variable named obj of type obj as
+ * so:
+ *    obj obj;
+ * The only hope of resolving this lies in the fact that a declaration
+ * is the only place in the language where two names are allowed
+ * together without an intervening operator.  Unfortunately
+ * the more general form:
+ *    <typeExpression> name, ..., name
+ * the typeExpression could have generated quite an elaborate parse
+ * tree before it figures out that it really wasn't a type expression
+ * after all, but perhaps something like:
+ *     obj = 10;
+ * that was being parsed.   The current parse is allowed as much
+ * lookahead into the token stream as it wants, but I'm reluctant
+ * to let it back-track as well.  
+ *
+ * The current solution to this is to put variable declarations
+ * at the level of precedence right under the = operations, which
+ * in turn are right under tuple.  The tuple is then responsible
+ * for seeing if the first item it sees is a variable declaration,
+ * and if so, making sure all of the others are compatible with
+ * being a var-decs too. */
 
 #include "common.h"
 #include "hash.h"
@@ -10,485 +70,6 @@
 #include "pfToken.h"
 #include "pfCompile.h"
 #include "pfParse.h"
-
-char *pfParseTypeAsString(enum pfParseType type)
-/* Return string corresponding to pfParseType */
-{
-switch (type)
-    {
-    case pptProgram:
-    	return "pptProgram";
-    case pptScope:
-        return "pptScope";
-    case pptInclude:
-        return "pptInclude";
-    case pptImport:
-        return "pptImport";
-    case pptModule:
-        return "pptModule";
-    case pptModuleRef:
-        return "pptModuleRef";
-    case pptMainModule:
-        return "pptMainModule";
-    case pptNop:
-    	return "pptNop";
-    case pptCompound:
-    	return "pptCompound";
-    case pptTuple:
-        return "pptTuple";
-    case pptOf:
-        return "pptOf";
-    case pptDot:
-        return "pptDot";
-    case pptModuleDotType:
-	return "pptModuleDotType";
-    case pptKeyVal:
-        return "pptKeyVal";
-    case pptIf:
-    	return "pptIf";
-    case pptElse:
-    	return "pptElse";
-    case pptWhile:
-    	return "pptWhile";
-    case pptFor:
-	return "pptFor";
-    case pptForeach:
-	return "pptForeach";
-    case pptForEachCall:
-	return "pptForEachCall";
-    case pptBreak:
-    	return "pptBreak";
-    case pptContinue:
-    	return "pptContinue";
-    case pptClass:
-	return "pptClass";
-    case pptInterface:
-	return "pptInterface";
-    case pptVarDec:
-	return "pptVarDec";
-    case pptNameUse:
-	return "pptNameUse";
-    case pptFieldUse:
-	return "pptFieldUse";
-    case pptSelfUse:
-	return "pptSelfUse";
-    case pptVarUse:
-	return "pptVarUse";
-    case pptModuleUse:
-	return "pptModuleUse";
-    case pptConstUse:
-	return "pptConstUse";
-    case pptPolymorphic:
-        return "pptPolymorphic";
-    case pptToDec:
-	return "pptToDec";
-    case pptFlowDec:
-	return "pptFlowDec";
-    case pptReturn:
-	return "pptReturn";
-    case pptCall:
-	return "pptCall";
-    case pptIndirectCall:
-	return "pptIndirectCall";
-    case pptAssignment:
-	return "pptAssignment";
-    case pptPlusEquals:
-	return "pptPlusEquals";
-    case pptMinusEquals:
-	return "pptMinusEquals";
-    case pptMulEquals:
-	return "pptMulEquals";
-    case pptDivEquals:
-	return "pptDivEquals";
-    case pptIndex:
-	return "pptIndex";
-    case pptPlus:
-	return "pptPlus";
-    case pptMinus:
-	return "pptMinus";
-    case pptMul:
-	return "pptMul";
-    case pptDiv:
-	return "pptDiv";
-    case pptShiftLeft:
-        return "pptShiftLeft";
-    case pptShiftRight:
-        return "pptShiftRight";
-    case pptMod:
-	return "pptMod";
-    case pptComma:
-	return "pptComma";
-    case pptSame:
-	return "pptSame";
-    case pptNotSame:
-	return "pptNotSame";
-    case pptGreater:
-	return "pptGreater";
-    case pptLess:
-	return "pptLess";
-    case pptGreaterOrEquals:
-	return "pptGreaterOrEquals";
-    case pptLessOrEquals:
-	return "pptLessOrEquals";
-    case pptNegate:
-	return "pptNegate";
-    case pptNot:
-        return "pptNot";
-    case pptFlipBits:
-        return "pptFlipBits";
-    case pptBitAnd:
-	return "pptBitAnd";
-    case pptBitOr:
-	return "pptBitOr";
-    case pptBitXor:
-	return "pptBitXor";
-    case pptLogAnd:
-	return "pptLogAnd";
-    case pptLogOr:
-	return "pptLogOr";
-    case pptRoot:
-	return "pptRoot";
-    case pptParent:
-	return "pptParent";
-    case pptSys:
-	return "pptSys";
-    case pptUser:
-	return "pptUser";
-    case pptSysOrUser:
-	return "pptSysOrUser";
-    case pptVarInit:
-        return "pptVarInit";
-    case pptFormalParameter:
-        return "pptFormalParameter";
-    case pptPlaceholder:
-        return "pptPlaceholder";
-    case pptSymName:
-	return "pptSymName";
-    case pptTypeName:
-	return "pptTypeName";
-    case pptTypeTuple:
-	return "pptTypeTuple";
-    case pptTypeFlowPt:
-	return "pptTypeFlowPt";
-    case pptTypeToPt:
-	return "pptTypeToPt";
-    case pptStringCat:
-	return "pptStringCat";
-    case pptParaDo:
-	return "pptParaDo";
-    case pptParaAdd:
-	return "pptParaAdd";
-    case pptParaMultiply:
-	return "pptParaMultiply";
-    case pptParaAnd:
-	return "pptParaAnd";
-    case pptParaOr:
-	return "pptParaOr";
-    case pptParaMin:
-	return "pptParaMin";
-    case pptParaMax:
-	return "pptParaMax";
-    case pptParaArgMin:
-	return "pptParaArgMin";
-    case pptParaArgMax:
-	return "pptParaArgMax";
-    case pptParaGet:
-	return "pptParaGet";
-    case pptParaFilter:
-	return "pptParaFilter";
-    case pptUntypedElInCollection:
-	return "pptUntypedElInCollection";
-    case pptUntypedKeyInCollection:
-	return "pptUntypedKeyInCollection";
-    case pptOperatorDec:
-	return "pptOperatorDec";
-    case pptArrayAppend:
-	return "pptArrayAppend";
-    case pptIndexRange:
-	return "pptIndexRange";
-    case pptAllocInit:
-	return "pptAllocInit";
-    case pptKeyName:
-	return "pptKeyName";
-    case pptTry:
-	return "pptTry";
-    case pptCatch:
-	return "pptCatch";
-    case pptSubstitute:
-        return "pptSubstitute";
-    case pptStringDupe:
-        return "pptStringDupe";
-    case pptNew:
-        return "pptNew";
-
-    case pptCastBitToBit:
-        return "pptCastBitToBit";
-    case pptCastBitToByte:
-        return "pptCastBitToByte";
-    case pptCastBitToChar:
-        return "pptCastBitToChar";
-    case pptCastBitToShort:
-	return "pptCastBitToShort";
-    case pptCastBitToInt:
-	return "pptCastBitToInt";
-    case pptCastBitToLong:
-	return "pptCastBitToLong";
-    case pptCastBitToFloat:
-	return "pptCastBitToFloat";
-    case pptCastBitToDouble:
-	return "pptCastBitToDouble";
-    case pptCastBitToString:
-        return "pptCastBitToString";
-
-    case pptCastByteToBit:
-        return "pptCastByteToBit";
-    case pptCastByteToByte:
-        return "pptCastByteToByte";
-    case pptCastByteToChar:
-        return "pptCastByteToChar";
-    case pptCastByteToShort:
-	return "pptCastByteToShort";
-    case pptCastByteToInt:
-	return "pptCastByteToInt";
-    case pptCastByteToLong:
-	return "pptCastByteToLong";
-    case pptCastByteToFloat:
-	return "pptCastByteToFloat";
-    case pptCastByteToDouble:
-	return "pptCastByteToDouble";
-    case pptCastByteToString:
-        return "pptCastByteToString";
-
-    case pptCastCharToBit:
-	return "pptCastCharToBit";
-    case pptCastCharToByte:
-	return "pptCastCharToByte";
-    case pptCastCharToChar:
-	return "pptCastCharToChar";
-    case pptCastCharToShort:
-	return "pptCastCharToShort";
-    case pptCastCharToInt:
-	return "pptCastCharToInt";
-    case pptCastCharToLong:
-	return "pptCastCharToLong";
-    case pptCastCharToFloat:
-	return "pptCastCharToFloat";
-    case pptCastCharToDouble:
-	return "pptCastCharToDouble";
-    case pptCastCharToString:
-	return "pptCastCharToString";
-
-    case pptCastShortToBit:
-        return "pptCastShortToBit";
-    case pptCastShortToByte:
-	return "pptCastShortToByte";
-    case pptCastShortToChar:
-        return "pptCastShortToChar";
-    case pptCastShortToInt:
-	return "pptCastShortToInt";
-    case pptCastShortToLong:
-	return "pptCastShortToLong";
-    case pptCastShortToFloat:
-	return "pptCastShortToFloat";
-    case pptCastShortToDouble:
-	return "pptCastShortToDouble";
-    case pptCastShortToString:
-        return "pptCastShortToString";
-
-    case pptCastIntToBit:
-        return "pptCastIntToBit";
-    case pptCastIntToByte:
-	return "pptCastIntToByte";
-    case pptCastIntToChar:
-        return "pptCastIntToChar";
-    case pptCastIntToShort:
-	return "pptCastIntToShort";
-    case pptCastIntToLong:
-	return "pptCastIntToLong";
-    case pptCastIntToFloat:
-	return "pptCastIntToFloat";
-    case pptCastIntToDouble:
-	return "pptCastIntToDouble";
-    case pptCastIntToString:
-        return "pptCastIntToString";
-
-    case pptCastLongToBit:
-        return "pptCastLongToBit";
-    case pptCastLongToByte:
-	return "pptCastLongToByte";
-    case pptCastLongToChar:
-        return "pptCastLongToChar";
-    case pptCastLongToShort:
-	return "pptCastLongToShort";
-    case pptCastLongToInt:
-	return "pptCastLongToInt";
-    case pptCastLongToFloat:
-	return "pptCastLongToFloat";
-    case pptCastLongToDouble:
-	return "pptCastLongToDouble";
-    case pptCastLongToString:
-        return "pptCastLongToString";
-
-    case pptCastFloatToBit:
-        return "pptCastFloatToBit";
-    case pptCastFloatToByte:
-	return "pptCastFloatToByte";
-    case pptCastFloatToChar:
-        return "pptCastFloatToChar";
-    case pptCastFloatToShort:
-	return "pptCastFloatToShort";
-    case pptCastFloatToInt:
-	return "pptCastFloatToInt";
-    case pptCastFloatToLong:
-	return "pptCastFloatToLong";
-    case pptCastFloatToDouble:
-	return "pptCastFloatToDouble";
-    case pptCastFloatToString:
-        return "pptCastFloatToString";
-
-    case pptCastDoubleToBit:
-        return "pptCastDoubleToBit";
-    case pptCastDoubleToByte:
-	return "pptCastDoubleToByte";
-    case pptCastDoubleToChar:
-        return "pptCastDoubleToChar";
-    case pptCastDoubleToShort:
-	return "pptCastDoubleToShort";
-    case pptCastDoubleToInt:
-	return "pptCastDoubleToInt";
-    case pptCastDoubleToLong:
-	return "pptCastDoubleToLong";
-    case pptCastDoubleToFloat:
-	return "pptCastDoubleToFloat";
-    case pptCastDoubleToDouble:
-	return "pptCastDoubleToDouble";
-    case pptCastDoubleToString:
-        return "pptCastDoubleToString";
-
-    case pptCastStringToBit:
-        return "pptCastStringToBit";
-    case pptCastObjectToBit:
-        return "pptCastObjectToBit";
-    case pptCastClassToInterface:
-    	return "pptCastClassToInterface";
-    case pptCastFunctionToPointer:
-	return "pptCastFunctionToPointer";
-    case pptCastTypedToVar:
-        return "pptCastTypedToVar";
-    case pptCastVarToTyped:
-        return "pptCastVarToTyped";
-    case pptCastCallToTuple:
-	return "pptCastCallToTuple";
-    case pptUniformTuple:
-        return "pptUniformTuple";
-    case pptConstBit:
-	return "pptConstBit";
-    case pptConstByte:
-	return "pptConstByte";
-    case pptConstShort:
-	return "pptConstShort";
-    case pptConstInt:
-	return "pptConstInt";
-    case pptConstLong:
-	return "pptConstLong";
-    case pptConstFloat:
-	return "pptConstFloat";
-    case pptConstDouble:
-	return "pptConstDouble";
-    case pptConstChar:
-	return "pptConstChar";
-    case pptConstString:
-	return "pptConstString";
-    case pptConstZero:
-	return "pptConstZero";
-
-    default:
-        internalErr();
-	return NULL;
-    }
-}
-
-static void pfDumpConst(struct pfToken *tok, FILE *f)
-/* Dump out constant to file */
-{
-switch (tok->type)
-    {
-    case pftString:
-    case pftSubstitute:
-	{
-	#define MAXLEN 32
-	char buf[MAXLEN+4];
-	char *s = tok->val.s;
-	int len = strlen(s);
-	if (len > MAXLEN) len = MAXLEN;
-	memcpy(buf, s, len);
-	buf[len] = 0;
-	strcpy(buf+MAXLEN, "...");
-	printEscapedString(f, buf);
-	break;
-	#undef MAXLEN
-	}
-    case pftLong:
-        fprintf(f, "%lld", tok->val.l);
-	break;
-    case pftInt:
-        fprintf(f, "%d", tok->val.i);
-	break;
-    case pftFloat:
-        fprintf(f, "%g", tok->val.x);
-	break;
-    case pftNil:
-        fprintf(f, "nil");
-	break;
-    default:
-        fprintf(f, "unknownType");
-	break;
-    }
-}
-
-void pfParseDumpOne(struct pfParse *pp, int level, FILE *f)
-/* Dump out single pfParse record at given level of indent. */
-{
-spaceOut(f, level*3);
-fprintf(f, "%s", pfParseTypeAsString(pp->type));
-if (pp->access != paUsual)
-    fprintf(f, " %s", pfAccessTypeAsString(pp->access));
-if (pp->ty != NULL)
-    {
-    fprintf(f, " ");
-    pfTypeDump(pp->ty, f);
-    }
-if (pp->name != NULL)
-    fprintf(f, " %s", pp->name);
-switch (pp->type)
-    {
-    case pptConstUse:
-    case pptConstBit:
-    case pptConstByte:
-    case pptConstShort:
-    case pptConstInt:
-    case pptConstLong:
-    case pptConstFloat:
-    case pptConstDouble:
-    case pptConstChar:
-    case pptConstString:
-    case pptConstZero:
-    case pptSubstitute:
-	fprintf(f, " ");
-	pfDumpConst(pp->tok, f);
-	break;
-    }
-fprintf(f, "\n");
-}
-
-void pfParseDump(struct pfParse *pp, int level, FILE *f)
-/* Write out pp (and it's children) to file at given level of indent */
-{
-pfParseDumpOne(pp, level, f);
-level += 1;
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    pfParseDump(pp, level, f);
-}
 
 struct pfParse *pfParseStatement(struct pfCompile *pfc, struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope);
@@ -507,7 +88,7 @@ static void syntaxError(struct pfToken *tok, int code)
 errAt(tok, "Syntax error #%d", code);
 }
 
-void eatSemi(struct pfToken **pTokList)
+static void eatSemi(struct pfToken **pTokList)
 /* Make sure there's a semicolon, and eat it. */
 {
 struct pfToken *tok = *pTokList;
@@ -560,7 +141,6 @@ for (pp = pp->parent; pp != NULL; pp = pp->parent)
     }
 return NULL;
 }
-
 
 struct pfParse *emptyTuple(struct pfParse *parent, struct pfToken *tok,
 	struct pfScope *scope)
@@ -1042,17 +622,17 @@ struct pfParse *parseNewObject(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse things of form  new type(init parameters) */
 {
-struct pfToken *tok = *pTokList, *endInputTok;
-struct pfParse *pp = pfParseNew(pptNew, tok, parent, scope);
-struct pfParse *type, *input;
+struct pfToken *tok = *pTokList, *newTok;
+struct pfParse *newPp;
+newTok = tok;
 tok = tok->next;   /* We covered 'new' */
-type = parseOf(pfc, pp, &tok, scope);
-massageIntoType(pfc, &type, scope);
-input = parseInputTuple(pfc, pp, &tok, scope, &endInputTok);
-pp->children = type;
-type->next = input;
+newPp = parseOf(pfc, parent, &tok, scope);
+if (newPp->type != pptCall)
+   errAt(newTok, "missing input tuple to new operator");
+massageIntoType(pfc, &newPp->children, scope);
+newPp->type = pptNew;
 *pTokList = tok;
-return pp;
+return newPp;
 }
 
 
@@ -1473,6 +1053,7 @@ if (tok->type == pftName)
     dec->children = type;
     type->next = name;
     dec->access = access;
+    dec->name = name->name;
     pp = dec;
     }
 else
@@ -1512,10 +1093,9 @@ struct pfParse *parseAssign(struct pfCompile *pfc, struct pfParse *parent,
 /* Parse '=' separated expression */
 {
 struct pfToken *tok = *pTokList;
-struct pfParse *pp = parseVarDec(pfc, parent, &tok, scope);
 struct pfParse *assign = NULL;
 enum pfParseType type = pptNone;
-
+struct pfParse *pp = parseVarDec(pfc, parent, &tok, scope);
 switch (tok->type)
     {
     case '=':
@@ -1539,6 +1119,8 @@ switch (tok->type)
     }
 if (type != pptNone)
     {
+    if (pp->type == pptVarDec && type != pptAssignment)
+        errAt(tok, "You can only initialize a variable with a simple '='");
     assign = pfParseNew(type, tok, parent, scope);
     assign->children = pp;
     assign->access = pp->access;
@@ -1717,10 +1299,9 @@ pp->name = name->name;
 
 parseFunctionIo(pfc, pp, &tok, scope, &input, &output);
 
-if (tok->type == ';')
-    {
-    tok = tok->next;
-    }
+if (pfc->isPfh || 
+	(parent->type == pptCompound && parent->parent->type == pptInterface))
+    eatSemi(&tok);
 else
     {
     body = parseCompound(pfc, pp, &tok, scope);

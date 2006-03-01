@@ -346,10 +346,11 @@ void _pf_dir_add_obj(struct _pf_dir  *dir, char *key, _pf_Stack *stack)
  * value. */
 {
 struct _pf_object *obj = stack[0].Obj;
-struct hash *hash = dir->hash;
+struct hash *hash;
 struct hashEl *hel;
 struct _pf_object *oldObj;
 
+hash = dir->hash;
 hel = hashLookup(hash, key);
 if (hel != NULL)
     {
@@ -371,6 +372,8 @@ void _pf_dir_add_object(_pf_Stack *stack, int dirOffset)
 struct _pf_dir *dir = stack[dirOffset].Dir;
 struct _pf_string *string = stack[dirOffset+1].String;
 
+_pf_nil_check(dir);
+_pf_nil_check(string);
 _pf_dir_add_obj(dir, string->s, stack);
 }
 
@@ -425,6 +428,8 @@ void _pf_dir_add_number(_pf_Stack *stack, int dirOffset)
 {
 struct _pf_dir *dir = stack[dirOffset].Dir;
 struct _pf_string *string = stack[dirOffset+1].String;
+_pf_nil_check(dir);
+_pf_nil_check(string);
 _pf_dir_add_num(dir, string->s, stack);
 }
 

@@ -882,7 +882,7 @@ if (initMethod)
      *     pptTuple 
      *         (input-to-init)
      * to
-     *     pptAllocInit <classType>
+     *     pptClassAllocFromInit <classType>
      *        pptTuple   
      *          (default-values-and-zeroes)
      *        pptTuple
@@ -890,7 +890,7 @@ if (initMethod)
      */
     struct pfType *initType = initMethod->ty;
     struct pfType *initInputType = initType->children;
-    struct pfParse *allocInit= pfParseNew(pptAllocInit, tuple->tok,
+    struct pfParse *allocInit= pfParseNew(pptClassAllocFromInit, tuple->tok,
     	tuple->parent, tuple->scope);
     struct pfParse *defaultValTuple = pfParseNew(pptTuple, tuple->tok,
     	tuple->parent, tuple->scope);
@@ -2538,6 +2538,28 @@ tuple->children = varList;
 pfTypeOnTuple(pfc, tuple);
 }
 
+static void typeOnNew(struct pfCompile *pfc, struct pfParse **pPp)
+/* Make sure all is fine with a new operation.  Input
+ * parse tree is:
+ *    pptNew
+ *       <type node>
+ *       pptTuple
+ *          <input-parameters>
+ * We make sure that the input tuple agrees with the
+ * init() function for the type, or just with the class
+ * fields if there is no init.  */
+{
+struct pfParse *pp = *pPp;
+struct pfParse *typePp = pp->children;
+struct pfParse *inputPp = typePp->next;
+struct pfBaseType *base = typePp->ty->base;
+if (!base->isClass)
+    errAt(pp->tok, "New operator only works on classes.");
+coerceTupleToClass(pfc, &inputPp, base);
+typePp->next = inputPp;
+pp->ty = typePp->ty;
+}
+
 void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
@@ -2693,6 +2715,9 @@ switch (pp->type)
 	break;
     case pptReturn:
         checkInFunction(pfc, pp);
+	break;
+    case pptNew:
+        typeOnNew(pfc, pPp);
 	break;
     default:
         break;

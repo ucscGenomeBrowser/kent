@@ -1,6 +1,4 @@
 TO DO:
-  - Add "new" keyword, and use it for dynamically creating things
-    in calls to functions and assigns to objects of parent type.
   - Add 'loco' parameter types to flow functions.  These reference
     local objects in the caller, so it's ok to return references
     to them.
@@ -37,6 +35,8 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Add "new" keyword, and use it for dynamically creating things
+    in calls to functions and assigns to objects of parent type.
   - ?Read-only and private variables.
         Make it so that class.new() is only legal way to
 	make something with private or read-only var.
@@ -262,3 +262,4 @@ UCSC Vacation Days for Working on ParaFlow
 
 
 
+Empire of Debt.

@@ -12,6 +12,8 @@ test:
 	diff expected/testLib output/testLib
 	paraFlow myExp/myExp.pf myExp/testExp.in > output/myExp
 	diff expected/myExp output/myExp
+	paraFlow newOp/newOp.pf > output/newOp
+	diff expected/newOp output/newOp
 	paraFlow oneCall/main.pf > output/oneCall
 	diff expected/oneCall output/oneCall
 	paraFlow streamInterface/testStream.pf > output/streamInterface

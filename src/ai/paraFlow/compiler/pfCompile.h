@@ -42,6 +42,7 @@ struct pfCompile
     struct pfModule *moduleList;/* List of all modules. */
     bool	isSys;		/* True if compiling a built-in module. */
     bool	isFunc;		/* True if compiling a function. */
+    bool	isPfh;		/* Tree if compiling a pfh file. */
     struct pfTokenizer *tkz;	/* Tokenizer. */
     struct hash *reservedWords;	/* Reserved words, can't be used for user data */
     struct pfScope *scope;	/* Outermost scope - for built in symbols */
