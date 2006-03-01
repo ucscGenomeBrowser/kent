@@ -13,7 +13,9 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.29.8.4 2005/12/05 22:04:17 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.29.8.5 2006/03/01 00:04:54 braney Exp $";
+
+#define ADDEXONCAPITAL
 
 /* Javascript to help make a selection from a drop-down
  * go back to the server. */
@@ -95,7 +97,7 @@ startChars = sizeChars = srcSizeChars = 0;
 for (mc = maf->components; mc != NULL; mc = mc->next)
     {
     /* Figure out length of source (species) field. */
-    //if (mc->size != 0)
+    /*if (mc->size != 0)*/
 	{
 	char dbOnly[128];
 	int len;
@@ -125,9 +127,11 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 	if (mc->text && (mc->rightStatus == MAF_INSERT_STATUS) && (masterMc->start + masterMc->size < winEnd))
 	    haveInserts = TRUE;
 
+#ifdef REVERSESTRAND
 	/* complement bases if hgTracks is on reverse strand */
 	if (mc->size && cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
 	    complement(mc->text, maf->textSize);
+#endif
 	}
     }
 /* first sequence in the alignment */
@@ -147,6 +151,16 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 	int s = mc->start;
 	int e = s + mc->size;
 	char *org;
+	char *revComp = "";
+	char strand = mc->strand;
+	struct dyString *dy = newDyString(512);
+#ifdef REVERSESTRAND
+	if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
+	    strand = (strand == '+') ? '-' : '+';
+#endif
+	if (strand == '-') revComp = "&hgSeq.revComp=on";
+
+	dyStringClear(dy);
 
 	safef(dbOnly, sizeof(dbOnly), "%s", mc->src);
 	chrom = chopPrefix(dbOnly);
@@ -159,29 +173,25 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 
 	if (mc->text != NULL)
 	    {
-	    if (lineStart == 0)
+	    if ((lineStart == 0) && (hDbIsActive(dbOnly)))
 		{
-		if (hDbIsActive(dbOnly))
-		    {
-		    struct dyString *dy = newDyString(512);
-		    dyStringPrintf(dy, "Browser %s:%d-%d %s %c %*dbps",chrom, s+1, e, hOrganism(dbOnly),mc->strand,sizeChars, mc->size);
-		    linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
-		    dyStringClear(dy);
-		    dyStringPrintf(dy, "GetDNA %s:%d-%d %s %c %*dbps",chrom, s+1, e, hOrganism(dbOnly),mc->strand,sizeChars, mc->size);
-		    fprintf(f, "B</A> ");
-		    printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%c&db=%s\">D</A> ",  dy->string,hgcName(),
-		       s, cgiEncode(chrom),
-		       chrom, s, e, mc->strand,dbOnly);
-		    }
-		else
-		    {
-		    fprintf(f, "    ");
-		    }
-
-		fprintf(f, "%*s ", srcChars, org);
+		dyStringPrintf(dy, "Browser %s:%d-%d %s %c %*dbps",chrom, s+1, e, hOrganism(dbOnly),mc->strand,sizeChars, mc->size);
+		linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
+		dyStringClear(dy);
+		dyStringPrintf(dy, "GetDNA %s:%d-%d %s %c %*dbps",chrom, s+1, e, hOrganism(dbOnly),mc->strand,sizeChars, mc->size);
+		fprintf(f, "B</A> ");
+		printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A> ",  dy->string,hgcName(),
+		   s, cgiEncode(chrom),
+		   chrom, s, e, dbOnly, revComp);
 		}
 	    else
-		fprintf(f, "%*s ", srcChars, org);
+		{
+		fprintf(f, "    ");
+		}
+
+	    dyStringClear(dy);
+	    dyStringPrintf(dy, "%s:%d-%d %c %*dbps",chrom, s+1, e, mc->strand,sizeChars, mc->size);
+	    fprintf(f, "<A TITLE=\"%s\"> %*s </A> ", dy->string, srcChars, org);
 
 	    updateSummaryLine(summaryLine, referenceText + lineStart, 
 				    mc->text + lineStart, size);
@@ -195,33 +205,32 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 	    || ((mc->leftStatus == MAF_INSERT_STATUS) && (mc->rightStatus == MAF_INSERT_STATUS) )
 	    || ((mc->leftStatus == MAF_MISSING_STATUS) && (mc->rightStatus == MAF_MISSING_STATUS) ))
 		{
-		if (lineStart == 0)
+		if ((lineStart == 0) && (hDbIsActive(dbOnly)))
 		    {
-		    if (hDbIsActive(dbOnly))
-			{
-			int s = mc->start;
-			int e = s + mc->rightLen;
-			struct dyString *dy = newDyString(512);
+		    int s = mc->start;
+		    int e = s + mc->rightLen;
+		    struct dyString *dy = newDyString(512);
 
-			if (mc->strand == '-')
-			    reverseIntRange(&s, &e, mc->srcSize);
+		    if (mc->strand == '-')
+			reverseIntRange(&s, &e, mc->srcSize);
 
-			dyStringPrintf(dy, "Browser %s:%d-%d %s %c %dbps Unaligned",chrom, s+1, e, hOrganism(dbOnly),mc->strand, e-s);
-			linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
-			
-			dyStringClear(dy);
-			dyStringPrintf(dy, "GetDNA %s:%d-%d %s %c %dbps Unaligned",chrom, s+1, e, hOrganism(dbOnly),mc->strand, e-s);
-			fprintf(f,"B</A> ");
+		    dyStringPrintf(dy, "Browser %s:%d-%d %s %c %dbps Unaligned",chrom, s+1, e, hOrganism(dbOnly),mc->strand, e-s);
+		    linkToOtherBrowserTitle(dbOnly, chrom, s, e, dy->string);
+		    
+		    dyStringClear(dy);
+		    dyStringPrintf(dy, "GetDNA %s:%d-%d %s %c %dbps Unaligned",chrom, s+1, e, hOrganism(dbOnly),mc->strand, e-s);
+		    fprintf(f,"B</A> ");
 
-			printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%c&db=%s\">D</A> ", dy->string,  hgcName(),
-			   s, cgiEncode(chrom),
-			   chrom, s, e, mc->strand,dbOnly);
-			}
-		    else
-			fprintf(f, "    ");
+		    printf("<A TITLE=\"%s\" TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A>  ", dy->string,  hgcName(),
+		       s, cgiEncode(chrom),
+		       chrom, s, e, dbOnly,revComp);
 		    }
+		else
+		    fprintf(f, "     ");
 		initSummaryLine(summaryLine, size, ' ');
-		fprintf(f, "%*s ", srcChars, org);
+		dyStringClear(dy);
+		dyStringPrintf(dy, "%s:%d-%d %c %*dbps",chrom, s+1, e, mc->strand,sizeChars, mc->size);
+		fprintf(f, "<A TITLE=\"%s\">%*s</A>  ", dy->string, srcChars, org);
 		ch = '-';
 		switch(mc->rightStatus)
 		    {
@@ -241,10 +250,14 @@ for (lineStart = 0; lineStart < maf->textSize; lineStart = lineEnd)
 		}
 	    }
 	}
+#ifdef ADDMATCHLINE
     if (lineStart == 0)
 	fprintf(f, "    %-*s %s\n", srcChars, "", summaryLine);
     else
 	fprintf(f, "%-*s %s\n", srcChars, "", summaryLine);
+#else
+    fprintf(f, "\n");
+#endif
     }
 
 if (haveInserts)
@@ -273,15 +286,22 @@ if (haveInserts)
 	    {
 	    if (hDbIsActive(dbOnly))
 		{
-	//	fprintf(f, "(");
+		char *revComp = "";
+		char strand = mc->strand;
+#ifdef REVERSESTRAND
+		if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
+		    strand = (strand == '+') ? '-' : '+';
+#endif
+		if (strand == '-') revComp = "&hgSeq.revComp=on";
+
 		linkToOtherBrowser(dbOnly, chrom, s, e);
 		fprintf(f,"B");
 		fprintf(f, "</A>");
 		fprintf(f, " ");
 
-		printf("<A TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&strand=%c&db=%s\">D</A> ",  hgcName(),
+		printf("<A TARGET=\"_blank\" HREF=\"%s?o=%d&g=getDna&i=%s&c=%s&l=%d&r=%d&db=%s%s\">D</A> ",  hgcName(),
 		   s, cgiEncode(chrom),
-		   chrom,  s, e, mc->strand,dbOnly);
+		   chrom,  s, e, dbOnly,revComp);
 		}
 	    else
 		fprintf(f, "    ");
@@ -304,6 +324,7 @@ for (mc = maf->components; mc != NULL; mc = mc->next)
 	tolowers(mc->text);
 }
 
+#ifdef ADDEXONCAPITAL
 static boolean findAliRange(char *ali, int aliSize, int start, int end,
 	int *retStart, int *retEnd)
 /* Convert start/end in sequence coordinates to alignment
@@ -391,6 +412,7 @@ strncpy(dbOnly, mc->src, sizeof(dbOnly));
 chrom = chopPrefix(dbOnly);
 capAliTextOnTrack(maf, dbOnly, chrom, track, onlyCds);
 }
+#endif
 
 static struct mafAli *mafOrAxtLoadInRegion(struct sqlConnection *conn, 
 	struct trackDb *tdb, char *chrom, int start, int end,
@@ -410,10 +432,12 @@ else
     return mafLoadInRegion(conn, tdb->tableName, chrom, start, end);
 }
 
+#ifdef ADDEXONCAPITAL
 static char *codeAll[] = {
 	"coding",
 	"all",
 };
+#endif
 
 static char *showAll[] = {
 	"all",
@@ -448,7 +472,6 @@ else
 	trackDbSetting(tdb, "irows") != NULL)
 	    useIrowChains = TRUE;
 
-    //printf("useIrows %d\n",useIrowChains);
     safef(buffer, sizeof(buffer), "%s.vis",tdb->tableName);
     if (useIrowChains)
 	{
@@ -466,13 +489,17 @@ else
     mafList = mafOrAxtLoadInRegion(conn, tdb, seqName, winStart, winEnd, 
     	axtOtherDb);
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
-    if (useIrowChains)
+#ifdef NOTYET
+    /*if (useIrowChains)*/
 	{
 	safef(option, sizeof(option), "%s.speciesOrder", tdb->tableName);
 	speciesOrder = cartUsualString(cart, option, NULL);
-	//printf("speciesOrder %s\n",speciesOrder);
-	//speciesOrder = NULL;
+	if (speciesOrder == NULL)
+	    speciesOrder = trackDbSetting(tdb, "speciesOrder");
+	speciesOrder = NULL;
 	}
+#endif
+
     for (maf = mafList; maf != NULL; maf = maf->next)
         {
         int mcCount = 0;
@@ -498,7 +525,6 @@ else
 
 	    for (i = 0; i < speciesCt; i++)
 		{
-		//printf("species %s\n",species[i]);
 		if ((mcThis = mafMayFindCompPrefix(maf, species[i], "")) == NULL)
 		    continue;
 		newOrder[mcCount++] = mcThis;
@@ -553,12 +579,14 @@ else
     mafAliFreeList(&mafList);
     if (subList != NULL)
 	{
-	char *codeVarName = "hgc.multiCapCoding";
-	char *codeVarVal = cartUsualString(cart, codeVarName, "coding");
-	boolean onlyCds = sameWord(codeVarVal, "coding");
 	char *showVarName = "hgc.showMultiBase";
 	char *showVarVal = cartUsualString(cart, showVarName, "all");
 	boolean onlyDiff = sameWord(showVarVal, "diff");
+#ifdef ADDEXONCAPITAL
+	char *codeVarName = "hgc.multiCapCoding";
+	char *codeVarVal = cartUsualString(cart, codeVarName, "coding");
+	boolean onlyCds = sameWord(codeVarVal, "coding");
+#endif
 
 	if (wigTable)
 	    {
@@ -572,6 +600,7 @@ else
 	    printf("Alignment score statistics</A></P>\n");
 	    }
 
+#ifdef ADDEXONCAPITAL
 	puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"gpForm\" METHOD=\"GET\">");
 	cartSaveSession(cart);
 	cgiContinueHiddenVar("g");
@@ -582,6 +611,7 @@ else
 	printf("exons based on ");
 	capTrack = genePredDropDown(cart, trackHash, 
                                         "gpForm", "hgc.multiCapTrack");
+#endif
 	printf("show ");
 	cgiMakeDropListFull(showVarName, showAll, showAll, 
 	    ArraySize(showAll), showVarVal, autoSubmit);
@@ -590,9 +620,11 @@ else
 	printf("</FORM>\n");
 	printf("<TT><PRE>");
 
+#ifdef REVERSESTRAND
         /* notify if bases are complemented (hgTracks is on reverse strand) */
         if (cartCgiUsualBoolean(cart, COMPLEMENT_BASES_VAR, FALSE))
             puts("<EM>Alignment displayed on reverse strand</EM><BR>");
+#endif
 
         /* notify if species removed from alignment */
         if (speciesOffHash)
@@ -605,13 +637,18 @@ else
             puts("<BR>");
             }
 
+	puts("<B>Place cursor over species for alignment detail. Click on 'B' to link to browser ");
+	puts("for aligned species, click on 'D' to get DNA for aligned species.\n</B>");
+
+
 	for (maf = subList; maf != NULL; maf = maf->next)
 	    {
 	    mafLowerCase(maf);
+#ifdef ADDEXONCAPITAL
 	    if (capTrack != NULL)
 	    	capMafOnTrack(maf, capTrack, onlyCds);
-	    //printf("<B>Alignment %d of %d in window, score %0.1f</B>\n", ++aliIx, realCount, maf->score);
-	    printf("<B>Alignment block %d of %d in window, %d - %d\n",++aliIx,realCount,maf->components->start + 1,maf->components->start + maf->components->size);
+#endif
+	    printf("<B>Alignment block %d of %d in window, %d - %d </B>\n",++aliIx,realCount,maf->components->start + 1,maf->components->start + maf->components->size);
 	    mafPrettyOut(stdout, maf, 70,onlyDiff, aliIx);
 	    }
 	mafAliFreeList(&subList);
