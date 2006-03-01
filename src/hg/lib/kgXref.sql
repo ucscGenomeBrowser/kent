@@ -14,7 +14,7 @@ CREATE TABLE kgXref (
     protAcc varchar(40),	# NCBI protein Accession number
     description varchar(255),	# Description
               #Indices
-    PRIMARY KEY(kgID),
+    KEY(kgID),
     KEY(mRNA),
     KEY(spID),
     KEY(spDisplayID),
