@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMultiple.c,v 1.8 2006/02/25 00:27:51 heather Exp $";
+static char const rcsid[] = "$Id: snpMultiple.c,v 1.9 2006/03/01 21:59:06 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -48,7 +48,7 @@ char **row;
 struct hashEl *helCoord, *helName = NULL;
 struct coords *cel = NULL;
 
-coordHash = newHash(22);
+coordHash = newHash(18);
 nameHash = newHash(0);
 verbose(1, "creating hashes...\n");
 safef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from snp125");
