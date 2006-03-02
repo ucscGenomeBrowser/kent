@@ -324,18 +324,6 @@ input->next = output;
 return pp;
 }
 
-#ifdef UNUSED
-static struct pfToken *nextMatchingTok(struct pfToken *tokList, enum pfTokType type)
-/* Return next token of type,  NULL if not found. */
-{
-struct pfToken *tok;
-for (tok = tokList; tok != NULL; tok = tok->next)
-    if (tok->type == type)
-        break;
-return tok;
-}
-#endif /* UNUSED */
-
 static struct pfParse *constUse(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Create constant use */
@@ -1185,7 +1173,7 @@ static void addMissingTypesInDeclareTuple(struct pfParse *tuple)
 struct pfParse *vars = tuple->children, *next;
 struct pfParse *type = NULL;
 struct pfParse *pp;
-enum pfAccessType access = vars->access; // TODO remove var.
+enum pfAccessType access = vars->access; 
 
 /* Make sure first item in tuple is a var dec. */
 if (!isVarDecOrVarDecInit(vars))
@@ -1209,6 +1197,10 @@ for (pp = vars; pp != NULL; pp = pp->next)
 	{
 	type = pp->children;
 	pp->name = type->next->name;
+	if (pp->access == paUsual)
+	    type->access = pp->access = access;
+	else
+	    access = pp->access;
 	}
     else if (pp->type == pptNameUse)
 	{
@@ -1220,15 +1212,19 @@ for (pp = vars; pp != NULL; pp = pp->next)
 	if (sub->type == pptVarDec)
 	    {
 	    type = sub->children;
+	    if (sub->access == paUsual)
+		type->access = sub->access = access;
+	    else
+	        access = sub->access;
 	    }
 	else if (sub->type == pptNameUse)
 	    {
 	    flipNameUseToVarDec(sub, type, pp);
+	    pp->access = sub->access;
+	    pp->ty = sub->ty;
 	    }
 	}
     }
-// TODO - remove this line.  Tuple shouldn't have access type.
-tuple->access = access;
 }
 
 static void varDecAndAssignToVarInit(struct pfParse *pp)

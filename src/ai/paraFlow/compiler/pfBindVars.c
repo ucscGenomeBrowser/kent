@@ -180,6 +180,7 @@ switch (pp->type)
 	if (base != NULL)
 	    {
 	    struct pfType *ty = pfTypeNew(base);
+	    ty->access = pp->access;
 	    pp->ty = ty;
 	    }
 	else
@@ -224,8 +225,8 @@ switch (pp->type)
 	{
 	struct pfParse *type = pp->children;
 	struct pfParse *name = type->next;
-	pp->var = pfScopeAddVar(pp->scope, name->name, pp->ty, pp);
 	pp->ty->access = pp->access;
+	pp->var = pfScopeAddVar(pp->scope, name->name, pp->ty, pp);
 	break;
 	}
     case pptToDec:

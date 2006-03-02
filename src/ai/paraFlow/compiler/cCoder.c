@@ -2548,9 +2548,12 @@ switch (pp->type)
 	break;
     case pptTuple:
         {
+#ifdef OLD
 	struct pfParse *p;
 	for (p = pp->children; p != NULL; p = p->next)
 	    codeStatement(pfc, f, p);
+#endif /* OLD */
+	internalErrAt(pp->tok);
 	break;
 	}
     case pptVarInit:
@@ -2790,13 +2793,13 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     codeStaticCleanups(pfc, f, pp);
 }
 
-static void codeStaticAssignments(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
+static void codeStaticInits(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
 /* Print out any static assignments in parse tree. */
 {
 if (pp->type == pptVarInit && pp->ty->access == paStatic)
     codeStatement(pfc, f, pp);
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    codeStaticAssignments(pfc, f, pp);
+    codeStaticInits(pfc, f, pp);
 }
 
 
@@ -2896,6 +2899,34 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     rPrintFuncDeclarations(pfc, f, pp, class);
 }
 
+static void codeAllButStaticInits(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
+/* Code everything *but* the static initializations. */
+{
+struct pfParse *p;
+for (p = pp->children; p != NULL; p = p->next)
+    {
+    switch (p->type)
+        {
+	case pptToDec:
+	case pptFlowDec:
+	case pptNop:
+	case pptClass:
+	case pptInterface:
+	    break;
+	case pptTuple:
+	    codeAllButStaticInits(pfc, f, p);
+	    break;
+	case pptVarInit:
+	    if (p->access != paStatic)
+		codeStatement(pfc, f, p);
+	    break;
+	default:
+	    codeStatement(pfc, f, p);
+	    break;
+	}
+    }
+}
+
 static void codeScope(struct pfCompile *pfc, FILE *f, struct pfParse *pp, 
 	boolean isModuleScope, struct ctar *ctarList)
 /* Print types and then variables from scope. */
@@ -2936,28 +2967,9 @@ if (isModuleScope)
     fprintf(f, "%s.next = %s;\n", moduleRuntimeName, moduleRuntimeList);
     fprintf(f, "%s = &%s;\n", moduleRuntimeList, moduleRuntimeName);
     ctarCodeStartupCall(ctarList, pfc, f);
-    codeStaticAssignments(pfc, f, pp);
+    codeStaticInits(pfc, f, pp);
     }
-for (p = pp->children; p != NULL; p = p->next)
-    {
-    switch (p->type)
-        {
-	case pptToDec:
-	case pptFlowDec:
-	case pptNop:
-	case pptClass:
-	case pptInterface:
-	    break;
-	case pptTuple:
-	case pptVarInit:
-	    if (p->access != paStatic)
-		codeStatement(pfc, f, p);
-	    break;
-	default:
-	    codeStatement(pfc, f, p);
-	    break;
-	}
-    }
+codeAllButStaticInits(pfc, f, pp);
 
 if (isModuleScope)
     {
