@@ -13,7 +13,7 @@
 #include "visiSearch.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.23 2006/02/06 19:48:40 kent Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.24 2006/02/28 22:09:57 galt Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -746,8 +746,7 @@ static void visiGeneMatchDescription(struct visiSearcher *searcher,
 	struct sqlConnection *conn, struct slName *wordList)
 /* Fold in matches to description - using full text index. */
 {
-char *ixFile = "/gbdb/visiGene.ix";
-struct trix *trix = trixOpen("/gbdb/visiGene/visiGene.ix");
+struct trix *trix = trixOpen("visiGeneData/visiGene.ix");
 struct slName *word;
 int wordIx;
 

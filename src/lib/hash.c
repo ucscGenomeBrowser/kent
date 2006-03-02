@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.28 2006/02/28 01:33:09 aamp Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.29 2006/02/28 05:04:56 aamp Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -253,7 +253,7 @@ for (i=0; i<hash->size; ++i)
     {
     for (hel = hash->table[i]; hel != NULL; hel = hel->next)
 	{
-	int num = (int)hel->val;
+	int num = ptToInt(hel->val);
 	sum += (long long)num;
 	}
     }

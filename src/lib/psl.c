@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.69 2006/02/27 06:47:00 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.68 2006/01/28 04:21:07 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1091,26 +1091,6 @@ for (i = 0; i < psl->blockCount; i++)
 reverseUnsigned(psl->tStarts, psl->blockCount);
 reverseUnsigned(psl->qStarts, psl->blockCount);
 reverseUnsigned(psl->blockSizes, psl->blockCount);
-}
-
-/* macro to swap to variables */
-#define swapVars(a, b, tmp) ((tmp) = (a), (a) = (b), (b) = (tmp))
-
-void pslSwap(struct psl *psl)
-/* swap query and target in psl */
-{
-int i, itmp;
-unsigned utmp;
-char ctmp, *stmp; 
-if (psl->strand[1] == '\0')
-    psl->strand[1] = '+';  /* explict strand */
-swapVars(psl->strand[0], psl->strand[1], ctmp);
-swapVars(psl->qName, psl->tName, stmp);
-swapVars(psl->qSize, psl->tSize, utmp);
-swapVars(psl->qStart, psl->tStart, itmp);
-swapVars(psl->qEnd, psl->tEnd, itmp);
-for (i = 0; i < psl->blockCount; i++)
-    swapVars(psl->qStarts[i], psl->tStarts[i], utmp);
 }
 
 void pslTargetOffset(struct psl *psl, int offset)

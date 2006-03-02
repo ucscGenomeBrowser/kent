@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.49 2005/11/15 00:14:12 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.50 2006/03/02 19:02:02 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -58,6 +58,35 @@ while (namePt != NULL && namePt[0] != 0)
     }
 }
 
+static boolean looksCorrupted(struct cartDb *cdb)
+/* Test for db corruption by checking format of firstUse field. */
+{
+if (cdb == NULL)
+    return FALSE;
+else
+    {
+    char *words[3];
+    int wordCount = 0;
+    boolean isCorr = FALSE;
+    char *fu = cloneString(cdb->firstUse);
+    wordCount = chopByChar(fu, '-', words, ArraySize(words));
+    if (wordCount < 3)
+	isCorr = TRUE;
+    else
+	{
+	time_t theTime = time(NULL);
+	struct tm *tm = localtime(&theTime);
+	int year = atoi(words[0]);
+	int month = atoi(words[1]);
+	if ((year < 2000) || (year > (1900+tm->tm_year)) ||
+	    (month < 1) || (month > 12))
+	    isCorr = TRUE;
+	}
+    freez(&fu);
+    return isCorr;
+    }
+}
+
 struct cartDb *cartDbLoadFromId(struct sqlConnection *conn, char *table, int id)
 /* Load up cartDb entry for particular ID.  Returns NULL if no such id. */
 {
@@ -65,9 +94,20 @@ if (id == 0)
    return NULL;
 else
    {
+   struct cartDb *cdb = NULL;
    char where[64];
-   sprintf(where, "id = %u", id);
-   return  cartDbLoadWhere(conn, table, where);
+   safef(where, sizeof(where), "id = %u", id);
+   cdb = cartDbLoadWhere(conn, table, where);
+   if (looksCorrupted(cdb))
+       {
+       /* Can't use warn here -- it interrupts the HTML header, causing an
+	* err500 (and nothing useful in error_log) instead of a warning. */
+       fprintf(stderr,
+	       "%s id=%d looks corrupted -- starting over with new %s id.\n",
+	       table, id, table);
+       cdb = NULL;
+       }
+   return cdb;
    }
 }
 

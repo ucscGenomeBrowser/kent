@@ -11,7 +11,7 @@
 #include "bed.h"
 #include "cutter.h"
 
-static char const rcsid[] = "$Id: cutter.c,v 1.8 2005/05/03 02:16:02 aamp Exp $";
+static char const rcsid[] = "$Id: cutter.c,v 1.9 2006/03/02 08:03:52 aamp Exp $";
 
 struct cutter *cutterLoad(char **row)
 /* Load a cutter from row fetched with select * from cutter
@@ -363,15 +363,11 @@ struct dnaSeq *sticky1 = stickyEnd(enz1);
 struct dnaSeq *sticky2 = stickyEnd(enz2);
 
 if (sticky1 && sticky2)
-/*     printf("enz 1: %s, enz 2: %s, sticky 1: %s, sticky 2: %s, acgt 1: %d, acgt 2: %d\n", enz1->name, enz2->name, sticky1->dna, sticky2->dna, acgtCount(sticky1->dna), acgtCount(sticky2->dna)); */
 if (sticky1 && sticky2 && (sticky1->size == sticky2->size) &&
     (acgtCount(sticky1->dna) == sticky1->size) && (acgtCount(sticky2->dna) == sticky2->size))
     {
     if (sameString(sticky1->dna, sticky2->dna))
-	{
-/* 	printf("BAM %s %s\n", enz1->name, enz2->name); */
 	ret = TRUE;
-	}
     else
 	{
 	reverseComplement(sticky2->dna, sticky2->size);
@@ -699,8 +695,8 @@ if (ACGTo[0] || ACGTo[1] || ACGTo[2] || ACGTo[3] || (sixers->elCount > 0))
 	    int seqCurPos = seqPos;	
 	    while (enzPos < enz->size && seqCurPos < seq->size && matchingBase(enz->seq[enzPos],seq->dna[seqCurPos]))
 		{
-		enzPos++; seqCurPos++;
-/* 		printf("%d %d<br>\n",enzPos,seqCurPos); */
+		enzPos++; 
+		seqCurPos++;
 		}
 	    if (enzPos == enz->size)
 		{
@@ -721,15 +717,11 @@ struct cutter *enz;
 struct cutter *ACGTo[5], *palinACGTo[5];
 struct bed *bedList = NULL, *tmp;
 int i;
-
 if (!cutters)
     return NULL;
-
 for (i = 0; i < 5; i++)
     ACGTo[i] = palinACGTo[i] = NULL;
-
 /* Put each of the enzymes in either a hash table of six-cutters or */
-
 enz = cutters;
 while (enz != NULL)
     {
@@ -778,11 +770,9 @@ while (enz != NULL)
 	}
     enz = next;
     }
-
 /* At this point we got a hash for the palindromes and non-palindromic six-cutters, 
    plus an array for each too.  The array is set up so the enzymes starting with 'A' go into [0], 'C'
    into [1], 'G' into [2], 'T' into [3], and other bases into [4].  */
-
 if (ACGTo[4])
     {
     ACGTo[0] = slCat(ACGTo[0], ACGTo[4]);
@@ -790,7 +780,6 @@ if (ACGTo[4])
     ACGTo[2] = slCat(ACGTo[2], ACGTo[4]);
     ACGTo[3] = slCat(ACGTo[3], ACGTo[4]);
     }
-
 if (palinACGTo[4])
     {
     palinACGTo[0] = slCat(palinACGTo[0], palinACGTo[4]);
@@ -798,15 +787,14 @@ if (palinACGTo[4])
     palinACGTo[2] = slCat(palinACGTo[2], palinACGTo[4]);
     palinACGTo[3] = slCat(palinACGTo[3], palinACGTo[4]);
     }
-
 /* Search the DNA in three ways: on the plus strand for both palindromes and nonpalindromes, and then
    just nonpalindromes on the minus strand. */
 bedList = searchStrand(palinSixers, palinACGTo, seq, startOffset, '+');
 tmp = searchStrand(sixers, ACGTo, seq, startOffset, '+');
-slCat(bedList, tmp);
+bedList = slCat(bedList, tmp);
 reverseComplement(seq->dna, seq->size);
 tmp = searchStrand(sixers, ACGTo, seq, startOffset, '-');
-slCat(bedList, tmp);
+bedList = slCat(bedList, tmp);
 if (bedList)
     slReverse(&bedList);
 return bedList;
