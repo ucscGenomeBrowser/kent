@@ -1,6 +1,8 @@
 
 test:
 	mkdir -p output
+	paraFlow allocTuple.pf > output/allocTuple
+	diff expected/allocTuple output/allocTuple
 	paraFlow arrayDot.pf > output/arrayDot
 	diff expected/arrayDot output/arrayDot
 	paraFlow badDefault.pf > output/badDefault
@@ -17,8 +19,6 @@ test:
 	diff expected/errOnEmptyMemberDir output/errOnEmptyMemberDir
 	paraFlow func2func2.pf > output/func2func2
 	diff expected/func2func2 output/func2func2
-	paraFlow func2in2class.pf > output/func2in2class
-	diff expected/func2in2class output/func2in2class
 	paraFlow memberDotInClass.pf > output/memberDotInClass
 	diff expected/memberDotInClass output/memberDotInClass
 	paraFlow multiFor.pf > output/multiFor
