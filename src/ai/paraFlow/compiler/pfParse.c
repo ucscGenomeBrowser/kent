@@ -2071,8 +2071,8 @@ struct pfParse *pfParseModule(struct pfCompile *pfc, struct pfModule *module,
 struct pfParse *modParse = pfParseNew(modType, NULL, parent, scope);
 pfParseTokens(pfc, module->tokList, scope, modParse);
 if (modType == pptMainModule) {FILE *f = mustOpen("out.preParse", "w"); pfParseDump(modParse, 0, f); carefulClose(&f);}
-varDecAndAssignToVarInit(modParse);
 #ifdef OLD
+varDecAndAssignToVarInit(modParse);
 #endif /* OLD */
 module->pp = modParse;
 return modParse;
