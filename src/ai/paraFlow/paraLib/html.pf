@@ -337,7 +337,7 @@ flow htmlTagsParse(string text, int pos) into (array of htmlTag tags)
 	}
    }
 
-to findOrMakeVar(dir of htmlFormVar vars, string name, htmlTag tag) 
+flow findOrMakeVar(local dir of htmlFormVar vars, string name, htmlTag tag) 
 into (htmlFormVar var)
 // Find a variable of existing name if it exists, other wise
 // make a new one.  Add reference to this tag to var, and return it.
@@ -367,7 +367,7 @@ flow isMixableInputType(string type) into (bit ok)
     ok = type == "BUTTON" || type == "SUBMIT" || type == "IMAGE";
     }
 
-to formParseVars(htmlPage page, htmlForm form) into (dir of htmlFormVar vars)
+flow formParseVars(htmlPage page, htmlForm form) into (dir of htmlFormVar vars)
 // Figure out the variables used in a form.  Variables may be constructed
 // from buttons, INPUT tags, OPTION lists, or TEXTAREAS.
     {
@@ -467,7 +467,7 @@ to formParseVars(htmlPage page, htmlForm form) into (dir of htmlFormVar vars)
 	}
     }
 
-to htmlFormsParse(htmlPage page) into (array of htmlForm forms)
+flow htmlFormsParse(htmlPage page) into (array of htmlForm forms)
 // Assuming that page.tags is already present, rummage through
 // it and return forms.
     {
@@ -498,7 +498,7 @@ to htmlFormsParse(htmlPage page) into (array of htmlForm forms)
 	}
     }
 
-to htmlPageParse(string text, string name) into (htmlPage page)
+flow htmlPageParse(string text, string name) into (htmlPage page)
     {
     page = ();
     page.url = name;
@@ -530,7 +530,7 @@ to htmlPageParse(string text, string name) into (htmlPage page)
 	}
     }
 
-to httpCookiesToString(dir of htmlCookie cookies) into (string out)
+flow httpCookiesToString(dir of htmlCookie cookies) into (string out)
 // Convert cookie directory into a string that we can send.
     {
     dyString tmp = "Cookie:";
@@ -540,7 +540,7 @@ to httpCookiesToString(dir of htmlCookie cookies) into (string out)
     out = tmp;
     }
 
-to cgiVarsToString(dir of string vars) into (string out)
+flow cgiVarsToString(dir of string vars) into (string out)
 // Make up a string with the cgi variables all encoded.
     {
     if (vars)
@@ -566,7 +566,7 @@ flow urlIsHttp(string url) into (bit b)
     b = url.first(7).same('http://');
     }
 
-to expandRelativeUrl(string baseUrl, string relUrl) into (string fullUrl)
+flow expandRelativeUrl(string baseUrl, string relUrl) into (string fullUrl)
 // Unless relUrl starts with "http://" then it needs to be expanded
 // relative to the base url.
    {
@@ -593,7 +593,7 @@ to expandRelativeUrl(string baseUrl, string relUrl) into (string fullUrl)
        }
    }
 
-to httpForwardingAddress(string text) into (string url)
+flow httpForwardingAddress(string text) into (string url)
 // Look through text for signs that it is just a forwarding
 // message.  The big clue for this is the 301 that is the
 // second word in the text right after the HTTP version.
