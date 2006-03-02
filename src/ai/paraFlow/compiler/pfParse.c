@@ -191,7 +191,7 @@ if (tok->type != type)
 *pTokList = tok->next;
 }
 
-struct pfParse *parseNameUse(struct pfParse *parent, 
+static struct pfParse *parseNameUse(struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Make sure have a name, and create a varUse type node
  * based on it. */
@@ -237,7 +237,7 @@ tuple->type = pptTypeTuple;
 return tuple;
 }
 
-void parseFunctionIo(struct pfCompile *pfc,
+static void parseFunctionIo(struct pfCompile *pfc,
     struct pfParse *parent, struct pfToken **pTokList, struct pfScope *scope, 
     struct pfParse **retInput, struct pfParse **retOutput)
 /* Parse out something like (int x, int y) into (int z)
@@ -324,7 +324,8 @@ input->next = output;
 return pp;
 }
 
-struct pfToken *nextMatchingTok(struct pfToken *tokList, enum pfTokType type)
+#ifdef UNUSED
+static struct pfToken *nextMatchingTok(struct pfToken *tokList, enum pfTokType type)
 /* Return next token of type,  NULL if not found. */
 {
 struct pfToken *tok;
@@ -333,9 +334,10 @@ for (tok = tokList; tok != NULL; tok = tok->next)
         break;
 return tok;
 }
+#endif /* UNUSED */
 
-struct pfParse *constUse(struct pfParse *parent, struct pfToken **pTokList, 
-	struct pfScope *scope)
+static struct pfParse *constUse(struct pfParse *parent, 
+	struct pfToken **pTokList, struct pfScope *scope)
 /* Create constant use */
 {
 struct pfToken *tok = *pTokList;
@@ -388,8 +390,9 @@ switch (tok->type)
 return pp;
 }
 
-struct pfParse *parseArrayCallDot(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *parseArrayCallDot(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
 /* Parse out this.that()[].other[]().more and the like. */
 {
 struct pfParse *pp = parseAtom(pfc, parent, pTokList, scope);
@@ -618,8 +621,9 @@ checkIsTypeExp(pfc, *pPp, scope);
 submergeTypeIndex(pPp);
 }
 
-struct pfParse *parseNewObject(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *parseNewObject(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
 /* Parse things of form  new type(init parameters) */
 {
 struct pfToken *tok = *pTokList, *newTok;
@@ -636,8 +640,9 @@ return newPp;
 }
 
 
-struct pfParse *parseParaOrNew(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *parseParaOrNew(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
 /* Parse expression that might include 'para' */
 {
 struct pfToken *tok = *pTokList;
@@ -713,8 +718,9 @@ switch (tok->type)
 return exp;
 }
 
-struct pfParse *parseNegation(struct pfCompile *pfc, struct pfParse *parent,
-	struct pfToken **pTokList, struct pfScope *scope)
+static struct pfParse *parseNegation(struct pfCompile *pfc, 
+	struct pfParse *parent, struct pfToken **pTokList, 
+	struct pfScope *scope)
 /* Parse unary minus, and other things at that level. */
 {
 struct pfToken *tok = *pTokList;
@@ -1113,6 +1119,7 @@ if (type != pptNone)
     assign = pfParseNew(type, tok, parent, scope);
     assign->children = pp;
     assign->access = pp->access;
+    assign->name = pp->name;
     pp->parent = assign;
     for (;;)
 	{
@@ -1190,7 +1197,6 @@ for (pp = vars; pp != NULL; pp = pp->next)
     if (pp->type != pptVarDec && pp->type != pptAssignment && 
     	pp->type != pptNameUse)
 	{
-	pfParseDump(pp, 3, uglyOut);
         errAt(pp->tok, "Expecting variable declaration");
 	}
     }
@@ -1231,7 +1237,6 @@ static void varDecAndAssignToVarInit(struct pfParse *pp)
 if (pp->type == pptVarDec)
     {
     pp->type = pptVarInit;
-    pp->name = pp->children->next->name;		// TODO - unneeded?
     }
 else if (pp->type == pptAssignment)
     {
@@ -1242,7 +1247,6 @@ else if (pp->type == pptAssignment)
 	pp->type = pptVarInit;
 	pp->access = left->access;
 	pp->children = left->children;
-	pp->name = left->name;
 	slAddTail(&pp->children, right);
 	}
     }
@@ -1286,8 +1290,6 @@ if (tuple != NULL)
 	{
 	addMissingTypesInDeclareTuple(tuple);
 	varDecAndAssignToVarInit(tuple);
-#ifdef SOON
-#endif /* SOON */
 	}
     return tuple;
     }
@@ -1295,8 +1297,6 @@ else
     {
     if (isVarDecOrVarDecInit(pp))
 	varDecAndAssignToVarInit(pp);
-#ifdef SOON
-#endif /* SOON */
     return pp;
     }
 }
@@ -1687,31 +1687,22 @@ else
     return parseForIn(pfc, parent, pTokList, scope);
 }
 
-static struct pfParse *fakeNameUse(char *name, struct pfToken *tok,
-	struct pfParse *parent, struct pfScope *scope)
-/* Create a pptNameUse, using the given string value rather than
- * the one from the token. */
-{
-struct pfParse *pp = pfParseNew(pptNameUse, tok, parent, scope);
-pp->name = name;
-return pp;
-}
-
-static struct pfParse *fakeVarDec(char *string, struct pfBaseType *base,
+static struct pfParse *fakeVarInit(char *string, struct pfBaseType *base,
 	struct pfToken *tok, struct pfParse *parent, struct pfScope *scope)
 /* Create a little parse tree like so:
- *        pptVarDec
- *           pptNameUse <base-type-name>
- *           pptNameUse name
+ *        pptVarInit <name>
+ *           pptTypeName <base-type-name>
+ *           pptSymName name
  */
 {
-struct pfParse *varDec = pfParseNew(pptVarDec, tok, parent, scope);
-struct pfParse *type = fakeNameUse(base->name, tok, parent, scope);
-struct pfParse *name = fakeNameUse(string, tok, parent, scope);
-type->type = pptTypeName;
-varDec->children = type;
+struct pfParse *varInit = pfParseNew(pptVarInit, tok, parent, scope);
+struct pfParse *type = pfParseNew(pptTypeName, tok, varInit, scope);
+struct pfParse *name = pfParseNew(pptSymName, tok, varInit, scope);
+varInit->name = name->name = string;
+type->name = base->name;
+varInit->children = type;
 type->next = name;
-return varDec;
+return varInit;
 }
 
 static struct pfParse *parseTry(struct pfCompile *pfc, struct pfParse *parent,
@@ -1739,7 +1730,7 @@ struct pfToken *tok = *pTokList;
 struct pfParse *tryPp = pfParseNew(pptTry, tok, parent, scope);
 struct pfParse *tryBody, *catchPp, *catchBody;
 struct pfParse *messagePp, *sourcePp;
-struct pfParse *levelAssignment, *levelVarDec, *levelExp = NULL;
+struct pfParse *levelPp, *levelExp = NULL;
 char *message, *source = "catchSource";
 struct pfToken *catchTok;
 int level = 0;
@@ -1787,17 +1778,11 @@ if (levelExp == NULL)
 skipRequiredCharType(')', &tok);
 
 /* Fake up parse nodes for the three catch parameters. */
-messagePp = fakeVarDec(message, pfc->stringType, catchTok, catchPp, catchScope);
-varDecAndAssignToVarInit(messagePp);
-sourcePp = fakeVarDec(source, pfc->stringType, catchTok, catchPp, catchScope);
-varDecAndAssignToVarInit(sourcePp);
-levelAssignment = pfParseNew(pptAssignment, catchTok, catchPp, catchScope);
-levelVarDec = fakeVarDec("catchLevel", pfc->intType, 
-	catchTok, levelAssignment, catchScope);
-levelExp->parent = levelAssignment;
-levelAssignment->children = levelVarDec;
-levelVarDec->next = levelExp;
-varDecAndAssignToVarInit(levelAssignment);
+messagePp = fakeVarInit(message, pfc->stringType, catchTok, catchPp, catchScope);
+sourcePp = fakeVarInit(source, pfc->stringType, catchTok, catchPp, catchScope);
+levelPp = fakeVarInit("catchLevel", pfc->intType, 
+	catchTok, catchPp, catchScope);
+slAddTail(&levelPp->children, levelExp);
 
 /* And get body of catch. */
 catchBody = pfParseStatement(pfc, tryPp, &tok, catchScope);
@@ -1807,7 +1792,7 @@ tryPp->children = tryBody;
 tryBody->next = catchPp;
 catchPp->children = messagePp;
 messagePp->next = sourcePp;
-sourcePp->next = levelAssignment;
+sourcePp->next = levelPp;
 catchPp->next = catchBody;
 *pTokList = tok;
 return tryPp;
@@ -2071,9 +2056,6 @@ struct pfParse *pfParseModule(struct pfCompile *pfc, struct pfModule *module,
 struct pfParse *modParse = pfParseNew(modType, NULL, parent, scope);
 pfParseTokens(pfc, module->tokList, scope, modParse);
 if (modType == pptMainModule) {FILE *f = mustOpen("out.preParse", "w"); pfParseDump(modParse, 0, f); carefulClose(&f);}
-#ifdef OLD
-varDecAndAssignToVarInit(modParse);
-#endif /* OLD */
 module->pp = modParse;
 return modParse;
 }
