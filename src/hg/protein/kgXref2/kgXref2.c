@@ -143,6 +143,16 @@ int main(int argc, char *argv[])
 
 	    refseqID = emptyStr;
 	    protAcc  = emptyStr;
+            sprintf(cond_str, "mrna = '%s'", kgID);
+            answer = sqlGetField(conn, ro_DB, "mrnaRefseq", "refseq", cond_str);
+	    if (answer != NULL) 
+	    	{
+		refseqID = answer;
+		}
+	    else
+	    	{
+		/*printf("%s does not have a related RefSeq.\n", kgID);fflush(stdout); */
+		}
 	    
 	    if (strlen(geneSymbol) == 0)
 		{ 
