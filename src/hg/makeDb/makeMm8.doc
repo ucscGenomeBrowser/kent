@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.11 2006/03/01 00:22:09 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.12 2006/03/02 21:31:07 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -26,7 +26,6 @@ exit; # don't actually run this like a script :)
     #	Downloaded: 2,201,934,141 bytes in 50 files
     #	real    44m48.975s
 
-XXXX - running 2006-02-14 11:26
     #	The pre-release sequence, Feb 27th:
     mkdir /cluster/data/mm8/pre_release
     cd /cluster/data/mm8/pre_release
@@ -87,6 +86,8 @@ XXXX - running 2006-02-14 11:26
 #############################################################################
 #  BREAK UP SEQUENCE INTO 5 MB CHUNKS at NON-BRIDGED CONTIGS
 #			(DONE - 2006-02-14 - Hiram)
+#########  Are these necessary ?  They may no longer be needed.
+#########  TRF can run on full chroms on the kki kluster
     ssh kkstore01
     cd /cluster/data/mm8
     for F in ncbi/chrfasta/chr*.fa.gz
@@ -1015,6 +1016,12 @@ TMPDIR=/scratch/tmp
 	`pwd`/DEF > swap.out 2>&1 &
     #	Started 2006-02-17 15:30
 
+    ssh hgwdev
+    time nice -n +19 featureBits mm8 chainHg18Link
+    #	984380268 bases of 2567283971 (38.343%) in intersection
+    time nice -n +19 featureBits hg18 chainMm8Link
+    #	994530182 bases of 2881515245 (34.514%) in intersection
+
 #########################################################################
 # BLASTZ RAT Rn4 (DONE - 2006-02-16 - 2006-02-18 - Hiram)
     ssh kkr1u00
@@ -1076,6 +1083,11 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap `pwd`/DEF > swap.out 2>&1 &
+
+    time nice -n +19 featureBits mm8 chainRn4Link
+    #	1770319811 bases of 2567283971 (68.957%) in intersection
+    time nice -n +19 featureBits rn4 chainMm8Link
+    #	1791093685 bases of 2571531505 (69.651%) in intersection
 
 ##############################################################################
 # CLONE ENDS - BACEND TRACK (DONE - 2006-02-17 - Hiram)
@@ -1452,7 +1464,7 @@ mm8.mgcTables.mgc = all
     #	real    228m59.734s
 
 #########################################################################
-# BLASTZ rheMac2 (WORKING - 2006-02-17 - Hiram)
+# BLASTZ rheMac2 (DONE - 2006-02-17 - Hiram)
     ssh pk
     mkdir /cluster/data/mm8/bed/blastz.rheMac2.2006-02-17
     cd /cluster/data/mm8/bed
@@ -1494,24 +1506,147 @@ TMPDIR=/scratch/tmp
 	-continue=chainMerge `pwd`/DEF > chainMerge.out 2>&1 &
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
-	`pwd`/DEF > blastz.out 2>&1 &
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=net `pwd`/DEF > swap.net.out 2>&1 &
+    #	failed during a san hiccup,  finish that off, then:
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap -continue=load `pwd`/DEF > swap.load.out 2>&1 &
 
-canFam2 on pk
+    time nice -n +19 featureBits mm8 chainRheMac2Link
+    #	891310108 bases of 2567283971 (34.718%) in intersection
+    time nice -n +19 featureBits rheMac2 chainMm8Link
+    #	877906099 bases of 2646704109 (33.170%) in intersection
+
+#########################################################################
+# BLASTZ canFam2 (DONE - 2006-02-18 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastz.canFam2.2006-02-18
+    cd /cluster/data/mm8/bed
+    ln -s blastz.canFam2.2006-02-18 blastz.canFam2
+    cd blastz.canFam2
+
+    cat << '_EOF_' > DEF
+# mouse vs dog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_SMSK=/scratch/hg/mm8/linSpecRep/notInOthers
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Dog CanFam2 - chunk big enough to do all chroms in single whole pieces
+SEQ2_DIR=/scratch/hg/canFam2/nib
+SEQ2_SMSK=/san/sanvol1/scratch/canFam2/linSpecRep.notInMouse
+SEQ2_LEN=/san/sanvol1/scratch/canFam2/chrom.sizes
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzCanFam2.2006-02-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	`pwd`/DEF > blastz.out 2>&1 &
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap `pwd`/DEF > swap.out 2>&1 &
-bosTau2 on pk
+
+    time nice -n +19 featureBits mm8 chainCanFam2Link
+    #	828741604 bases of 2567283971 (32.281%) in intersection
+    time nice -n +19 featureBits canFam2 chainMm8Link
+    #	816262344 bases of 2384996543 (34.225%) in intersection
+
+#########################################################################
+# BLASTZ bosTau2 (DONE - 2006-02-18 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastz.bosTau2.2006-02-18
+    cd /cluster/data/mm8/bed
+    ln -s blastz.bosTau2.2006-02-18 blastz.bosTau2
+    cd blastz.bosTau2
+
+    cat << '_EOF_' > DEF
+# mouse vs cow
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Cow (bosTau2)
+#  large enough chunk to do chroms in one piece
+SEQ2_DIR=/scratch/hg/bosTau2/bosTau2.noBin0.2bit
+SEQ2_LEN=/scratch/hg/bosTau2/noBin0.sizes
+SEQ2_CHUNK=150000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzBosTau.2006-02-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	`pwd`/DEF > blastz.out 2>&1 &
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap `pwd`/DEF > swap.out 2>&1 &
-galGal2 on kk
+
+    time nice -n +19 featureBits mm8 chainBosTau2Link
+    #	688859641 bases of 2567283971 (26.832%) in intersection
+    time nice -n +19 featureBits bosTau2 chainMm8Link
+    #	683178156 bases of 2812203870 (24.293%) in intersection
+
+#########################################################################
+# BLASTZ galGal2 (DONE - 2006-02-18 - Hiram)
+    ssh kk
+    mkdir /cluster/data/mm8/bed/blastz.galGal2.2006-02-18
+    cd /cluster/data/mm8/bed
+    ln -s blastz.galGal2.2006-02-18 blastz.galGal2
+    cd blastz.galGal2
+
+    cat << '_EOF_' > DEF
+# mouse vs chicken
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_SMSK=/scratch/hg/mm8/linSpecRep/notInOthers
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken galGal2 - single chunk big enough for whole chroms at once
+SEQ2_DIR=/scratch/hg/galGal2/nib
+SEQ2_LEN=/scratch/hg/galGal2/chrom.sizes
+SEQ2_SMSK=/scratch/hg/galGal2/linSpecRep
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzGalGal2.2006-02-18
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
@@ -1525,29 +1660,85 @@ galGal2 on kk
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap `pwd`/DEF > swap.out 2>&1 &
 
-rheMac2 on pk
-    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	`pwd`/DEF > blastz.out 2>&1 &
-    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	-swap `pwd`/DEF > swap.out 2>&1 &
-    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	-swap -continue=net `pwd`/DEF > swap.net.out 2>&1 &
-    #	failed during a san hiccup,  finish that off, then:
-    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	-swap -continue=load `pwd`/DEF > swap.load.out 2>&1 &
+    time nice -n +19 featureBits mm8 chainGalGal2Link
+    #	65517358 bases of 2567283971 (2.552%) in intersection
+    time nice -n +19 featureBits galGal2 chainMm8Link
+    #	57074100 bases of 1054197620 (5.414%) in intersection
 
-dasNov1 on pk 2006-02-19
+#########################################################################
+# BLASTZ dasNov1 (DONE - 2006-02-19 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastz.dasNov1.2006-02-19
+    cd /cluster/data/mm8/bed
+    ln -s blastz.dasNov1.2006-02-19 blastz.dasNov1
+    cd blastz.dasNov1
+
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+
+# QUERY - Armadillo dasNov1
+SEQ2_DIR=/scratch/hg/dasNov1/dasNov1.2bit
+SEQ2_LEN=/scratch/hg/dasNov1/chrom.sizes
+SEQ2_LIMIT=100
+SEQ2_CHUNK=50000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzDasNov1.2006-02-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	`pwd`/DEF > blastz.out 2>&1 &
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-continue=cat `pwd`/DEF > cat.out 2>&1 &
-echTel1 on pk 2006-02-19
+
+    time nice -n +19 featureBits mm8 chainDasNov1Link
+    #	431944142 bases of 2567283971 (16.825%) in intersection
+
+#########################################################################
+# BLASTZ echTel1 (DONE - 2006-02-19 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastz.echTel1.2006-02-19
+    cd /cluster/data/mm8/bed
+    ln -s blastz.echTel1.2006-02-19 blastz.echTel1
+    cd blastz.echTel1
+
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+
+# QUERY - Tenrec echTel1
+SEQ2_DIR=/scratch/hg/echTel1/echTel1.2bit
+SEQ2_LEN=/scratch/hg/echTel1/chrom.sizes
+SEQ2_LIMIT=100
+SEQ2_CHUNK=50000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzEchTel1.2006-02-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
@@ -1557,7 +1748,48 @@ echTel1 on pk 2006-02-19
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-continue=chainRun `pwd`/DEF > chain.out 2>&1 &
-fr1 on pk 2006-02-19 (started on kk)
+
+    time nice -n +19 featureBits mm8 chainEchTel1Link
+    #	292970406 bases of 2567283971 (11.412%) in intersection
+
+#########################################################################
+# BLASTZ fr1 (DONE - 2006-02-19 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastz.fr1.2006-02-19
+    cd /cluster/data/mm8/bed
+    ln -s blastz.fr1.2006-02-19 blastz.fr1
+    cd blastz.fr1
+
+    cat << '_EOF_' > DEF
+# mouse vs. fugu
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin:/parasol/bin
+ 
+BLASTZ=blastz.v7
+
+# Reuse parameters from human-chicken, except L=6000 (more relaxed)
+BLASTZ_H=2000
+BLASTZ_Y=3400 
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Fugu - chunk big enough to run the whole chrom at once
+SEQ2_DIR=/san/sanvol1/scratch/fr1/nib
+SEQ2_LEN=/san/sanvol1/scratch/fr1/chrom.sizes
+SEQ2_CHUNK=400000000
+SEQ2_LAP=0
+ 
+BASE=/cluster/data/mm8/bed/blastzFr1.2006-02-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
@@ -1567,7 +1799,43 @@ fr1 on pk 2006-02-19 (started on kk)
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap -continue=net `pwd`/DEF > swap.net.out 2>&1 &
-loxAfr1 on kk 2006-02-19
+
+    time nice -n +19 featureBits mm8 chainFr1Link
+    #	48949500 bases of 2567283971 (1.907%) in intersection
+    time nice -n +19 featureBits fr1 chainMm8Link
+    #	42671288 bases of 315518167 (13.524%) in intersection
+
+#########################################################################
+# BLASTZ loxAfr1 (DONE - 2006-02-19 - Hiram)
+    ssh kk
+    mkdir /cluster/data/mm8/bed/blastz.loxAfr1.2006-02-19
+    cd /cluster/data/mm8/bed
+    ln -s blastz.loxAfr1.2006-02-19 blastz.loxAfr1
+    cd blastz.loxAfr1
+
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/parasol/bin
+
+BLASTZ=blastz.v7
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=30000000
+SEQ1_LAP=10000
+
+# QUERY - Elephant loxAfr1
+SEQ2_DIR=/scratch/hg/loxAfr1/loxAfr1.2bit
+SEQ2_LEN=/scratch/hg/loxAfr1/chrom.sizes
+SEQ2_LIMIT=100
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzLoxAfr1.2006-02-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
 	`pwd`/DEF > blastz.out 2>&1 &
@@ -1575,7 +1843,47 @@ loxAfr1 on kk 2006-02-19
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
 	-continue=chainRun `pwd`/DEF > chain.out 2>&1 &
-tetNig1 on kk 2006-02-10
+
+    time nice -n +19 featureBits mm8 chainLoxAfr1Link
+    #	472168702 bases of 2567283971 (18.392%) in intersection
+
+#########################################################################
+# BLASTZ tetNig1 (DONE - 2006-02-19 - Hiram)
+    ssh kk
+    mkdir /cluster/data/mm8/bed/blastz.tetNig1.2006-02-19
+    cd /cluster/data/mm8/bed
+    ln -s blastz.tetNig1.2006-02-19 blastz.tetNig1
+    cd blastz.tetNig1
+
+    cat << '_EOF_' > DEF
+# Mouse vs tetraodon
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Tetraodon TetNig1 - single chunk big enough to run whole chroms
+SEQ2_DIR=/san/sanvol1/scratch/tetNig1/tetNig1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/tetNig1/chrom.sizes
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzTetNig1.2006-02-19
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
@@ -1590,12 +1898,90 @@ tetNig1 on kk 2006-02-10
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap -continue=net `pwd`/DEF > swap-net.out 2>&1 &
 
-oryCun1 on pk 2006-02-21
+
+    time nice -n +19 featureBits mm8 chainTetNig1Link
+    #	50358792 bases of 2567283971 (1.962%) in intersection
+    time nice -n +19 featureBits tetNig1 chainMm8Link
+    #	47024263 bases of 342403326 (13.734%) in intersection
+
+#########################################################################
+# BLASTZ oryCun1 (DONE - 2006-02-21 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastz.oryCun1.2006-02-21
+    cd /cluster/data/mm8/bed
+    ln -s blastz.oryCun1.2006-02-21 blastz.oryCun1
+    cd blastz.oryCun1
+
+    cat << '_EOF_' > DEF
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY - Rabbit oryCun1
+SEQ2_DIR=/scratch/hg/oryCun1/oryCun1.2bit
+SEQ2_LEN=/scratch/hg/oryCun1/chrom.sizes
+SEQ2_LIMIT=100
+SEQ2_CHUNK=50000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzOryCun1.2006-02-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	`pwd`/DEF > blastz.out 2>&1 &
 
-xenTro1 on kk 2006-02-21
+    time nice -n +19 featureBits mm8 chainOryCun1Link
+    #	496060619 bases of 2567283971 (19.322%) in intersection
+
+#########################################################################
+# BLASTZ xenTro1 (DONE - 2006-02-21 - Hiram)
+    ssh kk
+    mkdir /cluster/data/mm8/bed/blastz.xenTro1.2006-02-21
+    cd /cluster/data/mm8/bed
+    ln -s blastz.xenTro1.2006-02-21 blastz.xenTro1
+    cd blastz.xenTro1
+
+    cat << '_EOF_' > DEF
+# mouse vs. frog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro1 - single chunk big enough to run two of the
+#               largest scaffolds in one job
+SEQ2_DIR=/scratch/hg/xenTro1/xenTro1.2bit
+SEQ2_LEN=/scratch/hg/xenTro1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/mm8/bed/blastzXenTro1.2006-02-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
@@ -1605,18 +1991,148 @@ xenTro1 on kk 2006-02-21
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap `pwd`/DEF > swap.out 2>&1 &
-monDom4 on pk 2006-02-23
+
+    time nice -n +19 featureBits mm8 chainXenTro1Link
+    #	62015601 bases of 2567283971 (2.416%) in intersection
+    time nice -n +19 featureBits xenTro1 chainMm8Link
+    #	59307185 bases of 1381238994 (4.294%) in intersection
+
+#########################################################################
+# BLASTZ monDom4 (DONE - 2006-02-23 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastz.monDom4.2006-02-23
+    cd /cluster/data/mm8/bed
+    ln -s blastz.monDom4.2006-02-23 blastz.monDom4
+    cd blastz.monDom4
+
+    cat << '_EOF_' > DEF
+# Mouse vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=20
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse (mm8)
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom2
+SEQ2_DIR=/cluster/bluearc/scratch/hg/monDom4/monDom4.2bit
+SEQ2_LEN=/cluster/bluearc/scratch/hg/monDom4/chrom.sizes
+SEQ2_CHUNK=50000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzMonDom4.2006-02-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap `pwd`/DEF > swap.out 2>&1 &
-panTro1 on pk 2006-02-23
+
+    time nice -n +19 featureBits mm8 chainMonDom4Link
+    #	211663336 bases of 2567283971 (8.245%) in intersection
+    time nice -n +19 featureBits monDom4 chainMm8Link
+    #	210933035 bases of 3501643220 (6.024%) in intersection
+
+#########################################################################
+# BLASTZ panTro1 (DONE - 2006-02-23 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastz.panTro1.2006-02-23
+    cd /cluster/data/mm8/bed
+    ln -s blastz.panTro1.2006-02-23 blastz.panTro1
+    cd blastz.panTro1
+
+    cat << '_EOF_' > DEF
+# mouse vs chimp
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_M=50
+
+# TARGET: Mouse Mm7
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Chimp PanTro1
+SEQ2_DIR=/scratch/hg/panTro1/nib
+SEQ2_LEN=/scratch/hg/panTro1/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzPanTro1.2006-02-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	`pwd`/DEF > blastz.out 2>&1 &
-danRer3 on pk 2006-02-28
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+
+    time nice -n +19 featureBits mm8 chainPanTro1Link
+    #	901276629 bases of 2567283971 (35.106%) in intersection
+    time nice -n +19 featureBits panTro1 chainMm8Link
+    #	901976621 bases of 2733948177 (32.992%) in intersection
+
+#########################################################################
+# BLASTZ danRer3 (DONE - 2006-02-28 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastz.danRer3.2006-02-28
+    cd /cluster/data/mm8/bed
+    ln -s blastz.danRer3.2006-02-28 blastz.danRer3
+    cd blastz.danRer3
+
+    cat << '_EOF_' > DEF
+# mouse vs zebrafish
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn/x86_64:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Reuse parameters from hg16-fr1, danRer-hg17 and mm5-danRer
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish (danRer3)
+#  large enough chunk to do complete chroms at once
+SEQ2_DIR=/san/sanvol1/scratch/danRer3/chromNib
+SEQ2_LEN=/san/sanvol1/scratch/danRer3/chromNib.sizes
+SEQ2_CHUNK=100000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzDanRer3.2006-02-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
@@ -1624,6 +2140,12 @@ danRer3 on pk 2006-02-28
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap `pwd`/DEF > swap.out 2>&1 &
+
+
+    time nice -n +19 featureBits mm8 chainDanRer3Link
+    #	53125783 bases of 2567283971 (2.069%) in intersection
+    time nice -n +19 featureBits danRer3 chainMm8Link
+    #	54831876 bases of 1630323462 (3.363%) in intersection
 
 #############################################################################
 # STS MARKERS DATA DOWNLOAD (DONE - 2005-09-29 - 2005-10-07 - Hiram)
@@ -2740,7 +3262,7 @@ nice featureBits mm7 refGene:cds knownGene:cds
     hgsql mm8 -e 'load data local infile "mm8.kgSpAlias.tab" into table kgSpAlias'
 
 #############################################################################
-# 17-WAY VAR_MULTIZ - ALIGNMENTS (WORKING - 2006-02-28 - Hiram)
+# 17-WAY VAR_MULTIZ - ALIGNMENTS (DONE - 2006-02-28 - 2006-03-02 - Hiram)
     ssh kkstore01
     mkdir /cluster/data/mm8/bed/multiz17way
     cd /cluster/data/mm8/bed/multiz17way
@@ -2790,23 +3312,24 @@ xenopus_xenTro1:0.782453):0.156067,
 #                                           chainMm7Link   chain   linearGap
 #    distance                       on Mm7      on other   minScore
 #  1  0.1587 - rat rn4            (% 68.957)  (% 69.651)   3000     medium
-#  2  0.4677 - human hg18         (% 38.343)  (% 34.70x)   3000     medium
-#  3  0.4686 - chimp panTro1      (% 35.106)  (% 32.91x)   3000     medium
-#  4  0.4960 - macaque rheMac2    (% 34.718)  (% 32.02x)   3000     medium
-#  5  0.5131 - rabbit oryCun1     (% 19.322)  (% 24.16x)   3000     medium
-#  6  0.6142 - armadillo dasNov1  (% 16.825)  (% 20.60x)   3000     medium
-#  7  0.6230 - dog canFam2        (% 32.281)  (% 34.13x)   3000     medium
-#  8  0.6256 - elephant loxAfr1   (% 18.392)  (% 20.55x)   3000     medium
-#  9  0.6344 - cow bosTau2        (% 26.832)  (% 24.14x)   3000     medium
-# 10  0.7805 - tenrec echTel1     (% 11.412)  (% 14.36x)   5000     loose
-# 11  1.0698 - opossum monDom4    (%  8.245)  (%  6.31x)   5000     loose
-# 12  1.3425 - chicken galGal2    (%  2.552)  (%  6.71x)   5000     loose
-# 13  1.7936 - frog xenTro1       (%  2.416)  (%  4.29x)   5000     loose
-# 14  2.0157 - tetraodon tetNig1  (%  1.962)  (% 13.66x)   5000     loose
-# 15  2.0562 - fugu fr1           (%  1.907)  (% 13.48x)   5000     loose
-# 16  2.1059 - zebrafish danRer3  (%  2.069)  (%  4.37x)   5000     loose
-XXXX - working on this 2006-02-28
+#  2  0.4677 - human hg18         (% 38.343)  (% 34.514)   3000     medium
+#  3  0.4686 - chimp panTro1      (% 35.106)  (% 32.992)   3000     medium
+#  4  0.4960 - macaque rheMac2    (% 34.718)  (% 33.170)   3000     medium
+#  5  0.5131 - rabbit oryCun1     (% 19.322)  (no swap )   3000     medium
+#  6  0.6142 - armadillo dasNov1  (% 16.825)  (no swap )   3000     medium
+#  7  0.6230 - dog canFam2        (% 32.281)  (% 34.255)   3000     medium
+#  8  0.6256 - elephant loxAfr1   (% 18.392)  (no swap )   3000     medium
+#  9  0.6344 - cow bosTau2        (% 26.832)  (% 24.293)   3000     medium
+# 10  0.7805 - tenrec echTel1     (% 11.412)  (no swap )   5000     loose
+# 11  1.0698 - opossum monDom4    (%  8.245)  (%  6.024)   5000     loose
+# 12  1.3425 - chicken galGal2    (%  2.552)  (%  5.414)   5000     loose
+# 13  1.7936 - frog xenTro1       (%  2.416)  (%  4.294)   5000     loose
+# 14  2.0157 - tetraodon tetNig1  (%  1.962)  (% 13.734)   5000     loose
+# 15  2.0562 - fugu fr1           (%  1.907)  (% 13.524)   5000     loose
+# 16  2.1059 - zebrafish danRer3  (%  2.069)  (%  3.363)   5000     loose
 
+    cd /cluster/data/mm8/bed/multiz17way
+    #	bash shell syntax here ...
     export H=/cluster/data/mm8/bed
     mkdir mafLinks
     for G in rn4 hg18 panTro1 rheMac2 oryCun1 dasNov1 canFam2 \
@@ -2820,8 +3343,8 @@ XXXX - working on this 2006-02-28
 	ln -s ${H}/blastz.$G/mafNet/*.maf.gz ./mafLinks/$G
     done
 
-    #	Copy MAFs to SAN for kluster run
-    ssh pk
+    #	Copy MAFs to some appropriate NFS server for kluster run
+    ssh kkstore01
     mkdir /san/sanvol1/scratch/mm8/multiz17way
     cd /san/sanvol1/scratch/mm8/multiz17way
     rsync -a --copy-links --progress \
@@ -2830,163 +3353,81 @@ XXXX - working on this 2006-02-28
     #	We have about 5.9 Gb of data here, takes ~ 10 minutes to copy
 
     mkdir penn
-    cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/multiz penn
-    cp -p /cluster/bin/penn/v10.5.x86_64/multiz-tba/maf_project penn
-
-#       Progressive alignment up the tree w/o stager, 
-#       using multiz.v10.5 (var_multiz)
-#       Method: align internal subtrees (using 0 flag to var_multiz)
-#               Then, align these to mouse (using 1 flag to var_multiz)
-#       NOTE: must use maf_project after each multiz run, in order
-#       to order output.  Single-cov guaranteed by use of net MAF's,
-#       so it is not necessary to run single_cov2.
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
 
     # make output dir and run dir
     ssh pk
-    cd /cluster/data/mm8/bed/multiz17way
-    mkdir -p maf
-    mkdir -p run
+    cd /cluster/data/mm8/bed/multiz17way/
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	17way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    mkdir -p maf run
     cd run
 
-    # create scripts to run var_multiz on cluster
+    #	NOTE: you need to set the db properly in this script
 
-cat > oneMultiz.csh << 'EOF'
-#!/bin/csh -fe
-    set c = $1
-    set multi = /scratch/mm8/multiz17way.$c
-    set pairs = /san/sanvol1/scratch/mm8/multiz17way
-
-    # special mode --
-    # with 1 arg, cleanup
-    if ($#argv == 1) then
-        rm -fr $multi
-        exit
-    endif
-
-    # special mode --
-    # with 3 args, saves an alignment file
-    if ($#argv == 3) then
-        cp $multi/$2/$c.maf $3
-        exit
-    endif 
-        
-    set s1 = $2
-    set s2 = $3
-    set flag = $4
-    
-    # locate input files -- in pairwise dir, or multiple dir
-    set d1 = $multi
-    set d2 = $multi 
-    if (-d $pairs/$s1) then
-        set d1 = $pairs
-	set f1 = $d1/$s1/$c.maf.gz
-	set t1 = /tmp/$s1.$c.maf
-	zcat $f1 > $t1
-    else
-	set f1 = $d1/$s1/$c.maf
-	set t1 = /tmp/$s1.$c.maf
-	cp -p $f1 $t1
-    endif
-    if (-d $pairs/$s2) then
-        set d2 = $pairs
-	set f2 = $d2/$s2/$c.maf.gz
-	set t2 = /tmp/$s2.$c.maf
-	zcat $f2 > $t2
-    else
-	set f2 = $d2/$s2/$c.maf
-	set t2 = /tmp/$s2.$c.maf
-	cp -p $f2 $t2
-    endif
-    # write to output dir
-    set out = $multi/${s1}${s2}
-    mkdir -p $out
-
-    # check for empty input file
-    if (-s $t1 && -s $t2) then
-        echo "Aligning $f1 $f2 $flag"
-        /san/sanvol1/scratch/mm8/multiz17way/penn/multiz $t1 $t2 $flag \
-		$out/$c.unused1.maf $out/$c.unused2.maf > $out/$c.full.maf
-        cat $out/$c.full.maf $out/$c.unused1.maf $out/$c.unused2.maf > \
-                $out/$c.tmp.maf
-        echo "Ordering $c.maf"
-        /san/sanvol1/scratch/mm8/multiz17way/penn/maf_project \
-	$out/$c.tmp.maf mm8.$c > $out/$c.maf
-	rm -f $t1 $t2
-    else if (-s $t1) then
-        cp -p $t1 $out/$c.maf
-	rm -f $t1
-    else if (-s $t2) then
-        cp -p $t2 $out/$c.maf
-	rm -f $t2
-    endif
-'EOF'
-# << keep emacs coloring happy
-    chmod +x oneMultiz.csh
-    cp -p oneMultiz.csh /san/sanvol1/scratch/mm8/multiz17way/penn/oneMultiz.csh
-
-    #	using your tree diagram printed above, arrange these alignments
-    #	in order of the tree branches
-
-cat > allMultiz.csh << 'EOF'
-#!/bin/csh -fe
-    # multiple alignment steps:
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = mm8
 set c = $1
-set s = "/san/sanvol1/scratch/mm8/multiz17way/penn/oneMultiz.csh"
+set maf = $2
+set binDir = /san/sanvol1/scratch/$db/multiz17way/penn
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz17way
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz
 
-$s $c hg18 panTro1 0
-$s $c hg18panTro1 rheMac2 1
-$s $c rn4 oryCun1 0
-$s $c hg18panTro1rheMac2 rn4oryCun1 1
-$s $c canFam2 bosTau2 0
-$s $c hg18panTro1rheMac2rn4oryCun1 canFam2bosTau2 1
-$s $c hg18panTro1rheMac2rn4oryCun1canFam2bosTau2 dasNov1 1
-$s $c loxAfr1 echTel1 0
-$s $c hg18panTro1rheMac2rn4oryCun1canFam2bosTau2dasNov1 loxAfr1echTel1 1
-$s $c hg18panTro1rheMac2rn4oryCun1canFam2bosTau2dasNov1loxAfr1echTel1 monDom4 1
-$s $c hg18panTro1rheMac2rn4oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom4 \
-	galGal2 1
-$s $c \
-hg18panTro1rheMac2rn4oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom4galGal2 \
-	xenTro1 1
-$s $c tetNig1 fr1  0
-$s $c tetNig1fr1 danRer3 1
-$s $c \
-hg18panTro1rheMac2rn4oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom4galGal2xenTro1 \
-	tetNig1fr1danRer3 1
-#	 get final alignment file
-$s $c \
-hg18panTro1rheMac2rn4oryCun1canFam2bosTau2dasNov1loxAfr1echTel1monDom4galGal2xenTro1tetNig1fr1danRer3 \
-	/cluster/data/mm8/bed/multiz17way/maf/$c.maf
-#cleanup
-$s $c
-'EOF'
-# << keep emacs coloring happy
-    chmod +x allMultiz.csh
-
-cat  << 'EOF' > template
+cat  << '_EOF_' > template
 #LOOP
-./allMultiz.csh $(root1) {check out line+ /cluster/data/mm8/bed/multiz17way/maf/$(root1).maf}
+autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
 #ENDLOOP
-'EOF'
+'_EOF_'
+# << happy emacs
 
-    cd /cluster/data/mm8/bed/multiz17way/run
-    awk '{print $1}' ../../../chrom.sizes > chrom.lst
-
+    awk '{print $1}' /cluster/data/mm8/chrom.sizes > chrom.lst
     gensub2 chrom.lst single template jobList
     para create jobList
-    para try; para check
-    para push
+    # 34 jobs
+    para try ... check ... push ... etc ...
+# Completed: 34 of 34 jobs
+# CPU time in finished jobs:     209432s    3490.54m    58.18h    2.42d  0.007 y
+# IO & Wait Time:                  4685s      78.08m     1.30h    0.05d  0.000 y
+# Average job time:                6298s     104.96m     1.75h    0.07d
+# Longest finished job:           17491s     291.52m     4.86h    0.20d
+# Submission to last job:         17519s     291.98m     4.87h    0.20d
 
-# Completed: 40 of 40 jobs
-# CPU time in finished jobs:     460579s    7676.32m   127.94h    5.33d  0.015 y
-# IO & Wait Time:                 13669s     227.81m     3.80h    0.16d  0.000 y
-# Average job time:               11856s     197.60m     3.29h    0.14d
-# Longest finished job:           48345s     805.75m    13.43h    0.56d
-# Submission to last job:         48345s     805.75m    13.43h    0.56d
-
-    #	combine results into a single file for loading
-    #	This step could be skipped and the catDir output sent directly
-    #	into the loader.
+    #	combine results into a single file for loading and gbdb reference
     ssh kkstore01
     cd /cluster/data/mm8/bed/multiz17way
     #	There used to be a mafFilter here with a minScore of 500, but it
@@ -2994,12 +3435,11 @@ cat  << 'EOF' > template
     #	useless.  They range from very large negatives to very large
     #	positives.
     time catDir maf > multiz17way.maf
-    #	real    18m12.267s
-    #	makes an 15 Gb file:
-    #	-rw-rw-r--    1 15433191843 Nov 23 09:25 multiz17way.maf
+    #	real    12m26.098s
+    #	makes an 17 Gb file:
+    #	-rw-rw-r--   1 17284343601 Mar  2 10:14 multiz17way.maf
 
     #	Create per-chrom individual maf files for downloads
-    #		(DONE - 2005-11-30)
     ssh kkstore01
     cd /cluster/data/mm8/bed/multiz17way
     mkdir mafDownloads
@@ -3010,11 +3450,11 @@ cat  << 'EOF' > template
 	gzip mafDownloads/${B}
 	echo ${B} done
     done
-
+    #	real    56m24.191s
+    #	deliver to downloads
     ssh hgwdev
-    mkdir /usr/local/apache/htdocs/goldenPath/mm8/multiz17way
-    cd /usr/local/apache/htdocs/goldenPath/mm8/multiz17way
-    ln -s /cluster/data/mm8/bed/multiz17way/mafDownloads/chr*.maf.gz .
+    ln -s /cluster/data/mm8/bed/multiz17way/mafDownloads \
+	/usr/local/apache/htdocs/goldenPath/mm8/multiz17way
 
     # Load into database
     ssh hgwdev
@@ -3022,28 +3462,32 @@ cat  << 'EOF' > template
     mkdir /gbdb/mm8/multiz17way
     ln -s /cluster/data/mm8/bed/multiz17way/multiz17way.maf \
 	/gbdb/mm8/multiz17way
-    time hgLoadMaf mm8 multiz17way
-    #	Loaded 11964967 mafs in 1 files from /gbdb/mm8/multiz17way
-    #	real    32m40.228s
+    time nice -n +19 hgLoadMaf mm8 multiz17way
+    #	Loaded 11692972 mafs in 1 files from /gbdb/mm8/multiz17way
+    #	real    27m25.451s
 
-    time hgLoadMafSummary -minSize=10000 -mergeGap=500 -maxSize=50000 mm8 \
-	multiz17waySummary multiz17way.maf
-    #	Processed 66508536 components in 11964967 mafs from multiz17way.maf
-    #	real    37m56.218s
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 mm8 multiz17waySummary multiz17way.maf
+    #	Created 5758203 summary blocks from 64958819 components and
+    #	11692972 mafs from multiz17way.maf
+    #	real    33m54.608s
 
+    #	This was done for Mm7, same image can be reused
     # create tree image:
-    cat << '_EOF_' > species.nh
-((((((human,(mouse,rat)),(dog,cow)),opossum),chicken),frog),(tetraodon,zebrafish))
-'_EOF_'
-    /cluster/bin/phast/draw_tree -b -s species.nh > species10.ps
+    #	cat << '_EOF_' > species.nh
+# ((((((human,(mouse,rat)),(dog,cow)),opossum),chicken),frog),(tetraodon,zebrafish))
+# '_EOF_'
+#    /cluster/bin/phast/draw_tree -b -s species.nh > species10.ps
     # photoshop to enhance, reduce the amount of whitespace to make it
     # smaller, then save as jpg
-    cp species10.jpg /usr/local/apache/htdocs/images/phylo/Mm7_17way.jpg
+#    cp species10.jpg /usr/local/apache/htdocs/images/phylo/Mm7_17way.jpg
 
 ############################################################################
 # CREATE CONSERVATION WIGGLE WITH PHASTCONS
-#		(DONE 2005-11-23 - 2005-12-07 - Hiram)
+#		(WORKING - 2006-03-02 - Hiram)
 
+    #	Will skip this estimate for Mm8 since it was well done in Mm7
+    #	and in Hg17, skip to the creation of the SS files
 # Estimate phastCons parameters
     ssh kkstore01
     mkdir /cluster/data/mm8/bed/multiz17way/cons
@@ -3068,11 +3512,14 @@ cat  << 'EOF' > template
     #	0.407
     #	This 0.407 is used in the --gc argument below
 
+    #	CONTINUE HERE, no estimation required
     # Create big bad bloated SS files on san filesystem (takes ~ 2h 20m)
+    #	Increasing their size this time from 1,000,000 to 10,000,000 to
+    #	slow down the phastCons pk jobs
     ssh kkstore01
     mkdir -p  /san/sanvol1/scratch/mm8/cons/ss
     cd  /san/sanvol1/scratch/mm8/cons/ss
-    for C in `awk '{print $1}' /cluster/data/mm8/chrom.sizes`
+    time for C in `awk '{print $1}' /cluster/data/mm8/chrom.sizes`
     do
       if [ -s /cluster/data/mm8/bed/multiz17way/maf/${C}.maf ]; then
 	mkdir ${C}
@@ -3082,10 +3529,11 @@ cat  << 'EOF' > template
 	/cluster/bin/phast/$MACHTYPE/msa_split \
 	    /cluster/data/mm8/bed/multiz17way/maf/${C}.maf \
 	    --refseq /cluster/data/mm8/${chrN}/${C}.fa \
-	    --in-format MAF --windows 1000000,0 --between-blocks 5000 \
+	    --in-format MAF --windows 10000000,0 --between-blocks 5000 \
 	    --out-format SS --out-root ${C}/${C}
       fi
-    done
+    done &
+XXXX - running 2006-03-02 12:00
     #	real    143m42.404s
 
     # Create a random list of 50 1 mb regions  (do not use the _randoms)
