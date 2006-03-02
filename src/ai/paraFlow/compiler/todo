@@ -1,7 +1,4 @@
 TO DO:
-  - Add 'loco' parameter types to flow functions.  These reference
-    local objects in the caller, so it's ok to return references
-    to them.
   - Defining exceptions, and implementing exception chaining.
   - It turns out we need three levels of parallelizability for
     methods:
@@ -33,6 +30,9 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Add 'loco' parameter types to flow functions.  These reference
+    local objects in the caller, so it's ok to return references
+    to them.
   - Check that can call a function taking an object with a tuple
     and that it all works ok. [Nope, it doesn't...]  Fixing this.
   - Add "new" keyword, and use it for dynamically creating things

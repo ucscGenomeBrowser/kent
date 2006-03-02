@@ -2554,12 +2554,12 @@ switch (pp->type)
 	break;
     case pptTuple:
         {
-#ifdef OLD
 	struct pfParse *p;
 	for (p = pp->children; p != NULL; p = p->next)
 	    codeStatement(pfc, f, p);
-#endif /* OLD */
+#ifdef OLD
 	internalErrAt(pp->tok);
+#endif /* OLD */
 	break;
 	}
     case pptVarInit:
