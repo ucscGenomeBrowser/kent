@@ -41,6 +41,8 @@ test:
 	diff expected/initVars $O/initVars
 	paraFlow keyVal.pf > $O/keyVal
 	diff expected/keyVal $O/keyVal
+	paraFlow localFlow.pf > $O/localFlow
+	diff expected/localFlow $O/localFlow
 	paraFlow memberForeach.pf > $O/memberForeach
 	diff expected/memberForeach $O/memberForeach
 	paraFlow mixedDeclare.pf > $O/mixedDeclare
