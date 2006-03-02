@@ -1,0 +1,418 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# This file describes browser build for the panTro2 chimp genome: Feb 2006
+#
+#	"$Id: makePanTro2.doc,v 1.1 2006/03/02 23:40:56 kate Exp $"
+#
+#######################################################################
+# DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
+#
+# panTro2
+# 6X Chimp from LaDeana Hillier, WUSLT 
+
+# NCBI accession for the project is:  AADA01000000  (02-SEP-2005)
+# NOTE: chrom numbering follows hunan orthology, a change from panTro1.
+# Human chrom 2 is orthologus to chimp chroms 2a and 2b.
+
+# SETUP BUILD AREA AND DOWNLOAD ASSEMBLY (DONE 2006-02-27 kate)
+
+    ssh kkstore01
+    mkdir /cluster/store8/panTro2
+    ln -s /cluster/store8/panTro2 /cluster/data
+    cd /cluster/data/panTro2
+
+    # annotations dir
+    mkdir bed
+
+    # temp dir for lift files and 
+    # scripts copy-pasted from this doc
+    mkdir jkStuff
+
+    # make download dir
+    wget ftp://genome.wustl.edu/pub/user/lhillier/panTro2.tar.gz
+
+    tar xvfz *.gz
+    mv panTro2 wustl
+
+    # for finished chr21, there is chr21.agp, chr21.clones.agp,
+    #   and chr21.fa (complete chrom fasta file)
+    # for partially finished chrY, there is:
+    #   .agp, .clones.agp, and .fa for chrY and chrY_random
+    # for chr7, that includes a 5M finished region, there
+    # are:  chr7.agp, chr7.contigs.fa, and chr7.clones.fa
+    # (also chr7_random.{agp,contigs.fa}
+    # For all other chroms there are AGP files plus contig fasta:
+    #   chr*.agp, chr*.contigs.fa files
+
+    grep '>' wustl/*.contigs.fa | wc -l
+    # 246371
+    # NOTE: Release notes list 265882 contigs 
+    # (due to replacement of contigs by clone sequence in finished chroms?)
+    grep '>' wustl/*.clones.fa | wc -l
+    # 505
+
+
+# BUILD CHROM FASTA FILES (2005-02-28 kate)
+#  Most chroms are built from contigs, a few have
+#       clones in the AGP, chr7 has both!
+
+    cut -f1 wustl/*.agp | uniq | grep -v '^$' | grep -v random | \
+        sed 's/chr//' > chrom.lst
+    wc -l chrom.lst
+    # 28
+    # 1,2a,2b,3-22,X,Y,M,Un, and chr6_hla_hap1
+
+cat > jkStuff/makeChroms.csh << 'EOF'
+    date
+    foreach d (`cat chrom.lst`)
+        set c = chr$d
+        echo $c
+        mkdir $d
+        cp wustl/$c.{agp,*.fa} $d
+        if (-e $d/$c.clones.fa) then
+            set fa = clones.fa
+            # chr7 has both contigs and clones and clone file
+            # doesn't have genbank sequence header -- merge them
+            if ($c == "chr7") then
+                cat $d/$c.contigs.fa  >> $d/$c.clones.fa
+                rm $d/$c.contigs.fa
+            else
+                # extract clone id from sequence name line to please agpToFa
+                awk -F\| '{if (/^>/) printf(">%s\n", $4); else print}' \
+                wustl/$c.clones.fa > $d/$c.clones.fa
+            endif
+        else
+            set fa = contigs.fa
+        endif
+        agpToFa -simpleMultiMixed $d/$c.agp $c $d/$c.fa $d/$c.$fa
+        if (-e wustl/${c}_random.agp) then
+            set r = ${c}_random
+            echo $r
+            cp wustl/$r.{agp,*.fa} $d
+            if (-e $d/$r.clones.fa) then
+                set fa = clones.fa
+            awk -F\| '{if (/^>/) printf(">%s\n", $4); else print}' \
+                wustl/$r.clones.fa > $d/$r.clones.fa
+            else
+                set fa = contigs.fa
+            endif
+            agpToFa -simpleMultiMixed $d/$r.agp $r $d/$r.fa $d/$r.$fa
+        endif
+    end
+    date
+'EOF'
+    # << happy emacs
+    csh jkStuff/makeChroms.csh >&! jkStuff/makeChroms.log &
+        # 5 minutes
+
+cat > jkStuff/checkChroms.csh << 'EOF'
+    date
+    foreach d (`cat chrom.lst`)
+        set c = chr$d
+        echo $c
+        faSize $d/$c.fa
+        checkAgpAndFa $d/$c.agp $d/$c.fa | tail -1
+        if (-e $d/${c}_random.fa) then
+            set r = ${c}_random
+            echo $r
+            faSize $d/$r.fa
+            checkAgpAndFa $d/$r.agp $d/$r.fa | tail -1
+        endif
+    end
+    date
+'EOF'
+    # << happy emacs
+    csh jkStuff/checkChroms.csh >&! jkStuff/checkChroms.log &
+        # 3 minutes
+
+    # Replace chrM and chrM_random from this assembly with
+    # chrM from NCBI.
+    # so retrieving it from NCBI, via method described in canFam2 make doc.
+    # (search "pan troglodytes mitochondrion genome" finds NC_001643
+    rm -fr M
+    mkdir M
+    cd M
+    wget -O chrM.fa 'http://www.ncbi.nlm.nih.gov/entrez/viewer.fcgi?db=nucleotide&val=5835121&dopt=FASTA'
+    # Edit chrM.fa: make sure the long fancy header line says it's the 
+    # Canis familiaris mitochondrion complete genome, and then replace the 
+    # header line with just ">chrM".
+    faSize chrM.fa
+        # 16554 bases
+
+    # cleanup chrom dirs
+    cd ..
+    foreach d (`cat chrom.lst`)
+        set c = chr$d
+        mkdir $d/parts
+        mv $d/*.clones.fa $d/*.contigs.fa $d/parts
+    end
+
+    # retrieve fixed chr9.agp from LaDeana (2006-03-02)
+    mkdir wustl.chr9
+    cd wustl.chr9
+    wget ftp://genome.wustl.edu/pub/user/lhillier/pub/chr9.agp.gz
+    gunzip *.gz
+    cp -p chr9.agp ../9
+    cd ../9
+    agpToFa -simpleMultiMixed chr9.agp chr9 chr9.fa parts/chr9.contigs.fa
+    checkAgpAndFa chr9.agp chr9.fa | tail -1
+
+
+# CREATE DATABASE AND GRP TABLE (DONE 2006-02-28 kate)
+    ssh hgwdev
+    hgsql '' -e 'create database panTro2'
+    # Use df to make sure there is at least 75G free on hgwdev:/var/lib/mysql
+    df -h /var/lib/mysql
+        # /dev/sdc1             1.8T  1.6T   71G  96% /var/lib/mysql
+    # oops -- not enough ?
+
+    hgsql panTro2 -e \
+      "create table grp (PRIMARY KEY(NAME)) select * from mm8.grp"
+
+
+# MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) 2BIT (DONE 2006-02-28 kate)
+    # Redo to fix chr9 (2006-03-02 kate)
+    # Make .2bit, unmasked until RepeatMasker and TRF steps are done.
+    # Do this now so we can load up RepeatMasker and run featureBits; 
+    # can also load up other tables that don't depend on masking.  
+    ssh kkstore01
+    cd /cluster/data/panTro2
+    nice faToTwoBit ?{,?}/chr*.fa 6_hla_hap1/chr*.fa panTro2.2bit
+
+    mkdir bed/chromInfo
+    twoBitInfo panTro2.2bit stdout \
+    | awk '{print $1 "\t" $2 "\t/gbdb/panTro2/panTro2.2bit";}' \
+      > bed/chromInfo/chromInfo.tab
+    
+    # Make symbolic links from /gbdb/panTro2/ to the real .2bit.
+    ssh hgwdev
+    mkdir /gbdb/panTro2
+    ln -s /cluster/data/panTro2/panTro2.2bit /gbdb/panTro2/
+    # Load /gbdb/panTro2/panTro2.2bit paths into database and save size info.
+    cd /cluster/data/panTro2
+    hgsql panTro2  < $HOME/kent/src/hg/lib/chromInfo.sql
+    hgsql panTro2 -e 'load data local infile \
+      "/cluster/data/panTro2/bed/chromInfo/chromInfo.tab" \
+      into table chromInfo;'
+    echo "select chrom,size from chromInfo" | hgsql -N panTro2 > chrom.sizes
+    wc chrom.sizes
+       # 52
+
+# GOLD AND GAP TRACKS (DONE 2006-02-28 kate)
+    # Redo to fix chr9 (2006-03-02 kate)
+    ssh hgwdev
+    cd /cluster/data/panTro2
+    #hgGoldGapGl -noGl -chromLst=chrom.lst panTro2 /cluster/data/panTro2 .
+    hgGoldGapGl -noGl panTro2 /cluster/data/panTro2 .
+    # featureBits fails if there's missing tables, so make them:
+    hgsql panTro2 -e "create table chrM_gap select * from chr1_gap where 0=1"
+    hgsql panTro2 -e "create table chr6_hla_hap1_gap select * from chr1_gap where 0=1"
+
+[kate@hgwdev panTro2]$ featureBits panTro2 -countGaps -noRandom gap
+423043673 bases of 3175632892 (13.322%) in intersection
+[kate@hgwdev panTro2]$ featureBits panTro1 -countGaps -noRandom gap
+671583599 bases of 3083993401 (21.776%) in intersection
+[kate@hgwdev panTro2]$ featureBits hg15 -countGaps -noRandom gap
+238329157 bases of 3070537687 (7.762%) in intersection
+[kate@hgwdev panTro2]$ featureBits hg18 -countGaps -noRandom gap
+222401287 bases of 3091592211 (7.194%) in intersection
+
+chr1   12771775 bases of 229974691 (5.554%) in intersection
+chr10   9298149 bases of 135001995 (6.887%) in intersection
+chr11   10601065 bases of 134204764 (7.899%) in intersection
+chr12   5495847 bases of 135371336 (4.060%) in intersection
+chr13   28069601 bases of 115868456 (24.225%) in intersection
+chr14   21093350 bases of 107349158 (19.649%) in intersection
+chr15   23087195 bases of 100063422 (23.073%) in intersection
+chr16   16171896 bases of 90682376 (17.834%) in intersection
+chr17   9948345 bases of 83384210 (11.931%) in intersection
+chr18   3076876 bases of 77261746 (3.982%) in intersection
+chr19   12470245 bases of 64473437 (19.342%) in intersection
+chr20   4187763 bases of 62293572 (6.723%) in intersection
+chr21   13764311 bases of 46489110 (29.608%) in intersection
+chr22   17821597 bases of 50165558 (35.526%) in intersection
+chr2a   8581091 bases of 114460064 (7.497%) in intersection
+chr2b   120728260 bases of 248603653 (48.563%) in intersection
+chr3   8990241 bases of 203962478 (4.408%) in intersection
+chr4   7932593 bases of 194897272 (4.070%) in intersection
+chr5   8761164 bases of 183994906 (4.762%) in intersection
+chr6   9202606 bases of 173908612 (5.292%) in intersection
+chr6_hla_hap1   0 bases of 34169 (0.000%) in intersection
+chr7   9183564 bases of 160261443 (5.730%) in intersection
+chr8   6927299 bases of 145085868 (4.775%) in intersection
+#chr9   115285361 bases of 224587821 (51.332%) in intersection
+#  Seems too big -- notified LaDeana of huge gap (80MB)
+#  She fixed the AGP, and here's the result
+chr9    29207531 bases of 138509991 (21.087%) in intersection
+chrM   0 bases of 16554 (0.000%) in intersection
+chrUn   8188633 bases of 58616431 (13.970%) in intersection
+chrX   24409881 bases of 155361357 (15.712%) in intersection
+chrY   1261428 bases of 23952694 (5.266%) in intersection
+
+
+# HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 2006-02-05 kate)
+    ssh hgwdev
+    cd $HOME/kent/src/hg/makeDb/trackDb
+    cvs up -d -P
+    # Edit that makefile to add in all the right places and do
+    make update
+    cvs commit makefile
+    mkdir -p chimp/panTro2
+    cvs add chimp/panTro2
+    cvs ci -m "trackDb dir for second chimp genome(s)" chimp/panTro2
+    # Do this in a clean (up-to-date, no edits) tree:
+    make alpha DBS=panTro2
+
+    # Add dbDb entry (not a new organism so defaultDb and genomeClade already 
+    # have entries):
+    hgsql -h genome-testdb hgcentraltest \
+      -e 'insert into dbDb (name, description, nibPath, organism,  \
+          defaultPos, active, orderKey, genome, scientificName,  \
+          htmlPath, hgNearOk, hgPbOk, sourceName)  \
+          values("panTro2", "Jan. 2006", \
+          "/gbdb/panTro2/nib", "Chimp", "chr7:115705331-115981791", 1, \
+          15, "Chimp", "Pan troglodytes", \
+          "/gbdb/panTro2/html/description.html", 0, 0, \
+          "Washington University Build 2 Version 1");'
+
+
+# SPLIT SEQUENCE FOR REPEATMASKER (2006-03-01 kate)
+# Split into 500K chunks, at gaps if possible
+
+    ssh kkstore01
+    cd /cluster/data/panTro2
+    mkdir split500K
+    foreach d (`cat chrom.lst`)
+        set c = chr$d
+        mkdir split500K/$c
+        faSplit gap -minGapSize=100 -verbose=2 $d/$c.fa 500000 \
+                split500K/$c/${c}_ -lift=split500K/$c.lft
+        set r = ${c}_random
+        if (-e $d/$r.fa) then
+            mkdir split500K/$r
+            faSplit gap -minGapSize=100 -verbose=2 $d/$r.fa 500000 \
+                split500K/$r/${r}_ -lift=split500K/$r.lft
+        endif
+    end
+    mkdir lifts
+    cat split500K/*.lft > lifts/lift500K.lft
+
+    # Redo chr9 (2006-03-02 kate)
+    rm -fr split500K/chr9
+    mkdir split500K/chr9
+    faSplit gap -minGapSize=100 -verbose=2 9/chr9.fa 500000 \
+                split500K/chr9/chr9_ -lift=split500K/chr9.lft
+
+
+# REPEATMASKER RUN (2006-03-01 kate)
+# Using -species pan option to get chimp repeats
+
+    ssh pk
+    cd /cluster/data/panTro2
+    mkdir RMRun
+    cd RMRun
+
+    # Record RM version used
+    ls -l /cluster/bluearc/RepeatMasker
+        #lrwxrwxrwx    1 hiram    protein        18 Jan 20 13:13 /cluster/bluearc/RepeatMasker -> RepeatMasker060120/
+    cat /cluster/bluearc/RepeatMasker/Libraries/version > RM.version
+        #RM database version 20060120
+    # Run RepeatMasker on a dummy input, just to make it initialize its chimp 
+    # libraries once before the cluster run
+    /cluster/bluearc/RepeatMasker/RepeatMasker -spec pan /dev/null
+        # Building species libraries in: /cluster/bluearc/RepeatMasker060120/Libraries/20060120/pan
+
+    pushd  /cluster/data/panTro2/split500K
+    ls -1S */*.fa | sort > ../RMRun/split.lst
+    popd
+
+    cat << 'EOF' > template
+#LOOP
+./RMChimp.csh $(dir1) $(root1) {check out line out/$(dir1)/$(root1).out}
+#ENDLOOP
+'EOF'
+    # << for emacs
+    
+cat > RMChimp.csh << 'EOF'
+#!/bin/csh  -ef
+set d = /cluster/data/panTro2
+set tmp = /scratch/tmp/panTro2/$2
+mkdir -p $tmp
+mkdir -p out/$1
+cp $d/split500K/$1/$2.fa $tmp
+pushd $tmp
+/cluster/bluearc/RepeatMasker060120/RepeatMasker -ali -s -species pan $2.fa
+popd
+cp -p $tmp/$2.fa.out $3
+if (-e $tmp/$2.fa.align) cp $tmp/$2.fa.align out/$1
+if (-e $tmp/$2.fa.tbl) cp $tmp/$2.fa.tbl out/$1
+if (-e $tmp/$2.fa.cat) cp $tmp/$2.fa.cat out/$1
+rm -fr $tmp/*
+rmdir --ignore-fail-on-non-empty $tmp
+rmdir --ignore-fail-on-non-empty /scratch/tmp/panTro2
+'EOF'
+    # << for emacs
+    chmod +x RMChimp.csh
+
+    gensub2 split.lst single template jobList
+    para create jobList
+        # 6538 jobs
+    para try
+
+
+# RUN TRF TO IDENTIFY SIMPLE REPEATS (2006-03-01 kate)
+
+    ssh kkstore01
+    cd /cluster/data/panTro2
+
+    # First break up sequence into 5MB chunks at contigs/gaps
+    # NOTE: Probably unnecessary -- Hiram has run on whole chroms
+    # using small cluster
+    mkdir split5M
+    foreach d (`cat chrom.lst`)
+        set c = chr$d
+        mkdir split5M/$c
+        faSplit gap -minGapSize=100 -verbose=2 $d/$c.fa 5000000 \
+                split5M/$c/${c}_ -lift=split5M/$c.lft
+        set r = ${c}_random
+        if (-e $d/$r.fa) then
+            mkdir split5M/$r
+            faSplit gap -minGapSize=100 -verbose=2 $d/$r.fa 5000000 \
+                split5M/$r/${r}_ -lift=split5M/$r.lft
+        endif
+    end
+    mkdir lifts
+    cat split5M/*.lft > lifts/lift5M.lft
+
+    # Run TRF
+    mkdir -p bed/simpleRepeat/trf
+    cd bed/simpleRepeat
+cat > runTrf.csh << 'EOF'
+    date
+    foreach d (`find  /cluster/data/panTro2/split5M/* -type d`)
+        cd $d
+        foreach f (*.fa)
+            set b = $f:r
+            echo $f
+            trfBig -trf=/cluster/bin/i386/trf $f /dev/null -tempDir=/tmp \
+                    -bedAt=/cluster/data/panTro2/bed/simpleRepeat/trf/$b.bed
+        end
+    end
+    date
+'EOF'
+    csh runTrf.csh >&! runTrf.log &
+
+    # Redo chr9 (2006-03-02 kate)
+    rm -fr split5M/chr9
+    mkdir split5M/chr9
+    faSplit gap -minGapSize=100 -verbose=2 9/chr9.fa 5000000 \
+                split5M/chr9/chr9_ -lift=split5M/chr9.lft
+    cd bed/simpleRepeat
+    cp runTrf.csh runTrf.chr9.csh
+     # edit for just chr9
+    csh runTrf.chr9.csh >&! runTrf.chr9.log &
+
+
+
+
