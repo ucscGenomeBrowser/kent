@@ -3,8 +3,6 @@ TO DO:
     local objects in the caller, so it's ok to return references
     to them.
   - Defining exceptions, and implementing exception chaining.
-  - Check that can call a function taking an object with a tuple
-    and that it all works ok. [Nope, it doesn't...]
   - It turns out we need three levels of parallelizability for
     methods:
         1) flow - no side effects even to members.
@@ -35,6 +33,8 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Check that can call a function taking an object with a tuple
+    and that it all works ok. [Nope, it doesn't...]  Fixing this.
   - Add "new" keyword, and use it for dynamically creating things
     in calls to functions and assigns to objects of parent type.
   - ?Read-only and private variables.

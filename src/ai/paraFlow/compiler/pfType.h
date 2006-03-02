@@ -76,6 +76,9 @@ enum pfTyty
     tytyFunctionPointer,
     };
 
+char *pfTytyAsString(enum pfTyty tyty);
+/* Return string representation of tyty. */
+
 struct pfType
 /* A type tree that represents typed tuples and collections. 
  * The class heirarchy is not here, but instead in pfBaseType. */

@@ -18,6 +18,13 @@ static void coerceOne(struct pfCompile *pfc, struct pfParse **pPp,
 /* Make sure that a single variable is of the required type. 
  * Add casts if necessary */
 
+static void coerceTupleToClass(struct pfCompile *pfc, 	
+	struct pfParse **pPp, struct pfBaseType *base);
+/* Given a type that is a class, and a parse tree that
+ * is a tuple, do any casting required inside the tuple
+ * to get the members of the tuple to be of the same type
+ * as the corresponding members of the class. */
+
 static int baseTypeCount = 0;
 
 struct pfBaseType *pfBaseTypeNew(struct pfScope *scope, char *name, 
@@ -73,6 +80,31 @@ if (a1 != NULL || b1 != NULL)	/* Different number of children - can't match */
     return FALSE;
 return a->base == b->base;
 }
+
+char *pfTytyAsString(enum pfTyty tyty)
+/* Return string representation of tyty. */
+{
+switch (tyty)
+    {
+    case tytyVariable:
+        return "tytyVariable";
+    case tytyTuple:
+        return "tytyTuple";
+    case tytyFunction:
+        return "tytyFunction";
+    case tytyVirtualFunction:
+        return "tytyVirtualFunction";
+    case tytyModule:
+        return "tytyModule";
+    case tytyOperator:
+        return "tytyOperator";
+    case tytyFunctionPointer:
+        return "tytyFunctionPointer";
+    default:
+        return "unknown tyty";
+    }
+}
+
 
 void dumpTypeToDyString(struct pfType *ty, struct dyString *dy)
 /*  Append info on type to dy */
@@ -370,6 +402,12 @@ static void coerceToDouble(struct pfCompile *pfc, struct pfParse **pPp)
 coerceToBaseType(pfc, pfc->doubleType, pPp);
 }
 
+static void coerceToString(struct pfCompile *pfc, struct pfParse **pPp)
+/* Make sure type of pp is string. */
+{
+coerceToBaseType(pfc, pfc->stringType, pPp);
+}
+
 boolean pfTypesAllSame(struct pfType *aList, struct pfType *bList)
 /* Return TRUE if all elements of aList and bList have the same
  * type, and aList and bList have same number of elements. */
@@ -446,7 +484,7 @@ static void coerceCallToClass(struct pfCompile *pfc,
  * to get the members of the tuple to be of the same type
  * as the corresponding members of the class. */
 {
-coerceCallToTupleOfTypes(pfc, pPp, type->base->fields);
+coerceTupleToClass(pfc, pPp, type->base);
 }
 
 
@@ -754,45 +792,30 @@ static void coerceTupleToCollection(struct pfCompile *pfc,
  * as the collection elements.  */
 {
 struct pfParse *tuple = *pPp;
-struct pfType *elType;
+struct pfType *elType = type->children;
 struct pfParse **pos;
 if (type->base == pfc->dirType)
      {
-     struct pfBaseType *keyBase = type->base->keyedBy;
-     struct pfType *key = pfTypeNew(keyBase);
-     struct pfType *val = type->children;
-     elType = pfTypeNew(pfc->keyValType);
-     elType->children = key;
-     key->next = val;
-     if (keyBase == pfc->stringType)
-         {
-	 struct pfParse *pp;
-	 /* Convert keys in key-val pairs from pptKeyType to
-	  * pptConstString. */
-	 for (pp = tuple->children; pp != NULL; pp = pp->next)
-	     {
-	     struct pfParse *key, *val;
-	     if (pp->type != pptKeyVal)
-	        errAt(pp->tok, "Expecting key:val here.");
-	     key = pp->children;
-	     val = key->children;
-	     key->type = pptConstString;
-	     key->ty = pfTypeNew(pfc->stringType);
-	     pp->ty = typeFromChildren(pfc, pp, pfc->keyValType);
-	     }
-	 }
-     else
-         {
-	 internalErr();
+     struct pfParse *pp;
+     /* Convert keys in key-val pairs from pptKeyType to
+      * pptConstString. */
+     for (pp = tuple->children; pp != NULL; pp = pp->next)
+	 {
+	 struct pfParse *key, *val;
+	 if (pp->type != pptKeyVal)
+	    errAt(pp->tok, "Expecting key:val here.");
+	 key = pp->children;
+	 key->type = pptConstString;
+	 key->ty = pfTypeNew(pfc->stringType);
+	 coerceOne(pfc, &key->next, elType, FALSE);
+	 val = key->next;
+	 pp->ty = typeFromChildren(pfc, pp, pfc->keyValType);
 	 }
      }
 else
      {
-     elType = type->children;
-     }
-for (pos = &tuple->children; *pos != NULL; pos = &(*pos)->next)
-     {
-     coerceOne(pfc, pos, elType, FALSE);
+     for (pos = &tuple->children; *pos != NULL; pos = &(*pos)->next)
+	 coerceOne(pfc, pos, elType, FALSE);
      }
 pfTypeOnTuple(pfc, tuple);
 tuple->type = pptUniformTuple;
@@ -917,9 +940,13 @@ if (initMethod)
 else
     {
     boolean gotKeyVal = tupleKeyValsPresentOk(tuple);
+    struct pfParse *classAlloc = pfParseNew(pptClassAllocFromTuple,
+    	tuple->tok, tuple->parent, tuple->scope);
+    classAlloc->next = tuple->next;
+    classAlloc->ty = pfTypeNew(base);
     if (gotKeyVal)
 	{
-        coerceNamedTupleToClass(pfc, pPp, base);
+        coerceNamedTupleToClass(pfc, &tuple, base);
 	}
     else
 	{
@@ -929,6 +956,10 @@ else
 	    errAt(tuple->tok, "Type mismatch");
 	pfTypeOnTuple(pfc, tuple);
 	}
+    classAlloc->children = tuple;
+    tuple->next = NULL;
+    tuple->parent = classAlloc;
+    *pPp = classAlloc;
     }
 }
 

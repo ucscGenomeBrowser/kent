@@ -1499,14 +1499,17 @@ fprintf(f, "\");\n");
 static int codeInitOrAssign(struct pfCompile *pfc, FILE *f,
 	struct pfParse *lval, struct pfParse *rval,
 	int stack)
+/* Emit code for initialization or assignment. */
 {
 int count = codeExpression(pfc, f, rval, stack, TRUE);
+#ifdef OLD
 if (lval->ty->base->isClass)
     {
     if (rval->ty->base == pfc->tupleType)
 	codeTupleIntoClass(pfc, f, lval, rval, stack, count);
     }
 else
+#endif /* OLD */
     {
     if (rval->type == pptUniformTuple)
 	codeTupleIntoCollection(pfc, f, lval->ty, rval, stack, count);
@@ -1639,16 +1642,7 @@ static int codeNewOp(struct pfCompile *pfc, FILE *f,
 {
 struct pfParse *typePp = pp->children;
 struct pfParse *initPp = typePp->next;
-if (initPp->type == pptClassAllocFromInit)
-    codeAllocInit(pfc, f, initPp, stack);
-else if (initPp->type == pptTuple)
-    {
-    int count = codeExpression(pfc, f, initPp, stack, TRUE);
-    codeTupleIntoClass(pfc, f, typePp, initPp, stack, count);
-    }
-else
-    internalErrAt(pp->tok);
-return 1;
+return codeExpression(pfc, f, initPp, stack, TRUE);
 }
 
 static void codeVarInit(struct pfCompile *pfc, FILE *f,
@@ -2032,6 +2026,18 @@ fprintf(f, "_pf_cm_string_append(%s+%d);\n", stackName, stack);
 return 0;
 }
 
+static int codeTupleExpression(struct pfCompile *pfc, FILE *f,
+	struct pfParse *pp, int stack, boolean addRef)
+/* Code tuple as expression.  This just shoves each item
+ * on tuple on stack one at at time. */
+{
+int total = 0;
+struct pfParse *p;
+for (p = pp->children; p != NULL; p = p->next)
+    total += codeExpression(pfc, f, p, stack+total, addRef);
+return total;
+}
+
 static int codeExpression(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack, boolean addRef)
 /* Emit code for one expression.  Returns how many items added
@@ -2042,12 +2048,12 @@ switch (pp->type)
     case pptTuple:
     case pptUniformTuple:
     case pptKeyVal:
+        return codeTupleExpression(pfc, f, pp, stack, addRef);
+    case pptClassAllocFromTuple:
         {
-	int total = 0;
-	struct pfParse *p;
-	for (p = pp->children; p != NULL; p = p->next)
-	    total += codeExpression(pfc, f, p, stack+total, addRef);
-	return total;
+	int count = codeTupleExpression(pfc, f, pp->children, stack, addRef);
+	codeTupleIntoClass(pfc, f, pp, pp->children, stack, count);
+	return 1;
 	}
     case pptClassAllocFromInit:
 	return codeAllocInit(pfc, f, pp, stack);
