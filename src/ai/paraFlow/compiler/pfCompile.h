@@ -136,6 +136,12 @@ char *mangledModuleName(char *modName);
  * will be unique across directories, but for now is just the last
  * bit. */
 
+boolean pfBaseTypeIsPassedByValue(struct pfCompile *pfc, 
+	struct pfBaseType *base);
+/* Return TRUE if this type is passed by value.  (Strings
+ * since they are read-only are considered to be passed by
+ * value. */
+
 /* --- utility functions --- */
 void printEscapedString(FILE *f, char *s);
 /* Print string in such a way that C can use it. */

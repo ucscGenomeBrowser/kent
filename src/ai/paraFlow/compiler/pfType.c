@@ -731,6 +731,32 @@ else
     }
 }
 
+static void checkOneParamLocal(struct pfCompile *pfc, struct pfParse *pp)
+/* Check that pp contains only local variables. */
+{
+if (pfBaseTypeIsPassedByValue(pfc, pp->ty->base))
+    {
+    if (pp->type != pptVarUse)
+        errAt(pp->tok, "local inputs must be simple variables");
+    if (!pp->var->scope->isLocal)
+        errAt(pp->tok, "local input %s is not a local variable", pp->var->name);
+    }
+}
+
+static void checkLocalParams(struct pfCompile *pfc, struct pfParse *paramTuple,
+	struct pfType *inputType)
+{
+struct pfType *type;
+struct pfParse *param;
+
+for (type = inputType->children, param = paramTuple->children;
+     type != NULL; type = type->next, param = param->next)
+     {
+     if (type->access == paLocal)
+	 checkOneParamLocal(pfc, param);
+     }
+}
+
 static void coerceCall(struct pfCompile *pfc, struct pfParse **pPp)
 /* Make sure that parameters to call are right.  Then
  * set pp->type to call's return type. */
@@ -768,6 +794,7 @@ switch(functionType->tyty)
 	    {
 	    struct pfParse **pParamTuple = &function->next;
 	    coerceNamedTuple(pfc, pParamTuple, inputType);
+	    checkLocalParams(pfc, *pParamTuple, inputType);
 	    }
 	if (outputType->children != NULL && outputType->children->next == NULL)
 	    pp->ty = CloneVar(outputType->children);

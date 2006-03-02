@@ -215,6 +215,15 @@ pfc->dirType->keyedBy = pfc->stringType;
 //pfc->treeType->keyedBy = pfc->doubleType;
 }
 
+boolean pfBaseTypeIsPassedByValue(struct pfCompile *pfc, 
+	struct pfBaseType *base)
+/* Return TRUE if this type is passed by value.  (Strings
+ * since they are read-only are considered to be passed by
+ * value. */
+{
+return  (base == pfc->stringType || base->parent == pfc->numType);
+}
+
 struct pfCompile *pfCompileNew()
 /* Make new compiler object. */
 {

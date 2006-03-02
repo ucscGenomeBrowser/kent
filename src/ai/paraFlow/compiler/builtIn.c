@@ -96,7 +96,7 @@ return
 "    }\n"
 "class _pf_dyString extends _pf_string\n"
 "    {\n"
-"    to append(string s);\n"
+"    flow append(string s);\n"
 "    flow dupe() into string dupe;\n"
 "    }\n"
 "class _pf_elType\n"

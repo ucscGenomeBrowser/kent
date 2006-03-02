@@ -984,6 +984,13 @@ while (pp != NULL)
 return FALSE;
 }
 
+static void rSetAccess(struct pfParse *pp, enum pfAccessType access)
+/* Set access type for self and descendents. */
+{
+pp->access = access;
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    rSetAccess(pp, access);
+}
 
 static struct pfParse *parseVarDec(struct pfCompile *pfc, 
 	struct pfParse *parent, struct pfToken **pTokList, 
@@ -1046,7 +1053,8 @@ if (tok->type == pftName)
     pp->parent = dec;
     dec->children = type;
     type->next = name;
-    type->access = dec->access = access;
+    dec->access = access;
+    rSetAccess(type, access);
     dec->name = name->name;
     pp = dec;
     }

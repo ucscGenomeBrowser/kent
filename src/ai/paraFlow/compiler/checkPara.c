@@ -28,24 +28,28 @@ static boolean isOutsideObj(struct hash *outputVars, struct pfScope *localScope,
 return !(enclosedScope(localScope, pp->var->scope) || hashLookup(outputVars, pp->name));
 }
 
-static void checkLocal(struct hash *outputVars, struct pfScope *localScope,
-	struct pfParse *pp)
+static void checkLocal(struct pfCompile *pfc, struct hash *outputVars, 
+	struct pfScope *localScope, struct pfParse *pp)
 /* Make sure that any pptVarUse's are local or function calls */
 {
 switch (pp->type)
     {
     case pptVarUse:
 	{
-	if (pp->var->paraTainted)
-	    errAt(pp->tok, "%s may contain a non-local value, so you can no longer write to it here",
-	    	pp->name); 
-	if (isOutsideObj(outputVars, localScope, pp))
-	    errAt(pp->tok, "write to non-local variable illegal in this context");
+	struct pfBaseType *base  = pp->var->ty->base;
+	if (!pfBaseTypeIsPassedByValue(pfc, base))
+	    {
+	    if (pp->var->paraTainted)
+		errAt(pp->tok, "%s may contain a non-local value, so you can no longer write to it here",
+		    pp->name); 
+	    if (isOutsideObj(outputVars, localScope, pp))
+		errAt(pp->tok, "write to non-local variable illegal in this context");
+	    }
         break;
 	}
     }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    checkLocal(outputVars, localScope, pp);
+    checkLocal(pfc, outputVars, localScope, pp);
 }
 
 struct pfParse *firstVarInTree(struct pfParse *pp)
@@ -140,7 +144,7 @@ switch (pp->type)
     case pptMulEquals:
     case pptDivEquals:
          {
-	 checkLocal(outputVars, localScope, pp->children);
+	 checkLocal(pfc, outputVars, localScope, pp->children);
 	 markParaTainted(pfc, outputVars, localScope, pp);
 	 break;
 	 }
@@ -204,29 +208,17 @@ if (body != NULL)
     /* Build up hash of variables that it's ok to write to. */
     for (pp = output->children; pp != NULL; pp = pp->next)
 	hashAdd(outputVars, pp->name, pp->var);
+    for (pp = input->children; pp != NULL; pp = pp->next)
+        {
+	if (pp->var->ty->access == paLocal)
+	    hashAdd(outputVars, pp->name, pp->var);
+	}
 
     checkParaFlowBody(pfc, outputVars, body->scope, body);
 
     /* Clean up */
     hashFree(&outputVars);
     }
-}
-
-static void checkNoOutsideRefs(struct hash *outputVars, struct hash *inputVars,
-	struct pfScope *localScope, struct pfParse *pp)
-/* Make sure that all var uses are inside of scope or to input or output. */
-{
-switch (pp->type)
-    {
-    case pptVarUse:
-	if (!enclosedScope(localScope, pp->var->scope)
-	    && !hashLookup(outputVars, pp->name)
-	    && !hashLookup(inputVars, pp->name))
-	    errAt(pp->tok, "Can only reference local variables inside of flow");
-        break;
-    }
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    checkNoOutsideRefs(outputVars, inputVars, localScope, pp);
 }
 
 static void checkParaAction(struct pfCompile *pfc, struct pfParse *para)
