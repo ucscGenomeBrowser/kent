@@ -282,7 +282,7 @@ static void decsToFormal(struct pfParse *pp)
 {
 for (pp = pp->children; pp != NULL; pp = pp->next)
     {
-    if (pp->type != pptVarDec)
+    if (pp->type != pptVarInit)
         errAt(pp->tok, "expecting formal parameter");
     pp->type = pptFormalParameter;
     }
@@ -1164,6 +1164,12 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 return FALSE;
 }
 
+static boolean isVarDecOrVarDecInit(struct pfParse *pp)
+/* Return true if pp is either varDec or assignment to varDec. */
+{
+return (pp->type == pptVarDec 
+	|| (pp->type == pptAssignment && pp->children->type == pptVarDec));
+}
 
 static void addMissingTypesInDeclareTuple(struct pfParse *tuple)
 /* If first element of tuple is typed, then make sure rest
@@ -1175,8 +1181,7 @@ struct pfParse *pp;
 enum pfAccessType access = vars->access; // TODO remove var.
 
 /* Make sure first item in tuple is a var dec. */
-if (! (vars->type == pptVarDec 
-	|| (vars->type == pptAssignment && vars->children->type == pptVarDec)))
+if (!isVarDecOrVarDecInit(vars))
     errAt(vars->tok, "Missing type information.");
 
 /* Make sure everything is either a varDec or an assignment */
@@ -1220,6 +1225,37 @@ for (pp = vars; pp != NULL; pp = pp->next)
 tuple->access = access;
 }
 
+static void varDecAndAssignToVarInit(struct pfParse *pp)
+/* Convert pptVarDec and when appropriate pptAssignment to pptVarInit. */
+{
+if (pp->type == pptVarDec)
+    {
+    pp->type = pptVarInit;
+    pp->name = pp->children->next->name;		// TODO - unneeded?
+    }
+else if (pp->type == pptAssignment)
+    {
+    struct pfParse *left = pp->children;
+    if (left->type == pptVarDec)
+        {
+	struct pfParse *right = left->next;
+	pp->type = pptVarInit;
+	pp->access = left->access;
+	pp->children = left->children;
+	pp->name = left->name;
+	slAddTail(&pp->children, right);
+	}
+    }
+if (pp->type == pptVarInit || pp->type == pptFormalParameter)
+    {
+    struct pfParse *type = pp->children;
+    struct pfParse *name = type->next;
+    name->type = pptSymName;
+    pp->name = name->name;
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    varDecAndAssignToVarInit(pp);
+}
 
 static struct pfParse *parseTuple(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
@@ -1247,11 +1283,22 @@ if (tuple != NULL)
     {
     slReverse(&tuple->children);
     if (anyVarDecs(tuple))
+	{
 	addMissingTypesInDeclareTuple(tuple);
+	varDecAndAssignToVarInit(tuple);
+#ifdef SOON
+#endif /* SOON */
+	}
     return tuple;
     }
 else
+    {
+    if (isVarDecOrVarDecInit(pp))
+	varDecAndAssignToVarInit(pp);
+#ifdef SOON
+#endif /* SOON */
     return pp;
+    }
 }
 
 
@@ -1741,13 +1788,16 @@ skipRequiredCharType(')', &tok);
 
 /* Fake up parse nodes for the three catch parameters. */
 messagePp = fakeVarDec(message, pfc->stringType, catchTok, catchPp, catchScope);
+varDecAndAssignToVarInit(messagePp);
 sourcePp = fakeVarDec(source, pfc->stringType, catchTok, catchPp, catchScope);
+varDecAndAssignToVarInit(sourcePp);
 levelAssignment = pfParseNew(pptAssignment, catchTok, catchPp, catchScope);
 levelVarDec = fakeVarDec("catchLevel", pfc->intType, 
 	catchTok, levelAssignment, catchScope);
 levelExp->parent = levelAssignment;
 levelAssignment->children = levelVarDec;
 levelVarDec->next = levelExp;
+varDecAndAssignToVarInit(levelAssignment);
 
 /* And get body of catch. */
 catchBody = pfParseStatement(pfc, tryPp, &tok, catchScope);
@@ -1762,6 +1812,7 @@ catchPp->next = catchBody;
 *pTokList = tok;
 return tryPp;
 }
+
 
 static struct pfParse *parseWordStatement(struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope, enum pfParseType type)
@@ -2013,41 +2064,6 @@ return program;
 }
 
 
-void varDecAndAssignToVarInit(struct pfParse *pp)
-/* Convert pptVarDec and when appropriate pptAssignment to pptVarInit. */
-{
-if (pp->type == pptVarDec)
-    {
-    pp->type = pptVarInit;
-    pp->name = pp->children->next->name;
-    }
-else if (pp->type == pptAssignment)
-    {
-    struct pfParse *left = pp->children;
-    if (left->type == pptVarDec)
-        {
-	struct pfParse *right = left->next;
-	pp->type = pptVarInit;
-	pp->access = left->access;
-	pp->children = left->children;
-	pp->name = left->name;
-	slAddTail(&pp->children, right);
-	}
-    }
-if (pp->type == pptVarInit || pp->type == pptFormalParameter)
-    {
-    struct pfParse *type = pp->children;
-    struct pfParse *name = type->next;
-    name->type = pptSymName;
-    pp->name = name->name;
-    }
-/* Note in this case we can't process children before self.
- * This is one of the reasons this is done in a separate
- * pass actually. */
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    varDecAndAssignToVarInit(pp);
-}
-
 struct pfParse *pfParseModule(struct pfCompile *pfc, struct pfModule *module,
 	struct pfParse *parent, struct pfScope *scope, enum pfParseType modType)
 /* Parse a module and return parse tree associated with it. */
@@ -2056,6 +2072,8 @@ struct pfParse *modParse = pfParseNew(modType, NULL, parent, scope);
 pfParseTokens(pfc, module->tokList, scope, modParse);
 if (modType == pptMainModule) {FILE *f = mustOpen("out.preParse", "w"); pfParseDump(modParse, 0, f); carefulClose(&f);}
 varDecAndAssignToVarInit(modParse);
+#ifdef OLD
+#endif /* OLD */
 module->pp = modParse;
 return modParse;
 }
