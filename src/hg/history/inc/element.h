@@ -81,10 +81,11 @@ extern struct element *eleAddEdge(struct element *parent, struct element *child)
 /* add an edge to an element */
 extern char *eleFullName(struct element *e, boolean doNeg);
 extern char *eleName(struct element *e);
-extern struct phyloTree *eleReadTree(char *fileName);
+extern struct phyloTree *eleReadTree(char *fileName, boolean addStartStop);
 extern void printElementTrees(struct phyloTree *node, int depth);
 extern struct element *newElement(struct genome *g, char *name, char *version);
 extern void outElementTrees(FILE *f, struct phyloTree *node);
 extern struct genome *getGenome(char *file, char *name);
 extern char *nextVersion();
 extern char *nextGenome();
+extern void removeIs(struct genome *list);
