@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+
+# This script was originally written by Yontao Lu and was copied from
+# /cluster/store4/ratMarker/code/ into the kent/src tree in order
+# to get it under CVS control; added warnings & strict and some stderr 
+# messages from the mouse version.
+
+# $Id: createStsAlias,v 1.1 2006/03/03 19:56:17 angie Exp $
+
+use warnings;
+use strict;
+
+##Author Yontao Lu
+##Date Jul 7 03
+##Desc: This script will create the stsAlias file for alias search.
+
+##read in info bed file
+while(my $line = <>)
+{
+    chomp($line);
+    my (@eles) = split(/\t/, $line);
+    my (@alias) = split(/\;/, $eles[6]);
+    if (length($eles[0]) < 1) {
+	print STDERR "#\tERROR: no ucscId at line $.\n";
+    }
+    if (length($eles[1]) < 1) {
+	print STDERR "#\tERROR: no trueName at line $.\n";
+    }
+    if (length($eles[6]) < 1) {
+	print STDERR "#\tWARNING: no alias at line $.\n";
+    }
+    foreach my $ali (@alias)
+    {
+	print "$ali\t$eles[0]\t$eles[1]\n";
+    }
+}
