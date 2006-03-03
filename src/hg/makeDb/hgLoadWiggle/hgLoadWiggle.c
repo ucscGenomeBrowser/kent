@@ -10,8 +10,9 @@
 #include "chromInfo.h"
 #include "wiggle.h"
 #include "hdb.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.14 2005/01/19 00:30:40 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.15 2006/03/03 22:23:07 hiram Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -318,10 +319,26 @@ writeWiggleTab(tab, wiggleList, wiggleSize, database);
 
 if (! noLoad)
     {
+    char comment[256];
+    char pathAdded[192];
     verbose(1, "Loading %s\n", database);
     dyStringClear(dy);
     dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
     sqlUpdate(conn, dy->string);
+    if (pathPrefix)
+	safef(pathAdded, sizeof(pathAdded), "%s/", pathPrefix);
+    else
+	safef(pathAdded, sizeof(pathAdded), "/gbdb/%s/wib/", database);
+    if (oldTable)
+	safef(comment, sizeof(comment),
+	    "adding to wiggle table %s from %s/%s with wib path %s", track,
+		getCurrentDir(), tab, pathAdded);
+    else
+	safef(comment, sizeof(comment),
+	    "new wiggle table %s from %s/%s with wib path %s", track,
+		getCurrentDir(), tab, pathAdded);
+    hgHistoryComment(conn, comment);
+    verbose(2, "#\t%s\n", comment);
     sqlDisconnect(&conn);
     }
 else
