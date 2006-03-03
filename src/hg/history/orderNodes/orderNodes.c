@@ -6,19 +6,17 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: orderNodes.c,v 1.9 2006/02/28 16:27:12 braney Exp $";
+static char const rcsid[] = "$Id: orderNodes.c,v 1.10 2006/03/03 21:42:25 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "orderNodes - orders the ancestor nodes in  an element tree\n"
+  "orderNodes - orders the ancestor nodes in an element tree\n"
   "usage:\n"
-  "   orderNodes elementTreeFile outGroupElems outTree\n"
+  "   orderNodes elementTreeFile outTree\n"
   "arguments:\n"
   "   elementTreeFile      name of file containing element tree\n"
-  "   outGroupElems        the element list of the outgroup\n"
-  "   outLen               the length of the branch to the out group\n"
   "   outTree              name of file containing ordered element tree\n"
   );
 }
@@ -1019,7 +1017,10 @@ for(e = saveE ; e ; )
 	p = e->calced.prev;
 
     if (!p)
+	{
+	warn("end without END");
 	break;
+	}
 
     inFront = !p->doFlip ; //? (inFront ? FALSE : TRUE) : inFront;
     e = p->element;
@@ -1211,7 +1212,7 @@ else
 
 void orderNodes(char *treeFile, char *outFile)
 {
-struct phyloTree *node = eleReadTree(treeFile);
+struct phyloTree *node = eleReadTree(treeFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
 struct possibleEdge *edge;
 struct element *bestElement;
