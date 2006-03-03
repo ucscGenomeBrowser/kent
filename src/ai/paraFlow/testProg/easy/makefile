@@ -5,6 +5,8 @@ test:
 	diff expected/arrayAppend $O/arrayAppend
 	paraFlow assign.pf > $O/assign
 	diff expected/assign $O/assign
+	paraFlow case.pf > $O/case
+	diff expected/case $O/case
 	paraFlow classOfOne.pf > $O/classOfOne
 	diff expected/classOfOne $O/classOfOne
 	paraFlow cmp.pf > $O/cmp

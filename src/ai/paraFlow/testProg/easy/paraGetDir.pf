@@ -1,4 +1,4 @@
-dir of int numVals = ( one : 1, two : 2, three : 3);
+dir of int numVals = ( one @ 1, two @ 2, three @ 3);
 print(numVals);
 
 dir of int numSquared = para (i in numVals) get i*i;

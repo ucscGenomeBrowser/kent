@@ -34,7 +34,7 @@ class extraInit extends withInit
 
 withInit a = ();
 print(a);
-withInit b = ("Harry", i:19);
+withInit b = ("Harry", i@19);
 print(b);
 
 class noInit
