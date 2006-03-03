@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: getDist.c,v 1.3 2006/01/31 06:33:48 braney Exp $";
+static char const rcsid[] = "$Id: getDist.c,v 1.4 2006/03/03 21:37:10 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,12 +18,18 @@ errAbort(
   "arguments:\n"
   "   elementTreeFile      name of file containing element tree\n"
   "   outFile              name of file to output distance matrices to\n"
+  "options:\n"
+  "   -names     use special names (remove I's)\n"
   );
 }
 
 static struct optionSpec options[] = {
+    {"names", OPTION_BOOLEAN},
    {NULL, 0},
 };
+
+boolean SpecialNames = FALSE;
+
 
 void downToLeaves(struct distance **distanceList, struct hash **pDistHash, struct hash **pDistElemHash, 
     struct element *otherElement , struct element *e, double sumBranchLength)
@@ -164,12 +170,25 @@ for(; e; e = e->next)
     }
 }
 
+void removeAllIs(struct phyloTree *node)
+{
+int ii;
+
+removeIs(node->priv);
+
+for(ii=0; ii < node->numEdges; ii++)
+    removeAllIs(node->edges[ii]);
+}
+
 void getDist(char *treeFile, char *outFile)
 {
-struct phyloTree *node = eleReadTree(treeFile);
+struct phyloTree *node = eleReadTree(treeFile, FALSE);
 FILE *f = mustOpen(outFile, "w");
 
 //    printElementTrees(node, 0);
+
+if (SpecialNames)
+    removeAllIs(node);
 
     outDistances(node, f);
 }
@@ -180,6 +199,9 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
+
+if (optionExists("names"))
+    SpecialNames = TRUE;
 
 //verboseSetLevel(2);
 getDist(argv[1], argv[2]);
