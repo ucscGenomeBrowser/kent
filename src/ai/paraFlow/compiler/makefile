@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-O = builtIn.o cCoder.o checkPara.o checkPoly.o codedType.o \
+O = builtIn.o cCaseCode.o cCoder.o checkPara.o checkPoly.o codedType.o \
     ctar.o defFile.o main.o pfBindVars.o \
     pfParse.o pfScope.o pfToken.o pfType.o parseDump.o parseInto.o \
     recodedType.o tokInto.o util.o

@@ -64,6 +64,8 @@ enum pfTokType
     pftOperator,
     pftPara,
     pftPolymorphic,
+    pftPrivate,
+    pftProtected,
     pftReadable,
     pftReturn,
     pftStatic,

@@ -1104,7 +1104,7 @@ switch (tok->type)
     case pftDivEquals:
 	type = pptDivEquals;
 	break;
-    case ':':
+    case '@':
         type = pptKeyVal;
 	break;
     }
@@ -1543,6 +1543,89 @@ trueBody->next = falseBody;
 return pp;
 }
 
+static struct pfParse *parseCase(struct pfCompile *pfc, struct pfParse *parent,
+	struct pfToken **pTokList, struct pfScope *scope)
+/* Process case statement, which is of form:
+ *    case (exp)
+ *       {
+ *       tuple : statement
+ *       tuple : statement
+ *       else : statement 
+ *       }
+ * The output parse tree is
+ *    pptCase
+ *       <expression>
+ *       pptCaseList
+ *          pptCaseItem
+ *             <tuple>
+ *             <statement>
+ *          pptCaseItem
+ *             <tuple>
+ *             <statement>
+ *          pptCaseElse
+ *             <statement>
+ */
+{
+struct pfToken *tok = *pTokList;
+struct pfParse *casePp = pfParseNew(pptCase, tok, parent, scope);
+struct pfParse *expression;
+struct pfParse *list;
+boolean gotElse = FALSE;
+
+tok = tok->next;
+skipRequiredCharType('(', &tok);
+expression = pfParseExpression(pfc, casePp, &tok, scope);
+if (expression->type == pptTuple)
+    errAt(expression->tok, "Only single values allowed inside case expression.");
+skipRequiredCharType(')', &tok);
+list = pfParseNew(pptCaseList, tok, casePp, scope);
+skipRequiredCharType('{', &tok);
+for (;;)
+    {
+    if (tok->type == '}')
+        break;
+    else if (tok->type == pftElse)
+        {
+	struct pfParse *elsePp = pfParseNew(pptCaseElse, tok, list, scope);
+	struct pfParse *statement;
+	if (gotElse)
+	    errAt(tok, "Multiple elses inside of case.");
+	gotElse = TRUE;
+	tok = tok->next;
+	skipRequiredCharType(':', &tok);
+	statement = pfParseStatement(pfc, elsePp, &tok, scope);
+	elsePp->children = statement;
+	slAddHead(&list->children, elsePp);
+	}
+    else
+        {
+	struct pfParse *item;
+	struct pfParse *tuple;
+	struct pfParse *statement;
+	if (gotElse)
+	    errAt(tok, "Additional cases following else not allowed.");
+	item = pfParseNew(pptCaseItem, tok, list, scope);
+	tuple = pfParseExpression(pfc, item, &tok, scope);
+	if (anyVarDecs(tuple))
+	    errAt(tuple->tok,
+	    	"You can't declare variables to the left of : in a case.");
+	if (tuple->type != pptTuple)
+	    tuple = pfSingleTuple(tuple->parent, tuple->tok, tuple);
+	skipRequiredCharType(':', &tok);
+	statement = pfParseStatement(pfc, item, &tok, scope);
+	item->children = tuple;
+	tuple->next = statement;
+	slAddHead(&list->children, item);
+	}
+    }
+skipRequiredCharType('}', &tok);
+slReverse(&list->children);
+casePp->children = expression;
+expression->next = list;
+*pTokList = tok;
+return casePp;
+}
+
 static struct pfParse *parseWhile(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse if statement (which may include else) */
@@ -1950,6 +2033,9 @@ switch (tok->type)
     case pftIf:
         statement = parseIf(pfc, parent, &tok, scope);
 	break;
+    case pftCase:
+        statement = parseCase(pfc, parent, &tok, scope);
+	break;
     case pftWhile:
         statement = parseWhile(pfc, parent, &tok, scope);
 	break;
@@ -2025,6 +2111,11 @@ switch (tok->type)
     case '(':
 	statement = pfParseExpression(pfc, parent, &tok, scope);
 	eatSemi(&tok);
+	break;
+    case pftPrivate:
+    case pftProtected:
+        errAt(tok, "This word is reserved for future expansion.");
+	statement = NULL;
 	break;
     default:
         expectingGot("statement", tok);

@@ -26,6 +26,9 @@ struct _pf_string *_pf_string_cat(_pf_Stack *stack, int count);
 void _pf_strcat(_pf_String a, char *b, int bSize);
 /* Concatenate b onto the end of a. */
 
+_pf_Bit _pf_stringSame(_pf_String a, _pf_String b);
+/* Comparison between two strings not on the stack. */
+
 void _pf_string_substitute(_pf_Stack *stack);
 /* Create new string on top of stack based on all of the
  * substitution parameters already on the stack.  The

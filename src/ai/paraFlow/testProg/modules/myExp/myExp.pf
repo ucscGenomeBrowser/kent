@@ -5,7 +5,7 @@
 include 'stringTo'
 include 'myTok'
 
-dir of int symbols = ("nil" : 0);
+dir of int symbols = ("nil" @ 0);
 
 string usage = "
 myExp - evaluate expression in a file.

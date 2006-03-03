@@ -20,10 +20,10 @@ array of namedNumber nnTable =
 
 dir of string sDir =
     (
-       (one : "uno"),
-       (two : "dos"),
-       (three : "tres"),
-       (four : "quatro"),
+       (one @ "uno"),
+       (two @ "dos"),
+       (three @ "tres"),
+       (four @ "quatro"),
     );
 
 class selfRef

@@ -274,12 +274,12 @@ class countingHash extends hash
 string message;
 case (errCode)
     {
-    0: ;	// leave message nil
-    1: message = "File not found";
-    2: message = "Write protected";
-    3,4: message = "Privacy violation";
-    18: {message = "Hull breech"; alarm("evacuation")}
-    default: message = "Error code #" + errCode;
+    0 : ;	// leave message nil
+    1 : message = "File not found";
+    2 : message = "Write protected";
+    3,4 : message = "Privacy violation";
+    18 : {message = "Hull breech"; alarm("evacuation")}
+    default :  message = "Error code #" + errCode;
     }
 if (message)
     punt(message);

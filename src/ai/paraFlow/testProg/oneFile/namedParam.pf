@@ -1,8 +1,8 @@
 class named {string name;}
 class pt3 extends named{int x,y,z;}
 pt3 a = ("forward", 1,2,3);
-pt3 b = ("reverse", z:1, y:2, x:3);
-pt3 c = (y:1, x:2, z:3, name:"mixed");
+pt3 b = ("reverse", z@1, y@2, x@3);
+pt3 c = (y@1, x@2, z@3, name@"mixed");
 print(a);
 print(b);
 print(c);
@@ -22,8 +22,8 @@ class iPt3 extends iNamed
 	}
     }
 iPt3 ia = ("forward", 1,2,3);
-iPt3 ib = ("reverse", z:1, y:2, x:3);
-iPt3 ic = (y:1, x:2, z:3, n:"mixed");
+iPt3 ib = ("reverse", z@1, y@2, x@3);
+iPt3 ic = (y@1, x@2, z@3, n@"mixed");
 print(ia);
 print(ib);
 print(ic);
@@ -37,21 +37,21 @@ to liftIntoSpace(string payload, double grams, double kilometersHigh,
     }
 
 liftIntoSpace("10 frisbees", 298.1, 12.3, "UC Santa Cruz", 689);
-liftIntoSpace("10 frisbees", grams:298.1, kilometersHigh:12.3, 
-	sponsor:"UC Santa Cruz", id:689);
+liftIntoSpace("10 frisbees", grams@298.1, kilometersHigh@12.3, 
+	sponsor@"UC Santa Cruz", id@689);
 liftIntoSpace(
-	sponsor:"UC Santa Cruz", 
-	grams:298.1, 
-	kilometersHigh:12.3, 
-	payload:"10 frisbees", 
-	id:689);
+	sponsor@"UC Santa Cruz", 
+	grams@298.1, 
+	kilometersHigh@12.3, 
+	payload@"10 frisbees", 
+	id@689);
 liftIntoSpace(
-	grams:298.1, 
-	kilometersHigh:12.3, 
-	payload:"10 frisbees", 
-	id:689);
+	grams@298.1, 
+	kilometersHigh@12.3, 
+	payload@"10 frisbees", 
+	id@689);
 liftIntoSpace(
-	sponsor:"UC Santa Cruz", 
-	grams:298.1, 
-	kilometersHigh:12.3, 
-	payload:"10 frisbees");
+	sponsor@"UC Santa Cruz", 
+	grams@298.1, 
+	kilometersHigh@12.3, 
+	payload@"10 frisbees");

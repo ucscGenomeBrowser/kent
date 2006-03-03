@@ -1313,6 +1313,32 @@ static void coerceIf(struct pfCompile *pfc, struct pfParse *pp)
 coerceToBit(pfc, &pp->children);
 }
 
+static void coerceCase(struct pfCompile *pfc, struct pfParse *casePp)
+/* Check that case statement is kosher */
+{
+struct pfParse *expPp = casePp->children;
+struct pfType *expType = expPp->ty;
+struct pfParse *listPp = expPp->next;
+struct pfParse *itemPp;
+
+for (itemPp = listPp->children; itemPp != NULL; itemPp = itemPp->next)
+    {
+    if (itemPp->type == pptCaseItem)
+        {
+	struct pfParse *tuple = itemPp->children;
+	struct pfParse **pPp;
+	for (pPp = &tuple->children; *pPp != NULL; pPp = &((*pPp)->next))
+	    {
+	    coerceOne(pfc, pPp, expType, FALSE);
+	    }
+	}
+    else if (itemPp->type == pptCaseElse)
+        ;	/* No action, just checking */
+    else
+        internalErrAt(itemPp->tok);
+    }
+}
+
 static void turnSelfToVarOfType(struct pfParse *pp, struct pfType *ty)
 /* Turn parse node into pptVarInit type with two children (type and symbol).
  * The variable is actually expected to be in the symbol table already
@@ -2777,6 +2803,12 @@ switch (pp->type)
     case pptNew:
         typeOnNew(pfc, pPp);
 	break;
+    case pptCaseList:
+    case pptCaseItem:
+        break;	/* We check these all in the higher level pptCase */
+    case pptCase:
+	coerceCase(pfc, pp);
+        break;
     default:
         break;
     }

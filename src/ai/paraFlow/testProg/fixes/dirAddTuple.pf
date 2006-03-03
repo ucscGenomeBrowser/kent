@@ -6,9 +6,9 @@ class c
 
 dir of c dc = 
    (
-       one : (1,2,"ONE"),
-       two : (2,2,"TWO"),
-       three : (3,2,"THREE"),
+       one @ (1,2,"ONE"),
+       two @ (2,2,"TWO"),
+       three @ (3,2,"THREE"),
    );
 dc["four"] = (4,2,"FOUR");
 print(dc);

@@ -60,6 +60,16 @@ struct _pf_string *_pf_string_dupe(char *s, int size)
 return _pf_string_new(s, size);
 }
 
+_pf_Bit _pf_stringSame(_pf_String a, _pf_String b)
+/* Comparison between two strings not on the stack. */
+{
+if (a == b)
+    return TRUE;
+if (a == NULL || b == NULL)
+    return FALSE;
+return (strcmp(a->s, b->s) == 0);
+}
+
 int _pf_strcmp(_pf_Stack *stack)
 /* Return comparison between strings.  Cleans them off
  * of stack.  Does not put result on stack because

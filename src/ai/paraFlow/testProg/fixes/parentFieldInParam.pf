@@ -10,5 +10,5 @@ class iPt3 extends iNamed
 	self.z = z + 100;
 	}
     }
-iPt3 p = ("Joe", z:3, y:2, x:1);
+iPt3 p = ("Joe", z@3, y@2, x@1);
 print(p);

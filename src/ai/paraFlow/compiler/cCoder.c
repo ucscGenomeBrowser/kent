@@ -17,11 +17,11 @@
 #define globalPrefix "pf_"
 #define localPrefix "_pf_l."
 
-static void codeStatement(struct pfCompile *pfc, FILE *f,
+void codeStatement(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp);
 /* Emit code for one statement. */
 
-static int codeExpression(struct pfCompile *pfc, FILE *f,
+int codeExpression(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack, boolean addRef);
 /* Emit code for one expression.  Returns how many items added
  * to stack. */
@@ -71,8 +71,8 @@ fprintf(f, "void _pf_init_args(int argc, char **argv, _pf_String *retProg, _pf_A
 fprintf(f, "\n");
 }
 
-static char *stackName = "_pf_stack";
-static char *stackType = "_pf_Stack";
+char *stackName = "_pf_stack";
+char *stackType = "_pf_Stack";
 
 static void printModuleCleanupPrototype(FILE *f)
 /* Print function prototype for module cleanup routine. */
@@ -218,7 +218,7 @@ if (s == NULL)
 return s;
 }
 
-static void codeParamAccess(struct pfCompile *pfc, FILE *f, 
+void codeParamAccess(struct pfCompile *pfc, FILE *f, 
 	struct pfBaseType *base, int offset)
 /* Print out code to access paramater of given type at offset. */
 {
@@ -374,7 +374,7 @@ return outCount;
 }
 
 
-static void codeCleanupVarNamed(struct pfCompile *pfc, FILE *f, 
+void codeCleanupVarNamed(struct pfCompile *pfc, FILE *f, 
 	struct pfType *type, char *name)
 /* Emit cleanup code for variable of given type and name. */
 {
@@ -391,6 +391,36 @@ if (type->base->needsCleanup)
 	}
     }
 }
+
+void codeCleanupStackPos(struct pfCompile *pfc, FILE *f,
+     struct pfType *type, int stack)
+/* Generate cleanup code for stack position. */
+{
+if (type->base->needsCleanup)
+    {
+    if (type->base == pfc->varType)
+	{
+	fprintf(f, "_pf_var_cleanup(");
+	codeParamAccess(pfc, f, type->base, stack);
+	fprintf(f, ");\n");
+	}
+    else
+        {
+	fprintf(f, "if (0!=");
+	codeParamAccess(pfc, f, type->base, stack);
+	fprintf(f, " && (");
+	codeParamAccess(pfc, f, type->base, stack);
+	fprintf(f, "->_pf_refCount-=1) <= 0)\n");
+	codeParamAccess(pfc, f, type->base, stack);
+	fprintf(f, "->_pf_cleanup(");
+	codeParamAccess(pfc, f, type->base, stack);
+	fprintf(f, ", ");
+	codeForType(pfc, f, type);
+	fprintf(f, ");\n");
+	}
+    }
+}
+
 
 static void codeCleanupVar(struct pfCompile *pfc, FILE *f, 
         struct pfVar *var)
@@ -2038,7 +2068,7 @@ for (p = pp->children; p != NULL; p = p->next)
 return total;
 }
 
-static int codeExpression(struct pfCompile *pfc, FILE *f,
+int codeExpression(struct pfCompile *pfc, FILE *f,
 	struct pfParse *pp, int stack, boolean addRef)
 /* Emit code for one expression.  Returns how many items added
  * to stack. */
@@ -2530,8 +2560,7 @@ codeParamAccess(pfc, f, element->ty->base, stack);
 fprintf(f, ");\n");
 }
 
-static void codeStatement(struct pfCompile *pfc, FILE *f,
-	struct pfParse *pp)
+void codeStatement(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
 /* Emit C code for one statement. */
 {
 switch (pp->type)
@@ -2579,6 +2608,9 @@ switch (pp->type)
 	break;
     case pptWhile:
         codeWhile(pfc, f, pp);
+	break;
+    case pptCase:
+        codeCase(pfc, f, pp);
 	break;
     case pptIf:
         codeIf(pfc, f, pp);

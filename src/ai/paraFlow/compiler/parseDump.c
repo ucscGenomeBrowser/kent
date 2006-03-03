@@ -218,6 +218,14 @@ switch (type)
         return "pptStringDupe";
     case pptNew:
         return "pptNew";
+    case pptCase:
+	return "pptCase";
+    case pptCaseList:
+	return "pptCaseList";
+    case pptCaseItem:
+	return "pptCaseItem";
+    case pptCaseElse:
+	return "pptCaseElse";
 
     case pptCastBitToBit:
         return "pptCastBitToBit";

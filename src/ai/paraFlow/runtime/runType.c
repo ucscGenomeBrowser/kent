@@ -133,7 +133,6 @@ while ((parenCode = lti->parenCode) != NULL)
     struct _pf_type *type = hashFindVal(typeHash, parenCode);
     if (type == NULL)
 	{
-	uglyf("parenCode = %s\n", parenCode);
         internalErr();
 	}
     lti->id = type->typeId;

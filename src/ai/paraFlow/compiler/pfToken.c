@@ -142,6 +142,8 @@ switch (type)
     case pftOperator:	     return "pftOperator";
     case pftPara: 	     return "pftPara";
     case pftPolymorphic:     return "pftPolymorphic";
+    case pftPrivate:	     return "pftPrivate";
+    case pftProtected:	     return "pftProtected";
     case pftReadable:        return "pftReadable";
     case pftReturn: 	     return "pftReturn";
     case pftStatic:          return "pftStatic";
