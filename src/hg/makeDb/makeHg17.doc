@@ -20270,4 +20270,38 @@ BASE=/cluster/data/hg17/bed/blastz.rn4.2006-02-08
 
 # Compared to previous data, 2 records deleted, 27 records added.
 
+########################################################################
+##  Measuring MonDom4 chain pile ups (DONE - 2006-02-26 - Hiram)
+    ssh kkstore02
+    cd /cluster/data/hg17/bed/blastz.monDom4/axtChain
+    #	extract coordinates on the target genome of the chains
+    zcat hg17.monDom4.all.chain.gz | grep "^chain " \
+    | awk '{printf "%s\t%s\t%s\t%s\t%s\n", $3, $6, $7, $5, $2}' \
+        | gzip -c > target.chain.bed.gz
+    # turn that into a wiggle graph with bedItemOverlapCount
+    # use HGDB_CONF for read-only access to the hg17 DB in bedItemOverlapCount
+    #	it wants to read chromInfo ...
+    export HGDB_CONF=~/.hg.conf.read-only
+    #	ignore chains longer than 1,000,000
+    zcat target.chain.bed.gz | awk '$3-$2<1000000 {print}' \
+	| sort -k1,1 -k2,2n \
+	    | bedItemOverlapCount hg17 stdin \
+		| wigEncode stdin monDom4PileUps.wig monDom4PileUps.wib
+    #	Do the same for the query coordinates to find out where these
+    #	chains are coming from
+    zcat hg17.monDom4.all.chain.gz | grep "^chain " \
+    | awk '{printf "%s\t%s\t%s\t%s\t%s\n", $8, $11, $12, $10, $2}' \
+        | gzip -c > query.chain.bed.gz
+    zcat query.chain.bed.gz | awk '$3-$2<1000000 {print}' \
+    | sort -k1,1 -k2,2n \
+        | bedItemOverlapCount monDom4 stdin \
+            | wigEncode stdin hg17PileUps.wig hg17PileUps.wib
+    #	load those wiggles
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/blastz.monDom4/axtChain
+    ln -s `pwd`/monDom4PileUps.wib /gbdb/hg17/wib
+    ln -s `pwd`/hg17PileUps.wib /gbdb/monDom4/wib
 
+    hgLoadWiggle -verbose=2 hg17 monDom4PileUp monDom4PileUps.wig
+    hgLoadWiggle -verbose=2 monDom4 hg17PileUps hg17PileUps.wig
+    #	add wiggle track type entries to the respective trackDb.ra files
