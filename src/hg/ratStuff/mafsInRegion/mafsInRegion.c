@@ -8,7 +8,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafsInRegion.c,v 1.1 2006/03/03 22:18:39 kate Exp $";
+static char const rcsid[] = "$Id: mafsInRegion.c,v 1.2 2006/03/03 22:24:34 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -37,7 +37,6 @@ struct hash *loadRegions(char *file)
 struct bed *bed = NULL, *bedList = NULL, *nextBed = NULL;
 struct hash *regionHash = newHash(6);
 struct bed *regions;
-struct hashEl *hel;
 
 regions = bedLoadNAll(file, outDir ? 4 : 3);
 verbose(2, "found %d regions\n", slCount(regions));
@@ -86,11 +85,10 @@ void extractMafs(char *file, FILE *f, struct hash *regionHash)
 /* extract MAFs in a file from regions specified in hash */
 {
 char *chrom = NULL;
-struct bed *bed = NULL, *bedList = NULL;
+struct bed *bed = NULL;
 struct mafFile *mf = mafOpen(file);
 struct mafAli *maf = NULL;
 struct mafComp *mc;
-int mafEnd;
 char path[256];
 
 verbose(1, "extracting from %s\n", file);
