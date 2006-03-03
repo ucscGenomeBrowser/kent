@@ -37,7 +37,11 @@ struct pfCompile
 /* Paraflow compiler. */
     {
     struct pfCompile *next;
-    char *baseDir;		/* Base directory. */
+    char *baseDir;		/* paraFlow source file base dir. */
+    char *cIncludeDir;		/* Directory where pfPreamble.h lives. */
+    char *runtimeLib;		/* Location of runtime lib. */
+    struct slName *paraLibPath; /* Where paraFlow library modules live. */
+    struct hash *cfgHash;	/* Unparsed config hash. */
     struct hash *moduleHash;	/* Module hash.  pfModule valued, name keyed. */
     struct pfModule *moduleList;/* List of all modules. */
     bool	isSys;		/* True if compiling a built-in module. */

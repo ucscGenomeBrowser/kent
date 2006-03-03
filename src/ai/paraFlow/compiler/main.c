@@ -6,6 +6,7 @@
 #include "hash.h"
 #include "dystring.h"
 #include "localmem.h"
+#include "ra.h"
 #include "pfType.h"
 #include "pfScope.h"
 #include "pfToken.h"
@@ -260,6 +261,68 @@ else
 return name;
 }
 
+static char *mustFindSetting(struct hash *hash, char *name, char *fileName)
+/* Find named setting in hash or squawk and die. */
+{
+char *val = hashFindVal(hash, name);
+if (val == NULL)
+   errAbort("Can't find required setting %s in %s\n", name, fileName);
+return val;
+}
+
+static struct slName *parsePath(char *path)
+/* Convert : separated path into a name list. */
+{
+struct slName *list = NULL;
+char *dupe = cloneString(path);
+char *s, *e;
+for (s = dupe; s != NULL && s[0] != 0; s = e)
+    {
+    e = strchr(s, ':');
+    if (e != NULL)
+       *e++ = 0;
+    slNameAddTail(&list, s);
+    }
+freeMem(dupe);
+return list;
+}
+
+static void getPathsFromFile(struct pfCompile *pfc, char *fileName)
+/* Read in several fields of pfc from file. */
+{
+struct hash *hash = raReadSingle(fileName);
+char *libPath;
+pfc->cfgHash = hash;
+pfc->cIncludeDir = mustFindSetting(hash, "cIncludeDir", fileName);
+pfc->runtimeLib = mustFindSetting(hash, "runtimeLib", fileName);
+libPath = mustFindSetting(hash, "paraLibPath", fileName);
+pfc->paraLibPath = parsePath(libPath);
+}
+
+static void getPaths(struct pfCompile *pfc)
+/* Figure out where paraFlowPaths is and read it. */
+{
+char *fileName = getenv("PARAFLOWCFG");
+struct dyString *dy = dyStringNew(0);
+
+if (fileName == NULL)
+    {
+    char *home = getenv("HOME");
+    if (home == NULL)
+	errAbort("Can't find HOME environment variable.");
+    dyStringClear(dy);
+    dyStringPrintf(dy, "%s/paraFlow/paraFlow.cfg", home);
+    fileName = cloneString(dy->string);
+    }
+if (!fileExists(fileName))
+    {
+    errAbort(
+       "Can't find %s file.\nPlease see ParaFlow installation instructions."
+       , fileName);
+    }
+getPathsFromFile(pfc, fileName);
+}
+
 void paraFlow(char *fileName, int pfArgc, char **pfArgv)
 /* parse and dump. */
 {
@@ -281,6 +344,7 @@ if (endPhase < 0)
     return;
 verbose(2, "Phase 0 - initialization\n");
 pfc = pfCompileNew();
+getPaths(pfc);
 splitPath(fileName, baseDir, baseName, baseSuffix);
 pfc->baseDir = cloneString(baseDir);
 safef(defFile, sizeof(defFile), "%s%s.pfh", baseDir, baseName);
