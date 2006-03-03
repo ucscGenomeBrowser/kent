@@ -7,7 +7,7 @@
 #include "element.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: elTreeBuild.c,v 1.7 2006/02/17 01:10:58 braney Exp $";
+static char const rcsid[] = "$Id: elTreeBuild.c,v 1.8 2006/03/03 21:25:03 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -93,6 +93,7 @@ if (node->numEdges) // && (node->ident->name == NULL))
 	{
 	dyStringPrintf(dy, "%s",node->edges[0]->ident->name);
 	dy->string[strlen(dy->string) - 1 ] = 0;
+	//printf("building name with child %s got %s\n",node->edges[0]->ident->name, dy->string);
 	}
     else
 	{
@@ -114,9 +115,12 @@ if ((genome = node->priv) == NULL)
     AllocVar(genome);
     genome->elementHash = newHash(5);
     genome->node = node;
-    genome->name = node->ident->name;
     node->priv = genome;
     }
+
+genome->name = node->ident->name;
+//if (!sameString(genome->name, node->ident->name))
+ //   errAbort("not same strings");
 }
 
 
@@ -207,7 +211,7 @@ for (list = hashFindVal(distElemHash, buffer); list; list = list->next)
 	*/
 
 //printf("qwok dist %g: %s %s %x %x\n",d2->distance,eleName(d2->e1),eleName(d2->e2),d2->e1->parent,d2->e2->parent);
-///printf("new dist %g: %s %s %x %x\n",dist,eleName(other),eleName(root),d2->e1->parent,d2->e2->parent);
+//printf("new dist %g: %s %s %x %x\n",dist,eleName(other),eleName(root),d2->e1->parent,d2->e2->parent);
     setElementDist(other, root, dist, distanceList, &distHash, &distElemHash);
     }
 }
@@ -448,6 +452,7 @@ lineFileClose(&lf);
 nameNodes(speciesTree);
 
 genome = genomeList = readGenomes(genomeFileName);
+
 for(genome=genomeList; genome; genome=genome->next)
     numSpecies++;
 
@@ -463,12 +468,14 @@ assignElements(speciesTree, genomeHash);
 for(; genome; genome = genome->next)
     {
     if (( node = phyloFindName(speciesTree, genome->name)) == NULL)
-	errAbort("can't find leave node for %s\n",genome->name);
+	errAbort("can't find leaf node for %s\n",genome->name);
     }
 
 distanceList = readDistances(distanceFileName, genomeHash,
     &distHash, &distElemHash);
 
+if (SpecialNames)
+    removeIs(genomeList);
 for(d = distanceList; d ; d = d->next)
     {
     struct phyloTree *node1, *node2, *mergeNode;
@@ -523,7 +530,13 @@ for(d = distanceList; d ; d = d->next)
 
 	AllocVar(newRoot);
 	AllocVar(newRoot->ident);
-	safef(buffer, sizeof(buffer), "UR_%s",node->ident->name) ;
+	if (SpecialNames)
+	    {
+	    safef(buffer, sizeof(buffer), "%s",node->ident->name) ;
+	    buffer[strlen(buffer) - 1] = 0;
+	    }
+	else
+	    safef(buffer, sizeof(buffer), "UR_%s",node->ident->name) ;
 	newRoot->ident->name = cloneString(buffer);
 	AllocVar(g);
 	g->name = newRoot->ident->name;
@@ -540,7 +553,13 @@ for(d = distanceList; d ; d = d->next)
 
 	AllocVar(newNode);
 	AllocVar(newNode->ident);
-	safef(buffer, sizeof(buffer), "D_%s",node->ident->name) ;
+	if (SpecialNames)
+	    {
+	    safef(buffer, sizeof(buffer), "%s",node->ident->name) ;
+	    buffer[strlen(buffer) - 1] = 0;
+	    }
+	else
+	    safef(buffer, sizeof(buffer), "D_%s",node->ident->name) ;
 	newNode->ident->name = cloneString(buffer);
 	AllocVar(g);
 	g->name = newNode->ident->name;
@@ -562,7 +581,7 @@ if (SpecialNames)
     {
     nameNodes(newRoot);
     checkTree(newRoot);
-    //phyloDebugTree(newRoot, stdout);
+ //   phyloDebugTree(newRoot, stdout);
     }
 
 //phyloDebugTree(newRoot, stdout);
@@ -620,7 +639,8 @@ do
 	    {
 	    d->used = 0;
 	    //printf("not same parent\n");
-	//printf("5dist %g: %s %s used %x %x\n",d->distance,eleName(d->e1),eleName(d->e2),d->e1->parent, d->e2->parent);
+	    //printf("%s %s\n",d->e1->genome->node->parent->ident->name,d->e2->genome->node->parent->ident->name);
+//	printf("5dist %g: %s %s used %x %x\n",d->distance,eleName(d->e1),eleName(d->e2),d->e1->parent, d->e2->parent);
 	    continue;
 	    }
 	else if (d->e1->genome->node->ident->length + d->e2->genome->node->ident->length != d->distance )
