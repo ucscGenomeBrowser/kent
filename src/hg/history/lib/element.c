@@ -39,7 +39,8 @@ for(genome=genomes; genome; genome = genome->next)
     }
 }
 
-struct phyloTree *readEleTree(struct lineFile *lf, struct element **parents, int numParents)
+struct phyloTree *readEleTree(struct lineFile *lf, struct element **parents, 
+	int numParents, boolean addStartStop)
 {
 int ii;
 struct phyloTree *node = NULL;
@@ -52,7 +53,7 @@ struct element **elements;
 struct possibleEdge *p;
 struct element *element = NULL;
 
-printf("numParents %d\n",numParents);
+//printf("numParents %d\n",numParents);
 while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
     {
     if (needGenome)
@@ -93,19 +94,22 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    errAbort("too few elements in genome %s elementsLeft %d\n",genome->name,elementsLeft);
 	elementsLeft -= wordsRead/2;
 
-	AllocVar(chromBreak);
-	AllocVar(element);
-	chromBreak->element = element;
-	slAddHead(&genome->breaks, chromBreak);
-	slAddHead(&genome->elements, element);
-	element->genome = genome;
-	element->species = genome->name;
-	element->name = cloneString("START");
-	elements[count++] = element;
-	if (parents)
+	if (addStartStop)
 	    {
-	    element->parent = parents[0];
-	    newEdge(element->parent, element);
+	    AllocVar(chromBreak);
+	    AllocVar(element);
+	    chromBreak->element = element;
+	    slAddHead(&genome->breaks, chromBreak);
+	    slAddHead(&genome->elements, element);
+	    element->genome = genome;
+	    element->species = genome->name;
+	    element->name = cloneString("START");
+	    elements[count++] = element;
+	    if (parents)
+		{
+		element->parent = parents[0];
+		newEdge(element->parent, element);
+		}
 	    }
 
 	for(ii=0; ii < wordsRead; ii+=2)
@@ -121,7 +125,10 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    element->name = cloneString(words[ii]);
 	    if (parents)
 		{
-		element->parent = parents[atoi(words[ii+1]) ];
+		if (addStartStop)
+		    element->parent = parents[atoi(words[ii+1]) ];
+		else
+		    element->parent = parents[atoi(words[ii+1]) - 1 ];
 		newEdge(element->parent, element);
 
 		if (element->parent == NULL)
@@ -146,29 +153,32 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    }
 	if (elementsLeft == 0)
 	    {
-	    AllocVar(chromBreak);
-	    AllocVar(element);
-	    elements[count++] = element;
-	//    AllocVar(p);
-	 //   p->count = 1;
-	  //  p->element = genome->elements;
-	   // element->calced.prev = p;
-
-	   // AllocVar(p);
-	   // p->count = 1;
-	   // p->element = element;
-	   // genome->elements->calced.next = p;
-
-	    chromBreak->element = element;
-	    slAddHead(&genome->breaks, chromBreak);
-	    slAddHead(&genome->elements, element);
-	    element->genome = genome;
-	    element->species = genome->name;
-	    element->name = cloneString("END");
-	    if (parents)
+	    if (addStartStop)
 		{
-		element->parent = parents[numParents-1];
-		newEdge(element->parent, element);
+		AllocVar(chromBreak);
+		AllocVar(element);
+		elements[count++] = element;
+	    //    AllocVar(p);
+	     //   p->count = 1;
+	      //  p->element = genome->elements;
+	       // element->calced.prev = p;
+
+	       // AllocVar(p);
+	       // p->count = 1;
+	       // p->element = element;
+	       // genome->elements->calced.next = p;
+
+		chromBreak->element = element;
+		slAddHead(&genome->breaks, chromBreak);
+		slAddHead(&genome->elements, element);
+		element->genome = genome;
+		element->species = genome->name;
+		element->name = cloneString("END");
+		if (parents)
+		    {
+		    element->parent = parents[numParents-1];
+		    newEdge(element->parent, element);
+		    }
 		}
 	    break;
 	    }
@@ -185,32 +195,35 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
     //p->element = genome->elements;
     //genome->elements->next->calced.prev = p;
 
-    AllocVar(p);
-    p->element = element;
-    p->count = 1;
-    genome->elements->calced.prev = p;
+    if (addStartStop)
+	{
+	AllocVar(p);
+	p->element = element;
+	p->count = 1;
+	genome->elements->calced.prev = p;
 
-    AllocVar(p);
-    p->count = 1;
-    p->element = genome->elements;
-    element->calced.next = p;
+	AllocVar(p);
+	p->count = 1;
+	p->element = genome->elements;
+	element->calced.next = p;
+	}
 
     for(ii=0; ii < count; ii++)
 	if (elements[ii] == NULL)
 	    errAbort("elemen %d isnull\n",ii);
 
     for(ii=0; ii < numChildren; ii++)
-	phyloAddEdge(node, readEleTree(lf,elements, count));
+	phyloAddEdge(node, readEleTree(lf,elements, count, addStartStop));
 
     freez(&elements);
     return node;
 }
 
-struct phyloTree *eleReadTree(char *fileName)
+struct phyloTree *eleReadTree(char *fileName, boolean addStartStop)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 
-return readEleTree(lf, NULL, 0);
+return readEleTree(lf, NULL, 0, addStartStop);
 }
 
 struct genome *readGenomes(char *fileName)
@@ -323,7 +336,7 @@ if ((genome = hashFindVal(genomeHash, species)) == NULL)
     errAbort("can't find element list for %s\n",species);
 
 if ((e = hashFindVal(genome->elementHash, ename)) == NULL)
-    errAbort("can't find element with name %s in genome %s\n",ename,species);
+    printf("Warn: can't find element with name %s in genome %s\n",ename,species);
 
 return e;
 }
@@ -336,6 +349,12 @@ int val = 0;
 // char buffer[512];
 char *str = "%s.%s.%s-%s.%s.%s";
 float *pdist;
+
+if (!(e1 && e2))
+    {
+    errAbort("setElementDist: both elements NULL");
+    return;
+    }
 
 if (!sameString(e1->name, e2->name))
     errAbort("can't set element distance on elements with different names");
@@ -636,4 +655,21 @@ buffer[1] = count % 26 + 'A';
 buffer[2] = 0;
 count++;
 return buffer;
+}
+
+void removeIs(struct genome *list)
+{
+for(; list; list = list->next)
+    {
+    char *ptr, *lastPtr;
+
+    lastPtr = &list->name[strlen(list->name)];
+    for(ptr = list->name; *ptr; )
+	if (*ptr == 'I')
+	    memcpy(ptr, ptr+1, (lastPtr - ptr)); 
+	else 
+	    ptr++;
+    if (list->node)
+	list->node->ident->name = list->name;
+    }
 }
