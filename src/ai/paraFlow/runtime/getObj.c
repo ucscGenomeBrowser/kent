@@ -286,8 +286,8 @@ if (!gotNil(f))
 	    scanDyString(f, dy);
 	    if (fread(toBuf, 1, 1, f) != 1)
 		errAbort("Unexpected end of file");
-	    if (memcmp(toBuf, ":", 1) != 0)
-		errAbort("Expecting 'to'");
+	    if (memcmp(toBuf, "@", 1) != 0)
+		errAbort("Expecting '@'");
 	    switch (elBase->singleType)
 		{
 		case pf_stArray:

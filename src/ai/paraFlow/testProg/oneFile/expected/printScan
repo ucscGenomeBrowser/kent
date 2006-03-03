@@ -8,5 +8,5 @@
 zero point eight
 ('twenty-one',21)
 (('zero',0),('one',1),('two',2),('three',3))
-('four':'quatro','one':'uno','three':'tres','two':'dos')
+('four'@'quatro','one'@'uno','three'@'tres','two'@'dos')
 ('Me glorious me',$1)

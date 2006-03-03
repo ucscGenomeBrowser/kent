@@ -473,7 +473,7 @@ flow htmlFormsParse(htmlPage page) into (array of htmlForm forms)
     {
     forms = ();
     htmlForm form = nil;
-    for (tagIx:tag in page.tags)
+    for (tagIx@tag in page.tags)
         {
 	if (tag.name == "FORM")
 	    {
@@ -546,7 +546,7 @@ flow cgiVarsToString(dir of string vars) into (string out)
     if (vars)
 	{
 	dyString tmp = "";
-	for (key:val in vars)
+	for (key@val in vars)
 	    {
 	    if (tmp.size == 0)
 		tmp.append('?');
@@ -700,7 +700,7 @@ into (htmlPage page)
 to test(string fileName)
     {
     try {
-	dir of string vars = ("db" : "mm7");
+	dir of string vars = ("db" @ "mm7");
 	htmlPage page = htmlPageFetch(fileName, vars, "POST");
 	print(page.status);
 	print(page.header);

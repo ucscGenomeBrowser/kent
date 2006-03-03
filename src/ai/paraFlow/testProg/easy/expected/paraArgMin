@@ -2,6 +2,6 @@
 argmax: 4
 argmin: 1
 argmin of x*x in -5 to 6: 0
-('minusOne':-1,'one':1,'two':2,'zero':0)
+('minusOne'@-1,'one'@1,'two'@2,'zero'@0)
 argmin x*x: zero
 argmax x: two

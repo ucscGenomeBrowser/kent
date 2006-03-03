@@ -279,7 +279,7 @@ case (errCode)
     2 : message = "Write protected";
     3,4 : message = "Privacy violation";
     18 : {message = "Hull breech"; alarm("evacuation")}
-    default :  message = "Error code #" + errCode;
+    else :  message = "Error code #" + errCode;
     }
 if (message)
     punt(message);
