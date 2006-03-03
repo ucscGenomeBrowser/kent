@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.73 2006/02/17 03:08:17 hartera Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.74 2006/03/03 03:50:45 markd Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -529,13 +529,13 @@ char *cdsColorEnumToString(enum cdsColorOptEnum x)
 return cdsColorOptions[x];
 }
 
-void cdsColorDropDown(char *var, char* curVal, int size)
+void cdsColorDropDown(char *var, char* curVal, int numValues)
 /* Make drop down of options for coloring mRNAs and printing bases. */
 {
-if(size<0)
+if(numValues < 0)
     cgiMakeDropList(var, cdsColorOptions, ArraySize(cdsColorOptions), curVal);
 else
-    cgiMakeDropList(var, cdsColorOptions, size, curVal);
+    cgiMakeDropList(var, cdsColorOptions, numValues, curVal);
 
 }
 

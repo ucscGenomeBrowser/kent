@@ -4,6 +4,11 @@
 #include "binRange.h"
 #include "hash.h"
 
+/* Sized to hold maximum chromosome we have encountered.  This avoids need to
+ * get chrom sizes from database at the expense of more memory used and
+ * sometimes having to update this value. */
+static const int MAX_CHROM_SIZE = 400000000;
+
 struct chromBins *chromBinsNew(chromBinsFreeFunc *freeFunc)
 /* create a new chromBins object */
 {
@@ -59,7 +64,6 @@ struct binKeeper *chromBinsGet(struct chromBins* chromBins, char *chrom,
                                boolean create)
 /* get chromosome binKeeper, optionally creating if it doesn't exist */
 {
-static const int MAX_CHROM_SIZE = 350000000;
 if (create)
     {
     struct hashEl *hel = hashStore(chromBins->chromTbl, chrom);
