@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: elTreeToList.c,v 1.3 2006/02/27 16:54:37 braney Exp $";
+static char const rcsid[] = "$Id: elTreeToList.c,v 1.4 2006/03/03 21:26:26 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,17 +21,21 @@ errAbort(
   "options:\n"
   "   -leaf      just print out leaf species\n"
   "   -noVers    don't print out the version strings\n"
+  "   -names     use special names (remove I's)\n"
   );
 }
 
 static struct optionSpec options[] = {
     {"leaf", OPTION_BOOLEAN},
     {"noVers", OPTION_BOOLEAN},
+    {"names", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 boolean JustLeaf = FALSE;
 boolean NoVers = FALSE;
+boolean SpecialNames = FALSE;
+
 
 void printElements(FILE *f, struct phyloTree *node)
 {
@@ -41,6 +45,9 @@ if ((node->numEdges == 0) || !JustLeaf)
     {
     struct genome *g = node->priv;
     struct element *e;
+    if (SpecialNames)
+	removeIs(g);
+
     fprintf(f, ">%s %d\n",g->name,slCount(g->elements));
     for(e=g->elements; e ; e= e->next)
 	{
@@ -60,7 +67,7 @@ for(ii=0; ii < node->numEdges; ii++)
 
 void elTreeToList(char *treeFile, char *outFileName)
 {
-struct phyloTree *node = eleReadTree(treeFile);
+struct phyloTree *node = eleReadTree(treeFile, FALSE);
 FILE *f = mustOpen(outFileName, "w");
     //printElementTrees(node, 0);
 
@@ -78,6 +85,8 @@ if (optionExists("leaf"))
     JustLeaf = TRUE;
 if (optionExists("noVers"))
     NoVers = TRUE;
+if (optionExists("names"))
+    SpecialNames = TRUE;
 
 //verboseSetLevel(2);
 elTreeToList(argv[1], argv[2]);
