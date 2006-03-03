@@ -4103,6 +4103,10 @@ cat > template << '_EOF_'
     #	0 row(s) skipped, 10 warning(s) loading primers/primers.psl
     hgLoadPsl -nobin -table=all_sts_seq hg18 stsMarkers.lifted.psl
 
+# PRUNE stsMap RECORDS (DONE 3/3/06)
+
+  hgsql hg18 -e 'delete from stsMap where chromEnd-chromStart > 5000'
+
 ###########################################################################
 # CREATE HAPLOTYPEPOS TRACK (DONE 1/31/06, Fan)
 

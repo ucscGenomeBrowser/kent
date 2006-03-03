@@ -2920,7 +2920,11 @@ while (<FILE>) {
     # remove old table data and reload
     hgsql hg17 -e 'delete from stsAlias'
     hgsql hg17 -e 'load data local infile "stsAlias.bed" into table stsAlias'
- 
+
+# PRUNE stsMap RECORDS (DONE 3/3/06)
+
+  hgsql hg17 -e 'delete from stsMap where chromEnd-chromStart > 5000'
+  
 # RECOMBINATION RATES (2004-07-13 Terry)
 #                       (2004-07-21 kate)
 
