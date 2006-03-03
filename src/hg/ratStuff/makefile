@@ -16,4 +16,7 @@ DIRS = \
 	mafFilter \
 	mafFrag \
 	mafFrags \
-	stageMultiz
+	mafSplit \
+	mafSplitPos \
+	mafsInRegion \
+	stageMultiz 
