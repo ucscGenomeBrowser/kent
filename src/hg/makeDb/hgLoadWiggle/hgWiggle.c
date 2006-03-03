@@ -10,8 +10,9 @@
 #include "wiggle.h"
 #include "hdb.h"
 #include "portable.h"
+#include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgWiggle.c,v 1.37 2005/08/23 18:19:32 hiram Exp $";
+static char const rcsid[] = "$Id: hgWiggle.c,v 1.38 2006/03/03 22:27:10 hiram Exp $";
 
 /* Command line switches. */
 static boolean doAscii = TRUE;	/*	do not output ascii data */
@@ -347,6 +348,9 @@ float lowerLimit = -1 * INFINITY;  /*	for constraint comparison	*/
 float upperLimit = INFINITY;	/*	for constraint comparison	*/
 unsigned span = 0;	/*	select for this span only	*/
 static char *dataConstraint;	/*	one of < = >= <= == != 'in range' */
+
+pushCarefulMemHandler(2147483647 * ((sizeof(size_t)/4)*(sizeof(size_t)/4)));
+	/*	== 2 Gb for 32 bit machines, 8 Gb for 64 bit machines */
 
 optionInit(&argc, argv, optionSpecs);
 
