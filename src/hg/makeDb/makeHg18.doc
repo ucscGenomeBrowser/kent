@@ -4518,6 +4518,8 @@ done > cytobands.bed
     # using pslReps to generate the PSL file header
     pslSelect -queryPairs=queries.txt all_mrna.psl hinv_mrna.psl
 
+    # NEXT TIME, LOAD HInvGeneMrna TABLE AFTER HInv TABLE IS LOADED TO AVOID
+    # joinerCheck TO COMPLAIN.
     # load track of mrna alignments
     ssh hgwdev
     cd /cluster/data/hg18/bed/hinv
