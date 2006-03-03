@@ -270,6 +270,27 @@ if (val == NULL)
 return val;
 }
 
+static char *expandTilde(char *fileName)
+/* If file name starts with ~, then replace that with
+ * HOME dir. */
+{
+if (fileName[0] == '~' && fileName[1] == '/')
+    {
+    char *home = getenv("HOME");
+    int homeLen, oldLen;
+    char *expanded;
+    if (home == NULL)
+        errAbort("Can't find home");
+    homeLen = strlen(home);
+    oldLen = strlen(fileName);
+    expanded = needMem(homeLen + oldLen);
+    memcpy(expanded, home, homeLen);
+    memcpy(expanded+homeLen, fileName+1, oldLen);
+    fileName = expanded;
+    }
+return fileName;
+}
+
 static struct slName *parsePath(char *path)
 /* Convert : separated path into a name list. */
 {
@@ -281,7 +302,7 @@ for (s = dupe; s != NULL && s[0] != 0; s = e)
     e = strchr(s, ':');
     if (e != NULL)
        *e++ = 0;
-    slNameAddTail(&list, s);
+    slNameAddTail(&list, expandTilde(s));
     }
 freeMem(dupe);
 return list;

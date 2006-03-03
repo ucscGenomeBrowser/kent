@@ -52,47 +52,86 @@ struct pfSource *source = pfSourceOnFile(fileName);
 return tokenizeSource(tkz, source, modName);
 }
 
-void rTokInto(struct pfCompile *pfc, char *baseDir, char *modName,
+static char *findSourcePath(char *baseDir, struct slName *pathList, 
+	char *fileName, char *suffix)
+/* Given a pathList and a fileName, try and find file in path. */
+{
+struct slName *dir;
+struct dyString *dy = dyStringNew(0);
+char *path = NULL;
+if (baseDir[0] == 0)
+    baseDir = ".";
+dyStringPrintf(dy, "%s/%s%s", baseDir, fileName, suffix);
+if (fileExists(dy->string))
+   path = cloneString(dy->string);
+else
+    {
+    for (dir = pathList; dir != NULL; dir = dir->next)
+	{
+	dyStringClear(dy);
+	dyStringPrintf(dy, "%s/%s%s", dir->name, fileName, suffix);
+	uglyf("Looking in %s\n", dy->string);
+	if (fileExists(dy->string))
+	    {
+	    path = cloneString(dy->string);
+	    break;
+	    }
+	}
+    }
+dyStringFree(&dy);
+if (path == NULL)
+    errAbort("Couldn't find %s%s", fileName, suffix);
+return path;
+}
+
+char *replaceSuffix(char *path, char *oldSuffix, char *newSuffix)
+/* Return a string that's a copy of path, but with old suffix
+ * replaced by new suffix. */
+{
+int pathLen = strlen(path);
+int oldSuffLen = strlen(oldSuffix);
+int newSuffLen = strlen(newSuffix);
+int headLen = pathLen - oldSuffLen;
+int newLen = headLen + newSuffLen;
+char *result = needMem(newLen+1);
+memcpy(result, path, headLen);
+memcpy(result+headLen, newSuffix, newSuffLen);
+return result;
+}
+
+static void rTokInto(struct pfCompile *pfc, char *baseDir, char *modName,
     boolean lookForPfh)
 /* Tokenize module, and recursively any thing it goes into. */
 {
-struct dyString *pfPath = dyStringNew(0);
-struct dyString *pfhPath = dyStringNew(0);
-struct dyString *oPath = dyStringNew(0);
+char *pfPath = findSourcePath(baseDir, pfc->paraLibPath, modName, ".pf");
+char *pfhPath = replaceSuffix(pfPath, ".pf", ".pfh");
+char *oPath = replaceSuffix(pfPath, ".pf", ".o");
+char *cPath = replaceSuffix(pfPath, ".pf", ".c");
 char *fileName = NULL;
 struct pfModule *module;
 boolean isPfh = FALSE;
 struct pfToken *tok;
 
 
-/* Create path names, and make sure .pf file exists. */
-dyStringAppend(pfPath, baseDir);
-dyStringAppend(pfPath, modName);
-dyStringAppend(pfPath, ".pf");
-dyStringAppend(pfhPath, baseDir);
-dyStringAppend(pfhPath, modName);
-dyStringAppend(pfhPath, ".pfh");
-dyStringAppend(oPath, baseDir);
-dyStringAppend(oPath, modName);
-dyStringAppend(oPath, ".o");
-if (!fileExists(pfPath->string))
-    errAbort("Can't find %s", pfPath->string);
-
 /* Look too see if can use just module header.
  * We can if it exists and is newer than module. */
 if (lookForPfh)
     {
-    if (fileExists(pfhPath->string) && fileExists(oPath->string))
+    if (fileExists(pfhPath) && fileExists(cPath) && fileExists(oPath))
 	{
-	if (fileModTime(pfhPath->string) > fileModTime(pfPath->string))
+	unsigned long pfTime = fileModTime(pfPath);
+	unsigned long pfhTime = fileModTime(pfhPath);
+	unsigned long cTime = fileModTime(cPath);
+	unsigned long oTime = fileModTime(oPath);
+	if (pfTime < pfhTime && pfhTime <= cTime && cTime <= oTime)
 	    {
-	    fileName = pfhPath->string;
+	    fileName = pfhPath;
 	    isPfh = TRUE;
 	    }
 	}
     }
 if (fileName == NULL)
-    fileName = pfPath->string;
+    fileName = pfPath;
 
 /* Tokenize file and add module to hash. */
 module = tokenizeFile(pfc->tkz, fileName, modName);
@@ -118,9 +157,10 @@ for (tok = module->tokList; tok != NULL; tok = tok->next)
 slAddHead(&pfc->moduleList, module);
 
 /* Clean up and go home. */
-dyStringFree(&pfPath);
-dyStringFree(&pfhPath);
-dyStringFree(&oPath);
+freeMem(pfPath);
+freeMem(pfhPath);
+freeMem(oPath);
+freeMem(cPath);
 }
 
 static void addBuiltIn(struct pfCompile *pfc, char *code, char *modName)
