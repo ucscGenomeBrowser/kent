@@ -20274,6 +20274,58 @@ BASE=/cluster/data/hg17/bed/blastz.rn4.2006-02-08
 
 # Compared to previous data, 2 records deleted, 27 records added.
 
+
+########################################################################
+#  BLASTZ Opossum monDom4 (DONE - 2006-02-21 - 2006-02-26 - Hiram)
+    ssh pk
+    mkdir /cluster/data/hg17/bed/blastzMonDom4.2006-02-21
+    cd /cluster/data/hg17/bed
+    ln -s blastzMonDom4.2006-02-21 blastz.monDom4
+    cd blastzMonDom4.2006-02-21
+
+    cat << '_EOF_' > DEF
+# human vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Human (hg17)
+SEQ1_DIR=/scratch/hg/hg17/bothMaskedNibs
+SEQ1_LEN=/cluster/data/hg17/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom4
+SEQ2_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+SEQ2_LEN=/san/sanvol1/scratch/monDom4/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg17/bed/blastzMonDom4.2006-02-21
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #  << happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=chainMerge `pwd`/DEF > chainMerge.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+
+    time nice -n +19 featureBits hg17 chainMonDom4Link \
+	> fb.hg17.chainMonDom4Link 2>&1
+    time nice -n +19 featureBits monDom4 chainHg17Link \
+	> fb.monDom4.chainHg17Link 2>&1
+
 ########################################################################
 ##  Measuring MonDom4 chain pile ups (DONE - 2006-02-26 - Hiram)
     ssh kkstore02

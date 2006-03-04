@@ -4776,3 +4776,13 @@ searchPriority 55
    echo "load data local infile 'chicken13kInfo.txt' into table chicken13kinfo" | hgsql galGal2
 
 
+############################################################################
+##  BLASTZ swap from mm8 alignments (DONE - 2006-02-18 - Hiram)
+    ssh pk
+    cd /cluster/data/mm8/bed/blastzGalGal2.2006-02-18
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        `pwd`/DEF > swap.out 2>&1 &
+
+    time nice -n +19 featureBits galGal2 chainMm8Link
+    #   57074100 bases of 1054197620 (5.414%) in intersection

@@ -2178,3 +2178,14 @@ TMPDIR=/scratch/tmp
     ln -s blastz.rn4.swap /cluster/data/canFam2/bed/blastz.rn4
 
 
+############################################################################
+##  BLASTZ swap from mm8 alignments (DONE - 2006-02-18 - Hiram)
+    ssh pk
+    cd /cluster/data/mm8/bed/blastzCanFam2.2006-02-18
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+        `pwd`/DEF > swap.out 2>&1 &
+
+    time nice -n +19 featureBits canFam2 chainMm8Link
+    #   816262344 bases of 2384996543 (34.225%) in intersection
+

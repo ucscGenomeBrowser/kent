@@ -2040,3 +2040,18 @@ chainSome $(path1)
     cd /cluster/data/fr1/bed/blastz.danRer1.swap.2004-06-16
     rm pslChrom/psl.tab
     nice gzip axtChrom/* pslChrom/* &
+
+
+############################################################################
+##  BLASTZ swap from mm8 alignments (DONE - 2006-02-19 - Hiram)
+    ssh pk
+    cd /cluster/data/mm8/bed/blastzFr1.2006-02-19
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF > swap.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap -continue=net `pwd`/DEF > swap.net.out 2>&1 &
+
+     time nice -n +19 featureBits fr1 chainMm8Link
+    #   42671288 bases of 315518167 (13.524%) in intersection

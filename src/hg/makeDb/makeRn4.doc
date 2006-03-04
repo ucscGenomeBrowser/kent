@@ -1036,3 +1036,14 @@ BASE=/cluster/data/hg17/bed/blastz.galGal2.2006-02-13
 # BACTIGPOS - in rn3 this was a download from baylor, but I don't see it now -?
 # MGI?
 # SNPS?
+
+############################################################################
+##  BLASTZ swap from mm8 alignments (DONE - 2006-02-18 - Hiram)
+    ssh kk
+    cd /cluster/data/mm8/bed/blastzRn4.2006-02-16
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -swap -bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
+        `pwd`/DEF > swap.out 2>&1 &
+
+    time nice -n +19 featureBits rn4 chainMm8Link
+    #   1791093685 bases of 2571531505 (69.651%) in intersection

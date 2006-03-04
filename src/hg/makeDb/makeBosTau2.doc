@@ -1601,3 +1601,13 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 # SGP GENES (UPDATE 1/18/2006)
     sgpPep table dropped, replaced by hgc generated protein seq in browser
 
+############################################################################
+##  BLASTZ swap from mm8 alignments (DONE - 2006-02-18 - Hiram)
+    ssh pk
+    cd /cluster/data/mm8/bed/blastzBosTau.2006-02-18
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+        `pwd`/DEF > swap.out 2>&1 &
+
+    time nice -n +19 featureBits bosTau2 chainMm8Link
+    #   683178156 bases of 2812203870 (24.293%) in intersection

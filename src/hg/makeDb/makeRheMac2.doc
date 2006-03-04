@@ -487,3 +487,22 @@ cd /cluster/data/hg17/bed/blastz.rheMac2
 #      $db = "hg17";
 #  }
 #doBlastzChainNet.pl DEF -blastzOutRoot /san/sanvol1/scratch/rheMac2/rheMacOut/ >& do.log &
+
+
+############################################################################
+##  BLASTZ swap from mm8 alignments (DONE - 2006-02-18 - Hiram)
+    ssh pk
+    cd /cluster/data/mm8/bed/blastz.rheMac2.2006-02-17
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+        `pwd`/DEF > swap.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+        -swap -continue=net `pwd`/DEF > swap.net.out 2>&1 &
+    #   failed during a san hiccup,  finish that off, then:
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+        -swap -continue=load `pwd`/DEF > swap.load.out 2>&1 &
+
+    time nice -n +19 featureBits rheMac2 chainMm8Link
+    #   877906099 bases of 2646704109 (33.170%) in intersection
