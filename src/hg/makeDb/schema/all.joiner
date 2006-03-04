@@ -850,12 +850,14 @@ identifier bacAccession typeOf=genbankAccession external=genbank
 identifier humanBacAccession typeOf=bacAccession
 "Genbank accession of a sequenced $hg.BAC (~150kb of genomic sequence)."
     $hg.clonePos.name chopAfter=. dupeOk
-    $hg.gold.frag chopAfter=. $split
+    $hg,!hg18.gold.frag chopAfter=. $split
+    hg18.gold.frag chopAfter=. $split minCheck=0.98
     hg16.certificate.accession1 
     hg16.certificate.accession2
     hg15.certificate.accession1 minCheck=0.98
     hg15.certificate.accession2 minCheck=0.98
-    $hg.gl.frag chopAfter=. $split
+    $hg,!hg18.gl.frag chopAfter=. $split
+    hg18.gl.frag chopAfter=. $split minCheck=0.95
     $hg.fishClones.accNames chopAfter=. comma minCheck=0.70
 
 identifier humanBacAccessionVersion typeOf=bacAccession
