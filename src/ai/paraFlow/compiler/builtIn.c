@@ -3,9 +3,9 @@ char *fetchBuiltInCode()
 /* Return a string with the built in stuff. */
 {
 return
-"global string programName;\n"
-"global array of string args;\n"
-"global bit true=1, false=0;\n"
+"readable string programName;\n"
+"readable array of string args;\n"
+"readable bit true=1, false=0;\n"
 "\n"
 "global flow punt(string message, string source=\"application\", int level=0);\n"
 "global flow print(var v);\n"
@@ -57,6 +57,7 @@ return
 "global class win\n"
 "    {\n"
 "    string name;\n"
+"    to clear();\n"
 "    to plotDot(int x,y);\n"
 "    to line(int x1,y1,x2,y2);\n"
 "    to circle(int xCen,yCen,radius);\n"
