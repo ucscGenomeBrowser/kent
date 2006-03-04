@@ -1698,7 +1698,7 @@ static void checkRedefinitionInParent(struct pfCompile *pfc,
 	struct pfParse *varInit)
 /* Make sure that variable is not defined as a public member of parent class. */
 {
-if (!isFunctionIo(varInit))
+if (!isFunctionIo(varInit) && pfParseEnclosingFunction(varInit) == NULL)
     {
     struct pfBaseType *base;
     char *name = varInit->name;

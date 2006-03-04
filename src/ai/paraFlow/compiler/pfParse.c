@@ -129,6 +129,19 @@ else
     }
 }
 
+struct pfParse *pfParseEnclosingFunction(struct pfParse *pp)
+/* Find enclosing function if any.  */
+{
+for (pp = pp->parent; pp != NULL; pp = pp->parent)
+    {
+    if (pp->type == pptToDec || pp->type == pptFlowDec)
+	{
+        return pp;
+	}
+    }
+return NULL;
+}
+
 struct pfParse *pfParseEnclosingClass(struct pfParse *pp)
 /* Find enclosing class if any.  It treats self as enclosing self.  */
 {

@@ -251,6 +251,9 @@ struct pfParse *pfParseNew(enum pfParseType type,
 struct pfParse *pfParseEnclosingClass(struct pfParse *pp);
 /* Find enclosing class if any. */
 
+struct pfParse *pfParseEnclosingFunction(struct pfParse *pp);
+/* Find enclosing function if any.  */
+
 void pfParsePutChildrenInPlaceOfSelf(struct pfParse **pPp);
 /* Replace self with children. */
 
