@@ -101,7 +101,7 @@
 #include "hgMutUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1077 2006/02/24 01:20:44 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1078 2006/03/04 11:05:16 daryl Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10767,6 +10767,7 @@ registerTrackHandler("cnp", cnpMethods);
 //registerTrackHandler("cnpSebat", cnpSebatMethods);
 //registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("hapmapLd", ldMethods);
+registerTrackHandler("rertyHumanDiversityLd", ldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
 registerTrackHandler("recombRateMouse", recombRateMouseMethods);
 registerTrackHandler("recombRateRat", recombRateRatMethods);

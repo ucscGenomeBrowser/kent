@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.74 2006/02/27 08:34:08 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.75 2006/03/04 11:05:16 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1194,6 +1194,8 @@ if (startsWith("hapmapLd",pop)&&strlen(tg->mapName)>8)
     pop += 8;
 if (sameString(tg->mapName, "hapmapLdChbJpt"))
     pop = cloneString("Jpt+Chb");
+if (sameString(tg->mapName, "rertyHumanDiversityLd"))
+    pop = cloneString("rerty");
 
 if (sameString(valueString,"lod"))
     valueString = cloneString("LOD");

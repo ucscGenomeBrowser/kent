@@ -1171,6 +1171,16 @@ type bed 4 +
     longLabel Linkage Disequilibrium for the Han Chinese and Japanese from Tokyp (JPT+CHB)
     priority 5
 
+track rertyHumanDiversityLd
+shortLabel Haploview LD
+longLabel Haploview Linkage Disequilibrium 
+group varRep
+priority 144.499
+visibility hide
+canPack off
+chromosomes chr20
+type bed 4 +
+
 track blastzSelf
 shortLabel Self Blastz
 longLabel $Organism Blastz Self Alignments
