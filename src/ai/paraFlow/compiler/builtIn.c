@@ -19,6 +19,8 @@ return
 "global to randInit();\n"
 "global flow sqrt(double x) into double y;\n"
 "global flow atoi(string a) into int i;\n"
+"global flow sin(double radians) into double s;\n"
+"global flow cos(double radians) into double s;\n"
 "global flow isSpace(char c) into bit b;\n"
 "global to getEnvArray() into array of string envArray;\n"
 "global flow milliTicks() into long milliseconds;\n"
@@ -51,7 +53,17 @@ return
 "global to fileRemove(string name);\n"
 "global to httpConnect(string url, string method='GET', string agent='ParaFlow',"
 	"string protocol='HTTP/1.0') into (file f);\n"
+"\n"
+"global class win\n"
+"    {\n"
+"    string name;\n"
+"    to plotDot(int x,y);\n"
+"    to line(int x1,y1,x2,y2);\n"
+"    to circle(int xCen,yCen,radius);\n"
+"    }\n"
+"global to winOpen(int width,height, string name='mainWin') into (win win);\n"
 ;
+
 }
 
 char *fetchStringDef()

@@ -25,6 +25,18 @@ void pf_sqrt(_pf_Stack *stack)
 stack[0].Double = sqrt(stack[0].Double);
 }
 
+void pf_sin(_pf_Stack *stack)
+/* Return square root of number. */
+{
+stack[0].Double = sin(stack[0].Double);
+}
+
+void pf_cos(_pf_Stack *stack)
+/* Return square root of number. */
+{
+stack[0].Double = cos(stack[0].Double);
+}
+
 void pf_atoi(_pf_Stack *stack)
 /* Return binary representation of ascii-encoded number. */
 {
