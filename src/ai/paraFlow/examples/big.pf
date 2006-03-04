@@ -348,7 +348,6 @@ class cylinder extends polyhedron
         // going around circle twice effectively.  There's
         // a little bit of math here so we might as well
         // do it in parallel.
-	/*-needsDEBUG
         para (key@v in vertices) do
             {
 	    v = ();
@@ -357,17 +356,6 @@ class cylinder extends polyhedron
                v.z = -h;
             else
                v.z = h;
-            }
-	needsDEBUG-*/
-	for (int key=0; key<2*n; key++)
-            {
-	    point3d v = ();
-            (v.x,v.y) = rotate2d(0, radius, key*da);
-            if (key < n)
-               v.z = -h;
-            else
-               v.z = h;
-	    vertices[key] = v;
             }
 
         // Fill in facets except for the top and bottom
