@@ -2299,7 +2299,7 @@ switch (pp->type)
         errAt(pp->tok, "sorry, can't declare functions inside of functions");
 	break;
     case pptVarUse:
-	if (pp->var->scope == classScope)
+	if (pp->var->scope->class != NULL)
 	    {
 	    if (pp->parent->type == pptDot)
 		{

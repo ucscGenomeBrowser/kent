@@ -136,6 +136,24 @@ while (scope != NULL)
     struct pfVar *var = hashFindVal(scope->vars, name);
     if (var != NULL)
         return var;
+    if (scope->class != NULL)
+        {
+	/* Also look for it in parent classes. */
+	struct pfBaseType *class;
+	for (class = scope->class->parent; class != NULL; class = class->next)
+	    {
+	    struct pfParse *classDef = class->def;
+	    if (classDef != NULL)
+	        {
+		struct pfParse *namePp = classDef->children;
+		struct pfParse *body = namePp->next;
+		struct pfScope *classScope = body->scope;
+		var = hashFindVal(classScope->vars, name);
+		if (var != NULL)
+		    return var;
+		}
+	    }
+	}
     scope = scope->parent;
     }
 return NULL;
