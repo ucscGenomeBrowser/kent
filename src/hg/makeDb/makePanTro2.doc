@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.1 2006/03/02 23:40:56 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.2 2006/03/04 02:25:13 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -209,13 +209,13 @@ cat > jkStuff/checkChroms.csh << 'EOF'
     hgsql panTro2 -e "create table chrM_gap select * from chr1_gap where 0=1"
     hgsql panTro2 -e "create table chr6_hla_hap1_gap select * from chr1_gap where 0=1"
 
-[kate@hgwdev panTro2]$ featureBits panTro2 -countGaps -noRandom gap
+[kate@hgwdev panTro2]$ nice featureBits panTro2 -countGaps -noRandom gap
 423043673 bases of 3175632892 (13.322%) in intersection
-[kate@hgwdev panTro2]$ featureBits panTro1 -countGaps -noRandom gap
+[kate@hgwdev panTro2]$ nice featureBits panTro1 -countGaps -noRandom gap
 671583599 bases of 3083993401 (21.776%) in intersection
-[kate@hgwdev panTro2]$ featureBits hg15 -countGaps -noRandom gap
+[kate@hgwdev panTro2]$ nice featureBits hg15 -countGaps -noRandom gap
 238329157 bases of 3070537687 (7.762%) in intersection
-[kate@hgwdev panTro2]$ featureBits hg18 -countGaps -noRandom gap
+[kate@hgwdev panTro2]$ nice featureBits hg18 -countGaps -noRandom gap
 222401287 bases of 3091592211 (7.194%) in intersection
 
 chr1   12771775 bases of 229974691 (5.554%) in intersection
@@ -251,7 +251,7 @@ chrX   24409881 bases of 155361357 (15.712%) in intersection
 chrY   1261428 bases of 23952694 (5.266%) in intersection
 
 
-# HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 2006-02-05 kate)
+# HGCENTRALTEST ENTRY AND TRACKDB TABLE (DONE 2006-03-03 kate)
     ssh hgwdev
     cd $HOME/kent/src/hg/makeDb/trackDb
     cvs up -d -P
@@ -271,7 +271,7 @@ chrY   1261428 bases of 23952694 (5.266%) in intersection
           defaultPos, active, orderKey, genome, scientificName,  \
           htmlPath, hgNearOk, hgPbOk, sourceName)  \
           values("panTro2", "Jan. 2006", \
-          "/gbdb/panTro2/nib", "Chimp", "chr7:115705331-115981791", 1, \
+          "/gbdb/panTro2", "Chimp", "chr7:115705331-115981791", 1, \
           15, "Chimp", "Pan troglodytes", \
           "/gbdb/panTro2/html/description.html", 0, 0, \
           "Washington University Build 2 Version 1");'
@@ -360,6 +360,73 @@ rmdir --ignore-fail-on-non-empty /scratch/tmp/panTro2
         # 6538 jobs
     para try
 
+# CPU time in finished jobs:   32493557s  541559.29m  9025.99h  376.08d  1.030 y
+# IO & Wait Time:                 40999s     683.31m    11.39h    0.47d  0.001 y
+# Average job time:                4976s      82.94m     1.38h    0.06d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            7607s     126.78m     2.11h    0.09d
+# Submission to last job:        121890s    2031.50m    33.86h    1.41d
+
+#  34 hours
+
+    # Lift up the 500KB .out's to chrom level
+    ssh kkstore01
+    cd /cluster/data/panTro2/RMRun
+cat > lift.csh << 'EOF'
+    foreach d (`cat ../chrom.lst`)
+        set c = chr$d
+        echo $c
+        liftUp ../$d/$c.fa.out ../lifts/lift500K.lft error out/$c/*.out
+        set r = ${c}_random
+        if (-e out/$r) then
+            echo $r
+            liftUp ../$d/$r.fa.out ../lifts/lift500K.lft error out/$r/*.out
+        endif
+    end
+'EOF'
+    # << for emacs
+    csh lift.csh >&! lift.log &
+
+    # Load .outs into database
+    ssh hgwdev
+    cd /cluster/data/panTro2
+    ls */*.fa.out | wc -l
+        # 52 (one per chrom)... load them up
+    hgLoadOut panTro2 */*.fa.out
+# Several messages like: Strange perc. field -3.1 line 327855 of 1/chr1.fa.out
+# And at end: 953 records dropped due to repStart > repEnd
+# These are noted in rn4 and other make docs.
+# TODO: run it with -verbose=2 and send output to Robert Hubley/Arian Smit
+
+
+# VERIFY REPEATMASKER RESULTS (2006-03-03 kate)
+    # TODO: Eyeball some repeat annotations in the browser, compare to lib seqs.
+    # Run featureBits on previous genome build, and compare:
+    nice featureBits panTro2 rmsk
+        # 1396630330 bases of 2909512873 (48.002%) in intersection
+    nice featureBits panTro1 rmsk
+        # 1311281819 bases of 2733948177 (47.963%) in intersection
+    # looks good -- similar but just a bit higher
+
+    ssh hgwdev
+    cd /cluster/data/panTro2/RMRun
+    # take a look at 
+     hgsql panTro2 -e "select distinct(repFamily) from chr1_rmsk" > repFamilies.panTro2
+     hgsql panTro2 -e "select distinct(repName) from chr1_rmsk where repFamily <> 'Simple_repeat' and repFamily <> 'Low_complexity' order by repName" > repNames.panTro2
+    wc -l repNames.panTro2
+     hgsql panTro1 -e "select distinct(repFamily) from chr1_rmsk" > repFamilies.panTro1
+     hgsql panTro1 -e "select distinct(repName) from chr1_rmsk" > repNames.panTro1
+     hgsql panTro1 -e "select distinct(repName) from chr1_rmsk where repFamily <> 'Simple_repeat' and repFamily <> 'Low_complexity' order by repName" > repNames.panTro1
+    wc -l *Names*
+        # 864 repNames.panTro1
+        # 904 repNames.panTro2
+            # 40 new repeats
+    wc -l *Families*
+        # 38 repFamilies.panTro1
+        # 38 repFamilies.panTro2
+            # no new repeat families
+
+
 
 # RUN TRF TO IDENTIFY SIMPLE REPEATS (2006-03-01 kate)
 
@@ -403,6 +470,8 @@ cat > runTrf.csh << 'EOF'
 'EOF'
     csh runTrf.csh >&! runTrf.log &
 
+    # ~6 hours run-time
+
     # Redo chr9 (2006-03-02 kate)
     rm -fr split5M/chr9
     mkdir split5M/chr9
@@ -413,6 +482,159 @@ cat > runTrf.csh << 'EOF'
      # edit for just chr9
     csh runTrf.chr9.csh >&! runTrf.chr9.log &
 
+    # check for EOF in output files to give some assurance
+    endsInLf trf/*
+        # trf/chrM_0.bed zero length
+
+    # lift to chromosome coordinates
+    liftUp simpleRepeat.bed /cluster/data/panTro2/lifts/split5M.lft \
+         warn trf/*.bed
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/simpleRepeat
+    hgLoadBed panTro2 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+
+    nice featureBits panTro2 simpleRepeat
+        # 82897828 bases of 2909512873 (2.849%) in intersection
+    nice featureBits panTro1 simpleRepeat
+        # 53732632 bases of 2733948177 (1.965%) in intersection
+    # seems quite a bit higher -- compare it to hg17 chrom1
+
+        # nice featureBits panTro2 simpleRepeat -chrom=chr1
+            # 3068104 bases of 217202916 (1.413%) in intersection
+        nice featureBits hg17 simpleRepeat -chrom=chr1
+            # 3438627 bases of 222827847 (1.543%) in intersection
+                    # darn similar
 
 
+# PROCESS SIMPLE REPEATS INTO MASK
+    # After the simpleRepeats track has been built, make a filtered version 
+    # of the trf output: keep trf's with period <= 12:
+
+    ssh kkstore01
+    cd /cluster/data/panTro2/bed/simpleRepeat
+    mkdir -p trfMask trfMaskChrom
+    foreach f (trf/chr*.bed)
+        awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+    end
+
+    # lift filtered simple repeats to chrom coordinates, by chrom
+cat > liftChroms.csh << 'EOF'
+    foreach d (`cat /cluster/data/panTro2/chrom.lst`)
+        set c = chr$d
+        echo $c
+        liftUp trfMaskChrom/$c.bed /cluster/data/panTro2/split5M/$c.lft \
+                warn trfMask/${c}_?{,?}.bed 
+        set r = ${c}_random
+        if (-e /cluster/data/panTro2/$d/$r.fa) then
+            liftUp trfMaskChrom/$r.bed /cluster/data/panTro2/split5M/$r.lft \
+                warn trfMask/${r}_?{,?}.bed 
+        endif
+    end
+'EOF'
+    # << for emacs
+    csh liftChroms.csh >&! liftChroms.log &
+    
+    # check coverage of filtered TRF
+    hgwdev
+    cd /cluster/data/panTro2/bed/simpleRepeat
+    cat trfMaskChrom/*.bed > /tmp/filtTrf.bed
+    featureBits panTro2 /tmp/filtTrf.bed
+        # 28800863 bases of 2909512873 (0.990%) in intersection
+
+
+# MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF  (2006-03-03)
+    
+    ssh kkstore01
+    cd /cluster/data/panTro2
+
+    # soft-mask (lower-case) the chrom fasta files
+    # then make hard-masked versions from the soft-masked
+    set trfChr=bed/simpleRepeat/trfMaskChrom
+    foreach f (?{,?}/chr*.fa chr6_hla_hap1/chr*.fa)
+      cp $f $f.unmasked
+      echo "repeat- and trf-masking $f"
+      maskOutFa -soft $f $f.out $f
+      cp $f $f.rmsk
+      set c = $f:t:r
+      maskOutFa -softAdd $f $trfChr/$c.bed $f
+      echo "hard-masking $f"
+      maskOutFa $f hard $f.masked
+    end
+
+    # a few messages (e.g. 10 per chrom) like:
+    # WARNING: negative rEnd: -531 chr1:14090705-14090763 L1MEc
+
+    # after checking, remove .unmaksed and .rmsk
+
+    # make 2bit for browser and blat
+    faToTwoBit ?{,?}/chr*.fa chr6_hla_hap1/chr*.fa panTro2.2bit
+    cp -p panTro2.2bit /cluster/bluearc/scratch/hg/panTro2
+    # request push to cluster nodes
+    ssh kkr1u00
+    cp -p /cluster/data/panTro2/panTro2.2bit /iscratch/i/panTro2/panTro2.2bit
+    iSync
+
+    # make nibs for blastz w/linSpecRep
+    mkdir nib
+    foreach f (?{,?}/chr*.fa chr6_hla_hap1/chr*.fa)
+      echo $f:t:r
+      faToNib -softMask $f nib/$f:t:r.nib
+    end
+
+
+# PUT NIBS ON /SCRATCH 
+    #mkdir /cluster/bluearc/scratch/hg/panTro2
+    #rsync -av /cluster/data/panTro2/nib/* /cluster/bluearc/scratch/hg/panTro2/nib/
+
+# MAKE CHROMINFO TABLE WITH 2BIT 
+
+# MAKE 11.OOC 
+
+    ssh kolossus
+    cd /cluster/data/panTro2
+    mkdir /cluster/bluearc/panTro2
+    blat panTro2.2bit /dev/null /dev/null \
+        -tileSize=11 -makeOoc=/cluster/bluearc/panTro2/11.ooc -repMatch=1024
+
+
+    # GENBANK ALIGNMENTS
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add panTro2
+    # reviewed by Mark D.
+
+panTro2.serverGenome = /cluster/data/panTro2/panTro2.2bit
+panTro2.clusterGenome = /scratch/hg/panTro2/panTro2.2bit
+panTro2.ooc = /cluster/bluearc/panTro2/11.ooc
+panTro2.align.unplacedChroms = chrUn,chr*_random
+panTro2.lift = /cluster/store8/panTro2/jkStuff/liftAll.lft
+panTro2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+panTro2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+panTro2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+panTro2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+panTro2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+panTro2.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
+panTro2.downloadDir = panTro2
+panTro2.genbank.est.xeno.load = yes
+panTro2.refseq.mrna.native.load  = yes
+panTro2.refseq.mrna.xeno.load = yes
+panTro2.refseq.mrna.xeno.loadDesc  = yes
+
+    cvs ci etc/genbank.conf
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial rn4 &
+
+
+
+
+
+
+
+    # MAKE DOWNLOADABLE SEQUENCE FILES
 
