@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.14 2006/02/23 05:58:26 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.15 2006/03/04 01:10:50 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -51,17 +51,28 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char *chromName;
+char chromName[64];
 
 ret = newHash(0);
+
 safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    chromName = cloneString(row[0]);
+    safef(chromName, sizeof(chromName), "%s", row[0]);
     hashAdd(ret, chromName, NULL);
     }
 sqlFreeResult(&sr);
+
+safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end = 0", contigGroup);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    safef(chromName, sizeof(chromName), "%s_random", row[0]);
+    hashAdd(ret, chromName, NULL);
+    }
+
+
 hFreeConn(&conn);
 return ret;
 }
@@ -93,18 +104,31 @@ int alleleSize = strlen(allele);
 int chromEnd = 0;
 char *tmpString;
 int size = 0;
+boolean randomChrom = FALSE;
+
+tmpString = strstr(chromName, "random");
+if (tmpString != NULL) randomChrom = TRUE;
 
 /* range */
 if (locTypeInt == 1)
     {
-    tmpString = strstr(rangeString, "..");
-    if (tmpString == NULL) 
+    if (!randomChrom)
         {
-	fprintf(errorFileHandle, "Missing quotes in phys_pos for range\n");
-        return (-1);
+        tmpString = strstr(rangeString, "..");
+        if (tmpString == NULL) 
+            {
+	    fprintf(errorFileHandle, "Missing quotes in phys_pos for range\n");
+            return (-1);
+	    }
+        tmpString = tmpString + 2;
+        chromEnd = sqlUnsigned(tmpString);
 	}
-    tmpString = tmpString + 2;
-    chromEnd = sqlUnsigned(tmpString);
+    else
+        {
+        chromEnd = sqlUnsigned(rangeString);
+	chromEnd++;
+	}
+
     if (chromEnd <= chromStart) 
         {
 	fprintf(errorFileHandle, "Chrom end <= chrom start for range\n");
@@ -129,6 +153,16 @@ if (locTypeInt == 1)
 if (locTypeInt == 2)
     {
     chromEnd = sqlUnsigned(rangeString);
+    if (randomChrom)
+        {
+	if (chromEnd != chromStart)
+	    {
+	    fprintf(errorFileHandle, "Wrong size for exact\n");
+	    writeToExceptionFile(chromName, chromStart, chromEnd+1, snpId, "ExactLocTypeWrongSize");
+	    }
+	return chromEnd + 1;
+	}
+
     if (chromEnd != chromStart + 1) 
         {
 	fprintf(errorFileHandle, "Wrong size for exact\n");
