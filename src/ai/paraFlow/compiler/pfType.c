@@ -2781,7 +2781,8 @@ switch (pp->type)
 	   coerceSubstitute(pfc, pPp);
 	break;
     case pptConstZero:
-        pp->ty = pfTypeNew(pfc->intType);
+	if (pp->ty == NULL)
+	    pp->ty = pfTypeNew(pfc->intType);
 	break;
     case pptDot:
 	typeDot(pfc,pp);
