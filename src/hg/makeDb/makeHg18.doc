@@ -6710,3 +6710,33 @@ mkdir -p ${blatDir}/{over,net}
 
     time nice -n +19 featureBits hg18 chainMm8Link
     #   994530182 bases of 2881515245 (34.514%) in intersection
+
+# GENOSCOPE TETRAODON (tetNig1) ECORES (DONE, 2006-03-03, Fan)
+    ssh kkstore02
+    mkdir -p /cluster/data/hg18/bed/ecoresTetNig1
+    cd /cluster/data/hg18/bed/ecoresTetNig1
+                                                                                
+    wget --timestamp \
+         http://www.genoscope.cns.fr/externe/tetraodon/Data3/ecoresHumBuild36/EXOFISH_HS_WITH_TN.gff
+    wget --timestamp \
+         http://www.genoscope.cns.fr/externe/tetraodon/Data3/ecoresHumBuild36/EXOFISH_TN_WITH_HS.gff 
+
+    # this is in gff format
+    # remove "Ecotig" from name field
+    sed -e 's/Ecotig EG/EG/g' EXOFISH_HS_WITH_TN.gff |sed -e 's/CHR//' > ExofishHs36Tnig1.gff
+    # sed -e 's/Ecotig EG/EG/g' ExofishHs36Tnig1 > ExofishHs36Tnig1.gff
+    # need to have tabs between fields not a space to load file into table
+    sed -e 's/ /\t/g' ExofishHs36Tnig1.gff > Hs36Tnig1format.gff
+    # if "ecore" is changed to "CDS" and "ecotig" to "transcript" this loads
+    # correctly into the table.
+    sed -e 's/ecore/CDS/' Hs36Tnig1format.gff | sed -e 's/ecotig/transcript/' \
+	    | cut -f 1-8,10 > Hg18vstetNig1.gff
+    # add "chr" in front of the chromsome name in first field (2005-02-08)
+    perl -pi.bak -e 's/^([0-9XYM]{1,2})/chr$1/' Hg18vstetNig1.gff
+    rm *.bak
+    # need to reload table
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/ecoresTetNig1
+    echo 'drop table ecoresTetNig1;' | hgsql hg18
+    nice ldHgGene hg18 ecoresTetNig1 Hg18vstetNig1.gff
