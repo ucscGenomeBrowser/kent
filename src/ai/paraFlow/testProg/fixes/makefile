@@ -29,3 +29,5 @@ test:
 	diff expected/oneIntoClass output/oneIntoClass
 	paraFlow parentFieldInParam.pf parentFieldInParam.pf > output/parentFieldInParam
 	diff expected/parentFieldInParam output/parentFieldInParam
+	paraFlow parentMembers.pf > output/parentMembers
+	diff expected/parentMembers output/parentMembers
