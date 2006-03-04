@@ -1951,4 +1951,13 @@ cat > makeAxt.csh << 'EOF'
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
  
 
+############################################################################
+##  BLASTZ swap from mm8 alignments (DONE - 2006-02-23 - Hiram)
+    ssh pk
+    cd /cluster/data/mm8/bed/blastzPanTro1.2006-02-23
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+        `pwd`/DEF > swap.out 2>&1 &
 
+    time nice -n +19 featureBits panTro1 chainMm8Link
+    #   901976621 bases of 2733948177 (32.992%) in intersection

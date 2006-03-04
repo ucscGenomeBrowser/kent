@@ -869,3 +869,107 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     wc -l ../cpgIsland/cpgIsland.bed *bed
     #	22409 ../cpgIsland/cpgIsland.bed
     #	67504 cpgIslandGgfAndyMasked.bed
+
+#######################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2006-02-24 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/monDom4
+    #	use repMatch of 1228 as this genome is ~ %20 larger than human
+    #	1024 + (1024 * 0.2) = 1228
+    time blat monDom4.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=11.ooc -repMatch=1228
+    #	Wrote 43992 overused 11-mers to 11.ooc
+    #	real    3m24.793s
+
+    #	copy to bluearc filesystem for kluster use
+    cp -p 11.ooc /cluster/bluearc/scratch/hg/monDom4
+
+#########################################################################
+# GENBANK auto update (WORKING - 2006-02-24 - Hiram)
+    # align with revised genbank process. drop xeno ESTs.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvs update -d -P etc
+    #edit etc/genbank.conf to add monDom4, it is a copy of monDom2 with changes:
+
+# monDom4 (M. domestica)  8 chroms plus X and Un
+monDom4.serverGenome = /cluster/data/monDom4/monDom4.2bit
+monDom4.clusterGenome = /cluster/bluearc/scratch/hg/monDom4/monDom4.2bit
+monDom4.ooc = /cluster/data/monDom4/11.ooc
+monDom4.lift = no
+monDom4.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+monDom4.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+monDom4.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+monDom4.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+monDom4.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+monDom4.downloadDir = monDom4
+monDom4.refseq.mrna.xeno.load  = yes
+monDom4.refseq.mrna.xeno.loadDesc = yes
+monDom4.mgcTables.default = full
+monDom4.mgcTables.mgc = all
+
+    #	check that into CVS, then
+    # update /cluster/data/genbank/
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice -n 19 bin/gbAlignStep -initial monDom4 &
+    #	var/build/logs/2006.02.24-22:38:50.monDom4.initalign.log
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice -n 19 ./bin/gbDbLoadStep -drop -initialLoad  monDom4 &
+    #	var/dbload/hgwdev/logs/2006.02.26-09:36:15.dbload.log
+XXXX - running 2006-02-26 09:36
+
+##########################################################################
+#  BLASTZ SELF  (WORKING - 2006-03-02 - Hiram)
+
+    ssh kk
+    mkdir /cluster/data/monDom4/bed/blastzSelf.2006-03-02
+    cd /cluster/data/monDom4/bed
+    ln -s blastzSelf.2006-03-02 blastz.monDom4
+    cd blastzSelf.2006-03-02
+    
+    cat << '_EOF_' > DEF
+# monDom4 vs monDom4
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/cluster/home/angie/schwartzbin
+
+BLASTZ=blastz.v7
+
+BLASTZ_M=100
+
+# TARGET: Opossum monDom4
+SEQ1_DIR=/iscratch/i/monDom4/monDom4.2bit
+SEQ1_LEN=/iscratch/i/monDom4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: MonDom2
+SEQ2_DIR=/iscratch/i/monDom4/monDom4.2bit
+SEQ2_LEN=/iscratch/i/monDom4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom4/bed/blastzSelf.2006-03-02
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=10000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+XXXX - running 2006-03-02
+
+############################################################################
+##  BLASTZ swap from mm8 alignments (DONE - 2006-02-23 - Hiram)
+    ssh pk
+    cd /cluster/data/mm8/bed/blastzMonDom4.2006-02-23
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        `pwd`/DEF > swap.out 2>&1 &
+
+    time nice -n +19 featureBits monDom4 chainMm8Link
+    #   210933035 bases of 3501643220 (6.024%) in intersection

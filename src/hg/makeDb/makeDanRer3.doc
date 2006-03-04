@@ -5737,3 +5737,14 @@ _EOF_
     # these map, a subset that are STSs and with available primers sequences
     # were imported to UniSTS. These include submitted maps and those from
     # the Zebrafish Information Network (ZFIN).
+
+############################################################################
+##  BLASTZ swap from mm8 alignments (DONE - 2006-02-28 - Hiram)
+    ssh pk
+    cd /cluster/data/mm8/bed/blastzDanRer3.2006-02-28
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        `pwd`/DEF > swap.out 2>&1 &
+
+    time nice -n +19 featureBits danRer3 chainMm8Link
+    #   54831876 bases of 1630323462 (3.363%) in intersection

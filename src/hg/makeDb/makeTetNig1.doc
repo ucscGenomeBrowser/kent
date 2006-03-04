@@ -2650,3 +2650,17 @@ done
 # Modify track descriptions to describe the process using scaffolds for danRer3
 # chrNA and chrUn and the fact that dynamic masking was used for the Blastz
 # alignments - see makeDanRer3.doc for details.
+
+############################################################################
+##  BLASTZ swap from mm8 alignments (DONE - 2006-02-19 - Hiram)
+    ssh kk
+    cd /cluster/data/mm8/bed/blastzTetNig1.2006-02-19
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF > swap.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap -continue=net `pwd`/DEF > swap-net.out 2>&1 &
+
+    time nice -n +19 featureBits tetNig1 chainMm8Link
+    #   47024263 bases of 342403326 (13.734%) in intersection

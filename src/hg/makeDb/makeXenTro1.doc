@@ -2475,4 +2475,13 @@ doBlatz $(root1) $(root2) {check out exists psl/$(root1)_$(root2).psl}
 # MOUSE NET/CHAINS MM6 - Info contained in makeMm6.doc (200503 Hiram)
 
 
+############################################################################
+##  BLASTZ swap from mm8 alignments (DONE - 2006-02-21 - Hiram)
+    ssh kk
+    cd /cluster/data/mm8/bed/blastzXenTro1.2006-02-21
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF > swap.out 2>&1 &
 
+    time nice -n +19 featureBits xenTro1 chainMm8Link
+    #   59307185 bases of 1381238994 (4.294%) in intersection
