@@ -1,12 +1,15 @@
+// htmlFetch library module.  This contains code for fetching a web page
+// from the internet or from a local file, and parsing it.  Also it can
+// submit forms and get back the results. 
 
-class htmlStatus
+global class htmlStatus
 // HTTP version and status code.
     {
     string version="HTTP/1.1";	// HTTP protocal version
     int status=200;		// HTTP status code. 200 means A-OK.
     }
 
-class htmlCookie
+global class htmlCookie
 // A cookie - stored by the browser usually.  We need to
 // echo it back when we post forms.
     {
@@ -18,7 +21,7 @@ class htmlCookie
     bit secure;		// Is it a secure coookie?
     }
 
-class htmlTag
+global class htmlTag
 // An HTML tag - includes attribute list but no text.
     {
     string name;			// Tag name.
@@ -47,7 +50,7 @@ class htmlTag
 	}
     }
 
-class htmlFormVar
+global class htmlFormVar
 // A variable within an html form. Associated with a button, input tag etc.
     {
     string name;	// Variable name.
@@ -58,7 +61,7 @@ class htmlFormVar
     array of htmlTag tags;   // Associated html tags.
     }
 
-class htmlForm
+global class htmlForm
 // A form within an html page.
     {
     string name;	 // Name (nil if not defined)
@@ -99,7 +102,7 @@ class htmlForm
 	}
     }
 
-class htmlPage
+global class htmlPage
 // A complete parsed-out html page.
     {
     string url;		// URL or file where we got the page.
@@ -498,7 +501,7 @@ flow htmlFormsParse(htmlPage page) into (array of htmlForm forms)
 	}
     }
 
-flow htmlPageParse(string text, string name) into (htmlPage page)
+global flow htmlPageParse(string text, string name) into (htmlPage page)
     {
     page = ();
     page.url = name;
@@ -633,7 +636,8 @@ into (string text)
     text = f.readAll();
     }
 
-to httpGet(string url, dir of string vars=nil, dir of htmlCookie cookies=nil)
+global to httpGet(string url, dir of string vars=nil, 
+	dir of htmlCookie cookies=nil)
 into (string text)
 // Get http text from server.
     {
@@ -665,7 +669,7 @@ to httpPostUnforwarded(string url, dir of string vars,
     text = f.readAll();
     }
 
-to httpPost(string url, dir of string vars, dir of htmlCookie cookies=nil)
+global to httpPost(string url, dir of string vars, dir of htmlCookie cookies=nil)
 into (string text)
 // Get http text from server.
     {
@@ -680,7 +684,7 @@ into (string text)
 	}
     }
 
-to htmlPageFetch(string url, dir of string vars=nil, 
+global to htmlPageFetch(string url, dir of string vars=nil, 
 string method="GET", dir of htmlCookie cookies=nil) 
 into (htmlPage page)
     {
@@ -696,65 +700,4 @@ into (htmlPage page)
         text = fileReadAll(url);
     page = htmlPageParse(text,url);
     }
-
-to test(string fileName)
-    {
-    try {
-	dir of string vars = ("db" @ "mm7");
-	htmlPage page = htmlPageFetch(fileName, vars, "POST");
-	print(page.status);
-	print(page.header);
-	print(page.cookies);
-	print(page.tags.size + " tags in $fileName");
-	for (form in page.forms)
-	    {
-	    print(form.name + " " + form.method + " " + form.action);
-	    array of string keys = form.vars.keys();
-	    keys.sort();
-	    for (key in keys)
-		{
-		htmlFormVar var = form.vars[key];
-		prin("  " + var.name + " " );
-		prin(var.type + " " );
-		prin(var.value + " " );
-		print(var.values);
-		}
-	    }
-	print("All done");
-	}
-    catch(m)
-        {
-	print("Error: $m");
-	}
-    }
-
-to jimLinks()
-    {
-    htmlPage myPage = htmlPageFetch("http://www.soe.ucsc.edu/~kent");
-    for (tag in myPage.tags)
-        {
-	if (tag.attributes)
-	    {
-	    string link = tag.attribute("href");
-	    if (link)
-	        print(link);
-	    }
-	}
-    }
-
-to googleQuery()
-    {
-    htmlPage queryPage = htmlPageFetch("http://www.google.com");
-    htmlForm form = queryPage.forms[0];
-    htmlFormVar queryVar = form.vars['q'];
-    queryVar.value = 'parallel processing';
-    htmlPage resultsPage = queryPage.submit();
-    string resultCount = resultsPage.text.between('of about <b>', '</b> for');
-    print("Google found $resultCount pages on parallel processing.");
-    }
-
-string fileName = "gb.html";
-if (args.size > 0)
-    fileName = args[0];
-test(fileName);
 

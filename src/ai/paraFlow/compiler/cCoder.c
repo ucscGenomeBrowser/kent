@@ -501,7 +501,7 @@ else
 	if (keyName != NULL)
 	    {
 	    if (reverse)	/* To help simulate parallelism, do it in reverse. */
-		fprintf(f, "for (%s = _pf_collection->elsize-1, _pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; %s -= 1; _pf_offset -= _pf_elSize)\n", keyName->string, keyName->string);
+		fprintf(f, "for (%s = _pf_collection->elSize-1, _pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; %s -= 1, _pf_offset -= _pf_elSize)\n", keyName->string, keyName->string);
 	    else
 		fprintf(f, "for (%s=0, _pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize, %s+=1)\n", keyName->string, keyName->string);
 	    }
@@ -2388,19 +2388,33 @@ return FALSE;
 }
 
 static void codeForeach(struct pfCompile *pfc, FILE *f,
-	struct pfParse *foreach, boolean reverse)
+	struct pfParse *foreach, boolean isPara)
 /* Emit C code for foreach statement. */
 {
 struct pfParse *collectionPp = foreach->children;
 struct pfParse *elPp = collectionPp->next;
 struct pfParse *body = elPp->next;
+struct pfParse *elVarPp = NULL;
 
 startElInCollectionIteration(pfc, f, 0, 
-	foreach->scope, elPp, collectionPp, reverse);
+	foreach->scope, elPp, collectionPp, isPara);
 codeStatement(pfc, f, body);
-if (varWritten(elPp->var, body))
-    saveBackToCollection(pfc, f, 0, elPp, collectionPp);
-endElInCollectionIteration(pfc, f, foreach->scope, elPp, collectionPp, reverse);
+if (isPara)
+    {
+    if (elPp->type == pptKeyVal)
+	{
+	struct pfParse *keyPp = elPp->children;
+	struct pfParse *valPp = keyPp->next;
+	elVarPp = valPp;
+	}
+    else if (elPp->type == pptVarInit)
+	elVarPp = elPp;
+    else
+	internalErrAt(elPp->tok);
+    if (varWritten(elVarPp->var, body))
+	saveBackToCollection(pfc, f, 0, elVarPp, collectionPp);
+    }
+endElInCollectionIteration(pfc, f, foreach->scope, elPp, collectionPp, isPara);
 }
 
 static void codeFor(struct pfCompile *pfc, FILE *f, struct pfParse *pp)

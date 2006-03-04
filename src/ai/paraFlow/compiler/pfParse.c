@@ -469,7 +469,7 @@ skipRequiredCharType('(', &tok);
 pp = pfParseNew(pptNone, tok, parent, scope);
 
 /* Parse out the element in collection */
-element = parseNameUse(pp, &tok, scope);
+element = pfParseExpression(pfc, pp, &tok, scope);
 skipRequiredWord("in", &tok);
 collection = pfParseExpression(pfc, pp, &tok, scope);
 
