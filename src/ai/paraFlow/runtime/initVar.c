@@ -85,6 +85,7 @@ switch (st)
 		case pf_stDir:
 		     *((_pf_Dir *)output) = 
 		    	_pf_r_tuple_to_dir(stack, fieldType->children, encoding, pStack, pEncoding);
+		    break;
 		default:
 		    internalErr();
 		    break;
