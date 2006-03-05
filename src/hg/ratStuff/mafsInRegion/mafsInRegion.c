@@ -8,7 +8,7 @@
 #include "maf.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: mafsInRegion.c,v 1.2 2006/03/03 22:24:34 kate Exp $";
+static char const rcsid[] = "$Id: mafsInRegion.c,v 1.3 2006/03/05 01:53:13 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -138,7 +138,7 @@ while (maf)
         verbose(2, "   %s:%d-%d\n", chrom, mc->start+1, mc->start + mc->size);
         mafWrite(f, maf);
         //mafAliFree(&maf);
-        if (mafEnd > bed->chromEnd)
+        if (mafEnd > bed->chromEnd+1)
             maf = mafSubset(full, mc->src, bed->chromEnd+1, mafEnd);
         else
             maf = mafNext(mf);
