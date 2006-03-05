@@ -120,25 +120,23 @@ while (parenBalance > 0)
 return tok;
 }
 
-static void printFuncDef(FILE *f, struct pfParse *funcDef, boolean printLocals)
+static void printFuncDef(FILE *f, struct pfParse *funcDef)
 /* Print function definition - just name and parameters */
 {
-if (printLocals || funcDef->access == paGlobal)
-    {
-    struct pfToken *start, *end;
-    struct pfParse *name = funcDef->children;
-    struct pfParse *input = name->next;
-    struct pfParse *output = input->next;
-    struct pfParse *body = output->next;
-    start = end = funcDef->tok;
+struct pfToken *start, *end;
+struct pfParse *name = funcDef->children;
+struct pfParse *input = name->next;
+struct pfParse *output = input->next;
+struct pfParse *body = output->next;
+start = end = funcDef->tok;
+if (funcDef->access == paGlobal)
     fprintf(f, "global ");
-    findSpanningTokens(name, &start, &end);
-    findSpanningTokens(input, &start, &end);
-    findSpanningTokens(output, &start, &end);
-    end = addClosingParens(start, end);
-    printTokenRange(f, start, end);
-    fprintf(f, ";\n");
-    }
+findSpanningTokens(name, &start, &end);
+findSpanningTokens(input, &start, &end);
+findSpanningTokens(output, &start, &end);
+end = addClosingParens(start, end);
+printTokenRange(f, start, end);
+fprintf(f, ";\n");
 }
 
 static void printClassDef(FILE *f, struct pfParse *class)
@@ -176,7 +174,7 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
 	    break;
 	case pptToDec:
 	case pptFlowDec:
-	    printFuncDef(f, pp, printLocals);
+	    printFuncDef(f, pp);
 	    break;
 	case pptPolymorphic:
 	    fprintf(f, "polymorphic ");
