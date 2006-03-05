@@ -22,6 +22,7 @@ extern boolean hapmapLdChb_inv;
 extern boolean hapmapLdChbJpt_inv;
 extern boolean hapmapLdJpt_inv;
 extern boolean hapmapLdYri_inv;
+extern boolean rertyHumanDiversityLd_inv;
 
 #endif /* LDUI_H */
 

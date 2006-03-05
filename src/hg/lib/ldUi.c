@@ -12,3 +12,4 @@ boolean hapmapLdChb_inv = ldInvertDefault;
 boolean hapmapLdChbJpt_inv = ldInvertDefault;
 boolean hapmapLdJpt_inv = ldInvertDefault;
 boolean hapmapLdYri_inv = ldInvertDefault;
+boolean rertyHumanDiversityLd_inv = ldInvertDefault;

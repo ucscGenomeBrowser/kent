@@ -30,7 +30,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.257 2006/02/27 05:03:53 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.258 2006/03/05 06:21:51 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -371,6 +371,7 @@ hapmapLdChb_inv = cartUsualBoolean(cart, "hapmapLdChb_inv", ldInvertDefault);
 hapmapLdChbJpt_inv = cartUsualBoolean(cart, "hapmapLdChbJpt_inv", ldInvertDefault);
 hapmapLdJpt_inv = cartUsualBoolean(cart, "hapmapLdJpt_inv", ldInvertDefault);
 hapmapLdYri_inv = cartUsualBoolean(cart, "hapmapLdYri_inv", ldInvertDefault);
+rertyHumanDiversityLd_inv = cartUsualBoolean(cart, "rertyHumanDiversityLd_inv", ldInvertDefault);
 
 /* It would be nice to add a 'reset' button to reset the ld variables to their defaults. */
 
@@ -386,10 +387,11 @@ printf("&nbsp;LOD<BR>");
 printf("<BR><B>Track Geometry:</B><BR>&nbsp;&nbsp;\n");
 
 cgiMakeCheckBox("ldTrim", ldTrim); 
-printf("&nbsp;Trim to triangle<BR><BR>&nbsp;&nbsp;\n");
+printf("&nbsp;Trim to triangle<BR>\n");
 
 if (startsWith("hapmapLd", tdb->tableName))
     {
+    printf("<BR>&nbsp;&nbsp;");
     if (hTableExists("hapmapLdYri"))
 	{
 	cgiMakeCheckBox("hapmapLdYri_inv", hapmapLdYri_inv); 
@@ -414,6 +416,15 @@ if (startsWith("hapmapLd", tdb->tableName))
 	{
 	cgiMakeCheckBox("hapmapLdChbJpt_inv", hapmapLdChbJpt_inv); 
 	printf("&nbsp;Invert display for the combined JPT+CHB sample - Japanese in Tokyo, Japan and Han Chinese in Beijing, China <BR>&nbsp;&nbsp;\n");
+	}
+    }
+else if (startsWith("rertyHumanDiversityLd", tdb->tableName))
+    {
+    if (hTableExists("rertyHumanDiversityLd"))
+	{
+	printf("&nbsp;&nbsp;&nbsp;");
+	cgiMakeCheckBox("rertyHumanDiversityLd_inv", rertyHumanDiversityLd_inv); 
+	printf("&nbsp;Invert the display<BR>&nbsp;&nbsp;\n");
 	}
     }
 printf("<BR><B>Colors:</B>\n");
@@ -443,7 +454,9 @@ printf("</TD>\n  <TD>");
 radioButton("ldOut", ldOut, "none");
 printf("</TD>\n </TR>\n ");
 printf("</TABLE>\n");
-printf("<BR><B>Populations:</B>\n");
+
+if (startsWith("hapmapLd", tdb->tableName))
+    printf("<BR><B>Populations:</B>\n");
 }
 
 void hgMutIdControls (struct trackDb *tdb) 
@@ -1792,7 +1805,7 @@ else if (sameString(track, "snp"))
         snpUi(tdb);
 else if (sameString(track, "snp125"))
 	snp125Ui(tdb);
-else if (sameString(track, "ld"))
+else if (sameString(track, "rertyHumanDiversityLd"))
         ldUi(tdb);
 else if (sameString(track, "hapmapLd"))
         ldUi(tdb);
