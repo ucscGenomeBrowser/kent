@@ -431,6 +431,7 @@ codeCleanupVarNamed(pfc, f, var->ty, name->string);
 dyStringFree(&name);
 }
 
+
 static void startElInCollectionIteration(struct pfCompile *pfc, FILE *f,
 	int stack, struct pfScope *scope, struct pfParse *elIxPp, 
 	struct pfParse *collectionPp, boolean reverse)
@@ -517,6 +518,9 @@ else
 	fprintf(f, "%s = *((", elName->string);
 	codeBaseType(pfc, f, elBase);
 	fprintf(f, "*)(_pf_collection->elements + _pf_offset));\n");
+	if (elBase->needsCleanup)
+	    fprintf(f, "if (0 != %s) %s->_pf_refCount+=1;\n", elName->string,
+		elName->string);
 	}
     else if (base == pfc->stringType || base == pfc->dyStringType)
 	{
@@ -542,7 +546,6 @@ else
 	fprintf(f, "{\n");
 	if (keyName != NULL)
 	    {
-	    codeCleanupVar(pfc, f, ixPp->var);
 	    fprintf(f, "%s = _pf_string_from_const(_pf_key);\n", keyName->string);
 	    }
 	}
@@ -561,6 +564,8 @@ static void saveBackToCollection(struct pfCompile *pfc, FILE *f,
 {
 struct pfBaseType *base = collectionPp->ty->base;
 struct dyString *elName = varName(pfc, elPp->var);
+if (elPp->ty->base->needsCleanup)
+    fprintf(f, "%s->_pf_refCount += 1;\n", elName->string);
 if (base == pfc->arrayType)
     {
     fprintf(f, "*((");
@@ -599,19 +604,51 @@ else
     {
     internalErr();
     }
+dyStringFree(&elName);
 }
 
 
 static void endElInCollectionIteration(struct pfCompile *pfc, FILE *f,
-	struct pfScope *scope, struct pfParse *elPp, 
+	struct pfScope *scope, struct pfParse *elIxPp, 
 	struct pfParse *collectionPp, boolean reverse)
 /* This highly technical routine generates some of the code for
  * foreach and para actions.  */
 {
 struct pfBaseType *base = collectionPp->ty->base;
+struct dyString *keyName = NULL;
+struct pfParse *elPp, *ixPp = NULL;
+
+if (elIxPp->type == pptKeyVal)
+    {
+    ixPp = elIxPp->children;
+    elPp = ixPp->next;
+    keyName = varName(pfc,ixPp->var);
+    assert(base != pfc->indexRangeType);  /* Type checker prevents this */
+    }
+else
+    elPp = elIxPp;
+if (base == pfc->arrayType)
+    {
+    struct pfBaseType *elBase = collectionPp->ty->children->base;
+    if (elBase->needsCleanup)
+	{
+	struct dyString *elName;
+	if (elPp->type == pptKeyVal)
+	    elPp = elPp->children->next;
+	elName = varName(pfc, elPp->var);
+	codeCleanupVarNamed(pfc, f, elPp->var->ty, elName->string);
+	dyStringFree(&elName);
+	}
+    }
+else if (base == pfc->dirType)
+    {
+    if (keyName != NULL)
+	{
+	codeCleanupVar(pfc, f, ixPp->var);
+	}
+    }
 fprintf(f, "}\n");
-if (base != pfc->arrayType && base != pfc->stringType && 
-	base != pfc->dyStringType && base != pfc->indexRangeType)
+if (base == pfc->dirType)
     {
     fprintf(f, "_pf_ix.cleanup(&_pf_ix);\n");
     }
@@ -3202,11 +3239,11 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
     struct ctar *ctarList = NULL;
     if (toCode->type == pptModule || toCode->type == pptMainModule)
 	{
-	char fileName[PATH_LEN];
+	struct pfModule *mod = hashMustFindVal(pfc->moduleHash, toCode->name);
+	char *fileName = replaceSuffix(mod->fileName, ".pf", ".c");
 	char *moduleName = mangledModuleName(toCode->name);
 	if (toCode->type == pptMainModule)
 	    mainModule = toCode;
-	safef(fileName, sizeof(fileName), "%s%s.c", baseDir, toCode->name);
 	f = mustOpen(fileName, "w");
 
 	pfc->moduleTypeHash = hashNew(0);
@@ -3264,6 +3301,7 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 	printLocalTypeInfo(pfc, toCode->name, f);
 	freeHashAndVals(&pfc->moduleTypeHash);
 	carefulClose(&f);
+	freeMem(fileName);
 	}
     }
 f = mustOpen(mainName, "w");

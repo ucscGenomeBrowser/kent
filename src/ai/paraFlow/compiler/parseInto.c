@@ -187,9 +187,9 @@ for (mod = pfc->moduleList; mod != NULL; mod = mod->next)
 	slAddHead(&program->children, modPp);
     if (type != pptModuleRef)
         {
-	char defFile[PATH_LEN];
-	safef(defFile, sizeof(defFile), "%s%s.pfh", pfc->baseDir, mod->name);
+	char *defFile = replaceSuffix(mod->fileName, ".pf", ".pfh");
 	pfMakeDefFile(pfc, modPp, defFile);
+	freeMem(defFile);
 	}
     }
 slReverse(&program->children);

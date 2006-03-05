@@ -566,8 +566,10 @@ if (key != NULL)
     }
 if (dit->base->needsCleanup)
     {
+    struct _pf_object *obj = val;
     struct _pf_object **pObj = output;
-    *pObj = val;
+    obj->_pf_refCount += 1;
+    *pObj = obj;
     }
 else
     {

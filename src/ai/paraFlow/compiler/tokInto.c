@@ -10,7 +10,7 @@
 #include "pfCompile.h"
 
 static struct pfModule *tokenizeSource(struct pfTokenizer *tkz,
-	struct pfSource *source, char *modName)
+	struct pfSource *source, char *modName, char *fileName)
 /* Attatch source to tokenizer and read all tokens. 
  * Create a pfModule structure to hold results. */
 {
@@ -39,6 +39,7 @@ slReverse(&tokList);
 /* Create and return module. */
 AllocVar(module);
 module->name = cloneString(modName);
+module->fileName = cloneString(fileName);
 module->tokList = tokList;
 module->source = source;
 return module;
@@ -49,7 +50,7 @@ static struct pfModule *tokenizeFile(struct pfTokenizer *tkz,
 /* Tokenize a file. */
 {
 struct pfSource *source = pfSourceOnFile(fileName);
-return tokenizeSource(tkz, source, modName);
+return tokenizeSource(tkz, source, modName, fileName);
 }
 
 static char *findSourcePath(char *baseDir, struct slName *pathList, 
@@ -70,7 +71,6 @@ else
 	{
 	dyStringClear(dy);
 	dyStringPrintf(dy, "%s/%s%s", dir->name, fileName, suffix);
-	uglyf("Looking in %s\n", dy->string);
 	if (fileExists(dy->string))
 	    {
 	    path = cloneString(dy->string);
@@ -82,21 +82,6 @@ dyStringFree(&dy);
 if (path == NULL)
     errAbort("Couldn't find %s%s", fileName, suffix);
 return path;
-}
-
-char *replaceSuffix(char *path, char *oldSuffix, char *newSuffix)
-/* Return a string that's a copy of path, but with old suffix
- * replaced by new suffix. */
-{
-int pathLen = strlen(path);
-int oldSuffLen = strlen(oldSuffix);
-int newSuffLen = strlen(newSuffix);
-int headLen = pathLen - oldSuffLen;
-int newLen = headLen + newSuffLen;
-char *result = needMem(newLen+1);
-memcpy(result, path, headLen);
-memcpy(result+headLen, newSuffix, newSuffLen);
-return result;
 }
 
 static void rTokInto(struct pfCompile *pfc, char *baseDir, char *modName,
@@ -167,7 +152,7 @@ static void addBuiltIn(struct pfCompile *pfc, char *code, char *modName)
 /* Tokenize a little built-in module and hang it on pfc. */
 {
 struct pfSource *source = pfSourceNew(modName, code);
-struct pfModule *mod = tokenizeSource(pfc->tkz, source, modName);
+struct pfModule *mod = tokenizeSource(pfc->tkz, source, modName, modName);
 mod->isPfh = TRUE;
 hashAdd(pfc->moduleHash, modName, mod);
 slAddHead(&pfc->moduleList, mod);

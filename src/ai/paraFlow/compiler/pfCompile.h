@@ -26,6 +26,7 @@ struct pfModule
     {
     struct pfModule *next;	/* Next module in list. */
     char *name;			/* Module symbolic name. */
+    char *fileName;		/* File name of module. */
     struct pfToken *tokList;	/* All modules's tokens. */
     struct pfParse *pp;		/* Parse tree for module. */
     struct pfSource *source;	/* Source file associated with module. */
@@ -40,6 +41,7 @@ struct pfCompile
     char *baseDir;		/* paraFlow source file base dir. */
     char *cIncludeDir;		/* Directory where pfPreamble.h lives. */
     char *runtimeLib;		/* Location of runtime lib. */
+    char *jkwebLib;		/* Location of jkweb.a lib. */
     struct slName *paraLibPath; /* Where paraFlow library modules live. */
     struct hash *cfgHash;	/* Unparsed config hash. */
     struct hash *moduleHash;	/* Module hash.  pfModule valued, name keyed. */
@@ -149,6 +151,10 @@ boolean pfBaseTypeIsPassedByValue(struct pfCompile *pfc,
 /* --- utility functions --- */
 void printEscapedString(FILE *f, char *s);
 /* Print string in such a way that C can use it. */
+
+char *replaceSuffix(char *path, char *oldSuffix, char *newSuffix);
+/* Return a string that's a copy of path, but with old suffix
+ * replaced by new suffix. */
 
 #endif /* PFCOMPILE_H */
 

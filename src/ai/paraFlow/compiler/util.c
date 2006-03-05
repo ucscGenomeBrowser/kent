@@ -34,3 +34,18 @@ while ((c = *s++) != 0)
 fputc('"', f);
 }
 
+char *replaceSuffix(char *path, char *oldSuffix, char *newSuffix)
+/* Return a string that's a copy of path, but with old suffix
+ * replaced by new suffix. */
+{
+int pathLen = strlen(path);
+int oldSuffLen = strlen(oldSuffix);
+int newSuffLen = strlen(newSuffix);
+int headLen = pathLen - oldSuffLen;
+int newLen = headLen + newSuffLen;
+char *result = needMem(newLen+1);
+memcpy(result, path, headLen);
+memcpy(result+headLen, newSuffix, newSuffLen);
+return result;
+}
+

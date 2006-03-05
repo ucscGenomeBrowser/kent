@@ -316,6 +316,7 @@ char *libPath;
 pfc->cfgHash = hash;
 pfc->cIncludeDir = mustFindSetting(hash, "cIncludeDir", fileName);
 pfc->runtimeLib = mustFindSetting(hash, "runtimeLib", fileName);
+pfc->jkwebLib = mustFindSetting(hash, "jkwebLib", fileName);
 libPath = mustFindSetting(hash, "paraLibPath", fileName);
 pfc->paraLibPath = parsePath(libPath);
 }
@@ -426,40 +427,44 @@ verbose(2, "Phase 8 - compiling C code\n");
 	{
 	if (module->name[0] != '<' && module->type != pptModuleRef)
 	    {
+	    struct pfModule *mod = hashMustFindVal(pfc->moduleHash, module->name);
+	    char *cName = replaceSuffix(mod->fileName, ".pf", ".c");
+	    char *oName = replaceSuffix(mod->fileName, ".pf", ".o");
 	    dyStringClear(dy);
 	    dyStringAppend(dy, "gcc ");
 	    dyStringAppend(dy, "-O ");
-	    dyStringAppend(dy, "-I ~/kent/src/ai/paraFlow/compiler ");
+	    dyStringPrintf(dy, "-I %s ", pfc->cIncludeDir);
 	    dyStringAppend(dy, "-c ");
 	    dyStringAppend(dy, "-o ");
-	    dyStringAppend(dy, baseDir);
-	    dyStringAppend(dy, module->name);
-	    dyStringAppend(dy, ".o ");
-	    dyStringAppend(dy, baseDir);
-	    dyStringAppend(dy, module->name);
-	    dyStringAppend(dy, ".c");
+	    dyStringPrintf(dy, "%s ", oName);
+	    dyStringPrintf(dy, "%s ", cName);
 	    verbose(2, "%s\n", dy->string);
 	    err = system(dy->string);
 	    if (err != 0)
 		errAbort("Couldn't compile %s.c", module->name);
+	    freeMem(oName);
+	    freeMem(cName);
 	    }
 	}
     dyStringClear(dy);
     dyStringAppend(dy, "gcc ");
     dyStringAppend(dy, "-O ");
-    dyStringAppend(dy, "-I ~/kent/src/ai/paraFlow/compiler ");
+    dyStringPrintf(dy, "-I %s ", pfc->cIncludeDir);
     dyStringPrintf(dy, "-o %s%s ", baseDir, baseName);
     dyStringPrintf(dy, "%s ", cFile);
     for (module = program->children; module != NULL; module = module->next)
         {
 	if (module->name[0] != '<')
 	    {
-	    dyStringPrintf(dy, "%s%s", baseDir, module->name);
-	    dyStringPrintf(dy, ".o ");
+	    struct pfModule *mod = hashMustFindVal(pfc->moduleHash, module->name);
+	    char *suffix = (module->type == pptModuleRef ? ".pfh" : ".pf");
+	    char *oName = replaceSuffix(mod->fileName, suffix, ".o");
+	    dyStringPrintf(dy, "%s ", oName);
+	    freeMem(oName);
 	    }
 	}
-    dyStringAppend(dy, "~/kent/src/ai/paraFlow/runtime/runtime.a ");
-    dyStringPrintf(dy, "~/kent/src/lib/%s/jkweb.a", getenv("MACHTYPE"));
+    dyStringPrintf(dy, " %s ", pfc->runtimeLib);
+    dyStringPrintf(dy, "%s ", pfc->jkwebLib);
     verbose(2, "%s\n", dy->string);
     err = system(dy->string);
     if (err != 0)
