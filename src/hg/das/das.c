@@ -13,7 +13,7 @@
 #include "trackTable.h"
 #include <regex.h>
 
-static char const rcsid[] = "$Id: das.c,v 1.33 2006/01/30 21:56:57 daryl Exp $";
+static char const rcsid[] = "$Id: das.c,v 1.34 2006/03/06 17:34:25 angie Exp $";
 
 char *version = "1.00";
 char *database = NULL;	
@@ -928,7 +928,7 @@ for (segment = segmentList; segment != NULL; segment = segment->next)
     /* Write out DNA. */
     seq = hDnaFromSeq(segment->seq, segment->start, segment->end, dnaLower);
     if (seq == NULL)
-        errAbort("Couldn't fetch %s\n", seq);
+        errAbort("Couldn't fetch %s\n", segment->seq);
     size = seq->size;
     for (i=0; i<size; i += oneSize)
 	{
