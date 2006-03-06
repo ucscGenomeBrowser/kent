@@ -14,7 +14,7 @@
 #include "kgAlias.h"
 #include "findKGAlias.h"
 
-static char const rcsid[] = "$Id: knownGene.c,v 1.29 2005/12/30 00:31:34 fanhsu Exp $";
+static char const rcsid[] = "$Id: knownGene.c,v 1.30 2006/03/06 18:09:41 angie Exp $";
 
 static char *posFromRow3(char **row)
 /* Convert chrom/start/end row to position. */
@@ -174,7 +174,6 @@ char *pos = genePredPosFromTable("knownGene", gp, conn);
 if (pos == NULL)
     {
     char query[256];
-    char buf[128];
     struct sqlResult *sr;
     char **row;
     safef(query, sizeof(query), "select tName, tStart, tEnd from %s where qName = '%s'",

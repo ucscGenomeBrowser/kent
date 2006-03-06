@@ -153,7 +153,6 @@ dyStringFree(&query);
 static void groupMethods(struct order *ord, char *parameters)
 /* Fill in group methods. */
 {
-char *s;
 ord->table = cloneString(nextWord(&parameters));
 ord->curGeneField = cloneString(nextWord(&parameters));
 ord->groupField = cloneString(nextWord(&parameters));

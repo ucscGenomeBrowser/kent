@@ -14,13 +14,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: configure.c,v 1.43 2005/03/03 07:10:57 donnak Exp $";
-
-static char *onOffString(boolean on)
-/* Return "on" or "off". */
-{
-return on ? "on" : "off";
-}
+static char const rcsid[] = "$Id: configure.c,v 1.44 2006/03/06 18:09:41 angie Exp $";
 
 char *configVarName(struct column *col, char *varName)
 /* Return variable name for configuration. */
@@ -259,7 +253,6 @@ void doDefaultConfigure(struct sqlConnection *conn, struct column *colList)
 /* Do configuration starting with defaults. */
 {
 struct column *col;
-char varPattern[64];
 for (col=colList; col != NULL; col = col->next)
     col->on = col->defaultOn;
 cartRemovePrefix(cart, colConfigPrefix);

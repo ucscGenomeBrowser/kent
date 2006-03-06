@@ -11,7 +11,7 @@
 #include "jksql.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: userSettings.c,v 1.7 2005/03/03 07:10:58 donnak Exp $";
+static char const rcsid[] = "$Id: userSettings.c,v 1.8 2006/03/06 18:09:42 angie Exp $";
 
 static char *catAndClone(char *a, char *b)
 /* Return concatenation of a and b in dynamic memory. */
@@ -138,7 +138,7 @@ void userSettingsSaveForm(struct userSettings *us)
 /* Put up controls that let user name and save the current
  * set. */
 {
-struct hashEl *el, *list = cartFindPrefix(us->cart, us->savePrefix);
+struct hashEl *list = cartFindPrefix(us->cart, us->savePrefix);
 
 /* Start form/save session/print title. */
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"usForm\" METHOD=GET>\n");
@@ -182,7 +182,7 @@ void userSettingsLoadForm(struct userSettings *us)
 /* Put up controls that let user name and save the current
  * set. */
 {
-struct hashEl *el, *list = cartFindPrefix(us->cart, us->savePrefix);
+struct hashEl *list = cartFindPrefix(us->cart, us->savePrefix);
 
 /* Start form/save session/print title. */
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" NAME=\"usForm\" METHOD=GET>\n");
@@ -281,7 +281,7 @@ return retVal;
 void userSettingsDropDown(struct userSettings *us)
 /* Display list of available saved settings . */
 {
-struct hashEl *el, *list = cartFindPrefix(us->cart, us->savePrefix);
+struct hashEl *list = cartFindPrefix(us->cart, us->savePrefix);
 if (list != NULL)
     {
     hPrintf("<SELECT NAME=\"%s\">\n", us->nameVar);

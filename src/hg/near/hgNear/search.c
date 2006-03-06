@@ -7,7 +7,7 @@
 #include "obscure.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: search.c,v 1.17 2004/04/15 07:29:50 kent Exp $";
+static char const rcsid[] = "$Id: search.c,v 1.18 2006/03/06 18:09:42 angie Exp $";
 
 int searchResultCmpShortLabel(const void *va, const void *vb)
 /* Compare to sort based on short label. */
@@ -58,11 +58,9 @@ static void transformToCanonical(struct searchResult *list,
 	struct sqlConnection *conn)
 /* Transform search results to canonical versions.  */
 {
-char buf[64];
 struct dyString *dy = newDyString(1024);
 char *cannon = genomeSetting("canonicalTable");
 char *isoform = genomeSetting("isoformTable");
-char query[512];
 struct sqlResult *sr;
 char **row;
 struct searchResult *el;

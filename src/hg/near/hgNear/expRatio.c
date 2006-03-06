@@ -13,7 +13,7 @@
 #include "hgExp.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: expRatio.c,v 1.39 2005/11/10 01:17:10 aamp Exp $";
+static char const rcsid[] = "$Id: expRatio.c,v 1.40 2006/03/06 18:09:41 angie Exp $";
 
 
 static char *expCellVal(struct genePos *gp,
@@ -258,7 +258,6 @@ if (expAdvFilterUsed(col, subName))
     struct hash *expHash = expValHash(dataConn, dataTable);
     struct hash *nameExpHash = getNameExpHash(lookupConn, lookupTable, 
     	"name", "value", expHash);
-    int i;
     boolean orLogic = advFilterOrLogic(col, "logic", FALSE);
     int isMax;
     int repIx;
@@ -660,9 +659,6 @@ void setupColumnExpMulti(struct column *col, char *parameters)
  * short or long. */
 {
 struct expMultiData *emdList = NULL;
-struct expMultiData *allEmd = makeEmd(col, "all", "all replicates", &emdList);
-struct expMultiData *medianEmd = makeEmd(col, "median", "median of replicates", &emdList);
-struct expMultiData *selectedEmd = makeEmd(col, "selected", "selected", &emdList);
 char *ratioMax = columnSetting(col, "ratioMax", "3.0");
 char *absoluteMax = columnSetting(col, "absoluteMax", "30000");
 
@@ -672,6 +668,9 @@ if (col->table == NULL)
 
 /* Check that we have at least one set of experiments to display,
  * and set the current experiments. */
+makeEmd(col, "all", "all replicates", &emdList);
+makeEmd(col, "median", "median of replicates", &emdList);
+makeEmd(col, "selected", "selected", &emdList);
 if (emdList == NULL)
    errAbort("Need at least one of all/median/selected for %s", col->name);
 col->emdList = emdList;

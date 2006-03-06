@@ -599,8 +599,6 @@ static void customCellPrint(struct column *col, struct genePos *gp,
 /* Return value of custom field. */
 {
 boolean gotAny = FALSE;
-struct dyString *dy = NULL;
-char *retVal = NULL;
 struct hashEl *hel;
 hPrintf("<TD>");
 for (hel = hashLookup(col->customIdHash, gp->name); hel != NULL; hel = hashLookupNext(hel))
@@ -642,7 +640,7 @@ struct searchResult *customSearch(struct column *col,
     struct sqlConnection *conn, char *search)
 /* Search lookup type column. */
 {
-struct searchResult *resList = NULL, *res;
+struct searchResult *resList = NULL;
 char *type = columnSetting(col, "search", "exact");
 struct hashEl *helList, *hel;
 
