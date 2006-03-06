@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: elTreeComp.c,v 1.1 2006/03/03 21:22:37 braney Exp $";
+static char const rcsid[] = "$Id: elTreeComp.c,v 1.2 2006/03/06 17:36:42 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -44,15 +44,15 @@ if (slCount(g1->elements) != slCount(g2->elements))
 
 for(e1=g1->elements, e2=g2->elements; e1 && e2 ; e1 = e1->next, e2=e2->next,count++)
     {
-    if (e1->isFlipped != e2->isFlipped)
-	warn("in genomes %s and %s element %d not both flipped (%d and %d)",
-	    g1->name, g2->name, count, e1->isFlipped, e2->isFlipped);
     if (!sameString(e1->name, e2->name))
 	{
 	warn("in genomes %s and %s element %d not equal (%s and %s)",
 	    g1->name, g2->name, count, e1->name, e2->name);
 	break;
 	}
+    else if (e1->isFlipped != e2->isFlipped)
+	warn("in genomes %s element %s not same strand (%d and %d)",
+	    g1->name,  eleName(e1), e1->isFlipped, e2->isFlipped);
     }
 }
 
