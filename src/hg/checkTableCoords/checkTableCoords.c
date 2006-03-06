@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.10 2005/09/16 20:25:16 angie Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.11 2006/03/06 17:21:44 angie Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */
@@ -17,9 +17,9 @@ char *theTable = NULL;                  /* -table option or second arg */
 int hoursOld = 0;                       /* -daysOld, -hoursOld options */
 char *alwaysExclude = "trackDb*,hgFindSpec*,tableDescriptions,all_mrna,all_est";
                                         /* always exclude these patterns */
-char *genbankExclude = "*_mrna,*_est,*_intronEst,xeno*,ref*,gb*,mgc*,"
+char *genbankExclude = "*mrna,*_est,*intronEst,xeno*,ref*,gb*,mgc*,mrna,"
                        "author,cds,description,geneName,imageClone,"
-                       "mrnaClone,mrnaOrientInfo,productName";
+                       "mrnaClone,estOrientInfo,mrnaOrientInfo,productName";
                                         /* expand "genbank" to these patterns */
 struct slName *excludePatterns = NULL;  /* -exclude option + alwaysExclude */
 boolean ignoreBlocks = FALSE;           /* skip block checks to save time */
