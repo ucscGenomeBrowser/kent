@@ -192,7 +192,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.997 2006/02/28 22:11:50 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.998 2006/03/06 17:56:52 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -694,7 +694,8 @@ void samplePrintPos(struct sample *smp, int smpSize)
  * standard format. */
 {
 if( smpSize != 9 ) 
-    errAbort( "Invalid sample entry!\n It has %d fields instead of 9\n" );
+    errAbort("Invalid sample entry!\n It has %d fields instead of 9\n",
+	     smpSize);
 
 printf("<B>Item:</B> %s<BR>\n", smp->name);
 printf("<B>Score:</B> %d<BR>\n", smp->score);
@@ -14103,7 +14104,7 @@ char **row;
 char query[256];
 struct hTableInfo *hti = hFindTableInfo(seqName, table);
 if(hti == NULL)
-    errAbort("Can't find table: %s", seqName);
+    errAbort("Can't find table: (%s) %s", seqName, table);
 else if(hti && sameString(hti->startField, "tStart"))
     snprintf(query, sizeof(query), "select qName,tStart,tEnd from %s where tName='%s' and tStart < %u and tEnd > %u", 
 	     table, seqName, winEnd, winStart);
@@ -14111,7 +14112,7 @@ else if(hti && sameString(hti->startField, "chromStart"))
     snprintf(query, sizeof(query), "select name,chromStart,chromEnd from %s where chrom='%s' and chromStart < %u and chromEnd > %u", 
 	     table, seqName, winEnd, winStart);
 else
-    errAbort("%s doesn't have tStart or chromStart");
+    errAbort("%s doesn't have tStart or chromStart", table);
 sr = sqlGetResult(conn, query);
 while((row = sqlNextRow(sr)) != NULL)
     {
@@ -16970,7 +16971,7 @@ for(i = 0; i < 4; i++)
 	sqlFreeResult(&sr);
     }
 if(i == 4)
-    errAbort("Can't find query for %s in %s. This entry may no longer exist\n", gene, geneTable);
+    errAbort("Can't find query for %s in %s. This entry may no longer exist\n", geneName, geneTable);
 
 
 AllocArray(exnStarts, gene->exonCount);
