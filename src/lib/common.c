@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.87 2006/02/28 21:03:52 markd Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.88 2006/03/06 16:01:52 hartera Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1778,6 +1778,7 @@ return sz;
 }
 
 static char *naStr = "n/a";
+static char *emptyStr = "";
 
 char *naForNull(char *s)
 /* Return 'n/a' if s is NULL, otherwise s. */
@@ -1791,7 +1792,15 @@ char *naForEmpty(char *s)
 /* Return n/a if s is "" or NULL, otherwise s. */
 {
 if (s == NULL || s[0] == 0)
-   s = naStr;
+    s = naStr;
+return s;
+}
+
+char *emptyForNull(char *s)
+/* Return "" if s is NULL, otherwise s. */
+{
+if (s == NULL)
+   s = emptyStr;
 return s;
 }
 

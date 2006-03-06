@@ -892,6 +892,9 @@ char *naForNull(char *s);
 char *naForEmpty(char *s);
 /* Return n/a if s is "" or NULL, otherwise s. */
 
+char *emptyForNull(char *s);
+/* Return "" if s is NULL, otherwise s. */
+
 char *trueFalseString(boolean b);
 /* Return "true" or "false" */
 
