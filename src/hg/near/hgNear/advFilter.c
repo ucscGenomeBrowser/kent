@@ -11,7 +11,7 @@
 #include "hgColors.h"
 #include "hgNear.h"
 
-static char const rcsid[] = "$Id: advFilter.c,v 1.25 2005/03/03 07:10:57 donnak Exp $";
+static char const rcsid[] = "$Id: advFilter.c,v 1.26 2006/03/06 18:02:33 angie Exp $";
 
 struct genePos *advFilterResults(struct column *colList, 
 	struct sqlConnection *conn)
@@ -252,8 +252,6 @@ void doAdvFilter(struct sqlConnection *conn, struct column *colList)
 struct column *col;
 boolean passPresent[2];
 int onOff = 0;
-boolean anyForSecondPass = FALSE;
-struct userSettings *us = filUserSettings();
 
 makeTitle("Gene Sorter Filter", "hgNearHelp.html#Filter");
 hPrintf("<FORM ACTION=\"../cgi-bin/hgNear\" METHOD=POST>\n");
@@ -362,28 +360,6 @@ void doAdvFilterList(struct sqlConnection *conn, struct column *colList)
 /* List gene names matching advanced filter. */
 {
 doAdvFilterListCol(conn, colList, "name");
-}
-
-static struct genePos *firstBitsOfList(struct genePos *inList, int maxCount, 
-	struct genePos **pRejects)
-/* Return first maxCount of inList.  Put rest in rejects. */
-{
-struct genePos *outList = NULL, *gp, *next;
-int count;
-for (gp = inList, count=0; gp != NULL; gp = next, count++)
-    {
-    next = gp->next;
-    if (count < maxCount)
-        {
-	slAddHead(&outList, gp);
-	}
-    else
-        {
-	slAddHead(pRejects,gp);
-	}
-    }
-slReverse(&outList);
-return outList;
 }
 
 void doNameCurrentFilters()
