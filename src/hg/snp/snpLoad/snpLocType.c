@@ -11,7 +11,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.15 2006/03/04 01:10:50 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.16 2006/03/06 19:31:02 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -71,7 +71,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     safef(chromName, sizeof(chromName), "%s_random", row[0]);
     hashAdd(ret, chromName, NULL);
     }
-
+sqlFreeResult(&sr);
 
 hFreeConn(&conn);
 return ret;
