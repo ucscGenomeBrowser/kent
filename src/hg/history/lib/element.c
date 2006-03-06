@@ -129,10 +129,11 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 		    element->parent = parents[atoi(words[ii+1]) ];
 		else
 		    element->parent = parents[atoi(words[ii+1]) - 1 ];
-		newEdge(element->parent, element);
 
 		if (element->parent == NULL)
 		    errAbort("parent is null %s",words[ii+1]);
+
+		newEdge(element->parent, element);
 		}
 	    else
 		{
@@ -178,6 +179,8 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 		    {
 		    element->parent = parents[numParents-1];
 		    newEdge(element->parent, element);
+		    if (element->parent == NULL)
+			errAbort("bad eleTree");
 		    }
 		}
 	    break;
@@ -672,4 +675,55 @@ for(; list; list = list->next)
     if (list->node)
 	list->node->ident->name = list->name;
     }
+}
+
+void removeStartStop(struct genome *g)
+{
+struct element *e = g->elements;
+struct element *prev = NULL;
+
+if (!sameString(e->name, "START"))
+    errAbort("first element not START");
+
+g->elements = e->next;
+
+prev = NULL;
+for(e = g->elements; e->next ; prev = e, e = e->next)
+    ;
+
+if (!sameString(e->name, "END"))
+    errAbort("last element not END");
+
+if (prev == NULL)
+    g->elements = NULL;
+else
+    prev->next = NULL;
+}
+
+void removeAllStartStop(struct phyloTree *node)
+{
+int ii;
+
+for(ii=0; ii < node->numEdges; ii++)
+    removeAllStartStop(node->edges[ii]);
+
+removeStartStop(node->priv);
+}
+
+int workCountLeaves(struct phyloTree *node, int count )
+{
+int ii;
+
+for(ii = 0; ii < node->numEdges; ii++)
+    count = workCountLeaves(node->edges[ii], count);
+
+if (node->numEdges == 0)
+    count++;
+
+return count;
+}
+
+int countLeaves(struct phyloTree *node)
+{
+    return workCountLeaves(node, 0);
 }
