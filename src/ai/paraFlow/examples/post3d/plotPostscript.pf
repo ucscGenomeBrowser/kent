@@ -1,4 +1,4 @@
-include 'pi'	
+import 'math'	// for pi
 
 global class plotPostscript
 // A little plotter for postScript
@@ -37,7 +37,7 @@ stroke
        f.write("$x $y moveto\n");
        for (i in 1 to sides)
            {
-	   double angle = i * pi * 2 / sides;
+	   double angle = i * math.pi * 2 / sides;
 	   x = xCen + radius * cos(angle);
 	   y = yCen + radius * sin(angle);
 	   f.write("$x $y lineto\n");

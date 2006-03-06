@@ -1,7 +1,7 @@
 // Make a temple shape - a floor, four columns, and a roof.
 
 // Get the external modules we need.
-import 'pi'
+import 'math'    // For pi
 import 'shape'
 include 'plotter'
 include 'plotPostscript'
@@ -22,7 +22,7 @@ to columnAt(double x,y,z) into (shape.cylinder column)
 /* Create a column with base centered at x,y,z of given height */
     {
     column = (colHeight, colRadius, 6);
-    column.rotateX(pi/2);
+    column.rotateX(math.pi/2);
     column.move(0,colHeight/2,0);
     column.move(x,y,z);
     }
@@ -38,7 +38,7 @@ temple.append(columnAt(100-colOffset, -80, -100+colOffset));
 temple.append(columnAt(100-colOffset, -80, 100-colOffset));
 temple.append(columnAt(-100+colOffset, -80, 100-colOffset));
 shape.pyramid roof = (75,200);
-roof.rotateX(pi/2);
+roof.rotateX(math.pi/2);
 roof.move(0, 20, 0);
 temple.append(roof);
 

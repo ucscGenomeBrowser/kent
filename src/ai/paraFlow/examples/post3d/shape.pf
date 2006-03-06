@@ -11,7 +11,7 @@
 //              cube
 //           cylinder
 
-include 'pi'          // For sin, cos, pi.
+import 'math'    // For pi
 include 'plotter' // Plots lines and circles
 
 global class shape
@@ -268,7 +268,7 @@ global class cylinder extends polyhedron
         {
         array[2*n] of point3d vertices;
         array[2+n] of facet facets;
-        double da = 2*pi/n;  // Angle between points.
+        double da = 2*math.pi/n;  // Angle between points.
         double h = height/2;
 
         // Fill in vertices array in parallel by just
