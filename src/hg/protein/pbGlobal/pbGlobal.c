@@ -16,7 +16,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbGlobal.c,v 1.30 2005/12/16 01:15:00 markd Exp $";
+static char const rcsid[] = "$Id: pbGlobal.c,v 1.31 2006/03/06 18:32:05 angie Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -199,9 +199,6 @@ struct sqlConnection *connCentral;
 char query[256];
 struct sqlResult *sr;
 char **row;
-char *chp;
-int  i,l;
-int  ii = 0;
 int  iypos;
 char *blatGbDb;
 char *sciName, *commonName;
@@ -480,23 +477,13 @@ void doMiddle(struct cart *theCart)
 {
 char cond_str[255];
 struct sqlConnection *conn;
-char query[256];
-struct sqlResult *sr;
-char **row;
 char *proteinAC;
 char *chp, *chp1, *chp9;
 char *debugTmp = NULL;
-struct dyString *state = NULL;
 char *chromStr, *cdsStartStr, *cdsEndStr, posStr[255];
 
 char *supportedGenomeDatabase;
-char *org = NULL;
-char *spID, *displayID, *desc;
   
-struct sqlConnection *conn3;
-char query3[256];
-struct sqlResult *sr3;
-char **row3;
 char *answer;
 char *queryID;
 
@@ -506,8 +493,11 @@ cart = theCart;
 /* Uncomment this to see parameters for debugging. */
 /* Be careful though, it breaks if custom track
  * is more than 4k */
-/* state = cgiUrlString();
-hPrintf("State: %s\n", state->string); */   
+/* 
+{ struct dyString *state = cgiUrlString();
+  hPrintf("State: %s\n", state->string); 
+}
+*/   
 
 queryID = cartOptionalString(cart, "proteinID");
 
