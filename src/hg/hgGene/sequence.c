@@ -14,7 +14,7 @@
 #include "hCommon.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: sequence.c,v 1.13 2004/11/23 20:34:38 galt Exp $";
+static char const rcsid[] = "$Id: sequence.c,v 1.14 2006/03/06 17:46:35 angie Exp $";
 
 static void printGenomicAnchor(char *table, char *itemName,
 	char *chrom, int start, int end)
@@ -207,7 +207,6 @@ char *table = genomeSetting("knownGene");
 struct sqlResult *sr;
 char **row;
 char query[256];
-struct genePos *gp;
 
 hPrintf("<TT><PRE>");
 safef(query, sizeof(query), 

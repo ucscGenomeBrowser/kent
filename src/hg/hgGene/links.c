@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.22 2006/02/28 22:20:59 hartera Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.23 2006/03/06 17:46:34 angie Exp $";
 
 struct link
 /* A link to another web site. */
@@ -47,7 +47,7 @@ static char *linkRequiredField(struct hash *hash, char *name)
 char *s = hashFindVal(hash,name);
 if (s == NULL)
     errAbort("Couldn't find %s field in %s in links.ra", name, 
-    	hashFindVal(hash, "name"));
+	     (char *)hashFindVal(hash, "name"));
 return s;
 }
 
@@ -226,7 +226,6 @@ struct link *link, *linkList = section->items;
 hPrintLinkTableStart();
 for (link = linkList; link != NULL; link = link->next)
     {
-    char query[256];
     char *url = linkGetUrl(link, conn, geneId);
     if (url != NULL)
 	{

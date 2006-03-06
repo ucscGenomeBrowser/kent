@@ -10,7 +10,7 @@
 #include "fbTables.h"
 #include "bdgpExprLink.h"
 
-static char const rcsid[] = "$Id: flyBaseInfo.c,v 1.7 2006/02/07 18:14:34 angie Exp $";
+static char const rcsid[] = "$Id: flyBaseInfo.c,v 1.8 2006/03/06 17:46:34 angie Exp $";
 
 boolean isFly()
 /* Return true if organism is D. melanogaster. */
@@ -157,8 +157,7 @@ char query[256], **row;
 struct sqlResult *sr;
 struct fbAlleleInfo *alleleList = NULL, *allele;
 struct hash *alleleHash = newHash(10);
-struct fbRole *roleList = NULL, *role;
-char numName[16];
+struct fbRole *role = NULL;
 
 safef(query, sizeof(query),
 	"select * from %s where geneId='%s'", section->flyBaseTable, flyBaseId);
@@ -313,7 +312,6 @@ static void bdgpExprInSituPrint(struct section *section,
 /* Print out BDGP Expression in situ image links. */
 {
 char *flyBaseId = getFlyBaseId(conn, geneId);
-char *geneSym = NULL, *geneName = NULL;
 char query[256], **row;
 struct sqlResult *sr;
 

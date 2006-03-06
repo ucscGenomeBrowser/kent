@@ -7,7 +7,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: go.c,v 1.6 2004/06/29 17:54:25 angie Exp $";
+static char const rcsid[] = "$Id: go.c,v 1.7 2006/03/06 17:46:34 angie Exp $";
 
 static boolean goExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -48,7 +48,6 @@ char *acc = useFbGo ? fbAcc : swissProtAcc;
 char query[512];
 struct sqlResult *sr;
 char **row;
-char *lastType;
 static char *aspects[3] = {"F", "P", "C"};
 static char *aspectNames[3] = {
     "Molecular Function",

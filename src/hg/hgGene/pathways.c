@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.12 2005/08/15 13:34:09 fanhsu Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.13 2006/03/06 17:46:35 angie Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -105,8 +105,6 @@ static void reactomeLink(struct pathwayLink *pl, struct sqlConnection *conn,
 	char *geneId)
 {
 char condStr[255];
-char *protAccR;
-char *reactomeId;
 char *spID, *chp;
 
 struct sqlConnection *conn2;
@@ -274,8 +272,6 @@ static void pathwaysPrint(struct section *section,
 {
 int plIx;
 struct pathwayLink *pl;
-char **row;
-struct sqlResult *sr;
 boolean isFirst = TRUE;
 
 for (plIx=0; plIx < ArraySize(pathwayLinks); ++plIx)
@@ -283,7 +279,6 @@ for (plIx=0; plIx < ArraySize(pathwayLinks); ++plIx)
     pl = &pathwayLinks[plIx];
     if (pathwayExists(pl, conn, geneId))
         {
-	struct dyString *query = dyStringNew(1024);
 	if (isFirst)
 	    isFirst = !isFirst;
 	else

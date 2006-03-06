@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.65 2005/12/16 00:18:05 donnak Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.66 2006/03/06 17:46:34 angie Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -168,7 +168,7 @@ void hPrintNonBreak(char *s)
 /* Print out string but replace spaces with &nbsp; */
 {
 char c;
-while (c = *s++)
+while ((c = *s++) != '\0')
     {
     if (c == ' ')
 	fputs("&nbsp;", stdout);
@@ -545,7 +545,6 @@ struct hash *settings = hashFindVal(sectionRa, name);
 
 if (settings != NULL)
     {
-    char *s;
     AllocVar(section);
     section->settings = settings;
     section->name = sectionSetting(section, "name");
@@ -586,7 +585,7 @@ struct section *loadSectionList(struct sqlConnection *conn)
  * call each section loader. */
 {
 struct hash *sectionRa = NULL;
-struct section *sectionList = NULL, *section;
+struct section *sectionList = NULL;
 
 readRa("section.ra", &sectionRa);
 addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
@@ -673,7 +672,6 @@ static void getGenePosition(struct sqlConnection *conn)
  * otherwise from database. */
 {
 char *oldGene = hashFindVal(oldCart, hggGene);
-char *oldChrom = hashFindVal(oldCart, hggChrom);
 char *oldStarts = hashFindVal(oldCart, hggStart);
 char *oldEnds = hashFindVal(oldCart, hggEnd);
 char *newGene = curGeneId;

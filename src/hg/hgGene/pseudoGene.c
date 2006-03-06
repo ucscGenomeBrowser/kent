@@ -10,7 +10,7 @@
 #include "bed.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pseudoGene.c,v 1.1 2005/09/02 17:35:42 fanhsu Exp $";
+static char const rcsid[] = "$Id: pseudoGene.c,v 1.2 2006/03/06 17:46:35 angie Exp $";
 
 static boolean pseudoGeneExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -23,8 +23,6 @@ if (hTableExists("pseudoGeneLink"))
     {
     struct sqlResult *sr;
     char **row;
-    struct psl *psl;
-    int rowOffset;
     char query[255];
     safef(query, sizeof(query),
           "select name from pseudoGeneLink where name='%s' or kgName='%s' or refseq='%s'",
@@ -46,8 +44,6 @@ static void pseudoGenePrint(struct section *section,
 {
 struct sqlResult *sr;
 char **row;
-struct psl *psl;
-int rowOffset;
 char condStr[255];
 char *descID, *desc;    
 char *emptyStr;

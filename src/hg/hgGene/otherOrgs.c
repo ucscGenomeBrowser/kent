@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.11 2004/12/03 13:51:02 kent Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.12 2006/03/06 17:46:35 angie Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -50,7 +50,7 @@ static char *otherOrgRequiredField(struct hash *hash, char *name)
 char *s = hashFindVal(hash,name);
 if (s == NULL)
     errAbort("Couldn't find %s field in %s in otherOrgs.ra", name, 
-    	hashFindVal(hash, "name"));
+	     (char *)hashFindVal(hash, "name"));
 return s;
 }
 
@@ -101,7 +101,7 @@ static boolean otherOrgsExists(struct section *section,
 /* Return TRUE if necessary database exists and has something
  * on this one. */
 {
-struct otherOrg *otherOrg, *otherOrgList;
+struct otherOrg *otherOrgList;
 otherOrgList = section->items = getOtherOrgList(conn, section->raFile);
 return otherOrgList != NULL;
 return FALSE;
@@ -230,7 +230,6 @@ static void otherOrgsPrint(struct section *section, struct sqlConnection *conn,
 	char *geneId)
 /* Print the otherOrgs section. */
 {
-int rowIx = 0;
 struct otherOrg *otherOrg, *otherOrgList = section->items;
 
 hPrintLinkTableStart();

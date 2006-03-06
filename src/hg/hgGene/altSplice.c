@@ -10,7 +10,7 @@
 #include "altGraphX.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: altSplice.c,v 1.7 2005/08/01 20:12:30 heather Exp $";
+static char const rcsid[] = "$Id: altSplice.c,v 1.8 2006/03/06 17:46:34 angie Exp $";
 
 static int gpBedBasesShared(struct genePred *gp, struct bed *bed)
 /* Return number of bases genePred and bed share. */
@@ -78,7 +78,6 @@ char *altGraphXMakeImage(struct altGraphX *ag)
 /* create a drawing of splicing pattern */
 {
 MgFont *font = mgSmallFont();
-int trackTabWidth = 11;
 int fontHeight = mgFontLineHeight(font);
 struct spaceSaver *ssList = NULL;
 struct hash *heightHash = NULL;

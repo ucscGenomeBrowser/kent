@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: rnaStructure.c,v 1.6 2004/09/27 16:15:55 kent Exp $";
+static char const rcsid[] = "$Id: rnaStructure.c,v 1.7 2006/03/06 17:46:35 angie Exp $";
 
 static boolean rnaStructureExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -184,7 +184,6 @@ else if (sameString(how, "picture"))
     if (!fileExists(pdfName))
          {
 	 char command[512];
-	 FILE *f;
 	 safef(command, sizeof(command), "ps2pdf %s %s" , psFile, pdfName);
 	 system(command);
 	 }
@@ -192,7 +191,6 @@ else if (sameString(how, "picture"))
     if (!fileExists(pngName))
          {
 	 char command[512];
-	 FILE *f;
 	 safef(command, sizeof(command),
 	 	"gs -sDEVICE=png16m -sOutputFile=%s -dBATCH -dNOPAUSE -q %s"
 		, pngName, psFile);

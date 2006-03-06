@@ -10,13 +10,13 @@
 #include "bed.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: mrnaDescriptions.c,v 1.5 2004/09/17 03:17:19 kent Exp $";
+static char const rcsid[] = "$Id: mrnaDescriptions.c,v 1.6 2006/03/06 17:46:35 angie Exp $";
 
 static boolean mrnaDescriptionsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
 /* Return TRUE if mrna  on this one. */
 {
-struct psl *list = NULL, *psl;
+struct psl *list = NULL;
 if (hTableExists("all_mrna"))
     {
     struct sqlResult *sr;
