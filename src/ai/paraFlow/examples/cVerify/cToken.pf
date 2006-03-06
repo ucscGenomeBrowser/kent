@@ -1,0 +1,452 @@
+
+const short ctComment=256;
+const short ctString=257;
+const short ctChar=258;
+const short ctCtInt=259;
+const short ctCtLong=260;
+const short ctCtFloat=261;
+const short ctName=262;
+const short ctShiftLeft=263;
+const short ctShiftRight=264;
+const short ctPlusPlus=265;
+const short ctMinusMinus=266;
+const short ctEqualEqual=267;
+const short ctPlusEqual=268;
+const short ctTimesEqual=269;
+const short ctDivEqual=270;
+const short ctModEqual=271;
+const short ctMinusEqual=272;
+const short ctGreaterEqual=273;
+const short ctLessEqual=274;
+const short ctAndAnd=275;
+const short ctOrOr=276;
+const short ctEof=277;
+const short ctAndEqual = 278;
+const short ctOrEqual = 279;
+const short ctXorEqual = 280;
+const short ctNotEqual = 281;
+
+flow isdigit(char c) into bit is
+    {
+    case (c)
+       {
+       '0','1','2','3','4','5','6','7','8','9' : is=true;
+       else: is = false;
+       }
+    }
+
+flow isalpha(char c) into bit is
+    {
+    case (c)
+        {
+	'a','b','c','d','e','f','g','h','i','j','k','l','m','n',
+	'o','p','q','r','s','t','u','v','w','x','y','z',
+	'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
+	'O','P','Q','R','S','T','U','V','W','X','Y','Z' : is=true;
+	}
+    }
+
+flow iscsymf(char c) into bit is
+    {
+    is =  isalpha(c) || c == '_';
+    }
+
+flow iscsym(char c) into bit is
+    {
+    is = isdigit(c) || isalpha(c) || c == '_';
+    }
+
+
+class cToken
+// A token in a C program.
+    {
+    readable short type; // Token type.
+    readable string val; // Literal contents.
+    readable string spaceBefore;	// White space before token.
+    readable string fileName;	// Name of file.
+    readable int line;	// Starting line.
+    };
+
+class cTkz
+// Creates a stream of cTokens
+    {
+    readable cToken cur;		// Current token
+    readable cToken next;	// Next token
+    readable cToken afterNext;	// Next token after than
+    readable string fileName;	// Current file name
+
+    local string lineBuf="";	// Position in line
+    local int lineCount;	// Linein file.
+    local int linePos;		// Position within line
+    char reusedChar = 0;	// If non-zero we reuse this char
+    local file f;		// File
+    readable bit eof;		// Set to true at end of file.
+    local dir of string whiteSpaces = ();  // Dir of all white space types
+    local dir of string names = ();// Save room on names by putting into dir
+
+    to init(string fileName)
+    // Set up tokenizer on file.
+        {
+	self.fileName = fileName;
+	f = fileOpen(fileName, "r");
+	advance();
+	advance();
+	advance();
+	}
+
+    local to advanceLine() 
+        {
+	lineBuf = f.readLine();
+	if (!lineBuf)
+	   eof = true;
+	lineCount += 1;
+	linePos = 0;
+	}
+
+    local to reuseChar(char c)
+        {
+	reusedChar = c;
+	}
+
+    local to nextChar() into char c
+    // Get next character.
+        {
+	if (reusedChar)
+	    {
+	    c = reusedChar;
+	    reusedChar = 0;
+	    }
+	else
+	    {
+	    if (linePos >= lineBuf.size)
+		advanceLine();
+	    if (eof)
+		c = 0;
+	    else
+		{
+		c = lineBuf[linePos];
+		linePos += 1;
+		}
+	    }
+	}
+
+    to skipSpace() into string s
+        {
+	dyString dy = "";
+	char c;
+	for (;;)
+	   {
+	   c = nextChar();
+	   if (c == ' ' || c == '\t' || c == '\n')
+	       dy += c;
+	   else
+	       {
+	       reuseChar(c);
+	       break;
+	       }
+	   }
+	s = whiteSpaces[dy];
+	if (s == nil)
+	    {
+	    whiteSpaces[dy] = dy;
+	    s = whiteSpaces[dy];
+	    }
+	}
+
+    to parseInteger(char c) into dyString s
+    // Stuff all successive digits into s
+        {
+	s = "";
+	while (isdigit(c))
+	    {
+	    s += c;
+	    c = nextChar();
+	    }
+	reuseChar(c);
+	}
+
+    to singleChar(cToken tok, char c)
+    // Finish up a single character token
+        {
+	tok.val = c;
+	tok.type = c;
+	}
+
+    to doubleChar(cToken tok, char a, char b, short type)
+    // Finish up a double char token;
+        {
+	tok.val = a + "" + b;
+	tok.type = type;
+	}
+
+    to lineComment(cToken tok)
+    // Got a //, read until end of line
+        {
+	dyString dy = "//";
+	for (;;)
+	   {
+	   char c = nextChar();
+	   if (c == 0)
+	       break;
+	   dy += c;
+	   if (c == '\n')
+	       break;
+	   }
+	tok.type = ctComment;
+	tok.val = dy;
+	}
+
+    to cComment(cToken tok)
+    // Got a /*.  Read until matching */
+        {
+	dyString dy = "/*";
+	char lastC = 0;
+	for (;;)
+	    {
+	    char c = nextChar();
+	    if (c == 0)
+	        break;
+	    dy += c;
+	    if (c == '/' && lastC == '*')
+	        break;
+	    lastC = c;
+	    }
+	tok.type = ctComment;
+	tok.val = dy;
+	}
+
+    to parseNum(cToken tok,char c)
+        {
+	dyString s = parseInteger(c);
+	c = nextChar();
+	case (c)
+	    {
+	    'L', 'U' : 
+		{
+	    	s += c;
+		tok.type = ctCtLong;
+		}
+	    '.' : 
+		{
+	    	s += parseInteger(c);
+		tok.type = ctCtFloat;
+		}
+	    'x', 'X' : 
+	        {
+		s += c; 
+		c = nextChar();
+		if (isdigit(c))
+		    s += parseInteger(c);
+		else
+		    reuseChar(c);
+		tok.type = ctCtInt;
+		}
+	    else: 
+		{
+	    	reuseChar(c);
+		tok.type = ctCtInt;
+		}
+	    }
+	tok.val = s;
+	}
+
+    to parseQuote(cToken tok, char quoteC)
+        {
+	dyString dy = quoteC;
+	bit isEscaped = false;
+
+	for (;;)
+	    {
+	    char c = nextChar();
+	    if (!c)
+	       break;
+	    dy += c;
+	    if (isEscaped)
+	        isEscaped = false;
+	    else
+	        {
+		if (c == quoteC)
+		   break;
+		else if (c == '\\')
+		   isEscaped = true;
+		}
+	    }
+	tok.val = dy;
+	}
+
+    to parseSymbol(cToken tok, char c)
+        {
+	dyString dy = c;
+	for (;;)
+	    {
+	    c = nextChar();
+	    if (!iscsym(c))
+	        {
+		reuseChar(c);
+		break;
+		}
+	    dy += c;
+	    }
+	tok.type = ctName;
+	tok.val = names[dy];
+	if (!tok.val)
+	    {
+	    names[dy] = dy;
+	    tok.val = names[dy];
+	    }
+	}
+
+    to advance() 
+        {
+	cToken tok = ();
+	tok.spaceBefore = skipSpace();
+	tok.line = lineCount;
+	tok.fileName = fileName;
+	char c = nextChar();
+	if (isdigit(c))
+	    parseNum(tok, c);
+	else if (iscsymf(c))
+	    parseSymbol(tok, c);
+	else 
+	    {
+	    case (c)
+	        {
+		0  : tok.type = ctEof;
+		'!' : 
+		    {
+		    char nextC = nextChar();
+		    case (nextC)
+		        {
+			'=' : doubleChar(tok, c,nextC,ctNotEqual);
+			else: {singleChar(tok,c); reuseChar(nextC);}
+		        }
+		    }
+		'%' :
+		    {
+		    char nextC = nextChar();
+		    case (nextC)
+		        {
+			'=' : doubleChar(tok, c,nextC,ctModEqual);
+			else: {singleChar(tok,c); reuseChar(nextC);}
+		        }
+		    }
+		'^' :
+		    {
+		    char nextC = nextChar();
+		    case (nextC)
+		        {
+			'=' : doubleChar(tok, c,nextC,ctXorEqual);
+			else: {singleChar(tok,c); reuseChar(nextC);}
+		        }
+		    }
+		'&' :
+		    {
+		    char nextC = nextChar();
+		    case (nextC)
+		        {
+			'=' : doubleChar(tok, c,nextC,ctAndEqual);
+			'&' : doubleChar(tok, c,nextC,ctAndAnd);
+			else: {singleChar(tok,c); reuseChar(nextC);}
+		        }
+		    }
+		'*' :
+		    {
+		    char nextC = nextChar();
+		    case (nextC)
+		        {
+			'=' : doubleChar(tok, c,nextC,ctTimesEqual);
+			else: {singleChar(tok,c); reuseChar(nextC);}
+		        }
+		    }
+		'-' :
+		    {
+		    char nextC = nextChar();
+		    case (nextC)
+		        {
+			'=' : doubleChar(tok, c,nextC,ctMinusEqual);
+			'-' : doubleChar(tok, c,nextC,ctMinusMinus);
+			else: {singleChar(tok,c); reuseChar(nextC);}
+		        }
+		    }
+		'+' :
+		    {
+		    char nextC = nextChar();
+		    case (nextC)
+		        {
+			'=' : doubleChar(tok, c,nextC,ctPlusEqual);
+			'+' : doubleChar(tok, c,nextC,ctPlusPlus);
+			else: {singleChar(tok,c); reuseChar(nextC);}
+		        }
+		    }
+		'=' :
+		    {
+		    char nextC = nextChar();
+		    case (nextC)
+		        {
+			'=' : doubleChar(tok, c,nextC,ctEqualEqual);
+			else: {singleChar(tok,c); reuseChar(nextC);}
+		        }
+		    }
+		'<' :
+		    {
+		    char nextC = nextChar();
+		    case (nextC)
+		        {
+			'=' : doubleChar(tok, c,nextC,ctLessEqual);
+			'<' : doubleChar(tok, c,nextC,ctShiftLeft);
+			else: {singleChar(tok,c); reuseChar(nextC);}
+		        }
+		    }
+		'>' :
+		    {
+		    char nextC = nextChar();
+		    case (nextC)
+		        {
+			'=' : doubleChar(tok, c,nextC,ctGreaterEqual);
+			'<' : doubleChar(tok, c,nextC,ctShiftRight);
+			else: {singleChar(tok,c); reuseChar(nextC);}
+		        }
+		    }
+		'/' : 
+		    {
+		    char nextC = nextChar();
+		    case (nextC)
+		        {
+			'/' : lineComment(tok);
+			'*' : cComment(tok);
+			'=' : doubleChar(tok, c,nextC,ctDivEqual);
+			else: {singleChar(tok,c); reuseChar(nextC);}
+			}
+		    }
+		"'" : {parseQuote(tok, c); tok.type = ctChar}
+		'"' : {parseQuote(tok, c); tok.type = ctString}
+		else:	singleChar(tok, c);
+		}
+	    }
+	cur = next;
+	next = afterNext;
+	afterNext = tok;
+	}
+    }
+
+
+// TODO - add isalpha, isalnum, isspace, isnum.
+// Consider somehow making them methods of char.
+// Consider making dyString += char more efficient.
+// Enums!
+
+string fileName = "test.c";
+if (args.size > 0)
+    fileName = args[0];
+cTkz tkz = (fileName);
+for (;;)
+    {
+    prin(tkz.cur.spaceBefore);
+    if (tkz.cur.type == ctEof)
+        break;
+    prin(tkz.cur.val);
+    // print(tkz.cur);
+    tkz.advance();
+    }
+
+
