@@ -89,3 +89,6 @@ extern struct genome *getGenome(char *file, char *name);
 extern char *nextVersion();
 extern char *nextGenome();
 extern void removeIs(struct genome *list);
+extern void removeAllStartStop(struct phyloTree *node);
+extern void removeStartStop(struct genome *g);
+extern int countLeaves(struct phyloTree *node);
