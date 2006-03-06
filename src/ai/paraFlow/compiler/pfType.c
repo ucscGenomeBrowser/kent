@@ -209,9 +209,14 @@ static void typeMismatch(struct pfParse *pp, struct pfType *type)
 struct dyString *dy = dyStringNew(0);
 dumpTypeToDyString(type, dy);
 if (pp->name)
+    {
+    pfParseDump(pp, 3, uglyOut);
     errAt(pp->tok, "Type mismatch:  %s not %s.", pp->name, dy->string);
+    }
 else
+    {
     errAt(pp->tok, "Type mismatch: expecting %s.", dy->string);
+    }
 dyStringFree(&dy);
 }
 
@@ -1542,8 +1547,13 @@ switch (pp->type)
 	struct pfBaseType *classBase = classPp->ty->base;
 	struct pfType *fieldType = findField(classBase, pp->name);
 	if (fieldType->access == paReadable)
-	   errAt(pp->tok, "You can't write to field %s of class %s in this module",
-	       fieldType->fieldName, classBase->name);
+	    {
+	    struct pfModule *myModule = findEnclosingModule(pp);
+	    struct pfModule *classModule = findEnclosingModule(classBase->def);
+	    if (myModule != classModule)
+		errAt(pp->tok, "You can't write to field %s of class %s in this module",
+		    fieldType->fieldName, classBase->name);
+	    }
 	break;
 	}
     case pptDot:
@@ -2044,6 +2054,7 @@ for (p = compound->children; p != NULL; p = p->next)
 	    }
 	default:
 	    errAt(p->tok, "non-declaration statement inside of class");
+	    break;
 	}
     p2p = &p->next;
     }
@@ -2615,6 +2626,7 @@ switch (parent->type)
         break;
     default:
         errAt(pp->tok, "Use of 'to' not allowed in this context.");
+	break;
     }
 }
 

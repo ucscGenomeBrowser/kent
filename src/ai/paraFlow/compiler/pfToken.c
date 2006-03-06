@@ -164,6 +164,7 @@ switch (type)
 	    safef(buf, sizeof(buf), "tok#%d", type);
 	    return buf;
 	    }
+	break;
     }
 }
 

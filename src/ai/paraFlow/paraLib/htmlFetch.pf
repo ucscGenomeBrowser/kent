@@ -340,7 +340,7 @@ flow htmlTagsParse(string text, int pos) into (array of htmlTag tags)
 	}
    }
 
-flow findOrMakeVar(local dir of htmlFormVar vars, string name, htmlTag tag) 
+flow findOrMakeVar(writable dir of htmlFormVar vars, string name, htmlTag tag) 
 into (htmlFormVar var)
 // Find a variable of existing name if it exists, other wise
 // make a new one.  Add reference to this tag to var, and return it.

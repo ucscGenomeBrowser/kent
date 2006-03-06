@@ -1569,18 +1569,8 @@ static int codeInitOrAssign(struct pfCompile *pfc, FILE *f,
 /* Emit code for initialization or assignment. */
 {
 int count = codeExpression(pfc, f, rval, stack, TRUE);
-#ifdef OLD
-if (lval->ty->base->isClass)
-    {
-    if (rval->ty->base == pfc->tupleType)
-	codeTupleIntoClass(pfc, f, lval, rval, stack, count);
-    }
-else
-#endif /* OLD */
-    {
-    if (rval->type == pptUniformTuple)
-	codeTupleIntoCollection(pfc, f, lval->ty, rval, stack, count);
-    }
+if (rval->type == pptUniformTuple)
+    codeTupleIntoCollection(pfc, f, lval->ty, rval, stack, count);
 if (lval->type == pptTuple)
     return slCount(lval->children);
 else
@@ -1627,12 +1617,12 @@ return TRUE;
 
 
 static void codeCheckDims(struct pfCompile *pfc, FILE *f,
-        struct pfParse *lval, struct pfParse *rval, int stack)
+        struct pfParse *lval, struct pfParse *rval, int count, int stack)
 /* Generate code that checks that the dimensions of the array
- * in the tuple is the same as the dimensions of the arrayas
+ * in the tuple is the same as the dimensions of the array as
  * declared. */
 {
-uglyf("Theoretically doing codeCheckDims.\n");
+uglyf("Theoretically doing codeCheckDims - count %d.\n", count);
 }
 
 void codeInitDims(struct pfCompile *pfc, FILE *f, struct pfParse *pp, int stack)
@@ -1726,7 +1716,7 @@ if (rval != NULL)
     int count = codeInitOrAssign(pfc, f, lval, rval, stack);
     lvalOffStack(pfc, f, lval, stack, "=", count, FALSE);
     if (gotDims)
-	codeCheckDims(pfc, f, lval, rval, stack);
+	codeCheckDims(pfc, f, lval, rval, count, stack);
     }
 else if (gotDims)
     codeInitDims(pfc, f, pp, stack);
@@ -2152,6 +2142,7 @@ switch (pp->type)
 	    internalErr();  /* Type checker should prevent this. */
 	else
 	    return codeAssignment(pfc, f, pp, stack, "+=");
+	break;
     case pptMinusEquals:
 	return codeAssignment(pfc, f, pp, stack, "-=");
     case pptMulEquals:
@@ -2382,6 +2373,8 @@ switch (pp->type)
 	return 0;
 	}
     }
+assert(FALSE);
+return  0;
 }
 
 static boolean varUsed(struct pfVar *var, struct pfParse *pp)
