@@ -30,6 +30,7 @@ DIRS = \
 	hgGeneBands \
 	hgGnfMicroarray \
 	hgGoldGapGl \
+	hgKgGetText \
 	hgKgMrna \
 	hgKnownMore \
 	hgKnownMore.oo21 \
