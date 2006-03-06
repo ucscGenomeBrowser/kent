@@ -210,7 +210,7 @@ if (body != NULL)
 	hashAdd(outputVars, pp->name, pp->var);
     for (pp = input->children; pp != NULL; pp = pp->next)
         {
-	if (pp->var->ty->access == paLocal)
+	if (pp->var->ty->access == paWritable)
 	    hashAdd(outputVars, pp->name, pp->var);
 	}
 

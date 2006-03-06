@@ -10,7 +10,7 @@ global class abc {int a,b,c;}
 global class def {int d,e,f;}
 global class ad {abc abc, def def;}
 
-readable string zero = "zero";
+global string zero = "zero";
 global string one = "one";
 string two = "two";
 string three = "three";

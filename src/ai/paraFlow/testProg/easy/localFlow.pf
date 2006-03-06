@@ -5,7 +5,7 @@ class countedName
     int count;
     }
 
-flow findOrMake(local dir of countedName funnyName, string name) 
+flow findOrMake(writable dir of countedName funnyName, string name) 
 into (countedName result)
     {
     result = funnyName[name];

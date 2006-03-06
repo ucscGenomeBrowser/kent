@@ -53,6 +53,7 @@ struct hash *hash = hashNew(7);
 hashAddInt(hash, "break", pftBreak);
 hashAddInt(hash, "case", pftCase);
 hashAddInt(hash, "catch", pftCatch);
+hashAddInt(hash, "const", pftConst);
 hashAddInt(hash, "continue", pftContinue);
 hashAddInt(hash, "class", pftClass);
 hashAddInt(hash, "else", pftElse);
@@ -78,6 +79,7 @@ hashAddInt(hash, "static", pftStatic);
 hashAddInt(hash, "to", pftTo);
 hashAddInt(hash, "try", pftTry);
 hashAddInt(hash, "while", pftWhile);
+hashAddInt(hash, "writable", pftWritable);
 hashAddInt(hash, "_operator_", pftOperator);
 return hash;
 }
@@ -89,14 +91,18 @@ switch (pa)
     {
     case paUsual:
 	return "usual";
+    case paConst:
+	return "const";
     case paGlobal:
 	return "global";
-    case paReadable:
-	return "readable";
     case paLocal:
 	return "local";
+    case paReadable:
+	return "readable";
     case paStatic:
 	return "static";
+    case paWritable:
+	return "writable";
     default:
         internalErr();
 	return NULL;

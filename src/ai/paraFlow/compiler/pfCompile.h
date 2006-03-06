@@ -120,10 +120,12 @@ enum pfAccessType
 /* Access type for variables, members, and functions */
     {
     paUsual=0,	/* Nothing special. */
+    paConst,
     paGlobal,
-    paReadable,
     paLocal,
     paStatic,
+    paReadable,
+    paWritable,
     };
 char *pfAccessTypeAsString(enum pfAccessType pa);
 /* Return string representation of access qualifier. */

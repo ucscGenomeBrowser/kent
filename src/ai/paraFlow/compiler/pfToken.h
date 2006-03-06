@@ -45,6 +45,7 @@ enum pfTokType
     pftCase,
     pftCatch,
     pftContinue,
+    pftConst,
     pftClass,
     pftElse,
     pftExtends,
@@ -72,6 +73,7 @@ enum pfTokType
     pftTo,
     pftTry,
     pftWhile,
+    pftWritable,
     };
 
 char *pfTokTypeAsString(enum pfTokType type);

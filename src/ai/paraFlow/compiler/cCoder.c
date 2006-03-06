@@ -103,6 +103,29 @@ static void codeForType(struct pfCompile *pfc, FILE *f, struct pfType *type)
 codeLocalTypeRef(f, recodedTypeId(pfc, type));
 }
 
+static void codeRunTimeError(FILE *f, struct pfParse *pp, char *message)
+/* Print code for a run time error message. */
+{
+char *file;
+struct pfToken *tok = pp->tok;
+int line, col;
+pfSourcePos(tok->source, tok->text, &file, &line, &col);
+fprintf(f, "_pf_run_err(\"Run time error line %d col %d of %s: %s\");\n", 
+	line+1, col+1, file, message);
+}
+
+static void codeUseOfNil(FILE *f, struct pfParse *pp)
+/* Print code for use of nil message. */
+{
+codeRunTimeError(f, pp, "using uninitialized variable");
+}
+
+static void codeNilCheck(FILE *f, struct pfParse *pp, int stack)
+/* Print code to check stack for nil. */
+{
+fprintf(f, "if (%s[%d].v == 0) ", stackName, stack);
+codeUseOfNil(f, pp);
+}
 
 static char *typeKey(struct pfCompile *pfc, struct pfBaseType *base)
 /* Return key for type if available, or NULL */
@@ -486,6 +509,7 @@ else
     codeBaseType(pfc, f, collectionPp->ty->base);
     fprintf(f, " _pf_collection;\n");
     codeExpression(pfc, f, collectionPp, stack, FALSE);
+    codeNilCheck(f, collectionPp, stack);
     fprintf(f, "_pf_collection = ");
     codeParamAccess(pfc, f, collectionPp->ty->base, stack);
     fprintf(f, ";\n");
@@ -502,7 +526,7 @@ else
 	if (keyName != NULL)
 	    {
 	    if (reverse)	/* To help simulate parallelism, do it in reverse. */
-		fprintf(f, "for (%s = _pf_collection->elSize-1, _pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; %s -= 1, _pf_offset -= _pf_elSize)\n", keyName->string, keyName->string);
+		fprintf(f, "for (%s = _pf_collection->size-1, _pf_offset=_pf_endOffset-_pf_elSize; _pf_offset >= 0; %s -= 1, _pf_offset -= _pf_elSize)\n", keyName->string, keyName->string);
 	    else
 		fprintf(f, "for (%s=0, _pf_offset=0; _pf_offset<_pf_endOffset; _pf_offset += _pf_elSize, %s+=1)\n", keyName->string, keyName->string);
 	    }
@@ -821,30 +845,6 @@ fprintf(f, "}\n");
 fprintf(f, "/* End %s */\n", pfParseTypeAsString(para->type));
 
 return 1;
-}
-
-static void codeRunTimeError(FILE *f, struct pfParse *pp, char *message)
-/* Print code for a run time error message. */
-{
-char *file;
-struct pfToken *tok = pp->tok;
-int line, col;
-pfSourcePos(tok->source, tok->text, &file, &line, &col);
-fprintf(f, "_pf_run_err(\"Run time error line %d col %d of %s: %s\");\n", 
-	line+1, col+1, file, message);
-}
-
-static void codeUseOfNil(FILE *f, struct pfParse *pp)
-/* Print code for use of nil message. */
-{
-codeRunTimeError(f, pp, "using uninitialized variable");
-}
-
-static void codeNilCheck(FILE *f, struct pfParse *pp, int stack)
-/* Print code to check stack for nil. */
-{
-fprintf(f, "if (%s[%d].v == 0) ", stackName, stack);
-codeUseOfNil(f, pp);
 }
 
 static void codeRangeIntoStartEndSize(struct pfCompile *pfc,
@@ -1389,7 +1389,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
 	else
 	    {
 	    enum pfAccessType access = var->ty->access;
-	    if (access != paGlobal && access != paReadable && isModuleScope)
+	    if (access != paGlobal && access != paWritable && isModuleScope)
 	         fprintf(f, "static ");
 	    codeBaseType(pfc, f, type->base);
 	    fprintf(f, " ");
@@ -3209,7 +3209,7 @@ for (hel = varList; hel != NULL; hel = hel->next)
     if (type->tyty == tytyVariable)
         {
 	enum pfAccessType access = var->ty->access;
-	if (access == paGlobal || access == paReadable)
+	if (access == paGlobal || access == paWritable)
 	    {
 	    fprintf(f, "extern ");
 	    codeBaseType(pfc, f, type->base);

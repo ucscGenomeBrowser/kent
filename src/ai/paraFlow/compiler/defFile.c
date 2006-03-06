@@ -69,7 +69,7 @@ static void printVarDef(FILE *f, struct pfParse *pp, boolean printInit,
 	boolean printLocals)
 /* Print variable statement and optionally initialization. */
 {
-if (printLocals || pp->access == paReadable || pp->access == paGlobal)
+if (printLocals || pp->access == paWritable || pp->access == paGlobal)
     {
     struct pfToken *start = NULL, *end = NULL;
     struct pfParse *type = pp->children;

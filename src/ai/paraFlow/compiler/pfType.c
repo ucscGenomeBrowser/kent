@@ -731,7 +731,7 @@ else
     }
 }
 
-static void checkOneParamLocal(struct pfCompile *pfc, struct pfParse *pp)
+static void checkOneParamWritable(struct pfCompile *pfc, struct pfParse *pp)
 /* Check that pp contains only local variables. */
 {
 if (pfBaseTypeIsPassedByValue(pfc, pp->ty->base))
@@ -743,7 +743,7 @@ if (pfBaseTypeIsPassedByValue(pfc, pp->ty->base))
     }
 }
 
-static void checkLocalParams(struct pfCompile *pfc, struct pfParse *paramTuple,
+static void checkWritableParams(struct pfCompile *pfc, struct pfParse *paramTuple,
 	struct pfType *inputType)
 {
 struct pfType *type;
@@ -752,8 +752,8 @@ struct pfParse *param;
 for (type = inputType->children, param = paramTuple->children;
      type != NULL; type = type->next, param = param->next)
      {
-     if (type->access == paLocal)
-	 checkOneParamLocal(pfc, param);
+     if (type->access == paWritable)
+	 checkOneParamWritable(pfc, param);
      }
 }
 
@@ -794,7 +794,7 @@ switch(functionType->tyty)
 	    {
 	    struct pfParse **pParamTuple = &function->next;
 	    coerceNamedTuple(pfc, pParamTuple, inputType);
-	    checkLocalParams(pfc, *pParamTuple, inputType);
+	    checkWritableParams(pfc, *pParamTuple, inputType);
 	    }
 	if (outputType->children != NULL && outputType->children->next == NULL)
 	    pp->ty = CloneVar(outputType->children);
@@ -1516,10 +1516,12 @@ switch (pp->type)
         {
 	struct pfVar *var = pp->var;
 	struct pfModule *varModule = var->scope->module;
+	enum pfAccessType access = var->ty->access;
+	if (access == paConst)
+	    errAt(pp->tok, "Writing to a const");
 	if (varModule)
 	    {
-	    enum pfAccessType access = var->ty->access;
-	    if (access == paReadable)
+	    if (access != paWritable)
 	        {
 		struct pfModule *myModule = findEnclosingModule(pp);
 		if (myModule != varModule)
@@ -1719,6 +1721,24 @@ if (!isFunctionIo(varInit) && pfParseEnclosingFunction(varInit) == NULL)
     }
 }
 
+static void checkConstExp(struct pfCompile *pfc, struct pfParse *pp)
+/* Make sure that expression is really constant.  No non-constant 
+ * variables allowed. */
+{
+switch (pp->type)
+    {
+    case pptVarUse:
+	{
+        struct pfVar *var = pp->var;
+	if (var->ty->access != paConst)
+	   errAt(pp->tok, "Can only initialize a constant with other constants.");
+	break;
+	}
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    checkConstExp(pfc, pp);
+}
+
 static void coerceVarInit(struct pfCompile *pfc, struct pfParse *pp)
 /* Make sure that variable initialization can be coerced to variable
  * type. */
@@ -1731,6 +1751,8 @@ if (init != NULL)
     coerceOne(pfc, &symbol->next, type->ty, FALSE);
 checkTypeWellFormed(pfc, type);
 checkRedefinitionInParent(pfc, pp);
+if (pp->access == paConst && init != NULL)
+    checkConstExp(pfc, init);
 }
 
 static void coerceIndex(struct pfCompile *pfc, struct pfParse *pp)
@@ -1878,6 +1900,13 @@ for (pp = tuple->children; pp != NULL; pp = pp->next)
     }
 }
 
+static void modifierNotAllowed(struct pfParse *pp)
+/* Complain about inappropriate variable modifier. */
+{
+errAt(pp->tok, "Variable modifier %s not allowed here", 
+     pfAccessTypeAsString(pp->access));
+}
+
 static void addVarToClass(struct pfBaseType *class, struct pfParse *varPp)
 /* Add variable to class. */
 {
@@ -1888,6 +1917,14 @@ struct pfType *type = CloneVar(varPp->ty);
 type->fieldName = varPp->name;
 type->init = initPp;
 slAddHead(&class->fields, type);
+switch (varPp->access)
+    {
+    case paStatic:
+    case paWritable:
+    case paGlobal:
+	modifierNotAllowed(varPp);
+	break;
+    }
 }
 
 static void addFunctionToClass(struct pfBaseType *class, struct pfParse *funcPp)
@@ -1958,7 +1995,7 @@ struct pfBaseType *base = pfScopeFindType(pp->scope, pp->name);
 
 if (base == NULL)
     internalErrAt(pp->tok);
-if (pfBaseIsDerivedClass(base) && base->initMethod != NULL)
+if (!pfc->isPfh && pfBaseIsDerivedClass(base) && base->initMethod != NULL)
     insureCallsParentInit(base->initMethod, base->parent);
 pp->ty = type->ty;
 p2p = &compound->children;
@@ -2330,9 +2367,36 @@ for (pp = tuple->children; pp != NULL; pp = pp->next)
     {
     if (pp->type != pptVarInit)
         errAt(pp->tok, "only variable declarations allowed in input/output lists");
+    switch (pp->access)
+        {
+	case paGlobal:
+	case paLocal:
+	case paStatic:
+	case paConst:
+	    modifierNotAllowed(pp);
+	    break;
+	}
     pp->ty->fieldName = pp->name;
     }
 }
+
+static void checkToIoModifiers(struct pfParse *tuple)
+/* Check for inappropriate modifiers to flow inputs (on top of those
+ * done by checkIsSimpleDecTuple). */
+{
+struct pfParse *pp;
+for (pp = tuple->children; pp != NULL; pp = pp->next)
+    {
+    switch (pp->access)
+        {
+	case paReadable:
+	case paWritable:
+	    modifierNotAllowed(pp);
+	    break;
+	}
+    }
+}
+
 
 void checkInLoop(struct pfCompile *pfc, struct pfParse *pp)
 /* Check that break/continue lies inside of loop */
@@ -2380,7 +2444,10 @@ struct hashCookie hc;
 struct hashEl *hel;
 
 checkIsSimpleDecTuple(input);
+if (funcDec->type == pptToDec)
+    checkToIoModifiers(input);
 checkIsSimpleDecTuple(output);
+checkToIoModifiers(output);
 for (pp = output->children; pp != NULL; pp = pp->next)
     {
     hashAddInt(outputHash, pp->name, 0);

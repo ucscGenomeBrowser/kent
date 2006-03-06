@@ -281,7 +281,7 @@ while ((el = hashNext(&it)) != NULL)
     {
     struct pfVar *var = el->val;
     enum pfAccessType access = var->ty->access;
-    if (access == paGlobal || access == paReadable)
+    if (access == paGlobal || access == paWritable || access == paReadable)
 	hashAdd(scope->vars, el->name, var);
     }
 }
@@ -376,7 +376,7 @@ switch (pp->type)
 	    if (varModule != NULL && varModule != module)
 	        {
 		enum pfAccessType access = var->ty->access;
-		if (access != paGlobal && access != paReadable)
+		if (access != paGlobal && access != paWritable)
 		    errAt(pp->tok, "%s is private to module %s", 
 		    	var->name, varModule->name);
 		}

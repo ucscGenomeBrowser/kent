@@ -124,6 +124,7 @@ switch (type)
     case pftClass: 	     return "pftClass";
     case pftCase:	     return "pftCase";
     case pftCatch:	     return "pftCatch";
+    case pftConst:	     return "pftConst";
     case pftContinue: 	     return "pftContinue";
     case pftElse: 	     return "pftElse";
     case pftExtends: 	     return "pftExtends";
@@ -150,6 +151,7 @@ switch (type)
     case pftTo: 	     return "pftTo";
     case pftTry:             return "pftTry";
     case pftWhile: 	     return "pftWhile";
+    case pftWritable:        return "pftWritable";
     default:
 	if (type < 256)
 	    {

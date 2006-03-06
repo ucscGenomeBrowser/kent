@@ -1020,33 +1020,40 @@ while (inAccessSection)
     enum pfTokType tokType = tok->type;
     switch (tokType)
         {
-	case pftStatic:
-	case pftReadable:
-	case pftLocal:
+	case pftConst:
 	case pftGlobal:
+	case pftLocal:
+	case pftReadable:
+	case pftStatic:
+	case pftWritable:
 	    {
 	    boolean inFunc = inFunction(parent);
 	    if (access != paUsual)
-	        errAt(tok, "Only one of global/readable/local/static allowed.");
-	    if (tokType == pftStatic)
-		{
-	        access = paStatic;
-		if (!inFunc)
-		    errAt(tok, "'static' outside of function");
-		}
-	    else if (tokType == pftReadable)
-		{
-	        access = paReadable;
-		if (inFunc)
-		    errAt(tok, "'readable' inside function");
-		}
-	    else if (tokType == pftLocal)
-	        access = paLocal;
-	    else if (tokType == pftGlobal)
-		{
-	        access = paGlobal;
-		if (inFunc)
-		    errAt(tok, "'global' inside function");
+	        errAt(tok, "Only one of global/readable/const/writable/local/static allowed.");
+	    switch (tokType)
+	        {
+		case pftConst:
+		    access = paConst;
+		    break;
+		case pftGlobal:
+		    access = paGlobal;
+		    if (inFunc)
+			errAt(tok, "'global' inside function");
+		    break;
+		case pftLocal:
+		    access = paLocal;
+		    break;
+		case pftReadable:
+		    access = paReadable;
+		    break;
+		case pftStatic:
+		    access = paStatic;
+		    if (!inFunc)
+			errAt(tok, "'static' outside of function");
+		    break;
+		case pftWritable:
+		    access = paWritable;
+		    break;
 		}
 	    tok = tok->next;
 	    break;
@@ -1254,6 +1261,18 @@ static void varDecAndAssignToVarInit(struct pfParse *pp)
 if (pp->type == pptVarDec)
     {
     pp->type = pptVarInit;
+    if (pp->access == paConst)
+	{
+	boolean ok = FALSE;
+	if (pp->parent->type == pptTuple || pp->parent->type == pptTypeTuple)
+	    {
+	    enum pfParseType grandparentType = pp->parent->parent->type;
+	    if (grandparentType == pptToDec || grandparentType == pptFlowDec)
+	        ok = TRUE;
+	    }
+	if (!ok)
+	    errAt(pp->tok, "Uninitialized const.");
+	}
     }
 else if (pp->type == pptAssignment)
     {
@@ -2116,8 +2135,10 @@ switch (tok->type)
 	    }
 	break;
 	}
+    case pftConst:
     case pftStatic:
     case pftReadable:
+    case pftWritable:
     case pftName:
     case pftPlusPlus:
     case pftMinusMinus:

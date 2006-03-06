@@ -1,6 +1,6 @@
 import 'num'
 
-global string zebra = 'zebra';
+writable string zebra = 'zebra';
 global string monkey = 'monkey';
 global string dog = 'dog';
 global string cat = 'cat';
@@ -12,7 +12,7 @@ global to stutter(string s)
 
 global num.abc abc = (1,2,3);
 
-readable string mouse = "mouse";
+global string mouse = "mouse";
 string moose = "moose";
 
 class secretAnimalStuff
