@@ -63,6 +63,8 @@ static struct optionSpec optionSpecs[] = {
     {"zeroBed", OPTION_STRING},
     {"shoulderBed", OPTION_STRING},
     {"distOut", OPTION_STRING},
+    {"upstreamOnly", OPTION_BOOLEAN},
+    {"downstreamOnly", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -75,6 +77,8 @@ char *bedOutFile = NULL;
 char *zeroBedOutFile = NULL;
 char *distOut = NULL;
 char *shoulderBedOutFile = NULL;
+bool upstreamOnly = FALSE;
+bool downstreamOnly = FALSE;
 
 static void usage()
 /* Explain usage and exit. */
@@ -114,6 +118,9 @@ verbose(1,
   "                    - their nearest distance included in column 5\n"
   "   -zeroBed=<file name> - output bed file for the items that\n"
   "                    - are within 0bp of the measured neighbors\n"
+  "   -upstreamOnly   - TO BE VERIFIED measure to nearest upstream neighbor only\n"
+  "   -downstreamOnly - TO BE VERIFIED measure to nearest downstream neighbor only\n"
+  "   		(upstreamOnly and downstreamOnly are mutually exclusive)\n"
 );
 exit(255);
 }
@@ -447,7 +454,14 @@ if (placedItemCount)
 		    (gEl->downstream->chromStart - upstreamBound->chromEnd));
 		int downstreamDist = max(0,
 		    (downstreamBound->chromStart - gEl->downstream->chromEnd));
-		int minDistance = min(upstreamDist, downstreamDist);
+		int minDistance;
+
+		if (upstreamOnly)
+		    minDistance = upstreamDist;
+		else if (downstreamOnly)
+		    minDistance = downstreamDist;
+		else
+		    minDistance = min(upstreamDist, downstreamDist);
 
 		if (distFH)
 		    fprintf (distFH, "%s\t%d\t%d\t%s_%d\t%d\n",
@@ -1038,10 +1052,24 @@ for (cl = gapList; cl != NULL; cl = cl->next)
 	for (gEl = gl; (gEl != NULL) && (! gEl->isDownstreamBound);
 		    gEl = gEl->next)
 	    {
+	    /* protect against negative results with the max(0,..) */
+	    int upstreamDist = max(0,
+		(gEl->downstream->chromStart - upstreamBound->chromEnd));
+	    int downstreamDist = max(0,
+		(downstreamBound->chromStart - gEl->downstream->chromEnd));
+	    int minDistance;
+
+	    if (upstreamOnly)
+		minDistance = upstreamDist;
+	    else if (downstreamOnly)
+		minDistance = downstreamDist;
+	    else
+		minDistance = min(upstreamDist, downstreamDist);
+
 	    ++gapCount;
-	    fprintf (outFile, "%s\t%d\t%d\t%s_%d.%d\n", cl->chrom,
+	    fprintf (outFile, "%s\t%d\t%d\t%s_%d.%d\t%d\n", cl->chrom,
 		gEl->downstream->chromStart, gEl->downstream->chromEnd,
-		cl->chrom, chrCount, gapCount);
+		cl->chrom, chrCount, gapCount, minDistance);
 	    }
 	if (gEl)
 	    next = gEl->next;
@@ -1186,12 +1214,21 @@ zeroBedOutFile = optionVal("zeroBed", NULL);
 distOut = optionVal("distOut", NULL);
 shoulderBedOutFile = optionVal("shoulderBed", NULL);
 verbosity = optionInt("verbose", 1);
+upstreamOnly = optionExists("upstreamOnly");
+if (! upstreamOnly)
+    downstreamOnly = optionExists("downstreamOnly");
 
 verboseSetLevel(verbosity);
 verbose(2,"bounding elements file: %s\n", argv[1]);
 verbose(2,"placed items file: %s\n", argv[2]);
 if (neighbor)
     verbose(2,"nearest neighbor file: %s\n", neighbor);
+if (upstreamOnly)
+    verbose(2,"nearest neighbor measured only to upstream element\n");
+if (downstreamOnly)
+    verbose(2,"nearest neighbor measured only to downstream element\n");
+if (!upstreamOnly && !downstreamOnly)
+    verbose(2,"nearest neighbor measured either to upstream or downstream element\n");
 if (bedOutFile)
     verbose(2,"last alignment of trials output to bed file: %s\n", bedOutFile);
 if (zeroBedOutFile)
