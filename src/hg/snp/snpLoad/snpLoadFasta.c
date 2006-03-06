@@ -20,7 +20,7 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.15 2006/02/23 04:09:31 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.16 2006/03/06 23:46:23 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 /* The vast majority are single. */
@@ -185,7 +185,7 @@ if (sameString(observed, "lengthTooLong"))
 }
 
 
-boolean readFasta(char *chromName)
+boolean getDataFromFasta(char *chromName)
 /* Parse each line in chrN.gnl, write to chrN_snpFasta.tab. */
 {
 char inputFileName[64], outputFileName[64];
@@ -312,13 +312,13 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     safef(fileName, ArraySize(fileName), "ch%s.gnl", chromPtr->name);
     if (!fileExists(fileName)) continue;
     verbose(1, "chrom = %s\n", chromPtr->name);
-    readFasta(chromPtr->name);
+    getDataFromFasta(chromPtr->name);
     createTable(chromPtr->name);
     loadDatabase(chromPtr->name);
     addIndex(chromPtr->name);
     }
 
-readFasta("Multi");
+getDataFromFasta("Multi");
 createTable("Multi");
 loadDatabase("Multi");
 addIndex("Multi");
