@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSort.c,v 1.4 2006/02/17 21:12:41 heather Exp $";
+static char const rcsid[] = "$Id: snpSort.c,v 1.5 2006/03/06 19:49:51 heather Exp $";
 
 struct snpTmp
     {
@@ -96,17 +96,29 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char *chromName;
+char chromName[64];
 
 ret = newHash(0);
+
 safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    chromName = cloneString(row[0]);
+    safef(chromName, sizeof(chromName), "%s", row[0]);
     hashAdd(ret, chromName, NULL);
     }
 sqlFreeResult(&sr);
+
+safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end = 0", contigGroup);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    safef(chromName, sizeof(chromName), "%s_random", row[0]);
+    hashAdd(ret, chromName, NULL);
+    }
+sqlFreeResult(&sr);
+
+
 hFreeConn(&conn);
 return ret;
 }
