@@ -6,12 +6,13 @@
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
+#include "obscure.h"
 #include "options.h"
 #include "jksql.h"
 #include "sqlNum.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mafSplitPos.c,v 1.2 2006/02/26 16:32:46 kate Exp $";
+static char const rcsid[] = "$Id: mafSplitPos.c,v 1.3 2006/03/06 17:07:18 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -152,7 +153,7 @@ hc = hashFirst(chromHash);
 while ((hel = hashNext(&hc)) != NULL)
     {
     chrom = hel->name;
-    chromSize = (int)hel->val;
+    chromSize = ptToInt(hel->val);
     chromSplits(chrom, chromSize, splitSize, conn, f);
     }
 sqlDisconnect(&conn);
