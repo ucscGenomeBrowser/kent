@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitByChrom.c,v 1.2 2006/02/28 21:43:43 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitByChrom.c,v 1.3 2006/03/06 19:42:06 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -83,6 +83,7 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    // better to use FILE *f = hashMustFindVal(chromHash,row[2]);
     hel = hashLookup(chromHash,row[2]);
     if (hel == NULL)
         {
