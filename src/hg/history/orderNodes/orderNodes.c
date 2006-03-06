@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: orderNodes.c,v 1.10 2006/03/03 21:42:25 braney Exp $";
+static char const rcsid[] = "$Id: orderNodes.c,v 1.11 2006/03/06 17:38:10 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -135,6 +135,8 @@ for(e = g->elements; e->next; e = e->next)
     setPair(e, e->next, FALSE);
     setPair(e->next, e, TRUE);
     }
+setPair(e, g->elements, FALSE);
+setPair(g->elements, e, TRUE);
 }
 
 void setLeafNodePairs(struct phyloTree *node )
@@ -187,8 +189,10 @@ for(p = inList; p ; p = p->next)
     if ((findEdge(*outList, p->element, p->doFlip)) != NULL)
 	errAbort("in doUp , already on list");
     if (e == p->element->parent)
+	{
+	errAbort("n doUpadding edge to itself");
 	continue;
-    //errAbort("n doUpadding edge to itself");
+	}
 //if (*outList != NULL)
     //errAbort("in doUp edge should be alone");
 
@@ -577,6 +581,36 @@ struct possibleEdge *newEdge;
 if (*median != NULL)
     errAbort("should be null list");
 
+//printf("counts: %d %d %d\n",slCount(left),slCount(right), slCount(top));
+//printf("names %s %s %s\n",eleName(left->element),eleName(right->element), eleName(top->element));
+if (!((slCount(left) == 1) ||  (slCount(right) == 1) || (slCount(top) ==1)))
+    errAbort("breaks infinite sites 1 must be 1");
+if (slCount(left) + slCount(right) + slCount(top) < 3)
+    errAbort("breaks infinite sites < 3");
+if (slCount(left) + slCount(right) + slCount(top) > 4)
+    warn("breaks infinite sites > 4");
+
+p = left;
+if (slCount(left) == 2)
+    {
+    p=right;
+    }
+else if (slCount(top) == 1)
+    if ((left->element != top->element) || (left->doFlip!= top->doFlip))
+	p = right;
+
+if ((p == right) && (slCount(right) != 1))
+    if ((p->element != left->element) || (p->doFlip!= left->doFlip))
+	p=right->next;
+    //errAbort("screwed up logic");
+
+AllocVar(newEdge);
+newEdge->element = p->element;
+newEdge->doFlip = p->doFlip;
+newEdge->count = p->count;
+slAddHead(median, newEdge);
+
+#ifdef NOTNOW
 for(p = left; p ; p = p->next)
     {
     AllocVar(newEdge);
@@ -647,6 +681,7 @@ for(p = top; p ; p = p->next)
 	slAddHead(median, newEdge);
 	}
     }
+#endif
 }
 
 void chooseMedian2(struct possibleEdge *left, struct possibleEdge *right, struct possibleEdge **median) 
@@ -655,6 +690,27 @@ struct possibleEdge *p;
 struct possibleEdge *edge;
 struct possibleEdge *newEdge;
 
+if (!((slCount(left) == 1) ||  (slCount(right) == 1)))
+    errAbort("median2 breaks infinite sites 1 must be 1");
+if (slCount(right) + slCount(left) > 3)
+    errAbort("median2 infinites sites break > 3");
+if (slCount(right) + slCount(left) < 2)
+    errAbort("median2 infinites sites break < 2");
+//if (left->element != right->element)
+    //warn("median2 : right != left");
+p = left;
+if (slCount(p) != 1)
+    p = right;
+
+//p->next = NULL;
+
+AllocVar(newEdge);
+newEdge->element = p->element;
+newEdge->doFlip = p->doFlip;
+newEdge->count = p->count;
+slAddHead(median, newEdge);
+
+#ifdef NOTNOW
 for(p = left; p ; p = p->next)
     {
     if (( findEdge(*median, p->element, p->doFlip)) != NULL)
@@ -688,6 +744,7 @@ for(p = right; p ; p = p->next)
 	slAddHead(median, newEdge);
 	}
     }
+#endif
 }
 
 void calcMix(struct phyloTree *node)
@@ -822,7 +879,7 @@ else if (node->numEdges)
 	    else
 		doUpProbs(e->edges[1]->up.prev,&leftListPrev);
 
-	    chooseMedian3(topListPrev, rightListPrev, leftListPrev,  &e->mix.prev);
+	    chooseMedian3(leftListPrev, rightListPrev, topListPrev,  &e->mix.prev);
 	    if ((topListPrev || rightListPrev || leftListPrev) && (e->mix.prev == NULL))
 		errAbort("no mix prev");
 
@@ -848,7 +905,7 @@ else if (node->numEdges)
 		doUpProbs(e->edges[1]->calced.next,&leftListNext);
 	    else
 		doUpProbs(e->edges[1]->up.next,&leftListNext);
-	    chooseMedian3(topListNext, rightListNext, leftListNext,  &e->mix.next);
+	    chooseMedian3(leftListNext, rightListNext, topListNext,  &e->mix.next);
 
 	    if ((topListNext || rightListNext || leftListNext) && (e->mix.next == NULL))
 		errAbort("no mix next");
@@ -1034,28 +1091,6 @@ slReverse(&g->elements);
 //fprintf(f,"\n");
 }
 
-void removeStartStop(struct genome *g)
-{
-struct element *e = g->elements;
-struct element *prev = NULL;
-
-if (!sameString(e->name, "START"))
-    errAbort("first element not START");
-
-g->elements = e->next;
-
-prev = NULL;
-for(e = g->elements; e->next ; prev = e, e = e->next)
-    ;
-
-if (!sameString(e->name, "END"))
-    errAbort("last element not END");
-
-if (prev == NULL)
-    g->elements = NULL;
-else
-    prev->next = NULL;
-}
 
 void reOrderTree(FILE *f, struct phyloTree *node)
 {
