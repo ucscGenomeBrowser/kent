@@ -884,8 +884,8 @@ for (bedEl = bounds; bedEl != NULL; bedEl = bedEl->next)
 	prevChr = cloneString(bedEl->chrom);
 	prevGap = NULL;
 	prevBedEl = bedEl;	/*	bounding element before first gap */
-	verbose(4,"new chrom on bounding gap creation %s, adding %#x\n",
-		prevChr, (unsigned) cEl);
+	verbose(4,"new chrom on bounding gap creation %s, adding %#lx\n",
+		prevChr, (unsigned long) cEl);
 	slAddHead(&gaps,cEl);
 	++boundingChrCount;
 	curChrList = cEl;
