@@ -1,3 +1,4 @@
+/* cds - codon coloring */
 #include "common.h"
 #include "hCommon.h"
 #include "hash.h"
@@ -15,6 +16,8 @@
 #include "cds.h"
 #include "genbank.h"
 #include "hgTracks.h"
+
+static char const rcsid[] = "$Id: cds.c,v 1.38 2006/03/06 17:52:47 angie Exp $";
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
                                         int chromStart, int chromEnd,
@@ -987,7 +990,7 @@ if(mrnaS >= 0)
 				color, lf->score );
 	}
     else
-        errAbort("Unknown displayOption: %s<br>\n", displayOption);
+        errAbort("Unknown displayOption: %d<br>\n", displayOption);
 
     if(isDiff)        
         freeMem(retStrDy);
