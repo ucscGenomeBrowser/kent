@@ -1,30 +1,60 @@
 
-const short ctComment=256;
-const short ctString=257;
-const short ctChar=258;
-const short ctCtInt=259;
-const short ctCtLong=260;
-const short ctCtFloat=261;
-const short ctName=262;
-const short ctShiftLeft=263;
-const short ctShiftRight=264;
-const short ctPlusPlus=265;
-const short ctMinusMinus=266;
-const short ctEqualEqual=267;
-const short ctPlusEqual=268;
-const short ctTimesEqual=269;
-const short ctDivEqual=270;
-const short ctModEqual=271;
-const short ctMinusEqual=272;
-const short ctGreaterEqual=273;
-const short ctLessEqual=274;
-const short ctAndAnd=275;
-const short ctOrOr=276;
-const short ctEof=277;
-const short ctAndEqual = 278;
-const short ctOrEqual = 279;
-const short ctXorEqual = 280;
-const short ctNotEqual = 281;
+global short ctComment=256;
+global short ctString=257;
+global short ctChar=258;
+global short ctInt=259;
+global short ctLong=260;
+global short ctFloat=261;
+global short ctName=262;
+global short ctShiftLeft=263;
+global short ctShiftRight=264;
+global short ctPlusPlus=265;
+global short ctMinusMinus=266;
+global short ctEqualEqual=267;
+global short ctPlusEqual=268;
+global short ctTimesEqual=269;
+global short ctDivEqual=270;
+global short ctModEqual=271;
+global short ctMinusEqual=272;
+global short ctGreaterEqual=273;
+global short ctLessEqual=274;
+global short ctAndAnd=275;
+global short ctOrOr=276;
+global short ctEof=277;
+global short ctAndEqual = 278;
+global short ctOrEqual = 279;
+global short ctXorEqual = 280;
+global short ctNotEqual = 281;
+global short ctTilde = 282;
+global short ctBang = 283;
+global short ctSharp = 284;
+global short ctPercent = 285;
+global short ctCaret = 286;
+global short ctAnd = 287;
+global short ctAsterisk = 288;
+global short ctOpenParen = 289;
+global short ctCloseParen = 290;
+global short ctMinus = 291;
+global short ctPlus = 292;
+global short ctEqual = 293;
+global short ctOpenCurly = 294;
+global short ctCloseCurly = 295;
+global short ctOpenSquare = 296;
+global short ctCloseSquare = 297;
+global short ctOr = 298;
+global short ctColon = 299;
+global short ctSemi = 300;
+global short ctEscape = 301;
+global short ctGreater = 302;
+global short ctLess = 303;
+global short ctComma = 304;
+global short ctDot = 305;
+global short ctQuestion = 306;
+global short ctDiv = 307;
+global short ctDotDotDot = 308;
+global short ctPointer = 309;
+global short ctLeftShiftEqual = 310;
+global short ctRightShiftEqual = 311;
 
 flow isdigit(char c) into bit is
     {
@@ -57,7 +87,7 @@ flow iscsym(char c) into bit is
     }
 
 
-class cToken
+global class cToken
 // A token in a C program.
     {
     readable short type; // Token type.
@@ -65,14 +95,16 @@ class cToken
     readable string spaceBefore;	// White space before token.
     readable string fileName;	// Name of file.
     readable int line;	// Starting line.
+    global to init(){}
     };
 
-class cTkz
+global class cTkz
 // Creates a stream of cTokens
     {
     readable cToken cur;		// Current token
     readable cToken next;	// Next token
-    readable cToken afterNext;	// Next token after than
+    readable cToken twoAhead;	// Next token after than
+    readable cToken threeAhead;	// Next token after than
     readable string fileName;	// Current file name
 
     local string lineBuf="";	// Position in line
@@ -85,7 +117,8 @@ class cTkz
     local dir of string names = ();// Save room on names by putting into dir
 
     to init(string fileName)
-    // Set up tokenizer on file.
+    // Set up tokenizer on file.  Call advance to fetch
+    // first token.
         {
 	self.fileName = fileName;
 	f = fileOpen(fileName, "r");
@@ -165,11 +198,11 @@ class cTkz
 	reuseChar(c);
 	}
 
-    to singleChar(cToken tok, char c)
+    to singleChar(cToken tok, char c, short type)
     // Finish up a single character token
         {
 	tok.val = c;
-	tok.type = c;
+	tok.type = type;
 	}
 
     to doubleChar(cToken tok, char a, char b, short type)
@@ -224,12 +257,12 @@ class cTkz
 	    'L', 'U' : 
 		{
 	    	s += c;
-		tok.type = ctCtLong;
+		tok.type = ctLong;
 		}
 	    '.' : 
 		{
 	    	s += parseInteger(c);
-		tok.type = ctCtFloat;
+		tok.type = ctFloat;
 		}
 	    'x', 'X' : 
 	        {
@@ -239,12 +272,12 @@ class cTkz
 		    s += parseInteger(c);
 		else
 		    reuseChar(c);
-		tok.type = ctCtInt;
+		tok.type = ctInt;
 		}
 	    else: 
 		{
 	    	reuseChar(c);
-		tok.type = ctCtInt;
+		tok.type = ctInt;
 		}
 	    }
 	tok.val = s;
@@ -296,9 +329,9 @@ class cTkz
 	    }
 	}
 
-    to advance() 
+    local to adv() into (cToken tok)
         {
-	cToken tok = ();
+	tok = ();
 	tok.spaceBefore = skipSpace();
 	tok.line = lineCount;
 	tok.fileName = fileName;
@@ -318,7 +351,7 @@ class cTkz
 		    case (nextC)
 		        {
 			'=' : doubleChar(tok, c,nextC,ctNotEqual);
-			else: {singleChar(tok,c); reuseChar(nextC);}
+			else: {singleChar(tok,c,ctBang); reuseChar(nextC);}
 		        }
 		    }
 		'%' :
@@ -327,7 +360,7 @@ class cTkz
 		    case (nextC)
 		        {
 			'=' : doubleChar(tok, c,nextC,ctModEqual);
-			else: {singleChar(tok,c); reuseChar(nextC);}
+			else: {singleChar(tok,c,ctPercent); reuseChar(nextC);}
 		        }
 		    }
 		'^' :
@@ -336,7 +369,7 @@ class cTkz
 		    case (nextC)
 		        {
 			'=' : doubleChar(tok, c,nextC,ctXorEqual);
-			else: {singleChar(tok,c); reuseChar(nextC);}
+			else: {singleChar(tok,c,ctCaret); reuseChar(nextC);}
 		        }
 		    }
 		'&' :
@@ -346,7 +379,17 @@ class cTkz
 		        {
 			'=' : doubleChar(tok, c,nextC,ctAndEqual);
 			'&' : doubleChar(tok, c,nextC,ctAndAnd);
-			else: {singleChar(tok,c); reuseChar(nextC);}
+			else: {singleChar(tok,c,ctAnd); reuseChar(nextC);}
+		        }
+		    }
+		'|' :
+		    {
+		    char nextC = nextChar();
+		    case (nextC)
+		        {
+			'=' : doubleChar(tok, c,nextC,ctOrEqual);
+			'|' : doubleChar(tok, c,nextC,ctOrOr);
+			else: {singleChar(tok,c,ctAnd); reuseChar(nextC);}
 		        }
 		    }
 		'*' :
@@ -355,7 +398,7 @@ class cTkz
 		    case (nextC)
 		        {
 			'=' : doubleChar(tok, c,nextC,ctTimesEqual);
-			else: {singleChar(tok,c); reuseChar(nextC);}
+			else: {singleChar(tok,c,ctAsterisk); reuseChar(nextC);}
 		        }
 		    }
 		'-' :
@@ -365,7 +408,8 @@ class cTkz
 		        {
 			'=' : doubleChar(tok, c,nextC,ctMinusEqual);
 			'-' : doubleChar(tok, c,nextC,ctMinusMinus);
-			else: {singleChar(tok,c); reuseChar(nextC);}
+			'>' : doubleChar(tok, c,nextC,ctPointer);
+			else: {singleChar(tok,c,ctMinus); reuseChar(nextC);}
 		        }
 		    }
 		'+' :
@@ -375,7 +419,7 @@ class cTkz
 		        {
 			'=' : doubleChar(tok, c,nextC,ctPlusEqual);
 			'+' : doubleChar(tok, c,nextC,ctPlusPlus);
-			else: {singleChar(tok,c); reuseChar(nextC);}
+			else: {singleChar(tok,c,ctPlus); reuseChar(nextC);}
 		        }
 		    }
 		'=' :
@@ -384,7 +428,7 @@ class cTkz
 		    case (nextC)
 		        {
 			'=' : doubleChar(tok, c,nextC,ctEqualEqual);
-			else: {singleChar(tok,c); reuseChar(nextC);}
+			else: {singleChar(tok,c,ctEqual); reuseChar(nextC);}
 		        }
 		    }
 		'<' :
@@ -393,8 +437,21 @@ class cTkz
 		    case (nextC)
 		        {
 			'=' : doubleChar(tok, c,nextC,ctLessEqual);
-			'<' : doubleChar(tok, c,nextC,ctShiftLeft);
-			else: {singleChar(tok,c); reuseChar(nextC);}
+			'<' : 
+			    {
+			    nextC = nextChar();
+			    if (nextC == '=')
+			        {
+				tok.val = '<<=';
+				tok.type = ctLeftShiftEqual;
+				}
+			    else
+			        {
+				reuseChar(nextC);
+				doubleChar(tok, c,c,ctShiftLeft);
+				}
+			    }
+			else: {singleChar(tok,c,ctLess); reuseChar(nextC);}
 		        }
 		    }
 		'>' :
@@ -403,8 +460,21 @@ class cTkz
 		    case (nextC)
 		        {
 			'=' : doubleChar(tok, c,nextC,ctGreaterEqual);
-			'<' : doubleChar(tok, c,nextC,ctShiftRight);
-			else: {singleChar(tok,c); reuseChar(nextC);}
+			'>' : 
+			    {
+			    nextC = nextChar();
+			    if (nextC == '=')
+			        {
+				tok.val = '>>=';
+				tok.type = ctRightShiftEqual;
+				}
+			    else
+				{
+				reuseChar(nextC);
+				doubleChar(tok, c,c,ctShiftRight);
+				}
+			    }
+			else: {singleChar(tok,c,ctGreater); reuseChar(nextC);}
 		        }
 		    }
 		'/' : 
@@ -415,19 +485,62 @@ class cTkz
 			'/' : lineComment(tok);
 			'*' : cComment(tok);
 			'=' : doubleChar(tok, c,nextC,ctDivEqual);
-			else: {singleChar(tok,c); reuseChar(nextC);}
+			else: {singleChar(tok,c,ctDiv); reuseChar(nextC);}
+			}
+		    }
+		'.' : 
+		    {
+		    char nextC = nextChar();
+		    if (nextC == '.')
+		        {
+			nextC = nextChar();
+			if (nextC != '.')
+			    punt("No third dot line $lineCount of $fileName");
+			tok.val = "...";
+			tok.type = ctDotDotDot;
+			}
+		    else
+			{
+			singleChar(tok,c,ctDot);
+			reuseChar(nextC);
 			}
 		    }
 		"'" : {parseQuote(tok, c); tok.type = ctChar}
 		'"' : {parseQuote(tok, c); tok.type = ctString}
-		else:	singleChar(tok, c);
+		'~' : singleChar(tok, c, ctTilde);
+		'#' : singleChar(tok,c,ctSharp);
+		'(' : singleChar(tok,c,ctOpenParen);
+		')' : singleChar(tok,c,ctCloseParen);
+		'{' : singleChar(tok,c,ctOpenCurly);
+		'}' : singleChar(tok,c,ctCloseCurly);
+		'[' : singleChar(tok,c,ctOpenSquare);
+		']' : singleChar(tok,c,ctCloseSquare);
+		':' : singleChar(tok,c,ctColon);
+		';' : singleChar(tok,c,ctSemi);
+		'\\' : singleChar(tok,c,ctEscape);
+		',' : singleChar(tok,c,ctComma);
+		'?' : singleChar(tok,c,ctQuestion);
+		else: punt("Unrecognized char $c line $lineCount of $fileName");
 		}
 	    }
+	}
+
+    to advance() 
+        {
+	cToken tok;
+	for (;;)
+	    {
+	    tok = adv();
+	    if (tok.type != ctComment)
+	        break;
+	    }
 	cur = next;
-	next = afterNext;
-	afterNext = tok;
+	next = twoAhead;
+	twoAhead = threeAhead;
+	threeAhead = tok;
 	}
     }
+
 
 
 // TODO - add isalpha, isalnum, isspace, isnum.
@@ -435,18 +548,17 @@ class cTkz
 // Consider making dyString += char more efficient.
 // Enums!
 
-string fileName = "test.c";
+/*-TESTING
+string fileName = "c.txt";
 if (args.size > 0)
     fileName = args[0];
 cTkz tkz = (fileName);
 for (;;)
     {
-    prin(tkz.cur.spaceBefore);
+    tkz.advance();
+    print(tkz.cur);
     if (tkz.cur.type == ctEof)
         break;
-    prin(tkz.cur.val);
-    // print(tkz.cur);
-    tkz.advance();
     }
-
+TESTING-*/
 
