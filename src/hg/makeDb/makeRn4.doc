@@ -600,7 +600,7 @@ cd ../..
 #Wrote 25608 overused 11-mers to /cluster/bluearc/rn4/11.ooc
 
 
-# GENBANK AUTO UPDATE (IN PROGRESS 2/10/06 angie)
+# GENBANK AUTO UPDATE (DONE 2/10/06 angie)
     # align with revised genbank process. drop xeno ESTs.
     cd ~/kent/src/makeDb/genbank
     cvsup
@@ -636,7 +636,6 @@ rn4.mgcTables.mgc = all
     nice ./bin/gbDbLoadStep -drop -initialLoad rn4 &
 
     # enable daily alignment and update of hgwdev
-#TODO
     cd ~/kent/src/makeDb/genbank
     cvsup
     # add rn4 to:
@@ -961,6 +960,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     cd /cluster/data/rn4/bed/blastz.hg17.swap
     doBlastzChainNet.pl -swap /cluster/data/hg17/bed/blastz.rn4/DEF \
       -workhorse=kkr5u00 >& do.log & tail -f do.log
+    ln -s blastz.hg17.swap /cluster/data/rn4/bed/blastz.hg177
 
 
 # MAKE LINEAGE-SPECIFIC REPEATS FOR NON-MAMMALS (DONE 2/13/06 angie)
@@ -975,10 +975,10 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     iSync
 
 
-# BLASTZ CHICKEN (GALGAL2) (IN PROGRESS 2/13/06 angie)
+# BLASTZ CHICKEN (GALGAL2) (DONE 2/14/06 angie)
     ssh kk
-    mkdir /cluster/data/hg17/bed/blastz.galGal2.2006-02-13
-    cd /cluster/data/hg17/bed/blastz.galGal2.2006-02-13
+    mkdir /cluster/data/rn4/bed/blastz.galGal2.2006-02-13
+    cd /cluster/data/rn4/bed/blastz.galGal2.2006-02-13
     # Set L=10000 (higher threshold on blastz's outer loop) and abridge 
     # repeats.
     cat << '_EOF_' > DEF
@@ -1006,34 +1006,1157 @@ SEQ2_CHUNK=10000000
 SEQ2_LAP=0
 SEQ2_LEN=/cluster/data/galGal2/chrom.sizes
 
-BASE=/cluster/data/hg17/bed/blastz.galGal2.2006-02-13
+BASE=/cluster/data/rn4/bed/blastz.galGal2.2006-02-13
 '_EOF_'
     # << this line keeps emacs coloring happy
     doBlastzChainNet.pl DEF \
       -blastzOutRoot=/cluster/bluearc/blastzRn4GalGal2Out \
       > do.log & tail -f do.log
-#TODO
-    cd /cluster/data/hg17/bed
-    ln -s /cluster/data/hg17/bed/blastz.galGal2.2006-02-13 blastz.galGal2
+    cd /cluster/data/rn4/bed
+    ln -s /cluster/data/rn4/bed/blastz.galGal2.2006-02-13 blastz.galGal2
 
 
-# STS MARKERS -- Yontao made stsInfoRat.  TODO: figure out what he did,
-# redo it (checking scripts into kent/src/ tree), document it here.
-# Align sequences and primers to the genome, load up.
+##########################################################################
+# BACEND PAIRS TRACK
 
+# DOWNLOAD CLONEENDS (BACENDS) FROM NCBI (DONE 2/23/06 angie)
+    ssh kkstore01
+    cd /cluster/data/rn4
+    # Plenty of room at the moment:
+    df -h .
+#                      1.3T 1009G  234G  82% /cluster/store9
+    mkdir -p bed/cloneend/ncbi
+    cd bed/cloneend/ncbi
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/genomes/CLONEEND/rattus_norvegicus/\*
+    cd ..
+    # Extract unversioned accessions from headers and combine into one 
+    # uncompressed file which we will link to from /gbdb/:
+    zcat ncbi/*ends*.mfa.gz \
+    | perl -wpe 'if (/^>/) { \
+       s/^>.*\|(gb|dbj)\|(\w+)\.\d+\|.*/>$2/ || die "parse line $.:$_\n"; }' \
+      > cloneEnds.fa
+    # Make sure the sequences are intact after the header-munging:
+    faSize ncbi/*.mfa.gz
+#188448559 bases (4451 N's 188444108 real 102020307 upper 86423801 lower) in 307557 sequences in 18 files
+#Total size: mean 612.7 sd 198.9 min 83 (gi|30387889|gb|CC181697.1|) max 1158 (gi|24002262|gb|BZ277934.1|) median 634
+    faSize cloneEnds.fa
+#188448559 bases (4451 N's 188444108 real 102020307 upper 86423801 lower) in 307557 sequences in 1 files
+#Total size: mean 612.7 sd 198.9 min 83 (CC181697) max 1158 (BZ277934) median 634
+
+    # Extract pairings from info files:
+    zcat ncbi/*info*.txt.gz \
+    | /cluster/bin/scripts/convertCloneEndInfo stdin
+#134351 pairs and 38410 singles
+
+    # split for cluster run
+    mkdir /cluster/bluearc/rn4/cloneEnds
+    faSplit sequence cloneEnds.fa 100 /cluster/bluearc/rn4/cloneEnds/cloneEnds
+    #	Check to ensure no breakage:
+    faSize /cluster/bluearc/rn4/cloneEnds/*.fa
+#188448559 bases (4451 N's 188444108 real 102020307 upper 86423801 lower) in 307557 sequences in 98 files
+#Total size: mean 612.7 sd 198.9 min 83 (CC181697) max 1158 (BZ277934) median 634
+    #	same numbers as before
+
+    # load sequences
+    ssh hgwdev
+    mkdir /gbdb/rn4/cloneend
+    ln -s /cluster/data/rn4/bed/cloneend/cloneEnds.fa /gbdb/rn4/cloneend/
+    cd /tmp
+    hgLoadSeq rn4 /gbdb/rn4/cloneend/cloneEnds.fa
+#307557 sequences
+
+
+# BACEND SEQUENCE ALIGNMENTS (DONE 2/23/06 angie)
+    ssh kkstore01
+    # Make unmasked fasta.
+    cd /cluster/data/rn4
+    mkdir /cluster/bluearc/rn4/noMask
+    foreach f (?{,?}/chr*.fa)
+      echo $f:t:r
+      perl -wpe 'tr/a-z/A-Z/ if (! /^>/);' $f \
+        > /cluster/bluearc/rn4/noMask/$f:t
+    end
+
+    # kluster run
+    ssh pk
+    mkdir /cluster/data/rn4/bed/bacends
+    cd /cluster/data/rn4/bed/bacends
+    mkdir out
+    # allow blat to run politely in /tmp while it writes output, then
+    # copy results to results file:
+    cat << '_EOF_' > runBlat.csh
+#!/bin/csh -ef
+set root1 = $1
+set root2 = $2
+set result = $3
+rm -fr /scratch/tmp/${root1}_${root2}
+mkdir /scratch/tmp/${root1}_${root2}
+pushd /scratch/tmp/${root1}_${root2}
+/cluster/bin/x86_64/blat /cluster/bluearc/rn4/noMask/${root1}.fa \
+  /cluster/bluearc/rn4/cloneEnds/${root2}.fa \
+  -ooc=/cluster/bluearc/rn4/11.ooc ${root1}.${root2}.psl
+popd
+mkdir -p out/${root2}
+rm -f ${result}
+mv /scratch/tmp/${root1}_${root2}/${root1}.${root2}.psl ${result}
+rm -fr /scratch/tmp/${root1}_${root2}
+'_EOF_'
+    #	<< happy emacs
+    chmod +x runBlat.csh
+
+    cat << '_EOF_' > template
+#LOOP
+./runBlat.csh $(root1) $(root2) {check out line+ out/$(root2)/$(root1).$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << emacs happy
+    ls -1S /cluster/bluearc/rn4/cloneEnds/cloneEnds???.fa > bacEnds.lst
+    ls -1S /cluster/bluearc/rn4/noMask/chr*.fa > contig.lst
+    gensub2 contig.lst bacEnds.lst template jobList
+    para make jobList
+#Completed: 4410 of 4410 jobs
+#CPU time in finished jobs:     450309s    7505.15m   125.09h    5.21d  0.014 y
+#IO & Wait Time:                812287s   13538.12m   225.64h    9.40d  0.026 y
+#Average job time:                 286s       4.77m     0.08h    0.00d
+#Longest finished job:            1834s      30.57m     0.51h    0.02d
+#Submission to last job:          6982s     116.37m     1.94h    0.08d
+
+    ssh kkstore01
+    cd /cluster/data/rn4/bed/bacends
+    mkdir temp
+    time pslSort dirs raw.psl temp out/*
+#538.065u 55.510s 14:46.80 66.9%       0+0k 0+0io 3pf+0w
+    time pslReps -nearTop=0.01 -minCover=0.7 -minAli=0.8 -noIntrons \
+      raw.psl bacEnds.psl /dev/null
+#203.262u 8.877s 3:57.34 89.3%   0+0k 0+0io 2pf+0w
+
+
+# BACEND PAIRS TRACK (DONE 2/23/06 angie)
+    ssh kolossus
+    cd /cluster/data/rn4/bed/bacends
+    time /cluster/bin/x86_64/pslPairs -tInsert=10000 \
+      -minId=0.91 -noBin -min=25000 \
+      -max=350000 -slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+      -mismatch -verbose bacEnds.psl \
+        ../cloneend/cloneEndPairs.txt all_bacends bacEnds
+#19.229u 4.720s 0:26.34 90.8%    0+0k 0+0io 0pf+0w
+
+    # Filter by score and sort by {chrom,chromStart}:
+    awk '$5 >= 300 {print;}' bacEnds.pairs | sort -k1,2n > bacEndPairs.bed
+    cat bacEnds.{slop,short,long,mismatch,orphan} \
+    | awk '$5 >= 300 {print;}' | sort -k1,2n > bacEndPairsBad.bed
+
+    #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
+    awk '{print $5}' bacEndPairs.bed | sort -u
+
+    /cluster/bin/scripts/extractPslLoad -noBin bacEnds.psl bacEndPairs.bed \
+      bacEndPairsBad.bed \
+    | sorttbl tname tstart | headchg -del \
+    > bacEnds.load.psl
+    wc -l bacEnds.*
+#   5590477 bacEnds.psl
+#   4462768 bacEnds.load.psl
+#    109315 bacEnds.pairs
+#       705 bacEnds.long
+#        98 bacEnds.lst
+#      3925 bacEnds.mismatch
+#     88292 bacEnds.orphan
+#       558 bacEnds.short
+#       687 bacEnds.slop
+
+    # load into database
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/bacends
+    hgLoadBed -strict -notItemRgb rn4 bacEndPairs bacEndPairs.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
+#Loaded 109139 elements of size 11
+    # note - the "Bad" track isn't pushed to RR, just used for assembly QA.
+    hgLoadBed -strict -notItemRgb rn4 bacEndPairsBad bacEndPairsBad.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/bacEndPairsBad.sql
+#Loaded 38981 elements of size 11
+    time hgLoadPsl rn4 -table=all_bacends bacEnds.load.psl
+#load of all_bacends did not go as planned: 4462768 record(s), 0 row(s) skipped, 1 warning(s) loading psl.tab
+#165.730u 24.690s 10:57.43 28.9% 0+0k 0+0io 258pf+0w
+
+    # To diagnose:
+    echo select \* from all_bacends | hgsql -N rn4 > psl.tab.loaded
+    diff psl.tab* 
+#1491015c1491015
+#< 120   908     82      0       0       3       -124    6       278579  -       BZ232973        866     0       866     chr17   97296363        49307517   49587086 8       21,5,71,86,327,250,116,114,     0,21,27,98,184,382,632,752,     49307517,49307539,49307544,49335694,49336333,49470455,49586851,49586972,
+#---
+#> 120   908     82      0       0       3       0       6       278579  -       BZ232973        866     0       866     chr17   97296363        49307517   49587086 8       21,5,71,86,327,250,116,114,     0,21,27,98,184,382,632,752,     49307517,49307539,49307544,49335694,49336333,49470455,49586851,49586972,
+    # Q gap bases was -124 in... clipped to 0 in the db.  
+    # Identify and save the out/*.psl file that contains the -124:
+    grep '^>BZ232973' /cluster/bluearc/rn4/cloneEnds/*.fa
+#/cluster/bluearc/rn4/cloneEnds/cloneEnds079.fa:>BZ232973
+    grep BZ232973 out/cloneEnds079/*.psl | grep .-124
+#out/cloneEnds079/chr17.cloneEnds079.psl:908     82      0       0       3       -124    6       278579  -       BZ232973        866     0       866     chr17       97296363        49307517        49587086        8       21,5,71,86,327,250,116,114,     0,21,27,98,184,382,632,752,     49307517,49307539,49307544,49335694,49336333,49470455,49586851,49586972,
+    cp -p out/cloneEnds079/chr17.cloneEnds079.psl .
+
+    featureBits rn4 all_bacends
+#241203668 bases of 2571531505 (9.380%) in intersection
+    featureBits rn3 all_bacends
+#232313031 bases of 2571104688 (9.036%) in intersection
+    featureBits rn4 bacEndPairs
+#2687958438 bases of 2571531505 (104.528%) in intersection
+    featureBits rn3 bacEndPairs
+#2717444119 bases of 2571104688 (105.692%) in intersection
+    featureBits rn4 bacEndPairsBad
+#664080718 bases of 2571531505 (25.824%) in intersection
+    featureBits rn3 bacEndPairsBad
+#table bacEndPairsBad not found for any chroms
+
+    # Clean up - this recovers >10G!
+    rm psl.tab psl.tab.loaded raw.psl bed.tab
+    rm -r out
+    rmdir temp
+
+# end BACEND PAIRS TRACK
+##########################################################################
+
+
+# SWAP/CHAIN/NET MM7 (DONE 2/24/06 angie)
+    mkdir /cluster/data/rn4/bed/blastz.mm7.swap
+    cd /cluster/data/rn4/bed/blastz.mm7.swap
+    doBlastzChainNet.pl -swap /cluster/data/mm7/bed/blastz.rn4/DEF \
+      >& do.log & tail -f do.log
+    ln -s blastz.mm7.swap /cluster/data/rn4/bed/blastz.mm7
+
+
+# SWAP/CHAIN/NET HG18 (DONE 2/24/06 angie)
+    mkdir /cluster/data/rn4/bed/blastz.hg18.swap
+    cd /cluster/data/rn4/bed/blastz.hg18.swap
+    doBlastzChainNet.pl -swap /cluster/data/hg18/bed/blastz.rn4/DEF \
+      >& do.log & tail -f do.log
+    ln -s blastz.hg18.swap /cluster/data/rn4/bed/blastz.hg18
+
+
+# MAKE LINEAGE-SPECIFIC REPEATS VS. DOG, COW, RABBIT (DONE 2/24/06 angie)
+    ssh kolossus
+    mkdir /cluster/data/rn4/rmsk
+    cd /cluster/data/rn4/rmsk
+    ln -s ../?{,?}/chr*.fa.out .
+    # Run Arian's DateRepsinRMoutput.pl to add extra columns telling 
+    # whether repeats in -query are also expected in -comp species.  
+    # Dog in extra column 1, mouse in 2, rabbit in 3
+    foreach outfl ( *.out )
+        echo "$outfl"
+        nice /cluster/bluearc/RepeatMasker/DateRepeats \
+          ${outfl} -query rat -comp dog -comp cow -comp rabbit
+    end
+    # Now extract human (extra column 1), mouse (extra column).
+    cd ..
+    mkdir linSpecRep.notIn{Dog,Cow,Rabbit}
+    foreach f (rmsk/*.out_*)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractRepeats 1 $f > \
+                        linSpecRep.notInDog/$base.out.spec
+        /cluster/bin/scripts/extractRepeats 2 $f > \
+                        linSpecRep.notInCow/$base.out.spec
+        /cluster/bin/scripts/extractRepeats 3 $f > \
+                        linSpecRep.notInRabbit/$base.out.spec
+    end
+    wc -l rmsk/*.out
+#  4417757 total
+    wc -l linSpecRep.notInDog/*
+#  2676056 total
+    wc -l linSpecRep.notInCow/*
+#  2676056 total
+    wc -l linSpecRep.notInRabbit/*
+#  2676056 total
+    # These all look identical to each other (and to human except for header):
+    foreach f (linSpecRep.notInDog/*)
+      cmp $f linSpecRep.notInCow/$f:t
+      cmp $f linSpecRep.notInRabbit/$f:t
+    end
+    # Consolidate to save space (probably could have done this for human too):
+    mv linSpecRep.notInDog linSpecRep.notInNonRodentMammal
+    # Clean up.
+    rm -r rmsk linSpecRep.notInCow linSpecRep.notInRabbit
+    # Distribute linSpecRep.* for cluster run
+    ssh kkstore01
+    rsync -av /cluster/data/rn4/linSpecRep.notInNonRodentMammal/* \
+      /cluster/bluearc/rn4/linSpecRep.notInNonRodentMammal/
+
+
+# BLASTZ/CHAIN/NET CANFAM2 (DONE 2/24/06 angie)
+    ssh kkstore01
+    mkdir /cluster/data/rn4/bed/blastz.canFam2.2006-02-24
+    cd /cluster/data/rn4/bed/blastz.canFam2.2006-02-24
+    cat << '_EOF_' > DEF
+# rat vs. dog
+
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Rat
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_SMSK=/cluster/bluearc/rn4/linSpecRep.notInNonRodentMammal
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Dog
+SEQ2_DIR=/scratch/hg/canFam2/nib
+SEQ2_SMSK=/cluster/bluearc/canFam2/linSpecRep.notInRat
+SEQ2_LEN=/cluster/data/canFam2/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
+'_EOF_'
+    # << for emacs
+    doBlastzChainNet.pl DEF -bigClusterHub=pk \
+      -blastzOutRoot /san/sanvol1/scratch/blastzRn4CanFam2Out >& do.log &
+    tail -f do.log
+    ln -s blastz.canFam2.2006-02-24 /cluster/data/rn4/bed/blastz.canFam2 
+
+
+##########################################################################
+# STS MARKERS
+# NOTE: I've already gone through the steps to build the tables... however, 
+# at the end I found a lot of missing names, resulting in missing names in 
+# the NCBI files.  Also, the NCBI UniSTS.sts and UniSTS_rat.sts have several 
+# inconsistencies which I've passed on to NCBI... waiting to hear back from 
+# them before completing this.  Ideally they will crank out a new 
+# UniSTS_rat.sts and I can just repeat all the steps.
+
+# MAKE STSINFORAT (DONE 2/14/06 angie -- REDO with fixed UniSTS_rat.sts)
+    # This method was developed by Yontao.  ytlu/script is under CVS control
+    # so I'm using ~/ytlu/script/perl/script/match but have copied several 
+    # other scripts from /cluster/store4/ratMarker/code into 
+    # kent/src/hg/stsMarkers/ to get them in CVS too.
+    ssh kkstore01
+    mkdir /cluster/data/rn4/bed/stsMarkers
+    mkdir /cluster/data/rn4/bed/stsMarkers/info
+    cd /cluster/data/rn4/bed/stsMarkers/info
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Rattus_norvegicus/10116.FHH_x_ACI.7.txt
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Rattus_norvegicus/10116.RH_map.3.4.txt
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_MapReports/Rattus_norvegicus/10116.SHRSP_x_BN.7.txt
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS_rat.sts
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
+    wget --timestamping ftp://rgd.mcw.edu/pub/rhmap/3.4/RHv3_4_MapData.txt
+    wget --timestamping ftp://rgd.mcw.edu/pub/rhmap/3.4/RAW_MARKER_SEQINFO.txt
+    # Make UniSTS_rat.alias by joining the first columns of
+    # UniSTS_rat.sts and UniSTS.aliases so we get just the aliases of
+    # items in UniSTS_rat.sts:
+    /cluster/home/ytlu/ytlu/script/perl/script/match \
+      UniSTS_rat.sts 1 UniSTS.aliases 1 \
+      > UniSTS_rat.alias
+    # Extract these columns from RHv3_4_MapData.txt:
+    # RGD_Sym TEMPL_SEQ FORWARD_PRIMER REVERSE_PRIMER EXP_SIZE
+    awk '{print $2,$1,$17,$8,$9,$10}' RHv3_4_MapData.txt | sed s/" "/"\t"/g \
+      > inMapData.txt 
+    # Find entries not in RAW_MARKER_SEQINFO.txt but in inMapData.txt, 
+    /cluster/home/ytlu/ytlu/script/perl/script/match -M \
+      RAW_MARKER_SEQINFO.txt 1 inMapData.txt 1 > inMapDataOnly.txt
+    cat inMapDataOnly.txt RAW_MARKER_SEQINFO.txt > marker_seqinfo.txt
+    # Combine sources into a "draft" stsInfoRat.tab file:
+    ~/kent/src/hg/stsMarkers/createStsInfoRat \
+      UniSTS_rat.sts marker_seqinfo.txt UniSTS_rat.alias \
+      10116.RH_map.3.4.txt 10116.FHH_x_ACI.7.txt 10116.SHRSP_x_BN.7.txt \
+      > stsInfoRat-draft
+    # clean some redundant and conflicting entries --> final stsInfoRat.tab:
+    ~/kent/src/hg/stsMarkers/cleanInfo.pl -rat stsInfoRat-draft \
+      > ../stsInfoRat.tab
+    # Create the primer.fa, cloneseq.fa, and primerinfo files for alignment:
+    cd ..
+    ~/kent/src/hg/stsMarkers/luConvertPrimerToFa stsInfoRat.tab \
+      ratPrimer.fa ratSeq.fa ratPrimer.info -a 200
+
+
+# BLAT.2 STS PRIMERS (DONE 2/15/06 angie -- REDO with fixed UniSTS_rat.sts)
+    ssh kkstore01
+    cd /cluster/data/rn4
+    mkdir -p /cluster/bluearc/rn4/ctgFa
+    foreach d (*/chr*_?{,?})
+      cp -p $d/$d:t.fa /cluster/bluearc/rn4/ctgFa/
+    end
+    cp -p /cluster/data/rn4/bed/stsMarkers/ratPrimer.fa \
+      /cluster/bluearc/rn4/
+    ssh kk
+    mkdir /cluster/data/rn4/bed/stsMarkers/primer
+    cd /cluster/data/rn4/bed/stsMarkers/primer
+    # PLEASE NOTE /cluster/bin/i386/blat.2 SPECIFICALLY IS USED HERE. 
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat.2 {check in line+ $(path1)} {check in line+ /cluster/bluearc/rn4/ratPrimer.fa} -ooc=/cluster/bluearc/rn4/11.ooc  -minMatch=1 -minScore=0 -minIdentity=80 -oneOff {check out line+ primers.out/$(root1).psl}
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    mkdir primers.out
+    ls -1S /cluster/bluearc/rn4/ctgFa/chr*.fa > ctg.lst
+    gensub2 ctg.lst single gsub jobList
+    para make jobList
+    para time
+#Completed: 591 of 591 jobs
+#CPU time in finished jobs:     463771s    7729.52m   128.83h    5.37d  0.015 y
+#IO & Wait Time:                 62689s    1044.81m    17.41h    0.73d  0.002 y
+#Average job time:                 891s      14.85m     0.25h    0.01d
+#Longest finished job:            1100s      18.33m     0.31h    0.01d
+#Submission to last job:          3412s      56.87m     0.95h    0.04d
+
+    ssh kkstore01
+    cd /cluster/data/rn4/bed/stsMarkers/primer
+    #	filter alignments for (qEnd-qStart) vs. (tEnd-tStart)
+    #	should not be more than 100 bases different.
+    pslSort dirs stdout temp primers.out \
+    | awk -F"\t" ' \
+      { if (((($13 - $12) - ($17 - $16)) > -100) && \
+            ((($13 - $12) - ($17 - $16)) < 100)) {print} \
+      }' \
+      > primers.psl.100.unlifted
+    rmdir temp
+    rm /cluster/bluearc/rn4/ratPrimer.fa
+    # Would be very nice to compare wc output with rn3 run, but I cannot
+    # find the rn3 run.
+    wc primers.psl.100.unlifted
+#  8055079 169156577 796465212 primers.psl.100.unlifted
+
+
+# E-PCR STS PRIMERS (DONE 2/15/06 angie -- REDO with fixed UniSTS_rat.sts)
+    ssh kkstore01
+    cp -p /cluster/data/rn4/bed/stsMarkers/ratPrimer.info \
+      /cluster/bluearc/rn4/
+    ssh kk
+    mkdir /cluster/data/rn4/bed/stsMarkers/ePCR
+    cd /cluster/data/rn4/bed/stsMarkers/ePCR
+    ls -1S /cluster/bluearc/rn4/ctgFa/chr*.fa > ctg.lst
+    # Hiram built latest e-PCR into /cluster/bin/{i386,x86_64}/e-PCR,
+    # see notes in makeMm7.doc.
+    mkdir epcr.out
+    cat << '_EOF_' > runPCR.csh
+#!/bin/csh -fe
+/cluster/bin/$MACHTYPE/e-PCR $1 $2 N=1 M=50 W=5 > $3
+'_EOF_'
+    chmod +x runPCR.csh
+
+    cat << '_EOF_' > gsub
+#LOOP
+./runPCR.csh {check in line+ /cluster/bluearc/rn4/ratPrimer.info} {check in line+ $(path1)} {check out line+ epcr.out/$(num1).epcr}
+#ENDLOOP
+'_EOF_'
+    gensub2 ctg.lst single gsub jobList
+    para make jobList
+    para time
+#Completed: 591 of 591 jobs
+#CPU time in finished jobs:     211192s    3519.87m    58.66h    2.44d  0.007 y
+#IO & Wait Time:                 69874s    1164.56m    19.41h    0.81d  0.002 y
+#Average job time:                 476s       7.93m     0.13h    0.01d
+#Longest finished job:             557s       9.28m     0.15h    0.01d
+#Submission to last job:          1013s      16.88m     0.28h    0.01d
+
+    ssh kkstore01
+    cd /cluster/data/rn4/bed/stsMarkers/ePCR
+    cat epcr.out/*.epcr > all.epcr
+    rm /cluster/bluearc/rn4/ratPrimer.info
+    rm -r /cluster/bluearc/rn4/ctgFa
+    # Would compare to rn3 if I could find it...
+    wc all.epcr
+#  73893  295572 3915982 all.epcr
+
+
+# COMBINE AND FILTER BLAT.2 AND E-PCR RESULTS (IN PROGRESS 2/16/06 angie -- REDO with fixed UniSTS_rat.sts)
+    ssh kolossus
+    cd /cluster/data/rn4/bed/stsMarkers/primer
+    /cluster/bin/scripts/filterSTSPrimers -rat \
+      ../stsInfoRat.tab primers.psl.100.unlifted \
+      ../ratPrimer.info ../ePCR/all.epcr \
+    | liftUp -nohead -type=.psl primers.psl.filter.blat \
+        ../../../jkStuff/liftAll.lft warn stdin
+    # Would compare to rn3 if I could find it...
+    wc primers.psl.100
+#  8055078 169156577 827281916 primers.psl.100
+    wc primers.psl.filter.blat
+#  38724  813204 4101534 primers.psl.filter.blat
+
+    # create accession_info.rdb
+    /cluster/bin/scripts/compileAccInfo -rat /cluster/data/rn4 /dev/null
+#0 processed
+    # "0 processed" sounds a little scary but it's 0 because we didn't pass 
+    # in a -pre rdb.
+    mv accession_info.rdb accession_info.rdb.tmp
+    /cluster/bin/scripts/sorttbl Chr Ord Start < accession_info.rdb.tmp \
+      > accession_info.rdb
+    # some lines have "chrN_random_M" in the Contig column but "chrN" 
+    # (not chrN_random) in the chrom column.... looks weird, but reading 
+    # compileAccInfo it seems intentional to lump ordered and random.
+    rm accession_info.rdb.tmp
+    # Would compare to rn3 if I could find it...
+    wc accession_info.rdb
+# 138570 1524274 9921917 accession_info.rdb
+
+    # creates epcr.not.found.nomatch and epcr.not.found.psl
+    /cluster/bin/scripts/epcrToPsl -rat epcr.not.found ../ratPrimer.info \
+      accession_info.rdb /cluster/data/rn4
+    # Would compare to rn3 if I could find it...
+    wc epcr*
+#  748  2992 27112 epcr.not.found
+#    0     0     0 epcr.not.found.nomatch
+#  748 15708 72452 epcr.not.found.psl
+    mv epcr.not.found.psl epcr.not.found.unlifted.psl
+    liftUp -nohead epcr.not.found.psl \
+      ../../../jkStuff/liftAll.lft warn epcr.not.found.unlifted.psl
+    wc epcr.not.found.psl
+#  748 15708 80899 epcr.not.found.psl
+
+    cat primers.psl.filter.blat epcr.not.found.psl > primers.psl.filter
+
+    # create primers.psl.filter.lifted.initial
+    /cluster/bin/scripts/extractPslInfo primers.psl.filter
+    # Would compare to rn3 if I could find it...
+    wc primers.psl.filter.initial
+#  39469  236814 2071084 primers.psl.filter.initial
+
+    # create primers.psl.filter.lifted.initial.acc
+    /cluster/bin/scripts/findAccession -agp \
+      -rat primers.psl.filter.initial /cluster/data/rn4
+    #	it complains about missing AGP for Y, Y_random, M -- OK.
+    # Would compare to rn3 if I could find it...
+    wc primers.psl.filter.initial.acc
+#  37983  265881 2483833 primers.psl.filter.initial.acc
+
+    /cluster/bin/scripts/getStsId -rat \
+      ../stsInfoRat.tab  primers.psl.filter.initial.acc \
+      > primers.initial.acc.trans
+    # Would compare to rn3 if I could find it...
+    wc primers.initial.acc.trans
+#  37983  265881 2150969 primers.initial.acc.trans
+
+    sort -k 4n primers.initial.acc.trans > primers.final
+    # Would compare to rn3 if I could find it...
+    wc primers.final
+#  37983  265881 2150969 primers.final
+    rm primers.initial.acc.trans
+
+    cd /cluster/data/rn4/bed/stsMarkers
+    /cluster/bin/scripts/combineSeqPrimerPos \
+      /dev/null primer/primers.final > stsMarkers_pos.rdb
+    # Would compare to rn3 if I could find it...
+    wc stsMarkers_pos.rdb
+#  37811  264677 1870543 stsMarkers_pos.rdb
+
+    ~/kent/src/hg/stsMarkers/createStsMapRat \
+      stsInfoRat.tab  stsMarkers_pos.rdb > stsMapRat.bed
+    # Would compare to rn3 if I could find it...
+    wc stsMapRat.bed
+#  37043  533848 3133816 stsMapRat.bed
+
+    ~/kent/src/hg/stsMarkers/createStsAlias stsInfoRat.tab > stsAlias.tab
+    # Would compare to rn3 if I could find it...
+    wc stsAlias.tab
+# 117591  352773 2786614 stsAlias.tab
+
+    #	compare old and new name lists:
+    ssh -x hgwdev 'hgsql -N rn3 -e "select name from stsMapRat" | sort -u' \
+    > rn3.nameList
+    awk '{print $4}' stsMapRat.bed | sort -u > rn4.nameList
+    comm -12 rn?.nameList | wc
+#  31223   31223  277788 [in common]
+    comm -23 rn3.nameList rn4.nameList | wc
+#   2678    2678   23645
+    comm -13 rn3.nameList rn4.nameList | wc
+#   4562    4562   42653 [in rn4 only]
+
+
+# LOAD STS MARKER TABLES (TODO 2//06 angie)
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/stsMarkers
+    # Add primer sequences to /gbdb and load:
+    mkdir /gbdb/rn4/stsMarker
+    ln -s /cluster/data/rn4/bed/stsMarkers/ratPrimer.fa \
+      /gbdb/rn4/stsMarker/ratPrimer.fa
+    # PLEASE NOTE: if re-running hgLoadSeq, you MUST add
+    #	-replace
+    #	hgLoadSeq -replace rn4 /gbdb/rn4/stsMarker/ratPrimer.fa
+    # otherwise there will be a problem that the seq and extFile tables 
+    # will be out of sync. 
+    hgLoadSeq rn4 /gbdb/rn4/stsMarker/ratPrimer.fa
+    hgLoadSqlTab rn4 stsAlias \
+      ~/kent/src/hg/lib/stsAlias.sql stsAlias.tab
+    hgLoadSqlTab rn4 stsInfoRat \
+      ~/kent/src/hg/lib/stsInfoRat.sql stsInfoRat.tab
+    hgLoadPsl -table=all_sts_primer rn4 primer/primers.psl.filter
+    hgLoadBed rn4 stsMapRat \
+      -sqlTable=~/kent/src/hg/lib/stsMapRat.sql stsMapRat.bed
+    nice featureBits rn4 all_sts_primer
+    nice featureBits rn3 all_sts_primer
+    nice featureBits rn4 stsMapRat
+    nice featureBits rn3 stsMapRat
+
+# end STS MARKERS 
+##########################################################################
+
+
+###############################################################################
+# BUILD KNOWN GENES TABLES (DONE 3/2/06 angie)
+
+# Use protein databases built by Fan: sp060115 and proteins060115
+# See makeProteins060115.doc for details.
+# Ask cluster-admin to rync sp060115 and proteins060115 to kolossus 
+# so that database work can be done there; then final results will be 
+# rsync'd back to hgwdev.
+
+    # Create working subdirectories and temporary databases (kgRn4A)
+    ssh kolossus
+    mkdir /cluster/data/rn4/bed/kgRn4A
+    ln -s /cluster/data/rn4/bed/kgRn4A /cluster/store6/kgDB/bed/kgRn4A
+    ln -s /cluster/data/rn4/bed/kgRn4A /cluster/store11/kg/kgRn4A
+
+    hgsql rn4 -e "create database kgRn4A"   
+    hgsql rn4 -e "create database kgRn4ATemp"
+
+    mkdir /cluster/bluearc/kgDB/kgRn4A
+    mkdir /cluster/bluearc/kgDB/kgRn4A/protBlat
+    ln -s /cluster/bluearc/kgDB/kgRn4A/protBlat \
+      /cluster/data/rn4/bed/kgRn4A/protBlat
+
+    # Save a copy of several genbank tables so that we can produce consistent 
+    # results if we need to add more tables later.  First, ask cluster-admin 
+    # to rsync the tables from hgwdev rn4 --> kolossus.  Save files too:
+    mkdir /cluster/data/rn4/bed/kgRn4A/genbankBackup
+    cd /cluster/data/rn4/bed/kgRn4A/genbankBackup
+    chmod 777 .
+    foreach t (all_mrna cds gbCdnaInfo gbExtFile gbLoaded gbSeq gbStatus \
+               mgcGenes \
+               refFlat refGene refLink refSeqAli refSeqStatus refSeqSummary \
+               xenoMrna xenoRefFlat xenoRefGene xenoRefSeqAli)
+      echo $t
+      hgsqldump --tab=. rn4 $t
+    end
+    gzip *.txt
+    chmod 775 .
+
+    # Get all rat protein sequences
+    cd /cluster/data/rn4/bed/kgRn4A/protBlat
+    hgsql -N sp060115 -e \
+    'select p.acc, p.val from protein p, accToTaxon x \
+      where x.taxon=10116 and p.acc=x.acc'\
+    | awk '{print ">" $1; print $2;}' \
+      > ratProt.fa
+    hgsql -N sp060115 -e \
+    'select v.varAcc, p.val from varAcc v, protein p, accToTaxon x \
+      where v.parAcc = p.acc and x.taxon=10116   and v.parAcc=x.acc'\
+    | awk '{print ">" $1; print $2;}' \
+      >> ratProt.fa
+
+    # Prepare and perform cluster run for protein/genome alignment
+    ssh kolossus
+    cd /cluster/bluearc/kgDB/kgRn4A/protBlat
+    mkdir prot
+    faSplit sequence ratProt.fa 2000 prot/prot
+    ls /cluster/bluearc/kgDB/kgRn4A/protBlat/prot/* > prot.lis
+    hgsql rn4 -N -e 'select chrom from chromInfo' > chrom.lis
+
+    ssh pk
+    cd /cluster/bluearc/kgDB/kgRn4A/protBlat
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat -t=dnax -q=prot /scratch/hg/rn4/nib/$(path1).nib $(path2) {check out line+ /cluster/bluearc/kgDB/kgRn4A/protBlat/result/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+     # << emacs
+    mkdir result
+    gensub2 chrom.lis prot.lis gsub jobList
+    para make jobList
+#Completed: 89100 of 89100 jobs
+#CPU time in finished jobs:    4215176s   70252.93m  1170.88h   48.79d  0.134 y
+#IO & Wait Time:                230997s    3849.96m    64.17h    2.67d  0.007 y
+#Average job time:                  50s       0.83m     0.01h    0.00d
+#Longest finished job:            5794s      96.57m     1.61h    0.07d
+#Submission to last job:         16257s     270.95m     4.52h    0.19d
+
+    # collect BLAT results
+    ssh kolossus
+    cd /cluster/bluearc/kgDB/kgRn4A/protBlat
+    pslSort -nohead dirs raw.psl temp result
+    pslReps -nohead -minCover=0.80 -minAli=0.80 -nearTop=0.002 raw.psl \
+      protBlat.psl /dev/null
+    hgLoadPsl -fastLoad rn4 protBlat.psl
+#load of protBlat did not go as planned: 14768 record(s), 0 row(s) skipped, 48 warning(s) loading psl.tab
+# Some of the lines had negative qGapSizes.  ask Jim...
+
+    # create all_mrna.psl and tight_mrna.psl
+    zcat /cluster/data/rn4/bed/kgRn4A/genbankBackup/all_mrna.txt.gz \
+    | cut -f 2-22 > all_mrna.psl
+    pslReps -minCover=0.40 -minAli=0.97 -nearTop=0.002 all_mrna.psl \
+      tight_mrna.psl /dev/null
+
+    # Use overlapSelect to get protein and mRNA alignment overlaps   
+    overlapSelect  -statsOutput  -dropped=protOut.psl -overlapThreshold=0.90 \
+      -selectFmt=psl -inFmt=psl tight_mrna.psl  protBlat.psl protMrna.stat
+    overlapSelect  -mergeOutput  -dropped=protOut.psl -overlapThreshold=0.90 \
+      -selectFmt=psl -inFmt=psl tight_mrna.psl  protBlat.psl protMrna.out
+
+    # Create protein/mRNA pair and protein lists
+    cut -f 10,31 protMrna.out | sort -u > spMrna.tab
+    cut -f 10    protMrna.out | sort -u > protein.lis
+
+    # Load spMrna.tab into spMrna table in temp DB.
+    hgLoadSqlTab -notOnServer kgRn4ATemp spMrna ~/kent/src/hg/lib/spMrna.sql \
+      spMrna.tab
+    hgsql kgRn4ATemp -e 'create index mrnaID on spMrna(mrnaID)'
+
+# Prepare and perform cluster run of protein/mRNA alignment
+    # Get mRNA fa file.
+    cd /cluster/data/rn4/bed/kgRn4A
+    /cluster/data/genbank/bin/i386/gbGetSeqs -native -db=rn4 \
+      -gbRoot=/cluster/data/genbank genbank mrna mrna.fa
+    # Create mrnaSeq table in kgRn4ATemp DB.
+    hgPepPred kgRn4ATemp generic mrnaSeq mrna.fa
+    # Prepare files for cluster run
+    cd /cluster/bluearc/kgDB/kgRn4A
+    ~/kent/src/hg/protein/KG2.sh kgRn4A rn4 060115
+    # Perform cluster run of protein/mRNA alignment
+    ~/kent/src/hg/protein/KG3.sh kgRn4A rn4 060115
+    # Collect cluster run results
+    cd kgBestMrna
+    cp /dev/null protMrnaRaw.psl
+    foreach d (out/*)
+      echo $d
+      cat $d/*.out >> protMrnaRaw.psl
+    end
+    # Filter out low quality alignments
+    pslReps -nohead -singleHit -minAli=0.9 protMrnaRaw.psl \
+      protMrnaBlat.psl /dev/null
+#Processed 33623 alignments
+    cut -f 10,14 protMrnaBlat.psl | sort -u > protMrna.lis
+    wc protMrna.lis
+# 21430  42860 334656 protMrna.lis
+
+    # Load BLAT results into temp DB.
+    ssh kolossus
+    cd /cluster/data/rn4/bed/kgRn4A/kgBestMrna
+    hgsql kgRn4ATemp -e 'create table chromInfo select * from rn4.chromInfo'
+    hgLoadPsl -fastLoad kgRn4ATemp protMrnaBlat.psl
+#load of protMrnaBlat did not go as planned: 21432 record(s), 0 row(s) skipped, 97 warning(s) loading psl.tab
+#-- tGapBases (tGapInsert) this time -- ask Jim
+    # Create CDS files from protein/mRNA alignment results.
+    hgsql kgRn4ATemp -N -e \
+    'select qName,"_",tName,tStart+1,":",tEnd+3 from protMrnaBlat \
+      order by qName,tName,tEnd-tStart desc'\
+    | sed 's/\t_\t/_/g; s/\t:\t/../g' > protMrna.cds
+
+    # Create protMrna.psl with proteinID_mrnaID as query ID.
+    cut -f 22-30 ../protBlat/protMrna.out > j1.tmp
+    cut -f 32-42 ../protBlat/protMrna.out > j2.tmp
+    cut -f 10,31 ../protBlat/protMrna.out | sed -e 's/\t/_/g' > j3.tmp
+    paste j1.tmp j3.tmp j2.tmp > protMrna.psl
+    rm j1.tmp j2.tmp j3.tmp
+
+    # Run mrnaToGene to create protMrna.gp
+    bash
+    mrnaToGene -cdsFile=protMrna.cds protMrna.psl protMrna.gp \
+      2>protMrna.err >protMrna.log
+    exit
+
+    # No need to move kgBestMrna anywhere else for now:
+    du -sh
+#240M    .
+    df -h .
+#kkstore01-10:/export/cluster/store9
+#                      1.3T  1.1T  199G  84% /cluster/store9
+
+    # Prepare refGene and all_mrna gp files.
+    cd ..
+    zcat genbankBackup/refGene.txt.gz > ref.gp
+    hgsql rn4 -N -e \
+    'select gbCdnaInfo.acc,cds.name from gbCdnaInfo,cds,all_mrna \
+     where all_mrna.qName=gbCdnaInfo.acc and gbCdnaInfo.cds=cds.id' \
+    | sort -u > all_mrna.cds
+    bash
+    mrnaToGene -cdsFile=all_mrna.cds \
+      /cluster/bluearc/kgDB/kgRn4A/protBlat/all_mrna.psl all_mrna.gp \
+      2>all_mrna.err > all_mrna.log
+    exit
+
+    # Align proteins to RefSeq.
+    overlapSelect -inCds -statsOutput -overlapThreshold=0.90 -selectFmt=psl \
+      -inFmt=genePred protBlat/protBlat.psl ref.gp ref.stat
+    overlapSelect -inCds -dropped=refOut1.gp -overlapThreshold=0.90 \
+      -selectFmt=psl -inFmt=genePred protBlat/protBlat.psl ref.gp protRef.gp
+    overlapSelect -mergeOutput -selectCds -dropped=protOut1.psl \
+      -overlapThreshold=0.80 -inFmt=psl \
+      -selectFmt=genePred ref.gp protBlat/protBlat.psl protRef.out
+
+    cut -f 10,22 protRef.out | sort -u >spRef.tab
+    cut -f 10 protRef.out    | sort -u >protRef.lis
+
+    hgLoadSqlTab kgRn4ATemp spRef ~/kent/src/hg/lib/spRef.sql spRef.tab
+
+    # Prepare and perform cluster runs for protein/RefSeq alignments
+    ~/kent/src/hg/protein/KGRef2.sh kgRn4A rn4 060115
+    ~/kent/src/hg/protein/KGRef3.sh kgRn4A rn4 060115
+
+    cd kgBestRef
+    cp /dev/null protRefRaw.psl
+    foreach d (out/*)
+      echo $d
+      cat $d/*.out >> protRefRaw.psl
+    end
+    # Filter out low quality alignments.
+    pslReps -nohead -singleHit -minAli=0.9 protRefRaw.psl \
+      protRefBlat.psl /dev/null
+#Processed 15266 alignments
+    cut -f 10,14 protRefBlat.psl | sort -u > protRef.lis
+    wc protRef.lis
+# 11957  23914 216980 protRef.lis
+
+    hgLoadPsl -fastLoad kgRn4ATemp protRefBlat.psl
+#load of protRefBlat did not go as planned: 11958 record(s), 0 row(s) skipped, 45 warning(s) loading psl.tab
+    # Negative tGapSizes again.
+
+    # Run gene-check to filter out invalid gp entries
+    cd /cluster/data/rn4/bed/kgRn4A
+    cat ref.gp kgBestMrna/protMrna.gp all_mrna.gp >kgCandidate0.gp
+    /cluster/bin/i386/gene-check  -incl-ok -ok-genepred-out \
+      kgCandidate0.passed.gp \
+      -nib-dir /cluster/data/rn4/nib kgCandidate0.gp kgCandidate0.check
+
+    ldHgGene -predTab kgRn4ATemp kgCandidate0 kgCandidate0.gp
+    tail +3 kgCandidate0.check > geneCheck.tab
+    hgLoadSqlTab kgRn4ATemp geneCheck ~/kent/src/hg/lib/geneCheck.sql \
+      geneCheck.tab
+
+    # Run kgCheck to get all KG candidates that pass the KG gene check criteria
+    kgCheck kgRn4ATemp rn4 kgCandidate0 geneCheck kgCandidate.tab
+    hgLoadSqlTab  kgRn4ATemp kgCandidate ~/kent/src/hg/lib/kgCandidate.sql \
+      kgCandidate.tab
+    hgsql kgRn4ATemp -e 'create index alignID on kgCandidate(alignID)'
+
+    # Construct the kgCandidateX table that has alignID in the name field. 
+    cut -f 2-10 kgCandidate.tab > j2.tmp
+    cut -f 11 kgCandidate.tab > j1.tmp
+    paste j1.tmp j2.tmp > kgCandidateX.tab
+    ldHgGene -predTab kgRn4ATemp kgCandidateX kgCandidateX.tab
+
+    # Score protein/mRna and protein/RefSeq alignments
+    ln -s /cluster/bluearc/kgDB/kgRn4A/protBlat/protein.lis .
+    kgResultBestMrna2 060115 kgRn4ATemp rn4 protMrnaBlat | sort -u \
+      > protMrnaBlatScore.tab
+    kgResultBestRef2  060115 kgRn4ATemp rn4 protRefBlat | sort -u \
+      > protRefScore.tab
+
+    # Combine scoring results and load them into temp DB.
+    cat protMrnaBlatScore.tab protRefScore.tab > protMrnaScore.tab
+    hgLoadSqlTab kgRn4ATemp protMrnaScore ~/kent/src/hg/lib/protMrnaScore.sql \
+      protMrnaScore.tab
+    hgsql kgRn4ATemp -e 'create index mrnaAcc on protMrnaScore(mrnaAcc)'
+
+    # Run kgGetCds to get CDS structure of each gene
+    kgGetCds kgRn4ATemp 060115 kgCandidateX stdout \
+    | sort -u > kgCandidateY.tab
+    hgLoadSqlTab kgRn4ATemp kgCandidateY ~/kent/src/hg/lib/kgCandidateY.sql \
+      kgCandidateY.tab
+
+    # Run kgPickPrep to replace long cds structure string with cdsId.
+    kgPickPrep kgRn4ATemp kgCandidateZ.tab
+    hgLoadSqlTab kgRn4ATemp kgCandidateZ ~/kent/src/hg/lib/kgCandidateZ.sql \
+      kgCandidateZ.tab
+    hgsql kgRn4ATemp -e 'create index cdsId on kgCandidateZ(cdsId)'
+
+    # Run kgPick to pick the representative a mrna/protein pair for each 
+    # unique CDS structure.
+    kgPick kgRn4ATemp rn4 sp060115 kg3.tmp stdout \
+    | sort -u > dupSpMrna.tab
+
+    # Create put back list
+    /cluster/data/genbank/bin/i386/gbGetSeqs \
+      -gbRoot=/cluster/data/genbank db=rn4 -get=ra -native RefSeq mrna stdout \
+    | perl -wpe 's/^(\w+) (.*)/$1\t$2/ || next; $acc = $2 if ($1 eq "acc"); \
+                 s/^/$acc\t/;' \
+    | sort -u | tail +2 > refRa.tab
+    hgLoadSqlTab rn4 refRa ~/kent/src/hg/lib/refRa.sql refRa.tab
+
+     hgsql rn4 -N -e \
+     'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 \
+      where r.attr="selenocysteine" and r.acc=r2.acc and r2.attr="rss" and \
+        r2.val="rev" and r3.acc=r.acc and r3.attr="org" and \
+        r3.val="Rattus norvegicus"' \
+     > kgPutBack2.tab
+     hgsql rn4 -N -e \
+     'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 \
+      where r.attr="cno" and r.val like "%ribosomal frameshift%" and \
+        r.acc=r2.acc and r2.attr="rss" and r2.val="rev" and r2.val="rev" and \
+        r3.acc=r.acc and r3.attr="org" and r3.val="Rattus norvegicus"' \
+     >> kgPutBack2.tab
+     hgsql rn4 -N -e \
+     'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 \
+      where r.attr="cno" and r.val like "%non-AUG%" and r.acc=r2.acc and \
+        r2.attr="rss" and r2.val="rev" and r2.val="rev" and r3.acc=r.acc and \
+        r3.attr="org" and r3.val="Rattus norvegicus"' \
+     >> kgPutBack2.tab
+     hgsql rn4 -N -e \
+     'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 \
+      where r.attr="translExcept" and r.acc=r2.acc and r2.attr="rss" and \
+        r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and \
+        r3.val="Rattus norvegicus"' \
+     >> kgPutBack2.tab 
+     hgsql rn4 -N -e \
+     'select r.acc, r.attr, r.val from refRa r, refRa r2, refRa r3 \
+      where r.attr="exception" and r.acc=r2.acc and r2.attr="rss" and \
+        r2.val="rev" and r2.val="rev" and r3.acc=r.acc and r3.attr="org" and \
+        r3.val="Rattus norvegicus"' \
+     >> kgPutBack2.tab
+     wc -l kgPutBack2.tab
+#10 kgPutBack2.tab
+
+    hgLoadSqlTab kgRn4ATemp kgPutBack2 ~/kent/src/hg/lib/kgPutBack2.sql \
+      kgPutBack2.tab
+    kgPutBack kgRn4ATemp rn4 sp060115 kgPutBack2 kgPutBack2.gp
+
+    # Sort KG genes to make the kg4.gp table file.
+    cat kgPutBack2.gp kg3.tmp > kg4.tmp
+    ~/kent/src/hg/protein/sortKg.pl kg4.tmp \
+    | cut -f 1-12 > knownGene.tab
+    # Load data into knownGene table in both kgRn4ATemp and rn4.
+    hgLoadSqlTab kgRn4ATemp knownGene ~/kent/src/hg/lib/knownGene.sql \
+      knownGene.tab
+    hgLoadSqlTab rn4 knownGene ~/kent/src/hg/lib/knownGene.sql \
+      knownGene.tab
+
+    # Load dupSpMrna table after knownGene table is loaded so that \
+    # joinerCheck does not complain.
+    hgLoadSqlTab rn4 dupSpMrna ~/kent/src/hg/lib/dupSpMrna.sql dupSpMrna.tab
+
+    # Perform analysis on KG
+    nice featureBits rn4 -enrichment refGene knownGene
+#refGene 0.722%, knownGene 0.582%, both 0.539%, cover 74.72%, enrich 128.33x
+    nice featureBits rn4 -enrichment refGene:cds knownGene:cds
+#refGene:cds 0.500%, knownGene:cds 0.377%, both 0.352%, cover 70.41%, enrich 186.83x
+
+    nice featureBits rn3 -enrichment refGene knownGene
+#refGene 0.721%, knownGene 0.523%, both 0.411%, cover 56.96%, enrich 108.94x
+    nice featureBits rn3 -enrichment refGene:cds knownGene:cds
+#refGene:cds 0.500%, knownGene:cds 0.392%, both 0.294%, cover 58.91%, enrich 150.16x
+
+    # Build knownGeneMrna and knownGenePep tables.
+    kgPepMrna kgRn4ATemp rn4 060115
+    hgPepPred rn4 tab knownGeneMrna knownGeneMrna.tab
+    hgPepPred rn4 tab knownGenePep knownGeneMrna.tab
+
+    # Use hgwdev's entrez database (loaded by Fan, see makeHg18.doc) 
+    # to buid the mrnaRefseq table.
+    ssh hgwdev
+    hgsql entrez -N -e \
+    'select mrna, refseq from entrezRefseq, entrezMrna \
+     where entrezRefseq.geneID=entrezMrna.geneID' \
+      > /cluster/data/rn4/bed/kgRn4A/mrnaRefseq.tmp
+    hgsql rn4 -N -e 'select name, name from refGene' \
+     >> /cluster/data/rn4/bed/kgRn4A/mrnaRefseq.tmp
+    ssh kolossus
+    cd /cluster/data/rn4/bed/kgRn4A
+    sort -u mrnaRefseq.tmp > mrnaRefseq.tab
+    hgLoadSqlTab rn4 mrnaRefseq ~/kent/src/hg/lib/mrnaRefseq.sql mrnaRefseq.tab
+
+    # Build kgXref table
+    kgXref2 kgRn4ATemp 060115 rn4
+    hgLoadSqlTab rn4 kgXref ~/kent/src/hg/lib/kgXref.sql kgXref.tab
+
+    # Build spMrna table
+    hgsql rn4 -N -e 'select name, proteinID from knownGene' > kgSpMrna.tab
+    hgLoadSqlTab rn4 spMrna ~/kent/src/hg/lib/spMrna.sql kgSpMrna.tab
+
+    # Build kgProtMap table
+    ln -s /cluster/bluearc/kgDB/kgRn4A/protBlat/tight_mrna.psl .
+    ~/kent/src/hg/protein/kgProtMap2.sh kgRn4A rn4 060115
+
+#####################################
+# Build alias tables.		
+
+    kgAliasM rn4 proteins060115
+    kgAliasKgXref rn4
+    kgAliasRefseq rn4
+
+    hgsql sp060115 -N -e \
+    'select name,gene.val from rn4.knownGene,displayId,gene \
+     where displayId.val=proteinID and displayId.acc=gene.acc' \
+    | sort -u  > kgAliasP.tab
+
+    hgsql rn4 -N -e 'select name, name from knownGene' > kgAliasDup.tab
+    hgsql rn4 -N -e 'select mrnaID, dupMrnaID from dupSpMrna' >> kgAliasDup.tab
+
+    sort -u kgAliasM.tab kgAliasRefseq.tab kgAliasKgXref.tab kgAliasP.tab \
+      kgAliasDup.tab > kgAlias.tab
+
+    hgLoadSqlTab rn4 kgAlias ~/kent/src/hg/lib/kgAlias.sql kgAlias.tab
+    kgProtAlias rn4 060115
+
+    hgsql rn4 -N -e \
+    'select kgID, spDisplayID, protAcc from kgXref where protAcc != ""' \
+    | sort -u > kgProtAliasNCBI.tab
+
+    # include variant splice protein IDs
+    hgsql rn4 -N -e \
+    'select name, proteinID, parAcc from knownGene,sp060115.varAcc \
+     where varAcc=proteinID' \
+    | sort -u > kgProtAliasDup.tab
+    # include duplicate protein IDs from dupSpMrna table
+    hgsql rn4 -N -e \
+    'select name, knownGene.proteinID, dupProteinID from knownGene, dupSpMrna \
+     where name=mrnaID' \
+    | sort -u >> kgProtAliasDup.tab
+    # catch parent acc from dupProteinID too
+    hgsql rn4 -N -e\
+    'select name, knownGene.proteinID, parAcc \
+     from knownGene,dupSpMrna,sp060115.varAcc \
+     where name=mrnaID and dupProteinID=varAcc.varAcc' \
+    | sort -u >> kgProtAliasDup.tab
+    sort -u kgProtAliasNCBI.tab kgProtAlias.tab kgProtAliasDup.tab \
+    > kgProtAliasAll.tab
+
+    hgLoadSqlTab rn4 kgProtAlias ~/kent/src/hg/lib/kgProtAlias.sql \
+      kgProtAliasAll.tab
+
+    # Build kgSpAlias table
+    hgsql rn4 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgAlias \
+     where kgXref.kgID=kgAlias.kgID' > j.tmp
+    hgsql rn4 -e \
+    'select kgXref.kgID, spID, alias from kgXref, kgProtAlias \
+     where kgXref.kgID=kgProtAlias.kgID' >> j.tmp
+    sort -u j.tmp | grep -v 'kgID' > rn4.kgSpAlias.tab
+    rm j.tmp
+
+    hgLoadSqlTab rn4 kgSpAlias ~/kent/src/hg/lib/kgSpAlias.sql \
+      rn4.kgSpAlias.tab
+
+    # Ask cluster-admin to rsync the following tables from kolossus rn4 
+    # back to hgwdev rn4:
+    dupSpMrna
+    kgAlias
+    kgProtAlias
+    kgProtMap
+    kgSpAlias
+    kgXref
+    knownGene
+    knownGeneMrna
+    knownGenePep
+    mrnaRefseq
+    protBlat
+    refRa
+    spMrna
+
+    # Copy history comments from kolossus to hgwdev's rn4.history table.
+    hgsqldump rn4 history \
+    | egrep 'dupSpMrna|kgAlias|kgProtAlias|kgProtMap|kgSpAlias|kgXref|knownGene|knownGeneMrna|knownGenePep|mrnaRefseq|protBlat|refRa|spMrna' \
+    | perl -wpe 's/\([0-9]+,/(NULL,/' \
+      > kgHistory.sql
+    ssh hgwdev
+    hgsql rn4 < /cluster/data/rn4/bed/kgRn4A/kgHistory.sql
+
+# end KNOWN GENES
+###############################################################################
+
+
+# BLASTZ/CHAIN/NET DANRER3 - NO LINSPECREP (DONE 3/2/06 angie)
+    ssh kkstore01
+    mkdir /cluster/data/rn4/bed/blastz.danRer3.2006-03-02
+    cd /cluster/data/rn4/bed/blastz.danRer3.2006-03-02
+    cat << '_EOF_' > DEF
+# rat vs zebrafish
+BLASTZ=blastz.v7.x86_64
+
+# Reuse parameters from hg16-fr1, danRer-hg17 and mm5-danRer
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Rat Rn4
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish (danRer3)
+#  large enough chunk to do complete chroms at once
+SEQ2_DIR=/san/sanvol1/scratch/danRer3/chromNib
+SEQ2_LEN=/san/sanvol1/scratch/danRer3/chromNib.sizes
+SEQ2_CHUNK=100000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastz.danRer3.2006-03-02
+'_EOF_'
+    # << for emacs
+    doBlastzChainNet.pl DEF -bigClusterHub=pk \
+      -blastzOutRoot /san/sanvol1/scratch/blastzRn4DanRer3Out >& do.log &
+    tail -f do.log
+    ln -s blastz.danRer3.2006-03-02 /cluster/data/rn4/bed/blastz.danRer3 
+
+
+# BLASTZ/CHAIN/NET DANRER3 - WITH LINSPECREP (DONE 3/3/06 angie)
+    ssh kkstore01
+    # Set up rn4/linSpecRep.notInNonMammal
+    mkdir /cluster/bluearc/rn4/linSpecRep.notInNonMammal
+    cd /cluster/data/rn4
+    foreach f (?{,?}/chr*.fa.out)
+      echo $f:t:r:r
+      cp -p $f /cluster/bluearc/rn4/linSpecRep.notInNonMammal/$f:t:r:r.out.spec
+    end
+
+    # Rename tables from previous run; remove download dir
+    ssh hgwdev
+    foreach t (netDanRer3 \
+               `hgsql rn4 -N -e 'show tables like "%chainDanRer3%"'`)
+      set newT = `echo $t | sed -e 's/Rer3/Rer3NoLSR/'`
+      hgsql rn4 -e 'rename table '$t' to '$newT
+    end
+    rm -r /usr/local/apache/htdocs/goldenPath/rn4/vsDanRer3
+
+    ssh pk
+    mkdir /cluster/data/rn4/bed/blastz.danRer3.2006-03-03
+    cd /cluster/data/rn4/bed/blastz.danRer3.2006-03-03
+    cat << '_EOF_' > DEF
+# rat vs zebrafish
+BLASTZ=blastz.v7.x86_64
+
+BLASTZ_ABRIDGE_REPEATS=1
+
+# Reuse parameters from hg16-fr1, danRer-hg17 and mm5-danRer
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Rat Rn4
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_SMSK=/cluster/bluearc/rn4/linSpecRep.notInNonMammal
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish (danRer3)
+#  large enough chunk to do complete chroms at once
+SEQ2_DIR=/san/sanvol1/scratch/danRer3/chromNib
+SEQ2_SMSK=/san/sanvol1/scratch/danRer3/linSpecRep.notInOthers
+SEQ2_LEN=/san/sanvol1/scratch/danRer3/chromNib.sizes
+SEQ2_CHUNK=100000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastz.danRer3.2006-03-03
+'_EOF_'
+    # << for emacs
+    doBlastzChainNet.pl DEF -bigClusterHub=pk \
+      -blastzOutRoot /san/sanvol1/scratch/blastzRn4DanRer3Out >& do.log &
+    tail -f do.log
+    ln -s blastz.danRer3.2006-03-03 /cluster/data/rn4/bed/blastz.danRer3 
+
+
+#TODO: compare the two danRer3 runs... netstat?  coverage?  eyeball?
+
+#TODO: other pairwise: cow, rabbit, opossum, frog, elephant? armadillo?
 
 # MULTIZ
 # PHASTCONS
 
 # AFFY CHIPS
 
-# KNOWN GENES
-# do we need a self chains track??
-
-# MGC
-
-
-# BACTIGPOS - in rn3 this was a download from baylor, but I don't see it now -?
 # MGI?
 # SNPS?
 
