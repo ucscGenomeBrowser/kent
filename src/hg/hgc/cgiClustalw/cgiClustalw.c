@@ -1,3 +1,5 @@
+/* cgiClustalw - run clustalw on a given sequence */
+
 #include "common.h"
 #include "obscure.h"
 #include "hCommon.h"
@@ -9,51 +11,12 @@
 #include "jalview.h"
 #include "web.h"
 
-void getSequenceInRange(struct dnaSeq **seqList, struct hash *hash, char *table, char *type, char *tName, int tStart, int tEnd)
-/* Load a list of fasta sequences given tName tStart tEnd */
-{
-struct sqlResult *sr = NULL;
-char **row;
-struct psl *psl = NULL, *pslList = NULL;
-boolean hasBin;
-char splitTable[64];
-char query[256];
-struct dnaSeq *seq = NULL;
-struct sqlConnection *conn = hAllocConn();
-
-hFindSplitTable(tName, table, splitTable, &hasBin);
-safef(query, sizeof(query), "select qName from %s where tName = '%s' and tEnd > %d and tStart < %d", splitTable, tName, tStart, tEnd);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *acc = cloneString(row[0]);
-    struct dnaSeq *seq = hGenBankGetMrna(acc, NULL);
-    verbose(9,"%s %s %d<br>\n",acc, tName, tStart);
-    if (seq != NULL)
-        {
-        if (hashLookup(hash, acc) == NULL)
-            {
-            int len = strlen(seq->name);
-            seq->name [len-1] = type[0];
-            hashAdd(hash, acc, NULL);
-            slAddHead(seqList, seq);
-            }
-        }
-    }
-sqlFreeResult(&sr);
-slReverse(seqList);
-hFreeConn(&conn);
-}
+static char const rcsid[] = "$Id: cgiClustalw.c,v 1.5 2006/03/06 18:42:33 angie Exp $";
 
 int main(int argc, char *argv[])
 {
-struct dnaSeq *seqList = NULL, *seq;
-struct hash *faHash = hashNew(0);
-// char *db=cgiString("db");
 char *faIn=cgiOptionalString("fa");
-// not used?
-char *g=cgiOptionalString("g");
-struct tempName faTn, alnTn;
+struct tempName alnTn;
 struct lineFile *lf;
 char *line = NULL;
 char clustal[512];
@@ -64,7 +27,6 @@ cgiSpoof(&argc,argv);
 if (faIn == NULL)
     webAbort("Error", "Requires input fa file");
 
-//hSetDb(db);
 printf("\n");
 makeTempName(&alnTn, "clustal", ".aln");
 safef(clustal, sizeof(clustal), \
