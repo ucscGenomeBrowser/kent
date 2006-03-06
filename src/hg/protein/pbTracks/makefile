@@ -8,43 +8,17 @@ A = pbTracks
 
 O = $A.o
 
-my: compile
-	rm -f ${CGI_BIN}-${USER}/$A
-	mv $A ${CGI_BIN}-${USER}/$A
+include ../../../inc/cgi_build_rules.mk
 
-alpha: compile
-	rm -f ${CGI_BIN}/$A
-	mv $A ${CGI_BIN}/$A
+lib::
+	cd ../../../lib; make
 
-beta: compile
-	rm -f ${CGI_BIN}-beta/$A
-	mv $A ${CGI_BIN}-beta/$A
+compile: $O 
+	${CC} -o $A $O ${MYLIBS} ${L}
+	${STRIP} $A
+	chmod a+rx $A
 
 mgsc: compile
 	rm -f ${CGI_BIN}-mgsc/$A
 	mv $A ${CGI_BIN}-mgsc/$A
 
-compile: $O 
-	${CC} $O ${MYLIBS} ${L}
-	mv ${AOUT} $A
-	${STRIP} $A
-	chmod a+rx $A
-
-install:	compile
-	@if [ ! -d "${DESTDIR}${CGI_BIN}" ]; then \
-		${MKDIR} "${DESTDIR}${CGI_BIN}"; \
-	fi
-	mv $A ${DESTDIR}${CGI_BIN}/$A
-
-debug: $O
-	${CC} $O ${MYLIBS} ${L} 
-	mv ${AOUT} $A${EXE}
-
-lib:
-	cd ../../lib && ${MAKE}
-
-clean:
-	rm -f $O $A
-
-tags:  
-	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
