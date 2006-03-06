@@ -196,7 +196,7 @@ if ((row = sqlNextRow(sr)) != NULL)
 	}
     }
 else
-    errAbort("query returned no results: \"%s\"", query);
+    errAbort("query returned no results: \"%s\"", query->string);
 dyStringFree(&query);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
