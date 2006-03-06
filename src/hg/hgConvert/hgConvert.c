@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.11 2005/12/01 17:47:27 kent Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.12 2006/03/06 17:35:15 angie Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -284,7 +284,6 @@ char *fileName = liftOverChainFile(liftOver->fromDb, liftOver->toDb);
 char *chrom;
 int start, end;
 int origSize;
-double percentMapping;
 struct chain *chainList, *chain;
 
 cartWebStart(cart, "%s %s %s to %s %s", fromDb->organism, fromDb->description,
