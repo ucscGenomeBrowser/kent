@@ -28,12 +28,6 @@ char *oldOrg = NULL;
 char *defaultPosition = hDefaultPos(db);
 char *position = cloneString(cartUsualString(cart, "position", defaultPosition));
 
-/* JavaScript to copy input data on the change proteome button to a hidden form
-This was done in order to be able to flexibly arrange the UI HTML
-*/
-char *onChangeDB = "onchange=\"document.orgForm.db.value = document.mainForm.db.options[document.mainForm.db.selectedIndex].value; document.orgForm.submit();\"";
-char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
-
 /* 
    If we are changing databases via explicit cgi request,
    then remove custom track data which will 
