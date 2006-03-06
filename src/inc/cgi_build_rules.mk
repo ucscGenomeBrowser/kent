@@ -1,6 +1,6 @@
 #	Common set of build rules for CGI binaries
 
-HG_WARN=-DJK_WARN -Wall -Werror
+HG_WARN=${HG_WARN_ERR}
 my:: compile
 	chmod a+rx $A${EXE}
 	mv $A${EXE} ${CGI_BIN}-${USER}/$A
