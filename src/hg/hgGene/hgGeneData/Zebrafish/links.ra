@@ -27,16 +27,23 @@ priority 30
 name refSeq
 shortLabel RefSeq
 tables ensGeneXRef
-idSql select refseq from ensGeneXRef where ensGeneId = '%s'
+idSql select refSeq from ensGeneXRef where ensGeneId = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
 priority 40
 
+name refSeqPep
+shortLabel RefSeq Peptide
+tables ensGeneXRef
+idSql select protAcc from ensGeneXRef where ensGeneId = '%s'
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=protein&term=%s&doptcmdl=GenPept&tool=genome.ucsc.edu
+priority 42
+
 name entrezGene
 shortLabel Entrez Gene
-tables ensGeneXref 
-idSql select geneId from ensGeneXRef where ensGeneID = '%s'
-url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s
-priority 45.1
+tables ensGeneXRef
+idSql select geneId from ensGeneXRef where ensGeneId = '%s'
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s&tool=genome.ucsc.edu
+priority 45
 
 name zfin
 shortLabel ZFIN
