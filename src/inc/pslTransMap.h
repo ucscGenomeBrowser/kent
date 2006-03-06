@@ -11,7 +11,7 @@ enum pslTransMapOpts
 };
 
 struct psl* pslTransMap(unsigned opts, struct psl *inPsl, struct psl *mapPsl);
-/* map a psl via a mapping psl, a signle psl is returned, or NULL if it
+/* map a psl via a mapping psl, a single psl is returned, or NULL if it
  * couldn't be mapped. */
 
 #endif

@@ -257,7 +257,7 @@ return TRUE;
 }
 
 struct psl* pslTransMap(unsigned opts, struct psl *inPsl, struct psl *mapPsl)
-/* map a psl via a mapping psl, a signle psl is returned, or NULL if it
+/* map a psl via a mapping psl, a single psl is returned, or NULL if it
  * couldn't be mapped. */
 {
 int mappedPslMax = 8; /* allocated space in output psl */
@@ -269,8 +269,11 @@ boolean cnv2 = (pslIsProtein(mapPsl) && !pslIsProtein(inPsl));
 int iBlock;
 struct psl* mappedPsl;
 
+if (!sameString(inPsl->tName, mapPsl->qName))
+    errAbort("Error: inPsl tName %s != mapPsl tName %s)",
+            inPsl->tName, mapPsl->qName);
 if (inPsl->tSize != mapPsl->qSize)
-    errAbort("Non-fatal error: inPsl %s tSize (%d) != mapPsl %s qSize (%d)",
+    errAbort("Error: inPsl %s tSize (%d) != mapPsl %s qSize (%d)",
             inPsl->tName, inPsl->tSize, mapPsl->qName, mapPsl->qSize);
 
 /* convert protein PSLs */
