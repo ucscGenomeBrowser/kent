@@ -42,7 +42,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.3 2006/02/23 05:58:26 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.4 2006/03/06 20:44:57 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -77,8 +77,6 @@ safef(query, sizeof(query), "select chrom, size from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    randomSubstring = strstr(row[0], "random");
-    if (randomSubstring != NULL) continue;
     safef(tableName, ArraySize(tableName), "%s_snpTmp", row[0]);
     if (!hTableExists(tableName)) continue;
     el = chromInfoLoad(row);
@@ -104,20 +102,20 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char tableName[64];
+int loc_type = 0;
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 if (!hTableExists(tableName)) return;
 
 verbose(1, "chrom = %s\n", chromName);
 safef(query, sizeof(query), 
-    "select snp_id, chromStart, chromEnd, loc_type, orientation, allele, refUCSC, refUCSCReverseComp from %s", tableName);
+    "select snp_id, chromStart, chromEnd, loc_type, orientation, allele, refUCSC, refUCSCReverseComp from %s where loc_type != 3", 
+     tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    /* skip loc_type between */
-    if (sameString(row[3], "3")) continue;
-
+    loc_type = sqlUnsigned(row[3]);
     /* check positive strand first */
     if (sameString(row[4], "0"))
         {
@@ -133,7 +131,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* matching non-reverse comp is useful info */
     if (sameString(row[5], row[6]))
         {
-	if (sameString(row[3], "2"))
+	if (loc_type == 2)
             writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleNotRevCompExactLocType");
 	else
             writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleNotRevCompRangeLocType");
