@@ -11,7 +11,11 @@ O = $A.o
 
 include ../../../inc/cgi_build_rules.mk
 
+lib::
+	cd ../../../lib; make
+
 compile: $O 
-	${CC} $O ${MYLIBS} ${L} 
-	mv ${AOUT} $A${EXE}
+	${CC} -o $A $O ${MYLIBS} ${L}
+	${STRIP} $A
 	chmod a+rx $A
+
