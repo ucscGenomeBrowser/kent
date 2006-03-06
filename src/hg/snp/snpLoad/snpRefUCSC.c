@@ -16,7 +16,7 @@
 /* errAbort if larger SNP found */
 #define MAX_SNP_SIZE 1024
 
-static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.6 2006/02/17 21:58:36 heather Exp $";
+static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.7 2006/03/06 20:19:11 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -48,8 +48,6 @@ safef(query, sizeof(query), "select chrom, size from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    randomSubstring = strstr(row[0], "random");
-    if (randomSubstring != NULL) continue;
     safef(tableName, ArraySize(tableName), "%s_snpTmp", row[0]);
     if (!hTableExists(tableName)) continue;
     el = chromInfoLoad(row);
