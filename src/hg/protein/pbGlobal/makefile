@@ -15,10 +15,7 @@ lib::
 
 compile: $O 
 	${CC} -o $A $O ${MYLIBS} ${L}
-	${STRIP} $A
-	chmod a+rx $A
 
-mgsc: compile
-	rm -f ${CGI_BIN}-mgsc/$A
-	mv $A ${CGI_BIN}-mgsc/$A
+mgsc: strip
+	mv $A ${CGI_BIN}/$A
 
