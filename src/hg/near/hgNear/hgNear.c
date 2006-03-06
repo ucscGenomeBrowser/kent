@@ -20,7 +20,7 @@
 #include "hgNear.h"
 #include "versionInfo.h"
 
-static char const rcsid[] = "$Id: hgNear.c,v 1.156 2006/02/07 01:19:11 angie Exp $";
+static char const rcsid[] = "$Id: hgNear.c,v 1.157 2006/03/06 18:02:09 angie Exp $";
 
 char *excludeVars[] = { "submit", "Submit", idPosVarName, NULL }; 
 /* The excludeVars are not saved to the cart. (We also exclude
@@ -186,7 +186,7 @@ void hPrintNonBreak(char *s)
 /* Print out string but replace spaces with &nbsp; */
 {
 char c;
-while (c = *s++)
+while ((c = *s++) != '\0')
     {
     if (c == ' ')
 	fputs("&nbsp;", stdout);
@@ -956,8 +956,6 @@ char *minString = advFilterVal(col, "min");
 char *maxString = advFilterVal(col, "max");
 if (minString != NULL || maxString != NULL)
     {
-    struct sqlResult *sr;
-    char **row;
     struct dyString *dy = newDyString(512);
     dyStringPrintf(dy, "select %s from %s where ", col->keyField, col->table);
     if (minString && maxString)
@@ -1427,7 +1425,7 @@ struct column *getColumns(struct sqlConnection *conn)
 {
 char *raName = "columnDb.ra";
 struct column *col, *next, *customList, *colList = NULL;
-struct hash *raList = readRa(raName), *raHash, *settings;
+struct hash *raList = readRa(raName), *raHash = NULL;
 
 /* Create built-in columns. */
 if (raList == NULL)
@@ -1513,7 +1511,6 @@ hPrintf("<TABLE BORDER=1 CELLSPACING=0 CELLPADDING=1 COLS=%d BGCOLOR=\"#"HG_COL_
 hPrintf("<TR BGCOLOR=\"#"HG_COL_HEADER"\">");
 for (col = colList; col != NULL; col = col->next)
     {
-    char *colName = col->shortLabel;
     if (col->on)
 	{
 	col->labelPrint(col);
