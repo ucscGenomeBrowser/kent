@@ -15,7 +15,7 @@
 #include "pbStampPict.h"
 #include "pbTracks.h"
 
-static char const rcsid[] = "$Id: pbTracks.c,v 1.42 2005/12/16 01:15:00 markd Exp $";
+static char const rcsid[] = "$Id: pbTracks.c,v 1.43 2006/03/06 20:02:30 angie Exp $";
 
 boolean hgDebug = FALSE;      /* Activate debugging code. Set to true by hgDebug=on in command line*/
 
@@ -191,14 +191,7 @@ void makeActiveImagePB(char *psOutput, char *psOutput2)
 char *mapName = "map";
 int pixWidth, pixHeight;
 
-char cond_str[255];
 struct sqlConnection *conn;
-char query[256];
-struct sqlResult *sr;
-char **row;
-char *chp;
-int  i,l;
-int  ii = 0;
 int  iypos;
 char *spDisplayId;
 
@@ -390,23 +383,20 @@ void doMiddle(struct cart *theCart)
 {
 char cond_str[255];
 struct sqlConnection *conn;
-char query[256];
-struct sqlResult *sr;
-char **row;
 char *proteinAC;
 char *chp, *chp1, *chp9;
 char *debugTmp = NULL;
 char *answer;
-struct dyString *state = NULL;
 
 /* Initialize layout and database. */
 cart = theCart;
 
 /* Uncomment this to see parameters for debugging. */
-/* Be careful though, it breaks if custom track
- * is more than 4k */
-/* state = cgiUrlString();
-hPrintf("State: %s\n", state->string); */   
+/* Be careful though, it breaks if custom track is more than 4k */
+/*
+{ struct dyString *state = cgiUrlString(); 
+  hPrintf("State: %s\n", state->string); }
+*/
 
 getDbAndGenome(cart, &database, &organism);
 
