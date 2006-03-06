@@ -13,7 +13,7 @@
 #include "visiSearch.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.24 2006/02/28 22:09:57 galt Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.25 2006/03/06 18:59:00 angie Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -131,7 +131,6 @@ static void visiSearcherWeedResults(struct visiSearcher *searcher,
 struct visiMatch *newList = NULL, *match, *next, key;
 int wordCount = searcher->wordCount;
 struct dyString *query = dyStringNew(0);
-struct rbTree *tree = searcher->tree;
 struct sqlResult *sr;
 char **row;
 int passCount = 0;
@@ -271,8 +270,6 @@ static void visiGeneMatchMultiWord(struct visiSearcher *searcher,
 {
 struct slName *word;
 struct dyString *query = dyStringNew(0);
-struct sqlResult *sr;
-char **row;
 int wordIx;
 
 for (word = wordList, wordIx=0; word != NULL;  ++wordIx)
@@ -351,8 +348,6 @@ static void addImagesMatchingName(struct visiSearcher *searcher,
  * searcher with a weight of one.  Use dy for scratch space for
  * the query. */
 {
-int contributorId;
-
 dyStringClear(dy);
 dyStringPrintf(dy, 
    "select image.id from "
@@ -386,8 +381,6 @@ static void visiGeneMatchContributor(struct visiSearcher *searcher,
 {
 struct slName *word;
 struct dyString *query = dyStringNew(0);
-struct sqlResult *sr;
-char **row;
 int wordIx;
 
 for (word = wordList, wordIx=0; word != NULL;  wordIx++)
@@ -445,7 +438,7 @@ int wordIx;
 for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
     {
     char *sqlPat = sqlLikeFromWild(word->name);
-    struct slInt *imageList, *image;
+    struct slInt *imageList;
     if (sqlWildcardIn(sqlPat))
 	 imageList = visiGeneSelectNamed(conn, sqlPat, vgsLike);
     else
@@ -566,8 +559,6 @@ void addImagesMatchingStage(struct visiSearcher *searcher,
 {
 struct dyString *dy = dyStringNew(0);
 char *maxAge;
-struct sqlResult *sr;
-char **row;
 
 dyStringClear(dy);
 dyStringPrintf(dy, 
@@ -769,8 +760,7 @@ struct visiMatch *visiSearch(struct sqlConnection *conn, char *searchString)
  * by how well they match. This will search most fields in the
  * database. */
 {
-struct visiMatch *matchList, *match;
-struct slInt *imageList = NULL, *image;
+struct visiMatch *matchList;
 struct slName *wordList = stringToSlNames(searchString);
 int wordCount = slCount(wordList);
 struct visiSearcher *searcher = visiSearcherNew(wordCount);

@@ -25,10 +25,6 @@ struct hash *oldCart;		/* Previous CGI values */
 char *visiDb = "visiGene";	/* The visiGene database name */
 struct sqlConnCache *visiConnCache;  /* Cache of connections to database. */
 
-static struct optionSpec options[] = {
-   {NULL, 0},
-};
-
 char *hgVisiGeneShortName()
 /* Return short descriptive name (not cgi-executable name)
  * of program */
@@ -362,7 +358,6 @@ void doControls(struct sqlConnection *conn)
 /* Put up controls pane. */
 {
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
-char *selected = NULL;
 htmlSetBgColor(0xD0FFE0);
 htmlSetStyle("	<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">" "\n");
 htmStart(stdout, "do controls");
@@ -481,7 +476,6 @@ void doFrame(struct sqlConnection *conn, boolean forceImageToList)
 int imageId = cartUsualInt(cart, hgpId, 0);
 char *sidUrl = cartSidUrlString(cart);
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
-char *matchListFile;
 struct slName *geneList, *gene;
 struct tempName matchTempName;
 char *matchFile = NULL;

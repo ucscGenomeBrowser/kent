@@ -92,10 +92,9 @@ return url;
 static struct slName *geneProbeList(struct sqlConnection *conn, int id)
 /* Get list of gene names with hyperlinks to probe info page. */
 {
-struct slName *returnList = NULL, *returnEl;
+struct slName *returnList = NULL;
 char query[256], **row;
 struct sqlResult *sr;
-char *sidUrl = cartSidUrlString(cart);
 struct dyString *dy = dyStringNew(0);
 struct probeAndColor *pcList = NULL, *pc;
 int probeCount = 0;
@@ -167,13 +166,11 @@ return returnList;
 static struct slName *getProbeList(struct sqlConnection *conn, int id)
 /* Get list of probes with hyperlinks to probe info page. */
 {
-struct slName *returnList = NULL, *returnEl;
-char query[256], **row;
-struct sqlResult *sr;
+struct slName *returnList = NULL;
+char query[256];
 char *sidUrl = cartSidUrlString(cart);
 struct dyString *dy = dyStringNew(0);
 struct slInt *probeList = NULL, *probe;
-int probeCount = 0;
 
 /* Make up a list of all probes in this image. */
 safef(query, sizeof(query),
@@ -183,7 +180,6 @@ probeList = sqlQuickNumList(conn, query);
 for (probe = probeList; probe != NULL; probe = probe->next)
     {
     char *type;
-    char *lPrimer, *rPrimer;
 
     /* Create hyperlink to probe page around gene name. */
     dyStringClear(dy);
@@ -276,7 +272,6 @@ struct slName *vgImageFileGenes(struct sqlConnection *conn, int imageFile)
 struct hash *uniqHash = hashNew(0);
 struct slInt *imageList, *image;
 struct slName *geneList = NULL, *gene;
-char *name;
 
 imageList = visiGeneImagesForFile(conn, imageFile);
 for (image = imageList; image != NULL; image = image->next)
@@ -365,6 +360,7 @@ struct expInfo
     struct slName *tissueList;  /* List of tissues where gene expressed */
     };
 
+#ifdef UNUSED
 static void expInfoFree(struct expInfo **pExp)
 /* Free up memory associated with expInfo. */
 {
@@ -389,12 +385,12 @@ for (el = *pList; el != NULL; el = next)
     }
 *pList = NULL;
 }
+#endif /* UNUSED */
 
 
 static struct expInfo *expInfoForImage(struct sqlConnection *conn, int imageId)
 /* Return list of expression info for a given pane. */
 {
-struct dyString *dy = dyStringNew(0);
 struct expInfo *expList = NULL, *exp;
 char query[512], **row;
 struct sqlResult *sr;
@@ -733,15 +729,12 @@ if (bundleCount > 1)
 void fullCaption(struct sqlConnection *conn, int id)
 /* Print information about image. */
 {
-char query[256];
-char **row;
-char *permeablization, *publication, *copyright, *acknowledgement;
-char *setUrl, *itemUrl;
+char *publication, *copyright, *acknowledgement;
+char *itemUrl;
 char *caption = visiGeneCaption(conn, id);
-struct slName *geneList;
 int imageFile = visiGeneImageFile(conn, id);
-struct slInt *imageList, *image;
-int imageCount, imageIx=0;
+struct slInt *imageList;
+int imageCount=0;
 struct captionElement *captionElements;
 
 itemUrl = visiGeneItemUrl(conn, id);
