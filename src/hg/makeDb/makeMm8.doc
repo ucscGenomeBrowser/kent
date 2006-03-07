@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.13 2006/03/06 20:12:45 kate Exp $"
+#	"$Id: makeMm8.doc,v 1.14 2006/03/07 00:08:31 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -88,6 +88,9 @@ exit; # don't actually run this like a script :)
 #			(DONE - 2006-02-14 - Hiram)
 #########  Are these necessary ?  They may no longer be needed.
 #########  TRF can run on full chroms on the kki kluster
+#	It would be better to use . in place of the /cluster/data/mm8
+#	for the outputDir argument to splitFaIntoContigs so this script
+#	is independent of specific locations, thus it works in .
     ssh kkstore01
     cd /cluster/data/mm8
     for F in ncbi/chrfasta/chr*.fa.gz
@@ -496,8 +499,6 @@ if (-e /scratch/tmp/mm8/$R/$R.fa.cat) /bin/cp /scratch/tmp/mm8/$R/$R.fa.cat ./
     wc -l jobList
     #	5772 jobList
     para try ... check ... push ... etc
-XXX - running - 2006-02-14 15:40
-
 # Completed: 6172 of 6172 jobs
 # CPU time in finished jobs:   26381042s  439684.03m  7328.07h  305.34d  0.837 y
 # IO & Wait Time:                 46088s     768.13m    12.80h    0.53d  0.001 y
@@ -798,8 +799,8 @@ popd
 		notInDog/${B}.out.spec
         /cluster/bin/scripts/extractRepeats 4 ${F} > \
 		notInCow/${B}.out.spec
-        /cluster/bin/scripts/extractRepeats 4 ${F} > \
-		notInRabbit/${B}.out.spec
+        XXXXX /cluster/bin/scripts/extractRepeats 4 ${F} > \ XXXXX
+		notInRabbit/${B}.out.spec XXXXX
     done
    # NOTE: rabbit should be column 5 instead of 4.
    # This isn't a problem, as we're not using rabbit anyway (see below)
@@ -1281,7 +1282,6 @@ rm -fr /scratch/tmp/${root1}_${root2}
     para create jobList
     # 3322 jobs written to batch
     para try, check, push, etc ...
-    XXX - STARTED - 2006-02-17 - Hiram
 # Completed: 3332 of 3332 jobs
 # CPU time in finished jobs:     649465s   10824.42m   180.41h    7.52d  0.021 y
 # IO & Wait Time:                 11633s     193.88m     3.23h    0.13d  0.000 y
@@ -3487,7 +3487,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
 
 ############################################################################
 # CREATE CONSERVATION WIGGLE WITH PHASTCONS
-#		(WORKING - 2006-03-02 - Hiram)
+#		(DONE - 2006-03-02 - Hiram)
 
     #	Will skip this estimate for Mm8 since it was well done in Mm7
     #	and in Hg17, skip to the creation of the SS files
@@ -3536,8 +3536,10 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
 	    --out-format SS --out-root ${C}/${C}
       fi
     done &
-XXXX - running 2006-03-02 12:00
-    #	real    143m42.404s
+    #	real    101m9.118s
+
+    #  Again, going to SKIP this tuning business this time and use the
+    #  previous numbers.
 
     # Create a random list of 50 1 mb regions  (do not use the _randoms)
     cd /san/sanvol1/scratch/mm8/cons/ss
@@ -3579,12 +3581,10 @@ makeTree.csh $(path1)
     gensub2 ../randomSs.list single template jobList
     para create jobList
     para try/push/check/etc
-XXXX - working 2005-11-28 10:45
 # Completed: 50 of 50 jobs
 # CPU time in finished jobs:     354644s    5910.74m    98.51h    4.10d  0.011 y
 # IO & Wait Time:                   352s       5.86m     0.10h    0.00d  0.000 y
 # Average job time:                7100s     118.33m     1.97h    0.08d
-# Longest running job:                0s       0.00m     0.00h    0.00d
 # Longest finished job:           29358s     489.30m     8.15h    0.34d
 # Submission to last job:         29446s     490.77m     8.18h    0.34d
 
@@ -3642,22 +3642,46 @@ ERROR: with no separate source alignment, ss_from_msas expects sequences of posi
 # Required length: N=6.753382 sites
 # Total entropy: NH=9.987159 bits
 
+    #	SKIP to here passing by the tuning numbers
     ssh pk
     # Create cluster dir to do main phastCons run
     mkdir /san/sanvol1/scratch/mm8/cons/consRun1
+    cd /san/sanvol1/scratch/mm8/cons
+    cp /san/sanvol1/scratch/mm7/cons/elliotsEncode.mod .
+    #	edit, change monDom2 to monDom4, hg17 to hg18, rheMac1 to
+    #	rheMac2, rn3 to rn4, mm7 to mm8
+    #	It looks like:
+ALPHABET: A C G T
+ORDER: 0
+SUBST_MOD: REV
+TRAINING_LNL: -988246.132962
+BACKGROUND: 0.295 0.205 0.205 0.295
+RATE_MAT:
+  -1.165221    0.315494    0.589884    0.259843
+   0.189778   -0.878194    0.208718    0.479698
+   0.444622    0.261535   -0.885604    0.179447
+   0.234867    0.720815    0.215191   -1.170872
+TREE: (((((((((((((hg18:0.006690,panTro1:0.007571):0.024272,(colobus_monkey:0.015404,(baboon:0.008258,rheMac2:0.028617):0.008519):0.022120):0.023960,(dusky_titi:0.025662,(owl_monkey:0.012151,marmoset:0.029549):0.008236):0.027158):0.066101,(mouse_lemur:0.059024,galago:0.121375):0.032386):0.017073,((rn4:0.081728,mm8:0.077017):0.229273,oryCun1:0.206767):0.023340):0.023026,(((bosTau2:0.159182,canFam2:0.147731):0.004946,rfbat:0.138877):0.010150,(hedgehog:0.193396,shrew:0.261724):0.054246):0.024354):0.028505,dasNov1:0.149862):0.015994,(loxAfr1:0.104891,echTel1:0.259797):0.040371):0.218400,monDom4:0.371073):0.065268,platypus:0.468116):0.123856,galGal2:0.454691):0.123297,xenTro1:0.782453):0.156067,((tetNig1:0.199381,fr1:0.239894):0.492961,danRer3:0.782561):0.156067);
+
+
     cd /san/sanvol1/scratch/mm8/cons/consRun1
     mkdir ppRaw bed
 
     # Create script to run phastCons with right parameters
+    #	These parameters:
+    #	--rho 0.28 --expected-length 14 --target-coverage 0.008 --quiet \
+    #	were taken from Kate's 17-way in Hg17, including the
+    #	-not-informative panTro1
     #	This job is I/O intensive in its output files, thus it is all
     #	working over in /scratch/tmp/
-    cat > doPhast.csh << '_EOF_'
+    cat > doPhast << '_EOF_'
 #!/bin/csh -fe
 mkdir /scratch/tmp/${2}
 cp -p ../ss/${1}/${2}.ss ../elliotsEncode.mod /scratch/tmp/${2}
 pushd /scratch/tmp/${2} > /dev/null
 /cluster/bin/phast/${MACHTYPE}/phastCons ${2}.ss elliotsEncode.mod \
-   --rho 0.3 --expected-length 11 --target-coverage 0.16 --quiet \
+   --rho 0.28 --expected-length 14 --target-coverage 0.008 --quiet \
+	--not-informative panTro1 \
 	--seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
 popd > /dev/null
 mkdir -p ppRaw/${1}
@@ -3669,13 +3693,13 @@ rm /scratch/tmp/${2}/${2}.ss
 rmdir /scratch/tmp/${2}
 '_EOF_'
     # emacs happy
-    chmod a+x doPhast.csh
+    chmod a+x doPhast
 
     #	root1 == chrom name, file1 == ss file name without .ss suffix
     # Create gsub file
     cat > template << '_EOF_'
 #LOOP
-doPhast.csh $(root1) $(file1)
+doPhast $(root1) $(file1)
 #ENDLOOP
 '_EOF_'
     #	happy emacs
@@ -3688,13 +3712,12 @@ doPhast.csh $(root1) $(file1)
     para try/check/push/etc.
     #	These jobs are very fast and very I/O intensive, even on the san
     #	they will hang it up as they work at full tilt.
-# Completed: 2867 of 2867 jobs
-# CPU time in finished jobs:      15359s     255.98m     4.27h    0.18d  0.000 y
-# IO & Wait Time:                 34015s     566.92m     9.45h    0.39d  0.001 y
-# Average job time:                  17s       0.29m     0.00h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:             259s       4.32m     0.07h    0.00d
-# Submission to last job:          3236s      53.93m     0.90h    0.04d
+# Completed: 290 of 290 jobs
+# CPU time in finished jobs:      12367s     206.11m     3.44h    0.14d  0.000 y
+# IO & Wait Time:                  2000s      33.34m     0.56h    0.02d  0.000 y
+# Average job time:                  50s       0.83m     0.01h    0.00d
+# Longest finished job:              80s       1.33m     0.02h    0.00d
+# Submission to last job:           359s       5.98m     0.10h    0.00d
 
     # combine predictions and transform scores to be in 0-1000 interval
     #	it uses a lot of memory, so on kolossus:
@@ -3715,75 +3738,63 @@ doPhast.csh $(root1) $(file1)
     ssh kkstore01
     cd /cluster/data/mm8
     faSize ?/chr*.fa ??/chr*.fa
+    faSize ?{,?}/chr*.fa
+    #	2664455088 bases (97171400 N's 2567283688 real 1477933003 upper
+    #	1089350685 lower) in 34 sequences in 34 files
+
     #	2847717329 bases (264323483 N's 2583393846 real 1489414119
     #	upper 1093979727
 
     cd /san/sanvol1/scratch/mm8/cons/consRun1
     awk '
 {sum+=$3-$2}
-END{printf "%% %.2f = 100.0*%d/2583393846\n",100.0*sum/2583393846,sum}' \
+END{printf "%% %.2f = 100.0*%d/2567283688\n",100.0*sum/2567283688,sum}' \
 	mostConserved.bed
-    -target-coverage 0.16: % 7.00 = 100.0*187599245/2583393846 length 11
-    -target-coverage 0.17: % 7.26 = 100.0*187599245/2583393846 length 12
-    -target-coverage 0.13: % 6.86 = 100.0*177139744/2583393846 length 12
-    -target-coverage 0.08: % 6.39 = 100.0*165132383/2583393846 length 12
-    -target-coverage 0.03: % 5.88 = 100.0*151876064/2583393846 length 12
-    -target-coverage 0.013: % 5.62 = 100.0*145240686/2583393846 length 12
-    -target-coverage 0.08: % 6.10 = 100.0*157463396/2583393846 length 10
-    -target-coverage 0.08: % 5.50 = 100.0*142084011/2583393846 length 7
-    -target-coverage 0.03: % 5.02 = 100.0*129774852/2583393846 length 7
-    -target-coverage 0.03: % 4.74 = 100.0*122386185/2583393846 length 6
+    #	--rho 0.28 --expected-length 14 --target-coverage 0.008
+    #		% 5.39 = 100.0*138300407/2567283688
 
-    #	We used to aim for %4 in the above measurement, but as you can
-    #	see it won't go down that low.  Instead, aim for %70 coverage in
+    #	Aiming for %70 coverage in
     #	the following featureBits measurement on CDS:
     # Beware of negative scores when too high.  The logToBedScore
     # will output an error on any negative scores.
 
     HGDB_CONF=~/.hg.conf.read-only featureBits mm8 \
 	-enrichment refGene:cds mostConserved.bed
-    #	~ 1.5 minutes
-# -target-coverage 0.16 and expected lengths 11:
-# refGene:cds 1.022%, mostConserved.bed 6.999%, both 0.721%, cover 70.50%,
-#	enrich 10.07x
-# -target-coverage 0.17 and expected lengths 12:
-# refGene:cds 1.022%, mostConserved.bed 7.262%, both 0.724%, cover 70.79%,
-#	enrich 9.75x
-# -target-coverage 0.13 and expected lengths 12:
-# refGene:cds 1.022%, mostConserved.bed 6.857%, both 0.723%, cover 70.75%,
-#	enrich 10.32x
+    #	--rho 0.28 --expected-length 14 --target-coverage 0.008
+    #	refGene:cds 1.060%, mostConserved.bed 5.387%, both 0.739%, cover
+    #	69.71%, enrich 12.94x
 
     # Load most conserved track into database
     ssh hgwdev
     cd /cluster/data/mm8/bed/multiz17way
-    hgLoadBed -strict mm8 phastConsElements mostConserved.bed
+    cp -p /san/sanvol1/scratch/mm8/cons/consRun1/mostConserved.bed .
+    time nice -n +19 hgLoadBed -strict mm8 phastConsElements mostConserved.bed
+    #	real    2m45.281s
+    #	Loaded 1885142 elements of size 5
 
-    #	Loaded 4767525 elements of size 5
-    #	5 minute load time
     #	should measure the same as above
-    featureBits mm8 -enrichment refGene:cds phastConsElements
-# -target-coverage 0.16 and expected lengths 11:
-# refGene:cds 1.022%, phastConsElements 6.999%, both 0.721%, cover 70.50%,
-#	enrich 10.07x
-# -target-coverage 0.17 and expected lengths 12:
-# refGene:cds 1.022%, phastConsElements 7.262%, both 0.724%, cover 70.78%,
-#	enrich 9.75x
+    time nice -n +19 featureBits mm8 -enrichment refGene:cds phastConsElements
+    #	refGene:cds 1.060%, phastConsElements 5.387%, both 0.739%, cover
+    #	69.71%, enrich 12.94x
 
     # Create merged posterier probability file and wiggle track data files
-    #	pk is currently closer to the san than any other machine
-    ssh pk
+    ssh kkstore01
     cd /san/sanvol1/scratch/mm8/cons/consRun1
     # the sed business gets the names sorted by chromName, chromStart
     #	so that everything goes in numerical order into wigEncode
-    find ./ppRaw -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+    time nice -n +19 find ./ppRaw -type f \
+	| sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
 	| sort -k7,7 -k9,9n \
 	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
 	    | wigEncode stdin phastCons17.wig phastCons17.wib
-    # about 23 minutes for above
+    #	real    17m8.609s
+    #	-rw-rw-r--   1 1963282005 Mar  2 16:49 phastCons17.wib
+    #	-rw-rw-r--   1  236751796 Mar  2 16:49 phastCons17.wig
 
-    time rsync -a --progress phastCons17.wi? \
-	kkstore01:/cluster/data/mm8/bed/multiz17way/
-    # 3m 05s copy from pk to on kkstore01
+
+
+    time nice -n +19 cp -p phastCons17.wi? /cluster/data/mm8/bed/multiz17way/
+    #	real    0m33.014s
 
     #	prepare compressed copy of ascii data values for downloads
     ssh pk
@@ -3826,17 +3837,16 @@ done
     ssh hgwdev
     cd /cluster/data/mm8/bed/multiz17way
     ln -s `pwd`/phastCons17.wib /gbdb/mm8/wib/phastCons17.wib
-    hgLoadWiggle mm8 phastCons17 phastCons17.wig
-    #  ~ 3 minute load
+    time nice -n +19 hgLoadWiggle mm8 phastCons17 phastCons17.wig
+    #	time nice -n +19 hgLoadWiggle mm8 phastCons17 phastCons17.wig
 
     #  Create histogram to get an overview of all the data
     ssh hgwdev
-    cd /cluster/data/mm8/bed/multiz17way/cons
-    time hgWiggle -doHistogram \
+    cd /cluster/data/mm8/bed/multiz17way
+    time nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    -db=mm8 phastCons17 > histogram.data 2>&1
-    #	about 27 minutes to scan all data
-
+    #	real    26m31.261s
     #	create plot of histogram:
 
     cat << '_EOF_' | gnuplot > histo.png
@@ -3846,7 +3856,7 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Mouse Mm7 Histogram phastCons17 track"
+set title " Mouse Mm8 Histogram phastCons17 track"
 set xlabel " phastCons17 score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
