@@ -90,29 +90,29 @@ flow iscsym(char c) into bit is
 global class cToken
 // A token in a C program.
     {
-    readable short type; // Token type.
-    readable string val; // Literal contents.
-    readable string spaceBefore;	// White space before token.
-    readable string fileName;	// Name of file.
-    readable int line;	// Starting line.
-    global to init(){}
+    short type; // Token type.
+    string val; // Literal contents.
+    string spaceBefore;	// White space before token.
+    string fileName;	// Name of file.
+    int line;	// Starting line.
+    to init(){}
     };
 
 global class cTkz
 // Creates a stream of cTokens
     {
-    readable cToken cur;		// Current token
-    readable cToken next;	// Next token
-    readable cToken twoAhead;	// Next token after than
-    readable cToken threeAhead;	// Next token after than
-    readable string fileName;	// Current file name
+    cToken cur;		// Current token
+    cToken next;	// Next token
+    cToken twoAhead;	// Next token after than
+    cToken threeAhead;	// Next token after than
+    string fileName;	// Current file name
 
     local string lineBuf="";	// Position in line
     local int lineCount;	// Linein file.
     local int linePos;		// Position within line
     char reusedChar = 0;	// If non-zero we reuse this char
     local file f;		// File
-    readable bit eof;		// Set to true at end of file.
+    bit eof;		// Set to true at end of file.
     local dir of string whiteSpaces = ();  // Dir of all white space types
     local dir of string names = ();// Save room on names by putting into dir
 

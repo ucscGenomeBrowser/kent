@@ -54,7 +54,7 @@ global class htmlFormVar
 // A variable within an html form. Associated with a button, input tag etc.
     {
     string name;	// Variable name.
-    string value;	// Current value if any. May be nil.
+    writable string value;	// Current value if any. May be nil.
     string type;	// Variable type.
     array of string values;  // Available values for some types, nil for others.
     string tagName;	     // Name of associated tag.

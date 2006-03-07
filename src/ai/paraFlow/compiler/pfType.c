@@ -210,7 +210,6 @@ struct dyString *dy = dyStringNew(0);
 dumpTypeToDyString(type, dy);
 if (pp->name)
     {
-    pfParseDump(pp, 3, uglyOut);
     errAt(pp->tok, "Type mismatch:  %s not %s.", pp->name, dy->string);
     }
 else
@@ -1546,7 +1545,7 @@ switch (pp->type)
 	struct pfParse *classPp = pp->parent->children;
 	struct pfBaseType *classBase = classPp->ty->base;
 	struct pfType *fieldType = findField(classBase, pp->name);
-	if (fieldType->access == paReadable)
+	if (fieldType->access == paUsual || fieldType->access == paGlobal)
 	    {
 	    struct pfModule *myModule = findEnclosingModule(pp);
 	    struct pfModule *classModule = findEnclosingModule(classBase->def);
@@ -1930,7 +1929,7 @@ slAddHead(&class->fields, type);
 switch (varPp->access)
     {
     case paStatic:
-    case paWritable:
+    case paReadable:
     case paGlobal:
 	modifierNotAllowed(varPp);
 	break;
@@ -2063,32 +2062,11 @@ slReverse(&base->methods);
 if (base->access == paGlobal)
     {
     struct pfType *field;
-    boolean anyPrivate = FALSE;
     for (field = base->fields; field != NULL; field = field->next)
         {
 	if (field->base->access != paGlobal)
 	    errAt(pp->tok, "%s is a global type, but it's component %s isn't",
 	    	base->name, field->fieldName);
-	if (field->access == paLocal || field->access == paReadable)
-	    anyPrivate = TRUE;
-	}
-    if (anyPrivate)
-        {
-	struct pfType *method;
-	boolean anyInit = FALSE;
-	for (method = base->methods; method != NULL; method = method->next)
-	    {
-	    if (sameString(method->fieldName, "init"))
-		{
-	        anyInit = TRUE;
-		break;
-		}
-	    }
-	if (!anyInit)
-	    {
-	    errAt(pp->tok, "%s has local or readable data but no init method",
-	    	base->name);
-	    }
 	}
     }
 }
