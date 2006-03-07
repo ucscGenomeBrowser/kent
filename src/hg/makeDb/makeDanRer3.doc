@@ -4502,8 +4502,8 @@ TMPDIR=/scratch/tmp
     # Provided by Anhua Song: asong@enders.tch.harvard.edu
     # Updated data provided on 2006-02-23
     ssh kkstore02
-    mkdir -p /cluster/data/danRer3/bed/ZonLab/rhMap/seq
-    cd /cluster/data/danRer3/bed/ZonLab/rhMap/seq
+    mkdir -p /cluster/data/danRer3/bed/ZonLab/rhMap
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap
     # download data from e-mail to this directory
     # new sequences (2006-02-23) are available
     unzip rhSequenceSubmit022306.zip
@@ -4619,21 +4619,17 @@ cat << '_EOF_' > rhFix
     ln -s /san/sanvol1/scratch/danRer3/rhMap/psl .
     # copy input to the san
     cp \
-  /cluster/data/danRer3/bed/ZonLab/rhMap/seq/rhSequenceSubmit022306/rhMap.fa \
+  /cluster/data/danRer3/bed/ZonLab/rhMap/rhSequenceSubmit022306/rhMap.fa \
     /san/sanvol1/scratch/danRer3/rhMap/
     # do the blat run to align RH map sequences to danRer3 and do separate
     # runs for chroms and scaffolds from chrUn and chrNA
     ls -1S /san/sanvol1/scratch/danRer3/rhMap/rhMap.fa > rhMap.lst
-#    ls -1S /san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/chr[0-9M]*.fa \
- #          > genome.lst
-    # test run, do just chr2, see what this looks like and compare to using
-    # same parameters as for STS markers
+    ls -1S /san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/chr[0-9M]*.fa \
+          > genome.lst
 
-  #  foreach f (/san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/Zv5_*.fa)
-   #     ls -1S $f >> genome.lst
-  #  end
-    ls -1S /san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/chr2*.fa \
-           > chr2.lst
+    foreach f (/san/sanvol1/scratch/danRer3/trfFaChromsAndScafs/Zv5_*.fa)
+        ls -1S $f >> genome.lst
+    end
     cp -p /cluster/data/danRer3/bed/ooc/danRer3_10.ooc \
           /san/sanvol1/scratch/danRer3
 # try same parameters as for BAC ends
@@ -4644,7 +4640,7 @@ cat << '_EOF_' > gsub
 '_EOF_'
     # << this line keeps emacs coloring happy
     # gensub2 genome.lst rhmap.lst gsub spec
-    gensub2 chr2.lst rhMap.lst gsub spec
+    gensub2 genome.lst rhMap.lst gsub spec
     para create spec
     para try, check, push, check etc.
     ssh kkstore02
@@ -4653,9 +4649,42 @@ cat << '_EOF_' > gsub
     # Do sort, best in genome filter, and convert to chromosome coordinates
     # to create rhmap.psl
     pslSort dirs raw.psl tmp psl
-    pslReps -nearTop=0.0001 -minAli=0.96 -minCover=0.40 raw.psl \
+    pslReps -nearTop=0.0001 -minAli=0.80 -minCover=0.20 raw.psl \
             contig.psl /dev/null
-    liftUp rhMap.psl /cluster/data/danRer3/jkStuff/liftAll.lft warn contig.psl
+    # There are 11514 sequences in total in rhMap.fa
+    # Experimented with different parameters:
+    # little difference if STS markers BLAT parameters were used 
+    # i.e. -ooc=11.ooc and -stepSize=5.
+    # For Blat parameters used above (-ooc=10.ooc and -tileSize=10), try
+    # different pslReps parameters using minCover=0.40 and nearTop=0.0001:
+    # minAli=0.96, 83%, most aligned sequence has 11 alignments.
+    # minAli=0.90, 88% align, most aligned seq has 11 alignments
+    # minAli=0.80, 88%, 10120 sequences aligned. 
+    # at minAli=0.50, there are still 10120 sequences aligned so those that
+    # are not aligning must have very low sequence identity. Took a look at 
+    # some that are not aligning e.g. 2217C, 2791C and these are not passing
+    # the minCover=0.40 criterion. Some sequences have Ns in them too
+    # e.g. ZC92E13.YBF so has a lot of short alignments that do not pass
+    # the minCover parameter. Lowering minCover increases the number of 
+    # sequences aligned:
+    # minAli=0.80, minCover=0.20, there are 10850 (94%) of sequences aligned. 
+    # Most alignments for one sequence is 99, second most is 11. There are 
+    # about 1851 sequences with more than > 1 alignment (many of these 
+    # have 2 alignments) while for minAli=0.80 and minCover=0.40, there were
+    # 1266 sequences with more than 1 alignment. With lower minCover, more
+    # sequences align, but there are more sequences with higher numbers of
+    # multiple alignments. At minCover=0.0, there is 1 sequence with 1353
+    # alignments, the second largest number of alignments for 1 sequence
+    # is 532, then 329 etc. So use minAli=0.80 and minCover=0.20 to get the
+    # most sequences aligned without having sequences aligning too many times. 
+    # 88% of sequences were aligned for danRer2.
+    # merge together liftAll and scaffolds lift then lift psl to chrom level.
+    cat /cluster/data/danRer3/liftSuperToChrom/liftNAandUnScaffoldsToChrom.lft \        /cluster/data/danRer3/jkStuff/liftAll.lft \
+        > /cluster/data/danRer3/jkStuff/liftAllPlusliftScaffolds.lft 
+    liftUp rhMap.psl \
+           /cluster/data/danRer3/jkStuff/liftAllPlusliftScaffolds.lft \     
+           warn contig.psl
+    # Got 30168 lifts
     pslCheck rhMap.psl
     # psl is ok
     # Load sequence alignments into database.
@@ -4663,9 +4692,104 @@ cat << '_EOF_' > gsub
     cd /cluster/data/danRer3/bed/ZonLab/rhMap/blatRun
     echo "drop table rhMap;" | hgsql danRer3
     hgLoadPsl danRer3 rhMap.psl
-    # 2193 sequences aligned
+    # cleanup
+    rm -r /san/sanvol1/scratch/danRer3/rhMap/psl 
+    rm psl para.results batch batch.bak spec
+    rm -r err  
+    gzip *.psl
     
-     
+    # Check that all the headers from rhMap.headers are also in the primers
+    # file which seems to contain the same headers from the FASTA file
+    # as well as additional markers.
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap/rhSequenceSubmit022306
+    perl -pi.bak -e 's/>//' rhMap.headers
+    sort rhMap.headers > rhMap.headers.sort
+    sort rhMapPrimers022306.txt > rhMapPrimers.sort
+    wc -l *.sort
+    # 11514 rhMap.headers.sort
+    # 13437 rhMapPrimers.sort
+    comm -12 rhMap.headers.sort rhMapPrimers.sort | wc -l
+    # 11514 in common
+    # so all FASTA headers from rhMap022306.fa are in the primers file
+    # Get headers again from rhMap.fa file as the names of the sources have
+    # been changed. Parse out information from headers to add to an rhMapInfo
+    # table so that this information can be displayed on the details page for
+    # the RH map markers.
+    # Fields: 1 - name, 2 - linkage group (chrom), 3 - position number on the 
+    # RH map for that linkage group, 4 - distance (in cR) from the 
+    # top of a linkage group, 4 - position number in entire RH map (ordered 
+    # from LG1 to LG25, 5 - type of marker (SSLP, BAC_END, EST, GENE, STS),
+    # 9 - source, 10 - institute that mapped the marker, 11 - 5' forward primer,
+    # 12 - 3' reverse primer.
+    # Sort headers by linkage group and by position
+    grep '>' rhMap022306.fa > rhMap.headers2
+    # then use the rhMap.headers2.sort file to extract the marker information
+cat << '_EOF_' > getRhInfo
+#!/usr/bin/awk -f 
+
+#>z1396|14|418|5707|SSLP|f|cR|f|MGH|MPIEB|ATCCTTCAGCCACTCCTTCA|TGGAACCTGAAAAACACACG|
+/^>/ {
+    sub(/>/,"",$0);
+    split(toupper($0), a, "\\|");
+    print a[1]"\tLG"a[2]"\t"a[3]"\t"a[4]"\t"a[5]"\t"a[9]"\t"a[10]"\t"a[11]"\t"a[12];
+    next;
+}
+'_EOF_'
+# << keep emacs coloring happy
+    chmod +x getRhInfo
+    getRhInfo rhMap.headers2 > rhMapInfo.tab
+    # then sort by LG and by position
+    sort -k 2,2 -k 3,3n rhMapInfo.tab > rhMapInfoSorted.tab
+ 
+    ssh hgwdev 
+    # Create a table with RH map item information including type, source,
+    # origin and primer sequences.
+    cat << 'EOF' > ~/kent/src/hg/lib/rhMapInfo.as
+table rhMapInfo
+"Radiation Hybrid map information"
+(
+string name;		"Name of Radiation Hybrid (RH) map marker"
+string linkageGp;	"Linkage group to which the marker was mapped"
+uint position;  	"Position number in RH map for this linkage group"
+uint distance;  	"Distance from the top of linkage group (cR)"
+string markerType;      "Type of marker"
+string source;    	"Source of marker"
+string mapSite;   	"Institution that mapped the marker"
+string leftPrimer; 	"Forward primer sequence"
+string rightPrimer; 	"Reverse primer sequence"
+)
+'EOF'
+# << happy emacs
+    # create .sql, .c and .h files using autoSql
+    autoSql rhMapInfo.as rhMapInfo
+    mv rhMapInfo.h ../inc
+    # rhMapInfo.sql - name is the primary key
+    # commit rhMapInfo.as, .sql, .c and .h files to CVS.   
+    # create and load table
+    cd /cluster/data/danRer3/bed/ZonLab/rhMap/rhSequenceSubmit022306 
+    hgsql danRer3 < ~/kent/src/hg/lib/rhMapInfo.sql
+    hgsql -e \
+    'load data local infile "rhMapInfoSorted.tab" into table rhMapInfo' danRer3
+    # Copy sequences to gbdb if they are not already there.
+    mkdir -p /gbdb/danRer3/rhMap
+    ln -s \
+      /cluster/data/danRer3/bed/ZonLab/rhMap/rhSequenceSubmit022306/rhMap.fa \
+      /gbdb/danRer3/rhMap/rhMap022306.fa 
+    # then add sequences to database:
+    hgLoadSeq danRer3 /gbdb/danRer3/rhMap/rhMap022306.fa
+    # problem adding these: 2215 are not loaded into database, these all
+    # have names with extensions like .YB, .YC etc. so remove from extFile
+    # and seq
+    hgsql -e 'delete from seq where extFile = 736113;' danRer3
+    hgsql -e 'delete from extFile where id = 736113;' danRer3
+    hgsql -e 'update history set errata = "Removed sequences. Error so not all asequences loaded." where ix = 23;' danRer3 
+    # Find problem with loading sequences and reload.
+    # edit danRer3/trackDb.ra to add rhMap track and the search spec.  
+    # add and edit rhMap.html to describe the info data.
+    # edit ~/kent/src/hg/hgc/hgc.c so that the rhMapInfo data is displayed 
+    # on the details page for each marker - edit doRHmap function.
+    # commit these to CVS.
 
 # SELF BLASTZ, CHAIN, NET, AXTNET, MAFNET AND DOWNLOADS
 # (DONE, 2005-12-02, hartera)
@@ -5585,7 +5709,7 @@ _EOF_
     # Took about 2 hours to finish.
 # END OF HGNEAR STUFF
 ####################################################
-# KNOWN GENES SET BASED ON ENSEMBL GENES (in progress, 2005-11-23, hartera)
+# GENE SET BASED ON ENSEMBL GENES (in progress, 2005-11-23, hartera)
     # see ENSEMBL GENES section for documentation of creation of
     # the ensGene, ensGtp and ensPep tables and the track.
     # compare the Ensembl and Human Proteins tracks
@@ -5599,8 +5723,8 @@ _EOF_
     # it seems like Ensembl is the best choice in terms of genome coverage
     # and intersection with RefSeq CDS regions.
     ssh kkstore02
-    mkdir -p /cluster/data/danRer3/bed/knownGenes
-    cd /cluster/data/danRer3/bed/knownGenes
+    mkdir -p /cluster/data/danRer3/bed/ensGenes
+    cd /cluster/data/danRer3/bed/ensGenes
     # use Ensembl's BioMart to download the Ensembl Genes UniProt IDs and
     # descriptions. For genes with no description, use the InterPro domain.
     # Go to http://www.ensembl.org/Multi/martview
@@ -5632,27 +5756,27 @@ _EOF_
     gunzip ensGene36Desc2.tsv.gz  
     # need to make a table of cross reference information for Ensembl
     # for the Known Genes details pages.
-    # create a table definition for ensGeneXref:
+    # create a table definition for zfishEnsXRef:
     cd ~/kent/src/hg/lib
-cat << 'EOF' > ensGeneXRef.as
-table ensGeneXRef
-"Link together an Ensembl Transcript ID and a gene alias."
+cat << 'EOF' > ensXRefOrg.as
+table ensXRefZfish
+"Link from an Ensembl Transcript ID to other database IDs and description."
     (
     string ensGeneId;   "Ensembl Transcript ID"
-    string zfinId;      "ZFIN ID"
+    string zfinId;   "ZFIN ID"
     string uniProtId;   "Unified UniProt protein accession"
-    string geneId;      "NCBI Entrez Gene (formerly LocusLink) ID"
+    string geneId;	"NCBI Entrez Gene (formerly LocusLink) ID"
     string geneSymbol;  "NCBI Entrez Gene (formerly LocusLink) Symbol"
     string refSeq;      "RefSeq DNA Accession"
     string protAcc;     "RefSeq Protein Accession"
     string description; "Description"
     )
 'EOF'
-    autoSql ensGeneXRef.as ensGeneXRef
-    mv ensGeneXRef.h ../inc
-    # edit ensGeneXRef.sql so that only ensId is not null, add zfinId, 
-    # uniProtId, geneSymbol, refSeq and protAcc as keys. ensId is already the
-    # primary key.
+
+    autoSql ensXRefZfish.as ensXRefZfish
+    mv ensXRefZfish.h ../inc
+    # add zfinId, uniProtId, geneId, geneSymbol, refSeq and protAcc as keys. 
+    # ensGeneId is already the primary key.
     # get the gene2refseq file from NCBI to give the Entrez Gene ID
     # and symbol for refSeq accessions. Taxonomy ID is 7955 for Danio rerio.
     # columns in file are tax_id, GeneID, status, 
@@ -5688,15 +5812,26 @@ table ensGeneXRef
     /cluster/home/hartera/bin/i386/hgEnsGeneXRef \
        ensGene36Desc.tsv ensGene36Desc2.tsv \
        zfish.gene_info zfish.gene2refseq ensGene36XRef.tab >& ensGene36XRef.log
-    # load this tabbed file into ensGeneXRef table 
+    # load this tabbed file into zfishEnsXRef table 
     ssh hgwdev 
     cd /cluster/data/danRer3/bed/knownGenes
-    hgsql danRer3 < ~/kent/src/hg/lib/ensGeneXRef.sql
+    hgsql danRer3 < ~/kent/src/hg/lib/ensXRefZfish.sql
     hgsql -e \
-    'load data local infile "ensGene36XRef.tab" into table ensGeneXRef' danRer3
+    'load data local infile "ensGene36XRef.tab" into table ensGeneXZRef' danRer3
     # edit ~/kent/src/hg/hgGene/hgGeneData/Zebrafish/genome.ra to give 
     # mySQL queries to ensGtp and ensGeneXRef to retrieve name, protein and
     # description.
+cat << _EOF_ > ~/kent/src/hg/hgGene/hgGeneData/Zebrafish/genome.ra
+geneSymbolSql select geneSymbol from ensGeneXRef where ensGeneId = '%s'
+name global
+knownGene ensGene
+knownGenePep ensPep
+nameSql select gene from ensGtp where transcript = '%s'
+descriptionSql select description from ensGeneXRef where ensGeneId = '%s'
+proteinSql select uniProtId from ensGeneXRef where ensGeneId = '%s'
+_EOF_
+# << happy emacs
+
     # created blastp hgNear tables by alignment of Zebrafish Ensembl peptide
     # sequences to the equivalent "Known Genes" peptide sets for other species
     # - see hgNear sections above. Then create an otherOrg.ra file for 
@@ -5722,9 +5857,96 @@ name yeast
 db sacCer1
 _EOF_
      # << this line makes emacs coloring happy
+     # add Zebrafish-specific section.ra file
+cat << _EOF_ > ~/kent/src/hg/hgGene/hgGeneData/Zebrafish/section.ra
+name method
+shortLabel Methods
+longLabel Ensembl Genes Methods, Credits, and Data Use Restrictions
+priority 140
+_EOF_
+     # << this line makes emacs coloring happy
+     # added links to the Zebrafish links.ra file
+cat << _EOF_ > ~/kent/src/hg/hgGene/hgGeneData/Zebrafish/links.ra
+# Zebrafish-specific link info.
+# This contains info to construct the quick links. 
+
+name genome
+tables ensGene 
+idSql select chrom,txStart+1,txEnd from ensGene where name = '%s'
+
+name family
+tables ensGene
+idSql select name from ensGene where name = '%s'
+
+name ensemblGenes
+shortLabel Ensembl Genes
+tables ensGene
+idSql select name from ensGene where name = '%s'
+url http://dec2005.archive.ensembl.org/Danio_rerio/transview?transcript=%s
+priority 25
+
+name uniProt
+shortLabel UniProt
+tables ensGeneXRef
+idSql select uniProtId from ensGeneXRef where ensGeneId = '%s'
+nameSql select uniProtId from ensGeneXRef where ensGeneId = '%s'
+url http://us.expasy.org/cgi-bin/niceprot.pl?%s
+priority 30
+
+name refSeq
+shortLabel RefSeq
+tables ensGeneXRef
+idSql select refSeq from ensGeneXRef where ensGeneId = '%s'
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=%s&doptcmdl=GenBank&tool=genome.ucsc.edu
+priority 40
+
+name refSeqPep
+shortLabel RefSeq Peptide
+tables ensGeneXRef
+idSql select protAcc from ensGeneXRef where ensGeneId = '%s'
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=protein&term=%s&doptcmdl=GenPept&tool=genome.ucsc.edu
+priority 42
+
+name entrezGene
+shortLabel Entrez Gene
+tables ensGeneXRef
+idSql select geneId from ensGeneXRef where ensGeneId = '%s'
+url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s&tool=genome.ucsc.edu
+priority 45
+
+name zfin
+shortLabel ZFIN
+tables ensGeneXRef
+idSql select zfinId from ensGeneXRef where ensGeneId = '%s'
+url http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=%s
+priority 50
+
+name genBank
+hide
+
+name pubMed
+hide
+
+name geneCards
+hide
+
+name stanfordSource
+hide
+
+name cgap
+hide
+
+name ensembl
+hide 
+
+name aceView
+hide
+_EOF_
+     # << this line makes emacs coloring happy
      # then make my to visualize in own sandbox
      cd ~/kent/src/hg/hgGene
      make my
+     # commit *.ra files for Zebrafish to CVS.
  
 # STS MARKERS (in progress, 2005-10-13, hartera)
     # DOWNLOADED RECENTLY FROM NCBI
