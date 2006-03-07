@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: orderNodes.c,v 1.11 2006/03/06 17:38:10 braney Exp $";
+static char const rcsid[] = "$Id: orderNodes.c,v 1.12 2006/03/07 22:03:28 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -55,34 +55,11 @@ if ((edge = findEdge(*list, e2, doNeg)) == NULL)
     }
 else
     {
+    //errAbort("found edge twice");
     edge->count += count;
     }
 }
 
-void addPairProb( struct possibleEdge **list, struct element *e2,   boolean doNeg, int count, int totalCount)
-{
-struct possibleEdge *edge;
-char *name;
-
-if ((edge = findEdge(*list, e2, doNeg)) == NULL)
-    {
-    //printf("adding edge from -- to %s flip %d\n",eleName(e2), doNeg);
-    AllocVar(edge);
-    edge->count = (double)count * 65535 / totalCount;
-    edge->element = e2;
-    edge->doFlip = doNeg;
-    slAddHead(list, edge);
-    }
-else
-    {
-    //printf("edge count was %d ",edge->count);
-    edge->count = (((double)count * 65535 / totalCount ) + edge->count)/2;
-    //printf("now %d\n",edge->count);
-    //errAbort("shouldn't find edge in addPairProb");
-    }
-if (edge->count < 0)
-    errAbort("edge count less than 0");
-}
 
 char *eleFullName2(struct element *e, boolean doNeg)
 {
@@ -159,9 +136,6 @@ else
 
 void doOwn(struct possibleEdge *p, struct possibleEdge **outList, boolean doFlip, struct element *e)
 {
-//struct element *nextParent = e->parent;
-//if (nextParent == NULL)
-    //errAbort("next in hash doesn't have parent");
 
 if ((findEdge(*outList, p->element, p->doFlip)) != NULL)
     errAbort("in doOwn , already on list");
@@ -180,8 +154,6 @@ for(p = inList; p ; p = p->next)
     {
     struct element *nextParent = p->element->parent;
 
-//    if (p->element->version == NULL) 
-//	continue;
 
     if (nextParent == NULL)
 	errAbort("next in hash doesn't have parent");
@@ -190,11 +162,9 @@ for(p = inList; p ; p = p->next)
 	errAbort("in doUp , already on list");
     if (e == p->element->parent)
 	{
-	errAbort("n doUpadding edge to itself");
-	continue;
+	//errAbort("n doUpadding edge to itself");
+	//continue;
 	}
-//if (*outList != NULL)
-    //errAbort("in doUp edge should be alone");
 
     addPair(outList, nextParent, p->doFlip, p->count);
     }
@@ -242,40 +212,6 @@ for(p = *inList; p ; p = p->next)
     }
 }
 
-void doUpProbs(struct possibleEdge *inList, struct possibleEdge **outList)
-{
-struct possibleEdge *p;
-int totalCount = 0;
-struct possibleEdge *edge;
-
-//printf("in doUpProb before check\n");
-totalCount = getTotalCount(&inList);
-if (totalCount == 0)
-    return;
-
-//printf("in doUpProbs\n");
-for(p = inList; p ; p = p->next)
-    {
-    struct element *nextParent = p->element->parent;
-
-    if (nextParent == NULL)
-	errAbort("next in hash doesn't have parent");
-
-    //printf("adding %s\n",eleName(nextParent));
-    addPairProb(outList, nextParent, p->doFlip, p->count, totalCount);
-    }
-
-/*
-totalCount = getTotalCount(*outList);
-for(p = *outList; p ; p = p->next)
-    if (totalCount)
-	p->count = (double)p->count * 65535/ totalCount;
-    else
-	p->count = 0;
-	*/
-
-}
-
 void doDownList(struct possibleEdge *inList, struct possibleEdge **outList,  int childNum, struct element *e)
 {
 
@@ -295,8 +231,10 @@ for(p = inList; p ; p = p->next)
 	if (sameString(edge->element->edges[0]->species, e->species))
 	    nextChild = edge->element->edges[0];
 	else
+	    {
+	    errAbort("single child isn't right");
 	    return ;
-	    //errAbort("single child isn't right");
+	    }
 	}
     else
 	{
@@ -311,87 +249,20 @@ for(p = inList; p ; p = p->next)
     if (nextChild == NULL)
 	errAbort("next in hash doesn't have child");
 
-    //printf("looking at %s\n",eleName(edge->element));
-    //printf("child is %s\n",eleName(edge->element->edges[childNum]));
-
     if (!sameString(e->species, nextChild->species))
 	errAbort("not same species");
-    //printf("setting edge from %s to %s w %g p %g\n",eleName(e), eleName(nextChild), weight, edge->count);
     addPair(outList, nextChild, p->doFlip, p->count);
-    //addPair(*setHash, nextChild, edge->prob * weight , *next->name == '-');
     }
 }
 
-void doDownProbs(struct possibleEdge *inList, struct possibleEdge **outList,  int childNum, struct element *e)
-{
-int totalCount = 0;
-struct possibleEdge *p;
-
-totalCount = getTotalCount(&inList);
-if (totalCount == 0)
-    return;
-
-for(p = inList; p ; p = p->next)
-    {
-    struct possibleEdge *edge = p;
-    struct element *ne = edge->element;
-    struct element *nextChild = NULL;
-
-    if (ne->numEdges ==1)
-	{
-	if (sameString(edge->element->edges[0]->species, e->species))
-	    nextChild = edge->element->edges[0];
-	else
-	    return ;
-	    //errAbort("single child isn't right");
-	}
-    else
-	{
-	if (sameString(edge->element->edges[0]->species, e->species))
-	    nextChild = edge->element->edges[0];
-	else if (sameString(edge->element->edges[1]->species, e->species))
-	    nextChild = edge->element->edges[1];
-	else
-	    errAbort("neither child is right\n");
-	}
-
-    if (nextChild == NULL)
-	errAbort("next in hash doesn't have child");
-
-    //printf("looking at %s\n",eleName(edge->element));
-    //printf("child is %s\n",eleName(edge->element->edges[childNum]));
-
-    if (!sameString(e->species, nextChild->species))
-	errAbort("not same species");
-    //printf("setting edge from %s to %s w %g p %g\n",eleName(e), eleName(nextChild), weight, edge->count);
-    //addPair(outList, nextChild, p->doFlip, p->count);
-    addPairProb(outList, nextChild, p->doFlip, p->count, totalCount);
-    //addPair(*setHash, nextChild, edge->prob * weight , *next->name == '-');
-    }
-
-/*
-totalCount = getTotalCount(*outList);
-for(p = *outList; p ; p = p->next)
-    if (totalCount)
-	p->count = (double)p->count * 65535/ totalCount;
-    else
-	p->count = 0;
-	*/
-}
 
 void calcUpNodes(struct phyloTree *node)
 {
 struct genome *g = node->priv;
 int ii;
-//double totalLen = 0.0;
-
-//for(ii=0; ii < node->numEdges; ii++)
- //   totalLen += node->edges[ii]->ident->length;
 
 for(ii=0; ii < node->numEdges; ii++)
-    //calcUpNodes(node->edges[ii], (totalLen - node->edges[ii]->ident->length)/totalLen);
     calcUpNodes(node->edges[ii]);
-    //calcUpNodes(node->edges[ii], 1.0 / node->numEdges);
 
 if (node->numEdges)
     {
@@ -400,13 +271,9 @@ if (node->numEdges)
     for(e=g->elements; e; e = e->next)
 	{
 	struct element *parent = e->parent;
-	//double useWeight = weight;
 
 	if (e->numEdges == 0)
 	    errAbort("element should have children");
-
-	//if (node->parent->numEdges == 1)
-	    //useWeight /= parent->numEdges;
 
 	if (e->numEdges == 1)
 	    {
@@ -437,8 +304,6 @@ if (node->numEdges)
 	    else
 		doOwn(e->calced.prev, &e->up.prev, TRUE, e);
 	    }
-	//doUpHash(e->up.nextHash, &parent->up.nextHash, useWeight);
-	//doUpHash(e->up.prevHash, &parent->up.prevHash, useWeight);
 	}
     }
 }
@@ -455,10 +320,6 @@ if (node->parent == NULL)
 
     for(e=g->elements; e; e = e->next)
 	{
-	//printf("topnode working on %s\n",eleName(e));
-	//if (e->numEdges == 0)
-	    //break;
-
 	if (e->numEdges == 1)
 	    {
 	    if (e->calced.prev == NULL)
@@ -503,19 +364,8 @@ else if (node->numEdges)
     for(e=g->elements; e; e = e->next)
 	{
 	struct element *parent = e->parent;
-	//double useUpWeight = weight;
-	//double useDownWeight = weight;
 	int num;
 
-	//if (node->parent->numEdges == 1)
-	//    useDownWeight /= parent->numEdges;
-	//if (node->numEdges == 1)
-	//    useUpWeight /= e->numEdges;
-
-	//if (parent == NULL)
-	 //   continue;
-
-	//printf("working on %s\n",eleName(e));
 	num = 0;
 	if (e == parent->edges[1])
 	    num = 1;
@@ -526,6 +376,7 @@ else if (node->numEdges)
 		doDownList(parent->down[num].prev, &e->down[0].prev, num, e);
 	    else
 		doOwn(e->calced.prev, &e->down[0].prev, TRUE, e);
+
 	    if (e->calced.next == NULL)
 		doDownList(parent->down[num].next, &e->down[0].next, num, e);
 	    else
@@ -563,13 +414,11 @@ else if (node->numEdges)
 	    }
 	}
     } 
+
 for(ii=0; ii < node->numEdges; ii++)
     {
     calcDownNodes(node->edges[ii]);
     }
-//for(ii=0; ii < node->numEdges; ii++)
-    //totalLen += node->edges[ii]->ident->length;
-
 }
 
 void chooseMedian3(struct possibleEdge *left, struct possibleEdge *right, struct possibleEdge *top, struct possibleEdge **median) 
@@ -581,107 +430,65 @@ struct possibleEdge *newEdge;
 if (*median != NULL)
     errAbort("should be null list");
 
-//printf("counts: %d %d %d\n",slCount(left),slCount(right), slCount(top));
-//printf("names %s %s %s\n",eleName(left->element),eleName(right->element), eleName(top->element));
 if (!((slCount(left) == 1) ||  (slCount(right) == 1) || (slCount(top) ==1)))
     errAbort("breaks infinite sites 1 must be 1");
 if (slCount(left) + slCount(right) + slCount(top) < 3)
     errAbort("breaks infinite sites < 3");
-if (slCount(left) + slCount(right) + slCount(top) > 4)
-    warn("breaks infinite sites > 4");
+//if (slCount(left) + slCount(right) + slCount(top) > 4)
+    //warn("breaks infinite sites > 4");
 
+p = left;
+if ((left->element != top->element) || (left->doFlip!= top->doFlip))
+    {
+    p = right;
+    if (slCount(right) != 1)
+	;//errAbort("fon");
+	}
+else
+    if (slCount(left) != 1)
+	;//errAbort("fon");
+
+
+#ifdef NOWNOW
 p = left;
 if (slCount(left) == 2)
     {
     p=right;
     }
+    /*
+    if (slCount(right) == 2)
+	{
+	p=top;
+	warn("choosing top");
+	}
+    }
+    */
+
 else if (slCount(top) == 1)
     if ((left->element != top->element) || (left->doFlip!= top->doFlip))
+	{
 	p = right;
+	errAbort("here");
+	}
+#endif
 
+/*
 if ((p == right) && (slCount(right) != 1))
     if ((p->element != left->element) || (p->doFlip!= left->doFlip))
+	{
+	errAbort("here");
 	p=right->next;
-    //errAbort("screwed up logic");
+	}
+	*/
 
+/*
 AllocVar(newEdge);
 newEdge->element = p->element;
 newEdge->doFlip = p->doFlip;
 newEdge->count = p->count;
 slAddHead(median, newEdge);
-
-#ifdef NOTNOW
-for(p = left; p ; p = p->next)
-    {
-    AllocVar(newEdge);
-    //printf("adding %s\n",eleName(p->element));
-    newEdge->element = p->element;
-    newEdge->doFlip = p->doFlip;
-    newEdge->count = p->count;
-    slAddHead(median, newEdge);
-
-    //printf("looking for %s with %d\n",eleName(p->element), p->count);
-    if ((edge1 = findEdge(right, p->element, p->doFlip)) != NULL)
-	{
-    //printf("lfound %s with %d\n",eleName(p->element), edge1->count);
-	edge1->element = NULL;
-	
-	if (edge1->count > p->count)
-	    newEdge->count = edge1->count;
-    //printf("chose %s with %d\n",eleName(p->element), newEdge->count);
-
-	}
-    if ((edge2 = findEdge(top, p->element, p->doFlip)) != NULL)
-	{
-	//printf("found on top %s with %d\n",eleName(edge2->element),edge2->count);
-	edge2->element = NULL;
-	if (edge2->count > newEdge->count)
-	    newEdge->count = edge2->count;
-	//if ((edge2->count < newEdge->count) && (((edge1 == NULL) ||  (edge2->count > edge1->count)) ))
-	 //   newEdge->count = edge2->count;
-    //printf("chose %s with %d\n",eleName(p->element), newEdge->count);
-	}
-    }
-
-for(p = right; p ; p = p->next)
-    {
-    if (p->element != NULL)
-	{
-    //printf("at %s\n",eleName(p->element));
-	if ((edge1 = findEdge(*median, p->element, p->doFlip)) != NULL)
-	    errAbort("already on list");
-	AllocVar(newEdge);
-	newEdge->element = p->element;
-	newEdge->doFlip = p->doFlip;
-	newEdge->count = p->count;
-	slAddHead(median, newEdge);
-
-	if ((edge2 = findEdge(top, p->element, p->doFlip)) != NULL)
-	    {
-	    //printf("atfound on top %s\n",eleName(edge2->element));
-	    edge2->element = NULL;
-	    if (edge2->count > newEdge->count)
-		newEdge->count = edge2->count;
-	    }
-
-	}
-    }
-
-for(p = top; p ; p = p->next)
-    {
-    if (p->element != NULL)
-	{
-    //printf("at %s\n",eleName(p->element));
-    if ((edge1 = findEdge(*median, p->element, p->doFlip)) != NULL)
-	errAbort("aatlready on list");
-	AllocVar(newEdge);
-	newEdge->element = p->element;
-	newEdge->doFlip = p->doFlip;
-	newEdge->count = p->count;
-	slAddHead(median, newEdge);
-	}
-    }
-#endif
+*/
+slAddHead(median, p);
 }
 
 void chooseMedian2(struct possibleEdge *left, struct possibleEdge *right, struct possibleEdge **median) 
@@ -692,59 +499,22 @@ struct possibleEdge *newEdge;
 
 if (!((slCount(left) == 1) ||  (slCount(right) == 1)))
     errAbort("median2 breaks infinite sites 1 must be 1");
-if (slCount(right) + slCount(left) > 3)
-    errAbort("median2 infinites sites break > 3");
+//if (slCount(right) + slCount(left) > 3)
+    //warn("median2 infinites sites break > 3");
 if (slCount(right) + slCount(left) < 2)
     errAbort("median2 infinites sites break < 2");
-//if (left->element != right->element)
+//if ((slCount(left) == 1) && (slCount(right) == 1) && (left->element != right->element))
     //warn("median2 : right != left");
+
 p = left;
 if (slCount(p) != 1)
     p = right;
-
-//p->next = NULL;
 
 AllocVar(newEdge);
 newEdge->element = p->element;
 newEdge->doFlip = p->doFlip;
 newEdge->count = p->count;
 slAddHead(median, newEdge);
-
-#ifdef NOTNOW
-for(p = left; p ; p = p->next)
-    {
-    if (( findEdge(*median, p->element, p->doFlip)) != NULL)
-	errAbort("already on list");
-    AllocVar(newEdge);
-    newEdge->element = p->element;
-    newEdge->doFlip = p->doFlip;
-    newEdge->count = p->count;
-    slAddHead(median, newEdge);
-
-    if ((edge = findEdge(right, p->element, p->doFlip)) != NULL)
-	{
-    //printf("pfound %s with %d\n",eleName(p->element), edge->count);
-	edge->element = NULL;
-	
-	if (edge->count > p->count)
-	    newEdge->count = edge->count;
-	}
-    }
-for(p = right; p ; p = p->next)
-    {
-    if (p->element != NULL)
-	{
-	struct possibleEdge *edge1;
-    if ((edge1 = findEdge(*median, p->element, p->doFlip)) != NULL)
-	errAbort("already on list");
-	AllocVar(newEdge);
-	newEdge->element = p->element;
-	newEdge->doFlip = p->doFlip;
-	newEdge->count = p->count;
-	slAddHead(median, newEdge);
-	}
-    }
-#endif
 }
 
 void calcMix(struct phyloTree *node)
@@ -754,11 +524,6 @@ struct element *e;
 int ii;
 int totalCount;
 struct possibleEdge *p = NULL;
-//double totalLen = 0.0;
-//struct possibleEdge *leftListPrev = NULL;
-//struct possibleEdge *topListNext = NULL;
-//struct possibleEdge *rightListNext = NULL;
-//struct possibleEdge *leftListNext = NULL;
 
 if (node->numEdges == 0)
     return;
@@ -767,21 +532,10 @@ if (node->parent == NULL)
     {
     for(e=g->elements; e; e = e->next)
 	{
-	//printf("topnode working on %s\n",eleName(e));
-//	if (e->numEdges == 0)
-//	    continue;
-
 	if (e->numEdges == 1)
 	    {
-	    if (e->edges[0]->calced.next)
-		doUpProbs(e->edges[0]->calced.next, &e->mix.next);
-	    else
-		doUpProbs(e->edges[0]->up.next, &e->mix.next);
-
-	    if (e->edges[0]->calced.prev)
-		doUpProbs(e->edges[0]->calced.prev, &e->mix.prev);
-	    else
-		doUpProbs(e->edges[0]->up.prev, &e->mix.prev);
+	    doUpList(e->edges[0]->up.next, &e->mix.next,e);
+	    doUpList(e->edges[0]->up.prev, &e->mix.prev,e);
 	    }
 	else
 	    {
@@ -790,39 +544,24 @@ if (node->parent == NULL)
 	    struct possibleEdge *rightListNext = NULL;
 	    struct possibleEdge *leftListNext = NULL;
 
-	    //printf("at topnode in calcMix\n");
-	    if (e->edges[1]->calced.prev)
-		doUpProbs(e->edges[1]->calced.prev, &rightListPrev);
-	    else
-		doUpProbs(e->edges[1]->up.prev, &rightListPrev);
-	    if (e->edges[0]->calced.prev)
-		doUpProbs(e->edges[0]->calced.prev, &leftListPrev);
-	    else
-		doUpProbs(e->edges[0]->up.prev, &leftListPrev);
+	    doUpList(e->edges[0]->up.prev, &leftListPrev,e);
+	    doUpList(e->edges[1]->up.prev, &rightListPrev,e);
 	    chooseMedian2(leftListPrev, rightListPrev,  &e->mix.prev);
+
 	    if (( rightListPrev || leftListPrev) && (e->mix.prev == NULL))
 		errAbort("no mix prev");
 
-	    if (e->edges[1]->calced.next)
-		doUpProbs(e->edges[1]->calced.next, &rightListNext);
-	    else
-		doUpProbs(e->edges[1]->up.next, &rightListNext);
-	    if (e->edges[0]->calced.next)
-		doUpProbs(e->edges[0]->calced.next, &leftListNext);
-	    else
-		doUpProbs(e->edges[0]->up.next, &leftListNext);
-	    //if (!( rightListNext || leftListNext))
-		//printf("right and left next 0\n");
+	    doUpList(e->edges[0]->up.next, &leftListNext,e);
+	    doUpList(e->edges[1]->up.next, &rightListNext,e);
 	    chooseMedian2(leftListNext, rightListNext, &e->mix.next);
+
 	    if (( rightListNext || leftListNext) && (e->mix.next == NULL))
 		errAbort("no mix next");
-	    //printf("out topnode in calcMix\n");
 	    }
 	}
     }
 else if (node->numEdges)
     {
-
     for(e=g->elements; e; e = e->next)
 	{
 	struct element *parent = e->parent;
@@ -834,122 +573,45 @@ else if (node->numEdges)
 	struct possibleEdge *rightListNext = NULL;
 	struct possibleEdge *leftListNext = NULL;
 
-	//if (e->numEdges == 0)
-	    //continue;
-
 	num = 0;
 	if (e == parent->edges[1])
 	    num = 1;
 
 	if (e->numEdges == 1)
 	    {
-	    if (parent->calced.prev)
-		doDownProbs(parent->calced.prev, &topListPrev, num, e);
-	    else
-		doDownProbs(parent->down[num].prev, &topListPrev, num, e);
-	    if (e->edges[0]->calced.prev)
-		doUpProbs(e->edges[0]->calced.prev, &rightListPrev);
-	    else
-		doUpProbs(e->edges[0]->up.prev, &rightListPrev);
-	    chooseMedian2(topListPrev, rightListPrev,  &e->mix.prev);
+	    doUpList(e->edges[0]->up.prev, &rightListPrev, e);
+	    doDownList(parent->down[num].prev, &topListPrev, num, e);
 
-	    doDownProbs(parent->down[num].next, &topListNext, num, e);
-	    doUpProbs(e->edges[0]->up.next, &rightListNext);
-	    chooseMedian2(topListNext, rightListNext,  &e->mix.next);
+	    chooseMedian2( rightListPrev,topListPrev,  &e->mix.prev);
 
-	    //doDownList(parent->down[num].prev, &e->mix.prev, num, e);
-	    //doUpList(e->edges[0]->up.prev, &e->mix.prev);
-	    //doDownList(parent->down[num].next, &e->mix.next, num, e);
-	    //doUpList(e->edges[0]->up.next, &e->mix.next);
+	    doUpList(e->edges[0]->up.next, &rightListNext, e);
+	    doDownList(parent->down[num].next, &topListNext, num, e);
+
+	    chooseMedian2( rightListNext, topListNext, &e->mix.next);
 	    }
 	else
 	    {
-	    if (e->edges[0]->calced.prev)
-		doUpProbs(e->edges[0]->calced.prev,&rightListPrev);
-	    else
-		doUpProbs(e->edges[0]->up.prev,&rightListPrev);
-
-	    if (parent->calced.prev)
-		doDownProbs(parent->calced.prev, &topListPrev, num, e);
-	    else
-		doDownProbs(parent->down[num].prev, &topListPrev, num, e);
-
-	    if (e->edges[1]->calced.prev)
-		doUpProbs(e->edges[1]->calced.prev,&leftListPrev);
-	    else
-		doUpProbs(e->edges[1]->up.prev,&leftListPrev);
+	    doUpList(e->edges[0]->up.prev,&rightListPrev, e);
+	    doUpList(e->edges[1]->up.prev,&leftListPrev, e);
+	    doDownList(parent->down[num].prev, &topListPrev, num, e);
 
 	    chooseMedian3(leftListPrev, rightListPrev, topListPrev,  &e->mix.prev);
+
 	    if ((topListPrev || rightListPrev || leftListPrev) && (e->mix.prev == NULL))
 		errAbort("no mix prev");
 
-	    /*
-	    doUpProbs(e->edges[0]->up.next,&rightListNext);
-	    doDownProbs(parent->down[num].next, &topListNext, num, e);
-	    doUpProbs(e->edges[1]->up.next,&leftListNext);
-	    */
-	    if (e->edges[0]->calced.next)
-		{
-		//printf("edge 0 is calced\n");
-		doUpProbs(e->edges[0]->calced.next,&rightListNext);
-		}
-	    else
-		doUpProbs(e->edges[0]->up.next,&rightListNext);
+	    doUpList(e->edges[0]->up.next,&rightListNext, e);
+	    doUpList(e->edges[1]->up.next,&leftListNext, e);
+	    doDownList(parent->down[num].next, &topListNext, num, e);
 
-	    if (parent->calced.next)
-		doDownProbs(parent->calced.next, &topListNext, num, e);
-	    else
-		doDownProbs(parent->down[num].next, &topListNext, num, e);
-
-	    if (e->edges[1]->calced.next)
-		doUpProbs(e->edges[1]->calced.next,&leftListNext);
-	    else
-		doUpProbs(e->edges[1]->up.next,&leftListNext);
 	    chooseMedian3(leftListNext, rightListNext, topListNext,  &e->mix.next);
 
 	    if ((topListNext || rightListNext || leftListNext) && (e->mix.next == NULL))
 		errAbort("no mix next");
 
-	    //doUpList(e->edges[0]->up.prev,&e->mix.prev);
-	    //doDownList(parent->down[num].prev, &e->mix.prev, num, e);
-	    //doUpList(e->edges[1]->up.prev,&e->mix.prev);
-	    //doUpList(e->edges[0]->up.next,&e->mix.next);
-	    //doDownList(parent->down[num].next, &e->mix.next, num, e);
-	    //doUpList(e->edges[1]->up.next,&e->mix.next);
 	    }
 	}
     } 
-
-for(e=g->elements; e; e = e->next)
-    {
-    totalCount = getTotalCount(&e->mix.prev);
-//    printf("neg total %d element %s\n",totalCount,eleName(e));
-    for(p = e->mix.prev; p ; p = p->next)
-	{
-	if (totalCount)
-	    p->count = (double)p->count * 65535/ totalCount;
-	else
-	    p->count = 0;
-//	printf("count %d\n",p->count);
-	if (p->count > 65535)
-	    errAbort("too big");
-	}
-
-
-    totalCount = getTotalCount(&e->mix.next);
- //   printf("pos total %d element %s\n",totalCount,eleName(e));
-    for(p = e->mix.next; p ; p = p->next)
-	{
-	if (totalCount)
-	    p->count = (double)p->count * 65535/ totalCount;
-	else
-	    p->count = 0;
-//	printf("count %d\n",p->count);
-	if (p->count > 65535)
-	    errAbort("too big");
-	}
-    }
-
 
 for(ii=0; ii < node->numEdges; ii++)
     {
@@ -1040,9 +702,6 @@ void reOrderNode(FILE *f, struct genome *g)
 struct element *e, *saveE = NULL;
 boolean inFront = TRUE;
 
-//fprintf(f, ">%s\n",g->name);
-
-
 saveE =  g->breaks->element;
 if (!sameString(saveE->name, "START"))
     {
@@ -1051,23 +710,15 @@ if (!sameString(saveE->name, "START"))
 	errAbort("no START");
     }
 
-
 inFront = TRUE;
 g->elements = NULL;
-//saveE =  g->breaks->element->calced.next->element;
-//inFront = g->breaks->element->calced.next->doFlip;
-//g->elements = saveE;
-//saveE->next = NULL;
 for(e = saveE ; e ; )
     {
     struct possibleEdge *p;
 
     if (!inFront)
-	{
-	//fprintf(f, "-");
 	e->isFlipped = TRUE;
-	}
-    //fprintf(f, "%s ",eleName(e));
+
     if (inFront == TRUE)
 	p = e->calced.next;
     else
@@ -1088,7 +739,6 @@ for(e = saveE ; e ; )
     slAddHead(&g->elements, e);
     }
 slReverse(&g->elements);
-//fprintf(f,"\n");
 }
 
 
@@ -1103,7 +753,6 @@ else
     {
     removeStartStop(g);
     }
-    ;//outElems(f, node);
 
 for(ii=0; ii < node->numEdges; ii++)
     reOrderTree(f, node->edges[ii]);
@@ -1125,10 +774,14 @@ for(ii=0; ii < node->numEdges; ii++)
 for(e = g->elements; e; e = e->next)
     {
     /*
-    e->up.next = e->up.prev = NULL;
-    e->down[0].next = e->down[0].prev = NULL;
-    e->down[1].next = e->down[1].prev = NULL;
-    e->mix.next = e->mix.prev = NULL;
+    e->up.next = NULL;
+    e->up.prev  = NULL;
+    e->down[0].next = NULL;
+    e->down[0].prev  = NULL;
+    e->down[1].next  = NULL;
+    e->down[1].prev  = NULL;
+    e->mix.next  = NULL;
+    e->mix.prev  = NULL;
     */
     if(e->up.next) slFreeList(&e->up.next);
     if(e->up.prev ) slFreeList(&e->up.prev );
@@ -1155,20 +808,13 @@ if (node->numEdges == 0)
 for(ii=0; ii < node->numEdges; ii++)
     findBestEdge(node->edges[ii], pEdge, bestYet, neg, pEvent);
 
-//if (node->parent == 0)
-    //printf("findBestEdge at root\n");
 for(e=g->elements; e; e = e->next)
     {
-//if (node->parent == 0)
-    //printf("looking at element %s\n",eleName(e));
     if ((e->calced.prev == NULL) && (e->mix.prev ))
     {
     purgeList(&e->mix.prev);
     for(edge = e->mix.prev; edge; edge = edge->next)
 	{
-//if (node->parent == 0)
-    //printf("  elem %s count %d bestYest %d\n",eleName(edge->element),edge->count,*bestYet);
-
 	if (edge->count > *bestYet)
 	    {
 	    *bestYet = edge->count;
@@ -1183,8 +829,6 @@ for(e=g->elements; e; e = e->next)
     purgeList(&e->mix.next);
     for(edge = e->mix.next; edge; edge = edge->next)
 	{
-//if (node->parent == 0)
-    //printf("  +count %d bestYest %d\n",edge->count,*bestYet);
 	if (edge->count > *bestYet)
 	    {
 	    *bestYet = edge->count;
@@ -1203,15 +847,11 @@ void setEdge(struct element *e, struct possibleEdge *edge, boolean doFlip, int c
 struct possibleEdge **list;
 struct possibleEdge *newEdge;
 
-//printf("setting edge %d\n",count);
-//printf("%c%s %c%s\n", doFlip ? '-' : ' ',eleName(e), edge->doFlip ? '-' : ' ',eleName(edge->element));
-//if (e->parent == NULL)
-    //printf("setting edge at root\n");
 AllocVar(newEdge);
 newEdge->count = count;
 newEdge->doFlip = edge->doFlip;
 newEdge->element = edge->element;
-//edge->next = 0;
+
 if (doFlip)
     {
     if (e->calced.prev != NULL)
@@ -1233,14 +873,12 @@ if (!edge->doFlip)
     {
     if (edge->element->calced.prev != NULL)
 	errAbort("calced edge already set");
-//printf("-%s %c%s\n",eleName(edge->element), newEdge->doFlip ? '-' : ' ',eleName(newEdge->element));
     edge->element->calced.prev = newEdge;
     }
 else 
     {
     if (edge->element->calced.next != NULL)
 	errAbort("calced edge already set");
-//printf("%s %c%s\n",eleName(edge->element), newEdge->doFlip ? '-' : ' ',eleName(newEdge->element));
     edge->element->calced.next = newEdge;
     }
 }
@@ -1254,8 +892,6 @@ struct element *bestElement;
 int best;
 int totalCount;
 boolean doFlip;
-//double branchLen = atof(lenString);
-//struct genome *g = getGenome(outGroup, outGroup);
 
 setLeafNodePairs(node);
 //setAllPairs(g);
