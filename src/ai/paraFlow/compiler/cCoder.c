@@ -1651,13 +1651,14 @@ else
         {
 	if (type->next == NULL || type->children == NULL)
 	    {
-	    /* Final type - contains type of array cell.  Here we output call. */
+	    /* Final type - contains type of array cell.  Output call. */
 	    fprintf(f, "%s[%d].Array = ", stackName, stack);
 	    fprintf(f, "_pf_multi_dim_array(%s+%d, %d, ", 
 	    	stackName, stack, inittedDims);
 	    codeForType(pfc, f, ppOf->ty);
 	    fprintf(f, ");\n");
 	    lvalOffStack(pfc, f, pp, stack, "=", 1, FALSE);
+	    break;
 	    }
 	else
 	    {
