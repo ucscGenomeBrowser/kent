@@ -278,13 +278,6 @@ if (clDots) printf("\n");
 lineFileClose(&lf);
 }
 
-char *emptyForNull(char *s)
-/* Return "" if s is empty, else return s. */
-{
-if (s == NULL) s = "";
-return s;
-}
-
 struct exon
 /* Keep track of an exon. */
     {
