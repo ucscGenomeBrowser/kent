@@ -2,13 +2,13 @@ import 'animal'
 
 global class numType
     {
-    string name;
-    int num;
+    writable string name;
+    writable int num;
     };
 
-global class abc {int a,b,c;}
-global class def {int d,e,f;}
-global class ad {abc abc, def def;}
+global class abc {writable int a,int b,c;}
+global class def {int d,e, writable int f;}
+global class ad {writable abc abc, def def;}
 
 global string zero = "zero";
 global string one = "one";
