@@ -471,6 +471,7 @@ verbose(2, "Phase 8 - compiling C code\n");
 	}
     dyStringPrintf(dy, " %s ", pfc->runtimeLib);
     dyStringPrintf(dy, "%s ", pfc->jkwebLib);
+    dyStringAppend(dy, "-lm");
     verbose(2, "%s\n", dy->string);
     err = system(dy->string);
     if (err != 0)
