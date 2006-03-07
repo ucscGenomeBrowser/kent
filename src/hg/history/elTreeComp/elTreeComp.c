@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: elTreeComp.c,v 1.3 2006/03/07 22:02:25 braney Exp $";
+static char const rcsid[] = "$Id: elTreeComp.c,v 1.4 2006/03/07 22:26:15 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,21 +18,15 @@ errAbort(
   "arguments:\n"
   "   elementTreeFile      name of file containing element tree\n"
   "options:\n"
-  "   -leaf      just print out leaf species\n"
-  "   -noVers    don't print out the version strings\n"
   "   -sort      sort elements first so element order isn't important\n"
   );
 }
 
 static struct optionSpec options[] = {
-    {"leaf", OPTION_BOOLEAN},
-    {"noVers", OPTION_BOOLEAN},
     {"sort", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
-boolean JustLeaf = FALSE;
-boolean NoVers = FALSE;
 boolean DoSort = FALSE;
 
 
@@ -125,10 +119,6 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 
-if (optionExists("leaf"))
-    JustLeaf = TRUE;
-if (optionExists("noVers"))
-    NoVers = TRUE;
 if (optionExists("sort"))
     DoSort = TRUE;
 

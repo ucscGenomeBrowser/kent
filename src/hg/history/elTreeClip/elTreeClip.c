@@ -7,23 +7,19 @@
 #include "element.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: elTreeClip.c,v 1.1 2006/03/03 21:21:07 braney Exp $";
-
-int psSize = 5*72;
-int labelStep = 1;
-double postScale = 1.0;
-int margin = 0;
+static char const rcsid[] = "$Id: elTreeClip.c,v 1.2 2006/03/07 22:25:55 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "elTreeClip - prints an element tree\n"
+  "elTreeClip - clips out group and collapses inversion nodes\n"
   "usage:\n"
-  "   elTreeClip elementTreeFile ps.out\n"
+  "   elTreeClip inTree outName clipTree\n"
   "arguments:\n"
-  "   elementTreeFile      name of file containing element tree\n"
-  "   ps.out               name of file for postscript output \n"
+  "   inTree      name of file containing element tree\n"
+  "   outName     name of out group\n"
+  "   clipTree    tree without outgroup and with inversion nodes collapsed\n"
   );
 }
 
