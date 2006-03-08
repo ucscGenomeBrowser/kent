@@ -79,6 +79,62 @@ print("How does this look?");
 f.close();
 print(fileReadAll(tmp));
 
+// Do some binary operations.
+f = fileOpen(tmp, "w");
+for (byte i=5; i<10; ++i)
+    f.writeByte(i);
+f.close();
+f = fileOpen(tmp);
+for (byte i=0; i<5; ++i)
+     print(f.readByte());
+f.close();
+
+f = fileOpen(tmp, "w");
+for (byte i=15; i<20; ++i)
+    f.writeShort(i);
+f.close();
+f = fileOpen(tmp);
+for (short i=0; i<5; ++i)
+     print(f.readShort());
+f.close();
+
+f = fileOpen(tmp, "w");
+for (int i=25; i<30; ++i)
+    f.writeInt(i);
+f.close();
+f = fileOpen(tmp);
+for (int i=0; i<5; ++i)
+     print(f.readInt());
+f.close();
+
+f = fileOpen(tmp, "w");
+for (long i=35; i<40; ++i)
+    f.writeLong(i);
+f.close();
+f = fileOpen(tmp);
+for (long i=0; i<5; ++i)
+     print(f.readLong());
+f.close();
+
+f = fileOpen(tmp, "w");
+for (float i=45; i<50; ++i)
+    f.writeFloat(i);
+f.close();
+f = fileOpen(tmp);
+for (float i=0; i<5; ++i)
+     print(f.readFloat());
+f.close();
+
+f = fileOpen(tmp, "w");
+for (double i=55; i<60; ++i)
+    f.writeDouble(i);
+f.close();
+f = fileOpen(tmp);
+for (double i=0; i<5; ++i)
+     print(f.readDouble());
+f.close();
+
+// DO file moves and renames. 
 bit t1Exists = fileExists(tmp), t2Exists = fileExists(tmp2);
 print("exists: $tmp $t1Exists, $tmp2 $t2Exists");
 fileRename(tmp, tmp2);
@@ -89,6 +145,7 @@ fileRemove(tmp2);
 t1Exists = fileExists(tmp), t2Exists = fileExists(tmp2);
 print("After removing $tmp2");
 print("exists: $tmp $t1Exists, $tmp2 $t2Exists");
+
 
 print("Ok, I'm done now.");
 

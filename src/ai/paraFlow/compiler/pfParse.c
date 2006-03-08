@@ -2038,6 +2038,18 @@ if (ppt == pptImport)
 return pp;
 }
 
+static void preventNakedUse(struct pfParse *pp)
+/* Prevent statement that is nothing but a varUse. */
+/* Make sure that expression used as statement has a side effect. */
+{
+switch(pp->type)
+    {
+    case pptNameUse:
+        errAt(pp->tok, "Statement with no effect.");
+	break;
+    }
+}
+
 struct pfParse *pfParseStatement(struct pfCompile *pfc, struct pfParse *parent, 
 	struct pfToken **pTokList, struct pfScope *scope)
 /* Parse a single statement up to but not including semicolon,
@@ -2139,12 +2151,16 @@ switch (tok->type)
     case pftStatic:
     case pftReadable:
     case pftWritable:
-    case pftName:
     case pftPlusPlus:
     case pftMinusMinus:
     case '(':
 	statement = pfParseExpression(pfc, parent, &tok, scope);
 	eatSemi(&tok);
+	break;
+    case pftName:
+	statement = pfParseExpression(pfc, parent, &tok, scope);
+	eatSemi(&tok);
+	preventNakedUse(statement);
 	break;
     case pftPrivate:
     case pftProtected:

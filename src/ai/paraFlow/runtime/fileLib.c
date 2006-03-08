@@ -148,6 +148,90 @@ if (--string->_pf_refCount <= 0)
     string->_pf_cleanup(string, 0);
 }
 
+void _pf_cm_file_writeByte(_pf_Stack *stack)
+/* Write a Byte to file. */
+{
+struct file *file = stack[0].v;
+mustWrite(file->f, &stack[1].Byte, sizeof(stack[1].Byte));
+}
+
+void _pf_cm_file_writeShort(_pf_Stack *stack)
+/* Write a Short to file. */
+{
+struct file *file = stack[0].v;
+mustWrite(file->f, &stack[1].Short, sizeof(stack[1].Short));
+}
+
+void _pf_cm_file_writeInt(_pf_Stack *stack)
+/* Write a Int to file. */
+{
+struct file *file = stack[0].v;
+mustWrite(file->f, &stack[1].Int, sizeof(stack[1].Int));
+}
+
+void _pf_cm_file_writeLong(_pf_Stack *stack)
+/* Write a Long to file. */
+{
+struct file *file = stack[0].v;
+mustWrite(file->f, &stack[1].Long, sizeof(stack[1].Long));
+}
+
+void _pf_cm_file_writeFloat(_pf_Stack *stack)
+/* Write a Float to file. */
+{
+struct file *file = stack[0].v;
+mustWrite(file->f, &stack[1].Float, sizeof(stack[1].Float));
+}
+
+void _pf_cm_file_writeDouble(_pf_Stack *stack)
+/* Write a Double to file. */
+{
+struct file *file = stack[0].v;
+mustWrite(file->f, &stack[1].Double, sizeof(stack[1].Double));
+}
+
+void _pf_cm_file_readByte(_pf_Stack *stack)
+/* Read a Byte from file. */
+{
+struct file *file = stack[0].v;
+mustRead(file->f, &stack[0].Byte, sizeof(stack[0].Byte));
+}
+
+void _pf_cm_file_readShort(_pf_Stack *stack)
+/* Read a Short from file. */
+{
+struct file *file = stack[0].v;
+mustRead(file->f, &stack[0].Short, sizeof(stack[0].Short));
+}
+
+void _pf_cm_file_readInt(_pf_Stack *stack)
+/* Read a Int from file. */
+{
+struct file *file = stack[0].v;
+mustRead(file->f, &stack[0].Int, sizeof(stack[0].Int));
+}
+
+void _pf_cm_file_readLong(_pf_Stack *stack)
+/* Read a Long from file. */
+{
+struct file *file = stack[0].v;
+mustRead(file->f, &stack[0].Long, sizeof(stack[0].Long));
+}
+
+void _pf_cm_file_readFloat(_pf_Stack *stack)
+/* Read a Float from file. */
+{
+struct file *file = stack[0].v;
+mustRead(file->f, &stack[0].Float, sizeof(stack[0].Float));
+}
+
+void _pf_cm_file_readDouble(_pf_Stack *stack)
+/* Read a Double from file. */
+{
+struct file *file = stack[0].v;
+mustRead(file->f, &stack[0].Double, sizeof(stack[0].Double));
+}
+
 static void mustFlush(struct file *file)
 /* Flush file or die trying */
 {
