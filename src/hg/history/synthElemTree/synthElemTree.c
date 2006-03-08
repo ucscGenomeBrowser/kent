@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: synthElemTree.c,v 1.6 2006/03/07 22:04:17 braney Exp $";
+static char const rcsid[] = "$Id: synthElemTree.c,v 1.7 2006/03/08 22:39:45 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,6 +18,8 @@ errAbort(
   "arguments:\n"
   "   outTree      name of file containing element tree\n"
   "options\n"
+  "   -trace          leave version strings the same from gen to gen unless dup'ed\n"
+  "   -seed=num       use num as seed to random number generator\n"
   "   -InfSites       use infinite sites model\n"
   "   -NumElements    number of elements in initial genome\n"
   "   -MaxGeneration  max number of generations to run\n"
@@ -31,9 +33,11 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+    {"trace", OPTION_BOOLEAN},
     {"InfSites", OPTION_BOOLEAN},
     {"NumElements", OPTION_INT},
-    {"MaxGeneration", OPTION_INT},
+    {"seed", OPTION_INT}, 
+    {"MaxGeneration", OPTION_INT}, 
     {"MaxGenomes", OPTION_INT},
     {"SpeciesWt", OPTION_INT},
     {"DelWt", OPTION_INT},
@@ -43,6 +47,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
+boolean Trace = FALSE;
 boolean InfSites = FALSE;
 struct hash *InfHash = NULL;
 int OutLength = 8;
@@ -96,7 +101,10 @@ for(p = g->elements; p; p=p->next)
     e->species = g1->name;
     e->name = p->name;
     e->isFlipped = p->isFlipped;
-    safef(buffer, sizeof(buffer), "%s",nextVersion());
+    if (Trace)
+	safef(buffer, sizeof(buffer), "%s",p->version);
+    else
+	safef(buffer, sizeof(buffer), "%s",nextVersion());
     e->version = cloneString(buffer);
     eleAddEdge(p, e);
 
@@ -105,7 +113,10 @@ for(p = g->elements; p; p=p->next)
     e->species = g2->name;
     e->name = p->name;
     e->isFlipped = p->isFlipped;
-    safef(buffer, sizeof(buffer), "%s",nextVersion());
+    if (Trace)
+	safef(buffer, sizeof(buffer), "%s",p->version);
+    else
+	safef(buffer, sizeof(buffer), "%s",nextVersion());
     e->version = cloneString(buffer);
     eleAddEdge(p, e);
     }
@@ -212,7 +223,10 @@ for(pe = parent->elements; pe ; pe = pe->next)
     ce->species = child->name;
     ce->name = pe->name;
     ce->isFlipped = pe->isFlipped;
-    safef(buffer, sizeof(buffer), "%s",nextVersion());
+    if (Trace)
+	safef(buffer, sizeof(buffer), "%s",pe->version);
+    else
+	safef(buffer, sizeof(buffer), "%s",nextVersion());
     ce->version = cloneString(buffer);
     eleAddEdge(pe, ce);
     }
@@ -313,6 +327,7 @@ struct element *getElementCopy(struct element *list, int r, int n)
 int ii;
 struct element *copy = NULL;
 struct element *p, *e;
+char buffer[512];
 
 for(ii=0, p = list; (ii < r ) && p; ii++,p=p->next)
     ;
@@ -326,7 +341,15 @@ for(; (ii < r + n + 1  ) && p; ii++,p=p->next)
     e->species = p->species;
     e->isFlipped = p->isFlipped;
     e->name = p->name;
-    e->version = cloneString(nextVersion());
+    if (Trace)
+	{
+	safef(buffer, sizeof(buffer), "%s.1",p->version);
+	e->version = cloneString(buffer);
+	safef(buffer, sizeof(buffer), "%s.0",p->version);
+	p->version = cloneString(buffer);
+	}
+    else
+	e->version = cloneString(nextVersion());
     e->parent = p->parent;
     slAddHead(&copy, e);
     }
@@ -581,7 +604,9 @@ outElementTrees(f, root);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+int seed = time(NULL);
 optionInit(&argc, argv, options);
+
 if (argc != 2)
     usage();
 
@@ -592,6 +617,8 @@ SpeciesWt = optionInt( "SpeciesWt", 0);
 DelWt = optionInt( "DelWt", 0);
 DupWt = optionInt( "DupWt", 0);
 NoWt = optionInt( "NoWt", 0);
+seed = optionInt( "seed", 0);
+Trace = optionExists("trace");
 InverseWt = optionInt( "InverseWt", 0);
 InfSites = optionExists( "InfSites");
 if (InfSites)
@@ -600,7 +627,7 @@ if (InfSites)
 if (0 == SpeciesWt + DupWt + InverseWt + DelWt)
     errAbort("must specify at least one weight");
 
-srandom(getpid());
+srandom(seed);
 synthElemTree(argv[1]);
 return 0;
 }
