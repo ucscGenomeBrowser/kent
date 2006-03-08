@@ -12,7 +12,6 @@
 
 #include "common.h"
 
-#include "chromInfo.h"
 #include "dystring.h"
 #include "hash.h"
 #include "hdb.h"
@@ -20,10 +19,9 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpFinalTable.c,v 1.3 2006/02/23 02:29:15 heather Exp $";
+static char const rcsid[] = "$Id: snpFinalTable.c,v 1.4 2006/03/08 21:44:40 heather Exp $";
 
 static char *snpDb = NULL;
-static struct hash *chromHash = NULL;
 FILE *outputFileHandle = NULL;
 
 char *strandStrings[] = {
@@ -60,35 +58,6 @@ errAbort(
     "Also create exceptions table from exceptions files.\n"
     "usage:\n"
     "    snpFinalTable snpDb\n");
-}
-
-struct hash *loadChroms()
-/* hash from UCSC chromInfo */
-{
-struct hash *ret;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char *randomSubstring = NULL;
-struct chromInfo *el;
-char tableName[64];
-
-ret = newHash(0);
-safef(query, sizeof(query), "select chrom, size from chromInfo");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    randomSubstring = strstr(row[0], "random");
-    if (randomSubstring != NULL) continue;
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", row[0]);
-    if (!hTableExists(tableName)) continue;
-    el = chromInfoLoad(row);
-    hashAdd(ret, el->chrom, (void *)(& el->size));
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ret;
 }
 
 char *validString(int validCode)
@@ -288,9 +257,8 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 /* Query all chrN_snpTmp tables; write to snp125.tab. */
 {
-struct hashCookie cookie;
-struct hashEl *hel;
-char *chromName;
+
+struct slName *chromList, *chromPtr;
 char tableName[64];
 
 if (argc != 2)
@@ -298,31 +266,28 @@ if (argc != 2)
 
 snpDb = argv[1];
 hSetDb(snpDb);
-
-chromHash = loadChroms();
+chromList = hAllChromNamesDb(snpDb);
 
 outputFileHandle = mustOpen("snp125.tab", "w");
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
     if (!hTableExists(tableName)) continue;
-    verbose(1, "chrom = %s\n", chromName);
-    readSnps(chromName);
+    verbose(1, "chrom = %s\n", chromPtr->name);
+    readSnps(chromPtr->name);
     }
 
 carefulClose(&outputFileHandle);
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
     if (!hTableExists(tableName)) continue;
-    loadDatabase(chromName);
+    loadDatabase(chromPtr->name);
     }
 
-doExceptions();
+// doExceptions();
 
 return 0;
 }
