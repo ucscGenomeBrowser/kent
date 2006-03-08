@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: joinerCheck.c,v 1.35 2006/02/28 01:02:42 hartera Exp $";
+static char const rcsid[] = "$Id: joinerCheck.c,v 1.36 2006/03/08 23:11:47 hartera Exp $";
 
 /* Variable that are set from command line. */
 char *fieldListIn;
@@ -73,14 +73,6 @@ for (db = jf->dbList; db != NULL; db = db->next)
     fprintf(f, "%s", db->name);
     }
 fprintf(f, ".%s.%s", jf->table, jf->field);
-}
-
-static char *emptyForNull(char *s)
-/* Return "" for NULL strings, otherwise string itself. */
-{
-if (s == NULL)
-    s = "";
-return s;
 }
 
 void checkOneDependency(struct joiner *joiner,
