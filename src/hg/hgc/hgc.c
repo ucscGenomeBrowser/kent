@@ -192,7 +192,7 @@
 #include "hgMut.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.998 2006/03/06 17:56:52 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.999 2006/03/08 00:03:32 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -10590,21 +10590,19 @@ char stsClone[45];
 int i;
 struct psl *pslList = NULL, *psl;
 int pslStart;
+boolean hasBin = FALSE;
 
 /* Print out non-sequence info */
 sprintf(title, "STS Marker %s", marker);
 cartWebStart(cart, title);
 
 /* Find the instance of the object in the bed table */ 
-sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
-               "AND chrom = '%s' AND chromStart = %d "
-               "AND chromEnd = %d",
-	table, marker, seqName, start, end);
-sr = sqlMustGetResult(conn, query);
+safef(query, sizeof(query), "name = '%s'", marker);
+sr = hRangeQuery(conn, table, seqName, start, end, query, &hasBin);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    stsMapRatStaticLoad(row, &stsRow);
+    stsMapRatStaticLoad(row+hasBin, &stsRow);
     /* Find the instance of the object in the stsInfo table */ 
     sqlFreeResult(&sr);
     sprintf(query, "SELECT * FROM stsInfoRat WHERE identNo = '%d'", stsRow.identNo);
@@ -10666,13 +10664,14 @@ if (row != NULL)
 	sprintf(stsClone, "%d_%s_clone", infoRow->identNo, infoRow->name);
 
 	/* find sts in primer alignment info */
-	sprintf(query, "SELECT * FROM all_sts_primer WHERE  qName = '%s' AND  tStart = '%d' AND tEnd = '%d'",stsPrimer, start, end); 
-	sr1 = sqlGetResult(conn1, query);
+	safef(query, sizeof(query), "qName = '%s'", stsPrimer); 
+	sr1 = hRangeQuery(conn1, "all_sts_primer", seqName, start, end, query,
+			  &hasBin);
 	i = 0;
 	pslStart = 0;
 	while ((row = sqlNextRow(sr1)) != NULL )
 	    {  
-	    psl = pslLoad(row);
+	    psl = pslLoad(row+hasBin);
 	    fflush(stdout);
 	    if ((sameString(psl->tName, seqName)) && (abs(psl->tStart - start) < 1000))
 		pslStart = psl->tStart;
@@ -10690,13 +10689,14 @@ if (row != NULL)
 	stsInfoRatFree(&infoRow);
        
 	/* Find sts in clone sequece alignment info */
-        sprintf(query1, "SELECT * FROM all_sts_primer WHERE  qName = '%s' AND  tStart = '%d' AND tEnd = '%d'",stsClone, start, end);
-	sr2 = sqlGetResult(conn1, query1);
+        safef(query1, sizeof(query1), "qName = '%s'", stsClone);
+	sr2 = hRangeQuery(conn1, "all_sts_primer", seqName, start, end, query1,
+			  &hasBin);
 	i = 0;
 	pslStart = 0;
 	while ((row = sqlNextRow(sr2)) != NULL )
 	    {  
-	    psl = pslLoad(row);
+	    psl = pslLoad(row+hasBin);
 	    fflush(stdout);
 	    if ((sameString(psl->tName, seqName)) && (abs(psl->tStart - start) < 1000))
 		pslStart = psl->tStart;
@@ -10723,13 +10723,11 @@ if (row != NULL)
 	sqlFreeResult(&sr);
 	printf("<H4>Other locations found for %s in the genome:</H4>\n", marker);
 	printf("<TABLE>\n");
-	sprintf(query, "SELECT * FROM %s WHERE name = '%s' "
-                       "AND (chrom != '%s' OR chromStart != %d OR chromEnd != %d)",
-		table, marker, seqName, start, end); 
-	sr = sqlGetResult(conn,query);
+	safef(query, sizeof(query), "name = '%s'", marker);
+	sr = hRangeQuery(conn, table, seqName, start, end, query, &hasBin);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {
-	    stsMapRatStaticLoad(row, &stsRow);
+	    stsMapRatStaticLoad(row+hasBin, &stsRow);
 	    printf("<TR><TD>%s:</TD><TD><A HREF = \"../cgi-bin/hgc?hgsid=%d&o=%u&t=%d&g=stsMapRat&i=%s&c=%s\" target=_blank>%d</A></TD></TR>\n",
 		   stsRow.chrom, hgsid, stsRow.chromStart,stsRow.chromEnd, stsRow.name, stsRow.chrom,(stsRow.chromStart+stsRow.chromEnd)>>1);
 	    }
