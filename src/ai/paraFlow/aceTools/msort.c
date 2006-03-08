@@ -18,11 +18,17 @@
  *-------------------------------------------------------------------
  */
 
-/* $Id: msort.c,v 1.1 2006/03/08 09:30:13 mieg Exp $ */
+/* $Id: msort.c,v 1.2 2006/03/08 09:57:23 mieg Exp $ */
 
-/* #include "regular.h" */
+/* acedb include
+  #include "regular.h" 
+*/
+/* standard C include
 #include <memory.h>
 #include <malloc.h>
+*/
+/* paraflow include */
+#include "common.h"
 
 static void mDoSortInt (int *b, int n, int (*cmp)(void *va, void *vb), int *buf)
 {
@@ -99,7 +105,10 @@ void mSort (void *b, int n, int s, int (*cmp)(void *va, void *vb))
   if (size < 4*1024)
     buf = sBuf ;
   else
-    buf = mBuf = (char *) malloc (size) ;
+    {
+      /* buf = mBuf = (char *) malloc (size) ; */
+      buf = mBuf = (char *) needLargeZeroedMem(size);
+    }
 
   if (s == s_of_i &&   /* aligned integers.  Use direct int pointers.  */
       (((char *)b - (char *) 0) % s_of_i) == 0)
@@ -107,7 +116,8 @@ void mSort (void *b, int n, int s, int (*cmp)(void *va, void *vb))
   else
     mDoSort ((char *)b, n, s, cmp, buf) ;
 
-  free (mBuf) ;
+  /* if (mBuf) free (mBuf) ; */ 
+  if (mBuf) freeMem (mBuf) ;
 }
 
 /***********************************************************/
