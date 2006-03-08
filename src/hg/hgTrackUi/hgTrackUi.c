@@ -23,6 +23,7 @@
 #include "phyloTree.h"
 #include "humanPhenotypeUi.h"
 #include "hgMutUi.h"
+#include "landmarkUi.h"
 #include "hgConfig.h"
 
 #define CDS_HELP_PAGE "/goldenPath/help/hgCodonColoring.html"
@@ -30,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.258 2006/03/05 06:21:51 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.259 2006/03/08 17:48:35 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -457,6 +458,19 @@ printf("</TABLE>\n");
 
 if (startsWith("hapmapLd", tdb->tableName))
     printf("<BR><B>Populations:</B>\n");
+}
+
+void landmarkUi (struct trackDb *tdb)
+/* print the controls */
+{
+int i = 0; /* variable to walk through array */
+
+printf("<BR /><B>Exclude region type</B><BR />");
+for (i = 0; i < landmarkTypeSize; i++)
+    {
+    cartMakeCheckBox(cart, landmarkTypeString[i], FALSE);
+    printf (" %s<BR />", landmarkTypeLabel[i]);
+    }
 }
 
 void hgMutIdControls (struct trackDb *tdb) 
@@ -1915,6 +1929,8 @@ else if (sameString(track, "transRegCode"))
     transRegCodeUi(tdb);
 else if (sameString(track, "hgMut"))
     hgMutUi(tdb);
+else if (sameString(track, "landmark"))
+    landmarkUi(tdb);
 else if (sameString(track, "humanPhenotype"))
     humanPhenotypeUi(tdb);
 else if (tdb->type != NULL)

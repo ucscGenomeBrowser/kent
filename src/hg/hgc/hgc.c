@@ -188,11 +188,11 @@
 #include "dvXref2.h"
 #include "omimTitle.h"
 #include "dless.h"
-#include "humPhen.h"
 #include "hgMut.h"
+#include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.999 2006/03/08 00:03:32 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1000 2006/03/08 17:48:50 giardine Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -934,13 +934,14 @@ struct sqlResult *sr;
 char **row;
 boolean firstTime = TRUE;
 char *showTopScorers = trackDbSetting(tdb, "showTopScorers");
+char *escapedName = sqlEscapeString(item);
 
 hFindSplitTable(seqName, tdb->tableName, table, &hasBin);
 if (bedSize <= 3)
     sprintf(query, "select * from %s where chrom = '%s' and chromStart = %d", table, seqName, start);
 else
     sprintf(query, "select * from %s where name = '%s' and chrom = '%s' and chromStart = %d",
-	    table, item, seqName, start);
+	    table, escapedName, seqName, start);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -17312,6 +17313,38 @@ sqlFreeResult(&sr3);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
+void doLandmark (struct trackDb *tdb, char *itemName) 
+{
+char *table = tdb->tableName;
+struct landmark *r;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+
+/* postion, band, genomic size */
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    r = landmarkLoad(row);
+    printf("<B>Landmark name:</B> %s <BR />\n", r->name);
+    bedPrintPos((struct bed *)r, 3);
+    printf("<B>Region type:</B> %s <BR />\n", r->regionType);
+    }
+sqlFreeResult(&sr);
+
+/* fetch and print the source? */
+landmarkFree(&r);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
 
 void doHgMut (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Human Mutation track */
@@ -17454,106 +17487,6 @@ if (prevClass != NULL)
 printf("</DD></DL>\n");
 
 hgMutFree(&mut);
-printTrackHtml(tdb);
-hFreeConn(&conn);
-}
-
-void doHumPhen (struct trackDb *tdb, char *itemName)
-/* this prints the detail page for the Human Phenotype track */
-{
-char *table = tdb->tableName;
-struct humanPhenotypeLSDB *humPhen;
-struct humPhenLink *link;
-struct humPhenAlias alias;
-struct humPhenEthnic ethnic;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char query[256];
-char *linkArray[50], *idArray[50];  /* assume not more than 50 links per variant */
-int i, cnt = 0, idCnt = 0;
-
-int start = cartInt(cart, "o");
-
-genericHeader(tdb, itemName);
-
-printf("<B>HGVS name:</B> %s <BR>\n", itemName);
-/* postion, band, genomic size */
-safef(query, sizeof(query),
-      "select * from %s where chrom = '%s' and "
-      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
-sr = sqlGetResult(conn, query);
-if ((row = sqlNextRow(sr)) != NULL)
-    {
-    /* need in bed struct for print sub */
-    struct bed *copy = NULL;
-    AllocVar(copy);
-    humPhen = humanPhenotypeLSDBLoad(row);
-    copy->chrom = cloneString(humPhen->chrom);
-    copy->chromStart = humPhen->chromStart;
-    copy->chromEnd = humPhen->chromEnd;
-    bedPrintPos(copy, 3);
-    bedFree(&copy);
-    }
-sqlFreeResult(&sr);
-
-/* print location and mutation type fields */
-printf("<B>location:</B> %s<BR />\n", humPhen->location);
-printf("<B>type:</B> %s<BR />\n", humPhen->baseChangeType);
-
-/* get list of database keys from humPhen */
-cnt = chopString(cloneString(humPhen->linkDbs), ",", linkArray, ArraySize(linkArray));
-idCnt = chopString(cloneString(humPhen->dbId), ",", idArray, ArraySize(idArray));
-if (cnt != idCnt) 
-    errAbort("dbId and linkDbs have different counts");
-printf("<DL><DT><B>Outside Link(s):</B>\n<DD> ");
-for (i = 0; i < cnt; i++) 
-    {
-    char *url;
-    safef(query, sizeof(query),
-          "select * from humPhenLink where linkDb = '%s'", linkArray[i]);
-    link = humPhenLinkLoadByQuery(conn, query);
-    if (link != NULL) 
-        {
-        url = replaceChars(link->url, "$$", idArray[i]);
-        printf("<A HREF=%s", url);
-        printf(" Target=_blank> %s </A> <BR />\n", link->linkDisplayName);
-        freeMem(url);
-        }
-    }
-
-printf("<DT><B>Aliases:</B><DD>\n ");
-safef(query, sizeof(query),
-      "select * from humPhenAlias where dbId = '%s'", idArray[0]);
-sr = sqlGetResult(conn, query);
-i = 0;  /* count lines, print message if none */
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    i++;
-    humPhenAliasStaticLoad(row, &alias);
-    printf("%s<BR />\n", alias.name);
-    }
-sqlFreeResult(&sr);
-if (i == 0) 
-    printf("Not available<BR />\n");
-
-printf("<DT><B>Ethnicity/Nationality:</B><DD>\n ");
-safef(query, sizeof(query),
-      "select * from humPhenEthnic where dbId = '%s'", idArray[0]);
-sr = sqlGetResult(conn, query);
-i = 0;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    i++;
-    humPhenEthnicStaticLoad(row, &ethnic);
-    printf("%s<BR />\n", ethnic.ethnic);
-    }
-sqlFreeResult(&sr);
-if (i == 0)
-    printf("Not available<BR />\n");
-printf("</DL>\n");
-
-humanPhenotypeLSDBFree(&humPhen);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
@@ -18450,13 +18383,13 @@ else if (startsWith("hapmapSnps", track))
     {
     doHapmapSnps(tdb, item);
     }
-else if (startsWith("humanPhenotype", track))
-    {
-    doHumPhen(tdb, item);
-    }
 else if (sameString("hgMut", track))
     {
     doHgMut(tdb, item);
+    }
+else if (sameString("landmark", track))
+    {
+    doLandmark(tdb, item);
     }
 else if (sameString("allenBrainAli", track))
     {

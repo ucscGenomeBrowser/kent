@@ -1269,13 +1269,13 @@ visibility hide
 color 150,0,150
 type bed 4 +
 
-track Landmark
+track landmark
 shortLabel Landmarks
 longLabel Compilation of landmarks from locus experts
-group varRep
-priority 144.75
+group regulation
+priority 97
 visibility hide
-color 150,0,150
+color 30,130,210
 type bed 4 +
 
 track chainRheMac2

@@ -94,14 +94,15 @@
 #include "retroGene.h"
 #include "dless.h"
 #include "humPhen.h"
-#include "humanPhenotypeUi.h"
 #include "liftOver.h"
 #include "hgConfig.h"
 #include "hgMut.h"
 #include "hgMutUi.h"
+#include "landmark.h"
+#include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1078 2006/03/04 11:05:16 daryl Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1079 2006/03/08 17:48:42 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9516,44 +9517,6 @@ struct hgMut *el = item;
     //}
 }
 
-Color humPhenColor(struct track *tg, void *item, struct vGfx *vg)
-/* color items by type */
-{
-struct humanPhenotypeLSDB *el = item;
-
-/* warning hardcoded list of clinical links */
-if (strstr(el->linkDbs, "GenPhen")) 
-    {
-    if (sameString(el->baseChangeType, "substitution"))
-        return vgFindColorIx(vg, 204, 0, 255);
-    else if (sameString(el->baseChangeType, "deletion"))
-        return MG_BLUE;
-    else if (sameString(el->baseChangeType, "insertion"))
-        return vgFindColorIx(vg, 0, 153, 0); /* dark green */
-    else if (sameString(el->baseChangeType, "complex"))
-        return vgFindColorIx(vg, 221, 0, 0); /* dark red */
-    else if (sameString(el->baseChangeType, "duplication"))
-        return vgFindColorIx(vg, 255, 153, 0);
-    else
-        return MG_BLACK;
-    }
-else
-    {
-    if (sameString(el->baseChangeType, "substitution"))
-        return vgFindColorIx(vg, 204, 153, 255);   /* light purple */
-    else if (sameString(el->baseChangeType, "deletion"))
-        return vgFindColorIx(vg, 102, 204, 255); /* light blue */
-    else if (sameString(el->baseChangeType, "insertion"))
-        return vgFindColorIx(vg, 0, 255, 0);     /* light green */
-    else if (sameString(el->baseChangeType, "complex"))
-        return vgFindColorIx(vg, 255, 102, 102); /* light red, pink 153 too light?*/
-    else if (sameString(el->baseChangeType, "duplication"))
-        return vgFindColorIx(vg, 255, 204, 0);   /* light orange */
-    else
-        return vgFindColorIx(vg, 153, 153, 153); /* gray */
-    }
-}
-
 boolean hgMutFilterSrc(struct hgMut *el, struct hgMutSrc *srcList)
 /* Check to see if this element should be excluded. */
 {
@@ -9605,41 +9568,7 @@ for (cnt = 0; cnt < variantTypeSize; cnt++)
 return TRUE;
 }
 
-boolean humPhenFilterType(struct humanPhenotypeLSDB *el)
-/* Check to see if this element should be excluded. */
-{
-int cnt = 0;
-for (cnt = 0; cnt < variantTypeSize; cnt++)
-    {
-    if (cartVarExists(cart, variantTypeString[cnt]) && 
-        cartString(cart, variantTypeString[cnt]) != NULL &&
-        differentString(cartString(cart, variantTypeString[cnt]), "0") &&
-        sameString(variantTypeDbValue[cnt], el->baseChangeType))
-        {
-        return FALSE;
-        }
-    }
-return TRUE;
-}
-
 boolean hgMutFilterLoc(struct hgMut *el)
-/* Check to see if this element should be excluded. */
-{
-int cnt = 0;
-for (cnt = 0; cnt < variantLocationSize; cnt++)
-    {
-    if (cartVarExists(cart, variantLocationString[cnt]) &&
-        cartString(cart, variantLocationString[cnt]) != NULL &&
-        differentString(cartString(cart, variantLocationString[cnt]), "0") &&
-        sameString(variantLocationDbValue[cnt], el->location))
-        {
-        return FALSE;
-        }
-    }
-return TRUE;
-}
-
-boolean humPhenFilterLoc(struct humanPhenotypeLSDB *el)
 /* Check to see if this element should be excluded. */
 {
 int cnt = 0;
@@ -9759,6 +9688,48 @@ if (vis != tvDense)
     }
 }
 
+boolean landmarkFilterType (struct landmark *el) 
+/* filter landmarks on regionType field */
+{
+int cnt = 0;
+for (cnt = 0; cnt < landmarkTypeSize; cnt++)
+    {
+    if (cartVarExists(cart, landmarkTypeString[cnt]) &&
+        cartString(cart, landmarkTypeString[cnt]) != NULL &&
+        differentString(cartString(cart, landmarkTypeString[cnt]), "0") &&
+        sameString(landmarkTypeDbValue[cnt], el->regionType))
+        {
+        return FALSE;
+        }
+    }
+return TRUE;
+}
+
+void loadLandmark (struct track *tg)
+/* loads the landmark track */
+{
+struct landmark *list = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int rowOffset;
+
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+                 NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct landmark *el = landmarkLoad(row);
+    if (!landmarkFilterType(el)) 
+        landmarkFree(&el);
+    else
+        slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+tg->items = list;
+hFreeConn(&conn);
+}
+
 char *hgMutName(struct track *tg, void *item)
 /* Get name to use for hgMut item. */
 {
@@ -9773,38 +9744,6 @@ struct hgMut *el = item;
 return el->mutId;
 }
 
-void loadHumPhen(struct track *tg)
-/* Load human phenotype with filter */
-{
-struct humanPhenotypeLSDB *list = NULL;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-int rowOffset;
-
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
-                 NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    struct humanPhenotypeLSDB *el = humanPhenotypeLSDBLoad(row);
-    if (!humPhenFilterType(el)) 
-        {
-        humanPhenotypeLSDBFree(&el);
-        }
-    else if (!humPhenFilterLoc(el))
-        {
-        humanPhenotypeLSDBFree(&el);
-        }
-    else
-        {
-        slAddHead(&list, el);
-        }
-    }
-sqlFreeResult(&sr);
-slReverse(&list);
-tg->items = list;
-}
-
 void hgMutMethods (struct track *tg)
 /* Simple exclude/include filtering on human mutation items and color. */
 {
@@ -9815,12 +9754,10 @@ tg->itemName = hgMutName;
 tg->mapItemName = hgMutMapName;
 }
 
-void humanPhenotypeMethods (struct track *tg)
-/* Simple exclude/include filtering on human phenotype items. */
+void landmarkMethods (struct track *tg)
+/* load so can allow filtering on type */
 {
-tg->loadItems = loadHumPhen;
-tg->itemColor = humPhenColor;
-tg->itemNameColor = humPhenColor;
+tg->loadItems = loadLandmark;
 }
 
 void loadBed12Source(struct track *tg)
@@ -10971,8 +10908,8 @@ registerTrackHandler("encodeGencodeIntron", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronJun05", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
-registerTrackHandler("humanPhenotype", humanPhenotypeMethods);
 registerTrackHandler("hgMut", hgMutMethods);
+registerTrackHandler("landmark", landmarkMethods);
 registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 

@@ -20370,4 +20370,20 @@ TMPDIR=/scratch/tmp
     # requires visiGene probe track vgImageProbes be created first
     knownToVisiGene hg17 -fromProbePsl=vgImageProbes
 
+# Add Landmark track (2006-03-08 giardine)
+# Note: This track is for regulatory regions and other landmarks that are not
+    #included in other tracks.  It is being gathered from the locus experts
+    #that are contributing data to the Human Mutation track.  This should
+    #be helpful in understanding the data in the mutation track.
+#table definitions for autoSql
+autoSql landmark.as landmark -dbLink
+#change index on bin to normal index not primary key
+#move bin in struct so works as bed 4+
+#copy autoSql files to hg/lib and hg/inc (add .o file to makefile)
+#cat together landmark files from sources in landmark.bed then sort
+grep "^chr" landmark.bed | sort -k1,1 -k2,2n > sortedLandmark.bed
+#loading
+hgsql hg17 < landmark.sql
+hgLoadBed hg17 landmark sortedLandmark.bed -noSort -oldTable -tab
+#add to trackDb.ra file (human hg17 level)
 
