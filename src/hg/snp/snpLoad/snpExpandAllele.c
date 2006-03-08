@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.19 2006/03/06 19:46:55 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.20 2006/03/08 22:01:49 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -27,23 +27,24 @@ errAbort(
 }
 
 
-struct hash *loadChroms(char *contigGroup)
+struct slName *loadChroms(char *contigGroup)
 /* hash all chromNames that match contigGroup */
 {
-struct hash *ret;
+struct slName *ret = NULL;
+struct slName *el = NULL;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char chromName[64];
 
-ret = newHash(0);
 safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     safef(chromName, sizeof(chromName), "%s", row[0]);
-    hashAdd(ret, chromName, NULL);
+    el = slNameNew(chromName);
+    slAddHead(&ret, el);
     }
 sqlFreeResult(&sr);
 
@@ -52,7 +53,8 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     safef(chromName, sizeof(chromName), "%s_random", row[0]);
-    hashAdd(ret, chromName, NULL);
+    el = slNameNew(chromName);
+    slAddHead(&ret, el);
     }
 sqlFreeResult(&sr);
 
@@ -311,9 +313,7 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 /* read chrN_snpTmp, handle allele, rewrite to individual chrom tables */
 {
-struct hashCookie cookie;
-struct hashEl *hel;
-char *chromName;
+struct slName *chromList, *chromPtr;
 
 if (argc != 3)
     usage();
@@ -322,8 +322,8 @@ snpDb = argv[1];
 contigGroup = argv[2];
 hSetDb(snpDb);
 
-chromHash = loadChroms(contigGroup);
-if (chromHash == NULL) 
+chromList = loadChroms(contigGroup);
+if (chromList == NULL) 
     {
     verbose(1, "couldn't get chrom info\n");
     return 1;
@@ -332,14 +332,13 @@ if (chromHash == NULL)
 errorFileHandle = mustOpen("snpExpandAllele.errors", "w");
 exceptionFileHandle = mustOpen("snpExpandAllele.exceptions", "w");
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
-    verbose(1, "chrom = %s\n", chromName);
-    doExpandAllele(chromName);
+    verbose(1, "chrom = %s\n", chromPtr->name);
+    doExpandAllele(chromPtr->name);
     /* snpExpandAllele doesn't change the table format, so just delete old rows */
-    cleanDatabaseTable(chromName);
-    loadDatabase(chromName);
+    cleanDatabaseTable(chromPtr->name);
+    loadDatabase(chromPtr->name);
     verbose(2, "------------------------------\n");
     }
 
