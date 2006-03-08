@@ -2575,6 +2575,7 @@ fprintf(f, "%s = (", exceptionVarName->string);
 codeBaseType(pfc, f, exceptionType->base);
 fprintf(f, ")(_pf_err->err);\n");
 codeStatement(pfc, f, catchBody);
+codeCleanupVarNamed(pfc, f, exceptionType, exceptionVarName->string);
 fprintf(f, "}\n");
 fprintf(f, "  /* catch block should end here. */\n");
 fprintf(f, "}\n");
