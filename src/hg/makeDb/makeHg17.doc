@@ -20361,3 +20361,13 @@ TMPDIR=/scratch/tmp
     hgLoadWiggle -verbose=2 hg17 monDom4PileUp monDom4PileUps.wig
     hgLoadWiggle -verbose=2 monDom4 hg17PileUps hg17PileUps.wig
     #	add wiggle track type entries to the respective trackDb.ra files
+
+
+
+# UPDATE hg17 knownToVisiGene (2006-03-07 galt)
+# Create table that maps between known genes and visiGene database 
+    # mapping to other species such as mouse, zebrafish, frog
+    # requires visiGene probe track vgImageProbes be created first
+    knownToVisiGene hg17 -fromProbePsl=vgImageProbes
+
+

@@ -211,9 +211,9 @@ hgsqldump visiGene -T /san/sanvol1/visiGene/dump/visiGene.20060220
 #load into visiGene db
 visiGeneLoad -database=visiGene output/aba.ra output/aba.tab /dev/null
 
-# RE-MAKE knownToVisiGene tables 
-knownToVisiGene hg17
-knownToVisiGene mm7
+# RE-MAKE knownToVisiGene tables (see respective makedocs for hg17,mm7)
+#knownToVisiGene hg17 -fromProbePsl=vgImageProbes
+#knownToVisiGene mm7
 
 # Manually added several researchers names to the contributor and submissionContributor tables
 # at the request of Susan Sunkin as well as updating the text for contributor, copyright, acknowledgements.

@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.48 2006/02/27 16:00:53 angie Exp $"
+#	"$Id: makeMm7.doc,v 1.49 2006/03/08 00:47:46 galt Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -11823,4 +11823,7 @@ TMPDIR=/scratch/tmp
     rm -f /cluster/data/mm7/bed/blastz.rn4
     ln -s blastz.rn4.2006-02-23 /cluster/data/mm7/bed/blastz.rn4
 
+
+# Update table maps known genes to visiGene images (2006-03-07 galt)
+    knownToVisiGene mm7
 
