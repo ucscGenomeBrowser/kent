@@ -3,11 +3,10 @@
  * Create a hash from ContigLocusIdCondense table. */
 #include "common.h"
 
-#include "chromInfo.h"
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpFunction.c,v 1.6 2006/03/08 20:57:19 heather Exp $";
+static char const rcsid[] = "$Id: snpFunction.c,v 1.7 2006/03/08 20:59:10 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *functionHash = NULL;
@@ -22,31 +21,6 @@ errAbort(
 }
 
 
-struct hash *loadChroms()
-/* hash from UCSC chromInfo */
-{
-struct hash *ret;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-struct chromInfo *el;
-char tableName[64];
-
-ret = newHash(0);
-safef(query, sizeof(query), "select chrom, size from chromInfo");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", row[0]);
-    if (!hTableExists(tableName)) continue;
-    el = chromInfoLoad(row);
-    hashAdd(ret, el->chrom, (void *)(& el->size));
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ret;
-}
 
 struct hash *createFunctionHash()
 {
