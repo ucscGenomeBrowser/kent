@@ -66,11 +66,6 @@ void *hashRemove(struct hash *hash, char *name);
 struct hashEl *hashAddUnique(struct hash *hash, char *name, void *val);
 /* Add new element to hash table. Squawk and die if is already in table. */
 
-struct hashEl *hashAddReplace(struct hash *hash, char *name, void *val);
-/* Add an element to hash table. If there is already an element stored */ 
-/* for this key (name), then replace the existing element.*/
-/* Avoids having several entries for one name in the hash table. */
-
 struct hashEl *hashAddSaveName(struct hash *hash, char *name, void *val, char **saveName);
 /* Add new element to hash table.  Save the name of the element, which is now
  * allocated in the hash table, to *saveName.  A typical usage would be:
