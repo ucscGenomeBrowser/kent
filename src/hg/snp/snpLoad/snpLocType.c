@@ -11,11 +11,10 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.16 2006/03/06 19:31:02 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.17 2006/03/08 22:07:00 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
-static struct hash *chromHash = NULL;
 FILE *errorFileHandle = NULL;
 FILE *exceptionFileHandle = NULL;
 
@@ -43,24 +42,24 @@ errAbort(
 }
 
 
-struct hash *loadChroms(char *contigGroup)
+struct slName *loadChroms(char *contigGroup)
 /* hash all chromNames that match contigGroup */
 {
-struct hash *ret;
+struct slName *ret = NULL;
+struct slName *el = NULL;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char chromName[64];
 
-ret = newHash(0);
-
 safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     safef(chromName, sizeof(chromName), "%s", row[0]);
-    hashAdd(ret, chromName, NULL);
+    el = slNameNew(chromName);
+    slAddHead(&ret, el);
     }
 sqlFreeResult(&sr);
 
@@ -69,7 +68,8 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     safef(chromName, sizeof(chromName), "%s_random", row[0]);
-    hashAdd(ret, chromName, NULL);
+    el = slNameNew(chromName);
+    slAddHead(&ret, el);
     }
 sqlFreeResult(&sr);
 
@@ -300,9 +300,7 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 /* read chrN_snpTmp, handle locType, rewrite to individual chrom tables */
 {
-struct hashCookie cookie;
-struct hashEl *hel;
-char *chromName;
+struct slName *chromList, *chromPtr;
 
 if (argc != 3)
     usage();
@@ -311,8 +309,8 @@ snpDb = argv[1];
 contigGroup = argv[2];
 hSetDb(snpDb);
 
-chromHash = loadChroms(contigGroup);
-if (chromHash == NULL) 
+chromList = loadChroms(contigGroup);
+if (chromList == NULL) 
     {
     verbose(1, "couldn't get chrom info\n");
     return 1;
@@ -321,13 +319,12 @@ if (chromHash == NULL)
 errorFileHandle = mustOpen("snpLocType.errors", "w");
 exceptionFileHandle = mustOpen("snpLocType.exceptions", "w");
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
-    verbose(1, "chrom = %s\n", chromName);
-    doLocType(chromName);
-    recreateDatabaseTable(chromName);
-    loadDatabase(chromName);
+    verbose(1, "chrom = %s\n", chromPtr->name);
+    doLocType(chromPtr->name);
+    recreateDatabaseTable(chromPtr->name);
+    loadDatabase(chromPtr->name);
     }
 
 carefulClose(&errorFileHandle);
