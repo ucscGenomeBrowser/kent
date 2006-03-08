@@ -14,14 +14,10 @@
 
 #include "common.h"
 
-#include "chromInfo.h"
 #include "hash.h"
 #include "hdb.h"
 
-static struct hash *multiFastaHash = NULL;
-static struct hash *chromFastaHash = NULL;
-
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.7 2006/03/08 05:59:53 heather Exp $";
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.8 2006/03/08 22:14:53 heather Exp $";
 
 struct snpFasta
     {
@@ -31,8 +27,10 @@ struct snpFasta
     char *observed;
     };
 
+static struct hash *multiFastaHash = NULL;
+static struct hash *chromFastaHash = NULL;
+
 static char *snpDb = NULL;
-static struct hash *chromHash = NULL;
 FILE *errorFileHandle = NULL;
 
 void usage()
@@ -45,36 +43,6 @@ errAbort(
     "usage:\n"
     "    snpReadFasta snpDb \n");
 }
-
-
-struct hash *loadChroms()
-/* hash from UCSC chromInfo */
-/* not using size */
-/* actually this could just be a list */
-{
-struct hash *ret;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-struct chromInfo *el;
-char tableName[64];
-
-ret = newHash(0);
-safef(query, sizeof(query), "select chrom, size from chromInfo");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", row[0]);
-    if (!hTableExists(tableName)) continue;
-    el = chromInfoLoad(row);
-    hashAdd(ret, el->chrom, (void *)(& el->size));
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ret;
-}
-
 
 
 struct hash *readFasta(char *chromName)
@@ -121,8 +89,8 @@ return newChromHash;
 }
 
 struct snpFasta *getFastaElement(char *snp_id, char *chromName)
-/* look first in the chromHash */
-/* also look in the multiHash */
+/* look first in the chromFastaHash */
+/* also look in the multiFastaHash */
 {
 struct snpFasta *felChrom = NULL;
 struct snpFasta *felMulti = NULL;
@@ -257,9 +225,7 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 /* hash snpFasta, read through chrN_snpTmp, rewrite with extensions to individual chrom tables */
 {
-struct hashCookie cookie;
-struct hashEl *hel;
-char *chromName;
+struct slName *chromList, *chromPtr;
 struct snpTmp *snpList = NULL;
 char tableName[64];
 
@@ -268,38 +234,28 @@ if (argc != 2)
 
 snpDb = argv[1];
 hSetDb(snpDb);
+chromList = hAllChromNamesDb(snpDb);
 
 errorFileHandle = mustOpen("snpReadFasta.errors", "w");
 
-chromHash = loadChroms();
-if (chromHash == NULL) 
-    {
-    verbose(1, "couldn't get chrom info\n");
-    return 1;
-    }
-
 multiFastaHash = readFasta("chrMulti");
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
     if (!hTableExists(tableName)) continue;
-  
-     verbose(1, "chrom = %s\n", chromName);
-   
-    chromFastaHash = readFasta(chromName);
-    readSnps(chromName);
+    verbose(1, "chrom = %s\n", chromPtr->name);
+    chromFastaHash = readFasta(chromPtr->name);
+    readSnps(chromPtr->name);
     }
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
     if (!hTableExists(tableName)) continue;
-    recreateDatabaseTable(chromName);
-    verbose(1, "loading chrom = %s\n", chromName);
-    loadDatabase(chromName);
+    recreateDatabaseTable(chromPtr->name);
+    verbose(1, "loading chrom = %s\n", chromPtr->name);
+    loadDatabase(chromPtr->name);
     }
 
 carefulClose(&errorFileHandle);
