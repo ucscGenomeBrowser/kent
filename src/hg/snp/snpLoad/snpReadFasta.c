@@ -21,7 +21,7 @@
 static struct hash *multiFastaHash = NULL;
 static struct hash *chromFastaHash = NULL;
 
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.6 2006/03/08 05:27:09 heather Exp $";
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.7 2006/03/08 05:59:53 heather Exp $";
 
 struct snpFasta
     {
@@ -50,6 +50,7 @@ errAbort(
 struct hash *loadChroms()
 /* hash from UCSC chromInfo */
 /* not using size */
+/* actually this could just be a list */
 {
 struct hash *ret;
 char query[512];
@@ -285,21 +286,21 @@ while ((chromName = hashNextName(&cookie)) != NULL)
     safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
     if (!hTableExists(tableName)) continue;
   
-    verbose(1, "chrom = %s\n", chromName);
-  
+     verbose(1, "chrom = %s\n", chromName);
+   
     chromFastaHash = readFasta(chromName);
     readSnps(chromName);
     }
 
-// cookie = hashFirst(chromHash);
-// while ((chromName = hashNextName(&cookie)) != NULL)
-    // {
-    // safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
-    // if (!hTableExists(tableName)) continue;
-    // recreateDatabaseTable(chromName);
-    // verbose(1, "loading chrom = %s\n", chromName);
-    // loadDatabase(chromName);
-    // }
+cookie = hashFirst(chromHash);
+while ((chromName = hashNextName(&cookie)) != NULL)
+    {
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+    if (!hTableExists(tableName)) continue;
+    recreateDatabaseTable(chromName);
+    verbose(1, "loading chrom = %s\n", chromName);
+    loadDatabase(chromName);
+    }
 
 carefulClose(&errorFileHandle);
 
