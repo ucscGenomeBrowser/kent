@@ -1,15 +1,16 @@
 /* snpSNP - tenth step in dbSNP processing.
  * Read the chrN_snpTmp tables into memory.
  * Do lookups into SNP for validation status and heterozygosity.
+ * Could use hash here! 
+ * Also don't need to store into snpTmp list!!
  * Use UCSC chromInfo. */
 
 #include "common.h"
 
-#include "chromInfo.h"
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.3 2006/02/23 00:50:42 heather Exp $";
+static char const rcsid[] = "$Id: snpSNP.c,v 1.4 2006/03/08 22:32:29 heather Exp $";
 
 struct snpTmp
     {
@@ -29,7 +30,6 @@ struct snpTmp
     };
 
 static char *snpDb = NULL;
-static struct hash *chromHash = NULL;
 FILE *errorFileHandle = NULL;
 
 void usage()
@@ -98,35 +98,6 @@ for (el = *pList; el != NULL; el = next)
 }
 
 
-struct hash *loadChroms()
-/* hash from UCSC chromInfo */
-{
-struct hash *ret;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char *randomSubstring = NULL;
-struct chromInfo *el;
-char tableName[64];
-
-ret = newHash(0);
-safef(query, sizeof(query), "select chrom, size from chromInfo");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    randomSubstring = strstr(row[0], "random");
-    if (randomSubstring != NULL) continue;
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", row[0]);
-    if (!hTableExists(tableName)) continue;
-    el = chromInfoLoad(row);
-    hashAdd(ret, el->chrom, (void *)(& el->size));
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ret;
-}
-
 struct snpTmp *readSnps(char *chromName)
 /* slurp in all rows for this chrom */
 {
@@ -138,6 +109,7 @@ char **row;
 char tableName[64];
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+if (!hTableExists(tableName)) return list;
 
 safef(query, sizeof(query), 
      "select snp_id, chromStart, chromEnd, loc_type, class, orientation, molType, "
@@ -261,9 +233,7 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 /* read chrN_snpTmp, lookup in snpFasta, rewrite to individual chrom tables */
 {
-struct hashCookie cookie;
-struct hashEl *hel;
-char *chromName;
+struct slName *chromList, *chromPtr;
 struct snpTmp *snpList = NULL;
 char tableName[64];
 
@@ -272,39 +242,36 @@ if (argc != 2)
 
 snpDb = argv[1];
 hSetDb(snpDb);
-
-chromHash = loadChroms();
-if (chromHash == NULL) 
+chromList = hAllChromNamesDb(snpDb);
+if (chromList == NULL) 
     {
     verbose(1, "couldn't get chrom info\n");
     return 1;
     }
 
 errorFileHandle = mustOpen("snpSNP.errors", "w");
-
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
+    
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
     if (!hTableExists(tableName)) continue;
  
-    verbose(1, "chrom = %s\n", chromName);
+    verbose(1, "chrom = %s\n", chromPtr->name);
 
-    snpList = readSnps(chromName);
-    readSNP(chromName, snpList);
+    snpList = readSnps(chromPtr->name);
+    readSNP(chromPtr->name, snpList);
     snpTmpFreeList(&snpList);
     }
 
 carefulClose(&errorFileHandle);
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
     if (!hTableExists(tableName)) continue;
-    recreateDatabaseTable(chromName);
-    verbose(1, "loading chrom = %s\n", chromName);
-    loadDatabase(chromName);
+    recreateDatabaseTable(chromPtr->name);
+    verbose(1, "loading chrom = %s\n", chromPtr->name);
+    loadDatabase(chromPtr->name);
     }
 
 return 0;
