@@ -1,17 +1,16 @@
 /* snpReadFasta - eighth step in dbSNP processing.
- * Read the chrN_snpTmp tables into memory.
- * Do lookups into snpFasta for class, observed, molType. 
+ * Hash the snpFasta contents.
+ * Serially read the chrN_snpTmp tables.
+ * Do lookups into snpFasta hash for class, observed, molType. 
  * Use UCSC chromInfo. */
 
-/* Could drop refUCSCReverseComp here */
-
-/* This program is fairly slow.  Takes about an hour.
-   It would probably be good to use a hash.
-   It might also be somewhat faster to sort the snpTmp list by snp_id.
-   The rs_fasta files are sorted by rsId. */
+/* Could drop refUCSCReverseComp here. */
+/* Dropping ctg_id at this point. */
 
 /* Look in chrMulti_snpFasta if no match found in chrN_snpFasta. */
 /* Write to error file if no match found in chrN_snpFasta or chrMulti_snpFasta. */
+/* Also write to error file if matchees found in chrN_snpFasta AND chrMulti_snpFasta. */
+/* Give preference to chrMulti_snpFasta data. (Don't bother checking for difference). */
 
 #include "common.h"
 
@@ -19,19 +18,17 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.5 2006/02/23 04:08:52 heather Exp $";
+static struct hash *multiFastaHash = NULL;
+static struct hash *chromFastaHash = NULL;
 
-struct snpTmp
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.6 2006/03/08 05:27:09 heather Exp $";
+
+struct snpFasta
     {
-    struct snpTmp *next;  	        
-    int snp_id;			
-    int start;            
-    int end;
-    int loc_type;
-    int orientation;
-    char *allele;	
-    char *refUCSC;
-    char *refUCSCReverseComp;
+    struct snpFasta *next;
+    char *molType;
+    char *class;
+    char *observed;
     };
 
 static char *snpDb = NULL;
@@ -50,62 +47,15 @@ errAbort(
 }
 
 
-struct snpTmp *snpTmpLoad(char **row)
-/* Load a snpTmp from row fetched from snp table
- * in database.  Dispose of this with snpTmpFree(). */
-{
-struct snpTmp *ret;
-
-AllocVar(ret);
-ret->snp_id = sqlUnsigned(row[0]);
-ret->start = sqlUnsigned(row[1]);
-ret->end = sqlUnsigned(row[2]);
-ret->loc_type = sqlUnsigned(row[3]);
-ret->orientation = sqlUnsigned(row[4]);
-ret->allele   = cloneString(row[5]);
-ret->refUCSC   = cloneString(row[6]);
-ret->refUCSCReverseComp   = cloneString(row[7]);
-
-return ret;
-
-}
-
-
-void snpTmpFree(struct snpTmp **pEl)
-/* Free a single dynamically allocated snpTmp such as created with snpTmpLoad(). */
-{
-struct snpTmp *el;
-
-if ((el = *pEl) == NULL) return;
-freeMem(el->allele);
-freeMem(el->refUCSC);
-freeMem(el->refUCSCReverseComp);
-freez(pEl);
-}
-
-void snpTmpFreeList(struct snpTmp **pList)
-/* Free a list of dynamically allocated snpTmp's */
-{
-struct snpTmp *el, *next;
-
-for (el = *pList; el != NULL; el = next)
-    {
-    next = el->next;
-    snpTmpFree(&el);
-    }
-*pList = NULL;
-}
-
-
 struct hash *loadChroms()
 /* hash from UCSC chromInfo */
+/* not using size */
 {
 struct hash *ret;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char *randomSubstring = NULL;
 struct chromInfo *el;
 char tableName[64];
 
@@ -114,8 +64,6 @@ safef(query, sizeof(query), "select chrom, size from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    randomSubstring = strstr(row[0], "random");
-    if (randomSubstring != NULL) continue;
     safef(tableName, ArraySize(tableName), "%s_snpTmp", row[0]);
     if (!hTableExists(tableName)) continue;
     el = chromInfoLoad(row);
@@ -126,113 +74,134 @@ hFreeConn(&conn);
 return ret;
 }
 
-struct snpTmp *readSnps(char *chromName)
-/* slurp in all rows for this chrom */
+
+
+struct hash *readFasta(char *chromName)
+/* read contents of chrN_fasta into hash. */
+/* Read again for random */
+/* Also called to create the chrN_multi hash. */
 {
-struct snpTmp *list=NULL, *el;
+struct snpFasta *fel;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char fastaTableName[64];
+struct hash *newChromHash = NULL;
+char *adjustedChromName = cloneString(chromName);
+char *randomSubstring = NULL;
+
+newChromHash = newHash(0);
+
+randomSubstring = strstr(chromName, "random");
+if (randomSubstring != NULL) 
+    stripString(adjustedChromName, "_random");
+
+safef(fastaTableName, ArraySize(fastaTableName), "%s_snpFasta", adjustedChromName);
+if(!hTableExistsDb(snpDb, fastaTableName)) 
+    errAbort("can't get table %s\n", fastaTableName);
+
+safef(query, sizeof(query), "select rsId, molType, class, observed from %s", fastaTableName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    AllocVar(fel);
+    fel->molType = cloneString(row[1]);
+    fel->class = cloneString(row[2]);
+    fel->observed = cloneString(row[3]);
+    /* could check for duplicates here */
+    hashAdd(newChromHash, cloneString(row[0]), fel);
+    }
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+
+return newChromHash;
+}
+
+struct snpFasta *getFastaElement(char *snp_id, char *chromName)
+/* look first in the chromHash */
+/* also look in the multiHash */
+{
+struct snpFasta *felChrom = NULL;
+struct snpFasta *felMulti = NULL;
+char snpName[32];
+
+safef(snpName, sizeof(snpName), "rs%s", snp_id);
+felChrom = hashFindVal(chromFastaHash, snpName);
+felMulti = hashFindVal(multiFastaHash, snpName);
+
+if (felChrom == NULL && felMulti == NULL)
+    {
+    fprintf(errorFileHandle, "no snpFasta for %s in %s\n", snpName, chromName);
+    return NULL;
+    }
+    
+if (felChrom != NULL && felMulti != NULL)
+    {
+    fprintf(errorFileHandle, "duplicate snpFasta for %s in %s\n", snpName, chromName);
+    return felMulti;
+    }
+
+if (felChrom != NULL) 
+    return felChrom;
+
+return felMulti;
+
+}
+
+void readSnps(char *chromName)
+/* read through all rows in snpTmp */
+/* look up molType/class/observed */
+/* write to output file */
+{
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char tableName[64];
+char fileName[64];
+char *classString = NULL;
+FILE *f;
+struct snpFasta *fel = NULL;
+int loc_type = 0;
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+safef(fileName, ArraySize(fileName), "%s_snpTmp.tab", chromName);
+f = mustOpen(fileName, "w");
 
 safef(query, sizeof(query), 
      "select snp_id, chromStart, chromEnd, loc_type, orientation, allele, refUCSC, refUCSCReverseComp from %s ", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = snpTmpLoad(row);
-    slAddHead(&list,el);
+    loc_type = sqlUnsigned(row[3]);
+    fel = getFastaElement(row[0], chromName);
+    if (fel == NULL)
+        {
+        fprintf(f, "%s\t%s\t%s\t%d\t", row[0], row[1], row[2], loc_type);
+	fprintf(f, "%s\t%s\t%s\t%s\t", "unknown", row[4], "unknown", row[5]);
+	fprintf(f, "%s\t%s\t%s\n", row[6], row[7], "n/a");
+	continue;
+	}
+    classString = fel->class;
+    /* special handling for class = in-del; split into classes of our own construction */
+    if (sameString(classString, "in-del"))
+        {
+        if (loc_type == 3) 
+	    classString = cloneString("insertion");
+	else 
+	    classString = cloneString("deletion");
+	}
+    fprintf(f, "%s\t%s\t%s\t%d\t", row[0], row[1], row[2], loc_type);
+    fprintf(f, "%s\t%s\t%s\t%s\t", classString, row[4], fel->molType, row[5]);
+    fprintf(f, "%s\t%s\t%s\n", row[6], row[7], fel->observed);
     }
+
 sqlFreeResult(&sr);
-slReverse(&list);
-hFreeConn(&conn);
-return list;
-}
-
-
-void readFasta(char *chromName, struct snpTmp *list)
-/* get molType, class and observed from snpFasta table */
-{
-struct snpTmp *el;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char fileName[64];
-FILE *f;
-boolean gotMatch = FALSE;
-char *classString = NULL;
-char fastaTableName[64];
-
-safef(fastaTableName, ArraySize(fastaTableName), "%s_snpFasta", chromName);
-
-safef(fileName, ArraySize(fileName), "%s_snpTmp.tab", chromName);
-f = mustOpen(fileName, "w");
-
-verbose(5, "query snpFasta for molType, class, observed...\n");
-for (el = list; el != NULL; el = el->next)
-    {
-    safef(query, sizeof(query), 
-          "select molType, class, observed from %s where rsId = 'rs%d'", fastaTableName, el->snp_id);
-    sr = sqlGetResult(conn, query);
-    gotMatch = FALSE;
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	gotMatch = TRUE;
-	/* special handling for class = in-del; split into classes of our own construction */
-	classString = cloneString(row[1]);
-	if (sameString(classString, "in-del"))
-	    {
-	    if (el->loc_type == 3) 
-	        classString = cloneString("insertion");
-	    else 
-	        classString = cloneString("deletion");
-	    }
-
-        fprintf(f, "%d\t%d\t%d\t%d\t%s\t%d\t%s\t%s\t%s\t%s\t%s\n", 
-            el->snp_id, el->start, el->end, el->loc_type, classString, el->orientation, row[0],
-	    el->allele, el->refUCSC, el->refUCSCReverseComp, row[2]);
-	}
-    sqlFreeResult(&sr);
-    if (gotMatch) continue;
-    safef(query, sizeof(query), 
-      "select molType, class, observed from chrMulti_snpFasta where rsId = 'rs%d'", el->snp_id);
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	gotMatch = TRUE;
-	/* special handling for class = in-del; split into classes of our own construction */
-	classString = cloneString(row[1]);
-	if (sameString(classString, "in-del"))
-	    {
-	    if (el->loc_type == 3) 
-	        classString = cloneString("insertion");
-	    else 
-	        classString = cloneString("deletion");
-	    }
-
-        fprintf(f, "%d\t%d\t%d\t%d\t%s\t%d\t%s\t%s\t%s\t%s\t%s\n", 
-            el->snp_id, el->start, el->end, el->loc_type, classString, el->orientation, row[0],
-	    el->allele, el->refUCSC, el->refUCSCReverseComp, row[2]);
-	}
-
-    /* log missing fasta, preserve SNP */
-    if (!gotMatch)
-        {
-        fprintf(errorFileHandle, "no snpFasta for %d on %s\n", el->snp_id, chromName);
-        fprintf(f, "%d\t%d\t%d\t%d\t%s\t%d\t%s\t%s\t%s\t%s\t%s\n", 
-            el->snp_id, el->start, el->end, el->loc_type, "unknown", el->orientation, "unknown",
-	    el->allele, el->refUCSC, el->refUCSCReverseComp, "n/a");
-	}
-    }
 hFreeConn(&conn);
 carefulClose(&f);
 }
-
-
 
 
 void recreateDatabaseTable(char *chromName)
@@ -285,7 +254,7 @@ hFreeConn(&conn);
 
 
 int main(int argc, char *argv[])
-/* read chrN_snpTmp, lookup in snpFasta, rewrite to individual chrom tables */
+/* hash snpFasta, read through chrN_snpTmp, rewrite with extensions to individual chrom tables */
 {
 struct hashCookie cookie;
 struct hashEl *hel;
@@ -308,28 +277,29 @@ if (chromHash == NULL)
     return 1;
     }
 
+multiFastaHash = readFasta("chrMulti");
+
 cookie = hashFirst(chromHash);
 while ((chromName = hashNextName(&cookie)) != NULL)
     {
     safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
     if (!hTableExists(tableName)) continue;
-
+  
     verbose(1, "chrom = %s\n", chromName);
-
-    snpList = readSnps(chromName);
-    readFasta(chromName, snpList);
-    snpTmpFreeList(&snpList);
+  
+    chromFastaHash = readFasta(chromName);
+    readSnps(chromName);
     }
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
-    {
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
-    if (!hTableExists(tableName)) continue;
-    recreateDatabaseTable(chromName);
-    verbose(1, "loading chrom = %s\n", chromName);
-    loadDatabase(chromName);
-    }
+// cookie = hashFirst(chromHash);
+// while ((chromName = hashNextName(&cookie)) != NULL)
+    // {
+    // safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+    // if (!hTableExists(tableName)) continue;
+    // recreateDatabaseTable(chromName);
+    // verbose(1, "loading chrom = %s\n", chromName);
+    // loadDatabase(chromName);
+    // }
 
 carefulClose(&errorFileHandle);
 
