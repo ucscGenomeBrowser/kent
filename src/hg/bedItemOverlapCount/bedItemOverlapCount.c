@@ -12,7 +12,7 @@
 #include "wiggle.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.5 2006/02/24 20:05:20 hiram Exp $";
+static char const rcsid[] = "$Id: bedItemOverlapCount.c,v 1.6 2006/03/08 20:02:48 hiram Exp $";
 
 /* Command line switches. */
 //static char *strand = (char *)NULL;	/* strand to process, default +	*/
@@ -33,11 +33,18 @@ errAbort(
   "bedItemOverlapCount - count number of times a base is overlapped by the\n"
   "\titems in a bed file.  Output is bedGraph 4 to stdout.\n"
   "usage:\n"
-  "   sort -k1,1 bedFile.bed | bedItemOverlapCount [options] database stdin\n"
+  " sort -k1,1 -k2,2n bedFile.bed | bedItemOverlapCount [options] <database> stdin\n"
+  "or all the way to wiggle track data:\n"
+  " sort -k1,1 -k2,2n bedFile.bed \\\n"
+  "     | bedItemOverlapCount [options] <database> stdin \\\n"
+  "         | wigEncode stdin data.wig data.wib\n"
   "options:\n"
   "   (none at this time - you will want to separate your + and - strand\n"
   "\titems before sending into this program as it only looks at\n"
   "\tthe chrom, start and end columns of the bed file.\n"
+  "\tIt wants a <database> connection to lookup chrom sizes for a sanity\n"
+  "\tcheck of the incoming data.  This should be redone to take a chrom.sizes\n"
+  "\targument instead to be independent of the database.\n"
   "The bed file must be sorted at least by chrom since the processing is\n"
   "\tgoing to be chrom by chrom with no going back.\n"
   " *** AND *** this is only for simple bed files without multiple blocks. ***"
