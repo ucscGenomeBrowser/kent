@@ -7,10 +7,9 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpFunction.c,v 1.5 2006/03/08 20:27:59 heather Exp $";
+static char const rcsid[] = "$Id: snpFunction.c,v 1.6 2006/03/08 20:57:19 heather Exp $";
 
 static char *snpDb = NULL;
-static struct hash *chromHash = NULL;
 static struct hash *functionHash = NULL;
 
 void usage()
@@ -170,14 +169,15 @@ int main(int argc, char *argv[])
 /* Read ContigLocusIdCondense into hash. */
 /* Recreate chrN_snpTmp, adding fxn_classes. */
 {
-struct hashCookie cookie;
-char *chromName;
+struct slName *chromList, *chromPtr;
+char tableName[64];
 
 if (argc != 2)
     usage();
 
 snpDb = argv[1];
 hSetDb(snpDb);
+chromList = hAllChromNamesDb(snpDb);
 
 /* check for needed tables */
 if(!hTableExistsDb(snpDb, "ContigLocusIdCondense"))
@@ -185,27 +185,20 @@ if(!hTableExistsDb(snpDb, "ContigLocusIdCondense"))
 if(!hTableExistsDb(snpDb, "chromInfo"))
     errAbort("no chromInfo table in %s\n", snpDb);
 
-chromHash = loadChroms();
-if (chromHash == NULL) 
-    {
-    verbose(1, "couldn't get ContigInfo hash\n");
-    return 1;
-    }
-
 functionHash = createFunctionHash();
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
-    verbose(1, "chrom = %s\n", chromName);
-    addFunction(chromName);
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
+    if (!hTableExists(tableName)) continue;
+    verbose(1, "chrom = %s\n", chromPtr->name);
+    addFunction(chromPtr->name);
     }
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
-    recreateDatabaseTable(chromName);
-    loadDatabase(chromName);
+    recreateDatabaseTable(chromPtr->name);
+    loadDatabase(chromPtr->name);
     }
 
 return 0;
