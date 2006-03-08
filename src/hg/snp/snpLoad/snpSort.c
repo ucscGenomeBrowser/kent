@@ -7,7 +7,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSort.c,v 1.7 2006/03/08 22:54:37 heather Exp $";
+static char const rcsid[] = "$Id: snpSort.c,v 1.8 2006/03/08 22:57:12 heather Exp $";
 
 struct snpTmp
     {
@@ -86,7 +86,7 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-struct slName *loadChroms(char *contigGroup)
+struct slName *getChromListFromContigInfo(char *contigGroup)
 /* get all chromNames that match contigGroup */
 {
 struct slName *ret = NULL;
@@ -209,7 +209,7 @@ snpDb = argv[1];
 contigGroup = argv[2];
 hSetDb(snpDb);
 
-chromList = loadChroms(contigGroup);
+chromList = getChromListFromContigInfo(contigGroup);
 if (chromList == NULL) 
     {
     verbose(1, "couldn't get chrom info\n");

@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.21 2006/03/08 22:52:22 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.22 2006/03/08 22:57:11 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -26,7 +26,7 @@ errAbort(
 }
 
 
-struct slName *loadChroms(char *contigGroup)
+struct slName *getChromListFromContigInfo(char *contigGroup)
 /* get all chromNames that match contigGroup */
 {
 struct slName *ret = NULL;
@@ -321,7 +321,7 @@ snpDb = argv[1];
 contigGroup = argv[2];
 hSetDb(snpDb);
 
-chromList = loadChroms(contigGroup);
+chromList = getChromListFromContigInfo(contigGroup);
 if (chromList == NULL) 
     {
     verbose(1, "couldn't get chrom info\n");

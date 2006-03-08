@@ -10,7 +10,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.18 2006/03/08 22:54:07 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.19 2006/03/08 22:57:11 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -41,7 +41,7 @@ errAbort(
 }
 
 
-struct slName *loadChroms(char *contigGroup)
+struct slName *getChromListFromContigInfo(char *contigGroup)
 /* get all chromNames that match contigGroup */
 {
 struct slName *ret = NULL;
@@ -308,7 +308,7 @@ snpDb = argv[1];
 contigGroup = argv[2];
 hSetDb(snpDb);
 
-chromList = loadChroms(contigGroup);
+chromList = getChromListFromContigInfo(contigGroup);
 if (chromList == NULL) 
     {
     verbose(1, "couldn't get chrom info\n");
