@@ -5,10 +5,9 @@
 
 #include "common.h"
 
-#include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSort.c,v 1.6 2006/03/08 22:20:21 heather Exp $";
+static char const rcsid[] = "$Id: snpSort.c,v 1.7 2006/03/08 22:54:37 heather Exp $";
 
 struct snpTmp
     {
@@ -88,7 +87,7 @@ for (el = *pList; el != NULL; el = next)
 }
 
 struct slName *loadChroms(char *contigGroup)
-/* hash all chromNames that match contigGroup */
+/* get all chromNames that match contigGroup */
 {
 struct slName *ret = NULL;
 struct slName *el = NULL;

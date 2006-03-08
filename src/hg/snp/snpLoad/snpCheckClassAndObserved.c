@@ -35,10 +35,9 @@
 #include "common.h"
 
 #include "dystring.h"
-#include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.9 2006/03/08 21:17:28 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.10 2006/03/08 22:50:27 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;

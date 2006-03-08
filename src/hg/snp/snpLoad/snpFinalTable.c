@@ -13,13 +13,12 @@
 #include "common.h"
 
 #include "dystring.h"
-#include "hash.h"
 #include "hdb.h"
 #include "jksql.h"
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpFinalTable.c,v 1.4 2006/03/08 21:44:40 heather Exp $";
+static char const rcsid[] = "$Id: snpFinalTable.c,v 1.5 2006/03/08 22:53:19 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *outputFileHandle = NULL;

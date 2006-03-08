@@ -8,10 +8,9 @@
 #include "common.h"
 
 #include "dystring.h"
-#include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.17 2006/03/08 22:07:00 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.18 2006/03/08 22:54:07 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -43,7 +42,7 @@ errAbort(
 
 
 struct slName *loadChroms(char *contigGroup)
-/* hash all chromNames that match contigGroup */
+/* get all chromNames that match contigGroup */
 {
 struct slName *ret = NULL;
 struct slName *el = NULL;
