@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpFunction.c,v 1.4 2006/03/01 21:58:44 heather Exp $";
+static char const rcsid[] = "$Id: snpFunction.c,v 1.5 2006/03/08 20:27:59 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -31,7 +31,6 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char *randomSubstring = NULL;
 struct chromInfo *el;
 char tableName[64];
 
@@ -40,8 +39,6 @@ safef(query, sizeof(query), "select chrom, size from chromInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    randomSubstring = strstr(row[0], "random");
-    if (randomSubstring != NULL) continue;
     safef(tableName, ArraySize(tableName), "%s_snpTmp", row[0]);
     if (!hTableExists(tableName)) continue;
     el = chromInfoLoad(row);
