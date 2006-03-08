@@ -7,7 +7,7 @@
 
 # Define databases used for various organisms
 set hg hg15,hg16,hg17,hg18
-set mm mm3,mm4,mm5,mm6,mm7
+set mm mm3,mm4,mm5,mm6,mm7,mm8
 set rn rn2,rn3,rn4
 set fr fr1
 set ce ce1,ce2
@@ -919,20 +919,24 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     $gbd.all_mrna.qName dupeOk
     $gbd,!ce2.mrnaOrientInfo.name minCheck=0.01
     ce2.mrnaOrientInfo.name minCheck=0.08
-    $gbd,!mm6,!mm7,!hg17,!hg18.dupSpMrna.mrnaID minCheck=0.80
-    $gbd,!mm6,!mm7,!hg17,!hg18.dupSpMrna.dupMrnaID minCheck=0.95
-    $gbd,!mm6,!mm7,!hg17,!rn2,!rn3.mrnaRefseq.mrna minCheck=0.25
+    $gbd,!mm6,!mm7,!mm8,!hg17,!hg18.dupSpMrna.mrnaID minCheck=0.80
+    $gbd,!mm6,!mm7,!mm8,!hg17,!hg18.dupSpMrna.dupMrnaID minCheck=0.95
+    $gbd,!mm6,!mm7,!mm8,!hg17,!rn2,!rn3.mrnaRefseq.mrna minCheck=0.25
     mm6.mrnaRefseq.mrna minCheck=0.80
     mm7.mrnaRefseq.mrna minCheck=0.30
+    mm8.mrnaRefseq.mrna minCheck=0.30
     hg17.mrnaRefseq.mrna minCheck=0.80
     rn2,rn3.mrnaRefseq.mrna minCheck=0.03
-    $gbd,!mm6,!mm7,!hg17.spMrna.mrnaID minCheck=0.98
+    $gbd,!mm6,!mm7,!mm8,!hg17.spMrna.mrnaID minCheck=0.98
     mm6.spMrna.mrnaID minCheck=0.20
     mm6.dupSpMrna.mrnaID minCheck=0.10
     mm6.dupSpMrna.dupMrnaID minCheck=0.10
     mm7.spMrna.mrnaID minCheck=0.20
     mm7.dupSpMrna.mrnaID minCheck=0.10
     mm7.dupSpMrna.dupMrnaID minCheck=0.10
+    mm8.spMrna.mrnaID minCheck=0.20
+    mm8.dupSpMrna.mrnaID minCheck=0.10
+    mm8.dupSpMrna.dupMrnaID minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.30
     hg17.dupSpMrna.mrnaID minCheck=0.20
     hg17.dupSpMrna.dupMrnaID minCheck=0.20
@@ -971,6 +975,10 @@ identifier refSeqId typeOf=mrnaAccession
     mm7.spMrna.mrnaID minCheck=0.40
     mm7.dupSpMrna.mrnaID minCheck=0.60
     mm7.dupSpMrna.dupMrnaID minCheck=0.20
+    mm8.mrnaRefseq.mrna minCheck=0.03
+    mm8.spMrna.mrnaID minCheck=0.40
+    mm8.dupSpMrna.mrnaID minCheck=0.60
+    mm8.dupSpMrna.dupMrnaID minCheck=0.20
     hg17.mrnaRefseq.mrna minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.50
     hg17.dupSpMrna.mrnaID minCheck=0.40
@@ -989,6 +997,7 @@ identifier knownToRefSeqId typeOf=mrnaAccession
     $kgDb.knownToRefSeq.value dupeOk
     mm6.geneNetworkId.id minCheck=0.70
     mm7.geneNetworkId.id minCheck=0.80
+    mm8.geneNetworkId.id minCheck=0.80
     rn3.geneNetworkId.id minCheck=0.40
 
 identifier knownGeneId typeOf=nativeMrnaAccession dependency
@@ -1219,6 +1228,8 @@ identifier mouseStsTrueName typeOf=stsName
     $mm.stsAlias.trueName minCheck=0.99
     $mm,!mm7.all_sts_primer.qName chopBefore=_ minCheck=0.99
     mm7.all_sts_primer.qName chopBefore=_ minCheck=0.98
+    $mm,!mm8.all_sts_primer.qName chopBefore=_ minCheck=0.99
+    mm8.all_sts_primer.qName chopBefore=_ minCheck=0.98
     $mm.stsMapMouseNew.name
     $mm.jaxQTL3.marker exclude= minCheck=0.99
     $mm.jaxQTL3.flank1 exclude= minCheck=0.95
@@ -1308,7 +1319,7 @@ identifier flyBaseGeneId external=FlyBase
     $dm.fbSynonym.geneId
     $dm.fbTranscript.geneId minCheck=0.95
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
-    $gbd,!hg17,!hg18,!danRer3,!mm7,!rn3,!rn4.dmBlastTab.target minCheck=0.90
+    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!rn3,!rn4.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -1378,7 +1389,7 @@ identifier flyBase2004Id external=FlyBase
     $dm,!dm1.flyP2P.target
     dp3.flyBase2004Xref.name
     dp3.flyBaseGene.name
-    hg17,hg18,danRer3,mm7,rn3,rn4.dmBlastTab.target minCheck=0.90
+    hg17,hg18,danRer3,mm7,mm8,rn3,rn4.dmBlastTab.target minCheck=0.90
 
 identifier sgdIsoformCluster
 "Overlapping (after splicing) SGD (Yeast) transcripts"
