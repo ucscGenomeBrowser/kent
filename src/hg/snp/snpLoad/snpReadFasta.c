@@ -1,7 +1,7 @@
 /* snpReadFasta - eighth step in dbSNP processing.
- * Hash the snpFasta contents.
+ * Hash the snpFasta contents (by chrom, and also chrMulti).
  * Serially read the chrN_snpTmp tables.
- * Do lookups into snpFasta hash for class, observed, molType. 
+ * Do lookups into snpFasta hashes for class, observed, molType. 
  * Use UCSC chromInfo. */
 
 /* Could drop refUCSCReverseComp here. */
@@ -17,7 +17,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.9 2006/03/08 22:43:16 heather Exp $";
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.10 2006/03/08 22:45:43 heather Exp $";
 
 struct snpFasta
     {
