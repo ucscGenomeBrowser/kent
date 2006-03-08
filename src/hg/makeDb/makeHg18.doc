@@ -6740,3 +6740,106 @@ mkdir -p ${blatDir}/{over,net}
     cd /cluster/data/hg18/bed/ecoresTetNig1
     echo 'drop table ecoresTetNig1;' | hgsql hg18
     nice ldHgGene hg18 ecoresTetNig1 Hg18vstetNig1.gff
+
+#########################################################################
+# BUILD MAF ANNOTATION FOR MULTIZ17WAY (DONE 2006-03-07, Fan)
+    ssh kkstore01
+    cd /cluster/data/monDom4
+    twoBitInfo -nBed monDom4.2bit monDom4.N.bed
+
+    cd /cluster/data/rn4
+    twoBitInfo -nBed rn4.2bit rn4.N.bed
+
+    cd /cluster/data/mm8
+    twoBitInfo -nBed mm8.2bit mm8.N.bed
+
+    ssh kolossus
+    cd /cluster/data/hg18/bed/multiz17way
+    mkdir anno 
+    cd anno
+    mkdir maf run
+    cd run
+    rm sizes nBeds
+
+    foreach i (`cat /cluster/data/hg18/bed/multiz17way/species.lst`)
+        ln -s  /cluster/data/$i/chrom.sizes $i.len
+        ln -s  /cluster/data/$i/$i.N.bed $i.bed
+        echo $i.bed  >> nBeds
+        echo $i.len  >> sizes
+    end
+
+    echo date > jobs.csh
+    foreach i (../../maf/*.maf)
+        echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $i /cluster/data/hg18/hg18.2bit ../maf/`basename $i` >> jobs.csh
+        echo "echo $i" >> jobs.csh
+    end 
+    echo date >> jobs.csh
+
+    # do smaller jobs first
+    tac jobs.csh > jobsRev.csh
+    mv jobsRev.csh jobs.csh
+    
+    csh jobs.csh > jobs.log 
+
+    # This took 10 hours.  Hg17 took 1.5 hrs.
+
+    ssh kolossus
+    # loading here because summary table load crashed on hgwdev
+    cd /cluster/data/hg18/bed/multiz17way/anno/maf
+    mkdir -p /gbdb/hg18/multiz17way/anno/maf
+    ln -s /cluster/data/hg18/bed/multiz17way/anno/maf/*.maf \
+        /gbdb/hg18/multiz17way/anno/maf
+cat > loadMaf.csh << 'EOF'
+    date
+    hgLoadMaf -pathPrefix=/gbdb/hg18/multiz17way/anno/maf \
+                hg18 multiz17way
+    date
+    cat *.maf | \
+        nice hgLoadMafSummary hg18 -minSize=30000 -mergeGap=1500 \
+            -maxSize=200000  multiz17waySummary stdin
+    date
+'EOF'
+    csh loadMaf.csh > loadMaf.log 
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/multiz17way
+    mkdir frames
+    cd frames
+    cp /cluster/data/mm7/bed/multiz17wayFrames/mkMafFrames .
+    cp /cluster/data/mm7/bed/multiz17wayFrames/Makefile .
+    #edit Makefile to correct species names 
+
+cat > copy.csh << 'EOF'
+    set dir = /cluster/bluearc/hg18/multiz17way/frames/maf
+    mkdir -p $dir
+    foreach i (../maf/*.maf)
+        echo $i
+        cp -p $i $dir
+    end
+'EOF'
+    csh copy.csh > copy.log 
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz17way/frames
+    time make getGenes > getGenes.log 
+    # 26.100u 4.360s 1:02.78 48.5%    0+0k 0+0io 29643pf+0w
+    time make getFrames > getFrames.log 
+
+# Batch failed after 4 tries on ../mkMafFrames bosTau2 hg18 /san/sanvol1/scratch/hg18/multiz17way/frames/genes/bosTau2.gp.gz /cluster/data/hg18/bed/multiz17way/maf/chr1.maf /san/sanvol1/scratch/hg18/multiz17way/frames/mafFrames/bosTau2/chr1.mafFrames
+#make[1]: *** [mafFrames/bosTau2.cluster.done] Error 255
+
+# copy Makefile to Makefile.try2 and remove bosTau2
+    time make -f Makefile.try2 getFrames > getFrames.try2.log
+
+# copy Makefile to Makefile.try3 and with only bosTau2 remains    
+    time make -f Makefile.try3 getGenes  > getGenes.try3.log
+    time make -f Makefile.try3 getFrames > getFrames.try3.log
+    time make -f Makefile.try3 getFrames > getFrames.try5.log
+    time make -f Makefile.try3 getFrames > getFrames.try6.log
+
+# Finally after Mark fixed the bug and recompiled, it worked.
+    time make -f Makefile.try3 getFrames > getFrames.try7.log
+
+    time make loadDb > loadDb.log 
+
+
