@@ -18,16 +18,8 @@
  *-------------------------------------------------------------------
  */
 
-/* $Id: msort.c,v 1.2 2006/03/08 09:57:23 mieg Exp $ */
+/* $Id: msort.c,v 1.3 2006/03/08 09:58:58 mieg Exp $ */
 
-/* acedb include
-  #include "regular.h" 
-*/
-/* standard C include
-#include <memory.h>
-#include <malloc.h>
-*/
-/* paraflow include */
 #include "common.h"
 
 static void mDoSortInt (int *b, int n, int (*cmp)(void *va, void *vb), int *buf)
