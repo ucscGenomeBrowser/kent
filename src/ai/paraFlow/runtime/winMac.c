@@ -1,6 +1,5 @@
 /* This, GHU help us, is the Mac Windows Library. */
 
-#include <Carbon/Carbon.h>
 #include "common.h"
 #include "portable.h"
 #include "../compiler/pfPreamble.h"
