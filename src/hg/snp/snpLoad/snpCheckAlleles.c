@@ -37,15 +37,13 @@
 
 #include "common.h"
 
-#include "chromInfo.h"
 #include "dystring.h"
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.4 2006/03/06 20:44:57 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.5 2006/03/08 21:13:05 heather Exp $";
 
 static char *snpDb = NULL;
-static struct hash *chromHash = NULL;
 FILE *exceptionFileHandle = NULL;
 
 
@@ -58,34 +56,6 @@ errAbort(
     "    snpCheckAlleles snpDb \n");
 }
 
-
-struct hash *loadChroms()
-/* hash from UCSC chromInfo */
-/* not using size */
-{
-struct hash *ret;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char *randomSubstring = NULL;
-struct chromInfo *el;
-char tableName[64];
-
-ret = newHash(0);
-safef(query, sizeof(query), "select chrom, size from chromInfo");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", row[0]);
-    if (!hTableExists(tableName)) continue;
-    el = chromInfoLoad(row);
-    hashAdd(ret, el->chrom, (void *)(& el->size));
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ret;
-}
 
 void writeToExceptionFile(char *chrom, char *start, char *end, char *name, char *exception)
 {
@@ -150,28 +120,20 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 /* read chrN_snpTmp, log exceptions */
 {
-struct hashCookie cookie;
-struct hashEl *hel;
-char *chromName;
+struct slName *chromList, *chromPtr;
+char tableName[64];
 
 if (argc != 2)
     usage();
 
 snpDb = argv[1];
 hSetDb(snpDb);
-
-chromHash = loadChroms();
-if (chromHash == NULL) 
-    {
-    verbose(1, "couldn't get chrom info\n");
-    return 1;
-    }
+chromList = hAllChromNamesDb(snpDb);
 
 exceptionFileHandle = mustOpen("snpCheckAlleles.exceptions", "w");
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
-    doCheckAlleles(chromName);
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
+    doCheckAlleles(chromPtr->name);
 
 carefulClose(&exceptionFileHandle);
 return 0;
