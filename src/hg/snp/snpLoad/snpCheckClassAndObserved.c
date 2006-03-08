@@ -34,15 +34,13 @@
 
 #include "common.h"
 
-#include "chromInfo.h"
 #include "dystring.h"
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.8 2006/02/23 05:58:26 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.9 2006/03/08 21:17:28 heather Exp $";
 
 static char *snpDb = NULL;
-static struct hash *chromHash = NULL;
 FILE *exceptionFileHandle = NULL;
 
 
@@ -56,35 +54,6 @@ errAbort(
 }
 
 
-struct hash *loadChroms()
-/* hash from UCSC chromInfo */
-/* not using size */
-{
-struct hash *ret;
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char *randomSubstring = NULL;
-struct chromInfo *el;
-char tableName[64];
-
-ret = newHash(0);
-safef(query, sizeof(query), "select chrom, size from chromInfo");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    randomSubstring = strstr(row[0], "random");
-    if (randomSubstring != NULL) continue;
-    safef(tableName, ArraySize(tableName), "%s_snpTmp", row[0]);
-    if (!hTableExists(tableName)) continue;
-    el = chromInfoLoad(row);
-    hashAdd(ret, el->chrom, (void *)(& el->size));
-    }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
-return ret;
-}
 
 void writeToExceptionFile(char *chrom, char *start, char *end, char *name, char *exception)
 {
@@ -191,28 +160,19 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 /* read chrN_snpTmp, log exceptions */
 {
-struct hashCookie cookie;
-struct hashEl *hel;
-char *chromName;
+struct slName *chromList, *chromPtr;
 
 if (argc != 2)
     usage();
 
 snpDb = argv[1];
 hSetDb(snpDb);
-
-chromHash = loadChroms();
-if (chromHash == NULL) 
-    {
-    verbose(1, "couldn't get chrom info\n");
-    return 1;
-    }
+chromList = hAllChromNamesDb(snpDb);
 
 exceptionFileHandle = mustOpen("snpCheckClassAndObserved.exceptions", "w");
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
-    doCheck(chromName);
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
+    doCheck(chromPtr->name);
 
 carefulClose(&exceptionFileHandle);
 return 0;
