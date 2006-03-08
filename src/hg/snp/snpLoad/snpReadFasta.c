@@ -17,10 +17,11 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.8 2006/03/08 22:14:53 heather Exp $";
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.9 2006/03/08 22:43:16 heather Exp $";
 
 struct snpFasta
     {
+    /* I don't think I need next */
     struct snpFasta *next;
     char *molType;
     char *class;
