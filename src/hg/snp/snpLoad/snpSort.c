@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSort.c,v 1.5 2006/03/06 19:49:51 heather Exp $";
+static char const rcsid[] = "$Id: snpSort.c,v 1.6 2006/03/08 22:20:21 heather Exp $";
 
 struct snpTmp
     {
@@ -24,7 +24,6 @@ struct snpTmp
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
-static struct hash *chromHash = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -88,24 +87,24 @@ for (el = *pList; el != NULL; el = next)
 *pList = NULL;
 }
 
-struct hash *loadChroms(char *contigGroup)
+struct slName *loadChroms(char *contigGroup)
 /* hash all chromNames that match contigGroup */
 {
-struct hash *ret;
+struct slName *ret = NULL;
+struct slName *el = NULL;
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char chromName[64];
 
-ret = newHash(0);
-
 safef(query, sizeof(query), "select distinct(contig_chr) from ContigInfo where group_term = '%s' and contig_end != 0", contigGroup);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     safef(chromName, sizeof(chromName), "%s", row[0]);
-    hashAdd(ret, chromName, NULL);
+    el = slNameNew(chromName);
+    slAddHead(&ret, el);
     }
 sqlFreeResult(&sr);
 
@@ -114,10 +113,10 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     safef(chromName, sizeof(chromName), "%s_random", row[0]);
-    hashAdd(ret, chromName, NULL);
+    el = slNameNew(chromName);
+    slAddHead(&ret, el);
     }
 sqlFreeResult(&sr);
-
 
 hFreeConn(&conn);
 return ret;
@@ -201,9 +200,7 @@ hFreeConn(&conn);
 int main(int argc, char *argv[])
 /* read chrN_snpTmp, sort, rewrite to individual chrom tables */
 {
-struct hashCookie cookie;
-struct hashEl *hel;
-char *chromName;
+struct slName *chromList, *chromPtr;
 struct snpTmp *snpList = NULL;
 
 if (argc != 3)
@@ -213,28 +210,27 @@ snpDb = argv[1];
 contigGroup = argv[2];
 hSetDb(snpDb);
 
-chromHash = loadChroms(contigGroup);
-if (chromHash == NULL) 
+chromList = loadChroms(contigGroup);
+if (chromList == NULL) 
     {
     verbose(1, "couldn't get chrom info\n");
     return 1;
     }
 
-cookie = hashFirst(chromHash);
-while ((chromName = hashNextName(&cookie)) != NULL)
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
-    verbose(1, "chrom = %s\n", chromName);
+    verbose(1, "chrom = %s\n", chromPtr->name);
     verbose(5, "reading snps...\n");
-    snpList = readSnps(chromName);
+    snpList = readSnps(chromPtr->name);
     verbose(5, "sorting...\n");
     slSort(&snpList, snpTmpCmp);
     verbose(5, "dumping...\n");
-    writeSnps(chromName, snpList);
+    writeSnps(chromPtr->name, snpList);
     /* snpSort doesn't change the table format, so just delete old rows */
     verbose(5, "delete from table...\n");
-    cleanDatabaseTable(chromName);
+    cleanDatabaseTable(chromPtr->name);
     verbose(5, "load...\n");
-    loadDatabase(chromName);
+    loadDatabase(chromPtr->name);
     verbose(5, "free...\n");
     snpTmpFreeList(&snpList);
     verbose(5, "------------------------\n");
