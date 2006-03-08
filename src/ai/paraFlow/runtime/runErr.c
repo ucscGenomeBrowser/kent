@@ -247,10 +247,42 @@ void pf_punt(_pf_Stack *stack)
 _pf_String message = stack[0].String;
 _pf_String source = stack[1].String;
 _pf_Int code = stack[2].Int;
-int errTypeId = _pf_find_error_type_id();	// TODO - replace this with err type
+int errTypeId = _pf_find_error_type_id();	
 struct _pf_error *err = errorNew(message, source, code);
 puntCatcher(err, errTypeId);
 }
+
+void pf_puntMore(_pf_Stack *stack)
+/* Print  message and bail out. */
+{
+struct _pf_error *oldErr = stack[0].v;
+_pf_String message = stack[1].String;
+_pf_String source = stack[2].String;
+_pf_Int code = stack[3].Int;
+int errTypeId = _pf_find_error_type_id();	
+struct _pf_error *err = errorNew(message, source, code);
+err->next = oldErr;
+puntCatcher(err, errTypeId);
+}
+
+void pf_throw(_pf_Stack *stack)
+/* Throw an error, perhaps of a different type. */
+{
+struct _pf_error *err = stack[0].Var.val.v;
+int typeId = stack[0].Var.typeId;
+puntCatcher(err, typeId);
+}
+
+void pf_throwMore(_pf_Stack *stack)
+/* Throw an error, perhaps of a different type. */
+{
+struct _pf_error *oldErr = stack[0].v;
+struct _pf_error *newErr = stack[1].Var.val.v;
+int typeId = stack[1].Var.typeId;
+newErr->next = oldErr;
+puntCatcher(newErr, typeId);
+}
+
 
 void pf_warn(_pf_Stack *stack)
 /* Print warning message, but don't bail out. */
@@ -283,3 +315,22 @@ void _pf_cm_seriousError_report(_pf_Stack *stack)
 struct _pf_error *err = stack[0].v;
 reportErrToFile(err, stderr);
 }
+
+void _pf_cm_seriousError_init(_pf_Stack *stack)
+/* Initialize a serious error. */
+{
+struct _pf_error *err = stack[0].v;
+_pf_String message = stack[1].String;
+_pf_String source = stack[2].String;
+_pf_Int code = stack[1].Int;
+err->message = message;
+err->source = source;
+err->code = code;
+}
+
+void _pf_cm_error_init(_pf_Stack *stack)
+/* Initialize an error. */
+{
+_pf_cm_seriousError_init(stack);
+}
+

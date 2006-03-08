@@ -2090,7 +2090,7 @@ switch (tok->type)
 	enum pfTokType thisType = tok->type;
 	enum pfTokType nextType = tok->next->type;
 	enum pfAccessType access = (thisType == pftGlobal ? paGlobal : paLocal);
-	if (nextType == pftTo || nextType == pftFlow)
+	if (nextType == pftTo || nextType == pftFlow || nextType == pftOperator)
 	    {
 	    tok = tok->next;
 	    statement = pfParseStatement(pfc, parent, &tok, scope);

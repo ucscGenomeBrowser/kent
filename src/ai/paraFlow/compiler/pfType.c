@@ -606,7 +606,10 @@ static void coerceCallToOperator(struct pfCompile *pfc, struct pfParse *pp)
  * At the moment the only operator is array.append(). */
 {
 struct pfParse *function = pp->children;
+struct pfType *functionType = function->ty;
 struct pfParse *input = function->next;
+struct pfType *inputType = functionType->children;
+struct pfType *outputType = inputType->next;
 if (function->type == pptDot)
     {
     /* It's a method of some sort. */
@@ -636,7 +639,26 @@ if (function->type == pptDot)
     }
 else 
     {
-    internalErr();
+    if (sameString(function->name, "throw"))
+        {
+	if (slCount(input->children) != 1)
+	    errAt(input->children->tok, "throw always takes one parameter");
+	coerceOne(pfc, &input->children, pfc->seriousErrorFullType, FALSE);
+	insertCast(pptCastTypedToVar, pfTypeNew(pfc->varType), &input->children);
+	}
+    else if (sameString(function->name, "throwMore"))
+        {
+	if (slCount(input->children) != 2)
+	    errAt(input->children->tok, "throwMore always takes two parameters");
+	coerceOne(pfc, &input->children, pfc->seriousErrorFullType, FALSE);
+	coerceOne(pfc, &input->children->next, pfc->seriousErrorFullType, FALSE);
+	insertCast(pptCastTypedToVar, pfTypeNew(pfc->varType), 
+		&input->children->next);
+	}
+    else
+	internalErr();
+    pp->name = function->name;
+    pp->ty = CloneVar(outputType);
     }
 }
 
@@ -994,6 +1016,43 @@ else
     }
 }
 
+static boolean fruitfulToInitClassFromSingleton(struct pfCompile *pfc,
+	struct pfBaseType *classBase)
+/* Look and see whether it will be ok to promote a singleton
+ * to a tuple. In general this is a handy shortcut for initializing
+ * classes of a single field, so we can do:
+ *     type var = (val)
+ * instead of
+ *     type var = (val,)
+ * However if the first field of the class or the init routine
+ * is itself a class, this could lead to an infinite loop. */
+{
+struct pfParse *initMethod = classBase->initMethod;
+struct pfType *fields = NULL;
+if (initMethod)
+    {
+    fields = initMethod->ty->children->children;
+    }
+else
+    {
+    struct pfBaseType *base;
+    for (base = classBase; base != NULL; base = base->parent)
+        {
+	fields = base->fields;
+	if (fields != NULL)
+	    break;
+	}
+    }
+if (fields != NULL)
+    {
+    struct pfBaseType *base = fields->base;
+    if (!base->isClass)
+	return TRUE;
+    }
+return FALSE;
+}
+
+
 static void castNumToString(struct pfCompile *pfc, struct pfParse **pPp, 
 	struct pfType *stringType)
 /* Make sure that pp is numeric.  Then cast it to a string. */
@@ -1212,6 +1271,7 @@ if (pt->base != destBase)
 	}
     else if (destBase->isClass)
         {
+	verbose(3, "%s is a class\n", destBase->name);
 	if (pt->base->isClass)
 	    {
 	    /* Check to see if we're just coercing to a parent class, which is ok. */
@@ -1227,10 +1287,24 @@ if (pt->base != destBase)
 	    }
 	if (!ok)
 	    {
+	    /* Try in many cases to turn a single value into a tuple.
+	     * This is a convenience for user, but have to be careful
+	     * not to enter an infinite loop if the first field of
+	     * class is also a class... */
 	    if (pt->tyty != tytyTuple)
 		{
-		insertCast(pptTuple, NULL, pPp);  /* Also not just a cast. */
-		pfTypeOnTuple(pfc, *pPp);
+		if (fruitfulToInitClassFromSingleton(pfc, destBase))
+		    {
+		    insertCast(pptTuple, NULL, pPp);  
+		    pfTypeOnTuple(pfc, *pPp);
+		    }
+		else
+		    {
+		    errAt(pp->tok, 
+		    	"Can't  initialize %s from singleton, try (singleton,)"
+			, destType->base);
+		    typeMismatch(pp, destType);
+		    }
 		}
 	    if (pp->type == pptCall || pp->type == pptIndirectCall)
 		{
@@ -1966,7 +2040,9 @@ switch (pp->type)
 		     {
 		     if (sameString(var->name, "parent") 
 		        && sameString(field->name, "init"))
+			 {
 			 return TRUE;
+			 }
 		     }
 		 }
 	     }
@@ -1981,16 +2057,42 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 return FALSE;
 }
 
+static boolean funcHasBody(struct pfParse *func)
+/* Return true if function parse node includes body. */
+{
+struct pfParse *name = func->children;
+struct pfParse *input = name->next;
+struct pfParse *output = input->next;
+struct pfParse *body = output->next;
+return (body != NULL);
+}
+
 static void insureCallsParentInit(struct pfParse *initMethod,
 	struct pfBaseType *parent)
+/* Make sure that class calls it's parent class's init method
+ * if parent has one. */
 {
 struct pfParse *parentInit = parent->initMethod;
-if (parentInit)
+if (parentInit && funcHasBody(initMethod))
     {
     if (!rFindParentInit(initMethod))
          errAt(initMethod->tok, "Need a call to parent init here.");
     }
 }
+
+static void insureNoParentInit(struct pfBaseType *base, struct pfBaseType *parent)
+/* Make sure that there are not inits in any of parents. */
+{
+while (parent != NULL && parent->isClass)
+    {
+    if (parent->initMethod)
+        errAt(base->def->tok, 
+		"Parent class %s has an init method, so %s must as well"
+		, parent->name, base->name);
+    parent = parent->parent;
+    }
+}
+
 
 static void blessClassOrInterface(struct pfCompile *pfc, struct pfParse *pp, boolean isInterface)
 /* Make sure that there are only variable , class declarations and
@@ -2004,8 +2106,13 @@ struct pfBaseType *base = pfScopeFindType(pp->scope, pp->name);
 
 if (base == NULL)
     internalErrAt(pp->tok);
-if (!pfc->isPfh && pfBaseIsDerivedClass(base) && base->initMethod != NULL)
-    insureCallsParentInit(base->initMethod, base->parent);
+if (pfBaseIsDerivedClass(base)) 
+    {
+    if (base->initMethod != NULL)
+	insureCallsParentInit(base->initMethod, base->parent);
+    else
+        insureNoParentInit(base, base->parent);
+    }
 pp->ty = type->ty;
 p2p = &compound->children;
 for (p = compound->children; p != NULL; p = p->next)
@@ -2425,7 +2532,8 @@ static void blessFunction(struct pfCompile *pfc, struct pfParse *funcDec)
  * covered, and that there are no functions inside functions. */
 {
 struct hash *outputHash = hashNew(4);
-struct pfParse *input = funcDec->children->next;
+struct pfParse *name = funcDec->children;
+struct pfParse *input = name->next;
 struct pfParse *output = input->next;
 struct pfParse **pBody = &output->next;
 struct pfParse *pp;

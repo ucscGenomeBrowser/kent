@@ -6,5 +6,5 @@ class filex
     }
 
 file f = fileOpen(args[0], "r");
-filex fx = (f);
+filex fx = (f,);
 

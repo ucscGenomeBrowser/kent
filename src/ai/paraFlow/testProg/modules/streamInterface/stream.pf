@@ -67,6 +67,6 @@ class fileStream
 
 global to openFileStream(string fileName, string mode="r") into stream stream
     {
-    fileStream fs = (fileOpen(fileName, mode));
+    fileStream fs = (fileOpen(fileName, mode),);
     stream = fs;
     }

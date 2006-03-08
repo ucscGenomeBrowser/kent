@@ -50,6 +50,116 @@ to flakarelli(int level)
 
 flakarelli(-1);
 
+
+class myErr extends error
+    {
+    int mySecretCode = 870;
+    to init(string message)
+        {
+	parent.init(message);
+	}
+    }
+
+to bail()
+    {
+    myErr e = ("Owwweee!");
+    throw(e);
+    }
+
+to bailHarder()
+    {
+    punt("Ock, I'm out of here");
+    }
+
+to risk()
+    {
+    try
+        {
+	string inner = "innerString";
+	bail();
+	}
+    catch (myErr e)
+        {
+	e.report();
+	}
+    }
+
+to riskMore()
+    {
+    try
+        {
+	try
+	    {
+	    bailHarder();
+	    }
+	catch (myErr e)
+	    {
+	    print("Caught inner");
+	    e.report();
+	    }
+	}
+    catch (error e)
+        {
+	print("Caught outer");
+	e.report();
+	}
+    }
+
+to chainedPunt()
+    {
+    try
+        {
+	try
+	    {
+	    bail();
+	    }
+	catch (error e)
+	    {
+	    puntMore(e, "inner error in chainedPunt");
+	    }
+	}
+    catch (error e)
+        {
+	print("Caught chained");
+	e.report();
+	}
+    }
+
+to chainedThrow()
+    {
+    try
+        {
+	try
+	    {
+	    bail();
+	    }
+	catch (error e)
+	    {
+	    error moreErr = ("No, really, I can handle it", "overconfident");
+	    throwMore(e, moreErr);
+	    }
+	}
+    catch (error e)
+        {
+	e.report();
+	print("Caught chained");
+	}
+    }
+
+risk();
+riskMore();
+chainedPunt();
+chainedThrow();
+
+
+try
+    {
+    punt("Bail out of non-function");
+    }
+catch (error e)
+    {
+    e.report();
+    }
 try
    {
    print("Bravely running away.");
