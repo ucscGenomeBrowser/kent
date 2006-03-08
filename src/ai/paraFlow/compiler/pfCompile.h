@@ -114,6 +114,8 @@ struct pfCompile
     struct pfType *dirFullType;		/* Dir full type including .keys() */
     struct pfType *elTypeFullType;	/* Generic element of collection type. */
     struct pfType *moduleFullType;
+    struct pfType *seriousErrorFullType;
+    struct pfBaseType *seriousErrorType;
     };
 
 enum pfAccessType

@@ -140,9 +140,19 @@ int _pf_find_int_type_id();
 int _pf_find_string_type_id();
 /* Return string type ID. */
 
+int _pf_find_error_type_id();
+/* Return id of error */
+
+int _pf_find_serious_error_type_id();
+/* Return id of seriousError. */
+
 _pf_Bit _pf_check_types(int destType, int sourceType);
 /* Check that sourceType can be converted to destType. */
 
+_pf_Bit _pf_base_is_ancestor(struct _pf_base *base, 
+	struct _pf_base *ancestor);
+/* Return TRUE if ancestor really is same as base or one of bases's
+ * ancestors. */
 
 #endif /* RUNTYPE_H */
 

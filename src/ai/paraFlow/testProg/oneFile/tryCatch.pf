@@ -1,4 +1,5 @@
 
+class point {int x,y,z}
 
 to hardErr()
 /* Access undefined object to cause a hard error. */
@@ -37,32 +38,15 @@ to flakarelli(int level)
 	   {
 	   doSomethingFlaky("flaky test " + level, v);
 	   }
-	catch (m,s,level)
+	catch (seriousError e)
 	   {
 	   print("Caught punter " + i + ". I'm at level " + level);
+	   e.report();
 	   }
 	i += 1;
 	}
     }
 
-to doSomething()
-    {
-    string mess,src;
-    int lev=2;
-    try  // consider adding an optional time-out here.
-	{
-	doSomethingFlaky("now", hardErr);
-	}
-    catch (message,source,-1)
-	{
-        print("I guess it really was a flaky " + source + 
-		". Here's the error message:");
-	print(message);
-	}
-    print("**********************");
-    print("And again with no catch");
-    doSomethingFlaky("then", hardErr);
-    }
 
 flakarelli(-1);
 
@@ -71,9 +55,9 @@ try
    print("Bravely running away.");
    punt("I just got scared");
    }
-catch (m)
+catch (error e)
    {
-   print("problem: " + m);
+   print("problem: " + e.asString());
    }
 
 

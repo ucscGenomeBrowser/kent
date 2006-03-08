@@ -2545,23 +2545,17 @@ static void codeTry(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
 struct pfParse *tryBody = pp->children;
 struct pfParse *catchVars = tryBody->next;
 struct pfParse *catchBody = catchVars->next;
-struct pfParse *messageVar = catchVars->children;
-struct pfParse *sourceVar = messageVar->next;
-struct pfParse *levelVar = sourceVar->next;
-struct dyString *messageVarName = varName(pfc, messageVar->var);
-struct dyString *sourceVarName = varName(pfc, sourceVar->var);
-struct dyString *levelVarName = varName(pfc, levelVar->var);
+struct pfParse *exceptionVar = catchVars->children;
+struct dyString *exceptionVarName = varName(pfc, exceptionVar->var);
+struct pfType *exceptionType = exceptionVar->ty;
 
 fprintf(f, "{\n");
-if (!pfc->isFunc)
-    fprintf(f, "int pf_catchLevel;\n");
-codeStatement(pfc, f, levelVar);
 if (pfc->isFunc)
-    fprintf(f, "_pf_Err_catch _pf_err = _pf_err_catch_new(&_pf_act, %s);\n",
-	    levelVarName->string);
+    fprintf(f, "_pf_Err_catch _pf_err = _pf_err_catch_new(&_pf_act, ");
 else
-    fprintf(f, "_pf_Err_catch _pf_err = _pf_err_catch_new(0, %s);\n",
-	    levelVarName->string);
+    fprintf(f, "_pf_Err_catch _pf_err = _pf_err_catch_new(0, ");
+codeForType(pfc, f, exceptionType);
+fprintf(f, ");\n");
 
 fprintf(f, "if (_pf_err_catch_start(_pf_err))\n");
 fprintf(f, "{\n");
@@ -2573,23 +2567,20 @@ fprintf(f, "{\n");
 fprintf(f, "  /* catch block should start here. */\n");
 if (!pfc->isFunc)
     {
-    fprintf(f, "_pf_String %s = 0;\n", messageVarName->string);
-    fprintf(f, "_pf_String %s = 0;\n", sourceVarName->string);
+    codeBaseType(pfc, f, exceptionType->base);
+    fprintf(f, " %s = 0;\n", exceptionVarName->string);
     }
 fprintf(f, "{\n");
-fprintf(f, "%s = _pf_string_from_const(_pf_err->message);\n",
-	messageVarName->string);
-fprintf(f, "%s = _pf_string_from_const(_pf_err->source);\n",
-	sourceVarName->string);
+fprintf(f, "%s = (", exceptionVarName->string);
+codeBaseType(pfc, f, exceptionType->base);
+fprintf(f, ")(_pf_err->err);\n");
 codeStatement(pfc, f, catchBody);
 fprintf(f, "}\n");
 fprintf(f, "  /* catch block should end here. */\n");
 fprintf(f, "}\n");
 fprintf(f, "_pf_err_catch_free(&_pf_err);\n");
 fprintf(f, "}\n");
-dyStringFree(&levelVarName);
-dyStringFree(&sourceVarName);
-dyStringFree(&messageVarName);
+dyStringFree(&exceptionVarName);
 }
 
 static void codeArrayAppend(struct pfCompile *pfc, FILE *f, struct pfParse *pp)

@@ -25,7 +25,7 @@ return pfTypeNew(base);
 }
 
 static void attachStringsAndThings(struct pfCompile *pfc, 
-	struct pfParse *stringModule)
+	struct pfParse *stringModule, struct pfParse *builtInModule)
 /* Finish parsing, binding and type checking the string module.  
  * Rummage around for string class and some other things we need
  * and attach them to the pfCompile struct. */
@@ -39,6 +39,8 @@ pfc->arrayFullType = findTypeInModule(stringModule, "_pf_array");
 pfc->arrayType->methods = pfc->arrayFullType->base->methods;
 pfc->dirFullType = findTypeInModule(stringModule, "_pf_dir");
 pfc->dirType->methods = pfc->dirFullType->base->methods;
+pfc->seriousErrorFullType = findTypeInModule(builtInModule, "seriousError");
+pfc->seriousErrorType = pfc->seriousErrorFullType->base;
 }
 
 static void addCompoundScopes(struct pfCompile *pfc, struct pfToken *tokList,
@@ -193,7 +195,7 @@ for (mod = pfc->moduleList; mod != NULL; mod = mod->next)
 	}
     }
 slReverse(&program->children);
-attachStringsAndThings(pfc, stringModule->pp);
+attachStringsAndThings(pfc, stringModule->pp, builtInModule->pp);
 
 /* Restore order of scopes. */
 slReverse(&pfc->scopeRefList);

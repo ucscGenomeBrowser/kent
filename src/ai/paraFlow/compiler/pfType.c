@@ -2701,6 +2701,32 @@ typePp->next = inputPp;
 pp->ty = typePp->ty;
 }
 
+static void checkCatch(struct pfCompile *pfc, struct pfParse *pp)
+/* Make sure that the catch exception parameter is a descendent of
+ * runtimeError. */
+{
+struct pfParse *varInit = pp->children;
+struct pfType *type = varInit->ty;
+struct pfBaseType *base = type->base;
+boolean ok = FALSE;
+if (varInit->next != NULL)
+    errAt(varInit->next->tok, "too many catch parameters");
+if (base->isClass)
+    {
+    while (base != NULL)
+        {
+	if (base == pfc->seriousErrorType)
+	    {
+	    ok = TRUE;
+	    break;
+	    }
+	base = base->parent;
+	}
+    }
+if (!ok)
+    errAt(varInit->tok, "Can only catch exceptions.");
+}
+
 void rTypeCheck(struct pfCompile *pfc, struct pfParse **pPp)
 /* Check types (adding conversions where needed) on tree,
  * which should have variables bound already. */
@@ -2867,6 +2893,9 @@ switch (pp->type)
     case pptCase:
 	coerceCase(pfc, pp);
         break;
+    case pptCatch:
+        checkCatch(pfc, pp);
+	break;
     default:
         break;
     }

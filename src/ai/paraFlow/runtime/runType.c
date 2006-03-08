@@ -390,6 +390,9 @@ _pf_base_table = bases;
 _pf_base_table_size = baseCount;
 }
 
+/* The type IDs 0,1,2,3 are set up by the compiler's
+ * codedType.c routine to always be int,string,seriousError,error*/
+
 int _pf_find_int_type_id()
 /* Return int type ID. */
 {
@@ -401,6 +404,33 @@ int _pf_find_string_type_id()
 {
 return 1;
 }
+
+int _pf_find_serious_error_type_id()
+/* Return id of seriousError. */
+{
+return 2;
+}
+
+int _pf_find_error_type_id()
+/* Return id of error */
+{
+return 3;
+}
+
+_pf_Bit _pf_base_is_ancestor(struct _pf_base *base, 
+	struct _pf_base *ancestor)
+/* Return TRUE if ancestor really is same as base or one of bases's
+ * ancestors. */
+{
+while (base != NULL)
+    {
+    if (base == ancestor)
+        return TRUE;
+    base = base->parent;
+    }
+return FALSE;
+}
+
 
 _pf_Bit _pf_check_types(int destType, int sourceType)
 /* Check that sourceType can be converted to destType. */

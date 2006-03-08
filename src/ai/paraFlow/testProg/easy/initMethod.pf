@@ -50,4 +50,4 @@ print(c);
 extraInit x = (3);
 print(x);
 try { x.setUpCrash("bugga!");}
-catch (m) print("caught " + m);
+catch (error e) print("caught " + e.asString());

@@ -4,8 +4,18 @@
 #define RUNERR_H
 
 #include <setjmp.h>
-#define boolean int
-// #include "../../../inc/errCatch.h"
+
+struct _pf_error
+/* A run time error. */
+    {
+    int _pf_refCount;			     	/* Number of references. */
+    void (*_pf_cleanup)(struct _pf_error *obj, int id); /* Called when refCount <= 0 */
+    _pf_polyFunType *_pf_polyFun;	/* Polymorphic functions. */
+    struct _pf_error *next;			/* Next error in chain. */
+    struct _pf_string *message;		/* Human readable message. */
+    struct _pf_string *source;		/* Associated error source. */
+    _pf_Int code;			/* Error code. */
+    };
 
 struct _pf_err_catch
 /* Something to help catch errors.   */
@@ -13,14 +23,13 @@ struct _pf_err_catch
     struct _pf_err_catch *next;	 /* Next in stack. */
     jmp_buf jmpBuf;		 /* Where to jump back to for recovery. */
     struct _pf_activation *act;	 /* Activation record of our function. */
-    boolean gotError;		 /* If true we have an error. */
-    int level;			 /* We can handle errors of this level or more. */
-    char *message;		 /* Error message, filled by puntCatcher. */
-    char *source;		 /* Error source,  filled by puntCatcher. */
+    int catchType;		 /* Type of error we catch. */
+    struct _pf_error *err;	 /* Information about the error. */
     };
 typedef struct _pf_err_catch *_pf_Err_catch;
 
-struct _pf_err_catch *_pf_err_catch_new(struct _pf_activation *act, int level);
+struct _pf_err_catch *_pf_err_catch_new(struct _pf_activation *act,
+	int errTypeId);
 /* Create a new error catcher. */
 
 #define _pf_err_catch_start(e) \
@@ -37,7 +46,7 @@ void _pf_err_catch_end(struct _pf_err_catch *err);
 /* Pop error catcher off of stack.  Don't free it up yet, because
  * we want to examine gotErr still. */
 
-#define _pf_err_catch_got_err(e) (e->gotError)
+#define _pf_err_catch_got_err(e) (e->err)
 /* Return TRUE if catcher got an error. */
 
 void _pf_err_catch_free(struct _pf_err_catch **pErr);

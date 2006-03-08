@@ -9,6 +9,33 @@
 #include "print.h"
 #include "runErr.h"
 
+static void errCleanup(struct _pf_error *err, int typeId)
+/* Clean up an error structure. */
+{
+_pf_class_cleanup((struct _pf_object *)err, typeId);
+}
+
+static struct _pf_error *errorNew(_pf_String message, _pf_String source, 
+	int code)
+/* Create a new generic error object. */
+{
+struct _pf_error *err;
+AllocVar(err);
+err->message = message;
+err->source = source;
+err->code = code;
+err->_pf_refCount = 1;
+err->_pf_cleanup = errCleanup;
+return err;
+}
+
+static struct _pf_error *errorNewFromC(char *message, char *source, int code)
+/* Create error object around C style strings. */
+{
+return errorNew(_pf_string_from_const(message), _pf_string_from_const(source),
+    code);
+}
+
 static void stackDump(FILE *f)
 /* Print stack dump. */
 {
@@ -46,46 +73,45 @@ void pf_stackDump()
 {
 fprintf(stdout, "----------application requested stack dump---------\n");
 stackDump(stdout);
-fprintf(stdout, "----------end application user requesed stack dump----------\n");
 }
 
 static struct _pf_err_catch *errCatchStack = NULL;
 
-struct _pf_err_catch *_pf_err_catch_new(struct _pf_activation *act, int level)
+struct _pf_err_catch *_pf_err_catch_new(struct _pf_activation *act,
+	int errTypeId)
 /* Create a new error catcher. */
 {
-struct _pf_err_catch *err;
-AllocVar(err);
-err->act = act;
-err->level = level;
-return err;
+struct _pf_err_catch *errCatch;
+AllocVar(errCatch);
+errCatch->act = act;
+errCatch->catchType = errTypeId;
+return errCatch;
 }
 
-int _pf_err_catch_push(struct _pf_err_catch *err)
+int _pf_err_catch_push(struct _pf_err_catch *errCatch)
 /* Pushes catcher on catch stack and returns TRUE. Not typically
  * used directly, but called vi _pf_err_catch_start macro. */
 {
-slAddHead(&errCatchStack, err);
+slAddHead(&errCatchStack, errCatch);
 return TRUE;
 }
 
-void _pf_err_catch_end(struct _pf_err_catch *err)
+void _pf_err_catch_end(struct _pf_err_catch *errCatch)
 /* Pop error catcher off of stack.  Don't free it up yet, because
  * we want to examine gotErr still. */
 {
 errCatchStack = errCatchStack->next;
 }
 
-void _pf_err_catch_free(struct _pf_err_catch **pErr)
+void _pf_err_catch_free(struct _pf_err_catch **pErrCatch)
 /* Free up memory associated with error catcher. */
 {
-freez(pErr);
+freez(pErrCatch);
 }
 
 struct _pf_punt_info
 /* Information associated with a punt. */
     {
-    int level;		/* Punt level.  0 normal, -1 program error */
     struct dyString *message;	/* Punt message. */
     struct dyString *source;	/* Punt source. */
     };
@@ -136,20 +162,32 @@ for (s = _pf_activation_stack; s != act; s = s->parent)
 _pf_activation_stack = act;
 }
 
-static void puntCatcher()
+static void reportErrToFile(struct _pf_error *err, FILE *f)
+/* Report error to file. */
+{
+while (err != NULL)
+    {
+    fprintf(f, "%s\n", err->message->s);
+    err = err->next;
+    }
+}
+
+static void puntCatcher(struct _pf_error *err, int typeId)
 /* Try and catch the punt. */
 {
 struct _pf_err_catch *catcher;
+struct _pf_type *errType = _pf_type_table[typeId];
+struct _pf_base *errBase = errType->base;
 for (catcher = errCatchStack; catcher != NULL; catcher = catcher->next)
     {
-    if (catcher->level <= punter.level)
+    struct _pf_type *catchType = _pf_type_table[catcher->catchType];
+    struct _pf_base *catchBase = catchType->base;
+    if (_pf_base_is_ancestor(errBase, catchBase))
         break;
     }
 if (catcher)
     {
-    catcher->gotError = TRUE;
-    catcher->message = punter.message->string;
-    catcher->source = punter.source->string;
+    catcher->err = err;
     unwindStackTo(catcher->act);
     errCatchStack = catcher;
     longjmp(catcher->jmpBuf, -1);
@@ -160,9 +198,8 @@ else
 	{
 	fprintf(stderr, "\n----------start stack dump---------\n");
 	stackDump(stderr);
-	fprintf(stderr, "-----------end stack dump----------\n");
 	}
-    fprintf(stderr, "%s\n", punter.message->string);
+    reportErrToFile(err, stderr);
     exit(-1);
     }
 }
@@ -170,7 +207,10 @@ else
 static void puntAbortHandler()
 /* Our handler for errAbort. */
 {
-puntCatcher();
+struct _pf_error *err = errorNewFromC(punter.message->string, 
+	punter.source->string, errno);
+int errTypeId = _pf_find_error_type_id();
+puntCatcher(err, errTypeId);
 }
 
 static void puntWarnHandler(char *format, va_list args)
@@ -179,7 +219,6 @@ static void puntWarnHandler(char *format, va_list args)
 {
 dyStringClear(punter.message);
 dyStringVaPrintf(punter.message, format, args);
-punter.level = 0;
 dyStringClear(punter.source);
 dyStringAppend(punter.source, "lib");
 }
@@ -197,12 +236,9 @@ pushAbortHandler(puntAbortHandler);
 void _pf_run_err(char *message)
 /* Run time error.  Prints message, dumps stack, and aborts. */
 {
-dyStringClear(punter.message);
-dyStringAppend(punter.message, message);
-punter.level = -1;
-dyStringClear(punter.source);
-dyStringAppend(punter.source, "runtime");
-puntCatcher();
+struct _pf_error *err = errorNewFromC(message,  "runtime", -1);
+int seriousErrTypeId = _pf_find_serious_error_type_id();
+puntCatcher(err, seriousErrTypeId);
 }
 
 void pf_punt(_pf_Stack *stack)
@@ -210,14 +246,10 @@ void pf_punt(_pf_Stack *stack)
 {
 _pf_String message = stack[0].String;
 _pf_String source = stack[1].String;
-_pf_Int level = stack[2].Int;
-
-dyStringClear(punter.message);
-dyStringAppend(punter.message, message->s);
-dyStringClear(punter.source);
-dyStringAppend(punter.source, source->s);
-punter.level = level;
-puntCatcher();
+_pf_Int code = stack[2].Int;
+int errTypeId = _pf_find_error_type_id();	// TODO - replace this with err type
+struct _pf_error *err = errorNew(message, source, code);
+puntCatcher(err, errTypeId);
 }
 
 void pf_warn(_pf_Stack *stack)
@@ -226,4 +258,28 @@ void pf_warn(_pf_Stack *stack)
 _pf_String message = stack[0].String;
 _pf_nil_check(message);
 warn(message->s);
+}
+
+void _pf_cm_seriousError_asString(_pf_Stack *stack)
+/* Get error message. */
+{
+struct _pf_error *err = stack[0].v;
+struct dyString *dy = dyStringNew(0);
+while (err != NULL)
+    {
+    dyStringAppend(dy, err->message->s);
+    err = err->next;
+    if (err != NULL)
+	dyStringAppendC(dy, '\n');
+    }
+stack[0].String = _pf_string_from_const(dy->string);
+dyStringFree(&dy);
+}
+
+
+void _pf_cm_seriousError_report(_pf_Stack *stack)
+/* Report an error. */
+{
+struct _pf_error *err = stack[0].v;
+reportErrToFile(err, stderr);
 }

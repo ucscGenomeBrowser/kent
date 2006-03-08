@@ -145,13 +145,16 @@ struct hash *hash = hashNew(0);
 struct codedBaseType *cbt;
 struct codedBaseType *intCbt = cbtFind(cbtList, 1, "int");
 struct codedBaseType *stringCbt = cbtFind(cbtList, 1, "string");
-struct codedBaseType *dyStringCbt = cbtFind(cbtList, 1, "dyString");
+struct codedBaseType *seriousErrCbt = cbtFind(cbtList, 1, "seriousError");
+struct codedBaseType *errCbt = cbtFind(cbtList, 1, "error");
 
-/* Make up int and string types. The runtime depends on these
- * being first and second in the type array. */
+/* Make up int and string types, serious error, and error types. The runtime 
+ * depends on these being in this order as the first elements of the 
+ * type array. */
 saveSimpleTypes(f, hash, dy, intCbt);
 saveSimpleTypes(f, hash, dy, stringCbt);
-saveSimpleTypes(f, hash, dy, dyStringCbt);
+saveSimpleTypes(f, hash, dy, seriousErrCbt);
+saveSimpleTypes(f, hash, dy, errCbt);
 
 rFillCompHash(f, hash, dy, program);
 return hash;

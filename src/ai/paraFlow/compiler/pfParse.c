@@ -1826,7 +1826,7 @@ return varInit;
 
 static struct pfParse *parseTry(struct pfCompile *pfc, struct pfParse *parent,
 	struct pfToken **pTokList, struct pfScope *scope)
-/* Parse try {statements} catch (message,[source],[level])  statement 
+/* Parse try {statements} catch (exception e)  statement 
  * into:
  *      pptTry
  *         <try body>
@@ -1834,26 +1834,15 @@ static struct pfParse *parseTry(struct pfCompile *pfc, struct pfParse *parent,
  *            pptVarDec 
  *               pptTypeName string
  *               pptNameUse message
- *            pptVarDec
- *               pptTypeName string
- *               pptNameUse source (or catchSource if not declared)
- *            pptAssignment
- *               pptVarDec
- *                  pptTypeName int
- *                  pptNameUse catchLevel
- *                  pptConstUse [or pptConstZero if not declared)
  *         <catch body>
  */
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *tryPp = pfParseNew(pptTry, tok, parent, scope);
-struct pfParse *tryBody, *catchPp, *catchBody;
-struct pfParse *messagePp, *sourcePp;
-struct pfParse *levelPp, *levelExp = NULL;
-char *message, *source = "catchSource";
+struct pfParse *tryBody, *catchPp, *exceptionPp, *catchBody;
 struct pfToken *catchTok;
 int level = 0;
-struct pfScope *catchScope;	/* Scope for catch vars. */
+struct pfScope *catchScope;	/* Scope for catch var. */
 
 tok = tok->next;  /* Skip "try" */
 
@@ -1873,35 +1862,13 @@ catchScope = pfScopeNew(pfc, scope, 2, NULL);
 catchPp = pfParseNew(pptCatch, tok, tryPp, catchScope);
 tok = tok->next;
 
-/* Get catch parameters, there may be one to three. */
+/* Get exception declaration. */
 skipRequiredCharType('(', &tok);
-if (tok->type != pftName)
-    expectingGot("message variable name", tok);
-message = tok->val.s;
-tok = tok->next;
-if (tok->type != ')')
-    {
-    skipRequiredCharType(',', &tok);
-    if (tok->type != pftName)
-	expectingGot("source variable name", tok);
-    source = tok->val.s;
-    tok = tok->next;
-    }
-if (tok->type != ')')
-    {
-    skipRequiredCharType(',', &tok);
-    levelExp = pfParseExpression(pfc, catchPp, &tok, catchScope);
-    }
-if (levelExp == NULL)
-    levelExp = pfParseNew(pptConstZero, tok, catchPp, catchScope);
+exceptionPp = parseVarDec(pfc, catchPp, &tok, catchScope);
+if (exceptionPp->type != pptVarDec)
+    expectingGot("exception e", exceptionPp->tok);
+exceptionPp->type = pptVarInit;
 skipRequiredCharType(')', &tok);
-
-/* Fake up parse nodes for the three catch parameters. */
-messagePp = fakeVarInit(message, pfc->stringType, catchTok, catchPp, catchScope);
-sourcePp = fakeVarInit(source, pfc->stringType, catchTok, catchPp, catchScope);
-levelPp = fakeVarInit("catchLevel", pfc->intType, 
-	catchTok, catchPp, catchScope);
-slAddTail(&levelPp->children, levelExp);
 
 /* And get body of catch. */
 catchBody = pfParseStatement(pfc, tryPp, &tok, catchScope);
@@ -1909,9 +1876,7 @@ catchBody = pfParseStatement(pfc, tryPp, &tok, catchScope);
 /* Arrange parse tree under try. */
 tryPp->children = tryBody;
 tryBody->next = catchPp;
-catchPp->children = messagePp;
-messagePp->next = sourcePp;
-sourcePp->next = levelPp;
+catchPp->children = exceptionPp;
 catchPp->next = catchBody;
 *pTokList = tok;
 return tryPp;
