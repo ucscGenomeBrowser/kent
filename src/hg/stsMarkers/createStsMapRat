@@ -5,7 +5,7 @@
 # to get it under CVS control, and modified to make stsMapRat instead 
 # of human stsMap; added warnings & strict.
 
-# $Id: createStsMapRat,v 1.1 2006/03/03 19:56:17 angie Exp $
+# $Id: createStsMapRat,v 1.2 2006/03/09 01:22:05 angie Exp $
 
 use warnings;
 use strict;
@@ -77,7 +77,7 @@ while ($line = <INFO>) {
       print "$chrs[$i]\t$starts[$i]\t$ends[$i]\t$fields[1]\t$score{$id}\t$id\t$accs[$i]\t$oaccs[$i]\t";
       # RH
       if ($fields[19]) {
-	print "$fields[19]\t$fields[20]\t$fields[21]";
+	print "$fields[19]\t$fields[20]\t$fields[21]\t";
       } else {
 	print "0\t0.00\t0.0\t";
       }
