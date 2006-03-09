@@ -1315,14 +1315,13 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
 
 ##########################################################################
 # STS MARKERS
-# NOTE: I've already gone through the steps to build the tables... however, 
-# at the end I found a lot of missing names, resulting in missing names in 
-# the NCBI files.  Also, the NCBI UniSTS.sts and UniSTS_rat.sts have several 
-# inconsistencies which I've passed on to NCBI... waiting to hear back from 
-# them before completing this.  Ideally they will crank out a new 
-# UniSTS_rat.sts and I can just repeat all the steps.
+# NOTE: Instead of using UniSTS_rat.sts as usual, I made a local version 
+# which uses the name given in UniSTS.sts if none is given in UniSTS_rat.sts 
+# and "UniSTS:$id" if no name is given in UniSTS.sts.  Some inconsistencies 
+# between UniSTS.sts and UniSTS_rat.sts reported 2/21/06; haven't heard 
+# back from them yet so I'll just forge ahead with latest UniSTS files.
 
-# MAKE STSINFORAT (DONE 2/14/06 angie -- REDO with fixed UniSTS_rat.sts)
+# MAKE STSINFORAT (DONE 3/6/06 angie)
     # This method was developed by Yontao.  ytlu/script is under CVS control
     # so I'm using ~/ytlu/script/perl/script/match but have copied several 
     # other scripts from /cluster/store4/ratMarker/code into 
@@ -1338,11 +1337,52 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
     wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.aliases
     wget --timestamping ftp://rgd.mcw.edu/pub/rhmap/3.4/RHv3_4_MapData.txt
     wget --timestamping ftp://rgd.mcw.edu/pub/rhmap/3.4/RAW_MARKER_SEQINFO.txt
+
+    # UniSTS_rat.sts is missing a lot of names that can be found in UniSTS.sts
+    # so load that up and make a fixed-up UniSTS_rat.rat_extracted.sts:
+    wget --timestamping ftp://ftp.ncbi.nih.gov/repository/UniSTS/UniSTS.sts
+    awk -F"\t" '$5 != "-" {print $1 "\t" $5 "\t" $8;}' UniSTS.sts \
+      > UniSTS.names
+    cat > extractRat.pl <<'_EOF_'
+#!/usr/bin/perl -w
+
+use strict;
+
+open(NAMES, "<UniSTS.names") || die "Can't open UniSTS.names: $!\n";
+print STDERR "Hashing UniSTS.names...\n";
+my %id2name;
+while (<NAMES>) {
+  chomp;
+  my @words = split("\t");
+  $id2name{$words[0]} = $words[1];
+}
+
+print STDERR "Extracting rat and adding in names...\n";
+while (<>) {
+  chomp;
+  my @words = split("\t");
+  next if ($words[7] ne "Rattus norvegicus");
+  if ($words[4] eq '-') {
+    $words[4] = $id2name{$words[0]};
+    $words[4] = "UniSTS:$words[0]" if (! defined $words[4]);
+  } elsif ((defined $id2name{$words[0]}) &&
+           ($words[4] ne $id2name{$words[0]})) {
+    print STDERR "Disagreement: name of $words[0] given as " .
+                  $id2name{$words[0]} . " and as $words[4]\n";
+  }
+  print join("\t", @words) . "\n";
+}
+'_EOF_'
+    # << emacs
+    chmod a+x extractRat.pl
+    ./extractRat.pl UniSTS_rat.sts > UniSTS_rat.rat_extracted.sts
+    # Many warnings about different name given in UniSTS_rat.sts vs. 
+    # UniSTS.sts -- reported to NCBI.
     # Make UniSTS_rat.alias by joining the first columns of
-    # UniSTS_rat.sts and UniSTS.aliases so we get just the aliases of
-    # items in UniSTS_rat.sts:
+    # UniSTS_rat.rat_extracted.sts and UniSTS.aliases so we get just the 
+    # aliases of items in UniSTS_rat.rat_extracted.sts:
     /cluster/home/ytlu/ytlu/script/perl/script/match \
-      UniSTS_rat.sts 1 UniSTS.aliases 1 \
+      UniSTS_rat.rat_extracted.sts 1 UniSTS.aliases 1 \
       > UniSTS_rat.alias
     # Extract these columns from RHv3_4_MapData.txt:
     # RGD_Sym TEMPL_SEQ FORWARD_PRIMER REVERSE_PRIMER EXP_SIZE
@@ -1354,7 +1394,7 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
     cat inMapDataOnly.txt RAW_MARKER_SEQINFO.txt > marker_seqinfo.txt
     # Combine sources into a "draft" stsInfoRat.tab file:
     ~/kent/src/hg/stsMarkers/createStsInfoRat \
-      UniSTS_rat.sts marker_seqinfo.txt UniSTS_rat.alias \
+      UniSTS_rat.rat_extracted.sts marker_seqinfo.txt UniSTS_rat.alias \
       10116.RH_map.3.4.txt 10116.FHH_x_ACI.7.txt 10116.SHRSP_x_BN.7.txt \
       > stsInfoRat-draft
     # clean some redundant and conflicting entries --> final stsInfoRat.tab:
@@ -1366,13 +1406,55 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
       ratPrimer.fa ratSeq.fa ratPrimer.info -a 200
 
 
-# BLAT.2 STS PRIMERS (DONE 2/15/06 angie -- REDO with fixed UniSTS_rat.sts)
+# BLAT CLONE SEQUENCES (DONE 3/8/06 angie)
+    # Based on what was done for hg17, I think the thing to do is not use 
+    # ooc, but filter out the results with tGapSize > 1000.
     ssh kkstore01
     cd /cluster/data/rn4
     mkdir -p /cluster/bluearc/rn4/ctgFa
     foreach d (*/chr*_?{,?})
       cp -p $d/$d:t.fa /cluster/bluearc/rn4/ctgFa/
     end
+    cp -p /cluster/data/rn4/bed/stsMarkers/ratSeq.fa \
+      /cluster/bluearc/rn4/
+    ssh pk
+    mkdir /cluster/data/rn4/bed/stsMarkers/clone
+    cd /cluster/data/rn4/bed/stsMarkers/clone
+    # A run with ooc, and then a run without ooc only on the unaligned seqs,
+    # would probably save time next time around...
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/blat {check in line+ $(path1)} {check in line+ /cluster/bluearc/rn4/ratSeq.fa} -stepSize=5 {check out line+ clone.out/$(root1).psl}
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    mkdir clone.out
+    ls -1S /cluster/bluearc/rn4/ctgFa/chr*.fa > ctg.lst
+    gensub2 ctg.lst single gsub jobList
+    para make jobList
+    para time
+#Completed: 591 of 591 jobs
+#CPU time in finished jobs:    1628303s   27138.38m   452.31h   18.85d  0.052 y
+#IO & Wait Time:                 26091s     434.85m     7.25h    0.30d  0.001 y
+#Average job time:                2799s      46.66m     0.78h    0.03d
+#Longest finished job:            6138s     102.30m     1.71h    0.07d
+#Submission to last job:          8714s     145.23m     2.42h    0.10d
+    ssh kolossus
+    cd /cluster/data/rn4/bed/stsMarkers/clone
+    #	filter alignments for (qEnd-qStart) vs. (tEnd-tStart)
+    #	should not be more than 100 bases different.
+    pslSort dirs stdout temp clone.out \
+    | pslReps -nearTop=0.0001 -minCover=0.6 -minAli=0.8 -noIntrons stdin \
+        clones.unlifted.tmp.psl /dev/null
+    awk '($8 < 1000) {print;}' clones.unlifted.tmp.psl > clones.unlifted.psl
+    wc -l clones.un*
+#  19097 clones.unlifted.psl
+#  22275 clones.unlifted.tmp.psl
+    rmdir temp
+    rm /cluster/bluearc/rn4/ratSeq.fa
+
+
+# BLAT.2 STS PRIMERS (DONE 3/7/06 angie)
     cp -p /cluster/data/rn4/bed/stsMarkers/ratPrimer.fa \
       /cluster/bluearc/rn4/
     ssh kk
@@ -1391,11 +1473,11 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
     para make jobList
     para time
 #Completed: 591 of 591 jobs
-#CPU time in finished jobs:     463771s    7729.52m   128.83h    5.37d  0.015 y
-#IO & Wait Time:                 62689s    1044.81m    17.41h    0.73d  0.002 y
-#Average job time:                 891s      14.85m     0.25h    0.01d
-#Longest finished job:            1100s      18.33m     0.31h    0.01d
-#Submission to last job:          3412s      56.87m     0.95h    0.04d
+#CPU time in finished jobs:     466140s    7769.00m   129.48h    5.40d  0.015 y
+#IO & Wait Time:                 63525s    1058.75m    17.65h    0.74d  0.002 y
+#Average job time:                 896s      14.94m     0.25h    0.01d
+#Longest finished job:            1756s      29.27m     0.49h    0.02d
+#Submission to last job:          5330s      88.83m     1.48h    0.06d
 
     ssh kkstore01
     cd /cluster/data/rn4/bed/stsMarkers/primer
@@ -1412,10 +1494,10 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
     # Would be very nice to compare wc output with rn3 run, but I cannot
     # find the rn3 run.
     wc primers.psl.100.unlifted
-#  8055079 169156577 796465212 primers.psl.100.unlifted
+#  8050086 169051724 799770587 primers.psl.100.unlifted
 
 
-# E-PCR STS PRIMERS (DONE 2/15/06 angie -- REDO with fixed UniSTS_rat.sts)
+# E-PCR STS PRIMERS (DONE 3/7/06 angie)
     ssh kkstore01
     cp -p /cluster/data/rn4/bed/stsMarkers/ratPrimer.info \
       /cluster/bluearc/rn4/
@@ -1440,12 +1522,13 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
     gensub2 ctg.lst single gsub jobList
     para make jobList
     para time
+    # Actually ran on pk -- kk is swamped at the moment.
 #Completed: 591 of 591 jobs
-#CPU time in finished jobs:     211192s    3519.87m    58.66h    2.44d  0.007 y
-#IO & Wait Time:                 69874s    1164.56m    19.41h    0.81d  0.002 y
-#Average job time:                 476s       7.93m     0.13h    0.01d
-#Longest finished job:             557s       9.28m     0.15h    0.01d
-#Submission to last job:          1013s      16.88m     0.28h    0.01d
+#CPU time in finished jobs:     103485s    1724.75m    28.75h    1.20d  0.003 y
+#IO & Wait Time:                 29018s     483.63m     8.06h    0.34d  0.001 y
+#Average job time:                 224s       3.74m     0.06h    0.00d
+#Longest finished job:             341s       5.68m     0.09h    0.00d
+#Submission to last job:           482s       8.03m     0.13h    0.01d
 
     ssh kkstore01
     cd /cluster/data/rn4/bed/stsMarkers/ePCR
@@ -1454,24 +1537,13 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
     rm -r /cluster/bluearc/rn4/ctgFa
     # Would compare to rn3 if I could find it...
     wc all.epcr
-#  73893  295572 3915982 all.epcr
+#  73885  295540 3915703 all.epcr
 
 
-# COMBINE AND FILTER BLAT.2 AND E-PCR RESULTS (IN PROGRESS 2/16/06 angie -- REDO with fixed UniSTS_rat.sts)
+# COMBINE AND FILTER BLAT.2 AND E-PCR RESULTS (DONE 3/8/06 angie)
     ssh kolossus
     cd /cluster/data/rn4/bed/stsMarkers/primer
-    /cluster/bin/scripts/filterSTSPrimers -rat \
-      ../stsInfoRat.tab primers.psl.100.unlifted \
-      ../ratPrimer.info ../ePCR/all.epcr \
-    | liftUp -nohead -type=.psl primers.psl.filter.blat \
-        ../../../jkStuff/liftAll.lft warn stdin
-    # Would compare to rn3 if I could find it...
-    wc primers.psl.100
-#  8055078 169156577 827281916 primers.psl.100
-    wc primers.psl.filter.blat
-#  38724  813204 4101534 primers.psl.filter.blat
-
-    # create accession_info.rdb
+    # create accession_info.rdb: AGP info.
     /cluster/bin/scripts/compileAccInfo -rat /cluster/data/rn4 /dev/null
 #0 processed
     # "0 processed" sounds a little scary but it's 0 because we didn't pass 
@@ -1485,16 +1557,33 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
     rm accession_info.rdb.tmp
     # Would compare to rn3 if I could find it...
     wc accession_info.rdb
-# 138570 1524274 9921917 accession_info.rdb
+# 138571 1524285 9921966 accession_info.rdb
 
-    # creates epcr.not.found.nomatch and epcr.not.found.psl
+    # filterSTSPrimers combines blat.2 and epcr results.  
+    # For human there is a program pslFilterPrimers that combines isPcr and 
+    # epcr results... might be interesting to try that next time around.
+    /cluster/bin/scripts/filterSTSPrimers -rat \
+      ../stsInfoRat.tab primers.psl.100.unlifted \
+      ../ratPrimer.info ../ePCR/all.epcr \
+    | liftUp -nohead -type=.psl primers.psl.filter.blat \
+        ../../../jkStuff/liftAll.lft warn stdin
+    # Would compare to rn3 if I could find it...
+    wc primers.psl.100.unlifted
+#  8050086 169051724 799770587 primers.psl.100.unlifted
+    wc primers.psl.filter.blat
+#  38707  812847 4100619 primers.psl.filter.blat
+
+    # filterSTSPrimers creates epcr.not.found which actually contains 
+    # items that *were* found by epcr but not by blat.  Translate to PSL:
     /cluster/bin/scripts/epcrToPsl -rat epcr.not.found ../ratPrimer.info \
       accession_info.rdb /cluster/data/rn4
+    # epcrToPsl creates epcr.not.found.nomatch and epcr.not.found.psl
     # Would compare to rn3 if I could find it...
     wc epcr*
 #  748  2992 27112 epcr.not.found
 #    0     0     0 epcr.not.found.nomatch
 #  748 15708 72452 epcr.not.found.psl
+    # Lift the PSL:
     mv epcr.not.found.psl epcr.not.found.unlifted.psl
     liftUp -nohead epcr.not.found.psl \
       ../../../jkStuff/liftAll.lft warn epcr.not.found.unlifted.psl
@@ -1507,60 +1596,69 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
     /cluster/bin/scripts/extractPslInfo primers.psl.filter
     # Would compare to rn3 if I could find it...
     wc primers.psl.filter.initial
-#  39469  236814 2071084 primers.psl.filter.initial
+#  39451  236706 2071215 primers.psl.filter.initial
 
     # create primers.psl.filter.lifted.initial.acc
     /cluster/bin/scripts/findAccession -agp \
       -rat primers.psl.filter.initial /cluster/data/rn4
-    #	it complains about missing AGP for Y, Y_random, M -- OK.
+    # it warns about missing AGP for M_random -- OK.
     # Would compare to rn3 if I could find it...
     wc primers.psl.filter.initial.acc
-#  37983  265881 2483833 primers.psl.filter.initial.acc
+#  39451  276157 2579345 primers.psl.filter.initial.acc
 
     /cluster/bin/scripts/getStsId -rat \
       ../stsInfoRat.tab  primers.psl.filter.initial.acc \
-      > primers.initial.acc.trans
-    # Would compare to rn3 if I could find it...
-    wc primers.initial.acc.trans
-#  37983  265881 2150969 primers.initial.acc.trans
-
-    sort -k 4n primers.initial.acc.trans > primers.final
+    | sort -k 4n primers.initial.acc.trans > primers.final
     # Would compare to rn3 if I could find it...
     wc primers.final
-#  37983  265881 2150969 primers.final
-    rm primers.initial.acc.trans
+#  39451  276157 2232848 primers.final
 
+    # Lift clone sequence alignments
+    cd /cluster/data/rn4/bed/stsMarkers/clone
+    liftUp -nohead clones.psl \
+      ../../../jkStuff/liftAll.lft warn clones.unlifted.psl
+    /cluster/bin/scripts/extractPslInfo clones.psl
+    # extractPslInfo creates clones.psl.initial
+    /cluster/bin/scripts/findAccession -agp \
+      -rat clones.psl.initial /cluster/data/rn4
+    # findAccession creates clones.psl.initial.acc
+    sort -k 4n clones.psl.initial.acc > clones.final
+
+    # Combine clone sequence alignments with primer alignments
     cd /cluster/data/rn4/bed/stsMarkers
     /cluster/bin/scripts/combineSeqPrimerPos \
-      /dev/null primer/primers.final > stsMarkers_pos.rdb
+      clone/clones.final primer/primers.final 
+    # creates stsMarkers_pos.rdb
     # Would compare to rn3 if I could find it...
     wc stsMarkers_pos.rdb
-#  37811  264677 1870543 stsMarkers_pos.rdb
+#  39291  275037 1893500 stsMarkers_pos.rdb
 
     ~/kent/src/hg/stsMarkers/createStsMapRat \
       stsInfoRat.tab  stsMarkers_pos.rdb > stsMapRat.bed
     # Would compare to rn3 if I could find it...
     wc stsMapRat.bed
-#  37043  533848 3133816 stsMapRat.bed
+#  38802  582030 3297166 stsMapRat.bed
 
-    ~/kent/src/hg/stsMarkers/createStsAlias stsInfoRat.tab > stsAlias.tab
+    ~/kent/src/hg/stsMarkers/createStsAlias stsInfoRat.tab \
+    | sort -u > stsAlias.tab
+    # Warnings about missing aliases... probably OK.
     # Would compare to rn3 if I could find it...
     wc stsAlias.tab
-# 117591  352773 2786614 stsAlias.tab
+# 115872  347616 2809404 stsAlias.tab
 
     #	compare old and new name lists:
     ssh -x hgwdev 'hgsql -N rn3 -e "select name from stsMapRat" | sort -u' \
     > rn3.nameList
     awk '{print $4}' stsMapRat.bed | sort -u > rn4.nameList
     comm -12 rn?.nameList | wc
-#  31223   31223  277788 [in common]
+#  32693   32693  290774 [in common]
     comm -23 rn3.nameList rn4.nameList | wc
-#   2678    2678   23645
+#   1208    1208   10659 [in rn3 only]
     comm -13 rn3.nameList rn4.nameList | wc
-#   4562    4562   42653 [in rn4 only]
+#   5234    5234   48832 [in rn4 only]
 
 
-# LOAD STS MARKER TABLES (TODO 2//06 angie)
+# LOAD STS MARKER TABLES (DONE 3/8/06 angie)
     ssh hgwdev
     cd /cluster/data/rn4/bed/stsMarkers
     # Add primer sequences to /gbdb and load:
@@ -1577,13 +1675,38 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
       ~/kent/src/hg/lib/stsAlias.sql stsAlias.tab
     hgLoadSqlTab rn4 stsInfoRat \
       ~/kent/src/hg/lib/stsInfoRat.sql stsInfoRat.tab
-    hgLoadPsl -table=all_sts_primer rn4 primer/primers.psl.filter
-    hgLoadBed rn4 stsMapRat \
-      -sqlTable=~/kent/src/hg/lib/stsMapRat.sql stsMapRat.bed
+
+    # After some work on the stsInfoRat creation process which should help 
+    # next time around (do not do this part next time, just for the record):
+    hgLoadSqlTab rn4 stsInfoRat \
+      ~/kent/src/hg/lib/stsInfoRat.sql stsInfoRat.tab.new
+#Warning: load of stsInfoRat did not go as planned: 48048 record(s), 0 row(s) skipped, 5 warning(s) loading stsInfoRat.tab
+    echo 'select * from stsInfoRat' | hgsql -N rn4 > /tmp/tmp
+    # compare /tmp/tmp and stsInfoRat.tmp -- looks like 5 alias fields are 
+    # truncated at 255 chars, not so terrible because we have stsAlias.
+    # -- But since the IDs are off-by-one for a large stretch of that due 
+    # -- to getting rid of a garbage line, I reloaded and manually deleted 
+    # -- the unused and often truncated clone sequence values:
+    hgLoadSqlTab rn4 stsInfoRat \
+      ~/kent/src/hg/lib/stsInfoRat.sql stsInfoRat.tab
+#Warning: load of stsInfoRat did not go as planned: 48049 record(s), 0 row(s) skipped, 396095 warning(s) loading stsInfoRat.tab
+    hgsql rn4 -e 'update stsInfoRat set clone = "";'
+    # Again, next time around the above should not be necessary.
+
+    cat primer/primers.psl.filter clone/clones.psl \
+    | hgLoadPsl -table=all_sts_primer rn4 stdin
+    hgLoadBed rn4 stsMapRat -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/stsMapRat.sql stsMapRat.bed
+#Loaded 38802 elements of size 15
+
     nice featureBits rn4 all_sts_primer
+#10103096 bases of 2571531505 (0.393%) in intersection
     nice featureBits rn3 all_sts_primer
+#9722909 bases of 2571104688 (0.378%) in intersection
     nice featureBits rn4 stsMapRat
+#11755453 bases of 2571531505 (0.457%) in intersection
     nice featureBits rn3 stsMapRat
+#10119869 bases of 2571104688 (0.394%) in intersection
 
 # end STS MARKERS 
 ##########################################################################
@@ -2046,6 +2169,18 @@ BASE=/cluster/data/rn4/bed/blastz.canFam2.2006-02-24
     ssh hgwdev
     hgsql rn4 < /cluster/data/rn4/bed/kgRn4A/kgHistory.sql
 
+
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 3/6/06 angie)
+    # This depends on the go and uniProt databases as well as 
+    # the kgAlias and kgProAlias tables.
+    ssh hgwdev
+    mkdir /cluster/data/rn4/bed/kgRn4A/index
+    cd /cluster/data/rn4/bed/kgRn4A/index
+    hgKgGetText rn4 knownGene.text
+    ixIxx knownGene.text knownGene.ix knownGene.ixx
+    ln -s /cluster/data/rn4/bed/kgRn4A/index/knownGene.ix /gbdb/rn4/
+    ln -s /cluster/data/rn4/bed/kgRn4A/index/knownGene.ixx /gbdb/rn4/
+
 # end KNOWN GENES
 ###############################################################################
 
@@ -2170,3 +2305,5 @@ BASE=/cluster/data/rn4/bed/blastz.danRer3.2006-03-03
 
     time nice -n +19 featureBits rn4 chainMm8Link
     #   1791093685 bases of 2571531505 (69.651%) in intersection
+
+
