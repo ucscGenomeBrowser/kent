@@ -37,7 +37,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.13 2006/03/09 22:26:37 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.14 2006/03/09 22:36:57 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -170,7 +170,7 @@ void checkNamedObserved(char *chromName, char *start, char *end, char *rsId, cha
 
 if (observed[0] != '(')
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "NamedClassObservedWrongFormat", observed);
+            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "NamedClassObservedWrongFormat", observed);
 }
 
 
@@ -324,9 +324,11 @@ chromList = hAllChromNamesDb(snpDb);
 
 exceptionFileHandle = mustOpen("snpCheckClassAndObserved.exceptions", "w");
 
+verbose(1, "simple checks...\n");
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     doCheck(chromPtr->name);
  
+verbose(1, "check against locType...\n");
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     doCheckWithLocType(chromPtr->name);
 
