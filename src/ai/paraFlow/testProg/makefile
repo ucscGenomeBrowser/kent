@@ -1,6 +1,7 @@
 include ../../../inc/common.mk
 
 test: q
+	cd testLib && ${MAKE}
 	cd oneFile && ${MAKE}
 	cd easy && ${MAKE}
 	rm -f modules/*/*.pfh
