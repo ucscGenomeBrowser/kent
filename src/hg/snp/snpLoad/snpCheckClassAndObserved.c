@@ -37,7 +37,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.12 2006/03/09 20:16:55 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.13 2006/03/09 22:26:37 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -128,11 +128,11 @@ slashCount = chopString(observed, "/", NULL, 0);
 
 if (slashCount > 2)
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "IndelClassObservedWrongFormat", observed);
+            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "IndelClassObservedWrongFormat", observed);
 
 if (observed[0] != '-' || observed[1] != '/')
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "IndelClassObservedWrongFormat", observed);
+            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "IndelClassObservedWrongFormat", observed);
 }
 
 void checkMixedObserved(char *chromName, char *start, char *end, char *rsId, char *observed)
@@ -145,21 +145,21 @@ int slashCount = 0;
 if (strlen(observed) < 2)
     {
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\t%s\t%s\n", chromName, start, end, rsId, "MixedClassTruncatedObserved");
+            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "MixedClassTruncatedObserved");
     return;
     }
 
 if (observed[0] != '-' || observed[1] != '/')
     {
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "MixedClassObservedWrongFormat", observed);
+            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "MixedClassObservedWrongFormat", observed);
     return;
     }
 
 slashCount = chopString(observed, "/", NULL, 0);
 if (slashCount < 3)
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "MixedClassObservedWrongFormat", observed);
+            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "MixedClassObservedWrongFormat", observed);
 
 }
 
