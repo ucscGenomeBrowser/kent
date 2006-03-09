@@ -504,6 +504,7 @@ visibility hide
 spectrum on
 type netAlign danRer3 chainDanRer3
 otherDb danRer3
+
 track chainDanRer2
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
