@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpFunction.c,v 1.7 2006/03/08 20:59:10 heather Exp $";
+static char const rcsid[] = "$Id: snpFunction.c,v 1.8 2006/03/09 06:05:06 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *functionHash = NULL;
@@ -171,6 +171,8 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
 
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
+    if (!hTableExists(tableName)) continue;
     recreateDatabaseTable(chromPtr->name);
     loadDatabase(chromPtr->name);
     }
