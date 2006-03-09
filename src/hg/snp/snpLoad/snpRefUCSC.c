@@ -16,7 +16,7 @@
 /* errAbort if larger SNP found */
 #define MAX_SNP_SIZE 1024
 
-static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.7 2006/03/06 20:19:11 heather Exp $";
+static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.8 2006/03/09 16:29:53 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -190,6 +190,7 @@ int main(int argc, char *argv[])
 struct hashCookie cookie;
 struct hashEl *hel;
 char *chromName;
+char tableName[64];
 
 if (argc != 2)
     usage();
@@ -207,6 +208,8 @@ if (chromHash == NULL)
 cookie = hashFirst(chromHash);
 while ((chromName = hashNextName(&cookie)) != NULL)
     {
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+    if (!hTableExists(tableName)) continue;
     verbose(1, "chrom = %s\n", chromName);
     getRefUCSC(chromName);
     recreateDatabaseTable(chromName);
