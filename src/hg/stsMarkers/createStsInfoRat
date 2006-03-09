@@ -4,7 +4,7 @@
 # /cluster/store4/ratMarker/code/ into the kent/src tree in order
 # to get it under CVS control; added warnings.
 
-# $Id: createStsInfoRat,v 1.1 2006/03/03 19:56:17 angie Exp $
+# $Id: createStsInfoRat,v 1.2 2006/03/09 01:19:52 angie Exp $
 
 use warnings;
 
@@ -52,19 +52,22 @@ while(my $line = <UNI>)
 	warn "WARNING: Missing name for UniSTS ID $eles[0] (UCSC ID $ucscId) will cause trouble downstream.\n";
     }
     $table[$ucscId][1] = $eles[4];
-    $table[$ucscId][2] = $table[$ucscId][3] = "";
+    $table[$ucscId][2] = 0;
+    $table[$ucscId][3] = "";
     $table[$ucscId][4] = $eles[0];
-    $table[$ucscId][5] = $table[$ucscId][6] = "";
+    $table[$ucscId][5] = 0;
+    $table[$ucscId][6] = "";
     $table[$ucscId][7] = $eles[1];
     $table[$ucscId][8] = $eles[2];
     $table[$ucscId][9] = $eles[3] || "0";
-    $table[$ucscId][10] = "";
+    $table[$ucscId][10] = 0;
     $table[$ucscId][11] = "Rattus norvegicus";
-    $table[$ucscId][12] = $table[$ucscId][13] = $table[$ucscId][14] = "";
-    $table[$ucscId][15] = $table[$ucscId][16] = $table[$ucscId][17] = "";
-    $table[$ucscId][18] = $table[$ucscId][19] = $table[$ucscId][20] = "";
-    $table[$ucscId][21] = $table[$ucscId][22] = $table[$ucscId][23] = "";
-    $table[$ucscId][24] = "";
+    $table[$ucscId][12] = $table[$ucscId][13] = "";
+    $table[$ucscId][15] = $table[$ucscId][16] = "";
+    $table[$ucscId][18] = $table[$ucscId][19] = "";
+    $table[$ucscId][14] = $table[$ucscId][17] = $table[$ucscId][20] = 0.0;
+    $table[$ucscId][21] = 0.0;
+    $table[$ucscId][22] = $table[$ucscId][23] = $table[$ucscId][24] = "";
     $ucscId++;
 }
 close(UNI);
@@ -121,16 +124,19 @@ while(my $line = <RAW>)
 {
     chomp($line);
     my (@eles) = split(/\t/, $line);
+    next if ($eles[0] eq 'RGD_ID' && $eles[1] eq 'SYMBOL_NAME');
     my $rgdId = "RGD:$eles[0]";
     $eles[1] = uc($eles[1]);
     if($sts{$eles[1]})
     {
 	my $indx = $sts{$eles[1]};
-	$table[$indx][2] = $eles[0];
+	$table[$indx][2] = $eles[0] || 0;
 	$table[$indx][3] = $eles[1];
 	if($eles[2] && $eles[2] =~ /[ATCG]/o)
 	{
-	    $table[$indx][24] = $eles[2];
+	    # Discard clone sequence -- takes up space, still gets truncated,
+	    # not used.
+	    # $table[$indx][24] = $eles[2];
 	    $table[$indx][10] = 1;
 	}
 	$found++;
@@ -138,11 +144,13 @@ while(my $line = <RAW>)
     elsif($sts{$rgdId})
     {
 	my $indx = $sts{$rgdId};
-        $table[$indx][2] = $eles[0];
+        $table[$indx][2] = $eles[0] || 0;
         $table[$indx][3] = $eles[1];
 	if($eles[2] =~ /[ATCG]/o)
 	{
-	    $table[$indx][24] = $eles[2];
+	    # Discard clone sequence -- takes up space, still gets truncated,
+	    # not used.
+	    # $table[$indx][24] = $eles[2];
 	    $table[$indx][10] = 1 ;
 	}
 	$found++;
@@ -154,26 +162,32 @@ while(my $line = <RAW>)
 	    warn "WARNING: Missing name for RGD ID $eles[0] (UCSC ID $ucscId) will cause trouble downstream.\n";
 	}
 	$table[$ucscId][1] = $eles[1];
-	$table[$ucscId][2] = $eles[0];
+	$table[$ucscId][2] = $eles[0] || 0;
 	$table[$ucscId][3] = $eles[1];
-	$table[$ucscId][4] = $table[$ucscId][5] = $table[$ucscId][6] = "";
+	$table[$ucscId][4] = $table[$ucscId][5] = 0;
+	$table[$ucscId][6] = "";
 	$table[$ucscId][7] = $eles[3];
 	$table[$ucscId][8] = $eles[4];
 	$table[$ucscId][9] = $eles[5] || "0";
 	$table[$ucscId][11] = "Rattus norvegicus";
+    	$table[$ucscId][24] = "";
 	if($eles[2] =~ /[ATCG]/o)
 	{
 	    $table[$ucscId][10] = 1;
-	    $table[$ucscId][24] = $eles[2];
+	    # Discard clone sequence -- takes up space, still gets truncated,
+	    # not used.
+	    # $table[$ucscId][24] = $eles[2];
 	}
 	else
 	{
-	    $table[$ucscId][10] = $table[$ucscId][24] = ""
+	    $table[$ucscId][10] = 0;
 	}
-	$table[$ucscId][12] = $table[$ucscId][13] = $table[$ucscId][14] = "";
-	$table[$ucscId][15] = $table[$ucscId][16] = $table[$ucscId][17] = "";
-        $table[$ucscId][18] = $table[$ucscId][19] = $table[$ucscId][20] = "";
-	$table[$ucscId][21] = $table[$ucscId][22] = $table[$ucscId][23] = "";
+	$table[$ucscId][12] = $table[$ucscId][13] = "";
+	$table[$ucscId][15] = $table[$ucscId][16] = "";
+	$table[$ucscId][18] = $table[$ucscId][19] = "";
+	$table[$ucscId][14] = $table[$ucscId][17] = $table[$ucscId][20] = 0.0;
+	$table[$ucscId][21] = 0.0;
+	$table[$ucscId][22] = $table[$ucscId][23] = "";
 	$sts{$eles[1]} = $ucscId;
 	$ucscId++;
 	$new++;
