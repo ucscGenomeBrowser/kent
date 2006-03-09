@@ -37,7 +37,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.10 2006/03/08 22:50:27 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.11 2006/03/09 05:25:17 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -60,8 +60,162 @@ fprintf(exceptionFileHandle, "%s\t%s\t%s\trs%s\t%s\n", chrom, start, end, name, 
 }
 
 
+boolean triAllelic(char *observed)
+{
+if (sameString(observed, "A/C/G")) return TRUE;
+if (sameString(observed, "A/C/T")) return TRUE;
+if (sameString(observed, "A/G/T")) return TRUE;
+if (sameString(observed, "C/G/T")) return TRUE;
+return FALSE;
+}
+
+boolean quadAllelic(char *observed)
+{
+if (sameString(observed, "A/C/G/T")) return TRUE;
+return FALSE;
+}
+
+boolean validSingleObserved(char *observed)
+{
+if (sameString(observed, "A/C")) return TRUE;
+if (sameString(observed, "A/G")) return TRUE;
+if (sameString(observed, "A/T")) return TRUE;
+if (sameString(observed, "C/G")) return TRUE;
+if (sameString(observed, "C/T")) return TRUE;
+if (sameString(observed, "G/T")) return TRUE;
+return FALSE;
+}
+
+void checkSingleObserved(char *chromName, char *start, char *end, char *rsId, char *observed)
+/* check for exceptions in single class */
+{
+if (quadAllelic(observed))
+    {
+    fprintf(exceptionFileHandle, 
+            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "SingleClassQuadAllelic", observed);
+    return;
+    }
+
+if (triAllelic(observed))
+    {
+    fprintf(exceptionFileHandle, 
+            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "SingleClassTriAllelic", observed);
+    return;
+    }
+
+if (validSingleObserved(observed)) return;
+
+fprintf(exceptionFileHandle, 
+        "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "SingleClassWrongObserved", observed);
+
+}
+
+void checkIndelObserved(char *chromName, char *start, char *end, char *rsId, char *observed)
+/* Check for exceptions in in-del class. */
+/* First char should be dash, second char should be forward slash. */
+/* To do: no IUPAC */
+{
+int slashCount = 0;
+
+if (strlen(observed) < 2)
+    {
+    fprintf(exceptionFileHandle, 
+            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "IndelClassTruncatedObserved");
+    return;
+    }
+
+slashCount = chopString(observed, "/", NULL, 0);
+
+if (slashCount > 2)
+    fprintf(exceptionFileHandle, 
+            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "IndelClassObservedWrongFormat", observed);
+
+if (observed[0] != '-' || observed[1] != '/')
+    fprintf(exceptionFileHandle, 
+            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "IndelClassObservedWrongFormat", observed);
+}
+
+void checkMixedObserved(char *chromName, char *start, char *end, char *rsId, char *observed)
+/* Check for exceptions in mixed class. */
+/* should be multi-allelic */
+/* To do: no IUPAC */
+{
+int slashCount = 0;
+
+if (strlen(observed) < 2)
+    {
+    fprintf(exceptionFileHandle, 
+            "%s\t%s\t%s\t%s\t%s\n", chromName, start, end, rsId, "MixedClassTruncatedObserved");
+    return;
+    }
+
+if (observed[0] != '-' || observed[1] != '/')
+    {
+    fprintf(exceptionFileHandle, 
+            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "MixedClassObservedWrongFormat", observed);
+    return;
+    }
+
+slashCount = chopString(observed, "/", NULL, 0);
+if (slashCount < 3)
+    fprintf(exceptionFileHandle, 
+            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "MixedClassObservedWrongFormat", observed);
+
+}
+
+void checkNamedObserved(char *chromName, char *start, char *end, char *rsId, char *observed)
+/* Check for exceptions in named class. */
+/* Should be (name). */
+{
+
+if (observed[0] != '(')
+    fprintf(exceptionFileHandle, 
+            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "NamedClassObservedWrongFormat", observed);
+}
+
 
 void doCheck(char *chromName)
+/* simple checks: 
+   "SingleClassQuadAllelic" and "SingleClassTriAllelic" 
+   "SingleClassWrongObserved" 
+   "IndelClassTruncatedObserved" and "IndelClassObservedWrongFormat" 
+   "MixedClassTruncatedObserved" and "MixedClassObservedWrongFormat" 
+   "NamedClassObservedWrongFormat" 
+*/
+
+{
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char tableName[64];
+
+safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
+if (!hTableExists(tableName)) return;
+
+verbose(1, "chrom = %s\n", chromName);
+safef(query, sizeof(query), "select snp_id, chromStart, chromEnd, class, observed from %s", tableName);
+
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (sameString(row[4], "unknown")) continue;
+    if (sameString(row[4], "lengthTooLong")) continue;
+    if (sameString(row[3], "single"))
+	checkSingleObserved(chromName, row[0], row[1], row[2], row[4]);
+    if (sameString(row[3], "insertion") || sameString(row[3], "deletion"))
+	checkIndelObserved(chromName, row[0], row[1], row[2], row[4]);
+    if (sameString(row[3], "mixed"))
+        checkMixedObserved(chromName, row[0], row[1], row[2], row[4]);
+    if (sameString(row[3], "named"))
+        checkNamedObserved(chromName, row[0], row[1], row[2], row[4]);
+    }
+
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+void doCheckWithLocType(char *chromName)
 /* check each row for exceptions */
 {
 char query[512];
@@ -172,6 +326,9 @@ exceptionFileHandle = mustOpen("snpCheckClassAndObserved.exceptions", "w");
 
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     doCheck(chromPtr->name);
+ 
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
+    doCheckWithLocType(chromPtr->name);
 
 carefulClose(&exceptionFileHandle);
 return 0;
