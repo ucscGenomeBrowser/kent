@@ -37,7 +37,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.11 2006/03/09 05:25:17 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.12 2006/03/09 20:16:55 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -92,21 +92,21 @@ void checkSingleObserved(char *chromName, char *start, char *end, char *rsId, ch
 if (quadAllelic(observed))
     {
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "SingleClassQuadAllelic", observed);
+            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "SingleClassQuadAllelic", observed);
     return;
     }
 
 if (triAllelic(observed))
     {
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "SingleClassTriAllelic", observed);
+            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "SingleClassTriAllelic", observed);
     return;
     }
 
 if (validSingleObserved(observed)) return;
 
 fprintf(exceptionFileHandle, 
-        "%s\t%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "SingleClassWrongObserved", observed);
+        "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "SingleClassWrongObserved", observed);
 
 }
 
