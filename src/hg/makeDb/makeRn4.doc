@@ -1399,11 +1399,16 @@ while (<>) {
       > stsInfoRat-draft
     # clean some redundant and conflicting entries --> final stsInfoRat.tab:
     ~/kent/src/hg/stsMarkers/cleanInfo.pl -rat stsInfoRat-draft \
-      > ../stsInfoRat.tab
+      > ../stsInfoRat.withSeq.tab
     # Create the primer.fa, cloneseq.fa, and primerinfo files for alignment:
     cd ..
-    ~/kent/src/hg/stsMarkers/luConvertPrimerToFa stsInfoRat.tab \
+    ~/kent/src/hg/stsMarkers/luConvertPrimerToFa stsInfoRat.withSeq.tab \
       ratPrimer.fa ratSeq.fa ratPrimer.info -a 200
+    # Strip the sequence column off so that it isn't loaded into the db 
+    # (causing mysql warnings due to truncation).  The seq column is not 
+    # used from here on out:
+    perl -wpe '@w=split("\t"); $w[24] = ""; $_ = join("\t", @w) . "\n";' \
+      stsInfoRat.withSeq.tab > stsInfoRat.tab
 
 
 # BLAT CLONE SEQUENCES (DONE 3/8/06 angie)
@@ -1689,7 +1694,7 @@ while (<>) {
     # -- the unused and often truncated clone sequence values:
     hgLoadSqlTab rn4 stsInfoRat \
       ~/kent/src/hg/lib/stsInfoRat.sql stsInfoRat.tab
-#Warning: load of stsInfoRat did not go as planned: 48049 record(s), 0 row(s) skipped, 396095 warning(s) loading stsInfoRat.tab
+#Warning: load of stsInfoRat did not go as planned: 48049 record(s), 0 row(s) skipped, 187463 warning(s) loading stsInfoRat.tab
     hgsql rn4 -e 'update stsInfoRat set clone = "";'
     # Again, next time around the above should not be necessary.
 
