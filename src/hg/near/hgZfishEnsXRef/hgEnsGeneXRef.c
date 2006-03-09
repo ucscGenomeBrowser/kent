@@ -10,7 +10,7 @@
 #include "sqlNum.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgEnsGeneXRef.c,v 1.5 2006/03/06 16:12:03 hartera Exp $";
+static char const rcsid[] = "$Id: hgEnsGeneXRef.c,v 1.6 2006/03/09 19:52:17 hartera Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -64,7 +64,7 @@ if (!sameString(interProId, ""))
 return;
 }
 
-void getGeneSymbol(struct ensXRefZfish **xRef, struct hash *idHash, struct hash *mrnaHash)
+void getGeneSymbolAndId(struct ensXRefZfish **xRef, struct hash *idHash, struct hash *mrnaHash)
 /* Retrieves Gene Symbol from the hashes of NCBI RefSeq information */
 /* for a given Entrez ID */
 {
@@ -72,13 +72,11 @@ struct ensXRefZfish *gXRef = *xRef;
 struct ncbiGene *gene;
 char *geneSymbol = NULL;
 
-/* check if this exists in the hash already */
-if ((gXRef->geneId == NULL) && ((gene = hashFindVal(idHash, gXRef->geneId)) != NULL))
-    {
-    gXRef->geneSymbol = cloneString(gene->geneSymbol);
-    }
-/* if the Gene ID is NULL or it can not be found in the hash and also */
+/* First, if geneId is not NULL then check if it exists in the idHash */
+/* If the Gene ID is NULL or it can not be found in the hash and also */
 /* the refSeqAcc is not NULL then check the hash keyed by RefSeq accessions. */
+if ((gXRef->geneId != NULL) && ((gene = hashFindVal(idHash, gXRef->geneId)) != NULL))
+    gXRef->geneSymbol = cloneString(gene->geneSymbol);
 else if ((gXRef->refSeq != NULL) && ((gene = hashFindVal(mrnaHash, gXRef->refSeq)) != NULL))
     {
     /* find entry by accession and get Gene Symbol and Gene ID */
@@ -125,6 +123,8 @@ while (lineFileChopNextTab(lf, words, 6))
             xRef->refSeq = NULL;
             xRef->protAcc = NULL;
             xRefDesc = NULL;
+            /* Add structure to hash keyed by the transcript ID */
+            hashAdd(hash, cloneString(xRef->ensGeneId), xRef); 
             }
         else  
             { /* entry in hash exists for this transcript */
@@ -140,9 +140,6 @@ while (lineFileChopNextTab(lf, words, 6))
             createDescription(interProId, interProDesc, &desc);
             }
         xRef->description = cloneString(desc);
-        /* Add structure to hash keyed by the transcript ID */
-        /* and delete struct if present already before adding new version. */
-        hashAddReplace(hash, cloneString(xRef->ensGeneId), xRef); 
         }
     }
 lineFileClose(&lf);
@@ -176,7 +173,7 @@ while (lineFileChopNextTab(lf, words, 9))
         g->description = cloneString(desc);
         g->mrnaRefSeq = NULL;
         g->protRefSeq = NULL;
-        hashAddReplace(idHash, geneId, g); 
+        hashAdd(idHash, geneId, g); 
         }
     else  
         /* entry in hash exists for this transcript */
@@ -191,7 +188,8 @@ while (lineFileChopNextTab(rf, words, 6))
     mrnaAcc = cloneString(words[3]);
     protAcc = cloneString(words[5]);
     /* key is locusLink ID - must be a string */
-    /* check if this exists in the hash already */
+    /* check if this exists in the hash already and new information to */
+    /* the structure stored in the hash */
     if ((g = hashFindVal(idHash, geneId)) != NULL)
         {
         AllocVar(g2);
@@ -202,10 +200,8 @@ while (lineFileChopNextTab(rf, words, 6))
         g2->description = cloneString(g->description);
         g2->mrnaRefSeq = cloneString(mrnaAcc);
         g2->protRefSeq = cloneString(protAcc); 
-        /* add back to hash keyed by Gene IDs and add also to a hash */
-        /* keyed by RefSeq accession. */
-        hashAddReplace(idHash, geneId, g); 
-        hashAddReplace(refSeqHash, mrnaAcc, g2); 
+        /* Add the duplicated struct to a hash keyed by RefSeq accession. */
+        hashAdd(refSeqHash, mrnaAcc, g2); 
         }
     else
         fprintf(stderr, "This locusLinkID, %s, has not been stored already\n", geneId);
@@ -218,8 +214,7 @@ void readNcbiFile(char *ncbiFile, struct hash **hash, struct hash *geneByIdHash,
 /* and peptide accessions and add to the hash keyed by the appropriate ID. */
 {
 struct lineFile *lf = lineFileOpen(ncbiFile, TRUE);
-char *words[4], *tId, *refSeqId, *refSeqPepId, *geneSymbol, *lLinkId;
-unsigned geneId;
+char *words[4], *tId, *geneId, *refSeqId, *refSeqPepId, *geneSymbol, *lLinkId;
 struct hash *geneHash = *hash;
 struct ensXRefZfish *xRef;
 
@@ -228,30 +223,22 @@ while (lineFileChopNextTab(lf, words, 5))
     /* skip over header line */
     if (!startsWith("Ensembl", words[0]))
         {
-        fflush(stdout);
         tId = cloneString(words[0]);
-        if (!sameString(words[1], ""))
-            geneId = sqlUnsigned(words[1]);
-        else
-            geneId = 0;
+        geneId = cloneString(words[1]);
         refSeqId = cloneString(words[2]);
         refSeqPepId = cloneString(words[3]);
 
         /* retrieve the appropriate record from the hash using transcript ID */
         if ((xRef = hashFindVal(geneHash, tId)) != NULL)
             {
-            xRef->refSeq = cloneString(refSeqId);
+            if (!sameString(refSeqId, ""))
+                xRef->refSeq = cloneString(refSeqId);
             xRef->protAcc = cloneString(refSeqPepId);
-            /* retrieve Gene Symbol from Entrez Gene files */
-            if (geneId == 0)
-                lLinkId = NULL;
-            else
-                {
-                lLinkId = cloneString(words[1]);
-                xRef->geneId = cloneString(lLinkId);
-                }
-            getGeneSymbol(&xRef, geneByIdHash, geneByRefSeqHash);
-            hashAddReplace(geneHash, tId, xRef);
+            /* Retrieve Gene Symbol from Entrez Gene files information.*/
+            /* If geneId is not empty, add it to the hash element. */
+            if (!sameString(geneId, ""))
+                xRef->geneId = cloneString(geneId);
+            getGeneSymbolAndId(&xRef, geneByIdHash, geneByRefSeqHash);
             }
         else
             fprintf(stderr, "Found transcript ID, %s, in ncbiFile but it was not stored from the description file.\n", tId);
