@@ -119,8 +119,9 @@ struct sqlResult *sr;
 char **row;
 safef(query, sizeof(query), 
 "select e.chrom, e.chromStart, e.chromEnd, e.strand, p.id"
-" from probe p, bac b, gene g, %s.bacEndPairs e"
+" from probe p, probeExt pe, bac b, gene g, %s.bacEndPairs e"
 " where p.bac = b.id and p.gene = g.id and g.taxon=%d and b.name = e.name"
+" and p.id = pe.probe and pe.type='bac' and pe.state='new'"
 " order by e.chrom, e.chromStart",
 db,taxon);
 sr = sqlGetResult(conn, query);
@@ -172,7 +173,6 @@ char **row;
 struct dyString *dy = dyStringNew(0);
 struct sqlConnection *conn2 = sqlConnect(database);
 
-/* Try to hook up with existing antibody record. */
 dyStringAppend(dy, "select p.id,p.gene,antibody,probeType,fPrimer,rPrimer,p.seq,bac from probe p");
 dyStringAppend(dy, " left join probeExt e on e.probe = p.id");
 dyStringAppend(dy, " where e.probe is NULL");
@@ -216,7 +216,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     else if (bac > 0)
     	{
-	peType = "bac";   /* TODO */
+	peType = "bac";   /* use bacEndPairs */
 	}
     else	    
     	{
@@ -832,7 +832,7 @@ dyStringPrintf(dy,
     " from probeExt e, probe p, gene g"
     " where e.probe = p.id and p.gene = g.id"
     " and g.taxon = %d"
-    " and e.type in ('primersMrna','primersGenome','gene')"
+    " and e.type in ('primersMrna','primersGenome','gene','probe')"
     " and e.seq <> ''"
     " order by e.probe"
     , taxon);
@@ -915,7 +915,7 @@ rc = sqlSaveQuery(conn, dy->string, 2, "vgPrbAll.fa", TRUE);
 uglyf("rc = %d = count of sequences for vgPrbAll.fa, to use with psls for taxon %d\n",rc,taxon);
 
 // restore:
-/* make final psl 
+/* make final psl */
 system(
 "cat"
 " blatNearBest.psl"
@@ -934,7 +934,6 @@ system(
 
 uglyf("vgPrbAll.psl assembled for taxon %d\n",taxon);
 
-*/
 
 //unlink("blatNearBest.psl");  
 //unlink("blatBAC.psl");  
@@ -955,11 +954,11 @@ static void doProbes(struct sqlConnection *conn, int taxon, char *db)
 
 //restore: doAccessions(conn, taxon, db);
 
-//restore: doBlat(conn, taxon, db);   // watch out! some stuff inside here still disabled
+//restore: 
+doBlat(conn, taxon, db);   // watch out! some stuff inside here still disabled
 
 //restore: 
 assembleAllFaPsl(conn, taxon, db);
-
 printf("OK, DONE.  Go put vgPrbAll.fa in /gbdb/%s/ and use hgLoadPsl and hgLoadSeq \n",db);
 
 }
@@ -991,10 +990,11 @@ if (kill)  // this dependency is convenient for now.
 
 /* do mouse */
 /* get probe seq from primers, bacEndPairs, refSeq, genbank, gene-name */
-//restore: doProbes(conn,10090,"mm6");  /* taxon 10090 = mouse */
+//restore: 
+doProbes(conn,10090,"mm7");  /* taxon 10090 = mouse */
 
 // just to grab frog probe seq fa
-doProbes(conn,8355,"mm6");  /* taxon 8355 = frog */
+//doProbes(conn,8355,"mm7");  /* taxon 8355 = frog */
 
 sqlDisconnect(&conn);
 }
