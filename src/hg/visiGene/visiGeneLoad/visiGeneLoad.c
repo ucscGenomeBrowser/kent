@@ -443,7 +443,7 @@ else
 	   verbose(2, "%s\n", dy->string);
 	   sqlUpdate(conn, dy->string);
 	   }
-       else if (differentString(oldName, gene))
+       else if (differentWord(oldName, gene))
 	   {
 	   dyStringClear(dy);
 	   dyStringAppend(dy, "select count(*) from geneSynonym where ");
