@@ -37,7 +37,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.14 2006/03/09 22:36:57 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.15 2006/03/09 22:51:04 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -92,21 +92,21 @@ void checkSingleObserved(char *chromName, char *start, char *end, char *rsId, ch
 if (quadAllelic(observed))
     {
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "SingleClassQuadAllelic", observed);
+            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "SingleClassQuadAllelic");
     return;
     }
 
 if (triAllelic(observed))
     {
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "SingleClassTriAllelic", observed);
+            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "SingleClassTriAllelic");
     return;
     }
 
 if (validSingleObserved(observed)) return;
 
 fprintf(exceptionFileHandle, 
-        "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "SingleClassWrongObserved", observed);
+        "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "SingleClassWrongObserved");
 
 }
 
@@ -128,11 +128,11 @@ slashCount = chopString(observed, "/", NULL, 0);
 
 if (slashCount > 2)
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "IndelClassObservedWrongFormat", observed);
+            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "IndelClassObservedWrongFormat" );
 
 if (observed[0] != '-' || observed[1] != '/')
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "IndelClassObservedWrongFormat", observed);
+            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "IndelClassObservedWrongFormat");
 }
 
 void checkMixedObserved(char *chromName, char *start, char *end, char *rsId, char *observed)
@@ -152,14 +152,14 @@ if (strlen(observed) < 2)
 if (observed[0] != '-' || observed[1] != '/')
     {
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "MixedClassObservedWrongFormat", observed);
+            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "MixedClassObservedWrongFormat");
     return;
     }
 
 slashCount = chopString(observed, "/", NULL, 0);
 if (slashCount < 3)
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "MixedClassObservedWrongFormat", observed);
+            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "MixedClassObservedWrongFormat");
 
 }
 
@@ -170,7 +170,7 @@ void checkNamedObserved(char *chromName, char *start, char *end, char *rsId, cha
 
 if (observed[0] != '(')
     fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\t%s\n", chromName, start, end, rsId, "NamedClassObservedWrongFormat", observed);
+            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "NamedClassObservedWrongFormat");
 }
 
 
