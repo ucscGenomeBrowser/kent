@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.18 2006/03/09 04:15:36 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.19 2006/03/09 04:17:12 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 /* The vast majority are single. */
@@ -77,7 +77,10 @@ while (lineFileNext(lf, &line, &lineSize))
     classVal = sqlUnsigned(class[1]);
 
     if (sameString(allele[1], "lengthTooLong"))
+        {
         fprintf(f, "%s\t%s\t%s\t%s\n", rsId[0], molType[1], classStrings[classVal], "unknown");
+	fprintf(errorFileHandle, "missing observed for %s\n", rsId[0]);
+	}
     else
         fprintf(f, "%s\t%s\t%s\t%s\n", rsId[0], molType[1], classStrings[classVal], allele[1]);
     }
