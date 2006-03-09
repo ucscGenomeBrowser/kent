@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.12 2006/03/09 18:26:57 angie Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.13 2006/03/09 20:29:09 angie Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -35,7 +35,7 @@ if(!cgiIsOnWeb() ||
     if (getenv("HGDB_CONF") != NULL)
         strcpy(filename, getenv("HGDB_CONF"));
     else
-        safef(filename, sizeof(filename), "%s/%s",
+        safef(filename, PATH_LEN, "%s/%s",
 	      getenv("HOME"), USER_CONFIG_FILE);
     /* ensure that the file only readable by the user */
     if (stat(filename, &statBuf) == 0)
@@ -47,7 +47,7 @@ if(!cgiIsOnWeb() ||
     }
 else	/* on the web, read from global config file */
     {
-    safef(filename, sizeof(filename), "%s/%s",
+    safef(filename, PATH_LEN, "%s/%s",
 	  GLOBAL_CONFIG_PATH, GLOBAL_CONFIG_FILE);
     }
 }
