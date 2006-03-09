@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.17 2006/03/08 00:40:55 heather Exp $";
+static char const rcsid[] = "$Id: snpLoadFasta.c,v 1.18 2006/03/09 04:15:36 heather Exp $";
 
 /* from snpFixed.SnpClassCode */
 /* The vast majority are single. */
@@ -76,7 +76,10 @@ while (lineFileNext(lf, &line, &lineSize))
     stripChar(allele[1], '"');
     classVal = sqlUnsigned(class[1]);
 
-    fprintf(f, "%s\t%s\t%s\t%s\n", rsId[0], molType[1], classStrings[classVal], allele[1]);
+    if (sameString(allele[1], "lengthTooLong"))
+        fprintf(f, "%s\t%s\t%s\t%s\n", rsId[0], molType[1], classStrings[classVal], "unknown");
+    else
+        fprintf(f, "%s\t%s\t%s\t%s\n", rsId[0], molType[1], classStrings[classVal], allele[1]);
     }
 carefulClose(&f);
 // close the lineFile pointer?
