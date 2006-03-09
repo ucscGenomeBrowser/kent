@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.2 2006/03/04 02:25:13 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.3 2006/03/09 02:59:19 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -169,6 +169,9 @@ cat > jkStuff/checkChroms.csh << 'EOF'
 
     hgsql panTro2 -e \
       "create table grp (PRIMARY KEY(NAME)) select * from mm8.grp"
+    # remove encode track groups
+    hgsql panTro2 -e "delete from grp where name like 'encode%'"
+    
 
 
 # MAKE CHROMINFO TABLE WITH (TEMPORARILY UNMASKED) 2BIT (DONE 2006-02-28 kate)
@@ -553,7 +556,7 @@ cat > liftChroms.csh << 'EOF'
     # soft-mask (lower-case) the chrom fasta files
     # then make hard-masked versions from the soft-masked
     set trfChr=bed/simpleRepeat/trfMaskChrom
-    foreach f (?{,?}/chr*.fa chr6_hla_hap1/chr*.fa)
+    foreach f (?{,?}/chr*.fa 6_hla_hap1/chr*.fa)
       cp $f $f.unmasked
       echo "repeat- and trf-masking $f"
       maskOutFa -soft $f $f.out $f
@@ -570,26 +573,19 @@ cat > liftChroms.csh << 'EOF'
     # after checking, remove .unmaksed and .rmsk
 
     # make 2bit for browser and blat
-    faToTwoBit ?{,?}/chr*.fa chr6_hla_hap1/chr*.fa panTro2.2bit
-    cp -p panTro2.2bit /cluster/bluearc/scratch/hg/panTro2
-    # request push to cluster nodes
+    faToTwoBit ?{,?}/chr*.fa 6_hla_hap1/chr*.fa panTro2.2bit
+    mkdir /cluster/bluearc/scratch/hg/panTro2
     ssh kkr1u00
     cp -p /cluster/data/panTro2/panTro2.2bit /iscratch/i/panTro2/panTro2.2bit
-    iSync
+    ~kent/bin/iSync
 
     # make nibs for blastz w/linSpecRep
     mkdir nib
-    foreach f (?{,?}/chr*.fa chr6_hla_hap1/chr*.fa)
+    foreach f (?{,?}/chr*.fa 6_hla_hap1/chr*.fa)
       echo $f:t:r
       faToNib -softMask $f nib/$f:t:r.nib
     end
 
-
-# PUT NIBS ON /SCRATCH 
-    #mkdir /cluster/bluearc/scratch/hg/panTro2
-    #rsync -av /cluster/data/panTro2/nib/* /cluster/bluearc/scratch/hg/panTro2/nib/
-
-# MAKE CHROMINFO TABLE WITH 2BIT 
 
 # MAKE 11.OOC 
 
@@ -598,9 +594,21 @@ cat > liftChroms.csh << 'EOF'
     mkdir /cluster/bluearc/panTro2
     blat panTro2.2bit /dev/null /dev/null \
         -tileSize=11 -makeOoc=/cluster/bluearc/panTro2/11.ooc -repMatch=1024
+    cp -p /cluster/bluearc/panTro2/11.ooc .
 
 
-    # GENBANK ALIGNMENTS
+# COPY SEQUENCE TO CLUSTER NODES FOR CLUSTER RUNS
+    set scratch = /cluster/bluearc/scratch/hg/panTro2
+    mkdir $scratch
+    cp -p panTro2.2bit $scratch
+    cp -rp nib $scratch
+    cp -rp chrom.sizes $scratch
+    cp -p 11.ooc $scratch
+    # request cluster-admin sync /scratch/hg/panTro2 to cluster nodes
+
+
+
+# GENBANK ALIGNMENTS (WORKING 2006-03-03 kate)
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
     # edit etc/genbank.conf to add panTro2
@@ -610,7 +618,7 @@ panTro2.serverGenome = /cluster/data/panTro2/panTro2.2bit
 panTro2.clusterGenome = /scratch/hg/panTro2/panTro2.2bit
 panTro2.ooc = /cluster/bluearc/panTro2/11.ooc
 panTro2.align.unplacedChroms = chrUn,chr*_random
-panTro2.lift = /cluster/store8/panTro2/jkStuff/liftAll.lft
+panTro2.lift = /cluster/data/panTro2/lifts/lift5M.lft
 panTro2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
 panTro2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
 panTro2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
@@ -628,13 +636,302 @@ panTro2.refseq.mrna.xeno.loadDesc  = yes
 
     ssh kkstore02
     cd /cluster/data/genbank
-    nice bin/gbAlignStep -initial rn4 &
+    nice bin/gbAlignStep -initial panTro2 &
+    # various problems with ssh, bluearc, etc....
+    nice bin/gbAlignStep -initial -continue=copy panTro2 &
 
 
+# MAKE LINEAGE-SPECIFIC REPEATS FOR BLASTZ (2006-03-06 kate)
+
+    ssh kkstore01
+    cd /cluster/data/panTro2
+    mkdir linSpecRep
+    cd linSpecRep
+    mkdir dates
+    cd dates
+
+    # run Arian's script to annotate .out files with species-specificity
+    # include all currently supported comparison species
+cat > outRepeats.csh << 'EOF'
+    date
+    set d = /cluster/data/panTro2
+    foreach f ($d/?{,?}/chr*.fa.out $d/6_hla_hap1/chr*.fa.out)
+        set c = $f:t:r:r
+        echo $c
+        cp $f .
+        /cluster/bluearc/RepeatMasker060120/DateRepeats $c.fa.out -query pan \
+            -comp human -comp mouse -comp rat -comp dog -comp cow -comp rabbit
+        mv $c.fa.*cuniculus $c.fa.dates.out
+        end
+    date
+'EOF'
+    # << for emacs
+    csh outRepeats.csh >&! outRepeats.log &
+        # 25 minutes
+    
+    # run our script to extract lineage-specific by column 
+    #   from the annotated .outs
+    # just run on chr1 to assess which variants produce any
+    #   differences.
+    mkdir testChr1
+    cd testChr1
+cat > testChr1.csh << 'EOF'
+    set script = /cluster/bin/scripts/extractRepeats
+    set f = ../chr1.fa.dates.out
+    echo human
+    $script 1  $f > notInHuman.out.spec
+    echo mouse
+    $script 2 $f > notInMouse.out.spec
+    echo rat
+    $script 3 $f > notInRat.out.spec
+    echo dog
+    $script 4 $f > notInDog.out.spec
+    echo cow
+    $script 5 $f > notInCow.out.spec
+    #echo rabbit
+    #$script 6 $f > notInRabbit.out.spec
+'EOF'
+    csh testChr1.csh >&! testChr1.log &
+    ls -l *.spec
+-rw-rw-r--  1 kate protein 21424 Mar  6 13:43 notInCow.out.spec
+-rw-rw-r--  1 kate protein 21424 Mar  6 13:43 notInDog.out.spec
+-rw-rw-r--  1 kate protein  3911 Mar  6 13:42 notInHuman.out.spec
+-rw-rw-r--  1 kate protein 22161 Mar  6 13:42 notInMouse.out.spec
+-rw-rw-r--  1 kate protein   326 Mar  6 12:18 notInRabbit.out.spec
+# bad file -- script broke on 6th column
+-rw-rw-r--  1 kate protein 22161 Mar  6 13:42 notInRat.out.spec
+
+    # this indicates there are 3 unique LSR files:
+    # 1) notInHuman
+    # 2) notInRodent (includes Mouse & Rat)
+    # 3) notInOthers (includes Cow & Dog)
+
+ssh kolossus
+cd /san/sanvol1/scratch/canFam2/rmsk
+    # Run Arian's DateRepsinRMoutput.pl to add extra columns telling 
+    # whether repeats in -query are also expected in -comp species.  
+    # Human in extra column 1, Mouse in extra column 2
+    foreach outfl ( *.out )
+        echo "$outfl"
+        /cluster/bluearc/RepeatMasker/DateRepeats \
+          ${outfl} -query dog -comp human -comp mouse
+    end
+    # Now extract human (extra column 1), mouse (extra column).
+    cd ..
+    mkdir linSpecRep.notInHuman
+    mkdir linSpecRep.notInMouse
+    foreach f (rmsk/*.out_homo-sapiens_mus-musculus)
+        set base = $f:t:r:r
+        echo $base.out.spec
+        /cluster/bin/scripts/extractRepeats 1 $f > \
+                        linSpecRep.notInHuman/$base.out.spec
+        /cluster/bin/scripts/extractRepeats 2 $f > \
+                        linSpecRep.notInMouse/$base.out.spec
+    end
+    wc -l rmsk/*.out
+#4533630 total
+    wc -l linSpecRep.notInHuman/*
+#1542788 total
+    wc -l linSpecRep.notInMouse/*
+#1546408 total
+    # Clean up.
+    rm rmsk/*.out_h*
 
 
+# SET UP BLAT SERVER (2006-03-06 kate)
+# Request blat server from cluster-admin, then enter ports in database
+
+    ssh hgwdev
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("panTro2", "blat12", "17790", "1", "0"); \
+        INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+        VALUES ("panTro2", "blat12", "17791", "0", "1");' \
+            hgcentraltest
+    #   test it with some sequence
 
 
+# GC 5 BASE TRACK (2006-03-06 kate)
 
-    # MAKE DOWNLOADABLE SEQUENCE FILES
+    ssh kkstore01
+    cd /cluster/data/panTro2/bed
+    mkdir gc5base
+    cd gc5base
+    time hgGcPercent -wigOut -doGaps -file=stdout -win=5 panTro2 \
+              /cluster/data/panTro2 | wigEncode stdin gc5Base.wig gc5Base.wib
+
+    sh hgwdev
+    cd /cluster/data/panTro2/bed/gc5base
+    mkdir -p /gbdb/panTro2/wib
+    ln -s `pwd`/*.wib /gbdb/panTro2/wib
+    hgLoadWiggle panTro2 gc5Base gc5Base.wig
+
+
+# CPGISLANDS (2006-03-06 - kate)
+    ssh hgwdev
+    mkdir /cluster/data/panTro2/bed/cpgIsland
+    cd /cluster/data/panTro2/bed/cpgIsland
+
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    #   gcc readseq.c cpg_lh.c -o cpglh.exe
+    cd ../..
+    ln -s hg3rdParty/cpgIslands/cpglh.exe .
+
+    # cpglh.exe requires hard-masked (N) .fa's.  
+    # There may be warnings about "bad character" for IUPAC ambiguous 
+    # characters like R, S, etc.  Ignore the warnings.  
+    ssh kkstore01
+    cd /cluster/data/panTro2/bed/cpgIsland
+cat > doCpg.csh << 'EOF'
+    foreach f (../../?{,?}/chr*.fa.masked ../../6_hla_hap1/chr*.fa.masked)
+        set c = $f:t:r:r
+        echo $c
+        ./cpglh.exe $f > $c.cpg
+    end
+'EOF'
+    # << happy emacs
+    csh doCpg.csh >&! doCpg.log &
+
+    #   Several chroms have 0 results:
+    #   -rw-rw-r--  1     0 Feb 16 15:19 chr10_random.cpg
+    #   -rw-rw-r--  1     0 Feb 16 15:20 chr15_random.cpg
+    #   -rw-rw-r--  1     0 Feb 16 15:22 chr8_random.cpg
+    #   -rw-rw-r--  1     0 Feb 16 15:22 chr9_random.cpg
+    #   -rw-rw-r--  1     0 Feb 16 15:22 chrM.cpg
+    #   -rw-rw-r--  1     0 Feb 16 15:22 chrX_random.cpg
+    #   -rw-rw-r--  1     0 Feb 16 15:22 chrY.cpg
+
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
+'_EOF_'
+    #   happy emacs
+    awk -f filter.awk chr*.cpg | sort -k1,1 -k2,2n > cpgIsland.bed
+
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/cpgIsland
+    hgLoadBed -strict panTro2 cpgIslandExt -tab -noBin \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    featureBits panTro2 cpgIslandExt
+        # 19683723 bases of 2909512873 (0.677%) in intersection
+
+# BAC Ends (2006-03-08 kate)
+
+    # download BAC ends from NCBI.  
+    ssh kkstore
+    cd /cluster/data/ncbi/bacends/chimp
+    mkdir bacends.chimp.2
+    cd bacends.chimp.2
+    # wget ftp.ncbi.nih.gov/genomes/CLONEEND/pan_troglodytes/*
+    # trouble with wget on files in this dir -- they're hanging,
+    # so I used ftp mget w/o prompt
+    # creates files:  9598_clone_end???.mfa and 95998_clone_info???.txt
+    # 10 files of each type
+    # NOTE: the *.info files contain a superset of the data in the
+    # previous cl_acc_gi_len file -- extract fields 1-5 and 8 to
+    # use as input to Terry's script that generaes the .pair file
+    # for compatibility with downstream tools
+    ftp ftp.ncbi.nih.gov
+    cd /genomes/CLONEEND/pan_troglodytes
+    prompt
+    mget *
+    gunzip *.gz
+
+    # setup for track build area
+    cd /cluster/data/panTro2
+    mkdir -p bed/bacends
+    cd bed/bacends
+    ln -s  /cluster/data/ncbi/bacends/chimp/bacends.chimp.2 ncbi
+
+    # generate pairs info file by/for processing by Terry Furey's scripts
+    grep -h -v '^#' ncbi/*.txt | \
+        awk '{printf ("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, $4, $5, $8)}' \
+                > cl_acc_gi_len
+    wc -l cl_acc_gi_len
+        # 175757 cl_acc_gi_len
+        # previous load (2004): 158588 entries
+    faSize ncbi/*.mfa
+        # 175757 sequences in 10 files
+        # Info and sequence catch match -- good!
+     /cluster/bin/scripts/convertBacEndPairInfo cl_acc_gi_len
+        # 85911 pairs and 3935 singles
+        # previous: 78846 pairs and 896 singles
+        # Note large increase in singles -- either lower quality in
+        # new data set, or script could use some updating.
+        # Just note this for now.
+    wc -l bacEndPairs.txt bacEndSingles.txt
+        #  85911 bacEndPairs.txt
+        #   3935 bacEndSingles.txt
+
+    # create sequence file
+    cp /cluster/data/ncbi/bacends/chimp/bacends.chimp.1/convert.pl .
+    cat ncbi/*.mfa | ./convert.pl > BACends.fa
+    faSize BACends.fa
+        # 175757 sequences
+
+    # make accessible to track
+    ssh hgwdev
+    mkdir -p /gbdb/panTro2/bacends
+    ln -s /cluster/data/panTro2/bed/bacends/BACends.fa /gbdb/panTro1/bacends
+
+    # split for aligning on cluster
+    ssh kkstore01
+    cd /cluster/data/panTro2/bed/bacends
+    set tmp = /san/sanvol1/scratch/panTro2/bacends/
+    mkdir -p $tmp
+    faSplit BACends.fa sequence 10 $tmp
+
+    # blat vs. unmasked sequence in 5M chunks
+    # 652 chunks * 10 bacends files = 6520 jobs
+    ssh pk
+    cd /cluster/data/panTro2/bed/bacends
+    mkdir run
+    cd run
+    mkdir ../out
+
+    # list chrom chunks and bacends chunks
+    set dir = /cluster/data/panTro2/split5M
+    ls $dir/*/*.fa | sed "s^$dir/^^" > chromSplit.lst
+    set dir = /san/sanvol1/scratch/panTro2/bacends
+    ls $dir/*.fa | sed "s^$dir/^^" > bacends.lst
+
+cat > align.csh << 'EOF'
+#!/bin/csh -ef 
+    set d = $1:h
+    set f = $1:t
+    set e = $2
+    mkdir -p ../out/$d
+    set tmp = /scratch/tmp/panTro2/align.$$
+    mkdir -p $tmp
+    cp /cluster/data/panTro2/split5M/$d/$f $tmp
+    cp /san/sanvol1/scratch/panTro2/bacends/$e $tmp
+    blat $tmp/$f $tmp/$e -ooc=/cluster/bluearc/panTro2/11.ooc ../out/$d/$f:r.$e:r.psl
+    rm -fr $tmp
+'EOF'
+    # << happy emacs
+    chmod +x align.csh
+
+cat > gsub << 'EOF'
+#LOOP
+./align.csh $(path1) $(path2) {check out line+ ../out/$(dir1)/$(root1).$(root2).psl}
+#ENDLOOP
+'EOF'
+    # << happy emacs
+
+    gensub2 chromSplit.lst bacends.lst gsub jobList
+    para create jobList
+        # 6520 jobs
+    para try
+    # NOTE: these run quickly
+
+
+   # MAKE DOWNLOADABLE SEQUENCE FILES
 
