@@ -8,21 +8,21 @@ class point
 class animal
 // Base clase for animals
     {
-    polymorphic flow name() into string name {name = "animal";}
-    polymorphic flow dims() into point p {p = (1,1);}
+    morph flow name() into string name {name = "animal";}
+    morph flow dims() into point p {p = (1,1);}
     }
 animal animal = ();
 
 class zebra extends animal
     {
-    polymorphic flow name() into string name {name = "zebra";}
-    polymorphic flow dims() into point p {p = (4,5);}
+    morph flow name() into string name {name = "zebra";}
+    morph flow dims() into point p {p = (4,5);}
     }
 zebra zebra = ();
 
 class frog extends animal
     {
-    polymorphic flow name() into string name {name = "frog";}
+    morph flow name() into string name {name = "frog";}
     }
 frog frog = ();
 

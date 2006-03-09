@@ -375,7 +375,7 @@ flow formParseVars(htmlPage page, htmlForm form) into (dir of htmlFormVar vars)
 // from buttons, INPUT tags, OPTION lists, or TEXTAREAS.
     {
     vars = ();
-    for (tagIx in form.startTagIx to form.endTagIx)
+    for (tagIx in form.startTagIx til form.endTagIx)
         {
 	htmlTag tag = page.tags[tagIx];
 	if (tag.name == "INPUT")
@@ -425,7 +425,7 @@ flow formParseVars(htmlPage page, htmlForm form) into (dir of htmlFormVar vars)
 	    {
 	    string varName = tag.requiredAttribute("NAME");
 	    htmlFormVar var = findOrMakeVar(vars, varName, tag);
-	    for (subIx in tagIx+1 to form.endTagIx)
+	    for (subIx in tagIx+1 til form.endTagIx)
 	        {
 		htmlTag subTag = page.tags[subIx];
 		if (subTag.name == "/SELECT")
@@ -643,7 +643,7 @@ into (string text)
     {
     /* Here we deal with forwarding up to 10 levels
      * (If more levels than that, hmm, could be a trap!) */
-    for (i in 0 to 10)
+    for (i in 0 til 10)
         {
 	text = httpGetUnforwarded(url, vars, cookies);
 	url = httpForwardingAddress(text);
@@ -675,7 +675,7 @@ into (string text)
     {
     /* Here we deal with forwarding up to 10 levels
      * (If more levels than that, hmm, could be a trap!) */
-    for (i in 0 to 10)
+    for (i in 0 til 10)
         {
 	text = httpPostUnforwarded(url, vars, cookies);
 	url = httpForwardingAddress(text);

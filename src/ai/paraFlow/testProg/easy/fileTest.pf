@@ -28,7 +28,7 @@ print("The numbers are $num");
 /* Rewind file, and then do a print/skip loop. */
 f.seek(0);
 prin("Every other number and letter: ");
-for (i in 0 to (numbers.size+letters.size)/2)
+for (i in 0 til (numbers.size+letters.size)/2)
     {
     f.skip(1);
     string c = f.read(1);

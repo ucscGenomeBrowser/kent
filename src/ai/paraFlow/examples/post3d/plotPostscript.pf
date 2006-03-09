@@ -35,7 +35,7 @@ stroke
           sides = 16;
        int x = xCen+radius, y=yCen;
        f.write("$x $y moveto\n");
-       for (i in 1 to sides)
+       for (i in 1 til sides)
            {
 	   double angle = i * math.pi * 2 / sides;
 	   x = xCen + radius * cos(angle);

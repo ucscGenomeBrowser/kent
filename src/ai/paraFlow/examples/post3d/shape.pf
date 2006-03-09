@@ -19,11 +19,11 @@ global class shape
 // a few polymorphic functions that all types of shapes will
 // implement.
     {
-    polymorphic to draw(plotter plot){}          // Draw shape 
-    polymorphic to move(double dx,dy,dz){}   // Relative move
-    polymorphic to moveTo(double dx,dy,dz){} // Move center to
-    polymorphic to zoom(double factor){} // Shrink or expand
-    polymorphic to rotate(double x,y,z){} // Rotate on each axis
+    morph to draw(plotter plot){}          // Draw shape 
+    morph to move(double dx,dy,dz){}   // Relative move
+    morph to moveTo(double dx,dy,dz){} // Move center to
+    morph to zoom(double factor){} // Shrink or expand
+    morph to rotate(double x,y,z){} // Rotate on each axis
     
     // Some shortcut functions to rotate about a
     // particular axis.
@@ -39,7 +39,7 @@ global class sphere extends shape
     point3d center = ();
     double radius = 10; // Avoid spheres that look like points.
 
-    polymorphic to draw(plotter plot)
+    morph to draw(plotter plot)
         {
         // We'll just draw ourselves as a circle.
         // Get radius.
@@ -50,26 +50,26 @@ global class sphere extends shape
         plot.circle(flat.x,flat.y,pixelRadius);
         }
 
-    polymorphic to move(double dx,dy,dz)
+    morph to move(double dx,dy,dz)
     // Relative move.
         {
         center.move(dx,dy,dz);
         }
 
-    polymorphic to moveTo(double x,y,z)
+    morph to moveTo(double x,y,z)
     // Absolute move.
         {
         center = (x,y,z);
         }
 
 
-    polymorphic to zoom(double factor)
+    morph to zoom(double factor)
     // Zooming is easy, just scale radius.
         {
         radius *= factor;
         }
 
-    polymorphic to rotate(double dx,dy,dz)
+    morph to rotate(double dx,dy,dz)
     // Rotation is no work at all for a sphere,
     // but we still need to define the method.
         {
@@ -89,7 +89,7 @@ global class polyhedron extends shape
     array of point2d flattened;  // Points in 2-D coordinates
     array of facet facets;      // We'll define a facet later
 
-    polymorphic to draw(plotter plot)
+    morph to draw(plotter plot)
     // Draw polyhedron
         {
         // We project our vertices into 2D space, and
@@ -107,18 +107,18 @@ global class polyhedron extends shape
             facet.draw(plot, flattened);
         }
 
-    polymorphic to move(double dx,dy,dz)
+    morph to move(double dx,dy,dz)
     // To move self, just need to move center point
         {
         center.move(dx,dy,dz);
         }
 
-    polymorphic to moveTo(double x,y,z)
+    morph to moveTo(double x,y,z)
         {
         center = (x,y,z);
         }
 
-    polymorphic to zoom(double factor)
+    morph to zoom(double factor)
     // Ah, this one we can do in parallel!
         {
         para (v in vertices) do
@@ -129,7 +129,7 @@ global class polyhedron extends shape
             }
         }
 
-    polymorphic to rotate(double x,y,z)
+    morph to rotate(double x,y,z)
     // We can rotate in parallel too.
         {
         para (v in vertices) do
@@ -166,7 +166,7 @@ global class facet
          point2d a,b;
          // Draw lines between vertex and previous
          // vertex.
-         for (i in 1 to points.size)
+         for (i in 1 til points.size)
              {
              a = vertices[points[i-1]];
              b = vertices[points[i]];
@@ -287,7 +287,7 @@ global class cylinder extends polyhedron
 
         // Fill in facets except for the top and bottom
         // and one lonely little strip on the side.
-        for (i in 1 to n)
+        for (i in 1 til n)
             facets[i] = ((i-1, i, n+i, n+i-1),);
 
         // Fill in the last strip
@@ -295,7 +295,7 @@ global class cylinder extends polyhedron
 
         // Fill in the top and bottom.
         array[n] of int iTop, iBottom;
-        for (i in 0 to n)
+        for (i in 0 til n)
              {
              iTop[i] = i;
              iBottom[i] = i+n;

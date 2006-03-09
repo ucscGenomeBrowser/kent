@@ -41,11 +41,11 @@ class shape3d
 // a few polymorphic functions that all types of shapes will
 // implement.
     {
-    polymorphic to draw(win win){}          // Draw shape 
-    polymorphic to move(double dx,dy,dz){}   // Relative move
-    polymorphic to moveTo(double dx,dy,dz){} // Move center to
-    polymorphic to zoom(double factor){} // Shrink or expand
-    polymorphic to rotate(double x,y,z){} // Rotate on each axis
+    morph to draw(win win){}          // Draw shape 
+    morph to move(double dx,dy,dz){}   // Relative move
+    morph to moveTo(double dx,dy,dz){} // Move center to
+    morph to zoom(double factor){} // Shrink or expand
+    morph to rotate(double x,y,z){} // Rotate on each axis
     
     // Some shortcut functions to rotate about a
     // particular axis.
@@ -125,13 +125,13 @@ class point3d extends shape3d
          flat = (self.x * scale + winCenX, self.y * scale + winCenY);
          }
 
-    polymorphic to draw(win win)
+    morph to draw(win win)
         {
         point2d flat = toTwoD();
         win.plotDot(flat.x,flat.y);
         }
 
-    polymorphic to move(double dx,dy,dz)
+    morph to move(double dx,dy,dz)
     // Relative move.
         {
         x += dx;
@@ -139,7 +139,7 @@ class point3d extends shape3d
         z += dz;
         }
 
-    polymorphic to moveTo(double x,y,z)
+    morph to moveTo(double x,y,z)
     // Absolute move.
         {
         self.x = x;
@@ -147,7 +147,7 @@ class point3d extends shape3d
         self.z = z;
         }
 
-    polymorphic to zoom(double scaleFactor)
+    morph to zoom(double scaleFactor)
     // Control size of object
         {
         // Nothing for us to do here, since we are
@@ -156,7 +156,7 @@ class point3d extends shape3d
         // function or the compiler will complain.
         }
 
-    polymorphic to rotate(double dx,dy,dz)
+    morph to rotate(double dx,dy,dz)
         {
         // Also nothing for us to do here.  A point
         // is a point from any angle!
@@ -170,7 +170,7 @@ class sphere extends point3d
     {
     double radius = 10; // Avoid spheres that look like points.
 
-    polymorphic to draw(win win)
+    morph to draw(win win)
         {
         // We'll just draw ourselves as a circle.
         // Get radius.
@@ -181,7 +181,7 @@ class sphere extends point3d
         win.circle(flat.x,flat.y,pixelRadius);
         }
 
-     polymorphic to zoom(double factor)
+     morph to zoom(double factor)
          {
 	 radius *= factor;
 	 }
@@ -201,7 +201,7 @@ class polyhedron extends shape3d
     array of point2d flattened;	// Points in 2-D window coordinates
     array of facet facets;      // We'll define a facet later
 
-    polymorphic to draw(win win)
+    morph to draw(win win)
     // Draw polyhedron
         {
         // We project our vertices into 2D space, and
@@ -213,18 +213,18 @@ class polyhedron extends shape3d
             facet.draw(win, vertices2d);
         }
 
-    polymorphic to move(double dx,dy,dz)
+    morph to move(double dx,dy,dz)
     // To move self, just need to move center point
         {
         center.move(dx,dy,dz);
         }
 
-    polymorphic to moveTo(double x,y,z)
+    morph to moveTo(double x,y,z)
         {
         center.move(x,y,z);
         }
 
-    polymorphic to zoom(double factor)
+    morph to zoom(double factor)
     // Ah, this one we can do in parallel!
         {
         para (v in vertices) do
@@ -235,7 +235,7 @@ class polyhedron extends shape3d
             }
         }
 
-    polymorphic to rotate(double x,y,z)
+    morph to rotate(double x,y,z)
     // We can rotate in parallel too.
         {
         para (v in vertices) do
@@ -272,7 +272,7 @@ class facet
          point2d a,b;
          // Draw lines between vertex and previous
          // vertex.
-         for (i in 1 to points.size)
+         for (i in 1 til points.size)
              {
              a = vertices[points[i-1]];
              b = vertices[points[i]];
@@ -393,7 +393,7 @@ class cylinder extends polyhedron
 
         // Fill in facets except for the top and bottom
         // and one lonely little strip on the side.
-        for (i in 1 to n)
+        for (i in 1 til n)
             facets[i] = ((i-1, i, n+i, n+i-1),);
 
         // Fill in the last strip
@@ -401,7 +401,7 @@ class cylinder extends polyhedron
 
         // Fill in the top and bottom.
         array[n] of int iTop, iBottom;
-        for (i in 0 to n)
+        for (i in 0 til n)
              {
              iTop[i] = i;
              iBottom[i] = i+n;

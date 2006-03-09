@@ -1,4 +1,4 @@
-polymorphic to hello()
+morph to hello()
     {
     print("Hello");
     }

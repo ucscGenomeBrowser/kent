@@ -377,8 +377,10 @@ switch (pp->type)
 	        {
 		enum pfAccessType access = var->ty->access;
 		if (access != paGlobal && access != paWritable)
+		    {
 		    errAt(pp->tok, "%s is private to module %s", 
 		    	var->name, varModule->name);
+		    }
 		}
 	    pp->var = var;
 	    pp->type = pptVarUse;

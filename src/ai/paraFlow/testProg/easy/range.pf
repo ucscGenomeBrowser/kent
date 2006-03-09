@@ -1,5 +1,5 @@
 int end = 10;
-for (i in 0 to 10)
+for (i in 0 til 10)
     print(i);
-para (i in end-end to end) do
+para (i in end-end til end) do
     print(i);

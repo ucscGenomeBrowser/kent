@@ -2,26 +2,26 @@
 class animal
     {
     string name;
-    polymorphic to speak() {print("???");}
+    morph to speak() {print("???");}
     to sleep() {print("zzz");}
-    polymorphic to eat(string food) {print("eat " + food);}
+    morph to eat(string food) {print("eat " + food);}
     }
 
 class dog extends animal
     {
-    polymorphic to speak() {print("bark");}
-    polymorphic to eat(string food) {print("slurp " + food);}
+    morph to speak() {print("bark");}
+    morph to eat(string food) {print("slurp " + food);}
     }
 
 class cat extends animal
     {
-    polymorphic to speak() {print("meow");}
-    polymorphic to eat(string food) {print("nibble " + food);}
+    morph to speak() {print("meow");}
+    morph to eat(string food) {print("nibble " + food);}
     }
 
 class toyPoodle extends dog
     {
-    polymorphic to speak() {print("yip");}
+    morph to speak() {print("yip");}
     }
 
 animal animal = ("unknown");

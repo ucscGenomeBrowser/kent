@@ -13,7 +13,7 @@ class textGfx
         {
 	print(color + " " + "circle(" + x + " " + y + " " + radius + ")");
 	}
-    polymorphic to specialShape(int x,y) {print("special text at " + x + " " + y);}
+    morph to specialShape(int x,y) {print("special text at " + x + " " + y);}
     }
 
 class fontGfx extends textGfx
@@ -21,7 +21,7 @@ class fontGfx extends textGfx
     string font = "times";
     to getFont() into string font {font = self.font;}
     to setFont(string font) {self.font = font;}
-    polymorphic to specialShape(int x,y) {print("special font at " + x + " " + y);}
+    morph to specialShape(int x,y) {print("special font at " + x + " " + y);}
     }
 
 

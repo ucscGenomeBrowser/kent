@@ -148,6 +148,7 @@ switch (type)
     case pftReadable:        return "pftReadable";
     case pftReturn: 	     return "pftReturn";
     case pftStatic:          return "pftStatic";
+    case pftTil: 	     return "pftTil";
     case pftTo: 	     return "pftTo";
     case pftTry:             return "pftTry";
     case pftWhile: 	     return "pftWhile";

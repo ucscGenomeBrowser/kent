@@ -922,7 +922,7 @@ struct pfParse *parseIndexRange(struct pfCompile *pfc, struct pfParse *parent,
 {
 struct pfToken *tok = *pTokList;
 struct pfParse *pp = parseLogOr(pfc, parent, &tok, scope);
-if (tok->type == pftTo)
+if (tok->type == pftTil)
      {
      struct pfParse *left = pp, *right;
      pp = pfParseNew(pptIndexRange, tok, parent, scope);
@@ -1041,9 +1041,13 @@ while (inAccessSection)
 			errAt(tok, "'global' inside function");
 		    break;
 		case pftLocal:
+		    if (scope->module)
+		        errAt(tok, "'local' unneeded here");
 		    access = paLocal;
 		    break;
 		case pftReadable:
+		    if (scope->module)
+		        errAt(tok, "use global rather than readable here");
 		    access = paReadable;
 		    break;
 		case pftStatic:

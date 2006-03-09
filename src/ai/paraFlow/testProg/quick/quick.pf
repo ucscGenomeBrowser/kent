@@ -18,7 +18,7 @@ class creature
     string species;
     int id = nextId();
 
-    polymorphic to speak()
+    morph to speak()
         {
 	print("grunt");
 	}
@@ -26,7 +26,7 @@ class creature
 
 class human extends creature
     {
-    polymorphic to speak()
+    morph to speak()
         {
 	print("Hello there, I'm " + self.name);
 	}
@@ -56,7 +56,7 @@ flow distance(point a,b) into double d
     {
     int dimCount = a.dims.size;
     if (b.dims.size < dimCount) dimCount = b.dims.size;
-    for (i in 0 to dimCount)
+    for (i in 0 til dimCount)
         {
 	double diff = a.dims[i] - b.dims[i];
 	d += diff*diff;
@@ -68,7 +68,7 @@ to checkPara()
     {
     array of point a = (((1,2,3),),((2,3,4),),((4,5,6),));
     array of point b = (((3,2,1),),((4,3,2),),((4,5,6),));
-    double sumDistance = para (i in 0 to a.size) + distance(a[i], b[i]);
+    double sumDistance = para (i in 0 til a.size) + distance(a[i], b[i]);
     print(sumDistance);
     } 
 

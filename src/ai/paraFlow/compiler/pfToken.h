@@ -70,6 +70,7 @@ enum pfTokType
     pftReadable,
     pftReturn,
     pftStatic,
+    pftTil,
     pftTo,
     pftTry,
     pftWhile,
