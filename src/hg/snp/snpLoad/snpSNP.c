@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.5 2006/03/09 03:17:44 heather Exp $";
+static char const rcsid[] = "$Id: snpSNP.c,v 1.6 2006/03/09 17:15:12 heather Exp $";
 
 struct snpData
     {
@@ -197,14 +197,14 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
 
 carefulClose(&errorFileHandle);
 
-// for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
-    // {
-    // safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
-    // if (!hTableExists(tableName)) continue;
-    // recreateDatabaseTable(chromPtr->name);
-    // verbose(1, "loading chrom = %s\n", chromPtr->name);
-    // loadDatabase(chromPtr->name);
-    // }
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
+    {
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
+    if (!hTableExists(tableName)) continue;
+    recreateDatabaseTable(chromPtr->name);
+    verbose(1, "loading chrom = %s\n", chromPtr->name);
+    loadDatabase(chromPtr->name);
+    }
 
 return 0;
 }
