@@ -18,7 +18,7 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpFinalTable.c,v 1.5 2006/03/08 22:53:19 heather Exp $";
+static char const rcsid[] = "$Id: snpFinalTable.c,v 1.6 2006/03/09 20:00:22 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *outputFileHandle = NULL;
@@ -44,7 +44,6 @@ char *exceptionTables[] = {
     "snpCheckAlleles",
     "snpCheckClassAndObserved",
     "snpExpandAllele",
-    "snpLoadFasta",
     "snpLocType",
 };
 
