@@ -5,6 +5,7 @@
 
 #STS marker and its position on golden path and various maps
 CREATE TABLE stsMapRat (
+    bin smallint not null,              # speed index
     chrom varchar(255) not null,	# Chromosome or 'unknown'
     chromStart int not null,	# Start position in chrom - negative 1 if unpositioned
     chromEnd int unsigned not null,	# End position in chrom
