@@ -9,4 +9,3 @@ O = threadExp.o
 
 threadExp: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/threadExp $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/threadExp${EXE}
