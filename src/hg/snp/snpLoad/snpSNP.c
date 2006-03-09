@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.6 2006/03/09 17:15:12 heather Exp $";
+static char const rcsid[] = "$Id: snpSNP.c,v 1.7 2006/03/09 18:01:28 heather Exp $";
 
 struct snpData
     {
@@ -42,6 +42,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int validInt = 0;
+struct snpData *sel;
 
 /* could increase the default size */
 snpDataHash = newHash(0);
@@ -56,7 +57,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	        "unexpected validation_status %d for snp_id %s\n", validInt, row[0]);
 	validInt = 0;
 	}
-
+    AllocVar(sel);
+    sel->validation_status = validInt;
+    sel->avHet = atof(row[2]);
+    sel->avHetSE = atof(row[3]);
+    hashAdd(snpDataHash, row[0], sel);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -191,7 +196,7 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     if (!hTableExists(tableName)) continue;
  
     verbose(1, "chrom = %s\n", chromPtr->name);
-
+ 
     readSnps(chromPtr->name);
     }
 
