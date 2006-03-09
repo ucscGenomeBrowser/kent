@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.287 2006/03/09 18:26:57 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.288 2006/03/09 21:19:08 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -1029,7 +1029,8 @@ if (s == NULL)
    s = "";
    ok = FALSE;
    }
-safef(retBand, sizeof(retBand), "%s%s", (isDmel ? "" : skipChr(chrom)), buf);
+safef(retBand, HDB_MAX_BAND_STRING, "%s%s",
+      (isDmel ? "" : skipChr(chrom)), buf);
 return ok;
 }
 
