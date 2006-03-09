@@ -12,7 +12,7 @@ void usage()
 errAbort(
   "threadExp - Some pthread experiments\n"
   "usage:\n"
-  "   threadExp size threads\n"
+  "   threadExp size jobs threads\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -28,7 +28,6 @@ void bigCalc(double *output, int outSize, int startNum, int endNum)
 {
 int i;
 double d;
-uglyf("bigCount %d %d %d\n", outSize, startNum, endNum);
 assert(outSize == endNum-startNum);
 for (i=startNum; i<endNum; ++i)
     {
@@ -48,7 +47,6 @@ struct calcJob
     struct calcJob *next;
     double *output;
     int start, end;
-    pthread_t thread;
     };
 
 struct calcJob *makeJobs(double *results, int size, int jobCount)
@@ -87,30 +85,36 @@ for (;;)
 void doJobs(struct calcJob *jobList)
 {
 struct calcJob *job;
-toDo = synQueueNew();
-done = synQueueNew();
 for (job = jobList; job != NULL; job = job->next)
     synQueuePut(toDo, job);
-for (job = jobList; job != NULL; job = job->next)
-    pthreadCreate(&job->thread, NULL, workerBee, NULL);
+uglyTime("To load syn queue");
 for (job = jobList; job != NULL; job = job->next)
     synQueueGet(done);
 }
 
-void threadExp(char *asciiSize, char *asciiJobCount)
+void threadExp(char *asciiSize, char *asciiJobCount, char *asciiThreadCount)
 /* threadExp - Some pthread experiments. */
 {
 int size = atoi(asciiSize);
 int jobCount = atoi(asciiJobCount);
+int threadCount = atoi(asciiThreadCount);
+pthread_t *threads;
 int i;
+
 double *results;
 double sumErr = 0;
 struct calcJob *jobList, *job;
 if (size <= 0)
    usage();
 AllocArray(results, size);
+AllocArray(threads, threadCount);
+toDo = synQueueNew();
+done = synQueueNew();
 jobList = makeJobs(results, size, jobCount);
 uglyTime("To init and alloc %d\n", size);
+for (i=0; i<threadCount; ++i)
+    pthreadCreate(&threads[i], NULL, workerBee, NULL);
+uglyTime("Thread spwan time");
 doJobs(jobList);
 uglyTime("job time");
 for (i=0; i<size; ++i)
@@ -124,8 +128,8 @@ int main(int argc, char *argv[])
 {
 uglyTime(NULL);
 optionHash(&argc, argv);
-if (argc != 3)
+if (argc != 4)
     usage();
-threadExp(argv[1], argv[2]);
+threadExp(argv[1], argv[2], argv[3]);
 return 0;
 }
