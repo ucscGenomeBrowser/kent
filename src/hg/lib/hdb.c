@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.285 2006/02/15 21:53:43 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.286 2006/03/09 17:36:45 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -765,7 +765,7 @@ char chrom[HDB_MAX_CHROM_STRING];
 if (hashFindVal(hash, "chromInfo"))
     hParseTableName(table, trackName, chrom);
 else
-    safef(trackName, sizeof(trackName), table);
+    safef(trackName, sizeof(trackName), "%s", table);
 tableNames = (struct slName *)hashFindVal(hash, trackName);
 for (tbl = tableNames;  tbl != NULL;  tbl = tbl->next)
     {
@@ -798,12 +798,12 @@ if (ptr != NULL)
     snprintf(retDb, min(HDB_MAX_TABLE_STRING, (ptr - dbTable + 1)),
 	     dbTable);
     retDb[HDB_MAX_TABLE_STRING-1] = 0;
-    safef(retTable, HDB_MAX_TABLE_STRING, ptr+1);
+    safef(retTable, HDB_MAX_TABLE_STRING, "%s", ptr+1);
     }
 else
     {
-    safef(retDb, HDB_MAX_TABLE_STRING, hGetDb());
-    safef(retTable, HDB_MAX_TABLE_STRING, dbTable);
+    safef(retDb, HDB_MAX_TABLE_STRING, "%s", hGetDb());
+    safef(retTable, HDB_MAX_TABLE_STRING, "%s", dbTable);
     }
 }
 
@@ -849,8 +849,8 @@ void hParseTableName(char *table, char trackName[HDB_MAX_TABLE_STRING],
  * When chromosome/table name conventions change, this will need an update! */
 {
 /* It might not be a split table; provide defaults: */
-safef(trackName, HDB_MAX_TABLE_STRING, table);
-safef(chrom, HDB_MAX_CHROM_STRING, hDefaultChrom());
+safef(trackName, HDB_MAX_TABLE_STRING, "%s", table);
+safef(chrom, HDB_MAX_CHROM_STRING, "%s", hDefaultChrom());
 if (startsWith("chr", table) || startsWith("Group", table))
     {
     char *ptr = strrchr(table, '_');
@@ -859,7 +859,7 @@ if (startsWith("chr", table) || startsWith("Group", table))
 	int chromLen = min(HDB_MAX_CHROM_STRING-1, (ptr - table));
 	strncpy(chrom, table, chromLen);
 	chrom[chromLen] = 0;
-	safef(trackName, HDB_MAX_TABLE_STRING, ptr+1);
+	safef(trackName, HDB_MAX_TABLE_STRING, "%s", ptr+1);
 	}
     }
 }
@@ -889,7 +889,7 @@ void hNibForChrom2(char *chromName, char retNibName[HDB_MAX_PATH_STRING])
 /* Get .nib file associated with chromosome on db2. */
 {
 struct chromInfo *ci = mustGetChromInfo(hGetDb2(), chromName);
-safef(retNibName, HDB_MAX_PATH_STRING, ci->fileName);
+safef(retNibName, HDB_MAX_PATH_STRING, "%s", ci->fileName);
 }
 
 struct hash *hCtgPosHash()
@@ -1611,7 +1611,7 @@ if (hti == NULL)
 if (hti->isSplit)
     safef(fullTableName, sizeof(fullTableName), "%s_%s", chrom, rootName);
 else
-    safef(fullTableName, sizeof(fullTableName), rootName);
+    safef(fullTableName, sizeof(fullTableName), "%s", rootName);
 canDoUTR = hti->hasCDS;
 canDoIntrons = hti->hasBlocks;
 
@@ -2745,7 +2745,7 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
 	}
     if (!isSplit)
         {
-	safef(fullName, sizeof(fullName), rootName);
+	safef(fullName, sizeof(fullName), "%s", rootName);
 	if (!hTableExistsDb(db, fullName))
 	    return NULL;
 	}
@@ -2829,7 +2829,7 @@ if (retTableBuf != NULL)
     if (hti->isSplit)
 	safef(retTableBuf, HDB_MAX_TABLE_STRING, "%s_%s", chrom, rootName);
     else
-	safef(retTableBuf, HDB_MAX_TABLE_STRING, rootName);
+	safef(retTableBuf, HDB_MAX_TABLE_STRING, "%s", rootName);
     }
 if (hasBin != NULL)
     *hasBin = hti->hasBin;
