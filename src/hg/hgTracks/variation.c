@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.75 2006/03/04 11:05:16 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.76 2006/03/09 09:07:15 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -841,28 +841,33 @@ tg->itemName = perlegenName;
 Color ldShadesPos[LD_DATA_SHADES];
 Color ldHighLodLowDprime; /* pink */
 Color ldHighDprimeLowLod; /* blue */
-boolean ldInvert;
 int colorLookup[256];
 
-void ldShadesInit(struct vGfx *vg, boolean isDprime) 
+void ldShadesInit(struct track *tg, struct vGfx *vg, boolean isDprime) 
 /* Allocate the LD for positive and negative values, and error cases */
 {
 static struct rgbColor white = {255, 255, 255};
 static struct rgbColor red   = {255,   0,   0};
 static struct rgbColor green = {  0, 255,   0};
 static struct rgbColor blue  = {  0,   0, 255};
-char *posColorString = cartUsualString(cart, "ldPos", ldPosDefault);
+struct dyString *dsLdPos = newDyString(32);
+char *ldPos = NULL;
 
+if (startsWith("hapmapLd", tg->mapName))
+    dyStringPrintf(dsLdPos, "hapmapLd_pos");
+else
+    dyStringPrintf(dsLdPos, "%s_pos", tg->mapName);
+ldPos = cartUsualString(cart, dsLdPos->string, ldPosDefault);
 ldHighLodLowDprime = vgFindColorIx(vg, 255, 224, 224); /* pink */
 ldHighDprimeLowLod = vgFindColorIx(vg, 192, 192, 240); /* blue */
-if (sameString(posColorString,"red")) 
+if (sameString(ldPos,"red")) 
     vgMakeColorGradient(vg, &white, &red,   LD_DATA_SHADES, ldShadesPos);
-else if (sameString(posColorString,"blue"))
+else if (sameString(ldPos,"blue"))
     vgMakeColorGradient(vg, &white, &blue,  LD_DATA_SHADES, ldShadesPos);
-else if (sameString(posColorString,"green"))
+else if (sameString(ldPos,"green"))
     vgMakeColorGradient(vg, &white, &green, LD_DATA_SHADES, ldShadesPos);
 else
-    errAbort("LD fill color must be 'red', 'blue', or 'green'; '%s' is not recognized", posColorString);
+    errAbort("LD fill color must be 'red', 'blue', or 'green'; '%s' is not recognized", ldPos);
 }
 
 void bedLoadLdItemByQuery(struct track *tg, char *table, 
@@ -952,9 +957,9 @@ else
 return tg->height;
 }
 
-void initColorLookup(struct vGfx *vg, boolean isDprime)
+void initColorLookup(struct track *tg, struct vGfx *vg, boolean isDprime)
 {
-ldShadesInit(vg, isDprime);
+ldShadesInit(tg, vg, isDprime);
 colorLookup[(int)'a'] = ldShadesPos[0];
 colorLookup[(int)'b'] = ldShadesPos[1];
 colorLookup[(int)'c'] = ldShadesPos[2];
@@ -1003,8 +1008,12 @@ int yl = round((double)(scale*(c-a)/2)) + yOff;
 int yt = round((double)(scale*(d-a)/2)) + yOff;
 int yr = round((double)(scale*(d-b)/2)) + yOff;
 int yb = round((double)(scale*(c-b)/2)) + yOff;
+boolean ldInv;
+struct dyString *dsLdInv = newDyString(32);
 
-if (!ldInvert)
+dyStringPrintf(dsLdInv, "%s_inv", tg->mapName);
+ldInv = cartUsualBoolean(cart, dsLdInv->string, ldInvDefault);
+if (!ldInv)
     {
     yl = yMax - yl + yOff;
     yt = yMax - yt + yOff;
@@ -1024,10 +1033,17 @@ if (drawMap && xt-xl>5 && xb-xl>5)
     mapDiamondUi(xl, yl, xt, yt, xr, yr, xb, yb, name, tg->mapName);
 }
 
-Color getOutlineColor(int itemCount)
+Color getOutlineColor(struct track *tg, int itemCount)
 /* get outline color from cart and set outlineColor*/
 {
-char *outColor = cartUsualString(cart, "ldOut", ldOutDefault);
+struct dyString *dsLdOut = newDyString(32);
+char *outColor = NULL;
+
+if(startsWith("hapmapLd", tg->mapName))
+    dyStringPrintf(dsLdOut, "hapmapLd_out");
+else
+    dyStringPrintf(dsLdOut, "%s_out", tg->mapName);
+outColor = cartUsualString(cart, dsLdOut->string, ldOutDefault);
 if (winEnd-winStart > 100000)
     return 0;
 if (sameString(outColor,"yellow"))
@@ -1186,27 +1202,36 @@ void ldDrawLeftLabels(struct track *tg, int seqStart, int seqEnd,
 /* Draw left labels. */
 {
 char  label[16];
-char *valueString = cartUsualString(cart, "ldValues", ldValueDefault);
+char *ldVal = cartUsualString(cart, "hapmapLd_val", ldValDefault);
 char *pop         = tg->mapName;
 int   yVisOffset  = ( vis == tvDense ? 0 : tg->heightPer );
-
-if (startsWith("hapmapLd",pop)&&strlen(tg->mapName)>8)
+struct dyString *dsLdVal = newDyString(32);
+if (!startsWith("hapmapLd", tg->mapName))
+    {
+    dyStringPrintf(dsLdVal, "%s_val", tg->mapName);
+    ldVal = cartUsualString(cart, dsLdVal->string, ldValDefault);
+    }
+if (startsWith("hapmapLd", pop) && strlen(tg->mapName)>8)
+    {
     pop += 8;
-if (sameString(tg->mapName, "hapmapLdChbJpt"))
-    pop = cloneString("Jpt+Chb");
-if (sameString(tg->mapName, "rertyHumanDiversityLd"))
+    if (sameString(tg->mapName, "hapmapLdChbJpt"))
+	pop = cloneString("Jpt+Chb");
+    }
+else if (sameString(tg->mapName, "rertyHumanDiversityLd"))
     pop = cloneString("rerty");
-
-if (sameString(valueString,"lod"))
-    valueString = cloneString("LOD");
-else if (sameString(valueString,"rsquared"))
-    valueString = cloneString("R^2");
-else if (sameString(valueString,"dprime"))
-    valueString = cloneString("D'");
 else
-    errAbort("%s values are not recognized", valueString);
+    pop = "";
 
-safef(label, sizeof(label), "LD %s %s", pop, valueString);
+if (sameString(ldVal, "lod"))
+    ldVal = cloneString("LOD");
+else if (sameString(ldVal, "rsquared"))
+    ldVal = cloneString("R^2");
+else if (sameString(ldVal, "dprime"))
+    ldVal = cloneString("D'");
+else
+    errAbort("%s values are not recognized", ldVal);
+
+safef(label, sizeof(label), "LD %s %s", pop, ldVal);
 
 toUpperN(label, sizeof(label));
 vgUnclip(vg);
@@ -1247,37 +1272,48 @@ void ldDrawItems(struct track *tg, int seqStart, int seqEnd,
 /* Draw item list, one per track. */
 {
 struct ld   *dPtr      = NULL, *sPtr = NULL; /* pointers to 5' and 3' ends */
-char        *values    = cartUsualString(cart, "ldValues", ldValueDefault);
-boolean      trim      = cartUsualBoolean(cart, "ldTrim", ldTrimDefault);
 boolean      isLod     = FALSE, isRsquared = FALSE, isDprime = FALSE;
 double       scale     = scaleForPixels(insideWidth);
 int          itemCount = slCount((struct slList *)tg->items);
-Color        shade     = 0, outlineColor = getOutlineColor(itemCount);
+Color        shade     = 0, outlineColor = getOutlineColor(tg, itemCount);
 int          a, b, c, d, i; /* chromosome coordinates and counter */
 boolean      drawMap   = FALSE; /* ( itemCount<1000 ? TRUE : FALSE ); */
 struct hash *ldHash    = newHash(20);
-char         cartInvertVal[32];
 Color        yellow    = vgFindRgb(vg, &undefinedYellowColor);
+char        *ldVal     = NULL;
+boolean      ldTrm;
+struct dyString *dsLdVal = newDyString(32);
+struct dyString *dsLdTrm = newDyString(32);
 
+if(startsWith("hapmapLd",tg->mapName))
+    {
+    dyStringPrintf(dsLdVal, "hapmapLd_val");
+    dyStringPrintf(dsLdTrm, "hapmapLd_trm");
+    }
+else
+    {
+    dyStringPrintf(dsLdVal, "%s_val", tg->mapName);
+    dyStringPrintf(dsLdTrm, "%s_trm", tg->mapName);
+    }
+ldVal = cartUsualString( cart, dsLdVal->string, ldValDefault);
+ldTrm = cartUsualBoolean(cart, dsLdTrm->string, ldTrmDefault);
 if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
     vgBox(vg, insideX, yOff, insideWidth, tg->height-1, yellow);
 mapTrackBackground(tg, xOff, yOff);
 if (tg->items==NULL)
     return;
-safef(cartInvertVal, sizeof(cartInvertVal), "%s_inv", tg->mapName);
-ldInvert = cartUsualBoolean(cart, cartInvertVal, ldInvertDefault);
 
-if (sameString(values, "lod")) /* only one value can be drawn at a time, so figure it out here */
+if (sameString(ldVal, "lod")) /* only one value can be drawn at a time, so figure it out here */
     isLod = TRUE;
-else if (sameString(values, "dprime"))
+else if (sameString(ldVal, "dprime"))
     isDprime = TRUE;
-else if (sameString(values,"rsquared"))
+else if (sameString(ldVal, "rsquared"))
     isRsquared = TRUE;
 else
-    errAbort ("LD score value must be 'rsquared', 'dprime', or 'lod'; '%s' is not known", values);
+    errAbort ("LD score value must be 'rsquared', 'dprime', or 'lod'; '%s' is not known", ldVal);
 
 /* initialize arrays to convert from ascii encoding to color values */
-initColorLookup(vg, isDprime);
+initColorLookup(tg, vg, isDprime);
 
 /* Loop through all items to get values and initial coordinates (a and b) */
 for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
@@ -1285,34 +1321,34 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
     a = dPtr->chromStart;
     b = dPtr->next->chromStart;
     i = 0;
-    if ((trim && a <=winStart)||(!trim && b <=winStart-(winEnd-winStart))) /* return if this item is not to be drawn */
+    if ((ldTrm && a <=winStart)||(!ldTrm && b <=winStart-(winEnd-winStart))) /* return if this item is not to be drawn */
 	continue;
-    if (isLod) /* point to the right data values to be drawn.  'values' variable is reused */
-	values = dPtr->lod;
+    if (isLod) /* point to the right data values to be drawn.  'ldVal' variable is reused */
+	ldVal = dPtr->lod;
     else if (isRsquared)
-	values = dPtr->rsquared;
+	ldVal = dPtr->rsquared;
     else if (isDprime)
-	values = dPtr->dprime;
+	ldVal = dPtr->dprime;
     /* Loop through all items again to get end coordinates (c and d): used to be 'drawNecklace' */
     for ( sPtr=dPtr; i<dPtr->score && sPtr!=NULL && sPtr->next!=NULL; sPtr=sPtr->next )
 	{
 	c = sPtr->chromStart;
 	d = sPtr->next->chromStart;
-	if (notInWindow(a, b, c, d, trim)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
+	if (notInWindow(a, b, c, d, ldTrm)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
 	    {
-	    if ((c-b)/2 >= winEnd-winStart || (trim&&d>=winEnd) || (!trim&&c>=winEnd+(winEnd-winStart)))
+	    if ((c-b)/2 >= winEnd-winStart || (ldTrm&&d>=winEnd) || (!ldTrm&&c>=winEnd+(winEnd-winStart)))
 		i=dPtr->score;
 	    continue;
 	    }
 	if ( d-a > 250000 ) /* Check to see if we are trying to reach across a window that is too wide (centromere) */
 	    continue;
-	shade = colorLookup[(int)values[i]];
+	shade = colorLookup[(int)ldVal[i]];
 	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
-	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
+	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
 	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
 	    {
-	    ldAddToDenseValueHash(ldHash, a, values[i]);
-	    ldAddToDenseValueHash(ldHash, d, values[i]);
+	    ldAddToDenseValueHash(ldHash, a, ldVal[i]);
+	    ldAddToDenseValueHash(ldHash, d, ldVal[i]);
 	    }
 	else
 	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
@@ -1325,15 +1361,15 @@ for (dPtr=tg->items; dPtr!=NULL && dPtr->next!=NULL; dPtr=dPtr->next)
 	b = dPtr->chromEnd;
 	c = sPtr->chromStart;
 	d = sPtr->chromEnd;
-	if (notInWindow(a, b, c, d, trim)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
+	if (notInWindow(a, b, c, d, ldTrm)) /* Check to see if this diamond needs to be drawn, or if it is out of the window */
 	    continue;
-	shade = colorLookup[(int)values[i]];
+	shade = colorLookup[(int)ldVal[i]];
 	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
-	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
+	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, c, d, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
 	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
 	    {
-	    ldAddToDenseValueHash(ldHash, a, values[i]);
-	    ldAddToDenseValueHash(ldHash, d, values[i]);
+	    ldAddToDenseValueHash(ldHash, a, ldVal[i]);
+	    ldAddToDenseValueHash(ldHash, d, ldVal[i]);
 	    }
 	else
 	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));
@@ -1344,21 +1380,21 @@ if (dPtr->next==NULL)
     {
     a = dPtr->chromStart;
     b = dPtr->chromEnd;
-    if (!notInWindow(a, b, a, b, trim)) /* Continue only if this diamond needs to be drawn */
+    if (!notInWindow(a, b, a, b, ldTrm)) /* Continue only if this diamond needs to be drawn */
 	{
-	if (isLod) /* point to the right data values to be drawn.  'values' variable is reused */
-	    values = dPtr->lod;
+	if (isLod) /* point to the right data values to be drawn.  'ldVal' variable is reused */
+	    ldVal = dPtr->lod;
 	else if (isRsquared)
-	    values = dPtr->rsquared;
+	    ldVal = dPtr->rsquared;
 	else if (isDprime)
-	    values = dPtr->dprime;
-	shade = colorLookup[(int)values[0]];
+	    ldVal = dPtr->dprime;
+	shade = colorLookup[(int)ldVal[0]];
 	if ( vis==tvFull && ( !tg->limitedVisSet || ( tg->limitedVisSet && tg->limitedVis==tvFull ) ) )
-	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, a, b, shade, outlineColor, scale, drawMap, dPtr->name, vis, trim);
+	    ldDrawDiamond(vg, tg, width, xOff, yOff, a, b, a, b, shade, outlineColor, scale, drawMap, dPtr->name, vis, ldTrm);
 	else if ( vis==tvDense || ( tg->limitedVisSet && tg->limitedVis==tvDense ) )
 	    {
-	    ldAddToDenseValueHash(ldHash, a, values[0]);
-	    ldAddToDenseValueHash(ldHash, b, values[0]);
+	    ldAddToDenseValueHash(ldHash, a, ldVal[0]);
+	    ldAddToDenseValueHash(ldHash, b, ldVal[0]);
 	    }
 	else
 	    errAbort("Visibility '%s' is not supported for the LD track yet.", hStringFromTv(vis));

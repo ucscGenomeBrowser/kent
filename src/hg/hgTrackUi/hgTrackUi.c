@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.259 2006/03/08 17:48:35 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.260 2006/03/09 09:07:16 daryl Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -363,36 +363,63 @@ for (snpLocType=0; snpLocType<snpLocTypeCartSize; snpLocType++)
 void ldUi(struct trackDb *tdb)
 /* Put up UI snp data. */
 {
-ldValue         = cartUsualString(cart,  "ldValues",        ldValueDefault);
-ldPos           = cartUsualString(cart,  "ldPos",           ldPosDefault);
-ldOut           = cartUsualString(cart,  "ldOut",           ldOutDefault);
-ldTrim          = cartUsualBoolean(cart, "ldTrim",          ldTrimDefault);
-hapmapLdCeu_inv = cartUsualBoolean(cart, "hapmapLdCeu_inv", ldInvertDefault);
-hapmapLdChb_inv = cartUsualBoolean(cart, "hapmapLdChb_inv", ldInvertDefault);
-hapmapLdChbJpt_inv = cartUsualBoolean(cart, "hapmapLdChbJpt_inv", ldInvertDefault);
-hapmapLdJpt_inv = cartUsualBoolean(cart, "hapmapLdJpt_inv", ldInvertDefault);
-hapmapLdYri_inv = cartUsualBoolean(cart, "hapmapLdYri_inv", ldInvertDefault);
-rertyHumanDiversityLd_inv = cartUsualBoolean(cart, "rertyHumanDiversityLd_inv", ldInvertDefault);
+struct dyString *dsLdVal = newDyString(32);
+struct dyString *dsLdPos = newDyString(32);
+struct dyString *dsLdOut = newDyString(32);
+struct dyString *dsLdTrm = newDyString(32);
+struct dyString *dsLdInv = newDyString(32);
+char    *ldVal;
+char    *ldPos;
+char    *ldOut;
+boolean  ldTrm;
+boolean  ldInv;
+/* these subTrack-specific variables are needed for special case composite tracks */
+boolean  hapmapLdCeu_inv    = cartUsualBoolean(cart, "hapmapLdCeu_inv", ldInvDefault);
+boolean  hapmapLdChb_inv    = cartUsualBoolean(cart, "hapmapLdChb_inv", ldInvDefault);
+boolean  hapmapLdChbJpt_inv = cartUsualBoolean(cart, "hapmapLdChbJpt_inv", ldInvDefault);
+boolean  hapmapLdJpt_inv    = cartUsualBoolean(cart, "hapmapLdJpt_inv", ldInvDefault);
+boolean  hapmapLdYri_inv    = cartUsualBoolean(cart, "hapmapLdYri_inv", ldInvDefault);
+if (startsWith("hapmapLd",tdb->tableName))
+    {
+    dyStringPrintf(dsLdVal, "hapmapLd_val");
+    dyStringPrintf(dsLdPos, "hapmapLd_pos");
+    dyStringPrintf(dsLdOut, "hapmapLd_out");
+    dyStringPrintf(dsLdTrm, "hapmapLd_trm");
+    dyStringPrintf(dsLdInv, "hapmapLd_inv");
+    }
+else
+    {
+    dyStringPrintf(dsLdVal, "%s_val", tdb->tableName);
+    dyStringPrintf(dsLdPos, "%s_pos", tdb->tableName);
+    dyStringPrintf(dsLdOut, "%s_out", tdb->tableName);
+    dyStringPrintf(dsLdTrm, "%s_trm", tdb->tableName);
+    dyStringPrintf(dsLdInv, "%s_inv", tdb->tableName);
+    }
+ldVal = cartUsualString(cart,  dsLdVal->string, ldValDefault);
+ldPos = cartUsualString(cart,  dsLdPos->string, ldPosDefault);
+ldOut = cartUsualString(cart,  dsLdOut->string, ldOutDefault);
+ldTrm = cartUsualBoolean(cart, dsLdTrm->string, ldTrmDefault);
+ldInv = cartUsualBoolean(cart, dsLdInv->string, ldInvDefault);
 
 /* It would be nice to add a 'reset' button to reset the ld variables to their defaults. */
 
 printf("<BR><B>LD Values:</B><BR>&nbsp;&nbsp;\n");
 
-cgiMakeRadioButton("ldValues", "rsquared", sameString("rsquared", ldValue));
+cgiMakeRadioButton(dsLdVal->string, "rsquared", sameString("rsquared", ldVal));
 printf("&nbsp;r<sup>2</sup>&nbsp;&nbsp;");
-cgiMakeRadioButton("ldValues", "dprime",   sameString("dprime",   ldValue));
+cgiMakeRadioButton(dsLdVal->string, "dprime",   sameString("dprime",   ldVal));
 printf("&nbsp;D'&nbsp;&nbsp;");
-cgiMakeRadioButton("ldValues", "lod",      sameString("lod",      ldValue));
+cgiMakeRadioButton(dsLdVal->string, "lod",      sameString("lod",      ldVal));
 printf("&nbsp;LOD<BR>");
 
 printf("<BR><B>Track Geometry:</B><BR>&nbsp;&nbsp;\n");
 
-cgiMakeCheckBox("ldTrim", ldTrim); 
+cgiMakeCheckBox(dsLdTrm->string, ldTrm); 
 printf("&nbsp;Trim to triangle<BR>\n");
 
 if (startsWith("hapmapLd", tdb->tableName))
     {
-    printf("<BR>&nbsp;&nbsp;");
+    printf("<BR>&nbsp;&nbsp;&nbsp;");
     if (hTableExists("hapmapLdYri"))
 	{
 	cgiMakeCheckBox("hapmapLdYri_inv", hapmapLdYri_inv); 
@@ -419,40 +446,37 @@ if (startsWith("hapmapLd", tdb->tableName))
 	printf("&nbsp;Invert display for the combined JPT+CHB sample - Japanese in Tokyo, Japan and Han Chinese in Beijing, China <BR>&nbsp;&nbsp;\n");
 	}
     }
-else if (startsWith("rertyHumanDiversityLd", tdb->tableName))
+else 
     {
-    if (hTableExists("rertyHumanDiversityLd"))
-	{
 	printf("&nbsp;&nbsp;&nbsp;");
-	cgiMakeCheckBox("rertyHumanDiversityLd_inv", rertyHumanDiversityLd_inv); 
+	cgiMakeCheckBox(dsLdInv->string, ldInv); 
 	printf("&nbsp;Invert the display<BR>&nbsp;&nbsp;\n");
-	}
     }
 printf("<BR><B>Colors:</B>\n");
 
 printf("<TABLE>\n ");
 printf("<TR>\n  <TD>&nbsp;&nbsp;LD values&nbsp;&nbsp;</TD>\n  <TD>- ");
-radioButton("ldPos", ldPos, "red");
+radioButton(dsLdPos->string, ldPos, "red");
 printf("</TD>\n  <TD>");
-radioButton("ldPos", ldPos, "green");
+radioButton(dsLdPos->string, ldPos, "green");
 printf("</TD>\n  <TD>");
-radioButton("ldPos", ldPos, "blue");
+radioButton(dsLdPos->string, ldPos, "blue");
 printf("</TD>\n </TR>\n ");
 
 printf("<TR>\n  <TD>&nbsp;&nbsp;Outlines&nbsp;&nbsp;</TD>\n  <TD>- ");
-radioButton("ldOut", ldOut, "red");
+radioButton(dsLdOut->string, ldOut, "red");
 printf("</TD>\n  <TD>");
-radioButton("ldOut", ldOut, "green");
+radioButton(dsLdOut->string, ldOut, "green");
 printf("</TD>\n  <TD>");
-radioButton("ldOut", ldOut, "blue");
+radioButton(dsLdOut->string, ldOut, "blue");
 printf("</TD>\n  <TD>");
-radioButton("ldOut", ldOut, "yellow");
+radioButton(dsLdOut->string, ldOut, "yellow");
 printf("</TD>\n  <TD>");
-radioButton("ldOut", ldOut, "black");
+radioButton(dsLdOut->string, ldOut, "black");
 printf("</TD>\n  <TD>");
-radioButton("ldOut", ldOut, "white");
+radioButton(dsLdOut->string, ldOut, "white");
 printf("</TD>\n  <TD>");
-radioButton("ldOut", ldOut, "none");
+radioButton(dsLdOut->string, ldOut, "none");
 printf("</TD>\n </TR>\n ");
 printf("</TABLE>\n");
 

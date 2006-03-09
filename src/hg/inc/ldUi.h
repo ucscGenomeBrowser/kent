@@ -3,26 +3,13 @@
 #define LDUI_H
 
 #include "common.h"
+#include "dystring.h"
 
-#define ldValueDefault   "lod"
-#define ldPosDefault     "red"
-#define ldNegDefault     "blue"
-#define ldOutDefault     "black"
-#define ldTrimDefault    TRUE
-#define ldInvertDefault  FALSE
-
-extern char    *ldValue;
-extern char    *ldPos;
-extern char    *ldNeg;
-extern char    *ldOut;
-extern boolean  ldTrim;
-
-extern boolean hapmapLdCeu_inv;
-extern boolean hapmapLdChb_inv;
-extern boolean hapmapLdChbJpt_inv;
-extern boolean hapmapLdJpt_inv;
-extern boolean hapmapLdYri_inv;
-extern boolean rertyHumanDiversityLd_inv;
+#define ldValDefault  "lod"
+#define ldPosDefault  "red"
+#define ldOutDefault  "black"
+#define ldTrmDefault  TRUE
+#define ldInvDefault  FALSE
 
 #endif /* LDUI_H */
 
