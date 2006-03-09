@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.7 2006/03/09 18:01:28 heather Exp $";
+static char const rcsid[] = "$Id: snpSNP.c,v 1.8 2006/03/09 22:03:26 heather Exp $";
 
 struct snpData
     {
@@ -61,7 +61,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     sel->validation_status = validInt;
     sel->avHet = atof(row[2]);
     sel->avHetSE = atof(row[3]);
-    hashAdd(snpDataHash, row[0], sel);
+    hashAdd(snpDataHash, cloneString(row[0]), sel);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
