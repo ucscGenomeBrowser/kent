@@ -9,7 +9,7 @@
 #include "rmskOut.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: rmskOut.c,v 1.8 2006/03/09 18:26:58 angie Exp $";
+static char const rcsid[] = "$Id: rmskOut.c,v 1.9 2006/03/09 21:11:21 angie Exp $";
 
 void rmskOutStaticLoad(char **row, struct rmskOut *ret)
 /* Load a row from rmskOut table into ret.  The contents of ret will
@@ -293,13 +293,13 @@ fprintf(f,
 "\n");
 }
 
-static void parenNeg(int num, char *s)
+static void parenNeg(int num, char *s, size_t sSize)
 /* Write number to s, parenthesizing if negative. */
 {
 if (num <= 0)
-   safef(s, sizeof(s), "(%d)", -num);
+   safef(s, sSize, "(%d)", -num);
 else
-   safef(s, sizeof(s), "%d", num);
+   safef(s, sSize, "%d", num);
 }
 
 void rmskOutWriteOneOut(struct rmskOut *rmsk, FILE *f)
@@ -308,9 +308,9 @@ void rmskOutWriteOneOut(struct rmskOut *rmsk, FILE *f)
 char genoLeft[24], repStart[24], repLeft[24];
 char classFam[128];
 
-parenNeg(-rmsk->genoLeft, genoLeft);
-parenNeg(rmsk->repStart+1, repStart);
-parenNeg(-rmsk->repLeft, repLeft);
+parenNeg(-rmsk->genoLeft, genoLeft, sizeof(genoLeft));
+parenNeg(rmsk->repStart+1, repStart, sizeof(repStart));
+parenNeg(-rmsk->repLeft, repLeft, sizeof(repLeft));
 if (sameString(rmsk->repClass, rmsk->repFamily))
     safef(classFam, sizeof(classFam), "%s", rmsk->repClass);
 else
