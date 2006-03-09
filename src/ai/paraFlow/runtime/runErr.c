@@ -220,7 +220,7 @@ static void puntWarnHandler(char *format, va_list args)
 dyStringClear(punter.message);
 dyStringVaPrintf(punter.message, format, args);
 dyStringClear(punter.source);
-dyStringAppend(punter.source, "lib");
+dyStringAppend(punter.source, "library");
 }
 
 void _pf_punt_init()
