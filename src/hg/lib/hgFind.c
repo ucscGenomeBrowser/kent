@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.181 2006/03/09 18:26:57 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.182 2006/03/09 21:06:55 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -120,15 +120,16 @@ for (el = *pList; el != NULL; el = next)
 }
 #endif
 
-static char *hgPosBrowserRange(struct hgPos *pos, char range[64])
+#define HGPOSRANGESIZE 64
+static char *hgPosBrowserRange(struct hgPos *pos, char range[HGPOSRANGESIZE])
 /* Convert pos to chrN:123-456 format.  If range parameter is NULL it returns
  * static buffer, otherwise writes and returns range. */
 {
-static char buf[64];
+static char buf[HGPOSRANGESIZE];
 
 if (range == NULL)
     range = buf;
-safef(range, sizeof(range), "%s:%d-%d",
+safef(range, HGPOSRANGESIZE, "%s:%d-%d",
       pos->chrom, pos->chromStart, pos->chromEnd);
 return range;
 }
@@ -2367,7 +2368,7 @@ void hgPositionsHtml(struct hgPositions *hgp, FILE *f,
 struct hgPosTable *table;
 struct hgPos *pos;
 char *desc;
-char range[64];
+char range[HGPOSRANGESIZE];
 char *ui = getUiUrl(cart);
 char *extraCgi = hgp->extraCgi;
 char hgAppCombiner = (strchr(hgAppName, '?')) ? '&' : '?';
