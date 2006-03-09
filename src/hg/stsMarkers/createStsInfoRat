@@ -4,7 +4,7 @@
 # /cluster/store4/ratMarker/code/ into the kent/src tree in order
 # to get it under CVS control; added warnings.
 
-# $Id: createStsInfoRat,v 1.2 2006/03/09 01:19:52 angie Exp $
+# $Id: createStsInfoRat,v 1.3 2006/03/09 02:00:28 angie Exp $
 
 use warnings;
 
@@ -134,9 +134,7 @@ while(my $line = <RAW>)
 	$table[$indx][3] = $eles[1];
 	if($eles[2] && $eles[2] =~ /[ATCG]/o)
 	{
-	    # Discard clone sequence -- takes up space, still gets truncated,
-	    # not used.
-	    # $table[$indx][24] = $eles[2];
+	    $table[$indx][24] = $eles[2];
 	    $table[$indx][10] = 1;
 	}
 	$found++;
@@ -148,9 +146,7 @@ while(my $line = <RAW>)
         $table[$indx][3] = $eles[1];
 	if($eles[2] =~ /[ATCG]/o)
 	{
-	    # Discard clone sequence -- takes up space, still gets truncated,
-	    # not used.
-	    # $table[$indx][24] = $eles[2];
+	    $table[$indx][24] = $eles[2];
 	    $table[$indx][10] = 1 ;
 	}
 	$found++;
@@ -174,9 +170,7 @@ while(my $line = <RAW>)
 	if($eles[2] =~ /[ATCG]/o)
 	{
 	    $table[$ucscId][10] = 1;
-	    # Discard clone sequence -- takes up space, still gets truncated,
-	    # not used.
-	    # $table[$ucscId][24] = $eles[2];
+	    $table[$ucscId][24] = $eles[2];
 	}
 	else
 	{
