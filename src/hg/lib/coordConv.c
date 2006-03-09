@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "dbDb.h"
 
-static char const rcsid[] = "$Id: coordConv.c,v 1.13 2005/04/13 06:25:51 markd Exp $";
+static char const rcsid[] = "$Id: coordConv.c,v 1.14 2006/03/09 18:26:57 angie Exp $";
 
 /* #define DEBUG */
 
@@ -177,7 +177,8 @@ int chromSize;
 int querySize=0,midPos=0;
 int chromStart,chromEnd,nibStart=0;
 nibFileName[0] = '\0';
-sprintf(query, "select fileName from chromInfo where chrom='%s'", ccr->from->chrom);
+safef(query, sizeof(query), "select fileName from chromInfo where chrom='%s'",
+      ccr->from->chrom);
 sqlQuickQuery(conn, query, nibFileName, sizeof(nibFileName));
 if(strlen(nibFileName) == 0)
     errAbort("coordConv::loadUpDnaSeqs() - can't find file for chromosome %s.", ccr->from->chrom);

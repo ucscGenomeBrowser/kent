@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.50 2006/03/02 19:02:02 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.51 2006/03/09 18:26:57 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -123,7 +123,8 @@ if ((cdb = cartDbLoadFromId(conn, table, id)) != NULL)
     }
 else
     {
-    sprintf(query, "INSERT %s VALUES(0,\"\",0,now(),now(),0)", table);
+    safef(query, sizeof(query), "INSERT %s VALUES(0,\"\",0,now(),now(),0)",
+	  table);
     sqlUpdate(conn, query);
     id = sqlLastAutoId(conn);
     if ((cdb = cartDbLoadFromId(conn,table,id)) == NULL)
@@ -295,7 +296,7 @@ char *cartSidUrlString(struct cart *cart)
 /* Return session id string as in hgsid=N . */
 {
 static char buf[64];
-sprintf(buf, "%s=%u", cartSessionVarName(), cartSessionId(cart));
+safef(buf, sizeof(buf), "%s=%u", cartSessionVarName(), cartSessionId(cart));
 return buf;
 }
 
@@ -466,7 +467,7 @@ void cartSetInt(struct cart *cart, char *var, int val)
 /* Set integer value. */
 {
 char buf[32];
-sprintf(buf, "%d", val);
+safef(buf, sizeof(buf), "%d", val);
 cartSetString(cart, var, buf);
 }
 
@@ -501,7 +502,7 @@ void cartSetDouble(struct cart *cart, char *var, double val)
 /* Set double value. */
 {
 char buf[32];
-sprintf(buf, "%f", val);
+safef(buf, sizeof(buf), "%f", val);
 cartSetString(cart, var, buf);
 }
 
@@ -580,7 +581,7 @@ void cartSaveSession(struct cart *cart)
  * has multiple windows open. */
 {
 char buf[64];
-sprintf(buf, "%u", cart->sessionInfo->id);
+safef(buf, sizeof(buf), "%u", cart->sessionInfo->id);
 cgiMakeHiddenVar(sessionVar, buf);
 }
 
@@ -707,7 +708,8 @@ static void clearDbContents(struct sqlConnection *conn, char *table, unsigned id
 char query[256];
 if (id == 0)
    return;
-sprintf(query, "update %s set contents='' where id=%u", table, id);
+safef(query, sizeof(query), "update %s set contents='' where id=%u",
+      table, id);
 sqlUpdate(conn, query);
 }
 

@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.84 2005/12/12 02:48:40 kent Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.85 2006/03/09 18:26:58 angie Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -545,7 +545,7 @@ void sqlDropTable(struct sqlConnection *sc, char *table)
 if (sqlTableExists(sc, table))
     {
     char query[256];
-    sprintf(query, "drop table %s", table);
+    safef(query, sizeof(query), "drop table %s", table);
     sqlUpdate(sc, query);
     }
 }
@@ -559,7 +559,7 @@ char query[256];
 struct sqlResult *res;
 char **row = NULL;
                                                                                 
-sprintf(query, "select get_lock('%s', 1000)", name);
+safef(query, sizeof(query), "select get_lock('%s', 1000)", name);
 res = sqlGetResult(sc, query);
 while ((row=sqlNextRow(res)))
     {
@@ -578,7 +578,7 @@ void sqlReleaseLock(struct sqlConnection *sc, char *name)
 {
 char query[256];
                                                                                 
-sprintf(query, "select release_lock('%s')", name);
+safef(query, sizeof(query), "select release_lock('%s')", name);
 sqlUpdate(sc, query);
 printf("Advisory lock has been released\n");
 }
@@ -664,7 +664,7 @@ boolean sqlTableExists(struct sqlConnection *sc, char *table)
 char query[256];
 struct sqlResult *sr;
 
-sprintf(query, "select count(*) from %s", table);
+safef(query, sizeof(query), "select count(*) from %s", table);
 if ((sr = sqlUseOrStore(sc,query,mysql_use_result, FALSE)) == NULL)
     return FALSE;
 sqlNextRow(sr);	/* Just discard. */
@@ -992,7 +992,7 @@ char **row;
 int count;
 
 /* Read table description and count rows. */
-sprintf(query, "describe %s", table);
+safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(sc, query);
 count = 0;
 while ((row = sqlNextRow(sr)) != NULL)
@@ -1176,7 +1176,7 @@ int sqlTableSize(struct sqlConnection *conn, char *table)
 /* Find number of rows in table. */
 {
 char query[128];
-sprintf(query, "select count(*) from %s", table);
+safef(query, sizeof(query), "select count(*) from %s", table);
 return sqlQuickNum(conn, query);
 }
 
@@ -1190,7 +1190,7 @@ char **row;
 int i = 0, ix=-1;
 
 /* Read table description into hash. */
-sprintf(query, "describe %s", table);
+safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {

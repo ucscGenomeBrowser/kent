@@ -9,7 +9,7 @@
 #include "rmskOut.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: rmskOut.c,v 1.7 2005/04/13 06:25:56 markd Exp $";
+static char const rcsid[] = "$Id: rmskOut.c,v 1.8 2006/03/09 18:26:58 angie Exp $";
 
 void rmskOutStaticLoad(char **row, struct rmskOut *ret)
 /* Load a row from rmskOut table into ret.  The contents of ret will
@@ -297,9 +297,9 @@ static void parenNeg(int num, char *s)
 /* Write number to s, parenthesizing if negative. */
 {
 if (num <= 0)
-   sprintf(s, "(%d)", -num);
+   safef(s, sizeof(s), "(%d)", -num);
 else
-   sprintf(s, "%d", num);
+   safef(s, sizeof(s), "%d", num);
 }
 
 void rmskOutWriteOneOut(struct rmskOut *rmsk, FILE *f)
@@ -312,9 +312,10 @@ parenNeg(-rmsk->genoLeft, genoLeft);
 parenNeg(rmsk->repStart+1, repStart);
 parenNeg(-rmsk->repLeft, repLeft);
 if (sameString(rmsk->repClass, rmsk->repFamily))
-    sprintf(classFam, "%s", rmsk->repClass);
+    safef(classFam, sizeof(classFam), "%s", rmsk->repClass);
 else
-    sprintf(classFam, "%s/%s", rmsk->repClass, rmsk->repFamily);
+    safef(classFam, sizeof(classFam), "%s/%s",
+	  rmsk->repClass, rmsk->repFamily);
 fprintf(f, 
   "%5d %5.1f %4.1f %4.1f  %-9s %7d %7d %9s %1s  %-14s %-19s %6s %4d %6s %6s\n",
   rmsk->swScore, 0.1*rmsk->milliDiv, 0.1*rmsk->milliDel, 0.1*rmsk->milliIns, 
@@ -379,7 +380,7 @@ while (lineFileRow(lf, row))
         {
         bk = binKeeperNew(0, size);
         assert(size > 1);
-        sprintf(rmskFileName, "%s/%s.fa.out",rmskDir,name);
+        safef(rmskFileName, sizeof(rmskFileName), "%s/%s.fa.out",rmskDir,name);
         rmskOutOpenVerify(rmskFileName ,&rmskF , &rmskRet);
         while ((rmsk = rmskOutReadNext(rmskF)) != NULL)
             {

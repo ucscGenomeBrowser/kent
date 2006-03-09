@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: hCommon.c,v 1.28 2005/02/06 04:17:34 kent Exp $";
+static char const rcsid[] = "$Id: hCommon.c,v 1.29 2006/03/09 18:26:57 angie Exp $";
 
 static char *_hgcName = "../cgi-bin/hgc";	/* Path to click processing program. */
 static char *_hgTracksName = "../cgi-bin/hgTracks"; /* Path back to genome browser. */
@@ -177,7 +177,7 @@ if (!startsWith("chr", s))
     return 0;
     }
 s += 3;
-sprintf(str,"%s",s);
+safef(str, sizeof(str), "%s", s);
 u = strchr(str,'_');
 if (u != NULL)
     {

@@ -33,7 +33,7 @@ struct nibInfo *nib = hashFindVal(qChromHash, fill->qName);
         {
 	char path[512];
 	AllocVar(nib);
-	sprintf(path, "%s/%s.nib", nibDir, fill->qName);
+	safef(path, sizeof(path), "%s/%s.nib", nibDir, fill->qName);
 	nib->fileName = cloneString(path);
 	nibOpenVerify(path, &nib->f, &nib->size);
 	hashAdd(qChromHash, fill->qName, nib);

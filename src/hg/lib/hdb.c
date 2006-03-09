@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.286 2006/03/09 17:36:45 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.287 2006/03/09 18:26:57 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -235,7 +235,8 @@ struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
 boolean res = FALSE;
-sprintf(query, "select name from dbDb where name = '%s'", database);
+safef(query, sizeof(query), "select name from dbDb where name = '%s'",
+      database);
 res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 hDisconnectCentral(&conn);
 return res;
@@ -248,8 +249,8 @@ struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
 boolean res = FALSE;
-sprintf(query, "select name from dbDb where name = '%s' and active = 1",
-	database);
+safef(query, sizeof(query),
+      "select name from dbDb where name = '%s' and active = 1", database);
 res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
 hDisconnectCentral(&conn);
 return res;
@@ -293,7 +294,8 @@ if (NULL == genome)
     }
 
 /* Get proper default from defaultDb table */
-sprintf(query, "select * from defaultDb where genome = '%s'", genome);
+safef(query, sizeof(query), "select * from defaultDb where genome = '%s'",
+      genome);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -305,7 +307,7 @@ if (db == NULL)
      *	This is for the product browser which may have none of
      *	the usual UCSC genomes, but it needs to be able to function.
      */
-    sprintf(query, "select * from defaultDb");
+    safef(query, sizeof(query), "%s", "select * from defaultDb");
     sr = sqlGetResult(conn, query);
     if ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -1017,7 +1019,7 @@ char *s;
 boolean ok = TRUE;
 boolean isDmel = startsWith("dm", hGetDb());
 
-sprintf(query, 
+safef(query, sizeof(query), 
 	"select name from cytoBand where chrom = '%s' and chromStart <= %d and chromEnd > %d", 
 	chrom, pos, pos);
 buf[0] = 0;
@@ -1027,7 +1029,7 @@ if (s == NULL)
    s = "";
    ok = FALSE;
    }
-sprintf(retBand, "%s%s", (isDmel ? "" : skipChr(chrom)), buf);
+safef(retBand, sizeof(retBand), "%s%s", (isDmel ? "" : skipChr(chrom)), buf);
 return ok;
 }
 
@@ -1066,7 +1068,7 @@ else
     char **row;
     int chromStart, chromEnd;
     int scaffoldStart, scaffoldEnd;
-    sprintf(query, 
+    safef(query, sizeof(query), 
 	"SELECT frag, chromStart, chromEnd FROM %s WHERE chromStart <= %d ORDER BY chromStart DESC LIMIT 1", table, start);
     sr = sqlGetResult(conn, query);
     if (sr != NULL)
@@ -1280,7 +1282,7 @@ struct largeSeqFile *lsf;
 row = NULL;
 if (sqlTableExists(conn, "seq"))
     {
-    sprintf(query,
+    safef(query, sizeof(query),
        "select id,extFile,file_offset,file_size,gb_date from seq where acc = '%s'",
        acc);
     sr = sqlMustGetResult(conn, query);
@@ -1293,11 +1295,11 @@ if ((row == NULL) && sqlTableExists(conn, "gbSeq"))
     if (sr)
 	sqlFreeResult(&sr);
     if (gbDate != NULL)
-        sprintf(query,
+        safef(query, sizeof(query),
                 "select gbSeq.id,gbExtFile,file_offset,file_size,moddate from gbSeq,gbCdnaInfo where (gbSeq.acc = '%s') and (gbCdnaInfo.acc = gbSeq.acc)",
                 acc);
     else
-        sprintf(query,
+        safef(query, sizeof(query),
                 "select id,gbExtFile,file_offset,file_size from gbSeq where acc = '%s'",
                 acc);
     sr = sqlMustGetResult(conn, query);
@@ -1973,7 +1975,8 @@ char query[256];
 char *res = NULL;
     
 conn = (archive) ? hConnectArchiveCentral() : hConnectCentral();
-sprintf(query, "select %s from dbDb where name = '%s'", field, database);
+safef(query, sizeof(query), "select %s from dbDb where name = '%s'",
+      field, database);
 if (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL)
     res = cloneString(buf);
 if (archive)
@@ -2079,7 +2082,7 @@ char query[256];
 struct sqlConnection *conn = hAllocOrConnect(database);
 int ret;
 
-sprintf(query, "select id from organism where name = '%s'",
+safef(query, sizeof(query), "select id from organism where name = '%s'",
 				    hScientificName(database));
 ret = sqlQuickNum(conn, query);
 hFreeOrDisconnect(&conn);
@@ -2448,7 +2451,7 @@ char **row;
 boolean binned = FALSE;
 
 /* Read table description into hash. */
-sprintf(query, "describe %s", table);
+safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -2534,7 +2537,7 @@ if (! hTableExistsDb(db, table))
 conn = hAllocOrConnect(db);
 
 /* Read table description into hash. */
-sprintf(query, "describe %s", table);
+safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -3865,8 +3868,10 @@ char **row;
 struct axtInfo *aiList = NULL, *ai;
 char query[256];
 
-sprintf(query, "select * from axtInfo where species = '%s' and chrom = '%s' order by sort",
-	otherDb, hDefaultChrom());
+safef(query, sizeof(query),
+      "select * from axtInfo where species = '%s' and chrom = '%s' "
+      "order by sort",
+      otherDb, hDefaultChrom());
 /* Scan through axtInfo table, loading into list */
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -3890,8 +3895,9 @@ char **row;
 struct axtInfo *aiList = NULL, *ai;
 char query[256];
 
-sprintf(query, "select * from axtInfo where species = '%s' and chrom = '%s'",
-	otherDb, chrom);
+safef(query, sizeof(query),
+      "select * from axtInfo where species = '%s' and chrom = '%s'",
+      otherDb, chrom);
 /* Scan through axtInfo table, loading into list */
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -3947,7 +3953,7 @@ struct sqlConnection *conn = hConnectCentral();
 boolean gotIx;
 char query[256];
 
-sprintf(query, "select name from dbDb where name = '%s'", db);
+safef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
 gotIx = sqlExists(conn, query);
 hDisconnectCentral(&conn);
 return gotIx;
@@ -3966,16 +3972,18 @@ char **row;
 char dbActualName[32];
 
 /* If necessary convert database description to name. */
-sprintf(query, "select name from dbDb where name = '%s'", db);
+safef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
 if (!sqlExists(conn, query))
     {
-    sprintf(query, "select name from dbDb where description = '%s'", db);
+    safef(query, sizeof(query),
+	  "select name from dbDb where description = '%s'", db);
     if (sqlQuickQuery(conn, query, dbActualName, sizeof(dbActualName)) != NULL)
         db = dbActualName;
     }
 
 /* Do a little join to get data to fit into the blatServerTable. */
-sprintf(query, "select dbDb.name,dbDb.description,blatServers.isTrans"
+safef(query, sizeof(query),
+               "select dbDb.name,dbDb.description,blatServers.isTrans"
                ",blatServers.host,blatServers.port,dbDb.nibPath "
 	       "from dbDb,blatServers where blatServers.isTrans = %d and "
 	       "dbDb.name = '%s' and dbDb.name = blatServers.db", 
@@ -4020,8 +4028,8 @@ else
     }
 
 answer = NULL;
-sprintf(query, "select %s from %s.%s  where %s;",
-	fldName, dbName, tblName, condition);
+safef(query, sizeof(query), "select %s from %s.%s  where %s;",
+      fldName, dbName, tblName, condition);
 //printf("<br>%s\n", query); fflush(stdout);
 sr  = sqlGetResult(conn, query);
 row = sqlNextRow(sr);

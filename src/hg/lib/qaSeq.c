@@ -10,7 +10,7 @@
 #include "qaSeq.h"
 #include "sig.h"
 
-static char const rcsid[] = "$Id: qaSeq.c,v 1.4 2005/12/12 02:48:40 kent Exp $";
+static char const rcsid[] = "$Id: qaSeq.c,v 1.5 2006/03/09 18:26:58 angie Exp $";
 
 void qaSeqFree(struct qaSeq **pQa)
 /* Free up qaSeq. */
@@ -532,7 +532,7 @@ static char qacPath[512];
 char dir[256], name[128], ext[64];
 
 upOneDirFromFile(faName, dir, name, ext);
-sprintf(qacPath, "%sqac/%s.qac", dir, name);
+safef(qacPath, sizeof(qacPath), "%sqac/%s.qac", dir, name);
 return qacPath;
 }
 

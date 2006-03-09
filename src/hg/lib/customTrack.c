@@ -21,7 +21,7 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.70 2006/01/26 06:55:09 daryl Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.71 2006/03/09 18:26:57 angie Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -45,7 +45,7 @@ static int count=0;
 AllocVar(tdb);
 tdb->longLabel = cloneString("User Supplied Track");
 tdb->shortLabel = cloneString("User Track");
-sprintf(buf, "ct_%d", ++count);
+safef(buf, sizeof(buf), "ct_%d", ++count);
 tdb->tableName = cloneString(buf);
 tdb->visibility = tvDense;
 tdb->grp = cloneString("user");
@@ -141,7 +141,7 @@ tmp = cloneString(label);
 eraseWhiteSpace(tmp);	/*	perhaps should be erase any */
 stripChar(tmp,'_');	/*	thing that isn't isalnum	*/
 stripChar(tmp,'-');	/*	since that's the Invalid table */
-sprintf(buf, "ct_%s", tmp);	/*	name check in hgText	*/
+safef(buf, sizeof(buf), "ct_%s", tmp);	/*	name check in hgText	*/
 freeMem(tmp);
 return cloneString(buf);
 }
@@ -985,7 +985,7 @@ for (track = trackList; track != NULL; track = track->next)
 	 }
     if (!track->wiggle)
 	{
-	sprintf(buf, "bed %d .", track->fieldCount);
+	safef(buf, sizeof(buf), "bed %d .", track->fieldCount);
 	track->tdb->type = cloneString(buf);
 	}
 
@@ -1303,7 +1303,7 @@ for (track = trackList; track != NULL; track = track->next)
 	    wigAsciiToBinary(track->wigAscii, track->wigFile, track->wibFile,
 		&upperLimit, &lowerLimit, NULL);
 	    fprintf(f, "#\tascii data file: %s\n", track->wigAscii);
-	    sprintf(buf, "wig %g %g", lowerLimit, upperLimit);
+	    safef(buf, sizeof(buf), "wig %g %g", lowerLimit, upperLimit);
 	    freeMem(track->tdb->type);
 	    track->tdb->type = cloneString(buf);
 	    unlink(track->wigAscii);	/*	done with this, remove it */

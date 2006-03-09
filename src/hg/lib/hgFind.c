@@ -30,7 +30,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.180 2006/02/16 18:26:25 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.181 2006/03/09 18:26:57 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -128,7 +128,8 @@ static char buf[64];
 
 if (range == NULL)
     range = buf;
-sprintf(range, "%s:%d-%d", pos->chrom, pos->chromStart, pos->chromEnd);
+safef(range, sizeof(range), "%s:%d-%d",
+      pos->chrom, pos->chromStart, pos->chromEnd);
 return range;
 }
 
@@ -908,7 +909,7 @@ char c = chrom[0];
 
 if (c == 'x' || c == 'X' || c == 'Y' || c == 'y')
     {
-    sprintf(buf, "chr%c", toupper(c));
+    safef(buf, sizeof(buf), "chr%c", toupper(c));
     return hgOfficialChromName(buf);
     }
 if (!isdigit(chrom[0]))
@@ -916,7 +917,7 @@ if (!isdigit(chrom[0]))
 num = atoi(chrom);
 if (num < 1 || num > 22)
     return NULL;
-sprintf(buf, "chr%d", num);
+safef(buf, sizeof(buf), "chr%d", num);
 return hgOfficialChromName(buf);
 }
 
@@ -1161,7 +1162,8 @@ struct sqlResult *sr;
 char **row;
 int ret;
 
-sprintf(query, "select type, organism from gbCdnaInfo where acc = '%s'", acc);
+safef(query, sizeof(query),
+      "select type, organism from gbCdnaInfo where acc = '%s'", acc);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -1630,15 +1632,15 @@ for (el = *pAccList; el != NULL; el = el->next)
     dyStringPrintf(dy, "%s</A>", acc);
 
     /* print description for item, or lacking that, the product name */
-    sprintf(description, "n/a"); 
-    sprintf(query, 
+    safef(description, sizeof(description), "%s", "n/a"); 
+    safef(query, sizeof(query), 
         "select description.name from gbCdnaInfo,description"
         " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.description = description.id", acc);
     sqlQuickQuery(conn, query, description, sizeof(description));
     if (sameString(description, "n/a"))
         {
         /* look for product name */
-        sprintf(query, 
+        safef(query, sizeof(query), 
             "select productName.name from gbCdnaInfo,productName"
             " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.productName = productName.id",
                  acc);
@@ -1646,7 +1648,7 @@ for (el = *pAccList; el != NULL; el = el->next)
         if (!sameString(product, "n/a"))
             {
             /* get organism name */
-            sprintf(query, 
+            safef(query, sizeof(query), 
                 "select organism.name from gbCdnaInfo,organism"
                 " where gbCdnaInfo.acc = '%s' and gbCdnaInfo.organism = organism.id", acc);
             *organism = 0;
@@ -1850,7 +1852,7 @@ if (kaList != NULL)
 
 /* 	    pos->browserName = cloneString(kl->alias); highlight change */
 	    pos->browserName = cloneString(kl->kgID);
-	    sprintf(cond_str, "kgID = '%s'", kl->kgID);
+	    safef(cond_str, sizeof(cond_str), "kgID = '%s'", kl->kgID);
 	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description",
 				 cond_str);
 	    if (answer != NULL) 
@@ -1937,7 +1939,7 @@ if (kpaList != NULL)
 /* 	    pos->browserName = cloneString(kl->alias); highlight change */
 	    pos->browserName = cloneString(kl->kgID);
 
-	    sprintf(cond_str, "kgID = '%s'", kl->kgID);
+	    safef(cond_str, sizeof(cond_str), "kgID = '%s'", kl->kgID);
 	    answer = sqlGetField(conn2, hGetDb(), "kgXref", "description",
 				 cond_str);
 	    if (answer != NULL) 

@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.83 2006/01/16 21:37:27 markd Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.84 2006/03/09 18:26:57 angie Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1112,7 +1112,7 @@ if (*list == NULL)
     AllocVar(*list);
     conn = hAllocConn();
     AllocVar(gene);
-    sprintf(query, "select * from %s \n",table);
+    safef(query, sizeof(query), "select * from %s", table);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL){
         if (!sameString(table,"all_mrna"))

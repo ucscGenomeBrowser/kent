@@ -12,7 +12,7 @@
 #include "rmskOut.h"
 #include "featureBits.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.27 2005/04/13 06:25:52 markd Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.28 2006/03/09 18:26:57 angie Exp $";
 
 /* By default, clip features to the search range.  It's important to clip 
  * when featureBits output will be used to populate Bits etc.  But allow 
@@ -157,9 +157,10 @@ char nameBuf[512];
 int chromSize = hChromSize(chrom);
 
 if (name == NULL)
-    sprintf(nameBuf, "%s:%d-%d", chrom, start+1, start+size);
+    safef(nameBuf, sizeof(nameBuf), "%s:%d-%d", chrom, start+1, start+size);
 else
-    sprintf(nameBuf, "%s %s:%d-%d", name, chrom, start+1, start+size);
+    safef(nameBuf, sizeof(nameBuf), "%s %s:%d-%d", name, chrom, start+1,
+	  start+size);
 s = start;
 e = s + size;
 /* Padding might push us off the edge of the chrom; if so, truncate: */
@@ -444,7 +445,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		e = bed->chromStart;
 		s = e - promoSize;
 		}
-	    sprintf(nameBuf, "%s_up_%d_%s_%d_%c", 
+	    safef(nameBuf, sizeof(nameBuf), "%s_up_%d_%s_%d_%c", 
 		    bed->name, promoSize, bed->chrom, s+1,
 		    frForStrand(bed->strand[0]));
 	    fbAddFeature(&fbList, nameBuf, bed->chrom, s, e - s,
@@ -467,7 +468,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		s = bed->chromEnd;
 		e = s + endSize;
 		}
-	    sprintf(nameBuf, "%s_end_%d_%s_%d_%c", 
+	    safef(nameBuf, sizeof(nameBuf), "%s_end_%d_%s_%d_%c", 
 		    bed->name, endSize, bed->chrom, s+1,
 		    frForStrand(bed->strand[0]));
 	    fbAddFeature(&fbList, nameBuf, bed->chrom, s, e - s,
@@ -483,7 +484,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	    {
 	    s = bed->chromStart + starts[i-1] + sizes[i-1];
 	    e = bed->chromStart + starts[i];
-	    sprintf(nameBuf, "%s_intron_%d_%d_%s_%d_%c", 
+	    safef(nameBuf, sizeof(nameBuf), "%s_intron_%d_%d_%s_%d_%c", 
 		    bed->name, i-1, extraSize, bed->chrom, s+1,
 		    frForStrand(bed->strand[0]));
 	    setRangePlusExtra(&fbList, nameBuf, bed->chrom, s, e,
@@ -544,7 +545,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		    }
 		if (!doScore || (doScore && bed->score >= scoreThreshold))
 		    {
-		    sprintf(nameBuf, "%s_%s_%d_%d_%s_%d_%c", 
+		    safef(nameBuf, sizeof(nameBuf), "%s_%s_%d_%d_%s_%d_%c", 
 			    bed->name, fName, i, extraSize, bed->chrom, s+1,
 			    frForStrand(bed->strand[0]));
 		    setRangePlusExtra(&fbList, nameBuf, bed->chrom, s, e,
@@ -597,7 +598,7 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 		}
 	    if (!doScore || (doScore && bed->score >= scoreThreshold))
 		{
-		sprintf(nameBuf, "%s_%s_%d_%s_%d_%c", 
+		safef(nameBuf, sizeof(nameBuf), "%s_%s_%d_%s_%d_%c", 
 			bed->name, fName, extraSize, bed->chrom, s+1,
 			frForStrand(bed->strand[0]));
 		setRangePlusExtra(&fbList, nameBuf, bed->chrom, s, e,

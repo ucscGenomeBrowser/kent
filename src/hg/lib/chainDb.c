@@ -15,7 +15,7 @@
 #include "chainDb.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: chainDb.c,v 1.9 2005/01/10 00:27:16 kent Exp $";
+static char const rcsid[] = "$Id: chainDb.c,v 1.10 2006/03/09 18:26:57 angie Exp $";
 
 void chainHeadStaticLoad(char **row, struct chain *ret)
 /* Load a row from chain table into ret.  The contents of ret will
@@ -142,7 +142,7 @@ char **row;
 struct cBlock *b;
 char fullName[64];
 
-sprintf(fullName, "%s_%s", chain->tName, track);
+safef(fullName, sizeof(fullName), "%s_%s", chain->tName, track);
 if (!hTableExistsDb(hGetDb(), fullName))
     strcpy(fullName, track);
 dyStringPrintf(query, 

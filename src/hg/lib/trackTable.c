@@ -8,7 +8,7 @@
 #include "trackTable.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: trackTable.c,v 1.5 2005/04/13 06:25:58 markd Exp $";
+static char const rcsid[] = "$Id: trackTable.c,v 1.6 2006/03/09 18:26:58 angie Exp $";
 
 void trackTableStaticLoad(char **row, struct trackTable *ret)
 /* Load a row from trackTable table into ret.  The contents of ret will
@@ -393,9 +393,9 @@ for (i=0; i<ArraySize(builtIns); ++i)
     {
     tt = builtIns+i;
     if (tt->isSplit)
-       sprintf(table, "chr22_%s", tt->tableName);
+       safef(table, sizeof(table), "chr22_%s", tt->tableName);
     else
-       sprintf(table, "%s", tt->tableName);
+       safef(table, sizeof(table), "%s", tt->tableName);
     if (hTableExists(table))
         {
 	slAddHead(&ttList, tt);

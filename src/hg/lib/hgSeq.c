@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgSeq.c,v 1.28 2005/12/12 02:48:40 kent Exp $";
+static char const rcsid[] = "$Id: hgSeq.c,v 1.29 2006/03/09 18:26:58 angie Exp $";
 
 /* I don't like using this global, but don't want to do a zillion 
  * hChromSizes in addFeature and don't want to add it as a param of 
@@ -404,7 +404,9 @@ freeDnaSeq(&rSeq);
 if (isRc)
     reverseComplement(cSeq->dna, cSeq->size);
 
-sprintf(recName, "%s%s%s_%s range=%s:%d-%d 5'pad=%d 3'pad=%d revComp=%s strand=%c repeatMasking=%s",
+safef(recName, sizeof(recName),
+      "%s%s%s_%s range=%s:%d-%d 5'pad=%d 3'pad=%d "
+      "revComp=%s strand=%c repeatMasking=%s",
 	db, 
 	(sameString(db, hGetDb()) ? "" : "_"),
 	(sameString(db, hGetDb()) ? "" : hGetDb()),
