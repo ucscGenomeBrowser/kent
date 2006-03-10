@@ -11,7 +11,7 @@ MAILTO=genbank@cse.ucsc.edu
 
 # friday night and saturday, both mRNAs and ESTS
 # poll every 15 minutes fri/sat
-0,15,30,45 0-14 * * 5,6	/cluster/data/genbank/etc/hgwdev-dbload -inclEsts
+0,15,30,45 0-14 * * 5,6	/genbank/etc/hgwbeta-dbload -inclEsts
 # -extFileUpdate
 
 
