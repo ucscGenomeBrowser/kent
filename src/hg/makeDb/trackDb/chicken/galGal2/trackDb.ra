@@ -443,15 +443,6 @@ shortCircuit 1
 termRegex (UM|GBC|GBP|HDG|IG|MG|LA|HC)\.[[:alnum:]._]+
 searchPriority 50
 
-searchName ensGeneNoSuffix
-searchTable ensGene
-searchType genePred
-searchMethod prefix
-shortCircuit 1
-termRegex ENSGALT[0-9]+
-dontCheck ENSGALT[0-9]+\.[0-9]+
-searchPriority 50
-
 searchName ensGeneGtpGene
 searchTable ensGene
 searchType genePred
