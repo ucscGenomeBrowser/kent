@@ -2261,6 +2261,7 @@ searchTable ensGene
 query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
 shortCircuit 1
 termRegex ENS([A-Z]{3})?T[0-9]+
+dontCheck ENS([A-Z]{3})?T[0-9]+\.[0-9]+
 searchPriority 50
 
 searchName ensGeneGtpGene
@@ -2280,7 +2281,7 @@ searchMethod prefix
 shortCircuit 1
 xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
-termRegex ENSP[0-9]+(\.[0-9]+)?
+termRegex ENS([A-Z]{3})?P[0-9]+(\.[0-9]+)?
 
 searchTable ensEstGene
 searchType genePred
