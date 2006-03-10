@@ -5130,7 +5130,7 @@ cat out/$1/*.out >>protRefRaw.psl
 
 # Build spMrna table
 
-   hgsql hg18 -N -e 'select name, proteinID from knownGene' >kgSpMrna.tab
+   hgsql hg18 -N -e 'select proteinID, name from knownGene' >kgSpMrna.tab
 
    hgsql hg18 -e  'drop table spMrna'
    hgsql hg18 <~/src/hg/lib/spMrna.sql
