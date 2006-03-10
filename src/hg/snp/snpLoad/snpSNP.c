@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.8 2006/03/09 22:03:26 heather Exp $";
+static char const rcsid[] = "$Id: snpSNP.c,v 1.9 2006/03/10 17:43:04 heather Exp $";
 
 struct snpData
     {
@@ -67,7 +67,7 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
-void readSnps(char *chromName)
+void processSnps(char *chromName)
 /* read through chrN_snpTmp tables */
 /* lookup into snpDataHash */
 /* write to output file */
@@ -197,7 +197,7 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
  
     verbose(1, "chrom = %s\n", chromPtr->name);
  
-    readSnps(chromPtr->name);
+    processSnps(chromPtr->name);
     }
 
 carefulClose(&errorFileHandle);

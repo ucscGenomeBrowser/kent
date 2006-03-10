@@ -17,7 +17,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.10 2006/03/08 22:45:43 heather Exp $";
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.11 2006/03/10 17:42:26 heather Exp $";
 
 struct snpFasta
     {
@@ -120,7 +120,7 @@ return felMulti;
 
 }
 
-void readSnps(char *chromName)
+void processSnps(char *chromName)
 /* read through all rows in snpTmp */
 /* look up molType/class/observed */
 /* write to output file */
@@ -247,7 +247,7 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     if (!hTableExists(tableName)) continue;
     verbose(1, "chrom = %s\n", chromPtr->name);
     chromFastaHash = readFasta(chromPtr->name);
-    readSnps(chromPtr->name);
+    processSnps(chromPtr->name);
     }
 
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
