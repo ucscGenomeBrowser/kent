@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.6 2005/02/05 00:29:18 angie Exp $";
+static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.7 2006/03/10 23:13:20 angie Exp $";
 
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;
@@ -83,17 +83,17 @@ for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
 	tablesExist |= hTableExists(hfs->xrefTable);
     if (matches && tablesExist)
 	{
-	printf("SHORT-CIRCUIT %s\n", hfs->searchName);
+	verbose(1, "SHORT-CIRCUIT %s\n", hfs->searchName);
 	}
     else if (matches)
 	{
-	printf("no table %s: %s%s%s\n", hfs->searchName, hfs->searchTable,
-	       isNotEmpty(hfs->xrefTable) ? " and/or " : "",
-	       isNotEmpty(hfs->xrefTable) ? hfs->xrefTable : "");
+	verbose(1, "no table %s: %s%s%s\n", hfs->searchName, hfs->searchTable,
+		isNotEmpty(hfs->xrefTable) ? " and/or " : "",
+		isNotEmpty(hfs->xrefTable) ? hfs->xrefTable : "");
 	}
     else
 	{
-	printf("no match %s: %s\n", hfs->searchName, hfs->termRegex);
+	verbose(1, "no match %s: %s\n", hfs->searchName, hfs->termRegex);
 	}
     }
 endMs = clock1000();
@@ -111,17 +111,17 @@ for (hfs = longList;  hfs != NULL;  hfs = hfs->next)
 	tablesExist |= hTableExists(hfs->xrefTable);
     if (matches && tablesExist)
 	{
-	printf("ADDITIVE %s\n", hfs->searchName);
+	verbose(1, "ADDITIVE %s\n", hfs->searchName);
 	}
     else if (matches)
 	{
-	printf("no table %s: %s%s%s\n", hfs->searchName, hfs->searchTable,
-	       isNotEmpty(hfs->xrefTable) ? " and/or " : "",
-	       isNotEmpty(hfs->xrefTable) ? hfs->xrefTable : "");
+	verbose(1, "no table %s: %s%s%s\n", hfs->searchName, hfs->searchTable,
+		isNotEmpty(hfs->xrefTable) ? " and/or " : "",
+		isNotEmpty(hfs->xrefTable) ? hfs->xrefTable : "");
 	}
     else
 	{
-	printf("no match %s: %s\n", hfs->searchName, hfs->termRegex);
+	verbose(1, "no match %s: %s\n", hfs->searchName, hfs->termRegex);
 	}
     }
 endMs = clock1000();
