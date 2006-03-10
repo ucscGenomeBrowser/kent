@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.31 2006/02/21 05:28:58 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.32 2006/03/10 17:18:27 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -1076,8 +1076,12 @@ _EOF_
   if ($splitRef) {
     print SCRIPT <<_EOF_
 cd $runDir/chain
-foreach f (*.chain)
-    set c = \$f:r
+foreach c (`awk '{print \$1;}' $defVars{SEQ1_LEN}`)
+    set f = \$c.chain
+    if (! -e \$f) then
+      echo no chains for \$c
+      set f = /dev/null
+    endif
     hgLoadChain $tDb \${c}_chain$QDb \$f
 end
 _EOF_
