@@ -5471,13 +5471,11 @@ o Build the pepPi table
    hgsql entrez -e 'load data local infile "entrezMrna.tab" into table entrezMrna'
    hgsql entrez -e 'load data local infile "entrezRefProt.tab" into table entrezRefProt'
 
+   cd /cluster/store11/kg/kgHg18A
    hgsql entrez -N -e \
-   'select mrna, refseq from entrezRefseq, entrezMrna where entrezRefseq.geneID=entrezMrna.geneID' \
+        'select mrna, refseq from entrezRefseq, entrezMrna, hg18.all_mrna where qName=mrna and entrezRefseq.geneID=entrezMrna.geneID' \
    >mrnaRefseq1.tab
-
-#   hgsql hg18 < ~/src/hg/lib/mrnaRefseq.sql
-#   hgsql hg18 -e 'load data local infile "mrnaRefseq.tab" into table mrnaRefseq'
-
+   
 # Include RefSeq as valid mRNA too.
     hgsql hg18 -N -e 'select name, name from refGene' >mrnaRefseq2.tab
 
