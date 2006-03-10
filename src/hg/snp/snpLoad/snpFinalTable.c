@@ -18,7 +18,7 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpFinalTable.c,v 1.6 2006/03/09 20:00:22 heather Exp $";
+static char const rcsid[] = "$Id: snpFinalTable.c,v 1.7 2006/03/10 17:40:26 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *outputFileHandle = NULL;
@@ -133,7 +133,7 @@ switch (validCode)
 }
 
 
-void readSnps(char *chromName)
+void processSnps(char *chromName)
 /* read chrN_snpTmp */
 /* write to chrN_snp125.tab */
 
@@ -241,12 +241,14 @@ void doExceptions()
 struct sqlConnection *conn = hAllocConn();
 int i = 0;
 FILE *exceptionFileHandle = NULL;
+char tableName[64];
 
 snp125ExceptionsTableCreate(conn);
 
 for (i = 0; i < ArraySize(exceptionTables); i++)
     {
-    exceptionFileHandle = mustOpen(exceptionTables[i], "r");
+    safef(tableName, ArraySize(tableName), "%s.tab", exceptionTables[i]);
+    exceptionFileHandle = mustOpen(tableName, "r");
     hgLoadNamedTabFile(conn, ".", "snp125Exceptions", exceptionTables[i], &exceptionFileHandle);
     }
 hFreeConn(&conn);
@@ -273,7 +275,7 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
     if (!hTableExists(tableName)) continue;
     verbose(1, "chrom = %s\n", chromPtr->name);
-    readSnps(chromPtr->name);
+    processSnps(chromPtr->name);
     }
 
 carefulClose(&outputFileHandle);
@@ -285,7 +287,7 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     loadDatabase(chromPtr->name);
     }
 
-// doExceptions();
+doExceptions();
 
 return 0;
 }
