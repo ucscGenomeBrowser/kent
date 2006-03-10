@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.70 2006/02/28 21:04:51 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.71 2006/03/10 19:23:16 kent Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1110,7 +1110,7 @@ for (i = 0; i < psl->blockCount; i++)
     }
 }
 
-static void swapRcSeqs(char **seqs, int blockCount, int *blockSizes)
+static void swapRcSeqs(char **seqs, unsigned blockCount, unsigned *blockSizes)
 /* swap order of sequences in list, maintain property that all strings
  * are in one malloc block.  seqs should have old order, while blockSizes
  * are already reversed */
