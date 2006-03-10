@@ -1718,11 +1718,13 @@ pp->ty = CloneVar(destType);
 }
 
 
-static void rCheckDimsAndModules(struct pfCompile *pfc, struct pfParse *type)
+static boolean  rCheckDimsAndModules(struct pfCompile *pfc, struct pfParse *type)
 /* Do a double check on all pptTypeName nodes. Make sure that any
  * child nodes are array dimensions. Check that if type is defined
- * in another module that it is global. */
+ * in another module that it is global. Returns TRUE if there is
+ * a dimensioned array. */
 {
+boolean gotArray = FALSE;
 switch (type->type)
     {
     case pptTypeName:
@@ -1746,6 +1748,7 @@ switch (type->type)
 	    if (base != pfc->arrayType)
 	        errAt(type->children->tok, "[ illegal here except for arrays");
 	    coerceOne(pfc, &type->children, pfc->longFullType, FALSE);
+	    gotArray = TRUE;
 	    }
         break;
 	}
@@ -1753,13 +1756,15 @@ switch (type->type)
         break;
     }
 for (type = type->children; type != NULL; type = type->next)
-    rCheckDimsAndModules(pfc, type);
+    gotArray |= rCheckDimsAndModules(pfc, type);
+return gotArray;
 }
 
-static void checkTypeWellFormed(struct pfCompile *pfc, struct pfParse *type)
-/* Make sure that a type expression is a-ok. */
+static boolean checkTypeWellFormed(struct pfCompile *pfc, struct pfParse *type)
+/* Make sure that a type expression is a-ok. Returns TRUE if there
+ * is a dimensioned array in the type. */
 {
-rCheckDimsAndModules(pfc, type);
+return rCheckDimsAndModules(pfc, type);
 }
 
 static boolean isFunctionIo(struct pfParse *varInit)
@@ -1829,10 +1834,13 @@ static void coerceVarInit(struct pfCompile *pfc, struct pfParse *pp)
 struct pfParse *type = pp->children;
 struct pfParse *symbol = type->next;
 struct pfParse *init = symbol->next;
+boolean gotDimensionedArray;
 
 if (init != NULL)
     coerceOne(pfc, &symbol->next, type->ty, FALSE);
-checkTypeWellFormed(pfc, type);
+gotDimensionedArray = checkTypeWellFormed(pfc, type);
+if (init && gotDimensionedArray)
+    errAt(init->tok, "Can't initialized dimensioned array. Please either leave out [size] after array or leave out initialization tuple.");
 checkRedefinitionInParent(pfc, pp);
 if (pp->access == paConst && init != NULL)
     checkConstExp(pfc, init);

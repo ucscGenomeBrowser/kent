@@ -1616,15 +1616,6 @@ return TRUE;
 }
 
 
-static void codeCheckDims(struct pfCompile *pfc, FILE *f,
-        struct pfParse *lval, struct pfParse *rval, int count, int stack)
-/* Generate code that checks that the dimensions of the array
- * in the tuple is the same as the dimensions of the array as
- * declared. */
-{
-uglyf("Theoretically doing codeCheckDims - count %d.\n", count);
-}
-
 void codeInitDims(struct pfCompile *pfc, FILE *f, struct pfParse *pp, int stack)
 /* Generate code that creates an array that is initialized to
  * zero (as opposed to the empty array). */
@@ -1716,8 +1707,6 @@ if (rval != NULL)
     {
     int count = codeInitOrAssign(pfc, f, lval, rval, stack);
     lvalOffStack(pfc, f, lval, stack, "=", count, FALSE);
-    if (gotDims)
-	codeCheckDims(pfc, f, lval, rval, count, stack);
     }
 else if (gotDims)
     codeInitDims(pfc, f, pp, stack);
