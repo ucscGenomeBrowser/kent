@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.15 2006/03/08 19:44:13 fanhsu Exp $"
+#	"$Id: makeMm8.doc,v 1.16 2006/03/10 23:51:09 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -3170,7 +3170,7 @@ nice featureBits mm7 refGene:cds knownGene:cds
 
 # Build spMrna table
 
-   hgsql mm8 -N -e 'select name, proteinID from knownGene' >kgSpMrna.tab
+   hgsql mm8 -N -e 'select proteinID, name from knownGene' >kgSpMrna.tab
 
    hgsql mm8 -e  'drop table spMrna'
    hgsql mm8 <~/src/hg/lib/spMrna.sql
@@ -3969,4 +3969,105 @@ end
    hgsql mm8 -e 'load data local infile "cgapAlias.tab" into table cgapAlias'
    hgsql mm8 -e 'load data local infile "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc'
    hgsql mm8 -e 'load data local infile "cgapBIOCARTA.tab" into table cgapBiocPathway'
+
+####################################################################################
+
+# BUILD PROTEOME BROWSER TABLES FOR mm8 (DONE 3/8/06, Fan) 
+
+# These are instructions for building tables needed for the Proteome Browser. 
+ 
+# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
+# ARE REBUILT.  
+# This build is based on proteins DBs dated 060115.
+
+# Create the working directory
+
+    ssh hgwdev
+    mkdir /cluster/store9/kg/kgMm8A/pb-2006-03-08
+    cd /cluster/data/mm8/bed
+    rm pb
+    ln -s /cluster/store9/kg/kgMm8A/pb-2006-03-08 pb
+    cd pb
+
+# Define pep* tables in mm8 DB
+
+	cat ~/kent/src/hg/lib/pep*.sql > pepAll.sql
+
+#  First edit out pepPred table definition, then
+
+	hgsql mm8 < pepAll.sql
+
+# Build the pepMwAa table
+
+  hgsql proteins060115 -N -e \
+"select info.acc, molWeight, aaSize from sp060115.info, sp060115.accToTaxon where accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > pepMwAa.tab
+
+hgsql mm8 -e 'load data local infile "pepMwAa.tab" into table pepMwAa'
+
+o Build the pepPi table
+
+    hgsql proteins060115 -e \
+    "select info.acc from sp060115.info, sp060115.accToTaxon where accToTaxon.taxon=10090 and accToTaxon.acc = info.acc" > protAcc.lis
+
+    hgsql mm8 -N -e 'select proteinID from knownGene where proteinID like "%-%"' | sort -u >> protAcc.lis
+
+    pbCalPi protAcc.lis sp060115 pepPi.tab
+    hgsql mm8 -e 'delete from pepPi'
+    hgsql mm8 -e 'load data local infile "pepPi.tab" into table mm8.pepPi'
+
+# Calculate and load pep distributions
+
+    pbCalDist sp060115 proteins060115 10090 mm8 >pbCalDist.out
+    wc  pbCalDist.out
+
+    hgsql mm8
+    load data local infile "pepExonCntDist.tab" into table mm8.pepExonCntDist;
+    load data local infile "pepCCntDist.tab" into table mm8.pepCCntDist;
+    load data local infile "pepHydroDist.tab" into table mm8.pepHydroDist;
+    load data local infile "pepMolWtDist.tab" into table mm8.pepMolWtDist;
+    load data local infile "pepResDist.tab" into table mm8.pepResDist;
+    load data local infile "pepIPCntDist.tab" into table mm8.pepIPCntDist;
+    load data local infile "pepPiDist.tab" into table mm8.pepPiDist;
+    quit
+
+# Calculate frequency distributions
+
+    pbCalResStd sp060115 10090 mm8
+
+# Create pbAnomLimit and pbResAvgStd tables
+
+   hgsql mm8 -e "drop table pbAnomLimit"
+   hgsql mm8 -e "drop table pbResAvgStd"
+   hgsql mm8 < ~/src/hg/lib/pbAnomLimit.sql
+   hgsql mm8 < ~/src/hg/lib/pbResAvgStd.sql
+
+   hgsql mm8 -e 'load data local infile "pbResAvgStd.tab" into table mm8.pbResAvgStd;'
+   hgsql mm8 -e 'load data local infile "pbAnomLimit.tab" into table mm8.pbAnomLimit;'
+
+# Create pbStamp table for PB
+  hgsql mm8 -e "drop table pbStamp"
+  hgsql mm8 < ~/src/hg/lib/pbStamp.sql
+  hgsql mm7 -N -e 'select * from pbStamp' > pbStamp.tab
+  hgsql mm8 -e 'load data local infile "pbStamp.tab" into table mm8.pbStamp'
+
+# ENABLE PB FOR mm8 IN HGCENTRALTEST 
+
+    echo " insert into gdbPdb values('mm8', 'proteins060115')" \
+      | hgsql -h genome-testdb hgcentraltest
+
+    echo "update dbDb set hgPbOk = 1 where name = 'mm8';" \
+      | hgsql -h genome-testdb hgcentraltest
+
+# Adjust drawing parameters for Proteome Browser stamps
+
+  Now invoke Proteome Browser and adjust various drawing parameters
+  (mostly the ymax of each stamp) if necessary, by updating the 
+  pbStamp.tab file and then delete and reload the pbStamp table. 
+
+  hgsql mm8 -e "drop table pbStamp"
+  hgsql mm8 < ~/src/hg/lib/pbStamp.sql
+  hgsql mm8 -e 'load data local infile "pbStamp.tab" into table mm8.pbStamp'
+
+# Perform preliminary review of Proteome Browser for mm8, then
+  notify QA for formal review.
 
