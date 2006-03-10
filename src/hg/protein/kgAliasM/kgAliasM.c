@@ -87,11 +87,27 @@ while (!bothDone)
 		    if (chp == NULL)
 			{
 			alias = strdup(chp0);
+			
+			/* get rid of quote character in some aliases */
+			if (*alias == '"') 
+			    {
+			    *(alias + strlen(alias) - 1) = '\0';
+			    alias++;
+			    printf("%s\n", alias);fflush(stdout);
+			    }
 			chp0 = NULL;
 			}
 		    else
 			{
 			*chp = '\0';
+			
+			/* get rid of quote character in some aliases */
+			if (*chp0 == '"') 
+			    {
+			    *(chp0 + strlen(chp0) - 1) = '\0';
+			    chp0++;
+			    printf("%s\n", chp0);fflush(stdout);
+			    }
 			alias = strdup(chp0);
 			chp0 = chp+1;
 			}
