@@ -7,7 +7,7 @@
 #include "sig.h"
 #include "fof.h"
 
-static char const rcsid[] = "$Id: fof.c,v 1.6 2005/04/10 14:41:22 markd Exp $";
+static char const rcsid[] = "$Id: fof.c,v 1.7 2006/03/10 17:43:36 angie Exp $";
 
 struct fofRecord
 /* This holds a record of an index file. */
@@ -79,7 +79,7 @@ if (fofDir == NULL)
     }
 
 /* Open file, verify signature. */
-sprintf(pathBuf, "%s%s", fofDir, fofName);
+safef(pathBuf, sizeof(pathBuf), "%s%s", fofDir, fofName);
 f = mustOpen(pathBuf, "rb");
 mustReadOne(f, sig);
 if (sig != fofSig)
@@ -111,7 +111,7 @@ fof->last = needMem(sizeof(*fof->rec) + maxNameSize);
 for (i=0; i<fileCount; ++i)
     {
     readStringZ(f, nameBuf, sizeof(nameBuf));
-    sprintf(pathBuf, "%s%s", fofDir, nameBuf);
+    safef(pathBuf, sizeof(pathBuf), "%s%s", fofDir, nameBuf);
     fof->fileNames[i] = cloneString(pathBuf);
     }
 fof->headSize = ftell(f);

@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chain.c,v 1.23 2005/11/17 05:26:34 kent Exp $";
+static char const rcsid[] = "$Id: chain.c,v 1.24 2006/03/10 17:43:36 angie Exp $";
 
 void chainFree(struct chain **pChain)
 /* Free up a chain. */
@@ -358,7 +358,7 @@ while ((chain = chainRead(lf)) != NULL)
 	chainFree(&chain);
         continue;
 	}
-    sprintf(nameBuf, "%x", chain->id);
+    safef(nameBuf, sizeof(nameBuf), "%x", chain->id);
     if (hashLookup(hash, nameBuf))
         errAbort("Duplicate chain %d ending line %d of %s", 
 		chain->id, lf->lineIx, lf->fileName);
@@ -406,7 +406,7 @@ struct chain *chainLookup(struct hash *hash, int id)
 /* Find chain in hash. */
 {
 char nameBuf[16];
-sprintf(nameBuf, "%x", id);
+safef(nameBuf, sizeof(nameBuf), "%x", id);
 return hashMustFindVal(hash, nameBuf);
 }
 

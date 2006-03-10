@@ -8,7 +8,7 @@
 #include "twoBit.h"
 #include "nibTwo.h"
 
-static char const rcsid[] = "$Id: nibTwo.c,v 1.4 2006/01/26 21:32:44 markd Exp $";
+static char const rcsid[] = "$Id: nibTwo.c,v 1.5 2006/03/10 17:43:37 angie Exp $";
 
 struct nibTwoCache *nibTwoCacheNew(char *pathName)
 /* Get something that will more or less transparently get sequence from 
@@ -106,7 +106,7 @@ if (twoBitIsFile(pathName))
 else
     {
     char path[512];
-    sprintf(path, "%s/%s.nib", pathName, seqName);
+    safef(path, sizeof(path), "%s/%s.nib", pathName, seqName);
     seq = nibLoadAllMasked(NIB_MASK_MIXED, path);
     }
 return seq;

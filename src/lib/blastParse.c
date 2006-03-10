@@ -376,7 +376,7 @@ if (isdigit(s[0]))
     return atof(s);
 else
     {
-    sprintf(buf, "1.0%s", s);
+    safef(buf, sizeof(buf), "1.0%s", s);
     return atof(buf);
     }
 }

@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.25 2005/12/16 00:02:28 hiram Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.26 2006/03/10 17:43:37 angie Exp $";
 
 
 /* Return how long the named file is in bytes. 
@@ -288,7 +288,8 @@ if (s != NULL)
      *s = 0;
 for (;;)
    {
-   sprintf(fileName, "%s/%s_%s_%d_%d%s", dir, base, host, pid, num, suffix);
+   safef(fileName, sizeof(fileName), "%s/%s_%s_%d_%d%s",
+	 dir, base, host, pid, num, suffix);
    if (!fileExists(fileName))
        break;
    num += 1;

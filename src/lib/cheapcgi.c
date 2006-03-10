@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.75 2006/02/21 22:41:28 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.76 2006/03/10 17:43:36 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -555,7 +555,7 @@ while ((c = *in++) != 0)
         unsigned char uc = c;
         char buf[4];
         *out++ = '%';
-        sprintf(buf, "%02X", uc);
+        safef(buf, sizeof(buf), "%02X", uc);
         *out++ = buf[0];
         *out++ = buf[1];
         }
@@ -815,7 +815,7 @@ boolean cgiBooleanDefined(char *name)
  * checking for shadow. */
 {
 char buf[256];
-sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), name);
+safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 return cgiVarExists(buf);
 }
 
@@ -828,7 +828,7 @@ char buf[256];
 
 printf("<INPUT TYPE=CHECKBOX NAME=\"%s\" VALUE=on%s>", name,
     (checked ? " CHECKED" : "") );
-sprintf(buf, "%s%s", cgiBooleanShadowPrefix(), name);
+safef(buf, sizeof(buf), "%s%s", cgiBooleanShadowPrefix(), name);
 cgiMakeHiddenVar(buf, "1");
 }
 
@@ -1078,7 +1078,8 @@ static char hostLine[512];
 
 if (preferWeb && cgiIsOnWeb())
     return TRUE;	/* No spoofing required! */
-q += sprintf(q, "%s", "QUERY_STRING=cgiSpoof=on");
+q += safef(q, queryString + sizeof(queryString) - q,
+	   "%s", "QUERY_STRING=cgiSpoof=on");
 for (i=0; i<argcLeft; )
     {
     name = argv[i];
@@ -1089,11 +1090,11 @@ for (i=0; i<argcLeft; )
         {
         if (needAnd)
             *q++ = '&';
-        q += sprintf(q, "%s", name);
+        q += safef(q, queryString + sizeof(queryString) - q, "%s", name);
         if (!gotEq || strchr(name, '&') == NULL)
             needAnd = TRUE;
 	if (!gotEq)
-	    q += sprintf(q, "=on");
+	    q += safef(q, queryString + sizeof(queryString) - q, "=on");
         memcpy(&argv[i], &argv[i+1], sizeof(argv[i]) * (argcLeft-i-1));
         argcLeft -= 1;
         gotAny = TRUE;
