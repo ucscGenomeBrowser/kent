@@ -1,6 +1,7 @@
 O = output
 
 test:
+	mkdir -p $O
 	paraFlow arrayAppend.pf > $O/arrayAppend
 	diff expected/arrayAppend $O/arrayAppend
 	paraFlow assign.pf > $O/assign
