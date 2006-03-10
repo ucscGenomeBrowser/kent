@@ -465,6 +465,7 @@ searchMethod prefix
 shortCircuit 1
 xrefTable ensGtp
 xrefQuery select transcript,gene from %s where gene like '%s%%'
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
 termRegex ENSGALG[0-9]+(\.[0-9]+)?
 searchPriority 50
 
@@ -475,6 +476,7 @@ searchMethod prefix
 shortCircuit 1
 xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
+query select chrom,txStart,txEnd,name from %s where name like '%s.%%'
 termRegex ENSGALP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
