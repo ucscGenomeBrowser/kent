@@ -37,7 +37,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.15 2006/03/09 22:51:04 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.16 2006/03/10 00:28:48 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -202,13 +202,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (sameString(row[4], "unknown")) continue;
     if (sameString(row[4], "lengthTooLong")) continue;
     if (sameString(row[3], "single"))
-	checkSingleObserved(chromName, row[0], row[1], row[2], row[4]);
+	checkSingleObserved(chromName, row[1], row[2], row[0], row[4]);
     if (sameString(row[3], "insertion") || sameString(row[3], "deletion"))
-	checkIndelObserved(chromName, row[0], row[1], row[2], row[4]);
+	checkIndelObserved(chromName, row[1], row[2], row[0], row[4]);
     if (sameString(row[3], "mixed"))
-        checkMixedObserved(chromName, row[0], row[1], row[2], row[4]);
+        checkMixedObserved(chromName, row[1], row[2], row[0], row[4]);
     if (sameString(row[3], "named"))
-        checkNamedObserved(chromName, row[0], row[1], row[2], row[4]);
+        checkNamedObserved(chromName, row[1], row[2], row[0], row[4]);
     }
 
 sqlFreeResult(&sr);
