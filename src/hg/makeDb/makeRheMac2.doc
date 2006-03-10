@@ -506,17 +506,24 @@ cd /cluster/data/hg17/bed/blastz.rheMac2
     time nice -n +19 featureBits rheMac2 chainMm8Link
     #   877906099 bases of 2646704109 (33.170%) in intersection
 
-# QUALITY SCORES (Done March 3, 2006 Robert)
+# QUALITY SCORES (Done March 9, 2006 Robert)
     ssh kkstore01
     wget -q ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu:21/Assemblies/VI/FinalMergeSplit/v1.edit4.chrm.qv.bz2
     cd /cluster/data/rheMac2/downloads/
     bunzip2 v1.edit4.chrm.qv.bz2 &
-    nice fold --spaces v1.edit4.chrm.qv | sed -e 's/Chr/chr/' > rheMac2.qual.qv 
+    bunzip2 v1.edit4.chrUr.bz2 &
+    nice fold --spaces v1.edit4.chrm.qv | sed -e 's/Chr/chr/' > rheMac2.chrm.qual.qv 
+    nice fold --spaces v1.edit4.chrUr.qv | sed -e 's/Chr/chr/' > rheMac2.chrUr.qv 
+    cat rheMac2.chrm.qual.qv rheMac2.chrUr.qv > rheMac2.qual.qv
     qaToQac rheMac2.qual.qv temp.qac 
     gzip rheMac2.qual.qv
     qacToWig -fixed temp.qac rheMac2.wig 
     rm temp.qac
     wigEncode rheMac2.wig rheMac2.qual.wig rheMac2.qual.wib 
+    mv all.qv rheMac2.qual.qv
+    qaToQac rheMac2.qual.qv temp.qac
+    qacToWig -fixed temp.qac rheMac2.wig
+    wigEncode rheMac2.wig rheMac2.qual.wig rheMac2.qual.wib
     ssh hgwdev
     hgLoadWiggle rheMac2 quality rheMac2.qual.wig
     cp -p rheMac2.qual.qv.gz /usr/local/apache/htdocs/rheMac2/bigZips
