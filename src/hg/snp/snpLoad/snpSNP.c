@@ -9,13 +9,13 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.9 2006/03/10 17:43:04 heather Exp $";
+static char const rcsid[] = "$Id: snpSNP.c,v 1.10 2006/03/10 18:37:13 heather Exp $";
 
 struct snpData
     {
     int validation_status;
-    float avHet;
-    float avHetSE;
+    char *avHet;
+    char *avHetSE;
     };
 
 static char *snpDb = NULL;
@@ -45,7 +45,7 @@ int validInt = 0;
 struct snpData *sel;
 
 /* could increase the default size */
-snpDataHash = newHash(0);
+snpDataHash = newHash(16);
 safef(query, sizeof(query), "select snp_id, validation_status, avg_heterozygosity, het_se from SNP");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -59,8 +59,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     AllocVar(sel);
     sel->validation_status = validInt;
-    sel->avHet = atof(row[2]);
-    sel->avHetSE = atof(row[3]);
+    sel->avHet = cloneString(row[2]);
+    sel->avHetSE = cloneString(row[3]);
     hashAdd(snpDataHash, cloneString(row[0]), sel);
     }
 sqlFreeResult(&sr);
@@ -103,7 +103,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     fprintf(f, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3]);
     fprintf(f, "%s\t%s\t%s\t%s\t", row[4], row[5], row[6], row[7]);
-    fprintf(f, "%d\t%f\t%f\t", sel->validation_status, sel->avHet, sel->avHetSE);
+    fprintf(f, "%d\t%s\t%s\t", sel->validation_status, sel->avHet, sel->avHetSE);
     fprintf(f, "%s\t%s\t%s\t%s\n", row[8], row[9], row[10], row[11]);
     }
 
@@ -187,7 +187,7 @@ if (chromList == NULL)
 errorFileHandle = mustOpen("snpSNP.errors", "w");
 
 /* read into global hash */
-verbose(1, "reading SNP table...\n");
+verbose(1, "reading SNP table into hash...\n");
 readSNP();
     
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
@@ -195,7 +195,7 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
     if (!hTableExists(tableName)) continue;
  
-    verbose(1, "chrom = %s\n", chromPtr->name);
+    verbose(1, "processing chrom = %s\n", chromPtr->name);
  
     processSnps(chromPtr->name);
     }
