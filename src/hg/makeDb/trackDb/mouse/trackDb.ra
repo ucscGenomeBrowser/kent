@@ -360,7 +360,7 @@ type chain galGal2
 otherDb galGal2
 
 track chainRn4
-shortLabel Rn4 Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 260
@@ -759,7 +759,7 @@ type netAlign hg16 chainHg16
 otherDb hg16
 
 track netRn4
-shortLabel Rn4 Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 260.1
