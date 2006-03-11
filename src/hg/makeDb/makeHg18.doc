@@ -6932,4 +6932,33 @@ cat > copy.csh << 'EOF'
 
     time make loadDb > loadDb.log 
 
+##########################################################################
+# BUILD ALLEN BRAIN TRACK (DONE 03/11/06 Fan)
+
+# Make the working directory
+    ssh hgwdev
+    cd /cluster/data/hg18/bed
+    mkdir allenBrain
+    cd allenBrain
+
+# Remap the probe alignments from mm7 to hg18
+
+    zcat /gbdb/mm7/liftOver/mm7ToHg18.over.chain.gz \
+        |  pslMap -chainMapFile -swapMap \
+	       /cluster/data/mm7/bed/allenBrain/allenBrainAli.psl stdin stdout \
+	  |  sort -k 14,14 -k 16,16n > unscored.psl
+
+    pslRecalcMatch unscored.psl /cluster/data/hg18/nib \
+        /cluster/data/mm7/bed/allenBrain/allProbes.fa allenBrainAli.psl
+    
+# Load the database
+   hgsql hg18 < ~/kent/src/hg/lib/allenBrainUrl.sql
+   hgsql hg18 -e 'load data local infile "/cluster/data/mm7/bed/allenBrain/allenBrainUrl.tab" into table allenBrainUrl;'
+   hgLoadPsl hg18 allenBrainAli.psl
+   mkdir /gbdb/hg18/allenBrain
+   ln -s /cluster/data/mm7/bed/allenBrain/allProbes.fa /gbdb/hg18/allenBrain/allProbes.fa
+   hgLoadSeq hg18 /gbdb/hg18/allenBrain/allProbes.fa
+
+# Make mapping between known genes and allenBrain	
+   hgMapToGene hg18 allenBrainAli -type=psl knownGene knownToAllenBrain 
 
