@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.20 2006/03/01 23:15:58 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.21 2006/03/11 03:56:37 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -98,10 +98,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* use the contig_acc to get the coords */
     /* don't need to save contig_acc */
     AllocVar(celNew);
-    // hel = hashLookup(ctgPosHash, row[1]);
-    // if (hel == NULL)
-        // errAbort("Can't find %s in ctgPos\n", row[1]);
-    // celOld = (struct coords *)hel->val;
     celOld = hashFindVal(ctgPosHash, row[1]);
     if (celOld == NULL)
         errAbort("Can't find %s in ctgPos\n", row[1]);
@@ -128,7 +124,7 @@ struct sqlResult *sr;
 char **row;
 int count = 0;
 
-weightHash = newHash(0);
+weightHash = newHash(16);
 verbose(1, "getting weight = 10 from SNPMapInfo...\n");
 safef(query, sizeof(query), "select snp_id from SNPMapInfo where weight = 10");
 sr = sqlGetResult(conn, query);
@@ -193,7 +189,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	start = sqlUnsigned(row[3]);
 	safef(endString, sizeof(endString), "%s", row[4]);
 
-        /* handle randoms */
+        /* lift randoms */
 	if (start == 0)
 	    {
 	    start = sqlUnsigned(row[5]) + cel->start;

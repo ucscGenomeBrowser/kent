@@ -1,12 +1,13 @@
 /* snpContigLocusIdFilter 
  * Filter the ContigLocusId table to remove contigs that aren't the reference assembly.
-   Save only the fxn_class column. */
+   Save only the fxn_class column. 
+   Create the ContigLocusIdFilter table. */
 #include "common.h"
 
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocusIdFilter.c,v 1.3 2006/02/27 21:28:49 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocusIdFilter.c,v 1.4 2006/03/11 03:57:47 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *contigHash = NULL;
@@ -48,7 +49,7 @@ return ret;
 }
 
 
-void filterContigs()
+void filterSNPs()
 /* read all rows, relevant columns of ContigLocusId into memory. */
 /* Write out rows where ctg_id is in our hash. */
 {
@@ -132,7 +133,7 @@ if (contigHash == NULL)
     return 1;
     }
 
-filterContigs();
+filterSNPs();
 createTable();
 loadDatabase();
 
