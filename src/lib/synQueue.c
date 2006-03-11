@@ -6,7 +6,7 @@
 #include "pthreadWrap.h"
 #include "synQueue.h"
 
-static char const rcsid[] = "$Id: synQueue.c,v 1.5 2006/03/11 15:20:22 kent Exp $";
+static char const rcsid[] = "$Id: synQueue.c,v 1.6 2006/03/11 23:07:02 kent Exp $";
 
 struct synQueue
 /* A synchronized queue for messages between threads. */
@@ -84,13 +84,16 @@ void *synQueueGrab(struct synQueue *sq)
 /* Get message off start of queue.  Return NULL immediately 
  * if queue is empty. */
 {
-void *message;
+void *message = NULL;
 struct dlNode *node;
 pthreadMutexLock(&sq->mutex);
 node = dlPopHead(sq->queue);
 pthreadMutexUnlock(&sq->mutex);
-message = node->val;
-freeMem(node);
+if (node != NULL)
+    {
+    message = node->val;
+    freeMem(node);
+    }
 return message;
 }
 
