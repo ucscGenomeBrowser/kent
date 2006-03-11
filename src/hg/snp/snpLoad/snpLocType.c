@@ -1,16 +1,13 @@
 /* snpLocType - third step in dbSNP processing.
  * Read the chrN_snpTmp tables created by snpSplitSimple and handle locType.
- * Rewrite to new chrN_snpTmp tables.  Get chromInfo from ContigInfo. 
-
- * This could use chromInfo from assembly to check coords, or I could check 
- * ContigInfo earlier. */
+ * Rewrite to new chrN_snpTmp tables.  Get chromInfo from ContigInfo.  */
 
 #include "common.h"
 
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.19 2006/03/08 22:57:11 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.20 2006/03/11 03:35:42 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -230,7 +227,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	continue;
 	}
 
-    if (sameString(row[2], "1"))
+    if (sameString(row[2], "1") || sameString(row[2], "3"))
         {
 	chromStart = sqlUnsigned(row[3]);
 	chromStart++;
