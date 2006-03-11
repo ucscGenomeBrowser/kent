@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.32 2006/03/01 04:10:12 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.33 2006/03/11 01:28:58 kate Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -544,14 +544,18 @@ else
 	    for (mc = maf->components->next; mc != NULL; mc = nextMc)
 		{
 		char buf[64];
+                char *organism;
 		mafSrcDb(mc->src, buf, sizeof buf);
+                organism = hOrganism(buf);
+                if (!organism)
+                    organism = buf;
 		nextMc = mc->next;
 		safef(option, sizeof(option), "%s.%s", tdb->tableName, buf);
 		if (!cartUsualBoolean(cart, option, TRUE))
 		    {
 		    if (speciesOffHash == NULL)
 			speciesOffHash = newHash(4);
-		    hashStoreName(speciesOffHash, buf);
+		    hashStoreName(speciesOffHash, organism);
 		    }
 		if (!cartUsualBoolean(cart, option, TRUE))
 		    slRemoveEl(&maf->components, mc);
