@@ -18,7 +18,7 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpFinalTable.c,v 1.7 2006/03/10 17:40:26 heather Exp $";
+static char const rcsid[] = "$Id: snpFinalTable.c,v 1.8 2006/03/11 04:09:14 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *outputFileHandle = NULL;
@@ -194,8 +194,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(f, "%d\t%s\t%d\t%d\trs%s\t", bin, chromName, start, end, row[0]);
     alleleString = cloneString(row[11]);
     refUCSCString = cloneString(row[12]);
-    // stripChar(alleleString, ' ');
-    // stripChar(refUCSCString, ' ');
     fprintf(f, "%d\t%s\t%s\t%s\t", 
             score, strandStrings[sqlUnsigned(row[5])], alleleString, refUCSCString);
 
@@ -203,13 +201,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     observedString = cloneString(row[14]);
     molTypeString = cloneString(row[6]);
     classString = cloneString(row[4]);
-    // stripChar(observedString, ' ');
-    // stripChar(molTypeString, ' ');
-    // stripChar(classString, ' ');
     fprintf(f, "%s\t%s\t%s\t%s\t", observedString, molTypeString, classString, s);
 
     functionString = cloneString(row[7]);
-    // stripChar(functionString, ' ');
     fprintf(f, "%s\t%s\t%s\t%s\n", row[9], row[10], functionString, locTypeStrings[sqlUnsigned(row[3])]);
     }
 sqlFreeResult(&sr);
