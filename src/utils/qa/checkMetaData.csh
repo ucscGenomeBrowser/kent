@@ -11,7 +11,7 @@
 
 set db=""
 set dbTrunc=""
-set metatables="dbDb blatServers defaultDb gdbPdb genomeClade"
+set metatables="dbDb blatServers defaultDb gdbPdb genomeClade liftOverChain"
 
 if ( $#argv == 1 || $#argv == 3 ) then
   set db=$argv[1]
@@ -166,6 +166,15 @@ hgsql $host1 -e 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb1 \
   > $metatable.$db.$out1 
 hgsql $host2 -e 'SELECT * FROM gdbPdb WHERE genomeDb = "'$db'"' $centdb2 \
   > $metatable.$db.$out2 
+
+
+# check liftOverChain
+set metatable="liftOverChain"
+
+hgsql $host1 -e 'SELECT * FROM dbDb WHERE name = "'$db'"' $centdb1 \
+   > $metatable.$db.$out1
+hgsql $host2 -e 'SELECT * FROM dbDb WHERE name = "'$db'"' $centdb2  \
+  > $metatable.$db.$out2
 
 
 # check genomeClade
