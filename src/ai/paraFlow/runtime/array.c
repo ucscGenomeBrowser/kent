@@ -5,6 +5,7 @@
 #include "runType.h"
 #include "object.h"
 #include "array.h"
+#include "msort.h"
 
 void _pf_array_cleanup(struct _pf_array *array, int id)
 /* Clean up all elements of array, and then array itself. */
@@ -623,7 +624,7 @@ if (cmp == NULL)
 	    errAbort("Need to supply a comparison function to sort array of complex type.");
 	    break;
 	}
-    qsort(array->elements, array->size, array->elSize, compare);
+    _pf_cm_mSort(array->elements, array->size, array->elSize, compare);
     }
 else
     {
@@ -661,10 +662,13 @@ else
 	    compare = pCmpObj;
 	    break;
 	}
-#if defined(__linux__) && defined(__i386__)
-    uglyAbort("Dang, hgwdev doesn't seem to have qsort_r like my Mac does.");
-#else
-    qsort_r(array->elements, array->size, array->elSize, &pf, compare);
-#endif
+    _pf_cm_mSort_r(array->elements, array->size, array->elSize, &pf, compare);
+    /* mieg 2006_03_11 : use our own version of qsort
+      #if defined(__linux__) && defined(__i386__)
+      uglyAbort("Dang, hgwdev doesn't seem to have qsort_r like my Mac does.");
+      #else
+      qsort_r(array->elements, array->size, array->elSize, &pf, compare);
+      #endif
+    */
     }
 }
