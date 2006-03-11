@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: orderNodes.c,v 1.12 2006/03/07 22:03:28 braney Exp $";
+static char const rcsid[] = "$Id: orderNodes.c,v 1.13 2006/03/11 16:40:25 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -435,7 +435,8 @@ if (!((slCount(left) == 1) ||  (slCount(right) == 1) || (slCount(top) ==1)))
 if (slCount(left) + slCount(right) + slCount(top) < 3)
     errAbort("breaks infinite sites < 3");
 //if (slCount(left) + slCount(right) + slCount(top) > 4)
-    //warn("breaks infinite sites > 4");
+if (slCount(left) + slCount(right) > 3)
+    warn("breaks infinite sites > 3");
 
 p = left;
 if ((left->element != top->element) || (left->doFlip!= top->doFlip))
@@ -498,9 +499,9 @@ struct possibleEdge *edge;
 struct possibleEdge *newEdge;
 
 if (!((slCount(left) == 1) ||  (slCount(right) == 1)))
-    errAbort("median2 breaks infinite sites 1 must be 1");
-//if (slCount(right) + slCount(left) > 3)
-    //warn("median2 infinites sites break > 3");
+    warn("median2 breaks infinite sites 1 must be 1");
+if (slCount(right) + slCount(left) > 3)
+    warn("median2 infinites sites break > 3");
 if (slCount(right) + slCount(left) < 2)
     errAbort("median2 infinites sites break < 2");
 //if ((slCount(left) == 1) && (slCount(right) == 1) && (left->element != right->element))
@@ -509,6 +510,11 @@ if (slCount(right) + slCount(left) < 2)
 p = left;
 if (slCount(p) != 1)
     p = right;
+else if ((slCount(right) == 1) && (right->element->parent) &&  (right->element->parent->numEdges==2))
+    {
+    p = right;
+    //warn("happened");
+    }
 
 AllocVar(newEdge);
 newEdge->element = p->element;
@@ -906,6 +912,7 @@ for(;;)
     //printNodes(f, node, "down1");
     calcMix(node);
 
+    //break;
     //printNodes(f, node, "mix");
 
     edge = NULL;
