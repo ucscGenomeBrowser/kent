@@ -48,8 +48,8 @@
 enum messageType
 /* Different message types. */
     {
-    mRun,
-    mBundle,
+    mRun = 111,
+    mBundle = 222,
     };
 
 enum collectionType
@@ -169,6 +169,7 @@ struct worker *w = v;
 for (;;)
     {
     struct jobBundle *job = synQueueGet(w->queue);
+    uglyf("Got work type %d, jobs %d\n", (int)(job->messageType), job->itemCount);
     jobBundleRun(job);
     synQueuePut(manager->queue, job);
     }
@@ -232,9 +233,12 @@ else if (run->totalRunTime > 0.0001)
     itemsInBundle = 0.001*run->itemsFinished/run->totalRunTime;
 else
     itemsInBundle = run->itemCount/paraCpuCount;
+if (itemsInBundle < 1)
+    itemsInBundle = 1;
 if (itemsInBundle > itemsLeft)
     itemsInBundle = itemsLeft;
 
+uglyf("paraRunGetNextJob itemsInBundle %ld, itemsLeft %ld\n", itemsInBundle, itemsLeft);
 AllocVar(job);
 job->messageType = mBundle;
 job->itemCount = itemsInBundle;
@@ -354,9 +358,12 @@ static void checkWork(struct manager *manager, struct jobBundle *job)
 struct paraRun *run = job->run;
 struct worker *worker = job->worker;
 
+uglyf("checkWork %d, %d\n", job->messageType, job->itemCount);
 foldBundleIntoRun(run, job);
+jobBundleFree(&job);
 if (run->itemsFinished == run->itemCount)
     {
+    uglyf("finished one run of %d\n", (int)run->itemCount);
     dlRemove(run->node);	/* Remove node from active run list */
     freez(&run->node);
     synQueuePut(run->customerQueue, run);
@@ -365,6 +372,7 @@ if (run->itemsFinished == run->itemCount)
     }
 else if (run->itemsSubmitted < run->itemCount)
     {
+    uglyf("Submitted %ld of %ld, putting worker back on same run\n", run->itemsSubmitted, run->itemCount);
     job = paraRunGetNextJob(run, worker);
     synQueuePut(worker->queue, job);
     }
@@ -383,26 +391,28 @@ else
 	}
     if (newRun)
         {
+	uglyf("Putting worker on another run\n");
 	job = paraRunGetNextJob(newRun, worker);
 	synQueuePut(worker->queue, job);
 	}
     else
         {
+	uglyf("Idling worker\n");
 	dlRemove(worker->node);
 	slAddTail(manager->readyWorkers, worker->node);
 	}
     }
-jobBundleFree(&job);
 }
 
 static void *manageManage(void *v)
 /* Manage away on our message queue. */
 {
-struct manager *managers = v;
+struct manager *manger = v;
 for (;;)
     {
     enum messageType type;
     struct messageHeader *message = synQueueGet(manager->queue);
+    uglyf("Manager got message %d\n", (int)message->type);
     if (message->type == mRun)
 	scheduleRun(manager, (struct paraRun *)message);
     else

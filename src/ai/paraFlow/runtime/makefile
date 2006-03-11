@@ -5,7 +5,7 @@ O = argsEnv.o array.o cacheQueue.o dir.o fileLib.o getObj.o initVar.o \
     winMac.o
 
 testParaRun: testParaRun.o runtime.a
-	${CC} ${COPT} ${CFLAGS} -o testParaFlow $O ../../../lib/$(MACHTYPE)/jkweb.a -lm
+	${CC} ${COPT} ${CFLAGS} -o testParaRun testParaRun.o $O runtime.a ../../../lib/$(MACHTYPE)/jkweb.a -lm
 	
 
 runtime.a: $(O) 
