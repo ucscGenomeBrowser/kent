@@ -20,6 +20,14 @@ int gbSqlSignedNull(char *s);
 struct slName* gbSqlListTablesLike(struct sqlConnection *conn, char *like);
 /* get list of tables matching a pattern */
 
+void gbLockDb(struct sqlConnection *conn, char *db);
+/* get an advisory lock to keep two genbank process from updating
+ * the database at the same time.  If db is null, use the database
+ * associated with the connection. */
+
+void gbUnlockDb(struct sqlConnection *conn, char *db);
+/* free genbank advisory lock on database */
+
 #endif
 
 /*

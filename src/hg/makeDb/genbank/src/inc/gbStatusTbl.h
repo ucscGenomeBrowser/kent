@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "hgRelate.h"
+#include "genbank.h"
 
 /* Flags indicating used indiucate state changes */
 #define GB_NOCHG     0x00    /* no change */
@@ -46,8 +47,7 @@ struct gbStatus
     struct gbAligned* selectAlign;      /* selected aligned obj */
     UWORD stateChg;                     /* set of state change flags */
     boolean metaDone;                   /* add to metadata tables  */
-    unsigned cdsStart;                  /* CDS from genbank */
-    unsigned cdsEnd;
+    struct genbankCds cds;              /* CDS from genbank */    
     char *geneName;                     /* gene name for refSeq */
 };
 

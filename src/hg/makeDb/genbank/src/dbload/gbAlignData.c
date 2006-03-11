@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.22 2005/11/06 22:56:26 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.23 2006/03/11 00:07:57 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -43,11 +43,22 @@ static char *gLargeTables[] = {
     "xenoEst", NULL
 };
 
+/* information on RefSeq genePred tables */
+struct refSeqTblInfo {
+    char *tbl;             /* table name */
+    char *createSql;       /* SQL for creating table */
+    char *flatTbl;         /* flat table name */
+    char *flatCreateSql;   /* SQL for creating refFlat table */
+    boolean hasBin;        /* table has or will have bin column */
+    boolean hasExtCols;    /* table has or will have exonFrames, etc columns */
+    struct sqlUpdater* upd; /* updater for table */
+    struct sqlUpdater* flatUpd; /* updater for flat table */
+    
+};
+
 /* strings to create refSeq tables are put here */
-static char *gRefGeneTableDef = NULL;
-static char *gRefFlatTableDef = NULL;
-static char *gXenoRefGeneTableDef = NULL;
-static char *gXenoRefFlatTableDef = NULL;
+static struct refSeqTblInfo *gRefGeneInfo = NULL;
+static struct refSeqTblInfo *gXenoRefGeneInfo = NULL;
 
 /* global conf */
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
@@ -71,11 +82,7 @@ static struct sqlUpdater* gMrnaOIUpd = NULL;
 static struct sqlUpdater* gEstOIUpd = NULL;
 static struct sqlUpdater* gIntronEstUpd = NULL;  /* when doing single table */
 static struct sqlUpdater* gRefSeqAliUpd = NULL;
-static struct sqlUpdater* gRefGeneUpd = NULL;
-static struct sqlUpdater* gRefFlatUpd = NULL;
 static struct sqlUpdater* gXenoRefSeqAliUpd = NULL;
-static struct sqlUpdater* gXenoRefGeneUpd = NULL;
-static struct sqlUpdater* gXenoRefFlatUpd = NULL;
 
 static boolean isLargeTable(char *table)
 /* see if a table is in the large tables list */
@@ -89,15 +96,20 @@ for (i = 0; gLargeTables[i] != NULL; i++)
 return FALSE;
 }
 
-void makeRefGeneCreateSql(char *geneTable, char *flatTable,
-                          char **geneTableDef, char **flatTableDef)
+void makeRefGeneCreateSql(struct refSeqTblInfo *tblInfo)
 /* generate the string for create one of the refGene/refFlat pair tables */
 {
 char editDef[1024], *tmpDef, *part2, *p;
-*geneTableDef = genePredGetCreateSql(geneTable, 0, 0, hGetMinIndexLength());
+unsigned optFields = 0, options = 0;
+if (tblInfo->hasBin)
+    options |= genePredWithBin;
+if (tblInfo->hasExtCols)
+    optFields |= genePredAllFlds;
+
+tblInfo->createSql = genePredGetCreateSql(tblInfo->tbl, optFields, options, hGetMinIndexLength());
     
 /* edit generated SQL to add geneName column and index */
-tmpDef = genePredGetCreateSql(flatTable, 0, 0, hGetMinIndexLength());
+tmpDef = genePredGetCreateSql(tblInfo->flatTbl, 0, 0, hGetMinIndexLength());
 part2 = strchr(tmpDef, '(');
 *(part2++) = '\0';
 p = strrchr(part2, ')');
@@ -105,8 +117,41 @@ p = strrchr(part2, ')');
 safef(editDef, sizeof(editDef),
       "%s(geneName varchar(255) not null, %s, INDEX(geneName(10)))",
       tmpDef, part2);
-*flatTableDef = cloneString(editDef);
+tblInfo->flatCreateSql = cloneString(editDef);
 free(tmpDef);
+}
+
+void checkRefSeqTblOpts(struct sqlConnection *conn, struct refSeqTblInfo *tblInfo)
+/* determine if a refSeq genePred table has a bin and/or extended columns.  Since
+ * it was a little ugly to slot this check into the lazy creation of the
+ * tables, an existing table is checked and non-existant one assume new tables
+ * are created with bin and extended columns. Returns true if extended stuff
+ * is available */
+{
+if (!sqlTableExists(conn, tblInfo->tbl))
+    {
+    tblInfo->hasBin = TRUE;
+    tblInfo->hasExtCols = TRUE;
+    }
+else
+    {
+    tblInfo->hasBin = (sqlFieldIndex(conn, tblInfo->tbl, "bin") >= 0);
+    tblInfo->hasExtCols = (sqlFieldIndex(conn, tblInfo->tbl, "exonFrames") >= 0);
+    }
+}
+
+struct refSeqTblInfo *getRefTblInfo(char *geneTable, char *flatTable)
+/* get information about a table */
+{
+struct sqlConnection *conn = hAllocConn();
+struct refSeqTblInfo *tblInfo;
+AllocVar(tblInfo);
+tblInfo->tbl = cloneString(geneTable);
+tblInfo->flatTbl = cloneString(flatTable);
+checkRefSeqTblOpts(conn, tblInfo);
+makeRefGeneCreateSql(tblInfo);
+hFreeConn(&conn);
+return tblInfo;
 }
 
 void gbAlignDataInit(char *tmpDirPath, struct dbLoadOptions* options)
@@ -119,12 +164,10 @@ if (gChroms == NULL)
 
 /* get sql to create tables for first go, always get xeno, even if not
  * used  */
-if (gRefGeneTableDef == NULL)
+if (gRefGeneInfo == NULL)
     {
-    makeRefGeneCreateSql(REF_GENE_TBL, REF_FLAT_TBL,
-                         &gRefGeneTableDef, &gRefFlatTableDef);
-    makeRefGeneCreateSql(XENO_REF_GENE_TBL, XENO_REF_FLAT_TBL,
-                         &gXenoRefGeneTableDef, &gXenoRefFlatTableDef);
+    gRefGeneInfo = getRefTblInfo(REF_GENE_TBL, REF_FLAT_TBL);
+    gXenoRefGeneInfo = getRefTblInfo(XENO_REF_GENE_TBL, XENO_REF_FLAT_TBL);
     }
 }
 
@@ -295,43 +338,58 @@ status->version = version;
 status->numAligns++;
 }
 
+static void writeRefSeqGenePred(struct sqlConnection *conn, struct gbStatus* status,
+                                struct psl* psl, struct refSeqTblInfo *tblInfo)
+/* create and write genePred row (include refFlat tables) */
+{
+struct genePred* gene;
+unsigned optFields = 0;
+FILE *fh;
+
+if (tblInfo->hasExtCols)
+    optFields |= genePredAllFlds;
+
+/* refGene */
+gene = genePredFromPsl3(psl, &status->cds, optFields, 0,
+                        genePredStdInsertMergeSize, genePredStdInsertMergeSize);
+fh = getOtherTabFile(tblInfo->tbl, conn, tblInfo->createSql, &tblInfo->upd);
+if (tblInfo->hasExtCols)
+    {
+    /* add gene name */
+    freeMem(gene->name2);
+    gene->name2 = cloneString(status->geneName);
+    }
+if (tblInfo->hasBin)
+    fprintf(fh, "%u\t", hFindBin(gene->txStart, gene->txEnd));
+genePredTabOut(gene, fh);
+genePredFree(&gene);
+
+/* refFlat */
+gene = genePredFromPsl3(psl, &status->cds, 0, 0,
+                        genePredStdInsertMergeSize, genePredStdInsertMergeSize);
+fh = getOtherTabFile(tblInfo->flatTbl, conn, tblInfo->flatCreateSql, &tblInfo->flatUpd);
+fprintf(fh, "%s\t", ((status->geneName == NULL) ? "" : status->geneName));
+genePredTabOut(gene, fh);
+genePredFree(&gene);
+}
+
 static void writeRefSeqPsl(struct sqlConnection *conn, struct gbSelect* select,
                            struct gbStatus* status, int version,
                            struct psl* psl)
-/* write a refseq PSL */
+/* write a refseq PSL and associated genePred */
 {
-/* only native refseq have been selected */
-struct genePred* gene;
 FILE *fh;
 
 if (select->orgCats == GB_NATIVE)
     fh = getPslTabFile(REF_SEQ_ALI, conn, &gRefSeqAliUpd);
 else
     fh = getPslTabFile(XENO_REF_SEQ_ALI, conn, &gXenoRefSeqAliUpd);
-
 writePsl(fh, psl);
 
-/* genePred and geneFlat tables, merge insert <= n bases */
-gene = genePredFromPsl(psl, status->cdsStart, status->cdsEnd,
-                       genePredStdInsertMergeSize);
 if (select->orgCats == GB_NATIVE)
-    fh= getOtherTabFile(REF_GENE_TBL, conn, gRefGeneTableDef,
-                        &gRefGeneUpd);
+    writeRefSeqGenePred(conn, status, psl, gRefGeneInfo);
 else
-    fh= getOtherTabFile(XENO_REF_GENE_TBL, conn, gXenoRefGeneTableDef,
-                        &gXenoRefGeneUpd);
-genePredTabOut(gene, fh);
-
-if (select->orgCats == GB_NATIVE)
-    fh = getOtherTabFile(REF_FLAT_TBL, conn, gRefFlatTableDef,
-                         &gRefFlatUpd);
-else
-    fh = getOtherTabFile(XENO_REF_FLAT_TBL, conn, gXenoRefFlatTableDef,
-                         &gXenoRefFlatUpd);
-fprintf(fh, "%s\t", ((status->geneName == NULL) ? "" : status->geneName));
-genePredTabOut(gene, fh);
-
-genePredFree(&gene);
+    writeRefSeqGenePred(conn, status, psl, gXenoRefGeneInfo);
 
 status->version = version;
 status->numAligns++;
@@ -478,21 +536,22 @@ static void updateRefFlatEntry(struct sqlConnection *conn,
                                struct gbStatus* status)
 /* Update the gene names in the refFlat for an entry */
 {
+struct refSeqTblInfo *tblInfo;
 char* geneName = (status->geneName == NULL) ? "" : status->geneName;
-geneName = sqlEscapeString2(alloca(2*strlen(geneName)+1), geneName);
+char *buf = needMem(2*strlen(geneName)+1);
+geneName = sqlEscapeString2(buf, geneName);
+
 
 if (status->entry->orgCat == GB_NATIVE)
-    {
-    getOtherTabFile(REF_FLAT_TBL, conn, gRefFlatTableDef, &gRefFlatUpd);
-    sqlUpdaterModRow(gRefFlatUpd, status->numAligns,
-                     "geneName='%s' WHERE name='%s'", geneName, status->acc);
-    }
+    tblInfo = gRefGeneInfo;
 else
-    {
-    getOtherTabFile(XENO_REF_FLAT_TBL, conn, gXenoRefFlatTableDef, &gXenoRefFlatUpd);
-    sqlUpdaterModRow(gXenoRefFlatUpd, status->numAligns,
-                     "geneName='%s' WHERE name='%s'", geneName, status->acc);
-    }
+    tblInfo = gXenoRefGeneInfo;
+
+getOtherTabFile(tblInfo->flatTbl, conn, tblInfo->flatCreateSql,
+                &tblInfo->flatUpd);
+sqlUpdaterModRow(tblInfo->flatUpd, status->numAligns,
+                 "geneName='%s' WHERE name='%s'", geneName, status->acc);
+freeMem(buf);
 }
 
 static void updateRefFlat(struct sqlConnection *conn, struct gbSelect* select,
@@ -593,11 +652,11 @@ gMrnaOIUpd = NULL;
 gEstOIUpd = NULL;
 gIntronEstUpd = NULL;
 gRefSeqAliUpd = NULL;
-gRefGeneUpd = NULL;
-gRefFlatUpd = NULL;
 gXenoRefSeqAliUpd = NULL;
-gXenoRefGeneUpd = NULL;
-gXenoRefFlatUpd = NULL;
+if (gRefGeneInfo != NULL)
+    gRefGeneInfo->upd = NULL;
+if (gXenoRefGeneInfo != NULL)
+    gXenoRefGeneInfo->upd = NULL;
 }
 
 static void deleteGenBankAligns(struct sqlConnection *conn,

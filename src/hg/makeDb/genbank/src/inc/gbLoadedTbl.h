@@ -39,14 +39,18 @@ struct gbLoadedTbl
                               * Hash localmem is used for struct allocations
                               * as well */
     struct gbLoaded* uncommitted;  /* need to be committed to table */
+    struct sqlConnection *conn;    /* connection to use to access the table */
 };
 
 struct gbLoadedTbl* gbLoadedTblNew(struct sqlConnection *conn);
 /* create a new object for the loaded tables.  Create the table if it doesn't
  * exist. */
 
+boolean gbLoadedTblHaveRelease(struct gbLoadedTbl* loadedTbl,
+                               char *relName);
+/* check if the specified release is in the table. */
+
 void gbLoadedTblUseRelease(struct gbLoadedTbl* loadedTbl,
-                           struct sqlConnection *conn,
                            struct gbRelease *release);
 /* If the specified release has not been loaded from the database, load it.
  * Must be called before using a release. */
@@ -78,8 +82,7 @@ void gbLoadedTblSetExtFileUpdated(struct gbLoadedTbl* loadedTbl,
 /* Flag that type and accPrefix has had their extFile entries update
  * for this release. */
 
-void gbLoadedTblCommit(struct gbLoadedTbl* loadedTbl,
-                       struct sqlConnection *conn);
+void gbLoadedTblCommit(struct gbLoadedTbl* loadedTbl);
 /* commit pending changes */
 
 void gbLoadedTblFree(struct gbLoadedTbl** loadedTblPtr);

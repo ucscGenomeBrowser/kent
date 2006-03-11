@@ -77,7 +77,7 @@ BEGIN {
     }
 
     # set umask to preserve group write
-    umask 0022;
+    umask 0002;
         
     @gbCommon::savedArgv = @ARGV;
 }

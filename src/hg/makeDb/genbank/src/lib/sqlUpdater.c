@@ -7,7 +7,7 @@
 #include "gbFileOps.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: sqlUpdater.c,v 1.7 2005/02/02 06:35:13 genbank Exp $";
+static char const rcsid[] = "$Id: sqlUpdater.c,v 1.8 2006/03/11 00:07:59 markd Exp $";
 
 #define UPDATE_QUERY_MAX (10*1024)
 
@@ -145,6 +145,13 @@ if (su->updateCmds != NULL)
     updateRows(su, conn);
 if (su->tabFh != NULL)
     addRows(su, conn);
+}
+
+void sqlUpdaterCancel(struct sqlUpdater* su)
+/* drop pending changes  */
+{
+lmCleanup(&su->lm);
+su->updateCmds = NULL;
 }
 
 /*

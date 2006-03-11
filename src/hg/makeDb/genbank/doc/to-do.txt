@@ -974,3 +974,5 @@ Warning: NR_001874: malformed RefSeq CDS:
 
 
 - increase mrnaToGene merge size.
+
+- DQ075263 - two sequence version on same mod date.

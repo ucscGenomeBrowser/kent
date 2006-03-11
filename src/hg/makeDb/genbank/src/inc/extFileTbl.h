@@ -4,6 +4,7 @@
 #include "common.h"
 #include "hgRelate.h"
 struct sqlConnection;
+struct gbSelect;
 
 struct extFile
 /* This stores info on an external file. */
@@ -11,6 +12,13 @@ struct extFile
     HGID id;         /* id of file */
     char *path;      /* full path of file */
     off_t size;      /* size of file */
+};
+
+struct extFileRef
+/* list of references to extFile objects */
+{
+    struct extFileRef *next;
+    struct extFile *extFile;
 };
 
 struct extFileTbl
@@ -35,6 +43,10 @@ HGID extFileTblGet(struct extFileTbl *eft, struct sqlConnection *conn,
 
 struct extFile* extFileTblFindById(struct extFileTbl *eft, HGID id);
 /* Get the entry for an id, or null if not found */
+
+struct extFileRef* extFileTblMatch(struct extFileTbl *eft, struct gbSelect *select);
+/* get list of files with paths matching the specified list.  For refseqs,
+ * protein files are returned too.  Free results with slFreeList. */
 
 void extFileTblFree(struct extFileTbl **eftPtr);
 /* Free a extFileTbl object */

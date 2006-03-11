@@ -62,6 +62,37 @@ safef(query, sizeof(query), "show tables like '%s'", like);
 return sqlQuickList(conn, query);
 }
 
+/* mysql lock suffix, database if prefixed, just in case we want multiple
+ * gbLoadRnas on different databases*/
+static char *GB_LOCK_NAME = "genbank";
+
+void gbLockDb(struct sqlConnection *conn, char *db)
+/* get an advisory lock to keep two genbank process from updating
+ * the database at the same time.  If db is null, use the database
+ * associated with the connection. */
+{
+char query[128];
+int got;
+if (db == NULL)
+    db = sqlGetDatabase(conn);
+safef(query, sizeof(query), "SELECT GET_LOCK(\"%s.%s\", 0)", db, GB_LOCK_NAME);
+got = sqlNeedQuickNum(conn, query);
+if (!got)
+    errAbort("failed to get lock %s.%s", db, GB_LOCK_NAME);
+}
+
+void gbUnlockDb(struct sqlConnection *conn, char *db)
+/* free genbank advisory lock on database */
+{
+char query[128];
+if (db == NULL)
+    db = sqlGetDatabase(conn);
+safef(query, sizeof(query), "SELECT RELEASE_LOCK(\"%s.%s\")", db, GB_LOCK_NAME);
+sqlUpdate(conn, query);
+}
+
+
+
 /*
  * Local Variables:
  * c-file-style: "jkent-c"

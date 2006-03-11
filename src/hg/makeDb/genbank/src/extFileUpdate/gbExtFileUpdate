@@ -1,0 +1,55 @@
+#!/usr/bin/perl
+#
+# gbExtFileUpdate [options] database ...
+#
+# Update seq/extFile tables to point to the latest release
+#
+# $Id: gbExtFileUpdate,v 1.1 2006/03/11 00:07:58 markd Exp $
+#
+use strict;
+use warnings;
+use File::Basename;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use gbCommon;
+
+my $usage = 
+    " gbExtFileUpdate [options] database ...\n"
+    . "\n"
+    . "Update seq/extFile tables to point to the latest release.\n"
+;
+
+# update the specified file
+sub extFileUpdate($) {
+    my($db) = @_;
+    runProg("extFileUpdate -verbose=$gbCommon::verbose $db");
+}
+
+# Entry
+my $hostName = `hostname`;
+chomp($hostName);
+while (($#ARGV >= 0) && ($ARGV[0] =~ /^-.*/)) {
+    my $opt = $ARGV[0];
+    shift @ARGV;
+    if ($opt eq "-verbose") {
+        $gbCommon::verbose = 1;
+    } elsif ($opt =~ /^-verbose=/) {
+        $gbCommon::verbose = 1;
+    } else {
+        gbError("invalid option \"$opt\"\n$usage");
+    }
+}
+if ($#ARGV < 0) {
+    gbError("wrong # args: $usage");
+}
+my @databases = @ARGV;
+
+beginTask("dbload/$hostName", "extFileUpdate");
+setupHgConf();
+
+# load the database
+foreach my $db (@databases) {
+    extFileUpdate($db);
+}
+endTask();
+

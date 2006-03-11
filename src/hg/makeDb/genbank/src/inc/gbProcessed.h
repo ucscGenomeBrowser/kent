@@ -43,6 +43,10 @@ void gbProcessedGetDir(struct gbSelect* select, char* dir);
 void gbProcessedGetPath(struct gbSelect* select, char* ext, char* path);
 /* Get the path to a processed file base on selection criteria. */
 
+boolean gbProcessedGetPepFa(struct gbSelect* select, char* path);
+/* Get the path to a peptide fasta file base on selection criteria.
+ * Return false if there is not peptide file for the select srcDb. */
+
 boolean gbProcessedGetIndex(struct gbSelect* select, char* idxPath);
 /* Get the path to an aligned index file, returning false if it
  * doesn't exist.  If path is null, just check for existance. */

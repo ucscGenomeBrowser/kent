@@ -19,7 +19,7 @@
 #include "gbProcessed.h"
 #include "gbStatusTbl.h"
 
-static char const rcsid[] = "$Id: gbBuildState.c,v 1.18 2005/11/06 19:39:00 markd Exp $";
+static char const rcsid[] = "$Id: gbBuildState.c,v 1.19 2006/03/11 00:07:57 markd Exp $";
 
 static struct dbLoadOptions* gOptions; /* options from cmdline and conf */
 static int gErrorCnt = 0;  /* count of errors during build */
@@ -264,7 +264,7 @@ else
         errAbort("modDate for %s in release (%s) is before one in database (%s)",
                  entry->acc, gbFormatDate(processed->modDate),
                  gbFormatDate(tmpStatus->modDate));
-#
+#else
     if (processed->modDate < tmpStatus->modDate)
         {
         fprintf(stderr, "Warning: modDate for %s in release (%s) is before one in database (%s)\n",

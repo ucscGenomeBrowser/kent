@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.29 2005/11/04 22:40:13 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.30 2006/03/11 00:07:57 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -452,7 +452,7 @@ if (gSrcDb == GB_REFSEQ)
 status->modDate = raModDate;
 
 /* save CDS for use by the alignments */
-if (!genbankParseCds(raCds, &status->cdsStart, &status->cdsEnd))
+if (!genbankCdsParse(raCds, &status->cds))
     {
     /* not valid CDS, only warn if RefSeq, where we expect to be better */
     if (gSrcDb == GB_REFSEQ)
@@ -510,16 +510,11 @@ static HGID getPeptideFaId(struct sqlConnection *conn, struct gbSelect* select)
 HGID pepFaId = 0;
 char pepFaPath[PATH_LEN];
 
-gbProcessedGetDir(select, pepFaPath);
-strcat(pepFaPath, "/pep");
-if (select->accPrefix != NULL)
+if (gbProcessedGetPepFa(select, pepFaPath))
     {
-    strcat(pepFaPath, ".");
-    strcat(pepFaPath, select->accPrefix);
+    if (fileExists(pepFaPath))
+        pepFaId = getExtFileId(conn, pepFaPath);
     }
-strcat(pepFaPath, ".fa");
-if (fileExists(pepFaPath))
-    pepFaId = getExtFileId(conn, pepFaPath);
 return pepFaId;
 }
 

@@ -1,11 +1,15 @@
 #include "extFileTbl.h"
+#include "gbDefs.h"
+#include "gbRelease.h"
+#include "gbUpdate.h"
 #include "hash.h"
 #include "jksql.h"
 #include "gbFileOps.h"
 #include "sqlDeleter.h"
 #include "localmem.h"
+#include "dystring.h"
 
-static char const rcsid[] = "$Id: extFileTbl.c,v 1.5 2005/11/06 19:39:00 markd Exp $";
+static char const rcsid[] = "$Id: extFileTbl.c,v 1.6 2006/03/11 00:07:58 markd Exp $";
 
 /*
  * Note: this use immediate inserts rather than batch, because the tables
@@ -120,6 +124,61 @@ struct extFile* extFileTblFindById(struct extFileTbl *eft, HGID id)
 char idBuf[64];
 safef(idBuf, sizeof(idBuf), "%d", id);
 return hashFindVal(eft->idHash, idBuf);
+}
+
+static char *matchWildCard(struct gbSelect *select, char *filePrefix)
+/* construct wildcard for match, free string when done */
+{
+struct dyString *wildCard = dyStringNew(0);
+dyStringAppend(wildCard, "*/data/processed/");
+dyStringAppend(wildCard, select->release->name);
+dyStringPrintf(wildCard, "/%s/%s",
+               ((select->update == NULL) ? "*" : select->update->name),
+               filePrefix);
+if (select->accPrefix != NULL)
+    dyStringPrintf(wildCard, ".%s", select->accPrefix);
+dyStringAppend(wildCard, ".fa");
+return dyStringCannibalize(&wildCard);
+}
+
+static struct extFileRef *extFileRefNew(struct extFile *ef)
+/* construct a reference to ef */
+{
+struct extFileRef *efr;
+AllocVar(efr);
+efr->extFile = ef;
+return efr;
+}
+
+static void matchForFileType(struct extFileTbl *eft, struct gbSelect *select,
+                             char *filePrefix, struct extFileRef **extFiles)
+/* match based on file name prefix, used so we can get pep.fa files. */
+{
+char *wildCard = matchWildCard(select, filePrefix);
+struct hashCookie cookie = hashFirst(eft->pathHash);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    {
+    struct extFile *ef = hel->val;
+    if (wildMatch(wildCard, ef->path))
+        slSafeAddHead(extFiles, extFileRefNew(ef));
+    }
+    freeMem(wildCard);
+}
+
+struct extFileRef* extFileTblMatch(struct extFileTbl *eft, struct gbSelect *select)
+/* get list of files with paths matching the specified list.  For refseqs,
+ * protein files are returned too.  Free results with slFreeList. */
+{
+struct extFileRef *extFiles = NULL;
+matchForFileType(eft, select, "", &extFiles);
+if (select->type & GB_MRNA)
+    matchForFileType(eft, select, "mrna", &extFiles);
+if (select->type & GB_EST)
+    matchForFileType(eft, select, "est", &extFiles);
+if (select->release->srcDb & GB_REFSEQ)
+    matchForFileType(eft, select, "pep", &extFiles);
+return extFiles;
 }
 
 void extFileTblFree(struct extFileTbl** eftPtr)

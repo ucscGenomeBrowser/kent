@@ -28,9 +28,10 @@
 #include "sqlUpdater.h"
 #include "sqlDeleter.h"
 #include "extFileTbl.h"
+#include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.29 2005/11/07 03:53:11 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.30 2006/03/11 00:07:57 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -83,35 +84,6 @@ static struct sqlUpdater* gPendingStatusUpdates = NULL;
 /* loaded updates table */
 static struct gbLoadedTbl* gLoadedTbl = NULL;
 
-/* mysql lock suffix, database if prefixed, just incase we want multiple
- * gbLoadRnas on different databases*/
-static char *GB_LOCK_NAME = "genbank";
-
-void lockDb(struct sqlConnection *conn, char *db)
-/* get an advisory lock to keep two gbLoadRna process from updating
- * the table at the same time.  If db is null, use current db */
-{
-char query[128];
-int got;
-if (db == NULL)
-    db = sqlGetDatabase(conn);
-
-safef(query, sizeof(query), "SELECT GET_LOCK(\"%s.%s\", 0)", db, GB_LOCK_NAME);
-got = sqlNeedQuickNum(conn, query);
-if (!got)
-    errAbort("failed to get lock %s.%s", db, GB_LOCK_NAME);
-}
-
-void unlockDb(struct sqlConnection *conn, char *db)
-/* free advisory lock */
-{
-char query[128];
-if (db == NULL)
-    db = sqlGetDatabase(conn);
-safef(query, sizeof(query), "SELECT RELEASE_LOCK(\"%s.%s\")", db, GB_LOCK_NAME);
-sqlUpdate(conn, query);
-}
-
 void checkForStop()
 /* called at safe places to check for stop request, either from a signal
  * or var/dbload.stop existing */
@@ -156,39 +128,6 @@ if (existCnt > 0)
     errAbort("drop tables with -drop or don't specify -initialLoad");
     }
 
-}
-
-void getSelPartitions(struct gbIndex* index,
-                      unsigned srcDb,
-                      unsigned type,
-                      struct gbSelect** selectList)
-/* find selected partitions based on attributes and options */
-{
-unsigned orgCats = 0;
-if (dbLoadOptionsGetAttr(&gOptions, srcDb, type, GB_NATIVE)->load)
-    orgCats |= GB_NATIVE;
-if (dbLoadOptionsGetAttr(&gOptions, srcDb, type, GB_XENO)->load)
-    orgCats |= GB_XENO;
-
-if (orgCats)
-    {
-    struct gbSelect* select
-        = gbIndexGetPartitions(index, GB_ALIGNED, srcDb,
-                               gOptions.relRestrict, type, orgCats,
-                               gOptions.accPrefixRestrict);
-    *selectList = slCat(*selectList, select);
-    }
-}
-
-struct gbSelect* getPartitions(struct gbIndex* index)
-/* build a list of partitions to load based on the command line and
- * conf file options and whats in the index */
-{
-struct gbSelect* selectList = NULL;
-getSelPartitions(index, GB_GENBANK, GB_MRNA, &selectList);
-getSelPartitions(index, GB_GENBANK, GB_EST, &selectList);
-getSelPartitions(index, GB_REFSEQ, GB_MRNA, &selectList);
-return selectList;
 }
 
 void deleteOutdated(struct sqlConnection *conn, struct gbSelect* select,
@@ -459,7 +398,7 @@ else
 safef(tmpDir, sizeof(tmpDir), "%s/%s/%s/%s",
       gWorkDir, select->release->name, select->release->genome->database,
       typePrefix);
-if ((gOptions.flags & DBLOAD_DRY_RUN) == 0)
+if (!(gOptions.flags & DBLOAD_DRY_RUN))
     gbMakeDirs(tmpDir);
 
 extFileUpdate = extFileShouldUpdate(select);
@@ -508,7 +447,7 @@ if (extFileUpdate || (gOptions.flags & DBLOAD_INITIAL))
     gbLoadedTblSetExtFileUpdated(gLoadedTbl, select);
 
 if ((gOptions.flags & DBLOAD_INITIAL) == 0)
-    gbLoadedTblCommit(gLoadedTbl, conn);
+    gbLoadedTblCommit(gLoadedTbl);
 
 /* print before freeing memory */
 gbVerbLeave(3, "update %s", gbSelectDesc(select));
@@ -564,7 +503,7 @@ void loadPartition(struct gbSelect* select, struct sqlConnection* conn,
 checkForStop();  /* don't even get started */
 
 /* Need to make sure this release has been loaded into the gbLoaded obj */
-gbLoadedTblUseRelease(gLoadedTbl, conn, select->release);
+gbLoadedTblUseRelease(gLoadedTbl, select->release);
 
 /* if reloading, clean everything out */
 if (gReload)
@@ -595,7 +534,7 @@ while (gPendingStatusUpdates != NULL)
     sqlUpdaterCommit(statUpd, conn);
     sqlUpdaterFree(&statUpd);
     }
-gbLoadedTblCommit(gLoadedTbl, conn);
+gbLoadedTblCommit(gLoadedTbl);
 hFreeConn(&conn);
 }
 
@@ -625,7 +564,7 @@ if (gReload && (gOptions.flags & DBLOAD_DRY_RUN))
 
 gbVerbEnter(1, "gbLoadRna");
 conn = hAllocConn();
-lockDb(conn, NULL);
+gbLockDb(conn, NULL);
 
 if (gOptions.flags & DBLOAD_INITIAL)
     checkInitialLoad(conn);
@@ -634,7 +573,7 @@ if (gOptions.flags & DBLOAD_INITIAL)
 if (((gOptions.flags & DBLOAD_DRY_RUN) == 0) && (reloadList != NULL))
     gbReloadDelete(reloadList, gWorkDir);
 
-selectList = getPartitions(index);
+selectList = dbLoadPartitionsGet(&gOptions, index);
 if ((gOptions.flags & DBLOAD_INITIAL) && (selectList == NULL))
     errAbort("-initialLoad specified and no sequences were found to load");
 
@@ -663,7 +602,7 @@ if ((gOptions.flags & DBLOAD_EXT_FILE_UPDATE) && ((gOptions.flags & DBLOAD_DRY_R
 slFreeList(&selectList);
 gbMetaDataFree();
 gbLoadedTblFree(&gLoadedTbl);
-unlockDb(conn, NULL);
+gbUnlockDb(conn, NULL);
 hFreeConn(&conn);
 
 /* must go to stderr to be logged */
@@ -694,13 +633,13 @@ struct sqlConnection *conn;
 gbVerbEnter(1, "dropAll");
 hgSetDb(database);
 conn = hAllocConn();
-lockDb(conn, NULL);
+gbLockDb(conn, NULL);
 
 tables = getTableList(conn);
 for (tbl = tables; tbl != NULL; tbl = tbl->next)
     sqlDropTable(conn, tbl->name);
 slFreeList(&tables);
-unlockDb(conn, NULL);
+gbUnlockDb(conn, NULL);
 hFreeConn(&conn);
 gbVerbLeave(1, "dropAll");
 }
@@ -739,8 +678,8 @@ struct sqlConnection *conn;
 gbVerbEnter(1, "copyAll");
 hgSetDb(srcDb);
 conn = hAllocConn();
-lockDb(conn, srcDb);
-lockDb(conn, destDb);
+gbLockDb(conn, srcDb);
+gbLockDb(conn, destDb);
 
 copyChromInfo(conn, destDb);
 
@@ -751,8 +690,8 @@ for (tbl = tables; tbl != NULL; tbl = tbl->next)
     copyTable(conn, destDb, tbl->name, tbl->name);
     }
 slFreeList(&tables);
-unlockDb(conn, destDb);
-unlockDb(conn, srcDb);
+gbUnlockDb(conn, destDb);
+gbUnlockDb(conn, srcDb);
 hFreeConn(&conn);
 gbVerbLeave(1, "copyAll");
 }
@@ -768,8 +707,8 @@ char *sep;
 gbVerbEnter(1, "moveAll");
 hgSetDb(srcDb);
 conn = hAllocConn();
-lockDb(conn, srcDb);
-lockDb(conn, destDb);
+gbLockDb(conn, srcDb);
+gbLockDb(conn, destDb);
 
 copyChromInfo(conn, destDb);
 
@@ -787,8 +726,8 @@ sqlUpdate(conn, sqlCmd->string);
 dyStringFree(&sqlCmd);
 slFreeList(&tables);
 
-unlockDb(conn, destDb);
-unlockDb(conn, srcDb);
+gbUnlockDb(conn, destDb);
+gbUnlockDb(conn, srcDb);
 hFreeConn(&conn);
 gbVerbLeave(1, "moveAll");
 }

@@ -13,7 +13,11 @@ struct seqTbl
  * memory.  */
 {
     HGID nextId;                 /* next available sequence id */
-    struct sqlUpdater* updater;  /* object that handles loading */
+    char *tmpDir;                /* tmp directory to use, if not NULL */
+    int verbose;                 /* verbose level to use */
+    struct sqlUpdater* updater;  /* object that handles updating */
+    struct sqlDeleter* deleter;  /* object that handles deleting */
+    
 };
 
 /* name of gbSeqTbl */
@@ -51,11 +55,17 @@ void seqTblMod(struct seqTbl *st, HGID id, int version, HGID extFileId,
 /* Modify attributes of an existing sequence.  If fileId is not zero, set
  * extFile, size, file_off and file_size. If version >= 0, set version.*/
 
+void seqTblDelete(struct seqTbl *st, char *acc);
+/* delete a row from the seqTbl */
+
 HGID seqTblGetId(struct seqTbl *st, struct sqlConnection *conn, char* acc);
 /* Get the id for a sequence, or 0 of it's not it the table */
 
 void seqTblCommit(struct seqTbl *st, struct sqlConnection *conn);
 /* commit pending changes */
+
+void seqTblCancel(struct seqTbl *st);
+/* cancel pending changes */
 
 struct hash* seqTblLoadAcc(struct sqlConnection *conn,
                            struct gbSelect* select);

@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: gbLoadedTbl.c,v 1.4 2005/11/07 03:53:11 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadedTbl.c,v 1.5 2006/03/11 00:07:59 markd Exp $";
 
 static char* GB_LOADED_TBL = "gbLoaded";
 static char* createSql =
@@ -127,6 +127,7 @@ struct gbLoadedTbl* loadedTbl;
 AllocVar(loadedTbl);
 loadedTbl->releaseHash = hashNew(10);
 loadedTbl->entryHash = hashNew(19);
+loadedTbl->conn = conn;
 
 if (!sqlTableExists(conn, GB_LOADED_TBL))
     sqlRemakeTable(conn, GB_LOADED_TBL, createSql);
@@ -136,8 +137,29 @@ else if (sqlFieldIndex(conn, GB_LOADED_TBL, "extFileUpdated") < 0)
 return loadedTbl;
 }
 
-static void loadRelease(struct gbLoadedTbl* loadedTbl, 
-                        struct sqlConnection *conn, struct gbRelease *release)
+boolean gbLoadedTblHaveRelease(struct gbLoadedTbl* loadedTbl,
+                               char *relName)
+/* check if the specified release is in the table. */
+{
+
+char query[256];
+struct sqlResult *result;
+char *dotPtr = strchr(relName, '.');
+char **row;
+boolean have;
+*dotPtr = '\0';
+safef(query, sizeof(query),
+      "SELECT count(*) FROM gbLoaded WHERE (srcDb = '%s') AND (loadRelease = '%s')",
+      relName, dotPtr+1);
+*dotPtr = '.';
+result = sqlGetResult(loadedTbl->conn, query);
+have = ((row = sqlNextRow(result)) != NULL);
+sqlFreeResult(&result);
+return have;
+}
+
+static void loadRelease(struct gbLoadedTbl* loadedTbl,
+                        struct gbRelease *release)
 /* load table rows for a release */
 {
 char query[256];
@@ -147,15 +169,15 @@ safef(query, sizeof(query),
       "SELECT loadUpdate, type, accPrefix, extFileUpdated FROM gbLoaded"
       " WHERE (srcDb = '%s') AND (loadRelease = '%s')",
       gbSrcDbName(release->srcDb), release->version);
-result = sqlGetResult(conn, query);
+result = sqlGetResult(loadedTbl->conn, query);
 while ((row = sqlNextRow(result)) != NULL)
     addEntry(loadedTbl, release, row[0], gbParseType(row[1]),
              ((strlen(row[2]) > 0) ? row[2] : NULL),
              sqlUnsigned(row[3]));
+sqlFreeResult(&result);
 }
 
 void gbLoadedTblUseRelease(struct gbLoadedTbl* loadedTbl,
-                           struct sqlConnection *conn,
                            struct gbRelease *release)
 /* If the specified release has not been loaded from the database, load it.
  * Must be called before using a release. */
@@ -163,7 +185,7 @@ void gbLoadedTblUseRelease(struct gbLoadedTbl* loadedTbl,
 if (hashLookup(loadedTbl->releaseHash, release->name) == NULL)
     {
     hashAdd(loadedTbl->releaseHash, release->name, NULL);
-    loadRelease(loadedTbl, conn, release);
+    loadRelease(loadedTbl, release);
     }
 }
 
@@ -251,7 +273,7 @@ for (loaded = relHashEl->val; loaded != NULL; loaded = loaded->relNext)
     }
 }
 
-static void insertRow(struct sqlConnection *conn, struct gbLoaded *loaded)
+static void insertRow(struct gbLoadedTbl* loadedTbl, struct gbLoaded *loaded)
 /* insert a row into the table */
 {
 char query[512];
@@ -262,20 +284,19 @@ safef(query, sizeof(query),
       loaded->loadRelease, loaded->loadUpdate,
       ((loaded->accPrefix == NULL) ? "" : loaded->accPrefix),
       loaded->extFileUpdated);
-sqlUpdate(conn, query);
+sqlUpdate(loadedTbl->conn, query);
 }
 
-static void updateRow(struct sqlConnection *conn, struct gbLoaded *loaded)
+static void updateRow(struct gbLoadedTbl* loadedTbl, struct gbLoaded *loaded)
 /* update a row in the table.  Only the extFileUpdated field can be updated */
 {
 char query[512];
 safef(query, sizeof(query), "UPDATE %s SET extFileUpdated=%d",
       GB_LOADED_TBL,  loaded->extFileUpdated);
-sqlUpdate(conn, query);
+sqlUpdate(loadedTbl->conn, query);
 }
 
-void gbLoadedTblCommit(struct gbLoadedTbl* loadedTbl,
-                       struct sqlConnection *conn)
+void gbLoadedTblCommit(struct gbLoadedTbl* loadedTbl)
 /* commit pending changes */
 {
 struct gbLoaded *loaded;
@@ -283,9 +304,9 @@ for (loaded = loadedTbl->uncommitted;  loaded != NULL; loaded = loaded->next)
     {
     assert(loaded->isDirty);
     if (loaded->isNew)
-        insertRow(conn, loaded);
+        insertRow(loadedTbl, loaded);
     else
-        updateRow(conn, loaded);
+        updateRow(loadedTbl, loaded);
     loaded->isNew = loaded->isDirty = FALSE;
     }
 loadedTbl->uncommitted = NULL;

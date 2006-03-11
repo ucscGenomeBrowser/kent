@@ -51,6 +51,9 @@ __attribute__((format(printf, 3, 4)))
 void sqlUpdaterCommit(struct sqlUpdater* su, struct sqlConnection *conn);
 /* commit pending changes */
 
+void sqlUpdaterCancel(struct sqlUpdater* su);
+/* drop pending changes  */
+
 #endif
 
 /*

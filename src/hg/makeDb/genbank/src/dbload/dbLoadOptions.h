@@ -3,6 +3,7 @@
 #define GBLOADOPTIONS_H
 
 #include "gbDefs.h"
+struct gbIndex;
 
 #define DBLOAD_INITIAL           0x01   /* initial load of this databases */
 #define DBLOAD_GO_FASTER         0x02   /* optimize speed over memory */
@@ -42,7 +43,6 @@ struct dbLoadAttr* dbLoadOptionsGetAttr(struct dbLoadOptions* options,
                                         unsigned srcDb, unsigned type,
                                         unsigned orgCat);
 /* get a pointer the load attributes */
-
 #endif
 /*
  * Local Variables:

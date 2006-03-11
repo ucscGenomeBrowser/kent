@@ -157,3 +157,40 @@ for human MGC genes but in general it can be for any MGC species.
        previous table.
 
    II. Cron and CGI programs to initiate updates of RTDB.
+
+5. CGI security
+   A. Issues:
+      - Two type of users will be required for the update process:
+        - a unix user that will write files to the file system
+        - a database user that can update the database
+
+      - Access is granted to the database via the a .hg.conf file owned
+        and only readable by that user.
+
+      - CGIs execute as user "www". To similify the implementation,
+        it's desirably for the CGI to directly execute programs to
+        download the data and update the databases.
+
+   B. Configuration
+
+      - The update processes run as a unix user "mgcrtdb".  This uses exists
+        only on the mgc server and no login is allowed.  User "genbank" can
+        sudo to become this user for management purposes.
+
+      - The tables are created and updated by MySQL user "mgcrtdb", which
+        has write access only to the required subset of tables on the 
+        databases containing mgc tracks.
+
+      - A file /genbank/etc/.mgcrtdb.hg.conf, own by "mgcrtdb" contains
+        the write password for MySQL user "mgcrtdb".
+
+      - A suid mgcrtdb program, /genbank/libexec/i386/rtdbWwwUpdate, is called
+        by the CGI to exec the actually update script
+        (/genbank/bin/rtdbUpdate).  rtdbWwwUpdate will ensure that it is being
+        called by user "www" and will reset the path and environment to
+        a known state before execing the actual update script.
+        
+
+
+      
+   

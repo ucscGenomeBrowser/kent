@@ -184,7 +184,6 @@ struct dbLoadAttr* dbLoadOptionsGetAttr(struct dbLoadOptions* options,
 return &(options->loadAttr[gbSrcDbIdx(srcDb)][gbTypeIdx(type)][gbOrgCatIdx(orgCat)]);
 
 }
-
 /*
  * local Variables:
  * c-file-style: "jkent-c"

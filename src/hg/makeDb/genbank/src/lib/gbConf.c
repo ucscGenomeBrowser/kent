@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "localmem.h"
 
-static char const rcsid[] = "$Id: gbConf.c,v 1.3 2005/08/31 14:41:05 markd Exp $";
+static char const rcsid[] = "$Id: gbConf.c,v 1.4 2006/03/11 00:07:59 markd Exp $";
 
 /* standard conf file */
 char *GB_CONF_FILE = "etc/genbank.conf";
@@ -98,6 +98,7 @@ while (lineFileNextReal(lf, &line))
     dyStringAppend(lineBuf, line); 
     parseConfLine(lf, conf, lineBuf->string, valueBuf);
     }
+lineFileClose(&lf);
 dyStringFree(&lineBuf);
 dyStringFree(&valueBuf);
 return conf;

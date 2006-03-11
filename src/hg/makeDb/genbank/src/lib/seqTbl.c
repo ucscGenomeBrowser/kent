@@ -1,10 +1,12 @@
 #include "seqTbl.h"
 #include "sqlUpdater.h"
+#include "sqlDeleter.h"
 #include "gbFileOps.h"
 #include "gbDefs.h"
+#include "gbVerb.h"
 #include "gbRelease.h"
 
-static char const rcsid[] = "$Id: seqTbl.c,v 1.5 2005/11/06 22:56:26 markd Exp $";
+static char const rcsid[] = "$Id: seqTbl.c,v 1.6 2006/03/11 00:07:59 markd Exp $";
 
 /*
  * Note: don't use autoincrement for id column, as it causes problems for
@@ -54,6 +56,9 @@ struct seqTbl* seqTblNew(struct sqlConnection* conn, char* tmpDir,
 {
 struct seqTbl *seqTbl;
 AllocVar(seqTbl);
+seqTbl->verbose = verbose;
+if (tmpDir != NULL)
+    seqTbl->tmpDir = cloneString(tmpDir);
 if (!sqlTableExists(conn, SEQ_TBL))
     {
     sqlRemakeTable(conn, SEQ_TBL, createSql);
@@ -61,18 +66,29 @@ if (!sqlTableExists(conn, SEQ_TBL))
     }
 else
     seqTbl->nextId = hgGetMaxId(conn, SEQ_TBL) + 1;
-if (tmpDir != NULL)
-    seqTbl->updater = sqlUpdaterNew(SEQ_TBL, tmpDir, verbose, NULL);
 return seqTbl;
 }
 
 void seqTblFree(struct seqTbl** stPtr)
 /* free a seqTbl object */
 {
-if (*stPtr != NULL)
+struct seqTbl* st = *stPtr;
+if (st != NULL)
     {
-    sqlUpdaterFree(&(*stPtr)->updater);
+    sqlUpdaterFree(&st->updater);
+    sqlDeleterFree(&st->deleter);
+    freeMem(st->tmpDir);
     freez(stPtr);
+    }
+}
+
+static void ensureUpdater(struct seqTbl *st)
+/* ensure updater object exists */
+{
+if (st->updater == NULL)
+    {
+    assert(st->tmpDir != NULL);
+    st->updater = sqlUpdaterNew(SEQ_TBL, st->tmpDir, st->verbose, NULL);
     }
 }
 
@@ -81,7 +97,7 @@ HGID seqTblAdd(struct seqTbl *st, char* acc, int version, char* type,
                unsigned recSize)
 /* add a seq to the table, allocating an id */
 {
-assert(st->updater != NULL);
+ensureUpdater(st);
 sqlUpdaterAddRow(st->updater, "%u\t%s\t%d\t%u\t%u\t%llu\t%u\t%s\t%s",
                  st->nextId, acc, version, seqSize,
                  extFileId, (long long)fileOff, recSize, type, srcDb);
@@ -105,7 +121,22 @@ if (extFileId != 0)
                  seqSize, extFileId, (long long)fileOff, recSize);
 len += safef(query+len, sizeof(query)-len, " WHERE id=%u", id);
 
+ensureUpdater(st);
 sqlUpdaterModRow(st->updater, 1, "%s", query);
+}
+
+static void ensureDeleter(struct seqTbl *st)
+/* ensure deleter object exists */
+{
+if (st->deleter == NULL)
+    st->deleter = sqlDeleterNew(st->tmpDir, (st->verbose >= gbVerbose));
+}
+
+void seqTblDelete(struct seqTbl *st, char *acc)
+/* delete a row from the seqTbl */
+{
+ensureDeleter(st);
+sqlDeleterAddAcc(st->deleter, acc);
 }
 
 HGID seqTblGetId(struct seqTbl *st, struct sqlConnection *conn, char* acc)
@@ -120,7 +151,17 @@ return sqlQuickNum(conn, query);
 void seqTblCommit(struct seqTbl *st, struct sqlConnection *conn)
 /* commit pending changes */
 {
-sqlUpdaterCommit(st->updater, conn);
+if (st->deleter != NULL)
+    sqlDeleterDel(st->deleter, conn, SEQ_TBL, "acc");
+if (st->updater != NULL)
+    sqlUpdaterCommit(st->updater, conn);
+}
+
+void seqTblCancel(struct seqTbl *st)
+/* cancel pending changes */
+{
+if (st->updater != NULL)
+    sqlUpdaterCancel(st->updater);
 }
 
 static void buildSelect(struct gbSelect* select, char* query,

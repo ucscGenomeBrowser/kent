@@ -11,7 +11,7 @@
 #include "errabort.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: gbProcessed.c,v 1.5 2004/10/26 01:05:38 markd Exp $";
+static char const rcsid[] = "$Id: gbProcessed.c,v 1.6 2006/03/11 00:07:59 markd Exp $";
 
 /* column indices in gbidx files */
 #define GBIDX_ACC_COL       0
@@ -44,6 +44,23 @@ if (select->accPrefix != NULL)
     len += safef(path+len, PATH_LEN-len, ".%s", select->accPrefix);
 if (ext != NULL)
     len += safef(path+len, PATH_LEN-len, ".%s", ext);
+}
+
+boolean gbProcessedGetPepFa(struct gbSelect* select, char* path)
+/* Get the path to a peptide fasta file base on selection criteria.
+ * Return false if there is not peptide file for the select srcDb. */
+{
+if (select->release->srcDb != GB_REFSEQ)
+    return FALSE;
+gbProcessedGetDir(select, path);
+strcat(path, "/pep");
+if (select->accPrefix != NULL)
+    {
+    strcat(path, ".");
+    strcat(path, select->accPrefix);
+    }
+strcat(path, ".fa");
+return TRUE;
 }
 
 struct gbProcessed* gbProcessedNew(struct gbEntry* entry,
