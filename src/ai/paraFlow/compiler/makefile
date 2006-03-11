@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 O = builtIn.o cCaseCode.o cCoder.o checkPara.o checkPoly.o codedType.o \
     ctar.o defFile.o main.o pfBindVars.o \
     pfParse.o pfScope.o pfToken.o pfType.o parseDump.o parseInto.o \
-    recodedType.o tokInto.o util.o
+    recodedType.o refCount.o tokInto.o util.o
 
 paraFlow: $(O)
 	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/paraFlow $O ../../../lib/$(MACHTYPE)/jkweb.a -lm

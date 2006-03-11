@@ -12,6 +12,7 @@
 #include "recodedType.h"
 #include "codedType.h"
 #include "ctar.h"
+#include "refCount.h"
 #include "cCoder.h"
 
 #define globalPrefix "pf_"
@@ -407,10 +408,14 @@ if (type->base->needsCleanup)
 	fprintf(f, "_pf_var_cleanup(%s);\n", name);
     else
 	{
-	fprintf(f, "if (0!=%s && (%s->_pf_refCount-=1) <= 0)\n", name, name);
+	fprintf(f, "if (0!=%s)\n", name);
+	fprintf(f, "{\n");
+	codeVarDecRef(f, name);
+	fprintf(f, "if (%s->_pf_refCount == 0)\n", name);
 	fprintf(f, "   %s->_pf_cleanup(%s, ", name, name);
 	codeForType(pfc, f, type);
 	fprintf(f, ");\n");
+	fprintf(f, "}\n");
 	}
     }
 }
@@ -431,15 +436,19 @@ if (type->base->needsCleanup)
         {
 	fprintf(f, "if (0!=");
 	codeParamAccess(pfc, f, type->base, stack);
-	fprintf(f, " && (");
+	fprintf(f, ")\n");
+	fprintf(f, "{\n");
+	codeStackDecRef(f, stack);
+	fprintf(f, "if (");
 	codeParamAccess(pfc, f, type->base, stack);
-	fprintf(f, "->_pf_refCount-=1) <= 0)\n");
+	fprintf(f, "->_pf_refCount == 0)\n");
 	codeParamAccess(pfc, f, type->base, stack);
 	fprintf(f, "->_pf_cleanup(");
 	codeParamAccess(pfc, f, type->base, stack);
 	fprintf(f, ", ");
 	codeForType(pfc, f, type);
 	fprintf(f, ");\n");
+	fprintf(f, "}\n");
 	}
     }
 }
@@ -543,8 +552,10 @@ else
 	codeBaseType(pfc, f, elBase);
 	fprintf(f, "*)(_pf_collection->elements + _pf_offset));\n");
 	if (elBase->needsCleanup)
-	    fprintf(f, "if (0 != %s) %s->_pf_refCount+=1;\n", elName->string,
-		elName->string);
+	    {
+	    fprintf(f, "if (0 != %s) ", elName->string);
+	    codeVarIncRef(f, elName->string);
+	    }
 	}
     else if (base == pfc->stringType || base == pfc->dyStringType)
 	{
@@ -589,7 +600,7 @@ static void saveBackToCollection(struct pfCompile *pfc, FILE *f,
 struct pfBaseType *base = collectionPp->ty->base;
 struct dyString *elName = varName(pfc, elPp->var);
 if (elPp->ty->base->needsCleanup)
-    fprintf(f, "%s->_pf_refCount += 1;\n", elName->string);
+    codeVarIncRef(f, elName->string);
 if (base == pfc->arrayType)
     {
     fprintf(f, "*((");
@@ -1013,7 +1024,7 @@ if (collectBase == pfc->arrayType || collectBase == pfc->indexRangeType)
     fprintf(f, "if (_pf_passed[_pf_ix++])\n");
     fprintf(f, "{\n");
     if (element->ty->base->needsCleanup)
-        fprintf(f, "%s->_pf_refCount+=1;\n", elName->string);
+	codeVarIncRef(f, elName->string);
     fprintf(f, "*((");
     codeBaseType(pfc, f, element->ty->base);
     fprintf(f, "*)(_pf_result->elements + _pf_resOffset))");
@@ -1049,7 +1060,7 @@ else if (collectBase == pfc->dirType)
     fprintf(f, "=%s;\n", elName->string);
     if (elType->base->needsCleanup)
 	{
-        fprintf(f, "%s->_pf_refCount+=1;\n", elName->string);
+	codeVarIncRef(f, elName->string);
 	fprintf(f, "_pf_dir_add_obj(_pf_result, _pf_key, %s+%d);\n",  
 		stackName, stack);
 	}
@@ -1082,10 +1093,14 @@ fprintf(f, " {\n struct _pf_object *_pf_tmp = (struct _pf_object *)\n  ");
 static void endCleanTemp(struct pfCompile *pfc, FILE *f, struct pfType *type)
 {
 fprintf(f, ";\n");
-fprintf(f, " if (_pf_tmp != 0 && --_pf_tmp->_pf_refCount <= 0)\n");
+fprintf(f, " if (_pf_tmp != 0)\n");
+fprintf(f, "{\n");
+codeVarDecRef(f, "_pf_tmp");
+fprintf(f, "if (_pf_tmp->_pf_refCount == 0)\n");
 fprintf(f, "   _pf_tmp->_pf_cleanup(_pf_tmp, ");
 codeForType(pfc, f, type);
 fprintf(f, ");\n");
+fprintf(f, "}\n");
 fprintf(f, " }\n");
 }
 
@@ -1107,8 +1122,7 @@ else if (base->needsCleanup)
     fprintf(f, "if (0 != ");
     codeStackAccess(f, stack);
     fprintf(f, ".Obj) ");
-    codeStackAccess(f, stack);
-    fprintf(f, ".Obj->_pf_refCount+=1;\n");
+    codeStackIncRef(f, stack);
     }
 }
 
@@ -1749,7 +1763,7 @@ if (addRef && base->needsCleanup)
     else
 	{
 	fprintf(f, "if (0 != %s) ", name->string);
-	fprintf(f, "%s->_pf_refCount+=1;\n", name->string);
+	codeVarIncRef(f, name->string);
 	}
     }
 codeParamAccess(pfc, f, base, stack);
