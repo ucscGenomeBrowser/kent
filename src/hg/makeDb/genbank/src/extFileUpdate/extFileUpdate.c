@@ -17,7 +17,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: extFileUpdate.c,v 1.1 2006/03/11 00:07:58 markd Exp $";
+static char const rcsid[] = "$Id: extFileUpdate.c,v 1.2 2006/03/11 03:37:45 genbank Exp $";
 
 /*
  * Algorithm:
@@ -80,14 +80,14 @@ unsigned cDnaFaId, pepFaId = 0;
 char path[PATH_LEN];
 
 gbProcessedGetPath(select, "fa", path);
-cDnaFaId = extFileTblGet(extFileTbl, conn, path);
-if (gbProcessedGetPepFa(select, path))
+if (fileExists(path))
     {
-    pepFaId = extFileTblGet(extFileTbl, conn, path);
+    cDnaFaId = extFileTblGet(extFileTbl, conn, path);
+    if (gbProcessedGetPepFa(select, path) && fileExists(path))
+        pepFaId = extFileTblGet(extFileTbl, conn, path);
+    gbProcessedGetPath(select, "ra.gz", path);
+    raInfoTblRead(rit, path, cDnaFaId, pepFaId);
     }
-
-gbProcessedGetPath(select, "ra.gz", path);
-raInfoTblRead(rit, path, cDnaFaId, pepFaId);
 }
 
 static struct raInfoTbl *loadPartRaInfo(struct extFileTbl* extFileTbl,
