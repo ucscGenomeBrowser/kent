@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.21 2006/03/11 03:56:37 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.22 2006/03/11 03:59:44 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -194,7 +194,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    start = sqlUnsigned(row[5]) + cel->start;
 	    endNum = sqlUnsigned(row[6]) + cel->start;
-	    if (loc_type = 3)
+	    // do this for loc_type == 1 as well?
+	    if (loc_type == 3)
 		start++;
 	    safef(endString, sizeof(endString), "%d", endNum);
 	    }
