@@ -1,3 +1,4 @@
+#include "time.h"
 #include "common.h"
 #include "errabort.h"
 #include "linefile.h"
@@ -6,7 +7,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: synthElemTree.c,v 1.7 2006/03/08 22:39:45 braney Exp $";
+static char const rcsid[] = "$Id: synthElemTree.c,v 1.8 2006/03/11 15:51:26 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -372,6 +373,7 @@ int didIt = 0;
 struct element *eList;
 int count;
 
+//for (count = 0; (count < 100) && (t >= r - 2) && ( t < r + n + 2); count++)
 for (count = 0; (count < 100) && (t >= r - 1) && ( t < r + n + 1); count++)
     t = 1 + random() % (slCount(g->elements) - 2);
 if (count == 100)
@@ -574,10 +576,18 @@ for (; generation < MaxGeneration ;generation++)
 	    }
 	else if ((r -= DupWt) < 0)
 	    {
+	    //if ((g->name[strlen(g->name) - 1] == 'D')
+		//|| (g->name[strlen(g->name) - 1] == 'I'))
+		//didIt = FALSE;
+	    //else
 	    didIt = duplicate(&nextList, g);
 	    }
 	else if ((r -= InverseWt) < 0)
 	    {
+//	    if ((g->name[strlen(g->name) - 1] == 'D')
+//		|| (g->name[strlen(g->name) - 1] == 'I'))
+//		didIt = FALSE;
+//	    else
 	    didIt = invert(&nextList, g);
 	    }
 	else if ((r -= NoWt) < 0)
@@ -604,7 +614,7 @@ outElementTrees(f, root);
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-int seed = time(NULL);
+long seed = time(NULL) + getpid();
 optionInit(&argc, argv, options);
 
 if (argc != 2)
@@ -617,7 +627,7 @@ SpeciesWt = optionInt( "SpeciesWt", 0);
 DelWt = optionInt( "DelWt", 0);
 DupWt = optionInt( "DupWt", 0);
 NoWt = optionInt( "NoWt", 0);
-seed = optionInt( "seed", 0);
+seed = optionInt( "seed", seed);
 Trace = optionExists("trace");
 InverseWt = optionInt( "InverseWt", 0);
 InfSites = optionExists( "InfSites");
@@ -627,6 +637,7 @@ if (InfSites)
 if (0 == SpeciesWt + DupWt + InverseWt + DelWt)
     errAbort("must specify at least one weight");
 
+printf("using seed: %ld\n",seed);
 srandom(seed);
 synthElemTree(argv[1]);
 return 0;
