@@ -9,7 +9,7 @@
  *    Probably due to submitters leaving off a base on a flank sequence.
  *
  * 2) SingleClassRangeLocType
- *    class = 'single' and loc_type = 1 (range)
+ *    class = 'single' and loc_type = 1,4,5,6 (range)
  *
  * 3) SingleClassWrongObservedPositiveStrand
  *    SingleClassWrongObservedNegativeStrand
@@ -37,7 +37,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.16 2006/03/10 00:28:48 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.17 2006/03/11 03:53:53 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -245,7 +245,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* SingleClass */
     if (sameString(row[4], "single"))
         {
-        if (loc_type == 1)
+        if (loc_type == 1 || loc_type == 4 || loc_type == 5 || loc_type == 6)
             writeToExceptionFile(chromName, row[1], row[2], row[0], "SingleClassRangeLocType");
         if (loc_type == 3)
             writeToExceptionFile(chromName, row[1], row[2], row[0], "SingleClassBetweenLocType");
