@@ -1,7 +1,8 @@
 /* snpContigLocusIdCondense 
  * Condense the ContigLocusIdFilter table to contain one row per snp_id,
    with unique, comma separated fxn_class values. */
-/* This assumes that the SNPs are in order!!! */
+/* This assumes that the SNPs are in order!!! 
+   errAbort if this is violated. */
 #include "common.h"
 
 #include "hdb.h"
@@ -21,7 +22,7 @@ char *functionStrings[] = {
 
 boolean functionFound[ArraySize(functionStrings)];
 
-static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.5 2006/02/27 23:05:16 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.6 2006/03/11 03:58:35 heather Exp $";
 
 static char *snpDb = NULL;
 
