@@ -1,30 +1,37 @@
 /* snpCheckClassAndObserved
  *
- * Log 6 exceptions:
+ * Log exceptions:
+ * 
+ * 0) SingleClassQuadAllelic and SingleClassTriAllelic 
  *
- * 1) SingleClassBetweenLocType
+ * 1) SingleClassWrongObserved
+ *    IndelClassTruncatedObserved and IndelClassObservedWrongFormat 
+ *    MixedClassTruncatedObserved and MixedClassObservedWrongFormat 
+ *    NamedClassObservedWrongFormat 
+ *
+ * 2) SingleClassBetweenLocType
  *    class = 'single' and loc_type = 3 (between)
  *
  *    Daryl tells me dbSNP wants to leave these as is.
  *    Probably due to submitters leaving off a base on a flank sequence.
  *
- * 2) SingleClassRangeLocType
+ * 3) SingleClassRangeLocType
  *    class = 'single' and loc_type = 1,4,5,6 (range)
  *
- * 3) SingleClassWrongObservedPositiveStrand
+ * 4) SingleClassWrongObservedPositiveStrand
  *    SingleClassWrongObservedNegativeStrand
  *
  *    For positive strand, if the allele is not in the observed string.
  *    For negative strand, if reverseComp(allele) is not in the observed string.
  *    
- * 4) DeletionClassWrongObservedSize
+ * 5) DeletionClassWrongObservedSize
  *    for class = 'deletion', compare the length 
  *    of the observed string to chromRange
  *
- * 5) DeletionClassWrongObserved
+ * 6) DeletionClassWrongObserved
  *    observed doesn't match refUCSC or refUCSCReverseComp
  *
- * 6) NamedClassWrongLocType
+ * 7) NamedClassWrongLocType
  *    for class = 'named'
  *    if observed like "LARGEDELETION" then expect loc_type = 1
  *    if observed like "LARGEINSERTION" then expect loc_type = 3
@@ -37,7 +44,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.17 2006/03/11 03:53:53 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.18 2006/03/11 04:08:07 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;

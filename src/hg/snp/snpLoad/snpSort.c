@@ -1,5 +1,5 @@
 /* snpSort - fifth step in dbSNP processing.
- * Read the chrN_snpTmp tables and sort.
+ * Read the chrN_snpTmp tables into memory and sort by position.
  * Rewrite to chrN_snpTmp tables.  
  * Get chromInfo from ContigInfo. */
 
@@ -7,7 +7,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSort.c,v 1.8 2006/03/08 22:57:12 heather Exp $";
+static char const rcsid[] = "$Id: snpSort.c,v 1.9 2006/03/11 04:04:33 heather Exp $";
 
 struct snpTmp
     {

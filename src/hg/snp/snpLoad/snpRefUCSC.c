@@ -5,6 +5,8 @@
  * Rename chrMT_snpTmp to chrM_snpTmp before running this.
  * Use UCSC chromInfo.  */
 
+/* Could check for coords larger than chromSize.
+   Relying on upstream ctgPos/ContigInfo checks for now. */
 
 #include "common.h"
 
@@ -16,7 +18,7 @@
 /* errAbort if larger SNP found */
 #define MAX_SNP_SIZE 1024
 
-static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.8 2006/03/09 16:29:53 heather Exp $";
+static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.9 2006/03/11 04:05:26 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
