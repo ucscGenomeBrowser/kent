@@ -17,7 +17,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: extFileUpdate.c,v 1.2 2006/03/11 03:37:45 genbank Exp $";
+static char const rcsid[] = "$Id: extFileUpdate.c,v 1.3 2006/03/11 05:51:46 markd Exp $";
 
 /*
  * Algorithm:
@@ -37,6 +37,7 @@ static struct optionSpec optionSpecs[] = {
     {"orgCat", OPTION_STRING},
     {"accPrefix", OPTION_STRING},
     {"dryRun", OPTION_BOOLEAN},
+    {"gbdbGenBank", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -44,6 +45,7 @@ static struct optionSpec optionSpecs[] = {
 static boolean gStopSignaled = FALSE;  /* stop at the end of the current
                                         * partition */
 static struct dbLoadOptions gOptions; /* options from cmdline and conf */
+static char* gGbdbGenBank = NULL;     /* root file path to put in database */
 
 static void sigStopSignaled(int sig)
 /* signal handler that sets the stopWhenSafe flag */
@@ -70,6 +72,14 @@ extFileTblClean(conn, (gbVerbose >= 4));
 gbVerbLeave(3, "cleaning extFileTbl");
 }
 
+static void mkGbdbPath(char *gbdbPath, char *relPath)
+/* convert relative path to a gbdb path */
+{
+strcpy(gbdbPath, gGbdbGenBank);
+strcat(gbdbPath, "/");
+strcat(gbdbPath, relPath);
+}
+
 static void loadUpdateRaInfo(struct sqlConnection *conn,
                              struct extFileTbl* extFileTbl,
                              struct gbSelect *select,
@@ -77,16 +87,21 @@ static void loadUpdateRaInfo(struct sqlConnection *conn,
 /* load raInfo for an update of a partition */
 {
 unsigned cDnaFaId, pepFaId = 0;
-char path[PATH_LEN];
+char relPath[PATH_LEN], gbdbPath[PATH_LEN];
 
-gbProcessedGetPath(select, "fa", path);
-if (fileExists(path))
+gbProcessedGetPath(select, "fa", relPath);
+mkGbdbPath(gbdbPath, relPath);
+if (fileExists(gbdbPath))
     {
-    cDnaFaId = extFileTblGet(extFileTbl, conn, path);
-    if (gbProcessedGetPepFa(select, path) && fileExists(path))
-        pepFaId = extFileTblGet(extFileTbl, conn, path);
-    gbProcessedGetPath(select, "ra.gz", path);
-    raInfoTblRead(rit, path, cDnaFaId, pepFaId);
+    cDnaFaId = extFileTblGet(extFileTbl, conn, gbdbPath);
+    if (gbProcessedGetPepFa(select, relPath))
+        {
+        mkGbdbPath(gbdbPath, relPath);
+        if (fileExists(gbdbPath))
+            pepFaId = extFileTblGet(extFileTbl, conn, gbdbPath);
+        }
+    gbProcessedGetPath(select, "ra.gz", relPath);
+    raInfoTblRead(rit, relPath, cDnaFaId, pepFaId);
     }
 }
 
@@ -241,6 +256,8 @@ errAbort("Error: %s\n"
   "     -dryRun - go throught the selection process,  but don't update.\n"
   "      This will still remove ignored accessions.\n"
   "\n"
+  "     -gbdbGenBank=dir - set gbdb path to dir, default /gbdb/genbank\n"
+  "\n"
   "     -verbose=n - enable verbose output, values greater than 1 increase \n"
   "                  verbosity\n"
   "SIGUSR1 will cause process to stop after the current partition.  This\n"
@@ -259,6 +276,7 @@ if (argc < 2)
 gbVerbInit(optionInt("verbose", 0));
 if (gbVerbose >= 6)
     sqlMonitorEnable(JKSQL_TRACE);
+gGbdbGenBank = optionVal("gbdbGenBank", "/gbdb/genbank");
 ZeroVar(&sigSpec);
 sigSpec.sa_handler = sigStopSignaled;
 sigSpec.sa_flags = SA_RESTART;
