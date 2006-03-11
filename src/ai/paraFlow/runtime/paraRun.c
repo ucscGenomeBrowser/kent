@@ -228,11 +228,20 @@ long itemsLeft = run->itemCount - run->itemsSubmitted;
 if (itemsLeft == 0)
     return NULL;
 if (run->itemsFinished == 0)
+    {
+    uglyf("paraRunGetNextJob no one finished yet.\n");
     itemsInBundle = run->itemCount/(paraCpuCount*10);
+    }
 else if (run->totalRunTime > 0.0001)
-    itemsInBundle = 0.001*run->itemsFinished/run->totalRunTime;
+    {
+    uglyf("total run time is %f, aveTime %f\n", run->totalRunTime, run->totalRunTime/run->itemsFinished);
+    itemsInBundle = 0.005*run->itemsFinished/run->totalRunTime;
+    }
 else
+    {
+    uglyf("Short items, assigning a bunch\n");
     itemsInBundle = run->itemCount/paraCpuCount;
+    }
 if (itemsInBundle < 1)
     itemsInBundle = 1;
 if (itemsInBundle > itemsLeft)
