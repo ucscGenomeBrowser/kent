@@ -23,6 +23,10 @@ void *synQueueGet(struct synQueue *sq);
 /* Get message off start of queue.  Wait until there is
  * a message if queue is empty. */
 
+void *synQueueGrab(struct synQueue *sq);
+/* Get message off start of queue.  Return NULL immediately 
+ * if queue is empty. */
+
 int synQueueSize(struct synQueue *sq);
 /* Return number of messages currently on queue. */
 
