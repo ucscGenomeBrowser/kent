@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCompare.c,v 1.1 2006/03/11 03:03:44 heather Exp $";
+static char const rcsid[] = "$Id: snpCompare.c,v 1.2 2006/03/11 03:49:58 heather Exp $";
 
 struct snpSubsetList
     {
@@ -169,17 +169,19 @@ void compareAndLog(FILE *fileHandle, struct snpSubsetList *oldElement, struct sn
 {
 if (!sameString(oldElement->chrom, newElement->chrom))
     {
-    fprintf(fileHandle, "coord mismatch (different chroms) %s\n", oldElement->name);
-    fprintf(fileHandle, "old coords: %s:%d-%d\n", oldElement->chrom, oldElement->start, oldElement->end);
+    fprintf(fileHandle, "coord mismatch (different chroms) %s\t", oldElement->name);
+    fprintf(fileHandle, "old coords: %s:%d-%d\\t", oldElement->chrom, oldElement->start, oldElement->end);
     fprintf(fileHandle, "new coords: %s:%d-%d\n", newElement->chrom, newElement->start, newElement->end);
     return;
     }
 
 if (oldElement->start != newElement->start || oldElement->end != newElement->end)
     {
-    fprintf(fileHandle, "coord mismatch %s\n", oldElement->name);
-    fprintf(fileHandle, "old coords: %s:%d-%d\n", oldElement->chrom, oldElement->start, oldElement->end);
+    fprintf(fileHandle, "coord mismatch %s\t", oldElement->name);
+    fprintf(fileHandle, "old coords: %s:%d-%d\t", oldElement->chrom, oldElement->start, oldElement->end);
     fprintf(fileHandle, "new coords: %s:%d-%d\n", newElement->chrom, newElement->start, newElement->end);
+    fprintf(fileHandle, "old locType = %s, new locType = %s\t", oldElement->locType, newElement->locType);
+    fprintf(fileHandle, "old class = %s, new class = %s\t", oldElement->class, newElement->class);
     }
 
 }
