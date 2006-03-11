@@ -48,7 +48,7 @@ struct genome *genome = NULL;
 int wordsRead, elementsLeft = 0, numChildren = 0;
 boolean needGenome = TRUE;
 int count = 0;
-char *words[2048];
+char *words[16*1024];
 struct element **elements;
 struct possibleEdge *p;
 struct element *element = NULL;
@@ -150,6 +150,10 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 		errAbort("elements must be of the format name.version");
 	    *ptr++ = 0;
 	    element->version = ptr;
+	    if(element->parent && !sameString(element->name, element->parent->name))
+		errAbort("parent named %s doesn't have same name as child %s: line %d\n",
+		    element->name, element->parent->name, lf->lineIx);
+
 	    verbose(2, "added element %s.%s\n",element->name,element->version);
 	    }
 	if (elementsLeft == 0)
