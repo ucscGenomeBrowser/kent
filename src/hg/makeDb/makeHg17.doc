@@ -19714,6 +19714,7 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
     cd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons/
     # sort by chromName, chromStart so that items are in numerical order 
     #  for wigEncode
+    #next time try Angie's simpler sort, below
     find ./pp -name "chr*.pp" | \
         sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
 	sort -k7,7 -k9,9n | \
@@ -19777,6 +19778,34 @@ cat > downloads.csh << 'EOF'
     # edit README
 
     # phastCons scores
+
+# PHASTCONS SCORES DOWNLOADABLES FOR 17WAY (2006 kate)
+
+    ssh kkstore02
+    cd /cluster/data/hg17/bed/multiz17way 
+    mkdir phastConsDownloads
+    cd phastConsDownloads
+cat > downloads.csh << 'EOF'
+    date
+    cd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons/pp
+    foreach chr (`awk '{print $1}' /cluster/data/hg17/chrom.sizes`)
+      echo $chr
+      cat `ls -1 $chr/$chr.*.pp | sort -t\. -k2,2n` \
+        | nice gzip -c \
+            > /cluster/data/hg17/bed/multiz17way/phastConsDownloads/$chr.gz
+    end
+    date
+'EOF'
+        # ~20 minutes
+    # << happy emacs
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz17way/phastConsDownloads
+    md5sum *.gz > md5sum.txt
+    set dir = /usr/local/apache/htdocs/goldenPath/hg17/phastCons17way
+    mkdir $dir
+    ln -s /cluster/data/hg17/bed/multiz17way/phastConsDownloads/{*.gz,md5sum.txt} $dir
+    cp /usr/local/apache/htdocs/goldenPath/hg17/phastCons/README.txt $dir
+    # edit 
 
 
 # UPDATE MONKEY DOWNLOADS (2006-01-12 kate)
