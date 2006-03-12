@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.93 2006/02/24 01:20:45 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.94 2006/03/12 20:21:26 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -106,6 +106,7 @@ return mi;
 struct wigMafItem *newSpeciesItems(struct track *track, int height)
 /* Make up item list for all species configured in track settings */
 {
+struct dyString *order = dyStringNew(256);
 char option[64];
 char *species[100];
 char *groups[20];
@@ -200,7 +201,6 @@ for (group = 0; group < groupCt; group++)
 
 
     safef(option, sizeof(option), "%s.speciesOrder", track->mapName);
-    cartSetString(cart, option, speciesOrder);
     speciesCt = chopLine(cloneString(speciesOrder), species);
     for (i = 0; i < speciesCt; i++)
         {
@@ -218,8 +218,17 @@ for (group = 0; group < groupCt; group++)
         slAddHead(&miList, mi);
         }
     }
+
+slReverse(&miList);
 for (mi = miList; mi != NULL; mi = mi->next)
+    {
     mi->height = height;
+    dyStringPrintf(order, "%s ",mi->db);
+    }
+safef(option, sizeof(option), "%s.speciesOrder", track->mapName);
+cartSetString(cart, option, order->string);
+slReverse(&miList);
+
 return miList;
 }
 
@@ -1172,7 +1181,7 @@ else
 #define ISGAP(x)  (((x) == '=') || (((x) == '-')))
 #define ISN(x)  ((x) == 'N') 
 #define ISSPACE(x)  ((x) == ' ') 
-#define ISGASPACEPORN(x)  (ISSPACE(x) || ISGAP(x) || ISN(x))
+#define ISGAPSPACEORN(x)  (ISSPACE(x) || ISGAP(x) || ISN(x))
 
 static void translateCodons(char *tableName, char *compName, DNA *dna, int start, int length, int frame, 
 				char strand,int prevEnd, int nextStart,
@@ -1208,7 +1217,7 @@ if (frame && (prevEnd == -1))
     switch(frame)
 	{
 	case 1:
-	    if (0)//!( ISGASPACEPORN(ptr[0]) ||ISGASPACEPORN(ptr[1])))
+	    if (0)//!( ISGAPSPACEORN(ptr[0]) ||ISGAPSPACEORN(ptr[1])))
 		{
 		fillBox = TRUE;
 		*ptr++ = 'X';
@@ -1223,7 +1232,7 @@ if (frame && (prevEnd == -1))
 	    length -=2;
 	    break;
 	case 2:
-	    if (0)//!( ISGASPACEPORN(ptr[0])))
+	    if (0)//!( ISGAPSPACEORN(ptr[0])))
 		{
 		fillBox = TRUE;
 		*ptr++ = 'X';
@@ -1248,7 +1257,7 @@ else if (frame && (prevEnd != -1))
 	    ali = mafLoadInRegion(conn, tableName, chromName, prevEnd , prevEnd + 1  );
 	    sub = mafSubset(ali, masterChrom, prevEnd , prevEnd + 1  );
 	    comp = mafMayFindCompPrefix(sub, compName, ".");
-	    if (comp && comp->text && (!(ISGASPACEPORN(comp->text[0]) ||ISGASPACEPORN(ptr[0]) ||ISGASPACEPORN(ptr[1]))))
+	    if (comp && comp->text && (!(ISGAPSPACEORN(comp->text[0]) ||ISGAPSPACEORN(ptr[0]) ||ISGAPSPACEORN(ptr[1]))))
 		{
 		if (strand == '-')
 		    complement(comp->text, 1);
@@ -1276,7 +1285,7 @@ else if (frame && (prevEnd != -1))
 		sub = mafSubset(ali, masterChrom, prevEnd - 1  , prevEnd + 1  );
 		}
 	    comp = mafMayFindCompPrefix(sub, compName, ".");
-	    if (comp && comp->text && (!(ISGASPACEPORN(comp->text[0])||ISGASPACEPORN(comp->text[1]) ||ISGASPACEPORN(*ptr))))
+	    if (comp && comp->text && (!(ISGAPSPACEORN(comp->text[0])||ISGAPSPACEORN(comp->text[1]) ||ISGAPSPACEORN(*ptr))))
 		{
 		if (strand == '-')
 		    reverseComplement(comp->text, 2);
@@ -1308,7 +1317,7 @@ if (fillBox)
 
 for (;length > 2; ptr +=3 , length -=3)
     {
-    if (!(ISGASPACEPORN(ptr[0]) || ISGASPACEPORN(ptr[1]) || ISGASPACEPORN(ptr[2]) ))
+    if (!(ISGAPSPACEORN(ptr[0]) || ISGAPSPACEORN(ptr[1]) || ISGAPSPACEORN(ptr[2]) ))
 	{
 	ptr[1] = lookupCodon(ptr);
 	if (ptr[1] == 0) ptr[1] = '*';
@@ -1362,7 +1371,7 @@ if (length && (nextStart != -1))
 		codon[1] = *(1 + ptr);
 		codon[2] = *comp->text;
 
-		if (!(ISGASPACEPORN(codon[0]) ||ISGASPACEPORN(codon[1]) ||ISGASPACEPORN(codon[2])))
+		if (!(ISGAPSPACEORN(codon[0]) ||ISGAPSPACEORN(codon[1]) ||ISGAPSPACEORN(codon[2])))
 		    {
 		    fillBox = TRUE;
 		    *ptr++ = ' ';
@@ -1376,7 +1385,7 @@ if (length && (nextStart != -1))
 		codon[0] = *ptr;
 		codon[1] = comp->text[0];
 		codon[2] = comp->text[1];
-		if (!(ISGASPACEPORN(codon[0]) ||ISGASPACEPORN(codon[1]) ||ISGASPACEPORN(codon[2])))
+		if (!(ISGAPSPACEORN(codon[0]) ||ISGAPSPACEORN(codon[1]) ||ISGAPSPACEORN(codon[2])))
 		    {
 		    *ptr++ = lookupCodon(codon);
 		    fillBox = TRUE;
