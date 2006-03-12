@@ -382,35 +382,35 @@ memcpy(dest, source, array->elSize);
 }
 
 
-static int qCmpBit(const void *va, const void *vb)
+static int qCmpBit(void *dummy, const void *va, const void *vb)
 /* Quick, no ParaFlow callback sort function for byte. */
 {
 const _pf_Bit *a = va, *b = vb;
 return *a-*b;
 }
 
-static int qCmpByte(const void *va, const void *vb)
+static int qCmpByte(void *dummy, const void *va, const void *vb)
 /* Quick, no ParaFlow callback sort function for byte. */
 {
 const _pf_Byte *a = va, *b = vb;
 return *a-*b;
 }
 
-static int qCmpShort(const void *va, const void *vb)
+static int qCmpShort(void *dummy, const void *va, const void *vb)
 /* Quick, no ParaFlow callback sort function for short. */
 {
 const _pf_Short *a = va, *b = vb;
 return *a-*b;
 }
 
-static int qCmpInt(const void *va, const void *vb)
+static int qCmpInt(void *dummy, const void *va, const void *vb)
 /* Quick, no ParaFlow callback sort function for int. */
 {
 const _pf_Int *a = va, *b = vb;
 return *a-*b;
 }
 
-static int qCmpLong(const void *va, const void *vb)
+static int qCmpLong(void *dummy, const void *va, const void *vb)
 /* Quick, no ParaFlow callback sort function for long. */
 {
 const _pf_Long *a = va, *b = vb;
@@ -423,7 +423,7 @@ else
     return 0;
 }
 
-static int qCmpFloat(const void *va, const void *vb)
+static int qCmpFloat(void *dummy, const void *va, const void *vb)
 /* Quick, no ParaFlow callback sort function for float. */
 {
 const _pf_Float *a = va, *b = vb;
@@ -436,7 +436,7 @@ else
     return 0;
 }
 
-static int qCmpDouble(const void *va, const void *vb)
+static int qCmpDouble(void *dummy, const void *va, const void *vb)
 /* Quick, no ParaFlow callback sort function for double. */
 {
 const _pf_Double *a = va, *b = vb;
@@ -449,14 +449,14 @@ else
     return 0;
 }
 
-static int qCmpChar(const void *va, const void *vb)
+static int qCmpChar(void *dummy, const void *va, const void *vb)
 /* Quick, no ParaFlow callback sort function for byte. */
 {
 const _pf_Char *a = va, *b = vb;
 return *a-*b;
 }
 
-static int qCmpString(const void *va, const void *vb)
+static int qCmpString(void *dummy, const void *va, const void *vb)
 /* Quick, no ParaFlow callback sort function for string. */
 {
 const struct _pf_string *a = *((struct _pf_string **)va);
@@ -587,10 +587,10 @@ void _pf_cm_array_sort(_pf_Stack *stack)
 _pf_Array array = stack[0].Array;
 _pf_FunctionPt cmp = stack[1].FunctionPt;
 enum _pf_single_type st = array->elType->base->singleType;
+int (*compare)(void *dummy, const void *, const void *) = NULL;
 
 if (cmp == NULL)
     {
-    int (*compare)(const void *, const void *) = NULL;
     switch (st)
         {
 	case pf_stBit:
@@ -624,11 +624,10 @@ if (cmp == NULL)
 	    errAbort("Need to supply a comparison function to sort array of complex type.");
 	    break;
 	}
-    _pf_cm_mSort(array->elements, array->size, array->elSize, compare);
+    _pf_cm_mSort_r(array->elements, array->size, array->elSize, NULL, compare);
     }
 else
     {
-    int (*compare)(void *,const void *, const void *) = NULL;
     struct pfCmpState pf;
     pf.stack = stack;
     pf.cmp = cmp;
@@ -663,12 +662,5 @@ else
 	    break;
 	}
     _pf_cm_mSort_r(array->elements, array->size, array->elSize, &pf, compare);
-    /* mieg 2006_03_11 : use our own version of qsort
-      #if defined(__linux__) && defined(__i386__)
-      uglyAbort("Dang, hgwdev doesn't seem to have qsort_r like my Mac does.");
-      #else
-      qsort_r(array->elements, array->size, array->elSize, &pf, compare);
-      #endif
-    */
     }
 }
