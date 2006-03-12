@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.33 2006/03/11 01:28:58 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.34 2006/03/12 20:20:12 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -489,16 +489,11 @@ else
     mafList = mafOrAxtLoadInRegion(conn, tdb, seqName, winStart, winEnd, 
     	axtOtherDb);
     safef(dbChrom, sizeof(dbChrom), "%s.%s", database, seqName);
-#ifdef NOTYET
-    /*if (useIrowChains)*/
-	{
-	safef(option, sizeof(option), "%s.speciesOrder", tdb->tableName);
-	speciesOrder = cartUsualString(cart, option, NULL);
-	if (speciesOrder == NULL)
-	    speciesOrder = trackDbSetting(tdb, "speciesOrder");
-	speciesOrder = NULL;
-	}
-#endif
+    
+    safef(option, sizeof(option), "%s.speciesOrder", tdb->tableName);
+    speciesOrder = cartUsualString(cart, option, NULL);
+    if (speciesOrder == NULL)
+	speciesOrder = trackDbSetting(tdb, "speciesOrder");
 
     for (maf = mafList; maf != NULL; maf = maf->next)
         {
