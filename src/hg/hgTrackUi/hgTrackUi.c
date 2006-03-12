@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.260 2006/03/09 09:07:16 daryl Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.261 2006/03/12 20:12:36 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1588,7 +1588,7 @@ if (framesTable)
     char buffer[128];
 
     printf("<BR><B>Codon Translation:</B><BR>");
-    printf("Default species for translation: ");
+    printf("Default species to establish reading frame: ");
     nodeNames[0] = database;
     for (wmSpecies = wmSpeciesList, i = 1; wmSpecies != NULL; 
 			wmSpecies = wmSpecies->next, i++)
@@ -1602,11 +1602,11 @@ if (framesTable)
     cartMakeRadioButton(cart, buffer,"codonNone", "codonDefault");
     printf("No codon translation<BR>");
     cartMakeRadioButton(cart, buffer,"codonDefault", "codonDefault");
-    printf("Use default species for translation<BR>");
+    printf("Use default species reading frames for translation<BR>");
     cartMakeRadioButton(cart, buffer,"codonFrameNone", "codonDefault");
-    printf("Use frames for species if available, otherwise no translation<BR>");
+    printf("Use reading frames for species if available, otherwise no translation<BR>");
     cartMakeRadioButton(cart, buffer,"codonFrameDef", "codonDefault");
-    printf("Use frames for species if available, otherwise use default species<BR>");
+    printf("Use reading frames for species if available, otherwise use default species<BR>");
     }
 else
     {
