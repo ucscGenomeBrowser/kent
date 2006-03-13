@@ -172,7 +172,7 @@ struct worker *w = v;
 for (;;)
     {
     struct jobBundle *job = synQueueGet(w->queue);
-    // uglyf("Got work type %d, jobs %d\n", (int)(job->messageType), job->itemCount);
+    // uglyf("%p Got work type %d, jobs %d\n", w, (int)(job->messageType), job->itemCount);
     jobBundleRun(job, w->stack);
     synQueuePut(theManager->queue, job);
     }
@@ -409,9 +409,9 @@ else
 	}
     else
         {
-	// uglyf("Idling worker\n");
+	// uglyf("Idling worker %p\n", worker);
 	dlRemove(worker->node);
-	slAddTail(manager->readyWorkers, worker->node);
+	dlAddTail(manager->readyWorkers, worker->node);
 	}
     }
 }
@@ -424,7 +424,6 @@ for (;;)
     {
     enum messageType type;
     struct messageHeader *message = synQueueGet(manager->queue);
-    uglyf("manageManage message %p\n", message);
     // uglyf("Manager got message %d\n", (int)message->type);
     if (message->type == mRun)
 	scheduleRun(manager, (struct paraRun *)message);

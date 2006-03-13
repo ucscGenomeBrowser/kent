@@ -42,8 +42,9 @@ return array;
 int main(int argc, char *argv[])
 {
 static struct myLocal local = {1,2,3,"localStuff"};
-struct _pf_array *array = fakeStringArray(1000);
+struct _pf_array *array = fakeStringArray(6);
 _pf_paraRunInit();
+_pf_paraRunArray(array, &local, process);
 _pf_paraRunArray(array, &local, process);
 return 0;
 }
