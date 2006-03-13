@@ -153,5 +153,6 @@ void _pf_free_mem(void *pt);
 #include "../runtime/dir.h"
 #include "../runtime/array.h"
 #include "../runtime/initVar.h"
+#include "../runtime/paraRun.h"
 
 
