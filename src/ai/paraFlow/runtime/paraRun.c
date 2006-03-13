@@ -37,6 +37,7 @@
  * free thread pool, since creating threads does actually take a 
  * little time. */
 
+#include <sys/time.h>
 #include "common.h"
 #include "hash.h"
 #include "dlist.h"
