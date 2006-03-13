@@ -1,8 +1,8 @@
 include ../../../inc/common.mk
 
 test: q
-	cd testLib && ${MAKE}
 	cd oneFile && ${MAKE}
+	cd testLib && ${MAKE}
 	cd easy && ${MAKE}
 	rm -f modules/*/*.pfh
 	cd modules && ${MAKE}
