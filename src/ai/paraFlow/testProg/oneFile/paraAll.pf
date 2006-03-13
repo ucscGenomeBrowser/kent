@@ -2,7 +2,6 @@ array of string names = ("John", "Bob", "Susan", "Mary");
 print(names);
 para (s in names) do
     {
-    print(s.size + " " + s);
     }
 
 int i = para (x in names) + x.size;

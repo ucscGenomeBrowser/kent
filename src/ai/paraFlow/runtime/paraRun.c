@@ -79,7 +79,7 @@ struct paraRun
     long itemsFinished;		/* Number of items finished by threads. */
     struct synQueue *customerQueue;	/* Where customer waits. */
     void *localVars;		/* Local variables in caller. */
-    void (*process)(_pf_Stack *stack, void *item, void *localVars);  
+    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars);  
     	/* A function that processes one item. */
     struct dlNode *node;	/* Node in managers activeRun list */
     enum collectionType collectionType;	   /* Collection type. */
@@ -104,8 +104,10 @@ struct jobBundle
     int itemSize;	/* Size of each item. */
     void *items;	/* An array of items to process. */
     void *itemsToFree;	/* For locally allocated items, we'll free these */
+    char **keyStrings;	/* Keys if a string */
+    char *keyAsIx;	/* Keys if an index. */
     void *localVars;	/* Local variables in caller. */
-    void (*process)(_pf_Stack *stack, void *item, void *localVars);  
+    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars);  
     	/* A function that processes one item. */
     struct timeval startTime;	/* Start time (wall clock) */
     struct timeval endTime;		/* End time (wall clock). */
@@ -158,7 +160,12 @@ job->startCpu = clock();
 gettimeofday(&job->startTime, NULL);
 for (i=0; i<job->itemCount; ++i)
     {
-    job->process(stack, item, job->localVars);
+    char *key;
+    if (job->keyStrings)
+        key = job->keyStrings[i];
+    else
+        key = job->keyAsIx + i;
+    job->process(stack, key, item, job->localVars);
     item += job->itemSize;
     }
 gettimeofday(&job->endTime, NULL);
@@ -191,19 +198,22 @@ return worker;
 }
 
 
-void *getDirJobs(struct _pf_dir *dir, struct hashCookie *cookie, int size)
+void getDirJobs(struct _pf_dir *dir, struct hashCookie *cookie, int size,
+	struct jobBundle *job)
 /* Allocate an array of size, and fill it with next bunch of items from
  * hash. */
 {
 int i;
-void *buf = needLargeMem(size*sizeof(void*));
-void **pt = buf;
+void **itemBuf = needLargeMem(size*sizeof(void*));
+char **keyBuf = needLargeMem(size*sizeof(char *));
+job->keyStrings = keyBuf;
+job->items = job->itemsToFree = itemBuf;
 for (i=0; i<size; ++i)
     {
     struct hashEl *hel = hashNext(cookie);
-    *pt++ = &hel->val;
+    *itemBuf++ = &hel->val;
+    *keyBuf++ = hel->name;
     }
-return buf;
 }
 
 struct jobBundle *paraRunGetNextJob(struct paraRun *run, struct worker *worker)
@@ -248,11 +258,11 @@ job->run = run;
 switch (run->collectionType)
     {
     case cDir:
-	job->items = job->itemsToFree = 
-		getDirJobs(run->dir, &run->hashCookie, itemsInBundle);
+	getDirJobs(run->dir, &run->hashCookie, itemsInBundle, job);
         break;
     case cArray:
 	job->items = run->array->elements + run->itemSize*run->arrayIx;
+	job->keyAsIx += run->arrayIx; 
 	run->arrayIx += itemsInBundle;
         break;
     case cRange:
@@ -260,6 +270,7 @@ switch (run->collectionType)
 	_pf_Long i, *pt, end;
 	job->items = job->itemsToFree = pt = 
 		needLargeMem(itemsInBundle*sizeof(_pf_Long));
+	job->keyAsIx += run->rangeIx;
 	end = run->rangeIx + itemsInBundle;
 	for (i=run->rangeIx; i<end; ++i)
 	    *pt++ = i;
@@ -286,6 +297,7 @@ struct jobBundle *job = *pJob;
 if (job != NULL)
     {
     freeMem(job->itemsToFree);
+    freeMem(job->keyStrings);
     freez(pJob);
     }
 }
@@ -464,7 +476,7 @@ if (run != NULL)
 }
 
 static struct paraRun *paraRunNew(void *localVars, 
-	void (*process)(_pf_Stack *stack, void *item, void *localVars))
+    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars))
 /* Set up shared parts of paraRun structure. */
 {
 struct paraRun *run;
@@ -477,7 +489,7 @@ return run;
 }
 
 void _pf_paraRunArray(struct _pf_array *array, void *localVars, 
-	void (*process)(_pf_Stack *stack, void *item, void *localVars))
+    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars))
 /* Build up run structure on array. */
 {
 struct paraRun *run = paraRunNew(localVars, process);
@@ -490,7 +502,7 @@ paraRunFree(&run);
 }
 
 void _pf_paraRunDir(struct _pf_dir *dir, void *localVars, 
-	void (*process)(_pf_Stack *stack, void *item, void *localVars))
+    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars))
 /* Run process on each item in dir. */
 {
 struct paraRun *run = paraRunNew(localVars, process);
@@ -504,7 +516,7 @@ paraRunFree(&run);
 }
 
 void _pf_paraRunRange(long start, long end, void *localVars, 
-	void (*process)(_pf_Stack *stack, void *item, void *localVars))
+    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars))
 /* Build up run structure on range. */
 {
 struct paraRun *run = paraRunNew(localVars, process);

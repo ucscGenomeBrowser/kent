@@ -13,6 +13,8 @@ test:
 	diff expected/nestedClass output/nestedClass
 	paraFlow paraAll.pf > output/paraAll
 	diff expected/paraAll output/paraAll
+	paraFlow paraMore.pf > output/paraMore
+	diff expected/paraMore output/paraMore
 	paraFlow paraTwoD.pf > output/paraTwoD
 	diff expected/paraTwoD output/paraTwoD
 	paraFlow printRef.pf > output/printRef

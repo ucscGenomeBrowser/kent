@@ -31,10 +31,6 @@ static void codeScope(struct pfCompile *pfc, FILE *f, struct pfParse *pp,
 	boolean isModuleScope, struct ctar *ctarList);
 /* Print types and then variables from scope. */
 
-static void codeScopeVars(struct pfCompile *pfc, FILE *f, 
-	struct pfScope *scope, boolean zeroUnitialized);
-/* Print out variable declarations associated with scope. */
-
 static void printPreamble(struct pfCompile *pfc, FILE *f, char *fileName, boolean doExtern)
 /* Print out C code for preamble. */
 {
@@ -216,7 +212,12 @@ if (type->access == paStatic)
 else
     {
     if (var->scope->isLocal)
-	dyStringAppend(name, "_pf_l.");
+	{
+	if (pfc->codingPara)
+	    dyStringAppend(name, "_pf_l->");
+	else
+	    dyStringAppend(name, "_pf_l.");
+	}
     else
 	dyStringAppend(name, globalPrefix);
     dyStringAppend(name, var->cName);
@@ -454,7 +455,7 @@ if (type->base->needsCleanup)
 }
 
 
-static void codeCleanupVar(struct pfCompile *pfc, FILE *f, 
+void codeCleanupVar(struct pfCompile *pfc, FILE *f, 
         struct pfVar *var)
 /* Emit cleanup code for variable of given type and name. */
 {
@@ -1383,7 +1384,7 @@ for (hel = helList; hel != NULL; hel = hel->next)
     }
 }
 
-static void codeScopeVars(struct pfCompile *pfc, FILE *f, struct pfScope *scope,
+void codeScopeVars(struct pfCompile *pfc, FILE *f, struct pfScope *scope,
 	boolean zeroUninitialized)
 /* Print out variable declarations associated with scope. */
 {
@@ -2523,9 +2524,6 @@ switch (pp->type)
 	struct pfParse *p;
 	for (p = pp->children; p != NULL; p = p->next)
 	    codeStatement(pfc, f, p);
-#ifdef OLD
-	internalErrAt(pp->tok);
-#endif /* OLD */
 	break;
 	}
     case pptVarInit:
@@ -2667,7 +2665,7 @@ if (body != NULL)
 
     /* Print out activation record. */
 	{
-	ctarCodeLocalStruct(ctar, pfc, f);
+	ctarCodeLocalStruct(ctar, pfc, f, NULL);
 	ctarCodePush(ctar, pfc, f);
 	}
 
@@ -3001,9 +2999,7 @@ fprintf(f,
 "               _pf_module_info, _pf_module_info_count);\n"
 "_pf_init_args(argc, argv, &%sprogramName, &%sargs, environ);\n"
 "_pf_punt_init();\n"
-#ifdef SOON
 "_pf_paraRunInit();\n"
-#endif /* SOON */
 "_pf_entry_%s(stack);\n"
 "while (%s != 0)\n"
 "    {\n"
@@ -3181,6 +3177,8 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 		fprintf(f, "/* ParaFlow module %s */\n\n", module->name);
 		fprintf(f, "\n");
 		ctarCodeFixedParts(ctarList, pfc, f);
+		fprintf(f, "\n");
+		codeParaBlocks(pfc, f, module);
 		fprintf(f, "\n");
 		codeScope(pfc, f, module, TRUE, ctarList);
 		fprintf(f, "\n");

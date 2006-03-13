@@ -11,13 +11,13 @@ struct myLocal
     char *name;
     };
 
-void process(_pf_Stack *stack, void *item, void *localVars)
+void process(_pf_Stack *stack, char *key, void *item, void *localVars)
 {
 struct _pf_string **pString = item;
 struct _pf_string *string = *pString;
 struct myLocal *local = localVars;
 
-printf(">>processing<< %s, %d,%d,%d,%s\n", string->s, local->x,local->y,local->z,local->name);
+printf(">>processing<< %p@%s, %d,%d,%d,%s\n", key,string->s, local->x,local->y,local->z,local->name);
 }
 
 struct _pf_array *fakeStringArray(int size)

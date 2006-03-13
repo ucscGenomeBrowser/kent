@@ -33,8 +33,11 @@ void ctarCodeFixedParts(struct ctar *ctarList, struct pfCompile *pfc, FILE *f);
 void ctarCodeStartupCall(struct ctar *ctarList, struct pfCompile *pfc, FILE *f);
 /* Code call to initialize types and offsets of fixed run time activation records. */
 
-void ctarCodeLocalStruct(struct ctar *ctar, struct pfCompile *pfc, FILE *f);
-/* Write out a structure that has all of the local variables for a function. */
+void ctarCodeLocalStruct(struct ctar *ctar, struct pfCompile *pfc, FILE *f,
+	char *refName);
+/* Write out a structure that has all of the local variables for a function. 
+ * If refName is zero then make a pointer of this type equal to refName,
+ * otherwise make an actual instand initialized to zero. */
 
 void ctarCodePush(struct ctar *ctar, struct pfCompile *pfc, FILE *f);
 /* Write out code to define run-time activation structure and push

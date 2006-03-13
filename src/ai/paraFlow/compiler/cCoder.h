@@ -25,6 +25,14 @@ void codeCleanupVarNamed(struct pfCompile *pfc, FILE *f,
 	struct pfType *type, char *name);
 /* Emit cleanup code for variable of given type and name. */
 
+void codeCleanupVar(struct pfCompile *pfc, FILE *f, 
+        struct pfVar *var);
+/* Emit cleanup code for variable of given type and name. */
+
+void codeScopeVars(struct pfCompile *pfc, FILE *f, struct pfScope *scope,
+	boolean zeroUninitialized);
+/* Print out variable declarations associated with scope. */
+
 void codeCleanupStackPos(struct pfCompile *pfc, FILE *f,
      struct pfType *type, int stack);
 /* Generate cleanup code for stack position. */
@@ -46,6 +54,9 @@ void codeEndElInCollectionIteration(struct pfCompile *pfc, FILE *f,
 
 void codeCase(struct pfCompile *pfc, FILE *f, struct pfParse *pp);
 /* Emit C code for case statement. */
+
+void codeParaBlocks(struct pfCompile *pfc, FILE *f, struct pfParse *module);
+/* Create functions for code inside of para blocks. */
 
 void codeParaDo(struct pfCompile *pfc, FILE *f,
 	struct pfParse *foreach, boolean isPara);

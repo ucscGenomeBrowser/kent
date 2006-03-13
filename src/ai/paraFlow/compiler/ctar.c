@@ -183,9 +183,11 @@ void ctarCodeStartupCall(struct ctar *ctarList, struct pfCompile *pfc, FILE *f)
 fprintf(f, "_pf_rtar_init_tables(_pf_rtar_fixed, %d, _pf_lti);\n", slCount(ctarList));
 }
 
-void ctarCodeLocalStruct(struct ctar *ctar, struct pfCompile *pfc, FILE *f)
+void ctarCodeLocalStruct(struct ctar *ctar, struct pfCompile *pfc, FILE *f,
+	char *refName)
 /* Write out a structure that has all of the local variables for a function. 
- * Initialize it to zero. */
+ * If refName is zero then make a pointer of this type equal to refName,
+ * otherwise make an actual instand initialized to zero. */
 {
 struct slRef *ref;
 if (ctar->varRefList)
@@ -198,8 +200,14 @@ if (ctar->varRefList)
 	codeBaseType(pfc, f, var->ty->base);
 	fprintf(f, " %s;\n", var->cName);
 	}
-    fprintf(f, "} _pf_l;\n");
-    fprintf(f, "memset(&_pf_l, 0, sizeof(_pf_l));\n");
+    fprintf(f, "}");
+    if (refName)
+        fprintf(f, "*_pf_l = %s;\n", refName);
+    else
+	{
+	fprintf(f, "_pf_l;\n");
+	fprintf(f, "memset(&_pf_l, 0, sizeof(_pf_l));\n");
+	}
     }
 }
 
