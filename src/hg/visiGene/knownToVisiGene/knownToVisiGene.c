@@ -19,7 +19,7 @@ errAbort(
   "   -table=XXX - give another name to table other than knownToVisiGene\n"
   "   -visiDb=XXX - use a VisiGene database other than 'visiGene'\n"
   "   -fromProbePsl=XXX - use a probe track psl table for mapping,\n"
-  "      e.g. vgImageProbes for human.\n"
+  "      e.g. vgAllProbes for human.\n"
   );
   /*
   "options:\n"
