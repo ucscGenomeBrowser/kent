@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.34 2006/03/12 20:20:12 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.35 2006/03/13 23:22:26 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -507,33 +507,6 @@ else
          * the entire MAF if all components are empty 
          * (solely for gap annotation) */
 
-	if (speciesOrder)
-	    {
-	    int speciesCt;
-	    char *species[256];
-	    struct mafComp **newOrder, *mcThis;
-	    int i;
-
-	    speciesCt = chopLine(cloneString(speciesOrder), species);
-	    newOrder = needMem((speciesCt + 1) * sizeof (struct mafComp *));
-	    newOrder[mcCount++] = maf->components;
-
-	    for (i = 0; i < speciesCt; i++)
-		{
-		if ((mcThis = mafMayFindCompPrefix(maf, species[i], "")) == NULL)
-		    continue;
-		newOrder[mcCount++] = mcThis;
-		}
-
-	    maf->components = NULL;
-	    for (i = 0; i < mcCount; i++)
-		{
-		newOrder[i]->next = 0;
-		slAddHead(&maf->components, newOrder[i]);
-		}
-
-	    slReverse(&maf->components);
-	    }
 	if (!useTarg)
 	    {
 	    for (mc = maf->components->next; mc != NULL; mc = nextMc)
@@ -560,6 +533,35 @@ else
 	    }
         if (mcCount == 0)
             continue;
+
+	if (speciesOrder)
+	    {
+	    int speciesCt;
+	    char *species[256];
+	    struct mafComp **newOrder, *mcThis;
+	    int i;
+
+	    mcCount = 0;
+	    speciesCt = chopLine(cloneString(speciesOrder), species);
+	    newOrder = needMem((speciesCt + 1) * sizeof (struct mafComp *));
+	    newOrder[mcCount++] = maf->components;
+
+	    for (i = 0; i < speciesCt; i++)
+		{
+		if ((mcThis = mafMayFindCompPrefix(maf, species[i], "")) == NULL)
+		    continue;
+		newOrder[mcCount++] = mcThis;
+		}
+
+	    maf->components = NULL;
+	    for (i = 0; i < mcCount; i++)
+		{
+		newOrder[i]->next = 0;
+		slAddHead(&maf->components, newOrder[i]);
+		}
+
+	    slReverse(&maf->components);
+	    }
 	subset = mafSubset(maf, dbChrom, winStart, winEnd);
 	if (subset != NULL)
 	    {
