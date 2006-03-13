@@ -307,15 +307,71 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
     hgsql rn4 -e "create table grp (PRIMARY KEY(NAME)) select * from rn3.grp"
 
 
-# VERIFY REPEATMASKER RESULTS (TODO 1/30/06 angie)
+# VERIFY REPEATMASKER RESULTS (DONE 3/10/06 angie)
     # Eyeball some repeat annotations in the browser, compare to lib seqs.
     # Run featureBits on rn4 and on previous genome build, and compare:
     ssh hgwdev
     nice featureBits rn4 rmsk
-# Hmmmm... seems wrong for this to decrease...
+# Hmmmm... seems wrong for this to decrease...!
 #1106283290 bases of 2571531505 (43.020%) in intersection
     nice featureBits rn3 rmsk
 #1117483165 bases of 2571104688 (43.463%) in intersection
+    # Do some comparisons on the smallest chrom, chr20.
+    featureBits rn3 -chrom=chr20 rmsk
+#20269238 bases of 49432254 (41.004%) in intersection
+    # liftOver rn3 chr20 rmsk to rn4, find non-overlap and compare:
+    ssh kolossus
+    awk '$1 ~ /[0-9]/ {print $5 "\t" $6 "\t" $7;}' \
+      /cluster/data/rn3/20/chr20.fa.out > /tmp/rn3.chr20_rmsk.bed
+    liftOver /tmp/rn3.chr20_rmsk.bed \
+      /cluster/data/rn3/bed/blat.rn4.2006-02-07/rn3ToRn4.over.chain.gz \
+      /tmp/rn4.chr20_rmskLifted.bed /tmp/rn4.chr20.unmapped
+    featureBits rn4 -chrom=chr20 rmsk
+#19994056 bases of 49409453 (40.466%) in intersection
+    featureBits rn4 -chrom=chr20 /tmp/rn4.chr20_rmskLifted.bed
+#20117851 bases of 49409453 (40.717%) in intersection
+    # Wow, even after some small liftOver losses, the rn3 rmsk run is 
+    # still bigger than the rn4 run!  Look for large missing pieces:
+    featureBits rn4 -chrom=chr20 /tmp/rn4.chr20_rmskLifted.bed \!rmsk \
+      -minSize=500 -bed=stdout
+#chr20   107997  108538  chr20.1
+#chr20   15410534        15411405        chr20.2
+#chr20   26448452        26448976        chr20.3
+#chr20   34984144        34984704        chr20.4
+#chr20   41862299        41862843        chr20.5
+#chr20   49189694        49190470        chr20.6
+#chr20   50960151        50960656        chr20.7
+#chr20   53898688        53899203        chr20.8
+#chr20   54856700        54857268        chr20.9
+#634331 bases of 49409453 (1.284%) in intersection
+    # For the first such region above, the rn3 location is the same 
+    # (chr20:107998-108538) and is covered by a LINE... 34.1% divergence.
+    # Well, that should make for a handy little test case because the 
+    # sequence has not changed at all -- only the RM version.
+    mkdir /cluster/data/rn4/RMTest
+    cd /cluster/data/rn4/RMTest
+    twoBitToFa ../rn4.2bit -seq=chr20 -start=100000 -end=110000 chr20_frag.fa
+    /cluster/bluearc/RepeatMasker/RepeatMasker -s -spec rat chr20_frag.fa
+    mkdir open-3-1-3
+    mv chr20_frag.fa.* open-3-1-3/
+    # The version used for rn3:
+    /cluster/bluearc/RepeatMasker030619/RepeatMasker -s -spec rat chr20_frag.fa
+    mkdir 030619
+    mv chr20_frag.fa.* 030619/
+    # The next-latest version:
+    /cluster/bluearc/RepeatMasker051101/RepeatMasker -s -spec rat chr20_frag.fa
+    mkdir open-3-1-2
+    mv chr20_frag.fa.* open-3-1-2/
+    # 3-1-2 makes exactly the same .out as 3-1-3.  060319 has one more LINE...
+    # The first open- version that we have -- .out identical to 3-1-3:
+    /cluster/bluearc/RepeatMasker040909/RepeatMasker -s -spec rat chr20_frag.fa
+    mkdir open-3-0-5
+    mv chr20_frag.fa.* open-3-0-5/
+    # The only other version between 030619 and 040909:
+    /cluster/bluearc/RepeatMasker040130/RepeatMasker -s -spec rat chr20_frag.fa
+    mkdir 040130
+    mv chr20_frag.fa.* 040130/
+    # Sent the test case to Robert Hubley.
 
 
 # MAKE LIFTALL.LFT (DONE 1/27/06 angie)
@@ -1646,10 +1702,12 @@ while (<>) {
 
     ~/kent/src/hg/stsMarkers/createStsAlias stsInfoRat.tab \
     | sort -u > stsAlias.tab
-    # Warnings about missing aliases... probably OK.
+    # Warnings about aliases with multiple trueNames... would be good to 
+    # pass that on to NCBI, if we ever get a resolution for the previous 
+    # questions.
     # Would compare to rn3 if I could find it...
     wc stsAlias.tab
-# 115872  347616 2809404 stsAlias.tab
+#  69051  207153 1687764 stsAlias.tab
 
     #	compare old and new name lists:
     ssh -x hgwdev 'hgsql -N rn3 -e "select name from stsMapRat" | sort -u' \
@@ -1712,6 +1770,9 @@ while (<>) {
 #11755453 bases of 2571531505 (0.457%) in intersection
     nice featureBits rn3 stsMapRat
 #10119869 bases of 2571104688 (0.394%) in intersection
+
+    # Clean up.
+    rm -r primer/primers.out/ primer/primers.psl.100.unlifted clone/clone.out/
 
 # end STS MARKERS 
 ##########################################################################
@@ -2062,7 +2123,8 @@ while (<>) {
     # Build knownGeneMrna and knownGenePep tables.
     kgPepMrna kgRn4ATemp rn4 060115
     hgPepPred rn4 tab knownGeneMrna knownGeneMrna.tab
-    hgPepPred rn4 tab knownGenePep knownGeneMrna.tab
+#TODO after resolving non-unique names vs. primary key index:
+    hgPepPred rn4 tab knownGenePep knownGenePep.tab
 
     # Use hgwdev's entrez database (loaded by Fan, see makeHg18.doc) 
     # to buid the mrnaRefseq table.
@@ -2165,6 +2227,7 @@ while (<>) {
     protBlat
     refRa
     spMrna
+#TODO: repush knownGenePep after it is reloaded on kolossus.
 
     # Copy history comments from kolossus to hgwdev's rn4.history table.
     hgsqldump rn4 history \
