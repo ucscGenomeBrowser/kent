@@ -392,8 +392,8 @@ dataVersion ENCODE June 2005 Freeze
 
 track encodePseudogene
 compositeTrack on
-shortLabel PseudoGenes 
-longLabel ENCODE Pseudogene Predictions  All ENCODE Regions
+shortLabel Pseudogenes 
+longLabel ENCODE Pseudogene Predictions - All ENCODE Regions
 group encodeGenes
 priority 15.0
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
@@ -418,8 +418,8 @@ cdsDrawDefault genomic\ codons
 
     track pseudoEncodeConsensus
     subTrack encodePseudogene
-    shortLabel Consensus PseudoGenes
-    longLabel CONSENSUS of Yale, Havana-Gencode, UCSC and GIS Encode Pseudogenes 
+    shortLabel Consensus Pseudogenes
+    longLabel Consensus of Yale, Havana-Gencode, UCSC and GIS ENCODE Pseudogenes 
     priority 1
 
     track pseudoHavana
@@ -431,27 +431,27 @@ cdsDrawDefault genomic\ codons
 
     track pseudoYaleEncode
     subTrack encodePseudogene
-    shortLabel Yale Pseudo
-    longLabel Yale PseudoGene Predictions
+    shortLabel Yale Pseudogenes
+    longLabel Yale Pseudogene Predictions
     url http://www.pseudogene.org/cgi-bin/display-by-acc.cgi?id=$$
     priority 3
 
     track pseudoUcsc
     subTrack encodePseudogene
-    shortLabel UCSC Pseudo
-    longLabel UCSC RetroGene Predictions
+    shortLabel UCSC Pseudogenes
+    longLabel UCSC Retrogene Predictions
     priority 4
 
     track pseudoUcsc2
     subTrack encodePseudogene
-    shortLabel UCSC PseudoGenes
+    shortLabel UCSC Pseudogenes
     longLabel UCSC Pseudogene Predictions
     priority 5
 
     track pseudoGIS
     subTrack encodePseudogene
-    shortLabel GIS PseudoGenes
-    longLabel Genome Institute of Singapore Pseudogenes 
+    shortLabel GIS Pseudogenes
+    longLabel Genome Institute of Singapore (GIS) Pseudogenes 
     priority 6
 
 track encodeAffyEncode25bpProbes
