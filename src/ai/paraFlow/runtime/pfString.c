@@ -1076,7 +1076,7 @@ void pf_isSpace(_pf_Stack *stack)
 /* Return TRUE if it's a space character. */
 {
 _pf_Char c = stack[0].Char;
-stack[0].Bit = isspace(c);
+stack[0].Bit = (isspace(c) != 0);
 }
 
 void _pf_cm_string_leadingSpaces(_pf_Stack *stack)
