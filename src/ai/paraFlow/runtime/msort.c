@@ -18,7 +18,7 @@
  *-------------------------------------------------------------------
  */
 
-/* $Id: msort.c,v 1.2 2006/03/12 21:47:25 kent Exp $ */
+/* $Id: msort.c,v 1.3 2006/03/13 04:47:33 kent Exp $ */
 
 #include "common.h"
 
@@ -66,7 +66,7 @@ static void mDoSort ( char *b, int n, int s , void *pf,
   if (n1 > 1) mDoSort (b1, n1, s, pf, cmp_r, buf);
   if (n2 > 1) mDoSort (b2, n2, s, pf, cmp_r, buf);
 
-  if ( cmp_r (pf, b2 - 1, b2) <= 0)	/* Already sorted case */
+  if ( cmp_r (pf, b2 - s, b2) <= 0)	/* Already sorted case */
     return ;
 
   while (n1 > 0 && n2 > 0)
