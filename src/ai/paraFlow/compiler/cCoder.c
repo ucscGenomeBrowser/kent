@@ -190,7 +190,7 @@ codeStackAccess(f, offset);
 fprintf(f, ".%s", field);
 }
 
-struct dyString *varName(struct pfCompile *pfc, struct pfVar *var)
+struct dyString *codeVarName(struct pfCompile *pfc, struct pfVar *var)
 /* Return  variable name from C point of view.  (Easy unless it's static). */
 {
 struct dyString *name = dyStringNew(256);
@@ -227,7 +227,7 @@ return name;
 static void printVarName(struct pfCompile *pfc, FILE *f, struct pfVar *var)
 /* Print variable name from C point of view.  (Easy unless it's static). */
 {
-struct dyString *name = varName(pfc, var);
+struct dyString *name = codeVarName(pfc, var);
 fprintf(f, "%s", name->string);
 dyStringFree(&name);
 }
@@ -458,13 +458,13 @@ static void codeCleanupVar(struct pfCompile *pfc, FILE *f,
         struct pfVar *var)
 /* Emit cleanup code for variable of given type and name. */
 {
-struct dyString *name = varName(pfc, var);
+struct dyString *name = codeVarName(pfc, var);
 codeCleanupVarNamed(pfc, f, var->ty, name->string);
 dyStringFree(&name);
 }
 
 
-static void startElInCollectionIteration(struct pfCompile *pfc, FILE *f,
+void codeStartElInCollectionIteration(struct pfCompile *pfc, FILE *f,
 	int stack, struct pfScope *scope, struct pfParse *elIxPp, 
 	struct pfParse *collectionPp, boolean reverse)
 /* This highly technical routine generates some of the code for
@@ -479,13 +479,13 @@ if (elIxPp->type == pptKeyVal)
     {
     ixPp = elIxPp->children;
     elPp = ixPp->next;
-    keyName = varName(pfc,ixPp->var);
+    keyName = codeVarName(pfc,ixPp->var);
     assert(base != pfc->indexRangeType);  /* Type checker prevents this */
     }
 else
     elPp = elIxPp;
 
-elName = varName(pfc, elPp->var);
+elName = codeVarName(pfc, elPp->var);
 
 if (base == pfc->indexRangeType)
     {
@@ -593,57 +593,8 @@ dyStringFree(&elName);
 dyStringFree(&keyName);
 }
 
-static void saveBackToCollection(struct pfCompile *pfc, FILE *f,
-	int stack, struct pfParse *elPp, struct pfParse *collectionPp)
-/* Save altered value of element back to collection. */
-{
-struct pfBaseType *base = collectionPp->ty->base;
-struct dyString *elName = varName(pfc, elPp->var);
-if (elPp->ty->base->needsCleanup)
-    codeVarIncRef(f, elName->string);
-if (base == pfc->arrayType)
-    {
-    fprintf(f, "*((");
-    codeBaseType(pfc, f, elPp->ty->base);
-    fprintf(f, "*)(_pf_collection->elements + _pf_offset)) = %s;\n",
-    	elName->string);
-    }
-else if (base == pfc->stringType)
-    {
-    internalErr();	/* Type check module should prevent this */
-    }
-else if (base == pfc->dyStringType)
-    {
-    fprintf(f, "_pf_collection->s[_pf_offset] = %s;\n", elName->string);
-    }
-else if (base == pfc->dirType)
-    {
-    codeParamAccess(pfc, f, elPp->ty->base, stack);
-    fprintf(f, " = %s;\n", elName->string);
-    if (elPp->ty->base->needsCleanup)
-	{
-	fprintf(f, "_pf_dir_add_obj(_pf_collection, _pf_key, %s+%d);\n",  
-		stackName, stack);
-	}
-    else 
-	{
-	fprintf(f, "_pf_dir_add_num(_pf_collection, _pf_key, %s+%d);\n",  
-		stackName, stack);
-	}
-    }
-else if (base == pfc->indexRangeType)
-    {
-    /* Do nothing. */
-    }
-else
-    {
-    internalErr();
-    }
-dyStringFree(&elName);
-}
 
-
-static void endElInCollectionIteration(struct pfCompile *pfc, FILE *f,
+void codeEndElInCollectionIteration(struct pfCompile *pfc, FILE *f,
 	struct pfScope *scope, struct pfParse *elIxPp, 
 	struct pfParse *collectionPp, boolean reverse)
 /* This highly technical routine generates some of the code for
@@ -657,7 +608,7 @@ if (elIxPp->type == pptKeyVal)
     {
     ixPp = elIxPp->children;
     elPp = ixPp->next;
-    keyName = varName(pfc,ixPp->var);
+    keyName = codeVarName(pfc,ixPp->var);
     assert(base != pfc->indexRangeType);  /* Type checker prevents this */
     }
 else
@@ -670,7 +621,7 @@ if (base == pfc->arrayType)
 	struct dyString *elName;
 	if (elPp->type == pptKeyVal)
 	    elPp = elPp->children->next;
-	elName = varName(pfc, elPp->var);
+	elName = codeVarName(pfc, elPp->var);
 	codeCleanupVarNamed(pfc, f, elPp->var->ty, elName->string);
 	dyStringFree(&elName);
 	}
@@ -699,7 +650,7 @@ if (colBase == pfc->dirType)
     fprintf(f, "_pf_key;\n");
 else if (colBase == pfc->indexRangeType)
     {
-    struct dyString *elName = varName(pfc, elPp->var);
+    struct dyString *elName = codeVarName(pfc, elPp->var);
     fprintf(f, " %s;\n", elName->string);
     dyStringFree(&elName);
     }
@@ -770,7 +721,7 @@ if (isArgType)
 	 fprintf(f, "long _pf_best_ix = -1;\n");
      }
 
-startElInCollectionIteration(pfc, f, stack, 
+codeStartElInCollectionIteration(pfc, f, stack, 
 	para->scope, elPp, collectionPp, TRUE);
 
 /* Calculate expression */
@@ -837,7 +788,7 @@ switch (para->type)
     }
 fprintf(f, "}\n");
 
-endElInCollectionIteration(pfc, f, para->scope, elPp, collectionPp, TRUE);
+codeEndElInCollectionIteration(pfc, f, para->scope, elPp, collectionPp, TRUE);
 
 codeParamAccess(pfc, f, para->ty->base, stack);
 if (isArgType)
@@ -910,7 +861,7 @@ if (collectBase == pfc->arrayType || collectBase == pfc->indexRangeType)
 	fprintf(f, ");\n");
 	}
     fprintf(f, "_pf_resElSize = _pf_result->elSize;\n");
-    startElInCollectionIteration(pfc, f, stack, para->scope, element, 
+    codeStartElInCollectionIteration(pfc, f, stack, para->scope, element, 
     	collection, FALSE);
     codeExpression(pfc, f, expression, stack, TRUE);
     fprintf(f, "*((");
@@ -919,7 +870,7 @@ if (collectBase == pfc->arrayType || collectBase == pfc->indexRangeType)
     codeParamAccess(pfc, f, expression->ty->base, stack);
     fprintf(f, ";\n");
     fprintf(f, "_pf_resOffset += _pf_resElSize;\n");
-    endElInCollectionIteration(pfc, f, para->scope, element, 
+    codeEndElInCollectionIteration(pfc, f, para->scope, element, 
     	collection, FALSE);
     }
 else if (collectBase == pfc->dirType)
@@ -933,7 +884,7 @@ else if (collectBase == pfc->dirType)
     codeForType(pfc, f, expression->ty);
     fprintf(f, ");\n");
 
-    startElInCollectionIteration(pfc, f, stack, para->scope, element, 
+    codeStartElInCollectionIteration(pfc, f, stack, para->scope, element, 
     	collection, FALSE);
     codeExpression(pfc, f, expression, stack, TRUE);
     if (expression->ty->base->needsCleanup)
@@ -946,7 +897,7 @@ else if (collectBase == pfc->dirType)
 	fprintf(f, "_pf_dir_add_num(_pf_result, _pf_key, %s+%d);\n",  
 		stackName, stack);
 	}
-    endElInCollectionIteration(pfc, f, para->scope, element, 
+    codeEndElInCollectionIteration(pfc, f, para->scope, element, 
     	collection, FALSE);
     }
 else
@@ -970,7 +921,7 @@ struct pfParse *collection = para->children;
 struct pfParse *element = collection->next;
 struct pfParse *expression = element->next;
 struct pfBaseType *collectBase = collection->ty->base;
-struct dyString *elName = varName(pfc, element->var);
+struct dyString *elName = codeVarName(pfc, element->var);
 
 fprintf(f, "/* start para filter */\n");
 fprintf(f, "{\n");
@@ -997,7 +948,7 @@ if (collectBase == pfc->arrayType || collectBase == pfc->indexRangeType)
 	fprintf(f, "_pf_passed = _pf_need_mem(_pf_size);\n");
 	}
 
-    startElInCollectionIteration(pfc, f, stack, para->scope, element, 
+    codeStartElInCollectionIteration(pfc, f, stack, para->scope, element, 
     	collection, FALSE);
     codeExpression(pfc, f, expression, stack, FALSE);
     fprintf(f, "_pf_passOne = ");
@@ -1005,7 +956,7 @@ if (collectBase == pfc->arrayType || collectBase == pfc->indexRangeType)
     fprintf(f, ";\n");
     fprintf(f, "_pf_passed[_pf_ix++] = _pf_passOne;\n");
     fprintf(f, "_pf_passCount += _pf_passOne;\n");
-    endElInCollectionIteration(pfc, f, para->scope, element, 
+    codeEndElInCollectionIteration(pfc, f, para->scope, element, 
     	collection, FALSE);
 
     /* Allocate results array. */
@@ -1019,7 +970,7 @@ if (collectBase == pfc->arrayType || collectBase == pfc->indexRangeType)
     /* Generate code that will copy passing elements to results */
     fprintf(f, "_pf_passCount = 0;\n");
     fprintf(f, "_pf_ix = 0;\n");
-    startElInCollectionIteration(pfc, f, stack, para->scope, element, 
+    codeStartElInCollectionIteration(pfc, f, stack, para->scope, element, 
     	collection, FALSE);
     fprintf(f, "if (_pf_passed[_pf_ix++])\n");
     fprintf(f, "{\n");
@@ -1031,7 +982,7 @@ if (collectBase == pfc->arrayType || collectBase == pfc->indexRangeType)
     fprintf(f, "=%s;\n", elName->string);
     fprintf(f, "_pf_resOffset += _pf_elSize;\n");
     fprintf(f, "}\n");
-    endElInCollectionIteration(pfc, f, para->scope, element, 
+    codeEndElInCollectionIteration(pfc, f, para->scope, element, 
     	collection, FALSE);
 
     /* Generate clean up code. */
@@ -1049,7 +1000,7 @@ else if (collectBase == pfc->dirType)
     codeForType(pfc, f, elType);
     fprintf(f, ");\n");
 
-    startElInCollectionIteration(pfc, f, stack, para->scope, element, 
+    codeStartElInCollectionIteration(pfc, f, stack, para->scope, element, 
     	collection, FALSE);
     codeExpression(pfc, f, expression, stack, TRUE);
     fprintf(f, "if (");
@@ -1071,7 +1022,7 @@ else if (collectBase == pfc->dirType)
 	}
     fprintf(f, "}\n");
 
-    endElInCollectionIteration(pfc, f, para->scope, element, 
+    codeEndElInCollectionIteration(pfc, f, para->scope, element, 
     	collection, FALSE);
     }
 else
@@ -1755,7 +1706,7 @@ static int codeVarUse(struct pfCompile *pfc, FILE *f,
 /* Generate code for moving a variable onto stack. */
 {
 struct pfBaseType *base = pp->ty->base;
-struct dyString *name = varName(pfc, pp->var);
+struct dyString *name = codeVarName(pfc, pp->var);
 if (addRef && base->needsCleanup)
     {
     if (base == pfc->varType)
@@ -2381,48 +2332,8 @@ assert(FALSE);
 return  0;
 }
 
-static boolean varUsed(struct pfVar *var, struct pfParse *pp)
-/* Return TRUE if parse subtree uses var. */
-{
-switch (pp->type)
-    {
-    case pptVarUse:
-	if (pp->var == var)
-	    return TRUE;
-	break;
-    }
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    {
-    if (varUsed(var, pp))
-        return TRUE;
-    }
-return FALSE;
-}
-
-static boolean varWritten(struct pfVar *var, struct pfParse *pp)
-/* Return TRUE if parse subtree  writes to var. */
-{
-switch (pp->type)
-    {
-    case pptAssignment:
-    case pptPlusEquals:
-    case pptMinusEquals:
-    case pptMulEquals:
-    case pptDivEquals:
-        if (varUsed(var, pp->children))
-	    return TRUE;
-	break;
-    }
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    {
-    if (varWritten(var, pp))
-        return TRUE;
-    }
-return FALSE;
-}
-
 static void codeForeach(struct pfCompile *pfc, FILE *f,
-	struct pfParse *foreach, boolean isPara)
+	struct pfParse *foreach)
 /* Emit C code for foreach statement. */
 {
 struct pfParse *collectionPp = foreach->children;
@@ -2430,25 +2341,11 @@ struct pfParse *elPp = collectionPp->next;
 struct pfParse *body = elPp->next;
 struct pfParse *elVarPp = NULL;
 
-startElInCollectionIteration(pfc, f, 0, 
-	foreach->scope, elPp, collectionPp, isPara);
+codeStartElInCollectionIteration(pfc, f, 0, 
+	foreach->scope, elPp, collectionPp, FALSE);
 codeStatement(pfc, f, body);
-if (isPara)
-    {
-    if (elPp->type == pptKeyVal)
-	{
-	struct pfParse *keyPp = elPp->children;
-	struct pfParse *valPp = keyPp->next;
-	elVarPp = valPp;
-	}
-    else if (elPp->type == pptVarInit)
-	elVarPp = elPp;
-    else
-	internalErrAt(elPp->tok);
-    if (varWritten(elVarPp->var, body))
-	saveBackToCollection(pfc, f, 0, elVarPp, collectionPp);
-    }
-endElInCollectionIteration(pfc, f, foreach->scope, elPp, collectionPp, isPara);
+codeEndElInCollectionIteration(pfc, f, foreach->scope, elPp, 
+	collectionPp, FALSE);
 }
 
 static void codeFor(struct pfCompile *pfc, FILE *f, struct pfParse *pp)
@@ -2549,7 +2446,7 @@ struct pfParse *tryBody = pp->children;
 struct pfParse *catchVars = tryBody->next;
 struct pfParse *catchBody = catchVars->next;
 struct pfParse *exceptionVar = catchVars->children;
-struct dyString *exceptionVarName = varName(pfc, exceptionVar->var);
+struct dyString *exceptionVarName = codeVarName(pfc, exceptionVar->var);
 struct pfType *exceptionType = exceptionVar->ty;
 
 fprintf(f, "{\n");
@@ -2635,10 +2532,10 @@ switch (pp->type)
 	codeVarInit(pfc, f, pp, 0);
         break;
     case pptParaDo:
-        codeForeach(pfc, f, pp, TRUE);
+        codeParaDo(pfc, f, pp, TRUE);
 	break;
     case pptForeach:
-	codeForeach(pfc, f, pp, FALSE);
+	codeForeach(pfc, f, pp);
 	break;
     case pptForEachCall:
         codeForEachCall(pfc, f, pp);
