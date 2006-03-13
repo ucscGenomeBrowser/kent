@@ -2312,3 +2312,29 @@ BASE=/cluster/data/rn4/bed/blastz.danRer3.2006-03-03
     #   1791093685 bases of 2571531505 (69.651%) in intersection
 
 
+# BUILD GENE SORTER TABLES (AKA: FAMILY BROWSER) (STARTED 2006-03-13, Fan)
+#	This should be done after KG tables are complete from known genes build
+#	process.
+#
+# Cluster together various alt-splicing isoforms.
+#	Creates the knownIsoforms and knownCanonical tables
+ssh hgwdev
+mkdir /cluster/data/rn4/bed/geneSorter.2006-03-13
+# remove old symbolic link
+rm /cluster/data/rn4/bed/geneSorter
+ln -s /cluster/data/rn4/bed/geneSorter.2006-03-13 /cluster/data/rn4/bed/geneSorter
+cd /cluster/data/rn4/bed/geneSorter
+hgClusterGenes rn4 knownGene knownIsoforms knownCanonical
+
+# Extract peptides from knownGenes into fasta file
+# and create a blast database out of them.
+mkdir /cluster/data/rn4/bed/geneSorter/blastp
+ln -s /cluster/data/rn4/bed/geneSorter/blastp /cluster/data/rn4/bed/blastp
+cd /cluster/data/rn4/bed/geneSorter/blastp
+pepPredToFa rn4 knownGenePep known.faa
+#	You may need to build this binary in src/hg/near/pepPredToFa
+/scratch/blast/formatdb -i known.faa -t known -n known
+#	This command is in /projects/compbio/bin/$MACH/formatdb
+
+
+
