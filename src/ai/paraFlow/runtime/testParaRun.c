@@ -18,7 +18,6 @@ struct _pf_string *string = *pString;
 struct myLocal *local = localVars;
 
 printf(">>processing<< %s, %d,%d,%d,%s\n", string->s, local->x,local->y,local->z,local->name);
-sleep1000(1);
 }
 
 struct _pf_array *fakeStringArray(int size)
@@ -44,7 +43,7 @@ int main(int argc, char *argv[])
 {
 static struct myLocal local = {1,2,3,"localStuff"};
 struct _pf_array *array = fakeStringArray(10000);
-paraRunInit(2);
-paraRunArray(array, &local, process);
+_pf_paraRunInit();
+_pf_paraRunArray(array, &local, process);
 return 0;
 }

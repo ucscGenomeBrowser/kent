@@ -139,11 +139,11 @@ static struct manager *manager;
 static int paraCpuCount = 2;
 
 
-void paraRunInit(int cpuCount)
+void _pf_paraRunInit()
 /* Initialize job scheduler. */
 {
-manager = managerNew(cpuCount);
-paraCpuCount = cpuCount;
+/* TODO - figure out actual CPU count. */
+manager = managerNew(paraCpuCount);
 }
 
 void jobBundleRun(struct jobBundle *job)
@@ -486,7 +486,7 @@ run->process = process;
 return run;
 }
 
-void paraRunArray(struct _pf_array *array, 
+void _pf_paraRunArray(struct _pf_array *array, 
 	void *localVars, void (*process)(void *item, void *localVars))
 /* Build up run structure on array. */
 {
@@ -499,7 +499,7 @@ paraDoRun(run);
 paraRunFree(&run);
 }
 
-void paraRunDir(struct _pf_dir *dir,
+void _pf_paraRunDir(struct _pf_dir *dir,
 	void *localVars, void (*process)(void *item, void *localVars))
 /* Build up run structure on array. */
 {
@@ -513,7 +513,7 @@ paraDoRun(run);
 paraRunFree(&run);
 }
 
-void paraRunRange(int start, int end,
+void _pf_paraRunRange(int start, int end,
 	void *localVars, void (*process)(void *item, void *localVars))
 /* Build up run structure on range. */
 {
