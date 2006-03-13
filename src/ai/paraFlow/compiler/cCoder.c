@@ -3001,7 +3001,9 @@ fprintf(f,
 "               _pf_module_info, _pf_module_info_count);\n"
 "_pf_init_args(argc, argv, &%sprogramName, &%sargs, environ);\n"
 "_pf_punt_init();\n"
+#ifdef SOON
 "_pf_paraRunInit();\n"
+#endif /* SOON */
 "_pf_entry_%s(stack);\n"
 "while (%s != 0)\n"
 "    {\n"
