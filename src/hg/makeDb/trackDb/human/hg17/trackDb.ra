@@ -257,8 +257,8 @@ color 100,30,150
 type bed 5 .
 
 track multiz17way
-shortLabel 17-Way Conservation 
-longLabel Vertebrate Multiz Alignment & Conservation (17 Species)
+shortLabel Conservation 
+longLabel Vertebrate Multiz Alignment & Conservation
 group compGeno
 priority 104.1
 visibility hide
@@ -281,8 +281,8 @@ speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
 treeImage phylo/Mm7_17way.jpg
 
 track phastConsElements17way
-shortLabel 17-Way Most Conserved
-longLabel PhastCons Conserved Elements, 17-way Vertebrate Multiz Alignment
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
 group compGeno
 priority 104.3
 visibility hide
