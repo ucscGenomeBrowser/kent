@@ -138,7 +138,7 @@ struct manager
     };
 static struct manager *managerNew(int cpuCount);
 
-static struct manager *manager;
+static struct manager *theManager;
 static int paraCpuCount = 2;
 
 
@@ -146,7 +146,7 @@ void _pf_paraRunInit()
 /* Initialize job scheduler. */
 {
 /* TODO - figure out actual CPU count. */
-manager = managerNew(paraCpuCount);
+theManager = managerNew(paraCpuCount);
 }
 
 void jobBundleRun(struct jobBundle *job, _pf_Stack *stack)
@@ -174,7 +174,7 @@ for (;;)
     struct jobBundle *job = synQueueGet(w->queue);
     // uglyf("Got work type %d, jobs %d\n", (int)(job->messageType), job->itemCount);
     jobBundleRun(job, w->stack);
-    synQueuePut(manager->queue, job);
+    synQueuePut(theManager->queue, job);
     }
 }
 
@@ -419,11 +419,12 @@ else
 static void *manageManage(void *v)
 /* Manage away on our message queue. */
 {
-struct manager *manger = v;
+struct manager *manager = v;
 for (;;)
     {
     enum messageType type;
     struct messageHeader *message = synQueueGet(manager->queue);
+    uglyf("manageManage message %p\n", message);
     // uglyf("Manager got message %d\n", (int)message->type);
     if (message->type == mRun)
 	scheduleRun(manager, (struct paraRun *)message);
@@ -461,7 +462,7 @@ return manager;
 static void paraDoRun(struct paraRun *run)
 /* Send run to manager and wait for results. */
 {
-synQueuePut(manager->queue, run);
+synQueuePut(theManager->queue, run);
 synQueueGet(run->customerQueue);
 }
 
