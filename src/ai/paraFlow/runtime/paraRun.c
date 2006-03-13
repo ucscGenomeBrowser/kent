@@ -191,7 +191,7 @@ return worker;
 }
 
 
-void *getDirJobs(struct _pf_dir *dir, struct hashCookie cookie, int size)
+void *getDirJobs(struct _pf_dir *dir, struct hashCookie *cookie, int size)
 /* Allocate an array of size, and fill it with next bunch of items from
  * hash. */
 {
@@ -203,7 +203,7 @@ if (base->needsCleanup)
     struct _pf_object **pt = buf;
     for (i=0; i<size; ++i)
         {
-	struct hashEl *hel = hashNext(&cookie);
+	struct hashEl *hel = hashNext(cookie);
 	*pt++ = hel->val;
 	}
     }
@@ -212,7 +212,7 @@ else
     char *pt = buf;
     for (i=0; i<size; ++i)
         {
-	struct hashEl *hel = hashNext(&cookie);
+	struct hashEl *hel = hashNext(cookie);
 	memcpy(pt, hel->val, itemSize);
 	pt += itemSize;
 	}
@@ -263,7 +263,7 @@ switch (run->collectionType)
     {
     case cDir:
 	job->items = job->itemsToFree = 
-		getDirJobs(run->dir, run->hashCookie, itemsInBundle);
+		getDirJobs(run->dir, &run->hashCookie, itemsInBundle);
         break;
     case cArray:
 	job->items = run->array->elements + run->itemSize*run->arrayIx;
