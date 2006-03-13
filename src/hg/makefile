@@ -201,6 +201,7 @@ UTIL_DIRS = \
 	pslPairs \
 	pslPretty \
 	pslQuickFilter \
+	pslRecalcMatch \
 	pslReps \
 	pslSelect \
 	pslSimp \
