@@ -11,7 +11,7 @@ struct myLocal
     char *name;
     };
 
-void process(void *item, void *localVars)
+void process(_pf_Stack *stack, void *item, void *localVars)
 {
 struct _pf_string **pString = item;
 struct _pf_string *string = *pString;
@@ -42,7 +42,7 @@ return array;
 int main(int argc, char *argv[])
 {
 static struct myLocal local = {1,2,3,"localStuff"};
-struct _pf_array *array = fakeStringArray(10000);
+struct _pf_array *array = fakeStringArray(1000);
 _pf_paraRunInit();
 _pf_paraRunArray(array, &local, process);
 return 0;

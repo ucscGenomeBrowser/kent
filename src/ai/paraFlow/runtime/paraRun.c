@@ -78,7 +78,8 @@ struct paraRun
     long itemsFinished;		/* Number of items finished by threads. */
     struct synQueue *customerQueue;	/* Where customer waits. */
     void *localVars;		/* Local variables in caller. */
-    void (*process)(void *item, void *localVars);  /* Process function */
+    void (*process)(_pf_Stack *stack, void *item, void *localVars);  
+    	/* A function that processes one item. */
     struct dlNode *node;	/* Node in managers activeRun list */
     enum collectionType collectionType;	   /* Collection type. */
 
@@ -103,7 +104,7 @@ struct jobBundle
     void *items;	/* An array of items to process. */
     void *itemsToFree;	/* For locally allocated items, we'll free these */
     void *localVars;	/* Local variables in caller. */
-    void (*process)(void *item, void *localVars);  
+    void (*process)(_pf_Stack *stack, void *item, void *localVars);  
     	/* A function that processes one item. */
     struct timeval startTime;	/* Start time (wall clock) */
     struct timeval endTime;		/* End time (wall clock). */
@@ -119,6 +120,7 @@ struct worker
     struct synQueue *queue;	/* Worker waits on this. */
     pthread_t thread;	/* Worker's thread. */
     struct dlNode *node;	/* Node in double linked list. */
+    _pf_Stack stack[16*1024];   /* Expression stack. */
     };
 static struct worker *workerNew();
 
@@ -146,7 +148,7 @@ void _pf_paraRunInit()
 manager = managerNew(paraCpuCount);
 }
 
-void jobBundleRun(struct jobBundle *job)
+void jobBundleRun(struct jobBundle *job, _pf_Stack *stack)
 /* Run job on all items. */
 {
 char *item = job->items;
@@ -155,7 +157,7 @@ job->startCpu = clock();
 gettimeofday(&job->startTime, NULL);
 for (i=0; i<job->itemCount; ++i)
     {
-    job->process(item, job->localVars);
+    job->process(stack, item, job->localVars);
     item += job->itemSize;
     }
 gettimeofday(&job->endTime, NULL);
@@ -169,8 +171,8 @@ struct worker *w = v;
 for (;;)
     {
     struct jobBundle *job = synQueueGet(w->queue);
-    uglyf("Got work type %d, jobs %d\n", (int)(job->messageType), job->itemCount);
-    jobBundleRun(job);
+    // uglyf("Got work type %d, jobs %d\n", (int)(job->messageType), job->itemCount);
+    jobBundleRun(job, w->stack);
     synQueuePut(manager->queue, job);
     }
 }
@@ -229,17 +231,17 @@ if (itemsLeft == 0)
     return NULL;
 if (run->itemsFinished == 0)
     {
-    uglyf("paraRunGetNextJob no one finished yet.\n");
+    // uglyf("paraRunGetNextJob no one finished yet.\n");
     itemsInBundle = run->itemCount/(paraCpuCount*10);
     }
 else if (run->totalRunTime > 0.0001)
     {
-    uglyf("total run time is %f, aveTime %f\n", run->totalRunTime, run->totalRunTime/run->itemsFinished);
+    // uglyf("total run time is %f, aveTime %f\n", run->totalRunTime, run->totalRunTime/run->itemsFinished);
     itemsInBundle = 0.005*run->itemsFinished/run->totalRunTime;
     }
 else
     {
-    uglyf("Short items, assigning a bunch\n");
+    // uglyf("Short items, assigning a bunch\n");
     itemsInBundle = run->itemCount/paraCpuCount;
     }
 if (itemsInBundle < 1)
@@ -247,7 +249,7 @@ if (itemsInBundle < 1)
 if (itemsInBundle > itemsLeft)
     itemsInBundle = itemsLeft;
 
-uglyf("paraRunGetNextJob itemsInBundle %ld, itemsLeft %ld\n", itemsInBundle, itemsLeft);
+// uglyf("paraRunGetNextJob itemsInBundle %ld, itemsLeft %ld\n", itemsInBundle, itemsLeft);
 AllocVar(job);
 job->messageType = mBundle;
 job->itemCount = itemsInBundle;
@@ -367,12 +369,12 @@ static void checkWork(struct manager *manager, struct jobBundle *job)
 struct paraRun *run = job->run;
 struct worker *worker = job->worker;
 
-uglyf("checkWork %d, %d\n", job->messageType, job->itemCount);
+// uglyf("checkWork %d, %d\n", job->messageType, job->itemCount);
 foldBundleIntoRun(run, job);
 jobBundleFree(&job);
 if (run->itemsFinished == run->itemCount)
     {
-    uglyf("finished one run of %d\n", (int)run->itemCount);
+    // uglyf("finished one run of %d\n", (int)run->itemCount);
     dlRemove(run->node);	/* Remove node from active run list */
     freez(&run->node);
     synQueuePut(run->customerQueue, run);
@@ -381,7 +383,7 @@ if (run->itemsFinished == run->itemCount)
     }
 else if (run->itemsSubmitted < run->itemCount)
     {
-    uglyf("Submitted %ld of %ld, putting worker back on same run\n", run->itemsSubmitted, run->itemCount);
+    // uglyf("Submitted %ld of %ld, putting worker back on same run\n", run->itemsSubmitted, run->itemCount);
     job = paraRunGetNextJob(run, worker);
     synQueuePut(worker->queue, job);
     }
@@ -400,13 +402,13 @@ else
 	}
     if (newRun)
         {
-	uglyf("Putting worker on another run\n");
+	// uglyf("Putting worker on another run\n");
 	job = paraRunGetNextJob(newRun, worker);
 	synQueuePut(worker->queue, job);
 	}
     else
         {
-	uglyf("Idling worker\n");
+	// uglyf("Idling worker\n");
 	dlRemove(worker->node);
 	slAddTail(manager->readyWorkers, worker->node);
 	}
@@ -421,7 +423,7 @@ for (;;)
     {
     enum messageType type;
     struct messageHeader *message = synQueueGet(manager->queue);
-    uglyf("Manager got message %d\n", (int)message->type);
+    // uglyf("Manager got message %d\n", (int)message->type);
     if (message->type == mRun)
 	scheduleRun(manager, (struct paraRun *)message);
     else
@@ -474,7 +476,7 @@ if (run != NULL)
 }
 
 static struct paraRun *paraRunNew(void *localVars, 
-	void (*process)(void *item, void *localVars))
+	void (*process)(_pf_Stack *stack, void *item, void *localVars))
 /* Set up shared parts of paraRun structure. */
 {
 struct paraRun *run;
@@ -486,8 +488,8 @@ run->process = process;
 return run;
 }
 
-void _pf_paraRunArray(struct _pf_array *array, 
-	void *localVars, void (*process)(void *item, void *localVars))
+void _pf_paraRunArray(struct _pf_array *array, void *localVars, 
+	void (*process)(_pf_Stack *stack, void *item, void *localVars))
 /* Build up run structure on array. */
 {
 struct paraRun *run = paraRunNew(localVars, process);
@@ -499,9 +501,9 @@ paraDoRun(run);
 paraRunFree(&run);
 }
 
-void _pf_paraRunDir(struct _pf_dir *dir,
-	void *localVars, void (*process)(void *item, void *localVars))
-/* Build up run structure on array. */
+void _pf_paraRunDir(struct _pf_dir *dir, void *localVars, 
+	void (*process)(_pf_Stack *stack, void *item, void *localVars))
+/* Run process on each item in dir. */
 {
 struct paraRun *run = paraRunNew(localVars, process);
 run->collectionType = cDir;
@@ -513,8 +515,8 @@ paraDoRun(run);
 paraRunFree(&run);
 }
 
-void _pf_paraRunRange(int start, int end,
-	void *localVars, void (*process)(void *item, void *localVars))
+void _pf_paraRunRange(long start, long end, void *localVars, 
+	void (*process)(_pf_Stack *stack, void *item, void *localVars))
 /* Build up run structure on range. */
 {
 struct paraRun *run = paraRunNew(localVars, process);
