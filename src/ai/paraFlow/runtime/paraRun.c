@@ -195,27 +195,13 @@ void *getDirJobs(struct _pf_dir *dir, struct hashCookie *cookie, int size)
 /* Allocate an array of size, and fill it with next bunch of items from
  * hash. */
 {
-struct _pf_base *base = dir->elType->base;
-int itemSize = base->size, i;
-void *buf = needLargeMem(size*itemSize);
-if (base->needsCleanup)
+int i;
+void *buf = needLargeMem(size*sizeof(void*));
+void **pt = buf;
+for (i=0; i<size; ++i)
     {
-    struct _pf_object **pt = buf;
-    for (i=0; i<size; ++i)
-        {
-	struct hashEl *hel = hashNext(cookie);
-	*pt++ = hel->val;
-	}
-    }
-else
-    {
-    char *pt = buf;
-    for (i=0; i<size; ++i)
-        {
-	struct hashEl *hel = hashNext(cookie);
-	memcpy(pt, hel->val, itemSize);
-	pt += itemSize;
-	}
+    struct hashEl *hel = hashNext(cookie);
+    *pt++ = &hel->val;
     }
 return buf;
 }
@@ -277,6 +263,7 @@ switch (run->collectionType)
 	end = run->rangeIx + itemsInBundle;
 	for (i=run->rangeIx; i<end; ++i)
 	    *pt++ = i;
+	run->rangeIx = end;
         break;
 	}
     }
@@ -509,7 +496,7 @@ void _pf_paraRunDir(struct _pf_dir *dir, void *localVars,
 struct paraRun *run = paraRunNew(localVars, process);
 run->collectionType = cDir;
 run->itemCount = dir->hash->elCount;
-run->itemSize = dir->elType->base->size;
+run->itemSize = sizeof(void*);
 run->dir = dir;
 run->hashCookie = hashFirst(dir->hash);
 paraDoRun(run);
