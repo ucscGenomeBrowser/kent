@@ -90,7 +90,7 @@ name visigene
 shortLabel VisiGene
 longLabel UCSC VisiGene In Situ Image Browser
 priority 2.601
-visibility off
+visibility on
 type lookup knownToVisiGene name value
 search exact
 itemUrl ../cgi-bin/hgVisiGene?hgp_doId=%s
