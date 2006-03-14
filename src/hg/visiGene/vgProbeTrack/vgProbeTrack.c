@@ -21,15 +21,14 @@
 #include "dystring.h"
 #include "portable.h"
 #include "fa.h"
-#include "probeExt.h"
 #include "hdb.h"
+
+#include "probeExt.h"
+#include "vgPrb.h"
 
 /* Variables you can override from command line. */
 char *database = "visiGene";
 char *sqlPath = ".";
-boolean kill = FALSE;
-
-boolean doLock = FALSE;  // TODO delete this
 
 void usage()
 /* Explain usage and exit. */
@@ -37,13 +36,22 @@ void usage()
 errAbort(
   "vgProbeTrack - build probeExt table in visiGene database\n"
   "usage:\n"
-  "   vgProbeTrack workingDir\n"
+  "   vgProbeTrack <COMMAND> {workingDir db} {optional params}\n"
+  "\n"
+  "Commands:\n"
+  "   INIT - WARNING! drops and creates all tables (except vgPrb is not dropped). \n"
+  "   POP  - populate vgPrb to catch probes for newly added submission sets. \n"
+  "   SEQ workingDir db - find sequence using assembly db. \n"
+  "   ALI workingDir db - find or blat any needed alignments for vgProbes track. \n"
+  "   EXT workingDir db - add any needed seq and extfile records for vgProbes track. \n"
+  "   PSLMAP workingDir db fromDb - pslMap using chains fromDb to db for vgAllProbes track. \n"
+  "   EXTALL workingDir db - add any needed seq and extfile records for vgAllProbes track. \n"
   "\n"
   "workingDir is a directory with space for intermediate and final results.\n"
+  "db is the target assembly to use.\n"
   "Options:\n"
-  "   -database=%s - Specifically set database\n"
+  "   -database=%s - Specifically set database (default visiGene)\n"
   "   -sqlPath=%s - specify location of probeExt.sql, relative to workingDir \n"
-  "   -kill - delete probeExt table to start fresh\n"
   , database, sqlPath
   );
 }
@@ -51,7 +59,6 @@ errAbort(
 static struct optionSpec options[] = {
    {"database", OPTION_STRING,},
    {"sqlPath", OPTION_STRING,},
-   {"kill", OPTION_BOOLEAN,},
    {NULL, 0},
 };
 
@@ -118,10 +125,11 @@ char query[512];
 struct sqlResult *sr;
 char **row;
 safef(query, sizeof(query), 
-"select e.chrom, e.chromStart, e.chromEnd, e.strand, p.id"
-" from probe p, probeExt pe, bac b, gene g, %s.bacEndPairs e"
-" where p.bac = b.id and p.gene = g.id and g.taxon=%d and b.name = e.name"
-" and p.id = pe.probe and pe.type='bac' and pe.state='new'"
+"select e.chrom, e.chromStart, e.chromEnd, e.strand, pe.id"
+" from probe p, vgPrbMap m, vgPrb pe, bac b, %s.bacEndPairs e"
+" where p.bac = b.id and p.id = m.probe and pe.id = m.vgPrb"
+" and pe.taxon=%d and b.name = e.name"
+" and pe.type='bac' and pe.state='new'"
 " order by e.chrom, e.chromStart",
 db,taxon);
 sr = sqlGetResult(conn, query);
@@ -165,17 +173,31 @@ if (bac->chromEnd > chromSeq->size)
 return cloneStringZ(chromSeq->dna + bac->chromStart, bac->chromEnd - bac->chromStart);
 }
 
-static void populateMissingProbeExt(struct sqlConnection *conn)
-/* populate probeExt where missing */
+static int findVgPrbBySeq(struct sqlConnection *conn, char *seq, int taxon)
+/* find vgPrb.id by seq given or return 0 if not found */
+{
+char *fmt = "select id from vgPrb where seq = '%s' and taxon=%d";
+int size = strlen(fmt)+strlen(seq)+4;
+char *sql = needMem(size);
+safef(sql,size,fmt,seq,taxon);
+return sqlQuickNum(conn,sql);
+freez(&sql);
+}
+
+static void populateMissingVgPrb(struct sqlConnection *conn)
+/* populate vgPrb where missing, usually after new records added to visiGene */
 {
 struct sqlResult *sr;
 char **row;
 struct dyString *dy = dyStringNew(0);
 struct sqlConnection *conn2 = sqlConnect(database);
+struct sqlConnection *conn3 = sqlConnect(database);
+int probeCount=0, vgPrbCount=0;
 
-dyStringAppend(dy, "select p.id,p.gene,antibody,probeType,fPrimer,rPrimer,p.seq,bac from probe p");
-dyStringAppend(dy, " left join probeExt e on e.probe = p.id");
-dyStringAppend(dy, " where e.probe is NULL");
+dyStringAppend(dy, "select p.id,p.gene,antibody,probeType,fPrimer,rPrimer,p.seq,bac,g.taxon from probe p, gene g");
+dyStringAppend(dy, " left join vgPrbMap m on m.probe = p.id");
+dyStringAppend(dy, " where g.id = p.gene");
+dyStringAppend(dy, "   and m.probe is NULL");
 sr = sqlGetResult(conn, dy->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -187,6 +209,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *rPrimer = row[5]; 
     char *seq = row[6]; 
     int bac = sqlUnsigned(row[7]); 
+    int taxon = sqlUnsigned(row[8]); 
 
     char *peType = "none";
     int peProbe = id;
@@ -200,6 +223,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     int seqid = 0;
     int pslid = 0;
     char *state = "new";
+    char *db = "";
+    int vgPrb = 0;
 
     if (isNotEmpty(seq))
     	{
@@ -222,29 +247,52 @@ while ((row = sqlNextRow(sr)) != NULL)
     	{
 	peType = "refSeq";   /* use accession or gene */
 	}
+
+    if (!sameString(peSeq,""))
+	{
+	vgPrb = findVgPrbBySeq(conn3,peSeq,taxon);
+	}
+
+    if (vgPrb == 0)
+	{
+	dyStringClear(dy);
+	dyStringAppend(dy, "insert into vgPrb set");
+	dyStringPrintf(dy, " id=default,\n");
+	dyStringPrintf(dy, " type='%s',\n", peType);
+	dyStringAppend(dy, " seq='");
+	dyStringAppend(dy, peSeq);
+	dyStringAppend(dy, "',\n");
+	dyStringPrintf(dy, " tName='%s',\n", tName);
+	dyStringPrintf(dy, " tStart=%d,\n", tStart);
+	dyStringPrintf(dy, " tEnd=%d,\n", tEnd);
+	dyStringPrintf(dy, " tStrand='%s',\n", tStrand);
+	dyStringPrintf(dy, " db='%s',\n", db);
+	dyStringPrintf(dy, " taxon='%d',\n", taxon);
+	dyStringPrintf(dy, " state='%s'\n", state);
+	verbose(2, "%s\n", dy->string);
+	sqlUpdate(conn2, dy->string);
+	vgPrb = sqlLastAutoId(conn2);
+	vgPrbCount++;
+	}
 	
     dyStringClear(dy);
-    dyStringAppend(dy, "insert into probeExt set");
-    dyStringPrintf(dy, " id=default,\n");
-    dyStringPrintf(dy, " type='%s',\n", peType);
+    dyStringAppend(dy, "insert into vgPrbMap set");
     dyStringPrintf(dy, " probe=%d,\n", peProbe);
-    dyStringAppend(dy, " seq='");
-    dyStringAppend(dy, peSeq);
-    dyStringAppend(dy, "',\n");
-    dyStringPrintf(dy, " tName='%s',\n", tName);
-    dyStringPrintf(dy, " tStart=%d,\n", tStart);
-    dyStringPrintf(dy, " tEnd=%d,\n", tEnd);
-    dyStringPrintf(dy, " tStrand='%s',\n", tStrand);
-    dyStringPrintf(dy, " state='%s'\n", state);
+    dyStringPrintf(dy, " vgPrb=%d \n", vgPrb);
     verbose(2, "%s\n", dy->string);
     sqlUpdate(conn2, dy->string);
-    
+
+    probeCount++;
+	
     }
+
+verbose(1, "# new probe records found = %d, # new vgPrb records added = %d\n", probeCount, vgPrbCount);
 
 dyStringFree(&dy);
     
 sqlFreeResult(&sr);
 
+sqlDisconnect(&conn3);
 sqlDisconnect(&conn2);
 
 }
@@ -280,7 +328,7 @@ return count;
 }
 
 
-static void processIsPcr(struct sqlConnection *conn)
+static void processIsPcr(struct sqlConnection *conn, int taxon, char *db)
 /* process isPcr results  */
 {
 
@@ -297,7 +345,7 @@ char *tName;
 int tStart;
 int tEnd;
 char *tStrand;
-int probeid=0;
+int probeid=0;  /* really a vgPrb id */
 boolean more = lineFileNext(lf, &line, &lineSize);
 while(more)
     {
@@ -335,20 +383,43 @@ while(more)
     probeid = atoi(word); 
 
     dyStringClear(dy);
-    dyStringAppend(dy, "update probeExt set");
-    dyStringAppend(dy, " seq='");
-    dyStringAppend(dy, dna);
-    dyStringAppend(dy, "',\n");
-    dyStringPrintf(dy, " tName='%s',\n", tName);
-    dyStringPrintf(dy, " tStart=%d,\n", tStart);
-    dyStringPrintf(dy, " tEnd=%d,\n", tEnd);
-    dyStringPrintf(dy, " tStrand='%s',\n", tStrand);
-    dyStringPrintf(dy, " state='%s'\n", "seq");
-    dyStringPrintf(dy, " where probe=%d\n", probeid);
-    dyStringPrintf(dy, " and state='%s'\n", "new");
-    verbose(2, "%s\n", dy->string);
-    sqlUpdate(conn, dy->string);
+    dyStringPrintf(dy, "select count(*) from vgPrb where id=%d and state='new'",probeid);
+    if (sqlQuickNum(conn,dy->string)>0)
+	{
+	/* record exists and hasn't already been updated */
 
+	int vgPrb = findVgPrbBySeq(conn,dna,taxon);
+	
+	if (vgPrb == 0)
+	    {
+	    dyStringClear(dy);
+	    dyStringAppend(dy, "update vgPrb set");
+	    dyStringAppend(dy, " seq='");
+	    dyStringAppend(dy, dna);
+	    dyStringAppend(dy, "',\n");
+	    dyStringPrintf(dy, " tName='%s',\n", tName);
+	    dyStringPrintf(dy, " tStart=%d,\n", tStart);
+	    dyStringPrintf(dy, " tEnd=%d,\n", tEnd);
+	    dyStringPrintf(dy, " tStrand='%s',\n", tStrand);
+	    dyStringPrintf(dy, " db='%s',\n", db);
+	    dyStringPrintf(dy, " state='%s'\n", "seq");
+	    dyStringPrintf(dy, " where id=%d\n", probeid);
+	    dyStringPrintf(dy, " and state='%s'\n", "new");
+	    verbose(2, "%s\n", dy->string);
+	    sqlUpdate(conn, dy->string);
+	    }
+	else  /* probe seq already exists */ 
+	    { 
+	    /* just re-map the probe table recs to it */
+	    dyStringClear(dy);
+	    dyStringPrintf(dy, "update vgPrbMap set vgPrb=%d where vgPrb=%d",vgPrb,probeid);
+	    sqlUpdate(conn, dy->string);
+	    /* and delete it from vgPrb */
+	    dyStringClear(dy);
+	    dyStringPrintf(dy, "delete from vgPrb where id=%d",probeid);
+	    sqlUpdate(conn, dy->string);
+	    }
+	}
     
     freez(&tName);
     freez(&name);
@@ -389,26 +460,52 @@ for(bac=bacs;bac;bac=bac->next)
 	{
 	reverseComplement(dna,strlen(dna));
 	}
-    
-    dyStringClear(dy);
-    dyStringAppend(dy, "update probeExt set");
-    dyStringAppend(dy, " seq='");
-    dyStringAppend(dy, dna);
-    dyStringAppend(dy, "',\n");
-    dyStringPrintf(dy, " tName='%s',\n", bac->chrom);
-    dyStringPrintf(dy, " tStart=%d,\n", bac->chromStart);
-    dyStringPrintf(dy, " tEnd=%d,\n", bac->chromEnd);
-    dyStringPrintf(dy, " tStrand='%s',\n", bac->strand);
-    dyStringPrintf(dy, " state='%s'\n", "seq");
-    dyStringPrintf(dy, " where probe=%d\n", bac->probe);
-    dyStringPrintf(dy, " and state='%s'\n", "new");
-    //verbose(2, "%s\n", dy->string); // the sql string could be quite large
-    sqlUpdate(conn, dy->string);
 
-    ++count; 
+
+    dyStringClear(dy);
+    dyStringPrintf(dy, "select count(*) from vgPrb where id=%d and state='new'",bac->probe);
+    if (sqlQuickNum(conn,dy->string)>0)
+	{
+	/* record exists and hasn't already been updated */
+
+	int vgPrb = findVgPrbBySeq(conn,dna,taxon);
+	
+	if (vgPrb == 0)
+	    {
+	    dyStringClear(dy);
+	    dyStringAppend(dy, "update vgPrb set");
+	    dyStringAppend(dy, " seq='");
+	    dyStringAppend(dy, dna);
+	    dyStringAppend(dy, "',\n");
+	    dyStringPrintf(dy, " tName='%s',\n", bac->chrom);
+	    dyStringPrintf(dy, " tStart=%d,\n", bac->chromStart);
+	    dyStringPrintf(dy, " tEnd=%d,\n", bac->chromEnd);
+	    dyStringPrintf(dy, " tStrand='%s',\n", bac->strand);
+	    dyStringPrintf(dy, " db='%s',\n", db);
+	    dyStringPrintf(dy, " state='%s'\n", "seq");
+	    dyStringPrintf(dy, " where id=%d\n", bac->probe);
+	    dyStringPrintf(dy, " and state='%s'\n", "new");
+	    //verbose(2, "%s\n", dy->string); // the sql string could be quite large
+	    sqlUpdate(conn, dy->string);
+	    }
+	else  /* probe seq already exists */ 
+	    { 
+	    /* just re-map the probe table recs to it */
+	    dyStringClear(dy);
+	    dyStringPrintf(dy, "update vgPrbMap set vgPrb=%d where vgPrb=%d",vgPrb,bac->probe);
+	    sqlUpdate(conn, dy->string);
+	    /* and delete it from vgPrb */
+	    dyStringClear(dy);
+	    dyStringPrintf(dy, "delete from vgPrb where id=%d",bac->probe);
+	    sqlUpdate(conn, dy->string);
+	    }
+	    
+	++count; 
+	
     
-    verbose(2,"%d finished bac for probe id %d size %d\n", 
-	count, bac->probe, bac->chromEnd - bac->chromStart);
+	verbose(2,"%d finished bac for probe id %d size %d\n", 
+	    count, bac->probe, bac->chromEnd - bac->chromStart);
+	}
 
     freez(&dna);
     }
@@ -434,8 +531,8 @@ char path2[256];
 FILE *f = NULL;
 
 dyStringClear(dy);
-dyStringAppend(dy, "select p.id, p.fPrimer, p.rPrimer from probe p, probeExt e, gene g");
-dyStringPrintf(dy, " where p.id = e.probe and g.id = p.gene and g.taxon = %d",taxon);
+dyStringAppend(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, vgPrb e, gene g");
+dyStringPrintf(dy, " where p.id = m.probe and m.vgPrb = e.id and g.id = p.gene and g.taxon = %d",taxon);
 dyStringAppend(dy, " and e.state = 'new' and e.type='primersMrna'");
 rc = sqlSaveQuery(conn, dy->string, 3, "primers.query", FALSE);
 uglyf("rc = %d = count of primers for mrna search for taxon %d\n",rc,taxon);
@@ -455,7 +552,7 @@ if (rc > 0) /* something to do */
     system("date"); system("isPcr mrna.fa primers.query isPcr.fa -out=fa"); system("date");
     system("ls -l");
 
-    processIsPcr(conn);
+    processIsPcr(conn,taxon,db);
 
     unlink("mrna.fa"); unlink("accFile.txt"); unlink("isPcr.fa");
 
@@ -466,9 +563,9 @@ unlink("primers.query");
  * them to type primersGenome
  */
 dyStringClear(dy);
-dyStringAppend(dy, "update probeExt e, probe p, gene g set e.type='primersGenome'"); 
-dyStringPrintf(dy, " where p.id = e.probe and g.id = p.gene and g.taxon = %d",taxon);
-dyStringAppend(dy, " and e.state = 'new' and e.type='primersMrna'");
+dyStringAppend(dy, "update vgPrb set type='primersGenome'"); 
+dyStringPrintf(dy, " where taxon = %d",taxon);
+dyStringAppend(dy, " and state = 'new' and type='primersMrna'");
 sqlUpdate(conn, dy->string);
 
 
@@ -476,8 +573,8 @@ sqlUpdate(conn, dy->string);
 /* get primers for those probes that did not find mrna isPcr matches 
  * and then do them against the genome instead */
 dyStringClear(dy);
-dyStringAppend(dy, "select p.id, p.fPrimer, p.rPrimer from probe p, probeExt e, gene g");
-dyStringPrintf(dy, " where p.id = e.probe and g.id = p.gene and g.taxon = %d",taxon);
+dyStringAppend(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, vgPrb e, gene g");
+dyStringPrintf(dy, " where p.id = m.probe and m.vgPrb = e.id and g.id = p.gene and g.taxon = %d",taxon);
 dyStringAppend(dy, " and e.state = 'new' and e.type='primersGenome'");
 rc = 0;
 rc = sqlSaveQuery(conn, dy->string, 3, "primers.query", FALSE);
@@ -496,7 +593,7 @@ if (rc > 0) /* something to do */
     safef(path2,sizeof(path2),"%s/%s.2bit",getCurrentDir(),db);
     uglyf("rm %s\n",path2); unlink(path2); system("ls -l");
 
-    processIsPcr(conn);
+    processIsPcr(conn,taxon,db);
     
     unlink("mrna.fa"); unlink("accFile.txt"); unlink("isPcr.fa");
 
@@ -507,9 +604,9 @@ unlink("primers.query");
  * them to type refSeq
  */
 dyStringClear(dy);
-dyStringAppend(dy, "update probeExt e, probe p, gene g set e.type='refSeq'"); 
-dyStringPrintf(dy, " where p.id = e.probe and g.id = p.gene and g.taxon = %d",taxon);
-dyStringAppend(dy, " and e.state = 'new' and e.type='primersGenome'");
+dyStringAppend(dy, "update vgPrb set type='refSeq'"); 
+dyStringPrintf(dy, " where taxon = %d",taxon);
+dyStringAppend(dy, " and state = 'new' and type='primersGenome'");
 sqlUpdate(conn, dy->string);
 
 dyStringFree(&dy);
@@ -527,9 +624,11 @@ rc = doBacs(conn, taxon, db); uglyf("found seq for %d bacEndPairs\n",rc);
  * them to type refSeq
  */
 dyStringClear(dy);
-dyStringAppend(dy, "update probeExt e, probe p, gene g set e.type='refSeq'"); 
-dyStringPrintf(dy, " where p.id = e.probe and g.id = p.gene and g.taxon = %d",taxon);
-dyStringAppend(dy, " and e.state = 'new' and e.type='bac'");
+
+dyStringAppend(dy, "update vgPrb set type='refSeq'"); 
+dyStringPrintf(dy, " where taxon = %d",taxon);
+dyStringAppend(dy, " and state = 'new' and type='bac'");
+
 sqlUpdate(conn, dy->string);
 
 dyStringFree(&dy);
@@ -538,18 +637,18 @@ dyStringFree(&dy);
 
 
 static void setTName(struct sqlConnection *conn, int taxon, char *db, char *type, char *fld)
-/* set probeExt.tName to the desired value to try, 
+/* set vgPrb.tName to the desired value to try, 
  *  e.g. gene.refSeq, gene.genbank, mm6.refFlat.name(genoName=gene.name). */
 {
 struct dyString *dy = dyStringNew(0);
 dyStringClear(dy);
 dyStringPrintf(dy, 
-    "update probeExt e, probe p, gene g"
+    "update vgPrb e, vgPrbMap m, probe p, gene g"
     " set e.seq = '', e.tName = g.%s"
-    " where e.probe = p.id and p.gene = g.id"
+    " where e.id = m.vgPrb and m.probe = p.id and p.gene = g.id"
     " and e.type = '%s'"
     " and e.state = 'new'"
-    " and g.taxon = %d"
+    " and e.taxon = %d"
     , fld, type, taxon);
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
@@ -563,9 +662,9 @@ static void setTNameMapped(struct sqlConnection *conn, int taxon, char *db, char
 struct dyString *dy = dyStringNew(0);
 dyStringClear(dy);
 dyStringPrintf(dy, 
-"update probeExt e, probe p, gene g, %s.%s f"
+"update vgPrb e, vgPrbMap m, probe p, gene g, %s.%s f"
 " set e.seq = '', e.tName = f.%s"
-" where e.probe = p.id and p.gene = g.id"
+" where e.id = m.vgPrb and m.probe = p.id and p.gene = g.id"
 " and g.%s = f.%s"
     " and e.type = '%s'"
     " and e.state = 'new'"
@@ -575,7 +674,7 @@ sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
 
-static void processMrnaFa(struct sqlConnection *conn, int taxon, char *type)
+static void processMrnaFa(struct sqlConnection *conn, int taxon, char *type, char *db)
 /* process isPcr results  */
 {
 
@@ -603,20 +702,47 @@ while(more)
 	}
     dna = cloneString(dy->string);
 
-    dyStringClear(dy);
-
-    dyStringAppend(dy, "update probeExt e, probe p, gene g");
-    dyStringAppend(dy, " set e.seq = '");
-    dyStringAppend(dy, dna);
-    dyStringAppend(dy, "',\n");
-    dyStringAppend(dy, " e.state = 'seq',\n");
-    dyStringPrintf(dy, " e.tName = '%s'\n",name);  /* so we know where it came from */
-    dyStringAppend(dy, " where e.probe = p.id and p.gene = g.id");
-    dyStringPrintf(dy, " and g.taxon = %d", taxon);
-    dyStringPrintf(dy, " and e.type = '%s' and e.tName = '%s'", type, name);
-    dyStringAppend(dy, " and e.seq = ''");
-    verbose(2, "%s\n", dy->string);
-    sqlUpdate(conn, dy->string);
+    while(1)
+	{
+	int oldProbe = 0;
+	dyStringClear(dy);
+	dyStringPrintf(dy, "select id from vgPrb "
+	   "where taxon=%d and type='%s' and tName='%s' and state='new'",taxon,type,name);
+	oldProbe = sqlQuickNum(conn,dy->string);
+	if (oldProbe==0)
+	    break;       /* no more records match */
+	    
+	/* record exists and hasn't already been updated */
+	
+	int vgPrb = findVgPrbBySeq(conn,dna,taxon);
+	
+	if (vgPrb == 0)
+	    {
+	    dyStringClear(dy);
+	    dyStringAppend(dy, "update vgPrb set");
+	    dyStringAppend(dy, " seq = '");
+	    dyStringAppend(dy, dna);
+	    dyStringAppend(dy, "',\n");
+	    dyStringPrintf(dy, " db = '%s',\n", db);
+	    dyStringAppend(dy, " state = 'seq'\n");
+	    dyStringPrintf(dy, " where id=%d\n", oldProbe);
+	    dyStringPrintf(dy, " and state='%s'\n", "new");
+	    verbose(2, "%s\n", dy->string);
+	    sqlUpdate(conn, dy->string);
+	    }
+	else  /* probe seq already exists */ 
+	    { 
+	    /* just re-map the probe table recs to it */
+	    dyStringClear(dy);
+	    dyStringPrintf(dy, "update vgPrbMap set vgPrb=%d where vgPrb=%d",vgPrb,oldProbe);
+	    sqlUpdate(conn, dy->string);
+	    /* and delete it from vgPrb */
+	    dyStringClear(dy);
+	    dyStringPrintf(dy, "delete from vgPrb where id=%d",oldProbe);
+	    sqlUpdate(conn, dy->string);
+	    }
+	    
+	}    
 
     freez(&name);
     freez(&dna);
@@ -636,9 +762,9 @@ struct dyString *dy = dyStringNew(0);
 char cmdLine[256];
 dyStringClear(dy);
 dyStringPrintf(dy, 
-    "select distinct e.tName from probeExt e, probe p, gene g, %s.%s m"
-    " where e.probe = p.id and p.gene = g.id and e.tName = m.qName"
-    " and g.taxon = %d and e.type = '%s' and e.tName <> '' and e.state = 'new'"
+    "select distinct e.tName from vgPrb e, %s.%s m"
+    " where e.tName = m.qName"
+    " and e.taxon = %d and e.type = '%s' and e.tName <> '' and e.state = 'new'"
     ,db,table,taxon,type);
 rc = 0;
 rc = sqlSaveQuery(conn, dy->string, 1, "accFile.txt", FALSE);
@@ -647,7 +773,7 @@ safef(cmdLine,sizeof(cmdLine),"getRna %s accFile.txt mrna.fa",db);
 system(cmdLine); 
 //system("date");
 
-processMrnaFa(conn, taxon, type);
+processMrnaFa(conn, taxon, type, db);
 
 unlink("mrna.fa"); 
 unlink("accFile.txt");
@@ -664,41 +790,15 @@ static void advanceType(struct sqlConnection *conn, int taxon, char *oldType, ch
 struct dyString *dy = dyStringNew(0);
 dyStringClear(dy);
 dyStringPrintf(dy, 
- "update probeExt e, probe p, gene g set e.type='%s', e.tName=''"
- " where p.id = e.probe and g.id = p.gene and g.taxon = %d"
- " and e.state = 'new' and e.type='%s'"
+ "update vgPrb set type='%s', tName=''"
+ " where taxon = %d and state = 'new' and type='%s'"
  ,newType,taxon,oldType);
 sqlUpdate(conn, dy->string);
 dyStringFree(&dy);
 }
 
-static int doAccPsls(struct sqlConnection *conn, int taxon, char *db, char *type, char *table)
-/* get psls for one probeExt acc type */
-{
-int rc = 0;
-struct dyString *dy = dyStringNew(0);
-char outName[256];
-dyStringClear(dy);
-dyStringPrintf(dy, 
-    "select m.matches,m.misMatches,m.repMatches,m.nCount,m.qNumInsert,m.qBaseInsert,"
-    "m.tNumInsert,m.tBaseInsert,m.strand,"
-    "concat(\"vgPrb_\",p.id),"
-    "m.qSize,m.qStart,m.qEnd,m.tName,m.tSize,m.tStart,m.tEnd,m.blockCount,"
-    "m.blockSizes,m.qStarts,m.tStarts"    
-    " from probeExt e, probe p, gene g, %s.%s m"
-    " where e.probe = p.id and p.gene = g.id and e.tName = m.qName"
-    " and g.taxon = %d and e.type = '%s' and e.tName <> '' and e.state='seq' and e.seq <> ''"
-    " order by m.tName,m.tStart"
-    ,db,table,taxon,type);
-rc = 0;
-safef(outName,sizeof(outName),"%s.psl",type);
-rc = sqlSaveQuery(conn, dy->string, 21, outName, FALSE);
-dyStringFree(&dy);
-return rc;
-}
-
-static void doAccessions(struct sqlConnection *conn, int taxon, char *db)
-/* get probe seq from primers */
+static void doAccessionsSeq(struct sqlConnection *conn, int taxon, char *db)
+/* get probe seq from Accessions */
 {
 int rc = 0;
 struct dyString *dy = dyStringNew(0);
@@ -761,6 +861,113 @@ rc = getAccMrnas(conn, taxon, db, "kgAlAll", "all_mrna");
 uglyf("rc = %d = count of kgAlAll mrna for %s\n",rc,db);
 advanceType(conn,taxon,"kgAlAll","gene");
 
+dyStringFree(&dy);
+}
+
+
+static void populateMissingVgPrbAli(struct sqlConnection *conn, int taxon, char *db, char *table)
+/* populate vgPrbAli for db */
+{
+struct dyString *dy = dyStringNew(0);
+dyStringClear(dy);
+dyStringPrintf(dy,
+"insert into %s"
+" select distinct '%s', e.id, 'new' from vgPrb e"
+" left join %s a on e.id = a.vgPrb and a.db = '%s'"
+" where a.vgPrb is NULL "
+" and e.taxon = %d"
+    ,table,db,table,db,taxon);
+sqlUpdate(conn, dy->string);
+dyStringFree(&dy);
+}
+
+
+static void updateVgPrbAli(struct sqlConnection *conn, char *db, char *table, char *track)
+/* update vgPrbAli from vgProbes track for db */
+{
+struct dyString *dy = dyStringNew(0);
+dyStringClear(dy);
+dyStringPrintf(dy,
+"update %s a, %s.%s v"
+" set a.status = 'ali'"
+" where v.qName = concat('vgPrb_',a.vgPrb)"
+" and a.db = '%s'"
+    ,table,db,track,db);
+sqlUpdate(conn, dy->string);
+dyStringFree(&dy);
+}
+
+
+static void markNoneVgPrbAli(struct sqlConnection *conn, int fromTaxon, char *db, char *table)
+/* mark records in vgPrbAli that did not find any alignment for db */
+{
+struct dyString *dy = dyStringNew(0);
+dyStringClear(dy);
+dyStringPrintf(dy,
+"update %s a, vgPrb e"
+" set a.status = 'none'"
+" where a.status = 'new'"
+" and a.db = '%s' and e.taxon = %d"
+" and a.vgPrb = e.id"
+    ,table,db,fromTaxon);
+sqlUpdate(conn, dy->string);
+dyStringFree(&dy);
+}
+
+
+
+static int doAccPsls(struct sqlConnection *conn, int taxon, char *db, char *type, char *table)
+/* get psls for one probeExt acc type */
+{
+int rc = 0;
+struct dyString *dy = dyStringNew(0);
+char outName[256];
+dyStringClear(dy);
+dyStringPrintf(dy, 
+    "select m.matches,m.misMatches,m.repMatches,m.nCount,m.qNumInsert,m.qBaseInsert,"
+    "m.tNumInsert,m.tBaseInsert,m.strand,"
+    "concat(\"vgPrb_\",e.id),"
+    "m.qSize,m.qStart,m.qEnd,m.tName,m.tSize,m.tStart,m.tEnd,m.blockCount,"
+    "m.blockSizes,m.qStarts,m.tStarts"    
+    " from vgPrb e, vgPrbAli a, %s.%s m"
+    " where e.id = a.vgPrb and a.db = '%s' and a.status='new' and e.tName = m.qName"
+    " and e.taxon = %d and e.type = '%s' and e.tName <> '' and e.state='seq' and e.seq <> ''"
+    " order by m.tName,m.tStart"
+    ,db,table,db,taxon,type);
+rc = 0;
+safef(outName,sizeof(outName),"%s.psl",type);
+rc = sqlSaveQuery(conn, dy->string, 21, outName, FALSE);
+dyStringFree(&dy);
+return rc;
+}
+
+static int dumpPslTable(struct sqlConnection *conn, char *db, char *table)
+/* dump psls for db.table to table.psl in current (working) dir */
+{
+int rc = 0;
+struct dyString *dy = dyStringNew(0);
+char outName[256];
+dyStringClear(dy);
+dyStringPrintf(dy, 
+    "select matches,misMatches,repMatches,nCount,qNumInsert,qBaseInsert,"
+    "tNumInsert,tBaseInsert,strand,"
+    "qName,qSize,qStart,qEnd,tName,tSize,tStart,tEnd,"
+    "blockCount,blockSizes,qStarts,tStarts"    
+    " from %s.%s"
+    " order by tName,tStart"
+    ,db,table);
+rc = 0;
+safef(outName,sizeof(outName),"%s.psl",table);
+rc = sqlSaveQuery(conn, dy->string, 21, outName, FALSE);
+dyStringFree(&dy);
+return rc;
+}
+
+static void doAccessionsAli(struct sqlConnection *conn, int taxon, char *db)
+/* get probe alignments from Accessions */
+{
+int rc = 0;
+
 /* get refSeq psls */
 rc = doAccPsls(conn, taxon, db, "refSeq", "refSeqAli");
 uglyf("rc = %d = count of refSeq psls for %s\n",rc,db);
@@ -797,13 +1004,33 @@ uglyf("rc = %d = count of kgAlRef psls for %s\n",rc,db);
 rc = doAccPsls(conn, taxon, db, "kgAlAll", "all_mrna");
 uglyf("rc = %d = count of kgAlRef psls for %s\n",rc,db);
 
+}
 
+static void doFakeBacAli(struct sqlConnection *conn, int taxon, char *db)
+/* place probe seq from primers, etc with blat */
+{
+int rc = 0;
+struct dyString *dy = dyStringNew(0);
+/* create fake psls as blatBAC.psl */
+dyStringClear(dy);
+dyStringPrintf(dy, 
+    "select length(e.seq), 0, 0, 0, 0, 0, 0, 0, e.tStrand, concat('vgPrb_',e.id), length(e.seq),"
+    " 0, length(e.seq), e.tName, ci.size, e.tStart, e.tEnd, 1,"
+    " concat(length(e.seq),','), concat(0,','), concat(e.tStart,',')"
+    " from vgPrb e, %s.chromInfo ci, vgPrbAli a"
+    " where ci.chrom = e.tName and e.id = a.vgPrb"
+    " and e.type = 'bac'"
+    " and e.taxon = %d"
+    " and a.db = '%s' and a.status='new'"
+    , db, taxon, db);
+//restore: 
+rc = sqlSaveQuery(conn, dy->string, 21, "fakeBAC.psl", FALSE);
+uglyf("rc = %d = count of sequences for fakeBAC.psl, for taxon %d\n",rc,taxon);
 dyStringFree(&dy);
 }
 
-
 static void doBlat(struct sqlConnection *conn, int taxon, char *db)
-/* place probe seq from primers, etc with blat */
+/* place probe seq from non-BAC with blat that have no alignments yet */
 {
 int rc = 0;
 char *blatSpec=NULL;
@@ -811,6 +1038,30 @@ char cmdLine[256];
 char path1[256];
 char path2[256];
 struct dyString *dy = dyStringNew(0);
+
+/* (non-BACs needing alignment) */
+dyStringClear(dy);
+dyStringPrintf(dy, 
+    "select concat(\"vgPrb_\",e.id), e.seq"
+    " from vgPrb e, vgPrbAli a"
+    " where e.id = a.vgPrb"
+    " and a.db = '%s'"
+    " and a.status = 'new'"
+    " and e.taxon = %d"
+    " and e.type <> 'bac'"
+    " and e.seq <> ''"
+    " order by e.id"
+    , db, taxon);
+//restore: 
+rc = sqlSaveQuery(conn, dy->string, 2, "blat.fa", TRUE);
+uglyf("rc = %d = count of sequences for blat, to get psls for taxon %d\n",rc,taxon);
+
+if (rc == 0) 
+    {
+    unlink("blat.fa");
+    system("echo '' > blatNearBest.psl");
+    return;
+    }
 
 /* make .ooc and blat on kolossus */
 
@@ -820,25 +1071,11 @@ safef(path2,sizeof(path2),"%s/%s.2bit",getCurrentDir(),db);
 uglyf("copy: [%s] to [%s]\n",path1,path2);  copyFile(path1,path2);
 
 safef(cmdLine,sizeof(cmdLine),
-	"ssh kolossus 'cd %s; blat -makeOoc=11.ooc -tileSize=11 -repMatch=1024 %s.2bit /dev/null /dev/null'",
-	getCurrentDir(),db);
+"ssh kolossus 'cd %s; blat -makeOoc=11.ooc -tileSize=11"
+" -repMatch=1024 %s.2bit /dev/null /dev/null'",
+    getCurrentDir(),db);
 //restore: 
 system("date"); uglyf("cmdLine: [%s]\n",cmdLine); system(cmdLine); system("date");
-
-/* (will do BACs separately later) */
-dyStringClear(dy);
-dyStringPrintf(dy, 
-    "select concat(\"vgPrb_\",e.probe), e.seq"
-    " from probeExt e, probe p, gene g"
-    " where e.probe = p.id and p.gene = g.id"
-    " and g.taxon = %d"
-    " and e.type in ('primersMrna','primersGenome','gene','probe')"
-    " and e.seq <> ''"
-    " order by e.probe"
-    , taxon);
-//restore: 
-rc = sqlSaveQuery(conn, dy->string, 2, "blat.fa", TRUE);
-uglyf("rc = %d = count of sequences for blat, to get psls for taxon %d\n",rc,taxon);
 
 safef(cmdLine,sizeof(cmdLine),
 	"ssh kolossus 'cd %s; blat %s.2bit blat.fa -ooc=11.ooc -noHead blat.psl'",
@@ -869,57 +1106,24 @@ safef(cmdLine,sizeof(cmdLine),
 uglyf("cmdLine=[%s]\n",cmdLine);
 system(cmdLine); 
 
-
 unlink("blat.fa");
 unlink("blat.psl");
 unlink("blatS.psl");
-
-/* create fake psls as blatBAC.psl */
-dyStringClear(dy);
-dyStringPrintf(dy, 
-    "select length(e.seq), 0, 0, 0, 0, 0, 0, 0, e.tStrand, concat('vgPrb_',e.probe), length(e.seq),"
-    " 0, length(e.seq), e.tName, ci.size, e.tStart, e.tEnd, 1,"
-    " concat(length(e.seq),','), concat(0,','), concat(e.tStart,',')"
-    " from probeExt e, %s.chromInfo ci, probe p, gene g"
-    " where ci.chrom = e.tName and e.probe=p.id and p.gene=g.id"
-    " and e.type = 'bac'"
-    " and g.taxon = %d"
-    , db, taxon);
-//restore: 
-rc = sqlSaveQuery(conn, dy->string, 21, "blatBAC.psl", FALSE);
-uglyf("rc = %d = count of sequences for blatBAC.psl, for taxon %d\n",rc,taxon);
-
-      
 
 freez(&blatSpec);
 dyStringFree(&dy);
 }
 
-void static assembleAllFaPsl(struct sqlConnection *conn, int taxon, char *db)
-/* assemble final seq (all.fa) and alignments (various.psl) */
-{
-int rc = 0;
-char cmdLine[256];
-struct dyString *dy = dyStringNew(0);
-dyStringClear(dy);
-dyStringPrintf(dy, 
-    "select concat(\"vgPrb_\",e.probe) prb, e.seq"
-    " from probeExt e, probe p, gene g"
-    " where e.probe = p.id and p.gene = g.id"
-    " and g.taxon = %d"
-    " and e.seq <>  ''"
-    " order by prb"
-    , taxon);
-//restore: 
-rc = sqlSaveQuery(conn, dy->string, 2, "vgPrbAll.fa", TRUE);
-uglyf("rc = %d = count of sequences for vgPrbAll.fa, to use with psls for taxon %d\n",rc,taxon);
 
-// restore:
+
+void static assembleAllPsl(struct sqlConnection *conn, int taxon, char *db)
+/* assemble NonBlat.psl from variouls psl alignments */
+{
+// " blatNearBest.psl" not included
 /* make final psl */
 system(
 "cat"
-" blatNearBest.psl"
-" blatBAC.psl"
+" fakeBAC.psl"
 " flatAll.psl"
 " flatRef.psl"
 " genRef.psl"
@@ -929,89 +1133,399 @@ system(
 " linkAll.psl"
 " linkRef.psl"
 " refSeq.psl"
-" > vgPrbAll.psl"
+" > vgPrbNonBlat.psl"
 );
 
-uglyf("vgPrbAll.psl assembled for taxon %d\n",taxon);
+uglyf("vgPrbNonBlat.psl assembled for taxon %d\n",taxon);
 
 
 //unlink("blatNearBest.psl");  
-//unlink("blatBAC.psl");  
+//unlink("fakeBAC.psl");  
 
-
-system("ls -ltr");
-
-dyStringFree(&dy);
-}
-
-static void doProbes(struct sqlConnection *conn, int taxon, char *db)
-/* get probe seq from primers, bacEndPairs, refSeq, genbank, gene-name */
-{
-
-//restore: doPrimers(conn, taxon, db);
-
-//restore: doBacEndPairs(conn, taxon, db);
-
-//restore: doAccessions(conn, taxon, db);
-
-//restore: 
-doBlat(conn, taxon, db);   // watch out! some stuff inside here still disabled
-
-//restore: 
-assembleAllFaPsl(conn, taxon, db);
-printf("OK, DONE.  Go put vgPrbAll.fa in /gbdb/%s/ and use hgLoadPsl and hgLoadSeq \n",db);
+//system("ls -ltr");
 
 }
 
-static void vgProbeTrack()
-/* build visiGene probeExt table */
+
+static void rollupPsl(char *pslName, char *table, struct sqlConnection *conn, char *db)
 {
-struct sqlConnection *conn = sqlConnect(database);
-struct probeExt *pE = NULL;
+char cmd[256];
+char dbTbl[256];
 
-if (kill)
-    sqlDropTable(conn, "probeExt");
+if (fileSize(pslName)==0)
+    return;
 
-if (!sqlTableExists(conn, "probeExt"))
+
+safef(dbTbl,sizeof(dbTbl),"%s.%s",db,table);
+if (!sqlTableExists(conn, dbTbl))
     {
-    char *sql = NULL;
-    char path[256];
-    safef(path,sizeof(path),"%s/%s",sqlPath,"probeExt.sql");
-    readInGulp(path, &sql, NULL);
-    sqlUpdate(conn, sql);
-    sqlUpdate(conn, "create index probe on probeExt(probe);");
-    sqlUpdate(conn, "create index tName on probeExt(tName(20));");
+    verbose(1,"FYI: Table %s does not exist\n",dbTbl);
+    safef(cmd,sizeof(cmd),"echo '' > %s.psl",table);
+    uglyf("%s\n",cmd); system(cmd);
+    }
+else
+    {
+    dumpPslTable(conn, db, table);
     }
 
-/* populate probeExt where missing */
+safef(cmd,sizeof(cmd),"cat %s %s.psl | sort -u | sort -k 10,10 > %sNew.psl", pslName, table, table);
+uglyf("%s\n",cmd); system(cmd);
 
-if (kill)  // this dependency is convenient for now.
-    populateMissingProbeExt(conn);
+safef(cmd,sizeof(cmd),"hgLoadPsl %s %sNew.psl -table=%s",db,table,table);
+uglyf("%s\n",cmd); system(cmd);
 
-/* do mouse */
+safef(cmd,sizeof(cmd),"rm %s %s.psl %sNew.psl",pslName,table,table);
+uglyf("%s\n",cmd); 
+//system(cmd);
+
+}
+
+
+static int findTaxon(struct sqlConnection *conn, char *db)
+/* return the taxon for the given db, or abort */
+{
+char sql[256];
+int taxon = 0;
+char *fmt = "select ncbi_taxa_id from go.species "
+"where concat(genus,' ',species) = '%s'";
+safef(sql,sizeof(sql),fmt,hScientificName(db));
+taxon = sqlQuickNum(conn, sql);
+if (taxon == 0) 
+    {
+    if (sameString(db,"nibb"))   /* we don't really have this frog as an assembly */
+	taxon = 8355;    /* Xenopus laevis - African clawed frog */
+    /* can put more here in future */    
+    }
+if (taxon == 0)
+   errAbort("unknown taxon for db = %s, unable to continue until its taxon is defined.",db);
+return taxon;
+}
+
+
+static void makeFakeProbeSeq(struct sqlConnection *conn, char *db)
 /* get probe seq from primers, bacEndPairs, refSeq, genbank, gene-name */
+{
+
+int taxon = findTaxon(conn,db);
+
 //restore: 
-doProbes(conn,10090,"mm7");  /* taxon 10090 = mouse */
+doPrimers(conn, taxon, db);
 
-// just to grab frog probe seq fa
-//doProbes(conn,8355,"mm7");  /* taxon 8355 = frog */
+//restore: 
+doBacEndPairs(conn, taxon, db);
 
-sqlDisconnect(&conn);
+//restore: 
+doAccessionsSeq(conn, taxon, db);
+
+}
+
+
+static void initTable(struct sqlConnection *conn, char *table, boolean nuke)
+/* build tables */
+{
+char *sql = NULL;
+char path[256];
+if (nuke)
+    sqlDropTable(conn, table);
+if (!sqlTableExists(conn, table))
+    {
+    safef(path,sizeof(path),"%s/%s.sql",sqlPath,table);
+    readInGulp(path, &sql, NULL);
+    sqlUpdate(conn, sql);
+    }
+}
+
+static void init(struct sqlConnection *conn)
+/* build tables - for the first time */
+{
+if (!sqlTableExists(conn, "vgPrb"))
+    {
+    initTable(conn, "vgPrb", FALSE);  /* this most important table should never be nuked automatically */
+    sqlUpdate(conn, "create index tName on vgPrb(tName(20));");
+    sqlUpdate(conn, "create index seq on vgPrb(seq(40));");
+    }
+
+initTable(conn, "vgPrbMap", TRUE);
+sqlUpdate(conn, "create index probe on vgPrbMap(probe);");
+sqlUpdate(conn, "create index vgPrb on vgPrbMap(vgPrb);");
+
+initTable(conn, "vgPrbAli", TRUE);
+initTable(conn, "vgPrbAliAll", TRUE);
+
+}
+
+static void doAlignments(struct sqlConnection *conn, char *db)
+{
+int taxon = findTaxon(conn,db);
+
+populateMissingVgPrbAli(conn, taxon, db, "vgPrbAli");
+
+updateVgPrbAli(conn, db, "vgPrbAli","vgProbes");
+
+doAccessionsAli(conn, taxon, db);
+
+doFakeBacAli(conn, taxon, db);
+
+assembleAllPsl(conn, taxon, db);
+
+rollupPsl("vgPrbNonBlat.psl", "vgProbes", conn, db);
+
+updateVgPrbAli(conn, db, "vgPrbAli","vgProbes");
+
+doBlat(conn, taxon, db);   
+
+rollupPsl("blatNearBest.psl", "vgProbes", conn, db);
+
+updateVgPrbAli(conn, db, "vgPrbAli","vgProbes");
+
+markNoneVgPrbAli(conn, taxon, db, "vgPrbAli");
+
+}
+
+
+static void getPslMapAli(struct sqlConnection *conn, 
+    char *db, int fromTaxon, char *fromDb, boolean isBac)
+{
+int rc = 0;
+struct dyString *dy = dyStringNew(0);
+char outName[256];
+/* get {non-}bac $db.vgProbes not yet aligned */
+dyStringClear(dy);
+dyStringPrintf(dy, 
+    "select m.matches,m.misMatches,m.repMatches,m.nCount,m.qNumInsert,m.qBaseInsert,"
+    "m.tNumInsert,m.tBaseInsert,m.strand,"
+    "m.qName,m.qSize,m.qStart,m.qEnd,m.tName,m.tSize,m.tStart,m.tEnd,m.blockCount,"
+    "m.blockSizes,m.qStarts,m.tStarts"    
+    " from vgPrb e, vgPrbAliAll a, %s.vgProbes m"
+    " where e.id = a.vgPrb and a.db = '%s' and a.status='new'"
+    " and m.qName = concat(\"vgPrb_\",e.id)"
+    " and e.taxon = %d and e.type %s 'bac' and e.state='seq' and e.seq <> ''"
+    " order by m.tName,m.tStart"
+    ,fromDb,db,fromTaxon, isBac ? "=" : "<>");
+rc = 0;
+safef(outName,sizeof(outName), isBac ? "bac.psl" : "nonBac.psl");
+rc = sqlSaveQuery(conn, dy->string, 21, outName, FALSE);
+uglyf("Count of %s Psls found for pslMap: %d\n", isBac ? "bac" : "nonBac", rc);
+}
+
+
+static void getPslMapFa(struct sqlConnection *conn, 
+    char *db, int fromTaxon)
+{
+int rc = 0;
+struct dyString *dy = dyStringNew(0);
+char outName[256];
+/* get .fa for pslRecalcMatch use */
+dyStringClear(dy);
+dyStringPrintf(dy, 
+    "select concat(\"vgPrb_\",e.id), e.seq"
+    " from vgPrb e, vgPrbAliAll a"
+    " where e.id = a.vgPrb"
+    " and a.db = '%s'"
+    " and a.status = 'new'"
+    " and e.taxon = %d"
+    " and e.seq <> ''"
+    " order by e.id"
+    , db, fromTaxon);
+//restore: 
+rc = sqlSaveQuery(conn, dy->string, 2, "pslMap.fa", TRUE);
+uglyf("rc = %d = count of sequences for pslMap for taxon %d\n",rc,fromTaxon);
+}
+
+static void doPslMapAli(struct sqlConnection *conn, 
+    int taxon, char *db, 
+    int fromTaxon, char *fromDb)
+{
+char cmd[256];
+
+int rc = 0;
+struct dyString *dy = dyStringNew(0);
+char path[256];
+char toDb[12];
+
+safef(toDb,sizeof(toDb),"%s", db);
+toDb[0]=toupper(toDb[0]);
+
+safef(path,sizeof(path),"/cluster/data/%s/nib", db);
+if (!fileExists(path))
+    errAbort("unable to locate nib dir %s",path);
+    
+safef(path,sizeof(path),"/gbdb/%s/liftOver/%sTo%s.over.chain.gz", fromDb, fromDb, toDb);
+if (!fileExists(path))
+    errAbort("unable to locate chain file %s",path);
+
+/* get non-bac $db.vgProbes not yet aligned */
+getPslMapAli(conn, db, fromTaxon, fromDb, FALSE);
+/* get bac $db.vgProbes not yet aligned */
+getPslMapAli(conn, db, fromTaxon, fromDb, TRUE);
+/* get .fa for pslRecalcMatch use */
+getPslMapFa(conn, db, fromTaxon);
+
+/* non-bac */
+safef(cmd,sizeof(cmd),
+"zcat %s | pslMap -chainMapFile -swapMap  nonBac.psl stdin stdout "
+"|  sort -k 14,14 -k 16,16n > unscoredNB.psl"
+,path);
+uglyf("%s\n",cmd); system(cmd);
+
+safef(cmd,sizeof(cmd),
+"pslRecalcMatch unscoredNB.psl /cluster/data/%s/nib" 
+" pslMap.fa nonBac.psl"
+,db);
+uglyf("%s\n",cmd); system(cmd);
+
+/* bac */
+safef(cmd,sizeof(cmd),
+"zcat %s | pslMap -chainMapFile -swapMap  bac.psl stdin stdout "
+"|  sort -k 14,14 -k 16,16n > unscoredB.psl"
+,path);
+uglyf("%s\n",cmd); system(cmd);
+
+safef(cmd,sizeof(cmd),
+"pslRecalcMatch unscoredB.psl /cluster/data/%s/nib" 
+" pslMap.fa bacTemp.psl"
+,db);
+uglyf("%s\n",cmd); system(cmd);
+
+safef(cmd,sizeof(cmd),
+"pslCDnaFilter -globalNearBest=0.00001 -minCover=0.05"
+" bacTemp.psl bac.psl");
+uglyf("%s\n",cmd); system(cmd);
+
+safef(cmd,sizeof(cmd),"cat bac.psl nonBac.psl > vgPrbPslMap.psl");
+uglyf("%s\n",cmd); system(cmd);
+
+dyStringFree(&dy);
+
+}
+
+static void doAlignmentsPslMap(struct sqlConnection *conn, char *db, char *fromDb)
+{
+int taxon = findTaxon(conn,db);
+int fromTaxon = findTaxon(conn,fromDb);
+
+populateMissingVgPrbAli(conn, fromTaxon, db, "vgPrbAliAll");
+
+updateVgPrbAli(conn, db, "vgPrbAliAll","vgAllProbes");
+
+doPslMapAli(conn, taxon, db, fromTaxon, fromDb);
+
+rollupPsl("vgPrbPslMap.psl", "vgAllProbes", conn, db);
+
+updateVgPrbAli(conn, db, "vgPrbAliAll","vgAllProbes");
+
+markNoneVgPrbAli(conn, fromTaxon, db, "vgPrbAliAll");
+
+}
+
+
+static void doSeqAndExtFile(struct sqlConnection *conn, char *db, char *table)
+{
+int rc = 0;
+char cmd[256];
+char path[256];
+struct dyString *dy = dyStringNew(0);
+dyStringClear(dy);
+dyStringPrintf(dy, 
+"select distinct concat('vgPrb_',e.id), e.seq"
+" from vgPrb e, %s.%s v"
+" left join %s.seq s on s.acc = v.qName"
+" where concat('vgPrb_',e.id) = v.qName"
+" and s.acc is NULL"
+" order by e.id"
+    , db, table, db);
+rc = sqlSaveQuery(conn, dy->string, 2, "vgPrbExt.fa", TRUE);
+uglyf("rc = %d = count of sequences for vgPrbExt.fa, to use with %s track %s\n",rc,db,table);
+if (rc > 0)  /* can set any desired minimum */
+    {
+    safef(cmd,sizeof(cmd),"mkdir /gbdb/%s/visiGene",db);
+    uglyf("%s\n",cmd); system(cmd);
+    
+    safef(path,sizeof(path),"/gbdb/%s/visiGene/vgPrbExt_XXXXXX",db);
+    int fd = mkstemp(path);
+    close(fd);
+    
+    safef(cmd,sizeof(cmd),"rm %s",path);
+    uglyf("%s\n",cmd); system(cmd);
+    
+    safef(cmd,sizeof(cmd),"mv vgPrbExt.fa %s",path);
+    uglyf("%s\n",cmd); system(cmd);  
+    
+    safef(cmd,sizeof(cmd),"hgLoadSeq %s %s", db, path);
+    uglyf("%s\n",cmd); system(cmd);
+    }
+
+dyStringFree(&dy);
 }
 
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+struct sqlConnection *conn = NULL;
+char *command = NULL;
 optionInit(&argc, argv, options);
-if (argc != 2)
-    usage();
-if (!setCurrentDir(argv[1]))
-    usage();
 database = optionVal("database", database);
 sqlPath = optionVal("sqlPath", sqlPath);
-kill = optionExists("kill");
-//delete this: visiGeneLoad(argv[1], argv[2], argv[3]);
-vgProbeTrack();
+if (argc < 2)
+    usage();
+command = argv[1];
+if (argc >= 3)
+    if (!setCurrentDir(argv[2]))
+    	usage();
+conn = sqlConnect(database);
+if (sameWord(command,"INIT"))
+    {
+    if (argc != 2)
+	usage();
+    init(conn);	    
+    }
+else if (sameWord(command,"POP"))
+    {
+    if (argc != 2)
+	usage();
+    /* populate vgPrb where missing */
+    populateMissingVgPrb(conn);
+    }
+else if (sameWord(command,"SEQ"))
+    {
+    if (argc != 4)
+	usage();
+    /* make fake probe sequences */
+    makeFakeProbeSeq(conn,argv[3]);
+    }
+else if (sameWord(command,"ALI"))
+    {
+    if (argc != 4)
+	usage();
+    /* blat anything left that is not aligned, 
+      nor even attempted */
+    doAlignments(conn,argv[3]);
+    }
+else if (sameWord(command,"EXT"))
+    {
+    if (argc != 4)
+	usage();
+    /* update seq and extfile as necessary */
+    doSeqAndExtFile(conn,argv[3],"vgProbes");
+    }
+else if (sameWord(command,"PSLMAP"))
+    {
+    if (argc != 5)
+	usage();
+    /* pslMap anything left that is not aligned, 
+      nor even attempted */
+    doAlignmentsPslMap(conn,argv[3],argv[4]);
+    }
+else if (sameWord(command,"EXTALL"))
+    {
+    if (argc != 4)
+	usage();
+    /* update seq and extfile as necessary */
+    doSeqAndExtFile(conn,argv[3],"vgAllProbes");
+    }
+else
+    usage();
+sqlDisconnect(&conn);
 return 0;
 }

@@ -14,15 +14,17 @@ vgProbeTrack: $O ${MYLIBS}
 #	${STRIP} ${HOME}/bin/${MACHTYPE}/vgProbeTrack${EXE}
 
 autoSql:
-	autoSql probeExt.as probeExt -dbLink
-	sed -i -e 's/    id int not null/    id int auto_increment not null/' probeExt.sql
+	autoSql vgPrb.as vgPrb -dbLink
+	sed -i -e 's/    id int not null/    id int auto_increment not null/' vgPrb.sql
+	autoSql vgPrbMap.as vgPrbMap -dbLink
+	sed -i -e 's/PRIMARY KEY(probe)//' vgPrbMap.sql
+	sed -i -e 's/\,	\# ID of vgPrb//' vgPrbMap.sql
+	autoSql vgPrbAli.as vgPrbAli -dbLink
+	sed -i -e 's/PRIMARY KEY(db)/PRIMARY KEY(db,vgPrb)/' vgPrbAli.sql
+	autoSql vgPrbAliAll.as vgPrbAliAll -dbLink
+	sed -i -e 's/PRIMARY KEY(db)/PRIMARY KEY(db,vgPrb)/' vgPrbAliAll.sql
 
 clean:
 	rm -f $O
 
-fresh:
-	vgProbeTrack working -kill -sqlPath=..
-    
-go:
-	vgProbeTrack working
     
