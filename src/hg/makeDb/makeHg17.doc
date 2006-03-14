@@ -20605,3 +20605,8 @@ mkdir -p ${blatDir}/{over,net}
     gzip hg15ToHg17.over.chain
     hgAddLiftOverChain hg15 hg17 /gbdb/hg15/liftOver/hg15ToHg17.over.chain
 
+# UPDATED hg17.knownToVisiGene (2006-03-14 galt)
+#  after making sure hg17.vgAllProbes was up to date (see makeVisiGene.doc)
+ssh hgwdev
+knownToVisiGene hg17 -fromProbePsl=vgAllProbes
+
