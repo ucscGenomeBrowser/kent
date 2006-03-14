@@ -14,7 +14,7 @@
 #include "dnaseq.h"
 #include "crudeali.h"
 
-static char const rcsid[] = "$Id: crudeali.c,v 1.3 2004/06/03 20:50:45 galt Exp $";
+static char const rcsid[] = "$Id: crudeali.c,v 1.4 2006/03/14 19:02:31 angie Exp $";
 
 #define maxTileSize 16
 
@@ -239,7 +239,7 @@ int maxRep = (tileSize / 2);
 /* Make sure no N's in tile */
 for (i=0; i<tileSize; ++i)
     {
-    if (ntVal[dna[i]] < 0)
+    if (ntVal[(int)dna[i]] < 0)
         return FALSE;
     }
 
@@ -469,7 +469,6 @@ struct probeTile *pbt;
 int hitCount = 0;
 int i;
 int baseWordCount = (target->baseCount/caTileSize);
-bits16 *endBases = bases + baseWordCount;
 int tOffset = 0;
 
 /* Handle big/little endian problem. */
@@ -481,7 +480,6 @@ int swapIx = 0;
 
 /* Every so often we throw out singleton hits. The variables below
  * manage this. */
-int lastCompaction = 0;
 int compactWindowSizePower = 10;
 int compactWindowSize = (1<<compactWindowSizePower);
 int compactModMask = compactWindowSize-1;
@@ -587,8 +585,6 @@ static int findCrudeGenes(struct fastProber *fp, struct nt4Seq *target,
 struct crudeHit *hits;
 struct crudeExon *exons;
 int hitCount, exonCount, geneCount = 0;
-int targetSize = target->baseCount;
-int winMinHitIx = 0;
 
 if (fp == NULL)
     return 0;
@@ -755,9 +751,7 @@ DNA p,t;
 /* Figure out what DNA to fetch - trying to get all of target that
  * corresponds to all of probe, but clipping if at ends of chromosome. */
 int pTileStart = crudeGene->probeStart;
-int pTileEnd = crudeGene->probeEnd;
 int tTileStart = crudeGene->targetStart;
-int tTileEnd = crudeGene->targetEnd;
 int pStart = 0, pEnd = probeSize;
 int tStart = tTileStart - pTileStart;
 int tEnd = tStart + probeSize;
@@ -783,7 +777,7 @@ if (size > 0)
         assert(i + pStart < probeSize);
         p = probe[i + pStart];
         t = target[i];
-        score += wormDnaMatchScores[p][t];
+        score += wormDnaMatchScores[(int)p][(int)t];
         if (score < 0)
             score = 0;
         if (score > maxScore)
@@ -803,7 +797,6 @@ struct crudeAli *crudeAliFind(DNA *probe, int probeSize,
 {
 int oneGeneCount;
 int i;
-int decentAlignments = 0;
 int chromeIx;
 int geneCount = 0;
 int maxGeneCount = 2*maxHitsAtOnce;

@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.34 2006/02/14 21:54:23 kent Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.35 2006/03/14 19:02:31 angie Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -121,7 +121,7 @@ int i;
 for (i=0; i<seedSize; ++i)
     {
     acc <<= 1;
-    acc += ntVal[s[i]];
+    acc += ntVal[(int)s[i]];
     }
 return acc&0xfff;
 }
@@ -157,7 +157,7 @@ static struct ffAli *ffFindExtendNmers(char *nStart, char *nEnd, char *hStart, c
 /* Find perfectly matching n-mers and extend them. */
 {
 struct lm *lm = lmInit(32*1024);
-struct seqHashEl **hashTable, *hashChain, *hashEl, **hashSlot;
+struct seqHashEl **hashTable, *hashEl, **hashSlot;
 struct ffAli *ffList = NULL, *ff;
 char *n = nStart, *h = hStart, *ne = nEnd - seedSize, *he = hEnd - seedSize;
 
@@ -211,7 +211,6 @@ static void clumpToExactRange(struct gfClump *clump, bioSeq *qSeq, int tileSize,
 struct gfSeqSource *target = clump->target;
 aaSeq *tSeq = target->seq;
 BIOPOL *qs, *ts, *qe, *te;
-int maxScore = 0, maxPos = 0, score, pos;
 struct gfHit *hit;
 int qStart = 0, tStart = 0, qEnd = 0, tEnd = 0, newQ = 0, newT = 0;
 boolean outOfIt = TRUE;		/* Logically outside of a clump. */
@@ -353,7 +352,7 @@ static struct ffAli *scanIndexForSmallExons(struct genoFind *gf, struct gfSeqSou
 {
 int qGap, tGap, tStart, qStart;
 struct ffAli *lastFf = NULL, *ff = ffList;
-struct gfHit *hitList = NULL, *hit;
+struct gfHit *hitList = NULL;
 struct dnaSeq qSubSeq;
 struct ffAli *extraList = NULL;
 int tileSize = gf->tileSize;
@@ -700,7 +699,6 @@ struct ffAli *scanTinyOne(char *nStart, char *nEnd, char *hStart, char *hEnd,
 /* Try and add some exon candidates in the region. */
 {
 struct ffAli *ff;
-int resolverLimit =  3;
 int nGap = nEnd - nStart;
 if (nGap > 80)		/* The index should have found things this big already. */
     return NULL;
@@ -806,19 +804,19 @@ int score = 0;
 int matchScore = ss->matrix['c']['c'];
 if (orientation >= 0)  /* gt/ag or gc/ag */
     {
-    score += ss->matrix[a1]['g'];
+    score += ss->matrix[(int)a1]['g'];
     if (a2 != 'c')
-        score += ss->matrix[a2]['t'];
-    score += ss->matrix[b1]['a'];
-    score += ss->matrix[b2]['g'];
+        score += ss->matrix[(int)a2]['t'];
+    score += ss->matrix[(int)b1]['a'];
+    score += ss->matrix[(int)b2]['g'];
     }
 else		       /* ct/ac or ct/gc */
     {
-    score += ss->matrix[a1]['c'];
-    score += ss->matrix[a2]['t'];
+    score += ss->matrix[(int)a1]['c'];
+    score += ss->matrix[(int)a2]['t'];
     if (b1 != 'g')
-	score += ss->matrix[b1]['a'];
-    score += ss->matrix[b2]['c'];
+	score += ss->matrix[(int)b1]['a'];
+    score += ss->matrix[(int)b2]['c'];
     }
 if (score >= 3* matchScore)
     score += matchScore;
@@ -1168,7 +1166,6 @@ static struct ffAli *trimFlakyEnds(struct dnaSeq *qSeq, struct dnaSeq *tSeq,
 int orientation = ffIntronOrientation(ffList);
 struct ffAli *left, *right;
 char *iStart, *iEnd;
-int nGap;
 int blockScore, gapPenalty;
 
 /* If one or less block then don't bother. */
@@ -1232,7 +1229,6 @@ static void refineBundle(struct genoFind *gf,
 /* Refine bundle - extending alignments and looking for smaller exons. */
 {
 struct ssFfItem *ffi;
-int seedSize;
 struct gfSeqSource *target = gfFindNamedSource(gf, tSeq->name);
 
 /* First do gapless expansions and restitch. */

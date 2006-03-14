@@ -40,7 +40,7 @@
  * scanned for.
  */
 
-static char const rcsid[] = "$Id: fuzzyFind.c,v 1.15 2004/01/22 22:31:59 kent Exp $";
+static char const rcsid[] = "$Id: fuzzyFind.c,v 1.16 2006/03/14 19:02:31 angie Exp $";
 
 #include "common.h"
 #include "dnautil.h"
@@ -121,7 +121,7 @@ int baseVal;
 
 for (i=0; i<size; ++i)
     {
-    if ((baseVal = ntVal[oligo[i]]) >= 0)
+    if ((baseVal = ntVal[(int)oligo[i]]) >= 0)
         prob *= freq[baseVal];
     }
 return prob;
@@ -139,7 +139,7 @@ int startIx = 0;
 
 for (i=0;i<needleLength;++i)
     {
-    if ((base = ntVal[needle[i]]) < 0)
+    if ((base = ntVal[(int)needle[i]]) < 0)
         {
         totalProb = 1.0;
         startIx = i+1;
@@ -519,6 +519,7 @@ for (i = 0; i<=endIx; ++i)
 return FALSE;
 }
 
+#ifdef UNUSED
 static int countAlis(struct ffAli *ali)
 /* Count number of blocks in alignment. */
 {
@@ -534,6 +535,7 @@ while (ali)
     }
 return count;
 }
+#endif /* UNUSED */
 
 
 static struct ffAli *reconsiderAlignedGaps(struct ffAli *ali)
@@ -671,7 +673,6 @@ static struct ffAli *expandAlis(struct ffAli *ali, DNA *nStart, DNA *nEnd, DNA *
 struct ffAli *a, *left, *right;
 DNA *ns, *ne, *hs, *he;
 boolean expanded = TRUE;
-int expCount = 0;
 
 while (expanded)
     {
@@ -831,7 +832,6 @@ double evalExactAli(struct ffAli *ali, DNA *ns, DNA *ne, DNA *hs, DNA *he, int n
     double freq[4])
 {
 int haySize = he-hs;
-int needleSize = ne-ns;
 double prob = 1.0;
 double allPossibles = haySize*numTiles;
 
@@ -1369,8 +1369,6 @@ static int midTileMinSize[] ={0 /*(exact) */,12 /* cDNA */, 12 /* tight */, 4 /*
 
 struct ffAli *bestAli;
 int matchSize;
-int exactOffset;
-int needleSize = ne-ns;
 
 matchSize = nextPowerOfFour(he-hs)+1;
 if (matchSize < midTileMinSize[stringency])

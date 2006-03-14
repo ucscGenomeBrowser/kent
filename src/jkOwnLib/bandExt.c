@@ -18,7 +18,7 @@
 #include "localmem.h"
 #include "bandExt.h"
 
-static char const rcsid[] = "$Id: bandExt.c,v 1.12 2005/12/16 20:17:37 kent Exp $";
+static char const rcsid[] = "$Id: bandExt.c,v 1.13 2006/03/14 19:02:31 angie Exp $";
 
 /* Definitions for traceback byte.  This is encoded as so:
  *     xxxxLUMM
@@ -56,7 +56,7 @@ boolean bandExt(boolean global, struct axtScoreScheme *ss, int maxInsert,
  * alignment is returned in the various ret values.  The function
  * overall returns TRUE if an extension occurred, FALSE if not. */
 {
-int i,j;			/* A humble index or two. */
+int i;			/* A humble index or two. */
 int *bOffsets = NULL;	/* Offset of top of band. */
 UBYTE **parents = NULL;	/* Array of parent positions. */
 struct score *curScores = NULL;	/* Scores for current column. */
@@ -76,7 +76,6 @@ int symCount = 0;	/* Size of alignment and size allocated for it. */
 int gapOpen = ss->gapOpen;	 /* First base in gap costs this. */
 int gapExtend = ss->gapExtend;	 /* Extra bases in gap cost this. */
 int badScore = -gapOpen*100;	 /* A score bad enough no one will want to link with us. */
-int gMatch = ss->matrix['g']['g'];	 /* What a good match is worth */
 int maxDrop = gapOpen + gapExtend*maxInsert; /* Max score drop allowed before giving up. */
 int midScoreOff;		 /* Offset to middle of scoring array. */
 struct lm *lm;			 /* Local memory pool. */
@@ -148,10 +147,9 @@ prevScores[midScoreOff].match = 0;
 for (aPos=0; aPos < aSize; ++aPos)
     {
     char aBase = aStart[aPos];
-    int *matRow = ss->matrix[aBase];
+    int *matRow = ss->matrix[(int)aBase];
     int bestColScore = badScore;
     int bestColPos = -1;
-    int curColOffset, prevColOffset;
     int colTop = bandCenter - maxInsert;
     int colBottom = bandCenter + maxIns1;
 
@@ -195,7 +193,7 @@ for (aPos=0; aPos < aSize; ++aPos)
 	/* Handle ways into the matching state and record if it's
 	 * best score so far. */
 	    {
-	    int match = matRow[bStart[bPos]];
+	    int match = matRow[(int)bStart[bPos]];
 	    struct score *a = &prevScores[prevScoreOffset-1];
 	    int diagScore = a->match;
 	    int leftScore = a->left;
