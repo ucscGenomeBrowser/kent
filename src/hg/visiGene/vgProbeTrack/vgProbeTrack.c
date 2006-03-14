@@ -1,4 +1,4 @@
-/* vgProbeTrack - build probeExt table in visiGene database. 
+/* vgProbeTrack - build vgPrb permanent id table in visiGene database. 
  *
  *   This finds sequence for all probes, using the best method available,
  *   which can be given in probe.seq, using the primers to
@@ -23,7 +23,6 @@
 #include "fa.h"
 #include "hdb.h"
 
-#include "probeExt.h"
 #include "vgPrb.h"
 
 /* Variables you can override from command line. */
@@ -34,7 +33,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "vgProbeTrack - build probeExt table in visiGene database\n"
+  "vgProbeTrack - build vgPrb table in visiGene database\n"
   "usage:\n"
   "   vgProbeTrack <COMMAND> {workingDir db} {optional params}\n"
   "\n"
@@ -51,7 +50,7 @@ errAbort(
   "db is the target assembly to use.\n"
   "Options:\n"
   "   -database=%s - Specifically set database (default visiGene)\n"
-  "   -sqlPath=%s - specify location of probeExt.sql, relative to workingDir \n"
+  "   -sqlPath=%s - specify location of vgPrb.sql, relative to workingDir \n"
   , database, sqlPath
   );
 }
@@ -656,7 +655,7 @@ dyStringFree(&dy);
 
 static void setTNameMapped(struct sqlConnection *conn, int taxon, char *db, char *type, char *fld, 
             char *mapTable, char *mapField, char *mapTo)
-/* set probeExt.tName to the desired value to try, 
+/* set vgPrb.tName to the desired value to try, 
  *  e.g. gene.refSeq, gene.genbank, mm6.refFlat.name(genoName=gene.name). */
 {
 struct dyString *dy = dyStringNew(0);
@@ -755,7 +754,7 @@ dyStringFree(&dy);
 
 
 static int getAccMrnas(struct sqlConnection *conn, int taxon, char *db, char *type, char *table)
-/* get mRNAs for one probeExt acc type */
+/* get mRNAs for one vgPrb acc type */
 {
 int rc = 0;
 struct dyString *dy = dyStringNew(0);
@@ -917,7 +916,7 @@ dyStringFree(&dy);
 
 
 static int doAccPsls(struct sqlConnection *conn, int taxon, char *db, char *type, char *table)
-/* get psls for one probeExt acc type */
+/* get psls for one vgPrb acc type */
 {
 int rc = 0;
 struct dyString *dy = dyStringNew(0);
