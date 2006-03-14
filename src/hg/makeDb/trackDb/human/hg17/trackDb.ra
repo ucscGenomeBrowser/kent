@@ -261,7 +261,7 @@ shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation
 group compGeno
 priority 104.1
-visibility hide
+visibility pack
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
@@ -326,11 +326,11 @@ type bed 5 .
 
 track multiz8way
 release alpha
-shortLabel Conservation
+shortLabel 8-way Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
 group compGeno
 priority 109.51
-visibility pack
+visibility hide
 #color 0, 10, 100
 altColor 50,50,50
 #altColor 255,128,0
@@ -347,11 +347,11 @@ treeImage phylo/hg17_8way.jpg
 
 track multiz8way
 release beta
-shortLabel Conservation
+shortLabel 8-way Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
 group compGeno
 priority 109.51
-visibility pack
+visibility hide
 #color 0, 10, 100
 altColor 50,50,50
 #altColor 255,128,0
