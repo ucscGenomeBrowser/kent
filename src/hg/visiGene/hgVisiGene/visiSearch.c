@@ -13,7 +13,7 @@
 #include "visiSearch.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: visiSearch.c,v 1.26 2006/03/14 04:22:47 galt Exp $";
+static char const rcsid[] = "$Id: visiSearch.c,v 1.27 2006/03/14 12:30:55 galt Exp $";
 
 struct visiMatch *visiMatchNew(int imageId, int wordCount)
 /* Create a new visiMatch structure, as yet with no weight. */
@@ -679,8 +679,8 @@ for (word = wordList, wordIx=0; word != NULL; word = word->next, ++wordIx)
 	char **row, query[256];
 	int probeId = atoi(name + strlen(pat));
 	safef(query, sizeof(query),
-	    "select ip.image from imageProbe ip, probe p, vgPrbMap m, vgPrb e"
-	    " where ip.probe=p.id and p.id = m.probe and m.vgPrb = e.id"
+	    "select ip.image from imageProbe ip, vgPrbMap m, vgPrb e"
+	    " where ip.probe = m.probe and m.vgPrb = e.id"
 	    " and e.id=%d", probeId);
 	sr = sqlGetResult(conn, query);
 	while ((row = sqlNextRow(sr)) != NULL)
