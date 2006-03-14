@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.22 2006/03/11 03:59:44 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.23 2006/03/14 22:37:39 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -125,8 +125,8 @@ char **row;
 int count = 0;
 
 weightHash = newHash(16);
-verbose(1, "getting weight = 10 from SNPMapInfo...\n");
-safef(query, sizeof(query), "select snp_id from SNPMapInfo where weight = 10");
+verbose(1, "getting weight = 10 from MapInfo...\n");
+safef(query, sizeof(query), "select snp_id from MapInfo where weight = 10");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -257,8 +257,8 @@ if(!hTableExistsDb(snpDb, "ContigLoc"))
     errAbort("no ContigLoc table in %s\n", snpDb);
 if(!hTableExistsDb(snpDb, "ContigInfo"))
     errAbort("no ContigInfo table in %s\n", snpDb);
-if(!hTableExistsDb(snpDb, "SNPMapInfo"))
-    errAbort("no SNPMapInfo table in %s\n", snpDb);
+if(!hTableExistsDb(snpDb, "apInfo"))
+    errAbort("no MapInfo table in %s\n", snpDb);
 if(!hTableExistsDb(snpDb, "ctgPos"))
     errAbort("no ctgPos table in %s\n", snpDb);
 

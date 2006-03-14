@@ -1,15 +1,15 @@
 /* snpMissing - compare old snp table to new snp table.
- * Check that missing SNPs are not in ContigLoc or SNPMapInfo. */
+ * Check that missing SNPs are not in ContigLoc or MapInfo. */
 
 /* Could use ContigLocFilter instead of ContigLoc. */
-/* Could check that weight = 10 in SNPMapInfo. */
+/* Could check that weight = 10 in MapInfo. */
 
 #include "common.h"
 
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMissing.c,v 1.1 2006/03/11 03:03:59 heather Exp $";
+static char const rcsid[] = "$Id: snpMissing.c,v 1.2 2006/03/14 22:38:10 heather Exp $";
 
 
 void usage()
@@ -72,7 +72,7 @@ int count = 0;
 
 verbose(1, "creating hashes...\n");
 contigLocHash = getUniqueStringHash("snp_id", "ContigLoc");
-mapInfoHash = getUniqueStringHash("snp_id", "SNPMapInfo");
+mapInfoHash = getUniqueStringHash("snp_id", "MapInfo");
 oldNameHash = getUniqueStringHash("name", oldTableName);
 newNameHash = getUniqueStringHash("name", newTableName);
 
@@ -122,8 +122,8 @@ if (!hTableExists(newTableName))
     errAbort("no %s table in %s\n", newTableName, snpDb);
 if (!hTableExists("ContigLoc"))
     errAbort("no ContigLoc table in %s\n", snpDb);
-if (!hTableExists("SNPMapInfo"))
-    errAbort("no SNPMapInfo table in %s\n", snpDb);
+if (!hTableExists("MapInfo"))
+    errAbort("no MapInfo table in %s\n", snpDb);
 
 processSnps(oldTableName, newTableName);
 
