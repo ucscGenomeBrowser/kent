@@ -4,8 +4,8 @@ XINC = -I$(MYSQLINC)
 
 L = -lm $(MYSQLLIBS)
 
-O = acemblyClass.o affyAtlas.o affy10KDetails.o affy120KDetails.o affyOffset.o \
-    affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
+O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetails.o \
+    affyOffset.o affyPairs.o agp.o agpFrag.o agpGap.o alignSeqSizes.o altGraph.o \
     altGraphX.o ancientRref.o  axtInfo.o \
     axtLib.o bactigPos.o bdgpExprLink.o bdgpGeneInfo.o \
     bed.o bed5FloatScore.o bed6FloatScore.o bed12Source.o \

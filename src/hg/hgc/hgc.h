@@ -136,6 +136,9 @@ void cghNci60Details(struct trackDb *tdb, char *item);
 void nci60Details(struct trackDb *tdb, char *item);
 /* Set up details for nci60. */
 
+void doAffyHumanExon(struct trackDb *tdb, char *item);
+/* Details for affyHumanExon all exon arrays. */
+
 void getMsBedExpDetails(struct trackDb *tdb, char *expName, boolean all);
 /* Create tab-delimited output to download */
  

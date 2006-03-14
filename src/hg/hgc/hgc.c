@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1000 2006/03/08 17:48:50 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1001 2006/03/14 01:36:03 aamp Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -17973,6 +17973,10 @@ else if (sameWord(track, "affy120K"))
 else if (sameWord(track, "affy10K"))
     {
     doAffy10K(tdb, item);
+    }
+else if (sameWord(track, "affyHumanExon"))
+    {
+    doAffyHumanExon(tdb, item);
     }
 else if (sameWord(track, "uniGene_2") || sameWord(track, "uniGene"))
     {

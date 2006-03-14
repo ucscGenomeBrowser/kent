@@ -9,8 +9,9 @@
 #include "obscure.h"
 #include "cheapcgi.h"
 #include "genePred.h"
+#include "affyAllExonProbe.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.9 2005/06/02 14:16:33 kschneid Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.10 2006/03/14 01:36:03 aamp Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -1082,3 +1083,36 @@ void genericExpRatio(struct sqlConnection *conn, struct trackDb *tdb,
 grcExpRatio(tdb, item, NULL, FALSE);
 }
 
+void printAffyHumanExonProbeInfo(struct trackDb *tdb, char *item, char *probeTable)
+/* Get information on a probe and print that out.*/
+{
+struct sqlConnection *conn = sqlConnect("hgFixed");
+struct affyAllExonProbe *oneProbe;
+char query[200];
+safef(query, ArraySize(query), "select * from %s where name = \'%s\'", probeTable, item);
+oneProbe = affyAllExonProbeLoadByQuery(conn, query);
+if (oneProbe != NULL)
+    {
+    printf("<h3>Details for Probe %s</h3>\n", item);
+    printf("<B>Exon evidence:</B> %s<BR>\n", oneProbe->evidence); 
+    printf("<B>Exon level:</B> %s<BR>\n", oneProbe->level); 
+    affyAllExonProbeFreeList(&oneProbe);
+    }
+sqlDisconnect(&conn);
+}
+
+void doAffyHumanExon(struct trackDb *tdb, char *item)
+/* Display details for the affy all human exon track. */
+/* It's approximately a expRatio track, without the required */
+/* "chip" setting, and with additional probe details displayed. */
+{
+char *expTable = trackDbRequiredSetting(tdb, "expTable");
+char *expScale = trackDbRequiredSetting(tdb, "expScale");
+char *expStep = trackDbRequiredSetting(tdb, "expStep");
+char *expProbes = trackDbRequiredSetting(tdb, "expProbeTable");
+double maxScore = atof(expScale);
+double stepSize = atof(expStep);
+genericRatioDetails(tdb, item, expTable, NULL, stepSize, maxScore, 
+		    NULL, FALSE);
+printAffyHumanExonProbeInfo(tdb, item, expProbes);
+}
