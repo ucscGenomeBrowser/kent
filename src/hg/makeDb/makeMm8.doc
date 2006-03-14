@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.16 2006/03/10 23:51:09 fanhsu Exp $"
+#	"$Id: makeMm8.doc,v 1.17 2006/03/14 18:26:05 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -4070,4 +4070,557 @@ o Build the pepPi table
 
 # Perform preliminary review of Proteome Browser for mm8, then
   notify QA for formal review.
+
+# BUILD MISC STUFF FOR KG
+
+# Build mrnaRefseq table
+
+# First make sure the entrez DB is updated. (recently updated on 2/8/06).
+
+    ssh hgwdev
+    cd /cluster/store9/kg/kgMm8A
+
+    hgsql entrez -N -e \
+     'select mrna, refseq from entrezRefseq, entrezMrna, mm8.all_mrna where qName=mrna and    entrezRefseq.geneID=entrezMrna.geneID' \
+      >mrnaRefseq1.tab.tab
+
+    hgsql mm8 -N -e 'select name, name from refGene' >mrnaRefseq2.tab
+
+    cat mrnaRefseq1.tab mrnaRefseq2.tab |sort -u >mrnaRefseq.tab
+
+    hgsql mm8 -e 'drop table mrnaRefseq'
+    hgsql mm8 < ~/src/hg/lib/mrnaRefseq.sql
+    hgsql mm8 -e 'load data local infile "mrnaRefseq.tab" into table mrnaRefseq'
+
+# CREATE FULL TEXT INDEX FOR KNOWN GENES (DONE 3/8/06 Fan)
+# This depends on the go and uniProt databases as well as 
+# the kgAlias and kgProAlias tables.  The hgKgGetText takes
+# about 5 minutes when the database is not too busy.  The rest
+# is real quick.
+     ssh hgwdev
+     cd /cluster/store9/kg/kgMm8A
+     mkdir index
+     cd index
+     hgKgGetText mm8 knownGene.text
+     ixIxx knownGene.text knownGene.ix knownGene.ixx
+     ln -s /cluster/store9/kg/kgMm8A/index/knownGene.ix  /gbdb/mm8/knownGene.ix
+     ln -s /cluster/store9/kg/kgMm8A/index/knownGene.ixx /gbdb/mm8/knownGene.ixx
+
+# BUILD KNOWN GENE LIST FOR GOOGLE.  
+# make knownGeneLists.html mm8GeneList.html mm5GeneList.html rm3GeneList.html
+
+    cd /cluster/data/mm8/bed
+    rm -rf knownGeneList/mm8
+
+# Run hgKnownGeneList to generate the tree of HTML pages
+# under ./knownGeneList/mm8
+
+    hgKnownGeneList mm8
+
+# copy over to /usr/local/apache/htdocs
+
+    rm -rf /usr/local/apache/htdocs/knownGeneList/mm8
+    mkdir -p /usr/local/apache/htdocs/knownGeneList/mm8
+    cp -Rfp knownGeneList/mm8/* /usr/local/apache/htdocs/knownGeneList/mm8
+
+##################################################################################
+# Create description.html for mm8
+
+mkdir -p ~/kent/src/hg/makeDb/trackDb/mouse/mm8
+cd ~/kent/src/hg/makeDb/trackDb/mouse/mm8
+cp ../hg17/description.html .
+
+vi description.html
+# Change release date and build number and change hg17 to mm8
+# Check it into CVS
+
+mkdir -p /cluster/data/mm8/html
+cp -p description.html /cluster/data/mm8/html
+
+ln -s /cluster/data/mm8/html/description.html /gbdb/mm8/html/description.html
+
+# BUILD GENE SORTER TABLES (AKA: FAMILY BROWSER) (STARTED 2006-03-08, DONE 2006-02-14 - Fan)
+#	This should be done after KG tables are complete from known genes build
+#	process.
+#
+# Cluster together various alt-splicing isoforms.
+#	Creates the knownIsoforms and knownCanonical tables
+ssh hgwdev
+mkdir /cluster/data/mm8/bed/geneSorter.2006-03-08
+# remove old symbolic link
+rm /cluster/data/mm8/bed/geneSorter
+ln -s /cluster/data/mm8/bed/geneSorter.2006-03-08 /cluster/data/mm8/bed/geneSorter
+cd /cluster/data/mm8/bed/geneSorter
+hgClusterGenes mm8 knownGene knownIsoforms knownCanonical
+
+# Extract peptides from knownGenes into fasta file
+# and create a blast database out of them.
+mkdir /cluster/data/mm8/bed/geneSorter/blastp
+cd /cluster/data/mm8/bed/geneSorter/blastp
+pepPredToFa mm8 knownGenePep known.faa
+#	You may need to build this binary in src/hg/near/pepPredToFa
+/scratch/blast/formatdb -i known.faa -t known -n known
+#	This command is in /projects/compbio/bin/$MACH/formatdb
+
+# Copy over database to bluearc
+rm -fr /cluster/bluearc/mm8/blastp
+mkdir -p /cluster/bluearc/mm8/blastp
+cp -p /cluster/data/mm8/bed/geneSorter/blastp/known.* /cluster/bluearc/mm8/blastp
+
+# Split up fasta file into bite sized chunks for cluster
+cd /cluster/data/mm8/bed/geneSorter/blastp
+mkdir split
+faSplit sequence known.faa 8000 split/kg
+
+# Make parasol run directory
+ssh pk
+mkdir /cluster/data/mm8/bed/geneSorter/blastp/self
+cd /cluster/data/mm8/bed/geneSorter/blastp/self
+mkdir run
+cd run
+mkdir out
+
+# Make blast script
+cat  << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data /cluster/bluearc/blast229/blastall \
+-p blastp -d /cluster/bluearc/mm8/blastp/known -i $1 -o $2 \
+-e 0.01 -m 8 -b 1000
+'_EOF_'
+    # << keep emacs happy
+chmod +x blastSome
+
+# Make gensub2 file
+cat  << '_EOF_' > gsub
+#LOOP
+blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+
+# Create parasol batch
+#	'ls ../../split/*.fa' is too much, hence the echo
+echo ../../split/*.fa | wordLine stdin > split.lst
+gensub2 split.lst single gsub jobList
+para create jobList
+para try
+para push
+para check
+Completed: 7730 of 7730 jobs
+CPU time in finished jobs:      35194s     586.56m     9.78h    0.41d  0.001 y
+IO & Wait Time:                 29033s     483.89m     8.06h    0.34d  0.001 y
+Average job time:                   8s       0.14m     0.00h    0.00d
+Longest running job:                0s       0.00m     0.00h    0.00d
+Longest finished job:              43s       0.72m     0.01h    0.00d
+Submission to last job:           206s       3.43m     0.06h    0.00d
+
+# Load into database.  This takes about 20 minutes
+ssh hgwdev
+cd /cluster/data/mm8/bed/geneSorter/blastp/self/run/out
+bash
+time hgLoadBlastTab mm8 knownBlastTab *.tab
+# Scanning through 7730 files
+# Loading database with 5270545 rows
+# real    13m30.534s
+
+cd /cluster/data/mm8/bed/geneSorter
+# Create table that maps between known genes and RefSeq
+hgMapToGene mm8 refGene knownGene knownToRefSeq
+
+# Create table that maps between known genes and LocusLink
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" mm8 > refToLl.txt
+hgMapToGene mm8 refGene knownGene knownToLocusLink -lookup=refToLl.txt
+hgsql -e "select count(*) from knownToLocusLink;" mm8
+# 27636
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt mm8 knownGene name proteinID Pfam knownToPfam
+hgsql -e "select count(*) from knownToPfam;" mm8
+# 29479
+
+############################################################################
+
+### MAKE THE affyU74 TRACK - needed for the Gene Sorter (DONE
+#                              
+# MAKE THE affyU74 TRACK using Affy consensus sequences instead of 
+# target sequences. Recalculate alignments and load data
+----------------------------------
+# Load up semi-local disk with target sequences for Affy mouse U74 chips.
+# ssh kkr1u00
+# mkdir -p /iscratch/i/affy
+#	This /projects filesystem is not available on kkr1u00
+#	but it is on kk
+# ssh kk
+# cp /projects/compbio/data/microarray/affyGnfMouse/sequences/U74*consensus.fa /iscratch/i/affy
+
+ssh kkr1u00
+iSync
+
+# Run cluster job to do alignments
+ssh kk
+mkdir /cluster/data/mm8/
+cd /cluster/data/mm8/bed/affyU74.2006-03-08
+mkdir run
+cd run
+mkdir psl
+#echo /scratch/mus/mm8/maskedContigs/*.fa | wordLine stdin > genome.lst
+echo /scratch/hg/mm8/nib/*.nib | wordLine stdin > genome.lst
+ls -1 /iscratch/i/affy/U74*consensus.fa > affy.lst
+cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/11.ooc $(path1) {check in line+ $(path2)} {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+# << this line makes emacs coloring happy
+
+gensub2 genome.lst affy.lst gsub jobList
+para create jobList
+para try
+para check
+para push
+# Completed: 102 of 102 jobs
+# CPU time in finished jobs:       5846s      97.43m     1.62h    0.07d  0.000 y
+# IO & Wait Time:                   367s       6.12m     0.10h    0.00d  0.000 y
+# Average job time:                  61s       1.02m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             189s       3.15m     0.05h    0.00d
+# Submission to last job:           200s       3.33m     0.06h    0.00d
+
+# Do sort, best in genome filter, and convert to chromosome coordinates
+# to create affyU74.psl.
+ssh kk
+cd /cluster/data/mm8/bed/affyU74.2006-03-08/run
+pslSort dirs raw.psl tmp psl
+
+# change filter parameters for these sequences. only use alignments that
+# cover 30% of sequence and have at least minAli = 0.95.
+# minAli = 0.97 too high. low minCover as a lot of n's in these sequences
+#pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl ../all_affyU74.psl /dev/null
+
+# Sort by chromosome and load into database.
+
+ssh hgwdev
+cd /cluster/data/mm8/bed/affyU74.2006-03-08
+pslSortAcc nohead chrom temp all_affyU74.psl
+cat chrom/*.psl > affyU74.psl
+
+# shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
+# and reload data into table
+
+mv affyU74.psl affyU74.psl.orig
+
+cut -f 1-9 affyU74.psl.orig >j1.tmp
+cut -f 10 affyU74.psl.orig | sed -e 's/:/\t/' | cut -f 2 > j2.tmp
+cut -f 11-21 affyU74.psl.orig >j3.tmp
+paste j1.tmp j2.tmp j3.tmp >affyU74.psl
+
+hgLoadPsl mm8 affyU74.psl
+rm -rf chrom temp run
+
+##   MAKE THE affyGnfU74 TRACKs (DONE 3/8/06, Fan)
+# Make bed files and load consensus sequences for Affy U74 chip set.
+
+#This needs to be done after affyU74 is already made.
+ssh hgwdev
+mkdir -p /cluster/data/mm8/bed/affyGnf.2006-03-08
+cd /cluster/data/mm8/bed/affyGnf.2006-03-08
+#	may need to build this command in src/hg/affyGnf
+~/src/hg/affyGnf/affyPslAndAtlasToBed ../affyU74.2006-03-08/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/data_public_U74 \
+	affyGnfU74A.bed affyGnfU74A.exp -newType -chip=U74Av2
+~/src/hg/affyGnf/affyPslAndAtlasToBed ../affyU74.2006-03-08/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/U74B_b.txt \
+	affyGnfU74B.bed affyGnfU74B.exp -newType -chip=U74Bv2
+~/src/hg/affyGnf/affyPslAndAtlasToBed ../affyU74.2006-03-08/affyU74.psl \
+	/projects/compbio/data/microarray/affyGnfMouse/data/U74C_b.txt \
+	affyGnfU74C.bed affyGnfU74C.exp -newType -chip=U74Cv2
+
+# edit 3 .bed files to shorten qName to "xxxx_at" instead of "U74Xv2:xxxx_at;"
+mkdir sav
+cp *.bed sav -p
+cat sav/affyGnfU74A.bed|sed -e "s/U74Av2://" >affyGnfU74A.bed
+cat sav/affyGnfU74B.bed|sed -e "s/U74Bv2://" >affyGnfU74B.bed
+cat sav/affyGnfU74C.bed|sed -e "s/U74Cv2://" >affyGnfU74C.bed
+
+# and reload data into table
+hgLoadBed -strict mm8 affyGnfU74A affyGnfU74A.bed
+hgLoadBed -strict mm8 affyGnfU74B affyGnfU74B.bed
+hgLoadBed -strict mm8 affyGnfU74C affyGnfU74C.bed
+
+# Add in sequence data for U74 tracks.
+# Copy consensus sequence to /gbdb if it isn't already
+# [THE SYM LINKS WERE ALREADY DONE.]
+#    mkdir -p /gbdb/hgFixed/affyProbes
+    cd /gbdb/hgFixed/affyProbes
+    # fix broken symlinks after directory structure changed
+    # /projects/compbiodata ----> /projects/compbio/data
+    rm U74*
+    # make correct symlinks (hartera, 2005-05-03)
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Av2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Bv2_consensus.fa .
+    ln -s /projects/compbio/data/microarray/affyGnfMouse/sequences/U74Cv2_consensus.fa .
+
+    # used perl -pi.bak -e 's/;/ /' <file> to remove ";" after probe name
+    # ASSUMED THIS IS ALREADY DONE LAST TIME FOR MM4.
+    # reload sequences with prefix removed so acc matches name used in
+    # other dependent tables
+                                                    
+    hgLoadSeq -abbr=U74Av2: mm8 /gbdb/hgFixed/affyProbes/U74Av2_consensus.fa
+    hgLoadSeq -abbr=U74Bv2: mm8 /gbdb/hgFixed/affyProbes/U74Bv2_consensus.fa
+    hgLoadSeq -abbr=U74Cv2: mm8 /gbdb/hgFixed/affyProbes/U74Cv2_consensus.fa
+
+### GNF ATLAS 2  (DONE 3/9/06, Fan)
+    # Align probes from GNF1M chip.
+    ssh kk
+    cd /cluster/data/mm8/bed
+    mkdir -p geneAtlas2/run/psl
+    cd geneAtlas2/run
+
+    echo /scratch/hg/mm8/nib/*.nib | wordLine stdin > genome.lst
+
+    ls -1 /cluster/bluearc/geneAtlas2/gnf1m.fa > mrna.lst
+    echo '#LOOP\nblat -fine -ooc=/scratch/hg/h/mouse11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > gsub
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+    para try
+    para check
+    para push
+    para time
+# Completed: 34 of 34 jobs
+# CPU time in finished jobs:      53165s     886.08m    14.77h    0.62d  0.002 y
+# IO & Wait Time:                   241s       4.02m     0.07h    0.00d  0.000 y
+# Average job time:                1571s      26.18m     0.44h    0.02d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            3929s      65.48m     1.09h    0.05d
+# Submission to last job:          3929s      65.48m     1.09h    0.05d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create gnf1h.psl.
+    pslSort dirs raw.psl tmp psl
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl ../affyGnf1m.psl /dev/null
+
+    #rm -r contig.psl raw.psl psl
+
+    # Load probes and alignments from GNF1H into database.
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/geneAtlas2
+#    ln -s /projects/compbio/data/microarray/geneAtlas2/mouse/gnf1m.fa /gbdb/hgFixed/affyProbes
+    hgLoadPsl mm8 affyGnf1m.psl
+    hgLoadSeq mm8 /gbdb/hgFixed/affyProbes/gnf1m.fa
+
+    # Load up track
+    hgMapMicroarray gnfAtlas2.bed hgFixed.gnfMouseAtlas2MedianRatio \
+    	affyGnf1m.psl
+    # Note that the unmapped 5000 records are from all-N sequences.
+    hgLoadBed -strict mm8 gnfAtlas2 gnfAtlas2.bed
+
+# MOUSE AFFYMETRIX MOE430 TRACK (TBD)
+#    mkdir -p /projects/compbio/data/microarray/affyMouse
+    # Download MOE430A and MOE430B consensus sequences from Affymetrix web site
+    # http://www.affymetrix.com/support/technical/byproduct.affx?product=moe430
+#    unzip MOE430*_consensus.zip
+
+    # check for duplicate probes: there are none, all have unique names
+    # check for duplicate probes: 100 from 136745_at to 1367551_a_at
+    # remove "consensus:" and ";" from FASTA headers to shorten probeset
+    # names for database
+
+#    sed -e 's/consensus://' MOE430A_consensus | sed -e 's/;/ /' > MOE430_all.fa
+#    sed -e 's/consensus://' MOE430B_consensus | sed -e 's/;/ /' >> MOE430_all.fa
+ 
+#    cp /projects/compbio/data/microarray/affyMouse/MOE430_all.fa \
+#       /cluster/bluearc/affy/
+
+    # THE ABOVE WAS ALREADY TBD)
+
+    # Set up cluster job to align MOE430 consensus sequences to mm8
+    ssh kkr1u00
+    cd /cluster/data/mm8/bed
+    mkdir -p affyMOE430
+    cd affyMOE430
+#    mkdir -p /iscratch/i/affy
+#    cp /cluster/bluearc/affy/MOE430_all.fa /iscratch/i/affy
+#    iSync
+
+    ssh kk
+    cd /cluster/data/mm8/bed/affyMOE430
+    ls -1 /iscratch/i/affy/MOE430_all.fa > affy.lst
+    echo /scratch/hg/mm8/nib/*.nib | wordLine stdin > genome.lst
+
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/scratch/hg/h/mouse11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+    gensub2 genome.lst affy.lst template.sub para.spec
+    mkdir psl
+    para create para.spec
+    # Do the job with usual para try/check/push/time etc.
+# Completed: 34 of 34 jobs
+# CPU time in finished jobs:       9196s     153.26m     2.55h    0.11d  0.000 y
+# IO & Wait Time:                   362s       6.04m     0.10h    0.00d  0.000 y
+# Average job time:                 281s       4.69m     0.08h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             639s      10.65m     0.18h    0.01d
+# Submission to last job:           639s      10.65m     0.18h    0.01d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyRAE230.psl
+    pslSort dirs raw.psl tmp psl
+
+    # only use alignments that cover 30% of sequence and have at least
+    # 95% identity in aligned region. 
+    # low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.3 -sizeMatters -minAli=0.95 -nearTop=0.005 raw.psl affyMOE430.psl /dev/null
+
+    # Load alignments and sequences into database
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/affyMOE430
+    # shorten names in psl file
+    sed -e 's/MOE430//' affyMOE430.psl > affyMOE430.psl.bak
+    mv affyMOE430.psl.bak affyMOE430.psl
+
+    # load track into database
+
+    hgLoadPsl mm8 affyMOE430.psl
+ 
+    # Add consensus sequences for MOE430
+    # Copy sequences to gbdb is they are not there already
+#    mkdir -p /gbdb/hgFixed/affyProbes
+#    ln -s /projects/compbio/data/microarray/affyMouse/MOE430_all.fa \ 
+#       /gbdb/hgFixed/affyProbes
+
+    hgLoadSeq -abbr=MOE430 mm8 /gbdb/hgFixed/affyProbes/MOE430_all.fa
+    
+    # Clean up
+#    rm batch.bak contig.psl raw.psl 
+    
+    # BELOW TWO THINGS WERE DONE BY RACHEL ALREDAY FOR MM4
+    # add entry to trackDb.ra in ~kent/src/hg/makeDb/trackDb/mouse/
+    # add affyMOE430.html file and then do make alpha to add to trackDb table
+
+# Create known gene mapping table and expression distance tables
+# for GNF Atlas 2.  (The hgExpDistance takes an hour.)
+
+hgMapToGene mm8 affyGnf1m knownGene knownToGnf1m
+hgExpDistance mm8 hgFixed.gnfMouseAtlas2MedianRatio \
+	hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance -lookup=knownToGnf1m
+Have 34863 elements in hgFixed.gnfMouseAtlas2MedianRatio
+Got 22937 unique elements in hgFixed.gnfMouseAtlas2MedianRatio
+
+# Create table that maps between known genes and RefSeq
+hgMapToGene mm8 refGene knownGene knownToRefSeq
+#	may need to build this command in src/hg/near/hgMapToGene
+
+# Create a table that maps between known genes and 
+# the nice affy expression data.
+hgMapToGene mm8 affyU74  knownGene knownToU74
+hgMapToGene mm8 affyMOE430 knownGene knownToMOE430
+hgMapToGene mm8 affyMOE430 -prefix=A: knownGene knownToMOE430A
+
+# Format and load Rinn et al sex expression data
+mkdir /cluster/data/mm8/bed/rinnSex
+cd /cluster/data/mm8/bed/rinnSex
+hgMapMicroarray rinnSex.bed hgFixed.mouseRinnSexMedianRatio \
+../affyMOE430/affyMOE430.psl
+hgLoadBed mm8 rinnSex rinnSex.bed
+
+# Format and load the GNF data
+mkdir /cluster/data/mm8/bed/affyGnf95
+cd /cluster/data/mm8/bed/affyGnf95
+~/src/hg/affyGnf/affyPslAndAtlasToBed -newType ../affyU95.psl \
+/projects/compbio/data/microarray/affyGnfHuman/data_public_U95 \
+affyGnfU95.tab affyGnfU95Exps.tab -shortOut
+
+#	this .sql load was in preceeding instructions, but this .sql file
+#	appears to not exist and it doesn't seem to be needed anyway.
+#	Everything below this seems to create tables OK.
+#  hgsql mm8 < ~/kent/src/hg/affyGnf/affyGnfU95.sql
+
+# Create table that gives distance in expression space between 
+# GNF genes.  These commands take about 15 minutes each
+#	The affyGnfU74?Exps arguments appear to be unused in 
+# hgExpDistance
+cd /cluster/data/mm8/bed/geneSorter
+hgExpDistance mm8 affyGnfU74A affyGnfU74AExps affyGnfU74ADistance -lookup=knownToU74
+hgExpDistance mm8 affyGnfU74B affyGnfU74BExps affyGnfU74BDistance -lookup=knownToU74
+hgExpDistance mm8 affyGnfU74C affyGnfU74CExps affyGnfU74CDistance -lookup=knownToU74
+
+# Create table to map between known genes and GNF Atlas2
+# expression data.
+    hgMapToGene mm8 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+#	hgsql -e "select count(*) from knownToGnfAtlas2;" mm8
+#	row count changed to 22978
+
+# Create expression distance table - takes about an hour
+    hgExpDistance mm8 hgFixed.gnfMouseAtlas2MedianRatio \
+    	hgFixed.gnfMouseAtlas2MedianExps gnfAtlas2Distance \
+	-lookup=knownToGnfAtlas2 &
+#	hgsql -e "select count(*) from gnfAtlas2Distance;" mm8
+#	row count changed to 22937000 
+
+# HGNEAR PROTEIN BLAST TABLES (DONE 3/14/06 Fan)
+
+    ssh hgwdev
+    mkdir /cluster/data/mm8/bed/hgNearBlastp
+    cd /cluster/data/mm8/bed/hgNearBlastp
+    cat << _EOF_ > config.ra
+# Latest mouse vs. other Gene Sorter orgs:
+# human, rat, zebrafish, worm, yeast, fly
+
+targetGenesetPrefix mouse
+targetDb mm8
+queryDbs hg18 rn4 danRer3 ce2 sacCer1 dm2
+
+mm8Fa /cluster/data/mm8/bed/geneSorter/blastp/known.faa 
+hg18Fa /cluster/data/hg18/bed/geneSorter/blastp/known.faa
+rn4Fa /cluster/data/rn4/bed/blastp/known.faa
+danRer3Fa /cluster/data/danRer3/bed/blastp/ensembl.faa
+ce2Fa /cluster/data/ce2/bed/blastp/wormPep154.faa
+sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
+dm2Fa /cluster/data/dm2/bed/flybase4.1/flybasePep.fa
+
+buildDir /cluster/data/mm8/bed/hgNearBlastp
+scratchDir /san/sanvol1/scratch/mm8HgNearBlastp
+_EOF_
+
+    doHgNearBlastp.pl config.ra >do.log 
+
+# output was like this:
+...
+Scanning through 671 files^M
+Loading database with 14470 rows^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/mm8.split^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/mm8.formatdb^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/hg18.split^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/hg18.formatdb^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/rn4.split^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/rn4.formatdb^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/danRer3.split^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/danRer3.formatdb^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/ce2.split^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/ce2.formatdb^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/sacCer1.split^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/sacCer1.formatdb^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/dm2.split^M
+# ssh -x pk rm -rf /san/sanvol1/scratch/mm8HgNearBlastp/dm2.formatdb^M
+# ssh -x pk rmdir /san/sanvol1/scratch/mm8HgNearBlastp^M
+^M
+ *** All done!^M
+ *** Check these tables in mm8:^M
+ *** mouseBlastTab hgBlastTab rnBlastTab drBlastTab ceBlastTab scBlastTab dmBlastTab ^M
+ *** and mmBlastTab in these databases:^M
+ *** hg18 rn4 danRer3 ce2 sacCer1 dm2 ^M
+
+# MAKE ORGANISM-SPECIFIC HGNEARDATA FILES 
+    cd ~/kent/src/hg/near/hgNear/hgNearData
+    mkdir -p Mouse/mm8
+    cd Mouse/mm8
+    cp ../mm7/otherOrgs.ra
+# Edit ortherOrgs.ra to reflect the latest genomes used in blastp jobs
+    vi ortherOrgs.ra
+# then check it into CVS.
+
+# ENABLE HGNEAR FOR mm8 IN HGCENTRALTEST
+    echo "update dbDb set hgNearOk = 1 where name = 'mm8';" \
+      | hgsql -h genome-testdb hgcentraltest
+
+# END OF HGNEAR STUFF
 
