@@ -100,7 +100,10 @@ static void printString(FILE *f, struct _pf_string *string)
 /* Print out string. */
 {
 if (string != NULL)
+    {
+    // fprintf(f, "[ugly:%d]", string->_pf_refCount);
     printEscapedString(f, string->s);
+    }
 else
     fprintf(f, "nil");
 }

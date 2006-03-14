@@ -1,6 +1,7 @@
 /* Built in string handling. */
 #include "common.h"
 #include "../compiler/pfPreamble.h"
+#include "rtRefCount.h"
 #include "runType.h"
 #include "object.h"
 #include "pfString.h"
@@ -89,10 +90,8 @@ if (a != b)
         ret = strcmp(a->s, b->s);
     }
 
-if (NULL != a && --a->_pf_refCount <= 0)
-    a->_pf_cleanup(a, 0);
-if (NULL != b && --b->_pf_refCount <= 0)
-    b->_pf_cleanup(b, 0);
+rtRefCleanup(a,0);
+rtRefCleanup(b,0);
 return ret;
 }
 
@@ -162,10 +161,10 @@ for (i=0; i<count; ++i)
     _pf_String ss = stack[i].String;
     if (ss)
 	{
+    // uglyf("ss %p: %s, %d, refCount %d\n", ss, ss->s, ss->size, ss->_pf_refCount);
 	memcpy(s, ss->s, ss->size);
 	s += ss->size;
-	if (--ss->_pf_refCount <= 0)
-	    ss->_pf_cleanup(ss, 0);
+	rtRefCleanup(ss,0);
 	}
     }
 *s = 0;
@@ -173,8 +172,45 @@ string->size = string->allocated = total;
 return string;
 }
 
+#ifdef DEBUG
+struct _pf_string *_pf_string_cat(_pf_Stack *stack, int count)
+/* Create new string that's a concatenation of the above strings. */
+{
+int i;
+size_t total=0;
+size_t pos = 0;
+_pf_String string;
+char *s;
+AllocVar(string);
+string->_pf_refCount = 1;
+string->_pf_cleanup = _pf_string_cleanup;
+for (i=0; i<count; ++i)
+    {
+    _pf_String ss = stack[i].String;
+    if (ss)
+	total += ss->size;
+    }
+string->s = s = needLargeMem(total+1);
+for (i=0; i<count; ++i)
+    {
+    _pf_String ss = stack[i].String;
+    if (ss)
+	{
+	// uglyf("ss: %s, refCount %d\n", ss->s, ss->_pf_refCount);
+	memcpy(s, ss->s, ss->size);
+	s += ss->size;
+	rtRefCleanup(ss,0);
+	}
+    }
+*s = 0;
+string->size = string->allocated = total;
+return string;
+}
+#endif /* DEBUG */
+
+
 void _pf_string_make_independent_copy(_pf_Stack *stack)
-/* Make it so that string on stack is an indepent copy of
+/* Make it so that string on stack is an independentt copy of
  * what is already on stack.  As an optimization this routine
  * can do nothing if the refCount is exactly 1. */
 {
@@ -225,8 +261,7 @@ if (!other)
 else
     {
     stack[0].Bit = sameWord(string->s, other->s);
-    if (--other->_pf_refCount <= 0)
-	other->_pf_cleanup(other, 0);
+    rtRefCleanup(other,0);
     }
 }
 
@@ -309,8 +344,7 @@ if (end != NULL)
     {
     _pf_strcat(start, end->s, end->size);
     /* Clean up references on stack.  (Not first param since it's a method). */
-    if (--end->_pf_refCount <= 0)
-	end->_pf_cleanup(end, 0);
+    rtRefCleanup(end,0);
     }
 }
 
@@ -329,8 +363,7 @@ else
     stack[0].Int = loc - string->s;
 
 /* Clean up references on stack.  (Not first param since it's a method). */
-if (--sub->_pf_refCount <= 0)
-    sub->_pf_cleanup(sub, 0);
+rtRefCleanup(sub,0);
 }
 
 void _pf_cm_string_findNext(_pf_Stack *stack)
@@ -353,8 +386,7 @@ else
     stack[0].Int = loc - string->s;
 
 /* Clean up references on stack.  (Not first param since it's a method). */
-if (--sub->_pf_refCount <= 0)
-    sub->_pf_cleanup(sub, 0);
+rtRefCleanup(sub,0);
 }
 
 static int findLast(_pf_String pattern, _pf_String string)
@@ -402,8 +434,7 @@ _pf_nil_check(sub);
 stack[0].Int = findLast(sub, string);
 
 /* Clean up references on stack.  (Not first param since it's a method). */
-if (--sub->_pf_refCount <= 0)
-    sub->_pf_cleanup(sub, 0);
+rtRefCleanup(sub,0);
 }
 
 
@@ -448,10 +479,8 @@ _pf_Int nextPos;
 nextBetween(string, start, end, 0, &stack[0].String, &nextPos);
 
 /* Clean up references on stack.  (Not first param since it's a method). */
-if (--start->_pf_refCount <= 0)
-    start->_pf_cleanup(start, 0);
-if (--end->_pf_refCount <= 0)
-    end->_pf_cleanup(end, 0);
+rtRefCleanup(start,0);
+rtRefCleanup(end,0);
 }
 
 void _pf_cm_string_nextBetween(_pf_Stack *stack)
@@ -467,10 +496,8 @@ int nextPos;
 nextBetween(string, start, end, pos, &stack[0].String, &stack[1].Int);
 
 /* Clean up references on stack.  (Not first param since it's a method). */
-if (--start->_pf_refCount <= 0)
-    start->_pf_cleanup(start, 0);
-if (--end->_pf_refCount <= 0)
-    end->_pf_cleanup(end, 0);
+rtRefCleanup(start,0);
+rtRefCleanup(end,0);
 }
 
 
@@ -768,8 +795,7 @@ else
     stringSplitOnMultiChars(stack, splitter);
 
 /* Clean up references on stack.  (Not first param since it's a method). */
-if (--splitter->_pf_refCount <= 0)
-    splitter->_pf_cleanup(splitter, 0);
+rtRefCleanup(splitter,0);
 }
  
 
@@ -1015,8 +1041,7 @@ destSize = d - destBuf;
 for (varIx=0; varIx <= varCount; ++varIx)  /* <= intentional here */
     {
     struct _pf_string *s = stack[varIx].String;
-    if (s != NULL && --s->_pf_refCount <= 0)
-	s->_pf_cleanup(s, 0);
+    rtRefCleanup(s,0);
     }
 
 /* Create a string object to return and put it on stack. */
@@ -1033,8 +1058,7 @@ _pf_nil_check(prefix);
 stack[0].Bit = startsWith(prefix->s, string->s);
 
 /* Clean up references on stack.  (Not first param since it's a method). */
-if (--prefix->_pf_refCount <= 0)
-    prefix->_pf_cleanup(prefix, 0);
+rtRefCleanup(prefix,0);
 }
 
 
@@ -1047,8 +1071,7 @@ _pf_nil_check(suffix);
 stack[0].Bit = endsWith(string->s, suffix->s);
 
 /* Clean up references on stack.  (Not first param since it's a method). */
-if (--suffix->_pf_refCount <= 0)
-    suffix->_pf_cleanup(suffix, 0);
+rtRefCleanup(suffix,0);
 }
 
 void _pf_cm_string_asInt(_pf_Stack *stack)

@@ -3,8 +3,10 @@
 
 #include "common.h"
 #include "errabort.h"
+#include "memalloc.h"
 #include "dystring.h"
 #include "portable.h"
+#include "pthreadWrap.h"
 #include "../compiler/pfPreamble.h"
 #include "runType.h"
 #include "object.h"
@@ -12,6 +14,56 @@
 #include "initVar.h"
 
 static char **cl_env;
+
+static struct memHandler *parentMem;
+static pthread_mutex_t memMutex;
+
+static void *threadSafeAlloc(size_t size)
+/* Wrap mutex lock around allocation. */
+{
+void *result;
+pthreadMutexLock(&memMutex);
+result = parentMem->alloc(size);
+pthreadMutexUnlock(&memMutex);
+return result;
+}
+
+static void threadSafeFree(void *vpt)
+/* Wrap mutex lock around free. */
+{
+pthreadMutexLock(&memMutex);
+parentMem->free(vpt);
+pthreadMutexUnlock(&memMutex);
+}
+
+static void *threadSafeRealloc(void *vpt, size_t size)
+/* Wrap mutex lock around realloc. */
+{
+void *result;
+pthreadMutexLock(&memMutex);
+result = parentMem->realloc(vpt, size);
+pthreadMutexUnlock(&memMutex);
+return result;
+}
+
+static struct memHandler threadSafeMemHandler = 
+/* Default memory handler. */
+    {
+    NULL,
+    threadSafeAlloc,
+    threadSafeFree,
+    threadSafeRealloc,
+    };
+
+
+void _pf_init_mem()
+/* Initialize thread safe memory handler. */
+{
+#ifdef UNNEEDED
+pthreadMutexInit(&memMutex);
+parentMem = pushMemHandler(&threadSafeMemHandler);
+#endif /* UNNEEDED */
+}
 
 void *_pf_need_mem(int size)
 /* Allocate memory, which is initialized to zero. */

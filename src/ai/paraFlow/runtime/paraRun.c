@@ -80,6 +80,7 @@ struct paraRun
     long itemsFinished;		/* Number of items finished by threads. */
     struct synQueue *customerQueue;	/* Where customer waits. */
     void *localVars;		/* Local variables in caller. */
+    int localSize;		/* Size of local vars. */
     void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars);  
     	/* A function that processes one item. */
     struct dlNode *node;	/* Node in managers activeRun list */
@@ -113,6 +114,8 @@ struct jobBundle
     char **keyStrings;	/* Keys if a string */
     char *keyAsIx;	/* Keys if an index. */
     void *localVars;	/* Local variables in caller. */
+    int localSize;	/* Size of local vars. */
+    void *localOrig;	/* Original copy of local vars. */
     void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars);  
     	/* A function that processes one item. */
     struct timeval startTime;	/* Start time (wall clock) */
@@ -153,6 +156,7 @@ static struct manager *managerNew(int cpuCount);
 
 static struct manager *theManager;
 static int paraCpuCount = 2;
+// static int paraCpuCount = 1;
 
 
 void _pf_paraRunInit()
@@ -176,6 +180,8 @@ for (i=0; i<job->itemCount; ++i)
         key = job->keyStrings[i];
     else
         key = job->keyAsIx + i;
+    if (job->localVars)
+        memcpy(job->localVars, job->localOrig, job->localSize);
     job->process(stack, key, item, job->localVars);
     item += job->itemSize;
     }
@@ -190,7 +196,6 @@ struct worker *w = v;
 for (;;)
     {
     struct jobBundle *job = synQueueGet(w->queue);
-    // uglyf("%p Got work type %d, jobs %d\n", w, (int)(job->messageType), job->itemCount);
     jobBundleRun(job, w->stack);
     synQueuePut(theManager->queue, job);
     }
@@ -262,7 +267,12 @@ AllocVar(job);
 job->messageType = mBundle;
 job->itemCount = itemsInBundle;
 job->itemSize = run->itemSize;
-job->localVars = run->localVars;
+if (run->localVars)
+    {
+    job->localOrig = run->localVars;
+    job->localSize = run->localSize;
+    job->localVars = needMem(run->localSize);
+    }
 job->process = run->process;
 job->worker = worker;
 job->run = run;
@@ -309,6 +319,7 @@ if (job != NULL)
     {
     freeMem(job->itemsToFree);
     freeMem(job->keyStrings);
+    freeMem(job->localVars);
     freez(pJob);
     }
 }
@@ -488,7 +499,7 @@ if (run != NULL)
     }
 }
 
-static struct paraRun *paraRunNew(void *localVars, 
+static struct paraRun *paraRunNew(void *localVars, int localSize,
     void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars),
     enum paraRunType prtType, int expTypeId)
 /* Set up shared parts of paraRun structure. */
@@ -499,17 +510,19 @@ run->messageType = mRun;
 run->prtType = prtType;
 run->customerQueue = cacheQueueAlloc();
 run->localVars = localVars;
+run->localSize = localSize;
 run->process = process;
 run->expType = _pf_type_table[expTypeId];
 return run;
 }
 
-void *_pf_paraRunArray(struct _pf_array *array, void *localVars, 
+void *_pf_paraRunArray(struct _pf_array *array, void *localVars, int localSize,
     void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars),
     enum paraRunType prtType, int expTypeId)
 /* Build up run structure on array. */
 {
-struct paraRun *run = paraRunNew(localVars, process, prtType, expTypeId);
+struct paraRun *run = paraRunNew(localVars, localSize,
+	process, prtType, expTypeId);
 void *result;
 run->collectionType = cArray;
 run->itemCount = array->size;
@@ -520,12 +533,13 @@ paraRunFree(&run);
 return result;
 }
 
-void *_pf_paraRunDir(struct _pf_dir *dir, void *localVars, 
+void *_pf_paraRunDir(struct _pf_dir *dir, void *localVars, int localSize,
     void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars),
     enum paraRunType prtType, int expTypeId)
 /* Run process on each item in dir. */
 {
-struct paraRun *run = paraRunNew(localVars, process, prtType, expTypeId);
+struct paraRun *run = paraRunNew(localVars, localSize,
+	process, prtType, expTypeId);
 void *result;
 run->collectionType = cDir;
 run->itemCount = dir->hash->elCount;
@@ -537,12 +551,13 @@ paraRunFree(&run);
 return result;
 }
 
-void *_pf_paraRunRange(long start, long end, void *localVars, 
+void *_pf_paraRunRange(long start, long end, void *localVars, int localSize,
     void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars),
     enum paraRunType prtType, int expTypeId)
 /* Build up run structure on range. */
 {
-struct paraRun *run = paraRunNew(localVars, process, prtType, expTypeId);
+struct paraRun *run = paraRunNew(localVars, localSize,
+	process, prtType, expTypeId);
 void *result;
 run->collectionType = cRange;
 run->itemCount = end - start;

@@ -23,17 +23,17 @@ enum paraRunType
     prtParaFilter
     };
 
-void *_pf_paraRunArray(struct _pf_array *array, void *localVars, 
+void *_pf_paraRunArray(struct _pf_array *array, void *localVars, int localSize,
     void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars),
     enum paraRunType prtType, int expTypeId);
 /* Run process on each item in array. */
 
-void *_pf_paraRunDir(struct _pf_dir *dir, void *localVars, 
+void *_pf_paraRunDir(struct _pf_dir *dir, void *localVars, int localSize,
     void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars),
     enum paraRunType prtType, int expTypeId);
 /* Run process on each item in dir. */
 
-void *_pf_paraRunRange(long start, long end, void *localVars, 
+void *_pf_paraRunRange(long start, long end, void *localVars, int localSize,
     void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars),
     enum paraRunType prtType, int expTypeId);
 /* Run process on each item in range. */

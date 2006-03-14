@@ -43,8 +43,12 @@ int main(int argc, char *argv[])
 {
 static struct myLocal local = {1,2,3,"localStuff"};
 struct _pf_array *array = fakeStringArray(6);
+int i;
 _pf_paraRunInit();
-_pf_paraRunArray(array, &local, process);
-_pf_paraRunArray(array, &local, process);
+for (i=1; i<=3; ++i)
+   uglyf("Testing %d\n", i);
+
+_pf_paraRunArray(array, &local, process, prtParaDo, 0);
+// _pf_paraRunArray(array, &local, process, prtParaDo, 0);
 return 0;
 }

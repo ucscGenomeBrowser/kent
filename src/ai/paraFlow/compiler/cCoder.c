@@ -2993,6 +2993,7 @@ fprintf(f,
 "int main(int argc, char *argv[], char *environ[])\n"
 "{\n"
 "static _pf_Stack stack[16*1024];\n"
+"_pf_init_mem();\n"
 "_pf_init_types(_pf_base_info, _pf_base_info_count,\n"
 "               _pf_type_info, _pf_type_info_count,\n"
 "               _pf_field_info, _pf_field_info_count,\n"

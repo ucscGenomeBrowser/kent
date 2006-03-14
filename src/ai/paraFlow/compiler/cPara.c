@@ -82,9 +82,9 @@ else
     internalErrAt(para->tok);
 fprintf(f, ", ");
 if (enclosingFunction)
-    fprintf(f, "&_pf_l, ");
+    fprintf(f, "&_pf_l, sizeof(_pf_l), ");
 else
-    fprintf(f, "0, ");
+    fprintf(f, "0, 0, ");
 fprintf(f, "%s, ", para->name);
 fprintf(f, "%d, 0);\n", prtParaDo);
 }
