@@ -2,6 +2,6 @@
 CREATE TABLE knownGenePep (
   name varchar(255) NOT NULL default '',	# Known Gene entry ID
   seq longblob NOT NULL,			# protein sequence of the corresponding Known Gene
-  PRIMARY KEY  (name(32))
+  KEY  (name(32))
 ) TYPE=MyISAM;
 
