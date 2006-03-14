@@ -58,8 +58,7 @@ void codeCase(struct pfCompile *pfc, FILE *f, struct pfParse *pp);
 void codeParaBlocks(struct pfCompile *pfc, FILE *f, struct pfParse *module);
 /* Create functions for code inside of para blocks. */
 
-void codeParaDo(struct pfCompile *pfc, FILE *f,
-	struct pfParse *foreach, boolean isPara);
+void codeParaDo(struct pfCompile *pfc, FILE *f, struct pfParse *para);
 /* Emit C code for para ... do statement. */
 
 void pfCodeC(struct pfCompile *pfc, struct pfParse *program, char *baseDir, char *mainName);

@@ -6,6 +6,7 @@
 #include "pfParse.h"
 #include "refCount.h"
 #include "ctar.h"
+#include "pfPreamble.h"
 #include "cCoder.h"
 
 static boolean varUsed(struct pfVar *var, struct pfParse *pp)
@@ -48,8 +49,7 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 return FALSE;
 }
 
-void codeParaDo(struct pfCompile *pfc, FILE *f,
-	struct pfParse *para, boolean isPara)
+void codeParaDo(struct pfCompile *pfc, FILE *f, struct pfParse *para)
 /* Emit C code for para ... do statement. */
 {
 struct pfParse *collectionPp = para->children;
@@ -85,7 +85,8 @@ if (enclosingFunction)
     fprintf(f, "&_pf_l, ");
 else
     fprintf(f, "0, ");
-fprintf(f, "%s);\n", para->name);
+fprintf(f, "%s, ", para->name);
+fprintf(f, "%d, 0);\n", prtParaDo);
 }
 
 static char *paraBlockName(int *pCounter)
@@ -114,7 +115,8 @@ else
 }
 
 static void codeParaBlockFunction(struct pfCompile *pfc, FILE *f, 
-	struct pfParse *para, struct pfParse *enclosingFunction)
+	struct pfParse *para, struct pfParse *enclosingFunction,
+	enum paraRunType pftType)
 /* Code para block function */
 {
 struct pfParse *collectionPp = para->children;
@@ -188,7 +190,7 @@ bool oldCodingPara = pfc->codingPara;
 pfc->codingPara = TRUE;
 pfc->isFunc = (enclosingFunction != NULL);
 para->name = paraBlockName(pCounter);
-codeParaBlockFunction(pfc, f, para, enclosingFunction);
+codeParaBlockFunction(pfc, f, para, enclosingFunction, prtParaDo);
 pfc->isFunc = oldIsFunc;
 pfc->codingPara = oldCodingPara;
 }

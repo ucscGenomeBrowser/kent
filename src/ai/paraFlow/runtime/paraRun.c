@@ -72,6 +72,7 @@ struct paraRun
  * some stuff to help us manage the work. */
     {
     enum messageType messageType;	/* Always mRun */
+    enum paraRunType prtType;		/* do/get/filter etc. */
     long itemCount;			/* Element count */
     int itemSize;				/* Size each element */
     double totalRunTime;	/* Total job run time (finished only). */
@@ -94,12 +95,17 @@ struct paraRun
     long rangeStart;				/* Range info */
     long rangeEnd;				/*   "    "   */
     long rangeIx;				/* Position in range */
+
+    /* Output of run may go here. */
+    struct _pf_type *expType;		/* Type returned by process */
+    union _pf_stack result;
     };
 
 struct jobBundle
 /* A bundle of jobs that can be taken by our worker threads. */
     {
     enum messageType messageType;	/* Always mBundle */
+    enum paraRunType prtType;		/* do/get/filter etc. */
     int itemCount;	/* Count of items. */
     int itemSize;	/* Size of each item. */
     void *items;	/* An array of items to process. */
@@ -115,6 +121,11 @@ struct jobBundle
     time_t endCpu;		/* End CPU time. */
     struct worker *worker;	/* The worker on this one. */
     struct paraRun *run;	/* Run this is part of. */
+
+    /* Output of run may go here. */
+    enum _pf_single_type stResult;
+    union _pf_stack singleResult;
+    void *multiResult;
     };
 
 struct worker
@@ -457,11 +468,13 @@ pthreadCreate(&manager->thread, NULL, manageManage, manager);
 return manager;
 }
 
-static void paraDoRun(struct paraRun *run)
+static void *paraDoRun(struct paraRun *run)
 /* Send run to manager and wait for results. */
 {
+void *result = NULL;
 synQueuePut(theManager->queue, run);
 synQueueGet(run->customerQueue);
+return result;
 }
 
 static void paraRunFree(struct paraRun **pRun)
@@ -476,56 +489,68 @@ if (run != NULL)
 }
 
 static struct paraRun *paraRunNew(void *localVars, 
-    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars))
+    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars),
+    enum paraRunType prtType, int expTypeId)
 /* Set up shared parts of paraRun structure. */
 {
 struct paraRun *run;
 AllocVar(run);
 run->messageType = mRun;
+run->prtType = prtType;
 run->customerQueue = cacheQueueAlloc();
 run->localVars = localVars;
 run->process = process;
+run->expType = _pf_type_table[expTypeId];
 return run;
 }
 
-void _pf_paraRunArray(struct _pf_array *array, void *localVars, 
-    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars))
+void *_pf_paraRunArray(struct _pf_array *array, void *localVars, 
+    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars),
+    enum paraRunType prtType, int expTypeId)
 /* Build up run structure on array. */
 {
-struct paraRun *run = paraRunNew(localVars, process);
+struct paraRun *run = paraRunNew(localVars, process, prtType, expTypeId);
+void *result;
 run->collectionType = cArray;
 run->itemCount = array->size;
 run->itemSize = array->elSize;
 run->array = array;
-paraDoRun(run);
+result = paraDoRun(run);
 paraRunFree(&run);
+return result;
 }
 
-void _pf_paraRunDir(struct _pf_dir *dir, void *localVars, 
-    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars))
+void *_pf_paraRunDir(struct _pf_dir *dir, void *localVars, 
+    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars),
+    enum paraRunType prtType, int expTypeId)
 /* Run process on each item in dir. */
 {
-struct paraRun *run = paraRunNew(localVars, process);
+struct paraRun *run = paraRunNew(localVars, process, prtType, expTypeId);
+void *result;
 run->collectionType = cDir;
 run->itemCount = dir->hash->elCount;
 run->itemSize = sizeof(void*);
 run->dir = dir;
 run->hashCookie = hashFirst(dir->hash);
-paraDoRun(run);
+result = paraDoRun(run);
 paraRunFree(&run);
+return result;
 }
 
-void _pf_paraRunRange(long start, long end, void *localVars, 
-    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars))
+void *_pf_paraRunRange(long start, long end, void *localVars, 
+    void (*process)(_pf_Stack *stack, char *key, void *item, void *localVars),
+    enum paraRunType prtType, int expTypeId)
 /* Build up run structure on range. */
 {
-struct paraRun *run = paraRunNew(localVars, process);
+struct paraRun *run = paraRunNew(localVars, process, prtType, expTypeId);
+void *result;
 run->collectionType = cRange;
 run->itemCount = end - start;
 run->itemSize = sizeof(_pf_Long);
 run->rangeIx = run->rangeStart = start;
 run->rangeEnd = end;
-paraDoRun(run);
+result = paraDoRun(run);
 paraRunFree(&run);
+return result;
 }
 

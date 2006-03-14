@@ -2530,7 +2530,7 @@ switch (pp->type)
 	codeVarInit(pfc, f, pp, 0);
         break;
     case pptParaDo:
-        codeParaDo(pfc, f, pp, TRUE);
+        codeParaDo(pfc, f, pp);
 	break;
     case pptForeach:
 	codeForeach(pfc, f, pp);
