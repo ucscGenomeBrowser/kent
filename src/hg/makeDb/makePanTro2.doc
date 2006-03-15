@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.3 2006/03/09 02:59:19 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.4 2006/03/15 02:42:10 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -310,6 +310,8 @@ chrY   1261428 bases of 23952694 (5.266%) in intersection
 
 # REPEATMASKER RUN (2006-03-01 kate)
 # Using -species pan option to get chimp repeats
+# Redone 3/10 with additional chimp repeats from
+# Evan Eichler (left out of -pan lib)
 
     ssh pk
     cd /cluster/data/panTro2
@@ -405,8 +407,11 @@ cat > lift.csh << 'EOF'
 # VERIFY REPEATMASKER RESULTS (2006-03-03 kate)
     # TODO: Eyeball some repeat annotations in the browser, compare to lib seqs.
     # Run featureBits on previous genome build, and compare:
-    nice featureBits panTro2 rmsk
+    #nice featureBits panTro2 rmsk
+        # w/o 2 Eichler repeats:
         # 1396630330 bases of 2909512873 (48.002%) in intersection
+        # with 2 Eichler repeats:
+        # 1401134418 bases of 2909512873 (48.157%) in intersection
     nice featureBits panTro1 rmsk
         # 1311281819 bases of 2733948177 (47.963%) in intersection
     # looks good -- similar but just a bit higher
@@ -422,13 +427,12 @@ cat > lift.csh << 'EOF'
      hgsql panTro1 -e "select distinct(repName) from chr1_rmsk where repFamily <> 'Simple_repeat' and repFamily <> 'Low_complexity' order by repName" > repNames.panTro1
     wc -l *Names*
         # 864 repNames.panTro1
-        # 904 repNames.panTro2
-            # 40 new repeats
+        # 906 repNames.panTro2
+            # 40 new repeats (+ 2 added from Eichler)
     wc -l *Families*
         # 38 repFamilies.panTro1
         # 38 repFamilies.panTro2
             # no new repeat families
-
 
 
 # RUN TRF TO IDENTIFY SIMPLE REPEATS (2006-03-01 kate)
@@ -570,7 +574,7 @@ cat > liftChroms.csh << 'EOF'
     # a few messages (e.g. 10 per chrom) like:
     # WARNING: negative rEnd: -531 chr1:14090705-14090763 L1MEc
 
-    # after checking, remove .unmaksed and .rmsk
+    # after checking, remove .unmasked and .rmsk
 
     # make 2bit for browser and blat
     faToTwoBit ?{,?}/chr*.fa 6_hla_hap1/chr*.fa panTro2.2bit
@@ -597,7 +601,9 @@ cat > liftChroms.csh << 'EOF'
     cp -p /cluster/bluearc/panTro2/11.ooc .
 
 
+
 # COPY SEQUENCE TO CLUSTER NODES FOR CLUSTER RUNS
+
     set scratch = /cluster/bluearc/scratch/hg/panTro2
     mkdir $scratch
     cp -p panTro2.2bit $scratch
@@ -609,6 +615,8 @@ cat > liftChroms.csh << 'EOF'
 
 
 # GENBANK ALIGNMENTS (WORKING 2006-03-03 kate)
+    # restarted 3/13 4pm
+
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
     # edit etc/genbank.conf to add panTro2
@@ -767,6 +775,7 @@ cd /san/sanvol1/scratch/canFam2/rmsk
 
 
 # CPGISLANDS (2006-03-06 - kate)
+#       Redo 3/13/06 after second Repeatmasker run
     ssh hgwdev
     mkdir /cluster/data/panTro2/bed/cpgIsland
     cd /cluster/data/panTro2/bed/cpgIsland
@@ -821,7 +830,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     hgLoadBed -strict panTro2 cpgIslandExt -tab -noBin \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
     featureBits panTro2 cpgIslandExt
-        # 19683723 bases of 2909512873 (0.677%) in intersection
+        # 19683681 bases of 2909512873 (0.677%) in intersection
 
 # BAC Ends (2006-03-08 kate)
 
@@ -934,4 +943,99 @@ cat > gsub << 'EOF'
 
 
    # MAKE DOWNLOADABLE SEQUENCE FILES
+
+    # QUALITY SCORES 
+    # From Joanne Nelson, WUSTL
+
+    ssh kkstore02
+    cd /cluster/data/panTro2
+    mkdir bed/quality
+    cd bed/quality
+    mkdir wustl
+    cd wustl
+    wget -np -r ftp://genome.wustl.edu/private/963082470306293/upload_for_kate
+
+
+########################
+# BLASTZ HUMAN hg18 (2006-03-13 kate)
+# Do not use lineage-specific repeats, on recommendation of Arian Smit
+
+    ssh pk
+    cd /cluster/data/panTro2/bed
+    mkdir blastz.hg18.2006-03-13
+    ln -s blastz.hg18.2006-03-13 blastz.hg18
+    cd blastz.hg18
+
+    cat << '_EOF_' > DEF
+# chimp vs human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Chimmp panTro2
+SEQ1_DIR=/scratch/hg/panTro2/panTro2.2bit
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/bluearc/panTro2/chrom.sizes
+
+# QUERY: Human hg18 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/hg18/hg18.2bit
+SEQ2_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ2_CHUNK=3000000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/panTro2/bed/blastz.hg18.2006-03-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+
+    # << happy emacs
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
+        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg18 \
+        `pwd`/DEF >&! blastz.out &
+
+
+########################
+# BLASTZ MACAQUE rheMac2 (2006-03-14 kate)
+
+    ssh pk
+    cd /cluster/data/panTro2/bed
+    mkdir blastz.rheMac2.2006-03-14
+    ln -s blastz.rheMac2.2006-03-14 blastz.rheMac2
+    cd blastz.rheMac2
+
+    cat << '_EOF_' > DEF
+# chimp vs monkey
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Chimp panTro2
+SEQ1_DIR=/scratch/hg/panTro2/panTro2.2bit
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/bluearc/panTro2/chrom.sizes
+
+# QUERY: Macaque rheMac2 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/rheMac2/rheMac2.2bit
+SEQ2_LEN=/scratch/hg/rheMac2/chrom.sizes
+SEQ2_CHUNK=3000000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/panTro2/bed/blastz.rheMac2.2006-03-14
+TMPDIR=/scratch/tmp
+'_EOF_'
+
+    # << happy emacs
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
+        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.rheMac2 \
+        `pwd`/DEF >&! blastz.out &
+
+
+
+
+
 
