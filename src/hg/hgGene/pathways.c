@@ -9,7 +9,7 @@
 #include "spDb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: pathways.c,v 1.13 2006/03/06 17:46:35 angie Exp $";
+static char const rcsid[] = "$Id: pathways.c,v 1.14 2006/03/15 16:46:51 fanhsu Exp $";
 
 struct pathwayLink
 /* Info to link into a pathway. */
@@ -66,18 +66,25 @@ static void bioCycLink(struct pathwayLink *pl, struct sqlConnection *conn,
 {
 char query[512], **row;
 struct sqlResult *sr;
+char *oldMapId = strdup("");
+
 safef(query, sizeof(query),
 	"select bioCycPathway.mapId,description"
 	" from bioCycPathway,bioCycMapDesc"
 	" where bioCycPathway.kgId='%s'"
-	" and bioCycPathway.mapId = bioCycMapDesc.mapId"
+	" and bioCycPathway.mapId = bioCycMapDesc.mapId order by bioCycPathway.mapId"
 	, geneId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hPrintf("<A HREF=\"http://biocyc.org/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2\" TARGET=_blank>",
+    /* only print new ones */
+    if (!sameWord(oldMapId, row[0]))
+    	{
+    	hPrintf("<A HREF=\"http://biocyc.org/HUMAN/new-image?type=PATHWAY&object=%s&detail-level=2\" TARGET=_blank>",
     	row[0]);
-    hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
+    	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
+	}
+    oldMapId = strdup(row[0]);	
     }
 sqlFreeResult(&sr);
 }
