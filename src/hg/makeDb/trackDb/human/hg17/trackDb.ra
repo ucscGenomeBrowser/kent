@@ -134,7 +134,7 @@ visibility hide
 color 60,70,1 
 type bed 6 +
 url http://www.sanger.ac.uk/Software/Rfam/
-mafTrack multiz8way
+mafTrack multiz17way
 
 track rnafold
 shortLabel RNAfold
@@ -154,7 +154,7 @@ priority 63
 visibility hide
 color 20,90,0
 type bed 6 +
-mafTrack multiz8way
+mafTrack multiz17way
 
 track wgRna
 shortLabel sno/miRNA
