@@ -18,5 +18,6 @@ USE_DIRS = $(DIRS)
 DIRS = \
 	joinerCheck \
 	joinableFields \
+	makeTableDescriptions \
 	dbSnoop
 	
