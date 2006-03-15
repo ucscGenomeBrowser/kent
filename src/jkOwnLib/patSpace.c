@@ -7,7 +7,7 @@
 #include "ooc.h"
 #include "patSpace.h"
 
-static char const rcsid[] = "$Id: patSpace.c,v 1.2 2003/09/09 21:44:02 kent Exp $";
+static char const rcsid[] = "$Id: patSpace.c,v 1.3 2006/03/15 18:36:16 angie Exp $";
 
 #define blockSize (256)
 
@@ -122,13 +122,13 @@ int ls;
 
 for (i=0; i<ps->seedSize-1; ++i)
     {
-    bVal = ntValNoN[dna[i]];
+    bVal = ntValNoN[(int)dna[i]];
     bits <<= 2;
     bits += bVal;
     }
 for (i=ps->seedSize-1; i<size; ++i)
     {
-    bVal = ntValNoN[dna[i]];
+    bVal = ntValNoN[(int)dna[i]];
     bits <<= 2;
     bits += bVal;
     bits &= mask;
@@ -148,7 +148,6 @@ int i;
 psBits *listSizes = ps->listSizes;
 psBits **lists = ps->lists;
 psBits *allocated;
-int ignoreCount = 0;
 psBits maxPat = ps->maxPat;
 int size;
 int usedCount = 0, overusedCount = 0;
@@ -203,13 +202,13 @@ fixBlockSize(bp, startBlock);
 ++bp;
 for (i=0; i<ps->seedSize-1; ++i)
     {
-    bVal = ntValNoN[dna[i]];
+    bVal = ntValNoN[(int)dna[i]];
     bits <<= 2;
     bits += bVal;
     }
 for (i=ps->seedSize-1; i<size; ++i)
     {
-    bVal = ntValNoN[dna[i]];
+    bVal = ntValNoN[(int)dna[i]];
     bits <<= 2;
     bits += bVal;
     bits &= mask;
@@ -258,11 +257,10 @@ struct patSpace *makePatSpace(
    seqArray is a list of sequences. */
 {
 struct patSpace *ps = newPatSpace(minMatch, maxGap,seedSize);
-int i,j,k;
+int i;
 int startIx = 0;
 int total = 0;
 struct dnaSeq *seq;
-int globalOver = 0, localOver = 0;
 psBits maxPat;
 psBits *listSizes;
 int seedSpaceSize = ps->seedSpaceSize;
@@ -330,7 +328,6 @@ static struct patClump *newClump(struct patSpace *ps, struct blockPos *first, st
 /* Make new clump . */
 {
 struct dnaSeq *seq = first->seq;
-char *bacName = seq->name;
 int seqIx = first->seqIx;
 int bacIx = first->bacIx;
 int start = first->offset;
@@ -360,7 +357,6 @@ static struct patClump *clumpHits(struct patSpace *ps,
 /* Clumps together hits and returns a list. */
 {
 /* Clump together hits. */
-int clumpSize = 1;
 int block;
 int i;
 int maxGap = ps->maxGap;
@@ -416,7 +412,7 @@ for (i=0; i<=lastStart; i += ps->seedSize)
     pat = 0;
     for (j=0; j<ps->seedSize; ++j)
         {
-        int bVal = ntValNoN[tile[j]];
+        int bVal = ntValNoN[(int)tile[j]];
         pat <<= 2;
         pat += bVal;
         }

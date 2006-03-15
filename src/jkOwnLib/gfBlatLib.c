@@ -18,7 +18,7 @@
 #include "trans3.h"
 
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.21 2006/02/14 21:54:23 kent Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.22 2006/03/15 18:36:16 angie Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -69,8 +69,6 @@ static struct gfRange *gfRangeLoad(char **row)
  * server. Dispose of this with gfRangeFree(). */
 {
 struct gfRange *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->qStart = atoi(row[0]);
@@ -215,7 +213,6 @@ static void gfQuerySeqTrans(int conn, aaSeq *seq, struct gfClump *clumps[2][3],
 {
 int frame, isRc, rowSize;
 struct gfClump *clump;
-struct gfHit *hit;
 int tileSize = 0;
 char *line;
 char buf[256], *row[12];
@@ -287,7 +284,6 @@ static void gfQuerySeqTransTrans(int conn, struct dnaSeq *seq,
 {
 int qFrame, tFrame, isRc, rowSize;
 struct gfClump *clump;
-struct gfHit *hit;
 int tileSize = 0;
 char *line;
 char buf[256], *row[12];
@@ -608,7 +604,6 @@ static struct gfRange *seqClumpToRangeList(struct gfClump *clumpList, int frame)
 {
 struct gfRange *rangeList = NULL, *range;
 struct gfClump *clump;
-struct dnaSeq *seq;
 char *name;
 int tOff;
 
@@ -729,7 +724,6 @@ static void clumpToHspRange(struct gfClump *clump, bioSeq *qSeq, int tileSize,
 struct gfSeqSource *target = clump->target;
 aaSeq *tSeq = target->seq;
 BIOPOL *qs, *ts, *qe, *te;
-int maxScore = 0, maxPos = 0, score, pos;
 struct gfHit *hit;
 int qStart = 0, tStart = 0, qEnd = 0, tEnd = 0, newQ = 0, newT = 0;
 boolean outOfIt = TRUE;		/* Logically outside of a clump. */
@@ -1010,7 +1004,7 @@ static void loadHashT3Ranges(struct gfRange *rangeList,
 {
 struct hash *t3Hash = newHash(10);
 struct dnaSeq *targetSeq, *tSeqList = NULL;
-struct slRef *t3RefList = NULL, *ref;
+struct slRef *t3RefList = NULL;
 struct gfRange *range;
 
 for (range = rangeList; range != NULL; range = range->next)
@@ -1276,7 +1270,7 @@ static struct ssBundle *gfTransTransFindBundles(struct genoFind *gfs[3], struct 
 /* Look for alignment to three translations of qSeq in three translated reading frames. 
  * Save alignment via outFunction/outData. */
 {
-struct trans3 *qTrans = trans3New(qSeq), *t3;
+struct trans3 *qTrans = trans3New(qSeq);
 int qFrame, tFrame;
 struct gfClump *clumps[3][3], *clump;
 struct gfRange *rangeList = NULL, *range;
@@ -1329,7 +1323,6 @@ static void addToBigBundleList(struct ssBundle **pOneList, struct hash *bunHash,
  * to the same target sequence.  This will destroy oneList in the process. */
 {
 struct ssBundle *oneBun, *bigBun;
-struct ssFfItem *ffi;
 
 for (oneBun = *pOneList; oneBun != NULL; oneBun = oneBun->next)
     {
@@ -1570,7 +1563,6 @@ void gfLongTransTransInMem(struct dnaSeq *query, struct genoFind *gfs[3],
  * together again as nucleotides. */
 {
 enum ffStringency stringency = (qIsRna ? ffCdna : ffLoose);
-int hitCount;
 int maxSize = 1500;
 int preferredSize = 1200;	/* PreferredSize - overlapSize might need to be multiple of 3. */
 int overlapSize = 270;

@@ -17,10 +17,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.20 2005/12/16 20:17:37 kent Exp $";
-
-static int blockSize = 1024;
-static int blockShift = 10;
+static char const rcsid[] = "$Id: genoFind.c,v 1.21 2006/03/15 18:36:15 angie Exp $";
 
 char *gfSignature()
 /* Return signature that starts each command to gfServer. Helps defend 
@@ -120,7 +117,6 @@ static struct genoFind *gfNewEmpty(int minMatch, int maxGap,
 struct genoFind *gf;
 int tileSpaceSize;
 int segSize = 0;
-int segFactor = 0;
 
 gfCheckTileSize(tileSize, isPep);
 if (stepSize == 0)
@@ -200,7 +196,7 @@ int i, c;
 for (i=0; i<n; ++i)
     {
     tile <<= 2;
-    if ((c = ntLookup[dna[i]]) < 0)
+    if ((c = ntLookup[(int)dna[i]]) < 0)
         return -1;
     tile += c;
     }
@@ -215,7 +211,7 @@ int aa;
 while (--n >= 0)
     {
     tile *= 20;
-    aa = aaVal[*pep++];
+    aa = aaVal[(int)(*pep++)];
     if (aa < 0)
         return -1;
     tile += aa;
@@ -328,7 +324,6 @@ int i;
 bits32 *listSizes = gf->listSizes;
 bits32 **lists = gf->lists;
 bits32 *allocated = NULL;
-int ignoreCount = 0;
 bits32 maxPat = gf->maxPat;
 int size;
 int usedCount = 0, overusedCount = 0;
@@ -370,7 +365,6 @@ bits32 *listSizes = gf->listSizes;
 bits16 **endLists = gf->endLists;
 bits16 *allocated = NULL;
 int size;
-int usedCount = 0, overusedCount = 0;
 int tileSpaceSize = gf->tileSpaceSize;
 
 for (i=0; i<tileSpaceSize; ++i)
@@ -426,7 +420,6 @@ int tileTailSize = gf->segSize;
 int tileHeadSize = tileSize - tileTailSize;
 int i, lastTile = seq->size - tileSize;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
-int maxPat = gf->maxPat;
 int tileHead;
 int tileTail;
 bits32 *listSizes = gf->listSizes;
@@ -727,13 +720,10 @@ void gfIndexTransNibsAndTwoBits(struct genoFind *transGf[2][3],
     boolean allowOneMismatch, boolean doMask, int stepSize)
 /* Make translated (6 frame) index for all .nib and .2bit files. */
 {
-FILE *f = NULL;
-int nibSize;
 struct genoFind *gf;
 int i,isRc, frame;
 bits32 offset[2][3];
 char *fileName;
-struct gfSeqSource *ss;
 struct dnaSeq *seq;
 int sourceCount = 0;
 long long totalBases = 0, warnAt = maxTotalBases();
@@ -852,8 +842,7 @@ static struct genoFind *gfSmallIndexSeq(struct genoFind *gf, bioSeq *seqList,
 int seqCount = slCount(seqList);
 bioSeq *seq;
 int i;
-bits32 offset = 0, nibSize;
-char *fileName;
+bits32 offset = 0;
 struct gfSeqSource *ss;
 
 if (isPep)
@@ -888,8 +877,7 @@ static struct genoFind *gfLargeIndexSeq(struct genoFind *gf, bioSeq *seqList,
 int seqCount = slCount(seqList);
 bioSeq *seq;
 int i;
-bits32 offset = 0, nibSize;
-char *fileName;
+bits32 offset = 0;
 struct gfSeqSource *ss;
 
 for (seq = seqList; seq != NULL; seq = seq->next)
@@ -984,7 +972,6 @@ for (el = *pList; el != NULL; el = next)
 void gfClumpDump(struct genoFind *gf, struct gfClump *clump, FILE *f)
 /* Print out info on clump */
 {
-struct gfHit *hit;
 struct gfSeqSource *ss = clump->target;
 char *name = ss->fileName;
 
@@ -1105,6 +1092,7 @@ if (list != NULL && list->next != NULL)
 
 static int cmpQuerySize;
 
+#ifdef UNUSED
 static int gfHitCmpDiagonal(const void *va, const void *vb)
 /* Compare to sort based on 'diagonal' offset. */
 {
@@ -1118,6 +1106,7 @@ else if (a->diagonal == b->diagonal)
 else
     return -1;
 }
+#endif /* UNUSED */
 
 static int gfHitCmpTarget(const void *va, const void *vb)
 /* Compare to sort based on target offset. */
@@ -1235,7 +1224,6 @@ else
     /* If we've gotten here, then the clump is split across multiple targets.
      * We'll have to split it into multiple clumps... */
     struct gfHit *hit, *nextHit, *inList, *outList, *oldList = clump->hitList;
-    int start, end;
     int hCount;
 
     while (oldList != NULL)
@@ -1350,8 +1338,7 @@ static struct gfClump *clumpHits(struct genoFind *gf, struct gfHit *hitList, int
 {
 struct gfClump *clumpList = NULL, *clump = NULL;
 int maxGap = gf->maxGap;
-struct gfHit *clumpStart = NULL, *hit, *nextHit, *lastHit = NULL;
-int clumpSize = 0;
+struct gfHit *hit, *nextHit, *lastHit = NULL;
 int totalHits = 0, usedHits = 0, clumpCount = 0;
 int tileSize = gf->tileSize;
 int bucketShift = 16;		/* 64k buckets. */
@@ -1448,18 +1435,18 @@ int i, j;
 bits32 bits = 0;
 bits32 bVal;
 int listSize;
-bits32 qStart, tStart, *tList;
+bits32 qStart, *tList;
 int hitCount = 0;
 
 for (i=0; i<tileSizeMinusOne; ++i)
     {
-    bVal = ntValNoN[dna[i]];
+    bVal = ntValNoN[(int)dna[i]];
     bits <<= 2;
     bits += bVal;
     }
 for (i=tileSizeMinusOne; i<size; ++i)
     {
-    bVal = ntValNoN[dna[i]];
+    bVal = ntValNoN[(int)dna[i]];
     bits <<= 2;
     bits += bVal;
     bits &= mask;
@@ -1505,7 +1492,7 @@ char *poly = seq->dna;
 int i, j;
 int tile;
 int listSize;
-bits32 qStart, tStart, *tList;
+bits32 qStart, *tList;
 int hitCount = 0;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
 
@@ -1557,12 +1544,12 @@ char *poly = seq->dna;
 int i, j;
 int tile;
 int listSize;
-bits32 qStart, tStart, *tList;
+bits32 qStart, *tList;
 int hitCount = 0;
 int varPos, varVal;	/* Variable position. */
 int (*makeTile)(char *poly, int n); 
 int alphabetSize;
-char oldChar, zeroChar, badChar;
+char oldChar, zeroChar;
 int *seqValLookup;
 int posMul, avoid;
 
@@ -1597,7 +1584,7 @@ for (i=0; i<=lastStart; ++i)
 	if (varPos == 0)
 	    avoid = -1;
 	else
-	    avoid = seqValLookup[oldChar];
+	    avoid = seqValLookup[(int)oldChar];
 
 	if (tile >= 0)
 	    {
@@ -1657,7 +1644,7 @@ char *poly = seq->dna;
 int i, j;
 int tileHead, tileTail;
 int listSize;
-bits32 qStart, tStart;
+bits32 qStart;
 bits16 *endList;
 int hitCount = 0;
 int (*makeTile)(char *poly, int n) = (gf->isPep ? gfPepTile : gfDnaTile);
@@ -1718,13 +1705,13 @@ char *poly = seq->dna;
 int i, j;
 int tileHead, tileTail;
 int listSize;
-bits32 qStart, tStart;
+bits32 qStart;
 bits16 *endList;
 int hitCount = 0;
 int varPos, varVal;	/* Variable position. */
 int (*makeTile)(char *poly, int n); 
 int alphabetSize;
-char oldChar, zeroChar, badChar;
+char oldChar, zeroChar;
 int headPosMul, tailPosMul, avoid;
 boolean modTail;
 int *seqValLookup;
@@ -1765,7 +1752,7 @@ for (i=0; i<=lastStart; ++i)
 	    if (varPos == 0)
 		avoid = -1;
 	    else
-		avoid = seqValLookup[oldChar];
+		avoid = seqValLookup[(int)oldChar];
 
 	    if (tileHead >= 0 && tileTail >= 0)
 		{
@@ -2078,7 +2065,6 @@ int fTileIx,rTileIx,fPosIx,rPosIx;
 bits32 *fPosList, fPos, *rPosList, rPos;
 int fPosListSize, rPosListSize;
 struct hash *targetHash = newHash(0);
-int tile;
 
 /* Build up array of all tiles in reverse primer. */
 AllocArray(rTiles, rTileCount);
@@ -2108,7 +2094,6 @@ for (fTileIx=0; fTileIx<fTileCount; ++fTileIx)
 		rPosList = gf->lists[rTile];
 		for (rPosIx=0; rPosIx < rPosListSize; ++rPosIx)
 		    {
-		    bits32 distance;
 		    rPos = rPosList[rPosIx];
 		    if (rPos >= fPos)
 		        {

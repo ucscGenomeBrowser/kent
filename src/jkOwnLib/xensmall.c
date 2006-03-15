@@ -8,7 +8,7 @@
 #include "xenalign.h"
 #include "pairHmm.h"
 
-static char const rcsid[] = "$Id: xensmall.c,v 1.10 2004/07/06 16:57:42 kent Exp $";
+static char const rcsid[] = "$Id: xensmall.c,v 1.11 2006/03/15 18:36:16 angie Exp $";
 
 static double calcGcRatio(DNA *a, int aSize, DNA *b, int bSize)
 /* Figure out percentage of g/c in a and b. */
@@ -25,7 +25,7 @@ for (i=0; i<ArraySize(counts); ++i)
 for (i=0; i<aSize; ++i)
     {
     base = a[i];
-    if ((val = ntVal[base]) >= 0)
+    if ((val = ntVal[(int)base]) >= 0)
         {
         counts[val] += 1;
         total += 1;
@@ -34,7 +34,7 @@ for (i=0; i<aSize; ++i)
 for (i=0; i<bSize; ++i)
     {
     base = b[i];
-    if ((val = ntVal[base]) >= 0)
+    if ((val = ntVal[(int)base]) >= 0)
         {
         counts[val] += 1;
         total += 1;
@@ -224,7 +224,6 @@ struct phmmAliPair *pairList;
 int matchOff, qSlipOff, tSlipOff;
 int bestScore = -0x4fffffff;
 struct phmmMommy *bestCell = NULL;
-int badScore = -0x3fffffff;
 int c1c2PairScore, c3PairScore, loFiPairScore, hiFiPairScore;
 int matchTableOffset;
 double gcRatio;

@@ -13,7 +13,7 @@
 #include "wormdna.h"
 #include "xenalign.h"
 
-static char const rcsid[] = "$Id: xenbig.c,v 1.2 2003/09/09 21:44:03 kent Exp $";
+static char const rcsid[] = "$Id: xenbig.c,v 1.3 2006/03/15 18:36:16 angie Exp $";
 
 struct contig
 /* A contiguously aligned sequence pair. */
@@ -104,14 +104,11 @@ static void writeContig(struct contig *contig, FILE *out,
 	boolean compactOutput, boolean newFormat)
 /* Write out one contig to file */
 {
-int qOff = contig->qStart;
-int tOff = contig->tStart;
 int i;
 int size = contig->symCount;
 #define maxLineSize 50
 char buf[maxLineSize+1];
 int lineSize;
-int lineIx = 0;
 int j;
 int qIx = 0, tIx = 0;
 char *qSyms = contig->qSym;
@@ -180,7 +177,6 @@ else
             int off = j+i;
             char q = qSyms[off];
             char t = tSyms[off];
-            char c = (q == t ? '|' : ' ');
             if (q != '-')
                 ++qIx;
             if (t != '-')
@@ -208,6 +204,7 @@ struct cluster
     int score;
     };
 
+#ifdef UNUSED
 static int cmpCluster(const void *va, const void *vb)
 /* Compare two clusters. */
 {
@@ -217,6 +214,7 @@ struct cluster *a = *pA, *b = *pB;
 
 return b->score - a->score;
 }
+#endif /* UNUSED */
 
 static boolean contigsOverlap(struct contig *a, struct contig *b, 
     int *retQueryOverlap, int *retTargetOverlap)
@@ -962,7 +960,7 @@ while (fgets(line, sizeof(line), in))
         if (contig->qStrand != contig->tStrand) 
             rcQueryOffsetsAroundSeg(contig, contig->qOffset, contig->qEndOffset);
         }
-    else if (wordCount > 1 && isdigit(firstWord[0]) || firstWord[0] == '-')
+    else if (wordCount > 1 && (isdigit(firstWord[0]) || firstWord[0] == '-'))
         {
         int start, end;
         char *sym = words[1];

@@ -121,8 +121,6 @@ static void maskNucSeqList(struct dnaSeq *seqList, char *seqFileName, char *mask
  * upper case (since normal DNA sequence is lower case for us). */
 {
 struct dnaSeq *seq;
-DNA *dna;
-int size, i;
 char *outFile = NULL, outNameBuf[512];
 
 if (sameWord(maskType, "upper"))

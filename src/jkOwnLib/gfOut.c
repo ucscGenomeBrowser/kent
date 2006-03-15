@@ -14,7 +14,7 @@
 #include "psl.h"
 #include "genoFind.h"
 
-static char const rcsid[] = "$Id: gfOut.c,v 1.14 2005/10/05 18:02:48 fanhsu Exp $";
+static char const rcsid[] = "$Id: gfOut.c,v 1.15 2006/03/15 18:36:16 angie Exp $";
 
 struct pslxData
 /* This is the data structure put in gfOutput.data for psl/pslx output. */
@@ -63,9 +63,7 @@ int countNs = 0;
 DNA *np, *hp, n, h;
 int blockSize;
 int i;
-struct trans3 *t3 = NULL;
 struct trans3 *t3List = NULL;
-int score = 0;
 Bits *maskBits = NULL;
 
 if (maskHash != NULL)
@@ -252,7 +250,6 @@ struct axt *axt;
 struct dyString *q = newDyString(1024), *t = newDyString(1024);
 struct axtBundle *gab;
 struct trans3 *t3List = NULL;
-boolean isTrans = (out->qIsProt && !out->tIsProt);
 
 if (t3Hash != NULL)
     t3List = hashMustFindVal(t3Hash, tSeq->name);
@@ -377,8 +374,6 @@ static void sim4QueryOut(struct gfOutput *out, FILE *f)
 {
 struct axtData *aod = out->data;
 struct axtBundle *gab;
-char *qName = NULL, *tName = NULL;
-char stand = 0;
 
 for (gab = aod->bundleList; gab != NULL; gab = gab->next)
     {

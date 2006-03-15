@@ -13,7 +13,7 @@
 #include "gfInternal.h"
 #include "gfPcrLib.h"
 
-static char const rcsid[] = "$Id: gfPcrLib.c,v 1.7 2005/12/16 20:17:38 kent Exp $";
+static char const rcsid[] = "$Id: gfPcrLib.c,v 1.8 2006/03/15 18:36:16 angie Exp $";
 
 /**** Input and Output Handlers *****/
 
@@ -49,9 +49,6 @@ void gfPcrInputStaticLoad(char **row, struct gfPcrInput *ret)
 /* Load a row from gfPcrInput table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->name = row[0];
 ret->fPrimer = row[1];
 ret->rPrimer = row[2];
@@ -62,8 +59,6 @@ struct gfPcrInput *gfPcrInputLoad(char **row)
  * from database.  Dispose of this with gfPcrInputFree(). */
 {
 struct gfPcrInput *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->name = cloneString(row[0]);

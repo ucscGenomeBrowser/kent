@@ -15,7 +15,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.35 2006/02/14 21:54:23 kent Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.36 2006/03/15 18:36:16 angie Exp $";
 
 static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
@@ -70,8 +70,6 @@ for (el = *pList; el != NULL; el = next)
 void dumpNearCrossover(char *what, DNA *n, DNA *h, int size)
 /* Print sequence near crossover */
 {
-int i;
-
 printf("%s: ", what);
 mustWrite(stdout, n, size);
 printf("\n");
@@ -171,7 +169,6 @@ static void trans3Offsets(struct trans3 *t3List, AA *startP, AA *endP,
 struct trans3 *t3;
 int frame;
 aaSeq *seq;
-int startOff;
 
 for (t3 = t3List; t3 != NULL; t3 = t3->next)
     {
@@ -334,7 +331,7 @@ int nodeCount = ffAliCount(ffList);
 int maxEdgeCount = (nodeCount+1)*(nodeCount)/2;
 int edgeCount = 0;
 struct ssEdge *edges, *e;
-struct ssNode *nodes, *n;
+struct ssNode *nodes;
 struct ssGraph *graph;
 struct ffAli *ff, *mid;
 int i, midIx;
@@ -441,7 +438,6 @@ for (nodeIx = 1; nodeIx <= graph->nodeCount; ++nodeIx)
     int score;
     struct ssEdge *bestEdge = NULL;
     struct ssNode *curNode = &graph->nodes[nodeIx];
-    struct ssNode *prevNode;
     struct ssEdge *edge;
 
     for (edge = curNode->waysIn; edge != NULL; edge = edge->next)
@@ -614,8 +610,6 @@ int boxSize;
 DNA *firstH = tSeq->dna;
 struct chain *chainList, *chain, *bestChain;
 int tMin = BIGNUM, tMax = -BIGNUM;
-struct ffAli **newList;
-struct dlNode *node;
 
 
 /* Make up box list for chainer. */
@@ -659,8 +653,6 @@ bestChain = chainList;
 prevBox = bestChain->blockList;
 for (box = prevBox->next; box != NULL; box = box->next)
     {
-    int dq = box->qStart - prevBox->qEnd;
-    int dt = box->tStart - prevBox->tEnd;
     int overlap = findOverlap(prevBox, box);
     if (overlap > 0)
         {
@@ -761,11 +753,10 @@ void ssStitch(struct ssBundle *bundle, enum ffStringency stringency,
 {
 struct dnaSeq *qSeq =  bundle->qSeq;
 struct dnaSeq *genoSeq = bundle->genoSeq;
-struct ffAli *ff, *ffList = NULL;
+struct ffAli *ffList = NULL;
 struct ssFfItem *ffl;
-struct ffAli *bestPath, *leftovers;
+struct ffAli *bestPath;
 int score;
-int totalFfCount = 0;
 boolean firstTime = TRUE;
 
 if (bundle->ffList == NULL)
