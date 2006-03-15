@@ -26,17 +26,19 @@ type bed 3 +
 
 track quality
 shortLabel Quality Scores
-longLabel Quality Scores
+longLabel $Organism Sequencing Quality Scores
 group map
-priority 12
-visibility full
+priority 23.6
+visibility hide
 autoScaleDefault Off
-maxHeightPixels 128:12:12
+maxHeightPixels 128:36:16
 graphTypeDefault Bar
+windowingFunction Mean
 gridDefault OFF
-color 100,0,0
-altColor 150,100,30
-type wig 0 50
+color 0,128,255
+altColor 255,128,0
+spanList 1,1024
+type wig 0 70
 
 track gc5Base
 shortLabel GC Percent
