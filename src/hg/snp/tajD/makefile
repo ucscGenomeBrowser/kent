@@ -8,7 +8,7 @@ A = tajD
 O = ${A}.o
 
 ${A}:	${O} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${O} ${MYLIBS} ${L}
+	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${O} ${MYLIBS} ${L} -lm
 	mv ${AOUT} ${HOME}/bin/${MACHTYPE}/${A}
 
 tags:	
