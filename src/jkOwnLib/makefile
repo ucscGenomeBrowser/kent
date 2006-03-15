@@ -1,5 +1,7 @@
 include ../inc/common.mk
 
+HG_WARN = ${HG_WARN_ERR}
+
 O = bandExt.o crudeali.o ffAliHelp.o ffSeedExtend.o fuzzyFind.o \
     genoFind.o gfBlatLib.o gfClientLib.o gfInternal.o gfOut.o gfPcrLib.o gfWebLib.o ooc.o \
     patSpace.o supStitch.o trans3.o xenbig.o xensmall.o 
