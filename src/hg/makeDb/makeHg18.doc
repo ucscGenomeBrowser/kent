@@ -6962,3 +6962,60 @@ cat > copy.csh << 'EOF'
 # Make mapping between known genes and allenBrain	
    hgMapToGene hg18 allenBrainAli -type=psl knownGene knownToAllenBrain 
 
+##########################################################################
+# BUILD NIBB IMAGE PROGES (DONE 2006-03-14 galt following Jim's hg17 example)
+
+# Make directory on san for cluster job and copy in sequence
+    ssh pk
+    mkdir /san/sanvol1/scratch/hg18/nibbPics
+    cd /san/sanvol1/scratch/hg18/nibbPics
+    cp /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa .
+
+# Make parasol job dir and sequence list files
+    mkdir run
+    cd run
+    mkdir psl
+    ls -1 /san/sanvol1/scratch/hg18/nib/*.nib > genome.lst
+    echo ../nibbImageProbes.fa > mrna.lst
+
+# Create parasol gensub file file
+cat << '_EOF_' > gsub
+#LOOP
+blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
+#ENDLOOP
+'_EOF_'
+
+# Create parasol batch
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+
+# Do para try/push/time etc.
+#Completed: 49 of 49 jobs
+#CPU time in finished jobs:      12585s     209.74m     3.50h    0.15d  0.000 y
+#IO & Wait Time:                   411s       6.86m     0.11h    0.00d  0.000 y
+#Average job time:                 265s       4.42m     0.07h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            1145s      19.08m     0.32h    0.01d
+#Submission to last job:          1195s      19.92m     0.33h    0.01d
+
+
+# Make sort and filter
+    catDir psl | sort -k 10 \
+        | pslReps stdin stdout /dev/null -nohead -minAli=0.60 -nearTop=0.001 -minCover=0.10 -minNearTopSize=80 \
+	| sort -k 14,14 -k 16,16n \
+	| sed 's#/san/sanvol1/scratch/hg18/nib/chr#chr#' \
+	| sed 's/.nib//' > ../nibbImageProbes.psl
+
+# Make bed file and copy in stuff
+    ssh hgwdev
+    cd /cluster/data/hg18/bed
+    mkdir nibbPics
+    cd nibbPics
+    cp /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa .
+    cp /san/sanvol1/scratch/hg18/nibbPics/nibbImageProbes.psl .
+
+# Load into database
+    ln -s /cluster/data/xenTro1/bed/nibbPics/nibbImageProbes.fa /gbdb/hg18/nibbImageProbes.fa
+    hgLoadSeq hg18 /gbdb/hg18/nibbImageProbes.fa
+    hgLoadPsl hg18 nibbImageProbes.psl
+
