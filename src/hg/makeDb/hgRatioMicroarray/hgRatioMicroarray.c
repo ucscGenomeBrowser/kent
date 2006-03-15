@@ -9,7 +9,7 @@
 #include "expData.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgRatioMicroarray.c,v 1.2 2003/12/08 07:27:18 kent Exp $";
+static char const rcsid[] = "$Id: hgRatioMicroarray.c,v 1.3 2006/03/15 22:47:45 aamp Exp $";
 
 /* Command line overridable options. */
 char *database = "hgFixed";
@@ -62,6 +62,7 @@ static struct optionSpec options[] = {
    {"database", OPTION_STRING},
    {"average", OPTION_BOOLEAN},
    {"minAbsVal", OPTION_FLOAT},
+   {"minMaxVal", OPTION_INT},
    {"clump", OPTION_STRING},
    {"tab", OPTION_STRING},
    {"noLoad", OPTION_BOOLEAN},
