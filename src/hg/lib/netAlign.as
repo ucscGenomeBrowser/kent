@@ -24,6 +24,6 @@ int tNewR;        "Lineage specific repeats on target. -1 for undefined"
 int qNewR;        "Lineage specific repeats on query. -1 for undefined"
 int tOldR;        "Bases of ancient repeats on target. -1 for undefined"
 int qOldR;        "Bases of ancient repeats on query. -1 for undefined"
-int tTrf;         "Bases of Tandam repeats on target. -1 for undefined"
-int qTrf;         "Bases of Tandam repeats on query. -1 for undefined"
+int tTrf;         "Bases of tandem repeats on target. -1 for undefined"
+int qTrf;         "Bases of tandem repeats on query. -1 for undefined"
 )
