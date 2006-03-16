@@ -1,7 +1,8 @@
 TO DO:
+  - Make other para actions use p-threads.
+  - Make exceptions work with p-threads.
   - Make it so that flows with local inputs can't be called directly
     from a para block.
-  - Defining exceptions, and implementing exception chaining.
   - It turns out we need three levels of parallelizability for
     methods:
         1) flow - no side effects even to members.
@@ -13,7 +14,6 @@ TO DO:
 	3) clob - general side effects (clobbering time)
     Hmm.  Actually I'm not so wild about that.   How about
        1) flow  2) para 3) to
-  - Make para actions use p-threads.
   - ?Create 'serial' function - that is gauranteed only to be 
     executed by one thread at a time.  Can be called from a flow.
   - Implement lists.
@@ -31,6 +31,8 @@ TO CONSIDER:
 
 -----------
 DONE
+  - Make para do actions use p-threads.
+  - Defining exceptions, and implementing exception chaining.
   - Implement case statement.
   - Add 'loco' parameter types to flow functions.  These reference
     local objects in the caller, so it's ok to return references

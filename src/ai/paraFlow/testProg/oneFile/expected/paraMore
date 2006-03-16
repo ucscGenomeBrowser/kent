@@ -6,11 +6,6 @@
 ('Heidi'@'Kent','Mark'@'Diantonio','Nancy'@'Brumbaugh','Rob'@'Peck')
 ('Heidi'@'Heidi:Kent','Mark'@'Mark:Diantonio','Nancy'@'Nancy:Brumbaugh','Rob'@'Rob:Peck')
 ('Heidi'@'Heidi.Heidi:Kent','Mark'@'Mark.Mark:Diantonio','Nancy'@'Nancy.Nancy:Brumbaugh','Rob'@'Rob.Rob:Peck')
-5
-6
-7
-8
-9
 ('center'@(0.000000,0.000000),'lr'@(1.000000,10.000000),'ul'@(10.000000,1.000000),'ur'@(10.000000,10.000000))
 ('center'@(0.000000,0.000000),'lr'@(2.000000,20.000000),'ul'@(20.000000,2.000000),'ur'@(20.000000,20.000000))
 ('center'@(0.000000,0.000000),'lr'@(2.000000,20.000000),'ul'@(20.000000,2.000000),'ur'@(20.000000,20.000000))

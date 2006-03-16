@@ -49,6 +49,7 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 return FALSE;
 }
 
+#if defined(PARALLEL)
 void codeParaDo(struct pfCompile *pfc, FILE *f, struct pfParse *para)
 /* Emit C code for para ... do statement. */
 {
@@ -224,4 +225,90 @@ void codeParaBlocks(struct pfCompile *pfc, FILE *f, struct pfParse *module)
 int count = 0;
 rCodeParaBlocks(pfc, f, &count, NULL, NULL, module);
 }
+
+#else /* defined(PARALLEL) */
+
+static void saveBackToCollection(struct pfCompile *pfc, FILE *f,
+	int stack, struct pfParse *elPp, struct pfParse *collectionPp)
+/* Save altered value of element back to collection. */
+{
+struct pfBaseType *base = collectionPp->ty->base;
+struct dyString *elName = codeVarName(pfc, elPp->var);
+if (elPp->ty->base->needsCleanup)
+    codeVarIncRef(f, elName->string);
+if (base == pfc->arrayType)
+    {
+    fprintf(f, "*((");
+    codeBaseType(pfc, f, elPp->ty->base);
+    fprintf(f, "*)(_pf_collection->elements + _pf_offset)) = %s;\n",
+    	elName->string);
+    }
+else if (base == pfc->stringType)
+    {
+    internalErr();	/* Type check module should prevent this */
+    }
+else if (base == pfc->dyStringType)
+    {
+    fprintf(f, "_pf_collection->s[_pf_offset] = %s;\n", elName->string);
+    }
+else if (base == pfc->dirType)
+    {
+    codeParamAccess(pfc, f, elPp->ty->base, stack);
+    fprintf(f, " = %s;\n", elName->string);
+    if (elPp->ty->base->needsCleanup)
+	{
+	fprintf(f, "_pf_dir_add_obj(_pf_collection, _pf_key, %s+%d);\n",  
+		stackName, stack);
+	}
+    else 
+	{
+	fprintf(f, "_pf_dir_add_num(_pf_collection, _pf_key, %s+%d);\n",  
+		stackName, stack);
+	}
+    }
+else if (base == pfc->indexRangeType)
+    {
+    /* Do nothing. */
+    }
+else
+    {
+    internalErr();
+    }
+dyStringFree(&elName);
+}
+
+void codeParaDo(struct pfCompile *pfc, FILE *f,
+	struct pfParse *para)
+/* Emit C code for para ... do statement. */
+{
+struct pfParse *collectionPp = para->children;
+struct pfParse *elPp = collectionPp->next;
+struct pfParse *body = elPp->next;
+struct pfParse *elVarPp = NULL;
+
+codeStartElInCollectionIteration(pfc, f, 0, 
+	para->scope, elPp, collectionPp, TRUE);
+codeStatement(pfc, f, body);
+if (elPp->type == pptKeyVal)
+    {
+    struct pfParse *keyPp = elPp->children;
+    struct pfParse *valPp = keyPp->next;
+    elVarPp = valPp;
+    }
+else if (elPp->type == pptVarInit)
+    elVarPp = elPp;
+else
+    internalErrAt(elPp->tok);
+if (varWritten(elVarPp->var, body))
+    saveBackToCollection(pfc, f, 0, elVarPp, collectionPp);
+codeEndElInCollectionIteration(pfc, f, para->scope, elPp, collectionPp, 
+	TRUE);
+}
+
+void codeParaBlocks(struct pfCompile *pfc, FILE *f, struct pfParse *module)
+/* Create functions for code inside of para blocks. */
+{
+}
+
+#endif /* defined(PARALLEL) */
 

@@ -2,7 +2,7 @@
  * the runtime. */
 #ifndef RTREFCOUNT
 
-#if defined(__i686__)
+#if defined(PARALLEL)
 
 
 #define rtRefInc(obj) \
@@ -20,7 +20,8 @@
 		:"memory")
 
 #else
-// Really should give warning here
+
+/* Really should give warning here */
 
 #define rtRefInc(obj) ((obj)->_pf_refCount += 1)
 #define rtRefDec(obj) ((obj)->_pf_refCount -= 1)
@@ -35,15 +36,4 @@
 		(obj)->_pf_cleanup((obj), (type)); \
 	    }
 	        
-#ifdef DEBUG   
-	if ((obj) != NULL) \
-	    { \
-	    uglyf("rtRefCleanup of %p (%s): refCount %d\n", obj, obj->s, obj->_pf_refCount); \
-	    rtRefDec(obj); \
-	    uglyf(" after dec: refCount %d\n", obj->_pf_refCount); \
-	    if ((obj)->_pf_refCount == 0) \
-		(obj)->_pf_cleanup((obj), (type)); \
-	    }
-#endif /* DEBUG */
-
 #endif /* RTREFCOUNT */

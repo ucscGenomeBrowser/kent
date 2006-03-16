@@ -7,7 +7,7 @@
 #include "cCoder.h"
 #include "refCount.h"
 
-#if defined(__i686__)
+#if defined(PARALLEL)
 
 void codeVarIncRef(FILE *f, char *varName)
 /* Bump ref count of a variable on pentium family. */

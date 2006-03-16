@@ -57,9 +57,6 @@ para(key@val in lastFirst) do
     }
 print(lastFirst);
 
-para (i in 5 til 10) do
-   print(i);
-
 class point {float x,y}
 dir of point ptDir = (center@(0,0), ul@(10,1), ur@(10,10), lr@(1,10));
 print(ptDir);
