@@ -928,15 +928,9 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     hg17.mrnaRefseq.mrna minCheck=0.80
     rn2,rn3.mrnaRefseq.mrna minCheck=0.03
     $gbd,!mm6,!mm7,!mm8,!hg17.spMrna.mrnaID minCheck=0.98
-    mm6.spMrna.mrnaID minCheck=0.20
-    mm6.dupSpMrna.mrnaID minCheck=0.10
-    mm6.dupSpMrna.dupMrnaID minCheck=0.10
-    mm7.spMrna.mrnaID minCheck=0.20
-    mm7.dupSpMrna.mrnaID minCheck=0.10
-    mm7.dupSpMrna.dupMrnaID minCheck=0.10
-    mm8.spMrna.mrnaID minCheck=0.20
-    mm8.dupSpMrna.mrnaID minCheck=0.10
-    mm8.dupSpMrna.dupMrnaID minCheck=0.10
+    $mm.spMrna.mrnaID minCheck=0.20
+    $mm.dupSpMrna.mrnaID minCheck=0.10
+    $mm.dupSpMrna.dupMrnaID minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.30
     hg17.dupSpMrna.mrnaID minCheck=0.20
     hg17.dupSpMrna.dupMrnaID minCheck=0.20
@@ -971,14 +965,10 @@ identifier refSeqId typeOf=mrnaAccession
     mm6.spMrna.mrnaID minCheck=0.50
     mm6.dupSpMrna.mrnaID minCheck=0.60
     mm6.dupSpMrna.dupMrnaID minCheck=0.20
-    mm7.mrnaRefseq.mrna minCheck=0.03
-    mm7.spMrna.mrnaID minCheck=0.40
-    mm7.dupSpMrna.mrnaID minCheck=0.60
-    mm7.dupSpMrna.dupMrnaID minCheck=0.20
-    mm8.mrnaRefseq.mrna minCheck=0.03
-    mm8.spMrna.mrnaID minCheck=0.40
-    mm8.dupSpMrna.mrnaID minCheck=0.60
-    mm8.dupSpMrna.dupMrnaID minCheck=0.20
+    $mm,!mm6.mrnaRefseq.mrna minCheck=0.03
+    $mm,!mm6.spMrna.mrnaID minCheck=0.40
+    $mm,!mm6.dupSpMrna.mrnaID minCheck=0.60
+    $mm,!mm6.dupSpMrna.dupMrnaID minCheck=0.20
     hg17.mrnaRefseq.mrna minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.50
     hg17.dupSpMrna.mrnaID minCheck=0.40
@@ -1226,10 +1216,8 @@ identifier mouseStsTrueName typeOf=stsName
 "Mouse STS (Sequenced Tagged Site, aka mapping sequence) Unique Name"
     $mm.stsInfoMouseNew.name
     $mm.stsAlias.trueName minCheck=0.99
-    $mm,!mm7.all_sts_primer.qName chopBefore=_ minCheck=0.99
-    mm7.all_sts_primer.qName chopBefore=_ minCheck=0.98
-    $mm,!mm8.all_sts_primer.qName chopBefore=_ minCheck=0.99
-    mm8.all_sts_primer.qName chopBefore=_ minCheck=0.98
+    $mm,!mm7,!mm8.all_sts_primer.qName chopBefore=_ minCheck=0.99
+    mm7,mm8.all_sts_primer.qName chopBefore=_ minCheck=0.98
     $mm.stsMapMouseNew.name
     $mm.jaxQTL3.marker exclude= minCheck=0.99
     $mm.jaxQTL3.flank1 exclude= minCheck=0.95
