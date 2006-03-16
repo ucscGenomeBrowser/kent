@@ -25,7 +25,7 @@ struct raInfo *ri;
 char accVer[GB_ACC_BUFSZ];
 if (extFileId == 0)
     errAbort("no extFileId for %s.%d", acc, ver); 
-gbVerbPr(8, "raAdd %s.%d ext %d", acc, ver, extFileId);
+gbVerbPr(10, "raAdd %s.%d ext %d", acc, ver, extFileId);
 lmAllocVar(rit->accMap->lm, ri);
 safef(accVer, sizeof(accVer), "%s.%d", acc, ver);
 hel = hashAdd(rit->accMap, accVer, ri);

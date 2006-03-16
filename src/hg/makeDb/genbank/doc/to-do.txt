@@ -972,7 +972,15 @@ Warning: NR_001874: malformed RefSeq CDS:
           hg16:chr7:91710112-91711730
           hg17:chr7:91742734-91744352
 
+- increase mrnaToGene merge size
+
+- change gbAlignStep, etc to allow options after the databases, since
+  this is so familiar to people.
+
+- gbLoadRna -drop seems to be broken in some case (hgw8 tests)
 
 - increase mrnaToGene merge size.
 
 - DQ075263 - two sequence version on same mod date.
+
+- hg17 NM_182901, example of UTR aligning in a different place

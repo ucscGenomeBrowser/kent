@@ -17,7 +17,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: extFileUpdate.c,v 1.3 2006/03/11 05:51:46 markd Exp $";
+static char const rcsid[] = "$Id: extFileUpdate.c,v 1.4 2006/03/16 21:36:46 markd Exp $";
 
 /*
  * Algorithm:
@@ -123,7 +123,9 @@ return rit;
 static struct sqlResult *outdatedSeqQuery(struct sqlConnection *conn,
                                           struct gbSelect *select,
                                           struct extFileRef* extFiles)
-/* start query for outdated sequences */
+/* start query for outdated sequences. Selects seq that are of the type
+* in select and who's files are not in extFiles.  Note that extFiles
+* can be NULL, if the table contains none of the current files. */
 {
 struct dyString *query = dyStringNew(0);
 struct extFileRef* ef;
@@ -139,16 +141,77 @@ else
 if (select->accPrefix != NULL)
     dyStringPrintf(query, " and (acc like \"%s%%\")", select->accPrefix);
 
-dyStringPrintf(query, " and gbExtFile not in (");
-for (ef = extFiles; ef != NULL; ef = ef->next)
+if (extFiles != NULL)
     {
-    dyStringPrintf(query, "%s%d", sep, ef->extFile->id);
-    sep = ",";
+    dyStringPrintf(query, " and gbExtFile not in (");
+    for (ef = extFiles; ef != NULL; ef = ef->next)
+        {
+        dyStringPrintf(query, "%s%d", sep, ef->extFile->id);
+        sep = ",";
+        }
+    dyStringPrintf(query, ")");
     }
-dyStringPrintf(query, ")");
 result = sqlGetResult(conn, query->string);
 dyStringFree(&query);
 return result;
+}
+
+static int checkGbStatusVer(char *acc)
+/* check if acc is in gbStatus and get the version. return 0 if not in
+ * status */
+{
+struct sqlConnection *conn = hAllocConn();
+int ver;
+char query[256];
+safef(query, sizeof(query), "select version from gbStatus where acc=\"%s\"",
+      acc);
+ver = sqlQuickNum(conn, query);
+hFreeConn(&conn);
+return ver;
+}
+
+static void dropSeqEntry(struct seqTbl *seqTbl, unsigned seqId, char *acc, unsigned version, char *type)
+/* drop an unexpected seq entry */
+{
+fprintf(stderr, "Warning: %s %s.%d not expected in gbSeqTbl, dropping\n",
+        type, acc, version);
+seqTblDelete(seqTbl, acc);
+}
+
+static struct raInfo *getRaInfo(struct raInfoTbl *rit, char *acc, unsigned version, char *type)
+/* get RA info entry, or NULL if it can't be resolved */
+{
+struct raInfo *ri = NULL;
+char accVer[GB_ACC_BUFSZ];
+int statVer;
+safef(accVer, sizeof(accVer), "%s.%d", acc, version);
+
+ri = raInfoTblGet(rit, accVer);
+if (ri != NULL)
+    return ri;
+
+/* there is a bug where if a sequence version is updated twice on the same
+ * day, then gbExtFile can end up with the old version.  Check for this
+ * and update gbSeq version if it occured */
+statVer = checkGbStatusVer(acc);
+if (statVer != 0)
+    {
+    fprintf(stderr, "Warning: %s %s.%d in gbSeqTbl, %s.%d in gbStatus, updating to new version\n",
+            type, acc, version, acc, statVer);
+    version = statVer;
+    safef(accVer, sizeof(accVer), "%s.%d", acc, statVer);
+    ri = raInfoTblGet(rit, accVer);
+    if (ri != NULL)
+        return ri;
+    fprintf(stderr, "Warning: %s %s.%d in gbSeqTbl, %s.%d in gbStatus, neither ared in ra file, unchanged\n",
+            type, acc, version, acc, statVer);
+    }
+else
+    {
+    fprintf(stderr, "Warning: %s %s.%d in seqTbl but not in a ra file, unchanged\n",
+            type, acc, version);
+    }
+return NULL;
 }
 
 static void updateSeqEntry(struct raInfoTbl *rit, struct seqTbl *seqTbl,
@@ -156,18 +219,15 @@ static void updateSeqEntry(struct raInfoTbl *rit, struct seqTbl *seqTbl,
 /* add update for a given seq entry, skip with warning if not found in
  * table. */
 {
-struct raInfo *ri;
-char accVer[GB_ACC_BUFSZ];
-safef(accVer, sizeof(accVer), "%s.%d", acc, version);
-
-ri = raInfoTblGet(rit, accVer);
-if (ri == NULL)
-    fprintf(stderr, "Warning: %s %s.%d in seqTbl but not in a ra file, unchanged\n",
-            type, acc, version);
+struct raInfo *ri = NULL;
+if (startsWith("YP_", acc))
+    dropSeqEntry(seqTbl, seqId, acc, version, type);
 else
+    ri = getRaInfo(rit, acc, version, type);
+if (ri != NULL)
     {
-    gbVerbPr(3, "updateSeq %d %s: ext: %d", seqId, accVer, ri->extFileId);
-    seqTblMod(seqTbl, seqId, version, ri->extFileId,
+    gbVerbPr(4, "updateSeq %d %s.%d: ext: %d", seqId, acc, ri->version, ri->extFileId);
+    seqTblMod(seqTbl, seqId, ri->version, ri->extFileId,
               ri->size, ri->offset, ri->fileSize);
     }
 }
@@ -178,21 +238,23 @@ static void extFileUpdatePart(struct sqlConnection *conn,
 /* update gbSeq/gbExtFile entries for one partition of the database */
 {
 /* FIXME: hardcoded tmp*/
-struct seqTbl *seqTbl = seqTblNew(conn, "/var/tmp", (gbVerbose >= 4));
-struct extFileRef* extFiles = extFileTblMatch(extFileTbl, select);
+struct seqTbl *seqTbl;
+struct extFileRef* extFiles;
 struct raInfoTbl *rit = NULL;  /* lazy creation */
-if (extFiles != NULL)
+struct sqlResult *result;
+char **row;
+gbVerbEnter(3, "update %s", gbSelectDesc(select));
+seqTbl = seqTblNew(conn, "/var/tmp", (gbVerbose >= 4));
+extFiles = extFileTblMatch(extFileTbl, select);
+result = outdatedSeqQuery(conn, select, extFiles);
+
+while ((row = sqlNextRow(result)) != NULL)
     {
-    struct sqlResult *result = outdatedSeqQuery(conn, select, extFiles);
-    char **row;
-    while ((row = sqlNextRow(result)) != NULL)
-        {
-        if (rit == NULL)
-            rit = loadPartRaInfo(extFileTbl, select);
-        updateSeqEntry(rit, seqTbl, sqlUnsigned(row[0]), row[1], sqlUnsigned(row[2]), row[3]);
-        }
-    sqlFreeResult(&result);
+    if (rit == NULL)
+        rit = loadPartRaInfo(extFileTbl, select);
+    updateSeqEntry(rit, seqTbl, sqlUnsigned(row[0]), row[1], sqlUnsigned(row[2]), row[3]);
     }
+sqlFreeResult(&result);
 raInfoTblFree(&rit);
 slFreeList(&extFiles);
 if (gOptions.flags & DBLOAD_DRY_RUN)
@@ -200,6 +262,7 @@ if (gOptions.flags & DBLOAD_DRY_RUN)
 else
     seqTblCommit(seqTbl, conn);
 seqTblFree(&seqTbl);
+gbVerbLeave(3, "update %s", gbSelectDesc(select));
 checkForStop();
 }
 

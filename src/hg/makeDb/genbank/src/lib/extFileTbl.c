@@ -9,7 +9,7 @@
 #include "localmem.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: extFileTbl.c,v 1.6 2006/03/11 00:07:58 markd Exp $";
+static char const rcsid[] = "$Id: extFileTbl.c,v 1.7 2006/03/16 21:36:46 markd Exp $";
 
 /*
  * Note: this use immediate inserts rather than batch, because the tables
@@ -171,7 +171,6 @@ struct extFileRef* extFileTblMatch(struct extFileTbl *eft, struct gbSelect *sele
  * protein files are returned too.  Free results with slFreeList. */
 {
 struct extFileRef *extFiles = NULL;
-matchForFileType(eft, select, "", &extFiles);
 if (select->type & GB_MRNA)
     matchForFileType(eft, select, "mrna", &extFiles);
 if (select->type & GB_EST)
