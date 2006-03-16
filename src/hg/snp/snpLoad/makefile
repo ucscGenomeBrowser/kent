@@ -7,12 +7,12 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 O = snpContigLocFilter.o snpContigLocusIdFilter.o snpContigLocusIdCondense.o \
     snpSplitByChrom.o snpLocType.o snpExpandAllele.o snpSort.o snpRefUCSC.o \
     snpCheckAlleles.o snpLoadFasta.o snpReadFasta.o snpCheckClassAndObserved.o \
-    snpFunction.o snpSNP.o snpFinalTable.o
+    snpFunction.o snpSNP.o snpFinalTable.o snpMultiple.o snpMissing.o snpCompareLoctype.o 
 
 all: snpContigLocFilter snpContigLocusIdFilter snpContigLocusIdCondense \
      snpSplitByChrom snpLocType snpExpandAllele snpSort snpRefUCSC \
      snpCheckAlleles snpLoadFasta snpReadFasta snpCheckClassAndObserved \
-     snpFunction snpSNP snpFinalTable
+     snpFunction snpSNP snpFinalTable snpMultiple snpMissing snpCompareLoctype 
 
 snpContigLocFilter: snpContigLocFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocFilter snpContigLocFilter.o ${MYLIBS} $L
@@ -58,3 +58,12 @@ snpSNP: snpSNP.o ${MYLIBS}
 
 snpFinalTable: snpFinalTable.o ${MYLIBS}
 	${CC} -O -o snpFinalTable snpFinalTable.o ${MYLIBS} $L
+
+snpMultiple: snpMultiple.o ${MYLIBS}
+	${CC} -O -o snpMultiple snpMultiple.o ${MYLIBS} $L
+
+snpCompareLoctype: snpCompareLoctype.o ${MYLIBS}
+	${CC} -O -o snpCompareLoctype snpCompareLoctype.o ${MYLIBS} $L
+
+snpMissing: snpMissing.o ${MYLIBS}
+	${CC} -O -o snpMissing snpMissing.o ${MYLIBS} $L
