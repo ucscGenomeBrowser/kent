@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.23 2006/03/14 22:37:39 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.24 2006/03/16 00:47:50 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -244,6 +244,7 @@ int main(int argc, char *argv[])
 /* Read ContigInfo into hash. */
 /* Filter ContigLoc and write to ContigLocFilter. */
 {
+struct sqlConnection *conn ;
 
 if (argc != 3)
     usage();
@@ -253,14 +254,16 @@ contigGroup = argv[2];
 hSetDb(snpDb);
 
 /* check for needed tables */
-if(!hTableExistsDb(snpDb, "ContigLoc"))
+conn = hAllocConn();
+if(!sqlTableExists(conn, "ContigLoc"))
     errAbort("no ContigLoc table in %s\n", snpDb);
-if(!hTableExistsDb(snpDb, "ContigInfo"))
+if(!sqlTableExists(conn, "ContigInfo"))
     errAbort("no ContigInfo table in %s\n", snpDb);
-if(!hTableExistsDb(snpDb, "apInfo"))
+if(!sqlTableExists(conn, "MapInfo"))
     errAbort("no MapInfo table in %s\n", snpDb);
-if(!hTableExistsDb(snpDb, "ctgPos"))
+if(!sqlTableExists(conn, "ctgPos"))
     errAbort("no ctgPos table in %s\n", snpDb);
+hFreeConn(&conn);
 
 
 loadCtgPos();
