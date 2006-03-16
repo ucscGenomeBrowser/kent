@@ -7076,3 +7076,9 @@ blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
     hgLoadSeq hg18 /gbdb/hg18/nibbImageProbes.fa
     hgLoadPsl hg18 nibbImageProbes.psl
 
+
+# UPDATED hg18.knownToVisiGene (2006-03-15 galt)
+#  after making sure hg18.vgAllProbes was up to date (see makeVisiGene.doc)
+ssh hgwdev
+knownToVisiGene hg18 -fromProbePsl=vgAllProbes
+

@@ -211,10 +211,6 @@ hgsqldump visiGene -T /san/sanvol1/visiGene/dump/visiGene.20060220
 #load into visiGene db
 visiGeneLoad -database=visiGene output/aba.ra output/aba.tab /dev/null
 
-# RE-MAKE knownToVisiGene tables (see respective makedocs for hg17,mm7)
-#knownToVisiGene hg17 -fromProbePsl=vgImageProbes
-#knownToVisiGene mm7
-
 # Manually added several researchers names to the contributor and submissionContributor tables
 # at the request of Susan Sunkin as well as updating the text for contributor, copyright, acknowledgements.
 # I manually also updated aba.ra and vgLoadAllen.c to reflect her changes.  The manual mods
@@ -230,4 +226,100 @@ make alpha
 #vgGetText visiGene.text mm7 hg17
 #ixIxx visiGene.text visiGene.ix visiGene.ixx
 # (hgVisiGene cgi v128 now knows about this new location)
+
+############################
+
+# REBUILD WITH NEW vgProbeTrack PROGRAM - AFTER ADDING ALLEN BRAIN (DONE galt 2006-03-15)
+
+# (make a backup of visiGene db and these tables: {mm6,mm7,...}.vgProbes and {hg17,hg18,...}.vgAllProbes
+cd /san/sanvol1/visiGene/dump
+# (this backup shown is really an example template for the next person who needs to do this)
+mkdir visiGene20060315
+cd visiGene20060315
+hgsqdump visiGene -T .
+mkdir mm6
+hgsqdump visiGene vgProbes -T mm6
+mkdir mm7
+hgsqdump visiGene vgProbes -T mm7
+mkdir mm8
+hgsqdump visiGene vgProbes -T mm8
+mkdir hg17
+hgsqdump visiGene vgAllProbes -T hg17
+mkdir hg18
+hgsqdump visiGene vgAllProbes -T hg18
+#(do any others needed that might not be listed here)
+#(document the reason for making the backup)
+echo 'vgLoadAllenBrain has been run, so making backup of visiGene db and probe tracks before updating, ' > README
+
+# OK, NOW USE vgProbeTrack TO UPDATE
+
+cd ~/kent/src/hg/visiGene/vgProbeTrack
+
+# -sqlPath must be included whenever the vgProbes or vgAllProbes track tables do not yet exist for the db
+# so it can find the .sql script to create vgProbes or vgAllProbes tables as needed.
+# I happen to know that only AllenBrain was updated since last time, and that is mouse only
+
+# populate vgPrb with any new stuff in visiGene.probe (works for all taxons at once).
+vgProbeTrack POP
+
+# find sequence using various methods - given probe seq, primers, bacs, refseq, etc.
+#  must specify a specific assembly to use, so just using mm7 since mm8 still in qa.
+#  this finds any stuff for the mouse taxon
+vgProbeTrack SEQ working mm7  
+
+# create alignments using either refSeqAli or all_mrna or bacEnds or blat.  Took 1.5 hours.  
+# alignments are individually tracked per assembly here
+# alignment successes go in $db.vgProbes psl track, and whether succeeded or failed,
+# it only looks for things that have not already attempted alignment
+# the status goes into visiGene.vgPrbAli with .db="mm7"
+# because mm7.vgProbes is a new table, to create it we include the -sqlPath so
+# it can find the vgProbes.sql script
+vgProbeTrack ALI working mm7 -sqlPath=..
+
+# this finds any seq required for mm7.vgProbes track not already in mm7.seq 
+# adds the new .fa file in /cluster/data/mm7/bed/visiGene/
+# adds a symlink to it in /gbdb/mm7/visiGene/
+# and runs hgLoadSeq mm6 /gbdb/mm7/visiGene/vgPrbExt_??????.fa to add it to mm7.seq
+vgProbeTrack EXT working mm7
+
+# mm6.vgProbes was already complete from previous probe track creation, 
+#  it just needed to catch the new Allen Brain probes and align them.  About 1.5 hours.
+vgProbeTrack ALI working mm6
+vgProbeTrack EXT working mm6
+
+# hg17.vgAllProbes was pre-existing with all probes, just need to add new allenBrain mouse
+# this internally uses pslMap against the mm7 to hg17 liftover chain.gz
+# Because it is "Xeno" (from mouse to human), it creates track vgAllProbes,
+# and maintains the list of processed alignments in visiGene.vgPrbAliAll.
+vgProbeTrack PSLMAP working hg17 mm7  
+# updates hg17.seq/extFile similarly to the EXT command, but for All probes.
+# just like with EXT, EXTALL puts .fa in /cluster/data/hg17/visiGene
+# and symlink in /gbdb/hg17/visiGene and updates using hgLoadSeq.
+# if a sequence has already been loaded it will not be loaded again.
+vgProbeTrack EXTALL working hg17
+
+# hg18.vgAllProbes never existed before
+vgProbeTrack PSLMAP working hg18 mm7  -sqlPath=..
+# because the nibb blatz probe track hg18.nibbImageProbes was never done on hg18 
+# until just now (see makeHg18.doc), we have to add it for the first time.
+# "nibb" is not really a db here, so I manually put in a taxon mapping for it, 
+# so it appears as Xenopus laevis 8355, see the source code.
+vgProbeTrack REMAP working hg18 nibb nibbImageProbes /gbdb/hg18/nibbImageProbes.fa  
+vgProbeTrack EXTALL working hg18
+
+# mm8 is in qa and so it is basically ready to use now.  About 1.5 hours.
+vgProbeTrack ALI working mm8  -sqlPath=..
+vgProbeTrack EXT working mm8
+
+
+# RE-MAKE knownToVisiGene tables (see respective makedocs for these)
+#knownToVisiGene mm6
+#knownToVisiGene mm7
+#knownToVisiGene mm8
+#knownToVisiGene hg17 -fromProbePsl=vgAllProbes
+#knownToVisiGene hg18 -fromProbePsl=vgAllProbes
+
+############################
+
+
 

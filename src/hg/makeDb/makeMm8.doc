@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.17 2006/03/14 18:26:05 fanhsu Exp $"
+#	"$Id: makeMm8.doc,v 1.18 2006/03/16 19:34:35 galt Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -4623,4 +4623,9 @@ Loading database with 14470 rows^M
       | hgsql -h genome-testdb hgcentraltest
 
 # END OF HGNEAR STUFF
+
+
+# UPDATED mm8.knownToVisiGene (2006-03-15 galt)
+ssh hgwdev
+knownToVisiGene mm8
 
