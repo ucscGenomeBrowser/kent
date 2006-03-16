@@ -35,3 +35,5 @@ test:
 	diff expected/parentFieldInParam output/parentFieldInParam
 	paraFlow parentMembers.pf > output/parentMembers
 	diff expected/parentMembers output/parentMembers
+	paraFlow raceActivation.pf > output/raceActivation
+	diff expected/raceActivation output/raceActivation
