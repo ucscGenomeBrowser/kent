@@ -2,7 +2,6 @@
 
 #include "common.h"
 #include "dystring.h"
-#include "options.h"
 #include "linefile.h"
 #include "jksql.h"
 #include "bed.h"
@@ -63,7 +62,6 @@ struct expData *data = NULL;
 struct lineFile *lf = lineFileOpen(file,TRUE);
 char *strings[1000];
 int ncols, i, n;
-
 /* First line has experiment info */
 ncols = lineFileChopTab(lf,strings);
 for (i = 1; i < ncols; i++)
@@ -76,15 +74,12 @@ for (i = 1; i < ncols; i++)
     oneRec->url = CSNA;
     oneRec->ref = CSNA;
     oneRec->credit = CSNA;
-    oneRec->numExtras = 3;
-    AllocArray(oneRec->extras, 3);
-    oneRec->extras[0] = CSNA;
-    oneRec->extras[1] = CSNA;
-    oneRec->extras[2] = cloneString(strings[i]);
+    oneRec->numExtras = 1;
+    AllocArray(oneRec->extras, 1);
+    oneRec->extras[0] = cloneString(strings[i]);
     slAddHead(&exps, oneRec);
     }
 slReverse(&exps);
-
 /* Other lines have the data. */
 while (n = lineFileChopTab(lf,strings))
     {
