@@ -12,7 +12,11 @@ HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc
 ifeq (${OSTYPE},darwin)
     HG_WARN_ERR = -DJK_WARN -Wall -Werror -Wno-unused-variable
 else
+  ifeq (solaris,$(findstring solaris,${OSTYPE}))
+    HG_WARN_ERR = -DJK_WARN -Wall
+  else
     HG_WARN_ERR = -DJK_WARN -Wall -Werror
+  endif
 endif
 
 ifeq (${SCRIPTS},)
