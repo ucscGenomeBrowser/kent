@@ -15,7 +15,7 @@
 #include "supStitch.h"
 #include "chainBlock.h"
 
-static char const rcsid[] = "$Id: supStitch.c,v 1.36 2006/03/15 18:36:16 angie Exp $";
+static char const rcsid[] = "$Id: supStitch.c,v 1.37 2006/03/16 15:18:24 angie Exp $";
 
 static void ssFindBestBig(struct ffAli *ffList, bioSeq *qSeq, bioSeq *tSeq,
 	enum ffStringency stringency, boolean isProt, struct trans3 *t3List,
@@ -197,8 +197,8 @@ while ((right = left->right) != NULL)
 	left = right;
     else
 	{
-	verbose(2, "not monotonic dn %d, dh %d\n", right->nStart - left->nEnd, 
-		right->hStart - right->hEnd);
+	verbose(2, "not monotonic dn %d, dh %d\n", (int)(right->nStart - left->nEnd), 
+		(int)(right->hStart - right->hEnd));
         return FALSE;
 	}
     }
