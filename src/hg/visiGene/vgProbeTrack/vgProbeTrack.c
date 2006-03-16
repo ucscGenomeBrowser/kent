@@ -44,6 +44,7 @@ errAbort(
   "   ALI workingDir db - find or blat any needed alignments for vgProbes track. \n"
   "   EXT workingDir db - add any needed seq and extfile records for vgProbes track. \n"
   "   PSLMAP workingDir db fromDb - pslMap using chains fromDb to db for vgAllProbes track. \n"
+  "   REMAP  workingDir db fromDb track fa - import db.track psls of fromDb using fa fasta file for vgAllProbes track. \n"
   "   EXTALL workingDir db - add any needed seq and extfile records for vgAllProbes track. \n"
   "\n"
   "workingDir is a directory with space for intermediate and final results.\n"
@@ -863,6 +864,21 @@ advanceType(conn,taxon,"kgAlAll","gene");
 dyStringFree(&dy);
 }
 
+static void initTable(struct sqlConnection *conn, char *table, boolean nuke)
+/* build tables */
+{
+char *sql = NULL;
+char path[256];
+if (nuke)
+    sqlDropTable(conn, table);
+if (!sqlTableExists(conn, table))
+    {
+    safef(path,sizeof(path),"%s/%s.sql",sqlPath,table);
+    readInGulp(path, &sql, NULL);
+    sqlUpdate(conn, sql);
+    }
+}
+
 
 static void populateMissingVgPrbAli(struct sqlConnection *conn, int taxon, char *db, char *table)
 /* populate vgPrbAli for db */
@@ -885,6 +901,16 @@ static void updateVgPrbAli(struct sqlConnection *conn, char *db, char *table, ch
 /* update vgPrbAli from vgProbes track for db */
 {
 struct dyString *dy = dyStringNew(0);
+char cmd[256];
+char dbTrk[256];
+safef(dbTrk,sizeof(dbTrk),"%s.%s",db,track);
+if (!sqlTableExists(conn, dbTrk))
+    {
+    struct sqlConnection *conn2 = sqlConnect(db);
+    verbose(1,"FYI: Table %s does not exist\n",dbTrk);
+    initTable(conn2, track, FALSE);
+    sqlDisconnect(&conn2);
+    }
 dyStringClear(dy);
 dyStringPrintf(dy,
 "update %s a, %s.%s v"
@@ -1154,7 +1180,6 @@ char dbTbl[256];
 if (fileSize(pslName)==0)
     return;
 
-
 safef(dbTbl,sizeof(dbTbl),"%s.%s",db,table);
 if (!sqlTableExists(conn, dbTbl))
     {
@@ -1218,21 +1243,6 @@ doAccessionsSeq(conn, taxon, db);
 
 }
 
-
-static void initTable(struct sqlConnection *conn, char *table, boolean nuke)
-/* build tables */
-{
-char *sql = NULL;
-char path[256];
-if (nuke)
-    sqlDropTable(conn, table);
-if (!sqlTableExists(conn, table))
-    {
-    safef(path,sizeof(path),"%s/%s.sql",sqlPath,table);
-    readInGulp(path, &sql, NULL);
-    sqlUpdate(conn, sql);
-    }
-}
 
 static void init(struct sqlConnection *conn)
 /* build tables - for the first time */
@@ -1417,12 +1427,91 @@ markNoneVgPrbAli(conn, fromTaxon, db, "vgPrbAliAll");
 
 }
 
+static void doReMapAli(struct sqlConnection *conn, 
+    int taxon, char *db, 
+    int fromTaxon, char *fromDb,
+    char *track, char *fasta
+    )
+{
+char cmd[256];
+
+int rc = 0;
+struct dyString *dy = dyStringNew(0);
+char outName[256];
+char path[256];
+char dbTrk[256];
+
+safef(dbTrk,sizeof(dbTrk),"%s.%s",db,track);
+if (!sqlTableExists(conn, dbTrk))
+    errAbort("Track %s does not exist\n",dbTrk);
+
+if (!fileExists(fasta))
+    errAbort("Unable to locate fasta file %s",fasta);
+
+if (sqlTableExists(conn, "vgRemapTemp"))
+    {
+    sqlUpdate(conn, "drop table vgRemapTemp;");
+    }
+
+safef(cmd,sizeof(cmd),
+"hgPepPred %s generic vgRemapTemp %s "
+,database,fasta);
+uglyf("%s\n",cmd); system(cmd);
+
+sqlUpdate(conn, "create index seq on vgRemapTemp(seq(40));");
+
+/* get remapped psl probes not yet aligned */
+dyStringClear(dy);
+dyStringPrintf(dy, 
+    "select m.matches,m.misMatches,m.repMatches,m.nCount,m.qNumInsert,m.qBaseInsert,"
+    "m.tNumInsert,m.tBaseInsert,m.strand,"
+    "concat('vgPrb_',e.id),m.qSize,m.qStart,m.qEnd,m.tName,m.tSize,m.tStart,m.tEnd,m.blockCount,"
+    "m.blockSizes,m.qStarts,m.tStarts"    
+    " from vgPrb e, vgPrbAliAll a, %s.%s m, vgRemapTemp n"
+    " where e.id = a.vgPrb and a.db = '%s' and a.status='new'"
+    " and m.qName = n.name and n.seq = lower(e.seq)"
+    " and e.taxon = %d and e.state='seq' and e.seq <> ''"
+    " order by m.tName,m.tStart"
+    ,db,track,db,fromTaxon);
+rc = 0;
+rc = sqlSaveQuery(conn, dy->string, 21, "vgPrbReMap.psl", FALSE);
+uglyf("Count of Psls found for reMap: %d\n", rc);
+
+sqlUpdate(conn, "drop table vgRemapTemp;");
+
+dyStringFree(&dy);
+
+}
+
+
+static void doAlignmentsReMap(struct sqlConnection *conn, char *db, char *fromDb, char *track, char *fasta)
+{
+int taxon = findTaxon(conn,db);
+int fromTaxon = findTaxon(conn,fromDb);
+
+populateMissingVgPrbAli(conn, fromTaxon, db, "vgPrbAliAll");
+
+updateVgPrbAli(conn, db, "vgPrbAliAll","vgAllProbes");
+
+doReMapAli(conn, taxon, db, fromTaxon, fromDb, track, fasta);
+
+rollupPsl("vgPrbReMap.psl", "vgAllProbes", conn, db);
+
+updateVgPrbAli(conn, db, "vgPrbAliAll","vgAllProbes");
+
+markNoneVgPrbAli(conn, fromTaxon, db, "vgPrbAliAll");
+
+}
+
 
 static void doSeqAndExtFile(struct sqlConnection *conn, char *db, char *table)
 {
 int rc = 0;
 char cmd[256];
 char path[256];
+char bedPath[256];
+char gbdbPath[256];
+char *fname=NULL;
 struct dyString *dy = dyStringNew(0);
 dyStringClear(dy);
 dyStringPrintf(dy, 
@@ -1437,20 +1526,45 @@ rc = sqlSaveQuery(conn, dy->string, 2, "vgPrbExt.fa", TRUE);
 uglyf("rc = %d = count of sequences for vgPrbExt.fa, to use with %s track %s\n",rc,db,table);
 if (rc > 0)  /* can set any desired minimum */
     {
-    safef(cmd,sizeof(cmd),"mkdir /gbdb/%s/visiGene",db);
+    safef(bedPath,sizeof(bedPath),"/cluster/data/%s/bed/visiGene/",db);
+    if (!fileExists(bedPath))
+	{
+	safef(cmd,sizeof(cmd),"mkdir %s",bedPath);
+	uglyf("%s\n",cmd); system(cmd);
+	}
+    
+    safef(gbdbPath,sizeof(gbdbPath),"/gbdb/%s/visiGene/",db);
+    if (!fileExists(gbdbPath))
+	{
+	safef(cmd,sizeof(cmd),"mkdir %s",gbdbPath);
+    	uglyf("%s\n",cmd); system(cmd);
+	}
+   
+    while(1)
+	{
+	int i=0;
+	safef(path,sizeof(path),"%svgPrbExt_AAAAAA.fa",bedPath);
+        char *c = rStringIn("AAAAAA",path);
+        srand( (unsigned)time( NULL ) );
+        for(i=0;i<6;++i)
+            {
+            *c++ += (int) 26 * (rand() / (RAND_MAX + 1.0));
+            }
+	if (!fileExists(path))
+	    break;
+	}
+
+    
+    safef(cmd,sizeof(cmd),"cp vgPrbExt.fa %s",path);
     uglyf("%s\n",cmd); system(cmd);
     
-    safef(path,sizeof(path),"/gbdb/%s/visiGene/vgPrbExt_XXXXXX",db);
-    int fd = mkstemp(path);
-    close(fd);
+    fname = rStringIn("/", path);
+    ++fname;
     
-    safef(cmd,sizeof(cmd),"rm %s",path);
+    safef(cmd,sizeof(cmd),"ln -s %s %s%s",path,gbdbPath,fname);
     uglyf("%s\n",cmd); system(cmd);
     
-    safef(cmd,sizeof(cmd),"mv vgPrbExt.fa %s",path);
-    uglyf("%s\n",cmd); system(cmd);  
-    
-    safef(cmd,sizeof(cmd),"hgLoadSeq %s %s", db, path);
+    safef(cmd,sizeof(cmd),"hgLoadSeq %s %s%s", db, gbdbPath,fname);
     uglyf("%s\n",cmd); system(cmd);
     }
 
@@ -1477,7 +1591,10 @@ if (sameWord(command,"INIT"))
     {
     if (argc != 2)
 	usage();
+    errAbort("INIT is probably too dangerous. DO NOT USE.");
+    /*	    
     init(conn);	    
+    */
     }
 else if (sameWord(command,"POP"))
     {
@@ -1515,6 +1632,14 @@ else if (sameWord(command,"PSLMAP"))
     /* pslMap anything left that is not aligned, 
       nor even attempted */
     doAlignmentsPslMap(conn,argv[3],argv[4]);
+    }
+else if (sameWord(command,"REMAP"))
+    {
+    if (argc != 7)
+	usage();
+    /* re-map anything in track specified that is not aligned, 
+      nor even attempted, using specified fasta file. */
+    doAlignmentsReMap(conn,argv[3],argv[4],argv[5],argv[6]);
     }
 else if (sameWord(command,"EXTALL"))
     {
