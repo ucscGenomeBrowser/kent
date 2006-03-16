@@ -416,39 +416,39 @@ cdsDrawDefault genomic\ codons
     origAssembly hg17
     dataVersion ENCODE June 2005 Freeze
 
-    track pseudoEncodeConsensus
+    track encodePseudogeneConsensus
     subTrack encodePseudogene
     shortLabel Consensus Pseudogenes
     longLabel Consensus of Yale, Havana-Gencode, UCSC and GIS ENCODE Pseudogenes 
     priority 1
 
-    track pseudoHavana
+    track encodePseudogeneHavana
     subTrack encodePseudogene
     shortLabel Havana-Gencode Pseudogenes
     longLabel Havana-Gencode Annotated Pseudogenes and Immunoglobulin Segments
     url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
     priority 2
 
-    track pseudoYaleEncode
+    track encodePseudogeneYale
     subTrack encodePseudogene
     shortLabel Yale Pseudogenes
     longLabel Yale Pseudogene Predictions
     url http://www.pseudogene.org/cgi-bin/display-by-acc.cgi?id=$$
     priority 3
 
-    track pseudoUcsc
+    track encodePseudogeneUcsc
     subTrack encodePseudogene
     shortLabel UCSC Pseudogenes
     longLabel UCSC Retrogene Predictions
     priority 4
 
-    track pseudoUcsc2
+    track encodePseudogeneUcsc2
     subTrack encodePseudogene
     shortLabel UCSC Pseudogenes
     longLabel UCSC Pseudogene Predictions
     priority 5
 
-    track pseudoGIS
+    track encodePseudogeneGIS
     subTrack encodePseudogene
     shortLabel GIS Pseudogenes
     longLabel Genome Institute of Singapore (GIS) Pseudogenes 
