@@ -147,6 +147,16 @@ spectrum on
 type netAlign monDom4 chainMonDom4
 otherDb monDom4
 
+track gold
+shortLabel Assembly
+longLabel Assembly from Fragments
+group map
+priority 10
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
+
 track gap
 shortLabel Gap
 longLabel Gap Locations
