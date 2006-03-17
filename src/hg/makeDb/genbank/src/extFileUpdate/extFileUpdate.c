@@ -17,7 +17,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: extFileUpdate.c,v 1.4 2006/03/16 21:36:46 markd Exp $";
+static char const rcsid[] = "$Id: extFileUpdate.c,v 1.5 2006/03/17 07:33:31 genbank Exp $";
 
 /*
  * Algorithm:
@@ -170,7 +170,19 @@ hFreeConn(&conn);
 return ver;
 }
 
-static void dropSeqEntry(struct seqTbl *seqTbl, unsigned seqId, char *acc, unsigned version, char *type)
+static boolean isPepInRefLink(char *pepAcc)
+/* check if protein acc is in refLink */
+{
+struct sqlConnection *conn = hAllocConn();
+char buf[128], query[256], *acc;
+safef(query, sizeof(query), "select mrnaAcc from refLink where protAcc=\"%s\"",
+      pepAcc);
+acc = sqlQuickQuery(conn, query, buf, sizeof(buf));
+hFreeConn(&conn);
+return (acc != NULL);
+}
+
+static void dropUnexpectedSeqEntry(struct seqTbl *seqTbl, unsigned seqId, char *acc, unsigned version, char *type)
 /* drop an unexpected seq entry */
 {
 fprintf(stderr, "Warning: %s %s.%d not expected in gbSeqTbl, dropping\n",
@@ -203,12 +215,12 @@ if (statVer != 0)
     ri = raInfoTblGet(rit, accVer);
     if (ri != NULL)
         return ri;
-    fprintf(stderr, "Warning: %s %s.%d in gbSeqTbl, %s.%d in gbStatus, neither ared in ra file, unchanged\n",
+    fprintf(stderr, "Warning: %s %s.%d in gbSeqTbl, %s.%d in gbStatus, neither are in ra file\n",
             type, acc, version, acc, statVer);
     }
 else
     {
-    fprintf(stderr, "Warning: %s %s.%d in seqTbl but not in a ra file, unchanged\n",
+    fprintf(stderr, "Warning: %s %s.%d in seqTbl but not in a ra file\n",
             type, acc, version);
     }
 return NULL;
@@ -221,7 +233,7 @@ static void updateSeqEntry(struct raInfoTbl *rit, struct seqTbl *seqTbl,
 {
 struct raInfo *ri = NULL;
 if (startsWith("YP_", acc))
-    dropSeqEntry(seqTbl, seqId, acc, version, type);
+    dropUnexpectedSeqEntry(seqTbl, seqId, acc, version, type);
 else
     ri = getRaInfo(rit, acc, version, type);
 if (ri != NULL)
@@ -229,6 +241,19 @@ if (ri != NULL)
     gbVerbPr(4, "updateSeq %d %s.%d: ext: %d", seqId, acc, ri->version, ri->extFileId);
     seqTblMod(seqTbl, seqId, ri->version, ri->extFileId,
               ri->size, ri->offset, ri->fileSize);
+    }
+else 
+    {
+    if (isPepInRefLink(acc))
+        {
+        fprintf(stderr, "Warning: %s %s.%d in gbSeqTbl and refLink, not in ra file, unchanged\n",
+                type, acc, version);
+        }
+    else
+        {
+        fprintf(stderr, "Warning: dropping %s %s.%d\n", type, acc, version);
+        seqTblDelete(seqTbl, acc);
+        }
     }
 }
 
