@@ -93,7 +93,7 @@ databases </A>&nbsp;(100 Gb)
 <LI><A HREF="#step8">Create a $WEBROOT/trash apache user writable directory for temp files</A>
 <LI><A HREF="#step9">Set up HgFixed database</A>&nbsp;(500 Mb)
 <LI><A HREF="#step10">Set up the protein databases</A>&nbsp;(700 Mb)
-<LI><A HREF="#step11">Set up the Swiss-Prot database</A>&nbsp;(400 Mb)
+<LI><A HREF="#step11">Set up the UniProt database</A>&nbsp;(400 Mb)
 </OL>
 <BR><BR>
 <HR>
@@ -756,46 +756,36 @@ rsync -avzP --delete --max-delete=20 \
 </PRE>
 <LI>Create the protein databases
 <PRE>
-mysql&gt; create database proteins092903
-mysql&gt; create database proteins040115
 mysql&gt; create database proteins040315
 mysql&gt; create database proteins040515
-mysql&gt; create database proteins040915
-mysql&gt; create database proteins041115
-mysql&gt; create database proteins050201
-mysql&gt; create database sp050201
+mysql&gt; create database proteins050415
+mysql&gt; create database proteins051015
+mysql&gt; create database proteins060115
 </PRE>
 <LI>Import the data from proteinDB/proteins*/database in a similar
 	fashion as listed above.
 <LI>Create symlinks for your MySQL database of:
 <PRE>
-	/var/lib/mysql/proteins -&gt; proteins040115
-	/var/lib/mysql/proteome -&gt; proteins051015
-	/var/lib/mysql/uniProt -&gt; sp051015
+	/var/lib/mysql/proteome -&gt; proteins060115
+	/var/lib/mysql/uniProt -&gt; sp060115
 </PRE>
-These symlinks are a new organization of these proteins databases
-as of February 2005 to take care of the renaming of Locus Link
-data items at SwissProt.  Some older assemblies continue to find
-their proteins via the gdbPdb table in the hgcentral database.
-Newer assemblies find their proteins and SwissProt data via
-these symlinks.
 </OL>
 
 <H4><a NAME="step11"></A>
-11. Create the Swiss-Prot database</H4>
+11. Create the UniProt database</H4>
 
 <OL type="a">
-<LI>Please note <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/swissProt/database/README.txt">usage rights</A> for the Swiss-Prot database.
+<LI>Please note <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/swissProt/database/README.txt">usage rights</A> for the UniProt database.
 
-<LI>Download a copy of the dumped Swiss-Prot tables. (400 Mb)
+<LI>Download a copy of the dumped UniProt tables. (400 Mb)
 <PRE>
 rsync -avzP --delete --max-delete=20 \
-  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/swissProt/ \
-  $WEBROOT/goldenPath/swissProt/
+  rsync://hgdownload.cse.ucsc.edu/genome/goldenPath/uniProt/ \
+  $WEBROOT/goldenPath/uniProt/
 </PRE>
-<LI>Create the Swiss-Prot database
+<LI>Create the UniProt database
 <PRE>
-mysql&gt; create database swissProt
+mysql&gt; create database uniProt
 </PRE>
 <LI>Import the data in a similar fashion as listed above.
 </OL>
