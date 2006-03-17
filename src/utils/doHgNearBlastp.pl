@@ -3,11 +3,14 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.3 2006/02/24 17:51:27 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.4 2006/03/17 21:27:00 angie Exp $
 
 use Getopt::Long;
 use warnings;
 use strict;
+use FindBin qw($Bin);
+use lib "$Bin";
+use HgAutomate;
 
 # Hardcoded params:
 my $blastpParams = '-e 0.01 -m 8 -b'; # Keep -b at end -- value provided below.
@@ -176,32 +179,6 @@ sub parseConfig {
       if ($scratchDir =~ /^\/i?scratch\//);
 } # parseConfig
 
-# verbatim from doBlastz... this should go in a lib:
-sub verbose {
-  my ($level, $message) = @_;
-  print STDERR $message if ($opt_verbose >= $level);
-}
-
-# verbatim from doBlastz... this should go in a lib:
-sub run {
-  # Run a command in sh (unless -debug).
-  my ($cmd) = @_;
-  if ($opt_debug) {
-    print "# $cmd\n";
-  } else {
-    verbose(1, "# $cmd\n");
-    system($cmd) == 0 || die "Command failed:\n$cmd\n";
-  }
-} # run
-
-# verbatim from doBlastz... this should go in a lib:
-sub mustMkdir {
-  # mkdir || die.  Immune to -debug -- we need to create the dir structure 
-  # and dump out the scripts even if we don't actually execute the scripts.
-  my ($dir) = @_;
-  system("mkdir -p $dir") == 0 || die "Couldn't mkdir $dir\n";
-}
-
 sub splitSequence {
   # Split the target gene fasta file into small pieces for cluster run.
   my ($tDb, $tFasta) = @_;
@@ -222,8 +199,8 @@ faSplit sequence $tFasta $tSplitCount $scratchDir/$tDb.split/${tDb}_
 _EOF_
     ;
   close($fh);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $distrHost nice $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $distrHost nice $bossScript");
 }
 
 sub formatSequence {
@@ -231,7 +208,7 @@ sub formatSequence {
   my ($qDb, $qFasta) = @_;
 
   my $runDir = $buildDir;
-  &mustMkdir($runDir);
+  &HgAutomate::mustMkdir($runDir);
   my $bossScript = "$runDir/doFormat_$qDb.csh";
   my $fh = &openOrDie(">$bossScript");
   print $fh <<_EOF_
@@ -248,8 +225,8 @@ $blastPath/bin/formatdb -i $qFasta -t $qDb -n $qDb
 _EOF_
     ;
   close($fh);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $distrHost nice $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $distrHost nice $bossScript");
 } # formatSequence
 
 sub runPairwiseBlastp {
@@ -258,7 +235,7 @@ sub runPairwiseBlastp {
   my ($tDb, $qDb, $b) = @_;
 
   my $runDir = "$buildDir/run.$tDb.$qDb";
-  &mustMkdir($runDir);
+  &HgAutomate::mustMkdir($runDir);
   my $fh = &openOrDie(">$runDir/blastSome");
   print $fh <<_EOF_
 #!/bin/csh -ef
@@ -299,8 +276,8 @@ para time
 _EOF_
     ;
   close($fh);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $clusterHub $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $clusterHub $bossScript");
 } # runPairwiseBlastp
 
 
@@ -338,40 +315,40 @@ hgLoadBlastTab $tDb $tableName -maxPer=$max *.tab
 _EOF_
     ;
   close($fh);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $dbHost nice $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $dbHost nice $bossScript");
 } # loadPairwise
 
 
 sub cleanup {
   # Remove what we added in $scratchDir.
   foreach my $db (@_) {
-    &run("ssh -x $distrHost rm -rf $scratchDir/$db.split");
-    &run("ssh -x $distrHost rm -rf $scratchDir/$db.formatdb");
+    &HgAutomate::run("ssh -x $distrHost rm -rf $scratchDir/$db.split");
+    &HgAutomate::run("ssh -x $distrHost rm -rf $scratchDir/$db.formatdb");
   }
-  &run("ssh -x $distrHost rmdir $scratchDir");
+  &HgAutomate::run("ssh -x $distrHost rmdir $scratchDir");
 } # cleanup
 
 sub celebrate {
   # Hooray, we're done.
-verbose(1,
+HgAutomate::verbose(1,
 	"\n *** All done!\n");
-verbose(1,
+HgAutomate::verbose(1,
 	" *** Check these tables in $tDb:\n *** ");
 if (! $opt_noSelf) {
-  verbose(1, $tGenesetPrefix . 'BlastTab ');
+  HgAutomate::verbose(1, $tGenesetPrefix . 'BlastTab ');
 }
 foreach my $qDb (@qDbs) {
   my $qPrefix = &dbToPrefix($qDb);
-  verbose(1, $qPrefix . 'BlastTab ');
+  HgAutomate::verbose(1, $qPrefix . 'BlastTab ');
 }
 my $tPrefix = &dbToPrefix($tDb);
-verbose(1,
+HgAutomate::verbose(1,
 	"\n *** and $tPrefix" . "BlastTab in these databases:\n *** ");
 foreach my $qDb (@qDbs) {
-  verbose(1, "$qDb ");
+  HgAutomate::verbose(1, "$qDb ");
 }
-verbose(1,
+HgAutomate::verbose(1,
 	"\n\n");
 } # celebrate
 
@@ -387,7 +364,7 @@ verbose(1,
 &parseConfig($CONFIG);
 
 # Split target fasta.
-&run("ssh -x $distrHost mkdir $scratchDir");
+&HgAutomate::run("ssh -x $distrHost mkdir $scratchDir");
 my $tFasta = $dbToFasta{$tDb};
 &splitSequence($tDb, $tFasta);
 
