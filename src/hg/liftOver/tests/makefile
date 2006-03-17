@@ -15,7 +15,7 @@ bed12:	mkdirs
 bin:    mkdirs
 	${HOME}/bin/${MACHTYPE}/${PROG} -hasBin -bedPlus=6\
             input/bin.bed \
-            /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain \
+            /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
                 output/bin.good.bed output/bin.bad.bed
 	cat output/bin.{good,bad}.bed | \
                 diff - expected/bin.bed
@@ -23,7 +23,7 @@ bin:    mkdirs
 bedPlus3:	mkdirs
 	${HOME}/bin/${MACHTYPE}/${PROG} -bedPlus=3 \
             input/bedPlus.bed \
-            /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain \
+            /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
                 output/bedPlus3.good.bed output/bedPlus3.bad.bed
 	cat output/bedPlus3.{good,bad}.bed | \
                 diff - expected/bedPlus3.bed
@@ -66,7 +66,7 @@ chuckTest:	mkdirs
 chuckBigTest:	mkdirs
 	${HOME}/bin/${MACHTYPE}/${PROG} \
             input/chuckBigTest.bed \
-            /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain \
+            /cluster/data/mm2/bed/liftOver/mm2ToMm5.over.chain.gz \
                 output/chuckBigTest.good.bed output/chuckBigTest.bad.bed
 	cat output/chuckBigTest.{good,bad}.bed | \
                 diff - expected/chuckBigTest.bed
