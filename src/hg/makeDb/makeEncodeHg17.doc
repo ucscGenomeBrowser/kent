@@ -1572,6 +1572,9 @@ cat > project.csh << 'EOF'
     # For some reason, phastCons has + strand -- strip this out
     # NOTE: coords are ENCODE-region based, so need to adjust
     # by start of region (Elliott used custom tracks offset= to do this).
+
+    # NOTE: Updated GERP elements 2/1/06, with new data from Greg Cooper
+    # overwriting Elliott's elements.  This is doc'ed in the GERP section.
     cd /cluster/data/encode/MSA
     mkdir -p SEP-05/elements/lab
     cd SEP-05/elements/lab
@@ -1664,35 +1667,51 @@ cat > load.csh << 'EOF'
     csh load.csh >&! load.log
 
 ##########################################################################
-# MSA GERP Conservation (2005-12-13 kate)
+# MSA GERP Conservation (2005-02-06 kate)
+#  Submitted 2/1/06 by Greg Coooper
 
     cd /cluster/data/encode/MSA/Gerp
-    mkdir -p 2005-12-12/lab
-    cd 2005-12-12/lab
-
-# Found start=0 at line 6607734, the first chrom position is 1, not 0
+    mkdir -p 2006-02-01/lab
+    cd 2006-02-01/lab
+    wget http://baumbox.stanford.edu/~coopergm/ENCODE/GERP_Cons_SepFreeze_Jan.zip 
+    unzip GERP_Cons_SepFreeze_Jan.zip 
+    cd ..
 
     # TBA
     cat lab/chr*_GERP_TBA_scores.wig | \
         wigEncode stdin tbaGerpCons.wig tbaGerpCons.wib
+        #  upper limit 4.48, lower limit -29.86
     set d = /gbdb/hg17/encode/TBA/SEP-05
-    ln -s `pwd`/tbaGerpCons.wib $d
+    ln -s /cluster/data/encode/MSA/Gerp/2006-02-01/tbaGerpCons.wib $d
     hgLoadWiggle -pathPrefix=$d hg17 encodeTbaGerpCons tbaGerpCons.wig
 
     # MLAGAN 
     cat lab/chr*_GERP_MLAGAN_scores.wig | \
         wigEncode stdin mlaganGerpCons.wig mlaganGerpCons.wib
+        #  upper limit 4.48, lower limit -25.74
     set d = /gbdb/hg17/encode/MLAGAN/SEP-05
-    ln -s `pwd`/mlaganGerpCons.wib $d
+    ln -s /cluster/data/encode/MSA/Gerp/2006-02-01/mlaganGerpCons.wib $d
     hgLoadWiggle -pathPrefix=$d hg17 encodeMlaganGerpCons mlaganGerpCons.wig
 
     # MAVID
     cat lab/chr*_GERP_MAVID_scores.wig | \
         wigEncode stdin mavidGerpCons.wig mavidGerpCons.wib
-    set d = /gbdb/hg17/encode/MAVIE/SEP-05
-    ln -s `pwd`/mavidGerpCons.wib $d
+        # upper limit 4.48, lower limit -22.58
+    set d = /gbdb/hg17/encode/MAVID/SEP-05
+    ln -s /cluster/data/encode/MSA/Gerp/2006-02-01/mavidGerpCons.wib $d
     hgLoadWiggle -pathPrefix=$d hg17 encodeMavidGerpCons mavidGerpCons.wig
-    
+
+    # Elements.  Note: scores from 307-1000.  This data also
+        # upper limit 4.48, lower limit -22.58
+    # includes a 6th field with an unscaled float score, which
+    # will be included in the table, but not used for display
+    # with unscaled scores.
+
+    # Adding item names (<region>.#) for consistency with other MSA elements
+    # subtracks
+
+    lab/GERP_TBA_Cons.bed
+
 
 ##########################################################################
 # MSA SCONE Conservation (2005-12-12 kate)
@@ -1736,7 +1755,7 @@ cat > load.csh << 'EOF'
        # encodeRegions 1.047%, encodeTbaPhastConsEl 0.063%, both 0.063%, cover 6.04%, enrich 95.55x
     featureBits -enrichment hg17 encodeRegions encodeTbaGerpEl
        # encodeRegions 1.047%, encodeTbaGerpEl 0.057%, both 0.057%, cover 5.47%, enrich 95.55x
-    featureBits -enrichment hg17 encodeRegions encodeTbaBinConspEl
+    featureBits -enrichment hg17 encodeRegions encodeTbaBinConsEl
         # encodeRegions 1.047%, encodeTbaBinConsEl 0.060%, both 0.060%, cover 5.71%, enrich 95.55x
 
     # conservation
@@ -1876,5 +1895,33 @@ cat > load.csh << 'EOF'
         hgLoadBed -strict hg17 encodeRegulomeCapSitesGM06990 stdin
     
     
+##########################################################################
+# SANGER CHIP/CHIP  (2006-03-16 kate)
+#  5 histone mods in HFL cells, to be added to existing track
+#  Submitted by Rob Andrews
 
-    
+    ssh hgwdev
+    cd /cluster/data/encode/sanger/chipchip
+    mkdir -p 2006-03-16/lab
+    cd 2006-03-16
+    cp /var/ftp/encode/*.wig.txt lab
+
+    grep "^chr" lab/H3K4me1_HFL-1_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me1HFL1.bed
+    grep "^chr" lab/H3K4me2_HFL-1_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me2HFL1.bed
+    grep "^chr" lab/H3K4me3_HFL-1_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3K4me3HFL1.bed
+    grep "^chr" lab/H3ac_HFL-1_1.wig.txt | sort -k1,1 -k2,2n > \
+	H3acHFL1.bed
+    grep "^chr" lab/H4ac_HFL-1_1.wig.txt | sort -k1,1 -k2,2n > \
+	H4acHFL1.bed
+cat > load.csh << 'EOF'
+    foreach f (*.bed)
+        set t = $f:r
+        echo $t
+	hgLoadBed -bedGraph=4 hg17 encodeSangerChip$t $t.bed
+    end
+'EOF'
+    csh load.csh >&! load.log &
+    # loaded 23996 elements for 5 tables
