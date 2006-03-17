@@ -38,7 +38,7 @@ struct pfParse *expPp = casePp->children;
 struct pfBaseType *base = expPp->ty->base;
 struct pfParse *listPp = expPp->next;
 struct pfParse *itemPp;
-if (!(base == pfc->byteType || base == pfc->shortType
+if (!(base == pfc->byteType || base == pfc->shortType || base == pfc->charType
    || base == pfc->intType || base == pfc->longType))
      return FALSE;
 for (itemPp = listPp->children; itemPp != NULL; itemPp = itemPp->next)
@@ -101,6 +101,9 @@ for (itemPp = listPp->children; itemPp != NULL; itemPp = itemPp->next)
 		case pptConstShort:
 		case pptConstInt:
 		    fprintf(f, "%d", tok->val.i);
+		    break;
+		case pptConstChar:
+		    fprintf(f, "%d", tok->val.s[0]);
 		    break;
 		case pptConstLong:
 		    fprintf(f, "%lld", tok->val.l);
