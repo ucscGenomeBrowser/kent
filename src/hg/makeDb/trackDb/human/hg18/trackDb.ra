@@ -147,6 +147,15 @@ spectrum on
 type netAlign monDom4 chainMonDom4
 otherDb monDom4
 
+track HInvGeneMrna
+shortLabel H-Inv
+longLabel H-Invitational Genes mRNA Alignments
+group rna
+priority 67.5
+visibility hide
+color 0,100,100
+type psl .
+
 track gold
 shortLabel Assembly
 longLabel Assembly from Fragments
