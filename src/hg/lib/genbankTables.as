@@ -1,34 +1,81 @@
-table mrna
-"Basic information about mRNA and ESTs with links to other tables"
-   (
-   uint   id;              "Id, same as seq ID"
-   string acc;             "GenBank accession"
-   int    version;         "GenBank version"
-   date   moddate;         "Last modification date"
-   enum   type;            "Full length ('mRNA') or EST ('EST')"
-   enum   direction;       "Read direction ('5','3','0')"
-   uint   source;          "Ref in source table"
-   uint   organism;        "Ref in organism table"
-   uint   library;         "Ref in library table"
-   uint   mrnaClone;       "Ref in clone table"
-   uint   sex;             "Ref in sex table"
-   uint   tissue;          "Ref in tissue table"
-   uint   development;     "Ref in development table"
-   uint   cell;            "Ref in cell table"
-   uint   cds;             "Ref in CDS table"
-   uint   keyword;         "Ref in key table"
-   uint   description;     "Ref in description table"
-   uint   geneName;        "Ref in geneName table"
-   uint   productName;     "Ref in productName table"
-   uint   author;          "Ref in author table"
-   )
-
-
-table mrnaCharacteristic
-"Characteristics of mRNA and EST referenced in the mrna table"
+table gbCharacteristic
+"Characteristics of GenBank sequences referenced in the gbCdnaInfo table"
    (
    int    id;              "Unique id of characteristic (referenced by mrna table)"
    string name;            "Characteristic/value"
    int 	  crc;             "Cyclic redundancy check (performance optimization for loading tables)"
    )
+
+table gbExtFile
+"GenBank sequence file info"
+    (
+    uint id;		"ID/index"
+    string path;	"Full path of file"
+    long size;		"byte size of file"
+    )
+
+table gbLoaded
+"Release, updates and partitions loaded (cached to speed up loading process)"
+    (
+    enum srcDb;		"Source database: 'GenBank' or 'RefSeq'"
+    enum type;		"Full length ('mRNA') or EST ('EST')"
+    string loadRelease;	"release version that was loaded"
+    string loadUpdate;	"update that was loaded (date or 'full')"
+    string accPrefix;   "first two characters of accessions (or empty)"
+    timestamp time;	"time that this entry was inserted"
+    boolean extFileUpdated;	"true if extFile has been updated"
+    )
+
+table gbSeq
+"GenBank sequence metadata"
+    (
+    uint id;		"ID/index"
+    string acc;		"GenBank accession"
+    short version;	"GenBank version number suffix"
+    uint size;		"number of bases in sequence"
+    uint gbExtFile;	"ID/index of sequence file record in gbExtFile table"
+    long file_offset;	"byte offset in sequence file"
+    uint file_size;	"byte length of sequence in sequence file"
+    enum type;		"Full length ('mRNA') or EST ('EST')"
+    enum srcDb;		"Source database: 'GenBank' or 'RefSeq'"
+    )
+
+table gbStatus
+"GenBank version info for alignments in the database"
+    (
+    string acc;		"GenBank accession"
+    short version;	"GenBank version number suffix"
+    date modDate;	"last modified date"
+    enum type;		"Full length ('mRNA') or EST ('EST')"
+    enum srcDb;		"Source database: 'GenBank' or 'RefSeq'"
+    enum orgCat;	"Organism category: this ('native') or other ('xeno')"
+    uint gbSeq;		"ID/index in gbSeq table"
+    uint numAligns;	"number of alignments of the accession"
+    string seqRelease;	"release version where the sequence was obtained"
+    string seqUpdate;	"update where sequence was obtained (date or 'full')"
+    string metaRelease;	"release version where the metadata was obtained"
+    string metaUpdate;	"update where metadata was obtained (date or 'full')"
+    string extRelease;	"release version containing the external file"
+    string extUpdate;	"update containing the external file (date or 'full')"
+    timestamp time;	"time that this entry was inserted"
+    )
+
+table mgcFullStatus
+"Status of full-CDS MGC clones"
+    (
+    uint imageId;	"IMAGE ID for clone"
+    enum status;	"MGC status code: ('unpicked','candidate','picked','notBack','noDecision','fullLength','fullLengthShort','fullLengthSynthetic','incomplete','chimeric','frameShift','contaminated','retainedIntron','mixedWells','noGrowth','noInsert','no5est','microDel','artifact','noPolyATail','cantSequence','inconsistentWithGene')"
+    enum state;		"MGC state code: ('unpicked', 'pending', 'fullLength', 'problem')"
+    string acc;		"GenBank accession"
+    string organism;	"organism code"
+    string geneName;	"RefSeq accession for gene, if available"
+    )
+
+table refSeqSummary
+"Summary or completeness info for RefSeqs (when given in comments)"
+    (
+    string mrnaAcc;	"NM_* RefSeq mRNA accession"
+    enum completeness;	"'Complete5End', 'Complete3End', 'FullLength', 'IncompleteBothEnds', 'Incomplete5End', 'Incomplete3End', 'Partial', 'Unknown'"
+    string summary;	"Summary comments"
+    )
 
