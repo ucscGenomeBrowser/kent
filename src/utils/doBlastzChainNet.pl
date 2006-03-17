@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.32 2006/03/10 17:18:27 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.33 2006/03/17 21:26:20 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -21,6 +21,9 @@
 use Getopt::Long;
 use warnings;
 use strict;
+use FindBin qw($Bin);
+use lib "$Bin";
+use HgAutomate;
 
 # Hardcoded paths/command sequences:
 my $getFileServer = '/cluster/bin/scripts/fileServer';
@@ -344,22 +347,9 @@ sub checkOptions {
 # The following routines were taken almost verbatim from blastz-run-ucsc,
 # so may be good candidates for libification!  unless that would slow down 
 # blastz-run-ucsc...
-# run() had $opt_debug added to it which would be a good idea for b-r-u too.
-# run had path stuff removed -- user's path should be good enough already.
 # nfsNoodge() was removed from loadDef() and loadSeqSizes() -- since this 
 # script will not be run on the cluster, we should fully expect files to 
 # be immediately visible.  
-
-sub run {
-  # Run a command in sh (unless -debug).
-  my ($cmd) = @_;
-  if ($opt_debug) {
-    print "# $cmd\n";
-  } else {
-    verbose(1, "# $cmd\n");
-    system($cmd) == 0 || die "Command failed:\n$cmd\n";
-  }
-}
 
 sub loadDef {
   # Read parameters from a bash script with Scott's param variable names:
@@ -396,32 +386,8 @@ sub loadSeqSizes {
   close(SIZE);
 }
 
-sub fileBase {
-  # Get rid of leading path and .suffix (and .gz too if it's there).
-  my ($path) = @_;
-  $path =~ s/^(.*\/)?(\S+)\.\w+(\.gz)?/$2/;
-  return $path;
-}
-
-sub nfsNoodge {
-  # sometimes localhost can't see the newly created file immediately,
-  # so insert some artificial delay in order to prevent the next step
-  # from dieing on lack of file:
-  my ($file) = @_;
-  for (my $i=0;  $i < 5;  $i++) {
-    last if (system("ls $file >& /dev/null") == 0);
-    sleep(2);
-  }
-}
-
-
 # end shared stuff from blastz-run-ucsc
 #########################################################################
-
-sub verbose {
-  my ($level, $message) = @_;
-  print STDERR $message if ($opt_verbose >= $level);
-}
 
 sub requireVar {
   my ($var) = @_;
@@ -481,7 +447,7 @@ sub checkDef {
     die "-swap is not supported for self-alignments\n" .
         "($DEF has $tDb as both target and query).\n";
   }
-  verbose(1, "$DEF looks OK!\n" .
+  HgAutomate::verbose(1, "$DEF looks OK!\n" .
 	  "\ttDb=$tDb\n\tqDb=$qDb\n\ts1d=$defVars{SEQ1_DIR}\n" .
 	  "\tisSelf=$isSelf\n");
   if ($defVars{'SEQ1_SMSK'} || $defVars{'SEQ2_SMSK'} ||
@@ -492,21 +458,14 @@ sub checkDef {
       &requireVar($var);
       &requirePath($var);
     }
-    verbose(1, "Abridging repeats!\n");
+    HgAutomate::verbose(1, "Abridging repeats!\n");
   }
 }
 
 
-sub mustMkdir {
-  # mkdir || die.  Immune to -debug -- we need to create the dir structure 
-  # and dump out the scripts even if we don't actually execute the scripts.
-  my ($dir) = @_;
-  system("mkdir -p $dir") == 0 || die "Couldn't mkdir $dir\n";
-}
-
 sub doPartition{ 
   # Partition the sequence up before blastz.
-  my ($paraHub) = @_;
+  my ($paraHub, $fileServer) = @_;
   my $runDir = "$buildDir/run.blastz";
   my $targetList = "$tDb.lst";
   my $queryList = $isSelf ? $targetList : "$qDb.lst";
@@ -536,7 +495,7 @@ sub doPartition{
      "$seq2Dir $seq2Len $seq2Limit " .
      "$qPartDir > $queryList");
   my $bossScript = "$runDir/doPartition.csh";
-  &mustMkdir($runDir);
+  &HgAutomate::mustMkdir($runDir);
   open (SCRIPT, ">$bossScript")
     || die "Couldn't open $bossScript for writing: $!\n";
   print SCRIPT <<_EOF_
@@ -551,13 +510,13 @@ sub doPartition{
 cd $runDir
 $partitionTargetCmd
 $mkOutRoot
-csh -ef xdir.sh
 $partitionQueryCmd
 _EOF_
     ;
   close(SCRIPT);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $paraHub $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $paraHub $bossScript");
+  &HgAutomate::run("ssh -x $fileServer csh -ef xdir.sh");
 }
 
 sub doBlastzClusterRun {
@@ -621,8 +580,8 @@ $paraRun
 _EOF_
     ;
   close(SCRIPT);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $paraHub $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $paraHub $bossScript");
 }	#	sub doBlastzClusterRun {}
 
 sub doCatRun {
@@ -648,7 +607,7 @@ sub doCatRun {
     die "doCatRun: looks like previous stage was not successful (can't find " .
       "$successFile).\n";
   }
-  &mustMkdir($runDir);
+  &HgAutomate::mustMkdir($runDir);
 
   open (GSUB, ">$runDir/gsub")
     || die "Couldn't open $runDir/gsub for writing: $!\n";
@@ -693,8 +652,8 @@ $paraRun
 _EOF_
     ;
   close(SCRIPT);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $paraHub $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $paraHub $bossScript");
 }	#	sub doCatRun {}
 
 
@@ -757,7 +716,7 @@ sub doChainRun {
     die "doChainRun: looks like previous stage was not successful (can't " .
       "find $successFile).\n";
   }
-  &mustMkdir($runDir);
+  &HgAutomate::mustMkdir($runDir);
 
   open (GSUB, ">$runDir/gsub")
     || die "Couldn't open $runDir/gsub for writing: $!\n";
@@ -836,8 +795,8 @@ rmdir liftedChain
 _EOF_
   ;
   close(SCRIPT);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $paraHub $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $paraHub $bossScript");
 }	#	sub doChainRun {}
 
 
@@ -865,14 +824,14 @@ sub postProcessChains {
     die "postProcessChains: looks like previous stage was not successful " .
       "(can't find $successFile).\n";
   }
-  &run("ssh -x $workhorse nice " .
+  &HgAutomate::run("ssh -x $workhorse nice " .
        "'chainMergeSort $runDir/run/chain/*.chain " .
        "| nice gzip -c > $runDir/$chain'");
   if ($splitRef) {
-    &run("ssh -x $fileServer nice " .
+    &HgAutomate::run("ssh -x $fileServer nice " .
 	 "chainSplit $runDir/chain $runDir/$chain");
   }
-  &nfsNoodge("$runDir/$chain");
+  &HgAutomate::nfsNoodge("$runDir/$chain");
 }	#	sub postProcessChains {}
 
 
@@ -912,13 +871,13 @@ sub swapChains {
      "later stage, or move aside/remove $runDir/all.chain[.gz] and run again.\n";
   }
   # Main routine already made sure that $buildDir/axtChain/all.chain is there.
-  &run("ssh -x $workhorse nice " .
+  &HgAutomate::run("ssh -x $workhorse nice " .
        "'chainSwap $buildDir/axtChain/$inChain stdout " .
        "| nice chainSort stdin stdout " .
        "| nice gzip -c > $runDir/$swappedChain'");
-  &nfsNoodge("$runDir/$swappedChain");
+  &HgAutomate::nfsNoodge("$runDir/$swappedChain");
   if ($splitRef) {
-    &run("ssh -x $fileServer nice " .
+    &HgAutomate::run("ssh -x $fileServer nice " .
 	 "chainSplit $runDir/chain $runDir/$swappedChain");
   }
 }	#	sub swapChains {}
@@ -1038,8 +997,8 @@ _EOF_
       ;
   }
   close(SCRIPT);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $machine nice $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $machine nice $bossScript");
 }	#	sub netChains {}
 
 
@@ -1105,8 +1064,8 @@ netFilter -minGap=10 $tDb.$qDb.net \\
 _EOF_
   ;
   close(SCRIPT);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $dbHost nice $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $dbHost nice $bossScript");
 # maybe also peek in trackDb and see if entries need to be added for chain/net
 }
 
@@ -1117,7 +1076,7 @@ sub makeDownloads {
   my ($machine) = @_;
   my $runDir = "$buildDir/axtChain";
   if (-e "$runDir/$tDb.$qDb.net") {
-    &run("ssh -x $machine nice " .
+    &HgAutomate::run("ssh -x $machine nice " .
 	 "gzip $runDir/$tDb.$qDb.net");
   }
   # Make an md5sum.txt file.
@@ -1140,8 +1099,8 @@ md5sum axtNet/*.gz >> axtChain/md5sum.txt
 _EOF_
     ;
   close(SCRIPT);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $machine nice $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $machine nice $bossScript");
 }
 
 
@@ -1455,8 +1414,8 @@ $liftOver
 _EOF_
       ;
   close(SCRIPT);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $dbHost nice $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $dbHost nice $bossScript");
 # maybe also peek in trackDb and see if entries need to be added for chain/net
 }
 
@@ -1503,8 +1462,8 @@ _EOF_
       ;
   }
   close(SCRIPT);
-  &run("chmod a+x $bossScript");
-  &run("ssh -x $machine nice $bossScript");
+  &HgAutomate::run("chmod a+x $bossScript");
+  &HgAutomate::run("ssh -x $machine nice $bossScript");
 }
 
 
@@ -1549,24 +1508,24 @@ if ($opt_swap) {
         "which is required for -swap.\n";
   }
   $swapDir = "$clusterData/$qDb/$trackBuild/blastz.$tDb.swap";
-  &mustMkdir("$swapDir/axtChain");
+  &HgAutomate::mustMkdir("$swapDir/axtChain");
   $splitRef = (`wc -l < $defVars{SEQ2_LEN}` < $splitThreshold);
-  &verbose(1, "Swapping from $buildDir/axtChain/$inChain\n" .
+  &HgAutomate::verbose(1, "Swapping from $buildDir/axtChain/$inChain\n" .
 	      "to $swapDir/axtChain/$qDb.$tDb.all.chain.gz .\n");
 } else {
   if (! -d $buildDir) {
-    &mustMkdir($buildDir);
+    &HgAutomate::mustMkdir($buildDir);
   }
   if (! $opt_blastzOutRoot && $startStep < $stepVal{'chainRun'}) {
     &enforceClusterNoNo($buildDir,
 	    'blastz/chain/net build directory (or use -blastzOutRoot)');
   }
   $splitRef = (`wc -l < $defVars{SEQ1_LEN}` < $splitThreshold);
-  &verbose(1, "Building in $buildDir\n");
+  &HgAutomate::verbose(1, "Building in $buildDir\n");
 }
 
 if (! -e "$buildDir/DEF") {
-  &run("cp $DEF $buildDir/DEF");
+  &HgAutomate::run("cp $DEF $buildDir/DEF");
 }
 
 my $fileServer = $opt_fileServer ? $opt_fileServer :
@@ -1580,15 +1539,15 @@ if (scalar(grep /^$fileServer$/, @fileServerNoLogin)) {
 }
 
 my $step = 0;
-verbose(2,
+HgAutomate::verbose(2,
 	"startStep: $startStep, at step $step initial partition to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
-  &doPartition($bigClusterHub);
+  &doPartition($bigClusterHub, $fileServer);
 }
 
 #	-continue blastz
 $step++;
-verbose(2,
+HgAutomate::verbose(2,
 	"startStep: $startStep, at step $step initial blastz to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   &doBlastzClusterRun($bigClusterHub);
@@ -1596,7 +1555,7 @@ if ($startStep <= $step && $step <= $stopStep) {
 
 #	-continue cat
 $step++;
-verbose(2,
+HgAutomate::verbose(2,
 	"startStep: $startStep, at step $step cat to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   &doCatRun($smallClusterHub);
@@ -1604,7 +1563,7 @@ if ($startStep <= $step && $step <= $stopStep) {
 
 #	-continue chainRun
 $step++;
-verbose(2,
+HgAutomate::verbose(2,
 	"startStep: $startStep, at step $step chainRun to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   &doChainRun($smallClusterHub);
@@ -1612,7 +1571,7 @@ if ($startStep <= $step && $step <= $stopStep) {
 
 #	-continue chainMerge
 $step++;
-verbose(2,
+HgAutomate::verbose(2,
 	"startStep: $startStep, at step $step chainMerge to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   if ($opt_swap) {
@@ -1626,7 +1585,7 @@ if ($startStep <= $step && $step <= $stopStep) {
 
 #	-continue net
 $step++;
-verbose(2,
+HgAutomate::verbose(2,
 	"startStep: $startStep, at step $step net to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   &netChains($workhorse);
@@ -1634,7 +1593,7 @@ if ($startStep <= $step && $step <= $stopStep) {
 
 #	-continue load
 $step++;
-verbose(2,
+HgAutomate::verbose(2,
 	"startStep: $startStep, at step $step load to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   &loadUp();
@@ -1642,7 +1601,7 @@ if ($startStep <= $step && $step <= $stopStep) {
 
 #	-continue download
 $step++;
-verbose(2,
+HgAutomate::verbose(2,
 	"startStep: $startStep, at step $step download to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
   &makeDownloads($workhorse);
@@ -1655,14 +1614,14 @@ if ($startStep <= $step && $step <= $stopStep) {
   &cleanup($fileServer);
 }
 
-verbose(1,
+HgAutomate::verbose(1,
 	"\n *** All done!\n");
-verbose(1,
+HgAutomate::verbose(1,
 	" *** Make sure that goldenPath/$tDb/vs$QDb/README.txt is accurate.\n")
   if ($stopStep >= $stepVal{'download'});
-verbose(1,
+HgAutomate::verbose(1,
 	" *** Add {chain,net}$QDb tracks to trackDb.ra if necessary.\n")
   if ($stopStep >= $stepVal{'load'});
-verbose(1,
+HgAutomate::verbose(1,
 	"\n\n");
 
