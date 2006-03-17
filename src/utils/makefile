@@ -40,6 +40,7 @@ SCRIPT_FILES = \
 	blastz-run-ucsc \
 	doBlastzChainNet.pl \
 	doHgNearBlastp.pl \
+	HgAutomate.pm \
         iSync \
         lodToBedScore \
 	partitionSequence.pl
