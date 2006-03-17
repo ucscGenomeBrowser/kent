@@ -10,7 +10,7 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.22 2005/08/30 23:59:02 kate Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.23 2006/03/17 16:24:48 angie Exp $";
 
 int bedPlus = 0;
 bool fudgeThick = FALSE;
@@ -19,6 +19,28 @@ bool multiple = FALSE;
 bool hasBin = FALSE;
 bool tabSep = FALSE;
 char *chainTable = NULL;
+
+static struct optionSpec optionSpecs[] = {
+    {"bedPlus", OPTION_INT},
+    {"chainTable", OPTION_STRING},
+    {"errorHelp", OPTION_BOOLEAN},
+    {"fudgeThick", OPTION_BOOLEAN},
+    {"genePred", OPTION_BOOLEAN},
+    {"gff", OPTION_BOOLEAN},
+    {"hasBin", OPTION_BOOLEAN},
+    {"minBlocks", OPTION_FLOAT},
+    {"minChainQ", OPTION_INT},
+    {"minChainT", OPTION_INT},
+    {"minMatch", OPTION_FLOAT},
+    {"minSizeQ", OPTION_INT},
+    {"minSizeT", OPTION_INT},
+    {"multiple", OPTION_BOOLEAN},
+    {"pslT", OPTION_BOOLEAN},
+    {"sample", OPTION_BOOLEAN},
+    {"tab", OPTION_BOOLEAN},
+    {"tabSep", OPTION_BOOLEAN},
+    {NULL, 0}
+};
 
 void usage()
 /* Explain usage and exit. */
@@ -112,7 +134,7 @@ int minChainQ = 0;
 double minMatch = LIFTOVER_MINMATCH;
 double minBlocks = LIFTOVER_MINBLOCKS;
 
-optionHash(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 minMatch = optionFloat("minMatch", minMatch);
 minBlocks = optionFloat("minBlocks", minBlocks);
 fudgeThick = optionExists("fudgeThick");
@@ -129,8 +151,8 @@ minChainT = optionInt("minChainT", minChainT);
 minChainQ = optionInt("minChainQ", minChainQ);
 bedPlus = optionInt("bedPlus", bedPlus);
 hasBin = optionExists("hasBin");
-tabSep = optionExists("tabSep");
-if (hasBin && !bedPlus)
+tabSep = optionExists("tab") || optionExists("tabSep");
+if ((hasBin || tabSep) && !bedPlus)
     usage();
 chainTable = optionVal("chainTable", chainTable);
 if (optionExists("errorHelp"))
