@@ -4620,6 +4620,12 @@ done > cytobands.bed
     cd /cluster/data/hg18/bed/hinv
     hgMapToGene hg18 HInvGeneMrna knownGene knownToHInv
 
+# QA NOTE (3-6-2006): did a mytouch to update the time for the HInvGeneMrna table 
+# (because joinerCheck was complaining during -times check):
+# sudo mytouch hg18 HInvGeneMrna 200602031600.00
+# touch -t 200602031600.00 /var/lib/mysql/hg18/HInvGeneMrna.MYD
+
+
 # PRODUCE FUGU BLAT ALIGNMENT (DONE - 2006-02-02 - Fan)
 
     ssh kk
@@ -5287,6 +5293,11 @@ hgLoadPsl -tNameIx hg18 kgProtMap.psl
     hgsql hg18 -e 'drop table kgSpAlias';
     hgsql hg18 < ~/src/hg/lib/kgSpAlias.sql
     hgsql hg18 -e 'load data local infile "hg18.kgSpAlias.tab" into table kgSpAlias'
+
+# QA NOTE (3-6-2006): did a mytouch to update the time for the knownGene table
+# (because joinerCheck was complaining during -times check):
+# [hgwdev:~/joiner> sudo mytouch hg18 knownGene 200602061707
+# touch -t 200602061707 /var/lib/mysql/hg18/knownGene.MYD
 
 # MAKE FOLDUTR TABLES (DONE 2006-02-09, Fan)
 # First set up directory structure and extract UTR sequence on hgwdev
