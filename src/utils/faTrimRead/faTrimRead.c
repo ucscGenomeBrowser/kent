@@ -106,10 +106,7 @@ boolean qualReadAll(FILE *f, boolean preserveCase, char *defaultName,
 char lineBuf[1024];
 int lineSize;
 char *words[1];
-int c;
 off_t offset = ftello(f);
-size_t dnaSize = 0;
-int bogusChars = 0;
 char *name = defaultName;
 
 if (name == NULL)
@@ -225,15 +222,13 @@ struct dnaSeq seq;
 FILE *qf = mustOpen(qualFile, "r");
 FILE *f = mustOpen(outFile, "w");
 FILE *lift = mustOpen(liftFile, "w");
-int seqCount = 0, passCount = 0;
-int nCount;
+int seqCount = 0;
 ZeroVar(&seq);
 
 fprintf(lift,"## name \tclipStart\tclipEnd\tSize\n");
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, FALSE))
     {
-    int i, j, aSize = 0;
-    char *comment[1024];
+    int i, j = 0;
     int mode = START;
     struct qual qual;
     int clipStart = 0, clipEnd = seq.size;
