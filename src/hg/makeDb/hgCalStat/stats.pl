@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-#        $Id: stats.pl
+#        $Id: stats.pl,v 1.3 2006/03/18 18:11:47 fanhsu Exp $
 
 use strict;
 
