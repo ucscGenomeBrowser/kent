@@ -82,8 +82,8 @@ switch (type)
 	return "pptCall";
     case pptIndirectCall:
 	return "pptIndirectCall";
-    case pptAssignment:
-	return "pptAssignment";
+    case pptAssign:
+	return "pptAssign";
     case pptPlusEquals:
 	return "pptPlusEquals";
     case pptMinusEquals:

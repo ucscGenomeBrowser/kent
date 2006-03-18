@@ -1097,7 +1097,7 @@ static void checkNoNestedAssigns(struct pfParse *pp)
 {
 switch (pp->type)
     {
-    case pptAssignment:
+    case pptAssign:
     case pptPlusEquals:
     case pptMinusEquals:
     case pptMulEquals:
@@ -1120,7 +1120,7 @@ struct pfParse *pp = parseVarDec(pfc, parent, &tok, scope);
 switch (tok->type)
     {
     case '=':
-        type = pptAssignment;
+        type = pptAssign;
 	break;
     case pftPlusEquals:
 	type = pptPlusEquals;
@@ -1140,7 +1140,7 @@ switch (tok->type)
     }
 if (type != pptNone)
     {
-    if (pp->type == pptVarDec && type != pptAssignment)
+    if (pp->type == pptVarDec && type != pptAssign)
         errAt(tok, "You can only initialize a variable with a simple '='");
     assign = pfParseNew(type, tok, parent, scope);
     assign->children = pp;
@@ -1154,7 +1154,7 @@ if (type != pptNone)
 	pp = parseIndexRange(pfc, assign, &tok, scope);
 	checkNoNestedAssigns(pp);
 	slAddHead(&assign->children, pp);
-	if (tok->type != '=' || type != pptAssignment)
+	if (tok->type != '=' || type != pptAssign)
 	    break;
 	}
     }
@@ -1203,7 +1203,7 @@ static boolean isVarDecOrVarDecInit(struct pfParse *pp)
 /* Return true if pp is either varDec or assignment to varDec. */
 {
 return (pp->type == pptVarDec 
-	|| (pp->type == pptAssignment && pp->children->type == pptVarDec));
+	|| (pp->type == pptAssign && pp->children->type == pptVarDec));
 }
 
 static void updateAccessAndConst(struct pfParse *pp, struct pfParse *type, 
@@ -1238,7 +1238,7 @@ if (!isVarDecOrVarDecInit(vars))
 /* Make sure everything is either a varDec or an assignment */
 for (pp = vars; pp != NULL; pp = pp->next)
     {
-    if (pp->type != pptVarDec && pp->type != pptAssignment && 
+    if (pp->type != pptVarDec && pp->type != pptAssign && 
     	pp->type != pptNameUse)
 	{
         errAt(pp->tok, "Expecting variable declaration");
@@ -1259,7 +1259,7 @@ for (pp = vars; pp != NULL; pp = pp->next)
 	{
 	flipNameUseToVarDec(pp, type, tuple);
 	}
-    else if (pp->type == pptAssignment)
+    else if (pp->type == pptAssign)
 	{
 	struct pfParse *sub = pp->children;
 	if (sub->type == pptVarDec)
@@ -1279,7 +1279,7 @@ for (pp = vars; pp != NULL; pp = pp->next)
 }
 
 static void varDecAndAssignToVarInit(struct pfParse *pp)
-/* Convert pptVarDec and when appropriate pptAssignment to pptVarInit. */
+/* Convert pptVarDec and when appropriate pptAssign to pptVarInit. */
 {
 if (pp->type == pptVarDec)
     {
@@ -1297,7 +1297,7 @@ if (pp->type == pptVarDec)
 	    errAt(pp->tok, "Uninitialized const.");
 	}
     }
-else if (pp->type == pptAssignment)
+else if (pp->type == pptAssign)
     {
     struct pfParse *left = pp->children;
     if (left->type == pptVarDec)

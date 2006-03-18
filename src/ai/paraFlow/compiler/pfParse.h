@@ -47,7 +47,7 @@ enum pfParseType
     pptReturn,
     pptCall,
     pptIndirectCall,
-    pptAssignment,
+    pptAssign,
     pptPlusEquals,
     pptMinusEquals,
     pptMulEquals,

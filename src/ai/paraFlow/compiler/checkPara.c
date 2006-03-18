@@ -138,7 +138,7 @@ static void checkReadOnlyOutsideLocals(struct pfCompile *pfc,
 {
 switch (pp->type)
     {
-    case pptAssignment:
+    case pptAssign:
     case pptPlusEquals:
     case pptMinusEquals:
     case pptMulEquals:

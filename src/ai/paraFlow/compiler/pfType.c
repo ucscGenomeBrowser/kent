@@ -1536,7 +1536,7 @@ static void foreachIntoForeachCall(struct pfCompile *pfc, struct pfParse *pp)
  *           <function call>
  *        <pptCastXxxToBit>
  *           pptVarUse <element var>
- *        <pptAssignment>
+ *        <pptAssign>
  *           pptVarUse <element var>
  *           <function call>
  *        <loop body>
@@ -1551,7 +1551,7 @@ if (elInit->type != pptVarInit)
     errAt(elInit->tok, "element must be just a name");
 /* Create new parse nodes. */
 struct pfParse *firstVarUse = pfParseNew(pptVarUse, elInit->tok, pp, pp->scope);
-struct pfParse *assignment = pfParseNew(pptAssignment, elInit->tok, pp, pp->scope);
+struct pfParse *assignment = pfParseNew(pptAssign, elInit->tok, pp, pp->scope);
 struct pfParse *secondVarUse = pfParseNew(pptVarUse, elInit->tok, pp, pp->scope);
 firstVarUse->var = secondVarUse->var = elVar;
 firstVarUse->ty = secondVarUse->ty = elVar->ty;
@@ -2464,7 +2464,7 @@ switch (pp->type)
 	    }
 	return;
         break;
-    case pptAssignment:
+    case pptAssign:
         markUsedVars(outputScope, outputHash, pp);
 	break;
     }
@@ -2598,7 +2598,7 @@ if (left->type == pptTuple && right->type == pptTuple)
 	    lNext = left->next;
 	    rNext = right->next;
 
-	    a = pfParseNew(pptAssignment, pp->tok, pp->parent, pp->scope);
+	    a = pfParseNew(pptAssign, pp->tok, pp->parent, pp->scope);
 	    a->children = left;
 	    left->next = right;
 	    right->next = NULL;
@@ -2962,7 +2962,7 @@ switch (pp->type)
 	enforceInt(pfc, pp->children);
 	pp->ty = pp->children->ty;
         break;
-    case pptAssignment:
+    case pptAssign:
         coerceAssign(pfc, pp, FALSE);
 	flattenAssign(pfc, pPp);
 	break;

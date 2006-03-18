@@ -32,7 +32,7 @@ static boolean varWritten(struct pfVar *var, struct pfParse *pp)
 {
 switch (pp->type)
     {
-    case pptAssignment:
+    case pptAssign:
     case pptPlusEquals:
     case pptMinusEquals:
     case pptMulEquals:

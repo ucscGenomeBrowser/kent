@@ -2091,7 +2091,7 @@ switch (pp->type)
 	return codeCall(pfc, f, pp, stack);
     case pptIndirectCall:
         return codeIndirectCall(pfc, f, pp, stack);
-    case pptAssignment:
+    case pptAssign:
 	return codeAssignment(pfc, f, pp, stack, "=");
     case pptPlusEquals:
 	if (pp->ty->base == pfc->dyStringType)
@@ -2516,7 +2516,7 @@ switch (pp->type)
 	}
     case pptCall:
     case pptIndirectCall:
-    case pptAssignment:
+    case pptAssign:
     case pptPlusEquals:
     case pptMinusEquals:
     case pptMulEquals:

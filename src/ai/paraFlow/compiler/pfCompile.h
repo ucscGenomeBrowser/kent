@@ -118,7 +118,7 @@ struct pfCompile
     struct pfType *seriousErrorFullType;
     struct pfBaseType *seriousErrorType;
 
-    int isixLabelMaker;		/* Isix label generator */
+    int isxLabelMaker;		/* Isix label generator */
     int tempLabelMaker;		/* Temp var label generator */
     };
 
