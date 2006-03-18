@@ -5,5 +5,5 @@ table cytoBand
    uint   chromStart;  "Start position in genoSeq"
    uint   chromEnd;    "End position in genoSeq"
    string name;       "Name of cytogenetic band"
-   string   gieStain; "Giesma stain results"
+   string   gieStain; "Giemsa stain results"
    )
