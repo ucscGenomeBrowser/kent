@@ -852,7 +852,7 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 static boolean anyUnfoldedConstants(struct pfParse *pp)
 /* Return TRUE if no unfolded constants. */
 {
-if (pp->type == pptVarInit)
+if (pp->type == pptVarUse)
     {
     struct pfVar *var = pp->var;
     if (!var->constFolded)
@@ -872,6 +872,7 @@ rGetConstants(pp, &refList);
 
 while (refList != NULL)
     {
+    int resolveCount = 0;
     newList = NULL;
     for (ref = refList; ref != NULL; ref = nextRef)
 	{
@@ -883,14 +884,20 @@ while (refList != NULL)
 	    rConstFold(pfc, init);
 	    var->constFolded = TRUE;
 	    freeMem(ref);
+	    ++resolveCount;
 	    }
 	else
 	    {
 	    slAddHead(&newList, ref);
 	    }
 	}
+    if (resolveCount == 0)
+	{
+	struct pfVar *var = refList->val;
+	errAt(var->parse->tok, 
+	    "Circular definition of constant %s.", var->name);
+	}
     refList = newList;
-    // break;	/* ALl for now. */
     }
 }
 
