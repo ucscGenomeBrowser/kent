@@ -8,7 +8,7 @@
 #include "dnaLoad.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: findMotif.c,v 1.9 2006/03/18 02:14:00 angie Exp $";
+static char const rcsid[] = "$Id: findMotif.c,v 1.10 2006/03/18 02:34:37 angie Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */
@@ -204,7 +204,7 @@ else {
 }
 verbose(2, "#\ttype output: %s\n", wigOutput ? "bed format" : "wiggle data");
 verbose(2, "#\tspecified sequence: %s\n", argv[1]);
-verbose(2, "#\tsizeof(motifVal): %d\n", sizeof(motifVal));
+verbose(2, "#\tsizeof(motifVal): %d\n", (int)sizeof(motifVal));
 if (strand)
     {
     if (! (sameString(strand,"+") | sameString(strand,"-")))
@@ -224,7 +224,7 @@ motifLen = strlen(motif);
  */
 if (motifLen > (4*sizeof(motifVal))/2 )
     {
-    warn("ERROR: motif string too long, limit %d\n", (4*sizeof(motifVal))/2 );
+    warn("ERROR: motif string too long, limit %d\n", (4*(int)sizeof(motifVal))/2 );
     usage();
     }
 cp = motif;
