@@ -440,6 +440,36 @@ identifier gencodeGeneNamePseudoOct05 dependency
     $hg.encodeGencodeGenePseudoOct05.name
     $hg.gencodeGeneClassOct05.name minCheck=0.06 unique
 
+identifier encodePseudogeneConsensus dependency
+"Link together Consensus Pseudogenes and class"
+    $hg.encodePseudogeneConsensus.name
+    $hg.encodePseudogeneClass.name minCheck=0.16 unique
+
+identifier encodePseudogeneGIS dependency
+"Link together GIS Pseudogenes and class"
+    $hg.encodePseudogeneGIS.name
+    $hg.encodePseudogeneClass.name minCheck=0.04 unique
+
+identifier encodePseudogeneHavana dependency
+"Link together Havana Pseudogenes and class"
+    $hg.encodePseudogeneHavana.name
+    $hg.encodePseudogeneClass.name minCheck=0.17 unique
+
+identifier encodePseudogeneUcsc dependency
+"Link together Ucsc Retrogenes and class"
+    $hg.encodePseudogeneUcsc.name dupeOk
+    $hg.encodePseudogeneClass.name minCheck=0.22 unique
+
+identifier encodePseudogeneUcsc2 dependency
+"Link together Ucsc Pseudogenes and class"
+    $hg.encodePseudogeneUcsc2.name dupeOk
+    $hg.encodePseudogeneClass.name minCheck=0.04 unique
+
+identifier encodePseudogeneYale dependency
+"Link together Yale Pseudogenes and class"
+    $hg.encodePseudogeneYale.name
+    $hg.encodePseudogeneClass.name minCheck=0.16 unique
+
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
     $hg.acembly.name
