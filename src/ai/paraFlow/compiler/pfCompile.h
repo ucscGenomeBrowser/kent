@@ -117,6 +117,9 @@ struct pfCompile
     struct pfType *moduleFullType;
     struct pfType *seriousErrorFullType;
     struct pfBaseType *seriousErrorType;
+
+    int isixLabelMaker;		/* Isix label generator */
+    int tempLabelMaker;		/* Temp var label generator */
     };
 
 enum pfAccessType

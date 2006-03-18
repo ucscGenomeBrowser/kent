@@ -17,6 +17,7 @@
 #include "checkPara.h"
 #include "constFold.h"
 #include "cCoder.h"
+#include "isix.h"
 #include "pfPreamble.h"
 #include "defFile.h"
 #include "parseInto.h"
@@ -39,11 +40,13 @@ errAbort(
 "    -verbose=2 - Display info on the progress of things.\n"
 "    -endPhase=N - Break after such-and-such a phase of compiler\n"
 "                  Run it with verbose=2 to see phases defined.\n"
+"    -isix=file - Where to put intermediate code\n"
 );
 }
 
 static struct optionSpec options[] = {
    {"endPhase", OPTION_INT},
+   {"isix", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -418,6 +421,14 @@ if (endPhase < 6)
 verbose(2, "Phase 6 - constant folding\n");
 pfConstFold(pfc, program);
 dumpParseTree(pfc, program, foldedF);
+if (optionExists("isix"))
+    {
+    char *isixFileName = optionVal("isix", NULL);
+    FILE *f = mustOpen(isixFileName, "w");
+    struct dlList *isixList = isixFromParse(pfc, program);
+    isixDumpList(isixList, f);
+    carefulClose(&f);
+    }
 
 if (endPhase < 7)
     return;
