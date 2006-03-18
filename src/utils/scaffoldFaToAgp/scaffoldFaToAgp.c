@@ -2,7 +2,7 @@
 /*                   an AGP file, gap file and a lift file */
 /* This utility is used when working with genomes that consist
  * of scaffolds with no chromosome mapping (e.g. Fugu).
-/* The AGP file contains scaffolds and inter-scaffold gaps.
+ * The AGP file contains scaffolds and inter-scaffold gaps.
  * This file is used to generate the assembly ("gold") track.
  * The "gap" file contains gaps within scaffolds as well
  * as inter-scaffold gaps.  This file is used to generate the "gap" track.
@@ -17,7 +17,7 @@
 #include "../../hg/inc/agpFrag.h"
 #include "../../hg/inc/agpGap.h"
 
-static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.5 2003/10/07 18:51:30 angie Exp $";
+static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.6 2006/03/18 02:22:37 angie Exp $";
 
 #define SCAFFOLD_GAP_SIZE 1000
 /* TODO: optionize this */
@@ -61,7 +61,6 @@ void scaffoldFaToAgp(char *scaffoldFile)
 /* scaffoldFaToAgp - create AGP file, gap file and lift file 
 * from scaffold FA file */
 {
-struct dnaSeq scaffold, *scaffoldList, *pScaffold;
 DNA *scaffoldSeq;
 char *name;
 int size;
