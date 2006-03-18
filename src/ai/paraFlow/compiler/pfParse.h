@@ -13,7 +13,6 @@ enum pfParseType
     {
     pptNone = 0,
     pptProgram,
-    pptScope,
     pptInclude,
     pptImport,
     pptModule,
@@ -36,13 +35,12 @@ enum pfParseType
     pptContinue,
     pptClass,
     pptInterface,
-    pptVarDec,
-    pptNameUse,
+    pptVarDec,	/* Removed by pfBindVars */
+    pptNameUse,	/* Removed by pfBindVars */
     pptVarUse,
     pptModuleUse,
-    pptSelfUse,
     pptFieldUse,
-    pptConstUse,
+    pptConstUse,	/* Removed by pfType */
     pptPolymorphic,
     pptToDec,
     pptFlowDec,
@@ -77,11 +75,6 @@ enum pfParseType
     pptBitXor,
     pptLogAnd,
     pptLogOr,
-    pptRoot,
-    pptParent,
-    pptSys,		/* (Unused) Represents system include path. */
-    pptUser,		/* (Unused) Represents user include path. */
-    pptSysOrUser,	/* (Unused) Represent either include path. */
     pptVarInit,
     pptFormalParameter,
     pptPlaceholder,
@@ -102,8 +95,8 @@ enum pfParseType
     pptParaArgMax,
     pptParaGet,
     pptParaFilter,
-    pptUntypedElInCollection,	
-    pptUntypedKeyInCollection,	
+    pptUntypedElInCollection,	/* Removed by pfType */
+    pptUntypedKeyInCollection,	/* Removed by pfType */
     pptOperatorDec,
     pptArrayAppend,
     pptIndexRange,
@@ -222,7 +215,7 @@ enum pfParseType
     pptConstString,
     pptConstZero,
 
-    pptTypeCount,
+    pptTypeCount,	 /* Not emitted, just to keep track of # of types */
     };
 
 char *pfParseTypeAsString(enum pfParseType type);

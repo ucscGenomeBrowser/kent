@@ -14,8 +14,6 @@ switch (type)
     {
     case pptProgram:
     	return "pptProgram";
-    case pptScope:
-        return "pptScope";
     case pptInclude:
         return "pptInclude";
     case pptImport:
@@ -66,8 +64,6 @@ switch (type)
 	return "pptNameUse";
     case pptFieldUse:
 	return "pptFieldUse";
-    case pptSelfUse:
-	return "pptSelfUse";
     case pptVarUse:
 	return "pptVarUse";
     case pptModuleUse:
@@ -142,16 +138,6 @@ switch (type)
 	return "pptLogAnd";
     case pptLogOr:
 	return "pptLogOr";
-    case pptRoot:
-	return "pptRoot";
-    case pptParent:
-	return "pptParent";
-    case pptSys:
-	return "pptSys";
-    case pptUser:
-	return "pptUser";
-    case pptSysOrUser:
-	return "pptSysOrUser";
     case pptVarInit:
         return "pptVarInit";
     case pptFormalParameter:
