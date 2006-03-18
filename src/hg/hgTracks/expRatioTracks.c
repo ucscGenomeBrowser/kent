@@ -347,6 +347,41 @@ else
 bedFreeList(&bedList);
 }
 
+static void lfsFromAffyAllExonBed(struct track *tg)
+/* filters the bedList stored at tg->items
+into a linkedFeaturesSeries as determined by
+filter type */
+{
+struct bed *bedList = NULL;
+char varName[128];
+char *affyAllExonMap;
+enum affyAllExonOptEnum affyAllExonType;
+
+bedList = tg->items;
+safef(varName, sizeof(varName), "%s.%s", tg->mapName, "type");
+affyAllExonMap = cartUsualString(cart, varName, affyAllExonEnumToString(affyAllExonTissue));
+affyAllExonType = affyAllExonStringToEnum(affyAllExonMap);
+if(tg->limitedVis == tvDense)
+    {
+    tg->items = lfsFromMsBedSimple(bedList, "Affymetrix");
+    }
+else if(affyAllExonType == affyAllExonTissue)
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyAllExonTissue, NULL, -1);
+    slSort(&tg->items,lfsSortByName);
+    }
+else if(affyAllExonType == affyAllExonChip)
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyAllExonChip, NULL, -1);
+    }
+else
+    {
+    tg->items = msBedGroupByIndex(bedList, "hgFixed", tg->expTable, affyAllExonAllData, affyAllExonMap, 1);
+    slSort(&tg->items,lfsSortByName);
+    }
+bedFreeList(&bedList);
+}
+
 void lfsFromAffyUclaNormBed(struct track *tg)
 /* filters the bedList stored at tg->items
 into a linkedFeaturesSeries as determined by
@@ -1152,4 +1187,11 @@ void loweExpRatioMethods(struct track *tg)
 expRatioMethods(tg);
 tg->itemColor = loweRatioColor;
 
+}
+
+void affyAllExonMethods(struct track *tg)
+/* Special methods for the affy all exon chips. */
+{
+expRatioMethods(tg);
+tg->trackFilter = lfsFromAffyAllExonBed;
 }

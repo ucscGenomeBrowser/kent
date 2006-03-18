@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1079 2006/03/08 17:48:42 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1080 2006/03/18 08:48:29 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10832,6 +10832,7 @@ registerTrackHandler("nci60", nci60Methods);
 registerTrackHandler("cghNci60", cghNci60Methods);
 registerTrackHandler("rosetta", rosettaMethods);
 registerTrackHandler("affy", affyMethods);
+registerTrackHandler("affyHumanExon", affyAllExonMethods);
 registerTrackHandler("affyRatio", affyRatioMethods);
 registerTrackHandler("affyUclaNorm", affyUclaNormMethods);
 registerTrackHandler("gnfAtlas2", affyRatioMethods);
@@ -10919,7 +10920,9 @@ loadFromTrackDb(&trackList);
 if (userSeqString != NULL) slSafeAddHead(&trackList, userPslTg());
 slSafeAddHead(&trackList, oligoMatchTg());
 if (restrictionEnzymesOk())
+    {
     slSafeAddHead(&trackList, cuttersTg());
+    }
 loadCustomTracks(&trackList);
 
 groupTracks(&trackList, pGroupList);

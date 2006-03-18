@@ -695,6 +695,9 @@ void affyMethods(struct track *tg);
 /* set up special methods for NCI60 track and tracks with multiple
    scores in general */
 
+void affyAllExonMethods(struct track *tg);
+/* Special methods for the affy all exon chips. */
+
 void affyRatioMethods(struct track *tg);
 /* set up special methods for NCI60 track and tracks with multiple
    scores in general */

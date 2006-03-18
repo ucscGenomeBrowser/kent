@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.261 2006/03/12 20:12:36 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.262 2006/03/18 08:48:26 aamp Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -682,6 +682,25 @@ affyMap = cartUsualString(cart, varName, affyEnumToString(affyTissue));
 col = cartUsualString(cart, "exprssn.color", "rg");
 printf("<p><b>Experiment Display: </b> ");
 affyDropDown(varName, affyMap);
+printf(" <b>Color Scheme</b>: ");
+cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
+printf(" red/green ");
+cgiMakeRadioButton("exprssn.color", "rb", sameString(col, "rb"));
+printf(" red/blue ");
+}
+
+void affyAllExonUi(struct trackDb *tdb)
+/* put up UI for the affy all exon tracks. */
+{
+char *affyAllExonMap;
+char *col;
+char varName[128];
+
+safef(varName, sizeof(varName), "%s.%s", tdb->tableName, "type");
+affyAllExonMap = cartUsualString(cart, varName, affyAllExonEnumToString(affyAllExonTissue));
+col = cartUsualString(cart, "exprssn.color", "rg");
+printf("<p><b>Experiment Display: </b> ");
+affyAllExonDropDown(varName, affyAllExonMap);
 printf(" <b>Color Scheme</b>: ");
 cgiMakeRadioButton("exprssn.color", "rg", sameString(col, "rg"));
 printf(" red/green ");
@@ -1911,6 +1930,8 @@ else if (startsWith("wig", tdb->type))
         }
 else if (sameString(track, "affyRatio") || sameString(track, "gnfAtlas2") )
         affyUi(tdb);
+else if (sameString(track, "affyHumanExon"))
+        affyAllExonUi(tdb);
 else if (sameString(track, "ancientR"))
         ancientRUi(tdb);
 else if (sameString(track, "zoo") || sameString(track, "zooNew" ))

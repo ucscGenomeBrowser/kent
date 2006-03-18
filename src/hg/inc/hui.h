@@ -560,6 +560,23 @@ char *affyEnumToString(enum affyOptEnum x);
 void affyDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
+/*** Some Stuff for the affy all exon track ***/
+
+enum affyAllExonOptEnum {
+    affyAllExonChip = 0,
+    affyAllExonTissue = 1,
+    affyAllExonAllData = 2,
+};
+
+enum affyAllExonOptEnum affyAllExonStringToEnum(char *string);
+/* Convert from string to enum representation. */
+
+char *affyAllExonEnumToString(enum affyAllExonOptEnum x);
+/* Convert from enum to string representation. */
+
+void affyAllExonDropDown(char *var, char *curVal);
+/* Make drop down of options. */
+
 /****** Some stuff for Rosetta related controls *******/
 
 enum rosettaOptEnum {

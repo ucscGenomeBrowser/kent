@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.75 2006/03/03 03:52:56 markd Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.76 2006/03/18 08:48:22 aamp Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -588,6 +588,35 @@ void affyDropDown(char *var, char *curVal)
 /* Make drop down of options. */
 {
 cgiMakeDropList(var, affyOptions, ArraySize(affyOptions), 
+	curVal);
+}
+
+/****** Some stuff for affy all exon related controls *******/
+
+static char *affyAllExonOptions[] = {
+    "Chip",
+    "Tissue Averages"
+    };
+
+enum affyAllExonOptEnum affyAllExonStringToEnum(char *string)
+/* Convert from string to enum representation. */
+{
+int x = stringIx(string, affyAllExonOptions);
+if (x < 0)
+   errAbort("hui::affyAllExonStringToEnum() - Unknown option %s", string);
+return x;
+}
+
+char *affyAllExonEnumToString(enum affyAllExonOptEnum x)
+/* Convert from enum to string representation. */
+{
+return affyAllExonOptions[x];
+}
+
+void affyAllExonDropDown(char *var, char *curVal)
+/* Make drop down of options. */
+{
+cgiMakeDropList(var, affyAllExonOptions, ArraySize(affyAllExonOptions), 
 	curVal);
 }
 
