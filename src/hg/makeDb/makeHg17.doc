@@ -20610,3 +20610,23 @@ mkdir -p ${blatDir}/{over,net}
 ssh hgwdev
 knownToVisiGene hg17 -fromProbePsl=vgAllProbes
 
+########################################################################
+### microRNA targets tracks  (WORKING - 2006-03-17 - Hiram)
+### from: http://pictar.bio.nyu.edu/ Rajewsky Lab
+### Nikolaus Rajewsky nr@scarbo.bio.nyu.edu
+    ssh hgwdev
+    mkdir /cluster/data/hg17/bed/picTar
+    cd /cluster/data/hg17/bed/picTar
+    wget --timestamping \
+	'http://scarbo.bio.nyu.edu/~nr/new_mammals_bed' -O newMammals.bed
+
+    wget --timestamping \
+	'http://scarbo.bio.nyu.edu/~nr/new_mammals_chicken_bed' \
+	-O newMammalsChicken.bed
+
+    grep -v "^track" newMammals.bed \
+	| hgLoadBed -strict hg17 picTarMiRNA4Way stdin
+    #	Loaded 204953 elements of size 9
+    grep -v "^track" newMammalsChicken.bed \
+	| hgLoadBed -strict hg17 picTarMiRNA5Way stdin
+    #	Loaded 43046 elements of size 9
