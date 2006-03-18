@@ -234,6 +234,7 @@ struct pfParse
     struct pfParse *next;	/* Next in list */
     UBYTE type;			/* Node type */
     UBYTE access;		/* a pfAccessType */
+    UBYTE isConst;		/* TRUE if constant */
     char *name;			/* Node name - not allocated here */
     struct pfToken *tok;	/* Token associated with node. */
     struct pfScope *scope;	/* Associated scope. */

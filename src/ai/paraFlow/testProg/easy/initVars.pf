@@ -7,7 +7,7 @@ string name = "Jim", address = "123 Main St.";
 float x = 1, y = 1.0, z = -2.04879;
 float k = -5.0e3;
 short i = 1, j = -200;
-short ix = 100000;
+short ix = 10000;
 byte bb = 9, cc = 8;
 byte flags = 1;
 long longA = 123456123456L, longB = -0xABCDEF1234;

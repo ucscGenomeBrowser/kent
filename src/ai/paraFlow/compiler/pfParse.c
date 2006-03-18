@@ -997,12 +997,13 @@ while (pp != NULL)
 return FALSE;
 }
 
-static void rSetAccess(struct pfParse *pp, enum pfAccessType access)
+static void rSetAccess(struct pfParse *pp, enum pfAccessType access, bool isConst)
 /* Set access type for self and descendents. */
 {
 pp->access = access;
+pp->isConst = isConst;
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    rSetAccess(pp, access);
+    rSetAccess(pp, access, isConst);
 }
 
 static struct pfParse *parseVarDec(struct pfCompile *pfc, 
@@ -1010,9 +1011,9 @@ static struct pfParse *parseVarDec(struct pfCompile *pfc,
 	struct pfScope *scope)
 /* Parse something of the form [static] typeExp varName */
 {
-struct pfToken *tok = *pTokList;
+struct pfToken *tok = *pTokList, *constTok = NULL;
 struct pfParse *pp;
-bool inAccessSection = TRUE;
+bool inAccessSection = TRUE, isConst = FALSE;
 enum pfAccessType access = paUsual;
 
 while (inAccessSection)
@@ -1020,7 +1021,6 @@ while (inAccessSection)
     enum pfTokType tokType = tok->type;
     switch (tokType)
         {
-	case pftConst:
 	case pftGlobal:
 	case pftLocal:
 	case pftReadable:
@@ -1032,9 +1032,6 @@ while (inAccessSection)
 	        errAt(tok, "Only one of global/readable/const/writable/local/static allowed.");
 	    switch (tokType)
 	        {
-		case pftConst:
-		    access = paConst;
-		    break;
 		case pftGlobal:
 		    access = paGlobal;
 		    if (inFunc)
@@ -1067,6 +1064,12 @@ while (inAccessSection)
 	    break;
 	}
     }
+if (tok->type == pftConst)
+    {
+    isConst = TRUE;
+    constTok = tok;
+    tok = tok->next;
+    }
 pp = parseOf(pfc, parent, &tok, scope);
 if (tok->type == pftName)
     {
@@ -1078,10 +1081,13 @@ if (tok->type == pftName)
     dec->children = type;
     type->next = name;
     dec->access = access;
-    rSetAccess(type, access);
+    dec->isConst = isConst;
+    rSetAccess(type, access, isConst);
     dec->name = name->name;
     pp = dec;
     }
+else if (isConst)
+    errAt(constTok, "Misplaced const");
 *pTokList = tok;
 return pp;
 }
@@ -1139,6 +1145,7 @@ if (type != pptNone)
     assign = pfParseNew(type, tok, parent, scope);
     assign->children = pp;
     assign->access = pp->access;
+    assign->isConst = pp->isConst;
     assign->name = pp->name;
     pp->parent = assign;
     for (;;)
@@ -1176,6 +1183,7 @@ dupeType->next = dupeName;
 dupeName->next = NULL;
 pp->type = pptVarDec;
 pp->access = type->access;
+pp->isConst = type->isConst;
 }
 
 static boolean anyVarDecs(struct pfParse *pp)
@@ -1198,6 +1206,21 @@ return (pp->type == pptVarDec
 	|| (pp->type == pptAssignment && pp->children->type == pptVarDec));
 }
 
+static void updateAccessAndConst(struct pfParse *pp, struct pfParse *type, 
+	enum pfAccessType *pAccess, bool *pIsConst)
+/* If pp has access or const modifiers then update pAccess and pConst
+ * with them.  Otherwise use pAccess and pConst to set them. */
+{
+if (pp->access == paUsual)
+    type->access = pp->access = *pAccess;
+else
+    *pAccess = pp->access;
+if (pp->isConst)
+    *pIsConst = TRUE;
+else
+    type->isConst = pp->isConst = *pIsConst;
+}
+
 static void addMissingTypesInDeclareTuple(struct pfParse *tuple)
 /* If first element of tuple is typed, then make sure rest
  * is typed too. */
@@ -1206,6 +1229,7 @@ struct pfParse *vars = tuple->children, *next;
 struct pfParse *type = NULL;
 struct pfParse *pp;
 enum pfAccessType access = vars->access; 
+bool isConst = vars->isConst;
 
 /* Make sure first item in tuple is a var dec. */
 if (!isVarDecOrVarDecInit(vars))
@@ -1229,10 +1253,7 @@ for (pp = vars; pp != NULL; pp = pp->next)
 	{
 	type = pp->children;
 	pp->name = type->next->name;
-	if (pp->access == paUsual)
-	    type->access = pp->access = access;
-	else
-	    access = pp->access;
+	updateAccessAndConst(pp, type, &access, &isConst);
 	}
     else if (pp->type == pptNameUse)
 	{
@@ -1244,15 +1265,13 @@ for (pp = vars; pp != NULL; pp = pp->next)
 	if (sub->type == pptVarDec)
 	    {
 	    type = sub->children;
-	    if (sub->access == paUsual)
-		type->access = sub->access = access;
-	    else
-	        access = sub->access;
+	    updateAccessAndConst(sub, type, &access, &isConst);
 	    }
 	else if (sub->type == pptNameUse)
 	    {
 	    flipNameUseToVarDec(sub, type, pp);
 	    pp->access = sub->access;
+	    pp->isConst = sub->isConst;
 	    pp->ty = sub->ty;
 	    }
 	}
@@ -1265,7 +1284,7 @@ static void varDecAndAssignToVarInit(struct pfParse *pp)
 if (pp->type == pptVarDec)
     {
     pp->type = pptVarInit;
-    if (pp->access == paConst)
+    if (pp->isConst)
 	{
 	boolean ok = FALSE;
 	if (pp->parent->type == pptTuple || pp->parent->type == pptTypeTuple)
@@ -1286,6 +1305,7 @@ else if (pp->type == pptAssignment)
 	struct pfParse *right = left->next;
 	pp->type = pptVarInit;
 	pp->access = left->access;
+	pp->isConst = left->isConst;
 	pp->children = left->children;
 	slAddTail(&pp->children, right);
 	}

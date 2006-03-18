@@ -90,6 +90,7 @@ struct pfType
     struct pfParse *init;	/* Initialization if any. */
     UBYTE tyty;			/* Some PfTyty value. */
     UBYTE access;		/* Access type. */
+    bool isConst;		/* TRUE if it's a constant. */
     short polyOffset;		/* Offset in polymorphic function table. */
     };
 

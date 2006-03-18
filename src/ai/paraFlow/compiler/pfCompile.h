@@ -123,7 +123,6 @@ enum pfAccessType
 /* Access type for variables, members, and functions */
     {
     paUsual=0,	/* Nothing special. */
-    paConst,
     paGlobal,
     paLocal,
     paStatic,

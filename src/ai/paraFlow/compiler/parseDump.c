@@ -457,12 +457,17 @@ void pfParseDumpOne(struct pfParse *pp, int level, FILE *f)
 {
 spaceOut(f, level*3);
 fprintf(f, "%s", pfParseTypeAsString(pp->type));
-if (pp->access != paUsual)
-    fprintf(f, " %s", pfAccessTypeAsString(pp->access));
 if (pp->ty != NULL)
     {
     fprintf(f, " ");
     pfTypeDump(pp->ty, f);
+    }
+else
+    {
+    if (pp->access != paUsual)
+	fprintf(f, " %s", pfAccessTypeAsString(pp->access));
+    if (pp->isConst)
+	fprintf(f, " const");
     }
 if (pp->name != NULL)
     fprintf(f, " %s", pp->name);

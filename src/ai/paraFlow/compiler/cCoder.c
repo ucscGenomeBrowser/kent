@@ -1793,7 +1793,9 @@ struct pfParse *cast;
 for (cast = castList; cast != NULL; cast = cast->next)
     {
     if (cast->type != pptPlaceholder)
+	{
 	castStack(pfc, f, cast, stack);
+	}
     stack += 1;
     }
 }
@@ -2144,6 +2146,8 @@ switch (pp->type)
         return codeBinaryOp(pfc, f, pp, stack, "&");
     case pptBitOr:
         return codeBinaryOp(pfc, f, pp, stack, "|");
+    case pptBitXor:
+        return codeBinaryOp(pfc, f, pp, stack, "^");
     case pptShiftLeft:
         return codeBinaryOp(pfc, f, pp, stack, "<<");
     case pptShiftRight:

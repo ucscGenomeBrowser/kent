@@ -181,6 +181,7 @@ switch (pp->type)
 	    {
 	    struct pfType *ty = pfTypeNew(base);
 	    ty->access = pp->access;
+	    ty->isConst = pp->isConst;
 	    pp->ty = ty;
 	    }
 	else
@@ -226,6 +227,7 @@ switch (pp->type)
 	struct pfParse *type = pp->children;
 	struct pfParse *name = type->next;
 	pp->ty->access = pp->access;
+	pp->ty->isConst = pp->isConst;
 	pp->var = pfScopeAddVar(pp->scope, name->name, pp->ty, pp);
 	break;
 	}
@@ -240,6 +242,7 @@ switch (pp->type)
 	struct pfParse *class = pfParseEnclosingClass(pp->parent);
 	name->type = pptSymName;
 	pp->ty->access = pp->access;
+	pp->ty->isConst = pp->isConst;
 	pp->var = pfScopeAddVar(pp->scope->parent, name->name, pp->ty, pp);
 	if (class != NULL)
 	    {

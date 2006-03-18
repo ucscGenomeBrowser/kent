@@ -115,6 +115,8 @@ else
     {
     if (ty->access != paUsual)
         dyStringPrintf(dy, "%s ", pfAccessTypeAsString(ty->access));
+    if (ty->isConst)
+        dyStringPrintf(dy, "const ");
     if (ty->tyty == tytyTuple)
 	{
 	dyStringPrintf(dy, "(");
@@ -1594,8 +1596,9 @@ switch (pp->type)
         {
 	struct pfVar *var = pp->var;
 	struct pfModule *varModule = var->scope->module;
-	enum pfAccessType access = var->ty->access;
-	if (access == paConst)
+	struct pfType *ty = var->ty;
+	enum pfAccessType access = ty->access;
+	if (ty->isConst)
 	    errAt(pp->tok, "Writing to a const");
 	if (varModule)
 	    {
@@ -1818,7 +1821,7 @@ switch (pp->type)
     case pptVarUse:
 	{
         struct pfVar *var = pp->var;
-	if (var->ty->access != paConst)
+	if (!var->ty->isConst)
 	   errAt(pp->tok, "Can only initialize a constant with other constants.");
 	break;
 	}
@@ -1842,7 +1845,7 @@ gotDimensionedArray = checkTypeWellFormed(pfc, type);
 if (init && gotDimensionedArray)
     errAt(init->tok, "Can't initialized dimensioned array. Please either leave out [size] after array or leave out initialization tuple.");
 checkRedefinitionInParent(pfc, pp);
-if (pp->access == paConst && init != NULL)
+if (pp->isConst && init != NULL)
     checkConstExp(pfc, init);
 }
 
@@ -1996,6 +1999,12 @@ static void modifierNotAllowed(struct pfParse *pp)
 {
 errAt(pp->tok, "Variable modifier %s not allowed here", 
      pfAccessTypeAsString(pp->access));
+}
+
+static void constNotAllowed(struct pfParse *pp)
+/* Complain about inappropriate const. */
+{
+errAt(pp->tok, "const not allowed here");
 }
 
 static void addVarToClass(struct pfBaseType *class, struct pfParse *varPp)
@@ -2476,10 +2485,11 @@ for (pp = tuple->children; pp != NULL; pp = pp->next)
 	case paGlobal:
 	case paLocal:
 	case paStatic:
-	case paConst:
 	    modifierNotAllowed(pp);
 	    break;
 	}
+    if (pp->isConst)
+	constNotAllowed(pp);
     pp->ty->fieldName = pp->name;
     }
 }
@@ -2908,8 +2918,10 @@ switch (pp->type)
 	pp->ty = pfTypeNew(pfc->bitType);
 	break;
     case pptDiv:
+#ifdef TOOHARD	/* Ripples through constant folder are nasty */
 	coerceToDouble(pfc, &pp->children);
 	coerceToDouble(pfc, &pp->children->next);
+#endif /* TOOHARD */
         coerceBinaryOp(pfc, pp, TRUE, FALSE, FALSE, FALSE);
         break;
     case pptMul:

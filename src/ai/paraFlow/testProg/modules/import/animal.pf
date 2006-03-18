@@ -2,7 +2,7 @@ import 'num'
 
 writable string zebra = 'zebra';
 global string monkey = 'monkey';
-global string dog = 'dog';
+global const string dog = 'dog';
 global string cat = 'cat';
 
 global to stutter(string s)

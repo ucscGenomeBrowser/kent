@@ -15,6 +15,7 @@
 #include "pfBindVars.h"
 #include "checkPoly.h"
 #include "checkPara.h"
+#include "constFold.h"
 #include "cCoder.h"
 #include "pfPreamble.h"
 #include "defFile.h"
@@ -92,8 +93,6 @@ switch (pa)
     {
     case paUsual:
 	return "usual";
-    case paConst:
-	return "const";
     case paGlobal:
 	return "global";
     case paLocal:
@@ -363,11 +362,13 @@ char *parseFile = "out.parse";
 char *typeFile = "out.typed";
 char *boundFile = "out.bound";
 char *scopeFile = "out.scope";
+char *foldedFile = "out.folded";
 char *cFile = "out.c";
 FILE *parseF = mustOpen(parseFile, "w");
 FILE *typeF = mustOpen(typeFile, "w");
 FILE *scopeF = mustOpen(scopeFile, "w");
 FILE *boundF = mustOpen(boundFile, "w");
+FILE *foldedF = mustOpen(foldedFile, "w");
 
 if (endPhase < 0)
     return;
@@ -392,29 +393,31 @@ carefulClose(&parseF);
 
 if (endPhase < 3)
     return;
-verbose(2, "Phase 3 - nothing\n");
-
-if (endPhase < 4)
-    return;
-verbose(2, "Phase 4 - binding names\n");
+verbose(2, "Phase 3 - binding names\n");
 pfBindVars(pfc, program);
 dumpParseTree(pfc, program, boundF);
 carefulClose(&boundF);
 
-if (endPhase < 5)
+if (endPhase < 4)
     return;
-verbose(2, "Phase 5 - type checking\n");
+verbose(2, "Phase 4 - type checking\n");
 pfTypeCheck(pfc, &program);
 dumpParseTree(pfc, program, typeF);
 carefulClose(&typeF);
 
-if (endPhase < 6)
+if (endPhase < 5)
     return;
-verbose(2, "Phase 6 - polymorphic, para, and flow checks\n");
+verbose(2, "Phase 5 - polymorphic, para, and flow checks\n");
 checkPolymorphic(pfc, pfc->scopeRefList);
 checkParaFlow(pfc, program);
 printScopeInfo(scopeF, 0, program);
 carefulClose(&scopeF);
+
+if (endPhase < 6)
+    return;
+verbose(2, "Phase 6 - constant folding\n");
+pfConstFold(pfc, program);
+dumpParseTree(pfc, program, foldedF);
 
 if (endPhase < 7)
     return;

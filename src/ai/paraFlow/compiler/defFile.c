@@ -79,6 +79,11 @@ if (printLocals || pp->access == paWritable || pp->access == paGlobal)
     start = end = type->tok;
     if (pp->access != paUsual)
 	fprintf(f, "%s ", pfAccessTypeAsString(pp->access));
+    if (pp->isConst)
+	{
+        fprintf(f, "const ");
+	printInit = TRUE;
+	}
     findSpanningTokens(type, &start, &end);
     if (end->next->type == ')')
 	end = end->next;	// Hack for function pointers... */
