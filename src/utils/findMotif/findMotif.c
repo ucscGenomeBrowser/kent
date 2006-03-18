@@ -8,7 +8,7 @@
 #include "dnaLoad.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: findMotif.c,v 1.8 2005/02/24 01:18:45 aamp Exp $";
+static char const rcsid[] = "$Id: findMotif.c,v 1.9 2006/03/18 02:14:00 angie Exp $";
 
 char *chr = (char *)NULL;	/*	process the one chromosome listed */
 char *motif = (char *)NULL;	/*	specified motif string */
@@ -72,8 +72,8 @@ unsigned long long gapCount = 0;
 mask = 3;
 for (i=1; i < motifLen; ++i )
 	mask = (mask << 2) | 3;
-verbose(2, "#\tsequence: %s size: %d, motifMask: %#lx\n", seq->name, seq->size, mask);
-verbose(2, "#\tmotif numerical value: %llu (%#lx)\n", posNeedle, posNeedle);
+verbose(2, "#\tsequence: %s size: %d, motifMask: %#llx\n", seq->name, seq->size, mask);
+verbose(2, "#\tmotif numerical value: %llu (%#llx)\n", posNeedle, posNeedle);
 
 /* Need "chrom" */
 
@@ -81,7 +81,7 @@ dna = seq->dna;
 for (i=0; i < seq->size; ++i)
     {
     ++chromPosition;
-    val = ntVal[dna[i]];
+    val = ntVal[(int)dna[i]];
     switch (val)
 	{
 	case T_BASE_VAL:
@@ -157,7 +157,6 @@ carefulClose(&nf);
 static void findMotif(char *input)
 /* findMotif - find specified motif in sequence file. */
 {
-char dir[256], chrom[128], ext[64];
 struct dnaLoad *dl = dnaLoadOpen(input);
 struct dnaSeq *seq; 
 
