@@ -251,7 +251,6 @@ struct seqList *seqList = NULL, *seqEl;
 FILE *f;
 char *comment;
 struct dnaSeq *seq;
-int seqCount = 0;
 
 f = mustOpen(faFileName, "r");
 while (faReadNext(f, NULL, TRUE, &comment, &seq))
@@ -664,7 +663,7 @@ int i;
  * Return NULL if so. */
 for (i=0; i<tileSize; ++i)
     {
-    if (ntVal[tile[i]] < 0)
+    if (ntVal[(int)tile[i]] < 0)
 	return NULL;
     }
 
@@ -673,7 +672,7 @@ prof->locale.mean = location;
 prof->locale.standardDeviation = seqLen/2;
 for (col = prof->columns; col != NULL; col = col->next)
     {
-    baseVal = ntVal[*tile++];
+    baseVal = ntVal[(int)(*tile++)];
     if (baseVal < 0)
         col->slogProb[0] = col->slogProb[1] = col->slogProb[2] = col->slogProb[3] = slogOneFourth;
     else
@@ -857,7 +856,7 @@ int baseIx;
 
 for (i=0; i<patSize; ++i)
     {
-    baseIx = ntVal[pat[i]];
+    baseIx = ntVal[(int)pat[i]];
     slogProb += slogFreq[baseIx];
     }
 return slogProb;
@@ -874,11 +873,11 @@ int startIx = offset;
 int endIx = offset+patSize;
 if (startIx == 0)
     {
-    slogProb = slogFreq[ntVal[dna[startIx]]];
+    slogProb = slogFreq[ntVal[(int)dna[startIx]]];
     startIx = 1;
     }
 for (i=startIx; i<endIx; ++i)
-    slogProb += slogMark1Prob(ntVal[dna[i-1]], ntVal[dna[i]]);
+    slogProb += slogMark1Prob(ntVal[(int)dna[i-1]], ntVal[(int)dna[i]]);
 return slogProb;
 }
 
@@ -894,16 +893,16 @@ int endIx = offset+patSize;
 
 if (startIx == 0)
     {
-    slogProb += slogFreq[ntVal[dna[0]]];
+    slogProb += slogFreq[ntVal[(int)dna[0]]];
     startIx = 1;
     }
 if (startIx == 1)
     {
-    slogProb += slogMark1Prob(ntVal[dna[0]], ntVal[dna[1]]);
+    slogProb += slogMark1Prob(ntVal[(int)dna[0]], ntVal[(int)dna[1]]);
     startIx = 2;
     }
 for (i=startIx; i<endIx; ++i)
-    slogProb += slogMark2Prob(ntVal[dna[i-2]], ntVal[dna[i-1]], ntVal[dna[i]]);
+    slogProb += slogMark2Prob(ntVal[(int)dna[i-2]], ntVal[(int)dna[i-1]], ntVal[(int)dna[i]]);
 return slogProb;
 }
 
@@ -919,7 +918,7 @@ int patUsed = 0;
 
 if (startIx == 0)
     {
-    slogProb += slogFreq[ntVal[dna[0]]];
+    slogProb += slogFreq[ntVal[(int)dna[0]]];
     startIx = 1;
     ++patUsed;
     if (++frame >= 3)
@@ -927,7 +926,7 @@ if (startIx == 0)
     }
 if (startIx == 1)
     {
-    slogProb += slogMark1Prob(ntVal[dna[0]], ntVal[dna[1]]);
+    slogProb += slogMark1Prob(ntVal[(int)dna[0]], ntVal[(int)dna[1]]);
     startIx = 2;
     ++patUsed;
     if (++frame >= 3)
@@ -935,7 +934,7 @@ if (startIx == 1)
     }
 for (i=startIx; i<endIx; ++i)
     {
-    slogProb += slogCodingProb(frame, ntVal[dna[i-2]], ntVal[dna[i-1]], ntVal[dna[i]]);
+    slogProb += slogCodingProb(frame, ntVal[(int)dna[i-2]], ntVal[(int)dna[i-1]], ntVal[(int)dna[i]]);
     ++patUsed;
     if (++frame >= 3)
         frame = 0;
@@ -981,7 +980,7 @@ int baseVal;
 
 for (col = prof->columns; col != NULL; col = col->next)
     {
-    if ((baseVal = ntVal[*pat++]) >= 0)
+    if ((baseVal = ntVal[(int)(*pat++)]) >= 0)
         slogProb += col->slogProb[baseVal] + *softMask++;
     else 
         slogProb += slogOneFourth;
@@ -999,7 +998,7 @@ int baseVal;
 
 while (--colCount >= 0)
     {
-    if ((baseVal = ntVal[*pat++]) >= 0)
+    if ((baseVal = ntVal[(int)(*pat++)]) >= 0)
         slogProb += col->slogProb[baseVal] + *softMask++;
     else 
         slogProb += slogOneFourth;
@@ -1293,7 +1292,7 @@ for (position = posList; position != NULL; position = position->next)
         pos = position->pos +  profSize - 1 - posOffset;
         if (pos >= 0 && pos < seqSize)
             {
-            baseVal = ntVal[ntCompTable[dna[pos]]];
+            baseVal = ntVal[(int)ntCompTable[(int)dna[pos]]];
             if (baseVal >= 0)
                 hist[baseVal] += 1;
             }
@@ -1303,7 +1302,7 @@ for (position = posList; position != NULL; position = position->next)
         pos = position->pos + posOffset;
         if (pos >= 0 && pos < seqSize)
             {
-            baseVal = ntVal[dna[pos]];
+            baseVal = ntVal[(int)dna[pos]];
             if (baseVal >= 0)
                 hist[baseVal] += 1;
             }
@@ -1454,7 +1453,6 @@ else if (retProfile != NULL)
     struct profile *rcNewProf = NULL;
     struct dnaSeq *seq;
     DNA *dna;
-    int hitIx = 0;
     int colIx;
     double minSd = 1.0;
     double sd;
@@ -1478,7 +1476,7 @@ else if (retProfile != NULL)
             reverseComplement(dna, profSize);
         for (colIx = 0; colIx < profSize; ++colIx)
             {
-            int baseVal = ntVal[dna[colIx]];
+            int baseVal = ntVal[(int)dna[colIx]];
             if (baseVal < 0)    /* Matching an N - distribute weight evenly. */
                 {
                 int i;
@@ -1878,9 +1876,9 @@ for (frame=0; frame<3; frame += 1)
  * by a factor of 100.... */
 for (i=0; i<ArraySize(stopCodons); ++i)
     {
-    int i0 = ntVal[stopCodons[i][0]]+1;
-    int i1 = ntVal[stopCodons[i][1]]+1;
-    int i2 = ntVal[stopCodons[i][2]]+1;
+    int i0 = ntVal[(int)stopCodons[i][0]]+1;
+    int i1 = ntVal[(int)stopCodons[i][1]]+1;
+    int i2 = ntVal[(int)stopCodons[i][2]]+1;
     double logVal;
     logVal = (codingMark2[2][i0][i1][i2] *= 0.01);
     slogCodingMark2[2][i0][i1][i2] = carefulSlog(logVal);
@@ -2079,7 +2077,6 @@ long profHash = 0, lastHash = 0;
 int score = -0x7fffffff, lastScore;
 struct profile *newProf, *rcNewProf = NULL;
 struct profile *prof = initProf, *rcProf = NULL;
-long startTime = clock1000();
 
 if (considerRc)
     rcProf = rcProfileCopy(prof);   
@@ -2713,7 +2710,7 @@ void doRandomTest(boolean premade, boolean considerRc)
 /* Generate tables for scores on random sequences. */
 {
 int seqLen, seqCount;
-struct tempName randTn, profTn;
+struct tempName randTn;
 FILE *logFile = mustOpen("\\temp\\random.txt", "w");
 int reps = 2;
 int i;
@@ -3005,7 +3002,7 @@ for (;;)
                 word = words[0];
                 if (strlen(word) != 1)
                     explainMotif();
-                if ((baseVal = ntVal[word[0]]) < 0)
+                if ((baseVal = ntVal[(int)word[0]]) < 0)
                     explainMotif();
                 if (gotNt[baseVal])
                     errAbort("Got more than one row for %s", word);

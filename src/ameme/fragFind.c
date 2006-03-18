@@ -18,7 +18,7 @@ int baseVal;
 
 for (i=0; i<oligoSize; ++i)
     {
-    if ((baseVal = ntVal[oligo[i]]) < 0)
+    if ((baseVal = ntVal[(int)oligo[i]]) < 0)
         return -1;
     acc <<= 2;
     acc += baseVal;
@@ -46,7 +46,6 @@ int tableByteSize = tableSize * sizeof(int);
 int *table = needLargeMem(tableByteSize);
 char oligo[17];
 int i;
-long startTime = clock1000();
 
 for (i=0; i<tableSize; ++i)
     {
@@ -167,7 +166,6 @@ static int fuzzValOne(int *table, int oligoSize, int *rcTable)
  * matches that are off by no more than one. */
 {
 int tableSize = (1<<(oligoSize+oligoSize));
-int tableByteSize = tableSize * sizeof(int);
 int tableIx;
 int bestVal = -0x3ffffff;
 int bestIx;
@@ -218,7 +216,6 @@ static int fuzzValTwo(int *table, int oligoSize, int *rcTable)
  * matches that are off by no more than one. */
 {
 int tableSize = (1<<(oligoSize+oligoSize));
-int tableByteSize = tableSize * sizeof(int);
 int tableIx;
 int bestVal = -0x3ffffff;
 int bestIx = 0;
@@ -284,7 +281,6 @@ static int fuzzValThree(int *table, int oligoSize, int *rcTable)
  * matches that are off by no more than one. */
 {
 int tableSize = (1<<(oligoSize+oligoSize));
-int tableByteSize = tableSize * sizeof(int);
 int tableIx;
 int bestVal = -0x3ffffff;
 int bestIx = 0;
@@ -414,7 +410,7 @@ static boolean allGoodBases(DNA *oligo, int oligoSize)
 {
 int i;
 for (i=0; i<oligoSize; ++i)
-    if (ntVal[oligo[i]] < 0)
+    if (ntVal[(int)oligo[i]] < 0)
         return FALSE;
 return TRUE;
 }
@@ -469,14 +465,14 @@ for (seqEl = seqList; seqEl != NULL; seqEl = seqEl->next)
                 {
                 ++total;
                 for (j=0; j<oligoSize; ++j)
-                    counts[j][ntVal[target[j]]] += 1;
+                    counts[j][ntVal[(int)target[j]]] += 1;
                 }
             if (considerRc && mismatchCount(rcOligo, target, oligoSize) <= mismatchesAllowed)
                 {
                 ++total;
                 reverseComplement(target, oligoSize);
                 for (j=0; j<oligoSize; ++j)
-                    counts[j][ntVal[target[j]]] += 1;
+                    counts[j][ntVal[(int)target[j]]] += 1;
                 reverseComplement(target, oligoSize);
                 }
             } 
