@@ -2,7 +2,7 @@
 #include "common.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: faOneRecord.c,v 1.3 2003/11/14 23:53:17 angie Exp $";
+static char const rcsid[] = "$Id: faOneRecord.c,v 1.4 2006/03/18 01:58:35 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -16,7 +16,6 @@ errAbort(
 void faOneRecord(char *fileName, char *recordName)
 /* faOneRecord - Extract a single record from a .FA file. */
 {
-FILE *f = mustOpen(fileName, "r");
 struct lineFile *lf = lineFileOpen(fileName, FALSE);
 int lineSize;
 char *line;
