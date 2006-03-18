@@ -235,3 +235,16 @@ double mixedd = (1.0/4)*5L - 0.75 + 8;
 print(mixedd);
 int mixedi = (1.0/4)*5L - 0.75 + 8;
 print(mixedi);
+
+
+const int sixFac = 6*5*4*3*2*1;
+print("sixFac " + sixFac);
+const double pi = 3.1415;
+const double twoPi = 2*pi;
+const string http = "http:";
+const string version = "1.0";
+const string http1 = http+version;
+print(twoPi);
+print(http1);
+const string httpPiVersion = http1 + " " + twoPi + " is not a circle.";
+print(httpPiVersion);

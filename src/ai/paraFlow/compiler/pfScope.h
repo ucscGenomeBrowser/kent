@@ -35,6 +35,7 @@ struct pfVar
      struct ctar *ctar;	/* Compile-time Activation record for functions  */
      bool paraTainted;			/* If true then no writing to var allowed. */
      bool isExternal;			/* Variable in an external file? */
+     bool constFolded;			/* True if constant folded. */
      };
 
 /* Forward declarations so compiler doesn't squawk */

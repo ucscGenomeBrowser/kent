@@ -701,6 +701,16 @@ pp->children = NULL;
 pp->type = ppType;
 }
 
+static void flipVarUseToConst(struct pfCompile *pfc, struct pfParse *pp)
+/* Convert named constant to a straight constant. */
+{
+struct pfParse *init = pp->var->parse->children->next->next;
+struct pfParse *parent = pp->parent, *next = pp->next;
+memcpy(pp, init, sizeof(*pp));
+pp->parent = parent;
+pp->next = next;
+}
+
 static boolean rConstFold(struct pfCompile *pfc, struct pfParse *pp)
 /* Returns FALSE if there's a non-constant underneath self in tree. */
 {
@@ -813,6 +823,11 @@ if (isConst)
 	    break;
 
 	case pptVarUse:
+	    if (pp->var->constFolded)
+		flipVarUseToConst(pfc, pp);
+	    else
+		isConst = FALSE;
+	    break;
 	case pptPlaceholder:
 	    isConst = FALSE;
 	    break;
@@ -821,8 +836,67 @@ if (isConst)
 return isConst;
 }
 
+static void rGetConstants(struct pfParse *pp, struct slRef **pRefs)
+/* Get a list of all constants onto pRefs. */
+{
+if (pp->type == pptVarInit)
+    {
+    struct pfVar *var = pp->var;
+    if (var->ty->isConst)
+	refAdd(pRefs, var);
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    rGetConstants(pp, pRefs);
+}
+
+static boolean anyUnfoldedConstants(struct pfParse *pp)
+/* Return TRUE if no unfolded constants. */
+{
+if (pp->type == pptVarInit)
+    {
+    struct pfVar *var = pp->var;
+    if (!var->constFolded)
+        return TRUE;
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    if (anyUnfoldedConstants(pp))
+        return TRUE;
+return FALSE;
+}
+
+static void findConstVals(struct pfCompile *pfc, struct pfParse *pp)
+/* Fold down all named constants. */
+{
+struct slRef *refList = NULL, *ref, *newList, *nextRef;
+rGetConstants(pp, &refList);
+
+while (refList != NULL)
+    {
+    newList = NULL;
+    for (ref = refList; ref != NULL; ref = nextRef)
+	{
+	struct pfVar *var = ref->val;
+	struct pfParse *init = var->parse->children->next->next;
+	nextRef = ref->next;
+	if (!anyUnfoldedConstants(init))
+	    {
+	    rConstFold(pfc, init);
+	    var->constFolded = TRUE;
+	    freeMem(ref);
+	    }
+	else
+	    {
+	    slAddHead(&newList, ref);
+	    }
+	}
+    refList = newList;
+    // break;	/* ALl for now. */
+    }
+}
+
 void pfConstFold(struct pfCompile *pfc, struct pfParse *pp)
 /* Fold constants into simple expressions. */
 {
+findConstVals(pfc,pp);
 rConstFold(pfc, pp);
 }
