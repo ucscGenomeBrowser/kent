@@ -4,7 +4,7 @@
 #include "dnautil.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: faCount.c,v 1.6 2005/06/23 22:52:27 baertsch Exp $";
+static char const rcsid[] = "$Id: faCount.c,v 1.7 2006/03/18 01:51:36 angie Exp $";
 
 bool summary = FALSE;
 void usage()
@@ -47,7 +47,7 @@ for (f = 0; f<faCount; ++f)
             baseCount[i] = 0;
 	for (j=0; j<seq.size; ++j)
 	    {
-            int baseVal = ntVal5[seq.dna[j]];
+            int baseVal = ntVal5[(int)(seq.dna[j])];
             assert(baseVal != -1);
             assert(baseVal <= 4);
             length++;
