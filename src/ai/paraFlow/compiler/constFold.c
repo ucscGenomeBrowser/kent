@@ -58,7 +58,7 @@ switch (pp->type)
 		val.i = -oldVal.i;
 		break;
 	    case pftLong:
-		val.l = -oldVal.i;
+		val.l = -oldVal.l;
 		break;
 	    case pftFloat:
 		val.x = -oldVal.x;
@@ -91,7 +91,7 @@ switch (pp->type)
 		val.i = ~oldVal.i;
 		break;
 	    case pftLong:
-		val.l = ~oldVal.i;
+		val.l = ~oldVal.l;
 		break;
 	    default:
 	        internalErrAt(pp->tok);
