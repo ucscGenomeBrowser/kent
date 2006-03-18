@@ -86,9 +86,7 @@ void gffPeek(char *fileName)
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *word, *group;
 char *row[9];
-int i;
 int commentCount = 0;
-int recordCount = 0;
 int badCount = 0;
 int wordCount;
 struct countedHash *seqHash = countedHashNew("seq", 16);

@@ -12,7 +12,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlCheck.c,v 1.29 2005/12/03 20:02:09 kent Exp $";
+static char const rcsid[] = "$Id: htmlCheck.c,v 1.30 2006/03/18 02:16:53 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -368,7 +368,6 @@ else /* Do everything that requires full parsing. */
 int main(int argc, char *argv[])
 /* Process command line. */
 {
-char *commmand, *url;
 pushCarefulMemHandler(200000000);
 optionInit(&argc, argv, options);
 if (argc != 3)

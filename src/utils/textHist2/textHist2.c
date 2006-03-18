@@ -5,7 +5,7 @@
 #include "options.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: textHist2.c,v 1.9 2003/05/06 07:41:08 kate Exp $";
+static char const rcsid[] = "$Id: textHist2.c,v 1.10 2006/03/18 02:26:22 angie Exp $";
 
 int xBins = 12, yBins = 12;
 int xBinSize = 1, yBinSize = 1;
@@ -85,10 +85,9 @@ struct psGfx *ps = psOpen(psFile, psSize, psSize, psSize, psSize, margin);
 double val, maxVal = findMaxVal(hist);
 int x, y, both;
 double grayScale;
-double xPos, yPos, xMid, yMid;
+double xPos, yPos, xMid;
 double xBinPts = psInnerSize/xBins;
 double yBinPts = psInnerSize/yBins;
-double psGrayVal;
 
 grayScale = 1.0 / maxVal * postScale;
 for (y=0; y<yBins; ++y)

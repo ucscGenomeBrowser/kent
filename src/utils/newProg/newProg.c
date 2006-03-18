@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.17 2004/12/03 04:27:29 kent Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.18 2006/03/18 02:18:48 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -36,7 +36,7 @@ fprintf(f, "#include \"options.h\"\n");
 fprintf(f, "\n");
 if (doCvs)
     {
-    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.17 2004/12/03 04:27:29 kent Exp $\";\n");
+    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.18 2006/03/18 02:18:48 angie Exp $\";\n");
     fprintf(f, "\n");
     }
 fprintf(f, "void usage()\n");
@@ -140,7 +140,7 @@ if (doCvs)
     if (!setCurrentDir(dirName))
         errAbort("Couldn't change dir to %s", dirName);
     if (!setCurrentDir(".."))
-        errAbort("Couldn't change dir to ..", dirName);
+        errAbort("Couldn't change dir to ..");
     sprintf(command, "cvs add %s", fileOnly);
     if (system(command) != 0)
         errAbort("system call '%s' returned non-zero", command);
@@ -160,7 +160,6 @@ int main(int argc, char *argv[])
 {
 struct dyString *ds = newDyString(1024);
 int i;
-boolean doCvs = FALSE;
 
 optionHash(&argc, argv);
 if (argc < 3)

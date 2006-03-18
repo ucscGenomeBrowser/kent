@@ -6,7 +6,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-static char const rcsid[] = "$Id: subs.c,v 1.5 2003/06/10 17:19:33 kent Exp $";
+static char const rcsid[] = "$Id: subs.c,v 1.6 2006/03/18 02:23:40 angie Exp $";
 
 #define TRUE 1
 #define FALSE 0
@@ -579,7 +579,6 @@ void sub_file(char *t)
  ******************************************************************/
 {
 Name *ll, *n;
-char *p;
 FILE *sfile;
 
 sfile = must_open(t, "r");

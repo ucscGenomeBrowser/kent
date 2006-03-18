@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: tableSum.c,v 1.7 2003/05/06 07:41:08 kate Exp $";
+static char const rcsid[] = "$Id: tableSum.c,v 1.8 2006/03/18 02:24:56 angie Exp $";
 
 char *colDiv;
 char *rowDiv;
@@ -38,7 +38,7 @@ int countWordsInFirstRealRow(char *fileName)
  * that is nonblank and not-starting with # */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *word, c;
+char *line, *word;
 int count = 0;
 boolean gotLine = FALSE;
 
