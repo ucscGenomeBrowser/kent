@@ -9,7 +9,7 @@
 #include	<math.h>
 
 
-static char const rcsid[] = "$Id: convolve.c,v 1.10 2005/07/03 21:56:21 angie Exp $";
+static char const rcsid[] = "$Id: convolve.c,v 1.11 2006/03/18 01:49:51 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -294,7 +294,6 @@ for (i = 1; i < argc; ++i)
     struct hash *histo0;	/*	first histogram	*/
     struct hash *histo1;	/*	second histogram	*/
     int medianBin0 = 0;		/*	bin at median for histo0	*/
-    int medianBin1 = 0;		/*	bin at median for histo1	*/
     double medianLog_2 = -500.0;	/*	log at median	*/
     int bin = 0;		/*	0 to N-1 for N bins	*/
     int convolutions = 0;	/*	loop counter for # of convolutions */
@@ -388,8 +387,6 @@ warn("May have more than 128 values at line %d, file: %s", lineCount, argv[i]);
 
 int main(int argc, char *argv[])
 {
-int i;
-
 optionInit(&argc, argv, optionSpecs);
 
 if(argc < 2)

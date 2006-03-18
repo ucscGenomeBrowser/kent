@@ -4,7 +4,7 @@
 #include "fa.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: faFrag.c,v 1.4 2003/06/10 17:19:33 kent Exp $";
+static char const rcsid[] = "$Id: faFrag.c,v 1.5 2006/03/18 01:54:46 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -21,7 +21,6 @@ void faFrag(char *inName, int start, int end, char *outName, boolean mixed)
 /* faFrag - Extract a piece of DNA from a .fa file.. */
 {
 struct dnaSeq *seq;
-FILE *f;
 char name[512];
 
 if (start >= end)

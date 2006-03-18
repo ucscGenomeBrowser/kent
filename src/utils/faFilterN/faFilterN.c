@@ -6,7 +6,7 @@
 #include "fa.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: faFilterN.c,v 1.4 2003/05/06 07:41:05 kate Exp $";
+static char const rcsid[] = "$Id: faFilterN.c,v 1.5 2006/03/18 01:53:15 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -129,7 +129,6 @@ struct dnaSeq seq;
 struct lineFile *lf = lineFileOpen(inFile, TRUE);
 FILE *f = mustOpen(outFile, "w");
 int seqCount = 0, passCount = 0;
-int nCount;
 char *outName = cgiOptionalString("out");
 struct hash *outHash = hashOut(outName);
 char *pslName = cgiOptionalString("uniq");

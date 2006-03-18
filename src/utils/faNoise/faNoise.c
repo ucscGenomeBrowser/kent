@@ -5,7 +5,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: faNoise.c,v 1.4 2003/06/10 17:19:33 kent Exp $";
+static char const rcsid[] = "$Id: faNoise.c,v 1.5 2006/03/18 01:56:49 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -71,7 +71,6 @@ void faNoise(char *inName, char *outName, int transitionPpt,
 FILE *in = mustOpen(inName, "r");
 FILE *out = mustOpen(outName, "w");
 int dnaSize;
-int i;
 DNA *dna;
 char *name;
 
@@ -82,7 +81,7 @@ while (faFastReadNext(in, &dna, &dnaSize, &name))
     int tvCount = transversionPpt * dnaSize / 1000;
     int delCount = deletePpt * dnaSize / 1000;
     int insCount = insertPpt * dnaSize / 1000;
-    int i, pos;
+    int pos;
     int newSize = dnaSize;
     int maxSize = dnaSize*10;
     DNA *newDna = needMem(maxSize+1);

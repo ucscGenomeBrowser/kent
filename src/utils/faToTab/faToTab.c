@@ -71,7 +71,6 @@ void writeSeqTable(char *faName, FILE *out, boolean unburyAccession, boolean isD
 struct lineFile *lf = lineFileOpen(faName, TRUE);
 bioSeq seq;
 int dotMod = 0;
-char *dotIndex = 0;
 
 printf("Reading %s\n", faName);
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, isDna))
