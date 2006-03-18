@@ -8,7 +8,7 @@
 #include "fa.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: faToTwoBit.c,v 1.7 2005/12/10 05:03:37 galt Exp $";
+static char const rcsid[] = "$Id: faToTwoBit.c,v 1.8 2006/03/18 02:01:56 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -43,7 +43,7 @@ int i;
 for (i=0; i<size; ++i)
     {
     c = s[i];
-    if (ntChars[c] == 0)
+    if (ntChars[(int)c] == 0)
         {
 	if (isupper(c))
 	    s[i] = 'N';
