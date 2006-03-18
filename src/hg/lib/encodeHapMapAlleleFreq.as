@@ -14,4 +14,5 @@ TABLE encodeHapMapAlleleFreq
     float otherAlleleFreq;	"Variant allele frequency (between 0.0 and 1.0)"
     float minorAlleleFreq;	"Smaller of the 2 frequencies (between 0.0 and 0.5)"
     uint totalCount;		"Count of individuals"
+    float derivedAlleleFreq;	"Derived allele frequency"
 )

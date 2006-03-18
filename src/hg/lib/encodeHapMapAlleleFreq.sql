@@ -19,6 +19,7 @@ CREATE TABLE encodeHapMapAlleleFreq (
     otherAlleleFreq float not null,	# Variant allele frequency (between 0.0 and 1.0)
     minorAlleleFreq float not null,	# Smaller of the 2 frequencies (between 0.0 and 0.5)
     totalCount smallint unsigned not null,	# Count of individuals
+    derivedAlleleFreq float not null,	# Derived allele frequency
     index(chrom(8),chromStart),
     index(name)
 );
