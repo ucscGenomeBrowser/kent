@@ -17,7 +17,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: extFileUpdate.c,v 1.5 2006/03/17 07:33:31 genbank Exp $";
+static char const rcsid[] = "$Id: extFileUpdate.c,v 1.6 2006/03/19 17:16:56 markd Exp $";
 
 /*
  * Algorithm:
@@ -61,6 +61,15 @@ if (gStopSignaled)
     fprintf(stderr, "*** Stopped by SIGUSR1 request ***\n");
     exit(1);
     }
+}
+
+static void setTimeouts(struct sqlConnection *conn)
+/* set session timeouts, since we do some time consuming file loads during
+ * a query. */
+{
+char query[256];
+safef(query, sizeof(query), "set net_write_timeout=%d", 10*60*60);
+safef(query, sizeof(query), "set net_read_timeout=%d", 10*60*60);
 }
 
 static void cleanExtFileTable(struct sqlConnection *conn)
@@ -262,7 +271,6 @@ static void extFileUpdatePart(struct sqlConnection *conn,
                               struct extFileTbl* extFileTbl)
 /* update gbSeq/gbExtFile entries for one partition of the database */
 {
-/* FIXME: hardcoded tmp*/
 struct seqTbl *seqTbl;
 struct extFileRef* extFiles;
 struct raInfoTbl *rit = NULL;  /* lazy creation */
@@ -306,6 +314,7 @@ gOptions = dbLoadOptionsParse(db);
 hgSetDb(db);
 conn = hAllocConn();
 gbLockDb(conn, NULL);
+setTimeouts(conn);
 index = gbIndexNew(db, NULL);
 selectList = dbLoadPartitionsGet(&gOptions, index);
 extFileTbl = extFileTblLoad(conn);
