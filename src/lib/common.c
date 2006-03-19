@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.88 2006/03/06 16:01:52 hartera Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.89 2006/03/19 00:42:04 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -661,6 +661,15 @@ for (ref = refList; ref != NULL; ref = ref->next)
     if (ref->val == val)
         return ref;
 return NULL;
+}
+
+struct slRef *slRefNew(void *val)
+/* Create new slRef element. */
+{
+struct slRef *ref;
+AllocVar(ref);
+ref->val = val;
+return ref;
 }
 
 void refAdd(struct slRef **pRefList, void *val)

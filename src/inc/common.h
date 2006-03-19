@@ -43,9 +43,18 @@
 #include <errno.h>
 #include <unistd.h>
 #include <libgen.h>
+
 #if defined(MACHTYPE_ppc)
 #include <sys/wait.h>
 #endif
+
+#if defined(__APPLE__)
+#if defined(__i686__)
+/* The i686 apple math library defines warn. */
+#define warn jkWarn
+#endif
+#endif
+
 #ifdef __CYGWIN32__
 #include <mingw/math.h>
 #endif
@@ -487,6 +496,9 @@ struct slRef
     struct slRef *next;	/* Next in list. */
     void *val;		/* A reference to something. */
     };
+
+struct slRef *slRefNew(void *val);
+/* Create new slRef element. */
 
 struct slRef *refOnList(struct slRef *refList, void *val);
 /* Return ref if val is already on list, otherwise NULL. */
