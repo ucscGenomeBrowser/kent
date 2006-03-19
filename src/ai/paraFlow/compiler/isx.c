@@ -155,7 +155,7 @@ switch (iad->adType)
 	fprintf(f, "%s", iad->name);
 	break;
     case iadOperator:
-        fprintf(f, "#%s", iad->name);
+	fprintf(f, "#%s", iad->name);
 	break;
     }
 if (iad->reg != NULL)
@@ -166,28 +166,30 @@ if (iad->reg != NULL)
 void isxDump(struct isx *isx, FILE *f)
 /* Dump out isx code */
 {
-struct isxAddress *iad;
-struct slRef *ref;
 fprintf(f, "%d: %s ", isx->label, isxOpTypeToString(isx->opType));
-for (ref = isx->destList; ref != NULL; ref = ref->next)
+if (isx->dest != NULL)
     {
-    iad = ref->val;
     fprintf(f, " ");
-    isxAddrDump(iad, f);
+    isxAddrDump(isx->dest, f);
     }
 fprintf(f, " =");
-for (ref = isx->sourceList; ref != NULL; ref = ref->next)
+if (isx->left != NULL)
     {
-    iad = ref->val;
     fprintf(f, " ");
-    isxAddrDump(iad, f);
+    isxAddrDump(isx->left, f);
+    }
+if (isx->right != NULL)
+    {
+    fprintf(f, " ");
+    isxAddrDump(isx->right, f);
     }
 if (isx->liveList != NULL)
     {
+    struct slRef *ref;
     fprintf(f, "\t{");
     for (ref = isx->liveList; ref != NULL; ref = ref->next)
         {
-	iad = ref->val;
+	struct isxAddress *iad = ref->val;
 	fprintf(f, "%s", iad->name);
 	if (iad->reg != NULL)
 	    fprintf(f, "@%s", isxRegName(iad->reg, iad->valType));
@@ -196,7 +198,6 @@ if (isx->liveList != NULL)
 	}
     fprintf(f, "}");
     }
-
 }
 
 void isxDumpList(struct dlList *list, FILE *f)
@@ -210,19 +211,18 @@ for (node = list->head; !dlEnd(node); node = node->next)
     }
 }
 
-struct isx *isxNew(struct pfCompile *pfc, 
-	enum isxOpType opType,
-	struct slRef *destList,
-	struct slRef *sourceList,
-	struct dlList *iList)
-/* Return new isx */
+struct isx *isxNew(struct pfCompile *pfc, enum isxOpType opType,
+	struct isxAddress *dest, struct isxAddress *left,
+	struct isxAddress *right, struct dlList *iList)
+/* Make new isx instruction, and hang it on iList */
 {
 struct isx *isx;
 AllocVar(isx);
 isx->label = ++pfc->isxLabelMaker;
 isx->opType = opType;
-isx->destList = destList;
-isx->sourceList = sourceList;
+isx->dest = dest;
+isx->left = left;
+isx->right = right;
 dlAddValTail(iList, isx);
 return isx;
 }
@@ -326,10 +326,7 @@ struct isxAddress *left = isxExpression(pfc, pp->children,
 struct isxAddress *right = isxExpression(pfc, pp->children->next,
 	varHash, iList);
 struct isxAddress *dest = tempAddress(pfc, varHash, ppToIsxValType(pfc,pp));
-struct slRef *sourceList = NULL;
-refAdd(&sourceList, right);
-refAdd(&sourceList, left);
-isxNew(pfc, op, slRefNew(dest), sourceList, iList);
+isxNew(pfc, op, dest, left, right, iList);
 return dest;
 }
 
@@ -337,18 +334,8 @@ static struct isxAddress *isxStringCat(struct pfCompile *pfc,
 	struct pfParse *pp, struct hash *varHash, struct dlList *iList)
 /* Create string cat op */
 {
-enum isxValType valType = ppToIsxValType(pfc, pp);
-struct isxAddress *dest = tempAddress(pfc, varHash, valType);
-struct isxAddress *source;
-struct slRef *sourceList = slRefNew(operatorAddress("string_cat"));
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    {
-    source = isxExpression(pfc, pp, varHash, iList);
-    refAdd(&sourceList, source);
-    }
-slReverse(&sourceList);
-isxNew(pfc, poCall, slRefNew(dest), sourceList, iList);
-return dest;
+uglyAbort("Can't handle stringCat yet");
+return NULL;
 }
 
 static struct isxAddress *isxCall(struct pfCompile *pfc,
@@ -359,23 +346,17 @@ struct pfParse *function = pp->children;
 struct pfParse *inTuple = function->next;
 struct pfParse *p;
 struct pfType *outTuple = function->ty->children->next, *ty;
-struct slRef *sourceList, *destList = NULL;
 struct isxAddress *iad;
 
-sourceList = slRefNew(varAddress(function->var, varHash, ivJump));
 for (p = inTuple->children; p != NULL; p = p->next)
     {
     iad = isxExpression(pfc, p, varHash, iList);
-    refAdd(&sourceList, iad);
     }
-slReverse(&sourceList);
 for (ty = outTuple->children; ty != NULL; ty = ty->next)
     {
     iad = tempAddress(pfc, varHash, tyToIsxValType(pfc, ty));
-    refAdd(&destList, iad);
     }
-slReverse(&destList);
-isxNew(pfc, poCall, destList, sourceList, iList);
+uglyAbort("Can't handle calls yet.");
 return NULL;	// TODO - fixme.
 }
 
@@ -444,7 +425,7 @@ switch (pp->type)
 	    source = isxExpression(pfc, init, varHash, iList);
 	else
 	    source = zeroAddress();
-	isxNew(pfc, poInit, slRefNew(dest), slRefNew(source), iList);
+	isxNew(pfc, poInit, dest, source, NULL, iList);
 	break;
 	}
     case pptAssign:
@@ -454,7 +435,7 @@ switch (pp->type)
 	struct isxAddress *source = isxExpression(pfc, val, varHash, iList);
 	struct isxAddress *dest = varAddress(use->var, varHash, 
 		ppToIsxValType(pfc, use));
-	isxNew(pfc, poAssign, slRefNew(dest), slRefNew(source), iList);
+	isxNew(pfc, poAssign, dest, source, NULL, iList);
 	break;
 	}
     default:
@@ -474,6 +455,7 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
     {
     struct slRef *newList = NULL, *ref;
     struct isx *isx = node->val;
+    struct isxAddress *iad;
 
     /* Save away current live list. */
     isx->liveList = liveList;
@@ -482,19 +464,17 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
     for (ref = liveList; ref != NULL; ref = ref->next)
 	{
 	struct isxAddress *iad = ref->val;
-	if (!refOnList(isx->destList, iad))
+	if (iad != isx->dest)
 	    refAdd(&newList, iad);
 	}
 
     /* Add sources to live list */
-    for (ref = isx->sourceList; ref != NULL; ref = ref->next)
-	{
-	struct isxAddress *iad = ref->val;
-	if (iad->adType == iadRealVar || iad->adType == iadTempVar)
-	    {
-	    refAddUnique(&newList, iad);
-	    }
-	}
+    iad = isx->left;
+    if (iad != NULL && (iad->adType == iadRealVar || iad->adType == iadTempVar))
+	refAddUnique(&newList, iad);
+    iad = isx->right;
+    if (iad != NULL && (iad->adType == iadRealVar || iad->adType == iadTempVar))
+	refAddUnique(&newList, iad);
 
     /* Flip to new live list */
     liveList = newList;

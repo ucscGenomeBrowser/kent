@@ -1,17 +1,19 @@
 /* isx - intermediate sequenced executable -  the paraFlow
- * intermediate code.  This contains the fields:
- *    label opCode destType destList sourceList
- * For instance:
+ * intermediate code.  A fairly standard "three address code"
+ * that is a lower level representation than the parse tree but
+ * higher level than actual machine code.  The format is
+ *    label opCode dest left right
+ * which is interpreted as 
+ *    label:  dest = left opCode right
+ * so
  *    100 + x 3 8		represents x = 3 + 8
  *    101 * t1 t2 t3		represents t1 = t2*t3
  *    102 = x y			represents x = y
- * It ends up being handy to have a list for the sources rather than
- * just two sources as is traditional.  Many ops take only a single
- * source for one thing.  For another this way we can represent
- * function calls with a single intermediate code sequence. */
+ *    103 - u v                 represents u = -v
+ */
 
-#ifndef ISIX_H
-#define ISIX_H
+#ifndef ISX_H
+#define ISX_H
 
 #ifndef DLIST_H
 #include "dlist.h"
@@ -91,8 +93,9 @@ struct isx
     {
     int label;			/* Numerical label */
     enum isxOpType opType;	/* Opcode - add, mul, branch, etc. */
-    struct slRef *destList;	/* Destination addresses */
-    struct slRef *sourceList;	/* Source addresses */
+    struct isxAddress *dest;	/* Destination address */
+    struct isxAddress *left;	/* Left (or only) source address. */
+    struct isxAddress *right;	/* Right (optional) source address.*/
     struct slRef *liveList;	/* List of live vars after instruction  */
     };
 
@@ -110,12 +113,10 @@ struct isxReg
     };
 
 
-struct isx *isxNew(struct pfCompile *pfc, 
-	enum isxOpType opType,
-	struct slRef *destList,
-	struct slRef *sourceList,
-	struct dlList *iList);
-/* Return new isx */
+struct isx *isxNew(struct pfCompile *pfc, enum isxOpType opType,
+	struct isxAddress *dest, struct isxAddress *left,
+	struct isxAddress *right, struct dlList *iList);
+/* Make new isx instruction, and hang it on iList */
 
 char *isxRegName(struct isxReg *reg, enum isxValType valType);
 /* Get name of reg for given type. */
@@ -132,5 +133,5 @@ struct dlList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp);
 void isxToPentium(struct dlList *iList, FILE *f);
 /* Convert isx code to pentium instructions in file. */
 
-#endif /* ISIX_H */
+#endif /* ISX_H */
 

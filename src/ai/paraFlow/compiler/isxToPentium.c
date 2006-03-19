@@ -125,7 +125,7 @@ int count = 1;
 for (; !dlEnd(node); node = node->next, ++count)
     {
     struct isx *isx = node->val;
-    if (refOnList(isx->sourceList, iad))
+    if (isx->left == iad || isx->right == iad)
         return count;
     }
 return count+1;
@@ -269,8 +269,12 @@ struct isxReg *freeReg = NULL;
 	struct isxAddress *iad = reg->contents;
 	if (iad != NULL)
 	     {
-	     int sourceIx = refListIx(isx->sourceList, iad);
-	     if (sourceIx >= 0)
+	     int sourceIx = 0;
+	     if (isx->left == iad)
+	         sourceIx = 1;
+	     else if (isx->right == iad)
+	         sourceIx = 2;
+	     if (sourceIx)
 		 {
 		 if (!refOnList(isx->liveList, iad))
 		     {
@@ -311,8 +315,7 @@ for (i=0; i<regCount; ++i)
 	if ((iad->adType == iadRealVar) ||
 	    (iad->adType == iadTempVar && iad->val.tempMemLoc != 0))
 	    {
-	    int sourceIx = refListIx(isx->sourceList, iad);
-	    if (sourceIx >= 0)
+	    if (iad == isx->left || iad == isx->right)
 		{
 		int nextUse = findNextUse(iad, nextNode);
 		if (nextUse > soonestUse)
@@ -378,8 +381,8 @@ for (i=0; i<regCount; ++i)
 static void pentAssign(struct isx *isx, struct dlNode *nextNode, FILE *f)
 /* Code assignment */
 {
-struct isxAddress *source = isx->sourceList->val;
-struct isxAddress *dest = isx->destList->val;
+struct isxAddress *source = isx->left;
+struct isxAddress *dest = isx->dest;
 struct isxReg *reg;
 if (source->adType == iadZero)
     {
@@ -408,33 +411,20 @@ static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode,
 /* Code most binary ops.  Division is harder. */
 {
 struct isxReg *reg = freeReg(isx, nextNode, f);
-struct slRef *ref, *regSource = NULL;
+struct slRef *ref;
 struct isxAddress *dest;
+struct isxAddress *iad = NULL;
 
 /* Figure out if the reg already holds one of our sources. */
-for (ref = isx->sourceList; ref != NULL; ref = ref->next)
-    {
-    struct isxAddress *iad = ref->val;
-    if (iad->reg == reg)
-        regSource = ref;
-    }
-if (regSource != NULL)
+if (reg == isx->left->reg)
+    iad = isx->right;
+else if (reg == isx->right->reg)
+    iad = isx->left;
+if (iad != NULL)
     {
     /* We're lucky, the destination register is also one of our sources.
-     * we find the other source and add it in. */
-    struct slRef *otherSource = NULL;
-    struct isxAddress *iad;
-    boolean isSwapped;
-    for (ref = isx->sourceList; ref != NULL; ref = ref->next)
-        {
-	if (ref != regSource)
-	    {
-	    otherSource = ref;
-	    break;
-	    }
-	}
-    iad = otherSource->val;
-    isSwapped = (iad == isx->sourceList->val);
+     * See if we need to swap for subtraction though. */
+    boolean isSwapped = (iad == isx->left);
     if (isSub && isSwapped)
         {
 	unaryOpReg(opNeg, reg, iad->valType, f);
@@ -447,16 +437,12 @@ if (regSource != NULL)
     }
 else
     {
-    struct slRef *sourceList = isx->sourceList;
-    struct isxAddress *a,*b;
-    a = sourceList->val;
-    b = sourceList->next->val;
-    printOpDestReg(opMov, a, reg, f);
-    printOpDestReg(opCode, b, reg, f);
+    printOpDestReg(opMov, isx->left, reg, f);
+    printOpDestReg(opCode, isx->right, reg, f);
     }
 if (reg->contents != NULL)
     reg->contents->reg = NULL;
-dest = isx->destList->val;
+dest = isx->dest;
 reg->contents = dest;
 dest->reg = reg;
 }
@@ -465,11 +451,9 @@ static void pentModDivide(struct isx *isx, struct dlNode *nextNode,
 	boolean isMod, FILE *f)
 /* Generate code for mod or divide. */
 {
-struct slRef *pRef = isx->sourceList;
-struct slRef *qRef = pRef->next;
-struct isxAddress *p = pRef->val;
-struct isxAddress *q = qRef->val;
-struct isxAddress *d = isx->destList->val;
+struct isxAddress *p = isx->left;
+struct isxAddress *q = isx->right;
+struct isxAddress *d = isx->dest;
 struct isxReg *eax = &regInfo[ax];
 struct isxReg *edx = &regInfo[dx];
 
@@ -502,11 +486,9 @@ static void pentShiftOp(struct isx *isx, struct dlNode *nextNode,
 	enum pentDataOp opCode, FILE *f)
 /* Code shift ops.  */
 {
-struct slRef *pRef = isx->sourceList;
-struct slRef *qRef = pRef->next;
-struct isxAddress *p = pRef->val;
-struct isxAddress *q = qRef->val;
-struct isxAddress *d = isx->destList->val;
+struct isxAddress *p = isx->left;
+struct isxAddress *q = isx->right;
+struct isxAddress *d = isx->dest;
 
 if (q->adType == iadConst)
     {
