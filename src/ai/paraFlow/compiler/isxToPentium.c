@@ -38,8 +38,8 @@ static struct isxReg regInfo[] = {
 enum pentDataOp
 /* Some of the pentium op codes that apply to many types */
     {
-    opMov, opAdd, opSub, opMul, opDiv, opAnd, opOr, opXor, opAsl, 
-    opAsr, opNeg, opNot,
+    opMov, opAdd, opSub, opMul, opDiv, opAnd, opOr, opXor, opSal, 
+    opSar, opNeg, opNot,
     };
 
 struct dataOpTable
@@ -65,8 +65,8 @@ static struct dataOpTable dataOpTable[] =
     {opAnd, "andb", "andw", "andl", NULL, NULL, NULL, NULL},
     {opOr, "orb", "orw", "orl", NULL, NULL, NULL, NULL},
     {opXor, "xorb", "xorw", "xorl", NULL, NULL, NULL, NULL},
-    {opAsl, "salb", "salw", "sall", NULL, NULL, NULL, NULL},
-    {opAsr, "sarrb", "sarw", "sarl", NULL, NULL, NULL, NULL},
+    {opSal, "salb", "salw", "sall", NULL, NULL, NULL, NULL},
+    {opSar, "sarrb", "sarw", "sarl", NULL, NULL, NULL, NULL},
     {opNeg, "negb", "negw", "negl", NULL, NULL, NULL, NULL},
     {opNot, "notb", "notw", "notl", NULL, NULL, NULL, NULL},
     };
@@ -549,10 +549,12 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    pentBinaryOp(isx, nextNode, opXor, TRUE, f);
 	    break;
 	case poShiftLeft:
-	    pentBinaryOp(isx, nextNode, opAsl, TRUE, f);
+	    // TODO - actually the shifts just take an immediate
+	    // source or CL.
+	    pentBinaryOp(isx, nextNode, opSal, TRUE, f);
 	    break;
 	case poShiftRight:
-	    pentBinaryOp(isx, nextNode, opAsr, TRUE, f);
+	    pentBinaryOp(isx, nextNode, opSar, TRUE, f);
 	    break;
 	}
     }
