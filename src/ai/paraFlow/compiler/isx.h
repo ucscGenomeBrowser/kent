@@ -68,7 +68,7 @@ union isxAddressVal
     {
     struct pfToken *tok;	/* For constants */
     struct pfVar *var;		/* For real vars */
-    int	tempId;			/* ID for temp vals */
+    int tempMemLoc;		/* Memory location for temps, 0 for none */
     };
 
 struct isxAddress
@@ -78,6 +78,7 @@ struct isxAddress
     enum isxAddressType adType;/* Address type */
     enum isxValType valType;	/* Value type */
     union isxAddressVal val;	/* Address value */
+    struct regInfo *reg;	/* Register if any */
     };
 
 struct isx
@@ -85,8 +86,9 @@ struct isx
     {
     int label;			/* Numerical label */
     enum isxOpType opType;	/* Opcode - add, mul, branch, etc. */
-    struct slRef *destList;		/* Destination addresses */
-    struct slRef *sourceList;		/* Source addresses */
+    struct slRef *destList;	/* Destination addresses */
+    struct slRef *sourceList;	/* Source addresses */
+    struct slRef *liveList;	/* List of live vars after instruction  */
     };
 
 struct isx *isxNew(struct pfCompile *pfc, 

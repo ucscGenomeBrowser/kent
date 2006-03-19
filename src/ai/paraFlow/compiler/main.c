@@ -427,6 +427,7 @@ if (optionExists("isx"))
     FILE *f = mustOpen(isxFileName, "w");
     struct dlList *isxList = isxFromParse(pfc, program);
     isxDumpList(isxList, f);
+    isxToPentium(isxList, f);
     carefulClose(&f);
     }
 

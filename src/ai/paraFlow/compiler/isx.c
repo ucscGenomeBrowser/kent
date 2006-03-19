@@ -143,6 +143,19 @@ for (ref = isx->sourceList; ref != NULL; ref = ref->next)
     fprintf(f, " ");
     isxAddrDump(iad, f);
     }
+if (isx->liveList != NULL)
+    {
+    fprintf(f, "\t{");
+    for (ref = isx->liveList; ref != NULL; ref = ref->next)
+        {
+	iad = ref->val;
+	fprintf(f, "%s", iad->name);
+	if (ref->next != NULL)
+	    fprintf(f, ",");
+	}
+    fprintf(f, "}");
+    }
+
 }
 
 void isxDumpList(struct dlList *list, FILE *f)
@@ -230,7 +243,6 @@ safef(buf, sizeof(buf), "$t%X", ++(pfc->tempLabelMaker));
 AllocVar(iad);
 iad->adType = iadTempVar;
 iad->valType = valType;
-iad->val.tempId = pfc->tempLabelMaker;
 hashAddSaveName(hash, buf, iad, &iad->name);
 return iad;
 }
@@ -239,12 +251,15 @@ static struct isxAddress *varAddress(struct pfVar *var, struct hash *hash,
 	enum isxValType valType)
 /* Create reference to a real var */
 {
-struct isxAddress *iad;
-AllocVar(iad);
-iad->adType = iadRealVar;
-iad->valType = valType;
-iad->val.var = var;
-hashAddSaveName(hash, var->cName, iad, &iad->name);
+struct isxAddress *iad = hashFindVal(hash, var->cName);
+if (iad == NULL)
+    {
+    AllocVar(iad);
+    iad->adType = iadRealVar;
+    iad->valType = valType;
+    iad->val.var = var;
+    hashAddSaveName(hash, var->cName, iad, &iad->name);
+    }
 return iad;
 }
 
@@ -398,6 +413,48 @@ switch (pp->type)
     }
 }
 
+static void isxLiveList(struct dlList *iList)
+/* Create list of live variables at each instruction by scanning
+ * backwards. */
+{
+struct dlNode *node;
+struct slRef *liveList = NULL;
+for (node = iList->tail; !dlStart(node); node = node->prev)
+    {
+    struct slRef *newList = NULL, *ref;
+    struct isx *isx = node->val;
+
+    /* Save away current live list. */
+    isx->liveList = liveList;
+    uglyf("processing %d which has %d els:\n",  isx->label, slCount(liveList));
+
+    /* Make copy of live list minus any overwritten dests. */
+    for (ref = liveList; ref != NULL; ref = ref->next)
+	{
+	struct isxAddress *iad = ref->val;
+	if (!refOnList(isx->destList, iad))
+	    refAdd(&newList, iad);
+	else
+	    uglyf("removing %s\n", iad->name);
+	}
+
+    /* Add sources to live list */
+    for (ref = isx->sourceList; ref != NULL; ref = ref->next)
+	{
+	struct isxAddress *iad = ref->val;
+	if (iad->adType == iadRealVar || iad->adType == iadTempVar)
+	    {
+	    uglyf("Adding %s\n", iad->name);
+	    refAddUnique(&newList, iad);
+	    }
+	}
+
+    /* Flip to new live list */
+    liveList = newList;
+    }
+slFreeList(&liveList);
+}
+
 void isxModule(struct pfCompile *pfc, struct pfParse *pp, 
 	struct dlList *iList)
 /* Generate instructions for module. */
@@ -407,6 +464,7 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     {
     isxStatement(pfc, pp, varHash, iList);
     }
+isxLiveList(iList);
 }
 
 struct dlList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp)
