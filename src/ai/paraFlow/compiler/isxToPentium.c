@@ -10,24 +10,16 @@
 #include "pfCompile.h"
 #include "isx.h"
 
-struct regInfo
-    {
-    char *name;			 /* Register name */
-    enum isxValType *types;	 /* Types it can handle */
-    int typeCount;		 /* Count of types it can handle */
-    struct isxAddress *contents; /* What if anything register holds */
-    };
-
 static enum isxValType abcdRegTypes[] = { ivInt, ivObject,};
 static enum isxValType siDiRegTypes[] = {ivInt, ivObject,};
 static enum isxValType stRegTypes[] = {ivFloat, ivDouble,};
 
-struct regInfo regInfo[] = {
+struct isxReg regInfo[] = {
     { "eax", abcdRegTypes, ArraySize(abcdRegTypes),},
     { "ebx", abcdRegTypes, ArraySize(abcdRegTypes),},
     { "ecx", abcdRegTypes, ArraySize(abcdRegTypes),},
-    { "edx", abcdRegTypes, ArraySize(abcdRegTypes),},
 #ifdef SOON
+    { "edx", abcdRegTypes, ArraySize(abcdRegTypes),},
     { "esi", siDiRegTypes, ArraySize(siDiRegTypes),},
     { "edi", siDiRegTypes, ArraySize(siDiRegTypes),},
     { "st0", stRegTypes, ArraySize(stRegTypes),},
@@ -60,27 +52,27 @@ for (; !dlEnd(node); node = node->next, ++count)
     {
     struct isx *isx = node->val;
     if (refOnList(isx->sourceList, iad))
-        break;
+        return count;
     }
-return count;
+return count+1;
 }
 
 static int tempIx;
 
-static struct regInfo *freeReg(struct isx *isx, struct dlNode *nextNode, FILE *f)
+static struct isxReg *freeReg(struct isx *isx, struct dlNode *nextNode, FILE *f)
 /* Find free register for instruction result. */
 {
 int i;
-struct regInfo *regs = regInfo;
+struct isxReg *regs = regInfo;
 int regCount = ArraySize(regInfo);
-struct regInfo *freeReg = NULL;
+struct isxReg *freeReg = NULL;
 
 /* First look for a register holding a source that is no longer live. */
     {
     int freeIx = BIGNUM;
     for (i=0; i<regCount; ++i)
 	{
-	struct regInfo *reg = &regs[i];
+	struct isxReg *reg = &regs[i];
 	struct isxAddress *iad = reg->contents;
 	if (iad != NULL)
 	     {
@@ -105,21 +97,52 @@ struct regInfo *freeReg = NULL;
 /* If no luck yet, look for any free register */
 for (i=0; i<regCount; ++i)
     {
-    struct regInfo *reg = &regs[i];
+    struct isxReg *reg = &regs[i];
     struct isxAddress *iad = reg->contents;
     if (iad == NULL)
+        return reg;
+    if (!refOnList(isx->liveList, iad))
         return reg;
     }
 
 /* No free registers, well dang.  Then use a register that
- * holds a variable that is also in memory if possible.  Try
- * and do it for the variable that is not going to be used for a
- * while.... */
+ * holds a variable that is also in memory and is one of our
+ * sources. If there's a choice pick one that won't be used for
+ * longer. */
     {
     int soonestUse = 0;
     for (i=0; i<regCount; ++i)
 	{
-	struct regInfo *reg = &regs[i];
+	struct isxReg *reg = &regs[i];
+	struct isxAddress *iad = reg->contents;
+	if ((iad->adType == iadRealVar) ||
+	    (iad->adType == iadTempVar && iad->val.tempMemLoc != 0))
+	    {
+	    int sourceIx = refListIx(isx->sourceList, iad);
+	    if (sourceIx >= 0)
+		{
+		int nextUse = findNextUse(iad, nextNode);
+		if (nextUse > soonestUse)
+		    {
+		    soonestUse = nextUse;
+		    freeReg = reg;
+		    }
+		}
+	    }
+	}
+    if (freeReg)
+	return freeReg;
+    }
+
+/* Still no free registers, well dang.  Then try for a register
+ * that holds a value also in memory, but doesn't need to be 
+ * a source.  If there's a choice use the one holding the variable
+ * that won't be used for the longest time. */
+    {
+    int soonestUse = 0;
+    for (i=0; i<regCount; ++i)
+	{
+	struct isxReg *reg = &regs[i];
 	struct isxAddress *iad = reg->contents;
 	if ((iad->adType == iadRealVar) ||
 	    (iad->adType == iadTempVar && iad->val.tempMemLoc != 0))
@@ -133,11 +156,7 @@ for (i=0; i<regCount; ++i)
 	    }
 	}
     if (freeReg)
-        {
-	struct isxAddress *iad = freeReg->contents;
-	iad->reg = NULL;
 	return freeReg;
-	}
     }
 
 /* Ok, at this point we'll have to save one of the temps in a register
@@ -148,7 +167,7 @@ for (i=0; i<regCount; ++i)
     struct isxAddress *iad;
     for (i=0; i<regCount; ++i)
 	{
-	struct regInfo *reg = &regs[i];
+	struct isxReg *reg = &regs[i];
 	struct isxAddress *iad = reg->contents;
 	int nextUse = findNextUse(iad, nextNode);
 	if (nextUse > soonestUse)
@@ -161,6 +180,7 @@ for (i=0; i<regCount; ++i)
     fprintf(f, "\tmov %s,%d(ebp)\n", freeReg->name, tempIx);
     iad = freeReg->contents;
     iad->reg = NULL;
+    iad->val.tempMemLoc = tempIx;
     return freeReg;
     }
 }
@@ -203,7 +223,7 @@ static void pentAssign(struct isx *isx, struct dlNode *nextNode, FILE *f)
 {
 struct isxAddress *source = isx->sourceList->val;
 struct isxAddress *dest = isx->destList->val;
-struct regInfo *reg;
+struct isxReg *reg;
 if (source->adType == iadZero)
     {
     reg = freeReg(isx, nextNode, f);
@@ -228,13 +248,13 @@ reg->contents = dest;
 dest->reg = reg;
 }
 
-static void pentCommutativeOp(struct isx *isx, struct dlNode *nextNode, FILE *f)
-/* Code multiplication or addition */
+static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode, char *opCode,
+	boolean isSub, FILE *f)
+/* Code most binary ops.  Division is harder. */
 {
-struct regInfo *reg = freeReg(isx, nextNode, f);
+struct isxReg *reg = freeReg(isx, nextNode, f);
 struct slRef *ref, *regSource = NULL;
 struct isxAddress *dest;
-char *opCode = (isx->opType == poPlus ? "add" : "imul");
 
 /* Figure out if the reg already holds one of our sources. */
 for (ref = isx->sourceList; ref != NULL; ref = ref->next)
@@ -249,6 +269,7 @@ if (regSource != NULL)
      * we find the other source and add it in. */
     struct slRef *otherSource = NULL;
     struct isxAddress *iad;
+    boolean isSwapped;
     for (ref = isx->sourceList; ref != NULL; ref = ref->next)
         {
 	if (ref != regSource)
@@ -258,7 +279,16 @@ if (regSource != NULL)
 	    }
 	}
     iad = otherSource->val;
-    fprintf(f, "\t%s\t", opCode);
+    isSwapped = (iad == isx->sourceList->val);
+    if (isSub && isSwapped)
+        {
+	fprintf(f, "\tneg\t%s\n", reg->name);
+	fprintf(f, "\tadd\t");
+	}
+    else
+	{
+	fprintf(f, "\t%s\t", opCode);
+	}
     pentPrintAddress(iad,f);
     }
 else
@@ -284,7 +314,8 @@ dest->reg = reg;
 void isxToPentium(struct dlList *iList, FILE *f)
 /* Convert isx code to pentium instructions in file. */
 {
-struct regInfo *destReg;
+int i;
+struct isxReg *destReg;
 struct dlNode *node, *nextNode;
 struct isx *isx;
 fprintf(f, "------------Theoretically generating pentium code------------\n");
@@ -295,7 +326,16 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
     isx = node->val;
     fprintf(f, "# ");	// uglyf
     isxDump(isx, f);	// uglyf
-    fprintf(f, "\n");	// uglyf
+    fprintf(f, "[");
+    for (i=0; i<ArraySize(regInfo); ++i)
+        {
+	struct isxReg *reg = &regInfo[i];
+	fprintf(f, "%s", reg->name);
+	if (reg->contents != NULL)
+	    fprintf(f, "@%s", reg->contents->name);
+	fprintf(f, " ");
+	}
+    fprintf(f, "]\n");	// uglyf
     switch (isx->opType)
         {
 	case poInit:
@@ -303,15 +343,14 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    pentAssign(isx, nextNode, f);
 	    break;
 	case poPlus:
+	    pentBinaryOp(isx, nextNode, "add", FALSE, f);
+	    break;
 	case poMul:
-	case poMinus:	// uglyf
-	    pentCommutativeOp(isx, nextNode, f);
+	    pentBinaryOp(isx, nextNode, "imul", FALSE, f);
 	    break;
-#ifdef SOON
 	case poMinus:
-	    pentSubOp(isx, nextNode, f);
+	    pentBinaryOp(isx, nextNode, "sub", TRUE, f);
 	    break;
-#endif /* SOON */
 	}
     }
 }

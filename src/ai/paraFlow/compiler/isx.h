@@ -78,7 +78,7 @@ struct isxAddress
     enum isxAddressType adType;/* Address type */
     enum isxValType valType;	/* Value type */
     union isxAddressVal val;	/* Address value */
-    struct regInfo *reg;	/* Register if any */
+    struct isxReg *reg;	/* Register if any */
     };
 
 struct isx
@@ -89,6 +89,15 @@ struct isx
     struct slRef *destList;	/* Destination addresses */
     struct slRef *sourceList;	/* Source addresses */
     struct slRef *liveList;	/* List of live vars after instruction  */
+    };
+
+struct isxReg
+/* Represents a CPU register. */
+    {
+    char *name;			 /* Register name */
+    enum isxValType *types;	 /* Types it can handle */
+    int typeCount;		 /* Count of types it can handle */
+    struct isxAddress *contents; /* What if anything register holds */
     };
 
 struct isx *isxNew(struct pfCompile *pfc, 

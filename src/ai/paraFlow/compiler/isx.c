@@ -122,6 +122,8 @@ switch (iad->adType)
         fprintf(f, "#%s", iad->name);
 	break;
     }
+if (iad->reg != NULL)
+    fprintf(f, "@%s", iad->reg->name);
 }
 
 void isxDump(struct isx *isx, FILE *f)
@@ -150,6 +152,8 @@ if (isx->liveList != NULL)
         {
 	iad = ref->val;
 	fprintf(f, "%s", iad->name);
+	if (iad->reg != NULL)
+	    fprintf(f, "@%s", iad->reg->name);
 	if (ref->next != NULL)
 	    fprintf(f, ",");
 	}
@@ -426,7 +430,6 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 
     /* Save away current live list. */
     isx->liveList = liveList;
-    uglyf("processing %d which has %d els:\n",  isx->label, slCount(liveList));
 
     /* Make copy of live list minus any overwritten dests. */
     for (ref = liveList; ref != NULL; ref = ref->next)
@@ -434,8 +437,6 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 	struct isxAddress *iad = ref->val;
 	if (!refOnList(isx->destList, iad))
 	    refAdd(&newList, iad);
-	else
-	    uglyf("removing %s\n", iad->name);
 	}
 
     /* Add sources to live list */
@@ -444,7 +445,6 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 	struct isxAddress *iad = ref->val;
 	if (iad->adType == iadRealVar || iad->adType == iadTempVar)
 	    {
-	    uglyf("Adding %s\n", iad->name);
 	    refAddUnique(&newList, iad);
 	    }
 	}
