@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.33 2006/03/17 21:26:20 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.34 2006/03/19 02:22:34 kate Exp $
 
 # to-do items:
 # - lots of testing
@@ -516,7 +516,7 @@ _EOF_
   close(SCRIPT);
   &HgAutomate::run("chmod a+x $bossScript");
   &HgAutomate::run("ssh -x $paraHub $bossScript");
-  &HgAutomate::run("ssh -x $fileServer csh -ef xdir.sh");
+  &HgAutomate::run("ssh -x $fileServer csh -ef $runDir/xdir.sh");
 }
 
 sub doBlastzClusterRun {
