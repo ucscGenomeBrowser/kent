@@ -1,7 +1,8 @@
 include ../../../inc/common.mk
 
 O = builtIn.o cCaseCode.o cCoder.o checkPara.o checkPoly.o cPara.o \
-    codedType.o constFold.o ctar.o defFile.o isx.o main.o pfBindVars.o \
+    codedType.o constFold.o ctar.o defFile.o isx.o isxToPentium.o \
+    main.o pfBindVars.o \
     pfParse.o pfScope.o pfToken.o pfType.o parseDump.o parseInto.o \
     recodedType.o refCount.o tokInto.o util.o
 

@@ -61,6 +61,7 @@ enum isxAddressType
     iadConst,
     iadRealVar,
     iadTempVar,
+    iadOperator,
     };
 
 union isxAddressVal
@@ -73,7 +74,6 @@ union isxAddressVal
 struct isxAddress
 /* A piece of data somewhere */
     {
-    struct isxAddress *next;	/* Next address in list. */
     char *name;			/* Not allocated here. */
     enum isxAddressType adType;/* Address type */
     enum isxValType valType;	/* Value type */
@@ -85,14 +85,14 @@ struct isx
     {
     int label;			/* Numerical label */
     enum isxOpType opType;	/* Opcode - add, mul, branch, etc. */
-    struct isxAddress *dest;	/* Destination addresses */
-    struct isxAddress *source;	/* Source addresses */
+    struct slRef *destList;		/* Destination addresses */
+    struct slRef *sourceList;		/* Source addresses */
     };
 
 struct isx *isxNew(struct pfCompile *pfc, 
 	enum isxOpType opType,
-	struct isxAddress *dest,
-	struct isxAddress *source,
+	struct slRef *destList,
+	struct slRef *sourceList,
 	struct dlList *iList);
 /* Return new isx */
 
@@ -104,6 +104,9 @@ void isxDumpList(struct dlList *list, FILE *f);
 
 struct dlList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp);
 /* Convert parse tree to isx. */
+
+void isxToPentium(struct dlList *iList, FILE *f);
+/* Convert isx code to pentium instructions in file. */
 
 #endif /* ISIX_H */
 
