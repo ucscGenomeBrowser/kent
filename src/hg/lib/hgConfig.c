@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static char const rcsid[] = "$Id: hgConfig.c,v 1.13 2006/03/09 20:29:09 angie Exp $";
+static char const rcsid[] = "$Id: hgConfig.c,v 1.14 2006/03/19 18:14:33 markd Exp $";
 
 #include "common.h"
 #include "hash.h"
@@ -86,6 +86,7 @@ if((lf = lineFileMayOpen(filename, TRUE)) != 0)
                 }
 	    }
 	}
+    lineFileClose(&lf);
     }
 }
 
