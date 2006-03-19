@@ -82,6 +82,32 @@ switch (val)
     }
 }
 
+char *isxRegName(struct isxReg *reg, enum isxValType valType)
+/* Get name of reg for given type. */
+{
+switch (valType)
+    {
+    case ivByte:
+	return reg->byteName;
+    case ivShort:
+	return reg->shortName;
+    case ivInt:
+	return reg->intName;
+    case ivLong:
+	return reg->longName;
+    case ivFloat:
+	return reg->floatName;
+    case ivDouble:
+	return reg->doubleName;
+    case ivObject:
+	return reg->pointerName;
+    default:
+	internalErr();
+	return NULL;
+    }
+}
+
+
 
 static void isxAddrDump(struct isxAddress *iad, FILE *f)
 /* Print variable name or n/a */
@@ -123,8 +149,9 @@ switch (iad->adType)
 	break;
     }
 if (iad->reg != NULL)
-    fprintf(f, "@%s", iad->reg->name);
+    fprintf(f, "@%s", isxRegName(iad->reg, iad->valType));
 }
+
 
 void isxDump(struct isx *isx, FILE *f)
 /* Dump out isx code */
@@ -153,7 +180,7 @@ if (isx->liveList != NULL)
 	iad = ref->val;
 	fprintf(f, "%s", iad->name);
 	if (iad->reg != NULL)
-	    fprintf(f, "@%s", iad->reg->name);
+	    fprintf(f, "@%s", isxRegName(iad->reg, iad->valType));
 	if (ref->next != NULL)
 	    fprintf(f, ",");
 	}

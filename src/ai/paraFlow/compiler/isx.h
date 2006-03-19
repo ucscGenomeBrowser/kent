@@ -94,11 +94,16 @@ struct isx
 struct isxReg
 /* Represents a CPU register. */
     {
-    char *name;			 /* Register name */
-    enum isxValType *types;	 /* Types it can handle */
-    int typeCount;		 /* Count of types it can handle */
+    char *byteName;		 /* Register name when used for bytes. */
+    char *shortName;		 /* Register name when used for shorts. */
+    char *intName;		 /* Register name when used for ints. */
+    char *longName;		 /* Register name when used for longs. */
+    char *floatName;		 /* Register name when used for floats. */
+    char *doubleName;		 /* Register name when used for doubles. */
+    char *pointerName;		 /* Register name when used for pointers. */
     struct isxAddress *contents; /* What if anything register holds */
     };
+
 
 struct isx *isxNew(struct pfCompile *pfc, 
 	enum isxOpType opType,
@@ -106,6 +111,9 @@ struct isx *isxNew(struct pfCompile *pfc,
 	struct slRef *sourceList,
 	struct dlList *iList);
 /* Return new isx */
+
+char *isxRegName(struct isxReg *reg, enum isxValType valType);
+/* Get name of reg for given type. */
 
 void isxDump(struct isx *isx, FILE *f);
 /* Dump out isx code */

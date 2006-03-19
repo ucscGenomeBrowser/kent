@@ -10,42 +10,104 @@
 #include "pfCompile.h"
 #include "isx.h"
 
-static enum isxValType abcdRegTypes[] = { ivInt, ivObject,};
-static enum isxValType siDiRegTypes[] = {ivInt, ivObject,};
-static enum isxValType stRegTypes[] = {ivFloat, ivDouble,};
-
 enum pentRegs
 /* These need to be in same order as regInfo table. */
    {
-   ax=0,
-   bx=1,
-   cx=2,
-   dx=3,
-   si=4,
-   di=5,
-   st0=6,
+   ax=0, bx=1, cx=2, dx=3, si=4, di=5, st0=6,
    };
 
 static struct isxReg regInfo[] = {
-    { "eax", abcdRegTypes, ArraySize(abcdRegTypes),},
-    { "ebx", abcdRegTypes, ArraySize(abcdRegTypes),},
-    { "ecx", abcdRegTypes, ArraySize(abcdRegTypes),},
-    { "edx", abcdRegTypes, ArraySize(abcdRegTypes),},
+    { "%al", "%ax", "%eax", NULL, NULL, NULL, "%eax"},
+    { "%bl", "%bx", "%ebx", NULL, NULL, NULL, "%ebx"},
+    { "%cl", "%cx", "%ecx", NULL, NULL, NULL, "%ecx"},
+    { "%dl", "%dx", "%edx", NULL, NULL, NULL, "%edx"},
+    { NULL, "%si", "%esi", NULL, NULL, NULL, "%esi"},
+    { NULL, "%di", "%edi", NULL, NULL, NULL, "%edi"},
 #ifdef SOON
-    { "esi", siDiRegTypes, ArraySize(siDiRegTypes),},
-    { "edi", siDiRegTypes, ArraySize(siDiRegTypes),},
-    { "st0", stRegTypes, ArraySize(stRegTypes),},
-    { "st1", stRegTypes, ArraySize(stRegTypes),},
-    { "st2", stRegTypes, ArraySize(stRegTypes),},
-    { "st3", stRegTypes, ArraySize(stRegTypes),},
-    { "st4", stRegTypes, ArraySize(stRegTypes),},
-    { "st5", stRegTypes, ArraySize(stRegTypes),},
-    { "st6", stRegTypes, ArraySize(stRegTypes),},
-    { "st7", stRegTypes, ArraySize(stRegTypes),},
+    { NULL, NULL, NULL, NULL, "%st0", "%st0, NULL},
+    { NULL, NULL, NULL, NULL, "%st1", "%st1, NULL},
+    { NULL, NULL, NULL, NULL, "%st2", "%st2, NULL},
+    { NULL, NULL, NULL, NULL, "%st3", "%st3, NULL},
+    { NULL, NULL, NULL, NULL, "%st4", "%st4, NULL},
+    { NULL, NULL, NULL, NULL, "%st5", "%st5, NULL},
+    { NULL, NULL, NULL, NULL, "%st6", "%st6, NULL},
+    { NULL, NULL, NULL, NULL, "%st7", "%st7, NULL},
 #endif /* SOON */
 };
 
-int refListIx(struct slRef *refList, void *val)
+enum pentDataOp
+/* Some of the pentium op codes that apply to many types */
+    {
+    opMov, opAdd, opSub, opMul, opDiv, opAnd, opOr, opXor, opAsl, 
+    opAsr, opNeg, opNot,
+    };
+
+struct dataOpTable
+/* Opcode table */
+    {
+    enum pentDataOp op;
+    char *byteName;
+    char *shortName;
+    char *intName;
+    char *longName;
+    char *floatName;
+    char *doubleName;
+    char *pointerName;
+    };
+
+static struct dataOpTable dataOpTable[] =
+    {
+    {opMov, "movb", "movw", "movl", NULL, NULL, NULL, "movl"},
+    {opAdd, "addb", "addw", "addl", NULL, "fadd", "fadd", "addl"},
+    {opSub, "subb", "subw", "subl", NULL, "fsub", "fsub", "subl"},
+    {opMul, "imulb", "imulw", "imull", NULL, "fmul", "fmul", NULL},
+    {opDiv, "idivb", "idivw", "idivl", NULL, "fdiv", "fdiv", NULL},
+    {opAnd, "andb", "andw", "andl", NULL, NULL, NULL, NULL},
+    {opOr, "orb", "orw", "orl", NULL, NULL, NULL, NULL},
+    {opXor, "xorb", "xorw", "xorl", NULL, NULL, NULL, NULL},
+    {opAsl, "salb", "salw", "sall", NULL, NULL, NULL, NULL},
+    {opAsr, "sarrb", "sarw", "sarl", NULL, NULL, NULL, NULL},
+    {opNeg, "negb", "negw", "negl", NULL, NULL, NULL, NULL},
+    {opNot, "notb", "notw", "notl", NULL, NULL, NULL, NULL},
+    };
+
+static char *opOfType(enum pentDataOp opType, enum isxValType valType)
+/* Return string for given opCode and data type */
+{
+char *opString;
+switch (valType)
+    {
+    case ivByte:
+	opString = dataOpTable[opType].byteName;
+	break;
+    case ivShort:
+	opString = dataOpTable[opType].shortName;
+	break;
+    case ivInt:
+	opString = dataOpTable[opType].intName;
+	break;
+    case ivLong:
+	opString = dataOpTable[opType].longName;
+	break;
+    case ivFloat:
+	opString = dataOpTable[opType].floatName;
+	break;
+    case ivDouble:
+	opString = dataOpTable[opType].doubleName;
+	break;
+    case ivObject:
+	opString = dataOpTable[opType].pointerName;
+	break;
+    default:
+	internalErr();
+	opString = NULL;
+	break;
+    }
+assert(opString != NULL);
+return opString;
+}
+
+static int refListIx(struct slRef *refList, void *val)
 /* Return index of ref on list, or -1 if not there. */
 {
 struct slRef *ref;
@@ -56,7 +118,7 @@ for (ref = refList; ref != NULL; ref = ref->next,++ix)
 return -1;
 }
 
-int findNextUse(struct isxAddress *iad, struct dlNode *node)
+static int findNextUse(struct isxAddress *iad, struct dlNode *node)
 /* Find next use of node. */
 {
 int count = 1;
@@ -69,16 +131,106 @@ for (; !dlEnd(node); node = node->next, ++count)
 return count+1;
 }
 
-static int tempIx;
+static void pentPrintAddress(struct isxAddress *iad, FILE *f)
+/* Print out an address for an instruction. */
+{
+switch (iad->adType)
+    {
+    case iadConst:
+	{
+	fprintf(f, "$%d", iad->val.tok->val.i);
+	break;
+	}
+    case iadRealVar:
+	{
+	if (iad->reg != NULL)
+	    fprintf(f, "%s", isxRegName(iad->reg, iad->valType));
+	else
+	    fprintf(f, "%s", iad->name);
+	break;
+	}
+    case iadTempVar:
+	{
+	if (iad->reg != NULL)
+	    fprintf(f, "%s", isxRegName(iad->reg, iad->valType));
+	else
+	    fprintf(f, "%d(ebp)", iad->val.tempMemLoc);
+	break;
+	}
+    default:
+        internalErr();
+	break;
+    }
+}
+
+static void printOp(enum pentDataOp opType, struct isxAddress *source,
+	struct isxAddress *dest, FILE *f)
+/* Print op to file */
+{
+char *opName = opOfType(opType, source->valType);
+fprintf(f, "\t%s\t", opName);
+pentPrintAddress(source, f);
+if (dest != NULL)
+    {
+    fprintf(f, ",");
+    pentPrintAddress(dest, f);
+    }
+fprintf(f, "\n");
+}
+
+static void printOpSourceReg(enum pentDataOp opType, struct isxReg *reg,
+	struct isxAddress *dest, FILE *f)
+/* Print op where source is a register. */
+{
+enum isxValType valType = dest->valType;
+char *opName = opOfType(opType, valType);
+char *regName = isxRegName(reg, valType);
+fprintf(f, "\t%s\t%s,", opName, regName);
+pentPrintAddress(dest, f);
+fprintf(f, "\n");
+}
+
+static void printOpDestReg(enum pentDataOp opType, 
+	struct isxAddress *source, struct isxReg *reg, FILE *f)
+/* Print op where dest is a register. */
+{
+enum isxValType valType = source->valType;
+char *opName = opOfType(opType, valType);
+char *regName = isxRegName(reg, valType);
+fprintf(f, "\t%s\t", opName);
+pentPrintAddress(source, f);
+fprintf(f, ",%s\n", regName);
+}
+
+static void unaryOpReg(enum pentDataOp opType, struct isxReg *reg, 
+	enum isxValType valType,FILE *f)
+/* Do unary op on register. */
+{
+char *regName = isxRegName(reg, valType);
+char *opName = opOfType(opType, valType);
+fprintf(f, "\t%s\t%s\n", opName, regName);
+}
+
+static void clearReg(struct isxReg *reg, FILE *f)
+/* Clear out register. */
+{
+char *name = reg->pointerName;
+assert(name != NULL);
+fprintf(f, "\txorl\t%s,%s\n", name, name);
+}
+
 
 static void pentSwapTempFromReg(struct isxReg *reg, FILE *f)
 /* If reg contains something not also in memory then save it out. */
 {
 struct isxAddress *iad = reg->contents;
+struct isxAddress old = *iad;
+static int tempIx;
+
 tempIx -= 4;	// FIXME
-fprintf(f, "\tmov\t%s,%d(ebp)\n", reg->name, tempIx);
 iad->reg = NULL;
 iad->val.tempMemLoc = tempIx;
+printOp(opMov, &old, iad, f);
 }
 
 static void pentSwapOutIfNeeded(struct isxReg *reg, FILE *f)
@@ -218,38 +370,6 @@ for (i=0; i<regCount; ++i)
 }
 
 
-static void pentPrintAddress(struct isxAddress *iad, FILE *f)
-/* Print out an address for an instruction. */
-{
-switch (iad->adType)
-    {
-    case iadConst:
-	{
-	fprintf(f, "$%d", iad->val.tok->val.i);
-	break;
-	}
-    case iadRealVar:
-	{
-	if (iad->reg != NULL)
-	    fprintf(f, "%s", iad->reg->name);
-	else
-	    fprintf(f, "%s", iad->name);
-	break;
-	}
-    case iadTempVar:
-	{
-	if (iad->reg != NULL)
-	    fprintf(f, "%s", iad->reg->name);
-	else
-	    fprintf(f, "%d(ebp)", iad->val.tempMemLoc);
-	break;
-	}
-    default:
-        internalErr();
-	break;
-    }
-}
-
 static void pentAssign(struct isx *isx, struct dlNode *nextNode, FILE *f)
 /* Code assignment */
 {
@@ -259,7 +379,7 @@ struct isxReg *reg;
 if (source->adType == iadZero)
     {
     reg = freeReg(isx, nextNode, f);
-    fprintf(f, "\txor\t%s,%s\n", reg->name, reg->name);
+    clearReg(reg, f);
     }
 else
     {
@@ -267,21 +387,19 @@ else
     if (reg == NULL)
 	{
 	reg = freeReg(isx, nextNode, f);
-	fprintf(f, "\tmov\t");
-	pentPrintAddress(source,f);
-	fprintf(f, ",%s\n", reg->name);
+	printOpDestReg(opMov, source, reg, f);
 	}
     }
 if (dest->adType == iadRealVar)
-    fprintf(f, "\tmov\t%s,%s\n", reg->name, dest->name);
+    printOpSourceReg(opMov, reg, dest, f);
 if (reg->contents != NULL)
     reg->contents->reg = NULL;
 reg->contents = dest;
 dest->reg = reg;
 }
 
-static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode, char *opCode,
-	boolean isSub, FILE *f)
+static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode, 
+	enum pentDataOp opCode, boolean isSub, FILE *f)
 /* Code most binary ops.  Division is harder. */
 {
 struct isxReg *reg = freeReg(isx, nextNode, f);
@@ -314,14 +432,13 @@ if (regSource != NULL)
     isSwapped = (iad == isx->sourceList->val);
     if (isSub && isSwapped)
         {
-	fprintf(f, "\tneg\t%s\n", reg->name);
-	fprintf(f, "\tadd\t");
+	unaryOpReg(opNeg, reg, iad->valType, f);
+	printOpDestReg(opAdd, iad, reg, f);
 	}
     else
 	{
-	fprintf(f, "\t%s\t", opCode);
+	printOpDestReg(opCode, iad, reg, f);
 	}
-    pentPrintAddress(iad,f);
     }
 else
     {
@@ -329,13 +446,9 @@ else
     struct isxAddress *a,*b;
     a = sourceList->val;
     b = sourceList->next->val;
-    fprintf(f, "\tmov\t");
-    pentPrintAddress(a, f);
-    fprintf(f, ",%s\n", reg->name);
-    fprintf(f, "\t%s\t", opCode);
-    pentPrintAddress(b, f);
+    printOpDestReg(opMov, a, reg, f);
+    printOpDestReg(opCode, b, reg, f);
     }
-fprintf(f, ",%s\n", reg->name);
 if (reg->contents != NULL)
     reg->contents->reg = NULL;
 dest = isx->destList->val;
@@ -356,17 +469,13 @@ struct isxReg *eax = &regInfo[ax];
 struct isxReg *edx = &regInfo[dx];
 
 pentSwapOutIfNeeded(edx,f);
-fprintf(f, "\txor\t%s,%s\n", edx->name, edx->name);
+clearReg(edx, f);
 if (eax->contents != p)
     {
     pentSwapOutIfNeeded(eax, f);
-    fprintf(f, "\tmov\t");
-    pentPrintAddress(p, f);
-    fprintf(f, ",%s\n", eax->name);
+    printOpDestReg(opMov, p, eax, f);
     }
-fprintf(f, "\tidiv\t");
-pentPrintAddress(q, f);
-fprintf(f, "\n");
+printOp(opDiv, q, NULL, f);
 if (eax->contents != NULL)
     eax->contents->reg = NULL;
 if (isMod)
@@ -403,7 +512,7 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
     for (i=0; i<ArraySize(regInfo); ++i)
         {
 	struct isxReg *reg = &regInfo[i];
-	fprintf(f, "%s", reg->name);
+	fprintf(f, "%s", isxRegName(reg, ivInt));
 	if (reg->contents != NULL)
 	    fprintf(f, "@%s", reg->contents->name);
 	fprintf(f, " ");
@@ -416,13 +525,13 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    pentAssign(isx, nextNode, f);
 	    break;
 	case poPlus:
-	    pentBinaryOp(isx, nextNode, "add", FALSE, f);
+	    pentBinaryOp(isx, nextNode, opAdd, FALSE, f);
 	    break;
 	case poMul:
-	    pentBinaryOp(isx, nextNode, "imul", FALSE, f);
+	    pentBinaryOp(isx, nextNode, opMul, FALSE, f);
 	    break;
 	case poMinus:
-	    pentBinaryOp(isx, nextNode, "sub", TRUE, f);
+	    pentBinaryOp(isx, nextNode, opSub, TRUE, f);
 	    break;
 	case poDiv:
 	    pentModDivide(isx, nextNode, FALSE, f);
