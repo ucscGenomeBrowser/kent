@@ -468,13 +468,13 @@ struct isxAddress *d = isx->destList->val;
 struct isxReg *eax = &regInfo[ax];
 struct isxReg *edx = &regInfo[dx];
 
-pentSwapOutIfNeeded(edx,f);
-clearReg(edx, f);
 if (eax->contents != p)
     {
     pentSwapOutIfNeeded(eax, f);
     printOpDestReg(opMov, p, eax, f);
     }
+pentSwapOutIfNeeded(edx,f);
+clearReg(edx, f);
 printOp(opDiv, q, NULL, f);
 if (eax->contents != NULL)
     eax->contents->reg = NULL;
@@ -538,6 +538,21 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    break;
 	case poMod:
 	    pentModDivide(isx, nextNode, TRUE, f);
+	    break;
+	case poBitAnd:
+	    pentBinaryOp(isx, nextNode, opAnd, TRUE, f);
+	    break;
+	case poBitOr:
+	    pentBinaryOp(isx, nextNode, opOr, TRUE, f);
+	    break;
+	case poBitXor:
+	    pentBinaryOp(isx, nextNode, opXor, TRUE, f);
+	    break;
+	case poShiftLeft:
+	    pentBinaryOp(isx, nextNode, opAsl, TRUE, f);
+	    break;
+	case poShiftRight:
+	    pentBinaryOp(isx, nextNode, opAsr, TRUE, f);
 	    break;
 	}
     }

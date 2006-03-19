@@ -29,6 +29,11 @@ enum isxOpType
     poMul,
     poDiv,
     poMod,
+    poBitAnd,
+    poBitOr,
+    poBitXor,
+    poShiftLeft,
+    poShiftRight,
     poGoTo,	/* Unconditional jump */
     poBranch,	/* Conditional jump */
     poCall,	/* Call subroutine */

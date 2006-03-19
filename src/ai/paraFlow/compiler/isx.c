@@ -70,6 +70,16 @@ switch (val)
 	return "poDiv";
     case poMod:
 	return "poMod";
+    case poBitAnd:
+	return "poBitAnd";
+    case poBitOr:
+	return "poBitOr";
+    case poBitXor:
+	return "poBitXor";
+    case poShiftLeft:
+	return "poShiftLeft";
+    case poShiftRight:
+	return "poShiftRight";
     case poGoTo:
 	return "poGoTo";
     case poBranch:
@@ -397,6 +407,16 @@ switch (pp->type)
 	return isxBinaryOp(pfc, pp, varHash, poDiv, iList);
     case pptMod:
 	return isxBinaryOp(pfc, pp, varHash, poMod, iList);
+    case pptBitAnd:
+	return isxBinaryOp(pfc, pp, varHash, poBitAnd, iList);
+    case pptBitOr:
+	return isxBinaryOp(pfc, pp, varHash, poBitOr, iList);
+    case pptBitXor:
+	return isxBinaryOp(pfc, pp, varHash, poBitXor, iList);
+    case pptShiftLeft:
+	return isxBinaryOp(pfc, pp, varHash, poShiftLeft, iList);
+    case pptShiftRight:
+	return isxBinaryOp(pfc, pp, varHash, poShiftRight, iList);
     case pptStringCat:
         return isxStringCat(pfc, pp, varHash, iList);
     case pptCall:
