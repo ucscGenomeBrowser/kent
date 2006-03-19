@@ -527,7 +527,6 @@ else
      * seem worth it to optimize it further. */
     struct isxReg *eax = &regInfo[ax];
     struct isxReg *ecx = &regInfo[cx];
-    fprintf(f, "#ugly - doing shift the slow way\n");
     if (eax != p->reg)
 	{
 	pentSwapOutIfNeeded(eax,isx->liveList, f);
@@ -562,8 +561,10 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
     {
     nextNode = node->next;
     isx = node->val;
-    fprintf(f, "# ");	// uglyf
-    isxDump(isx, f);	// uglyf
+#define HELP_DEBUG
+#ifdef HELP_DEBUG
+    fprintf(f, "# ");	
+    isxDump(isx, f);
     fprintf(f, "[");
     for (i=0; i<ArraySize(regInfo); ++i)
         {
@@ -573,7 +574,8 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    fprintf(f, "@%s", reg->contents->name);
 	fprintf(f, " ");
 	}
-    fprintf(f, "]\n");	// uglyf
+    fprintf(f, "]\n");	
+#endif /* HELP_DEBUG */
     switch (isx->opType)
         {
 	case poInit:
