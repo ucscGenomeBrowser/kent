@@ -1,9 +1,9 @@
-/* variation.c - hgTracks routines that are specific to the SNP and
- * haplotype tracks */
+/* variation.c - hgTracks routines that are specific to the tracks in
+ * the variation group */
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.76 2006/03/09 09:07:15 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.77 2006/03/19 22:32:06 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -932,12 +932,19 @@ hPrintf(">\n");
 static void mapTrackBackground(struct track *tg, int xOff, int yOff)
 /* Print out image map rectangle that invokes hgTrackUi. */
 {
+struct dyString *name = newDyString(32);
+
+if (startsWith("hapmapLd", tg->mapName))
+    dyStringPrintf(name, "hapmapLd");
+else
+    dyStringPrintf(name, "%s", tg->mapName);
 hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", 
 	xOff, yOff, xOff+insideWidth, yOff+tg->height);
 /* change 'hapmapLd' to use parent composite table name */
 /* move this to hgTracks when finished */
-hPrintf("HREF=\"%s?%s=%u&c=%s&g=hapmapLd&i=hapmapLd\"", hgTrackUiName(), 
-	cartSessionVarName(), cartSessionId(cart), chromName);
+hPrintf("HREF=\"%s?%s=%u&c=%s&g=%s&i=%s\"", hgTrackUiName(), 
+	cartSessionVarName(), cartSessionId(cart), chromName, 
+	name->string, name->string);
 mapStatusMessage("%s controls", tg->mapName);
 hPrintf(">\n");
 }
@@ -1217,8 +1224,6 @@ if (startsWith("hapmapLd", pop) && strlen(tg->mapName)>8)
     if (sameString(tg->mapName, "hapmapLdChbJpt"))
 	pop = cloneString("Jpt+Chb");
     }
-else if (sameString(tg->mapName, "rertyHumanDiversityLd"))
-    pop = cloneString("rerty");
 else
     pop = "";
 
