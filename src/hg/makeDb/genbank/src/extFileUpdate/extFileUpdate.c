@@ -17,7 +17,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: extFileUpdate.c,v 1.6 2006/03/19 17:16:56 markd Exp $";
+static char const rcsid[] = "$Id: extFileUpdate.c,v 1.7 2006/03/19 18:18:24 markd Exp $";
 
 /*
  * Algorithm:
@@ -47,6 +47,57 @@ static boolean gStopSignaled = FALSE;  /* stop at the end of the current
 static struct dbLoadOptions gOptions; /* options from cmdline and conf */
 static char* gGbdbGenBank = NULL;     /* root file path to put in database */
 
+struct outdatedSeq
+/* structure used to hold outdated seq information */
+{
+    struct outdatedSeq *next;
+    unsigned seqId;             /* id in seq table */
+    char *acc;                  /* genbank acc and version */
+    unsigned version;
+    char *type;                 /* sequence type, not malloced */
+};
+
+static struct outdatedSeq *outdatedSeqNew(unsigned seqId, char *acc, 
+                                          unsigned version, char *type)
+/* create a new outdated seq structure */
+{
+struct outdatedSeq *os;
+AllocVar(os);
+os->seqId = seqId;
+os->acc = cloneString(acc);
+os->version = version;
+if (sameString(type, "mRNA"))
+    os->type = "mRNA";
+else if (sameString(type, "EST"))
+    os->type = "EST";
+else if (sameString(type, "PEP"))
+    os->type = "PEP";
+return os;
+}
+
+static void outdatedSeqFree(struct outdatedSeq **osPtr)
+/* free an outdated seq structure */
+{
+struct outdatedSeq *os = *osPtr;
+if (os != NULL)
+    {
+    freeMem(os->acc);
+    freeMem(os);
+    *osPtr = NULL;
+    }
+}
+
+static void outdatedSeqFreeList(struct outdatedSeq **osList)
+/* free list of outdatedSeq structs */
+{
+struct outdatedSeq *os;
+while ((os = slPopHead(osList)) != NULL)
+    {
+    outdatedSeqFree(&os);
+    }
+*osList = NULL;
+}
+
 static void sigStopSignaled(int sig)
 /* signal handler that sets the stopWhenSafe flag */
 {
@@ -61,15 +112,6 @@ if (gStopSignaled)
     fprintf(stderr, "*** Stopped by SIGUSR1 request ***\n");
     exit(1);
     }
-}
-
-static void setTimeouts(struct sqlConnection *conn)
-/* set session timeouts, since we do some time consuming file loads during
- * a query. */
-{
-char query[256];
-safef(query, sizeof(query), "set net_write_timeout=%d", 10*60*60);
-safef(query, sizeof(query), "set net_read_timeout=%d", 10*60*60);
 }
 
 static void cleanExtFileTable(struct sqlConnection *conn)
@@ -129,22 +171,24 @@ hFreeConn(&conn);
 return rit;
 }
 
-static struct sqlResult *outdatedSeqQuery(struct sqlConnection *conn,
-                                          struct gbSelect *select,
-                                          struct extFileRef* extFiles)
-/* start query for outdated sequences. Selects seq that are of the type
-* in select and who's files are not in extFiles.  Note that extFiles
-* can be NULL, if the table contains none of the current files. */
+static struct outdatedSeq *getOutdatedSeqs(struct sqlConnection *conn,
+                                           struct gbSelect *select,
+                                           struct extFileRef* extFiles)
+/* query for outdated sequences. Selects seq that are of the type
+ * in select and who's files are not in extFiles.  Note that extFiles
+ * can be NULL, if the table contains none of the current files. */
 {
+struct outdatedSeq *outdatedSeqs = NULL;
 struct dyString *query = dyStringNew(0);
 struct extFileRef* ef;
 char *sep = "";
 struct sqlResult *result;
+char **row;
 
 dyStringPrintf(query, "select id, acc, version, type from gbSeq where (srcDb=\"%s\")",
                gbSrcDbName(select->release->srcDb));
 if (select->release->srcDb == GB_REFSEQ)
-    dyStringPrintf(query, " and ((type=\"mRna\") or (type=\"PEP\"))");
+    dyStringPrintf(query, " and ((type=\"mRNA\") or (type=\"PEP\"))");
 else
     dyStringPrintf(query, " and (type=\"%s\")", gbTypeName(select->type));
 if (select->accPrefix != NULL)
@@ -162,7 +206,12 @@ if (extFiles != NULL)
     }
 result = sqlGetResult(conn, query->string);
 dyStringFree(&query);
-return result;
+
+while ((row = sqlNextRow(result)) != NULL)
+    slSafeAddHead(&outdatedSeqs, outdatedSeqNew(sqlUnsigned(row[0]), row[1], sqlUnsigned(row[2]), row[3]));
+sqlFreeResult(&result);
+slReverse(&outdatedSeqs);
+return outdatedSeqs;
 }
 
 static int checkGbStatusVer(char *acc)
@@ -236,32 +285,34 @@ return NULL;
 }
 
 static void updateSeqEntry(struct raInfoTbl *rit, struct seqTbl *seqTbl,
-                           unsigned seqId, char *acc, unsigned version, char *type)
+                           struct outdatedSeq *os)
 /* add update for a given seq entry, skip with warning if not found in
  * table. */
 {
 struct raInfo *ri = NULL;
-if (startsWith("YP_", acc))
-    dropUnexpectedSeqEntry(seqTbl, seqId, acc, version, type);
+if (startsWith("YP_", os->acc))
+    dropUnexpectedSeqEntry(seqTbl, os->seqId, os->acc, os->version, os->type);
 else
-    ri = getRaInfo(rit, acc, version, type);
+    ri = getRaInfo(rit, os->acc, os->version, os->type);
 if (ri != NULL)
     {
-    gbVerbPr(4, "updateSeq %d %s.%d: ext: %d", seqId, acc, ri->version, ri->extFileId);
-    seqTblMod(seqTbl, seqId, ri->version, ri->extFileId,
+    /* update from ra entry */
+    gbVerbPr(4, "updateSeq %d %s.%d: ext: %d", os->seqId, os->acc, ri->version, ri->extFileId);
+    seqTblMod(seqTbl, os->seqId, ri->version, ri->extFileId,
               ri->size, ri->offset, ri->fileSize);
     }
 else 
     {
-    if (isPepInRefLink(acc))
+    /* not in ra table */
+    if (isPepInRefLink(os->acc))
         {
         fprintf(stderr, "Warning: %s %s.%d in gbSeqTbl and refLink, not in ra file, unchanged\n",
-                type, acc, version);
+                os->type, os->acc, os->version);
         }
     else
         {
-        fprintf(stderr, "Warning: dropping %s %s.%d\n", type, acc, version);
-        seqTblDelete(seqTbl, acc);
+        fprintf(stderr, "Warning: dropping %s %s.%d\n", os->type, os->acc, os->version);
+        seqTblDelete(seqTbl, os->acc);
         }
     }
 }
@@ -271,30 +322,27 @@ static void extFileUpdatePart(struct sqlConnection *conn,
                               struct extFileTbl* extFileTbl)
 /* update gbSeq/gbExtFile entries for one partition of the database */
 {
-struct seqTbl *seqTbl;
-struct extFileRef* extFiles;
-struct raInfoTbl *rit = NULL;  /* lazy creation */
-struct sqlResult *result;
-char **row;
+struct extFileRef* extFiles = extFileTblMatch(extFileTbl, select);
+struct outdatedSeq *outdatedSeqs = NULL;
 gbVerbEnter(3, "update %s", gbSelectDesc(select));
-seqTbl = seqTblNew(conn, "/var/tmp", (gbVerbose >= 4));
-extFiles = extFileTblMatch(extFileTbl, select);
-result = outdatedSeqQuery(conn, select, extFiles);
 
-while ((row = sqlNextRow(result)) != NULL)
+outdatedSeqs = getOutdatedSeqs(conn, select, extFiles);
+if (outdatedSeqs != NULL)
     {
-    if (rit == NULL)
-        rit = loadPartRaInfo(extFileTbl, select);
-    updateSeqEntry(rit, seqTbl, sqlUnsigned(row[0]), row[1], sqlUnsigned(row[2]), row[3]);
+    struct seqTbl *seqTbl = seqTblNew(conn, "/var/tmp", (gbVerbose >= 4));
+    struct raInfoTbl *rit = loadPartRaInfo(extFileTbl, select);
+    struct outdatedSeq *os;
+    for (os = outdatedSeqs; os != NULL; os = os->next)
+        updateSeqEntry(rit, seqTbl, os);
+    outdatedSeqFreeList(&outdatedSeqs);
+    raInfoTblFree(&rit);
+    if (gOptions.flags & DBLOAD_DRY_RUN)
+        seqTblCancel(seqTbl);
+    else
+        seqTblCommit(seqTbl, conn);
+    seqTblFree(&seqTbl);
     }
-sqlFreeResult(&result);
-raInfoTblFree(&rit);
 slFreeList(&extFiles);
-if (gOptions.flags & DBLOAD_DRY_RUN)
-    seqTblCancel(seqTbl);
-else
-    seqTblCommit(seqTbl, conn);
-seqTblFree(&seqTbl);
 gbVerbLeave(3, "update %s", gbSelectDesc(select));
 checkForStop();
 }
@@ -314,7 +362,6 @@ gOptions = dbLoadOptionsParse(db);
 hgSetDb(db);
 conn = hAllocConn();
 gbLockDb(conn, NULL);
-setTimeouts(conn);
 index = gbIndexNew(db, NULL);
 selectList = dbLoadPartitionsGet(&gOptions, index);
 extFileTbl = extFileTblLoad(conn);
@@ -326,6 +373,7 @@ slFreeList(&selectList);
 cleanExtFileTable(conn);
 gbUnlockDb(conn, NULL);
 hFreeConn(&conn);
+gbIndexFree(&index);
 gbVerbLeave(1, "extFileUpdate %s", db);
 }
 
