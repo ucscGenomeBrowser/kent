@@ -14,12 +14,24 @@ static enum isxValType abcdRegTypes[] = { ivInt, ivObject,};
 static enum isxValType siDiRegTypes[] = {ivInt, ivObject,};
 static enum isxValType stRegTypes[] = {ivFloat, ivDouble,};
 
-struct isxReg regInfo[] = {
+enum pentRegs
+/* These need to be in same order as regInfo table. */
+   {
+   ax=0,
+   bx=1,
+   cx=2,
+   dx=3,
+   si=4,
+   di=5,
+   st0=6,
+   };
+
+static struct isxReg regInfo[] = {
     { "eax", abcdRegTypes, ArraySize(abcdRegTypes),},
     { "ebx", abcdRegTypes, ArraySize(abcdRegTypes),},
     { "ecx", abcdRegTypes, ArraySize(abcdRegTypes),},
-#ifdef SOON
     { "edx", abcdRegTypes, ArraySize(abcdRegTypes),},
+#ifdef SOON
     { "esi", siDiRegTypes, ArraySize(siDiRegTypes),},
     { "edi", siDiRegTypes, ArraySize(siDiRegTypes),},
     { "st0", stRegTypes, ArraySize(stRegTypes),},
@@ -58,6 +70,30 @@ return count+1;
 }
 
 static int tempIx;
+
+static void pentSwapTempFromReg(struct isxReg *reg, FILE *f)
+/* If reg contains something not also in memory then save it out. */
+{
+struct isxAddress *iad = reg->contents;
+tempIx -= 4;	// FIXME
+fprintf(f, "\tmov\t%s,%d(ebp)\n", reg->name, tempIx);
+iad->reg = NULL;
+iad->val.tempMemLoc = tempIx;
+}
+
+static void pentSwapOutIfNeeded(struct isxReg *reg, FILE *f)
+/* Swap out register to memory if need be. */
+{
+struct isxAddress *iad = reg->contents;
+if (iad != NULL)
+    {
+    if (iad->adType == iadTempVar && iad->val.tempMemLoc == 0)
+	pentSwapTempFromReg(reg, f);
+    else
+	iad->reg = NULL;
+    }
+reg->contents = NULL;
+}
 
 static struct isxReg *freeReg(struct isx *isx, struct dlNode *nextNode, FILE *f)
 /* Find free register for instruction result. */
@@ -100,9 +136,9 @@ for (i=0; i<regCount; ++i)
     struct isxReg *reg = &regs[i];
     struct isxAddress *iad = reg->contents;
     if (iad == NULL)
-        return reg;
+	return reg;
     if (!refOnList(isx->liveList, iad))
-        return reg;
+	return reg;
     }
 
 /* No free registers, well dang.  Then use a register that
@@ -149,7 +185,7 @@ for (i=0; i<regCount; ++i)
 	    {
 	    int nextUse = findNextUse(iad, nextNode);
 	    if (nextUse > soonestUse)
-	        {
+		{
 		soonestUse = nextUse;
 		freeReg = reg;
 		}
@@ -176,11 +212,7 @@ for (i=0; i<regCount; ++i)
 	    freeReg = reg;
 	    }
 	}
-    tempIx -= 4;	// FIXME
-    fprintf(f, "\tmov %s,%d(ebp)\n", freeReg->name, tempIx);
-    iad = freeReg->contents;
-    iad->reg = NULL;
-    iad->val.tempMemLoc = tempIx;
+    pentSwapTempFromReg(freeReg, f);
     return freeReg;
     }
 }
@@ -227,7 +259,7 @@ struct isxReg *reg;
 if (source->adType == iadZero)
     {
     reg = freeReg(isx, nextNode, f);
-    fprintf(f, "\tsub\t%s,%s\n", reg->name, reg->name);
+    fprintf(f, "\txor\t%s,%s\n", reg->name, reg->name);
     }
 else
     {
@@ -311,6 +343,47 @@ reg->contents = dest;
 dest->reg = reg;
 }
 
+static void pentModDivide(struct isx *isx, struct dlNode *nextNode, 
+	boolean isMod, FILE *f)
+/* Generate code for mod or divide. */
+{
+struct slRef *pRef = isx->sourceList;
+struct slRef *qRef = pRef->next;
+struct isxAddress *p = pRef->val;
+struct isxAddress *q = qRef->val;
+struct isxAddress *d = isx->destList->val;
+struct isxReg *eax = &regInfo[ax];
+struct isxReg *edx = &regInfo[dx];
+
+pentSwapOutIfNeeded(edx,f);
+fprintf(f, "\txor\t%s,%s\n", edx->name, edx->name);
+if (eax->contents != p)
+    {
+    pentSwapOutIfNeeded(eax, f);
+    fprintf(f, "\tmov\t");
+    pentPrintAddress(p, f);
+    fprintf(f, ",%s\n", eax->name);
+    }
+fprintf(f, "\tidiv\t");
+pentPrintAddress(q, f);
+fprintf(f, "\n");
+if (eax->contents != NULL)
+    eax->contents->reg = NULL;
+if (isMod)
+    {
+    /* Jean would like code to add q to a negative result here. */
+    eax->contents = NULL;
+    edx->contents = d;
+    d->reg = edx;
+    }
+else
+    {
+    edx->contents = NULL;
+    eax->contents = d;
+    d->reg = eax;
+    }
+}
+
 void isxToPentium(struct dlList *iList, FILE *f)
 /* Convert isx code to pentium instructions in file. */
 {
@@ -350,6 +423,12 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    break;
 	case poMinus:
 	    pentBinaryOp(isx, nextNode, "sub", TRUE, f);
+	    break;
+	case poDiv:
+	    pentModDivide(isx, nextNode, FALSE, f);
+	    break;
+	case poMod:
+	    pentModDivide(isx, nextNode, TRUE, f);
 	    break;
 	}
     }
