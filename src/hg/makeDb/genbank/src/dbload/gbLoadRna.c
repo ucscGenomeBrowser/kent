@@ -31,7 +31,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.30 2006/03/11 00:07:57 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.31 2006/03/19 18:17:06 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -54,8 +54,6 @@ static struct optionSpec optionSpecs[] = {
     {"gbdbGenBank", OPTION_STRING},
     {"reloadList", OPTION_STRING},
     {"reload", OPTION_BOOLEAN},
-    {"extFileUpdate", OPTION_BOOLEAN},
-    {"maxExtFileUpdate", OPTION_INT},
     {"verbose", OPTION_INT},
     {"conf", OPTION_STRING},
     {NULL, 0}
@@ -181,16 +179,6 @@ select->orgCats = orgCatsHold;
 return hasAligns;
 }
 
-bool extFileShouldUpdate(struct gbSelect* select)
-/* determined if ext files should be updated for a partition.  This checks if
- * they are enable, if they should be loaded, and the max number to update
- * hasn't been exceeded */
-{
-return (gOptions.flags & DBLOAD_EXT_FILE_UPDATE)
-    && (gExtFileChged < gOptions.maxExtFileUpdate)
-    && !gbLoadedTblExtFileUpdated(gLoadedTbl, select);
-}
-
 bool updateNeedsLoaded(struct gbSelect* select, struct gbUpdate* update)
 /* check if an update and orgCat is not in the gbLoaded table, but does
  * have index files. */
@@ -202,8 +190,7 @@ select->update = update;
 /* If the table indicates that this partition has not been loaded or extFile
  * links need to be updated, we check to see if there are readable alignments
  * index files. */
-needsLoaded = 
-    (!gbLoadedTblIsLoaded(gLoadedTbl, select) || extFileShouldUpdate(select))
+needsLoaded = (!gbLoadedTblIsLoaded(gLoadedTbl, select))
     && updateHasAligned(select, update);
 
 select->update = updateHold;
@@ -383,7 +370,6 @@ struct sqlConnection *conn = hAllocConn();
 struct gbStatusTbl* statusTbl;
 boolean maxShrinkageExceeded;
 char typePrefix[32], tmpDir[PATH_LEN];
-boolean extFileUpdate = FALSE;
 
 gbVerbEnter(3, "update %s", gbSelectDesc(select));
 
@@ -401,13 +387,12 @@ safef(tmpDir, sizeof(tmpDir), "%s/%s/%s/%s",
 if (!(gOptions.flags & DBLOAD_DRY_RUN))
     gbMakeDirs(tmpDir);
 
-extFileUpdate = extFileShouldUpdate(select);
 
 /* Build list of entries that need processed.  This also flags updates that
  * have the change and new entries so we can limit the per-update processing.
  */
 statusTbl = gbBuildState(conn, select, &gOptions, gMaxShrinkage, tmpDir,
-                         gbVerbose, extFileUpdate, &maxShrinkageExceeded);
+                         gbVerbose, FALSE, &maxShrinkageExceeded);
 if (maxShrinkageExceeded)
     {
     fprintf(stderr, "Warning: switching to dryRun mode due to maxShrinkage being exceeded\n");
@@ -443,7 +428,7 @@ else
 /* add this and partition to the loaded table, if not already there.
  * set the extFile updated flag updates were done or this is the initial load    */
 updateLoadedTbl(select);
-if (extFileUpdate || (gOptions.flags & DBLOAD_INITIAL))
+if (gOptions.flags & DBLOAD_INITIAL)
     gbLoadedTblSetExtFileUpdated(gLoadedTbl, select);
 
 if ((gOptions.flags & DBLOAD_INITIAL) == 0)
@@ -791,15 +776,6 @@ errAbort(
   "      would require more memory.\n"
   "\n"
   "     -workdir=work/load - Temporary directory for load files.\n"
-  "\n"
-  "     -extFileUpdate - update the gbSeq table to link each sequence to\n"
-  "      the latest release.  This allows removing fasta files for older\n"
-  "      releases, but is very time consuming.\n"
-  "\n"
-  "     -maxExtFileUpdate=n - update the gbSeq data for up to this many\n"
-  "      entries. This allows some entries to be changed on each update,\n"
-  "      while avoiding very long loads in a given day.  Implies\n"
-  "      -extFileUpdate\n"
   "\n"
   "     -verbose=n - enable verbose output, values greater than 1 increase \n"
   "                  verbosity:\n"
