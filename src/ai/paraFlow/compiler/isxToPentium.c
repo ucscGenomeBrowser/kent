@@ -211,6 +211,7 @@ char *opName = opOfType(opType, valType);
 fprintf(f, "\t%s\t%s\n", opName, regName);
 }
 
+
 static void clearReg(struct isxReg *reg, FILE *f)
 /* Clear out register. */
 {
@@ -233,14 +234,18 @@ iad->val.tempMemLoc = tempIx;
 printOp(opMov, &old, iad, f);
 }
 
-static void pentSwapOutIfNeeded(struct isxReg *reg, FILE *f)
+static void pentSwapOutIfNeeded(struct isxReg *reg, struct slRef *liveList, 
+	FILE *f)
 /* Swap out register to memory if need be. */
 {
 struct isxAddress *iad = reg->contents;
 if (iad != NULL)
     {
     if (iad->adType == iadTempVar && iad->val.tempMemLoc == 0)
-	pentSwapTempFromReg(reg, f);
+	{
+	if (refOnList(liveList, iad))
+	    pentSwapTempFromReg(reg, f);
+	}
     else
 	iad->reg = NULL;
     }
@@ -470,10 +475,10 @@ struct isxReg *edx = &regInfo[dx];
 
 if (eax->contents != p)
     {
-    pentSwapOutIfNeeded(eax, f);
+    pentSwapOutIfNeeded(eax, isx->liveList, f);
     printOpDestReg(opMov, p, eax, f);
     }
-pentSwapOutIfNeeded(edx,f);
+pentSwapOutIfNeeded(edx,isx->liveList, f);
 clearReg(edx, f);
 printOp(opDiv, q, NULL, f);
 if (eax->contents != NULL)
@@ -488,6 +493,57 @@ if (isMod)
 else
     {
     edx->contents = NULL;
+    eax->contents = d;
+    d->reg = eax;
+    }
+}
+
+static void pentShiftOp(struct isx *isx, struct dlNode *nextNode, 
+	enum pentDataOp opCode, FILE *f)
+/* Code shift ops.  */
+{
+struct slRef *pRef = isx->sourceList;
+struct slRef *qRef = pRef->next;
+struct isxAddress *p = pRef->val;
+struct isxAddress *q = qRef->val;
+struct isxAddress *d = isx->destList->val;
+
+if (q->adType == iadConst)
+    {
+    /* The constant case can be handled as normal. */
+    pentBinaryOp(isx, nextNode, opCode, FALSE, f);
+    return;
+    }
+else
+    {
+    /* Here where we shift by a non-constant amount.
+     * The code is only moderately optimized.  It always
+     * grabs eax as the destination and ecx as the thing
+     * to hold the amount to shift.  The use of ecx is
+     * constrained by the pentium instruction set.  The
+     * eax use is not necessary, but our regular register allocation
+     * scheme won't work, because it might end up returning
+     * ecx.  Since this is relatively rare code, it doesn't
+     * seem worth it to optimize it further. */
+    struct isxReg *eax = &regInfo[ax];
+    struct isxReg *ecx = &regInfo[cx];
+    fprintf(f, "#ugly - doing shift the slow way\n");
+    if (eax != p->reg)
+	{
+	pentSwapOutIfNeeded(eax,isx->liveList, f);
+	printOpDestReg(opMov, p, eax, f);
+	}
+    else
+        {
+	p->reg = NULL;
+	}
+    if (ecx != q->reg)
+	{
+	pentSwapOutIfNeeded(ecx,isx->liveList, f);
+	printOpDestReg(opMov, q, ecx, f);
+	}
+    fprintf(f, "\t%s\t%s,%s\n", opOfType(opCode, p->valType), 
+    	isxRegName(ecx, ivByte), isxRegName(eax, p->valType));
     eax->contents = d;
     d->reg = eax;
     }
@@ -549,12 +605,10 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    pentBinaryOp(isx, nextNode, opXor, TRUE, f);
 	    break;
 	case poShiftLeft:
-	    // TODO - actually the shifts just take an immediate
-	    // source or CL.
-	    pentBinaryOp(isx, nextNode, opSal, TRUE, f);
+	    pentShiftOp(isx, nextNode, opSal, f);
 	    break;
 	case poShiftRight:
-	    pentBinaryOp(isx, nextNode, opSar, TRUE, f);
+	    pentShiftOp(isx, nextNode, opSar, f);
 	    break;
 	}
     }
