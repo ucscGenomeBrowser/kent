@@ -80,6 +80,10 @@ switch (val)
 	return "poShiftLeft";
     case poShiftRight:
 	return "poShiftRight";
+    case poNegate:
+	return "poNegate";
+    case poFlipBits:
+	return "poFlipBits";
     case poGoTo:
 	return "poGoTo";
     case poBranch:
@@ -315,7 +319,6 @@ iad->name = name;
 return iad;
 }
 
-
 static struct isxAddress *isxBinaryOp(struct pfCompile *pfc, 
 	struct pfParse *pp, struct hash *varHash, 
 	enum isxOpType op, struct dlList *iList)
@@ -327,6 +330,18 @@ struct isxAddress *right = isxExpression(pfc, pp->children->next,
 	varHash, iList);
 struct isxAddress *dest = tempAddress(pfc, varHash, ppToIsxValType(pfc,pp));
 isxNew(pfc, op, dest, left, right, iList);
+return dest;
+}
+
+static struct isxAddress *isxUnaryOp(struct pfCompile *pfc, 
+	struct pfParse *pp, struct hash *varHash, 
+	enum isxOpType op, struct dlList *iList)
+/* Generate intermediate code for expression. Return destination */
+{
+struct isxAddress *target = isxExpression(pfc, pp->children,
+	varHash, iList);
+struct isxAddress *dest = tempAddress(pfc, varHash, ppToIsxValType(pfc,pp));
+isxNew(pfc, op, dest, target, NULL, iList);
 return dest;
 }
 
@@ -398,6 +413,10 @@ switch (pp->type)
 	return isxBinaryOp(pfc, pp, varHash, poShiftLeft, iList);
     case pptShiftRight:
 	return isxBinaryOp(pfc, pp, varHash, poShiftRight, iList);
+    case pptNegate:
+        return isxUnaryOp(pfc, pp, varHash, poNegate, iList);
+    case pptFlipBits:
+        return isxUnaryOp(pfc, pp, varHash, poFlipBits, iList);
     case pptStringCat:
         return isxStringCat(pfc, pp, varHash, iList);
     case pptCall:

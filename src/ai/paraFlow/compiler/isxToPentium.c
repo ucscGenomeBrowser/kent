@@ -17,21 +17,21 @@ enum pentRegs
    };
 
 static struct isxReg regInfo[] = {
-    { "%al", "%ax", "%eax", NULL, NULL, NULL, "%eax"},
-    { "%bl", "%bx", "%ebx", NULL, NULL, NULL, "%ebx"},
-    { "%cl", "%cx", "%ecx", NULL, NULL, NULL, "%ecx"},
-    { "%dl", "%dx", "%edx", NULL, NULL, NULL, "%edx"},
-    { NULL, "%si", "%esi", NULL, NULL, NULL, "%esi"},
-    { NULL, "%di", "%edi", NULL, NULL, NULL, "%edi"},
+    { 4, "%al", "%ax", "%eax", NULL, NULL, NULL, "%eax"},
+    { 4, "%bl", "%bx", "%ebx", NULL, NULL, NULL, "%ebx"},
+    { 4, "%cl", "%cx", "%ecx", NULL, NULL, NULL, "%ecx"},
+    { 4, "%dl", "%dx", "%edx", NULL, NULL, NULL, "%edx"},
+    { 4, NULL, "%si", "%esi", NULL, NULL, NULL, "%esi"},
+    { 4, NULL, "%di", "%edi", NULL, NULL, NULL, "%edi"},
 #ifdef SOON
-    { NULL, NULL, NULL, NULL, "%st0", "%st0, NULL},
-    { NULL, NULL, NULL, NULL, "%st1", "%st1, NULL},
-    { NULL, NULL, NULL, NULL, "%st2", "%st2, NULL},
-    { NULL, NULL, NULL, NULL, "%st3", "%st3, NULL},
-    { NULL, NULL, NULL, NULL, "%st4", "%st4, NULL},
-    { NULL, NULL, NULL, NULL, "%st5", "%st5, NULL},
-    { NULL, NULL, NULL, NULL, "%st6", "%st6, NULL},
-    { NULL, NULL, NULL, NULL, "%st7", "%st7, NULL},
+    { 8, NULL, NULL, NULL, NULL, "%st0", "%st0, NULL},
+    { 8, NULL, NULL, NULL, NULL, "%st1", "%st1, NULL},
+    { 8, NULL, NULL, NULL, NULL, "%st2", "%st2, NULL},
+    { 8, NULL, NULL, NULL, NULL, "%st3", "%st3, NULL},
+    { 8, NULL, NULL, NULL, NULL, "%st4", "%st4, NULL},
+    { 8, NULL, NULL, NULL, NULL, "%st5", "%st5, NULL},
+    { 8, NULL, NULL, NULL, NULL, "%st6", "%st6, NULL},
+    { 8, NULL, NULL, NULL, NULL, "%st7", "%st7, NULL},
 #endif /* SOON */
 };
 
@@ -66,7 +66,7 @@ static struct dataOpTable dataOpTable[] =
     {opOr, "orb", "orw", "orl", NULL, NULL, NULL, NULL},
     {opXor, "xorb", "xorw", "xorl", NULL, NULL, NULL, NULL},
     {opSal, "salb", "salw", "sall", NULL, NULL, NULL, NULL},
-    {opSar, "sarrb", "sarw", "sarl", NULL, NULL, NULL, NULL},
+    {opSar, "sarb", "sarw", "sarl", NULL, NULL, NULL, NULL},
     {opNeg, "negb", "negw", "negl", NULL, NULL, NULL, NULL},
     {opNot, "notb", "notw", "notl", NULL, NULL, NULL, NULL},
     };
@@ -228,7 +228,7 @@ struct isxAddress *iad = reg->contents;
 struct isxAddress old = *iad;
 static int tempIx;
 
-tempIx -= 4;	// FIXME
+tempIx -= reg->size;	/* Could do better... TODO FIXME */
 iad->reg = NULL;
 iad->val.tempMemLoc = tempIx;
 printOp(opMov, &old, iad, f);
@@ -256,6 +256,7 @@ static struct isxReg *freeReg(struct isx *isx, struct dlNode *nextNode, FILE *f)
 /* Find free register for instruction result. */
 {
 int i;
+enum isxValType valType = isx->dest->valType;
 struct isxReg *regs = regInfo;
 int regCount = ArraySize(regInfo);
 struct isxReg *freeReg = NULL;
@@ -266,26 +267,29 @@ struct isxReg *freeReg = NULL;
     for (i=0; i<regCount; ++i)
 	{
 	struct isxReg *reg = &regs[i];
-	struct isxAddress *iad = reg->contents;
-	if (iad != NULL)
-	     {
-	     int sourceIx = 0;
-	     if (isx->left == iad)
-	         sourceIx = 1;
-	     else if (isx->right == iad)
-	         sourceIx = 2;
-	     if (sourceIx)
+	if (isxRegName(reg, valType))
+	    {
+	    struct isxAddress *iad = reg->contents;
+	    if (iad != NULL)
 		 {
-		 if (!refOnList(isx->liveList, iad))
+		 int sourceIx = 0;
+		 if (isx->left == iad)
+		     sourceIx = 1;
+		 else if (isx->right == iad)
+		     sourceIx = 2;
+		 if (sourceIx)
 		     {
-		     if (sourceIx < freeIx)
+		     if (!refOnList(isx->liveList, iad))
 			 {
-			 freeIx = sourceIx;	/* Prefer first source */
-			 freeReg = reg;
+			 if (sourceIx < freeIx)
+			     {
+			     freeIx = sourceIx;	/* Prefer first source */
+			     freeReg = reg;
+			     }
 			 }
 		     }
 		 }
-	     }
+	    }
 	}
     if (freeReg)
 	return freeReg;
@@ -295,11 +299,14 @@ struct isxReg *freeReg = NULL;
 for (i=0; i<regCount; ++i)
     {
     struct isxReg *reg = &regs[i];
-    struct isxAddress *iad = reg->contents;
-    if (iad == NULL)
-	return reg;
-    if (!refOnList(isx->liveList, iad))
-	return reg;
+    if (isxRegName(reg, valType))
+	{
+	struct isxAddress *iad = reg->contents;
+	if (iad == NULL)
+	    return reg;
+	if (!refOnList(isx->liveList, iad))
+	    return reg;
+	}
     }
 
 /* No free registers, well dang.  Then use a register that
@@ -311,17 +318,20 @@ for (i=0; i<regCount; ++i)
     for (i=0; i<regCount; ++i)
 	{
 	struct isxReg *reg = &regs[i];
-	struct isxAddress *iad = reg->contents;
-	if ((iad->adType == iadRealVar) ||
-	    (iad->adType == iadTempVar && iad->val.tempMemLoc != 0))
+	if (isxRegName(reg, valType))
 	    {
-	    if (iad == isx->left || iad == isx->right)
+	    struct isxAddress *iad = reg->contents;
+	    if ((iad->adType == iadRealVar) ||
+		(iad->adType == iadTempVar && iad->val.tempMemLoc != 0))
 		{
-		int nextUse = findNextUse(iad, nextNode);
-		if (nextUse > soonestUse)
+		if (iad == isx->left || iad == isx->right)
 		    {
-		    soonestUse = nextUse;
-		    freeReg = reg;
+		    int nextUse = findNextUse(iad, nextNode);
+		    if (nextUse > soonestUse)
+			{
+			soonestUse = nextUse;
+			freeReg = reg;
+			}
 		    }
 		}
 	    }
@@ -339,15 +349,18 @@ for (i=0; i<regCount; ++i)
     for (i=0; i<regCount; ++i)
 	{
 	struct isxReg *reg = &regs[i];
-	struct isxAddress *iad = reg->contents;
-	if ((iad->adType == iadRealVar) ||
-	    (iad->adType == iadTempVar && iad->val.tempMemLoc != 0))
+	if (isxRegName(reg, valType))
 	    {
-	    int nextUse = findNextUse(iad, nextNode);
-	    if (nextUse > soonestUse)
+	    struct isxAddress *iad = reg->contents;
+	    if ((iad->adType == iadRealVar) ||
+		(iad->adType == iadTempVar && iad->val.tempMemLoc != 0))
 		{
-		soonestUse = nextUse;
-		freeReg = reg;
+		int nextUse = findNextUse(iad, nextNode);
+		if (nextUse > soonestUse)
+		    {
+		    soonestUse = nextUse;
+		    freeReg = reg;
+		    }
 		}
 	    }
 	}
@@ -364,12 +377,15 @@ for (i=0; i<regCount; ++i)
     for (i=0; i<regCount; ++i)
 	{
 	struct isxReg *reg = &regs[i];
-	struct isxAddress *iad = reg->contents;
-	int nextUse = findNextUse(iad, nextNode);
-	if (nextUse > soonestUse)
+	if (isxRegName(reg, valType))
 	    {
-	    soonestUse = nextUse;
-	    freeReg = reg;
+	    struct isxAddress *iad = reg->contents;
+	    int nextUse = findNextUse(iad, nextNode);
+	    if (nextUse > soonestUse)
+		{
+		soonestUse = nextUse;
+		freeReg = reg;
+		}
 	    }
 	}
     pentSwapTempFromReg(freeReg, f);

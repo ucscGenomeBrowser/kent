@@ -36,6 +36,8 @@ enum isxOpType
     poBitXor,
     poShiftLeft,
     poShiftRight,
+    poNegate,
+    poFlipBits,
     poGoTo,	/* Unconditional jump */
     poBranch,	/* Conditional jump */
     poCall,	/* Call subroutine */
@@ -102,6 +104,7 @@ struct isx
 struct isxReg
 /* Represents a CPU register. */
     {
+    int size;			 /* Size in bytes. */
     char *byteName;		 /* Register name when used for bytes. */
     char *shortName;		 /* Register name when used for shorts. */
     char *intName;		 /* Register name when used for ints. */
