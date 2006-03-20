@@ -1,13 +1,18 @@
 /* snpExpandAllele - fourth step in dbSNP processing.
  * Read the chrN_snpTmp tables created by snpLocType and expand allele.
- * Rewrite to new chrN_snpTmp tables.  Get chromInfo from ContigInfo. */
+ * Rewrite to new chrN_snpTmp tables.  Get chromInfo from ContigInfo. 
+ * Write syntax errors to snpExpandAllele.errors.
+ * Write exceptions to snpExpandAllele.exceptions:
+      RangeLocTypeWrongSizeLargeAllele
+      RangeLocTypeWrongSize
+ */
 
 #include "common.h"
 
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.22 2006/03/08 22:57:11 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.23 2006/03/20 23:28:44 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
