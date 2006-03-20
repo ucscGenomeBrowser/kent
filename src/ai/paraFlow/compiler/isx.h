@@ -143,5 +143,7 @@ struct dlList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp);
 void isxToPentium(struct dlList *iList, FILE *f);
 /* Convert isx code to pentium instructions in file. */
 
+#define isxPrefixC "_"		/* Prefix before symbols shared with C. */
+
 #endif /* ISX_H */
 

@@ -18,6 +18,7 @@
 #include "constFold.h"
 #include "cCoder.h"
 #include "isx.h"
+#include "isxToPentium.h"
 #include "pfPreamble.h"
 #include "defFile.h"
 #include "parseInto.h"
@@ -433,7 +434,7 @@ if (optionExists("isx"))
     isxDumpList(isxList, f);
     carefulClose(&f);
     f = mustOpen(buf, "w");
-    isxToPentium(isxList, f);
+    pentFromIsx(isxList, f);
     carefulClose(&f);
     }
 
