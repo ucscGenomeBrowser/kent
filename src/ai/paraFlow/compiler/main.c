@@ -47,7 +47,7 @@ errAbort(
 
 static struct optionSpec options[] = {
    {"endPhase", OPTION_INT},
-   {"isx", OPTION_STRING},
+   {"isx", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -422,90 +422,119 @@ if (endPhase < 6)
 verbose(2, "Phase 6 - constant folding\n");
 pfConstFold(pfc, program);
 dumpParseTree(pfc, program, foldedF);
+
 if (optionExists("isx"))
     {
-    verbose(2, "Phase 6a - Pentium code generation");
-    struct dlList *isxList = isxFromParse(pfc, program);
-    char *isxFileName = optionVal("isx", NULL);
-    FILE *f = mustOpen(isxFileName, "w");
-    char buf[PATH_LEN];
+    FILE *f;
+    struct dlList *isxList;
+    char isxFileName[PATH_LEN];
+    char sFileName[PATH_LEN];
+
+    if (endPhase < 7)
+	return;
+    safef(isxFileName, sizeof(isxFileName), "%s%s.isx", baseDir, baseName);
+    f = mustOpen(isxFileName, "w");
+    verbose(2, "Phase 7 - Intermediate code generation\n");
+    isxList = isxFromParse(pfc, program);
+
+
+    if (endPhase < 8)
+	return;
+    verbose(2, "Phase 8 - Pentium code generation\n");
     chopSuffix(isxFileName);
-    safef(buf, sizeof(buf), "%s.s", isxFileName);
+    safef(sFileName, sizeof(sFileName), "%s%s.s", baseDir, baseName);
     isxDumpList(isxList, f);
     carefulClose(&f);
-    f = mustOpen(buf, "w");
+    f = mustOpen(sFileName, "w");
     pentFromIsx(isxList, f);
     carefulClose(&f);
-    }
 
-if (endPhase < 7)
-    return;
-verbose(2, "Phase 7 - C code generation\n");
-pfCodeC(pfc, program, baseDir, cFile);
-verbose(2, "%d modules, %d tokens, %d parseNodes\n",
+    if (endPhase < 9)
+        return;
+    verbose(2, "Phase 9 - Assembling pentium code\n");
+        {
+	struct dyString *dy = dyStringNew(0);
+	int err;
+	dyStringPrintf(dy, "gcc -o %s%s ", baseDir, baseName);
+	dyStringPrintf(dy, "%s", sFileName);
+	verbose(2, "%s\n", dy->string);
+	err = system(dy->string);
+	if (err != 0)
+	    errAbort("Couldn't assemble: %s", dy->string);
+	}
+    }
+else
+    {
+    verbose(2, "Phase 7 - nothing\n");
+    if (endPhase < 8)
+	return;
+    verbose(2, "Phase 8 - C code generation\n");
+    pfCodeC(pfc, program, baseDir, cFile);
+    verbose(2, "%d modules, %d tokens, %d parseNodes\n",
 	pfc->moduleHash->elCount, pfc->tkz->tokenCount, pfParseCount(program));
 
-if (endPhase < 8)
-    return;
-verbose(2, "Phase 8 - compiling C code\n");
-/* Now run gcc on it. */
-    {
-    struct dyString *dy = dyStringNew(0);
-    int err;
-    for (module = program->children; module != NULL; module = module->next)
+    if (endPhase < 9)
+	return;
+    verbose(2, "Phase 9 - compiling C code\n");
+    /* Now run gcc on it. */
 	{
-	if (module->name[0] != '<' && module->type != pptModuleRef)
+	struct dyString *dy = dyStringNew(0);
+	int err;
+	for (module = program->children; module != NULL; module = module->next)
 	    {
-	    struct pfModule *mod = hashMustFindVal(pfc->moduleHash, module->name);
-	    char *cName = replaceSuffix(mod->fileName, ".pf", ".c");
-	    char *oName = replaceSuffix(mod->fileName, ".pf", ".o");
-	    dyStringClear(dy);
-	    dyStringAppend(dy, "gcc ");
-	    dyStringAppend(dy, "-O ");
-	    dyStringPrintf(dy, "-I %s ", pfc->cIncludeDir);
-	    dyStringAppend(dy, "-c ");
-	    dyStringAppend(dy, "-o ");
-	    dyStringPrintf(dy, "%s ", oName);
-	    dyStringPrintf(dy, "%s ", cName);
-	    verbose(2, "%s\n", dy->string);
-	    err = system(dy->string);
-	    if (err != 0)
-		errAbort("Couldn't compile %s.c", module->name);
-	    freeMem(oName);
-	    freeMem(cName);
+	    if (module->name[0] != '<' && module->type != pptModuleRef)
+		{
+		struct pfModule *mod = hashMustFindVal(pfc->moduleHash, module->name);
+		char *cName = replaceSuffix(mod->fileName, ".pf", ".c");
+		char *oName = replaceSuffix(mod->fileName, ".pf", ".o");
+		dyStringClear(dy);
+		dyStringAppend(dy, "gcc ");
+		dyStringAppend(dy, "-O ");
+		dyStringPrintf(dy, "-I %s ", pfc->cIncludeDir);
+		dyStringAppend(dy, "-c ");
+		dyStringAppend(dy, "-o ");
+		dyStringPrintf(dy, "%s ", oName);
+		dyStringPrintf(dy, "%s ", cName);
+		verbose(2, "%s\n", dy->string);
+		err = system(dy->string);
+		if (err != 0)
+		    errAbort("Couldn't compile %s.c", module->name);
+		freeMem(oName);
+		freeMem(cName);
+		}
 	    }
-	}
-    dyStringClear(dy);
-    dyStringAppend(dy, "gcc ");
-    dyStringAppend(dy, "-O ");
-    dyStringPrintf(dy, "-I %s ", pfc->cIncludeDir);
-    dyStringPrintf(dy, "-o %s%s ", baseDir, baseName);
-    dyStringPrintf(dy, "%s ", cFile);
-    for (module = program->children; module != NULL; module = module->next)
-        {
-	if (module->name[0] != '<')
+	dyStringClear(dy);
+	dyStringAppend(dy, "gcc ");
+	dyStringAppend(dy, "-O ");
+	dyStringPrintf(dy, "-I %s ", pfc->cIncludeDir);
+	dyStringPrintf(dy, "-o %s%s ", baseDir, baseName);
+	dyStringPrintf(dy, "%s ", cFile);
+	for (module = program->children; module != NULL; module = module->next)
 	    {
-	    struct pfModule *mod = hashMustFindVal(pfc->moduleHash, module->name);
-	    char *suffix = (module->type == pptModuleRef ? ".pfh" : ".pf");
-	    char *oName = replaceSuffix(mod->fileName, suffix, ".o");
-	    dyStringPrintf(dy, "%s ", oName);
-	    freeMem(oName);
+	    if (module->name[0] != '<')
+		{
+		struct pfModule *mod = hashMustFindVal(pfc->moduleHash, module->name);
+		char *suffix = (module->type == pptModuleRef ? ".pfh" : ".pf");
+		char *oName = replaceSuffix(mod->fileName, suffix, ".o");
+		dyStringPrintf(dy, "%s ", oName);
+		freeMem(oName);
+		}
 	    }
+	dyStringPrintf(dy, " %s ", pfc->runtimeLib);
+	dyStringPrintf(dy, "%s ", pfc->jkwebLib);
+	dyStringAppend(dy, "-lpthread -lm");
+	verbose(2, "%s\n", dy->string);
+	err = system(dy->string);
+	if (err != 0)
+	    errnoAbort("problem compiling:\n", dy->string);
+	dyStringFree(&dy);
 	}
-    dyStringPrintf(dy, " %s ", pfc->runtimeLib);
-    dyStringPrintf(dy, "%s ", pfc->jkwebLib);
-    dyStringAppend(dy, "-lpthread -lm");
-    verbose(2, "%s\n", dy->string);
-    err = system(dy->string);
-    if (err != 0)
-	errnoAbort("problem compiling:\n", dy->string);
-    dyStringFree(&dy);
-    }
 
-if (endPhase < 9)
+    }
+if (endPhase < 10)
     return;
 
-verbose(2, "Phase 9 - execution\n");
+verbose(2, "Phase 10 - execution\n");
 /* Now go run program itself. */
     {
     struct dyString *dy = dyStringNew(0);
@@ -514,9 +543,9 @@ verbose(2, "Phase 9 - execution\n");
     if (baseDir[0] == 0)
 	dyStringPrintf(dy, "./%s", baseName);
     else
-        dyStringPrintf(dy, "%s%s", baseDir, baseName);
+	dyStringPrintf(dy, "%s%s", baseDir, baseName);
     for (i=0; i<pfArgc; ++i)
-        {
+	{
 	dyStringAppendC(dy, ' ');
 	dyStringAppend(dy, pfArgv[i]);
 	}
