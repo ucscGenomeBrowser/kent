@@ -1,11 +1,12 @@
 include ../../../inc/common.mk
 
 L = -lm
-MYLIBDIR = $(HOME)/src/lib/$(MACHTYPE)
+MYLIBDIR = $(HOME)/kent/src/lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = chimpHiQualDiffs.o
+X = chimpHiQualDiffs
+O = ${X}.o
 
-chimpHiQualDiffs: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/chimpHiQualDiffs $O $(MYLIBS) $L
-	${STRIP} $(HOME)/bin/$(MACHTYPE)/chimpHiQualDiffs${EXE}
+${X}: $O $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/${X} $O $(MYLIBS) $L
+	${STRIP} $(HOME)/bin/$(MACHTYPE)/${X}${EXE}

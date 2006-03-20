@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "rle.h"
 
-static char const rcsid[] = "$Id: chimpHiQualDiffs.c,v 1.1 2003/12/13 09:29:02 kent Exp $";
+static char const rcsid[] = "$Id: chimpHiQualDiffs.c,v 1.2 2006/03/20 08:35:13 daryl Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,12 +18,21 @@ errAbort(
   "usage:\n"
   "   chimpHiQualDiffs axtDir chimp.qac out.bed\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -winSize      Window Size (11)\n"
+  "   -diffQualMin  Min quality score for difference (30)\n"
+  "   -winQualMin   Min quality score for window (25)\n"
+  "   -winMaxDiff   Maximum number of differences in window (0)\n"
+  "   -indelOk      Allow indels in window (currently not implemented)\n"
   );
 }
 
 static struct optionSpec options[] = {
-   {NULL, 0},
+    {"winSize", OPTION_INT},
+    {"diffQualMin", OPTION_INT},
+    {"winQualMin", OPTION_INT},
+    {"winMaxDiff", OPTION_INT},
+    {"indelOk", OPTION_BOOLEAN},
+    {NULL, 0}
 };
 
 struct qac
@@ -75,12 +84,15 @@ char *qName = cloneString("");
 UBYTE *qQuals = NULL;
 UBYTE *quals = NULL;
 struct qac *qac = NULL;
-struct axt *axt;
+struct axt *axt = NULL;
 struct lineFile *lf = lineFileOpen(axtFile, TRUE);
 int qStart, qDir, qPos, qWinStart, qWinEnd, tPos;
-int qWinSize = 11, qQualMin = 30, qWinQualMin = 25, qWinMaxDiff = 2;
+int qWinSize     = optionInt("winSize",     11);
+int qQualMin     = optionInt("diffQualMin", 30);
+int qWinQualMin  = optionInt("winQualMin",  25);
+int qWinMaxDiff  = optionInt("winMaxDiff",  2);
+boolean qIndelOk = optionExists("indelOk");
 int qHalfWinSize = qWinSize/2;
-
 
 while ((axt = axtRead(lf)) != NULL)
     {
@@ -115,13 +127,9 @@ while ((axt = axtRead(lf)) != NULL)
 	qc = qSym[symIx];
 	tc = tSym[symIx];
 	if (qc == '-')
-	    {
 	    tPos += 1;
-	    }
 	else if (tc == '-')
-	    {
 	    qPos += qDir;
-	    }
 	else 
 	    {
 	    if (qc != tc)
@@ -135,13 +143,11 @@ while ((axt = axtRead(lf)) != NULL)
 			int i;
 			boolean ok = TRUE;
 			for (i = qWinStart; i<qWinEnd; ++i)
-			    {
 			    if (qQuals[i] < qWinQualMin)
 			        {
 				ok = FALSE;
 				break;
 				}
-			    }
 			if (ok)
 			    {
 			    int diffCount = 0;
@@ -160,10 +166,8 @@ while ((axt = axtRead(lf)) != NULL)
 				    ++diffCount;
 				}
 			    if (ok && diffCount <= qWinMaxDiff)
-			        {
 				fprintf(f, "%s\t%d\t%d\t%c\t%c\n",
 					axt->tName, tPos, tPos+1, tSym[symIx], qSym[symIx]);
-				}
 			    }
 			}
 		    }
@@ -183,10 +187,11 @@ void chimpHiQualDiffs(char *axtDir, char *qacName, char *bedName)
 struct hash *qacHash = qacReadToHash(qacName);
 struct fileInfo *axtEl, *axtList = listDirX(axtDir, "*.axt", TRUE);
 FILE *f = mustOpen(bedName, "w");
+
+if (axtList==NULL)
+    printf("No axt files were found in the '%s' directory.\n",axtDir);
 for (axtEl = axtList; axtEl != NULL; axtEl = axtEl->next)
-    {
     axtHiQualDiffs(axtEl->name, qacHash, f);
-    }
 carefulClose(&f);
 }
 
