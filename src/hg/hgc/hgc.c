@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1001 2006/03/14 01:36:03 aamp Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1002 2006/03/20 22:58:19 hartera Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -800,6 +800,7 @@ void printCustomUrlWithLabel(struct trackDb *tdb, char *itemName,
 			     char *urlLabel, char *url, boolean encode)
 /* Print custom URL with specific URL label. */
 {
+char *name = NULL;
 if (url != NULL && url[0] != 0)
     {
     struct dyString *uUrl = NULL;
@@ -837,7 +838,11 @@ if (url != NULL && url[0] != 0)
 	}
     else
     	{
-    	printf("%s</A><BR>\n", uUrl->string);
+        name = (trackDbSetting(tdb, "urlName"));
+        if ((name != NULL) && (sameString(name, "gene")))
+            printf("%s</A><BR>\n", itemName);
+        else    
+            printf("%s</A><BR>\n", uUrl->string);
 	}
     freeMem(eItem);
     freeDyString(&uUrl);
@@ -4786,10 +4791,13 @@ void doRHmap(struct trackDb *tdb, char *itemName)
 /* Put up RHmap information for Zebrafish */
 {
 char *dupe, *type, *words[16];
-char title[256];
-int wordCount;
+char title[256], query[256];
+struct sqlResult *sr = NULL;
+char **row; 
+int wordCount, pos, dist;
 int start = cartInt(cart, "o");
 struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn1 = hAllocConn();
 
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
@@ -4798,6 +4806,29 @@ genericHeader(tdb, itemName);
 /* Print non-sequence info */
 cartWebStart(cart, title);
 
+/* Print out RH map information if available */
+if (hTableExists("rhMapInfo"))
+    {
+    sprintf(query, "SELECT * FROM rhMapInfo WHERE name = '%s'", itemName);  
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+        pos = sqlUnsigned(row[2]);
+        dist = sqlUnsigned(row[3]);
+	printf("<H2>Information on %s </H2>\n", itemName);
+        printf("<P><HR ALIGN=\"CENTER\"></P>\n<TABLE>\n");
+        printf("<TR><TH ALIGN=left>Linkage group:</TH><TD>%s</TD></TR>\n",row[1]);
+        printf("<TR><TH ALIGN=left>Position on linkage group:</TH><TD>%d</TD></TR>\n",pos);
+        printf("<TR><TH ALIGN=left>Distance (cR):</TH><TD>%d</TD></TR>\n",dist);
+        printf("<TR><TH ALIGN=left>Marker type:</TH><TD>%s</TD></TR>\n",row[4]);
+        printf("<TR><TH ALIGN=left>Marker source:</TH><TD>%s</TD></TR>\n",row[5]);
+        printf("<TR><TH ALIGN=left>Mapping institution:</TH><TD>%s</TD></TR>\n",row[6]);
+        printf("<TR><TH ALIGN=left>Forward Primer:</TH><TD>%s</TD></TR>\n",row[7]);
+        printf("<TR><TH ALIGN=left>Reverse Primer:</TH><TD>%s</TD></TR>\n",row[8]);
+        printf("</TABLE>\n");
+        }
+    }
 dupe = cloneString(tdb->type);
 wordCount = chopLine(dupe, words);
 if (wordCount > 0)
@@ -4809,11 +4840,13 @@ if (wordCount > 0)
 	char *subType = ".";
 	if (wordCount > 1)
 	    subType = words[1];
-        printPslFormat(conn, tdb, itemName, start, subType);
+        printPslFormat(conn1, tdb, itemName, start, subType);
 	}
     }
 printTrackHtml(tdb);
 freez(&dupe);
+sqlDisconnect(&conn);
+sqlDisconnect(&conn1);
 }
 
 void doRikenRna(struct trackDb *tdb, char *item)
@@ -8232,6 +8265,34 @@ genericHeader(tdb, geneName);
 showPseudoHomologies(geneName, "borkPseudoHom");
 geneShowCommon(geneName, tdb, "borkPseudoPep");
 printTrackHtml(tdb);
+}
+
+void doEncodePseudoPred(struct trackDb *tdb, char *geneName)
+{
+char query[256], *headerItem, *name2 = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int start = cartInt(cart, "o");
+char *url2 = trackDbSetting(tdb, "url2");
+
+headerItem = cloneString(geneName);
+genericHeader(tdb, headerItem);
+printCustomUrl(tdb, geneName, FALSE);
+if ((sameString(tdb->tableName, "encodePseudogeneConsensus")) || 
+         (sameString(tdb->tableName, "encodePseudogeneYale")))
+    {
+    sprintf(query, "select name2 from %s where name = '%s'", tdb->tableName, geneName);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        name2 = cloneString(row[0]);
+        }
+    printCustomUrlWithLabel(tdb, name2, "Yale Pseudogene Link:", url2, TRUE);
+    }
+genericGenePredClick(conn, tdb, geneName, start, NULL, NULL);
+printTrackHtml(tdb);
+hFreeConn(&conn);
 }
 
 void showOrthology(char *geneName, char *table, struct sqlConnection *connMm)
@@ -17747,6 +17808,10 @@ else if (sameWord(track, "borkPseudo"))
 else if (sameWord(track, "borkPseudoBig"))
     {
     doPseudoPred(tdb, item);
+    }
+else if (startsWith("encodePseudogene", track))
+    {
+    doEncodePseudoPred(tdb,item);
     }
 else if (sameWord(track, "sanger22"))
     {
