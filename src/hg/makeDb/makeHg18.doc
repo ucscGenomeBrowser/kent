@@ -7093,3 +7093,35 @@ blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
 ssh hgwdev
 knownToVisiGene hg18 -fromProbePsl=vgAllProbes
 
+# GENERATE SUMMARY STATISTICS (DONE, Fan 3/18/06)
+
+   ssh hgwdev
+   cd /cluster/data/hg18
+   mkdir stat
+   cd stat
+
+   stats.pl ~/hg18 >hg18.pl.out
+   hgCalStat hg18.pl.out hg18 hg18.out
+
+   cp hg18.out hg18.out.sorted
+# Editi hg18.out.sorted to order by chromosomes and
+# replace the "?" in the Y chrom line with 6265435 and align its position.
+  vi hg18.out.sorted
+  
+# Add the hg18 stats to goldenPath/stats.html
+
+  cd ~/browser/goldenPath
+
+# insert hg18.out.sorted into stats.html and add necessary
+# surrounding HTML lines for the hg18 section.
+
+  vi stats.html
+  
+  cvs update stats.html
+  cvs commit stats.html
+
+# Change description of hg18, per suggestion by Kim at NCBI (3/20/06, Fan).
+
+  ssh hgwdev
+  echo "update dbDb set description='Mar. 2006' where name = 'hg18';" \
+      | hgsql -h genome-testdb hgcentraltest
