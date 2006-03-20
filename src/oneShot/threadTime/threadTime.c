@@ -53,6 +53,14 @@ for (;;)
 		:"m" (obj->_pf_refCount) \
 		:"memory")
 
+#define rtRefXaddLock(obj) \
+	asm("mov $1,%%eax;" \
+		"xadd %%eax,%1;" \
+		:"=m" (obj->_pf_refCount) \
+		:"m" (obj->_pf_refCount) \
+		:"memory", "%eax")
+
+
 struct worker *worker = NULL;
 int total = 0;
 
@@ -127,6 +135,13 @@ for (i=0; i<10000000; ++i)
     rtRefIncNoLock(worker);
     }
 uglyTime("rtRefIncNoLock worker->_pf_refCount 10,000,000x, result is %d", worker->_pf_refCount);
+
+worker->_pf_refCount = 0;
+for (i=0; i<10000000; ++i)
+    {
+    rtRefXaddLock(worker);
+    }
+uglyTime("rtRefXaddLock worker->_pf_refCount 10,000,000x, result is %d", worker->_pf_refCount);
 }
 
 int main(int argc, char *argv[])
