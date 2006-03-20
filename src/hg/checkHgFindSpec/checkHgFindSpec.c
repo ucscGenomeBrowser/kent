@@ -12,8 +12,9 @@
 #include "hgFind.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.7 2006/03/10 23:13:20 angie Exp $";
+static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.8 2006/03/20 16:49:12 angie Exp $";
 
+char *database = NULL;
 /* Need to get a cart in order to use hgFind. */
 struct cart *cart = NULL;
 
@@ -193,8 +194,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (errCount < 1 ||
 	    (errCount < 10 && verboseLevel() > 1))
 	    {
-	    printf("Error: %s.%s value \"%s\" doesn't match termRegex \"%s\"",
-		   table, field, row[0], exp);
+	    printf("Error: %s.%s.%s value \"%s\" doesn't match termRegex \"%s\"",
+		   database, table, field, row[0], exp);
 	    if (isNotEmpty(altExp))
 		printf(" or dontCheck \"%s\"", altExp);
 	    printf(" for search %s\n", searchName);
@@ -287,8 +288,8 @@ for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
 	    if (! hFieldHasIndex(tPtr->name, field))
 		{
 		gotError = TRUE;
-		printf("Error: No SQL index defined for %s.%s (search %s)\n",
-		       tPtr->name, field, hfs->searchName);
+		printf("Error: No SQL index defined for %s.%s.%s (search %s)\n",
+		       database, tPtr->name, field, hfs->searchName);
 		}
 	    else
 		verbose(2, "Index exists for %s.%s (search %s)\n",
@@ -301,12 +302,12 @@ for (hfs = wholeList;  hfs != NULL;  hfs = hfs->next)
 	if (! hFieldHasIndex(hfs->xrefTable, field))
 	    {
 	    gotError = TRUE;
-	    printf("Error: No SQL index defined for %s.%s (search %s)\n",
-		   hfs->xrefTable, field, hfs->searchName);
+	    printf("Error: No SQL index defined for %s.%s.%s (search %s)\n",
+		   database, hfs->xrefTable, field, hfs->searchName);
 	    }
 	else
-	    verbose(2, "Index exists for %s.%s (search %s)\n",
-		    hfs->xrefTable, field, hfs->searchName);
+	    verbose(2, "Index exists for %s.%s.%s (search %s)\n",
+		    database, hfs->xrefTable, field, hfs->searchName);
 	}
     }
 
@@ -346,6 +347,7 @@ int checkHgFindSpec(char *db, char *termToSearch, boolean showSearches,
 boolean gotError = FALSE;
 
 hSetDb(db);
+database = db;
 
 if (isNotEmpty(termToSearch))
     gotError |= reportSearch(termToSearch);
