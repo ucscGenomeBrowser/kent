@@ -7,6 +7,7 @@ return
 "readable array of string args;\n"
 "readable bit true=1, false=0;\n"
 "\n"
+"global flow _printInt(int i);\n"
 "global flow print(var v);\n"
 "global to prin(var v);\n"
 "global flow ugly(var v);\n"

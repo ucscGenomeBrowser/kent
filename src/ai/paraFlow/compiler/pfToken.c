@@ -634,6 +634,7 @@ char *pos = tkz->pos + 2;
 unsigned long long l = 0;
 int v;
 char c;
+int digitCount = 0;
 
 for (;;)
    {
@@ -679,14 +680,23 @@ for (;;)
        case 'F':
            v = 15; break;
        default:
-	   tok->val.i = l;
-	   tok->type = pftInt;
+	   if (digitCount > 8)
+	       {
+	       tok->val.l = l;
+	       tok->type = pftLong;
+	       }
+	   else
+	       {
+	       tok->val.i = l;
+	       tok->type = pftInt;
+	       }
 	   tkz->pos = pos;
 	   return;
        }
     l <<= 4;
     l += v;
     pos += 1;
+    digitCount += 1;
     }
 }
 

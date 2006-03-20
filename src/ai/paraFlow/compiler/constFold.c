@@ -901,6 +901,7 @@ while (refList != NULL)
     }
 }
 
+
 void pfConstFold(struct pfCompile *pfc, struct pfParse *pp)
 /* Fold constants into simple expressions. */
 {

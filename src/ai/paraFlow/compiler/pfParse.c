@@ -115,6 +115,26 @@ pp->scope = scope;
 return pp;
 }
 
+boolean pfParseIsConst(struct pfParse *pp)
+/* Return TRUE if pp is a simple constant. */
+{
+switch (pp->type)
+    {
+    case pptConstBit:
+    case pptConstByte:
+    case pptConstChar:
+    case pptConstShort:
+    case pptConstInt:
+    case pptConstLong:
+    case pptConstFloat:
+    case pptConstDouble:
+    case pptConstString:
+        return TRUE;
+    default:
+        return FALSE;
+    }
+}
+
 void pfParsePutChildrenInPlaceOfSelf(struct pfParse **pPp)
 /* Replace self with children. */
 {

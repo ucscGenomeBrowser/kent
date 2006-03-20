@@ -24,23 +24,25 @@ enum isxOpType
  * assembly language instruction without type or address
  * considerations. */
     {
-    poInit,	
-    poAssign,	
-    poPlus,
-    poMinus,
-    poMul,
-    poDiv,
-    poMod,
-    poBitAnd,
-    poBitOr,
-    poBitXor,
-    poShiftLeft,
-    poShiftRight,
-    poNegate,
-    poFlipBits,
+    poInit,	 /* Variable initialization */
+    poAssign,	 /* Variable (re)assignment */
+    poPlus,	 /* dest = left + right */
+    poMinus,	 /* dest = left - right */
+    poMul,	 /* dest = left * right */
+    poDiv,	 /* dest = left / right */
+    poMod,	 /* dest = left % right */
+    poBitAnd,	 /* dest = left & right */
+    poBitOr,     /* dest = left | right */
+    poBitXor,	 /* dest = left ^ right */
+    poShiftLeft, /* dest = left << right */
+    poShiftRight,/* dest = left >> right */
+    poNegate,	 /* dest = -left */
+    poFlipBits,  /* dest = ~left */
+    poInput,	 /* An input parameter: dest = left */
+    poCall,	 /* Call subroutine:    call left   */
+    poOutput,	 /* An output parameter dest = left */
     poGoTo,	/* Unconditional jump */
     poBranch,	/* Conditional jump */
-    poCall,	/* Call subroutine */
     };
 
 char *isxOpTypeToString(enum isxOpType val);
@@ -56,6 +58,7 @@ enum isxValType
     ivLong,
     ivFloat,
     ivDouble,
+    ivString,
     ivObject,
     ivJump,	
     };
@@ -70,6 +73,8 @@ enum isxAddressType
     iadConst,
     iadRealVar,
     iadTempVar,
+    iadInStack,
+    iadOutStack,
     iadOperator,
     };
 
@@ -78,11 +83,13 @@ union isxAddressVal
     struct pfToken *tok;	/* For constants */
     struct pfVar *var;		/* For real vars */
     int tempMemLoc;		/* Memory location for temps, 0 for none */
+    int stackOffset;		/* Stack offset. */
     };
 
 struct isxAddress
 /* A piece of data somewhere */
     {
+    struct isxAddress *next;	/* For multivalued functions */
     char *name;			/* Not allocated here. */
     enum isxAddressType adType;/* Address type */
     enum isxValType valType;	/* Value type */

@@ -43,6 +43,8 @@ switch (val)
 	return "dbl";
     case ivObject:
 	return "obj";
+    case ivString:
+	return "str";
     case ivJump:
 	return "jmp";
     default:
@@ -84,12 +86,16 @@ switch (val)
 	return "poNegate";
     case poFlipBits:
 	return "poFlipBits";
+    case poInput:
+        return "poInput";
+    case poCall:
+	return "poCall";
+    case poOutput:
+        return "poOutput";
     case poGoTo:
 	return "poGoTo";
     case poBranch:
 	return "poBranch";
-    case poCall:
-	return "poCall";
     default:
         internalErr();
 	return NULL;
@@ -114,6 +120,7 @@ switch (valType)
     case ivDouble:
 	return reg->doubleName;
     case ivObject:
+    case ivString:
 	return reg->pointerName;
     default:
 	internalErr();
@@ -151,6 +158,9 @@ switch (iad->adType)
 	    case pftString:
 		fprintf(f, "#'%s'", val.s);
 		break;
+	    default:
+	        internalErr();
+		break;
 	    }
 	break;
 	}
@@ -158,8 +168,17 @@ switch (iad->adType)
     case iadTempVar:
 	fprintf(f, "%s", iad->name);
 	break;
+    case iadInStack:
+	fprintf(f, "in(%d)", iad->val.stackOffset);
+        break;
+    case iadOutStack:
+	fprintf(f, "out(%d)", iad->val.stackOffset);
+        break;
     case iadOperator:
 	fprintf(f, "#%s", iad->name);
+	break;
+    default:
+        internalErr();
 	break;
     }
 if (iad->reg != NULL)
@@ -248,6 +267,8 @@ else if (base == pfc->floatType)
     return ivFloat;
 else if (base == pfc->doubleType)
     return ivDouble;
+else if (base == pfc->stringType || base == pfc->dyStringType)
+    return ivString;
 else
     return ivObject;
 }
@@ -308,6 +329,27 @@ if (iad == NULL)
 return iad;
 }
 
+static struct isxAddress *callAddress(struct pfVar *var, struct hash *hash)
+/* Create reference to a function */
+{
+struct isxAddress *iad = varAddress(var, hash, ivJump);
+iad->adType = iadOperator;
+return iad;
+}
+
+
+static struct isxAddress *ioAddress(int offset, enum isxValType valType,
+	enum isxAddressType adType)
+/* Return reference to an io stack address */
+{
+struct isxAddress *iad;
+AllocVar(iad);
+iad->adType = adType;
+iad->valType = valType;
+iad->val.stackOffset = offset;
+return iad;
+}
+
 static struct isxAddress *operatorAddress(char *name)
 /* Create reference to a build-in operator call */
 {
@@ -361,18 +403,26 @@ struct pfParse *function = pp->children;
 struct pfParse *inTuple = function->next;
 struct pfParse *p;
 struct pfType *outTuple = function->ty->children->next, *ty;
-struct isxAddress *iad;
+struct isxAddress *source, *dest, *destList = NULL;
+int offset;
 
-for (p = inTuple->children; p != NULL; p = p->next)
+for (p = inTuple->children, offset=0; p != NULL; p = p->next, ++offset)
     {
-    iad = isxExpression(pfc, p, varHash, iList);
+    source = isxExpression(pfc, p, varHash, iList);
+    dest = ioAddress(offset, source->valType, iadInStack);
+    isxNew(pfc, poInput, dest, source, NULL, iList);
     }
-for (ty = outTuple->children; ty != NULL; ty = ty->next)
+source = callAddress(function->var, varHash);
+isxNew(pfc, poCall, NULL, source, NULL, iList);
+for (ty = outTuple->children, offset=0; ty != NULL; ty = ty->next, ++offset)
     {
-    iad = tempAddress(pfc, varHash, tyToIsxValType(pfc, ty));
+    enum isxValType valType = tyToIsxValType(pfc, ty);
+    source = ioAddress(offset, valType, iadOutStack);
+    dest = tempAddress(pfc, varHash, valType);
+    slAddTail(&destList, dest);
+    isxNew(pfc, poOutput, dest, source, NULL, iList);
     }
-uglyAbort("Can't handle calls yet.");
-return NULL;	// TODO - fixme.
+return destList;
 }
 
 static struct isxAddress *isxExpression(struct pfCompile *pfc, 
@@ -458,8 +508,7 @@ switch (pp->type)
 	break;
 	}
     default:
-	pfParseDump(pp, 3, uglyOut);
-        errAt(pp->tok, "Unrecognized statement in isxStatement");
+	isxExpression(pfc, pp, varHash, iList);
 	break;
     }
 }

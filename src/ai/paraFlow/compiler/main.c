@@ -24,7 +24,7 @@
 #include "tokInto.h"
 
 
-int endPhase = 10;
+int endPhase = 12;
 
 void usage()
 /* Explain command line and exit. */
@@ -423,10 +423,16 @@ pfConstFold(pfc, program);
 dumpParseTree(pfc, program, foldedF);
 if (optionExists("isx"))
     {
+    verbose(2, "Phase 6a - Pentium code generation");
+    struct dlList *isxList = isxFromParse(pfc, program);
     char *isxFileName = optionVal("isx", NULL);
     FILE *f = mustOpen(isxFileName, "w");
-    struct dlList *isxList = isxFromParse(pfc, program);
+    char buf[PATH_LEN];
+    chopSuffix(isxFileName);
+    safef(buf, sizeof(buf), "%s.s", isxFileName);
     isxDumpList(isxList, f);
+    carefulClose(&f);
+    f = mustOpen(buf, "w");
     isxToPentium(isxList, f);
     carefulClose(&f);
     }

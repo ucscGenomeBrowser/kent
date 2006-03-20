@@ -242,6 +242,9 @@ struct pfParse *pfParseNew(enum pfParseType type,
 /* Return new parse node.  It's up to caller to fill in
  * children later. */
 
+boolean pfParseIsConst(struct pfParse *pp);
+/* Return TRUE if pp is a simple constant. */
+
 struct pfParse *pfParseEnclosingClass(struct pfParse *pp);
 /* Find enclosing class if any. */
 
