@@ -199,6 +199,14 @@ fprintf(f, "%s",
 "       popl    %ebx\n"
 "       popl    %ebp\n"
 "       ret\n"
+".globl __addTwo\n"
+"__addTwo:\n"
+"        pushl   %ebp\n"
+"        movl    %esp, %ebp\n"
+"        movl    12(%ebp), %eax\n"
+"        addl    8(%ebp), %eax\n"
+"        popl    %ebp\n"
+"        ret\n"
 "\n"
 );
 printInittedModuleVars(iList, f);

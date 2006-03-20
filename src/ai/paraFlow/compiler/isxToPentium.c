@@ -602,6 +602,40 @@ else
     }
 }
 
+static void pentOutput(struct isx *isx, struct dlNode *nextNode, FILE *f)
+/* Output code to save an output parameter after a call. */
+{
+/* This needs to get a lot more complex eventually....  For now it just
+ * handles up to three int-sized result. */
+struct isxReg *reg;
+struct isxAddress *source = isx->left;
+struct isxAddress *dest = isx->dest;
+enum isxValType valType = source->valType;
+int sourceIx = source->val.stackOffset;
+if (sourceIx > 2)
+    errAbort("Can't handle more than three pentOutput\n");
+if (valType == ivLong || valType == ivFloat || valType == ivDouble)
+    errAbort("Can't handle long or floating point pentOutput\n");
+switch (sourceIx)
+    {
+    case 0:
+       reg = &regInfo[ax];
+       break;
+    case 1:
+       reg = &regInfo[cx];
+       break;
+    case 2:
+       reg = &regInfo[dx];
+       break;
+    default:
+       internalErr();
+       reg = NULL;
+       break;
+    }
+dest->reg = reg;
+reg->contents = dest;
+}
+
 static void pentCall(struct isx *isx, FILE *f)
 /* Output code to actually do call */
 {
@@ -723,6 +757,9 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    break;
 	case poInput:
 	    pentInput(isx, nextNode, f);
+	    break;
+	case poOutput:
+	    pentOutput(isx, nextNode, f);
 	    break;
 	case poCall:
 	    pentCall(isx, f);
