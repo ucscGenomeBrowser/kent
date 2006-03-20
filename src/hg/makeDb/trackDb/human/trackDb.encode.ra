@@ -420,12 +420,17 @@ cdsDrawDefault genomic\ codons
     subTrack encodePseudogene
     shortLabel Consensus Pseudogenes
     longLabel Consensus of Yale, Havana-Gencode, UCSC and GIS ENCODE Pseudogenes 
+    urlName gene
+    urlLabel Vega Genes Link:
+    url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
+    url2 http://www.pseudogene.org/cgi-bin/search-results.cgi?tax_id=9606&set_search=25&criterion0=pgene_by_acc&operator0=%3D&sort=0&output=html&searchValue0_0=$$
     priority 1
 
     track encodePseudogeneHavana
     subTrack encodePseudogene
     shortLabel Havana-Gencode Pseudogenes
     longLabel Havana-Gencode Annotated Pseudogenes and Immunoglobulin Segments
+    urlLabel Vega Genes Link:
     url http://vega.sanger.ac.uk/Homo_sapiens/geneview?transcript=$$
     priority 2
 
@@ -433,7 +438,8 @@ cdsDrawDefault genomic\ codons
     subTrack encodePseudogene
     shortLabel Yale Pseudogenes
     longLabel Yale Pseudogene Predictions
-    url http://www.pseudogene.org/cgi-bin/display-by-acc.cgi?id=$$
+    urlName gene
+    url2 http://www.pseudogene.org/cgi-bin/search-results.cgi?tax_id=9606&set_search=25&criterion0=pgene_by_acc&operator0=%3D&sort=1&output=html&searchValue0_0=$$
     priority 3
 
     track encodePseudogeneUcsc
