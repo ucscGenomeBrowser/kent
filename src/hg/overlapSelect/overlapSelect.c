@@ -33,6 +33,7 @@ static struct optionSpec optionSpecs[] = {
     {"merge", OPTION_BOOLEAN},
     {"mergeOutput", OPTION_BOOLEAN},
     {"statsOutput", OPTION_BOOLEAN},
+    {"statsOutputAll", OPTION_BOOLEAN},
     {"idOutput", OPTION_BOOLEAN},
     {"aggregate", OPTION_BOOLEAN},
     {NULL, 0}
@@ -62,6 +63,7 @@ boolean nonOverlapping = FALSE;
 boolean mergeOutput = FALSE;
 boolean idOutput = FALSE;
 boolean statsOutput = FALSE;
+boolean outputAll = FALSE;
 float overlapThreshold = 0.0;
 float overlapSimilarity = 0.0;
 
@@ -191,18 +193,19 @@ static void doAggregateOverlap(struct chromAnn* inCa, struct ioFiles *ioFiles)
 /* Do aggreate overlap process of chromAnn object given the criteria,
  * and if so output */
 {
-float overlap = selectAggregateOverlap(selectOpts, inCa);
+struct overlapStats stats = selectAggregateOverlap(selectOpts, inCa);
 boolean overlaps;
 if (overlapThreshold <= 0.0)
-    overlaps = (overlap > 0.0); /* any overlap */
+    overlaps = (stats.inOverlap > 0.0); /* any overlap */
 else
-    overlaps = (overlap >= overlapThreshold);
-if ((nonOverlapping) ? !overlaps : overlaps)
+    overlaps = (stats.inOverlap >= overlapThreshold);
+if (((nonOverlapping) ? !overlaps : overlaps) || outputAll)
     {
     if (idOutput)
         fprintf(ioFiles->outFh, "%s\n", getPrintId(inCa));
     else if (statsOutput)
-        fprintf(ioFiles->outFh, "%s\t%0.3g\n", getPrintId(inCa), overlap);
+        fprintf(ioFiles->outFh, "%s\t%0.3g\t%d\t%d\n", getPrintId(inCa),
+                stats.inOverlap, stats.inOverBases, stats.inBases);
     else
         fprintf(ioFiles->outFh, "%s\n", inCa->recLine);
     }
@@ -322,7 +325,12 @@ if (idOutput)
         fputs("#inId\t" "selectId\n", ioFiles.outFh);
     }
 if (statsOutput)
-    fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\n", ioFiles.outFh);
+    {
+    if (useAggregate)
+        fputs("#inId\t" "inOverlap\t" "inOverBases\t" "inBases\n", ioFiles.outFh);
+    else
+        fputs("#inId\t" "selectId\t" "inOverlap\t" "selectOverlap\n", ioFiles.outFh);
+    }
 
 switch (inFmt)
     {
@@ -347,76 +355,10 @@ carefulClose(&ioFiles.dropFh);
 void usage(char *msg)
 /* usage message and abort */
 {
-errAbort("%s:\n"
-         "overlapSelect [options] selectFile inFile outFile\n"
-         "\n"
-         "Select records based on overlaping chromosome ranges.\n"
-         "The ranges are specified in the selectFile, with each block\n"
-         "specifying a range.  Records are copied from the inFile to outFile\n"
-         "based on the selection criteria.  Selection is based on blocks or\n"
-         "exons rather than entire range.\n"
-         "\n"
-         "Options:\n"
-         "  -selectFmt=fmt - specify selectFile format:\n"
-         "          psl - PSL format (default for *.psl files).\n"
-         "          genePred - gepePred format (default for *.gp or\n"
-         "                     *.genePred files).\n"
-         "          bed - BED format (default for *.bed files).\n"
-         "                If BED doesn't have blocks, the bed range is used.\n" 
-         "  -selectCoordCols=spec - Select file is tab-separate with coordinates\n"
-         "          as described by spec, which is one of:\n"
-         "            o chromCol - chrom in this column followed by start and end.\n"
-         "            o chromCol,startCol,endCol - chrom, start, and end in specified\n"
-         "              columns.\n"
-         "            o chromCol,startCol,endCol,strandCol - chrom, start, end, and\n"
-         "              strand in specified columns.\n"
-         "          NOTE: column numbers are zero-based\n"
-         "  -selectCds - Use only CDS in the select file\n"
-         "  -selectRange - Use entire range instead of blocks from records in\n"
-         "          the select file.\n"
-         "  -inFmt=fmt - specify inFile format, same values as -selectFmt.\n"
-         "  -inCoordCols=spec - in file is tab-separate with coordinates specified by\n"
-         "          spec, in format described above.\n"
-         "  -inCds - Use only CDS in the in file\n"
-         "  -inRange - Use entire range instead of blocks of records in\n"
-         "          the in file.\n"
-         "  -nonOverlapping - select non-overlaping instead of overlaping records\n"
-         "  -strand - must be on the same strand to be considered overlaping\n"
-         "  -excludeSelf - don't compare records with the same coordinates and name.\n"
-         "  -idMatch - only select overlapping records if they have the same id\n"
-         "  -aggregate - instead of computing overlap bases on individual select entries, \n"
-         "      compute it based on the total number of inFile bases overlap by select file\n"
-         "      records. -overlapSimilarity and -mergeOutput will not work with\n"
-         "      this option.\n"
-         "  -overlapThreshold=0.0 - minimun fraction of an inFile record that\n"
-         "      must be overlapped by a single select record to be considered overlapping.\n"
-         "      Note that this is only coverage by a single select record, not total coverage.\n"
-         "  -overlapSimilarity=0.0 - minimun fraction of inFile and select records that\n"
-         "      Note that this is only coverage by a single select record and this is;\n"
-         "      bidirectional inFile and selectFile must overlap by this amount.  A value of 1.0\n"
-         "      will select identical records (or CDS if both CDS options are specified.\n"
-         "      Not currently supported with -aggregate.\n"
-         "  -statsOutput - output overlap statistics instead of selected records. \n"
-         "      If no overlap criteria is specified, all overlapping entries are reported,\n"
-         "      Otherwise only the pairs passing the citeria are reported. This results\n"
-         "      in a tab-seperated file with the columns:\n"
-         "         inId selectId inOverlap selectOverlap \n"
-         "      Where inOverlap is the fraction of the inFile record overlapped by the select file\n"
-         "      record and selectOverlap is the fraction of the select record overlap by the in file\n"
-         "      record.  With -aggregate, output is:\n"
-         "         inId inOverlap\n"
-         "  -mergeOutput - output file with be a merge of the input file with the\n"
-         "      selectFile records that selected it.  The format is\n"
-         "         inRec<tab>selectRec.\n"
-         "      if multiple select records hit, inRec is repeated.\n"
-         "      This will increase the memory required\n"
-         "      Not currently supported with -aggregate.\n"
-         "  -idOutput - output a table seprate file of pairs of\n"
-         "        inId selectId\n"
-         "      with -aggregate, omly a single column of inId is written\n"
-         "  -dropped=file  - output rows that were dropped to this file.\n"
-         "  -verbose=n - verbose > 1 prints some details\n",
-         msg);
+static char *usageMsg =
+#include "usage.msg"
+    ;
+errAbort("%s:  %s", msg, usageMsg);
 }
 
 /* entry */
@@ -491,9 +433,15 @@ if (optionExists("merge")) /* FIXME: this is tmp */
     errAbort("please use -mergeOutput instead of -merge; trying to keep option names sane");
 mergeOutput = optionExists("mergeOutput");
 idOutput = optionExists("idOutput");
-statsOutput = optionExists("statsOutput");
+statsOutput = optionExists("statsOutput") || optionExists("statsOutputAll");
 if ((mergeOutput + idOutput + statsOutput) > 1)
-    errAbort("can only specify one of -mergeOutput, -idOutput, or -statsOutput");
+    errAbort("can only specify one of -mergeOutput, -idOutput, -statsOutput, or -statsOutputAll");
+if (optionExists("statsOutputAll"))
+    {
+    if (!useAggregate)
+        errAbort("-statsOutputAll only works with -aggregate");
+    outputAll = TRUE;
+    }
 if (mergeOutput)
     {
     if (nonOverlapping)

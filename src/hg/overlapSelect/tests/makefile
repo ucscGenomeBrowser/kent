@@ -396,7 +396,8 @@ gp_gp_similarityCds100: mkout
 ###
 aggregateTests: psl_gp_aggregate  psl_gp_non_aggregate \
 	gp_gp_aggregate95 gp_gp_aggregate75 gp_gp_aggregate100 \
-	gp_gp_aggregateCds95 gp_gp_aggregateCds75 gp_gp_aggregateCds100
+	gp_gp_aggregateCds95 gp_gp_aggregateCds75 gp_gp_aggregateCds100 \
+	gp_gp_aggregateStats psl_gp_aggregateStatsAll
 
 # select psls overlaping NM_015110 with gp and overlapThreshold
 psl_gp_aggregate: mkout
@@ -451,6 +452,16 @@ gp_gp_aggregateCds100: mkout
 	${OVERSEL} -aggregate -idOutput -overlapThreshold=1.0 -selectCds -inCds input/NM_015110Similar.gp input/NM_015110.gp output/$@Rev.ids
 	${DIFF} expected/$@.ids output/$@.ids
 	${DIFF} expected/$@Rev.ids output/$@Rev.ids
+
+# aggregate stats
+gp_gp_aggregateStats: mkout
+	${OVERSEL} -aggregate -statsOutput input/NM_015110.gp  input/NM_015110Similar.gp output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
+
+# aggregate stats on all records
+psl_gp_aggregateStatsAll: mkout
+	${OVERSEL} -aggregate -statsOutputAll input/NM_015110.gp input/mrna.psl output/$@.stats
+	${DIFF} expected/$@.stats output/$@.stats
 
 
 ###

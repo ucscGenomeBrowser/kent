@@ -297,8 +297,9 @@ for (ca1Blk = ca1->blocks; ca1Blk != NULL; ca1Blk = ca1Blk->next)
     }
 }
 
-static float computeAggregateOverlap(unsigned opts, struct chromAnn *inCa,
-                                     struct binElement* overlapping)
+static void computeAggregateOverlap(unsigned opts, struct chromAnn *inCa,
+                                    struct binElement* overlapping,
+                                    struct overlapStats *stats)
 /* Compute the aggregate overlap */
 {
 
@@ -306,10 +307,9 @@ int mapOff = inCa->start;
 int mapLen = (inCa->end - inCa->start);
 Bits *overMap;
 struct binElement* o;
-int numOver;
 assert(mapLen >= 0);
 if (mapLen == 0)
-    return 0.0;  /* no CDS */
+    return;  /* no CDS */
 
 overMap = bitAlloc(mapLen);
 
@@ -319,24 +319,26 @@ for (o = overlapping; o != NULL; o = o->next)
     if (passCriteria(opts, inCa, selCa))
         addToAggregateMap(overMap, mapOff, inCa, selCa);
     }
-numOver = bitCountRange(overMap, 0, mapLen);
+stats->inOverBases = bitCountRange(overMap, 0, mapLen);
 bitFree(&overMap);
-return ((float)numOver) / ((float)inCa->totalSize);
+stats->inOverlap = ((float)stats->inOverBases) / ((float)inCa->totalSize);
 }
 
-float selectAggregateOverlap(unsigned opts, struct chromAnn *inCa)
+struct overlapStats selectAggregateOverlap(unsigned opts, struct chromAnn *inCa)
 /* Compute the aggregate overlap of a chromAnn */
 {
-float overlap = 0.0;
 struct binKeeper* bins = selectGetChromBins(inCa->chrom, FALSE, NULL);
+struct overlapStats stats;
+ZeroVar(&stats);
+stats.inBases = inCa->totalSize;
 if (bins != NULL)
     {
     struct binElement* overlapping = binKeeperFind(bins, inCa->start, inCa->end);
-    overlap = computeAggregateOverlap(opts, inCa, overlapping);
+    computeAggregateOverlap(opts, inCa, overlapping, &stats);
     slFreeList(&overlapping);
     }
 verbose(2, "selectAggregateOverlap: %s: %s %d-%d, %c => %0.3g\n", inCa->name, inCa->chrom, inCa->start, inCa->end,
-        ((inCa->strand == '\0') ? '?' : inCa->strand), overlap);
-return overlap;
+        ((inCa->strand == '\0') ? '?' : inCa->strand), stats.inOverlap);
+return stats;
 }
 

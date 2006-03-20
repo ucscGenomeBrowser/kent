@@ -13,6 +13,15 @@ enum selectOpts
     selIdMatch      = 0x20     /* ids must match and overlap  */
 };
 
+struct overlapStats
+/* overlap stats */
+{
+    float inOverlap;          /* fraction of in object overlapped */
+    unsigned inOverBases;     /* number of bases overlaped */
+    unsigned inBases;         /* number of possible bases to overlap */
+};
+
+
 struct coordCols;
 struct lineFile;
 struct chromAnn;
@@ -38,7 +47,7 @@ boolean selectIsOverlapped(unsigned opts, struct chromAnn *inCa,
 /* Determine if a range is overlapped.  If overlappingRecs is not null, a list
  * of the of selected records is returned.  Free with slFreelList. */
 
-float selectAggregateOverlap(unsigned opts, struct chromAnn *inCa);
+struct overlapStats selectAggregateOverlap(unsigned opts, struct chromAnn *inCa);
 /* Compute the aggregate overlap of a chromAnn */
 
 #endif

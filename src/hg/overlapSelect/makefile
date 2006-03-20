@@ -20,12 +20,17 @@ overlapSelect: $O ${MYLIBS}
 chromAnn.o: chromAnn.c chromAnn.h
 coordCols.o: coordCols.c coordCols.h
 selectTable.o: selectTable.c selectTable.h coordCols.h chromAnn.h
-overlapSelect.o: overlapSelect.c coordCols.h selectTable.h chromAnn.h
+overlapSelect.o: usage.msg overlapSelect.c coordCols.h selectTable.h chromAnn.h
 
+# create usage msg from text
+usage.msg: usage.txt
+	echo '/* GENERATED CODE, DO NOT EDIT */' > $@.tmp
+	stringify $< >> $@.tmp
+	mv -f $@.tmp $@
 
 test:
 	cd tests && ${MAKE} test
 
 clean:
-	rm -f $O $B
+	rm -f $O $B usage.msg
 	cd tests && ${MAKE} clean
