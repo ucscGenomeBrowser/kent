@@ -586,16 +586,29 @@ else
     }
 }
 
-static void pentInput(struct isx *isx, FILE *f)
+static void pentInput(struct isx *isx, struct dlNode *nextNode, FILE *f)
 /* Output code to load an input parameter before a call. */
 {
-printOp(opMov, isx->left, isx->dest, f);
+struct isxAddress *source = isx->left;
+if (source->reg)
+    printOp(opMov, source, isx->dest, f);
+else
+    {
+    struct isxReg *reg = freeReg(isx, nextNode, f);
+    printOpDestReg(opMov, source, reg, f);
+    reg->contents = source;
+    source->reg = reg;
+    printOp(opMov, source, isx->dest, f);
+    }
 }
 
 static void pentCall(struct isx *isx, FILE *f)
 /* Output code to actually do call */
 {
 struct pfVar *funcVar = isx->left->val.var;
+pentSwapOutIfNeeded(&regInfo[ax],isx->liveList, f);
+pentSwapOutIfNeeded(&regInfo[cx],isx->liveList, f);
+pentSwapOutIfNeeded(&regInfo[dx],isx->liveList, f);
 fprintf(f, "\tcall\t%s%s\n", isxPrefixC, funcVar->cName);
 }
 
@@ -651,6 +664,7 @@ struct isx *isx;
 calcInputOffsets(iList);
 gnuMacPreamble(iList, f);
 printFuncStart("main", 24, TRUE, f);
+fprintf(f, "\n# Starting code generation\n");
 
 for (node = iList->head; !dlEnd(node); node = nextNode)
     {
@@ -708,7 +722,7 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    pentShiftOp(isx, nextNode, opSar, f);
 	    break;
 	case poInput:
-	    pentInput(isx, f);
+	    pentInput(isx, nextNode, f);
 	    break;
 	case poCall:
 	    pentCall(isx, f);
@@ -718,6 +732,7 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    break;
 	}
     }
+fprintf(f, "\n# Finishing up main\n");
 fprintf(f, "\tmovl\t$0,%%eax\n");
 printFuncEnd(f);
 gnuMacPostscript(iList, f);

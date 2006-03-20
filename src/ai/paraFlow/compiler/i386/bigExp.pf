@@ -30,3 +30,4 @@ int n = j%k;
 int o = j/k;
 shd = e<<shs;
 shd = e>>shs;
+_printInt(k);

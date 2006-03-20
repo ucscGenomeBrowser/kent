@@ -41,13 +41,13 @@ errAbort(
 "    -verbose=2 - Display info on the progress of things.\n"
 "    -endPhase=N - Break after such-and-such a phase of compiler\n"
 "                  Run it with verbose=2 to see phases defined.\n"
-"    -isx=file - Where to put intermediate code\n"
+"    -asm  - Generate assembly rather than C code\n"
 );
 }
 
 static struct optionSpec options[] = {
    {"endPhase", OPTION_INT},
-   {"isx", OPTION_BOOLEAN},
+   {"asm", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -423,7 +423,7 @@ verbose(2, "Phase 6 - constant folding\n");
 pfConstFold(pfc, program);
 dumpParseTree(pfc, program, foldedF);
 
-if (optionExists("isx"))
+if (optionExists("asm"))
     {
     FILE *f;
     struct dlList *isxList;
