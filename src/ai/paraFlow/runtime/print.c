@@ -390,3 +390,9 @@ void pf__printInt(_pf_Stack *stack)
 {
 printf("%d\n", stack->Int);
 }
+
+void pf__addTwo(_pf_Stack *stack)
+/* Add two integers and return result. Just for debugging really */
+{
+stack->Int = stack[0].Int + stack[1].Int;
+}

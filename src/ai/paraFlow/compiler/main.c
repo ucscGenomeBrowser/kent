@@ -453,10 +453,11 @@ if (optionExists("asm"))
         return;
     verbose(2, "Phase 9 - Assembling pentium code\n");
         {
+	char *libName = hashMustFindVal(pfc->cfgHash,"runAsmLib");
 	struct dyString *dy = dyStringNew(0);
 	int err;
 	dyStringPrintf(dy, "gcc -o %s%s ", baseDir, baseName);
-	dyStringPrintf(dy, "%s", sFileName);
+	dyStringPrintf(dy, "%s %s", sFileName, libName);
 	verbose(2, "%s\n", dy->string);
 	err = system(dy->string);
 	if (err != 0)
