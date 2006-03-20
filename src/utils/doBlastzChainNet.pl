@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.35 2006/03/20 18:56:36 hiram Exp $
+# $Id: doBlastzChainNet.pl,v 1.36 2006/03/20 23:36:12 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -48,7 +48,9 @@ my @clusterNAS = ('/cluster/bluearc', '/panasas/store', '/san/sanvol1');
 my $clusterNAS = join('/... or ', @clusterNAS) . '/...';
 my @clusterNoNo = ('/cluster/home', '/projects');
 my @fileServerNoNo = ('kkhome', 'kks00');
-my @fileServerNoLogin = ('kkusr01', '10.1.1.3', 'sanhead2', '10.1.10.11');
+my @fileServerNoLogin = ('kkusr01', '10.1.1.3', '10.1.10.11',
+			 'sanhead1', 'sanhead2', 'sanhead3', 'sanhead4',
+			 'sanhead5', 'sanhead6', 'sanhead7', 'sanhead8');
 my $splitThreshold = 100;
 
 # Option variable names:
