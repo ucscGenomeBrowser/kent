@@ -20630,3 +20630,356 @@ knownToVisiGene hg17 -fromProbePsl=vgAllProbes
     grep -v "^track" newMammalsChicken.bed \
 	| hgLoadBed -strict hg17 picTarMiRNA5Way stdin
     #	Loaded 43046 elements of size 9
+
+
+############################################################################
+# dbSNP BUILD 125 (Heather, March 2006)
+
+# Set up directory structure
+ssh kkstore02
+cd /cluster/data/dbSnp
+mkdir 125
+cd 125
+mkdir shared
+mkdir shared/data
+mkdir shared/schema
+mkdir organisms
+mkdir organisms/human_9606
+mkdir organisms/human_9606/rs_fasta
+mkdir organisms/human_9606/database
+mkdir organisms/human_9606/database/organism_data
+mkdir organisms/human_9606/database/organism_data/hg17
+mkdir organisms/human_9606/database/schema
+
+# Get data from NCBI
+
+# Shared data includes data dictionary, 
+# Shared data includes defined types such as validity, class, function, locType
+# Actually this is independent of hg17 build and should go in separate makeDoc
+cd shared/data
+ftp ftp.ncbi.nih.gov
+cd snp/database/organism_shared_data
+mget *.gz
+
+cd ../schema
+ftp ftp.ncbi.nih.gov
+cd snp/database/schema/shared_schema
+mget *.gz
+
+# using headers of fasta files for molType, class and observed
+cd ../organisms/human_9606/rs_fasta
+ftp ftp.ncbi.nih.gov
+cd snp/organisms/human_9606/rs_fasta
+mget *.gz
+
+cd ../database/organism_data/hg17
+ftp ftp.ncbi.nih.gov
+cd snp/organisms/human_9606/database/organism_data
+# ContigLoc table has coords, orientation, loc_type, and refNCBI allele
+get b125_SNPContigLoc_35_1.bcp.gz
+# ContigLocusId has function
+get b125_SNPContigLocusId_35_1.bcp.gz
+get b125_ContigInfo_35_1.bcp.gz
+# MapInfo has alignment weights
+get b125_SNPMapInfo_35_1.bcp.gz
+# SNP has validation status and heterozygosity
+get SNP.bcp.gz
+# done with FTP
+
+# rename
+mv b125_SNPContigLoc_35_1.bcp.gz ContigLoc.gz
+mv b125_SNPContigLocusId_35_1.bcp.gz ContigLocusId.gz
+mv b125_ContigInfo_35_1.bcp.gz ContigInfo.gz
+mv b125_SNPMapInfo_35_1.bcp.gz MapInfo.gz
+mv SNP.bcp.gz SNP.gz
+
+# edit table descriptions
+cd /cluster/data/dbSnp/125/organisms/human_9606/database/schema
+# get CREATE statements from human_9606_table.sql for our 5 tables
+# store in table.tmp
+# convert and rename tables
+sed -f 'mssqlToMysql.sed' table.tmp > table2.tmp
+rm table.tmp
+sed -f 'tableRename.sed' table2.tmp > table.sql
+rm table2.tmp
+
+# get header lines from rs_fasta
+cd /cluster/data/dbSnp/125/organisms/human_9606/rs_fasta
+/bin/csh gnl.csh
+
+# load on kkr5u00
+ssh kkr5u00
+hgsql -e mysql 'create database dbSnpHumanBuild125' 
+cd /cluster/data/dbSnp/125/organisms/human_9606/database/schema
+hgsql dbSnpHumanBuild125 < table.sql
+cd ../organism_data/hg17
+/bin/csh load.csh
+
+# note rowcount
+# ContigLoc     24135144 
+# SNP           10430754 
+# MapInfo       10271016 
+# ContigLocusId  9539145 
+
+# create working /scratch dir
+cd /scratch/snp
+mkdir 125
+cd 125
+mkdir human
+cd human
+
+# get hg17 ctgPos, load into dbSnpHumanBuild125, compare contig list between ctgPos and ContigInfo
+
+# get gnl files
+cd /cluster/data/dbSnp/125/organisms/human_9606/rs_fasta/*.gnl .
+
+# examine ContigInfo for group_term and edit pipeline.csh
+# use "ref_haplotype" 
+
+# filter ContigLoc into ContigLocFilter
+# this gets rid of alternate assemblies and poor quality alignments
+# uses ContigInfo and MapInfo (weight == 10)
+# assumes all contigs are positively oriented
+# will abort if not true
+
+mysql> desc ContigLocFilter;
+#  +---------------+-------------+------+-----+---------+-------+
+#  | Field         | Type        | Null | Key | Default | Extra |
+#  +---------------+-------------+------+-----+---------+-------+
+#  | snp_id        | int(11)     | NO   |     |         |       |
+#  | ctg_id        | int(11)     | NO   |     |         |       |
+#  | chromName     | varchar(32) | NO   |     |         |       |
+#  | loc_type      | tinyint(4)  | NO   |     |         |       |
+#  | phys_pos_from | int(11)     | NO   |     |         |       |
+#  | phys_pos      | varchar(32) | YES  |     | NULL    |       |
+#  | orientation   | tinyint(4)  | NO   |     |         |       |
+#  | allele        | blob        | YES  |     | NULL    |       |
+#  +---------------+-------------+------+-----+---------+-------+
+ 
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocFilter dbSnpHumanBuild125 ref_haplotype
+# note rowcount
+# ContigLocFilter  10738923
+# how many are positive strand? hopefully 90%
+mysql> select count(*) from ContigLocFilter where orientation = 0;
+# 9161012
+
+# filter ContigLocusId into ContigLocusIdFilter
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocusIdFilter dbSnpHumanBuild125 ref_haplotype
+# note rowcount 
+# ContigLocusIdFilter  5352542
+
+# condense ContigLocusIdFilter into ContigLocusIdCondense (one SNP can have multiple functions)
+# assumes SNPs are in numerical order
+# will errAbort if not true
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocusIdCondense dbSnpHumanBuild125 ref_haplotype
+# note rowcount
+# expect about 50% for human
+# ContigLocusIdCondense 4129899
+# could delete ContigLocusIdFilter table here
+
+# create chrN_snpFasta tables from *.gnl files
+# snpLoadFasta.error will report all SNPs with "lengthTooLong"
+# here we have 4428 SNPs with lengthTooLong
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpLoadFasta dbSnpHumanBuild125 
+
+# split ContigLocFilter by chrom (could start using pipeline.csh here)
+# create the first chrN_snpTmp
+# we will reuse this table name, adding/changing columns as we go
+# at this point chrN_snpTmp will have the same description as ContigLocFilter
+# this opens a file handle for every chrom, so will not scale to scaffold-based assemblies
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpSplitByChrom dbSnpHumanBuild125 ref_haplotype
+
+# generate true coords using loc_type
+# possible errors logged to snpLocType.error:
+# "Missing quotes in phys_pos for range"
+# "Chrom end <= chrom start for range"
+# "Wrong size for exact"
+# "Unknown locType"
+# Unable to get chromEnd
+# We got none of these
+
+# possible exceptions logged to snpLocType.exceptions:
+# RangeLocTypeWrongSizeLargeAllele
+# RangeLocTypeWrongSize
+# ExactLocTypeWrongSize
+
+# this run got just 43 RangeLocTypeWrongSizeLargeAllele
+
+# morph chrN_snpTmp 
+
+mysql> desc chr1_snpTmp;
+
+#  +---------------+-------------+------+-----+---------+-------+
+#  | Field         | Type        | Null | Key | Default | Extra |
+#  +---------------+-------------+------+-----+---------+-------+
+#  | snp_id        | int(11)     | NO   |     |         |       |
+#  | ctg_id        | int(11)     | NO   |     |         |       |
+#  | chromStart    | int(11)     | NO   |     |         |       |
+#  | chromEnd      | int(11)     | NO   |     |         |       |
+#  | loc_type      | tinyint(4)  | NO   |     |         |       |
+#  | orientation   | tinyint(4)  | NO   |     |         |       |
+#  | allele        | blob        | YES  |     | NULL    |       |
+#  +---------------+-------------+------+-----+---------+-------+
+
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpLoctype dbSnpHumanBuild125 ref_haplotype
+
+# expand allele as necessary
+# report syntax errors to snpExpandAllele.errors
+# this run had 66 of these
+# possible exceptions logged to snpExpandAlleles.exceptions:
+# RangeLocTypeWrongSizeLargeAllele
+# RangeLocTypeWrongSize
+# this run has 522 RangeLocTypeWrongSizeLargeAllele
+
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpExpandAllele dbSnpHumanBuild125 ref_haplotype
+
+# the next few steps prepare for working in UCSC space
+# sort by position
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpSort dbSnpHumanBuild125 ref_haplotype
+# get hg17 nib files
+# get hg17 chromInfo, load into dbSnpHumanBuild125 with editted path
+hgsql -e "rename table chrMT_snpTmp to chrM_snpTmp"
+
+# lookup reference allele in nibs
+# keep reference complement to use in error checking (snpCheckAlleles)
+# check here for SNPs larger than 1024
+# errAbort if detected
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpRefUCSC dbSnpHumanBuild125
+
+# morph chrN_snpTmp 
+
+mysql> desc chr1_snpTmp;
+
+#  +--------------------+-------------+------+-----+---------+-------+
+#  | Field              | Type        | Null | Key | Default | Extra |
+#  +--------------------+-------------+------+-----+---------+-------+
+#  | snp_id             | int(11)     | NO   |     |         |       |
+#  | ctg_id             | int(11)     | NO   |     |         |       |
+#  | chromStart         | int(11)     | NO   |     |         |       |
+#  | chromEnd           | int(11)     | NO   |     |         |       |
+#  | loc_type           | tinyint(4)  | NO   |     |         |       |
+#  | orientation        | tinyint(4)  | NO   |     |         |       |
+#  | allele             | blob        | YES  |     | NULL    |       |
+#  | refUCSC            | blob        | YES  |     | NULL    |       |
+#  | refUCSCReverseComp | blob        | YES  |     | NULL    |       |
+#  +--------------------+-------------+------+-----+---------+-------+
+
+# compare allele from dbSNP to refUCSC
+# locType between is excluded from this check
+# log exceptions to snpCheckAllele.exceptions
+# if SNP is positive strand, expect allele == refUCSC
+# log WrongRefAllelePositiveStrand if not
+# if SNP is negative strand, if not allele == refUCSC, then check for allele == refUCSCReverseComp
+# If allele == refUCSCRevComp, log RefAlleleNotRevComp(Range,Exact)LocType
+# If allele doesn't match either of refUCSC or refUCSCReverseComp, log WrongRefAlleleNegativeStrand
+# This run we got:
+# 888    WrongRefAllelePositiveStrand
+# 414    WrongRefAlleleNegativeStrand
+# 8256   RefAlleleNotRevCompRangeLocType
+# 91158  RefAlleleNotRevCompExactLocType
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpCheckAlleles dbSnpHumanBuild125
+
+# add class, observed and molType from chrN_snpFasta tables
+# log errors to snpReadFasta.errors
+# errors detected: no data available, duplicate data
+# This run we got:
+# 49 no data available
+# 226048 duplicate
+
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpReadFasta dbSnpHumanBuild125
+
+# morph chrN_snpTmp
+#  +--------------------+---------------+------+-----+---------+-------+
+#  | Field              | Type          | Null | Key | Default | Extra |
+#  +--------------------+---------------+------+-----+---------+-------+
+#  | snp_id             | int(11)       | NO   |     |         |       |
+#  | chromStart         | int(11)       | NO   |     |         |       |
+#  | chromEnd           | int(11)       | NO   |     |         |       |
+#  | loc_type           | tinyint(4)    | NO   |     |         |       |
+#  | class              | varchar(255)  | NO   |     |         |       |
+#  | orientation        | tinyint(4)    | NO   |     |         |       |
+#  | molType            | varchar(255)  | NO   |     |         |       |
+#  | allele             | blob          | YES  |     | NULL    |       |
+#  | refUCSC            | blob          | YES  |     | NULL    |       |
+#  | refUCSCReverseComp | blob          | YES  |     | NULL    |       |
+#  | observed           | blob          | YES  |     | NULL    |       |
+#  +--------------------+---------------+------+-----+---------+-------+
+
+# generate exceptions for class and observed
+# first just using class and observed on their own
+# then including loc_type in the comparison
+
+# class/observed only:
+# SingleClassQuadAllelic and SingleClassTriAllelic 
+# SingleClassWrongObserved
+# IndelClassTruncatedObserved and IndelClassObservedWrongFormat 
+# MixedClassTruncatedObserved and MixedClassObservedWrongFormat 
+# NamedClassObservedWrongFormat 
+
+# This run we got:
+# 19312 SingleClassTriAllelic
+# 2303 SingleClassQuadAllelic
+# 78640 SingleClassWrongObserved
+# 11 IndelClassObservedWrongFormat
+
+# exceptions class/observed/loc_type:
+# SingleClassBetweenLocType
+# SingleClassRangeLocType
+# SingleClassWrongObservedPositiveStrand
+# SingleClassWrongObservedNegativeStrand
+# DeletionClassWrongObservedSize
+# DeletionClassWrongObserved
+# NamedClassWrongLocType
+
+# This run we got:
+# 20730 SingleClassBetweenLocType
+# 15635 SingleClassRangeLocType
+# 3909 SingleClassWrongObservedPositiveStrand
+# 74731 SingleClassWrongObservedNegativeStrand
+# 18299 DeletionClassWrongObservedSize
+# 614 NamedClassWrongLocType
+
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpCheckClassAndObserved dbSnpHumanBuild125
+
+# add function
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpFunction dbSnpHumanBuild125
+
+# add validation status and heterozygosity
+# log error if validation status > 31 or missing
+# this run we got 8 missing
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpSNP dbSnpHumanBuild125
+
+# generate chrN_snp125 and snp125Exceptions tables
+cp snpCheckAlleles.exceptions snpCheckAlleles.tab
+cp snpCheckClassAndObserved.exceptions snpCheckClassAndObserved.tab
+cp snpExpandAllele.exceptions snpExpandAllele.tab
+cp snpLocType.exceptions snpLocType.tab
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpFinalTable dbSnpHumanBuild125
+
+# concat into snp125.tab
+/bin/csh concat.csh
+
+# check for multiple alignments
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpMultiple dbSnpHumanBuild125
+
+# run and review snpCompareLoctype (currently tuned for 124/125 differences)
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpCompareLoctype dbSnpHumanBuild125
+
+# create indexes
+
+mysql> load data local infile 'snp125.tab' into table snp125; 
+# Query OK, 10727794 rows affected (1 min 0.87 sec)
+# Records: 10727794  Deleted: 0  Skipped: 0  Warnings: 8
+
+mysql> alter table snp125 add index name (name(10));
+# Query OK, 10727794 rows affected (1 min 12.40 sec)
+# Records: 10727794  Duplicates: 0  Warnings: 0
+
+mysql> alter table snp125 add index chrom (chrom, bin);
+# Query OK, 10727794 rows affected (2 min 17.20 sec)
+# Records: 10727794  Duplicates: 0  Warnings: 0
+
+mysql> alter table snp125 add index chromStart (chrom, chromStart);
+# Query OK, 10727794 rows affected (2 min 19.93 sec)
+# Records: 10727794  Duplicates: 0  Warnings: 0
+
