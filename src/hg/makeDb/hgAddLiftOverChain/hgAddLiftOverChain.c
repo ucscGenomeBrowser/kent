@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.5 2005/11/30 20:08:24 aamp Exp $";
+static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.6 2006/03/21 18:39:41 angie Exp $";
 
 #define TABLE_NAME "liftOverChain"
 
@@ -46,7 +46,7 @@ errAbort(
     "   hgAddLiftOverChain fromDatabase toDatabase chainFile\n"
     "options:\n"
     "    -path=<path>\tfile pathname to use:\n"
-    "                           (default /gbdb/<fromDb>To<ToDb>.over.chain)\n"
+    "                           (default /gbdb/<fromDb>To<ToDb>.over.chain.gz)\n"
     "    -minMatch=0.N Minimum ratio of bases that must remap. Default %3.2f\n"
     "    -minBlocks=0.N Minimum ratio of alignment blocks/exons that must map\n"
     "                  (default %3.2f)\n"
@@ -65,7 +65,7 @@ void hgAddLiftOverChain(char *fromDb, char *toDb, char *chainFile)
 struct sqlConnection *conn = hConnectCentral();
 struct liftOverChain loChain;
 
-verbose(1, "Connected to central database\n");
+verbose(1, "Connected to central database %s\n", sqlGetDatabase(conn));
 
 /* First make table definition. */
 if (!sqlTableExists(conn, TABLE_NAME))
@@ -127,7 +127,7 @@ fromDb = argv[1];
 toDb = argv[2];
 upperToDb = cloneString(toDb);
 upperToDb[0] = toupper(upperToDb[0]);
-safef(buf, sizeof(buf), "/gbdb/%s/liftOver/%sTo%s.over.chain", 
+safef(buf, sizeof(buf), "/gbdb/%s/liftOver/%sTo%s.over.chain.gz", 
                                         fromDb, fromDb, upperToDb);
 path = optionVal("path", buf);
 minMatch = optionFloat("minMatch", minMatch);
