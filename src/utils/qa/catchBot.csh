@@ -17,7 +17,7 @@ if ($#argv < 1 || $#argv > 2) then
   # not enough command line args
   echo
   echo "  script to catch bots."
-  echo "  monitors the most common IP addresses of users "
+  echo "  monitors the IP addresses of most common users "
   echo "    and squawks when someone gets too high."
   echo "  now also checks the last hour."
   echo
@@ -35,8 +35,8 @@ endif
 
 set debug="false"
 # get some times
-set lastHit=`hgsql -N -h genome-centdb -e 'SELECT MAX(time_stamp) FROM access_log' apachelog`
-set firstHit=`hgsql -N -h genome-centdb -e 'SELECT MIN(time_stamp) FROM access_log' apachelog`
+set lastHit=`hgsql -N -h genome-log -e 'SELECT MAX(time_stamp) FROM access_log' apachelog`
+set firstHit=`hgsql -N -h genome-log -e 'SELECT MIN(time_stamp) FROM access_log' apachelog`
 set hitSpan=`echo $lastHit $firstHit | gawk '{printf "%.1f", ($1 - $2) / 3600}'`
 set hourAgo=`echo $lastHit | gawk '{printf "%.0f", $1 - 3600}'`
 
@@ -49,7 +49,7 @@ endif
 
 # get whole list from access_log
 #### 
-hgsql -N -h genome-centdb -e "SELECT remote_host FROM access_log" apachelog > remote_host
+hgsql -N -h genome-log -e "SELECT remote_host FROM access_log" apachelog > remote_host
 #### 
 sort remote_host | uniq -c | sort -nr > xxUserCountxx
 set totalHits=`wc -l remote_host | gawk '{print $1}'`
@@ -78,7 +78,7 @@ while ($checked < $size)
   # get timeSpan stats
   set num=`echo $line | gawk '{print $1}'`
   set host=`echo $line |gawk '{print $2}'`
-  set timeSpan=`hgsql -N -h genome-centdb -e 'SELECT MAX(time_stamp) - MIN(time_stamp) \
+  set timeSpan=`hgsql -N -h genome-log -e 'SELECT MAX(time_stamp) - MIN(time_stamp) \
       AS timeSpan FROM access_log WHERE remote_host = "'$host'"' apachelog`
   set timeHours=`echo $timeSpan | gawk '{printf  "%.1f", $1/3600}'`
   if ($num > 0 ) then
@@ -129,7 +129,7 @@ echo >> $output
 # ----------------------------------------------
 # check last hour  
 
-hgsql -N -h genome-centdb -e "SELECT remote_host FROM access_log \
+hgsql -N -h genome-log -e "SELECT remote_host FROM access_log \
    WHERE time_stamp > $hourAgo" apachelog > xxLastHoursHostsxx
 sort -nr xxLastHoursHostsxx | uniq -c | sort -nr | head -5 > xxHoursHitsxx 
 echo "\n-------------------------------------------------------" >> $output
