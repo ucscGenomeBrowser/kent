@@ -9,7 +9,7 @@
 
 /* Look in chrMulti_snpFasta if no match found in chrN_snpFasta. */
 /* Write to error file if no match found in chrN_snpFasta or chrMulti_snpFasta. */
-/* Also write to error file if matchees found in chrN_snpFasta AND chrMulti_snpFasta. */
+/* Also write to error file if matches found in chrN_snpFasta AND chrMulti_snpFasta. */
 /* Give preference to chrMulti_snpFasta data. (Don't bother checking for difference). */
 
 #include "common.h"
@@ -17,7 +17,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.12 2006/03/11 03:53:21 heather Exp $";
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.13 2006/03/21 05:33:18 heather Exp $";
 
 struct snpFasta
     {
