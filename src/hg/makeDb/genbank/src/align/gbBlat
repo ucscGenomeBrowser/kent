@@ -51,7 +51,7 @@
 # written in Tcl because bash version was getting hideously hard and wanted
 # a language with named fuction parameters, ya known, like in fortran.
 #
-# $Id: gbBlat,v 1.68 2006/03/20 23:00:25 markd Exp $
+# $Id: gbBlat,v 1.69 2006/03/21 01:31:05 markd Exp $
 #
 
 # Tools are normally taken from /cluster/bin, however we allow them to be
@@ -264,7 +264,7 @@ proc determineBlatParams {specsVar} {
     }
     # hack: for panTro1
     set qdb0 [lindex $specs(qdb) 0]
-    if {[string match "*refseq*" $qdb0] && [stringf match "*/panTro1/*" $qdb0]
+    if {[string match "*refseq*" $qdb0] && [string match "*/panTro1/*" $qdb0]
         && [string match "*xeno*" $qdb0]} {
         set blatParams "-q=rna -fine -mask=lower"
     }
