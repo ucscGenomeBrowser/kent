@@ -10,7 +10,7 @@
 #include "options.h"
 #include "xap.h"
 
-static char const rcsid[] = "$Id: autoDtd.c,v 1.12 2005/12/20 18:20:28 kent Exp $";
+static char const rcsid[] = "$Id: autoDtd.c,v 1.13 2006/03/21 16:45:47 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -196,7 +196,6 @@ if (text[0] == 0)
 else
     {
     int textLen = strlen(text);
-    char head[33];
     struct attribute *att = type->textAttribute;
     if (att == NULL)
 	{
