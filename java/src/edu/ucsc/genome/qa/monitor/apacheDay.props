@@ -1,4 +1,4 @@
-sourceMachine genome-centdb.cse.ucsc.edu
+sourceMachine genome-log.cse.ucsc.edu
 sourceDB apachelog
 sourceTable access_log
 targetMachine all

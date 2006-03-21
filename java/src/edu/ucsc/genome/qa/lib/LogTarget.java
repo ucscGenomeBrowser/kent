@@ -47,7 +47,7 @@ public class LogTarget {
   }
     
   public void setDefaults() {
-    sourceMachine = "genome-centdb";
+    sourceMachine = "genome-log";
     sourceDB = "apachelog";
     sourceTable = "access_log";
     targetMachine = "all";
