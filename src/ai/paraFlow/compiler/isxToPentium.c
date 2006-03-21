@@ -184,7 +184,7 @@ switch (iad->adType)
 	if (iad->reg != NULL)
 	    fprintf(f, "%s", isxRegName(iad->reg, iad->valType));
 	else
-	    fprintf(f, "%d(ebp)", iad->val.tempMemLoc);
+	    fprintf(f, "%d(%%ebp)", iad->val.tempMemLoc);
 	break;
 	}
     case iadInStack:
