@@ -1420,7 +1420,6 @@ searchPriority 1.1
 searchTable affyGnf
 searchMethod exact
 searchType bed
-shortCircuit 1
 termRegex HG-U95:.+
 searchPriority 15
 termPrefix HG-U95:
@@ -1428,15 +1427,20 @@ termPrefix HG-U95:
 searchTable affyU95
 searchMethod exact
 searchType psl
-shortCircuit 1
 termRegex HG-U95:.+
 searchPriority 15
 termPrefix HG-U95:
 
+searchName affyU95NoChip
+searchTable affyU95
+searchMethod exact
+searchType psl
+termRegex [0-9]+[[:alnum:]_]*_at
+searchPriority 15
+
 searchTable affyUcla
 searchMethod exact
 searchType bed
-shortCircuit 1
 termRegex HG-U133:.+
 searchPriority 16
 termPrefix HG-U133:
@@ -1445,14 +1449,12 @@ searchName affyUclaNoChip
 searchTable affyUcla
 searchMethod exact
 searchType bed
-shortCircuit 1
 termRegex [0-9]+[[:alnum:]_]*_at
 searchPriority 16
 
 searchTable affyU133
 searchMethod exact
 searchType psl
-shortCircuit 1
 termRegex HG-U133[A-Z]:.+
 query select tName,tStart,tEnd,qName from %s where qName like '%s;'
 searchPriority 16
@@ -1461,7 +1463,6 @@ termPrefix HG-
 searchTable affyU133Plus2
 searchMethod exact
 searchType psl
-shortCircuit 1
 termRegex HG-U133_Plus_2:.+
 searchPriority 16
 termPrefix HG-U133_Plus_2:
@@ -1470,14 +1471,12 @@ searchName affyU133Plus2NoChip
 searchTable affyU133Plus2
 searchMethod exact
 searchType psl
-shortCircuit 1
 termRegex [0-9]+[[:alnum:]_]*_at
 searchPriority 16
 
 searchTable affyGnf1h
 searchMethod exact
 searchType psl
-shortCircuit 1
 termRegex gnf1h[0-9]+.+
 searchPriority 16
 
