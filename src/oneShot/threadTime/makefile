@@ -1,6 +1,6 @@
 include ../../inc/common.mk
 
-L = -lm
+L = -lpthread -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
