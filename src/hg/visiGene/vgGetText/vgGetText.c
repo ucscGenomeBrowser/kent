@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: vgGetText.c,v 1.8 2006/02/02 19:16:48 kent Exp $";
+static char const rcsid[] = "$Id: vgGetText.c,v 1.9 2006/03/21 02:36:02 galt Exp $";
 
 char *db = "visiGene";
 
@@ -30,6 +30,7 @@ errAbort(
 }
 
 static struct optionSpec options[] = {
+   {"db", OPTION_STRING},
    {NULL, 0},
 };
 
