@@ -148,16 +148,22 @@ exit; # don't actually run this like a script :)
     mkdir /cluster/data/rn4/bed
 
 
-# REPEAT MASKING (DONE 1/30/06 angie)
+# REPEAT MASKING (DONE 3/16/06 angie)
+    # Originally run 1/30/06.  Coverage was a bit low (43.020%, compared to 
+    # 43.463% for rn3) so I made a test case (see below) for Robert Hubley,
+    # who fixed a bug and re-released RepeatMasker 3/14/06.  So I'm 
+    # re-running... original chr*.fa.out have been moved to .bak and 
+    # lower-level .fa.out's have been removed.  Added -ali at Robert H's 
+    # request.  
     # Record RM version used:
     ls -l /cluster/bluearc/RepeatMasker
-#lrwxrwxrwx    1 hiram    protein        18 Jan 20 13:13 /cluster/bluearc/RepeatMasker -> RepeatMasker060120/
-    cat /cluster/bluearc/RepeatMasker/Libraries/version
-#RM database version 20060120
+#lrwxrwxrwx  1 angie protein 18 Mar 14 16:56 /cluster/bluearc/RepeatMasker -> RepeatMasker060314/
+    grep RELEASE /cluster/bluearc/RepeatMasker/Libraries/RepeatMaskerLib.embl
+#CC   RELEASE 20060314;                                            *
     # Run RepeatMasker on a dummy input, just to make it initialize its 
     # rat libraries once before the cluster run:
     /cluster/bluearc/RepeatMasker/RepeatMasker -spec rat /dev/null
-#Building species libraries in: /cluster/bluearc/RepeatMasker060120/Libraries/20060120/rattus
+#Building species libraries in: /cluster/bluearc/RepeatMasker060314/Libraries/20060314/rattus
 
     #- Split contigs into 500kb chunks, at gaps if possible:
     ssh kkstore01
@@ -183,7 +189,7 @@ pushd .
 /bin/mkdir -p /tmp/rn4/$2
 /bin/cp $2 /tmp/rn4/$2/
 cd /tmp/rn4/$2
-/cluster/bluearc/RepeatMasker/RepeatMasker -s -spec rat $2
+/cluster/bluearc/RepeatMasker/RepeatMasker -s -ali -spec rat $2
 popd
 /bin/cp /tmp/rn4/$2/$2.out ./
 if (-e /tmp/rn4/$2/$2.tbl) /bin/cp /tmp/rn4/$2/$2.tbl ./
@@ -210,43 +216,20 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
     end
 
     #- Do the run
-    ssh kk
+    ssh pk
     cd /cluster/data/rn4/RMRun
     para create RMJobs
     para make RMJobs; para time | mail -s 'RM cluster run finished' $USER
 #Completed: 6487 of 6488 jobs
 #Crashed: 1 jobs
-#CPU time in finished jobs:   46404794s  773413.24m 12890.22h  537.09d  1.471 y
-#IO & Wait Time:                229486s    3824.76m    63.75h    2.66d  0.007 y
-#Average job time:                7189s     119.81m     2.00h    0.08d
-#Longest finished job:           10699s     178.32m     2.97h    0.12d
-#Submission to last job:         86450s    1440.83m    24.01h    1.00d
-    # The one crash was due to a divide-by-zero error in ProcessRepeats,
-    # on chr1_24_04.fa.  RepeatMasker made chr1_24_04.fa.cat OK, but then 
-    # ProcessRepeats died on that when trying to create the .out.  
-    # The 050112 version of ProcessRepeats ran OK on the .cat, but the 
-    # 050305 and later versions get the divide-by-zero error.  
-    # I sent a test case to Robert Hubley on Sunday 1/29 but as of 2pm Mon.
-    # I haven't heard back from him yet.  
-
-    # I made what I think is a straightforward fix to get around the 
-    # divide-by-0 (there already was a case to handle another denominator
-    # term being 0; I just hooked into that), and re-ran ProcessRepeats 
-    # like this:
-    ssh kolossus
-    cd /tmp
-    cp /cluster/data/rn4/1/chr1_24/chr1_24_04.out .
-    /cluster/bluearc/RepeatMasker/RepeatMasker chr1_24_04.fa
-    ~/cb/hg3rdParty/RepeatMasker/ProcessRepeats chr1_24_04.fa.cat
-    mv chr1_24_04.fa.out /cluster/data/rn4/1/chr1_24/
-    # That is risky -- Robert might provide a fix that has a slightly 
-    # different effect, in which case I'll have to redo everything at least 
-    # for chr1.  But I'd like to make some progress at least....
-
-    # Update 2/7/06 -- Robert sent a patch for ProcessRepeats (and for 
-    # DateRepeats, see below).  Although the patch was not identical to 
-    # my patch, the results of ProcessRepeats run on the .cat were identical.
-    # So I don't have to redo subsequent steps, whew!
+#CPU time in finished jobs:   27797186s  463286.43m  7721.44h  321.73d  0.881 y
+#IO & Wait Time:                 41276s     687.94m    11.47h    0.48d  0.001 y
+#Average job time:                4291s      71.52m     1.19h    0.05d
+#Longest finished job:            6361s     106.02m     1.77h    0.07d
+#Submission to last job:        133586s    2226.43m    37.11h    1.55d
+    # The one crash was a divide-by-zero error on chr1_24_04 -- the patch 
+    # that Robert send for open-3-1-3 was missing from open-3-1-4.  So I 
+    # applied it to open-3-1-4 and manually ran ProcessRepeats on the .cat.
 
     #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
     ssh kkstore01
@@ -276,21 +259,25 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
     #- Load the .out files into the database with:
     ssh hgwdev
     cd /cluster/data/rn4
-    hgLoadOut rn4 */chr*.fa.out
+    hgLoadOut rn4 ?{,?}/chr*.fa.out
     # Many warnings like this one:
-#Strange perc. field -7282.5 line 384881 of 1/chr1.fa.out
-#Strange perc. field -143.1 line 384881 of 1/chr1.fa.out
-    # That's from chr1_49, not chr1_24 so it is independent of 
-    # my tweak to ProcessRepeats above.
+#Strange perc. field -7282.5 line 396666 of 1/chr1.fa.out
+#Strange perc. field -143.1 line 396666 of 1/chr1.fa.out
+    # That's from chr1_49, not chr1_24 so it is independent of the tweak to 
+    # ProcessRepeats.
     # There was also this warning at the end:
-#note: 4 records dropped due to repStart > repEnd
+#note: 249 records dropped due to repStart > repEnd
 #      run with -verbose=2 for details
-    # Ran with -verbose=2 on kolossus... these are the warnings:
-#bad rep range [152, 128] line 108428 of 17/chr17.fa.out 
-#bad rep range [58, -69] line 86997 of 5/chr5.fa.out 
-#bad rep range [69, 7] line 30310 of 8/chr8.fa.out 
-#bad rep range [1303, 1228] line 94319 of X/chrX.fa.out 
+    # Ran with -verbose=2 on kolossus... these are some of the warnings:
+#bad rep range [4533, 4532] line 955 of 14/chr14.fa.out 
+#bad rep range [6936, 6935] line 15888 of 14/chr14.fa.out 
+#bad rep range [458, 457] line 30645 of 14/chr14.fa.out 
+#bad rep range [5798, 5797] line 85282 of 14/chr14.fa.out 
 #TODO: send those on to Robert too.
+    nice featureBits rn4 rmsk
+#1137387810 bases of 2571531505 (44.230%) in intersection
+    # Good -- it's now higher than rn3:
+#1117483165 bases of 2571104688 (43.463%) in intersection
 
 
 # CREATING DATABASE (DONE 1/27/06 angie)
@@ -307,7 +294,7 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
     hgsql rn4 -e "create table grp (PRIMARY KEY(NAME)) select * from rn3.grp"
 
 
-# VERIFY REPEATMASKER RESULTS (DONE 3/10/06 angie)
+# MAKE REPEATMASKER LOW-COVERAGE TEST CASE (DONE 3/10/06 angie)
     # Eyeball some repeat annotations in the browser, compare to lib seqs.
     # Run featureBits on rn4 and on previous genome build, and compare:
     ssh hgwdev
@@ -371,7 +358,7 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
     /cluster/bluearc/RepeatMasker040130/RepeatMasker -s -spec rat chr20_frag.fa
     mkdir 040130
     mv chr20_frag.fa.* 040130/
-    # Sent the test case to Robert Hubley.
+    # Sent the test case to Robert Hubley -- he found a rodent-specific bug.
 
 
 # MAKE LIFTALL.LFT (DONE 1/27/06 angie)
@@ -499,14 +486,15 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
 #50551402 bases of 2571531505 (1.966%) in intersection
 
 
-# MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 1/30/06 angie)
+# MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF (DONE 3/17/06 angie)
+    # Originally done 1/30 -- redoing after re-run of RepeatMasker.
     ssh kkstore01
     cd /cluster/data/rn4
     # Soft-mask (lower-case) the contig and chr .fa's, 
     # then make hard-masked versions from the soft-masked.  
     set trfCtg=bed/simpleRepeat/trfMask
     set trfChr=bed/simpleRepeat/trfMaskChrom
-    foreach f (*/chr*.fa)
+    foreach f (?{,?}/chr*.fa)
       echo "repeat- and trf-masking $f"
       maskOutFa -soft $f $f.out $f
       set chr = $f:t:r
@@ -525,7 +513,7 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
       end
     end
     # Make 2bit (for hgBlat, browser):
-    faToTwoBit */chr*.fa rn4.2bit
+    faToTwoBit ?{,?}/chr*.fa rn4.2bit
     # Make nib (for blastz w/linSpecRep, OK for genbank too):
     mkdir nib
     foreach f (?{,?}/chr*.fa)
@@ -534,10 +522,12 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
     end
 
 
-# PUT NIBS ON /SCRATCH (DONE 1/30/06 angie)
+# PUT NIBS ON /SCRATCH (DONE 3/17/06 angie)
+    # Originally done 1/30 -- redoing after re-run of RepeatMasker.
     ssh kkstore01
     mkdir /cluster/bluearc/scratch/hg/rn4
     rsync -av /cluster/data/rn4/nib/* /cluster/bluearc/scratch/hg/rn4/nib/
+    cp -p /cluster/data/rn4/rn4.2bit /cluster/bluearc/scratch/hg/rn4/
     # Ask cluster-admin to distribute to /scratch on big & small cluster
 
 
@@ -603,6 +593,7 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
 
 
 # MAKE DOWNLOADABLE SEQUENCE FILES (DONE 1/30/06 angie)
+# chrom{Fa*,Out}, md5sum.txt REDONE, 3/17/06, after RepeatMasker re-run.
     ssh kolossus
     cd /cluster/data/rn4
     #- Build the .tar.gz files -- no genbank for now.
@@ -2123,8 +2114,7 @@ while (<>) {
     # Build knownGeneMrna and knownGenePep tables.
     kgPepMrna kgRn4ATemp rn4 060115
     hgPepPred rn4 tab knownGeneMrna knownGeneMrna.tab
-#TODO after resolving non-unique names vs. primary key index:
-    hgPepPred rn4 tab knownGenePep knownGenePep.tab
+    hgLoadSqlTab rn4 knownGenePep ~/kent/src/hg/lib/knownGenePep.sql knownGenePep.tab
 
     # Use hgwdev's entrez database (loaded by Fan, see makeHg18.doc) 
     # to buid the mrnaRefseq table.
@@ -2227,7 +2217,6 @@ while (<>) {
     protBlat
     refRa
     spMrna
-#TODO: repush knownGenePep after it is reloaded on kolossus.
 
     # Copy history comments from kolossus to hgwdev's rn4.history table.
     hgsqldump rn4 history \
@@ -2351,9 +2340,101 @@ BASE=/cluster/data/rn4/bed/blastz.danRer3.2006-03-03
     ln -s blastz.danRer3.2006-03-03 /cluster/data/rn4/bed/blastz.danRer3 
 
 
-#TODO: compare the two danRer3 runs... netstat?  coverage?  eyeball?
+# COMPARE danRer3 runs, without vs. with LSR (DONE 3/13/06 angie)
+    ssh kolossus
+    cd /cluster/data/rn4/bed
+    # have to use redirect because vprintf doesn't like being called 
+    # twice on x86_64... should fix that sometime.  
+    netStats /dev/null blastz.danRer3.2006-03-02/axtChain/rn4.danRer3.net.gz \
+      > blastz.danRer3.2006-03-02/axtChain/netStats.out
+    netStats /dev/null blastz.danRer3.2006-03-03/axtChain/rn4.danRer3.net.gz \
+      > blastz.danRer3.2006-03-03/axtChain/netStats.out
+    sdiff blastz.danRer3.2006-03-0[23]/axtChain/netStats.out
+    # A few points of comparison from that:
+    #                       Without:    With:
+    # max depth:                  11        7
+    # gap count:              618046   487550
+    # gap average size T:      809.1   1024.5
+    # gap average size Q:      529.2    688.0
+    # fill count:              60347    58415
+    # top count:               38000    37787
+    # top percent of total:    84.9%    87.5%
+    # nonSyn percent of total: 11.1%     9.6%
+    # syn percent of total:     2.5%     1.8%
+    # Coverage:
+    netToBed blastz.danRer3.2006-03-02/axtChain/{rn4.danRer3.net.gz,net.bed}
+    netToBed blastz.danRer3.2006-03-03/axtChain/{rn4.danRer3.net.gz,net.bed}
+    featureBits rn4 blastz.danRer3.2006-03-02/axtChain/net.bed
+#513894027 bases of 2571531505 (19.984%) in intersection
+    featureBits rn4 blastz.danRer3.2006-03-03/axtChain/net.bed
+#509076601 bases of 2571531505 (19.797%) in intersection
+    # OK, so coverage drops with LSR.  Maybe some repeats are being snipped 
+    # that could be aligned (ancestral)?  
+    # Eyeball the one place where level == 11 in the 02 set
+    # ("select * from netDanRer3NoLSR where level >= 11;" on hgwdev):
+    # chr3  | 97071076 | 97071655, zoom out 1.5
+    # NoLSR has a lot more chains... more levels filled.  
+    # with LSR gets a "Level 2" chain that NoLSR does not get at all.  
+    # Who's to say which is right???  NoLSR looks messier to me but that 
+    # is a very subjective judgment.  
+    # Interestingly, there are no repeats on rn4 in that region.
+    # Panning to the right a ways, just long gaps for NoLSR but a few 
+    # blocks for with.  NoLSR gets some sizable alignments where with 
+    # does not... a stretch of simple/low-complexity repeats there.  
+    # Those should probably be excluded when we are using all repeats 
+    # as lin-spec!  Hopping over to a danRer3 region aligned only by 
+    # NoLSR I see some more low-complexity.  Should run that by Arian.  
+    # Could do yet another run with all repeats except simple/low-complexity
+    # (what is DNA? maybe that too?) as linSpec.  
+    # Panning to the right some more, a long dry spell for with LSR.
+    # There are olfactory receptor genes around which could indicate a 
+    # tougher job than usual.  Not much agreement between the nets though,
+    # yikes.  High precision, but at what accuracy?
+    # I just worry about the reliability of what comes out of the pipeline...
+    # so sensitive to parameters.  
+    # chr3:97,345,533-97,360,012 there is a withLSR chain but the net is empty.
 
-#TODO: other pairwise: cow, rabbit, opossum, frog, elephant? armadillo?
+
+# BLASTZ/CHAIN/NET XENTRO1 (IN PROGRESS 3/20/06 angie)
+    ssh kkstore01
+    mkdir /cluster/data/rn4/bed/blastz.xenTro1.2006-03-20
+    cd /cluster/data/rn4/bed/blastz.xenTro1.2006-03-20
+    cat << '_EOF_' > DEF
+# rat vs. frog
+BLASTZ=/cluster/bin/penn/x86_64/blastz.v7.x86_64
+
+# Mammal to non-mammal, with threshold of 8000 as in mm8-xenTro1
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Rat rn4
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro1 - single chunk big enough to run two of the
+#               largest scaffolds in one job
+SEQ2_DIR=/scratch/hg/xenTro1/xenTro1.2bit
+SEQ2_LEN=/scratch/hg/xenTro1/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/rn4/bed/blastz.xenTro1.2006-03-20
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl -blastzOutRoot=/san/sanvol1/rn4XenTro1 \
+      -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose DEF \
+      >& do.log & tail -f do.log
+#TODO
+    ln -s blastz.xenTro1.2006-03-20 /cluster/data/rn4/bed/blastz.xenTro1
+
+
+#TODO: other pairwise: cow, opossum
 
 # MULTIZ
 # PHASTCONS
@@ -2361,7 +2442,7 @@ BASE=/cluster/data/rn4/bed/blastz.danRer3.2006-03-03
 # AFFY CHIPS
 
 # MGI?
-# SNPS?
+# SNPS - TBD by Heather's new process.
 
 ############################################################################
 ##  BLASTZ swap from mm8 alignments (DONE - 2006-02-18 - Hiram)
