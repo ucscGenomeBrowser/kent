@@ -7806,3 +7806,10 @@ axtChain -linearGap=medium -verbose=0 -psl $(path1) /scratch/hg/mm7/nib /cluster
 	/usr/local/apache/htdocs/goldenPath/mm7/liftOver/mm7ToMm5.over.chain.gz
     #	How is this done with a gzipped file ?
     hgAddLiftOverChain mm7 mm5 /gbdb/mm7/liftOver/mm7ToMm5.over.chain.gz
+
+
+# UPDATED mm5.knownToVisiGene (2006-03-21 galt)
+ssh hgwdev
+knownToVisiGene mm5
+
+    
