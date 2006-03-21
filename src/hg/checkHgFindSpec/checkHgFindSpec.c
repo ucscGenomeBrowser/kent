@@ -12,7 +12,7 @@
 #include "hgFind.h"
 #include "hgFindSpec.h"
 
-static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.8 2006/03/20 16:49:12 angie Exp $";
+static char const rcsid[] = "$Id: checkHgFindSpec.c,v 1.9 2006/03/21 17:08:32 angie Exp $";
 
 char *database = NULL;
 /* Need to get a cart in order to use hgFind. */
@@ -187,6 +187,8 @@ safef(buf, sizeof(buf), "select %s from %s", field, table);
 sr = sqlGetResult(conn, buf);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    if (isEmpty(row[0]))
+	continue;
     if (! matchRegex(row[0], exp))
 	{
 	if (isNotEmpty(altExp) && matchRegex(row[0], altExp))
