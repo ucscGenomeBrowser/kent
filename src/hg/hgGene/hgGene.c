@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.67 2006/03/20 17:45:14 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.68 2006/03/21 01:30:37 hartera Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -361,6 +361,31 @@ if (totalCount > 0)
     }
 }
 
+void printGeneSymbol (char *geneId, char *table, char *idCol, struct sqlConnection *conn)
+/* Print out official Entrez gene symbol from a cross-reference table.*/
+{
+char query[256];
+struct sqlResult *sr = NULL;
+char **row;
+char *geneSymbol;
+
+if (sqlTablesExist(conn, table))
+    {
+    hPrintf("<B>Entrez Gene Official Symbol:</B> ");
+    safef(query, sizeof(query), "select geneSymbol from %s where %s = '%s'", table, idCol, geneId);
+    sr = sqlGetResult(conn, query);
+    if (sr != NULL)
+        {
+        row = sqlNextRow(sr);
+
+        geneSymbol = cloneString(row[0]);
+        if (!sameString(geneSymbol, ""))
+            hPrintf("%s<BR>", geneSymbol);
+        }
+    }
+sqlFreeResult(&sr);
+}
+
 void printCcds(char *kgId, struct sqlConnection *conn)
 /* Print out CCDS ids most closely matching the kg. */
 {
@@ -386,6 +411,28 @@ if (ccdsKgs != NULL)
     }
 }
 
+char *getRefSeqAcc(char *id, char *table, char *idCol, struct sqlConnection *conn)
+/* Finds RefSeq accession from a cross-reference table. */
+{
+char query[256];
+struct sqlResult *sr = NULL;
+char **row;
+char *refseqAcc = NULL;
+
+if (sqlTablesExist(conn, table))
+    {
+    safef(query, sizeof(query), "select refSeq from %s where %s = '%s'", table, idCol, id);
+    sr = sqlGetResult(conn, query);
+    if (sr != NULL)
+        {
+        row = sqlNextRow(sr);
+        refseqAcc = cloneString(row[0]);
+        }
+    }
+sqlFreeResult(&sr);
+return refseqAcc;
+}
+
 void printDescription(char *id, struct sqlConnection *conn)
 /* Print out description of gene given ID. */
 {
@@ -393,6 +440,8 @@ char *description = NULL;
 char *summaryTables = genomeOptionalSetting("summaryTables");
 char *protAcc = getSwissProtAcc(conn, spConn, id);
 char *spDisplayId;
+char *refseqAcc = NULL;
+boolean gotRefseq = FALSE;
 boolean gotRnaAli = idInAllMrna(id, conn);
 boolean gotRefseqAli = idInRefseq(id, conn);
 char *oldDisplayId;
@@ -400,10 +449,9 @@ char condStr[255];
 char *kgProteinID;
 char *parAcc; /* parent accession of a variant splice protein */
 char *chp;
+char *xrefTable;
+char *geneIdCol;
 description = genoQuery(id, "descriptionSql", conn);
-
-if (curProtId == NULL) curProtId = protAcc;
-
 hPrintf("<B>Description:</B> ");
 if (description != NULL)
     hPrintf("%s<BR>", description);
@@ -414,13 +462,35 @@ if (sqlTablesExist(conn, "kgAlias"))
     {
     printAlias(id, conn);
     }
+if (sameWord(genome, "Zebrafish"))
+    {
+    xrefTable = "ensGeneXRef";
+    geneIdCol = "ensGeneId";
+    /* get Gene Symbol and RefSeq accession from Zebrafish-specific */
+    /* cross-reference table */
+    printGeneSymbol(id, xrefTable, geneIdCol, conn);
+    refseqAcc = getRefSeqAcc(id, xrefTable, geneIdCol, conn);
+    if (refseqAcc != NULL)
+        {
+        gotRefseq = TRUE;
+        gotRefseqAli = idInRefseq(refseqAcc, conn);
+        }
+    }
 printCcds(id, conn);
     
 if (gotRefseqAli)
     {
     hPrintf("<B>Representative Refseq: </B> <A HREF=\"");
-    printOurRefseqUrl(stdout, id);
-    hPrintf("\">%s</A>\n", id);
+    if (gotRefseq)
+        {
+        printOurRefseqUrl(stdout, refseqAcc);
+        hPrintf("\">%s</A>\n", refseqAcc);
+        }
+    else
+        {
+        printOurRefseqUrl(stdout, id);
+        hPrintf("\">%s</A>\n", id);
+        }
     hPrintf("&nbsp&nbsp&nbsp");
     }
 else
@@ -777,6 +847,10 @@ void doKgMethod(struct sqlConnection *conn)
     if (sameWord(genome, "S. cerevisiae"))
 	{
         tdb = hTrackDbForTrack("sgdGene");
+	}
+    if (sameWord(genome, "Danio rerio"))
+	{
+        tdb = hTrackDbForTrack("ensGene");
 	}
     tdb2 = hTrackDbForTrack(curGeneType);
     hPrintf("%s", tdb2->html);
