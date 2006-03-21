@@ -31,12 +31,12 @@ if ($go != "go") then
 endif
 
 echo "\nprocesses:\n"
-hgsql -N -h genome-centdb -e "SHOW PROCESSLIST" hgcentral | awk '{print $3}' \
+hgsql -N -h genome-log -e "SHOW PROCESSLIST" hgcentral | awk '{print $3}' \
  | awk -F"." '{print $1}' | sort | uniq -c | grep -v hgwdev
 
 echo "\nhits in last 10 min:\n"
 
-set max=`hgsql -N -h genome-centdb -e "SELECT MAX(time_stamp) FROM access_log" apachelog` 
-hgsql -N -h genome-centdb -e "SELECT DISTINCT(machine_id), COUNT(*) FROM access_log \
+set max=`hgsql -N -h genome-log -e "SELECT MAX(time_stamp) FROM access_log" apachelog` 
+hgsql -N -h genome-log -e "SELECT DISTINCT(machine_id), COUNT(*) FROM access_log \
   WHERE time_stamp > $max - 600 GROUP BY machine_id " apachelog | awk '{printf("%7s %5d\n"), $1, $2}'
 echo
