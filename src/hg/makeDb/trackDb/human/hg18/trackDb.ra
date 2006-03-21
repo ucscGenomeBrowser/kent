@@ -107,7 +107,7 @@ track chainMonDom1
 shortLabel MonDom1 Chain 
 longLabel MonDom1 ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 190.14
+priority 190.16
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -119,7 +119,7 @@ track netMonDom1
 shortLabel MonDom1 Net
 longLabel MonDom1 ($o_date/$o_db) Alignment Net
 group compGeno
-priority 190.15
+priority 190.17
 visibility hide
 spectrum on
 type netAlign monDom1 chainMonDom1
@@ -323,7 +323,7 @@ track chainRn3
 shortLabel Rn3 Chain
 longLabel Rn3 ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 260
+priority 260.2
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -337,7 +337,7 @@ track netRn3
 shortLabel Rn3 Net
 longLabel Rn3 ($o_date/$o_db) Alignment Net
 group compGeno
-priority 260.1
+priority 260.3
 visibility hide
 spectrum on
 type netAlign rn3 chainRn3
@@ -513,7 +513,7 @@ track chainMm7
 shortLabel Mm7 Chain
 longLabel Mm7 ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 270
+priority 270.2
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -525,7 +525,7 @@ track netMm7
 shortLabel Mm7 Net
 longLabel Mm7 ($o_date/$o_db) Alignment Net
 group compGeno
-priority 270.1
+priority 270.3
 visibility hide
 spectrum on
 type netAlign mm7 chainMm7
@@ -535,7 +535,7 @@ track chainMm8
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 270.2
+priority 270
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -549,7 +549,7 @@ track netMm8
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 270.3
+priority 270.1
 visibility hide
 spectrum on
 type netAlign mm8 chainMm8
