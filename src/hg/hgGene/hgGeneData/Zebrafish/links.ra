@@ -16,12 +16,17 @@ idSql select name from ensGene where name = '%s'
 url http://dec2005.archive.ensembl.org/Danio_rerio/transview?transcript=%s
 priority 25
 
+name zfin
+shortLabel ZFIN
+tables ensGeneXRef
+idSql select zfinId from ensGeneXRef where ensGeneId = '%s'
+url http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=%s
+priority 28
+
 name uniProt
 shortLabel UniProt
 tables ensGeneXRef
 idSql select uniProtId from ensGeneXRef where ensGeneId = '%s'
-nameSql select uniProtId from ensGeneXRef where ensGeneId = '%s'
-url http://us.expasy.org/cgi-bin/niceprot.pl?%s
 priority 30
 
 name refSeq
@@ -44,13 +49,6 @@ tables ensGeneXRef
 idSql select geneId from ensGeneXRef where ensGeneId = '%s'
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?db=gene&cmd=Retrieve&dopt=Graphics&list_uids=%s&tool=genome.ucsc.edu
 priority 45
-
-name zfin
-shortLabel ZFIN
-tables ensGeneXRef
-idSql select zfinId from ensGeneXRef where ensGeneId = '%s'
-url http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=%s
-priority 50
 
 name genBank
 hide
