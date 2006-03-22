@@ -253,27 +253,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-char *fixCopyright(char *s)
-/* Fix copyright notice which sometimes is truncated in
- * Jackson labs database. */
-{
-if (endsWith(s, " and is"))
-    {
-    char *tail = NULL;
-    if (stringIn(" Development ", s))
-        {
-	char *tail = " displayed with the permission of The Company of Biologists Limited who owns the Copyright.";
-	int newSize = strlen(tail) + strlen(s) + 1;
-	char *fixed = needMem(newSize);
-	strcpy(fixed, s);
-	strcat(fixed, tail);
-	uglyf("Patched %s to %s\n", s, fixed);
-	freez(&s);
-	s = fixed;
-	}
-    }
-return s;
-}
 
 void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, char *ref, char *fileRoot,
 	char *inJax)
@@ -284,7 +263,7 @@ void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, c
 char raName[PATH_LEN], tabName[PATH_LEN], tmpName[PATH_LEN], capName[PATH_LEN];
 FILE *ra = NULL, *tab = NULL, *cap = NULL;
 struct dyString *query = dyStringNew(0);
-struct sqlResult *sr, *sr2;
+struct sqlResult *sr;
 char **row;
 char *pubMed;
 struct slName *list, *el;
@@ -473,6 +452,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     if (!lookedForCopyright)
 	{
+	struct sqlResult *sr = NULL;
+	char **row;
 	lookedForCopyright = TRUE;
 
 	dyStringClear(query);
@@ -486,15 +467,14 @@ while ((row = sqlNextRow(sr)) != NULL)
 	     "and MGI_Note._Note_key = MGI_NoteChunk._Note_key "
 	     "order by sequenceNum"
 	     , imageKey);
-	sr2 = sqlGetResultVerbose(conn2, query->string);
-	while ((row = sqlNextRow(sr2)) != NULL)
+	sr = sqlGetResultVerbose(conn2, query->string);
+	while ((row = sqlNextRow(sr)) != NULL)
 	   dyStringAppend(copyright, row[0]);
-	sqlFreeResult(&sr2);
+	sqlFreeResult(&sr);
 
 	if (copyright->stringSize != 0)
 	    {
-	    char *fixed = fixCopyright(copyright->string);
-	    fprintf(ra, "copyright %s\n", fixed);
+	    fprintf(ra, "copyright %s\n", copyright->string);
 	    }
 	}
 
@@ -649,7 +629,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    dyStringPrintf(query, "select latinName from MGI_Organism "
 	                          "where _Organism_key = %d", orgKey);
 	    latinName = sqlQuickStringVerbose(conn2, query->string);
-	    if (latinName != NULL && !sameString(latinName, "Not Specified"))
+	    if (latinName != NULL 
+		&& !sameString(latinName, "Not Specified")
+		&& !sameString(latinName, "Not Applicable"))
 		{
 		char *e = strchr(latinName, '/');
 		if (e != NULL) 
@@ -662,7 +644,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 		dyStringPrintf(query, "select commonName from MGI_Organism "
 	                          "where _Organism_key = %d", orgKey);
 		commonName = sqlQuickStringVerbose(conn2, query->string);
-		if (commonName != NULL && !sameString(commonName, "Not Specified"))
+		if (commonName != NULL 
+		    && !sameString(commonName, "Not Applicable")
+		    && !sameString(commonName, "Not Specified"))
 		    {
 		    spTaxon = spCommonToTaxon(sp, commonName);
 		    }
@@ -756,10 +740,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	     "and MGI_Note._Note_key = MGI_NoteChunk._Note_key "
 	     "order by sequenceNum"
 	     , imageKey);
-	sr2 = sqlGetResultVerbose(conn2, query->string);
-	while ((row = sqlNextRow(sr2)) != NULL)
+	sr = sqlGetResultVerbose(conn2, query->string);
+	while ((row = sqlNextRow(sr)) != NULL)
 	   dyStringAppend(caption, row[0]);
-	sqlFreeResult(&sr2);
+	sqlFreeResult(&sr);
 
 	if (caption->stringSize > 0)
 	    {
