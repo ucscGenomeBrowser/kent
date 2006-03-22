@@ -254,6 +254,24 @@ sqlFreeResult(&sr);
 }
 
 
+void fixCopyright(struct dyString *s)
+/* Fix copyright notice which sometimes is truncated in
+ * Jackson labs database. */
+{
+if (endsWith(s->string, " and is"))
+    {
+    if (stringIn(" Development ", s->string))
+	{
+	char *temp = cloneString(s->string);
+	dyStringAppend(s," displayed with the permission of The Company of Biologists Limited who owns the Copyright.");
+	verbose(1,"Patched\n[%s]\n to \n[%s]\n", temp, s->string);
+	freez(&temp);
+	}
+    }
+}
+
+
+
 void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, char *ref, char *fileRoot,
 	char *inJax)
 /* Create a .ra and a .tab file for given reference. */
@@ -474,6 +492,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 	if (copyright->stringSize != 0)
 	    {
+	    fixCopyright(copyright);
 	    fprintf(ra, "copyright %s\n", copyright->string);
 	    }
 	}
