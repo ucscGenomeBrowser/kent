@@ -63,10 +63,10 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	metMar1 methJann1 methTher1 methKand1\
 	metAce1 methBark1 methMaze1 methBurt1 \
 	therAcid1 therVolc1 ferrAcid1 picrTorr1 \
-	nanEqu1\
+	nanEqu1 natrPhar1 methStad1 \
 	sc1 \
-	canHg12 canHg11 canHg10\
-	canHg4 canHg9 car46 canHg10 canHg11
+	canHg4 canHg9 car46 canHg10 canHg11\
+	vibrCho11 
 
 MGC_DBS = \
 	hg16 hg17 hg18\
@@ -84,7 +84,7 @@ ARCH_DBS = \
 	metMar1 methJann1 methTher1 methKand1\
 	metAce1 methBark1 methMaze1 methBurt1 \
 	therAcid1 therVolc1 ferrAcid1 picrTorr1 \
-	nanEqu1\
+	nanEqu1 natrPhar1 methStad1 methHung1\
 
 update: #clean
 	@for D in *; do \
