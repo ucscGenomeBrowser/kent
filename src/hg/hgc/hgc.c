@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1002 2006/03/20 22:58:19 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1003 2006/03/22 07:17:52 lowe Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -14464,10 +14464,8 @@ while ((row = sqlNextRow(sr)) != NULL)
   {
     trna = tRNAsLoad(row+rowOffset);
     
-    printf("<img align=right src=\"http://lowelab.ucsc.edu/tRNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
+    printf("<img align=right src=\"http://archaea.ucsc.edu/tRNA-img/%s/%s-%s-%s.gif\" alt='tRNA secondary structure for %s'>\n",
 	   database,database,trna->chrom,trna->name,trna->name);
-    
-    /*	  printf("<img align=right src=\"http://lowelab.ucsc.edu/test.gif\">");  */
     
     printf("<B>tRNA name: </B> %s<BR>\n",trna->name);
     printf("<B>tRNA Isotype: </B> %s<BR>\n",trna->aa);
@@ -14711,7 +14709,7 @@ for(cbs2=list;cbs2!=NULL;cbs2=cbs2->next)
 	    }
 	    else if((sameString(cbs2->species, "Pyrobaculum aerophilum"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
-	    printf("<a\nhref=\"%s?db=pyrAer2&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
+	    printf("<a\nhref=\"%s?db=pyrAer1&position=%s\">%s</a>",hgTracksName(),cbs2->name,cbs2->name);
 	    }
 	    else if((sameString(cbs2->species, "Nanoarchaeum equitans"))){
 	    printf("<br>\n      </td>\n      <td style=\"vertical-align: top;\">");
