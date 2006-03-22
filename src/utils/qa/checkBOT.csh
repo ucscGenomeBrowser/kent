@@ -22,6 +22,11 @@ else
   set ip=$argv[1]
 endif
 
+if ( "$HOST" != "hgwdev" ) then
+ echo "\n error: you must run this script on dev!\n"
+ exit 1
+endif
+
 echo
 if ($ip == "all") then
   rm -f ipFile
