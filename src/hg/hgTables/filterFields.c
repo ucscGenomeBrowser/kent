@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.44 2005/07/08 08:25:19 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.45 2006/03/21 17:32:58 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -809,7 +809,7 @@ else
     hPrintf("</TD></TR></TABLE>\n");
     }
 
-if (isWig)
+if (isWig || isBedGr)
     {
     char *name;
     hPrintf("<TABLE BORDER=0><TR><TD> Limit data output to:&nbsp\n");

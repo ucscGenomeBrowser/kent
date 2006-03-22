@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.66 2006/03/06 17:46:34 angie Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.67 2006/03/20 17:45:14 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -401,6 +401,9 @@ char *kgProteinID;
 char *parAcc; /* parent accession of a variant splice protein */
 char *chp;
 description = genoQuery(id, "descriptionSql", conn);
+
+if (curProtId == NULL) curProtId = protAcc;
+
 hPrintf("<B>Description:</B> ");
 if (description != NULL)
     hPrintf("%s<BR>", description);
