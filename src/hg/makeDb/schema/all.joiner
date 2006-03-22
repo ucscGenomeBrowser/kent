@@ -893,8 +893,10 @@ identifier humanBacAccession typeOf=bacAccession
 identifier humanBacAccessionVersion typeOf=bacAccession
 "Genbank accession.version of sequence $hg.BAC"
     $hg.clonePos.name dupeOk
-    $hg.gl.frag $split chopAfter=_
-    $hg.gold.frag $split
+    $hg,!hg18.gl.frag $split chopAfter=_
+    $hg,!hg18.gold.frag $split
+    hg18.gl.frag $split chopAfter=_ minCheck=0.95
+    hg18.gold.frag $split minCheck=0.90
 
 identifier wgsContigAccession typeOf=genbankAccession
 "Genbank accession.version of whole-genome shotgun contig"
