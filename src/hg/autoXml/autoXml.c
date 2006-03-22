@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "dtdParse.h"
 
-static char const rcsid[] = "$Id: autoXml.c,v 1.23 2005/12/19 19:04:12 kent Exp $";
+static char const rcsid[] = "$Id: autoXml.c,v 1.24 2006/03/22 16:52:23 angie Exp $";
 
 /* Variables that can be over-ridden from command line. */
 char *textField = "text";
@@ -74,7 +74,6 @@ boolean anyParent(struct dtdElement *elList, struct dtdElement *child)
 /* Return TRUE if anybody in elList could be a parent to child. */
 {
 struct dtdElement *el;
-struct dtdElChild *ec;
 for (el = elList; el != NULL; el = el->next)
     {
     if (childMatch(el->children, child))
@@ -657,9 +656,6 @@ void makeC(struct dtdElement *elList, char *fileName, char *incName)
 {
 FILE *f = mustOpen(fileName, "w");
 struct dtdElement *el;
-struct dtdAttribute *att;
-struct dtdElChild *ec;
-char upcPrefix[128];
 char incFile[128], incExt[64];
 
 splitPath(incName, NULL, incFile, incExt);
@@ -694,7 +690,7 @@ if (makeMain)
 void autoXml(char *dtdxFile, char *outRoot)
 /* autoXml - Generate structures code and parser for XML file from DTD-like spec. */
 {
-struct dtdElement *elList = NULL, *el;
+struct dtdElement *elList = NULL;
 struct hash *elHash = NULL;
 char hName[512], cName[512];
 char outDir[256];
