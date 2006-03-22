@@ -143,3 +143,20 @@ Submission to last job:          3766s      62.77m     1.05h    0.04d
 
 ============================================
 
+Be sure to run ANALYZE TABLE on at least this set of key 
+tables, otherwise vgLoadJax will be horrendously slow.
+
+ANALYZE TABLE MRK_Marker;
+ANALYZE TABLE GXD_Assay;
+ANALYZE TABLE GXD_Specimen;
+ANALYZE TABLE GXD_InSituResult;
+ANALYZE TABLE GXD_InSituResultImage;
+ANALYZE TABLE GXD_FixationMethod;
+ANALYZE TABLE GXD_EmbeddingMethod;
+ANALYZE TABLE IMG_ImagePane;
+ANALYZE TABLE IMG_Image;
+ANALYZE TABLE ACC_Accession;
+
+
+
+
