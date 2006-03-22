@@ -6,8 +6,8 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 
-H = cDnaAligns.h overlapFilter.h polyASize.h usage.msg
-O = cDnaAligns.o overlapFilter.o polyASize.o pslCDnaFilter.o
+H = cDnaAligns.h cDnaStats.h cDnaReader.h overlapFilter.h polyASize.h hapRegions.h usage.msg algo.msg
+O = cDnaAligns.o cDnaStats.o cDnaReader.o overlapFilter.o polyASize.o hapRegions.o pslCDnaFilter.o
 B =  ${HOME}/bin/${MACHTYPE}/pslCDnaFilter
 
 $B: pslCDnaFilter
@@ -22,8 +22,8 @@ cDnaAligns.o: cDnaAligns.c $H
 overlapFilter.o: overlapFilter.c $H
 polyASizes.o: polyASizes.c polyASizes.h
 
-# create usage msg from text
-usage.msg: usage.txt
+# create msg from text
+%.msg: %.txt
 	echo '/* GENERATED CODE, DO NOT EDIT */' > $@.tmp
 	stringify $< >> $@.tmp
 	mv -f $@.tmp $@

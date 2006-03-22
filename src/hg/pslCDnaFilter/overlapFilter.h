@@ -1,4 +1,4 @@
-/* filter overlapping alignments */
+/* overlapFilter - filter overlapping alignments */
 #ifndef OVERLAPFILTER_H
 #define OVERLAPFILTER_H
 

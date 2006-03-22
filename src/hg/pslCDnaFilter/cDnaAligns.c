@@ -1,18 +1,19 @@
-/* Objects to read and score sets of cDNA alignments */
+/* cDnaAligns - Objects to read and score sets of cDNA alignments. Filtering decissions are
+ * not made here*/
 #include "common.h"
 #include "cDnaAligns.h"
+#include "cDnaStats.h"
 #include "psl.h"
-#include "hash.h"
 #include "sqlNum.h"
 #include "verbose.h"
-#include "linefile.h"
 #include "localmem.h"
 #include "polyASize.h"
+#include "hapRegions.h"
 
 static void alignInfoVerb(int level, struct cDnaAlign *aln, char *desc)
 /* print info about and alignment */
 {
-cDnaAlignVerb(5, aln->psl, "%s: id=%0.3f cov=%0.3f rep=%0.3f alnPolyAT=%d score=%0.3f mat=%d mis=%d repMat=%d nCnt=%d adjMis=%d",
+cDnaAlignVerb(5, aln, "%s: id=%0.3f cov=%0.3f rep=%0.3f alnPolyAT=%d score=%0.3f mat=%d mis=%d repMat=%d nCnt=%d adjMis=%d",
               desc, aln->ident, aln->cover, aln->repMatch, aln->alnPolyAT, aln->score,
               aln->psl->match, aln->psl->misMatch, aln->psl->repMatch, aln->psl->nCount, aln->adjMisMatch);
 }
@@ -27,7 +28,7 @@ else
     return ((float)(psl->match + psl->repMatch))/((float)(aligned));
 }
 
-static float calcCover(struct cDnaQuery *cdna, struct psl *psl)
+static float calcCover(struct cDnaAlign *aln)
 /* calculate coverage less poly-A tail */
 {
 unsigned totAlnSize = 0;  /* for sanity checking */
@@ -36,18 +37,18 @@ int iBlk;
 
 /* want to ignore actual poly-A, not just size diff, so need to count what is
  * not in poly-A. */
-for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
+for (iBlk = 0; iBlk < aln->psl->blockCount; iBlk++)
     {
-    struct cDnaRange q = cDnaQueryBlk(cdna, psl, iBlk);
+    struct range q = cDnaQueryBlk(aln->cdna, aln->psl, iBlk);
     if (q.start < q.end)
         alnSize += (q.end - q.start);
-    totAlnSize += psl->blockSizes[iBlk];
+    totAlnSize += aln->psl->blockSizes[iBlk];
     }
-if (cdna->reader->opts & cDnaIgnoreNs)
-    alnSize -= psl->nCount;
-if (totAlnSize != (psl->match+psl->misMatch+psl->repMatch+psl->nCount))
-    cDnaAlignVerb(1, psl, "Warning: total alignment size doesn't match counts");
-return ((float)alnSize)/((float)(cdna->adjQEnd - cdna->adjQStart));
+if (aln->cdna->opts & cDnaIgnoreNs)
+    alnSize -= aln->psl->nCount;
+if (totAlnSize != (aln->psl->match+aln->psl->misMatch+aln->psl->repMatch+aln->psl->nCount))
+    cDnaAlignVerb(1, aln, "Warning: total alignment size doesn't match counts");
+return ((float)alnSize)/((float)(aln->cdna->adjQEnd - aln->cdna->adjQStart));
 }
 
 static int alignMilliBadness(struct psl *psl, int adjMisMatch)
@@ -131,7 +132,7 @@ int iBlk;
 for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     {
     /* get block, adjusted for poly-A/T, and find what was omitted */
-    struct cDnaRange adj = cDnaQueryBlk(cdna, psl, iBlk);
+    struct range adj = cDnaQueryBlk(cdna, psl, iBlk);
     int start =  psl->qStarts[iBlk];
     int end = start+psl->blockSizes[iBlk];
     if (psl->strand[0] == '-')
@@ -141,21 +142,26 @@ for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
 return alnSize;
 }
 
-static struct cDnaAlign *cDnaAlignNew(struct cDnaQuery *cdna,
-                                      struct psl *psl)
-/* construct a new object */
+struct cDnaAlign *cDnaAlignNew(struct cDnaQuery *cdna,
+                               struct psl *psl)
+/* construct a new object and add to the cdna list, updating the stats */
 {
 struct cDnaAlign *aln;
 AllocVar(aln);
 aln->cdna = cdna;
 aln->psl = psl;
-aln->adjMisMatch = psl->misMatch + ((cdna->reader->opts & cDnaIgnoreNs) ? 0 : psl->nCount);
+aln->alnId = cdna->numAln;
+aln->adjMisMatch = psl->misMatch + ((cdna->opts & cDnaIgnoreNs) ? 0 : psl->nCount);
 aln->ident = calcIdent(psl);
-aln->cover = calcCover(cdna, psl);
 aln->repMatch = ((float)psl->repMatch)/((float)(psl->match+psl->repMatch));
 aln->score = calcScore(psl, aln->adjMisMatch);
 aln->alnPolyAT = getAlnPolyATLen(cdna, psl);
+aln->cover = calcCover(aln);
 assert(aln->alnPolyAT <= (psl->match+psl->misMatch+psl->repMatch+psl->nCount));
+
+slSafeAddHead(&cdna->alns, aln);
+cdna->numAln++;
+cdna->stats->totalCnts.aligns++;
 
 if (verboseLevel() >= 5)
     alignInfoVerb(5, aln, "align");
@@ -166,7 +172,7 @@ static void polyAAdjBounds(struct cDnaQuery *cdna,
                            struct polyASize *polyASize)
 /* adjust mRNA bounds for poly-A/poly-Ts */
 {
-if (cdna->reader->opts & cDnaUsePolyTHead)
+if (cdna->opts & cDnaUsePolyTHead)
     {
     /* use longest of poly-A tail or poly-T head */
     if (polyASize->headPolyTSize > polyASize->tailPolyASize)
@@ -192,31 +198,29 @@ cnts->aligns++;
 assert(aln->cdna->numDrop <= aln->cdna->numAln);
 }
 
-static struct cDnaQuery *cDnaQueryNew(struct cDnaReader *reader, struct psl *psl,
-                                      struct polyASize *polyASize)
-/* construct a new cDnaQuery and add initial alignment.  polyASize is null if
- * not available.*/
+struct cDnaQuery *cDnaQueryNew(unsigned opts, struct cDnaStats *stats,
+                               struct psl *psl, struct polyASize *polyASize)
+/* construct a new cDnaQuery.  This does not add an initial alignment.
+ * polyASize is null if not available.*/
 {
 struct cDnaQuery *cdna;
 AllocVar(cdna);
-cdna->reader = reader;
-cdna->stats = &reader->stats;
+cdna->opts = opts;
+cdna->stats = stats;
 cdna->id = psl->qName;
 cdna->adjQStart = 0;
 cdna->adjQEnd = psl->qSize;
 if (polyASize != NULL)
     polyAAdjBounds(cdna, polyASize);
-cdna->alns = cDnaAlignNew(cdna, psl);
-cdna->numAln++;
 return cdna;
 }
 
-struct cDnaRange cDnaQueryBlk(struct cDnaQuery *cdna, struct psl *psl,
-                              int iBlk)
+struct range cDnaQueryBlk(struct cDnaQuery *cdna, struct psl *psl,
+                          int iBlk)
 /* Get the query range for a block of a psl, adjust to exclude a polyA tail or
  * a polyT head */
 {
-struct cDnaRange r;
+struct range r;
 r.start = psl->qStarts[iBlk];
 r.end = r.start+psl->blockSizes[iBlk];
 if (psl->strand[0] == '-')
@@ -230,7 +234,7 @@ if (r.end > cdna->adjQEnd)
 return r;
 }
 
-static void cDnaQueryFree(struct cDnaQuery **cdnaPtr) 
+void cDnaQueryFree(struct cDnaQuery **cdnaPtr) 
 /* free cDnaQuery and contained data  */
 {
 struct cDnaQuery *cdna = *cdnaPtr;
@@ -240,6 +244,7 @@ if (cdna != NULL)
     while ((aln = slPopHead(&cdna->alns)) != NULL)
         {
         pslFree(&aln->psl);
+        slFreeList(&aln->hapAlns);
         freeMem(aln);
         }
     freeMem(cdna);
@@ -265,6 +270,17 @@ void cDnaQueryRevScoreSort(struct cDnaQuery *cdna)
 slSort(&cdna->alns, scoreRevCmp);
 }
 
+void cDnaAlnLinkHapAln(struct cDnaAlign *aln, struct cDnaAlign *hapAln, float score) 
+/* link a reference alignment to a haplotype alignment */
+{
+struct cDnaHapAln *ha;
+AllocVar(ha);
+ha->hapAln = hapAln;
+ha->score = score;
+slAddHead(&aln->hapAlns, ha);
+hapAln->refLinkCount++;
+}
+
 void cDnaQueryWriteKept(struct cDnaQuery *cdna,
                         FILE *outFh)
 /* write the current set of psls that are flagged to keep */
@@ -275,7 +291,7 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     if (!aln->drop)
         {
         cdna->stats->keptCnts.aligns++;
-        pslTabOut(aln->psl, outFh);
+        cDnaAlignOut(aln, outFh);
         if (aln->weirdOverlap)
             cdna->stats->weirdKeptCnts.aligns++;
         if (verboseLevel() >= 4)
@@ -292,7 +308,7 @@ struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     if (aln->drop)
-        pslTabOut(aln->psl, outFh);
+        cDnaAlignOut(aln, outFh);
     }
 }
 
@@ -304,134 +320,54 @@ struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
     if (aln->weirdOverlap)
-        pslTabOut(aln->psl, outFh);
+        cDnaAlignOut(aln, outFh);
     }
 }
 
-static struct psl* readNextPsl(struct cDnaReader *reader)
-/* Read the next psl. If one is save in alns, return it, otherwise
- * read the next one.  Discard invalid psls and try again */
+/* should alignment ids be added to qNames? */
+boolean alnIdQNameMode = FALSE;
+
+void cDnaAlignPslOut(struct psl *psl, int alnId, FILE *fh)
+/* output a PSL to a tab file.  If alnId is non-negative and
+ * aldId out mode is set, append it to qName */
 {
-struct psl* psl = NULL;
-if (reader->nextCDnaPsl != NULL)
+if (alnIdQNameMode && (alnId >= 0))
     {
-    psl = reader->nextCDnaPsl;
-    reader->nextCDnaPsl = NULL;
+    char *qNameHold = psl->qName;
+    char qNameId[512];
+    safef(qNameId, sizeof(qNameId), "%s#%d", psl->qName, alnId);
+    psl->qName = qNameId;
+    pslTabOut(psl, fh);
+    psl->qName = qNameHold;
     }
 else
-    {
-    char *row[PSLX_NUM_COLS];
-    int nCols;
-    if ((nCols = lineFileChopNextTab(reader->pslLf, row, ArraySize(row))) > 0)
-        {
-        if (nCols == PSL_NUM_COLS)
-            psl = pslLoad(row);
-        else if (nCols == PSLX_NUM_COLS)
-            psl = pslxLoad(row);
-        else
-            errAbort("%s:%d: expected %d or %d columns, got %d",
-                     reader->pslLf->fileName, reader->pslLf->lineIx,
-                     PSL_NUM_COLS, PSLX_NUM_COLS, nCols);
-        }
-    }
-return psl;
+    pslTabOut(psl, fh);
 }
 
-static void updateCounter(struct cDnaCnts *cnts)
-/* update counts after processing a query */
+void cDnaAlignOut(struct cDnaAlign *aln, FILE *fh)
+/* Output a PSL to a tab file, include alnId in qname based on
+ * alnIdQNameMode */
 {
-if (cnts->aligns > cnts->prevAligns)
-    {
-    /* at least one alignment dropped from query */
-    cnts->queries++;
-    }
-cnts->prevAligns = cnts->aligns;
+cDnaAlignPslOut(aln->psl, aln->alnId, fh);
 }
 
-static void updateCounters(struct cDnaReader *reader)
-/* update counters after processing a batch of queries */
+void cDnaAlignVerbPsl(int level, struct psl *psl)
+/* print psl location using verbose level */
 {
-struct cDnaStats *stats = &reader->stats;
-updateCounter(&stats->totalCnts);
-updateCounter(&stats->badCnts);
-updateCounter(&stats->keptCnts);
-updateCounter(&stats->weirdOverCnts);
-updateCounter(&stats->weirdKeptCnts);
-updateCounter(&stats->minQSizeCnts);
-updateCounter(&stats->overlapCnts);
-updateCounter(&stats->minIdCnts);
-updateCounter(&stats->minCoverCnts);
-updateCounter(&stats->minAlnSizeCnts);
-updateCounter(&stats->minNonRepSizeCnts);
-updateCounter(&stats->maxRepMatchCnts);
-updateCounter(&stats->maxAlignsCnts);
-updateCounter(&stats->localBestCnts);
-updateCounter(&stats->globalBestCnts);
-updateCounter(&stats->minSpanCnts);
+verbose(level, "%s:%d-%d %s:%d-%d (%s)",
+        psl->qName, psl->qStart, psl->qEnd,
+        psl->tName, psl->tStart, psl->tEnd,
+        psl->strand);
 }
 
-boolean cDnaReaderNext(struct cDnaReader *reader)
-/* load the next set of cDNA alignments, return FALSE if no more */
+void cDnaAlignVerbLoc(int level, struct cDnaAlign *aln)
+/* print aligment location using verbose level */
 {
-struct psl *psl;
-struct cDnaQuery *cdna;
-struct polyASize *polyASize = NULL;
-
-if (reader->cdna != NULL)
-    {
-    updateCounters(reader);
-    cDnaQueryFree(&reader->cdna);
-    }
-
-/* first alignment for query */
-psl = readNextPsl(reader);
-if (psl == NULL)
-    return FALSE;
-if (reader->polyASizes != NULL)
-    polyASize = hashFindVal(reader->polyASizes, psl->qName);
-cdna = reader->cdna = cDnaQueryNew(reader, psl, polyASize);
-reader->stats.totalCnts.aligns++;
-
-/* remaining alignments for same sequence */
-while (((psl = readNextPsl(reader)) != NULL)
-       && sameString(psl->qName, cdna->id))
-    {
-    slSafeAddHead(&cdna->alns, cDnaAlignNew(cdna, psl));
-    cdna->numAln++;
-    reader->stats.totalCnts.aligns++;
-    }
-
-reader->nextCDnaPsl = psl;  /* save for next time (or NULL) */
-return TRUE;
+verbose(level, "[#%d]", aln->alnId);
+cDnaAlignVerbPsl(level, aln->psl);
 }
 
-struct cDnaReader *cDnaReaderNew(char *pslFile, unsigned opts, char *polyASizeFile)
-/* construct a new object, opening the psl file */
-{
-struct cDnaReader *reader;
-AllocVar(reader);
-reader->opts = opts;
-reader->pslLf = pslFileOpen(pslFile);
-if (polyASizeFile != NULL)
-    reader->polyASizes = polyASizeLoadHash(polyASizeFile);
-return reader;
-}
-
-void cDnaReaderFree(struct cDnaReader **readerPtr)
-/* free object */
-{
-struct cDnaReader *reader = *readerPtr;
-if (reader != NULL)
-    {
-    cDnaQueryFree(&reader->cdna);
-    lineFileClose(&reader->pslLf);
-    hashFree(&reader->polyASizes);
-    freeMem(reader);
-    *readerPtr = NULL;
-    }
-}
-
-void cDnaAlignVerb(int level, struct psl *psl, char *msg, ...)
+void cDnaAlignVerb(int level, struct cDnaAlign *aln, char *msg, ...)
 /* write verbose messager followed by location of a cDNA alignment */
 {
 va_list ap;
@@ -439,10 +375,7 @@ va_list ap;
 va_start(ap, msg);
 verboseVa(level, msg, ap);
 verbose(level, ": ");
-verbose(level, "%s:%d-%d %s:%d-%d (%s)",
-        psl->qName, psl->qStart, psl->qEnd,
-        psl->tName, psl->tStart, psl->tEnd,
-        psl->strand);
+cDnaAlignVerbLoc(level, aln);
 verbose(level, "\n");
 va_end(ap);
 }

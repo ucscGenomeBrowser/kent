@@ -7,7 +7,7 @@ test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	repMatchTest minAlnSizeTest nonRepSizeTest nonRepMismatchTest \
 	noDropCntBugTest minSpan100Test minSpan10Test localBestTest \
 	globalBestTest ignoreNsCoverTest ignoreNsMinAlnTest \
-	ignoreNsLocalBestTest
+	ignoreNsLocalBestTest hapGlobalTest hapLocalTest
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -67,8 +67,16 @@ ignoreNsMinAlnTest:
 ignoreNsLocalBestTest:
 	${MAKE} doFilter name=$@ inPsl=gapOver.psl filtArgs='-ignoreNs -localNearBest=0.005'
 
-# Recursive targets.  Results are sorted to allow consistent comparisons, as somethimes
-# internal sorting done by pslCDnaFilter is not stable.
+# resting of haplotype region handling and globalNearBest
+hapGlobalTest:
+	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-globalNearBest=0.005 -hapRegions=input/hapMappings.psl'
+
+# resting of haplotype region handling and localNearBest
+hapLocalTest:
+	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-localNearBest=0.005 -hapRegions=input/hapMappings.psl'
+
+# Recursive targets.  Results are sorted to allow consistent comparisons, as
+# sometimes internal sorting done by pslCDnaFilter is not stable.
 #  o name - test name
 #  o filtArgs - filter arguments
 #  o inPsl - input psl, relative to input dir
@@ -77,10 +85,11 @@ ifneq (${inSizes},)
 	sizesOpt=-polyASizes=input/${inSizes}
 endif
 outDir=output/${name}
+sortPsl=sort -k 10,10 -k 12,12n -k 13,13n
 doFilter:
 	@${MKDIR} ${outDir}
 	${PSLFILT} ${filtArgs} -verbose=1 input/${inPsl} ${outDir}/keep.psl.tmp >${outDir}/filt.out 2>&1
-	@sort ${outDir}/keep.psl.tmp > ${outDir}/keep.psl
+	@${sortPsl} ${outDir}/keep.psl.tmp > ${outDir}/keep.psl
 	@rm -f ${outDir}/keep.psl.tmp
 	${DIFF} expected/${name} output/${name}
 
@@ -88,9 +97,9 @@ doFilter:
 doFilterSave:
 	@${MKDIR} ${outDir}
 	${PSLFILT} ${filtArgs} -verbose=1 -dropped=${outDir}/drop.psl.tmp -weirdOverlapped=${outDir}/weird.psl.tmp input/${inPsl} ${outDir}/keep.psl.tmp >${outDir}/filt.out 2>&1
-	@sort ${outDir}/keep.psl.tmp > ${outDir}/keep.psl
-	@sort ${outDir}/drop.psl.tmp > ${outDir}/drop.psl 
-	@sort ${outDir}/weird.psl.tmp > ${outDir}/weird.psl
+	@${sortPsl} ${outDir}/keep.psl.tmp > ${outDir}/keep.psl
+	@${sortPsl} ${outDir}/drop.psl.tmp > ${outDir}/drop.psl 
+	@${sortPsl} ${outDir}/weird.psl.tmp > ${outDir}/weird.psl
 	@rm -f ${outDir}/keep.psl.tmp ${outDir}/drop.psl.tmp ${outDir}/weird.psl.tmp
 	${DIFF} expected/${name} output/${name}
 clean:

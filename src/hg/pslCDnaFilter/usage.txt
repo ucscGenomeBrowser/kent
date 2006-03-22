@@ -17,6 +17,8 @@ unfinished genomes.  Global near best in genome keeps alignments
 based on overall score.
 
 Options:
+   -helpAlgo - print message describing the filtering algorithm.
+
    -localNearBest=-1.0 - local near best in genome filtering,
     keeping aligments within this fraction of the top score for
     each aligned portion of the mRNA. A value of zero keeps only
@@ -77,12 +79,26 @@ Options:
     best of aligments that are similar, but not discarding ones
     with weird overlap.
 
+   -hapRegions=psl - PSL format alignments of each haplotype pseudo-chromosome
+    to the corresponding reference chromosome region.  This is used to map
+    alignments between regions.
+
    -dropped=psl - save psls that were dropped to this file.
 
    -weirdOverlapped=psl - output weirdly overlapping PSLs to
     this file.
 
    -alignStats=file - output the per-alignment statistics to this file
+
+   -hapRefMapped=psl - output PSLs of haplotype to reference chromosome
+    cDNA alignments mappings (for debugging purposes).
+
+   -hapRefCDnaAlns=psl - output PSLs of haplotype cDNA to reference cDNA
+    alignments (for debugging purposes).
+
+   -alnIdQNameMode - add internal assigned alignment numbers to cDNA names
+    on output.  Useful for debugging, as they are include in the verbose
+    tracing as [#1], etc.  Will make a mess of normal production usage.
 
    -verbose=1 - 0: quite
                 1: output stats
@@ -94,38 +110,5 @@ Options:
 The default options don't do any filtering. If no filtering
 criteria are specified, all PSLs will be passed though, except
 those that are internally inconsistent.
-
-Ther filters are applied in the following order to each cDNA
-alignment.
-
-  o PSLs that are not internally consistent, such has having
-    overlapping blocks, are dropped.  Use pslCheck program to
-    get the details.
-
-  o Drop if repMatch/totalMatch is greater than maxRepMatch.
-
-  o Drop queries less than the min size.
-
-  o Filter by minimum identity to the target sequence.
-
-  o Filter by minimum coverage, if polyA sizes are supplied, the
-    poly-A tail is not included in coverage calculation.
-
-  o Keep only best overlapping alignment. This is the one with
-    the highest score. However, don't dropping weird overlaps.
-    Weird alignments are sets of alignments for a given query
-    that overlap, however the same query bases align to
-    different target bases.  These will be included in the
-    output unless dropped by another filter criteria.  These are
-    often caused by tandem repeats.  A small fraction of
-    differently aligned bases are allowed to handle different
-    block boundaries.
-
-  o Filter by minSpan.
-
-  o Do either either global or local near best in genome
-    selection.
-
-  o Filter by maxAligns
 
 THE INPUT MUST BE BE SORTED BY QUERY for the comparitive filters.

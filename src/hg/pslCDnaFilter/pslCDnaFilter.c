@@ -1,7 +1,9 @@
 /* filter cDNA alignments in psl format */
 #include "common.h"
 #include "cDnaAligns.h"
+#include "cDnaReader.h"
 #include "overlapFilter.h"
+#include "hapRegions.h"
 #include "psl.h"
 #include "options.h"
 
@@ -15,10 +17,22 @@ static char *usageMsg =
 errAbort("%s:  %s", msg, usageMsg);
 }
 
+static void prAlgo()
+/* print algorithm description and exit */
+{
+/* message got huge, so it's in a generate file */
+static char *algoMsg =
+#include "algo.msg"
+    ;
+fprintf(stderr, "%s", algoMsg);
+exit(0);
+}
+
 
 /* command line options and values */
 static struct optionSpec optionSpecs[] =
 {
+    {"algoHelp", OPTION_BOOLEAN},
     {"localNearBest", OPTION_FLOAT},
     {"globalNearBest", OPTION_FLOAT},
     {"ignoreNs", OPTION_BOOLEAN},
@@ -32,10 +46,14 @@ static struct optionSpec optionSpecs[] =
     {"maxRepMatch", OPTION_FLOAT},
     {"polyASizes", OPTION_STRING},
     {"usePolyTHead", OPTION_BOOLEAN},
+    {"hapRegions", OPTION_STRING},
     {"bestOverlap", OPTION_BOOLEAN},
     {"dropped", OPTION_STRING},
     {"weirdOverlapped", OPTION_STRING},
     {"alignStats", OPTION_STRING},
+    {"hapRefMapped", OPTION_STRING},
+    {"hapRefCDnaAlns", OPTION_STRING},
+    {"alnIdQNameMode", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -51,21 +69,29 @@ static int gMinAlnSize = 0;            /* minimum bases that must be aligned */
 static int gMinNonRepSize = 0;         /* minimum non-repeat bases that must match */
 static float gMaxRepMatch = 1.0;       /* maximum fraction of repeat matching */
 static char *gPolyASizes = NULL;       /* polyA size file */
+static char *gHapRegions = NULL;       /* haplotype regions file */
 static boolean gBestOverlap = FALSE;   /* filter overlaping, keeping only the best */
 static char *gDropped = NULL;          /* save dropped psls here */
 static char *gWeirdOverlappped = NULL; /* save weird overlapping psls here */
-static char *gAlignStats = NULL;       /* file for statistics output */
-
 static int gMinLocalBestCnt = 30;      /* minimum number of bases that are over threshold
                                         * for local best */
+#if 0 // FIXME:
+static float gHapRefNearTop = 0.01;    /* near-top cut off for hap-ref alignment
+                                        * association */
+#endif
+static char *gHapRefMapped = NULL;    /* PSLs of haplotype to reference chromosome
+                                       * mappings */
+static char *gHapRefCDnaAlns = NULL;  /* PSLs of haplotype cDNA to reference
+                                       * cDNA alignments */
 
 struct outFiles
 /* open output files */
 {
-    FILE *pslFh;               /* filtered psls */
-    FILE *droppedFh;           /* dropped psls, or NULL */
-    FILE *weirdOverPslFh;      /* wierd overlap psls, or NULL */
-    FILE *alignStatsFh;        /* alignment stats, or NULL; */
+    FILE *passFh;              /* filtered psls */
+    FILE *dropFh;              /* dropped psls, or NULL */
+    FILE *weirdOverFh;         /* wierd overlap psls, or NULL */
+    FILE *hapRefMappedFh;      /* hap to ref cDNA alignment mappings */
+    FILE *hapRefCDnaAlnsFh;    /* cDNA to cDNA alignments. */
 };
 
 static boolean validPsl(struct psl *psl)
@@ -82,10 +108,10 @@ static void invalidPslFilter(struct cDnaQuery *cdna)
 {
 struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
-    if ((!aln->drop) && !validPsl(aln->psl))
+    if (!aln->drop && !validPsl(aln->psl))
         {
         cDnaAlignDrop(aln, &cdna->stats->badCnts);
-        cDnaAlignVerb(2, aln->psl, "drop: invalid psl");
+        cDnaAlignVerb(2, aln, "drop: invalid psl");
         }
 }
 
@@ -95,10 +121,10 @@ static void minQSizeFilter(struct cDnaQuery *cdna)
 struct cDnaAlign *aln;
 /* note that qSize is actually the same for all alignments */
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
-    if ((!aln->drop) && (aln->psl->qSize < gMinQSize))
+    if (!aln->drop && (aln->psl->qSize < gMinQSize))
         {
         cDnaAlignDrop(aln, &cdna->stats->minQSizeCnts);
-        cDnaAlignVerb(3, aln->psl, "drop: min query size %0.4g", aln->psl->qSize);
+        cDnaAlignVerb(3, aln, "drop: min query size %0.4g", aln->psl->qSize);
         }
 }
 
@@ -107,10 +133,10 @@ static void identFilter(struct cDnaQuery *cdna)
 {
 struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
-    if ((!aln->drop) && (aln->ident < gMinId))
+    if (!aln->drop && (aln->ident < gMinId))
         {
         cDnaAlignDrop(aln, &cdna->stats->minIdCnts);
-        cDnaAlignVerb(3, aln->psl, "drop: min ident %0.4g", aln->ident);
+        cDnaAlignVerb(3, aln, "drop: min ident %0.4g", aln->ident);
         }
 }
 
@@ -121,10 +147,10 @@ struct cDnaAlign *aln;
 
 /* drop those that are under min */
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
-    if ((!aln->drop) && (aln->cover < gMinCover))
+    if (!aln->drop && (aln->cover < gMinCover))
         {
         cDnaAlignDrop(aln, &cdna->stats->minCoverCnts);
-        cDnaAlignVerb(3, aln->psl, "drop: min cover %0.4g", aln->cover);
+        cDnaAlignVerb(3, aln, "drop: min cover %0.4g", aln->cover);
         }
 }
 
@@ -139,10 +165,10 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     /* don't included poly-A length. */
     struct psl *psl = aln->psl;
     int alnSize = ((psl->match + psl->repMatch + aln->adjMisMatch) - aln->alnPolyAT);
-    if ((!aln->drop) && (alnSize < gMinAlnSize))
+    if (!aln->drop && (alnSize < gMinAlnSize))
         {
         cDnaAlignDrop(aln, &cdna->stats->minAlnSizeCnts);
-        cDnaAlignVerb(3, aln->psl, "drop: min align size %d", alnSize);
+        cDnaAlignVerb(3, aln, "drop: min align size %d", alnSize);
         }
     }
 }
@@ -161,10 +187,10 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
     int nonRepSize = (aln->psl->match - aln->alnPolyAT);
     if (nonRepSize < 0)
         nonRepSize = 0;
-    if ((!aln->drop) && (nonRepSize < gMinNonRepSize))
+    if (!aln->drop && (nonRepSize < gMinNonRepSize))
         {
         cDnaAlignDrop(aln, &cdna->stats->minNonRepSizeCnts);
-        cDnaAlignVerb(3, aln->psl, "drop: min non-rep size %d", nonRepSize);
+        cDnaAlignVerb(3, aln, "drop: min non-rep size %d", nonRepSize);
         }
     }
 }
@@ -177,10 +203,10 @@ struct cDnaAlign *aln;
 /* drop those that are over max */
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
-    if ((!aln->drop) && (aln->repMatch > gMaxRepMatch))
+    if (!aln->drop && (aln->repMatch > gMaxRepMatch))
         {
         cDnaAlignDrop(aln, &cdna->stats->maxRepMatchCnts);
-        cDnaAlignVerb(3, aln->psl, "drop: max repMatch %0.4g", aln->repMatch);
+        cDnaAlignVerb(3, aln, "drop: max repMatch %0.4g", aln->repMatch);
         }
     }
 }
@@ -208,7 +234,7 @@ for (aln = findMaxAlign(cdna); aln != NULL; aln = aln->next)
     if (!aln->drop)
         {
         cDnaAlignDrop(aln, &cdna->stats->maxAlignsCnts);
-        cDnaAlignVerb(3, aln->psl, "drop: max aligns");
+        cDnaAlignVerb(3, aln, "drop: max aligns");
         }
 }
 
@@ -235,10 +261,10 @@ for (aln = cdna->alns; aln != NULL; aln = aln->next)
 /* filter by under this amount  */
 minSpanLen = gMinSpan*longestSpan;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
-    if ((!aln->drop) && (getTargetSpan(aln) < minSpanLen))
+    if (!aln->drop && (getTargetSpan(aln) < minSpanLen))
         {
         cDnaAlignDrop(aln, &cdna->stats->minSpanCnts);
-        cDnaAlignVerb(3, aln->psl, "drop: minSpan span %d, min is %d (%0.2f)",
+        cDnaAlignVerb(3, aln, "drop: minSpan span %d, min is %d (%0.2f)",
                       getTargetSpan(aln), minSpanLen, ((float)getTargetSpan(aln))/longestSpan);
         }
 }
@@ -252,7 +278,7 @@ int iBlk, i;
 
 for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     {
-    struct cDnaRange q = cDnaQueryBlk(cdna, psl, iBlk);
+    struct range q = cDnaQueryBlk(cdna, psl, iBlk);
     for (i = q.start; i < q.end; i++)
         {
         if (aln->score > baseScores[i])
@@ -281,7 +307,7 @@ static void localNearBestVerb(struct cDnaAlign *aln, boolean pass,
                               float minBest, float maxBest)
 /* verbose tracing for isLocalNearBest */
 {
-cDnaAlignVerb(5, aln->psl, "isLocalNearBest: %s nearScore: %0.3f %d in %d best: %0.3f .. %0.3f",
+cDnaAlignVerb(5, aln, "isLocalNearBest: %s nearScore: %0.3f %d in %d best: %0.3f .. %0.3f",
               (pass ? "yes" : "no "), nearScore, topCnt, chkCnt, 
               minBest, maxBest);
 }
@@ -298,7 +324,7 @@ float minBest = 0.0, maxBest = 0.0;
 
 for (iBlk = 0; iBlk < psl->blockCount; iBlk++)
     {
-    struct cDnaRange q = cDnaQueryBlk(cdna, psl, iBlk);
+    struct range q = cDnaQueryBlk(cdna, psl, iBlk);
     for (i = q.start; i < q.end; i++)
         {
         if (chkCnt == 0)
@@ -346,15 +372,35 @@ struct cDnaAlign *aln;
 
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
     {
-    if ((!aln->drop) && !isLocalNearBest(cdna, aln, baseScores))
+    if (!aln->drop && !isLocalNearBest(cdna, aln, baseScores))
         {
         cDnaAlignDrop(aln, &cdna->stats->localBestCnts);
-        cDnaAlignVerb(3, aln->psl, "drop: local near best %0.4g",
+        cDnaAlignVerb(3, aln, "drop: local near best %0.4g",
                       aln->score);
         }
     }
 
 freeMem(baseScores);
+}
+
+static boolean isLinkedHap(struct cDnaAlign *aln)
+/* determine if a cDNA is a haplotype linked to a reference sequence */
+{
+return (aln->isHapChrom && aln->refLinkCount > 0);
+}
+
+static float getAlnScore(struct cDnaAlign *aln)
+/* get the score for an alignment, getting best score for a refAln that is
+ * linked, */
+{
+float best = aln->score;
+if (aln->hapAlns != NULL)
+    {
+    struct cDnaHapAln *hapAln;
+    for (hapAln = aln->hapAlns; hapAln != NULL; hapAln = hapAln->next)
+        best = max(best, hapAln->hapAln->score);
+    }
+return best;
 }
 
 static float getBestScore(struct cDnaQuery *cdna)
@@ -363,9 +409,36 @@ static float getBestScore(struct cDnaQuery *cdna)
 float best = -1.0;
 struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
-    if ((!aln->drop) && (aln->score > best))
-        best = aln->score;
+    {
+    if (!aln->drop && !isLinkedHap(aln))
+        {
+        float score = getAlnScore(aln);
+        best = max(score, best);
+        }
+    }
 return best;
+}
+
+static void globalNearBestDrop(struct cDnaAlign *aln, float score, float best,
+                               float thresh)
+/* drop alignment for global near best */
+{
+cDnaAlignDrop(aln, &aln->cdna->stats->globalBestCnts);
+cDnaAlignVerb(3, aln, "drop: global near best %0.4g, best=%0.4g, th=%0.4g%s",
+              score, best, thresh, ((aln->hapAlns != NULL) ? " refLinked" : ""));
+
+/* if there are referenced alignments, decrement ref count, maybe dropping */
+if (aln->hapAlns != NULL)
+    {
+    struct cDnaHapAln *hapAln;
+    for (hapAln = aln->hapAlns; hapAln != NULL; hapAln = hapAln->next)
+        if (--hapAln->hapAln->refLinkCount == 0)
+            {
+            cDnaAlignDrop(hapAln->hapAln, &hapAln->hapAln->cdna->stats->globalBestCnts);
+            cDnaAlignVerb(3, hapAln->hapAln, "drop: global near best hapLinked %0.4g ",
+                          hapAln->hapAln->score);
+            }
+    }
 }
 
 static void globalNearBestFilter(struct cDnaQuery *cdna)
@@ -375,16 +448,16 @@ float best = getBestScore(cdna);
 float thresh = best*(1.0-gGlobalNearBest);
 struct cDnaAlign *aln;
 for (aln = cdna->alns; aln != NULL; aln = aln->next)
-    if ((!aln->drop) && (aln->score < thresh))
+    if (!aln->drop && !isLinkedHap(aln))
         {
-        cDnaAlignDrop(aln, &cdna->stats->globalBestCnts);
-        cDnaAlignVerb(3, aln->psl, "drop: global near best %0.4g, best=%0.4g, th=%0.4g",
-                      aln->score, best, thresh);
+        float score = getAlnScore(aln);
+        if (score < thresh)
+            globalNearBestDrop(aln, score, best, thresh);
         }
 }
 
-static void filterQuery(struct cDnaQuery *cdna,
-                        FILE *outPslFh, FILE *dropPslFh, FILE *weirdOverPslFh)
+static void filterQuery(struct cDnaQuery *cdna, struct hapRegions *hapRegions,
+                        struct outFiles *outFiles)
 /* filter the current query set of alignments in cdna */
 {
 /* n.b. order should agree with doc */
@@ -405,64 +478,49 @@ if (gBestOverlap)
     overlapFilter(cdna);
 if (gMinSpan > 0.0)
     minSpanFilter(cdna);
+/* begin comparative filters */
+if (hapRegions != NULL)
+    hapRegionsLink(hapRegions, cdna, outFiles->hapRefMappedFh, outFiles->hapRefCDnaAlnsFh);
 if (gLocalNearBest >= 0.0)
     localNearBestFilter(cdna);
 if (gGlobalNearBest >= 0.0)
     globalNearBestFilter(cdna);
 if (gMaxAligns >= 0)
     maxAlignFilter(cdna);
-cDnaQueryWriteKept(cdna, outPslFh);
-if (dropPslFh != NULL)
-    cDnaQueryWriteDrop(cdna, dropPslFh);
-if (weirdOverPslFh != NULL)
-    cDnaQueryWriteWeird(cdna, weirdOverPslFh);
-}
-
-static void verbStats(char *label, struct cDnaCnts *cnts, boolean always)
-/* output stats */
-{
-if ((cnts->aligns > 0) || always)
-    verbose(1, "%18s:\t%d\t%d\n", label, cnts->queries, cnts->aligns);
+cDnaQueryWriteKept(cdna, outFiles->passFh);
+if (outFiles->dropFh != NULL)
+    cDnaQueryWriteDrop(cdna, outFiles->dropFh);
+if (outFiles->weirdOverFh != NULL)
+    cDnaQueryWriteWeird(cdna, outFiles->weirdOverFh);
 }
 
 static void pslCDnaFilter(char *inPsl, char *outPsl)
 /* filter cDNA alignments in psl format */
 {
-struct cDnaReader *reader = cDnaReaderNew(inPsl, gCDnaOpts, gPolyASizes);
-struct cDnaStats *stats = &reader->stats;
-FILE *outPslFh = mustOpen(outPsl, "w");
-FILE *dropPslFh = NULL;
-FILE *weirdOverPslFh = NULL;
+struct hapRegions *hapRegions = (gHapRegions == NULL) ? NULL : hapRegionsNew(gHapRegions);
+struct cDnaReader *reader = cDnaReaderNew(inPsl, gCDnaOpts, gPolyASizes, hapRegions);
+struct outFiles outFiles;
+ZeroVar(&outFiles);
+outFiles.passFh = mustOpen(outPsl, "w");
 if (gDropped != NULL)
-    dropPslFh = mustOpen(gDropped, "w");
+    outFiles.dropFh = mustOpen(gDropped, "w");
 if (gWeirdOverlappped != NULL)
-    weirdOverPslFh = mustOpen(gWeirdOverlappped, "w");
+    outFiles.weirdOverFh = mustOpen(gWeirdOverlappped, "w");
+if (gHapRefMapped != NULL)
+    outFiles.hapRefMappedFh = mustOpen(gHapRefMapped, "w");
+if (gHapRefCDnaAlns != NULL)
+    outFiles.hapRefCDnaAlnsFh = mustOpen(gHapRefCDnaAlns, "w");
 
 while (cDnaReaderNext(reader))
-    filterQuery(reader->cdna, outPslFh, dropPslFh, weirdOverPslFh);
+    filterQuery(reader->cdna, hapRegions, &outFiles);
 
-carefulClose(&dropPslFh);
-carefulClose(&weirdOverPslFh);
-carefulClose(&outPslFh);
-
-verbose(1,"%18s \tseqs\taligns\n", "");
-verbStats("total", &stats->totalCnts, FALSE);
-verbStats("drop invalid", &stats->badCnts, FALSE);
-verbStats("drop minAlnSize", &stats->minAlnSizeCnts, FALSE);
-verbStats("drop minNonRepSize", &stats->minNonRepSizeCnts, FALSE);
-verbStats("drop maxRepMatch", &stats->maxRepMatchCnts, FALSE);
-verbStats("drop min size", &stats->minQSizeCnts, FALSE);
-verbStats("drop minIdent", &stats->minIdCnts, FALSE);
-verbStats("drop minCover", &stats->minCoverCnts, FALSE);
-verbStats("weird over", &stats->weirdOverCnts, FALSE);
-verbStats("kept weird", &stats->weirdKeptCnts, FALSE);
-verbStats("drop overlap", &stats->overlapCnts, FALSE);
-verbStats("drop minSpan", &stats->minSpanCnts, FALSE);
-verbStats("drop localBest", &stats->localBestCnts, FALSE);
-verbStats("drop globalBest", &stats->globalBestCnts, FALSE);
-verbStats("drop maxAligns", &stats->maxAlignsCnts, FALSE);
-verbStats("kept", &stats->keptCnts, TRUE);
-
+carefulClose(&outFiles.hapRefMappedFh);
+carefulClose(&outFiles.hapRefCDnaAlnsFh);
+carefulClose(&outFiles.dropFh);
+carefulClose(&outFiles.weirdOverFh);
+carefulClose(&outFiles.passFh);
+cDnaStatsPrint(&reader->stats, 1);
+hapRegionsFree(&hapRegions);
 cDnaReaderFree(&reader);
 }
 
@@ -479,6 +537,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
+if (optionExists("algoHelp"))
+    prAlgo();
 if (argc != 3)
     usage("wrong # of args");
 
@@ -501,10 +561,13 @@ gMaxRepMatch = optionFrac("maxRepMatch", gMaxRepMatch);
 gPolyASizes = optionVal("polyASizes", NULL);
 if (optionExists("usePolyTHead") && (gPolyASizes == NULL))
     errAbort("must specify -polyASizes with -usePolyTHead");
+gHapRegions = optionVal("hapRegions", NULL);
 gBestOverlap = optionExists("bestOverlap");
 gDropped = optionVal("dropped", NULL);
 gWeirdOverlappped = optionVal("weirdOverlapped", NULL);
-gAlignStats = optionVal("alignStats", gAlignStats);
+gHapRefMapped = optionVal("hapRefMapped", NULL);
+gHapRefCDnaAlns = optionVal("hapRefCDnaAlns", NULL);
+alnIdQNameMode = optionExists("alnIdQNameMode");
 
 pslCDnaFilter(argv[1], argv[2]);
 return 0;

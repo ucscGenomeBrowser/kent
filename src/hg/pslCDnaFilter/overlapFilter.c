@@ -1,7 +1,8 @@
-/* filter overlapping alignments */
+/* overlapFilter - filter overlapping alignments */
 #include "common.h"
 #include "overlapFilter.h"
 #include "cDnaAligns.h"
+#include "cDnaStats.h"
 #include "verbose.h"
 #include "psl.h"
 
@@ -131,9 +132,9 @@ if (((float)(alnSim.same)/((float)(alnSim.same + alnSim.diff))) < dissimFrac)
     if (verboseLevel() >= 2)
         {
         if (!aln1->weirdOverlap)
-            cDnaAlignVerb(2, aln1->psl, "weird overlap");
+            cDnaAlignVerb(2, aln1, "weird overlap");
         if (!aln2->weirdOverlap)
-            cDnaAlignVerb(2, aln2->psl, "weird overlap");
+            cDnaAlignVerb(2, aln2, "weird overlap");
         }
     /* don't double count ones flagged as weird */
     if (!aln1->weirdOverlap)
@@ -183,12 +184,12 @@ for (aln2 = aln->next; (aln2 != NULL) && (!aln->drop); aln2 = aln2->next)
         if (cmp < 0)
             {
             aln2->drop = TRUE;
-            cDnaAlignVerb(3, aln2->psl, "drop: overlap");
+            cDnaAlignVerb(3, aln2, "drop: overlap");
             }
         else if (cmp > 0)
             {
             aln->drop = TRUE;
-            cDnaAlignVerb(3, aln->psl, "drop: overlap");
+            cDnaAlignVerb(3, aln, "drop: overlap");
             }
         if (cmp != 0)
             cdna->stats->overlapCnts.aligns++;
