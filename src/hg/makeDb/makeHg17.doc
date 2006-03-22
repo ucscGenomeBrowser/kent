@@ -19420,7 +19420,7 @@ cat > loadMaf.csh << 'EOF'
     # TODO 
 
 
-# PHASTCONS CONSERVATION (2005-01-05 kate)
+# PHASTCONS CONSERVATION (2006-01-05 kate)
 # This process is distilled from Hiram and Adam's experiments
 # on mouse (mm7) 17way track.  Many parameters are now fixed, without
 # being experimentally derived, either because the experiments
@@ -19456,7 +19456,7 @@ cat > loadMaf.csh << 'EOF'
     mkdir /cluster/data/hg17/bed/multiz17way.2005-12-20/cons
     cd /cluster/data/hg17/bed/multiz17way.2005-12-20/cons
     cp /san/sanvol1/scratch/mm7/cons/elliotsEncode.mod .
-        # edit, changing monDom2->monDom1 and rheMac1 -> rheMac2
+        # edit, changing rheMac1 -> rheMac2
     mkdir run.split
     cd run.split
     set WINDOWS = /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons/ss
@@ -19528,7 +19528,7 @@ cp -p $san/ss/$c/$f.ss ../elliotsEncode.mod $tmp
 pushd $tmp > /dev/null
 /cluster/bin/phast/$MACHTYPE/phastCons $f.ss elliotsEncode.mod \
    --rho $rho --expected-length $len --target-coverage $cov --quiet \
-    --not-informative panTro1 \
+    --not-informative panTro1,rheMac2 \
 	--seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
 popd > /dev/null
 mkdir -p $san/pp/$c $san/bed/$c
@@ -19557,17 +19557,19 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
 
     gensub2 in.list single template jobList
     para create jobList
-        # 625 jobs
+        # 333 jobs
     para try
     para check
     para push
-    # NOTE: some jobs crashed, but worked when restarted
-# CPU time in finished jobs:      18310s     305.16m     5.09h    0.21d  0.001 y
-# IO & Wait Time:                 39184s     653.07m    10.88h    0.45d  0.001 y
-# Average job time:                  92s       1.53m     0.03h    0.00d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:             238s       3.97m     0.07h    0.00d
-# Submission to last job:           273s       4.55m     0.08h    0.00d
+    # NOTE: these jobs go fast -- some crashed apparently having
+    # difficulty accessing input files.  Just restart them and
+    # they work
+#CPU time in finished jobs:      15520s     258.67m     4.31h    0.18d  0.000 y
+#IO & Wait Time:                 15796s     263.27m     4.39h    0.18d  0.001 y
+#Average job time:                  94s       1.57m     0.03h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             180s       3.00m     0.05h    0.00d
+#Submission to last job:         48266s     804.43m    13.41h    0.56d
 
     # create Most Conserved track
     ssh kolossus
@@ -19591,15 +19593,16 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way/cons
     hgLoadBed -strict hg17 phastConsElements17way mostConserved.bed
+        # Loaded 2212444 elements of size 5
         # Loaded 2037557 elements
     # compare with previous tracks
     hgsql hg17 -e "select count(*) from phastConsElements10way"
         # 2011952
     hgsql hg17 -e "select count(*) from phastConsElements"
         # 1601903
-    # Try for 5% overall cov, and 70% CDS cov (used elen=13, tcov=.007, rho=.27)
+    # Try for 5% overall cov, and 70% CDS cov (used elen=14, tcov=.008, rho=.28)
     featureBits hg17 -enrichment refGene:cds phastConsElements17way
-        # refGene:cds 1.063%, phastConsElements17way 5.104%, both 0.747%, cover 70.30%, enrich 13.78x
+        # refGene:cds 1.065%, phastConsElements17way 5.116%, both 0.759%, cover 71.26%, enrich 13.93x
 
     # compare with previous tracks
     featureBits hg17 -enrichment refGene:cds phastConsElements10way
@@ -19715,7 +19718,7 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
     # sort by chromName, chromStart so that items are in numerical order 
     #  for wigEncode
     #next time try Angie's simpler sort, below
-    find ./pp -name "chr*.pp" | \
+    time find ./pp -name "chr*.pp" | \
         sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
 	sort -k7,7 -k9,9n | \
 	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
@@ -19777,9 +19780,8 @@ cat > downloads.csh << 'EOF'
     cp /usr/local/apache/htdocs/goldenPath/mm7/multiz17way/README.txt $dir
     # edit README
 
-    # phastCons scores
 
-# PHASTCONS SCORES DOWNLOADABLES FOR 17WAY (2006 kate)
+# PHASTCONS SCORES DOWNLOADABLES FOR 17WAY (2006-03-20 kate)
 
     ssh kkstore02
     cd /cluster/data/hg17/bed/multiz17way 
@@ -19796,6 +19798,8 @@ cat > downloads.csh << 'EOF'
     end
     date
 'EOF'
+    csh downloads.csh >&! downloads.log &
+
         # ~20 minutes
     # << happy emacs
     ssh hgwdev
