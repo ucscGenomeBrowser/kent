@@ -10,6 +10,8 @@ O = hgVisiGene.o captionElement.o configPage.o printCaption.o probePage.o visiSe
 
 include ../../../inc/cgi_build_rules.mk
 
+CFLAGS=-DVISIGENE='"visiGeneNew"'
+
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}

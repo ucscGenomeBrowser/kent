@@ -22,7 +22,7 @@
 /* Globals */
 struct cart *cart;		/* Current CGI values */
 struct hash *oldCart;		/* Previous CGI values */
-char *visiDb = "visiGene";	/* The visiGene database name */
+char *visiDb = VISIGENE;	/* The visiGene database name */
 struct sqlConnCache *visiConnCache;  /* Cache of connections to database. */
 
 char *hgVisiGeneShortName()
@@ -745,7 +745,7 @@ void dispatch()
 /* Set up a connection to database and dispatch control
  * based on hgpDo type var. */
 {
-struct sqlConnection *conn = sqlConnect("visiGene");
+struct sqlConnection *conn = sqlConnect(visiDb);
 if (cartVarExists(cart, hgpDoThumbnails))
     doThumbnails(conn);
 else if (cartVarExists(cart, hgpDoImage))
