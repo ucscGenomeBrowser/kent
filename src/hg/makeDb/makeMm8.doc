@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.18 2006/03/16 19:34:35 galt Exp $"
+#	"$Id: makeMm8.doc,v 1.19 2006/03/22 18:17:59 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -231,6 +231,10 @@ done
         "chr6:28912411-28925620", 1, 22, "Mouse", \
         "Mus musculus", "/gbdb/mm8/html/description.html", 0, 0, \
         "NCBI Build 36");' -h localhost hgcentraltest
+    #	Reset default position to be like Mm7, 2006-03-09 - Hiram
+    hgsql -e \
+'update dbDb set defaultPos="chr12:50258170-50263946" where name="mm8";' \
+	hgcentraltest
     #	Do *NOT* set default genome on genome-test until ready for release
     # hgsql hgcentraltest \
     #	-e 'update defaultDb set name="mm8" where genome="Mouse";'
@@ -2151,8 +2155,7 @@ TMPDIR=/scratch/tmp
     #	54831876 bases of 1630323462 (3.363%) in intersection
 
 #############################################################################
-# STS MARKERS DATA DOWNLOAD (DONE - 2005-09-29 - 2005-10-07 - Hiram)
-#	Applied a filter to primers.psl - 2005-10-20 - Hiram
+# STS MARKERS DATA DOWNLOAD (DONE - 2006-02-23 - 2006-02-28 - Hiram)
     ssh kkstore01
     mkdir -p /cluster/data/mm8/bed/STSmarkers/downloads
     cd /cluster/data/mm8/bed/STSmarkers/downloads
@@ -4624,8 +4627,113 @@ Loading database with 14470 rows^M
 
 # END OF HGNEAR STUFF
 
+#########################################################################
+# BLASTZ panTro2 (DONE - 2006-03-15 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastz.panTro2.2006-02-23
+    cd /cluster/data/mm8/bed
+    ln -s blastz.panTro2.2006-02-23 blastz.panTro2
+    cd blastz.panTro2
 
+    cat << '_EOF_' > DEF
+# mouse vs chimp
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm7
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_SMSK=/cluster/bluearc/scratch/hg/mm8/linSpecRep/notInOthers
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Chimp PanTro2
+SEQ2_DIR=/scratch/hg/panTro2/nib
+SEQ2_LEN=/scratch/hg/panTro2/chrom.sizes
+SEQ2_SMSK=/cluster/bluearc/panTro2/linSpecRep/notInRodent
+SEQ2_CHUNK=50000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzPanTro2.2006-03-15
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	broken during chain step due to missing files on the Iservers
+    #	completed chain run manually, then continuing
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=chainMerge `pwd`/DEF > chainMerge.out 2>&1 &
+    #	broken during loadUp due to script bug, ran loadUp.csh manually
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+XXXX running 2006-03-21 13:50
+    
+    time nice -n +19 featureBits mm8 chainPanTro1Link
+    #	901276629 bases of 2567283971 (35.106%) in intersection
+    time nice -n +19 featureBits panTro2 chainMm8Link
+    #	901976621 bases of 2733948177 (32.992%) in intersection
+
+
+#############################################################################
 # UPDATED mm8.knownToVisiGene (2006-03-15 galt)
 ssh hgwdev
 knownToVisiGene mm8
 
+#############################################################################
+# BLASTZ SELF (DONE - 2006-03-20 - 2006-03-22 - Hiram)
+#	using chain min score of 10,000 to cut down on volumn of data
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastzSelf.2006-03-20
+    cd /cluster/data/mm8/bed
+    ln -s blastzSelf.2006-03-20 blastz.mm8
+    cd blastzSelf.2006-03-20
+
+    cat << '_EOF_' > DEF
+# mouse vs mouse
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_H=2000
+BLASTZ_M=200
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Mouse Mm8
+SEQ2_DIR=/scratch/hg/mm8/nib
+SEQ2_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzSelf.2006-03-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	<< happy emacs
+
+    cd /cluster/data/mm8/bed/blastzSelf.2006-03-20
+    time /cluster/home/hiram/kent/src/utils/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	broke during the load step due to doBlastz script changes,
+    #	finished the load manually, then:
+    time /cluster/home/hiram/kent/src/utils/doBlastzChainNet.pl -verbose=2 \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	-continue=download `pwd`/DEF > download.out 2>&1 &
+
+    ssh kolossus
+    cd /cluster/data/mm8/bed/blastzSelf.2006-03-20
+    time HGDB_CONF=~/.hg.conf.read-only featureBits mm8 \
+	chainSelfLink >fb.mm8.chainSelfLink 2>&1
+    XXXX - running 2006-03-22
+    cat fb.mm8.chainSelfLink
+    #	409297278 bases of 2583394090 (15.843%) in intersection
