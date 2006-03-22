@@ -20140,7 +20140,7 @@ TMPDIR=/scratch/tmp
     #	is really huge about these results.
 
 #########################################################################
-# Build maf annotation for multiz17way  (kate 2006-02-16)
+# BUILD MAF ANNOTATION FOR MULTIZ17WAY  (kate 2006-02-16)
 
     ssh kkstore01
     cd /cluster/data/rheMac2
@@ -20458,7 +20458,7 @@ hgLoadBed hg17 landmark sortedLandmark.bed -noSort -oldTable -tab
     # cp -p /san/sanVol1/scratch/fan/*.sh /san/sanVol1/scratch/fan
     # cp /san/sanVol1/scratch/andy/psl.header /san/sanVol1/scratch/fan
 
-    ######## LIFTOVER BLATING  
+    ######## LIFTOVER BLATTING  
 
     # HG15
     ssh pk
