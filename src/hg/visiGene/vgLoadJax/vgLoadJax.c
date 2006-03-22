@@ -317,7 +317,7 @@ fprintf(ra, "acknowledgement Thanks to the Gene Expression Database group at "
             "Mouse Genome Informatics (MGI) for collecting, annotating and sharing "
 	    "this image. The MGI images were last updated in VisiGene on June 17, 2005. "
 	    "Additional and more up to date annotations and images may be available "
-	    "directly at <A HREF=\"http://www.informatics.jax.org\">MGI.</A>\n");
+	    "directly at <A HREF='http://www.informatics.jax.org'>MGI.</A>\n");
 fprintf(ra, "submitSet jax%s\n", ref);
 fprintf(ra, "taxon 10090\n");	/* Mus musculus taxon */
 fprintf(ra, "fullDir ../visiGene/full/inSitu/Mouse/jax\n");
