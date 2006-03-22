@@ -7,12 +7,12 @@ longLabel Difference in Expression with Selected Gene According to GNF Gene Expr
 type pair gnfAtlas2Distance query target distance 1
 priority 1.0
 
-name knownExpUcla
-shortLabel Expression (UCLA)
-longLabel Difference in Expression with Selected Gene
-type pair knownExpDistance query target distance 1
-priority 1.5
-
+#name knownExpUcla
+#shortLabel Expression (UCLA)
+#longLabel Difference in Expression with Selected Gene
+#type pair knownExpDistance query target distance 1
+#priority 1.5
+#
 name expGnfU95
 shortLabel Expression (GNF Atlas1)
 longLabel Difference in Expression with Selected Gene
