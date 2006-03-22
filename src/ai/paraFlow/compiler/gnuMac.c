@@ -180,15 +180,9 @@ fprintf(f, "%s",
 "# Preamble found in all modules for Mac OS-X Pentium\n"
 "       .cstring\n"
 "LC0:\n"
-"       .ascii \"%d\\12\\0\"\n"
+"       .ascii \">%d<\\12\\0\"\n"
 "       .text\n"
-"# Important offsets for structures\n"
-"pfRefCount = 0\n"
-"pfCleanup = 4\n"
-"pfPolyTable = 8\n"
-"pfString = 8\n"
-"\n"
-"# Some built in functions - really just for testing\n"
+".globl __printInt\n"
 "__printInt:\n"
 "       pushl   %ebp\n"
 "       movl    %esp, %ebp\n"
@@ -205,16 +199,43 @@ fprintf(f, "%s",
 "       popl    %ebx\n"
 "       popl    %ebp\n"
 "       ret\n"
+".globl __addTwo\n"
 "__addTwo:\n"
-"        pushl   %ebp\n"
-"        movl    %esp, %ebp\n"
-"        movl    12(%ebp), %eax\n"
-"        addl    8(%ebp), %eax\n"
-"        popl    %ebp\n"
-"        ret\n"
+"       pushl   %ebp\n"
+"       movl    %esp, %ebp\n"
+"       movl    12(%ebp), %eax\n"
+"       addl    8(%ebp), %eax\n"
+"       popl    %ebp\n"
+"       ret\n"
 "\n"
 );
 printInittedModuleVars(iList, f);
+fprintf(f, "%s",
+".globl _main\n"
+"_main:\n"
+"       pushl   %ebp\n"
+"       movl    %esp, %ebp\n"
+"       pushl   %edi\n"
+"       pushl   %esi\n"
+"       pushl   %ebx\n"
+"       subl    $124, %esp\n"
+/* NOTE: It looks like the MacTel is veeerrrry picky about
+ * what the stack is at.  It seems to want to be on boundaries
+ * that are even multiples of 16.  It somehow messes with the
+ * 'calling helpers' they have otherwise, leading to illegal
+ * instruction crashes.  I think this is all part of the
+ * attempts to make the code relocatable somehow. */
+);
+}
+
+void gnuMacFunkyThunky(FILE *f)
+/* Do that call to the funky get thunk thingie
+ * that Mac does to make the code more relocatable
+ * at the expense of burning the ebx register and
+ * adding overhead to every single d*ng subroutine
+ * almost! */
+{
+fprintf(f, "\tcall    ___i686.get_pc_thunk.bx\n");
 }
 
 void gnuMacPostscript(struct dlList *iList, FILE *f)
@@ -222,6 +243,15 @@ void gnuMacPostscript(struct dlList *iList, FILE *f)
  * source file for working on Mac OS X on Pentiums, or at
  * least on my mini. Also print uninitialized vars. */
 {
+fprintf(f, "%s",
+"       movl    $0,%eax\n"
+"       addl    $124, %esp\n"
+"       popl    %ebx\n"
+"       popl    %esi\n"
+"       popl    %edi\n"
+"       popl    %ebp\n"
+"       ret\n"
+);
 printUninittedModuleVars(iList, f);
 fprintf(f, "%s",
 "\n"

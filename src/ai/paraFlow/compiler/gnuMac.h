@@ -18,4 +18,11 @@ void gnuMacPostscript(struct dlList *iList, FILE *f);
  * source file for working on Mac OS X on Pentiums, or at
  * least on my mini. Also print uninitialized vars. */
 
+void gnuMacFunkyThunky(FILE *f);
+/* Do that call to the funky get thunk thingie
+ * that Mac does to make the code more relocatable
+ * at the expense of burning the ebx register and
+ * adding overhead to every single d*ng subroutine
+ * almost! */
+
 #endif /* GNUMAC_H */

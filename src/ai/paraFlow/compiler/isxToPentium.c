@@ -684,7 +684,11 @@ fprintf(f, "\tsubl\t$%d,%%esp\n", localSize);
 static void printFuncEnd(FILE *f)
 /* Print end of function */
 {
-fprintf(f, "\tleave\n\tret\n");
+// fprintf(f, "\tleave\n\tret\n");
+fprintf(f, "%s",
+"\tmovl\t%ebp,%esp\n"
+"\tpopl\t%ebp\n"
+"\tret\n");
 }
 
 void pentFromIsx(struct dlList *iList, FILE *f)
@@ -697,7 +701,6 @@ struct isx *isx;
 
 calcInputOffsets(iList);
 gnuMacPreamble(iList, f);
-printFuncStart("main", 24, TRUE, f);
 fprintf(f, "\n# Starting code generation\n");
 
 for (node = iList->head; !dlEnd(node); node = nextNode)
@@ -769,9 +772,6 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    break;
 	}
     }
-fprintf(f, "\n# Finishing up main\n");
-fprintf(f, "\tmovl\t$0,%%eax\n");
-printFuncEnd(f);
 gnuMacPostscript(iList, f);
 }
 
