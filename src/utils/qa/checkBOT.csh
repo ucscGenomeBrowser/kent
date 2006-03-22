@@ -15,7 +15,7 @@ if ($#argv != 1) then
   echo
   echo '      usage:  ipAddress '
   echo
-  echo '  (will use "all" to get all IPs having delays)'
+  echo '  (use "all" to get all IPs having delays)'
   echo
   exit
 else
@@ -27,9 +27,17 @@ if ($ip == "all") then
   rm -f ipFile
   ssh hgwbeta /etc/init.d/bottleneck status | egrep "current"
   ssh hgwbeta /etc/init.d/bottleneck status | grep -w -v "0" \
-     | grep -v "current" | sort -nr -k5
-  set worst=`ssh hgwbeta /etc/init.d/bottleneck status | grep -w -v "0" \
-     | grep -v "current" | sort -nr -k5 | head -1 | awk '{print $1}'`
+     | grep -v "current" | sort -nr -k5 > ipFile
+  set allIPs=`cat ipFile | awk '{print $1}'`
+  set worst=`echo $allIPs | awk '{print $1}'`
+  cat ipFile
+  echo
+
+  foreach ip (`echo $allIPs`)
+    set orgName=`ipw $ip | grep OrgName | sed -e "s/OrgName: //"` > /dev/null
+    set current=`grep $ip ipFile | awk '{print $5}'`
+    echo "$ip\t\t$current\t  $orgName"
+  end
 else
   ssh hgwbeta /etc/init.d/bottleneck status | egrep "$ip|current"
 endif
@@ -49,8 +57,8 @@ echo "  If current is over 10,000 they get a message.  If it's"
 echo "  over 15,000 they get cut off with a ruder message."
 echo
 
-
-echo "  the longest delay is from:"
+echo
+echo "the longest delay is from:"
 
 if ($worst != "") then
   ipw $worst | head -10
