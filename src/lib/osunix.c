@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.26 2006/03/10 17:43:37 angie Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.27 2006/03/23 06:30:16 galt Exp $";
 
 
 /* Return how long the named file is in bytes. 
@@ -119,7 +119,7 @@ slNameSort(&list);
 return list;
 }
 
-struct fileInfo *newFileInfo(char *name, long size, bool isDir)
+struct fileInfo *newFileInfo(char *name, off_t size, bool isDir)
 /* Return a new fileInfo. */
 {
 int len = strlen(name);

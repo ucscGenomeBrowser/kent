@@ -18,12 +18,12 @@ struct fileInfo
 /* Info about a file. */
     {
     struct fileInfo  *next;	/* Next in list. */
-    long size;		/* Size in bytes. */
+    off_t size;		/* Size in bytes. */
     bool isDir;		/* True if file is a directory. */
     char name[1];	/* Allocated at run time. */
     };
 
-struct fileInfo *newFileInfo(char *name, long size, bool isDir);
+struct fileInfo *newFileInfo(char *name, off_t size, bool isDir);
 /* Return a new fileInfo. */
 
 struct fileInfo *listDirX(char *dir, char *pattern, boolean fullPath);
