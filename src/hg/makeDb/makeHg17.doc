@@ -19218,6 +19218,19 @@ TMPDIR=/scratch/tmp
     cd /cluster/data/hg17/bed/blastz.rheMac2
     cp -rp mafNet /san/sanvol1/scratch/hg17/mafNet/rheMac2
 
+# SWAP CHAIN AND NET ALIGNMENTS OVER TO RHESUS (rheMac2) 
+# CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET, LIFTOVER AND ALIGNMENT DOWNLOADS
+# (DONE, 2006-03-22, hartera) 
+    # Do the swap of hg17/rheMac2 alignments over to rheMac2 to produce
+    # rheMac2/hg17 alignments. 
+    ssh pk
+    cd /cluster/data/hg17/bed/blastz.rheMac2
+    # use chain parameters for "close" species
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+        `pwd`/DEF >& swap.log &
+    # Took about 3 hours 40 minutes to run.
+
 #############################################################################
 # 17-WAY MULTIZ ALIGNMENTS (WORKING - 2005-12-20 kate)
 
