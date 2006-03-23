@@ -2,7 +2,7 @@
  * simple constants.  */
 
 #include "common.h"
-#include "dyString.h"
+#include "dystring.h"
 #include "pfParse.h"
 #include "pfToken.h"
 #include "pfCompile.h"
