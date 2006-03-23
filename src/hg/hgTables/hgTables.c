@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.123 2006/03/01 23:32:35 hiram Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.124 2006/03/23 00:53:40 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -1477,12 +1477,14 @@ void dispatch(struct sqlConnection *conn)
 struct hashEl *varList;
 if (cartVarExists(cart, hgtaDoTest))
     doTest();
+else if (cartVarExists(cart, hgtaDoMainPage))
+    doMainPage(conn);
+else if (cartVarExists(cart, hgtaDoSchema))
+    doSchema(conn);
 else if (cartVarExists(cart, hgtaDoTopSubmit))
     doTopSubmit(conn);
 else if (cartVarExists(cart, hgtaDoSummaryStats))
     doSummaryStats(conn);
-else if (cartVarExists(cart, hgtaDoSchema))
-    doSchema(conn);
 else if (cartVarExists(cart, hgtaDoIntersectPage))
     doIntersectPage(conn);
 else if (cartVarExists(cart, hgtaDoClearIntersect))
@@ -1551,8 +1553,6 @@ else if (cartVarExists(cart, hgtaDoGetCustomTrackFile))
     doGetCustomTrackFile(conn);
 else if (cartVarExists(cart, hgtaDoRemoveCustomTrack))
     doRemoveCustomTrack(conn);
-else if (cartVarExists(cart, hgtaDoMainPage))
-    doMainPage(conn);
 else if (cartVarExists(cart, hgtaDoClearSubtrackMerge))
     doClearSubtrackMerge(conn);
 /* Hack but I don't know what else to do now: hCompositeUi makes a hidden 
