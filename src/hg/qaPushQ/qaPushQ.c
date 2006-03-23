@@ -1,7 +1,7 @@
 
-/* qaPushQ - An test Push Queue cgi program that uses mySQL. */
+/* qaPushQ - Push Queue cgi */
 
-/* if we use the cart, we will need to link jkhgap.a */
+/* we don't use the cart, we have our own table to store cart-like info */
 
 #include <time.h>
 #include <stdio.h>
@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.78 2005/12/05 22:37:34 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.79 2006/03/23 06:27:54 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -386,7 +386,7 @@ void replaceInStr(char *s, int ssize, char *t, char *r)
 char *temp = replaceChars(s,t,r);
 if (strlen(temp) >= ssize)
     {
-    errAbort("buf size exceeded. strlen(temp)=%s, size of buf= %s",strlen(temp),ssize);
+    errAbort("buf size exceeded. strlen(temp)=%d, size of buf= %d",strlen(temp),ssize);
     }
 safef(s,ssize,"%s",temp);
 freez(&temp);
@@ -2574,8 +2574,8 @@ void doShowSizes()
 {
 char tbl[BLSIZE] = "";
 char  db[1024] = "";
-unsigned long size = 0;
-long long totalsize = 0;
+off_t size = 0;
+off_t totalsize = 0;
 unsigned long sizeMB = 0;
 int i = 0, ii = 0, iii = 0;
 int j = 0, jj = 0, jjj = 0;
