@@ -4,7 +4,7 @@
 #include "dystring.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.18 2006/03/18 02:18:48 angie Exp $";
+static char const rcsid[] = "$Id: newProg.c,v 1.19 2006/03/23 18:54:12 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -36,7 +36,7 @@ fprintf(f, "#include \"options.h\"\n");
 fprintf(f, "\n");
 if (doCvs)
     {
-    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.18 2006/03/18 02:18:48 angie Exp $\";\n");
+    fprintf(f, "static char const rcsid[] = \"$Id: newProg.c,v 1.19 2006/03/23 18:54:12 kent Exp $\";\n");
     fprintf(f, "\n");
     }
 fprintf(f, "void usage()\n");
@@ -121,13 +121,13 @@ if (doCvs)
         errAbort("Can't find environment variable 'HOME'");
     if (!startsWith("kent", module))
         errAbort("Need to include full module name with cvs option, not just relative path");
-    sprintf(dirName, "%s%s", homeDir, module+strlen("kent"));
+    safef(dirName, sizeof(dirName), "%s/kent%s", homeDir, module+strlen("kent"));
     }
 else
-    sprintf(dirName, "%s", module);
+    safef(dirName, sizeof(dirName), "%s", module);
 makeDir(dirName);
 splitPath(dirName, NULL, fileOnly, NULL);
-sprintf(fileName, "%s/%s.c", dirName, fileOnly);
+safef(fileName, sizeof(fileName), "%s/%s.c", dirName, fileOnly);
 makeC(fileOnly, description, fileName, doCvs);
 
 sprintf(fileName, "%s/makefile", dirName);
@@ -141,15 +141,15 @@ if (doCvs)
         errAbort("Couldn't change dir to %s", dirName);
     if (!setCurrentDir(".."))
         errAbort("Couldn't change dir to ..");
-    sprintf(command, "cvs add %s", fileOnly);
+    safef(command, sizeof(command), "cvs add %s", fileOnly);
     if (system(command) != 0)
         errAbort("system call '%s' returned non-zero", command);
-    sprintf(command, "cvs commit -m \"%s\" %s", description, fileOnly);
+    safef(command, sizeof(command), "cvs commit -m \"%s\" %s", description, fileOnly);
     if (system(command) != 0)
         errAbort("system call '%s' returned non-zero", command);
     if (!setCurrentDir(dirName))
         errAbort("Couldn't change dir to %s", dirName);
-    sprintf(command, "cvs add %s.c makefile", fileOnly);
+    safef(command, sizeof(command), "cvs add %s.c makefile", fileOnly);
     if (system(command) != 0)
         errAbort("system call '%s' returned non-zero", command);
     }
