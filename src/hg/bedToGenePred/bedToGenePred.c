@@ -5,7 +5,7 @@
 #include "genePred.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: bedToGenePred.c,v 1.1 2005/04/21 03:39:28 markd Exp $";
+static char const rcsid[] = "$Id: bedToGenePred.c,v 1.2 2006/03/23 16:35:12 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -14,7 +14,7 @@ static struct optionSpec optionSpecs[] = {
 
 /* command line options */
 
-void usage(msg)
+void usage(char *msg)
 /* Explain usage and exit. */
 {
 errAbort("%s:\n"
@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, optionSpecs);
 if (argc != 3)
-    usage();
+    usage("Too few arguments");
 cnvBedToGenePred(argv[1], argv[2]);
 return 0;
 }
