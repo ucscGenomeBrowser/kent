@@ -536,6 +536,7 @@ if (falseLabel)
     isxNew(pfc, poJump, falseLabel, NULL, NULL, iList);
 }
 
+
 static enum pfParseType invLogOp(enum pfParseType op)
 /* Convert != to ==, > to <=, etc. */
 {
@@ -551,7 +552,6 @@ switch (op)
      case pptLogOr:		return pptLogAnd;
      default:
           {
-	  internalErr();
 	  return op;
 	  }
      }
@@ -567,6 +567,8 @@ static void isxConditionalJump(struct pfCompile *pfc, struct pfParse *cond,
 enum pfParseType ppt = cond->type;
 if (invert)
     ppt = invLogOp(ppt);
+uglyf("invert %d, ", invert);
+pfParseDumpOne(cond, 3, uglyOut);
 switch (ppt)
     {
     case pptLess:
@@ -613,10 +615,21 @@ switch (ppt)
 		iList);
 	break;
 	}
-    default:
-	pfParseDump(cond, 3, uglyOut);
-        internalErr();
+    case pptNot:
+        {
+	isxConditionalJump(pfc, cond->children, varHash, trueLabel, falseLabel, 
+	    !invert, iList);
 	break;
+	}
+    default:
+	{
+	struct isxAddress *source = isxExpression(pfc, cond, varHash, iList);
+	enum isxOpType op = (invert ? poBz : poBnz);
+	isxNew(pfc, op, trueLabel, source, NULL, iList);
+	if (falseLabel)
+	    isxNew(pfc, poJump, falseLabel, NULL, NULL, iList);
+	break;
+	}
     }
 }
 
@@ -696,6 +709,8 @@ switch (pp->type)
 	isxNew(pfc, poLoopEnd, endLabel, NULL, NULL, iList);
 	break;
 	}
+    case pptNop:
+        break;
     default:
 	isxExpression(pfc, pp, varHash, iList);
 	break;

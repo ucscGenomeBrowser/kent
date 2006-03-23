@@ -43,7 +43,7 @@ enum pentDataOp
 /* Some of the pentium op codes that apply to many types */
     {
     opMov, opAdd, opSub, opMul, opDiv, opAnd, opOr, opXor, opSal, 
-    opSar, opNeg, opNot, opCmp,
+    opSar, opNeg, opNot, opCmp, opTest,
     };
 
 struct dataOpTable
@@ -74,6 +74,7 @@ static struct dataOpTable dataOpTable[] =
     {opNeg, "negb", "negw", "negl", NULL, NULL, NULL, NULL},
     {opNot, "notb", "notw", "notl", NULL, NULL, NULL, NULL},
     {opCmp, "cmpb", "cmpw", "cmpl", NULL, NULL, NULL, NULL},
+    {opTest, "testb", "testw", "testl", NULL, NULL, NULL, NULL},
     };
 
 static char *opOfType(enum pentDataOp opType, enum isxValType valType)
@@ -207,7 +208,7 @@ switch (iad->adType)
     }
 }
 
-static void printOp(enum pentDataOp opType, struct isxAddress *source,
+static void codeOp(enum pentDataOp opType, struct isxAddress *source,
 	struct isxAddress *dest, struct pentCoder *coder)
 /* Print op to file */
 {
@@ -222,7 +223,7 @@ if (dest != NULL)
 pentCoderAdd(coder, opName, coder->sourceBuf, destString);
 }
 
-static void printOpSourceReg(enum pentDataOp opType, struct isxReg *reg,
+static void codeOpSourceReg(enum pentDataOp opType, struct isxReg *reg,
 	struct isxAddress *dest,  struct pentCoder *coder)
 /* Print op where source is a register. */
 {
@@ -233,7 +234,7 @@ pentPrintAddress(dest, coder->destBuf);
 pentCoderAdd(coder, opName, regName, coder->destBuf);
 }
 
-static void printOpDestReg(enum pentDataOp opType, 
+static void codeOpDestReg(enum pentDataOp opType, 
 	struct isxAddress *source, struct isxReg *reg,  struct pentCoder *coder)
 /* Print op where dest is a register. */
 {
@@ -273,7 +274,7 @@ static int tempIx;
 coder->tempIx -= reg->size;
 iad->reg = NULL;
 iad->val.tempMemLoc = coder->tempIx;
-printOp(opMov, &old, iad, coder);
+codeOp(opMov, &old, iad, coder);
 }
 
 static void pentSwapOutIfNeeded(struct isxReg *reg, struct slRef *liveList, 
@@ -454,11 +455,11 @@ else
     if (reg == NULL)
 	{
 	reg = freeReg(isx, isx->dest->valType, nextNode, coder);
-	printOpDestReg(opMov, source, reg, coder);
+	codeOpDestReg(opMov, source, reg, coder);
 	}
     }
 if (dest->adType == iadRealVar)
-    printOpSourceReg(opMov, reg, dest, coder);
+    codeOpSourceReg(opMov, reg, dest, coder);
 if (reg->contents != NULL)
     reg->contents->reg = NULL;
 reg->contents = dest;
@@ -487,17 +488,17 @@ if (iad != NULL)
     if (isSub && isSwapped)
         {
 	unaryOpReg(opNeg, reg, iad->valType, coder);
-	printOpDestReg(opAdd, iad, reg, coder);
+	codeOpDestReg(opAdd, iad, reg, coder);
 	}
     else
 	{
-	printOpDestReg(opCode, iad, reg, coder);
+	codeOpDestReg(opCode, iad, reg, coder);
 	}
     }
 else
     {
-    printOpDestReg(opMov, isx->left, reg, coder);
-    printOpDestReg(opCode, isx->right, reg, coder);
+    codeOpDestReg(opMov, isx->left, reg, coder);
+    codeOpDestReg(opCode, isx->right, reg, coder);
     }
 if (reg->contents != NULL)
     reg->contents->reg = NULL;
@@ -519,11 +520,11 @@ struct isxReg *edx = &regInfo[dx];
 if (eax->contents != p)
     {
     pentSwapOutIfNeeded(eax, isx->liveList, coder);
-    printOpDestReg(opMov, p, eax, coder);
+    codeOpDestReg(opMov, p, eax, coder);
     }
 pentSwapOutIfNeeded(edx,isx->liveList, coder);
 clearReg(edx, coder);
-printOp(opDiv, q, NULL, coder);
+codeOp(opDiv, q, NULL, coder);
 if (eax->contents != NULL)
     eax->contents->reg = NULL;
 if (isMod)
@@ -571,7 +572,7 @@ else
     if (eax != p->reg)
 	{
 	pentSwapOutIfNeeded(eax,isx->liveList, coder);
-	printOpDestReg(opMov, p, eax, coder);
+	codeOpDestReg(opMov, p, eax, coder);
 	}
     else
         {
@@ -580,7 +581,7 @@ else
     if (ecx != q->reg)
 	{
 	pentSwapOutIfNeeded(ecx,isx->liveList, coder);
-	printOpDestReg(opMov, q, ecx, coder);
+	codeOpDestReg(opMov, q, ecx, coder);
 	}
     pentCoderAdd(coder, opOfType(opCode, p->valType), 
     	isxRegName(ecx, ivByte), isxRegName(eax, p->valType));
@@ -595,14 +596,14 @@ static void pentInput(struct isx *isx, struct dlNode *nextNode,
 {
 struct isxAddress *source = isx->left;
 if (source->reg || source->adType == iadConst)
-    printOp(opMov, source, isx->dest, coder);
+    codeOp(opMov, source, isx->dest, coder);
 else
     {
     struct isxReg *reg = freeReg(isx, isx->dest->valType, nextNode, coder);
-    printOpDestReg(opMov, source, reg, coder);
+    codeOpDestReg(opMov, source, reg, coder);
     reg->contents = source;
     source->reg = reg;
-    printOp(opMov, source, isx->dest, coder);
+    codeOp(opMov, source, isx->dest, coder);
     }
 }
 
@@ -663,15 +664,42 @@ static void pentCmpJump(struct isx *isx, struct dlNode *nextNode,
 	char *jmpOp, struct pentCoder *coder)
 /* Output conditional jump code for == != < <= => > . */
 {
-if (isx->left->reg || isx->right->reg)
-    printOp(opCmp, isx->left, isx->right, coder);
+if (isx->left->reg)
+    {
+    codeOp(opCmp, isx->right, isx->left, coder);
+    if (sameString(jmpOp, "jl")) jmpOp = "jge";
+    else if (sameString(jmpOp, "jle")) jmpOp = "jg";
+    else if (sameString(jmpOp, "jge")) jmpOp = "jl";
+    else if (sameString(jmpOp, "jg")) jmpOp = "jle";
+    }
+else if (isx->right->reg)
+    {
+    codeOp(opCmp, isx->left, isx->right, coder);
+    }
 else
     {
     struct isxReg *reg = freeReg(isx, isx->left->valType, nextNode, coder);
-    printOpDestReg(opMov, isx->left, reg, coder);
+    codeOpDestReg(opMov, isx->left, reg, coder);
     isx->left->reg = reg;
     reg->contents = isx->left;
-    printOpDestReg(opCmp, isx->right, reg, coder);
+    codeOpDestReg(opCmp, isx->right, reg, coder);
+    }
+pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
+}
+
+static void pentTestJump(struct isx *isx, struct dlNode *nextNode,
+	char *jmpOp, struct pentCoder *coder)
+/* Output conditional jump code for == 0/!= 0. */
+{
+if (isx->left->reg)
+    codeOp(opTest, isx->left, isx->left, coder);
+else
+    {
+    struct isxReg *reg = freeReg(isx, isx->left->valType, nextNode, coder);
+    codeOpDestReg(opMov, isx->left, reg, coder);
+    isx->left->reg = reg;
+    reg->contents = isx->left;
+    codeOpDestReg(opTest, isx->left, reg, coder);
     }
 pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
 }
@@ -800,6 +828,12 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    break;
 	case poBne:
 	    pentCmpJump(isx, nextNode, "jne", coder);
+	    break;
+	case poBz:
+	    pentTestJump(isx, nextNode, "jz", coder);
+	    break;
+	case poBnz:
+	    pentTestJump(isx, nextNode, "jnz", coder);
 	    break;
 	case poJump:
 	    pentJump(isx, nextNode, coder);
