@@ -2,7 +2,7 @@ include ../../../inc/common.mk
 
 O = builtIn.o cCaseCode.o cCoder.o checkPara.o checkPoly.o cPara.o \
     codedType.o constFold.o ctar.o defFile.o gnuMac.o isx.o isxToPentium.o \
-    main.o parseDump.o parseInto.o pentCode.o pfBindVars.o \
+    main.o optBranch.o parseDump.o parseInto.o pentCode.o pfBindVars.o \
     pfParse.o pfScope.o pfToken.o pfType.o \
     recodedType.o refCount.o tokInto.o util.o
 

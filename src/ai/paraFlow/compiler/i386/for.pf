@@ -1,0 +1,5 @@
+int i;
+int j=2;
+for (i=0; i<10; ++i)
+    _printInt(i+j);
+_printInt(999);

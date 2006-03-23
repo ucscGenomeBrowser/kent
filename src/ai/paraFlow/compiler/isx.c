@@ -18,7 +18,7 @@ static struct isxAddress *isxExpression(struct pfCompile *pfc,
 	struct pfParse *pp, struct hash *varHash, struct dlList *iList);
 /* Generate intermediate code for expression. Return destination */
 
-void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
+static void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
 	struct hash *varHash, struct dlList *iList);
 /* Generate intermediate code for statement. */
 
@@ -46,7 +46,7 @@ switch (val)
     case ivString:
 	return "str";
     case ivJump:
-	return "jmp";
+	return "lab";
     default:
         internalErr();
 	return NULL;
@@ -92,10 +92,36 @@ switch (val)
 	return "poCall";
     case poOutput:
         return "poOutput";
-    case poGoTo:
-	return "poGoTo";
-    case poBranch:
-	return "poBranch";
+    case poLabel:
+	return "poLabel";
+    case poLoopStart:
+        return "poLoopStart";
+    case poLoopEnd:
+        return "poLoopEnd";
+    case poCondEnd:
+        return "poCondEnd";
+    case poCondStart:
+        return "poCondStart";
+    case poCondCase:
+        return "poCondCase";
+    case poJump:
+	return "poJump";
+    case poBeq:
+	return "poBeq";
+    case poBne:
+	return "poBne";
+    case poBlt:
+	return "poBlt";
+    case poBle:
+	return "poBle";
+    case poBgt:
+	return "poBgt";
+    case poBge:
+	return "poBge";
+    case poBz:
+	return "poBz";
+    case poBnz:
+	return "poBnz";
     default:
         internalErr();
 	return NULL;
@@ -177,6 +203,9 @@ switch (iad->adType)
     case iadOperator:
 	fprintf(f, "#%s", iad->name);
 	break;
+    case iadLabel:
+        fprintf(f, "@%s", iad->name);
+	break;
     default:
         internalErr();
 	break;
@@ -189,7 +218,7 @@ if (iad->reg != NULL)
 void isxDump(struct isx *isx, FILE *f)
 /* Dump out isx code */
 {
-fprintf(f, "%d: %s ", isx->label, isxOpTypeToString(isx->opType));
+fprintf(f, "%s ", isxOpTypeToString(isx->opType));
 if (isx->dest != NULL)
     {
     fprintf(f, " ");
@@ -241,7 +270,6 @@ struct isx *isxNew(struct pfCompile *pfc, enum isxOpType opType,
 {
 struct isx *isx;
 AllocVar(isx);
-isx->label = ++pfc->isxLabelMaker;
 isx->opType = opType;
 isx->dest = dest;
 isx->left = left;
@@ -313,6 +341,7 @@ hashAddSaveName(hash, buf, iad, &iad->name);
 return iad;
 }
 
+
 static struct isxAddress *varAddress(struct pfVar *var, struct hash *hash,
 	enum isxValType valType)
 /* Create reference to a real var */
@@ -358,6 +387,19 @@ AllocVar(iad);
 iad->adType = iadOperator;
 iad->valType = ivJump;
 iad->name = name;
+return iad;
+}
+
+static struct isxAddress *tempLabelAddress(struct pfCompile *pfc)
+/* Create reference to a label. */
+{
+struct isxAddress *iad;
+char buf[18];
+safef(buf, sizeof(buf), "L%d", ++pfc->isxLabelMaker);
+AllocVar(iad);
+iad->adType = iadLabel;
+iad->valType = ivJump;
+iad->name = cloneString(buf);
 return iad;
 }
 
@@ -478,12 +520,120 @@ switch (pp->type)
     }
 }
 
-void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
+static void cmpAndJump(struct pfCompile *pfc, struct pfParse *cond, 
+	struct hash *varHash, struct isxAddress *trueLabel, 
+	struct isxAddress *falseLabel,enum isxOpType op,  
+	struct dlList *iList)
+/* Generate code that jumps to the true label if cond is true, and
+ * to the false label otherwise. */
+{
+struct pfParse *left = cond->children;
+struct pfParse *right = left->next;
+struct isxAddress *leftAddr = isxExpression(pfc, left, varHash, iList);
+struct isxAddress *rightAddr = isxExpression(pfc, right, varHash, iList);
+isxNew(pfc, op, trueLabel, leftAddr, rightAddr, iList);
+if (falseLabel)
+    isxNew(pfc, poJump, falseLabel, NULL, NULL, iList);
+}
+
+static enum pfParseType invLogOp(enum pfParseType op)
+/* Convert != to ==, > to <=, etc. */
+{
+switch (op)
+     {
+     case pptGreater: 		return pptLessOrEquals;
+     case pptGreaterOrEquals: 	return pptLess;
+     case pptLess: 		return pptGreaterOrEquals;
+     case pptLessOrEquals:	return pptGreater;
+     case pptSame:		return pptNotSame;
+     case pptNotSame:		return pptSame;
+     case pptLogAnd:		return pptLogOr;
+     case pptLogOr:		return pptLogAnd;
+     default:
+          {
+	  internalErr();
+	  return op;
+	  }
+     }
+}
+
+
+static void isxConditionalJump(struct pfCompile *pfc, struct pfParse *cond, 
+	struct hash *varHash, struct isxAddress *trueLabel, 
+	struct isxAddress *falseLabel, boolean invert, struct dlList *iList)
+/* Generate code that jumps to the true label if cond is true, and
+ * to the false label otherwise. */
+{
+enum pfParseType ppt = cond->type;
+if (invert)
+    ppt = invLogOp(ppt);
+switch (ppt)
+    {
+    case pptLess:
+	cmpAndJump(pfc, cond, varHash, trueLabel, falseLabel, poBlt, 
+		iList);
+        break;
+    case pptLessOrEquals:
+	cmpAndJump(pfc, cond, varHash, trueLabel, falseLabel, poBle, 
+		iList);
+        break;
+    case pptGreaterOrEquals:
+	cmpAndJump(pfc, cond, varHash, trueLabel, falseLabel, poBge, 
+		iList);
+        break;
+    case pptGreater:
+	cmpAndJump(pfc, cond, varHash, trueLabel, falseLabel, poBgt, 
+		iList);
+        break;
+    case pptSame:
+	cmpAndJump(pfc, cond, varHash, trueLabel, falseLabel, poBeq, 
+		iList);
+        break;
+    case pptNotSame:
+	cmpAndJump(pfc, cond, varHash, trueLabel, falseLabel, poBne, 
+		iList);
+        break;
+    case pptLogOr:
+        {
+	struct pfParse *left = cond->children;
+	struct pfParse *right = left->next;
+	isxConditionalJump(pfc, left, varHash, trueLabel, NULL, invert,
+		iList);
+	isxConditionalJump(pfc, right, varHash, trueLabel, falseLabel, invert,
+		iList);
+	break;
+	}
+    case pptLogAnd:
+        {
+	struct pfParse *left = cond->children;
+	struct pfParse *right = left->next;
+	isxConditionalJump(pfc, left, varHash, falseLabel, NULL, !invert,
+		iList);
+	isxConditionalJump(pfc, right, varHash, trueLabel, falseLabel, invert,
+		iList);
+	break;
+	}
+    default:
+	pfParseDump(cond, 3, uglyOut);
+        internalErr();
+	break;
+    }
+}
+
+
+static void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
 	struct hash *varHash, struct dlList *iList)
 /* Generate intermediate code for statement. */
 {
 switch (pp->type)
     {
+    case pptCompound:
+    case pptTuple:
+        {
+	for (pp = pp->children; pp != NULL; pp = pp->next)
+	    isxStatement(pfc, pp, varHash, iList);
+	break;
+	}
     case pptVarInit:
 	{
 	struct pfParse *init = pp->children->next->next;
@@ -505,6 +655,45 @@ switch (pp->type)
 	struct isxAddress *dest = varAddress(use->var, varHash, 
 		ppToIsxValType(pfc, use));
 	isxNew(pfc, poAssign, dest, source, NULL, iList);
+	break;
+	}
+    case pptIf:
+        {
+	struct pfParse *test = pp->children;
+	struct pfParse *truePp = test->next;
+	struct pfParse *falsePp = truePp->next;
+	struct isxAddress *trueLabel = tempLabelAddress(pfc);
+	struct isxAddress *falseLabel = tempLabelAddress(pfc);
+	struct isxAddress *endLabel = tempLabelAddress(pfc);
+	isxConditionalJump(pfc, test, varHash, trueLabel, falseLabel, FALSE,
+		iList);
+	isxNew(pfc, poCondStart, NULL, NULL, NULL, iList);
+	isxNew(pfc, poCondCase, trueLabel, NULL, NULL, iList);
+	isxStatement(pfc, truePp, varHash, iList);
+	isxNew(pfc, poJump, endLabel, NULL, NULL, iList);
+	isxNew(pfc, poCondCase, falseLabel, NULL, NULL, iList);
+	if (falsePp)
+	    isxStatement(pfc, falsePp, varHash, iList);
+	isxNew(pfc, poCondEnd, endLabel, NULL, NULL, iList);
+	break;
+	}
+    case pptFor:
+        {
+	struct pfParse *init = pp->children;
+	struct pfParse *test = init->next;
+	struct pfParse *end = test->next;
+	struct pfParse *body = end->next;
+	struct isxAddress *startLabel = tempLabelAddress(pfc);
+	struct isxAddress *condLabel = tempLabelAddress(pfc);
+	struct isxAddress *endLabel = tempLabelAddress(pfc);
+	isxStatement(pfc, init, varHash, iList);
+	isxNew(pfc, poJump, condLabel, NULL, NULL, iList);
+	isxNew(pfc, poLoopStart, startLabel, NULL, NULL, iList);
+	isxStatement(pfc, body, varHash, iList);
+	isxNew(pfc, poLabel, condLabel, NULL, NULL, iList);
+	isxConditionalJump(pfc, test, varHash, startLabel, endLabel, 
+		FALSE, iList);
+	isxNew(pfc, poLoopEnd, endLabel, NULL, NULL, iList);
 	break;
 	}
     default:

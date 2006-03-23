@@ -41,8 +41,21 @@ enum isxOpType
     poInput,	 /* An input parameter: dest = left */
     poCall,	 /* Call subroutine:    call left   */
     poOutput,	 /* An output parameter dest = left */
-    poGoTo,	/* Unconditional jump */
-    poBranch,	/* Conditional jump */
+    poLabel,	 /* Some misc label. */
+    poLoopStart, /* Start of some sort of loop. Also a label. */
+    poLoopEnd,	 /* End of some sort of loop. Also a label. */
+    poCondStart, /* Start of if/else or case */
+    poCondCase,  /* Start of a particular case. Also a label.  */
+    poCondEnd,	 /* End of if/else or case. Also a label. */
+    poJump,	/* Unconditional jump */
+    poBeq,	/* Branch if two things are the same. */
+    poBne,	/* Branch if two things are different. */
+    poBlt,	/* Branch if a < b. */
+    poBle,	/* Branch if a <= b. */
+    poBgt,	/* Branch if a > b. */
+    poBge,	/* Branch if a >= b. */
+    poBz,	/* Branch if a == 0 */
+    poBnz,	/* Branch if a != 0 */
     };
 
 char *isxOpTypeToString(enum isxOpType val);
@@ -76,6 +89,7 @@ enum isxAddressType
     iadInStack,
     iadOutStack,
     iadOperator,
+    iadLabel,
     };
 
 union isxAddressVal
@@ -100,7 +114,6 @@ struct isxAddress
 struct isx
 /* An instruction in our intermediate language. */
     {
-    int label;			/* Numerical label */
     enum isxOpType opType;	/* Opcode - add, mul, branch, etc. */
     struct isxAddress *dest;	/* Destination address */
     struct isxAddress *left;	/* Left (or only) source address. */

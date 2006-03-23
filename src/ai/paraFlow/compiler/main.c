@@ -19,6 +19,7 @@
 #include "cCoder.h"
 #include "isx.h"
 #include "isxToPentium.h"
+#include "optBranch.h"
 #include "pfPreamble.h"
 #include "defFile.h"
 #include "parseInto.h"
@@ -432,19 +433,24 @@ if (optionExists("asm"))
 
     if (endPhase < 7)
 	return;
+    verbose(2, "Phase 7 - Intermediate code generation\n");
     safef(isxFileName, sizeof(isxFileName), "%s%s.isx", baseDir, baseName);
     f = mustOpen(isxFileName, "w");
-    verbose(2, "Phase 7 - Intermediate code generation\n");
     isxList = isxFromParse(pfc, program);
+    isxDumpList(isxList, f);
+    carefulClose(&f);
 
+    verbose(2, "Phase 7a - optimizing branches\n");
+    safef(isxFileName, sizeof(isxFileName), "%s%s.branch", baseDir, baseName);
+    f = mustOpen(isxFileName, "w");
+    optBranch(isxList);
+    isxDumpList(isxList, f);
+    carefulClose(&f);
 
     if (endPhase < 8)
 	return;
     verbose(2, "Phase 8 - Pentium code generation\n");
-    chopSuffix(isxFileName);
     safef(sFileName, sizeof(sFileName), "%s%s.s", baseDir, baseName);
-    isxDumpList(isxList, f);
-    carefulClose(&f);
     f = mustOpen(sFileName, "w");
     pentFromIsx(isxList, f);
     carefulClose(&f);

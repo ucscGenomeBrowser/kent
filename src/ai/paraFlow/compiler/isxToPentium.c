@@ -43,7 +43,7 @@ enum pentDataOp
 /* Some of the pentium op codes that apply to many types */
     {
     opMov, opAdd, opSub, opMul, opDiv, opAnd, opOr, opXor, opSal, 
-    opSar, opNeg, opNot,
+    opSar, opNeg, opNot, opCmp,
     };
 
 struct dataOpTable
@@ -73,6 +73,7 @@ static struct dataOpTable dataOpTable[] =
     {opSar, "sarb", "sarw", "sarl", NULL, NULL, NULL, NULL},
     {opNeg, "negb", "negw", "negl", NULL, NULL, NULL, NULL},
     {opNot, "notb", "notw", "notl", NULL, NULL, NULL, NULL},
+    {opCmp, "cmpb", "cmpw", "cmpl", NULL, NULL, NULL, NULL},
     };
 
 static char *opOfType(enum pentDataOp opType, enum isxValType valType)
@@ -293,12 +294,11 @@ if (iad != NULL)
 reg->contents = NULL;
 }
 
-static struct isxReg *freeReg(struct isx *isx, struct dlNode *nextNode,  
-	struct pentCoder *coder)
+static struct isxReg *freeReg(struct isx *isx, enum isxValType valType,
+	struct dlNode *nextNode,  struct pentCoder *coder)
 /* Find free register for instruction result. */
 {
 int i;
-enum isxValType valType = isx->dest->valType;
 struct isxReg *regs = regInfo;
 int regCount = ArraySize(regInfo);
 struct isxReg *freeReg = NULL;
@@ -445,7 +445,7 @@ struct isxAddress *dest = isx->dest;
 struct isxReg *reg;
 if (source->adType == iadZero)
     {
-    reg = freeReg(isx, nextNode, coder);
+    reg = freeReg(isx, isx->dest->valType, nextNode, coder);
     clearReg(reg, coder);
     }
 else
@@ -453,7 +453,7 @@ else
     reg = source->reg;
     if (reg == NULL)
 	{
-	reg = freeReg(isx, nextNode, coder);
+	reg = freeReg(isx, isx->dest->valType, nextNode, coder);
 	printOpDestReg(opMov, source, reg, coder);
 	}
     }
@@ -469,7 +469,7 @@ static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode,
 	enum pentDataOp opCode, boolean isSub,  struct pentCoder *coder)
 /* Code most binary ops.  Division is harder. */
 {
-struct isxReg *reg = freeReg(isx, nextNode, coder);
+struct isxReg *reg = freeReg(isx, isx->dest->valType, nextNode, coder);
 struct slRef *ref;
 struct isxAddress *dest;
 struct isxAddress *iad = NULL;
@@ -594,11 +594,11 @@ static void pentInput(struct isx *isx, struct dlNode *nextNode,
 /* Output code to load an input parameter before a call. */
 {
 struct isxAddress *source = isx->left;
-if (source->reg)
+if (source->reg || source->adType == iadConst)
     printOp(opMov, source, isx->dest, coder);
 else
     {
-    struct isxReg *reg = freeReg(isx, nextNode, coder);
+    struct isxReg *reg = freeReg(isx, isx->dest->valType, nextNode, coder);
     printOpDestReg(opMov, source, reg, coder);
     reg->contents = source;
     source->reg = reg;
@@ -650,6 +650,30 @@ pentSwapOutIfNeeded(&regInfo[cx],isx->liveList, coder);
 pentSwapOutIfNeeded(&regInfo[dx],isx->liveList, coder);
 safef(coder->destBuf, pentCodeBufSize, "%s%s", isxPrefixC, funcVar->cName);
 pentCoderAdd(coder, "call", NULL, coder->destBuf);
+}
+
+static void pentJump(struct isx *isx, struct dlNode *nextNode,
+	struct pentCoder *coder)
+/* Do unconditional jump. */
+{
+pentCoderAdd(coder, "jmp", isx->dest->name, NULL);
+}
+
+static void pentCmpJump(struct isx *isx, struct dlNode *nextNode,
+	char *jmpOp, struct pentCoder *coder)
+/* Output conditional jump code for == != < <= => > . */
+{
+if (isx->left->reg || isx->right->reg)
+    printOp(opCmp, isx->left, isx->right, coder);
+else
+    {
+    struct isxReg *reg = freeReg(isx, isx->left->valType, nextNode, coder);
+    printOpDestReg(opMov, isx->left, reg, coder);
+    isx->left->reg = reg;
+    reg->contents = isx->left;
+    printOpDestReg(opCmp, isx->right, reg, coder);
+    }
+pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
 }
 
 static void calcInputOffsets(struct dlList *iList)
@@ -749,6 +773,36 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    break;
 	case poCall:
 	    pentCall(isx, coder);
+	    break;
+	case poLabel:
+	case poLoopStart:
+	case poLoopEnd:
+	case poCondCase:
+	case poCondEnd:
+	    pentCoderAdd(coder, NULL, NULL, isx->dest->name);
+	    break;
+	case poCondStart:
+	    break;
+	case poBlt:
+	    pentCmpJump(isx, nextNode, "jl", coder);
+	    break;
+	case poBle:
+	    pentCmpJump(isx, nextNode, "jle", coder);
+	    break;
+	case poBge:
+	    pentCmpJump(isx, nextNode, "jge", coder);
+	    break;
+	case poBgt:
+	    pentCmpJump(isx, nextNode, "jg", coder);
+	    break;
+	case poBeq:
+	    pentCmpJump(isx, nextNode, "je", coder);
+	    break;
+	case poBne:
+	    pentCmpJump(isx, nextNode, "jne", coder);
+	    break;
+	case poJump:
+	    pentJump(isx, nextNode, coder);
 	    break;
 	default:
 	    warn("unimplemented\t%s\n", isxOpTypeToString(isx->opType));

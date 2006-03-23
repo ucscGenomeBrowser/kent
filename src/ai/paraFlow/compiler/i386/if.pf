@@ -1,0 +1,17 @@
+int i = 3, j=2;
+if (i == 3 || (i == 2 && i == 1))
+    {
+    if (j == 1)
+	{
+	_printInt(1);
+	_printInt(2);
+	}
+    }
+else
+    {
+    if (j == 1)
+	{
+	_printInt(0);
+	_printInt(i);
+	}
+    }
