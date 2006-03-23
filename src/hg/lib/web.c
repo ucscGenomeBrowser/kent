@@ -9,7 +9,7 @@
 #include "axtInfo.h"
 #include "hgColors.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.85 2005/11/25 16:35:31 kent Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.86 2006/03/23 00:51:58 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -229,16 +229,19 @@ else
 	{
 	struct trackDb *tdb = hTrackDbForTrack(table);
 	if (tdb != NULL)
-	    printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_group=%s"
-		   "&hgta_track=%s&hgta_table=%s\" class=\"topbar\">\n",
+	    printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1&"
+		   "hgta_group=%s&hgta_track=%s&hgta_table=%s\" "
+		   "class=\"topbar\">\n",
 		   uiState, tdb->grp, table, table);
 	else
-	    printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n",
+	    printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1\" "
+		   "class=\"topbar\">\n",
 		   uiState);
 	trackDbFree(&tdb);
 	}
     else
-	printf("       <A HREF=\"/cgi-bin/hgTables%s\" class=\"topbar\">\n",
+	printf("       <A HREF=\"/cgi-bin/hgTables%s&hgta_doMainPage=1\" "
+	       "class=\"topbar\">\n",
 	       uiState);
     }
     puts("           Tables</A> &nbsp;&nbsp;&nbsp;");
