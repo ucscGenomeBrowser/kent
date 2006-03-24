@@ -703,9 +703,10 @@ switch (pp->type)
 	isxNew(pfc, poJump, condLabel, NULL, NULL, iList);
 	isxNew(pfc, poLoopStart, startLabel, NULL, NULL, iList);
 	isxStatement(pfc, body, varHash, iList);
+	isxStatement(pfc, end, varHash, iList);
 	isxNew(pfc, poLabel, condLabel, NULL, NULL, iList);
-	isxConditionalJump(pfc, test, varHash, startLabel, endLabel, 
-		FALSE, iList);
+	isxConditionalJump(pfc, test, varHash, startLabel, NULL, 
+		TRUE, iList);
 	isxNew(pfc, poLoopEnd, endLabel, NULL, NULL, iList);
 	break;
 	}
@@ -717,6 +718,7 @@ switch (pp->type)
     }
 }
 
+#ifdef OLD
 static void isxLiveList(struct dlList *iList)
 /* Create list of live variables at each instruction by scanning
  * backwards. */
@@ -751,6 +753,144 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
     /* Flip to new live list */
     liveList = newList;
     }
+slFreeList(&liveList);
+}
+#endif /* OLD */
+
+#ifdef EXAMPLE
+z = 12;              {z}
+y = z + 2;           {z,y}
+x = y + z;           {z,x}
+i = 0;               {i,z,x}
+goto cond;           {i,z,x}
+startLoop:           {i,z,x}  [i,z,x]
+a = call x;          {i,z,a,x}[i,z,x,a]
+b = call a,x;        {i,z,b}  [i,z,x,b]
+    call b;          {i,z}    [i,z,x]
+cond:
+i = i + 1;           {i,z}    [i,z,x]
+startLoop if (i<z);  {z}      [i,z,x]
+endLoop:             {}       [i,z,x]
+z = z + 3;           {}       []
+
+x = 9                {x}
+z = 12               {x,z}
+y =  2               {x,y,z}
+b = 0                {x,y,z}
+falseCase if (z < y) {x,y,z}
+startCond:     {x,y,z}
+case trueCase: {x,z}
+a = z          {x,z}
+goto endCond;  {x}
+case falseCase:{x,y}
+a = y          {x,y}
+b = a+6        {x,a}
+endCond:       {x}
+call x         {}
+
+#endif /* EXAMPLE */
+
+struct liveStack
+    {
+    struct liveStack *next;	/* Next in stack. */
+    struct slRef *liveList;	/* Live list at this node. */
+    struct dlNode *node;	/* Node where we pushed liveList */
+    int loopCount;		/* How many times we've gone through loop. */
+    struct slRef *condLiveList;	/* Live list at start of condition. */
+    };
+
+static void pushLiveList(struct liveStack **pStack, struct slRef *liveList,
+	struct dlNode *node)
+/* Alloc and push live stack entry */
+{
+struct liveStack *ls;
+AllocVar(ls);
+ls->liveList = liveList;
+ls->node = node;
+slAddHead(pStack, ls);
+}
+
+static void popLiveList(struct liveStack **pStack)
+/* Pop and free live stack entry */
+{
+struct liveStack *ls = *pStack;
+assert(ls != NULL);
+*pStack = ls->next;
+freeMem(ls);
+}
+
+static void foldInCaseLive(struct liveStack *ls, struct slRef *liveList)
+/* Fold the liveList into the condLiveList. */
+{
+struct slRef *ref;
+uglyf("foldInCaseLive, %d\n", slCount(liveList));
+for (ref = liveList; ref != NULL; ref = ref->next)
+    refAddUnique(&ls->condLiveList, ref->val);
+}
+
+static void isxLiveList(struct dlList *iList)
+/* Create list of live variables at each instruction by scanning
+ * backwards. */
+{
+struct dlNode *node;
+struct slRef *liveList = NULL;
+struct liveStack *liveStack = NULL, *ls;
+for (node = iList->tail; !dlStart(node); node = node->prev)
+    {
+    struct slRef *newList = NULL, *ref;
+    struct isx *isx = node->val;
+    struct isxAddress *iad;
+
+    /* Save away current live list. */
+    isx->liveList = liveList;
+    switch (isx->opType)
+        {
+	case poLoopEnd:
+	    pushLiveList(&liveStack, liveList, node);
+	    break;
+	case poCondEnd:
+	    pushLiveList(&liveStack, liveList, node);
+	    break;
+	case poCondCase:
+	    foldInCaseLive(liveStack, liveList);
+	    liveList = liveStack->liveList;
+	    break;
+	case poCondStart:
+	    liveList = liveStack->condLiveList;
+	    liveStack->condLiveList = NULL;
+	    popLiveList(&liveStack);
+	    break;
+	case poLoopStart:
+	    if (liveStack->loopCount > 0)
+	        popLiveList(&liveStack);
+	    else
+	        {
+		liveStack->loopCount = 1;
+		node = liveStack->node;
+		}
+	    break;
+	}
+
+    /* Make copy of live list minus any overwritten dests. */
+    for (ref = liveList; ref != NULL; ref = ref->next)
+	{
+	struct isxAddress *iad = ref->val;
+	if (iad != isx->dest)
+	    refAdd(&newList, iad);
+	}
+
+    /* Add sources to live list */
+    iad = isx->left;
+    if (iad != NULL && (iad->adType == iadRealVar || iad->adType == iadTempVar))
+	refAddUnique(&newList, iad);
+    iad = isx->right;
+    if (iad != NULL && (iad->adType == iadRealVar || iad->adType == iadTempVar))
+	refAddUnique(&newList, iad);
+
+    /* Flip to new live list */
+    liveList = newList;
+    }
+assert(liveStack == NULL);
 slFreeList(&liveList);
 }
 

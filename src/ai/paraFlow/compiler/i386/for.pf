@@ -1,5 +1,5 @@
 int i;
 int j=2;
-for (i=0; i<10; ++i)
+for (i=0; i<10; i = i+1)
     _printInt(i+j);
 _printInt(999);
