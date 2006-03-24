@@ -7031,6 +7031,84 @@ cat > copy.csh << 'EOF'
    hgMapToGene hg18 allenBrainAli -type=psl knownGene knownToAllenBrain 
 
 ##########################################################################
+####  Blat knownGene proteins to determine exons
+#	(WORKING - 2006-03-15 - hiramc)
+    ssh hgwdev
+    cd /cluster/data/hg18/bed
+    mkdir blat.hg18KG.2006-03-15
+    rm blat.hg18KG
+    ln -s  blat.hg18KG.2006-03-15 blat.hg18KG
+    cd blat.hg18KG
+    pepPredToFa hg18 knownGenePep known.fa
+    hgPepPred hg18 generic blastKGPep00 known.fa
+    grep ">" known.fa | sed "s/>//" > kgName.lst
+    kgName hg18 kgName.lst blastKGRef00
+    hgsql hg18 < ~/kent/src/lib/hg/blastRef.sql
+    echo "rename table blastRef to blastKGRef00" | hgsql hg18
+    echo "load data local infile 'blastKGRef00' into table blastKGRef00" | hgsql hg18
+
+    #	The kluster run
+    ssh pk
+    cd /cluster/data/hg18/bed/blat.hg18KG
+    cat << '_EOF_' > blatSome
+#!/bin/csh -fe
+blat -t=dnax -q=prot -out=pslx /scratch/hg/gs.19/build36/bothMaskedNibs/$1.nib \
+	kgfa/$2.fa $3
+'_EOF_'
+    # << keep emacs happy
+    chmod +x blatSome
+    ls -1S /scratch/hg/gs.19/build36/bothMaskedNibs > human.lst
+    mkdir kgfa
+    cd kgfa
+    #	This split should be done on the file server, not over NFS
+    faSplit sequence ../known.fa 3000 kg
+    ls -1S *.fa > ../kg.lst
+    cd ..
+    cat << '_EOF_' > template
+#LOOP
+blatSome $(root1) $(root2) {check out line psl/$(root1)/$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs happy
+    gensub2 human.lst kg.lst template jobList
+    mkdir psl
+    cd psl
+    sed -e "s/.nib//" ../human.lst | xargs mkdir
+    cd ..
+    para create jobList
+    para try ... check ... push ... etc
+# Completed: 142100 of 142100 jobs
+# CPU time in finished jobs:    7520598s  125343.30m  2089.06h   87.04d  0.238 y
+# IO & Wait Time:                415523s    6925.38m   115.42h    4.81d  0.013 y
+# Average job time:                  56s       0.93m     0.02h    0.00d
+# Longest finished job:            5737s      95.62m     1.59h    0.07d
+# Submission to last job:         72538s    1208.97m    20.15h    0.84d
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/blat.hg18KG.2006-03-15
+    pslSort dirs raw.psl /tmp psl/*
+    pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
+    pslUniq cooked.psl hg18KG.psl
+    pslxToFa hg18KG.psl hg18KG_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+
+    kgName hg18 kgName.lst blastKGRef00
+    hgsql hg18 < ~/kent/src/lib/hg/blastRef.sql
+    echo "rename table blastRef to blastKGRef00" | hgsql hg18
+    echo "load data local infile 'blastKGRef00' into table blastKGRef00" | hgsql hg18
+
+    pslxToFa hg18KG.psl hg18KG_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
+    kgName hg18 hg18KG.psl blastKGRef01
+    cut -f 10 hg18KG.psl > kgName.lst
+    faSomeRecords known.fa kgName.lst hg18KG.fa
+    hgPepPred hg18 generic blastKGPep01 hg18KG.fa
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blat.hg18KG
+    hgsql hg18 < ~/kent/src/hg/lib/blastRef.sql
+    echo "rename table blastRef to blastKGRef01" | hgsql hg18
+    echo "load data local infile 'blastKGRef01' into table blastKGRef01" | hgsql hg18
+
+##########################################################################
 # BUILD NIBB IMAGE PROGES (DONE 2006-03-14 galt following Jim's hg17 example)
 
 # Make directory on san for cluster job and copy in sequence
@@ -7087,12 +7165,13 @@ blatz -rna -minScore=6000 -out=psl $(path1) $(path2) psl/$(root1)_$(root2).psl
     hgLoadSeq hg18 /gbdb/hg18/nibbImageProbes.fa
     hgLoadPsl hg18 nibbImageProbes.psl
 
-
+##########################################################################
 # UPDATED hg18.knownToVisiGene (2006-03-15 galt)
 #  after making sure hg18.vgAllProbes was up to date (see makeVisiGene.doc)
 ssh hgwdev
 knownToVisiGene hg18 -fromProbePsl=vgAllProbes
 
+##########################################################################
 # GENERATE SUMMARY STATISTICS (DONE, Fan 3/18/06)
 
    ssh hgwdev
@@ -7307,5 +7386,3 @@ mkdir -p ${blatDir}/{over,net}
     cp /gbdb/hg18/liftOver/hg18ToHg17.over.chain .
     gzip hg18ToHg17.over.chain
     hgAddLiftOverChain hg18 hg17 /gbdb/hg18/liftOver/hg18ToHg17.over.chain
-
-
