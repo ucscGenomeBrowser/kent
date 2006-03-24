@@ -237,15 +237,19 @@ if (isx->right != NULL)
     }
 if (isx->liveList != NULL)
     {
-    struct slRef *ref;
+    struct isxLiveVar *live;
     fprintf(f, "\t{");
-    for (ref = isx->liveList; ref != NULL; ref = ref->next)
+    for (live = isx->liveList; live != NULL; live = live->next)
         {
-	struct isxAddress *iad = ref->val;
+	struct isxAddress *iad = live->var;
 	fprintf(f, "%s", iad->name);
+	fprintf(f, ":%d", live->useCount);
+	fprintf(f, "@%d", live->usePos[0]);
+	if (live->useCount > 1)
+	    fprintf(f, "@%d", live->usePos[1]);
 	if (iad->reg != NULL)
-	    fprintf(f, "@%s", isxRegName(iad->reg, iad->valType));
-	if (ref->next != NULL)
+	    fprintf(f, "~%s", isxRegName(iad->reg, iad->valType));
+	if (live->next != NULL)
 	    fprintf(f, ",");
 	}
     fprintf(f, "}");
@@ -793,13 +797,56 @@ call x         {}
 struct liveStack
     {
     struct liveStack *next;	/* Next in stack. */
-    struct slRef *liveList;	/* Live list at this node. */
+    struct isxLiveVar *liveList;	/* Live list at this node. */
     struct dlNode *node;	/* Node where we pushed liveList */
     int loopCount;		/* How many times we've gone through loop. */
-    struct slRef *condLiveList;	/* Live list at start of condition. */
+    struct isxLiveVar *condLiveList;	/* Live list at start of condition. */
     };
 
-static void pushLiveList(struct liveStack **pStack, struct slRef *liveList,
+struct isxLiveVar *isxLiveVarNew(struct isxAddress *iad, int pos)
+/* Creat new live list entry */
+{
+struct isxLiveVar *live;
+AllocVar(live);
+live->var = iad;
+live->useCount = 1;
+live->usePos[0] = pos;
+return live;
+}
+
+struct isxLiveVar *isxLiveVarFind(struct isxLiveVar *liveList, 
+	struct isxAddress *iad)
+/* Return liveVar associated with address, or NULL if none. */
+{
+struct isxLiveVar *live;
+for (live = liveList; live != NULL; live = live->next)
+    {
+    if (live->var == iad)
+        return live;
+    }
+return NULL;
+}
+
+struct isxLiveVar *isxLiveVarAdd(struct isxLiveVar *liveList,
+	struct isxAddress *iad, int pos)
+/* Add live var to list and return new list. */
+{
+struct isxLiveVar *live = isxLiveVarFind(liveList, iad);
+if (live == NULL)
+    {
+    live = isxLiveVarNew(iad, pos);
+    slAddHead(&liveList, live);
+    }
+else
+    {
+    live->useCount += 1;
+    live->usePos[1] = live->usePos[0];
+    live->usePos[0] = pos;
+    }
+return liveList;
+}
+
+static void pushLiveList(struct liveStack **pStack, struct isxLiveVar *liveList,
 	struct dlNode *node)
 /* Alloc and push live stack entry */
 {
@@ -819,13 +866,36 @@ assert(ls != NULL);
 freeMem(ls);
 }
 
-static void foldInCaseLive(struct liveStack *ls, struct slRef *liveList)
+static void foldInCaseLive(struct liveStack *ls, struct isxLiveVar *liveList)
 /* Fold the liveList into the condLiveList. */
 {
-struct slRef *ref;
+struct isxLiveVar *live, *next;
 uglyf("foldInCaseLive, %d\n", slCount(liveList));
-for (ref = liveList; ref != NULL; ref = ref->next)
-    refAddUnique(&ls->condLiveList, ref->val);
+for (live = liveList; live != NULL; live = live->next)
+    {
+    struct isxLiveVar *condLive = isxLiveVarFind(ls->condLiveList, live->var);
+    if (condLive == NULL)
+         {
+	 /* If var first appears in this case, just clone it. */
+	 condLive = CloneVar(live);
+	 slAddHead(&ls->condLiveList, condLive);
+	 }
+    else
+         {
+	 /* If var is in another case as well, then make useCount and
+	  * positions reflect the soonest and heaviest use in any particular
+	  * case. */
+	 if (live->useCount > 1)
+	     {
+	     if (condLive->useCount > 1)
+	         condLive->usePos[1] = min(condLive->usePos[1],live->usePos[1]);
+	     else
+	         condLive->usePos[1] = live->usePos[1];
+	     }
+	 condLive->usePos[0] = min(condLive->usePos[0], live->usePos[0]);
+	 condLive->useCount = max(condLive->useCount, live->useCount);
+	 }
+    }
 }
 
 static void isxLiveList(struct dlList *iList)
@@ -833,11 +903,11 @@ static void isxLiveList(struct dlList *iList)
  * backwards. */
 {
 struct dlNode *node;
-struct slRef *liveList = NULL;
+struct isxLiveVar *liveList = NULL;
 struct liveStack *liveStack = NULL, *ls;
 for (node = iList->tail; !dlStart(node); node = node->prev)
     {
-    struct slRef *newList = NULL, *ref;
+    struct isxLiveVar *newList = NULL, *live;
     struct isx *isx = node->val;
     struct isxAddress *iad;
 
@@ -872,26 +942,32 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 	}
 
     /* Make copy of live list minus any overwritten dests. */
-    for (ref = liveList; ref != NULL; ref = ref->next)
+    for (live = liveList; live != NULL; live = live->next)
 	{
-	struct isxAddress *iad = ref->val;
+	struct isxAddress *iad = live->var;
 	if (iad != isx->dest)
-	    refAdd(&newList, iad);
+	    {
+	    struct isxLiveVar *newLive = CloneVar(live);
+	    newLive->usePos[0] += 1;
+	    newLive->usePos[1] += 1;
+	    slAddHead(&newList, newLive);
+	    }
 	}
+    slReverse(&newList);
 
     /* Add sources to live list */
     iad = isx->left;
     if (iad != NULL && (iad->adType == iadRealVar || iad->adType == iadTempVar))
-	refAddUnique(&newList, iad);
+	newList = isxLiveVarAdd(newList, iad, 1);
     iad = isx->right;
     if (iad != NULL && (iad->adType == iadRealVar || iad->adType == iadTempVar))
-	refAddUnique(&newList, iad);
+	newList = isxLiveVarAdd(newList, iad, 1);
 
     /* Flip to new live list */
     liveList = newList;
     }
 assert(liveStack == NULL);
-slFreeList(&liveList);
+isxLiveVarFreeList(&liveList);
 }
 
 void isxModule(struct pfCompile *pfc, struct pfParse *pp, 

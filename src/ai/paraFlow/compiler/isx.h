@@ -111,6 +111,21 @@ struct isxAddress
     struct isxReg *reg;	/* Register if any */
     };
 
+struct isxLiveVar
+/* A variable that is alive (which is defined and may be referenced later on) */
+    {
+    struct isxLiveVar *next;
+    struct isxAddress *var;
+    int useCount;	/* Number of following uses */
+    int usePos[2];	/* The next two use relative positions */
+    };
+
+#define isxLiveVarFree(pLive) freeMem(pLive)
+/* Free up liveVar */
+
+#define isxLiveVarFreeList(pList) slFreeList(pList)
+/* Free up list of live vars. */
+
 struct isx
 /* An instruction in our intermediate language. */
     {
@@ -118,7 +133,7 @@ struct isx
     struct isxAddress *dest;	/* Destination address */
     struct isxAddress *left;	/* Left (or only) source address. */
     struct isxAddress *right;	/* Right (optional) source address.*/
-    struct slRef *liveList;	/* List of live vars after instruction  */
+    struct isxLiveVar *liveList;/* List of live vars after instruction  */
     };
 
 struct isxReg
