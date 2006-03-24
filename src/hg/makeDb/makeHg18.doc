@@ -7040,12 +7040,6 @@ cat > copy.csh << 'EOF'
     ln -s  blat.hg18KG.2006-03-15 blat.hg18KG
     cd blat.hg18KG
     pepPredToFa hg18 knownGenePep known.fa
-    hgPepPred hg18 generic blastKGPep00 known.fa
-    grep ">" known.fa | sed "s/>//" > kgName.lst
-    kgName hg18 kgName.lst blastKGRef00
-    hgsql hg18 < ~/kent/src/lib/hg/blastRef.sql
-    echo "rename table blastRef to blastKGRef00" | hgsql hg18
-    echo "load data local infile 'blastKGRef00' into table blastKGRef00" | hgsql hg18
 
     #	The kluster run
     ssh pk
