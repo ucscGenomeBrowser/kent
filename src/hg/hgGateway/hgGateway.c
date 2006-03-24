@@ -13,7 +13,7 @@
 #include "hCommon.h"
 #include "hui.h"
 
-static char const rcsid[] = "$Id: hgGateway.c,v 1.84 2005/12/16 10:14:16 kent Exp $";
+static char const rcsid[] = "$Id: hgGateway.c,v 1.85 2006/03/24 02:00:50 braney Exp $";
 
 boolean isPrivateHost;		/* True if we're on genome-test. */
 struct cart *cart = NULL;
@@ -222,11 +222,7 @@ else
 	else
 	    safef(buffer, sizeof(buffer), "(<I>%s</I>) ", scientificName);
 	}
-    if (sameString(clade,"ancestor"))
-	cartWebStart(theCart, "%s Common Ancestor %s%s Gateway\n", organism, 
-		buffer, browserName);
-    else
-	cartWebStart(theCart, "%s %s%s Gateway\n", organism, buffer, browserName);
+    cartWebStart(theCart, "%s %s%s Gateway\n", organism, buffer, browserName);
     htmlDoEscape();
     }
 hgGateway();
