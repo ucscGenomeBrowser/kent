@@ -7032,7 +7032,7 @@ cat > copy.csh << 'EOF'
 
 ##########################################################################
 ####  Blat knownGene proteins to determine exons
-#	(WORKING - 2006-03-15 - hiramc)
+#	(DONE - 2006-03-15 - 2006-03-24 - hiramc)
     ssh hgwdev
     cd /cluster/data/hg18/bed
     mkdir blat.hg18KG.2006-03-15
@@ -7087,27 +7087,55 @@ blatSome $(root1) $(root2) {check out line psl/$(root1)/$(root2).psl}
     ssh kkstore02
     cd /cluster/data/hg18/bed/blat.hg18KG.2006-03-15
     pslSort dirs raw.psl /tmp psl/*
+    #	-rw-rw-r--   1 568238823 Mar 20 13:30 raw.psl
     pslReps -nohead -minCover=0.9 -minAli=0.9 raw.psl cooked.psl /dev/null
+    #	-rw-rw-r--   1  43446007 Mar 24 11:13 cooked.psl
     pslUniq cooked.psl hg18KG.psl
-    pslxToFa hg18KG.psl hg18KG_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
-
-    kgName hg18 kgName.lst blastKGRef00
-    hgsql hg18 < ~/kent/src/lib/hg/blastRef.sql
-    echo "rename table blastRef to blastKGRef00" | hgsql hg18
-    echo "load data local infile 'blastKGRef00' into table blastKGRef00" | hgsql hg18
-
-    pslxToFa hg18KG.psl hg18KG_ex.fa -liftTarget=genome.lft -liftQuery=protein.lft
-    kgName hg18 hg18KG.psl blastKGRef01
+    #	-rw-rw-r--   1  41321225 Mar 24 11:14 hg18KG.psl
     cut -f 10 hg18KG.psl > kgName.lst
     faSomeRecords known.fa kgName.lst hg18KG.fa
-    hgPepPred hg18 generic blastKGPep01 hg18KG.fa
+    faSize hg18KG.fa
+    #	16419953 bases (12961273 N's 3458680 real 3458680 upper 0 lower)
+    #	in 36727 sequences in 1 files
+    faSize known.fa
+    #	16430067 bases (12969298 N's 3460769 real 3460769 upper 0 lower)
+    #	in 36798 sequences in 1 files
 
+    #	You may need to build this pslxToFa - it is not in the standard build
+    pslxToFa hg18KG.psl hg18KG_ex.fa -liftTarget=genome.lft \
+	-liftQuery=protein.lft
+    #	-rw-rw-r--   1  11294262 Mar 24 11:31 protein.lft
+    #	-rw-rw-r--   1  21428637 Mar 24 11:31 hg18KG_ex.fa
+    #	-rw-rw-r--   1  14324928 Mar 24 11:31 genome.lft
+    wc -l *.psl *.lft *.fa kgName.lst
+    #	  39908 cooked.psl
+    #	  36727 hg18KG.psl
+    #	1521400 raw.psl
+    #	 303516 genome.lft
+    #	 303516 protein.lft
+    #	 383037 hg18KG.fa
+    #	 607032 hg18KG_ex.fa
+    #	 383348 known.fa
+    #	  36727 kgName.lst
+    #	3615211 total
+
+    #	back on hgwdev
     ssh hgwdev
     cd /cluster/data/hg18/bed/blat.hg18KG
-    hgsql hg18 < ~/kent/src/hg/lib/blastRef.sql
-    echo "rename table blastRef to blastKGRef01" | hgsql hg18
-    echo "load data local infile 'blastKGRef01' into table blastKGRef01" | hgsql hg18
-
+    kgName hg18 hg18KG.psl blastKGRef04
+    #	After about an hour, it exited with this message:
+    #	sqlFreeConnection called on cache (hg18) that doesn't contain
+    #	the given connection
+    #	This may be a lurking error in this program, because the
+    #	resulting file seems to have the correct number of lines:
+     wc -l kgName.lst blastKGRef04 hg18KG.psl
+    #	 36727 kgName.lst
+    #	 36727 blastKGRef04
+    #	 36727 hg18KG.psl
+    #	110181 total
+    hgPepPred hg18 generic blastKGPep04 hg18KG.fa
+    #	end blat proteins
+    
 ##########################################################################
 # BUILD NIBB IMAGE PROGES (DONE 2006-03-14 galt following Jim's hg17 example)
 
