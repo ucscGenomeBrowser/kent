@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1080 2006/03/18 08:48:29 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1081 2006/03/24 02:19:50 braney Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10962,7 +10962,6 @@ boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
-char *clade = hClade(hGenome(database));
 char *clearButtonJavascript;
 
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
@@ -11048,10 +11047,7 @@ if (!hideControls)
     else
 	{
 
-	if (sameString(clade, "ancestor"))
-	    hPrintf("%s %s on %s Common Ancestor (%s)", 
-	    	organization, browserName, organism, freezeName);
-	else if (sameString(organism, "Archaea"))
+	if (sameString(organism, "Archaea"))
 	    hPrintf("%s %s on Archaeon %s Assembly", 
 	    	organization, browserName, freezeName);
 	else
