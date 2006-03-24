@@ -510,7 +510,9 @@ psl_idMatch_non: mkout
 rangeTests: range_psl_over_NM_015110gp range_psl_nonover_NM_015110gp \
 	    range_psl_over_NM_015110bed range_psl_nonover_NM_015110bed \
 	    range_NM_015110gp_over_psl range_NM_015110gp_nonover_psl \
-	    range_NM_015110bed_over_psl range_NM_015110bed_nonover_psl
+	    range_NM_015110bed_over_psl range_NM_015110bed_nonover_psl \
+	    range_nostrand_gp_gp range_strand_gp_gp \
+	    range_nostrand_gp_nonover_gp range_strand_gp_nonover_gp
 
 # range select psls overlaping NM_015110 with gp
 range_psl_over_NM_015110gp: mkout
@@ -553,6 +555,26 @@ range_NM_015110bed_over_psl: mkout
 range_NM_015110bed_nonover_psl: mkout
 	${OVERSEL} -inRange -nonOverlapping input/inNM_015110.psl input/NM_015110.bed output/$@.bed
 	${DIFF} expected/$@.bed output/$@.bed
+
+# -selectRange contained in intron on both strands (without -strand)
+range_nostrand_gp_gp: mkout
+	${OVERSEL} -selectRange input/rangeSel1.gp input/rangeIn1.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
+
+# -selectRange contained in intron on both strands (with -strand)
+range_strand_gp_gp: mkout
+	${OVERSEL} -selectRange -strand input/rangeSel1.gp input/rangeIn1.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
+
+# -selectRange contained in intron on both strands (without -strand), non-overlaping
+range_nostrand_gp_nonover_gp: mkout
+	${OVERSEL} -selectRange -nonOverlapping input/rangeSel1.gp input/rangeIn1.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
+
+# -selectRange contained in intron on both strands (with -strand), non-overlaping
+range_strand_gp_nonover_gp: mkout
+	${OVERSEL} -selectRange -strand -nonOverlapping input/rangeSel1.gp input/rangeIn1.gp output/$@.gp
+	${DIFF} expected/$@.gp output/$@.gp
 
 mkout:
 	@${MKDIR} output

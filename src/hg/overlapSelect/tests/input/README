@@ -21,6 +21,14 @@
     - no overlap with the refGene sequences (they overlap each other):
         BC040840 AK124136
 
+- inNM_015110.psl
+  - genes in NM_015110
+
+- rangeIn1.gp, rangeSel1.gp
+    - for -inRange, -selectRange tests, rangeSel1.gp contains a gene
+      that has the genes in rangeIn1 in introns.  rangeIn1.gp has 
+      the contain genes, and copies swapped to the other strand.
+
 - mrna-self1.psl
     - two that don't overlap
 - mrna-self2.psl
