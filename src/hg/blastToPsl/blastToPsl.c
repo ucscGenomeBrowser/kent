@@ -6,7 +6,7 @@
 #include "blastParse.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: blastToPsl.c,v 1.15 2005/08/19 07:05:28 markd Exp $";
+static char const rcsid[] = "$Id: blastToPsl.c,v 1.16 2006/03/24 15:40:47 angie Exp $";
 
 double eVal = -1; /* default Expect value signifying no filtering */
 boolean pslxFmt = FALSE; /* output in pslx format */
@@ -118,8 +118,6 @@ void growPsl(struct psl* psl, int* pslMax)
 /* grow psl block space */
 {
 int newMax = 2 * *pslMax;
-int oldSize = (psl->blockCount * sizeof(unsigned));
-int newSize = (newMax * sizeof(unsigned));
 ExpandArray(psl->blockSizes, psl->blockCount, newMax);
 ExpandArray(psl->qStarts, psl->blockCount, newMax);
 ExpandArray(psl->tStarts, psl->blockCount, newMax);
