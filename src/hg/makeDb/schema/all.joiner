@@ -2289,6 +2289,7 @@ tablesIgnored $hg
     encodeUncFairePeaks
     encodeUvaDnaRep%
     pseudoYale
+    wgRna
 
 tablesIgnored $mm
     chr%_gold
