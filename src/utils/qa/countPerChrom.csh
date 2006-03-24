@@ -19,6 +19,7 @@ set db=""
 set oldDb=""
 set table=""
 set tableName=""
+set machine1="hgwdev"
 set machine2=""
 set host2=""
 set chrom="chrom"
@@ -56,6 +57,7 @@ endif
 
 if ($#argv == 4) then
   set oldDb=$argv[3]
+  set machine1=$argv[4]
   set machine2=$argv[4]
   set machineOut="(${argv[4]})"
   set host2="-h $argv[4]"
@@ -67,7 +69,11 @@ endif
 # echo "table = $table"
 
 set chroms=`hgsql -N -e "SELECT chrom FROM chromInfo" $db`
-set split=`getSplit.csh $db $table`
+set split=`getSplit.csh $db $table $machine1`
+if ($status) then
+  echo "\n  maybe the database is not present on $machine1?\n"
+  exit
+endif
 
 if ($split != "unsplit") then
   set tableName=${split}_$table
