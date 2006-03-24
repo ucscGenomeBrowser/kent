@@ -961,7 +961,17 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=10000 -chainLinearGap=medium \
 	`pwd`/DEF > blastz.out 2>&1 &
-XXXX - running 2006-03-02
+    #	This was a difficult run, needed to do the last job on Kolossus:
+# Completed: 133955 of 133956 jobs
+# CPU time in finished jobs:   78602533s 1310042.22m 21834.04h  909.75d  2.492 y
+# IO & Wait Time:              47419875s  790331.25m 13172.19h  548.84d  1.504 y
+# Average job time:                 941s      15.68m     0.26h    0.01d
+# Longest finished job:          111202s    1853.37m    30.89h    1.29d
+# Submission to last job:        521430s    8690.50m   144.84h    6.04d
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=10000 -chainLinearGap=medium \
+	-continue=cat `pwd`/DEF > cat.out 2>&1 &
 
 ############################################################################
 ##  BLASTZ swap from mm8 alignments (DONE - 2006-02-23 - Hiram)
@@ -973,3 +983,275 @@ XXXX - running 2006-03-02
 
     time nice -n +19 featureBits monDom4 chainMm8Link
     #   210933035 bases of 3501643220 (6.024%) in intersection
+
+############################################################################
+##  BLASTZ CHICKEN galGal2 (DONE - 2006-03-06 - 2006-03-08 - Hiram)
+
+    ssh pk
+    mkdir /cluster/data/monDom4/bed/blastzGalGal2.2006-03-06
+    cd /cluster/data/monDom4/bed
+    ln -s blastzGalGal2.2006-03-06 blastz.galGal2
+    cd blastzGalGal2.2006-03-06
+
+    cat << '_EOF_' > DEF
+# Opossum vs Chicken
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Opossum monDom4
+SEQ1_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+SEQ1_LEN=/san/sanvol1/scratch/monDom4/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken galGal2 - single chunk big enough for whole chroms at once
+SEQ2_DIR=/scratch/hg/galGal2/nib
+SEQ2_LEN=/scratch/hg/galGal2/chrom.sizes
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom4/bed/blastzGalGal2.2006-03-06
+TMPDIR=/scratch/tmp
+'_EOF_'
+  # << happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	real    1399m47.238s
+
+    mkdir /cluster/data/galGal2/bed/blastz.monDom4.swap
+    cd /cluster/data/galGal2/bed
+    ln -s blastz.monDom4.swap blastz.monDom4
+    cd blastz.monDom4.swap
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap /cluster/data/monDom4/bed/blastzGalGal2.2006-03-06/DEF \
+	> swap.out 2>&1 &
+
+
+    featureBits monDom4 chainGalGal2Link > fb.monDom4.chainGalGal2Link 2>&1
+    cat fb.monDom4.chainGalGal2Link
+    #	106807090 bases of 3501643220 (3.050%) in intersection
+    featureBits galGal2 chainMonDom4Link > fb.galGal2.chainMonDom4Link 2>&1
+    cat fb.galGal2.chainMonDom4Link
+    #	95852676 bases of 1054197620 (9.092%) in intersection
+
+############################################################################
+##  BLASTZ ZEBRAFISH danRer3 (DONE - 2006-03-06 - 2003-03-08 - Hiram)
+    ssh pk
+    mkdir /cluster/data/monDom4/bed/blastzDanRer3.2006-03-06
+    cd /cluster/data/monDom4/bed
+    ln -s blastzDanRer3.2006-03-06 blastz.danRer3
+    cd blastzDanRer3.2006-03-06
+
+    #	doing only the chroms on zebrafish, leaving out the chrUn and chrNA
+
+    cat << '_EOF_' > DEF
+# Opossum vs Zebrafish
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Opossum monDom4
+SEQ1_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+SEQ1_LEN=/san/sanvol1/scratch/monDom4/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish (danRer3)
+#  large enough chunk to do complete chroms at once
+SEQ2_DIR=/san/sanvol1/scratch/danRer3/chromNib
+SEQ2_LEN=/san/sanvol1/scratch/danRer3/chromNib.sizes
+SEQ2_CHUNK=100000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom4/bed/blastzDanRer3.2006-03-06
+TMPDIR=/scratch/tmp
+'_EOF_'
+  # << happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	common failure for unknown reason:
+    #	startStep: 0, at step 5 net to stopStep 9
+    #	netChains: looks like previous stage was not successful
+    #		(can't find [monDom4.danRer3.]all.chain[.gz]).
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=net `pwd`/DEF > net.out 2>&1 &
+
+    mkdir /cluster/data/danRer3/bed/blastz.monDom4.swap
+    cd /cluster/data/danRer3/bed
+    ln -s blastz.monDom4.swap blastz.monDom4
+    cd blastz.monDom4.swap
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap /cluster/data/monDom4/bed/blastzDanRer3.2006-03-06/DEF \
+	> swap.out 2>&1 &
+
+    featureBits monDom4 chainDanRer3Link > fb.monDom4.chainDanRer3Link 2>&1
+    cat fb.monDom4.chainDanRer3Link
+    #	73187496 bases of 3501643220 (2.090%) in intersection
+    featureBits danRer3 chainMonDom4Link > fb.danRer3.chainMonDom4Link 2>&1
+    cat fb.danRer3.chainMonDom4Link
+    #	65225617 bases of 1630323462 (4.001%) in intersection
+
+##########################################################################
+# MAKE Human Proteins track (WORKING - 2006-03-24 - Hiram)
+    ssh kkstore01
+    cd /cluster/data/monDom4
+    cat */chr*/*.lft > jkStuff/subChr.lft   
+    mkdir blastDb
+    for i in */*/*_*_*.fa; do ln `pwd`/$i blastDb; done 
+    cd blastDb
+    for i in *.fa; do /cluster/bluearc/blast229/formatdb -p F -i $i; rm $i; done
+
+    ssh pk
+    destDir=/san/sanvol1/scratch/monDom4/blastDb
+    mkdir -p $destDir
+    cd /cluster/data/monDom4/blastDb
+    for i in nin nsq nhr; do cp *.$i $destDir; done
+    mkdir -p /cluster/data/monDom4/bed/tblastn.hg18KG
+    cd /cluster/data/monDom4/bed/tblastn.hg18KG
+    find $destDir -name "*.nsq" | sed "s/\.nsq//" > target.lst        
+
+    mkdir kgfa
+    # calculate a reasonable number of jobs
+    calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk "{print \\\$1}"`/\(500000/`wc target.lst | awk "{print \\\$1}"`\)
+# 37365/(500000/6149) = 459.514770
+    split -l 460 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl kgfa/kg
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    rm -rf  /cluster/bluearc/monDom4/bed/tblastn.hg18KG/blastOut
+    mkdir -p /cluster/bluearc/monDom4/bed/tblastn.hg18KG/blastOut
+    ln -s  /cluster/bluearc/monDom4/bed/tblastn.hg18KG/blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast2211x86_64/bin/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+if /cluster/bin/i386/blastToPsl $f.1 $f.2
+then
+        liftUp -nosort -type=".psl" -pslQ -nohead $f.3 /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.2
+	liftUp -nosort -type=".psl" -nohead $f.4 /cluster/data/monDom4/jkStuff/subChr.lft carry $f.3
+	liftUp -nosort -type=".psl" -nohead $3.tmp /cluster/data/monDom4/jkStuff/liftAll.lft carry $f.4
+        mv $3.tmp $3
+        rm -f $f.1 $f.2 
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8
+exit 1
+'_EOF_'
+
+    exit
+    chmod +x blastSome
+    gensub2 target.lst kg.lst blastGsub blastSpec
+
+    para create blastSpec
+    para push
+
+# Completed: 504218 of 504218 jobs
+# CPU time in finished jobs:   28863259s  481054.31m  8018.57h  334.07d  0.915 y
+# IO & Wait Time:               4255045s   70918.42m  1181.96h   49.25d  0.135 y
+# Average job time:                  66s       1.09m     0.02h    0.00d
+# Longest finished job:             443s       7.38m     0.12h    0.01d
+# Submission to last job:        166648s    2777.47m    46.29h    1.93d
+
+    ssh kki
+    cd /cluster/data/monDom4/bed/tblastn.hg18KG
+    tcsh
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1) $(path2)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.$2_*.psl | /cluster/home/braney/bin/i386/simpleChain -chrom=$2 -prot -outPsl -maxGap=250000 stdin ../c.$2.`bas
+ename $1`.psl)
+'_EOF_'
+
+    chmod +x chainSome
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec ../../chrom.lst
+    para create chainSpec
+    para push
+
+# Completed: 3362 of 3362 jobs
+# CPU time in finished jobs:    1078406s   18973.43m   299.56h   12.48d  0.034 y
+# IO & Wait Time:                 85905s    1431.75m    23.86h    0.99d  0.003 y
+# Average job time:                 346s       5.77m     0.10h    0.00d
+# Longest finished job:           22556s     375.93m     6.27h    0.26d
+# Submission to last job:        106376s    1872.93m    29.55h    1.23d
+
+    ssh kkstore01
+    cd /cluster/data/monDom4/bed/tblastn.hg18KG/blastOut
+    for i in kg??
+    do 
+	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.*.$i.psl > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    sort -u -k 14,14 -k 16,16n -k 18,18n u.*.psl m60* > /cluster/data/monDom4/bed/tblastn.hg18KG/blastHg18KG.psl
+    cd ..
+    wc blastHg18KG.psl
+# 64343 1351203 10913814 blastHg18KG.psl
+    pslUniq blastDm2FB.psl stdout | wc                                                                                    
+#  18827  395367 2992653
+    cat kgfa/*fa | grep ">" | wc                                                                                  
+# 309494  309494 4810327
+
+    ssh hgwdev
+    cd /cluster/data/monDom4/bed/tblastn.hg18KG
+    hgLoadPsl monDom4 blastHg18KG.psl
+    featureBits monDom4 blastHg18KG
+# 35781547 bases of 2384996543 (1.500%) in intersection
+
+    exit
+
+    # back to kksilo
+    rm -rf blastOut
+
+# End tblastn
+
