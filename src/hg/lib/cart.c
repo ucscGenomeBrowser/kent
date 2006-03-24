@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.51 2006/03/09 18:26:57 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.52 2006/03/24 01:59:30 braney Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -924,8 +924,6 @@ clade = hClade(org);
 pos = cartOptionalString(cart, positionCgiName);
 pos = addCommasToPos(stripCommas(pos));
 *extra = 0;
-if ((clade != NULL) && sameString(clade,"ancestor"))
-    safef(extra, sizeof(extra), " Common Ancestor");
 if (pos == NULL && org != NULL) 
     safef(titlePlus,sizeof(titlePlus), "%s%s - %s",org, extra, title );
 else if (pos != NULL && org == NULL)
