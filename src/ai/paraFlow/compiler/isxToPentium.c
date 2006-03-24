@@ -17,8 +17,14 @@
 enum pentRegs
 /* These need to be in same order as regInfo table. */
    {
-   ax=0, bx=1, cx=2, dx=3, si=4, di=5, st0=6,
+   ax=0, bx=1, cx=2, dx=3, si=4, di=5, st0=6, pentRegCount=7,
    };
+
+struct regInfo
+/* Information on registers. */
+    {
+    int stompPos[8];	
+    };
 
 static struct isxReg regInfo[] = {
     { 4, "%al", "%ax", "%eax", NULL, NULL, NULL, "%eax"},
@@ -724,6 +730,134 @@ for (node = iList->head; !dlEnd(node); node = node->next)
     }
 }
 
+struct regInfoStack
+    {
+    struct regInfoStack *next;	/* Next in stack. */
+    struct regInfo *info;	/* Info at this node. */
+    struct dlNode *node;	/* Node where we pushed this */
+    int loopCount;		/* How many times we've gone through loop. */
+    struct regInfo *condInfo;	/* Info at start of condition. */
+    boolean gotCondInfo;	/* True if we've set cond info */
+    };
+
+
+static void pushRegInfo(struct regInfoStack **pStack, 
+	struct regInfo *info, struct dlNode *node)
+/* Alloc and push live stack entry */
+{
+struct regInfoStack *is;
+AllocVar(is);
+is->info = info;
+is->node = node;
+slAddHead(pStack, is);
+}
+
+static void popRegInfo(struct regInfoStack **pStack)
+/* Pop and free live stack entry */
+{
+struct regInfoStack *is = *pStack;
+assert(is != NULL);
+*pStack = is->next;
+freeMem(is);
+}
+
+static void foldInCaseRegInfo(struct regInfoStack *is, struct regInfo *info)
+/* Fold the liveList into the condLiveList. */
+{
+struct regInfo *cond = is->condInfo;
+int i;
+if (is->gotCondInfo)
+    {
+    for (i=0; i<ArraySize(info->stompPos); ++i)
+	{
+	cond->stompPos[i] = min(cond->stompPos[i], info->stompPos[i]);
+	}
+    }
+else
+    {
+    *cond = *info;
+    is->gotCondInfo = TRUE;
+    }
+}
+
+static void addRegInfo(struct dlList *iList)
+/* Add regInfo to all instructions. */
+{
+int i;
+struct dlNode *node;
+struct regInfo *info;
+struct regInfoStack *infoStack = NULL;
+AllocVar(info);
+
+#ifdef SOON
+for (node = iList->tail; !dlStart(node); node = node->prev)
+    {
+    struct isx *isx = node->val;
+
+    /* Save away current info list. */
+    isx->regInfo = info;
+    switch (isx->opType)
+        {
+	case poLoopEnd:
+	case poCondEnd:
+	    pushRegInfo(&infoStack, info, node);
+	    break;
+	case poCondCase:
+	    foldInCaseRegInfo(infoStack, info);
+	    break;
+	case poCondStart:
+	    info = infoStack->condInfo;
+	    infoStack->condInfo = NULL;
+	    popRegInfo(&infoStack);
+	    break;
+	case poLoopStart:
+	    if (infoStack->loopCount > 0)
+	        popRegInfo(&infoStack);
+	    else
+	        {
+		infoStack->loopCount = 1;
+		node = infoStack->node;
+		}
+	    break;
+	}
+
+    /* Make new copy of info and bump all stomp positions. */
+    info = CloneVar(info);
+    for (i=0; i<ArraySize(info->stompPos); ++i)
+	info->stompPos[i] += 1;
+
+    /* Snoop through stomping instructions, and set stomps. */
+    switch (isx->opType)
+        {
+	case poCall:
+	   info->stompPos[ax] = 0;
+	   info->stompPos[cx] = 0;
+	   info->stompPos[dx] = 0;
+	   break;
+	case poDiv:
+	case poMod:
+	   switch (isx->dest->valType)
+	       {
+	       case ivByte:
+	       case ivShort:
+	       case ivInt:
+	           info->stompPos[ax] = 0;
+		   info->stompPos[dx] = 0;
+		   break;
+	       }
+	    break;
+	case poShiftLeft:
+	case poShiftRight:
+	    if (isx->right->adType != iadConst)
+	        info->stompPos[cx] = 0;
+	    break;
+	}
+    }
+#endif /* SOON */
+assert(infoStack == NULL);
+freeMem(info);
+}
+
 void pentFromIsx(struct dlList *iList, FILE *f)
 /* Convert isx code to pentium instructions in file. */
 {
@@ -734,6 +868,7 @@ struct isx *isx;
 struct pentCoder *coder = pentCoderNew();
 
 calcInputOffsets(iList);
+addRegInfo(iList);
 gnuMacPreamble(iList, f);
 fprintf(f, "\n# Starting code generation\n");
 

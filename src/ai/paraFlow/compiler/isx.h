@@ -124,7 +124,8 @@ struct isx
     struct isxAddress *dest;	/* Destination address */
     struct isxAddress *left;	/* Left (or only) source address. */
     struct isxAddress *right;	/* Right (optional) source address.*/
-    struct isxLiveVar *liveList;/* List of live vars after instruction  */
+    struct isxLiveVar *liveList;/* List of live vars after instruction.  */
+    void *regInfo;		/* Machine-specific register info. */
     };
 
 struct isxReg

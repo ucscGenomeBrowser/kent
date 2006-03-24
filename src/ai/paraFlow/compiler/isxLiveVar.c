@@ -205,8 +205,6 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
     switch (isx->opType)
         {
 	case poLoopEnd:
-	    pushLiveList(&liveStack, liveList, node);
-	    break;
 	case poCondEnd:
 	    pushLiveList(&liveStack, liveList, node);
 	    break;
