@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.7 2006/03/20 03:25:17 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.8 2006/03/24 21:57:39 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -1218,7 +1218,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/panTro2/bed/blastz.galGal2.2006-03-18
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #   happy emacs
+    #   << happy emacs
 
     /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
         -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
@@ -1283,3 +1283,48 @@ TMPDIR=/scratch/tmp
     hgLoadBed panTro2 genscanSubopt genscanSubopt.bed
         # Loaded 535541 elements of size 6
 
+#######################################################################
+#  OPOSSUM BLASTZ - (WORKING - 2006-03-20 - Hiram)
+    ssh pk
+    mkdir /cluster/data/panTro2/bed/blastzMonDom4.2006-03-20
+    cd /cluster/data/panTro2/bed
+    ln -s blastzMonDom4.2006-03-20 blastz.monDom4
+    cd /cluster/data/panTro2/bed/blastzMonDom4.2006-03-20
+
+    cat << '_EOF_' > DEF
+# chimp vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Chimp (panTro2)
+SEQ1_DIR=/scratch/hg/panTro2/nib
+SEQ1_LEN=/scratch/hg/panTro2/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom4
+SEQ2_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+SEQ2_LEN=/san/sanvol1/scratch/monDom4/chrom.sizes
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/panTro2/bed/blastzMonDom4.2006-03-20
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	<< happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	running 2006-03-20 11:30
