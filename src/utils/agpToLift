@@ -1,0 +1,50 @@
+#!/usr/bin/perl
+
+# agpToLift - generate a lift file from an AGP file
+
+# $Header: /projects/compbio/cvsroot/kent/src/utils/agpToLift,v 1.1 2006/03/24 23:18:09 kate Exp $
+
+my %chromSizes = ();
+my @lines = ();
+my $i;
+
+# check for options
+
+while ($#ARGV > 1) {
+  $arg = shift(@ARGV);
+  if ($arg eq "-revStrand") {
+    warn ("Including fragments on reverse strand, with _REV suffix\n \
+            The resulting lift file will refer to nonexistent sequences");
+    my $revStrand = 1;
+  } else {
+    print stderr "$arg is not a valid parameter\n";
+  }
+}
+
+# read in AGP file, saving chrom lengths
+while (<STDIN>) {
+    $lines[$i++] = $_;
+    my ($chrom, $chromStart, $chromEnd, $ix, $type, 
+            $frag, $fragStart, $fragEnd, $strand) = split /\s+/;
+    $chromSizes{$chrom} = $chromEnd;
+}
+
+# process AGP lines, writing lift file, using chrom length info
+for ($i=0; $i < @lines; $i++) {
+    $_ = $lines[$i];
+    my ($chrom, $chromStart, $chromEnd, $ix, $type, 
+            $frag, $fragStart, $fragEnd, $strand) = split /\s+/;
+    next if ($type eq "N");     # skip gap
+    if ($strand eq "-") {
+        if (defined($revStrand)) {
+            $frag = $frag . "_REV"; 
+        } else {
+            die ("Reverse strand fragments: use -revStrand");
+        }
+    }
+    printf ("%s\t%s\t%s\t%s\t%s\n", 
+            $chromStart - 1, $frag, $fragEnd - $fragStart + 1,
+            $chrom, $chromSizes{$chrom});
+}
+
+
