@@ -2,6 +2,7 @@
 #include "common.h"
 #include "hdb.h"
 #include "hgConfig.h"
+#include "hgRelate.h"
 
 char *host = NULL;
 char *user = NULL;
@@ -159,6 +160,7 @@ if (row == NULL)
     errAbort("couldn't get database time\n");
 verbose(1, "\nCurrent date-time = %s\n\n", row[0]);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 }
 
 int getUnixTimeNow()
@@ -177,12 +179,15 @@ if (row == NULL)
     errAbort("couldn't get current time\n");
 ret = sqlUnsigned(row[0]);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 return ret;
 }
 
 void readLogs(int secondsNow)
 /* read access_log where time_stamp > startTime */
+/* write error 500 to fileName */
 {
+char fileName[255];
 char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
@@ -190,19 +195,30 @@ char **row;
 int startTime = secondsNow - (minutes * 60);
 int hits = 0;
 int errors = 0;
+FILE *outputFileHandle = NULL;
+int status = 0;
 
-safef(query, sizeof(query), "select remote_host, machine_id, status, time_stamp, request_line, request_method, referer, agent "
+safef(fileName, ArraySize(fileName), "/tmp/apacheMonitor/%d.tab", secondsNow);
+outputFileHandle = mustOpen(fileName, "w");
+
+safef(query, sizeof(query), "select remote_host, machine_id, status, time_stamp, "
+                            "request_method, request_uri, request_line, referer, agent "
                             "from access_log where time_stamp > %d", startTime);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {  
-    logStatus(sqlUnsigned(row[2]));
+    status = sqlUnsigned(row[2]);
+    logStatus(status);
     logMachine(row[1]);
-    if (sameString(row[6], "-")) robotcount++;
+    if (sameString(row[7], "-")) robotcount++;
     total++;
+    if (status == 500)
+        fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+	        row[0], row[1], row[3], row[4], row[5], row[6], row[7], row[8]);
     } 
 sqlFreeResult(&sr);
-
+carefulClose(&outputFileHandle);
+hFreeConn(&conn);
 }
 
 void printMachines()
@@ -235,6 +251,32 @@ verbose(1, "414: %d\n", status414);
 verbose(1, "500: %d\n\n", status500);
 }
 
+void store500(int timeNow)
+{
+char localfileName[255];
+char fullfileName[255];
+char tableName[255];
+struct sqlConnection *conn = hAllocConn();
+FILE *f;
+
+/* open the file because hgLoadNamedTabFile closes it */
+safef(fullfileName, ArraySize(fullfileName), "/tmp/apacheMonitor/%d.tab", timeNow);
+f = mustOpen(fullfileName, "r");
+
+safef(tableName, ArraySize(tableName), "status500");
+safef(localfileName, ArraySize(localfileName), "%d", timeNow);
+hgLoadNamedTabFile(conn, "/tmp/apacheMonitor", tableName, localfileName, &f);
+
+hFreeConn(&conn);
+}
+
+void cleanup(int timeNow)
+{
+char command[255];
+safef(command, ArraySize(command), "rm /tmp/apacheMonitor/%d.tab", timeNow);
+system(command);
+}
+
 int main(int argc, char *argv[])
 /* Check args and call readLogs. */
 {
@@ -257,5 +299,7 @@ verbose(1, "Total hits in the last %d minutes = %d\n", minutes, total);
 verbose(1, "Hits from robots = %d\n\n", robotcount);
 printMachines();
 printStatus();
+if (status500 > 0) store500(timeNow);
+cleanup(timeNow);
 return 0;
 }
