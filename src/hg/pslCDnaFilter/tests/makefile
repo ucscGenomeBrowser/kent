@@ -7,7 +7,7 @@ test:	noopTest overlapTest maxAlignTest minQSizeTest \
 	repMatchTest minAlnSizeTest nonRepSizeTest nonRepMismatchTest \
 	noDropCntBugTest minSpan100Test minSpan10Test localBestTest \
 	globalBestTest ignoreNsCoverTest ignoreNsMinAlnTest \
-	ignoreNsLocalBestTest hapGlobalTest hapLocalTest
+	ignoreNsLocalBestTest hapGlobalTest hapLocalTest hapLocalXenoTest
 
 # nothing should be filtered with no arguments
 noopTest:
@@ -74,6 +74,11 @@ hapGlobalTest:
 # resting of haplotype region handling and localNearBest
 hapLocalTest:
 	${MAKE} doFilter name=$@ inPsl=haplotype.psl inSizes=haplotype.sizes filtArgs='-localNearBest=0.005 -hapRegions=input/hapMappings.psl'
+
+# haplotype test using xeno alignments; was bug with comparing with wrong
+# refChrom
+hapLocalXenoTest:
+	${MAKE} doFilter name=$@ inPsl=xenoHap.psl inSizes=haplotype.sizes filtArgs='-localNearBest=0.005 -hapRegions=input/hapMappings.psl'
 
 # Recursive targets.  Results are sorted to allow consistent comparisons, as
 # sometimes internal sorting done by pslCDnaFilter is not stable.

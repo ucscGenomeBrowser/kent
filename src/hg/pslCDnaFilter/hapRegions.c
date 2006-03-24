@@ -342,6 +342,15 @@ if (verboseLevel() >= 5)
     }
 }
 
+static boolean isHapRegionAln(struct hapChrom *hapChrom, struct cDnaAlign *aln)
+/* test if aln overlaps the hap region for the specified hapChrom */
+{
+return aln->isHapRegion &&
+    sameString(aln->psl->tName, hapChrom->refChrom->chrom)
+    && positiveRangeIntersection(aln->psl->tStart, aln->psl->tEnd, 
+                                 hapChrom->refStart, hapChrom->refEnd);
+}
+
 static void mapHapAlign(struct hapRegions *hr, struct cDnaAlign *hapAln,
                         FILE *hapRefMappedFh, FILE *hapRefCDnaFh)
 /* map a haplotype chrom alignment to reference chrom alignments and link if
@@ -353,7 +362,7 @@ struct cDnaAlign *aln;
 
 for (aln = hapAln->cdna->alns; aln != NULL; aln = aln->next)
     {
-    if (!aln->drop && aln->isHapRegion)
+    if (!aln->drop && isHapRegionAln(hapChrom, aln))
         {
         float score = scoreHapRefPair(hapAln, hapChrom, mappedHaps, aln, hapRefCDnaFh);
         if (score > 0)
