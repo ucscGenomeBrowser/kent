@@ -964,6 +964,7 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     $mm.dupSpMrna.mrnaID minCheck=0.10
     $mm.dupSpMrna.dupMrnaID minCheck=0.10
     hg17.spMrna.mrnaID minCheck=0.30
+    hg18.spMrna.mrnaID minCheck=0.20
     hg17.dupSpMrna.mrnaID minCheck=0.20
     hg17.dupSpMrna.dupMrnaID minCheck=0.20
     hg18.dupSpMrna.mrnaID minCheck=0.20
