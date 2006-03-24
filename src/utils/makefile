@@ -35,6 +35,7 @@ clean:
 	- find . -name \*.o -print | xargs rm
 
 SCRIPT_FILES = \
+        agpToLift \
 	blastz-make-joblist \
 	blastz-normalizeLav \
 	blastz-run-ucsc \
