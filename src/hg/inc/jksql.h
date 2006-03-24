@@ -391,4 +391,10 @@ __attribute__((format(printf, 4, 5)))
 #endif
 ;
 
+int sqlSaveQuery(struct sqlConnection *conn, char *query, char *outPath, boolean isFa);
+/* Execute query, save the resultset as a tab-separated file.
+ * If isFa is true, than assume it is a two column fasta query and format accordingly.
+ * Return count of rows in result set.  Abort on error. */
+
+
 #endif /* JKSQL_H */

@@ -297,37 +297,6 @@ sqlDisconnect(&conn2);
 
 }
 
-static int sqlSaveQuery(struct sqlConnection *conn, char *query, int numCols, char *outPath, boolean isFa)
-/* execute query, save the resultset as a tab-separated file */
-{
-struct sqlResult *sr;
-char **row;
-char *sep="";
-int c = 0;
-int count = 0;
-FILE *f = mustOpen(outPath,"w");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    sep="";
-    if (isFa)
-	sep = ">";
-    for (c=0;c<numCols;++c)
-	{
-	fprintf(f,"%s%s",sep,row[c]);
-	sep = "\t";
-	if (isFa)
-	    sep = "\n";
-	}
-    fprintf(f,"\n");	    
-    ++count;
-    }
-sqlFreeResult(&sr);
-carefulClose(&f);
-return count;
-}
-
-
 static void processIsPcr(struct sqlConnection *conn, int taxon, char *db)
 /* process isPcr results  */
 {
@@ -352,7 +321,7 @@ while(more)
     if (line[0] != '>')
 	errAbort("unexpected error out of phase\n");
     name = cloneString(line);
-    uglyf("name=%s\n",name);
+    verbose(1,"name=%s\n",name);
     dyStringClear(dy);
     while(more=lineFileNext(lf, &line, &lineSize))
 	{
@@ -440,7 +409,7 @@ struct bac *bac = NULL;
 char *chrom = cloneString("");
 int count = 0;
 
-uglyf("bac list read done.\n");
+verbose(1,"bac list read done.\n");
 
 hSetDb(db);  /* unfortunately this is required for hLoadChrom */
 for(bac=bacs;bac;bac=bac->next)
@@ -534,8 +503,8 @@ dyStringClear(dy);
 dyStringAppend(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, vgPrb e, gene g");
 dyStringPrintf(dy, " where p.id = m.probe and m.vgPrb = e.id and g.id = p.gene and g.taxon = %d",taxon);
 dyStringAppend(dy, " and e.state = 'new' and e.type='primersMrna'");
-rc = sqlSaveQuery(conn, dy->string, 3, "primers.query", FALSE);
-uglyf("rc = %d = count of primers for mrna search for taxon %d\n",rc,taxon);
+rc = sqlSaveQuery(conn, dy->string, "primers.query", FALSE);
+verbose(1,"rc = %d = count of primers for mrna search for taxon %d\n",rc,taxon);
 
 if (rc > 0) /* something to do */
     {
@@ -543,11 +512,11 @@ if (rc > 0) /* something to do */
     dyStringClear(dy);
     dyStringPrintf(dy, "select qName from %s.all_mrna",db);
     rc = 0;
-    rc = sqlSaveQuery(conn, dy->string, 1, "accFile.txt", FALSE);
+    rc = sqlSaveQuery(conn, dy->string, "accFile.txt", FALSE);
     safef(cmdLine,sizeof(cmdLine),"getRna %s accFile.txt mrna.fa",db);
-    system("date"); uglyf("cmdLine: [%s]\n",cmdLine); system(cmdLine); system("date");
+    system("date"); verbose(1,"cmdLine: [%s]\n",cmdLine); system(cmdLine); system("date");
     
-    uglyf("rc = %d = count of mrna for %s\n",rc,db);
+    verbose(1,"rc = %d = count of mrna for %s\n",rc,db);
 
     system("date"); system("isPcr mrna.fa primers.query isPcr.fa -out=fa"); system("date");
     system("ls -l");
@@ -577,21 +546,21 @@ dyStringAppend(dy, "select e.id, p.fPrimer, p.rPrimer from probe p, vgPrbMap m, 
 dyStringPrintf(dy, " where p.id = m.probe and m.vgPrb = e.id and g.id = p.gene and g.taxon = %d",taxon);
 dyStringAppend(dy, " and e.state = 'new' and e.type='primersGenome'");
 rc = 0;
-rc = sqlSaveQuery(conn, dy->string, 3, "primers.query", FALSE);
-uglyf("rc = %d = count of primers for genome search for taxon %d\n",rc,taxon);
+rc = sqlSaveQuery(conn, dy->string, "primers.query", FALSE);
+verbose(1,"rc = %d = count of primers for genome search for taxon %d\n",rc,taxon);
 
 if (rc > 0) /* something to do */
     {
     safef(path1,sizeof(path1),"/gbdb/%s/%s.2bit",db,db);
     safef(path2,sizeof(path2),"%s/%s.2bit",getCurrentDir(),db);
-    uglyf("copy: [%s] to [%s]\n",path1,path2);  copyFile(path1,path2);
+    verbose(1,"copy: [%s] to [%s]\n",path1,path2);  copyFile(path1,path2);
 
     safef(cmdLine,sizeof(cmdLine),
 	    "ssh kolossus 'cd %s; isPcr %s.2bit primers.query isPcr.fa -out=fa'",
 	    getCurrentDir(),db);
-    system("date"); uglyf("cmdLine: [%s]\n",cmdLine); system(cmdLine); system("date");
+    system("date"); verbose(1,"cmdLine: [%s]\n",cmdLine); system(cmdLine); system("date");
     safef(path2,sizeof(path2),"%s/%s.2bit",getCurrentDir(),db);
-    uglyf("rm %s\n",path2); unlink(path2); system("ls -l");
+    verbose(1,"rm %s\n",path2); unlink(path2); system("ls -l");
 
     processIsPcr(conn,taxon,db);
     
@@ -618,7 +587,7 @@ static void doBacEndPairs(struct sqlConnection *conn, int taxon, char *db)
 struct dyString *dy = dyStringNew(0);
 int rc = 0;
 /* fetch available sequence for bacEndPairs */
-rc = doBacs(conn, taxon, db); uglyf("found seq for %d bacEndPairs\n",rc);
+rc = doBacs(conn, taxon, db); verbose(1,"found seq for %d bacEndPairs\n",rc);
 
 /* find any remaining type bac that couldn't be resolved and demote 
  * them to type refSeq
@@ -767,9 +736,9 @@ dyStringPrintf(dy,
     " and e.taxon = %d and e.type = '%s' and e.tName <> '' and e.state = 'new'"
     ,db,table,taxon,type);
 rc = 0;
-rc = sqlSaveQuery(conn, dy->string, 1, "accFile.txt", FALSE);
+rc = sqlSaveQuery(conn, dy->string, "accFile.txt", FALSE);
 safef(cmdLine,sizeof(cmdLine),"getRna %s accFile.txt mrna.fa",db);
-//system("date"); uglyf("cmdLine: [%s]\n",cmdLine); 
+//system("date"); verbose(1,"cmdLine: [%s]\n",cmdLine); 
 system(cmdLine); 
 //system("date");
 
@@ -806,31 +775,31 @@ struct dyString *dy = dyStringNew(0);
 /* get refSeq accessions and rna */
 setTName(conn, taxon, db, "refSeq", "refSeq");
 rc = getAccMrnas(conn, taxon, db, "refSeq", "refSeqAli");
-uglyf("rc = %d = count of refSeq mrna for %s\n",rc,db);
+verbose(1,"rc = %d = count of refSeq mrna for %s\n",rc,db);
 advanceType(conn,taxon,"refSeq","genRef");
 
 /* get refSeq-in-gene.genbank accessions and rna */
 setTName(conn, taxon, db, "genRef", "genbank");
 rc = getAccMrnas(conn, taxon, db, "genRef", "refSeqAli");
-uglyf("rc = %d = count of genRef mrna for %s\n",rc,db);
+verbose(1,"rc = %d = count of genRef mrna for %s\n",rc,db);
 advanceType(conn,taxon,"genRef","genbank");
 
 /* get genbank accessions and rna */
 setTName(conn, taxon, db, "genbank", "genbank");
 rc = getAccMrnas(conn, taxon, db, "genbank", "all_mrna");
-uglyf("rc = %d = count of genbank mrna for %s\n",rc,db);
+verbose(1,"rc = %d = count of genbank mrna for %s\n",rc,db);
 advanceType(conn,taxon,"genbank","flatRef");
 
 /* get gene.name -> refFlat to refSeq accessions and rna */
 setTNameMapped(conn, taxon, db, "flatRef", "name", "refFlat", "geneName", "name");
 rc = getAccMrnas(conn, taxon, db, "flatRef", "refSeqAli");
-uglyf("rc = %d = count of flatRef mrna for %s\n",rc,db);
+verbose(1,"rc = %d = count of flatRef mrna for %s\n",rc,db);
 advanceType(conn,taxon,"flatRef","flatAll");
 
 /* get gene.name -> refFlat to all_mrna accessions */
 setTNameMapped(conn, taxon, db, "flatAll", "name", "refFlat", "geneName", "name");
 rc = getAccMrnas(conn, taxon, db, "flatAll", "all_mrna");
-uglyf("rc = %d = count of flatAll mrna for %s\n",rc,db);
+verbose(1,"rc = %d = count of flatAll mrna for %s\n",rc,db);
 advanceType(conn,taxon,"flatAll","linkRef");
 
 
@@ -838,13 +807,13 @@ advanceType(conn,taxon,"flatAll","linkRef");
 /* get gene.name -> refLink to refSeq accessions and rna */
 setTNameMapped(conn, taxon, db, "linkRef", "name", "refLink", "name", "mrnaAcc");
 rc = getAccMrnas(conn, taxon, db, "linkRef", "refSeqAli");
-uglyf("rc = %d = count of linkRef mrna for %s\n",rc,db);
+verbose(1,"rc = %d = count of linkRef mrna for %s\n",rc,db);
 advanceType(conn,taxon,"linkRef","linkAll");
 
 /* get gene.name -> refLink to all_mrna accessions */
 setTNameMapped(conn, taxon, db, "linkAll", "name", "refLink", "name", "mrnaAcc");
 rc = getAccMrnas(conn, taxon, db, "linkAll", "all_mrna");
-uglyf("rc = %d = count of linkAll mrna for %s\n",rc,db);
+verbose(1,"rc = %d = count of linkAll mrna for %s\n",rc,db);
 advanceType(conn,taxon,"linkAll","kgAlRef");
 
 
@@ -852,13 +821,13 @@ advanceType(conn,taxon,"linkAll","kgAlRef");
 /* get gene.name -> kgAlias to refSeq accessions and rna */
 setTNameMapped(conn, taxon, db, "kgAlRef", "name", "kgAlias", "alias", "kgId");
 rc = getAccMrnas(conn, taxon, db, "kgAlRef", "refSeqAli");
-uglyf("rc = %d = count of kgAlRef mrna for %s\n",rc,db);
+verbose(1,"rc = %d = count of kgAlRef mrna for %s\n",rc,db);
 advanceType(conn,taxon,"kgAlRef","kgAlAll");
 
 /* get gene.name -> kgAlias to all_mrna accessions */
 setTNameMapped(conn, taxon, db, "kgAlAll", "name", "kgAlias", "alias", "kgId");
 rc = getAccMrnas(conn, taxon, db, "kgAlAll", "all_mrna");
-uglyf("rc = %d = count of kgAlAll mrna for %s\n",rc,db);
+verbose(1,"rc = %d = count of kgAlAll mrna for %s\n",rc,db);
 advanceType(conn,taxon,"kgAlAll","gene");
 
 dyStringFree(&dy);
@@ -961,7 +930,7 @@ dyStringPrintf(dy,
     ,db,table,db,taxon,type);
 rc = 0;
 safef(outName,sizeof(outName),"%s.psl",type);
-rc = sqlSaveQuery(conn, dy->string, 21, outName, FALSE);
+rc = sqlSaveQuery(conn, dy->string, outName, FALSE);
 dyStringFree(&dy);
 return rc;
 }
@@ -983,7 +952,7 @@ dyStringPrintf(dy,
     ,db,table);
 rc = 0;
 safef(outName,sizeof(outName),"%s.psl",table);
-rc = sqlSaveQuery(conn, dy->string, 21, outName, FALSE);
+rc = sqlSaveQuery(conn, dy->string, outName, FALSE);
 dyStringFree(&dy);
 return rc;
 }
@@ -995,39 +964,39 @@ int rc = 0;
 
 /* get refSeq psls */
 rc = doAccPsls(conn, taxon, db, "refSeq", "refSeqAli");
-uglyf("rc = %d = count of refSeq psls for %s\n",rc,db);
+verbose(1,"rc = %d = count of refSeq psls for %s\n",rc,db);
 
 /* get genRef psls */
 rc = doAccPsls(conn, taxon, db, "genRef", "refSeqAli");
-uglyf("rc = %d = count of genRef psls for %s\n",rc,db);
+verbose(1,"rc = %d = count of genRef psls for %s\n",rc,db);
 
 /* get genbank psls */
 rc = doAccPsls(conn, taxon, db, "genbank", "all_mrna");
-uglyf("rc = %d = count of genbank psls for %s\n",rc,db);
+verbose(1,"rc = %d = count of genbank psls for %s\n",rc,db);
 
 /* get flatRef psls */
 rc = doAccPsls(conn, taxon, db, "flatRef", "refSeqAli");
-uglyf("rc = %d = count of flatRef psls for %s\n",rc,db);
+verbose(1,"rc = %d = count of flatRef psls for %s\n",rc,db);
 
 /* get flatAll psls */
 rc = doAccPsls(conn, taxon, db, "flatAll", "all_mrna");
-uglyf("rc = %d = count of flatAll psls for %s\n",rc,db);
+verbose(1,"rc = %d = count of flatAll psls for %s\n",rc,db);
 
 /* get linkRef psls */
 rc = doAccPsls(conn, taxon, db, "linkRef", "refSeqAli");
-uglyf("rc = %d = count of linkRef psls for %s\n",rc,db);
+verbose(1,"rc = %d = count of linkRef psls for %s\n",rc,db);
 
 /* get linkAll psls */
 rc = doAccPsls(conn, taxon, db, "linkAll", "all_mrna");
-uglyf("rc = %d = count of linkAll psls for %s\n",rc,db);
+verbose(1,"rc = %d = count of linkAll psls for %s\n",rc,db);
 
 /* get kgAlRef psls */
 rc = doAccPsls(conn, taxon, db, "kgAlRef", "refSeqAli");
-uglyf("rc = %d = count of kgAlRef psls for %s\n",rc,db);
+verbose(1,"rc = %d = count of kgAlRef psls for %s\n",rc,db);
 
 /* get kgAlAll psls */
 rc = doAccPsls(conn, taxon, db, "kgAlAll", "all_mrna");
-uglyf("rc = %d = count of kgAlRef psls for %s\n",rc,db);
+verbose(1,"rc = %d = count of kgAlRef psls for %s\n",rc,db);
 
 }
 
@@ -1049,8 +1018,8 @@ dyStringPrintf(dy,
     " and a.db = '%s' and a.status='new'"
     , db, taxon, db);
 //restore: 
-rc = sqlSaveQuery(conn, dy->string, 21, "fakeBAC.psl", FALSE);
-uglyf("rc = %d = count of sequences for fakeBAC.psl, for taxon %d\n",rc,taxon);
+rc = sqlSaveQuery(conn, dy->string, "fakeBAC.psl", FALSE);
+verbose(1,"rc = %d = count of sequences for fakeBAC.psl, for taxon %d\n",rc,taxon);
 dyStringFree(&dy);
 }
 
@@ -1078,8 +1047,8 @@ dyStringPrintf(dy,
     " order by e.id"
     , db, taxon);
 //restore: 
-rc = sqlSaveQuery(conn, dy->string, 2, "blat.fa", TRUE);
-uglyf("rc = %d = count of sequences for blat, to get psls for taxon %d\n",rc,taxon);
+rc = sqlSaveQuery(conn, dy->string, "blat.fa", TRUE);
+verbose(1,"rc = %d = count of sequences for blat, to get psls for taxon %d\n",rc,taxon);
 
 if (rc == 0) 
     {
@@ -1093,42 +1062,42 @@ if (rc == 0)
 safef(path1,sizeof(path1),"/gbdb/%s/%s.2bit",db,db);
 safef(path2,sizeof(path2),"%s/%s.2bit",getCurrentDir(),db);
 //restore: 
-uglyf("copy: [%s] to [%s]\n",path1,path2);  copyFile(path1,path2);
+verbose(1,"copy: [%s] to [%s]\n",path1,path2);  copyFile(path1,path2);
 
 safef(cmdLine,sizeof(cmdLine),
 "ssh kolossus 'cd %s; blat -makeOoc=11.ooc -tileSize=11"
 " -repMatch=1024 %s.2bit /dev/null /dev/null'",
     getCurrentDir(),db);
 //restore: 
-system("date"); uglyf("cmdLine: [%s]\n",cmdLine); system(cmdLine); system("date");
+system("date"); verbose(1,"cmdLine: [%s]\n",cmdLine); system(cmdLine); system("date");
 
 safef(cmdLine,sizeof(cmdLine),
 	"ssh kolossus 'cd %s; blat %s.2bit blat.fa -ooc=11.ooc -noHead blat.psl'",
 	getCurrentDir(),db);
 //restore: 
-system("date"); uglyf("cmdLine: [%s]\n",cmdLine); system(cmdLine); system("date");
+system("date"); verbose(1,"cmdLine: [%s]\n",cmdLine); system(cmdLine); system("date");
 
 /* using blat even with -fastMap was way too slow - took over a day,
  * so instead I will make a procedure to write a fake psl for the BACs
  * which you will see called below */
 
 safef(path2,sizeof(path2),"%s.2bit",db);
-uglyf("rm %s\n",path2); unlink(path2); 
+verbose(1,"rm %s\n",path2); unlink(path2); 
 
 safef(path2,sizeof(path2),"11.ooc");
-uglyf("rm %s\n",path2); unlink(path2); 
+verbose(1,"rm %s\n",path2); unlink(path2); 
 
 
 /* skip psl header and sort on query name */
 safef(cmdLine,sizeof(cmdLine), "sort -k 10,10 blat.psl > blatS.psl");
-uglyf("cmdLine=[%s]\n",cmdLine);
+verbose(1,"cmdLine=[%s]\n",cmdLine);
 system(cmdLine); 
 
 /* keep near best within 5% of the best */
 safef(cmdLine,sizeof(cmdLine), 
     "pslCDnaFilter -globalNearBest=0.005 -minId=0.96 -minNonRepSize=20 -minCover=0.50"
     " blatS.psl blatNearBest.psl");
-uglyf("cmdLine=[%s]\n",cmdLine);
+verbose(1,"cmdLine=[%s]\n",cmdLine);
 system(cmdLine); 
 
 unlink("blat.fa");
@@ -1161,7 +1130,7 @@ system(
 " > vgPrbNonBlat.psl"
 );
 
-uglyf("vgPrbNonBlat.psl assembled for taxon %d\n",taxon);
+verbose(1,"vgPrbNonBlat.psl assembled for taxon %d\n",taxon);
 
 
 //unlink("blatNearBest.psl");  
@@ -1185,7 +1154,7 @@ if (!sqlTableExists(conn, dbTbl))
     {
     verbose(1,"FYI: Table %s does not exist\n",dbTbl);
     safef(cmd,sizeof(cmd),"echo '' > %s.psl",table);
-    uglyf("%s\n",cmd); system(cmd);
+    verbose(1,"%s\n",cmd); system(cmd);
     }
 else
     {
@@ -1193,13 +1162,13 @@ else
     }
 
 safef(cmd,sizeof(cmd),"cat %s %s.psl | sort -u | sort -k 10,10 > %sNew.psl", pslName, table, table);
-uglyf("%s\n",cmd); system(cmd);
+verbose(1,"%s\n",cmd); system(cmd);
 
 safef(cmd,sizeof(cmd),"hgLoadPsl %s %sNew.psl -table=%s",db,table,table);
-uglyf("%s\n",cmd); system(cmd);
+verbose(1,"%s\n",cmd); system(cmd);
 
 safef(cmd,sizeof(cmd),"rm %s %s.psl %sNew.psl",pslName,table,table);
-uglyf("%s\n",cmd); 
+verbose(1,"%s\n",cmd); 
 //system(cmd);
 
 }
@@ -1313,8 +1282,8 @@ dyStringPrintf(dy,
     ,fromDb,db,fromTaxon, isBac ? "=" : "<>");
 rc = 0;
 safef(outName,sizeof(outName), isBac ? "bac.psl" : "nonBac.psl");
-rc = sqlSaveQuery(conn, dy->string, 21, outName, FALSE);
-uglyf("Count of %s Psls found for pslMap: %d\n", isBac ? "bac" : "nonBac", rc);
+rc = sqlSaveQuery(conn, dy->string, outName, FALSE);
+verbose(1,"Count of %s Psls found for pslMap: %d\n", isBac ? "bac" : "nonBac", rc);
 }
 
 
@@ -1337,8 +1306,8 @@ dyStringPrintf(dy,
     " order by e.id"
     , db, fromTaxon);
 //restore: 
-rc = sqlSaveQuery(conn, dy->string, 2, "pslMap.fa", TRUE);
-uglyf("rc = %d = count of sequences for pslMap for taxon %d\n",rc,fromTaxon);
+rc = sqlSaveQuery(conn, dy->string, "pslMap.fa", TRUE);
+verbose(1,"rc = %d = count of sequences for pslMap for taxon %d\n",rc,fromTaxon);
 }
 
 static void doPslMapAli(struct sqlConnection *conn, 
@@ -1375,34 +1344,34 @@ safef(cmd,sizeof(cmd),
 "zcat %s | pslMap -chainMapFile -swapMap  nonBac.psl stdin stdout "
 "|  sort -k 14,14 -k 16,16n > unscoredNB.psl"
 ,path);
-uglyf("%s\n",cmd); system(cmd);
+verbose(1,"%s\n",cmd); system(cmd);
 
 safef(cmd,sizeof(cmd),
 "pslRecalcMatch unscoredNB.psl /cluster/data/%s/nib" 
 " pslMap.fa nonBac.psl"
 ,db);
-uglyf("%s\n",cmd); system(cmd);
+verbose(1,"%s\n",cmd); system(cmd);
 
 /* bac */
 safef(cmd,sizeof(cmd),
 "zcat %s | pslMap -chainMapFile -swapMap  bac.psl stdin stdout "
 "|  sort -k 14,14 -k 16,16n > unscoredB.psl"
 ,path);
-uglyf("%s\n",cmd); system(cmd);
+verbose(1,"%s\n",cmd); system(cmd);
 
 safef(cmd,sizeof(cmd),
 "pslRecalcMatch unscoredB.psl /cluster/data/%s/nib" 
 " pslMap.fa bacTemp.psl"
 ,db);
-uglyf("%s\n",cmd); system(cmd);
+verbose(1,"%s\n",cmd); system(cmd);
 
 safef(cmd,sizeof(cmd),
 "pslCDnaFilter -globalNearBest=0.00001 -minCover=0.05"
 " bacTemp.psl bac.psl");
-uglyf("%s\n",cmd); system(cmd);
+verbose(1,"%s\n",cmd); system(cmd);
 
 safef(cmd,sizeof(cmd),"cat bac.psl nonBac.psl > vgPrbPslMap.psl");
-uglyf("%s\n",cmd); system(cmd);
+verbose(1,"%s\n",cmd); system(cmd);
 
 dyStringFree(&dy);
 
@@ -1432,6 +1401,8 @@ static void doReMapAli(struct sqlConnection *conn,
     int fromTaxon, char *fromDb,
     char *track, char *fasta
     )
+/* re-map anything in track specified that is not aligned, 
+      nor even attempted yet, using specified fasta file. */
 {
 char cmd[256];
 
@@ -1456,7 +1427,7 @@ if (sqlTableExists(conn, "vgRemapTemp"))
 safef(cmd,sizeof(cmd),
 "hgPepPred %s generic vgRemapTemp %s "
 ,database,fasta);
-uglyf("%s\n",cmd); system(cmd);
+verbose(1,"%s\n",cmd); system(cmd);
 
 sqlUpdate(conn, "create index seq on vgRemapTemp(seq(40));");
 
@@ -1474,8 +1445,8 @@ dyStringPrintf(dy,
     " order by m.tName,m.tStart"
     ,db,track,db,fromTaxon);
 rc = 0;
-rc = sqlSaveQuery(conn, dy->string, 21, "vgPrbReMap.psl", FALSE);
-uglyf("Count of Psls found for reMap: %d\n", rc);
+rc = sqlSaveQuery(conn, dy->string, "vgPrbReMap.psl", FALSE);
+verbose(1,"Count of Psls found for reMap: %d\n", rc);
 
 sqlUpdate(conn, "drop table vgRemapTemp;");
 
@@ -1484,7 +1455,11 @@ dyStringFree(&dy);
 }
 
 
-static void doAlignmentsReMap(struct sqlConnection *conn, char *db, char *fromDb, char *track, char *fasta)
+static void doAlignmentsReMap(
+    struct sqlConnection *conn, 
+    char *db, char *fromDb, char *track, char *fasta)
+/* re-map anything in track specified that is not aligned, 
+      nor even attempted yet, using specified fasta file. */
 {
 int taxon = findTaxon(conn,db);
 int fromTaxon = findTaxon(conn,fromDb);
@@ -1522,22 +1497,22 @@ dyStringPrintf(dy,
 " and s.acc is NULL"
 " order by e.id"
     , db, table, db);
-rc = sqlSaveQuery(conn, dy->string, 2, "vgPrbExt.fa", TRUE);
-uglyf("rc = %d = count of sequences for vgPrbExt.fa, to use with %s track %s\n",rc,db,table);
+rc = sqlSaveQuery(conn, dy->string, "vgPrbExt.fa", TRUE);
+verbose(1,"rc = %d = count of sequences for vgPrbExt.fa, to use with %s track %s\n",rc,db,table);
 if (rc > 0)  /* can set any desired minimum */
     {
     safef(bedPath,sizeof(bedPath),"/cluster/data/%s/bed/visiGene/",db);
     if (!fileExists(bedPath))
 	{
 	safef(cmd,sizeof(cmd),"mkdir %s",bedPath);
-	uglyf("%s\n",cmd); system(cmd);
+	verbose(1,"%s\n",cmd); system(cmd);
 	}
     
     safef(gbdbPath,sizeof(gbdbPath),"/gbdb/%s/visiGene/",db);
     if (!fileExists(gbdbPath))
 	{
 	safef(cmd,sizeof(cmd),"mkdir %s",gbdbPath);
-    	uglyf("%s\n",cmd); system(cmd);
+    	verbose(1,"%s\n",cmd); system(cmd);
 	}
    
     while(1)
@@ -1556,16 +1531,16 @@ if (rc > 0)  /* can set any desired minimum */
 
     
     safef(cmd,sizeof(cmd),"cp vgPrbExt.fa %s",path);
-    uglyf("%s\n",cmd); system(cmd);
+    verbose(1,"%s\n",cmd); system(cmd);
     
     fname = rStringIn("/", path);
     ++fname;
     
     safef(cmd,sizeof(cmd),"ln -s %s %s%s",path,gbdbPath,fname);
-    uglyf("%s\n",cmd); system(cmd);
+    verbose(1,"%s\n",cmd); system(cmd);
     
     safef(cmd,sizeof(cmd),"hgLoadSeq %s %s%s", db, gbdbPath,fname);
-    uglyf("%s\n",cmd); system(cmd);
+    verbose(1,"%s\n",cmd); system(cmd);
     }
 
 dyStringFree(&dy);
@@ -1638,7 +1613,7 @@ else if (sameWord(command,"REMAP"))
     if (argc != 7)
 	usage();
     /* re-map anything in track specified that is not aligned, 
-      nor even attempted, using specified fasta file. */
+      nor even attempted yet, using specified fasta file. */
     doAlignmentsReMap(conn,argv[3],argv[4],argv[5],argv[6]);
     }
 else if (sameWord(command,"EXTALL"))

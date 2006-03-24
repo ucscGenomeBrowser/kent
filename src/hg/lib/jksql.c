@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.85 2006/03/09 18:26:58 angie Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.86 2006/03/24 00:15:54 galt Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1768,4 +1768,39 @@ objs = sqlVaQueryObjs(conn, loadFunc, opts, queryFmt, args);
 va_end(args);
 return objs;
 }
+
+int sqlSaveQuery(struct sqlConnection *conn, char *query, char *outPath, boolean isFa)
+/* Execute query, save the resultset as a tab-separated file.
+ * If isFa is true, than assume it is a two column fasta query and format accordingly.
+ * Return count of rows in result set.  Abort on error. */
+{
+struct sqlResult *sr;
+char **row;
+char *sep="";
+int c = 0;
+int count = 0;
+int numCols = 0;
+FILE *f = mustOpen(outPath,"w");
+sr = sqlGetResult(conn, query);
+numCols = sqlCountColumns(sr);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    sep="";
+    if (isFa)
+	sep = ">";
+    for (c=0;c<numCols;++c)
+	{
+	fprintf(f,"%s%s",sep,row[c]);
+	sep = "\t";
+	if (isFa)
+	    sep = "\n";
+	}
+    fprintf(f,"\n");	    
+    ++count;
+    }
+sqlFreeResult(&sr);
+carefulClose(&f);
+return count;
+}
+
 
