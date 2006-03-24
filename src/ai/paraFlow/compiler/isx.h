@@ -2,14 +2,14 @@
  * intermediate code.  A fairly standard "three address code"
  * that is a lower level representation than the parse tree but
  * higher level than actual machine code.  The format is
- *    label opCode dest left right
+ *    opCode dest left right
  * which is interpreted as 
- *    label:  dest = left opCode right
+ *    dest = left opCode right
  * so
- *    100 + x 3 8		represents x = 3 + 8
- *    101 * t1 t2 t3		represents t1 = t2*t3
- *    102 = x y			represents x = y
- *    103 - u v                 represents u = -v
+ *    + x 3 8		represents x = 3 + 8
+ *    * t1 t2 t3	represents t1 = t2*t3
+ *    = x y		represents x = y
+ *    - u v             represents u = -v
  */
 
 #ifndef ISX_H
@@ -18,6 +18,10 @@
 #ifndef DLIST_H
 #include "dlist.h"
 #endif 
+
+#ifndef ISXLIVEVAR_H
+#include "isxLiveVar.h"
+#endif
 
 enum isxOpType
 /* What sort of operation - corresponds roughly to an
@@ -111,20 +115,7 @@ struct isxAddress
     struct isxReg *reg;	/* Register if any */
     };
 
-struct isxLiveVar
-/* A variable that is alive (which is defined and may be referenced later on) */
-    {
-    struct isxLiveVar *next;
-    struct isxAddress *var;
-    int useCount;	/* Number of following uses */
-    int usePos[2];	/* The next two use relative positions */
-    };
-
-#define isxLiveVarFree(pLive) freeMem(pLive)
-/* Free up liveVar */
-
-#define isxLiveVarFreeList(pList) slFreeList(pList)
-/* Free up list of live vars. */
+struct isxLiveVar;	/* Defined in isxLiveVar.h */
 
 struct isx
 /* An instruction in our intermediate language. */

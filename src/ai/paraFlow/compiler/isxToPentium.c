@@ -140,28 +140,28 @@ switch (valType)
     }
 }
 
-static int refListIx(struct slRef *refList, void *val)
+static int liveListIx(struct isxLiveVar *liveList, struct isxAddress *var)
 /* Return index of ref on list, or -1 if not there. */
 {
-struct slRef *ref;
+struct isxLiveVar *live;
 int ix = 0;
-for (ref = refList; ref != NULL; ref = ref->next,++ix)
-    if (ref->val == val)
+for (live = liveList; live != NULL; live = live->next,++ix)
+    if (live->var == var)
         return ix;
 return -1;
 }
 
-static int findNextUse(struct isxAddress *iad, struct dlNode *node)
+static int findNextUse(struct isxAddress *iad, struct isxLiveVar *liveList)
 /* Find next use of node. */
 {
-int count = 1;
-for (; !dlEnd(node); node = node->next, ++count)
+struct isxLiveVar *live;
+for (live = liveList; live != NULL; live = live->next)
     {
-    struct isx *isx = node->val;
-    if (isx->left == iad || isx->right == iad)
-        return count;
+    if (live->var == iad)
+        return live->usePos[0];
     }
-return count+1;
+assert(FALSE);
+return 0;
 }
 
 static void pentPrintAddress(struct isxAddress *iad, char *buf)
@@ -277,7 +277,7 @@ iad->val.tempMemLoc = coder->tempIx;
 codeOp(opMov, &old, iad, coder);
 }
 
-static void pentSwapOutIfNeeded(struct isxReg *reg, struct slRef *liveList, 
+static void pentSwapOutIfNeeded(struct isxReg *reg, struct isxLiveVar *liveList, 
 	 struct pentCoder *coder)
 /* Swap out register to memory if need be. */
 {
@@ -286,7 +286,7 @@ if (iad != NULL)
     {
     if (iad->adType == iadTempVar && iad->val.tempMemLoc == 0)
 	{
-	if (refOnList(liveList, iad))
+	if (isxLiveVarFind(liveList, iad))
 	    pentSwapTempFromReg(reg, coder);
 	}
     else
@@ -322,7 +322,7 @@ struct isxReg *freeReg = NULL;
 		     sourceIx = 2;
 		 if (sourceIx)
 		     {
-		     if (!refOnList(isx->liveList, iad))
+		     if (!isxLiveVarFind(isx->liveList, iad))
 			 {
 			 if (sourceIx < freeIx)
 			     {
@@ -347,7 +347,7 @@ for (i=0; i<regCount; ++i)
 	struct isxAddress *iad = reg->contents;
 	if (iad == NULL)
 	    return reg;
-	if (!refOnList(isx->liveList, iad))
+	if (!isxLiveVarFind(isx->liveList, iad))
 	    return reg;
 	}
     }
@@ -369,7 +369,7 @@ for (i=0; i<regCount; ++i)
 		{
 		if (iad == isx->left || iad == isx->right)
 		    {
-		    int nextUse = findNextUse(iad, nextNode);
+		    int nextUse = findNextUse(iad, isx->liveList);
 		    if (nextUse > soonestUse)
 			{
 			soonestUse = nextUse;
@@ -383,7 +383,7 @@ for (i=0; i<regCount; ++i)
 	return freeReg;
     }
 
-/* Still no free registers, well dang.  Then try for a register
+/* Still no free registers, well rats.  Then try for a register
  * that holds a value also in memory, but doesn't need to be 
  * a source.  If there's a choice use the one holding the variable
  * that won't be used for the longest time. */
@@ -398,7 +398,7 @@ for (i=0; i<regCount; ++i)
 	    if ((iad->adType == iadRealVar) ||
 		(iad->adType == iadTempVar && iad->val.tempMemLoc != 0))
 		{
-		int nextUse = findNextUse(iad, nextNode);
+		int nextUse = findNextUse(iad, isx->liveList);
 		if (nextUse > soonestUse)
 		    {
 		    soonestUse = nextUse;
@@ -423,7 +423,7 @@ for (i=0; i<regCount; ++i)
 	if (isxRegName(reg, valType))
 	    {
 	    struct isxAddress *iad = reg->contents;
-	    int nextUse = findNextUse(iad, nextNode);
+	    int nextUse = findNextUse(iad, isx->liveList);
 	    if (nextUse > soonestUse)
 		{
 		soonestUse = nextUse;
@@ -471,7 +471,6 @@ static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode,
 /* Code most binary ops.  Division is harder. */
 {
 struct isxReg *reg = freeReg(isx, isx->dest->valType, nextNode, coder);
-struct slRef *ref;
 struct isxAddress *dest;
 struct isxAddress *iad = NULL;
 

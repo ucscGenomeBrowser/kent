@@ -22,6 +22,7 @@ int h = (a - b - c) * (d-e-f) * g;
 int i = (a+b+c) * (d+e+f) % (g+h);
 int j = (a+b+c) * (d+e+f) * (g+h>>i);
 int k = ((a-b-c) * (b-c+d) % (c+d+e)) * ((d+e-f)*(e/f+g)%(f+g/h)) - ((h/i+j)*(i+j/a)*(j%a<<b));
+// int k = a-b-c;
 shd = e<<shs;
 shd = e>>shs;
 int l = j+k;
