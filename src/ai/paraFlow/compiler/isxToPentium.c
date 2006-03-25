@@ -609,7 +609,16 @@ struct isxAddress *q = isx->right;
 struct isxAddress *d = isx->dest;
 struct isxReg *eax = &regInfo[ax];
 struct isxReg *edx = &regInfo[dx];
+struct isxReg *ecx = &regInfo[cx];
+boolean swappedOutC = FALSE;
 
+if (q->adType == iadConst)
+    {
+    pentSwapOutIfNeeded(ecx, isx->liveList, coder);
+    codeOpDestReg(opMov, q, ecx, coder);
+    ecx->contents = NULL;
+    swappedOutC = TRUE;
+    }
 if (eax->contents != p)
     {
     pentSwapOutIfNeeded(eax, isx->liveList, coder);
@@ -617,7 +626,10 @@ if (eax->contents != p)
     }
 pentSwapOutIfNeeded(edx,isx->liveList, coder);
 clearReg(edx, coder);
-codeOp(opDiv, q, NULL, coder);
+if (swappedOutC)
+    unaryOpReg(opDiv, ecx, d->valType, coder);
+else
+    codeOp(opDiv, q, NULL, coder);
 if (eax->contents != NULL)
     eax->contents->reg = NULL;
 if (isMod)
@@ -880,8 +892,6 @@ struct regStomper *stomp;
 struct regStompStack *stompStack = NULL;
 AllocVar(stomp);
 
-#ifdef SOON
-#endif /* SOON */
 for (node = iList->tail; !dlStart(node); node = node->prev)
     {
     struct isx *isx = node->val;
@@ -937,6 +947,8 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 		   stomp->stompPos[dx] = 0;
 		   break;
 	       }
+	    if (isx->right->adType == iadConst)
+	       stomp->stompPos[cx] = 0;
 	    break;
 	case poShiftLeft:
 	case poShiftRight:
@@ -987,7 +999,7 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	fprintf(f, " ");
 	}
     fprintf(f, "]\n");	
-    fprintf(f, "# ");
+    fprintf(f, "# stomps ax bx cx dx si di ");
     for (i=0; i<ArraySize(regInfo); ++i)
 	fprintf(f, " %d", stomp->stompPos[i]);
     fprintf(f, "\n");
