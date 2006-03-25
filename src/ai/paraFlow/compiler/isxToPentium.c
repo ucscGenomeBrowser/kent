@@ -20,7 +20,7 @@ enum pentRegs
    ax=0, bx=1, cx=2, dx=3, si=4, di=5, st0=6, pentRegCount=7,
    };
 
-struct regInfo
+struct regStomper
 /* Information on registers. */
     {
     int stompPos[8];	
@@ -306,16 +306,20 @@ static struct isxReg *freeReg(struct isx *isx, enum isxValType valType,
 /* Find free register for instruction result. */
 {
 int i;
+struct isxAddress *dest;
 struct isxReg *regs = regInfo;
 int regCount = ArraySize(regInfo);
-struct isxReg *freeReg = NULL;
+struct isxReg *reg, *freeReg = NULL;
+struct regStomper *stomp = isx->cpuInfo;
+bool usedFlags[ArraySize(stomp->stompPos)];
+struct isxLiveVar *live;
 
-/* First look for a register holding a source that is no longer live. */
+/* Look for a register holding a source that is no longer live. */
     {
     int freeIx = BIGNUM;
     for (i=0; i<regCount; ++i)
 	{
-	struct isxReg *reg = &regs[i];
+	reg = &regs[i];
 	if (isxRegName(reg, valType))
 	    {
 	    struct isxAddress *iad = reg->contents;
@@ -344,6 +348,92 @@ struct isxReg *freeReg = NULL;
 	return freeReg;
     }
 
+/* Mark registers not used by live list as free. */
+for (i=0; i<regCount; ++i)
+    regs[i].isLive = FALSE;
+for (live = isx->liveList; live != NULL; live = live->next)
+    if ((reg = live->var->reg) != NULL)
+	reg->isLive = TRUE;
+for (i=0; i<regCount; ++i)
+     {
+     reg = &regs[i];
+     if (!reg->isLive)
+	 {
+	 if (reg->contents)
+	     reg->contents->reg = NULL;
+         reg->contents = NULL;
+	 }
+     }
+
+/* Look for a free register that will get stomped as soon after we disappear
+ * ourselves as possible.  We only know when we disappear if our use count
+ * is two or less. */
+if ((dest = isx->dest) != NULL)
+    {
+    int destLifetime = 0;
+    struct isxLiveVar *destLive = isxLiveVarFind(isx->liveList, dest);
+    if (destLive)
+        {
+	if (destLive->useCount <= 2)
+	    destLifetime = destLive->usePos[destLive->useCount-1];
+	else
+	    destLifetime = -1;
+	}
+    if (destLifetime >= 0)
+        {
+	int minUnstomped = BIGNUM;
+	for (i=0; i<regCount; ++i)
+	    {
+	    reg = &regs[i];
+	    if (isxRegName(reg, valType))
+		{
+		struct isxAddress *iad = reg->contents;
+		if (iad == NULL)
+		    {
+		    int stompPos = stomp->stompPos[i];
+		    if (stompPos>= destLifetime && stompPos < minUnstomped)
+			{
+			minUnstomped = stompPos;
+			freeReg = reg;
+			}
+		    }
+		}
+	    }
+	if (freeReg != NULL)
+	    {
+	    uglyf("got reg %s, which will be stomped in %d (we live %d)\n", isxRegName(freeReg, valType), minUnstomped, destLifetime);
+	    return freeReg;
+	    }
+	}
+    else  /* Here we have at least three references, try for stable register */
+        {
+	int maxUnstomped = -1;
+	int nextUse = destLive->usePos[0];
+	for (i=0; i<regCount; ++i)
+	    {
+	    reg = &regs[i];
+	    if (isxRegName(reg, valType))
+		{
+		struct isxAddress *iad = reg->contents;
+		if (iad == NULL)
+		    {
+		    int stompPos = stomp->stompPos[i];
+		    if (stompPos >= nextUse && stompPos > maxUnstomped)
+			{
+			maxUnstomped = stompPos;
+			freeReg = reg;
+			}
+		    }
+		}
+	    }
+	if (freeReg != NULL)
+	    {
+	    uglyf("got stable reg %s, which will be stomped in %d (we have %d uses)\n", isxRegName(freeReg, valType), maxUnstomped, destLive->useCount);
+	    return freeReg;
+	    }
+	}
+    }
+
 /* If no luck yet, look for any free register */
 for (i=0; i<regCount; ++i)
     {
@@ -352,8 +442,6 @@ for (i=0; i<regCount; ++i)
 	{
 	struct isxAddress *iad = reg->contents;
 	if (iad == NULL)
-	    return reg;
-	if (!isxLiveVarFind(isx->liveList, iad))
 	    return reg;
 	}
     }
@@ -730,109 +818,113 @@ for (node = iList->head; !dlEnd(node); node = node->next)
     }
 }
 
-struct regInfoStack
+struct regStompStack
     {
-    struct regInfoStack *next;	/* Next in stack. */
-    struct regInfo *info;	/* Info at this node. */
+    struct regStompStack *next;	/* Next in stack. */
+    struct regStomper *stomp;	/* Info at this node. */
     struct dlNode *node;	/* Node where we pushed this */
     int loopCount;		/* How many times we've gone through loop. */
-    struct regInfo *condInfo;	/* Info at start of condition. */
-    boolean gotCondInfo;	/* True if we've set cond info */
+    struct regStomper *condStomp;/* Stomper at start of condition. */
+    boolean gotCondStomp;	/* True if we've set cond info */
     };
 
 
-static void pushRegInfo(struct regInfoStack **pStack, 
-	struct regInfo *info, struct dlNode *node)
+static void pushRegStomper(struct regStompStack **pStack, 
+	struct regStomper *stomp, struct dlNode *node)
 /* Alloc and push live stack entry */
 {
-struct regInfoStack *is;
+struct regStompStack *is;
 AllocVar(is);
-is->info = info;
+is->stomp = stomp;
 is->node = node;
 slAddHead(pStack, is);
 }
 
-static void popRegInfo(struct regInfoStack **pStack)
+static void popRegStomper(struct regStompStack **pStack)
 /* Pop and free live stack entry */
 {
-struct regInfoStack *is = *pStack;
+struct regStompStack *is = *pStack;
 assert(is != NULL);
 *pStack = is->next;
 freeMem(is);
 }
 
-static void foldInCaseRegInfo(struct regInfoStack *is, struct regInfo *info)
+static void foldInCaseRegStomper(struct regStompStack *is, 
+	struct regStomper *stomp)
 /* Fold the liveList into the condLiveList. */
 {
-struct regInfo *cond = is->condInfo;
+struct regStomper *cond = is->condStomp;
 int i;
-if (is->gotCondInfo)
+if (is->gotCondStomp)
     {
-    for (i=0; i<ArraySize(info->stompPos); ++i)
+    for (i=0; i<ArraySize(stomp->stompPos); ++i)
 	{
-	cond->stompPos[i] = min(cond->stompPos[i], info->stompPos[i]);
+	cond->stompPos[i] = min(cond->stompPos[i], stomp->stompPos[i]);
 	}
     }
 else
     {
-    *cond = *info;
-    is->gotCondInfo = TRUE;
+    AllocVar(cond);
+    is->condStomp = cond;
+    *cond = *stomp;
+    is->gotCondStomp = TRUE;
     }
 }
 
-static void addRegInfo(struct dlList *iList)
-/* Add regInfo to all instructions. */
+static void addRegStomper(struct dlList *iList)
+/* Add regStomper to all instructions. */
 {
 int i;
 struct dlNode *node;
-struct regInfo *info;
-struct regInfoStack *infoStack = NULL;
-AllocVar(info);
+struct regStomper *stomp;
+struct regStompStack *stompStack = NULL;
+AllocVar(stomp);
 
 #ifdef SOON
+#endif /* SOON */
 for (node = iList->tail; !dlStart(node); node = node->prev)
     {
     struct isx *isx = node->val;
 
-    /* Save away current info list. */
-    isx->regInfo = info;
+    /* Save away current stomp list. */
+    isx->cpuInfo = stomp;
     switch (isx->opType)
         {
 	case poLoopEnd:
 	case poCondEnd:
-	    pushRegInfo(&infoStack, info, node);
+	    pushRegStomper(&stompStack, stomp, node);
 	    break;
 	case poCondCase:
-	    foldInCaseRegInfo(infoStack, info);
+	    foldInCaseRegStomper(stompStack, stomp);
 	    break;
 	case poCondStart:
-	    info = infoStack->condInfo;
-	    infoStack->condInfo = NULL;
-	    popRegInfo(&infoStack);
+	    stomp = stompStack->condStomp;
+	    stompStack->condStomp = NULL;
+	    popRegStomper(&stompStack);
 	    break;
 	case poLoopStart:
-	    if (infoStack->loopCount > 0)
-	        popRegInfo(&infoStack);
+	    if (stompStack->loopCount > 0)
+	        popRegStomper(&stompStack);
 	    else
 	        {
-		infoStack->loopCount = 1;
-		node = infoStack->node;
+		stompStack->loopCount = 1;
+		node = stompStack->node;
 		}
 	    break;
 	}
 
-    /* Make new copy of info and bump all stomp positions. */
-    info = CloneVar(info);
-    for (i=0; i<ArraySize(info->stompPos); ++i)
-	info->stompPos[i] += 1;
+    /* Make new copy of stomper and bump all stomp positions. */
+    stomp = CloneVar(stomp);
+    for (i=0; i<ArraySize(stomp->stompPos); ++i)
+	stomp->stompPos[i] += 1;
 
     /* Snoop through stomping instructions, and set stomps. */
     switch (isx->opType)
         {
 	case poCall:
-	   info->stompPos[ax] = 0;
-	   info->stompPos[cx] = 0;
-	   info->stompPos[dx] = 0;
+	   stomp->stompPos[ax] = 0;
+	   stomp->stompPos[cx] = 0;
+	   stomp->stompPos[dx] = 0;
 	   break;
 	case poDiv:
 	case poMod:
@@ -841,21 +933,20 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 	       case ivByte:
 	       case ivShort:
 	       case ivInt:
-	           info->stompPos[ax] = 0;
-		   info->stompPos[dx] = 0;
+	           stomp->stompPos[ax] = 0;
+		   stomp->stompPos[dx] = 0;
 		   break;
 	       }
 	    break;
 	case poShiftLeft:
 	case poShiftRight:
 	    if (isx->right->adType != iadConst)
-	        info->stompPos[cx] = 0;
+	        stomp->stompPos[cx] = 0;
 	    break;
 	}
     }
-#endif /* SOON */
-assert(infoStack == NULL);
-freeMem(info);
+assert(stompStack == NULL);
+freeMem(stomp);
 }
 
 void pentFromIsx(struct dlList *iList, FILE *f)
@@ -866,16 +957,22 @@ struct isxReg *destReg;
 struct dlNode *node, *nextNode;
 struct isx *isx;
 struct pentCoder *coder = pentCoderNew();
+struct regStomper *stomp;
 
+uglyf("ok1\n");
 calcInputOffsets(iList);
-addRegInfo(iList);
+uglyf("ok2\n");
+addRegStomper(iList);
+uglyf("ok3\n");
 gnuMacPreamble(iList, f);
+uglyf("ok4\n");
 fprintf(f, "\n# Starting code generation\n");
 
 for (node = iList->head; !dlEnd(node); node = nextNode)
     {
     nextNode = node->next;
     isx = node->val;
+    stomp = isx->cpuInfo;
 #define HELP_DEBUG
 #ifdef HELP_DEBUG
     fprintf(f, "# ");	
@@ -890,6 +987,10 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	fprintf(f, " ");
 	}
     fprintf(f, "]\n");	
+    fprintf(f, "# ");
+    for (i=0; i<ArraySize(regInfo); ++i)
+	fprintf(f, " %d", stomp->stompPos[i]);
+    fprintf(f, "\n");
 #endif /* HELP_DEBUG */
     switch (isx->opType)
         {

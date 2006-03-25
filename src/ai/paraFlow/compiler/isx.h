@@ -125,7 +125,7 @@ struct isx
     struct isxAddress *left;	/* Left (or only) source address. */
     struct isxAddress *right;	/* Right (optional) source address.*/
     struct isxLiveVar *liveList;/* List of live vars after instruction.  */
-    void *regInfo;		/* Machine-specific register info. */
+    void *cpuInfo;		/* Machine-specific register info. */
     };
 
 struct isxReg
@@ -140,6 +140,7 @@ struct isxReg
     char *doubleName;		 /* Register name when used for doubles. */
     char *pointerName;		 /* Register name when used for pointers. */
     struct isxAddress *contents; /* What if anything register holds */
+    bool isLive;		/* True if holds live variable. */
     };
 
 
