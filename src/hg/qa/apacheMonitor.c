@@ -3,6 +3,16 @@
 #include "hdb.h"
 #include "hgConfig.h"
 #include "hgRelate.h"
+#include "options.h"
+
+static char const rcsid[] = "$Id: apacheMonitor.c,v 1.4 2006/03/25 00:46:24 heather Exp $";
+
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"store", OPTION_BOOLEAN}, 
+    {NULL, 0} 
+};
+
 
 char *host = NULL;
 char *user = NULL;
@@ -44,7 +54,9 @@ void usage()
 errAbort(
     "apacheMonitor - check for error 500s in the last minutes\n"
     "usage:\n"
-    "    apacheMonitor host database minutes\n");
+    "    apacheMonitor host database minutes\n"
+    "options:\n"
+    "    -store  Write to status500 table");
 }
 
 static char* getCfgValue(char* envName, char* cfgName)
@@ -183,7 +195,7 @@ hFreeConn(&conn);
 return ret;
 }
 
-void readLogs(int secondsNow)
+void readLogs(int secondsNow, boolean write500)
 /* read access_log where time_stamp > startTime */
 /* write error 500 to fileName */
 {
@@ -198,8 +210,11 @@ int errors = 0;
 FILE *outputFileHandle = NULL;
 int status = 0;
 
-safef(fileName, ArraySize(fileName), "/tmp/apacheMonitor/%d.tab", secondsNow);
-outputFileHandle = mustOpen(fileName, "w");
+if (write500)
+    {
+    safef(fileName, ArraySize(fileName), "/tmp/apacheMonitor/%d.tab", secondsNow);
+    outputFileHandle = mustOpen(fileName, "w");
+    }
 
 safef(query, sizeof(query), "select remote_host, machine_id, status, time_stamp, "
                             "request_method, request_uri, request_line, referer, agent "
@@ -212,12 +227,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     logMachine(row[1]);
     if (sameString(row[7], "-")) robotcount++;
     total++;
-    if (status == 500)
+    if (status == 500 && write500)
         fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
 	        row[0], row[1], row[3], row[4], row[5], row[6], row[7], row[8]);
     } 
 sqlFreeResult(&sr);
-carefulClose(&outputFileHandle);
+if (write500) carefulClose(&outputFileHandle);
 hFreeConn(&conn);
 }
 
@@ -281,6 +296,9 @@ int main(int argc, char *argv[])
 /* Check args and call readLogs. */
 {
 int timeNow = 0;
+
+optionInit(&argc, argv, optionSpecs); 
+
 if (argc != 4)
     usage();
 host = argv[1];
@@ -294,12 +312,12 @@ hSetDbConnect(host, database, user, password);
 
 printDatabaseTime();
 timeNow = getUnixTimeNow();
-readLogs(timeNow);
+readLogs(timeNow, optionExists("store"));
 verbose(1, "Total hits in the last %d minutes = %d\n", minutes, total);
 verbose(1, "Hits from robots = %d\n\n", robotcount);
 printMachines();
 printStatus();
-if (status500 > 0) store500(timeNow);
-cleanup(timeNow);
+if (status500 > 0 && optionExists("store")) store500(timeNow);
+if (optionExists("store")) cleanup(timeNow);
 return 0;
 }
