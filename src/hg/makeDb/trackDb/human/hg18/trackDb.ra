@@ -20,7 +20,7 @@ cdsDrawOptions enabled
 track haplotypePos
 shortLabel $Organism hapPos
 longLabel $Organism Haplotype Posistion
-group rna
+group varRep
 priority 54.5
 visibility hide
 type psl .
@@ -41,7 +41,7 @@ shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation (17 Species)
 group compGeno
 priority 104.2
-visibility pack
+visibility hide
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
