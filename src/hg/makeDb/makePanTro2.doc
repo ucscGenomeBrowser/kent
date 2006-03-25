@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.9 2006/03/25 00:54:59 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.10 2006/03/25 21:52:14 markd Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -707,7 +707,7 @@ cat > liftChroms.csh << 'EOF'
 
 
 
-# GENBANK ALIGNMENTS (WORKING 2006-03-03 kate)
+# GENBANK ALIGNMENTS (DONE 2006-03-25 kate/markd)
     # restarted 3/13 4pm
 
     # Make a lift file that identifies gap locations for Genbank
@@ -724,7 +724,9 @@ cat > liftChroms.csh << 'EOF'
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
     # edit etc/genbank.conf to add panTro2
-    # reviewed by Mark D.
+    # the hack in the genbank code for panTro1 as changed for
+    # panTro2.  panTro2 treats both chimp and human cDNAs as
+    # native, and all else as xeno.  Don't do xeno ESTs any more.
 
 panTro2.serverGenome = /cluster/data/panTro2/panTro2.2bit
 panTro2.clusterGenome = /scratch/hg/panTro2/panTro2.2bit
@@ -738,7 +740,7 @@ panTro2.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaF
 panTro2.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
 panTro2.genbank.est.xeno.pslCDnaFilter    = ${ordered.genbank.est.xeno.pslCDnaFilter}
 panTro2.downloadDir = panTro2
-panTro2.genbank.est.xeno.load = yes
+panTro2.genbank.est.xeno.load = no
 panTro2.refseq.mrna.native.load  = yes
 panTro2.refseq.mrna.xeno.load = yes
 panTro2.refseq.mrna.xeno.loadDesc  = yes
@@ -751,6 +753,10 @@ panTro2.refseq.mrna.xeno.loadDesc  = yes
     nice bin/gbAlignStep -initial panTro2 &
     # various problems with ssh, bluearc, etc....
     nice bin/gbAlignStep -initial -continue=copy panTro2 &
+
+    ssh hgwdev
+    nice bin/gbDbLoadStop -initialLoad -drop panTro2 &
+  
 
 
 # MAKE LINEAGE-SPECIFIC REPEATS FOR BLASTZ (2006-03-15 kate)
