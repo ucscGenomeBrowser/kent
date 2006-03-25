@@ -432,13 +432,27 @@ return dest;
 static struct isxAddress *isxUnaryOp(struct pfCompile *pfc, 
 	struct pfParse *pp, struct hash *varHash, 
 	enum isxOpType op, struct dlList *iList)
-/* Generate intermediate code for expression. Return destination */
+/* Generate intermediate code for unary expression. Return destination */
 {
 struct isxAddress *target = isxExpression(pfc, pp->children,
 	varHash, iList);
 struct isxAddress *dest = tempAddress(pfc, varHash, ppToIsxValType(pfc,pp));
 isxNew(pfc, op, dest, target, NULL, iList);
 return dest;
+}
+
+static void isxOpEquals(struct pfCompile *pfc, 
+	struct pfParse *pp, struct hash *varHash, 
+	enum isxOpType op, struct dlList *iList)
+{
+struct pfParse *use = pp->children;
+struct isxAddress *exp = isxExpression(pfc, use->next,
+	varHash, iList);
+struct isxAddress *dest = varAddress(use->var, varHash, 
+	ppToIsxValType(pfc, use));
+struct isxAddress *temp = tempAddress(pfc, varHash, ppToIsxValType(pfc,pp));
+isxNew(pfc, op, temp, dest, exp, iList);
+isxNew(pfc, poAssign, dest, temp, NULL, iList);
 }
 
 static struct isxAddress *isxStringCat(struct pfCompile *pfc,
@@ -682,6 +696,18 @@ switch (pp->type)
 	isxNew(pfc, poAssign, dest, source, NULL, iList);
 	break;
 	}
+    case pptPlusEquals:
+	isxOpEquals(pfc, pp, varHash, poPlus, iList);
+	break;
+    case pptMinusEquals:
+	isxOpEquals(pfc, pp, varHash, poMinus, iList);
+	break;
+    case pptMulEquals:
+	isxOpEquals(pfc, pp, varHash, poMul, iList);
+	break;
+    case pptDivEquals:
+	isxOpEquals(pfc, pp, varHash, poDiv, iList);
+	break;
     case pptIf:
         {
 	struct pfParse *test = pp->children;
