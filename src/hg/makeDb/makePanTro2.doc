@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.8 2006/03/24 21:57:39 hiram Exp $"
+#	"$Id: makePanTro2.doc,v 1.9 2006/03/25 00:54:59 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -53,7 +53,7 @@ exit; # don't actually run this like a script :)
     # 505
 
 
-# BUILD CHROM FASTA FILES (2005-02-28 kate)
+# BUILD CHROM FASTA FILES (2006-02-28 kate)
 #  Most chroms are built from contigs, a few have
 #       clones in the AGP, chr7 has both!
 
@@ -354,13 +354,15 @@ chrY   1261428 bases of 23952694 (5.266%) in intersection
         endif
     end
     mkdir lifts
-    cat split500K/*.lft > lifts/lift500K.lft
+    cat split500K/*.lft > lifts/split500K.lft
 
     # Redo chr9 (2006-03-02 kate)
     rm -fr split500K/chr9
     mkdir split500K/chr9
     faSplit gap -minGapSize=100 -verbose=2 9/chr9.fa 500000 \
                 split500K/chr9/chr9_ -lift=split500K/chr9.lft
+    # forgot to redo this -- doing it now (2006-03-21 kate)
+    cat split500K/*.lft > lifts/split500K.lft
 
 
 # REPEATMASKER RUN (2006-03-01 kate)
@@ -436,18 +438,22 @@ cat > lift.csh << 'EOF'
     foreach d (`cat ../chrom.lst`)
         set c = chr$d
         echo $c
-        liftUp ../$d/$c.fa.out ../lifts/lift500K.lft error out/$c/*.out
+        liftUp ../$d/$c.fa.out ../lifts/split500K.lft error out/$c/*.out
         set r = ${c}_random
         if (-e out/$r) then
             echo $r
-            liftUp ../$d/$r.fa.out ../lifts/lift500K.lft error out/$r/*.out
+            liftUp ../$d/$r.fa.out ../lifts/split500K.lft error out/$r/*.out
         endif
     end
 'EOF'
     # << for emacs
     csh lift.csh >&! lift.log &
 
+    # Redo chr9 after remaking split500K.lft (2006-03-24 kate)
+    liftUp ../9/chr9.fa.out ../lifts/split500K.lft error out/chr9/*.out
+
     # Load .outs into database
+    # Redone after relift (2006-03-24 kate)
     ssh hgwdev
     cd /cluster/data/panTro2
     ls */*.fa.out | wc -l
@@ -469,6 +475,9 @@ cat > lift.csh << 'EOF'
         # 1401134418 bases of 2909512873 (48.157%) in intersection
     nice featureBits panTro1 rmsk
         # 1311281819 bases of 2733948177 (47.963%) in intersection
+        # after chr9 .out reload...
+        # 1311281819 bases of 2733948177 (47.963%) in intersection
+
     # looks good -- similar but just a bit higher
 
     ssh hgwdev
@@ -512,7 +521,7 @@ cat > lift.csh << 'EOF'
         endif
     end
     mkdir lifts
-    cat split5M/*.lft > lifts/lift5M.lft
+    cat split5M/*.lft > lifts/split5M.lft
 
     # Run TRF
     mkdir -p bed/simpleRepeat/trf
@@ -535,6 +544,7 @@ cat > runTrf.csh << 'EOF'
     # ~6 hours run-time
 
     # Redo chr9 (2006-03-02 kate)
+    cd /cluster/data/panTro2
     rm -fr split5M/chr9
     mkdir split5M/chr9
     faSplit gap -minGapSize=100 -verbose=2 9/chr9.fa 5000000 \
@@ -543,7 +553,6 @@ cat > runTrf.csh << 'EOF'
     cp runTrf.csh runTrf.chr9.csh
      # edit for just chr9
     csh runTrf.chr9.csh >&! runTrf.chr9.log &
-
     # check for EOF in output files to give some assurance
     endsInLf trf/*
         # trf/chrM_0.bed zero length
@@ -552,12 +561,20 @@ cat > runTrf.csh << 'EOF'
     liftUp simpleRepeat.bed /cluster/data/panTro2/lifts/split5M.lft \
          warn trf/*.bed
 
+    # forgot to include the new lift in the all split (2006-03-21 kate)
+    # so do it now and reload table
+    cd /cluster/data/panTro2
+    cat split5M/*.lft > lifts/split5M.lft
+    cd bed/simpleRepeat
+    liftUp simpleRepeat.bed /cluster/data/panTro2/lifts/split5M.lft \
+         warn trf/*.bed
+
     # load into database
     ssh hgwdev
     cd /cluster/data/panTro2/bed/simpleRepeat
     hgLoadBed panTro2 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
-
+  
     nice featureBits panTro2 simpleRepeat
         # 82897828 bases of 2909512873 (2.849%) in intersection
     nice featureBits panTro1 simpleRepeat
@@ -598,7 +615,7 @@ cat > liftChroms.csh << 'EOF'
 'EOF'
     # << for emacs
     csh liftChroms.csh >&! liftChroms.log &
-    
+
     # check coverage of filtered TRF
     hgwdev
     cd /cluster/data/panTro2/bed/simpleRepeat
@@ -609,11 +626,11 @@ cat > liftChroms.csh << 'EOF'
 
 # MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF  (2006-03-03)
     
-    ssh kkstore01
-    cd /cluster/data/panTro2
-
     # soft-mask (lower-case) the chrom fasta files
     # then make hard-masked versions from the soft-masked
+    # note: next time simplify this (as below for chr9)
+    ssh kkstore01
+    cd /cluster/data/panTro2
     set trfChr=bed/simpleRepeat/trfMaskChrom
     foreach f (?{,?}/chr*.fa 6_hla_hap1/chr*.fa)
       cp $f $f.unmasked
@@ -626,16 +643,29 @@ cat > liftChroms.csh << 'EOF'
       maskOutFa $f hard $f.masked
     end
 
+    # remask chr9 after relifting .out's (2006-03-24)
+    set f = 9/chr9.fa
+    set c = chr9
+    maskOutFa -soft $f.unmasked $f.out $f.rmsk
+    maskOutFa -softAdd $f.rmsk $trfChr/$c.bed $f
+    maskOutFa $f hard $f.masked
+
     # a few messages (e.g. 10 per chrom) like:
     # WARNING: negative rEnd: -531 chr1:14090705-14090763 L1MEc
 
     # after checking, remove .unmasked and .rmsk
 
     # make 2bit for browser and blat
+    # redone for chr9 correction (2006-03-24 kate)
     faToTwoBit ?{,?}/chr*.fa 6_hla_hap1/chr*.fa panTro2.2bit
     mkdir /cluster/bluearc/scratch/hg/panTro2
     ssh kkr1u00
     cp -p /cluster/data/panTro2/panTro2.2bit /iscratch/i/panTro2/panTro2.2bit
+    ~kent/bin/iSync
+
+    # after chr9 remask:
+    cp -p /cluster/data/panTro2/panTro2.2bit /iscratch/i/panTro2
+    cp -p /cluster/data/panTro2/nib/chr9.nib /iscratch/i/panTro2/nib
     ~kent/bin/iSync
 
     # make nibs for blastz w/linSpecRep
@@ -644,9 +674,12 @@ cat > liftChroms.csh << 'EOF'
       echo $f:t:r
       faToNib -softMask $f nib/$f:t:r.nib
     end
+    # remake chr9 (2006-03-24 kate)
+    faToNib -softMask 9/chr9.fa nib/chr9.nib
 
 
 # MAKE 11.OOC 
+#   #Remade after chr9 remask (2006-03-24 kate)
 
     ssh kolossus
     cd /cluster/data/panTro2
@@ -654,7 +687,6 @@ cat > liftChroms.csh << 'EOF'
     blat panTro2.2bit /dev/null /dev/null \
         -tileSize=11 -makeOoc=/cluster/bluearc/panTro2/11.ooc -repMatch=1024
     cp -p /cluster/bluearc/panTro2/11.ooc .
-
 
 
 # COPY SEQUENCE TO CLUSTER NODES FOR CLUSTER RUNS
@@ -667,11 +699,28 @@ cat > liftChroms.csh << 'EOF'
     cp -p 11.ooc $scratch
     # request cluster-admin sync /scratch/hg/panTro2 to cluster nodes
 
+    # update 2bit and chr9 nib after updating chr9 masking
+    cp -p panTro2.2bit $scratch
+    cp -p nib/chr9.nib $scratch
+    cp -p 11.ooc $scratch
+    # request cluster-admin sync /scratch/hg/panTro2 to cluster nodes
+
 
 
 # GENBANK ALIGNMENTS (WORKING 2006-03-03 kate)
     # restarted 3/13 4pm
 
+    # Make a lift file that identifies gap locations for Genbank
+    # This is a pseudo "liftAll" made from the AGP files, however negative
+    #  strand contigs are renamed to indicate they need to be
+    #  reversed. 
+    
+    ssh kkstore01
+    cd /cluster/data/panTro2
+    cat ?{,?}/*.agp 6_hla_hap1/*.agp | agpToLift -revStrand > \
+        lifts/genbank.lft
+    
+    ssh hgwdev
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
     # edit etc/genbank.conf to add panTro2
@@ -681,7 +730,7 @@ panTro2.serverGenome = /cluster/data/panTro2/panTro2.2bit
 panTro2.clusterGenome = /scratch/hg/panTro2/panTro2.2bit
 panTro2.ooc = /cluster/bluearc/panTro2/11.ooc
 panTro2.align.unplacedChroms = chrUn,chr*_random
-panTro2.lift = /cluster/data/panTro2/lifts/lift5M.lft
+panTro2.lift = /cluster/data/panTro2/lifts/genbank.lft
 panTro2.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
 panTro2.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
 panTro2.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
@@ -731,6 +780,13 @@ cat > outRepeats.csh << 'EOF'
     # << for emacs
     csh outRepeats.csh >&! outRepeats.log &
         # 25 minutes
+
+    # Redo for fixed chr9 (2006-03-24 kate)
+    cp /cluster/data/panTro2/9/chr9.fa.out .
+    set c = chr9
+    /cluster/bluearc/RepeatMasker060120/DateRepeats $c.fa.out -query human \
+            -comp mouse -comp rat -comp dog -comp cow -comp rabbit
+        mv $c.fa.*cuniculus $c.fa.dates.out
     
     # run our script to extract lineage-specific by column 
     #   from the annotated .outs
@@ -786,6 +842,15 @@ cat > makeLSR.csh << 'EOF'
     cp -rp notInRodent $d
     cp -rp notInOthers $d
 
+    # update for chr9 (2006-03-24 kate)
+    set c = chr9
+    extractRepeats 1 dates/$c.fa.dates.out > \
+                notInRodent/$c.out.spec
+    extractRepeats 3 dates/$c.fa.dates.out > \
+                notInOthers/$c.out.spec
+    cp -rp notInRodent $d
+    cp -rp notInOthers $d
+
 
 # SET UP BLAT SERVER (2006-03-06 kate)
 # Request blat server from cluster-admin, then enter ports in database
@@ -817,6 +882,7 @@ cat > makeLSR.csh << 'EOF'
 
 # CPGISLANDS (2006-03-06 - kate)
 #       Redo 3/13/06 after second Repeatmasker run
+#       Redone for chr9 remasking (2006-03-24 kate)
     ssh hgwdev
     mkdir /cluster/data/panTro2/bed/cpgIsland
     cd /cluster/data/panTro2/bed/cpgIsland
@@ -871,9 +937,10 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     hgLoadBed -strict panTro2 cpgIslandExt -tab -noBin \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
     featureBits panTro2 cpgIslandExt
-        # 19683681 bases of 2909512873 (0.677%) in intersection
+        # 19412837 bases of 2909512873 (0.667%) in intersection
 
-# BAC Ends (2006-03-08 kate)
+
+# BAC Ends (2006-03-08 IN PROGRESS kate)
 
     # download BAC ends from NCBI.  
     ssh kkstore
@@ -984,7 +1051,6 @@ cat > gsub << 'EOF'
 
 
    # MAKE DOWNLOADABLE SEQUENCE FILES
-
 
 
 ########################
@@ -1154,7 +1220,7 @@ SEQ2_IN_CONTIGS=0
 SEQ2_CHUNK=200000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/panTro2/bed/blastz.canFam2.2005-03-15
+BASE=/cluster/data/panTro2/bed/blastz.canFam2.2006-03-15
 TMPDIR=/scratch/tmp
 '_EOF_'
     # << happy emacs
@@ -1182,6 +1248,7 @@ TMPDIR=/scratch/tmp
     /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -continue=load \
 	`pwd`/DEF >&! blastz.3.out &
+
 
 
 #########################################################################
@@ -1254,7 +1321,7 @@ TMPDIR=/scratch/tmp
     # Create template file, gsub, for gensub2.  For example (3-line file):
     cat << '_EOF_' > gsub
 #LOOP
-/cluster/home/kate/bin/RH7/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
 #ENDLOOP
 '_EOF_'
     # << this line makes emacs coloring happy
