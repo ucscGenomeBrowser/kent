@@ -131,7 +131,7 @@ while ((fname = sqlFieldName(gpr->sr)) != NULL)
     {
     if (sameString(fname, "bin"))
         {
-        if (iCol == 0)
+        if (iCol != 0)
             errAbort("bin column not first column in %s", gpr->table);
         gpr->rowOffset = 1;
         }
