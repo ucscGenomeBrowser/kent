@@ -126,38 +126,36 @@ else
 return liveList;
 }
 
-struct liveStack
+struct condStack
+/* A stack of conditionals */
     {
-    struct liveStack *next;	/* Next in stack. */
+    struct condStack *next;	/* Next in stack. */
     struct isxLiveVar *liveList;	/* Live list at this node. */
     struct dlNode *node;	/* Node where we pushed liveList */
-    int loopCount;		/* How many times we've gone through loop. */
-    struct isxLoopInfo *loopy;  /* Additional loop info */
     struct isxLiveVar *condLiveList;	/* Live list at start of condition. */
     };
 
-static void pushLiveList(struct liveStack **pStack, struct isxLiveVar *liveList,
-	struct dlNode *node, struct isxLoopInfo *loopy)
-/* Alloc and push live stack entry */
+static void pushCond(struct condStack **pStack, struct isxLiveVar *liveList,
+	struct dlNode *node)
+/* Alloc and push conditional stack entry */
 {
-struct liveStack *ls;
-AllocVar(ls);
-ls->liveList = liveList;
-ls->node = node;
-ls->loopy = loopy;
-slAddHead(pStack, ls);
+struct condStack *cond;
+AllocVar(cond);
+cond->liveList = liveList;
+cond->node = node;
+slAddHead(pStack, cond);
 }
 
-static void popLiveList(struct liveStack **pStack)
-/* Pop and free live stack entry */
+static void popCond(struct condStack **pStack)
+/* Pop and free cond stack entry */
 {
-struct liveStack *ls = *pStack;
-assert(ls != NULL);
-*pStack = ls->next;
-freeMem(ls);
+struct condStack *cond = *pStack;
+assert(cond != NULL);
+*pStack = cond->next;
+freeMem(cond);
 }
 
-static void foldInCaseLive(struct liveStack *ls, struct isxLiveVar *liveList)
+static void foldInCaseLive(struct condStack *ls, struct isxLiveVar *liveList)
 /* Fold the liveList into the condLiveList. */
 {
 struct isxLiveVar *live, *next;
@@ -190,6 +188,38 @@ for (live = liveList; live != NULL; live = live->next)
 }
 
 
+struct loopStack
+/* A stack of loops */
+    {
+    struct loopStack *next;	/* Next in stack. */
+    struct isxLiveVar *liveList;	/* Live list at this node. */
+    struct dlNode *node;	/* Node where we pushed liveList */
+    int loopCount;		/* How many times we've gone through loop. */
+    struct isxLoopInfo *loopy;  /* Additional loop info */
+    };
+
+static void pushLoop(struct loopStack **pStack, struct isxLiveVar *liveList,
+	struct dlNode *node, struct isxLoopInfo *loopy)
+/* Alloc and push conditional stack entry */
+{
+struct loopStack *loop;
+AllocVar(loop);
+loop->liveList = liveList;
+loop->node = node;
+loop->loopy = loopy;
+slAddHead(pStack, loop);
+}
+
+static void popLoop(struct loopStack **pStack)
+/* Pop and free loop stack entry */
+{
+struct loopStack *loop = *pStack;
+assert(loop != NULL);
+*pStack = loop->next;
+freeMem(loop);
+}
+
+
 static struct isxAddress *loopyAddress(struct isxLoopInfo *loopy)
 /* Create reference to a build-in operator call */
 {
@@ -201,7 +231,8 @@ iad->val.loopy = loopy;
 return iad;
 }
 
-static struct isxLoopInfo *getLoopyAtEnd(struct dlNode *node, struct isx *isx)
+static struct isxLoopInfo *getLoopyAtEnd(struct dlNode *node, struct isx *isx,
+	struct loopStack *parent)
 /* Get loopInfo.  Create it and hang it on isx->left if it doesn't already
  * exist */
 {
@@ -212,6 +243,10 @@ if (iad == NULL)
     AllocVar(loopy);
     loopy->end = node;
     isx->left = loopy->iad = loopyAddress(loopy);
+    if (parent != NULL)
+        {
+	slAddTail(&parent->loopy->children, loopy);
+	}
     }
 else
     {
@@ -242,7 +277,8 @@ void isxLiveList(struct dlList *iList)
 {
 struct dlNode *node;
 struct isxLiveVar *liveList = NULL;
-struct liveStack *liveStack = NULL, *ls;
+struct condStack *condStack = NULL, *cond;
+struct loopStack *loopStack = NULL, *loop;
 for (node = iList->tail; !dlStart(node); node = node->prev)
     {
     struct isxLiveVar *newList = NULL, *live;
@@ -255,29 +291,29 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
     switch (isx->opType)
         {
 	case poLoopEnd:
-	    loopy = getLoopyAtEnd(node, isx);
-	    pushLiveList(&liveStack, liveList, node, loopy);
+	    loopy = getLoopyAtEnd(node, isx, loopStack);
+	    pushLoop(&loopStack, liveList, node, loopy);
 	    break;
 	case poCondEnd:
-	    pushLiveList(&liveStack, liveList, node, NULL);
+	    pushCond(&condStack, liveList, node);
 	    break;
 	case poCondCase:
-	    foldInCaseLive(liveStack, liveList);
-	    liveList = liveStack->liveList;
+	    foldInCaseLive(condStack, liveList);
+	    liveList = condStack->liveList;
 	    break;
 	case poCondStart:
-	    liveList = liveStack->condLiveList;
-	    liveStack->condLiveList = NULL;
-	    popLiveList(&liveStack);
+	    liveList = condStack->condLiveList;
+	    condStack->condLiveList = NULL;
+	    popCond(&condStack);
 	    break;
 	case poLoopStart:
-	    setLoopyAtStart(liveStack->loopy, node);
-	    if (liveStack->loopCount > 0)
-	        popLiveList(&liveStack);
+	    setLoopyAtStart(loopStack->loopy, node);
+	    if (loopStack->loopCount > 0)
+	        popLoop(&loopStack);
 	    else
 	        {
-		liveStack->loopCount = 1;
-		node = liveStack->node;
+		loopStack->loopCount = 1;
+		node = loopStack->node;
 		}
 	    break;
 	}
@@ -307,7 +343,8 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
     /* Flip to new live list */
     liveList = newList;
     }
-assert(liveStack == NULL);
+assert(loopStack == NULL);
+assert(condStack == NULL);
 isxLiveVarFreeList(&liveList);
 }
 

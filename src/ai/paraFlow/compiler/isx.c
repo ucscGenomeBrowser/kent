@@ -214,8 +214,13 @@ switch (iad->adType)
         fprintf(f, "@%s", iad->name);
 	break;
     case iadLoopInfo:
-        fprintf(f, "~%dx%d", iad->val.loopy->iteration, 
-		iad->val.loopy->instructionCount);
+	{
+	struct isxLoopInfo *loopy = iad->val.loopy;
+        fprintf(f, "~%dx%d", loopy->iteration, 
+		loopy->instructionCount);
+	if (loopy->children == NULL)
+	     fprintf(f, "[inner]");
+	}
 	break;
     default:
         internalErr();

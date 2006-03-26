@@ -100,6 +100,8 @@ enum isxAddressType
 struct isxLoopInfo
 /* Information associated with a loop. */
     {
+    struct isxLoopInfo *next;	 /* Younger sibling. */
+    struct isxLoopInfo *children;/* Eldest child. */
     struct dlNode *start;	 /* Loop start instruction. */
     struct dlNode *end;		 /* Loop end instruction. */
     int instructionCount;	 /* Number of instructions in loop */
