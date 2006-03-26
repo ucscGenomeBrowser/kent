@@ -94,14 +94,27 @@ enum isxAddressType
     iadOutStack,
     iadOperator,
     iadLabel,
+    iadLoopInfo,
+    };
+
+struct isxLoopInfo
+/* Information associated with a loop. */
+    {
+    struct dlNode *start;	 /* Loop start instruction. */
+    struct dlNode *end;		 /* Loop end instruction. */
+    int instructionCount;	 /* Number of instructions in loop */
+    struct isxAddress *iad;	 /* Associated isxAddress */
+    int iteration;		 /* How many times we've been through */
     };
 
 union isxAddressVal
+/* Variable part of an isx code address. */
     {
     struct pfToken *tok;	/* For constants */
     struct pfVar *var;		/* For real vars */
     int tempMemLoc;		/* Memory location for temps, 0 for none */
     int stackOffset;		/* Stack offset. */
+    struct isxLoopInfo *loopy;  /* Information on loop */
     };
 
 struct isxAddress

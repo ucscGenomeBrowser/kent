@@ -132,17 +132,19 @@ struct liveStack
     struct isxLiveVar *liveList;	/* Live list at this node. */
     struct dlNode *node;	/* Node where we pushed liveList */
     int loopCount;		/* How many times we've gone through loop. */
+    struct isxLoopInfo *loopy;  /* Additional loop info */
     struct isxLiveVar *condLiveList;	/* Live list at start of condition. */
     };
 
 static void pushLiveList(struct liveStack **pStack, struct isxLiveVar *liveList,
-	struct dlNode *node)
+	struct dlNode *node, struct isxLoopInfo *loopy)
 /* Alloc and push live stack entry */
 {
 struct liveStack *ls;
 AllocVar(ls);
 ls->liveList = liveList;
 ls->node = node;
+ls->loopy = loopy;
 slAddHead(pStack, ls);
 }
 
@@ -187,6 +189,53 @@ for (live = liveList; live != NULL; live = live->next)
     }
 }
 
+
+static struct isxAddress *loopyAddress(struct isxLoopInfo *loopy)
+/* Create reference to a build-in operator call */
+{
+struct isxAddress *iad;
+AllocVar(iad);
+iad->adType = iadLoopInfo;
+iad->valType = ivJump;
+iad->val.loopy = loopy;
+return iad;
+}
+
+static struct isxLoopInfo *getLoopyAtEnd(struct dlNode *node, struct isx *isx)
+/* Get loopInfo.  Create it and hang it on isx->left if it doesn't already
+ * exist */
+{
+struct isxAddress *iad = isx->left;
+uglyf("getLoopyAtEnd, iad = %p\n", iad);
+struct isxLoopInfo *loopy;
+if (iad == NULL)
+    {
+    AllocVar(loopy);
+    loopy->end = node;
+    isx->left = loopy->iad = loopyAddress(loopy);
+    loopy->iteration = 1;
+    }
+else
+    {
+    loopy = iad->val.loopy;
+    loopy->iteration += 1;
+    }
+return loopy;
+}
+
+static void setLoopyAtStart(struct isxLoopInfo *loopy, struct dlNode *node)
+/* Set loopy start, and count number of instructions. */
+{
+if (loopy->start == NULL)
+    {
+    int count = 1;
+    loopy->start = node;
+    for ( ; node != loopy->end; node=node->next)
+	count += 1;
+    loopy->instructionCount = count;
+    }
+}
+
 void isxLiveList(struct dlList *iList)
 /* Create list of live variables at each instruction by scanning
  * backwards. Handles loops and conditionals appropriately. */
@@ -199,14 +248,18 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
     struct isxLiveVar *newList = NULL, *live;
     struct isx *isx = node->val;
     struct isxAddress *iad;
+    struct isxLoopInfo *loopy;
 
     /* Save away current live list. */
     isx->liveList = liveList;
     switch (isx->opType)
         {
 	case poLoopEnd:
+	    loopy = getLoopyAtEnd(node, isx);
+	    pushLiveList(&liveStack, liveList, node, loopy);
+	    break;
 	case poCondEnd:
-	    pushLiveList(&liveStack, liveList, node);
+	    pushLiveList(&liveStack, liveList, node, NULL);
 	    break;
 	case poCondCase:
 	    foldInCaseLive(liveStack, liveList);
@@ -224,6 +277,7 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 	        {
 		liveStack->loopCount = 1;
 		node = liveStack->node;
+		setLoopyAtStart(liveStack->loopy, node);
 		}
 	    break;
 	}

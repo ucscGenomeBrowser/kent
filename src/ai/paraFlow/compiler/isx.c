@@ -214,6 +214,9 @@ switch (iad->adType)
     case iadLabel:
         fprintf(f, "@%s", iad->name);
 	break;
+    case iadLoopInfo:
+        fprintf(f, "~%p", iad->val.loopInfo);
+	break;
     default:
         internalErr();
 	break;

@@ -971,13 +971,9 @@ struct isx *isx;
 struct pentCoder *coder = pentCoderNew();
 struct regStomper *stomp;
 
-uglyf("ok1\n");
 calcInputOffsets(iList);
-uglyf("ok2\n");
 addRegStomper(iList);
-uglyf("ok3\n");
 gnuMacPreamble(iList, f);
-uglyf("ok4\n");
 fprintf(f, "\n# Starting code generation\n");
 
 for (node = iList->head; !dlEnd(node); node = nextNode)
