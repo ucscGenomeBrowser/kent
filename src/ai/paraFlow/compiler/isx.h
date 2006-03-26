@@ -126,6 +126,7 @@ struct isxAddress
     enum isxValType valType;	/* Value type */
     union isxAddressVal val;	/* Address value */
     struct isxReg *reg;	/* Register if any */
+    float weight;	/* Number of uses, scaled for loops */
     };
 
 struct isxLiveVar;	/* Defined in isxLiveVar.h */

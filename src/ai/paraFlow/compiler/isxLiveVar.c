@@ -213,12 +213,10 @@ if (iad == NULL)
     AllocVar(loopy);
     loopy->end = node;
     isx->left = loopy->iad = loopyAddress(loopy);
-    loopy->iteration = 1;
     }
 else
     {
     loopy = iad->val.loopy;
-    loopy->iteration += 1;
     }
 return loopy;
 }
@@ -229,11 +227,14 @@ static void setLoopyAtStart(struct isxLoopInfo *loopy, struct dlNode *node)
 if (loopy->start == NULL)
     {
     int count = 1;
+    struct isx *isx = node->val;
+    isx->left = loopy->iad;
     loopy->start = node;
     for ( ; node != loopy->end; node=node->next)
 	count += 1;
     loopy->instructionCount = count;
     }
+loopy->iteration += 1;
 }
 
 void isxLiveList(struct dlList *iList)
@@ -271,13 +272,13 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 	    popLiveList(&liveStack);
 	    break;
 	case poLoopStart:
+	    setLoopyAtStart(liveStack->loopy, node);
 	    if (liveStack->loopCount > 0)
 	        popLiveList(&liveStack);
 	    else
 	        {
 		liveStack->loopCount = 1;
 		node = liveStack->node;
-		setLoopyAtStart(liveStack->loopy, node);
 		}
 	    break;
 	}
