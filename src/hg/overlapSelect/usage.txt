@@ -6,6 +6,9 @@ specifying a range.  Records are copied from the inFile to outFile
 based on the selection criteria.  Selection is based on blocks or
 exons rather than entire range.
 
+Options starting with -select* apply to selectFile and
+those starting with -in* apply to inFile.
+
 Options:
   -selectFmt=fmt - specify selectFile format:
           psl - PSL format (default for *.psl files).
@@ -13,7 +16,7 @@ Options:
                      *.genePred files).
           bed - BED format (default for *.bed files).
                 If BED doesn't have blocks, the bed range is used. 
-  -selectCoordCols=spec - Select file is tab-separate with coordinates
+  -selectCoordCols=spec - selectFile is tab-separate with coordinates
           as described by spec, which is one of:
             o chromCol - chrom in this column followed by start and end.
             o chromCol,startCol,endCol - chrom, start, and end in specified
@@ -21,21 +24,20 @@ Options:
             o chromCol,startCol,endCol,strandCol - chrom, start, end, and
               strand in specified columns.
           NOTE: column numbers are zero-based
-  -selectCds - Use only CDS in the select file
+  -selectCds - Use only CDS in the selectFile
   -selectRange - Use entire range instead of blocks from records in
-          the select file.
+          the selectFile.
   -inFmt=fmt - specify inFile format, same values as -selectFmt.
-  -inCoordCols=spec - in file is tab-separate with coordinates specified by
+  -inCoordCols=spec - inFile is tab-separate with coordinates specified by
           spec, in format described above.
-  -inCds - Use only CDS in the in file
-  -inRange - Use entire range instead of blocks of records in
-          the in file.
+  -inCds - Use only CDS in the inFile
+  -inRange - Use entire range instead of blocks of records in the inFile.
   -nonOverlapping - select non-overlaping instead of overlaping records
   -strand - must be on the same strand to be considered overlaping
   -excludeSelf - don't compare records with the same coordinates and name.
   -idMatch - only select overlapping records if they have the same id
   -aggregate - instead of computing overlap bases on individual select entries, 
-      compute it based on the total number of inFile bases overlap by select file
+      compute it based on the total number of inFile bases overlap by selectFile
       records. -overlapSimilarity and -mergeOutput will not work with
       this option.
   -overlapThreshold=0.0 - minimun fraction of an inFile record that
@@ -51,9 +53,9 @@ Options:
       Otherwise only the pairs passing the citeria are reported. This results
       in a tab-seperated file with the columns:
          inId selectId inOverlap selectOverlap 
-      Where inOverlap is the fraction of the inFile record overlapped by the select file
-      record and selectOverlap is the fraction of the select record overlap by the in file
-      record.  With -aggregate, output is:
+      Where inOverlap is the fraction of the inFile record overlapped by the selectFile
+      record and selectOverlap is the fraction of the select record overlap by inFile
+      records.  With -aggregate, output is:
          inId inOverlap inOverBases inBases
   -statsOutputAll - like -statsOutput, only include all inFile records,
    including ones that are not overlapped.
