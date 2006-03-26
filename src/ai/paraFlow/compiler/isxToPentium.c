@@ -365,11 +365,12 @@ for (i=0; i<regCount; ++i)
 	 }
      }
 
-/* Look for a free register that will get stomped as soon after we disappear
- * ourselves as possible.  We only know when we disappear if our use count
- * is two or less. */
+/* Do a couple of things for which we need to know the dest register... */
 if ((dest = isx->dest) != NULL)
     {
+    /* Look for a free register that will get stomped as soon after we disappear
+     * ourselves as possible.  We only know when we disappear if our use count
+     * is two or less. */
     int destLifetime = 0;
     struct isxLiveVar *destLive = isxLiveVarFind(isx->liveList, dest);
     if (destLive)
@@ -401,7 +402,7 @@ if ((dest = isx->dest) != NULL)
 	    }
 	if (freeReg != NULL)
 	    {
-	    uglyf("got reg %s, which will be stomped in %d (we live %d)\n", isxRegName(freeReg, valType), minUnstomped, destLifetime);
+	    uglyf("got reg %s, which will be stomped in %d (%s lives %d)\n", isxRegName(freeReg, valType), minUnstomped, dest->name, destLifetime);
 	    return freeReg;
 	    }
 	}
@@ -432,7 +433,51 @@ if ((dest = isx->dest) != NULL)
 	    return freeReg;
 	    }
 	}
+
+    /* If we got to here then still have no free register.  One reason might
+     * be that something stable, but little used, is hanging out in one
+     * of the stable registers.  See if this is the case and can evict
+     * something. */
+	{
+	double minWeight = 0;
+	int useCount = destLive->useCount;
+	int usePos;
+	if (useCount > 2) useCount = 2;
+	usePos = destLive->usePos[useCount-1];
+	for (i=0; i<regCount; ++i)
+	    {
+	    struct isxReg *reg = &regs[i];
+	    if (isxRegName(reg, valType))
+		{
+		struct isxAddress *iad = reg->contents;
+		if (iad != NULL && iad->adType == iadRealVar 
+			&& iad->weight < dest->weight)
+		    {
+		    int stompPos = stomp->stompPos[i];
+		    if (stompPos >= usePos)
+		        {
+			if (freeReg == NULL)
+			    {
+			    minWeight = iad->weight;
+			    freeReg = reg;
+			    }
+			else if (minWeight > iad->weight)
+			    {
+			    minWeight = iad->weight;
+			    freeReg = reg;
+			    }
+			}
+		    }
+		}
+	    }
+	if (freeReg != NULL)
+	    {
+	    uglyf("Evicting %s*%2.1f from %s for %s*%2.1f\n", freeReg->contents->name, freeReg->contents->weight, isxRegName(freeReg, valType), dest->name, dest->weight);
+	    return freeReg;
+	    }
+	}
     }
+
 
 /* If no luck yet, look for any free register */
 for (i=0; i<regCount; ++i)

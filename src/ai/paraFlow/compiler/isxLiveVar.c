@@ -206,7 +206,6 @@ static struct isxLoopInfo *getLoopyAtEnd(struct dlNode *node, struct isx *isx)
  * exist */
 {
 struct isxAddress *iad = isx->left;
-uglyf("getLoopyAtEnd, iad = %p\n", iad);
 struct isxLoopInfo *loopy;
 if (iad == NULL)
     {
