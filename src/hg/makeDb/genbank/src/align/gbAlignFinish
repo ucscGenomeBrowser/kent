@@ -16,7 +16,7 @@
 #
 # Obtains other parameters from etc/genbank.conf
 #
-# $Id: gbAlignFinish,v 1.14 2006/02/10 18:44:44 markd Exp $
+# $Id: gbAlignFinish,v 1.15 2006/03/26 19:18:16 markd Exp $
 #
 use strict;
 use warnings;
@@ -119,9 +119,12 @@ sub getPslCDnaFilterArgs($$$) {
     my $args = getDbConf($db, "$srcDb.$type.$orgCat.pslCDnaFilter");
     if ($args eq "no") {
         return undef;
-    } else {
-        return $args;
     }
+    my $hapRegions = getDbConfUndef($db, "hapRegions");
+    if (defined($hapRegions)) {
+        $args = "$args -hapRegions=$hapRegions";
+    }
+    return $args;
 }
 
 # Combine PSL from one set of PSL (results from one query file), appending to

@@ -31,7 +31,7 @@
 #include "genbank.h"
 #include "gbSql.h"
 
-static char const rcsid[] = "$Id: gbMetaData.c,v 1.30 2006/03/11 00:07:57 markd Exp $";
+static char const rcsid[] = "$Id: gbMetaData.c,v 1.31 2006/03/26 19:18:16 markd Exp $";
 
 // FIXME: move mrna, otherse to objects.
 
@@ -173,12 +173,6 @@ fprintf(stderr, "Warning: ");
 vfprintf(stderr, format, args);
 fprintf(stderr, "\n");
 va_end(args);
-}
-
-static char *emptyForNull(char *s)
-/* Return "" if s is empty, else return s. */
-{
-return ((s == NULL) ? "" : s);
 }
 
 void gbMetaDataInit(struct sqlConnection *conn, unsigned srcDb,

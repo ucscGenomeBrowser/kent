@@ -98,6 +98,11 @@
           sequence for alignment.  It does not have to contain all chromosomes.
           Sequences named <code>gap</code> are treated as gaps as well as gaps in
           contig placement.
+     <li> <code><em>$db</em>.hapRegions</code> - path to a PSL that contains
+          alignments of haplotype pseudo-chromosomes to the reference chromosomes
+          or <CODE>no</CODE> if none.  This is used to map
+          alignments between haplotype regions for the near-best in genome alignment
+          mappings.  This is not access from cluster jobs.
      <li> <code><em>$db</em>.<em>$srcDb</em>.<em>$cdnaType</em>.<em>$orgCat</em>.pslCDnaFilter</code> - Arguments
            for <CODE>pslCDnaFilter</CODE> for various types of alignments
            or <CODE>no</CODE> to skip pslCDnaFilter.
