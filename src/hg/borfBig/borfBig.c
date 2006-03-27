@@ -7,7 +7,7 @@
 #include "fa.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: borfBig.c,v 1.4 2003/05/06 07:22:14 kate Exp $";
+static char const rcsid[] = "$Id: borfBig.c,v 1.5 2006/03/27 18:44:07 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -48,7 +48,6 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line = mustFindLine(lf, "BESTORF");
 char *word;
 char *row[13];
-int i;
 struct dnaSeq seq;
 int seqSize;
 ZeroVar(&seq);
