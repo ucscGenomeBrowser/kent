@@ -5,10 +5,10 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 O = apacheMonitor.o checkCardinality.o countNib.o \
-    dropTable.o dumpNib.o gbSeqCheck.o reviewIndexes.o seqCheck.o
+    dumpNib.o gbSeqCheck.o reviewIndexes.o seqCheck.o
 
 all: apacheMonitor checkCardinality countNib \
-     dropTable dumpNib gbSeqCheck reviewIndexes seqCheck
+    dumpNib gbSeqCheck reviewIndexes seqCheck
 
 apacheMonitor: apacheMonitor.o ${MYLIBS}
 	${CC} -O -o apacheMonitor apacheMonitor.o ${MYLIBS} $L
@@ -18,9 +18,6 @@ checkCardinality: checkCardinality.o ${MYLIBS}
 
 countNib: countNib.o ${MYLIBS}
 	${CC} -O -o countNib countNib.o ${MYLIBS} $L
-
-dropTable: dropTable.o ${MYLIBS}
-	${CC} -O -o dropTable dropTable.o ${MYLIBS} $L
 
 dumpNib: dumpNib.o ${MYLIBS}
 	${CC} -O -o dumpNib dumpNib.o ${MYLIBS} $L
