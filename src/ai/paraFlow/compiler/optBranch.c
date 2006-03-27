@@ -114,7 +114,6 @@ void optBranch(struct dlList *iList)
 /* Optimize branch instructions. */
 {
 struct hash *labelHash = hashLabels(iList);
-uglyf("Got %d labels\n", labelHash->elCount);
 struct dlNode *node, *next;
 for (node = iList->head; !dlEnd(node); node =  next)
     {

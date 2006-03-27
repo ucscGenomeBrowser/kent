@@ -180,7 +180,7 @@ fprintf(f, "%s",
 "# Preamble found in all modules for Mac OS-X Pentium\n"
 "       .cstring\n"
 "LC0:\n"
-"       .ascii \">%d<\\12\\0\"\n"
+"       .ascii \"%d\\12\\0\"\n"
 "       .text\n"
 ".globl __printInt\n"
 "__printInt:\n"

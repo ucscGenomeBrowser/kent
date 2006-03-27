@@ -407,7 +407,6 @@ if ((dest = isx->dest) != NULL)
 	    }
 	if (freeReg != NULL)
 	    {
-	    uglyf("got reg %s, which will be stomped in %d (%s lives %d)\n", isxRegName(freeReg, valType), minUnstomped, dest->name, destLifetime);
 	    return freeReg;
 	    }
 	}
@@ -434,7 +433,6 @@ if ((dest = isx->dest) != NULL)
 	    }
 	if (freeReg != NULL)
 	    {
-	    uglyf("got stable reg %s, which will be stomped in %d (we have %d uses)\n", isxRegName(freeReg, valType), maxUnstomped, destLive->useCount);
 	    return freeReg;
 	    }
 	}
