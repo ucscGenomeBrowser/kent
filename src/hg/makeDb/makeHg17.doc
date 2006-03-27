@@ -20974,6 +20974,7 @@ cp snpLocType.exceptions snpLocType.tab
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpFinalTable dbSnpHumanBuild125
 
 # concat into snp125.tab
+# cat chr*_snp125.tab >> snp125.tab
 /bin/csh concat.csh
 
 # check for multiple alignments
