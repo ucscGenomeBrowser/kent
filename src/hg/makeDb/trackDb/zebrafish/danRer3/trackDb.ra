@@ -58,6 +58,16 @@ visibility hide
 type bed 6 +
 exonArrows off
 
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl v37 Gene Predictions (Protein Coding Genes)
+group genes
+priority 32.8
+visibility pack
+color 150,0,0
+type genePred ensPep
+hgGene on
+
 track multiz5way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation
