@@ -20977,17 +20977,18 @@ cp snpLocType.exceptions snpLocType.tab
 # cat chr*_snp125.tab >> snp125.tab
 /bin/csh concat.csh
 
+mysql> load data local infile 'snp125.tab' into table snp125; 
+# Query OK, 10727794 rows affected (1 min 0.87 sec)
+# Records: 10727794  Deleted: 0  Skipped: 0  Warnings: 8
+
 # check for multiple alignments
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpMultiple dbSnpHumanBuild125
+mysql> load data local file 'snpMultiple.tab' into table snp125Exceptions;
 
 # run and review snpCompareLoctype (currently tuned for 124/125 differences)
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpCompareLoctype dbSnpHumanBuild125
 
 # create indexes
-
-mysql> load data local infile 'snp125.tab' into table snp125; 
-# Query OK, 10727794 rows affected (1 min 0.87 sec)
-# Records: 10727794  Deleted: 0  Skipped: 0  Warnings: 8
 
 mysql> alter table snp125 add index name (name(10));
 # Query OK, 10727794 rows affected (1 min 12.40 sec)
@@ -20997,7 +20998,8 @@ mysql> alter table snp125 add index chrom (chrom, bin);
 # Query OK, 10727794 rows affected (2 min 17.20 sec)
 # Records: 10727794  Duplicates: 0  Warnings: 0
 
-mysql> alter table snp125 add index chromStart (chrom, chromStart);
-# Query OK, 10727794 rows affected (2 min 19.93 sec)
-# Records: 10727794  Duplicates: 0  Warnings: 0
+mysql> alter table snp125Exceptions add index name(name(10));
 
+# rsync to hgwdev
+
+# create snp125ExceptionDesc table
