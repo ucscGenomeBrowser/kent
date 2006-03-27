@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMultiple.c,v 1.9 2006/03/01 21:59:06 heather Exp $";
+static char const rcsid[] = "$Id: snpMultiple.c,v 1.10 2006/03/27 20:21:10 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -97,7 +97,7 @@ while ((name = hashNextName(&cookie)) != NULL)
     for (hel = hashLookup(coordHash, name); hel != NULL; hel= hashLookupNext(hel))
         {
 	cel = (struct coords *)hel->val;
-	fprintf(outputFileHandle, "%s\t%s\t%d\t%d\n", name, cel->chrom, cel->start, cel->end);
+	fprintf(outputFileHandle, "%s\t%s\t%d\t%d\tMultipleAlignments\n", name, cel->chrom, cel->start, cel->end);
 	count++;
 	}
     fprintf(logFileHandle, "%s\t%d\n", name, count);
