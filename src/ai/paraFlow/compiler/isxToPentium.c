@@ -39,6 +39,14 @@ static struct isxReg regInfo[] = {
 #endif /* SOON */
 };
 
+static void initRegInfo()
+/* Do some one-time initialization of regInfo */
+{
+int i;
+for (i=0; i<ArraySize(regInfo); ++i)
+    regInfo[i].regIx = i;
+}
+
 struct regStomper
 /* Information on registers. */
     {
@@ -312,12 +320,23 @@ static struct isxReg *freeReg(struct isx *isx, enum isxValType valType,
 /* Find free register for instruction result. */
 {
 int i;
-struct isxAddress *dest;
+struct isxAddress *dest = isx->dest;
 struct isxReg *regs = regInfo;
 int regCount = ArraySize(regInfo);
 struct isxReg *reg, *freeReg = NULL;
 struct regStomper *stomp = isx->cpuInfo;
 struct isxLiveVar *live;
+
+/* If destination is reserved, by all means use reserved register */
+if (dest != NULL)
+    {
+    for (i=0; i<regCount; ++i)
+	{
+	reg = &regs[i];
+	if (reg->reserved == dest)
+	    return reg;
+	}
+    }
 
 /* Look for a register holding a source that is no longer live. */
     {
@@ -362,7 +381,7 @@ for (live = isx->liveList; live != NULL; live = live->next)
 for (i=0; i<regCount; ++i)
      {
      reg = &regs[i];
-     if (!reg->isLive)
+     if (!reg->isLive && !reg->reserved)
 	 {
 	 if (reg->contents)
 	     reg->contents->reg = NULL;
@@ -371,7 +390,7 @@ for (i=0; i<regCount; ++i)
      }
 
 /* Do a couple of things for which we need to know the dest register... */
-if ((dest = isx->dest) != NULL)
+if (dest != NULL)
     {
     /* Look for a free register that will get stomped as soon after we disappear
      * ourselves as possible.  We only know when we disappear if our use count
@@ -993,18 +1012,16 @@ stomp->stompPos[bx] = 6;
 }
 
 
-static int stompFromIsx(struct isx *isx, struct regStomper *stomp)
+static void stompFromIsx(struct isx *isx, struct regStomper *stomp)
 /* Set stompPos to 0 where required by isx instruction.  Doesn't include
  * loops. */
 {
-int result = 0;
 switch (isx->opType)
     {
     case poCall:
        stomp->stompPos[ax] = 0;
        stomp->stompPos[cx] = 0;
        stomp->stompPos[dx] = 0;
-       result = 3;
        break;
     case poDiv:
     case poMod:
@@ -1015,13 +1032,11 @@ switch (isx->opType)
 	   case ivInt:
 	       stomp->stompPos[ax] = 0;
 	       stomp->stompPos[dx] = 0;
-	       result = 2;
 	       break;
 	   }
 	if (isx->right->adType == iadConst)
 	   {
 	   stomp->stompPos[cx] = 0;
-	   result += 1;
 	   }
 	break;
     case poShiftLeft:
@@ -1029,11 +1044,9 @@ switch (isx->opType)
 	if (isx->right->adType != iadConst)
 	    {
 	    stomp->stompPos[cx] = 0;
-	    result = 1;
 	    }
 	break;
     }
-return result;
 }
 
 static void addRegStomper(struct dlList *iList)
@@ -1056,7 +1069,6 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
     isx->cpuInfo = stomp;
     switch (isx->opType)
         {
-	case poLoopEnd:
 	case poCondEnd:
 	    pushRegStomper(&stompStack, stomp, node);
 	    break;
@@ -1068,15 +1080,6 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 	    stompStack->condStomp = NULL;
 	    popRegStomper(&stompStack);
 	    break;
-	case poLoopStart:
-	    if (stompStack->loopCount > 0)
-	        popRegStomper(&stompStack);
-	    else
-	        {
-		stompStack->loopCount = 1;
-		node = stompStack->node;
-		}
-	    break;
 	}
 
     /* Make new copy of stomper and bump all stomp positions. */
@@ -1086,6 +1089,24 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 
     /* Snoop through stomping instructions, and set stomps. */
     stompFromIsx(isx, stomp);
+    if (isx->opType == poLoopStart)
+        {
+	uglyf("theoretically stomping hotLive\n");
+	/* Stomp variables used in loops */
+	struct isxLoopVar *lv;
+	struct isxLoopInfo *loopy = isx->left->val.loopy;
+	for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
+	    {
+	    if (lv->reg == NULL)
+	        break;
+	    uglyf("   stomping %s for loop var %s\n", isxRegName(lv->reg, ivInt), lv->iad->name);
+	    uglyf("   lv->reg->regIx = %d\n", lv->reg->regIx);
+	    stomp->stompPos[lv->reg->regIx] = 0;
+	    }
+	}
+    else
+        stompFromIsx(isx, stomp);
+
     }
 assert(stompStack == NULL);
 freeMem(stomp);
@@ -1132,7 +1153,7 @@ for (i=0; i<ArraySize(d->stompPos); ++i)
     }
 }
 
-static void rCalcLoopRegVars(struct isxLoopInfo *loopy, struct regUse *regUse,
+static void rCalcLoopRegVars(struct isxLoopInfo *loopy, 
 	struct regStomper *stomp)
 /* Do depth-first-recursion to assign register loop variables. */
 {
@@ -1147,7 +1168,7 @@ struct regStomper origStomp = *stomp;
 for (l = loopy->children; l != NULL; l = l->next)
     {
     struct regStomper childStomp = origStomp;
-    rCalcLoopRegVars(l, regUse, &childStomp);
+    rCalcLoopRegVars(l, &childStomp);
     mergeStomper(&childStomp, stomp, stomp);
     }
 
@@ -1195,16 +1216,14 @@ static void calcLoopRegVars(struct isxList *isxList)
 /* Calculate register vars to use in loops */
 {
 struct isxLoopInfo *loopy;
-struct regUse regUse;
 struct regStomper stomp;
 
 ZeroVar(&stomp);
 
 for (loopy = isxList->loopList; loopy != NULL; loopy  = loopy->next)
     {
-    ZeroVar(&regUse);
     initStompPos(&stomp);
-    rCalcLoopRegVars(loopy, &regUse, &stomp);
+    rCalcLoopRegVars(loopy, &stomp);
     }
 }
 
@@ -1219,6 +1238,7 @@ struct pentCoder *coder = pentCoderNew();
 struct regStomper *stomp;
 struct dlList *iList = isxList->iList;
 
+initRegInfo();
 calcInputOffsets(iList);
 calcLoopRegVars(isxList);
 addRegStomper(iList);
@@ -1294,8 +1314,11 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	case poCall:
 	    pentCall(isx, coder);
 	    break;
-	case poLabel:
 	case poLoopStart:
+	    pentCoderAdd(coder, "jmp", isx->right->name, NULL);
+	    pentCoderAdd(coder, NULL, NULL, isx->dest->name);
+	    break;
+	case poLabel:
 	case poLoopEnd:
 	case poCondCase:
 	case poCondEnd:

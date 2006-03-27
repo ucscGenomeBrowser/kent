@@ -764,8 +764,7 @@ switch (pp->type)
 	struct isxAddress *endLabel = tempLabelAddress(pfc);
 	double loopWeight = weight*10;
 	isxStatement(pfc, init, varHash, weight, iList);
-	isxNew(pfc, poJump, condLabel, NULL, NULL, iList);
-	isxNew(pfc, poLoopStart, startLabel, NULL, NULL, iList);
+	isxNew(pfc, poLoopStart, startLabel, NULL, condLabel, iList);
 	isxStatement(pfc, body, varHash, loopWeight, iList);
 	isxStatement(pfc, end, varHash, loopWeight, iList);
 	isxNew(pfc, poLabel, condLabel, NULL, NULL, iList);

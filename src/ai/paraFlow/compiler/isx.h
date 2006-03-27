@@ -167,7 +167,9 @@ struct isxReg
     char *doubleName;		 /* Register name when used for doubles. */
     char *pointerName;		 /* Register name when used for pointers. */
     struct isxAddress *contents; /* What if anything register holds */
+    struct isxAddress *reserved; /* Register reserved for this var. */
     bool isLive;		/* True if holds live variable. */
+    int regIx;			/* Index of register in regInfo */
     };
 
 
