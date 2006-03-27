@@ -51,12 +51,7 @@ struct regStomper
 /* Information on registers. */
     {
     int stompPos[ArraySize(regInfo)];	
-    };
-
-struct regUse
-/* Information on register use. */
-    {
-    struct isxAddress contents[ArraySize(regInfo)];	
+    struct isxAddress *contents[ArraySize(regInfo)];
     };
 
 enum pentDataOp
@@ -327,13 +322,14 @@ struct isxReg *reg, *freeReg = NULL;
 struct regStomper *stomp = isx->cpuInfo;
 struct isxLiveVar *live;
 
-/* If destination is reserved, by all means use reserved register */
 if (dest != NULL)
     {
+    /* If destination is reserved or is the one that stomps, by all means
+     * use corresponding register.  */
     for (i=0; i<regCount; ++i)
 	{
 	reg = &regs[i];
-	if (reg->reserved == dest)
+	if (reg->reserved == dest || stomp->contents[i] == dest)
 	    return reg;
 	}
     }
@@ -897,31 +893,37 @@ struct isxLoopInfo *loopy = isx->left->val.loopy;
 struct isxLoopVar *lv;
 int i;
 
+/* Add reserved registers. */
+for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
+    {
+    struct isxReg *reg = lv->reg;
+    struct isxAddress *iad = lv->iad;
+    if (reg->contents != iad)
+        {
+	if (reg->contents != NULL)
+	    {
+	    reg->contents->reg = NULL;
+	    reg->contents = NULL;
+	    }
+	if (iad->reg != reg)
+	    codeOpDestReg(opMov, iad, reg, coder);
+	reg->reserved = reg->contents = iad;
+	iad->reg = reg;
+	}
+    reg->reserved = iad;
+    }
+
 /* Clear non-reserved registers. */
 for (i=0; i<ArraySize(regInfo); ++i)
     {
     struct isxReg *reg = &regInfo[i];
-    if (reg->contents != NULL)
+    if (reg->contents != NULL && reg->reserved == NULL)
 	{
 	reg->contents->reg = NULL;
 	reg->contents = NULL;
 	}
     }
     
-/* Add in reserved registers. */
-for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
-    {
-    struct isxReg *reg = lv->reg;
-    struct isxAddress *iad = lv->iad;
-    if (reg == NULL)
-        break;
-    reg->reserved = iad;
-    if (iad->reg != reg)
-        codeOpDestReg(opMov, iad, reg, coder);
-    iad->reg = reg;
-    reg->contents = iad;
-    }
-
 pentCoderAdd(coder, "jmp", isx->right->name, NULL);
 pentCoderAdd(coder, NULL, NULL, isx->dest->name);
 }
@@ -1058,6 +1060,7 @@ if (is->gotCondStomp)
     for (i=0; i<ArraySize(stomp->stompPos); ++i)
 	{
 	cond->stompPos[i] = min(cond->stompPos[i], stomp->stompPos[i]);
+	cond->contents[i] = NULL;
 	}
     }
 else
@@ -1082,6 +1085,8 @@ stomp->stompPos[cx] = 3;
 stomp->stompPos[si] = 4;
 stomp->stompPos[di] = 5;
 stomp->stompPos[bx] = 6;
+for (i=0; i<ArraySize(stomp->contents); ++i)
+    stomp->contents[i] = NULL;
 }
 
 
@@ -1093,8 +1098,11 @@ switch (isx->opType)
     {
     case poCall:
        stomp->stompPos[ax] = 0;
+       stomp->contents[ax] = 0;
        stomp->stompPos[cx] = 0;
+       stomp->contents[cx] = 0;
        stomp->stompPos[dx] = 0;
+       stomp->contents[dx] = 0;
        break;
     case poDiv:
     case poMod:
@@ -1104,12 +1112,15 @@ switch (isx->opType)
 	   case ivShort:
 	   case ivInt:
 	       stomp->stompPos[ax] = 0;
+	       stomp->contents[ax] = isx->left;
 	       stomp->stompPos[dx] = 0;
+	       stomp->contents[dx] = 0;
 	       break;
 	   }
 	if (isx->right->adType == iadConst)
 	   {
 	   stomp->stompPos[cx] = 0;
+	   stomp->contents[cx] = 0;
 	   }
 	break;
     case poShiftLeft:
@@ -1117,6 +1128,7 @@ switch (isx->opType)
 	if (isx->right->adType != iadConst)
 	    {
 	    stomp->stompPos[cx] = 0;
+	    stomp->contents[cx] = isx->right;
 	    }
 	break;
     }
@@ -1169,9 +1181,12 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 	struct isxLoopInfo *loopy = isx->left->val.loopy;
 	for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
 	    {
+	    int ix;
 	    if (lv->reg == NULL)
 	        break;
-	    stomp->stompPos[lv->reg->regIx] = 0;
+	    ix = lv->reg->regIx;
+	    stomp->stompPos[ix] = 0;
+	    stomp->contents[ix] = lv->iad;
 	    }
 	}
     else
