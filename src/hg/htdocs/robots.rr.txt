@@ -13,7 +13,7 @@ Disallow: /cgi-bin/hgc/
 Disallow: /cgi-bin/hgTrackUi/
 Disallow: /cgi-bin/hgNear/
 Disallow: /cgi-bin/hgBlat/
-Disallow: /cgi-bin/hgliftOver/
+Disallow: /cgi-bin/hgLiftOver/
 Disallow: /cgi-bin/hgPcr/
 Disallow: /cgi-bin/hgTables/
 Disallow: /cgi-bin/hgText/
