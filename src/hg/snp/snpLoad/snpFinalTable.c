@@ -10,6 +10,8 @@
 /* Expand validation_status. */
 /* Drop refUCSCReverseComp. */
 
+/* Not currently using outputFileHandle. */
+
 #include "common.h"
 
 #include "dystring.h"
@@ -18,7 +20,7 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpFinalTable.c,v 1.8 2006/03/11 04:09:14 heather Exp $";
+static char const rcsid[] = "$Id: snpFinalTable.c,v 1.9 2006/03/27 19:25:20 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *outputFileHandle = NULL;
