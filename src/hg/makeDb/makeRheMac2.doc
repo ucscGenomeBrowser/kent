@@ -528,6 +528,8 @@ cd /cluster/data/hg17/bed/blastz.rheMac2
     hgLoadWiggle rheMac2 quality rheMac2.qual.wig
     cp -p rheMac2.qual.qv.gz /usr/local/apache/htdocs/rheMac2/bigZips
 
+<<<<<<< makeRheMac2.doc
+
 # BLASTZ SWAP FOR HUMAN (hg17) (DONE, 2006-03-22, hartera)
 # CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET, LIFTOVER AND ALIGNMENT DOWNLOADS
     # Documented in makeHg17.doc in the section:
