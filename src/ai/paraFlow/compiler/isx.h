@@ -179,6 +179,9 @@ struct isx *isxNew(struct pfCompile *pfc, enum isxOpType opType,
 char *isxRegName(struct isxReg *reg, enum isxValType valType);
 /* Get name of reg for given type. */
 
+void isxAddressDump(struct isxAddress *iad, FILE *f);
+/* Print variable name or n/a */
+
 void isxDump(struct isx *isx, FILE *f);
 /* Dump out isx code */
 

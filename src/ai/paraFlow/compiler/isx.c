@@ -163,7 +163,7 @@ switch (valType)
     }
 }
 
-static void isxAddrDump(struct isxAddress *iad, FILE *f)
+void isxAddressDump(struct isxAddress *iad, FILE *f)
 /* Print variable name or n/a */
 {
 fprintf(f, "%s:", isxValTypeToString(iad->valType));
@@ -246,18 +246,18 @@ fprintf(f, "%s ", isxOpTypeToString(isx->opType));
 if (isx->dest != NULL)
     {
     fprintf(f, " ");
-    isxAddrDump(isx->dest, f);
+    isxAddressDump(isx->dest, f);
     }
 fprintf(f, " =");
 if (isx->left != NULL)
     {
     fprintf(f, " ");
-    isxAddrDump(isx->left, f);
+    isxAddressDump(isx->left, f);
     }
 if (isx->right != NULL)
     {
     fprintf(f, " ");
-    isxAddrDump(isx->right, f);
+    isxAddressDump(isx->right, f);
     }
 if (isx->liveList != NULL)
     {

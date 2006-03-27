@@ -15,7 +15,7 @@ struct isxLiveVar
     int usePos[2];	/* The next two use relative positions */
     };
 
-#define isxLiveVarFree(pLive) freeMem(pLive)
+#define isxLiveVarFree(pLive) freez(pLive)
 /* Free up liveVar */
 
 #define isxLiveVarFreeList(pList) slFreeList(pList)

@@ -289,8 +289,8 @@ iad->val.tempMemLoc = coder->tempIx;
 codeOp(opMov, &old, iad, coder);
 }
 
-static void pentSwapOutIfNeeded(struct isxReg *reg, struct isxLiveVar *liveList, 
-	 struct pentCoder *coder)
+static void pentSwapOutIfNeeded(struct isxReg *reg, 
+	struct isxLiveVar *liveList, struct pentCoder *coder)
 /* Swap out register to memory if need be. */
 {
 struct isxAddress *iad = reg->contents;
@@ -397,7 +397,7 @@ if ((dest = isx->dest) != NULL)
 		if (iad == NULL)
 		    {
 		    int stompPos = stomp->stompPos[i];
-		    if (stompPos>= destLifetime && stompPos < minUnstomped)
+		    if (stompPos > destLifetime && stompPos < minUnstomped) 
 			{
 			minUnstomped = stompPos;
 			freeReg = reg;
@@ -424,7 +424,7 @@ if ((dest = isx->dest) != NULL)
 		if (iad == NULL)
 		    {
 		    int stompPos = stomp->stompPos[i];
-		    if (stompPos >= nextUse && stompPos > maxUnstomped)
+		    if (stompPos > nextUse && stompPos > maxUnstomped)
 			{
 			maxUnstomped = stompPos;
 			freeReg = reg;
@@ -459,7 +459,7 @@ if ((dest = isx->dest) != NULL)
 			&& iad->weight < dest->weight)
 		    {
 		    int stompPos = stomp->stompPos[i];
-		    if (stompPos >= usePos)
+		    if (stompPos > usePos)
 		        {
 			if (freeReg == NULL)
 			    {
@@ -650,6 +650,42 @@ reg->contents = dest;
 dest->reg = reg;
 }
 
+static struct isxLiveVar *dummyLive(struct isxAddress *iad)
+/* Construct a live var of lifetime 0 around isx.  This is
+ * needed for divides and shifts where may swap out something
+ * that is live during this instruction, but not after. */
+{
+struct isxLiveVar *live;
+AllocVar(live);
+live->var = iad;
+return live;
+}
+
+static void addDummyToLive(struct isxAddress *iad, struct isxLiveVar **pList)
+/* If iad is a variable then add a dummy ref of it to live list. */
+{
+if (iad->adType == iadTempVar || iad->adType == iadRealVar)
+    {
+    if (!isxLiveVarFind(*pList, iad))
+        {
+	struct isxLiveVar *live = dummyLive(iad);
+	slAddHead(pList, live);
+	}
+    }
+}
+
+static void trimDummiesFromLive(struct isxLiveVar *extraLive, 
+	struct isxLiveVar *origLive)
+/* Free up any extra live vars up until hit origLive. */
+{
+struct isxLiveVar *live, *next;
+for (live = extraLive; live != origLive; live = next)
+   {
+   next = live->next;
+   isxLiveVarFree(&live);
+   }
+}
+
 static void pentModDivide(struct isx *isx, struct dlNode *nextNode, 
 	boolean isMod,  struct pentCoder *coder)
 /* Generate code for mod or divide. */
@@ -661,20 +697,25 @@ struct isxReg *eax = &regInfo[ax];
 struct isxReg *edx = &regInfo[dx];
 struct isxReg *ecx = &regInfo[cx];
 boolean swappedOutC = FALSE;
+struct isxLiveVar *extraLive = isx->liveList;
+int extraLiveCount = 0;
+
+addDummyToLive(p, &extraLive);
+addDummyToLive(q, &extraLive);
 
 if (q->adType == iadConst)
     {
-    pentSwapOutIfNeeded(ecx, isx->liveList, coder);
+    pentSwapOutIfNeeded(ecx, extraLive, coder);
     codeOpDestReg(opMov, q, ecx, coder);
     ecx->contents = NULL;
     swappedOutC = TRUE;
     }
 if (eax->contents != p)
     {
-    pentSwapOutIfNeeded(eax, isx->liveList, coder);
+    pentSwapOutIfNeeded(eax, extraLive, coder);
     codeOpDestReg(opMov, p, eax, coder);
     }
-pentSwapOutIfNeeded(edx,isx->liveList, coder);
+pentSwapOutIfNeeded(edx,extraLive, coder);
 clearReg(edx, coder);
 if (swappedOutC)
     unaryOpReg(opDiv, ecx, d->valType, coder);
@@ -695,6 +736,7 @@ else
     eax->contents = d;
     d->reg = eax;
     }
+trimDummiesFromLive(extraLive, isx->liveList);
 }
 
 static void pentShiftOp(struct isx *isx, struct dlNode *nextNode, 
@@ -724,9 +766,12 @@ else
      * seem worth it to optimize it further. */
     struct isxReg *eax = &regInfo[ax];
     struct isxReg *ecx = &regInfo[cx];
+    struct isxLiveVar *extraLive = isx->liveList;
+    addDummyToLive(p, &extraLive);
+    addDummyToLive(q, &extraLive);
     if (eax != p->reg)
 	{
-	pentSwapOutIfNeeded(eax,isx->liveList, coder);
+	pentSwapOutIfNeeded(eax,extraLive, coder);
 	codeOpDestReg(opMov, p, eax, coder);
 	}
     else
@@ -735,13 +780,14 @@ else
 	}
     if (ecx != q->reg)
 	{
-	pentSwapOutIfNeeded(ecx,isx->liveList, coder);
+	pentSwapOutIfNeeded(ecx,extraLive, coder);
 	codeOpDestReg(opMov, q, ecx, coder);
 	}
     pentCoderAdd(coder, opOfType(opCode, p->valType), 
     	isxRegName(ecx, ivByte), isxRegName(eax, p->valType));
     eax->contents = d;
     d->reg = eax;
+    trimDummiesFromLive(extraLive, isx->liveList);
     }
 }
 
