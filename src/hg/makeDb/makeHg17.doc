@@ -20858,7 +20858,7 @@ mysql> desc chr1_snpTmp;
 hgsql -e "rename table chrMT_snpTmp to chrM_snpTmp"
 
 # lookup reference allele in nibs
-# keep reference complement to use in error checking (snpCheckAlleles)
+# keep reverse complement to use in error checking (snpCheckAlleles)
 # check here for SNPs larger than 1024
 # errAbort if detected
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpRefUCSC dbSnpHumanBuild125
