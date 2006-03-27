@@ -225,6 +225,8 @@ switch (iad->adType)
 	for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
 	    {
 	    fprintf(f, "%s*%2.1f", lv->iad->name, lv->iad->weight);
+	    if (lv->reg != NULL)
+	        fprintf(f, "@%s", isxRegName(lv->reg, lv->iad->valType));
 	    if (lv->next != NULL)
 	        fprintf(f, ",");
 	    }
@@ -616,8 +618,6 @@ static void isxConditionalJump(struct pfCompile *pfc, struct pfParse *cond,
 enum pfParseType ppt = cond->type;
 if (invert)
     ppt = invLogOp(ppt);
-uglyf("invert %d, ", invert);
-pfParseDumpOne(cond, 3, uglyOut);
 switch (ppt)
     {
     case pptLess:

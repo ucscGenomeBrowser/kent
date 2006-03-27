@@ -977,6 +977,22 @@ else
     }
 }
 
+static void initStompPos(struct regStomper *stomp)
+/* Initialize all stompPos in stomp to val.   This will
+ * by default convince system that ax is the first register
+ * to use for unstable values, and bx the last. */
+{
+int i;
+assert(ArraySize(stomp->stompPos) <= 6);/* Reminder to fix for floating point */
+stomp->stompPos[ax] = 1;
+stomp->stompPos[dx] = 2;
+stomp->stompPos[cx] = 3;
+stomp->stompPos[si] = 4;
+stomp->stompPos[di] = 5;
+stomp->stompPos[bx] = 6;
+}
+
+
 static int stompFromIsx(struct isx *isx, struct regStomper *stomp)
 /* Set stompPos to 0 where required by isx instruction.  Doesn't include
  * loops. */
@@ -1030,8 +1046,7 @@ struct regStompStack *stompStack = NULL;
 AllocVar(stomp);
 
 /* Initialize stomp positions to past end of code */
-for (i=0; i<ArraySize(stomp->stompPos); ++i)
-    stomp->stompPos[i] = 1;
+initStompPos(stomp);
 
 for (node = iList->tail; !dlStart(node); node = node->prev)
     {
@@ -1076,9 +1091,121 @@ assert(stompStack == NULL);
 freeMem(stomp);
 }
 
-static void calcLoopRegVars(struct dlList *iList)
+static int findUnstomped(struct regStomper *stomp, enum isxValType valType)
+/* Find the unstomped register with the shortest life */
+{
+int lifetime = BIGNUM;
+int bestReg = -1;
+int i;
+for (i=0; i<ArraySize(stomp->stompPos); ++i)
+    {
+    if (isxRegName(&regInfo[i], valType) != NULL)
+	{
+	int pos = stomp->stompPos[i];
+	if (pos != 0 && pos < lifetime)
+	     {
+	     lifetime = pos;
+	     bestReg = i;
+	     }
+	}
+    }
+return bestReg;
+}
+
+static void regStomperDump(struct regStomper *stomp, enum isxValType valType,
+	FILE *f)
+/* Dump out contents of stomper. */
+{
+int i;
+for (i=0; i<ArraySize(stomp->stompPos); ++i)
+    fprintf(f, "%s:%d ", isxRegName(&regInfo[i], valType), stomp->stompPos[i]);
+}
+
+static void mergeStomper(struct regStomper *a, struct regStomper *b, 
+	struct regStomper *d)
+/* Merge a/b into d */
+{
+int i;
+for (i=0; i<ArraySize(d->stompPos); ++i)
+    {
+    d->stompPos[i] = min(a->stompPos[i], b->stompPos[i]);
+    }
+}
+
+static void rCalcLoopRegVars(struct isxLoopInfo *loopy, struct regUse *regUse,
+	struct regStomper *stomp)
+/* Do depth-first-recursion to assign register loop variables. */
+{
+struct isxLoopInfo *l;
+struct dlNode *node;
+struct isx *isx;
+struct isxLoopVar *lv;
+int i;
+struct regStomper origStomp = *stomp;
+
+/* Fill in info about children. */
+for (l = loopy->children; l != NULL; l = l->next)
+    {
+    struct regStomper childStomp = origStomp;
+    rCalcLoopRegVars(l, regUse, &childStomp);
+    mergeStomper(&childStomp, stomp, stomp);
+    }
+
+uglyf("rCalcLoopRegVars hotLive = ");
+for (lv = loopy->hotLive; lv != NULL; lv = lv->next) uglyf("%s ", lv->iad->name);
+uglyf("\n");
+
+uglyf("stomped before instructions= ");
+regStomperDump(stomp, ivInt, uglyOut);
+uglyf("\n");
+
+/* Figure out all registers stomped. */
+for (node = loopy->start; node != loopy->end; node = node->next)
+    {
+    isx = node->val;
+    stompFromIsx(isx, stomp);
+    }
+
+uglyf("stomped after instructions= ");
+regStomperDump(stomp, ivInt, uglyOut);
+uglyf("\n");
+
+
+/* Always stomp on eax, to prevent system from reserving too many
+ * variables for loops. (Might be better to do a calculation of
+ * number of temporaries required here.) */
+stomp->stompPos[ax] = 0;
+
+/* Reserve registers from most frequently used to least frequently
+ * used. */
+for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
+    {
+    int unstomped = findUnstomped(stomp, lv->iad->valType);
+    if (unstomped >= 0)
+        {
+	lv->reg = &regInfo[unstomped];
+	stomp->stompPos[unstomped] = 0;
+	}
+    else
+        break;
+    }
+}
+
+static void calcLoopRegVars(struct isxList *isxList)
 /* Calculate register vars to use in loops */
 {
+struct isxLoopInfo *loopy;
+struct regUse regUse;
+struct regStomper stomp;
+
+ZeroVar(&stomp);
+
+for (loopy = isxList->loopList; loopy != NULL; loopy  = loopy->next)
+    {
+    ZeroVar(&regUse);
+    initStompPos(&stomp);
+    rCalcLoopRegVars(loopy, &regUse, &stomp);
+    }
 }
 
 void pentFromIsx(struct isxList *isxList, FILE *f)
@@ -1093,7 +1220,7 @@ struct regStomper *stomp;
 struct dlList *iList = isxList->iList;
 
 calcInputOffsets(iList);
-calcLoopRegVars(iList);
+calcLoopRegVars(isxList);
 addRegStomper(iList);
 gnuMacPreamble(iList, f);
 fprintf(f, "\n# Starting code generation\n");
