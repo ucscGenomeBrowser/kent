@@ -20978,8 +20978,8 @@ cp snpLocType.exceptions snpLocType.tab
 /bin/csh concat.csh
 
 mysql> load data local infile 'snp125.tab' into table snp125; 
-# Query OK, 10727794 rows affected (1 min 0.87 sec)
-# Records: 10727794  Deleted: 0  Skipped: 0  Warnings: 8
+# Query OK, 10738923 rows affected (2 min 46.16 sec)
+# Records: 10738923  Deleted: 0  Skipped: 0  Warnings: 0
 
 # check for multiple alignments
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpMultiple dbSnpHumanBuild125
