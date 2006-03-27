@@ -529,8 +529,58 @@ cd /cluster/data/hg17/bed/blastz.rheMac2
     cp -p rheMac2.qual.qv.gz /usr/local/apache/htdocs/rheMac2/bigZips
 
 
+# RUN DATEREPEATS TO GET LINEAGE-SPECIFIC (DONE 3/22/06 angie)
+    ssh kkstore01
+    cd /cluster/data/rheMac2
+
+    # First make per-chrom .fa.out files as should have been done:
+    tail +4 repeats/repeat.out \
+    | perl -we '$prevChr = ""; \
+                while (<>) { \
+                  @w = split; $chr = $w[4]; $c = $chr; $c =~ s/^chr//; \
+                  if ($chr ne $prevChr) { \
+                    print "creating $c/$chr.fa.out\n"; \
+                    system("cat repeats/repeats.header > $c/$chr.fa.out"); \
+                    close(OUT);  open(OUT, ">>$c/$chr.fa.out") || die; \
+                  } \
+                  print OUT; \
+                  $prevChr = $chr; \
+                }'
+
+    # Run DateRepeats to get outputs on rodent, non-rodent mammal:
+    mkdir linSpecRep
+    cd linSpecRep
+    ln -s ../*/chr*.fa.out .
+    foreach f (*.fa.out)
+      echo $f:r:r
+      /cluster/bluearc/RepeatMasker/DateRepeats $f -query human \
+        -comp mouse -comp dog
+    end
+    mkdir /cluster/bluearc/rheMac2/linSpecRep
+    mkdir /cluster/bluearc/rheMac2/linSpecRep/notIn{Rodent,NonRodentMammal}
+    foreach f (*.out_mus*)
+      set chr = $f:r:r
+      echo $chr
+      /cluster/bin/scripts/extractRepeats 1 $f \
+       > /cluster/bluearc/rheMac2/linSpecRep/notInRodent/$chr.out.spec
+      /cluster/bin/scripts/extractRepeats 2 $f \
+       > /cluster/bluearc/rheMac2/linSpecRep/notInNonRodentMammal/$chr.out.spec
+    end
+
+
 # BLASTZ SWAP FOR HUMAN (hg17) (DONE, 2006-03-22, hartera)
 # CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET, LIFTOVER AND ALIGNMENT DOWNLOADS
     # Documented in makeHg17.doc in the section:
     # SWAP CHAIN AND NET ALIGNMENTS OVER TO RHESUS (rheMac2)
     # alignments are in: /cluster/data/rheMac2/bed/blastz.hg17.swap
+
+
+# SWAP CHAINS/NET RN4 (DONE 3/23/06 angie)
+    ssh kkstore01
+    mkdir /cluster/data/rheMac2/bed/blastz.rn4.swap
+    cd /cluster/data/rheMac2/bed/blastz.rn4.swap
+    doBlastzChainNet.pl -swap /cluster/data/rn4/bed/blastz.rheMac2/DEF \
+      >& do.log & tail -f do.log
+    ln -s blastz.rn4.swap /cluster/data/rheMac2/bed/blastz.rn4
+
+
