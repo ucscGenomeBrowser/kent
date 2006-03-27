@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.21 2006/03/20 23:17:30 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.22 2006/03/27 23:15:42 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -28,17 +28,16 @@ char *locTypeStrings[] = {
 };
 
 /* Errors detected here (written to snpLoctype.error): */
-/*  "Missing quotes in phys_pos for range" */
-/*  "Chrom end <= chrom start for range" */
-/*  "Wrong size for exact" */
-/*  "Unknown locType" */
-/*  Unable to get chromEnd */
+/* Missing quotes in phys_pos for range */
+/* Chrom end <= chrom start for range */
+/* Wrong size for exact */
+/* Unknown locType */
+/* Unable to get chromEnd */
 
 /* Exceptions detected: */
 /*  RangeLocTypeWrongSizeLargeAllele */
 /*  RangeLocTypeWrongSize */
 /*  ExactLocTypeWrongSize */
-
 
 
 void usage()
