@@ -23,6 +23,10 @@ idSql select zfinId from ensXRefZfish where ensGeneId = '%s'
 url http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=%s
 priority 28
 
+name tbSchema
+shortLabel Table Schema
+tables ensGene
+
 name uniProt
 shortLabel UniProt
 tables ensXRefZfish
