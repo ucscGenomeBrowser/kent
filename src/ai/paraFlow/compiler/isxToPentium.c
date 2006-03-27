@@ -20,12 +20,6 @@ enum pentRegs
    ax=0, bx=1, cx=2, dx=3, si=4, di=5, st0=6, pentRegCount=7,
    };
 
-struct regStomper
-/* Information on registers. */
-    {
-    int stompPos[8];	
-    };
-
 static struct isxReg regInfo[] = {
     { 4, "%al", "%ax", "%eax", NULL, NULL, NULL, "%eax"},
     { 4, "%bl", "%bx", "%ebx", NULL, NULL, NULL, "%ebx"},
@@ -44,6 +38,18 @@ static struct isxReg regInfo[] = {
     { 8, NULL, NULL, NULL, NULL, "%st7", "%st7, NULL},
 #endif /* SOON */
 };
+
+struct regStomper
+/* Information on registers. */
+    {
+    int stompPos[ArraySize(regInfo)];	
+    };
+
+struct regUse
+/* Information on register use. */
+    {
+    struct isxAddress contents[ArraySize(regInfo)];	
+    };
 
 enum pentDataOp
 /* Some of the pentium op codes that apply to many types */
@@ -311,7 +317,6 @@ struct isxReg *regs = regInfo;
 int regCount = ArraySize(regInfo);
 struct isxReg *reg, *freeReg = NULL;
 struct regStomper *stomp = isx->cpuInfo;
-bool usedFlags[ArraySize(stomp->stompPos)];
 struct isxLiveVar *live;
 
 /* Look for a register holding a source that is no longer live. */
@@ -928,6 +933,49 @@ else
     }
 }
 
+static int stompFromIsx(struct isx *isx, struct regStomper *stomp)
+/* Set stompPos to 0 where required by isx instruction.  Doesn't include
+ * loops. */
+{
+int result = 0;
+switch (isx->opType)
+    {
+    case poCall:
+       stomp->stompPos[ax] = 0;
+       stomp->stompPos[cx] = 0;
+       stomp->stompPos[dx] = 0;
+       result = 3;
+       break;
+    case poDiv:
+    case poMod:
+       switch (isx->dest->valType)
+	   {
+	   case ivByte:
+	   case ivShort:
+	   case ivInt:
+	       stomp->stompPos[ax] = 0;
+	       stomp->stompPos[dx] = 0;
+	       result = 2;
+	       break;
+	   }
+	if (isx->right->adType == iadConst)
+	   {
+	   stomp->stompPos[cx] = 0;
+	   result += 1;
+	   }
+	break;
+    case poShiftLeft:
+    case poShiftRight:
+	if (isx->right->adType != iadConst)
+	    {
+	    stomp->stompPos[cx] = 0;
+	    result = 1;
+	    }
+	break;
+    }
+return result;
+}
+
 static void addRegStomper(struct dlList *iList)
 /* Add regStomper to all instructions. */
 {
@@ -936,6 +984,10 @@ struct dlNode *node;
 struct regStomper *stomp;
 struct regStompStack *stompStack = NULL;
 AllocVar(stomp);
+
+/* Initialize stomp positions to past end of code */
+for (i=0; i<ArraySize(stomp->stompPos); ++i)
+    stomp->stompPos[i] = 1;
 
 for (node = iList->tail; !dlStart(node); node = node->prev)
     {
@@ -974,33 +1026,7 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 	stomp->stompPos[i] += 1;
 
     /* Snoop through stomping instructions, and set stomps. */
-    switch (isx->opType)
-        {
-	case poCall:
-	   stomp->stompPos[ax] = 0;
-	   stomp->stompPos[cx] = 0;
-	   stomp->stompPos[dx] = 0;
-	   break;
-	case poDiv:
-	case poMod:
-	   switch (isx->dest->valType)
-	       {
-	       case ivByte:
-	       case ivShort:
-	       case ivInt:
-	           stomp->stompPos[ax] = 0;
-		   stomp->stompPos[dx] = 0;
-		   break;
-	       }
-	    if (isx->right->adType == iadConst)
-	       stomp->stompPos[cx] = 0;
-	    break;
-	case poShiftLeft:
-	case poShiftRight:
-	    if (isx->right->adType != iadConst)
-	        stomp->stompPos[cx] = 0;
-	    break;
-	}
+    stompFromIsx(isx, stomp);
     }
 assert(stompStack == NULL);
 freeMem(stomp);
