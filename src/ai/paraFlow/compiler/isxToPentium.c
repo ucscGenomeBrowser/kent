@@ -344,7 +344,7 @@ if (dest != NULL)
     for (i=0; i<regCount; ++i)
 	{
 	reg = &regs[i];
-	if (isxRegName(reg, valType))
+	if (reg->reserved == NULL && isxRegName(reg, valType))
 	    {
 	    struct isxAddress *iad = reg->contents;
 	    if (iad != NULL)
@@ -410,7 +410,7 @@ if (dest != NULL)
 	for (i=0; i<regCount; ++i)
 	    {
 	    reg = &regs[i];
-	    if (isxRegName(reg, valType))
+	    if (reg->reserved == NULL && isxRegName(reg, valType))
 		{
 		struct isxAddress *iad = reg->contents;
 		if (iad == NULL)
@@ -436,7 +436,7 @@ if (dest != NULL)
 	for (i=0; i<regCount; ++i)
 	    {
 	    reg = &regs[i];
-	    if (isxRegName(reg, valType))
+	    if (reg->reserved == NULL && isxRegName(reg, valType))
 		{
 		struct isxAddress *iad = reg->contents;
 		if (iad == NULL)
@@ -469,7 +469,7 @@ if (dest != NULL)
 	for (i=0; i<regCount; ++i)
 	    {
 	    struct isxReg *reg = &regs[i];
-	    if (isxRegName(reg, valType))
+	    if (reg->reserved == NULL && isxRegName(reg, valType))
 		{
 		struct isxAddress *iad = reg->contents;
 		if (iad != NULL && iad->adType == iadRealVar 
@@ -500,12 +500,11 @@ if (dest != NULL)
 	}
     }
 
-
 /* If no luck yet, look for any free register */
 for (i=0; i<regCount; ++i)
     {
     struct isxReg *reg = &regs[i];
-    if (isxRegName(reg, valType))
+    if (reg->reserved == NULL && isxRegName(reg, valType))
 	{
 	struct isxAddress *iad = reg->contents;
 	if (iad == NULL)
@@ -522,7 +521,7 @@ for (i=0; i<regCount; ++i)
     for (i=0; i<regCount; ++i)
 	{
 	struct isxReg *reg = &regs[i];
-	if (isxRegName(reg, valType))
+	if (reg->reserved == NULL && isxRegName(reg, valType))
 	    {
 	    struct isxAddress *iad = reg->contents;
 	    if ((iad->adType == iadRealVar) ||
@@ -553,7 +552,7 @@ for (i=0; i<regCount; ++i)
     for (i=0; i<regCount; ++i)
 	{
 	struct isxReg *reg = &regs[i];
-	if (isxRegName(reg, valType))
+	if (reg->reserved == NULL && isxRegName(reg, valType))
 	    {
 	    struct isxAddress *iad = reg->contents;
 	    if ((iad->adType == iadRealVar) ||
@@ -581,7 +580,7 @@ for (i=0; i<regCount; ++i)
     for (i=0; i<regCount; ++i)
 	{
 	struct isxReg *reg = &regs[i];
-	if (isxRegName(reg, valType))
+	if (reg->reserved == NULL && isxRegName(reg, valType))
 	    {
 	    struct isxAddress *iad = reg->contents;
 	    int nextUse = findNextUse(iad, isx->liveList);
@@ -594,6 +593,20 @@ for (i=0; i<regCount; ++i)
 	}
     pentSwapTempFromReg(freeReg, coder);
     return freeReg;
+    }
+}
+
+
+static void copyRealVarToMem(struct isxAddress *iad, struct pentCoder *coder)
+/* Copy address to memory if it's in a register and it's a real var. */
+{
+if (iad->adType == iadRealVar)
+    {
+    struct isxReg *reg = iad->reg;
+    iad->reg = NULL;
+    if (reg != NULL)
+	codeOpSourceReg(opMov, reg, iad, coder);
+    iad->reg = reg;
     }
 }
 
@@ -619,12 +632,11 @@ else
 	codeOpDestReg(opMov, source, reg, coder);
 	}
     }
-if (dest->adType == iadRealVar)
-    codeOpSourceReg(opMov, reg, dest, coder);
 if (reg->contents != NULL)
     reg->contents->reg = NULL;
 reg->contents = dest;
 dest->reg = reg;
+copyRealVarToMem(dest, coder);
 }
 
 static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode, 
@@ -665,6 +677,7 @@ if (reg->contents != NULL)
 dest = isx->dest;
 reg->contents = dest;
 dest->reg = reg;
+copyRealVarToMem(dest, coder);
 }
 
 static struct isxLiveVar *dummyLive(struct isxAddress *iad)
@@ -754,6 +767,7 @@ else
     d->reg = eax;
     }
 trimDummiesFromLive(extraLive, isx->liveList);
+copyRealVarToMem(d, coder);
 }
 
 static void pentShiftOp(struct isx *isx, struct dlNode *nextNode, 
@@ -805,6 +819,7 @@ else
     eax->contents = d;
     d->reg = eax;
     trimDummiesFromLive(extraLive, isx->liveList);
+    copyRealVarToMem(d, coder);
     }
 }
 
@@ -869,6 +884,64 @@ pentSwapOutIfNeeded(&regInfo[cx],isx->liveList, coder);
 pentSwapOutIfNeeded(&regInfo[dx],isx->liveList, coder);
 safef(coder->destBuf, pentCodeBufSize, "%s%s", isxPrefixC, funcVar->cName);
 pentCoderAdd(coder, "call", NULL, coder->destBuf);
+}
+
+
+static void pentLoopStart(struct isx *isx, struct dlNode *nextNode,
+	struct pentCoder *coder)
+/* Code beginning of a loop.  This includes loading up the loop
+ * register variables and marking them as reserved, jumping
+ * to the loop condition, and printing the loop start label. */
+{
+struct isxLoopInfo *loopy = isx->left->val.loopy;
+struct isxLoopVar *lv;
+int i;
+
+/* Clear non-reserved registers. */
+for (i=0; i<ArraySize(regInfo); ++i)
+    {
+    struct isxReg *reg = &regInfo[i];
+    if (reg->contents != NULL)
+	{
+	reg->contents->reg = NULL;
+	reg->contents = NULL;
+	}
+    }
+    
+/* Add in reserved registers. */
+for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
+    {
+    struct isxReg *reg = lv->reg;
+    struct isxAddress *iad = lv->iad;
+    if (reg == NULL)
+        break;
+    reg->reserved = iad;
+    if (iad->reg != reg)
+        codeOpDestReg(opMov, iad, reg, coder);
+    iad->reg = reg;
+    reg->contents = iad;
+    }
+
+pentCoderAdd(coder, "jmp", isx->right->name, NULL);
+pentCoderAdd(coder, NULL, NULL, isx->dest->name);
+}
+
+static void pentLoopEnd(struct isx *isx, struct dlNode *nextNode,
+	struct pentCoder *coder)
+/* Code end of a loop.  This is just unreserving the registers 
+ * and printing the end of loop label. */
+{
+struct isxLoopInfo *loopy = isx->left->val.loopy;
+struct isxLoopVar *lv;
+for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
+    {
+    struct isxReg *reg = lv->reg;
+    struct isxAddress *iad = lv->iad;
+    if (reg == NULL)
+        break;
+    reg->reserved = NULL;
+    }
+pentCoderAdd(coder, NULL, NULL, isx->dest->name);
 }
 
 static void pentJump(struct isx *isx, struct dlNode *nextNode,
@@ -1091,7 +1164,6 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
     stompFromIsx(isx, stomp);
     if (isx->opType == poLoopStart)
         {
-	uglyf("theoretically stomping hotLive\n");
 	/* Stomp variables used in loops */
 	struct isxLoopVar *lv;
 	struct isxLoopInfo *loopy = isx->left->val.loopy;
@@ -1099,8 +1171,6 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 	    {
 	    if (lv->reg == NULL)
 	        break;
-	    uglyf("   stomping %s for loop var %s\n", isxRegName(lv->reg, ivInt), lv->iad->name);
-	    uglyf("   lv->reg->regIx = %d\n", lv->reg->regIx);
 	    stomp->stompPos[lv->reg->regIx] = 0;
 	    }
 	}
@@ -1172,14 +1242,6 @@ for (l = loopy->children; l != NULL; l = l->next)
     mergeStomper(&childStomp, stomp, stomp);
     }
 
-uglyf("rCalcLoopRegVars hotLive = ");
-for (lv = loopy->hotLive; lv != NULL; lv = lv->next) uglyf("%s ", lv->iad->name);
-uglyf("\n");
-
-uglyf("stomped before instructions= ");
-regStomperDump(stomp, ivInt, uglyOut);
-uglyf("\n");
-
 /* Figure out all registers stomped. */
 for (node = loopy->start; node != loopy->end; node = node->next)
     {
@@ -1187,15 +1249,11 @@ for (node = loopy->start; node != loopy->end; node = node->next)
     stompFromIsx(isx, stomp);
     }
 
-uglyf("stomped after instructions= ");
-regStomperDump(stomp, ivInt, uglyOut);
-uglyf("\n");
-
-
-/* Always stomp on eax, to prevent system from reserving too many
+/* Always stomp on eax,edx, to prevent system from reserving too many
  * variables for loops. (Might be better to do a calculation of
  * number of temporaries required here.) */
 stomp->stompPos[ax] = 0;
+stomp->stompPos[dx] = 0;
 
 /* Reserve registers from most frequently used to least frequently
  * used. */
@@ -1261,6 +1319,8 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	fprintf(f, "%s", isxRegName(reg, ivInt));
 	if (reg->contents != NULL)
 	    fprintf(f, "@%s", reg->contents->name);
+	if (reg->reserved != NULL)
+	    fprintf(f, "!%s", reg->reserved->name);
 	fprintf(f, " ");
 	}
     fprintf(f, "]\n");	
@@ -1315,11 +1375,12 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    pentCall(isx, coder);
 	    break;
 	case poLoopStart:
-	    pentCoderAdd(coder, "jmp", isx->right->name, NULL);
-	    pentCoderAdd(coder, NULL, NULL, isx->dest->name);
+	    pentLoopStart(isx, nextNode, coder);
+	    break;
+	case poLoopEnd:
+	    pentLoopEnd(isx, nextNode, coder);
 	    break;
 	case poLabel:
-	case poLoopEnd:
 	case poCondCase:
 	case poCondEnd:
 	    pentCoderAdd(coder, NULL, NULL, isx->dest->name);

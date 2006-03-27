@@ -471,9 +471,7 @@ struct isxAddress *exp = isxExpression(pfc, use->next,
 	varHash, weight, iList);
 struct isxAddress *dest = varAddress(use->var, varHash, 
 	weight, ppToIsxValType(pfc, use));
-struct isxAddress *temp = tempAddress(pfc, varHash, weight, ppToIsxValType(pfc,pp));
-isxNew(pfc, op, temp, dest, exp, iList);
-isxNew(pfc, poAssign, dest, temp, NULL, iList);
+isxNew(pfc, op, dest, dest, exp, iList);
 }
 
 static struct isxAddress *isxStringCat(struct pfCompile *pfc,
