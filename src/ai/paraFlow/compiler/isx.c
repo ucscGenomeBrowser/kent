@@ -216,10 +216,19 @@ switch (iad->adType)
     case iadLoopInfo:
 	{
 	struct isxLoopInfo *loopy = iad->val.loopy;
+	struct isxLoopVar *lv;
         fprintf(f, "~%dx%d", loopy->iteration, 
 		loopy->instructionCount);
 	if (loopy->children == NULL)
 	     fprintf(f, "[inner]");
+	fprintf(f, "[");
+	for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
+	    {
+	    fprintf(f, "%s*%2.1f", lv->iad->name, lv->iad->weight);
+	    if (lv->next != NULL)
+	        fprintf(f, ",");
+	    }
+	fprintf(f, "]");
 	}
 	break;
     default:

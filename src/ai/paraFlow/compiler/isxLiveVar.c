@@ -1,4 +1,5 @@
-/* isxLiveVar - Manage live variable lists for intermediate code. */
+/* isxLiveVar - Manage live variable lists for intermediate code. 
+ * Also builds up loop var lists. */
 
 
 #include "common.h"
@@ -11,44 +12,6 @@
 #include "isx.h"
 #include "isxLiveVar.h"
 
-#ifdef OLD
-static void isxLiveList(struct dlList *iList)
-/* Create list of live variables at each instruction by scanning
- * backwards. */
-{
-struct dlNode *node;
-struct slRef *liveList = NULL;
-for (node = iList->tail; !dlStart(node); node = node->prev)
-    {
-    struct slRef *newList = NULL, *ref;
-    struct isx *isx = node->val;
-    struct isxAddress *iad;
-
-    /* Save away current live list. */
-    isx->liveList = liveList;
-
-    /* Make copy of live list minus any overwritten dests. */
-    for (ref = liveList; ref != NULL; ref = ref->next)
-	{
-	struct isxAddress *iad = ref->val;
-	if (iad != isx->dest)
-	    refAdd(&newList, iad);
-	}
-
-    /* Add sources to live list */
-    iad = isx->left;
-    if (iad != NULL && (iad->adType == iadRealVar || iad->adType == iadTempVar))
-	refAddUnique(&newList, iad);
-    iad = isx->right;
-    if (iad != NULL && (iad->adType == iadRealVar || iad->adType == iadTempVar))
-	refAddUnique(&newList, iad);
-
-    /* Flip to new live list */
-    liveList = newList;
-    }
-slFreeList(&liveList);
-}
-#endif /* OLD */
 
 #ifdef EXAMPLE
 z = 12;              {z}
@@ -271,14 +234,81 @@ if (loopy->start == NULL)
 loopy->iteration += 1;
 }
 
+static boolean usedInIsxRange(struct dlNode *start, struct dlNode *end,
+	struct isxAddress *iad)
+/* Return TRUE if iad is used between start and end. */
+{
+struct dlNode *node;
+for (node = start; node != end; node = node->next)
+    {
+    struct isx *isx = node->val;
+    if (isx->left == iad || isx->right == iad)
+        return TRUE;
+    }
+return FALSE;
+}
+
+static int isxLoopVarCmpWeight(const void *va, const void *vb)
+/* Compare to leave heightest weighted first. */
+{
+const struct isxLoopVar *a = *((struct isxLoopVar **)va);
+const struct isxLoopVar *b = *((struct isxLoopVar **)vb);
+double diff = b->iad->weight - a->iad->weight;
+if (diff > 0)
+    return 1;
+else if (diff < 0)
+    return -1;
+else
+    return 0;
+}
+
+static void makeLoopVars(struct isxLoopInfo *loopy)
+/* Get live list at end of loop.  If the live var is used
+ * in the loop add it to the hotLive list.  Sort hotLive list
+ * by variable weight. */
+{
+struct dlNode *finalBranchNode = loopy->end->prev;
+struct isx *finalBranch = finalBranchNode->val;
+struct isxLiveVar *liveList = finalBranch->liveList, *live;
+int count = 0;
+for (live = liveList; live != NULL; live = live->next)
+    {
+    if (usedInIsxRange(loopy->start, loopy->end, live->var))
+         {
+	 struct isxLoopVar *lv;
+	 AllocVar(lv);
+	 lv->iad = live->var;
+	 slAddHead(&loopy->hotLive, lv);
+	 ++count;
+	 }
+    }
+if (count > 1)
+    slSort(&loopy->hotLive, isxLoopVarCmpWeight);
+}
+
+static void rMakeLoopVars(struct isxLoopInfo *loopy)
+/* Fill in loop variables recursively on loop and it's children, depth first. */
+{
+struct isxLoopInfo *l;
+for (l = loopy->children; l != NULL; l = l->next)
+    rMakeLoopVars(l);
+makeLoopVars(loopy);
+}
+
 void isxLiveList(struct dlList *iList)
 /* Create list of live variables at each instruction by scanning
- * backwards. Handles loops and conditionals appropriately. */
+ * backwards. Handles loops and conditionals appropriately. 
+ * Returns loop information. */
 {
 struct dlNode *node;
 struct isxLiveVar *liveList = NULL;
 struct condStack *condStack = NULL, *cond;
 struct loopStack *loopStack = NULL, *loop;
+struct isxLoopInfo *rootLoop, *loopy;
+AllocVar(rootLoop);
+AllocVar(loopStack);
+loopStack->loopy = rootLoop;
+
 for (node = iList->tail; !dlStart(node); node = node->prev)
     {
     struct isxLiveVar *newList = NULL, *live;
@@ -343,8 +373,11 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
     /* Flip to new live list */
     liveList = newList;
     }
+popLoop(&loopStack);
 assert(loopStack == NULL);
 assert(condStack == NULL);
 isxLiveVarFreeList(&liveList);
+for (loopy = rootLoop->children; loopy != NULL; loopy = loopy->next)
+    rMakeLoopVars(loopy);
 }
 

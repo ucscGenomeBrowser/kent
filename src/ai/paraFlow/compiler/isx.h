@@ -97,6 +97,15 @@ enum isxAddressType
     iadLoopInfo,
     };
 
+struct isxLoopVar
+/* Information about a "hot" variable in a loop.  That is one
+ * that is live at end of loop, and used within the loop. */
+    {
+    struct isxLoopVar *next;
+    struct isxAddress *iad;	/* Associated address including weight. */
+    struct isxReg *reg;		/* Assigned register if any. */
+    };
+
 struct isxLoopInfo
 /* Information associated with a loop. */
     {
@@ -107,6 +116,8 @@ struct isxLoopInfo
     int instructionCount;	 /* Number of instructions in loop */
     struct isxAddress *iad;	 /* Associated isxAddress */
     int iteration;		 /* How many times we've been through */
+    struct isxLoopVar *hotLive;	 /* Variables good to put in registers, 
+    				  * most important first. */
     };
 
 union isxAddressVal
