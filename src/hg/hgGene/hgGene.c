@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.68 2006/03/21 01:30:37 hartera Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.69 2006/03/27 16:46:18 hartera Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -464,7 +464,7 @@ if (sqlTablesExist(conn, "kgAlias"))
     }
 if (sameWord(genome, "Zebrafish"))
     {
-    xrefTable = "ensGeneXRef";
+    xrefTable = "ensXRefZfish";
     geneIdCol = "ensGeneId";
     /* get Gene Symbol and RefSeq accession from Zebrafish-specific */
     /* cross-reference table */
