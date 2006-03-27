@@ -295,21 +295,21 @@ for (l = loopy->children; l != NULL; l = l->next)
 makeLoopVars(loopy);
 }
 
-void isxLiveList(struct dlList *iList)
+void isxLiveList(struct isxList *isxList)
 /* Create list of live variables at each instruction by scanning
- * backwards. Handles loops and conditionals appropriately. 
- * Returns loop information. */
+ * backwards. Handles loops and conditionals appropriately.  
+ * Also fill in loopList. */
 {
 struct dlNode *node;
 struct isxLiveVar *liveList = NULL;
 struct condStack *condStack = NULL, *cond;
 struct loopStack *loopStack = NULL, *loop;
-struct isxLoopInfo *rootLoop, *loopy;
+struct isxLoopInfo *rootLoop, *loopy, *loopyList;
 AllocVar(rootLoop);
 AllocVar(loopStack);
 loopStack->loopy = rootLoop;
 
-for (node = iList->tail; !dlStart(node); node = node->prev)
+for (node = isxList->iList->tail; !dlStart(node); node = node->prev)
     {
     struct isxLiveVar *newList = NULL, *live;
     struct isx *isx = node->val;
@@ -379,5 +379,7 @@ assert(condStack == NULL);
 isxLiveVarFreeList(&liveList);
 for (loopy = rootLoop->children; loopy != NULL; loopy = loopy->next)
     rMakeLoopVars(loopy);
+isxList->loopList = slCat(isxList->loopList, rootLoop->children);
+freeMem(rootLoop);
 }
 

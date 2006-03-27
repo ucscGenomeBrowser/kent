@@ -1076,7 +1076,12 @@ assert(stompStack == NULL);
 freeMem(stomp);
 }
 
-void pentFromIsx(struct dlList *iList, FILE *f)
+static void calcLoopRegVars(struct dlList *iList)
+/* Calculate register vars to use in loops */
+{
+}
+
+void pentFromIsx(struct isxList *isxList, FILE *f)
 /* Convert isx code to pentium instructions in file. */
 {
 int i;
@@ -1085,8 +1090,10 @@ struct dlNode *node, *nextNode;
 struct isx *isx;
 struct pentCoder *coder = pentCoderNew();
 struct regStomper *stomp;
+struct dlList *iList = isxList->iList;
 
 calcInputOffsets(iList);
+calcLoopRegVars(iList);
 addRegStomper(iList);
 gnuMacPreamble(iList, f);
 fprintf(f, "\n# Starting code generation\n");

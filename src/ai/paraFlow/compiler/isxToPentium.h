@@ -4,7 +4,7 @@
 #ifndef ISXTOPENTIUM_H
 #define ISXTOPENTIUM_H
 
-void pentFromIsx(struct dlList *iList, FILE *f);
+void pentFromIsx(struct isxList *isxList, FILE *f);
 /* Convert isx code to pentium instructions in file. */
 
 int pentTypeSize(enum isxValType valType);

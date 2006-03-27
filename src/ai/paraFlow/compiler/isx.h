@@ -188,11 +188,15 @@ void isxDump(struct isx *isx, FILE *f);
 void isxDumpList(struct dlList *list, FILE *f);
 /* Dump all of isx in list */
 
-struct dlList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp);
-/* Convert parse tree to isx. */
+struct isxList
+/* A list of instructions, and a list of loop information */
+    {
+    struct dlList *iList;		/* List of instructions */
+    struct isxLoopInfo *loopList;	/* List of loops */
+    };
 
-void isxToPentium(struct dlList *iList, FILE *f);
-/* Convert isx code to pentium instructions in file. */
+struct isxList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp);
+/* Convert parse tree to isx. */
 
 #define isxPrefixC "_"		/* Prefix before symbols shared with C. */
 

@@ -782,32 +782,32 @@ switch (pp->type)
     }
 }
 
-void isxModule(struct pfCompile *pfc, struct pfParse *pp, 
-	struct dlList *iList)
+static void isxModule(struct pfCompile *pfc, struct pfParse *pp, 
+	struct isxList *isxList)
 /* Generate instructions for module. */
 {
 struct hash *varHash = hashNew(16);
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    {
-    isxStatement(pfc, pp, varHash, 1.0, iList);
-    }
-isxLiveList(iList);
+    isxStatement(pfc, pp, varHash, 1.0, isxList->iList);
+isxLiveList(isxList);
 }
 
-struct dlList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp)
+struct isxList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp)
 /* Convert parse tree to isx. */
 {
-struct dlList *iList = dlListNew(0);
+struct isxList *isxList;
+AllocVar(isxList);
+isxList->iList = dlListNew(0);
 for (pp = pp->children; pp != NULL; pp = pp->next)
     {
     switch (pp->type)
         {
 	case pptMainModule:
 	case pptModule:
-	    isxModule(pfc, pp, iList);
+	    isxModule(pfc, pp, isxList);
 	    break;
 	}
     }
-return iList;
+return isxList;
 }
 

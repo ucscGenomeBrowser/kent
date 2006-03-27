@@ -427,7 +427,7 @@ dumpParseTree(pfc, program, foldedF);
 if (optionExists("asm"))
     {
     FILE *f;
-    struct dlList *isxList;
+    struct isxList *isxList;
     char isxFileName[PATH_LEN];
     char sFileName[PATH_LEN];
 
@@ -437,14 +437,14 @@ if (optionExists("asm"))
     safef(isxFileName, sizeof(isxFileName), "%s%s.isx", baseDir, baseName);
     f = mustOpen(isxFileName, "w");
     isxList = isxFromParse(pfc, program);
-    isxDumpList(isxList, f);
+    isxDumpList(isxList->iList, f);
     carefulClose(&f);
 
     verbose(2, "Phase 7a - optimizing branches\n");
     safef(isxFileName, sizeof(isxFileName), "%s%s.branch", baseDir, baseName);
     f = mustOpen(isxFileName, "w");
-    optBranch(isxList);
-    isxDumpList(isxList, f);
+    optBranch(isxList->iList);
+    isxDumpList(isxList->iList, f);
     carefulClose(&f);
 
     if (endPhase < 8)

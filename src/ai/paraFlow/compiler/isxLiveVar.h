@@ -4,6 +4,7 @@
 #define ISXLIVEVAR_H
 
 struct isxAddress;
+struct isxList;;
 struct dlList;
 
 struct isxLiveVar
@@ -21,9 +22,10 @@ struct isxLiveVar
 #define isxLiveVarFreeList(pList) slFreeList(pList)
 /* Free up list of live vars. */
 
-void isxLiveList(struct dlList *iList);
+void isxLiveList(struct isxList *isxList);
 /* Create list of live variables at each instruction by scanning
- * backwards. Handles loops and conditionals appropriately. */
+ * backwards. Handles loops and conditionals appropriately.  
+ * Also fill in loopList. */
 
 struct isxLiveVar *isxLiveVarFind(struct isxLiveVar *liveList, 
 	struct isxAddress *iad);
