@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.10 2006/03/25 21:52:14 markd Exp $"
+#	"$Id: makePanTro2.doc,v 1.11 2006/03/28 21:37:57 angie Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -1356,6 +1356,7 @@ TMPDIR=/scratch/tmp
     hgLoadBed panTro2 genscanSubopt genscanSubopt.bed
         # Loaded 535541 elements of size 6
 
+
 #######################################################################
 #  OPOSSUM BLASTZ - (WORKING - 2006-03-20 - Hiram)
     ssh pk
@@ -1401,3 +1402,15 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
     #	running 2006-03-20 11:30
+
+
+# SWAP CHAINS/NET RN4 (DONE 3/27/06 angie)
+    # This run used the updated chr9.nib.
+    ssh kkstore01
+    mkdir /cluster/data/panTro2/bed/blastz.rn4.swap
+    cd /cluster/data/panTro2/bed/blastz.rn4.swap
+    doBlastzChainNet.pl -swap /cluster/data/rn4/bed/blastz.panTro2/DEF \
+      -workhorse kkr8u00 >& do.log & tail -f do.log
+    ln -s blastz.rn4.swap /cluster/data/panTro2/bed/blastz.rn4
+
+
