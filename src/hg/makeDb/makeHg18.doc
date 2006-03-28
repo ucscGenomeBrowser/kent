@@ -7408,3 +7408,31 @@ mkdir -p ${blatDir}/{over,net}
     cp /gbdb/hg18/liftOver/hg18ToHg17.over.chain .
     gzip hg18ToHg17.over.chain
     hgAddLiftOverChain hg18 hg17 /gbdb/hg18/liftOver/hg18ToHg17.over.chain
+
+##########################################################################
+# NSCAN track - ( markd)
+# hg17 had both NSCAN and NSCAN-EST tracks, in a composite track.
+# currently have only NSCAN for hg18
+    cd /cluster/data/hg18/bed/nscan/
+
+    # obtainedf NSCAN predictions from michael brent's group
+    # at WUSTL
+    wget -nv http://genes.cse.wustl.edu/jeltje/hg18/hg18.nscan.gtf
+    wget -r -np -nv http://genes.cse.wustl.edu/jeltje/hg18/chr_ptx/
+    mv genes.cse.wustl.edu/jeltje/hg18/chr_ptx .
+    rm -rf genes.cse.wustl.edu chr_ptx/index.html*
+    gzip -9 hg18.nscan.gtf chr_ptx/*.fa
+    chmod a-w hg18.nscan.gtf.gz chr_ptx/*.gz
+
+    # load tracks.  Note that these have *utr features, rather than
+    # exon features.  currently ldHgGene creates separate genePred exons
+    # for these.
+    ldHgGene -bin -gtf -genePredExt hg18 nscanGene hg18.nscan.gtf.gz
+    # add .a suffix to match transcript id
+    hgPepPred -suffix=.a hg18 generic nscanPep chr_ptx/*.fa.gz
+    rm -f *.tab
+
+    # update trackDb; need a hg18-specific page to describe informants
+    human/hg18/nscanGene.html    
+    human/hg18/trackDb.ra
+
