@@ -2395,7 +2395,7 @@ BASE=/cluster/data/rn4/bed/blastz.danRer3.2006-03-03
     # chr3:97,345,533-97,360,012 there is a withLSR chain but the net is empty.
 
 
-# BLASTZ/CHAIN/NET XENTRO1 (IN PROGRESS 3/20/06 angie)
+# BLASTZ/CHAIN/NET XENTRO1 (DONE 3/20/06 angie)
     ssh kkstore01
     mkdir /cluster/data/rn4/bed/blastz.xenTro1.2006-03-20
     cd /cluster/data/rn4/bed/blastz.xenTro1.2006-03-20
@@ -2430,11 +2430,189 @@ BASE=/cluster/data/rn4/bed/blastz.xenTro1.2006-03-20
     doBlastzChainNet.pl -blastzOutRoot=/san/sanvol1/rn4XenTro1 \
       -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose DEF \
       >& do.log & tail -f do.log
-#TODO
     ln -s blastz.xenTro1.2006-03-20 /cluster/data/rn4/bed/blastz.xenTro1
 
 
-#TODO: other pairwise: cow, opossum
+# BLASTZ/CHAIN/NET RHEMAC2 (DONE 3/23/06 angie)
+    # Won't put this in Conservation -- special request for ancestor recon.
+    ssh pk
+    mkdir /cluster/data/rn4/bed/blastz.rheMac2.2006-03-22
+    cd /cluster/data/rn4/bed/blastz.rheMac2.2006-03-22
+    cat << '_EOF_' > DEF
+# Rat vs. macacque
+
+BLASTZ=/cluster/bin/penn/x86_64/blastz.v7.x86_64
+
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Rat (rn4)
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_SMSK=/san/sanvol1/scratch/rn4/linSpecRep.notInHuman
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Macacque (rheMac2)
+SEQ2_DIR=/san/sanvol1/scratch/rheMac2/nib
+SEQ2_SMSK=/cluster/bluearc/rheMac2/linSpecRep/notInRodent
+SEQ2_LEN=/cluster/data/rheMac2/chrom.sizes
+SEQ2_CHUNK=50000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastz.rheMac2.2006-03-22
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl -blastzOutRoot /san/sanvol1/rn4RheMac2 \
+      -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium DEF \
+      >& do.log & tail -f do.log
+    ln -s blastz.rheMac2.2006-03-22 /cluster/data/rn4/bed/blastz.rheMac2
+
+
+# BLASTZ/CHAIN/NET MONDOM4 (DONE 3/24/06 angie)
+    ssh pk
+    mkdir /cluster/data/rn4/bed/blastz.monDom4.2006-03-23
+    cd /cluster/data/rn4/bed/blastz.monDom4.2006-03-23
+    cat << '_EOF_' > DEF
+# Rat vs. opossum
+
+BLASTZ=/cluster/bin/penn/x86_64/blastz.v7.x86_64
+
+# Mammal to non-mammal -- well, I guess non-placental-mammal, with 
+# high L like chicken, and low M to guard against pileups w/monDom4:
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=20
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Rat (rn4)
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom4
+SEQ2_DIR=/cluster/bluearc/scratch/hg/monDom4/monDom4.2bit
+SEQ2_LEN=/cluster/bluearc/scratch/hg/monDom4/chrom.sizes
+SEQ2_CHUNK=50000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastz.monDom4.2006-03-23
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl -blastzOutRoot /san/sanvol1/rn4MonDom4 \
+      -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose DEF \
+      -workhorse kkr7u00 >& do.log & tail -f do.log
+    ln -s blastz.monDom4.2006-03-23 /cluster/data/rn4/bed/blastz.monDom4
+
+
+# BLASTZ/CHAIN/NET BOSTAU2 (DONE 3/24/06 angie)
+    ssh pk
+    mkdir /cluster/data/rn4/bed/blastz.bosTau2.2006-03-23
+    cd /cluster/data/rn4/bed/blastz.bosTau2.2006-03-23
+    cat << '_EOF_' > DEF
+# rat vs cow
+
+BLASTZ=/cluster/bin/penn/x86_64/blastz.v7.x86_64
+
+# TARGET: Rat (rn4)
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Cow (bosTau2)
+#  large enough chunk to do chroms in one piece
+SEQ2_DIR=/scratch/hg/bosTau2/bosTau2.noBin0.2bit
+SEQ2_LEN=/scratch/hg/bosTau2/noBin0.sizes
+SEQ2_CHUNK=150000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastz.bosTau2.2006-03-23
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl -chainMinScore=3000 -chainLinearGap=medium \
+      -bigClusterHub=pk -workhorse=kkr8u00 DEF \
+      >& do.log & tail -f do.log
+    ln -s blastz.bosTau2.2006-03-23 /cluster/data/rn4/bed/blastz.bosTau2
+
+
+# SELF CHAINS (DONE - NOT LOADED INTO DB 3/27/06 angie)
+    # Won't put this in Conservation -- special request for ancestor recon.
+    ssh pk
+    mkdir /cluster/data/rn4/bed/blastz.rn4.2006-03-24
+    cd /cluster/data/rn4/bed/blastz.rn4.2006-03-24
+    cat << '_EOF_' > DEF
+# rat vs rat
+
+BLASTZ=/cluster/bin/penn/x86_64/blastz.v7.x86_64
+BLASTZ_H=2000
+BLASTZ_M=200
+
+# TARGET: rat rn4
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: rat rn4
+SEQ2_DIR=/scratch/hg/rn4/nib
+SEQ2_LEN=/cluster/data/rn4/chrom.sizes
+SEQ2_CHUNK=10000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastz.rn4.2006-03-24
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl -chainMinScore=10000 -chainLinearGap=medium \
+      -bigClusterHub=pk -workhorse=kkr7u00 DEF \
+      >& do.log & tail -f do.log
+    # It died during loading because hgwdev /var/lib/mysql ran out of room!
+    # There is enough space now but I deleted the tables anyway -- can load 
+    # later if anyone wants to browse.  Did -continue download so that the 
+    # ancestor-reconstruction folks who requested this can find the chains 
+    # in the usual place.
+    ln -s blastz.rn4.2006-03-24 /cluster/data/rn4/bed/blastz.rn4
+
+
+# BLASTZ/CHAIN/NET PANTRO2 (IN PROGRESS 3/27/06 angie)
+    # Won't put this in Conservation -- special request for ancestor recon.
+    ssh pk
+    mkdir /cluster/data/rn4/bed/blastz.panTro2.2006-03-27
+    cd /cluster/data/rn4/bed/blastz.panTro2.2006-03-27
+    cat << '_EOF_' > DEF
+# Rat vs. chimp
+
+BLASTZ=/cluster/bin/penn/x86_64/blastz.v7.x86_64
+
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Rat (rn4)
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_SMSK=/san/sanvol1/scratch/rn4/linSpecRep.notInHuman
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chimp (panTro2)
+SEQ2_DIR=/scratch/hg/panTro2/nib
+SEQ2_SMSK=/cluster/bluearc/panTro2/linSpecRep/notInRodent
+SEQ2_LEN=/cluster/data/panTro2/chrom.sizes
+SEQ2_CHUNK=50000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastz.panTro2.2006-03-27
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl -blastzOutRoot /san/sanvol1/rn4PanTro2 \
+      -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium DEF \
+      -workhorse=kkr5u00 >& do.log & tail -f do.log
+#TODO
+    ln -s blastz.panTro2.2006-03-27 /cluster/data/rn4/bed/blastz.panTro2
+
 
 # MULTIZ
 # PHASTCONS
@@ -2443,6 +2621,7 @@ BASE=/cluster/data/rn4/bed/blastz.xenTro1.2006-03-20
 
 # MGI?
 # SNPS - TBD by Heather's new process.
+
 
 ############################################################################
 ##  BLASTZ swap from mm8 alignments (DONE - 2006-02-18 - Hiram)
