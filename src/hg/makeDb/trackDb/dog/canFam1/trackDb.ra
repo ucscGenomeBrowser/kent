@@ -217,6 +217,16 @@ visibility hide
 color 0,100,100
 type genePred twinscanPep
 
+track nscanGene
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
+visibility hide
+color 34,139,34
+type genePred nscanPep
+cdsDrawDefault genomic\ codons
+
 track blastHg17KG
 shortLabel Human Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
