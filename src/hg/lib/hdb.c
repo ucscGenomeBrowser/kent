@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.288 2006/03/09 21:19:08 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.289 2006/03/28 00:06:39 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2548,7 +2548,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
-/* Look for bed-style names. */
+/* Look for bed-style or linkedFeatures names. */
 if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEnd))
     {
     if (!fitField(hash, "name", retName))
@@ -2558,10 +2558,13 @@ if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEn
     fitField(hash, "strand", retStrand);
     fitField(hash, "thickStart", retCdsStart);
     fitField(hash, "thickEnd", retCdsEnd);
-    fitField(hash, "blockCount", retCount);
+    fitField(hash, "blockCount", retCount) ||
+	fitField(hash, "lfCount", retCount);
     fitField(hash, "chromStarts", retStarts) ||
-	fitField(hash, "blockStarts", retStarts);
-    fitField(hash, "blockSizes", retEndsSizes);
+	fitField(hash, "blockStarts", retStarts) ||
+	fitField(hash, "lfStarts", retStarts);
+    fitField(hash, "blockSizes", retEndsSizes) ||
+	fitField(hash, "lfSizes", retEndsSizes);
     fitField(hash, "span", retSpan);
     }
 /* Look for psl-style names. */
@@ -2771,6 +2774,8 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
 	else if (sameString(hti->startsField, "chromStarts") ||
 		 sameString(hti->startsField, "blockStarts"))
 	    hti->type = cloneString("bed 12");
+	else if (sameString(hti->startsField, "lfStarts"))
+	    hti->type = cloneString("linkedFeatures");
 	else if (sameString(hti->startsField, "tStarts"))
 	    hti->type = cloneString("psl");
 	else if (hti->cdsStartField[0] != 0)
