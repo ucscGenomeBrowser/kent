@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1004 2006/03/28 00:51:43 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1005 2006/03/28 00:52:48 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12207,7 +12207,6 @@ int count = 0;
 struct slName *exceptionList = NULL;
 struct slName *slNameElement = NULL;
 
-fprintf(stderr, "writeSnp125Exception\n");
 safef(query, sizeof(query), 
       "select count(*) from snp125Exceptions where chrom='%s' and chromStart=%d and name='%s'", 
       seqName, start, itemName);
@@ -12219,13 +12218,11 @@ printf("<BR><BR>Annotations:\n");
 safef(query, sizeof(query), 
       "select * from snp125Exceptions where chrom='%s' and chromStart=%d and name='%s'", 
       seqName, start, itemName);
-fprintf(stderr, "%s\n", query);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr))!=NULL)
     {
     snp125ExceptionsStaticLoad(row, &el);
     slNameElement = slNameNew(cloneString(el.exception));
-    fprintf(stderr, "%s\n", el.exception);
     slAddHead(&exceptionList, slNameElement);
     }
 sqlFreeResult(&sr);
@@ -12234,7 +12231,6 @@ for (slNameElement = exceptionList; slNameElement != NULL; slNameElement = slNam
     {
     safef(query, sizeof(query), 
       "select description from snp125ExceptionDesc where exception = '%s'", slNameElement->name);
-    fprintf(stderr, "%s\n", query);
     sr = sqlGetResult(conn, query);
     row = sqlNextRow(sr);
     if (row != NULL)
