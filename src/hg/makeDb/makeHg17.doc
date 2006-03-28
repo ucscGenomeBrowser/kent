@@ -19446,6 +19446,10 @@ cat > loadMaf.csh << 'EOF'
 # Also, instead of generating cons and noncons tree models,
 # we use a single, pre-existing tree model -- Elliot Margulies' model 
 # from the (37-way) ENCODE alignments.
+#
+# NOTE: Redone 3/20/06, adding rheMac2 to non-informative options,
+#       by recommendation of Adam Siepel, to correct unwanted
+#       high conservation in regions with primate-only alignments
 
     # NOTE: reusing cluster-friendly chrom fasta files created earlier
     #cd /cluster/data/hg17
