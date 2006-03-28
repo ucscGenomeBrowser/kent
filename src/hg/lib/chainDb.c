@@ -15,7 +15,7 @@
 #include "chainDb.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: chainDb.c,v 1.10 2006/03/09 18:26:57 angie Exp $";
+static char const rcsid[] = "$Id: chainDb.c,v 1.11 2006/03/28 18:18:17 angie Exp $";
 
 void chainHeadStaticLoad(char **row, struct chain *ret)
 /* Load a row from chain table into ret.  The contents of ret will
@@ -168,24 +168,16 @@ boolean chainDbNormScoreAvailable(char *chromName, char *mapName,
 /*	check if normScore column is available in this table	*/
 {
 boolean normScoreAvailable = FALSE;
-char tableName[128];
+char tableName[HDB_MAX_TABLE_STRING];
+boolean hasBin;
 
 /*      find out if the optional normScore column exists */
-/*      Check for mapName or chr*_mapName - don't know if it is split */
-safef(tableName, ArraySize(tableName), "%s", mapName);
-
-if (!hTableExistsDb(hGetDb(), tableName))
-    {
-    safef(tableName, ArraySize(tableName), "%s_%s", chromName, mapName);
-    if (!hTableExistsDb(hGetDb(), tableName))
-        tableName[0] = (char) NULL;
-    }
-if (tableName[0])
+if (hFindSplitTable(chromName, mapName, tableName, &hasBin))
     {
     struct sqlConnection *conn = hAllocOrConnect(hGetDb());
     int tblIx = sqlFieldIndex(conn, tableName, "normScore");
     normScoreAvailable = (tblIx > -1) ? TRUE : FALSE;
-    hFreeConn(&conn);
+    hFreeOrDisconnect(&conn);
     }   
 
 if (normScoreAvailable && foundTable)
