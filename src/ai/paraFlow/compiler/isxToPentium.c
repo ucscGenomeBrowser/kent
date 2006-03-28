@@ -412,7 +412,7 @@ if (dest != NULL)
 		if (iad == NULL)
 		    {
 		    int stompPos = stomp->stompPos[i];
-		    if (stompPos > destLifetime && stompPos < minUnstomped) 
+		    if (stompPos >= destLifetime && stompPos < minUnstomped) 
 			{
 			minUnstomped = stompPos;
 			freeReg = reg;
@@ -438,7 +438,7 @@ if (dest != NULL)
 		if (iad == NULL)
 		    {
 		    int stompPos = stomp->stompPos[i];
-		    if (stompPos > nextUse && stompPos > maxUnstomped)
+		    if (stompPos >= nextUse && stompPos > maxUnstomped)
 			{
 			maxUnstomped = stompPos;
 			freeReg = reg;
@@ -472,7 +472,7 @@ if (dest != NULL)
 			&& iad->weight < dest->weight)
 		    {
 		    int stompPos = stomp->stompPos[i];
-		    if (stompPos > usePos)
+		    if (stompPos >= usePos)
 		        {
 			if (freeReg == NULL)
 			    {
@@ -980,7 +980,6 @@ static void pentCmpJump(struct isx *isx, struct dlNode *nextNode,
 if (isx->left->reg)
     {
     codeOp(opCmp, isx->right, isx->left, coder);
-    // jmpOp = flipRightLeftInJump(jmpOp);
     }
 else if (isx->right->reg)
     {
@@ -994,7 +993,6 @@ else
     isx->left->reg = reg;
     reg->contents = isx->left;
     codeOpDestReg(opCmp, isx->right, reg, coder);
-    // jmpOp = flipRightLeftInJump(jmpOp);
     }
 pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
 }

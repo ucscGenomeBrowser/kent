@@ -716,7 +716,15 @@ switch (pp->type)
 		weight, iList);
 	struct isxAddress *dest = varAddress(use->var, varHash, 
 		weight, ppToIsxValType(pfc, use));
-	isxNew(pfc, poAssign, dest, source, NULL, iList);
+	if (source->adType == iadTempVar)
+	    {
+	    struct isx *prevIsx = iList->tail->val;
+	    prevIsx->dest = dest;
+	    }
+	else
+	    {
+	    isxNew(pfc, poAssign, dest, source, NULL, iList);
+	    }
 	break;
 	}
     case pptPlusEquals:
