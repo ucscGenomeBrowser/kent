@@ -24,7 +24,7 @@
 #include "joiner.h"
 #include "bedCart.h"
 
-static char const rcsid[] = "$Id: hgTables.c,v 1.124 2006/03/23 00:53:40 angie Exp $";
+static char const rcsid[] = "$Id: hgTables.c,v 1.125 2006/03/28 17:34:05 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -873,19 +873,18 @@ if (trackDupe != NULL && trackDupe[0] != 0)
     char *type = nextWord(&s);
     if (sameString(type, "wigMaf"))
         {
-	char *wigTrack = trackDbSetting(track, "wiggle");
-	char *summary = trackDbSetting(track, "summary");
-	if (wigTrack != NULL) 
+	static char *wigMafAssociates[] = {"frames", "summary", "wiggle"};
+	int i;
+	for (i=0; i<ArraySize(wigMafAssociates); ++i)
 	    {
-	    name = slNameNew(wigTrack);
-	    slAddHead(pList, name);
-	    hashAdd(uniqHash, wigTrack, NULL);
-	    }
-	if (summary != NULL)
-	    {
-	    name = slNameNew(summary);
-	    slAddTail(pList, name);
-	    hashAdd(uniqHash, summary, NULL);
+	    char *setting = wigMafAssociates[i];
+	    char *table = trackDbSetting(track, setting);
+	    if (table != NULL)
+	        {
+		name = slNameNew(table);
+		slAddHead(pList, name);
+		hashAdd(uniqHash, table, NULL);
+		}
 	    }
 	}
     if (trackDbIsComposite(track))
