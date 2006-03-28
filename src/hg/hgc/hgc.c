@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1003 2006/03/22 07:17:52 lowe Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1004 2006/03/28 00:51:43 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12204,7 +12204,10 @@ char   query[256];
 int    start = cartInt(cart, "o");
 struct snp125Exceptions el;
 int count = 0;
+struct slName *exceptionList = NULL;
+struct slName *slNameElement = NULL;
 
+fprintf(stderr, "writeSnp125Exception\n");
 safef(query, sizeof(query), 
       "select count(*) from snp125Exceptions where chrom='%s' and chromStart=%d and name='%s'", 
       seqName, start, itemName);
@@ -12216,14 +12219,28 @@ printf("<BR><BR>Annotations:\n");
 safef(query, sizeof(query), 
       "select * from snp125Exceptions where chrom='%s' and chromStart=%d and name='%s'", 
       seqName, start, itemName);
-
+fprintf(stderr, "%s\n", query);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr))!=NULL)
     {
     snp125ExceptionsStaticLoad(row, &el);
-    printf("<BR>%s\n", el.exception);
+    slNameElement = slNameNew(cloneString(el.exception));
+    fprintf(stderr, "%s\n", el.exception);
+    slAddHead(&exceptionList, slNameElement);
     }
 sqlFreeResult(&sr);
+
+for (slNameElement = exceptionList; slNameElement != NULL; slNameElement = slNameElement->next)
+    {
+    safef(query, sizeof(query), 
+      "select description from snp125ExceptionDesc where exception = '%s'", slNameElement->name);
+    fprintf(stderr, "%s\n", query);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        printf("<BR>%s\n", row[0]);
+    sqlFreeResult(&sr);
+    }
 hFreeConn(&conn);
 }
 
@@ -12255,7 +12272,7 @@ printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
 printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
 doSnpEntrezGeneLink(tdb, itemName);
 
-if (hTableExists("snp125Exceptions"))
+if (hTableExists("snp125Exceptions") && hTableExists("snp125ExceptionDesc"))
     writeSnp125Exception(itemName);
 
 printTrackHtml(tdb);
