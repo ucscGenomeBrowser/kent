@@ -36,6 +36,11 @@
  *    if observed like "LARGEDELETION" then expect loc_type = 1
  *    if observed like "LARGEINSERTION" then expect loc_type = 3
  *
+ *  8) NewLocTypeWrongSize 
+ *     rangeInsertion should have observed shorter than span 
+ *     rangeSubstitution should have observed equal to span 
+ *     rangeDeletion should have observed longer than span 
+
  * Use UCSC chromInfo.  */
 
 
@@ -44,7 +49,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.18 2006/03/11 04:08:07 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.19 2006/03/28 00:24:08 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -231,7 +236,7 @@ struct sqlResult *sr;
 char **row;
 char tableName[64];
 int loc_type = 0;
-int alleleLen = 0;
+int observedLen = 0;
 int span = 0;
 char *subString = NULL;
 int slashCount = 0;
@@ -289,10 +294,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (sameString(row[4], "deletion") && loc_type < 3)
         {
         /* DeletionClassWrongObservedSize */
-	alleleLen = strlen(row[5]);
-	alleleLen = alleleLen - 2;
+	observedLen = strlen(row[5]);
+	observedLen = observedLen - 2;
 	span = sqlUnsigned(row[2]) - sqlUnsigned(row[1]);
-	if (alleleLen != span)
+	if (observedLen != span)
 	    {
             writeToExceptionFile(chromName, row[1], row[2], row[0], "DeletionClassWrongObservedSize");
 	    continue;
@@ -309,6 +314,17 @@ while ((row = sqlNextRow(sr)) != NULL)
             writeToExceptionFile(chromName, row[1], row[2], row[0], "DeletionClassWrongObserved");
 	}
 
+    /* NewLocType */
+    /* could also check if observed is subset of allele at one end */
+    observedLen = strlen(row[5]);
+    observedLen = observedLen - 2;
+    span = sqlUnsigned(row[2]) - sqlUnsigned(row[1]);
+    if (loc_type == 4 && sameString(row[4], "in-del") && observedLen >= span)
+        writeToExceptionFile(chromName, row[1], row[2], row[0], "NewLocTypeWrongSize");
+    if (loc_type == 5 && sameString(row[4], "in-del") && observedLen != span)
+        writeToExceptionFile(chromName, row[1], row[2], row[0], "NewLocTypeWrongSize");
+    if (loc_type == 6 && sameString(row[4], "in-del") && observedLen <= span)
+        writeToExceptionFile(chromName, row[1], row[2], row[0], "NewLocTypeWrongSize");
 
     }
 sqlFreeResult(&sr);
