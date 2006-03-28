@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.36 2006/03/20 23:36:12 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.37 2006/03/28 02:30:10 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -138,12 +138,13 @@ Automates UCSC's blastz/chain/net pipeline:
     1. Big cluster run of blastz.
     2. Small cluster consolidation of blastz result files.
     3. Small cluster chaining run.
-    4. Sorting and netting of chains on the fileserver.
+    4. Sorting and netting of chains on the fileserver
+       (no nets for self-alignments).
     5. Generation of liftOver-suitable chains from nets+chains on fileserver
        (not done for self-alignments).
-    6. Generation of axtNet and mafNet files on the fileserver.
-    7. Addition of gap/repeat info to nets on hgwdev.
-    8. Loading of chain and net tables on hgwdev.
+    6. Generation of axtNet and mafNet files on the fileserver (not for self).
+    7. Addition of gap/repeat info to nets on hgwdev (not for self).
+    8. Loading of chain and net tables on hgwdev (no nets for self).
     9. Setup of download directory on hgwdev.
 DEF is a Scott Schwartz-style bash script containing blastz parameters.
 This script makes a lot of assumptions about conventional placements of 
@@ -923,15 +924,13 @@ sub netChains {
     die "netChains: looks like previous stage was not successful " .
       "(can't find [$tDb.$qDb.]all.chain[.gz]).\n";
   }
+  # Don't do this for self alignments.
+  if ($isSelf) {
+    die "program error: netChains should not be called when $isSelf.";
+  }
   my $over = $tDb . "To$QDb.over.chain.gz";
   my $altOver = "$tDb.$qDb.over.chain.gz";
   my $liftOverDir = "$clusterData/$tDb/$trackBuild/liftOver";
-  my $liftOver = ($isSelf ? "# No liftOver chains for self-alignments." :
-		  "# Make liftOver chains:\n" .
-		  "netChainSubset -verbose=0 noClass.net $chain stdout " .
-		  "| chainSort stdin stdout | gzip -c > $altOver\n" .
-		  "mkdir -p $liftOverDir\n" .
-		  "cp -p $altOver $liftOverDir/$over");
   my $bossScript = "$buildDir/axtChain/netChains.csh";
   open(SCRIPT, ">$bossScript")
     || die "Couldn't open $bossScript for writing: $!\n";
@@ -951,7 +950,11 @@ chainPreNet $chain $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout \\
 | chainNet stdin -minSpace=1 $defVars{SEQ1_LEN} $defVars{SEQ2_LEN} stdout /dev/null \\
 | netSyntenic stdin noClass.net
 
-$liftOver
+# Make liftOver chains:
+netChainSubset -verbose=0 noClass.net $chain stdout \\
+| chainSort stdin stdout | gzip -c > $altOver
+mkdir -p $liftOverDir
+cp -p $altOver $liftOverDir/$over
 
 _EOF_
     ;
@@ -1014,7 +1017,8 @@ sub loadUp {
 	"or move aside/remove $runDir/$tDb.$qDb.net[.gz] and run again.\n";
   }
   # Make sure previous stage was successful.
-  my $successDir = "$buildDir/mafNet/";
+  my $successDir = $isSelf ? "$runDir/$tDb.$qDb.all.chain.gz" :
+                             "$buildDir/mafNet/";
   if (! -d $successDir && ! $opt_debug) {
     die "loadUp: looks like previous stage was not successful " .
       "(can't find $successDir).\n";
@@ -1054,7 +1058,8 @@ hgLoadChain -tIndex $tDb chain$QDb $tDb.$qDb.all.chain.gz
 _EOF_
       ;
   }
-  print SCRIPT <<_EOF_
+  if (! $isSelf) {
+    print SCRIPT <<_EOF_
 
 # Add gap/repeat stats to the net file using database tables:
 cd $runDir
@@ -1064,12 +1069,13 @@ netClass -verbose=0 -noAr noClass.net $tDb $qDb $tDb.$qDb.net
 netFilter -minGap=10 $tDb.$qDb.net \\
 | hgLoadNet -verbose=0 $tDb net$QDb stdin
 _EOF_
-  ;
+      ;
+  }
   close(SCRIPT);
   &HgAutomate::run("chmod a+x $bossScript");
   &HgAutomate::run("ssh -x $dbHost nice $bossScript");
 # maybe also peek in trackDb and see if entries need to be added for chain/net
-}
+}	#	sub loadUp {}
 
 
 sub makeDownloads {
@@ -1083,6 +1089,7 @@ sub makeDownloads {
   }
   # Make an md5sum.txt file.
   my $bossScript = "$buildDir/axtChain/makeMd5sum.csh";
+  my $net = $isSelf ? "" : "$tDb.$qDb.net.gz";
   open(SCRIPT, ">$bossScript")
     || die "Couldn't open $bossScript for writing: $!\n";
   print SCRIPT <<_EOF_
@@ -1095,11 +1102,16 @@ sub makeDownloads {
 # This script will fail if any of its commands fail.
 
 cd $runDir
-md5sum $tDb.$qDb.all.chain.gz $tDb.$qDb.net.gz > md5sum.txt
+md5sum $tDb.$qDb.all.chain.gz $net > md5sum.txt
+_EOF_
+;
+  if (! $isSelf) {
+    print SCRIPT <<_EOF_
 cd ..
 md5sum axtNet/*.gz >> axtChain/md5sum.txt
 _EOF_
-    ;
+      ;
+  }
   close(SCRIPT);
   &HgAutomate::run("chmod a+x $bossScript");
   &HgAutomate::run("ssh -x $machine nice $bossScript");
@@ -1236,12 +1248,6 @@ alignment coordinates were adjusted) using the restore_rpts program from
 Penn State.";
     }
   }
-  my $netMeaning = $isSelf ? "duplications/
-    rearrangements and the best-in-genome match to any other part of
-    the genome." :
-"rearrangements between 
-    the species and the best $qGenome match to any part of the
-    $tGenome genome.";
   my $desc = $isSelf ? 
 "This directory contains alignments of $tGenome ($tDb, $tDate,
 $tSource) to itself." :
@@ -1260,7 +1266,12 @@ Files included in this directory:
   - $tDb.$qDb.all.chain.gz: chained blastz alignments. The chain format is
     described in http://genome.ucsc.edu/goldenPath/help/chain.html .
 
-  - $tDb.$qDb.net.gz: \"net\" file that describes $netMeaning  The net format is described in
+";
+  if (! $isSelf) {
+    print R
+"  - $tDb.$qDb.net.gz: \"net\" file that describes rearrangements between 
+    the species and the best $qGenome match to any part of the
+    $tGenome genome.  The net format is described in
     http://genome.ucsc.edu/goldenPath/help/net.html .
 
   - $dir$tDb.$qDb.net.axt.gz: chained and netted alignments,
@@ -1269,6 +1280,7 @@ Files included in this directory:
     described in http://genome.ucsc.edu/goldenPath/help/axt.html .
 
 ";
+  }
   if ($opt_swap) {
     my $TDb = ucfirst($tDb);
     print R
@@ -1324,10 +1336,13 @@ bothGap 750 825 850 1000 1300 3300  23300 58300 118300 218300  318300
 	print R "(specified):\n", `cat $chainLinearGap`, "\n";
     }
   }
-  print R "
+  if (! $isSelf) {
+    print R "
 Chained alignments were processed into nets by the chainNet, netSyntenic,
 and netClass programs.
-Best-chain alignments in axt format were extracted by the netToAxt program.
+Best-chain alignments in axt format were extracted by the netToAxt program.";
+  }
+  print R "
 All programs run after blastz were written by Jim Kent at UCSC.
 
 ----------------------------------------------------------------
@@ -1368,28 +1383,20 @@ sub installDownloads {
   my $runDir = "$buildDir/axtChain";
   my $bossScript = "$buildDir/axtChain/installDownloads.csh";
   # Make sure previous stage was successful.
-  my $successFile = "$runDir/$tDb.$qDb.net.gz";
+  my $successFile = $isSelf ? "$runDir/$tDb.$qDb.all.chain.gz" :
+                              "$runDir/$tDb.$qDb.net.gz";
   if (! -e $successFile && ! $opt_debug) {
     die "installDownloads: looks like previous stage was not successful " .
       "(can't find $successFile).\n";
   }
   &dumpDownloadReadme("$runDir/README.txt");
-  my $axt = ($splitRef ?
-	     "mkdir axtNet\n" . "ln -s $buildDir/axtNet/*.axt.gz axtNet/" :
-	     "ln -s $buildDir/axtNet/$tDb.$qDb.net.axt.gz .");
   my $over = $tDb . "To$QDb.over.chain.gz";
   my $liftOverDir = "$clusterData/$tDb/$trackBuild/liftOver";
   my $gpLiftOverDir = "$goldenPath/$tDb/liftOver";
   my $gbdbLiftOverDir = "$gbdb/$tDb/liftOver";
-  my $liftOver = ($isSelf ? '# No liftOver chains for self-alignments.' :
-		  "mkdir -p $gpLiftOverDir\n" .
-		  "rm -f $gpLiftOverDir/$over\n" .
-		  "ln -s $liftOverDir/$over $gpLiftOverDir/$over\n" .
-		  "mkdir -p $gbdbLiftOverDir\n" .
-		  "rm -f $gbdbLiftOverDir/$over\n" .
-		  "ln -s $liftOverDir/$over $gbdbLiftOverDir/$over\n" .
-		  "hgAddLiftOverChain $tDb $qDb -multiple" .
-		  " -path=$gbdbLiftOverDir/$over");
+  my $andNets = $isSelf ? "." :
+    ", nets and axtNet,\n" .
+    "# and copies the liftOver chains to the liftOver download dir.";
   open(SCRIPT, ">$bossScript")
     || die "Couldn't open $bossScript for writing: $!\n";
   print SCRIPT <<_EOF_
@@ -1397,24 +1404,37 @@ sub installDownloads {
 # This script was automatically generated by $0 
 # from $DEF.
 # It is to be executed on $dbHost in $runDir .
-# It creates the download directory for chains, nets and axtNet,
-# and copies the liftOver chains (if applicable) to the liftOver download dir.
+# It creates the download directory for chains$andNets
 # This script will fail if any of its commands fail.
 
 mkdir -p $goldenPath/$tDb
 mkdir $goldenPath/$tDb/vs$QDb
 cd $goldenPath/$tDb/vs$QDb
 ln -s $runDir/$tDb.$qDb.all.chain.gz .
-ln -s $runDir/$tDb.$qDb.net.gz .
 cp -p $runDir/README.txt .
 ln -s $runDir/md5sum.txt .
 
+_EOF_
+    ;
+  if (! $isSelf) {
+    my $axt = ($splitRef ?
+	       "mkdir axtNet\n" . "ln -s $buildDir/axtNet/*.axt.gz axtNet/" :
+	       "ln -s $buildDir/axtNet/$tDb.$qDb.net.axt.gz .");
+    print SCRIPT <<_EOF_
+ln -s $runDir/$tDb.$qDb.net.gz .
 $axt
 
-$liftOver
+mkdir -p $gpLiftOverDir
+rm -f $gpLiftOverDir/$over
+ln -s $liftOverDir/$over $gpLiftOverDir/$over
+mkdir -p $gbdbLiftOverDir
+rm -f $gbdbLiftOverDir/$over
+ln -s $liftOverDir/$over $gbdbLiftOverDir/$over
+hgAddLiftOverChain $tDb $qDb -multiple -path=$gbdbLiftOverDir/$over
 
 _EOF_
       ;
+  }
   close(SCRIPT);
   &HgAutomate::run("chmod a+x $bossScript");
   &HgAutomate::run("ssh -x $dbHost nice $bossScript");
@@ -1590,7 +1610,7 @@ $step++;
 HgAutomate::verbose(2,
 	"startStep: $startStep, at step $step net to stopStep $stopStep\n");
 if ($startStep <= $step && $step <= $stopStep) {
-  &netChains($workhorse);
+  &netChains($workhorse) if (! $isSelf);
 }
 
 #	-continue load
