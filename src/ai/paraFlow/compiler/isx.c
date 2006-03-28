@@ -767,7 +767,7 @@ switch (pp->type)
 	isxStatement(pfc, end, varHash, loopWeight, iList);
 	isxNew(pfc, poLabel, condLabel, NULL, NULL, iList);
 	isxConditionalJump(pfc, test, varHash, startLabel, NULL, 
-		TRUE, loopWeight, iList);
+		FALSE, loopWeight, iList);
 	isxNew(pfc, poLoopEnd, endLabel, NULL, NULL, iList);
 	break;
 	}

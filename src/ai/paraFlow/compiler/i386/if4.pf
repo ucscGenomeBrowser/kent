@@ -1,0 +1,5 @@
+int zero = 0, one = 1;
+if (zero < one)
+   _printInt(1);
+else
+   _printInt(0);

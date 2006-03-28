@@ -122,7 +122,6 @@ static void foldInCaseLive(struct condStack *ls, struct isxLiveVar *liveList)
 /* Fold the liveList into the condLiveList. */
 {
 struct isxLiveVar *live, *next;
-uglyf("foldInCaseLive, %d\n", slCount(liveList));
 for (live = liveList; live != NULL; live = live->next)
     {
     struct isxLiveVar *condLive = isxLiveVarFind(ls->condLiveList, live->var);

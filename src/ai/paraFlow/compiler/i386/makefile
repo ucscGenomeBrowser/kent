@@ -18,3 +18,18 @@ test:
 	paraFlow for5.pf > expected/for5
 	paraFlow -asm for5.pf > output/for5
 	diff expected/for5 output/for5
+	paraFlow for.pf > expected/for
+	paraFlow -asm for.pf > output/for
+	diff expected/for output/for
+	paraFlow if.pf > expected/if
+	paraFlow -asm if.pf > output/if
+	diff expected/if output/if
+	paraFlow if2.pf > expected/if2
+	paraFlow -asm if2.pf > output/if2
+	diff expected/if2 output/if2
+	paraFlow if3.pf > expected/if3
+	paraFlow -asm if3.pf > output/if3
+	diff expected/if3 output/if3
+	paraFlow if4.pf > expected/if4
+	paraFlow -asm if4.pf > output/if4
+	diff expected/if4 output/if4

@@ -621,15 +621,16 @@ if (source->adType == iadZero)
     }
 else
     {
-    reg = source->reg;
+    reg = dest->reg;
     if (reg == NULL)
-	{
 	reg = freeReg(isx, isx->dest->valType, nextNode, coder);
+    if (source->reg != reg)
 	codeOpDestReg(opMov, source, reg, coder);
-	}
     }
+
 if (reg->contents != NULL)
     reg->contents->reg = NULL;
+
 reg->contents = dest;
 dest->reg = reg;
 copyRealVarToMem(dest, coder);
@@ -979,11 +980,12 @@ static void pentCmpJump(struct isx *isx, struct dlNode *nextNode,
 if (isx->left->reg)
     {
     codeOp(opCmp, isx->right, isx->left, coder);
-    jmpOp = flipRightLeftInJump(jmpOp);
+    // jmpOp = flipRightLeftInJump(jmpOp);
     }
 else if (isx->right->reg)
     {
     codeOp(opCmp, isx->left, isx->right, coder);
+    jmpOp = flipRightLeftInJump(jmpOp);
     }
 else
     {
@@ -992,7 +994,7 @@ else
     isx->left->reg = reg;
     reg->contents = isx->left;
     codeOpDestReg(opCmp, isx->right, reg, coder);
-    jmpOp = flipRightLeftInJump(jmpOp);
+    // jmpOp = flipRightLeftInJump(jmpOp);
     }
 pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
 }
@@ -1413,11 +1415,11 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    pentLoopEnd(isx, nextNode, coder);
 	    break;
 	case poLabel:
+	case poCondEnd:
 	    pentCoderAdd(coder, NULL, NULL, isx->dest->name);
 	    forgetUnreservedRegs();
 	    break;
 	case poCondCase:
-	case poCondEnd:
 	    pentCoderAdd(coder, NULL, NULL, isx->dest->name);
 	    break;
 	case poCondStart:
