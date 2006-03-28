@@ -11,7 +11,7 @@
 #include "genePred.h"
 #include "affyAllExonProbe.h"
 
-static char const rcsid[] = "$Id: expClick.c,v 1.10 2006/03/14 01:36:03 aamp Exp $";
+static char const rcsid[] = "$Id: expClick.c,v 1.11 2006/03/28 04:40:51 aamp Exp $";
 
 static struct rgbColor getColorForExprBed(float val, float max)
 /* Return the correct color for a given score */
@@ -771,6 +771,137 @@ if(name != NULL)
     }
 }
 
+struct expRecord *basicExpRecord(char *expName, int id, int extrasIndex)
+/* This returns a stripped-down new expRecord, probably the result of an average. */
+{
+int i;
+struct expRecord *er = NULL;
+AllocVar(er);
+er->id = id;
+er->name = cloneString(expName);
+er->description = cloneString(expName);
+er->url = cloneString("n/a");
+er->ref = cloneString("n/a");
+er->credit = cloneString("n/a");
+er->numExtras = extrasIndex+1;
+AllocArray(er->extras, er->numExtras);
+for (i = 0; i < er->numExtras; i++)
+    er->extras[i] = cloneString(expName);
+return er;
+}
+
+void bedListExpRecordAverage(struct bed **pBedList, struct expRecord **pERList, int extrasIndex)
+/* This is a mildy complicated function to make the details page have the */
+/* same data as the track when the UI option "Tissue averages" is selected. */
+/* This is done by hacking the bed and expRecord lists in place and keeping */
+/* the original code for the most part. */
+{
+struct bed *bed = NULL;
+struct expRecord *er, *newERList = NULL;
+struct slName *extras = NULL, *oneSlName;
+int M, N, i, columns;
+int *mapping;
+if (!pBedList || !pERList || !*pBedList || !*pERList)
+    return;
+er = *pERList;
+if ((extrasIndex < 0) || (extrasIndex >= er->numExtras))
+    return;
+/* Build up a unique list of words from the specific "extras" column. */
+for (er = *pERList; er != NULL; er = er->next)
+    slNameStore(&extras, er->extras[extrasIndex]);
+slReverse(&extras);
+M = slCount(extras);
+N = slCount(*pERList);
+columns = N + 1;
+/* M rows, reserve first column for counts. */
+mapping = needMem(sizeof(int) * M * columns);
+/* Create the mapping array: */
+/*   each row corresponds to one of the groupings.  The first column is the number of */
+/*   things in the original list in the group (k things), and the next k elements  on */
+/*   that row are indeces. */
+for (er = *pERList, i = 0; er != NULL && i < N; er = er->next, i++)
+    {    
+    int ix = slNameFindIx(extras, er->extras[extrasIndex]) * columns;
+    mapping[ix + ++mapping[ix]] = er->id; 
+    }
+/* Make a new expRecord list. */
+for (oneSlName = extras, i = 0; oneSlName != NULL && i < M; oneSlName = oneSlName->next, i++)
+    {
+    struct expRecord *newER = basicExpRecord(oneSlName->name, i, extrasIndex);
+    slAddHead(&newERList, newER);
+    }
+slReverse(&newERList);
+expRecordFreeList(pERList);
+*pERList = newERList;
+/* Go through each bed and change it. */
+for (bed = *pBedList; bed != NULL; bed = bed->next)
+    {
+    float *newExpScores = needMem(sizeof(float) * M);
+    int *newExpIds = needMem(sizeof(int) * M);
+    /* Calculate averages. */
+    for (i = 0; i < M; i++)
+	{
+	int ix = i * columns;
+	int size = mapping[ix];
+	int j;
+	double sum = 0;
+	for (j = 1; j < size + 1; j++)
+	    sum += (double)bed->expScores[mapping[ix + j]];
+	newExpScores[i] = (float)(sum/size);
+	newExpIds[i] = i;
+	}
+    bed->expCount = M;
+    freeMem(bed->expIds);
+    bed->expIds = newExpIds;
+    freeMem(bed->expScores);
+    bed->expScores = newExpScores;    
+    }
+/* Free stuff. */
+slNameFreeList(&extras);
+freez(&mapping);
+}
+
+void affyAllExonDetails(struct trackDb *tdb, char *expName, char *tableName, char *expTable,
+	char *chip, float stepSize, float maxScore) 
+/* print out a page for the affy data from gnf based on ratio of
+ * measurements to the median of the measurements. */
+{
+struct bed *bedList;
+char *itemName = cgiUsualString("i2","none");
+struct expRecord *erList = NULL, *er;
+char buff[32];
+struct hash *erHash;
+genericHeader(tdb, itemName);
+bedList = loadMsBed(tableName, seqName, winStart, winEnd);
+if(bedList == NULL)
+    printf("<b>No Expression Data in this Range.</b>\n");
+else 
+    {
+    char varName[128];
+    char *affyAllExonMap;
+    enum affyAllExonOptEnum affyAllExonType;
+    erHash = newHash(2);
+    erList = loadExpRecord(expTable, "hgFixed");
+    safef(varName, sizeof(varName), "%s.%s", tdb->tableName, "type");
+    affyAllExonMap = cartUsualString(cart, varName, affyAllExonEnumToString(affyAllExonTissue));
+    affyAllExonType = affyAllExonStringToEnum(affyAllExonMap);
+    if (affyAllExonType == affyAllExonTissue)
+	bedListExpRecordAverage(&bedList, &erList, affyAllExonTissue);
+    for(er = erList; er != NULL; er=er->next)
+	{
+	snprintf(buff, sizeof(buff), "%d", er->id);
+	hashAddUnique(erHash, buff, er);
+	}
+    printf("<h2></h2><p>\n");
+    msBedPrintTable(bedList, erHash, itemName, expName, -1*maxScore, maxScore, stepSize, 2,
+		    msBedDefaultPrintHeader, msBedExpressionPrintRow, printExprssnColorKey, getColorForExprBed);
+    expRecordFreeList(&erList);
+    hashFree(&erHash);
+    bedFreeList(&bedList);
+    }
+printf("<h2></h2><p>\n");
+}
+
 void affyDetails(struct trackDb *tdb, char *expName) 
 /* print out a page for the affy data from gnf */
 {
@@ -1112,7 +1243,6 @@ char *expStep = trackDbRequiredSetting(tdb, "expStep");
 char *expProbes = trackDbRequiredSetting(tdb, "expProbeTable");
 double maxScore = atof(expScale);
 double stepSize = atof(expStep);
-genericRatioDetails(tdb, item, expTable, NULL, stepSize, maxScore, 
-		    NULL, FALSE);
+affyAllExonDetails(tdb, item, tdb->tableName, expTable, NULL, stepSize, maxScore);
 printAffyHumanExonProbeInfo(tdb, item, expProbes);
 }
