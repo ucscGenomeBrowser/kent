@@ -883,6 +883,22 @@ pentCoderAdd(coder, "call", NULL, coder->destBuf);
 }
 
 
+static void forgetUnreservedRegs()
+/* Forget whatever is in non-reserved registers */
+{
+int i;
+/* Clear non-reserved registers. */
+for (i=0; i<ArraySize(regInfo); ++i)
+    {
+    struct isxReg *reg = &regInfo[i];
+    if (reg->contents != NULL && reg->reserved == NULL)
+	{
+	reg->contents->reg = NULL;
+	reg->contents = NULL;
+	}
+    }
+}
+
 static void pentLoopStart(struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder)
 /* Code beginning of a loop.  This includes loading up the loop
@@ -898,6 +914,8 @@ for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
     {
     struct isxReg *reg = lv->reg;
     struct isxAddress *iad = lv->iad;
+    if (reg == NULL)
+        break;
     if (reg->contents != iad)
         {
 	if (reg->contents != NULL)
@@ -912,18 +930,8 @@ for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
 	}
     reg->reserved = iad;
     }
+forgetUnreservedRegs();
 
-/* Clear non-reserved registers. */
-for (i=0; i<ArraySize(regInfo); ++i)
-    {
-    struct isxReg *reg = &regInfo[i];
-    if (reg->contents != NULL && reg->reserved == NULL)
-	{
-	reg->contents->reg = NULL;
-	reg->contents = NULL;
-	}
-    }
-    
 pentCoderAdd(coder, "jmp", isx->right->name, NULL);
 pentCoderAdd(coder, NULL, NULL, isx->dest->name);
 }
@@ -953,6 +961,17 @@ static void pentJump(struct isx *isx, struct dlNode *nextNode,
 pentCoderAdd(coder, "jmp", isx->dest->name, NULL);
 }
 
+static char *flipRightLeftInJump(char *jmpOp)
+/* Turn jump to jump you'd get if comparison were reversed. */
+{
+if (sameString(jmpOp, "jl")) jmpOp = "jge";
+else if (sameString(jmpOp, "jle")) jmpOp = "jg";
+else if (sameString(jmpOp, "jge")) jmpOp = "jl";
+else if (sameString(jmpOp, "jg")) jmpOp = "jle";
+return jmpOp;
+}
+
+
 static void pentCmpJump(struct isx *isx, struct dlNode *nextNode,
 	char *jmpOp, struct pentCoder *coder)
 /* Output conditional jump code for == != < <= => > . */
@@ -960,10 +979,7 @@ static void pentCmpJump(struct isx *isx, struct dlNode *nextNode,
 if (isx->left->reg)
     {
     codeOp(opCmp, isx->right, isx->left, coder);
-    if (sameString(jmpOp, "jl")) jmpOp = "jge";
-    else if (sameString(jmpOp, "jle")) jmpOp = "jg";
-    else if (sameString(jmpOp, "jge")) jmpOp = "jl";
-    else if (sameString(jmpOp, "jg")) jmpOp = "jle";
+    jmpOp = flipRightLeftInJump(jmpOp);
     }
 else if (isx->right->reg)
     {
@@ -976,6 +992,7 @@ else
     isx->left->reg = reg;
     reg->contents = isx->left;
     codeOpDestReg(opCmp, isx->right, reg, coder);
+    jmpOp = flipRightLeftInJump(jmpOp);
     }
 pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
 }
@@ -1396,6 +1413,9 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    pentLoopEnd(isx, nextNode, coder);
 	    break;
 	case poLabel:
+	    pentCoderAdd(coder, NULL, NULL, isx->dest->name);
+	    forgetUnreservedRegs();
+	    break;
 	case poCondCase:
 	case poCondEnd:
 	    pentCoderAdd(coder, NULL, NULL, isx->dest->name);
