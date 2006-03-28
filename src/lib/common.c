@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.89 2006/03/19 00:42:04 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.90 2006/03/28 17:57:01 aamp Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -568,6 +568,19 @@ for (el = list; el != NULL; el = el->next)
     if (sameWord(string, el->name))
         return el;
 return NULL;
+}
+
+int slNameFindIx(struct slName *list, char *string)
+/* Return index of first element of slName list (or any other 
+ * list starting with next/name fields) that matches string.
+ * Return -1 if not found. */
+{
+struct slName *el;
+int ix = 0;
+for (el = list; el != NULL; el = el->next, ix++)
+    if (sameString(string, el->name))
+        return ix;
+return -1;
 }
 
 char *slNameStore(struct slName **pList, char *string)
