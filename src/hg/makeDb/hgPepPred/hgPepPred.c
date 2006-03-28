@@ -1,13 +1,13 @@
 /* hgPepPred - Load peptide predictions from Ensembl or Genie. */
 #include "common.h"
-#include "cheapcgi.h"
+#include "options.h"
 #include "linefile.h"
 #include "dystring.h"
 #include "hash.h"
 #include "jksql.h"
 #include "pepPred.h"
 
-static char const rcsid[] = "$Id: hgPepPred.c,v 1.13 2004/11/09 00:14:10 hiram Exp $";
+static char const rcsid[] = "$Id: hgPepPred.c,v 1.14 2006/03/28 00:25:12 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -26,24 +26,28 @@ errAbort(
   "which will load the given table from a single tab separated file\n"
   "options:\n"
   "   -abbr=prefix  Abbreviate by removing prefix from names\n"
+  "   -suffix=suffix - add suffix to each protein id\n"
   );
 }
 
-char *abbr = NULL;
+/* command line option specifications */
+static struct optionSpec optionSpecs[] = {
+    {"abbr", OPTION_STRING},
+    {"suffix", OPTION_STRING},
+    {NULL, 0}
+};
 
+char *abbr = NULL;
+char *suffix = NULL;
 
 void makeCustomTable(char *database, char *table, char *defString)
-/* Make table if it doesn't exist already.  If it does exist clear it. */
+/* create/recreate table. */
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *ds = newDyString(2048);
 
 dyStringPrintf(ds, defString, table);
-sqlMaybeMakeTable(conn, table, ds->string);
-dyStringClear(ds);
-dyStringPrintf(ds, 
-   "delete from %s", table);
-sqlUpdate(conn, ds->string);
+sqlRemakeTable(conn, table, ds->string);
 sqlDisconnect(&conn);
 freeDyString(&ds);
 }
@@ -276,7 +280,7 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
 int lineSize;
 boolean firstTime = TRUE;
-char *trans;
+char *trans, transBuf[128];
 
 /* Do cursory sanity check. */
 if (!lineFileNext(lf, &line, &lineSize))
@@ -298,6 +302,11 @@ while (lineFileNext(lf, &line, &lineSize))
 	trans = firstWordInLine(line+1);
 	if (abbr != NULL && startsWith(abbr, trans))
 	    trans += strlen(abbr);
+        if (suffix != NULL)
+            {
+            safef(transBuf, sizeof(transBuf), "%s%s", trans, suffix);
+            trans = transBuf;
+            }
 	if (hashLookupUpperCase(uniq, trans) != NULL)
 	    errAbort("Duplicate (case insensitive) '%s' line %d of %s", trans, lf->lineIx, lf->fileName);
 	upperCase = cloneString(trans);
@@ -378,10 +387,11 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 char *type;
-cgiSpoof(&argc, argv);
+optionInit(&argc, argv, optionSpecs);
 if (argc < 4)
     usage();
-abbr = cgiUsualString("abbr", abbr);
+abbr = optionVal("abbr", abbr);
+suffix = optionVal("suffix", abbr);
 type = argv[2];
 if (sameWord(type, "ensembl"))
     ensPepPred(argv[1], argc-3, argv+3);
