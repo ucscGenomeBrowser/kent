@@ -12,12 +12,14 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.33 2005/04/06 22:00:27 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.34 2006/03/28 01:59:04 markd Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
+boolean useBin = FALSE;         /* add bin column */
 char *outFile = NULL;	        /* Output file as alternative to database. */
-boolean gOptFields = 0;  /* optional fields from cmdline */
+unsigned gOptFields = 0;        /* optional fields from cmdline */
+unsigned gCreateOpts = 0;       /* table create options from cmdline */
 
 
 /* command line option specifications */
@@ -27,6 +29,7 @@ static struct optionSpec optionSpecs[] = {
     {"noncoding", OPTION_BOOLEAN},
     {"nonCoding", OPTION_BOOLEAN},
     {"gtf", OPTION_BOOLEAN},
+    {"bin", OPTION_BOOLEAN},
     {"predTab", OPTION_BOOLEAN},
     {"requireCDS", OPTION_BOOLEAN},
     {"genePredExt", OPTION_BOOLEAN},
@@ -41,6 +44,7 @@ errAbort(
     "usage:\n"
     "     ldHgGene database table file(s).gff\n"
     "options:\n"
+    "     -bin         Add bin column (recommended for larger tables\n"
     "     -exon=type   Sets type field for exons to specific value\n"
     "     -oldTable    Don't overwrite what's already in table\n"
     "     -noncoding   Forces whole prediction to be UTR\n"
@@ -62,7 +66,7 @@ hSetDb(database);
 
 if (!appendTbl)
     {
-    char *createSql = genePredGetCreateSql(table,  gOptFields, 0,
+    char *createSql = genePredGetCreateSql(table,  gOptFields, gCreateOpts,
                                            hGetMinIndexLength());
     sqlRemakeTable(conn, table, createSql);
     freeMem(createSql);
@@ -110,6 +114,8 @@ else
     f = mustOpen(tabName, "w");
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
+    if (useBin)
+        fprintf(f, "%d\t", hFindBin(gp->txStart, gp->txEnd));
     genePredTabOut(gp, f);
     }
 carefulClose(&f);
@@ -185,6 +191,8 @@ else
     f = mustOpen(tabName, "w");
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
+    if (useBin)
+        fprintf(f, "%d\t", hFindBin(gp->txStart, gp->txEnd));
     genePredTabOut(gp, f);
     }
 carefulClose(&f);
@@ -204,8 +212,11 @@ if (optionExists("exon") && optionExists("gtf"))
 exonType = optionVal("exon", exonType);
 outFile = optionVal("out", NULL);
 requireCDS = optionExists("requireCDS");
+useBin = optionExists("bin");
 if (optionExists("genePredExt"))
-    gOptFields = genePredAllFlds;
+    gOptFields |= genePredAllFlds;
+if (useBin)
+    gCreateOpts |= genePredWithBin;
 
 if (optionExists("predTab"))
     ldHgGenePred(argv[1], argv[2], argc-3, argv+3);
