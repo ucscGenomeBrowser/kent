@@ -6,14 +6,6 @@ table gbCharacteristic
    int 	  crc;             "Cyclic redundancy check (performance optimization for loading tables)"
    )
 
-table gbExtFile
-"GenBank sequence file info"
-    (
-    uint id;		"ID/index"
-    string path;	"Full path of file"
-    long size;		"byte size of file"
-    )
-
 table gbLoaded
 "Release, updates and partitions loaded (cached to speed up loading process)"
     (
