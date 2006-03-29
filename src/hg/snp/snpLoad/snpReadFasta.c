@@ -17,7 +17,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.13 2006/03/21 05:33:18 heather Exp $";
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.14 2006/03/29 00:15:20 heather Exp $";
 
 struct snpFasta
     {
@@ -160,7 +160,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
         if (loc_type == 3) 
 	    classString = cloneString("insertion");
-	if (loc_type == 1) 
+	if (loc_type == 1 || loc_type == 2) 
 	    classString = cloneString("deletion");
 	}
     fprintf(f, "%s\t%s\t%s\t%d\t", row[0], row[1], row[2], loc_type);
