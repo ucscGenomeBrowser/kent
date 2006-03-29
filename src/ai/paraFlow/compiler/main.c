@@ -17,6 +17,7 @@
 #include "checkPara.h"
 #include "constFold.h"
 #include "cCoder.h"
+#include "asmCoder.h"
 #include "isx.h"
 #include "isxToPentium.h"
 #include "optBranch.h"
@@ -426,34 +427,17 @@ dumpParseTree(pfc, program, foldedF);
 
 if (optionExists("asm"))
     {
-    FILE *f;
-    struct isxList *isxList;
-    char isxFileName[PATH_LEN];
-    char sFileName[PATH_LEN];
+    struct dyString *gccFiles;
 
     if (endPhase < 7)
 	return;
-    verbose(2, "Phase 7 - Intermediate code generation\n");
-    safef(isxFileName, sizeof(isxFileName), "%s%s.isx", baseDir, baseName);
-    f = mustOpen(isxFileName, "w");
-    isxList = isxFromParse(pfc, program);
-    isxDumpList(isxList->iList, f);
-    carefulClose(&f);
-
-    verbose(2, "Phase 7a - optimizing branches\n");
-    safef(isxFileName, sizeof(isxFileName), "%s%s.branch", baseDir, baseName);
-    f = mustOpen(isxFileName, "w");
-    optBranch(isxList->iList);
-    isxDumpList(isxList->iList, f);
-    carefulClose(&f);
+    verbose(2, "Phase 7 - nothing\n");
 
     if (endPhase < 8)
 	return;
-    verbose(2, "Phase 8 - Pentium code generation\n");
-    safef(sFileName, sizeof(sFileName), "%s%s.s", baseDir, baseName);
-    f = mustOpen(sFileName, "w");
-    pentFromIsx(isxList, f);
-    carefulClose(&f);
+    verbose(2, "Phase 8 - Code generation\n");
+
+    gccFiles = asmCoder(pfc, program, baseDir, baseName);
 
     if (endPhase < 9)
         return;
@@ -463,14 +447,17 @@ if (optionExists("asm"))
 	struct dyString *dy = dyStringNew(0);
 	int err;
 	dyStringPrintf(dy, "gcc -o %s%s ", baseDir, baseName);
-	dyStringPrintf(dy, "%s %s ", sFileName, libName);
+	dyStringAppend(dy, gccFiles->string);
+	dyStringPrintf(dy, "%s ", libName);
 	dyStringPrintf(dy, " %s ", pfc->runtimeLib);
 	dyStringPrintf(dy, "%s ", pfc->jkwebLib);
 	verbose(2, "%s\n", dy->string);
 	err = system(dy->string);
 	if (err != 0)
 	    errAbort("Couldn't assemble: %s", dy->string);
+	dyStringFree(&dy);
 	}
+    dyStringFree(&gccFiles);
     }
 else
     {

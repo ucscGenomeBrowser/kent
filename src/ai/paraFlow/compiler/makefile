@@ -1,6 +1,6 @@
 include ../../../inc/common.mk
 
-O = builtIn.o cCaseCode.o cCoder.o checkPara.o checkPoly.o cPara.o \
+O = asmCoder.o builtIn.o cCaseCode.o cCoder.o checkPara.o checkPoly.o cPara.o \
     codedType.o constFold.o ctar.o defFile.o gnuMac.o \
     isx.o isxLiveVar.o isxToPentium.o \
     main.o optBranch.o parseDump.o parseInto.o pentCode.o pfBindVars.o \
