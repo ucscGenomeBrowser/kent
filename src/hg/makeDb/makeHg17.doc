@@ -20652,6 +20652,10 @@ knownToVisiGene hg17 -fromProbePsl=vgAllProbes
 	| hgLoadBed -strict hg17 picTarMiRNA5Way stdin
     #	Loaded 43046 elements of size 9
 
+    featureBits hg17 picTarMiRNA4Way
+    #	608595 bases of 2866216770 (0.021%) in intersection
+    featureBits hg17 picTarMiRNA5Way
+    #	109060 bases of 2866216770 (0.004%) in intersection
 
 ############################################################################
 # dbSNP BUILD 125 (Heather, March 2006)
