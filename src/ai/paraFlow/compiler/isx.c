@@ -803,15 +803,14 @@ struct isxList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp)
 struct isxList *isxList;
 AllocVar(isxList);
 isxList->iList = dlListNew(0);
-for (pp = pp->children; pp != NULL; pp = pp->next)
+switch (pp->type)
     {
-    switch (pp->type)
-        {
-	case pptMainModule:
-	case pptModule:
-	    isxModule(pfc, pp, isxList);
-	    break;
-	}
+    case pptMainModule:
+    case pptModule:
+	isxModule(pfc, pp, isxList);
+	break;
+    default:
+        internalErr();
     }
 return isxList;
 }

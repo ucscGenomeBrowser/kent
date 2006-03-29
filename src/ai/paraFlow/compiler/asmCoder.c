@@ -7,6 +7,7 @@
 #include "isx.h"
 #include "isxToPentium.h"
 #include "optBranch.h"
+#include "gnuMac.h"
 
 #define asmSuffix ".s"
 #define objSuffix ".o"
@@ -29,7 +30,7 @@ safef(path, sizeof(path), "%s%s%s", baseDir, baseName, asmSuffix);
 asmFile = mustOpen(path, "w");
 
 verbose(2, "Phase 7 - generating intermediate code\n");
-isxList = isxFromParse(pfc, program);
+isxList = isxFromParse(pfc, module);
 isxDumpList(isxList->iList, isxFile);
 
 verbose(2, "Phase 7a - optimizing branches\n");
@@ -37,7 +38,13 @@ optBranch(isxList->iList);
 isxDumpList(isxList->iList, branchFile);
 
 verbose(2, "Phase 8 - Pentium code generation\n");
+gnuMacModulePreamble(asmFile);
+gnuMacInittedModuleVars(isxList->iList, asmFile);
+gnuMacMainStart(asmFile);
 pentFromIsx(isxList, asmFile);
+gnuMacMainEnd(asmFile);
+gnuMacUninittedModuleVars(isxList->iList, asmFile);
+gnuMacModulePostscript(asmFile);
 
 carefulClose(&isxFile);
 carefulClose(&branchFile);

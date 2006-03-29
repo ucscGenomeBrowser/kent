@@ -1332,7 +1332,6 @@ initRegInfo();
 calcInputOffsets(iList);
 calcLoopRegVars(isxList);
 addRegStomper(iList);
-gnuMacPreamble(iList, f);
 fprintf(f, "\n# Starting code generation\n");
 
 for (node = iList->head; !dlEnd(node); node = nextNode)
@@ -1457,6 +1456,5 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
     pentCodeSaveAll(coder->list, f);
     pentCodeFreeList(&coder->list);
     }
-gnuMacPostscript(iList, f);
 }
 

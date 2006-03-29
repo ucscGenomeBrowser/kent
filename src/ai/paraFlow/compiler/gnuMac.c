@@ -154,7 +154,7 @@ for (node = iList->head; !dlEnd(node); node = node->next)
     }
 }
 
-static void printInittedModuleVars(struct dlList *iList, FILE *f)
+void gnuMacInittedModuleVars(struct dlList *iList, FILE *f)
 /* Print out info on initialized variables. */
 {
 fprintf(f, "# Declaring initialized global and module variables\n");
@@ -162,7 +162,7 @@ declareModuleVars(iList, f, TRUE);
 fprintf(f, "\n");
 }
 
-static void printUninittedModuleVars(struct dlList *iList, FILE *f)
+void gnuMacUninittedModuleVars(struct dlList *iList, FILE *f)
 /* Print out info on uninitialized variables. */
 {
 fprintf(f, "# Declaring uninitialized global and module variables\n");
@@ -170,7 +170,7 @@ declareModuleVars(iList, f, FALSE);
 fprintf(f, "\n");
 }
 
-void gnuMacPreamble(struct dlList *iList, FILE *f)
+void gnuMacModulePreamble(FILE *f)
 /* Print out various incantations needed at start of every
  * source file for working on Mac OS X on Pentiums, or at
  * least on my mini. Also print initialized vars. */
@@ -209,7 +209,45 @@ fprintf(f, "%s",
 "       ret\n"
 "\n"
 );
-printInittedModuleVars(iList, f);
+}
+
+void gnuMacFunkyThunky(FILE *f)
+/* Do that call to the funky get thunk thingie
+ * that Mac does to make the code more relocatable
+ * at the expense of burning the ebx register and
+ * adding overhead to every single d*ng subroutine
+ * almost! */
+{
+fprintf(f, "\tcall    ___i686.get_pc_thunk.bx\n");
+}
+
+void gnuMacModulePostscript(FILE *f)
+/* Print out various incantations needed at end of every
+ * source file for working on Mac OS X on Pentiums, or at
+ * least on my mini. Also print uninitialized vars. */
+{
+fprintf(f, "%s",
+"\n"
+"# Postscript found in all modules for Mac OS-X Pentium\n"
+"       .section __IMPORT,__jump_table,symbol_stubs,self_modifying_code+pure_instructions,5\n"
+"L_printf$stub:\n"
+"       .indirect_symbol _printf\n"
+"       hlt ; hlt ; hlt ; hlt ; hlt\n"
+"       .indirect_symbol __pfaNewString\n"
+"       hlt ; hlt ; hlt ; hlt ; hlt\n"
+"       .subsections_via_symbols\n"
+"       .section __TEXT,__textcoal_nt,coalesced,pure_instructions\n"
+".weak_definition       ___i686.get_pc_thunk.bx\n"
+".private_extern        ___i686.get_pc_thunk.bx\n"
+"___i686.get_pc_thunk.bx:\n"
+"       movl    (%esp), %ebx\n"
+"       ret\n"
+);
+}
+
+void gnuMacMainStart(FILE *f)
+/* Declare main function start. */
+{
 fprintf(f, "%s",
 ".globl _main\n"
 "_main:\n"
@@ -228,20 +266,8 @@ fprintf(f, "%s",
 );
 }
 
-void gnuMacFunkyThunky(FILE *f)
-/* Do that call to the funky get thunk thingie
- * that Mac does to make the code more relocatable
- * at the expense of burning the ebx register and
- * adding overhead to every single d*ng subroutine
- * almost! */
-{
-fprintf(f, "\tcall    ___i686.get_pc_thunk.bx\n");
-}
-
-void gnuMacPostscript(struct dlList *iList, FILE *f)
-/* Print out various incantations needed at end of every
- * source file for working on Mac OS X on Pentiums, or at
- * least on my mini. Also print uninitialized vars. */
+void gnuMacMainEnd(FILE *f)
+/* Declare main function end. */
 {
 fprintf(f, "%s",
 "       movl    $0,%eax\n"
@@ -250,24 +276,6 @@ fprintf(f, "%s",
 "       popl    %esi\n"
 "       popl    %edi\n"
 "       popl    %ebp\n"
-"       ret\n"
-);
-printUninittedModuleVars(iList, f);
-fprintf(f, "%s",
-"\n"
-"# Postscript found in all modules for Mac OS-X Pentium\n"
-"       .section __IMPORT,__jump_table,symbol_stubs,self_modifying_code+pure_instructions,5\n"
-"L_printf$stub:\n"
-"       .indirect_symbol _printf\n"
-"       hlt ; hlt ; hlt ; hlt ; hlt\n"
-"       .indirect_symbol __pfaNewString\n"
-"       hlt ; hlt ; hlt ; hlt ; hlt\n"
-"       .subsections_via_symbols\n"
-"       .section __TEXT,__textcoal_nt,coalesced,pure_instructions\n"
-".weak_definition       ___i686.get_pc_thunk.bx\n"
-".private_extern        ___i686.get_pc_thunk.bx\n"
-"___i686.get_pc_thunk.bx:\n"
-"       movl    (%esp), %ebx\n"
 "       ret\n"
 );
 }
