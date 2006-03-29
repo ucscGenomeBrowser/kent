@@ -1,0 +1,61 @@
+#!/bin/csh -f # set emacs mode
+exit; # don't actually run this like a script :)
+
+# Danio Rerio (zebrafish) from Sanger, version Zv5 (released 5/20/05)
+#  Project website:
+#    http://www.sanger.ac.uk/Projects/D_rerio/
+#  Assembly notes:
+#    http://www.sanger.ac.uk/Projects/D_rerio/
+#    ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv6release/Zv6_assembl_information.shmtl
+
+# DOWNLOAD SEQUENCE (DONE, 2006-03-29, hartera)
+
+     ssh kkstore01
+     mkdir /cluster/store8/danRer4 
+     ln -s /cluster/store8/danRer4 /cluster/data
+     cd /cluster/data/danRer4
+     wget --timestamp \
+      ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv6release/README
+     wget --timestamp \
+      ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv6release/Zv6.chunks.agp
+     wget --timestamp \
+      ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv6release/Zv6.scaffold.agp
+     wget --timestamp \
+      ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv6release/Zv6_scaffolds.fa
+     wget --timestamp \
+    ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv6release/Zv6_scaffolds.stats
+
+# DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE, 2006-03-29, hartera)
+     ssh kkstore01
+     mkdir -p /cluster/data/danRer4/M
+     cd /cluster/data/danRer4/M
+     # go to http://www.ncbi.nih.gov/ and search the Nucleotide database for
+     # "Danio mitochondrion genome".  That shows the gi number:
+     # 8576324 for the accession, AC024175
+ # Use that number in the entrez linking interface to get fasta:
+     wget -O chrM.fa \
+      'http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Text&db=Nucleotide&uid=8576324&dopt=FASTA'
+     # Edit chrM.fa: make sure the header line says it is the
+     # Danio Rerio mitochondrion complete genome, and then replace the
+     # header line with just ">chrM".
+     perl -pi.bak -e 's/>.+/>chrM/' chrM.fa
+     rm *.bak
+     # Make a "pseudo-contig" for processing chrM too:
+     mkdir ./chrM_1
+     sed -e 's/chrM/chrM_1/' ./chrM.fa > ./chrM_1/chrM_1.fa
+     mkdir ./lift
+     echo "chrM_1/chrM_1.fa.out" > ./lift/oOut.lst
+     echo "chrM_1" > ./lift/ordered.lst
+     # make sure this is tab delimited:
+     echo "0\tM/chrM_1\t16596\tchrM\t16596" > ./lift/ordered.lft
+# create a .agp file for chrM as hgGoldGapGl and other
+# programs require a .agp file so create chrM.agp
+     echo "chrM\t1\t16596\t1\tF\tAC024175.3\t1\t16596\t+" > ./chrM.agp
+     # Create a chrM.chunks.agp
+     mkdir -p /cluster/data/danRer3/M/agps
+     cd /cluster/data/danRer3/M/agps
+     awk 'BEGIN {OFS="\t"} \
+        {print $1, $2, $3, $4, $5, $6, $7, $8, $1, $7, $8}' ../chrM.agp \
+         > chrM.chunks.agp
+     # make sure that all above *.agp files are tab delimited
+
