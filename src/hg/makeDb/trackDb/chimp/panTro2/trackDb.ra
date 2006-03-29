@@ -1,0 +1,17 @@
+track refGene
+shortLabel Human RefSeq
+longLabel Human RefSeq Genes
+group genes
+priority 35
+visibility dense
+color 12,12,120
+type genePred refPep refMrna
+
+track xenoRefGene
+shortLabel Other RefSeq
+longLabel Non-Human RefSeq Genes
+group genes
+priority 36
+visibility pack
+color 12,12,120
+type genePred

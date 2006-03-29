@@ -56,6 +56,15 @@ altColor 255,128,0
 defaultViewLimits 30:70
 type wig 0 100 
 
+track xenoRefGene
+shortLabel Human RefSeq
+longLabel Human RefSeq Genes
+group genes
+priority 35
+visibility pack
+color 12,12,120
+type genePred
+
 track chainHg16
 shortLabel Human Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
