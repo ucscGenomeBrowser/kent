@@ -20804,6 +20804,7 @@ mysql> select count(*) from ContigLocFilter where orientation = 0;
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpLoadFasta dbSnpHumanBuild125 
 
 # split ContigLocFilter by chrom (could start using pipeline.csh here)
+# pipeline.csh takes about 35 minutes to run
 # create the first chrN_snpTmp
 # we will reuse this table name, adding/changing columns as we go
 # at this point chrN_snpTmp will have the same description as ContigLocFilter
@@ -20906,6 +20907,8 @@ mysql> desc chr1_snpTmp;
 # This run we got:
 # 49 no data available
 # 226048 duplicate
+# chrN_snpFasta have class = 'in-del'
+# we promote this to 'deletion' for locType 1&2 and to 'insertion' for locType 3
 
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpReadFasta dbSnpHumanBuild125
 
