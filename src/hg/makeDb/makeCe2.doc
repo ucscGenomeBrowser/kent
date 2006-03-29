@@ -2676,3 +2676,22 @@ chainSome $(path1)
     cp -p Caenorhabditis_elegans.jpg /usr/local/apache/htdocs/images
 #	Add IMG tag pointer to this image in the description.html page
 #	and for ce1 and ce3
+
+
+########################################################################
+### microRNA targets tracks  (WORKING - 2006-03-29 - Hiram)
+### from: http://pictar.bio.nyu.edu/ Rajewsky Lab
+### Nikolaus Rajewsky nr@scarbo.bio.nyu.edu
+    ssh hgwdev
+    mkdir /cluster/data/ce2/bed/picTar
+    cd /cluster/data/ce2/bed/picTar
+    wget --timestamping \
+	'http://scarbo.bio.nyu.edu/~nr/new_single_elegans_bed' \
+	    -O newSingleElegans.bed
+
+    grep -v "^track" newSingleElegans.bed \
+	| hgLoadBed -strict ce2 picTarMiRNA stdin
+    #	Loaded 11987 elements of size 9
+
+    featureBits ce2 picTarMiRNA
+    #	39233 bases of 100291761 (0.039%) in intersection
