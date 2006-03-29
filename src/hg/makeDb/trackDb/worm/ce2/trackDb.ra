@@ -241,6 +241,15 @@ useScore 1
 visibility hide
 type bed 6 .
 
+track picTarMiRNA
+shortLabel micro RNA
+longLabel PicTar microRNA sites
+group genes
+priority 65
+visibility hide
+color 128,0,128
+type bed 9
+
 track gcatg_bedP
 shortLabel GCATG Plus
 longLabel locations of pentamer GCATG on plus strand
