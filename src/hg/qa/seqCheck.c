@@ -1,7 +1,6 @@
 /* seqCheck - check that extFile references in seq table are valid. */
 #include "common.h"
 #include "hdb.h"
-#include "extFile.h"
 
 char *database = NULL;
 
