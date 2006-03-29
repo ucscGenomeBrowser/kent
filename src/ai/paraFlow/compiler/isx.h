@@ -23,6 +23,7 @@
 #include "isxLiveVar.h"
 #endif
 
+
 enum isxOpType
 /* What sort of operation - corresponds roughly to an
  * assembly language instruction without type or address
@@ -60,6 +61,8 @@ enum isxOpType
     poBge,	/* Branch if a >= b. */
     poBz,	/* Branch if a == 0 */
     poBnz,	/* Branch if a != 0 */
+    poFuncStart,/* Declare start of function */
+    poFuncEnd,  /* Declare end of function. */
     };
 
 char *isxOpTypeToString(enum isxOpType val);
@@ -95,6 +98,7 @@ enum isxAddressType
     iadOperator,
     iadLabel,
     iadLoopInfo,
+    iadCtar,
     };
 
 struct isxLoopVar
@@ -120,6 +124,8 @@ struct isxLoopInfo
     				  * most important first. */
     };
 
+struct ctar;	
+
 union isxAddressVal
 /* Variable part of an isx code address. */
     {
@@ -128,6 +134,7 @@ union isxAddressVal
     int tempMemLoc;		/* Memory location for temps, 0 for none */
     int stackOffset;		/* Stack offset. */
     struct isxLoopInfo *loopy;  /* Information on loop */
+    struct ctar *ctar;		/* Information about function variables. */
     };
 
 struct isxAddress
@@ -190,6 +197,10 @@ void isxDump(struct isx *isx, FILE *f);
 void isxDumpList(struct dlList *list, FILE *f);
 /* Dump all of isx in list */
 
+void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
+	struct hash *varHash, double weight, struct dlList *iList);
+/* Generate intermediate code for statement. */
+
 struct isxList
 /* A list of instructions, and a list of loop information */
     {
@@ -203,9 +214,8 @@ struct isxList *isxListNew();
 struct isxList *isxModuleVars(struct pfCompile *pfc, struct pfParse *module);
 /* Convert module-level and static function variables to an isxList */
 
-void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
-	struct hash *varHash, double weight, struct dlList *iList);
-/* Generate intermediate code for statement. */
+struct isxList *isxCodeFunction(struct pfCompile *pfc, struct pfParse *funcPp);
+/* Generate code for a function */
 
 #define isxPrefixC "_"		/* Prefix before symbols shared with C. */
 

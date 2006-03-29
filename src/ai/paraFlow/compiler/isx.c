@@ -19,6 +19,7 @@
 #include "pfType.h"
 #include "pfScope.h"
 #include "pfCompile.h"
+#include "ctar.h"
 #include "isxLiveVar.h"
 #include "isx.h"
 
@@ -127,6 +128,10 @@ switch (val)
 	return "poBz";
     case poBnz:
 	return "poBnz";
+    case poFuncStart:
+        return "poFuncStart";
+    case poFuncEnd:
+        return "poFuncEnd";
     default:
         internalErr();
 	return NULL;
@@ -204,6 +209,7 @@ switch (iad->adType)
 	fprintf(f, "out(%d)", iad->val.stackOffset);
         break;
     case iadOperator:
+    case iadCtar:
 	fprintf(f, "#%s", iad->name);
 	break;
     case iadLabel:
@@ -429,6 +435,18 @@ AllocVar(iad);
 iad->adType = iadLabel;
 iad->valType = ivJump;
 iad->name = cloneString(buf);
+return iad;
+}
+
+static struct isxAddress *ctarAddress(struct ctar *ctar)
+/* Create a reference to function variable info. */
+{
+struct isxAddress *iad;
+AllocVar(iad);
+iad->adType = iadCtar;
+iad->valType = ivJump;
+iad->name = ctar->cName;
+iad->val.ctar = ctar;
 return iad;
 }
 
@@ -817,6 +835,15 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
     rIsxModuleVars(pfc, pp, varHash, iList);
 }
 
+struct isxList *isxListNew()
+/* Create new empty isxList */
+{
+struct isxList *isxList;
+AllocVar(isxList);
+isxList->iList = dlListNew(0);
+return isxList;
+}
+
 struct isxList *isxModuleVars(struct pfCompile *pfc, struct pfParse *module)
 /* Convert module-level and static function variables to an isxList */
 {
@@ -827,23 +854,30 @@ hashFree(&varHash);
 return isxList;
 }
 
-
-static void isxModule(struct pfCompile *pfc, struct pfParse *pp, 
-	struct isxList *isxList)
-/* Generate instructions for module. */
+struct isxList *isxCodeFunction(struct pfCompile *pfc, struct pfParse *funcPp)
+/* Generate code for a function */
 {
-struct hash *varHash = hashNew(16);
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    isxStatement(pfc, pp, varHash, 1.0, isxList->iList);
-isxLiveList(isxList);
-}
-
-struct isxList *isxListNew()
-/* Create new empty isxList */
-{
-struct isxList *isxList;
-AllocVar(isxList);
-isxList->iList = dlListNew(0);
+struct isxList *isxList = isxListNew();
+struct dlList *iList = isxList->iList;
+struct hash *varHash = hashNew(0);
+struct ctar *ctar = ctarOnFunction(funcPp);
+struct isxAddress *ctarIad = ctarAddress(ctar);
+struct pfParse *namePp = funcPp->children;
+struct pfParse *inTuple = namePp->next;
+struct pfParse *outTuple = inTuple->next;
+struct pfParse *body = outTuple->next;
+struct pfParse *pp;
+isxNew(pfc, poFuncStart, ctarIad, NULL, NULL, iList);
+for (pp = body->children; body != NULL; body = body->next)
+    isxStatement(pfc, pp, varHash, 1.0, iList);
+isxNew(pfc, poFuncEnd, ctarIad, NULL, NULL, iList);
+hashFree(&varHash);
 return isxList;
 }
+
+#ifdef OLD
+struct slRef *ref;
+struct pfVar *var;
+struct ctar *ctar = ctarOnFunction(funcPp);
+#endif /* OLD */
 

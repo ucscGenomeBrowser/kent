@@ -56,11 +56,8 @@ static void codeFunction(struct pfCompile *pfc, struct pfParse *funcPp,
 	FILE *isxFile, FILE *branchFile, FILE *asmFile, struct pfParse *classPp)
 /* Generate code for one function */
 {
-struct pfParse *namePp = funcPp->children;
-struct pfParse *inTuple = namePp->next;
-struct pfParse *outTuple = inTuple->next;
-struct pfParse *body = outTuple->next;
-uglyf("THeoretically generating code for function\n");
+struct isxList *isxList = isxCodeFunction(pfc, funcPp);
+codeFinishFunc(pfc, isxList, isxFile, branchFile, asmFile);
 }
 
 static void codeFunctions(struct pfCompile *pfc, struct pfParse *parent, 
