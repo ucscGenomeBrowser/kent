@@ -5755,7 +5755,7 @@ hgExpDistance hg18 hgFixed.gnfHumanAtlas2MedianRatio \
 # Got 8739 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
 
 # AFFYMETRIX HG-U133 PLUS TRACK (DONE, 2006-02-11, Fan)
-
+# Loaded the HG-U133 Plus 2 sequences for hg18 (DONE, 2006-03-29, hartera)
 # The below was already done.
 # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
      ssh hgwdev
@@ -5838,10 +5838,12 @@ hgExpDistance hg18 hgFixed.gnfHumanAtlas2MedianRatio \
     mkdir -p /gbdb/hgFixed/affyProbes
     cd /gbdb/hgFixed/affyProbes
     ln -s /projects/compbio/data/microarray/affyHuman/HG-U133Plus2/U133Plus2_all.fa .
-    cd /cluster/data/hg18/bed/affyU133Plus2.2006-02-11
-    hgLoadSeq -abbr=U133+2: hg18 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # The above is already done by Rachel during hg17 build.
+    cd /cluster/data/hg18/bed/affyU133Plus2.2006-02-11
+    # the sequences need to be loaded for the hg18 database 
+    # (2006-03-29, hartera)
+    hgLoadSeq -abbr=U133+2: hg18 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
     
     # clean up
     rm -r psl tmp err contig.psl raw.psl *.bak psl.tab seq.tab
