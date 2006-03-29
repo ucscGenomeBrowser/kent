@@ -1116,51 +1116,86 @@ TMPDIR=/scratch/tmp
 
 ##########################################################################
 # MAKE Human Proteins track (WORKING - 2006-03-24 - Hiram)
+    #	we need the split500K sequences to do this work, set them up on
+    #	the Iservers
     ssh kkstore01
-    cd /cluster/data/monDom4
-    cat */chr*/*.lft > jkStuff/subChr.lft   
-    mkdir blastDb
-    for i in */*/*_*_*.fa; do ln `pwd`/$i blastDb; done 
-    cd blastDb
-    for i in *.fa; do /cluster/bluearc/blast229/formatdb -p F -i $i; rm $i; done
+    cd /cluster/data/monDom4/split500K
+    rsync -a --progress `pwd`/ kkr1u00:/iscratch/i/monDom4/split500K/
+    ssh kkr1u00
+    cd /iscratch/i/monDom4/split500K
+    #	create individual blast db's for each sequence
+    for C in 1 2 3 4 5 6 7 8 Un X
+    do
+	echo ${C} working ...
+	cd ${C}
+	for i in *.fa
+	do
+	    /cluster/bluearc/blast229/formatdb -p F -i $i
+	done
+	cd ..
+	echo ${C} done
+    done
+    find /iscratch/i/monDom4/split500K -name "*.nsq" \
+	| sed "s/\.nsq//" > target.lst        
 
-    ssh pk
-    destDir=/san/sanvol1/scratch/monDom4/blastDb
-    mkdir -p $destDir
-    cd /cluster/data/monDom4/blastDb
-    for i in nin nsq nhr; do cp *.$i $destDir; done
+    #	now sync everything to the other Iserver nodes
+    for R in 2 3 4 5 6 7 8
+    do
+	rsync -a --progress `pwd`/ kkr${R}u00:/iscratch/i/monDom4/split500K/
+    done
+
+    ssh kkstore01
     mkdir -p /cluster/data/monDom4/bed/tblastn.hg18KG
     cd /cluster/data/monDom4/bed/tblastn.hg18KG
-    find $destDir -name "*.nsq" | sed "s/\.nsq//" > target.lst        
 
     mkdir kgfa
-    # calculate a reasonable number of jobs
-    calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk "{print \\\$1}"`/\(500000/`wc target.lst | awk "{print \\\$1}"`\)
-# 37365/(500000/6149) = 459.514770
-    split -l 460 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl kgfa/kg
+    # calculate number of protein sequence to give a job count of about
+    #	500,000
+    echo `cat /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | wc -l` \
+	`cat /iscratch/i/monDom4/split500K/target.lst | wc -l` \
+	| awk '{printf "%d/(500000/%d) = %d\n", $1, $2, $1/(500000/$2)}'
+    #	36727/(500000/7170) = 526
+    #	split the proteins by that number
+
+    split -l 526 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl kgfa/kg
+
     cd kgfa
-    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    for i in kg??; do pslxToFa $i $i.fa; rm $i; done
     cd ..
     ls -1S kgfa/*.fa > kg.lst
+    #	Want output to go to bluearc to preserve sanity of file server
     rm -rf  /cluster/bluearc/monDom4/bed/tblastn.hg18KG/blastOut
     mkdir -p /cluster/bluearc/monDom4/bed/tblastn.hg18KG/blastOut
-    ln -s  /cluster/bluearc/monDom4/bed/tblastn.hg18KG/blastOut
+    ln -s  /cluster/bluearc/monDom4/bed/tblastn.hg18KG/blastOut .
     for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
-    tcsh
-    cat << '_EOF_' > blastGsub
+
+    ssh kk
+    cd /cluster/data/monDom4/bed/tblastn.hg18KG
+    cat /iscratch/i/monDom4/split500K/*.lft > subChr.lft
+
+    cat << '_EOF_' > template
 #LOOP
-blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+blastSome $(path1) $(path2) {check out exists blastOut/$(root2)/q.$(root1).psl}
 #ENDLOOP
 '_EOF_'
+    #	<<	happy emacs
+
+    #### !NOTE: Next time run these jobs with a better separation
+    #	of I/O spaces, they seem to hangup bluearc while they work.
+    #	Plus, they are using /tmp instead of /scratch/tmp/
+    #	And they are leaving lots of garbage, the $f.3 file.
+    #	Have added $f.3 to the listing below to remove it
+
+
     cat << '_EOF_' > blastSome
 #!/bin/sh
-BLASTMAT=/iscratch/i/blast/data
+BLASTMAT=/cluster/bluearc/blast229/data
 export BLASTMAT
 g=`basename $2`
 f=/tmp/`basename $3`.$g
 for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
 do
-if /cluster/bluearc/blast2211x86_64/bin/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
 then
         mv $f.8 $f.1
         break;
@@ -1171,22 +1206,28 @@ then
 if /cluster/bin/i386/blastToPsl $f.1 $f.2
 then
         liftUp -nosort -type=".psl" -pslQ -nohead $f.3 /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.2
-	liftUp -nosort -type=".psl" -nohead $f.4 /cluster/data/monDom4/jkStuff/subChr.lft carry $f.3
-	liftUp -nosort -type=".psl" -nohead $3.tmp /cluster/data/monDom4/jkStuff/liftAll.lft carry $f.4
+	liftUp -nosort -type=".psl" -nohead $3.tmp /cluster/data/monDom4/bed/tblastn.hg18KG/subChr.lft carry $f.3
         mv $3.tmp $3
-        rm -f $f.1 $f.2 
+        rm -f $f.1 $f.2 $f.3
         exit 0
     fi
 fi
-rm -f $f.1 $f.2 $3.tmp $f.8
+rm -f $f.1 $f.2 $f.3 $3.tmp $f.8
 exit 1
 '_EOF_'
-
-    exit
+    #	<<	happy emacs
     chmod +x blastSome
-    gensub2 target.lst kg.lst blastGsub blastSpec
 
-    para create blastSpec
+    cp -p /iscratch/i/monDom4/split500K/target.lst .
+    gensub2 target.lst kg.lst template jobList
+
+    #	You want to try 10 jobs and see if the following chain
+    #	pipeline will work in a reasonable time.  If it doesn't the
+    #	jobs are too big
+
+    para create jobList
+    para try
+
     para push
 
 # Completed: 504218 of 504218 jobs
@@ -1198,21 +1239,33 @@ exit 1
 
     ssh kki
     cd /cluster/data/monDom4/bed/tblastn.hg18KG
-    tcsh
-    cat << '_EOF_' > chainGsub
+    mkdir chainEm
+    cd /cluster/data/monDom4/bed/tblastn.hg18KG/blastOut
+    find . -name "*.psl" \
+	> /cluster/data/monDom4/bed/tblastn.hg18KG/chainEm/chain.lst
+    cd chainEm
+    mkdir psl
+
+    cat << '_EOF_' > template
 #LOOP
-chainSome $(path1) $(path2)
+./chainSome.csh $(root1) $(file2) {check out line psl/c.$(file2).$(root1).psl}
 #ENDLOOP
 '_EOF_'
+    #	<<	happy emacs
 
-    cat << '_EOF_' > chainSome
-(cd $1; cat q.$2_*.psl | /cluster/home/braney/bin/i386/simpleChain -chrom=$2 -prot -outPsl -maxGap=250000 stdin ../c.$2.`bas
-ename $1`.psl)
+    cat << '_EOF_' > chainSome.csh
+#!/bin/csh -fe
+cd /cluster/data/monDom4/bed/tblastn.hg18KG/blastOut/$1
+cat q.$2_*.psl | \
+    /cluster/home/braney/bin/i386/simpleChain -chrom=$2 \
+	-prot -outPsl -maxGap=250000 stdin psl/c.$2.$1.psl
 '_EOF_'
+    #	<<	happy emacs
+    chmod +x chainSome.csh
 
-    chmod +x chainSome
-    ls -1dS `pwd`/blastOut/kg?? > chain.lst
-    gensub2 chain.lst single chainGsub chainSpec ../../chrom.lst
+    ls -1dS ../blastOut/kg?? > chain.dirs
+
+    gensub2 chain.dirs ../../../chrom.lst template jobList 
     para create chainSpec
     para push
 
@@ -1255,3 +1308,47 @@ ename $1`.psl)
 
 # End tblastn
 
+#######################################################################
+#  CHIMP BLASTZ - (WORKING - 2006-03-29 - Hiram)
+    ssh pk
+    mkdir /cluster/data/monDom4/bed/blastzPanTro2.2006-03-29
+    cd /cluster/data/monDom4/bed
+    ln -s blastzPanTro2.2006-03-29 blastz.panTro2
+    cd blastzPanTro2.2006-03-29
+
+    cat << '_EOF_' > DEF
+# opossum vs. chimp
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Opossum monDom4
+SEQ1_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+SEQ1_LEN=/san/sanvol1/scratch/monDom4/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chimp PanTro2
+SEQ2_DIR=/scratch/hg/panTro2/nib
+SEQ2_LEN=/scratch/hg/panTro2/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/monDom4/bed/blastzPanTro2.2006-03-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    # XXXX	running 2006-03-29
