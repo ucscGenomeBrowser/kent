@@ -1,0 +1,148 @@
+<H2>Description</H2>
+<P>
+  This track contains dbSNP build 125.   
+</P>
+<P>
+  The data was obtained from
+  ftp.ncbi.nih.gov/snp/organisms/<species>/organism_data tables and rs_fasta files.   
+</P>
+<P>
+  We used b125_SNPContigLoc.bcp.gz for coordinates, orientation, locType
+  and the dbSNP reference allele.  We used b125_SNPMapInfo.bcp.gz
+  for alignment weights, filtering out alignments with weight = 3 or 10.
+  We obtained functional classification from b125_SNPContigLocusId.bcp.gz
+  and validation status and heterozygosity from SNP.bcp.gz.
+  Finally, we used the header line in the rs_fasta file for class,
+  observed polymorphism and molecule type.
+</P>
+<P>
+  In addition to presenting the dbSNP data, we provide the following annotations:
+  <UL>
+  <LI>dbSNP uses a class called 'in-del'.   We split this into
+      'insertion' and 'deletion', based on locType.</LI>
+  <LI>We compare the dbSNP reference allele to our reference allele,
+      and note differences.   We also note if the difference is specifically
+      that the dbSNP reference allele is the reverse complement.</LI>
+  <LI>We note tri-allelic and quad-allelic single-base substitutions.</LI>
+  <LI>We note if the observed string has an unexpected format.</LI>
+  <LI>For single-base substitutions and simple deletions, we check
+      that the observed string matches the reference allele.</LI>
+  <LI>For any range locType, we check the size of the observed string.</LI>
+  <LI>We note rsIds that have multiple alignments.</LI>
+  <LI>For single-base substitutions, we note where the alignments of the
+      flanking sequences were adjacent or had a gap of more than one base.</LI>
+  </UL>
+
+</P>
+<H2>Interpreting and Configuring the Graphical Display</H2>
+<P>
+  Variants are shown as single tick marks at most zoom levels.
+  When viewing the track at or near base-level resolution, the displayed
+  width of the SNP corresponds to the width of the variant in the reference
+  sequence. Insertions are indicated by a single tick mark displayed between
+  two nucleotides, single nucleotide polymorphisms are displayed as the width 
+  of a single base, and multiple nucleotide variants are represented by a 
+  block that spans two or more bases.
+</P>
+<P>
+  When the start coordinate for a SNP is shown as chromStart = chromEnd+1 on 
+  the SNP's details page, this is generally not an 
+  error; rather, it indicates that the variant is an insertion at this genomic
+  position.  
+  Note that insertions are represented as chromStart = 
+  chromEnd in the <em>snp</em> table accessible from the Table Browser 
+  or downloads server, due to the half-open zero-based representation of
+  data in the underlying database. 
+</P>
+
+<P>
+  The configuration categories reflect the following definitions:
+  <UL>
+
+    <LI>
+      <A name="LocType"></A>
+      <B>Location Type</B>: Describes the alignment of the flanking sequence<BR>
+      <UL>
+        <LI><B>Range</B> - The flank alignments leaves a gap of 2 or more bases.
+        <LI><B>Exact</B> - The flank alignments leaves exactly one base between them.
+        <LI><B>Between</B> - The flank alignments are contiguous; the variation is an insertion. 
+        <LI><B>RangeInsertion</B> - The flank alignments surround distinct polymorphism between
+	                            submitted SNP and reference assembly.    The SNP is shorter.
+        <LI><B>RangeSubstitution</B> - The flank alignments surround distinct polymorphism between
+	                            submitted SNP and reference assembly.    The SNP and the
+				    reference assembly are of equal length.
+        <LI><B>RangeInsertion</B> - The flank alignments surround distinct polymorphism between
+	                            submitted SNP and reference assembly.    The SNP is longer.
+      </UL>
+    </LI>
+    <LI>
+      <A name="Class"></A>
+      <B>Variant Class</B>: Variant classification<BR>
+      <UL>
+        <LI><B>Unknown</B> - no classification provided by data contributor
+        <LI><B>Single</B> - single nucleotide variation: alleles of length = 1 and from set of {A,T,C,G};
+	    can be tri- or quad-allelic
+        <LI><B>Insertion</B> - insertion variation
+        <LI><B>Deletion</B> - deletion variation
+        <LI><B>In-del</B> - insertion/deletion (applies to RangeInsertion, RangeSubstitution, RangeDeletion)
+        <LI><B>Mixed</B> - multiple observations at the same locus
+        <LI><B>Named</B> - named variation
+        <LI><B>Microsatellite</B> - microsatellite variation
+      </UL>
+    </LI>
+
+
+    <LI>
+      <A name="Valid"></A>
+      <B><A HREF="http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=validation" 
+	target="_blank">Validation Status</A></B>: Method used to validate
+	the variant (<I>each variant may be validated by more than one method</I>)<BR>
+        <UL>
+        <LI><B>Unknown</B> - no validation has been reported for this refSNP
+        <LI><B>By Submitter</B> - at least one ss in cluster was validated by independent assay
+        <LI><B>By Frequency</B> - at least one subsnp in cluster has frequency data submitted
+        <LI><B>By Cluster</B> - cluster has 2+ submissions, with 1+ submissions assayed with a non-computational method
+        <LI><B>By 2 Hit/2 Allele</B> - all alleles have been observed in 2+ chromosomes
+        <LI><B>By HapMap</B> - validated by HapMap project
+      </UL>
+    </LI>
+    <LI>
+      <A name="Func"></A>
+      <B><A HREF="http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=snpFxnColor" 
+	target="_blank">Function</A></B>: Predicted functional role 
+	(<I>each variant may have more than one functional role</I>)<BR>
+      <UL>
+        <LI><B>Unknown</B> - no known functional classification
+        <LI><B>Locus Region</B> - variation in region of gene, but not in transcript
+        <LI><B>Coding - Synonymous</B> - no change in peptide for allele with respect to contig seq
+        <LI><B>Coding - Non-Synonymous</B> - change in peptide with respect to contig sequence
+        <LI><B>Untranslated</B> - variation in transcript, but not in coding region interval
+        <LI><B>Intron</B> - variation in intron, but not in first two or last two bases of intron
+        <LI><B>Splice Site</B> - variation in first two or last two bases of intron
+        <LI><B>Reference</B> - allele observed in reference contig sequence
+      </UL>
+    </LI>
+    <LI>
+      <A name="MolType"></A>
+      <B>Molecule Type</B>: Sample used to find this variant<BR>
+      <UL>
+        <LI><B>Unknown</B> - sample type not known
+        <LI><B>Genomic</B> - variant discovered using a genomic template
+        <LI><B>cDNA</B> - variant discovered using a cDNA template
+      </UL>
+    </LI>
+
+
+  </UL>
+</P>
+
+
+<H2>Credits and Data Use Restrictions</H2>
+<P>
+  Thanks to the <A HREF="http://snp.cshl.org/" TARGET=_blank>SNP
+  Consortium</A> and <A HREF="http://www.ncbi.nlm.nih.gov"
+  TARGET=_blank>NIH</A> for providing the public data, which are
+  available from <A HREF="http://www.ncbi.nlm.nih.gov/SNP"
+  TARGET=_blank>dbSnp</A> at NCBI.
+</P>
+
