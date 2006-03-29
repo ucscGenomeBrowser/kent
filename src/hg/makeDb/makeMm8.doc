@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.20 2006/03/22 19:53:40 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.21 2006/03/29 23:54:27 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -4626,6 +4626,56 @@ Loading database with 14470 rows^M
       | hgsql -h genome-testdb hgcentraltest
 
 # END OF HGNEAR STUFF
+
+#########################################################################
+# BLASTZ panTro2 after chr9 re-masked (WORKING - 2006-03-28 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastzPanTro2.2006-03-28
+    cd /cluster/data/mm8/bed
+    rm blastz.panTro2
+    ln -s blastzPanTro2.2006-03-28 blastz.panTro2
+    cd blastz.panTro2
+
+    cat << '_EOF_' > DEF
+# mouse vs chimp
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm7
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_SMSK=/cluster/bluearc/scratch/hg/mm8/linSpecRep/notInOthers
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Chimp PanTro2
+SEQ2_DIR=/scratch/hg/panTro2/nib
+SEQ2_LEN=/scratch/hg/panTro2/chrom.sizes
+SEQ2_SMSK=/cluster/bluearc/panTro2/linSpecRep/notInRodent
+SEQ2_CHUNK=50000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzPanTro2.2006-03-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	broken during blastz run due to panassas failure
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=cat `pwd`/DEF > cat.out 2>&1 &
+    XXXX - running 2006-03-29
+    
+    time nice -n +19 featureBits mm8 chainPanTro1Link
+    #	901276629 bases of 2567283971 (35.106%) in intersection
+    time nice -n +19 featureBits panTro2 chainMm8Link
+    #	901976621 bases of 2733948177 (32.992%) in intersection
+
 
 #########################################################################
 # BLASTZ panTro2 (DONE - 2006-03-15 - Hiram)
