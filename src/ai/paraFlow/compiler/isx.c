@@ -27,10 +27,6 @@ static struct isxAddress *isxExpression(struct pfCompile *pfc,
 	double weight, struct dlList *iList);
 /* Generate intermediate code for expression. Return destination */
 
-static void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
-	struct hash *varHash, double weight, struct dlList *iList);
-/* Generate intermediate code for statement. */
-
 char *isxValTypeToString(enum isxValType val)
 /* Convert isxValType to string. */
 {
@@ -682,7 +678,7 @@ switch (ppt)
 }
 
 
-static void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
+void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
 	struct hash *varHash, double weight, struct dlList *iList)
 /* Generate intermediate code for statement. */
 {
@@ -848,22 +844,6 @@ struct isxList *isxListNew()
 struct isxList *isxList;
 AllocVar(isxList);
 isxList->iList = dlListNew(0);
-return isxList;
-}
-
-struct isxList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp)
-/* Convert parse tree to isx. */
-{
-struct isxList *isxList = isxListNew();
-switch (pp->type)
-    {
-    case pptMainModule:
-    case pptModule:
-	isxModule(pfc, pp, isxList);
-	break;
-    default:
-        internalErr();
-    }
 return isxList;
 }
 

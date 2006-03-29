@@ -12,6 +12,79 @@
 #define asmSuffix ".s"
 #define objSuffix ".o"
 
+
+static void codeFinishFunc(struct pfCompile *pfc, struct isxList *isxList,
+	FILE *isxFile, FILE *branchFile, FILE *asmFile)
+/* Finish up code generation for a function. */
+{
+isxLiveList(isxList);
+isxDumpList(isxList->iList, isxFile);
+
+verbose(2, "Phase 7a - optimizing branches\n");
+optBranch(isxList->iList);
+isxDumpList(isxList->iList, branchFile);
+
+verbose(2, "Phase 8 - Pentium code generation\n");
+pentFromIsx(isxList, asmFile);
+}
+
+static void codeOutsideFunctions(struct pfCompile *pfc, struct pfParse *module, 
+	FILE *isxFile, FILE *branchFile, FILE *asmFile)
+/* Generate code outside of functions */
+{
+struct isxList *isxList = isxListNew();
+struct pfParse *pp;
+struct hash *varHash = hashNew(0);
+for (pp = module->children; pp != NULL; pp = pp->next)
+    {
+    switch (pp->type)
+	{
+	case pptClass:
+	case pptToDec:
+	case pptFlowDec:
+	    break;
+	default:
+	    isxStatement(pfc, pp, varHash, 1.0, isxList->iList);
+	    break;
+	}
+    }
+codeFinishFunc(pfc, isxList, isxFile, branchFile, asmFile);
+hashFree(&varHash);
+}
+
+static void codeFunction(struct pfCompile *pfc, struct pfParse *funcPp, 
+	FILE *isxFile, FILE *branchFile, FILE *asmFile, struct pfParse *classPp)
+/* Generate code for one function */
+{
+struct pfParse *namePp = funcPp->children;
+struct pfParse *inTuple = namePp->next;
+struct pfParse *outTuple = inTuple->next;
+struct pfParse *body = outTuple->next;
+uglyf("THeoretically generating code for function\n");
+}
+
+static void codeFunctions(struct pfCompile *pfc, struct pfParse *parent, 
+	FILE *isxFile, FILE *branchFile, FILE *asmFile, struct pfParse *classPp)
+/* Generate code inside of functions */
+{
+struct isxList *isxList = isxListNew();
+struct pfParse *pp;
+for (pp = parent->children; pp != NULL; pp = pp->next)
+    {
+    switch (pp->type)
+	{
+	case pptClass:
+	    codeFunctions(pfc, pp, isxFile, branchFile, asmFile, pp);
+	    break;
+	case pptToDec:
+	case pptFlowDec:
+	    codeFunction(pfc, pp, isxFile, branchFile, asmFile, classPp);
+	    break;
+	}
+    }
+}
+
+
 static void asmModule(struct pfCompile *pfc, struct pfParse *program,
 	struct pfParse *module, char *baseDir)
 /* Generate assembly for a single module */
@@ -33,20 +106,13 @@ modVarIsx = isxModuleVars(pfc, module);
 
 gnuMacModulePreamble(asmFile);
 gnuMacInittedModuleVars(modVarIsx->iList, asmFile);
+
 gnuMacMainStart(asmFile);
-
-verbose(2, "Phase 7 - generating intermediate code\n");
-isxList = isxFromParse(pfc, module);
-isxDumpList(isxList->iList, isxFile);
-
-verbose(2, "Phase 7a - optimizing branches\n");
-optBranch(isxList->iList);
-isxDumpList(isxList->iList, branchFile);
-
-verbose(2, "Phase 8 - Pentium code generation\n");
-pentFromIsx(isxList, asmFile);
-
+codeOutsideFunctions(pfc, module, isxFile, branchFile, asmFile);
 gnuMacMainEnd(asmFile);
+
+codeFunctions(pfc, module, isxFile, branchFile, asmFile, NULL);
+
 gnuMacUninittedModuleVars(modVarIsx->iList, asmFile);
 gnuMacModulePostscript(asmFile);
 

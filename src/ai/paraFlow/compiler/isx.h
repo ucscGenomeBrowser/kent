@@ -203,8 +203,9 @@ struct isxList *isxListNew();
 struct isxList *isxModuleVars(struct pfCompile *pfc, struct pfParse *module);
 /* Convert module-level and static function variables to an isxList */
 
-struct isxList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp);
-/* Convert parse tree to isx. */
+void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
+	struct hash *varHash, double weight, struct dlList *iList);
+/* Generate intermediate code for statement. */
 
 #define isxPrefixC "_"		/* Prefix before symbols shared with C. */
 
