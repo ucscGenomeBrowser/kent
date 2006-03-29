@@ -7,7 +7,7 @@
 #include "chromInserts.h"
 #include "errabort.h"
 
-static char const rcsid[] = "$Id: ctgToChromFa.c,v 1.6 2003/05/06 07:22:16 kate Exp $";
+static char const rcsid[] = "$Id: ctgToChromFa.c,v 1.7 2006/03/29 15:55:04 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -119,7 +119,6 @@ struct lineFile *lf = lineFileOpen(orderLst, TRUE);
 FILE *f = mustOpen(outName, "w");
 char ctgFaName[512];
 char *words[2];
-int wordCount;
 int liftChromSize = 0;
 int actualChromSize = 0;
 boolean isFirst = TRUE;
