@@ -49,7 +49,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.19 2006/03/28 00:24:08 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.20 2006/03/29 00:07:18 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -308,9 +308,9 @@ while ((row = sqlNextRow(sr)) != NULL)
 	if (strlen(subString) < 2) continue;
 	if (subString[0] != '-' || subString[1] != '/') continue;
 	slashCount = chopString(subString, "/", NULL, 0);
-	if (slashCount > 1) continue;
+	if (slashCount > 2) continue;
 	subString = subString + 2;
-	if (!sameString(subString, row[6]) && !sameString(subString, row[7]))
+	if (!sameString(subString, row[6]))
             writeToExceptionFile(chromName, row[1], row[2], row[0], "DeletionClassWrongObserved");
 	}
 
