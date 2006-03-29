@@ -787,6 +787,51 @@ switch (pp->type)
     }
 }
 
+static void rIsxModuleVars(struct pfCompile *pfc, struct pfParse *pp, 
+	struct hash *varHash, struct dlList *iList)
+/* Convert module-level and static function variables to members of iList. */
+{
+double weight = 1.0;
+switch (pp->type)
+    {
+    case pptVarInit:
+	{
+	struct pfVar *var = pp->var;
+	struct pfScope *scope = var->scope;
+	if (!scope->isLocal)	
+	    {
+	    struct isxAddress *dest = varAddress(pp->var, varHash, 
+		    weight,  ppToIsxValType(pfc, pp));
+	    struct isxAddress *source;
+	    struct pfParse *init = pp->children->next->next;
+	    boolean doInit = FALSE;
+	    doInit =  (init != NULL && pfParseIsConst(init));
+	    if (doInit)
+		source = isxExpression(pfc, init, varHash, weight, iList);
+	    else
+		source = zeroAddress();
+	    isxNew(pfc, poInit, dest, source, NULL, iList);
+	    }
+	else if (var->ty->access == paStatic)
+	    internalErrAt(pp->tok);	// FIXME
+        break;
+	}
+    }
+for (pp = pp->children; pp != NULL; pp = pp->next)
+    rIsxModuleVars(pfc, pp, varHash, iList);
+}
+
+struct isxList *isxModuleVars(struct pfCompile *pfc, struct pfParse *module)
+/* Convert module-level and static function variables to an isxList */
+{
+struct isxList *isxList = isxListNew();
+struct hash *varHash = hashNew(0);
+rIsxModuleVars(pfc, module, varHash, isxList->iList);
+hashFree(&varHash);
+return isxList;
+}
+
+
 static void isxModule(struct pfCompile *pfc, struct pfParse *pp, 
 	struct isxList *isxList)
 /* Generate instructions for module. */
@@ -797,12 +842,19 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 isxLiveList(isxList);
 }
 
-struct isxList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp)
-/* Convert parse tree to isx. */
+struct isxList *isxListNew()
+/* Create new empty isxList */
 {
 struct isxList *isxList;
 AllocVar(isxList);
 isxList->iList = dlListNew(0);
+return isxList;
+}
+
+struct isxList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp)
+/* Convert parse tree to isx. */
+{
+struct isxList *isxList = isxListNew();
 switch (pp->type)
     {
     case pptMainModule:

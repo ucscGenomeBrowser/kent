@@ -18,7 +18,7 @@ static void asmModule(struct pfCompile *pfc, struct pfParse *program,
 {
 FILE *asmFile;
 FILE *isxFile, *branchFile; 
-struct isxList *isxList;
+struct isxList *isxList, *modVarIsx;
 char path[PATH_LEN];
 char *baseName = module->name;
 
@@ -29,6 +29,12 @@ branchFile = mustOpen(path, "w");
 safef(path, sizeof(path), "%s%s%s", baseDir, baseName, asmSuffix);
 asmFile = mustOpen(path, "w");
 
+modVarIsx = isxModuleVars(pfc, module);
+
+gnuMacModulePreamble(asmFile);
+gnuMacInittedModuleVars(modVarIsx->iList, asmFile);
+gnuMacMainStart(asmFile);
+
 verbose(2, "Phase 7 - generating intermediate code\n");
 isxList = isxFromParse(pfc, module);
 isxDumpList(isxList->iList, isxFile);
@@ -38,12 +44,10 @@ optBranch(isxList->iList);
 isxDumpList(isxList->iList, branchFile);
 
 verbose(2, "Phase 8 - Pentium code generation\n");
-gnuMacModulePreamble(asmFile);
-gnuMacInittedModuleVars(isxList->iList, asmFile);
-gnuMacMainStart(asmFile);
 pentFromIsx(isxList, asmFile);
+
 gnuMacMainEnd(asmFile);
-gnuMacUninittedModuleVars(isxList->iList, asmFile);
+gnuMacUninittedModuleVars(modVarIsx->iList, asmFile);
 gnuMacModulePostscript(asmFile);
 
 carefulClose(&isxFile);

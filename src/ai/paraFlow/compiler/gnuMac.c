@@ -99,56 +99,44 @@ static void declareModuleVars(struct dlList *iList, FILE *f, boolean doInitted)
 {
 struct dlNode *node;
 if (doInitted)
-    {
     fprintf(f, "\t.data\n");
-    }
 for (node = iList->head; !dlEnd(node); node = node->next)
     {
     struct isx *isx = node->val;
-    switch (isx->opType)
-        {
-	case poInit:
+    struct isxAddress *dest = isx->dest;
+    struct pfVar *var = dest->val.var;
+    struct pfParse *initPp = var->parse->children->next->next;
+    enum pfAccessType access = var->ty->access;
+    boolean isGlobal = (access == paGlobal || access == paWritable);
+    boolean constInit = initPp != NULL;
+    if (doInitted)
+	{
+	if (constInit)
 	    {
-	    struct isxAddress *dest = isx->dest;
-	    struct pfVar *var = dest->val.var;
-	    if (!var->scope->isLocal)
-	        {
-		struct pfParse *initPp = var->parse->children->next->next;
-		enum pfAccessType access = var->ty->access;
-		boolean isGlobal = (access == paGlobal || access == paWritable);
-		boolean constInit = (initPp != NULL && pfParseIsConst(initPp));
-		if (doInitted)
-		    {
-		    if (constInit)
-			{
-			if (isGlobal)
-			    fprintf(f, ".globl\t%s%s\n", isxPrefixC, var->cName);
-			fprintf(f, "%s%s:\n", isxPrefixC, var->cName);
-			printInitConst(dest->valType, initPp, f);
-			}
-		    }
-		else 
-		    {
-		    if (!constInit)
-			{
-			int size = pentTypeSize(dest->valType);
-			if (isGlobal)
-			    {
-			    fprintf(f, ".align %d\n", size);
-			    fprintf(f, ".comm");
-			    fprintf(f, " %s%s,%d\n", isxPrefixC, var->cName,
-				    size);
-			    }
-			else
-			    {
-			    fprintf(f, ".lcomm");
-			    fprintf(f, " %s%s,%d,%d\n", isxPrefixC, var->cName,
-				    size, size);
-			    }
-			}
-		    }
+	    if (isGlobal)
+		fprintf(f, ".globl\t%s%s\n", isxPrefixC, var->cName);
+	    fprintf(f, "%s%s:\n", isxPrefixC, var->cName);
+	    printInitConst(dest->valType, initPp, f);
+	    }
+	}
+    else 
+	{
+	if (!constInit)
+	    {
+	    int size = pentTypeSize(dest->valType);
+	    if (isGlobal)
+		{
+		fprintf(f, ".align %d\n", size);
+		fprintf(f, ".comm");
+		fprintf(f, " %s%s,%d\n", isxPrefixC, var->cName,
+			size);
 		}
-	    break;
+	    else
+		{
+		fprintf(f, ".lcomm");
+		fprintf(f, " %s%s,%d,%d\n", isxPrefixC, var->cName,
+			size, size);
+		}
 	    }
 	}
     }
