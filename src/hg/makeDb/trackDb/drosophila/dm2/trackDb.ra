@@ -228,15 +228,15 @@ type bed 9
 
     track picTarMiRNAS1
     subTrack picTar
-    shortLabel PicTar 4 Species
+    shortLabel PicTar microRNA
     longLabel PicTar microRNA sites
     color 128,0,128
     priority 1
 
     track picTarMiRNAS3
     subTrack picTar
-    shortLabel PicTar 5 Species
-    longLabel PicTar microRNA sites, 3 species conservation constraint:
+    shortLabel PicTar microRNA
+    longLabel PicTar microRNA sites
     color 128,0,128
     priority 2
 
