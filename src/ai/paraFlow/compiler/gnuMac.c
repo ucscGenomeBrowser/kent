@@ -10,7 +10,7 @@
 #include "pfCompile.h"
 #include "pfPreamble.h"
 #include "isx.h"
-#include "isxToPentium.h"
+#include "pentCode.h"
 #include "gnuMac.h"
 
 #define cstrPrefix "JK_"	/* Prefix before string constants */

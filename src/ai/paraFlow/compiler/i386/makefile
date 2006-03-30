@@ -1,8 +1,5 @@
 test:
 	mkdir -p expected output
-	paraFlow crash.pf > expected/crash
-	paraFlow -asm crash.pf > output/crash
-	diff expected/crash output/crash
 	paraFlow for1.pf > expected/for1
 	paraFlow -asm for1.pf > output/for1
 	diff expected/for1 output/for1
@@ -33,3 +30,6 @@ test:
 	paraFlow if4.pf > expected/if4
 	paraFlow -asm if4.pf > output/if4
 	diff expected/if4 output/if4
+	paraFlow crash.pf > expected/crash
+	paraFlow -asm crash.pf > output/crash
+	diff expected/crash output/crash

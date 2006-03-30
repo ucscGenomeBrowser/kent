@@ -1,6 +1,10 @@
 #ifndef PENTCODE_H
 #define PENTCODE_H
 
+#ifndef ISX_H
+#include "isx.h"
+#endif 
+
 #define pentCodeBufSize 256
 
 struct pentCoder
@@ -46,6 +50,43 @@ void pentCodeSave(struct pentCode *code, FILE *f);
 
 void pentCodeSaveAll(struct pentCode *code, FILE *f);
 /* Save list of instructions. */
+
+struct pentFunctionInfo
+/* Info about a function */
+    {
+    int regCount;	/* Number of registers */
+    bool *regsUsed;	/* One for each register, set to TRUE if register 
+    			 * is used. */
+    int savedContextSize;/* Size of saved regs & return address on stack */
+    int outVarSize;	/* Output variables. */
+    int locVarSize;	/* Local variables. */
+    int tempVarSize;	/* Temp variables. */
+    int callParamSize;	/* Size needed for calls */
+    int stackSubAmount;	/* Total amount to subtract from stack */
+    struct pentCoder *coder;  /* Place for instructions */
+    };
+
+struct pentFunctionInfo *pentFunctionInfoNew();
+/* Create new pentFunctionInfo */
+
+void pentFromIsx(struct isxList *isxList, struct pentFunctionInfo *pfi);
+/* Convert isx code to pentium instructions in pfi. */
+
+int pentTypeSize(enum isxValType valType);
+/* Return size of a val type */
+
+void pentFunctionStart(struct pfCompile *pfc, struct pentFunctionInfo *pfi, 
+	boolean isGlobal, FILE *asmFile);
+/* Start coding up a function in pentium assembly language. */
+
+void pentFunctionEnd(struct pfCompile *pfc, struct pentFunctionInfo *pfi, 
+	FILE *asmFile);
+/* Finish coding up a function in pentium assembly language. */
+
+void pentInitFuncVars(struct pfCompile *pfc, struct ctar *ctar, 
+	struct hash *varHash, struct pentFunctionInfo *pfi);
+/* Set up variables and offsets for parameters and local variables
+ * in hash. */
 
 #endif /* PENTCODE_H */
 

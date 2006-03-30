@@ -203,10 +203,10 @@ switch (iad->adType)
 	fprintf(f, "%s*%2.1f", iad->name, iad->weight);
 	break;
     case iadInStack:
-	fprintf(f, "in(%d)", iad->val.stackOffset);
+	fprintf(f, "in(%d)", iad->val.ioOffset);
         break;
     case iadOutStack:
-	fprintf(f, "out(%d)", iad->val.stackOffset);
+	fprintf(f, "out(%d)", iad->val.ioOffset);
         break;
     case iadOperator:
     case iadCtar:
@@ -310,9 +310,8 @@ dlAddValTail(iList, isx);
 return isx;
 }
 
-static enum isxValType tyToIsxValType(struct pfCompile *pfc, 
-	struct pfType *ty)
-/* Return isxValType corresponding to pp */
+enum isxValType isxValTypeFromTy(struct pfCompile *pfc, struct pfType *ty)
+/* Return isxValType corresponding to pfType  */
 {
 struct pfBaseType *base = ty->base;
 if (base == pfc->bitType || base == pfc->byteType)
@@ -337,7 +336,7 @@ static enum isxValType ppToIsxValType(struct pfCompile *pfc,
 	struct pfParse *pp)
 /* Return isxValType corresponding to pp */
 {
-return tyToIsxValType(pfc, pp->ty);
+return isxValTypeFromTy(pfc, pp->ty);
 }
 
 static struct isxAddress *constAddress(struct pfToken *tok, 
@@ -410,7 +409,7 @@ struct isxAddress *iad;
 AllocVar(iad);
 iad->adType = adType;
 iad->valType = valType;
-iad->val.stackOffset = offset;
+iad->val.ioOffset = offset;
 return iad;
 }
 
@@ -435,18 +434,6 @@ AllocVar(iad);
 iad->adType = iadLabel;
 iad->valType = ivJump;
 iad->name = cloneString(buf);
-return iad;
-}
-
-static struct isxAddress *ctarAddress(struct ctar *ctar)
-/* Create a reference to function variable info. */
-{
-struct isxAddress *iad;
-AllocVar(iad);
-iad->adType = iadCtar;
-iad->valType = ivJump;
-iad->name = ctar->cName;
-iad->val.ctar = ctar;
 return iad;
 }
 
@@ -519,7 +506,7 @@ source = callAddress(function->var, weight, varHash);
 isxNew(pfc, poCall, NULL, source, NULL, iList);
 for (ty = outTuple->children, offset=0; ty != NULL; ty = ty->next, ++offset)
     {
-    enum isxValType valType = tyToIsxValType(pfc, ty);
+    enum isxValType valType = isxValTypeFromTy(pfc, ty);
     source = ioAddress(offset, valType, iadOutStack);
     dest = tempAddress(pfc, varHash, weight, valType);
     slAddTail(&destList, dest);
@@ -853,31 +840,4 @@ rIsxModuleVars(pfc, module, varHash, isxList->iList);
 hashFree(&varHash);
 return isxList;
 }
-
-struct isxList *isxCodeFunction(struct pfCompile *pfc, struct pfParse *funcPp)
-/* Generate code for a function */
-{
-struct isxList *isxList = isxListNew();
-struct dlList *iList = isxList->iList;
-struct hash *varHash = hashNew(0);
-struct ctar *ctar = ctarOnFunction(funcPp);
-struct isxAddress *ctarIad = ctarAddress(ctar);
-struct pfParse *namePp = funcPp->children;
-struct pfParse *inTuple = namePp->next;
-struct pfParse *outTuple = inTuple->next;
-struct pfParse *body = outTuple->next;
-struct pfParse *pp;
-isxNew(pfc, poFuncStart, ctarIad, NULL, NULL, iList);
-for (pp = body->children; body != NULL; body = body->next)
-    isxStatement(pfc, pp, varHash, 1.0, iList);
-isxNew(pfc, poFuncEnd, ctarIad, NULL, NULL, iList);
-hashFree(&varHash);
-return isxList;
-}
-
-#ifdef OLD
-struct slRef *ref;
-struct pfVar *var;
-struct ctar *ctar = ctarOnFunction(funcPp);
-#endif /* OLD */
 

@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "hash.h"
+#include "isx.h"
 #include "pentCode.h"
 
 struct pentCoder *pentCoderNew()

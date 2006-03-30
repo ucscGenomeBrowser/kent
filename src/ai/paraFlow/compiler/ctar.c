@@ -97,28 +97,43 @@ struct hash *aliasHash = hashNew(8);
 int aliasNum = 1;
 static int id=0;
 struct pfBaseType *class = funcDec->var->scope->class;
+struct pfParse *namePp = funcDec->children;
+struct pfParse *inTuple = namePp->next;
+struct pfParse *outTuple = inTuple->next;
 
 AllocVar(ctar);
+funcDec->var->ctar = ctar;
 ctar->id = ++id;
 ctar->name = funcDec->name;
 ctar->cName = cNameForFunction(funcDec);
 ctar->pp = funcDec;
+ctar->inCount = slCount(inTuple->children);
+ctar->outCount = slCount(outTuple->children);
 rAddVars(ctar, funcDec, aliasHash, &aliasNum);
+ctar->localCount = slCount(ctar->varRefList) - ctar->inCount - ctar->outCount;
 if (class != NULL)
     {
     struct pfVar *selfVar = pfScopeFindVar(funcDec->scope, "self");
     assert(selfVar != NULL);
     refAdd(&ctar->varRefList, selfVar);
+    ctar->selfVar = selfVar;
     if (pfBaseIsDerivedClass(class))
         {
 	struct pfVar *parentVar = pfScopeFindVar(funcDec->scope, "parent");
 	assert(parentVar != NULL);
 	refAdd(&ctar->varRefList, parentVar);
+	ctar->parentVar = parentVar;
 	}
     }
 slReverse(&ctar->varRefList);
+
+/* Fill in in, out, and local vars */
+ctar->inRefList = ctar->varRefList;
+ctar->outRefList = slElementFromIx(ctar->inRefList, ctar->inCount);
+ctar->localRefList = slElementFromIx(ctar->outRefList, ctar->outCount);
+
+/* Clean up and go home. */
 hashFree(&aliasHash);
-funcDec->var->ctar = ctar;
 return ctar;
 }
 

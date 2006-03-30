@@ -5,16 +5,17 @@
 #include "pfCompile.h"
 #include "pfParse.h"
 #include "isx.h"
-#include "isxToPentium.h"
 #include "optBranch.h"
 #include "gnuMac.h"
+#include "ctar.h"
+#include "pentCode.h"
 
 #define asmSuffix ".s"
 #define objSuffix ".o"
 
-
-static void codeFinishFunc(struct pfCompile *pfc, struct isxList *isxList,
-	FILE *isxFile, FILE *branchFile, FILE *asmFile)
+static void finishFuncOrOutside(struct pfCompile *pfc, struct isxList *isxList,
+	FILE *isxFile, FILE *branchFile, FILE *asmFile, 
+	struct pentFunctionInfo *pfi, boolean isFunc, boolean isGlobal)
 /* Finish up code generation for a function. */
 {
 isxLiveList(isxList);
@@ -25,7 +26,13 @@ optBranch(isxList->iList);
 isxDumpList(isxList->iList, branchFile);
 
 verbose(2, "Phase 8 - Pentium code generation\n");
-pentFromIsx(isxList, asmFile);
+pentFromIsx(isxList, pfi);
+if (isFunc)
+    pentFunctionStart(pfc, pfi, isGlobal, asmFile);
+pentCodeSaveAll(pfi->coder->list, asmFile);
+if (isFunc)
+    pentFunctionEnd(pfc, pfi, asmFile);
+pentCodeFreeList(&pfi->coder->list);
 }
 
 static void codeOutsideFunctions(struct pfCompile *pfc, struct pfParse *module, 
@@ -35,6 +42,7 @@ static void codeOutsideFunctions(struct pfCompile *pfc, struct pfParse *module,
 struct isxList *isxList = isxListNew();
 struct pfParse *pp;
 struct hash *varHash = hashNew(0);
+struct pentFunctionInfo *pfi = pentFunctionInfoNew();
 for (pp = module->children; pp != NULL; pp = pp->next)
     {
     switch (pp->type)
@@ -48,7 +56,8 @@ for (pp = module->children; pp != NULL; pp = pp->next)
 	    break;
 	}
     }
-codeFinishFunc(pfc, isxList, isxFile, branchFile, asmFile);
+finishFuncOrOutside(pfc, isxList, isxFile, branchFile, asmFile, pfi, 
+	FALSE, FALSE);
 hashFree(&varHash);
 }
 
@@ -56,9 +65,35 @@ static void codeFunction(struct pfCompile *pfc, struct pfParse *funcPp,
 	FILE *isxFile, FILE *branchFile, FILE *asmFile, struct pfParse *classPp)
 /* Generate code for one function */
 {
-struct isxList *isxList = isxCodeFunction(pfc, funcPp);
-codeFinishFunc(pfc, isxList, isxFile, branchFile, asmFile);
+struct hash *varHash = hashNew(0);
+struct isxList *isxList = isxListNew();
+struct pfParse *namePp = funcPp->children;
+struct pfParse *inTuple = namePp->next;
+struct pfParse *outTuple = inTuple->next;
+struct pfParse *body = outTuple->next;
+struct ctar *ctar = ctarOnFunction(funcPp);
+struct pfVar *funcVar = funcPp->var;
+enum pfAccessType access = funcVar->ty->access;
+struct pfParse *pp;
+struct pentFunctionInfo *pfi = pentFunctionInfoNew();
+boolean isGlobal;
+
+fprintf(isxFile, "# Starting function %s\n", ctar->cName);
+fprintf(branchFile, "# Starting function %s\n", ctar->cName);
+fprintf(asmFile, "# Starting function %s\n", ctar->cName);
+
+for (pp = body->children; body != NULL; body = body->next)
+    isxStatement(pfc, pp, varHash, 1.0, isxList->iList);
+pentInitFuncVars(pfc, ctar, varHash, pfi);
+if (classPp != NULL)
+    isGlobal = (classPp->ty->access == paGlobal && access != paLocal);
+else
+    isGlobal = (access == paGlobal);
+finishFuncOrOutside(pfc, isxList, isxFile, branchFile, asmFile, pfi, TRUE,
+    isGlobal);
+hashFree(&varHash);
 }
+
 
 static void codeFunctions(struct pfCompile *pfc, struct pfParse *parent, 
 	FILE *isxFile, FILE *branchFile, FILE *asmFile, struct pfParse *classPp)

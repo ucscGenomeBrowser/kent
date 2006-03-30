@@ -9,10 +9,10 @@
 #include "pfScope.h"
 #include "pfCompile.h"
 #include "pfPreamble.h"
+#include "ctar.h"
 #include "isx.h"
 #include "gnuMac.h"
 #include "pentCode.h"
-#include "isxToPentium.h"
 
 enum pentRegs
 /* These need to be in same order as regInfo table. */
@@ -38,6 +38,17 @@ static struct isxReg regInfo[] = {
     { 8, NULL, NULL, NULL, NULL, "%st7", "%st7, NULL},
 #endif /* SOON */
 };
+
+struct pentFunctionInfo *pentFunctionInfoNew()
+/* Create new pentFunctionInfo */
+{
+struct pentFunctionInfo *pfi;
+AllocVar(pfi);
+pfi->regCount = ArraySize(regInfo);
+AllocArray(pfi->regsUsed, pfi->regCount);
+pfi->coder = pentCoderNew();
+return pfi;
+}
 
 static void initRegInfo()
 /* Do some one-time initialization of regInfo */
@@ -209,12 +220,12 @@ switch (iad->adType)
 	}
     case iadInStack:
         {
-	safef(buf, pentCodeBufSize, "%d(%%esp)", iad->val.stackOffset);
+	safef(buf, pentCodeBufSize, "%d(%%esp)", iad->val.ioOffset);
 	break;
 	}
     case iadOutStack:
         {
-	safef(buf, pentCodeBufSize, "%d(uglyOut)", iad->val.stackOffset);
+	safef(buf, pentCodeBufSize, "%d(uglyOut)", iad->val.ioOffset);
 	break;
 	}
     default:
@@ -847,7 +858,7 @@ struct isxReg *reg;
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
 enum isxValType valType = source->valType;
-int sourceIx = source->val.stackOffset;
+int sourceIx = source->val.ioOffset;
 if (sourceIx > 2)
     errAbort("Can't handle more than three pentOutput\n");
 if (valType == ivLong || valType == ivFloat || valType == ivDouble)
@@ -1014,7 +1025,7 @@ else
 pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
 }
 
-static void calcInputOffsets(struct dlList *iList)
+static void calcInputOffsets(struct pentFunctionInfo *pfi, struct dlList *iList)
 /* Go through and fix stack offsets for input parameters */
 {
 struct dlNode *node;
@@ -1025,8 +1036,10 @@ for (node = iList->head; !dlEnd(node); node = node->next)
     switch (isx->opType)
         {
 	case poInput:
-	    isx->dest->val.stackOffset = offset;
+	    isx->dest->val.ioOffset = offset;
 	    offset += pentTypeSize(isx->dest->valType);
+	    if (offset > pfi->callParamSize)
+	         pfi->callParamSize = offset;
 	    break;
 	case poCall:
 	    offset = 0;
@@ -1317,29 +1330,32 @@ for (loopy = isxList->loopList; loopy != NULL; loopy  = loopy->next)
     }
 }
 
-void pentFromIsx(struct isxList *isxList, FILE *f)
+void pentFromIsx(struct isxList *isxList, struct pentFunctionInfo *pfi)
 /* Convert isx code to pentium instructions in file. */
 {
 int i;
 struct isxReg *destReg;
 struct dlNode *node, *nextNode;
 struct isx *isx;
-struct pentCoder *coder = pentCoderNew();
+struct pentCoder *coder = pfi->coder;
 struct regStomper *stomp;
 struct dlList *iList = isxList->iList;
+int stackUse;
 
 initRegInfo();
-calcInputOffsets(iList);
+calcInputOffsets(pfi, iList);
 calcLoopRegVars(isxList);
 addRegStomper(iList);
-fprintf(f, "\n# Starting code generation\n");
+
+stackUse = pfi->outVarSize + pfi->locVarSize + pfi->callParamSize;
+coder->tempIx -= stackUse;
 
 for (node = iList->head; !dlEnd(node); node = nextNode)
     {
     nextNode = node->next;
     isx = node->val;
     stomp = isx->cpuInfo;
-#define HELP_DEBUG
+#undef HELP_DEBUG
 #ifdef HELP_DEBUG
     fprintf(f, "# ");	
     isxDump(isx, f);
@@ -1448,13 +1464,96 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	case poJump:
 	    pentJump(isx, nextNode, coder);
 	    break;
+	case poFuncStart:
+	    break;
+	case poFuncEnd:
+	    break;
 	default:
 	    warn("unimplemented\t%s\n", isxOpTypeToString(isx->opType));
 	    break;
 	}
-    slReverse(&coder->list);
-    pentCodeSaveAll(coder->list, f);
-    pentCodeFreeList(&coder->list);
     }
+slReverse(&coder->list);
+pfi->tempVarSize = coder->tempIx - stackUse;
+}
+
+static int alignOffset(int offset, int size)
+/* Align offset to go with variable of a given size */
+{
+if (size == 2)
+    offset = ((offset+1)&0xFFFFFFFE);
+else if (size >= 4)
+    offset = ((offset+3)&0xFFFFFFFC);
+return offset;
+}
+
+static int calcVarListSize(struct pfCompile *pfc, struct slRef *varRefList, 
+	int varCount)
+/* Figure out size of vars - align things to be on even boundaries. */
+{
+int i, size1, offset = 0;
+struct slRef *varRef; 
+for (i=0,varRef = varRefList; i<varCount; ++i, varRef=varRef->next)
+    {
+    struct pfVar *var = varRef->val;
+    size1 = pentTypeSize(isxValTypeFromTy(pfc, var->ty));
+    offset = alignOffset(offset, size1);
+    offset += size1;
+    }
+offset = alignOffset(offset, 4);
+return offset;
+}
+
+static void fillInVarOffsets(struct pfCompile *pfc, int offset,
+	struct slRef *varRefList, int varCount, struct hash *varHash)
+/* Fill in stack offsets */
+{
+int i, size1;
+struct slRef *varRef; 
+for (i=0,varRef = varRefList; i<varCount; ++i, varRef=varRef->next)
+    {
+    struct pfVar *var = varRef->val;
+    struct isxAddress *iad = hashFindVal(varHash, var->cName);
+    size1 = pentTypeSize(isxValTypeFromTy(pfc, var->ty));
+    offset = alignOffset(offset, size1);
+    iad->stackOffset = offset;
+    offset += size1;
+    }
+}
+
+void pentInitFuncVars(struct pfCompile *pfc, struct ctar *ctar, 
+	struct hash *varHash, struct pentFunctionInfo *pfi)
+/* Set up variables and offsets for parameters and local variables
+ * in hash. */
+{
+struct slRef *varRef;
+struct pfVar *var;
+struct isxAddress *iad;
+int stackSubAmount;
+
+pfi->savedContextSize = 20; /* Saved retAddress,ebp,ebx,esi,edi. Might not save 
+			     * them all , but will always reserve space. */
+pfi->outVarSize = calcVarListSize(pfc, ctar->outRefList, ctar->outCount);
+pfi->locVarSize = calcVarListSize(pfc, ctar->localRefList, ctar->localCount);
+fillInVarOffsets(pfc, pfi->savedContextSize, ctar->inRefList, ctar->inCount, 
+	varHash);
+stackSubAmount = pfi->outVarSize;
+fillInVarOffsets(pfc, -stackSubAmount, ctar->outRefList, ctar->outCount, 
+	varHash);
+stackSubAmount -= pfi->locVarSize;
+fillInVarOffsets(pfc, -stackSubAmount, ctar->localRefList, ctar->localCount, 
+	varHash);
+}
+
+void pentFunctionStart(struct pfCompile *pfc, struct pentFunctionInfo *pfi, 
+	boolean isGlobal, FILE *asmFile)
+/* Finish coding up a function in pentium assembly language. */
+{
+}
+
+void pentFunctionEnd(struct pfCompile *pfc, struct pentFunctionInfo *pfi, 
+	FILE *asmFile)
+/* Finish coding up a function in pentium assembly language. */
+{
 }
 

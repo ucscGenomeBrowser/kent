@@ -23,6 +23,9 @@
 #include "isxLiveVar.h"
 #endif
 
+struct pfCompile;
+struct pfParse;
+struct pfType;
 
 enum isxOpType
 /* What sort of operation - corresponds roughly to an
@@ -86,6 +89,9 @@ enum isxValType
 char *isxValTypeToString(enum isxValType val);
 /* Convert isxValType to string. */
 
+enum isxValType isxValTypeFromTy(struct pfCompile *pfc, struct pfType *ty);
+/* Return isxValType corresponding to pfType  */
+
 enum isxAddressType
 /* Address type */
     {
@@ -132,7 +138,7 @@ union isxAddressVal
     struct pfToken *tok;	/* For constants */
     struct pfVar *var;		/* For real vars */
     int tempMemLoc;		/* Memory location for temps, 0 for none */
-    int stackOffset;		/* Stack offset. */
+    int ioOffset;		/* Stack offset. */
     struct isxLoopInfo *loopy;  /* Information on loop */
     struct ctar *ctar;		/* Information about function variables. */
     };
@@ -145,6 +151,7 @@ struct isxAddress
     enum isxAddressType adType;/* Address type */
     enum isxValType valType;	/* Value type */
     union isxAddressVal val;	/* Address value */
+    int stackOffset;		/* Stack offset. */
     struct isxReg *reg;	/* Register if any */
     float weight;	/* Number of uses, scaled for loops */
     };
