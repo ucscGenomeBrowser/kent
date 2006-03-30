@@ -25,7 +25,6 @@ to printParam(int i)
 _printInt(i);
 }
 
-/*-SOON
 to doSomethingComplex(int start,end)
 {
 int a = 600;
@@ -39,6 +38,7 @@ for (int i=start; i<=end; i++)
     }
 }
 doSomethingComplex(1,3);
+/*-SOON
 SOON-*/
 
 

@@ -1354,7 +1354,8 @@ calcInputOffsets(pfi, iList);
 calcLoopRegVars(isxList);
 addRegStomper(iList);
 
-stackUse = pfi->outVarSize + pfi->locVarSize + pfi->callParamSize;
+stackUse = pfi->outVarSize + pfi->locVarSize + pfi->callParamSize 
+	+ pfi->savedRegSize;
 coder->tempIx -= stackUse;
 
 for (node = iList->head; !dlEnd(node); node = nextNode)
@@ -1481,8 +1482,7 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	}
     }
 slReverse(&coder->list);
-pfi->tempVarSize = stackUse + coder->tempIx;
-// uglyf("stackUse %d, coder->tempIx %d\n", stackUse, coder->tempIx);
+pfi->tempVarSize = -(stackUse + coder->tempIx);
 }
 
 static int alignOffset(int offset, int size)
@@ -1525,7 +1525,6 @@ for (i=0,varRef = varRefList; i<varCount; ++i, varRef=varRef->next)
     size1 = pentTypeSize(isxValTypeFromTy(pfc, var->ty));
     offset = alignOffset(offset, size1);
     iad->stackOffset = offset;
-    // uglyf("fillInVarOffset %s@%d\n", var->cName, offset);
     offset += size1;
     }
 }
@@ -1539,15 +1538,15 @@ struct slRef *varRef;
 struct pfVar *var;
 struct isxAddress *iad;
 int stackSubAmount;
-int retPlusBp = 8;	/* Space for return address and ebp */
-int savedRegs = 12;	/* Space for ebx, esi, edi */
 
-pfi->savedContextSize = retPlusBp + savedRegs; 
+pfi->savedRegSize = 12;
+pfi->savedRetEbpSize = 8;
+pfi->savedContextSize = pfi->savedRetEbpSize + pfi->savedRegSize; 
 pfi->outVarSize = calcVarListSize(pfc, ctar->outRefList, ctar->outCount);
 pfi->locVarSize = calcVarListSize(pfc, ctar->localRefList, ctar->localCount);
-fillInVarOffsets(pfc, retPlusBp, ctar->inRefList, ctar->inCount, 
+fillInVarOffsets(pfc, pfi->savedRetEbpSize, ctar->inRefList, ctar->inCount, 
 	varHash);
-stackSubAmount = savedRegs+pfi->outVarSize;
+stackSubAmount = pfi->savedRegSize+pfi->outVarSize;
 fillInVarOffsets(pfc, -stackSubAmount, ctar->outRefList, ctar->outCount, 
 	varHash);
 stackSubAmount += pfi->locVarSize;
@@ -1560,8 +1559,6 @@ void pentFunctionStart(struct pfCompile *pfc, struct pentFunctionInfo *pfi,
 /* Finish coding up a function in pentium assembly language. */
 {
 int stackSubAmount;
-// uglyf("pentFunctionStart %s\n", cName);
-// uglyf("outVarSize %d, locVarSize %d, tempVarSize %d, callParamSize %d\n", pfi->outVarSize, pfi->locVarSize, pfi->tempVarSize, pfi->callParamSize);
 if (isGlobal)
     fprintf(f, ".globl %s%s\n", isxPrefixC, cName);
 fprintf(f, "%s%s:\n", isxPrefixC, cName);

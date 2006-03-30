@@ -58,6 +58,8 @@ struct pentFunctionInfo
     bool *regsUsed;	/* One for each register, set to TRUE if register 
     			 * is used. */
     int savedContextSize;/* Size of saved regs & return address on stack */
+    int savedRegSize;	/* Saved registers. */
+    int savedRetEbpSize;/* Saved ebp/return address */
     int outVarSize;	/* Output variables. */
     int locVarSize;	/* Local variables. */
     int tempVarSize;	/* Temp variables. */
