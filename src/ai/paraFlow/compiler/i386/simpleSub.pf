@@ -1,0 +1,48 @@
+
+to doSomething(int count) into int sum
+{
+for (int i=0; i<count; ++i)
+    {
+    _printInt(i);
+    _printInt(i*i);
+    sum += i;
+    }
+}
+
+to printOne()
+{
+_printInt(1);
+}
+
+to printThree()
+{
+for (int i=0; i<3; ++i)
+    _printInt(i);
+}
+
+to printParam(int i)
+{
+_printInt(i);
+}
+
+/*-SOON
+to doSomethingComplex(int start,end)
+{
+int a = 600;
+int b = 60;
+int c = 6;
+int hex = a + b + c;
+for (int i=start; i<=end; i++)
+    {
+    int x = a/b + b/c;
+    printParam(((a+b)+c - hex + x) * i);
+    }
+}
+doSomethingComplex(1,3);
+SOON-*/
+
+
+printOne();
+printThree();
+printParam(123);
+doSomething(5);

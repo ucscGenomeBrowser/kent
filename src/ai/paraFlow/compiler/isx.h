@@ -224,7 +224,7 @@ struct isxList *isxModuleVars(struct pfCompile *pfc, struct pfParse *module);
 struct isxList *isxCodeFunction(struct pfCompile *pfc, struct pfParse *funcPp);
 /* Generate code for a function */
 
-#define isxPrefixC "_"		/* Prefix before symbols shared with C. */
+#define isxPrefixC "_"	/* Prefix before symbols shared with C. */
 
 #endif /* ISX_H */
 

@@ -202,11 +202,18 @@ switch (iad->adType)
 	}
     case iadRealVar:
 	{
+	struct pfVar *var = iad->val.var;
 	if (iad->reg != NULL)
 	    safef(buf, pentCodeBufSize, "%s", 
 	    	isxRegName(iad->reg, iad->valType));
+	else if (var->scope->isLocal)
+	    {
+	    safef(buf, pentCodeBufSize, "%d(%%ebp)", iad->stackOffset);
+	    }
 	else
+	    {
 	    safef(buf, pentCodeBufSize, "%s%s", isxPrefixC, iad->name);
+	    }
 	break;
 	}
     case iadTempVar:
@@ -1474,7 +1481,8 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	}
     }
 slReverse(&coder->list);
-pfi->tempVarSize = coder->tempIx - stackUse;
+pfi->tempVarSize = stackUse + coder->tempIx;
+// uglyf("stackUse %d, coder->tempIx %d\n", stackUse, coder->tempIx);
 }
 
 static int alignOffset(int offset, int size)
@@ -1517,6 +1525,7 @@ for (i=0,varRef = varRefList; i<varCount; ++i, varRef=varRef->next)
     size1 = pentTypeSize(isxValTypeFromTy(pfc, var->ty));
     offset = alignOffset(offset, size1);
     iad->stackOffset = offset;
+    // uglyf("fillInVarOffset %s@%d\n", var->cName, offset);
     offset += size1;
     }
 }
@@ -1530,30 +1539,56 @@ struct slRef *varRef;
 struct pfVar *var;
 struct isxAddress *iad;
 int stackSubAmount;
+int retPlusBp = 8;	/* Space for return address and ebp */
+int savedRegs = 12;	/* Space for ebx, esi, edi */
 
-pfi->savedContextSize = 20; /* Saved retAddress,ebp,ebx,esi,edi. Might not save 
-			     * them all , but will always reserve space. */
+pfi->savedContextSize = retPlusBp + savedRegs; 
 pfi->outVarSize = calcVarListSize(pfc, ctar->outRefList, ctar->outCount);
 pfi->locVarSize = calcVarListSize(pfc, ctar->localRefList, ctar->localCount);
-fillInVarOffsets(pfc, pfi->savedContextSize, ctar->inRefList, ctar->inCount, 
+fillInVarOffsets(pfc, retPlusBp, ctar->inRefList, ctar->inCount, 
 	varHash);
-stackSubAmount = pfi->outVarSize;
+stackSubAmount = savedRegs+pfi->outVarSize;
 fillInVarOffsets(pfc, -stackSubAmount, ctar->outRefList, ctar->outCount, 
 	varHash);
-stackSubAmount -= pfi->locVarSize;
+stackSubAmount += pfi->locVarSize;
 fillInVarOffsets(pfc, -stackSubAmount, ctar->localRefList, ctar->localCount, 
 	varHash);
 }
 
 void pentFunctionStart(struct pfCompile *pfc, struct pentFunctionInfo *pfi, 
-	boolean isGlobal, FILE *asmFile)
+	char *cName, boolean isGlobal, FILE *f)
 /* Finish coding up a function in pentium assembly language. */
 {
+int stackSubAmount;
+// uglyf("pentFunctionStart %s\n", cName);
+// uglyf("outVarSize %d, locVarSize %d, tempVarSize %d, callParamSize %d\n", pfi->outVarSize, pfi->locVarSize, pfi->tempVarSize, pfi->callParamSize);
+if (isGlobal)
+    fprintf(f, ".globl %s%s\n", isxPrefixC, cName);
+fprintf(f, "%s%s:\n", isxPrefixC, cName);
+fprintf(f, "%s",
+"	pushl	%ebp\n"
+"	movl	%esp,%ebp\n"
+"	pushl	%ebx\n"
+"	pushl	%esi\n"
+"	pushl	%edi\n");
+stackSubAmount = pfi->outVarSize + pfi->locVarSize + pfi->tempVarSize 
+			+ pfi->callParamSize + pfi->savedContextSize;
+stackSubAmount = ((stackSubAmount+15)&0xFFFFFFF0);
+stackSubAmount -= pfi->savedContextSize;
+pfi->stackSubAmount = stackSubAmount;
+fprintf(f, "\tsubl\t$%d,%%esp\n", stackSubAmount);
 }
 
 void pentFunctionEnd(struct pfCompile *pfc, struct pentFunctionInfo *pfi, 
-	FILE *asmFile)
+	FILE *f)
 /* Finish coding up a function in pentium assembly language. */
 {
+fprintf(f, "\taddl\t$%d,%%esp\n", pfi->stackSubAmount);
+fprintf(f, "%s",
+"	popl	%edi\n"
+"	popl	%esi\n"
+"	popl	%ebx\n"
+"	popl	%ebp\n"
+"	ret\n");
 }
 

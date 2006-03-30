@@ -15,7 +15,8 @@
 
 static void finishFuncOrOutside(struct pfCompile *pfc, struct isxList *isxList,
 	FILE *isxFile, FILE *branchFile, FILE *asmFile, 
-	struct pentFunctionInfo *pfi, boolean isFunc, boolean isGlobal)
+	struct pentFunctionInfo *pfi, boolean isFunc, char *cName,
+	boolean isGlobal)
 /* Finish up code generation for a function. */
 {
 isxLiveList(isxList);
@@ -28,7 +29,7 @@ isxDumpList(isxList->iList, branchFile);
 verbose(2, "Phase 8 - Pentium code generation\n");
 pentFromIsx(isxList, pfi);
 if (isFunc)
-    pentFunctionStart(pfc, pfi, isGlobal, asmFile);
+    pentFunctionStart(pfc, pfi, cName, isGlobal, asmFile);
 pentCodeSaveAll(pfi->coder->list, asmFile);
 if (isFunc)
     pentFunctionEnd(pfc, pfi, asmFile);
@@ -57,7 +58,7 @@ for (pp = module->children; pp != NULL; pp = pp->next)
 	}
     }
 finishFuncOrOutside(pfc, isxList, isxFile, branchFile, asmFile, pfi, 
-	FALSE, FALSE);
+	FALSE, NULL, FALSE);
 hashFree(&varHash);
 }
 
@@ -73,14 +74,15 @@ struct pfParse *outTuple = inTuple->next;
 struct pfParse *body = outTuple->next;
 struct ctar *ctar = ctarOnFunction(funcPp);
 struct pfVar *funcVar = funcPp->var;
+char *cName = funcVar->cName;
 enum pfAccessType access = funcVar->ty->access;
 struct pfParse *pp;
 struct pentFunctionInfo *pfi = pentFunctionInfoNew();
 boolean isGlobal;
 
-fprintf(isxFile, "# Starting function %s\n", ctar->cName);
-fprintf(branchFile, "# Starting function %s\n", ctar->cName);
-fprintf(asmFile, "# Starting function %s\n", ctar->cName);
+fprintf(isxFile, "# Starting function %s\n", cName);
+fprintf(branchFile, "# Starting function %s\n", cName);
+fprintf(asmFile, "# Starting function %s\n", cName);
 
 for (pp = body->children; body != NULL; body = body->next)
     isxStatement(pfc, pp, varHash, 1.0, isxList->iList);
@@ -90,7 +92,7 @@ if (classPp != NULL)
 else
     isGlobal = (access == paGlobal);
 finishFuncOrOutside(pfc, isxList, isxFile, branchFile, asmFile, pfi, TRUE,
-    isGlobal);
+    cName, isGlobal);
 hashFree(&varHash);
 }
 

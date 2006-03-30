@@ -76,7 +76,7 @@ int pentTypeSize(enum isxValType valType);
 /* Return size of a val type */
 
 void pentFunctionStart(struct pfCompile *pfc, struct pentFunctionInfo *pfi, 
-	boolean isGlobal, FILE *asmFile);
+	char *cName, boolean isGlobal, FILE *asmFile);
 /* Start coding up a function in pentium assembly language. */
 
 void pentFunctionEnd(struct pfCompile *pfc, struct pentFunctionInfo *pfi, 
