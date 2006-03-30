@@ -1,20 +1,21 @@
 <H2>Description</H2>
 <P>
-  This track contains dbSNP build 125.   
+  This track contains dbSNP build 125, available from ftp.ncbi.nih.gov/snp.
 </P>
+
+<H2>Data Sources</H2>
 <P>
-  The data was obtained from
-  ftp.ncbi.nih.gov/snp/organisms/<species>/organism_data tables and rs_fasta files.   
+  <UL>
+  <LI>We used b125_SNPContigLoc.bcp.gz for coordinates, orientation, location type
+  and the dbSNP reference allele.  
+  <LI>We used b125_SNPMapInfo.bcp.gz for alignment weights, filtering out alignments with weight = 3 or 10.
+  <LI>We obtained functional classification from b125_SNPContigLocusId.bcp.gz.
+  <LI>We obtained validation status and heterozygosity from SNP.bcp.gz.
+  <LI>We used the header line in the rs_fasta file for class, observed polymorphism and molecule type.
+  </UL>
 </P>
-<P>
-  We used b125_SNPContigLoc.bcp.gz for coordinates, orientation, locType
-  and the dbSNP reference allele.  We used b125_SNPMapInfo.bcp.gz
-  for alignment weights, filtering out alignments with weight = 3 or 10.
-  We obtained functional classification from b125_SNPContigLocusId.bcp.gz
-  and validation status and heterozygosity from SNP.bcp.gz.
-  Finally, we used the header line in the rs_fasta file for class,
-  observed polymorphism and molecule type.
-</P>
+
+<H2>UCSC Annotations</H2>
 <P>
   In addition to presenting the dbSNP data, we provide the following annotations:
   <UL>
@@ -67,27 +68,29 @@
         <LI><B>Exact</B> - The flank alignments leaves exactly one base between them.
         <LI><B>Between</B> - The flank alignments are contiguous; the variation is an insertion. 
         <LI><B>RangeInsertion</B> - The flank alignments surround distinct polymorphism between
-	                            submitted SNP and reference assembly.    The SNP is shorter.
+	                            submitted sequence and reference assembly.    
+				    The submitted sequence is shorter.
         <LI><B>RangeSubstitution</B> - The flank alignments surround distinct polymorphism between
-	                            submitted SNP and reference assembly.    The SNP and the
-				    reference assembly are of equal length.
+	                            submitted sequence and reference assembly.    
+				    The submitted sequence and the reference assembly sequence are of equal length.
         <LI><B>RangeInsertion</B> - The flank alignments surround distinct polymorphism between
-	                            submitted SNP and reference assembly.    The SNP is longer.
+	                            submitted sequence and reference assembly.    
+				    The submitted sequence is longer.
       </UL>
     </LI>
     <LI>
       <A name="Class"></A>
       <B>Variant Class</B>: Variant classification<BR>
       <UL>
-        <LI><B>Unknown</B> - no classification provided by data contributor
-        <LI><B>Single</B> - single nucleotide variation: alleles of length = 1 and from set of {A,T,C,G};
-	    can be tri- or quad-allelic
+        <LI><B>Single</B> - single nucleotide variation: all observed alleles are single nucleotides
+	    (can have 2, 3 or 4 alleles)
         <LI><B>Insertion</B> - insertion variation
         <LI><B>Deletion</B> - deletion variation
         <LI><B>In-del</B> - insertion/deletion (applies to RangeInsertion, RangeSubstitution, RangeDeletion)
         <LI><B>Mixed</B> - multiple observations at the same locus
         <LI><B>Named</B> - named variation
         <LI><B>Microsatellite</B> - microsatellite variation
+        <LI><B>Unknown</B> - no classification provided by data contributor
       </UL>
     </LI>
 
@@ -98,12 +101,12 @@
 	target="_blank">Validation Status</A></B>: Method used to validate
 	the variant (<I>each variant may be validated by more than one method</I>)<BR>
         <UL>
-        <LI><B>Unknown</B> - no validation has been reported for this refSNP
-        <LI><B>By Submitter</B> - at least one ss in cluster was validated by independent assay
         <LI><B>By Frequency</B> - at least one subsnp in cluster has frequency data submitted
         <LI><B>By Cluster</B> - cluster has 2+ submissions, with 1+ submissions assayed with a non-computational method
+        <LI><B>By Submitter</B> - at least one ss in cluster was validated by independent assay
         <LI><B>By 2 Hit/2 Allele</B> - all alleles have been observed in 2+ chromosomes
         <LI><B>By HapMap</B> - validated by HapMap project
+        <LI><B>Unknown</B> - no validation has been reported for this refSNP
       </UL>
     </LI>
     <LI>
@@ -112,7 +115,6 @@
 	target="_blank">Function</A></B>: Predicted functional role 
 	(<I>each variant may have more than one functional role</I>)<BR>
       <UL>
-        <LI><B>Unknown</B> - no known functional classification
         <LI><B>Locus Region</B> - variation in region of gene, but not in transcript
         <LI><B>Coding - Synonymous</B> - no change in peptide for allele with respect to contig seq
         <LI><B>Coding - Non-Synonymous</B> - change in peptide with respect to contig sequence
@@ -120,6 +122,7 @@
         <LI><B>Intron</B> - variation in intron, but not in first two or last two bases of intron
         <LI><B>Splice Site</B> - variation in first two or last two bases of intron
         <LI><B>Reference</B> - allele observed in reference contig sequence
+        <LI><B>Unknown</B> - no known functional classification
       </UL>
     </LI>
     <LI>
@@ -136,13 +139,4 @@
   </UL>
 </P>
 
-
-<H2>Credits and Data Use Restrictions</H2>
-<P>
-  Thanks to the <A HREF="http://snp.cshl.org/" TARGET=_blank>SNP
-  Consortium</A> and <A HREF="http://www.ncbi.nlm.nih.gov"
-  TARGET=_blank>NIH</A> for providing the public data, which are
-  available from <A HREF="http://www.ncbi.nlm.nih.gov/SNP"
-  TARGET=_blank>dbSnp</A> at NCBI.
-</P>
 
