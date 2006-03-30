@@ -1308,6 +1308,18 @@ cat q.$2_*.psl | \
 
 # End tblastn
 
+
+# SWAP CHAINS/NET RN4 (DONE 3/28/06 angie)
+    ssh kkstore01
+    mkdir /cluster/data/monDom4/bed/blastz.rn4.swap
+    cd /cluster/data/monDom4/bed/blastz.rn4.swap
+    doBlastzChainNet.pl -swap /cluster/data/rn4/bed/blastz.monDom4/DEF \
+      -workhorse kkr8u00 >& do.log & tail -f do.log
+    ln -s blastz.rn4.swap /cluster/data/monDom4/bed/blastz.rn4
+    nice featureBits monDom4 chainRn4Link 
+#198094619 bases of 3501643220 (5.657%) in intersection
+
+
 #######################################################################
 #  CHIMP BLASTZ - (WORKING - 2006-03-29 - Hiram)
     ssh pk
@@ -1346,9 +1358,11 @@ SEQ2_LAP=0
 BASE=/cluster/data/monDom4/bed/blastzPanTro2.2006-03-29
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    # << emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
     # XXXX	running 2006-03-29
+
+
