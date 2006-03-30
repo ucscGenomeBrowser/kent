@@ -490,7 +490,7 @@ flow htmlFormsParse(htmlPage page) into (array of htmlForm forms)
 	    }
 	else if (tag.name == "/FORM")
 	    {
-	    if (!tag) punt("/FORM without FORM");
+	    if (!form) punt("/FORM without FORM");
 	    form.endTagIx = tagIx;
 	    form = nil;
 	    }
