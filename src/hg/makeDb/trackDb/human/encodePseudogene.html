@@ -4,12 +4,10 @@ five different methods plus a Consensus pseudogenes subtrack based on the
 pseudogenes from all of the methods.
 
 <P>
-The gene annotations are colored based on the Havana annotation type.
-Known and validated transcripts
-are colored <em>dark green</em>,
-putative and unconfirmed are <em>light green</em>,
-pseudogenes are <em>blue</em>,
-and artifacts are <em>grey</em>.
+The gene annotations are colored based on the pseudogene annotation type.
+Processed pseudogenes are <em>pink</em>, unprocessed pseudogenes are 
+<em>blue</em>, pseudogene fragments are <em>light blue</em>, 
+and those that are undefined are <em>gray</em>.
 The transcript types are defined in more detail in the accompanying table.
 <P>
 <TABLE BORDER=1 BORDERCOLOR="#aaaaaa" CELLPADDING=4>
@@ -17,46 +15,6 @@ The transcript types are defined in more detail in the accompanying table.
   <TH align=left>Type</TH>
   <TH align=left>Color</TH>
   <TH align=left>Description</TH>
-</TR>
-<TR>
-  <TD>Known</TD>
-  <TD><FONT COLOR=#21i5B33>dark green</FONT></TD>
-  <TD>Known protein coding genes (referenced in Entrez Gene, NCBI)</TD>
-</TR>
-<TR>
-  <TD>Novel_CDS</TD>
-  <TD><FONT COLOR=#21i5B33>dark green</FONT></TD>
-  <TD>Novel protein coding genes annotated by Havana (not referenced in Entrez Gene, NCBI)</TD>
-</TR>
-<TR>
-  <TD>Novel_transcript_gencode_conf</TD>
-  <TD><FONT COLOR=#21i5B33>dark green</FONT></TD>
-  <TD> Novel transcripts annotated by Havana (no ORF assigned) with at least
-       one junction validated by RT-PCR</TD>
-</TR>
-<TR>
-  <TD>Putative_gencode_conf</TD>
-  <TD><FONT COLOR=#21i5B33>dark green</FONT></TD>
-  <TD>Putative transcripts (similar to &quot;novel transcripts&quot;, EST supported,
-         short, no viable ORF) with at least one junction validated by RT-PCR</TD>
-</TR>
-<TR>
-  <TD>Novel_transcript</TD>
-  <TD><FONT COLOR=#54BC00>light green</FONT></TD>
-  <TD>Novel transcripts annotated by Havana (no ORF assigned) not validated
-      by RT-PCR</TD>
-</TR>
-<TR>
-  <TD>Putative</TD>
-  <TD><FONT COLOR=#54BC00>light green</FONT></TD>
-  <TD>Putative transcripts (similar to &quot;novel transcripts&quot;, EST supported,
-                short, no viable ORF) not validated by RT-PCR</TD>
-</TR>
-<TR>
-  <TD>TEC</TD>
-  <TD><FONT COLOR=#54BC00>light green</FONT></TD>
-  <TD>Single exon objects (supported by multiple ESTs with polyA
-          sites and signals) undergoing experimental validation/extension.  <TD>
 </TR>
 <TR>
   <TD>Processed_pseudogene</TD>
@@ -73,10 +31,6 @@ The transcript types are defined in more detail in the accompanying table.
   <TD><FONT COLOR=#645BBF>light blue</FONT></TD>
   <TD>Pseudogenes sequences that are single-exon and cannot be confidently 
 assigned to either the processed or the duplicated category.</TD>
-</TR>
-  <TD>Undefined</TD>
-  <TD><FONT COLOR=#636863>gray</FONT></TD>
-  <TD> </TD>
 </TR>
 </TABLE></P>
 
@@ -120,15 +74,16 @@ boundaries derived from the alignment in Step IV.
 assigned parent proteins and new classifications (processed or non-processed).
 </UL></P>
      
+<H3>Verification of the Consensus Pseudogenes</H3>
+<P>
+All pseudogenes in the list have been extensively curated by Adam Frankish and
+Jennifer Harrow at the The Wellcome Trust Sanger Institute.</P>
+
 <H3>References</H3>
 <P>
 More information is available from <A
 HREF= http://www.pseudogene.org/ENCODE TARGET=_blank>pseudogene.org/ENCODE</A>.
 </P>
-<H3>Verification of the Consensus Pseudogenes</H3>
-<P>
-All pseudogenes in the list have been extensively curated by Adam Frankish and
-Jennifer Harrow at the The Wellcome Trust Sanger Institute.</P>
 
 <H2>Yale Pseudogenes</H2>
 <H3>Description</H3>
@@ -184,13 +139,13 @@ All pseudogenes in the list have been manually checked.
 
 <H3>References</H3>
 <P>
-<A HREF=http://papers.gersteinlab.org/papers/human-pgenes-gr2003><B>Millions of years of evolution preserved: a comprehensive catalog of the processed pseudogenes in the human genome.</B></A>
-<BR>Z Zhang, PM Harrison, Y Liu, M Gerstein (2003) <I>Genome Res</I> 
-13: 2541-58.
+Zhang, Z., Harrison, P.M., Liu, Y. and Gerstein, M. 
+<A HREF=http://papers.gersteinlab.org/papers/human-pgenes-gr2003>Millions of years of evolution preserved: a comprehensive catalog of the processed pseudogenes in the human genome.</A>
+<I>Genome Res</I> <B>13</B>, 2541-2558 (2003).
 <P>
-<A HREF=http://papers.gersteinlab.org/papers/chr22-pgene-exp><B>Integrated pseudogene annotation for human chromosome 22: evidence for transcription.</B></A>
-<BR>D Zheng, Z Zhang, PM Harrison, J Karro, N Carriero, M Gerstein (2005) <I>
-J Mol Biol</I> 349: 27-45.
+Zheng, D., Zhang, Z., Harrison, P.M., Karro, J., Carriero, N. and Gerstein, M. 
+<A HREF=http://papers.gersteinlab.org/papers/chr22-pgene-exp>Integrated pseudogene annotation for human chromosome 22: evidence for transcription.</A>
+<I>J Mol Biol</I> <B>349</B>, 27-45 (2005).
 
 
 <H2>UCSC Retrogene Predictions</H2>
