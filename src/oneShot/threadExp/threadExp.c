@@ -5,6 +5,7 @@
 #include "options.h"
 #include "pthreadWrap.h"
 #include "synQueue.h"
+#include "cacheQueue.h"
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +24,23 @@ double squa(double a)
 return a*a;
 }
 
+int incer;
+
+
+#define rtRefIncLock(obj) \
+	asm("lock ;" \
+		"incl %1;" \
+		:"=m" (obj) \
+		:"m" (obj) \
+		:"memory")
+
+#define rtRefXaddLock(obj) \
+        asm("mov $1,%%eax;" \
+                "lock; xadd %%eax,%1;" \
+                :"=m" (obj) \
+                :"m" (obj) \
+                :"memory", "%eax")
+
 void bigCalc(double *output, int outSize, int startNum, int endNum)
 /* Do a big calculation. */
 {
@@ -32,9 +50,14 @@ assert(outSize == endNum-startNum);
 for (i=startNum; i<endNum; ++i)
     {
     int j;
+    rtRefXaddLock(incer);
+    /*
+    rtRefIncLock(incer);
+    ++incer;
     d = sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(sqrt(i))))))));
     d = squa(squa(squa(squa(squa(squa(squa(squa(d))))))));
     *output++ = d;
+    */
     }
 }
 
@@ -108,8 +131,8 @@ if (size <= 0)
    usage();
 AllocArray(results, size);
 AllocArray(threads, threadCount);
-toDo = synQueueNew();
-done = synQueueNew();
+toDo = cacheQueueAlloc();
+done = cacheQueueAlloc();
 jobList = makeJobs(results, size, jobCount);
 uglyTime("To init and alloc %d\n", size);
 for (i=0; i<threadCount; ++i)
@@ -121,6 +144,7 @@ for (i=0; i<size; ++i)
     sumErr += (results[i]-i);
 uglyTime("summing err");
 printf("Total error = %e\n", sumErr);
+printf("Total incer = %d\n", incer);
 }
 
 int main(int argc, char *argv[])
