@@ -1925,3 +1925,70 @@ cat > load.csh << 'EOF'
 'EOF'
     csh load.csh >&! load.log &
     # loaded 23996 elements for 5 tables
+
+# ENCODE PSEUDOGENE TRACK (in progress, hartera)
+    # Yontao reloaded the encodePseudogeneUcsc2 table with shorter 
+    # names for the pseudogenes as they were cut off in the browser so now
+    # NM_001017421|chr2|+|1 would be NM_001017421|1
+    # The class table needs to be reloaded. Yontao provided a file:
+    # encodePseudogeneUcsc2-forload.class
+    # get a dump of the current table without the ucsc2 entries.
+    ssh hgwdev
+    cd /cluster/data/encode/pseudogene/class
+    hgsql -N -e 'select * from encodePseudogeneClass where owner != "ucsc2";' \
+          hg17 > encodePseudogeneClassNoUcsc2.txt
+    cat encodePseudogeneClassNoUcsc2.txt encodePseudogeneUcsc2-forload.class \
+        > allPseudogenesClass.txt
+    sort -k3,3 allPseudogenesClass.txt > encodePseudogeneClass2.txt 
+    # the consensus sequences have different names in the Class table, the
+    # names had been changed to Vega gene names. Get the Class from the gtf in
+    # /cluster/data/encode/pseudogene/consensus
+    awk 'BEGIN {OFS="\t"} {print $10, $2}' \
+         ../consensus/consensus.jan6.hg17.gtf | sort | uniq \
+         > pgConsensus.class
+    sed -e 's/VEGA_//' pgConsensus.class | sed -e 's/"//g' \
+           | sed -e 's/;//' > pgConsensusClass.txt
+    wc -l pgConsensusClass.txt
+    # 201 pgConsensusClass.txt
+    awk 'BEGIN {OFS="\t"}{print $0,"consensus"}' pgConsensusClass.txt | sort \
+        > pgConsensusClassSorted.txt
+    # reload the encodePseudogeneClass table
+    hgsql -N -e 'select * from encodePseudogeneClass where owner != "ucsc2" and owner != "consensus";' \
+          hg17 > pseudoClassNoUcsc2OrConsensus.txt
+    cat pseudoClassNoUcsc2OrConsensus.txt encodePseudogeneUcsc2-forload.class \
+        pgConsensusClassSorted.txt > allPseudogenesClass.txt
+    sort -k3,3 allPseudogenesClass.txt > encodePseudogeneClass2.txt 
+    wc -l encodePseudogeneClass2.txt
+    # 995 encodePseudogeneClass2.txt
+    # only 830 load as there are dupicate names - 165 names are shared
+    # between the consensus and havana subtracks. These names
+    # need to be unique as they are the primary key. Checked that the 
+    # class is the same for havana and consensus subtracks where the 
+    # name is the same so reload table with one entry for these genes.
+    # remove havana and consensus pseudogenes
+    grep -v havana allPseudogenesClass.txt | grep -v consensus \
+         > pseudoNoHavananNoCons.txt
+    wc -l pseudoNoHavananNoCons.txt
+    # 616 pseudoNoHavananNoCons.txt
+    # prepare consensus set not in havana
+    awk 'BEGIN {OFS="\t"}{print $0,"consensus"}' consOnly > consOnlyWithOwner
+    # prepare havana set not in consensus
+    awk 'BEGIN {OFS="\t"}{print $0,"havana"}' havanaOnly2 > havanaOnlyWithOwner
+    # prepare set common to consensus and havana
+    awk 'BEGIN {OFS="\t"}{print $0,"havana or consensus"}' \
+        nameAndClass.ConsAndHavana > havanaAndConsWithOwner
+    wc -l *Owner
+    # 36 consOnlyWithOwner
+    # 165 havanaAndConsWithOwner
+    # 2 havanaOnlyWithOwner
+    cat pseudoNoHavananNoCons.txt consOnlyWithOwner havanaAndConsWithOwner \
+        havanaOnlyWithOwner > allPseudogenesClass2.txt
+    sort -k3,3 allPseudogenesClass2.txt > encodePseudogeneClass2.txt 
+    wc -l encodePseudogeneClass2.txt
+    # 819 encodePseudogeneClass2.txt
+    # reload table
+    hgsql -e 'drop table encodePseudogeneClass;' hg17
+    hgsql hg17 < encodePseudogeneClass.sql
+    echo "load data local infile 'encodePseudogeneClass2.txt' into \
+         table encodePseudogeneClass" | hgsql hg17
+
