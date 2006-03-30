@@ -1,40 +1,12 @@
 <H2>Description</H2>
+
 <P>
-  This track contains dbSNP build 125, available from ftp.ncbi.nih.gov/snp.
+This track contains
+<A HREF=" http://www.ncbi.nlm.nih.gov/SNP/" target=_blank>dbSNP</A>
+build 125, available from
+<A HREF="ftp://ftp.ncbi.nih.gov/snp/organisms" target=_blank>ftp.ncbi.nih.gov/snp</A>.
 </P>
 
-<H2>Data Sources</H2>
-<P>
-  <UL>
-  <LI>We used b125_SNPContigLoc.bcp.gz for coordinates, orientation, location type
-  and the dbSNP reference allele.  
-  <LI>We used b125_SNPMapInfo.bcp.gz for alignment weights, filtering out alignments with weight = 3 or 10.
-  <LI>We obtained functional classification from b125_SNPContigLocusId.bcp.gz.
-  <LI>We obtained validation status and heterozygosity from SNP.bcp.gz.
-  <LI>We used the header line in the rs_fasta file for class, observed polymorphism and molecule type.
-  </UL>
-</P>
-
-<H2>UCSC Annotations</H2>
-<P>
-  In addition to presenting the dbSNP data, we provide the following annotations:
-  <UL>
-  <LI>dbSNP uses a class called 'in-del'.   We split this into
-      'insertion' and 'deletion', based on locType.</LI>
-  <LI>We compare the dbSNP reference allele to our reference allele,
-      and note differences.   We also note if the difference is specifically
-      that the dbSNP reference allele is the reverse complement.</LI>
-  <LI>We note tri-allelic and quad-allelic single-base substitutions.</LI>
-  <LI>We note if the observed string has an unexpected format.</LI>
-  <LI>For single-base substitutions and simple deletions, we check
-      that the observed string matches the reference allele.</LI>
-  <LI>For any range locType, we check the size of the observed string.</LI>
-  <LI>We note rsIds that have multiple alignments.</LI>
-  <LI>For single-base substitutions, we note where the alignments of the
-      flanking sequences were adjacent or had a gap of more than one base.</LI>
-  </UL>
-
-</P>
 <H2>Interpreting and Configuring the Graphical Display</H2>
 <P>
   Variants are shown as single tick marks at most zoom levels.
@@ -138,5 +110,45 @@
 
   </UL>
 </P>
+<H2>UCSC Annotations</H2>
+<P>
+  In addition to presenting the dbSNP data, we provide the following annotations:
+  <UL>
+  <LI>dbSNP uses a class called 'in-del'.   We split this into
+      'insertion' and 'deletion', based on location type.
+      Location type 'range' and 'exact' are deletions relative 
+      to the reference assembly.
+      Location type 'between' are insertions relative to the
+      reference assembly.</LI>
+  <LI>We compare the dbSNP reference allele to our reference allele,
+      and note differences.   We also note if the difference is specifically
+      that the dbSNP reference allele is the reverse complement.</LI>
+  <LI>We note tri-allelic and quad-allelic single-base substitutions.</LI>
+  <LI>We note if the observed alleles have an unexpected format.</LI>
+  <LI>For simple deletions, we check that the observed allele 
+      matches the reference allele.</LI>
+  <LI>For single-base substitutions, we check that one of the observed
+      alleles matches the reference allele.</LI>
+  <LI>For any range location type, we check the size of the observed allele.</LI>
+  <LI>We note variants that have multiple mappings.</LI>
+  <LI>For single-base substitutions, we note where the alignments of the
+      flanking sequences were adjacent or had a gap of more than one base.</LI>
+  </UL>
+</P>
+
+<H2>Data Sources</H2>
+<P>
+  <UL>
+  <LI>We used b125_SNPContigLoc.bcp.gz for coordinates, orientation, location type
+      and the dbSNP reference allele.  
+  <LI>We used b125_SNPMapInfo.bcp.gz for alignment weights, filtering out 
+      alignments with weight = 3 or 10.
+  <LI>We obtained functional classification from b125_SNPContigLocusId.bcp.gz.
+  <LI>We obtained validation status and heterozygosity from SNP.bcp.gz.
+  <LI>We used the header line in the rs_fasta files for class, 
+      observed polymorphism and molecule type.
+  </UL>
+</P>
+
 
 
