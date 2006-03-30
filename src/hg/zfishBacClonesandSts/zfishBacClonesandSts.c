@@ -47,7 +47,7 @@
 #define NUMPREFIXES 9
 #define MAXSANGER 50
 
-static char const rcsid[] = "$Id: zfishBacClonesandSts.c,v 1.11 2006/02/14 21:45:18 hartera Exp $";
+static char const rcsid[] = "$Id: zfishBacClonesandSts.c,v 1.12 2006/03/30 06:14:42 hartera Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -87,17 +87,6 @@ struct hash *sangerByExtNameHash;
 
 char *intNamePrefix[] = {"zC", "ZC", "zK", "zKp", "bZ", "dZ", "bY", "CHORI73_", "bP"};
 char *extNamePrefix[] = {"CH211-", "CH211-", "DKEY-", "DKEYP-", "RP71-", "BUSM1-", "XX-", "CH73-", "CT7-"};
-
-struct hashEl *addHashElUnique(struct hash *hash, char *name, void *val)
-/* Adds new element to hash table. If not unique, remove old element */
-/* before adding new one. Avoids replicate entries in the table */
-{
-if (hashLookup(hash, name) != NULL)
-    /* if item in hash already, remove first */
-    hashRemove(hash, name);
-/* then add element to hash table */
-return hashAdd(hash, name, val);
-}
 
 char *translateName(char *name, boolean toInt)
 /* translates external name to internal name format or vice versa */
@@ -174,8 +163,8 @@ while (lineFileChopCharNext(cgf, sep, words, 5))
             b->chrom[i] = NULL;
             }
         b->acc = NULL;
-        addHashElUnique(bacHash, extName, b);
-        addHashElUnique(extNameHash, name, extName);
+        hashAdd(bacHash, extName, b);
+        hashAdd(extNameHash, name, extName);
         }
     else
         fprintf(stderr, "The BAC clone %s is assigned to more than one contig\n", extName);
@@ -262,7 +251,7 @@ while (lineFileChopCharNext(clf, sep, words, 5))
     a->primer1 = NULL;
     a->primer2 = NULL;
     /* add this alias struct to the hash keyed by sanger name */
-    addHashElUnique(aliasHash, sanger, a);
+    hashAdd(aliasHash, sanger, a);
     /* add sanger name to hash keyed by external name */
     if ((s = hashFindVal(sangerByExtNameHash, extName)) == NULL)
         {
@@ -283,8 +272,8 @@ while (lineFileChopCharNext(clf, sep, words, 5))
             s->sangerName[i] = cloneString(sanger);
             }
         }
-    /* add this list of sanger names to a hash keyed by external name, extName */
-    addHashElUnique(sangerByExtNameHash, extName, s);
+  /* add this list of sanger names to a hash keyed by external name, extName */
+    hashAdd(sangerByExtNameHash, extName, s);
     }
 }
 
@@ -329,8 +318,6 @@ while (lineFileChopCharNext(mkf, sep, words, 6))
             /* store primer sequences */
             a->primer1 = cloneString(pr1);
             a->primer2 = cloneString(pr2);
-            /* add alias struct to aliasHash keyed by sanger name for each sanger name read */
-            addHashElUnique(aliasHash, sanger[i], a);
             }
         else
             fprintf(stderr, "Can not find sanger name, %s, in aliasHash\n", sanger[i]);
@@ -371,7 +358,7 @@ while (lineFileChopTab(nmf, words))
         b->acc = NULL;
         /* add this new entry to the extNameHash, added to bacHash later */
         if (intName != NULL)
-            addHashElUnique(extNameHash, intName, extName);
+            hashAdd(extNameHash, intName, extName);
         }
     found = FALSE;
     for (i = 0; i < NUMCHROMS && (!found); i++)
@@ -386,7 +373,7 @@ while (lineFileChopTab(nmf, words))
     if (!found)
         errAbort("No room left in chrom array to add chrom for %s\n", extName);
     /* add BAC info to hash keyed by external name */
-    addHashElUnique(bacHash, extName, b);
+    hashAdd(bacHash, extName, b);
     }
 }
 
@@ -408,8 +395,6 @@ while (lineFileChopTab(acf, words))
             b->acc = cloneString(acc);
         else
             errAbort("External name %s found for internal name %s but no BAC clone entry in the bacHash\n", extName, name);
-        /* add to bac hash */
-        addHashElUnique(bacHash, extName, b);
         }
     }
 }
@@ -442,8 +427,6 @@ while (lineFileChopTab(usf, words))
                     al->uniStsId[i] = cloneString(uniStsId);
                     }
                 }
-            /* add this alias structure back to the hash */
-            addHashElUnique(aliasHash, sanger[j], al);
             /* if the UniStsId read here is not the same as that stored from markers file, then report */
             } 
         else
