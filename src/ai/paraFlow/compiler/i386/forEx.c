@@ -1,18 +1,21 @@
-void calc()
+void calc(int count)
 {
-int s = 88;
-int t = 81;
-int u = 19;
-int v = 21;
-int x = 23;
-int y = 33;
-int z = 44;
-int i = 0;
-for (i=0; i<10; ++i)
+int s = 1;
+int t = 2;
+int u = 3;
+int v = 4;
+int x = 5;
+int y = 6;
+int z = 7;
+int i,j;
+for (i=0; i<count; ++i)
     {
     int xx = s*t + u*v+i;
     int yy = x+y+z+i;
-    _printInt(xx+yy);
+    int sum = 0;
+    for (j=0; j<count;++j)
+	sum += xx + yy + j;
+    _printInt(sum);
     s += 1;
     t += 1;
     u += 1;
