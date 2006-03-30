@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.11 2006/03/28 21:37:57 angie Exp $"
+#	"$Id: makePanTro2.doc,v 1.12 2006/03/30 08:01:14 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -1128,6 +1128,67 @@ TMPDIR=/scratch/tmp
         -workhorse=hgwdev64 \
         /cluster/data/panTro2/bed/blastz.hg18/DEF >&! swap.log &
 
+    # Redo of chr9 (2006-03-28 kate)
+    # Create blastz run dir for just chr9, and run manually on pk.
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.hg18
+    mkdir run.blastz.chr9
+    cd run.blastz.chr9
+    cp ../run.blastz/*.csh .
+    grep chr9 ../run.blastz/jobList | grep -v random > jobList
+    ln -s ../run.blastz/qParts .
+    para create jobList
+        # 28 jobs
+    para push
+    para time > run.time
+
+    # merge chr9 psl's on small cluster ("cat" step in automated script)
+    ssh kki
+    cd /cluster/data/panTro2/bed/blastz.hg18
+    mkdir run.cat.chr9
+    cd run.cat.chr9
+    cp ../run.cat/cat.csh .
+    grep chr9 ../run.cat/jobList > jobList
+    para create jobList
+        # 14 jobs
+    para push
+    para time > run.time
+
+    cd ../axtChain
+    mkdir run.chr9
+    cd run.chr9
+    cp ../run/chain.csh .
+    grep chr9 ../run/jobList > jobList
+    mkdir chain
+    para create jobList
+        # 1 job
+    para push
+    para time > run.time
+
+    # replace chr9 chain in all.chain
+    ssh hgwdev64 # kolossus busy
+    cd /cluster/data/panTro2/bed/blastz.hg18/axtChain/run
+    mkdir chain
+    set all = panTro2.hg18.all.chain.gz
+    chainSplit chain/ ../$all
+    rm chain/chr9.chain
+    cp ../run.chr9/chain/*.chain chain
+    chainMergeSort chain/*.chain | nice gzip -c > ../$all
+    rm -fr chain/*
+    cd ..
+    mkdir chain
+    chainSplit chain/ $all
+
+    # automate the rest
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.hg18
+    rm -fr axtNet mafNet
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -workhorse=hgwdev64 \
+        -continue=net \
+        `pwd`/DEF >&! blastz.net.chr9.out &
+    # GOT HERE
+
 
 ########################
 # BLASTZ MACAQUE rheMac2 (2006-03-14 kate)
@@ -1189,6 +1250,67 @@ TMPDIR=/scratch/tmp
     ssh hgwdev
     cd /cluster/data/rheMac2/bed/blastz.panTro2.swap/axtChain
     nice loadUp.csh >&! loadUp.log &
+
+    # Redo of chr9 (2006-03-28 kate)
+    # Create blastz run dir for just chr9, and run manually on pk.
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.rheMac2
+    mkdir run.blastz.chr9
+    cd run.blastz.chr9
+    cp ../run.blastz/*.csh .
+    grep chr9 ../run.blastz/jobList | grep -v random > jobList
+    ln -s ../run.blastz/qParts .
+    para create jobList
+        # 28 jobs
+    para try
+    para push
+    para time > run.time
+
+    # merge chr9 psl's on small cluster ("cat" step in automated script)
+    ssh kki
+    cd /cluster/data/panTro2/bed/blastz.rheMac2
+    mkdir run.cat.chr9
+    cd run.cat.chr9
+    cp ../run.cat/cat.csh .
+    grep chr9 ../run.cat/jobList > jobList
+    para create jobList
+        # 14 jobs
+    para push
+    para time > run.time
+
+    cd ../axtChain
+    mkdir run.chr9
+    cd run.chr9
+    cp ../run/chain.csh .
+    grep chr9 ../run/jobList > jobList
+    mkdir chain
+    para create jobList
+        # 1 job
+    para push
+        # GOT HERE
+    para time > run.time
+
+    # replace chr9 chain in all.chain
+    ssh hgwdev64 # kolossus busy
+    cd /cluster/data/panTro2/bed/blastz.rheMac2/axtChain/run
+    mkdir chain
+    set all = panTro2.rheMac2.all.chain.gz
+    chainSplit chain/ ../$all
+    rm chain/chr9.chain
+    cp ../run.chr9/chain/*.chain chain
+    chainMergeSort chain/*.chain | nice gzip -c > ../$all
+    # GOT HERE
+    rm chain/*
+    chainSplit chain/ ../$all
+
+    # automate the rest
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.rheMac2
+    rm -fr axtNet mafNet
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -workhorse=hgwdev64 \
+        -continue=net \
+        `pwd`/DEF >&! blastz.net.chr9.out &
 
 
 ########################
@@ -1255,6 +1377,65 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk -continue=load \
 	`pwd`/DEF >&! blastz.3.out &
 
+    # Redo of chr9 (2006-03-28 kate)
+    # Create blastz run dir for just chr9, and run manually on pk.
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.canFam2
+    mkdir run.blastz.chr9
+    cd run.blastz.chr9
+    cp ../run.blastz/*.csh .
+    grep panTro2/nib/chr9.nib ../run.blastz/jobList > jobList
+    para create jobList
+        # 14 jobs
+    para try
+    para push
+    para time > run.time
+
+    # merge chr9 psl's on small cluster ("cat" step in automated script)
+    ssh kki
+    cd /cluster/data/panTro2/bed/blastz.canFam2
+    mkdir run.cat.chr9
+    cd run.cat.chr9
+    cp ../run.cat/cat.csh .
+    grep chr9 ../run.cat/jobList > jobList
+    para create jobList
+        # 15 jobs
+    para push
+    para time > run.time
+
+    cd ../axtChain
+    mkdir run.chr9
+    cd run.chr9
+    cp ../run/chain.csh .
+    grep chr9 ../run/jobList | grep -v random > jobList
+    mkdir chain
+    para create jobList
+        # 1 job
+    para push
+    para time > run.time
+
+    # replace chr9 chain in all.chain
+    ssh hgwdev64 # kolossus busy
+    cd /cluster/data/panTro2/bed/blastz.canFam2/axtChain/run
+    mkdir chain
+    set all = panTro2.canFam2.all.chain.gz
+    chainSplit chain/ ../$all
+    rm chain/chr9.chain
+    cp ../run.chr9/chain/*.chain chain
+    chainMergeSort chain/*.chain | nice gzip -c > ../$all
+    rm chain/*
+    chainSplit chain/ ../$all
+    mv chain ..
+
+    # automate the rest
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.canFam2
+    rm -fr axtNet mafNet
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -workhorse=hgwdev64 \
+        -continue=net \
+        `pwd`/DEF >&! blastz.net.chr9.out &
+    # GOT HERE
 
 
 #########################################################################
@@ -1304,6 +1485,64 @@ TMPDIR=/scratch/tmp
         -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
         -continue=net \
         `pwd`/DEF >&! blastz.2.out &
+
+    # Redo of chr9 (2006-03-28 kate)
+    # Create blastz run dir for just chr9, and run manually on pk.
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.galGal2
+    mkdir run.blastz.chr9
+    cd run.blastz.chr9
+    cp ../run.blastz/*.csh .
+    grep panTro2/nib/chr9.nib ../run.blastz/jobList > jobList
+        # 162 jobs
+    para create jobList
+    para push
+    para time > run.time
+
+    # merge chr9 psl's on small cluster ("cat" step in automated script)
+    ssh kki
+    cd /cluster/data/panTro2/bed/blastz.galGal2
+    mkdir run.cat.chr9
+    cd run.cat.chr9
+    cp ../run.cat/cat.csh .
+    grep chr9 ../run.cat/jobList > jobList
+    para create jobList
+        # 15 jobs
+    para push
+    para time > run.time
+
+    cd ../axtChain
+    mkdir run.chr9
+    cd run.chr9
+    cp ../run/chain.csh .
+    grep chr9 ../run/jobList | grep -v random > jobList
+    mkdir chain
+    para create jobList
+        # 1 job
+    para push
+        # GOT HERE
+    para time > run.time
+
+    # replace chr9 chain in all.chain
+    ssh hgwdev64 # kolossus busy
+    cd /cluster/data/panTro2/bed/blastz.galGal2/axtChain/run
+    mkdir chain
+    set all = panTro2.galGal2.all.chain.gz
+    chainSplit chain/ ../$all
+    rm chain/chr9.chain
+    cp ../run.chr9/chain/*.chain chain
+    chainMergeSort chain/*.chain | nice gzip -c > ../$all
+    rm chain/*
+    chainSplit chain/ ../$all
+
+    # automate the rest
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.galGal2
+    rm -fr axtNet mafNet
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -workhorse=hgwdev64 \
+        -continue=net \
+        `pwd`/DEF >&! blastz.net.chr9.out &
 
 
 ############################################################################
