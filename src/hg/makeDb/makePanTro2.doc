@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.13 2006/03/31 00:21:17 hiram Exp $"
+#	"$Id: makePanTro2.doc,v 1.14 2006/03/31 01:00:01 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -1183,11 +1183,89 @@ TMPDIR=/scratch/tmp
     ssh pk
     cd /cluster/data/panTro2/bed/blastz.hg18
     rm -fr axtNet mafNet
+    ssh hgwdev "rm -fr /usr/local/apache/htdocs/goldenPath/panTro2/vsHg18"
     /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
         -bigClusterHub=pk -workhorse=hgwdev64 \
         -continue=net \
         `pwd`/DEF >&! blastz.net.chr9.out &
-    # GOT HERE
+    # done
+
+    # swap after chr9 fix (2006-03-30 kate)
+    rm -fr /cluster/data/hg18/bed/blastz.panTro2.swap
+    /cluster/bin/scripts/doBlastzChainNet.pl -swap \
+        -workhorse=kkr4u00 \
+        /cluster/data/panTro2/bed/blastz.hg18/DEF >&! swap.log &
+
+    # Reciprocal best (IN PROGRESS 2005-03-31 kate)
+    # These are best alignments in both directions
+    # Start with the best chains from the net (these are in the liftOver chain).
+    # Swap to human-reference, and net them
+    # Finally extract the best chains from this net, and make axt's
+    ssh kkr7u00
+    cd /cluster/data/hg18/bed
+    ln -s blastz.panTro2.swap blastz.panTro2
+    cd blastz.panTro2/axtChain
+    mkdir rBestNet
+    set swapChain = panTro2ToHg18.swap.chain
+    zcat /cluster/data/panTro2/bed/liftOver/panTro2ToHg18.over.chain.gz | \ 
+        chainMergeSort stdin | \
+        chainSwap stdin $swapChain
+    chainSplit swapChain/ $swapChain
+    chainPreNet $swapChain /cluster/bluearc/hg18/chrom.sizes \
+                          /cluster/bluearc/panTro2/chrom.sizes stdout | \
+        chainNet stdin -minSpace=1 /cluster/bluearc/hg18/chrom.sizes \
+                                   /cluster/bluearc/panTro2/chrom.sizes \
+                        stdout /dev/null | \
+        netSyntenic stdin rbest.noClass.net
+    netSplit rbest.noClass.net rBestNet
+    netChainSubset -verbose=0 rbest.noClass.net $swapChain stdout | \
+        chainSort stdin stdout | gzip -c > hg18.panTro2.rbest.chain.gz
+    cd ..
+    mkdir axtRBestNet
+    foreach f (axtChain/rBestNet/*.net)
+        netToAxt $f axtChain/swapChain/$f:t:r.chain \
+                /san/sanvol1/scratch/hg18/hg18.2bit  \
+                /cluster/bluearc/panTro2/panTro2.2bit stdout | \
+        axtSort stdin stdout | \
+        gzip -c > axtRBestNet/$f:t:r.hg18.panTro2.net.axt.gz
+    end
+           # GOT HERE 
+
+    # load chains & nets for viewing on genome-test
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.panTro2/axtChain
+    set chain = hg18.panTro2.rbest.chain
+    set net = hg18.panTro2.rbest.net
+    cat rBestNet/* | \
+        netClass -verbose=0 -noAr stdin hg18 panTro2 $net
+    netFilter -minGap=10 $net | hgLoadNet -verbose=0 netHg18 panTro2 stdin
+    cd chain
+    foreach c (`awk '{print $1;}' /cluster/bluearc/hg18/chrom.sizes`)
+        set f = $c.chain
+        if (! -e $f) then
+          echo no chains for $c
+          set f = /dev/null
+        endif
+        hgLoadChain panTro2 ${c}_chainHg18 $f
+    end
+    gzip $net
+
+    # link to downloads
+    md5sum $chain.gz $net.gz >> md5sum.txt
+    cd ..
+    md5sum axtRBestNet/*.gz >> axtChain/md5sum.txt
+    cd  /usr/local/apache/htdocs/goldenPath/hg18/vsPanTro2
+    set d = /cluster/data/hg18/bed/blastz.panTro2
+    ln -s $d/axtChain/$chain.gz .
+    ln -s $d/axtChain/$net.gz .
+    mkdir axtRBestNet
+    ln -s $dir/axtRBestNet/*.axt.gz axtRBestNet
+    # edit README.txt
+
+    # cleanup
+    cd /cluster/data/hg18/bed/blastz.panTro2/axtChain
+    rm -f rbest.noClass.net panTro2ToHg18.swap.chain
+    rm -fr rBestNet swapChain
 
 
 ########################
@@ -1287,7 +1365,6 @@ TMPDIR=/scratch/tmp
     para create jobList
         # 1 job
     para push
-        # GOT HERE
     para time > run.time
 
     # replace chr9 chain in all.chain
@@ -1299,18 +1376,48 @@ TMPDIR=/scratch/tmp
     rm chain/chr9.chain
     cp ../run.chr9/chain/*.chain chain
     chainMergeSort chain/*.chain | nice gzip -c > ../$all
-    # GOT HERE
-    rm chain/*
-    chainSplit chain/ ../$all
+    rm -fr chain/*
+    cd ..
+    mkdir chain
+    chainSplit chain/ $all
+        # GOT HERE
 
     # automate the rest
     ssh pk
     cd /cluster/data/panTro2/bed/blastz.rheMac2
     rm -fr axtNet mafNet
+    ssh hgwdev "rm -fr /usr/local/apache/htdocs/goldenPath/panTro2/vsRheMac2"
     /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
         -bigClusterHub=pk -workhorse=hgwdev64 \
         -continue=net \
         `pwd`/DEF >&! blastz.net.chr9.out &
+
+    # gotta remove another file for the automation
+    rm axtChain/panTro2.rheMac2.net.gz
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -workhorse=kkr1u00 \
+        -continue=load \
+        `pwd`/DEF >&! blastz.load.chr9.out &
+
+    # missing noClass.net, work around it
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/blastz.rheMac2/axtChain
+    cat net/*.net > noClass.net
+    # create a script from loadUp.csh, containing only netClass and hgLoadNet
+    csh loadUp2.csh >&! ../blastz.load2.chr9.out &
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -workhorse=kkr1u00 \
+        -continue=download \
+        `pwd`/DEF >&! blastz.download.chr9.out &
+
+    # swap alignments after chr9 fix
+    ssh pk
+    rm -fr /cluster/data/rheMac2/bed/blastz.panTro2.swap
+    cd /cluster/data/panTro2/bed/blastz.rheMac2
+    /cluster/bin/scripts/doBlastzChainNet.pl -swap \
+        -workhorse=kkr1u00 \
+       `pwd`/DEF >&! swap.log &
 
 
 ########################
@@ -1431,11 +1538,13 @@ TMPDIR=/scratch/tmp
     ssh pk
     cd /cluster/data/panTro2/bed/blastz.canFam2
     rm -fr axtNet mafNet
+    rm axtChain/{noClass.net,panTro2.canFam2.net.gz}
+    ssh hgwdev "rm -fr /usr/local/apache/htdocs/goldenPath/panTro2/vsCanFam2"
     /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-        -bigClusterHub=pk -workhorse=hgwdev64 \
+        -bigClusterHub=pk -workhorse=kkr8u00 \
         -continue=net \
         `pwd`/DEF >&! blastz.net.chr9.out &
-    # GOT HERE
+    # done
 
 
 #########################################################################
@@ -1524,23 +1633,27 @@ TMPDIR=/scratch/tmp
     para time > run.time
 
     # replace chr9 chain in all.chain
-    ssh hgwdev64 # kolossus busy
+    ssh kkstore01 # kolossus busy
     cd /cluster/data/panTro2/bed/blastz.galGal2/axtChain/run
     mkdir chain
     set all = panTro2.galGal2.all.chain.gz
-    chainSplit chain/ ../$all
+    nice chainSplit chain/ ../$all
     rm chain/chr9.chain
     cp ../run.chr9/chain/*.chain chain
-    chainMergeSort chain/*.chain | nice gzip -c > ../$all
+    nice chainMergeSort chain/*.chain | nice gzip -c > ../$all
     rm chain/*
-    chainSplit chain/ ../$all
+    cd ..
+    mkdir chain
+    nice chainSplit chain/ $all
 
     # automate the rest
     ssh pk
     cd /cluster/data/panTro2/bed/blastz.galGal2
     rm -fr axtNet mafNet
+    rm axtChain/{noClass.net,panTro2.galGal2.net.gz}
+    ssh hgwdev "rm -fr /usr/local/apache/htdocs/goldenPath/panTro2/vsGalGal2"
     /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-        -bigClusterHub=pk -workhorse=hgwdev64 \
+        -bigClusterHub=pk -workhorse=kkr7u00 \
         -continue=net \
         `pwd`/DEF >&! blastz.net.chr9.out &
 
