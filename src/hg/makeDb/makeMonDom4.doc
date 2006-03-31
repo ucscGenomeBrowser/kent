@@ -972,6 +972,10 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=10000 -chainLinearGap=medium \
 	-continue=cat `pwd`/DEF > cat.out 2>&1 &
+    #	broke during chaining, the processes are too large.  Running
+    #	them individually on hgwdev64 and kolossus, they take many days
+    #	each, perhaps a week, still trying to get them done after two
+    #	weeks of messing with them.
 
 ############################################################################
 ##  BLASTZ swap from mm8 alignments (DONE - 2006-02-23 - Hiram)
