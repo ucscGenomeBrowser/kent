@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.12 2006/03/30 08:01:14 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.13 2006/03/31 00:21:17 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -1653,3 +1653,22 @@ TMPDIR=/scratch/tmp
     ln -s blastz.rn4.swap /cluster/data/panTro2/bed/blastz.rn4
 
 
+
+############################################################################
+### swap of Mm8 alignments - (DONE - 2006-03-30 - Hiram)
+    ssh pk
+    mv /cluster/data/panTro2/bed/blastz.mm8.swap \
+	/cluster/data/panTro2/bed/blastz.mm8.swap.2006-03-21
+    mkdir /cluster/data/panTro2/bed/blastz.mm8.swap
+    cd /cluster/data/panTro2/bed/blastz.mm8.swap
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/mm8/bed/blastzPanTro2.2006-03-28/DEF \
+	> blastz.out 2>&1 &
+    #  XXX started 2006-03-30
+
+    time nice -n +19 featureBits panTro2 chainMm8Link \
+	> fb.panTro2.chainMm8Link
+    # XXXX first time was:
+    #	986978326 bases of 2909512873 (33.922%) in intersection
