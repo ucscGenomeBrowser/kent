@@ -23,12 +23,10 @@ isxLiveList(isxList);
 isxDumpList(isxList->iList, isxFile);
 fflush(isxFile);
 
-verbose(2, "Phase 7a - optimizing branches\n");
 optBranch(isxList->iList);
 isxDumpList(isxList->iList, branchFile);
 fflush(branchFile);
 
-verbose(2, "Phase 8 - Pentium code generation\n");
 pentFromIsx(isxList, pfi);
 if (isFunc)
     pentFunctionStart(pfc, pfi, cName, isGlobal, asmFile);
@@ -87,10 +85,8 @@ fprintf(branchFile, "# Starting function %s\n", cName);
 fprintf(asmFile, "# Starting function %s\n", cName);
 
 for (pp = body->children; pp != NULL; pp = pp->next)
-    {
     isxStatement(pfc, pp, varHash, 1.0, isxList->iList);
-    }
-
+isxAddReturnInfo(pfc, outTuple, varHash, isxList->iList);
 pentInitFuncVars(pfc, ctar, varHash, pfi);
 if (classPp != NULL)
     isGlobal = (classPp->ty->access == paGlobal && access != paLocal);

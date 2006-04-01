@@ -6,6 +6,7 @@
 #endif 
 
 #define pentCodeBufSize 256
+#define pentRegCount 14
 
 struct pentCoder
 /* A factory for pentCodes */
@@ -15,6 +16,8 @@ struct pentCoder
     char destBuf[pentCodeBufSize];	/* Space to print dest */
     char sourceBuf[pentCodeBufSize];	/* Space to print source */
     int tempIx;				/* Index (negative) for temps */
+    bool regsUsed[pentRegCount];	/* One for each register, set to TRUE if
+					 * register is used. */
     };
 
 struct pentCoder *pentCoderNew();
@@ -54,9 +57,6 @@ void pentCodeSaveAll(struct pentCode *code, FILE *f);
 struct pentFunctionInfo
 /* Info about a function */
     {
-    int regCount;	/* Number of registers */
-    bool *regsUsed;	/* One for each register, set to TRUE if register 
-    			 * is used. */
     int savedContextSize;/* Size of saved regs & return address on stack */
     int savedRegSize;	/* Saved registers. */
     int savedRetEbpSize;/* Saved ebp/return address */

@@ -132,6 +132,8 @@ switch (val)
         return "poFuncStart";
     case poFuncEnd:
         return "poFuncEnd";
+    case poReturnVal:
+        return "poReturnVal";
     default:
         internalErr();
 	return NULL;
@@ -514,6 +516,22 @@ for (ty = outTuple->children, offset=0; ty != NULL; ty = ty->next, ++offset)
     }
 return destList;
 }
+
+void isxAddReturnInfo(struct pfCompile *pfc, struct pfParse *outTuple, 
+	struct hash *varHash, struct dlList *iList)
+/* Add instructions for return parameters. */
+{
+struct pfParse *pp;
+int offset=0;
+for (pp = outTuple->children; pp != NULL; pp = pp->next, ++offset)
+    {
+    struct isxAddress *source = varAddress(pp->var, varHash, 1.0, 
+	ppToIsxValType(pfc, pp));
+    struct isxAddress *dest = ioAddress(offset, source->valType, iadInStack);
+    isxNew(pfc, poReturnVal, dest, source, NULL, iList);
+    }
+}
+
 
 static struct isxAddress *isxExpression(struct pfCompile *pfc, 
 	struct pfParse *pp, struct hash *varHash, 

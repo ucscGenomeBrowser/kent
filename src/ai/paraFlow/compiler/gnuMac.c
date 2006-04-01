@@ -187,6 +187,29 @@ fprintf(f, "%s",
 "       popl    %ebx\n"
 "       popl    %ebp\n"
 "       ret\n"
+"	.cstring\n"
+"LC1:\n"
+"	.ascii \"%f\\12\\0\"\n"
+"	.text\n"
+".globl __printDouble\n"
+"__printDouble:\n"
+"	pushl	%ebp\n"
+"	movl	%esp, %ebp\n"
+"	pushl	%ebx\n"
+"	subl	$20, %esp\n"
+"	call	___i686.get_pc_thunk.bx\n"
+"\"L00000000002$pb\":\n"
+"	movsd	8(%ebp), %xmm0\n"
+"	movsd	%xmm0, 4(%esp)\n"
+"	leal	LC1-\"L00000000002$pb\"(%ebx), %eax\n"
+"	movl	%eax, (%esp)\n"
+"	call	L_printf$stub\n"
+"	addl	$20, %esp\n"
+"	popl	%ebx\n"
+"	popl	%ebp\n"
+"	ret\n"
+
+#ifdef OLD 
 ".globl __addTwo\n"
 "__addTwo:\n"
 "       pushl   %ebp\n"
@@ -195,6 +218,7 @@ fprintf(f, "%s",
 "       addl    8(%ebp), %eax\n"
 "       popl    %ebp\n"
 "       ret\n"
+#endif /* OLD */
 "\n"
 );
 }

@@ -17,26 +17,25 @@
 enum pentRegs
 /* These need to be in same order as regInfo table. */
    {
-   ax=0, bx=1, cx=2, dx=3, si=4, di=5, st0=6, pentRegCount=7,
+   ax=0, bx=1, cx=2, dx=3, si=4, di=5, 
+   xmm0=6,xmm1=7,xmm2=8,xmm3=9,xmm4=10,xmm5=11,xmm6=12,xmm7=13,
    };
 
-static struct isxReg regInfo[] = {
+static struct isxReg regInfo[pentRegCount] = {
     { 4, "%al", "%ax", "%eax", NULL, NULL, NULL, "%eax"},
     { 4, "%bl", "%bx", "%ebx", NULL, NULL, NULL, "%ebx"},
     { 4, "%cl", "%cx", "%ecx", NULL, NULL, NULL, "%ecx"},
     { 4, "%dl", "%dx", "%edx", NULL, NULL, NULL, "%edx"},
     { 4, NULL, "%si", "%esi", NULL, NULL, NULL, "%esi"},
     { 4, NULL, "%di", "%edi", NULL, NULL, NULL, "%edi"},
-#ifdef SOON
-    { 8, NULL, NULL, NULL, NULL, "%st0", "%st0, NULL},
-    { 8, NULL, NULL, NULL, NULL, "%st1", "%st1, NULL},
-    { 8, NULL, NULL, NULL, NULL, "%st2", "%st2, NULL},
-    { 8, NULL, NULL, NULL, NULL, "%st3", "%st3, NULL},
-    { 8, NULL, NULL, NULL, NULL, "%st4", "%st4, NULL},
-    { 8, NULL, NULL, NULL, NULL, "%st5", "%st5, NULL},
-    { 8, NULL, NULL, NULL, NULL, "%st6", "%st6, NULL},
-    { 8, NULL, NULL, NULL, NULL, "%st7", "%st7, NULL},
-#endif /* SOON */
+    { 8, NULL, NULL, NULL, NULL, "%xmm0", "%xmm0", NULL},
+    { 8, NULL, NULL, NULL, NULL, "%xmm1", "%xmm1", NULL},
+    { 8, NULL, NULL, NULL, NULL, "%xmm2", "%xmm2", NULL},
+    { 8, NULL, NULL, NULL, NULL, "%xmm3", "%xmm3", NULL},
+    { 8, NULL, NULL, NULL, NULL, "%xmm4", "%xmm4", NULL},
+    { 8, NULL, NULL, NULL, NULL, "%xmm5", "%xmm5", NULL},
+    { 8, NULL, NULL, NULL, NULL, "%xmm6", "%xmm6", NULL},
+    { 8, NULL, NULL, NULL, NULL, "%xmm7", "%xmm7", NULL},
 };
 
 struct pentFunctionInfo *pentFunctionInfoNew()
@@ -44,8 +43,6 @@ struct pentFunctionInfo *pentFunctionInfoNew()
 {
 struct pentFunctionInfo *pfi;
 AllocVar(pfi);
-pfi->regCount = ArraySize(regInfo);
-AllocArray(pfi->regsUsed, pfi->regCount);
 pfi->coder = pentCoderNew();
 return pfi;
 }
@@ -54,15 +51,15 @@ static void initRegInfo()
 /* Do some one-time initialization of regInfo */
 {
 int i;
-for (i=0; i<ArraySize(regInfo); ++i)
+for (i=0; i<pentRegCount; ++i)
     regInfo[i].regIx = i;
 }
 
 struct regStomper
 /* Information on registers. */
     {
-    int stompPos[ArraySize(regInfo)];	
-    struct isxAddress *contents[ArraySize(regInfo)];
+    int stompPos[pentRegCount];	
+    struct isxAddress *contents[pentRegCount];
     };
 
 enum pentDataOp
@@ -87,11 +84,11 @@ struct dataOpTable
 
 static struct dataOpTable dataOpTable[] =
     {
-    {opMov, "movb", "movw", "movl", NULL, NULL, NULL, "movl"},
-    {opAdd, "addb", "addw", "addl", NULL, "fadd", "fadd", "addl"},
-    {opSub, "subb", "subw", "subl", NULL, "fsub", "fsub", "subl"},
-    {opMul, "imulb", "imulw", "imull", NULL, "fmul", "fmul", NULL},
-    {opDiv, "idivb", "idivw", "idivl", NULL, "fdiv", "fdiv", NULL},
+    {opMov, "movb", "movw", "movl", NULL, "movss", "movsd", "movl"},
+    {opAdd, "addb", "addw", "addl", NULL, "addss", "addsd", "addl"},
+    {opSub, "subb", "subw", "subl", NULL, "subss", "subsd", "subl"},
+    {opMul, "imulb", "imulw", "imull", NULL, "mulss", "mulsd", NULL},
+    {opDiv, "idivb", "idivw", "idivl", NULL, "divss", "divsd", NULL},
     {opAnd, "andb", "andw", "andl", NULL, NULL, NULL, NULL},
     {opOr, "orb", "orw", "orl", NULL, NULL, NULL, NULL},
     {opXor, "xorb", "xorw", "xorl", NULL, NULL, NULL, NULL},
@@ -99,7 +96,7 @@ static struct dataOpTable dataOpTable[] =
     {opSar, "sarb", "sarw", "sarl", NULL, NULL, NULL, NULL},
     {opNeg, "negb", "negw", "negl", NULL, NULL, NULL, NULL},
     {opNot, "notb", "notw", "notl", NULL, NULL, NULL, NULL},
-    {opCmp, "cmpb", "cmpw", "cmpl", NULL, NULL, NULL, NULL},
+    {opCmp, "cmpb", "cmpw", "cmpl", NULL, "ucomiss", "ucomisd", "cmpl"},
     {opTest, "testb", "testw", "testl", NULL, NULL, NULL, NULL},
     };
 
@@ -291,9 +288,36 @@ pentCoderAdd(coder, opName, NULL, regName);
 static void clearReg(struct isxReg *reg,  struct pentCoder *coder)
 /* Clear out register. */
 {
-char *name = reg->pointerName;
-assert(name != NULL);
-pentCoderAdd(coder, "xorl", name, name);
+switch (reg->regIx)
+    {
+    case ax:
+    case bx:
+    case cx:
+    case dx:
+    case si:
+    case di:
+	{
+	char *name = reg->pointerName;
+	pentCoderAdd(coder, "xorl", name, name);
+	break;
+	}
+    case xmm0:
+    case xmm1:
+    case xmm2:
+    case xmm3:
+    case xmm4:
+    case xmm5:
+    case xmm6:
+    case xmm7:
+        {
+	char *name = reg->doubleName;
+	pentCoderAdd(coder, "subsd", name, name);
+	break;
+	}
+    default:
+        internalErr();
+	break;
+    }
 }
 
 
@@ -328,23 +352,33 @@ if (iad != NULL)
 reg->contents = NULL;
 }
 
-static struct isxReg *freeReg(struct isx *isx, enum isxValType valType,
+static struct isxReg *getFreeReg(struct isx *isx, enum isxValType valType,
 	struct dlNode *nextNode,  struct pentCoder *coder)
 /* Find free register for instruction result. */
 {
 int i;
 struct isxAddress *dest = isx->dest;
 struct isxReg *regs = regInfo;
-int regCount = ArraySize(regInfo);
+int regStartIx, regEndIx;
 struct isxReg *reg, *freeReg = NULL;
 struct regStomper *stomp = isx->cpuInfo;
 struct isxLiveVar *live;
 
+if (valType == ivFloat || valType == ivDouble)
+     {
+     regStartIx = xmm0;
+     regEndIx =  xmm7;
+     }
+else
+     {
+     regStartIx = ax;
+     regEndIx = di;
+     }
 if (dest != NULL)
     {
     /* If destination is reserved or is the one that stomps, by all means
      * use corresponding register.  */
-    for (i=0; i<regCount; ++i)
+    for (i=regStartIx; i<=regEndIx; ++i)
 	{
 	reg = &regs[i];
 	if (reg->reserved == dest || stomp->contents[i] == dest)
@@ -355,7 +389,7 @@ if (dest != NULL)
 /* Look for a register holding a source that is no longer live. */
     {
     int freeIx = BIGNUM;
-    for (i=0; i<regCount; ++i)
+    for (i=regStartIx; i<=regEndIx; ++i)
 	{
 	reg = &regs[i];
 	if (reg->reserved == NULL && isxRegName(reg, valType))
@@ -387,12 +421,12 @@ if (dest != NULL)
     }
 
 /* Mark registers not used by live list as free. */
-for (i=0; i<regCount; ++i)
+for (i=regStartIx; i<=regEndIx; ++i)
     regs[i].isLive = FALSE;
 for (live = isx->liveList; live != NULL; live = live->next)
     if ((reg = live->var->reg) != NULL)
 	reg->isLive = TRUE;
-for (i=0; i<regCount; ++i)
+for (i=regStartIx; i<=regEndIx; ++i)
      {
      reg = &regs[i];
      if (!reg->isLive && !reg->reserved)
@@ -421,7 +455,7 @@ if (dest != NULL)
     if (destLifetime >= 0)
         {
 	int minUnstomped = BIGNUM;
-	for (i=0; i<regCount; ++i)
+	for (i=regStartIx; i<=regEndIx; ++i)
 	    {
 	    reg = &regs[i];
 	    if (reg->reserved == NULL && isxRegName(reg, valType))
@@ -447,7 +481,7 @@ if (dest != NULL)
         {
 	int maxUnstomped = -1;
 	int nextUse = destLive->usePos[0];
-	for (i=0; i<regCount; ++i)
+	for (i=regStartIx; i<=regEndIx; ++i)
 	    {
 	    reg = &regs[i];
 	    if (reg->reserved == NULL && isxRegName(reg, valType))
@@ -480,7 +514,7 @@ if (dest != NULL)
 	int usePos;
 	if (useCount > 2) useCount = 2;
 	usePos = destLive->usePos[useCount-1];
-	for (i=0; i<regCount; ++i)
+	for (i=regStartIx; i<=regEndIx; ++i)
 	    {
 	    struct isxReg *reg = &regs[i];
 	    if (reg->reserved == NULL && isxRegName(reg, valType))
@@ -515,7 +549,7 @@ if (dest != NULL)
     }
 
 /* If no luck yet, look for any free register */
-for (i=0; i<regCount; ++i)
+for (i=regStartIx; i<=regEndIx; ++i)
     {
     struct isxReg *reg = &regs[i];
     if (reg->reserved == NULL && isxRegName(reg, valType))
@@ -532,7 +566,7 @@ for (i=0; i<regCount; ++i)
  * longer. */
     {
     int soonestUse = 0;
-    for (i=0; i<regCount; ++i)
+    for (i=regStartIx; i<=regEndIx; ++i)
 	{
 	struct isxReg *reg = &regs[i];
 	if (reg->reserved == NULL && isxRegName(reg, valType))
@@ -563,7 +597,7 @@ for (i=0; i<regCount; ++i)
  * that won't be used for the longest time. */
     {
     int soonestUse = 0;
-    for (i=0; i<regCount; ++i)
+    for (i=regStartIx; i<=regEndIx; ++i)
 	{
 	struct isxReg *reg = &regs[i];
 	if (reg->reserved == NULL && isxRegName(reg, valType))
@@ -591,7 +625,7 @@ for (i=0; i<regCount; ++i)
     {
     int soonestUse = 0;
     struct isxAddress *iad;
-    for (i=0; i<regCount; ++i)
+    for (i=regStartIx; i<=regEndIx; ++i)
 	{
 	struct isxReg *reg = &regs[i];
 	if (reg->reserved == NULL && isxRegName(reg, valType))
@@ -608,6 +642,15 @@ for (i=0; i<regCount; ++i)
     pentSwapTempFromReg(freeReg, coder);
     return freeReg;
     }
+}
+
+static struct isxReg *freeReg(struct isx *isx, enum isxValType valType,
+	struct dlNode *nextNode,  struct pentCoder *coder)
+/* Find free register for instruction result. */
+{
+struct isxReg *reg = getFreeReg(isx, valType, nextNode, coder);
+coder->regsUsed[reg->regIx] = TRUE;
+return reg;
 }
 
 
@@ -855,37 +898,48 @@ else
     }
 }
 
+struct isxReg *outOffsetToReg(int ioOffset, enum isxValType valType)
+/* Convert output offset to an output register */
+{
+struct isxReg *reg = NULL;
+
+switch (valType)
+    {
+    case ivLong:
+    case ivFloat:
+    case ivDouble:
+        errAbort("Returns of type %s not implemented", 
+		isxValTypeToString(valType));
+	break;
+    }
+if (ioOffset >= 3)
+    errAbort("More than 3 return values not implemented");
+switch (ioOffset)
+    {
+    case 0:
+        reg = &regInfo[ax];
+	break;
+    case 1:
+        reg = &regInfo[dx];
+	break;
+    case 2:
+        reg = &regInfo[cx];
+	break;
+    }
+return reg;
+}
+
 static void pentOutput(struct isx *isx, struct dlNode *nextNode,  
 	struct pentCoder *coder)
 /* Output code to save an output parameter after a call. */
 {
 /* This needs to get a lot more complex eventually....  For now it just
  * handles up to three int-sized result. */
-struct isxReg *reg;
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
 enum isxValType valType = source->valType;
 int sourceIx = source->val.ioOffset;
-if (sourceIx > 2)
-    errAbort("Can't handle more than three pentOutput\n");
-if (valType == ivLong || valType == ivFloat || valType == ivDouble)
-    errAbort("Can't handle long or floating point pentOutput\n");
-switch (sourceIx)
-    {
-    case 0:
-       reg = &regInfo[ax];
-       break;
-    case 1:
-       reg = &regInfo[cx];
-       break;
-    case 2:
-       reg = &regInfo[dx];
-       break;
-    default:
-       internalErr();
-       reg = NULL;
-       break;
-    }
+struct isxReg *reg = outOffsetToReg(sourceIx, valType);;
 dest->reg = reg;
 reg->contents = dest;
 }
@@ -907,7 +961,7 @@ static void forgetUnreservedRegs()
 {
 int i;
 /* Clear non-reserved registers. */
-for (i=0; i<ArraySize(regInfo); ++i)
+for (i=0; i<pentRegCount; ++i)
     {
     struct isxReg *reg = &regInfo[i];
     if (reg->contents != NULL && reg->reserved == NULL)
@@ -1094,7 +1148,7 @@ struct regStomper *cond = is->condStomp;
 int i;
 if (is->gotCondStomp)
     {
-    for (i=0; i<ArraySize(stomp->stompPos); ++i)
+    for (i=0; i<pentRegCount; ++i)
 	{
 	cond->stompPos[i] = min(cond->stompPos[i], stomp->stompPos[i]);
 	cond->contents[i] = NULL;
@@ -1109,37 +1163,61 @@ else
     }
 }
 
+static void pentReturnVal(struct isx *isx, struct pentCoder *coder)
+/* Move return value to return register. */
+{
+struct isxAddress *source = isx->left;
+struct isxAddress *dest = isx->dest;
+enum isxValType valType = dest->valType;
+int ioOffset = dest->val.ioOffset;
+struct isxReg *reg = outOffsetToReg(ioOffset, valType);
+if (source->reg != reg)
+    codeOpDestReg(opMov, source, reg, coder);
+}
+
 static void initStompPos(struct regStomper *stomp)
 /* Initialize all stompPos in stomp to val.   This will
  * by default convince system that ax is the first register
  * to use for unstable values, and bx the last. */
 {
 int i;
-assert(ArraySize(stomp->stompPos) <= 6);/* Reminder to fix for floating point */
 stomp->stompPos[ax] = 1;
 stomp->stompPos[dx] = 2;
 stomp->stompPos[cx] = 3;
 stomp->stompPos[si] = 4;
 stomp->stompPos[di] = 5;
 stomp->stompPos[bx] = 6;
-for (i=0; i<ArraySize(stomp->contents); ++i)
+for (i=xmm0; i<=xmm7; ++i)
+    stomp->stompPos[i] = i;
+for (i=0; i<pentRegCount; ++i)
     stomp->contents[i] = NULL;
 }
 
 
-static void stompFromIsx(struct isx *isx, struct regStomper *stomp)
+static void stompFromIsx(struct isx *isx, struct regStomper *stomp,
+	struct pentCoder *coder)
 /* Set stompPos to 0 where required by isx instruction.  Doesn't include
  * loops. */
 {
+int i;
 switch (isx->opType)
     {
     case poCall:
        stomp->stompPos[ax] = 0;
-       stomp->contents[ax] = 0;
+       stomp->contents[ax] = NULL;
+       coder->regsUsed[ax] = TRUE;
        stomp->stompPos[cx] = 0;
-       stomp->contents[cx] = 0;
+       stomp->contents[cx] = NULL;
+       coder->regsUsed[cx] = TRUE;
        stomp->stompPos[dx] = 0;
-       stomp->contents[dx] = 0;
+       stomp->contents[dx] = NULL;
+       coder->regsUsed[dx] = TRUE;
+       for (i=xmm0; i<=xmm7; ++i)
+	    {
+	    stomp->stompPos[i] = 0;
+	    stomp->contents[i] = NULL;
+	    coder->regsUsed[i] = TRUE;
+	    }
        break;
     case poDiv:
     case poMod:
@@ -1150,14 +1228,17 @@ switch (isx->opType)
 	   case ivInt:
 	       stomp->stompPos[ax] = 0;
 	       stomp->contents[ax] = isx->left;
+	       coder->regsUsed[ax] = TRUE;
 	       stomp->stompPos[dx] = 0;
 	       stomp->contents[dx] = 0;
+	       coder->regsUsed[dx] = TRUE;
 	       break;
 	   }
 	if (isx->right->adType == iadConst)
 	   {
 	   stomp->stompPos[cx] = 0;
 	   stomp->contents[cx] = 0;
+	   coder->regsUsed[cx] = TRUE;
 	   }
 	break;
     case poShiftLeft:
@@ -1166,12 +1247,28 @@ switch (isx->opType)
 	    {
 	    stomp->stompPos[cx] = 0;
 	    stomp->contents[cx] = isx->right;
+	    coder->regsUsed[cx] = TRUE;
 	    }
 	break;
+    case poReturnVal:
+        {
+	struct isxAddress *dest = isx->dest;
+	enum isxValType valType = dest->valType;
+	if (valType != ivFloat && valType != ivDouble)
+	    {
+	    int ioOffset = dest->val.ioOffset;
+	    struct isxReg *reg = outOffsetToReg(ioOffset, valType);
+	    int regIx = reg->regIx;
+	    stomp->stompPos[regIx] = 0;
+	    stomp->contents[regIx] = isx->left;
+	    coder->regsUsed[regIx] = TRUE;
+	    }
+	break;
+	}
     }
 }
 
-static void addRegStomper(struct dlList *iList)
+static void addRegStomper(struct dlList *iList, struct pentCoder *coder)
 /* Add regStomper to all instructions. */
 {
 int i;
@@ -1206,11 +1303,11 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 
     /* Make new copy of stomper and bump all stomp positions. */
     stomp = CloneVar(stomp);
-    for (i=0; i<ArraySize(stomp->stompPos); ++i)
+    for (i=0; i<pentRegCount; ++i)
 	stomp->stompPos[i] += 1;
 
     /* Snoop through stomping instructions, and set stomps. */
-    stompFromIsx(isx, stomp);
+    stompFromIsx(isx, stomp, coder);
     if (isx->opType == poLoopStart)
         {
 	/* Stomp variables used in loops */
@@ -1224,10 +1321,11 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
 	    ix = lv->reg->regIx;
 	    stomp->stompPos[ix] = 0;
 	    stomp->contents[ix] = lv->iad;
+	    coder->regsUsed[ix] = TRUE;
 	    }
 	}
     else
-        stompFromIsx(isx, stomp);
+        stompFromIsx(isx, stomp, coder);
 
     }
 assert(stompStack == NULL);
@@ -1240,7 +1338,7 @@ static int findUnstomped(struct regStomper *stomp, enum isxValType valType)
 int lifetime = BIGNUM;
 int bestReg = -1;
 int i;
-for (i=0; i<ArraySize(stomp->stompPos); ++i)
+for (i=0; i<pentRegCount; ++i)
     {
     if (isxRegName(&regInfo[i], valType) != NULL)
 	{
@@ -1260,7 +1358,7 @@ static void regStomperDump(struct regStomper *stomp, enum isxValType valType,
 /* Dump out contents of stomper. */
 {
 int i;
-for (i=0; i<ArraySize(stomp->stompPos); ++i)
+for (i=0; i<pentRegCount; ++i)
     fprintf(f, "%s:%d ", isxRegName(&regInfo[i], valType), stomp->stompPos[i]);
 }
 
@@ -1269,14 +1367,14 @@ static void mergeStomper(struct regStomper *a, struct regStomper *b,
 /* Merge a/b into d */
 {
 int i;
-for (i=0; i<ArraySize(d->stompPos); ++i)
+for (i=0; i<pentRegCount; ++i)
     {
     d->stompPos[i] = min(a->stompPos[i], b->stompPos[i]);
     }
 }
 
 static void rCalcLoopRegVars(struct isxLoopInfo *loopy, 
-	struct regStomper *stomp)
+	struct regStomper *stomp, struct pentCoder *coder)
 /* Do depth-first-recursion to assign register loop variables. */
 {
 struct isxLoopInfo *l;
@@ -1290,7 +1388,7 @@ struct regStomper origStomp = *stomp;
 for (l = loopy->children; l != NULL; l = l->next)
     {
     struct regStomper childStomp = origStomp;
-    rCalcLoopRegVars(l, &childStomp);
+    rCalcLoopRegVars(l, &childStomp, coder);
     mergeStomper(&childStomp, stomp, stomp);
     }
 
@@ -1298,14 +1396,16 @@ for (l = loopy->children; l != NULL; l = l->next)
 for (node = loopy->start; node != loopy->end; node = node->next)
     {
     isx = node->val;
-    stompFromIsx(isx, stomp);
+    stompFromIsx(isx, stomp, coder);
     }
 
-/* Always stomp on eax,edx, to prevent system from reserving too many
+/* Always stomp on eax,edx,xmm0,xmm1 to prevent system from reserving too many
  * variables for loops. (Might be better to do a calculation of
  * number of temporaries required here.) */
 stomp->stompPos[ax] = 0;
 stomp->stompPos[dx] = 0;
+stomp->stompPos[xmm0] = 0;
+stomp->stompPos[xmm1] = 0;
 
 /* Reserve registers from most frequently used to least frequently
  * used. */
@@ -1322,7 +1422,7 @@ for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
     }
 }
 
-static void calcLoopRegVars(struct isxList *isxList)
+static void calcLoopRegVars(struct isxList *isxList, struct pentCoder *coder)
 /* Calculate register vars to use in loops */
 {
 struct isxLoopInfo *loopy;
@@ -1333,7 +1433,7 @@ ZeroVar(&stomp);
 for (loopy = isxList->loopList; loopy != NULL; loopy  = loopy->next)
     {
     initStompPos(&stomp);
-    rCalcLoopRegVars(loopy, &stomp);
+    rCalcLoopRegVars(loopy, &stomp, coder);
     }
 }
 
@@ -1351,8 +1451,8 @@ int stackUse;
 
 initRegInfo();
 calcInputOffsets(pfi, iList);
-calcLoopRegVars(isxList);
-addRegStomper(iList);
+calcLoopRegVars(isxList, coder);
+addRegStomper(iList, pfi->coder);
 
 stackUse = pfi->outVarSize + pfi->locVarSize + pfi->callParamSize 
 	+ pfi->savedRegSize;
@@ -1368,7 +1468,7 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
     fprintf(f, "# ");	
     isxDump(isx, f);
     fprintf(f, "[");
-    for (i=0; i<ArraySize(regInfo); ++i)
+    for (i=0; i<pentRegCount; ++i)
         {
 	struct isxReg *reg = &regInfo[i];
 	fprintf(f, "%s", isxRegName(reg, ivInt));
@@ -1380,7 +1480,7 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	}
     fprintf(f, "]\n");	
     fprintf(f, "# stomps ax bx cx dx si di ");
-    for (i=0; i<ArraySize(regInfo); ++i)
+    for (i=0; i<pentRegCount; ++i)
 	fprintf(f, " %d", stomp->stompPos[i]);
     fprintf(f, "\n");
 #endif /* HELP_DEBUG */
@@ -1476,6 +1576,9 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    break;
 	case poFuncEnd:
 	    break;
+	case poReturnVal:
+	    pentReturnVal(isx, coder);
+	    break;
 	default:
 	    warn("unimplemented\t%s\n", isxOpTypeToString(isx->opType));
 	    break;
@@ -1558,20 +1661,34 @@ void pentFunctionStart(struct pfCompile *pfc, struct pentFunctionInfo *pfi,
 	char *cName, boolean isGlobal, FILE *f)
 /* Finish coding up a function in pentium assembly language. */
 {
+/* This gets a little complex because we have to maintain the
+ * stack at an even multiple of 16, on the Mac at least. */
 int stackSubAmount;
+int skipPushSize = 0;	/* Amount extra to move stack for missing pushes */
+bool *regsUsed = pfi->coder->regsUsed;
 if (isGlobal)
     fprintf(f, ".globl %s%s\n", isxPrefixC, cName);
 fprintf(f, "%s%s:\n", isxPrefixC, cName);
 fprintf(f, "%s",
 "	pushl	%ebp\n"
-"	movl	%esp,%ebp\n"
-"	pushl	%ebx\n"
-"	pushl	%esi\n"
-"	pushl	%edi\n");
+"	movl	%esp,%ebp\n");
+if (regsUsed[bx])
+    fprintf(f, "\tpushl\t%%ebx\n");
+else
+    skipPushSize += 4;
+if (regsUsed[si])
+    fprintf(f, "\tpushl\t%%esi\n");
+else
+    skipPushSize += 4;
+if (regsUsed[di])
+    fprintf(f, "\tpushl\t%%edi\n");
+else
+    skipPushSize += 4;
 stackSubAmount = pfi->outVarSize + pfi->locVarSize + pfi->tempVarSize 
 			+ pfi->callParamSize + pfi->savedContextSize;
 stackSubAmount = ((stackSubAmount+15)&0xFFFFFFF0);
 stackSubAmount -= pfi->savedContextSize;
+stackSubAmount += skipPushSize;
 pfi->stackSubAmount = stackSubAmount;
 fprintf(f, "\tsubl\t$%d,%%esp\n", stackSubAmount);
 }
@@ -1580,11 +1697,15 @@ void pentFunctionEnd(struct pfCompile *pfc, struct pentFunctionInfo *pfi,
 	FILE *f)
 /* Finish coding up a function in pentium assembly language. */
 {
+bool *regsUsed = pfi->coder->regsUsed;
 fprintf(f, "\taddl\t$%d,%%esp\n", pfi->stackSubAmount);
+if (regsUsed[di])
+    fprintf(f, "\tpopl\t%%edi\n");
+if (regsUsed[si])
+    fprintf(f, "\tpopl\t%%esi\n");
+if (regsUsed[bx])
+    fprintf(f, "\tpopl\t%%ebx\n");
 fprintf(f, "%s",
-"	popl	%edi\n"
-"	popl	%esi\n"
-"	popl	%ebx\n"
 "	popl	%ebp\n"
 "	ret\n");
 }

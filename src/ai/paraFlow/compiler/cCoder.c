@@ -1582,7 +1582,7 @@ return TRUE;
 }
 
 
-void codeInitDims(struct pfCompile *pfc, FILE *f, struct pfParse *pp, int stack)
+static void codeInitDims(struct pfCompile *pfc, FILE *f, struct pfParse *pp, int stack)
 /* Generate code that creates an array that is initialized to
  * zero (as opposed to the empty array). */
 {

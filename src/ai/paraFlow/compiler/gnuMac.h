@@ -6,7 +6,11 @@
 
 #ifndef ISX_H
 #include "isx.h"
-#endif /* ISX_H */
+#endif
+
+#ifndef ASMCODER_H
+#include "asmCoder.h"
+#endif 
 
 void gnuMacModulePreamble(FILE *f);
 /* Print out various incantations needed at start of every
@@ -36,5 +40,8 @@ void gnuMacFunkyThunky(FILE *f);
  * at the expense of burning the ebx register and
  * adding overhead to every single d*ng subroutine
  * almost! */
+
+struct asmCoder *gnuMacPentiumAsmCoder();
+/* Get coder for pentium running on mac. */
 
 #endif /* GNUMAC_H */

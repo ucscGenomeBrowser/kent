@@ -66,6 +66,7 @@ enum isxOpType
     poBnz,	/* Branch if a != 0 */
     poFuncStart,/* Declare start of function */
     poFuncEnd,  /* Declare end of function. */
+    poReturnVal,/* Declare return value. */
     };
 
 char *isxOpTypeToString(enum isxOpType val);
@@ -207,6 +208,10 @@ void isxDumpList(struct dlList *list, FILE *f);
 void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
 	struct hash *varHash, double weight, struct dlList *iList);
 /* Generate intermediate code for statement. */
+
+void isxAddReturnInfo(struct pfCompile *pfc, struct pfParse *outTuple, 
+	struct hash *varHash, struct dlList *iList);
+/* Add instructions for return parameters. */
 
 struct isxList
 /* A list of instructions, and a list of loop information */
