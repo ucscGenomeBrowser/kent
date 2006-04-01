@@ -29,7 +29,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.8 2006/04/01 20:34:49 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.9 2006/04/01 23:36:44 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -1449,7 +1449,6 @@ if (bedOut != NULL)
     fclose(bedFile);
 if (scoreOut != NULL)
     fclose(scoreFile);
-fclose(outFile);
 freeDlList(&fileCache);
 twoBitClose(&twoBitFile);
 return(0);
