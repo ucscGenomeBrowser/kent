@@ -697,6 +697,26 @@ dest->reg = reg;
 copyRealVarToMem(dest, coder);
 }
 
+static void pentInit(struct isx *isx, struct dlNode *nextNode,  
+	struct pentCoder *coder)
+/* Code assignment */
+{
+enum isxAddressType adType = isx->left->adType;
+struct isxAddress *dest = isx->dest;
+boolean simpleStaticConstant = FALSE;
+if (adType == iadZero || adType == iadConst)
+    {
+    if (dest->valType != ivString && dest->valType != ivObject)
+	{
+	struct pfVar *var = dest->val.var;
+	if (!var->scope->isLocal || var->ty->access == paStatic)
+	    simpleStaticConstant = TRUE;
+	}
+    }
+if (!simpleStaticConstant)
+    pentAssign(isx, nextNode, coder);
+}
+
 static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode, 
 	enum pentDataOp opCode, boolean isSub,  struct pentCoder *coder)
 /* Code most binary ops.  Division is harder. */
@@ -1487,6 +1507,8 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
     switch (isx->opType)
         {
 	case poInit:
+	    pentInit(isx, nextNode, coder);
+	    break;
 	case poAssign:
 	    pentAssign(isx, nextNode, coder);
 	    break;
