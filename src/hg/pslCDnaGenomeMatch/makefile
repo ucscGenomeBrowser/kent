@@ -17,6 +17,6 @@ lib:
 test: test1 test2
 %:	input/%.psl
 	${MKDIR} output
-	pslCDnaGenomeMatch -verbose=5 -bedOut=$@.bed input/$@.psl S1.len /cluster/data/hg17/bed/pseudo/blueMrna/mrnaNover.2bit /cluster/data/hg17/nib output/$@.psl -snp=input/$@.snp -score=output/$@.tab  > $@.log 
+	pslCDnaGenomeMatch -verbose=4 -bedOut=$@.bed input/$@.psl S1.len /cluster/data/hg17/bed/pseudo/blueMrna/mrnaNover.2bit /cluster/data/hg17/nib output/$@.psl -snp=input/$@.snp -score=output/$@.tab  > $@.log 
 	diff expected/$@.psl output/$@.psl 
 	diff expected/$@.tab output/$@.tab 
