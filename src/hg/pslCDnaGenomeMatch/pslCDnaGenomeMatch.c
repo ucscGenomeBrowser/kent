@@ -29,7 +29,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.6 2005/06/29 21:09:10 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.7 2006/04/01 20:28:15 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -148,11 +148,11 @@ void usage()
 errAbort(
     "pslCDnaGenomeMatch - check if retroGene aligns better to parent or retroGene \n"
     "usage:\n"
-    "    pslCDnaGenomeMatch input.psl chrom.sizes mrna.2bit nibDir output.psl\n\n"
+    "    pslCDnaGenomeMatch input.psl chrom.sizes cdna.2bit nibDir output.psl\n\n"
     "where \n"
-    "input.psl contains input mRNA alignment psl file\n"
+    "input.psl contains input mRNA/EST alignment psl file SORTED by qName\n"
     "chrom.sizes is a list of chromosome followed by size\n"
-    "mrna.2bit contains fasta sequences of all mrnas \n"
+    "cdna.2bit contains fasta sequences of all mrnas/EST \n"
     "directory containing nibs of genome\n"
     "output.psl contains filtered alignments for best matches and cases where no filtering occurred.\n"
     "    -score=output.tab  is output containing mismatch info\n" 
@@ -160,13 +160,13 @@ errAbort(
     "    -passthru  if best hit cannot be decided, then pass through all alignments\n"
     "    -minDiff=N minimum difference in score to filter out 2nd best hit (default 5)\n"
     "    -bedOut=bed output file of mismatches.\n"
-    "    -species1=psl file with alignment of mrna to other species.\n"
-    "    -species2=psl file with alignment of mrna to other species.\n"
+    "    -species1=psl file with alignment of mrna/EST to other species.\n"
+    "    -species2=psl file with alignment of mrna/EST to other species.\n"
     "    -snp=snp.tab.gz contains snps with or without bin field \n"
     "    -nibdir1=sequence of species 1 \n"
     "    -nibdir2=sequence of species 2 \n"
-    "    -mrna1=fasta file with sequence of mrna used in alignment 1\n"
-    "    -mrna2=fasta file with sequence of mrna used in alignment 2\n"
+    "    -mrna1=fasta file with sequence of mrna/EST used in alignment 1\n"
+    "    -mrna2=fasta file with sequence of mrna/EST used in alignment 2\n"
     );
 }
 
@@ -791,6 +791,8 @@ if (getLociPosition(lociList, maxIndex, &chrom, &chromStart, &chromEnd, &psl))
                 name,  psl->tName , psl->tStart, chromEnd, maxIndex, missCount[maxIndex], goodCount[maxIndex], neither[maxIndex], indel,
                 missCount[maxIndex]+ goodCount[maxIndex]+ neither[maxIndex]+ indel, gapCount[maxIndex], snpCount[maxIndex],
                 seqCount - slCount(lociList), maxScore, maxCount, nextBestScore, diff);
+        if (psl->strand[0] == '+' && psl->strand[1] == '-')
+            pslRc(psl);
         pslTabOut(psl, outFile);
         outputCount++;
         filterCount++;
@@ -814,7 +816,7 @@ freez(&snpCount);
 return FALSE;
 }
 
-bool isDna(char a)
+bool isPureDna(char a)
 /* return true of the base is a valid dna nt */
 {
 char b = tolower(a);
@@ -833,7 +835,7 @@ if (x1 == -1 )
 if (x2 == -1)
     b = '.';
 
-if (isDna(a) && isDna(b))
+if (isPureDna(a) && isPureDna(b))
     {
     histogram[a][b]++;
     }
@@ -1125,8 +1127,8 @@ int misMatchCount = 0;
 int transitionCount = 0;
 int transversionCount = 0;
 char genomeStrand = psl->strand[1] == '-' ? '-' : '+';
-if (genomeStrand == '-')
-    reverseIntRange(&tStart, &tEnd, psl->tSize);
+//if (genomeStrand == '-')
+//    reverseIntRange(&tStart, &tEnd, psl->tSize);
 for (blockIx=0; blockIx < psl->blockCount; ++blockIx)
     /* for each alignment block get sequence for both strands */
     {
