@@ -1090,7 +1090,6 @@ if (reg != NULL)
     }
 else
     {
-    uglyf("Theoretically saving output from function with non-register outputs.\n");
     reg = freeReg(isx, valType, nextNode, coder);
     codeOpDestReg(opMov, source, reg, coder);
     linkDestReg(dest, reg, coder);
@@ -1242,21 +1241,16 @@ else
 pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
 }
 
-static void calcInOutRetOffsets(struct pentFunctionInfo *pfi, struct dlList *iList)
-/* Go through and fix stack offsets for input parameters, output parameters,
- * and return values. */
+static void calcInOutOffsets(struct pentFunctionInfo *pfi, struct dlList *iList)
+/* Go through and fix stack offsets for input and output parameters */
 {
 struct dlNode *node;
-int inOffset = 0, outOffset = 0, retOffset = 8;
+int inOffset = 0, outOffset = 0;
 for (node = iList->head; !dlEnd(node); node = node->next)
     {
     struct isx *isx = node->val;
     switch (isx->opType)
         {
-	case poReturnVal:
-	    isx->dest->stackOffset = retOffset;
-	    retOffset += pentTypeSize(isx->dest->valType);
-	    break;
 	case poInput:
 	    isx->dest->stackOffset = inOffset;
 	    inOffset += pentTypeSize(isx->dest->valType);
@@ -1271,6 +1265,24 @@ for (node = iList->head; !dlEnd(node); node = node->next)
 	    break;
 	case poCall:
 	    inOffset = outOffset = 0;
+	    break;
+	}
+    }
+}
+
+static void calcRetOffsets(struct pentFunctionInfo *pfi, struct dlList *iList)
+/* Go through and fix stack offsets for return values. */
+{
+struct dlNode *node;
+int retOffset = 8;
+for (node = iList->tail; !dlStart(node); node = node->prev)
+    {
+    struct isx *isx = node->val;
+    switch (isx->opType)
+        {
+	case poReturnVal:
+	    isx->dest->stackOffset = retOffset;
+	    retOffset += pentTypeSize(isx->dest->valType);
 	    break;
 	}
     }
@@ -1362,14 +1374,13 @@ if (reg != NULL)
     }
 else
     {
-    uglyf("THeoretically saving output outside register\n");
-    uglyf("Hmm, looks like this needs to be reversed so non-regs get saved first\n");
-#ifdef REALFLAKY
     reg = freeReg(isx, valType, nextNode, coder);
     if (source->reg != reg)
 	codeOpDestReg(opMov, source, reg, coder);
     codeOpSourceReg(opMov, reg, dest, coder);
-#endif /* REALFLAKY */
+    if (reg->contents != NULL)
+	reg->contents->reg = NULL;
+    reg->contents = NULL;
     }
 }
 
@@ -1648,7 +1659,8 @@ struct dlList *iList = isxList->iList;
 int stackUse;
 
 initRegInfo();
-calcInOutRetOffsets(pfi, iList);
+calcInOutOffsets(pfi, iList);
+calcRetOffsets(pfi, iList);
 calcLoopRegVars(isxList, coder);
 addRegStomper(iList, pfi->coder);
 

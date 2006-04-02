@@ -528,14 +528,17 @@ void isxAddReturnInfo(struct pfCompile *pfc, struct pfParse *outTuple,
 /* Add instructions for return parameters. */
 {
 struct pfParse *pp;
-int offset=0;
-for (pp = outTuple->children; pp != NULL; pp = pp->next, ++offset)
+int offset=slCount(outTuple->children)-1;
+/* Code generator's job is easier if we reverse these. */
+slReverse(&outTuple->children);
+for (pp = outTuple->children; pp != NULL; pp = pp->next, --offset)
     {
     struct isxAddress *source = varAddress(pp->var, varHash, 1.0, 
 	ppToIsxValType(pfc, pp));
     struct isxAddress *dest = ioAddress(offset, source->valType, iadReturnVar);
     isxNew(pfc, poReturnVal, dest, source, NULL, iList);
     }
+slReverse(&outTuple->children);
 }
 
 
