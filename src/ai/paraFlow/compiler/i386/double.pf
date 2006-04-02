@@ -1,8 +1,8 @@
-flow addFive(double a) 
+flow addFive(double a)  into double z
     {
     double b = 5.0;
     double c = 1.5;
-    double z = a+b+c;
+    z = a+b+c;
     _printDouble(z);
     }
 
@@ -11,5 +11,6 @@ double x=1.1,y=2.2,z=x+y;
 double doubleRes = 1.5;
 float floatRes = 1.5;
 _printDouble(z);
-addFive(1.0);
+double sevenPtFive = addFive(1.0);
+_printDouble(sevenPtFive);
 

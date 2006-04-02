@@ -1,5 +1,8 @@
 test:
 	mkdir -p expected output
+	paraFlow double.pf > expected/double
+	paraFlow -asm double.pf > output/double
+	diff expected/double output/double
 	paraFlow simpleSub.pf > expected/simpleSub
 	paraFlow -asm simpleSub.pf > output/simpleSub
 	diff expected/simpleSub output/simpleSub

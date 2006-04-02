@@ -1,5 +1,90 @@
-/* isxToPentium - convert isx code to Pentium code.  This basically 
- * follows the register picking algorithm in Aho/Ulman. */
+/* isxToPentium - convert isx code to Pentium code.  This is done
+ * one function at a time.
+ *
+ * The register picking algorithm in the routine getFreeReg may
+ * be the most important part of this code. The algorithm originated
+ * in Aho/Ulman 1979, but has diverged here quite a bit.
+ *
+ * The isx instructions that are the input to this module are primarily
+ * in the form:
+ *        dest = left <op> right
+ * where collectively left and right are called "sources."
+ * The getFreeReg routine is called to find a register for the dest.
+ * The system keeps track of which variables are in which registers,
+ * how soon (if ever) these variables will be used again, and how soon
+ * the register will be "stomped" by some event that will demand that
+ * register in particular. The getFreeReg routine tries to return
+ * a register that will get stomped right after the dest variable is
+ * no longer needed.  Failing this it searches in order for:
+ *         a register that holds a source that will no longer be used
+ *         any register that isn't holding a live value
+ *         a register holding a live value that is also in memory
+ *         a register holding a live value that must be saved to memory
+ *
+ * The life-time of variables and the stomp-time of registers is
+ * calculated by scanning the isx instructions backwards.  This
+ * scan is complicated a bit by loops and conditional statements.
+ * Within the straight-line code the lifetime of a variable starts
+ * when it appears as either a left or right source operand in the isx
+ * code, and the lifetime ends when the variable a dest operand.
+ * In the backwards scan, loops are passed through twice, and
+ * the second iteration is used to determine life-times.  Various
+ * branches of conditionals are done separately, and the results 
+ * merge at the start of the condition.
+ *
+ * Registers are stomped by various events.  Certain pentium instructions
+ * such as integer divide, demand the use of certain registers.
+ * Subroutine calls will stomp all registers except esi, ebi, and ebx.
+ * The most commonly used variables in a loop are assigned to registers,
+ * and so effectively loops can stomp registers as well. 
+ *
+ * I'm sure the register allocation could be improved (it is an NP
+ * complete problem after all!) but it is not bad. The system does
+ * make sure to write user-declared variables to memory as soon as
+ * possible as well as keeping them in memory.  The first optimization
+ * to this would probably be to relax this constraint.  However
+ * it would be a little tricky, since the exception handling automatic
+ * cleanup does need to know where all the variables are.  Basically
+ * this would force all the variables in registers to be saved at
+ * every subroutine call anyway, since ParaFlow does not track which
+ * subroutines can cause an exception.  There's a few places where
+ * the code generator assumes that real variables are in memory as well
+ * currently.
+ *
+ * The function call register conventions here are compatible with Pentium
+ * C conventions.  All input is passed on the stack.  The registers esp, 
+ * ebp, esi, edi, ebx are preserved by function calls, and all others are 
+ * potentially trashed. Return values are stored in:
+ *     eax - for pointer and integers
+ *     eax:edx - for long longs
+ *     st0 - for floating point values
+ * For functions returning multiple values the first value follows the
+ * C conventions.  Other registers will be used up to a point, and
+ * then past that the values will be returned on the stack.  The convention
+ * in full is:
+ *            int    long/long   float
+ *      1     eax     eax:edx    st0
+ *      2     ecx     stack      xmm1
+ *      3     stack   stack      xmm2
+ *      4     stack   stack      xmm3
+ *      5     stack   stack      xmm4
+ *      6     stack   stack      xmm5
+ *      7     stack   stack      xmm6
+ *      8     stack   stack      xmm7
+ *      9+    stack   stack      stack
+ * If a return value is on the stack, it is in the same place it
+ * would be if it were an input on the stack.  For instance in
+ * this function:
+ *      to doSomething(int a, b, string c, short d, float e, double f, int g)
+ *      into (int aa, bb, string cc, short dd, float ee, double ff, int gg)
+ * The positions of various input and outputs are:
+ *         a - 0(esp)    aa - eax
+ *         b - 4(esp)    bb - ecx
+ *         c - 8(esp)    cc - 8(esp)
+ *         d - 12(esp)   dd - 12(esp)
+ *         e - 16(esp)   ee - xmm4
+ *         f - 20(esp)   ff - xmm5
+ *         g - 28(esp)   gg - 28(esp) */
 
 #include "common.h"
 #include "dlist.h"
@@ -233,7 +318,7 @@ else
 	    }
 	case iadInStack:
 	    {
-	    safef(buf, pentCodeBufSize, "%d(%%esp)", iad->val.ioOffset);
+	    safef(buf, pentCodeBufSize, "%d(%%esp)", iad->stackOffset);
 	    break;
 	    }
 	case iadOutStack:
@@ -938,24 +1023,27 @@ struct isxReg *reg = NULL;
 switch (valType)
     {
     case ivLong:
-    case ivFloat:
-    case ivDouble:
         errAbort("Returns of type %s not implemented", 
 		isxValTypeToString(valType));
 	break;
-    }
-if (ioOffset >= 3)
-    errAbort("More than 3 return values not implemented");
-switch (ioOffset)
-    {
-    case 0:
-        reg = &regInfo[ax];
+    case ivFloat:
+    case ivDouble:
+	if (ioOffset >= 8)
+	    errAbort("More than 8 floating pt return values not implemented");
+	reg = &regInfo[xmm0 + ioOffset];
 	break;
-    case 1:
-        reg = &regInfo[dx];
-	break;
-    case 2:
-        reg = &regInfo[cx];
+    default:
+	if (ioOffset >= 2)
+	    errAbort("More than 2 int return values not implemented");
+	switch (ioOffset)
+	    {
+	    case 0:
+		reg = &regInfo[ax];
+		break;
+	    case 2:
+		reg = &regInfo[cx];
+		break;
+	    }
 	break;
     }
 return reg;
@@ -965,15 +1053,33 @@ static void pentOutput(struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder)
 /* Output code to save an output parameter after a call. */
 {
-/* This needs to get a lot more complex eventually....  For now it just
- * handles up to three int-sized result. */
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
 enum isxValType valType = source->valType;
 int sourceIx = source->val.ioOffset;
-struct isxReg *reg = outOffsetToReg(sourceIx, valType);;
+struct isxReg *reg = outOffsetToReg(sourceIx, valType);
 dest->reg = reg;
 reg->contents = dest;
+if (sourceIx == 0)
+    {
+    /* The first floating point parameter is a bit gnarly.  Move it
+     * from old fashioned floating point stack top to xmm0 register */
+    switch(valType)
+	{
+	case ivFloat:
+	    safef(coder->destBuf, pentCodeBufSize, "%d(%%esp)",
+	    	source->stackOffset);
+	    pentCoderAdd(coder, "fstps", NULL, coder->destBuf);
+	    pentCoderAdd(coder, "movss", coder->destBuf, "%xmm0");
+	    break;
+	case ivDouble:
+	    safef(coder->destBuf, pentCodeBufSize, "%d(%%esp)",
+	    	source->stackOffset);
+	    pentCoderAdd(coder, "fstpl", NULL, coder->destBuf);
+	    pentCoderAdd(coder, "movsd", coder->destBuf, "%xmm0");
+	    break;
+	}
+    }
 }
 
 static void pentCall(struct isx *isx,  struct pentCoder *coder)
@@ -1129,7 +1235,7 @@ for (node = iList->head; !dlEnd(node); node = node->next)
     switch (isx->opType)
         {
 	case poInput:
-	    isx->dest->val.ioOffset = offset;
+	    isx->dest->stackOffset = offset;
 	    offset += pentTypeSize(isx->dest->valType);
 	    if (offset > pfi->callParamSize)
 	         pfi->callParamSize = offset;
@@ -1140,6 +1246,31 @@ for (node = iList->head; !dlEnd(node); node = node->next)
 	}
     }
 }
+
+static void calcOutputOffsets(struct pentFunctionInfo *pfi, 
+	struct dlList *iList)
+/* Go through and fix stack offsets for output parameters */
+{
+struct dlNode *node;
+int offset = 0;
+for (node = iList->head; !dlEnd(node); node = node->next)
+    {
+    struct isx *isx = node->val;
+    switch (isx->opType)
+        {
+	case poOutput:
+	    isx->left->stackOffset = offset;
+	    offset += pentTypeSize(isx->left->valType);
+	    if (offset > pfi->callParamSize)
+	         pfi->callParamSize = offset;
+	    break;
+	case poCall:
+	    offset = 0;
+	    break;
+	}
+    }
+}
+
 
 struct regStompStack
     {
@@ -1203,8 +1334,23 @@ struct isxAddress *dest = isx->dest;
 enum isxValType valType = dest->valType;
 int ioOffset = dest->val.ioOffset;
 struct isxReg *reg = outOffsetToReg(ioOffset, valType);
-if (source->reg != reg)
-    codeOpDestReg(opMov, source, reg, coder);
+if (ioOffset == 0 && (valType == ivFloat || valType == ivDouble))
+    {
+    /* Deal with first floating point return value - which we have
+     * to store in the top of the floating point stack. */
+    /* Note - here we are assuming variables all live in memory
+     * as well as any registers... */
+    char *op = (valType == ivFloat ? "flds" : "fldl");
+    assert(source->adType == iadRealVar);
+    source->reg = NULL;
+    pentPrintAddress(source, coder->sourceBuf);
+    pentCoderAdd(coder, op, NULL, coder->sourceBuf);
+    }
+else
+    {
+    if (source->reg != reg)
+	codeOpDestReg(opMov, source, reg, coder);
+    }
 }
 
 static void initStompPos(struct regStomper *stomp)
@@ -1286,15 +1432,12 @@ switch (isx->opType)
         {
 	struct isxAddress *dest = isx->dest;
 	enum isxValType valType = dest->valType;
-	if (valType != ivFloat && valType != ivDouble)
-	    {
-	    int ioOffset = dest->val.ioOffset;
-	    struct isxReg *reg = outOffsetToReg(ioOffset, valType);
-	    int regIx = reg->regIx;
-	    stomp->stompPos[regIx] = 0;
-	    stomp->contents[regIx] = isx->left;
-	    coder->regsUsed[regIx] = TRUE;
-	    }
+	int ioOffset = dest->val.ioOffset;
+	struct isxReg *reg = outOffsetToReg(ioOffset, valType);
+	int regIx = reg->regIx;
+	stomp->stompPos[regIx] = 0;
+	stomp->contents[regIx] = isx->left;
+	coder->regsUsed[regIx] = TRUE;
 	break;
 	}
     }
@@ -1483,6 +1626,7 @@ int stackUse;
 
 initRegInfo();
 calcInputOffsets(pfi, iList);
+calcOutputOffsets(pfi, iList);
 calcLoopRegVars(isxList, coder);
 addRegStomper(iList, pfi->coder);
 
