@@ -4,10 +4,15 @@ to addMul(int a,b) into (int x,y)
     y = a*b;
     }
 
+to quadOp(double a,b) into (double sum, product, sub, div)
+{
+sum = a+b;
+product = a*b;
+sub = a-b;
+div = a/b;
+}
+
 (int x,y) = addMul(2,3);
-_printInt(x);
-_printInt(y);
-(x,y) = addMul(3,4);
 _printInt(x);
 _printInt(y);
 (x,y) = addMul(1,2);
@@ -16,3 +21,9 @@ _printInt(y);
 (x,y) = addMul(addMul(1,2));
 _printInt(x);
 _printInt(y);
+
+(double sum, product, sub, div) = quadOp(1.0,2.0);
+_printDouble(sum);
+_printDouble(product);
+_printDouble(sub);
+_printDouble(div);

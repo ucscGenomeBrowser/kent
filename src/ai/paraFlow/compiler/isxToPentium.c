@@ -762,6 +762,19 @@ if (iad->adType == iadRealVar)
     }
 }
 
+static void linkDestReg(struct isxAddress *dest, struct isxReg *reg,
+	struct pentCoder *coder)
+/* Unlink whatever old variable was in register and link in dest.
+ * Also copy dest to memory if it's a real variable. */
+{
+if (reg->contents != NULL)
+    reg->contents->reg = NULL;
+reg->contents = dest;
+dest->reg = reg;
+copyRealVarToMem(dest, coder);
+}
+
+
 static void pentAssign(struct isx *isx, struct dlNode *nextNode,  
 	struct pentCoder *coder)
 /* Code assignment */
@@ -782,43 +795,15 @@ else
     if (source->reg != reg)
 	codeOpDestReg(opMov, source, reg, coder);
     }
-
-if (reg->contents != NULL)
-    reg->contents->reg = NULL;
-
-reg->contents = dest;
-dest->reg = reg;
-copyRealVarToMem(dest, coder);
+linkDestReg(dest, reg, coder);
 }
 
-#ifdef DEFEATEDBYLOOPS
-static void pentInit(struct isx *isx, struct dlNode *nextNode,  
-	struct pentCoder *coder)
-/* Code assignment */
-{
-enum isxAddressType adType = isx->left->adType;
-struct isxAddress *dest = isx->dest;
-boolean simpleStaticConstant = FALSE;
-if (adType == iadZero || adType == iadConst)
-    {
-    if (dest->valType != ivString && dest->valType != ivObject)
-	{
-	struct pfVar *var = dest->val.var;
-	if (!var->scope->isLocal || var->ty->access == paStatic)
-	    simpleStaticConstant = TRUE;
-	}
-    }
-if (!simpleStaticConstant)
-    pentAssign(isx, nextNode, coder);
-}
-#endif /* DEFEATEDBYLOOPS */
 
 static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode, 
 	enum pentDataOp opCode, boolean isSub,  struct pentCoder *coder)
 /* Code most binary ops.  Division is harder. */
 {
 struct isxReg *reg = freeReg(isx, isx->dest->valType, nextNode, coder);
-struct isxAddress *dest;
 struct isxAddress *iad = NULL;
 
 /* Figure out if the reg already holds one of our sources. */
@@ -846,12 +831,7 @@ else
     codeOpDestReg(opMov, isx->left, reg, coder);
     codeOpDestReg(opCode, isx->right, reg, coder);
     }
-if (reg->contents != NULL)
-    reg->contents->reg = NULL;
-dest = isx->dest;
-reg->contents = dest;
-dest->reg = reg;
-copyRealVarToMem(dest, coder);
+linkDestReg(isx->dest, reg, coder);
 }
 
 static struct isxLiveVar *dummyLive(struct isxAddress *iad)
@@ -890,7 +870,7 @@ for (live = extraLive; live != origLive; live = next)
    }
 }
 
-static void pentModDivide(struct isx *isx, struct dlNode *nextNode, 
+static void pentIntModDivide(struct isx *isx, struct dlNode *nextNode, 
 	boolean isMod,  struct pentCoder *coder)
 /* Generate code for mod or divide. */
 {
@@ -942,6 +922,34 @@ else
     }
 trimDummiesFromLive(extraLive, isx->liveList);
 copyRealVarToMem(d, coder);
+}
+
+static void pentFloatDivide(struct isx *isx, struct dlNode *nextNode, 
+	struct pentCoder *coder)
+/* Generate code for floating point divide. */
+{
+struct isxReg *reg = freeReg(isx, isx->dest->valType, nextNode, coder);
+if (reg != isx->left->reg)
+    codeOpDestReg(opMov, isx->left, reg, coder);
+codeOpDestReg(opDiv, isx->right, reg, coder);
+linkDestReg(isx->dest, reg, coder);
+}
+
+static void pentDivide(struct isx *isx, struct dlNode *nextNode, 
+	struct pentCoder *coder)
+/* Generate code for floating point or integer divide. */
+{
+enum isxValType valType = isx->dest->valType;
+switch (valType)
+    {
+    case ivFloat:
+    case ivDouble:
+	pentFloatDivide(isx, nextNode, coder);
+        break;
+    default:
+         pentIntModDivide(isx, nextNode, FALSE, coder);
+	 break;
+    }
 }
 
 static void pentShiftOp(struct isx *isx, struct dlNode *nextNode, 
@@ -1086,9 +1094,12 @@ static void pentCall(struct isx *isx,  struct pentCoder *coder)
 /* Output code to actually do call */
 {
 struct pfVar *funcVar = isx->left->val.var;
+int i;
 pentSwapOutIfNeeded(&regInfo[ax],isx->liveList, coder);
 pentSwapOutIfNeeded(&regInfo[cx],isx->liveList, coder);
 pentSwapOutIfNeeded(&regInfo[dx],isx->liveList, coder);
+for (i=xmm0; i<= xmm7; ++i)
+    pentSwapOutIfNeeded(&regInfo[i],isx->liveList, coder);
 safef(coder->destBuf, pentCodeBufSize, "%s%s", isxPrefixC, funcVar->cName);
 pentCoderAdd(coder, "call", NULL, coder->destBuf);
 }
@@ -1676,10 +1687,10 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    pentBinaryOp(isx, nextNode, opSub, TRUE, coder);
 	    break;
 	case poDiv:
-	    pentModDivide(isx, nextNode, FALSE, coder);
+	    pentDivide(isx, nextNode, coder);
 	    break;
 	case poMod:
-	    pentModDivide(isx, nextNode, TRUE, coder);
+	    pentIntModDivide(isx, nextNode, TRUE, coder);
 	    break;
 	case poBitAnd:
 	    pentBinaryOp(isx, nextNode, opAnd, TRUE, coder);
