@@ -1040,7 +1040,7 @@ switch (valType)
 	    case 0:
 		reg = &regInfo[ax];
 		break;
-	    case 2:
+	    case 1:
 		reg = &regInfo[cx];
 		break;
 	    }

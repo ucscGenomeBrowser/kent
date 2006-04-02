@@ -1,0 +1,18 @@
+to addMul(int a,b) into (int x,y)
+    {
+    x = a+b;
+    y = a*b;
+    }
+
+(int x,y) = addMul(2,3);
+_printInt(x);
+_printInt(y);
+(x,y) = addMul(3,4);
+_printInt(x);
+_printInt(y);
+(x,y) = addMul(1,2);
+_printInt(x);
+_printInt(y);
+(x,y) = addMul(addMul(1,2));
+_printInt(x);
+_printInt(y);

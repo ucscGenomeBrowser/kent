@@ -500,9 +500,12 @@ int offset;
 
 for (p = inTuple->children, offset=0; p != NULL; p = p->next, ++offset)
     {
-    source = isxExpression(pfc, p, varHash, weight, iList);
-    dest = ioAddress(offset, source->valType, iadInStack);
-    isxNew(pfc, poInput, dest, source, NULL, iList);
+    for (source = isxExpression(pfc, p, varHash, weight, iList);
+    	source != NULL; source = source->next)
+	{
+	dest = ioAddress(offset, source->valType, iadInStack);
+	isxNew(pfc, poInput, dest, source, NULL, iList);
+	}
     }
 source = callAddress(function->var, weight, varHash);
 isxNew(pfc, poCall, NULL, source, NULL, iList);
@@ -701,6 +704,53 @@ switch (ppt)
 }
 
 
+static void isxAssign(struct pfCompile *pfc, 
+	struct pfParse *pp, struct hash *varHash, 
+	double weight, struct dlList *iList)
+/* Code an assignment */
+{
+struct pfParse *use = pp->children;
+struct pfParse *val = use->next;
+if (use->type == pptVarUse)
+    {
+    struct isxAddress *source = isxExpression(pfc, val, varHash, 
+	    weight, iList);
+    struct isxAddress *dest = varAddress(use->var, varHash, 
+	    weight, ppToIsxValType(pfc, use));
+    if (source->adType == iadTempVar)
+	{
+	struct isx *prevIsx = iList->tail->val;
+	prevIsx->dest = dest;
+	}
+    else
+	{
+	isxNew(pfc, poAssign, dest, source, NULL, iList);
+	}
+    }
+else if (use->type == pptTuple)
+    {
+    struct isxAddress *sourceList = isxExpression(pfc, val, varHash, 
+	    weight, iList);
+    int tupSize = slCount(use->children);
+    struct isxAddress *source;
+    struct pfParse *pp;
+    assert(tupSize == slCount(sourceList));
+    for (source = sourceList,pp=use->children; 
+    	source != NULL; source = source->next, pp=pp->next)
+        {
+	struct isxAddress *dest;
+	if (pp->type != pptVarInit && pp->type != pptVarUse)
+	     internalErrAt(pp->tok);
+	dest = varAddress(pp->var, varHash, weight, ppToIsxValType(pfc, pp));
+	isxNew(pfc, poAssign, dest, source, NULL, iList);
+	}
+    }
+else
+    {
+    internalErrAt(pp->tok);
+    }
+}
+
 void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
 	struct hash *varHash, double weight, struct dlList *iList)
 /* Generate intermediate code for statement. */
@@ -728,24 +778,8 @@ switch (pp->type)
 	break;
 	}
     case pptAssign:
-        {
-	struct pfParse *use = pp->children;
-	struct pfParse *val = use->next;
-	struct isxAddress *source = isxExpression(pfc, val, varHash, 
-		weight, iList);
-	struct isxAddress *dest = varAddress(use->var, varHash, 
-		weight, ppToIsxValType(pfc, use));
-	if (source->adType == iadTempVar)
-	    {
-	    struct isx *prevIsx = iList->tail->val;
-	    prevIsx->dest = dest;
-	    }
-	else
-	    {
-	    isxNew(pfc, poAssign, dest, source, NULL, iList);
-	    }
+	isxAssign(pfc, pp, varHash, weight, iList);
 	break;
-	}
     case pptPlusEquals:
 	isxOpEquals(pfc, pp, varHash, poPlus, weight, iList);
 	break;
