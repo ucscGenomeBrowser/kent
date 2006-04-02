@@ -245,7 +245,10 @@ pseudogenes.  A representative member was selected from each family which
 was the shortest PET as defined by genomic coordinates. This representative
 PET was aligned to the hg17 genome using in order to identify all the 
 putative pseudogenes at the whole genome level.  All hits with an 
-identity = 70% and completeness = 50% within ENCODE regions were reported.
+identity >= 70% and coverage >= 50% within ENCODE regions were reported.
+Coverage refers to alignment coverage of the query sequence, so it is a 
+measure of how complete the predicted pseudogene is relative to the query 
+sequence.
 
 <H3>Verification</H3>
 Pseudogenes were verified by manual examination.
