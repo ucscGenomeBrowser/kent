@@ -316,14 +316,15 @@ else
 	    safef(buf, pentCodeBufSize, "%d(%%ebp)", iad->val.tempMemLoc);
 	    break;
 	    }
-	case iadInStack:
+	case iadReturnVar:
 	    {
-	    safef(buf, pentCodeBufSize, "%d(%%esp)", iad->stackOffset);
+	    safef(buf, pentCodeBufSize, "%d(%%ebp)", iad->stackOffset);
 	    break;
 	    }
+	case iadInStack:
 	case iadOutStack:
 	    {
-	    safef(buf, pentCodeBufSize, "%d(uglyOut)", iad->val.ioOffset);
+	    safef(buf, pentCodeBufSize, "%d(%%esp)", iad->stackOffset);
 	    break;
 	    }
 	default:
@@ -1036,13 +1037,9 @@ switch (valType)
 	break;
     case ivFloat:
     case ivDouble:
-	if (ioOffset >= 8)
-	    errAbort("More than 8 floating pt return values not implemented");
 	reg = &regInfo[xmm0 + ioOffset];
 	break;
     default:
-	if (ioOffset >= 2)
-	    errAbort("More than 2 int return values not implemented");
 	switch (ioOffset)
 	    {
 	    case 0:
@@ -1066,27 +1063,37 @@ struct isxAddress *dest = isx->dest;
 enum isxValType valType = source->valType;
 int sourceIx = source->val.ioOffset;
 struct isxReg *reg = outOffsetToReg(sourceIx, valType);
-dest->reg = reg;
-reg->contents = dest;
-if (sourceIx == 0)
+if (reg != NULL)
     {
-    /* The first floating point parameter is a bit gnarly.  Move it
-     * from old fashioned floating point stack top to xmm0 register */
-    switch(valType)
+    dest->reg = reg;
+    reg->contents = dest;
+    if (sourceIx == 0)
 	{
-	case ivFloat:
-	    safef(coder->destBuf, pentCodeBufSize, "%d(%%esp)",
-	    	source->stackOffset);
-	    pentCoderAdd(coder, "fstps", NULL, coder->destBuf);
-	    pentCoderAdd(coder, "movss", coder->destBuf, "%xmm0");
-	    break;
-	case ivDouble:
-	    safef(coder->destBuf, pentCodeBufSize, "%d(%%esp)",
-	    	source->stackOffset);
-	    pentCoderAdd(coder, "fstpl", NULL, coder->destBuf);
-	    pentCoderAdd(coder, "movsd", coder->destBuf, "%xmm0");
-	    break;
+	/* The first floating point parameter is a bit gnarly.  Move it
+	 * from old fashioned floating point stack top to xmm0 register */
+	switch(valType)
+	    {
+	    case ivFloat:
+		safef(coder->destBuf, pentCodeBufSize, "%d(%%esp)",
+		    source->stackOffset);
+		pentCoderAdd(coder, "fstps", NULL, coder->destBuf);
+		pentCoderAdd(coder, "movss", coder->destBuf, "%xmm0");
+		break;
+	    case ivDouble:
+		safef(coder->destBuf, pentCodeBufSize, "%d(%%esp)",
+		    source->stackOffset);
+		pentCoderAdd(coder, "fstpl", NULL, coder->destBuf);
+		pentCoderAdd(coder, "movsd", coder->destBuf, "%xmm0");
+		break;
+	    }
 	}
+    }
+else
+    {
+    uglyf("Theoretically saving output from function with non-register outputs.\n");
+    reg = freeReg(isx, valType, nextNode, coder);
+    codeOpDestReg(opMov, source, reg, coder);
+    linkDestReg(dest, reg, coder);
     }
 }
 
@@ -1235,53 +1242,39 @@ else
 pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
 }
 
-static void calcInputOffsets(struct pentFunctionInfo *pfi, struct dlList *iList)
-/* Go through and fix stack offsets for input parameters */
+static void calcInOutRetOffsets(struct pentFunctionInfo *pfi, struct dlList *iList)
+/* Go through and fix stack offsets for input parameters, output parameters,
+ * and return values. */
 {
 struct dlNode *node;
-int offset = 0;
+int inOffset = 0, outOffset = 0, retOffset = 8;
 for (node = iList->head; !dlEnd(node); node = node->next)
     {
     struct isx *isx = node->val;
     switch (isx->opType)
         {
+	case poReturnVal:
+	    isx->dest->stackOffset = retOffset;
+	    retOffset += pentTypeSize(isx->dest->valType);
+	    break;
 	case poInput:
-	    isx->dest->stackOffset = offset;
-	    offset += pentTypeSize(isx->dest->valType);
-	    if (offset > pfi->callParamSize)
-	         pfi->callParamSize = offset;
+	    isx->dest->stackOffset = inOffset;
+	    inOffset += pentTypeSize(isx->dest->valType);
+	    if (inOffset > pfi->callParamSize)
+	         pfi->callParamSize = inOffset;
 	    break;
-	case poCall:
-	    offset = 0;
-	    break;
-	}
-    }
-}
-
-static void calcOutputOffsets(struct pentFunctionInfo *pfi, 
-	struct dlList *iList)
-/* Go through and fix stack offsets for output parameters */
-{
-struct dlNode *node;
-int offset = 0;
-for (node = iList->head; !dlEnd(node); node = node->next)
-    {
-    struct isx *isx = node->val;
-    switch (isx->opType)
-        {
 	case poOutput:
-	    isx->left->stackOffset = offset;
-	    offset += pentTypeSize(isx->left->valType);
-	    if (offset > pfi->callParamSize)
-	         pfi->callParamSize = offset;
+	    isx->left->stackOffset = outOffset;
+	    outOffset += pentTypeSize(isx->left->valType);
+	    if (outOffset > pfi->callParamSize)
+	         pfi->callParamSize = outOffset;
 	    break;
 	case poCall:
-	    offset = 0;
+	    inOffset = outOffset = 0;
 	    break;
 	}
     }
 }
-
 
 struct regStompStack
     {
@@ -1337,30 +1330,46 @@ else
     }
 }
 
-static void pentReturnVal(struct isx *isx, struct pentCoder *coder)
-/* Move return value to return register. */
+static void pentReturnVal(struct isx *isx, struct dlNode *nextNode,
+	struct pentCoder *coder)
+/* Move return variable to return location - usually a register,
+ * but possibly the parameter stack if there are many return vals. */
 {
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
 enum isxValType valType = dest->valType;
 int ioOffset = dest->val.ioOffset;
 struct isxReg *reg = outOffsetToReg(ioOffset, valType);
-if (ioOffset == 0 && (valType == ivFloat || valType == ivDouble))
+if (reg != NULL)
     {
-    /* Deal with first floating point return value - which we have
-     * to store in the top of the floating point stack. */
-    /* Note - here we are assuming variables all live in memory
-     * as well as any registers... */
-    char *op = (valType == ivFloat ? "flds" : "fldl");
-    assert(source->adType == iadRealVar);
-    source->reg = NULL;
-    pentPrintAddress(source, coder->sourceBuf);
-    pentCoderAdd(coder, op, NULL, coder->sourceBuf);
+    if (ioOffset == 0 && (valType == ivFloat || valType == ivDouble))
+	{
+	/* Deal with first floating point return value - which we have
+	 * to store in the top of the floating point stack. */
+	/* Note - here we are assuming variables all live in memory
+	 * as well as any registers... */
+	char *op = (valType == ivFloat ? "flds" : "fldl");
+	assert(source->adType == iadRealVar);
+	source->reg = NULL;
+	pentPrintAddress(source, coder->sourceBuf);
+	pentCoderAdd(coder, op, NULL, coder->sourceBuf);
+	}
+    else
+	{
+	if (source->reg != reg)
+	    codeOpDestReg(opMov, source, reg, coder);
+	}
     }
 else
     {
+    uglyf("THeoretically saving output outside register\n");
+    uglyf("Hmm, looks like this needs to be reversed so non-regs get saved first\n");
+#ifdef REALFLAKY
+    reg = freeReg(isx, valType, nextNode, coder);
     if (source->reg != reg)
 	codeOpDestReg(opMov, source, reg, coder);
+    codeOpSourceReg(opMov, reg, dest, coder);
+#endif /* REALFLAKY */
     }
 }
 
@@ -1445,10 +1454,13 @@ switch (isx->opType)
 	enum isxValType valType = dest->valType;
 	int ioOffset = dest->val.ioOffset;
 	struct isxReg *reg = outOffsetToReg(ioOffset, valType);
-	int regIx = reg->regIx;
-	stomp->stompPos[regIx] = 0;
-	stomp->contents[regIx] = isx->left;
-	coder->regsUsed[regIx] = TRUE;
+	if (reg != NULL)
+	    {
+	    int regIx = reg->regIx;
+	    stomp->stompPos[regIx] = 0;
+	    stomp->contents[regIx] = isx->left;
+	    coder->regsUsed[regIx] = TRUE;
+	    }
 	break;
 	}
     }
@@ -1636,8 +1648,7 @@ struct dlList *iList = isxList->iList;
 int stackUse;
 
 initRegInfo();
-calcInputOffsets(pfi, iList);
-calcOutputOffsets(pfi, iList);
+calcInOutRetOffsets(pfi, iList);
 calcLoopRegVars(isxList, coder);
 addRegStomper(iList, pfi->coder);
 
@@ -1764,7 +1775,7 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	case poFuncEnd:
 	    break;
 	case poReturnVal:
-	    pentReturnVal(isx, coder);
+	    pentReturnVal(isx, nextNode, coder);
 	    break;
 	default:
 	    warn("unimplemented\t%s\n", isxOpTypeToString(isx->opType));

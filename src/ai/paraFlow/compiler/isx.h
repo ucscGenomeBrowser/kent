@@ -106,6 +106,7 @@ enum isxAddressType
     iadLabel,
     iadLoopInfo,
     iadCtar,
+    iadReturnVar,
     };
 
 struct isxLoopVar

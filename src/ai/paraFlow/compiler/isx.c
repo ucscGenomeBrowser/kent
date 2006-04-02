@@ -210,6 +210,9 @@ switch (iad->adType)
     case iadOutStack:
 	fprintf(f, "out(%d)", iad->val.ioOffset);
         break;
+    case iadReturnVar:
+	fprintf(f, "ret(%d)", iad->val.ioOffset);
+        break;
     case iadOperator:
     case iadCtar:
 	fprintf(f, "#%s", iad->name);
@@ -530,7 +533,7 @@ for (pp = outTuple->children; pp != NULL; pp = pp->next, ++offset)
     {
     struct isxAddress *source = varAddress(pp->var, varHash, 1.0, 
 	ppToIsxValType(pfc, pp));
-    struct isxAddress *dest = ioAddress(offset, source->valType, iadInStack);
+    struct isxAddress *dest = ioAddress(offset, source->valType, iadReturnVar);
     isxNew(pfc, poReturnVal, dest, source, NULL, iList);
     }
 }
