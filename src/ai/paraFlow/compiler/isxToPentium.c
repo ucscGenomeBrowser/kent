@@ -104,6 +104,7 @@ enum pentRegs
    {
    ax=0, bx=1, cx=2, dx=3, si=4, di=5, 
    xmm0=6,xmm1=7,xmm2=8,xmm3=9,xmm4=10,xmm5=11,xmm6=12,xmm7=13,
+   mm1=14, mm2=15, mm3=16, mm4=17, mm5=18, mm6=19
    };
 
 static struct isxReg regInfo[pentRegCount] = {
@@ -121,6 +122,12 @@ static struct isxReg regInfo[pentRegCount] = {
     { 8, NULL, NULL, NULL, NULL, "%xmm5", "%xmm5", NULL},
     { 8, NULL, NULL, NULL, NULL, "%xmm6", "%xmm6", NULL},
     { 8, NULL, NULL, NULL, NULL, "%xmm7", "%xmm7", NULL},
+    { 8, NULL, NULL, NULL, "%mm1", NULL, NULL, NULL},
+    { 8, NULL, NULL, NULL, "%mm2", NULL, NULL, NULL},
+    { 8, NULL, NULL, NULL, "%mm3", NULL, NULL, NULL},
+    { 8, NULL, NULL, NULL, "%mm4", NULL, NULL, NULL},
+    { 8, NULL, NULL, NULL, "%mm5", NULL, NULL, NULL},
+    { 8, NULL, NULL, NULL, "%mm6", NULL, NULL, NULL},
 };
 
 struct pentFunctionInfo *pentFunctionInfoNew()
@@ -169,15 +176,15 @@ struct dataOpTable
 
 static struct dataOpTable dataOpTable[] =
     {
-    {opMov, "movb", "movw", "movl", NULL, "movss", "movsd", "movl"},
-    {opAdd, "addb", "addw", "addl", NULL, "addss", "addsd", "addl"},
-    {opSub, "subb", "subw", "subl", NULL, "subss", "subsd", "subl"},
+    {opMov, "movb", "movw", "movl", "movq", "movss", "movsd", "movl"},
+    {opAdd, "addb", "addw", "addl", "paddq", "addss", "addsd", "addl"},
+    {opSub, "subb", "subw", "subl", "psubq", "subss", "subsd", "subl"},
     {opMul, "imulb", "imulw", "imull", NULL, "mulss", "mulsd", NULL},
     {opDiv, "idivb", "idivw", "idivl", NULL, "divss", "divsd", NULL},
-    {opAnd, "andb", "andw", "andl", NULL, NULL, NULL, NULL},
-    {opOr, "orb", "orw", "orl", NULL, NULL, NULL, NULL},
-    {opXor, "xorb", "xorw", "xorl", NULL, NULL, NULL, NULL},
-    {opSal, "salb", "salw", "sall", NULL, NULL, NULL, NULL},
+    {opAnd, "andb", "andw", "andl", "pand", NULL, NULL, NULL},
+    {opOr,  "orb",  "orw",  "orl",  "por",  NULL, NULL, NULL},
+    {opXor, "xorb", "xorw", "xorl", "pxor", NULL, NULL, NULL},
+    {opSal, "salb", "salw", "sall", "pslldq", NULL, NULL, NULL},
     {opSar, "sarb", "sarw", "sarl", NULL, NULL, NULL, NULL},
     {opNeg, "negb", "negw", "negl", NULL, NULL, NULL, NULL},
     {opNot, "notb", "notw", "notl", NULL, NULL, NULL, NULL},
@@ -272,6 +279,22 @@ assert(FALSE);
 return 0;
 }
 
+static char *pentFloatOrLongLabel(char *buf, int bufSize, enum isxValType valType, 
+	struct isxAddress *iad)
+/* Return label associated with floating point or long constant. */
+{
+if (valType == ivLong)
+    safef(buf, bufSize, "Q%lld", iad->val.tok->val.l);
+else
+    {
+    char pre = (valType == ivFloat ? 'F' : 'D');
+    safef(buf, bufSize, "%c%g", pre, iad->val.tok->val.x);
+    subChar(buf, '-', '_');
+    subChar(buf, '.', 'o');
+    }
+return buf;
+}
+
 static void pentPrintAddress(struct isxAddress *iad, char *buf)
 /* Print out an address for an instruction. */
 {
@@ -290,7 +313,8 @@ else
 		{
 		case ivFloat:
 		case ivDouble:
-		    pentFloatLabel(buf, pentCodeBufSize, iad->valType, iad);
+		case ivLong:
+		    pentFloatOrLongLabel(buf, pentCodeBufSize, iad->valType, iad);
 		    break;
 		default:
 		    safef(buf, pentCodeBufSize, "$%d", iad->val.tok->val.i);
@@ -410,6 +434,17 @@ switch (reg->regIx)
 	pentCoderAdd(coder, "subsd", name, name);
 	break;
 	}
+    case mm1:
+    case mm2:
+    case mm3:
+    case mm4:
+    case mm5:
+    case mm6:
+        {
+	char *name = reg->longName;
+	pentCoderAdd(coder, "pxor", name, name);
+	break;
+	}
     default:
         internalErr();
 	break;
@@ -460,16 +495,22 @@ struct isxReg *reg, *freeReg = NULL;
 struct regStomper *stomp = isx->cpuInfo;
 struct isxLiveVar *live;
 
-if (valType == ivFloat || valType == ivDouble)
-     {
-     regStartIx = xmm0;
-     regEndIx =  xmm7;
-     }
-else
-     {
-     regStartIx = ax;
-     regEndIx = di;
-     }
+switch (valType)
+    {
+    case ivFloat:
+    case ivDouble:
+	 regStartIx = xmm0;
+	 regEndIx =  xmm7;
+	 break;
+    case ivLong:
+    	regStartIx = mm1;
+	regEndIx = mm6;
+	break;
+    default:
+	regStartIx = ax;
+	regEndIx = di;
+	break;
+    }
 if (dest != NULL)
     {
     /* If destination is reserved or is the one that stomps, by all means
@@ -947,6 +988,9 @@ switch (valType)
     case ivDouble:
 	pentFloatDivide(isx, nextNode, coder);
         break;
+    case ivLong:
+        internalErr();
+	break;
     default:
          pentIntModDivide(isx, nextNode, FALSE, coder);
 	 break;
@@ -1012,7 +1056,8 @@ static void pentInput(struct isx *isx, struct dlNode *nextNode,
 {
 struct isxAddress *source = isx->left;
 if (source->reg || (source->adType == iadConst 
-	&& source->valType != ivFloat && source->valType != ivDouble))
+	&& source->valType != ivFloat && source->valType != ivDouble
+	&& source->valType != ivLong))
     codeOp(opMov, source, isx->dest, coder);
 else
     {
@@ -1032,12 +1077,13 @@ struct isxReg *reg = NULL;
 switch (valType)
     {
     case ivLong:
-        errAbort("Returns of type %s not implemented", 
-		isxValTypeToString(valType));
+	if (ioOffset < 4)
+	    reg = &regInfo[mm1 + ioOffset];
 	break;
     case ivFloat:
     case ivDouble:
-	reg = &regInfo[xmm0 + ioOffset];
+	if (ioOffset < 8)
+	    reg = &regInfo[xmm0 + ioOffset];
 	break;
     default:
 	switch (ioOffset)
@@ -1070,7 +1116,8 @@ if (reg != NULL)
     if (sourceIx == 0)
 	{
 	/* The first floating point parameter is a bit gnarly.  Move it
-	 * from old fashioned floating point stack top to xmm0 register */
+	 * from old fashioned floating point stack top to xmm0 register.
+	 * Long also a little gnarly.  Move from eax:edx to xmm0 */
 	switch(valType)
 	    {
 	    case ivFloat:
@@ -1084,6 +1131,9 @@ if (reg != NULL)
 		    source->stackOffset);
 		pentCoderAdd(coder, "fstpl", NULL, coder->destBuf);
 		pentCoderAdd(coder, "movsd", coder->destBuf, "%xmm0");
+		break;
+	    case ivLong:
+		internalErr();
 		break;
 	    }
 	}
@@ -1104,7 +1154,7 @@ int i;
 pentSwapOutIfNeeded(&regInfo[ax],isx->liveList, coder);
 pentSwapOutIfNeeded(&regInfo[cx],isx->liveList, coder);
 pentSwapOutIfNeeded(&regInfo[dx],isx->liveList, coder);
-for (i=xmm0; i<= xmm7; ++i)
+for (i=xmm0; i<= mm6; ++i)
     pentSwapOutIfNeeded(&regInfo[i],isx->liveList, coder);
 safef(coder->destBuf, pentCodeBufSize, "%s%s", isxPrefixC, funcVar->cName);
 pentCoderAdd(coder, "call", NULL, coder->destBuf);
@@ -1192,7 +1242,11 @@ pentCoderAdd(coder, "jmp", isx->dest->name, NULL);
 static char *flipRightLeftInJump(char *jmpOp)
 /* Turn jump to jump you'd get if comparison were reversed. */
 {
-if (sameString(jmpOp, "jl")) jmpOp = "jge";
+if (sameString(jmpOp, "jb")) jmpOp = "jnb";
+else if (sameString(jmpOp, "jbe")) jmpOp = "jnbe";
+else if (sameString(jmpOp, "jnb")) jmpOp = "jb";
+else if (sameString(jmpOp, "jnbe")) jmpOp = "jbe";
+else if (sameString(jmpOp, "jl")) jmpOp = "jge";
 else if (sameString(jmpOp, "jle")) jmpOp = "jg";
 else if (sameString(jmpOp, "jge")) jmpOp = "jl";
 else if (sameString(jmpOp, "jg")) jmpOp = "jle";
@@ -1201,9 +1255,12 @@ return jmpOp;
 
 
 static void pentCmpJump(struct isx *isx, struct dlNode *nextNode,
-	char *jmpOp, struct pentCoder *coder)
+	char *jmpOp, char *floatJmpOp, struct pentCoder *coder)
 /* Output conditional jump code for == != < <= => > . */
 {
+enum isxValType valType = isx->left->valType;
+if (valType == ivFloat || valType == ivDouble)
+    jmpOp = floatJmpOp;
 if (isx->left->reg)
     {
     codeOp(opCmp, isx->right, isx->left, coder);
@@ -1366,6 +1423,10 @@ if (reg != NULL)
 	pentPrintAddress(source, coder->sourceBuf);
 	pentCoderAdd(coder, op, NULL, coder->sourceBuf);
 	}
+    else if (ioOffset == 0 && valType == ivLong)
+        {
+	internalErr();
+	}
     else
 	{
 	if (source->reg != reg)
@@ -1396,7 +1457,7 @@ stomp->stompPos[cx] = 3;
 stomp->stompPos[si] = 4;
 stomp->stompPos[di] = 5;
 stomp->stompPos[bx] = 6;
-for (i=xmm0; i<=xmm7; ++i)
+for (i=xmm0; i<=mm6; ++i)
     stomp->stompPos[i] = i;
 for (i=0; i<pentRegCount; ++i)
     stomp->contents[i] = NULL;
@@ -1421,7 +1482,7 @@ switch (isx->opType)
        stomp->stompPos[dx] = 0;
        stomp->contents[dx] = NULL;
        coder->regsUsed[dx] = TRUE;
-       for (i=xmm0; i<=xmm7; ++i)
+       for (i=xmm0; i<=mm6; ++i)
 	    {
 	    stomp->stompPos[i] = 0;
 	    stomp->contents[i] = NULL;
@@ -1615,6 +1676,8 @@ stomp->stompPos[ax] = 0;
 stomp->stompPos[dx] = 0;
 stomp->stompPos[xmm0] = 0;
 stomp->stompPos[xmm1] = 0;
+stomp->stompPos[mm1] = 0;
+stomp->stompPos[mm2] = 0;
 
 /* Reserve registers from most frequently used to least frequently
  * used. */
@@ -1756,22 +1819,22 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	case poCondStart:
 	    break;
 	case poBlt:
-	    pentCmpJump(isx, nextNode, "jl", coder);
+	    pentCmpJump(isx, nextNode, "jl", "jb", coder);
 	    break;
 	case poBle:
-	    pentCmpJump(isx, nextNode, "jle", coder);
+	    pentCmpJump(isx, nextNode, "jle", "jbe", coder);
 	    break;
 	case poBge:
-	    pentCmpJump(isx, nextNode, "jge", coder);
+	    pentCmpJump(isx, nextNode, "jge", "jnb", coder);
 	    break;
 	case poBgt:
-	    pentCmpJump(isx, nextNode, "jg", coder);
+	    pentCmpJump(isx, nextNode, "jg", "jnbe", coder);
 	    break;
 	case poBeq:
-	    pentCmpJump(isx, nextNode, "je", coder);
+	    pentCmpJump(isx, nextNode, "je", "je", coder);
 	    break;
 	case poBne:
-	    pentCmpJump(isx, nextNode, "jne", coder);
+	    pentCmpJump(isx, nextNode, "jne", "jne", coder);
 	    break;
 	case poBz:
 	    pentTestJump(isx, nextNode, "jz", coder);
@@ -1883,16 +1946,6 @@ switch (valType)
     }
 }
 
-char *pentFloatLabel(char *buf, int bufSize, enum isxValType valType, 
-	struct isxAddress *iad)
-/* Return label associated with floating point constant. */
-{
-char pre = (valType == ivFloat ? 'F' : 'D');
-safef(buf, bufSize, "%c%g", pre, iad->val.tok->val.x);
-subChar(buf, '-', '_');
-subChar(buf, '.', 'o');
-return buf;
-}
 
 static void codeLocalConst(struct isxAddress *iad, struct hash *uniqHash, 
 	boolean *pInText, FILE *f)
@@ -1907,7 +1960,8 @@ if (iad->adType == iadConst)
         {
 	case ivFloat:
 	case ivDouble:
-	    pentFloatLabel(buf, sizeof(buf), valType, iad);
+	case ivLong:
+	    pentFloatOrLongLabel(buf, sizeof(buf), valType, iad);
 	    if ((hel = hashLookup(uniqHash, buf)) == NULL)
 		{
 		if (*pInText)

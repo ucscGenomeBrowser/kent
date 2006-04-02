@@ -6,7 +6,7 @@
 #endif 
 
 #define pentCodeBufSize 256
-#define pentRegCount 14
+#define pentRegCount 20
 
 struct pentCoder
 /* A factory for pentCodes */
@@ -89,10 +89,6 @@ void pentInitFuncVars(struct pfCompile *pfc, struct ctar *ctar,
 	struct hash *varHash, struct pentFunctionInfo *pfi);
 /* Set up variables and offsets for parameters and local variables
  * in hash. */
-
-char *pentFloatLabel(char *buf, int bufSize, enum isxValType valType, 
-	struct isxAddress *iad);
-/* Return label associated with floating point constant. */
 
 void pentPrintInitConst(char *prefix, char *label, enum isxValType valType, 
 	struct pfToken *tok, FILE *f);

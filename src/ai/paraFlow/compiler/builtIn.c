@@ -9,6 +9,7 @@ return
 "\n"
 "global flow _printInt(int i);\n"
 "global flow _printDouble(double x);\n"
+"global flow _printLong(long l);\n"
 "global flow print(var v);\n"
 "global to prin(var v);\n"
 "global flow ugly(var v);\n"

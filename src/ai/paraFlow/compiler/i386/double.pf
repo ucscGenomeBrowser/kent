@@ -13,4 +13,21 @@ float floatRes = 1.5;
 _printDouble(z);
 double sevenPtFive = addFive(1.0);
 _printDouble(sevenPtFive);
-
+double dx = 1.0, dy = 2.0, dz = 2.0;
+_printInt(666);
+if (dx < dy)
+    _printInt(1);
+else
+    _printInt(0);
+if (dy > dx)
+    _printInt(1);
+else
+    _printInt(0);
+if (dx == dy)
+    _printInt(0);
+else
+    _printInt(1);
+if (dz == dy)
+    _printInt(1);
+else
+    _printInt(0);
