@@ -15,85 +15,7 @@
 
 #define cstrPrefix "JK_"	/* Prefix before string constants */
 
-static void printAsciiString(char *s, FILE *f)
-/* Print constant string with escapes for assembler 
- * The surrounding quotes and terminal 0 are handled elsewhere. */
-{
-char c;
-while ((c = *s++) != 0)
-    {
-    switch (c)
-        {
-	case '"':
-	case '\\':
-	   fputc('\\', f);
-	   fputc(c, f);
-	   break;
-	default:
-	   if (isprint(c))
-	      fputc(c, f);
-	   else
-	      {
-	      fputc('\\', f);
-	      fprintf(f, "%o", c);
-	      }
-	   break;
-	}
-    }
-}
-
-static void printInitConst(enum isxValType valType, struct pfParse *initPp, 
-	FILE *f)
-/* Print out a constant initialization */
-{
-union pfTokVal val = initPp->tok->val;
-switch (valType)
-    {
-    case ivByte:
-	fprintf(f, "\t.byte\t%d\n", val.i);
-	break;
-    case ivShort:
-	fprintf(f, "\t.align 1\n");
-	fprintf(f, "\t.word\t%d\n", val.i);
-	break;
-    case ivInt:
-	fprintf(f, "\t.align 2\n");
-	fprintf(f, "\t.long\t%d\n", val.i);
-	break;
-    case ivLong:
-	fprintf(f, "\t.align 3\n");
-	fprintf(f, "\t.long\t%d\n", (int)(val.l&0xFFFFFFFF));
-	fprintf(f, "\t.long\t%d\n", (int)(val.l>>32));
-	break;
-    case ivFloat:
-	{
-	float x = val.x;
-	_pf_Int *i = (_pf_Int *)(&x);
-	fprintf(f, "\t.align 2\n");
-	fprintf(f, "\t.long\t%d\n", *i);
-	break;
-	}
-    case ivDouble:
-	{
-	_pf_Long *l = (_pf_Long *)(&val.x);
-	fprintf(f, "\t.align 3\n");
-	fprintf(f, "\t.long\t%d\n", (int)(*l&0xFFFFFFFF));
-	fprintf(f, "\t.long\t%d\n", (int)(*l>>32));
-	break;
-	}
-    case ivString:
-	fprintf(f, "\t.cstring\n");
-	fprintf(f, "\t.ascii\t\"");
-	printAsciiString(val.s, f);
-	fprintf(f, "\\0\"\n");
-	fprintf(f, "\t.data\n");
-	break;
-    default:
-        internalErr();
-	break;
-    }
-}
-
+#ifdef OLD
 static void declareModuleVars(struct dlList *iList, FILE *f, boolean doInitted)
 /* Declare module-level variables, either initted or not depending on flag. */
 {
@@ -116,7 +38,7 @@ for (node = iList->head; !dlEnd(node); node = node->next)
 	    if (isGlobal)
 		fprintf(f, ".globl\t%s%s\n", isxPrefixC, var->cName);
 	    fprintf(f, "%s%s:\n", isxPrefixC, var->cName);
-	    printInitConst(dest->valType, initPp, f);
+	    pentPrintInitConst(dest->valType, initPp->tok, f);
 	    }
 	}
     else 
@@ -141,7 +63,9 @@ for (node = iList->head; !dlEnd(node); node = node->next)
 	}
     }
 }
+#endif /* OLD */
 
+#ifdef OLD
 void gnuMacInittedModuleVars(struct dlList *iList, FILE *f)
 /* Print out info on initialized variables. */
 {
@@ -149,13 +73,44 @@ fprintf(f, "# Declaring initialized global and module variables\n");
 declareModuleVars(iList, f, TRUE);
 fprintf(f, "\n");
 }
+#endif /* OLD */
 
+#ifdef OLD
 void gnuMacUninittedModuleVars(struct dlList *iList, FILE *f)
 /* Print out info on uninitialized variables. */
 {
 fprintf(f, "# Declaring uninitialized global and module variables\n");
 declareModuleVars(iList, f, FALSE);
 fprintf(f, "\n");
+}
+#endif /* OLD */
+
+void gnuMacModuleVars(struct dlList *iList, FILE *f)
+/* Print out info on uninitialized variables - actually all vars..... */
+{
+struct dlNode *node;
+for (node = iList->head; !dlEnd(node); node = node->next)
+    {
+    struct isx *isx = node->val;
+    struct isxAddress *dest = isx->dest;
+    struct pfVar *var = dest->val.var;
+    enum pfAccessType access = var->ty->access;
+    boolean isGlobal = (access == paGlobal || access == paWritable);
+    int size = pentTypeSize(dest->valType);
+    if (isGlobal)
+	{
+	fprintf(f, ".align %d\n", size);
+	fprintf(f, ".comm");
+	fprintf(f, " %s%s,%d\n", isxPrefixC, var->cName,
+		size);
+	}
+    else
+	{
+	fprintf(f, ".lcomm");
+	fprintf(f, " %s%s,%d,%d\n", isxPrefixC, var->cName,
+		size, size);
+	}
+    }
 }
 
 void gnuMacModulePreamble(FILE *f)

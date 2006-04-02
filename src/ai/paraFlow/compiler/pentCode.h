@@ -11,7 +11,7 @@
 struct pentCoder
 /* A factory for pentCodes */
     {
-    struct hash *storeHash;	/* Save strings here to reuse */
+    struct hash *storeHash;	/* Save strings, floats here to reuse */
     struct pentCode *list;	/* List of instructions */
     char destBuf[pentCodeBufSize];	/* Space to print dest */
     char sourceBuf[pentCodeBufSize];	/* Space to print source */
@@ -89,6 +89,19 @@ void pentInitFuncVars(struct pfCompile *pfc, struct ctar *ctar,
 	struct hash *varHash, struct pentFunctionInfo *pfi);
 /* Set up variables and offsets for parameters and local variables
  * in hash. */
+
+char *pentFloatLabel(char *buf, int bufSize, enum isxValType valType, 
+	struct isxAddress *iad);
+/* Return label associated with floating point constant. */
+
+void pentPrintInitConst(enum isxValType valType, struct pfToken *tok, 
+	FILE *f);
+/* Print out a constant initialization */
+
+void pentCodeLocalConsts(struct isxList *isxList, 
+	struct hash *uniqHash, FILE *f);
+/* Print code that helps local non-int constant initialization. 
+ * for any sources in instruction. */
 
 #endif /* PENTCODE_H */
 

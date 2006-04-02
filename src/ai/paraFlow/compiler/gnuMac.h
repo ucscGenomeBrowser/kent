@@ -28,11 +28,8 @@ void gnuMacMainStart(FILE *f);
 void gnuMacMainEnd(FILE *f);
 /* Declare main function end. */
 
-void gnuMacInittedModuleVars(struct dlList *iList, FILE *f);
-/* Print out info on initialized variables. */
-
-void gnuMacUninittedModuleVars(struct dlList *iList, FILE *f);
-/* Print out info on uninitialized variables. */
+void gnuMacModuleVars(struct dlList *iList, FILE *f);
+/* Print out info on module level variables. */
 
 void gnuMacFunkyThunky(FILE *f);
 /* Do that call to the funky get thunk thingie

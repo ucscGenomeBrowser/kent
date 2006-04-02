@@ -13,6 +13,7 @@
 #define asmSuffix ".s"
 #define objSuffix ".o"
 
+#ifdef OLD
 static void finishFuncOrOutside(struct pfCompile *pfc, struct isxList *isxList,
 	FILE *isxFile, FILE *branchFile, FILE *asmFile, 
 	struct pentFunctionInfo *pfi, boolean isFunc, char *cName,
@@ -27,6 +28,8 @@ optBranch(isxList->iList);
 isxDumpList(isxList->iList, branchFile);
 fflush(branchFile);
 
+pentCodeLocalConsts(isxList, pfi->coder->storeHash, asmFile);
+
 pentFromIsx(isxList, pfi);
 if (isFunc)
     pentFunctionStart(pfc, pfi, cName, isGlobal, asmFile);
@@ -35,9 +38,24 @@ if (isFunc)
     pentFunctionEnd(pfc, pfi, asmFile);
 pentCodeFreeList(&pfi->coder->list);
 }
+#endif /* OLD */
+
+static void finishIsx(struct isxList *isxList, FILE *isxFile, FILE *branchFile)
+/* Make live list and do a little optimization on intermediate code,
+ * and save for debugging. */
+{
+isxLiveList(isxList);
+isxDumpList(isxList->iList, isxFile);
+fflush(isxFile);
+
+optBranch(isxList->iList);
+isxDumpList(isxList->iList, branchFile);
+fflush(branchFile);
+
+}
 
 static void codeOutsideFunctions(struct pfCompile *pfc, struct pfParse *module, 
-	FILE *isxFile, FILE *branchFile, FILE *asmFile)
+	struct hash *constHash, FILE *isxFile, FILE *branchFile, FILE *asmFile)
 /* Generate code outside of functions */
 {
 struct isxList *isxList = isxListNew();
@@ -57,13 +75,19 @@ for (pp = module->children; pp != NULL; pp = pp->next)
 	    break;
 	}
     }
-finishFuncOrOutside(pfc, isxList, isxFile, branchFile, asmFile, pfi, 
-	FALSE, NULL, FALSE);
+finishIsx(isxList, isxFile, branchFile);
+pentCodeLocalConsts(isxList, constHash, asmFile);
+pentFromIsx(isxList, pfi);
+gnuMacMainStart(asmFile);
+pentCodeSaveAll(pfi->coder->list, asmFile);
+gnuMacMainEnd(asmFile);
+pentCodeFreeList(&pfi->coder->list);
 hashFree(&varHash);
 }
 
 static void codeFunction(struct pfCompile *pfc, struct pfParse *funcPp, 
-	FILE *isxFile, FILE *branchFile, FILE *asmFile, struct pfParse *classPp)
+	struct hash *constHash, FILE *isxFile, FILE *branchFile, 
+	FILE *asmFile, struct pfParse *classPp)
 /* Generate code for one function */
 {
 struct hash *varHash = hashNew(0);
@@ -92,14 +116,20 @@ if (classPp != NULL)
     isGlobal = (classPp->ty->access == paGlobal && access != paLocal);
 else
     isGlobal = (access == paGlobal);
-finishFuncOrOutside(pfc, isxList, isxFile, branchFile, asmFile, pfi, TRUE,
-    cName, isGlobal);
+finishIsx(isxList, isxFile, branchFile);
+pentCodeLocalConsts(isxList, constHash, asmFile);
+pentFromIsx(isxList, pfi);
+pentFunctionStart(pfc, pfi, cName, isGlobal, asmFile);
+pentCodeSaveAll(pfi->coder->list, asmFile);
+pentFunctionEnd(pfc, pfi, asmFile);
+pentCodeFreeList(&pfi->coder->list);
 hashFree(&varHash);
 }
 
 
 static void codeFunctions(struct pfCompile *pfc, struct pfParse *parent, 
-	FILE *isxFile, FILE *branchFile, FILE *asmFile, struct pfParse *classPp)
+	struct hash *constHash, FILE *isxFile, FILE *branchFile, 
+	FILE *asmFile, struct pfParse *classPp)
 /* Generate code inside of functions */
 {
 struct isxList *isxList = isxListNew();
@@ -109,16 +139,16 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
     switch (pp->type)
 	{
 	case pptClass:
-	    codeFunctions(pfc, pp, isxFile, branchFile, asmFile, pp);
+	    codeFunctions(pfc, pp, constHash, isxFile, branchFile, asmFile, pp);
 	    break;
 	case pptToDec:
 	case pptFlowDec:
-	    codeFunction(pfc, pp, isxFile, branchFile, asmFile, classPp);
+	    codeFunction(pfc, pp, constHash, isxFile, branchFile, asmFile, 
+	    	classPp);
 	    break;
 	}
     }
 }
-
 
 static void asmModule(struct pfCompile *pfc, struct pfParse *program,
 	struct pfParse *module, char *baseDir)
@@ -129,6 +159,7 @@ FILE *isxFile, *branchFile;
 struct isxList *isxList, *modVarIsx;
 char path[PATH_LEN];
 char *baseName = module->name;
+struct hash *constHash = hashNew(0);
 
 safef(path, sizeof(path), "%s%s.isx", baseDir, baseName);
 isxFile = mustOpen(path, "w");
@@ -138,19 +169,13 @@ safef(path, sizeof(path), "%s%s%s", baseDir, baseName, asmSuffix);
 asmFile = mustOpen(path, "w");
 
 modVarIsx = isxModuleVars(pfc, module);
-
 gnuMacModulePreamble(asmFile);
-gnuMacInittedModuleVars(modVarIsx->iList, asmFile);
-
-gnuMacMainStart(asmFile);
-codeOutsideFunctions(pfc, module, isxFile, branchFile, asmFile);
-gnuMacMainEnd(asmFile);
-
-codeFunctions(pfc, module, isxFile, branchFile, asmFile, NULL);
-
-gnuMacUninittedModuleVars(modVarIsx->iList, asmFile);
+codeOutsideFunctions(pfc, module, constHash, isxFile, branchFile, asmFile);
+codeFunctions(pfc, module, constHash, isxFile, branchFile, asmFile, NULL);
+gnuMacModuleVars(modVarIsx->iList, asmFile);
 gnuMacModulePostscript(asmFile);
 
+hashFree(&constHash);
 carefulClose(&isxFile);
 carefulClose(&branchFile);
 carefulClose(&asmFile);
