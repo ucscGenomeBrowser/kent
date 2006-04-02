@@ -37,8 +37,8 @@ for (node = iList->head; !dlEnd(node); node = node->next)
 	    {
 	    if (isGlobal)
 		fprintf(f, ".globl\t%s%s\n", isxPrefixC, var->cName);
-	    fprintf(f, "%s%s:\n", isxPrefixC, var->cName);
-	    pentPrintInitConst(dest->valType, initPp->tok, f);
+	    pentPrintInitConst(isxPrefixC, var->cName,
+	    	dest->valType, initPp->tok, f);
 	    }
 	}
     else 

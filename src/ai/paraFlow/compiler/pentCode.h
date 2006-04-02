@@ -94,8 +94,8 @@ char *pentFloatLabel(char *buf, int bufSize, enum isxValType valType,
 	struct isxAddress *iad);
 /* Return label associated with floating point constant. */
 
-void pentPrintInitConst(enum isxValType valType, struct pfToken *tok, 
-	FILE *f);
+void pentPrintInitConst(char *prefix, char *label, enum isxValType valType, 
+	struct pfToken *tok, FILE *f);
 /* Print out a constant initialization */
 
 void pentCodeLocalConsts(struct isxList *isxList, 

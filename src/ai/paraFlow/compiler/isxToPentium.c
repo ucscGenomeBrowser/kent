@@ -1647,26 +1647,30 @@ while ((c = *s++) != 0)
     }
 }
 
-void pentPrintInitConst(enum isxValType valType, struct pfToken *tok, 
-	FILE *f)
+void pentPrintInitConst(char *prefix, char *label, enum isxValType valType, 
+	struct pfToken *tok, FILE *f)
 /* Print out a constant initialization */
 {
 union pfTokVal val = tok->val;
 switch (valType)
     {
     case ivByte:
+	fprintf(f, "%s%s:\n", prefix, label);
 	fprintf(f, "\t.byte\t%d\n", val.i);
 	break;
     case ivShort:
 	fprintf(f, "\t.align 1\n");
+	fprintf(f, "%s%s:\n", prefix, label);
 	fprintf(f, "\t.word\t%d\n", val.i);
 	break;
     case ivInt:
 	fprintf(f, "\t.align 2\n");
+	fprintf(f, "%s%s:\n", prefix, label);
 	fprintf(f, "\t.long\t%d\n", val.i);
 	break;
     case ivLong:
 	fprintf(f, "\t.align 3\n");
+	fprintf(f, "%s%s:\n", prefix, label);
 	fprintf(f, "\t.long\t%d\n", (int)(val.l&0xFFFFFFFF));
 	fprintf(f, "\t.long\t%d\n", (int)(val.l>>32));
 	break;
@@ -1675,6 +1679,7 @@ switch (valType)
 	float x = val.x;
 	_pf_Int *i = (_pf_Int *)(&x);
 	fprintf(f, "\t.align 2\n");
+	fprintf(f, "%s%s:\n", prefix, label);
 	fprintf(f, "\t.long\t%d\n", *i);
 	break;
 	}
@@ -1682,6 +1687,7 @@ switch (valType)
 	{
 	_pf_Long *l = (_pf_Long *)(&val.x);
 	fprintf(f, "\t.align 3\n");
+	fprintf(f, "%s%s:\n", prefix, label);
 	fprintf(f, "\t.long\t%d\n", (int)(*l&0xFFFFFFFF));
 	fprintf(f, "\t.long\t%d\n", (int)(*l>>32));
 	break;
@@ -1731,8 +1737,7 @@ if (iad->adType == iadConst)
 		    fprintf(f, "\t.data\n");
 		    *pInText = FALSE;
 		    }
-		fprintf(f, "%s:\n", buf);
-		pentPrintInitConst(valType, iad->val.tok, f);
+		pentPrintInitConst("", buf, valType, iad->val.tok, f);
 		hel = hashAdd(uniqHash, buf, NULL);
 		}
 	    iad->name = hel->name;
