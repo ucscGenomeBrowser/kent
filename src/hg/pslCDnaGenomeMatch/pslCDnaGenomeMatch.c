@@ -29,7 +29,7 @@
 #define NOVALUE 10000  /* loci index when there is no genome base for that mrna position */
 #include "mrnaMisMatch.h"
 
-//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.9 2006/04/01 23:36:44 baertsch Exp $";
+//static char const rcsid[] = "$Id: pslCDnaGenomeMatch.c,v 1.10 2006/04/02 01:14:06 baertsch Exp $";
 static char na[3] = "NA";
 struct axtScoreScheme *ss = NULL; /* blastz scoring matrix */
 struct hash *snpHash = NULL, *mrnaHash = NULL, *faHash = NULL, *tHash = NULL, *species1Hash = NULL, *species2Hash = NULL;
@@ -660,8 +660,8 @@ int *neither;             /* count of cases where the loci all have the same bas
 int *gapCount;             /* count of cases where the loci are gaps*/
 int *snpCount;             /* count of cases where the loci are snps*/
 int indel = 0;             /* count of gaps in mrna alignment */
-int maxScore = 0;       /* max scoring alignment for this mrna */
-int nextBestScore = 0;       /* 2nd best scoring alignment for this mrna */
+int maxScore = -100;       /* max scoring alignment for this mrna */
+int nextBestScore = -100;       /* 2nd best scoring alignment for this mrna */
 int maxCount = 0;       /* number of alignments with max score */
 int maxIndex = -1;      /* index in loci list of best aligment */
 char *chrom;           /* best alignment */
@@ -769,18 +769,35 @@ for (l = lociList ; l != NULL; l=l->next)
         {
         maxCount ++;
         nextBestScore = score;
+        verbose(5,"score == maxScore %s score %d nextBestScore %d maxScore %d\n",
+                name, score, nextBestScore, maxScore);
         }
     else if (score > maxScore)
         {
         maxCount = 1;
         maxIndex = z;
         nextBestScore = maxScore;
+        verbose(5,"score > maxScore %s score %d nextBestScore %d maxScore %d\n",
+                name, score, nextBestScore, maxScore);
+        }
+    else if (score > nextBestScore);
+        {
+        nextBestScore = score;
+        verbose(5,"score > maxScore %s score %d nextBestScore %d maxScore %d\n",
+                name, score, nextBestScore, maxScore);
         }
     maxScore = max(maxScore, score); 
-    verbose(3, "%s %s:%d [%d] mismatch %d good %d neither %d indel %d gaps %d snpCount[%d] %d total %d diff %d score %d index %d \n",
+    if (scoreFile != NULL)
+        fprintf(scoreFile, "## %s %s:%d [%d] mismatch %d good %d neither %d indel %d \
+                gaps %d snpCount[%d] %d total %d diff %d score %d nextBestScore %d index %d \n",
             name, l->chrom, l->chromStart, z, missCount[z], goodCount[z], neither[z], indel,
             missCount[z]+ goodCount[z]+ neither[z]+ indel, gapCount[z], z, snpCount[z],
-            seqCount - slCount(lociList), score, l->index);
+            seqCount - slCount(lociList), score, nextBestScore, l->index);
+    verbose(3, "%s %s:%d [%d] mismatch %d good %d neither %d indel %d \
+            gaps %d snpCount[%d] %d total %d diff %d score %d nextBestScore %d index %d \n",
+            name, l->chrom, l->chromStart, z, missCount[z], goodCount[z], neither[z], indel,
+            missCount[z]+ goodCount[z]+ neither[z]+ indel, gapCount[z], z, snpCount[z],
+            seqCount - slCount(lociList), score, nextBestScore, l->index);
     }
 if (getLociPosition(lociList, maxIndex, &chrom, &chromStart, &chromEnd, &psl))
     {
@@ -788,9 +805,12 @@ if (getLociPosition(lociList, maxIndex, &chrom, &chromStart, &chromEnd, &psl))
     assert(psl != NULL);
     if (maxIndex >= 0 && maxCount == 1 && diff > minDiff)
         {
-        verbose(2, "%s bestHit %s:%d-%d [%d] mismatch %d good %d neither %d indel %d gaps %d snps %d total %d diff %d maxScore %d maxCount %d 2nd best %d diff %d\n",
-                name,  psl->tName , psl->tStart, chromEnd, maxIndex, missCount[maxIndex], goodCount[maxIndex], neither[maxIndex], indel,
-                missCount[maxIndex]+ goodCount[maxIndex]+ neither[maxIndex]+ indel, gapCount[maxIndex], snpCount[maxIndex],
+        verbose(2, "%s bestHit %s:%d-%d [%d] mismatch %d good %d neither %d indel %d \
+                gaps %d snps %d total %d diff %d maxScore %d maxCount %d 2nd best %d diff %d\n",
+                name,  psl->tName , psl->tStart, chromEnd, maxIndex, 
+                missCount[maxIndex], goodCount[maxIndex], neither[maxIndex], indel,
+                missCount[maxIndex]+ goodCount[maxIndex]+ neither[maxIndex]+ indel, 
+                gapCount[maxIndex], snpCount[maxIndex],
                 seqCount - slCount(lociList), maxScore, maxCount, nextBestScore, diff);
         if (psl->strand[0] == '+' && psl->strand[1] == '-')
             pslRc(psl);
@@ -805,10 +825,10 @@ if (getLociPosition(lociList, maxIndex, &chrom, &chromStart, &chromEnd, &psl))
         return TRUE;
         }
     else
-        verbose(2, "%s nobestScore %d maxCount %d index %d pos %s:%d-%d diff %d\n", name, maxScore, maxCount, maxIndex, psl->tName , psl->tStart, chromEnd, diff);
+        verbose(2, "%s nobestScore %d nextBestScore %d maxCount %d index %d pos %s:%d-%d diff %d \n", name, maxScore, nextBestScore, maxCount, maxIndex, psl->tName , psl->tStart, chromEnd, diff);
     }
 else
-    verbose(2, "%s noLoci bestScore %d maxCount %d index %d no loci\n", name, maxScore, maxCount, maxIndex);
+    verbose(2, "%s noLoci bestScore %d nextBestScore %d maxCount %d index %d no loci\n", name, maxScore, nextBestScore, maxCount, maxIndex);
 freez(&missCount);
 freez(&goodCount);
 freez(&gapCount);
