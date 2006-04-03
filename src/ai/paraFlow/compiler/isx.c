@@ -353,7 +353,7 @@ static enum isxValType ppToIsxValType(struct pfCompile *pfc,
 return isxValTypeFromTy(pfc, pp->ty);
 }
 
-static struct isxAddress *constAddress(struct pfToken *tok, 
+struct isxAddress *isxConstAddress(struct pfToken *tok, 
 	enum isxValType valType)
 /* Get place to put constant. */
 {
@@ -568,7 +568,7 @@ switch (pp->type)
     case pptConstFloat:
     case pptConstDouble:
     case pptConstString:
-	return constAddress(pp->tok, ppToIsxValType(pfc, pp));
+	return isxConstAddress(pp->tok, ppToIsxValType(pfc, pp));
     case pptVarUse:
 	return varAddress(pp->var, varHash, weight, ppToIsxValType(pfc, pp));
     case pptPlus:

@@ -202,6 +202,10 @@ struct isx *isxAddNew(struct pfCompile *pfc, enum isxOpType opType,
 char *isxRegName(struct isxReg *reg, enum isxValType valType);
 /* Get name of reg for given type. */
 
+struct isxAddress *isxConstAddress(struct pfToken *tok, 
+	enum isxValType valType);
+/* Get place to put constant. */
+
 struct isxAddress *isxIoAddress(int offset, enum isxValType valType,
 	enum isxAddressType adType);
 /* Return reference to an io stack address */

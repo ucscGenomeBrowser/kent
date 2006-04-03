@@ -53,13 +53,11 @@ fprintf(f, "%s",
 "# Preamble found in all modules for Mac OS-X Pentium\n"
 "       .data\n"
 "       .align 3\n"
-"longLongZero:\n"
-"       .long 0\n"
-"       .long 0\n"
 "longLongMinusOne:\n"
 "       .long -1\n"
 "       .long -1\n"
 "\n"
+#ifdef OLD
 "       .cstring\n"
 "LC0:\n"
 "       .ascii \"%d\\12\\0\"\n"
@@ -122,6 +120,7 @@ fprintf(f, "%s",
 "	popl	%ebx\n"
 "	popl	%ebp\n"
 "	ret\n"
+#endif /* OLD */
 
 #ifdef OLD 
 ".globl __addTwo\n"
@@ -154,6 +153,7 @@ void gnuMacModulePostscript(FILE *f)
 {
 fprintf(f, "%s",
 "\n"
+#ifdef OLD 
 "# Postscript found in all modules for Mac OS-X Pentium\n"
 "       .section __IMPORT,__jump_table,symbol_stubs,self_modifying_code+pure_instructions,5\n"
 "L_printf$stub:\n"
@@ -168,6 +168,7 @@ fprintf(f, "%s",
 "___i686.get_pc_thunk.bx:\n"
 "       movl    (%esp), %ebx\n"
 "       ret\n"
+#endif /* OLD */
 );
 }
 

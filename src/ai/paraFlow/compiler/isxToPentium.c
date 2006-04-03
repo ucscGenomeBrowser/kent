@@ -1094,6 +1094,7 @@ unaryOpReg(opCode, reg, valType, coder);
 linkDestReg(isx->dest, reg, coder);
 }
 
+#ifdef OLD
 static void pentNegLong(struct isx *isx, struct dlNode *nextNode,  
 	struct pentCoder *coder)
 /* Output code to implement unary minus for long values. */
@@ -1112,7 +1113,9 @@ pentCoderAdd(coder, subOpName, destRegName, destRegName); /* Zero dest */
 pentCoderAdd(coder, subOpName, mm0RegName, destRegName);  /* Subtract left */
 linkDestReg(isx->dest, destReg, coder);
 }
+#endif /* OLD */
 
+#ifdef OLD
 static void pentNegFloat(struct isx *isx, struct dlNode *nextNode,  
 	struct pentCoder *coder)
 /* Output code to implement unary minus for floating point values. */
@@ -1120,6 +1123,7 @@ static void pentNegFloat(struct isx *isx, struct dlNode *nextNode,
 uglyf("THeoretically negating float\n");
 internalErr();	// uglyf
 }
+#endif /* OLD */
 
 static void pentNegate(struct isx *isx, struct dlNode *nextNode,  
 	struct pentCoder *coder)
@@ -1132,13 +1136,6 @@ switch (valType)
     case ivShort:
     case ivInt:
         pentUnaryOp(isx, opNeg, nextNode, coder);
-	break;
-    case ivLong:
-        pentNegLong(isx, nextNode, coder);
-	break;
-    case ivFloat:
-    case ivDouble:
-        pentNegFloat(isx, nextNode, coder);
 	break;
     default:
         internalErr();
@@ -2283,6 +2280,19 @@ freez(&node);
 freez(&isx);
 }
 
+void subFromZeroForNeg(struct pfCompile *pfc, struct dlNode *node,
+	struct isx *isx)
+/* convert -x  to  0 - x. */
+{
+enum isxValType valType = isx->dest->valType;
+struct pfToken *tok;
+AllocVar(tok);
+tok->type = (valType == ivLong ? pftLong : pftFloat);
+isx->opType = poMinus;
+isx->right = isx->left;
+isx->left = isxConstAddress(tok, valType);
+}
+
 void pentSubCallsForHardStuff(struct pfCompile *pfc, struct isxList *isxList)
 /* Substitute subroutine calls for some of the harder
  * instructions, particularly acting on longs. */
@@ -2291,24 +2301,44 @@ struct dlNode *node, *next;
 for (node = isxList->iList->head; !dlEnd(node); node = next)
     {
     struct isx *isx = node->val;
-    boolean destIsLong = (isx->dest != NULL && isx->dest->valType == ivLong);
     next = node->next;
-    if (destIsLong)
+    if (isx->dest != NULL)
 	{
-	switch (isx->opType)
+	switch (isx->dest->valType)
 	    {
-	    case poMul:
-	    	subInBinary(pfc, node, isx, "_pfLongMul");
+	    case ivLong:
+		{
+		switch (isx->opType)
+		    {
+		    case poMul:
+			subInBinary(pfc, node, isx, "_pfLongMul");
+			break;
+		    case poDiv:
+			subInBinary(pfc, node, isx, "_pfLongDiv");
+			break;
+		    case poMod:
+			subInBinary(pfc, node, isx, "_pfLongMod");
+			break;
+		    case poShiftRight:
+			subInBinary(pfc, node, isx, "_pfLongShiftRight");
+			break;
+		    case poNegate:
+			subFromZeroForNeg(pfc, node, isx);
+			break;
+		    }
 		break;
-	    case poDiv:
-	    	subInBinary(pfc, node, isx, "_pfLongDiv");
+		}
+	    case ivFloat:
+	    case ivDouble:
+		{
+		switch (isx->opType)
+		    {
+		    case poNegate:
+			subFromZeroForNeg(pfc, node, isx);
+			break;
+		    }
 		break;
-	    case poMod:
-	    	subInBinary(pfc, node, isx, "_pfLongMod");
-		break;
-	    case poShiftRight:
-	    	subInBinary(pfc, node, isx, "_pfLongShiftRight");
-		break;
+		}
 	    }
 	}
     }
