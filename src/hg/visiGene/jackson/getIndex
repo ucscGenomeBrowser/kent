@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/bin/tcsh -ef
 
 #idx_Object_key|clustered located on seg4| _Object_key|0|0|0|Jun 12 2005 12:09AM|
 #idx_Accession_key|nonclustered, unique located on seg5| _Accession_key|0|0|0|Jun 12 2005 12:12AM|
@@ -23,6 +23,7 @@ if ("$jdb" == "") then
 endif
 
 set table = "$1"
+set outpath = "/san/sanvol1/visiGene/offline/jax/$jdb"
 set sql = "sp_helpindex $table; -m bcp"
 
 query "$sql" "bcp" > tempfields
@@ -32,6 +33,15 @@ sed -i -e 's/|/\t/g' tempfields
 
 #cat tempfields
 set fields = ( `cat tempfields` )
+
+if ( "$fields" == "Objectdoesnothaveanyindexes." ) then
+    echo "" > $outpath/${table}Idx.sql
+    exit 0
+endif
+
+if ( -e $outpath/${table}Idx.sql ) then
+    rm $outpath/${table}Idx.sql
+endif
 
 # make create-sql
 
@@ -55,10 +65,12 @@ while ("$fields" != "")
     sed -i -e 's/,/\t/g' tempsubkeys
     #cat tempsubkeys
     set subkeys = ( `cat tempsubkeys` )
+    
     #drop index on table in jackson db
-    echo "" > tempsqlidx
-    echo "DROP INDEX $idxname on $table;" >> tempsqlidx
-    hgsql $jdb -e "source tempsqlidx"
+    #echo "" > tempsqlidx
+    #echo "DROP INDEX $idxname on $table;" >> tempsqlidx
+    #hgsql $jdb -e "source tempsqlidx"
+    
     #create index on table in jackson db
     echo "" > tempsqlidx
     echo "CREATE INDEX $idxname on $table ("  >> tempsqlidx
@@ -75,9 +87,9 @@ while ("$fields" != "")
     	set sep = ","
     end
     echo "); " >> tempsqlidx
-    cat tempsqlidx
-
-    #create index on table in jackson db
-    hgsql $jdb -e "source tempsqlidx"
+    cat tempsqlidx >> $outpath/${table}Idx.sql
 
 end
+echo "analyze table $table;" >> $outpath/${table}Idx.sql
+cat $outpath/${table}Idx.sql
+

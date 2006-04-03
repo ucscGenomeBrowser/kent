@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/bin/tcsh -ef
 set table = "$1"
 set sql = "select name from sysobjects where type='U' order by name"
 query "$sql" "bcp" | sed -e 's/|//g' > temptablelist
