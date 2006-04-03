@@ -706,14 +706,24 @@ switch (ppt)
 	    !invert, weight, iList);
 	break;
 	}
-    default:
-	{
-	struct isxAddress *source = isxExpression(pfc, cond, varHash, weight,
-		iList);
+    case pptCastByteToBit:
+    case pptCastShortToBit:
+    case pptCastIntToBit:
+    case pptCastLongToBit:
+    case pptCastFloatToBit:
+    case pptCastDoubleToBit:
+        {
+	struct isxAddress *source = isxExpression(pfc, cond->children, 
+		varHash, weight, iList);
 	enum isxOpType op = (invert ? poBz : poBnz);
 	isxAddNew(pfc, op, trueLabel, source, NULL, iList);
 	if (falseLabel)
 	    isxAddNew(pfc, poJump, falseLabel, NULL, NULL, iList);
+	break;
+	}
+    default:
+	{
+	internalErrAt(cond->tok);
 	break;
 	}
     }

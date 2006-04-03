@@ -1,0 +1,19 @@
+int a = 1;
+if (a)
+   _printInt(a);
+else
+   _printInt(0);
+
+/*-SOON
+long l = 2L;
+if (l)
+   _printLong(l);
+else
+   _printLong(0L);
+SOON-*/
+
+double d = 1.0;
+if (d)
+    _printDouble(d);
+else
+    _printDouble(0.1);
