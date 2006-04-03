@@ -6045,3 +6045,14 @@ _EOF_
 
     time nice -n +19 featureBits danRer3 chainMm8Link
     #   54831876 bases of 1630323462 (3.363%) in intersection
+
+
+# SWAP CHAINS/NET RN4 (DONE 4/2/06 angie)
+    ssh kkstore02
+    mkdir /cluster/data/danRer3/bed/blastz.rn4.swap
+    cd /cluster/data/danRer3/bed/blastz.rn4.swap
+    doBlastzChainNet.pl -swap /cluster/data/rn4/bed/blastz.danRer3/DEF \
+      -workhorse kkr7u00 >& do.log & tail -f do.log
+    ln -s blastz.rn4.swap /cluster/data/danRer3/bed/blastz.rn4
+
+

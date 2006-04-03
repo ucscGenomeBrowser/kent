@@ -1611,3 +1611,14 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
     time nice -n +19 featureBits bosTau2 chainMm8Link
     #   683178156 bases of 2812203870 (24.293%) in intersection
+
+
+# SWAP CHAINS/NET RN4 (DONE 4/2/06 angie)
+    ssh kkstore02
+    mkdir /cluster/data/bosTau2/bed/blastz.rn4.swap
+    cd /cluster/data/bosTau2/bed/blastz.rn4.swap
+    doBlastzChainNet.pl -swap /cluster/data/rn4/bed/blastz.bosTau2/DEF \
+      -workhorse kkr8u00 >& do.log & tail -f do.log
+    ln -s blastz.rn4.swap /cluster/data/bosTau2/bed/blastz.rn4
+
+
