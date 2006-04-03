@@ -75,7 +75,8 @@ void pentSubCallsForHardStuff(struct pfCompile *pfc, struct isxList *isxList);
 /* Substitute subroutine calls for some of the harder
  * instructions, particularly acting on longs. */
 
-void pentFromIsx(struct isxList *isxList, struct pentFunctionInfo *pfi);
+void pentFromIsx(struct pfCompile *pfc, struct isxList *isxList, 
+	struct pentFunctionInfo *pfi);
 /* Convert isx code to pentium instructions in pfi. */
 
 int pentTypeSize(enum isxValType valType);

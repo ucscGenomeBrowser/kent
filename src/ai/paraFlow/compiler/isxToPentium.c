@@ -324,6 +324,35 @@ else
 return buf;
 }
 
+static void pentPrintVarMemAddress(struct isxAddress *iad, char *buf, int offset)
+/* Print out an address for variable in memory. */
+{
+switch (iad->adType)
+    {
+    case iadRealVar:
+	{
+	struct pfVar *var = iad->val.var;
+	if (var->scope->isLocal)
+	    {
+	    safef(buf, pentCodeBufSize, "%d(%%ebp)", iad->stackOffset + offset);
+	    }
+	else
+	    {
+	    if (offset)
+		safef(buf, pentCodeBufSize, "%s%s+%d", isxPrefixC, iad->name, offset);
+	    else
+		safef(buf, pentCodeBufSize, "%s%s", isxPrefixC, iad->name);
+	    }
+	break;
+	}
+    case iadTempVar:
+	{
+	safef(buf, pentCodeBufSize, "%d(%%ebp)", iad->val.tempMemLoc + offset);
+	break;
+	}
+    }
+}
+
 static void pentPrintAddress(struct isxAddress *iad, char *buf)
 /* Print out an address for an instruction. */
 {
@@ -352,23 +381,8 @@ else
 	    break;
 	    }
 	case iadRealVar:
-	    {
-	    struct pfVar *var = iad->val.var;
-	    if (var->scope->isLocal)
-		{
-		safef(buf, pentCodeBufSize, "%d(%%ebp)", iad->stackOffset);
-		}
-	    else
-		{
-		safef(buf, pentCodeBufSize, "%s%s", isxPrefixC, iad->name);
-		}
-	    break;
-	    }
 	case iadTempVar:
-	    {
-	    safef(buf, pentCodeBufSize, "%d(%%ebp)", iad->val.tempMemLoc);
-	    break;
-	    }
+	    pentPrintVarMemAddress(iad, buf, 0);
 	case iadReturnVar:
 	    {
 	    safef(buf, pentCodeBufSize, "%d(%%ebp)", iad->stackOffset);
@@ -488,7 +502,6 @@ static void pentSwapTempFromReg(struct isxReg *reg,  struct pentCoder *coder)
 {
 struct isxAddress *iad = reg->contents;
 struct isxAddress old = *iad;
-static int tempIx;
 
 coder->tempIx -= reg->size;
 iad->reg = NULL;
@@ -955,7 +968,6 @@ struct isxReg *edx = &regInfo[dx];
 struct isxReg *ecx = &regInfo[cx];
 boolean swappedOutC = FALSE;
 struct isxLiveVar *extraLive = isx->liveList;
-int extraLiveCount = 0;
 
 addDummyToLive(p, &extraLive);
 addDummyToLive(q, &extraLive);
@@ -1356,32 +1368,86 @@ else if (sameString(jmpOp, "jg")) jmpOp = "jle";
 return jmpOp;
 }
 
+static void pentCmpJumpLong(struct pfCompile *pfc, struct isx *isx, 
+	struct dlNode *nextNode, char *jmpOp, struct pentCoder *coder)
+/* Output conditional jump code for == != < <= => > involving longs.
+ * This is a bit of work since we have to move out of the mmx registers
+ * into memory, and then from memory to eax. */
+{
+struct isxLiveVar *extraLive = isx->liveList;
+struct isxAddress *left = isx->left, *right = isx->right;
+struct isxReg *eax = &regInfo[ax];
+char *eaxName = isxRegName(eax, ivInt);
+struct isxAddress *skipAddress = isxTempLabelAddress(pfc);
 
-static void pentCmpJump(struct isx *isx, struct dlNode *nextNode,
-	char *jmpOp, char *floatJmpOp, struct pentCoder *coder)
+uglyf("Theoretically coding comparison between longs.\n");
+
+/* Force operands into memory, since no long comparison is possible
+ * in the mmx registers. */
+addDummyToLive(left, &extraLive);
+addDummyToLive(right, &extraLive);
+if (left->reg)
+    pentSwapOutIfNeeded(left->reg, extraLive, coder);
+if (right->reg)
+    pentSwapOutIfNeeded(right->reg, extraLive, coder);
+
+/* Free up eax */
+pentSwapOutIfNeeded(eax, isx->liveList, coder);
+eax->contents = NULL;
+
+/* Do comparison of high order 32 bits jumping to end if
+ * they are not equal. */
+pentPrintVarMemAddress(left, coder->sourceBuf, 4);
+pentCoderAdd(coder, "movl", coder->sourceBuf, eaxName);
+pentPrintVarMemAddress(right, coder->sourceBuf, 4);
+pentCoderAdd(coder, "cmpl", coder->sourceBuf, eaxName);
+pentCoderAdd(coder, "jne", skipAddress->name, NULL);
+
+/* Do comparion of low order 32 bits. */
+pentPrintVarMemAddress(left, coder->sourceBuf, 0);
+pentCoderAdd(coder, "movl", coder->sourceBuf, eaxName);
+pentPrintVarMemAddress(right, coder->sourceBuf, 0);
+pentCoderAdd(coder, "cmpl", coder->sourceBuf, eaxName);
+
+/* Code label for shortcut, and the conditional jump. */
+pentCoderAdd(coder, NULL, NULL, skipAddress->name);
+pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
+
+/* Clean up. */
+trimDummiesFromLive(extraLive, isx->liveList);
+}
+
+static void pentCmpJump(struct pfCompile *pfc, struct isx *isx, 
+	struct dlNode *nextNode, char *jmpOp, char *floatJmpOp, 
+	struct pentCoder *coder)
 /* Output conditional jump code for == != < <= => > . */
 {
 enum isxValType valType = isx->left->valType;
-if (valType == ivFloat || valType == ivDouble)
-    jmpOp = floatJmpOp;
-if (isx->left->reg)
-    {
-    codeOp(opCmp, isx->right, isx->left, coder);
-    }
-else if (isx->right->reg)
-    {
-    codeOp(opCmp, isx->left, isx->right, coder);
-    jmpOp = flipRightLeftInJump(jmpOp);
-    }
+if (valType == ivLong)
+    pentCmpJumpLong(pfc, isx, nextNode, jmpOp, coder);
 else
     {
-    struct isxReg *reg = freeReg(isx, isx->left->valType, nextNode, coder);
-    codeOpDestReg(opMov, isx->left, reg, coder);
-    isx->left->reg = reg;
-    reg->contents = isx->left;
-    codeOpDestReg(opCmp, isx->right, reg, coder);
+    if (valType == ivFloat || valType == ivDouble)
+	jmpOp = floatJmpOp;
+    if (isx->left->reg)
+	{
+	codeOp(opCmp, isx->right, isx->left, coder);
+	}
+    else if (isx->right->reg)
+	{
+	codeOp(opCmp, isx->left, isx->right, coder);
+	jmpOp = flipRightLeftInJump(jmpOp);
+	}
+    else
+	{
+	struct isxReg *reg = freeReg(isx, isx->left->valType, nextNode, coder);
+	codeOpDestReg(opMov, isx->left, reg, coder);
+	isx->left->reg = reg;
+	reg->contents = isx->left;
+	codeOpDestReg(opCmp, isx->right, reg, coder);
+	}
+    pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
     }
-pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
 }
 
 static void pentTestJump(struct isx *isx, struct dlNode *nextNode,
@@ -1610,7 +1676,7 @@ switch (isx->opType)
 	if (isx->right->adType == iadConst)
 	   {
 	   stomp->stompPos[cx] = 0;
-	   stomp->contents[cx] = 0;
+	   stomp->contents[cx] = NULL;
 	   coder->regsUsed[cx] = TRUE;
 	   }
 	break;
@@ -1635,6 +1701,23 @@ switch (isx->opType)
 	    stomp->stompPos[regIx] = 0;
 	    stomp->contents[regIx] = isx->left;
 	    coder->regsUsed[regIx] = TRUE;
+	    }
+	break;
+	}
+    case poBeq:
+    case poBne:
+    case poBlt:
+    case poBle:
+    case poBgt:
+    case poBge:
+    case poBz:
+    case poBnz:
+        {
+        if (isx->dest->valType == ivLong)
+	    {
+	    stomp->stompPos[ax] = 0;
+	    stomp->contents[ax] = NULL;
+	    coder->regsUsed[ax] = TRUE;
 	    }
 	break;
 	}
@@ -1812,7 +1895,8 @@ for (loopy = isxList->loopList; loopy != NULL; loopy  = loopy->next)
     }
 }
 
-void pentFromIsx(struct isxList *isxList, struct pentFunctionInfo *pfi)
+void pentFromIsx(struct pfCompile *pfc, struct isxList *isxList, 
+	struct pentFunctionInfo *pfi)
 /* Convert isx code to pentium instructions in file. */
 {
 int i;
@@ -1928,22 +2012,22 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	case poCondStart:
 	    break;
 	case poBlt:
-	    pentCmpJump(isx, nextNode, "jl", "jb", coder);
+	    pentCmpJump(pfc, isx, nextNode, "jl", "jb", coder);
 	    break;
 	case poBle:
-	    pentCmpJump(isx, nextNode, "jle", "jbe", coder);
+	    pentCmpJump(pfc, isx, nextNode, "jle", "jbe", coder);
 	    break;
 	case poBge:
-	    pentCmpJump(isx, nextNode, "jge", "jnb", coder);
+	    pentCmpJump(pfc, isx, nextNode, "jge", "jnb", coder);
 	    break;
 	case poBgt:
-	    pentCmpJump(isx, nextNode, "jg", "jnbe", coder);
+	    pentCmpJump(pfc, isx, nextNode, "jg", "jnbe", coder);
 	    break;
 	case poBeq:
-	    pentCmpJump(isx, nextNode, "je", "je", coder);
+	    pentCmpJump(pfc, isx, nextNode, "je", "je", coder);
 	    break;
 	case poBne:
-	    pentCmpJump(isx, nextNode, "jne", "jne", coder);
+	    pentCmpJump(pfc, isx, nextNode, "jne", "jne", coder);
 	    break;
 	case poBz:
 	    pentTestJump(isx, nextNode, "jz", coder);

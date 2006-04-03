@@ -54,7 +54,7 @@ for (pp = module->children; pp != NULL; pp = pp->next)
     }
 finishIsx(pfc, isxList, isxFile, branchFile);
 pentCodeLocalConsts(isxList, constHash, asmFile);
-pentFromIsx(isxList, pfi);
+pentFromIsx(pfc, isxList, pfi);
 gnuMacMainStart(asmFile);
 pentCodeSaveAll(pfi->coder->list, asmFile);
 gnuMacMainEnd(asmFile);
@@ -95,7 +95,7 @@ else
     isGlobal = (access == paGlobal);
 finishIsx(pfc, isxList, isxFile, branchFile);
 pentCodeLocalConsts(isxList, constHash, asmFile);
-pentFromIsx(isxList, pfi);
+pentFromIsx(pfc, isxList, pfi);
 pentFunctionStart(pfc, pfi, cName, isGlobal, asmFile);
 pentCodeSaveAll(pfi->coder->list, asmFile);
 pentFunctionEnd(pfc, pfi, asmFile);

@@ -213,6 +213,9 @@ struct isxAddress *isxIoAddress(int offset, enum isxValType valType,
 struct isxAddress *isxCallAddress(char *name);
 /* Create reference to a function */
 
+struct isxAddress *isxTempLabelAddress(struct pfCompile *pfc);
+/* Create reference to a temporary label for jumping to. */
+
 void isxAddressDump(struct isxAddress *iad, FILE *f);
 /* Print variable name or n/a */
 

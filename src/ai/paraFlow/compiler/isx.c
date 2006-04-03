@@ -439,8 +439,8 @@ iad->name = name;
 return iad;
 }
 
-static struct isxAddress *tempLabelAddress(struct pfCompile *pfc)
-/* Create reference to a label. */
+struct isxAddress *isxTempLabelAddress(struct pfCompile *pfc)
+/* Create reference to a temporary label for jumping to. */
 {
 struct isxAddress *iad;
 char buf[18];
@@ -813,9 +813,9 @@ switch (pp->type)
 	struct pfParse *test = pp->children;
 	struct pfParse *truePp = test->next;
 	struct pfParse *falsePp = truePp->next;
-	struct isxAddress *trueLabel = tempLabelAddress(pfc);
-	struct isxAddress *falseLabel = tempLabelAddress(pfc);
-	struct isxAddress *endLabel = tempLabelAddress(pfc);
+	struct isxAddress *trueLabel = isxTempLabelAddress(pfc);
+	struct isxAddress *falseLabel = isxTempLabelAddress(pfc);
+	struct isxAddress *endLabel = isxTempLabelAddress(pfc);
 	isxConditionalJump(pfc, test, varHash, trueLabel, falseLabel, FALSE,
 		weight, iList);
 	isxAddNew(pfc, poCondStart, NULL, NULL, NULL, iList);
@@ -834,9 +834,9 @@ switch (pp->type)
 	struct pfParse *test = init->next;
 	struct pfParse *end = test->next;
 	struct pfParse *body = end->next;
-	struct isxAddress *startLabel = tempLabelAddress(pfc);
-	struct isxAddress *condLabel = tempLabelAddress(pfc);
-	struct isxAddress *endLabel = tempLabelAddress(pfc);
+	struct isxAddress *startLabel = isxTempLabelAddress(pfc);
+	struct isxAddress *condLabel = isxTempLabelAddress(pfc);
+	struct isxAddress *endLabel = isxTempLabelAddress(pfc);
 	double loopWeight = weight*10;
 	isxStatement(pfc, init, varHash, weight, iList);
 	isxAddNew(pfc, poLoopStart, startLabel, NULL, condLabel, iList);

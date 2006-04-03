@@ -15,3 +15,21 @@ _printLong(a|b);
 _printLong(a^b);
 _printLong(-a);
 _printLong(~a);
+if (a > b)
+    _printInt(0);
+else 
+    _printInt(1);
+
+to test()
+    {
+    long a = 123L;
+    long b = 234L;
+    if (a > b)
+	_printInt(0);
+    else 
+	_printInt(1);
+    if (a+b > 0)
+	_printInt(0);
+    else 
+	_printInt(1);
+    }
