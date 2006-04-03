@@ -17,12 +17,21 @@ errAbort(
   );
 }
 
-int max = 10;
-void loop()
+struct refString
+    {
+    int refCount;
+    int type;
+    char *s;
+    int size;
+    int alloced;
+    bool isConst;
+    };
+
+struct refString refString = {0, 0, "Hello world", 11, 11, TRUE};
+
+void test(char *s)
 {
-int i;
-for (i=0; i<max; ++i)
-    printf("%d\n", i);
+printf("%s\n", refString.s);
 }
 
 int main(int argc, char *argv[], char *env[])
