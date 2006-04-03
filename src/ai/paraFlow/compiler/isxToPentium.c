@@ -164,6 +164,9 @@ struct pentFunctionInfo *pentFunctionInfoNew()
 {
 struct pentFunctionInfo *pfi;
 AllocVar(pfi);
+pfi->savedRegSize = 12;
+pfi->savedRetEbpSize = 8;
+pfi->savedContextSize = pfi->savedRetEbpSize + pfi->savedRegSize; 
 pfi->coder = pentCoderNew();
 return pfi;
 }
@@ -350,6 +353,25 @@ switch (iad->adType)
 	safef(buf, pentCodeBufSize, "%d(%%ebp)", iad->val.tempMemLoc + offset);
 	break;
 	}
+    case iadConst:
+	{
+	switch (iad->valType)
+	    {
+	    case ivFloat:
+	    case ivDouble:
+	    case ivLong:
+		pentFloatOrLongLabel(buf, pentCodeBufSize, iad->valType, iad);
+		if (offset)
+		    {
+		    int len = strlen(buf);
+		    safef(buf+len, pentCodeBufSize - len, "+%d", offset);
+		    }
+		break;
+	    default:
+	        internalErr();
+		break;
+	    }
+	}
     }
 }
 
@@ -383,6 +405,7 @@ else
 	case iadRealVar:
 	case iadTempVar:
 	    pentPrintVarMemAddress(iad, buf, 0);
+	    break;
 	case iadReturnVar:
 	    {
 	    safef(buf, pentCodeBufSize, "%d(%%ebp)", iad->stackOffset);
@@ -1380,8 +1403,6 @@ struct isxReg *eax = &regInfo[ax];
 char *eaxName = isxRegName(eax, ivInt);
 struct isxAddress *skipAddress = isxTempLabelAddress(pfc);
 
-uglyf("Theoretically coding comparison between longs.\n");
-
 /* Force operands into memory, since no long comparison is possible
  * in the mmx registers. */
 addDummyToLive(left, &extraLive);
@@ -1403,7 +1424,7 @@ pentPrintVarMemAddress(right, coder->sourceBuf, 4);
 pentCoderAdd(coder, "cmpl", coder->sourceBuf, eaxName);
 pentCoderAdd(coder, "jne", skipAddress->name, NULL);
 
-/* Do comparion of low order 32 bits. */
+/* Do comparison of low order 32 bits. */
 pentPrintVarMemAddress(left, coder->sourceBuf, 0);
 pentCoderAdd(coder, "movl", coder->sourceBuf, eaxName);
 pentPrintVarMemAddress(right, coder->sourceBuf, 0);
@@ -1914,9 +1935,9 @@ calcRetOffsets(pfi, iList);
 calcLoopRegVars(isxList, coder);
 addRegStomper(iList, pfi->coder);
 
-stackUse = pfi->outVarSize + pfi->locVarSize + pfi->callParamSize 
+stackUse = pfi->outVarSize + pfi->locVarSize 
 	+ pfi->savedRegSize;
-coder->tempIx -= stackUse;
+coder->tempIx = -stackUse;
 
 for (node = iList->head; !dlEnd(node); node = nextNode)
     {
@@ -2244,9 +2265,6 @@ struct pfVar *var;
 struct isxAddress *iad;
 int stackSubAmount;
 
-pfi->savedRegSize = 12;
-pfi->savedRetEbpSize = 8;
-pfi->savedContextSize = pfi->savedRetEbpSize + pfi->savedRegSize; 
 pfi->outVarSize = calcVarListSize(pfc, ctar->outRefList, ctar->outCount);
 pfi->locVarSize = calcVarListSize(pfc, ctar->localRefList, ctar->localCount);
 fillInVarOffsets(pfc, pfi->savedRetEbpSize, ctar->inRefList, ctar->inCount, 
