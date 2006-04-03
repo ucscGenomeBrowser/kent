@@ -1,5 +1,8 @@
 test:
 	mkdir -p expected output
+	paraFlow string.pf > expected/string
+	paraFlow -asm string.pf > output/string
+	diff expected/string output/string
 	paraFlow int.pf > expected/int
 	paraFlow -asm int.pf > output/int
 	diff expected/int output/int

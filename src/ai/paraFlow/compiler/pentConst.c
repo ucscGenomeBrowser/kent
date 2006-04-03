@@ -108,9 +108,35 @@ switch (valType)
     }
 }
 
+static void codeStringConst(char *s, struct hash *stringHash, FILE *f)
+/* If s is not in stringHash, then write out constant initialization and
+ * save label of initialized data in stringHash */
+{
+if (!hashLookup(stringHash, s))
+    {
+    char label[16];
+    int len = strlen(s);
+    safef(label, sizeof(label), "STR%d", stringHash->elCount);
+    fprintf(f, "\t.cstring\n");
+    fprintf(f, "%sS:\n", label);
+    fprintf(f, "\t.ascii\t\"");
+    printAsciiString(s, f);
+    fprintf(f, "\\0\"\n");
+    fprintf(f, "\t.data\n");
+    fprintf(f, "\t.align\t2\n");
+    fprintf(f, "%s:\n", label);
+    fprintf(f, "\t.long\t0\n");
+    fprintf(f, "\t.long\t0\n");
+    fprintf(f, "\t.long\t%sS\n", label);
+    fprintf(f, "\t.long\t%d\n", len);
+    fprintf(f, "\t.long\t%d\n", len);
+    fprintf(f, "\t.byte\t1\n");
+    hashAdd(stringHash, s, cloneString(label));
+    }
+}
 
 static void codeLocalConst(struct isxAddress *iad, struct hash *uniqHash, 
-	boolean *pInText, FILE *f)
+	struct hash *stringHash, boolean *pInText, FILE *f)
 /* Print code that helps local non-int constant initialization. */
 {
 if (iad->adType == iadConst)
@@ -136,25 +162,30 @@ if (iad->adType == iadConst)
 		}
 	    iad->name = hel->name;
 	    break;
+	case ivString:
+	    codeStringConst(iad->val.tok->val.s, stringHash, f);
+	    break;
 	}
     }
 }
 
 void pentCodeLocalConsts(struct isxList *isxList, 
-	struct hash *uniqHash, FILE *f)
+	struct hash *uniqHash, struct hash *stringHash, FILE *f)
 /* Print code that helps local non-int constant initialization. 
  * for any sources in instruction. */
 {
 struct dlNode *node;
 boolean inText = TRUE;
+fprintf(f, "#String, float, double, and long constants\n");
 for (node = isxList->iList->head; !dlEnd(node); node = node->next)
     {
     struct isx *isx = node->val;
     if (isx->left)
-       codeLocalConst(isx->left, uniqHash, &inText, f);
+       codeLocalConst(isx->left, uniqHash, stringHash, &inText, f);
     if (isx->right)
-       codeLocalConst(isx->right, uniqHash, &inText, f);
+       codeLocalConst(isx->right, uniqHash, stringHash, &inText, f);
     }
+fprintf(f, "\n");
 if (!inText)
     fprintf(f, "\t.text\n");
 }

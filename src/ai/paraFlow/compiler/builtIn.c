@@ -13,6 +13,7 @@ return
 "global flow _printLong(long l);\n"
 "global flow _printFloat(float x);\n"
 "global flow _printDouble(double x);\n"
+"global flow _printString(string s);\n"
 "global flow print(var v);\n"
 "global to prin(var v);\n"
 "global flow ugly(var v);\n"

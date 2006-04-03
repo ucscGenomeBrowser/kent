@@ -159,7 +159,7 @@ static struct isxReg regInfo[pentRegCount] = {
     { 8, NULL, NULL, NULL, "%mm7", NULL, NULL, NULL},
 };
 
-struct pentFunctionInfo *pentFunctionInfoNew()
+struct pentFunctionInfo *pentFunctionInfoNew(struct hash *constStringHash)
 /* Create new pentFunctionInfo */
 {
 struct pentFunctionInfo *pfi;
@@ -167,7 +167,7 @@ AllocVar(pfi);
 pfi->savedRegSize = 12;
 pfi->savedRetEbpSize = 8;
 pfi->savedContextSize = pfi->savedRetEbpSize + pfi->savedRegSize; 
-pfi->coder = pentCoderNew();
+pfi->coder = pentCoderNew(constStringHash);
 return pfi;
 }
 
@@ -359,7 +359,8 @@ switch (iad->adType)
     }
 }
 
-static void pentPrintAddress(struct isxAddress *iad, char *buf)
+static void pentPrintAddress(struct pentCoder *coder,
+	struct isxAddress *iad, char *buf)
 /* Print out an address for an instruction. */
 {
 if (iad->reg != NULL)
@@ -380,6 +381,14 @@ else
 		case ivLong:
 		    pentFloatOrLongLabel(buf, pentCodeBufSize, iad->valType, iad);
 		    break;
+		case ivString:
+		    {
+		    char *s = hashFindVal(coder->constStringHash, 
+		    	iad->val.tok->val.s);
+		    assert(s != NULL);
+		    safef(buf, pentCodeBufSize, "$%s", s);
+		    break;
+		    }
 		default:
 		    safef(buf, pentCodeBufSize, "$%d", iad->val.tok->val.i);
 		    break;
@@ -414,10 +423,10 @@ static void codeOp(enum pentDataOp opType, struct isxAddress *source,
 {
 char *opName = opOfType(opType, source->valType);
 char *destString = NULL;
-pentPrintAddress(source, coder->sourceBuf);
+pentPrintAddress(coder, source, coder->sourceBuf);
 if (dest != NULL)
     {
-    pentPrintAddress(dest, coder->destBuf);
+    pentPrintAddress(coder, dest, coder->destBuf);
     destString = coder->destBuf;
     }
 pentCoderAdd(coder, opName, coder->sourceBuf, destString);
@@ -430,7 +439,7 @@ static void codeOpSourceReg(enum pentDataOp opType, struct isxReg *reg,
 enum isxValType valType = dest->valType;
 char *opName = opOfType(opType, valType);
 char *regName = isxRegName(reg, valType);
-pentPrintAddress(dest, coder->destBuf);
+pentPrintAddress(coder, dest, coder->destBuf);
 pentCoderAdd(coder, opName, regName, coder->destBuf);
 }
 
@@ -441,7 +450,7 @@ static void codeOpDestReg(enum pentDataOp opType,
 enum isxValType valType = source->valType;
 char *opName = opOfType(opType, valType);
 char *regName = isxRegName(reg, valType);
-pentPrintAddress(source, coder->sourceBuf);
+pentPrintAddress(coder, source, coder->sourceBuf);
 pentCoderAdd(coder, opName, coder->sourceBuf, regName);
 }
 
@@ -1642,7 +1651,7 @@ if (reg != NULL)
 	char *op = (valType == ivFloat ? "flds" : "fldl");
 	assert(source->adType == iadRealVar);
 	source->reg = NULL;
-	pentPrintAddress(source, coder->sourceBuf);
+	pentPrintAddress(coder, source, coder->sourceBuf);
 	pentCoderAdd(coder, op, NULL, coder->sourceBuf);
 	}
     else if (ioOffset == 0 && valType == ivLong)

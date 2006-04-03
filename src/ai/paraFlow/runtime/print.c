@@ -421,3 +421,13 @@ void pf__printDouble(_pf_Stack *stack)
 printf("%f\n", stack->Double);
 }
 
+void pf__printString(_pf_Stack *stack)
+/* Print double, just for debugging really */
+{
+struct _pf_string *string = stack->String;
+char *text = "(null)";
+if (string != NULL)
+    text = string->s;
+printf("%s\n", text);
+}
+

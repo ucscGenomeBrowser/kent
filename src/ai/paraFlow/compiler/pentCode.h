@@ -9,6 +9,7 @@
 #include "pentConst.h"
 #endif 
 
+
 #define pentCodeBufSize 256
 #define pentRegCount 22
 
@@ -16,6 +17,7 @@ struct pentCoder
 /* A factory for pentCodes */
     {
     struct hash *storeHash;	/* Save strings, floats here to reuse */
+    struct hash *constStringHash; /* String constants, not allocated here. */
     struct pentCode *list;	/* List of instructions */
     char destBuf[pentCodeBufSize];	/* Space to print dest */
     char sourceBuf[pentCodeBufSize];	/* Space to print source */
@@ -24,7 +26,7 @@ struct pentCoder
 					 * register is used. */
     };
 
-struct pentCoder *pentCoderNew();
+struct pentCoder *pentCoderNew(struct hash *constStringHash);
 /* Make new pentCoder. */
 
 void pentCoderFree(struct pentCoder **pCoder);
@@ -72,7 +74,7 @@ struct pentFunctionInfo
     struct pentCoder *coder;  /* Place for instructions */
     };
 
-struct pentFunctionInfo *pentFunctionInfoNew();
+struct pentFunctionInfo *pentFunctionInfoNew(struct hash *constStringHash);
 /* Create new pentFunctionInfo */
 
 void pentSubCallsForHardStuff(struct pfCompile *pfc, struct isxList *isxList);
@@ -98,15 +100,6 @@ void pentInitFuncVars(struct pfCompile *pfc, struct ctar *ctar,
 	struct hash *varHash, struct pentFunctionInfo *pfi);
 /* Set up variables and offsets for parameters and local variables
  * in hash. */
-
-void pentPrintInitConst(char *prefix, char *label, enum isxValType valType, 
-	struct pfToken *tok, FILE *f);
-/* Print out a constant initialization */
-
-void pentCodeLocalConsts(struct isxList *isxList, 
-	struct hash *uniqHash, FILE *f);
-/* Print code that helps local non-int constant initialization. 
- * for any sources in instruction. */
 
 #endif /* PENTCODE_H */
 

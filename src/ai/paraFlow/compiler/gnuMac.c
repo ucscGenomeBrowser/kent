@@ -51,6 +51,10 @@ void gnuMacModulePreamble(FILE *f)
 fprintf(f, "# ParaFlow Pentium Output\n\n");
 fprintf(f, "%s",
 "# Preamble found in all modules for Mac OS-X Pentium\n"
+"       .text\n"
+"doNothing:\n"
+"       ret\n"
+"\n"
 "       .data\n"
 "       .align 3\n"
 "longLongMinusOne:\n"
@@ -176,6 +180,7 @@ void gnuMacMainStart(FILE *f)
 /* Declare main function start. */
 {
 fprintf(f, "%s",
+"# Main routine\n"
 ".globl _main\n"
 "_main:\n"
 "       pushl   %ebp\n"

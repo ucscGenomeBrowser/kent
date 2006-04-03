@@ -8,6 +8,8 @@
 #include "optBranch.h"
 #include "gnuMac.h"
 #include "ctar.h"
+#include "pentConst.h"
+#include "pentStruct.h"
 #include "pentCode.h"
 
 #define asmSuffix ".s"
@@ -32,13 +34,13 @@ fflush(branchFile);
 }
 
 static void codeOutsideFunctions(struct pfCompile *pfc, struct pfParse *module, 
-	struct hash *constHash, FILE *isxFile, FILE *branchFile, FILE *asmFile)
+	struct hash *labelHash, FILE *isxFile, FILE *branchFile, FILE *asmFile)
 /* Generate code outside of functions */
 {
 struct isxList *isxList = isxListNew();
 struct pfParse *pp;
 struct hash *varHash = hashNew(0);
-struct pentFunctionInfo *pfi = pentFunctionInfoNew();
+struct pentFunctionInfo *pfi = pentFunctionInfoNew(pfc->constStringHash);
 for (pp = module->children; pp != NULL; pp = pp->next)
     {
     switch (pp->type)
@@ -53,7 +55,7 @@ for (pp = module->children; pp != NULL; pp = pp->next)
 	}
     }
 finishIsx(pfc, isxList, isxFile, branchFile);
-pentCodeLocalConsts(isxList, constHash, asmFile);
+pentCodeLocalConsts(isxList, labelHash, pfc->constStringHash, asmFile);
 pentFromIsx(pfc, isxList, pfi);
 gnuMacMainStart(asmFile);
 pentCodeSaveAll(pfi->coder->list, asmFile);
@@ -63,7 +65,7 @@ hashFree(&varHash);
 }
 
 static void codeFunction(struct pfCompile *pfc, struct pfParse *funcPp, 
-	struct hash *constHash, FILE *isxFile, FILE *branchFile, 
+	struct hash *labelHash, FILE *isxFile, FILE *branchFile, 
 	FILE *asmFile, struct pfParse *classPp)
 /* Generate code for one function */
 {
@@ -78,7 +80,7 @@ struct pfVar *funcVar = funcPp->var;
 char *cName = funcVar->cName;
 enum pfAccessType access = funcVar->ty->access;
 struct pfParse *pp;
-struct pentFunctionInfo *pfi = pentFunctionInfoNew();
+struct pentFunctionInfo *pfi = pentFunctionInfoNew(pfc->constStringHash);
 boolean isGlobal;
 
 fprintf(isxFile, "# Starting function %s\n", cName);
@@ -94,7 +96,7 @@ if (classPp != NULL)
 else
     isGlobal = (access == paGlobal);
 finishIsx(pfc, isxList, isxFile, branchFile);
-pentCodeLocalConsts(isxList, constHash, asmFile);
+pentCodeLocalConsts(isxList, labelHash, pfc->constStringHash, asmFile);
 pentFromIsx(pfc, isxList, pfi);
 pentFunctionStart(pfc, pfi, cName, isGlobal, asmFile);
 pentCodeSaveAll(pfi->coder->list, asmFile);
@@ -105,7 +107,7 @@ hashFree(&varHash);
 
 
 static void codeFunctions(struct pfCompile *pfc, struct pfParse *parent, 
-	struct hash *constHash, FILE *isxFile, FILE *branchFile, 
+	struct hash *labelHash, FILE *isxFile, FILE *branchFile, 
 	FILE *asmFile, struct pfParse *classPp)
 /* Generate code inside of functions */
 {
@@ -116,11 +118,11 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
     switch (pp->type)
 	{
 	case pptClass:
-	    codeFunctions(pfc, pp, constHash, isxFile, branchFile, asmFile, pp);
+	    codeFunctions(pfc, pp, labelHash, isxFile, branchFile, asmFile, pp);
 	    break;
 	case pptToDec:
 	case pptFlowDec:
-	    codeFunction(pfc, pp, constHash, isxFile, branchFile, asmFile, 
+	    codeFunction(pfc, pp, labelHash, isxFile, branchFile, asmFile, 
 	    	classPp);
 	    break;
 	}
@@ -136,7 +138,11 @@ FILE *isxFile, *branchFile;
 struct isxList *isxList, *modVarIsx;
 char path[PATH_LEN];
 char *baseName = module->name;
-struct hash *constHash = hashNew(0);
+struct hash *labelHash = hashNew(0);
+
+pfc->isxLabelMaker = 0;
+pfc->tempLabelMaker = 0;
+pfc->constStringHash = hashNew(0);
 
 safef(path, sizeof(path), "%s%s.isx", baseDir, baseName);
 isxFile = mustOpen(path, "w");
@@ -147,12 +153,14 @@ asmFile = mustOpen(path, "w");
 
 modVarIsx = isxModuleVars(pfc, module);
 gnuMacModulePreamble(asmFile);
-codeOutsideFunctions(pfc, module, constHash, isxFile, branchFile, asmFile);
-codeFunctions(pfc, module, constHash, isxFile, branchFile, asmFile, NULL);
+pentStructPrint(asmFile);
+codeOutsideFunctions(pfc, module, labelHash, isxFile, branchFile, asmFile);
+codeFunctions(pfc, module, labelHash, isxFile, branchFile, asmFile, NULL);
 gnuMacModuleVars(modVarIsx->iList, asmFile);
 gnuMacModulePostscript(asmFile);
 
-hashFree(&constHash);
+hashFree(&labelHash);
+hashFree(&pfc->constStringHash);
 carefulClose(&isxFile);
 carefulClose(&branchFile);
 carefulClose(&asmFile);

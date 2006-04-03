@@ -1,0 +1,4 @@
+
+string s = "Hello wonderful world";
+_printString(s);
+_printString("Bye cruel world");

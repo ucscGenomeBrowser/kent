@@ -8,9 +8,10 @@ char *pentFloatOrLongLabel(char *buf, int bufSize, enum isxValType valType,
 /* Return label associated with floating point or long constant. */
 
 void pentCodeLocalConsts(struct isxList *isxList, 
-	struct hash *uniqHash, FILE *f);
+	struct hash *uniqHash, struct hash *stringHash, FILE *f);
 /* Print code that helps local non-int constant initialization. 
  * for any sources in instruction. */
+
 
 #endif /* PENTCONST_H */
 

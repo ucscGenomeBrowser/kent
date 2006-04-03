@@ -6,12 +6,13 @@
 #include "isx.h"
 #include "pentCode.h"
 
-struct pentCoder *pentCoderNew()
+struct pentCoder *pentCoderNew(struct hash *constStringHash)
 /* Make new pentCoder. */
 {
 struct pentCoder *coder;
 AllocVar(coder);
 coder->storeHash = hashNew(16);
+coder->constStringHash = constStringHash;
 return coder;
 }
 
