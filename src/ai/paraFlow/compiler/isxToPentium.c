@@ -2351,17 +2351,37 @@ freez(&node);
 freez(&isx);
 }
 
+static struct pfToken *constZeroLongFloatTok(enum isxValType valType)
+/* Return zero token of correct type */
+{
+struct pfToken *tok;
+AllocVar(tok);
+tok->type = (valType == ivLong ? pftLong : pftFloat);
+return tok;
+}
+
 void subFromZeroForNeg(struct pfCompile *pfc, struct dlNode *node,
 	struct isx *isx)
 /* convert -x  to  0 - x. */
 {
 enum isxValType valType = isx->dest->valType;
-struct pfToken *tok;
-AllocVar(tok);
-tok->type = (valType == ivLong ? pftLong : pftFloat);
+struct pfToken *tok = constZeroLongFloatTok(valType);;
 isx->opType = poMinus;
 isx->right = isx->left;
 isx->left = isxConstAddress(tok, valType);
+}
+
+void cmpFloatToZero(struct pfCompile *pfc, struct dlNode *node,
+	struct isx *isx)
+/* Convert x  to x == 0 */
+{
+enum isxValType valType = isx->left->valType;
+struct pfToken *tok = constZeroLongFloatTok(valType);
+if (isx->opType == poBz)
+    isx->opType = poBeq;
+else
+    isx->opType = poBne;
+isx->right = isxConstAddress(tok, valType);
 }
 
 void pentSubCallsForHardStuff(struct pfCompile *pfc, struct isxList *isxList)
@@ -2406,6 +2426,28 @@ for (node = isxList->iList->head; !dlEnd(node); node = next)
 		    {
 		    case poNegate:
 			subFromZeroForNeg(pfc, node, isx);
+			break;
+		    case poBz:
+		    case poBnz:
+		        cmpFloatToZero(pfc, node, isx);
+			break;
+		    }
+		break;
+		}
+	    }
+	}
+    if (isx->left != NULL)
+	{
+	switch (isx->left->valType)
+	    {
+	    case ivFloat:
+	    case ivDouble:
+		{
+		switch (isx->opType)
+		    {
+		    case poBz:
+		    case poBnz:
+		        cmpFloatToZero(pfc, node, isx);
 			break;
 		    }
 		break;

@@ -17,3 +17,8 @@ if (d)
     _printDouble(d);
 else
     _printDouble(0.1);
+double e = 0.0;
+if (e)
+    _printDouble(e);
+else
+    _printDouble(0.1);
