@@ -51,6 +51,15 @@ void gnuMacModulePreamble(FILE *f)
 fprintf(f, "# ParaFlow Pentium Output\n\n");
 fprintf(f, "%s",
 "# Preamble found in all modules for Mac OS-X Pentium\n"
+"       .data\n"
+"       .align 3\n"
+"longLongZero:\n"
+"       .long 0\n"
+"       .long 0\n"
+"longLongMinusOne:\n"
+"       .long -1\n"
+"       .long -1\n"
+"\n"
 "       .cstring\n"
 "LC0:\n"
 "       .ascii \"%d\\12\\0\"\n"

@@ -13,3 +13,5 @@ _printLong(a>>1);
 _printLong(a&b);
 _printLong(a|b);
 _printLong(a^b);
+_printLong(-a);
+_printLong(~a);

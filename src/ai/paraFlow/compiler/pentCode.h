@@ -6,7 +6,7 @@
 #endif 
 
 #define pentCodeBufSize 256
-#define pentRegCount 20
+#define pentRegCount 21
 
 struct pentCoder
 /* A factory for pentCodes */

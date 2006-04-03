@@ -51,7 +51,35 @@
  * the code generator assumes that real variables are in memory as well
  * currently.
  *
- * The function call register conventions here are compatible with Pentium
+ * This generates code for Pentium 4/Xeon processors and above, which
+ * are what Intel has been producing since 2000.  In particular it depends
+ * on having the SSE2 extensions.  These let us do floating point via
+ * the xmm registers rather than the older 8087 floating point stack.
+ * This lets us us the same register allocation scheme for floating point
+ * as regular values.  Somewhat perversely then we use use the mm registers
+ * for 64-bit-longs.  These share the same space as the 8087 stack.  The
+ * 64-bit-longs fit somewhat awkwardly in the mm registers, but using
+ * them avoids having to devote eax:edx to long operations, which would
+ * starve the pointer/integer registers more than they already are.
+ * Here's a register-by-register description:
+ *   eax - used as al for bytes, as ax for shorts, as eax for ints and pointers
+ *         Also used for integer divide.
+ *   ebx - used as bl for bytes, as bx for shorts, as ebx for ints and pointers
+ *   ecx - used as cl for bytes, as cx for shorts, as ecx for ints and pointers
+ *         Also used for shifts by non-constant amounts, and for string ops
+ *   edx - used as dl for bytes, as dx for shorts, as edx for ints and pointers
+ *         Also used for integer divide.
+ *   esi - used as si for shorts, as esi for ints and pointers
+ *         Also used for string ops.
+ *   edi - used as di for shorts, as edi for ints and pointers
+ *         Also used for string ops.
+ *   ebp - Not allocated, used in stack frames.
+ *   esp - Not allocated, used as stack pointer.
+ *   mm0 - Not allocated - used to do negate and logical nots of longs
+ *   mm1-mm7 - Used for long (64 bit) integers
+ *   xmm0-xmm7 - Used for float (32 bit) and double (64 bit) numbers.
+ *
+ * The function call register conventions are compatible with Pentium
  * C conventions.  All input is passed on the stack.  The registers esp, 
  * ebp, esi, edi, ebx are preserved by function calls, and all others are 
  * potentially trashed. Return values are stored in:
@@ -64,12 +92,12 @@
  * in full is:
  *            int    long/long   float
  *      1     eax     eax:edx    st0
- *      2     ecx     stack      xmm1
- *      3     stack   stack      xmm2
- *      4     stack   stack      xmm3
- *      5     stack   stack      xmm4
- *      6     stack   stack      xmm5
- *      7     stack   stack      xmm6
+ *      2     ecx     mm2        xmm1
+ *      3     stack   mm3        xmm2
+ *      4     stack   mm4        xmm3
+ *      5     stack   mm5        xmm4
+ *      6     stack   mm6        xmm5
+ *      7     stack   mm7        xmm6
  *      8     stack   stack      xmm7
  *      9+    stack   stack      stack
  * If a return value is on the stack, it is in the same place it
@@ -104,7 +132,7 @@ enum pentRegs
    {
    ax=0, bx=1, cx=2, dx=3, si=4, di=5, 
    xmm0=6,xmm1=7,xmm2=8,xmm3=9,xmm4=10,xmm5=11,xmm6=12,xmm7=13,
-   mm1=14, mm2=15, mm3=16, mm4=17, mm5=18, mm6=19
+   mm1=14, mm2=15, mm3=16, mm4=17, mm5=18, mm6=19, mm7=20,
    };
 
 static struct isxReg regInfo[pentRegCount] = {
@@ -128,7 +156,10 @@ static struct isxReg regInfo[pentRegCount] = {
     { 8, NULL, NULL, NULL, "%mm4", NULL, NULL, NULL},
     { 8, NULL, NULL, NULL, "%mm5", NULL, NULL, NULL},
     { 8, NULL, NULL, NULL, "%mm6", NULL, NULL, NULL},
+    { 8, NULL, NULL, NULL, "%mm7", NULL, NULL, NULL},
 };
+
+struct isxReg mm0Reg = { 8, NULL, NULL, NULL, "%mm0", NULL, NULL, NULL};
 
 struct pentFunctionInfo *pentFunctionInfoNew()
 /* Create new pentFunctionInfo */
@@ -440,6 +471,7 @@ switch (reg->regIx)
     case mm4:
     case mm5:
     case mm6:
+    case mm7:
         {
 	char *name = reg->longName;
 	pentCoderAdd(coder, "pxor", name, name);
@@ -504,7 +536,7 @@ switch (valType)
 	 break;
     case ivLong:
     	regStartIx = mm1;
-	regEndIx = mm6;
+	regEndIx = mm7;
 	break;
     default:
 	regStartIx = ax;
@@ -1050,6 +1082,106 @@ else
     }
 }
 
+static void pentUnaryOp(struct isx *isx, enum pentDataOp opCode,
+	struct dlNode *nextNode, struct pentCoder *coder)
+/* Handle unary operation on byte/short/int data types */
+{
+enum isxValType valType = isx->dest->valType;
+struct isxReg *reg = freeReg(isx, valType, nextNode, coder);
+if (reg != isx->left->reg)
+    codeOpDestReg(opMov, isx->left, reg, coder);
+unaryOpReg(opCode, reg, valType, coder);
+linkDestReg(isx->dest, reg, coder);
+}
+
+static void pentNegLong(struct isx *isx, struct dlNode *nextNode,  
+	struct pentCoder *coder)
+/* Output code to implement unary minus for long values. */
+{
+/* Use mm0 as a temporary location.  Basically do:
+ *     mm0 = left;
+ *     dest = 0;
+ *     dest -= mm0; */
+enum isxValType valType = isx->dest->valType;
+struct isxReg *destReg = freeReg(isx, valType, nextNode, coder);
+char *destRegName = isxRegName(destReg, valType);
+char *mm0RegName = isxRegName(&mm0Reg, valType);
+char *subOpName = opOfType(opSub, valType);
+codeOpDestReg(opMov, isx->left, &mm0Reg, coder);
+pentCoderAdd(coder, subOpName, destRegName, destRegName); /* Zero dest */
+pentCoderAdd(coder, subOpName, mm0RegName, destRegName);  /* Subtract left */
+linkDestReg(isx->dest, destReg, coder);
+}
+
+static void pentNegFloat(struct isx *isx, struct dlNode *nextNode,  
+	struct pentCoder *coder)
+/* Output code to implement unary minus for floating point values. */
+{
+uglyf("THeoretically negating float\n");
+internalErr();	// uglyf
+}
+
+static void pentNegate(struct isx *isx, struct dlNode *nextNode,  
+	struct pentCoder *coder)
+/* Output code to implement unary minus. */
+{
+enum isxValType valType = isx->dest->valType;
+switch (valType)
+    {
+    case ivByte:
+    case ivShort:
+    case ivInt:
+        pentUnaryOp(isx, opNeg, nextNode, coder);
+	break;
+    case ivLong:
+        pentNegLong(isx, nextNode, coder);
+	break;
+    case ivFloat:
+    case ivDouble:
+        pentNegFloat(isx, nextNode, coder);
+	break;
+    default:
+        internalErr();
+	break;
+    }
+}
+
+static void pentFlipBitsLong(struct isx *isx, struct dlNode *nextNode,  
+	struct pentCoder *coder)
+/* Output code to implement binary not for long values. */
+{
+/* This zeroes out mm0, and then does not-and using it as a source,
+ * which effectively is just a not. */
+enum isxValType valType = isx->dest->valType;
+struct isxReg *destReg = freeReg(isx, valType, nextNode, coder);
+char *destRegName = isxRegName(destReg, valType);
+if (destReg != isx->left->reg)
+    codeOpDestReg(opMov, isx->left, destReg, coder);
+pentCoderAdd(coder, "pandn", "longLongMinusOne", destRegName);
+linkDestReg(isx->dest, destReg, coder);
+}
+
+static void pentFlipBits(struct isx *isx, struct dlNode *nextNode,  
+	struct pentCoder *coder)
+/* Output code to implement binary not. */
+{
+enum isxValType valType = isx->dest->valType;
+switch (valType)
+    {
+    case ivByte:
+    case ivShort:
+    case ivInt:
+        pentUnaryOp(isx, opNot, nextNode, coder);
+	break;
+    case ivLong:
+        pentFlipBitsLong(isx, nextNode, coder);
+	break;
+    default:
+        internalErr();
+	break;
+    }
+}
+
 static void pentInput(struct isx *isx, struct dlNode *nextNode,  
 	struct pentCoder *coder)
 /* Output code to load an input parameter before a call. */
@@ -1159,7 +1291,7 @@ int i;
 pentSwapOutIfNeeded(&regInfo[ax],isx->liveList, coder);
 pentSwapOutIfNeeded(&regInfo[cx],isx->liveList, coder);
 pentSwapOutIfNeeded(&regInfo[dx],isx->liveList, coder);
-for (i=xmm0; i<= mm6; ++i)
+for (i=xmm0; i<= mm7; ++i)
     pentSwapOutIfNeeded(&regInfo[i],isx->liveList, coder);
 safef(coder->destBuf, pentCodeBufSize, "%s%s", isxPrefixC, isx->left->name);
 pentCoderAdd(coder, "call", NULL, coder->destBuf);
@@ -1462,7 +1594,7 @@ stomp->stompPos[cx] = 3;
 stomp->stompPos[si] = 4;
 stomp->stompPos[di] = 5;
 stomp->stompPos[bx] = 6;
-for (i=xmm0; i<=mm6; ++i)
+for (i=xmm0; i<=mm7; ++i)
     stomp->stompPos[i] = i;
 for (i=0; i<pentRegCount; ++i)
     stomp->contents[i] = NULL;
@@ -1487,7 +1619,7 @@ switch (isx->opType)
        stomp->stompPos[dx] = 0;
        stomp->contents[dx] = NULL;
        coder->regsUsed[dx] = TRUE;
-       for (i=xmm0; i<=mm6; ++i)
+       for (i=xmm0; i<=mm7; ++i)
 	    {
 	    stomp->stompPos[i] = 0;
 	    stomp->contents[i] = NULL;
@@ -1797,6 +1929,12 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    break;
 	case poShiftRight:
 	    pentShiftOp(isx, nextNode, opSar, coder);
+	    break;
+	case poNegate:
+	    pentNegate(isx, nextNode, coder);
+	    break;
+	case poFlipBits:
+	    pentFlipBits(isx, nextNode, coder);
 	    break;
 	case poInput:
 	    pentInput(isx, nextNode, coder);
