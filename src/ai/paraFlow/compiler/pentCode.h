@@ -5,6 +5,10 @@
 #include "isx.h"
 #endif 
 
+#ifndef PENTCONST_H
+#include "pentConst.h"
+#endif 
+
 #define pentCodeBufSize 256
 #define pentRegCount 22
 
