@@ -4,12 +4,16 @@ if (a)
 else
    _printInt(0);
 
-/*-SOON
 long l = 2L;
 if (l)
    _printLong(l);
 else
    _printLong(0L);
+if (!l)
+   _printLong(l);
+else
+   _printLong(0L);
+/*-SOON
 SOON-*/
 
 double d = 1.0;

@@ -45,6 +45,9 @@ test:
 	paraFlow if4.pf > expected/if4
 	paraFlow -asm if4.pf > output/if4
 	diff expected/if4 output/if4
+	paraFlow if5.pf > expected/if5
+	paraFlow -asm if5.pf > output/if5
+	diff expected/if5 output/if5
 	paraFlow crash.pf > expected/crash
 	paraFlow -asm crash.pf > output/crash
 	diff expected/crash output/crash
