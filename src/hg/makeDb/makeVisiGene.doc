@@ -367,13 +367,14 @@ hgsql uniProt -e "load data local infile 'commonName.txt' into table commonName"
 rm taxon.*
 rm commonName.*
 
+#update vgLoadJax.c to update the date given in .ra acknowledgements
+#recompile vgLoadJax on dev
 #run vgLoadJax to create .ra .tab .txt for each submissionSet
 ssh kkr3u00
 setenv jdb jackson20060328
 cd ~/kent/src/hg/visiGene/vgLoadJax
 #remove any old data dir
 rm -fr visiGene/
-#compiled vgLoadJax on dev
 # visiGene in line below is just an output dir for the .ra/.tab/.txt files
 ~/bin/i386/vgLoadJax /san/sanvol1/visiGene/gbdb jackson20060328 visiGene
 #ref 32185: missing title from BIB_Refs, ref skipped
