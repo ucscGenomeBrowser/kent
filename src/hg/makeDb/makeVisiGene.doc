@@ -321,5 +321,90 @@ vgProbeTrack EXT working mm8
 
 ############################
 
+###  JACKSON UPDATE CONTINUED (done 2006-04-01 galt)  #############
+
+# updated jackson20060328 db on kkr3u00 (see hg/visiGene/jackson/makeJackson.doc)
+
+# Dropped old visiGeneOld db, asked Heather to clone visiGene db to visiGene db,
+# and then ran this query to remove the old previous JAX info:
+# MULTI-TABLE DELETE:
+delete submissionSource, submissionSet, submissionContributor, image,
+imageProbe, expressionLevel, imageFile from
+submissionSource so,
+submissionSet ss,
+submissionContributor sc,
+image i,
+imageProbe ip,
+expressionLevel el,
+imageFile f
+where so.id = 2
+and ss.submissionSource = so.id
+and sc.submissionSet = ss.id
+and i.submissionSet = ss.id
+and ip.image = i.id
+and el.imageProbe = ip.id
+and f.submissionSet = ss.id;
+
+#delete query (get rid of all submissionSource.id=2)
+#Query OK, 164717 rows affected (48 min 16.07 sec)
+
+# Workaround for uniProt access from kkr3u00
+ssh hgwdev
+setenv jdb jackson20060328
+cd ~/kent/src/hg/visiGene/vgLoadJax
+hgsqldump uniProt taxon commonName -T .
+ssh kkr3u00
+setenv jdb jackson20060328
+cd ~/kent/src/hg/visiGene/vgLoadJax
+hgsql mysql -e "create database uniProt"
+hgsql uniProt < taxon.sql
+hgsql uniProt < commonName.sql
+# hgsql uniProt -e 'show tables'
+hgsql uniProt -e "load data local infile 'taxon.txt' into table taxon"
+hgsql uniProt -e "load data local infile 'commonName.txt' into table commonName"
+# hgsql uniProt -e 'show table status\G'
+# cleanup
+rm taxon.*
+rm commonName.*
+
+#run vgLoadJax to create .ra .tab .txt for each submissionSet
+ssh kkr3u00
+setenv jdb jackson20060328
+cd ~/kent/src/hg/visiGene/vgLoadJax
+#remove any old data dir
+rm -fr visiGene/
+#compiled vgLoadJax on dev
+# visiGene in line below is just an output dir for the .ra/.tab/.txt files
+~/bin/i386/vgLoadJax /san/sanvol1/visiGene/gbdb jackson20060328 visiGene
+#ref 32185: missing title from BIB_Refs, ref skipped
+#Calculating age from postnatal
+#ref 67768: missing title from BIB_Refs, ref skipped
+#Calculating age from postnatal month 3
+#Calculating age from postnatal
+#Calculating age from postnatal
+#Calculating age from postnatal month 4
+#Calculating age from postnatal month 4
+#Calculating age from Not Specified 12.5
+#refCount=2970
+
+
+#ran loadAll to load the updated jax .ra .tab .txt into visiGene db
+ssh hgwdev
+cd ~/kent/src/hg/visiGene/vgLoadJax
+loadAll
+#loadAll.output has 1112 lines like
+#visiGene/100423.ra
+
+# ran vgGetText to update cgi-bin-galt/visiGeneData/ using visiGene db
+cd ~/kent/src/hg/visiGene/vgGetText
+make alpha
+# output:
+#vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text mm7 hg17
+#probe has 19276 rows
+#gene has 15173 rows
+#imageProbe has 115500 rows
+
+
+# recompiled hgVisiGene 
 
 
