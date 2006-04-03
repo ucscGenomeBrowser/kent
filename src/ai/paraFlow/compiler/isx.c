@@ -722,6 +722,15 @@ switch (ppt)
 	    isxAddNew(pfc, poJump, falseLabel, NULL, NULL, iList);
 	break;
 	}
+    case pptConstBit:
+        {
+	int isTrue = cond->tok->val.i;
+	if (isTrue)
+	    isxAddNew(pfc, poJump, trueLabel, NULL, NULL, iList);
+	else
+	    isxAddNew(pfc, poJump, falseLabel, NULL, NULL, iList);
+	break;
+	}
     default:
 	{
 	internalErrAt(cond->tok);

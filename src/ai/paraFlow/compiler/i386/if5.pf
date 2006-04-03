@@ -1,3 +1,12 @@
+if (1)
+   _printString("One is true");
+else
+   _printString("One is false");
+if (1 == 2)
+   _printString("1 == 2");
+else
+   _printString("1 != 2");
+
 int a = 1;
 if (a)
    _printInt(a);
@@ -13,8 +22,6 @@ if (!l)
    _printLong(l);
 else
    _printLong(0L);
-/*-SOON
-SOON-*/
 
 double d = 1.0;
 if (d)
@@ -26,3 +33,6 @@ if (e)
     _printDouble(e);
 else
     _printDouble(0.1);
+/*-SOON
+SOON-*/
+
