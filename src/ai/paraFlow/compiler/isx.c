@@ -712,6 +712,7 @@ switch (ppt)
     case pptCastLongToBit:
     case pptCastFloatToBit:
     case pptCastDoubleToBit:
+    case pptCastStringToBit:
         {
 	struct isxAddress *source = isxExpression(pfc, cond->children, 
 		varHash, weight, iList);

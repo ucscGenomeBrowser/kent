@@ -220,8 +220,8 @@ static struct dataOpTable dataOpTable[] =
     {opSar, "sarb", "sarw", "sarl", NULL, NULL, NULL, NULL},
     {opNeg, "negb", "negw", "negl", NULL, NULL, NULL, NULL},
     {opNot, "notb", "notw", "notl", NULL, NULL, NULL, NULL},
-    {opCmp, "cmpb", "cmpw", "cmpl", NULL, "ucomiss", "ucomisd", "cmpl"},
-    {opTest, "testb", "testw", "testl", NULL, NULL, NULL, NULL},
+    {opCmp, "cmpb", "cmpw", "cmpl", NULL, "ucomiss", "ucomisd", NULL},
+    {opTest, "testb", "testw", "testl", NULL, NULL, NULL, "testl"},
     };
 
 static char *opOfType(enum pentDataOp opType, enum isxValType valType)
@@ -864,15 +864,22 @@ if (iad->adType == iadRealVar)
     }
 }
 
-static void linkDestReg(struct isxAddress *dest, struct isxReg *reg,
+static void linkReg(struct isxAddress *iad, struct isxReg *reg)
+/* Link register to new address. */
+{
+if (reg->contents != NULL)
+    reg->contents->reg = NULL;
+reg->contents = iad;
+iad->reg = reg;
+}
+
+
+static void linkRegSaveReal(struct isxAddress *dest, struct isxReg *reg,
 	struct pentCoder *coder)
 /* Unlink whatever old variable was in register and link in dest.
  * Also copy dest to memory if it's a real variable. */
 {
-if (reg->contents != NULL)
-    reg->contents->reg = NULL;
-reg->contents = dest;
-dest->reg = reg;
+linkReg(dest, reg);
 copyRealVarToMem(dest, coder);
 }
 
@@ -897,7 +904,7 @@ else
     if (source->reg != reg)
 	codeOpDestReg(opMov, source, reg, coder);
     }
-linkDestReg(dest, reg, coder);
+linkRegSaveReal(dest, reg, coder);
 }
 
 
@@ -933,7 +940,7 @@ else
     codeOpDestReg(opMov, isx->left, reg, coder);
     codeOpDestReg(opCode, isx->right, reg, coder);
     }
-linkDestReg(isx->dest, reg, coder);
+linkRegSaveReal(isx->dest, reg, coder);
 }
 
 static struct isxLiveVar *dummyLive(struct isxAddress *iad)
@@ -1033,7 +1040,7 @@ struct isxReg *reg = freeReg(isx, isx->dest->valType, nextNode, coder);
 if (reg != isx->left->reg)
     codeOpDestReg(opMov, isx->left, reg, coder);
 codeOpDestReg(opDiv, isx->right, reg, coder);
-linkDestReg(isx->dest, reg, coder);
+linkRegSaveReal(isx->dest, reg, coder);
 }
 
 static void pentDivide(struct isx *isx, struct dlNode *nextNode, 
@@ -1118,7 +1125,7 @@ struct isxReg *reg = freeReg(isx, valType, nextNode, coder);
 if (reg != isx->left->reg)
     codeOpDestReg(opMov, isx->left, reg, coder);
 unaryOpReg(opCode, reg, valType, coder);
-linkDestReg(isx->dest, reg, coder);
+linkRegSaveReal(isx->dest, reg, coder);
 }
 
 static void pentNegate(struct isx *isx, struct dlNode *nextNode,  
@@ -1149,7 +1156,7 @@ char *destRegName = isxRegName(destReg, valType);
 if (destReg != isx->left->reg)
     codeOpDestReg(opMov, isx->left, destReg, coder);
 pentCoderAdd(coder, "pandn", "longLongMinusOne", destRegName);
-linkDestReg(isx->dest, destReg, coder);
+linkRegSaveReal(isx->dest, destReg, coder);
 }
 
 static void pentFlipBits(struct isx *isx, struct dlNode *nextNode,  
@@ -1274,7 +1281,7 @@ else
     {
     reg = freeReg(isx, valType, nextNode, coder);
     codeOpDestReg(opMov, source, reg, coder);
-    linkDestReg(dest, reg, coder);
+    linkRegSaveReal(dest, reg, coder);
     }
 }
 
@@ -1506,24 +1513,54 @@ pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
 trimDummiesFromLive(extraLive, isx->liveList);
 }
 
+static void pentTestJumpString(struct pfCompile *pfc, struct isx *isx, 
+	struct dlNode *nextNode, char *jmpOp, struct pentCoder *coder)
+/* Generate code to test string for NULL, and then for empty */
+{
+struct isxAddress *iad = isx->left;
+struct isxAddress *skipAddress = isxTempLabelAddress(pfc);
+struct isxReg *reg = freeReg(isx, ivString, nextNode, coder);
+char *regName = isxRegName(reg, ivString);
+
+/* Get a register to work in and detatch it from anything else. */
+if (reg != iad->reg)
+    codeOpDestReg(opMov, iad, reg, coder);
+if (reg->contents != NULL)
+    reg->contents->reg = NULL;
+reg->contents = NULL;
+
+/* Test for NULL, no sense going any further if NULL */
+pentCoderAdd(coder, "testl", regName, regName);
+pentCoderAdd(coder, "jz", skipAddress->name, NULL);
+
+/* Now load up size field and test it for NULL */
+safef(coder->sourceBuf, pentCodeBufSize, "pfSize(%s)", regName);
+pentCoderAdd(coder, "movl", coder->sourceBuf, regName);
+pentCoderAdd(coder, "testl", regName, regName);
+pentCoderAdd(coder, NULL, NULL, skipAddress->name);
+pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
+}
+
 static void pentTestJump(struct pfCompile *pfc, struct isx *isx, 
 	struct dlNode *nextNode, char *jmpOp, struct pentCoder *coder)
 /* Output conditional jump code for == 0/!= 0. */
 {
-enum isxValType valType = isx->left->valType;
+struct isxAddress *left = isx->left;
+enum isxValType valType = left->valType;
 if (valType == ivLong)
     pentTestJumpLong(pfc, isx, nextNode, jmpOp, coder);
+else if (valType == ivString)
+    pentTestJumpString(pfc, isx, nextNode, jmpOp, coder);
 else
     {
-    if (isx->left->reg)
-	codeOp(opTest, isx->left, isx->left, coder);
+    if (left->reg)
+	codeOp(opTest, left, left, coder);
     else
 	{
 	struct isxReg *reg = freeReg(isx, valType, nextNode, coder);
-	codeOpDestReg(opMov, isx->left, reg, coder);
-	isx->left->reg = reg;
-	reg->contents = isx->left;
-	codeOpDestReg(opTest, isx->left, reg, coder);
+	codeOpDestReg(opMov, left, reg, coder);
+	linkReg(left, reg);
+	codeOpDestReg(opTest, left, reg, coder);
 	}
     pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
     }
