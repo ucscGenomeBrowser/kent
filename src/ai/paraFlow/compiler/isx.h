@@ -191,11 +191,23 @@ struct isxReg
 
 struct isx *isxNew(struct pfCompile *pfc, enum isxOpType opType,
 	struct isxAddress *dest, struct isxAddress *left,
+	struct isxAddress *right);
+/* Make new isx instruction. */
+
+struct isx *isxAddNew(struct pfCompile *pfc, enum isxOpType opType,
+	struct isxAddress *dest, struct isxAddress *left,
 	struct isxAddress *right, struct dlList *iList);
 /* Make new isx instruction, and hang it on iList */
 
 char *isxRegName(struct isxReg *reg, enum isxValType valType);
 /* Get name of reg for given type. */
+
+struct isxAddress *isxIoAddress(int offset, enum isxValType valType,
+	enum isxAddressType adType);
+/* Return reference to an io stack address */
+
+struct isxAddress *isxCallAddress(char *name);
+/* Create reference to a function */
 
 void isxAddressDump(struct isxAddress *iad, FILE *f);
 /* Print variable name or n/a */

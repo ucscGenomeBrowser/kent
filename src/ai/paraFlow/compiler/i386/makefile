@@ -1,5 +1,8 @@
 test:
 	mkdir -p expected output
+	paraFlow long.pf > expected/long
+	paraFlow -asm long.pf > output/long
+	diff expected/long output/long
 	paraFlow ret2.pf > expected/ret2
 	paraFlow -asm ret2.pf > output/ret2
 	diff expected/ret2 output/ret2

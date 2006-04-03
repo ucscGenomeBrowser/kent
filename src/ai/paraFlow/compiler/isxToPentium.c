@@ -184,7 +184,7 @@ static struct dataOpTable dataOpTable[] =
     {opAnd, "andb", "andw", "andl", "pand", NULL, NULL, NULL},
     {opOr,  "orb",  "orw",  "orl",  "por",  NULL, NULL, NULL},
     {opXor, "xorb", "xorw", "xorl", "pxor", NULL, NULL, NULL},
-    {opSal, "salb", "salw", "sall", "pslldq", NULL, NULL, NULL},
+    {opSal, "salb", "salw", "sall", "psllq", NULL, NULL, NULL},
     {opSar, "sarb", "sarw", "sarl", NULL, NULL, NULL, NULL},
     {opNeg, "negb", "negw", "negl", NULL, NULL, NULL, NULL},
     {opNot, "notb", "notw", "notl", NULL, NULL, NULL, NULL},
@@ -1133,7 +1133,13 @@ if (reg != NULL)
 		pentCoderAdd(coder, "movsd", coder->destBuf, "%xmm0");
 		break;
 	    case ivLong:
-		internalErr();
+		safef(coder->destBuf, pentCodeBufSize, "%d(%%esp)",
+		    source->stackOffset+4);
+		pentCoderAdd(coder, "movl", "%edx", coder->destBuf);
+		safef(coder->destBuf, pentCodeBufSize, "%d(%%esp)",
+		    source->stackOffset);
+		pentCoderAdd(coder, "movl", "%eax", coder->destBuf);
+		pentCoderAdd(coder, "movq", coder->destBuf, "%mm1");
 		break;
 	    }
 	}
@@ -1149,14 +1155,13 @@ else
 static void pentCall(struct isx *isx,  struct pentCoder *coder)
 /* Output code to actually do call */
 {
-struct pfVar *funcVar = isx->left->val.var;
 int i;
 pentSwapOutIfNeeded(&regInfo[ax],isx->liveList, coder);
 pentSwapOutIfNeeded(&regInfo[cx],isx->liveList, coder);
 pentSwapOutIfNeeded(&regInfo[dx],isx->liveList, coder);
 for (i=xmm0; i<= mm6; ++i)
     pentSwapOutIfNeeded(&regInfo[i],isx->liveList, coder);
-safef(coder->destBuf, pentCodeBufSize, "%s%s", isxPrefixC, funcVar->cName);
+safef(coder->destBuf, pentCodeBufSize, "%s%s", isxPrefixC, isx->left->name);
 pentCoderAdd(coder, "call", NULL, coder->destBuf);
 }
 
@@ -2119,3 +2124,54 @@ fprintf(f, "%s",
 "	ret\n");
 }
 
+static void subInBinary(struct pfCompile *pfc, struct dlNode *node, 
+	struct isx *isx, char *call)
+/* Substitute call to function for a binary operation. */
+{
+enum isxValType valType = isx->dest->valType;
+struct isx *firstIn = isxNew(pfc, poInput, isxIoAddress(0, valType, iadInStack),
+	isx->left, NULL);
+struct isx *secondIn = isxNew(pfc, poInput, isxIoAddress(1, valType, iadInStack),
+	isx->right, NULL);
+struct isx *callIsx = isxNew(pfc, poCall, NULL, isxCallAddress(call), NULL);
+struct isx *outIsx = isxNew(pfc, poOutput, isx->dest, 
+	isxIoAddress(0, valType, iadOutStack), NULL);
+dlAddValAfter(node, outIsx);
+dlAddValAfter(node, callIsx);
+dlAddValAfter(node, secondIn);
+dlAddValAfter(node, firstIn);
+dlRemove(node);
+freez(&node);
+freez(&isx);
+}
+
+void pentSubCallsForHardStuff(struct pfCompile *pfc, struct isxList *isxList)
+/* Substitute subroutine calls for some of the harder
+ * instructions, particularly acting on longs. */
+{
+struct dlNode *node, *next;
+for (node = isxList->iList->head; !dlEnd(node); node = next)
+    {
+    struct isx *isx = node->val;
+    boolean destIsLong = (isx->dest != NULL && isx->dest->valType == ivLong);
+    next = node->next;
+    if (destIsLong)
+	{
+	switch (isx->opType)
+	    {
+	    case poMul:
+	    	subInBinary(pfc, node, isx, "_pfLongMul");
+		break;
+	    case poDiv:
+	    	subInBinary(pfc, node, isx, "_pfLongDiv");
+		break;
+	    case poMod:
+	    	subInBinary(pfc, node, isx, "_pfLongMod");
+		break;
+	    case poShiftRight:
+	    	subInBinary(pfc, node, isx, "_pfLongShiftRight");
+		break;
+	    }
+	}
+    }
+}

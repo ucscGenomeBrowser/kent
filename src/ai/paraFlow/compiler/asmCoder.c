@@ -13,37 +13,14 @@
 #define asmSuffix ".s"
 #define objSuffix ".o"
 
-#ifdef OLD
-static void finishFuncOrOutside(struct pfCompile *pfc, struct isxList *isxList,
-	FILE *isxFile, FILE *branchFile, FILE *asmFile, 
-	struct pentFunctionInfo *pfi, boolean isFunc, char *cName,
-	boolean isGlobal)
-/* Finish up code generation for a function. */
-{
-isxLiveList(isxList);
-isxDumpList(isxList->iList, isxFile);
-fflush(isxFile);
 
-optBranch(isxList->iList);
-isxDumpList(isxList->iList, branchFile);
-fflush(branchFile);
-
-pentCodeLocalConsts(isxList, pfi->coder->storeHash, asmFile);
-
-pentFromIsx(isxList, pfi);
-if (isFunc)
-    pentFunctionStart(pfc, pfi, cName, isGlobal, asmFile);
-pentCodeSaveAll(pfi->coder->list, asmFile);
-if (isFunc)
-    pentFunctionEnd(pfc, pfi, asmFile);
-pentCodeFreeList(&pfi->coder->list);
-}
-#endif /* OLD */
-
-static void finishIsx(struct isxList *isxList, FILE *isxFile, FILE *branchFile)
+static void finishIsx(struct pfCompile *pfc,
+	struct isxList *isxList, FILE *isxFile, FILE *branchFile)
 /* Make live list and do a little optimization on intermediate code,
  * and save for debugging. */
 {
+pentSubCallsForHardStuff(pfc, isxList);
+
 isxLiveList(isxList);
 isxDumpList(isxList->iList, isxFile);
 fflush(isxFile);
@@ -75,7 +52,7 @@ for (pp = module->children; pp != NULL; pp = pp->next)
 	    break;
 	}
     }
-finishIsx(isxList, isxFile, branchFile);
+finishIsx(pfc, isxList, isxFile, branchFile);
 pentCodeLocalConsts(isxList, constHash, asmFile);
 pentFromIsx(isxList, pfi);
 gnuMacMainStart(asmFile);
@@ -116,7 +93,7 @@ if (classPp != NULL)
     isGlobal = (classPp->ty->access == paGlobal && access != paLocal);
 else
     isGlobal = (access == paGlobal);
-finishIsx(isxList, isxFile, branchFile);
+finishIsx(pfc, isxList, isxFile, branchFile);
 pentCodeLocalConsts(isxList, constHash, asmFile);
 pentFromIsx(isxList, pfi);
 pentFunctionStart(pfc, pfi, cName, isGlobal, asmFile);

@@ -391,8 +391,15 @@ void pf__printInt(_pf_Stack *stack)
 printf("%d\n", stack->Int);
 }
 
-void pf__addTwo(_pf_Stack *stack)
-/* Add two integers and return result. Just for debugging really */
+void pf__printDouble(_pf_Stack *stack)
+/* Print double, just for debugging really */
 {
-stack->Int = stack[0].Int + stack[1].Int;
+printf("%f\n", stack->Double);
 }
+
+void pf__printLong(_pf_Stack *stack)
+/* Print long, just for debugging really */
+{
+printf("%lld\n", stack->Long);
+}
+
