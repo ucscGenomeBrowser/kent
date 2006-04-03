@@ -1,3 +1,14 @@
+string abc = "abc";
+string xyz = "xyz";
+if (abc < xyz)
+    _printString("Looks good");
+else
+    _printString("What are they thinking?");
+
+if (xyz < abc)
+    _printString("Still don't know what  they are thinking.");
+else
+    _printString("Still looks good");
 
 string s = "Hello wonderful world";
 _printString(s);

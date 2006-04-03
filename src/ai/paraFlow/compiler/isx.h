@@ -202,6 +202,10 @@ struct isx *isxAddNew(struct pfCompile *pfc, enum isxOpType opType,
 char *isxRegName(struct isxReg *reg, enum isxValType valType);
 /* Get name of reg for given type. */
 
+struct isxAddress *isxTempVarAddress(struct pfCompile *pfc, struct hash *hash,
+	double weight, enum isxValType valType);
+/* Create a new temporary var */
+
 struct isxAddress *isxConstAddress(struct pfToken *tok, 
 	enum isxValType valType);
 /* Get place to put constant. */

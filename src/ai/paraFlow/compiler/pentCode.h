@@ -77,7 +77,8 @@ struct pentFunctionInfo
 struct pentFunctionInfo *pentFunctionInfoNew(struct hash *constStringHash);
 /* Create new pentFunctionInfo */
 
-void pentSubCallsForHardStuff(struct pfCompile *pfc, struct isxList *isxList);
+void pentSubCallsForHardStuff(struct pfCompile *pfc, struct hash *varHash,
+	struct isxList *isxList);
 /* Substitute subroutine calls for some of the harder
  * instructions, particularly acting on longs. */
 

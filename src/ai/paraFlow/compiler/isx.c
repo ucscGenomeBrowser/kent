@@ -372,9 +372,9 @@ static struct isxAddress zero;
 return &zero;
 }
 
-static struct isxAddress *tempAddress(struct pfCompile *pfc, struct hash *hash,
+struct isxAddress *isxTempVarAddress(struct pfCompile *pfc, struct hash *hash,
 	double weight, enum isxValType valType)
-/* Create a new temporary */
+/* Create a new temporary var */
 {
 struct isxAddress *iad;
 char buf[18];
@@ -461,7 +461,7 @@ struct isxAddress *left = isxExpression(pfc, pp->children,
 	varHash, weight, iList);
 struct isxAddress *right = isxExpression(pfc, pp->children->next,
 	varHash, weight, iList);
-struct isxAddress *dest = tempAddress(pfc, varHash, weight, ppToIsxValType(pfc,pp));
+struct isxAddress *dest = isxTempVarAddress(pfc, varHash, weight, ppToIsxValType(pfc,pp));
 isxAddNew(pfc, op, dest, left, right, iList);
 return dest;
 }
@@ -473,7 +473,7 @@ static struct isxAddress *isxUnaryOp(struct pfCompile *pfc,
 {
 struct isxAddress *target = isxExpression(pfc, pp->children,
 	varHash, weight, iList);
-struct isxAddress *dest = tempAddress(pfc, varHash, weight, ppToIsxValType(pfc,pp));
+struct isxAddress *dest = isxTempVarAddress(pfc, varHash, weight, ppToIsxValType(pfc,pp));
 isxAddNew(pfc, op, dest, target, NULL, iList);
 return dest;
 }
@@ -526,7 +526,7 @@ for (ty = outTuple->children, offset=0; ty != NULL; ty = ty->next, ++offset)
     {
     enum isxValType valType = isxValTypeFromTy(pfc, ty);
     source = isxIoAddress(offset, valType, iadOutStack);
-    dest = tempAddress(pfc, varHash, weight, valType);
+    dest = isxTempVarAddress(pfc, varHash, weight, valType);
     slAddTail(&destList, dest);
     isxAddNew(pfc, poOutput, dest, source, NULL, iList);
     }

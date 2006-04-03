@@ -16,12 +16,12 @@
 #define objSuffix ".o"
 
 
-static void finishIsx(struct pfCompile *pfc,
+static void finishIsx(struct pfCompile *pfc, struct hash *varHash,
 	struct isxList *isxList, FILE *isxFile, FILE *branchFile)
 /* Make live list and do a little optimization on intermediate code,
  * and save for debugging. */
 {
-pentSubCallsForHardStuff(pfc, isxList);
+pentSubCallsForHardStuff(pfc, varHash, isxList);
 
 isxLiveList(isxList);
 isxDumpList(isxList->iList, isxFile);
@@ -54,7 +54,7 @@ for (pp = module->children; pp != NULL; pp = pp->next)
 	    break;
 	}
     }
-finishIsx(pfc, isxList, isxFile, branchFile);
+finishIsx(pfc, varHash, isxList, isxFile, branchFile);
 pentCodeLocalConsts(isxList, labelHash, pfc->constStringHash, asmFile);
 pentFromIsx(pfc, isxList, pfi);
 gnuMacMainStart(asmFile);
@@ -95,7 +95,7 @@ if (classPp != NULL)
     isGlobal = (classPp->ty->access == paGlobal && access != paLocal);
 else
     isGlobal = (access == paGlobal);
-finishIsx(pfc, isxList, isxFile, branchFile);
+finishIsx(pfc, varHash, isxList, isxFile, branchFile);
 pentCodeLocalConsts(isxList, labelHash, pfc->constStringHash, asmFile);
 pentFromIsx(pfc, isxList, pfi);
 pentFunctionStart(pfc, pfi, cName, isGlobal, asmFile);

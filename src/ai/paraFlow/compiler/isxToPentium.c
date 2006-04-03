@@ -2272,10 +2272,11 @@ fprintf(f, "%s",
 "	ret\n");
 }
 
-static void subInBinary(struct pfCompile *pfc, struct dlNode *node, 
+static struct dlNode *subInBinary(struct pfCompile *pfc, struct dlNode *node, 
 	struct isx *isx, char *call)
 /* Substitute call to function for a binary operation. */
 {
+struct dlNode *retNode;
 enum isxValType valType = isx->dest->valType;
 struct isx *firstIn = isxNew(pfc, poInput, isxIoAddress(0, valType, iadInStack),
 	isx->left, NULL);
@@ -2284,21 +2285,38 @@ struct isx *secondIn = isxNew(pfc, poInput, isxIoAddress(1, valType, iadInStack)
 struct isx *callIsx = isxNew(pfc, poCall, NULL, isxCallAddress(call), NULL);
 struct isx *outIsx = isxNew(pfc, poOutput, isx->dest, 
 	isxIoAddress(0, valType, iadOutStack), NULL);
-dlAddValAfter(node, outIsx);
+retNode = dlAddValAfter(node, outIsx);
 dlAddValAfter(node, callIsx);
 dlAddValAfter(node, secondIn);
 dlAddValAfter(node, firstIn);
 dlRemove(node);
 freez(&node);
 freez(&isx);
+return retNode;
 }
 
-static struct pfToken *constZeroLongFloatTok(enum isxValType valType)
+static struct pfToken *constZeroTok(enum isxValType valType)
 /* Return zero token of correct type */
 {
 struct pfToken *tok;
 AllocVar(tok);
-tok->type = (valType == ivLong ? pftLong : pftFloat);
+switch (valType)
+    {
+    case ivLong:
+         tok->type = pftLong;
+	 break;
+    case ivFloat:
+    case ivDouble:
+         tok->type = pftFloat;
+	 break;
+    case ivInt:
+    case ivShort:
+         tok->type = pftInt;
+	 break;
+    default:
+         internalErr();
+	 break;
+    }
 return tok;
 }
 
@@ -2307,7 +2325,7 @@ void subFromZeroForNeg(struct pfCompile *pfc, struct dlNode *node,
 /* convert -x  to  0 - x. */
 {
 enum isxValType valType = isx->dest->valType;
-struct pfToken *tok = constZeroLongFloatTok(valType);;
+struct pfToken *tok = constZeroTok(valType);;
 isx->opType = poMinus;
 isx->right = isx->left;
 isx->left = isxConstAddress(tok, valType);
@@ -2318,7 +2336,7 @@ void cmpFloatToZero(struct pfCompile *pfc, struct dlNode *node,
 /* Convert x  to x == 0 */
 {
 enum isxValType valType = isx->left->valType;
-struct pfToken *tok = constZeroLongFloatTok(valType);
+struct pfToken *tok = constZeroTok(valType);
 if (isx->opType == poBz)
     isx->opType = poBeq;
 else
@@ -2326,7 +2344,27 @@ else
 isx->right = isxConstAddress(tok, valType);
 }
 
-void pentSubCallsForHardStuff(struct pfCompile *pfc, struct isxList *isxList)
+void cmpStrings(struct pfCompile *pfc, struct hash *varHash, 
+	struct dlNode *node, struct isx *isx)
+/* Convert  $a cmp $b  to 
+ *        temp = cmpStrings($a,$b);
+ *        $tmp cmp 0 */
+{
+struct isx saveIsx = *isx;
+struct isxAddress *tempVar = isxTempVarAddress(pfc, varHash, 1.0, ivString);
+struct pfToken *tok = constZeroTok(ivInt);
+struct isx *cmpIsx, *callOutIsx;
+isx->dest = tempVar;
+node = subInBinary(pfc, node, isx, "_pfStringCmp");
+callOutIsx = node->val;
+callOutIsx->dest->valType = ivInt;
+cmpIsx = isxNew(pfc, saveIsx.opType, saveIsx.dest, callOutIsx->dest, 
+	isxConstAddress(tok, ivInt));
+dlAddValAfter(node, cmpIsx);
+}
+
+void pentSubCallsForHardStuff(struct pfCompile *pfc, struct hash *varHash,
+	struct isxList *isxList)
 /* Substitute subroutine calls for some of the harder
  * instructions, particularly acting on longs. */
 {
@@ -2390,6 +2428,21 @@ for (node = isxList->iList->head; !dlEnd(node); node = next)
 		    case poBz:
 		    case poBnz:
 		        cmpFloatToZero(pfc, node, isx);
+			break;
+		    }
+		break;
+		}
+	    case ivString:
+	        {
+		switch (isx->opType)
+		    {
+		    case poBlt:
+		    case poBle:
+		    case poBge:
+		    case poBgt:
+		    case poBeq:
+		    case poBne:
+		        cmpStrings(pfc, varHash, node, isx);
 			break;
 		    }
 		break;
