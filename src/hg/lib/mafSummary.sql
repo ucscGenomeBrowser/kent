@@ -5,11 +5,14 @@
 
 #Positions and scores for alignment blocks
 CREATE TABLE mafSummary (
+    bin smallint unsigned not null,	# bin field for speed
     chrom varchar(255) not null,	# Chromosome
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
     src varchar(255) not null,	# Sequence name or database of alignment
     score float not null,	# Floating point score.
               #Indices
-    PRIMARY KEY(chrom)
+    INDEX(chrom(20),bin),
+    INDEX(chrom(20),chromStart),
+    INDEX(chrom(20),chromEnd)
 );
