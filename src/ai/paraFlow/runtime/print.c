@@ -385,6 +385,12 @@ void pf_ugly(_pf_Stack *stack)
 pf_print(stack);
 }
 
+void pf__printBit(_pf_Stack *stack)
+/* Print integer, just for debugging really */
+{
+printf("%d\n", stack->Bit);
+}
+
 void pf__printByte(_pf_Stack *stack)
 /* Print integer, just for debugging really */
 {

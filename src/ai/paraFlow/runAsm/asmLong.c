@@ -26,6 +26,11 @@ return a>>b;
 }
 
 
+void _printBit(_pf_Bit x)
+{
+printf("%d\n", x);
+}
+
 void _printByte(_pf_Byte x)
 {
 printf("%d\n", x);

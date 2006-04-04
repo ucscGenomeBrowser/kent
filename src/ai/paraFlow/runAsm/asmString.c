@@ -19,3 +19,20 @@ if (string != NULL)
 printf("%s\n", text);
 }
 
+int _pfStringCmp(struct _pf_string *a, struct _pf_string *b)
+/* Compare two strings */
+{
+int ret = 0;
+
+if (a != b)
+    {
+    if (a == NULL)
+        ret = -1;
+    else if (b == NULL)
+        ret = 1;
+    else
+        ret = strcmp(a->s, b->s);
+    }
+return ret;
+}
+
