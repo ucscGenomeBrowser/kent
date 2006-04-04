@@ -314,6 +314,33 @@ pentCoderAdd(coder, "setnz", NULL, isxRegName(destReg, ivBit));
 pentLinkRegSave(dest, destReg, coder);
 }
 
+static void castFloatToLong(struct isx *isx, struct dlNode *nextNode,
+	struct pentCoder *coder, int fpSize, char *fpPush)
+/* Cast floating point number to long. */
+{
+struct isxAddress *source = isx->left;
+struct isxAddress *dest = isx->dest;
+int tempOffset = (coder->tempIx -= fpSize);
+struct isxReg *reg = pentFreeReg(isx, dest->valType, nextNode, coder);
+
+/* Force memory location for source. */
+if (source->reg && pentTempJustInReg(source))
+    pentSwapTempFromReg(source->reg,  coder);
+
+/* Save and mark as trashed all mmx registers since using floating point
+ * stack. Also flip processor out of mmx mode. */
+pentSwapAllMmx(isx, coder);
+pentCoderAdd(coder, "emms", NULL, NULL);
+
+/* Code it up. */
+pentPrintVarMemAddress(source, coder->sourceBuf, 0);
+pentCoderAdd(coder, fpPush, coder->sourceBuf, NULL);
+safef(coder->destBuf, pentCodeBufSize, "%d(%%ebp)", tempOffset);
+pentCoderAdd(coder, "fistpll", NULL,coder->destBuf);
+pentCoderAdd(coder, "movq", coder->destBuf, isxRegName(reg, dest->valType));
+pentLinkRegSave(dest, reg, coder);
+}
+
 static void castFromFloat(struct pfCompile *pfc, struct isx *isx,
 	struct dlNode *nextNode, struct pentCoder *coder)
 /* Create code for cast from float to something else. */
@@ -329,13 +356,16 @@ switch (isx->dest->valType)
 	castByOneViaType(isx, nextNode, coder, "cvtss2si", ivInt);
 	break;
     case ivLong:
+        castFloatToLong(isx, nextNode, coder, 4, "flds");
+	break;
     case ivDouble:
+	castByOneInstruction(isx, nextNode, coder, "cvtss2sd");
+	break;
     default:
         internalErr();
 	break;
     }
 }
-
 
 void pentCast(struct pfCompile *pfc, struct isx *isx, struct dlNode *nextNode, 
 	struct pentCoder *coder)

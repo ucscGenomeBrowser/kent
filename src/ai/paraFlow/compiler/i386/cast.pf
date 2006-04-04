@@ -117,3 +117,7 @@ s2 = f1;
 _printShort(s2);
 i2 = f1;
 _printInt(i2);
+l2 = f1;
+_printLong(l2);
+d2 = f1;
+_printDouble(d2);
