@@ -286,6 +286,25 @@ switch (isx->dest->valType)
     }
 }
 
+static void castFromFloat(struct pfCompile *pfc, struct isx *isx,
+	struct dlNode *nextNode, struct pentCoder *coder)
+/* Create code for cast from float to something else. */
+{
+switch (isx->dest->valType)
+    {
+    case ivBit:
+    case ivByte:
+    case ivShort:
+    case ivInt:
+    case ivLong:
+    case ivFloat:
+    case ivDouble:
+    default:
+        internalErr();
+	break;
+    }
+}
+
 
 void pentCast(struct pfCompile *pfc, struct isx *isx, struct dlNode *nextNode, 
 	struct pentCoder *coder)
@@ -305,6 +324,9 @@ switch (isx->left->valType)
 	break;
     case ivLong:
         castFromLong(pfc, isx, nextNode, coder);
+	break;
+    case ivFloat:
+        castFromFloat(pfc, isx, nextNode, coder);
 	break;
     default:
         internalErr();
