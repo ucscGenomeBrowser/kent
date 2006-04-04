@@ -17,7 +17,12 @@ double d2;
 _printString("Starting the castathon.");
 b2 = i1;
 _printByte(b2);
-
 s2 = i1;
 _printShort(s2);
+l2 = i1;
+_printLong(l2);
+f2 = i1;
+_printFloat(f2);
+d2 = i1;
+_printDouble(d2);
 
