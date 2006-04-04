@@ -1625,6 +1625,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
 ############################################################################
 ##  BLASTZ swap from hg17 alignments (DONE - 2006-03-30 - 2004-04-04 - Hiram)
+#  LIFTOVER BOSTAU2HG17
     #	swapping to get the lift over file in the other direction
     ssh pk
     mkdir /cluster/data/bosTau2/bed/blastz.hg17.swap
