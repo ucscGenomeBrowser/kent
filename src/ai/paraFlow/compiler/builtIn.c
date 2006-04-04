@@ -7,6 +7,7 @@ return
 "readable array of string args;\n"
 "readable bit true=1, false=0;\n"
 "\n"
+"global flow _printBit(bit i);\n"
 "global flow _printByte(byte i);\n"
 "global flow _printShort(short i);\n"
 "global flow _printInt(int i);\n"

@@ -149,6 +149,7 @@ char *isxRegName(struct isxReg *reg, enum isxValType valType)
 {
 switch (valType)
     {
+    case ivBit:
     case ivByte:
 	return reg->byteName;
     case ivShort:
@@ -332,7 +333,9 @@ enum isxValType isxValTypeFromTy(struct pfCompile *pfc, struct pfType *ty)
 /* Return isxValType corresponding to pfType  */
 {
 struct pfBaseType *base = ty->base;
-if (base == pfc->bitType || base == pfc->byteType)
+if (base == pfc->bitType)
+    return ivBit;
+else if (base == pfc->byteType)
     return ivByte;
 else if (base == pfc->shortType)
     return ivShort;

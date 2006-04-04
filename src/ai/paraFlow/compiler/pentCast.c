@@ -11,17 +11,31 @@
 #include "pentCode.h"
 #include "pentCast.h"
 
-static void castViaMovl(struct isx *isx, struct dlNode *nextNode,
+static void castViaMov(struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder)
-/* Do a cast just involving a simple movl instruction operation. */
+/* Do a cast just involving a simple instruction operation between
+ * general purpose registers. */
 {
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
 struct isxReg *reg = pentFreeReg(isx, dest->valType, nextNode, coder);
 if (source->reg != reg)
     {
-    pentPrintAddress(coder, source, coder->sourceBuf);
-    pentCoderAdd(coder, "movl", coder->sourceBuf, isxRegName(reg, ivInt));
+    enum isxValType valType = dest->valType;
+    if (source->reg != NULL)
+	{
+	/* If register/register always do it as a movl, so that
+	 * can use si/di as source. */
+	char *sourceRegName = isxRegName(source->reg, ivInt);
+	char *destRegName = isxRegName(reg, ivInt);
+	pentCoderAdd(coder, "movl", sourceRegName, destRegName);
+	}
+    else
+	{
+	char *op = pentOpOfType(opMov, valType);
+	pentPrintAddress(coder, source, coder->sourceBuf);
+	pentCoderAdd(coder, op, coder->sourceBuf, isxRegName(reg, valType));
+	}
     }
 pentLinkRegSave(dest, reg, coder);
 }
@@ -42,6 +56,48 @@ static void castIntToBit(struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder)
 /* Convert byte/short/long to bit using combination of test/setnz */
 {
+struct isxAddress *source = isx->left;
+struct isxAddress *dest = isx->dest;
+struct isxReg *reg = pentFreeReg(isx, dest->valType, nextNode, coder);
+char *wideRegName = isxRegName(reg, source->valType);
+char *narrowRegName = isxRegName(reg, ivBit);
+char *testOp = pentOpOfType(opTest, source->valType);
+if (source->reg != reg)
+    pentCodeDestReg(opMov, source, reg, coder);
+pentCoderAdd(coder, testOp, wideRegName, wideRegName);
+pentCoderAdd(coder, "setnz", NULL, narrowRegName);
+pentLinkRegSave(dest, reg, coder);
+}
+
+static void castFromShort(struct pfCompile *pfc, struct isx *isx,
+	struct dlNode *nextNode, struct pentCoder *coder)
+/* Create code for cast from long to something else. */
+{
+switch (isx->dest->valType)
+    {
+    case ivBit:
+	castIntToBit(isx, nextNode, coder);
+	break;
+    case ivByte:
+	castViaMov(isx, nextNode, coder);
+	break;
+#ifdef SOON
+    case ivInt:
+	break;
+    case ivLong:
+	castByOneInstruction(isx, nextNode, coder, "movd");
+	break;
+    case ivFloat:
+	castByOneInstruction(isx, nextNode, coder, "cvtsi2ss");
+	break;
+    case ivDouble:
+	castByOneInstruction(isx, nextNode, coder, "cvtsi2sd");
+	break;
+#endif /* SOON */
+    default:
+        internalErr();
+	break;
+    }
 }
 
 static void castFromInt(struct pfCompile *pfc, struct isx *isx,
@@ -51,11 +107,11 @@ static void castFromInt(struct pfCompile *pfc, struct isx *isx,
 switch (isx->dest->valType)
     {
     case ivBit:
-	uglyAbort("BIts from ints?!");
+	castIntToBit(isx, nextNode, coder);
 	break;
     case ivByte:
     case ivShort:
-	castViaMovl(isx, nextNode, coder);
+	castViaMov(isx, nextNode, coder);
 	break;
     case ivLong:
 	castByOneInstruction(isx, nextNode, coder, "movd");
@@ -78,6 +134,9 @@ void pentCast(struct pfCompile *pfc, struct isx *isx, struct dlNode *nextNode,
 {
 switch (isx->left->valType)
     {
+    case ivShort:
+        castFromShort(pfc, isx, nextNode, coder);
+	break;
     case ivInt:
         castFromInt(pfc, isx, nextNode, coder);
 	break;

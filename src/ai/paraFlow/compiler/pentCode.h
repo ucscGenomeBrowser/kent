@@ -20,6 +20,9 @@ enum pentDataOp
     opSar, opNeg, opNot, opCmp, opTest, 
     };
 
+char *pentOpOfType(enum pentDataOp opType, enum isxValType valType);
+/* Return string for given opCode and data type */
+
 struct pentCoder
 /* A factory for pentCodes */
     {
@@ -121,6 +124,10 @@ void pentLinkRegSave(struct isxAddress *dest, struct isxReg *reg,
 void pentPrintAddress(struct pentCoder *coder,
 	struct isxAddress *iad, char *buf);
 /* Print out an address for an instruction. */
+
+void pentCodeDestReg(enum pentDataOp opType, struct isxAddress *source, 
+	struct isxReg *reg,  struct pentCoder *coder);
+/* Code op where dest is a register. */
 
 #endif /* PENTCODE_H */
 

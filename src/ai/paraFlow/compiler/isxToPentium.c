@@ -220,12 +220,13 @@ static struct dataOpTable dataOpTable[] =
     {opTest, "testb", "testw", "testl", NULL, NULL, NULL, "testl"},
     };
 
-static char *opOfType(enum pentDataOp opType, enum isxValType valType)
+char *pentOpOfType(enum pentDataOp opType, enum isxValType valType)
 /* Return string for given opCode and data type */
 {
 char *opString;
 switch (valType)
     {
+    case ivBit:
     case ivByte:
 	opString = dataOpTable[opType].byteName;
 	break;
@@ -263,6 +264,7 @@ int pentTypeSize(enum isxValType valType)
 switch (valType)
     {
     case ivByte:
+    case ivBit:
 	return 1;
     case ivShort:
 	return 2;
@@ -426,7 +428,7 @@ static void codeOp(enum pentDataOp opType, struct isxAddress *source,
 	struct isxAddress *dest, struct pentCoder *coder)
 /* Print op to file */
 {
-char *opName = opOfType(opType, source->valType);
+char *opName = pentOpOfType(opType, source->valType);
 char *destString = NULL;
 pentPrintAddress(coder, source, coder->sourceBuf);
 if (dest != NULL)
@@ -442,18 +444,18 @@ static void pentCodeSourceReg(enum pentDataOp opType, struct isxReg *reg,
 /* Print op where source is a register. */
 {
 enum isxValType valType = dest->valType;
-char *opName = opOfType(opType, valType);
+char *opName = pentOpOfType(opType, valType);
 char *regName = isxRegName(reg, valType);
 pentPrintAddress(coder, dest, coder->destBuf);
 pentCoderAdd(coder, opName, regName, coder->destBuf);
 }
 
-static void pentCodeDestReg(enum pentDataOp opType, struct isxAddress *source, 
+void pentCodeDestReg(enum pentDataOp opType, struct isxAddress *source, 
 	struct isxReg *reg,  struct pentCoder *coder)
 /* Code op where dest is a register. */
 {
 enum isxValType valType = source->valType;
-char *opName = opOfType(opType, valType);
+char *opName = pentOpOfType(opType, valType);
 char *regName = isxRegName(reg, valType);
 pentPrintAddress(coder, source, coder->sourceBuf);
 pentCoderAdd(coder, opName, coder->sourceBuf, regName);
@@ -464,7 +466,7 @@ static void unaryOpReg(enum pentDataOp opType, struct isxReg *reg,
 /* Do unary op on register. */
 {
 char *regName = isxRegName(reg, valType);
-char *opName = opOfType(opType, valType);
+char *opName = pentOpOfType(opType, valType);
 pentCoderAdd(coder, opName, NULL, regName);
 }
 
@@ -570,6 +572,11 @@ switch (valType)
     case ivLong:
     	regStartIx = mm0;
 	regEndIx = mm7;
+	break;
+    case ivByte:
+    case ivBit:
+        regStartIx = ax;
+	regEndIx = dx;
 	break;
     default:
 	regStartIx = ax;
@@ -744,7 +751,7 @@ if (dest != NULL)
 	    }
 	if (freeReg != NULL)
 	    {
-	    uglyf("Evicting %s*%2.1f from %s for %s*%2.1f\n", freeReg->contents->name, freeReg->contents->weight, isxRegName(freeReg, valType), dest->name, dest->weight);
+	    // uglyf("Evicting %s*%2.1f from %s for %s*%2.1f\n", freeReg->contents->name, freeReg->contents->weight, isxRegName(freeReg, valType), dest->name, dest->weight);
 	    return freeReg;
 	    }
 	}
@@ -1112,7 +1119,7 @@ else
 	pentSwapOutIfNeeded(ecx,extraLive, coder);
 	pentCodeDestReg(opMov, q, ecx, coder);
 	}
-    pentCoderAdd(coder, opOfType(opCode, p->valType), 
+    pentCoderAdd(coder, pentOpOfType(opCode, p->valType), 
     	isxRegName(ecx, ivByte), isxRegName(eax, p->valType));
     eax->contents = d;
     d->reg = eax;
