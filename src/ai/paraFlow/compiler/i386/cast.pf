@@ -101,5 +101,7 @@ s2 = l1;
 _printShort(s2);
 i2 = l1;
 _printInt(i2);
+f2 = l1;
+_printFloat(f2);
 d2 = l1;
 _printDouble(d2);
