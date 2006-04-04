@@ -54,7 +54,7 @@ pentLinkRegSave(dest, reg, coder);
 
 static void castIntToBit(struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder)
-/* Convert byte/short/long to bit using combination of test/setnz */
+/* Convert byte/short/int to bit using combination of test/setnz */
 {
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
@@ -185,6 +185,52 @@ switch (isx->dest->valType)
     }
 }
 
+static void castLongToBit(struct isx *isx, struct dlNode *nextNode,
+	struct pentCoder *coder)
+/* Convert long to bit using move to memory, then loading high part into
+ * a 8/16/32 bit register, oring in low part, and then testl/setnz */
+{
+struct isxAddress *source = isx->left;
+struct isxAddress *dest = isx->dest;
+struct isxReg *reg = pentFreeReg(isx, dest->valType, nextNode, coder);
+char *wideRegName = isxRegName(reg, ivInt);
+char *narrowRegName = isxRegName(reg, ivBit);
+
+/* Force memory location for long. */
+if (source->reg && pentTempJustInReg(source))
+    pentSwapTempFromReg(source->reg,  coder);
+
+/* Code move/or/test/setnz */
+pentPrintVarMemAddress(source, coder->sourceBuf, 4);
+pentCoderAdd(coder, "movl", coder->sourceBuf, wideRegName);
+pentPrintVarMemAddress(source, coder->sourceBuf, 0);
+pentCoderAdd(coder, "orl", coder->sourceBuf, wideRegName);
+pentCoderAdd(coder, "testl", wideRegName, wideRegName);
+pentCoderAdd(coder, "setnz", NULL, narrowRegName);
+pentLinkRegSave(dest, reg, coder);
+}
+
+static void castFromLong(struct pfCompile *pfc, struct isx *isx,
+	struct dlNode *nextNode, struct pentCoder *coder)
+/* Create code for cast from long to something else. */
+{
+switch (isx->dest->valType)
+    {
+    case ivBit:
+        castLongToBit(isx, nextNode, coder);
+	break;
+    case ivByte:
+    case ivShort:
+    case ivInt:
+    case ivFloat:
+    case ivDouble:
+    default:
+        internalErr();
+	break;
+    }
+}
+
+
 void pentCast(struct pfCompile *pfc, struct isx *isx, struct dlNode *nextNode, 
 	struct pentCoder *coder)
 /* Create code for a cast instruction */
@@ -200,6 +246,9 @@ switch (isx->left->valType)
 	break;
     case ivInt:
         castFromInt(pfc, isx, nextNode, coder);
+	break;
+    case ivLong:
+        castFromLong(pfc, isx, nextNode, coder);
 	break;
     default:
         internalErr();

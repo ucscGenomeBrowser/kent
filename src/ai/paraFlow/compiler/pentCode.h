@@ -121,6 +121,16 @@ void pentLinkRegSave(struct isxAddress *dest, struct isxReg *reg,
 /* Unlink whatever old variable was in register and link in dest.
  * Also copy dest to memory if it's a real variable. */
 
+boolean pentTempJustInReg(struct isxAddress *iad);
+/* Return TRUE if address is for a temp that only exists in
+ * a register, not in memory */
+
+void pentSwapTempFromReg(struct isxReg *reg,  struct pentCoder *coder);
+/* If reg contains temp var not also in memory then save it out. */
+
+void pentPrintVarMemAddress(struct isxAddress *iad, char *buf, int offset);
+/* Print out an address for variable in memory to buffer. */
+
 void pentPrintAddress(struct pentCoder *coder,
 	struct isxAddress *iad, char *buf);
 /* Print out an address for an instruction. */

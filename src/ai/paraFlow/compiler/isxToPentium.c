@@ -318,8 +318,8 @@ assert(FALSE);
 return 0;
 }
 
-static void pentPrintVarMemAddress(struct isxAddress *iad, char *buf, int offset)
-/* Print out an address for variable in memory. */
+void pentPrintVarMemAddress(struct isxAddress *iad, char *buf, int offset)
+/* Print out an address for variable in memory to buffer. */
 {
 switch (iad->adType)
     {
@@ -520,7 +520,7 @@ switch (reg->regIx)
 }
 
 
-static void pentSwapTempFromReg(struct isxReg *reg,  struct pentCoder *coder)
+void pentSwapTempFromReg(struct isxReg *reg,  struct pentCoder *coder)
 /* If reg contains something not also in memory then save it out. */
 {
 struct isxAddress *iad = reg->contents;
@@ -532,6 +532,13 @@ iad->val.tempMemLoc = coder->tempIx;
 codeOp(opMov, &old, iad, coder);
 }
 
+boolean pentTempJustInReg(struct isxAddress *iad)
+/* Return TRUE if address is for a temp that only exists in
+ * a register, not in memory */
+{
+return (iad->adType == iadTempVar && iad->val.tempMemLoc == 0);
+}
+
 static void pentSwapOutIfNeeded(struct isxReg *reg, 
 	struct isxLiveVar *liveList, struct pentCoder *coder)
 /* Swap out register to memory if need be. */
@@ -539,7 +546,7 @@ static void pentSwapOutIfNeeded(struct isxReg *reg,
 struct isxAddress *iad = reg->contents;
 if (iad != NULL)
     {
-    if (iad->adType == iadTempVar && iad->val.tempMemLoc == 0)
+    if (pentTempJustInReg(iad))
 	{
 	if (isxLiveVarFind(liveList, iad))
 	    pentSwapTempFromReg(reg, coder);
