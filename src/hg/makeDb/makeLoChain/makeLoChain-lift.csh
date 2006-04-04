@@ -6,9 +6,9 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.6 2006/04/04 20:44:43 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.7 2006/04/04 20:45:40 kate Exp $
 
-if ( $#argv != 3 ) then
+if ( $#argv != 2 ) then
     echo "usage: $0 <old-assembly> <new-assembly>"
     exit 1
 endif
