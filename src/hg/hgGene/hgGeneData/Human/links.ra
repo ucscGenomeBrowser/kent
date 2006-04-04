@@ -18,7 +18,7 @@ name geneCards
 shortLabel GeneCards
 tables kgXref
 idSql select geneSymbol from kgXref where kgID = '%s'
-url http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?search=%s
+url http://www.genecards.org/cgi-bin/cardsearch.pl?search=%s
 priority 80
 
 name hugo
