@@ -24,21 +24,22 @@ double d2;
 
 _printString("Starting the castathon.");
 
-// Do all casts from int.
-bit2 = i1;
+// Do all casts from byte.
+bit2 = b1;
 _printBit(bit2);
-bit2 = i0;
+bit2 = b0;
 _printBit(bit2);
-b2 = i1;
-_printByte(b2);
 s2 = i1;
 _printShort(s2);
-l2 = i1;
+i2 = b1;
+_printInt(i2);
+l2 = b1;
 _printLong(l2);
-f2 = i1;
+f2 = b1;
 _printFloat(f2);
-d2 = i1;
+d2 = b1;
 _printDouble(d2);
+
 
 // Do all casts from short.
 bit2 = s1;
@@ -55,3 +56,36 @@ f2 = s1;
 _printFloat(f2);
 d2 = s1;
 _printDouble(d2);
+
+// Do all casts from int.
+bit2 = i1;
+_printBit(bit2);
+bit2 = i0;
+_printBit(bit2);
+b2 = i1;
+_printByte(b2);
+s2 = i1;
+_printShort(s2);
+l2 = i1;
+_printLong(l2);
+f2 = i1;
+_printFloat(f2);
+d2 = i1;
+_printDouble(d2);
+
+// Do all casts from bit.
+b2 = bit0;
+_printByte(b2);
+b2 = bit1;
+_printByte(b2);
+s2 = bit1;
+_printShort(s2);
+i2 = bit1;
+_printInt(b2);
+l2 = bit1;
+_printLong(l2);
+f2 = bit1;
+_printFloat(f2);
+d2 = bit1;
+_printDouble(d2);
+

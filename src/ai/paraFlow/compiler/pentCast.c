@@ -94,9 +94,42 @@ if (reg1->contents)
 pentLinkRegSave(dest, reg2, coder);
 }
 
+static void castFromBitOrByte(struct pfCompile *pfc, struct isx *isx,
+	struct dlNode *nextNode, struct pentCoder *coder)
+/* Create code for cast from byte to something else. */
+{
+switch (isx->dest->valType)
+    {
+    case ivBit:
+	castIntToBit(isx, nextNode, coder);
+	break;
+    case ivByte:
+	castViaMov(isx, nextNode, coder);
+	break;
+    case ivShort:
+	castByOneInstruction(isx, nextNode, coder, "movsbw");
+	break;
+    case ivInt:
+	castByOneInstruction(isx, nextNode, coder, "movsbl");
+	break;
+    case ivLong:
+	castViaInt(isx, nextNode, coder, "movsbl", "movd");
+	break;
+    case ivFloat:
+	castViaInt(isx, nextNode, coder, "movsbl", "cvtsi2ss");
+	break;
+    case ivDouble:
+	castViaInt(isx, nextNode, coder, "movsbl", "cvtsi2sd");
+	break;
+    default:
+        internalErr();
+	break;
+    }
+}
+
 static void castFromShort(struct pfCompile *pfc, struct isx *isx,
 	struct dlNode *nextNode, struct pentCoder *coder)
-/* Create code for cast from long to something else. */
+/* Create code for cast from short to something else. */
 {
 switch (isx->dest->valType)
     {
@@ -126,7 +159,7 @@ switch (isx->dest->valType)
 
 static void castFromInt(struct pfCompile *pfc, struct isx *isx,
 	struct dlNode *nextNode, struct pentCoder *coder)
-/* Create code for cast from long to something else. */
+/* Create code for cast from int to something else. */
 {
 switch (isx->dest->valType)
     {
@@ -158,6 +191,10 @@ void pentCast(struct pfCompile *pfc, struct isx *isx, struct dlNode *nextNode,
 {
 switch (isx->left->valType)
     {
+    case ivBit:
+    case ivByte:
+        castFromBitOrByte(pfc, isx, nextNode, coder);
+	break;
     case ivShort:
         castFromShort(pfc, isx, nextNode, coder);
 	break;
