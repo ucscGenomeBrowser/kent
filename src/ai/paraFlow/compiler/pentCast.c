@@ -40,16 +40,23 @@ if (source->reg != reg)
 pentLinkRegSave(dest, reg, coder);
 }
 
-static void castByOneInstruction(struct isx *isx, struct dlNode *nextNode,
-	struct pentCoder *coder, char *op)
+static void castByOneViaType(struct isx *isx, struct dlNode *nextNode,
+	struct pentCoder *coder, char *op, enum isxValType viaType)
 /* Cast using just a single instruction. */
 {
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
 struct isxReg *reg = pentFreeReg(isx, dest->valType, nextNode, coder);
 pentPrintAddress(coder, source, coder->sourceBuf);
-pentCoderAdd(coder, op, coder->sourceBuf, isxRegName(reg, dest->valType));
+pentCoderAdd(coder, op, coder->sourceBuf, isxRegName(reg, viaType));
 pentLinkRegSave(dest, reg, coder);
+}
+
+static void castByOneInstruction(struct isx *isx, struct dlNode *nextNode,
+	struct pentCoder *coder, char *op)
+/* Cast using just a single instruction. */
+{
+castByOneViaType(isx, nextNode, coder, op, isx->dest->valType);
 }
 
 static void castIntToBit(struct isx *isx, struct dlNode *nextNode,
@@ -319,8 +326,9 @@ switch (isx->dest->valType)
     case ivByte:
     case ivShort:
     case ivInt:
+	castByOneViaType(isx, nextNode, coder, "cvtss2si", ivInt);
+	break;
     case ivLong:
-    case ivFloat:
     case ivDouble:
     default:
         internalErr();
