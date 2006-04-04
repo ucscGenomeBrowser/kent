@@ -35,6 +35,8 @@ switch (val)
     {
     case ivZero:
 	return "zer";
+    case ivBit:
+	return "bit";
     case ivByte:
 	return "byt";
     case ivShort:
@@ -134,6 +136,8 @@ switch (val)
         return "poFuncEnd";
     case poReturnVal:
         return "poReturnVal";
+    case poCast:
+        return "poCast";
     default:
         internalErr();
 	return NULL;
@@ -473,7 +477,8 @@ static struct isxAddress *isxUnaryOp(struct pfCompile *pfc,
 {
 struct isxAddress *target = isxExpression(pfc, pp->children,
 	varHash, weight, iList);
-struct isxAddress *dest = isxTempVarAddress(pfc, varHash, weight, ppToIsxValType(pfc,pp));
+struct isxAddress *dest = isxTempVarAddress(pfc, varHash, weight, 
+	ppToIsxValType(pfc,pp));
 isxAddNew(pfc, op, dest, target, NULL, iList);
 return dest;
 }
@@ -551,7 +556,6 @@ for (pp = outTuple->children; pp != NULL; pp = pp->next, --offset)
 slReverse(&outTuple->children);
 }
 
-
 static struct isxAddress *isxExpression(struct pfCompile *pfc, 
 	struct pfParse *pp, struct hash *varHash, 
 	double weight, struct dlList *iList)
@@ -599,6 +603,71 @@ switch (pp->type)
         return isxStringCat(pfc, pp, varHash, weight, iList);
     case pptCall:
         return isxCall(pfc, pp, varHash, weight, iList);
+    case pptCastBitToByte:
+    case pptCastBitToChar:
+    case pptCastBitToShort:
+    case pptCastBitToInt:
+    case pptCastBitToLong:
+    case pptCastBitToFloat:
+    case pptCastBitToDouble:
+    case pptCastBitToString:
+    case pptCastByteToBit:
+    case pptCastByteToChar:
+    case pptCastByteToShort:
+    case pptCastByteToInt:
+    case pptCastByteToLong:
+    case pptCastByteToFloat:
+    case pptCastByteToDouble:
+    case pptCastByteToString:
+    case pptCastCharToBit:
+    case pptCastCharToByte:
+    case pptCastCharToShort:
+    case pptCastCharToInt:
+    case pptCastCharToLong:
+    case pptCastCharToFloat:
+    case pptCastCharToDouble:
+    case pptCastCharToString:
+    case pptCastShortToBit:
+    case pptCastShortToByte:
+    case pptCastShortToChar:
+    case pptCastShortToInt:
+    case pptCastShortToLong:
+    case pptCastShortToFloat:
+    case pptCastShortToDouble:
+    case pptCastShortToString:
+    case pptCastIntToBit:
+    case pptCastIntToByte:
+    case pptCastIntToChar:
+    case pptCastIntToShort:
+    case pptCastIntToLong:
+    case pptCastIntToFloat:
+    case pptCastIntToDouble:
+    case pptCastIntToString:
+    case pptCastLongToBit:
+    case pptCastLongToByte:
+    case pptCastLongToChar:
+    case pptCastLongToShort:
+    case pptCastLongToInt:
+    case pptCastLongToFloat:
+    case pptCastLongToDouble:
+    case pptCastLongToString:
+    case pptCastFloatToBit:
+    case pptCastFloatToByte:
+    case pptCastFloatToChar:
+    case pptCastFloatToShort:
+    case pptCastFloatToInt:
+    case pptCastFloatToLong:
+    case pptCastFloatToDouble:
+    case pptCastFloatToString:
+    case pptCastDoubleToBit:
+    case pptCastDoubleToByte:
+    case pptCastDoubleToChar:
+    case pptCastDoubleToShort:
+    case pptCastDoubleToInt:
+    case pptCastDoubleToLong:
+    case pptCastDoubleToFloat:
+    case pptCastDoubleToString:
+        return isxUnaryOp(pfc, pp, varHash, poCast, weight, iList);
     default:
 	pfParseDump(pp, 3, uglyOut);
         internalErr();

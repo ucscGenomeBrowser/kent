@@ -67,6 +67,7 @@ enum isxOpType
     poFuncStart,/* Declare start of function */
     poFuncEnd,  /* Declare end of function. */
     poReturnVal,/* Declare return value. */
+    poCast,	/* Convert from one type to another. */
     };
 
 char *isxOpTypeToString(enum isxOpType val);
@@ -76,6 +77,7 @@ enum isxValType
 /* Simplified value type system.  */
     {
     ivZero,
+    ivBit,
     ivByte,
     ivShort,
     ivInt,

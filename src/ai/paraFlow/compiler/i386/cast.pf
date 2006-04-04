@@ -1,0 +1,23 @@
+bit bit1 = 1;
+byte b1 = 123;
+short s1 = 1234;
+int i1 =  123456;
+long l1 = 12345678901;
+float f1 = 1.23;
+double d1 = 12.3456;
+
+bit bit2;
+byte b2;
+short s2;
+int i2;
+long l2;
+float f2;
+double d2;
+
+_printString("Starting the castathon.");
+b2 = i1;
+_printByte(b2);
+
+s2 = i1;
+_printShort(s2);
+

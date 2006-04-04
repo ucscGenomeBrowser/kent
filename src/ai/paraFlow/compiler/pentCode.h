@@ -13,6 +13,13 @@
 #define pentCodeBufSize 256
 #define pentRegCount 22
 
+enum pentDataOp
+/* Some of the pentium op codes that apply to many types */
+    {
+    opMov, opAdd, opSub, opMul, opDiv, opAnd, opOr, opXor, opSal, 
+    opSar, opNeg, opNot, opCmp, opTest, 
+    };
+
 struct pentCoder
 /* A factory for pentCodes */
     {
@@ -101,6 +108,19 @@ void pentInitFuncVars(struct pfCompile *pfc, struct ctar *ctar,
 	struct hash *varHash, struct pentFunctionInfo *pfi);
 /* Set up variables and offsets for parameters and local variables
  * in hash. */
+
+struct isxReg *pentFreeReg(struct isx *isx, enum isxValType valType,
+	struct dlNode *nextNode,  struct pentCoder *coder);
+/* Find free register for instruction result. */
+
+void pentLinkRegSave(struct isxAddress *dest, struct isxReg *reg,
+	struct pentCoder *coder);
+/* Unlink whatever old variable was in register and link in dest.
+ * Also copy dest to memory if it's a real variable. */
+
+void pentPrintAddress(struct pentCoder *coder,
+	struct isxAddress *iad, char *buf);
+/* Print out an address for an instruction. */
 
 #endif /* PENTCODE_H */
 

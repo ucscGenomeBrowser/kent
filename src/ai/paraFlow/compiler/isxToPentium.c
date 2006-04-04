@@ -111,7 +111,9 @@
  *         d - 12(esp)   dd - 12(esp)
  *         e - 16(esp)   ee - xmm4
  *         f - 20(esp)   ff - xmm5
- *         g - 28(esp)   gg - 28(esp) */
+ *         g - 28(esp)   gg - 28(esp) 
+ * Note in particular that items of less than 4 bytes will still take 4
+ * bytes on stack. */
 
 #include "common.h"
 #include "dlist.h"
@@ -125,6 +127,7 @@
 #include "isx.h"
 #include "gnuMac.h"
 #include "pentCode.h"
+#include "pentCast.h"
 
 enum pentRegs
 /* These need to be in same order as regInfo table. */
@@ -184,13 +187,6 @@ struct regStomper
     {
     int stompPos[pentRegCount];	
     struct isxAddress *contents[pentRegCount];
-    };
-
-enum pentDataOp
-/* Some of the pentium op codes that apply to many types */
-    {
-    opMov, opAdd, opSub, opMul, opDiv, opAnd, opOr, opXor, opSal, 
-    opSar, opNeg, opNot, opCmp, opTest,
     };
 
 struct dataOpTable
@@ -287,6 +283,15 @@ switch (valType)
     }
 }
 
+int pentTypeSize4(enum isxValType valType)
+/* Return size of a val type - rounding up to 4*/
+{
+int ret = pentTypeSize(valType);
+if (ret < 4) ret = 4;
+return ret;
+}
+
+
 static int liveListIx(struct isxLiveVar *liveList, struct isxAddress *var)
 /* Return index of ref on list, or -1 if not there. */
 {
@@ -359,7 +364,7 @@ switch (iad->adType)
     }
 }
 
-static void pentPrintAddress(struct pentCoder *coder,
+void pentPrintAddress(struct pentCoder *coder,
 	struct isxAddress *iad, char *buf)
 /* Print out an address for an instruction. */
 {
@@ -432,7 +437,7 @@ if (dest != NULL)
 pentCoderAdd(coder, opName, coder->sourceBuf, destString);
 }
 
-static void codeOpSourceReg(enum pentDataOp opType, struct isxReg *reg,
+static void pentCodeSourceReg(enum pentDataOp opType, struct isxReg *reg,
 	struct isxAddress *dest,  struct pentCoder *coder)
 /* Print op where source is a register. */
 {
@@ -443,9 +448,9 @@ pentPrintAddress(coder, dest, coder->destBuf);
 pentCoderAdd(coder, opName, regName, coder->destBuf);
 }
 
-static void codeOpDestReg(enum pentDataOp opType, 
-	struct isxAddress *source, struct isxReg *reg,  struct pentCoder *coder)
-/* Print op where dest is a register. */
+static void pentCodeDestReg(enum pentDataOp opType, struct isxAddress *source, 
+	struct isxReg *reg,  struct pentCoder *coder)
+/* Code op where dest is a register. */
 {
 enum isxValType valType = source->valType;
 char *opName = opOfType(opType, valType);
@@ -841,7 +846,7 @@ for (i=regStartIx; i<=regEndIx; ++i)
     }
 }
 
-static struct isxReg *freeReg(struct isx *isx, enum isxValType valType,
+struct isxReg *pentFreeReg(struct isx *isx, enum isxValType valType,
 	struct dlNode *nextNode,  struct pentCoder *coder)
 /* Find free register for instruction result. */
 {
@@ -859,7 +864,7 @@ if (iad->adType == iadRealVar)
     struct isxReg *reg = iad->reg;
     iad->reg = NULL;
     if (reg != NULL)
-	codeOpSourceReg(opMov, reg, iad, coder);
+	pentCodeSourceReg(opMov, reg, iad, coder);
     iad->reg = reg;
     }
 }
@@ -874,7 +879,7 @@ iad->reg = reg;
 }
 
 
-static void linkRegSaveReal(struct isxAddress *dest, struct isxReg *reg,
+void pentLinkRegSave(struct isxAddress *dest, struct isxReg *reg,
 	struct pentCoder *coder)
 /* Unlink whatever old variable was in register and link in dest.
  * Also copy dest to memory if it's a real variable. */
@@ -893,18 +898,18 @@ struct isxAddress *dest = isx->dest;
 struct isxReg *reg;
 if (source->adType == iadZero)
     {
-    reg = freeReg(isx, isx->dest->valType, nextNode, coder);
+    reg = pentFreeReg(isx, isx->dest->valType, nextNode, coder);
     clearReg(reg, coder);
     }
 else
     {
     reg = dest->reg;
     if (reg == NULL)
-	reg = freeReg(isx, isx->dest->valType, nextNode, coder);
+	reg = pentFreeReg(isx, isx->dest->valType, nextNode, coder);
     if (source->reg != reg)
-	codeOpDestReg(opMov, source, reg, coder);
+	pentCodeDestReg(opMov, source, reg, coder);
     }
-linkRegSaveReal(dest, reg, coder);
+pentLinkRegSave(dest, reg, coder);
 }
 
 
@@ -912,7 +917,7 @@ static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode,
 	enum pentDataOp opCode, boolean isSub,  struct pentCoder *coder)
 /* Code most binary ops.  Division is harder. */
 {
-struct isxReg *reg = freeReg(isx, isx->dest->valType, nextNode, coder);
+struct isxReg *reg = pentFreeReg(isx, isx->dest->valType, nextNode, coder);
 struct isxAddress *iad = NULL;
 
 /* Figure out if the reg already holds one of our sources. */
@@ -928,19 +933,19 @@ if (iad != NULL)
     if (isSub && isSwapped)
         {
 	unaryOpReg(opNeg, reg, iad->valType, coder);
-	codeOpDestReg(opAdd, iad, reg, coder);
+	pentCodeDestReg(opAdd, iad, reg, coder);
 	}
     else
 	{
-	codeOpDestReg(opCode, iad, reg, coder);
+	pentCodeDestReg(opCode, iad, reg, coder);
 	}
     }
 else
     {
-    codeOpDestReg(opMov, isx->left, reg, coder);
-    codeOpDestReg(opCode, isx->right, reg, coder);
+    pentCodeDestReg(opMov, isx->left, reg, coder);
+    pentCodeDestReg(opCode, isx->right, reg, coder);
     }
-linkRegSaveReal(isx->dest, reg, coder);
+pentLinkRegSave(isx->dest, reg, coder);
 }
 
 static struct isxLiveVar *dummyLive(struct isxAddress *iad)
@@ -998,14 +1003,14 @@ addDummyToLive(q, &extraLive);
 if (q->adType == iadConst)
     {
     pentSwapOutIfNeeded(ecx, extraLive, coder);
-    codeOpDestReg(opMov, q, ecx, coder);
+    pentCodeDestReg(opMov, q, ecx, coder);
     ecx->contents = NULL;
     swappedOutC = TRUE;
     }
 if (eax->contents != p)
     {
     pentSwapOutIfNeeded(eax, extraLive, coder);
-    codeOpDestReg(opMov, p, eax, coder);
+    pentCodeDestReg(opMov, p, eax, coder);
     }
 pentSwapOutIfNeeded(edx,extraLive, coder);
 clearReg(edx, coder);
@@ -1036,11 +1041,11 @@ static void pentFloatDivide(struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder)
 /* Generate code for floating point divide. */
 {
-struct isxReg *reg = freeReg(isx, isx->dest->valType, nextNode, coder);
+struct isxReg *reg = pentFreeReg(isx, isx->dest->valType, nextNode, coder);
 if (reg != isx->left->reg)
-    codeOpDestReg(opMov, isx->left, reg, coder);
-codeOpDestReg(opDiv, isx->right, reg, coder);
-linkRegSaveReal(isx->dest, reg, coder);
+    pentCodeDestReg(opMov, isx->left, reg, coder);
+pentCodeDestReg(opDiv, isx->right, reg, coder);
+pentLinkRegSave(isx->dest, reg, coder);
 }
 
 static void pentDivide(struct isx *isx, struct dlNode *nextNode, 
@@ -1096,7 +1101,7 @@ else
     if (eax != p->reg)
 	{
 	pentSwapOutIfNeeded(eax,extraLive, coder);
-	codeOpDestReg(opMov, p, eax, coder);
+	pentCodeDestReg(opMov, p, eax, coder);
 	}
     else
         {
@@ -1105,7 +1110,7 @@ else
     if (ecx != q->reg)
 	{
 	pentSwapOutIfNeeded(ecx,extraLive, coder);
-	codeOpDestReg(opMov, q, ecx, coder);
+	pentCodeDestReg(opMov, q, ecx, coder);
 	}
     pentCoderAdd(coder, opOfType(opCode, p->valType), 
     	isxRegName(ecx, ivByte), isxRegName(eax, p->valType));
@@ -1121,11 +1126,11 @@ static void pentUnaryOp(struct isx *isx, enum pentDataOp opCode,
 /* Handle unary operation on byte/short/int data types */
 {
 enum isxValType valType = isx->dest->valType;
-struct isxReg *reg = freeReg(isx, valType, nextNode, coder);
+struct isxReg *reg = pentFreeReg(isx, valType, nextNode, coder);
 if (reg != isx->left->reg)
-    codeOpDestReg(opMov, isx->left, reg, coder);
+    pentCodeDestReg(opMov, isx->left, reg, coder);
 unaryOpReg(opCode, reg, valType, coder);
-linkRegSaveReal(isx->dest, reg, coder);
+pentLinkRegSave(isx->dest, reg, coder);
 }
 
 static void pentNegate(struct isx *isx, struct dlNode *nextNode,  
@@ -1151,12 +1156,12 @@ static void pentFlipBitsLong(struct isx *isx, struct dlNode *nextNode,
 /* Output code to implement binary not for long values. */
 {
 enum isxValType valType = isx->dest->valType;
-struct isxReg *destReg = freeReg(isx, valType, nextNode, coder);
+struct isxReg *destReg = pentFreeReg(isx, valType, nextNode, coder);
 char *destRegName = isxRegName(destReg, valType);
 if (destReg != isx->left->reg)
-    codeOpDestReg(opMov, isx->left, destReg, coder);
+    pentCodeDestReg(opMov, isx->left, destReg, coder);
 pentCoderAdd(coder, "pandn", "longLongMinusOne", destRegName);
-linkRegSaveReal(isx->dest, destReg, coder);
+pentLinkRegSave(isx->dest, destReg, coder);
 }
 
 static void pentFlipBits(struct isx *isx, struct dlNode *nextNode,  
@@ -1180,6 +1185,24 @@ switch (valType)
     }
 }
 
+static void codeMoveExtendParam(struct isxAddress *source, 
+	struct isxAddress *dest, struct pentCoder *coder)
+/* Do extension to word if necessary on a parameter. */
+{
+struct isxReg *reg = source->reg;
+enum isxValType valType = source->valType;
+if (reg != NULL && (valType == ivByte || valType == ivShort))
+    {
+    char *regName = isxRegName(reg, ivInt);
+    char *op = (valType == ivByte ? "movsbl" : "movswl");
+    pentCoderAdd(coder, op, isxRegName(reg, valType), regName);
+    pentPrintAddress(coder, dest, coder->destBuf);
+    pentCoderAdd(coder, "movl", regName, coder->destBuf);
+    }
+else
+    codeOp(opMov, source, dest, coder);
+}
+	
 static void pentInput(struct isx *isx, struct dlNode *nextNode,  
 	struct pentCoder *coder)
 /* Output code to load an input parameter before a call. */
@@ -1188,14 +1211,14 @@ struct isxAddress *source = isx->left;
 if (source->reg || (source->adType == iadConst 
 	&& source->valType != ivFloat && source->valType != ivDouble
 	&& source->valType != ivLong))
-    codeOp(opMov, source, isx->dest, coder);
+    codeMoveExtendParam(source, isx->dest, coder);
 else
     {
-    struct isxReg *reg = freeReg(isx, isx->dest->valType, nextNode, coder);
-    codeOpDestReg(opMov, source, reg, coder);
+    struct isxReg *reg = pentFreeReg(isx, isx->dest->valType, nextNode, coder);
+    pentCodeDestReg(opMov, source, reg, coder);
     reg->contents = source;
     source->reg = reg;
-    codeOp(opMov, source, isx->dest, coder);
+    codeMoveExtendParam(source, isx->dest, coder);
     }
 }
 
@@ -1279,9 +1302,9 @@ if (reg != NULL)
     }
 else
     {
-    reg = freeReg(isx, valType, nextNode, coder);
-    codeOpDestReg(opMov, source, reg, coder);
-    linkRegSaveReal(dest, reg, coder);
+    reg = pentFreeReg(isx, valType, nextNode, coder);
+    pentCodeDestReg(opMov, source, reg, coder);
+    pentLinkRegSave(dest, reg, coder);
     }
 }
 
@@ -1340,7 +1363,7 @@ for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
 	    reg->contents = NULL;
 	    }
 	if (iad->reg != reg)
-	    codeOpDestReg(opMov, iad, reg, coder);
+	    pentCodeDestReg(opMov, iad, reg, coder);
 	reg->reserved = reg->contents = iad;
 	iad->reg = reg;
 	}
@@ -1461,11 +1484,11 @@ else
 	}
     else
 	{
-	struct isxReg *reg = freeReg(isx, valType, nextNode, coder);
-	codeOpDestReg(opMov, isx->left, reg, coder);
+	struct isxReg *reg = pentFreeReg(isx, valType, nextNode, coder);
+	pentCodeDestReg(opMov, isx->left, reg, coder);
 	isx->left->reg = reg;
 	reg->contents = isx->left;
-	codeOpDestReg(opCmp, isx->right, reg, coder);
+	pentCodeDestReg(opCmp, isx->right, reg, coder);
 	}
     pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
     }
@@ -1519,12 +1542,12 @@ static void pentTestJumpString(struct pfCompile *pfc, struct isx *isx,
 {
 struct isxAddress *iad = isx->left;
 struct isxAddress *skipAddress = isxTempLabelAddress(pfc);
-struct isxReg *reg = freeReg(isx, ivString, nextNode, coder);
+struct isxReg *reg = pentFreeReg(isx, ivString, nextNode, coder);
 char *regName = isxRegName(reg, ivString);
 
 /* Get a register to work in and detatch it from anything else. */
 if (reg != iad->reg)
-    codeOpDestReg(opMov, iad, reg, coder);
+    pentCodeDestReg(opMov, iad, reg, coder);
 if (reg->contents != NULL)
     reg->contents->reg = NULL;
 reg->contents = NULL;
@@ -1557,10 +1580,10 @@ else
 	codeOp(opTest, left, left, coder);
     else
 	{
-	struct isxReg *reg = freeReg(isx, valType, nextNode, coder);
-	codeOpDestReg(opMov, left, reg, coder);
+	struct isxReg *reg = pentFreeReg(isx, valType, nextNode, coder);
+	pentCodeDestReg(opMov, left, reg, coder);
 	linkReg(left, reg);
-	codeOpDestReg(opTest, left, reg, coder);
+	pentCodeDestReg(opTest, left, reg, coder);
 	}
     pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
     }
@@ -1578,13 +1601,13 @@ for (node = iList->head; !dlEnd(node); node = node->next)
         {
 	case poInput:
 	    isx->dest->stackOffset = inOffset;
-	    inOffset += pentTypeSize(isx->dest->valType);
+	    inOffset += pentTypeSize4(isx->dest->valType);
 	    if (inOffset > pfi->callParamSize)
 	         pfi->callParamSize = inOffset;
 	    break;
 	case poOutput:
 	    isx->left->stackOffset = outOffset;
-	    outOffset += pentTypeSize(isx->left->valType);
+	    outOffset += pentTypeSize4(isx->left->valType);
 	    if (outOffset > pfi->callParamSize)
 	         pfi->callParamSize = outOffset;
 	    break;
@@ -1607,7 +1630,7 @@ for (node = iList->tail; !dlStart(node); node = node->prev)
         {
 	case poReturnVal:
 	    isx->dest->stackOffset = retOffset;
-	    retOffset += pentTypeSize(isx->dest->valType);
+	    retOffset += pentTypeSize4(isx->dest->valType);
 	    break;
 	}
     }
@@ -1698,15 +1721,15 @@ if (reg != NULL)
     else
 	{
 	if (source->reg != reg)
-	    codeOpDestReg(opMov, source, reg, coder);
+	    pentCodeDestReg(opMov, source, reg, coder);
 	}
     }
 else
     {
-    reg = freeReg(isx, valType, nextNode, coder);
+    reg = pentFreeReg(isx, valType, nextNode, coder);
     if (source->reg != reg)
-	codeOpDestReg(opMov, source, reg, coder);
-    codeOpSourceReg(opMov, reg, dest, coder);
+	pentCodeDestReg(opMov, source, reg, coder);
+    pentCodeSourceReg(opMov, reg, dest, coder);
     if (reg->contents != NULL)
 	reg->contents->reg = NULL;
     reg->contents = NULL;
@@ -2144,6 +2167,9 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	case poReturnVal:
 	    pentReturnVal(isx, nextNode, coder);
 	    break;
+	case poCast:
+	    pentCast(pfc, isx, nextNode, coder);
+	    break;
 	default:
 	    warn("unimplemented\t%s\n", isxOpTypeToString(isx->opType));
 	    break;
@@ -2153,6 +2179,7 @@ slReverse(&coder->list);
 pfi->tempVarSize = -(stackUse + coder->tempIx);
 }
 
+#ifdef OLD
 static int alignOffset(int offset, int size)
 /* Align offset to go with variable of a given size */
 {
@@ -2162,6 +2189,7 @@ else if (size >= 4)
     offset = ((offset+3)&0xFFFFFFFC);
 return offset;
 }
+#endif /* OLD */
 
 static int calcVarListSize(struct pfCompile *pfc, struct slRef *varRefList, 
 	int varCount)
@@ -2172,17 +2200,17 @@ struct slRef *varRef;
 for (i=0,varRef = varRefList; i<varCount; ++i, varRef=varRef->next)
     {
     struct pfVar *var = varRef->val;
-    size1 = pentTypeSize(isxValTypeFromTy(pfc, var->ty));
-    offset = alignOffset(offset, size1);
+    size1 = pentTypeSize4(isxValTypeFromTy(pfc, var->ty));
     offset += size1;
     }
-offset = alignOffset(offset, 4);
 return offset;
 }
 
-static void fillInVarOffsets(struct pfCompile *pfc, int offset,
+static void fillInStackVarOffsets(struct pfCompile *pfc, int offset,
 	struct slRef *varRefList, int varCount, struct hash *varHash)
-/* Fill in stack offsets */
+/* Fill in stack offsets of variables that live on stack.  This will
+ * pad them to be at least 4 bytes long, and also force alignment
+ * if need be. */
 {
 int i, size1;
 struct slRef *varRef; 
@@ -2190,8 +2218,9 @@ for (i=0,varRef = varRefList; i<varCount; ++i, varRef=varRef->next)
     {
     struct pfVar *var = varRef->val;
     struct isxAddress *iad = hashFindVal(varHash, var->cName);
-    size1 = pentTypeSize(isxValTypeFromTy(pfc, var->ty));
-    offset = alignOffset(offset, size1);
+    size1 = pentTypeSize4(isxValTypeFromTy(pfc, var->ty));
+    if (size1 < 4)
+        size1 = 4;
     iad->stackOffset = offset;
     offset += size1;
     }
@@ -2209,13 +2238,13 @@ int stackSubAmount;
 
 pfi->outVarSize = calcVarListSize(pfc, ctar->outRefList, ctar->outCount);
 pfi->locVarSize = calcVarListSize(pfc, ctar->localRefList, ctar->localCount);
-fillInVarOffsets(pfc, pfi->savedRetEbpSize, ctar->inRefList, ctar->inCount, 
+fillInStackVarOffsets(pfc, pfi->savedRetEbpSize, ctar->inRefList, ctar->inCount, 
 	varHash);
 stackSubAmount = pfi->savedRegSize+pfi->outVarSize;
-fillInVarOffsets(pfc, -stackSubAmount, ctar->outRefList, ctar->outCount, 
+fillInStackVarOffsets(pfc, -stackSubAmount, ctar->outRefList, ctar->outCount, 
 	varHash);
 stackSubAmount += pfi->locVarSize;
-fillInVarOffsets(pfc, -stackSubAmount, ctar->localRefList, ctar->localCount, 
+fillInStackVarOffsets(pfc, -stackSubAmount, ctar->localRefList, ctar->localCount, 
 	varHash);
 }
 
