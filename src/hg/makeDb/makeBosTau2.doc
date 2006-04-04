@@ -1613,6 +1613,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     #   683178156 bases of 2812203870 (24.293%) in intersection
 
 
+############################################################################
 # SWAP CHAINS/NET RN4 (DONE 4/2/06 angie)
     ssh kkstore02
     mkdir /cluster/data/bosTau2/bed/blastz.rn4.swap
@@ -1622,3 +1623,33 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     ln -s blastz.rn4.swap /cluster/data/bosTau2/bed/blastz.rn4
 
 
+############################################################################
+##  BLASTZ swap from hg17 alignments (DONE - 2006-03-30 - 2004-04-04 - Hiram)
+    #	swapping to get the lift over file in the other direction
+    ssh pk
+    mkdir /cluster/data/bosTau2/bed/blastz.hg17.swap
+    cd /cluster/data/bosTau2/bed
+    ln -s blastz.hg17.swap blastz.hg17
+    cd blastz.hg17.swap
+    
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/hg17/bed/blastz.bosTau2.2005-12-19/DEF > swap.out 2>&1 &
+    #	XXXX running 2006-03-30 09:23
+
+    cd /cluster/data/bosTau2/bed/blastz.hg17
+    nice -n +19 featureBits bosTau2 chainHg18Link \
+	> fb.bosTau2.chainHg18Link 2>&1 &
+    #	1357027317 bases of 2812203870 (48.255%) in intersection
+
+    #	manually cleaned this up since the run faild during the MySQL
+    #	load due to out of space problems.  These tables do not need to
+    #	be loaded anyway.
+    sh kkstore02
+    cd /cluster/data/bosTau2/bed/blastz.hg17.swap
+
+    rm -fr psl/
+
+    rm -fr axtChain/run/chain/
+    rm -f  axtChain/noClass.net
+    rm -f  axtChain/*.tastzPanTro2.2006-03-29
