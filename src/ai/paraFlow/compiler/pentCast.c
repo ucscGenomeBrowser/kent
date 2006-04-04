@@ -42,7 +42,7 @@ pentLinkRegSave(dest, reg, coder);
 
 static void castByOneInstruction(struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder, char *op)
-/* Cast int to long. */
+/* Cast using just a single instruction. */
 {
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
@@ -231,6 +231,35 @@ else
 pentLinkRegSave(dest, reg, coder);
 }
 
+static void castLongToDouble(struct isx *isx, struct dlNode *nextNode,
+	struct pentCoder *coder)
+/* Convert long to double using move to memory, then fildll to load memory
+ * into top of floating point stack, then fstp to store to a temp location
+ * in memory, and finally movsd to get into xmm register. */
+{
+struct isxAddress *source = isx->left;
+struct isxAddress *dest = isx->dest;
+int tempOffset = (coder->tempIx -= 8);
+struct isxReg *reg = pentFreeReg(isx, dest->valType, nextNode, coder);
+
+/* Force memory location for long. */
+if (source->reg && pentTempJustInReg(source))
+    pentSwapTempFromReg(source->reg,  coder);
+
+/* Save and mark as trashed all mmx registers since using floating point
+ * stack. */
+pentSwapAllMmx(isx, coder);
+pentCoderAdd(coder, "emms", NULL, NULL);
+
+/* Code it up. */
+pentPrintVarMemAddress(source, coder->sourceBuf, 0);
+pentCoderAdd(coder, "fildll", coder->sourceBuf, NULL);
+safef(coder->destBuf, pentCodeBufSize, "%d(%%ebp)", tempOffset);
+pentCoderAdd(coder, "fstpl", NULL,coder->destBuf);
+pentCoderAdd(coder, "movsd", coder->destBuf, isxRegName(reg, dest->valType));
+pentLinkRegSave(dest, reg, coder);
+}
+
 static void castFromLong(struct pfCompile *pfc, struct isx *isx,
 	struct dlNode *nextNode, struct pentCoder *coder)
 /* Create code for cast from long to something else. */
@@ -245,8 +274,16 @@ switch (isx->dest->valType)
     case ivInt:
 	castLongToByteShortInt(isx, nextNode, coder);
 	break;
+#ifdef SOON
     case ivFloat:
+
+	fildll ...
+	castByOneInstruction(isx, nextNode, coder, "cvtpi2ps");
+	break;
+#endif /* SOON */
     case ivDouble:
+	castLongToDouble(isx, nextNode, coder);
+	break;
     default:
         internalErr();
 	break;

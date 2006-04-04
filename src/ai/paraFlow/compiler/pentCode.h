@@ -128,6 +128,9 @@ boolean pentTempJustInReg(struct isxAddress *iad);
 void pentSwapTempFromReg(struct isxReg *reg,  struct pentCoder *coder);
 /* If reg contains temp var not also in memory then save it out. */
 
+void pentSwapAllMmx(struct isx *isx, struct pentCoder *coder);
+/* Swap out all Mmx registers to memory locations */
+
 void pentPrintVarMemAddress(struct isxAddress *iad, char *buf, int offset);
 /* Print out an address for variable in memory to buffer. */
 

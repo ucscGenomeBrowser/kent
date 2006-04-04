@@ -10,7 +10,7 @@ bit bit1 = 1;
 byte b1 = 123;
 short s1 = 1234;
 int i1 =  123456;
-long l1 = 12345678901;
+long l1 = 12345678901L;
 float f1 = 1.23;
 double d1 = 12.3456;
 
@@ -101,3 +101,5 @@ s2 = l1;
 _printShort(s2);
 i2 = l1;
 _printInt(i2);
+d2 = l1;
+_printDouble(d2);

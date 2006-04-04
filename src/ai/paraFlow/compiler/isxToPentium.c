@@ -1322,6 +1322,14 @@ else
     }
 }
 
+void pentSwapAllMmx(struct isx *isx, struct pentCoder *coder)
+/* Swap out all Mmx registers to memory locations */
+{
+int i;
+for (i=mm0; i<= mm7; ++i)
+    pentSwapOutIfNeeded(&regInfo[i],isx->liveList, coder);
+}
+
 static void pentCall(struct isx *isx,  struct pentCoder *coder)
 /* Output code to actually do call */
 {
@@ -1856,6 +1864,22 @@ switch (isx->opType)
 	    coder->regsUsed[ax] = TRUE;
 	    }
 	break;
+	}
+    case poCast:
+        {
+	if (isx->left->valType == ivLong)
+	    {
+	    enum isxValType destType = isx->dest->valType;
+	    if (destType == ivFloat || destType == ivDouble)
+	        {
+	        for (i=mm0; i<=mm7; ++i)
+		    {
+		    stomp->stompPos[i] = 0;
+		    stomp->contents[i] = NULL;
+		    coder->regsUsed[i] = TRUE;
+		    }
+		}
+	    }
 	}
     }
 }
@@ -2406,6 +2430,28 @@ cmpIsx = isxNew(pfc, saveIsx.opType, saveIsx.dest, callOutIsx->dest,
 dlAddValAfter(node, cmpIsx);
 }
 
+#ifdef MAYBE
+void castCall(struct pfCompile *pfc, struct dlNode *node, struct isx *isx,
+	char *call)
+/* Generate code to cast via a function call. */
+{
+struct dlNode *retNode;
+struct isxAddress *source = isx->left;
+struct isxAddress *dest = isx->dest;
+struct isx *inIsx = isxNew(pfc, poInput, 
+	isxIoAddress(0, source->valType, iadInStack), source, NULL);
+struct isx *callIsx = isxNew(pfc, poCall, NULL, isxCallAddress(call), NULL);
+struct isx *outIsx = isxNew(pfc, poOutput, dest, 
+	isxIoAddress(0, dest->valType, iadOutStack), NULL);
+retNode = dlAddValAfter(node, outIsx);
+dlAddValAfter(node, callIsx);
+dlAddValAfter(node, inIsx);
+dlRemove(node);
+freez(&node);
+freez(&isx);
+}
+#endif /* MAYBE */
+
 void pentSubCallsForHardStuff(struct pfCompile *pfc, struct hash *varHash,
 	struct isxList *isxList)
 /* Substitute subroutine calls for some of the harder
@@ -2475,6 +2521,28 @@ for (node = isxList->iList->head; !dlEnd(node); node = next)
 		    }
 		break;
 		}
+#ifdef MAYBE
+	    case ivLong:
+	        {
+		switch (isx->opType)
+		    {
+		    case poCast:
+		        {
+			switch (isx->dest->valType)
+			    {
+			    case ivFloat:
+			        castCall(pfc, node, isx, "_pfLongToFloat");
+				break;
+			    case ivDouble:
+			        castCall(pfc, node, isx, "_pfLongToDouble");
+				break;
+			    }
+			break;
+			}
+		    }
+		break;
+		}
+#endif /* MAYBE */
 	    case ivString:
 	        {
 		switch (isx->opType)
