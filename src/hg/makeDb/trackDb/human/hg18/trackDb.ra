@@ -3,7 +3,7 @@ shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation (17 Species)
 group compGeno
 priority 104.2
-visibility packed
+visibility pack
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
