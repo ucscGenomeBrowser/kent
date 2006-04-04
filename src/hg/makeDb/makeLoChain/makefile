@@ -10,6 +10,7 @@ SCRIPTS = \
 	makeLoChain-chain.csh \
 	makeLoChain-net.csh \
 	makeLoChain-load.csh \
+	makeLoChain-split.csh
 
 all:
 	@for F in $(SCRIPTS); do \
