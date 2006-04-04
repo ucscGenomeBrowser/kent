@@ -883,7 +883,7 @@ if (iad->adType == iadRealVar)
     }
 }
 
-static void linkReg(struct isxAddress *iad, struct isxReg *reg)
+void pentLinkReg(struct isxAddress *iad, struct isxReg *reg)
 /* Link register to new address. */
 {
 if (reg->contents != NULL)
@@ -898,7 +898,7 @@ void pentLinkRegSave(struct isxAddress *dest, struct isxReg *reg,
 /* Unlink whatever old variable was in register and link in dest.
  * Also copy dest to memory if it's a real variable. */
 {
-linkReg(dest, reg);
+pentLinkReg(dest, reg);
 copyRealVarToMem(dest, coder);
 }
 
@@ -1604,7 +1604,7 @@ else
 	{
 	struct isxReg *reg = pentFreeReg(isx, valType, nextNode, coder);
 	pentCodeDestReg(opMov, left, reg, coder);
-	linkReg(left, reg);
+	pentLinkReg(left, reg);
 	pentCodeDestReg(opTest, left, reg, coder);
 	}
     pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);

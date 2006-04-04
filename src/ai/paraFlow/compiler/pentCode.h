@@ -116,6 +116,9 @@ struct isxReg *pentFreeReg(struct isx *isx, enum isxValType valType,
 	struct dlNode *nextNode,  struct pentCoder *coder);
 /* Find free register for instruction result. */
 
+void pentLinkReg(struct isxAddress *iad, struct isxReg *reg);
+/* Link register to new address. */
+
 void pentLinkRegSave(struct isxAddress *dest, struct isxReg *reg,
 	struct pentCoder *coder);
 /* Unlink whatever old variable was in register and link in dest.

@@ -286,6 +286,27 @@ switch (isx->dest->valType)
     }
 }
 
+static void castFloatOrDoubleToBit(struct isx *isx, struct dlNode *nextNode,
+	struct pentCoder *coder)
+/* Cast floating point number to bit. */
+{
+struct isxAddress *source = isx->left;
+struct isxAddress *dest = isx->dest;
+struct isxReg *sourceReg = source->reg;
+enum isxValType sourceType = source->valType;
+struct isxReg *destReg = pentFreeReg(isx, ivBit, nextNode, coder);
+if (sourceReg == NULL)
+    {
+    sourceReg = pentFreeReg(isx, source->valType, nextNode, coder);
+    pentCodeDestReg(opMov, source, sourceReg, coder);
+    pentLinkReg(source, sourceReg);
+    }
+pentCoderAdd(coder, pentOpOfType(opCmp, sourceType), 
+	"bunchOfZero", isxRegName(sourceReg, sourceType));
+pentCoderAdd(coder, "setnz", NULL, isxRegName(destReg, ivBit));
+pentLinkRegSave(dest, destReg, coder);
+}
+
 static void castFromFloat(struct pfCompile *pfc, struct isx *isx,
 	struct dlNode *nextNode, struct pentCoder *coder)
 /* Create code for cast from float to something else. */
@@ -293,6 +314,8 @@ static void castFromFloat(struct pfCompile *pfc, struct isx *isx,
 switch (isx->dest->valType)
     {
     case ivBit:
+        castFloatOrDoubleToBit(isx, nextNode, coder);
+	break;
     case ivByte:
     case ivShort:
     case ivInt:

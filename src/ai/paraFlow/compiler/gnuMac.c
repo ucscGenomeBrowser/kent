@@ -60,6 +60,11 @@ fprintf(f, "%s",
 "longLongMinusOne:\n"
 "       .long -1\n"
 "       .long -1\n"
+"bunchOfZero:\n"
+"       .long 0\n"
+"       .long 0\n"
+"       .long 0\n"
+"       .long 0\n"
 "\n"
 #ifdef OLD
 "       .cstring\n"

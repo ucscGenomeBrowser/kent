@@ -105,3 +105,9 @@ f2 = l1;
 _printFloat(f2);
 d2 = l1;
 _printDouble(d2);
+
+// Do all casts from float.
+bit2 = f1;
+_printBit(bit2);
+bit2 = f0;
+_printBit(bit2);
