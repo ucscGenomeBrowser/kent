@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1005 2006/03/28 00:52:48 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1006 2006/04/04 18:05:41 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4148,7 +4148,7 @@ void printGeneCards(char *geneName)
 if (startsWith("hg", database) && isNotEmpty(geneName))
     {
     printf("<B>GeneCards:</B> "
-	   "<A HREF = \"http://bioinfo.weizmann.ac.il/cards-bin/cardsearch.pl?"
+	   "<A HREF = \"http://www.genecards.org/cgi-bin/cardsearch.pl?"
 	   "search=%s\" TARGET=_blank>%s</A><BR>\n",
 	   geneName, geneName);
     }
