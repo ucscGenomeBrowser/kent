@@ -314,7 +314,7 @@ pentCoderAdd(coder, "setnz", NULL, isxRegName(destReg, ivBit));
 pentLinkRegSave(dest, destReg, coder);
 }
 
-static void castFloatToLong(struct isx *isx, struct dlNode *nextNode,
+static void castFloatOrDoubleToLong(struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder, int fpSize, char *fpPush)
 /* Cast floating point number to long. */
 {
@@ -356,10 +356,36 @@ switch (isx->dest->valType)
 	castByOneViaType(isx, nextNode, coder, "cvtss2si", ivInt);
 	break;
     case ivLong:
-        castFloatToLong(isx, nextNode, coder, 4, "flds");
+        castFloatOrDoubleToLong(isx, nextNode, coder, 4, "flds");
 	break;
     case ivDouble:
 	castByOneInstruction(isx, nextNode, coder, "cvtss2sd");
+	break;
+    default:
+        internalErr();
+	break;
+    }
+}
+
+static void castFromDouble(struct pfCompile *pfc, struct isx *isx,
+	struct dlNode *nextNode, struct pentCoder *coder)
+/* Create code for cast from float to something else. */
+{
+switch (isx->dest->valType)
+    {
+    case ivBit:
+        castFloatOrDoubleToBit(isx, nextNode, coder);
+	break;
+    case ivByte:
+    case ivShort:
+    case ivInt:
+	castByOneViaType(isx, nextNode, coder, "cvtsd2si", ivInt);
+	break;
+    case ivLong:
+        castFloatOrDoubleToLong(isx, nextNode, coder, 8, "fldl");
+	break;
+    case ivFloat:
+	castByOneInstruction(isx, nextNode, coder, "cvtsd2ss");
 	break;
     default:
         internalErr();
@@ -388,6 +414,9 @@ switch (isx->left->valType)
 	break;
     case ivFloat:
         castFromFloat(pfc, isx, nextNode, coder);
+	break;
+    case ivDouble:
+        castFromDouble(pfc, isx, nextNode, coder);
 	break;
     default:
         internalErr();

@@ -121,3 +121,19 @@ l2 = f1;
 _printLong(l2);
 d2 = f1;
 _printDouble(d2);
+
+// Do all casts from double.
+bit2 = d1;
+_printBit(bit2);
+bit2 = d0;
+_printBit(bit2);
+b2 = d1;
+_printByte(b2);
+s2 = d1;
+_printShort(s2);
+i2 = d1;
+_printInt(i2);
+l2 = d1;
+_printLong(l2);
+f2 = d1;
+_printFloat(f2);
