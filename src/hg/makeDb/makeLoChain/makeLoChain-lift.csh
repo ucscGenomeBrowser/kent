@@ -6,7 +6,7 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.7 2006/04/04 20:45:40 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.8 2006/04/04 20:47:13 kate Exp $
 
 if ( $#argv != 2 ) then
     echo "usage: $0 <old-assembly> <new-assembly>"
@@ -29,7 +29,7 @@ if (`ls -1 $newLiftDir/*.lft | wc -l` < 1) then
 endif
 
 cd $blatDir/raw
-if ($HOST != kkr1u00) then
+if ($HOST != kkr1u00 && $HOST != kkr1u00.kilokluster.ucsc.edu) then
     echo "Run this on kkr1u00"
     exit 1
 endif
