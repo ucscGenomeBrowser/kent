@@ -69,6 +69,31 @@ pentCoderAdd(coder, "setnz", NULL, narrowRegName);
 pentLinkRegSave(dest, reg, coder);
 }
 
+static void castViaInt(struct isx *isx, struct dlNode *nextNode,
+	struct pentCoder *coder, char *opToInt, char *opToOther)
+/* Convert to long or floating point using an intermediate integer
+ * register */
+{
+struct isxAddress *source = isx->left;
+struct isxAddress *dest = isx->dest;
+enum isxValType destType = dest->valType;
+struct isxReg *reg1 = pentFreeReg(isx, ivInt, nextNode, coder);
+struct isxReg *reg2 = pentFreeReg(isx, destType, nextNode, coder);
+char *reg1Name = isxRegName(reg1, ivInt);
+
+pentPrintAddress(coder, source, coder->sourceBuf);
+pentCoderAdd(coder, opToInt, coder->sourceBuf, reg1Name);
+pentCoderAdd(coder, opToOther, reg1Name, isxRegName(reg2, destType));
+
+/* We've used up the int register, but put nothing in it. */
+if (reg1->contents)
+    {
+    reg1->contents->reg = NULL;
+    reg1->contents = NULL;
+    }
+pentLinkRegSave(dest, reg2, coder);
+}
+
 static void castFromShort(struct pfCompile *pfc, struct isx *isx,
 	struct dlNode *nextNode, struct pentCoder *coder)
 /* Create code for cast from long to something else. */
@@ -81,19 +106,18 @@ switch (isx->dest->valType)
     case ivByte:
 	castViaMov(isx, nextNode, coder);
 	break;
-#ifdef SOON
     case ivInt:
+	castByOneInstruction(isx, nextNode, coder, "movswl");
 	break;
     case ivLong:
-	castByOneInstruction(isx, nextNode, coder, "movd");
+	castViaInt(isx, nextNode, coder, "movswl", "movd");
 	break;
     case ivFloat:
-	castByOneInstruction(isx, nextNode, coder, "cvtsi2ss");
+	castViaInt(isx, nextNode, coder, "movswl", "cvtsi2ss");
 	break;
     case ivDouble:
-	castByOneInstruction(isx, nextNode, coder, "cvtsi2sd");
+	castViaInt(isx, nextNode, coder, "movswl", "cvtsi2sd");
 	break;
-#endif /* SOON */
     default:
         internalErr();
 	break;
