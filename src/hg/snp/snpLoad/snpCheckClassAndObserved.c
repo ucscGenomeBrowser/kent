@@ -49,7 +49,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.21 2006/04/04 22:19:49 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.22 2006/04/04 22:51:02 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -278,8 +278,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	}
 
+    /* for everything downstream, we need a valid observed */
+    if (sameString(row[5], "unknown")) continue;
+
     /* NamedClassWrongLocType */
-    /* need to reconsider this */
     if (sameString(row[4], "named"))
         {
 	subString = strstr(row[5], "LARGEINSERTION");
