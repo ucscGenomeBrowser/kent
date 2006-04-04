@@ -49,7 +49,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.20 2006/03/29 00:07:18 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.21 2006/04/04 22:19:49 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -316,6 +316,12 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     /* NewLocType */
     /* could also check if observed is subset of allele at one end */
+    subString = cloneString(row[5]);
+    if (strlen(subString) < 2) continue;
+    if (subString[0] != '-' || subString[1] != '/') continue;
+    slashCount = chopString(subString, "/", NULL, 0);
+    if (slashCount > 2) continue;
+    subString = subString + 2;
     observedLen = strlen(row[5]);
     observedLen = observedLen - 2;
     span = sqlUnsigned(row[2]) - sqlUnsigned(row[1]);
@@ -323,6 +329,8 @@ while ((row = sqlNextRow(sr)) != NULL)
         writeToExceptionFile(chromName, row[1], row[2], row[0], "NewLocTypeWrongSize");
     if (loc_type == 5 && sameString(row[4], "in-del") && observedLen != span)
         writeToExceptionFile(chromName, row[1], row[2], row[0], "NewLocTypeWrongSize");
+    if (loc_type == 5 && sameString(row[4], "in-del") && sameString(subString, row[8]))
+        writeToExceptionFile(chromName, row[1], row[2], row[0], "RangeSubstitutionLocTypeExactMatch");
     if (loc_type == 6 && sameString(row[4], "in-del") && observedLen <= span)
         writeToExceptionFile(chromName, row[1], row[2], row[0], "NewLocTypeWrongSize");
 
