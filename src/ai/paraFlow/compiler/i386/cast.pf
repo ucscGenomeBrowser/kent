@@ -88,8 +88,16 @@ _printFloat(f2);
 d2 = i1;
 _printDouble(d2);
 
-// Do all casts from int.
+// Do all casts from long.
 bit2 = l1;
 _printBit(bit2);
 bit2 = l0;
 _printBit(bit2);
+l1 += 1;
+l1 -= 1;
+b2 = l1;
+_printByte(b2);
+s2 = l1;
+_printShort(s2);
+i2 = l1;
+_printInt(i2);

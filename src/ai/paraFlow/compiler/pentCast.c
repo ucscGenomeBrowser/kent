@@ -210,6 +210,27 @@ pentCoderAdd(coder, "setnz", NULL, narrowRegName);
 pentLinkRegSave(dest, reg, coder);
 }
 
+static void castLongToByteShortInt(struct isx *isx, struct dlNode *nextNode,
+	struct pentCoder *coder)
+/* Convert long to byte.  If it's in a register then do
+ * movd/movb combo.  Otherwise do movb from memory location */
+{
+struct isxAddress *source = isx->left;
+struct isxAddress *dest = isx->dest;
+enum isxValType destType = dest->valType;
+struct isxReg *reg = pentFreeReg(isx, destType, nextNode, coder);
+if (source->reg)
+    pentCoderAdd(coder, "movd", isxRegName(source->reg, ivLong), 
+    	isxRegName(reg, ivInt));
+else
+    {
+    char *movOp = pentOpOfType(opMov, destType);
+    pentPrintVarMemAddress(source, coder->sourceBuf, 0);
+    pentCoderAdd(coder, movOp, coder->sourceBuf, isxRegName(reg, destType));
+    }
+pentLinkRegSave(dest, reg, coder);
+}
+
 static void castFromLong(struct pfCompile *pfc, struct isx *isx,
 	struct dlNode *nextNode, struct pentCoder *coder)
 /* Create code for cast from long to something else. */
@@ -222,6 +243,8 @@ switch (isx->dest->valType)
     case ivByte:
     case ivShort:
     case ivInt:
+	castLongToByteShortInt(isx, nextNode, coder);
+	break;
     case ivFloat:
     case ivDouble:
     default:
