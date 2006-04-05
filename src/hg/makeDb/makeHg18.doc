@@ -6885,6 +6885,7 @@ mkdir -p ${blatDir}/{over,net}
     #   994530182 bases of 2881515245 (34.514%) in intersection
 
 # GENOSCOPE TETRAODON (tetNig1) ECORES (DONE, 2006-03-03, Fan)
+# GENOSCOPE TETRAODON (tetNig1) ECORES (REBUILT, 2006-04-04, Fan)
     ssh kkstore02
     mkdir -p /cluster/data/hg18/bed/ecoresTetNig1
     cd /cluster/data/hg18/bed/ecoresTetNig1
@@ -6903,7 +6904,7 @@ mkdir -p ${blatDir}/{over,net}
     # if "ecore" is changed to "CDS" and "ecotig" to "transcript" this loads
     # correctly into the table.
     sed -e 's/ecore/CDS/' Hs36Tnig1format.gff | sed -e 's/ecotig/transcript/' \
-	    | cut -f 1-8,10 > Hg18vstetNig1.gff
+	    | cut -f 1-8,11 > Hg18vstetNig1.gff
     # add "chr" in front of the chromsome name in first field (2005-02-08)
     perl -pi.bak -e 's/^([0-9XYM]{1,2})/chr$1/' Hg18vstetNig1.gff
     rm *.bak
