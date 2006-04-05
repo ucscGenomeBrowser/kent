@@ -1,3 +1,38 @@
+track multiz9way
+shortLabel Conservation 
+longLabel Vertebrate Multiz Alignment & Conservation
+group compGeno
+priority 101.1
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons9way
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz9waySummary
+frames multiz9wayFrames
+irows on
+speciesGroups mammal vertebrate
+sGroup_mammal mm8 hg18 canFam2 bosTau2 monDom4
+sGroup_vertebrate galGal2 xenTro1 danRer3
+treeImage phylo/rn4_9way.jpg
+
+track phastConsElements9way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
+group compGeno
+priority 101.3
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
+
+
 searchName ensGeneGtpGene
 searchTable ensGene
 searchType genePred
