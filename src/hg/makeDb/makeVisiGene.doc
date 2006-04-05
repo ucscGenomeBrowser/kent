@@ -236,17 +236,12 @@ cd /san/sanvol1/visiGene/dump
 # (this backup shown is really an example template for the next person who needs to do this)
 mkdir visiGene20060315
 cd visiGene20060315
-hgsqdump visiGene -T .
-mkdir mm6
-hgsqdump visiGene vgProbes -T mm6
-mkdir mm7
-hgsqdump visiGene vgProbes -T mm7
-mkdir mm8
-hgsqdump visiGene vgProbes -T mm8
-mkdir hg17
-hgsqdump visiGene vgAllProbes -T hg17
-mkdir hg18
-hgsqdump visiGene vgAllProbes -T hg18
+hgsqldump visiGene -T .
+mkdir mm6; hgsqldump mm6 vgProbes -T mm6
+mkdir mm7; hgsqldump mm7 vgProbes -T mm7
+mkdir mm8; hgsqldump mm8 vgProbes -T mm8
+mkdir hg17; hgsqldump hg17 vgAllProbes -T hg17
+mkdir hg18; hgsqldump hg18 vgAllProbes -T hg18
 #(do any others needed that might not be listed here)
 #(document the reason for making the backup)
 echo 'vgLoadAllenBrain has been run, so making backup of visiGene db and probe tracks before updating, ' > README
@@ -321,7 +316,7 @@ vgProbeTrack EXT working mm8
 
 ############################
 
-###  JACKSON UPDATE CONTINUED (done 2006-04-01 galt)  #############
+###  JACKSON UPDATE (done 2006-04-01 galt)  #############
 
 # updated jackson20060328 db on kkr3u00 (see hg/visiGene/jackson/makeJackson.doc)
 
@@ -405,7 +400,109 @@ make alpha
 #gene has 15173 rows
 #imageProbe has 115500 rows
 
-
 # recompiled hgVisiGene 
 
 
+############################
+
+# REBUILD PROBETRACK   (DONE galt 2006-04-04)
+#    WITH vgProbeTrack PROGRAM - AFTER DOING JAX UPDATE 20060328 
+
+# (make a backup of visiGene db and these tables: {mm6,mm7,...}.vgProbes and {hg17,hg18,...}.vgAllProbes
+cd /san/sanvol1/visiGene/dump
+# (this backup shown is really an example template for the next person who needs to do this)
+mkdir visiGene.20060404
+cd visiGene.20060404
+hgsqldump visiGene -T .
+mkdir mm6; hgsqldump mm6 vgProbes -T mm6
+mkdir mm7; hgsqldump mm7 vgProbes -T mm7
+mkdir mm8; hgsqldump mm8 vgProbes -T mm8
+mkdir hg17; hgsqldump hg17 vgAllProbes -T hg17
+mkdir hg18; hgsqldump hg18 vgAllProbes -T hg18
+#(do any others needed that might not be listed here)
+#(document the reason for making the backup)
+echo 'vgLoadJax jackson20060328 has been run, so making backup of visiGene db and probe tracks before updating probeTracks, ' > README
+
+# OK, NOW USE vgProbeTrack TO UPDATE
+
+cd ~/kent/src/hg/visiGene/vgProbeTrack
+
+# Make sure vgProbeTrack program is up to date
+make
+
+# -sqlPath must be included whenever the vgProbes or vgAllProbes track tables do not yet exist for the db
+# so it can find the .sql script to create vgProbes or vgAllProbes tables as needed.
+# I happen to know that only JAX was updated since last time, and that is mouse only
+
+# populate vgPrb with any new stuff in visiGene.probe (works for all taxons at once).
+vgProbeTrack POP
+#new probe records found = 1285, # new vgPrb records added = 1285
+#   most of these are old, but we updated JAX by dropping completely and re-adding
+#   so these probes find their way back via sequence identity of probes in vgPrb.sequence
+
+# find sequence using various methods - given probe seq, primers, bacs, refseq, etc.
+#  must specify a specific assembly to use, so mm7 is ready to use now, mm8 still in qa.
+#  this finds any stuff for the mouse taxon
+vgProbeTrack SEQ working mm7
+
+#rc = 0 = count of primers for mrna search for taxon 10090
+#rc = 0 = count of primers for genome search for taxon 10090
+#bac list read done.
+#found seq for 0 bacEndPairs
+#rc = 549 = count of refSeq mrna for mm7
+#rc = 18 = count of genRef mrna for mm7
+#rc = 33 = count of genbank mrna for mm7
+#rc = 428 = count of flatRef mrna for mm7
+#rc = 0 = count of flatAll mrna for mm7
+#rc = 1 = count of linkRef mrna for mm7
+#rc = 0 = count of linkAll mrna for mm7
+#rc = 1 = count of kgAlRef mrna for mm7
+#rc = 37 = count of kgAlAll mrna for mm7
+
+
+# create alignments using either refSeqAli or all_mrna or bacEnds or blat.  Took 1.5 hours.  
+# alignments are individually tracked per assembly here
+# alignment successes go in $db.vgProbes psl track, and whether succeeded or failed,
+# it only looks for things that have not already attempted alignment
+# the status goes into visiGene.vgPrbAli with .db="mm7"
+vgProbeTrack ALI working mm7
+
+# this finds any seq required for mm7.vgProbes track not already in mm7.seq 
+# adds the new .fa file in /cluster/data/mm7/bed/visiGene/
+# adds a symlink to it in /gbdb/mm7/visiGene/
+# and runs hgLoadSeq mm6 /gbdb/mm7/visiGene/vgPrbExt_??????.fa to add it to mm7.seq
+vgProbeTrack EXT working mm7
+
+# mm6.vgProbes was already complete from previous probe track creation, 
+#  it just needed to catch the new Allen Brain probes and align them.  About 1.5 hours.
+vgProbeTrack ALI working mm6
+vgProbeTrack EXT working mm6
+
+# hg17.vgAllProbes was pre-existing with all probes, just need to add new allenBrain mouse
+# this internally uses pslMap against the mm7 to hg17 liftover chain.gz
+# Because it is "Xeno" (from mouse to human), it creates track vgAllProbes,
+# and maintains the list of processed alignments in visiGene.vgPrbAliAll.
+vgProbeTrack PSLMAP working hg17 mm7  
+# updates hg17.seq/extFile similarly to the EXT command, but for All probes.
+# just like with EXT, EXTALL puts .fa in /cluster/data/hg17/visiGene
+# and symlink in /gbdb/hg17/visiGene and updates using hgLoadSeq.
+# if a sequence has already been loaded it will not be loaded again.
+vgProbeTrack EXTALL working hg17
+
+# hg18.vgAllProbes existed before
+vgProbeTrack PSLMAP working hg18 mm7 
+vgProbeTrack EXTALL working hg18
+
+# mm8 is in qa and so it is basically ready to use now.
+vgProbeTrack ALI working mm8
+vgProbeTrack EXT working mm8
+
+
+# RE-MAKE knownToVisiGene tables (see respective makedocs for these)
+#knownToVisiGene mm6
+#knownToVisiGene mm7
+#knownToVisiGene mm8
+#knownToVisiGene hg17 -fromProbePsl=vgAllProbes
+#knownToVisiGene hg18 -fromProbePsl=vgAllProbes
+
+############################
