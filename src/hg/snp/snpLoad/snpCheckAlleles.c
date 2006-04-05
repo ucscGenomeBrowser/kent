@@ -11,8 +11,6 @@
  *    Note an assymetry here: we are not checking
  *    allele against refUCSCReverseComp
 
- *    Note: these are also logged as RangeLocTypeWrongSizeLargeAllele
- *
  * 2) WrongRefAlleleNegativeStrand
  *    orientation = 1
  *    and allele != refUCSCReverseComp
@@ -40,7 +38,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.6 2006/03/08 22:49:41 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.7 2006/04/05 23:12:38 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -72,6 +70,9 @@ struct sqlResult *sr;
 char **row;
 char tableName[64];
 int loc_type = 0;
+int chromStart = 0;
+int chromEnd = 0;
+int span = 0;
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 if (!hTableExists(tableName)) return;
@@ -84,12 +85,20 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    /* we already check size of allele in snpLocType and snpExpandAllele. */
+    /* skip past alleles with wrong size here. */
+    chromStart = sqlUnsigned(row[1]);
+    chromEnd = sqlUnsigned(row[2]);
+    span = chromEnd - chromStart;
+    if (span != strlen(allele)) continue;
+
     loc_type = sqlUnsigned(row[3]);
+
     /* check positive strand first */
     if (sameString(row[4], "0"))
         {
         if (sameString(row[5], row[6])) continue;
-        writeToExceptionFile(chromName, row[1], row[2], row[0], "WrongRefAllelePositiveStrand");
+        writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleMismatchPositiveStrand");
 	continue;
 	}
 
@@ -108,7 +117,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
 
     /* nothing matching */
-    writeToExceptionFile(chromName, row[1], row[2], row[0], "WrongRefAlleleNegativeStrand");
+    writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleMismatchNegativeStrand");
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
