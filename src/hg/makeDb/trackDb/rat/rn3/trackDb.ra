@@ -1,12 +1,3 @@
-track cytoBandIdeo
-shortLabel Chromosome Band (Ideogram)
-longLabel Chromosome Bands Based On ISCN Lengths (for Ideogram)
-group map
-priority .1
-visibility dense
-altColor 150,50,50
-type bed 4 +
-
 track gcPercent
 shortLabel GC% 20K
 longLabel Percentage GC in 20,000-Base Windows

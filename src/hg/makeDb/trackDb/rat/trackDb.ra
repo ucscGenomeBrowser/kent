@@ -1,3 +1,12 @@
+track cytoBandIdeo
+shortLabel Chromosome Band (Ideogram)
+longLabel Chromosome Bands Based On ISCN Lengths (for Ideogram)
+group map
+priority .1
+visibility dense
+altColor 150,50,50
+type bed 4 +
+
 track cytoBand
 shortLabel Chromosome Band
 longLabel Chromosome Bands Based On ISCN Lengths
