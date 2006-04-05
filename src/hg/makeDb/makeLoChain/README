@@ -5,22 +5,28 @@ used for generating liftOver chain files and
 associated database entries, for use with
 the "liftOver" executable, and the "hgLiftOver" CGI.
 
-Before running, the "to" assembly must be split
-into 3K chunks onto a reasonable location
-for cluster input (see make doc).
-
 They are run in the following order:
 
         makeLoChain-split   kkr1u00
-        makeLoChain-align   kk or kk9
+        makeLoChain-align   kk
         makeLoChain-lift    fileserver
-        makeLoChain-chain   kk, kk9 or kki
+        makeLoChain-chain   kk, or kki
         makeLoChain-net     fileserver
         makeLoChain-load    hgwdev
+        makeLoChain-cleanup fileserver 
 
 They are run on the KiloKluster, fileserver, or database server --
 each script tests that it is being executed on the appropriate
 host and gives warning.  Also, each script indicates which
 script to run next, and where.
+
+The "split" program creates 10K chunks on /iscratch/i,
+which isn't accessible from the pk, so cluster runs
+are restricted to kk and kki.
+
+The output file (<old>To<New>.over.chain.gz) is saved to the directory:
+    /cluster/data/<old-assembly>/bed/liftOver
+It is suggested that commands be executed from this dir,
+and output saved there to appropriately named log files.
 
     Kate
