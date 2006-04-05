@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1081 2006/03/24 02:19:50 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1082 2006/04/05 00:10:41 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11688,7 +11688,7 @@ puts(
 "	Annotation File: <INPUT TYPE=FILE NAME=\"hgt.customFile\">\n"
 );
 
-cgiMakeButton("Submit", "submit");
+cgiMakeButton("Submit", "Submit");
 
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
@@ -11699,6 +11699,7 @@ cgiTableRowEnd();
 cgiSimpleTableRowStart();
 cgiSimpleTableFieldStart();
 cgiMakeResetButton();
+cgiMakeButton("Submit", "Submit");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiTableEnd();
