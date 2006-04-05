@@ -6,17 +6,19 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-net.csh,v 1.2 2004/09/18 00:18:57 angie Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-net.csh,v 1.3 2006/04/05 19:06:11 kate Exp $
 
 if ( $#argv != 2 ) then
-    echo "$0 usage: <old-assembly> <new-assembly>"
+    echo "usage: <old-assembly> <new-assembly>"
     exit 1
 endif
 
 set oldAssembly = $1
 set newAssembly = $2
+set prefix = /cluster/data/$oldAssembly/bed/blat.$newAssembly
+set blatDir = `ls -td $prefix.20* | head -1`
+echo "using dir $blatDir"
 
-set blatDir = /cluster/data/$oldAssembly/bed/blat.$newAssembly.`date +%Y-%m-%d`
 cd $blatDir
 
 if ( ! -e $blatDir/chainRaw ) then
@@ -54,14 +56,14 @@ end
 
 set upperNewAssembly = $newAssembly:u
 set filename = ${oldAssembly}To${upperNewAssembly}.over.chain
-cat ../over/*.chain > ../$filename
-set destDir = /cluster/data/$oldAssembly/bed/bedOver
+set destDir = /cluster/data/$oldAssembly/bed/liftOver
 mkdir -p $destDir
-cp ../$filename $destDir/$filename
+chainMergeSort ../over/*.chain > $destDir/$filename
+gzip $destDir/$filename
 
 set execDir = $0:h
 echo ""
-echo "Created $blatDir/$filename and copied to $destDir/$filename"
+echo "Created $destDir/$filename.gz"
 echo "DO THIS NEXT:"
 echo "    ssh hgwdev"
 echo "    $execDir/makeLoChain-load.csh $oldAssembly $newAssembly"

@@ -6,7 +6,7 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.8 2006/04/04 20:47:13 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.9 2006/04/05 19:06:10 kate Exp $
 
 if ( $#argv != 2 ) then
     echo "usage: $0 <old-assembly> <new-assembly>"
@@ -17,7 +17,9 @@ set oldAssembly = $1
 set newAssembly = $2
 set newLiftDir = /iscratch/i/$newAssembly/split10k
 
-set blatDir = /cluster/data/$oldAssembly/bed/blat.$newAssembly.`date +%Y-%m-%d`
+set prefix = /cluster/data/$oldAssembly/bed/blat.$newAssembly
+set blatDir = `ls -td $prefix.20* | head -1`
+echo "using dir $blatDir"
 
 if ( ! -e $blatDir/raw ) then
     echo "Can't find $blatDir/raw"
