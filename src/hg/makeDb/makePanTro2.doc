@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.14 2006/03/31 01:00:01 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.15 2006/04/05 19:25:44 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -1056,7 +1056,76 @@ cat > gsub << 'EOF'
     # NOTE: these run quickly
 
 
-   # MAKE DOWNLOADABLE SEQUENCE FILES
+########################
+# MAKE DOWNLOADABLE SEQUENCE FILES (2006-04-02 kate)
+
+    ssh kkstore04
+    cd /cluster/data/panTro2
+    mkdir -p downloads/bigZips downloads/chromosomes
+    cd downloads
+cat > makeChroms.csh << 'EOF'
+    date
+    foreach f (../?{,?}/*.fa ../6_hla_hap1/*.fa)
+        echo $f:t:r
+        nice gzip -c $f > chromosomes/$f:t.gz
+    end
+    date
+'EOF'
+    csh makeChroms.csh >&! makeChroms.log &
+        # 14 minutes
+
+    cat > bigZips.csh << 'EOF'
+cd /cluster/data/panTro2
+tar cvzf downloads/bigZips/chromAgp.tar.gz \
+        ?{,?}/chr*.agp 6_hla_hap1/*.agp
+tar cvzf downloads/bigZips/chromFa.tar.gz \
+        ?{,?}/chr*.fa 6_hla_hap1/chr*.fa
+tar cvzf downloads/bigZips/chromFaMasked.tar.gz \
+        ?{,?}/chr*.fa.masked 6_hla_hap1/chr*.fa.masked 
+tar cvzf downloads/bigZips/chromOut.tar.gz \
+        ?{,?}/chr*.fa.out 6_hla_hap1/chr*.fa.out
+cd /cluster/data/panTro2/bed/simpleRepeat
+tar cvzf ../../downloads/bigZips/chromTrf.tar.gz ./trfMaskChrom
+'EOF'
+    csh bigZips.csh >&! bigZips.log &
+
+    # get GenBank native mRNAs and refGene 
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/i386/gbGetSeqs -db=panTro2 -native GenBank mrna \
+        /cluster/data/panTro2/downloads/bigZips/mrna.fa
+    cd /cluster/data/panTro2/downloads/bigZips
+    cd /cluster/data/panTro2/downloads/bigZips
+    foreach I (1000 2000 5000) 
+        echo "upstream${I} working ... "
+        featureBits panTro2 refGene:upstream:${I} -fa=stdout \
+                | gzip -c > upstream${I}.fa.gz
+        echo "upstream${I} done"
+    end
+    #   real    11m25.493s
+
+    ssh kkstore04
+    cd /cluster/data/panTro2/downloads/chromosomes
+    #   copy previous release README.txt
+    scp hgwdev:/usr/local/apache/htdocs/goldenPath/panTro1/chromosomes/README.txt .
+    #   edit it to bring it up to date
+    md5sum *.gz > md5sum.txt
+
+    cd /cluster/data/panTro2/downloads/bigZips
+    gzip mrna.fa
+    cp -p ../../panTro2.2bit .
+    #   copy previous release README.txt
+    scp hgwdev:/usr/local/apache/htdocs/goldenPath/panTro1/bigZips/README.txt .
+    # edit README.txt to indicate proper version of sequence and
+    #   RepeatMasker
+    md5sum *.gz *.2bit README.txt > md5sum.txt
+
+    ssh hgwdev
+    set d = /usr/local/apache/htdocs/goldenPath/panTro2
+    mkdir $d
+    ln -s /cluster/data/panTro2/downloads/bigZips $d
+    ln -s /cluster/data/panTro2/downloads/chromosomes $d
+
 
 
 ########################
@@ -1123,7 +1192,6 @@ TMPDIR=/scratch/tmp
         `pwd`/DEF >&! blastz.3.out &
 
     # SWAP ALIGNMENTS TO PANTRO2 (2006-03-19 kate)
-
     /cluster/bin/scripts/doBlastzChainNet.pl -swap \
         -workhorse=hgwdev64 \
         /cluster/data/panTro2/bed/blastz.hg18/DEF >&! swap.log &
@@ -1196,7 +1264,12 @@ TMPDIR=/scratch/tmp
         -workhorse=kkr4u00 \
         /cluster/data/panTro2/bed/blastz.hg18/DEF >&! swap.log &
 
-    # Reciprocal best (IN PROGRESS 2005-03-31 kate)
+    # downloads failed -- need to remove the old dir
+     ssh hgwdev "rm -fr /usr/local/apache/htdocs/goldenPath/hg18/vsPanTro2"
+    /cluster/bin/scripts/doBlastzChainNet.pl -swap -continue=download\
+        /cluster/data/panTro2/bed/blastz.hg18/DEF >&! swap.download.log &
+
+    # Reciprocal best (DONE 2005-04-02 kate)
     # These are best alignments in both directions
     # Start with the best chains from the net (these are in the liftOver chain).
     # Swap to human-reference, and net them
@@ -1219,7 +1292,9 @@ TMPDIR=/scratch/tmp
         netSyntenic stdin rbest.noClass.net
     netSplit rbest.noClass.net rBestNet
     netChainSubset -verbose=0 rbest.noClass.net $swapChain stdout | \
-        chainSort stdin stdout | gzip -c > hg18.panTro2.rbest.chain.gz
+        chainMergeSort stdin | \
+        gzip -c > hg18.panTro2.rbest.chain.gz
+    chainSplit rBestChain/ hg18.panTro2.rbest.chain.gz 
     cd ..
     mkdir axtRBestNet
     foreach f (axtChain/rBestNet/*.net)
@@ -1229,25 +1304,29 @@ TMPDIR=/scratch/tmp
         axtSort stdin stdout | \
         gzip -c > axtRBestNet/$f:t:r.hg18.panTro2.net.axt.gz
     end
-           # GOT HERE 
 
-    # load chains & nets for viewing on genome-test
+    # load chains for viewing on genome-test
     ssh hgwdev
     cd /cluster/data/hg18/bed/blastz.panTro2/axtChain
     set chain = hg18.panTro2.rbest.chain
-    set net = hg18.panTro2.rbest.net
-    cat rBestNet/* | \
-        netClass -verbose=0 -noAr stdin hg18 panTro2 $net
-    netFilter -minGap=10 $net | hgLoadNet -verbose=0 netHg18 panTro2 stdin
-    cd chain
+    # skip for now -- load by request
+    cd rBestChain
+cat > loadRBestChain.csh << 'EOF'
+    date
     foreach c (`awk '{print $1;}' /cluster/bluearc/hg18/chrom.sizes`)
+        echo $c
         set f = $c.chain
         if (! -e $f) then
           echo no chains for $c
           set f = /dev/null
         endif
-        hgLoadChain panTro2 ${c}_chainHg18 $f
+        hgLoadChain hg18 ${c}_chainRBestPanTro2 $f
     end
+    date
+'EOF'
+    cd ..
+    #end skip for now
+
     gzip $net
 
     # link to downloads
@@ -1259,13 +1338,13 @@ TMPDIR=/scratch/tmp
     ln -s $d/axtChain/$chain.gz .
     ln -s $d/axtChain/$net.gz .
     mkdir axtRBestNet
-    ln -s $dir/axtRBestNet/*.axt.gz axtRBestNet
+    ln -s /cluster/data/hg18/bed/blastz.panTro2/axtRBestNet/*.axt.gz axtRBestNet
     # edit README.txt
 
     # cleanup
     cd /cluster/data/hg18/bed/blastz.panTro2/axtChain
     rm -f rbest.noClass.net panTro2ToHg18.swap.chain
-    rm -fr rBestNet swapChain
+    rm -fr swapChain rBestChain rBestNet 
 
 
 ########################
@@ -1411,6 +1490,12 @@ TMPDIR=/scratch/tmp
         -continue=download \
         `pwd`/DEF >&! blastz.download.chr9.out &
 
+    featureBits panTro2 chainRheMac2Link >&! chainRheMac2Link.fb
+        # 2452377221 bases of 2909512873 (84.288%) in intersection
+
+    # NOTE: had to run this on kolossus as hgwdev ran out of mem.
+    # (needed to push chromInfo and chr*_gap tables over first).
+
     # swap alignments after chr9 fix
     ssh pk
     rm -fr /cluster/data/rheMac2/bed/blastz.panTro2.swap
@@ -1546,6 +1631,9 @@ TMPDIR=/scratch/tmp
         `pwd`/DEF >&! blastz.net.chr9.out &
     # done
 
+    featureBits panTro2 chainCanFam2Link > chainCanFam2Link.fb
+        # 1516576565 bases of 2909512873 (52.125%) in intersection
+
 
 #########################################################################
 # BLASTZ galGal2 (2006-03-18 kate)
@@ -1656,6 +1744,9 @@ TMPDIR=/scratch/tmp
         -bigClusterHub=pk -workhorse=kkr7u00 \
         -continue=net \
         `pwd`/DEF >&! blastz.net.chr9.out &
+    
+    featureBits panTro2 chainGalGal2Link > chainGalGal2Link.fb
+        # 79103883 bases of 2909512873 (2.719%) in intersection
 
 
 ############################################################################
@@ -1766,7 +1857,6 @@ TMPDIR=/scratch/tmp
     ln -s blastz.rn4.swap /cluster/data/panTro2/bed/blastz.rn4
 
 
-
 ############################################################################
 ### swap of Mm8 alignments - (DONE - 2006-03-30 - Hiram)
     ssh pk
@@ -1785,3 +1875,16 @@ TMPDIR=/scratch/tmp
 	> fb.panTro2.chainMm8Link
     # XXXX first time was:
     #	986978326 bases of 2909512873 (33.922%) in intersection
+
+
+
+
+############################################################################
+# SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM PANTRO1  (2006-03-13 kate)
+
+    ssh kkr1u00
+    cd /cluster/data/panTro2/bed
+    mkdir liftOver
+    cd liftOver
+    makeLoChain-split panTro2 /cluster/data/panTro2/nib >&! split.log &
+
