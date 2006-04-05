@@ -9,7 +9,7 @@
 #include "genePred.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: assessLibs.c,v 1.5 2004/09/17 03:17:19 kent Exp $";
+static char const rcsid[] = "$Id: assessLibs.c,v 1.6 2006/04/05 14:19:55 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -114,9 +114,8 @@ void assessLibsOnChroms(struct slName *chromList, char *refTrack, struct libEstH
 {
 struct slName *chrom;
 struct dnaSeq *seq;
-struct genePred *gpList = NULL, *gp;
-struct psl *estList, *est;
-struct libStats *stats;
+struct genePred *gpList = NULL;
+struct psl *estList;
 struct libEstHash *lib;
 Bits *bits = NULL;
 
