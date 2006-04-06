@@ -11,6 +11,8 @@ CREATE TABLE mafSummary (
     chromEnd int unsigned not null,	# End position in chromosome
     src varchar(255) not null,	# Sequence name or database of alignment
     score float not null,	# Floating point score.
+    leftStatus char(1) not null,    # Gap/break annotation for preceding block
+    rightStatus char(1) not null,   # Gap/break annotation for following block
               #Indices
     INDEX(chrom(20),bin),
     INDEX(chrom(20),chromStart),
