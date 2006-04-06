@@ -38,7 +38,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.7 2006/04/05 23:12:38 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.8 2006/04/06 17:42:25 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -90,7 +90,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     chromStart = sqlUnsigned(row[1]);
     chromEnd = sqlUnsigned(row[2]);
     span = chromEnd - chromStart;
-    if (span != strlen(allele)) continue;
+    if (span != strlen(row[5])) continue;
 
     loc_type = sqlUnsigned(row[3]);
 
