@@ -7554,3 +7554,175 @@ mkdir -p ${blatDir}/{over,net}
 ssh hgwdev
 knownToVisiGene hg18 -fromProbePsl=vgAllProbes
 
+
+##############################################################################
+# BLASTZ CHIMP PanTro1 second time (STARTED - 2006-01-05, DONE 2006-01-13 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzPanTro1.2006-01-05
+    cd /cluster/data/hg18/bed
+    rm blastz.panTro1
+    ln -s blastzPanTro1.2006-01-05 blastz.panTro1
+    cd blastzPanTro1.2006-01-05
+
+    cat << '_EOF_' > DEF
+# human vs chimp
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/hg18.2bit
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+
+# QUERY: Chimp PanTro1 - single chunk big enough to run entire genome
+SEQ2_DIR=/san/sanvol1/scratch/panTro1/panTro1.2bit
+SEQ2_LEN=/scratch/hg/panTro1/chrom.sizes
+SEQ2_CHUNK= 30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzPanTro1.2006-01-05
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+screen
+bash
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-workhorse=pk \
+-stop=load \
+`pwd`/DEF > load.out 2>&1 &
+# Started Thu Jan  5 11:26:45 PST 2006
+# Encountered an error at the net step:
+
+startStep: 0, at step 5 net to stopStep 6
+# chmod a+x /cluster/data/hg18/bed/blastzPanTro1.2006-01-05/axtChain/netChains.csh
+# ssh -x pk nice /cluster/data/hg18/bed/blastzPanTro1.2006-01-05/axtChain/netChains.csh
+cd /cluster/data/hg18/bed/blastzPanTro1.2006-01-05/axtChain
+chainPreNet hg18.panTro1.all.chain.gz /scratch/hg/hg18/chrom.sizes /scratch/hg/panTro1/chrom.sizes stdout
+chainNet stdin -minSpace=1 /scratch/hg/hg18/chrom.sizes /scratch/hg/panTro1/chrom.sizes stdout /dev/null
+netSyntenic stdin noClass.net
+Got 49 chroms in /scratch/hg/hg18/chrom.sizes, 52 in /scratch/hg/panTro1/chrom.sizes
+Finishing nets
+writing stdout
+writing /dev/null
+memory usage 363347968, utime 1042 s/100, stime 56
+netChainSubset -verbose=0 noClass.net hg18.panTro1.all.chain.gz stdout
+chainSort stdin stdout
+gzip -c
+Out of memory needMem - request size 6 bytes
+
+gzip: stdout: Broken pipe
+Command failed:
+ssh -x pk nice /cluster/data/hg18/bed/blastzPanTro1.2006-01-05/axtChain/netChains.csh
+
+# 1/9/06, Retry again
+
+ssh pk
+cd /cluster/data/hg18/bed
+cd blastzPanTro1.2006-01-05
+screen
+bash
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-workhorse=pk \
+-continue=net \
+-stop=load \
+`pwd`/DEF > load2.out 2>&1 &
+
+# Same error.
+
+# Try with kolossus
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-continue=net \
+-stop=load \
+`pwd`/DEF > load3.out 2>&1 &
+
+# Still have problems, which seem to be related to the
+# wrong $MACHTYPE and $PATH on kolossus.  Updated my .cshrc
+
+# Did the following manually on kolossus:
+
+# vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+/cluster/bin/x86_64/netChainSubset -verbose=0 noClass.net hg18.panTro1.all.chain.gz stdout | chainSort stdin stdout | gzip -c > hg18.panTro1.over.chain.gz
+
+mkdir -p /cluster/data/hg18/bed/liftOver
+cp -p hg18.panTro1.over.chain.gz /cluster/data/hg18/bed/liftOver/hg18ToPanTro1.over.chain.gz
+
+# Make axtNet for download: one .axt per hg18 seq.
+netSplit noClass.net net
+cd ..
+mkdir axtNet
+foreach f (axtChain/net/*.net)
+netToAxt $f axtChain/chain/$f:t:r.chain \
+  /scratch/hg/hg18/hg18.2bit /san/sanvol1/scratch/panTro1/panTro1.2bit stdout \
+  | axtSort stdin stdout \
+  | gzip -c > axtNet/$f:t:r.hg18.panTro1.net.axt.gz
+end
+
+# Make mafNet for multiz: one .maf per hg18 seq.
+mkdir mafNet
+foreach f (axtNet/*.hg18.panTro1.net.axt.gz)
+  axtToMaf -tPrefix=hg18. -qPrefix=panTro1. $f \
+        /scratch/hg/hg18/chrom.sizes /scratch/hg/panTro1/chrom.sizes \
+        stdout \
+  | gzip -c > mafNet/$f:t:r:r:r:r:r.maf.gz
+end
+
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ above by hand.
+
+ssh pk
+cd /cluster/data/hg18/bed
+cd blastzPanTro1.2006-01-05
+
+screen
+bash 
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-continue=load \
+-stop=load \
+`pwd`/DEF > load4.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-swap -stop=load \
+`pwd`/DEF > swap-load.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-continue=download \
+`pwd`/DEF > download.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-swap -continue=download \
+`pwd`/DEF > swap-download.out 2>&1 &
+
+# Measurements:
+
+# Go to kolossus to run featureBits to avoid out of memory problem.
+
+ssh kolossus
+bash
+
+time HGDB_CONF=~/.hg.conf.read-only featureBits panTro1 chainHg18Link 
+# 2641472125 bases of 2733948177 (96.617%) in intersection
+
+time HGDB_CONF=~/.hg.conf.read-only featureBits hg18 chainPanTro1Link 
+# 2681146909 bases of 2881515245 (93.046%) in intersection
+
+time HGDB_CONF=~/.hg.conf.read-only featureBits panTro1 chainHg17Link 
+# 0 bases of 2733948177 (0.000%) in intersection
+
+time HGDB_CONF=~/.hg.conf.read-only featureBits hg17 chainPanTro1Link 
+# 2633869032 bases of 2866216770 (91.894%) in intersection
+
