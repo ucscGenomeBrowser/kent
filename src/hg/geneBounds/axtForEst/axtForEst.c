@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: axtForEst.c,v 1.4 2003/05/06 07:22:17 kate Exp $";
+static char const rcsid[] = "$Id: axtForEst.c,v 1.5 2006/04/06 15:59:47 angie Exp $";
 
 char *clChrom = "all";
 char *track = "est";
@@ -26,10 +26,10 @@ errAbort(
   "options:\n"
   "   -chrom=chrN - restrict to a specific chromosome\n"
   "   -track=track - Use a track other than est\n"
-  "   -lib=libWildCard (SQL format where % is like * normally)\n"
+  "   -lib=libWildCard (SQL format where %% is like * normally)\n"
   "   -refSeq - Don't correct indels in EST, treat as refSeq\n"
   "To get MGC est's for Dec 2001 human do:\n"
-  "axtForEst hg10 ~/bz/axtBest mgcEst.axt -track=tightEst -lib=NIH_MGC%\n"
+  "axtForEst hg10 ~/bz/axtBest mgcEst.axt -track=tightEst -lib=NIH_MGC%%\n"
   );
 }
 
@@ -248,7 +248,6 @@ int qSize = psl->qSize;
 int tSize = psl->tSize;
 static struct axt axt;
 int qLastEnd = 0;
-int blockIx;
 struct mrnaBlock *mbList, *mb;
 int genoOffset = psl->tStart;
 boolean isRc = FALSE;
