@@ -36,32 +36,32 @@ build 125, available from
       <A name="LocType"></A>
       <B>Location Type</B>: Describes the alignment of the flanking sequence<BR>
       <UL>
-        <LI><B>Range</B> - The flank alignments leaves a gap of 2 or more bases.
-        <LI><B>Exact</B> - The flank alignments leaves exactly one base between them.
+        <LI><B>Range</B> - The flank alignment leaves a gap of 2 or more bases in the reference assembly.
+        <LI><B>Exact</B> - The flank alignments leave exactly one base between them.
         <LI><B>Between</B> - The flank alignments are contiguous; the variation is an insertion. 
-        <LI><B>RangeInsertion</B> - The flank alignments surround distinct polymorphism between
-	                            submitted sequence and reference assembly.    
+        <LI><B>RangeInsertion</B> - The flank alignments surround a distinct polymorphism between
+	                            the submitted sequence and reference assembly.    
 				    The submitted sequence is shorter.
-        <LI><B>RangeSubstitution</B> - The flank alignments surround distinct polymorphism between
-	                            submitted sequence and reference assembly.    
+        <LI><B>RangeSubstitution</B> - The flank alignments surround a distinct polymorphism between
+	                            the submitted sequence and reference assembly.    
 				    The submitted sequence and the reference assembly sequence are of equal length.
-        <LI><B>RangeDeletion</B> - The flank alignments surround distinct polymorphism between
-	                            submitted sequence and reference assembly.    
+        <LI><B>RangeDeletion</B> - The flank alignments surround a distinct polymorphism between
+	                           the submitted sequence and reference assembly.    
 				    The submitted sequence is longer.
       </UL>
     </LI>
     <LI>
       <A name="Class"></A>
-      <B>Variant Class</B>: Variant classification<BR>
+      <B>Variant Class</B>: Describes the observed alleles<BR>
       <UL>
         <LI><B>Single</B> - single nucleotide variation: all observed alleles are single nucleotides
 	    (can have 2, 3 or 4 alleles)
-        <LI><B>Insertion</B> - insertion variation
-        <LI><B>Deletion</B> - deletion variation
+        <LI><B>Insertion</B> - the polymorphism is an insertion relative to the reference assembly
+        <LI><B>Deletion</B> - the polymorphism i a deletion relative to the reference assembly
         <LI><B>In-del</B> - insertion/deletion (applies to RangeInsertion, RangeSubstitution, RangeDeletion)
-        <LI><B>Mixed</B> - multiple observations at the same locus
-        <LI><B>Named</B> - named variation
-        <LI><B>Microsatellite</B> - microsatellite variation
+        <LI><B>Mixed</B> - multiple polymorphisms at the same locus
+        <LI><B>Named</B> - the observed allele from dbSnp is given as a text name
+        <LI><B>Microsatellite</B> - the polymorphism is a short tandem repeat
         <LI><B>Unknown</B> - no classification provided by data contributor
       </UL>
     </LI>
@@ -73,12 +73,12 @@ build 125, available from
 	target="_blank">Validation Status</A></B>: Method used to validate
 	the variant (<I>each variant may be validated by more than one method</I>)<BR>
         <UL>
-        <LI><B>By Frequency</B> - at least one subsnp in cluster has frequency data submitted
+        <LI><B>By Frequency</B> - at least one submitted SNP in cluster has frequency data submitted
         <LI><B>By Cluster</B> - cluster has 2+ submissions, with 1+ submissions assayed with a non-computational method
-        <LI><B>By Submitter</B> - at least one ss in cluster was validated by independent assay
+        <LI><B>By Submitter</B> - at least one submitter SNP in cluster was validated by independent assay
         <LI><B>By 2 Hit/2 Allele</B> - all alleles have been observed in 2+ chromosomes
         <LI><B>By HapMap</B> - validated by HapMap project
-        <LI><B>Unknown</B> - no validation has been reported for this refSNP
+        <LI><B>Unknown</B> - no validation has been reported for this rsId
       </UL>
     </LI>
     <LI>
@@ -88,12 +88,12 @@ build 125, available from
 	(<I>each variant may have more than one functional role</I>)<BR>
       <UL>
         <LI><B>Locus Region</B> - variation in region of gene, but not in transcript
-        <LI><B>Coding - Synonymous</B> - no change in peptide for allele with respect to contig seq
-        <LI><B>Coding - Non-Synonymous</B> - change in peptide with respect to contig sequence
+        <LI><B>Coding - Synonymous</B> - no change in peptide for allele with respect to reference assembly
+        <LI><B>Coding - Non-Synonymous</B> - change in peptide for allele with respect to reference assembly
         <LI><B>Untranslated</B> - variation in transcript, but not in coding region interval
         <LI><B>Intron</B> - variation in intron, but not in first two or last two bases of intron
         <LI><B>Splice Site</B> - variation in first two or last two bases of intron
-        <LI><B>Reference</B> - allele observed in reference contig sequence
+        <LI><B>Reference</B> - allele observed in reference sequence
         <LI><B>Unknown</B> - no known functional classification
       </UL>
     </LI>
@@ -120,19 +120,19 @@ build 125, available from
       to the reference assembly.
       Location type 'between' are insertions relative to the
       reference assembly.</LI>
+  <LI>We check that the size of the dbSnp reference allele matches the coordinate span.</LI>
   <LI>We compare the dbSNP reference allele to our reference allele,
       and note differences.   We also note if the difference is specifically
       that the dbSNP reference allele is the reverse complement.</LI>
-  <LI>We note tri-allelic and quad-allelic single-base substitutions.</LI>
-  <LI>We note if the observed alleles have an unexpected format.</LI>
-  <LI>For simple deletions, we check that the observed allele 
-      matches the reference allele.</LI>
-  <LI>For single-base substitutions, we check that one of the observed
-      alleles matches the reference allele.</LI>
-  <LI>For any range location type, we check the size of the observed allele.</LI>
-  <LI>We note variants that have multiple mappings.</LI>
   <LI>For single-base substitutions, we note where the alignments of the
       flanking sequences were adjacent or had a gap of more than one base.</LI>
+  <LI>We note if the observed alleles are not available from the rs_fasta files.</LI>
+  <LI>We note if the observed alleles have an unexpected format.</LI>
+  <LI>We check that the length of the observed alleles match the coordinate span.</LI>
+  <LI>For simple deletions, we check that the observed allele matches the reference allele.</LI>
+  <LI>For single-base substitutions, we check that one of the observed alleles matches the reference allele.</LI>
+  <LI>We note tri-allelic and quad-allelic single-base substitutions.</LI>
+  <LI>We note variants that have multiple mappings.</LI>
   </UL>
 </P>
 
