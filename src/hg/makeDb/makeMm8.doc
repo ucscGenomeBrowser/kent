@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.22 2006/04/06 00:41:44 galt Exp $"
+#	"$Id: makeMm8.doc,v 1.23 2006/04/06 21:28:55 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -1307,12 +1307,12 @@ rm -fr /scratch/tmp/${root1}_${root2}
     #	real    6m15.981s
     #	-rw-rw-r--    1  197029888 Feb 22 15:37 bacEnds.psl
 
+    #	utilize the scripts from the previous build
     cp -p /cluster/data/mm7/bed/bacends/split.pl .
     cp -p /cluster/data/mm7/bed/bacends/header .
 
     time ./split.pl header < bacEnds.psl
     #	real    0m26.983s
-
 
     mv bacEnds.psl bacEnds.psl.save
     time pslSort dirs bacEnds.psl temp split
@@ -4669,13 +4669,33 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-continue=cat `pwd`/DEF > cat.out 2>&1 &
-    XXXX - running 2006-03-29
     
-    time nice -n +19 featureBits mm8 chainPanTro1Link
-    #	901276629 bases of 2567283971 (35.106%) in intersection
-    time nice -n +19 featureBits panTro2 chainMm8Link
-    #	901976621 bases of 2733948177 (32.992%) in intersection
+    #	Do not have this measurement for the first time around, tables
+    #	got loaded again before I thought of that.
+    time nice -n +19 featureBits mm8 chainPanTro2Link \
+	> fb.mm8.chainPanTro2Link
 
+    #	For panTro1 this was:
+    time nice -n +19 featureBits mm8 chainPanTro1Link \
+	> fb.mm8.chainPanTro1Link
+    #	901276629 bases of 2567283971 (35.106%) in intersection
+
+    ssh pk
+    mv /cluster/data/panTro2/bed/blastz.mm8.swap \
+	/cluster/data/panTro2/bed/blastz.mm8.swap.2006-03-21
+    mkdir /cluster/data/panTro2/bed/blastz.mm8.swap
+    cd /cluster/data/panTro2/bed/blastz.mm8.swap
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/mm8/bed/blastzPanTro2.2006-03-28/DEF \
+	> blastz.out 2>&1 &
+    #  XXX started 2006-03-30
+
+    time nice -n +19 featureBits panTro2 chainMm8Link \
+	> fb.panTro2.chainMm8Link
+    # XXXX first time was:
+    #	986978326 bases of 2909512873 (33.922%) in intersection
 
 #########################################################################
 # BLASTZ panTro2 (DONE - 2006-03-15 - Hiram)
@@ -4723,12 +4743,13 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap `pwd`/DEF > swap.out 2>&1 &
-XXXX running 2006-03-21 13:50
     
+    #	mistakenly did PanTro1 here ...  should have been PanTro2
     time nice -n +19 featureBits mm8 chainPanTro1Link
     #	901276629 bases of 2567283971 (35.106%) in intersection
-    time nice -n +19 featureBits panTro2 chainMm8Link
-    #	901976621 bases of 2733948177 (32.992%) in intersection
+    time nice -n +19 featureBits panTro2 chainMm8Link \
+	> fb.panTro2.chainMm8Link 2>&1
+    #	986978326 bases of 2909512873 (33.922%) in intersection
 
 
 #############################################################################
