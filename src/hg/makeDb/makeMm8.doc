@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.21 2006/03/29 23:54:27 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.22 2006/04/06 00:41:44 galt Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -4786,3 +4786,9 @@ TMPDIR=/scratch/tmp
 	chainSelfLink >fb.mm8.chainSelfLink 2>&1
     cat fb.mm8.chainSelfLink
     #	362483673 bases of 2567283971 (14.119%) in intersection
+
+#############################################################################
+# UPDATED mm8.knownToVisiGene (2006-04-05 galt)
+ssh hgwdev
+knownToVisiGene mm8
+

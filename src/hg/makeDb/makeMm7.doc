@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.51 2006/03/28 16:40:53 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.52 2006/04/06 00:41:44 galt Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -11828,6 +11828,10 @@ TMPDIR=/scratch/tmp
     knownToVisiGene mm7
 
 # UPDATED mm7.knownToVisiGene (2006-03-14 galt)
+ssh hgwdev
+knownToVisiGene mm7
+
+# UPDATED mm7.knownToVisiGene (2006-04-05 galt)
 ssh hgwdev
 knownToVisiGene mm7
 

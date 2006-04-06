@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.109 2006/03/14 21:43:24 galt Exp $"
+#	"$Id: makeMm6.doc,v 1.110 2006/04/06 00:41:43 galt Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -10130,6 +10130,10 @@ TMPDIR=/scratch/tmp
 	    -swap -continue download `pwd`/DEF > swap.download.out 2>&1
 
 # UPDATED mm6.knownToVisiGene (2006-03-14 galt)
+ssh hgwdev
+knownToVisiGene mm6
+
+# UPDATED mm6.knownToVisiGene (2006-04-05 galt)
 ssh hgwdev
 knownToVisiGene mm6
 

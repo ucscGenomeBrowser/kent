@@ -21014,3 +21014,12 @@ mysql> alter table snp125Exceptions add index name(name(10));
 # rsync to hgwdev
 
 # create snp125ExceptionDesc table
+
+
+############
+# UPDATE hg17 knownToVisiGene (2006-04-05 galt)
+# Create table that maps between known genes and visiGene database 
+    # mapping to other species such as mouse, zebrafish, frog
+    # requires visiGene probe track vgImageProbes be created first
+    knownToVisiGene hg17 -fromProbePsl=vgImageProbes
+

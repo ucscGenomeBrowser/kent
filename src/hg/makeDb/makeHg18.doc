@@ -7544,3 +7544,9 @@ mkdir -p ${blatDir}/{over,net}
     human/hg18/nscanGene.html    
     human/hg18/trackDb.ra
 
+##########################################################################
+# UPDATED hg18.knownToVisiGene (2006-04-05 galt)
+#  after making sure hg18.vgAllProbes was up to date (see makeVisiGene.doc)
+ssh hgwdev
+knownToVisiGene hg18 -fromProbePsl=vgAllProbes
+

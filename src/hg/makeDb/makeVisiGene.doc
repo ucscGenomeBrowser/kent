@@ -505,4 +505,13 @@ vgProbeTrack EXT working mm8
 #knownToVisiGene hg17 -fromProbePsl=vgAllProbes
 #knownToVisiGene hg18 -fromProbePsl=vgAllProbes
 
+# update text/index for visiGene
+cd hg/visiGene/vgGetText
+make alpha
+#vgGetText /usr/local/apache/cgi-bin/visiGeneData/visiGene.text mm7 hg17
+#probe has 19276 rows
+#gene has 15173 rows
+#imageProbe has 115500 rows
+
+
 ############################
