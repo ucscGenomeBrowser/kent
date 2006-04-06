@@ -1,34 +1,9 @@
 /* snpCheckAlleles
- * Write first standalone, once working
- * integrate into snpRefUCSC.
+ * Run after snpRefUCSC.
  *
- * Log 4 exceptions:
- *
- * 1) WrongRefAllelePositiveStrand
- *    orientation = 0
- *    and allele != refUCSC
- *
- *    Note an assymetry here: we are not checking
- *    allele against refUCSCReverseComp
-
- * 2) WrongRefAlleleNegativeStrand
- *    orientation = 1
- *    and allele != refUCSCReverseComp
- *    and allele != refUCSC
- *
- *    Hoping for none of these
- *   
- * 3) RefAlleleNotRevCompExactLocType
- *    orientation = 1
- *    and allele != refUCSCReverseComp
- *    and allele = refUCSC
- *    and loc_type = 2
- *
- * 4) RefAlleleNotRevCompRangeLocType
- *    orientation = 1
- *    and allele != refUCSCReverseComp
- *    and allele = refUCSC
- *    and loc_type = 1, 4, 5, 6
+ * Log 2 annotations:
+ * RefAlleleNotRevComp
+ * RefAlleleMismatch
  *
  * Use UCSC chromInfo.  */
 
@@ -38,11 +13,10 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.8 2006/04/06 17:42:25 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.9 2006/04/06 18:19:37 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
-
 
 void usage()
 /* Explain usage and exit. */
@@ -53,13 +27,10 @@ errAbort(
     "    snpCheckAlleles snpDb \n");
 }
 
-
 void writeToExceptionFile(char *chrom, char *start, char *end, char *name, char *exception)
 {
 fprintf(exceptionFileHandle, "%s\t%s\t%s\trs%s\t%s\n", chrom, start, end, name, exception);
 }
-
-
 
 void doCheckAlleles(char *chromName)
 /* check each row for exceptions */
