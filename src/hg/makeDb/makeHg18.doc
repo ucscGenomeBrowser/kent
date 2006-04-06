@@ -8748,5 +8748,8 @@ nice featureBits fr1 netHg18
 nice featureBits fr1 netHg17
 # 0 bases of 315518167 (0.000%) in intersection
 
+##################################################
 
+# For blastz runs between hg18 and other organisms, they are documented in 
+# makeMm8.doc makeRn4.doc, makeRheMac2.doc, makeDanRer3.doc.
 
