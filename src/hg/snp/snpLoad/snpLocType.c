@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.23 2006/04/05 22:46:01 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.24 2006/04/06 18:34:28 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -205,6 +205,11 @@ FILE *f;
 int chromEnd = 0;
 int chromStart = 0;
 int skipCount = 0;
+boolean randomChrom = FALSE;
+char *tmpString;
+
+tmpString = strstr(chromName, "random");
+if (tmpString != NULL) randomChrom = TRUE;
 
 safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
 safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
@@ -231,15 +236,26 @@ while ((row = sqlNextRow(sr)) != NULL)
 	continue;
 	}
 
-    if (sameString(row[2], "1") || sameString(row[2], "3"))
+    /* COORD ADJUSTMENT for between */
+    if (sameString(row[2], "3"))
         {
 	chromStart = sqlUnsigned(row[3]);
 	chromStart++;
 	chromEnd++;
-        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\n", 
-               row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6]);
+        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\n", row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6]);
 	continue;
 	}
+
+    /* COORD ADJUSTMENT for range, non-random only */
+    if (!randomChrom && sameString(row[2], "1"))
+        {
+	chromStart = sqlUnsigned(row[3]);
+	chromStart++;
+	chromEnd++;
+        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\n", row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6]);
+	continue;
+	}
+
     fprintf(f, "%s\t%s\t%s\t%d\t%s\t%s\t%s\n", 
                row[0], row[1], row[3], chromEnd, row[2], row[5], row[6]);
 
