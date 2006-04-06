@@ -43,6 +43,6 @@ cd $gbRoot
 gbCheckLock $gbRoot/var/mkdownload/run/mkdownload.lock
 
 # make downloads for everything on the rr
-databases=`gbGetDatabases etc/rr.dbs`
+databases=`gbGetDatabases etc/hgwbeta.dbs etc/rr.dbs`
 
 nice gbMakeDownload $verb -getDownloadSeqs=$downloadSeqsDays $databases
