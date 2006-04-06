@@ -5,14 +5,14 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh,v 1.5 2006/04/05 19:06:10 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh,v 1.6 2006/04/06 19:12:28 kate Exp $
 
 if ( $#argv != 4 && $#argv != 5 ) then
     echo "usage: $0 <old-assembly> <old-nibdir> <new-assembly> <new-splitdir> [.ooc-file]"
     exit 1
 endif
 
-if ($HOST != 'kk' then
+if ($HOST != 'kk') then
     echo "Must run on host kk"
     exit 1
 endif
