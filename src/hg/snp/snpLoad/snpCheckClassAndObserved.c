@@ -1,47 +1,19 @@
 /* snpCheckClassAndObserved
+ * Use UCSC chromInfo.  
  *
- * Log exceptions:
- * 
- * 0) SingleClassQuadAllelic and SingleClassTriAllelic 
+ * Check class for annotations:
+ * SingleClassBetweenLocType
+ * SingleClassRangeLocType
+ * NamedClassWrongLocType
  *
- * 1) SingleClassWrongObserved
- *    IndelClassTruncatedObserved and IndelClassObservedWrongFormat 
- *    MixedClassTruncatedObserved and MixedClassObservedWrongFormat 
- *    NamedClassObservedWrongFormat 
+ * Check observed for annotations:
+ * ObservedNotAvailable
+ * ObservedWrongFormat
+ * ObservedWrongSize
+ * ObservedMismatch
  *
- * 2) SingleClassBetweenLocType
- *    class = 'single' and loc_type = 3 (between)
- *
- *    Daryl tells me dbSNP wants to leave these as is.
- *    Probably due to submitters leaving off a base on a flank sequence.
- *
- * 3) SingleClassRangeLocType
- *    class = 'single' and loc_type = 1,4,5,6 (range)
- *
- * 4) SingleClassWrongObservedPositiveStrand
- *    SingleClassWrongObservedNegativeStrand
- *
- *    For positive strand, if the allele is not in the observed string.
- *    For negative strand, if reverseComp(allele) is not in the observed string.
- *    
- * 5) DeletionClassWrongObservedSize
- *    for class = 'deletion', compare the length 
- *    of the observed string to chromRange
- *
- * 6) DeletionClassWrongObserved
- *    observed doesn't match refUCSC or refUCSCReverseComp
- *
- * 7) NamedClassWrongLocType
- *    for class = 'named'
- *    if observed like "LARGEDELETION" then expect loc_type = 1
- *    if observed like "LARGEINSERTION" then expect loc_type = 3
- *
- *  8) NewLocTypeWrongSize 
- *     rangeInsertion should have observed shorter than span 
- *     rangeSubstitution should have observed equal to span 
- *     rangeDeletion should have observed longer than span 
-
- * Use UCSC chromInfo.  */
+ * Also note SingleClassTriAllelic and SingleClassQuadAllelic
+ */
 
 
 #include "common.h"
@@ -49,7 +21,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.22 2006/04/04 22:51:02 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.23 2006/04/06 21:44:50 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -64,13 +36,33 @@ errAbort(
     "    snpCheckClassAndObserved snpDb \n");
 }
 
-
-
-void writeToExceptionFile(char *chrom, char *start, char *end, char *name, char *exception)
+void writeToExceptionFile(char *chrom, int start, int end, int name, char *exception)
 {
-fprintf(exceptionFileHandle, "%s\t%s\t%s\trs%s\t%s\n", chrom, start, end, name, exception);
+fprintf(exceptionFileHandle, "%s\t%d\t%d\trs%d\t%s\n", chrom, start, end, name, exception);
 }
 
+void checkClass(char *chromName, int start, int end, int snp_id, int loc_type, char *class, char *observed)
+{
+char *subString = NULL;
+/* SingleClass should be loc_type 2 */
+if (sameString(class, "single"))
+    {
+    if (loc_type == 1 || loc_type == 4 || loc_type == 5 || loc_type == 6)
+        writeToExceptionFile(chromName, start, end, snp_id, "SingleClassRangeLocType");
+    if (loc_type == 3)
+        writeToExceptionFile(chromName, start, end, snp_id, "SingleClassBetweenLocType");
+    }
+
+if (sameString(class, "named"))
+    {
+    subString = strstr(observed, "LARGEINSERTION");
+    if (subString != NULL && loc_type != 3)
+            writeToExceptionFile(chromName, start, end, snp_id, "NamedClassWrongLocType");
+    subString = strstr(observed, "LARGEDELETION");
+    if (subString != NULL && loc_type != 1)
+        writeToExceptionFile(chromName, start, end, snp_id, "NamedClassWrongLocType");
+    }
+}
 
 boolean triAllelic(char *observed)
 {
@@ -98,133 +90,158 @@ if (sameString(observed, "G/T")) return TRUE;
 return FALSE;
 }
 
-void checkSingleObserved(char *chromName, char *start, char *end, char *rsId, char *observed)
-/* check for exceptions in single class */
+boolean iupac(char *observed)
 {
-if (quadAllelic(observed))
-    {
-    fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "SingleClassQuadAllelic");
-    return;
-    }
-
-if (triAllelic(observed))
-    {
-    fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "SingleClassTriAllelic");
-    return;
-    }
-
-if (validSingleObserved(observed)) return;
-
-fprintf(exceptionFileHandle, 
-        "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "SingleClassWrongObserved");
-
+int pos = strcspn(observed, "ACGT-/");
+if (pos != 0) return TRUE;
+return FALSE;
 }
 
-void checkIndelObserved(char *chromName, char *start, char *end, char *rsId, char *observed)
-/* Check for exceptions in in-del class. */
+boolean checkObservedFormat(char *chromName, int start, int end, int snp_id, int loc_type, char *class, char *observed)
+/* return TRUE if format is valid so downstream checks can continue */
+{
+/* Single class */
+if (sameString(class, "single"))
+    {
+    if (quadAllelic(observed))
+        {
+        writeToExceptionFile(chromName, start, end, snp_id, "SingleClassQuadAllelic");
+        return TRUE;
+	}
+    if (triAllelic(observed))
+        {
+        writeToExceptionFile(chromName, start, end, snp_id, "SingleClassTriAllelic");
+        return TRUE;
+	}
+    if (validSingleObserved(observed)) return TRUE;
+    writeToExceptionFile(chromName, start, end, snp_id, "ObservedWrongFormat");
+    return FALSE;
+    }
+
+/* In-dels */
 /* First char should be dash, second char should be forward slash. */
-/* To do: no IUPAC */
-{
-int slashCount = 0;
-
-if (strlen(observed) < 2)
+/* Only one forward slash. */
+/* No IUPAC. */
+if (sameString(class, "deletion") || sameString(class, "insertion") || sameString(class, "in-del"))
     {
-    fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "IndelClassTruncatedObserved");
+    int slashCount = chopString(observed, "/", NULL, 0);
+
+    if (strlen(observed) < 2 || slashCount > 2 || observed[0] != '-' || observed[1] != '/' || iupac(observed))
+        {
+        writeToExceptionFile(chromName, start, end, snp_id, "ObservedWrongFormat");
+        return FALSE;
+        }
+    return TRUE;
+    }
+
+/* Named. */
+if (sameString(class, "named"))
+    {
+    if (observed[0] != '(')
+        {
+        writeToExceptionFile(chromName, start, end, snp_id, "ObservedWrongFormat");
+	return FALSE;
+	}
+    return TRUE;
+    }
+
+/* Mixed. */
+if (sameString(class, "mixed"))
+    {
+    int slashCount = chopString(observed, "/", NULL, 0);
+    if (strlen(observed) < 2 || slashCount < 3 || observed[0] != '-' || observed[1] != '/' || iupac(observed))
+        {
+        writeToExceptionFile(chromName, start, end, snp_id, "ObservedWrongFormat");
+        return FALSE;
+        }
+    return TRUE;
+    }
+
+/* Microsat. */
+return TRUE;
+}
+
+boolean checkObservedSize(char *chromName, int start, int end, int snp_id, int loc_type, char *class, char *observed)
+/* This only applies to loc_type range. */
+{
+int observedLen = strlen(observed);
+int span = end - start;
+
+if (loc_type == 2 || loc_type == 3) return TRUE;
+
+/* start with simple deletions */
+/* class is deletion if and only if loc_type is 1 */
+if (sameString(class, "deletion") && loc_type == 1)
+    {
+    observedLen = observedLen - 2;
+    if (observedLen != span)
+        {
+        writeToExceptionFile(chromName, start, end, snp_id, "ObservedWrongSize");
+	return FALSE;
+	}
+    return TRUE;
+    }
+
+/* loc_type 4,5,6 */
+/* only check for class = 'in-del' */
+if (!sameString(class, "in-del")) return TRUE;
+if (loc_type == 4 && observedLen >= span)
+    {
+    writeToExceptionFile(chromName, start, end, snp_id, "ObservedWrongSize");
+    return FALSE;
+    }
+if (loc_type == 5 && observedLen != span)
+    {
+    writeToExceptionFile(chromName, start, end, snp_id, "ObservedWrongSize");
+    return FALSE;
+    }
+
+if (loc_type == 6 && observedLen <= span)
+    {
+    writeToExceptionFile(chromName, start, end, snp_id, "ObservedWrongSize");
+    return FALSE;
+    }
+return TRUE;
+}
+
+
+void checkObservedAgainstReference(char *chromName, int start, int end, int snp_id, int loc_type, char *class, 
+                                   char *observed, char *refUCSC, char *refUCSCReverseComp, int orientation)
+{
+char *refAllele = NULL;
+char *subString = NULL;
+
+if (orientation == 0)
+   refAllele = cloneString(refUCSC);
+else
+   refAllele = cloneString(refUCSCReverseComp);
+
+if (sameString(class, "single") && loc_type == 2 && strlen(refUCSC) == 1)
+    {
+    subString = strstr(observed, refAllele);
+    if (subString == NULL)
+        writeToExceptionFile(chromName, start, end, snp_id, "ObservedMismatch");
     return;
     }
 
-slashCount = chopString(observed, "/", NULL, 0);
-
-if (slashCount > 2)
-    fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "IndelClassObservedWrongFormat" );
-
-if (observed[0] != '-' || observed[1] != '/')
-    fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "IndelClassObservedWrongFormat");
-}
-
-void checkMixedObserved(char *chromName, char *start, char *end, char *rsId, char *observed)
-/* Check for exceptions in mixed class. */
-/* should be multi-allelic */
-/* To do: no IUPAC */
-{
-int slashCount = 0;
-
-if (strlen(observed) < 2)
+if (sameString(class, "deletion") && loc_type == 1)
     {
-    fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "MixedClassTruncatedObserved");
+    subString = cloneString(observed);
+    subString = subString + 2;
+    if (!sameString(subString, refAllele))
+        writeToExceptionFile(chromName, start, end, snp_id, "ObservedMismatch");
     return;
     }
 
-if (observed[0] != '-' || observed[1] != '/')
+if (sameString(class, "in-del") && loc_type == 5)
     {
-    fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "MixedClassObservedWrongFormat");
-    return;
+    subString = cloneString(observed);
+    subString = subString + 2;
+    if (sameString(subString, refAllele))
+        writeToExceptionFile(chromName, start, end, snp_id, "RangeSubstitutionLocTypeExactMatch");
     }
 
-slashCount = chopString(observed, "/", NULL, 0);
-if (slashCount < 3)
-    fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "MixedClassObservedWrongFormat");
-
-}
-
-void checkNamedObserved(char *chromName, char *start, char *end, char *rsId, char *observed)
-/* Check for exceptions in named class. */
-/* Should be (name). */
-{
-
-if (observed[0] != '(')
-    fprintf(exceptionFileHandle, 
-            "%s\t%s\t%s\trs%s\t%s\n", chromName, start, end, rsId, "NamedClassObservedWrongFormat");
-}
-
-
-void doCheck(char *chromName)
-/* simple checks: 
-   "SingleClassQuadAllelic" and "SingleClassTriAllelic" 
-   "SingleClassWrongObserved" 
-   "IndelClassTruncatedObserved" and "IndelClassObservedWrongFormat" 
-   "MixedClassTruncatedObserved" and "MixedClassObservedWrongFormat" 
-   "NamedClassObservedWrongFormat" 
-*/
-
-{
-char query[512];
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char **row;
-char tableName[64];
-
-safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
-if (!hTableExists(tableName)) return;
-
-verbose(1, "chrom = %s\n", chromName);
-safef(query, sizeof(query), "select snp_id, chromStart, chromEnd, class, observed from %s", tableName);
-
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (sameString(row[4], "unknown")) continue;
-    if (sameString(row[4], "lengthTooLong")) continue;
-    if (sameString(row[3], "single"))
-	checkSingleObserved(chromName, row[1], row[2], row[0], row[4]);
-    if (sameString(row[3], "insertion") || sameString(row[3], "deletion"))
-	checkIndelObserved(chromName, row[1], row[2], row[0], row[4]);
-    if (sameString(row[3], "mixed"))
-        checkMixedObserved(chromName, row[1], row[2], row[0], row[4]);
-    if (sameString(row[3], "named"))
-        checkNamedObserved(chromName, row[1], row[2], row[0], row[4]);
-    }
-
-sqlFreeResult(&sr);
-hFreeConn(&conn);
+/* todo here: check rangeInsertion and rangeDeletion for substring matches at start and end of observed */
 }
 
 void doCheckWithLocType(char *chromName)
@@ -235,107 +252,48 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char tableName[64];
+
+int snp_id = 0;
+int chromStart = 0;
+int chromEnd = 0;
 int loc_type = 0;
-int observedLen = 0;
-int span = 0;
-char *subString = NULL;
-int slashCount = 0;
-char *allele = NULL;
+char *class = NULL;
+char *observed = NULL;
+char *refUCSC = NULL;
+char *refUCSCReverseComp = NULL;
+int orientation = 0;
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 if (!hTableExists(tableName)) return;
 
 verbose(1, "chrom = %s\n", chromName);
 safef(query, sizeof(query), 
-    "select snp_id, chromStart, chromEnd, loc_type, class, observed, refUCSC, refUCSCReverseComp, allele, orientation from %s", tableName);
+    "select snp_id, chromStart, chromEnd, loc_type, class, observed, refUCSC, refUCSCReverseComp, orientation from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    snp_id = sqlUnsigned(row[0]);
+    chromStart = sqlUnsigned(row[1]);
+    chromEnd = sqlUnsigned(row[2]);
     loc_type = sqlUnsigned(row[3]);
+    class = cloneString(row[4]);
+    observed = cloneString(row[5]);
+    refUCSC = cloneString(row[6]);;
+    refUCSCReverseComp = cloneString(row[7]);
+    orientation = sqlUnsigned(row[8]);
 
-    /* SingleClass */
-    if (sameString(row[4], "single"))
+    checkClass(chromName, chromStart, chromEnd, snp_id, loc_type, class, observed);
+
+    if (sameString(observed, "unknown") || sameString(observed, "lengthTooLong"))
         {
-        if (loc_type == 1 || loc_type == 4 || loc_type == 5 || loc_type == 6)
-            writeToExceptionFile(chromName, row[1], row[2], row[0], "SingleClassRangeLocType");
-        if (loc_type == 3)
-            writeToExceptionFile(chromName, row[1], row[2], row[0], "SingleClassBetweenLocType");
-	if (loc_type == 2)
-	    {
-	    allele = cloneString(row[8]);
-	    /* allele from NCBI should be reverse complemented already */
-	    subString = strstr(row[5], allele);
-            if (subString == NULL)
-	        {
-	        if (sameString(row[9], "0"))
-                    writeToExceptionFile(chromName, row[1], row[2], row[0], 
-		                         "SingleClassWrongObservedPositiveStrand");
-		else
-                    writeToExceptionFile(chromName, row[1], row[2], row[0], 
-		                         "SingleClassWrongObservedNegativeStrand");
-		}
-	    }
+        writeToExceptionFile(chromName, chromStart, chromEnd, snp_id, "ObservedNotAvailable");
+	continue;
 	}
 
-    /* for everything downstream, we need a valid observed */
-    if (sameString(row[5], "unknown")) continue;
-
-    /* NamedClassWrongLocType */
-    if (sameString(row[4], "named"))
-        {
-	subString = strstr(row[5], "LARGEINSERTION");
-	if (subString != NULL && loc_type != 3)
-            writeToExceptionFile(chromName, row[1], row[2], row[0], "NamedClassWrongLocType");
-        subString = strstr(row[5], "LARGEDELETION");
-	if (subString != NULL && loc_type != 1)
-            writeToExceptionFile(chromName, row[1], row[2], row[0], "NamedClassWrongLocType");
-        }
-
-    /* DeletionClass */
-    if (sameString(row[4], "deletion") && loc_type < 3)
-        {
-        /* DeletionClassWrongObservedSize */
-	observedLen = strlen(row[5]);
-	observedLen = observedLen - 2;
-	span = sqlUnsigned(row[2]) - sqlUnsigned(row[1]);
-	if (observedLen != span)
-	    {
-            writeToExceptionFile(chromName, row[1], row[2], row[0], "DeletionClassWrongObservedSize");
-	    continue;
-	    }
-
-	/* DeletionClassWrongObserved */
-        subString = cloneString(row[5]);
-	if (strlen(subString) < 2) continue;
-	if (subString[0] != '-' || subString[1] != '/') continue;
-	slashCount = chopString(subString, "/", NULL, 0);
-	if (slashCount > 2) continue;
-	subString = subString + 2;
-	if (!sameString(subString, row[6]))
-            writeToExceptionFile(chromName, row[1], row[2], row[0], "DeletionClassWrongObserved");
-	}
-
-    /* NewLocType */
-    /* could also check if observed is subset of allele at one end */
-    subString = cloneString(row[5]);
-    if (strlen(subString) < 2) continue;
-    if (subString[0] != '-' || subString[1] != '/') continue;
-    slashCount = chopString(subString, "/", NULL, 0);
-    if (slashCount > 2) continue;
-    subString = subString + 2;
-    observedLen = strlen(row[5]);
-    observedLen = observedLen - 2;
-    span = sqlUnsigned(row[2]) - sqlUnsigned(row[1]);
-    if (loc_type == 4 && sameString(row[4], "in-del") && observedLen >= span)
-        writeToExceptionFile(chromName, row[1], row[2], row[0], "NewLocTypeWrongSize");
-    if (loc_type == 5 && sameString(row[4], "in-del") && observedLen != span)
-        writeToExceptionFile(chromName, row[1], row[2], row[0], "NewLocTypeWrongSize");
-    if (loc_type == 5 && sameString(row[4], "in-del") && sameString(subString, row[8]))
-        writeToExceptionFile(chromName, row[1], row[2], row[0], "RangeSubstitutionLocTypeExactMatch");
-    if (loc_type == 6 && sameString(row[4], "in-del") && observedLen <= span)
-        writeToExceptionFile(chromName, row[1], row[2], row[0], "NewLocTypeWrongSize");
-
+    if(!checkObservedFormat(chromName, chromStart, chromEnd, snp_id, loc_type, class, observed)) continue;
+    if(!checkObservedSize(chromName, chromStart, chromEnd, snp_id, loc_type, class, observed)) continue;
+    checkObservedAgainstReference(chromName, chromStart, chromEnd, snp_id, loc_type, class, observed, refUCSC, refUCSCReverseComp, orientation);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -357,11 +315,7 @@ chromList = hAllChromNamesDb(snpDb);
 
 exceptionFileHandle = mustOpen("snpCheckClassAndObserved.exceptions", "w");
 
-verbose(1, "simple checks...\n");
-for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
-    doCheck(chromPtr->name);
- 
-verbose(1, "check against locType...\n");
+verbose(1, "checking class and observed ...\n");
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     doCheckWithLocType(chromPtr->name);
 
