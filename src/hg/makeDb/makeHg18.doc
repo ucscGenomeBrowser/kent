@@ -8753,3 +8753,35 @@ nice featureBits fr1 netHg17
 # For blastz runs between hg18 and other organisms, they are documented in 
 # makeMm8.doc makeRn4.doc, makeRheMac2.doc, makeDanRer3.doc.
 
+# PHASTCONS SCORES DOWNLOADABLES FOR 17WAY (2006-04-06 Fan)
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/multiz17way 
+    mkdir phastConsDownloads
+    cd phastConsDownloads
+cat > downloads.csh << 'EOF'
+    date
+    cd /san/sanvol1/scratch/hg18/multiz17way.2006-02-18/cons/pp
+    foreach chr (`awk '{print $1}' /cluster/data/hg18/chrom.sizes`)
+      echo $chr
+      cat `ls -1 $chr/$chr.*.pp | sort -t\. -k2,2n` \
+        | nice gzip -c \
+            > /cluster/data/hg18/bed/multiz17way/phastConsDownloads/$chr.gz
+    end
+    date
+'EOF'
+    csh downloads.csh >&! downloads.log &
+
+        # ~20 minutes
+    # << happy emacs
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz17way/phastConsDownloads
+    md5sum *.gz > md5sum.txt
+    set dir = /usr/local/apache/htdocs/goldenPath/hg18/phastCons17way
+    mkdir $dir
+    ln -s /cluster/data/hg18/bed/multiz17way/phastConsDownloads/{*.gz,md5sum.txt} $dir
+    cp /usr/local/apache/htdocs/goldenPath/hg17/phastCons17way/README.txt $dir
+    # edit this file to reflect the latest releases used.
+    vi $dir/README.txt
+
+
