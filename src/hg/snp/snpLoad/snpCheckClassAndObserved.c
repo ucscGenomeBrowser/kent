@@ -17,11 +17,9 @@
 
 
 #include "common.h"
-
-#include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.23 2006/04/06 21:44:50 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.24 2006/04/06 23:43:29 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -92,8 +90,12 @@ return FALSE;
 
 boolean iupac(char *observed)
 {
-int pos = strcspn(observed, "ACGT-/");
-if (pos != 0) return TRUE;
+int pos = strspn(observed, "ACGT-/");
+if (pos != strlen(observed)) 
+    {
+    verbose(1, "IUPAC detected in %s\n", observed);
+    return TRUE;
+    }
 return FALSE;
 }
 
@@ -164,7 +166,7 @@ return TRUE;
 boolean checkObservedSize(char *chromName, int start, int end, int snp_id, int loc_type, char *class, char *observed)
 /* This only applies to loc_type range. */
 {
-int observedLen = strlen(observed);
+int observedLen = strlen(observed) - 2;
 int span = end - start;
 
 if (loc_type == 2 || loc_type == 3) return TRUE;
@@ -173,7 +175,6 @@ if (loc_type == 2 || loc_type == 3) return TRUE;
 /* class is deletion if and only if loc_type is 1 */
 if (sameString(class, "deletion") && loc_type == 1)
     {
-    observedLen = observedLen - 2;
     if (observedLen != span)
         {
         writeToExceptionFile(chromName, start, end, snp_id, "ObservedWrongSize");
