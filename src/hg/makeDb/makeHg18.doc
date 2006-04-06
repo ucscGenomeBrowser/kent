@@ -912,9 +912,13 @@ warn trf/*.bed  > lu.out 2>&1
     hgCtgPos -chromLst=chrom.lst hg18 .
 
 # GOLD AND GAP TRACKS (DONE - 2005-12-10 - Fan)
-
+		      (RE-DONE - 2006-04-06 - Fan)
     ssh hgwdev
     cd /cluster/data/hg18
+
+# manually edit the 4 haplotype .agp files to change the first col from
+# contig IDs into chrom name.
+
     hgGoldGapGl -noGl -chromLst=chrom.lst hg18 /cluster/data/hg18 .
     #	Disappointing to see this create so many tables ...
     #	_gap and _gold for each chrom
