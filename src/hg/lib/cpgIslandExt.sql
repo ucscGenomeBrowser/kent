@@ -5,6 +5,7 @@
 
 #Describes the CpG Islands (includes observed/expected ratio)
 CREATE TABLE cpgIslandExt (
+    bin smallint not null,  # Bin number for browser speedup
     chrom varchar(255) not null,	# Human chromosome or FPC contig
     chromStart int unsigned not null,	# Start position in chromosome
     chromEnd int unsigned not null,	# End position in chromosome
@@ -16,6 +17,6 @@ CREATE TABLE cpgIslandExt (
     perGc float not null,	# Percentage of island that is C or G
     obsExp float not null,	# Ratio of observed(cpgNum) to expected(numC*numG/length) CpG in island
               #Indices
-    INDEX(chrom(14),chromStart),
-    INDEX(chrom(14),chromEnd)
+    INDEX(chrom(14),bin),
+    INDEX(chrom(14),chromStart)
 );
