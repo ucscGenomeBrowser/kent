@@ -9,7 +9,7 @@
 #include "twoBit.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.15 2005/08/21 04:35:30 markd Exp $";
+static char const rcsid[] = "$Id: polyInfo.c,v 1.16 2006/04/07 15:25:18 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -117,7 +117,6 @@ return count;
 void correctEst(struct psl *psl, struct dnaSeq *est, struct dnaSeq *geno)
 /* Correct bases in EST to match genome where they align. */
 {
-int sumSplice = 0;
 int i, blockCount = psl->blockCount;
 
 if (psl->strand[0] == '-')
@@ -152,7 +151,7 @@ int findSignalPos(struct psl *psl, struct dnaSeq *est, int polyASize, char *sign
 /* Return position of start of polyadenlyation signal relative to end
  * of EST. */
 {
-int i, pos;
+int pos;
 int end = est->size;
 if (polyASize > 0)
     end -= polyASize;

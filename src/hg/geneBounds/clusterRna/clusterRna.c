@@ -11,7 +11,7 @@
 #include "ggMrnaAli.h"
 #include "geneGraph.h"
 
-static char const rcsid[] = "$Id: clusterRna.c,v 1.14 2004/03/02 19:35:50 kent Exp $";
+static char const rcsid[] = "$Id: clusterRna.c,v 1.15 2006/04/07 15:25:18 angie Exp $";
 
 /* Global variables set for sorting alignments. */
 char *clusterStrand = NULL;
@@ -144,7 +144,7 @@ struct ggMrnaAli *maFromPslTable(struct sqlConnection *conn, char *table,
 	boolean isRefSeq)
 /* Load all psl's from a given table on chromosome and conver to ma's. */
 {
-struct psl *pslList, *psl;
+struct psl *pslList;
 struct ggMrnaAli *maList;
 
 pslList = loadPsls(conn, table, chromName);
@@ -307,7 +307,6 @@ void addCluster(struct ggMrnaAli *maList, struct binKeeper *bins,
 {
 struct ggMrnaAli *ma, *nextMa;
 struct ggMrnaCluster *newCluster, *oldCluster;
-struct estOrientInfo *eoi;
 struct binElement *binList = NULL, *binEl, *nextBinEl, *overlapList = NULL;
 
 for (ma = maList; ma != NULL; ma = nextMa)
@@ -332,7 +331,6 @@ for (ma = maList; ma != NULL; ma = nextMa)
     overlapList = NULL;
     for (binEl = binList; binEl != NULL; binEl = nextBinEl)
 	{
-	boolean gotOverlap = FALSE;
 	nextBinEl = binEl->next;
 	oldCluster = binEl->val;
 	overlap = exonsOverlapCluster(oldCluster, newCluster);
@@ -762,10 +760,7 @@ char **row=NULL;
 char *mgcOutFile = NULL;
 int maxPicks = optionInt("mgcNumPicks", 10);     /* How many picks to make. */
 int maxDistance = optionInt("mgcMaxDist", 100);  /* Max distance allowed from 5' end to allow. */
-int i=0;
-int clusterNumber = 0;   /* Group number for each cluster. */
-
-struct binElement *el, *list = binKeeperFindSorted(bins, 0, chromSize);
+struct binElement *list = binKeeperFindSorted(bins, 0, chromSize);
 
 /* Read mRNA table and split into hashes. */
 verbose(2, "Scanning mrna table\n");
@@ -860,7 +855,6 @@ struct hash *pslHash = newHash(20);
 struct estOrientInfo *eoiList = NULL;
 struct estOrientInfo *mRnaOiList = NULL;
 struct psl *estPslList = NULL, *mrnaPslList = NULL;
-struct ggMrnaCluster *clusterList = NULL, *cluster;
 struct binKeeper *bins = NULL;
 char *mgcOut = optionVal("MGC", NULL);
 char *rnaTable = optionVal("rna", "mrna");

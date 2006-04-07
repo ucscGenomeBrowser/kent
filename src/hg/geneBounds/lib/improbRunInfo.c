@@ -8,15 +8,14 @@
 #include "jksql.h"
 #include "improbRunInfo.h"
 
-static char const rcsid[] = "$Id: improbRunInfo.c,v 1.2 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: improbRunInfo.c,v 1.3 2006/04/07 15:25:18 angie Exp $";
 
 struct improbRunInfo *improbRunInfoLoad(char **row)
 /* Load a improbRunInfo from row fetched with select * from improbRunInfo
  * from database.  Dispose of this with improbRunInfoFree(). */
 {
 struct improbRunInfo *ret;
-int sizeOne,i;
-char *s;
+int sizeOne;
 
 AllocVar(ret);
 ret->columnCount = sqlSigned(row[9]);
