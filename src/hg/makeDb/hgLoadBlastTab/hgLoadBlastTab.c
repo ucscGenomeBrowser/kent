@@ -8,7 +8,7 @@
 #include "hgRelate.h"
 #include "blastTab.h"
 
-static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.7 2005/11/03 01:22:01 galt Exp $";
+static char const rcsid[] = "$Id: hgLoadBlastTab.c,v 1.8 2006/04/07 18:55:05 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -72,6 +72,7 @@ if (!optionExists("createOnly"))
     int count = 0;
     int qHitCount = 0;
     char lastQ[512];
+    char comment[256];
     lastQ[0] = 0;
     verbose(1, "Scanning through %d files\n", inCount);
 
@@ -103,6 +104,11 @@ if (!optionExists("createOnly"))
     conn = sqlConnect(database);
     hgLoadTabFile(conn, ".", table, &f);
     hgRemoveTabFile(".", table);
+
+    /* add a comment to the history table and finish up connection */
+    safef(comment, sizeof(comment), "Add %d blast alignments to %s table",
+	  count, table);
+    hgHistoryComment(conn, comment);
     sqlDisconnect(&conn);
     }
 }
