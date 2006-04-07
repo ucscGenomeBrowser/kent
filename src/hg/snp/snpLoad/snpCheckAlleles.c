@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.9 2006/04/06 18:19:37 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.10 2006/04/07 15:17:30 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -69,7 +69,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (sameString(row[4], "0"))
         {
         if (sameString(row[5], row[6])) continue;
-        writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleMismatchPositiveStrand");
+        writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleMismatch");
 	continue;
 	}
 
@@ -80,15 +80,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* matching non-reverse comp is useful info */
     if (sameString(row[5], row[6]))
         {
-	if (loc_type == 2)
-            writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleNotRevCompExactLocType");
-	else
-            writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleNotRevCompRangeLocType");
+        writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleNotRevComp");
         continue;
 	}
 
     /* nothing matching */
-    writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleMismatchNegativeStrand");
+    writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleMismatch");
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
