@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: twinOrf.c,v 1.5 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: twinOrf.c,v 1.6 2006/04/07 15:25:26 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -126,8 +126,6 @@ return dyno;
 void makeTransitionProbs(double **transProbLookup)
 /* Allocate transition probabilities and initialize them. */
 {
-int i, j;
-
 /* Make certain transitions reasonably likely. */
 transProbLookup[aUtr5][aUtr5] = scaledLog(0.990);
 transProbLookup[aUtr5][aKoz0] = scaledLog(0.010);
@@ -277,8 +275,8 @@ for (i=0; i<ArraySize(symToIx); ++i)
     symToIx[i] = -1;
 for (i=0; i<ArraySize(ixToSym); ++i)
     {
-    symToIx[ixToSym[i]] = i;
-    symToIx[lixToSym[i]] = i;
+    symToIx[(int)ixToSym[i]] = i;
+    symToIx[(int)lixToSym[i]] = i;
     }
 }
 
@@ -459,7 +457,7 @@ int ix = 0;
 for (i=0; i<3; ++i)
    {
    ix *= 7;
-   ix += symToIx[c[i]];
+   ix += symToIx[(int)c[i]];
    }
 return ix;
 }
@@ -481,7 +479,6 @@ void killInsertsInCodons(struct codonOdds *o)
 /* Get rid of inserts in the target.  Scale down
  * inserts in the query except for '---' */
 {
-int dashIx = symToIx['-'];
 int i1,i2,i3;
 int i,j;
 for (i1=0; i1<7; ++i1)
@@ -605,14 +602,14 @@ return td;
 double prob1(struct baseOdds *o, char q, char t)
 /* Find probability of simple q/t pair. */
 {
-return o->odds[symToIx[t]][symToIx[q]];
+return o->odds[symToIx[(int)t]][symToIx[(int)q]];
 }
 
 double probM1(struct markov1 *o, char *q, char *t)
 /* Find probability of double */
 {
-int qIx = symToIx[t[0]]*7 + symToIx[q[0]];
-int tIx = symToIx[t[1]]*7 + symToIx[q[1]];
+int qIx = symToIx[(int)t[0]]*7 + symToIx[(int)q[0]];
+int tIx = symToIx[(int)t[1]]*7 + symToIx[(int)q[1]];
 double x;
 x = o->odds[tIx][qIx];
 // uglyf("  probM1(%c%c %c%c) = %f\n", t[0], t[1], q[0], q[1], x);
@@ -628,9 +625,9 @@ double x;
 for (i=0; i<3; ++i)
     {
     qIx *= 7;
-    qIx += symToIx[q[i]];
+    qIx += symToIx[(int)q[i]];
     tIx *= 7;
-    tIx += symToIx[t[i]];
+    tIx += symToIx[(int)t[i]];
     }
 x =  o->odds[tIx][qIx];
 // uglyf("  prob3(%s %s) = %f\n", t, q, x);
@@ -683,7 +680,6 @@ double lastCodonProb(struct codonOdds *o, char *qSym, char *tSym, int symIx)
 /* Return probability of last codon. */
 {
 static char qCodon[4], tCodon[4];
-int i;
 if (!getPrevNonInsert(qSym, tSym, symIx, qCodon, tCodon, 3))
     return never;
 // uglyf("%c%c%c %c%c%c  vs %c%c%c %c%c%c\n", tSym[symIx-2], tSym[symIx-1], tSym[symIx], qSym[symIx-2], qSym[symIx-1], qSym[symIx], tCodon[0], tCodon[1], tCodon[2], qCodon[0], qCodon[1], qCodon[2]);
@@ -693,10 +689,9 @@ return prob3(o, qCodon, tCodon);
 double kozakProb(struct baseOdds *kozak[8], char *qSym, char *tSym, int symIx)
 /* Return probability of kozak consensus. */
 {
-char qs[8], ts[8], q, t;
+char qs[8], ts[8];
 double odds = 0;
 int i;
-struct baseOdds *o;
 if (!getPrevNonInsert(qSym, tSym, symIx, qs, ts, 8))
     return never;
 for (i=0; i<8; ++i)
@@ -718,7 +713,6 @@ int stateByteSize = symCount * sizeof(State);
 int i;
 int symIx;
 int scanSize = symCount;
-double reallyUnlikely = 10*never;
 double score;
 double tNotIns, tIsIns;
 

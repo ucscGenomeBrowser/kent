@@ -5,7 +5,7 @@
 #include "options.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: orfStats.c,v 1.3 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: orfStats.c,v 1.4 2006/04/07 15:25:26 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -58,10 +58,10 @@ void addPairs(int m[], DNA *dna, int start, int end)
 int i;
 int prev, cur;
 if (start == 0) start = 1;
-prev = ntVal[dna[start]];
+prev = ntVal[(int)dna[start]];
 for (i=start+1; i<end; ++i)
     {
-    cur = ntVal[dna[i]];
+    cur = ntVal[(int)dna[i]];
     if (prev >= 0 && cur >= 0)
        {
        int ix = (prev*4 + cur);
@@ -80,9 +80,9 @@ int c1,c2,c3;
 end -= 2;
 for (i=start; i<end; i += 3)
     {
-    c1 = ntVal[dna[i]];
-    c2 = ntVal[dna[i+1]];
-    c3 = ntVal[dna[i+2]];
+    c1 = ntVal[(int)dna[i]];
+    c2 = ntVal[(int)dna[i+1]];
+    c3 = ntVal[(int)dna[i+2]];
     if (c1 >= 0 && c2 >= 0 && c3 >= 0)
         {
 	int ix = c1*4*4 + c2*4 + c3;
@@ -124,7 +124,7 @@ for (i=0; i<4; ++i)
 void killCodon(int m[], char *codon)
 /* Set codon count to zero */
 {
-int ix = ntVal[codon[0]]*4*4 + ntVal[codon[1]]*4 + ntVal[codon[2]];
+int ix = ntVal[(int)codon[0]]*4*4 + ntVal[(int)codon[1]]*4 + ntVal[(int)codon[2]];
 m[ix] = 0;
 }
 
@@ -183,7 +183,6 @@ FILE *f = mustOpen(outFile, "w");
 struct dnaSeq seq;
 static int codons[4*4*4];
 static int utr5[4*4], utr3[4*4], kozak[10][4];
-int i,j;
 
 ZeroVar(&seq);
 while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
@@ -201,7 +200,7 @@ while (faSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name))
 	   {
 	   int val;
 	   ix = i + cds->cdsStart - 5;
-	   val = ntVal[seq.dna[ix]];
+	   val = ntVal[(int)(seq.dna[ix])];
 	   if (val >= 0)
 	       kozak[i][val] += 1;
 	   }
