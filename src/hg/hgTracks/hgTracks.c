@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1082 2006/04/05 00:10:41 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1083 2006/04/07 04:13:55 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3461,7 +3461,7 @@ else
 }
 
 char *refGeneMapName(struct track *tg, void *item)
-/* Return un-abbreviated genie name. */
+/* Return un-abbreviated gene name. */
 {
 struct linkedFeatures *lf = item;
 return lf->name;
@@ -3525,7 +3525,12 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     {
     struct dyString *name = dyStringNew(64);
     labelStarted = FALSE; /* reset for each item in track */
-    if ((useGeneName || useAcc || useMim) && !isNative)
+    if ((useGeneName || useAcc || useMim) && 
+            (!isNative || startsWith("panTro", database)))
+                /* special handling for chimp -- both chimp and
+                   human refSeq's are considered 'native', so we
+                   label them to distinguish */
+
         {
         char *org = getOrganismShort(conn, lf->name);
         if (org != NULL)
@@ -3951,19 +3956,7 @@ else
     linkedFeaturesDraw(tg, seqStart, seqEnd, vg, xOff, yOff, width, font, color, vis);
 }
 
-void estMethods(struct track *tg)
-/* Make track of EST methods - overrides color handler. */
-{
-tg->drawItems = linkedFeaturesAverageDenseOrientEst;
-tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
-tg->totalHeight = tgFixedTotalHeightUsingOverflow;
-}
 
-void mrnaMethods(struct track *tg)
-/* Make track of mRNA methods. */
-{
-tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
-}
 
 char *sanger22Name(struct track *tg, void *item)
 /* Return Sanger22 name. */
@@ -5501,6 +5494,24 @@ tg->loadItems = loadRefGene;
 tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
 tg->itemColor = refGeneColor;
+}
+
+void mrnaMethods(struct track *tg)
+/* Make track of mRNA methods. */
+{
+tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
+if (startsWith("panTro", database))
+    tg->itemName = xenoMrnaName;
+}
+
+void estMethods(struct track *tg)
+/* Make track of EST methods - overrides color handler. */
+{
+tg->drawItems = linkedFeaturesAverageDenseOrientEst;
+tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
+tg->totalHeight = tgFixedTotalHeightUsingOverflow;
+if (startsWith("panTro", database))
+    tg->itemName = xenoMrnaName;
 }
 
 boolean isNonChromColor(Color color)
