@@ -21,6 +21,5 @@ CREATE TABLE chr18deletions (
     largeEnds longblob not null,	# Large end positions
               #Indices
     INDEX(name),
-    INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd)
+    INDEX(chrom(8),chromStart)
 );

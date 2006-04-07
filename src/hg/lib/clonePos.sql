@@ -13,6 +13,5 @@ CREATE TABLE clonePos (
     chromEnd int unsigned not null,	# End in chromosome
               #Indices
     PRIMARY KEY(name(12)),
-    INDEX(chrom(12),chromStart),
-    INDEX(chrom(12),chromEnd)
+    INDEX(chrom(12),chromStart)
 );
