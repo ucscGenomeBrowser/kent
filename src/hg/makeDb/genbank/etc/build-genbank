@@ -23,7 +23,7 @@ cd $gbRoot
 # download and process
 cd $gbRoot
 nice gbDownloadStep
-nice gbProcessStep
+nice gbProcessStep -mkSpeciesList
 
 exec etc/align-genbank
 

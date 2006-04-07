@@ -161,7 +161,7 @@ class Pipeline(object):
 
     def close(self):
         "wait for process to complete, with an error if it exited non-zero"
-        if isRunning:
+        if self.isRunning:
             self.wait()
         if self.failExcept != None:
             raise failExcept

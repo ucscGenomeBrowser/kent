@@ -42,16 +42,14 @@
            <CODE>kent/src/hg/makeDb/genbank/</CODE>
       <UL>
       <LI> A mapping between the prefix used in the UCSC databases names
-           (e.g. <CODE>hg</CODE> of <CODE>hg13</CODE>) and the species names
+           (e.g. <CODE>hg</CODE> of <CODE>hg13</CODE>) and the organism names
            used in GenBank needs to be defined.  This is done by editing
            <CODE>genbank/src/lib/gbGenome.c</CODE> and rebuilding the programs.  It maybe
-           necessary to define multiple species name mappings.  The list of 
-           species used by GenBank can be obtained by using a command in the form:<BR>
+           necessary to define multiple organism name mappings.  A list of 
+           organism in GenBank/RefSeq, along with the count of cDNAs is in:<BR>
            <PRE>
-           cd /cluster/data/genbank/data
-           awk 'BEGIN{FS=&quot;\t&quot;}{print $4}' processed/genbank.135.0/full/*.gbidx |sort -u &gt;species.txt
+           /cluster/data/genbank/data/organism.lst
            </PRE>
-           on the latest GenBank release. 
       <LI> <CODE>cd</CODE> to the top of the genbank source (<CODE>kent/src/hg/makeDb/genbank/</CODE>)
       <LI> <CODE>make</CODE> to test if the source builds
       <LI> <CODE>make install-server</CODE> to update <CODE>/cluster/data/genbank/</CODE>.
