@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.183 2006/03/28 23:29:26 kate Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.184 2006/04/07 05:26:23 kate Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -1679,6 +1679,8 @@ if (alignCount > 0)
     char *organism = hOrganism(hgp->database);      /* dbDb organism column */
     char title[256];
     slReverse(&table->posList);
+    if (isNewChimp(hGetDb()))
+        organism = cloneString("Chimp or Human");
     safef(title, sizeof(title), "%s%s %sligned mRNA Search Results",
 			isXeno ? "Non-" : "", organism, 
 			aligns ?  "A" : "Una");
@@ -2091,10 +2093,22 @@ if (rlList != NULL)
 		AllocVar(table);
 		table->name = cloneString(hfs->searchTable);
 		if (startsWith("xeno", hfs->searchTable))
-		    safef(desc, sizeof(desc), "Non-%s RefSeq Genes",
-			  hOrganism(hGetDb()));
+                    {
+                    if (isNewChimp(hGetDb()))
+                        safef(desc, sizeof(desc), 
+                                "Non-Chimp or Human RefSeq Genes");
+                    else
+                        safef(desc, sizeof(desc), "Non-%s RefSeq Genes",
+                              hOrganism(hGetDb()));
+                    }
 		else
-		    safef(desc, sizeof(desc), "RefSeq Genes");
+                    {
+                    if (isNewChimp(hGetDb()))
+                        safef(desc, sizeof(desc), 
+                                "Chimp and Human RefSeq Genes");
+                    else
+                        safef(desc, sizeof(desc), "RefSeq Genes");
+                    }
 		table->description = cloneString(desc);
 		slAddHead(&hgp->tableList, table);
 		}
