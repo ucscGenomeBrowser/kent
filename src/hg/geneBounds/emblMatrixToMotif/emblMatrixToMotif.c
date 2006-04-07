@@ -8,7 +8,7 @@
 #include "dnaMotifSql.h"
 #include "emblParse.h"
 
-static char const rcsid[] = "$Id: emblMatrixToMotif.c,v 1.5 2005/01/27 21:01:42 baertsch Exp $";
+static char const rcsid[] = "$Id: emblMatrixToMotif.c,v 1.6 2006/04/07 14:31:22 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -107,7 +107,6 @@ void emblMatrixToMotif(char *inName, char *outName)
 struct hash *hash = NULL;
 struct lineFile *lf = emblOpen(inName, NULL);
 FILE *f = mustOpen(outName, "w");
-boolean first;
 struct dnaMotif *motif;
 
 while ((hash = emblRecord(lf)) != NULL)

@@ -11,7 +11,7 @@
 #include "refLink.h"
 #include "expRecord.h"
 
-static char const rcsid[] = "$Id: eisenInput.c,v 1.3 2003/05/06 07:22:17 kate Exp $";
+static char const rcsid[] = "$Id: eisenInput.c,v 1.4 2006/04/07 14:30:29 angie Exp $";
 
 /* Some variables we should probably let people set from the
  * command line. */
@@ -168,7 +168,6 @@ void outputAveraged(FILE *f, struct rangeInfo *ri, struct hash *erHash,
 static FILE *oldFile = NULL;
 static int colCount = 0;
 float *scores = NULL;
-struct bed *range = ri->range;
 struct binElement *be;
 struct bed *exp;
 int elCount = 0;
@@ -225,8 +224,8 @@ struct binKeeper *rangeBk = binKeeperNew(0, chromSize);
 struct binKeeper *expBk = binKeeperNew(0, chromSize);
 struct binKeeper *knownBk = binKeeperNew(0, chromSize);
 struct bed *rangeList = NULL, *range;
-struct bed *expList = NULL, *exp;
-struct genePred *knownList = NULL, *known;
+struct bed *expList = NULL;
+struct genePred *knownList = NULL;
 struct rangeInfo *riList = NULL, *ri;
 struct hash *riHash = hashNew(0); /* rangeInfo values. */
 struct binElement *rangeBeList = NULL, *rangeBe, *beList = NULL, *be;
