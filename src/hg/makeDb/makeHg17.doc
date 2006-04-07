@@ -20971,6 +20971,17 @@ mysql> load data local file 'snpMultiple.tab' into table snp125Exceptions;
 
 # run and review snpCompareLoctype (currently tuned for 124/125 differences)
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpCompareLoctype dbSnpHumanBuild125
+# cat snpCompareLoctypeCounts.out
+# exactToExact = 8310192
+# exactToBetween = 107956
+# exactToRange = 16200
+# betweenToBetween = 206224
+# betweenToExact 4012
+# betweenToRange 715
+# rangeToRange = 98648
+# rangeToBetween = 3151
+# rangeToExact = 6198
+# oldToNew = 10224
 
 # load on hgwdev
 cp snp125.tab /cluster/home/heather/transfer/snp
