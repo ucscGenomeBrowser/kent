@@ -1,6 +1,6 @@
 #!/usr/bin/env /cluster/data/genbank/bin/gbPython
 #
-# $Id: gbMkOrganismList,v 1.1 2006/04/07 14:10:26 markd Exp $
+# $Id: gbMkOrganismList,v 1.2 2006/04/07 22:29:08 markd Exp $
 #
 
 usage="""gbMkOrganismList outFile
@@ -100,7 +100,7 @@ class Organisms(dict):
         orgNames = list(self.iterkeys())
         orgNames.sort()
         ofh = open(outFile, "w")
-        fileOps.prRowv(ofh, "#organism", "mRNACnt", "ESTCnt", "RefSeqCnt")
+        fileOps.prRowv(ofh, "#organism", "mrnaCnt", "estCnt", "refSeqCnt")
         for on in orgNames:
             o = self[on]
             fileOps.prRowv(ofh, o.name, o.mrnaCnt, o.estCnt, o.refSeqCnt)
