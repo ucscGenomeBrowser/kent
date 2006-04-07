@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: bedCons.c,v 1.3 2003/05/06 07:22:17 kate Exp $";
+static char const rcsid[] = "$Id: bedCons.c,v 1.4 2006/04/07 14:21:24 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -56,7 +56,6 @@ struct otherSeq
 struct hash *makeOtherHash(char *table)
 /* Make otherSeq valued hash of other sequences */
 {
-char nibFile[512];
 char query[256];
 struct hash *hash = newHash(7);
 struct sqlConnection *conn = hAllocConn();
@@ -112,7 +111,7 @@ void foldPslIntoStats(struct psl *psl, struct dnaSeq *tSeq,
 {
 struct dnaSeq *qSeq = loadSomeSeq(otherHash, 
 	psl->qName, psl->qStart, psl->qEnd);
-int i, bCount = psl->blockCount, bSize;
+int i, bCount = psl->blockCount;
 int qOffset;
 
 // uglyf("%s:%d-%d %s %s:%d-%d\n", psl->qName, psl->qStart, psl->qEnd, psl->strand, psl->tName, psl->tStart, psl->tEnd);
