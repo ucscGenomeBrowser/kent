@@ -414,3 +414,5 @@ _EOF_
      # Create human-level trackDb entry and affyHumanExon.html
      # and check into cvs.
 
+# QA push new cutters and rebaseRefs tables (04-06-2006: ASZ).
+
