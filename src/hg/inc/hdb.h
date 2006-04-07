@@ -796,4 +796,7 @@ int chrSlNameCmp(const void *el1, const void *el2);
 int getTableSize(char *table);
 /* Get count of rows in a table in the primary database */
 
+boolean isNewChimp(char *database) ;
+/* database is panTro2 or later */
+
 #endif /* HDB_H */

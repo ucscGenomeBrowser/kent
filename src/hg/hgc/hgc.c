@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1007 2006/04/04 18:47:21 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1008 2006/04/07 05:06:35 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -4650,7 +4650,10 @@ struct psl *pslList = NULL;
 if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) )
     {
     char temp[256];
-    sprintf(temp, "non-%s RNA", organism);
+    if (isNewChimp(database))
+        sprintf(temp, "Other RNA");
+    else
+        sprintf(temp, "non-%s RNA", organism);
     type = temp;
     table = track;
     }
@@ -7154,7 +7157,12 @@ char *cdsCmpl = NULL;
 
 printf("<td valign=top nowrap>\n");
 if (isXeno)
-    printf("<H2>Non-%s RefSeq Gene %s</H2>\n", organism, rl->name);
+    {
+    if (startsWith("panTro", database))
+        printf("<H2>Other RefSeq Gene %s</H2>\n", rl->name);
+    else
+        printf("<H2>Non-%s RefSeq Gene %s</H2>\n", organism, rl->name);
+    }
 else
     printf("<H2>RefSeq Gene %s</H2>\n", rl->name);
 printf("<B>RefSeq:</B> <A HREF=\"");
@@ -7177,7 +7185,7 @@ if (hTableExists("refSeqStatus"))
     sqlFreeResult(&sr);
     }
 puts("<BR>");
-if (isXeno)
+if (isXeno || isNewChimp(database))
     {
     char *org;
     safef(query, sizeof(query), "select organism.name from gbCdnaInfo,organism "
@@ -7329,7 +7337,12 @@ sqlFreeResult(&sr);
 
 /* print the first section with info  */
 if (isXeno)
-    cartWebStart(cart, "Non-%s RefSeq Gene", organism);
+    {
+    if (isNewChimp(database))
+        cartWebStart(cart, "Other RefSeq Gene");
+    else
+        cartWebStart(cart, "Non-%s RefSeq Gene", organism);
+    }
 else
     cartWebStart(cart, "RefSeq Gene");
 printf("<table border=0>\n<tr>\n");

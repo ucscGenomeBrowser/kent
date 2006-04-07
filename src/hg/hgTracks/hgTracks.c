@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1083 2006/04/07 04:13:55 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1084 2006/04/07 05:06:36 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3526,7 +3526,7 @@ for (lf = tg->items; lf != NULL; lf = lf->next)
     struct dyString *name = dyStringNew(64);
     labelStarted = FALSE; /* reset for each item in track */
     if ((useGeneName || useAcc || useMim) && 
-            (!isNative || startsWith("panTro", database)))
+        (!isNative || isNewChimp(database)))
                 /* special handling for chimp -- both chimp and
                    human refSeq's are considered 'native', so we
                    label them to distinguish */
@@ -5500,7 +5500,7 @@ void mrnaMethods(struct track *tg)
 /* Make track of mRNA methods. */
 {
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
-if (startsWith("panTro", database))
+if (isNewChimp(database))
     tg->itemName = xenoMrnaName;
 }
 
@@ -5510,7 +5510,7 @@ void estMethods(struct track *tg)
 tg->drawItems = linkedFeaturesAverageDenseOrientEst;
 tg->extraUiData = newMrnaUiData(tg->mapName, FALSE);
 tg->totalHeight = tgFixedTotalHeightUsingOverflow;
-if (startsWith("panTro", database))
+if (isNewChimp(database))
     tg->itemName = xenoMrnaName;
 }
 
