@@ -20976,12 +20976,23 @@ mysql> load data local file 'snpMultiple.tab' into table snp125Exceptions;
 # exactToBetween = 107956
 # exactToRange = 16200
 # betweenToBetween = 206224
-# betweenToExact 4012
-# betweenToRange 715
+# betweenToExact = 4012
+# betweenToRange = 715
 # rangeToRange = 98648
 # rangeToBetween = 3151
 # rangeToExact = 6198
 # oldToNew = 10224
+
+# 12043 coord changes in exact (.1%)
+# 1370 moved to different chroms
+
+# 3664 coord changes in between (1.7%)
+# 2260 off-by-one
+# 13 moved to different chroms
+
+# 22198 coord changes in range (22.5%)
+# 19548 look like fixes: observedLengthOld != coordSpanOld && observedLengthNew == coordSpanNew
+# 1296 look like errors: observedLengthOld == coordSpanOld && observedLengthNew != coordSpanNew
 
 # load on hgwdev
 cp snp125.tab /cluster/home/heather/transfer/snp
