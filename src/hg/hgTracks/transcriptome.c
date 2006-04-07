@@ -13,7 +13,7 @@
 #include "bed.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: transcriptome.c,v 1.6 2006/04/07 04:13:56 kate Exp $";
+static char const rcsid[] = "$Id: transcriptome.c,v 1.7 2006/04/07 04:15:45 kate Exp $";
 
 
 
@@ -122,10 +122,8 @@ struct bed *bed = item;
 if(cleanCol == MG_WHITE)
     {
     cleanCol = tg->ixColor;
-    //blatCol = vgFindColorIx(vg, 100, 100, 160);
-    blatCol = vgFindColorIx(vg, 230, 190, 190);
-    //pseudoCol = vgFindColorIx(vg, 190, 190, 230);
-    pseudoCol = vgFindColorIx(vg, 230, 190, 190);
+    blatCol = vgFindColorIx(vg, 100, 100, 160);
+    pseudoCol = vgFindColorIx(vg, 190, 190, 230);
     }
 
 switch(bed->name[0]) 
