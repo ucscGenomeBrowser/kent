@@ -20763,7 +20763,7 @@ cd /cluster/data/dbSnp/125/organisms/human_9606/rs_fasta/*.gnl .
 
 # filter ContigLoc into ContigLocFilter
 # this gets rid of alternate assemblies and poor quality alignments
-# uses ContigInfo and MapInfo (weight == 10)
+# uses ContigInfo and MapInfo (weight == 10 || weight == 3)
 # assumes all contigs are positively oriented
 # will abort if not true
 
@@ -20783,7 +20783,7 @@ mysql> desc ContigLocFilter;
  
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocFilter dbSnpHumanBuild125 ref_haplotype
 # note rowcount
-# ContigLocFilter  10738923
+# ContigLocFilter  10113426
 # how many are positive strand? hopefully 90%
 mysql> select count(*) from ContigLocFilter where orientation = 0;
 # 9161012
@@ -20805,6 +20805,7 @@ mysql> select count(*) from ContigLocFilter where orientation = 0;
 # create chrN_snpFasta tables from *.gnl files
 # snpLoadFasta.error will report all SNPs with "lengthTooLong"
 # here we have 4428 SNPs with lengthTooLong
+# these are noted as ObservedNotAvailable
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpLoadFasta dbSnpHumanBuild125 
 
 # split ContigLocFilter by chrom (could start using pipeline.csh here)
@@ -20821,15 +20822,12 @@ mysql> select count(*) from ContigLocFilter where orientation = 0;
 # "Chrom end <= chrom start for range"
 # "Wrong size for exact"
 # "Unknown locType"
-# Unable to get chromEnd
+# "Unable to get chromEnd"
 # We got none of these
 
 # possible exceptions logged to snpLocType.exceptions:
-# RangeLocTypeWrongSizeLargeAllele
-# RangeLocTypeWrongSize
-# ExactLocTypeWrongSize
-
-# this run got just 43 RangeLocTypeWrongSizeLargeAllele
+# RefAlleleWrongSize
+# this run got just 40 
 
 # morph chrN_snpTmp 
 
@@ -20851,11 +20849,10 @@ mysql> desc chr1_snpTmp;
 
 # expand allele as necessary
 # report syntax errors to snpExpandAllele.errors
-# this run had 66 of these
-# possible exceptions logged to snpExpandAlleles.exceptions:
-# RangeLocTypeWrongSizeLargeAllele
-# RangeLocTypeWrongSize
-# this run has 522 RangeLocTypeWrongSizeLargeAllele
+# this run had 63 of these
+# possible exceptions logged to snpExpandAllele.exceptions:
+# RefAlleleWrongSize
+# this run has 512 
 
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpExpandAllele dbSnpHumanBuild125 ref_haplotype
 
@@ -20894,15 +20891,13 @@ mysql> desc chr1_snpTmp;
 # locType between is excluded from this check
 # log exceptions to snpCheckAllele.exceptions
 # if SNP is positive strand, expect allele == refUCSC
-# log WrongRefAllelePositiveStrand if not
+# log RefAlleleMismatch if not
 # if SNP is negative strand, if not allele == refUCSC, then check for allele == refUCSCReverseComp
-# If allele == refUCSCRevComp, log RefAlleleNotRevComp(Range,Exact)LocType
-# If allele doesn't match either of refUCSC or refUCSCReverseComp, log WrongRefAlleleNegativeStrand
+# If allele == refUCSCRevComp, log RefAlleleNotRevComp
+# If allele doesn't match either of refUCSC or refUCSCReverseComp, log RefAlleleMismatch
 # This run we got:
-# 888    WrongRefAllelePositiveStrand
-# 414    WrongRefAlleleNegativeStrand
-# 8256   RefAlleleNotRevCompRangeLocType
-# 91158  RefAlleleNotRevCompExactLocType
+# 0 RefAlleleMismatch
+# 49763   RefAlleleNotRevComp
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpCheckAlleles dbSnpHumanBuild125
 
 # add class, observed and molType from chrN_snpFasta tables
@@ -20911,7 +20906,7 @@ mysql> desc chr1_snpTmp;
 # This run we got:
 # 49 no data available
 # 226048 duplicate
-# chrN_snpFasta have class = 'in-del'
+# chrN_snpFasta has class = 'in-del'
 # we promote this to 'deletion' for locType 1&2 and to 'insertion' for locType 3
 
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpReadFasta dbSnpHumanBuild125
@@ -20934,38 +20929,20 @@ mysql> desc chr1_snpTmp;
 #  +--------------------+---------------+------+-----+---------+-------+
 
 # generate exceptions for class and observed
-# first just using class and observed on their own
-# then including loc_type in the comparison
 
-# class/observed only:
-# SingleClassQuadAllelic and SingleClassTriAllelic 
-# SingleClassWrongObserved
-# IndelClassTruncatedObserved and IndelClassObservedWrongFormat 
-# MixedClassTruncatedObserved and MixedClassObservedWrongFormat 
-# NamedClassObservedWrongFormat 
-
-# This run we got:
-# 19312 SingleClassTriAllelic
-# 2303 SingleClassQuadAllelic
-# 78640 SingleClassWrongObserved
-# 11 IndelClassObservedWrongFormat
-
-# exceptions class/observed/loc_type:
 # SingleClassBetweenLocType
 # SingleClassRangeLocType
-# SingleClassWrongObservedPositiveStrand
-# SingleClassWrongObservedNegativeStrand
-# DeletionClassWrongObservedSize
-# DeletionClassWrongObserved
 # NamedClassWrongLocType
 
-# This run we got:
-# 20730 SingleClassBetweenLocType
-# 15635 SingleClassRangeLocType
-# 3909 SingleClassWrongObservedPositiveStrand
-# 74731 SingleClassWrongObservedNegativeStrand
-# 18299 DeletionClassWrongObservedSize
-# 614 NamedClassWrongLocType
+# ObservedNotAvailable
+# ObservedWrongFormat
+# ObservedWrongSize
+# ObservedMismatch
+
+# RangeSubstitutionLocTypeExactMatch
+
+# SingleClassTriAllelic
+# SingleClassQuadAllelic
 
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpCheckClassAndObserved dbSnpHumanBuild125
 
@@ -20988,10 +20965,6 @@ cp snpLocType.exceptions snpLocType.tab
 # cat chr*_snp125.tab >> snp125.tab
 /bin/csh concat.csh
 
-mysql> load data local infile 'snp125.tab' into table snp125; 
-# Query OK, 10738923 rows affected (2 min 46.16 sec)
-# Records: 10738923  Deleted: 0  Skipped: 0  Warnings: 0
-
 # check for multiple alignments
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpMultiple dbSnpHumanBuild125
 mysql> load data local file 'snpMultiple.tab' into table snp125Exceptions;
@@ -20999,21 +20972,32 @@ mysql> load data local file 'snpMultiple.tab' into table snp125Exceptions;
 # run and review snpCompareLoctype (currently tuned for 124/125 differences)
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpCompareLoctype dbSnpHumanBuild125
 
-# create indexes
+# load on hgwdev
+cp snp125.tab /cluster/home/heather/transfer/snp
+hgsql dbSnpHumanBuild125 -e 'select * from snp125Exceptions' > /cluster/home/heather/transfer/snp/snp125Exceptions.tab
+ssh hgwdev
+mysql> load data local infile 'snp125.tab' into table snp125; 
+# Query OK, 10113426 rows affected (3 min 8.28 sec)
+# Records: 10113426  Deleted: 0  Skipped: 0  Warnings: 0
+# note rowcount exactly matches ContigLocFilter;
 
-mysql> alter table snp125 add index name (name(10));
-# Query OK, 10727794 rows affected (1 min 12.40 sec)
-# Records: 10727794  Duplicates: 0  Warnings: 0
+# create indexes
+mysql> alter table snp125 add index name (name);
+# Query OK, 10113426 rows affected (1 min 12.40 sec)
+# Records: 113426  Duplicates: 0  Warnings: 0
 
 mysql> alter table snp125 add index chrom (chrom, bin);
-# Query OK, 10727794 rows affected (2 min 17.20 sec)
-# Records: 10727794  Duplicates: 0  Warnings: 0
+# Query OK, 10113426 rows affected (2 min 17.20 sec)
+# Records: 10113426  Duplicates: 0  Warnings: 0
 
+mysql> load data local infile 'snp125Exceptions.tab' into table snp125Exceptions; 
 mysql> alter table snp125Exceptions add index name(name(10));
 
-# rsync to hgwdev
-
 # create snp125ExceptionDesc table
+cd /cluster/data/dbSnp
+# add counts to exception.template
+hgsql hg17 < snp125ExceptionDesc.sql
+mysql> load data local file 'exception.template' into table snp125ExceptionDesc;
 
 
 ############
