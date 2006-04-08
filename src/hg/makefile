@@ -120,6 +120,7 @@ UTIL_DIRS = \
 	checkTableCoords \
 	ctgFaToFa \
 	ctgToChromFa \
+	estOrient \
 	embossToPsl \
 	fakeFinContigs \
 	fakeOut \
