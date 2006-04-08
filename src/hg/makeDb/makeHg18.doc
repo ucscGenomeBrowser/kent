@@ -6339,7 +6339,8 @@ cat > loadMaf.csh << 'EOF'
     csh loadMaf.csh 
     exit
 
-# PHASTCONS CONSERVATION (2005-01-05 kate)
+###############################################################
+# PHASTCONS CONSERVATION (DONE, 2ND TIME, 2006-03-28 Fan)
 # This process is distilled from Hiram and Adam's experiments
 # on mouse (mm7) 17way track.  Many parameters are now fixed, without
 # being experimentally derived, either because the experiments
@@ -6451,7 +6452,7 @@ cp -p $san/ss/$c/$f.ss ../elliotsEncode.mod $tmp
 pushd $tmp > /dev/null
 /cluster/bin/phast/$MACHTYPE/phastCons $f.ss elliotsEncode.mod \
 --rho $rho --expected-length $len --target-coverage $cov --quiet \
---not-informative panTro1 \
+--not-informative panTro1,rheMac2 \
 --seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
 popd > /dev/null
 mkdir -p $san/pp/$c $san/bed/$c
