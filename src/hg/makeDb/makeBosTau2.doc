@@ -1654,3 +1654,18 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     rm -fr axtChain/run/chain/
     rm -f  axtChain/noClass.net
     rm -f  axtChain/*.tastzPanTro2.2006-03-29
+
+############################################################################
+##  BLASTZ swap from canFam2 alignments (DONE 2006-04-09 markd)
+    ssh pk  # not sure why this was done in hg17 swap
+    mkdir /cluster/data/bosTau2/bed/blastz.canFam2.swap
+    cd /cluster/data/bosTau2/bed
+    ln -s blastz.canFam2.swap blastz.canFam2
+    cd blastz.canFam2.swap
+    
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/canFam2/bed/blastz.bosTau2/DEF >& swap.out
+
+    # should have specified -stop=net, so kill hgLoadChain
+

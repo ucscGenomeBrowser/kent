@@ -6056,3 +6056,21 @@ _EOF_
     ln -s blastz.rn4.swap /cluster/data/danRer3/bed/blastz.rn4
 
 
+############################################################################
+##  BLASTZ swap from hg17 alignments (DONE 2006-04-09 markd)
+    ssh pk  
+    mkdir /cluster/data/danRer3/bed/blastz.hg17.swap
+    ln -s blastz.hg17.swap /cluster/data/danRer3/bed/blastz.hg17
+    cd /cluster/data/danRer3/bed/blastz.hg17.swap
+    
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -stop=net \
+	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	/cluster/data/hg17/bed/blastz.danRer3/DEF >& swap.out&
+   # failed due to
+       netChains: looks like previous stage was not successful (can't find [danRer3.hg17.]all.chain[.gz]).
+   #
+    mv swap.out swap.out.1
+   # rerun with -continue=net
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -continue=net -stop=net \
+	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	/cluster/data/hg17/bed/blastz.danRer3/DEF >& swap.out&
