@@ -1,5 +1,4 @@
 /* snpMultiple - eleventh step in dbSNP processing.
- * Run on hgwdev.
  * Read snp125.
  * Report coords for all SNPs that align more than once.
  * Also report counts. */
@@ -9,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMultiple.c,v 1.11 2006/03/27 21:13:32 heather Exp $";
+static char const rcsid[] = "$Id: snpMultiple.c,v 1.12 2006/04/10 20:27:15 heather Exp $";
 
 static char *snpDb = NULL;
 
