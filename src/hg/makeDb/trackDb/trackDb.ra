@@ -1523,6 +1523,8 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
 type chain xenTro1
 otherDb xenTro1
 
@@ -1545,6 +1547,8 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
 type chain galGal2
 otherDb galGal2
 
@@ -1557,6 +1561,30 @@ visibility hide
 spectrum on
 type netAlign galGal2 chainGalGal2
 otherDb galGal2
+
+track chainMonDom4
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 190
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain monDom4
+otherDb monDom4
+
+track netMonDom4
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 190.1
+visibility hide
+spectrum on
+type netAlign monDom4 chainMonDom4
+otherDb monDom4
 
 track chainMonDom2
 shortLabel $o_Organism Chain 
@@ -1769,6 +1797,8 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
 type chain bosTau2
 otherDb bosTau2
 release alpha
@@ -1793,6 +1823,8 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
 type chain bosTau2
 otherDb bosTau2
 release beta
@@ -1839,6 +1871,8 @@ visibility hide
 color 100,50,0
 altColor 255,240,200
 spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
 type chain canFam2
 otherDb canFam2
 
