@@ -28,13 +28,13 @@ location (in thousands) of the match for each matching alignment.</P>
 Transposons that have been inserted since the $o_organism/$organism
 split were removed from the assemblies. The abbreviated genomes were
 aligned with blastz, and the transposons were then added back in.
-The resulting alignments were converted into axt format using the lavToAxt
-program. The axt alignments were fed into axtChain, which organizes all
+The resulting alignments were converted into psl format using the lavToPsl
+program. The psl alignments were fed into axtChain, which organizes all
 alignments between a single $o_organism chromosome and a single
 $organism chromosome into a group and creates a kd-tree out
 of the gapless subsections (blocks) of the alignments. A dynamic program
 was then run over the kd-trees to find the maximally scoring chains of these
-blocks. Chains scoring below a threshold were discarded; the remaining
+blocks. $matrix Chains scoring below a threshold were discarded; the remaining
 chains are displayed in this track.</P>
 
 <H2>Credits</H2>
