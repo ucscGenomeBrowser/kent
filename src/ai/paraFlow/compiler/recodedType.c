@@ -98,11 +98,9 @@ back->emitLabel(back, label, 16, TRUE, f);
 for (rt = rtList; rt != NULL; rt = rt->next)
     {
     back->emitInt(back, 0, f);
-    safef(label, sizeof(label), "L%d", rt->label);
-    back->emitPointer(back, label, f);
+    backEndLocalPointer(back, rt->label, f);
     }
 back->emitInt(back, 0, f);
 back->emitInt(back, 0, f);
-uglyf("Done recodedTypeTableToBackend\n");
 }
 

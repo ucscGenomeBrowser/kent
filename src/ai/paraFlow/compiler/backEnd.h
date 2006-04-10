@@ -49,7 +49,26 @@ struct pfBackEnd
 struct pfBackEnd *backEndFind(char *name);
 /* Find named back end. */
 
+void backEndLocalPointer(struct pfBackEnd *back, int id, FILE *f);
+/* Emit code for pointer labeled LXX where XX is id. */
+
 int backEndTempLabeledString(struct pfCompile *pfc, char *s, FILE *f);
 /* Put out string, label it LNN for some number N, and return N. */
+
+struct backEndString
+/* A string labeled for assembler. */
+    {
+    struct backEndString *next;
+    int id;			/* String ID.  Label is L before ID */
+    char *string;		/* String itself.  Not allocated here. */
+    };
+
+int backEndStringAdd(struct pfCompile *pfc,
+	struct backEndString **pList, char *string);
+/* Add string and label to list.  Return string ID. */
+
+void backEndStringEmitAll(struct pfBackEnd *back,
+	struct backEndString *list, FILE *f);
+/* Emit all labeled strings to file. */
 
 #endif /* PFBACKEND_H */
