@@ -1,4 +1,4 @@
-/* snpSNP - tenth step in dbSNP processing.
+/* snpSNP - ninth step in dbSNP processing.
  * Read the chrN_snpTmp tables into memory.
  * Do lookups into SNP for validation status and heterozygosity.
  * Report if missing.
@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.10 2006/03/10 18:37:13 heather Exp $";
+static char const rcsid[] = "$Id: snpSNP.c,v 1.11 2006/04/10 20:32:59 heather Exp $";
 
 struct snpData
     {

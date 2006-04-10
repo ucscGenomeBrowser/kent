@@ -1,4 +1,4 @@
-/* snpMultiple - eleventh step in dbSNP processing.
+/* snpMultiple - post-processing.
  * Read snp125.
  * Report coords for all SNPs that align more than once.
  * Also report counts. */
@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMultiple.c,v 1.12 2006/04/10 20:27:15 heather Exp $";
+static char const rcsid[] = "$Id: snpMultiple.c,v 1.13 2006/04/10 20:31:34 heather Exp $";
 
 static char *snpDb = NULL;
 
