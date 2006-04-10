@@ -847,7 +847,8 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     # load into database:
     ssh hgwdev
     cd /cluster/data/rn4/bed/cpgIsland
-    hgLoadBed rn4 cpgIslandExt -tab -noBin \
+    # Reloaded without -noBin (bin added to .sql) 4/7/06.
+    hgLoadBed rn4 cpgIslandExt -tab \
       -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
 
 
@@ -875,9 +876,10 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     # load into database:
     ssh hgwdev
     cd /cluster/data/rn4/bed/cpgIslandGgfAndy
+    # Reloaded without -noBin (bin added to .sql) 4/7/06.
     sed -e 's/cpgIslandExt/cpgIslandGgfAndyMasked/g' \
       $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndyMasked.sql
-    hgLoadBed rn4 cpgIslandGgfAndyMasked -tab -noBin \
+    hgLoadBed rn4 cpgIslandGgfAndyMasked -tab \
       -sqlTable=cpgIslandGgfAndyMasked.sql cpgIslandGgfAndyMasked.bed
 #Loaded 91097 elements of size 10
     featureBits rn4 cpgIslandExt
@@ -1215,6 +1217,7 @@ rm -fr /scratch/tmp/${root1}_${root2}
     # load into database
     ssh hgwdev
     cd /cluster/data/rn4/bed/bacends
+    # Reloaded with updated .sql (no chromEnd index) 4/7/06.
     hgLoadBed -strict -notItemRgb rn4 bacEndPairs bacEndPairs.bed \
         -sqlTable=$HOME/kent/src/hg/lib/bacEndPairs.sql
 #Loaded 109139 elements of size 11
@@ -2658,7 +2661,7 @@ pepPredToFa rn4 knownGenePep known.faa
 
 #TODO: swap rn4 to:  xenTro1
 
-# MULTIZ (9-WAY) (DONE 3/30/06 angie)
+# MULTIZ9WAY (DONE 3/30/06 angie)
 # (((((((rn4 mm8) hg18) (canFam2 bosTau2)) monDom4) galGal2) xenTro1) danRer3)
     ssh kkstore01
     mkdir /cluster/data/rn4/bed/multiz9way.2006-03-30
@@ -2768,37 +2771,19 @@ cat  << 'EOF' > spec
 #Longest finished job:            6172s     102.87m     1.71h    0.07d
 #Submission to last job:          6173s     102.88m     1.71h    0.07d
 
-    # Load into database
+    # Make .jpg for tree and install in htdocs/images/phylo/... don't forget
+    # to request a push of that file.  The treeImage setting in trackDb.ra 
+    # is phylo/rn4_9way.jpg (relative to htdocs/images).
     ssh hgwdev
-    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/maf
-    mkdir -p /gbdb/rn4/multiz9way/maf
-    ln -s /cluster/data/rn4/bed/multiz9way.2006-03-30/maf/*.maf \
-        /gbdb/rn4/multiz9way/maf/
-    time hgLoadMaf -pathPrefix=/gbdb/rn4/multiz9way/maf rn4 multiz9way \
-      >& loadMaf.log & tail -f 
-    # Do the computation-intensive part on a workhorse machine and then 
-    # load on hgwdev:
-    ssh kkr7u00
-    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/maf
-    cat *.maf \
-    | nice hgLoadMafSummary rn4 -minSize=30000 -mergeGap=1500 -maxSize=200000 \
-             -test multiz9waySummary stdin
-#Created 1408247 summary blocks from 22055250 components and 7726120 mafs from stdin
-    # hgLoadMafSummary, for some reason, creates two empty columns that 
-    # cause mysql warnings when loading.  strip those off and load:
-    sed -e 's/\t\t$//' multiz9waySummary.tab > multiz9waySummaryCleaned.tab
-    ssh hgwdev
-    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/maf
-    sed -e 's/mafSummary/multiz9waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
-      > /tmp/multiz9waySummary.sql
-    time nice hgLoadSqlTab rn4 multiz9waySummary /tmp/multiz9waySummary.sql \
-      multiz9waySummaryCleaned.tab
-#0.000u 0.010s 5:23.78 0.0%      0+0k 0+0io 232pf+0w
-    rm *.tab
-    ln -s multiz9way.2006-03-30 /cluster/data/rn4/bed/multiz9way
+    cd /cluster/data/rn4/bed/multiz9way.2006-03-30
+    pstopnm -stdout 9way.ps | pnmtojpeg > rn4_9way.jpg
+    ln -s /cluster/data/rn4/bed/multiz9way.2006-03-30/rn4_9way.jpg \
+      /usr/local/apache/htdocs/images/phylo/rn4_9way.jpg
 
 
-# MULTIZ9WAY DOWNLOADABLES (DONE 4/3/2006 angie)
+# MULTIZ9WAY DOWNLOADABLES (UNANNOTATED) (DONE 4/3/2006 angie)
+    # We haven't publicly documented the annotated maf format yet,
+    # so put the unannotated mafs out for download.
     ssh hgwdev
     cd /cluster/data/rn4/bed/multiz9way.2006-03-30
     mkdir mafDownloads
@@ -2842,6 +2827,176 @@ cat > downloads.csh << 'EOF'
     ln -s /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads/{*.gz,md5sum.txt} $dir
     cp /usr/local/apache/htdocs/goldenPath/mm7/multiz17way/README.txt $dir
     # edit README.txt
+
+
+# ANNOTATE MULTIZ9WAY MAF AND LOAD TABLES (DONE 4/4/2006 angie)
+    ssh kolossus
+    mkdir /cluster/data/rn4/bed/multiz9way.2006-03-30/anno
+    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/anno
+    mkdir maf run
+    cd run
+    rm -f sizes nBeds
+    foreach db (`cat /cluster/data/rn4/bed/multiz9way.2006-03-30/species.lst`)
+      ln -s  /cluster/data/$db/chrom.sizes $db.len
+      if (! -e /cluster/data/$db/$db.N.bed) then
+        twoBitInfo -nBed /cluster/data/$db/$db.{2bit,N.bed}
+      endif
+      ln -s  /cluster/data/$db/$db.N.bed $db.bed
+      echo $db.bed  >> nBeds
+      echo $db.len  >> sizes
+    end
+    echo date > jobs.csh
+    # do smaller jobs first:
+    foreach f (`ls -1rS ../../maf/*.maf`)
+      echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $f \
+        /cluster/data/rn4/rn4.2bit ../maf/`basename $f` >> jobs.csh
+      echo "echo $f" >> jobs.csh
+    end 
+    echo date >> jobs.csh
+    csh -efx jobs.csh >&! jobs.log & tail -f jobs.log
+    # 1.5 hrs.
+
+    # Load anno/maf
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/anno/maf
+    mkdir -p /gbdb/rn4/multiz9way/anno/maf
+    ln -s /cluster/data/rn4/bed/multiz9way.2006-03-30/anno/maf/*.maf \
+      /gbdb/rn4/multiz9way/anno/maf
+    cat > loadMaf.csh << 'EOF'
+date
+nice hgLoadMaf -pathPrefix=/gbdb/rn4/multiz9way/anno/maf rn4 multiz9way
+date
+'EOF'
+    # << emacs
+    csh -efx loadMaf.csh >&! loadMaf.log & tail -f loadMaf.log
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # machine and then load on hgwdev:
+    ssh kkr7u00
+    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/anno/maf
+    cat *.maf \
+    | nice hgLoadMafSummary rn4 -minSize=30000 -mergeGap=1500 -maxSize=200000 \
+             -test multiz9waySummary stdin
+#Created 1408247 summary blocks from 22055250 components and 8577575 mafs from stdin
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/anno/maf
+    sed -e 's/mafSummary/multiz9waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
+      > /tmp/multiz9waySummary.sql
+    time nice hgLoadSqlTab rn4 multiz9waySummary /tmp/multiz9waySummary.sql \
+      multiz9waySummary.tab
+#0.000u 0.000s 4:04.62 0.0%      0+0k 0+0io 217pf+0w
+    rm *.tab
+    ln -s multiz9way.2006-03-30 /cluster/data/rn4/bed/multiz9way
+
+
+# MULTIZ9WAY MAF FRAMES (DONE 4/5/2006 angie)
+    ssh hgwdev
+    mkdir /cluster/data/rn4/bed/multiz9way.2006-03-30/frames
+    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/frames
+    # The following is adapted from MarkD's Makefile used for mm7...
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using mrna table as genes: canFam2 bosTau2 danRer3
+    mkdir genes
+    foreach queryDb (canFam2 bosTau2 danRer3)
+      set tmpExt = `mktemp temp.XXXXXX`
+      set tmpMrnaCds = ${queryDb}.mrna-cds.${tmpExt}
+      set tmpMrna = ${queryDb}.mrna.${tmpExt}
+      set tmpCds = ${queryDb}.cds.${tmpExt}
+      echo $queryDb
+      hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
+                   from all_mrna,gbCdnaInfo,cds \
+                   where (all_mrna.qName = gbCdnaInfo.acc) and \
+                     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+       ${queryDb} > ${tmpMrnaCds}
+      cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+      cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+      mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} \
+        stdout \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$queryDb.tmp.gz
+      rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+      rm -f $tmpExt
+    end
+    # using knownGene for rn4 mm8 hg18
+    # using refGene for galGal2
+    # using mgcGenes for xenTro1
+    # no genes for monDom4
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    foreach queryDb (rn4 mm8 hg18 galGal2 xenTro1)
+      if ($queryDb == "xenTro1") then
+        set geneTbl = mgcGenes
+      else if ($queryDb == "galGal2") then
+        set geneTbl = refGene
+      else
+        set geneTbl = knownGene
+      endif
+      hgsql -N -e "select * from $geneTbl" ${queryDb} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$queryDb.tmp.gz
+      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+      rm -f $tmpExt
+    end
+
+    #------------------------------------------------------------------------
+    # create frames
+    set clusterDir = /cluster/bluearc/rn4/multiz9wayFrames
+    set multizDir = /cluster/data/rn4/bed/multiz9way.2006-03-30
+    set mafDir = $multizDir/mafDownloads
+    set geneDir = $multizDir/frames/genes
+    set clusterMafDir = ${clusterDir}/maf
+    set clusterGeneDir = ${clusterDir}/genes
+    set clusterFramesDir = ${clusterDir}/mafFrames.kki
+
+    # copy mafs to cluster storage
+    mkdir $clusterDir
+    ssh -x kkstore04 "rsync -av $mafDir/*.maf.gz $clusterMafDir/"
+
+    # copy genes to cluster storage
+    ssh -x kkstore04 "rsync -av $geneDir/*.gp.gz $clusterGeneDir/"
+
+    # run cluster jobs
+    set tmpExt = `mktemp temp.XXXXXX`
+    set paraDir = $multizDir/frames/para.${tmpExt}
+    mkdir mafFrames $paraDir
+    rm -f $paraDir/jobList
+    mkdir ${clusterFramesDir}
+    foreach queryDb (`cat /cluster/data/rn4/bed/multiz9way.2006-03-30/species.lst`)
+      mkdir ${clusterFramesDir}/${queryDb}
+      foreach c (`awk '{print $1;}' /cluster/data/rn4/chrom.sizes`)
+        if (-e ${clusterGeneDir}/${queryDb}.gp.gz) then
+          echo /cluster/bin/scripts/mkMafFrames.pl ${queryDb} rn4 \
+            ${clusterGeneDir}/${queryDb}.gp.gz ${clusterMafDir}/$c.maf.gz \
+            ${clusterFramesDir}/${queryDb}/$c.mafFrames \
+            >> $paraDir/jobList
+        endif
+      end
+    end
+    rm -f $tmpExt
+    ssh -x kki "cd ${paraDir} && para make jobList && para time"
+#Completed: 360 of 360 jobs
+#CPU time in finished jobs:       2027s      33.78m     0.56h    0.02d  0.000 y
+#IO & Wait Time:                  3816s      63.60m     1.06h    0.04d  0.000 y
+#Average job time:                  16s       0.27m     0.00h    0.00d
+#Longest finished job:             124s       2.07m     0.03h    0.00d
+#Submission to last job:           493s       8.22m     0.14h    0.01d
+
+    # combine results from cluster
+    foreach queryDb (`cat ../species.lst`)
+      echo $queryDb
+      ssh -x kolossus "cat ${clusterFramesDir}/${queryDb}/*.mafFrames | gzip -2c > ${multizDir}/frames/mafFrames/${queryDb}.mafFrames.gz"
+    end
+
+    #------------------------------------------------------------------------
+    # load the database
+    hgLoadMafFrames rn4 multiz9wayFrames mafFrames/*.mafFrames.gz
+
+    #------------------------------------------------------------------------
+    # clean up
+    rm -rf ${clusterDir}
 
 
 # PHASTCONS (DONE 4/2/2006 angie)
@@ -3094,7 +3249,10 @@ cat > downloads.csh << 'EOF'
     ln -s /cluster/data/rn4/bed/multiz9way.2006-03-30/phastConsDownloads/{*.gz,md5sum.txt} $dir
     cp /usr/local/apache/htdocs/goldenPath/mm7/phastCons17Scores/README.txt $dir
     # edit README.txt
-
+    # Clean up after phastCons run.
+    ssh kkstore04
+    rm /cluster/data/rn4/bed/multiz9way.2006-03-30/phastCons/*.tab
+    rm -r /san/sanvol1/scratch/rn4/multiz9way.2006-03-30/phastCons
 
 
 # AFFY CHIPS
