@@ -8,12 +8,15 @@
 #include "pfCompile.h"
 #include "codedType.h"
 #include "recodedType.h"
+#include "backEnd.h"
 
 struct recodedType
+/* Local reference to a type */
     {
     struct recodedType *next;
     char *encoding;	/* Paren/comma/name coding. */
     int localTypeId;	/* Offset into local type table. */
+    int label;		/* Label used for assembly code. */
     };
 
 int recodedTypeCmp(const void *va, const void *vb)
@@ -42,8 +45,8 @@ dyStringFree(&dy);
 return rt->localTypeId;
 }
 
-void printModuleTypeTable(struct pfCompile *pfc, FILE *f)
-/* Print out type table for one module. */
+static struct recodedType *moduleRecodedTypes(struct pfCompile *pfc)
+/* Get sorted list of all recoded types in module. */
 {
 struct hash *hash = pfc->moduleTypeHash;
 struct hashEl *hel;
@@ -60,8 +63,53 @@ while ((hel = hashNext(&iterator)) != NULL)
 
 /* Sort it and print it out. */
 slSort(&rtList, recodedTypeCmp);
+return rtList;
+}
+
+
+void recodedTypeTableToC(struct pfCompile *pfc, char *moduleName, FILE *f)
+/* Print out type table for one module in C. */
+{
+struct recodedType *rt, *rtList = moduleRecodedTypes(pfc);
+fprintf(f, "struct %s %s_%s", recodedStructType, recodedTypeTableName, 
+	mangledModuleName(moduleName));
+fprintf(f, "[] = {\n");
 for (rt = rtList; rt != NULL; rt = rt->next)
     fprintf(f, "  {0, \"%s\"},\n", rt->encoding);
 fprintf(f, "  {0, 0},\n");
+fprintf(f, "};\n");
+fprintf(f, "\n");
+}
+
+void recodedTypeTableToBackend(struct pfCompile *pfc, char *moduleName,
+	FILE *f)
+/* Write type table for module to back end (assembler). */
+{
+uglyf("Starting recodedTypeTableToBackend\n");
+struct recodedType *rt, *rtList = moduleRecodedTypes(pfc);
+uglyf("ok 1\n");
+struct pfBackEnd *back = pfc->backEnd;
+char label[64];
+back->stringSegment(back, f);
+for (rt = rtList; rt != NULL; rt = rt->next)
+    {
+    rt->label = ++pfc->isxLabelMaker;
+    safef(label, sizeof(label), "L%d", rt->label);
+    back->emitLabel(back, label, 1, FALSE, f);
+    back->emitAscii(back, rt->encoding, strlen(rt->encoding), f);
+    }
+back->dataSegment(back, f);
+safef(label, sizeof(label), "%s_%s", recodedTypeTableName, 
+	mangledModuleName(moduleName) );
+back->emitLabel(back, label, 16, TRUE, f);
+for (rt = rtList; rt != NULL; rt = rt->next)
+    {
+    back->emitInt(back, 0, f);
+    safef(label, sizeof(label), "L%d", rt->label);
+    back->emitPointer(back, label, f);
+    }
+back->emitInt(back, 0, f);
+back->emitInt(back, 0, f);
+uglyf("Done recodedTypeTableToBackend\n");
 }
 

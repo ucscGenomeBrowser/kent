@@ -1,6 +1,9 @@
 /* pfPreamble - this gets included at the start of
  * paraFlow-generated C code. */
 
+#ifndef PFPREAMBLE_H
+#define PFPREAMBLE_H
+
 #include <stdio.h>
 #include <string.h>
 
@@ -155,4 +158,6 @@ void _pf_free_mem(void *pt);
 #include "../runtime/initVar.h"
 #include "../runtime/paraRun.h"
 
+
+#endif /* PFPREAMBLE_H */
 

@@ -120,6 +120,7 @@ struct pfCompile
 
     /* Here's some stuff used by assembly code generator.  These are all 
      * initialized freshly for each module.*/
+    struct pfBackEnd *backEnd;	/* Specific back end. */
     int isxLabelMaker;		/* Isix label generator */
     int tempLabelMaker;		/* Temp var label generator */
     struct hash *constStringHash; /* Look up string constants here */

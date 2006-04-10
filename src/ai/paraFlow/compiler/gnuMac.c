@@ -11,6 +11,7 @@
 #include "pfPreamble.h"
 #include "isx.h"
 #include "pentCode.h"
+#include "backEnd.h"
 #include "gnuMac.h"
 
 #define cstrPrefix "JK_"	/* Prefix before string constants */
@@ -216,4 +217,151 @@ fprintf(f, "%s",
 "       ret\n"
 );
 }
+
+static void dataSegment(struct pfBackEnd *backEnd, FILE *f)
+/* Switch to data segment */
+{
+if (backEnd->segment != pfbData)
+    {
+    fprintf(f, "\t.data\n");
+    backEnd->segment = pfbData;
+    }
+}
+
+static void codeSegment(struct pfBackEnd *backEnd, FILE *f)
+/* Switch to code segment */
+{
+if (backEnd->segment != pfbCode)
+    {
+    fprintf(f, "\t.text\n");
+    backEnd->segment = pfbCode;
+    }
+}
+
+static void bssSegment(struct pfBackEnd *backEnd, FILE *f)
+/* Switch to bss segment */
+{
+codeSegment(backEnd, f);	/* Seems to be case on mac....??? */
+}
+
+static void stringSegment(struct pfBackEnd *backEnd, FILE *f)
+/* Switch to string segment */
+{
+if (backEnd->segment != pfbString)
+    {
+    fprintf(f, "\t.cstring\n");
+    backEnd->segment = pfbString;
+    }
+}
+
+static void emitLabel(struct pfBackEnd *backEnd, char *label, 
+	int aliSize, boolean isGlobal, FILE *f)
+/* Emit label aligned to aliSize. */
+{
+if (aliSize > 8)
+    fprintf(f, "\t.align\t4\n");
+else if (aliSize > 4)
+    fprintf(f, "\t.align\t3\n");
+else if (aliSize > 2)
+    fprintf(f, "\t.align\t2\n");
+if (isGlobal)
+    fprintf(f, ".globl\t%s\n", label);
+fprintf(f, "%s:\n", label);
+}
+
+static void emitAscii(struct pfBackEnd *backEnd, char *string,int size,FILE *f)
+/* Emit string of ascii chars of given size. */
+{
+char c;
+int i;
+fprintf(f, "\t.ascii\t\"");
+for (i=0; i<size; ++i)
+    {
+    c = string[i];
+    switch (c)
+        {
+	case '"':
+	case '\\':
+	   fputc('\\', f);
+	   fputc(c, f);
+	   break;
+	default:
+	   if (isprint(c))
+	      fputc(c, f);
+	   else
+	      {
+	      fputc('\\', f);
+	      fprintf(f, "%o", c);
+	      }
+	   break;
+	}
+    }
+fprintf(f, "\\0\"\n");
+}
+
+static void emitByte(struct pfBackEnd *backEnd, _pf_Byte x, FILE *f)
+/* Emit Byte */
+{
+fprintf(f, "\t.byte\t%d\n", x);
+}
+
+static void emitShort(struct pfBackEnd *backEnd, _pf_Short x, FILE *f)
+/* Emit Short */
+{
+fprintf(f, "\t.short\t%d\n", x);
+}
+
+static void emitInt(struct pfBackEnd *backEnd, _pf_Int x, FILE *f)
+/* Emit Int */
+{
+fprintf(f, "\t.long\t%d\n", x);
+}
+
+static void emitLong(struct pfBackEnd *backEnd, _pf_Long x, FILE *f)
+/* Emit Long */
+{
+_pf_Int *p = (_pf_Int*)&x;
+fprintf(f, "\t.long\t%d\n", p[0]);
+fprintf(f, "\t.long\t%d\n", p[1]);
+}
+
+static void emitFloat(struct pfBackEnd *backEnd, _pf_Float x, FILE *f)
+/* Emit Float */
+{
+_pf_Int *p = (_pf_Int*)&x;
+fprintf(f, "\t.long\t%d\n", p[0]);
+}
+
+static void emitDouble(struct pfBackEnd *backEnd, _pf_Double x, FILE *f)
+/* Emit Double */
+{
+_pf_Int *p = (_pf_Int*)&x;
+fprintf(f, "\t.long\t%d\n", p[0]);
+fprintf(f, "\t.long\t%d\n", p[1]);
+}
+
+static void emitPointer(struct pfBackEnd *backEnd, char *label, FILE *f)
+/* Emit Pointer */
+{
+fprintf(f, "\t.long\t%s\n", label);
+}
+
+struct pfBackEnd macPentiumBackEnd = {
+/* Interface to mac-pentium back end. */
+    "mac-pentium",
+    pfbNone,
+    dataSegment,
+    codeSegment,
+    bssSegment,
+    stringSegment,
+    emitLabel,
+    emitAscii,
+    emitByte,
+    emitShort,
+    emitInt,
+    emitLong,
+    emitFloat,
+    emitDouble,
+    emitPointer,
+    };
 

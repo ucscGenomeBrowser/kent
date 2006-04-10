@@ -8,6 +8,7 @@
 #include "optBranch.h"
 #include "gnuMac.h"
 #include "ctar.h"
+#include "recodedType.h"
 #include "pentConst.h"
 #include "pentStruct.h"
 #include "pentCode.h"
@@ -143,6 +144,7 @@ struct hash *labelHash = hashNew(0);
 pfc->isxLabelMaker = 0;
 pfc->tempLabelMaker = 0;
 pfc->constStringHash = hashNew(0);
+pfc->moduleTypeHash = hashNew(0);
 
 safef(path, sizeof(path), "%s%s.isx", baseDir, baseName);
 isxFile = mustOpen(path, "w");
@@ -157,10 +159,12 @@ pentStructPrint(asmFile);
 codeOutsideFunctions(pfc, module, labelHash, isxFile, branchFile, asmFile);
 codeFunctions(pfc, module, labelHash, isxFile, branchFile, asmFile, NULL);
 gnuMacModuleVars(modVarIsx->iList, asmFile);
+recodedTypeTableToBackend(pfc, module->name, asmFile);
 gnuMacModulePostscript(asmFile);
 
-hashFree(&labelHash);
+hashFree(&pfc->moduleTypeHash);
 hashFree(&pfc->constStringHash);
+hashFree(&labelHash);
 carefulClose(&isxFile);
 carefulClose(&branchFile);
 carefulClose(&asmFile);

@@ -22,6 +22,7 @@
 #include "defFile.h"
 #include "parseInto.h"
 #include "tokInto.h"
+#include "backEnd.h"
 
 
 int endPhase = 12;
@@ -434,6 +435,7 @@ if (optionExists("asm"))
 	return;
     verbose(2, "Phase 8 - Code generation\n");
 
+    pfc->backEnd = pfBackEndFind("mac-pentium");
     gccFiles = asmCoder(pfc, program, baseDir, baseName);
 
     if (endPhase < 9)
