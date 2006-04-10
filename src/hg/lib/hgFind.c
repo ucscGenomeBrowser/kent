@@ -13,6 +13,7 @@
 #include "hdb.h"
 #include "psl.h"
 #include "genePred.h"
+#include "genePredReader.h"
 #include "bed.h"
 #include "cytoBand.h"
 #include "cart.h"
@@ -30,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.182 2006/03/09 21:06:55 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.183 2006/03/28 23:29:26 kate Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2013,9 +2014,7 @@ static boolean findRefGenes(struct hgFindSpec *hfs, char *spec,
 /* Look up refSeq genes in table. */
 {
 struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr = NULL;
 struct dyString *ds = newDyString(256);
-char **row;
 struct refLink *rlList = NULL, *rl;
 boolean gotRefLink = hTableExists("refLink");
 boolean found = FALSE;
@@ -2068,6 +2067,10 @@ if (rlList != NULL)
     struct hash *hash = newHash(8);
     for (rl = rlList; rl != NULL; rl = rl->next)
         {
+        char where[64];
+        struct genePredReader *gpr;
+        struct genePred *gp;
+
         /* Don't return duplicate mrna accessions */
         if (hashFindVal(hash, rl->mrnaAcc))
             {            
@@ -2076,13 +2079,10 @@ if (rlList != NULL)
             }
 
         hashAdd(hash, rl->mrnaAcc, rl);
-	dyStringClear(ds);
-	dyStringPrintf(ds, "select * from %s where name = '%s'",
-		       hfs->searchTable, rl->mrnaAcc);
-	sr = sqlGetResult(conn, ds->string);
-	while ((row = sqlNextRow(sr)) != NULL)
+        safef(where, sizeof where, "name = '%s'", rl->mrnaAcc);
+        gpr = genePredReaderQuery(conn, hfs->searchTable, where);
+	while ((gp = genePredReaderNext(gpr)) != NULL)
 	    {
-	    struct genePred *gp = genePredLoad(row);
 	    struct hgPos *pos = NULL;
 	    AllocVar(pos);
 	    if (table == NULL)
@@ -2110,7 +2110,7 @@ if (rlList != NULL)
 	    genePredFree(&gp);
 	    found = TRUE;
 	    }
-	sqlFreeResult(&sr);
+        genePredReaderFree(&gpr);
 	}
     refLinkFreeList(&rlList);
     freeHash(&hash);
