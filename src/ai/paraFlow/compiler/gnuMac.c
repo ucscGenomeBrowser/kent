@@ -350,6 +350,7 @@ struct pfBackEnd macPentiumBackEnd = {
 /* Interface to mac-pentium back end. */
     "mac-pentium",
     pfbNone,
+    "_",
     dataSegment,
     codeSegment,
     bssSegment,

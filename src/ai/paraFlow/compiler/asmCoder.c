@@ -8,6 +8,7 @@
 #include "optBranch.h"
 #include "gnuMac.h"
 #include "ctar.h"
+#include "codedType.h"
 #include "recodedType.h"
 #include "pentConst.h"
 #include "pentStruct.h"
@@ -177,6 +178,9 @@ struct dyString *asmCoder(struct pfCompile *pfc, struct pfParse *program,
 {
 struct pfParse *module;
 struct dyString *gccFiles = dyStringNew(0);
+struct hash *compTypeHash = NULL;
+char mainName[PATH_LEN];
+FILE *mainFile;
 
 for (module = program->children; module != NULL; module = module->next)
     {
@@ -197,6 +201,11 @@ for (module = program->children; module != NULL; module = module->next)
     else
         internalErr();
     }
+safef(mainName, sizeof(mainName), "%sout.s", baseDir);
+mainFile = mustOpen(mainName, "w");
+pfc->isxLabelMaker = 0;
+compTypeHash = codedTypesCalcAndPrintToBackend(pfc, program, mainFile);
+carefulClose(&mainFile);
 return gccFiles;
 }
 

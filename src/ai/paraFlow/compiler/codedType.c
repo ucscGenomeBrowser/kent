@@ -4,6 +4,7 @@
 #include "pfType.h"
 #include "pfParse.h"
 #include "pfCompile.h"
+#include "backEnd.h"
 #include "codedType.h"
 
 struct codedBaseType 
@@ -17,6 +18,7 @@ struct codedBaseType
     bool needsCleanup;	/* True if it's an object or string. */
     bool size;		/* Type size. */
     struct pfBaseType *base;	/* Unencoded version */
+    int label;		/* Assembly language label. */
     };
 
 struct codedType *codedTypeNew(char *code, struct pfType *type)
@@ -135,7 +137,7 @@ encodeType(type, dy);
 printAndSaveCompType(f, hash, type, dy->string);
 }
 
-static struct hash *hashCompTypes(struct pfCompile *pfc, 
+static struct hash *hashCompTypesToC(struct pfCompile *pfc, 
 	struct codedBaseType *cbtList,
 	struct pfParse *program, struct dyString *dy, FILE *f)
 /* Create a hash full of codedTypes.  Also print out type 
@@ -186,18 +188,11 @@ const struct codedBaseType *b = *((struct codedBaseType **)vb);
 return a->id - b->id;
 }
 
-struct hash *codedTypesCalcAndPrintAsC(struct pfCompile *pfc, 
-	struct pfParse *program, FILE *f)
-/* Traverse parse tree and encode all types referenced in it.
- * Also print out the types in C structures that the runtime
- * system can interpret. */
+static struct codedBaseType *getBaseTypes(struct pfCompile *pfc)
+/* Get list of all abse types in program sorted by ID */
 {
-struct pfScope *scope;
-struct hash *compTypeHash;
-struct dyString *dy = dyStringNew(0);
 struct codedBaseType *cbtList = NULL, *cbt;
 struct slRef *ref;
-
 /* Get list of base types sorted by id. */
 for (ref = pfc->scopeRefList; ref != NULL; ref = ref->next)
     {
@@ -224,10 +219,27 @@ for (ref = pfc->scopeRefList; ref != NULL; ref = ref->next)
     hashElFreeList(&helList);
     }
 slSort(&cbtList, codedBaseTypeCmpId);
+return cbtList;
+}
+
+#define pfBaseInfoName "_pf_base_info"
+#define pfBaseInfoCountName "_pf_base_info_count"
+
+struct hash *codedTypesCalcAndPrintAsC(struct pfCompile *pfc, 
+	struct pfParse *program, FILE *f)
+/* Traverse parse tree and encode all types referenced in it.
+ * Also print out the types in C structures that the runtime
+ * system can interpret. */
+{
+struct pfScope *scope;
+struct hash *compTypeHash;
+struct dyString *dy = dyStringNew(0);
+struct slRef *ref;
+struct codedBaseType *cbt, *cbtList = getBaseTypes(pfc);
 
 /* Write out base types in a C table. */
 fprintf(f, "/* All base types */\n");
-fprintf(f, "struct _pf_base_info _pf_base_info[] = {\n");
+fprintf(f, "struct _pf_base_info %s[] = {\n", pfBaseInfoName);
 for (cbt = cbtList; cbt != NULL; cbt = cbt->next)
     {
     fprintf(f, "  {%d, ", cbt->id);
@@ -239,11 +251,11 @@ for (cbt = cbtList; cbt != NULL; cbt = cbt->next)
     fprintf(f, "},\n");
     }
 fprintf(f, "};\n");
-fprintf(f, "int _pf_base_info_count = %d;\n\n", slCount(cbtList));
+fprintf(f, "int %s = %d;\n\n", pfBaseInfoCountName, slCount(cbtList));
 
 fprintf(f, "/* All composed types */\n");
 fprintf(f, "struct _pf_type_info _pf_type_info[] = {\n");
-compTypeHash = hashCompTypes(pfc, cbtList, program, dy, f);
+compTypeHash = hashCompTypesToC(pfc, cbtList, program, dy, f);
 fprintf(f, "};\n");
 fprintf(f, "int _pf_type_info_count = sizeof(_pf_type_info)/sizeof(_pf_type_info[0]);\n\n");
 
@@ -280,3 +292,35 @@ dyStringFree(&dy);
 return compTypeHash;
 }
 
+struct hash *codedTypesCalcAndPrintToBackend(struct pfCompile *pfc, 
+	struct pfParse *program, FILE *f)
+/* Traverse parse tree and encode all types referenced in it.
+ * Save these out in assembly language data structures for runtime. */
+{
+struct hash *compTypeHash = NULL;
+struct codedBaseType *cbt, *cbtList = getBaseTypes(pfc);
+struct pfBackEnd *back = pfc->backEnd;
+char label[256];
+
+for (cbt = cbtList; cbt != NULL; cbt = cbt->next)
+    {
+    safef(label, sizeof(label), "%d:%s", cbt->scope, cbt->name);
+    cbt->label = backEndTempLabeledString(pfc, label, f);
+    }
+back->dataSegment(back, f);
+safef(label, sizeof(label), "%s%s", back->cPrefix, pfBaseInfoName);
+back->emitLabel(back, label, 16, FALSE, f);
+for (cbt = cbtList; cbt != NULL; cbt = cbt->next)
+    {
+    back->emitInt(back, cbt->id, f);
+    safef(label, sizeof(label), "L%d", cbt->label);
+    back->emitPointer(back, label, f);
+    back->emitInt(back, cbt->parentId, f);
+    back->emitInt(back, cbt->needsCleanup, f);
+    back->emitInt(back, cbt->size, f);
+    }
+safef(label, sizeof(label), "%s%s", back->cPrefix, pfBaseInfoCountName);
+back->emitLabel(back, label, 2, FALSE, f);
+back->emitInt(back, slCount(cbtList), f);
+return compTypeHash;
+}

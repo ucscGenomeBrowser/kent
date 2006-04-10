@@ -85,21 +85,14 @@ void recodedTypeTableToBackend(struct pfCompile *pfc, char *moduleName,
 	FILE *f)
 /* Write type table for module to back end (assembler). */
 {
-uglyf("Starting recodedTypeTableToBackend\n");
 struct recodedType *rt, *rtList = moduleRecodedTypes(pfc);
-uglyf("ok 1\n");
 struct pfBackEnd *back = pfc->backEnd;
 char label[64];
-back->stringSegment(back, f);
 for (rt = rtList; rt != NULL; rt = rt->next)
-    {
-    rt->label = ++pfc->isxLabelMaker;
-    safef(label, sizeof(label), "L%d", rt->label);
-    back->emitLabel(back, label, 1, FALSE, f);
-    back->emitAscii(back, rt->encoding, strlen(rt->encoding), f);
-    }
+    rt->label = backEndTempLabeledString(pfc, rt->encoding, f);
 back->dataSegment(back, f);
-safef(label, sizeof(label), "%s_%s", recodedTypeTableName, 
+safef(label, sizeof(label), "%s%s_%s", 
+	back->cPrefix, recodedTypeTableName, 
 	mangledModuleName(moduleName) );
 back->emitLabel(back, label, 16, TRUE, f);
 for (rt = rtList; rt != NULL; rt = rt->next)

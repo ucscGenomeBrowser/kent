@@ -435,7 +435,7 @@ if (optionExists("asm"))
 	return;
     verbose(2, "Phase 8 - Code generation\n");
 
-    pfc->backEnd = pfBackEndFind("mac-pentium");
+    pfc->backEnd = backEndFind("mac-pentium");
     gccFiles = asmCoder(pfc, program, baseDir, baseName);
 
     if (endPhase < 9)

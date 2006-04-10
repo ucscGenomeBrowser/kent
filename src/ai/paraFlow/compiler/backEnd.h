@@ -17,6 +17,7 @@ struct pfBackEnd
     {
     char *name;			/* Back end name */
     enum pfbSegment segment;	/* Current segment type */
+    char *cPrefix;		/* Prefix for C symbols. */
     void (*dataSegment)(struct pfBackEnd *backEnd, FILE *f);
     	/* Switch to data segment */
     void (*codeSegment)(struct pfBackEnd *backEnd, FILE *f);
@@ -45,7 +46,10 @@ struct pfBackEnd
     			/* Emit Pointer */
     };
 
-struct pfBackEnd *pfBackEndFind(char *name);
+struct pfBackEnd *backEndFind(char *name);
 /* Find named back end. */
+
+int backEndTempLabeledString(struct pfCompile *pfc, char *s, FILE *f);
+/* Put out string, label it LNN for some number N, and return N. */
 
 #endif /* PFBACKEND_H */
