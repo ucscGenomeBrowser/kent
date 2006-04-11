@@ -2288,8 +2288,9 @@ fillInStackVarOffsets(pfc, -stackSubAmount, ctar->localRefList, ctar->localCount
 }
 
 void pentFunctionStart(struct pfCompile *pfc, struct pentFunctionInfo *pfi, 
-	char *cName, boolean isGlobal, FILE *f)
-/* Finish coding up a function in pentium assembly language. */
+	char *cName, boolean isGlobal, char *protectLabel, char *skipLabel,
+	FILE *f)
+/* Start coding up a function in pentium assembly language. */
 {
 /* This gets a little complex because we have to maintain the
  * stack at an even multiple of 16, on the Mac at least. */
@@ -2321,13 +2322,23 @@ stackSubAmount -= pfi->savedContextSize;
 stackSubAmount += skipPushSize;
 pfi->stackSubAmount = stackSubAmount;
 fprintf(f, "\tsubl\t$%d,%%esp\n", stackSubAmount);
+if (protectLabel)
+    {
+    fprintf(f, "\tmovb\t%s,%%al\n", protectLabel);
+    fprintf(f, "\ttestb\t%%al,%%al\n");
+    fprintf(f, "\tjnz\t%s\n", skipLabel);
+    fprintf(f, "\tinc\t%%al\n");
+    fprintf(f, "\tmov\t%%al,%s\n", protectLabel);
+    }
 }
 
 void pentFunctionEnd(struct pfCompile *pfc, struct pentFunctionInfo *pfi, 
-	FILE *f)
+	char *skipLabel, FILE *f)
 /* Finish coding up a function in pentium assembly language. */
 {
 bool *regsUsed = pfi->coder->regsUsed;
+if (skipLabel)
+    fprintf(f, "%s:\n", skipLabel);
 fprintf(f, "\taddl\t$%d,%%esp\n", pfi->stackSubAmount);
 if (regsUsed[di])
     fprintf(f, "\tpopl\t%%edi\n");

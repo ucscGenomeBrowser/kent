@@ -44,10 +44,14 @@ static void codeOutsideFunctions(struct pfCompile *pfc, struct pfParse *module,
 /* Generate code outside of functions */
 {
 struct isxList *isxList = isxListNew();
+struct pfBackEnd *back = pfc->backEnd;
 struct pfParse *pp;
 struct hash *varHash = hashNew(0);
 struct pentFunctionInfo *pfi = pentFunctionInfoNew(pfc->constStringHash);
 char entryName[128];
+char firstTimeLabel[16], skipLabel[16];
+safef(firstTimeLabel, sizeof(firstTimeLabel), "L%d", ++pfc->isxLabelMaker);
+safef(skipLabel, sizeof(skipLabel), "L%d", ++pfc->isxLabelMaker);
 for (pp = module->children; pp != NULL; pp = pp->next)
     {
     switch (pp->type)
@@ -63,14 +67,17 @@ for (pp = module->children; pp != NULL; pp = pp->next)
     }
 finishIsx(pfc, varHash, isxList, isxFile, branchFile);
 pentCodeLocalConsts(isxList, labelHash, pfc->constStringHash, asmFile);
+back->dataSegment(back, asmFile);
+back->emitLabel(back, firstTimeLabel, 1, FALSE, asmFile);
+back->emitByte(back, 0, asmFile);
+back->codeSegment(back, asmFile);
 pentFromIsx(pfc, isxList, pfi);
-safef(entryName, sizeof(entryName), "%spf_entry_%s", pfc->backEnd->cPrefix,
+safef(entryName, sizeof(entryName), "%spf_entry_%s", back->cPrefix,
 	module->name);
-pentFunctionStart(pfc, pfi, entryName, TRUE, asmFile);
-// gnuMacMainStart(asmFile);
+pentFunctionStart(pfc, pfi, entryName, TRUE, firstTimeLabel, skipLabel,
+    asmFile);
 pentCodeSaveAll(pfi->coder->list, asmFile);
-// gnuMacMainEnd(asmFile);
-pentFunctionEnd(pfc, pfi, asmFile);
+pentFunctionEnd(pfc, pfi, skipLabel, asmFile);
 pentCodeFreeList(&pfi->coder->list);
 hashFree(&varHash);
 }
@@ -109,9 +116,9 @@ else
 finishIsx(pfc, varHash, isxList, isxFile, branchFile);
 pentCodeLocalConsts(isxList, labelHash, pfc->constStringHash, asmFile);
 pentFromIsx(pfc, isxList, pfi);
-pentFunctionStart(pfc, pfi, cName, isGlobal, asmFile);
+pentFunctionStart(pfc, pfi, cName, isGlobal, NULL, NULL, asmFile);
 pentCodeSaveAll(pfi->coder->list, asmFile);
-pentFunctionEnd(pfc, pfi, asmFile);
+pentFunctionEnd(pfc, pfi, NULL, asmFile);
 pentCodeFreeList(&pfi->coder->list);
 hashFree(&varHash);
 }
