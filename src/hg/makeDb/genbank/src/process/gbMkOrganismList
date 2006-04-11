@@ -1,6 +1,6 @@
 #!/usr/bin/env /cluster/data/genbank/bin/gbPython
 #
-# $Id: gbMkOrganismList,v 1.2 2006/04/07 22:29:08 markd Exp $
+# $Id: gbMkOrganismList,v 1.3 2006/04/11 16:33:44 markd Exp $
 #
 
 usage="""gbMkOrganismList outFile
@@ -49,11 +49,11 @@ class Organisms(dict):
         "count organism cDNAs in a release"
         gbIdxTbl = self._getRelGbIndexes(rel)
         if rel.srcDb == RefSeq:
-            self._countGbIdxs("refSeqCnt", gbIdxTbl[MRNA][None])
+            self._countGbIdxs(RefSeq, "refSeqCnt", gbIdxTbl[MRNA][None])
         else:
-            self._countGbIdxs("mrnaCnt", gbIdxTbl[MRNA][None])
+            self._countGbIdxs(GenBank, "mrnaCnt", gbIdxTbl[MRNA][None])
             for gbIdxs in gbIdxTbl[EST].itervalues():
-                self._countGbIdxs("estCnt", gbIdxs)
+                self._countGbIdxs(GenBank, "estCnt", gbIdxs)
 
     def _getRelGbIndexes(self, rel):
         """Get table of all gbidx (covering all updates) in release, partationed
@@ -71,20 +71,21 @@ class Organisms(dict):
         return gbIdxTbl
 
 
-    def _countGbIdxs(self, fld, gbIdxs):
+    def _countGbIdxs(self, srcDb, fld, gbIdxs):
         "count the unique accessions in a set of gbidx files"
         # gbIdx columns: acc version moddate organism
         # used cut to get accession and organism, sort to make unique
-        # then awk to count by organism
+        # then awk to count by organism.  Only count NM_ for RefSeqs.
         cutCmd = ["cut", "-f", "1,4"]
         cutCmd.extend(gbIdxs)
         sortCmd = ["sort", "-u"]
-        awkCmd = ["awk", """
-           BEGIN{FS="\t"; OFS="\t"}
-           !/^#/{cnts[$2]++}
-           END{
-              for (o in cnts) {print o,cnts[o]}
-           }"""]
+        awkProg = """BEGIN{FS="\t"; OFS="\t"}"""
+        if srcDb == RefSeq:
+            awkProg += """ !/^#/&&/NM_/{cnts[$2]++}"""
+        else:
+            awkProg += """ !/^#/{cnts[$2]++}"""
+        awkProg += """ END{for (o in cnts) {print o,cnts[o]}}"""
+        awkCmd = ["awk", awkProg]
         pl = Pipeline([cutCmd, sortCmd, awkCmd])
 
         while True:
