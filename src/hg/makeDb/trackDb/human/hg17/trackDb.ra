@@ -348,28 +348,6 @@ showTopScorers 200
 type bed 5 .
 
 track multiz8way
-release alpha
-shortLabel 8-way Conservation
-longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
-group compGeno
-priority 109.51
-visibility hide
-#color 0, 10, 100
-altColor 50,50,50
-#altColor 255,128,0
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-spanList 1
-wiggle phastCons
-summary multiz8waySummary
-yLineOnOff Off
-autoScaleDefault Off
-spanList 1
-speciesOrder panTro1 canFam1 mm5 rn3 galGal2 fr1 danRer1
-treeImage phylo/hg17_8way.jpg
-
-track multiz8way
-release beta
 shortLabel 8-way Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
 group compGeno
@@ -951,30 +929,6 @@ type netAlign canFam1 chainCanFam1
 otherDb canFam1
 
 track chainCanFam2
-shortLabel $o_Organism ($o_db) Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
-group compGeno
-priority 166.91
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain canFam2
-otherDb canFam2
-release alpha
-
-track netCanFam2
-shortLabel $o_Organism ($o_db) Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
-group compGeno
-priority 166.92
-visibility hide
-spectrum on
-type netAlign canFam2 chainCanFam2
-otherDb canFam2
-release alpha
-
-track chainCanFam2
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
@@ -985,7 +939,6 @@ altColor 255,240,200
 spectrum on
 type chain canFam2
 otherDb canFam2
-release beta
 
 track netCanFam2
 shortLabel $o_Organism Net
@@ -996,7 +949,6 @@ visibility hide
 spectrum on
 type netAlign canFam2 chainCanFam2
 otherDb canFam2
-release beta
 
 track blastzMm5
 shortLabel Mm5 Blastz
