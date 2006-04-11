@@ -1,9 +1,41 @@
 <H2>Description</H2>
 <P>
-PicTar microRNA sites
+MicroRNA target sites in 3' UTRs as predicted by PicTar, based on the
+RefSeq annotation of 3' UTRs. 
 </P>
 
 <H2>Methods</H2>
+<P>
+The original PicTar algorithm was published in Krek et al,
+Nature Genetics, 2005. Displayed are updated predictions as published in
+Lall et al, Current Biology 2006. Briefly, PicTar is a Hidden Markov Model
+that assigns probabilities to 3' UTR subsequences to be a binding site for a
+microRNA, considers all possible ways the 3' UTR could be bound by microRNAs,
+and then uses a maximum likelihood method to compute the optimal Likelihood
+under which the 3' UTR could be explained by microRNAs and background.
+The Score is this likelihood divided by backround, ie the local
+basecomposition of each 3' UTR is taken into account. To fit the Score
+track conventions of the UCSC browser (integers), we scaled all scores by
+the maximum score of all microRNA:3' UTR scores observed. Note that PicTar
+scores any 3' UTR that has at least 1 aligned, conserved predicted binding
+site for a microRNA, but then incorporates all possible binding sites into
+the score, even if they appear to be non-conserved. Since the Score for
+a 3' UTR is a "phylo" average over all orthologous 3' UTRs used, "scattered"
+sites that appear in many species may boost the score, and individual sites
+shown in the display may not be aligned and conserved in all species under
+consideration. 
+</P>
+
+<P>
+Two levels of conservation can be chosen: conservation between
+human/mouse/rat/dog, and conservation between human/mouse/rat/dog/chicken.
+The latter settings have improved quality, but less sensitivity.
+</P>
+
+<P>
+For a detailed analysis of signal to noise ratios and and sensitivity
+please refer to Lall et al 2006. 
+</P>
 
 <H2>References</H2>
 <P>
@@ -11,10 +43,18 @@ PicTar microRNA sites
 Combinatorial microRNA target predictions,</A>
 Nature Genetics  37, 495 - 500 (2005) 
 </P>
+<P>
+<A HREF="http://www.current-biology.com/content/article/abstract?uid=PIIS0960982206010591" TARGET=_blank>
+A Genome-Wide Map of Conserved MicroRNA Targets in C. elegans,</A>
+Current Biology, Vol 16, 460-471, 7 March 2006
+</P>
 
 <H2>Credits</H2>
 <P>
-Thanks to the
-<A HREF="http://pictar.bio.nyu.edu/" TARGET=_blank>Rajewsky Lab</A>
-at NYU Department of Biology for providing this data.
+Thanks to the Dominic Grun, Yi-Lu Wang, and Nikolaus Rajewsky for providing
+this annotation. PicTar is a project of the Rajewsky lab at NYU's Center for
+Comaprative Functional Genomics. Much more detailed information about
+individual predictions can be found at
+<A HREF="http://pictar.bio.nyu.edu/" TARGET=_blank>The Rajewsky Lab,</A>
+NYU Department of Biology, including links to other databases. 
 </P>
