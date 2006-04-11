@@ -445,7 +445,9 @@ if (optionExists("asm"))
 	char *libName = hashMustFindVal(pfc->cfgHash,"runAsmLib");
 	struct dyString *dy = dyStringNew(0);
 	int err;
-	dyStringPrintf(dy, "gcc -o %s%s ", baseDir, baseName);
+	dyStringPrintf(dy, "gcc ");
+	dyStringPrintf(dy, "-I %s ", pfc->cIncludeDir);
+	dyStringPrintf(dy, "-o %s%s ", baseDir, baseName);
 	dyStringAppend(dy, gccFiles->string);
 	dyStringPrintf(dy, "%s ", libName);
 	dyStringPrintf(dy, " %s ", pfc->runtimeLib);

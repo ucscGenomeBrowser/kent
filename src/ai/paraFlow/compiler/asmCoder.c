@@ -47,6 +47,7 @@ struct isxList *isxList = isxListNew();
 struct pfParse *pp;
 struct hash *varHash = hashNew(0);
 struct pentFunctionInfo *pfi = pentFunctionInfoNew(pfc->constStringHash);
+char entryName[128];
 for (pp = module->children; pp != NULL; pp = pp->next)
     {
     switch (pp->type)
@@ -63,9 +64,13 @@ for (pp = module->children; pp != NULL; pp = pp->next)
 finishIsx(pfc, varHash, isxList, isxFile, branchFile);
 pentCodeLocalConsts(isxList, labelHash, pfc->constStringHash, asmFile);
 pentFromIsx(pfc, isxList, pfi);
-gnuMacMainStart(asmFile);
+safef(entryName, sizeof(entryName), "%spf_entry_%s", pfc->backEnd->cPrefix,
+	module->name);
+pentFunctionStart(pfc, pfi, entryName, TRUE, asmFile);
+// gnuMacMainStart(asmFile);
 pentCodeSaveAll(pfi->coder->list, asmFile);
-gnuMacMainEnd(asmFile);
+// gnuMacMainEnd(asmFile);
+pentFunctionEnd(pfc, pfi, asmFile);
 pentCodeFreeList(&pfi->coder->list);
 hashFree(&varHash);
 }
@@ -148,7 +153,7 @@ struct backEndString *strings = NULL;
 back->dataSegment(back, f);
 safef(label, sizeof(label), "%s_pf_poly_info_%s", back->cPrefix,
 	mangledModuleName(module->name));
-back->emitLabel(back, label, 16, FALSE, f);
+back->emitLabel(back, label, 16, TRUE, f);
 for (ref = scopeRefs; ref != NULL; ref = ref->next)
     {
     struct pfScope *scope = ref->val;
@@ -248,8 +253,9 @@ for (module = program->children; module != NULL; module = module->next)
     }
 
 /* Open up main file, with overall info on each module and type. */
-safef(mainName, sizeof(mainName), "%sout.s", baseDir);
+safef(mainName, sizeof(mainName), "%sout.c", baseDir);
 cMain(pfc, program, mainName);
+dyStringPrintf(gccFiles, "%s ", mainName);
 return gccFiles;
 }
 
