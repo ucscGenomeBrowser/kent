@@ -219,10 +219,10 @@ type genePred
 
 track picTar
 compositeTrack on
-shortLabel PicTar
-longLabel PicTar microRNA sites
-group genes
-priority 143
+shortLabel PicTar miRNA
+longLabel MicroRNA target sites in 3' UTRs as predicted by PicTar
+group regulation
+priority 100
 visibility hide
 type bed 9
 
