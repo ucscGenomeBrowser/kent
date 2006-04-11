@@ -242,9 +242,9 @@ visibility hide
 type bed 6 .
 
 track picTarMiRNA
-shortLabel micro RNA
-longLabel PicTar microRNA sites
-group genes
+shortLabel PicTar miRNA
+longLabel MicroRNA target sites in 3' UTRs as predicted by PicTar
+group regulation
 priority 65
 visibility hide
 color 128,0,128
