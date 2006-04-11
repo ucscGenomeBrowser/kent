@@ -8,15 +8,15 @@
 #include "jksql.h"
 #include "taxonName.h"
 
-static char const rcsid[] = "$Id: taxonName.c,v 1.1 2006/04/11 21:43:10 baertsch Exp $";
+static char const rcsid[] = "$Id: taxonName.c,v 1.2 2006/04/11 22:15:09 baertsch Exp $";
 
 void taxonNameStaticLoad(char **row, struct taxonName *ret)
 /* Load a row from taxonName table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-ret->taxon = sqlUnsigned(row[0]);
-ret->name = row[1];
+ret->name = row[0];
+ret->taxon = sqlUnsigned(row[1]);
 ret->class = row[2];
 }
 
@@ -27,8 +27,8 @@ struct taxonName *taxonNameLoad(char **row)
 struct taxonName *ret;
 
 AllocVar(ret);
-ret->taxon = sqlUnsigned(row[0]);
-ret->name = cloneString(row[1]);
+ret->name = cloneString(row[0]);
+ret->taxon = sqlUnsigned(row[1]);
 ret->class = cloneString(row[2]);
 return ret;
 }
@@ -101,8 +101,8 @@ void taxonNameSaveToDb(struct sqlConnection *conn, struct taxonName *el, char *t
  * If worried about this use taxonNameSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s')", 
-	tableName,  el->taxon,  el->name,  el->class);
+dyStringPrintf(update, "insert into %s values ( '%s',%u,'%s')", 
+	tableName,  el->name,  el->taxon,  el->class);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -121,8 +121,8 @@ char  *name, *class;
 name = sqlEscapeString(el->name);
 class = sqlEscapeString(el->class);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s','%s')", 
-	tableName, el->taxon ,  name,  class);
+dyStringPrintf(update, "insert into %s values ( '%s',%u,'%s')", 
+	tableName,  name, el->taxon ,  class);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&name);
@@ -138,8 +138,8 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
-ret->taxon = sqlUnsignedComma(&s);
 ret->name = sqlStringComma(&s);
+ret->taxon = sqlUnsignedComma(&s);
 ret->class = sqlStringComma(&s);
 *pS = s;
 return ret;
@@ -173,11 +173,11 @@ for (el = *pList; el != NULL; el = next)
 void taxonNameOutput(struct taxonName *el, FILE *f, char sep, char lastSep) 
 /* Print out taxonName.  Separate fields with sep. Follow last field with lastSep. */
 {
-fprintf(f, "%u", el->taxon);
-fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->taxon);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->class);

@@ -5,10 +5,10 @@
 
 #ncbi taxonomy species names and id including synonmyms
 CREATE TABLE taxonName (
-    taxon int unsigned not null,	# ncbi id of node associated with this name
     name varchar(255) not null,	# ncbi name
+    taxon int unsigned not null,	# ncbi id of node associated with this name
     class varchar(255) not null,	# type of name: synonym, common name, scientific name, misspelling
               #Indices
-    PRIMARY KEY(taxon),
-    INDEX(name)
+    PRIMARY KEY(name)
+    INDEX(taxon)
 );
