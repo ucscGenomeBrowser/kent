@@ -3294,7 +3294,125 @@ cat > downloads.csh << 'EOF'
     hgsql miRNAtmp -e 'drop database miRNAtmp'
 
 
-# AFFY CHIPS
+# AFFYRAE230 (DONE 4/11/06 angie)
+    # Rachel already set up consensus sequences in 
+    # /iscratch/i/affy/RAE230_all.fa - see makeRn3.doc.
+
+    # Align consensus sequences to genome.
+    ssh kk
+    mkdir /cluster/data/rn4/bed/affyRat.2006-04-11
+    cd /cluster/data/rn4/bed/affyRat.2006-04-11
+    ls -1 /iscratch/i/affy/RAE230_all.fa > affy.lst
+    ls -1S /panasas/store/rn4/ctgFa/* > allctg.lst
+
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/cluster/bluearc/rn4/11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+
+    gensub2 allctg.lst affy.lst template.sub para.spec
+    mkdir psl
+    para make para.spec
+    para time
+#Completed: 591 of 591 jobs
+#CPU time in finished jobs:      10704s     178.40m     2.97h    0.12d  0.000 y
+#IO & Wait Time:                  9584s     159.73m     2.66h    0.11d  0.000 y
+#Average job time:                  34s       0.57m     0.01h    0.00d
+#Longest finished job:              83s       1.38m     0.02h    0.00d
+#Submission to last job:           270s       4.50m     0.07h    0.00d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyRAE230.psl
+    pslSort dirs raw.psl tmp psl
+    # only use alignments that cover 30% of sequence and have at least 
+    # 95% identity in aligned region. minAli = 0.97 too high. 
+    # low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl contig.psl \
+        /dev/null
+    liftUp affyRAE230.psl ../../jkStuff/liftAll.lft warn contig.psl
+    
+    # shorten names in psl file
+    sed -e 's/RAE230//' affyRAE230.psl > affyRAE230.psl.bak
+    mv affyRAE230.psl.bak affyRAE230.psl
+    
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/affyRat.2006-04-11
+    # Rachel already set up /gbdb/hgFixed/affyProbes/RAE230_all.fa -
+    # see makeRn3.doc.
+    hgLoadSeq -abbr=RAE230 rn4 /gbdb/hgFixed/affyProbes/RAE230_all.fa
+   
+    # load track into database
+    hgLoadPsl rn4 affyRAE230.psl
+
+    # Load knownToRAE230:
+    hgMapToGene rn4 affyRAE230 knownGene knownToRAE230
+
+    # Clean up    
+    rm -r psl tmp err batch.bak contig.psl raw.psl seq.tab
+
+
+# AFFYRGU34A (DONE 4/11/06 angie)
+# RG-U34A is the chip used for the GNF Atlas 2 expression data for Rat
+    # Rachel already set up consensus sequences in 
+    # /iscratch/i/affy/RG-U34A_all.fa -see makeRn3.doc.
+
+    # Align consensus sequences to genome.
+    ssh kk
+    mkdir /cluster/data/rn4/bed/affyU34A
+    cd /cluster/data/rn4/bed/affyU34A
+    ls -1 /iscratch/i/affy/RG-U34A_all.fa > affy.lst
+    ls -1 /panasas/store/rn4/ctgFa/* > allctg.lst
+
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -mask=lower -minIdentity=95 -ooc=/cluster/bluearc/rn4/11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+
+    gensub2 allctg.lst affy.lst template.sub para.spec
+    mkdir psl
+    para make para.spec
+#Completed: 591 of 591 jobs
+#CPU time in finished jobs:       4911s      81.85m     1.36h    0.06d  0.000 y
+#IO & Wait Time:                 10019s     166.99m     2.78h    0.12d  0.000 y
+#Average job time:                  25s       0.42m     0.01h    0.00d
+#Longest finished job:              64s       1.07m     0.02h    0.00d
+#Submission to last job:           388s       6.47m     0.11h    0.00d
+
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyRGU34A.psl
+    pslSort dirs raw.psl tmp psl
+
+    # only use alignments that cover 30% of sequence and have at least 
+    # 95% identity in aligned region. minAli = 0.97 too high. 
+    # low minCover as a lot of n's in these sequences
+    pslReps -minCover=0.3 -minAli=0.95 -nearTop=0.005 raw.psl contig.psl \
+      /dev/null
+    liftUp affyU34A.psl ../../jkStuff/liftAll.lft warn contig.psl
+    
+    # shorten names in psl file
+    sed -e 's/RG-U34A://' affyU34A.psl > affyU34A.psl.bak
+    mv affyU34A.psl.bak affyU34A.psl
+    
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/affyU34A
+    # Rachel already set up /gbdb/hgFixed/affyProbes/RG-U34A_all.fa -
+    # see makeRn3.doc.
+    hgLoadSeq -abbr=RG-U34A: rn4 /gbdb/hgFixed/affyProbes/RG-U34A_all.fa
+   
+    # load track into database
+    hgLoadPsl rn4 affyU34A.psl
+
+    # create and load knownToU34A
+    hgMapToGene rn4 affyU34A knownGene knownToU34A
+
+    # Clean up    
+    rm -r psl tmp err batch.bak contig.psl raw.psl seq.tab
+
+
+# MERGE GNF ATLAS 2 EXPRESSION DATA AND ALIGNMENT (DONE 4/11/06 angie)
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/affyU34A
+    hgMapMicroarray gnfRatAtlas2.bed hgFixed.gnfRatAtlas2MedianRatio \
+        affyU34A.psl
+#Loaded 8022 rows of expression data from hgFixed.gnfRatAtlas2MedianRatio
+#Mapped 7447,  multiply-mapped 216, missed 695, unmapped 575
+    hgLoadBed rn4 gnfAtlas2 gnfRatAtlas2.bed
+    rm bed.tab
+
 
 # MGI?
 
