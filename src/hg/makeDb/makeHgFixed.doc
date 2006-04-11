@@ -447,7 +447,8 @@ hgsql hgFixed -e "load data local infile 'taxonName.txt' into table taxonName;"
 hgsql hgFixed -e "load data local infile 'taxonNode.txt' into table taxonNode" 
 hgsql hgFixed -e "load data local infile 'taxonDivision.txt' into table taxonDivision;"
 hgsql hgFixed -e "load data local infile 'taxonGencode.txt' into table taxonGeneticCode;"
-hgsql hg17 -N -B < xref.sql > taxonXref.txt
+
+echo "select o.name, n.taxon as ncbi_taxon, n.name , toGenus from sp060115.taxon t, hgFixed.taxonName n, organism o where o.name = n.name and n.taxon = t.id order by toGenus;" | hgsql hg17 -N -B > taxonXref.txt
 hgsql hgFixed -e "load data local infile 'taxonXref.txt' into table taxonXref;"
 
 
