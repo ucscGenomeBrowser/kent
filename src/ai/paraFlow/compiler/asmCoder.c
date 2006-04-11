@@ -1,9 +1,11 @@
 /* asmCoder - driver for assembly code generation from parse tree. */
 
 #include "common.h"
+#include "hash.h"
 #include "dyString.h"
 #include "pfCompile.h"
 #include "pfParse.h"
+#include "pfScope.h"
 #include "isx.h"
 #include "optBranch.h"
 #include "gnuMac.h"
@@ -11,6 +13,7 @@
 #include "codedType.h"
 #include "recodedType.h"
 #include "backEnd.h"
+#include "cMain.h"
 #include "pentConst.h"
 #include "pentStruct.h"
 #include "pentCode.h"
@@ -208,6 +211,7 @@ carefulClose(&branchFile);
 carefulClose(&asmFile);
 }
 
+
 struct dyString *asmCoder(struct pfCompile *pfc, struct pfParse *program, 
 	char *baseDir, char *baseName)
 /* asmCoder - driver for assembly code generation from parse tree. 
@@ -245,42 +249,7 @@ for (module = program->children; module != NULL; module = module->next)
 
 /* Open up main file, with overall info on each module and type. */
 safef(mainName, sizeof(mainName), "%sout.s", baseDir);
-mainFile = mustOpen(mainName, "w");
-pfc->isxLabelMaker = 0;
-
-/* Print out module table. */
-back->dataSegment(back, mainFile);
-safef(label, sizeof(label), "%s%s", back->cPrefix, "_pf_module_info");
-back->emitLabel(back, label, 16, FALSE, mainFile);
-for (module = program->children; module != NULL; module = module->next)
-    {
-    char *modName = module->name;
-    if (modName[0] != '<')
-	{
-	int stringId = backEndStringAdd(pfc, &strings,  modName);
-	backEndLocalPointer(back, stringId, mainFile);
-	safef(label, sizeof(label), "%s_pf_lti_%s", back->cPrefix, modName);
-	back->emitPointer(back, label, mainFile);
-	safef(label, sizeof(label), "%s_pf_poly_info_%s", 
-		back->cPrefix, modName);
-	back->emitPointer(back, label, mainFile);
-	safef(label, sizeof(label), "%s_pf_entry_%s", back->cPrefix, modName);
-	back->emitPointer(back, label, mainFile);
-	++realModuleCount;
-	}
-    }
-safef(label, sizeof(label), "%s%s", back->cPrefix, "_pf_module_info_count");
-back->emitLabel(back, label, 4, FALSE, mainFile);
-back->emitInt(back, realModuleCount, mainFile);
-
-/* Write out types */
-compTypeHash = codedTypesToBackEnd(pfc, program, &strings, mainFile);
-
-/* Write out saved-up-strings. */
-slReverse(&strings);
-backEndStringEmitAll(back, strings, mainFile);
-slFreeList(&strings);
-carefulClose(&mainFile);
+cMain(pfc, program, mainName);
 return gccFiles;
 }
 

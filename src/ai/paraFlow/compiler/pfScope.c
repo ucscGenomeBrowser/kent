@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "hash.h"
+#include "pfToken.h"
 #include "pfType.h"
 #include "pfCompile.h"
 #include "pfParse.h"

@@ -116,6 +116,7 @@
  * bytes on stack. */
 
 #include "common.h"
+#include "hash.h"
 #include "dlist.h"
 #include "pfParse.h"
 #include "pfToken.h"

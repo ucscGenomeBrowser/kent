@@ -28,7 +28,7 @@ fprintf(f,
 "\t\"incl %%1;\"\n"
 "\t:\"=m\" (%s[%d].Obj->_pf_refCount)\n"
 "\t:\"m\" (%s[%d].Obj->_pf_refCount)\n"
-"\t:\"memory\");\n", stackName, stack, stackName, stack);
+"\t:\"memory\");\n", cStackName, stack, cStackName, stack);
 }
 
 void codeVarDecRef(FILE *f, char *varName)
@@ -50,7 +50,7 @@ fprintf(f,
 "\t\"decl %%1;\"\n"
 "\t:\"=m\" (%s[%d].Obj->_pf_refCount)\n"
 "\t:\"m\" (%s[%d].Obj->_pf_refCount)\n"
-"\t:\"memory\");\n", stackName, stack, stackName, stack);
+"\t:\"memory\");\n", cStackName, stack, cStackName, stack);
 }
 
 #else
@@ -64,7 +64,7 @@ fprintf(f, "%s->_pf_refCount += 1;\n", varName);
 void codeStackIncRef(FILE *f, int stack)
 /* Bump ref count of something on expression stack not thread-safely. */
 {
-fprintf(f, "%s[%d].Obj->_pf_refCount += 1;\n", stackName, stack);
+fprintf(f, "%s[%d].Obj->_pf_refCount += 1;\n", cStackName, stack);
 }
 
 void codeVarDecRef(FILE *f, char *varName)
@@ -76,7 +76,7 @@ fprintf(f, "%s->_pf_refCount -= 1;\n", varName);
 void codeStackDecRef(FILE *f, int stack)
 /* Dec ref count of something on expression stack not thread-safely. */
 {
-fprintf(f, "%s[%d].Obj->_pf_refCount -= 1;\n", stackName, stack);
+fprintf(f, "%s[%d].Obj->_pf_refCount -= 1;\n", cStackName, stack);
 }
 
 

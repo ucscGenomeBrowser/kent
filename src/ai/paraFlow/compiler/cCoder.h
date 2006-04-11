@@ -3,8 +3,8 @@
 #ifndef CCODER_H
 #define CCODER_H
 
-extern char *stackName;
-extern char *stackType;
+extern char *cStackName;
+extern char *cStackType;
 
 void codeStatement(struct pfCompile *pfc, FILE *f, struct pfParse *pp);
 /* Emit C code for one statement. */

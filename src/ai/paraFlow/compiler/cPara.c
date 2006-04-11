@@ -144,7 +144,7 @@ elBase = elPp->ty->base;
 elName = codeVarName(pfc, elPp->var);
 
 fprintf(f, "static void %s(%s *%s, char *_pf_key, void *_pf_item, void *_pf_localVars)\n", 
-	para->name, stackType, stackName);
+	para->name, cStackType, cStackName);
 fprintf(f, "{\n");
 if (enclosingFunction != NULL)
     {
@@ -258,12 +258,12 @@ else if (base == pfc->dirType)
     if (elPp->ty->base->needsCleanup)
 	{
 	fprintf(f, "_pf_dir_add_obj(_pf_collection, _pf_key, %s+%d);\n",  
-		stackName, stack);
+		cStackName, stack);
 	}
     else 
 	{
 	fprintf(f, "_pf_dir_add_num(_pf_collection, _pf_key, %s+%d);\n",  
-		stackName, stack);
+		cStackName, stack);
 	}
     }
 else if (base == pfc->indexRangeType)

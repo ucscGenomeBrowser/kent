@@ -2,8 +2,10 @@
  * simple constants.  */
 
 #include "common.h"
+#include "hash.h"
 #include "dystring.h"
 #include "pfParse.h"
+#include "pfType.h"
 #include "pfToken.h"
 #include "pfCompile.h"
 #include "constFold.h"

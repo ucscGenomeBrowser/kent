@@ -3,6 +3,8 @@
  * paraflow module, as opposed to the global type table
  * that applies to all modules. */
 #include "common.h"
+#include "hash.h"
+#include "dystring.h"
 #include "pfType.h"
 #include "pfParse.h"
 #include "pfCompile.h"

@@ -5,6 +5,7 @@
 
 #include "common.h"
 #include "hash.h"
+#include "pfToken.h"
 #include "pfParse.h"
 #include "pfCompile.h"
 #include "pfType.h"

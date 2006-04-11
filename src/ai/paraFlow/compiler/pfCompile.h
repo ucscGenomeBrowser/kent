@@ -4,20 +4,8 @@
 #ifndef PFCOMPILE_H
 #define PFCOMPILE_H
 
-#ifndef HASH_H
-#include "hash.h"
-#endif
-
-#ifndef PFTOKEN_H
-#include "pfToken.h"
-#endif
-
-#ifndef PFSCOPE_H
-#include "pfScope.h"
-#endif
-
-#ifndef PFTYPE_H
-#include "pfType.h"
+#ifndef PFSTRUCT_H
+#include "pfStruct.h"
 #endif
 
 

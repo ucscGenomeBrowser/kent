@@ -1,6 +1,8 @@
 /* codedType - Types in form that can be used at run time. */
 
 #include "common.h"
+#include "hash.h"
+#include "dystring.h"
 #include "pfType.h"
 #include "pfParse.h"
 #include "pfCompile.h"
@@ -76,49 +78,38 @@ return id;
 }
 
 static void printAndSaveCompType(struct pfCompile *pfc, FILE *f, 
-	struct hash *hash, struct pfType *type, char *encoding,
-	boolean viaBackend, struct backEndString **pStrings)
+	struct hash *hash, struct pfType *type, char *encoding)
 /* Save to hash and print out to file run-time encoding of type. */
 {
 struct codedType *cot = codedTypeNew(encoding, type);
 hashAddSaveName(hash, encoding, cot, &cot->code);
-if (viaBackend)
-    {
-    struct pfBackEnd *back = pfc->backEnd;
-    int stringId = backEndStringAdd(pfc, pStrings, cot->code);
-    back->emitInt(back, cot->id, f);
-    backEndLocalPointer(back, stringId, f);
-    }
-else
-    fprintf(f, "  {%d, \"%s\"},\n", cot->id, cot->code);
+fprintf(f, "  {%d, \"%s\"},\n", cot->id, cot->code);
 }
 
 static void addTypesAndChildTypes(struct pfCompile *pfc, FILE *f, 
-	struct hash *hash, struct dyString *dy, struct pfType *ty, 
-	boolean viaBackend, struct backEndString **pStrings)
+	struct hash *hash, struct dyString *dy, struct pfType *ty)
 {
 struct pfType *t;
 for (t = ty->children; t != NULL; t = t->next)
-    addTypesAndChildTypes(pfc, f, hash, dy, t, viaBackend, pStrings);
+    addTypesAndChildTypes(pfc, f, hash, dy, t);
 encodeType(ty, dy);
 if (!hashLookup(hash, dy->string))
-    printAndSaveCompType(pfc, f, hash, ty, dy->string, viaBackend, pStrings);
+    printAndSaveCompType(pfc, f, hash, ty, dy->string);
 }
 
 static void rFillCompHash(struct pfCompile *pfc, FILE *f,
-	struct hash *hash, struct dyString *dy, struct pfParse *pp,
-	boolean viaBackend, struct backEndString **pStrings)
+	struct hash *hash, struct dyString *dy, struct pfParse *pp)
 /* Fill in hash with uniq types.  Print encodings of unique
  * types as we find them to file. */
 {
 struct pfParse *p;
 for (p = pp->children; p != NULL; p = p->next)
-    rFillCompHash(pfc, f, hash, dy, p, viaBackend, pStrings);
+    rFillCompHash(pfc, f, hash, dy, p);
 if (pp->ty)
     {
     encodeType(pp->ty, dy);
     if (!hashLookup(hash, dy->string))
-	addTypesAndChildTypes(pfc, f, hash, dy, pp->ty, viaBackend, pStrings);
+	addTypesAndChildTypes(pfc, f, hash, dy, pp->ty);
     }
 }
 
@@ -135,20 +126,18 @@ return NULL;
 }
 
 static void saveSimpleTypes(struct pfCompile *pfc, FILE *f, struct hash *hash,
-	struct dyString *dy, struct codedBaseType *cbt,
-	boolean viaBackend, struct backEndString **pStrings)
+	struct dyString *dy, struct codedBaseType *cbt)
 /* Make a type out of base type, and print and save it.
  * Also do this for arrays and dirs of that type. */
 {
 struct pfType *type = pfTypeNew(cbt->base), *dirType, *arrayType;
 encodeType(type, dy);
-printAndSaveCompType(pfc, f, hash, type, dy->string, viaBackend, pStrings);
+printAndSaveCompType(pfc, f, hash, type, dy->string);
 }
 
 static struct hash *hashPrintCompType(struct pfCompile *pfc, 
 	struct codedBaseType *cbtList, struct pfParse *program, 
-	struct dyString *dy, boolean viaBackend, struct backEndString **pStrings,
-	FILE *f)
+	struct dyString *dy, FILE *f)
 /* Create a hash full of codedTypes.  Also print out type 
  * encodings. */
 {
@@ -162,12 +151,12 @@ struct codedBaseType *errCbt = cbtFind(cbtList, 1, "error");
 /* Make up int and string types, serious error, and error types. The runtime 
  * depends on these being in this order as the first elements of the 
  * type array. */
-saveSimpleTypes(pfc, f, hash, dy, intCbt, viaBackend, pStrings);
-saveSimpleTypes(pfc, f, hash, dy, stringCbt, viaBackend, pStrings);
-saveSimpleTypes(pfc, f, hash, dy, seriousErrCbt, viaBackend, pStrings);
-saveSimpleTypes(pfc, f, hash, dy, errCbt, viaBackend, pStrings);
+saveSimpleTypes(pfc, f, hash, dy, intCbt);
+saveSimpleTypes(pfc, f, hash, dy, stringCbt);
+saveSimpleTypes(pfc, f, hash, dy, seriousErrCbt);
+saveSimpleTypes(pfc, f, hash, dy, errCbt);
 
-rFillCompHash(pfc, f, hash, dy, program, viaBackend, pStrings);
+rFillCompHash(pfc, f, hash, dy, program);
 return hash;
 }
 
@@ -268,7 +257,7 @@ fprintf(f, "int %s = %d;\n\n", pfBaseInfoCountName, slCount(cbtList));
 
 fprintf(f, "/* All composed types */\n");
 fprintf(f, "struct _pf_type_info %s[] = {\n", pfTypeInfoName);
-compTypeHash = hashPrintCompType(pfc, cbtList, program, dy, FALSE, NULL, f);
+compTypeHash = hashPrintCompType(pfc, cbtList, program, dy, f);
 fprintf(f, "};\n");
 fprintf(f, "int %s = sizeof(%s)/sizeof(%s[0]);\n\n",
 	pfTypeInfoCountName, pfTypeInfoName, pfTypeInfoName);
@@ -310,84 +299,3 @@ dyStringFree(&dy);
 return compTypeHash;
 }
 
-struct hash *codedTypesToBackEnd(struct pfCompile *pfc, 
-	struct pfParse *program, struct backEndString **pStrings, FILE *f)
-/* Traverse parse tree and encode all types referenced in it.
- * Save these out in assembly language data structures for runtime. */
-{
-struct dyString *dy = dyStringNew(0);
-struct dyString *fieldDy = dyStringNew(0);
-struct hash *compTypeHash = NULL;
-struct codedBaseType *cbt, *cbtList = getBaseTypes(pfc);
-struct pfBackEnd *back = pfc->backEnd;
-char label[256];
-struct slRef *ref;
-int fieldInfoCount = 0;
-
-/* Write out base types in a table - first strings then rest. */
-for (cbt = cbtList; cbt != NULL; cbt = cbt->next)
-    {
-    safef(label, sizeof(label), "%d:%s", cbt->scope, cbt->name);
-    cbt->label = backEndTempLabeledString(pfc, label, f);
-    }
-back->dataSegment(back, f);
-safef(label, sizeof(label), "%s%s", back->cPrefix, pfBaseInfoName);
-back->emitLabel(back, label, 16, FALSE, f);
-for (cbt = cbtList; cbt != NULL; cbt = cbt->next)
-    {
-    back->emitInt(back, cbt->id, f);
-    backEndLocalPointer(back, cbt->label, f);
-    back->emitInt(back, cbt->parentId, f);
-    back->emitInt(back, cbt->needsCleanup, f);
-    back->emitInt(back, cbt->size, f);
-    }
-safef(label, sizeof(label), "%s%s", back->cPrefix, pfBaseInfoCountName);
-back->emitLabel(back, label, 2, FALSE, f);
-back->emitInt(back, slCount(cbtList), f);
-
-/* Write out composite types in a table.  Save strings for later. */
-safef(label, sizeof(label), "%s%s", back->cPrefix, pfTypeInfoName);
-back->emitLabel(back, label, 16, FALSE, f);
-compTypeHash = hashPrintCompType(pfc, cbtList, program, dy, TRUE, pStrings, f);
-safef(label, sizeof(label), "%s%s", back->cPrefix, pfTypeInfoCountName);
-back->emitLabel(back, label, 2, FALSE, f);
-back->emitInt(back, compTypeHash->elCount, f);
-
-/* Write out field info to table. */
-safef(label, sizeof(label), "%s%s", back->cPrefix, pfFieldInfoName);
-back->emitLabel(back, label, 16, FALSE, f);
-for (ref = pfc->scopeRefList; ref != NULL; ref = ref->next)
-    {
-    struct pfScope *scope = ref->val;
-    struct hashEl *hel, *helList = hashElListHash(scope->types);
-    int scopeId = scope->id;
-    slSort(&helList, hashElCmp);
-    for (hel = helList; hel != NULL; hel = hel->next)
-        {
-	struct pfBaseType *base = hel->val;
-	if (base->isClass)
-	    {
-	    if (base->scope == scope)
-		{
-		int stringId;
-		back->emitInt(back, base->id, f);
-		dyStringClear(fieldDy);
-		rPrintTypedFields(compTypeHash, dy, base, fieldDy);
-		stringId = backEndStringAdd(pfc, pStrings, 
-			cloneString(fieldDy->string));
-		backEndLocalPointer(back, stringId, f);
-		++fieldInfoCount;
-		}
-	    }
-	}
-    hashElFreeList(&helList);
-    }
-safef(label, sizeof(label), "%s%s", back->cPrefix, pfFieldInfoCountName);
-back->emitLabel(back, label, 2, FALSE, f);
-back->emitInt(back, fieldInfoCount, f);
-
-dyStringFree(&fieldDy);
-dyStringFree(&dy);
-
-return compTypeHash;
-}
