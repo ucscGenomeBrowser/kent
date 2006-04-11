@@ -3,10 +3,11 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpPAR.c,v 1.1 2006/04/11 00:01:00 heather Exp $";
+static char const rcsid[] = "$Id: snpPAR.c,v 1.2 2006/04/11 01:41:32 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *outputFileHandle = NULL;
+FILE *exceptionFileHandle = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -56,6 +57,36 @@ sqlFreeResult(&sr);
 hFreeConn(&conn);
 }
 
+void getExceptions()
+{
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int start = 0;
+int end = 0;
+
+safef(query, sizeof(query), "select * from snp125Exceptions where chrom = 'chrX' and chromEnd < 2642881");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    fprintf(exceptionFileHandle, "chrY\t%s\t%s\t%s\t%s\n", row[1], row[2], row[3], row[4]);
+sqlFreeResult(&sr);
+
+safef(query, sizeof(query), "select * from snp125Exceptions where chrom = 'chrX' and chromEnd > 154494748");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    start = sqlUnsigned(row[1]);
+    end = sqlUnsigned(row[2]);
+    start = start - 97122574;
+    end = end - 97122574;
+    fprintf(exceptionFileHandle, "chrY\t%d\t%d\t%s\t%s\n", start, end, row[3], row[4]);
+    }
+sqlFreeResult(&sr);
+
+hFreeConn(&conn);
+}
+
 
 void loadDatabase()
 {
@@ -76,9 +107,12 @@ if (argc != 2)
 snpDb = argv[1];
 hSetDb(snpDb);
 outputFileHandle = mustOpen("snpPAR.tab", "w");
+exceptionFileHandle = mustOpen("snpPARexceptions.tab", "w");
 getSnps();
+getExceptions();
 // loadDatabase();
 carefulClose(&outputFileHandle);
+carefulClose(&exceptionFileHandle);
 
 return 0;
 }
