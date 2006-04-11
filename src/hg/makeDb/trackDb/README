@@ -208,6 +208,10 @@ Some settings used by various tracks:
     o itemAttrTbl - table used to color individual items in a track, selected
       by name and locations.  Currently works for genePred tracks.
 
+Note: We have a restriction on table names.   We currently do not handle
+table names in the format chrN_table_name.   The 2nd underscore is not allowed.
+
+
 Composite Tracks
 ================
 Tracks of the same type can be grouped in a single "composite track",
