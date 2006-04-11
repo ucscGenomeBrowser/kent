@@ -9,7 +9,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: bed.c,v 1.41 2005/08/01 21:10:19 hiram Exp $";
+static char const rcsid[] = "$Id: bed.c,v 1.42 2006/04/11 21:43:07 baertsch Exp $";
 
 void bedStaticLoad(char **row, struct bed *ret)
 /* Load a row from bed table into ret.  The contents of ret will
@@ -615,7 +615,11 @@ assert(bed);
 AllocVar(gp);
 gp->name = cloneString(bed->name);
 gp->chrom = cloneString(bed->chrom);
-safef(gp->strand, sizeof(gp->strand), "%s", bed->strand);
+//fails if strlen(bed->strand) == 2 as genepred has no space for zero terminator
+//safef(gp->strand, sizeof(gp->strand), "%s", bed->strand);
+gp->strand[0] = bed->strand[0];
+gp->strand[1] = '\0';
+assert(gp->strand[1] != '-');
 gp->txStart = bed->chromStart;
 gp->txEnd = bed->chromEnd;
 gp->cdsStart = bed->thickStart;

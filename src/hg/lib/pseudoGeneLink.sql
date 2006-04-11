@@ -5,8 +5,7 @@
 
 #links a gene/pseudogene prediction to an ortholog or paralog.
 CREATE TABLE pseudoGeneLink (
-    bin int unsigned not null,	# bin
-    chrom varchar(255) not null,	# Chromosome name for pseudogene
+    chrom varchar(255) not null,	# Reference sequence chromosome or scaffold
     chromStart int unsigned not null,	# pseudogene alignment start position
     chromEnd int unsigned not null,	# pseudogene alignment end position
     name varchar(255) not null,	# Name of pseudogene
@@ -29,22 +28,22 @@ CREATE TABLE pseudoGeneLink (
     geneOverlap int unsigned not null,	# bases overlapping
     polyA int unsigned not null,	# count of As in polyA
     polyAstart int not null,	# start of polyA, relative to end of pseudogene
-    exonCover int unsigned not null,	# number of exons in Gene covered
+    exonCover int not null,	# number of exons in Gene covered
     intronCount int unsigned not null,	# number of introns in pseudogene
     bestAliCount int unsigned not null,	# number of good mrnas aligning
     matches int unsigned not null,	# matches + repMatches
     qSize int unsigned not null,	# aligning bases in pseudogene
     qEnd int unsigned not null,	# end of cdna alignment
     tReps int unsigned not null,	# repeats in gene
-    qReps int unsigned not null,	# repeats in pseudogene
-    overlapDiag int unsigned not null,	# bases syntenic to mouse
+    overlapRhesus int not null,	# percent of retro that breaks net relative to Rhesus
+    overlapMouse int not null,	# percent of retro that breaks net relative to Mouse
     coverage int unsigned not null,	# % of bases that align to gene
-    label int not null,	# 1=pseudogene,-1 not pseudogene,-2 expressed retroGene
+    label int not null,	# 1=pseudogene,-1 not pseudogene -2 expressed retroGene
     milliBad int unsigned not null,	# milliBad score, pseudogene aligned to genome
     oldScore int unsigned not null,	# another heuristic
     oldIntronCount int not null,	# old simple intron count
     conservedIntrons int not null,	# conserved intron count
-    intronScores varchar(255) not null,	# Intron sizes in gene/pseudogene
+    conservedSpliceSites int not null,	# conserved splice site count
     maxOverlap int not null,	# largest overlap with another mrna
     refSeq varchar(255) not null,	# Name of closest regSeq to gene
     rStart int not null,	# refSeq alignment start position
@@ -59,11 +58,9 @@ CREATE TABLE pseudoGeneLink (
     overStart int not null,	# overlapping mrna start position
     overEnd int not null,	# overlapping mrna end position
     overStrand char(2) not null,	# strand of overlapping mrna
-    adaBoost int not null,	# adaBoost label
+    overlapDog int not null,	# percent of retro that breaks net relative to dog
     posConf float not null,	# pvalue for positive
     polyAlen int unsigned not null,	# length of polyA
               #Indices
-    PRIMARY KEY(chrom(8),bin, name(10), chromStart),
-    INDEX (name(8)),
-    INDEX (refSeq(12))
+    PRIMARY KEY(chrom)
 );

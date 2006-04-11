@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.290 2006/04/07 05:06:35 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.291 2006/04/11 21:43:08 baertsch Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2754,7 +2754,10 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
         {
 	safef(fullName, sizeof(fullName), "%s", rootName);
 	if (!hTableExistsDb(db, fullName))
+            {
+//            warn("No table %s in %s", fullName, db);
 	    return NULL;
+            }
 	}
     AllocVar(hti);
     hashAddSaveName(hash, rootName, hti, &hti->rootName);
@@ -3031,7 +3034,7 @@ int rowOffset = 0;
 if (fields == NULL) fields = "*";
 if (hti == NULL)
     {
-    warn("table %s doesn't exist", rootTable);
+    warn("table %s doesn't exist or hFindTableInfoDb failed", rootTable);
     }
 else
     {

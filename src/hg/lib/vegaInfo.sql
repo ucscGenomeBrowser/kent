@@ -10,6 +10,7 @@ CREATE TABLE vegaInfo (
     geneId varchar(255) not null,	# Vega gene ID
     method varchar(255) not null,	# GTF method field
     geneDesc varchar(255) not null,	# Vega gene description
+    confidence varchar(255) not null,	# Vega gene confidence
               #Indices
     PRIMARY KEY(transcriptId)
 );

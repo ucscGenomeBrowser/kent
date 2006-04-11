@@ -7,6 +7,7 @@
 #include "hdb.h"
 #include "linefile.h"
 #include "genePred.h"
+#include "binRange.h"
 
 /* Aliases for id field */
 static char *idAliases[] =
@@ -316,3 +317,37 @@ struct genePred *gpList = genePredReaderAll(gpr);
 genePredReaderFree(&gpr);
 return gpList;
 }
+
+struct hash *genePredToBinKeeper(char *sizeFileName, char *gpFile)
+/* read a list of genePreds and return results in hash of binKeeper structure for fast query*/
+{
+struct binKeeper *bk; 
+struct genePred *gp , *gpList = NULL;
+struct lineFile *sf = lineFileOpen(sizeFileName, TRUE);
+struct hash *hash = newHash(0);
+char *chromRow[2];
+
+while (lineFileRow(sf, chromRow))
+    {
+    char *name = chromRow[0];
+    int size = lineFileNeedNum(sf, chromRow, 1);
+
+    if (hashLookup(hash, name) != NULL)
+        warn("Duplicate %s, ignoring all but first\n", name);
+    else
+        {
+        bk = binKeeperNew(0, size);
+        assert(size > 1);
+	hashAdd(hash, name, bk);
+        }
+    }
+gpList = genePredReaderLoadFile(gpFile, NULL);
+for (gp = gpList ; gp!= NULL; gp=gp->next)
+    {
+    bk = hashMustFindVal(hash, gp->chrom);
+    binKeeperAdd(bk, gp->txStart, gp->txEnd, gp);
+    }
+lineFileClose(&sf);
+return hash;
+}
+

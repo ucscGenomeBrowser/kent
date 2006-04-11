@@ -68,6 +68,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     stsMap.o stsMapMouse.o stsMapMouseNew.o stsMapRat.o stsMarker.o \
     synMap.o synteny100000.o syntenyBerk.o syntenySanger.o \
     tableDescriptions.o tableStatus.o tfbsConsMap.o \
+    taxonDivision.o taxonGeneticCode.o taxonName.o taxonNode.o taxonXref.o \
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
     trackDbCustom.o trackTable.o transRegCode.o transRegCodeCondition.o \
     transRegCodeProbe.o vegaInfo.o visiGene.o vntr.o wabAli.o web.o wgRna.o \
