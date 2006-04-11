@@ -10,7 +10,7 @@
 #include "bits.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: gsBig.c,v 1.14 2005/02/19 18:04:31 angie Exp $";
+static char const rcsid[] = "$Id: gsBig.c,v 1.15 2006/04/11 16:26:27 angie Exp $";
 
 char *exePath = "/projects/compbio/bin/genscan-linux/genscan";
 char *parPath = "/projects/compbio/bin/genscan-linux/HumanIso.smat";
@@ -250,7 +250,7 @@ char *words[2];
 if (!lineFileNext(lf, &line, NULL))
     errAbort("%s is empty", fileName);
 if (!startsWith("GENSCAN ", line))
-    errAbort("%s is not a GENSCAN output file");
+    errAbort("%s is not a GENSCAN output file", fileName);
 if (retSeqName != NULL)
     {
     line = mustSkipTo(lf, "Sequence");
@@ -342,7 +342,6 @@ void writeSeg(char *seqName, struct segment *seg, FILE *gtf, FILE *sub, FILE *tr
 {
 struct genScanGene *gene;
 struct genScanFeature *gsf;
-struct hash *nameHash = newHash(0);
 
 for (gene = seg->geneList; gene != NULL; gene = gene->next)
     {
@@ -435,7 +434,6 @@ void genesToBits(struct genScanGene *geneList, Bits *bits, int overlapStart, int
 /* Write ranges covered by gene to bitfield. */
 {
 struct genScanGene *gene;
-int s, e, size;
 
 for (gene = geneList; gene != NULL; gene = gene->next)
     {
@@ -639,7 +637,7 @@ else
     {
     struct dyString *dy = newDyString(1024);
     char tempFa[512], tempGs[512];
-    char dir1[256], root1[128], ext1[64], file1[265];
+    char dir1[256], root1[128], ext1[64];
     int myPid = (int)getpid();
 
     splitPath(faName, dir1, root1, ext1);
