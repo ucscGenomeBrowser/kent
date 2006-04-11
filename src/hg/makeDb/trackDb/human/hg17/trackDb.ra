@@ -178,8 +178,8 @@ track picTar
 compositeTrack on
 shortLabel PicTar
 longLabel PicTar microRNA sites
-group genes
-priority 63.7
+group regulation
+priority 100
 visibility hide
 type bed 9
 
