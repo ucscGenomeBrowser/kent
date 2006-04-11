@@ -3255,9 +3255,52 @@ cat > downloads.csh << 'EOF'
     rm -r /san/sanvol1/scratch/rn4/multiz9way.2006-03-30/phastCons
 
 
+# MIRNA (DONE 4/10/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/rn4/bed/miRNA
+    cd /cluster/data/rn4/bed/miRNA
+    wget ftp://ftp.sanger.ac.uk/pub/mirbase/sequences/8.0/database_files/tables.sql
+    foreach t (mirna mirna_species mirna_mature mirna_pre_mature \
+               mirna_chromosome_build)
+      wget ftp://ftp.sanger.ac.uk/pub/mirbase/sequences/8.0/database_files/$t.dat.gz
+    end
+    nice gunzip *.gz
+    hgsql '' -e 'create database miRNAtmp'
+    hgsql miRNAtmp < tables.sql
+    foreach t (mirna mirna_species mirna_mature mirna_pre_mature \
+               mirna_chromosome_build)
+      hgsql miRNAtmp -e 'load data local infile "'$t.dat'" into table '$t
+    end
+    set species = `hgsql miRNAtmp -N -e 'select auto_id from mirna_species where name = "Rattus norvegicus"'`
+    hgsql miRNAtmp -e "create table mirna_rat select * from mirna where auto_species = $species"
+    hgsql miRNAtmp -N -e "select count(*) from mirna_rat"
+#| 234 |
+    time nice hgsql miRNAtmp -N -e \
+     "select mirna_chromosome_build.xsome, \
+             mirna_chromosome_build.contig_start - 1, \
+             mirna_chromosome_build.contig_end, \
+             mirna_rat.mirna_id, 0, \
+             mirna_chromosome_build.strand, \
+       (mirna_chromosome_build.contig_start + mirna_mature.mature_from - 2), \
+       (mirna_chromosome_build.contig_start + mirna_mature.mature_to - 1) \
+      from mirna_rat, mirna_chromosome_build, mirna_mature, mirna_pre_mature \
+      where mirna_rat.auto_mirna = mirna_chromosome_build.auto_mirna and \
+            mirna_rat.auto_mirna = mirna_pre_mature.auto_mirna and \
+            mirna_pre_mature.auto_mature = mirna_mature.auto_mature" \
+       > mirna.almostBed
+    awk '{$5 = 960;}  $6 == "-" {$5 = 480;}  {$1 = "chr" $1;  print;}' \
+      mirna.almostBed > miRNA.bed
+    hgLoadBed rn4 miRNA miRNA.bed
+    hgsql miRNAtmp -e 'drop database miRNAtmp'
+
+
 # AFFY CHIPS
 
 # MGI?
+
+# Recomb rate - no doc, but ls -l /cluster/bin/scripts/*ecomb* and see 
+# ftp://ftp.ncbi.nih.gov/genomes/R_norvegicus/Mapping_data/
+
 # SNPS - TBD by Heather's new process.
 
 
