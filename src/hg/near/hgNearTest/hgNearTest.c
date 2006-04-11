@@ -13,7 +13,7 @@
 #include "hdb.h"
 #include "qa.h"
 
-static char const rcsid[] = "$Id: hgNearTest.c,v 1.19 2004/11/10 15:15:38 kent Exp $";
+static char const rcsid[] = "$Id: hgNearTest.c,v 1.20 2006/04/11 00:51:07 heather Exp $";
 
 /* Command line variables. */
 char *dataDir = "/usr/local/apache/cgi-bin/hgNearData";
@@ -431,6 +431,12 @@ char *canonicalTable = hashMustFindVal(genomeRa, "canonicalTable");
 char *accColumn = hashMustFindVal(genomeRa, "idColumn");
 struct slName *geneList = sqlRandomSample(db, canonicalTable, "transcript", clRepeat);
 struct htmlPage *dbPage;
+struct slName *ptr;
+
+verbose(1, "genelist:\n");
+for (ptr = geneList; ptr != NULL; ptr = ptr->next)
+    verbose(1, "%s\n", ptr->name);
+
 
 htmlPageSetVar(orgPage, NULL, "db", db);
 htmlPageSetVar(orgPage, NULL, searchVarName, "");
