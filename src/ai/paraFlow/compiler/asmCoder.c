@@ -10,6 +10,7 @@
 #include "ctar.h"
 #include "codedType.h"
 #include "recodedType.h"
+#include "backEnd.h"
 #include "pentConst.h"
 #include "pentStruct.h"
 #include "pentCode.h"
@@ -131,6 +132,41 @@ for (pp = parent->children; pp != NULL; pp = pp->next)
     }
 }
 
+static void printPolyFuncConnections(struct pfCompile *pfc,
+	struct slRef *scopeRefs, struct pfParse *module, FILE *f)
+/* Print out poly_info table that connects polymorphic function
+ * tables to the classes they belong to. */
+{
+struct pfBackEnd *back = pfc->backEnd;
+struct slRef *ref;
+char label[256];
+struct backEndString *strings = NULL;
+
+back->dataSegment(back, f);
+safef(label, sizeof(label), "%s_pf_poly_info_%s", back->cPrefix,
+	mangledModuleName(module->name));
+back->emitLabel(back, label, 16, FALSE, f);
+for (ref = scopeRefs; ref != NULL; ref = ref->next)
+    {
+    struct pfScope *scope = ref->val;
+    struct pfBaseType *class = scope->class;
+    if (class != NULL && class->polyList != NULL && 
+    	pfParseIsInside(module, class->def))
+        {
+	int stringId = backEndStringAdd(pfc, &strings,  class->name);
+	backEndLocalPointer(back, stringId, f);
+	safef(label, sizeof(label), "%s_pf_pf%d_%s", back->cPrefix,
+		class->scope->id, class->name);
+	back->emitPointer(back, label, f);
+	}
+    }
+back->emitInt(back, 0, f);
+back->emitInt(back, 0, f);
+slReverse(&strings);
+backEndStringEmitAll(back, strings, f);
+slFreeList(&strings);
+}
+
 static void asmModule(struct pfCompile *pfc, struct pfParse *program,
 	struct pfParse *module, char *baseDir)
 /* Generate assembly for a single module */
@@ -160,6 +196,7 @@ pentStructPrint(asmFile);
 codeOutsideFunctions(pfc, module, labelHash, isxFile, branchFile, asmFile);
 codeFunctions(pfc, module, labelHash, isxFile, branchFile, asmFile, NULL);
 gnuMacModuleVars(modVarIsx->iList, asmFile);
+printPolyFuncConnections(pfc, pfc->scopeRefList, module, asmFile);
 recodedTypeTableToBackend(pfc, module->name, asmFile);
 gnuMacModulePostscript(asmFile);
 
@@ -179,8 +216,12 @@ struct dyString *asmCoder(struct pfCompile *pfc, struct pfParse *program,
 struct pfParse *module;
 struct dyString *gccFiles = dyStringNew(0);
 struct hash *compTypeHash = NULL;
+struct backEndString *strings = NULL;
 char mainName[PATH_LEN];
 FILE *mainFile;
+struct pfBackEnd *back = pfc->backEnd;
+char label[128];
+int realModuleCount = 0;
 
 for (module = program->children; module != NULL; module = module->next)
     {
@@ -201,10 +242,44 @@ for (module = program->children; module != NULL; module = module->next)
     else
         internalErr();
     }
+
+/* Open up main file, with overall info on each module and type. */
 safef(mainName, sizeof(mainName), "%sout.s", baseDir);
 mainFile = mustOpen(mainName, "w");
 pfc->isxLabelMaker = 0;
-compTypeHash = codedTypesCalcAndPrintToBackend(pfc, program, mainFile);
+
+/* Print out module table. */
+back->dataSegment(back, mainFile);
+safef(label, sizeof(label), "%s%s", back->cPrefix, "_pf_module_info");
+back->emitLabel(back, label, 16, FALSE, mainFile);
+for (module = program->children; module != NULL; module = module->next)
+    {
+    char *modName = module->name;
+    if (modName[0] != '<')
+	{
+	int stringId = backEndStringAdd(pfc, &strings,  modName);
+	backEndLocalPointer(back, stringId, mainFile);
+	safef(label, sizeof(label), "%s_pf_lti_%s", back->cPrefix, modName);
+	back->emitPointer(back, label, mainFile);
+	safef(label, sizeof(label), "%s_pf_poly_info_%s", 
+		back->cPrefix, modName);
+	back->emitPointer(back, label, mainFile);
+	safef(label, sizeof(label), "%s_pf_entry_%s", back->cPrefix, modName);
+	back->emitPointer(back, label, mainFile);
+	++realModuleCount;
+	}
+    }
+safef(label, sizeof(label), "%s%s", back->cPrefix, "_pf_module_info_count");
+back->emitLabel(back, label, 4, FALSE, mainFile);
+back->emitInt(back, realModuleCount, mainFile);
+
+/* Write out types */
+compTypeHash = codedTypesToBackEnd(pfc, program, &strings, mainFile);
+
+/* Write out saved-up-strings. */
+slReverse(&strings);
+backEndStringEmitAll(back, strings, mainFile);
+slFreeList(&strings);
 carefulClose(&mainFile);
 return gccFiles;
 }

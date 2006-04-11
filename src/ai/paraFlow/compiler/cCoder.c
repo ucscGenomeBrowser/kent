@@ -2836,18 +2836,6 @@ for (pp = pp->children; pp != NULL; pp = pp->next)
 }
 
 
-static boolean isInside(struct pfParse *outside, struct pfParse *inside)
-/* Return TRUE if inside is a child of outside. */
-{
-while (inside != NULL)
-    {
-    if (inside == outside)
-	return TRUE;
-    inside = inside->parent;
-    }
-return FALSE;
-}
-
 static void rPrintFuncDeclarations(struct pfCompile *pfc, FILE *f, 
 	struct pfParse *pp, struct pfParse *class)
 /* Print out function declarations. */
@@ -2914,7 +2902,7 @@ if (isModuleScope)
     for (hel = helList; hel != NULL; hel = hel->next)
         {
 	struct pfVar *var = hel->val;
-	var->isExternal = !isInside(pp, var->parse);
+	var->isExternal = !pfParseIsInside(pp, var->parse);
 	}
     }
 codeVarsInHelList(pfc, f, helList, !isModuleScope, isModuleScope);
@@ -2970,7 +2958,8 @@ for (ref = scopeRefs; ref != NULL; ref = ref->next)
     {
     struct pfScope *scope = ref->val;
     struct pfBaseType *class = scope->class;
-    if (class != NULL && class->polyList != NULL && isInside(module, class->def))
+    if (class != NULL && class->polyList != NULL && 
+    	pfParseIsInside(module, class->def))
         {
 	fprintf(f, "  {\"%s\", _pf_pf%d_%s},\n", class->name, class->scope->id, class->name);
 	}
@@ -3181,7 +3170,7 @@ f = mustOpen(mainName, "w");
 printPreamble(pfc, f, mainName, FALSE);
 printSysVarsAndPrototypes(f);
 printModuleTable(pfc, f, program);
-codedTypesCalcAndPrintAsC(pfc, program, f);
+codedTypesToC(pfc, program, f);
 printConclusion(pfc, f, mainModule);
 carefulClose(&f);
 }

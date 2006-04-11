@@ -242,6 +242,9 @@ struct pfParse *pfParseNew(enum pfParseType type,
 /* Return new parse node.  It's up to caller to fill in
  * children later. */
 
+boolean pfParseIsInside(struct pfParse *outside, struct pfParse *inside);
+/* Return TRUE if inside is a child of outside. */
+
 boolean pfParseIsConst(struct pfParse *pp);
 /* Return TRUE if pp is a simple constant. */
 
@@ -267,12 +270,6 @@ void pfParseDump(struct pfParse *pp, int level, FILE *f);
 
 void pfParseDumpOne(struct pfParse *pp, int level, FILE *f);
 /* Dump out single pfParse record at given level of indent. */
-
-#ifdef OLD
-struct pfParse *pfParseSource(struct pfCompile *pfc, struct pfSource *source,
-	struct pfParse *parent, struct pfScope *scope, enum pfParseType modType);
-/* Tokenize and parse given source. */
-#endif /* OLD */
 
 struct pfParse *pfParseModule(struct pfCompile *pfc, struct pfModule *module,
       struct pfParse *parent, struct pfScope *scope, enum pfParseType modType);

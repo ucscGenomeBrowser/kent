@@ -115,6 +115,18 @@ pp->scope = scope;
 return pp;
 }
 
+boolean pfParseIsInside(struct pfParse *outside, struct pfParse *inside)
+/* Return TRUE if inside is a child of outside. */
+{
+while (inside != NULL)
+    {
+    if (inside == outside)
+	return TRUE;
+    inside = inside->parent;
+    }
+return FALSE;
+}
+
 boolean pfParseIsConst(struct pfParse *pp)
 /* Return TRUE if pp is a simple constant. */
 {

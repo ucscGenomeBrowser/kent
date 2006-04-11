@@ -237,7 +237,7 @@ return cbtList;
 #define pfFieldInfoCountName "_pf_field_info_count"
 
 
-struct hash *codedTypesCalcAndPrintAsC(struct pfCompile *pfc, 
+struct hash *codedTypesToC(struct pfCompile *pfc, 
 	struct pfParse *program, FILE *f)
 /* Traverse parse tree and encode all types referenced in it.
  * Also print out the types in C structures that the runtime
@@ -310,8 +310,8 @@ dyStringFree(&dy);
 return compTypeHash;
 }
 
-struct hash *codedTypesCalcAndPrintToBackend(struct pfCompile *pfc, 
-	struct pfParse *program, FILE *f)
+struct hash *codedTypesToBackEnd(struct pfCompile *pfc, 
+	struct pfParse *program, struct backEndString **pStrings, FILE *f)
 /* Traverse parse tree and encode all types referenced in it.
  * Save these out in assembly language data structures for runtime. */
 {
@@ -321,7 +321,6 @@ struct hash *compTypeHash = NULL;
 struct codedBaseType *cbt, *cbtList = getBaseTypes(pfc);
 struct pfBackEnd *back = pfc->backEnd;
 char label[256];
-struct backEndString *strings = NULL;
 struct slRef *ref;
 int fieldInfoCount = 0;
 
@@ -349,7 +348,7 @@ back->emitInt(back, slCount(cbtList), f);
 /* Write out composite types in a table.  Save strings for later. */
 safef(label, sizeof(label), "%s%s", back->cPrefix, pfTypeInfoName);
 back->emitLabel(back, label, 16, FALSE, f);
-compTypeHash = hashPrintCompType(pfc, cbtList, program, dy, TRUE, &strings, f);
+compTypeHash = hashPrintCompType(pfc, cbtList, program, dy, TRUE, pStrings, f);
 safef(label, sizeof(label), "%s%s", back->cPrefix, pfTypeInfoCountName);
 back->emitLabel(back, label, 2, FALSE, f);
 back->emitInt(back, compTypeHash->elCount, f);
@@ -374,7 +373,7 @@ for (ref = pfc->scopeRefList; ref != NULL; ref = ref->next)
 		back->emitInt(back, base->id, f);
 		dyStringClear(fieldDy);
 		rPrintTypedFields(compTypeHash, dy, base, fieldDy);
-		stringId = backEndStringAdd(pfc, &strings, 
+		stringId = backEndStringAdd(pfc, pStrings, 
 			cloneString(fieldDy->string));
 		backEndLocalPointer(back, stringId, f);
 		++fieldInfoCount;
@@ -387,10 +386,6 @@ safef(label, sizeof(label), "%s%s", back->cPrefix, pfFieldInfoCountName);
 back->emitLabel(back, label, 2, FALSE, f);
 back->emitInt(back, fieldInfoCount, f);
 
-/* Write out saved-up-strings. */
-slReverse(&strings);
-backEndStringEmitAll(back, strings, f);
-slFreeList(&strings);
 dyStringFree(&fieldDy);
 dyStringFree(&dy);
 
