@@ -13,7 +13,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.11 2006/04/10 22:53:21 heather Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.12 2006/04/12 20:19:23 heather Exp $";
 
 static char *database = NULL;
 static struct hash *chromHash = NULL;
@@ -158,7 +158,10 @@ for (machinePos = machineList; machinePos != NULL; machinePos = machinePos->next
     dyStringPrintf(dy, "%s/cgi-bin/hgTracks?db=hg17&position=%s:%d-%d", machinePos->name, 
                    chrom, startPos, startPos + windowSize);
     elapsedTime = hgTracksRandom(dy->string);
-    printf("%s %ld\n", machinePos->name, elapsedTime);
+    if (elapsedTime > 5000)
+        printf("%s %ld <---\n", machinePos->name, elapsedTime);
+    else
+        printf("%s %ld\n", machinePos->name, elapsedTime);
     }
 printf("----------------------------------\n");
 
