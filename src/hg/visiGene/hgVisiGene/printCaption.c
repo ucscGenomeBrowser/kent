@@ -301,6 +301,9 @@ void smallCaption(struct sqlConnection *conn, int imageId)
 {
 struct slName *geneList, *gene;
 int imageFile = visiGeneImageFile(conn, imageId);
+char *genotype = visiGeneGenotype(conn, imageId);
+if (genotype && !sameString(genotype,"wild type"))
+    printf("Mutant ");
 printf("%s", shortOrgName(visiGeneOrganism(conn, imageId)));
 geneList = vgImageFileGenes(conn, imageFile);
 for (gene = geneList; gene != NULL; gene = gene->next)
@@ -308,6 +311,7 @@ for (gene = geneList; gene != NULL; gene = gene->next)
     printf(" %s", gene->name);
     }
 slFreeList(&geneList);
+freez(&genotype);
 }
 
 

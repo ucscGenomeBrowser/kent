@@ -269,32 +269,32 @@ if (imageCount > 0)
     printf("<HR>\n");
     }
 if (count != imageCount)
-   {
-   int start;
-   int page = 0;
-   printf("%d-%d of %d for:<BR>", startAt+1,
-   	startAt+count, imageCount);
-   printf("&nbsp;%s<BR>\n", listSpec);
-   printf("Page:\n");
-   for (start=0; start<imageCount; start += maxCount)
-       {
-       ++page;
-       if (start != startAt)
-	   {
-	   printf("<A HREF=\"%s?", hgVisiGeneCgiName());
-	   printf("%s&", sidUrl);
-	   printf("%s=on&", hgpDoThumbnails);
-	   printf("%s=%s&", hgpListSpec, listSpec);
-	   if (start != 0)
+    {
+    int start;
+    int page = 0;
+    printf("%d-%d of %d for:<BR>", startAt+1,
+	startAt+count, imageCount);
+    printf("&nbsp;%s<BR>\n", listSpec);
+    printf("Page:\n");
+    for (start=0; start<imageCount; start += maxCount)
+	{
+	++page;
+	if (start != startAt)
+	    {
+	    printf("<A HREF=\"%s?", hgVisiGeneCgiName());
+	    printf("%s&", sidUrl);
+	    printf("%s=on&", hgpDoThumbnails);
+	    printf("%s=%s&", hgpListSpec, listSpec);
+	    if (start != 0)
 	       printf("%s=%d", hgpStartAt, start);
-	   printf("\">");
-	   }
-       printf("%d", page);
-       if (start != startAt)
+	    printf("\">");
+	    }
+	printf("%d", page);
+	if (start != startAt)
 	   printf("</A>");
-       printf(" ");
-       }
-   }
+	printf(" ");
+	}
+    }
 else
     {
     printf("%d images for:<BR>", imageCount);
