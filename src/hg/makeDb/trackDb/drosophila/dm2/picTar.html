@@ -1,71 +1,77 @@
 <H2>Description</H2>
 <P>
-MicroRNA target sites in 3' UTRs as predicted by PicTar,
-based on the full length cDNAs provided by flybase.
+MicroRNA target sites in 3' UTRs as predicted by PicTar, based on the
+RefSeq annotation of 3' UTRs. 
 </P>
 
 <H2>Methods</H2>
 <P>
-The original PicTar algorithm was published in Krek et al, Nature
-Genetics, 2005. Displayed are updated predictions as published in Lall et
-al, Current Biology 2006. Briefly, PicTar is a Hidden Markov Model that
-assigns probabilities to 3' UTR subsequences to be a binding site for a
-microRNA, considers all possible ways the 3' UTR could be bound by
-microRNAs, and then uses a maximum likelihood method to compute the
-optimal Likelihood under which the 3' UTR could be explained by microRNAs
-and background. The Score is this likelihood divided by backround, ie the
-local basecomposition of each 3' UTR is taken into account. To fit the
-Score track conventions of the UCSC browser (integers), we scaled all
-scores by the maximum score of all microRNA:3' UTR scores observed. Note
-that PicTar scores any 3' UTR that has at least 1 aligned, conserved
-predicted binding site for a microRNA, but then incorporates all possible
-binding sites into the score, even if they appear to be non-conserved.
-Since the Score for a 3' UTR is a "phylo" average over all orthologous 3'
-UTRs used, "scattered" sites that appear in many species may boost the
-score, and individual sites shown in the display may not be aligned and
-conserved in all species under consideration.
+The original PicTar algorithm was published in Krek <EM>et al.</EM>,
+Nature Genetics, 2005. Displayed are updated predictions as published in
+Lall <EM>et al.</EM>, Current Biology 2006. Briefly, PicTar is a Hidden 
+Markov Model
+that assigns probabilities to 3' UTR subsequences to be a binding site for a
+microRNA, considers all possible ways the 3' UTR could be bound by microRNAs,
+and then uses a maximum likelihood method to compute the optimal likelihood
+under which the 3' UTR could be explained by microRNAs and background.
+The score is this likelihood divided by background, <EM>i.e.</EM>, the local
+base composition of each 3' UTR is taken into account. To fit the score
+track conventions of the UCSC browser (integers), we scaled all scores by
+the maximum score of all microRNA 3'-UTR scores observed. Note that the PicTar
+algorithm
+scores any 3' UTR that has at least one aligned conserved predicted binding
+site for a microRNA, but then incorporates all possible binding sites into
+the score, even if they appear to be non-conserved. Because the score for
+a 3' UTR is a "phylo" average over all orthologous 3' UTRs used, "scattered"
+sites that appear in many species may boost the score, and individual sites
+shown in the display may not be aligned and conserved in all species under
+consideration. 
 </P>
+
 <P>
-Two levels of conservation can be chosen: conservation between
-melanogaster/yakuba/ananassae/pseudoobscura (high sensitivity settings)
-and conservation between the
-melanogaster/yakuba/ananassae/pseudoobscura/mojavensis/virilis.
-The latter settings have improved specificity, but less sensitivity.
+Two levels of conservation can be chosen: conservation among
+melanogaster/yakuba/ananassae/pseudoobscura (high sensitivity settings) and 
+conservation between the 
+melanogaster/yakuba/ananassae/pseudoobscura/mojavensis/virilis. 
+The latter settings have improved quality, but lower sensitivity.
 </P>
+
 <P>
-For a detailed analysis of signal to noise ratios and and sensitivity
-please refer to Grun et al, Plos Computational Biology, and Lall et al 2006.
+For a detailed analysis of signal-to-noise ratios and sensitivity
+please refer to Grün, <EM>et al.</EM> and Lall <EM>et al.</EM>. 
 </P>
 
 <H2>References</H2>
 <P>
-Krek, A, Grün, D, Poy, MN, Wolf R, Rosenberg L, Epstein EJ, MacMenamin P,
-da Piedade I, Gunsalus KC, Stoffel M, &amp; Rajewsky N
+Krek, A., Grün, D., Poy, M.N., Wolf, R,, Rosenberg, L., Epstein E.J., 
+MacMenamin, P., da Piedade, I., Gunsalus, K.C., Stoffel, M., and Rajewsky, N.,
 <A HREF="http://www.nature.com/ng/journal/v37/n5/abs/ng1536.html" TARGET=_blank>
-Combinatorial microRNA target predictions,</A>
-Nature Genetics  37, 495 - 500 (2005) 
+Combinatorial microRNA target predictions</A>,
+<EM>Nature Genetics</EM>, <B>37</B>,495-500 (2005). 
 </P>
 <P>
-Grün D, Wang YL, Langenberger D, Gunsalus KC, Rajewsky N, et. al.
+Grün D., Wang, Y.L., Langenberger, D., Gunsalus, K.C., Rajewsky, N, 
+<EM>et al.</EM>
 <A HREF="http://compbiol.plosjournals.org/perlserv/?request=get-document&doi=10.1371/journal.pcbi.0010013" TARGET=_blank>
-microRNA Target predictions across seven Drosophial species and
-comparison to mammalian targets,</A> PLoS Comp. Biol. 1(1):e13 (2005) 
+MicroRNA target predictions across seven <EM>Drosophila </EM>species and
+comparison to mammalian targets</A>, <EM>PLoS Comp. Biol.</EM>, <B>1</B>(1):e13 
+(2005).
 </P>
 <P>
-S. Lall, D. Grün, A. Krek, K. Chen, Y-L Wang, CN Dewey, P. Sood,
-T. Colombo, N. Bray, P. MacMenamin, H.-L. Kao, K. C. Gunsalus, L. Pachter,
-F. Piano &amp; N. Rajewsky
+Lall, S., Grün, D., Krek, A., Chen, K., Wang, Y-L.,  Dewey, C.N., Sood, P.,
+Colombo, T., Bray, N., MacMenamin, P., Kao, H-L., Gunsalus, K.C., Pachter, L.,
+Piano, F. and Rajewsky, N.,
 <A HREF="http://www.current-biology.com/content/article/abstract?uid=PIIS0960982206010591" TARGET=_blank>
-A Genome-Wide Map of Conserved MicroRNA Targets in C. elegans,</A>
-Current Biology, Vol 16, 460-471, 7 March 2006
+A genome-wide map of conserved microRNA targets in <EM>C. elegans</EM></A>,
+<EM>Current Biology</EM>, <B>16</B>,460-471 (2006).
 </P>
 
 <H2>Credits</H2>
 <P>
-Thanks to the Dominic Grün, Yi-Lu Wang, and Nikolaus Rajewsky for
-providing this annotation. PicTar is a project of the Rajewsky lab at
-NYU's Center for Comaprative Functional Genomics. Much more detailed
-information about individual predictions can be found at
+Thanks to the Dominic Grün, Yi-Lu Wang, and Nikolaus Rajewsky for providing
+this annotation. PicTar is a project of the Rajewsky lab at NYU's Center for
+Comparative Functional Genomics. More detailed information about
+individual predictions can be found at
 <A HREF="http://pictar.bio.nyu.edu/" TARGET=_blank>The Rajewsky Lab,</A>
-NYU Department of Biology, including links to other databases.
+NYU Department of Biology, including links to other databases. 
 </P>
