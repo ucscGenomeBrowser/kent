@@ -1653,7 +1653,8 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 
     rm -fr axtChain/run/chain/
     rm -f  axtChain/noClass.net
-    rm -f  axtChain/*.tastzPanTro2.2006-03-29
+    rm -fr axtChain/net/
+    rm -fr axtChain/chain/
 
 ############################################################################
 ##  BLASTZ swap from canFam2 alignments (DONE 2006-04-09 markd)
