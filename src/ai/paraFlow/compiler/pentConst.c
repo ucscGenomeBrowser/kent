@@ -12,11 +12,11 @@ char *pentFloatOrLongLabel(char *buf, int bufSize, enum isxValType valType,
 /* Return label associated with floating point or long constant. */
 {
 if (valType == ivLong)
-    safef(buf, bufSize, "Q%lld", iad->val.tok->val.l);
+    safef(buf, bufSize, "Q%lld", iad->val.isxTok.val.l);
 else
     {
     char pre = (valType == ivFloat ? 'F' : 'D');
-    safef(buf, bufSize, "%c%g", pre, iad->val.tok->val.x);
+    safef(buf, bufSize, "%c%g", pre, iad->val.isxTok.val.x);
     subChar(buf, '-', '_');
     subChar(buf, '.', 'o');
     }
@@ -50,8 +50,8 @@ while ((c = *s++) != 0)
     }
 }
 
-void pentPrintInitConst(char *prefix, char *label, enum isxValType valType, 
-	struct pfToken *tok, FILE *f)
+static void pentPrintInitConst(char *prefix, char *label, 
+	enum isxValType valType, struct isxToken *tok, FILE *f)
 /* Print out a constant initialization */
 {
 union pfTokVal val = tok->val;
@@ -157,13 +157,13 @@ if (iad->adType == iadConst)
 		    fprintf(f, "\t.data\n");
 		    *pInText = FALSE;
 		    }
-		pentPrintInitConst("", buf, valType, iad->val.tok, f);
+		pentPrintInitConst("", buf, valType, &iad->val.isxTok, f);
 		hel = hashAdd(uniqHash, buf, NULL);
 		}
 	    iad->name = hel->name;
 	    break;
 	case ivString:
-	    codeStringConst(iad->val.tok->val.s, stringHash, f);
+	    codeStringConst(iad->val.isxTok.val.s, stringHash, f);
 	    break;
 	}
     }

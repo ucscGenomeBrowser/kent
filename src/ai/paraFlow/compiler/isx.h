@@ -23,6 +23,10 @@
 #include "isxLiveVar.h"
 #endif
 
+#ifndef PFTOKEN_H
+#include "pfToken.h"
+#endif
+
 struct pfCompile;
 struct pfParse;
 struct pfType;
@@ -136,10 +140,17 @@ struct isxLoopInfo
 
 struct ctar;	
 
+struct isxToken
+/* A smaller version of lexical token for code generator. */
+    {
+    enum pfTokType type;	/* Token type. */
+    union pfTokVal val;		/* Type-dependent value. */
+    };
+
 union isxAddressVal
 /* Variable part of an isx code address. */
     {
-    struct pfToken *tok;	/* For constants */
+    struct isxToken isxTok;	/* For constants */
     struct pfVar *var;		/* For real vars */
     int tempMemLoc;		/* Memory location for temps, 0 for none */
     int ioOffset;		/* Stack offset. */
@@ -208,8 +219,8 @@ struct isxAddress *isxTempVarAddress(struct pfCompile *pfc, struct hash *hash,
 	double weight, enum isxValType valType);
 /* Create a new temporary var */
 
-struct isxAddress *isxConstAddress(struct pfToken *tok, 
-	enum isxValType valType);
+struct isxAddress *isxConstAddress(enum pfTokType tokType,
+	union pfTokVal tokVal, enum isxValType valType);
 /* Get place to put constant. */
 
 struct isxAddress *isxIoAddress(int offset, enum isxValType valType,

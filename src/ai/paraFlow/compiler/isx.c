@@ -184,21 +184,20 @@ switch (iad->adType)
 	break;
     case iadConst:
 	{
-	struct pfToken *tok = iad->val.tok;
-	union pfTokVal val = tok->val;
+	struct isxToken *tok = &iad->val.isxTok;
 	switch(tok->type)
 	    {
 	    case pftInt:
-		fprintf(f, "#%d", val.i);
+		fprintf(f, "#%d", tok->val.i);
 		break;
 	    case pftLong:
-		fprintf(f, "#%lld", val.l);
+		fprintf(f, "#%lld", tok->val.l);
 		break;
 	    case pftFloat:
-		fprintf(f, "#%f", val.x);
+		fprintf(f, "#%f", tok->val.x);
 		break;
 	    case pftString:
-		fprintf(f, "#'%s'", val.s);
+		fprintf(f, "#'%s'", tok->val.s);
 		break;
 	    default:
 	        internalErr();
@@ -361,15 +360,16 @@ static enum isxValType ppToIsxValType(struct pfCompile *pfc,
 return isxValTypeFromTy(pfc, pp->ty);
 }
 
-struct isxAddress *isxConstAddress(struct pfToken *tok, 
-	enum isxValType valType)
+struct isxAddress *isxConstAddress(enum pfTokType tokType,
+	union pfTokVal tokVal, enum isxValType valType)
 /* Get place to put constant. */
 {
 struct isxAddress *iad;
 AllocVar(iad);
 iad->adType = iadConst;
 iad->valType = valType;
-iad->val.tok = tok;
+iad->val.isxTok.type = tokType;
+iad->val.isxTok.val = tokVal;
 return iad;
 }
 
@@ -576,7 +576,8 @@ switch (pp->type)
     case pptConstFloat:
     case pptConstDouble:
     case pptConstString:
-	return isxConstAddress(pp->tok, ppToIsxValType(pfc, pp));
+	return isxConstAddress(pp->tok->type, pp->tok->val, 
+		ppToIsxValType(pfc, pp));
     case pptVarUse:
 	return varAddress(pp->var, varHash, weight, ppToIsxValType(pfc, pp));
     case pptPlus:

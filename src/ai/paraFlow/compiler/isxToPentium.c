@@ -392,13 +392,13 @@ else
 		case ivString:
 		    {
 		    char *s = hashFindVal(coder->constStringHash, 
-		    	iad->val.tok->val.s);
+		    	iad->val.isxTok.val.s);
 		    assert(s != NULL);
 		    safef(buf, pentCodeBufSize, "$%s", s);
 		    break;
 		    }
 		default:
-		    safef(buf, pentCodeBufSize, "$%d", iad->val.tok->val.i);
+		    safef(buf, pentCodeBufSize, "$%d", iad->val.isxTok.val.i);
 		    break;
 		}
 	    break;
@@ -2374,29 +2374,30 @@ freez(&isx);
 return retNode;
 }
 
-static struct pfToken *constZeroTok(enum isxValType valType)
-/* Return zero token of correct type */
+static struct isxAddress *constZeroAddress(enum isxValType valType)
+/* Fill in zero token of correct type */
 {
-struct pfToken *tok;
-AllocVar(tok);
+static union pfTokVal val;
+enum pfTokType type;
 switch (valType)
     {
     case ivLong:
-         tok->type = pftLong;
+         type = pftLong;
 	 break;
     case ivFloat:
     case ivDouble:
-         tok->type = pftFloat;
+         type = pftFloat;
 	 break;
     case ivInt:
     case ivShort:
-         tok->type = pftInt;
+         type = pftInt;
 	 break;
     default:
          internalErr();
+	 type = pftInt;
 	 break;
     }
-return tok;
+return isxConstAddress(type, val, valType);
 }
 
 void subFromZeroForNeg(struct pfCompile *pfc, struct dlNode *node,
@@ -2404,10 +2405,9 @@ void subFromZeroForNeg(struct pfCompile *pfc, struct dlNode *node,
 /* convert -x  to  0 - x. */
 {
 enum isxValType valType = isx->dest->valType;
-struct pfToken *tok = constZeroTok(valType);;
 isx->opType = poMinus;
 isx->right = isx->left;
-isx->left = isxConstAddress(tok, valType);
+isx->left = constZeroAddress(valType);
 }
 
 void cmpFloatToZero(struct pfCompile *pfc, struct dlNode *node,
@@ -2415,12 +2415,11 @@ void cmpFloatToZero(struct pfCompile *pfc, struct dlNode *node,
 /* Convert x  to x == 0 */
 {
 enum isxValType valType = isx->left->valType;
-struct pfToken *tok = constZeroTok(valType);
 if (isx->opType == poBz)
     isx->opType = poBeq;
 else
     isx->opType = poBne;
-isx->right = isxConstAddress(tok, valType);
+isx->right = constZeroAddress(valType);
 }
 
 void cmpStrings(struct pfCompile *pfc, struct hash *varHash, 
@@ -2431,14 +2430,13 @@ void cmpStrings(struct pfCompile *pfc, struct hash *varHash,
 {
 struct isx saveIsx = *isx;
 struct isxAddress *tempVar = isxTempVarAddress(pfc, varHash, 1.0, ivString);
-struct pfToken *tok = constZeroTok(ivInt);
 struct isx *cmpIsx, *callOutIsx;
 isx->dest = tempVar;
 node = subInBinary(pfc, node, isx, "_pfStringCmp");
 callOutIsx = node->val;
 callOutIsx->dest->valType = ivInt;
 cmpIsx = isxNew(pfc, saveIsx.opType, saveIsx.dest, callOutIsx->dest, 
-	isxConstAddress(tok, ivInt));
+	constZeroAddress(ivInt));
 dlAddValAfter(node, cmpIsx);
 }
 
