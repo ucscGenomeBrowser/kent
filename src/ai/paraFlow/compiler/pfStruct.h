@@ -13,6 +13,7 @@ struct pfVar;	    /* A single variable. */
 struct pfToken;	    /* A tokenized string from a ParaFlow source file. */
 struct pfBackEnd;   /* Interface to code generator. */
 struct backEndString; /* Back end string representation. */
+struct ctar;	      /* This keeps track of function vars. */
 struct hash;	    /* A hash table. */
 struct dyString;    /* Dynamically sized string */
 

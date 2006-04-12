@@ -15,6 +15,10 @@
 #ifndef ISX_H
 #define ISX_H
 
+#ifndef PFSTRUCT_H
+#include "pfStruct.h"
+#endif
+
 #ifndef DLIST_H
 #include "dlist.h"
 #endif 
@@ -27,9 +31,6 @@
 #include "pfToken.h"
 #endif
 
-struct pfCompile;
-struct pfParse;
-struct pfType;
 
 enum isxOpType
 /* What sort of operation - corresponds roughly to an
@@ -72,6 +73,8 @@ enum isxOpType
     poFuncEnd,  /* Declare end of function. */
     poReturnVal,/* Declare return value. */
     poCast,	/* Convert from one type to another. */
+    poVarInit,	 /* Variable type initialization */
+    poVarAssign, /* Variable type (re)assignment */
     };
 
 char *isxOpTypeToString(enum isxOpType val);
@@ -90,6 +93,7 @@ enum isxValType
     ivDouble,
     ivString,
     ivObject,
+    ivVar,
     ivJump,	
     };
 
@@ -111,8 +115,8 @@ enum isxAddressType
     iadOperator,
     iadLabel,
     iadLoopInfo,
-    iadCtar,
     iadReturnVar,
+    iadRecodedType,
     };
 
 struct isxLoopVar
@@ -138,7 +142,9 @@ struct isxLoopInfo
     				  * most important first. */
     };
 
+#ifdef OLD
 struct ctar;	
+#endif /* OLD */
 
 struct isxToken
 /* A smaller version of lexical token for code generator. */
@@ -155,7 +161,10 @@ union isxAddressVal
     int tempMemLoc;		/* Memory location for temps, 0 for none */
     int ioOffset;		/* Stack offset. */
     struct isxLoopInfo *loopy;  /* Information on loop */
+#ifdef OLD
     struct ctar *ctar;		/* Information about function variables. */
+#endif /* OLD */
+    int recodedType;		/* Local type information */
     };
 
 struct isxAddress
@@ -222,6 +231,10 @@ struct isxAddress *isxTempVarAddress(struct pfCompile *pfc, struct hash *hash,
 struct isxAddress *isxConstAddress(enum pfTokType tokType,
 	union pfTokVal tokVal, enum isxValType valType);
 /* Get place to put constant. */
+
+struct isxAddress *isxRecodedTypeAddress(struct pfCompile *pfc, 
+	struct pfType *type);
+/* Get type info. */
 
 struct isxAddress *isxIoAddress(int offset, enum isxValType valType,
 	enum isxAddressType adType);

@@ -250,6 +250,9 @@ switch (valType)
     case ivString:
 	opString = dataOpTable[opType].pointerName;
 	break;
+    case ivVar:
+        opString = dataOpTable[opType].intName;
+	break;
     default:
 	internalErr();
 	opString = NULL;
@@ -280,6 +283,8 @@ switch (valType)
     case ivObject:
     case ivString:
 	return 4;
+    case ivVar:
+        return 12;
     default:
 	internalErr();
 	return 0;
@@ -418,6 +423,11 @@ else
 	    safef(buf, pentCodeBufSize, "%d(%%esp)", iad->stackOffset);
 	    break;
 	    }
+	case iadRecodedType:
+	    {
+	    safef(buf, pentCodeBufSize, "%d*8+__pf_lti_varType", iad->val.recodedType);
+	    break;
+	    }
 	default:
 	    internalErr();
 	    break;
@@ -440,15 +450,23 @@ if (dest != NULL)
 pentCoderAdd(coder, opName, coder->sourceBuf, destString);
 }
 
-static void pentCodeSourceReg(enum pentDataOp opType, struct isxReg *reg,
-	struct isxAddress *dest,  struct pentCoder *coder)
-/* Print op where source is a register. */
+static void pentCodeSourceRegVarType(enum pentDataOp opType, struct isxReg *reg,
+	struct isxAddress *dest,  enum isxValType valType, 
+	struct pentCoder *coder)
+/* Print op where source is a register, and valType might not match
+ * dest type */
 {
-enum isxValType valType = dest->valType;
 char *opName = pentOpOfType(opType, valType);
 char *regName = isxRegName(reg, valType);
 pentPrintAddress(coder, dest, coder->destBuf);
 pentCoderAdd(coder, opName, regName, coder->destBuf);
+}
+
+static void pentCodeSourceReg(enum pentDataOp opType, struct isxReg *reg,
+	struct isxAddress *dest,  struct pentCoder *coder)
+/* Print op where source is a register. */
+{
+pentCodeSourceRegVarType(opType, reg, dest, dest->valType, coder);
 }
 
 void pentCodeDestReg(enum pentDataOp opType, struct isxAddress *source, 
@@ -520,6 +538,13 @@ switch (reg->regIx)
     }
 }
 
+static void clearRegContents(struct isxReg *reg)
+/* Clear out register contents */
+{
+if (reg->contents)
+    reg->contents->reg = NULL;
+reg->contents = NULL;
+}
 
 void pentSwapTempFromReg(struct isxReg *reg,  struct pentCoder *coder)
 /* If reg contains something not also in memory then save it out. */
@@ -648,9 +673,7 @@ for (i=regStartIx; i<=regEndIx; ++i)
      reg = &regs[i];
      if (!reg->isLive && !reg->reserved)
 	 {
-	 if (reg->contents)
-	     reg->contents->reg = NULL;
-         reg->contents = NULL;
+	 clearRegContents(reg);
 	 }
      }
 
@@ -927,6 +950,59 @@ else
 pentLinkRegSave(dest, reg, coder);
 }
 
+static void pentVarAssign(struct isx *isx, struct dlNode *nextNode,  
+	struct pentCoder *coder)
+/* Code variable assignment */
+{
+struct isxAddress *source = isx->left;
+struct isxAddress *sourceType = isx->right;
+struct isxAddress *dest = isx->dest;
+struct isxReg *reg;
+char *regName;
+
+uglyf("Theoretically doing a pentVarAssign\n");
+if (source->valType == ivVar)
+    {
+    int i;
+    assert(source->adType == iadRealVar || source->adType == iadTempVar);
+    reg = pentFreeReg(isx, ivInt, nextNode, coder);
+    regName = isxRegName(reg, ivInt);
+    for (i=0; i<12; i += 4)
+	{
+	pentPrintVarMemAddress(source, coder->sourceBuf, i);
+	pentCoderAdd(coder, "movl", coder->sourceBuf, regName);
+	pentPrintVarMemAddress(dest, coder->destBuf, i);
+	pentCoderAdd(coder, "movl", regName, coder->destBuf);
+	}
+    }
+else
+    {
+    /* Move variable to dest */
+    if (source->reg)
+	{
+	pentCodeSourceRegVarType(opMov, source->reg, dest, source->valType, 
+		coder);
+	}
+    else
+	{
+	reg = pentFreeReg(isx, source->valType, nextNode, coder);
+	if (source->adType == iadZero)
+	    clearReg(reg, coder);
+	else
+	    pentCodeDestReg(opMov, source, reg, coder);
+	pentCodeSourceRegVarType(opMov, reg, dest, source->valType, coder);
+	clearRegContents(reg);
+	}
+    /* Move type to dest. */
+    reg = pentFreeReg(isx, ivInt, nextNode, coder);
+    regName = isxRegName(reg, ivInt);
+    pentPrintAddress(coder, sourceType, coder->sourceBuf);
+    pentCoderAdd(coder, "movl", coder->sourceBuf, regName);
+    pentPrintVarMemAddress(dest, coder->destBuf, 8);
+    pentCoderAdd(coder, "movl", regName, coder->destBuf);
+    }
+clearRegContents(reg);
+}
 
 static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode, 
 	enum pentDataOp opCode, boolean isSub,  struct pentCoder *coder)
@@ -2111,6 +2187,11 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	case poAssign:
 	    pentAssign(isx, nextNode, coder);
 	    break;
+	case poVarInit:
+	case poVarAssign:
+	    pentVarAssign(isx, nextNode, coder);
+	    break;
+
 	case poPlus:
 	    pentBinaryOp(isx, nextNode, opAdd, FALSE, coder);
 	    break;

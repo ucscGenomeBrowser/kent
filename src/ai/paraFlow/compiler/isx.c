@@ -21,6 +21,7 @@
 #include "pfScope.h"
 #include "pfCompile.h"
 #include "ctar.h"
+#include "recodedType.h"
 #include "isxLiveVar.h"
 #include "isx.h"
 
@@ -50,10 +51,12 @@ switch (val)
 	return "flt";
     case ivDouble:
 	return "dbl";
-    case ivObject:
-	return "obj";
     case ivString:
 	return "str";
+    case ivObject:
+	return "obj";
+    case ivVar:
+        return "var";
     case ivJump:
 	return "lab";
     default:
@@ -61,6 +64,8 @@ switch (val)
 	return NULL;
     }
 }
+
+
 
 char *isxOpTypeToString(enum isxOpType val)
 /* Convert isxValType to string. */
@@ -139,6 +144,10 @@ switch (val)
         return "poReturnVal";
     case poCast:
         return "poCast";
+    case poVarInit:
+        return "poVarInit";
+    case poVarAssign:
+        return "poVarAssign";
     default:
         internalErr();
 	return NULL;
@@ -166,6 +175,8 @@ switch (valType)
     case ivObject:
     case ivString:
 	return reg->pointerName;
+    case ivVar:
+	return reg->intName;
     default:
 	internalErr();
 	return NULL;
@@ -219,7 +230,6 @@ switch (iad->adType)
 	fprintf(f, "ret(%d)", iad->val.ioOffset);
         break;
     case iadOperator:
-    case iadCtar:
 	fprintf(f, "#%s", iad->name);
 	break;
     case iadLabel:
@@ -245,6 +255,9 @@ switch (iad->adType)
 	fprintf(f, "]");
 	}
 	break;
+    case iadRecodedType:
+	fprintf(f, "type(%d)", iad->val.recodedType);
+        break;
     default:
         internalErr();
 	break;
@@ -349,6 +362,8 @@ else if (base == pfc->doubleType)
     return ivDouble;
 else if (base == pfc->stringType || base == pfc->dyStringType)
     return ivString;
+else if (base == pfc->varType)
+    return ivVar;
 else
     return ivObject;
 }
@@ -370,6 +385,17 @@ iad->adType = iadConst;
 iad->valType = valType;
 iad->val.isxTok.type = tokType;
 iad->val.isxTok.val = tokVal;
+return iad;
+}
+
+struct isxAddress *isxRecodedTypeAddress(struct pfCompile *pfc, 
+	struct pfType *type)
+/* Get type info. */
+{
+struct isxAddress *iad;
+AllocVar(iad);
+iad->adType = iadRecodedType;
+iad->val.recodedType = recodedTypeId(pfc, type);
 return iad;
 }
 
@@ -861,6 +887,35 @@ else
     }
 }
 
+
+
+static void isxVarExpression(struct pfCompile *pfc, 
+	struct pfParse *pp, struct hash *varHash, 
+	double weight, struct dlList *iList, struct isxAddress **retVal,
+	struct isxAddress **retType)
+/* Generate intermediate code for expression that may begin with
+ * pptCastTypedToVar. */
+{
+struct isxAddress *iad;
+struct pfType *type;
+int recodedType;
+uglyf("Theoretically doing isxVarExpression\n"); 
+if (pp == NULL)
+    {
+    *retVal = zeroAddress();
+    type = pfc->intFullType;
+    }
+else
+    {
+    if (pp->type == pptCastTypedToVar)
+       pp = pp->children;
+    *retVal = isxExpression(pfc, pp, varHash, weight, iList);
+    type = pp->ty;
+    }
+*retType = isxRecodedTypeAddress(pfc, type);
+}
+
+
 void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
 	struct hash *varHash, double weight, struct dlList *iList)
 /* Generate intermediate code for statement. */
@@ -877,14 +932,25 @@ switch (pp->type)
     case pptVarInit:
 	{
 	struct pfParse *init = pp->children->next->next;
+	enum isxValType valType = ppToIsxValType(pfc, pp);
 	struct isxAddress *dest = varAddress(pp->var, varHash, 
-		weight, ppToIsxValType(pfc, pp));
-	struct isxAddress *source;
-	if (init)
-	    source = isxExpression(pfc, init, varHash, weight, iList);
+		weight, valType);
+	if (valType == ivVar)
+	    {
+	    struct isxAddress *source, *sourceType;
+	    isxVarExpression(pfc, init, varHash, weight, iList, 
+	    	&source, &sourceType);
+	    isxAddNew(pfc, poVarInit, dest, source, sourceType, iList);
+	    }
 	else
-	    source = zeroAddress();
-	isxAddNew(pfc, poInit, dest, source, NULL, iList);
+	    {
+	    struct isxAddress *source;
+	    if (init)
+		source = isxExpression(pfc, init, varHash, weight, iList);
+	    else
+		source = zeroAddress();
+	    isxAddNew(pfc, poInit, dest, source, NULL, iList);
+	    }
 	break;
 	}
     case pptAssign:
