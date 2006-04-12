@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.23 2006/04/06 21:28:55 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.24 2006/04/12 22:02:33 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -2636,10 +2636,15 @@ set out = $3
     /projects/cc/hg/ytlu/bin/script/perl/createStsBed \
 	stsInfoMouse.bed  stsMarkers_pos.rdb 500 \
 	| sort -k1,1 -k2,2n > stsMapMouse.bed
-    wc stsMapMouse.bed  (after filter applied to primers.psl above)
-    #	29842  308123 2135776 stsMapMouse.bed
-    wc stsMapMouse.bed  (before filter applied to primers.psl above)
-    #	30296  312257 2166725 stsMapMouse.bed
+    #	Fixup --- 2006-04-12 - Hiram - it was found that column 12 had blanks
+    #	as the first character of the field.  This isn't what is needed
+    #	here.  Let's take those blanks out, turns out these were the
+    #	only blanks in the file:
+    mv stsMapMouse.bed stsMapMouse_withBlanks.bed
+    sed -e "s/ //" stsMapMouse_withBlanks.bed > stsMapMouse.bed
+
+    wc stsMapMouse.bed
+    #	29888  308263 2087726 stsMapMouse.bed
     wc /cluster/data/mm7/bed/STSmarkers/stsMapMouse.bed
     #	29079  301678 2097544 stsMapMouse.bed
     wc /cluster/data/mm5/bed/STSmarkers/stsMapMouse.bed
@@ -2667,6 +2672,7 @@ set out = $3
     hgsql mm8 < ~/kent/src/hg/lib/stsAlias.sql
     hgsql -e \
 	'load data local infile "ucscStsAlias.tab" into table stsAlias;' mm8
+    #   reloaded stsMapMouseNew 2006-04-12 to remove blanks in col 12 - Hiram
     #	hgsql -e "drop table stsMapMouseNew;" mm8
     hgsql mm8 < ~/kent/src/hg/lib/stsMapMouseNew.sql
     hgsql -e \
