@@ -515,3 +515,30 @@ make alpha
 
 
 ############################
+#
+# Patch contributors so we can search MGI submission sets 
+#  by specifying JAX or MGI in the search box.
+#
+
+select id from submissionSource where name = 'MGI';
++----+
+| id |
++----+
+| 6  |
++----+
+
+# note: we have to double the search word or else the search doesn't work
+insert into contributor set name = 'JAX JAX';
+insert into contributor set name = 'MGI MGI';
+mysql> select * from contributor where name in ('JAX JAX','MGI MGI');
++------+---------+
+| id   | name    |
++------+---------+
+| 3981 | JAX JAX |
+| 3982 | MGI MGI |
++------+---------+
+
+insert into submissionContributor select id, '3981' from submissionSet where submissionSource = 6;
+insert into submissionContributor select id, '3982' from submissionSet where submissionSource = 6;
+
+
