@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "pseudoGeneLink.h"
 
-static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.20 2006/04/12 02:43:56 baertsch Exp $";
+static char const rcsid[] = "$Id: pseudoGeneLink.c,v 1.21 2006/04/12 02:44:42 baertsch Exp $";
 
 struct pseudoGeneLink *pseudoGeneLinkLoad(char **row)
 /* Load a pseudoGeneLink from row fetched with select * from pseudoGeneLink
@@ -394,7 +394,7 @@ if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->overStrand);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
-fprintf(f, "%u", el->overlapDog);
+fprintf(f, "%u", el->adaBoost);
 fputc(sep,f);
 fprintf(f, "%f", el->posConf);
 fputc(sep,f);
