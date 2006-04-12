@@ -8785,4 +8785,35 @@ cat > downloads.csh << 'EOF'
     # edit this file to reflect the latest releases used.
     vi $dir/README.txt
 
+# RE-BUILT GO DATABASE (DONE 4/12/06, Fan)
+
+# GO changed the content of gene_association.goa_uniprot.gz.
+# Tho original one we use no longer has human, mouse, etc in it.
+# They are placed in separate files.
+# Per GO's suggestion, we now get the file from the submission sub-directory.
+# This seems cover more than concatenating the individual goa... files.
+
+# Download the terms and make the database.
+ssh hgwdev
+mkdir /cluster/store1/geneOntology/20060330
+cd /cluster/store1/geneOntology/20060330
+
+wget --timestamping http://www.godatabase.org/dev/database/archive/latest/go_200603-assocdb-data.gz
+
+hgsql mysql <<end
+create database go060330;
+end
+zcat go_*data.gz | sed -e 's/ENGINE=MyISAM DEFAULT CHARSET=latin1/TYPE=MyISAM/g' >j.tmp
+hgsql go060330 <j.tmp
+rm j.tmp
+
+wget --timestamping \
+"ftp://ftp.geneontology.org/pub/go/gene-associations/submission/gene_association.goa_uniprot.gz"
+
+# Updated hgGoAssociation.c so that it does not skip any line in the beginning */
+
+zcat gene_association.goa_uniprot.gz|\
+/cluster/home/fanhsu/bin/i386/hgGoAssociation go060330 goaPart stdin
+
+# Ask sys-admin to switch the database pointer go to point to go060330.
 
