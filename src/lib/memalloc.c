@@ -13,7 +13,7 @@
 #include "memalloc.h"
 #include "dlist.h"
 
-static char const rcsid[] = "$Id: memalloc.c,v 1.28 2006/02/21 22:09:01 hiram Exp $";
+static char const rcsid[] = "$Id: memalloc.c,v 1.29 2006/04/12 20:27:21 hiram Exp $";
 
 static void *defaultAlloc(size_t size)
 /* Default allocator. */
@@ -71,8 +71,9 @@ void setDefaultMemHandler()
 mhStack = &defaultMemHandler;
 }
 
-/*	128*4*1024*1024 == 536870912 == 2^29	*/
-static size_t maxAlloc = 128*8*1024*1024;
+/* 128*8*1024*1024 == 1073741824 == 2^30 on 32 bit machines,size_t == 4 bytes*/
+/* on 64 bit machines, size_t = 8 bytes, 2^30 * 2 * 2 = 2^32 == 4 Gb */
+static size_t maxAlloc = 128*8*1024*1024*(sizeof(size_t)/4)*(sizeof(size_t)/4);
 
 void setMaxAlloc(size_t s)
 /* Set large allocation limit. */
@@ -86,13 +87,10 @@ void *needLargeMem(size_t size)
 {
 void *pt;
 if (size == 0 || size >= maxAlloc)
-    {
-    warn("Program error: trying to allocate %llu bytes in needLargeMem (limit: %llu)",
+    errAbort("needLargeMem: trying to allocate %llu bytes (limit: %llu)",
          (unsigned long long)size, (unsigned long long)maxAlloc);
-    assert(FALSE);
-    }
 if ((pt = mhStack->alloc(size)) == NULL)
-    errAbort("Out of memory needLargeMem - request size %llu bytes\n",
+    errAbort("needLargeMem: Out of memory - request size %llu bytes\n",
              (unsigned long long)size);
 return pt;
 }
@@ -112,13 +110,10 @@ void *needLargeMemResize(void* vp, size_t size)
 {
 void *pt;
 if (size == 0 || size >= maxAlloc)
-    {
-    warn("Program error: trying to allocate %llu bytes in needLargeMem",
-         (unsigned long long)size);
-    assert(FALSE);
-    }
+    errAbort("needLargeMemResize: trying to allocate %llu bytes (limit: %llu)",
+         (unsigned long long)size, (unsigned long long)maxAlloc);
 if ((pt = mhStack->realloc(vp, size)) == NULL)
-    errAbort("Out of memory - request size %llu bytes\n",
+    errAbort("needLargeMemResize: Out of memory - request size %llu bytes\n",
              (unsigned long long)size);
 return pt;
 }
@@ -138,12 +133,9 @@ void *needHugeMem(size_t size)
 {
 void *pt;
 if (size == 0)
-    {
-    warn("Program error: trying to allocate 0 bytes in needHugeMem");
-    assert(FALSE);
-    }
+    errAbort("needHugeMem: trying to allocate 0 bytes");
 if ((pt = mhStack->alloc(size)) == NULL)
-    errAbort("Out of huge memory - request size %llu bytes\n",
+    errAbort("needHugeMen: Out of huge memory - request size %llu bytes\n",
              (unsigned long long)size);
 return pt;
 }
@@ -165,7 +157,8 @@ void *needHugeMemResize(void* vp, size_t size)
 {
 void *pt;
 if ((pt = mhStack->realloc(vp, size)) == NULL)
-    errAbort("Out of memory - request resize %llu bytes\n", (unsigned long long)size);
+    errAbort("needHugeMemResize: Out of memory - request resize %llu bytes\n",
+	(unsigned long long)size);
 return pt;
 }
 
@@ -182,19 +175,18 @@ if (newSize > oldSize)
 return v;
 }
 
+#define NEEDMEM_LIMIT 100000000
+
 void *needMem(size_t size)
 /* Need mem calls abort if the memory allocation fails. The memory
  * is initialized to zero. */
 {
 void *pt;
-if (size == 0 || size > 100000000)
-    {
-    warn("Program error: trying to allocate %llu bytes in needMem",
-         (unsigned long long)size);
-    assert(FALSE);
-    }
+if (size == 0 || size > NEEDMEM_LIMIT)
+    errAbort("needMem: trying to allocate %llu bytes (limit: %llu)",
+         (unsigned long long)size, (unsigned long long)NEEDMEM_LIMIT);
 if ((pt = mhStack->alloc(size)) == NULL)
-    errAbort("Out of memory needMem - request size %llu bytes\n",
+    errAbort("needMem: Out of memory - request size %llu bytes\n",
              (unsigned long long)size);
 memset(pt, 0, size);
 return pt;
@@ -367,11 +359,9 @@ for (cmb = (struct carefulMemBlock *)(cmbAllocedList->head); cmb->next != NULL; 
         errAbort("Bad start cookie %x checking %llx\n", cmb->startCookie,
                  ptrToLL(cmb+1));
     if (memcmp(pEndCookie, cmbEndCookie, sizeof(cmbEndCookie)) != 0)
-        {
         errAbort("Bad end cookie %x%x%x%x checking %llx\n", 
                  pEndCookie[0], pEndCookie[1], pEndCookie[2], pEndCookie[3],
                  ptrToLL(cmb+1));
-        }
     if (--maxPieces == 0)
         errAbort("Loop or more than 10000000 pieces in memory list");
     }
