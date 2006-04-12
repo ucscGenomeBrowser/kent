@@ -16,7 +16,7 @@
 
 #define MAX_ATTEMPTS 10
 
-static char const rcsid[] = "$Id: hgTablesTest.c,v 1.34 2005/04/14 22:07:32 heather Exp $";
+static char const rcsid[] = "$Id: hgTablesTest.c,v 1.35 2006/04/12 14:17:35 angie Exp $";
 
 /* Command line variables. */
 char *clOrg = NULL;	/* Organism from command line. */
@@ -521,7 +521,6 @@ void checkFaOutput(struct htmlPage *page, int expectedCount, boolean lessOk)
 {
 if (page != NULL)
     {
-    char *s = page->htmlText;
     int count = countChars(page->htmlText, '>');
     if (count != expectedCount)
 	{
