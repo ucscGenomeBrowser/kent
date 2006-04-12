@@ -594,8 +594,8 @@ dataVersion ENCODE June & Oct 2005 Freezes
     track encodeSangerChipH4acHeLa
     subTrack encodeSangerChip
     shortLabel SI H4ac HeLa
-    longLabel Sanger Institute ChIP/Chip (H4ac ab, HFL-1 cells)
-    subGroups celltype=hlf1 factor=h4ac
+    longLabel Sanger Institute ChIP/Chip (H4ac ab, HeLa cells)
+    subGroups celltype=hela factor=h4ac
     dataVersion ENCODE Oct 2005 Freeze
     priority 14
     color 10,10,130
@@ -608,6 +608,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion Jan 2006
     priority 15
     color 10,10,10
+release alpha
 
     track encodeSangerChipH3K4me2HFL1
     subTrack encodeSangerChip
@@ -617,6 +618,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion Jan 2006
     priority 16
     color 10,10,10
+release alpha
 
     track encodeSangerChipH3K4me3HFL1
     subTrack encodeSangerChip
@@ -626,6 +628,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion Jan 2006
     priority 17
     color 10,10,10
+release alpha
 
     track encodeSangerChipH3acHFL1
     subTrack encodeSangerChip
@@ -635,6 +638,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion Jan 2006
     priority 18
     color 10,10,10
+release alpha
 
     track encodeSangerChipH4acHFL1
     subTrack encodeSangerChip
@@ -644,6 +648,7 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion Jan 2006
     priority 19
     color 10,10,10
+release alpha
 
 track encodeSangerChipHits
 compositeTrack on
