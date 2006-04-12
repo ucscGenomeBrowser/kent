@@ -5,7 +5,7 @@
 #include "hgRelate.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: apacheMonitor.c,v 1.4 2006/03/25 00:46:24 heather Exp $";
+static char const rcsid[] = "$Id: apacheMonitor.c,v 1.5 2006/04/12 19:12:21 heather Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -236,6 +236,56 @@ if (write500) carefulClose(&outputFileHandle);
 hFreeConn(&conn);
 }
 
+void desc500(int secondsNow)
+{
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int startTime = secondsNow - (minutes * 60);
+
+if (status500 <= 20)
+    {
+    safef(query, sizeof(query), "select remote_host, machine_id, request_uri, referer from access_log "
+                                "where time_stamp > %d and status = 500\n", startTime);
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        verbose(1, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", row[0], row[1], row[2], row[3]);
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    return;
+    }
+
+safef(query, sizeof(query), "select count(*) from access_log where time_stamp > %d and status = 500 and referer = '-'", startTime);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+verbose(1, "500 from robots: %s\n", row[0]);
+sqlFreeResult(&sr);
+
+verbose(1, "\nmachine_ids (non-robots):\n");
+safef(query, sizeof(query), "select count(*), machine_id from access_log where time_stamp > %d and status = 500 and "
+                            "referer != '-' group by machine_id", startTime);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    verbose(1, "%s\t%s\n", row[0], row[1]);
+sqlFreeResult(&sr);
+
+verbose(1, "\nremote_hosts:\n");
+safef(query, sizeof(query), "select count(*), remote_host from access_log where time_stamp > %d and status = 500 group by remote_host", startTime);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    verbose(1, "%s\t%s\n", row[0], row[1]);
+sqlFreeResult(&sr);
+
+verbose(1, "\ndistinct request_uris:\n");
+safef(query, sizeof(query), "select distinct(request_uri) from access_log where time_stamp > %d and status = 500", startTime);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    verbose(1, "%s\n", row[0]);
+sqlFreeResult(&sr);
+
+}
+
 void printMachines()
 {
 verbose(1, "Count by machine: \n");
@@ -317,7 +367,12 @@ verbose(1, "Total hits in the last %d minutes = %d\n", minutes, total);
 verbose(1, "Hits from robots = %d\n\n", robotcount);
 printMachines();
 printStatus();
-if (status500 > 0 && optionExists("store")) store500(timeNow);
-if (optionExists("store")) cleanup(timeNow);
+if (status500 >= 10)
+    desc500(timeNow);
+if (optionExists("store") && status500 > 0)
+    {
+    store500(timeNow);
+    cleanup(timeNow);
+    }
 return 0;
 }
