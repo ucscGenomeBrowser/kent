@@ -148,6 +148,8 @@ switch (val)
         return "poVarInit";
     case poVarAssign:
         return "poVarAssign";
+    case poVarInput:
+        return "poVarInput";
     default:
         internalErr();
 	return NULL;
@@ -534,6 +536,31 @@ uglyAbort("Can't handle stringCat yet");
 return NULL;
 }
 
+static void isxVarExpression(struct pfCompile *pfc, 
+	struct pfParse *pp, struct hash *varHash, 
+	double weight, struct dlList *iList, struct isxAddress **retVal,
+	struct isxAddress **retType)
+/* Generate intermediate code for expression that may begin with
+ * pptCastTypedToVar. */
+{
+struct isxAddress *iad;
+struct pfType *type;
+int recodedType;
+if (pp == NULL)
+    {
+    *retVal = zeroAddress();
+    type = pfc->intFullType;
+    }
+else
+    {
+    if (pp->type == pptCastTypedToVar)
+       pp = pp->children;
+    *retVal = isxExpression(pfc, pp, varHash, weight, iList);
+    type = pp->ty;
+    }
+*retType = isxRecodedTypeAddress(pfc, type);
+}
+
 static struct isxAddress *isxCall(struct pfCompile *pfc,
 	struct pfParse *pp, struct hash *varHash, double weight,
 	struct dlList *iList)
@@ -548,11 +575,23 @@ int offset;
 
 for (p = inTuple->children, offset=0; p != NULL; p = p->next, ++offset)
     {
-    for (source = isxExpression(pfc, p, varHash, weight, iList);
-    	source != NULL; source = source->next)
-	{
+    if (p->ty->base == pfc->varType)
+        {
+	struct isxAddress *sourceType;
+uglyf("Theoretically doing call with var param\n"); 
+	isxVarExpression(pfc, p, varHash, weight, iList, 
+	    &source, &sourceType);
 	dest = isxIoAddress(offset, source->valType, iadInStack);
-	isxAddNew(pfc, poInput, dest, source, NULL, iList);
+	isxAddNew(pfc, poVarInput, dest, source, sourceType, iList);
+	}
+    else
+	{
+	for (source = isxExpression(pfc, p, varHash, weight, iList);
+	    source != NULL; source = source->next)
+	    {
+	    dest = isxIoAddress(offset, source->valType, iadInStack);
+	    isxAddNew(pfc, poInput, dest, source, NULL, iList);
+	    }
 	}
     }
 source = isxCallAddress(function->var->cName);
@@ -888,32 +927,6 @@ else
 }
 
 
-
-static void isxVarExpression(struct pfCompile *pfc, 
-	struct pfParse *pp, struct hash *varHash, 
-	double weight, struct dlList *iList, struct isxAddress **retVal,
-	struct isxAddress **retType)
-/* Generate intermediate code for expression that may begin with
- * pptCastTypedToVar. */
-{
-struct isxAddress *iad;
-struct pfType *type;
-int recodedType;
-uglyf("Theoretically doing isxVarExpression\n"); 
-if (pp == NULL)
-    {
-    *retVal = zeroAddress();
-    type = pfc->intFullType;
-    }
-else
-    {
-    if (pp->type == pptCastTypedToVar)
-       pp = pp->children;
-    *retVal = isxExpression(pfc, pp, varHash, weight, iList);
-    type = pp->ty;
-    }
-*retType = isxRecodedTypeAddress(pfc, type);
-}
 
 
 void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 

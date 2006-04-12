@@ -350,6 +350,12 @@ switch (iad->adType)
 	safef(buf, pentCodeBufSize, "%d(%%ebp)", iad->val.tempMemLoc + offset);
 	break;
 	}
+    case iadInStack:
+    case iadOutStack:
+	{
+	safef(buf, pentCodeBufSize, "%d(%%esp)", iad->stackOffset + offset);
+	break;
+	}
     case iadConst:
 	{
 	switch (iad->valType)
@@ -410,17 +416,13 @@ else
 	    }
 	case iadRealVar:
 	case iadTempVar:
+	case iadInStack:
+	case iadOutStack:
 	    pentPrintVarMemAddress(iad, buf, 0);
 	    break;
 	case iadReturnVar:
 	    {
 	    safef(buf, pentCodeBufSize, "%d(%%ebp)", iad->stackOffset);
-	    break;
-	    }
-	case iadInStack:
-	case iadOutStack:
-	    {
-	    safef(buf, pentCodeBufSize, "%d(%%esp)", iad->stackOffset);
 	    break;
 	    }
 	case iadRecodedType:
@@ -1003,6 +1005,15 @@ else
     }
 clearRegContents(reg);
 }
+
+static void pentVarInput(struct isx *isx, struct dlNode *nextNode,  
+	struct pentCoder *coder)
+/* Output code to load a variable input parameter before a call. */
+{
+uglyf("THeoretically doing pentVarInput\n");
+pentVarAssign(isx, nextNode, coder);
+}
+
 
 static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode, 
 	enum pentDataOp opCode, boolean isSub,  struct pentCoder *coder)
@@ -2187,11 +2198,6 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	case poAssign:
 	    pentAssign(isx, nextNode, coder);
 	    break;
-	case poVarInit:
-	case poVarAssign:
-	    pentVarAssign(isx, nextNode, coder);
-	    break;
-
 	case poPlus:
 	    pentBinaryOp(isx, nextNode, opAdd, FALSE, coder);
 	    break;
@@ -2289,6 +2295,13 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    break;
 	case poCast:
 	    pentCast(pfc, isx, nextNode, coder);
+	    break;
+	case poVarInit:
+	case poVarAssign:
+	    pentVarAssign(isx, nextNode, coder);
+	    break;
+	case poVarInput:
+	    pentVarInput(isx, nextNode, coder);
 	    break;
 	default:
 	    warn("unimplemented\t%s\n", isxOpTypeToString(isx->opType));
