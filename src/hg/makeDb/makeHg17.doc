@@ -10546,7 +10546,7 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
 # updated trackDb.ra under /kent/src/hg/makeDb/trackDb/human/hg17 and
 # added rgdQtl.html.
 
-# AFFYMETRIX HG-U133 PLUS TRACK (DONE, 2004-10-11, hartera)
+#### AFFYMETRIX HG-U133 PLUS TRACK (DONE, 2004-10-11, hartera)
      ssh hgwdev
      mkdir -p /projects/compbio/data/microarray/affyHuman/HG-U133Plus2
      # Go to 
@@ -10621,7 +10621,7 @@ hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLin
 # Added knownToU133Plus2 track (2004-10-14) - see GeneSorter section
 
 
-# MAF COVERAGE FIGURES FOR ADAM (DONE 10/18/04 angie)
+#### MAF COVERAGE FIGURES FOR ADAM (DONE 10/18/04 angie)
     # First, get ranges of target coverage:
     ssh eieio
     mkdir /cluster/data/hg17/bed/var_multiz.2004-08-12/coverage
@@ -15454,7 +15454,7 @@ cd /cluster/data/hg17/bed/geneSorter
 hgMapToGene hg17 affyU133Plus2 knownGene knownToU133Plus2
 #	row count changed to 35055 
 
-# UPDATE GO DATABASE (DONE 5/21/05 Fan)
+#### UPDATE GO DATABASE (DONE 5/21/05 Fan)
 
 # Download the terms and make the database.
 ssh hgwdev
@@ -16719,7 +16719,7 @@ cd /cluster/data/hg17/bed/geneSorter
 hgMapToGene hg17 affyU133Plus2 knownGene knownToU133Plus2
 #	row count changed to 35139  
 
-# UPDATE GO DATABASE (THIS PART WAS DONE 5/21/05 Fan)
+#### UPDATE GO DATABASE (THIS PART WAS DONE 5/21/05 Fan)
 
 # Download the terms and make the database.
 ssh hgwdev
@@ -19947,14 +19947,14 @@ cat > makeMaf.csh << 'EOF'
     # Request push to downloads server
 
 
-# UPDATE hg17 knownToVisiGene (2006-01-21 galt)
+##### UPDATE hg17 knownToVisiGene (2006-01-21 galt)
 # Create table that maps between known genes and visiGene database 
     # mapping to other species such as mouse, zebrafish, frog
     # requires visiGene probe track vgImageProbes be created first
     knownToVisiGene hg17 -fromProbePsl=vgImageProbes
 
 
-# UPDATE hg17 mmBlastTab (2006-01-22 galt)
+##### UPDATE hg17 mmBlastTab (2006-01-22 galt)
 # Make the protein seqs from mm7.knownGenePep
 cd /cluster/data/hg17/bed/geneSorter/blastp
 mkdir mm7
