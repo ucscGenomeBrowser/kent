@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.24 2006/04/12 22:02:33 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.25 2006/04/12 23:04:30 galt Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -4818,4 +4818,73 @@ TMPDIR=/scratch/tmp
 # UPDATED mm8.knownToVisiGene (2006-04-05 galt)
 ssh hgwdev
 knownToVisiGene mm8
+
+#############################################################################
+# Create Allen Brain Atlas mapping. (DONE 2006-04-12 galt)
+
+# compile allenCollectSeq
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/allenBrain/allenCollectSeq
+    make
+
+# Set up directory
+    ssh kk
+    cd /cluster/data/mm8/bed
+    mkdir allenBrain
+    cd allenBrain
+
+# In /san/sanvol1/visiGene/offline/allenBrain/probesAndData/
+#  allen20051021.tab (converted from spreadsheet mailed by Susan Sunkin <SusanS@alleninstitute.org>)
+#  probeSeq.20051027.fasta (also from Susan).
+
+# Create a list of probe sequences filling ones missing from probeSeq.20050127.fa
+# with some NCBI and TIGR files, and some downloaded one at a time.
+     allenCollectSeq /san/sanvol1/visiGene/offline/allenBrain/probesAndData/allen20051021.tab /san/sanvol1/visiGene/offline/allenBrain/probesAndData/probeSeq.20051027.fasta /cluster/data/mm7/bed/ncbiXm/ncbiNm.fa /cluster/data/mm7/bed/ncbiXm/ncbiXm.fa /cluster/data/mm6/bed/tigrMgiTc/tigrMgiTc.fa ~/kent/src/hg/makeDb/allenBrain/allenCollectSeq/extra.fa allProbes.fa allProbes.tab missing.tab allenBrainUrl.tab
+    
+# Set up a blat run to align the probes.
+    mkdir split
+    faSplit sequence allProbes.fa 200 split/rp
+    mkdir run
+    cd run
+    ls -1 ../split/*.fa > mrna.lst
+    ls -1 /scratch/hg/mm8/nib/*.nib > genome.lst
+    mkdir psl
+    cat << '_EOF_' > gsub
+#LOOP
+blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+    gensub2 genome.lst mrna.lst gsub spec
+    para create spec
+# Then do the usual para try/push/time/check until the run is finished
+
+# Then do sorting and near-best-in-genome step on file server
+    ssh kkstore02
+    cd /cluster/data/mm8/bed/allenBrain/run
+    pslSort dirs raw.psl tmp psl
+    pslReps raw.psl ../best.psl -nohead -minCover=0.20 -minAli=0.96 -nearTop=0.001 /dev/null
+    sort -k 14,14 -k 16,16n ../best.psl > ../allenBrainAli.psl
+
+# Clean up big files no longer needed
+   rm raw.psl
+   rm -r psl
+   rm -r ../split
+
+# Load up database
+   ssh hgwdev
+   cd /cluster/data/mm8/bed/allenBrain
+
+# Make a new table that contains the URLs for the allen brain genes
+# Make this one first since all.joiner considers it the master table.
+   hgsql mm8 < ~/kent/src/hg/lib/allenBrainUrl.sql
+   hgsql mm8 -e 'load data local infile "allenBrainUrl.tab" into table allenBrainUrl;'
+
+# Make probe alignment table, and load sequence.
+   hgLoadPsl mm8 allenBrainAli.psl
+   mkdir /gbdb/mm8/allenBrain
+   ln -s /cluster/data/mm8/bed/allenBrain/allProbes.fa /gbdb/mm8/allenBrain/allProbes.fa
+   hgLoadSeq mm8 /gbdb/mm8/allenBrain/allProbes.fa
+
+# Make mapping between known genes and allenBrain	
+   hgMapToGene mm8 allenBrainAli -type=psl knownGene knownToAllenBrain 
 
