@@ -53,7 +53,6 @@ group genes
 priority 34.5
 visibility hide
 color 12,120,12
-hgGene on
 type genePred
 cdsDrawDefault genomic\ codons
 

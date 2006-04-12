@@ -786,7 +786,7 @@ boolean trackWantsHgGene(struct track *tg);
 /* Return TRUE if track wants hgGene on details page. */
 
 void mapBoxHgcOrHgGene(int start, int end, int x, int y, int width, int height, 
-		       char *track, char *item, char *statusLine, boolean doHgGene);
+	char *track, char *item, char *statusLine, char *directUrl, boolean withHguid);
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 

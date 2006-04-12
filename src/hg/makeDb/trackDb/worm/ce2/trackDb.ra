@@ -49,7 +49,8 @@ visibility pack
 color 0,0,200
 type genePred sangerPep
 url http://www.wormbase.org/db/gene/gene?name=$$
-hgGene on
+hgsid on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 
 track sangerGenefinder
 shortLabel WormBase Genefinder

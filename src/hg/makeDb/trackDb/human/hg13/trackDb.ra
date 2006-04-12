@@ -6,7 +6,6 @@ priority 34
 visibility hide
 color 12,12,120
 type genePred refPep refMrna
-hgGene off
 
 track vegaGene
 shortLabel Vega Genes

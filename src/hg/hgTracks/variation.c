@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.77 2006/03/19 22:32:06 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.78 2006/04/12 03:25:46 kent Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -576,7 +576,6 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
-boolean doHgGene = trackWantsHgGene(tg);
 
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
@@ -624,7 +623,7 @@ if (vis == tvPack || vis == tvSquish)
             int w = x2-textX;
             if (w > 0)
                 mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
-				  tg->mapItemName(tg, item), name, doHgGene);
+				  tg->mapItemName(tg, item), name, NULL, FALSE);
             }
         }
     vgUnclip(vg);
@@ -653,7 +652,6 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
-boolean doHgGene = trackWantsHgGene(tg);
 
 if (!tg->drawItemAt)
     errAbort("missing drawItemAt in track %s", tg->mapName);
@@ -701,7 +699,7 @@ if (vis == tvPack || vis == tvSquish)
             int w = x2-textX;
             if (w > 0)
                 mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
-				  tg->mapItemName(tg, item), name, doHgGene);
+				  tg->mapItemName(tg, item), name, NULL, FALSE);
             }
         }
     vgUnclip(vg);

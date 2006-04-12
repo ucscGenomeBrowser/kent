@@ -207,6 +207,24 @@ Some settings used by various tracks:
     o exonArrows - if specified to draw strand arrows on exons.
     o itemAttrTbl - table used to color individual items in a track, selected
       by name and locations.  Currently works for genePred tracks.
+url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
+    o url - If present puts up a link to an external URL on the details
+      page.  The url includes everything else on the line after the first word.
+      The string $$ will be replaced by the name of an item.   Example:
+      url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
+    o directUrl - If present this will replace the "hgc" details page with 
+      whats in the url.  The URL is formatted as a printf line including
+      the following fields in this order:
+         %s - item name
+	 %s - chromosome name
+	 %d - chromosome start position
+	 %d - chromosome end position
+	 %s - track name
+	 %s - database name
+      An example is:
+	directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+      Note that it is possible to only include the first field or first few
+      fields.  The fields must be in the given order if present though.
 
 Note: We have a restriction on table names.   We currently do not handle
 table names in the format chrN_table_name.   The 2nd underscore is not allowed.

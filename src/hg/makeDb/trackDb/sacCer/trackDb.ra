@@ -16,7 +16,8 @@ priority 45.5
 visibility pack
 color 0,100,180
 type genePred sgdPep
-hgGene on
+hgsid on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 exonArrows on
 
 track sgdOther

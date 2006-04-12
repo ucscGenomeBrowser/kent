@@ -6,7 +6,6 @@ priority 34
 visibility pack
 color 12,12,120
 type genePred refPep refMrna
-hgGene off
 
 track ensRiken
 shortLabel Ensembl/Riken

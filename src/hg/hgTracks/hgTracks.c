@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1084 2006/04/07 05:06:36 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1085 2006/04/12 03:25:45 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -803,14 +803,11 @@ return dy->string;
 }
 
 void mapBoxHgcOrHgGene(int start, int end, int x, int y, int width, int height, 
-	char *track, char *item, char *statusLine, boolean doHgGene)
+	char *track, char *item, char *statusLine, char *directUrl, boolean withHgsid)
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 {
 struct sqlConnection *conn = hAllocConn();
-char condStr[256];
-char *chp;
-char *refseqId;
 int xEnd = x+width;
 int yEnd = y+height;
 if (x < 0) x = 0;
@@ -820,36 +817,13 @@ if (x < xEnd)
     char *encodedItem = cgiEncode(item);
 
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
-    if (doHgGene)
+    if (directUrl)
         {
-	if (sameWord(track, "ccdsGene"))
-	    {
-            safef(condStr, sizeof(condStr), 
-	    	  "ccds='%s'", item);
-	    refseqId = sqlGetField(conn, database, "ccdsInfo", "mrnaAcc", condStr);
-	    chp = strstr(refseqId, ".");
-	    if (chp != NULL) *chp = '\0';
-            safef(condStr, sizeof(condStr), 
-	    	  "refseq='%s' and cdsOverlap >= 0.95 order by cdsOverlap desc", 
-		  refseqId);
-	    
-            hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
-                    hgcNameAndSettings(), start, end, track, encodedItem, 
-                    chromName, winStart, winEnd, 
-                    database, tl.picWidth);
-	    } /* end of TRUE branch of: if (sameWord(track, "ccdsGene")) */
-	else
-	    {
-  	    hPrintf("HREF=\"../cgi-bin/hgGene?%s&%s=%s&%s=%s&%s=%s&%s=%d&%s=%d&%s=%s\" ",
-		    cartSidUrlString(cart),
-		    "db", database,
-		    "hgg_gene", item,
-		    "hgg_chrom", chromName,
-		    "hgg_start", start,
-		    "hgg_end", end,
-	 	    "hgg_type", track);
-	    }
-	} /* end of TRUE branch of: if (doHgGene) */
+	hPrintf("HREF=\"");
+	hPrintf(directUrl, item, chromName, start, end, track, database);
+	if (withHgsid)
+	     hPrintf("&%s", cartSidUrlString(cart));
+	}
     else
 	{
 	hPrintf("HREF=\"%s&o=%d&t=%d&g=%s&i=%s&c=%s&l=%d&r=%d&db=%s&pix=%d\" ", 
@@ -870,7 +844,7 @@ void mapBoxHc(int start, int end, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 {
-mapBoxHgcOrHgGene(start, end, x, y, width, height, track, item, statusLine, FALSE);
+mapBoxHgcOrHgGene(start, end, x, y, width, height, track, item, statusLine, NULL, FALSE);
 }
 
 boolean chromTableExists(char *tabSuffix)
@@ -1685,13 +1659,6 @@ int e = tg->itemEnd(tg, item);
 *retX2 = round((e - winStart)*scale) + xOff;
 }
 
-boolean trackWantsHgGene(struct track *tg)
-/* Return TRUE if track wants hgGene on details page. */
-{
-char *hgGene = trackDbSetting(tg->tdb, "hgGene");
-return hgGene != NULL && sameString(hgGene, "on");
-}
-
 boolean highlightItem(struct track *tg, void *item)
 /* Should this item be highlighted? */
 {
@@ -1737,7 +1704,8 @@ int lineHeight = tg->lineHeight;
 int heightPer = tg->heightPer;
 int y;
 boolean withLabels = (withLeftLabels && vis == tvPack && !tg->drawName);
-boolean doHgGene = trackWantsHgGene(tg);
+char *directUrl = trackDbSetting(tg->tdb, "directUrl");
+boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
 
 if (vis == tvPack || vis == tvSquish)
     {
@@ -1842,7 +1810,7 @@ if (vis == tvPack || vis == tvSquish)
             int w = x2-textX;
             if (w > 0)
                 mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
-				  tg->mapItemName(tg, item), name, doHgGene);
+				  tg->mapItemName(tg, item), name, directUrl, withHgsid);
             }
 
 	/* If printing things to the "overflow" row return state to original 
@@ -4196,6 +4164,8 @@ int w;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
 int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+char *directUrl = trackDbSetting(tdb, "directUrl");
+boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
 
 if (tg->itemColor != NULL)
     color = tg->itemColor(tg, bed, vg);
@@ -4220,8 +4190,8 @@ if (color)
 	    Color textColor = contrastingColor(vg, color);
 	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
 	    }
-	mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
-		tg->mapName, tg->mapItemName(tg, bed), NULL);
+	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+		tg->mapName, tg->mapItemName(tg, bed), NULL, directUrl, withHgsid);
 	}
     }
 if (tg->subType == lfWithBarbs || tg->exonArrows)
@@ -7707,7 +7677,8 @@ static int doMapItems(struct track *track, int fontHeight, int y)
 /* Draw map boxes around track items */
 {
 int newy;
-boolean doHgGene = trackWantsHgGene(track);
+char *directUrl = trackDbSetting(track->tdb, "directUrl");
+boolean withHgsid = (trackDbSetting(track->tdb, "hgsid") != NULL);
 int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int start = 1;
@@ -7753,7 +7724,7 @@ for (item = track->items; item != NULL; item = item->next)
                     track->itemEnd(track, item), trackPastTabX,
                     y, trackPastTabWidth,height, track->mapName,
                     track->mapItemName(track, item),
-                    track->itemName(track, item), doHgGene);
+                    track->itemName(track, item), directUrl, withHgsid);
             }
         y += height;
         }
@@ -11130,10 +11101,6 @@ if (showTrackControls)
 	hButton("submit", "jump");
 	hOnClickButton(clearButtonJavascript,"clear");
 	hPrintf(" size %s bp. ", buf);
-#ifdef OLD
-	hWrites("&nbsp;image width: ");
-	hIntVar("pix", tl.picWidth, 4);
-#endif /* OLD */
         hButton("hgTracksConfigPage", "configure");
 	hPutc('\n');
 	}

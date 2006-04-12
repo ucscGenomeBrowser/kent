@@ -506,7 +506,8 @@ priority 34
 visibility pack
 color 0,100,180
 type genePred bdgpGenePep
-hgGene on
+hgsid on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 
 track bdgpNonCoding
 shortLabel FlyBase Non-coding
