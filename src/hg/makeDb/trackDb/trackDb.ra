@@ -577,6 +577,7 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
+maxItems 300
 
 track est
 shortLabel $Organism ESTs
@@ -588,6 +589,7 @@ spectrum on
 intronGap 30
 type psl est
 pslSequenceBases no
+maxItems 300
 
 track protBlat
 shortLabel Protein BLAT
