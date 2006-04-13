@@ -77,7 +77,7 @@ struct _pf_base_info
     int id;		/* Unique id */
     char *name;		/* Name in scope:class format. */
     int parentId;	/* Id of parent class. */
-    char needsCleanup;	/* Does this type need cleanup? */
+    int needsCleanup;	/* Does this type need cleanup? */
     int size;		/* Type size. */
     };
 

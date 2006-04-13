@@ -358,7 +358,8 @@ switch (base->singleType)
     }
 if (base->needsCleanup)
     {
-    if (val.Obj != NULL && --val.Obj->_pf_refCount <= 0)
+    if (val.Obj != NULL && val.Obj->_pf_cleanup != NULL &&
+    	--val.Obj->_pf_refCount <= 0)
 	val.Obj->_pf_cleanup(val.Obj, stack->Var.typeId);
     }
 freeHash(&idHash);
