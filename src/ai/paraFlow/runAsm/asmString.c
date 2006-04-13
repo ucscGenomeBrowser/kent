@@ -36,3 +36,12 @@ if (a != b)
 return ret;
 }
 
+extern void pf_print(_pf_Stack *stack);
+
+void print(_pf_Stack stack)
+/* Print out single variable where type is determined at run time. 
+ * Add newline. */
+{
+pf_print(&stack);
+}
+
