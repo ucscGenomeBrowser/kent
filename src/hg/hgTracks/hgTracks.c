@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1086 2006/04/12 22:05:16 ytlu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1087 2006/04/13 03:28:34 ytlu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -5908,11 +5908,11 @@ int stsMapMouseSelectColor(struct track *tg, void *item)
 {
 struct stsMapMouseNew *el = item;
 if((el->wigChr[0] != '\0' || el->mgiChrom[0] != '\0') && el->rhChrom[0] != '\0')
-    return 1;
+    return 3;
 else if(el->wigChr[0] != '\0' || el->mgiChrom[0] != '\0')
     return 2;
 else if(el->rhChrom[0] != '\0')
-    return 3;
+    return 1;
 else
     return 0;
 }
