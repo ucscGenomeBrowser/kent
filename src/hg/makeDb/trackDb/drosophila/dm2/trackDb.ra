@@ -231,14 +231,14 @@ type bed 9
     track picTarMiRNAS1
     subTrack picTar
     shortLabel PicTar microRNA
-    longLabel PicTar microRNA sites
+    longLabel MicroRNA target sites as predicted by PicTar, high sensitivity
     color 128,0,128
     priority 1
 
     track picTarMiRNAS3
     subTrack picTar
     shortLabel PicTar microRNA
-    longLabel PicTar microRNA sites
+    longLabel MicroRNA target sites as predicted by PicTar, high specificity
     color 128,0,128
     priority 2
 
