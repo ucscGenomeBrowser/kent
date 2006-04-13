@@ -8207,6 +8207,7 @@ hgLoadBed hg17 ensRatMm5Hom ucsc100k.bed -sqlTable=ensRatMm5Hom.sql
     nice rm axtChain/run1/chain/* &
     nice gzip axtChrom/* pslChrom/* lav/*/* axtChain/all.chain axtChain/*.net &
 
+##############################################################################
 #  MAKING BLASTZ SELF (DONE - 2004-07-14 - Hiram)
 
     # The procedure for lineage spec business with self is to simply
@@ -8292,6 +8293,7 @@ SEQ2_LEN=$BASE/S2.len
 XXX - running 2004-07-01 11:26
 
 
+##############################################################################
 # LIFTOVER (DROP) CHAINS TO HG16 (IN PROGRESS 2005-01-03 kate)
 
    # swap hg16->hg17 chains 
@@ -17792,8 +17794,6 @@ TMPDIR=/scratch/tmp
 
     cp -p /cluster/data/hg17/chrom.sizes ./S1.len
     twoBitInfo /cluster/bluearc/mm7/mm7Chroms_RandomContigs.2bit S2.len
-XXXX - working on modifications to doBlastzChainNet.pl 2005-09-06
-XXXX - to do this random contigs business properly
 
     #	establish a screen to control this job
     screen
@@ -17807,10 +17807,6 @@ XXXX - to do this random contigs business properly
 	-bigClusterHub=pk \
 	-continue=cat -stop=cat \
 	`pwd`/DEF > catStep.out 2>&1 &
-
-XXX under screen on kkstore02:
-Tue Sep 13 17:05:53 PDT 2005
-[hiram@kkstore02 /cluster/data/hg17/bed/blastzMm7.2005-09-06]
 
     time $HOME/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
@@ -19152,6 +19148,31 @@ TMPDIR=/scratch/tmp
     ssh hgwdev "featureBits hg17 chainBosTau1Link" >& bosTau1.fb; cat bosTau1.fb
     ssh hgwdev "featureBits hg17 chainBosTau2Link" >& bosTau2.fb; cat bosTau2.fb
 
+    #	swapping to get the lift over file in the other direction (Hiram)
+    ssh pk
+    mkdir /cluster/data/bosTau2/bed/blastz.hg17.swap
+    cd /cluster/data/bosTau2/bed
+    ln -s blastz.hg17.swap blastz.hg17
+    cd blastz.hg17.swap
+    
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/hg17/bed/blastz.bosTau2.2005-12-19/DEF > swap.out 2>&1 &
+    #	this failed during the load of the tables, but that is OK, we
+    #	just wanted the liftOver files from this
+
+    #	manually cleaned this up since the run faild during the MySQL
+    #	load due to out of space problems.  These tables do not need to
+    #	be loaded anyway.
+    sh kkstore02
+    cd /cluster/data/bosTau2/bed/blastz.hg17.swap
+
+    rm -fr psl/
+
+    rm -fr axtChain/run/chain/
+    rm -f  axtChain/noClass.net
+    rm -fr axtChain/net/
+    rm -fr axtChain/chain/
 
 #########################################################################
 # BLASTZ rheMac2 (2006-02-08 kate)
@@ -20635,27 +20656,29 @@ knownToVisiGene hg17 -fromProbePsl=vgAllProbes
 ### microRNA targets tracks  (WORKING - 2006-03-17 - Hiram)
 ### from: http://pictar.bio.nyu.edu/ Rajewsky Lab
 ### Nikolaus Rajewsky nr@scarbo.bio.nyu.edu
+### Yi-Lu Wang ylw205@nyu.edu
+### dg@thp.Uni-Koeln.DE
     ssh hgwdev
     mkdir /cluster/data/hg17/bed/picTar
     cd /cluster/data/hg17/bed/picTar
     wget --timestamping \
-	'http://scarbo.bio.nyu.edu/~nr/new_mammals_bed' -O newMammals.bed
+	'http://pictar.bio.nyu.edu/ucsc/new_mammals_bed' -O newMammals.bed
 
     wget --timestamping \
-	'http://scarbo.bio.nyu.edu/~nr/new_mammals_chicken_bed' \
+	'http://pictar.bio.nyu.edu/ucsc/new_mammals_chicken_bed' \
 	-O newMammalsChicken.bed
 
     grep -v "^track" newMammals.bed \
 	| hgLoadBed -strict hg17 picTarMiRNA4Way stdin
-    #	Loaded 204953 elements of size 9
+    #	Loaded 205263 elements of size 9
     grep -v "^track" newMammalsChicken.bed \
 	| hgLoadBed -strict hg17 picTarMiRNA5Way stdin
-    #	Loaded 43046 elements of size 9
+    #	Loaded 43081 elements of size 9
 
-    featureBits hg17 picTarMiRNA4Way
-    #	608595 bases of 2866216770 (0.021%) in intersection
-    featureBits hg17 picTarMiRNA5Way
-    #	109060 bases of 2866216770 (0.004%) in intersection
+    nice -n +19 featureBits hg17 picTarMiRNA4Way
+    #	608549 bases of 2866216770 (0.021%) in intersection
+    nice -n +19 featureBits hg17 picTarMiRNA5Way
+    #	109059 bases of 2866216770 (0.004%) in intersection
 
 ############################################################################
 # dbSNP BUILD 125 (Heather, March 2006)
