@@ -4724,6 +4724,7 @@ done > cytobands.bed
         # 56419
 
     # !!! DO THIS AFTER KG IS BUILD !!!
+    # DONE (4/13/06 Fan).
     # create table for knownGenes detail page
     ssh hgwdev
     cd /cluster/data/hg18/bed/hinv
