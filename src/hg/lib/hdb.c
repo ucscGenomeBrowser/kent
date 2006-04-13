@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.292 2006/04/12 01:18:55 baertsch Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.293 2006/04/13 22:57:14 baertsch Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -954,6 +954,14 @@ hNibForChrom(chrom, fileName);
 return hFetchSeqMixed(fileName, chrom, start, end);
 }
 
+struct dnaSeq *hChromSeqMixed2(char *chrom, int start, int end)
+/* Return mixed case (repeats in lower case) DNA from chromosome. */
+{
+char fileName[HDB_MAX_PATH_STRING];
+hNibForChrom2(chrom, fileName);
+return hFetchSeqMixed(fileName, chrom, start, end);
+}
+
 struct dnaSeq *hChromSeq(char *chrom, int start, int end)
 /* Return lower case DNA from chromosome. */
 {
@@ -1115,6 +1123,21 @@ if (dnaCase == dnaMixed)
 else
     {
     seq = hChromSeq(seqName, start, end);
+	if (dnaCase == dnaUpper)
+	  touppers(seq->dna);
+	}
+return seq;
+}
+
+struct dnaSeq *hDnaFromSeq2(char *seqName, int start, int end, enum dnaCase dnaCase)
+/* Fetch DNA */
+{
+struct dnaSeq *seq;
+if (dnaCase == dnaMixed)
+    seq = hChromSeqMixed2(seqName, start, end);
+else
+    {
+    seq = hChromSeq2(seqName, start, end);
 	if (dnaCase == dnaUpper)
 	  touppers(seq->dna);
 	}
