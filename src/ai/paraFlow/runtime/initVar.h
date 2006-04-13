@@ -54,6 +54,7 @@ _pf_Dir _pf_long_dir_from_tuple(_pf_Stack *stack, int count, int typeId, int elT
 _pf_Dir _pf_float_dir_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
 _pf_Dir _pf_double_dir_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
 _pf_Dir _pf_string_dir_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
+#define _pf_dyString_dir_from_tuple _pf_string_dir_from_tuple
 _pf_Dir _pf_class_dir_from_tuple(_pf_Stack *stack, int count, int typeId, int elTypeId);
 
 int _pf_countOurLevel(char *encoding);

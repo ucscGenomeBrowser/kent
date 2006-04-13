@@ -1,3 +1,100 @@
+track multiz9way
+shortLabel Conservation 
+longLabel Vertebrate Multiz Alignment & Conservation
+group compGeno
+priority 101.1
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons9way
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz9waySummary
+frames multiz9wayFrames
+irows on
+speciesGroups mammal vertebrate
+sGroup_mammal mm8 hg18 canFam2 bosTau2 monDom4
+sGroup_vertebrate galGal2 xenTro1 danRer3
+treeImage phylo/rn4_9way.jpg
+
+track phastConsElements9way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
+group compGeno
+priority 101.3
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
+track chainDanRer3
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 160
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain danRer3
+otherDb danRer3
+
+track netDanRer3
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 160.1
+visibility hide
+spectrum on
+type netAlign danRer3 chainDanRer3
+otherDb danRer3
+
+track chainXenTro1
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 170
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain xenTro1
+otherDb xenTro1
+
+track chainMm7
+shortLabel $o_db Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 254
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+type chain mm7
+otherDb mm7
+
+track netMm7
+shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 254.1
+visibility hide
+spectrum on
+type netAlign mm7 chainMm7
+otherDb mm7
+
+
+
 searchName ensGeneGtpGene
 searchTable ensGene
 searchType genePred

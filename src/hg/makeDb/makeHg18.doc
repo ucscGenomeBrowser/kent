@@ -912,9 +912,13 @@ warn trf/*.bed  > lu.out 2>&1
     hgCtgPos -chromLst=chrom.lst hg18 .
 
 # GOLD AND GAP TRACKS (DONE - 2005-12-10 - Fan)
-
+		      (RE-DONE - 2006-04-06 - Fan)
     ssh hgwdev
     cd /cluster/data/hg18
+
+# manually edit the 4 haplotype .agp files to change the first col from
+# contig IDs into chrom name.
+
     hgGoldGapGl -noGl -chromLst=chrom.lst hg18 /cluster/data/hg18 .
     #	Disappointing to see this create so many tables ...
     #	_gap and _gold for each chrom
@@ -2316,7 +2320,8 @@ nice featureBits hg17 chainBosTau2Link
    cp -p 11.ooc /cluster/bluearc/hg18
    
 #######################################################################
-# PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE (WORKING - 2006-01-12 - Hiram)
+# PLACE ASSEMBLY CLONES ON CONTIGS AND SEQUENCE
+#	(DONE - 2006-01-12 - 2006-04-04 - Hiram)
     ssh kkstore02
     mkdir /cluster/data/hg18/bed/coverage
     cd /cluster/data/hg18/bed/coverage
@@ -2387,6 +2392,9 @@ foreach my $major (sort keys %cloneAcc) {
 	2> obsoleteClone.list > allClones.notObsolete.list
     #	After this obsolete list was made, those clone results were
     #	removed from the kluster run hierarchies of results.
+    #	And when we finally got to loading up the coverage track
+    #	2006-04-04, a few additional ones had crept into the mix.
+    #	These were added to this list at that loading time.
 
     comm -12 allClonesConsidered.list \
 	/cluster/data/hg17/bed/contig_overlaps/sequence.list \
@@ -2776,6 +2784,107 @@ printf "./runPsLayout.sh %s %s %s {check out line+ psl/%s/%s/%s.psl}\n",
     para create jobListY
     para try ... check ... etc ...
 
+    #	... some time later ... 2006-04-04
+    #	All the clones were eventually run through the placement kluster
+    #	runs.  Ending up with five different directory results:
+    [hiram@hgwdev64 /san/sanvol1/scratch/hg18/coverage] 
+    #	-rw-rw-r--  1  3144245541 Mar 15 09:24 runFishClones/raw.psl
+    #	-rw-rw-r--  1    91182723 Mar 15 10:44 runUnPlaced/raw.psl
+    #	-rw-rw-r--  1   102642706 Mar 15 10:49 runPlaced/raw.psl
+    #	-rw-rw-r--  1 15839733941 Mar 15 14:56 runLastRecover/raw.psl
+    #	-rw-rw-r--  1 14338192704 Mar 15 18:25 runLastOnes/raw.psl
+
+    #	Combining those results together required a large memory
+    #	machine and a couple of days processing time:
+    ssh hgwdev64
+    cd /san/sanvol1/scratch/hg18/coverage
+    pslSort dirs raw.psl tmp runPlaced runUnPlaced runFishClones \
+	runLastRecover runLastOnes > raw.psl.out 2>&1
+    #	resulting in a 33 Gb result file:
+    -rw-rw-r--    1 33515995907 Apr  2 10:54 raw.psl
+    #	trimming that down with pslReps:
+    time pslReps -nohead -nearTop=0.001 -singleHit \
+	raw.psl repsSingle.psl /dev/null
+    #	real    14m58.371s
+    #	-rw-rw-r--    1    42333543 Apr  4 10:22 repsSingle.psl
+    #	wc -l repsSingle.psl
+    #	48005 repsSingle.psl
+    #	Now, clustering those alignments together:
+    clusterClone -allowDuplicates -agp -minCover=80 -maxGap=60000 \
+        repsSingle.psl > single.agp 2> single.out
+    wc -l single.agp
+    #	45714 single.agp
+    #	Sort them, and set their phase correctly:
+    sort -k1,1 -k2,2n single.agp \
+    | ./fixPhase.pl /cluster/data/hg18/bed/coverage/phase.txt \
+        > contig_overlaps.agp
+    #	some of them are not in the phase.txt file, these are
+    #	set to draft status:
+    #	WARN: can not find contig AC024654.2 in phase.txt
+    #	WARN: can not find contig AL133291.12 in phase.txt
+    #	WARN: can not find contig AC055712.12 in phase.txt
+    #	WARN: can not find contig AC024480.2 in phase.txt
+    #	WARN: can not find contig AC068738.2 in phase.txt
+    #	WARN: can not find contig AL354703.14 in phase.txt
+    #	WARN: can not find contig AL354756.17 in phase.txt
+    #	WARN: can not find contig AL157825.11 in phase.txt
+    #	WARN: can not find contig AC073306.1 in phase.txt
+    #	WARN: can not find contig AL138892.13 in phase.txt
+    #	WARN: can not find contig AL590104.7 in phase.txt
+    #	WARN: can not find contig AC079146.4 in phase.txt
+    #	WARN: can not find contig AC024497.3 in phase.txt
+    #	WARN: can not find contig AC021295.3 in phase.txt
+    #	WARN: can not find contig AC040906.3 in phase.txt
+    #	WARN: can not find contig AC008372.5 in phase.txt
+    #	WARN: can not find contig AC026054.3 in phase.txt
+    #	WARN: can not find contig AC053504.4 in phase.txt
+
+    #	create the gl files from that overlaps.agp file:
+    ssh hgwdev
+    cd /cluster/data/hg18
+    cp -p /san/sanvol1/scratch/hg18/coverage/contig_overlaps.agp .
+    #	after going through this sequence and loading everything,
+    #	a few clones were discovered to have crept into the list that
+    #	were obsolete.  So, add them to the list used by the
+    #	removeObsoleteClones.sh script:
+    awk '{print $6}' contig_overlaps.agp > clone.coverage.list
+    bed/coverage/ckMultipleVersions.pl clone.coverage.list \
+	> /dev/null 2> /tmp/clone.transitions
+    awk '{if (! match($1,$3)){ print }}' /tmp/clone.transitions \
+	>> bed/coverage/obsoleteClone.list
+    
+    time ./removeObsoleteClones.sh
+    wc -l /san/sanvol1/scratch/hg18/coverage/contig_overlaps.agp \
+	./contig_overlaps.agp
+    #	45714 /san/sanvol1/scratch/hg18/coverage/contig_overlaps.agp
+    #	45597 ./contig_overlaps.agp
+    #	after adding ten new ones the second time around:
+    #	45587 ./contig_overlaps.agp
+    time agpToGl contig_overlaps.agp . -md=seq_contig.md
+    #       this liftGl.csh finds all the contig.gl files under each
+    #       contig directory and creates chromsome coordinate chr*.gl
+    #       files in each chrom directory
+    jkStuff/liftGl.csh contig.gl
+    #       Then hgGoldGapGl uses those chrom level chr*.gl files to add
+    #       the gl tables (as well as gold and gap
+    hgGoldGapGl -chromLst=chrom.lst hg18 /cluster/store11/gs.19 build36
+
+    #	strip some business from the sequence.inf file that is not needed
+    #	The sed here has to be done in a shell script, those tabs are
+    #	actual tabs and not the explicit ^I
+    mkdir -p /scratch/tmp
+    grep -v AADB /cluster/store11/gs.19/ncbi/sequence.inf \
+	> /scratch/tmp/seq0.inf
+    (cat /scratch/tmp/seq0.inf; \
+    grep AADB01066164.1 /cluster/store11/gs.19/ncbi/sequence.inf) \
+	| grep "for_assembly" \
+	| sed -e "s/^IW^I/^I3^I/" > cleanedSequence.inf
+    #       Then hgClonePos uses those tables to create the Coverage track
+    hgClonePos  -maxErr=600 -maxWarn=50000 -chromLst=clonePos.list \
+        hg18 /cluster/data/hg18 ./cleanedSequence.inf /cluster/store11/gs.19 \
+        > clone.pos.errors 2>&1
+
+###########################################################################
 # RECOMBINATION RATES (DONE 2006-02-15 Fan)
 
 # The STS MArkers track must be completed prior to creating this track
@@ -5755,7 +5864,7 @@ hgExpDistance hg18 hgFixed.gnfHumanAtlas2MedianRatio \
 # Got 8739 unique elements in hgFixed.gnfHumanAtlas2MedianRatio
 
 # AFFYMETRIX HG-U133 PLUS TRACK (DONE, 2006-02-11, Fan)
-
+# Loaded the HG-U133 Plus 2 sequences for hg18 (DONE, 2006-03-29, hartera)
 # The below was already done.
 # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
      ssh hgwdev
@@ -5838,10 +5947,12 @@ hgExpDistance hg18 hgFixed.gnfHumanAtlas2MedianRatio \
     mkdir -p /gbdb/hgFixed/affyProbes
     cd /gbdb/hgFixed/affyProbes
     ln -s /projects/compbio/data/microarray/affyHuman/HG-U133Plus2/U133Plus2_all.fa .
-    cd /cluster/data/hg18/bed/affyU133Plus2.2006-02-11
-    hgLoadSeq -abbr=U133+2: hg18 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 # The above is already done by Rachel during hg17 build.
+    cd /cluster/data/hg18/bed/affyU133Plus2.2006-02-11
+    # the sequences need to be loaded for the hg18 database 
+    # (2006-03-29, hartera)
+    hgLoadSeq -abbr=U133+2: hg18 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
     
     # clean up
     rm -r psl tmp err contig.psl raw.psl *.bak psl.tab seq.tab
@@ -6228,7 +6339,8 @@ cat > loadMaf.csh << 'EOF'
     csh loadMaf.csh 
     exit
 
-# PHASTCONS CONSERVATION (2005-01-05 kate)
+###############################################################
+# PHASTCONS CONSERVATION (DONE, 2ND TIME, 2006-03-28 Fan)
 # This process is distilled from Hiram and Adam's experiments
 # on mouse (mm7) 17way track.  Many parameters are now fixed, without
 # being experimentally derived, either because the experiments
@@ -6340,7 +6452,7 @@ cp -p $san/ss/$c/$f.ss ../elliotsEncode.mod $tmp
 pushd $tmp > /dev/null
 /cluster/bin/phast/$MACHTYPE/phastCons $f.ss elliotsEncode.mod \
 --rho $rho --expected-length $len --target-coverage $cov --quiet \
---not-informative panTro1 \
+--not-informative panTro1,rheMac2 \
 --seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
 popd > /dev/null
 mkdir -p $san/pp/$c $san/bed/$c
@@ -6778,6 +6890,7 @@ mkdir -p ${blatDir}/{over,net}
     #   994530182 bases of 2881515245 (34.514%) in intersection
 
 # GENOSCOPE TETRAODON (tetNig1) ECORES (DONE, 2006-03-03, Fan)
+# GENOSCOPE TETRAODON (tetNig1) ECORES (REBUILT, 2006-04-04, Fan)
     ssh kkstore02
     mkdir -p /cluster/data/hg18/bed/ecoresTetNig1
     cd /cluster/data/hg18/bed/ecoresTetNig1
@@ -6796,7 +6909,7 @@ mkdir -p ${blatDir}/{over,net}
     # if "ecore" is changed to "CDS" and "ecotig" to "transcript" this loads
     # correctly into the table.
     sed -e 's/ecore/CDS/' Hs36Tnig1format.gff | sed -e 's/ecotig/transcript/' \
-	    | cut -f 1-8,10 > Hg18vstetNig1.gff
+	    | cut -f 1-8,11 > Hg18vstetNig1.gff
     # add "chr" in front of the chromsome name in first field (2005-02-08)
     perl -pi.bak -e 's/^([0-9XYM]{1,2})/chr$1/' Hg18vstetNig1.gff
     rm *.bak
@@ -7408,3 +7521,1268 @@ mkdir -p ${blatDir}/{over,net}
     cp /gbdb/hg18/liftOver/hg18ToHg17.over.chain .
     gzip hg18ToHg17.over.chain
     hgAddLiftOverChain hg18 hg17 /gbdb/hg18/liftOver/hg18ToHg17.over.chain
+
+##########################################################################
+# NSCAN track - ( markd)
+# hg17 had both NSCAN and NSCAN-EST tracks, in a composite track.
+# currently have only NSCAN for hg18
+    cd /cluster/data/hg18/bed/nscan/
+
+    # obtainedf NSCAN predictions from michael brent's group
+    # at WUSTL
+    wget -nv http://genes.cse.wustl.edu/jeltje/hg18/hg18.nscan.gtf
+    wget -r -np -nv http://genes.cse.wustl.edu/jeltje/hg18/chr_ptx/
+    mv genes.cse.wustl.edu/jeltje/hg18/chr_ptx .
+    rm -rf genes.cse.wustl.edu chr_ptx/index.html*
+    gzip -9 hg18.nscan.gtf chr_ptx/*.fa
+    chmod a-w hg18.nscan.gtf.gz chr_ptx/*.gz
+
+    # load tracks.  Note that these have *utr features, rather than
+    # exon features.  currently ldHgGene creates separate genePred exons
+    # for these.
+    ldHgGene -bin -gtf -genePredExt hg18 nscanGene hg18.nscan.gtf.gz
+    # add .a suffix to match transcript id
+    hgPepPred -suffix=.a hg18 generic nscanPep chr_ptx/*.fa.gz
+    rm -f *.tab
+
+    # update trackDb; need a hg18-specific page to describe informants
+    human/hg18/nscanGene.html    
+    human/hg18/trackDb.ra
+
+##########################################################################
+# UPDATED hg18.knownToVisiGene (2006-04-05 galt)
+#  after making sure hg18.vgAllProbes was up to date (see makeVisiGene.doc)
+ssh hgwdev
+knownToVisiGene hg18 -fromProbePsl=vgAllProbes
+
+
+##############################################################################
+# BLASTZ CHIMP PanTro1 second time (STARTED - 2006-01-05, DONE 2006-01-13 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzPanTro1.2006-01-05
+    cd /cluster/data/hg18/bed
+    rm blastz.panTro1
+    ln -s blastzPanTro1.2006-01-05 blastz.panTro1
+    cd blastzPanTro1.2006-01-05
+
+    cat << '_EOF_' > DEF
+# human vs chimp
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/hg18.2bit
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+
+# QUERY: Chimp PanTro1 - single chunk big enough to run entire genome
+SEQ2_DIR=/san/sanvol1/scratch/panTro1/panTro1.2bit
+SEQ2_LEN=/scratch/hg/panTro1/chrom.sizes
+SEQ2_CHUNK= 30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzPanTro1.2006-01-05
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+screen
+bash
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-workhorse=pk \
+-stop=load \
+`pwd`/DEF > load.out 2>&1 &
+# Started Thu Jan  5 11:26:45 PST 2006
+# Encountered an error at the net step:
+
+startStep: 0, at step 5 net to stopStep 6
+# chmod a+x /cluster/data/hg18/bed/blastzPanTro1.2006-01-05/axtChain/netChains.csh
+# ssh -x pk nice /cluster/data/hg18/bed/blastzPanTro1.2006-01-05/axtChain/netChains.csh
+cd /cluster/data/hg18/bed/blastzPanTro1.2006-01-05/axtChain
+chainPreNet hg18.panTro1.all.chain.gz /scratch/hg/hg18/chrom.sizes /scratch/hg/panTro1/chrom.sizes stdout
+chainNet stdin -minSpace=1 /scratch/hg/hg18/chrom.sizes /scratch/hg/panTro1/chrom.sizes stdout /dev/null
+netSyntenic stdin noClass.net
+Got 49 chroms in /scratch/hg/hg18/chrom.sizes, 52 in /scratch/hg/panTro1/chrom.sizes
+Finishing nets
+writing stdout
+writing /dev/null
+memory usage 363347968, utime 1042 s/100, stime 56
+netChainSubset -verbose=0 noClass.net hg18.panTro1.all.chain.gz stdout
+chainSort stdin stdout
+gzip -c
+Out of memory needMem - request size 6 bytes
+
+gzip: stdout: Broken pipe
+Command failed:
+ssh -x pk nice /cluster/data/hg18/bed/blastzPanTro1.2006-01-05/axtChain/netChains.csh
+
+# 1/9/06, Retry again
+
+ssh pk
+cd /cluster/data/hg18/bed
+cd blastzPanTro1.2006-01-05
+screen
+bash
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-workhorse=pk \
+-continue=net \
+-stop=load \
+`pwd`/DEF > load2.out 2>&1 &
+
+# Same error.
+
+# Try with kolossus
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-continue=net \
+-stop=load \
+`pwd`/DEF > load3.out 2>&1 &
+
+# Still have problems, which seem to be related to the
+# wrong $MACHTYPE and $PATH on kolossus.  Updated my .cshrc
+
+# Did the following manually on kolossus:
+
+# vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+
+/cluster/bin/x86_64/netChainSubset -verbose=0 noClass.net hg18.panTro1.all.chain.gz stdout | chainSort stdin stdout | gzip -c > hg18.panTro1.over.chain.gz
+
+mkdir -p /cluster/data/hg18/bed/liftOver
+cp -p hg18.panTro1.over.chain.gz /cluster/data/hg18/bed/liftOver/hg18ToPanTro1.over.chain.gz
+
+# Make axtNet for download: one .axt per hg18 seq.
+netSplit noClass.net net
+cd ..
+mkdir axtNet
+foreach f (axtChain/net/*.net)
+netToAxt $f axtChain/chain/$f:t:r.chain \
+  /scratch/hg/hg18/hg18.2bit /san/sanvol1/scratch/panTro1/panTro1.2bit stdout \
+  | axtSort stdin stdout \
+  | gzip -c > axtNet/$f:t:r.hg18.panTro1.net.axt.gz
+end
+
+# Make mafNet for multiz: one .maf per hg18 seq.
+mkdir mafNet
+foreach f (axtNet/*.hg18.panTro1.net.axt.gz)
+  axtToMaf -tPrefix=hg18. -qPrefix=panTro1. $f \
+        /scratch/hg/hg18/chrom.sizes /scratch/hg/panTro1/chrom.sizes \
+        stdout \
+  | gzip -c > mafNet/$f:t:r:r:r:r:r.maf.gz
+end
+
+# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ above by hand.
+
+ssh pk
+cd /cluster/data/hg18/bed
+cd blastzPanTro1.2006-01-05
+
+screen
+bash 
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-continue=load \
+-stop=load \
+`pwd`/DEF > load4.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-swap -stop=load \
+`pwd`/DEF > swap-load.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-continue=download \
+`pwd`/DEF > download.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-swap -continue=download \
+`pwd`/DEF > swap-download.out 2>&1 &
+
+# Measurements:
+
+# Go to kolossus to run featureBits to avoid out of memory problem.
+
+ssh kolossus
+bash
+
+time HGDB_CONF=~/.hg.conf.read-only featureBits panTro1 chainHg18Link 
+# 2641472125 bases of 2733948177 (96.617%) in intersection
+
+time HGDB_CONF=~/.hg.conf.read-only featureBits hg18 chainPanTro1Link 
+# 2681146909 bases of 2881515245 (93.046%) in intersection
+
+time HGDB_CONF=~/.hg.conf.read-only featureBits panTro1 chainHg17Link 
+# 0 bases of 2733948177 (0.000%) in intersection
+
+time HGDB_CONF=~/.hg.conf.read-only featureBits hg17 chainPanTro1Link 
+# 2633869032 bases of 2866216770 (91.894%) in intersection
+
+#########################################################################
+# BLASTZ RAT Rn3 (STARTED - 2005-12-22, DONE 2006-01-05 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzRn3.2005-12-22
+    cd /cluster/data/hg18/bed
+    rm blastz.rn3
+    ln -s blastzRn3.2005-12-22 blastz.rn3
+    cd blastzRn3.2005-12-22
+
+    cat << '_EOF_' > DEF
+# human vs rat
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+BLASTZ_ABRIDGE_REPEATS=1
+    
+# TARGET: Muman Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_SMSK=/scratch/hg/hg18/linSpecRep/notInRat
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Rat Rn3 - chunk big enough to do all chroms in single whole
+pieces
+SEQ2_DIR=/scratch/rat/rn3/softNib
+SEQ2_SMSK=/cluster/bluearc/rat/rn3/linSpecRep.notInHuman
+SEQ2_LEN=/cluster/bluearc/rat/rn3/chrom.sizes
+SEQ2_CHUNK=300000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzRn3.2005-12-22
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # happy emacs
+
+    #	establish a screen to control this job
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-stop=load \
+	`pwd`/DEF > to-load.out 2>&1 &
+
+# start processing again on 12/31/05.
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=pk \
+      -swap \
+      -stop=load \
+	`pwd`/DEF > swap.out 2>&1 &
+
+# Either UCSC RR and hgwdev systems or network went down around 11 AM 12/31/05.
+
+# After holidays, start again on 1/3/06 and again on 1/5/06.
+
+    ssh pk
+    cd /cluster/data/hg18/bed
+    cd blastzRn3.2005-12-22
+    screen
+    bash
+
+      time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=pk \
+      -swap \
+      -continue=net \
+      -stop=load \
+	`pwd`/DEF > swap6.out 2>&1 &
+
+# DONE! Jan  5 13:39
+
+# Measurements:
+nice featureBits rn3 chainHg18Link 
+# 962630574 bases of 2571104688 (37.440%) in intersection
+nice featureBits hg18 chainRn3Link 
+# 964251210 bases of 2881515245 (33.463%) in intersection
+
+#########################################################################
+# BLASTZ ARMADILLO DasNov1 (STARTED - 2006-01-06 - 2006-01-09 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzDasNov1.2006-01-06
+    cd /cluster/data/hg18/bed
+    rm blastz.dasNov1
+    ln -s blastzDasNov1.2006-01-06 blastz.dasNov1
+    cd blastzDasNov1.2006-01-06
+
+    cat << '_EOF_' > DEF
+# human vs armadillo
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for armadillo (per Webb email to Brian Raney)
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=30000000
+SEQ1_LAP=10000
+
+# QUERY: Armadillo DasNov1
+SEQ2_DIR=/scratch/hg/dasNov1/dasNov1.2bit
+SEQ2_LEN=/scratch/hg/dasNov1/chrom.sizes
+SEQ2_LIMIT=400
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzDasNov1.2006-01-06
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-workhorse=pk \
+	-stop=load \
+	`pwd`/DEF > load.out 2>&1 &
+# Started Fri Jan  6 06:20:12 PST 2006
+
+# 1:20 PM, 1/7/06
+# The blastz cluster run seemed finished OK, but make jobList some how
+# does not end, even after creating the run.time file manually.  Kill it manually.
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-workhorse=pk \
+-continue=cat \
+-stop=load \
+`pwd`/DEF > load2.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-workhorse=pk \
+-swap -stop=load \
+`pwd`/DEF > swap-load.out 2>&1 &
+
+# Done, Jan  8 21:40.
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-continue=download \
+`pwd`/DEF > download.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-swap -continue=download \
+`pwd`/DEF > swap-download.out 2>&1 &
+
+# Done! Jan  9 06:11
+
+#########################################################################
+# BLASTZ DOG CanFam2 second time (DONE - 2005-12-28 - 2005-12-29 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzCanFam2.2005-12-28
+    cd /cluster/data/hg18/bed
+    rm blastz.canFam2
+    ln -s blastzCanFam2.2005-12-28 blastz.canFam2
+    cd blastzCanFam2.2005-12-28
+
+    cat << '_EOF_' > DEF
+# human vs dog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for dog (per Webb email to Brian Raney)
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_SMSK=/cluster/bluearc/hg18/linSpecRep/notInOthers
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_IN_CONTIGS=0 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Dog CanFam2 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/canFam2/nib
+SEQ2_LEN=/cluster/bluearc/canFam2/chrom.sizes
+SEQ2_SMSK=/san/sanvol1/scratch/canFam2/linSpecRep.notInHuman
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzCanFam2.2005-12-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-stop=load \
+	`pwd`/DEF > load.out 2>&1 &
+    #	Started 2005-12-28 21:33
+
+    # Two jobs stuck in the same node.  Did manual para stop and para push.  
+    # Both finished within a few minutes.
+
+    # Done! On Thu Dec 29 05:27:31 PST 2005.
+
+    # system seems hang on kolossus (3 processes of [tcsh -c nice chainMergeSort], not moving)
+    # manually killed the jobs.
+    # now use pk as the workhorse.
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+      -workhorse=pk \
+      -continue=chainMerge \
+	-stop=load \
+	`pwd`/DEF > load2.out 2>&1 &
+
+    # Done! Thu Dec 29 09:10:02 PST 2005.
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-workhorse=pk \
+      -swap -stop=load \
+	`pwd`/DEF > swap-load.out 2>&1 &
+
+    # Had an error at the load step,
+    # mySQL error 2013: Lost connection to MySQL server during query,
+    # probably due to sys admin working on network connections,
+    # continue at the load step
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+      -workhorse=pk \
+      -swap -continue=load -stop=load \
+	`pwd`/DEF > swap-load2.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+    -workhorse=pk \
+    -continue=download \
+    `pwd`/DEF > download.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -workhorse=pk \
+    -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+    -swap -continue=download \
+    `pwd`/DEF > swap-download.out 2>&1 &
+
+    # Done! Dec 29 13:21
+
+    #	Measurements:
+
+    ssh hgwdev
+nice featureBits canFam2 chainHg18Link 
+# 1477551526 bases of 2384996543 (61.952%) in intersection
+nice featureBits hg18 chainCanFam2Link 
+# 1524764349 bases of 2881515245 (52.915%) in intersection
+nice featureBits canFam2 chainHg17Link 
+# 1487483112 bases of 2384996543 (62.368%) in intersection
+nice featureBits hg17 chainCanFam2Link 
+# 1530197469 bases of 2866216770 (53.387%) in intersection
+
+
+#########################################################################
+# BLASTZ ELEPHANT LoxAfr1 second time (STARTED - 2006-01-03 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzLoxAfr1.2006-01-03
+    cd /cluster/data/hg18/bed
+    rm blastz.loxAfr1
+    ln -s blastzLoxAfr1.2006-01-03 blastz.loxAfr1
+    cd blastzLoxAfr1.2006-01-03
+
+    cat << '_EOF_' > DEF
+# human vs elephant
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+BLASTZ=blastz.v7.x86_64
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Elephant LoxAfr1 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/loxAfr1/loxAfr1.2bit
+SEQ2_LEN=/scratch/hg/loxAfr1/chrom.sizes
+SEQ2_LIMIT=300
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzLoxAfr1.2006-01-03
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    bash
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-workhorse=pk \
+-stop=load \
+`pwd`/DEF > load.out 2>&1 &
+
+# failed at step 2 due to kki cluster not started.
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-workhorse=pk \
+-smallClusterHub=pk \
+-continue=cat \
+-stop=load \
+`pwd`/DEF > load2.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-smallClusterHub=pk \
+-continue=net \
+-stop=load \
+`pwd`/DEF > load3.out 2>&1 &
+
+# Same broken pipe error.
+
+netChainSubset -verbose=0 noClass.net hg18.loxAfr1.all.chain.gz stdout
+chainSort stdin stdout
+gzip -c
+Out of memory needMem - request size 28 bytes
+
+gzip: stdout: Broken pipe
+Command failed:
+ssh -x kolossus nice /cluster/data/hg18/bed/blastzLoxAfr1.2006-01-03/axtChain/netChains.csh
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-continue=net \
+-stop=load \
+`pwd`/DEF > load4.out 2>&1 &
+
+#########################################################################
+# BLASTZ COW BosTau2 second time (STARTED - 2006-01-07 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzBosTau2.2006-01-07
+    cd /cluster/data/hg18/bed
+    rm blastz.bosTau2
+    ln -s blastzBosTau2.2006-01-07 blastz.bosTau2
+    cd blastzBosTau2.2006-01-07
+
+    cat << '_EOF_' > DEF
+# human vs cow
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_M=50
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Cow BosTau2 - single chunk big enough to run entire genome
+SEQ2_DIR=/san/sanvol1/scratch/bosTau2/bosTau2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/bosTau2/chrom.sizes
+SEQ2_CHUNK=3200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzBosTau2.2006-01-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+# establish a screen to control this job
+screen
+bash
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-stop=load \
+-workhorse=pk \
+`pwd`/DEF > load.out 2>&1 &
+
+# Started Sat Jan  7 07:57:22 PST 2006
+# blastz run (and load) done Jan  8 00:13
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-swap -stop=load \
+`pwd`/DEF > swap-load.out 2>&1 &
+
+# took a long time to finish.
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-continue=download \
+`pwd`/DEF > download.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+-swap -continue=download \
+`pwd`/DEF > swap-download.out 2>&1 &
+
+# Done! Jan  8 21:10
+
+# Measurements:
+
+ssh hgwdev
+nice featureBits bosTau2 chainHg18Link 
+# 1357027317 bases of 2812203870 (48.255%) in intersection
+nice featureBits hg18 chainBosTau2Link 
+# 1357291762 bases of 2881515245 (47.103%) in intersection
+nice featureBits bosTau2 chainHg17Link 
+# 0 bases of 2812203870 (0.000%) in intersection
+# nice featureBits hg17 chainBosTau2Link 
+1350076765 bases of 2866216770 (47.103%) in intersection
+
+#########################################################################
+# BLASTZ TENREC EchTel1 second time (STARTED - 2006-01-09 DONE 2006-01-12 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzEchTel1.2006-01-09
+    cd /cluster/data/hg18/bed
+    rm blastz.echTel1
+    ln -s blastzEchTel1.2006-01-09 blastz.echTel1
+    cd blastzEchTel1.2006-01-09
+
+    cat << '_EOF_' > DEF
+# human vs tenrec
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Tenrec EchTel1
+SEQ2_DIR=/scratch/hg/echTel1/echTel1.2bit
+SEQ2_LEN=/scratch/hg/echTel1/chrom.sizes
+SEQ2_LIMIT=400
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzEchTel1.2006-01-09
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+# establish a screen to control this job
+screen
+bash
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-stop=load \
+`pwd`/DEF > load.out 2>&1 &
+
+# Started Mon Jan  9 08:09:03 PST 2006
+
+# Found over a thousand jobs failed, all with the following 7 hosts.
+
+[pk:run.blastz> fgrep host j1.err | sort -u
+host: kkr10u06.kilokluster.ucsc.edu
+host: kkr10u58.kilokluster.ucsc.edu
+host: kkr10u62.kilokluster.ucsc.edu
+host: kkr11u34.kilokluster.ucsc.edu
+host: kkr11u39.kilokluster.ucsc.edu
+host: kkr12u18.kilokluster.ucsc.edu
+host: kkr12u29.kilokluster.ucsc.edu
+
+# manually created /scratch/tmp on above machines (except one).
+
+# 2 jobs still running for more than 5 hours each.  
+para stop
+para recover jobList newJobList
+
+# newJobList contains only 2 jobs.  Checked the .psl files under psl confirming only two files missing.
+para create newJobList
+para push
+# This 2 jobs finished within a couple of mintues!
+para time >run.time
+
+bash
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-continue=cat \
+-stop=load \
+`pwd`/DEF > load2.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-swap -stop=load \
+`pwd`/DEF > swap-load.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-continue=net \
+-swap \
+-stop=load \
+`pwd`/DEF > swap-load3.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-continue=download \
+`pwd`/DEF > download.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-swap -continue=download \
+`pwd`/DEF > swap-download.out 2>&1 &
+
+# Done! On Jan 12 09:18
+
+#########################################################################
+# BLASTZ CHICKEN GalGal2 second time (DONE - 2005-12-28 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzGalGal2.2005-12-28
+    cd /cluster/data/hg18/bed
+    rm blastz.galGal2
+    ln -s blastzGalGal2.2005-12-28 blastz.galGal2
+    cd blastzGalGal2.2005-12-28
+
+    cat << '_EOF_' > DEF
+# human vs chicken
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_SMSK=/cluster/bluearc/hg18/linSpecRep/notInOthers
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_IN_CONTIGS=0 
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken GalGal2 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/galGal2/nib
+SEQ2_LEN=/cluster/bluearc/galGal2/chrom.sizes
+SEQ2_SMSK=/scratch/hg/galGal2/linSpecRep
+SEQ2_IN_CONTIGS=0
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzGalGal2.2005-12-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-stop=load \
+	`pwd`/DEF > load.out 2>&1 &
+    #	Started 2005-12-28 10:35
+
+    # Two jobs stuck in the same node.  Did manual para stop and para push.  
+    # Both finished within a few minutes.
+
+    # Done! On Wed Dec 28 15:32:45 PST 2005.
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -stop=load \
+	`pwd`/DEF > swap-load.out 2>&1 &
+
+    # Had an error at the net step
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+      -swap -continue=net -stop=load \
+	`pwd`/DEF > swap-load.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+    -continue=download \
+    `pwd`/DEF > download.out 2>&1 &
+
+    # the gzip job on kolossus seems not moving at all.
+    # killed it manually.  Try again.
+
+    # Seemed not moving, kill it again.  Now use pk instead of kolossus.
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -workhorse=pk \
+    -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+    -continue=download \
+    `pwd`/DEF > download.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -workhorse=pk \
+    -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+    -swap -continue=download \
+    `pwd`/DEF > swap-download.out 2>&1 &
+
+    # Done! Wed Dec 28 20:39:44 PST 2005
+
+    #	Measurements:
+
+    ssh hgwdev
+
+    nice featureBits galGal2 chainHg18Link 
+    # 91564024 bases of 1054197620 (8.686%) in intersection
+    nice featureBits hg18 chainGalGal2Link 
+    # 102417858 bases of 2881515245 (3.554%) in intersection
+
+    nice featureBits galGal2 chainHg17Link 
+    # 93277286 bases of 1054197620 (8.848%) in intersection
+    nice featureBits hg17 chainGalGal2Link 
+    # 103882699 bases of 2866216770 (3.624%) in intersection
+
+# BLASTZ FROG XenTro1 second time (DONE - 2006-01-07 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzXenTro1.2006-01-06
+    cd /cluster/data/hg18/bed
+    rm blastz.xenTro1
+    ln -s blastzXenTro1.2006-01-06 blastz.xenTro1
+    cd blastzXenTro1.2006-01-06
+
+    cat << '_EOF_' > DEF
+# human vs frog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Frog XenTro1 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/xenTro1/xenTro1.2bit
+SEQ2_LEN=/scratch/hg/xenTro1/chrom.sizes
+SEQ2_LIMIT=400
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzXenTro1.2006-01-06
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+      -stop=load \
+	`pwd`/DEF > load.out 2>&1 &
+# Started Fri Jan  6 20:19:30 PST 2006
+# Blastz run done.  Jan  7 02:07 load.out
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -stop=load \
+	`pwd`/DEF > swap-load.out 2>&1 &
+
+# got the following error:
+
+startStep: 4, at step 5 net to stopStep 6
+netChains: looks like previous stage was not successful (can't find [xenTro1.hg18.]all.chain[.gz]).
+
+# Try it with pk instead of kolossus:
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-workhorse=pk \
+-swap -stop=load \
+`pwd`/DEF > swap-load2.out 2>&1 &
+
+# It worked, swap-load done. Jan  7 06:05
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-workhorse=pk \
+-continue=download \
+`pwd`/DEF > download.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-workhorse=pk \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-swap -continue=download \
+`pwd`/DEF > swap-download.out 2>&1 &
+
+# Done! Jan  7 06:18
+
+# Measurements:
+
+ssh hgwdev
+nice featureBits xenTro1 chainHg18Link 
+# 61197900 bases of 1381238994 (4.431%) in intersection
+nice featureBits hg18 chainXenTro1Link 
+# 67810866 bases of 2881515245 (2.353%) in intersection
+
+nice featureBits xenTro1 chainHg17Link 
+# 81777842 bases of 1381238994 (5.921%) in intersection
+nice featureBits hg17 chainXenTro1Link 
+# 85701475 bases of 2866216770 (2.990%) in intersection
+
+# BLASTZ FROG XenTro1 second time (STARTED - 2006-01-06 Fan)
+
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzXenTro1.2006-01-06
+    cd /cluster/data/hg18/bed
+    rm blastz.xenTro1
+    ln -s blastzXenTro1.2006-01-06 blastz.xenTro1
+    cd blastzXenTro1.2006-01-06
+
+    cat << '_EOF_' > DEF
+# human vs frog
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Frog XenTro1 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/xenTro1/xenTro1.2bit
+SEQ2_LEN=/scratch/hg/xenTro1/chrom.sizes
+SEQ2_LIMIT=400
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzXenTro1.2006-01-06
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+      -stop=load \
+	`pwd`/DEF > load.out 2>&1 &
+# Started Fri Jan  6 20:19:30 PST 2006
+# Blastz run done.  Jan  7 02:07 load.out
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap -stop=load \
+	`pwd`/DEF > swap-load.out 2>&1 &
+
+# got the following error:
+
+startStep: 4, at step 5 net to stopStep 6
+netChains: looks like previous stage was not successful (can't find [xenTro1.hg18.]all.chain[.gz]).
+
+# Try it with pk instead of kolossus:
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-workhorse=pk \
+-swap -stop=load \
+`pwd`/DEF > swap-load2.out 2>&1 &
+
+# It worked, swap-load done. Jan  7 06:05
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-workhorse=pk \
+-continue=download \
+`pwd`/DEF > download.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-workhorse=pk \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-swap -continue=download \
+`pwd`/DEF > swap-download.out 2>&1 &
+
+# Done! Jan  7 06:18
+
+# Measurements:
+
+ssh hgwdev
+nice featureBits xenTro1 chainHg18Link 
+# 61197900 bases of 1381238994 (4.431%) in intersection
+nice featureBits hg18 chainXenTro1Link 
+# 67810866 bases of 2881515245 (2.353%) in intersection
+
+nice featureBits xenTro1 chainHg17Link 
+# 81777842 bases of 1381238994 (5.921%) in intersection
+nice featureBits hg17 chainXenTro1Link 
+# 85701475 bases of 2866216770 (2.990%) in intersection
+
+# BLASTZ TETRAODON TetNig1 second time (DONE - 2006-01-07 Fan)
+
+ssh pk
+mkdir /cluster/data/hg18/bed/blastzTetNig1.2006-01-07
+cd /cluster/data/hg18/bed
+rm blastz.tetNig1
+ln -s blastzTetNig1.2006-01-07 blastz.tetNig1
+cd blastzTetNig1.2006-01-07
+
+    cat << '_EOF_' > DEF
+# human vs tetraodon
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Human Hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Tetraodon TetNig1 - single chunk big enough to run entire genome
+SEQ2_DIR=/san/sanvol1/scratch/tetNig1/tetNig1.2bit
+SEQ2_LEN=/san/sanvol1/scratch/tetNig1/chrom.sizes
+SEQ2_CHUNK=410000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzTetNig1.2006-01-07
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+# establish a screen to control this job
+screen
+bash
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-stop=load \
+`pwd`/DEF > load.out 2>&1 &
+# Started Sat Jan  7 05:40:51 PST 2006
+
+# Encountered an error:
+startStep: 0, at step 5 net to stopStep 6
+netChains: looks like previous stage was not successful (can't find [hg18.tetNig1.]all.chain[.gz]).
+
+# Try it with pk as the workhorse.
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-workhorse=pk \
+-continue=net \
+-stop=load \
+`pwd`/DEF > load2.out 2>&1 &
+
+# Load done.  Sat Jan  7 07:34:56 PST 2006
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-workhorse=pk \
+-swap -stop=load \
+`pwd`/DEF > swap-load.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-workhorse=pk \
+-continue=download \
+ `pwd`/DEF > download.out 2>&1 &
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+-workhorse=pk \
+-swap -continue=download \
+`pwd`/DEF > swap-download.out 2>&1 &
+
+# Done! Sat Jan  7 08:02:14 PST 2006
+# The download and swap-download took less than 10 seconds each.  ???
+
+# Measurements:
+
+ssh hgwdev
+nice featureBits tetNig1 chainHg18Link 
+# 50026847 bases of 342403326 (14.611%) in intersection
+nice featureBits hg18 chainTetNig1Link 
+# 57654754 bases of 2881515245 (2.001%) in intersection
+
+nice featureBits tetNig1 chainHg17Link 
+# 34379509 bases of 342403326 (10.041%) in intersection
+nice featureBits hg17 chainTetNig1Link 
+# 35910128 bases of 2866216770 (1.253%) in intersection
+
+#########################################################################
+# BLASTZ FUGU fr1 (STARTED - 2005-12-20, DONE 2006-01-04 Fan)
+    ssh pk
+    mkdir /cluster/data/hg18/bed/blastzFr1.2005-12-20
+    cd /cluster/data/hg18/bed
+    ln -s blastzFr1.2005-12-20 blastz.fr1
+    cd blastzFr1.2005-12-20
+
+    cat << '_EOF_' > DEF
+# human vs. fugu
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+
+# Reuse parameters from human-chicken, except L=6000 (more relaxed)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Human Hg18 - testing 100,000,000 sized chunk on pk kluster
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+
+# QUERY: Fugu Fr1 - chunk big enough to run the whole chrom at once
+SEQ2_DIR=/san/sanvol1/scratch/fr1/nib
+SEQ2_LEN=/san/sanvol1/scratch/fr1/chrom.sizes
+SEQ2_CHUNK=400000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzFr1.2005-12-20
+'_EOF_'
+    # << happy emacs
+
+    #	establish a screen to control this job
+    ssh pk
+    cd /cluster/data/hg18/bed/blastzFr1.2005-12-20
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -stop=load \
+	`pwd`/DEF > thruLoad.out 2>&1 &
+
+    ssh pk
+    cd /cluster/data/hg18/bed/blastzFr1.2005-12-20
+    screen
+    bash
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -continue=chainMerge -stop=load \
+	`pwd`/DEF > thruLoad.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -continue=download \
+	`pwd`/DEF > download.clean.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -swap \
+	`pwd`/DEF > swap.out 2>&1 &
+
+# Finish the remaining step, 1/4/05.
+
+    ssh pk
+    cd /cluster/data/hg18/bed/blastzFr1.2005-12-20
+    screen
+    bash
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 \
+	-swap -continue=download \
+	`pwd`/DEF > DownloadSwap.out 2>&1 &
+
+# First try found the DEF was some how altered for rn3.
+# Re-generated DEF and try again.
+
+time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 \
+	-swap -continue=download \
+	`pwd`/DEF > DownloadSwap2.out 2>&1 &
+
+# Done.  Jan  4 09:48.
+
+# measurements
+
+nice featureBits hg18 chainFr1Link
+# 51795958 bases of 2881515245 (1.798%) in intersection
+nice featureBits hg17 chainFr1Link
+#50831650 bases of 2866216770 (1.773%) in intersection
+
+nice featureBits hg18 netFr1
+# 691148929 bases of 2881515245 (23.986%) in intersection
+nice featureBits hg17 netFr1
+# 714234935 bases of 2866216770 (24.919%) in intersection
+
+nice featureBits fr1 chainHg18Link
+# 43267869 bases of 315518167 (13.713%) in intersection
+# nice featureBits fr1 chainHg17Link
+0 bases of 315518167 (0.000%) in intersection
+nice featureBits fr1 netHg18
+# 140843080 bases of 315518167 (44.639%) in intersection
+nice featureBits fr1 netHg17
+# 0 bases of 315518167 (0.000%) in intersection
+
+##################################################
+
+# For blastz runs between hg18 and other organisms, they are documented in 
+# makeMm8.doc makeRn4.doc, makeRheMac2.doc, makeDanRer3.doc.
+
+# PHASTCONS SCORES DOWNLOADABLES FOR 17WAY (2006-04-06 Fan)
+
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/multiz17way 
+    mkdir phastConsDownloads
+    cd phastConsDownloads
+cat > downloads.csh << 'EOF'
+    date
+    cd /san/sanvol1/scratch/hg18/multiz17way.2006-02-18/cons/pp
+    foreach chr (`awk '{print $1}' /cluster/data/hg18/chrom.sizes`)
+      echo $chr
+      cat `ls -1 $chr/$chr.*.pp | sort -t\. -k2,2n` \
+        | nice gzip -c \
+            > /cluster/data/hg18/bed/multiz17way/phastConsDownloads/$chr.gz
+    end
+    date
+'EOF'
+    csh downloads.csh >&! downloads.log &
+
+        # ~20 minutes
+    # << happy emacs
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz17way/phastConsDownloads
+    md5sum *.gz > md5sum.txt
+    set dir = /usr/local/apache/htdocs/goldenPath/hg18/phastCons17way
+    mkdir $dir
+    ln -s /cluster/data/hg18/bed/multiz17way/phastConsDownloads/{*.gz,md5sum.txt} $dir
+    cp /usr/local/apache/htdocs/goldenPath/hg17/phastCons17way/README.txt $dir
+    # edit this file to reflect the latest releases used.
+    vi $dir/README.txt
+
+

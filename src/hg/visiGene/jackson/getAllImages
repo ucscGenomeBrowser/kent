@@ -4,7 +4,11 @@ if ("$jdb" == "") then
     exit 1
 endif
 
-hgsql $jdb -BN -e 'select substring(accID,5) from ACC_Accession where prefixPart = "PIX:"' > pixIds.list
+# we can't get to the downloaded mysql db now because it's on another machine
+#hgsql $jdb -BN -e 'select substring(accID,5) from ACC_Accession where prefixPart = "PIX:"' > pixIds.list
+
+set sql = 'select substring(accID,5,30) from ACC_Accession where prefixPart = "PIX:"' 
+query "$sql" "bcp" | sed -e 's/|//g' > pixIds.list
 
 #cat pixIds.list
 
@@ -25,5 +29,4 @@ while ( $#pixList != 0 )
 	getImage $pix
     endif	    
 end
-
 	

@@ -3290,11 +3290,12 @@ EOF
 
     wget -nv http://genes.cse.wustl.edu/predictions/dog/canFam1/CanFam1_hg17_nscan_10_18_2005.tar.gz
     chmod a-w CanFam1_hg17_nscan_10_18_2005.tar.gz 
+    tar -zxf  CanFam1_hg17_nscan_10_18_2005.tar.gz 
 
     # load tracks.  Note that these have *utr features, rather than
     # exon features.  currently ldHgGene creates separate genePred exons
     # for these.
-    ldHgGene -gtf -genePredExt canFam1 nscanGene  CanFam1_hg17_nscan_10_18_2005/chr_gtf/*.gtf
+    ldHgGene -bin -gtf -genePredExt canFam1 nscanGene  CanFam1_hg17_nscan_10_18_2005/chr_gtf/*.gtf
     # add .a suffix to match transcript id
     hgPepPred -suffix=.a canFam1 generic nscanPep CanFam1_hg17_nscan_10_18_2005/chr_ptx/*.ptx
     rm -rf CanFam1_hg17_nscan_10_18_2005 *.tab

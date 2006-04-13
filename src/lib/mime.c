@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mime.c,v 1.8 2005/12/05 22:22:02 kent Exp $";
+static char const rcsid[] = "$Id: mime.c,v 1.9 2006/04/12 21:44:16 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
@@ -135,7 +135,7 @@ if (b->i >= b->eod && b->eoi == b->eom) /* at end of buffer */
 //    *b->i
 //    );
 //fprintf(stderr,"%c",*b->i);
-//fflush(stdout); 
+//fflush(stderr); 
 return *b->i++;    
 }
 
@@ -223,7 +223,7 @@ while(TRUE)
     
     //debug
     //fprintf(stderr,"MIME header: key=[%s], val=[%s]\n",key,val);
-    //fflush(stdout); 
+    //fflush(stderr); 
     
     if (!altHeader)
 	freez(&line);
@@ -347,7 +347,7 @@ readPartHeaderMB(b,p,altHeader);
 ct = hashFindVal(p->hdr,"content-type");  /* use lowercase key */
 //debug
 //fprintf(stderr,"ct from hash:%s\n",ct);
-//fflush(stdout); 
+//fflush(stderr); 
 
 if (ct && startsWith("multipart/",ct))
     {
@@ -371,7 +371,7 @@ if (ct && startsWith("multipart/",ct))
     boundary = cloneString(bound);
     //debug
     //fprintf(stderr,"initial boundary parsed:%s\n",boundary);
-    //fflush(stdout); 
+    //fflush(stderr); 
 
     /* skip any extra "prolog" before the initial boundary marker */
     while (TRUE)
@@ -383,7 +383,7 @@ if (ct && startsWith("multipart/",ct))
 	}
 	//debug
     	//fprintf(stderr,"initial boundary found:%s\n",bnd);
-	//fflush(stdout); 
+	//fflush(stderr); 
     
     freez(&bnd);
 
@@ -416,7 +416,7 @@ if (ct && startsWith("multipart/",ct))
 	    errAbort("expected boundary %s, but found %s in MIME",boundary,bound);
 	//debug
     	//fprintf(stderr,"\nfound boundary:%s\n",bound);
-	//fflush(stdout); 
+	//fflush(stderr); 
     	c1 = getcMB(b);
     	c2 = getcMB(b);
 	if (c1 == '-' && c2 == '-')
@@ -513,8 +513,8 @@ else
 	}
     if (dy)
 	{
-	p->data=needMem(dy->stringSize+1);
-	memmove(p->data,dy->string,dy->stringSize);
+	p->data=needLargeMem(dy->stringSize+1);
+	memcpy(p->data,dy->string,dy->stringSize);
 	p->data[dy->stringSize] = 0;
     	freeDyString(&dy);
 	}

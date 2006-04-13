@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.289 2006/03/28 00:06:39 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.290 2006/04/07 05:06:35 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -4303,6 +4303,12 @@ struct sqlConnection *conn = hAllocConn();
 int ct = sqlTableSize(conn, table);
 hFreeConn(&conn);
 return ct;
+}
+
+boolean isNewChimp(char *database) 
+/* database is panTro2 or later */
+{
+return (startsWith("panTro", database) && !sameString("panTro1", database));
 }
 
 

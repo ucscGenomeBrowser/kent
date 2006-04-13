@@ -1,3 +1,37 @@
+track multiz17way
+shortLabel Conservation
+longLabel Vertebrate Multiz Alignment & Conservation (17 Species)
+group compGeno
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons17way
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+frames multiz17wayFrames
+irows on
+autoScaleDefault Off
+summary multiz17waySummary
+speciesGroups mammal vertebrate
+sGroup_mammal panTro1 rheMac2 mm8 rn4 oryCun1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom4
+sGroup_vertebrate galGal2 xenTro1 danRer3 tetNig1 fr1
+speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
+treeImage phylo/Mm7_17way.jpg
+
+track phastConsElements17way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, 17-way Vertebrate Multiz Alignment
+group compGeno
+priority 104.4
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track stsMap
 shortLabel STS Markers
 longLabel STS Markers on Genetic (blue) and Radiation Hybrid (black) Maps
@@ -36,43 +70,19 @@ type genePred knownGenePep knownGeneMrna
 hgGene on
 cdsDrawDefault genomic\ codons
 
-track multiz17way
-shortLabel Conservation
-longLabel Vertebrate Multiz Alignment & Conservation (17 Species)
-group compGeno
-priority 104.2
+track nscanGene
+shortLabel N-SCAN
+longLabel N-SCAN Gene Predictions
+group genes
+priority 45.1
 visibility hide
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons17way
-pairwiseHeight 12
-spanList 1
-yLineOnOff Off
-frames multiz17wayFrames
-irows on
-autoScaleDefault Off
-summary multiz17waySummary
-speciesGroups mammal vertebrate
-sGroup_mammal panTro1 rheMac2 mm8 rn4 oryCun1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom4
-sGroup_vertebrate galGal2 xenTro1 tetNig1 fr1 danRer3 
-speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
-treeImage phylo/Mm7_17way.jpg
-
-track phastConsElements17way
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements, 17-way Vertebrate Multiz Alignment
-group compGeno
-priority 104.4
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
+color 34,139,34
+type genePred nscanPep
+cdsDrawDefault genomic\ codons
 
 track phastConsElements
 shortLabel Most Conserved
-longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
+longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish
 group compGeno
 priority 109.52
 visibility hide
@@ -90,6 +100,7 @@ color 100,50,0
 altColor 255,240,200
 spectrum on
 matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
 type chain danRer3
 otherDb danRer3
                                                                                 

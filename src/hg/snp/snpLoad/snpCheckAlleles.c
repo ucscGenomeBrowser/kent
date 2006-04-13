@@ -1,36 +1,9 @@
 /* snpCheckAlleles
- * Write first standalone, once working
- * integrate into snpRefUCSC.
+ * Run after snpRefUCSC.
  *
- * Log 4 exceptions:
- *
- * 1) WrongRefAllelePositiveStrand
- *    orientation = 0
- *    and allele != refUCSC
- *
- *    Note an assymetry here: we are not checking
- *    allele against refUCSCReverseComp
-
- *    Note: these are also logged as RangeLocTypeWrongSizeLargeAllele
- *
- * 2) WrongRefAlleleNegativeStrand
- *    orientation = 1
- *    and allele != refUCSCReverseComp
- *    and allele != refUCSC
- *
- *    Hoping for none of these
- *   
- * 3) RefAlleleNotRevCompExactLocType
- *    orientation = 1
- *    and allele != refUCSCReverseComp
- *    and allele = refUCSC
- *    and loc_type = 2
- *
- * 4) RefAlleleNotRevCompRangeLocType
- *    orientation = 1
- *    and allele != refUCSCReverseComp
- *    and allele = refUCSC
- *    and loc_type = 1, 4, 5, 6
+ * Log 2 annotations:
+ * RefAlleleNotRevComp
+ * RefAlleleMismatch
  *
  * Use UCSC chromInfo.  */
 
@@ -40,11 +13,10 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.6 2006/03/08 22:49:41 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckAlleles.c,v 1.10 2006/04/07 15:17:30 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
-
 
 void usage()
 /* Explain usage and exit. */
@@ -55,13 +27,10 @@ errAbort(
     "    snpCheckAlleles snpDb \n");
 }
 
-
 void writeToExceptionFile(char *chrom, char *start, char *end, char *name, char *exception)
 {
 fprintf(exceptionFileHandle, "%s\t%s\t%s\trs%s\t%s\n", chrom, start, end, name, exception);
 }
-
-
 
 void doCheckAlleles(char *chromName)
 /* check each row for exceptions */
@@ -72,6 +41,9 @@ struct sqlResult *sr;
 char **row;
 char tableName[64];
 int loc_type = 0;
+int chromStart = 0;
+int chromEnd = 0;
+int span = 0;
 
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 if (!hTableExists(tableName)) return;
@@ -84,12 +56,20 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    /* we already check size of allele in snpLocType and snpExpandAllele. */
+    /* skip past alleles with wrong size here. */
+    chromStart = sqlUnsigned(row[1]);
+    chromEnd = sqlUnsigned(row[2]);
+    span = chromEnd - chromStart;
+    if (span != strlen(row[5])) continue;
+
     loc_type = sqlUnsigned(row[3]);
+
     /* check positive strand first */
     if (sameString(row[4], "0"))
         {
         if (sameString(row[5], row[6])) continue;
-        writeToExceptionFile(chromName, row[1], row[2], row[0], "WrongRefAllelePositiveStrand");
+        writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleMismatch");
 	continue;
 	}
 
@@ -100,15 +80,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* matching non-reverse comp is useful info */
     if (sameString(row[5], row[6]))
         {
-	if (loc_type == 2)
-            writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleNotRevCompExactLocType");
-	else
-            writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleNotRevCompRangeLocType");
+        writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleNotRevComp");
         continue;
 	}
 
     /* nothing matching */
-    writeToExceptionFile(chromName, row[1], row[2], row[0], "WrongRefAlleleNegativeStrand");
+    writeToExceptionFile(chromName, row[1], row[2], row[0], "RefAlleleMismatch");
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);

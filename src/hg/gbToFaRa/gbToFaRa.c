@@ -24,7 +24,7 @@
 #include "keys.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: gbToFaRa.c,v 1.23 2004/06/23 23:39:21 markd Exp $";
+static char const rcsid[] = "$Id: gbToFaRa.c,v 1.24 2006/04/04 16:47:33 angie Exp $";
 
 enum formatType
 /* Are we working on genomic sequence or mRNA?  Need to write
@@ -608,7 +608,7 @@ void addContig(int start, int end)
 /* Add a new contig. */
 {
 if (contigCount >= ArraySize(contigStarts) )
-    errAbort("Too many contigs, can only handle %d\n", ArraySize(contigStarts));
+    errAbort("Too many contigs, can only handle %d\n", (int)ArraySize(contigStarts));
 contigStarts[contigCount] = start;
 contigEnds[contigCount] = end;
 ++contigCount;
@@ -687,7 +687,7 @@ for (i=0; i<dnaSize; ++i)
 if (open)
     {
     if (contigCount >= ArraySize(contigStarts) )
-        errAbort("Too many contigs, can only handle %d\n", ArraySize(contigStarts));
+        errAbort("Too many contigs, can only handle %d\n", (int)ArraySize(contigStarts));
     contigStarts[contigCount] = firstIx;
     contigEnds[contigCount] = i;
     ++contigCount;
@@ -730,7 +730,7 @@ if (s == NULL)
     }
 s = strstr(s, "preserved");
 if (s == NULL)
-    errAbort("Can't find preserved marker in %s\n%s\n", accession);
+    errAbort("Can't find preserved marker in %s\n%s\n", accession, s);
 for (;;)
     {
     int start, end;
@@ -1204,8 +1204,8 @@ while (readGbInfo(lf))
 	    uglyf("\n");
             errAbort("Short LOCUS line in %s accession %s", inName, accession);
             }
-        if (wordCount >= 5 && sameString(words[4], "EST") || 
-	    wordCount >= 6 && sameString(words[5], "EST"))
+        if ((wordCount >= 5 && sameString(words[4], "EST")) || 
+	    (wordCount >= 6 && sameString(words[5], "EST")))
             {
             /* Try and figure out if it's a 3' or 5' EST */
 	    char *dir = getEstDir(definitionField->val, com);
@@ -1638,7 +1638,6 @@ int startIndex = 5;
 struct hash *uniqHash = NULL;
 struct hash *estAuthorHash = NULL;
 struct hash *orgHash = NULL;
-static char *byOrgOption = "-byOrganism=";
 
 optionHash(&argc, argv);
 if (argc < 6)

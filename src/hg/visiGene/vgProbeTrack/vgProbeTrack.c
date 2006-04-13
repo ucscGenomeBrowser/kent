@@ -1053,7 +1053,7 @@ verbose(1,"rc = %d = count of sequences for blat, to get psls for taxon %d\n",rc
 if (rc == 0) 
     {
     unlink("blat.fa");
-    system("echo '' > blatNearBest.psl");
+    system("rm -f blatNearBest.psl; touch blatNearBest.psl");  /* make empty file */
     return;
     }
 
@@ -1153,7 +1153,7 @@ safef(dbTbl,sizeof(dbTbl),"%s.%s",db,table);
 if (!sqlTableExists(conn, dbTbl))
     {
     verbose(1,"FYI: Table %s does not exist\n",dbTbl);
-    safef(cmd,sizeof(cmd),"echo '' > %s.psl",table);
+    safef(cmd,sizeof(cmd),"rm -f %s.psl; touch %s.psl",table,table); /* make empty file */
     verbose(1,"%s\n",cmd); system(cmd);
     }
 else

@@ -6,7 +6,7 @@
 #include "axt.h"
 #include "ra.h"
 
-static char const rcsid[] = "$Id: twinOrfStats.c,v 1.4 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: twinOrfStats.c,v 1.5 2006/04/07 15:18:29 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -109,8 +109,8 @@ for (i=0; i<ArraySize(symToIx); ++i)
     symToIx[i] = -1;
 for (i=0; i<ArraySize(ixToSym); ++i)
     {
-    symToIx[ixToSym[i]] = i;
-    symToIx[lixToSym[i]] = i;
+    symToIx[(int)ixToSym[i]] = i;
+    symToIx[(int)lixToSym[i]] = i;
     }
 }
 
@@ -298,8 +298,8 @@ for (;symIx < axt->symCount; ++symIx)
 	  tIx = qIx = 0;
 	  for (i=0; i<3; ++i)
 	      {
-	      tIx = tIx*7 + symToIx[tCod[i]];
-	      qIx = qIx*7 + symToIx[qCod[i]];
+	      tIx = tIx*7 + symToIx[(int)tCod[i]];
+	      qIx = qIx*7 + symToIx[(int)qCod[i]];
 	      }
 	  cm->counts[tIx][qIx] += 1;
 	  codIx = 0;
@@ -324,8 +324,8 @@ for (;symIx < axt->symCount; ++symIx)
         break;
     t = axt->tSym[symIx];
     q = axt->qSym[symIx];
-    tIx = symToIx[t];
-    qIx = symToIx[q];
+    tIx = symToIx[(int)t];
+    qIx = symToIx[(int)q];
     if (tIx >= 0 && qIx >= 0)
 	{
 	cm->counts[tIx][qIx] += 1;
@@ -355,8 +355,8 @@ for (symIx = 0; symIx < axt->symCount; ++symIx)
 	    {
 	    char t = axt->tSym[symIx];
 	    char q = axt->qSym[symIx];
-	    int tIx = symToIx[t];
-	    int qIx = symToIx[q];
+	    int tIx = symToIx[(int)t];
+	    int qIx = symToIx[(int)q];
 	    if (tIx >= 0 && qIx >= 0)
 		cm->counts[tIx][qIx] += 1;
 	    break;
@@ -469,7 +469,7 @@ double scoreMotif(struct oddsMatrix *motif,  int motifSize, char *t, char *q)
 int i;
 double score = 0;
 for (i=0; i<motifSize; ++i)
-    score += motif[i].odds[symToIx[t[i]]][symToIx[q[i]]];
+    score += motif[i].odds[symToIx[(int)t[i]]][symToIx[(int)q[i]]];
 return score;
 }
 

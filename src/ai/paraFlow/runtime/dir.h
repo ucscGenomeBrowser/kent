@@ -6,7 +6,7 @@
 
 struct _pf_dir
     {
-    int _pf_refCount;			     	      /* Number of references. */
+    int _pf_refCount;	     	      /* Number of references. */
     void (*_pf_cleanup)(struct _pf_dir *dir, int id); /* Called when refCount <= 0 */
     struct _pf_type *elType;	/* Type of each element. */
     struct hash *hash;

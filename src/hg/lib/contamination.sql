@@ -13,6 +13,5 @@ CREATE TABLE contamination (
     ctg varchar(255) not null,	# Alternate name (e.g. WGS contig name)
     len int not null,	# Length of contaminated portion of sequence
               #Indices
-    INDEX(chrom(12),chromStart),
-    INDEX(chrom(12),chromEnd)
+    INDEX(chrom(12),chromStart)
 );

@@ -8,7 +8,7 @@
 #include "hgGene.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: domains.c,v 1.14 2005/01/04 23:21:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: domains.c,v 1.15 2006/04/07 23:19:33 fanhsu Exp $";
 
 static boolean domainsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -126,7 +126,7 @@ if (list != NULL)
 	hPrintf("<TD>");
 	hPrintf("<A HREF=\"http://www.rcsb.org/pdb/cgi/explore.cgi?pdbId=%s\" TARGET=_blank>", row[0]);
 	if (rowCount < 1)
-	    hPrintf("<IMG SRC=\"http://www.rcsb.org/pdb/cgi/pdbImage.cgi/%sx150.jpg\"><BR>", row[0]);
+	    hPrintf("<IMG SRC=\"http://www.rcsb.org/pdb/images/%s_asym_r_250.jpe\"><BR>", row[0]);
 	hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
 	hPrintf("</TD>");
 	}

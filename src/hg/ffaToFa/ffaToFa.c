@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: ffaToFa.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
+static char const rcsid[] = "$Id: ffaToFa.c,v 1.4 2006/03/30 16:53:35 angie Exp $";
 
 FILE *errLog;
 
@@ -39,9 +39,6 @@ errAbort(
 void ffaToFa(char *inFile, char *outDir, char *outTabName)
 /* convert Greg Schulers .ffa fasta files to our .fa files */
 {
-struct slName *inList, *inEl;
-char *inName;
-int inCount;
 struct lineFile *in;
 FILE *out = NULL, *tab;
 int lineSize;
@@ -49,7 +46,6 @@ char *line;
 char ucscName[128];
 char path[512];
 static char lastPath[512];
-char ucscFa[256];
 int outFileCount = 0;
 struct hash *uniqClone = newHash(16);
 struct hash *uniqFrag = newHash(19);

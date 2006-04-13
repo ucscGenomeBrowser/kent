@@ -13,5 +13,5 @@ CREATE TABLE bactigPos (
     endContig varchar(255) not null,	# Last contig in this bactig
               #Indices
     PRIMARY KEY(name(12)),
-    INDEX(chrom,chromStart,chromEnd)
+    INDEX(chrom,chromStart)
 );

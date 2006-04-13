@@ -107,7 +107,7 @@ int snp125MolTypeIncludeStringsSize  = ArraySize(snp125MolTypeIncludeStrings);
 
 /****** Class related controls *******/
 /* Types: unknown, snp, in-del (locType exact), heterozygous, 
-          microsatelite, named, no variation, mixed, mnp, 
+          microsatellite, named, no variation, mixed, mnp, 
 	  insertion (constructed from class = in-del, locType = between)
 	  deletion (constructed from class = in-del, locType = range) */
 
@@ -116,7 +116,7 @@ char *snp125ClassLabels[] = {
     "Single Nucleotide Polymorphism",
     "Insertion/Deletion",
     "Heterozygous",
-    "Microsatelite",
+    "Microsatellite",
     "Named",
     "No Variation",
     "Mixed",
@@ -129,7 +129,7 @@ char *snp125ClassStrings[] = {
     "snp125ClassSingle",
     "snp125ClassIn-del",
     "snp125ClassHet",
-    "snp125ClassMicrosatelite",
+    "snp125ClassMicrosatellite",
     "snp125ClassNamed",
     "snp125ClassNoVar",
     "snp125ClassMixed",
@@ -142,7 +142,7 @@ char *snp125ClassDataName[] = {
     "single",
     "in-del",
     "heterozygous",
-    "microsatelite",
+    "microsatellite",
     "named",
     "no variation",
     "mixed",
@@ -155,7 +155,7 @@ char *snp125ClassDefault[] = {
     "black",  // single
     "black",  // in-del
     "black",  // het
-    "blue",   // microsatelite
+    "blue",   // microsatellite
     "blue",   // named
     "black",  // no variation
     "green",  // mixed
@@ -168,7 +168,7 @@ char *snp125ClassCart[] = {
     "black",  // single
     "black",  // in-del
     "black",  // het
-    "blue",   // microsatelite
+    "blue",   // microsatellite
     "blue",   // named
     "black",  // no variation
     "green",  // mixed
@@ -181,7 +181,7 @@ char *snp125ClassIncludeStrings[] = {
     "snp125ClassSingleInclude",
     "snp125ClassIn-delInclude",
     "snp125ClassHetInclude",
-    "snp125ClassMicrosateliteInclude",
+    "snp125ClassMicrosatelliteInclude",
     "snp125ClassNamedInclude",
     "snp125ClassNoVarInclude",
     "snp125ClassMixedInclude",
@@ -194,7 +194,7 @@ boolean snp125ClassIncludeDefault[] = {
     TRUE,  // single
     TRUE,  // in-del
     TRUE,  // het
-    TRUE,  // microsatelite
+    TRUE,  // microsatellite
     TRUE,  // named
     TRUE,  // no variation
     TRUE,  // mixed
@@ -207,7 +207,7 @@ boolean snp125ClassIncludeCart[] = {
     TRUE,  // single
     TRUE,  // in-del
     TRUE,  // het
-    TRUE,  // microsatelite
+    TRUE,  // microsatellite
     TRUE,  // named
     TRUE,  // no variation
     TRUE,  // mixed

@@ -377,6 +377,7 @@ group compGeno
 priority 151.1
 visibility hide
 color 0,60,120
+autoTranslate 0
 type genePred
 otherDb tetNig1
 

@@ -1961,3 +1961,61 @@ cat > makeAxt.csh << 'EOF'
 
     time nice -n +19 featureBits panTro1 chainMm8Link
     #   901976621 bases of 2733948177 (32.992%) in intersection
+
+
+############################################################################
+# LIFTOVER CHAINS TO PANTRO2
+
+    # Split (using makeLoChain-split) of panTro2 is doc'ed in makePanTro2.doc
+    # Do what makeLoChain-split says to do next (start blat alignment)
+    ssh kk
+    cd /cluster/data/panTro1/bed/liftOver
+    makeLoChain-align panTro1 /scratch/hg/panTro1/nib panTro2 \
+        /iscratch/i/panTro2/split10k \
+        /cluster/bluearc/panTro2/11.ooc >&! align.log &
+    # Do what its output says to do next (start cluster job)
+    cd /cluster/data/panTro1/bed/blat.panTro2.2006-04-04/run
+    para shove
+    para time >&! run.time
+#CPU time in finished jobs:     906023s   15100.39m   251.67h   10.49d  0.029 y
+#IO & Wait Time:                 22074s     367.90m     6.13h    0.26d  0.001 y
+#Average job time:                 343s       5.72m     0.10h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            4260s      71.00m     1.18h    0.05d
+#Submission to last job:          4965s      82.75m     1.38h    0.06d
+
+    # lift alignments
+    ssh kkr1u00
+    cd /cluster/data/panTro1/bed/liftOver
+    makeLoChain-lift panTro1 panTro2 >&! lift.log &
+
+    # chain alignments
+    ssh kki
+    cd /cluster/data/panTro1/bed/liftOver
+    makeLoChain-chain panTro1 /scratch/hg/panTro1/nib \
+                panTro2 /scratch/hg/panTro2/nib >&! chain.log &
+    # Do what its output says to do next (start cluster job)
+    cd /cluster/data/panTro1/bed/blat.panTro2.2006-04-04/chainRun
+    para shove
+    para time >&! run.time
+#CPU time in finished jobs:       3884s      64.73m     1.08h    0.04d  0.000 y
+#IO & Wait Time:                   594s       9.91m     0.17h    0.01d  0.000 y
+#Average job time:                  86s       1.44m     0.02h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             245s       4.08m     0.07h    0.00d
+#Submission to last job:           401s       6.68m     0.11h    0.00d
+
+    # net alignment chains
+    ssh kkstore03
+    cd /cluster/data/panTro1/bed/liftOver
+    makeLoChain-net panTro1 panTro2 >&! net.log &
+
+    # load reference to over.chain into database table, 
+    # and create symlinks  /gbdb  and download area
+    ssh hgwdev
+    cd /cluster/data/panTro1/bed/liftOver
+    makeLoChain-load panTro1 panTro2 >&! load.log &
+
+    # test by converting a region using the "convert" link on
+    # the browser, and comparing to blat of the same region
+

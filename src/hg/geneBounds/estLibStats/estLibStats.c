@@ -6,7 +6,7 @@
 #include "jksql.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: estLibStats.c,v 1.5 2003/06/14 17:23:54 kent Exp $";
+static char const rcsid[] = "$Id: estLibStats.c,v 1.6 2006/04/07 14:35:43 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -262,7 +262,6 @@ void printLibStats(struct libInfo *liList, char *fileName)
 {
 struct libInfo *li;
 FILE *f = mustOpen(fileName, "w");
-int score, strand;
 
 #ifdef NEEDSWORK
 fprintf(f, "#ests\tsize\tstartDate\tendngDate\t");
@@ -276,9 +275,11 @@ fprintf(f, "library\tauthor\n");
 
 for (li = liList; li != NULL; li = li->next)
     {
+#ifdef NEEDSWORK
     char *minDate = NULL, *maxDate = NULL;
     long totalSize = 0;
     int count = 0, avgSize = 0;
+#endif /* NEEDSWORK */
 
     if (li->estCount == 0)
         continue;
@@ -329,8 +330,10 @@ void estLibStats(char *database, char *eiInfoBed, char *output)
 {
 struct hash *eiHash = NULL, *liHash = newHash(0);
 struct hash *libHash = NULL, *authorHash = NULL;
+#ifdef NEEDSWORK
 struct hash *dateHash = newHash(0);
-struct libInfo *liList = NULL, *li;
+#endif /* NEEDSWORK */
+struct libInfo *liList = NULL;
 
 libHash = readIdHash(database, "library");
 authorHash = readIdHash(database, "author");

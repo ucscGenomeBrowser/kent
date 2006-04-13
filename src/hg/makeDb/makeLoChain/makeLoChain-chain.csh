@@ -6,16 +6,16 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh,v 1.4 2006/02/14 00:17:10 angie Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh,v 1.5 2006/04/05 19:06:10 kate Exp $
 
 if ( $#argv != 4 ) then
     echo "usage: $0 <old-assembly> <old-nibdir> <new-assembly> <new-nibdir>"
-    echo "    Run this on a cluster hub: kk, kk9 or kki."
+    echo "    Run this on a cluster hub: kk, pk, or kki."
     exit 1
 endif
 
-if ( $HOST != 'kk' && $HOST != 'kk9' && $HOST != 'kki' ) then
-    echo "Must run on host kk, kk9 or kki"
+if ( $HOST != 'kk' && $HOST != 'pk' && $HOST != 'kki' ) then
+    echo "Must run on host kk, pk, or kki"
     exit 1
 endif
 
@@ -34,7 +34,9 @@ if (`ls -1 $newNibDir/*.nib | wc -l` < 1) then
     exit 1
 endif
 
-set blatDir = /cluster/data/$oldAssembly/bed/blat.$newAssembly.`date +%Y-%m-%d`
+set prefix = /cluster/data/$oldAssembly/bed/blat.$newAssembly
+set blatDir = `ls -td $prefix.20* | head -1`
+echo "using dir $blatDir"
 cd $blatDir
 rm -fr chainRun chainRaw
 mkdir chainRun chainRaw

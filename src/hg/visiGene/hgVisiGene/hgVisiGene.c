@@ -5,6 +5,7 @@
 #include "options.h"
 #include "htmshell.h"
 #include "cheapcgi.h"
+#include "net.h"
 #include "portable.h"
 #include "cart.h"
 #include "hui.h"
@@ -307,7 +308,9 @@ void doImage(struct sqlConnection *conn)
 /* Put up image page. */
 {
 int imageId = cartUsualInt(cart, hgpId, 0);
+char *sidUrl = cartSidUrlString(cart);
 char buf[1024];
+char url[1024];
 char *p = NULL;
 char dir[256];
 char name[128];
@@ -341,7 +344,12 @@ if (imageId != 0)
     fullCaption(conn, imageId);
     
     safef(buf,sizeof(buf),"%s%s%s", dir, name, extension);
-    printf("<B>Full-size image:</B> %d x %d <A HREF='%s'> download </A>\n", w, h, buf);
+    safef(url,sizeof(url),"../cgi-bin/%s?%s=go&%s&%s=%d",
+    	hgVisiGeneCgiName(), hgpDoDownload, sidUrl, hgpId, imageId);
+    
+    printf("<B>Full-size image:</B> %d x %d &nbsp; "
+	"<A HREF='%s'> download </A> &nbsp;&nbsp; <A HREF='%s'> view </A>\n", 
+	w, h, url, buf);
     
     }
 htmlEnd();
@@ -528,7 +536,7 @@ printf("    <frame name=\"controls\" src=\"../cgi-bin/%s?%s=go&%s&%s=%d\" noresi
 printf("  <frameset cols=\"230,*\"> \n");
 printf("    <frame src=\"../cgi-bin/%s?%s=go&%s&%s=%d\" noresize frameborder=\"0\" name=\"list\">\n",
     hgVisiGeneCgiName(), hgpDoThumbnails, sidUrl, hgpId, imageId);
-printf("    <frame src=\"../cgi-bin/%s?%s=go&%s&%s=%d/\" name=\"image\" noresize frameborder=\"0\">\n",
+printf("    <frame src=\"../cgi-bin/%s?%s=go&%s&%s=%d\" name=\"image\" noresize frameborder=\"0\">\n",
     hgVisiGeneCgiName(), hgpDoImage, sidUrl, hgpId, imageId);
 printf("  </frameset>\n");
 
@@ -741,6 +749,69 @@ doDefault(conn, FALSE);
 }
 
 
+static void problemPage(char *msg, char *url)
+/* send back a page describing problem */
+{
+printf("Content-Type: text/plain\n");
+printf("\n");
+htmStart(stdout, "do download");
+printf("%s %s",msg,url);
+htmlEnd();
+}
+
+static void doDownload(struct sqlConnection *conn)
+/* Try to force user's browser to download by giving special response headers */
+{
+int imageId = cartUsualInt(cart, hgpId, 0);
+char url[1024];
+char *p = NULL;
+char dir[256];
+char name[128];
+char extension[64];
+int w = 0, h = 0;
+int sd = -1;
+
+if (!visiGeneImageSize(conn, imageId, &w, &h))
+    imageId = 0;
+	
+if (imageId == 0)
+    {
+    problemPage("invalid imageId","");
+    }
+else    
+    {
+    p=visiGeneFullSizePath(conn, imageId);
+    splitPath(p, dir, name, extension);
+    safef(url,sizeof(url),"%s%s%s", dir, name, extension);
+    sd = netUrlOpen(url);
+    if (sd < 0)
+	{
+	problemPage("Couldn't open", url);
+	}
+    else
+	{
+	if (netSkipHttpHeaderLines(sd, url))  /* url needed only for err msgs*/
+	    {
+	    char buf[32*1024];
+	    int readSize;
+	    printf("Content-Type: application/octet-stream\n");
+	    printf("Content-Disposition: attachment; filename=%s%s\n", name, extension);
+	    printf("\n");
+	    while ((readSize = read(sd, buf, sizeof(buf))) > 0)
+	        fwrite(buf, 1,  readSize, stdout);
+	    close(sd);
+	    sd = -1;
+	    fflush(stdout);
+	    fclose(stdout);
+	    }
+	else
+	    {
+	    problemPage("Skip http header problem", url);
+    	    }	
+	}
+    }
+}
+
 void dispatch()
 /* Set up a connection to database and dispatch control
  * based on hgpDo type var. */
@@ -789,6 +860,16 @@ int main(int argc, char *argv[])
 uglyTime(NULL);
 cgiSpoof(&argc, argv);
 oldCart = hashNew(0);
-cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldCart);
+if (cgiVarExists(hgpDoDownload))  /* use cgiVars -- do not commit to any cart method yet */
+    {
+    struct sqlConnection *conn = sqlConnect(visiDb);
+    cart = cartAndCookieNoContent(hUserCookie(), excludeVars, oldCart);
+    doDownload(conn);
+    cartCheckout(&cart);
+    }
+else
+    {
+    cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldCart);
+    }
 return 0;
 }

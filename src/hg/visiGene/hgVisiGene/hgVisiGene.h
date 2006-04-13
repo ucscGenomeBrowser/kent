@@ -13,6 +13,7 @@
 #define hgpDoSearch "hgp_doSearch"
 #define hgpDoProbe "hgp_doProbe"
 #define hgpDoConfig "hgp_doConfig"
+#define hgpDoDownload "hgp_doDownload"
 
 #define hgpId "hgp_id"	/* ID of image in big frame */
 #define hgpMatchFile "hgp_matchFile"	/* Name of files containing search matches */

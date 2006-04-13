@@ -19,6 +19,7 @@
 #include "pfType.h"
 #include "pfScope.h"
 #include "pfCompile.h"
+#include "ctar.h"
 #include "isxLiveVar.h"
 #include "isx.h"
 
@@ -27,10 +28,6 @@ static struct isxAddress *isxExpression(struct pfCompile *pfc,
 	double weight, struct dlList *iList);
 /* Generate intermediate code for expression. Return destination */
 
-static void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
-	struct hash *varHash, double weight, struct dlList *iList);
-/* Generate intermediate code for statement. */
-
 char *isxValTypeToString(enum isxValType val)
 /* Convert isxValType to string. */
 {
@@ -38,6 +35,8 @@ switch (val)
     {
     case ivZero:
 	return "zer";
+    case ivBit:
+	return "bit";
     case ivByte:
 	return "byt";
     case ivShort:
@@ -131,6 +130,14 @@ switch (val)
 	return "poBz";
     case poBnz:
 	return "poBnz";
+    case poFuncStart:
+        return "poFuncStart";
+    case poFuncEnd:
+        return "poFuncEnd";
+    case poReturnVal:
+        return "poReturnVal";
+    case poCast:
+        return "poCast";
     default:
         internalErr();
 	return NULL;
@@ -142,6 +149,7 @@ char *isxRegName(struct isxReg *reg, enum isxValType valType)
 {
 switch (valType)
     {
+    case ivBit:
     case ivByte:
 	return reg->byteName;
     case ivShort:
@@ -202,12 +210,16 @@ switch (iad->adType)
 	fprintf(f, "%s*%2.1f", iad->name, iad->weight);
 	break;
     case iadInStack:
-	fprintf(f, "in(%d)", iad->val.stackOffset);
+	fprintf(f, "in(%d)", iad->val.ioOffset);
         break;
     case iadOutStack:
-	fprintf(f, "out(%d)", iad->val.stackOffset);
+	fprintf(f, "out(%d)", iad->val.ioOffset);
+        break;
+    case iadReturnVar:
+	fprintf(f, "ret(%d)", iad->val.ioOffset);
         break;
     case iadOperator:
+    case iadCtar:
 	fprintf(f, "#%s", iad->name);
 	break;
     case iadLabel:
@@ -295,8 +307,8 @@ for (node = list->head; !dlEnd(node); node = node->next)
 
 struct isx *isxNew(struct pfCompile *pfc, enum isxOpType opType,
 	struct isxAddress *dest, struct isxAddress *left,
-	struct isxAddress *right, struct dlList *iList)
-/* Make new isx instruction, and hang it on iList */
+	struct isxAddress *right)
+/* Make new isx instruction. */
 {
 struct isx *isx;
 AllocVar(isx);
@@ -304,16 +316,26 @@ isx->opType = opType;
 isx->dest = dest;
 isx->left = left;
 isx->right = right;
+return isx;
+}
+
+struct isx *isxAddNew(struct pfCompile *pfc, enum isxOpType opType,
+	struct isxAddress *dest, struct isxAddress *left,
+	struct isxAddress *right, struct dlList *iList)
+/* Make new isx instruction, and hang it on iList */
+{
+struct isx *isx = isxNew(pfc, opType, dest, left, right);;
 dlAddValTail(iList, isx);
 return isx;
 }
 
-static enum isxValType tyToIsxValType(struct pfCompile *pfc, 
-	struct pfType *ty)
-/* Return isxValType corresponding to pp */
+enum isxValType isxValTypeFromTy(struct pfCompile *pfc, struct pfType *ty)
+/* Return isxValType corresponding to pfType  */
 {
 struct pfBaseType *base = ty->base;
-if (base == pfc->bitType || base == pfc->byteType)
+if (base == pfc->bitType)
+    return ivBit;
+else if (base == pfc->byteType)
     return ivByte;
 else if (base == pfc->shortType)
     return ivShort;
@@ -335,10 +357,10 @@ static enum isxValType ppToIsxValType(struct pfCompile *pfc,
 	struct pfParse *pp)
 /* Return isxValType corresponding to pp */
 {
-return tyToIsxValType(pfc, pp->ty);
+return isxValTypeFromTy(pfc, pp->ty);
 }
 
-static struct isxAddress *constAddress(struct pfToken *tok, 
+struct isxAddress *isxConstAddress(struct pfToken *tok, 
 	enum isxValType valType)
 /* Get place to put constant. */
 {
@@ -357,9 +379,9 @@ static struct isxAddress zero;
 return &zero;
 }
 
-static struct isxAddress *tempAddress(struct pfCompile *pfc, struct hash *hash,
+struct isxAddress *isxTempVarAddress(struct pfCompile *pfc, struct hash *hash,
 	double weight, enum isxValType valType)
-/* Create a new temporary */
+/* Create a new temporary var */
 {
 struct isxAddress *iad;
 char buf[18];
@@ -390,17 +412,18 @@ iad->weight += weight;
 return iad;
 }
 
-static struct isxAddress *callAddress(struct pfVar *var, double weight, 
-	struct hash *hash)
+struct isxAddress *isxCallAddress(char *name)
 /* Create reference to a function */
 {
-struct isxAddress *iad = varAddress(var, hash, weight, ivJump);
+struct isxAddress *iad;
+AllocVar(iad);
 iad->adType = iadOperator;
+iad->name = name;
 return iad;
 }
 
 
-static struct isxAddress *ioAddress(int offset, enum isxValType valType,
+struct isxAddress *isxIoAddress(int offset, enum isxValType valType,
 	enum isxAddressType adType)
 /* Return reference to an io stack address */
 {
@@ -408,7 +431,7 @@ struct isxAddress *iad;
 AllocVar(iad);
 iad->adType = adType;
 iad->valType = valType;
-iad->val.stackOffset = offset;
+iad->val.ioOffset = offset;
 return iad;
 }
 
@@ -423,8 +446,8 @@ iad->name = name;
 return iad;
 }
 
-static struct isxAddress *tempLabelAddress(struct pfCompile *pfc)
-/* Create reference to a label. */
+struct isxAddress *isxTempLabelAddress(struct pfCompile *pfc)
+/* Create reference to a temporary label for jumping to. */
 {
 struct isxAddress *iad;
 char buf[18];
@@ -445,8 +468,8 @@ struct isxAddress *left = isxExpression(pfc, pp->children,
 	varHash, weight, iList);
 struct isxAddress *right = isxExpression(pfc, pp->children->next,
 	varHash, weight, iList);
-struct isxAddress *dest = tempAddress(pfc, varHash, weight, ppToIsxValType(pfc,pp));
-isxNew(pfc, op, dest, left, right, iList);
+struct isxAddress *dest = isxTempVarAddress(pfc, varHash, weight, ppToIsxValType(pfc,pp));
+isxAddNew(pfc, op, dest, left, right, iList);
 return dest;
 }
 
@@ -457,8 +480,9 @@ static struct isxAddress *isxUnaryOp(struct pfCompile *pfc,
 {
 struct isxAddress *target = isxExpression(pfc, pp->children,
 	varHash, weight, iList);
-struct isxAddress *dest = tempAddress(pfc, varHash, weight, ppToIsxValType(pfc,pp));
-isxNew(pfc, op, dest, target, NULL, iList);
+struct isxAddress *dest = isxTempVarAddress(pfc, varHash, weight, 
+	ppToIsxValType(pfc,pp));
+isxAddNew(pfc, op, dest, target, NULL, iList);
 return dest;
 }
 
@@ -471,7 +495,7 @@ struct isxAddress *exp = isxExpression(pfc, use->next,
 	varHash, weight, iList);
 struct isxAddress *dest = varAddress(use->var, varHash, 
 	weight, ppToIsxValType(pfc, use));
-isxNew(pfc, op, dest, dest, exp, iList);
+isxAddNew(pfc, op, dest, dest, exp, iList);
 }
 
 static struct isxAddress *isxStringCat(struct pfCompile *pfc,
@@ -497,21 +521,42 @@ int offset;
 
 for (p = inTuple->children, offset=0; p != NULL; p = p->next, ++offset)
     {
-    source = isxExpression(pfc, p, varHash, weight, iList);
-    dest = ioAddress(offset, source->valType, iadInStack);
-    isxNew(pfc, poInput, dest, source, NULL, iList);
+    for (source = isxExpression(pfc, p, varHash, weight, iList);
+    	source != NULL; source = source->next)
+	{
+	dest = isxIoAddress(offset, source->valType, iadInStack);
+	isxAddNew(pfc, poInput, dest, source, NULL, iList);
+	}
     }
-source = callAddress(function->var, weight, varHash);
-isxNew(pfc, poCall, NULL, source, NULL, iList);
+source = isxCallAddress(function->var->cName);
+isxAddNew(pfc, poCall, NULL, source, NULL, iList);
 for (ty = outTuple->children, offset=0; ty != NULL; ty = ty->next, ++offset)
     {
-    enum isxValType valType = tyToIsxValType(pfc, ty);
-    source = ioAddress(offset, valType, iadOutStack);
-    dest = tempAddress(pfc, varHash, weight, valType);
+    enum isxValType valType = isxValTypeFromTy(pfc, ty);
+    source = isxIoAddress(offset, valType, iadOutStack);
+    dest = isxTempVarAddress(pfc, varHash, weight, valType);
     slAddTail(&destList, dest);
-    isxNew(pfc, poOutput, dest, source, NULL, iList);
+    isxAddNew(pfc, poOutput, dest, source, NULL, iList);
     }
 return destList;
+}
+
+void isxAddReturnInfo(struct pfCompile *pfc, struct pfParse *outTuple, 
+	struct hash *varHash, struct dlList *iList)
+/* Add instructions for return parameters. */
+{
+struct pfParse *pp;
+int offset=slCount(outTuple->children)-1;
+/* Code generator's job is easier if we reverse these. */
+slReverse(&outTuple->children);
+for (pp = outTuple->children; pp != NULL; pp = pp->next, --offset)
+    {
+    struct isxAddress *source = varAddress(pp->var, varHash, 1.0, 
+	ppToIsxValType(pfc, pp));
+    struct isxAddress *dest = isxIoAddress(offset, source->valType, iadReturnVar);
+    isxAddNew(pfc, poReturnVal, dest, source, NULL, iList);
+    }
+slReverse(&outTuple->children);
 }
 
 static struct isxAddress *isxExpression(struct pfCompile *pfc, 
@@ -530,7 +575,7 @@ switch (pp->type)
     case pptConstFloat:
     case pptConstDouble:
     case pptConstString:
-	return constAddress(pp->tok, ppToIsxValType(pfc, pp));
+	return isxConstAddress(pp->tok, ppToIsxValType(pfc, pp));
     case pptVarUse:
 	return varAddress(pp->var, varHash, weight, ppToIsxValType(pfc, pp));
     case pptPlus:
@@ -561,6 +606,71 @@ switch (pp->type)
         return isxStringCat(pfc, pp, varHash, weight, iList);
     case pptCall:
         return isxCall(pfc, pp, varHash, weight, iList);
+    case pptCastBitToByte:
+    case pptCastBitToChar:
+    case pptCastBitToShort:
+    case pptCastBitToInt:
+    case pptCastBitToLong:
+    case pptCastBitToFloat:
+    case pptCastBitToDouble:
+    case pptCastBitToString:
+    case pptCastByteToBit:
+    case pptCastByteToChar:
+    case pptCastByteToShort:
+    case pptCastByteToInt:
+    case pptCastByteToLong:
+    case pptCastByteToFloat:
+    case pptCastByteToDouble:
+    case pptCastByteToString:
+    case pptCastCharToBit:
+    case pptCastCharToByte:
+    case pptCastCharToShort:
+    case pptCastCharToInt:
+    case pptCastCharToLong:
+    case pptCastCharToFloat:
+    case pptCastCharToDouble:
+    case pptCastCharToString:
+    case pptCastShortToBit:
+    case pptCastShortToByte:
+    case pptCastShortToChar:
+    case pptCastShortToInt:
+    case pptCastShortToLong:
+    case pptCastShortToFloat:
+    case pptCastShortToDouble:
+    case pptCastShortToString:
+    case pptCastIntToBit:
+    case pptCastIntToByte:
+    case pptCastIntToChar:
+    case pptCastIntToShort:
+    case pptCastIntToLong:
+    case pptCastIntToFloat:
+    case pptCastIntToDouble:
+    case pptCastIntToString:
+    case pptCastLongToBit:
+    case pptCastLongToByte:
+    case pptCastLongToChar:
+    case pptCastLongToShort:
+    case pptCastLongToInt:
+    case pptCastLongToFloat:
+    case pptCastLongToDouble:
+    case pptCastLongToString:
+    case pptCastFloatToBit:
+    case pptCastFloatToByte:
+    case pptCastFloatToChar:
+    case pptCastFloatToShort:
+    case pptCastFloatToInt:
+    case pptCastFloatToLong:
+    case pptCastFloatToDouble:
+    case pptCastFloatToString:
+    case pptCastDoubleToBit:
+    case pptCastDoubleToByte:
+    case pptCastDoubleToChar:
+    case pptCastDoubleToShort:
+    case pptCastDoubleToInt:
+    case pptCastDoubleToLong:
+    case pptCastDoubleToFloat:
+    case pptCastDoubleToString:
+        return isxUnaryOp(pfc, pp, varHash, poCast, weight, iList);
     default:
 	pfParseDump(pp, 3, uglyOut);
         internalErr();
@@ -579,9 +689,9 @@ struct pfParse *left = cond->children;
 struct pfParse *right = left->next;
 struct isxAddress *leftAddr = isxExpression(pfc, left, varHash, weight, iList);
 struct isxAddress *rightAddr = isxExpression(pfc,right, varHash, weight, iList);
-isxNew(pfc, op, trueLabel, leftAddr, rightAddr, iList);
+isxAddNew(pfc, op, trueLabel, leftAddr, rightAddr, iList);
 if (falseLabel)
-    isxNew(pfc, poJump, falseLabel, NULL, NULL, iList);
+    isxAddNew(pfc, poJump, falseLabel, NULL, NULL, iList);
 }
 
 
@@ -668,21 +778,88 @@ switch (ppt)
 	    !invert, weight, iList);
 	break;
 	}
+    case pptCastByteToBit:
+    case pptCastShortToBit:
+    case pptCastIntToBit:
+    case pptCastLongToBit:
+    case pptCastFloatToBit:
+    case pptCastDoubleToBit:
+    case pptCastStringToBit:
+        {
+	struct isxAddress *source = isxExpression(pfc, cond->children, 
+		varHash, weight, iList);
+	enum isxOpType op = (invert ? poBz : poBnz);
+	isxAddNew(pfc, op, trueLabel, source, NULL, iList);
+	if (falseLabel)
+	    isxAddNew(pfc, poJump, falseLabel, NULL, NULL, iList);
+	break;
+	}
+    case pptConstBit:
+        {
+	int isTrue = cond->tok->val.i;
+	if (isTrue)
+	    isxAddNew(pfc, poJump, trueLabel, NULL, NULL, iList);
+	else
+	    isxAddNew(pfc, poJump, falseLabel, NULL, NULL, iList);
+	break;
+	}
     default:
 	{
-	struct isxAddress *source = isxExpression(pfc, cond, varHash, weight,
-		iList);
-	enum isxOpType op = (invert ? poBz : poBnz);
-	isxNew(pfc, op, trueLabel, source, NULL, iList);
-	if (falseLabel)
-	    isxNew(pfc, poJump, falseLabel, NULL, NULL, iList);
+	internalErrAt(cond->tok);
 	break;
 	}
     }
 }
 
 
-static void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
+static void isxAssign(struct pfCompile *pfc, 
+	struct pfParse *pp, struct hash *varHash, 
+	double weight, struct dlList *iList)
+/* Code an assignment */
+{
+struct pfParse *use = pp->children;
+struct pfParse *val = use->next;
+if (use->type == pptVarUse)
+    {
+    struct isxAddress *source = isxExpression(pfc, val, varHash, 
+	    weight, iList);
+    struct isxAddress *dest = varAddress(use->var, varHash, 
+	    weight, ppToIsxValType(pfc, use));
+    if (source->adType == iadTempVar)
+	{
+	struct isx *prevIsx = iList->tail->val;
+	prevIsx->dest = dest;
+	}
+    else
+	{
+	isxAddNew(pfc, poAssign, dest, source, NULL, iList);
+	}
+    }
+else if (use->type == pptTuple)
+    {
+    struct isxAddress *sourceList = isxExpression(pfc, val, varHash, 
+	    weight, iList);
+    int tupSize = slCount(use->children);
+    struct isxAddress *source;
+    struct pfParse *pp;
+    assert(tupSize == slCount(sourceList));
+    for (source = sourceList,pp=use->children; 
+    	source != NULL; source = source->next, pp=pp->next)
+        {
+	struct isxAddress *dest;
+	if (pp->type != pptVarInit && pp->type != pptVarUse)
+	     internalErrAt(pp->tok);
+	dest = varAddress(pp->var, varHash, weight, ppToIsxValType(pfc, pp));
+	isxAddNew(pfc, poAssign, dest, source, NULL, iList);
+	}
+    }
+else
+    {
+    internalErrAt(pp->tok);
+    }
+}
+
+void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
 	struct hash *varHash, double weight, struct dlList *iList)
 /* Generate intermediate code for statement. */
 {
@@ -705,20 +882,12 @@ switch (pp->type)
 	    source = isxExpression(pfc, init, varHash, weight, iList);
 	else
 	    source = zeroAddress();
-	isxNew(pfc, poInit, dest, source, NULL, iList);
+	isxAddNew(pfc, poInit, dest, source, NULL, iList);
 	break;
 	}
     case pptAssign:
-        {
-	struct pfParse *use = pp->children;
-	struct pfParse *val = use->next;
-	struct isxAddress *source = isxExpression(pfc, val, varHash, 
-		weight, iList);
-	struct isxAddress *dest = varAddress(use->var, varHash, 
-		weight, ppToIsxValType(pfc, use));
-	isxNew(pfc, poAssign, dest, source, NULL, iList);
+	isxAssign(pfc, pp, varHash, weight, iList);
 	break;
-	}
     case pptPlusEquals:
 	isxOpEquals(pfc, pp, varHash, poPlus, weight, iList);
 	break;
@@ -736,19 +905,19 @@ switch (pp->type)
 	struct pfParse *test = pp->children;
 	struct pfParse *truePp = test->next;
 	struct pfParse *falsePp = truePp->next;
-	struct isxAddress *trueLabel = tempLabelAddress(pfc);
-	struct isxAddress *falseLabel = tempLabelAddress(pfc);
-	struct isxAddress *endLabel = tempLabelAddress(pfc);
+	struct isxAddress *trueLabel = isxTempLabelAddress(pfc);
+	struct isxAddress *falseLabel = isxTempLabelAddress(pfc);
+	struct isxAddress *endLabel = isxTempLabelAddress(pfc);
 	isxConditionalJump(pfc, test, varHash, trueLabel, falseLabel, FALSE,
 		weight, iList);
-	isxNew(pfc, poCondStart, NULL, NULL, NULL, iList);
-	isxNew(pfc, poCondCase, trueLabel, NULL, NULL, iList);
+	isxAddNew(pfc, poCondStart, NULL, NULL, NULL, iList);
+	isxAddNew(pfc, poCondCase, trueLabel, NULL, NULL, iList);
 	isxStatement(pfc, truePp, varHash, weight*0.6, iList);
-	isxNew(pfc, poJump, endLabel, NULL, NULL, iList);
-	isxNew(pfc, poCondCase, falseLabel, NULL, NULL, iList);
+	isxAddNew(pfc, poJump, endLabel, NULL, NULL, iList);
+	isxAddNew(pfc, poCondCase, falseLabel, NULL, NULL, iList);
 	if (falsePp)
 	    isxStatement(pfc, falsePp, varHash, weight*0.6, iList);
-	isxNew(pfc, poCondEnd, endLabel, NULL, NULL, iList);
+	isxAddNew(pfc, poCondEnd, endLabel, NULL, NULL, iList);
 	break;
 	}
     case pptFor:
@@ -757,18 +926,18 @@ switch (pp->type)
 	struct pfParse *test = init->next;
 	struct pfParse *end = test->next;
 	struct pfParse *body = end->next;
-	struct isxAddress *startLabel = tempLabelAddress(pfc);
-	struct isxAddress *condLabel = tempLabelAddress(pfc);
-	struct isxAddress *endLabel = tempLabelAddress(pfc);
+	struct isxAddress *startLabel = isxTempLabelAddress(pfc);
+	struct isxAddress *condLabel = isxTempLabelAddress(pfc);
+	struct isxAddress *endLabel = isxTempLabelAddress(pfc);
 	double loopWeight = weight*10;
 	isxStatement(pfc, init, varHash, weight, iList);
-	isxNew(pfc, poLoopStart, startLabel, NULL, condLabel, iList);
+	isxAddNew(pfc, poLoopStart, startLabel, NULL, condLabel, iList);
 	isxStatement(pfc, body, varHash, loopWeight, iList);
 	isxStatement(pfc, end, varHash, loopWeight, iList);
-	isxNew(pfc, poLabel, condLabel, NULL, NULL, iList);
+	isxAddNew(pfc, poLabel, condLabel, NULL, NULL, iList);
 	isxConditionalJump(pfc, test, varHash, startLabel, NULL, 
-		TRUE, loopWeight, iList);
-	isxNew(pfc, poLoopEnd, endLabel, NULL, NULL, iList);
+		FALSE, loopWeight, iList);
+	isxAddNew(pfc, poLoopEnd, endLabel, NULL, NULL, iList);
 	break;
 	}
     case pptNop:
@@ -779,32 +948,56 @@ switch (pp->type)
     }
 }
 
-static void isxModule(struct pfCompile *pfc, struct pfParse *pp, 
-	struct isxList *isxList)
-/* Generate instructions for module. */
+static void rIsxModuleVars(struct pfCompile *pfc, struct pfParse *pp, 
+	struct hash *varHash, struct dlList *iList)
+/* Convert module-level and static function variables to members of iList. */
 {
-struct hash *varHash = hashNew(16);
+double weight = 1.0;
+switch (pp->type)
+    {
+    case pptVarInit:
+	{
+	struct pfVar *var = pp->var;
+	struct pfScope *scope = var->scope;
+	if (!scope->isLocal)	
+	    {
+	    struct isxAddress *dest = varAddress(pp->var, varHash, 
+		    weight,  ppToIsxValType(pfc, pp));
+	    struct isxAddress *source;
+	    struct pfParse *init = pp->children->next->next;
+	    boolean doInit = FALSE;
+	    doInit =  (init != NULL && pfParseIsConst(init));
+	    if (doInit)
+		source = isxExpression(pfc, init, varHash, weight, iList);
+	    else
+		source = zeroAddress();
+	    isxAddNew(pfc, poInit, dest, source, NULL, iList);
+	    }
+	else if (var->ty->access == paStatic)
+	    internalErrAt(pp->tok);	// FIXME
+        break;
+	}
+    }
 for (pp = pp->children; pp != NULL; pp = pp->next)
-    isxStatement(pfc, pp, varHash, 1.0, isxList->iList);
-isxLiveList(isxList);
+    rIsxModuleVars(pfc, pp, varHash, iList);
 }
 
-struct isxList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp)
-/* Convert parse tree to isx. */
+struct isxList *isxListNew()
+/* Create new empty isxList */
 {
 struct isxList *isxList;
 AllocVar(isxList);
 isxList->iList = dlListNew(0);
-for (pp = pp->children; pp != NULL; pp = pp->next)
-    {
-    switch (pp->type)
-        {
-	case pptMainModule:
-	case pptModule:
-	    isxModule(pfc, pp, isxList);
-	    break;
-	}
-    }
+return isxList;
+}
+
+struct isxList *isxModuleVars(struct pfCompile *pfc, struct pfParse *module)
+/* Convert module-level and static function variables to an isxList */
+{
+struct isxList *isxList = isxListNew();
+struct hash *varHash = hashNew(0);
+rIsxModuleVars(pfc, module, varHash, isxList->iList);
+hashFree(&varHash);
 return isxList;
 }
 

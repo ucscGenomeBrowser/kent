@@ -68,16 +68,41 @@ for (; !dlEnd(node); node = node->next)
 	case poLoopStart:
 	case poLoopEnd:
 	case poCondCase:
+	case poCondStart:
 	case poCondEnd:
 	    break;
 	case poJump:
-	    uglyf("Short circuiting %s\n", name);
+	    // uglyf("Short circuiting %s\n", name);
 	    return makeDirect(node->val, labelHash);
 	default:
 	    return dest;
 	}
     }
 return dest;
+}
+
+static boolean anyRealBefore(struct dlNode *node, struct isxAddress *label)
+/* Return TRUE if get any real instruction before label */
+{
+for ( ; !dlEnd(node); node = node->next)
+    {
+    struct isx *isx = node->val;
+    switch (isx->opType)
+        {
+	case poLabel:
+	case poLoopStart:
+	case poLoopEnd:
+	case poCondCase:
+	case poCondStart:
+	case poCondEnd:
+	    if (isx->dest == label)
+	        return FALSE;
+	    break;
+	default:
+	    return TRUE;
+	}
+    }
+return TRUE;
 }
 
 static void removeNonJumps(struct dlNode *node)
@@ -87,26 +112,10 @@ static void removeNonJumps(struct dlNode *node)
 struct dlNode *n;
 struct isx *isx = node->val;
 struct isxAddress *dest = isx->dest;
-for (n = node->next; !dlEnd(n); n = n->next)
+if (!anyRealBefore(node->next, dest))
     {
-    isx = n->val;
-    switch (isx->opType)
-        {
-	case poLabel:
-	case poLoopStart:
-	case poLoopEnd:
-	case poCondCase:
-	case poCondEnd:
-	    if (isx->dest == dest)
-	        {
-		uglyf("removing non-jump to %s\n", dest->name);
-		dlRemove(node);
-		return;
-		}
-	    break;
-	default:
-	    return;
-	}
+    // uglyf("removing non-jump to %s\n", dest->name);
+    dlRemove(node);
     }
 }
 
@@ -136,11 +145,14 @@ for (node = iList->head; !dlEnd(node); node =  next)
 		if (nextIsx->opType == poJump)
 		    {
 		    struct dlNode *nn = next->next;
-		    uglyf("Consolidating cond/jump into !cond\n");
-		    isx->opType = invOp(isx->opType);
-		    isx->dest = nextIsx->dest;
-		    dlRemove(next);
-		    next = nn;
+		    if (!anyRealBefore(nn, isx->dest))
+			{
+			// uglyf("Consolidating cond/jump into !cond\n");
+			isx->opType = invOp(isx->opType);
+			isx->dest = nextIsx->dest;
+			dlRemove(next);
+			next = nn;
+			}
 		    }
 		}
 	    isx->dest = makeDirect(isx, labelHash);

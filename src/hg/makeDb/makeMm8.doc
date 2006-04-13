@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.20 2006/03/22 19:53:40 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.23 2006/04/06 21:28:55 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -1307,12 +1307,12 @@ rm -fr /scratch/tmp/${root1}_${root2}
     #	real    6m15.981s
     #	-rw-rw-r--    1  197029888 Feb 22 15:37 bacEnds.psl
 
+    #	utilize the scripts from the previous build
     cp -p /cluster/data/mm7/bed/bacends/split.pl .
     cp -p /cluster/data/mm7/bed/bacends/header .
 
     time ./split.pl header < bacEnds.psl
     #	real    0m26.983s
-
 
     mv bacEnds.psl bacEnds.psl.save
     time pslSort dirs bacEnds.psl temp split
@@ -4628,6 +4628,76 @@ Loading database with 14470 rows^M
 # END OF HGNEAR STUFF
 
 #########################################################################
+# BLASTZ panTro2 after chr9 re-masked (WORKING - 2006-03-28 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastzPanTro2.2006-03-28
+    cd /cluster/data/mm8/bed
+    rm blastz.panTro2
+    ln -s blastzPanTro2.2006-03-28 blastz.panTro2
+    cd blastz.panTro2
+
+    cat << '_EOF_' > DEF
+# mouse vs chimp
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse Mm7
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_SMSK=/cluster/bluearc/scratch/hg/mm8/linSpecRep/notInOthers
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Chimp PanTro2
+SEQ2_DIR=/scratch/hg/panTro2/nib
+SEQ2_LEN=/scratch/hg/panTro2/chrom.sizes
+SEQ2_SMSK=/cluster/bluearc/panTro2/linSpecRep/notInRodent
+SEQ2_CHUNK=50000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzPanTro2.2006-03-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	happy emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	broken during blastz run due to panassas failure
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=cat `pwd`/DEF > cat.out 2>&1 &
+    
+    #	Do not have this measurement for the first time around, tables
+    #	got loaded again before I thought of that.
+    time nice -n +19 featureBits mm8 chainPanTro2Link \
+	> fb.mm8.chainPanTro2Link
+
+    #	For panTro1 this was:
+    time nice -n +19 featureBits mm8 chainPanTro1Link \
+	> fb.mm8.chainPanTro1Link
+    #	901276629 bases of 2567283971 (35.106%) in intersection
+
+    ssh pk
+    mv /cluster/data/panTro2/bed/blastz.mm8.swap \
+	/cluster/data/panTro2/bed/blastz.mm8.swap.2006-03-21
+    mkdir /cluster/data/panTro2/bed/blastz.mm8.swap
+    cd /cluster/data/panTro2/bed/blastz.mm8.swap
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/mm8/bed/blastzPanTro2.2006-03-28/DEF \
+	> blastz.out 2>&1 &
+    #  XXX started 2006-03-30
+
+    time nice -n +19 featureBits panTro2 chainMm8Link \
+	> fb.panTro2.chainMm8Link
+    # XXXX first time was:
+    #	986978326 bases of 2909512873 (33.922%) in intersection
+
+#########################################################################
 # BLASTZ panTro2 (DONE - 2006-03-15 - Hiram)
     ssh pk
     mkdir /cluster/data/mm8/bed/blastz.panTro2.2006-02-23
@@ -4673,12 +4743,13 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	-swap `pwd`/DEF > swap.out 2>&1 &
-XXXX running 2006-03-21 13:50
     
+    #	mistakenly did PanTro1 here ...  should have been PanTro2
     time nice -n +19 featureBits mm8 chainPanTro1Link
     #	901276629 bases of 2567283971 (35.106%) in intersection
-    time nice -n +19 featureBits panTro2 chainMm8Link
-    #	901976621 bases of 2733948177 (32.992%) in intersection
+    time nice -n +19 featureBits panTro2 chainMm8Link \
+	> fb.panTro2.chainMm8Link 2>&1
+    #	986978326 bases of 2909512873 (33.922%) in intersection
 
 
 #############################################################################
@@ -4736,3 +4807,9 @@ TMPDIR=/scratch/tmp
 	chainSelfLink >fb.mm8.chainSelfLink 2>&1
     cat fb.mm8.chainSelfLink
     #	362483673 bases of 2567283971 (14.119%) in intersection
+
+#############################################################################
+# UPDATED mm8.knownToVisiGene (2006-04-05 galt)
+ssh hgwdev
+knownToVisiGene mm8
+

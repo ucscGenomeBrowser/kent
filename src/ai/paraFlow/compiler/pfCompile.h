@@ -111,15 +111,19 @@ struct pfCompile
     /* These next ones are initialized after compiling the <builtin> module */
     struct pfType *strFullType;
     struct pfType *dyStrFullType;
-    struct pfType *arrayFullType;	/* Array type info including .size etc. */
-    struct pfType *dirFullType;		/* Dir full type including .keys() */
-    struct pfType *elTypeFullType;	/* Generic element of collection type. */
+    struct pfType *arrayFullType;   /* Array type info including .size etc. */
+    struct pfType *dirFullType;	    /* Dir full type including .keys() */
+    struct pfType *elTypeFullType;  /* Generic element of collection type. */
     struct pfType *moduleFullType;
     struct pfType *seriousErrorFullType;
     struct pfBaseType *seriousErrorType;
 
+    /* Here's some stuff used by assembly code generator.  These are all 
+     * initialized freshly for each module.*/
+    struct pfBackEnd *backEnd;	/* Specific back end. */
     int isxLabelMaker;		/* Isix label generator */
     int tempLabelMaker;		/* Temp var label generator */
+    struct hash *constStringHash; /* Look up string constants here */
     };
 
 enum pfAccessType

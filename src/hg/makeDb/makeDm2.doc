@@ -4186,4 +4186,36 @@ _EOF_
     ln -s /cluster/data/dm2/bed/blastz.droSim1/axtChain/droSim1ToDm2.rbest.over.chain.gz .
     # Make a README.txt.
 
+########################################################################
+### microRNA targets tracks  (WORKING - 2006-03-29 - Hiram)
+### from: http://pictar.bio.nyu.edu/ Rajewsky Lab
+### Nikolaus Rajewsky nr@scarbo.bio.nyu.edu
+    ssh hgwdev
+    mkdir /cluster/data/dm2/bed/picTar
+    cd /cluster/data/dm2/bed/picTar
+    wget --timestamping \
+	'http://scarbo.bio.nyu.edu/~nr/new_melanogaster_S1_bed' \
+	    -O newMelanogasterS1.bed
 
+    wget --timestamping \
+	'http://scarbo.bio.nyu.edu/~nr/new_melanogaster_S3_bed' \
+	-O newMelanogasterS3.bed
+
+    grep -v "^track" newMelanogasterS1.bed \
+	| hgLoadBed -strict dm2 picTarMiRNAS1 stdin
+WARNING: start >= end: chr2R    17925275        17925275        CG5821-RA:dme-miR-9c     66     +       17925275        17925275        0
+WARNING: start >= end: chr2R    17925275        17925275        CG5821-RA:dme-miR-9b     38     +       17925275        17925275        0
+WARNING: start >= end: chr2R    17925275        17925275        CG5821-RA:dme-miR-9a     117    +       17925275        17925275        0
+WARNING: start >= end: chrX     14867543        14867543        CG32594-RB:dme-miR-9c    111    +       14867543        14867543        0
+    #	Loaded 204953 elements of size 9
+    grep -v "^track" newMelanogasterS3.bed \
+	| hgLoadBed -strict dm2 picTarMiRNAS3 stdin
+WARNING: start >= end: chr2R    17925275        17925275        CG5821-RA:dme-miR-9c     33     +       17925275        17925275        0
+WARNING: start >= end: chr2R    17925275        17925275        CG5821-RA:dme-miR-9b     23     +       17925275        17925275        0
+WARNING: start >= end: chr2R    17925275        17925275        CG5821-RA:dme-miR-9a     17     +       17925275        17925275        0
+    #	Loaded 43046 elements of size 9
+
+    featureBits dm2 picTarMiRNAS1
+    #	59881 bases of 131698467 (0.045%) in intersection
+    featureBits dm2 picTarMiRNAS3
+    #	26231 bases of 131698467 (0.020%) in intersection

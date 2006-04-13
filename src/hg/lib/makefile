@@ -33,7 +33,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     estPair.o exoFish.o expData.o expRecord.o exprBed.o \
     fbTables.o featureBits.o findKGAlias.o findKGProtAlias.o fishClones.o \
     flyBase2004Xref.o \
-    flyBaseSwissProt.o flyreg.o flyreg2.o gbProtAnn.o gcPercent.o \
+    flyBaseSwissProt.o flyreg.o flyreg2.o gbExtFile.o gbProtAnn.o gcPercent.o \
     gencodeGeneClass.o gencodeIntron.o genMapDb.o genbank.o \
     geneBands.o geneGraph.o genePred.o genePredReader.o genomicDups.o \
     genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \

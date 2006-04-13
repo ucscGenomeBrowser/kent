@@ -14,7 +14,7 @@
 #include "linefile.h"
 #include "base64.h"
 
-static char const rcsid[] = "$Id: net.c,v 1.48 2006/02/27 03:39:02 kent Exp $";
+static char const rcsid[] = "$Id: net.c,v 1.49 2006/03/30 04:58:00 galt Exp $";
 
 /* Brought errno in to get more useful error messages */
 
@@ -651,7 +651,7 @@ close(sd);
 return dy;
 }
 
-static boolean netSkipHttpHeaderLines(int sd, char *url)
+boolean netSkipHttpHeaderLines(int sd, char *url)
 /* Skip http header lines. Return FALSE if there's a problem.
    The input is a standard sd or fd descriptor.
    This is meant to be able work even with a re-passable stream handle,

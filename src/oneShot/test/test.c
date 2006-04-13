@@ -17,44 +17,21 @@ errAbort(
   );
 }
 
-int level = 0;
-
-void atStart(void *userData, char *name, char **atts)
-{
-char *att;
-spaceOut(stdout, level*2);
-printf("<%s", name);
-while ((att = *atts++) != NULL)
-     {
-     printf(" %s=\"", att);
-     att = *atts++;
-     printf("%s\"", att);
-     }
-printf(">\n");
-level += 1;
-}
-
-void atEnd(void *userData, char *name, char *text)
-{
-text = trimSpaces(text);
-if (text[0] != 0)
+struct refString
     {
-    spaceOut(stdout, level*2);
-    printf("%s\n", trimSpaces(text));
-    }
-level -= 1;
-spaceOut(stdout, level*2);
-printf("</%s>\n", name);
-}
+    int refCount;
+    int type;
+    char *s;
+    int size;
+    int alloced;
+    bool isConst;
+    };
 
+struct refString refString = {0, 0, "Hello world", 11, 11, TRUE};
 
-void test(char *in)
-/* test - Test something. */
+void test(char *s)
 {
-FILE *f = mustOpen(in, "r");
-struct xp *xp = xpNew(f, atStart, atEnd, xpReadFromFile, in);
-while (xpParseNext(xp, "interest"))
-    ;
+printf("%s\n", refString.s);
 }
 
 int main(int argc, char *argv[], char *env[])

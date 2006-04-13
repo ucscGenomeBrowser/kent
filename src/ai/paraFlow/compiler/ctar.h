@@ -16,7 +16,15 @@ struct ctar
     char *cName;		/* Function name in C. */
     int id;			/* Unique numeric ID. */
     struct pfParse *pp;		/* Function declaration in parse tree. */
-    struct slRef *varRefList;	/* A reference to each local var.  Val is type pfVar. */
+    int inCount, outCount;	/* Count of input and output variables. */
+    int localCount;		/* Count of local vars (excluding self) */
+    struct slRef *varRefList;	/* A reference to each local var, including i/o vars.  
+    	 			 * Val is type pfVar. */
+    struct slRef *inRefList;	/* Start of input within varRefList */
+    struct slRef *outRefList;	/* Start of output within varRefList */
+    struct slRef *localRefList;	/* Start of locals within varRefList */
+    struct pfVar *selfVar;	/* Self class variable if any. */
+    struct pfVar *parentVar;	/* Parent class variable if any. */
     };
 
 struct ctar *ctarOnFunction(struct pfParse *pp);

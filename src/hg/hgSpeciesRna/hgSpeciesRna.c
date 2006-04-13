@@ -15,12 +15,14 @@ errAbort(
   "usage:\n"
   "   hgSpeciesRna database Genus species output.fa\n"
   "options:\n"
-  "   -est - If set will get ESTs rather than mRNAs\n"
+  "   -est         - If set will get ESTs rather than mRNAs\n"
+  "   -filter=file - only read accessions listed in file\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"est", OPTION_BOOLEAN},
+   {"filter", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -33,8 +35,25 @@ struct sqlResult *sr;
 char **row;
 int taxon;
 char *type = "mRNA";
+char *filter = NULL;
 FILE *f = mustOpen(outFile, "w");
+char *line;
+struct lineFile *lf = NULL;
+struct hash *filterHash = newHash(0);
 
+filter = optionVal("filter", NULL);
+if (filter != NULL)
+    {
+    lf = lineFileOpen(filter, TRUE);
+    while (lineFileNext(lf, &line, NULL))
+        {
+        char *name = nextWord(&line);
+        if (name == NULL)
+           errAbort("bad line %d of %s", lf->lineIx, lf->fileName);
+        hashStoreName(filterHash, name);
+        }
+    lineFileClose(&lf);
+    }
 if (optionExists("est"))
     type = "EST";
 hSetDb(database);
@@ -50,9 +69,13 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct dnaSeq *seq = hGenBankGetMrna(row[0], NULL);
-    faWriteNext(f, seq->name, seq->dna, seq->size);
-    dnaSeqFree(&seq);
+    struct dnaSeq *seq = NULL;
+    if ( hashLookup(filterHash, row[0]) != NULL)
+        {
+        seq = hGenBankGetMrna(row[0], NULL);
+        faWriteNext(f, seq->name, seq->dna, seq->size);
+        dnaSeqFree(&seq);
+        }
     }
 carefulClose(&f);
 }

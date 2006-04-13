@@ -1,0 +1,59 @@
+track refGene
+shortLabel RefSeq Genes
+longLabel Human and Chimp RefSeq Genes
+group genes
+priority 35
+visibility dense
+color 12,12,120
+type genePred refPep refMrna
+
+track xenoRefGene
+shortLabel Other RefSeq
+longLabel Non-Chimp or Human RefSeq Genes
+group genes
+priority 36
+visibility pack
+color 12,12,120
+type genePred
+
+track mrna
+shortLabel mRNAs
+longLabel Chimp and Human mRNAs from GenBank 
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+cdsDrawOptions enabled
+
+track xenoMrna
+shortLabel Other mRNAs
+longLabel Non-Chimp or Human mRNAs from GenBank
+group rna
+priority 63
+visibility hide
+spectrum on
+type psl xeno
+cdsDrawOptions enabled
+
+track intronEst
+shortLabel Spliced ESTs
+longLabel Chimp and Human ESTs That Have Been Spliced
+group rna
+priority 56
+visibility dense
+spectrum on
+intronGap 30
+type psl est
+pslSequenceBases no
+
+track est
+shortLabel ESTs
+longLabel Chimp and Human ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+intronGap 30
+type psl est
+pslSequenceBases no

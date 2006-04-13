@@ -7,10 +7,6 @@
 #if defined(INCL_HELP_TEXT)
 static char *corrHelpText = "\
 <HR>\
-<P>\
-<EM>Please note: the correlation function is under development. Because of \
-this, the functionality and features are subject to change.</EM>\
-</P>\
 <H2>Methods</H2>\
 <P>\
 The data points from each table are projected down to the base level. \

@@ -12,6 +12,5 @@ CREATE TABLE ctgPos (
     chromEnd int unsigned not null,	# End in chromosome
               #Indices
     PRIMARY KEY(contig(14)),
-    UNIQUE(chrom(16),chromStart),
-    UNIQUE(chrom(16),chromEnd)
+    UNIQUE(chrom(16),chromStart)
 );

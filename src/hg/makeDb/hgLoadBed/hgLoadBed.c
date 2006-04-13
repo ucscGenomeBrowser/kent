@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.37 2006/01/18 03:02:23 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.38 2006/04/07 17:29:35 angie Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -288,7 +288,6 @@ else if (!oldTable)
     if (noBin)
 	{
 	dyStringPrintf(dy, "  INDEX(chrom(%d),chromStart),\n", minLength);
-	dyStringPrintf(dy, "  INDEX(chrom(%d),chromEnd)\n", minLength);
 	}
     else
 	{

@@ -13,7 +13,7 @@
 #include "bed.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: transcriptome.c,v 1.5 2005/10/20 01:15:32 sugnet Exp $";
+static char const rcsid[] = "$Id: transcriptome.c,v 1.7 2006/04/07 04:15:45 kate Exp $";
 
 
 

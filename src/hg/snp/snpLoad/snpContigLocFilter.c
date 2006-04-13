@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.26 2006/03/16 22:49:47 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.27 2006/04/08 00:07:30 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -125,6 +125,7 @@ char **row;
 int count = 0;
 
 weightHash = newHash(16);
+
 verbose(1, "getting weight = 10 from MapInfo...\n");
 safef(query, sizeof(query), "select snp_id from MapInfo where weight = 10");
 sr = sqlGetResult(conn, query);
@@ -134,8 +135,19 @@ while ((row = sqlNextRow(sr)) != NULL)
     count++;
     }
 sqlFreeResult(&sr);
+
+verbose(1, "getting weight = 3 from MapInfo...\n");
+safef(query, sizeof(query), "select snp_id from MapInfo where weight = 3");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hashAdd(weightHash, cloneString(row[0]), NULL);
+    count++;
+    }
+sqlFreeResult(&sr);
+
 hFreeConn(&conn);
-verbose(1, "SNPs with weight 10 found = %d\n", count);
+verbose(1, "SNPs with weight 3 or 10 found = %d\n", count);
 }
 
 

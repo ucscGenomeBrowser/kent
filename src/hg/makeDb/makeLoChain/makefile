@@ -6,10 +6,12 @@ SCRIPT_DIR = /cluster/bin/scripts
 
 SCRIPTS = \
 	makeLoChain-align.csh \
-	makeLoChain-lift.csh \
 	makeLoChain-chain.csh \
-	makeLoChain-net.csh \
+	makeLoChain-cleanup.csh \
+	makeLoChain-lift.csh \
 	makeLoChain-load.csh \
+	makeLoChain-net.csh \
+	makeLoChain-split.csh
 
 all:
 	@for F in $(SCRIPTS); do \

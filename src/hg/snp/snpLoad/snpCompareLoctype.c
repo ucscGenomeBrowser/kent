@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCompareLoctype.c,v 1.1 2006/03/16 02:32:48 heather Exp $";
+static char const rcsid[] = "$Id: snpCompareLoctype.c,v 1.2 2006/04/08 00:08:15 heather Exp $";
 
 struct snpSubsetList
     {
@@ -297,6 +297,13 @@ if (oldElement->start != newElement->start || oldElement->end != newElement->end
     {
     fprintf(fileHandle, "coord mismatch %s\t", oldElement->name);
 
+    if (sameString(oldElement->locType, "between"))
+        {
+	distance = oldElement->start - newElement->start;
+	if (distance == 1 || distance == -1)
+	    fprintf(fileHandle, "off-by-one\t");
+	}
+        
     if (sameString(oldElement->locType, "exact"))
 	fprintf(fileHandle, "distance = %d\t", oldElement->start - newElement->start);
     if (sameString(oldElement->locType, "range"))

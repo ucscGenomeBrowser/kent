@@ -7,7 +7,7 @@ table lfs
    uint   chromEnd;   "End position of clone in chromosome"
    string name;       "Name of clone"
 
-   uint   score;      "Score = 1000/(# of times clone appears in assembly)"
+   uint   score;      "1000 if uniquely aligned, else 1500/(# of alignments to assembly)"
    char[1] strand;    "Value should be + or -"
    string pslTable;   "Table which contains corresponding PSL records for linked features"
    uint   lfCount;    "Number of linked features in the series"

@@ -1,4 +1,4 @@
-/* snpFunction: ninth step in dbSnp processing.
+/* snpFunction: eighth step in dbSnp processing.
  * Add fxn_class values (can be more than one) to chrN_snpTmp.
  * Create a hash from ContigLocusIdCondense table. */
 #include "common.h"
@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpFunction.c,v 1.8 2006/03/09 06:05:06 heather Exp $";
+static char const rcsid[] = "$Id: snpFunction.c,v 1.9 2006/04/10 20:32:59 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *functionHash = NULL;

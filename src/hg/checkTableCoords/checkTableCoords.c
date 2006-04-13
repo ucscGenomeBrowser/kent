@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.11 2006/03/06 17:21:44 angie Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.13 2006/04/04 23:57:26 angie Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */
@@ -393,7 +393,6 @@ struct sqlConnection *conn = hAllocOrConnect(db);
 struct slName *tableList = NULL, *curTable = NULL;
 struct slName *allChroms = NULL;
 boolean gotError = FALSE;
-struct dyString *bigQuery = newDyString(1024);
 
 hSetDb(db);
 allChroms = hAllChromNames();
@@ -411,7 +410,6 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
     struct slName *chromList = NULL, *chromPtr = NULL;
     char *table = curTable->name;
     char tableChrom[32], trackName[128], tableChromPrefix[33];
-    int numItemsChecked = 0;
     boolean gotError = FALSE;
     hParseTableName(table, trackName, tableChrom);
     hti = hFindTableInfo(tableChrom, trackName);
@@ -432,25 +430,31 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
 	/* The SQL query is too huge for scaffold-based db's, check count: */
 	if (hChromCount() <= HDB_MAX_SEQS_FOR_SPLIT)
 	    {
-	    dyStringClear(bigQuery);
-	    dyStringPrintf(bigQuery, "select count(*) from %s where ", table);
-	    for (chromPtr=chromList; chromPtr != NULL; chromPtr=chromPtr->next)
+	    if (isNotEmpty(hti->chromField))
 		{
-		dyStringPrintf(bigQuery, "%s != '%s' ",
-			       hti->chromField, chromPtr->name);
-		if (chromPtr->next != NULL)
-		    dyStringAppend(bigQuery, "AND ");
+		struct dyString *bigQuery = newDyString(1024);
+		dyStringClear(bigQuery);
+		dyStringPrintf(bigQuery, "select count(*) from %s where ",
+			       table);
+		for (chromPtr=chromList; chromPtr != NULL;
+		       chromPtr=chromPtr->next)
+		    {
+		    dyStringPrintf(bigQuery, "%s != '%s' ",
+				   hti->chromField, chromPtr->name);
+		    if (chromPtr->next != NULL)
+			dyStringAppend(bigQuery, "AND ");
+		    }
+		gotError |= reportErrors(BAD_CHROM, table,
+					 sqlQuickNum(conn, bigQuery->string));
+		dyStringFree(&bigQuery);
 		}
-	    gotError |= reportErrors(BAD_CHROM, table,
-				     sqlQuickNum(conn, bigQuery->string));
 	    for (chromPtr=chromList; chromPtr != NULL; chromPtr=chromPtr->next)
 		{
 		char *chrom = chromPtr->name;
 		int chromSize = hChromSize(chrom);
 		struct bed *bedList = hGetBedRange(table, chrom, 0, chromSize,
 						   NULL);
-		struct bed *bed = NULL;
-		if (hti->isSplit)
+		if (hti->isSplit && isNotEmpty(hti->chromField))
 		    gotError |= checkSplitTableOnlyChrom(bedList, table, hti,
 							 tableChrom);
 		gotError |= checkStartEnd(bedList, table, hti,
@@ -464,7 +468,6 @@ for (curTable = tableList;  curTable != NULL;  curTable = curTable->next)
 	    }
 	}
     }
-dyStringFree(&bigQuery);
 return gotError;
 }
 

@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1006 2006/04/04 18:05:41 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1008 2006/04/07 05:06:35 kate Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -643,7 +643,7 @@ if (strand != NULL)
     printf("<B>Strand:</B> %s<BR>\n", strand);
 else
     strand = "?";
-if (featDna)
+if (featDna && end > start)
     {
     char *tbl = cgiUsualString("table", cgiString("g"));
     strand = cgiEncode(strand);
@@ -4650,7 +4650,10 @@ struct psl *pslList = NULL;
 if (sameString("xenoMrna", track) || sameString("xenoBestMrna", track) || sameString("xenoEst", track) || sameString("sim4", track) )
     {
     char temp[256];
-    sprintf(temp, "non-%s RNA", organism);
+    if (isNewChimp(database))
+        sprintf(temp, "Other RNA");
+    else
+        sprintf(temp, "non-%s RNA", organism);
     type = temp;
     table = track;
     }
@@ -7154,7 +7157,12 @@ char *cdsCmpl = NULL;
 
 printf("<td valign=top nowrap>\n");
 if (isXeno)
-    printf("<H2>Non-%s RefSeq Gene %s</H2>\n", organism, rl->name);
+    {
+    if (startsWith("panTro", database))
+        printf("<H2>Other RefSeq Gene %s</H2>\n", rl->name);
+    else
+        printf("<H2>Non-%s RefSeq Gene %s</H2>\n", organism, rl->name);
+    }
 else
     printf("<H2>RefSeq Gene %s</H2>\n", rl->name);
 printf("<B>RefSeq:</B> <A HREF=\"");
@@ -7177,7 +7185,7 @@ if (hTableExists("refSeqStatus"))
     sqlFreeResult(&sr);
     }
 puts("<BR>");
-if (isXeno)
+if (isXeno || isNewChimp(database))
     {
     char *org;
     safef(query, sizeof(query), "select organism.name from gbCdnaInfo,organism "
@@ -7329,7 +7337,12 @@ sqlFreeResult(&sr);
 
 /* print the first section with info  */
 if (isXeno)
-    cartWebStart(cart, "Non-%s RefSeq Gene", organism);
+    {
+    if (isNewChimp(database))
+        cartWebStart(cart, "Other RefSeq Gene");
+    else
+        cartWebStart(cart, "Non-%s RefSeq Gene", organism);
+    }
 else
     cartWebStart(cart, "RefSeq Gene");
 printf("<table border=0>\n<tr>\n");
@@ -12181,10 +12194,37 @@ hFreeConn(&conn);
 void printSnp125Info(struct snp125 snp)
 /* print info on a snp125 */
 {
+int alleleLen = strlen(snp.refUCSC);
+char refUCSCRevComp[1024];
+
+if (sameString(snp.strand,"-"))
+    {
+    safef(refUCSCRevComp, ArraySize(refUCSCRevComp), "%s", snp.refUCSC);
+    reverseComplement(refUCSCRevComp, alleleLen);
+    }
+
 if (differentString(snp.strand,"?")) {printf("<B>Strand: </B>%s\n", snp.strand);}
+
 printf("<BR><B>Observed: </B>%s\n",                                 snp.observed);
+
 if (!sameString(snp.class, "insertion"))
-    printf("<BR><B>Reference allele: </B>%s\n",                     snp.refUCSC);
+
+    {
+    if (sameString(snp.strand,"+"))
+        {
+	printf("<BR><B>Reference allele: </B>%s\n",                 snp.refUCSC);
+        if (!sameString(snp.refUCSC, snp.refNCBI))
+            printf("<BR><B>dbSnp reference allele: </B>%s\n",       snp.refNCBI);
+        }
+    else if (sameString(snp.strand,"-"))
+        {
+        printf("<BR><B>Reference allele: </B>%s\n",                 refUCSCRevComp);
+        if (!sameString(refUCSCRevComp, snp.refNCBI))
+            printf("<BR><B>dbSnp reference allele: </B>%s\n",       snp.refNCBI);
+        }
+    }
+
+
 printf("<BR><B><A HREF=\"#Class\">Loc Type</A>: </B>%s\n",          snp.locType);
 printf("<BR><B><A HREF=\"#Class\">Variant Class</A>: </B>%s\n",     snp.class);
 printf("<BR><B><A HREF=\"#Valid\">Validation Status</A>: </B>%s\n", snp.valid);

@@ -1595,6 +1595,8 @@ end
 # BLASTZ SWAP FOR MOUSE (mm6) (DONE, 2005-08-10, hartera)
 # CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET AND ALIGNMENT DOWNLOADS
 # REMAKE AXTNET AND COPY TO DOWNLOADS. REMAKE MAFNET (DONE, 2005-08-17, hartera)
+# DROPPED THE CHAIN AND NET TABLES FROM HGWDEV AS THERE WERE 3 SETS OF 
+# MOUSE ALIGNMENTS: mm6, mm7 and mm8 (DONE, 2006-03-28, hartera)
     ssh kkr1u00
     # blastz requires lineage-specific repeats
     # Treat all repeats as lineage-specific
@@ -1727,6 +1729,13 @@ chainPreNet danRer3.mm6.all.chain.gz /cluster/data/mm6/bed/blastz.danRer3/S2.len
    # remake md5sum.txt 
    rm md5sum.txt
    md5sum *.gz */*.gz > md5sum.txt
+   # Dropped mouse mm6 chain and net tables from hgwdev as there were 3 sets 
+   # of mouse alignments for danRer3: mm6, mm7 and mm8 (hartera, 2006-03-29)
+   hgsql -e 'drop table netMm6;' danRer3
+   foreach c (`cat /cluster/data/danRer3/chrom.lst`)
+      hgsql -e "drop table chr${c}_chainMm6;" danRer3
+      hgsql -e "drop table chr${c}_chainMm6Link;" danRer3
+   end
 
 # BLASTZ FOR FUGU (fr1) (DONE, 2005-08-18, hartera)
 # CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET AND ALIGNMENT DOWNLOADS
@@ -5741,7 +5750,8 @@ _EOF_
     # Took about 2 hours to finish.
 # END OF HGNEAR STUFF
 ####################################################
-# GENE SET BASED ON ENSEMBL GENES (in progress, 2005-11-23, hartera)
+# GENE SET BASED ON ENSEMBL GENES (PROTEIN CODING GENES) 
+# (in progress, 2005-11-23, hartera)
     # see ENSEMBL GENES section for documentation of creation of
     # the ensGene, ensGtp and ensPep tables and the track.
     # compare the Ensembl and Human Proteins tracks
@@ -5779,14 +5789,24 @@ _EOF_
     # compression. Hit export. Save as ensGeneInfo37Coding.tsv.gz. Same as for
     # Ensembl v36 so update to Ensembl v37.
     gunzip ensGeneInfo37Coding.tsv.gz
-    # repeat above and get the Ensembl transcript ID from Ensembl Attributes
-    # and then get EntrezGene ID, RefSeq DNA Accession and RefSeq Peptide ID
-    # from the External References section. Select text, tab-separated 
-    # for output. Choose gzip compression. Hit export. Again Ensembl v36 gives
-    # the same result for Danio rerio. 
+    # this file has some errors in it - there is a newline character in the
+    # middle of the descriptions for the genes with the following UniProt 
+    # IDs: Q5TYV0, Q5SPG7, Q5SPG5, Q5RIJ2, Q5RID3. This causes the table
+    # to be loaded incorrectly. Edit the ensGeneInfo37Coding.tsv.gz manually
+    # to remove these extra newlines.
+
+    # Repeat above steps and get the Ensembl transcript ID from Ensembl 
+    # Attributes and then get EntrezGene ID, RefSeq DNA Accession and 
+    # RefSeq Peptide ID from the External References section. Select text, 
+    # tab-separated for output. Choose gzip compression. Hit export. Again 
+    # Ensembl v36 gives the same result for Danio rerio. 
     # Save as ensGeneInfo37Coding2.tsv.gz
     cd /cluster/data/danRer3/bed/ensGenes
     gunzip ensGeneInfo37Coding2.tsv.gz  
+    wc -l ensGeneInfo37*
+    # 85607 ensGeneInfo37Coding.tsv
+    # 33233 ensGeneInfo37Coding2.tsv
+
     # need to make a table of cross reference information for Ensembl
     # for the Known Genes details pages. Changed table name from 
     # ensGeneXRef to ensXRefZfish as there are a number of tables already
@@ -5932,6 +5952,10 @@ idSql select zfinId from ensXRefZfish where ensGeneId = '%s'
 url http://zfin.org/cgi-bin/webdriver?MIval=aa-markerview.apg&OID=%s
 priority 28
 
+name tbSchema
+shortLabel Table Schema
+tables ensGene
+
 name uniProt
 shortLabel UniProt
 tables ensXRefZfish
@@ -5987,6 +6011,17 @@ _EOF_
      # commit *.ra files for Zebrafish to CVS.
      # edited hgGene.c so that the Gene Symbol (if available) is displayed 
      # in the description section of the details page.
+     # added ensXRefZfish to ensemblTranscriptId rules in all.joiner.
+     # add entry to danRer3/trackDb.ra:
+# track ensGene
+# shortLabel Ensembl Genes
+# longLabel Ensembl v37 Gene Predictions (Protein Coding Genes)
+# group genes
+# priority 32.8
+# visibility pack
+# color 150,0,0
+# type genePred ensPep
+# hgGene on 
  
 # STS MARKERS (in progress, 2005-10-13, hartera)
     # DOWNLOADED RECENTLY FROM NCBI
@@ -6010,3 +6045,32 @@ _EOF_
 
     time nice -n +19 featureBits danRer3 chainMm8Link
     #   54831876 bases of 1630323462 (3.363%) in intersection
+
+
+# SWAP CHAINS/NET RN4 (DONE 4/2/06 angie)
+    ssh kkstore02
+    mkdir /cluster/data/danRer3/bed/blastz.rn4.swap
+    cd /cluster/data/danRer3/bed/blastz.rn4.swap
+    doBlastzChainNet.pl -swap /cluster/data/rn4/bed/blastz.danRer3/DEF \
+      -workhorse kkr7u00 >& do.log & tail -f do.log
+    ln -s blastz.rn4.swap /cluster/data/danRer3/bed/blastz.rn4
+
+
+############################################################################
+##  BLASTZ swap from hg17 alignments (DONE 2006-04-09 markd)
+    ssh pk  
+    mkdir /cluster/data/danRer3/bed/blastz.hg17.swap
+    ln -s blastz.hg17.swap /cluster/data/danRer3/bed/blastz.hg17
+    cd /cluster/data/danRer3/bed/blastz.hg17.swap
+    
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -stop=net \
+	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	/cluster/data/hg17/bed/blastz.danRer3/DEF >& swap.out&
+   # failed due to
+       netChains: looks like previous stage was not successful (can't find [danRer3.hg17.]all.chain[.gz]).
+   #
+    mv swap.out swap.out.1
+   # rerun with -continue=net
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -continue=net -stop=net \
+	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	/cluster/data/hg17/bed/blastz.danRer3/DEF >& swap.out&

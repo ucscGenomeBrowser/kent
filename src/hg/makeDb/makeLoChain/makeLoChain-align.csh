@@ -5,15 +5,15 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh,v 1.3 2004/09/18 00:18:57 angie Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh,v 1.6 2006/04/06 19:12:28 kate Exp $
 
 if ( $#argv != 4 && $#argv != 5 ) then
     echo "usage: $0 <old-assembly> <old-nibdir> <new-assembly> <new-splitdir> [.ooc-file]"
     exit 1
 endif
 
-if ( $HOST != 'kk' && $HOST != 'kk9' ) then
-    echo "Must run on host kk or kk9"
+if ($HOST != 'kk') then
+    echo "Must run on host kk"
     exit 1
 endif
 
@@ -26,8 +26,8 @@ if ("$ooc" != "") then
     set ooc = '-ooc='$ooc
 endif
 
-if (`ls -1 $oldNibDir/*.nib | wc -l` < 1) then
-    echo "Can't find any .nib files in $oldNibDir"
+if (`ls -1 $oldNibDir/*.{nib,2bit} | wc -l` < 1) then
+    echo "Can't find any .2bit or .nib files in $oldNibDir"
     exit 1
 endif
 
@@ -52,12 +52,12 @@ echo '#ENDLOOP' >> gsub
 
 
 # target
-ls -1S $oldNibDir/*.nib > old.lst
+ls -1S $oldNibDir/*.{nib,2bit} > old.lst
 # query
 ls -1S $newSplitDir/*.{nib,fa} > new.lst
 
 gensub2 old.lst new.lst gsub spec
-para create spec
+/parasol/bin/para create spec
 
 set execDir = $0:h
 set fs = `fileServer $blatDir`

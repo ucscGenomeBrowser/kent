@@ -7,7 +7,7 @@ table fosEndPairs
    uint   chromEnd;   "End position of fosmid in chromosome"
    string name;       "Name of fosmid"
 
-   uint   score;      "Score = 1000/(# of times fosmid appears in assembly)"
+   uint   score;      "1000 if uniquely aligned, else 1500/(# of alignments to assembly)"
    char[1] strand;    "Value should be + or -"
    string pslTable;   "Table which contains corresponding PSL records for linked features"
    uint   lfCount;    "Number of linked features in the series"

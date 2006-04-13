@@ -385,14 +385,55 @@ void pf_ugly(_pf_Stack *stack)
 pf_print(stack);
 }
 
+void pf__printBit(_pf_Stack *stack)
+/* Print integer, just for debugging really */
+{
+printf("%d\n", stack->Bit);
+}
+
+void pf__printByte(_pf_Stack *stack)
+/* Print integer, just for debugging really */
+{
+printf("%d\n", stack->Byte);
+}
+
+void pf__printShort(_pf_Stack *stack)
+/* Print integer, just for debugging really */
+{
+printf("%d\n", stack->Short);
+}
+
 void pf__printInt(_pf_Stack *stack)
 /* Print integer, just for debugging really */
 {
 printf("%d\n", stack->Int);
 }
 
-void pf__addTwo(_pf_Stack *stack)
-/* Add two integers and return result. Just for debugging really */
+void pf__printLong(_pf_Stack *stack)
+/* Print long, just for debugging really */
 {
-stack->Int = stack[0].Int + stack[1].Int;
+printf("%lld\n", stack->Long);
 }
+
+void pf__printFloat(_pf_Stack *stack)
+/* Print double, just for debugging really */
+{
+printf("%f\n", stack->Float);
+}
+
+void pf__printDouble(_pf_Stack *stack)
+/* Print double, just for debugging really */
+{
+printf("%f\n", stack->Double);
+}
+
+void pf__printString(_pf_Stack *stack)
+/* Print double, just for debugging really */
+{
+struct _pf_string *string = stack->String;
+char *text = "(null)";
+if (string != NULL)
+    text = string->s;
+printf("%s\n", text);
+}
+

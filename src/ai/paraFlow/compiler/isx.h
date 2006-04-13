@@ -23,6 +23,10 @@
 #include "isxLiveVar.h"
 #endif
 
+struct pfCompile;
+struct pfParse;
+struct pfType;
+
 enum isxOpType
 /* What sort of operation - corresponds roughly to an
  * assembly language instruction without type or address
@@ -60,6 +64,10 @@ enum isxOpType
     poBge,	/* Branch if a >= b. */
     poBz,	/* Branch if a == 0 */
     poBnz,	/* Branch if a != 0 */
+    poFuncStart,/* Declare start of function */
+    poFuncEnd,  /* Declare end of function. */
+    poReturnVal,/* Declare return value. */
+    poCast,	/* Convert from one type to another. */
     };
 
 char *isxOpTypeToString(enum isxOpType val);
@@ -69,6 +77,7 @@ enum isxValType
 /* Simplified value type system.  */
     {
     ivZero,
+    ivBit,
     ivByte,
     ivShort,
     ivInt,
@@ -83,6 +92,9 @@ enum isxValType
 char *isxValTypeToString(enum isxValType val);
 /* Convert isxValType to string. */
 
+enum isxValType isxValTypeFromTy(struct pfCompile *pfc, struct pfType *ty);
+/* Return isxValType corresponding to pfType  */
+
 enum isxAddressType
 /* Address type */
     {
@@ -95,6 +107,8 @@ enum isxAddressType
     iadOperator,
     iadLabel,
     iadLoopInfo,
+    iadCtar,
+    iadReturnVar,
     };
 
 struct isxLoopVar
@@ -120,14 +134,17 @@ struct isxLoopInfo
     				  * most important first. */
     };
 
+struct ctar;	
+
 union isxAddressVal
 /* Variable part of an isx code address. */
     {
     struct pfToken *tok;	/* For constants */
     struct pfVar *var;		/* For real vars */
     int tempMemLoc;		/* Memory location for temps, 0 for none */
-    int stackOffset;		/* Stack offset. */
+    int ioOffset;		/* Stack offset. */
     struct isxLoopInfo *loopy;  /* Information on loop */
+    struct ctar *ctar;		/* Information about function variables. */
     };
 
 struct isxAddress
@@ -138,6 +155,7 @@ struct isxAddress
     enum isxAddressType adType;/* Address type */
     enum isxValType valType;	/* Value type */
     union isxAddressVal val;	/* Address value */
+    int stackOffset;		/* Stack offset. */
     struct isxReg *reg;	/* Register if any */
     float weight;	/* Number of uses, scaled for loops */
     };
@@ -175,11 +193,34 @@ struct isxReg
 
 struct isx *isxNew(struct pfCompile *pfc, enum isxOpType opType,
 	struct isxAddress *dest, struct isxAddress *left,
+	struct isxAddress *right);
+/* Make new isx instruction. */
+
+struct isx *isxAddNew(struct pfCompile *pfc, enum isxOpType opType,
+	struct isxAddress *dest, struct isxAddress *left,
 	struct isxAddress *right, struct dlList *iList);
 /* Make new isx instruction, and hang it on iList */
 
 char *isxRegName(struct isxReg *reg, enum isxValType valType);
 /* Get name of reg for given type. */
+
+struct isxAddress *isxTempVarAddress(struct pfCompile *pfc, struct hash *hash,
+	double weight, enum isxValType valType);
+/* Create a new temporary var */
+
+struct isxAddress *isxConstAddress(struct pfToken *tok, 
+	enum isxValType valType);
+/* Get place to put constant. */
+
+struct isxAddress *isxIoAddress(int offset, enum isxValType valType,
+	enum isxAddressType adType);
+/* Return reference to an io stack address */
+
+struct isxAddress *isxCallAddress(char *name);
+/* Create reference to a function */
+
+struct isxAddress *isxTempLabelAddress(struct pfCompile *pfc);
+/* Create reference to a temporary label for jumping to. */
 
 void isxAddressDump(struct isxAddress *iad, FILE *f);
 /* Print variable name or n/a */
@@ -190,6 +231,14 @@ void isxDump(struct isx *isx, FILE *f);
 void isxDumpList(struct dlList *list, FILE *f);
 /* Dump all of isx in list */
 
+void isxStatement(struct pfCompile *pfc, struct pfParse *pp, 
+	struct hash *varHash, double weight, struct dlList *iList);
+/* Generate intermediate code for statement. */
+
+void isxAddReturnInfo(struct pfCompile *pfc, struct pfParse *outTuple, 
+	struct hash *varHash, struct dlList *iList);
+/* Add instructions for return parameters. */
+
 struct isxList
 /* A list of instructions, and a list of loop information */
     {
@@ -197,10 +246,16 @@ struct isxList
     struct isxLoopInfo *loopList;	/* List of loops */
     };
 
-struct isxList *isxFromParse(struct pfCompile *pfc, struct pfParse *pp);
-/* Convert parse tree to isx. */
+struct isxList *isxListNew();
+/* Create new empty isxList */
 
-#define isxPrefixC "_"		/* Prefix before symbols shared with C. */
+struct isxList *isxModuleVars(struct pfCompile *pfc, struct pfParse *module);
+/* Convert module-level and static function variables to an isxList */
+
+struct isxList *isxCodeFunction(struct pfCompile *pfc, struct pfParse *funcPp);
+/* Generate code for a function */
+
+#define isxPrefixC "_"	/* Prefix before symbols shared with C. */
 
 #endif /* ISX_H */
 

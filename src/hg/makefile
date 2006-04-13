@@ -120,6 +120,7 @@ UTIL_DIRS = \
 	checkTableCoords \
 	ctgFaToFa \
 	ctgToChromFa \
+	estOrient \
 	embossToPsl \
 	fakeFinContigs \
 	fakeOut \
@@ -211,6 +212,7 @@ UTIL_DIRS = \
 	pslSwap \
 	pslToBed \
 	pslUnpile \
+	qa \
 	qaToQac \
 	qacAgpLift \
 	qacToQa \

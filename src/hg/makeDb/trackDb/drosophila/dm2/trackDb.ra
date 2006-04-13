@@ -217,6 +217,29 @@ visibility hide
 color 180,0,0
 type genePred
 
+track picTar
+compositeTrack on
+shortLabel PicTar
+longLabel PicTar microRNA sites
+group genes
+priority 143
+visibility hide
+type bed 9
+
+    track picTarMiRNAS1
+    subTrack picTar
+    shortLabel PicTar microRNA
+    longLabel PicTar microRNA sites
+    color 128,0,128
+    priority 1
+
+    track picTarMiRNAS3
+    subTrack picTar
+    shortLabel PicTar microRNA
+    longLabel PicTar microRNA sites
+    color 128,0,128
+    priority 2
+
 track blastHg17KG
 shortLabel Human  Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
@@ -411,4 +434,3 @@ searchMethod exact
 searchType bed
 termRegex BAC[HNR][0-9]{2}[A-Z][0-9]{2}
 searchPriority 8
-

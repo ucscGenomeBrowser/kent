@@ -78,20 +78,10 @@ fprintf(f, "static void %s(struct %s *module, %s *stack)",
 	moduleCleanupName, moduleRuntimeType, stackType);
 }
 
-static char *localTypeTableType = "_pf_local_type_info";
-static char *localTypeTableName = "_pf_lti";
-
 static void codeLocalTypeRef(FILE *f, int ref)
 /* Print out local type reference. */
 {
-fprintf(f, "%s[%d].id", localTypeTableName, ref);
-}
-
-static void codeLocalTypeTableName(FILE *f, char *moduleName)
-/* Print out local type table name. */
-{
-fprintf(f, "struct %s %s_%s", localTypeTableType, localTypeTableName, 
-	mangledModuleName(moduleName));
+fprintf(f, "%s[%d].id", recodedTypeTableName, ref);
 }
 
 static void codeForType(struct pfCompile *pfc, FILE *f, struct pfType *type)
@@ -1582,7 +1572,7 @@ return TRUE;
 }
 
 
-void codeInitDims(struct pfCompile *pfc, FILE *f, struct pfParse *pp, int stack)
+static void codeInitDims(struct pfCompile *pfc, FILE *f, struct pfParse *pp, int stack)
 /* Generate code that creates an array that is initialized to
  * zero (as opposed to the empty array). */
 {
@@ -3018,16 +3008,6 @@ moduleRuntimeList, moduleRuntimeList, moduleRuntimeList,
 moduleRuntimeList, moduleRuntimeList);
 }
 
-static void printLocalTypeInfo(struct pfCompile *pfc, char *moduleName, FILE *f)
-/* Print out local type info table. */
-{
-codeLocalTypeTableName(f, moduleName);
-fprintf(f, "[] = {\n");
-printModuleTypeTable(pfc, f);
-fprintf(f, "};\n");
-fprintf(f, "\n");
-}
-
 static void printModuleTable(struct pfCompile *pfc, FILE *f, struct pfParse *program)
 /* Print out table with basic info on each module */
 {
@@ -3039,7 +3019,7 @@ for (module = program->children; module != NULL; module = module->next)
         {
 	char *mangledName = mangledModuleName(module->name);
 	fprintf(f, "extern struct %s %s_%s[];\n", 
-	    localTypeTableType, localTypeTableName, mangledName);
+	    recodedStructType, recodedTypeTableName, mangledName);
         fprintf(f, "extern struct _pf_poly_info _pf_poly_info_%s[];\n",
 		mangledName);
 	fprintf(f, "void _pf_entry_%s(%s *%s);\n", 
@@ -3054,7 +3034,7 @@ for (module = program->children; module != NULL; module = module->next)
         {
 	char *mangledName = mangledModuleName(module->name);
 	fprintf(f, "  {\"%s\", %s_%s, _pf_poly_info_%s, _pf_entry_%s,},\n",
-	    mangledName, localTypeTableName, mangledName, mangledName,
+	    mangledName, recodedTypeTableName, mangledName, mangledName,
 	    mangledName);
 	++moduleCount;
 	}
@@ -3138,10 +3118,11 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 
 	pfc->moduleTypeHash = hashNew(0);
 	printPreamble(pfc, f, fileName, TRUE);
-	fprintf(f, "extern struct %s %s_%s[];\n", localTypeTableType, localTypeTableName,
+	fprintf(f, "extern struct %s %s_%s[];\n", recodedStructType, recodedTypeTableName,
 		moduleName);
 	fprintf(f, "static struct %s *%s = %s_%s;\n\n",
-		localTypeTableType, localTypeTableName, localTypeTableName, moduleName);
+		recodedStructType, recodedTypeTableName, recodedTypeTableName, 
+		moduleName);
 	printModuleCleanupPrototype(f);
 	fprintf(f, ";\n");
 	fprintf(f, "static struct %s %s = {0, \"%s\", %s};\n",
@@ -3190,7 +3171,7 @@ for (toCode = program->children; toCode != NULL; toCode = toCode->next)
 		printPolyFuncConnections(pfc, pfc->scopeRefList, module, f);
 		}
 	    }
-	printLocalTypeInfo(pfc, toCode->name, f);
+	recodedTypeTableToC(pfc, toCode->name, f);
 	freeHashAndVals(&pfc->moduleTypeHash);
 	carefulClose(&f);
 	freeMem(fileName);

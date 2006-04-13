@@ -12,7 +12,7 @@
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
 
-static char const rcsid[] = "$Id: dnaMotifFind.c,v 1.6 2005/01/27 21:01:39 baertsch Exp $";
+static char const rcsid[] = "$Id: dnaMotifFind.c,v 1.7 2006/04/07 14:29:10 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -153,37 +153,37 @@ if (markovLevel == 0)
     {
     dna += pos;
     for (i=0; i<width; ++i)
-	score += slogMark0[ntVal[dna[i]]+1];
+	score += slogMark0[ntVal[(int)dna[i]]+1];
     }
 else if (markovLevel == 1)
     {
     if (pos == 0 && width > 0)
         {
-	score += slogMark0[ntVal[dna[0]]+1];
+	score += slogMark0[ntVal[(int)dna[0]]+1];
 	pos += 1;
 	width -= 1;
 	}
     dna += pos;
     for (i=0; i<width; ++i)
-        score += slogMark1[ntVal[dna[i-1]]+1][ntVal[dna[i]]+1];
+        score += slogMark1[ntVal[(int)dna[i-1]]+1][ntVal[(int)dna[i]]+1];
     }
 else if (markovLevel == 2)
     {
     if (pos == 0 && width > 0)
         {
-	score += slogMark0[ntVal[dna[0]]+1];
+	score += slogMark0[ntVal[(int)dna[0]]+1];
 	pos += 1;
 	width -= 1;
 	}
     if (pos == 1 && width > 0)
         {
-        score += slogMark1[ntVal[dna[0]]+1][ntVal[dna[1]]+1];
+        score += slogMark1[ntVal[(int)dna[0]]+1][ntVal[(int)dna[1]]+1];
 	pos += 1;
 	width -= 1;
 	}
     dna += pos;
     for (i=0; i<width; ++i)
-        score += slogMark2[ntVal[dna[i-2]]+1][ntVal[dna[i-1]]+1][ntVal[dna[i]]+1];
+        score += slogMark2[ntVal[(int)dna[i-2]]+1][ntVal[(int)dna[i-1]]+1][ntVal[(int)dna[i]]+1];
     }
 return score;
 }
@@ -204,7 +204,7 @@ for (pos=0; pos<lastPos; pos += 1)
         {
 	double fScore = invSlogScale * score;
 	int bedScore = round((fScore - 5.0)*100);
-	int s = pos,  e = pos+width, tmp;
+	int s = pos,  e = pos+width;
 	if (bedScore < 0) bedScore = 0;
 	if (bedScore > 1000) bedScore = 1000;
 	if (strand == '-')

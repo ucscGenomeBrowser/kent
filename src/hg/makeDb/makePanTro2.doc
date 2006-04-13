@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.10 2006/03/25 21:52:14 markd Exp $"
+#	"$Id: makePanTro2.doc,v 1.15 2006/04/05 19:25:44 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -1056,7 +1056,76 @@ cat > gsub << 'EOF'
     # NOTE: these run quickly
 
 
-   # MAKE DOWNLOADABLE SEQUENCE FILES
+########################
+# MAKE DOWNLOADABLE SEQUENCE FILES (2006-04-02 kate)
+
+    ssh kkstore04
+    cd /cluster/data/panTro2
+    mkdir -p downloads/bigZips downloads/chromosomes
+    cd downloads
+cat > makeChroms.csh << 'EOF'
+    date
+    foreach f (../?{,?}/*.fa ../6_hla_hap1/*.fa)
+        echo $f:t:r
+        nice gzip -c $f > chromosomes/$f:t.gz
+    end
+    date
+'EOF'
+    csh makeChroms.csh >&! makeChroms.log &
+        # 14 minutes
+
+    cat > bigZips.csh << 'EOF'
+cd /cluster/data/panTro2
+tar cvzf downloads/bigZips/chromAgp.tar.gz \
+        ?{,?}/chr*.agp 6_hla_hap1/*.agp
+tar cvzf downloads/bigZips/chromFa.tar.gz \
+        ?{,?}/chr*.fa 6_hla_hap1/chr*.fa
+tar cvzf downloads/bigZips/chromFaMasked.tar.gz \
+        ?{,?}/chr*.fa.masked 6_hla_hap1/chr*.fa.masked 
+tar cvzf downloads/bigZips/chromOut.tar.gz \
+        ?{,?}/chr*.fa.out 6_hla_hap1/chr*.fa.out
+cd /cluster/data/panTro2/bed/simpleRepeat
+tar cvzf ../../downloads/bigZips/chromTrf.tar.gz ./trfMaskChrom
+'EOF'
+    csh bigZips.csh >&! bigZips.log &
+
+    # get GenBank native mRNAs and refGene 
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time ./bin/i386/gbGetSeqs -db=panTro2 -native GenBank mrna \
+        /cluster/data/panTro2/downloads/bigZips/mrna.fa
+    cd /cluster/data/panTro2/downloads/bigZips
+    cd /cluster/data/panTro2/downloads/bigZips
+    foreach I (1000 2000 5000) 
+        echo "upstream${I} working ... "
+        featureBits panTro2 refGene:upstream:${I} -fa=stdout \
+                | gzip -c > upstream${I}.fa.gz
+        echo "upstream${I} done"
+    end
+    #   real    11m25.493s
+
+    ssh kkstore04
+    cd /cluster/data/panTro2/downloads/chromosomes
+    #   copy previous release README.txt
+    scp hgwdev:/usr/local/apache/htdocs/goldenPath/panTro1/chromosomes/README.txt .
+    #   edit it to bring it up to date
+    md5sum *.gz > md5sum.txt
+
+    cd /cluster/data/panTro2/downloads/bigZips
+    gzip mrna.fa
+    cp -p ../../panTro2.2bit .
+    #   copy previous release README.txt
+    scp hgwdev:/usr/local/apache/htdocs/goldenPath/panTro1/bigZips/README.txt .
+    # edit README.txt to indicate proper version of sequence and
+    #   RepeatMasker
+    md5sum *.gz *.2bit README.txt > md5sum.txt
+
+    ssh hgwdev
+    set d = /usr/local/apache/htdocs/goldenPath/panTro2
+    mkdir $d
+    ln -s /cluster/data/panTro2/downloads/bigZips $d
+    ln -s /cluster/data/panTro2/downloads/chromosomes $d
+
 
 
 ########################
@@ -1123,10 +1192,159 @@ TMPDIR=/scratch/tmp
         `pwd`/DEF >&! blastz.3.out &
 
     # SWAP ALIGNMENTS TO PANTRO2 (2006-03-19 kate)
-
     /cluster/bin/scripts/doBlastzChainNet.pl -swap \
         -workhorse=hgwdev64 \
         /cluster/data/panTro2/bed/blastz.hg18/DEF >&! swap.log &
+
+    # Redo of chr9 (2006-03-28 kate)
+    # Create blastz run dir for just chr9, and run manually on pk.
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.hg18
+    mkdir run.blastz.chr9
+    cd run.blastz.chr9
+    cp ../run.blastz/*.csh .
+    grep chr9 ../run.blastz/jobList | grep -v random > jobList
+    ln -s ../run.blastz/qParts .
+    para create jobList
+        # 28 jobs
+    para push
+    para time > run.time
+
+    # merge chr9 psl's on small cluster ("cat" step in automated script)
+    ssh kki
+    cd /cluster/data/panTro2/bed/blastz.hg18
+    mkdir run.cat.chr9
+    cd run.cat.chr9
+    cp ../run.cat/cat.csh .
+    grep chr9 ../run.cat/jobList > jobList
+    para create jobList
+        # 14 jobs
+    para push
+    para time > run.time
+
+    cd ../axtChain
+    mkdir run.chr9
+    cd run.chr9
+    cp ../run/chain.csh .
+    grep chr9 ../run/jobList > jobList
+    mkdir chain
+    para create jobList
+        # 1 job
+    para push
+    para time > run.time
+
+    # replace chr9 chain in all.chain
+    ssh hgwdev64 # kolossus busy
+    cd /cluster/data/panTro2/bed/blastz.hg18/axtChain/run
+    mkdir chain
+    set all = panTro2.hg18.all.chain.gz
+    chainSplit chain/ ../$all
+    rm chain/chr9.chain
+    cp ../run.chr9/chain/*.chain chain
+    chainMergeSort chain/*.chain | nice gzip -c > ../$all
+    rm -fr chain/*
+    cd ..
+    mkdir chain
+    chainSplit chain/ $all
+
+    # automate the rest
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.hg18
+    rm -fr axtNet mafNet
+    ssh hgwdev "rm -fr /usr/local/apache/htdocs/goldenPath/panTro2/vsHg18"
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -workhorse=hgwdev64 \
+        -continue=net \
+        `pwd`/DEF >&! blastz.net.chr9.out &
+    # done
+
+    # swap after chr9 fix (2006-03-30 kate)
+    rm -fr /cluster/data/hg18/bed/blastz.panTro2.swap
+    /cluster/bin/scripts/doBlastzChainNet.pl -swap \
+        -workhorse=kkr4u00 \
+        /cluster/data/panTro2/bed/blastz.hg18/DEF >&! swap.log &
+
+    # downloads failed -- need to remove the old dir
+     ssh hgwdev "rm -fr /usr/local/apache/htdocs/goldenPath/hg18/vsPanTro2"
+    /cluster/bin/scripts/doBlastzChainNet.pl -swap -continue=download\
+        /cluster/data/panTro2/bed/blastz.hg18/DEF >&! swap.download.log &
+
+    # Reciprocal best (DONE 2005-04-02 kate)
+    # These are best alignments in both directions
+    # Start with the best chains from the net (these are in the liftOver chain).
+    # Swap to human-reference, and net them
+    # Finally extract the best chains from this net, and make axt's
+    ssh kkr7u00
+    cd /cluster/data/hg18/bed
+    ln -s blastz.panTro2.swap blastz.panTro2
+    cd blastz.panTro2/axtChain
+    mkdir rBestNet
+    set swapChain = panTro2ToHg18.swap.chain
+    zcat /cluster/data/panTro2/bed/liftOver/panTro2ToHg18.over.chain.gz | \ 
+        chainMergeSort stdin | \
+        chainSwap stdin $swapChain
+    chainSplit swapChain/ $swapChain
+    chainPreNet $swapChain /cluster/bluearc/hg18/chrom.sizes \
+                          /cluster/bluearc/panTro2/chrom.sizes stdout | \
+        chainNet stdin -minSpace=1 /cluster/bluearc/hg18/chrom.sizes \
+                                   /cluster/bluearc/panTro2/chrom.sizes \
+                        stdout /dev/null | \
+        netSyntenic stdin rbest.noClass.net
+    netSplit rbest.noClass.net rBestNet
+    netChainSubset -verbose=0 rbest.noClass.net $swapChain stdout | \
+        chainMergeSort stdin | \
+        gzip -c > hg18.panTro2.rbest.chain.gz
+    chainSplit rBestChain/ hg18.panTro2.rbest.chain.gz 
+    cd ..
+    mkdir axtRBestNet
+    foreach f (axtChain/rBestNet/*.net)
+        netToAxt $f axtChain/swapChain/$f:t:r.chain \
+                /san/sanvol1/scratch/hg18/hg18.2bit  \
+                /cluster/bluearc/panTro2/panTro2.2bit stdout | \
+        axtSort stdin stdout | \
+        gzip -c > axtRBestNet/$f:t:r.hg18.panTro2.net.axt.gz
+    end
+
+    # load chains for viewing on genome-test
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/blastz.panTro2/axtChain
+    set chain = hg18.panTro2.rbest.chain
+    # skip for now -- load by request
+    cd rBestChain
+cat > loadRBestChain.csh << 'EOF'
+    date
+    foreach c (`awk '{print $1;}' /cluster/bluearc/hg18/chrom.sizes`)
+        echo $c
+        set f = $c.chain
+        if (! -e $f) then
+          echo no chains for $c
+          set f = /dev/null
+        endif
+        hgLoadChain hg18 ${c}_chainRBestPanTro2 $f
+    end
+    date
+'EOF'
+    cd ..
+    #end skip for now
+
+    gzip $net
+
+    # link to downloads
+    md5sum $chain.gz $net.gz >> md5sum.txt
+    cd ..
+    md5sum axtRBestNet/*.gz >> axtChain/md5sum.txt
+    cd  /usr/local/apache/htdocs/goldenPath/hg18/vsPanTro2
+    set d = /cluster/data/hg18/bed/blastz.panTro2
+    ln -s $d/axtChain/$chain.gz .
+    ln -s $d/axtChain/$net.gz .
+    mkdir axtRBestNet
+    ln -s /cluster/data/hg18/bed/blastz.panTro2/axtRBestNet/*.axt.gz axtRBestNet
+    # edit README.txt
+
+    # cleanup
+    cd /cluster/data/hg18/bed/blastz.panTro2/axtChain
+    rm -f rbest.noClass.net panTro2ToHg18.swap.chain
+    rm -fr swapChain rBestChain rBestNet 
 
 
 ########################
@@ -1189,6 +1407,102 @@ TMPDIR=/scratch/tmp
     ssh hgwdev
     cd /cluster/data/rheMac2/bed/blastz.panTro2.swap/axtChain
     nice loadUp.csh >&! loadUp.log &
+
+    # Redo of chr9 (2006-03-28 kate)
+    # Create blastz run dir for just chr9, and run manually on pk.
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.rheMac2
+    mkdir run.blastz.chr9
+    cd run.blastz.chr9
+    cp ../run.blastz/*.csh .
+    grep chr9 ../run.blastz/jobList | grep -v random > jobList
+    ln -s ../run.blastz/qParts .
+    para create jobList
+        # 28 jobs
+    para try
+    para push
+    para time > run.time
+
+    # merge chr9 psl's on small cluster ("cat" step in automated script)
+    ssh kki
+    cd /cluster/data/panTro2/bed/blastz.rheMac2
+    mkdir run.cat.chr9
+    cd run.cat.chr9
+    cp ../run.cat/cat.csh .
+    grep chr9 ../run.cat/jobList > jobList
+    para create jobList
+        # 14 jobs
+    para push
+    para time > run.time
+
+    cd ../axtChain
+    mkdir run.chr9
+    cd run.chr9
+    cp ../run/chain.csh .
+    grep chr9 ../run/jobList > jobList
+    mkdir chain
+    para create jobList
+        # 1 job
+    para push
+    para time > run.time
+
+    # replace chr9 chain in all.chain
+    ssh hgwdev64 # kolossus busy
+    cd /cluster/data/panTro2/bed/blastz.rheMac2/axtChain/run
+    mkdir chain
+    set all = panTro2.rheMac2.all.chain.gz
+    chainSplit chain/ ../$all
+    rm chain/chr9.chain
+    cp ../run.chr9/chain/*.chain chain
+    chainMergeSort chain/*.chain | nice gzip -c > ../$all
+    rm -fr chain/*
+    cd ..
+    mkdir chain
+    chainSplit chain/ $all
+        # GOT HERE
+
+    # automate the rest
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.rheMac2
+    rm -fr axtNet mafNet
+    ssh hgwdev "rm -fr /usr/local/apache/htdocs/goldenPath/panTro2/vsRheMac2"
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -workhorse=hgwdev64 \
+        -continue=net \
+        `pwd`/DEF >&! blastz.net.chr9.out &
+
+    # gotta remove another file for the automation
+    rm axtChain/panTro2.rheMac2.net.gz
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -workhorse=kkr1u00 \
+        -continue=load \
+        `pwd`/DEF >&! blastz.load.chr9.out &
+
+    # missing noClass.net, work around it
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/blastz.rheMac2/axtChain
+    cat net/*.net > noClass.net
+    # create a script from loadUp.csh, containing only netClass and hgLoadNet
+    csh loadUp2.csh >&! ../blastz.load2.chr9.out &
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -workhorse=kkr1u00 \
+        -continue=download \
+        `pwd`/DEF >&! blastz.download.chr9.out &
+
+    featureBits panTro2 chainRheMac2Link >&! chainRheMac2Link.fb
+        # 2452377221 bases of 2909512873 (84.288%) in intersection
+
+    # NOTE: had to run this on kolossus as hgwdev ran out of mem.
+    # (needed to push chromInfo and chr*_gap tables over first).
+
+    # swap alignments after chr9 fix
+    ssh pk
+    rm -fr /cluster/data/rheMac2/bed/blastz.panTro2.swap
+    cd /cluster/data/panTro2/bed/blastz.rheMac2
+    /cluster/bin/scripts/doBlastzChainNet.pl -swap \
+        -workhorse=kkr1u00 \
+       `pwd`/DEF >&! swap.log &
 
 
 ########################
@@ -1255,6 +1569,70 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk -continue=load \
 	`pwd`/DEF >&! blastz.3.out &
 
+    # Redo of chr9 (2006-03-28 kate)
+    # Create blastz run dir for just chr9, and run manually on pk.
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.canFam2
+    mkdir run.blastz.chr9
+    cd run.blastz.chr9
+    cp ../run.blastz/*.csh .
+    grep panTro2/nib/chr9.nib ../run.blastz/jobList > jobList
+    para create jobList
+        # 14 jobs
+    para try
+    para push
+    para time > run.time
+
+    # merge chr9 psl's on small cluster ("cat" step in automated script)
+    ssh kki
+    cd /cluster/data/panTro2/bed/blastz.canFam2
+    mkdir run.cat.chr9
+    cd run.cat.chr9
+    cp ../run.cat/cat.csh .
+    grep chr9 ../run.cat/jobList > jobList
+    para create jobList
+        # 15 jobs
+    para push
+    para time > run.time
+
+    cd ../axtChain
+    mkdir run.chr9
+    cd run.chr9
+    cp ../run/chain.csh .
+    grep chr9 ../run/jobList | grep -v random > jobList
+    mkdir chain
+    para create jobList
+        # 1 job
+    para push
+    para time > run.time
+
+    # replace chr9 chain in all.chain
+    ssh hgwdev64 # kolossus busy
+    cd /cluster/data/panTro2/bed/blastz.canFam2/axtChain/run
+    mkdir chain
+    set all = panTro2.canFam2.all.chain.gz
+    chainSplit chain/ ../$all
+    rm chain/chr9.chain
+    cp ../run.chr9/chain/*.chain chain
+    chainMergeSort chain/*.chain | nice gzip -c > ../$all
+    rm chain/*
+    chainSplit chain/ ../$all
+    mv chain ..
+
+    # automate the rest
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.canFam2
+    rm -fr axtNet mafNet
+    rm axtChain/{noClass.net,panTro2.canFam2.net.gz}
+    ssh hgwdev "rm -fr /usr/local/apache/htdocs/goldenPath/panTro2/vsCanFam2"
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -workhorse=kkr8u00 \
+        -continue=net \
+        `pwd`/DEF >&! blastz.net.chr9.out &
+    # done
+
+    featureBits panTro2 chainCanFam2Link > chainCanFam2Link.fb
+        # 1516576565 bases of 2909512873 (52.125%) in intersection
 
 
 #########################################################################
@@ -1304,6 +1682,71 @@ TMPDIR=/scratch/tmp
         -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
         -continue=net \
         `pwd`/DEF >&! blastz.2.out &
+
+    # Redo of chr9 (2006-03-28 kate)
+    # Create blastz run dir for just chr9, and run manually on pk.
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.galGal2
+    mkdir run.blastz.chr9
+    cd run.blastz.chr9
+    cp ../run.blastz/*.csh .
+    grep panTro2/nib/chr9.nib ../run.blastz/jobList > jobList
+        # 162 jobs
+    para create jobList
+    para push
+    para time > run.time
+
+    # merge chr9 psl's on small cluster ("cat" step in automated script)
+    ssh kki
+    cd /cluster/data/panTro2/bed/blastz.galGal2
+    mkdir run.cat.chr9
+    cd run.cat.chr9
+    cp ../run.cat/cat.csh .
+    grep chr9 ../run.cat/jobList > jobList
+    para create jobList
+        # 15 jobs
+    para push
+    para time > run.time
+
+    cd ../axtChain
+    mkdir run.chr9
+    cd run.chr9
+    cp ../run/chain.csh .
+    grep chr9 ../run/jobList | grep -v random > jobList
+    mkdir chain
+    para create jobList
+        # 1 job
+    para push
+        # GOT HERE
+    para time > run.time
+
+    # replace chr9 chain in all.chain
+    ssh kkstore01 # kolossus busy
+    cd /cluster/data/panTro2/bed/blastz.galGal2/axtChain/run
+    mkdir chain
+    set all = panTro2.galGal2.all.chain.gz
+    nice chainSplit chain/ ../$all
+    rm chain/chr9.chain
+    cp ../run.chr9/chain/*.chain chain
+    nice chainMergeSort chain/*.chain | nice gzip -c > ../$all
+    rm chain/*
+    cd ..
+    mkdir chain
+    nice chainSplit chain/ $all
+
+    # automate the rest
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.galGal2
+    rm -fr axtNet mafNet
+    rm axtChain/{noClass.net,panTro2.galGal2.net.gz}
+    ssh hgwdev "rm -fr /usr/local/apache/htdocs/goldenPath/panTro2/vsGalGal2"
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -workhorse=kkr7u00 \
+        -continue=net \
+        `pwd`/DEF >&! blastz.net.chr9.out &
+    
+    featureBits panTro2 chainGalGal2Link > chainGalGal2Link.fb
+        # 79103883 bases of 2909512873 (2.719%) in intersection
 
 
 ############################################################################
@@ -1356,6 +1799,7 @@ TMPDIR=/scratch/tmp
     hgLoadBed panTro2 genscanSubopt genscanSubopt.bed
         # Loaded 535541 elements of size 6
 
+
 #######################################################################
 #  OPOSSUM BLASTZ - (WORKING - 2006-03-20 - Hiram)
     ssh pk
@@ -1401,3 +1845,46 @@ TMPDIR=/scratch/tmp
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
     #	running 2006-03-20 11:30
+
+
+# SWAP CHAINS/NET RN4 (DONE 3/27/06 angie)
+    # This run used the updated chr9.nib.
+    ssh kkstore01
+    mkdir /cluster/data/panTro2/bed/blastz.rn4.swap
+    cd /cluster/data/panTro2/bed/blastz.rn4.swap
+    doBlastzChainNet.pl -swap /cluster/data/rn4/bed/blastz.panTro2/DEF \
+      -workhorse kkr8u00 >& do.log & tail -f do.log
+    ln -s blastz.rn4.swap /cluster/data/panTro2/bed/blastz.rn4
+
+
+############################################################################
+### swap of Mm8 alignments - (DONE - 2006-03-30 - Hiram)
+    ssh pk
+    mv /cluster/data/panTro2/bed/blastz.mm8.swap \
+	/cluster/data/panTro2/bed/blastz.mm8.swap.2006-03-21
+    mkdir /cluster/data/panTro2/bed/blastz.mm8.swap
+    cd /cluster/data/panTro2/bed/blastz.mm8.swap
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/mm8/bed/blastzPanTro2.2006-03-28/DEF \
+	> blastz.out 2>&1 &
+    #  XXX started 2006-03-30
+
+    time nice -n +19 featureBits panTro2 chainMm8Link \
+	> fb.panTro2.chainMm8Link
+    # XXXX first time was:
+    #	986978326 bases of 2909512873 (33.922%) in intersection
+
+
+
+
+############################################################################
+# SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM PANTRO1  (2006-03-13 kate)
+
+    ssh kkr1u00
+    cd /cluster/data/panTro2/bed
+    mkdir liftOver
+    cd liftOver
+    makeLoChain-split panTro2 /cluster/data/panTro2/nib >&! split.log &
+

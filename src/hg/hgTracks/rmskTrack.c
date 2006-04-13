@@ -16,10 +16,10 @@
 
 static struct repeatItem *otherRepeatItem = NULL;
 static char *repeatClassNames[] =  {
-    "SINE", "LINE", "LTR", "DNA", "Simple", "Low Complexity", "Satellite", "tRNA", "Other", "Unknown",
+    "SINE", "LINE", "LTR", "DNA", "Simple", "Low Complexity", "Satellite", "RNA", "Other", "Unknown",
 };
 static char *repeatClasses[] = {
-    "SINE", "LINE", "LTR", "DNA", "Simple_repeat", "Low_complexity", "Satellite", "tRNA", "Other", "Unknown",
+    "SINE", "LINE", "LTR", "DNA", "Simple_repeat", "Low_complexity", "Satellite", "RNA", "Other", "Unknown",
 };
 
 static struct repeatItem *makeRepeatItems()
@@ -96,7 +96,10 @@ if (isFull)
     while ((row = sqlNextRow(sr)) != NULL)
         {
 	rmskOutStaticLoad(row+rowOffset, &ro);
-	ri = hashFindVal(hash, ro.repClass);
+	if (endsWith(ro.repClass, "RNA"))
+	    ri = hashFindVal(hash, "RNA");
+	else
+	    ri = hashFindVal(hash, ro.repClass);
 	if (ri == NULL)
 	   ri = otherRepeatItem;
 	percId = 1000 - ro.milliDiv - ro.milliDel - ro.milliIns;

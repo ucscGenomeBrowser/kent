@@ -8,7 +8,7 @@
 #include "improbRunInfo.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: motifSig.c,v 1.3 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: motifSig.c,v 1.4 2006/04/07 15:25:18 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -98,7 +98,6 @@ char motifName[256];
 int seqCount, baseCount;
 struct improbRunInfo *iriList = NULL, *iri;
 struct lineFile *lf = NULL;
-char consensus[maxMotifSize];
 struct motif motif;
 int motifIx = 0;
 int i;

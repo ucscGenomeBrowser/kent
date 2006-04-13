@@ -3,7 +3,7 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: gpStats.c,v 1.4 2004/07/21 23:44:13 angie Exp $";
+static char const rcsid[] = "$Id: gpStats.c,v 1.5 2006/04/10 15:22:35 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -91,10 +91,9 @@ void oneStats(char *fileName, int winSize, int maxGap)
 /* Accumulate stats on one file. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-int lineSize, wordCount;
-char *line, *words[32];
+int wordCount;
+char *words[32];
 boolean inRaft = FALSE; 
-boolean inFlotilla = FALSE;
 int raftSize = 0, flotillaSize = 0;
 int gapSize;
 

@@ -123,7 +123,6 @@ sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 totalKgCnt = atoi(row2[0]);
 sqlFreeResult(&sr2);
-totalKgPage = totalKgCnt/LINKSPERPAGE + 1;
 
 /* figure out how many KG IDs in total */
 safef(query2, sizeof(query2), "select count(*) from %s.kgXref", database);
@@ -131,6 +130,7 @@ sr2  = sqlMustGetResult(conn2, query2);
 row2 = sqlNextRow(sr2);
 totalKgId = atoi(row2[0]);
 sqlFreeResult(&sr2);
+totalKgPage = totalKgId/LINKSPERPAGE + 1;
 
 safef(query2, sizeof(query2),
       "select kgID, geneSymbol, description from %s.kgXref order by geneSymbol",
@@ -156,7 +156,7 @@ while (kgIdCnt < totalKgId)
     "select chrom,txSTart,txEnd,proteinID from %s.knownGene where name='%s'", database, kgID);
     sr = sqlMustGetResult(conn, query);
     row = sqlNextRow(sr);
-    while (row != NULL)
+    if (row != NULL)
     	{
 	geneCnt++;
     	chrom     = row[0];

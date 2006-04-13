@@ -254,26 +254,15 @@ sqlFreeResult(&sr);
 }
 
 
-void fixCopyright(struct dyString *s)
-/* Fix copyright notice which sometimes is truncated in
- * Jackson labs database. */
+boolean isStrNull(char *s)
+/* see if string is "0" or "(null)" */
 {
-if (endsWith(s->string, " and is"))
-    {
-    if (stringIn(" Development ", s->string))
-	{
-	char *temp = cloneString(s->string);
-	dyStringAppend(s," displayed with the permission of The Company of Biologists Limited who owns the Copyright.");
-	verbose(1,"Patched\n[%s]\n to \n[%s]\n", temp, s->string);
-	freez(&temp);
-	}
-    }
+return (s == NULL);
+ /* used to do comparison to "0" but that was based on the old Sybase import which didn't handle nulls */
 }
 
-
-
-void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, char *ref, char *fileRoot,
-	char *inJax)
+void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, struct sqlConnection *connSp,
+    char *ref, char *fileRoot, char *inJax)
 /* Create a .ra and a .tab file for given reference. */
 {
 /* Initially the tab file will have some duplicate lines, so
@@ -309,19 +298,18 @@ row = sqlNextRow(sr);
 if (row == NULL)
     errAbort("Can't find _Refs_key %s in BIB_Refs", ref);
 
-
 /* Make ra file with stuff common to whole submission set. */
 ra = mustOpen(raName, "w");
 fprintf(ra, "submissionSource MGI\n");
 fprintf(ra, "acknowledgement Thanks to the Gene Expression Database group at "
             "Mouse Genome Informatics (MGI) for collecting, annotating and sharing "
-	    "this image. The MGI images were last updated in VisiGene on June 17, 2005. "
+	    "this image. The MGI images were last updated in VisiGene on March 28, 2006. "
 	    "Additional and more up to date annotations and images may be available "
-	    "directly at <A HREF='http://www.informatics.jax.org'>MGI.</A>\n");
+	    "directly at <A HREF='http://www.informatics.jax.org' target='_blank'>MGI.</A>\n");
 fprintf(ra, "submitSet jax%s\n", ref);
 fprintf(ra, "taxon 10090\n");	/* Mus musculus taxon */
-fprintf(ra, "fullDir ../visiGene/full/inSitu/Mouse/jax\n");
-fprintf(ra, "thumbDir ../visiGene/200/inSitu/Mouse/jax\n");
+fprintf(ra, "fullDir http://hgwdev.cse.ucsc.edu/visiGene/full/inSitu/Mouse/jax\n");
+fprintf(ra, "thumbDir http://hgwdev.cse.ucsc.edu/visiGene/200/inSitu/Mouse/jax\n");
 fprintf(ra, "setUrl http://www.informatics.jax.org/\n");
 fprintf(ra, "itemUrl http://www.informatics.jax.org/searches/image.cgi?%%s\n");
 fprintf(ra, "journal %s\n", row[1]);
@@ -404,11 +392,10 @@ dyStringAppend(query,
 	  "and IMG_ImagePane._Image_key = IMG_Image._Image_key "
 	  "and IMG_Image._Image_key = ACC_Accession._Object_key "
 	  "and ACC_Accession.prefixPart = 'PIX:' "
-	  "and GXD_Assay._ImagePane_key = 0 "
+	  "and GXD_Assay._ImagePane_key is NULL "
 	);
 dyStringPrintf(query, "and GXD_Assay._Refs_key = %s", ref);
 sr = sqlGetResultVerbose(conn, query->string);
-
 
 fprintf(tab, "#");
 fprintf(tab, "gene\t");
@@ -434,6 +421,7 @@ fprintf(tab, "priority\t");
 fprintf(tab, "captionId\t");
 fprintf(tab, "imageWidth\t");
 fprintf(tab, "imageHeight\n");
+
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *gene = row[0];
@@ -490,9 +478,10 @@ while ((row = sqlNextRow(sr)) != NULL)
 	   dyStringAppend(copyright, row[0]);
 	sqlFreeResult(&sr);
 
+	verbose(2,"imageKey=%s\n",imageKey);
+
 	if (copyright->stringSize != 0)
 	    {
-	    fixCopyright(copyright);
 	    fprintf(ra, "copyright %s\n", copyright->string);
 	    }
 	}
@@ -537,7 +526,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    calcAge = 365;	/* Most adult mice are relatively young */
 	else
 	    {
-	    warn("Calculating age from %s\n", age);
+	    warn("Calculating age from %s", age);
 	    calcAge = (calcMinAge + calcMaxAge) * 0.5;
 	    }
 	if (calcAge < calcMinAge)
@@ -548,7 +537,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     
     /* Massage probeColor */
         {
-	if (!sameString(reporterGeneKey, "0"))
+	if (!isStrNull(reporterGeneKey))
 	    {
 	    /* Fixme: make sure that reporterGene's end up in probeType table. */
 	    char *name = NULL;
@@ -568,7 +557,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	        warn("Don't know color of reporter gene %s", name);
 	    freez(&name);
 	    }
-	if (!sameString(probePrepKey, "0"))
+	if (!isStrNull(probePrepKey))
 	    {
 	    char *name = NULL;
 	    dyStringClear(query);
@@ -599,7 +588,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		}
 	    freez(&name);
 	    }
-	if (!sameString(antibodyPrepKey, "0") && probeColor[0] == 0 )
+	if (!isStrNull(antibodyPrepKey) && probeColor[0] == 0 )
 	    {
 	    char *name = NULL;
 	    dyStringClear(query);
@@ -618,7 +607,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     /* Get abName, abTaxon */
     abTaxon[0] = 0;
-    if (!sameString(antibodyPrepKey, "0"))
+    if (!isStrNull(antibodyPrepKey))
         {
 	struct sqlResult *sr = NULL;
 	int orgKey = 0;
@@ -641,7 +630,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 	if (orgKey > 0)
 	    {
-	    struct sqlConnection *sp = sqlConnect("uniProt");
 	    char *latinName = NULL, *commonName = NULL;
 	    int spTaxon = 0;
 	    dyStringClear(query);
@@ -655,7 +643,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 		char *e = strchr(latinName, '/');
 		if (e != NULL) 
 		   *e = 0;	/* Chop off / and after. */
-		spTaxon = spBinomialToTaxon(sp, latinName);
+		spTaxon = spBinomialToTaxon(connSp, latinName);
 		}
 	    else
 	        {
@@ -667,14 +655,13 @@ while ((row = sqlNextRow(sr)) != NULL)
 		    && !sameString(commonName, "Not Applicable")
 		    && !sameString(commonName, "Not Specified"))
 		    {
-		    spTaxon = spCommonToTaxon(sp, commonName);
+		    spTaxon = spCommonToTaxon(connSp, commonName);
 		    }
 		}
 	    if (spTaxon != 0)
 	        safef(abTaxon, sizeof(abTaxon), "%d", spTaxon);
 	    freez(&latinName);
 	    freez(&commonName);
-	    sqlDisconnect(&sp);
 	    }
 	}
     if (abName == NULL)
@@ -687,7 +674,7 @@ while ((row = sqlNextRow(sr)) != NULL)
      * the primers are actually stored in free text in the PRB_Notes
      * tabel. At this point I'm going to move on rather than figure out
      * how to dig it out of there. */
-    if (!sameString(probePrepKey, "0"))
+    if (!isStrNull(probePrepKey))
         {
 	struct sqlResult *sr = NULL;
 	char **row;
@@ -729,6 +716,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 
     genotypeAndStrainFromKey(genotypeKey, conn2, &genotype, &strain);
 
+    if (isStrNull(paneLabel))
+	paneLabel = cloneString("");	  /* trying to suppress nulls in output */
     stripChar(paneLabel, '"');	/* Get rid of a difficult quote to process. */
     
     /* Fetch image dimensions from file. */
@@ -783,7 +772,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%3.2f\t", calcAge);
     fprintf(tab, "%s\t", ageMin);
     fprintf(tab, "%s\t", ageMax);
-    fprintf(tab, "%s\t", paneLabel);
+    fprintf(tab, "%s\t", paneLabel);   /* may have to change NULL to empty string or "0" ? */
     fprintf(tab, "%s.jpg\t", fileKey);
     fprintf(tab, "%s\t", imageKey);
     fprintf(tab, "%s\t", fPrimer);
@@ -813,6 +802,7 @@ sqlFreeResult(&sr);
 carefulClose(&ra);
 carefulClose(&tab);
 carefulClose(&cap);
+
 if (gotAny)
     undupeCopyFile(tmpName, tabName);
 else
@@ -826,10 +816,11 @@ dyStringFree(&caption);
 dyStringFree(&query);
 hashFree(&uniqImageHash);
 hashFree(&captionHash);
+
 }
 
-void submitToDir(struct sqlConnection *conn, struct sqlConnection *conn2, char *outDir,
-	char *inJax)
+void submitToDir(struct sqlConnection *conn, struct sqlConnection *conn2, struct sqlConnection *connSp,
+    char *outDir, char *inJax)
 /* Create directory full of visiGeneLoad .ra/.tab files from
  * jackson database connection.  Creates a pair of files for
  * each submission set.   Returns outDir. */
@@ -843,7 +834,7 @@ makeDir(outDir);
 for (ref = refList; ref != NULL; ref = ref->next)
     {
     char path[PATH_LEN];
-    char *pub;
+    char *pub=NULL;
     boolean skip;
 
     /* Check that it isn't on our skip list - one that we
@@ -852,14 +843,22 @@ for (ref = refList; ref != NULL; ref = ref->next)
     dyStringClear(query);
     dyStringPrintf(query, "select title from BIB_Refs where _Refs_key = %s", 
     	ref->name);
+
     pub = sqlQuickString(conn, query->string);
+
+    if (!pub)
+	{
+	verbose(1,"ref %s: missing title from BIB_Refs, ref skipped\n",ref->name);
+	continue;
+	}
+
     skip = sameString(pub, 
 	"Mouse Brain Organization Revealed Through Direct Genome-Scale TF Expression Analysis.");
 
-     if (!skip)
+    if (!skip)
 	{
 	safef(path, sizeof(path), "%s/%s", outDir, ref->name);
-	submitRefToFiles(conn, conn2, ref->name, path, inJax);
+	submitRefToFiles(conn, conn2, connSp, ref->name, path, inJax);
 	refCount += 1;
 	if (testMax != 0 && refCount >= testMax)
 	     errAbort("Reached testMax %d output dirs [%s]\n", testMax, path);
@@ -867,8 +866,11 @@ for (ref = refList; ref != NULL; ref = ref->next)
     freeMem(pub);
     }
 
+    verbose(1,"refCount=%d\n",refCount);
+
 slNameFreeList(&refList);
 dyStringFree(&query);
+
 }
 
 void vgLoadJax(char *visiGeneDir, char *jaxDb, char *outDir)
@@ -876,13 +878,24 @@ void vgLoadJax(char *visiGeneDir, char *jaxDb, char *outDir)
 {
 struct sqlConnection *conn = sqlConnect(jaxDb);
 struct sqlConnection *conn2 = sqlConnect(jaxDb);
+struct sqlConnection *connSp = sqlConnect("uniProt");
 
 char inFull[PATH_LEN];
 char *jaxPath = "inSitu/Mouse/jax";
 char inJax[PATH_LEN];
+
+/* won't work yet
+char* host = "genome-test";
+char* user = getCfgValue("HGDB_USER", "db.user");
+char* password = getCfgValue("HGDB_PASSWORD", "db.password");
+
+connSp = sqlConnRemote(host, user, password, "uniProt", TRUE); // true=abort-on-error 
+*/
+
 safef(inFull, sizeof(inFull), "%s/full", visiGeneDir);
 safef(inJax, sizeof(inJax), "%s/%s", inFull, jaxPath);
-submitToDir(conn, conn2, outDir, inJax);
+submitToDir(conn, conn2, connSp, outDir, inJax);
+sqlDisconnect(&connSp);
 sqlDisconnect(&conn2);
 sqlDisconnect(&conn);
 }

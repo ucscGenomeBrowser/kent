@@ -4786,3 +4786,14 @@ searchPriority 55
 
     time nice -n +19 featureBits galGal2 chainMm8Link
     #   57074100 bases of 1054197620 (5.414%) in intersection
+
+
+# SWAP CHAINS/NET RN4 (DONE 3/30/06 angie)
+    ssh kkr3u00
+    mkdir /cluster/data/galGal2/bed/blastz.rn4.swap
+    cd /cluster/data/galGal2/bed/blastz.rn4.swap
+    doBlastzChainNet.pl -swap /cluster/data/rn4/bed/blastz.galGal2/DEF \
+      -workhorse kkr3u00 >& do.log & tail -f do.log
+    ln -s blastz.rn4.swap /cluster/data/galGal2/bed/blastz.rn4
+
+

@@ -2055,3 +2055,19 @@ chainSome $(path1)
 
      time nice -n +19 featureBits fr1 chainMm8Link
     #   42671288 bases of 315518167 (13.524%) in intersection
+
+############################################################################
+##  BLASTZ swap from hg17 alignments (DONE 2006-04-09 markd)
+    mkdir /cluster/data/fr1/bed/blastz.hg17.swap
+    ln -s blastz.hg17.swap /cluster/data/fr1/bed/blastz.hg17
+    cd /cluster/data/fr1/bed/blastz.hg17.swap
+    
+    #
+    cp /cluster/data/hg17/bed/blastz.fr1/DEF .
+    # edit to change /iscratch/i/hg17/bothMaskedNibs to /scratch/hg/hg17/bothMaskedNibs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -stop=net \
+	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	./DEF >& swap.out&
+
+

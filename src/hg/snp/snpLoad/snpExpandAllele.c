@@ -3,8 +3,7 @@
  * Rewrite to new chrN_snpTmp tables.  Get chromInfo from ContigInfo. 
  * Write syntax errors to snpExpandAllele.errors.
  * Write exceptions to snpExpandAllele.exceptions:
-      RangeLocTypeWrongSizeLargeAllele
-      RangeLocTypeWrongSize
+      RefAlleleWrongSize
  */
 
 #include "common.h"
@@ -12,7 +11,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.23 2006/03/20 23:28:44 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.24 2006/04/05 23:02:59 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -263,12 +262,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	end = sqlUnsigned(row[3]);
 	size = end - start;
 	if (size != strlen(allele))
-	    {
-	    if (size > 256)
-	        writeToExceptionFile(chromName, start, end, row[0], "RangeLocTypeWrongSizeLargeAllele");
-            else
-	        writeToExceptionFile(chromName, start, end, row[0], "RangeLocTypeWrongSize");
-	    }
+	    writeToExceptionFile(chromName, start, end, row[0], "RefAlleleWrongSize");
 	}
 
     writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5], allele);

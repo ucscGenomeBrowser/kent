@@ -1,3 +1,12 @@
+track cytoBandIdeo
+shortLabel Chromosome Band (Ideogram)
+longLabel Chromosome Bands Based On ISCN Lengths (for Ideogram)
+group map
+priority .1
+visibility dense
+altColor 150,50,50
+type bed 4 +
+
 track cytoBand
 shortLabel Chromosome Band
 longLabel Chromosome Bands Based On ISCN Lengths
@@ -124,8 +133,9 @@ altColor 200,220,255
 spectrum on
 type psl xeno 
 
+# release alpha: shortLabel $o_db
 track chainHg18
-shortLabel Hg18 Chain 
+shortLabel $o_db Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 250
@@ -137,9 +147,11 @@ matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
 type chain hg18
 otherDb hg18
+release alpha
 
-track chainHg17
-shortLabel Human Chain 
+# release beta: shortLabel $o_Organism
+track chainHg18
+shortLabel $o_Organism Chain 
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 250
@@ -149,8 +161,89 @@ altColor 255,240,200
 spectrum on
 matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
 matrixHeader A, C, G, T
+type chain hg18
+otherDb hg18
+release beta
+
+# release alpha: shortLabel $o_db
+track netHg18
+shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 250.1
+visibility dense
+spectrum on
+type netAlign hg18 chainHg18
+otherDb hg18
+release alpha
+
+# release beta: shortLabel $o_Organism
+track netHg18
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 250.1
+visibility dense
+spectrum on
+type netAlign hg18 chainHg18
+otherDb hg18
+release beta
+
+# release alpha: shortLabel $o_db
+track chainHg17
+shortLabel $o_db Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 251
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
 type chain hg17
 otherDb hg17
+release alpha
+
+# release beta: shortLabel $o_Organism
+track chainHg17
+shortLabel $o_Organism Chain 
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 251
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+type chain hg17
+otherDb hg17
+release beta
+
+# release alpha: shortLabel $o_db, vis hide
+track netHg17
+shortLabel $o_db Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 251.1
+visibility hide
+spectrum on
+type netAlign hg17 chainHg17
+otherDb hg17
+release alpha
+
+# release beta: shortLabel $o_Organism
+track netHg17
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 251.1
+visibility dense
+spectrum on
+type netAlign hg17 chainHg17
+otherDb hg17
+release beta
 
 track chainMm8
 shortLabel $o_Organism Chain

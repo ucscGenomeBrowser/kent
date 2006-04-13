@@ -273,9 +273,25 @@ echo drop table xmMrna | hgsql mm6
    # Load the cutters table.
    hgCutters hgFixed rebase.gcg
    # Load the other table.
-   echo delete from rebaseRefs | hgsql hgFixed
-   echo "load data local infile 'rebaseRefs.txt' into table rebaseRefs" | hgsql hgFixed
+   hgsql hgFixed -e "echo delete from rebaseRefs"
+   hgsql hgFixed -e "load data local infile 'rebaseRefs.txt' into table rebaseRefs"
    
+# REBASE 603 (3-1-2006)  (Done 3-2-2006 Andy)
+   ssh hgwdev
+   # download files
+   curl -A "Mozilla/4.0" http://rebase.neb.com/rebase/link_gcgenz > rebase.gcg
+   curl -A "Mozilla/4.0" http://rebase.neb.com/rebase/link_gcgref > rebaseRefs.txt
+   # References file
+   tail +15 rebaseRefs.txt | sed 's/ \+/ /g; s/^ //; /^$/d' | cut -f2- -d' ' > c2
+   tail +15 rebaseRefs.txt | sed 's/ \+/ /g; s/^ //; /^$/d' | cut -f1 -d' ' | sed 's/\.//' > c1
+   paste c1 c2 | sed '/^$/d' > rebaseRefs.txt
+   rm c1 c2
+   # Load the cutters table.
+   hgCutters hgFixed rebase.gcg
+   # Load the other table.
+   hgsql hgFixed -e "echo delete from rebaseRefs"
+   hgsql hgFixed -e "load data local infile 'rebaseRefs.txt' into table rebaseRefs"   
+
 # GLADSTONE hESC Novartis microarray data.
    # 1. Download http://www.genmapp.org/temp/humansimpleESC.zip
    # 2. Manually convert using MS access on Bob's laptop to a tab-delimited text file.
@@ -356,3 +372,47 @@ _EOF_
 
 # QA push cghNci60Exps on 2006-02-07 to rr. Table/data previously missing (Jen)
 # QA re-push rosChr22Dat on 2006-02-08 to fix table formatting/timestamps (Jen)
+
+# AFFY ALL EXON HUMAN ARRAYS (INCLUDES TABLES ON HG17 AND HG18) (Done 3/15/2006, Andy)
+     # Chuck put them in tab-delimited file in ~sugnet
+   ssh hgwdev
+   cd /projects/compbio/data/microarray
+   mkdir affyHumanExon
+   cd affyHumanExon/
+   cp ~sugnet/plier-gcbg-sketch.summary.txt .
+   sed -e "s/huex_wta_//g" -e "s/\.CEL//g" plier-gcbg-sketch.summary.txt > data.txt
+   hgGenericMicroarray hgFixed affyHumanExon data.txt
+     # Chuck put probe data into two tables in hg17.
+     # Grab the bed first.  Change the original name because a lot got started
+     # without keeping Chuck's naming convention in mind.  oh well.
+   hgsql hg17 -e "rename table affyHuEx1 to affyHumanExonProbes"
+   hgsql hg17 -e "rename table affyHuEx1Annot to affyHumanExonProbeAnnot"
+   hgsql hg17 -e "select * from affyHuEx1" | tail +2 | cut -f2-7 | > hg17.probes.bed
+     # Lift to hg18
+   liftOver hg17.probes.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain hg18.probes.bed hg18.unMapped
+     # How many didn't get lifted (out of 1.4 million)? 
+   wc -l hg18.unMapped
+#    276 hg18.unMapped
+     # That's not bad at all. 99.99% of them lifted fine.
+     # Load the hg18 probe bed.  Change the name of the hg17 one.
+   hgLoadBed hg18 affyHumanExonProbes hg18.probes.bed
+     # Deal with that extra annotation table of Chuck's.  I made a new autosql 
+     # which almost matches it except for the name/probeSet fields.
+     # First copy it out of hg17 and into a file with the new column order.
+   hgsql hg17 -e "select probesetId,numIndependentProbes,exonClustId,numNonOverlapProbes,probeCount,transcriptClustId,probesetType,numXHybeProbe,psrId,level,evidence,bounded,cds from affyHumanExonProbeAnnot" \
+   | tail +2 > annot.tab
+     # Load that into hgFixed and change the name.
+   hgLoadSqlTab hgFixed affyAllExonProbe ~/kent/src/hg/lib/affyAllExonProbe.sql annot.tab
+   hgsql hgFixed -e "rename table affyAllExonProbe to affyHumanExonProbeAnnot"
+     # Make ratio table for the microarray
+   hgRatioMicroarray affyHumanExon affyHumanExonRatio
+     # Merge probe beds with array data and load those beds.
+   bedMergeExpData hgFixed.affyHumanExonRatio hg17.affyHumanExonProbes hg17.bed
+   bedMergeExpData hgFixed.affyHumanExonRatio hg18.affyHumanExonProbes hg18.bed
+   hgLoadBed hg17 affyHumanExon hg17.bed
+   hgLoadBed hg18 affyHumanExon hg18.bed
+     # Create human-level trackDb entry and affyHumanExon.html
+     # and check into cvs.
+
+# QA push new cutters and rebaseRefs tables (04-06-2006: ASZ).
+

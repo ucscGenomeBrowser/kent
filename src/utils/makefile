@@ -44,6 +44,7 @@ SCRIPT_FILES = \
 	HgAutomate.pm \
         iSync \
         lodToBedScore \
+	mkMafFrames.pl \
 	partitionSequence.pl
 
 # List of directories to build

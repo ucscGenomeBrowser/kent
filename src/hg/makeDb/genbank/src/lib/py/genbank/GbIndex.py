@@ -1,6 +1,6 @@
 "objects to manage genbank release and update infomation"
 #
-# $Id: GbIndex.py,v 1.2 2005/08/22 19:55:35 markd Exp $
+# $Id: GbIndex.py,v 1.3 2006/04/07 14:10:26 markd Exp $
 #
 
 # FIXME: tmp hack
@@ -46,6 +46,14 @@ class GbProcessedPart(object):
         self.update = update
         self.cdnaType = cdnaType
         self.accPrefix = accPrefix
+
+    def getGbIdx(self):
+        "get path to gbidx file for this partition"
+        gbIdx = self.update.rel.relProcDir + "/" + self.update + "/" + self.cdnaType
+        if self.accPrefix != None:
+            gbIdx += "." + self.accPrefix
+        gbIdx += ".gbidx"
+        return gbIdx
 
     def getAlignedPart(self):
         "get the GbAlignedPart object associated with this object, or None"
@@ -168,7 +176,7 @@ class GbRelease(str):
         self.cdnaTypes = SrcDbCdnaTypes[srcDb]  # valid cDNA types
         self.relProcDir = relProcDir
         self.updates = None  # None indicates no update search has been done
-        self.alignDb = None # aligned database currently loaded
+        self.alignDb = None  # aligned database currently loaded
         return self
 
     def _addUpdates(self, updateGlob):
@@ -267,6 +275,7 @@ class GbIndex(dict):
 
 
 if __name__ == "__main__":
+    # quick test
     os.chdir("/cluster/data/genbank")
     gbi = GbIndex()
     rel = gbi[GenBank].getLatestRel()

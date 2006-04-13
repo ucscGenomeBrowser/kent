@@ -1,5 +1,5 @@
 include ../inc/common.mk
-HG_WARN = ${HG_WARN_ERR}
+#HG_WARN = ${HG_WARN_ERR}
 
 O = aliType.o apacheLog.o asParse.o axt.o axtAffine.o \
     base64.o bits.o binRange.o \

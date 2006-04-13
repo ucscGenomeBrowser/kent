@@ -984,3 +984,8 @@ Warning: NR_001874: malformed RefSeq CDS:
 - DQ075263 - two sequence version on same mod date.
 
 - hg17 NM_182901, example of UTR aligning in a different place
+
+- perhaps should have separate HGC division mRNAs track?
+  - are these all being included now??
+
+- way to exclude annotated linker/vector from alignment

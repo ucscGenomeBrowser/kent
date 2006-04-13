@@ -6,18 +6,20 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.5 2005/09/13 21:41:34 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh,v 1.9 2006/04/05 19:06:10 kate Exp $
 
-if ( $#argv != 3 ) then
-    echo "usage: $0 <old-assembly> <new-assembly> <new-liftdir>"
+if ( $#argv != 2 ) then
+    echo "usage: $0 <old-assembly> <new-assembly>"
     exit 1
 endif
 
 set oldAssembly = $1
 set newAssembly = $2
-set newLiftDir = $3
+set newLiftDir = /iscratch/i/$newAssembly/split10k
 
-set blatDir = /cluster/data/$oldAssembly/bed/blat.$newAssembly.`date +%Y-%m-%d`
+set prefix = /cluster/data/$oldAssembly/bed/blat.$newAssembly
+set blatDir = `ls -td $prefix.20* | head -1`
+echo "using dir $blatDir"
 
 if ( ! -e $blatDir/raw ) then
     echo "Can't find $blatDir/raw"
@@ -29,9 +31,8 @@ if (`ls -1 $newLiftDir/*.lft | wc -l` < 1) then
 endif
 
 cd $blatDir/raw
-set fs = `fileServer $blatDir`
-if ( $HOST != $fs ) then
-    echo "Run this on $fs"
+if ($HOST != kkr1u00 && $HOST != kkr1u00.kilokluster.ucsc.edu) then
+    echo "Run this on kkr1u00"
     exit 1
 endif
 

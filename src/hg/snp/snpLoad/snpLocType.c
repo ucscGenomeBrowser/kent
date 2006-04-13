@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.22 2006/03/27 23:15:42 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.24 2006/04/06 18:34:28 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -35,9 +35,7 @@ char *locTypeStrings[] = {
 /* Unable to get chromEnd */
 
 /* Exceptions detected: */
-/*  RangeLocTypeWrongSizeLargeAllele */
-/*  RangeLocTypeWrongSize */
-/*  ExactLocTypeWrongSize */
+/*  RefAlleleWrongSize */
 
 
 void usage()
@@ -144,15 +142,9 @@ if (locTypeInt == 1)
 	}
     size = chromEnd - chromStart;
 
-    /* only check size if we don't need to expand (that is next step in processing */
+    /* only check size if we don't need to expand (that is next step in processing) */
     if (!needToExpand(allele) && alleleSize != size)
-        {
-        /* distinguish large alleles because rs_fasta should have correct data for them */
-        if (size > 256)
-            writeToExceptionFile(chromName, chromStart, chromEnd, snpId, "RangeLocTypeWrongSizeLargeAllele");
-        else
-            writeToExceptionFile(chromName, chromStart, chromEnd, snpId, "RangeLocTypeWrongSize");
-        }
+        writeToExceptionFile(chromName, chromStart, chromEnd, snpId, "RefAlleleWrongSize");
 
     return chromEnd;
     }
@@ -166,7 +158,7 @@ if (locTypeInt == 2)
 	if (chromEnd != chromStart)
 	    {
 	    fprintf(errorFileHandle, "Wrong size for exact\n");
-	    writeToExceptionFile(chromName, chromStart, chromEnd+1, snpId, "ExactLocTypeWrongSize");
+	    writeToExceptionFile(chromName, chromStart, chromEnd+1, snpId, "RefAlleleWrongSize");
 	    }
 	return chromEnd + 1;
 	}
@@ -174,7 +166,7 @@ if (locTypeInt == 2)
     if (chromEnd != chromStart + 1) 
         {
 	fprintf(errorFileHandle, "Wrong size for exact\n");
-	writeToExceptionFile(chromName, chromStart, chromEnd, snpId, "ExactLocTypeWrongSize");
+	writeToExceptionFile(chromName, chromStart, chromEnd, snpId, "RefAlleleWrongSize");
         return (-1);
 	}
     return chromEnd;
@@ -213,6 +205,11 @@ FILE *f;
 int chromEnd = 0;
 int chromStart = 0;
 int skipCount = 0;
+boolean randomChrom = FALSE;
+char *tmpString;
+
+tmpString = strstr(chromName, "random");
+if (tmpString != NULL) randomChrom = TRUE;
 
 safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
 safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
@@ -239,15 +236,26 @@ while ((row = sqlNextRow(sr)) != NULL)
 	continue;
 	}
 
-    if (sameString(row[2], "1") || sameString(row[2], "3"))
+    /* COORD ADJUSTMENT for between */
+    if (sameString(row[2], "3"))
         {
 	chromStart = sqlUnsigned(row[3]);
 	chromStart++;
 	chromEnd++;
-        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\n", 
-               row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6]);
+        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\n", row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6]);
 	continue;
 	}
+
+    /* COORD ADJUSTMENT for range, non-random only */
+    if (!randomChrom && sameString(row[2], "1"))
+        {
+	chromStart = sqlUnsigned(row[3]);
+	chromStart++;
+	chromEnd++;
+        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\n", row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6]);
+	continue;
+	}
+
     fprintf(f, "%s\t%s\t%s\t%d\t%s\t%s\t%s\n", 
                row[0], row[1], row[3], chromEnd, row[2], row[5], row[6]);
 

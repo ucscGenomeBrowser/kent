@@ -9,7 +9,7 @@
 #include "hCommon.h"
 #include "qaSeq.h"
 
-static char const rcsid[] = "$Id: fqToQac.c,v 1.3 2003/09/05 21:30:42 kent Exp $";
+static char const rcsid[] = "$Id: fqToQac.c,v 1.4 2006/04/03 16:27:16 angie Exp $";
 
 FILE *errLog;
 
@@ -43,16 +43,11 @@ void fqToQa(struct lineFile *in, char *outDir)
 /* fqToQa - convert from fq format with one big file to
  * format with one file per clone. */
 {
-struct slName *inList, *inEl;
-char *inName;
-int inCount;
 FILE *out = NULL;
 char ucscName[128];
 char path[512];
 static char lastPath[512];
-char ucscFa[256];
 char *gsName;
-UBYTE *q;
 int outFileCount = 0;
 struct hash *uniqClone = newHash(16);
 struct hash *uniqFrag = newHash(19);

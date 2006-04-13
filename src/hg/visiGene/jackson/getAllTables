@@ -1,4 +1,15 @@
-#!/bin/tcsh
+#!/bin/tcsh -ef
+if ("$jdb" == "") then
+    echo "env var jdb not set.  should be something like jackson20060125"
+    exit 1
+endif
+
+set outpath = "/san/sanvol1/visiGene/offline/jax/$jdb"
+#rm -fr $outpath
+if ( ! -d $outpath ) then
+    mkdir $outpath
+endif    
+
 set sql = "select name from sysobjects where type='U' order by name"
 query "$sql" "bcp" | sed -e 's/|//g' > temptablelist
 
@@ -6,14 +17,18 @@ query "$sql" "bcp" | sed -e 's/|//g' > temptablelist
 
 set tables = ( `cat temptablelist` )
 
+set op = "do" #"skip"
 while ("$tables" != "")
     set table = $tables[1] 
     shift tables
-    echo $table
     # I already loaded this big table, don't need to do it again.
-    #if ("$table" != "ACC_Accession") then
-    	getTable $table
+    #if ("$table" == "GXD_Index_Stages") then
+	#set op = "do"
     #endif
+    if ("$op" == "do") then
+	echo $table
+    	getTable $table
+    endif
 end
 
 	

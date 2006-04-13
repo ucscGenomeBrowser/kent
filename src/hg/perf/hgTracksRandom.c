@@ -13,7 +13,7 @@
 #include "options.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.10 2006/01/11 20:40:23 heather Exp $";
+static char const rcsid[] = "$Id: hgTracksRandom.c,v 1.11 2006/04/10 22:53:21 heather Exp $";
 
 static char *database = NULL;
 static struct hash *chromHash = NULL;
@@ -102,6 +102,11 @@ struct htmlPage *rootPage;
 startTime = clock1000();
 rootPage = htmlPageGet(url);
 endTime = clock1000();
+
+htmlPageValidateOrAbort(rootPage);
+if (rootPage->status->status != 200)
+   errAbort("%s returned with status code %d", url, rootPage->status->status);
+
 return endTime - startTime;
 }
 

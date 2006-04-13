@@ -1,4 +1,4 @@
-#!/bin/tcsh
+#!/bin/tcsh -ef
 if ("$1" == "") then
     echo "error: no table name specified"
     exit 1
@@ -8,7 +8,10 @@ if ("$jdb" == "") then
     exit 1
 endif
 set table = "$1"
+set outpath = "/san/sanvol1/visiGene/offline/jax/$jdb"
+
 set sql = "select c.name, t.name, c.length from syscolumns c, sysobjects o, systypes t where o.id=c.id and o.type='U' and t.usertype=c.usertype and o.name='"$table"'order by o.name, colid"
+
 
 query "$sql" "bcp" > tempfields
 
@@ -32,6 +35,9 @@ while ("$fields" != "")
     shift fields
     #echo $field $type $length
     if ( ("$type" == "char") || ("$type" == "varchar") || ("$type" == "int") || ("$type" == "bit")) then
+	if ("$type" == "bit") then
+	    set type = "tinyint"   #workaround for mysql5.0
+	endif
 	echo "$sep$field $type($length)" >> tempsqldef
     else	    
 	echo "$sep$field $type" >> tempsqldef
@@ -42,19 +48,21 @@ end
 echo "); " >> tempsqldef
 
 cat tempsqldef
+cp tempsqldef ${outpath}/${table}.sql
 
-#create table in jackson db
-hgsql $jdb -e "source tempsqldef"
+if ( ! -d /scratch/visiGene/temp ) then
+    mkdir -p /scratch/visiGene/temp
+endif    
 
 #fetch rows of table using bcp
-set cmd = "freebcp $table out $table.tab -S gondor.informatics.jax.org:4025 -U kent -PJKent01 -c"
+set cmd = "freebcp $table out /scratch/visiGene/temp/temp.bcp -S gondor.informatics.jax.org:4025 -U kent -PJKent01 -c -t <UCSCtabUCSC> -r <UCSCnewlineUCSC>"
 echo $cmd
 $cmd
 
-#load data into jackson db
-hgsql $jdb -e 'load data local infile "'$1'.tab" into table '$1
+mysqlEscape -tabSep < /scratch/visiGene/temp/temp.bcp > ${outpath}/${table}.tab
 
-#save space
-rm -f $table.tab
+if ( -e /scratch/visiGene/temp/temp.bcp ) then
+    rm /scratch/visiGene/temp/temp.bcp	
+endif    
 
-	
+

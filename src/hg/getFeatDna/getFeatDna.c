@@ -12,7 +12,7 @@
 #include "psl.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: getFeatDna.c,v 1.8 2003/07/10 17:07:08 kent Exp $";
+static char const rcsid[] = "$Id: getFeatDna.c,v 1.9 2006/04/09 20:09:01 angie Exp $";
 
 /* Variables set explicitly or optionally from command line. */
 char *database = NULL;		/* Which database? */
@@ -122,7 +122,6 @@ struct dnaSeq *seq = NULL;
 DNA *dna = NULL;
 int s=0,e,sz,i,size=0;
 boolean lastIsUpper = FALSE, isUpper = FALSE;
-int last;
 char nibFileName[512];
 FILE *nibFile = NULL;
 int nibSize;

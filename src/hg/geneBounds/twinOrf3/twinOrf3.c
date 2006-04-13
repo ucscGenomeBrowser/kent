@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: twinOrf3.c,v 1.4 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: twinOrf3.c,v 1.5 2006/04/07 15:11:38 angie Exp $";
 
 double utrPenalty = 0.15;
 double firstBonus = 15.0;
@@ -154,7 +154,6 @@ return dyno;
 void makeTransitionProbs(double **transProbLookup)
 /* Allocate transition probabilities and initialize them. */
 {
-int i, j;
 double codIns1 = 0.0001;	/* Probability of single base insert in coding */
 double codIns3 = 0.001;		/* Probability of three base insert in coding. */
 double codIns= codIns1 + codIns3; /* Probability of any insert in coding */
@@ -343,7 +342,7 @@ char lixToSym[] = {'t', 'c', 'a', 'g', 'n', '-', '.'};
 int symToIx[256];
 
 #define ix2(t,q)  ((t)*7 + (q))
-#define symIx2(t,q)  ix2(symToIx[t],symToIx[q])
+#define symIx2(t,q)  ix2(symToIx[(int)t],symToIx[(int)q])
 /* Go from pair of letters to single letter in larger alphabet. */
 
 void initSymToIx()
@@ -354,8 +353,8 @@ for (i=0; i<ArraySize(symToIx); ++i)
     symToIx[i] = -1;
 for (i=0; i<ArraySize(ixToSym); ++i)
     {
-    symToIx[ixToSym[i]] = i;
-    symToIx[lixToSym[i]] = i;
+    symToIx[(int)ixToSym[i]] = i;
+    symToIx[(int)lixToSym[i]] = i;
     }
 }
 
@@ -425,7 +424,7 @@ struct  markov1 *o;
 int i,i1,i2,j;
 double p;
 char rowLabel[4];
-char *row[7*7+1], *name;
+char *row[7*7+1];
 AllocVar(o);
 o->observations = atoi(initRow[1]);
 for (i1=0; i1<7; ++i1)
@@ -480,10 +479,10 @@ struct markov2 *readM2Odds(struct lineFile *lf, char **initRow, double psuedoCt)
 /* Read a 1st order Markov odds table. Don't convert to logs. */
 {
 struct  markov2 *o;
-int i,j,k,i1,j1,k1,i2,j2,k2;
+int i,j,k,i1,j1,i2,j2;
 double p;
 char rowLabel[6];
-char *row[7*7+1], *name;
+char *row[7*7+1];
 AllocVar(o);
 o->observations = atoi(initRow[1]);
 for (i1=0; i1<7; ++i1)
@@ -550,7 +549,7 @@ void tweakStopCodons(struct markov2 *o, boolean keep)
 /* Set any target sequence involving stop codons to very low probability */
 {
 int i1,i2,j1,j2,k1,k2,i,j,k;
-int s, c;
+int s;
 for (i1=0; i1<7; ++i1)
     {
     for (i2=0; i2<7; ++i2)
@@ -570,9 +569,9 @@ for (i1=0; i1<7; ++i1)
 			for (s=0; s<ArraySize(stopCodons); ++s)
 			    {
 			    char *stop = stopCodons[s];
-			    kill |= (symToIx[stop[0]] == i1
-			     	     && symToIx[stop[1]] == j1
-			     	     && symToIx[stop[2]] == k1);
+			    kill |= (symToIx[(int)stop[0]] == i1
+			     	     && symToIx[(int)stop[1]] == j1
+			     	     && symToIx[(int)stop[2]] == k1);
 			    }
 			if (keep)
 			    kill = !kill;
@@ -603,8 +602,7 @@ void killInsertsInCodons(struct markov2 *o)
 /* Get rid of inserts in the target. */
 {
 int i1,i2,j1,j2,k1,k2,i,j,k;
-int dash = symToIx['-'];
-int s, c;
+int dash = symToIx[(int)'-'];
 for (i1=0; i1<7; ++i1)
     {
     for (i2=0; i2<7; ++i2)
@@ -775,7 +773,7 @@ double probM0(struct markov0 *o, char q, char t)
 /* Find probability of simple q/t pair. */
 {
 double x;
-x = o->odds[symToIx[t]][symToIx[q]];
+x = o->odds[symToIx[(int)t]][symToIx[(int)q]];
 // uglyf("                 probM0(%c/%c) = %f\n", t, q, x);
 return x;
 }
@@ -847,7 +845,6 @@ double codonProb(struct markov2 *o, char *qSym, char *tSym, int symIx)
 /* Return probability of last codon. */
 {
 static char qCodon[4], tCodon[4];
-int i;
 if (!getPrevNonInsert(qSym, tSym, symIx, qCodon, tCodon, 3))
     return never;
 // uglyf("%c%c%c %c%c%c  vs %c%c%c %c%c%c\n", tSym[symIx-2], tSym[symIx-1], tSym[symIx], qSym[symIx-2], qSym[symIx-1], qSym[symIx], tCodon[0], tCodon[1], tCodon[2], qCodon[0], qCodon[1], qCodon[2]);
@@ -866,7 +863,7 @@ return probM2(o, qCodon, tCodon);
     allStates[destState][symIx] = parent; \
     }
 
-    // uglyf(" %d(%c) from %d(%c) score %f\n", destState, visStates[destState], parent, visStates[parent], newScore); \
+    // uglyf(" %d(%c) from %d(%c) score %f\n", destState, visStates[destState], parent, visStates[parent], newScore);
 
 
 #define source(sourceState, emitScore) \
@@ -892,7 +889,6 @@ int stateByteSize = symCount * sizeof(State);
 int i;
 int symIx;
 int scanSize = symCount;
-double reallyUnlikely = 10*never;
 double tNotIns, tIsIns;
 boolean firstAtg = TRUE, firstKozAtg = TRUE;
 

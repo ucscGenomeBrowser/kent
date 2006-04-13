@@ -1,10 +1,12 @@
 include ../../../inc/common.mk
 
-O = builtIn.o cCaseCode.o cCoder.o checkPara.o checkPoly.o cPara.o \
+O = asmCoder.o backEnd.o builtIn.o cCaseCode.o \
+    cCoder.o checkPara.o checkPoly.o cPara.o \
     codedType.o constFold.o ctar.o defFile.o gnuMac.o \
     isx.o isxLiveVar.o isxToPentium.o \
-    main.o optBranch.o parseDump.o parseInto.o pentCode.o pfBindVars.o \
-    pfParse.o pfScope.o pfToken.o pfType.o \
+    main.o optBranch.o parseDump.o parseInto.o pentCast.o \
+    pentCode.o pentConst.o \
+    pentStruct.o pfBindVars.o pfParse.o pfScope.o pfToken.o pfType.o \
     recodedType.o refCount.o tokInto.o util.o
 
 paraFlow: $(O)

@@ -6,7 +6,7 @@
 #include "dnautil.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: orf.c,v 1.4 2003/05/06 07:22:18 kate Exp $";
+static char const rcsid[] = "$Id: orf.c,v 1.5 2006/04/07 15:25:26 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -152,7 +152,6 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line;
 struct trainingData *td;
 char *row[10], *type;
-int i;
 boolean gotUtr3 = FALSE, gotUtr5 = FALSE, gotCodon = FALSE,
 	gotKozak = FALSE;
 
@@ -249,8 +248,6 @@ return dyno;
 void makeTransitionProbs(double **transProbLookup)
 /* Allocate transition probabilities and initialize them. */
 {
-int i, j;
-
 /* Make certain transitions reasonably likely. */
 transProbLookup[aUtr5][aUtr5] = scaledLog(0.990);
 transProbLookup[aUtr5][aKoz0] = scaledLog(0.010);
@@ -373,7 +370,7 @@ double kozakProb(double kozak[10][4], char *dna)
 double odds = 0;
 int i;
 for (i=0; i<10; ++i)
-    odds += kozak[i][ntVal[dna[i]]];
+    odds += kozak[i][ntVal[(int)dna[i]]];
 odds += log4;	/* Correct for double use of last two nucleotides. */
 odds += log4;
 // uglyf("  kozakProb %c%c%c%c%c^%c%c%c%c%c = %f\n", dna[0], dna[1], dna[2], dna[3], dna[4], dna[5], dna[6], dna[7], dna[8], dna[9], odds);
@@ -396,7 +393,6 @@ int stateByteSize = dnaSize * sizeof(State);
 int i;
 int dnaIx;
 int scanSize = dnaSize;
-double reallyUnlikely = 10*never;
 double score;
 double kozakAdjustment = 0.0;
 
@@ -421,7 +417,7 @@ for (dnaIx=0; dnaIx<scanSize; dnaIx += 1)
     {
     pos = dna+dnaIx;
     // uglyf("%d %c\n", dnaIx, pos[0]);
-    base = ntVal[pos[0]];
+    base = ntVal[(int)pos[0]];
 
     /* Utr5 state. */
     startState(aUtr5)

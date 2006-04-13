@@ -15,6 +15,5 @@ CREATE TABLE bed6FloatScore (
               #Indices
     INDEX(chrom(8),bin),
     INDEX(chrom(8),chromStart),
-    INDEX(chrom(8),chromEnd),
     INDEX(name(12))
 );

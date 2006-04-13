@@ -20,6 +20,11 @@ struct hash *codedTypesCalcAndPrintAsC(struct pfCompile *pfc,
  * Also print out the types in C structures that the runtime
  * system can interpret. */
 
+struct hash *codedTypesCalcAndPrintToBackend(struct pfCompile *pfc, 
+	struct pfParse *program, FILE *f);
+/* Traverse parse tree and encode all types referenced in it.
+ * Save these out in assembly language data structures for runtime. */
+
 void encodeType(struct pfType *type, struct dyString *dy);
 /* Encode type into dy. */
 
