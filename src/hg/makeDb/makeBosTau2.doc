@@ -1669,4 +1669,10 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 	/cluster/data/canFam2/bed/blastz.bosTau2/DEF >& swap.out
 
     # should have specified -stop=net, so kill hgLoadChain
-
+    # create the net files
+    ssh kolossus
+    ./netChains.csh
+    ssh hgwdev
+    cd /cluster/data/bosTau2/bed/blastz.hg17.swap/axtChain
+    nice netClass -verbose=0 -noAr noClass.net bosTau2 hg17 bosTau2.hg17.net
+    nice gzip bosTau2.hg17.net
