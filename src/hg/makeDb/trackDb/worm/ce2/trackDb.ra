@@ -243,7 +243,7 @@ useScore 1
 visibility hide
 type bed 6 .
 
-track picTarMiRNA
+track picTar
 shortLabel PicTar miRNA
 longLabel MicroRNA target sites in 3' UTRs as predicted by PicTar
 group regulation
