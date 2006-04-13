@@ -258,11 +258,20 @@ struct dnaSeq *hFetchSeqMixed(char *fileName, char *seqName, int start, int end)
 struct dnaSeq *hChromSeq(char *chrom, int start, int end);
 /* Return lower case DNA from chromosome. */
 
+struct dnaSeq *hChromSeq2(char *chrom, int start, int end);
+/* Return lower case DNA from chromosome in db2.*/
+
 struct dnaSeq *hChromSeqMixed(char *chrom, int start, int end);
 /* Return mixed case (repeats in lower case) DNA from chromosome. */
 
-struct dnaSeq *hChromSeq2(char *chrom, int start, int end);
-/* Return lower case DNA from chromosome in db2.*/
+struct dnaSeq *hChromSeqMixed2(char *chrom, int start, int end);
+/* Return mixed case (repeats in lower case) DNA from chromosome. */
+
+struct dnaSeq *hDnaFromSeq2(char *seqName, int start, int end, enum dnaCase dnaCase)
+/* Fetch DNA */
+
+struct dnaSeq *hChromSeqNib(char *chrom, int start, int end, char *nibDir);
+/* Return lower case DNA from chromosome and nib directory. */
 
 struct dnaSeq *hSeqForBed(struct bed *bed);
 /* Get the sequence associated with a particular bed concatenated together. */
