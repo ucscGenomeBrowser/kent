@@ -113,14 +113,16 @@ void pentInitFuncVars(struct pfCompile *pfc, struct ctar *ctar,
 /* Set up variables and offsets for parameters and local variables
  * in hash. */
 
-struct isxReg *pentFreeReg(struct isx *isx, enum isxValType valType,
+struct isxReg *pentFreeReg(struct pfCompile *pfc,
+	struct isx *isx, enum isxValType valType,
 	struct dlNode *nextNode,  struct pentCoder *coder);
 /* Find free register for instruction result. */
 
 void pentLinkReg(struct isxAddress *iad, struct isxReg *reg);
 /* Link register to new address. */
 
-void pentLinkRegSave(struct isxAddress *dest, struct isxReg *reg,
+void pentLinkRegSave(struct pfCompile *pfc,
+	struct isxAddress *dest, struct isxReg *reg,
 	struct pentCoder *coder);
 /* Unlink whatever old variable was in register and link in dest.
  * Also copy dest to memory if it's a real variable. */
@@ -129,20 +131,23 @@ boolean pentTempJustInReg(struct isxAddress *iad);
 /* Return TRUE if address is for a temp that only exists in
  * a register, not in memory */
 
-void pentSwapTempFromReg(struct isxReg *reg,  struct pentCoder *coder);
+void pentSwapTempFromReg(struct pfCompile *pfc,
+	struct isxReg *reg,  struct pentCoder *coder);
 /* If reg contains temp var not also in memory then save it out. */
 
-void pentSwapAllMmx(struct isx *isx, struct pentCoder *coder);
+void pentSwapAllMmx(struct pfCompile *pfc,
+	struct isx *isx, struct pentCoder *coder);
 /* Swap out all Mmx registers to memory locations */
 
 void pentPrintVarMemAddress(struct isxAddress *iad, char *buf, int offset);
 /* Print out an address for variable in memory to buffer. */
 
-void pentPrintAddress(struct pentCoder *coder,
+void pentPrintAddress(struct pfCompile *pfc, struct pentCoder *coder,
 	struct isxAddress *iad, char *buf);
 /* Print out an address for an instruction. */
 
-void pentCodeDestReg(enum pentDataOp opType, struct isxAddress *source, 
+void pentCodeDestReg(struct pfCompile *pfc,
+	enum pentDataOp opType, struct isxAddress *source, 
 	struct isxReg *reg,  struct pentCoder *coder);
 /* Code op where dest is a register. */
 

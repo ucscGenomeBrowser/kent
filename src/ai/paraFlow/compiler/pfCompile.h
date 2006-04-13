@@ -108,6 +108,7 @@ struct pfCompile
 
     /* Here's some stuff used by assembly code generator.  These are all 
      * initialized freshly for each module.*/
+    char *moduleName;		/* Current module name. */
     struct pfBackEnd *backEnd;	/* Specific back end. */
     int isxLabelMaker;		/* Isix label generator */
     int tempLabelMaker;		/* Temp var label generator */

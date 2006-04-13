@@ -397,6 +397,7 @@ struct isxAddress *isxRecodedTypeAddress(struct pfCompile *pfc,
 struct isxAddress *iad;
 AllocVar(iad);
 iad->adType = iadRecodedType;
+iad->valType = ivInt;
 iad->val.recodedType = recodedTypeId(pfc, type);
 return iad;
 }
@@ -561,17 +562,13 @@ else
 *retType = isxRecodedTypeAddress(pfc, type);
 }
 
-static struct isxAddress *isxCall(struct pfCompile *pfc,
-	struct pfParse *pp, struct hash *varHash, double weight,
-	struct dlList *iList)
-/* Create call op */
+static void isxPushInTuple(struct pfCompile *pfc, struct pfParse *inTuple,
+	struct hash *varHash, double weight, struct dlList *iList,
+	int offset)
+/* Generate code to push inTuple onto stack */
 {
-struct pfParse *function = pp->children;
-struct pfParse *inTuple = function->next;
 struct pfParse *p;
-struct pfType *outTuple = function->ty->children->next, *ty;
-struct isxAddress *source, *dest, *destList = NULL;
-int offset;
+struct isxAddress *source, *dest;
 
 for (p = inTuple->children, offset=0; p != NULL; p = p->next, ++offset)
     {
@@ -593,6 +590,21 @@ for (p = inTuple->children, offset=0; p != NULL; p = p->next, ++offset)
 	    }
 	}
     }
+}
+
+static struct isxAddress *isxCall(struct pfCompile *pfc,
+	struct pfParse *pp, struct hash *varHash, double weight,
+	struct dlList *iList)
+/* Create call op */
+{
+struct pfParse *function = pp->children;
+struct pfParse *inTuple = function->next;
+struct pfParse *p;
+struct pfType *outTuple = function->ty->children->next, *ty;
+struct isxAddress *source, *dest, *destList = NULL;
+int offset;
+
+isxPushInTuple(pfc, inTuple, varHash, weight, iList,0);
 source = isxCallAddress(function->var->cName);
 isxAddNew(pfc, poCall, NULL, source, NULL, iList);
 for (ty = outTuple->children, offset=0; ty != NULL; ty = ty->next, ++offset)
@@ -604,6 +616,33 @@ for (ty = outTuple->children, offset=0; ty != NULL; ty = ty->next, ++offset)
     isxAddNew(pfc, poOutput, dest, source, NULL, iList);
     }
 return destList;
+}
+
+static struct isxAddress *isxClassFromTuple(struct pfCompile *pfc,
+	struct pfParse *pp, struct hash *varHash, double weight,
+	struct dlList *iList)
+/* Push tuple on stack and call class creator from it. */
+{
+struct pfParse *tuple = pp->children, *p;
+struct isxAddress *source, *dest, *recoded;
+
+/* Generate call to save type parameter */
+recoded = isxRecodedTypeAddress(pfc, pp->ty);
+dest = isxIoAddress(0, ivInt, iadOutStack);
+isxAddNew(pfc, poInput, dest, recoded, NULL, iList);
+
+/* Push other parameters */
+isxPushInTuple(pfc, tuple, varHash, weight, iList,1);
+
+/* Generate function call itself. */
+source = isxCallAddress("_zx_tuple_to_class");
+isxAddNew(pfc, poCall, NULL, source, NULL, iList);
+
+/* Generate code to get return value. */
+source = isxIoAddress(0, ivObject, iadOutStack);
+dest = isxTempVarAddress(pfc, varHash, weight, ivObject);
+isxAddNew(pfc, poOutput, dest, source, NULL, iList);
+return dest;
 }
 
 void isxAddReturnInfo(struct pfCompile *pfc, struct pfParse *outTuple, 
@@ -672,6 +711,8 @@ switch (pp->type)
         return isxStringCat(pfc, pp, varHash, weight, iList);
     case pptCall:
         return isxCall(pfc, pp, varHash, weight, iList);
+    case pptClassAllocFromTuple:
+        return isxClassFromTuple(pfc, pp, varHash, weight, iList);
     case pptCastBitToByte:
     case pptCastBitToChar:
     case pptCastBitToShort:

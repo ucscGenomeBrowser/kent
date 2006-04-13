@@ -378,7 +378,7 @@ switch (iad->adType)
     }
 }
 
-void pentPrintAddress(struct pentCoder *coder,
+void pentPrintAddress(struct pfCompile *pfc, struct pentCoder *coder,
 	struct isxAddress *iad, char *buf)
 /* Print out an address for an instruction. */
 {
@@ -427,7 +427,8 @@ else
 	    }
 	case iadRecodedType:
 	    {
-	    safef(buf, pentCodeBufSize, "%d*8+__pf_lti_varType", iad->val.recodedType);
+	    safef(buf, pentCodeBufSize, "%d*8+__pf_lti_%s", 
+	    	iad->val.recodedType, pfc->moduleName);
 	    break;
 	    }
 	default:
@@ -437,22 +438,24 @@ else
     }
 }
 
-static void codeOp(enum pentDataOp opType, struct isxAddress *source,
+static void codeOp(struct pfCompile *pfc,
+	enum pentDataOp opType, struct isxAddress *source,
 	struct isxAddress *dest, struct pentCoder *coder)
 /* Print op to file */
 {
 char *opName = pentOpOfType(opType, source->valType);
 char *destString = NULL;
-pentPrintAddress(coder, source, coder->sourceBuf);
+pentPrintAddress(pfc, coder, source, coder->sourceBuf);
 if (dest != NULL)
     {
-    pentPrintAddress(coder, dest, coder->destBuf);
+    pentPrintAddress(pfc, coder, dest, coder->destBuf);
     destString = coder->destBuf;
     }
 pentCoderAdd(coder, opName, coder->sourceBuf, destString);
 }
 
-static void pentCodeSourceRegVarType(enum pentDataOp opType, struct isxReg *reg,
+static void pentCodeSourceRegVarType(struct pfCompile *pfc,
+	enum pentDataOp opType, struct isxReg *reg,
 	struct isxAddress *dest,  enum isxValType valType, 
 	struct pentCoder *coder)
 /* Print op where source is a register, and valType might not match
@@ -460,25 +463,27 @@ static void pentCodeSourceRegVarType(enum pentDataOp opType, struct isxReg *reg,
 {
 char *opName = pentOpOfType(opType, valType);
 char *regName = isxRegName(reg, valType);
-pentPrintAddress(coder, dest, coder->destBuf);
+pentPrintAddress(pfc, coder, dest, coder->destBuf);
 pentCoderAdd(coder, opName, regName, coder->destBuf);
 }
 
-static void pentCodeSourceReg(enum pentDataOp opType, struct isxReg *reg,
+static void pentCodeSourceReg(struct pfCompile *pfc,
+	enum pentDataOp opType, struct isxReg *reg,
 	struct isxAddress *dest,  struct pentCoder *coder)
 /* Print op where source is a register. */
 {
-pentCodeSourceRegVarType(opType, reg, dest, dest->valType, coder);
+pentCodeSourceRegVarType(pfc, opType, reg, dest, dest->valType, coder);
 }
 
-void pentCodeDestReg(enum pentDataOp opType, struct isxAddress *source, 
+void pentCodeDestReg(struct pfCompile *pfc,	
+	enum pentDataOp opType, struct isxAddress *source, 
 	struct isxReg *reg,  struct pentCoder *coder)
 /* Code op where dest is a register. */
 {
 enum isxValType valType = source->valType;
 char *opName = pentOpOfType(opType, valType);
 char *regName = isxRegName(reg, valType);
-pentPrintAddress(coder, source, coder->sourceBuf);
+pentPrintAddress(pfc, coder, source, coder->sourceBuf);
 pentCoderAdd(coder, opName, coder->sourceBuf, regName);
 }
 
@@ -548,7 +553,8 @@ if (reg->contents)
 reg->contents = NULL;
 }
 
-void pentSwapTempFromReg(struct isxReg *reg,  struct pentCoder *coder)
+void pentSwapTempFromReg(struct pfCompile *pfc,
+	struct isxReg *reg,  struct pentCoder *coder)
 /* If reg contains something not also in memory then save it out. */
 {
 struct isxAddress *iad = reg->contents;
@@ -557,7 +563,7 @@ struct isxAddress old = *iad;
 coder->tempIx -= reg->size;
 iad->reg = NULL;
 iad->val.tempMemLoc = coder->tempIx;
-codeOp(opMov, &old, iad, coder);
+codeOp(pfc, opMov, &old, iad, coder);
 }
 
 boolean pentTempJustInReg(struct isxAddress *iad)
@@ -567,7 +573,7 @@ boolean pentTempJustInReg(struct isxAddress *iad)
 return (iad->adType == iadTempVar && iad->val.tempMemLoc == 0);
 }
 
-static void pentSwapOutIfNeeded(struct isxReg *reg, 
+static void pentSwapOutIfNeeded(struct pfCompile *pfc, struct isxReg *reg, 
 	struct isxLiveVar *liveList, struct pentCoder *coder)
 /* Swap out register to memory if need be. */
 {
@@ -577,7 +583,7 @@ if (iad != NULL)
     if (pentTempJustInReg(iad))
 	{
 	if (isxLiveVarFind(liveList, iad))
-	    pentSwapTempFromReg(reg, coder);
+	    pentSwapTempFromReg(pfc, reg, coder);
 	}
     else
 	iad->reg = NULL;
@@ -585,7 +591,8 @@ if (iad != NULL)
 reg->contents = NULL;
 }
 
-static struct isxReg *getFreeReg(struct isx *isx, enum isxValType valType,
+static struct isxReg *getFreeReg(struct pfCompile *pfc,
+	struct isx *isx, enum isxValType valType,
 	struct dlNode *nextNode,  struct pentCoder *coder)
 /* Find free register for instruction result. */
 {
@@ -881,22 +888,24 @@ for (i=regStartIx; i<=regEndIx; ++i)
 		}
 	    }
 	}
-    pentSwapTempFromReg(freeReg, coder);
+    pentSwapTempFromReg(pfc, freeReg, coder);
     return freeReg;
     }
 }
 
-struct isxReg *pentFreeReg(struct isx *isx, enum isxValType valType,
+struct isxReg *pentFreeReg(struct pfCompile *pfc,
+	struct isx *isx, enum isxValType valType,
 	struct dlNode *nextNode,  struct pentCoder *coder)
 /* Find free register for instruction result. */
 {
-struct isxReg *reg = getFreeReg(isx, valType, nextNode, coder);
+struct isxReg *reg = getFreeReg(pfc, isx, valType, nextNode, coder);
 coder->regsUsed[reg->regIx] = TRUE;
 return reg;
 }
 
 
-static void copyRealVarToMem(struct isxAddress *iad, struct pentCoder *coder)
+static void copyRealVarToMem(struct pfCompile *pfc,
+	struct isxAddress *iad, struct pentCoder *coder)
 /* Copy address to memory if it's in a register and it's a real var. */
 {
 if (iad->adType == iadRealVar)
@@ -904,7 +913,7 @@ if (iad->adType == iadRealVar)
     struct isxReg *reg = iad->reg;
     iad->reg = NULL;
     if (reg != NULL)
-	pentCodeSourceReg(opMov, reg, iad, coder);
+	pentCodeSourceReg(pfc, opMov, reg, iad, coder);
     iad->reg = reg;
     }
 }
@@ -919,18 +928,18 @@ iad->reg = reg;
 }
 
 
-void pentLinkRegSave(struct isxAddress *dest, struct isxReg *reg,
-	struct pentCoder *coder)
+void pentLinkRegSave(struct pfCompile *pfc,
+	struct isxAddress *dest, struct isxReg *reg, struct pentCoder *coder)
 /* Unlink whatever old variable was in register and link in dest.
  * Also copy dest to memory if it's a real variable. */
 {
 pentLinkReg(dest, reg);
-copyRealVarToMem(dest, coder);
+copyRealVarToMem(pfc, dest, coder);
 }
 
 
-static void pentAssign(struct isx *isx, struct dlNode *nextNode,  
-	struct pentCoder *coder)
+static void pentAssign(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode,  struct pentCoder *coder)
 /* Code assignment */
 {
 struct isxAddress *source = isx->left;
@@ -938,21 +947,22 @@ struct isxAddress *dest = isx->dest;
 struct isxReg *reg;
 if (source->adType == iadZero)
     {
-    reg = pentFreeReg(isx, isx->dest->valType, nextNode, coder);
+    reg = pentFreeReg(pfc, isx, isx->dest->valType, nextNode, coder);
     clearReg(reg, coder);
     }
 else
     {
     reg = dest->reg;
     if (reg == NULL)
-	reg = pentFreeReg(isx, isx->dest->valType, nextNode, coder);
+	reg = pentFreeReg(pfc, isx, isx->dest->valType, nextNode, coder);
     if (source->reg != reg)
-	pentCodeDestReg(opMov, source, reg, coder);
+	pentCodeDestReg(pfc, opMov, source, reg, coder);
     }
-pentLinkRegSave(dest, reg, coder);
+pentLinkRegSave(pfc, dest, reg, coder);
 }
 
-static void pentVarAssign(struct isx *isx, struct dlNode *nextNode,  
+static void pentVarAssign(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode,  
 	struct pentCoder *coder)
 /* Code variable assignment */
 {
@@ -966,7 +976,7 @@ if (source->valType == ivVar)
     {
     int i;
     assert(source->adType == iadRealVar || source->adType == iadTempVar);
-    reg = pentFreeReg(isx, ivInt, nextNode, coder);
+    reg = pentFreeReg(pfc, isx, ivInt, nextNode, coder);
     regName = isxRegName(reg, ivInt);
     for (i=0; i<12; i += 4)
 	{
@@ -981,23 +991,23 @@ else
     /* Move variable to dest */
     if (source->reg)
 	{
-	pentCodeSourceRegVarType(opMov, source->reg, dest, source->valType, 
+	pentCodeSourceRegVarType(pfc, opMov, source->reg, dest, source->valType,
 		coder);
 	}
     else
 	{
-	reg = pentFreeReg(isx, source->valType, nextNode, coder);
+	reg = pentFreeReg(pfc, isx, source->valType, nextNode, coder);
 	if (source->adType == iadZero)
 	    clearReg(reg, coder);
 	else
-	    pentCodeDestReg(opMov, source, reg, coder);
-	pentCodeSourceRegVarType(opMov, reg, dest, source->valType, coder);
+	    pentCodeDestReg(pfc, opMov, source, reg, coder);
+	pentCodeSourceRegVarType(pfc, opMov, reg, dest, source->valType, coder);
 	clearRegContents(reg);
 	}
     /* Move type to dest. */
-    reg = pentFreeReg(isx, ivInt, nextNode, coder);
+    reg = pentFreeReg(pfc, isx, ivInt, nextNode, coder);
     regName = isxRegName(reg, ivInt);
-    pentPrintAddress(coder, sourceType, coder->sourceBuf);
+    pentPrintAddress(pfc, coder, sourceType, coder->sourceBuf);
     pentCoderAdd(coder, "movl", coder->sourceBuf, regName);
     pentPrintVarMemAddress(dest, coder->destBuf, 8);
     pentCoderAdd(coder, "movl", regName, coder->destBuf);
@@ -1005,18 +1015,20 @@ else
 clearRegContents(reg);
 }
 
-static void pentVarInput(struct isx *isx, struct dlNode *nextNode,  
+static void pentVarInput(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode,  
 	struct pentCoder *coder)
 /* Output code to load a variable input parameter before a call. */
 {
-pentVarAssign(isx, nextNode, coder);
+pentVarAssign(pfc, isx, nextNode, coder);
 }
 
-static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode, 
+static void pentBinaryOp(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, 
 	enum pentDataOp opCode, boolean isSub,  struct pentCoder *coder)
 /* Code most binary ops.  Division is harder. */
 {
-struct isxReg *reg = pentFreeReg(isx, isx->dest->valType, nextNode, coder);
+struct isxReg *reg = pentFreeReg(pfc, isx, isx->dest->valType, nextNode, coder);
 struct isxAddress *iad = NULL;
 
 /* Figure out if the reg already holds one of our sources. */
@@ -1032,19 +1044,19 @@ if (iad != NULL)
     if (isSub && isSwapped)
         {
 	unaryOpReg(opNeg, reg, iad->valType, coder);
-	pentCodeDestReg(opAdd, iad, reg, coder);
+	pentCodeDestReg(pfc, opAdd, iad, reg, coder);
 	}
     else
 	{
-	pentCodeDestReg(opCode, iad, reg, coder);
+	pentCodeDestReg(pfc, opCode, iad, reg, coder);
 	}
     }
 else
     {
-    pentCodeDestReg(opMov, isx->left, reg, coder);
-    pentCodeDestReg(opCode, isx->right, reg, coder);
+    pentCodeDestReg(pfc, opMov, isx->left, reg, coder);
+    pentCodeDestReg(pfc, opCode, isx->right, reg, coder);
     }
-pentLinkRegSave(isx->dest, reg, coder);
+pentLinkRegSave(pfc, isx->dest, reg, coder);
 }
 
 static struct isxLiveVar *dummyLive(struct isxAddress *iad)
@@ -1083,7 +1095,8 @@ for (live = extraLive; live != origLive; live = next)
    }
 }
 
-static void pentIntModDivide(struct isx *isx, struct dlNode *nextNode, 
+static void pentIntModDivide(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, 
 	boolean isMod,  struct pentCoder *coder)
 /* Generate code for mod or divide. */
 {
@@ -1101,22 +1114,22 @@ addDummyToLive(q, &extraLive);
 
 if (q->adType == iadConst)
     {
-    pentSwapOutIfNeeded(ecx, extraLive, coder);
-    pentCodeDestReg(opMov, q, ecx, coder);
+    pentSwapOutIfNeeded(pfc, ecx, extraLive, coder);
+    pentCodeDestReg(pfc, opMov, q, ecx, coder);
     ecx->contents = NULL;
     swappedOutC = TRUE;
     }
 if (eax->contents != p)
     {
-    pentSwapOutIfNeeded(eax, extraLive, coder);
-    pentCodeDestReg(opMov, p, eax, coder);
+    pentSwapOutIfNeeded(pfc, eax, extraLive, coder);
+    pentCodeDestReg(pfc, opMov, p, eax, coder);
     }
-pentSwapOutIfNeeded(edx,extraLive, coder);
+pentSwapOutIfNeeded(pfc, edx,extraLive, coder);
 clearReg(edx, coder);
 if (swappedOutC)
     unaryOpReg(opDiv, ecx, d->valType, coder);
 else
-    codeOp(opDiv, q, NULL, coder);
+    codeOp(pfc, opDiv, q, NULL, coder);
 if (eax->contents != NULL)
     eax->contents->reg = NULL;
 if (isMod)
@@ -1133,22 +1146,23 @@ else
     d->reg = eax;
     }
 trimDummiesFromLive(extraLive, isx->liveList);
-copyRealVarToMem(d, coder);
+copyRealVarToMem(pfc, d, coder);
 }
 
-static void pentFloatDivide(struct isx *isx, struct dlNode *nextNode, 
+static void pentFloatDivide(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, 
 	struct pentCoder *coder)
 /* Generate code for floating point divide. */
 {
-struct isxReg *reg = pentFreeReg(isx, isx->dest->valType, nextNode, coder);
+struct isxReg *reg = pentFreeReg(pfc, isx, isx->dest->valType, nextNode, coder);
 if (reg != isx->left->reg)
-    pentCodeDestReg(opMov, isx->left, reg, coder);
-pentCodeDestReg(opDiv, isx->right, reg, coder);
-pentLinkRegSave(isx->dest, reg, coder);
+    pentCodeDestReg(pfc, opMov, isx->left, reg, coder);
+pentCodeDestReg(pfc, opDiv, isx->right, reg, coder);
+pentLinkRegSave(pfc, isx->dest, reg, coder);
 }
 
-static void pentDivide(struct isx *isx, struct dlNode *nextNode, 
-	struct pentCoder *coder)
+static void pentDivide(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode,struct pentCoder *coder)
 /* Generate code for floating point or integer divide. */
 {
 enum isxValType valType = isx->dest->valType;
@@ -1156,18 +1170,19 @@ switch (valType)
     {
     case ivFloat:
     case ivDouble:
-	pentFloatDivide(isx, nextNode, coder);
+	pentFloatDivide(pfc, isx, nextNode, coder);
         break;
     case ivLong:
         internalErr();
 	break;
     default:
-         pentIntModDivide(isx, nextNode, FALSE, coder);
+         pentIntModDivide(pfc, isx, nextNode, FALSE, coder);
 	 break;
     }
 }
 
-static void pentShiftOp(struct isx *isx, struct dlNode *nextNode, 
+static void pentShiftOp(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, 
 	enum pentDataOp opCode,  struct pentCoder *coder)
 /* Code shift ops.  */
 {
@@ -1178,7 +1193,7 @@ struct isxAddress *d = isx->dest;
 if (q->adType == iadConst)
     {
     /* The constant case can be handled as normal. */
-    pentBinaryOp(isx, nextNode, opCode, FALSE, coder);
+    pentBinaryOp(pfc, isx, nextNode, opCode, FALSE, coder);
     return;
     }
 else
@@ -1199,8 +1214,8 @@ else
     addDummyToLive(q, &extraLive);
     if (eax != p->reg)
 	{
-	pentSwapOutIfNeeded(eax,extraLive, coder);
-	pentCodeDestReg(opMov, p, eax, coder);
+	pentSwapOutIfNeeded(pfc, eax,extraLive, coder);
+	pentCodeDestReg(pfc, opMov, p, eax, coder);
 	}
     else
         {
@@ -1208,32 +1223,33 @@ else
 	}
     if (ecx != q->reg)
 	{
-	pentSwapOutIfNeeded(ecx,extraLive, coder);
-	pentCodeDestReg(opMov, q, ecx, coder);
+	pentSwapOutIfNeeded(pfc, ecx,extraLive, coder);
+	pentCodeDestReg(pfc, opMov, q, ecx, coder);
 	}
     pentCoderAdd(coder, pentOpOfType(opCode, p->valType), 
     	isxRegName(ecx, ivByte), isxRegName(eax, p->valType));
     eax->contents = d;
     d->reg = eax;
     trimDummiesFromLive(extraLive, isx->liveList);
-    copyRealVarToMem(d, coder);
+    copyRealVarToMem(pfc, d, coder);
     }
 }
 
-static void pentUnaryOp(struct isx *isx, enum pentDataOp opCode,
+static void pentUnaryOp(struct pfCompile *pfc,
+	struct isx *isx, enum pentDataOp opCode,
 	struct dlNode *nextNode, struct pentCoder *coder)
 /* Handle unary operation on byte/short/int data types */
 {
 enum isxValType valType = isx->dest->valType;
-struct isxReg *reg = pentFreeReg(isx, valType, nextNode, coder);
+struct isxReg *reg = pentFreeReg(pfc, isx, valType, nextNode, coder);
 if (reg != isx->left->reg)
-    pentCodeDestReg(opMov, isx->left, reg, coder);
+    pentCodeDestReg(pfc, opMov, isx->left, reg, coder);
 unaryOpReg(opCode, reg, valType, coder);
-pentLinkRegSave(isx->dest, reg, coder);
+pentLinkRegSave(pfc, isx->dest, reg, coder);
 }
 
-static void pentNegate(struct isx *isx, struct dlNode *nextNode,  
-	struct pentCoder *coder)
+static void pentNegate(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, struct pentCoder *coder)
 /* Output code to implement unary minus. */
 {
 enum isxValType valType = isx->dest->valType;
@@ -1242,7 +1258,7 @@ switch (valType)
     case ivByte:
     case ivShort:
     case ivInt:
-        pentUnaryOp(isx, opNeg, nextNode, coder);
+        pentUnaryOp(pfc, isx, opNeg, nextNode, coder);
 	break;
     default:
         internalErr();
@@ -1250,21 +1266,21 @@ switch (valType)
     }
 }
 
-static void pentFlipBitsLong(struct isx *isx, struct dlNode *nextNode,  
-	struct pentCoder *coder)
+static void pentFlipBitsLong(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode,  struct pentCoder *coder)
 /* Output code to implement binary not for long values. */
 {
 enum isxValType valType = isx->dest->valType;
-struct isxReg *destReg = pentFreeReg(isx, valType, nextNode, coder);
+struct isxReg *destReg = pentFreeReg(pfc, isx, valType, nextNode, coder);
 char *destRegName = isxRegName(destReg, valType);
 if (destReg != isx->left->reg)
-    pentCodeDestReg(opMov, isx->left, destReg, coder);
+    pentCodeDestReg(pfc, opMov, isx->left, destReg, coder);
 pentCoderAdd(coder, "pandn", "longLongMinusOne", destRegName);
-pentLinkRegSave(isx->dest, destReg, coder);
+pentLinkRegSave(pfc, isx->dest, destReg, coder);
 }
 
-static void pentFlipBits(struct isx *isx, struct dlNode *nextNode,  
-	struct pentCoder *coder)
+static void pentFlipBits(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, struct pentCoder *coder)
 /* Output code to implement binary not. */
 {
 enum isxValType valType = isx->dest->valType;
@@ -1273,10 +1289,10 @@ switch (valType)
     case ivByte:
     case ivShort:
     case ivInt:
-        pentUnaryOp(isx, opNot, nextNode, coder);
+        pentUnaryOp(pfc, isx, opNot, nextNode, coder);
 	break;
     case ivLong:
-        pentFlipBitsLong(isx, nextNode, coder);
+        pentFlipBitsLong(pfc, isx, nextNode, coder);
 	break;
     default:
         internalErr();
@@ -1284,7 +1300,8 @@ switch (valType)
     }
 }
 
-static void codeMoveExtendParam(struct isxAddress *source, 
+static void codeMoveExtendParam(struct pfCompile *pfc,
+	struct isxAddress *source, 
 	struct isxAddress *dest, struct pentCoder *coder)
 /* Do extension to word if necessary on a parameter. */
 {
@@ -1295,29 +1312,29 @@ if (reg != NULL && (valType == ivByte || valType == ivShort))
     char *regName = isxRegName(reg, ivInt);
     char *op = (valType == ivByte ? "movsbl" : "movswl");
     pentCoderAdd(coder, op, isxRegName(reg, valType), regName);
-    pentPrintAddress(coder, dest, coder->destBuf);
+    pentPrintAddress(pfc, coder, dest, coder->destBuf);
     pentCoderAdd(coder, "movl", regName, coder->destBuf);
     }
 else
-    codeOp(opMov, source, dest, coder);
+    codeOp(pfc, opMov, source, dest, coder);
 }
 	
-static void pentInput(struct isx *isx, struct dlNode *nextNode,  
-	struct pentCoder *coder)
+static void pentInput(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, struct pentCoder *coder)
 /* Output code to load an input parameter before a call. */
 {
 struct isxAddress *source = isx->left;
 if (source->reg || (source->adType == iadConst 
 	&& source->valType != ivFloat && source->valType != ivDouble
 	&& source->valType != ivLong))
-    codeMoveExtendParam(source, isx->dest, coder);
+    codeMoveExtendParam(pfc, source, isx->dest, coder);
 else
     {
-    struct isxReg *reg = pentFreeReg(isx, isx->dest->valType, nextNode, coder);
-    pentCodeDestReg(opMov, source, reg, coder);
+    struct isxReg *reg = pentFreeReg(pfc, isx, isx->dest->valType, nextNode, coder);
+    pentCodeDestReg(pfc, opMov, source, reg, coder);
     reg->contents = source;
     source->reg = reg;
-    codeMoveExtendParam(source, isx->dest, coder);
+    codeMoveExtendParam(pfc, source, isx->dest, coder);
     }
 }
 
@@ -1355,8 +1372,8 @@ switch (valType)
 return reg;
 }
 
-static void pentOutput(struct isx *isx, struct dlNode *nextNode,  
-	struct pentCoder *coder)
+static void pentOutput(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, struct pentCoder *coder)
 /* Output code to save an output parameter after a call. */
 {
 struct isxAddress *source = isx->left;
@@ -1401,29 +1418,31 @@ if (reg != NULL)
     }
 else
     {
-    reg = pentFreeReg(isx, valType, nextNode, coder);
-    pentCodeDestReg(opMov, source, reg, coder);
-    pentLinkRegSave(dest, reg, coder);
+    reg = pentFreeReg(pfc, isx, valType, nextNode, coder);
+    pentCodeDestReg(pfc, opMov, source, reg, coder);
+    pentLinkRegSave(pfc, dest, reg, coder);
     }
 }
 
-void pentSwapAllMmx(struct isx *isx, struct pentCoder *coder)
+void pentSwapAllMmx(struct pfCompile *pfc,
+	struct isx *isx, struct pentCoder *coder)
 /* Swap out all Mmx registers to memory locations */
 {
 int i;
 for (i=mm0; i<= mm7; ++i)
-    pentSwapOutIfNeeded(&regInfo[i],isx->liveList, coder);
+    pentSwapOutIfNeeded(pfc, &regInfo[i],isx->liveList, coder);
 }
 
-static void pentCall(struct isx *isx,  struct pentCoder *coder)
+static void pentCall(struct pfCompile *pfc,
+	struct isx *isx,  struct pentCoder *coder)
 /* Output code to actually do call */
 {
 int i;
-pentSwapOutIfNeeded(&regInfo[ax],isx->liveList, coder);
-pentSwapOutIfNeeded(&regInfo[cx],isx->liveList, coder);
-pentSwapOutIfNeeded(&regInfo[dx],isx->liveList, coder);
+pentSwapOutIfNeeded(pfc, &regInfo[ax],isx->liveList, coder);
+pentSwapOutIfNeeded(pfc, &regInfo[cx],isx->liveList, coder);
+pentSwapOutIfNeeded(pfc, &regInfo[dx],isx->liveList, coder);
 for (i=xmm0; i<= mm7; ++i)
-    pentSwapOutIfNeeded(&regInfo[i],isx->liveList, coder);
+    pentSwapOutIfNeeded(pfc, &regInfo[i],isx->liveList, coder);
 safef(coder->destBuf, pentCodeBufSize, "%s%s", isxPrefixC, isx->left->name);
 pentCoderAdd(coder, "call", NULL, coder->destBuf);
 }
@@ -1445,8 +1464,8 @@ for (i=0; i<pentRegCount; ++i)
     }
 }
 
-static void pentLoopStart(struct isx *isx, struct dlNode *nextNode,
-	struct pentCoder *coder)
+static void pentLoopStart(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, struct pentCoder *coder)
 /* Code beginning of a loop.  This includes loading up the loop
  * register variables and marking them as reserved, jumping
  * to the loop condition, and printing the loop start label. */
@@ -1470,7 +1489,7 @@ for (lv = loopy->hotLive; lv != NULL; lv = lv->next)
 	    reg->contents = NULL;
 	    }
 	if (iad->reg != reg)
-	    pentCodeDestReg(opMov, iad, reg, coder);
+	    pentCodeDestReg(pfc, opMov, iad, reg, coder);
 	reg->reserved = reg->contents = iad;
 	iad->reg = reg;
 	}
@@ -1482,8 +1501,8 @@ pentCoderAdd(coder, "jmp", isx->right->name, NULL);
 pentCoderAdd(coder, NULL, NULL, isx->dest->name);
 }
 
-static void pentLoopEnd(struct isx *isx, struct dlNode *nextNode,
-	struct pentCoder *coder)
+static void pentLoopEnd(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, struct pentCoder *coder)
 /* Code end of a loop.  This is just unreserving the registers 
  * and printing the end of loop label. */
 {
@@ -1538,12 +1557,12 @@ struct isxAddress *skipAddress = isxTempLabelAddress(pfc);
 addDummyToLive(left, &extraLive);
 addDummyToLive(right, &extraLive);
 if (left->reg)
-    pentSwapOutIfNeeded(left->reg, extraLive, coder);
+    pentSwapOutIfNeeded(pfc, left->reg, extraLive, coder);
 if (right->reg)
-    pentSwapOutIfNeeded(right->reg, extraLive, coder);
+    pentSwapOutIfNeeded(pfc, right->reg, extraLive, coder);
 
 /* Free up eax */
-pentSwapOutIfNeeded(eax, isx->liveList, coder);
+pentSwapOutIfNeeded(pfc, eax, isx->liveList, coder);
 eax->contents = NULL;
 
 /* Do comparison of high order 32 bits jumping to end if
@@ -1582,20 +1601,20 @@ else
 	jmpOp = floatJmpOp;
     if (isx->left->reg)
 	{
-	codeOp(opCmp, isx->right, isx->left, coder);
+	codeOp(pfc, opCmp, isx->right, isx->left, coder);
 	}
     else if (isx->right->reg)
 	{
-	codeOp(opCmp, isx->left, isx->right, coder);
+	codeOp(pfc, opCmp, isx->left, isx->right, coder);
 	jmpOp = flipRightLeftInJump(jmpOp);
 	}
     else
 	{
-	struct isxReg *reg = pentFreeReg(isx, valType, nextNode, coder);
-	pentCodeDestReg(opMov, isx->left, reg, coder);
+	struct isxReg *reg = pentFreeReg(pfc, isx, valType, nextNode, coder);
+	pentCodeDestReg(pfc, opMov, isx->left, reg, coder);
 	isx->left->reg = reg;
 	reg->contents = isx->left;
-	pentCodeDestReg(opCmp, isx->right, reg, coder);
+	pentCodeDestReg(pfc, opCmp, isx->right, reg, coder);
 	}
     pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
     }
@@ -1617,10 +1636,10 @@ struct isxAddress *skipAddress = isxTempLabelAddress(pfc);
  * in the mmx registers. */
 addDummyToLive(left, &extraLive);
 if (left->reg)
-    pentSwapOutIfNeeded(left->reg, extraLive, coder);
+    pentSwapOutIfNeeded(pfc, left->reg, extraLive, coder);
 
 /* Free up eax */
-pentSwapOutIfNeeded(eax, isx->liveList, coder);
+pentSwapOutIfNeeded(pfc, eax, isx->liveList, coder);
 eax->contents = NULL;
 
 /* Do comparison of high order 32 bits jumping to end if
@@ -1649,12 +1668,12 @@ static void pentTestJumpString(struct pfCompile *pfc, struct isx *isx,
 {
 struct isxAddress *iad = isx->left;
 struct isxAddress *skipAddress = isxTempLabelAddress(pfc);
-struct isxReg *reg = pentFreeReg(isx, ivString, nextNode, coder);
+struct isxReg *reg = pentFreeReg(pfc, isx, ivString, nextNode, coder);
 char *regName = isxRegName(reg, ivString);
 
 /* Get a register to work in and detatch it from anything else. */
 if (reg != iad->reg)
-    pentCodeDestReg(opMov, iad, reg, coder);
+    pentCodeDestReg(pfc, opMov, iad, reg, coder);
 if (reg->contents != NULL)
     reg->contents->reg = NULL;
 reg->contents = NULL;
@@ -1684,13 +1703,13 @@ else if (valType == ivString)
 else
     {
     if (left->reg)
-	codeOp(opTest, left, left, coder);
+	codeOp(pfc, opTest, left, left, coder);
     else
 	{
-	struct isxReg *reg = pentFreeReg(isx, valType, nextNode, coder);
-	pentCodeDestReg(opMov, left, reg, coder);
+	struct isxReg *reg = pentFreeReg(pfc, isx, valType, nextNode, coder);
+	pentCodeDestReg(pfc, opMov, left, reg, coder);
 	pentLinkReg(left, reg);
-	pentCodeDestReg(opTest, left, reg, coder);
+	pentCodeDestReg(pfc, opTest, left, reg, coder);
 	}
     pentCoderAdd(coder, jmpOp, NULL, isx->dest->name);
     }
@@ -1797,8 +1816,8 @@ else
     }
 }
 
-static void pentReturnVal(struct isx *isx, struct dlNode *nextNode,
-	struct pentCoder *coder)
+static void pentReturnVal(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, struct pentCoder *coder)
 /* Move return variable to return location - usually a register,
  * but possibly the parameter stack if there are many return vals. */
 {
@@ -1818,7 +1837,7 @@ if (reg != NULL)
 	char *op = (valType == ivFloat ? "flds" : "fldl");
 	assert(source->adType == iadRealVar);
 	source->reg = NULL;
-	pentPrintAddress(coder, source, coder->sourceBuf);
+	pentPrintAddress(pfc, coder, source, coder->sourceBuf);
 	pentCoderAdd(coder, op, NULL, coder->sourceBuf);
 	}
     else if (ioOffset == 0 && valType == ivLong)
@@ -1828,15 +1847,15 @@ if (reg != NULL)
     else
 	{
 	if (source->reg != reg)
-	    pentCodeDestReg(opMov, source, reg, coder);
+	    pentCodeDestReg(pfc, opMov, source, reg, coder);
 	}
     }
 else
     {
-    reg = pentFreeReg(isx, valType, nextNode, coder);
+    reg = pentFreeReg(pfc, isx, valType, nextNode, coder);
     if (source->reg != reg)
-	pentCodeDestReg(opMov, source, reg, coder);
-    pentCodeSourceReg(opMov, reg, dest, coder);
+	pentCodeDestReg(pfc, opMov, source, reg, coder);
+    pentCodeSourceReg(pfc, opMov, reg, dest, coder);
     if (reg->contents != NULL)
 	reg->contents->reg = NULL;
     reg->contents = NULL;
@@ -2170,6 +2189,7 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
     stomp = isx->cpuInfo;
 #undef HELP_DEBUG
 #ifdef HELP_DEBUG
+    FILE *f = uglyOut;
     fprintf(f, "# ");	
     isxDump(isx, f);
     fprintf(f, "[");
@@ -2193,58 +2213,58 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
         {
 	case poInit:
 	case poAssign:
-	    pentAssign(isx, nextNode, coder);
+	    pentAssign(pfc, isx, nextNode, coder);
 	    break;
 	case poPlus:
-	    pentBinaryOp(isx, nextNode, opAdd, FALSE, coder);
+	    pentBinaryOp(pfc, isx, nextNode, opAdd, FALSE, coder);
 	    break;
 	case poMul:
-	    pentBinaryOp(isx, nextNode, opMul, FALSE, coder);
+	    pentBinaryOp(pfc, isx, nextNode, opMul, FALSE, coder);
 	    break;
 	case poMinus:
-	    pentBinaryOp(isx, nextNode, opSub, TRUE, coder);
+	    pentBinaryOp(pfc, isx, nextNode, opSub, TRUE, coder);
 	    break;
 	case poDiv:
-	    pentDivide(isx, nextNode, coder);
+	    pentDivide(pfc, isx, nextNode, coder);
 	    break;
 	case poMod:
-	    pentIntModDivide(isx, nextNode, TRUE, coder);
+	    pentIntModDivide(pfc, isx, nextNode, TRUE, coder);
 	    break;
 	case poBitAnd:
-	    pentBinaryOp(isx, nextNode, opAnd, FALSE, coder);
+	    pentBinaryOp(pfc, isx, nextNode, opAnd, FALSE, coder);
 	    break;
 	case poBitOr:
-	    pentBinaryOp(isx, nextNode, opOr, FALSE, coder);
+	    pentBinaryOp(pfc, isx, nextNode, opOr, FALSE, coder);
 	    break;
 	case poBitXor:
-	    pentBinaryOp(isx, nextNode, opXor, FALSE, coder);
+	    pentBinaryOp(pfc, isx, nextNode, opXor, FALSE, coder);
 	    break;
 	case poShiftLeft:
-	    pentShiftOp(isx, nextNode, opSal, coder);
+	    pentShiftOp(pfc, isx, nextNode, opSal, coder);
 	    break;
 	case poShiftRight:
-	    pentShiftOp(isx, nextNode, opSar, coder);
+	    pentShiftOp(pfc, isx, nextNode, opSar, coder);
 	    break;
 	case poNegate:
-	    pentNegate(isx, nextNode, coder);
+	    pentNegate(pfc, isx, nextNode, coder);
 	    break;
 	case poFlipBits:
-	    pentFlipBits(isx, nextNode, coder);
+	    pentFlipBits(pfc, isx, nextNode, coder);
 	    break;
 	case poInput:
-	    pentInput(isx, nextNode, coder);
+	    pentInput(pfc, isx, nextNode, coder);
 	    break;
 	case poOutput:
-	    pentOutput(isx, nextNode, coder);
+	    pentOutput(pfc, isx, nextNode, coder);
 	    break;
 	case poCall:
-	    pentCall(isx, coder);
+	    pentCall(pfc, isx, coder);
 	    break;
 	case poLoopStart:
-	    pentLoopStart(isx, nextNode, coder);
+	    pentLoopStart(pfc, isx, nextNode, coder);
 	    break;
 	case poLoopEnd:
-	    pentLoopEnd(isx, nextNode, coder);
+	    pentLoopEnd(pfc, isx, nextNode, coder);
 	    break;
 	case poLabel:
 	case poCondEnd:
@@ -2288,17 +2308,17 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	case poFuncEnd:
 	    break;
 	case poReturnVal:
-	    pentReturnVal(isx, nextNode, coder);
+	    pentReturnVal(pfc, isx, nextNode, coder);
 	    break;
 	case poCast:
 	    pentCast(pfc, isx, nextNode, coder);
 	    break;
 	case poVarInit:
 	case poVarAssign:
-	    pentVarAssign(isx, nextNode, coder);
+	    pentVarAssign(pfc, isx, nextNode, coder);
 	    break;
 	case poVarInput:
-	    pentVarInput(isx, nextNode, coder);
+	    pentVarInput(pfc, isx, nextNode, coder);
 	    break;
 	default:
 	    warn("unimplemented\t%s\n", isxOpTypeToString(isx->opType));
@@ -2531,27 +2551,6 @@ cmpIsx = isxNew(pfc, saveIsx.opType, saveIsx.dest, callOutIsx->dest,
 dlAddValAfter(node, cmpIsx);
 }
 
-#ifdef MAYBE
-void castCall(struct pfCompile *pfc, struct dlNode *node, struct isx *isx,
-	char *call)
-/* Generate code to cast via a function call. */
-{
-struct dlNode *retNode;
-struct isxAddress *source = isx->left;
-struct isxAddress *dest = isx->dest;
-struct isx *inIsx = isxNew(pfc, poInput, 
-	isxIoAddress(0, source->valType, iadInStack), source, NULL);
-struct isx *callIsx = isxNew(pfc, poCall, NULL, isxCallAddress(call), NULL);
-struct isx *outIsx = isxNew(pfc, poOutput, dest, 
-	isxIoAddress(0, dest->valType, iadOutStack), NULL);
-retNode = dlAddValAfter(node, outIsx);
-dlAddValAfter(node, callIsx);
-dlAddValAfter(node, inIsx);
-dlRemove(node);
-freez(&node);
-freez(&isx);
-}
-#endif /* MAYBE */
 
 void pentSubCallsForHardStuff(struct pfCompile *pfc, struct hash *varHash,
 	struct isxList *isxList)
@@ -2622,28 +2621,6 @@ for (node = isxList->iList->head; !dlEnd(node); node = next)
 		    }
 		break;
 		}
-#ifdef MAYBE
-	    case ivLong:
-	        {
-		switch (isx->opType)
-		    {
-		    case poCast:
-		        {
-			switch (isx->dest->valType)
-			    {
-			    case ivFloat:
-			        castCall(pfc, node, isx, "_pfLongToFloat");
-				break;
-			    case ivDouble:
-			        castCall(pfc, node, isx, "_pfLongToDouble");
-				break;
-			    }
-			break;
-			}
-		    }
-		break;
-		}
-#endif /* MAYBE */
 	    case ivString:
 	        {
 		switch (isx->opType)

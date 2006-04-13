@@ -197,6 +197,7 @@ pfc->isxLabelMaker = 0;
 pfc->tempLabelMaker = 0;
 pfc->constStringHash = hashNew(0);
 pfc->moduleTypeHash = hashNew(0);
+pfc->moduleName = baseName;
 
 safef(path, sizeof(path), "%s%s.isx", baseDir, baseName);
 isxFile = mustOpen(path, "w");
@@ -212,7 +213,7 @@ codeOutsideFunctions(pfc, module, labelHash, isxFile, branchFile, asmFile);
 codeFunctions(pfc, module, labelHash, isxFile, branchFile, asmFile, NULL);
 gnuMacModuleVars(modVarIsx->iList, asmFile);
 printPolyFuncConnections(pfc, pfc->scopeRefList, module, asmFile);
-recodedTypeTableToBackend(pfc, module->name, asmFile);
+recodedTypeTableToBackend(pfc, baseName, asmFile);
 gnuMacModulePostscript(asmFile);
 
 hashFree(&pfc->moduleTypeHash);

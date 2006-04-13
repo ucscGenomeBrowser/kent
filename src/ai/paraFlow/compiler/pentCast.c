@@ -11,14 +11,14 @@
 #include "pentCode.h"
 #include "pentCast.h"
 
-static void castViaMov(struct isx *isx, struct dlNode *nextNode,
-	struct pentCoder *coder)
+static void castViaMov(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, struct pentCoder *coder)
 /* Do a cast just involving a simple instruction operation between
  * general purpose registers. */
 {
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
-struct isxReg *reg = pentFreeReg(isx, dest->valType, nextNode, coder);
+struct isxReg *reg = pentFreeReg(pfc, isx, dest->valType, nextNode, coder);
 if (source->reg != reg)
     {
     enum isxValType valType = dest->valType;
@@ -33,50 +33,53 @@ if (source->reg != reg)
     else
 	{
 	char *op = pentOpOfType(opMov, valType);
-	pentPrintAddress(coder, source, coder->sourceBuf);
+	pentPrintAddress(pfc, coder, source, coder->sourceBuf);
 	pentCoderAdd(coder, op, coder->sourceBuf, isxRegName(reg, valType));
 	}
     }
-pentLinkRegSave(dest, reg, coder);
+pentLinkRegSave(pfc, dest, reg, coder);
 }
 
-static void castByOneViaType(struct isx *isx, struct dlNode *nextNode,
+static void castByOneViaType(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder, char *op, enum isxValType viaType)
 /* Cast using just a single instruction. */
 {
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
-struct isxReg *reg = pentFreeReg(isx, dest->valType, nextNode, coder);
-pentPrintAddress(coder, source, coder->sourceBuf);
+struct isxReg *reg = pentFreeReg(pfc, isx, dest->valType, nextNode, coder);
+pentPrintAddress(pfc, coder, source, coder->sourceBuf);
 pentCoderAdd(coder, op, coder->sourceBuf, isxRegName(reg, viaType));
-pentLinkRegSave(dest, reg, coder);
+pentLinkRegSave(pfc, dest, reg, coder);
 }
 
-static void castByOneInstruction(struct isx *isx, struct dlNode *nextNode,
+static void castByOneInstruction(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder, char *op)
 /* Cast using just a single instruction. */
 {
-castByOneViaType(isx, nextNode, coder, op, isx->dest->valType);
+castByOneViaType(pfc, isx, nextNode, coder, op, isx->dest->valType);
 }
 
-static void castIntToBit(struct isx *isx, struct dlNode *nextNode,
-	struct pentCoder *coder)
+static void castIntToBit(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, struct pentCoder *coder)
 /* Convert byte/short/int to bit using combination of test/setnz */
 {
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
-struct isxReg *reg = pentFreeReg(isx, dest->valType, nextNode, coder);
+struct isxReg *reg = pentFreeReg(pfc, isx, dest->valType, nextNode, coder);
 char *wideRegName = isxRegName(reg, source->valType);
 char *narrowRegName = isxRegName(reg, ivBit);
 char *testOp = pentOpOfType(opTest, source->valType);
 if (source->reg != reg)
-    pentCodeDestReg(opMov, source, reg, coder);
+    pentCodeDestReg(pfc, opMov, source, reg, coder);
 pentCoderAdd(coder, testOp, wideRegName, wideRegName);
 pentCoderAdd(coder, "setnz", NULL, narrowRegName);
-pentLinkRegSave(dest, reg, coder);
+pentLinkRegSave(pfc, dest, reg, coder);
 }
 
-static void castViaInt(struct isx *isx, struct dlNode *nextNode,
+static void castViaInt(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder, char *opToInt, char *opToOther)
 /* Convert to long or floating point using an intermediate integer
  * register */
@@ -84,11 +87,11 @@ static void castViaInt(struct isx *isx, struct dlNode *nextNode,
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
 enum isxValType destType = dest->valType;
-struct isxReg *reg1 = pentFreeReg(isx, ivInt, nextNode, coder);
-struct isxReg *reg2 = pentFreeReg(isx, destType, nextNode, coder);
+struct isxReg *reg1 = pentFreeReg(pfc, isx, ivInt, nextNode, coder);
+struct isxReg *reg2 = pentFreeReg(pfc, isx, destType, nextNode, coder);
 char *reg1Name = isxRegName(reg1, ivInt);
 
-pentPrintAddress(coder, source, coder->sourceBuf);
+pentPrintAddress(pfc, coder, source, coder->sourceBuf);
 pentCoderAdd(coder, opToInt, coder->sourceBuf, reg1Name);
 pentCoderAdd(coder, opToOther, reg1Name, isxRegName(reg2, destType));
 
@@ -98,7 +101,7 @@ if (reg1->contents)
     reg1->contents->reg = NULL;
     reg1->contents = NULL;
     }
-pentLinkRegSave(dest, reg2, coder);
+pentLinkRegSave(pfc, dest, reg2, coder);
 }
 
 static void castFromBitOrByte(struct pfCompile *pfc, struct isx *isx,
@@ -108,25 +111,25 @@ static void castFromBitOrByte(struct pfCompile *pfc, struct isx *isx,
 switch (isx->dest->valType)
     {
     case ivBit:
-	castIntToBit(isx, nextNode, coder);
+	castIntToBit(pfc, isx, nextNode, coder);
 	break;
     case ivByte:
-	castViaMov(isx, nextNode, coder);
+	castViaMov(pfc, isx, nextNode, coder);
 	break;
     case ivShort:
-	castByOneInstruction(isx, nextNode, coder, "movsbw");
+	castByOneInstruction(pfc, isx, nextNode, coder, "movsbw");
 	break;
     case ivInt:
-	castByOneInstruction(isx, nextNode, coder, "movsbl");
+	castByOneInstruction(pfc, isx, nextNode, coder, "movsbl");
 	break;
     case ivLong:
-	castViaInt(isx, nextNode, coder, "movsbl", "movd");
+	castViaInt(pfc, isx, nextNode, coder, "movsbl", "movd");
 	break;
     case ivFloat:
-	castViaInt(isx, nextNode, coder, "movsbl", "cvtsi2ss");
+	castViaInt(pfc, isx, nextNode, coder, "movsbl", "cvtsi2ss");
 	break;
     case ivDouble:
-	castViaInt(isx, nextNode, coder, "movsbl", "cvtsi2sd");
+	castViaInt(pfc, isx, nextNode, coder, "movsbl", "cvtsi2sd");
 	break;
     default:
         internalErr();
@@ -141,22 +144,22 @@ static void castFromShort(struct pfCompile *pfc, struct isx *isx,
 switch (isx->dest->valType)
     {
     case ivBit:
-	castIntToBit(isx, nextNode, coder);
+	castIntToBit(pfc, isx, nextNode, coder);
 	break;
     case ivByte:
-	castViaMov(isx, nextNode, coder);
+	castViaMov(pfc, isx, nextNode, coder);
 	break;
     case ivInt:
-	castByOneInstruction(isx, nextNode, coder, "movswl");
+	castByOneInstruction(pfc, isx, nextNode, coder, "movswl");
 	break;
     case ivLong:
-	castViaInt(isx, nextNode, coder, "movswl", "movd");
+	castViaInt(pfc, isx, nextNode, coder, "movswl", "movd");
 	break;
     case ivFloat:
-	castViaInt(isx, nextNode, coder, "movswl", "cvtsi2ss");
+	castViaInt(pfc, isx, nextNode, coder, "movswl", "cvtsi2ss");
 	break;
     case ivDouble:
-	castViaInt(isx, nextNode, coder, "movswl", "cvtsi2sd");
+	castViaInt(pfc, isx, nextNode, coder, "movswl", "cvtsi2sd");
 	break;
     default:
         internalErr();
@@ -171,20 +174,20 @@ static void castFromInt(struct pfCompile *pfc, struct isx *isx,
 switch (isx->dest->valType)
     {
     case ivBit:
-	castIntToBit(isx, nextNode, coder);
+	castIntToBit(pfc, isx, nextNode, coder);
 	break;
     case ivByte:
     case ivShort:
-	castViaMov(isx, nextNode, coder);
+	castViaMov(pfc, isx, nextNode, coder);
 	break;
     case ivLong:
-	castByOneInstruction(isx, nextNode, coder, "movd");
+	castByOneInstruction(pfc, isx, nextNode, coder, "movd");
 	break;
     case ivFloat:
-	castByOneInstruction(isx, nextNode, coder, "cvtsi2ss");
+	castByOneInstruction(pfc, isx, nextNode, coder, "cvtsi2ss");
 	break;
     case ivDouble:
-	castByOneInstruction(isx, nextNode, coder, "cvtsi2sd");
+	castByOneInstruction(pfc, isx, nextNode, coder, "cvtsi2sd");
 	break;
     default:
         internalErr();
@@ -192,20 +195,20 @@ switch (isx->dest->valType)
     }
 }
 
-static void castLongToBit(struct isx *isx, struct dlNode *nextNode,
-	struct pentCoder *coder)
+static void castLongToBit(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, struct pentCoder *coder)
 /* Convert long to bit using move to memory, then loading high part into
  * a 8/16/32 bit register, oring in low part, and then testl/setnz */
 {
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
-struct isxReg *reg = pentFreeReg(isx, dest->valType, nextNode, coder);
+struct isxReg *reg = pentFreeReg(pfc, isx, dest->valType, nextNode, coder);
 char *wideRegName = isxRegName(reg, ivInt);
 char *narrowRegName = isxRegName(reg, ivBit);
 
 /* Force memory location for long. */
 if (source->reg && pentTempJustInReg(source))
-    pentSwapTempFromReg(source->reg,  coder);
+    pentSwapTempFromReg(pfc, source->reg,  coder);
 
 /* Code move/or/test/setnz */
 pentPrintVarMemAddress(source, coder->sourceBuf, 4);
@@ -214,18 +217,18 @@ pentPrintVarMemAddress(source, coder->sourceBuf, 0);
 pentCoderAdd(coder, "orl", coder->sourceBuf, wideRegName);
 pentCoderAdd(coder, "testl", wideRegName, wideRegName);
 pentCoderAdd(coder, "setnz", NULL, narrowRegName);
-pentLinkRegSave(dest, reg, coder);
+pentLinkRegSave(pfc, dest, reg, coder);
 }
 
-static void castLongToByteShortInt(struct isx *isx, struct dlNode *nextNode,
-	struct pentCoder *coder)
+static void castLongToByteShortInt(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, struct pentCoder *coder)
 /* Convert long to byte.  If it's in a register then do
  * movd/movb combo.  Otherwise do movb from memory location */
 {
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
 enum isxValType destType = dest->valType;
-struct isxReg *reg = pentFreeReg(isx, destType, nextNode, coder);
+struct isxReg *reg = pentFreeReg(pfc, isx, destType, nextNode, coder);
 if (source->reg)
     pentCoderAdd(coder, "movd", isxRegName(source->reg, ivLong), 
     	isxRegName(reg, ivInt));
@@ -235,10 +238,11 @@ else
     pentPrintVarMemAddress(source, coder->sourceBuf, 0);
     pentCoderAdd(coder, movOp, coder->sourceBuf, isxRegName(reg, destType));
     }
-pentLinkRegSave(dest, reg, coder);
+pentLinkRegSave(pfc, dest, reg, coder);
 }
 
-static void castLongToFloatOrDouble(struct isx *isx, struct dlNode *nextNode,
+static void castLongToFloatOrDouble(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder, int fpSize, char *fpPop, char *movOp)
 /* Convert long to double using move to memory, then fildll to load memory
  * into top of floating point stack, then fstp to store to a temp location
@@ -247,15 +251,15 @@ static void castLongToFloatOrDouble(struct isx *isx, struct dlNode *nextNode,
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
 int tempOffset = (coder->tempIx -= fpSize);
-struct isxReg *reg = pentFreeReg(isx, dest->valType, nextNode, coder);
+struct isxReg *reg = pentFreeReg(pfc, isx, dest->valType, nextNode, coder);
 
 /* Force memory location for long. */
 if (source->reg && pentTempJustInReg(source))
-    pentSwapTempFromReg(source->reg,  coder);
+    pentSwapTempFromReg(pfc, source->reg,  coder);
 
 /* Save and mark as trashed all mmx registers since using floating point
  * stack. Also flip processor out of mmx mode. */
-pentSwapAllMmx(isx, coder);
+pentSwapAllMmx(pfc, isx, coder);
 pentCoderAdd(coder, "emms", NULL, NULL);
 
 /* Code it up. */
@@ -264,7 +268,7 @@ pentCoderAdd(coder, "fildll", coder->sourceBuf, NULL);
 safef(coder->destBuf, pentCodeBufSize, "%d(%%ebp)", tempOffset);
 pentCoderAdd(coder, fpPop, NULL,coder->destBuf);
 pentCoderAdd(coder, movOp, coder->destBuf, isxRegName(reg, dest->valType));
-pentLinkRegSave(dest, reg, coder);
+pentLinkRegSave(pfc, dest, reg, coder);
 }
 
 static void castFromLong(struct pfCompile *pfc, struct isx *isx,
@@ -274,18 +278,18 @@ static void castFromLong(struct pfCompile *pfc, struct isx *isx,
 switch (isx->dest->valType)
     {
     case ivBit:
-        castLongToBit(isx, nextNode, coder);
+        castLongToBit(pfc, isx, nextNode, coder);
 	break;
     case ivByte:
     case ivShort:
     case ivInt:
-	castLongToByteShortInt(isx, nextNode, coder);
+	castLongToByteShortInt(pfc, isx, nextNode, coder);
 	break;
     case ivFloat:
-	castLongToFloatOrDouble(isx, nextNode, coder, 4, "fstps", "movss");
+	castLongToFloatOrDouble(pfc, isx, nextNode, coder, 4, "fstps", "movss");
 	break;
     case ivDouble:
-	castLongToFloatOrDouble(isx, nextNode, coder, 8, "fstpl", "movsd");
+	castLongToFloatOrDouble(pfc, isx, nextNode, coder, 8, "fstpl", "movsd");
 	break;
     default:
         internalErr();
@@ -293,43 +297,44 @@ switch (isx->dest->valType)
     }
 }
 
-static void castFloatOrDoubleToBit(struct isx *isx, struct dlNode *nextNode,
-	struct pentCoder *coder)
+static void castFloatOrDoubleToBit(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode, struct pentCoder *coder)
 /* Cast floating point number to bit. */
 {
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
 struct isxReg *sourceReg = source->reg;
 enum isxValType sourceType = source->valType;
-struct isxReg *destReg = pentFreeReg(isx, ivBit, nextNode, coder);
+struct isxReg *destReg = pentFreeReg(pfc, isx, ivBit, nextNode, coder);
 if (sourceReg == NULL)
     {
-    sourceReg = pentFreeReg(isx, source->valType, nextNode, coder);
-    pentCodeDestReg(opMov, source, sourceReg, coder);
+    sourceReg = pentFreeReg(pfc, isx, source->valType, nextNode, coder);
+    pentCodeDestReg(pfc, opMov, source, sourceReg, coder);
     pentLinkReg(source, sourceReg);
     }
 pentCoderAdd(coder, pentOpOfType(opCmp, sourceType), 
 	"bunchOfZero", isxRegName(sourceReg, sourceType));
 pentCoderAdd(coder, "setnz", NULL, isxRegName(destReg, ivBit));
-pentLinkRegSave(dest, destReg, coder);
+pentLinkRegSave(pfc, dest, destReg, coder);
 }
 
-static void castFloatOrDoubleToLong(struct isx *isx, struct dlNode *nextNode,
+static void castFloatOrDoubleToLong(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder, int fpSize, char *fpPush)
 /* Cast floating point number to long. */
 {
 struct isxAddress *source = isx->left;
 struct isxAddress *dest = isx->dest;
 int tempOffset = (coder->tempIx -= fpSize);
-struct isxReg *reg = pentFreeReg(isx, dest->valType, nextNode, coder);
+struct isxReg *reg = pentFreeReg(pfc, isx, dest->valType, nextNode, coder);
 
 /* Force memory location for source. */
 if (source->reg && pentTempJustInReg(source))
-    pentSwapTempFromReg(source->reg,  coder);
+    pentSwapTempFromReg(pfc, source->reg,  coder);
 
 /* Save and mark as trashed all mmx registers since using floating point
  * stack. Also flip processor out of mmx mode. */
-pentSwapAllMmx(isx, coder);
+pentSwapAllMmx(pfc, isx, coder);
 pentCoderAdd(coder, "emms", NULL, NULL);
 
 /* Code it up. */
@@ -338,7 +343,7 @@ pentCoderAdd(coder, fpPush, coder->sourceBuf, NULL);
 safef(coder->destBuf, pentCodeBufSize, "%d(%%ebp)", tempOffset);
 pentCoderAdd(coder, "fistpll", NULL,coder->destBuf);
 pentCoderAdd(coder, "movq", coder->destBuf, isxRegName(reg, dest->valType));
-pentLinkRegSave(dest, reg, coder);
+pentLinkRegSave(pfc, dest, reg, coder);
 }
 
 static void castFromFloat(struct pfCompile *pfc, struct isx *isx,
@@ -348,18 +353,18 @@ static void castFromFloat(struct pfCompile *pfc, struct isx *isx,
 switch (isx->dest->valType)
     {
     case ivBit:
-        castFloatOrDoubleToBit(isx, nextNode, coder);
+        castFloatOrDoubleToBit(pfc, isx, nextNode, coder);
 	break;
     case ivByte:
     case ivShort:
     case ivInt:
-	castByOneViaType(isx, nextNode, coder, "cvtss2si", ivInt);
+	castByOneViaType(pfc, isx, nextNode, coder, "cvtss2si", ivInt);
 	break;
     case ivLong:
-        castFloatOrDoubleToLong(isx, nextNode, coder, 4, "flds");
+        castFloatOrDoubleToLong(pfc, isx, nextNode, coder, 4, "flds");
 	break;
     case ivDouble:
-	castByOneInstruction(isx, nextNode, coder, "cvtss2sd");
+	castByOneInstruction(pfc, isx, nextNode, coder, "cvtss2sd");
 	break;
     default:
         internalErr();
@@ -374,18 +379,18 @@ static void castFromDouble(struct pfCompile *pfc, struct isx *isx,
 switch (isx->dest->valType)
     {
     case ivBit:
-        castFloatOrDoubleToBit(isx, nextNode, coder);
+        castFloatOrDoubleToBit(pfc, isx, nextNode, coder);
 	break;
     case ivByte:
     case ivShort:
     case ivInt:
-	castByOneViaType(isx, nextNode, coder, "cvtsd2si", ivInt);
+	castByOneViaType(pfc, isx, nextNode, coder, "cvtsd2si", ivInt);
 	break;
     case ivLong:
-        castFloatOrDoubleToLong(isx, nextNode, coder, 8, "fldl");
+        castFloatOrDoubleToLong(pfc, isx, nextNode, coder, 8, "fldl");
 	break;
     case ivFloat:
-	castByOneInstruction(isx, nextNode, coder, "cvtsd2ss");
+	castByOneInstruction(pfc, isx, nextNode, coder, "cvtsd2ss");
 	break;
     default:
         internalErr();
