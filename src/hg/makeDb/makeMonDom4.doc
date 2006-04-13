@@ -1227,7 +1227,8 @@ exit 1
 
     #	You want to try 10 jobs and see if the following chain
     #	pipeline will work in a reasonable time.  If it doesn't the
-    #	jobs are too big
+    #	jobs are too big.  There were some hippos in the simpleChain
+    #	step.
 
     para create jobList
     para try
@@ -1241,7 +1242,10 @@ exit 1
 # Longest finished job:             443s       7.38m     0.12h    0.01d
 # Submission to last job:        166648s    2777.47m    46.29h    1.93d
 
-    ssh kki
+    #	This simpleChain step has jobs that are too large.  They could
+    #	be broken up even more as was done for the hippos that remained,
+    #	see below.
+    ssh kk
     cd /cluster/data/monDom4/bed/tblastn.hg18KG
     mkdir chainEm
     cd /cluster/data/monDom4/bed/tblastn.hg18KG/blastOut
@@ -1257,12 +1261,14 @@ exit 1
 '_EOF_'
     #	<<	happy emacs
 
+    #	you will have to build this simpleChain binary in
+    #	hg/mouseStuff/simpleChain/
+    #	it will not run compiled as an x86_64 binary, only i386
     cat << '_EOF_' > chainSome.csh
 #!/bin/csh -fe
-cd /cluster/data/monDom4/bed/tblastn.hg18KG/blastOut/$1
-cat q.$2_*.psl | \
-    /cluster/home/braney/bin/i386/simpleChain -chrom=$2 \
-	-prot -outPsl -maxGap=250000 stdin psl/c.$2.$1.psl
+cat ../blastOut/${1}/q.${2}_*.psl | \
+    $HOME/bin/i386/simpleChain \
+        -prot -outPsl -maxGap=250000 stdin psl/c.${2}.${1}.psl
 '_EOF_'
     #	<<	happy emacs
     chmod +x chainSome.csh
@@ -1270,34 +1276,240 @@ cat q.$2_*.psl | \
     ls -1dS ../blastOut/kg?? > chain.dirs
 
     gensub2 chain.dirs ../../../chrom.lst template jobList 
-    para create chainSpec
+    para create jobList
     para push
+# Completed: 574 of 699 jobs
+# CPU time in finished jobs:   17708635s  295143.92m  4919.07h  204.96d  0.562 y
+# IO & Wait Time:               1589482s   26491.37m   441.52h   18.40d  0.050 y
+# Average job time:               33620s     560.34m     9.34h    0.39d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:          222754s    3712.57m    61.88h    2.58d
+# Submission to last job:        673020s   11217.00m   186.95h    7.79d
 
-# Completed: 3362 of 3362 jobs
-# CPU time in finished jobs:    1078406s   18973.43m   299.56h   12.48d  0.034 y
-# IO & Wait Time:                 85905s    1431.75m    23.86h    0.99d  0.003 y
-# Average job time:                 346s       5.77m     0.10h    0.00d
-# Longest finished job:           22556s     375.93m     6.27h    0.26d
-# Submission to last job:        106376s    1872.93m    29.55h    1.23d
+    #	Some of these ended up as hippos after a few days.
+    #	Rebuild a new batch for just the hippos
+    ssh kk
+    cd /cluster/store9/monDom4/bed/tblastn.hg18KG/chainEm
+    mkdir runHippos
+    mkdir runHippos/psl
+    #	from the running hippos, extract the commands:
+    para running | grep command: > splitHippos.sh
+    #	edit splitHippos.sh to make those lines read:
+    #	./mkHippoList.csh kgaa chr1
+    #	where mkHippoList.csh is:
+    #	#!/bin/csh -fe
+    #	ls ../blastOut/${1}/q.${2}_*.psl
+    #	run that:
+    ./splitHippos.sh > hippo.list
+    #	split by chrom
+    grep chr1_ hippo.list > chr1.list
+    grep chr2_ hippo.list > chr2.list
+    grep chr3_ hippo.list > chr3.list
+    grep chr4_ hippo.list > chr4.list
+    #	these were the only chroms in the list, then
 
-    ssh kkstore01
-    cd /cluster/data/monDom4/bed/tblastn.hg18KG/blastOut
+    #	The sequence below does not produce the correct result.
+    #	Instead, break up all protein results for each chrom to
+    #	individual files.
+    ssh hgwdev
+    cd /cluster/store9/monDom4/bed/tblastn.hg18KG/chainEm
+    #	Do these one at a time since they create huge amounts of data in
+    #	/scratch/tmp  - after each one has been sent to kkr1u00, the
+    #	data here on hgwdev can be deleted
+    cat chr1.list | xargs cat > /scratch/tmp/chr1.psl
+    cd /scratch/tmp
+    cat << '_EOF_' > splitProteins.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+    print "usage: sort -k10 chrN.psl | ./splitProteins.pl <chrN>\n";
+    print "  where chrN is : chr1, chr2, chr3, etc...\n";
+    print "  one at a time please.\n";
+    exit 255;
+}
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) { usage; }
+
+my $chr = shift;
+
+print "mkdir -p $chr", "\n";
+print `mkdir -p $chr`, "\n";
+
+my $curProtein="";
+my $linesRead = 0;
+
+while (my $line=<STDIN>) {
+    ++$linesRead;
+my ($col1, $col2, $col3, $col4, $col5, $col6, $col7, $col8, $col9, $col10, $rest) = split('\t',$line);
+    if ($curProtein ne $col10) {
+        if (length($curProtein) > 0) {
+        close(FH);
+        }
+        open(FH,">$chr/$col10.psl") or die "can not open $chr/$col10.psl";
+        $curProtein = $col10;
+    }
+    print FH $line;
+    if (0 == ($linesRead % 1000)) {print ".";}
+    if (0 == ($linesRead % 70000)) {print " $linesRead \n";}
+}
+close(FH);
+'_EOF_'
+    #	<< happy emacs
+    chmod +x ./splitProteins.pl
+
+    sort -k10 chr1.psl | ./splitProteins.pl chr1
+    rsync -a --progress ./chr1/ kkr1u00:/iscratch/i/monDom4/simpleChain/chr1/
+    
+    #	After the four chroms are there, sync to all I servers
+    ssh kkr1u00
+    cd /iscratch/i/monDom4/simpleChain
+    for R in 2 3 4 5 6 7 8
+do
+    rsync -a --progress --stats `pwd`/ \
+	kkr${R}u00:/iscratch/i/monDom4/simpleChain/
+done
+    #
+    #	while we are here, make up the jobList
+    cat << '_EOF_' > mkJobList
+#!/bin/sh
+
+for C in 1 2 3 4
+do
+    M=0
+    N="00"
+    find ./chr${C} -type f | while read F
+    do
+        BN=`basename ${F}`
+        echo "./oneChained.csh chr${C} ${BN} ${N} (check line+ psl/chr${C}/${N}/${BN})"
+        M=`echo $M | awk '{printf "%d", $1+1}'`
+        if [ "${M}" -gt 999 ]; then
+            N=`echo ${N} | awk '{printf "%02d", $1+1}'`
+            M=0
+        fi
+    done
+done
+'_EOF_'
+    #	<< happy emacs
+    chmod +x mkJobList
+    ./mkJobList > jobList
+    mkdir /cluster/data/monDom4/bed/tblastn.hg18KG/hippoRun
+    cp jobList /cluster/data/monDom4/bed/tblastn.hg18KG/hippoRun
+
+    ssh kk
+    cd /cluster/data/monDom4/bed/tblastn.hg18KG/hippoRun
+    mkdir psl
+    cat << '_EOF_' > oneChained.csh
+#!/bin/csh -fe
+mkdir -p psl/${1}/${3}
+cat /iscratch/i/monDom4/simpleChain/${1}/${2} | \
+    $HOME/bin/i386/simpleChain \
+        -prot -outPsl -maxGap=250000 stdin psl/${1}/${3}/${2}
+'_EOF_'
+    #	<< happy emacs
+
+    #	XXXX this sequence did not work right, it breaks up individual
+    #	XXXX protein results
+    #	these were the only chroms in the list, then
+    mkdir chr1 chr2 chr3 chr4
+    cd chr1
+    split -a 3 -l 100 ../chr1.list chr1
+    cd ../chr2
+    split -a 3 -l 100 ../chr2.list chr2
+    cd ../chr3
+    split -a 3 -l 100 ../chr3.list chr3
+    cd ../chr4
+    split -a 3 -l 100 ../chr4.list chr4
+    cd ../runHippos
+    cat << '_EOF_' > mkJobList.sh
+#!/bin/sh
+
+for C in 1 2 3 4
+do
+    for F in `(cd ../chr${C}; ls chr${C}*)`
+    do
+    echo \
+"./chainHippos.csh ${F} chr${C} {check out line psl/c.chr${C}.${F}.psl}"
+    done
+done
+'_EOF_'
+    #	<< happy emacs
+    chmod +x ./mkJobList.sh
+    ./mkJobList.sh > jobList
+
+
+    cat << '_EOF_' > chainHippos.csh
+#!/bin/csh -fe
+sed -e "s/^/..\//" ../${2}/${1} | xargs cat | \
+    $HOME/bin/i386/simpleChain \
+        -prot -outPsl -maxGap=250000 stdin psl/c.${2}.${1}.psl
+'_EOF_'
+    #	<< happy emacs
+    chmod +x chainHippos.sh
+
+    para create jobList
+    para try ... check ... etc ....
+
+    ######  Continuing with the concatenation of all the results
+    ssh kkstore04
+    #	running out of disk space on store9, create a parallel hierarchy
+    #	on a different disk still on this server:
+    mkdir -p /cluster/store8/monDom4/bed/tblastn.hg18KG/sortingResults
+    cd /cluster/data/monDom4/bed/tblastn.hg18KG
+    ln -s /cluster/store8/monDom4/bed/tblastn.hg18KG/sortingResults \
+    	sortingResults
+    #	first set of results was in blastOut
+    cd blastOut
     for i in kg??
     do 
-	awk "(\$13 - \$12)/\$11 > 0.6 {print}" c.*.$i.psl > c60.$i.psl
-	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
-	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	find ./$i -name "q.*.psl" | xargs cat \
+		| awk '($13 - $12)/$11 > 0.6 {print}' \
+    > /cluster/data/monDom4/bed/tblastn.hg18KG/sortingResults/c60.$i.psl
+	sort -rn \
+/cluster/data/monDom4/bed/tblastn.hg18KG/sortingResults/c60.$i.psl \
+	    | pslUniq stdin \
+/cluster/data/monDom4/bed/tblastn.hg18KG/sortingResults/u.$i.psl
+	awk '(($1 / $11) ) > 0.60 {print}' \
+/cluster/data/monDom4/bed/tblastn.hg18KG/sortingResults/c60.$i.psl \
+	   > /cluster/data/monDom4/bed/tblastn.hg18KG/sortingResults/m60.$i.psl
 	echo $i
     done
 
-    sort -u -k 14,14 -k 16,16n -k 18,18n u.*.psl m60* > /cluster/data/monDom4/bed/tblastn.hg18KG/blastHg18KG.psl
+    #	And then, adding the hippo results to those:
+    cd ../hippoRun/psl
+    for C in 1 2 3 4
+    do
+	cd chr${C}
+	for D in *
+	do
+	    find ./${D} -name "*.psl" | xargs cat \
+		| awk '($13 - $12)/$11 > 0.6 {print}' \
+> /cluster/data/monDom4/bed/tblastn.hg18KG/sortingResults/c60.kg0${C}_${D}.psl
+	    sort -rn \
+/cluster/data/monDom4/bed/tblastn.hg18KG/sortingResults/c60.kg0${C}_${D}.psl \
+	    | pslUniq stdin \
+/cluster/data/monDom4/bed/tblastn.hg18KG/sortingResults/u.kg0${C}_${D}.psl
+	awk '(($1 / $11) ) > 0.60 {print}' \
+/cluster/data/monDom4/bed/tblastn.hg18KG/sortingResults/c60.kg0${C}_${D}.psl \
+> /cluster/data/monDom4/bed/tblastn.hg18KG/sortingResults/m60.kg0${C}_${D}.psl
+	echo chr${C}/${D}
+	done
+	cd ..
+    done
+
+    cd ../../sortingResults
+    sort -u -k 14,14 -k 16,16n -k 18,18n u.*.psl m60* \
+	> /cluster/data/monDom4/bed/tblastn.hg18KG/blastHg18KG.psl
     cd ..
-    wc blastHg18KG.psl
-# 64343 1351203 10913814 blastHg18KG.psl
-    pslUniq blastDm2FB.psl stdout | wc                                                                                    
-#  18827  395367 2992653
-    cat kgfa/*fa | grep ">" | wc                                                                                  
-# 309494  309494 4810327
+    wc -l blastHg18KG.psl
+    # 61188 blastHg18KG.psl
+
+    #	what is this for ?
+    cat kgfa/*fa | grep ">" | wc
+    # 309494  309494 4810327
 
     ssh hgwdev
     cd /cluster/data/monDom4/bed/tblastn.hg18KG
@@ -1305,14 +1517,13 @@ cat q.$2_*.psl | \
     featureBits monDom4 blastHg18KG
 # 35781547 bases of 2384996543 (1.500%) in intersection
 
-    exit
-
     # back to kksilo
     rm -rf blastOut
 
 # End tblastn
 
 
+############################################################################
 # SWAP CHAINS/NET RN4 (DONE 3/28/06 angie)
     ssh kkstore01
     mkdir /cluster/data/monDom4/bed/blastz.rn4.swap
@@ -1370,3 +1581,21 @@ TMPDIR=/scratch/tmp
     # XXXX	running 2006-03-29
 
 
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+    # XXXX	running 2006-04-04
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=net -swap `pwd`/DEF > swap.net.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=load -swap `pwd`/DEF > swap.load.out 2>&1 &
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=cleanup -swap `pwd`/DEF > swap.cleanup.out 2>&1 &
+
+    time nice -n +19 featureBits panTro2 chainMonDom4Link \
+	> fb.panTro2.chainMonDom4Link 2>&1 &
