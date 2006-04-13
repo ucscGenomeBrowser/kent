@@ -52,7 +52,7 @@ echo
 echo "  hits    = total number of accesses since started tracking"
 echo "  time    = last seen hit was N seconds ago"
 echo "  max     = the most delay time slapped on this source IP"
-echo "  current = the current delay in miliseconds."
+echo "  current = the current delay in milliseconds."
 echo
 echo "  delay decays at the rate of 10 miliseconds per second"
 echo
