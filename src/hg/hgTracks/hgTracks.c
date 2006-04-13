@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1087 2006/04/13 03:28:34 ytlu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1088 2006/04/13 17:57:23 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -506,10 +506,14 @@ int packCountRows(struct track *tg, int maxCount, boolean withLabels)
 return packCountRowsOverflow(tg, maxCount, withLabels, FALSE);
 }
 
-int maximumTrackHeight()
+static int maximumTrackHeight(struct track *tg)
 /* Return the maximum track height allowed in pixels. */
 {
-return maxItemsInFullTrack * tl.fontHeight;
+int maxItems = maxItemsInFullTrack;
+char *maxItemsString = trackDbSetting(tg->tdb, "maxItems");
+if (maxItemsString != NULL)
+    maxItems = sqlUnsigned(maxItemsString);
+return maxItems * tl.fontHeight;
 }
 
 int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vis, 
@@ -518,7 +522,7 @@ int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vi
  * they use. */
 {
 int rows;
-double maxHeight = maximumTrackHeight();
+double maxHeight = maximumTrackHeight(tg);
 int itemCount = slCount(tg->items);
 tg->heightPer = heightPer;
 tg->lineHeight = lineHeight;
@@ -1713,7 +1717,7 @@ if (vis == tvPack || vis == tvSquish)
     struct spaceNode *sn;
     /* These variables keep track of state if there are
        too many items and there is going to be an overflow row. */
-    int maxHeight = maximumTrackHeight();
+    int maxHeight = maximumTrackHeight(tg);
     int overflowRow = (maxHeight - tl.fontHeight +1) / lineHeight;
     int overflowCount = 0;
     boolean overflowDrawn = FALSE;
@@ -7886,7 +7890,7 @@ if (!tg->limitedVisSet)
     {
     enum trackVisibility vis = tg->visibility;
     int h;
-    int maxHeight = maximumTrackHeight();
+    int maxHeight = maximumTrackHeight(tg);
     tg->limitedVisSet = TRUE;
     if (vis == tvHide)
 	{
