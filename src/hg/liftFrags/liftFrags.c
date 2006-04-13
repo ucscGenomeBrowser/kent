@@ -9,7 +9,7 @@
 #include "rmskOut.h"
 #include "psl.h"
 
-static char const rcsid[] = "$Id: liftFrags.c,v 1.5 2004/07/21 23:44:13 angie Exp $";
+static char const rcsid[] = "$Id: liftFrags.c,v 1.6 2006/04/13 16:59:56 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -217,7 +217,7 @@ void liftFrags(char *destFile, char *goldFile, char *genoLst, char *sourceDir)
  * coordinates. */
 {
 struct hash *fragHash = newHash(16);
-struct agpFrag *fragList = NULL, *frag;
+struct agpFrag *fragList = NULL;
 int goldSize;
 
 fragList = readGold(goldFile, fragHash, &goldSize);
