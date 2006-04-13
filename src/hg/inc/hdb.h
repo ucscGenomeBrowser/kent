@@ -267,7 +267,7 @@ struct dnaSeq *hChromSeqMixed(char *chrom, int start, int end);
 struct dnaSeq *hChromSeqMixed2(char *chrom, int start, int end);
 /* Return mixed case (repeats in lower case) DNA from chromosome. */
 
-struct dnaSeq *hDnaFromSeq2(char *seqName, int start, int end, enum dnaCase dnaCase)
+struct dnaSeq *hDnaFromSeq2(char *seqName, int start, int end, enum dnaCase dnaCase);
 /* Fetch DNA */
 
 struct dnaSeq *hChromSeqNib(char *chrom, int start, int end, char *nibDir);
