@@ -1636,12 +1636,6 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	/cluster/data/hg17/bed/blastz.bosTau2.2005-12-19/DEF > swap.out 2>&1 &
-    #	XXXX running 2006-03-30 09:23
-
-    cd /cluster/data/bosTau2/bed/blastz.hg17
-    nice -n +19 featureBits bosTau2 chainHg18Link \
-	> fb.bosTau2.chainHg18Link 2>&1 &
-    #	1357027317 bases of 2812203870 (48.255%) in intersection
 
     #	manually cleaned this up since the run faild during the MySQL
     #	load due to out of space problems.  These tables do not need to
