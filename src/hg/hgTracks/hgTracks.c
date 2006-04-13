@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1088 2006/04/13 17:57:23 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1089 2006/04/13 21:42:59 ytlu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -5907,20 +5907,6 @@ switch (stsMapMouseType)
     }
 }
 
-int stsMapMouseSelectColor(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
-{
-struct stsMapMouseNew *el = item;
-if((el->wigChr[0] != '\0' || el->mgiChrom[0] != '\0') && el->rhChrom[0] != '\0')
-    return 3;
-else if(el->wigChr[0] != '\0' || el->mgiChrom[0] != '\0')
-    return 2;
-else if(el->rhChrom[0] != '\0')
-    return 1;
-else
-    return 0;
-}
-
 void loadStsMapMouse(struct track *tg)
 /* Load up stsMarkers from database table to track items. */
 {
@@ -5929,7 +5915,7 @@ stsMapMouseMap = cartUsualString(cart, "stsMapMouse.type", smmoeEnumToString(0))
 stsMapMouseType = smmoeStringToEnum(stsMapMouseMap);
 bedLoadItem(tg, "stsMapMouseNew", (ItemLoader)stsMapMouseNewLoad);
 filterItems(tg, stsMapMouseFilterItem, stsMapMouseFilter);
-//stsMapMouseFilterColor = getFilterColor(stsMapMouseFilter, MG_BLACK);
+stsMapMouseFilterColor = getFilterColor(stsMapMouseFilter, MG_BLACK);
 
 }
 
@@ -5942,48 +5928,38 @@ stsMapMouseNewFreeList((struct stsMapMouseNew**)&tg->items);
 Color stsMapMouseColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of stsMap track item. */
 {
-int colIdx = stsMapMouseSelectColor(tg, item);
-int col=tg->ixColor;
 struct stsMapMouseNew *el = item;
-switch(colIdx)
+if (stsMapMouseFilterItem(tg, item))
     {
-    case 0:
-	col = MG_BLACK;
-	break;
-    case 1:
-	col = MG_BLUE;
-	break;
-    case 2:
-	col = MG_YELLOW;
-	break;
-    case 3:
-	col = MG_GREEN;
-	break;
-    default:
-	col = MG_BLACK;
-    }
-
-if (el->score < 900)
-    {
-    switch(colIdx)
+    if(el->score >= 900)
+	return stsMapMouseFilterColor;
+    else
 	{
-	case 0:
-	    col = MG_GRAY;
-	    break;
-	case 1:
-	    col = vgFindColorIx(vg,30, 144, 255);
-	    break;
-	case 2:
-	    col = vgFindColorIx(vg, 205, 173, 0);
-	    break;
-	case 3:
-	    col = vgFindColorIx(vg, 154, 205, 50);
-	    break;
-	default:
-	    col = MG_GRAY;
+	switch(stsMapMouseFilterColor)
+	    {
+	    case 1:
+		return MG_GRAY;
+		break;
+	    case 2:
+		return (vgFindColorIx(vg, 240, 128, 128)); //Light red
+		break;
+	    case 3:
+		return (vgFindColorIx(vg, 154, 205, 154)); // light green	
+		break;
+	    case 4:
+		return (vgFindColorIx(vg, 176, 226, 255)); // light blue
+	    default:
+		return MG_GRAY;
+	    }
 	}
     }
-return col;
+else
+    {
+    if(el->score < 900)
+	return MG_GRAY;
+    else
+	return MG_BLACK;
+    }
 }
 
 void stsMapMouseMethods(struct track *tg)
