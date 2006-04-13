@@ -2682,16 +2682,18 @@ chainSome $(path1)
 ### microRNA targets tracks  (WORKING - 2006-03-29 - Hiram)
 ### from: http://pictar.bio.nyu.edu/ Rajewsky Lab
 ### Nikolaus Rajewsky nr@scarbo.bio.nyu.edu
+### Yi-Lu Wang ylw205@nyu.edu
+### dg@thp.Uni-Koeln.DE
     ssh hgwdev
     mkdir /cluster/data/ce2/bed/picTar
     cd /cluster/data/ce2/bed/picTar
     wget --timestamping \
-	'http://scarbo.bio.nyu.edu/~nr/new_single_elegans_bed' \
+	'http://pictar.bio.nyu.edu/ucsc/new_single_elegans_bed' \
 	    -O newSingleElegans.bed
 
     grep -v "^track" newSingleElegans.bed \
-	| hgLoadBed -strict ce2 picTarMiRNA stdin
+	| hgLoadBed -strict ce2 picTar stdin
     #	Loaded 11987 elements of size 9
 
-    featureBits ce2 picTarMiRNA
+    nice -n +19 featureBits ce2 picTar
     #	39233 bases of 100291761 (0.039%) in intersection
