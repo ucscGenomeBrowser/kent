@@ -962,7 +962,6 @@ struct isxAddress *dest = isx->dest;
 struct isxReg *reg;
 char *regName;
 
-uglyf("Theoretically doing a pentVarAssign\n");
 if (source->valType == ivVar)
     {
     int i;
@@ -1010,10 +1009,8 @@ static void pentVarInput(struct isx *isx, struct dlNode *nextNode,
 	struct pentCoder *coder)
 /* Output code to load a variable input parameter before a call. */
 {
-uglyf("THeoretically doing pentVarInput\n");
 pentVarAssign(isx, nextNode, coder);
 }
-
 
 static void pentBinaryOp(struct isx *isx, struct dlNode *nextNode, 
 	enum pentDataOp opCode, boolean isSub,  struct pentCoder *coder)

@@ -578,7 +578,6 @@ for (p = inTuple->children, offset=0; p != NULL; p = p->next, ++offset)
     if (p->ty->base == pfc->varType)
         {
 	struct isxAddress *sourceType;
-uglyf("Theoretically doing call with var param\n"); 
 	isxVarExpression(pfc, p, varHash, weight, iList, 
 	    &source, &sourceType);
 	dest = isxIoAddress(offset, source->valType, iadInStack);
