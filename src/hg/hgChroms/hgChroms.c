@@ -3,7 +3,7 @@
 #include "hdb.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgChroms.c,v 1.2 2004/12/15 19:35:32 markd Exp $";
+static char const rcsid[] = "$Id: hgChroms.c,v 1.3 2006/04/13 22:08:39 krish Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -17,6 +17,7 @@ errAbort(
     "Options:\n"
     "   -noRandom - omit random and Un chromsomes\n"
     "   -noHap - omit _hap0 chromsomes\n"
+    "   -noPrefix - omit \"chr\" prefix\n"
   );
 }
 
@@ -25,11 +26,13 @@ errAbort(
 static struct optionSpec optionSpec[] = {
     {"noRandom", OPTION_BOOLEAN},
     {"noHap", OPTION_BOOLEAN},
+    {"noPrefix", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 boolean noRandom;
 boolean noHap;
+boolean noPrefix;
 
 bool inclChrom(struct slName *chrom)
 /* check if a chromosome should be included */
@@ -46,7 +49,16 @@ struct slName *chrom, *chroms = hAllChromNamesDb(db);
 for (chrom = chroms; chrom != NULL; chrom = chrom->next)
     {
     if (inclChrom(chrom))
-        printf("%s\n", chrom->name);
+        {
+        if (noPrefix && startsWith("chr", chrom->name))
+            {
+            printf("%s\n", chrom->name + strlen("chr"));
+            }
+        else
+            {
+            printf("%s\n", chrom->name);
+            }
+        }
     }
 }
 
@@ -58,6 +70,7 @@ if (argc != 2)
     usage();
 noRandom = optionExists("noRandom");
 noHap = optionExists("noHap");
+noPrefix = optionExists("noPrefix");
 hgChroms(argv[1]);
 return 0;
 }
