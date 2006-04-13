@@ -12,7 +12,7 @@
 #include "hgConfig.h"
 #include "chainCart.h"
 
-static char const rcsid[] = "$Id: hui.c,v 1.76 2006/03/18 08:48:22 aamp Exp $";
+static char const rcsid[] = "$Id: hui.c,v 1.77 2006/04/13 17:44:08 kate Exp $";
 
 char *hUserCookie()
 /* Return our cookie name. */
@@ -1279,7 +1279,7 @@ for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	    printf ("</TD><TD>%s [selected on main page]</TD></TR>\n",
 		    subtrack->longLabel);
 	    }
-	else if (sameString(primaryType, subtrack->type))
+	else if (sameString(primaryType, subtrack->type) && hTableExists(subtrack->tableName))
 	    {
 	    cgiMakeCheckBox(option, alreadySet);
 	    printf ("</TD><TD>%s</TD></TR>\n", subtrack->longLabel);
@@ -1287,8 +1287,11 @@ for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
 	}
     else
 	{
-	cgiMakeCheckBox(option, alreadySet);
-	printf ("</TD><TD>%s</TD></TR>\n", subtrack->longLabel);
+        if (hTableExists(subtrack->tableName))
+            {
+            cgiMakeCheckBox(option, alreadySet);
+            printf ("</TD><TD>%s</TD></TR>\n", subtrack->longLabel);
+            }
 	}
     }
 puts("</TABLE>");
