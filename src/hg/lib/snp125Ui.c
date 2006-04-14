@@ -20,19 +20,19 @@ int snp125ColorLabelSize = ArraySize(snp125ColorLabel);
 /* Available SNP features: Molecule Type, Class, Validation, Function */
 
 char *snp125ColorSourceLabels[] = {
-    "Molecule Type",
+    "Location Type",
     "Class",
     "Validation",
     "Function",
-    "Location Type",
+    "Molecule Type",
 };
 
 char *snp125ColorSourceStrings[] = {
-    "snp125ColorSourceMolType",
+    "snp125ColorSourceLocType",
     "snp125ColorSourceClass",
     "snp125ColorSourceValid",
     "snp125ColorSourceFunc",
-    "snp125ColorSourceLocType",
+    "snp125ColorSourceMolType",
 };
 
 // why are these arrays?
