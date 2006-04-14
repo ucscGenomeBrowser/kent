@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "gbFileOps.h"
 
-static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.13 2006/02/23 05:22:05 markd Exp $";
+static char const rcsid[] = "$Id: mgcStatusTbl.c,v 1.14 2006/04/14 23:38:34 markd Exp $";
 
 /* 
  * Clone detailed status values.
@@ -37,12 +37,13 @@ struct mgcStatusType MGC_NO_DECISION = {
 /*** these are full-length status ***/
 struct mgcStatusType MGC_FULL_LENGTH = {
     "fullLength", 6, "full length", MGC_STATE_FULL_LENGTH};
-struct mgcStatusType MGC_FULL_LENGTH_SHORT = {
-    "fullLengthShort", 7, "full length (short isoform)", MGC_STATE_FULL_LENGTH};
 struct mgcStatusType MGC_FULL_LENGTH_SYNTHETIC = {
-    "fullLengthSynthetic", 8, "full length (synthetic, expression ready, no stop)", MGC_STATE_FULL_LENGTH};
+    "fullLengthSynthetic", 7, "full length (synthetic, expression ready, no stop)", MGC_STATE_FULL_LENGTH};
 
 /*** these are error status ***/
+/* MGC_FULL_LENGTH_SHORT was moved to error status due to confusion about meaning */
+struct mgcStatusType MGC_FULL_LENGTH_SHORT = {
+    "fullLengthShort", 8, "full length (short isoform)", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_INCOMPLETE = {
     "incomplete", 9, "incomplete", MGC_STATE_PROBLEM};
 struct mgcStatusType MGC_CHIMERIC = {
@@ -80,8 +81,8 @@ static struct mgcStatusType *mgcStatusList[] = {
     &MGC_NOT_BACK,
     &MGC_NO_DECISION,
     &MGC_FULL_LENGTH,
-    &MGC_FULL_LENGTH_SHORT,
     &MGC_FULL_LENGTH_SYNTHETIC,
+    &MGC_FULL_LENGTH_SHORT,
     &MGC_INCOMPLETE,
     &MGC_CHIMERIC,
     &MGC_FRAME_SHIFTED,

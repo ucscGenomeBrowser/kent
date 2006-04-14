@@ -989,3 +989,7 @@ Warning: NR_001874: malformed RefSeq CDS:
   - are these all being included now??
 
 - way to exclude annotated linker/vector from alignment
+
+- use taxoniy tree to exclude sequences too distant to align
+
+- double check mgcFull against /clone="MGC:4744 IMAGE:3536686"

@@ -2,7 +2,8 @@ Import of CCDS (Consensus CDS) into browser database.
 
 Dumps of the CCDS database are in at:
 
-     ftp://ftp.ncbi.nlm.nih.gov/pub/hcds/Hs35.1/CDSTrackDB/
+     ftp://ftp-private.ncbi.nih.gov/
+user ccds
 
 named in the form:
         CCDS.20050303.tar.gz
