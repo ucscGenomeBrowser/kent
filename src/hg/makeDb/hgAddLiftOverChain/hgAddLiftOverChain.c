@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.6 2006/03/21 18:39:41 angie Exp $";
+static char const rcsid[] = "$Id: hgAddLiftOverChain.c,v 1.7 2006/04/14 14:53:33 angie Exp $";
 
 #define TABLE_NAME "liftOverChain"
 
@@ -56,7 +56,7 @@ errAbort(
     "    -minSizeT, -minSizeQ    Minimum chain size in target/query,\n" 
     "                             when mapping to multiple output regions\n"
     "                                     (default 0, 0)"
-    );
+    , minMatch, minBlocks);
 }
 
 void hgAddLiftOverChain(char *fromDb, char *toDb, char *chainFile)
