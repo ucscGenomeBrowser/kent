@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.262 2006/03/18 08:48:26 aamp Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.263 2006/04/14 02:53:56 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -163,46 +163,6 @@ char *autoSubmit = "onchange=\"document.snp125UiForm.submit();\"";
 printf("Any type of data can be excluded from view by unselecting the checkbox below.\n");
 printf("<BR><BR>\n");
 
-printf("<B>Molecule Type</B>: ");
-printf("<BR>\n");
-for (i=0; i < snp125MolTypeLabelsSize; i++)
-    {
-    snp125MolTypeIncludeCart[i] = cartUsualBoolean(cart, snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeDefault[i]);
-    cgiMakeCheckBox(snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeCart[i]);
-    printf(" %s", snp125MolTypeLabels[i]);
-    }
-
-printf("<BR>\n");
-printf("<B>Class</B>: ");
-printf("<BR>\n");
-for (i=0; i < snp125ClassLabelsSize; i++)
-    {
-    snp125ClassIncludeCart[i] = cartUsualBoolean(cart, snp125ClassIncludeStrings[i], snp125ClassIncludeDefault[i]);
-    cgiMakeCheckBox(snp125ClassIncludeStrings[i], snp125ClassIncludeCart[i]);
-    printf(" %s", snp125ClassLabels[i]);
-    }
-
-printf("<BR>\n");
-printf("<B>Validation</B>: ");
-printf("<BR>\n");
-for (i=0; i < snp125ValidLabelsSize; i++)
-    {
-    snp125ValidIncludeCart[i] = cartUsualBoolean(cart, snp125ValidIncludeStrings[i], snp125ValidIncludeDefault[i]);
-    cgiMakeCheckBox(snp125ValidIncludeStrings[i], snp125ValidIncludeCart[i]);
-    printf(" %s", snp125ValidLabels[i]);
-    }
-
-printf("<BR>\n");
-printf("<B>Function</B>: ");
-printf("<BR>\n");
-for (i=0; i < snp125FuncLabelsSize; i++)
-    {
-    snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
-    cgiMakeCheckBox(snp125FuncIncludeStrings[i], snp125FuncIncludeCart[i]);
-    printf(" %s", snp125FuncLabels[i]);
-    }
-
-printf("<BR>\n");
 printf("<B>LocType</B>: ");
 printf("<BR>\n");
 for (i=0; i < snp125LocTypeLabelsSize; i++)
@@ -211,6 +171,47 @@ for (i=0; i < snp125LocTypeLabelsSize; i++)
         cartUsualBoolean(cart, snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeDefault[i]);
     cgiMakeCheckBox(snp125LocTypeIncludeStrings[i], snp125LocTypeIncludeCart[i]);
     printf(" %s", snp125LocTypeLabels[i]);
+    }
+printf("<BR>\n");
+
+
+printf("<B>Class</B>: ");
+printf("<BR>\n");
+for (i=0; i < snp125ClassLabelsSize; i++)
+    {
+    snp125ClassIncludeCart[i] = cartUsualBoolean(cart, snp125ClassIncludeStrings[i], snp125ClassIncludeDefault[i]);
+    cgiMakeCheckBox(snp125ClassIncludeStrings[i], snp125ClassIncludeCart[i]);
+    printf(" %s", snp125ClassLabels[i]);
+    }
+printf("<BR>\n");
+
+printf("<B>Validation</B>: ");
+printf("<BR>\n");
+for (i=0; i < snp125ValidLabelsSize; i++)
+    {
+    snp125ValidIncludeCart[i] = cartUsualBoolean(cart, snp125ValidIncludeStrings[i], snp125ValidIncludeDefault[i]);
+    cgiMakeCheckBox(snp125ValidIncludeStrings[i], snp125ValidIncludeCart[i]);
+    printf(" %s", snp125ValidLabels[i]);
+    }
+printf("<BR>\n");
+
+printf("<B>Function</B>: ");
+printf("<BR>\n");
+for (i=0; i < snp125FuncLabelsSize; i++)
+    {
+    snp125FuncIncludeCart[i] = cartUsualBoolean(cart, snp125FuncIncludeStrings[i], snp125FuncIncludeDefault[i]);
+    cgiMakeCheckBox(snp125FuncIncludeStrings[i], snp125FuncIncludeCart[i]);
+    printf(" %s", snp125FuncLabels[i]);
+    }
+printf("<BR>\n");
+
+printf("<B>Molecule Type</B>: ");
+printf("<BR>\n");
+for (i=0; i < snp125MolTypeLabelsSize; i++)
+    {
+    snp125MolTypeIncludeCart[i] = cartUsualBoolean(cart, snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeDefault[i]);
+    cgiMakeCheckBox(snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeCart[i]);
+    printf(" %s", snp125MolTypeLabels[i]);
     }
 
 /* prematurely close the hgTracks FORM because forms cannot be nested */
