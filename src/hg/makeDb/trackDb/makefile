@@ -32,7 +32,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	tetNig1 \
 	fr1 \
 	cioSav1 \
-	danRer1 danRer2 danRer3\
+	danRer1 danRer2 danRer3 danRer4 \
 	dm1 dm2 \
 	dp1 dp2 dp3 \
 	droYak1 droYak2 \
@@ -62,7 +62,7 @@ MGC_DBS = \
 	hg16 hg17 hg18\
 	mm5 mm6 \
 	rn3 \
-	danRer1	danRer2 \
+	danRer1	danRer2 danRer3 danRer4 \
 	xenTro1
 
 ARCH_DBS = \
@@ -142,7 +142,7 @@ alpha: clean
 #cmd="../../encode/encodeTrackDb.csh ../../lib/trackDb.sql" ; echo $$cmd; $$cmd
 
 strict: clean
-	${CVS} up -d -P .
+	# ${CVS} up -d -P .
 	@for D in *; do \
             if [ -d "$$D" ]; then \
                 if [ -e "$$D/makefile" ]; then \
