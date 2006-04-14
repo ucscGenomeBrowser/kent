@@ -23,7 +23,7 @@ char *snp125ColorSourceLabels[] = {
     "Class",
     "Validation",
     "Function",
-    "LocType",
+    "Location Type",
 };
 
 char *snp125ColorSourceStrings[] = {
@@ -114,7 +114,7 @@ int snp125MolTypeIncludeStringsSize  = ArraySize(snp125MolTypeIncludeStrings);
 char *snp125ClassLabels[] = {
     "Unknown",
     "Single Nucleotide Polymorphism",
-    "Insertion/Deletion",
+    "In/Del",
     "Heterozygous",
     "Microsatellite",
     "Named",
