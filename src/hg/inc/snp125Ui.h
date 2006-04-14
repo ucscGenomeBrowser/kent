@@ -6,9 +6,10 @@
 
 enum snp125ColorEnum {
     snp125ColorRed,
-    snp125ColorGreen,
     snp125ColorBlue,
+    snp125ColorGreen,
     snp125ColorBlack,
+    snp125ColorGray,
     snp125ColorExclude
 };
 
