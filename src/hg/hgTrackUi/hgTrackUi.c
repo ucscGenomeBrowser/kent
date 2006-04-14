@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.263 2006/04/14 02:53:56 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.264 2006/04/14 03:02:10 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -232,14 +232,14 @@ printf("The selected feature above has the following values below.  \n");
 printf("For each value, a selection of colors are available.<BR><BR>\n");
 
 snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
-if (sameString(snp125ColorSourceCart[0], "Molecule Type"))
+if (sameString(snp125ColorSourceCart[0], "LocType"))
     {
-    for (i=0; i<snp125MolTypeLabelsSize; i++)
+    for (i=0; i<snp125LocTypeLabelsSize; i++)
         {
-	printf("<B>%s</B>: ", snp125MolTypeLabels[i]);
-	snp125MolTypeCart[i] = cartUsualString(cart, snp125MolTypeStrings[i], snp125MolTypeDefault[i]);
-        cgiMakeDropListFull(snp125MolTypeStrings[i], snp125ColorLabel, snp125ColorLabel, 
-                            snp125ColorLabelSize, snp125MolTypeCart[i], autoSubmit);
+	printf("<B>%s</B>: ", snp125LocTypeLabels[i]);
+	snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
+        cgiMakeDropListFull(snp125LocTypeStrings[i], snp125ColorLabel, snp125ColorLabel, 
+                            snp125ColorLabelSize, snp125LocTypeCart[i], autoSubmit);
         }
     }
 else if (sameString(snp125ColorSourceCart[0], "Class"))
@@ -272,14 +272,14 @@ else if (sameString(snp125ColorSourceCart[0], "Function"))
                             snp125ColorLabelSize, snp125FuncCart[i], autoSubmit);
         }
     }
-else if (sameString(snp125ColorSourceCart[0], "LocType"))
+else if (sameString(snp125ColorSourceCart[0], "Molecule Type"))
     {
-    for (i=0; i<snp125LocTypeLabelsSize; i++)
+    for (i=0; i<snp125MolTypeLabelsSize; i++)
         {
-	printf("<B>%s</B>: ", snp125LocTypeLabels[i]);
-	snp125LocTypeCart[i] = cartUsualString(cart, snp125LocTypeStrings[i], snp125LocTypeDefault[i]);
-        cgiMakeDropListFull(snp125LocTypeStrings[i], snp125ColorLabel, snp125ColorLabel, 
-                            snp125ColorLabelSize, snp125LocTypeCart[i], autoSubmit);
+	printf("<B>%s</B>: ", snp125MolTypeLabels[i]);
+	snp125MolTypeCart[i] = cartUsualString(cart, snp125MolTypeStrings[i], snp125MolTypeDefault[i]);
+        cgiMakeDropListFull(snp125MolTypeStrings[i], snp125ColorLabel, snp125ColorLabel, 
+                            snp125ColorLabelSize, snp125MolTypeCart[i], autoSubmit);
         }
     }
 
