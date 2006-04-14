@@ -296,22 +296,96 @@ slSort(&geneList, slNameCmp);
 return geneList;
 }
 
+struct slName *vgImageFileGenotypes(struct sqlConnection *conn, int imageFile)
+/* Return unique alphabetical list of all genotypes associated with image file. */
+{
+struct hash *uniqHash = hashNew(0);
+struct slInt *imageList, *image;
+struct slName *genoList=NULL;
+
+imageList = visiGeneImagesForFile(conn, imageFile);
+for (image = imageList; image != NULL; image = image->next)
+    {
+    char *genotype = visiGeneGenotype(conn, image->val);
+    if (genotype == NULL)
+	genotype = cloneString("wild type");
+    if (hashLookup(uniqHash, genotype))
+	freeMem(genotype);
+    else
+	{
+	hashAdd(uniqHash, genotype, NULL);
+	slNameAddHead(&genoList, genotype);
+	}
+    }
+slFreeList(&imageList);
+hashFree(&uniqHash);
+slSort(&genoList, slNameCmp);
+return genoList;
+}
+
+struct slName *vgImageFileOrganisms(struct sqlConnection *conn, int imageFile)
+/* Return unique alphabetical list of all organisms associated with image file. */
+{
+struct hash *uniqHash = hashNew(0);
+struct slInt *imageList, *image;
+struct slName *orgList=NULL;
+
+imageList = visiGeneImagesForFile(conn, imageFile);
+for (image = imageList; image != NULL; image = image->next)
+    {
+    char *organism = visiGeneOrganism(conn, image->val);
+    char *org = cloneString(shortOrgName(organism));
+    freeMem(organism);
+    if (hashLookup(uniqHash, org))
+	freeMem(org);
+    else
+	{
+	hashAdd(uniqHash, org, NULL);
+	slNameAddHead(&orgList, org);
+	}
+    }
+slFreeList(&imageList);
+hashFree(&uniqHash);
+slSort(&orgList, slNameCmp);
+return orgList;
+}
+
 void smallCaption(struct sqlConnection *conn, int imageId)
 /* Write out small format caption. */
 {
 struct slName *geneList, *gene;
+struct slName *genotypeList, *genotype;
+struct slName *orgList, *org;
 int imageFile = visiGeneImageFile(conn, imageId);
-char *genotype = visiGeneGenotype(conn, imageId);
-if (genotype && !sameString(genotype,"wild type"))
+boolean mutant = FALSE;
+char *sep = "";
+
+genotypeList = vgImageFileGenotypes(conn, imageFile);
+for (genotype = genotypeList; genotype != NULL; genotype = genotype->next)
+    {
+    if (!sameString(genotype->name,"wild type"))
+	mutant = TRUE;
+    }
+slFreeList(&genotypeList);
+if (mutant)
     printf("Mutant ");
-printf("%s", shortOrgName(visiGeneOrganism(conn, imageId)));
+
+orgList = vgImageFileOrganisms(conn, imageFile);
+for (org = orgList; org != NULL; org = org->next)
+    {
+    printf("%s%s", sep, org->name);
+    sep = " ";
+    }
+slFreeList(&orgList);
+
+
 geneList = vgImageFileGenes(conn, imageFile);
 for (gene = geneList; gene != NULL; gene = gene->next)
     {
     printf(" %s", gene->name);
     }
 slFreeList(&geneList);
-freez(&genotype);
+
 }
 
 
