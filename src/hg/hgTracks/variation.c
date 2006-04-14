@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.78 2006/04/12 03:25:46 kent Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.79 2006/04/14 03:46:10 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -421,11 +421,14 @@ switch (thisSnpColor)
  	return MG_RED;
  	break;
     case snp125ColorGreen:
- 	return vgFindColorIx(vg, 0x79, 0xaa, 0x3d);
+        return MG_GREEN;
  	break;
     case snp125ColorBlue:
  	return MG_BLUE;
  	break;
+    case snp125ColorGray:
+        return MG_GRAY;
+	break;
     case snp125ColorBlack:
     default:
  	return MG_BLACK;
