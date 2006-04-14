@@ -6,8 +6,8 @@
 
 char *snp125ColorLabel[] = {
     "red",
-    "green",
     "blue",
+    "green",
     "black",
     "gray",
 };
