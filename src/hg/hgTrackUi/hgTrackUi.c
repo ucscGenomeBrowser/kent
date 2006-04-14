@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.267 2006/04/14 17:18:15 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.268 2006/04/14 19:27:31 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -967,7 +967,7 @@ printf(" %s&nbsp;&nbsp;&nbsp;", "UniProt Display ID");
 
 if (omimAvail != NULL)
     {
-    safef(varName, sizeof(varName), "%s.label.omim", tdb->tableName);
+    safef(varName, sizeof(varName), "%s.label.omim%s", tdb->tableName, cartString(cart, "db"));
     option = cartUsualBoolean(cart, varName, FALSE);
     cgiMakeCheckBox(varName, option);
     printf(" %s&nbsp;&nbsp;&nbsp;", "OMIM ID");
@@ -992,7 +992,7 @@ int omimAvail = 0;
 char query[128];
 if (sameString(tdb->tableName, "refGene"))
     {
-    safef(query, sizeof(query), "select omimId from refLink where omimId != 0 limit 1");
+    safef(query, sizeof(query), "select refLink.omimId from refLink, refGene where refLink.mrnaAcc = refGene.name and refLink.omimId != 0 limit 1");
     omimAvail = sqlQuickNum(conn, query);
     }
 hFreeConn(&conn);
@@ -1022,7 +1022,7 @@ int omimAvail = 0;
 char query[128];
 if (sameString(tdb->tableName, "refGene"))
     {
-    safef(query, sizeof(query), "select omimId from refLink where omimId != 0 limit 1");
+    safef(query, sizeof(query), "select refLink.omimId from refLink, refGene where refLink.mrnaAcc = refGene.name and refLink.omimId != 0 limit 1");
     omimAvail = sqlQuickNum(conn, query);
     }
 hFreeConn(&conn);
@@ -1040,7 +1040,7 @@ printf(" %s&nbsp;&nbsp;&nbsp;", "accession");
 
 if (omimAvail != 0)
     {
-    safef(varName, sizeof(varName), "%s.label.omim", tdb->tableName);
+    safef(varName, sizeof(varName), "%s.label.omim%s", tdb->tableName, cartString(cart, "db"));
     option = cartUsualBoolean(cart, varName, FALSE);
     cgiMakeCheckBox(varName, option);
     printf(" %s&nbsp;&nbsp;&nbsp;", "OMIM ID");
