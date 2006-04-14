@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.264 2006/04/14 03:02:10 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.265 2006/04/14 03:32:42 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -232,7 +232,7 @@ printf("The selected feature above has the following values below.  \n");
 printf("For each value, a selection of colors are available.<BR><BR>\n");
 
 snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
-if (sameString(snp125ColorSourceCart[0], "LocType"))
+if (sameString(snp125ColorSourceCart[0], "Location Type"))
     {
     for (i=0; i<snp125LocTypeLabelsSize; i++)
         {
