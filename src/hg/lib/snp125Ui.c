@@ -307,18 +307,16 @@ int snp125ValidIncludeStringsSize     = ArraySize(snp125ValidIncludeStrings);
 char *snp125FuncLabels[] = {
     "Unknown",
     "Locus",
-    "Coding",
     "Coding - Synonymous",
     "Coding - Non-Synonymous",
     "Untranslated",
     "Intron",
-    "Splice site",
-    "Reference",
+    "Splice Site",
+    "Reference (coding)",
 };
 char *snp125FuncStrings[] = {
     "snp125FuncUnknown",
     "snp125FuncLocus",
-    "snp125FuncCoding",
     "snp125FuncSynon",
     "snp125FuncNonSynon",
     "snp125FuncUntranslated",
@@ -329,7 +327,6 @@ char *snp125FuncStrings[] = {
 char *snp125FuncDataName[] = {
     "unknown",
     "locus",
-    "coding",
     "coding-synon",
     "coding-nonsynon",
     "untranslated",
@@ -340,7 +337,6 @@ char *snp125FuncDataName[] = {
 char *snp125FuncDefault[] = {
     "black",  // unknown
     "red",    // locus
-    "blue",   // coding
     "green",  // coding-synon
     "red",    // coding-nonsynon
     "blue",   // untranslated
@@ -349,20 +345,18 @@ char *snp125FuncDefault[] = {
     "black",  // cds-reference
 };
 char *snp125FuncCart[] = {
-    "black",
-    "red",
-    "blue",
-    "green",
-    "red",
-    "blue",
-    "blue",
-    "red",
-    "black",
+    "black", // unknown
+    "red",   // locus
+    "green", // coding-synon
+    "red",   // coding-nonsynon
+    "blue",  // untranslated
+    "blue",  // intron
+    "red",   // splice-site
+    "black", // cds-reference
 };
 char *snp125FuncIncludeStrings[] = {
     "snp125FuncUnknownInclude",
     "snp125FuncLocusInclude",
-    "snp125FuncCodingInclude",
     "snp125FuncSynonInclude",
     "snp125FuncNonSynonInclude",
     "snp125FuncUntranslatedInclude",
@@ -379,10 +373,8 @@ boolean snp125FuncIncludeDefault[] = {
     TRUE,
     TRUE,
     TRUE,
-    TRUE,
 };
 boolean snp125FuncIncludeCart[] = {
-    TRUE,
     TRUE,
     TRUE,
     TRUE,
