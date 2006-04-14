@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1089 2006/04/13 21:42:59 ytlu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1090 2006/04/14 19:21:56 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -2889,10 +2889,8 @@ boolean labelStarted = FALSE;
 	
 if (hTableExists("kgXref"))
     {
-    char *omimAvail = NULL;
-    char query[128];
-    safef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
-    omimAvail = sqlQuickString(conn, query);
+    char omimLabel[48];
+    safef(omimLabel, sizeof(omimLabel), "omim%s", cartString(cart, "db"));
 
     if (knownGeneLabels == NULL)
         {
@@ -2909,26 +2907,15 @@ if (hTableExists("kgXref"))
             useKgId = TRUE;
         else if (endsWith(label->name, "prot") && differentString(label->val, "0"))
             useProtDisplayId = TRUE;
-        else if (endsWith(label->name, "omim") && differentString(label->val, "0"))
+        else if (endsWith(label->name, omimLabel) && differentString(label->val, "0"))
             useMimId = TRUE;
         else if (!endsWith(label->name, "gene") && 
                  !endsWith(label->name, "kgId") &&
                  !endsWith(label->name, "prot") &&
-                 !endsWith(label->name, "omim") )
+                 !endsWith(label->name, omimLabel) )
             {
             useGeneSymbol = TRUE;
             cartRemove(cart, label->name);
-            }
-        }
-
-    /* cart may be from another build which has OMIM */
-    if (omimAvail == NULL && useMimId) 
-        {
-        useMimId = FALSE;
-        if (!useGeneSymbol && !useKgId && !useProtDisplayId)
-            {  
-            useGeneSymbol = TRUE; /* set default */
-            cartSetBoolean(cart, "knownGene.label.gene", TRUE);
             }
         }
 
@@ -3452,10 +3439,8 @@ boolean useMim =  FALSE;
 
 struct hashEl *refGeneLabels = cartFindPrefix(cart, (isNative ? "refGene.label" : "xenoRefGene.label"));
 struct hashEl *label;
-int omimAvail = 0;
-char query[128];
-safef(query, sizeof(query), "select omimId from refLink where refLink.omimId != 0 limit 1");
-omimAvail = sqlQuickNum(conn, query);
+char omimLabel[48];
+safef(omimLabel, sizeof(omimLabel), "omim%s", cartString(cart, "db"));
 
 if (refGeneLabels == NULL)
     {
@@ -3470,26 +3455,14 @@ for (label = refGeneLabels; label != NULL; label = label->next)
         useGeneName = TRUE;
     else if (endsWith(label->name, "acc") && differentString(label->val, "0"))
         useAcc = TRUE;
-    else if (endsWith(label->name, "omim") && differentString(label->val, "0"))
+    else if (endsWith(label->name, omimLabel) && differentString(label->val, "0"))
         useMim = TRUE;
     else if (!endsWith(label->name, "gene") &&
              !endsWith(label->name, "acc")  &&
-             !endsWith(label->name, "omim") )
+             !endsWith(label->name, omimLabel) )
         {
         useGeneName = TRUE;
         cartRemove(cart, label->name);
-        }
-    }
-
-/* cart may be from another build which has OMIM */
-if (omimAvail == 0 && useMim)
-    {
-    useMim = FALSE;
-    if (!useGeneName && !useAcc) 
-        {
-        useGeneName = TRUE; /* set default */
-        if (isNative) cartSetBoolean(cart, "refGene.label.gene", TRUE);
-        else cartSetBoolean(cart, "xenoRefGene.label.gene", TRUE);
         }
     }
 
