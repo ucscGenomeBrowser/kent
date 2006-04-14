@@ -5,7 +5,7 @@
 #include "hgRelate.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: apacheMonitor.c,v 1.6 2006/04/12 20:11:21 heather Exp $";
+static char const rcsid[] = "$Id: apacheMonitor.c,v 1.7 2006/04/14 20:04:49 heather Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -236,6 +236,30 @@ if (write500) carefulClose(&outputFileHandle);
 hFreeConn(&conn);
 }
 
+void printBots(int secondsNow)
+{
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+int startTime = secondsNow - (minutes * 60);
+int hits = 0;
+
+verbose(1, "\nheavy hitters overall (all status values):\n");
+safef(query, sizeof(query), "select count(*), remote_host from access_log where time_stamp > %d group by remote_host", startTime);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hits = sqlUnsigned(row[0]);
+    if (hits > 1000)
+        verbose(1, "%s\t%s\n", row[0], row[1]);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
+
 void desc500(int secondsNow)
 {
 char query[512];
@@ -286,7 +310,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     verbose(1, "%s\n", row[0]);
 sqlFreeResult(&sr);
-
+hFreeConn(&conn);
 }
 
 void printMachines()
@@ -377,5 +401,6 @@ if (optionExists("store") && status500 > 0)
     store500(timeNow);
     cleanup(timeNow);
     }
+printBots(timeNow);
 return 0;
 }
