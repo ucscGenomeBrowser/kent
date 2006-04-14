@@ -9,6 +9,7 @@ char *snp125ColorLabel[] = {
     "green",
     "blue",
     "black",
+    "gray",
 };
 
 int snp125ColorLabelSize = ArraySize(snp125ColorLabel);
@@ -335,24 +336,24 @@ char *snp125FuncDataName[] = {
     "exception",
 };
 char *snp125FuncDefault[] = {
-    "black",  // unknown
-    "red",    // locus
+    "gray",   // unknown
+    "blue",   // locus
     "green",  // coding-synon
     "red",    // coding-nonsynon
     "blue",   // untranslated
-    "blue",   // intron
+    "black",  // intron
     "red",    // splice-site
-    "black",  // cds-reference
+    "blue",  // cds-reference
 };
 char *snp125FuncCart[] = {
-    "black", // unknown
-    "red",   // locus
+    "gray",  // unknown
+    "blue",  // locus
     "green", // coding-synon
     "red",   // coding-nonsynon
     "blue",  // untranslated
-    "blue",  // intron
+    "black", // intron
     "red",   // splice-site
-    "black", // cds-reference
+    "blue", // cds-reference
 };
 char *snp125FuncIncludeStrings[] = {
     "snp125FuncUnknownInclude",
