@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.265 2006/04/14 03:32:42 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.266 2006/04/14 03:34:19 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -163,7 +163,7 @@ char *autoSubmit = "onchange=\"document.snp125UiForm.submit();\"";
 printf("Any type of data can be excluded from view by unselecting the checkbox below.\n");
 printf("<BR><BR>\n");
 
-printf("<B>LocType</B>: ");
+printf("<B>Location Type</B>: ");
 printf("<BR>\n");
 for (i=0; i < snp125LocTypeLabelsSize; i++)
     {
