@@ -14,7 +14,7 @@
 # -mkOrganismList - update the organism list
 # -verbose - print details
 #
-# $Id: gbProcessStep,v 1.7 2006/04/07 14:10:27 markd Exp $
+# $Id: gbProcessStep,v 1.8 2006/04/14 23:38:14 markd Exp $
 #
 use strict;
 use warnings;
@@ -228,7 +228,7 @@ sub processRefSeqRel($) {
 sub createOrganismList() {
     my $lst = "data/organism.lst";
     my $lstTmp = "$lst.tmp";
-    runProg("mkOrganismList $lstTmp");
+    runProg("gbMkOrganismList $lstTmp");
     renameFile($lstTmp, $lst);
 }
 
