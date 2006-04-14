@@ -5,7 +5,7 @@
 #include "hgRelate.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: apacheMonitor.c,v 1.7 2006/04/14 20:04:49 heather Exp $";
+static char const rcsid[] = "$Id: apacheMonitor.c,v 1.8 2006/04/14 20:23:22 heather Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -237,6 +237,7 @@ hFreeConn(&conn);
 }
 
 void printBots(int secondsNow)
+/* who is faster than a hit every 5 seconds on average? */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -245,13 +246,13 @@ char **row;
 int startTime = secondsNow - (minutes * 60);
 int hits = 0;
 
-verbose(1, "\nheavy hitters overall (all status values):\n");
+verbose(1, "\nheavy hitters overall (all status values, less than 5 seconds between average hits):\n");
 safef(query, sizeof(query), "select count(*), remote_host from access_log where time_stamp > %d group by remote_host", startTime);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     hits = sqlUnsigned(row[0]);
-    if (hits > 1000)
+    if (hits > minutes * 12)
         verbose(1, "%s\t%s\n", row[0], row[1]);
     }
 sqlFreeResult(&sr);
