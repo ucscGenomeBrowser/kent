@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doHgNearBlastp.pl instead.
 
-# $Id: doHgNearBlastp.pl,v 1.4 2006/03/17 21:27:00 angie Exp $
+# $Id: doHgNearBlastp.pl,v 1.5 2006/04/14 15:36:18 angie Exp $
 
 use Getopt::Long;
 use warnings;
@@ -25,6 +25,8 @@ use vars qw/
     $opt_dbHost
     $opt_blastPath
     $opt_noSelf
+    $opt_targetOnly
+    $opt_queryOnly
     $opt_debug
     $opt_verbose
     $opt_help
@@ -57,13 +59,16 @@ options:
 			cluster hosts).
 			Default: $blastPath
     -noSelf		Don't do self alignments (update pairwise only).
+    -targetOnly		Perform target vs. all queries, not vice versa.
+    -queryOnly		Perform all queries vs. target, not vice versa.
     -debug		Don't actually run commands, just display them.
     -verbose num	Set verbose level to num.  Default $defaultVerbose
     -help		Show detailed help (config.ra variables) and exit.
 Automates the protein blast runs for hgNear and loads the *BlastTab tables.
 config.ra specifies one target db and multiple query dbs.  Self-blastp for
-the target and pairwise blastp for the target vs. all queries (and all
-queries vs. the target) are performed.
+the target and pairwise blastp for the target vs. all queries, and all
+queries vs. the target, are performed by default but can be selectively
+disabled with -noSelf, -targetOnly or -queryOnly.
 To see detailed information about what should appear in config.ra,
 run \"$base -help\".
 ";
@@ -109,6 +114,8 @@ sub checkOptions {
 		      "dbHost=s",
 		      "verbose=n",
 		      "noSelf",
+		      "targetOnly",
+		      "queryOnly",
 		      "debug",
 		      "help");
   &usage(1) if (!$ok);
@@ -118,6 +125,11 @@ sub checkOptions {
   $distrHost = $opt_distrHost if (defined $opt_distrHost);
   $dbHost = $opt_dbHost if (defined $opt_dbHost);
   $blastPath = $opt_blastPath if (defined $opt_blastPath);
+  if ($opt_targetOnly && $opt_queryOnly) {
+    warn "\nBoth -targetOnly and -queryOnly were specified -- if you want " .
+      "both target and query, then omit both of those options.\n";
+    usage(1);
+  }
 } # checkOptions
 
 sub openOrDie {
@@ -331,25 +343,30 @@ sub cleanup {
 
 sub celebrate {
   # Hooray, we're done.
-HgAutomate::verbose(1,
+  HgAutomate::verbose(1,
 	"\n *** All done!\n");
-HgAutomate::verbose(1,
-	" *** Check these tables in $tDb:\n *** ");
-if (! $opt_noSelf) {
-  HgAutomate::verbose(1, $tGenesetPrefix . 'BlastTab ');
-}
-foreach my $qDb (@qDbs) {
-  my $qPrefix = &dbToPrefix($qDb);
-  HgAutomate::verbose(1, $qPrefix . 'BlastTab ');
-}
-my $tPrefix = &dbToPrefix($tDb);
-HgAutomate::verbose(1,
-	"\n *** and $tPrefix" . "BlastTab in these databases:\n *** ");
-foreach my $qDb (@qDbs) {
-  HgAutomate::verbose(1, "$qDb ");
-}
-HgAutomate::verbose(1,
-	"\n\n");
+  if (! $opt_queryOnly) {
+    HgAutomate::verbose(1,
+			" *** Check these tables in $tDb:\n *** ");
+    if (! $opt_noSelf) {
+      HgAutomate::verbose(1, $tGenesetPrefix . 'BlastTab ');
+    }
+    foreach my $qDb (@qDbs) {
+      my $qPrefix = &dbToPrefix($qDb);
+      HgAutomate::verbose(1, $qPrefix . 'BlastTab ');
+    }
+    HgAutomate::verbose(1, "\n");
+  }
+  if (! $opt_targetOnly) {
+    my $tPrefix = &dbToPrefix($tDb);
+    HgAutomate::verbose(1,
+	      " *** Check $tPrefix" . "BlastTab in these databases:\n *** ");
+    foreach my $qDb (@qDbs) {
+      HgAutomate::verbose(1, "$qDb ");
+    }
+    HgAutomate::verbose(1, "\n");
+  }
+  HgAutomate::verbose(1, "\n");
 } # celebrate
 
 
@@ -370,7 +387,7 @@ my $tFasta = $dbToFasta{$tDb};
 
 # Self blastp.
 &formatSequence($tDb, $tFasta);
-if (! $opt_noSelf) {
+if (! $opt_noSelf && ! $opt_queryOnly) {
   &runPairwiseBlastp($tDb, $tDb, $selfMaxPer);
   &loadPairwise($tDb, $tDb, $tGenesetPrefix, $selfMaxPer);
 }
@@ -380,14 +397,18 @@ my $tPrefix = &dbToPrefix($tDb);
 foreach my $qDb (@qDbs) {
   my $qFasta = $dbToFasta{$qDb};
   my $qPrefix = &dbToPrefix($qDb);
-  # tDb vs qDb
-  &formatSequence($qDb, $qFasta);
-  &runPairwiseBlastp($tDb, $qDb, $pairwiseMaxPer);
-  &loadPairwise($tDb, $qDb, $qPrefix, $pairwiseMaxPer);
-  # qDb vs tDb
-  &splitSequence($qDb, $qFasta);
-  &runPairwiseBlastp($qDb, $tDb, $pairwiseMaxPer);
-  &loadPairwise($qDb, $tDb, $tPrefix, $pairwiseMaxPer);
+  if (! $opt_queryOnly) {
+    # tDb vs qDb
+    &formatSequence($qDb, $qFasta);
+    &runPairwiseBlastp($tDb, $qDb, $pairwiseMaxPer);
+    &loadPairwise($tDb, $qDb, $qPrefix, $pairwiseMaxPer);
+  }
+  if (! $opt_targetOnly) {
+    # qDb vs tDb
+    &splitSequence($qDb, $qFasta);
+    &runPairwiseBlastp($qDb, $tDb, $pairwiseMaxPer);
+    &loadPairwise($qDb, $tDb, $tPrefix, $pairwiseMaxPer);
+  }
 }
 
 # Clean up.
