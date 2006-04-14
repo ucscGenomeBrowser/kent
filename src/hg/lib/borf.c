@@ -12,7 +12,7 @@
 #include "fa.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: borf.c,v 1.5 2005/04/13 06:25:50 markd Exp $";
+static char const rcsid[] = "$Id: borf.c,v 1.6 2006/04/14 20:14:34 sugnet Exp $";
 static char *_bestOrfExe = "/projects/compbio/bin/bestorf.linux/bestorf";
 static char *_bestOrfParam = "/projects/compbio/bin/bestorf.linux/hume.dat";
 
@@ -53,7 +53,8 @@ ret->orfStart = sqlSigned(row[7]);
 ret->orfEnd = sqlSigned(row[8]);
 ret->cdsSize = sqlSigned(row[9]);
 strcpy(ret->frame, row[10]);
-ret->protein = cloneString(row[11]);
+if(ret->cdsSize != 0)
+    ret->protein = cloneString(row[11]);
 return ret;
 }
 
@@ -65,7 +66,7 @@ struct borf *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *row[12];
 
-while (lineFileRow(lf, row))
+while (lineFileChopNextTab(lf, row, ArraySize(row)))
     {
     el = borfLoad(row);
     slAddHead(&list, el);
