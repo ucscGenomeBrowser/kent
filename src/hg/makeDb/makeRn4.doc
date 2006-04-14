@@ -3275,6 +3275,7 @@ cat > downloads.csh << 'EOF'
     hgsql miRNAtmp -e "create table mirna_rat select * from mirna where auto_species = $species"
     hgsql miRNAtmp -N -e "select count(*) from mirna_rat"
 #| 234 |
+    # This is a tiny database so this query takes almost no time at all:
     time nice hgsql miRNAtmp -N -e \
      "select mirna_chromosome_build.xsome, \
              mirna_chromosome_build.contig_start - 1, \
@@ -3288,6 +3289,7 @@ cat > downloads.csh << 'EOF'
             mirna_rat.auto_mirna = mirna_pre_mature.auto_mirna and \
             mirna_pre_mature.auto_mature = mirna_mature.auto_mature" \
        > mirna.almostBed
+#0.000u 0.010s 0:00.03 33.3% 0+0k 0+0io 211pf+0w
     awk '{$5 = 960;}  $6 == "-" {$5 = 480;}  {$1 = "chr" $1;  print;}' \
       mirna.almostBed > miRNA.bed
     hgLoadBed rn4 miRNA miRNA.bed
@@ -3403,7 +3405,7 @@ cat > downloads.csh << 'EOF'
     rm -r psl tmp err batch.bak contig.psl raw.psl seq.tab
 
 
-# MERGE GNF ATLAS 2 EXPRESSION DATA AND ALIGNMENT (DONE 4/11/06 angie)
+# MERGE GNF ATLAS 2 EXPRESSION DATA AND ALIGNMENT (DONE 4/13/06 angie)
     ssh hgwdev
     cd /cluster/data/rn4/bed/affyU34A
     hgMapMicroarray gnfRatAtlas2.bed hgFixed.gnfRatAtlas2MedianRatio \
@@ -3412,6 +3414,59 @@ cat > downloads.csh << 'EOF'
 #Mapped 7447,  multiply-mapped 216, missed 695, unmapped 575
     hgLoadBed rn4 gnfAtlas2 gnfRatAtlas2.bed
     rm bed.tab
+    # Create table to map between known genes and GNF Atlas2
+    # expression data.
+    hgMapToGene rn4 gnfAtlas2 knownGene knownToGnfAtlas2 '-type=bed 12'
+    hgExpDistance rn4 hgFixed.gnfRatAtlas2MedianRatio \
+        hgFixed.gnfRatAtlas2MedianExps gnfAtlas2Distance \
+        -lookup=knownToGnfAtlas2
+
+
+# HGNEAR PROTEIN BLAST TABLES -- TARGET (DONE 4/12/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/rn4/bed/hgNearBlastp
+    cd /cluster/data/rn4/bed/hgNearBlastp
+    cat << _EOF_ > config.ra
+# Latest rat vs. other Gene Sorter orgs:
+# human, mouse, zebrafish, fly, worm, yeast
+
+targetGenesetPrefix known
+targetDb rn4
+queryDbs hg18 mm8 danRer3 dm2 ce2 sacCer1
+
+rn4Fa /cluster/data/rn4/bed/blastp/known.faa
+hg18Fa /cluster/data/hg18/bed/blastp/known.faa
+mm8Fa /cluster/data/mm8/bed/geneSorter/blastp/known.faa
+danRer3Fa /cluster/data/danRer3/bed/blastp/ensembl.faa
+dm2Fa /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
+ce2Fa /cluster/data/ce2/bed/blastp/wormPep151.faa
+sacCer1Fa /cluster/data/sacCer1/bed/blastp/sgdPep.faa
+
+buildDir /cluster/data/rn4/bed/hgNearBlastp
+scratchDir /san/sanvol1/scratch/rn4HgNearBlastp
+_EOF_
+    # Do -targetOnly until rn4 has been released -- then it will be OK to 
+    # update rnBlastTab in the other species.
+    doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
+# *** Check these tables in rn4:
+# *** knownBaseBlastTab hgBlastTab mmBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab 
+
+
+# HGNEAR PROTEIN BLAST TABLES -- QUERIES (TODO //06 angie)
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/hgNearBlastp
+    # Do -queryOnly after rn4 has been released:
+    doHgNearBlastp.pl -queryOnly config.ra >& do.queries.log & tail -f do.log
+
+
+# MORE HGNEAR TABLES (DONE 4/13/06 angie)
+    ssh hgwdev
+    cd /tmp
+    # Create table that maps between known genes and RefSeq
+    hgMapToGene rn4 refGene knownGene knownToRefSeq
+
+    # Create knownToEnsembl column
+    hgMapToGene rn4 ensGene knownGene knownToEnsembl
 
 
 # MGI?
@@ -3420,5 +3475,9 @@ cat > downloads.csh << 'EOF'
 # ftp://ftp.ncbi.nih.gov/genomes/R_norvegicus/Mapping_data/
 
 # SNPS - TBD by Heather's new process.
+
+#TODO after SNPS:
+    # Make knownToCdsSnp column.
+    hgMapToGene rn4 snpMap knownGene knownToCdsSnp -all -cds
 
 
