@@ -36,7 +36,7 @@ build 125, available from
       <A name="LocType"></A>
       <B>Location Type</B>: Describes the alignment of the flanking sequence<BR>
       <UL>
-        <LI><B>Range</B> - The flank alignment leaves a gap of 2 or more bases in the reference assembly.
+        <LI><B>Range</B> - The flank alignments leave a gap of 2 or more bases in the reference assembly.
         <LI><B>Exact</B> - The flank alignments leave exactly one base between them.
         <LI><B>Between</B> - The flank alignments are contiguous; the variation is an insertion. 
         <LI><B>RangeInsertion</B> - The flank alignments surround a distinct polymorphism between
@@ -57,11 +57,11 @@ build 125, available from
         <LI><B>Single</B> - single nucleotide variation: all observed alleles are single nucleotides
 	    (can have 2, 3 or 4 alleles)
         <LI><B>Insertion</B> - the polymorphism is an insertion relative to the reference assembly
-        <LI><B>Deletion</B> - the polymorphism i a deletion relative to the reference assembly
+        <LI><B>Deletion</B> - the polymorphism is a deletion relative to the reference assembly
         <LI><B>In-del</B> - insertion/deletion (applies to RangeInsertion, RangeSubstitution, RangeDeletion)
-        <LI><B>Mixed</B> - multiple polymorphisms at the same locus
-        <LI><B>Named</B> - the observed allele from dbSnp is given as a text name
-        <LI><B>Microsatellite</B> - the polymorphism is a short tandem repeat
+        <LI><B>Mixed</B> - the cluster contains submissions from multiple classes
+        <LI><B>Named</B> - the observed allele from dbSNP is given as a text name
+        <LI><B>Microsatellite</B> - the observed allele from dbSNP is variation in counts of short tandem repeats
         <LI><B>Unknown</B> - no classification provided by data contributor
       </UL>
     </LI>
@@ -74,26 +74,25 @@ build 125, available from
 	the variant (<I>each variant may be validated by more than one method</I>)<BR>
         <UL>
         <LI><B>By Frequency</B> - at least one submitted SNP in cluster has frequency data submitted
-        <LI><B>By Cluster</B> - cluster has 2+ submissions, with 1+ submissions assayed with a non-computational method
+        <LI><B>By Cluster</B> - cluster has at least 2 submissions, with at least one submission assayed with a non-computational method
         <LI><B>By Submitter</B> - at least one submitter SNP in cluster was validated by independent assay
-        <LI><B>By 2 Hit/2 Allele</B> - all alleles have been observed in 2+ chromosomes
+        <LI><B>By 2 Hit/2 Allele</B> - all alleles have been observed in at least 2 chromosomes
         <LI><B>By HapMap</B> - validated by HapMap project
-        <LI><B>Unknown</B> - no validation has been reported for this rsId
+        <LI><B>Unknown</B> - no validation has been reported for this variant
       </UL>
     </LI>
     <LI>
       <A name="Func"></A>
-      <B><A HREF="http://www.ncbi.nlm.nih.gov/SNP/snp_legend.cgi?legend=snpFxnColor" 
-	target="_blank">Function</A></B>: Predicted functional role 
+      <B>Function</B>: Predicted functional role 
 	(<I>each variant may have more than one functional role</I>)<BR>
       <UL>
-        <LI><B>Locus Region</B> - variation in region of gene, but not in transcript
+        <LI><B>Locus Region</B> - variation within 2000 bases of gene, but not in transcript
         <LI><B>Coding - Synonymous</B> - no change in peptide for allele with respect to reference assembly
         <LI><B>Coding - Non-Synonymous</B> - change in peptide for allele with respect to reference assembly
         <LI><B>Untranslated</B> - variation in transcript, but not in coding region interval
         <LI><B>Intron</B> - variation in intron, but not in first two or last two bases of intron
         <LI><B>Splice Site</B> - variation in first two or last two bases of intron
-        <LI><B>Reference</B> - allele observed in reference sequence
+        <LI><B>Reference</B> - allele observed in a coding region of the reference sequence
         <LI><B>Unknown</B> - no known functional classification
       </UL>
     </LI>
@@ -101,9 +100,9 @@ build 125, available from
       <A name="MolType"></A>
       <B>Molecule Type</B>: Sample used to find this variant<BR>
       <UL>
-        <LI><B>Unknown</B> - sample type not known
         <LI><B>Genomic</B> - variant discovered using a genomic template
         <LI><B>cDNA</B> - variant discovered using a cDNA template
+        <LI><B>Unknown</B> - sample type not known
       </UL>
     </LI>
 
@@ -120,12 +119,14 @@ build 125, available from
       to the reference assembly.
       Location type 'between' are insertions relative to the
       reference assembly.</LI>
-  <LI>We check that the size of the dbSnp reference allele matches the coordinate span.</LI>
+  <LI>We check that the size of the dbSNP reference allele matches the coordinate span.</LI>
+
   <LI>We compare the dbSNP reference allele to our reference allele,
       and note differences.   We also note if the difference is specifically
       that the dbSNP reference allele is the reverse complement.</LI>
+      
   <LI>For single-base substitutions, we note where the alignments of the
-      flanking sequences were adjacent or had a gap of more than one base.</LI>
+      flanking sequences are adjacent or have a gap of more than one base.</LI>
   <LI>We note if the observed alleles are not available from the rs_fasta files.</LI>
   <LI>We note if the observed alleles have an unexpected format.</LI>
   <LI>We check that the length of the observed alleles match the coordinate span.</LI>
