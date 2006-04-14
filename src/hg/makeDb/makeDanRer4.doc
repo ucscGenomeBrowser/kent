@@ -8,8 +8,9 @@ exit; # don't actually run this like a script :)
 #    http://www.sanger.ac.uk/Projects/D_rerio/
 #    ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv6release/Zv6_assembl_information.shmtl
 
+###########################################################################
 # DOWNLOAD SEQUENCE (DONE, 2006-03-29, hartera)
-
+# CHANGED NAME OF SCAFFOLDS AGP FILE (DONE, 2006-04-13, hartera)
      ssh kkstore01
      mkdir /cluster/store8/danRer4 
      ln -s /cluster/store8/danRer4 /cluster/data
@@ -24,8 +25,12 @@ exit; # don't actually run this like a script :)
       ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv6release/Zv6_scaffolds.fa
      wget --timestamp \
     ftp://ftp.ensembl.org/pub/assembly/zebrafish/Zv6release/Zv6_scaffolds.stats
+     # keep agp file name consistent with Zv5 (hartera, 2006-04-13)
+     mv Zv6.scaffold.agp Zv6.scaffolds.agp
 
+###########################################################################
 # DOWNLOAD MITOCHONDRION GENOME SEQUENCE (DONE, 2006-03-29, hartera)
+# ADDED CHUNKS AGP FILE (DONE, 2006-04-13, hartera)
      ssh kkstore01
      mkdir -p /cluster/data/danRer4/M
      cd /cluster/data/danRer4/M
@@ -50,12 +55,439 @@ exit; # don't actually run this like a script :)
      echo "0\tM/chrM_1\t16596\tchrM\t16596" > ./lift/ordered.lft
 # create a .agp file for chrM as hgGoldGapGl and other
 # programs require a .agp file so create chrM.agp
-     echo "chrM\t1\t16596\t1\tF\tAC024175.3\t1\t16596\t+" > ./chrM.agp
-     # Create a chrM.chunks.agp
-     mkdir -p /cluster/data/danRer3/M/agps
-     cd /cluster/data/danRer3/M/agps
+     echo "chrM\t1\t16596\t1\tF\tAC024175.3\t1\t16596\t+" \
+          > chrM.agp
+     # Create a chrM.chunks.agp (hartera, 2006-04-13)
+     mkdir -p /cluster/data/danRer4/M/agps
+     cd /cluster/data/danRer4/M/agps
      awk 'BEGIN {OFS="\t"} \
-        {print $1, $2, $3, $4, $5, $6, $7, $8, $1, $7, $8}' ../chrM.agp \
-         > chrM.chunks.agp
+        {print $1, $2, $3, $4, $5, $6, $7, $8, $1, $7, $8}' \
+        ../chrM.agp > chrM.chunks.agp
      # make sure that all above *.agp files are tab delimited
+
+###########################################################################
+# CREATE LIST OF CHROMOSOMES (DONE, 2006-04-12, hartera)
+     ssh kkstore01
+     cd /cluster/data/danRer4
+     awk '{if ($1 !~ /Zv6/) print $1;}' Zv6.scaffolds.agp \
+         | sort -n | uniq > chrom.lst
+     cp chrom.lst chrom1to25.lst
+     # add chrM, chrUn and chrNA
+     echo "M" >> chrom.lst
+     echo "NA" >> chrom.lst
+     echo "Un" >> chrom.lst
+
+###########################################################################
+# MAKE JKSTUFF AND BED DIRECTORIES (DONE, 2006-04-12, hartera)
+    ssh kkstore01
+    cd /cluster/data/danRer4
+    # This used to hold scripts -- better to keep them inline here 
+    # Now it should just hold lift file(s) and
+    # temporary scripts made by copy-paste from this file.
+    mkdir /cluster/data/danRer4/jkStuff
+    # This is where most tracks will be built:
+    mkdir /cluster/data/danRer4/bed
+
+###########################################################################
+# CHECK AGP FILES AND FASTA SIZE CONSISTENCY (DONE, 2006-04-13, hartera)
+# 
+    ssh kkstore01
+    cd /cluster/data/danRer4
+    mkdir -p /cluster/data/danRer4/scaffolds
+    cd /cluster/data/danRer4/scaffolds
+    faSize detailed=on ../Zv6_scaffolds.fa > Zv6.scaffolds.sizes
+    # Check that these sizes correspond to the sizes in the scaffolds agp file
+    # use script compareSizes2.pl
+    cat << '_EOF_' > ../jkStuff/compareSizes2.pl
+#!/usr/bin/perl -w
+use strict;
+
+my ($file, $agp);
+
+$file = $ARGV[0];
+$agp = $ARGV[1];
+
+open(FILE, $file) || die "Can not open $file: $!\n";
+open(AGP, $agp) || die "Can not open $agp: $!\n";
+open(OUT, ">log.txt") || die "Can not create log.txt: $!\n";
+
+my ($l, @f, $name, $size, %scafsHash);
+while (<FILE>)
+{
+$l = $_;
+@f = split(/\t/, $l);
+
+$name = $f[0]; 
+$size = $f[1];
+$scafsHash{$name} = $size;
+}
+close FILE;
+
+while (<AGP>)
+{
+my ($line, @fi, $scaf, $end);
+$line = $_;
+
+if ($line =~ /Zv/)
+   {
+   @fi = split(/\t/, $line);
+   $scaf = $fi[5];
+   $end = $fi[7];
+
+   if (exists($scafsHash{$scaf}))
+      {
+      if ($scafsHash{$scaf} == $end)
+         {
+         print OUT "$scaf - ok\n";
+         }
+      else
+         {
+         print OUT "$scaf - different size to sequence\n";
+         }
+      }
+   else
+      {
+      print OUT "$scaf - does not exist in list of sizes\n";
+      }
+   }
+}
+close AGP;
+close OUT;
+'_EOF_'
+   # << happy emacs
+   chmod +x ../jkStuff/compareSizes2.pl
+   perl /cluster/data/danRer4/jkStuff/compareSizes2.pl \
+        Zv6.scaffolds.sizes ../Zv6.scaffolds.agp 
+   grep different log.txt
+   grep not log.txt
+   # these are all consistent with the sequence sizes
+   # check that the co-ordinates in the agp files are consistent:
+   # field 2 is the start position, field 3 is the end and field 8 is the size
+   # so check that this is consistent.
+   cd /cluster/data/danRer4
+   awk '{if ($6 ~ /^Zv6/ && (($3-$2+1) != $8)) print $6;}' Zv6.scaffolds.agp \
+       > Zv6.scaffolds.coordCheck 
+   # this file is empty so they are ok. do the same for the chunks.agp file
+   awk '{if ($6 ~ /^Zv6/ && (($3-$2+1) != $8)) print $6;}' Zv6.chunks.agp \
+       > Zv6.chunks.coordCheck
+   # this file is empty so ok
+   # check that the difference between 7th and 8th fields is the same as the 
+   # difference between 11th and 12th fields. 
+   awk '{if ($5 != "N" && (($8 - $7) != ($12 - $11))) print $6;}' \
+       Zv6.chunks.agp > Zv6.chunks.coordCheck2
+   # these are all ok
+   rm Zv6.*.coord*
+
+   cat << '_EOF_' > ./jkStuff/checkSizesInAgps.pl
+#!/usr/bin/perl -w
+use strict;
+
+my ($ch, $sc, %scafsHash);
+$sc = $ARGV[0]; # scaffolds agp
+$ch = $ARGV[1]; # chunks or contigs agp
+
+open(SCAFS, $sc) || die "Can not open $sc: $!\n";
+open(CHUNKS, $ch) || die "Can not open $ch: $!\n";
+
+while (<SCAFS>)
+{
+my ($l, @f, $name, $e);
+$l = $_;
+@f = split(/\t/, $l);
+if ($f[5] =~ /^Zv/)
+   {
+   $name = $f[5];
+   $e = $f[2];
+   $scafsHash{$name} = $e;
+   }
+}
+close SCAFS;
+
+my $scaf = "";
+my $prev = "";
+my $prevEnd = 0;
+
+while (<CHUNKS>)
+{
+my ($line, @fi);
+$line = $_;
+@fi = split(/\t/, $line);
+
+# if it is not a gap line
+if ($fi[4] ne "N")
+   {
+   $scaf = $fi[9];
+   if (($scaf ne $prev) && ($prev ne ""))
+      {
+      checkCoords($prev, $prevEnd);
+      }
+$prev = $scaf;
+$prevEnd = $fi[2];
+   }
+}
+# check last entry in file
+checkCoords($prev, $prevEnd);
+close CHUNKS;
+
+sub checkCoords {
+my ($name, $end) = @_;
+if (exists($scafsHash{$prev}))
+   {
+   if ($scafsHash{$prev} != $prevEnd)
+      {
+      my $ed = $scafsHash{$prev};
+      print "Scaffold $prev is not consistent between agps\n";
+      }
+   else
+      {
+      my $ed = $scafsHash{$prev};
+      print "Scaffold $prev - ok\n";
+      }
+   }
+}
+'_EOF_'
+   # << happy emacs
+   chmod +x ./jkStuff/checkSizesInAgps.pl
+   cd scaffolds
+   perl /cluster/data/danRer4/jkStuff/checkSizesInAgps.pl \
+        Zv6.scaffolds.agp Zv6.chunks.agp > Zv6.scafsvschunks
+   grep "not consistent" Zv6.scafsvschunks
+   # no lines were inconsistency was reported
+   wc -l Zv6.scafsvschunks
+   # 6653 Zv6.scafsvschunks
+   grep "Zv6" Zv6.scaffolds.agp | wc -l
+   # 6653
+   # so all the scaffolds were checked and were ok.
+   cd ..
+   rm -r scaffolds
+ 
+###########################################################################
+# SPLIT AGP FILES BY CHROMOSOME (DONE, 2006-04-13, hartera)
+# GENOME FASTA FROM SANGER WAS CREATED USING SCAFFOLDS AGP
+   ssh kkstore01
+   cd /cluster/data/danRer4
+   # There are 2 .agp files: one for scaffolds (supercontigs on danRer1) and
+   # then one for chunks (contigs on danRer1) showing how they map on to
+   # scaffolds.
+  
+   # get list of scaffolds from FASTA file and check these are in agp
+   grep '>' Zv6_scaffolds.fa | sed -e 's/>//' | sort | uniq > Zv6FaScafs.lst
+   # get list of scaffolds from agp - do not print from gap lines
+   awk '{if ($7 !~ /contig/) print $6;}' Zv6.scaffolds.agp \
+        | sort | uniq > Zv6AgpScafs.lst
+   diff Zv6FaScafs.lst Zv6AgpScafs.lst
+   # no difference so all scaffolds are in the FASTA file
+   # add "chr" prefix for the agp files
+   perl -pi -e 's/^([0-9]+)/chr$1/' ./*.agp
+   # for chromosomes 1 to 25, create 2 agps for each chrom, one for scaffolds 
+   # and one for chunks:
+   foreach c (`cat chrom1to25.lst`)
+     echo "Processing $c ..."
+     mkdir $c
+     perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
+          ./Zv6.chunks.agp \
+          > $c/chr$c.chunks.agp
+     perl -we "while(<>){if (/^chr$c\t/) {print;}}" \
+          ./Zv6.scaffolds.agp \
+          > $c/chr$c.scaffolds.agp
+   end
+   
+###########################################################################
+# CREATE AGP FILES FOR chrNA AND chrUn (DONE, 2006-04-13, hartera)
+   ssh kkstore01
+   # chrNA consists of WGS contigs that could not be related to any
+   # FPC contig and the scaffolds and contigs are named Zv5_NAN in the
+   # first field of the agp files
+   cd /cluster/data/danRer4
+   mkdir ./NA
+   awk '{if ($1 ~ /Zv6_NA/) print;}' Zv6.chunks.agp \
+       > ./NA/NA.chunks.agp
+   awk '{if ($1 ~ /Zv6_NA/) print;}' Zv6.scaffolds.agp \
+       > ./NA/NA.scaffolds.agp
+   # change the first field to "chrUn" then can use agpToFa to process
+   perl -pi.bak -e 's/Zv6_NA[0-9]+/chrNA/' ./NA/*.agp
+   wc -l ./NA/NA.scaffolds.agp
+   # 2898 ./NA/NA.scaffolds.agp
+   # check files and remove backup files
+   # these are not sorted numerically by scaffold number
+   rm ./NA/*.bak
+   # then process chrUn - this is made from scaffolds and
+   # contigs where the name is Zv6_scaffoldN in the first field of the
+   # agp files. These scaffolds and contigs are unmapped to chromosomes
+   # in the agp file. chrUn is made up of WGS scaffolds that mapped to
+   # FPC contigs, but the chromosome is unknown.
+   mkdir ./Un
+   awk '{if ($1 ~ /Zv6_scaffold/) print;}' Zv6.chunks.agp \
+       > ./Un/Un.chunks.agp
+   awk '{if ($1 ~ /Zv6_scaffold/) print;}' Zv6.scaffolds.agp \
+       > ./Un/Un.scaffolds.agp
+   # change the first field to "chrUn" then can use agpToFa to process
+   perl -pi.bak -e 's/Zv6_scaffold[0-9]+/chrUn/' ./Un/*.agp
+   wc -l ./Un/Un.scaffolds.agp
+   # 68 ./Un/Un.scaffolds.agp
+   # check files and remove backup files
+   rm ./Un/*.bak
+   # get FASTA file of sequences for NA and Un and create agp with
+   # Ns between scaffolds
+   # from scaffolds agp, get name of scaffolds to be retrieved from the 
+   # FASTA file to make the NA and Un chromosomes.
+   cd /cluster/data/danRer4
+   foreach c (NA Un)
+     awk '{print $6;}' $c/$c.scaffolds.agp > $c/chr$c.scaffolds.lst
+         $HOME/bin/i386/faSomeRecords /cluster/data/danRer4/Zv6_scaffolds.fa \
+         $c/chr$c.scaffolds.lst $c/chr$c.fa
+   end
+   # check that all scaffolds in the list are in the FASTA file for NA and Un.
+   # made a change to scaffoldFaToAgp.c so that the the number of Ns to be
+   # inserted between scaffolds can be specified as an option.
+   # There are less and smaller random scaffolds than before so use 50,000 Ns
+   # between scaffolds as for the human random chromosomes.
+   foreach c (NA Un)              
+     $HOME/bin/i386/scaffoldFaToAgp -scaffoldGapSize=50000 $c/chr$c.fa
+     mv $c/chr$c.fa $c/chr$c.scaffolds.fa
+   end
+   # change chrUn to chrNA for NA and D to W for NA and Un
+   sed -e 's/chrUn/chrNA/' ./NA/chrNA.agp | sed -e 's/D/W/' \
+       > ./NA/chrNA.scaffolds.agp
+   # the scaffolds agp for chrNA is now sorted numerically by scaffold number
+   sed -e 's/D/W/' ./Un/chrUn.agp > ./Un/chrUn.scaffolds.agp
+   # edit ./NA/chrNA.scaffolds.agp and ./Un/chrUn.scaffolds.agp and 
+   # remove last line as this just adds an extra 500 Ns at the 
+   # end of the sequence.
+   rm ./NA/chrNA.agp ./Un/chrUn.agp
+cat << '_EOF_' > ./jkStuff/createAgpWithGaps.pl
+#!/usr/bin/perl
+use strict;
+
+# This script takes a chunks agp and inserts Ns between scaffolds for 
+# the chunks (contigs) agp file. Could also insert Ns between scaffolds
+# for scaffolds agp.
+
+my ($chrom, $numN, $name, $prev, $st, $end, $prevEnd, $id);
+my $chrom = $ARGV[0]; # chromosome name
+my $numN = $ARGV[1];  # number of Ns to be inserted 
+my $type = $ARGV[2]; # contigs or scaffolds
+
+$prev = "";
+$st = 1;
+$prevEnd = 0;
+$id = 0;
+
+while (<STDIN>)
+{
+my $l = $_;
+my @f = split(/\t/, $l);
+
+if ($type eq "contigs")
+   {
+   $name = $f[9];
+   }
+else
+   {
+   $name = $f[5]
+   }
+
+my $currSt = $f[1];
+my $currEnd = $f[2];
+my $size = $currEnd - $currSt;
+
+$id++;
+$st = $prevEnd + 1;
+$end = $st + $size;
+
+if (($prev ne "") && ($prev ne $name))
+   {
+   $st = $prevEnd + 1;
+   $end = ($st + $numN) - 1;
+   print "$chrom\t$st\t$end\t$id\tN\t$numN\tcontig\tno\n";
+   $prevEnd = $end;
+   $id++;
+   }
+
+$st = $prevEnd + 1;
+$end = $st + $size;
+print "$chrom\t$st\t$end\t$id\t$f[4]\t$f[5]\t$f[6]\t$f[7]\t$f[8]";
+if ($type eq "contigs")
+   {
+   print "\t$f[9]\t$f[10]\t$f[11]";
+   }
+
+$prevEnd = $end;
+$prev = $name;
+}
+'_EOF_'
+   chmod +x ./jkStuff/createAgpWithGaps.pl
+   cd /cluster/data/danRer4/NA
+   # for NA, sort the chunks.agp by contig number
+   perl -pi.bak -e 's/Zv6_NA//' NA.chunks.agp
+   sort -k6,6n NA.chunks.agp > NA.chunks2.agp
+   # then put back Zv6_NA
+   perl -pi.bak -e 's/([0-9]+\.[0-9]+)/Zv6_NA$1/' NA.chunks2.agp
+   mv NA.chunks2.agp NA.chunks.agp
+   cd /cluster/data/danRer4
+   foreach c (NA Un)
+      cd $c
+      perl /cluster/data/danRer4/jkStuff/createAgpWithGaps.pl \
+           chr${c} 50000 contigs < ${c}.chunks.agp > chr${c}.chunks.agp
+      cd ..
+   end
+   # check co-ordinates
+   # field 2 is the start position, field 3 is the end and field 8 is the size
+   # so check that this is consistent in scaffolds and chunks agp. 
+   # check that the difference between 7th and 8th fields is the same as the 
+   # difference between 11th and 12th fields for chunks agp. 
+   cd /cluster/data/danRer4
+   foreach c (NA Un)
+        awk '{if ($6 ~ /^Zv6/ && (($3-$2+1) != $8)) print $6;}' \
+            $c/chr${c}.scaffolds.agp > $c/chr${c}.scaffolds.coordCheck 
+        awk '{if ($6 ~ /^Zv6/ && (($3-$2+1) != $8)) print $6;}' \
+            $c/chr${c}.chunks.agp > $c/chr${c}.chunks.coordCheck 
+        awk '{if ($5 != "N" && (($8 - $7) != ($12 - $11))) print $6;}' \
+            $c/chr${c}.chunks.agp > $c/chr${c}.chunks.coordCheck2 
+   end
+   # check the outputs are empty
+   wc -l NA/*.coord*
+   wc -l Un/*.coord*
+   rm NA/*.coord* Un/*.coord*
+   # check that the scaffolds and chunks agp files are consistent with
+   # each other. 
+   foreach c (NA Un)
+      perl /cluster/data/danRer4/jkStuff/checkSizesInAgps.pl \
+           $c/chr${c}.scaffolds.agp $c/chr${c}.chunks.agp \
+           > $c/${c}.scafsvschunks
+   end
+   foreach c (NA Un)
+     grep "not consistent" $c/${c}.scafsvschunks
+   end 
+   wc -l NA/NA.scafsvschunks 
+   wc -l Un/Un.scafsvschunks 
+   # no lines were inconsistency was reported
+   rm NA/NA.scafsvschunks Un/Un.scafsvschunks
+   # clean up
+   foreach c (NA Un)
+      rm $c/${c}.scaffolds.agp $c/${c}.chunks.agp $c/chr${c}.scaffolds.fa \
+         $c/chr${c}.scaffolds.lst $c/*.bak
+   end
+
+###########################################################################
+# BUILD CHROM-LEVEL SEQUENCE (DONE, 2006-04-13, hartera)
+   ssh kkstore01
+   cd /cluster/data/danRer4
+   # Ignore warnings about chrM files not existing - this chrom has 
+   # already been processed - see mitochondrion section above.
+   # Sequence is already in upper case so no need to change
+   foreach c (`cat chrom.lst`)
+     echo "Processing ${c}"
+     $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr$c.scaffolds.agp chr$c \
+         $c/chr$c.fa ./Zv6_scaffolds.fa
+     echo "${c} - DONE"
+   end
+   # move scaffolds agp to be chrom agp and clean up
+   foreach c (`cat chrom.lst`)
+      cd $c
+      cp chr${c}.scaffolds.agp chr${c}.agp
+      mkdir -p agps
+      mv chr${c}.*.agp ./agps/
+      cd ..
+   end
 
