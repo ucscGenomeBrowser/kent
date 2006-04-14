@@ -17,16 +17,14 @@
 #include "../../hg/inc/agpFrag.h"
 #include "../../hg/inc/agpGap.h"
 
-static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.6 2006/03/18 02:22:37 angie Exp $";
-
-#define SCAFFOLD_GAP_SIZE 1000
-/* TODO: optionize this */
+static char const rcsid[] = "$Id: scaffoldFaToAgp.c,v 1.7 2006/04/14 03:17:47 hartera Exp $";
 
 #define SCAFFOLD_GAP_TYPE "contig"   
 #define FRAGMENT_GAP_TYPE "frag"        /* within scaffolds (bridged) */
 #define CHROM_NAME "chrUn"
 
 int minGapSize = 5;
+int scaffoldGapSize = 1000;
 
 void usage()
 /* Print usage instructions and exit. */
@@ -35,10 +33,11 @@ errAbort("scaffoldFaToAgp - generate an AGP file, gap file, and lift file from a
      "usage:\n"
      "    scaffoldFaToAgp source.fa\n"
      "options:\n"
-     "      -minGapSize   Minimum threshold for calling a block of Ns a gap."
+     "      -minGapSize   Minimum threshold for calling a block of Ns a gap.\n"
+     "      -scaffoldGapSize Size of gaps of Ns to be inserted between scaffolds.\n"
      "The resulting files will be source.{agp,gap,lft}\n"
-     "Note: gaps of 1000 bases are inserted between scaffold records\n"
-     "   as contig gaps in the .agp file.\n"
+     "Note: unless otherwise specified, gaps of 1000 bases are inserted \n"
+     "between scaffold records by default as contig gaps in the .agp file.\n"
      "  N's within scaffolds are represented as\n"
      "   frag gaps in the .gap file only\n");
 }
@@ -67,9 +66,6 @@ int size;
 struct agpFrag frag;
 struct agpGap scaffoldGap, fragGap;
 
-/* TODO: make settable by command-line option */
-int scaffoldGapSize = SCAFFOLD_GAP_SIZE;
-
 struct lineFile *lf = lineFileOpen(scaffoldFile, TRUE);
 char outDir[256], outFile[128], ext[64], outPath[512];
 FILE *agpFile = NULL, *gapFile = NULL, *liftFile = NULL;
@@ -88,11 +84,11 @@ int seqStart = 0;
 while (faMixedSpeedReadNext(lf, &scaffoldSeq, &size, &name))
     {
     chromSize += size;
-    chromSize += SCAFFOLD_GAP_SIZE;
+    chromSize += scaffoldGapSize;
     scaffoldCount++;
     }
 printf("scaffold gap size is %d, total scaffolds: %d\n",
-         SCAFFOLD_GAP_SIZE, scaffoldCount);
+         scaffoldGapSize, scaffoldCount);
 printf("chrom size is %d\n", chromSize);
 
 /* initialize fixed fields in AGP frag */
@@ -180,7 +176,7 @@ while (faMixedSpeedReadNext(lf, &scaffoldSeq, &size, &name))
 
     /* write lift file entry for this gap */
     fprintf(liftFile, "%d\t%s\t%d\t%s\t%d\n",
-            start-1, "gap", SCAFFOLD_GAP_SIZE, CHROM_NAME, chromSize);
+            start-1, "gap", scaffoldGapSize, CHROM_NAME, chromSize);
 
     start = end;
 
@@ -197,6 +193,8 @@ int main(int argc, char *argv[])
 {
 optionHash(&argc, argv);
 minGapSize = optionInt("minGapSize", minGapSize);
+scaffoldGapSize = optionInt("scaffoldGapSize", scaffoldGapSize);
+
 if (argc != 2)
     usage();
 scaffoldFaToAgp(argv[1]);
