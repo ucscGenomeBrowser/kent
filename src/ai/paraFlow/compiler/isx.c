@@ -258,8 +258,8 @@ switch (iad->adType)
 	}
 	break;
     case iadRecodedType:
-	fprintf(f, "type(%d)", iad->val.recodedType);
-        break;
+	fprintf(f, "type(%d)", iad->recodedType);
+	break;
     default:
         internalErr();
 	break;
@@ -390,18 +390,6 @@ iad->val.isxTok.val = tokVal;
 return iad;
 }
 
-struct isxAddress *isxRecodedTypeAddress(struct pfCompile *pfc, 
-	struct pfType *type)
-/* Get type info. */
-{
-struct isxAddress *iad;
-AllocVar(iad);
-iad->adType = iadRecodedType;
-iad->valType = ivInt;
-iad->val.recodedType = recodedTypeId(pfc, type);
-return iad;
-}
-
 static struct isxAddress *zeroAddress()
 /* Get place representing zero or nil. */
 {
@@ -452,6 +440,16 @@ iad->name = name;
 return iad;
 }
 
+struct isxAddress *isxRecodedTypeAddress(struct pfCompile *pfc, 
+	struct pfType *ty)
+{
+struct isxAddress *iad;
+AllocVar(iad);
+iad->adType = iadRecodedType;
+iad->recodedType = recodedTypeId(pfc, ty);
+iad->valType = ivInt;
+return iad;
+}
 
 struct isxAddress *isxIoAddress(int offset, enum isxValType valType,
 	enum isxAddressType adType)
@@ -537,10 +535,9 @@ uglyAbort("Can't handle stringCat yet");
 return NULL;
 }
 
-static void isxVarExpression(struct pfCompile *pfc, 
+static struct isxAddress *isxVarExpression(struct pfCompile *pfc, 
 	struct pfParse *pp, struct hash *varHash, 
-	double weight, struct dlList *iList, struct isxAddress **retVal,
-	struct isxAddress **retType)
+	double weight, struct dlList *iList)
 /* Generate intermediate code for expression that may begin with
  * pptCastTypedToVar. */
 {
@@ -549,48 +546,71 @@ struct pfType *type;
 int recodedType;
 if (pp == NULL)
     {
-    *retVal = zeroAddress();
+    iad = zeroAddress();
     type = pfc->intFullType;
     }
 else
     {
     if (pp->type == pptCastTypedToVar)
        pp = pp->children;
-    *retVal = isxExpression(pfc, pp, varHash, weight, iList);
+    iad = isxExpression(pfc, pp, varHash, weight, iList);
     type = pp->ty;
     }
-*retType = isxRecodedTypeAddress(pfc, type);
+iad->recodedType = recodedTypeId(pfc, type);
+return iad;
 }
 
-static void isxPushInTuple(struct pfCompile *pfc, struct pfParse *inTuple,
-	struct hash *varHash, double weight, struct dlList *iList,
-	int offset)
-/* Generate code to push inTuple onto stack */
+static struct isxAddress *isxInTupleAddresses(struct pfCompile *pfc, 
+	struct pfParse *inTuple, struct hash *varHash, double weight, 
+	struct dlList *iList)
+/* Generate addresses (which may involving evaluating expressions to temps)
+ * for all input vars in tuple. */
 {
 struct pfParse *p;
-struct isxAddress *source, *dest;
+struct isxAddress *source, *next, *sourceList = NULL;
 
-for (p = inTuple->children, offset=0; p != NULL; p = p->next, ++offset)
+for (p = inTuple->children; p != NULL; p = p->next)
     {
     if (p->ty->base == pfc->varType)
         {
-	struct isxAddress *sourceType;
-	isxVarExpression(pfc, p, varHash, weight, iList, 
-	    &source, &sourceType);
+	source = isxVarExpression(pfc, p, varHash, weight, iList);
+	slAddHead(&sourceList, source);
+#ifdef OLD
 	dest = isxIoAddress(offset, source->valType, iadInStack);
-	isxAddNew(pfc, poVarInput, dest, source, sourceType, iList);
+	isxAddNew(pfc, poVarInput, dest, source, NULL, iList);
+#endif /* OLD */
 	}
     else
 	{
 	for (source = isxExpression(pfc, p, varHash, weight, iList);
-	    source != NULL; source = source->next)
+	    source != NULL; source = next)
 	    {
+	    next = source->next;
+	    slAddHead(&sourceList, source);
+#ifdef OLD
 	    dest = isxIoAddress(offset, source->valType, iadInStack);
 	    isxAddNew(pfc, poInput, dest, source, NULL, iList);
+#endif /* OLD */
 	    }
 	}
     }
+slReverse(&sourceList);
+return sourceList;
 }
+
+static void isxCodeIn(struct pfCompile *pfc, struct isxAddress *sourceList,
+	struct hash *varHash, double weight, struct dlList *iList, 
+	int offset)
+/* Generate code to push addresses on stack for function call. */
+{
+struct isxAddress *source, *dest;
+for (source = sourceList; source != NULL; source = source->next, ++offset)
+    {
+    dest = isxIoAddress(offset, source->valType, iadInStack);
+    isxAddNew(pfc, poInput, dest, source, NULL, iList);
+    }
+}
+
 
 static struct isxAddress *isxCall(struct pfCompile *pfc,
 	struct pfParse *pp, struct hash *varHash, double weight,
@@ -601,10 +621,11 @@ struct pfParse *function = pp->children;
 struct pfParse *inTuple = function->next;
 struct pfParse *p;
 struct pfType *outTuple = function->ty->children->next, *ty;
-struct isxAddress *source, *dest, *destList = NULL;
+struct isxAddress *source, *sourceList, *dest, *destList = NULL;
 int offset;
 
-isxPushInTuple(pfc, inTuple, varHash, weight, iList,0);
+sourceList = isxInTupleAddresses(pfc, inTuple, varHash, weight, iList);
+isxCodeIn(pfc, sourceList, varHash, weight, iList, 1);
 source = isxCallAddress(function->var->cName);
 isxAddNew(pfc, poCall, NULL, source, NULL, iList);
 for (ty = outTuple->children, offset=0; ty != NULL; ty = ty->next, ++offset)
@@ -624,15 +645,19 @@ static struct isxAddress *isxClassFromTuple(struct pfCompile *pfc,
 /* Push tuple on stack and call class creator from it. */
 {
 struct pfParse *tuple = pp->children, *p;
-struct isxAddress *source, *dest, *recoded;
+struct isxAddress *sourceList, *source, *dest, *recoded;
+
+
+/* Get parameters */
+sourceList = isxInTupleAddresses(pfc, tuple, varHash, weight, iList);
 
 /* Generate call to save type parameter */
-recoded = isxRecodedTypeAddress(pfc, pp->ty);
 dest = isxIoAddress(0, ivInt, iadOutStack);
+recoded = isxRecodedTypeAddress(pfc, pp->ty);
 isxAddNew(pfc, poInput, dest, recoded, NULL, iList);
 
-/* Push other parameters */
-isxPushInTuple(pfc, tuple, varHash, weight, iList,1);
+/* Push parameters */
+isxCodeIn(pfc, sourceList, varHash, weight, iList, 1);
 
 /* Generate function call itself. */
 source = isxCallAddress("_zx_tuple_to_class");
@@ -988,16 +1013,14 @@ switch (pp->type)
 	enum isxValType valType = ppToIsxValType(pfc, pp);
 	struct isxAddress *dest = varAddress(pp->var, varHash, 
 		weight, valType);
+	struct isxAddress *source;
 	if (valType == ivVar)
 	    {
-	    struct isxAddress *source, *sourceType;
-	    isxVarExpression(pfc, init, varHash, weight, iList, 
-	    	&source, &sourceType);
-	    isxAddNew(pfc, poVarInit, dest, source, sourceType, iList);
+	    source = isxVarExpression(pfc, init, varHash, weight, iList);
+	    isxAddNew(pfc, poVarInit, dest, source, NULL, iList);
 	    }
 	else
 	    {
-	    struct isxAddress *source;
 	    if (init)
 		source = isxExpression(pfc, init, varHash, weight, iList);
 	    else

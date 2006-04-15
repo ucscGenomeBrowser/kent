@@ -428,7 +428,7 @@ else
 	case iadRecodedType:
 	    {
 	    safef(buf, pentCodeBufSize, "%d*8+__pf_lti_%s", 
-	    	iad->val.recodedType, pfc->moduleName);
+	    	iad->recodedType, pfc->moduleName);
 	    break;
 	    }
 	default:
@@ -436,6 +436,13 @@ else
 	    break;
 	}
     }
+}
+
+void pentPrintTypeAddress(struct pfCompile *pfc, struct pentCoder *coder,
+	int recodedType, char *buf)
+/* Print out an address for an instruction. */
+{
+safef(buf, pentCodeBufSize, "%d*8+__pf_lti_%s", recodedType, pfc->moduleName);
 }
 
 static void codeOp(struct pfCompile *pfc,
@@ -1007,7 +1014,10 @@ else
     /* Move type to dest. */
     reg = pentFreeReg(pfc, isx, ivInt, nextNode, coder);
     regName = isxRegName(reg, ivInt);
+    pentPrintTypeAddress(pfc, coder, source->recodedType, coder->sourceBuf);
+#ifdef OLD
     pentPrintAddress(pfc, coder, sourceType, coder->sourceBuf);
+#endif /* OLD */
     pentCoderAdd(coder, "movl", coder->sourceBuf, regName);
     pentPrintVarMemAddress(dest, coder->destBuf, 8);
     pentCoderAdd(coder, "movl", regName, coder->destBuf);

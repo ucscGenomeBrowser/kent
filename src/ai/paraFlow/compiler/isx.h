@@ -162,10 +162,6 @@ union isxAddressVal
     int tempMemLoc;		/* Memory location for temps, 0 for none */
     int ioOffset;		/* Stack offset. */
     struct isxLoopInfo *loopy;  /* Information on loop */
-#ifdef OLD
-    struct ctar *ctar;		/* Information about function variables. */
-#endif /* OLD */
-    int recodedType;		/* Local type information */
     };
 
 struct isxAddress
@@ -179,6 +175,7 @@ struct isxAddress
     int stackOffset;		/* Stack offset. */
     struct isxReg *reg;	/* Register if any */
     float weight;	/* Number of uses, scaled for loops */
+    int recodedType;	/* Recoded run-time type info. */
     };
 
 struct isxLiveVar;	/* Defined in isxLiveVar.h */
