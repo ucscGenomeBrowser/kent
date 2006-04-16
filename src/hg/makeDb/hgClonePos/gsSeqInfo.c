@@ -6,15 +6,12 @@
 #include "jksql.h"
 #include "gsSeqInfo.h"
 
-static char const rcsid[] = "$Id: gsSeqInfo.c,v 1.3 2003/06/10 16:59:40 kent Exp $";
+static char const rcsid[] = "$Id: gsSeqInfo.c,v 1.4 2006/04/16 23:34:14 angie Exp $";
 
 void gsSeqInfoStaticLoad(char **row, struct gsSeqInfo *ret)
 /* Load a row from gsSeqInfo table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->acc = row[0];
 strcpy(ret->gi, row[1]);
 ret->size = sqlUnsigned(row[2]);
@@ -30,8 +27,6 @@ struct gsSeqInfo *gsSeqInfoLoad(char **row)
  * from database.  Dispose of this with gsSeqInfoFree(). */
 {
 struct gsSeqInfo *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->acc = cloneString(row[0]);
@@ -51,7 +46,6 @@ struct gsSeqInfo *gsSeqInfoCommaIn(char **pS, struct gsSeqInfo *ret)
  * return a new gsSeqInfo */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -97,7 +91,6 @@ for (el = *pList; el != NULL; el = next)
 void gsSeqInfoOutput(struct gsSeqInfo *el, FILE *f, char sep, char lastSep) 
 /* Print out gsSeqInfo.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->acc);
 if (sep == ',') fputc('"',f);
