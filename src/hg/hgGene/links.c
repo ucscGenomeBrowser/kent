@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: links.c,v 1.23 2006/03/06 17:46:34 angie Exp $";
+static char const rcsid[] = "$Id: links.c,v 1.24 2006/04/16 12:34:27 fanhsu Exp $";
 
 struct link
 /* A link to another web site. */
@@ -138,7 +138,8 @@ if (sameString(link->name, "protBrowser"))
     if (!hgPbOk(database))
         return NULL;
     /* special processing for PB, since we need the protein ID, instead everything key off from gene ID */
-    safef(query, sizeof(query), "../cgi-bin/pbTracks?proteinID=%s", curProtId);
+    /* use UniProt accession instead of displayID, because display ID sometimes changes */
+    safef(query, sizeof(query), "../cgi-bin/pbTracks?proteinID=%s", swissProtAcc);
     return(strdup(query));
     }
 if (sameString(link->name, "tbSchema"))
