@@ -95,10 +95,10 @@ longLabel  MGC C-List RT-PCR: Confirmed
 group mgcCList
 priority 101.05
 visibility pack
-type bed 12
+type psl .
 color 10,100,150
 exonArrows on
-#pslSequenceBases all
+pslSequenceBases all
 
 track mgcWUPcrHit
 shortLabel C-List Hit
