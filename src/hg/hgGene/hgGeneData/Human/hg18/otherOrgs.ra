@@ -9,8 +9,6 @@ db danRer3
 
 name drosophila
 db dm2
-otherIdSql select flyBase2004Xref.fbgn from flyBase2004Xref,flyBaseGene where flyBaseGene.name = '%s' and flyBaseGene.name = flyBase2004Xref.name 
-pepTable flyBasePep
 
 name cElegans
 db ce2

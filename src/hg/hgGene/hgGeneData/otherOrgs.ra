@@ -54,13 +54,13 @@ name drosophila
 shortLabel D. melanogaster
 tables dmBlastTab
 idSql select target from dmBlastTab where query = '%s'
-pepTable bdgpGenePep
+pepTable flyBasePep
 genomeUrl ../cgi-bin/hgTracks?org=D.+melanogaster&position=%s
 sorterUrl ../cgi-bin/hgNear?org=D.+melanogaster&near.oldOrg=D.+melanogaster&near_search=%s
 geneUrl ../cgi-bin/hgGene?org=D.+melanogaster&hgg_gene=%s&hgg_chrom=none
 otherName FlyBase
 otherUrl http://flybase.bio.indiana.edu/cgi-bin/fbidq.html?%s
-otherIdSql select bdgpGeneInfo.flyBaseId from bdgpGeneInfo,bdgpToCanonical where bdgpToCanonical.name='%s' and bdgpToCanonical.value = dm1.bdgpGeneInfo.bdgpName
+otherIdSql select flyBase2004Xref.fbgn from flyBase2004Xref,flyBaseGene where flyBaseGene.name = '%s' and flyBaseGene.name = flyBase2004Xref.name
 priority 40
 
 name cElegans

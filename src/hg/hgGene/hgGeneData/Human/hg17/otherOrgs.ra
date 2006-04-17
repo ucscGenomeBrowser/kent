@@ -8,8 +8,7 @@ name zebrafish
 db danRer2
 
 name drosophila
-db dm1
-idSql select dm1.bdgpToCanonical.name from dmBlastTab,dm1.bdgpGeneInfo,dm1.bdgpToCanonical where dmBlastTab.query='%s' and dmBlastTab.target = dm1.bdgpGeneInfo.flyBaseId and dm1.bdgpGeneInfo.bdgpName=bdgpToCanonical.value
+db dm2
 
 name cElegans
 db ce2

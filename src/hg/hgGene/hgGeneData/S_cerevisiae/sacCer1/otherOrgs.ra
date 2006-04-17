@@ -8,8 +8,7 @@ name zebrafish
 db danRer1
 
 name drosophila
-db dm1
-idSql select target from dmBlastTab where query='%s';
+db dm2
 
 name cElegans
 db ce1

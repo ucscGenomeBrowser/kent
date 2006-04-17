@@ -6,7 +6,9 @@ db danRer1
 
 name drosophila
 db dm1
+pepTable bdgpGenePep
 idSql select target from dmBlastTab where query='%s';
+otherIdSql select bdgpGeneInfo.flyBaseId from bdgpGeneInfo,bdgpToCanonical where bdgpToCanonical.name='%s' and bdgpToCanonical.value = dm1.bdgpGeneInfo.bdgpName
 
 name rat
 db rn3
