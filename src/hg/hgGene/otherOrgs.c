@@ -9,7 +9,7 @@
 #include "axt.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: otherOrgs.c,v 1.12 2006/03/06 17:46:35 angie Exp $";
+static char const rcsid[] = "$Id: otherOrgs.c,v 1.13 2006/04/17 21:35:47 angie Exp $";
 
 struct otherOrg
 /* Links involving another organism. */
@@ -111,9 +111,14 @@ static char *otherOrgId(struct otherOrg *otherOrg, struct sqlConnection *conn,
 	char *geneId)
 /* Return gene ID in other organism or NULL if it doesn't exist. */
 {
-char query[256];
-safef(query, sizeof(query), otherOrg->idSql, geneId);
-return sqlQuickString(conn, query);
+if (geneId != NULL)
+    {
+    char query[256];
+    safef(query, sizeof(query), otherOrg->idSql, geneId);
+    return sqlQuickString(conn, query);
+    }
+else
+    return NULL;
 }
 
 static char *otherOrgProteinId(struct otherOrg *otherOrg, struct sqlConnection *conn,
@@ -143,7 +148,7 @@ static char *otherOrgExternalId(struct otherOrg *otherOrg, char *localId)
 /* Convert other organism UCSC id to external database ID. */
 {
 char *otherId = NULL;
-if (otherOrg->otherIdSql)
+if (otherOrg->otherIdSql && localId != NULL)
     {
     struct sqlConnection *conn = sqlConnect(otherOrg->db);
     char query[512];
@@ -151,7 +156,7 @@ if (otherOrg->otherIdSql)
     otherId = sqlQuickString(conn, query);
     sqlDisconnect(&conn);
     }
-if (otherId == NULL)
+if (otherId == NULL && localId != NULL)
     otherId = cloneString(localId);
 return otherId;
 }
