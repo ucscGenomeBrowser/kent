@@ -491,3 +491,366 @@ $prev = $name;
       cd ..
    end
 
+##########################################################################
+# CHECK CHROM AND VIRTUAL CHROM SEQUENCES (DONE, 2006-04-14, hartera)
+   # Check that the size of each chromosome .fa file is equal to the last
+   # co-ordinate of the correcpsonding agp file.
+   ssh hgwdev
+   cd /cluster/data/danRer4
+   foreach c (`cat chrom.lst`)
+     foreach f ( $c/chr$c.agp )
+       set agpLen = `tail -1 $f | awk '{print $3;}'`
+       set h = $f:r
+       set g = $h:r
+       echo "Getting size of $g.fa"
+       set faLen = `faSize $g.fa | awk '{print $1;}'`
+       if ($agpLen == $faLen) then
+         echo "   OK: $f length = $g length = $faLen"
+       else
+         echo "ERROR:  $f length = $agpLen, but $g length = $faLen"
+       endif
+     end
+   end
+   # all are the OK so FASTA files are the expected size
+
+###########################################################################
+# CREATING DATABASE (DONE, 2006-04-14, hartera)
+    # Create the database.
+    # next machine
+    ssh hgwdev
+    echo 'create database danRer4' | hgsql ''
+    # if you need to delete that database:  !!! WILL DELETE EVERYTHING !!!
+    echo 'drop database danRer4' | hgsql danRer4
+    # Use df to make sure there is at least 10 gig free on
+    df -h /var/lib/mysql
+# Before loading data:
+# Filesystem            Size  Used Avail Use% Mounted on
+# /dev/sdc1             1.8T  1.5T  173G  90% /var/lib/mysql
+
+###########################################################################
+# CREATING GRP TABLE FOR TRACK GROUPING (DONE, 2006-04-14, hartera)
+    # next machine
+    ssh hgwdev
+    #  the following command copies all the data from the table
+    #  grp in the database mm8 to the new database danRer4. Use one of the
+    #  newest databases to copy from to make sure that the groupings are
+    #  up to date.
+    echo "create table grp (PRIMARY KEY(NAME)) select * from mm8.grp" \
+      | hgsql danRer4
+    # if you need to delete that table:   !!! WILL DELETE ALL grp data !!!
+    echo 'drop table grp;' | hgsql danRer4
+
+###########################################################################
+# MAKE HGCENTRALTEST ENTRY FOR DANRER4 (DONE, 2006-04-14, hartera)
+    # Make entry into dbDb and defuaultDb so test browser knows about it.
+    ssh hgwdev
+    # Add dbDb and defaultDb entries:
+    echo 'insert into dbDb (name, description, nibPath, organism,  \
+          defaultPos, active, orderKey, genome, scientificName,  \
+          htmlPath, hgNearOk, hgPbOk, sourceName)  \
+          values("danRer4", "March 2006", \
+          "/gbdb/danRer4", "Zebrafish", "chr2:15,906,734-15,926,406", 1, \
+          37, "Zebrafish", "Danio rerio", \
+          "/gbdb/danRer4/html/description.html", 0,  0, \
+          "Sanger Centre, Danio rerio Sequencing Project Zv6");' \
+    | hgsql -h genome-testdb hgcentraltest
+    # SET AS DEFAULT LATER WHEN READY FOR RELEASE
+    # set danRer4 to be the default assembly for Zebrafish
+    echo 'update defaultDb set name = "danRer4" \
+          where genome = "Zebrafish";' \
+          | hgsql -h genome-testdb hgcentraltest
+    # Create /gbdb directory for danRer4
+    mkdir /gbdb/danRer4
+
+###########################################################################
+# BREAK UP SEQUENCE INTO 5MB CHUNKS AT CONTIGS/GAPS FOR CLUSTER RUNS
+# (DONE, 2006-04-14, hartera)
+
+     ssh kkstore01
+     cd /cluster/data/danRer4
+     foreach c (`cat chrom.lst`)
+       foreach agp ($c/chr$c.agp)
+         if (-e $agp) then
+           set fa = $c/chr$c.fa
+           echo splitting $agp and $fa
+           cp -p $agp $agp.bak
+           cp -p $fa $fa.bak
+           splitFaIntoContigs $agp $fa . -nSize=5000000
+         endif
+       end
+     end
+
+###########################################################################
+# MAKE LIFTALL.LFT (DONE, 2006-04-14, hartera)
+     ssh kkstore01
+     cd /cluster/data/danRer4
+     cat */lift/ordered.lft > jkStuff/liftAll.lft
+
+###########################################################################
+# MAKE TRACKDB ENTRY FOR DANRER4 (DONE, 2006-04-14, hartera)
+    # Make trackDb table so browser knows what tracks to expect.
+    ssh hgwdev
+    mkdir -p ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer4
+    cd ~/kent/src/hg/makeDb/trackDb/zebrafish
+    cvs add danRer4
+    cvs commit danRer4
+    cd ~/kent/src/hg/makeDb/trackDb
+    cvs up -d -P
+    # Edit that makefile to add danRer4 in all the right places and do
+    make update DBS=danRer4
+    make alpha DBS=danRer4
+    cvs commit -m "Added danRer4." makefile
+
+###########################################################################
+# SIMPLE REPEAT [TRF] TRACK  (DONE, 2006-04-14, hartera)
+    # TRF can be run in parallel with RepeatMasker on the file server
+    # since it doesn't require masked input sequence.
+    # Run this on the kilokluster. Need to mask contig and chromosome 
+    # sequences so run trf using contig sequences.
+    # First copy over contig sequences to iscratch and then rsync to cluster.
+    ssh kkr1u00
+    mkdir -p /iscratch/i/danRer4/contigsNoMask
+    cd /cluster/data/danRer4
+    foreach d (/cluster/data/danRer4/*/chr*_?{,?})
+       set ctg = $d:t
+       foreach f ($d/${ctg}.fa)
+          echo "Copyig $f ..."
+          cp $f /iscratch/i/danRer4/contigsNoMask/
+       end
+    end
+    ls /iscratch/i/danRer4/contigsNoMask/*.fa | wc -l
+    # 317 sequence files
+    # rsync to cluster machines
+    foreach R (2 3 4 5 6 7 8)
+       rsync -a --progress /iscratch/i/danRer4/ kkr${R}u00:/iscratch/i/danRer4/
+    end
+     
+    ssh kki
+    mkdir -p /cluster/data/danRer4/bed/simpleRepeat
+    cd /cluster/data/danRer4/bed/simpleRepeat
+    mkdir trf
+cat << '_EOF_' > runTrf
+#!/bin/csh -fe
+#
+set path1 = $1
+set inputFN = $1:t
+set outpath = $2
+set outputFN = $2:t
+mkdir -p /tmp/$outputFN
+cp $path1 /tmp/$outputFN
+pushd .
+cd /tmp/$outputFN
+/cluster/bin/i386/trfBig -trf=/cluster/bin/i386/trf $inputFN /dev/null -bedAt=$outputFN -tempDir=/tmp
+popd
+rm -f $outpath
+cp -p /tmp/$outputFN/$outputFN $outpath
+rm -fr /tmp/$outputFN/*
+rmdir --ignore-fail-on-non-empty /tmp/$outputFN
+'_EOF_'
+ # << keep emacs coloring happy
+    chmod +x runTrf
+
+cat << '_EOF_' > gsub
+#LOOP
+./runTrf {check in line+ $(path1)}  {check out line trf/$(root1).bed}
+#ENDLOOP
+'_EOF_'
+    # << keep emacs coloring happy
+
+    ls -1S /iscratch/i/danRer4/contigsNoMask/chr*.fa > genome.lst
+    gensub2 genome.lst single gsub jobList
+    # 317 jobs
+    para create jobList
+    para try, check, push, check etc...
+    para time
+# Completed: 317 of 317 jobs
+# CPU time in finished jobs:      25083s     418.05m     6.97h    0.29d  0.001 y
+# IO & Wait Time:                   933s      15.55m     0.26h    0.01d  0.000 y
+# Average job time:                  82s       1.37m     0.02h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            2732s      45.53m     0.76h    0.03d
+# Submission to last job:          4604s      76.73m     1.28h    0.05d
+    # lift up to chrom level
+    liftUp simpleRepeat.bed /cluster/data/danRer4/jkStuff/liftAll.lft warn \
+           trf/*.bed
+
+    # Load into the database
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/simpleRepeat
+    hgLoadBed danRer4 simpleRepeat simpleRepeat.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+    # Loaded 759659 elements of size 16
+
+###########################################################################
+# PROCESS SIMPLE REPEATS INTO MASK (DONE, 2005-06-14, hartera)
+   # After the simpleRepeats track has been built, make a filtered version
+   # of the trf output: keep trf's with period <= 12:
+   ssh kkstore01
+   cd /cluster/data/danRer4/bed/simpleRepeat
+   mkdir -p trfMask
+   foreach f (trf/chr*.bed)
+     awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
+   end
+
+   # Lift up filtered trf output to chrom coords as well:
+   cd /cluster/data/danRer4
+   mkdir bed/simpleRepeat/trfMaskChrom
+   
+   foreach c (`cat chrom.lst`)
+     if (-e $c/lift/ordered.lst) then
+       perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+         $c/lift/ordered.lst > $c/lift/oTrf.lst
+       liftUp bed/simpleRepeat/trfMaskChrom/chr$c.bed \
+         jkStuff/liftAll.lft warn `cat $c/lift/oTrf.lst`
+     endif
+     if (-e $c/lift/random.lst) then
+       perl -wpe 's@(\S+)@bed/simpleRepeat/trfMask/$1.bed@' \
+          $c/lift/random.lst > $c/lift/rTrf.lst
+       liftUp bed/simpleRepeat/trfMaskChrom/chr${c}_random.bed \
+         jkStuff/liftAll.lft warn `cat $c/lift/rTrf.lst`
+     endif
+   end
+
+###########################################################################
+# GET ADDITIONAL ZEBRAFISH REPBASE LIBRARY FOR REPEATMASKER AND ADD TO
+# DANIO LIBRARY FOR REPEATMASKER (DONE, 2006-04-14, hartera)
+# Go to http://www.girinst.org/server/RepBase/RepBase11.02.fasta
+# (03-15-2006) and download zebunc.ref.txt containing unclassified zebrafish 
+# repeats.
+# Need username and password. Copy to /cluster/bluearc/RepeatMasker/Libraries/
+   ssh hgwdev
+   cd /cluster/bluearc/RepeatMasker/Libraries
+   # This is /cluster/bluearc/RepeatMasker060320/Libraries
+   # Do a dummy run of RepeatMasker with the -species option. This creates
+   # a zebrafish-specific library from the EMBL format RepBase library.
+   # Then the zebunc.ref unclassified repeats can be added to this library.
+   /cluster/bluearc/RepeatMasker/RepeatMasker -spec danio /dev/null
+   # RepeatMasker version development-$Id: RepeatMasker,v 1.13 2006/03/21 
+   # This creates a specieslib in Libraries/20060315/danio
+   # Format the zebunc.ref library:
+   # Sequence is upper case, change to lower case like the specieslib
+   cat zebunc.ref.txt | tr '[A-Z]' '[a-z]' > zebunc.ref.format 
+   perl -pi.bak -e 's/>dr([0-9]+)/>Dr$1#Unknown/' zebunc.ref.format
+   grep '>' zebunc.ref.format | wc -l
+   # 958
+   cd /cluster/bluearc/RepeatMasker/Libraries/20060315/danio
+   grep '>' specieslib | wc -l
+   # 219
+   mv specieslib danio.lib
+   cat danio.lib ../../zebunc.ref.format > specieslib  
+   grep '>' specieslib | wc -l
+   # 1177
+   rm danio.lib
+   # make a copy in Libraries directory in case this directory of libraries
+   # is removed.
+   cp specieslib /cluster/bluearc/RepeatMasker/Libraries/danio.lib
+ 
+###########################################################################
+# SPLIT SEQUENCE FOR REPEATMASKER RUN (DONE, 2006-04-14, hartera)
+   ssh kkstore01
+   cd /cluster/data/danRer4
+   
+   # break up into 500 kb sized chunks at gaps if possible 
+   # for RepeatMasker runs
+   foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}*_?{,?})
+        cd $d
+        echo "splitting $d"
+        set contig = $d:t
+        faSplit gap $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+            -minGapSize=100
+        cd ../..
+      end
+    end
+    # took about 3 minutes. 
+
+###########################################################################
+# REPEATMASKER RUN (in progress, 2006-04-14, hartera)
+   # When a new library is added for this version of repeatMasker, need to 
+   # check in /cluster/bluearc/RepeatMasker/Libraries for a directory made 
+   # up of a date e.g. 20060315 here and inside this are species directories
+   # for which RepeatMasker has already been run. In this directory it creates
+   # a specieslib of the danio repeats. If this exists, this is used for the
+   # RepeatMasker run for that species. Check that this contains the 
+   # unclassified Zebrafish repeats with IDs beginning with Dr. This library
+   # with these repeats should have been created in the section above:
+   # Use sequence split into 500 kb chunks.
+   ssh kkstore01
+   cd /cluster/data/danRer4
+   mkdir RMRun
+   # Record RM version used:
+   ls -l /cluster/bluearc/RepeatMasker
+   # lrwxrwxrwx  1 angie protein 18 Mar 20 16:50 /cluster/bluearc/RepeatMasker -> RepeatMasker060320
+   # March 20 2006 (open-3-1-5) version of RepeatMasker
+   # get RM database version
+   grep RELEASE /cluster/bluearc/RepeatMasker/Libraries/RepeatMaskerLib.embl \
+        > RMdatabase.version
+   # RELEASE 20060315
+
+   cd /cluster/data/danRer4
+   cat << '_EOF_' > jkStuff/RMZebrafish
+#!/bin/csh -fe
+
+cd $1
+pushd .
+/bin/mkdir -p /tmp/danRer4/$2
+/bin/cp $2 /tmp/danRer4/$2/
+cd /tmp/danRer4/$2
+/cluster/bluearc/RepeatMasker060320/RepeatMasker -ali -s -species danio $2
+popd
+/bin/cp /tmp/danRer4/$2/$2.out ./
+if (-e /tmp/danRer4/$2/$2.align) /bin/cp /tmp/danRer4/$2/$2.align ./
+if (-e /tmp/danRer4/$2/$2.tbl) /bin/cp /tmp/danRer4/$2/$2.tbl ./
+if (-e /tmp/danRer4/$2/$2.cat) /bin/cp /tmp/danRer4/$2/$2.cat ./
+/bin/rm -fr /tmp/danRer4/$2/*
+/bin/rmdir --ignore-fail-on-non-empty /tmp/danRer4/$2
+/bin/rmdir --ignore-fail-on-non-empty /tmp/danRer4
+'_EOF_'
+    chmod +x jkStuff/RMZebrafish
+    cp /dev/null RMRun/RMJobs
+    foreach c (`cat chrom.lst`)
+      foreach d ($c/chr${c}_?{,?})
+          set ctg = $d:t
+          foreach f ( $d/${ctg}_?{,?}.fa )
+            set f = $f:t
+            echo /cluster/data/danRer4/jkStuff/RMZebrafish \
+                 /cluster/data/danRer4/$d $f \
+               '{'check out line+ /cluster/data/danRer4/$d/$f.out'}' \
+              >> RMRun/RMJobs
+          end
+      end
+    end
+    # Do the run
+    ssh pk
+    cd /cluster/data/danRer4/RMRun
+    para create RMJobs
+    # 4382 jobs written to batch
+    para try, check, push, check ... etc.
+    para time
+# 1 job failed with a division by zero error in ProcessRepeats. The sequence
+# is chr16_4_10.fa. Reported the error, sequence and zebrafish repeats library
+# to Arian Smit and Robert Hubley.
+ 
+###########################################################################
+# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (in progress, 2006-04-14, hartera)
+    ssh hgwdev
+    mkdir /cluster/data/danRer4/html
+    # make a symbolic link from /gbdb/danRer4/html to /cluster/data/danRer4/html
+    ln -s /cluster/data/danRer4/html /gbdb/danRer4/html
+    # Add a description page for zebrafish
+    cd /cluster/data/danRer4/html
+    cp $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer3/description.html .
+    # Edit this for zebrafish danRer4
+
+    # create a description.html page here
+    cd ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer4
+    # Add description page here too
+    cp /cluster/data/danRer4/html/description.html .
+    cvs add description.html
+    cvs commit -m "First draft of description page for danRer4." \
+        description.html
+    cd ~/kent/src/hg/makeDb/trackDb
+    make update DBS=danRer4
+    make alpha  DBS=danRer4
+
+
