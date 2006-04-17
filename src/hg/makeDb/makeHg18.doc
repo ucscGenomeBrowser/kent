@@ -4363,6 +4363,14 @@ hgLoadPsl hg18 haplotypePos.psl
 ###########################################################################
 # LOAD AFFYRATIO (DONE - 2006-02-01 - Fan)
 #	Copied from Hg17 doc
+# NOTE: Jim recommends that, in the future, all AFFY blat alignments should drop
+# -mask=lower for blat and drop -minIdentity=95 to -minIdentity=90 as the
+# higher minIdentity is causing alignments to be dropped that should not be. 
+# e.g. 
+# /cluster/bin/i386/blat -fine -minIdentity=90 -ooc=/cluster/bluearc/hg18/11.ooc  $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+# pslReps can be used to handle filtering at a later step. Blat's minIdentity 
+# seems to be more severe than that for pslReps as it takes insertions and 
+# deletions into account. 
     # Set up cluster job to align consenesus/exemplars to hg18
     ssh kkstore02
     mkdir /cluster/bluearc/hg18/affyGnf
