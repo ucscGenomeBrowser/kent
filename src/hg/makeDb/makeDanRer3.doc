@@ -226,7 +226,7 @@ close OUT;
 '_EOF_'
    # << happy emacs
    chmod +x compareSizes.pl
-   perl compareSizes.pl Zv5.scaffolds.sizes ../Zv5.scaffolds.list
+   perl compareSizes.pl Zv5.scaffolds.sizes ../Zv5.scaffolds.agp
    # the only lines where no ID was found in the list of scaffolds with sizes
    # were those lines for gaps.
    grep "different" Zv5_scaffold1475
@@ -246,7 +246,6 @@ close OUT;
        > Zv5.chunks.coordCheck
    # also empty so ok. check that the difference between $7 and $8 is the
    # same as the difference between $11 and $12 fields
-   # 8th and 12th fields should be the same
    awk '{if ($6 != 5000 && (($8 - $7) != ($12 - $11))) print $6;}' \
        Zv5.chunks.agp > Zv5.chunks.coordCheck2
    # these are all ok
@@ -399,7 +398,8 @@ if (exists($scafsHash{$prev}))
 
      # get FASTA file of sequences for NA and Un and create agp with 
      # Ns between scaffolds
-     # from scaffolds agp, get name of scaffolds to get from FASTA file for NA
+     # from scaffolds agp, get name of scaffolds to retrieve from the FASTA 
+     # file to make the NA and Un chromosomes.
      foreach c (NA Un)
        awk '{print $6;}' $c/$c.scaffolds.agp > $c/chr$c.scaffolds.lst
        $HOME/bin/i386/faSomeRecords /cluster/data/danRer3/Zv5.fa \
@@ -988,7 +988,7 @@ getSeqs.csh $(path1)
     make alpha
 
 # MAKE HGCENTRALTEST ENTRY FOR DANRER3 (DONE, 2004-06-16, hartera)
-    # Make trackDb table so browser knows what tracks to expect:
+    # Make dbDb and deafaultDb entries so test browser knows about it:
     ssh hgwdev
     # Add dbDb and defaultDb entries:
     echo 'insert into dbDb (name, description, nibPath, organism,  \
@@ -6066,11 +6066,21 @@ _EOF_
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -stop=net \
 	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	/cluster/data/hg17/bed/blastz.danRer3/DEF >& swap.out&
-   # failed due to
-       netChains: looks like previous stage was not successful (can't find [danRer3.hg17.]all.chain[.gz]).
+   # failed due to netChains: looks like previous stage was not 
+   # successful (can't find [danRer3.hg17.]all.chain[.gz]).
    #
     mv swap.out swap.out.1
    # rerun with -continue=net
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -continue=net -stop=net \
 	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	/cluster/data/hg17/bed/blastz.danRer3/DEF >& swap.out&
+
+###########################################################################
+# SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM DANRER2 (DONE, 2006-04-17, hartera)
+    # followed instructions used in makePanTro2.doc
+    ssh kkr1u00
+    cd /cluster/data/danRer3/bed
+    mkdir -p liftOver
+    cd liftOver
+    makeLoChain-split danRer3 /cluster/data/danRer3/nib >&! split.log &
+    # Took about 30 minutes.
