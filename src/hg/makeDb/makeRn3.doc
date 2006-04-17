@@ -3238,6 +3238,7 @@ do
 echo "done"
 done
 '_EOF_'
+    # << emacs
     chmod +x runGcPercent.sh
     #	This is going to take perhaps two hours to run.  It is a lot of
     #	data.  make sure you do it on the fileserver:
@@ -3291,6 +3292,7 @@ do
 echo "done"
 done
 '_EOF_'
+    # << emacs
     chmod +x runZoom.sh
     #	This is going to take even longer than above, certainly do this
     #	on the fileserver
@@ -4227,6 +4229,7 @@ cat > makeMaf.csh << 'EOF'
             ../mafNet/$c.maf -tPrefix=rn3. -qPrefix=hg17.
     end
 'EOF'
+    # << emacs
     csh makeMaf.csh >&! makeMaf.log &
     tail -100f makeMaf.log
 
@@ -4434,6 +4437,7 @@ cat  << '_EOF_' > blastSome
 BLASTMAT=/scratch/blast/data /scratch/blast/blastall -p blastp \
 	-d /cluster/bluearc/rn3/blastp/known -i $1 -o $2 -e 0.01 -m 8 -b 1000
 '_EOF_'
+    # << emacs
 chmod a+x blastSome
 
 # Make gensub2 file
@@ -4442,6 +4446,7 @@ cat  << '_EOF_' > gsub
 blastSome {check in line+ $(path1)} {check out line out/$(root1).tab}
 #ENDLOOP
 '_EOF_'
+# << emacs
 
 # Create parasol batch
 #	'ls ../../split/*.fa' is too much, hence the echo
