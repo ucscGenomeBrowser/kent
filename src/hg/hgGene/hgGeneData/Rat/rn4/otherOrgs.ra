@@ -1,0 +1,17 @@
+name human
+db hg18
+
+name mouse
+db mm8
+
+name zebrafish
+db danRer3
+
+name drosophila
+db dm2
+
+name cElegans
+db ce2
+
+name yeast
+db sacCer1
