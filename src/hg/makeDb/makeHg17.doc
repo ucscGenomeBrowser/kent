@@ -13043,6 +13043,7 @@ hgsql hg17 -e 'update wgRna set type = "scaRna" where name ="mgU2-22/U4-8"'
 
 # EXTRACT AXT'S AND MAF'S FROM TETRAODON (tetNig1) NET 
 # (DONE, 2004-12-15, hartera) 
+# Redo to remove overlaps (2006-04-07 kate)
     ssh eieio
     # create axts
     cd /cluster/data/hg17/bed/blastz.tetNig1/axtChain
@@ -13054,8 +13055,8 @@ cat > axtNet.csh << 'EOF'
         echo "axtNet on $c"
         netToAxt tetraodonNet/$c.net chain/$c.chain \
         /cluster/data/hg17/nib /cluster/data/tetNig1/nib ../axtNet/$c.axt
-    echo "Complete: $c.net -> $c.axt"
-    end
+        echo "Complete: $c.net -> $c.axt"
+        end
 'EOF'
 
     chmod +x axtNet.csh
@@ -13092,151 +13093,33 @@ cat > makeMaf.csh << 'EOF'
 
     nice gzip axtChrom/* pslChrom/* axtChain/all.chain axtChain/*.net &
 
-
-# REDO 8-WAY MULTIZ MULTIPLE ALIGNMENT (WORKING 2005-08-16 kate)
-#  TO REMOVE OVERLAPS.  NOTE: Must use multiz.v10.5
-
+    # redo axt's and maf's to remove overlaps (2006-04-07 kate)
     ssh kkstore02
-    set multizDir = multiz8way.2005-08-16
-    cd /cluster/data/hg17/bed
-    mkdir -p $multizDir
-    rm multiz8way
-    ln -s $multizDir multiz8way
-    
-    # Redo net axt's using 8/05 netToAxt to assure single-coverage
-    # See section for each species, above:
-    #    panTro1, canFam1, mm5, rn3, galGal2, danRer1, fr1
-    # Copy to /cluster/bluearc/hg17/mafNet
+    cd /cluster/data/hg17/bed/blastz.tetNig1
+    mv axtNet axtNet.old
+    mv mafNet mafNet.old
+    mkdir -p axtNet mafNet
+    cd axtChain
 
-    cd /cluster/bluearc/hg17
-    mkdir -p $multizDir
-    rm multiz8way
-    ln -s $multizDir multiz8way
-
-    # make output dir and run dir
-    ssh pk
-    cd /cluster/data/hg17/bed
-    cd multiz8way
-    cat > tree.nh << 'EOF'
-(((((hg17,panTro1),(rn3,mm5)),canFam1),galGal2)(fr1,danRer1))
-'EOF'
-    mkdir -p maf run
-    cd run
-
-    # create scripts to run multiz on cluster
-cat > oneMultiz.csh << 'EOF'
-#!/bin/csh -fe
-    set c = $1
-    set multi = /scratch/$user/multiz8way.$c
-    set pairs = /cluster/bluearc/hg17/mafNet
-
-    # special mode --
-    # with 1 arg, cleanup
-    if ($#argv == 1) then
-        rm -fr $multi
-        exit
-    endif
-
-    #  special mode --
-    # with 3 args, saves an alignment file
-    if ($#argv == 3) then
-        cp $multi/$2/$c.maf $3
-        exit
-    endif 
-        
-    set s1 = $2
-    set s2 = $3
-    set flag = $4
-
-    # locate input files -- in pairwise dir, or multiple dir
-    set d1 = $multi
-    set d2 = $multi
-    if (-d $pairs/$s1) then
-        set d1 = $pairs
-    endif
-    if (-d $pairs/$s2) then
-        set d2 = $pairs
-    endif
-    set f1 = $d1/$s1/$c.maf
-    set f2 = $d2/$s2/$c.maf
-    # write to output dir
-    set out = $multi/${s1}${s2}
-    mkdir -p $out
-
-    # check for empty input file
-    if (-s $f1 && -s $f2) then
-        echo "Aligning $f1 $f2 $flag"
-        /cluster/data/hg17/bed/multiz17way/run/penn/multiz $t1 $t2 $flag \
-        /cluster/bin/penn/bed/multiz10wy multiz.v10.5 $f1 $f2 $flag > $out/$c.tmp.maf
-        echo "Ordering $c.maf"
-        /cluster/data/hg17/multiz17way/run/penn/maf_project $out/$c.tmp.maf hg17.$c > $out/$c.maf
-    else if (-s $f1) then
-        cp $f1 $out
-    else if (-s $f2) then
-        cp $f2 $out
-    endif
-'EOF'
-# << for emacs
-chmod +x oneMultiz.csh
-
-cat > allMultiz.csh << 'EOF'
-#!/bin/csh -fe
-set c = $1
-oneMultiz.csh $c mm5 rn3 0
-oneMultiz.csh $c fr1 danRer1 0
-oneMultiz.csh $c panTro1 mm5rn3 1
-oneMultiz.csh $c panTro1mm5rn3 canFam1 1
-oneMultiz.csh $c panTro1mm5rn3canFam1 galGal2 1
-oneMultiz.csh $c panTro1mm5rn3canFam1galGal2 fr1danRer1 1
-#uto get final alignment file
-oneMultiz.csh $c panTro1mm5rn3canFam1galGal2fr1danRer1 /cluster/data/hg17/bed/multiz8way/maf/$c.maf
-#cleanup
-oneMultiz.csh $c
-'EOF'
-# << for emacs
-chmod +x allMultiz.csh
-
-cat > gsub << 'EOF'
-#LOOP
-allMultiz.csh $(root1) {check out line+ /cluster/data/hg17/bed/multiz8way/maf/$(root1).maf}
-#ENDLOOP
-'EOF'
-# << for emacs
-    cut -f 1 /cluster/data/hg17/chrom.sizes > chrom.lst
-    set path = (/parasol/bin $path);rehash
-    gensub2 chrom.lst single gsub jobList
-    para create jobList
-        # 46 jobs
-    para try; para check
-    para push
-
-# V8 run:
-#CPU time in finished jobs:      40024s     667.07m    11.12h    0.46d  0.001 y
-#IO & Wait Time:                  6287s     104.78m     1.75h    0.07d  0.000 y
-#Average job time:                1007s      16.78m     0.28h    0.01d
-#Longest running job:                0s       0.00m     0.00h    0.00d
-#Longest finished job:            3574s      59.57m     0.99h    0.04d
-#Submission to last job:          6645s     110.75m     1.85h    0.08d
-
-    # check mafs for overlaps
-    ssh kkstore02
-    cd /cluster/data/hg17/bed/multiz8way/maf
-    foreach f (*.maf)
-        echo -n "${f}: "
-        mafFilter -overlap $f > /dev/null
+cat > fix.csh << 'EOF'
+    date
+    foreach f (tetraodonNet/chr*.net)
+        set c = $f:t:r
+        echo $c
+        netToAxt tetraodonNet/$c.net chain/$c.chain \
+            /cluster/data/hg17/nib /cluster/data/tetNig1/nib stdout | \
+                axtSort stdin ../axtNet/$c.axt
+        echo "Complete: $c.net -> $c.axt"
+        axtToMaf ../axtNet/$c.axt \
+            /cluster/data/hg17/chrom.sizes /cluster/data/tetNig1/chrom.sizes \
+            ../mafNet/$c.maf -tPrefix=hg17. -qPrefix=tetNig1.
     end
-
-    # load alignments into tables
-    ssh hgwdev
-    cd /cluster/data/hg17/bed/multiz8way
-
-    ln -s `pwd`/*.maf $mafDir
-    hgLoadMaf hg17 -warn multiz8wayFixed -pathPrefix=$mafDir
-
-    # load summary table
-    cd /cluster/data/hg17/bed/multiz8way/maf
-    time cat chr*.maf | hgLoadMafSummary hg17 multiz8waySummary stdin
-    # 30 minutes ?
+    date
+'EOF'
+    csh fix.csh >&! fix.log &
+    cd /san/sanvol1/scratch/hg17/mafNet
+    rm -fr tetNig1
+    cp -rp /cluster/data/hg17/bed/blastz.tetNig1/mafNet tetNig1
 
 
 # 10-WAY MULTIZ -- 8-WAY PLUS FROG AND TETRA (DONE 2004-12-22 kate)
@@ -19253,7 +19136,8 @@ TMPDIR=/scratch/tmp
     # Took about 3 hours 40 minutes to run.
 
 #############################################################################
-# 17-WAY MULTIZ ALIGNMENTS (WORKING - 2005-12-20 kate)
+# 17-WAY MULTIZ ALIGNMENTS (DONE - 2005-12-20 kate)
+#       # redo fix overlaps from xenTro1 and tetNig1 (2006-04-08 kate)
 
     # copy net mafs to cluster-friendly storage for multiz run (2006-01-25 kate)
 
@@ -19418,43 +19302,22 @@ cat  << 'EOF' > spec
 # << happy emacs
 
     awk '{print $1}' /cluster/data/hg17/chrom.sizes > chrom.lst
+
+    # REDO FOR OVERLAPS (2006-04-07 kate)
+    mv ../maf ../maf.old
+    # edit spec file to fix maf dir path
     gensub2 chrom.lst single spec jobList
     para create jobList
         # 46 files
     para try
     para check
     para push
-#  NOTE: much faster than V10 (40 hrs)
-# CPU time in finished jobs:     341957s    5699.28m    94.99h    3.96d  0.011 y
-# IO & Wait Time:                 53679s     894.65m    14.91h    0.62d  0.002 y
-# Average job time:                8601s     143.35m     2.39h    0.10d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:           52274s     871.23m    14.52h    0.61d
-# Submission to last job:         52294s     871.57m    14.53h    0.61d
-
-    # Load into database
-    ssh hgwdev
-    cd /cluster/data/hg17/bed/multiz17way/maf
-    mkdir /gbdb/hg17/multiz17way/maf
-    ln -s /cluster/data/hg17/bed/multiz17way/maf/*.maf \
-        /gbdb/hg17/multiz17way/maf
-cat > loadMaf.csh << 'EOF'
-    time hgLoadMaf -pathPrefix=/gbdb/hg17/multiz17way/maf hg17 multiz17way
-    cat *.maf | \
-        nice hgLoadMafSummary hg17 -minSize=30000 -mergeGap=1500 \
-            -maxSize=200000  multiz17waySummary stdin
-'EOF'
-    # 3213116
-
-#<< happy emacs
-    # expect lengthy load time for this -- a few hours ?
-    csh loadMaf.csh >&! loadMaf.log &
-
-    # downloads
-    # TODO 
+    para time > run.time
+        # 36 hrs (not typical -- previous runs were ~16 hrs)
 
 
 # PHASTCONS CONSERVATION (2006-01-05 kate)
+# Redone when multiz redone to fix overlaps (2006-04-12)
 # This process is distilled from Hiram and Adam's experiments
 # on mouse (mm7) 17way track.  Many parameters are now fixed, without
 # being experimentally derived, either because the experiments
@@ -19631,16 +19494,16 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way/cons
     hgLoadBed -strict hg17 phastConsElements17way mostConserved.bed
-        # Loaded 2212444 elements of size 5
-        # Loaded 2037557 elements
+        # Loaded 2212445 elements of size 5
     # compare with previous tracks
     hgsql hg17 -e "select count(*) from phastConsElements10way"
         # 2011952
     hgsql hg17 -e "select count(*) from phastConsElements"
         # 1601903
     # Try for 5% overall cov, and 70% CDS cov (used elen=14, tcov=.008, rho=.28)
+    
     featureBits hg17 -enrichment refGene:cds phastConsElements17way
-        # refGene:cds 1.065%, phastConsElements17way 5.116%, both 0.759%, cover 71.26%, enrich 13.93x
+        # refGene:cds 1.065%, phastConsElements17way 5.116%, both 0.759%, cover 71.27%, enrich 13.93x
 
     # compare with previous tracks
     featureBits hg17 -enrichment refGene:cds phastConsElements10way
@@ -19756,20 +19619,23 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
     # sort by chromName, chromStart so that items are in numerical order 
     #  for wigEncode
     #next time try Angie's simpler sort, below
-    time find ./pp -name "chr*.pp" | \
+    find ./pp -name "chr*.pp" | \
         sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
 	sort -k7,7 -k9,9n | \
 	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
 	xargs cat | \
         nice wigEncode stdin phastCons17way.wig phastCons17way.wib
     # about 23 minutes for above
+        # GOT HERE ON REDO
+        # NOTE: remember to flip /gbdb link from cons.old to cons
 
     cp -p phastCons17way.wi? /cluster/data/hg17/bed/multiz17way/cons
 
     # Load gbdb and database with wiggle.
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way/cons
-    ln -s `pwd`/phastCons17way.wib /gbdb/hg17/multiz17way/phastCons17way.wib
+    ln -s /cluster/data/hg17/bed/multiz17way/cons/phastCons17way.wib \
+        /gbdb/hg17/multiz17way/phastCons17way.wib
     hgLoadWiggle -pathPrefix=/gbdb/hg17/multiz17way hg17 \
         phastCons17way phastCons17way.wig
     #  ~ 3 minute load
@@ -19789,6 +19655,7 @@ cat > mafFrags.csh << 'EOF'
         rm up.bad
         nice mafFrags hg17 multiz17way up.bed upstream$i.maf \
                 -orgs=../species.lst
+        nice gzip upstream$i.maf
         rm up.bed
     end
     date
@@ -19803,13 +19670,14 @@ cat > downloads.csh << 'EOF'
     foreach f (../maf/chr*.maf)
 	set c = $f:t:r
         echo $c
-	nice gzip -c $f > mafDownloads/$c.maf.gz
+	nice gzip -c $f > $c.maf.gz
     end
     md5sum *.gz > md5sum.txt
     date
 'EOF'
     time csh downloads.csh >&! downloads.log
         # ~2 hours
+        # GOT HERE
 
     ssh hgwdev
     set dir = /usr/local/apache/htdocs/goldenPath/hg17/multiz17way
@@ -20183,12 +20051,13 @@ TMPDIR=/scratch/tmp
 
 #########################################################################
 # BUILD MAF ANNOTATION FOR MULTIZ17WAY  (kate 2006-02-16)
+# Redo to fix overlaps (2006-04-09 kate)
 
     ssh kkstore01
     cd /cluster/data/rheMac2
     twoBitInfo -nBed rheMac2.2bit rheMac2.N.bed
 
-    ssh kolossus
+    ssh kkstore02
     cd /cluster/data/hg17/bed/multiz17way
     mkdir anno 
     cd anno
@@ -20216,9 +20085,9 @@ TMPDIR=/scratch/tmp
     
     csh jobs.csh >&! jobs.log &
         # 1.5 hrs.
+        # 9 hours for redo -- something wrong ?
 
-    ssh kolossus
-    # loading here because summary table load crashed on hgwdev
+    ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way/anno/maf
     mkdir -p /gbdb/hg17/multiz17way/anno/maf
     ln -s /cluster/data/hg17/bed/multiz17way/anno/maf/*.maf \
@@ -20228,41 +20097,40 @@ cat > loadMaf.csh << 'EOF'
     hgLoadMaf -pathPrefix=/gbdb/hg17/multiz17way/anno/maf \
                 hg17 multiz17way
     date
-    cat *.maf | \
-        nice hgLoadMafSummary hg17 -minSize=30000 -mergeGap=1500 \
-            -maxSize=200000  multiz17waySummary stdin
-    date
 'EOF'
     csh loadMaf.csh >&! loadMaf.log &
 
+    # load summary table on kolossus, as it crashes on hgwdev
+    ssh kolossus
+    cd /cluster/data/hg17/bed/multiz17way/anno/maf
+    cat *.maf | \
+        nice hgLoadMafSummary hg17 -minSize=30000 -mergeGap=1500 \
+            -maxSize=200000  multiz17waySummary stdin
+
+        # Created 3212623 summary blocks from 114139253 components and 17522217 mafs from stdin
+    # request push to hgwdev
+
     ssh kkstore02
     cd /cluster/data/hg17/bed/multiz17way
+    set sanDir = /san/sanvol1/scratch/hg17/multiz17way/frames
+    mkdir -p $sanDir/maf
+    cp -rp maf/* $sanDir/maf
     mkdir frames
     cd frames
     cp /cluster/data/mm7/bed/multiz17wayFrames/mkMafFrames .
     cp /cluster/data/mm7/bed/multiz17wayFrames/Makefile .
-    #edit Makefile to correct species names and use bluearc instead of san
-    # (san is sick)
-
-cat > copy.csh << 'EOF'
-    set dir = /cluster/bluearc/hg17/multiz17way/frames/maf
-    mkdir -p $dir
-    foreach i (../maf/*.maf)
-        echo $i
-        cp -p $i $dir
-    end
-'EOF'
-    csh copy.csh >&! copy.log &
-
-    #for i in ../../maf/*.maf; do echo $i; cp $i /san/sanvol1/scratch/hg17/multiz17wayFrames/maf/$i; done  
+    #edit Makefile to correct species names and set and sanDir
 
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way/frames
-    time make getGenes >&! getGenes.log &
+    make getGenes >&! getGenes.log &
         # ~1 minute
-    time make getFrames >&! getFrames.log &
+    make getFrames >&! getFrames.log &
         # ~2 hours
-    time make loadDb >&! loadDb.log &
+    # NOTE: if jobs get hung up (e.g. running for hours, when
+    #   they should run for minutes, do 'para stop' so that
+    #   the 'para make' can restart the job
+    make loadDb >&! loadDb.log &
 
 
 # EXTRACT LINEAGE-SPECIFIC REPEATS FOR RAT (DONE 2/8/06 angie)
