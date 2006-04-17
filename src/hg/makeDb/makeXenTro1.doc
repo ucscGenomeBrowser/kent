@@ -2316,7 +2316,8 @@ chainSome $(path1)
     rm -rf blastOut
 # End tblastn
 
-# MAKE JGI FILTERED GENES
+
+# MAKE JGI FILTERED GENES (DONE 3/16/05 kent)
 #
 # Copy email attatchment from Igor Grigoriev (IVGrigoriev@lbl.gov)
 # to /cluster/data/xenTro1/bed/jgiFilteredModels/xenopus.FilteredModels
@@ -2327,7 +2328,8 @@ chainSome $(path1)
     ldHgGene xenTro1 jgiFilteredModels jgiFilteredModels.gff
 # Then edit trackDb to put in the track.
 
-# MAKE NIBBPICS 
+
+# MAKE NIBPICS (DONE 3/17/05 kent)
 #
     # Load image data from NIBB (contact Naoto Ueno nueno@nibb.ac.jp)
     # from CD's into /cluster/store11/visiGene/offLine/nibbFrog
@@ -2468,6 +2470,7 @@ doBlatz $(root1) $(root2) {check out exists psl/$(root1)_$(root2).psl}
     # Clean up.  This also takes a good while
     rm -r run1/psl split
     rm raw.psl nearBest.psl
+
 
 
 
