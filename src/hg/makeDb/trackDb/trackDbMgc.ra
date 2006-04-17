@@ -178,11 +178,20 @@ exonArrows on
 cdsDrawOptions enabled
 
 track exoniphy
-shortLabel Exoniphy 
-longLabel Exoniphy Human/Mouse/Rat, Lifted from Hg16
+shortLabel Exoniphy
+longLabel Exoniphy Human/Mouse/Rat/Dog
 group mgcCList
 priority 105
 visibility dense
+color 173,17,162
+type genePred
+
+track exoniphyHMR
+shortLabel Exoniphy HMR
+longLabel Exoniphy Human/Mouse/Rat, Lifted from Hg16
+group mgcCList
+priority 105.1
+visibility hide
 color 173,17,162
 type genePred
 
@@ -415,7 +424,7 @@ longLabel GSC RT-PCR for MGC plate 2
 group mgcBCGSC
 priority 2105.2
 type bed
-visibility pack
+visibility hide
 noInherit on
 
     track gscMgcTargets2
@@ -449,7 +458,7 @@ longLabel GSC RT-PCR for MGC plate 3
 group mgcBCGSC
 priority 2105.3
 type bed
-visibility pack
+visibility hide
 noInherit on
 
     track gscMgcTargets3
@@ -469,6 +478,40 @@ noInherit on
     subTrack gscMgc3
     shortLabel GSC clones plate 3
     longLabel GSC MGC RT-PCR clones plate 3
+    priority 2
+    visibility hide
+    color 155,0,125
+    type psl .
+    exonArrows on
+    cdsDrawOptions enabled
+
+track gscMgc4
+compositeTrack on
+shortLabel GSC plates 4,5
+longLabel GSC RT-PCR for MGC plates 4,5
+group mgcBCGSC
+priority 2105.4
+type bed
+visibility hide
+noInherit on
+
+    track gscMgcTargets4
+    noInherit on
+    subTrack gscMgc4
+    shortLabel GSC targets plates 4,5 
+    longLabel GSC MGC RT-PCR targets plate 4,5
+    priority 1
+    visibility hide
+    color 200,0,50
+    type genePred
+    exonArrows on
+    cdsDrawDefault genomic\ codons
+
+    track gscMgcClones4
+    noInherit on
+    subTrack gscMgc4
+    shortLabel GSC clones plates 4,5
+    longLabel GSC MGC RT-PCR clones plate 4,5
     priority 2
     visibility hide
     color 155,0,125
