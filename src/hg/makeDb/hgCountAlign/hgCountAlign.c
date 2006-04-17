@@ -10,7 +10,7 @@
 #include <limits.h>
 
 
-static char const rcsid[] = "$Id: hgCountAlign.c,v 1.5 2003/06/26 18:20:07 weber Exp $";
+static char const rcsid[] = "$Id: hgCountAlign.c,v 1.6 2006/04/17 14:16:08 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -45,7 +45,6 @@ static void countAlign(struct winCounts *cnts,
 char *tPtr = block->tSym;
 char *qPtr = block->qSym;
 int tPos = block->tStart;
-int initCnts = cnts->numCounts;
 
 if (strlen(tPtr) != strlen(qPtr))
     errAbort("alignment string lengths don't match: target=%s:%d-%d, query=%s:%d-%d ",
