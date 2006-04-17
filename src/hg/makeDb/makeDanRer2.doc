@@ -5229,3 +5229,24 @@ awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4,
     cd multiz6way
     md5sum *.gz > md5sum.txt
 
+###########################################################################
+# LIFTOVER CHAINS TO DANRER3 (in progress, 2006-04-17, hartera)
+    # Split (using makeLoChain-split) of panTro3 is doc'ed in makeDanRer3.doc
+    # Do what makeLoChain-split says to do next (start blat alignment)
+    ssh kk
+    mkdir -p /cluster/data/danRer2/bed/liftOver
+    cd /cluster/data/danRer2/bed/liftOver
+    makeLoChain-align danRer2 /iscratch/i/danRer2/nib danRer3 \
+        /iscratch/i/danRer3/split10k \
+        /iscratch/i/danRer3/danRer3_11.ooc >&! align.log &
+    # Took about 4 minutes.
+    # Do what its output says to do next (start cluster job)
+    cd /cluster/data/danRer2/bed/blat.danRer3.2006-04-17/run
+    para try, check, push, check, ...
+    para time >&! run.time
+    # BLAT JOBS ARE RUNNING NOW
+
+    # lift alignments
+    ssh kkstore04
+    cd /cluster/data/danRer2/bed/liftOver
+    makeLoChain-lift.csh danRer2 danRer3 >&! lift.log &
