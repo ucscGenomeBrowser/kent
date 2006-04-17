@@ -12,7 +12,7 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.23 2006/02/27 22:52:40 hiram Exp $";
+static char const rcsid[] = "$Id: hgGoldGapGl.c,v 1.24 2006/04/17 17:32:49 angie Exp $";
 
 static boolean noLoad = FALSE;
 
@@ -56,14 +56,12 @@ char *createGold =
 char *goldSplitIndex =
 "   INDEX(bin),\n"
 "   UNIQUE(chromStart),\n"
-"   UNIQUE(chromEnd),\n"
 "   INDEX(frag(14))\n"
 ")\n";
 
 char *goldIndex = 
 "   INDEX(chrom(16),bin),\n"
 "   UNIQUE(chrom(16),chromStart),\n"
-"   UNIQUE(chrom(16),chromEnd),\n"
 "   INDEX(frag(14))\n"
 ")\n";
 
@@ -82,14 +80,12 @@ char *createGap =
 
 char *gapSplitIndex =
 "   INDEX(bin),\n"
-"   UNIQUE(chromStart),\n"
-"   UNIQUE(chromEnd)\n"
+"   UNIQUE(chromStart)\n"
 ")\n";
 
 char *gapIndex =
 "   INDEX(chrom(16),bin),\n"
-"   UNIQUE(chrom(16),chromStart),\n"
-"   UNIQUE(chrom(16),chromEnd)\n"
+"   UNIQUE(chrom(16),chromStart)\n"
 ")\n";
 
 char *createGl = 
