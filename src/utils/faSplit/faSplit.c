@@ -9,7 +9,7 @@
 #include "options.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: faSplit.c,v 1.32 2006/01/27 13:29:02 fanhsu Exp $";
+static char const rcsid[] = "$Id: faSplit.c,v 1.33 2006/04/17 15:55:41 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -54,10 +54,10 @@ errAbort(
   "    -minGapSize=X Consider a block of Ns to be a gap if block size >= X.\n"
   "                  Default value 1000.  Only used with gap.\n"
   "    -noGapDrops - include all N's when splitting by gap.\n"
-  "    -outDirDepth=n Create n-levels of output directory under outRoot.\n"
+  "    -outDirDepth=N Create N levels of output directory under current dir.\n"
   "                   This helps prevent NFS problems with a large number of\n"
   "                   file in a directory.  Using -outDirDepth=3 would\n"
-  "                   produce rootDir/1/2/3/foo.123.fa.\n"
+  "                   produce ./1/2/3/outRoot123.fa.\n"
   "    -prefixLength=N - used with byname option. create a separate output\n"
   "                   file for each group of sequences names with same prefix\n"
   "                   of length N.\n"
