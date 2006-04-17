@@ -100,7 +100,7 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   find scaffolds -print > scaffolds.list.0
   grep fa scaffolds.list.0 > scaffolds.list
 
-# MAKE 2BIT NIB FILE 
+#### MAKE 2BIT NIB FILE 
 
   ssh kkstore01
   nice /cluster/bin/i386/faToTwoBit rheMac2.fa rheMac2.2bit
@@ -118,7 +118,7 @@ hgGoldGapGl -noGl rheMac2 /cluster/data/rheMac2/downloads/v1.edit4.final.fix2.ag
   ln -s /cluster/data/rheMac2/rheMac2.2bit /gbdb/rheMac2/rheMac2.2bit
 
 
-# CREATE DATABASE (DONE Jan 27 , 2006 Robert)
+#### CREATE DATABASE (DONE Jan 27 , 2006 Robert)
 
   ssh hgwdev
   hgsql hg17
