@@ -176,11 +176,19 @@ CREATE TABLE antibody (
     name varchar(255) not null,	# Name of antibody
     description longblob not null,	# Description of antibody
     taxon int not null,	# Taxon of animal antibody is from
-    abSubmitId varchar(255) not null,	# ID within submission source
               #Indices
     PRIMARY KEY(id),
     INDEX(name(8)),
     INDEX(taxon)
+);
+
+#Information on an antibodySource
+CREATE TABLE antibodySource (
+    antibody int not null,	# Antibody ID
+    submissionSource int not null, # Source of this submission
+    abSubmitId varchar(255) not null,	# ID within submission source
+              #Indices
+    INDEX(antibody)
 );
 
 #Color - what color probe is in
