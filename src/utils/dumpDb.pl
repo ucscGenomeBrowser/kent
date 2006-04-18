@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/dumpDb.pl instead.
 
-# $Id: dumpDb.pl,v 1.3 2006/04/18 19:02:22 hiram Exp $
+# $Id: dumpDb.pl,v 1.4 2006/04/18 19:35:14 hiram Exp $
 
 use strict;
 use warnings;
@@ -40,13 +40,34 @@ while (my $line = <PH>)
 {
     chomp $line;
     my @fields = split('\t', $line);
-    #	field 0 is the table name, 11 is the Update_time
-    my ($YMD, $HMS) = split('\s',$fields[11]);
-    my ($YYYY, $MM, $DD) = split('-',$YMD);
-    my ($hr, $min, $sec) = split(':',$HMS);
-    #	create touch -t format YYYYMMDDhhmm.ss
-    $tableTimes{$fields[0]} =
-	sprintf("%4d%02d%02d%02d%02d.%02d", $YYYY, $MM, $DD, $hr, $min, $sec);
+    my $numFields = scalar(@fields);
+    #	field 0 is the table name, 11 is the Update_time in MySQL 4
+    #	field 0 is the table name, 12 is the Update_time in MySQL 5 when != NULL
+    my $YMD = "0";
+    my $HMS = "0";
+    #	sometimes there isn't any date in the status ?
+    if ($numFields > 14)
+	{
+	if ($fields[12] =~ /NULL/)
+	    {
+	    if ($fields[11] !~ /NULL/)
+		{
+		($YMD, $HMS) = split('\s',$fields[11]);
+		}
+	    } else {
+	    ($YMD, $HMS) = split('\s',$fields[12]);
+	    }
+	} else {
+	    ($YMD, $HMS) = split('\s',$fields[11]);
+	}
+    if (length($YMD) > 2)
+	{
+	my ($YYYY, $MM, $DD) = split('-',$YMD);
+	my ($hr, $min, $sec) = split(':',$HMS);
+	#	create touch -t format YYYYMMDDhhmm.ss
+	$tableTimes{$fields[0]} =
+	    sprintf("%4d%02d%02d%02d%02d.%02d", $YYYY, $MM, $DD, $hr, $min, $sec);
+	}
 }
 
 close (PH);
