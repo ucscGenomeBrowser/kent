@@ -515,10 +515,10 @@ if (antibody > 0 && submissionSource > 0 && abSubmitId != NULL && abSubmitId[0] 
     else
 	{
 	dyStringClear(dy);
-	dyStringAppend(dy, "insert into antibody set");
+	dyStringAppend(dy, "insert into antibodySource set");
 	dyStringPrintf(dy, " antibody = %d,",antibody);
 	dyStringPrintf(dy, " submissionSource = %d,", submissionSource);
-	dyStringPrintf(dy, " abSubmitId = %s", abSubmitId);
+	dyStringPrintf(dy, " abSubmitId = '%s'", abSubmitId);
 	verbose(2, "%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
 	}
