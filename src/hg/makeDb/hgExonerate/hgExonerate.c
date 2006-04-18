@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgExonerate.c,v 1.8 2003/05/06 07:22:24 kate Exp $";
+static char const rcsid[] = "$Id: hgExonerate.c,v 1.9 2006/04/18 14:35:41 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -59,7 +59,7 @@ struct hash *hashGroup(struct lineFile *lf, char *s)
 /* Make a little hash from group field. */
 {
 struct hash *hash = newHash(4);
-char buf[128], *words[2], *e;
+char *words[2], *e;
 int wordCount;
 
 for (;;)
