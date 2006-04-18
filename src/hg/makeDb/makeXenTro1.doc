@@ -1213,7 +1213,37 @@ Submission to last job:          2042s      34.03m     0.57h    0.02d
     mkdir -p ../mafNet
     cat *.axt | axtSort stdin stdout | axtToMaf -tSplit stdin \
      -tPrefix=hg17. /cluster/data/hg17/chrom.sizes \
-     -qPrefix=xenTro1. /cluster/data/xenTro1/chrom.sizes ../mafNet
+    qPrefix=xenTro1. /cluster/data/xenTro1/chrom.sizes ../mafNet
+
+# redo axt's and maf's to remove overlaps (2006-04-07 kate)
+    ssh kkstore04
+    cd /cluster/data/xenTro1/bed/zb.hg17
+    mv axtNet axtNet.old
+    mv mafNet mafNet.old
+    mkdir -p axtNet mafNet
+    cd axtChain
+    netSplit human.net net/
+    chainSplit chain/ all.chain
+cat > fix.csh << 'EOF'
+    date
+    foreach f (net/chr*.net)
+        set c = $f:t:r
+        echo $c
+        netToAxt net/$c.net chain/$c.chain \
+            /cluster/data/hg17/nib /cluster/data/xenTro1/xenTro1.2bit stdout | \
+                axtSort stdin ../axtNet/$c.axt
+        echo "Complete: $c.net -> $c.axt"
+        axtToMaf ../axtNet/$c.axt \
+            /cluster/data/hg17/chrom.sizes /cluster/data/xenTro1/chrom.sizes \
+            ../mafNet/$c.maf -tPrefix=hg17. -qPrefix=xenTro1.
+    end
+    date
+'EOF'
+    csh fix.csh >&! fix.log &
+    cd /san/sanvol1/scratch/hg17/mafNet
+    rm -fr xenTro1
+    cp -rp /cluster/data/xenTro1/bed/zb.hg17/mafNet xenTro1
+
 
 # SWAP EVERYTHING AND REMAKE NET FROM XENOPUS REFERENCE
     ssh kksilo
