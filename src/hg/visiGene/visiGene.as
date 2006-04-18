@@ -94,6 +94,7 @@ table submissionSource
     string acknowledgement;	"Something extra to put in the caption after copyright"
     lstring sourceUrl;		"URL for image source"
     lstring itemUrl;		"URL for item.  Put %s where imageFile.submitId should go"
+    lstring abUrl;		"URL for antibody.  Put %s where antibody.abSubmitId should go"
     )
 
 table submissionSet
@@ -131,6 +132,7 @@ table antibody
     string name;	"Name of antibody"
     lstring description;	"Description of antibody"
     int taxon;		"NCBI Taxon of animal antibody is from"
+    string abSubmitId;	"ID within submission source"
     )
 
 table bac

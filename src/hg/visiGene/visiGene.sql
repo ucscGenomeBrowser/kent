@@ -130,6 +130,7 @@ CREATE TABLE submissionSource (
     acknowledgement longtext not null, # Something extra to put in the caption after copyright.
     setUrl longblob not null,	# URL for whole set
     itemUrl longblob not null,	# URL for item.  Put %s where image.submitId should go
+    abUrl longblob not null,	# URL for antibody.  Put %s where antibody.abSubmitId should go
               #Indices
     PRIMARY KEY(id),
     UNIQUE(name(32))
@@ -175,6 +176,7 @@ CREATE TABLE antibody (
     name varchar(255) not null,	# Name of antibody
     description longblob not null,	# Description of antibody
     taxon int not null,	# Taxon of animal antibody is from
+    abSubmitId varchar(255) not null,	# ID within submission source
               #Indices
     PRIMARY KEY(id),
     INDEX(name(8)),
