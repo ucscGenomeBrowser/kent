@@ -32,10 +32,17 @@ your personal copy (on hgwdev-userName) do
     make update
 to do it on genome-test do
     make alpha
+You can also restrict a track to alpha or beta using
+by using the release field.
 
-Most of the fields in the track.ra file should 
-be reasonably self explanatory.  A notable exception
-is the type field.  Currently there are fourteen types:
+THE TYPE FIELD
+
+One of the most important and complicated fields in the
+trackDb.ra file is the type field.  Here's an explanation
+of that field.  Explanations of several other less-than-obvious
+fields follow.
+
+Currently there are fourteen different track types:
 axt, bed, chain, clonePos, ctgPos, expRatio, genePred,
 maf, netAlign, psl, rmsk, sample, wigMaf and wig
 
@@ -179,6 +186,8 @@ display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
 a make update.
 
+OTHER FIELDS
+
 The shortLabel and longLabel fields may have the following
 variables, which will be substituted:
      $ORGANISM - all upper case organism, like 'MOUSE'
@@ -229,12 +238,14 @@ url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
 	directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
       Note that it is possible to only include the first field or first few
       fields.  The fields must be in the given order if present though.
+    o hgsid - if present the hgsid=XXXXXX CGI variable will be appended to the end
+      of the directUrl string.
 
 Note: We have a restriction on table names.   We currently do not handle
 table names in the format chrN_table_name.   The 2nd underscore is not allowed.
 
 
-Composite Tracks
+COMPOSITE TRACKS
 ================
 Tracks of the same type can be grouped in a single "composite track",
 using the "compositeTrack on" setting.  The track name for the
