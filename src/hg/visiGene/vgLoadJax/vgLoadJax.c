@@ -312,6 +312,7 @@ fprintf(ra, "fullDir http://hgwdev.cse.ucsc.edu/visiGene/full/inSitu/Mouse/jax\n
 fprintf(ra, "thumbDir http://hgwdev.cse.ucsc.edu/visiGene/200/inSitu/Mouse/jax\n");
 fprintf(ra, "setUrl http://www.informatics.jax.org/\n");
 fprintf(ra, "itemUrl http://www.informatics.jax.org/searches/image.cgi?%%s\n");
+fprintf(ra, "abUrl http://www.informatics.jax.org/searches/antibody.cgi?%%s\n");
 fprintf(ra, "journal %s\n", row[1]);
 fprintf(ra, "publication %s\n", row[2]);
 fprintf(ra, "year %s\n", row[3]);
@@ -411,6 +412,7 @@ fprintf(tab, "fPrimer\t");
 fprintf(tab, "rPrimer\t");
 fprintf(tab, "abName\t");
 fprintf(tab, "abTaxon\t");
+fprintf(tab, "abSubmitId\t");
 fprintf(tab, "fixation\t");
 fprintf(tab, "embedding\t");
 fprintf(tab, "bodyPart\t");
@@ -450,6 +452,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *priority = NULL;
     char abTaxon[32];
     char *captionId = "";
+    char *abSubmitId = NULL;
 
     verbose(3, "   "); dumpRow(row, 16);
 
@@ -605,7 +608,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	}
 
-    /* Get abName, abTaxon */
+    /* Get abName, abTaxon, abSubmitId */
     abTaxon[0] = 0;
     if (!isStrNull(antibodyPrepKey))
         {
@@ -614,7 +617,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	char **row;
 	dyStringClear(query);
 	dyStringPrintf(query, 
-		"select antibodyName,_Organism_key "
+		"select antibodyName,_Organism_key,GXD_Antibody._Antibody_key "
 		"from GXD_AntibodyPrep,GXD_Antibody "
 		"where GXD_AntibodyPrep._AntibodyPrep_key = %s "
 		"and GXD_AntibodyPrep._Antibody_key = GXD_Antibody._Antibody_key"
@@ -625,6 +628,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    {
 	    abName = cloneString(row[0]);
 	    orgKey = atoi(row[1]);
+	    abSubmitId = cloneString(row[2]);
 	    }
 	sqlFreeResult(&sr);
 
@@ -779,6 +783,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%s\t", rPrimer);
     fprintf(tab, "%s\t", abName);
     fprintf(tab, "%s\t", abTaxon);
+    fprintf(tab, "%s\t", abSubmitId);
     fprintf(tab, "%s\t", fixation);
     fprintf(tab, "%s\t", embedding);
     fprintf(tab, "%s\t", bodyPart);
@@ -794,6 +799,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     gotAny = TRUE;
     freez(&genotype);
     freez(&abName);
+    freez(&abSubmitId);
     freez(&rPrimer);
     freez(&fPrimer);
     }
