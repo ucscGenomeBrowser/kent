@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/dumpDb.pl instead.
 
-# $Id: dumpDb.pl,v 1.1 2006/04/18 18:48:36 hiram Exp $
+# $Id: dumpDb.pl,v 1.2 2006/04/18 18:58:28 hiram Exp $
 
 use strict;
 use warnings;
@@ -58,8 +58,10 @@ foreach my $table (keys %tableTimes)
 {
     if ($table =~ /^trackDb_.*|^hgFindSpec_.*/)
 	{
-	`rm $table.sql $table.txt`;
+	`rm -f $table.sql $table.txt`;
 	} else {
+	#	the .txt files are owned by mysql, change ownership
+	print `mv $table.txt $table.txt.tmp;cp $table.txt.tmp $table.txt;rm -f $table.txt.tmp`;
 	`touch -t $tableTimes{$table} $table.sql $table.txt`;
 	}
 }
