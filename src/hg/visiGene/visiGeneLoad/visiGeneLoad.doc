@@ -59,6 +59,9 @@ OPTIONAL FIELDS (WITH DEFAULT VALUES IF ANY IN BRACKETS)
 abName - Name of antibody used as probe
 abDescription - Description of antibody used as prob
 abTaxon - Taxon of animal antibody isolated from
+abSubmitId - an ID to substitute into abUrl for antibody.
+abUrl - Contributor-supplied URL associated with this particular antibody.  Should
+    have a %s where abSubmitId gets substituted in.
 bac - If probe is made from a bac, the bac's name, often RP-something.
 bodyPart - Name of part of body depicted in image.  Use "whole" for whole mounts.  
 captionId - Same as in caption.txt file.
