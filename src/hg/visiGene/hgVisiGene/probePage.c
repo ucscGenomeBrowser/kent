@@ -115,7 +115,8 @@ if (gotMapping)
    printf("</A>");
 }
 
-static void antibodyProbeInfo(struct sqlConnection *conn, int probeId)
+static void antibodyProbeInfo(struct sqlConnection *conn, 
+    int probeId, int submissionSourceId)
 /* Print out info on antibody based probe */
 {
 char query[256];
@@ -123,7 +124,6 @@ int abId;
 int taxon;
 char *species = "n/a";
 char *abUrl = NULL;
-char *abSubmitId = NULL;
 
 /* Lookup antibody id and taxon. */
 safef(query, sizeof(query), "select antibody from probe where id=%d", 
@@ -138,31 +138,32 @@ if (taxon != 0)
     species = orgName(conn, taxon);
 labeledText("species", species);
 printf("<BR>\n");
-safef(query, sizeof(query), "select description from antibody where id=%d", 
-	abId);
+safef(query, sizeof(query), "select description from antibody where id=%d", abId);
 labeledResult("description", conn, query);
 printf("<BR>\n");
 
-safef(query, sizeof(query), "select abSubmitId from antibody where id=%d", abId);
-abSubmitId = sqlQuickString(conn, query);
-
-/* Currently this is only used by MGI (JAX) */
-/* TODO: FIX -- hardwired to MGI */
-safef(query, sizeof(query), "select abUrl from submissionSource where name='MGI'");
+safef(query, sizeof(query), "select abUrl from submissionSource where id=%d", submissionSourceId);
 abUrl = sqlQuickString(conn, query);
-if (abUrl != NULL && abUrl[0] != 0 && abSubmitId != NULL && abSubmitId[0] != 0)
+if (abUrl != NULL && abUrl[0] != 0)
     {
-    printf("<B>source:</B> ");
-    printf("<A HREF=\"");
-    printf(abUrl, abSubmitId);
-    printf("\" target=_blank>%s</A> ", "MGI");
+    char *abSubmitId = NULL;
+    safef(query, sizeof(query), "select abSubmitId from antibodySource"
+	" where antibody=%d and submissionSource=%d", abId, submissionSourceId);
+    abSubmitId = sqlQuickString(conn, query);
+    if (abSubmitId != NULL && abSubmitId[0] != 0)
+	{
+	printf("<B>source:</B> ");
+	printf("<A HREF=\"");
+	printf(abUrl, abSubmitId);
+	printf("\" target=_blank>%s</A> ", "MGI");
+	freez(&abSubmitId);
+	}
     }
 
 freez(&abUrl);
-freez(&abSubmitId);
 }
 
-void probePage(struct sqlConnection *conn, int probeId)
+void probePage(struct sqlConnection *conn, int probeId, int submissionSourceId)
 /* Put up a page of info on probe. */
 {
 char query[256];
@@ -206,7 +207,7 @@ safef(query, sizeof(query),
 probeType = sqlQuickString(conn, query);
 labeledText("probe type", probeType);
 if (sameWord(probeType, "antibody"))
-    antibodyProbeInfo(conn, probeId);
+    antibodyProbeInfo(conn, probeId, submissionSourceId);
 else if (sameWord(probeType, "BAC"))
     bacProbeInfo(conn, probeId, taxon);
 else

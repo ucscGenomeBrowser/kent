@@ -359,7 +359,9 @@ void doProbe(struct sqlConnection *conn)
 /* Put up probe info page. */
 {
 int probeId = cartInt(cart, hgpDoProbe);
-probePage(conn, probeId);
+int submissionSourceId = cartInt(cart, hgpSs);
+cartRemove(cart, hgpSs);
+probePage(conn, probeId, submissionSourceId);
 }
 
 void doControls(struct sqlConnection *conn)

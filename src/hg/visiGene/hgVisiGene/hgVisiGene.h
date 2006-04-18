@@ -22,6 +22,8 @@
 
 #define hgpIncludeMutants "hgp_includeMutants"  /* Include mutant images. */
 
+#define hgpSs "hgp_ss"	/* Submission Source ID */
+
 /* Global variables (all read-only outside of hgVisiGene). */
 extern struct cart *cart;		/* Current CGI values */
 
