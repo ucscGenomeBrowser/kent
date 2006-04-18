@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: vgGetText.c,v 1.9 2006/03/21 02:36:02 galt Exp $";
+static char const rcsid[] = "$Id: vgGetText.c,v 1.10 2006/04/18 19:44:58 galt Exp $";
 
 char *db = "visiGene";
 
@@ -57,7 +57,7 @@ char query[256];
 int tableSize;
 safef(query, sizeof(query), "select count(*) from %s", table);
 tableSize = sqlQuickNum(conn, query);
-verbose(1, "%s has %d rows\n", table, tableSize);
+printf("%s has %d rows\n", table, tableSize);
 return newHash(digitsBaseTwo(tableSize) + 1);
 }
 
