@@ -670,6 +670,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     if (abName == NULL)
         abName = cloneString("");
+    if (abSubmitId == NULL)
+        abSubmitId = cloneString("");
 
     /* Get rPrimer, lPrimer */
     /* Note that this code seems to be correct, but the
