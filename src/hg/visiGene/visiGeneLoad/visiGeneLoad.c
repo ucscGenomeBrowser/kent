@@ -79,7 +79,7 @@ static char *requiredSetFields[] = {"contributor", "submitSet"};
 static char *requiredFields[] = {"imageWidth", "imageHeight", "fullDir", "thumbDir", "taxon", 
 	"age", "probeColor", };
 static char *optionalFields[] = {
-    "abName", "abDescription", "abTaxon", "bodyPart", "copyright",
+    "abName", "abDescription", "abSubmitId", "abTaxon", "abUrl", "bodyPart", "copyright",
     "embedding", "fixation", "fPrimer", "genbank", "gene",
     "genotype", "imagePos", "itemUrl", "minAge", "maxAge",
     "journal", "journalUrl",
@@ -151,7 +151,7 @@ else
 }
 
 int findOrAddSubmissionSource(struct sqlConnection *conn, char *name, 
-	char *acknowledgement, char *setUrl, char *itemUrl)
+	char *acknowledgement, char *setUrl, char *itemUrl, char *abUrl)
 /* Return submissionSource table id.  If necessary creating row in 
  * submissionSource table. */
 {
@@ -167,7 +167,8 @@ if (id == 0)
     dyStringPrintf(dy, "\"%s\", ", name);
     dyStringPrintf(dy, "\"%s\", ", acknowledgement);
     dyStringPrintf(dy, "\"%s\", ", setUrl);
-    dyStringPrintf(dy, "\"%s\")", itemUrl);
+    dyStringPrintf(dy, "\"%s\",", itemUrl);
+    dyStringPrintf(dy, "\"%s\")", abUrl);
     verbose(2, "%s\n", dy->string);
     sqlUpdate(conn, dy->string);
     dyStringFree(&dy);
@@ -262,13 +263,14 @@ char *publication = hashValOrDefault(raHash, "publication", "");
 char *pubUrl = hashValOrDefault(raHash, "pubUrl", "");
 char *setUrl = hashValOrDefault(raHash, "setUrl", "");
 char *itemUrl = hashValOrDefault(raHash, "itemUrl", "");
+char *abUrl = hashValOrDefault(raHash, "abUrl", "");
 char *journal = hashValOrDefault(raHash, "journal", "");
 char *journalUrl = hashValOrDefault(raHash, "journalUrl", "");
 char *acknowledgement = hashValOrDefault(raHash, "acknowledgement", "");
 char *copyright = hashFindVal(raHash, "copyright");
 int copyrightId = 0;
 int submissionSourceId = findOrAddSubmissionSource(conn, submissionSource, acknowledgement,
-	setUrl, itemUrl);
+	setUrl, itemUrl, abUrl);
 int submissionId = findExactSubmissionId(conn, name, contributor);
 if (copyright != NULL)
     copyrightId = findOrAddIdTable(conn, "copyright", "notice", copyright, copyrightCache);
@@ -482,7 +484,7 @@ return geneId;
 }
 
 int doAntibody(struct sqlConnection *conn, char *abName, char *abDescription,
-	char *abTaxon)
+	char *abTaxon, char *abSubmitId)
 /* Update antibody table if necessary and return antibody ID. */
 {
 int antibodyId = 0;
@@ -495,7 +497,7 @@ if (abName[0] != 0)
     struct dyString *dy = dyStringNew(0);
 
     /* Try to hook up with existing antibody record. */
-    dyStringAppend(dy, "select id,name,description,taxon from antibody");
+    dyStringAppend(dy, "select id,name,description,taxon,abSubmitId from antibody");
     dyStringPrintf(dy, " where name = '%s'", abName);
     sr = sqlGetResult(conn, dy->string);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -504,7 +506,15 @@ if (abName[0] != 0)
 	char *name = row[1];
 	char *description = row[2];
 	char *taxon = row[3];
+	char *submitId = row[4];
 	int score = 1;
+	if (submitId[0] != 0 && abSubmitId[0] != 0)
+	    {
+	    if (differentString(submitId,abSubmitId))
+		continue;
+	    else
+		score += 1;
+	    }
 	if (abTaxon[0] != '0' && taxon[0] != '0')
 	    {
 	    if (differentString(taxon, abTaxon))
@@ -536,7 +546,8 @@ if (abName[0] != 0)
 	dyStringPrintf(dy, " description = \"%s\",\n", abDescription);
 	if (abTaxon[0] == 0)
 	    abTaxon = "0";
-	dyStringPrintf(dy, " taxon = %s", abTaxon);
+	dyStringPrintf(dy, " taxon = %s,", abTaxon);
+	dyStringPrintf(dy, " abSubmitId = %s", abSubmitId);
 	verbose(2, "%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
         antibodyId = sqlLastAutoId(conn);
@@ -556,6 +567,15 @@ if (abName[0] != 0)
 	    {
 	    dyStringClear(dy);
 	    dyStringPrintf(dy, "update antibody set taxon = %s", abTaxon);
+	    dyStringPrintf(dy, " where id = %d", antibodyId);
+	    verbose(2, "%s\n", dy->string);
+	    sqlUpdate(conn, dy->string);
+	    }
+	if (abSubmitId[0] != 0)
+	    {
+	    dyStringClear(dy);
+	    dyStringPrintf(dy, "update antibody set abSubmitId = \"%s\"",
+		    abSubmitId);
 	    dyStringPrintf(dy, " where id = %d", antibodyId);
 	    verbose(2, "%s\n", dy->string);
 	    sqlUpdate(conn, dy->string);
@@ -1199,6 +1219,7 @@ while (lineFileNextReal(lf, &line))
 	char *abName = getVal("abName", raHash, rowHash, words, "");
 	char *abDescription = getVal("abDescription", raHash, rowHash, words, "");
 	char *abTaxon = getVal("abTaxon", raHash, rowHash, words, "0");
+	char *abSubmitId = getVal("abSubmitId", raHash, rowHash, words, "");
 	char *fPrimer = getVal("fPrimer", raHash, rowHash, words, "");
 	char *genbank = getVal("genbank", raHash, rowHash, words, "");
 	char *gene = getVal("gene", raHash, rowHash, words, "");
@@ -1239,7 +1260,7 @@ while (lineFileNextReal(lf, &line))
 	verbose(3, "line %d of %s: gene %s, fileName %s\n", lf->lineIx, lf->fileName, gene, fileName);
 	sectionId = doSectionSet(conn, sectionSetCache, sectionSet);
 	geneId = doGene(lf, conn, gene, locusLink, refSeq, uniProt, genbank, taxon);
-	antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
+	antibodyId = doAntibody(conn, abName, abDescription, abTaxon, abSubmitId);
 	probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq, bac);
 
 	captionId = doCaption(lf, conn, captionExtId, captionTextHash, 
