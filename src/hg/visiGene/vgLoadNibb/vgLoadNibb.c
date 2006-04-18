@@ -10,7 +10,7 @@
 #include "dnaseq.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: vgLoadNibb.c,v 1.7 2005/11/12 02:42:53 kent Exp $";
+static char const rcsid[] = "$Id: vgLoadNibb.c,v 1.8 2006/04/18 00:40:13 galt Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -96,6 +96,7 @@ fprintf(f, "acknowledgement Thanks to Naoto Ueno and colleagues at NIBB for help
 fprintf(f, "contributor Ueno N., Kitayama A., Terasaka C., Nomoto K., Shibamoto K., Nishide H.\n");
 fprintf(f, "year 2005\n");
 fprintf(f, "setUrl http://xenopus.nibb.ac.jp\n");
+fprintf(f, "itemUrl http://xenopus.nibb.ac.jp/cgi-bin/search?query=%%s&name=clone\n");
 fprintf(f, "probeColor purple\n");
 carefulClose(&f);
 }
