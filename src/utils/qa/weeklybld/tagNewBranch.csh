@@ -43,8 +43,15 @@ echo "new branch and tag v$BRANCHNN created."
 
 echo
 echo "moving tag beta..."
-cvs -d hgwdev:$CVSROOT rtag -da beta kent >& /dev/null
-cvs -d hgwdev:$CVSROOT rtag -rv${BRANCHNN}_branch beta kent >& /dev/null
+# new way (faster, but does it work? attic files ok?):
+cvs -d hgwdev:$CVSROOT rtag -Fa -rv${BRANCHNN}_branch beta kent >& /dev/null
+# old way (works but slower)
+#cvs -d hgwdev:$CVSROOT rtag -da beta kent >& /dev/null
+#cvs -d hgwdev:$CVSROOT rtag -rv${BRANCHNN}_branch beta kent >& /dev/null
+if ( $status ) then
+ echo "cvs rtag failed for beta tag with new version# $BRANCHNN on $HOST"
+ exit 1
+endif
 echo "beta regular tag moved to the new branch v$BRANCHNN."
 
 exit 0
