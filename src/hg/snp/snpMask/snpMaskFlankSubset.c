@@ -10,11 +10,12 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: snpMaskFlankSubset.c,v 1.1 2006/04/16 00:29:13 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlankSubset.c,v 1.2 2006/04/18 20:37:53 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
 struct hash *snpHash = NULL;
+struct dnaSeq *seqAll;
 
 char geneTable[] = "refGene";
 
@@ -520,7 +521,22 @@ while (lineFileNext(lf, &line, &lineSize))
 carefulClose(&fileHandle);
 }
 
+struct dnaSeq *getSeqFrag(int start, int size)
+{
+struct dnaSeq *seq;
+DNA *dna = needMem(size+1);
 
+// verbose(1, "calling memcpy\n");
+memcpy(dna, seqAll->dna + start, size);
+// verbose(1, "back from memcpy\n");
+
+AllocVar(seq);
+seq->dna = dna;
+seq->size = size;
+
+return seq;
+
+}
 
 void snpMaskFlankSubset(char *nibFile, char *outFile)
 /* snpMaskFlankSubset - Print sequence, centered on SNP, exons only, 
@@ -531,18 +547,21 @@ struct genePred *genes = NULL, *gene = NULL;
 int exonPos = 0, exonStart = 0, exonEnd = 0, exonSize = 0;
 struct snpSimple *snps = NULL, *snp = NULL;
 struct dnaSeq *seqOrig, *seqMasked, *seqFlank;
+struct dnaSeq *seqOrig2, *seqMasked2, *seqFlank2;
 char *ptr;
 int snpPos = 0;
 int flankStart = 0, flankEnd = 0, flankSize = 0;
 struct dnaSeq *exonSequence[MAX_EXONS];
+struct snpSimple *snpLists[MAX_EXONS];
 boolean gotCoord = FALSE;
 int startExon = 0, endExon = 0, snpExon = 0;
-char *nibFile2;
 // for short circuit
 int geneCount = 0;
+char *nibFile2;
 
 nibFile2 = needMem(128);
 strcpy(nibFile2, nibFile);
+
 genes = readGenes(chromName);
 
 for (gene = genes; gene != NULL; gene = gene->next)
@@ -562,10 +581,15 @@ for (gene = genes; gene != NULL; gene = gene->next)
         assert (exonSize > 0);
 
         snps = readSnps(gene->chrom, exonStart, exonEnd);
+	// store for printing
+	snpLists[exonPos] = snps;
 
-        AllocVar(seqMasked);
-        seqMasked->dna = needMem(exonSize+1);
-        seqMasked = nibLoadPartMasked(NIB_MASK_MIXED, nibFile2, exonStart, exonSize);
+        seqMasked = getSeqFrag(exonStart, exonSize);
+
+	// AllocVar(seqMasked2);
+	// seqMasked2->dna = needMem(exonSize+1);
+	// seqMasked2 = nibLoadPartMasked(NIB_MASK_MIXED, nibFile2, exonStart, exonSize);
+	// assert(sameString(seqMasked->dna, seqMasked2->dna));
 
         /* first do all substitutions */
 	/* a flank may include other SNPs */
@@ -590,7 +614,8 @@ for (gene = genes; gene != NULL; gene = gene->next)
         exonEnd   = gene->exonEnds[exonPos];
 	verbose(5, "exonPos = %d\n", exonPos);
         /* could save these from last time */
-        snps = readSnps(gene->chrom, exonStart, exonEnd);
+        // snps = readSnps(gene->chrom, exonStart, exonEnd);
+	snps = snpLists[exonPos];
 	if (snps == NULL) continue;
 
 	for (snp = snps; snp != NULL; snp = snp->next)
@@ -605,7 +630,8 @@ for (gene = genes; gene != NULL; gene = gene->next)
 	    strcat(snpName, snp->name);
 	    strcat(snpName, " (reference = ");
             /* could do a memcpy from sequence for full exon, potentially faster */
-            seqOrig = nibLoadPartMasked(NIB_MASK_MIXED, nibFile2, snpPos, 1);
+            // seqOrig = nibLoadPartMasked(NIB_MASK_MIXED, nibFile2, snpPos, 1);
+            seqOrig = getSeqFrag(snpPos, 1);
 	    ptr = seqOrig->dna;
 	    if (sameString(gene->strand, "-"))
 	        reverseComplement(seqOrig->dna, 1);
@@ -661,7 +687,11 @@ if(hgOfficialChromName(chromName) == NULL)
     errAbort("no such chromosome %s in %s\n", chromName, database);
 // check that nib file exists
 // or, use hNibForChrom from hdb.c
+// hNibForChrom(chromName, nibName);
 dnaUtilOpen();
+seqAll = nibLoadPartMasked(NIB_MASK_MIXED, argv[3], 0, hChromSize(chromName));
+// seqAll = hFetchSeq(argv[3], chromName, 0, hChromSize(chromName));
+
 readSnpsFromFile(argv[4]);
 snpMaskFlankSubset(argv[3], argv[5]);
 return 0;
