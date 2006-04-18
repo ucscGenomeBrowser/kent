@@ -580,6 +580,13 @@ char *visiGeneItemUrl(struct sqlConnection *conn, int id)
 return stringFieldInSubmissionSource(conn, id, "itemUrl");
 }
 
+char *visiGeneAbUrl(struct sqlConnection *conn, int id)
+/* Return contributor antibody url. 
+ * Substitute in submitId for %s before using.  May be null.
+ * FreeMem when done. */
+{
+return stringFieldInSubmissionSource(conn, id, "abUrl");
+}
 char *visiGeneAcknowledgement(struct sqlConnection *conn, int id)
 /* Return acknowledgement if any, NULL if none. 
  * FreeMem this when done. */
