@@ -252,7 +252,7 @@ return submissionSetId;
 }
 
 int saveSubmissionSet(struct sqlConnection *conn, struct hash *raHash, 
-	struct hash *copyrightCache, struct hash *contributorCache)
+	struct hash *copyrightCache, struct hash *contributorCache, int *submissionSourceId)
 /* Create submissionSet, submissionContributor, and contributor records. */
 {
 char *contributor = hashMustFindVal(raHash, "contributor");
@@ -269,7 +269,7 @@ char *journalUrl = hashValOrDefault(raHash, "journalUrl", "");
 char *acknowledgement = hashValOrDefault(raHash, "acknowledgement", "");
 char *copyright = hashFindVal(raHash, "copyright");
 int copyrightId = 0;
-int submissionSourceId = findOrAddSubmissionSource(conn, submissionSource, acknowledgement,
+*submissionSourceId = findOrAddSubmissionSource(conn, submissionSource, acknowledgement,
 	setUrl, itemUrl, abUrl);
 int submissionId = findExactSubmissionId(conn, name, contributor);
 if (copyright != NULL)
@@ -279,7 +279,7 @@ if (submissionId != 0)
      return submissionId;
 else
      return createSubmissionId(conn, name, contributor, 
-     	publication, pubUrl, submissionSourceId, journal, 
+     	publication, pubUrl, *submissionSourceId, journal, 
 	journalUrl, copyrightId, atoi(year), contributorCache);
 }
 
@@ -483,8 +483,53 @@ dyStringFree(&dy);
 return geneId;
 }
 
+void doAntibodySource(struct sqlConnection *conn, 
+	int antibody, int submissionSource, char *abSubmitId)
+/* Update antibodySource table if necessary and return antibody ID. */
+{
+if (antibody > 0 && submissionSource > 0 && abSubmitId != NULL && abSubmitId[0] != 0)
+    {
+    struct sqlResult *sr;
+    char **row;
+    struct dyString *dy = dyStringNew(0);
+
+    /* Try to hook up with existing antibody record. */
+    dyStringAppend(dy, "select abSubmitId from antibodySource");
+    dyStringPrintf(dy, " where antibody=%d and submissionSource=%d", antibody, submissionSource);
+    sr = sqlGetResult(conn, dy->string);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	char *submitId = row[0];
+	if (submitId[0] != 0)
+	    {
+	    if (differentString(submitId,abSubmitId))
+		{
+		dyStringClear(dy);
+		dyStringPrintf(dy, "update antibodySource set abSubmitId = '%s'", abSubmitId);
+		dyStringPrintf(dy, " where antibody = %d and submissionSource=%d", antibody, submissionSource);
+		verbose(2, "%s\n", dy->string);
+		sqlUpdate(conn, dy->string);
+		}
+	    }
+	}
+    else
+	{
+	dyStringClear(dy);
+	dyStringAppend(dy, "insert into antibody set");
+	dyStringPrintf(dy, " antibody = %d,",antibody);
+	dyStringPrintf(dy, " submissionSource = %d,", submissionSource);
+	dyStringPrintf(dy, " abSubmitId = %s", abSubmitId);
+	verbose(2, "%s\n", dy->string);
+	sqlUpdate(conn, dy->string);
+	}
+    sqlFreeResult(&sr);
+    dyStringFree(&dy);
+    }
+
+}
+
 int doAntibody(struct sqlConnection *conn, char *abName, char *abDescription,
-	char *abTaxon, char *abSubmitId)
+	char *abTaxon)
 /* Update antibody table if necessary and return antibody ID. */
 {
 int antibodyId = 0;
@@ -497,7 +542,7 @@ if (abName[0] != 0)
     struct dyString *dy = dyStringNew(0);
 
     /* Try to hook up with existing antibody record. */
-    dyStringAppend(dy, "select id,name,description,taxon,abSubmitId from antibody");
+    dyStringAppend(dy, "select id,name,description,taxon from antibody");
     dyStringPrintf(dy, " where name = '%s'", abName);
     sr = sqlGetResult(conn, dy->string);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -506,15 +551,7 @@ if (abName[0] != 0)
 	char *name = row[1];
 	char *description = row[2];
 	char *taxon = row[3];
-	char *submitId = row[4];
 	int score = 1;
-	if (submitId[0] != 0 && abSubmitId[0] != 0)
-	    {
-	    if (differentString(submitId,abSubmitId))
-		continue;
-	    else
-		score += 1;
-	    }
 	if (abTaxon[0] != '0' && taxon[0] != '0')
 	    {
 	    if (differentString(taxon, abTaxon))
@@ -546,8 +583,7 @@ if (abName[0] != 0)
 	dyStringPrintf(dy, " description = \"%s\",\n", abDescription);
 	if (abTaxon[0] == 0)
 	    abTaxon = "0";
-	dyStringPrintf(dy, " taxon = %s,", abTaxon);
-	dyStringPrintf(dy, " abSubmitId = %s", abSubmitId);
+	dyStringPrintf(dy, " taxon = %s", abTaxon);
 	verbose(2, "%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
         antibodyId = sqlLastAutoId(conn);
@@ -567,15 +603,6 @@ if (abName[0] != 0)
 	    {
 	    dyStringClear(dy);
 	    dyStringPrintf(dy, "update antibody set taxon = %s", abTaxon);
-	    dyStringPrintf(dy, " where id = %d", antibodyId);
-	    verbose(2, "%s\n", dy->string);
-	    sqlUpdate(conn, dy->string);
-	    }
-	if (abSubmitId[0] != 0)
-	    {
-	    dyStringClear(dy);
-	    dyStringPrintf(dy, "update antibody set abSubmitId = \"%s\"",
-		    abSubmitId);
 	    dyStringPrintf(dy, " where id = %d", antibodyId);
 	    verbose(2, "%s\n", dy->string);
 	    sqlUpdate(conn, dy->string);
@@ -1072,6 +1099,7 @@ char *line, *words[256];
 struct sqlConnection *conn = sqlConnect(database);
 int rowSize;
 int submissionSetId;
+int submissionSourceId;
 struct hash *captionTextHash = readCaptions(captionFile);
 int imageProbeId = 0;
 
@@ -1138,7 +1166,7 @@ if (doLock)
     sqlHardLockAll(conn, TRUE);
 
 /* Create/find submission record. */
-submissionSetId = saveSubmissionSet(conn, raHash, copyrightCache, contributorCache);
+submissionSetId = saveSubmissionSet(conn, raHash, copyrightCache, contributorCache, &submissionSourceId);
 
 /* Process rest of tab file. */
 while (lineFileNextReal(lf, &line))
@@ -1260,7 +1288,10 @@ while (lineFileNextReal(lf, &line))
 	verbose(3, "line %d of %s: gene %s, fileName %s\n", lf->lineIx, lf->fileName, gene, fileName);
 	sectionId = doSectionSet(conn, sectionSetCache, sectionSet);
 	geneId = doGene(lf, conn, gene, locusLink, refSeq, uniProt, genbank, taxon);
-	antibodyId = doAntibody(conn, abName, abDescription, abTaxon, abSubmitId);
+	
+	antibodyId = doAntibody(conn, abName, abDescription, abTaxon);
+	doAntibodySource(conn, antibodyId, submissionSourceId, abSubmitId);
+	
 	probeId = doProbe(lf, conn, geneId, antibodyId, fPrimer, rPrimer, seq, bac);
 
 	captionId = doCaption(lf, conn, captionExtId, captionTextHash, 
