@@ -1,0 +1,20 @@
+track all_est
+shortLabel $Organism ESTs
+longLabel $Organism ESTs Including Unspliced
+group rna
+priority 57
+visibility hide
+spectrum on
+intronGap 30
+type psl est
+
+track all_mrna
+shortLabel $Organism mRNAs
+longLabel $Organism mRNAs from GenBank 
+group rna
+priority 54
+visibility pack
+spectrum on
+type psl .
+cdsDrawOptions enabled
+
