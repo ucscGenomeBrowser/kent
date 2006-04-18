@@ -41,6 +41,7 @@ SCRIPT_FILES = \
 	blastz-run-ucsc \
 	doBlastzChainNet.pl \
 	doHgNearBlastp.pl \
+	dumpDb.pl \
 	HgAutomate.pm \
         iSync \
         lodToBedScore \
