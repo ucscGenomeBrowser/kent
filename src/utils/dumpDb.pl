@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/dumpDb.pl instead.
 
-# $Id: dumpDb.pl,v 1.2 2006/04/18 18:58:28 hiram Exp $
+# $Id: dumpDb.pl,v 1.3 2006/04/18 19:02:22 hiram Exp $
 
 use strict;
 use warnings;
@@ -60,6 +60,11 @@ foreach my $table (keys %tableTimes)
 	{
 	`rm -f $table.sql $table.txt`;
 	} else {
+	if ( ! -r "$table.txt" )
+	    {
+	    print "ERROR: can not find file $table.txt\n";
+	    exit 255;
+	    }
 	#	the .txt files are owned by mysql, change ownership
 	print `mv $table.txt $table.txt.tmp;cp $table.txt.tmp $table.txt;rm -f $table.txt.tmp`;
 	`touch -t $tableTimes{$table} $table.sql $table.txt`;
