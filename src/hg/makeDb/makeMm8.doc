@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.27 2006/04/19 18:49:17 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.28 2006/04/19 19:30:45 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -4680,6 +4680,7 @@ TMPDIR=/scratch/tmp
     #	got loaded again before I thought of that.
     time nice -n +19 featureBits mm8 chainPanTro2Link \
 	> fb.mm8.chainPanTro2Link
+    #	963977790 bases of 2567283971 (37.549%) in intersection
 
     #	For panTro1 this was:
     time nice -n +19 featureBits mm8 chainPanTro1Link \
@@ -4696,11 +4697,19 @@ TMPDIR=/scratch/tmp
 	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	/cluster/data/mm8/bed/blastzPanTro2.2006-03-28/DEF \
 	> blastz.out 2>&1 &
-    #  XXX started 2006-03-30
+    #	completed the downloads manually since they failed due to the
+    #	existing downloads.  Then cleanup:
+    ssh hgwbeta
+    cd /cluster/data/panTro2/bed/blastz.mm8.swap
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-continue=cleanup /cluster/data/mm8/bed/blastzPanTro2.2006-03-28/DEF \
+	> cleanup.out 2>&1 &
 
     time nice -n +19 featureBits panTro2 chainMm8Link \
-	> fb.panTro2.chainMm8Link
-    # XXXX first time was:
+	> fb.panTro2.chainMm8Link 2>&1 &
+    #	978002566 bases of 2909512873 (33.614%) in intersection
+    # first time before the chr9 fix was:
     #	986978326 bases of 2909512873 (33.922%) in intersection
 
 #########################################################################
@@ -4945,4 +4954,4 @@ TMPDIR=/scratch/tmp
     time nice -n +19 featureBits mm8 chainHg17Link > fb.mm8.chainHg17Link 2>&1
     #	990554882 bases of 2567283971 (38.584%) in intersection
     time nice -n +19 featureBits hg17 chainMm8Link > fb.hg17.chainMm8Link 2>&1
-    #	994530172 bases of 2881515245 (34.514%) in intersection
+    #	997368618 bases of 2866216770 (34.797%) in intersection
