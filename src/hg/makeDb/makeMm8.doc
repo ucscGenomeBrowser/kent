@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.26 2006/04/13 23:23:48 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.27 2006/04/19 18:49:17 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -4889,7 +4889,7 @@ blat -ooc=/scratch/hg/h/mouse11.ooc $(path1) $(path2) {check out line+ psl/$(roo
    hgMapToGene mm8 allenBrainAli -type=psl knownGene knownToAllenBrain 
 
 #########################################################################
-# BLASTZ HUMAN Hg17 (WORKING - 2006-04-13 - Hiram)
+# BLASTZ HUMAN Hg17 (DONE - 2006-04-13 - 2006-04-19 - Hiram)
     ssh pk
     mkdir /cluster/data/mm8/bed/blastzHg17.2006-04-13
     cd /cluster/data/mm8/bed
@@ -4911,7 +4911,7 @@ SEQ1_CHUNK=50000000
 SEQ1_LAP=10000
 
 # QUERY: Human Hg17 - single chunk big enough to run each chrom by itself
-SEQ2_DIR=/scratch/hg/hg17/hg17.2bit
+SEQ2_DIR=/scratch/hg/hg17/bothMaskedNibs
 SEQ2_SMSK=/scratch/hg/hg17/linSpecRep.notInMouse
 SEQ2_LEN=/cluster/data/hg17/chrom.sizes
 SEQ2_CHUNK=300000000
@@ -4928,29 +4928,21 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
 	`pwd`/DEF > blastz.out 2>&1 &
-    #	Started 2006-04-13 16:22
-XXXXX
-# Completed: 3724 of 3724 jobs
-# CPU time in finished jobs:    5190293s   86504.89m  1441.75h   60.07d  0.165 y
-# IO & Wait Time:                259150s    4319.16m    71.99h    3.00d  0.008 y
-# Average job time:                1463s      24.39m     0.41h    0.02d
-# Longest finished job:           10621s     177.02m     2.95h    0.12d
-# Submission to last job:         74153s    1235.88m    20.60h    0.86d
-
-    #	continuing
-    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	-continue=cat `pwd`/DEF > cat.out 2>&1 &
-    #	Done 2006-02-17 15:02
+    #	real    656m20.633s
 
     #	Then to swap over to Hg17
+    mkdir /cluster/data/hg17/bed/blastz.mm8.swap
+    cd /cluster/data/hg17/bed
+    ln -s blastz.mm8.swap blastz.mm8
+    cd blastz.mm8.swap
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
-	`pwd`/DEF > swap.out 2>&1 &
-    #	Started 2006-02-17 15:30
+	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	-swap /cluster/data/mm8/bed/blastzHg17.2006-04-13/DEF \
+	> swap.out 2>&1 &
 
     ssh hgwdev
-    time nice -n +19 featureBits mm8 chainHg17Link
-    #	984380268 bases of 2567283971 (38.343%) in intersection
-    time nice -n +19 featureBits hg17 chainMm8Link
+    cd /cluster/data/mm8/bed/blastzHg17.2006-04-13
+    time nice -n +19 featureBits mm8 chainHg17Link > fb.mm8.chainHg17Link 2>&1
+    #	990554882 bases of 2567283971 (38.584%) in intersection
+    time nice -n +19 featureBits hg17 chainMm8Link > fb.hg17.chainMm8Link 2>&1
     #	994530172 bases of 2881515245 (34.514%) in intersection
