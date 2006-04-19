@@ -12,7 +12,7 @@
 #include "expData.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgExperiment.c,v 1.1 2004/09/09 07:01:14 kate Exp $";
+static char const rcsid[] = "$Id: hgExperiment.c,v 1.2 2006/04/19 14:54:26 angie Exp $";
 
 char *tabDir = ".";
 char *chopName = NULL;
@@ -66,7 +66,7 @@ char *words[6];
 int wordCt;
 struct hash *expHash = newHash(0);
 
-while (wordCt = lineFileChopNext(lf, words, ArraySize(words)))
+while ((wordCt = lineFileChopNext(lf, words, ArraySize(words))))
     {
     char *name = words[0];
     hashAddInt(expHash, name, expId);
@@ -138,7 +138,7 @@ slSort(&bedList, bedCmp);
 /* Read data file into a hash of arrays of data values, keyed by name */
 dataHash = newHash(0);
 lf = lineFileOpen(dataFile, TRUE);
-while (wordCt = lineFileChopNext(lf, words, ArraySize(words)))
+while ((wordCt = lineFileChopNext(lf, words, ArraySize(words))))
     {
     /* format: <region-name> <experiment-name> <data-value> */
     char *name, *exp;
