@@ -170,8 +170,8 @@ type bed 8 +
 track targetScanS
 shortLabel T-ScanS miRNA
 longLabel TargetScanS miRNA Regulatory Sites
-group genes
-priority 63.6
+group regulation
+priority 101
 visibility hide
 color 0,96,0
 type bed 9 .
@@ -181,7 +181,7 @@ compositeTrack on
 shortLabel PicTar miRNA
 longLabel MicroRNA target sites in 3' UTRs as predicted by PicTar
 group regulation
-priority 100
+priority 102
 visibility hide
 type bed 9
 
