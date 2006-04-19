@@ -426,18 +426,29 @@ safef(query, sizeof(query),
 return sqlQuickNonemptyString(conn, query);
 }
 
-char *visiGeneGenotype(struct sqlConnection *conn, int id)
-/* Return genotype of organism if any.  This is either "wild type"
- * or a comma separated list of gene:allele.  FreeMem this when done. */
+struct slName *visiGeneGenotypes(struct sqlConnection *conn, int id)
+/* Return list of genotypes.  A genotype is either "wild type"
+ * or gene:allele.  slFreeList this when done. */
 {
 char query[256];
+char *genotypesComma = NULL;  /* comma-separated list of genotypes */
+struct slName *nameList = NULL;
+
 safef(query, sizeof(query),
     "select genotype.alleles from image,specimen,genotype "
     "where image.id = %d "
     "and image.specimen = specimen.id "
     "and specimen.genotype = genotype.id"
     , id);
-return sqlQuickNonemptyString(conn, query);
+genotypesComma = sqlQuickNonemptyString(conn, query);
+if (genotypesComma == NULL || genotypesComma[0] == 0)
+    {
+    freez(&genotypesComma);
+    genotypesComma = cloneString("wild type,");
+    }
+nameList = slNameListFromComma(genotypesComma);
+freez(&genotypesComma);
+return nameList;
 }
 
 

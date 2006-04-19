@@ -67,9 +67,9 @@ char *visiGeneSex(struct sqlConnection *conn, int id);
 char *visiGeneStrain(struct sqlConnection *conn, int id);
 /* Return strain of organism if any.  FreeMem this when done. */
 
-char *visiGeneGenotype(struct sqlConnection *conn, int id);
-/* Return genotype of organism if any.  This is either "wild type"
- * or a comma separated list of gene:allele.  FreeMem this when done. */
+struct slName *visiGeneGenotypes(struct sqlConnection *conn, int id);
+/* Return list of genotypes.  A genotype is either "wild type"
+ * or gene:allele.  slFreeList this when done. */
 
 char *visiGeneSliceType(struct sqlConnection *conn, int id);
 /* Return slice type if any.  FreeMem this when done. */

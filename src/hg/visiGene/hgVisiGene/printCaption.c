@@ -307,20 +307,23 @@ struct slName *vgImageFileGenotypes(struct sqlConnection *conn, int imageFile)
 {
 struct hash *uniqHash = hashNew(0);
 struct slInt *imageList, *image;
-struct slName *genoList=NULL;
+struct slName *genoList=NULL,*genotype=NULL;
 
 imageList = visiGeneImagesForFile(conn, imageFile);
 for (image = imageList; image != NULL; image = image->next)
     {
-    char *genotype = visiGeneGenotype(conn, image->val);
-    if (genotype == NULL)
-	genotype = cloneString("wild type");
-    if (hashLookup(uniqHash, genotype))
-	freeMem(genotype);
-    else
-	{
-	hashAdd(uniqHash, genotype, NULL);
-	slNameAddHead(&genoList, genotype);
+    struct slName *oneList, *next;
+    oneList = visiGeneGenotypes(conn, image->val);
+    for (genotype = oneList; genotype != NULL; genotype = next)
+        {
+	next = genotype->next;
+	if (hashLookup(uniqHash, genotype->name))
+	    freeMem(genotype);
+	else
+	    {
+	    hashAdd(uniqHash, genotype->name, NULL);
+	    slAddHead(&genoList, genotype);
+	    }
 	}
     }
 slFreeList(&imageList);
