@@ -3,7 +3,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpPAR.c,v 1.2 2006/04/11 01:41:32 heather Exp $";
+static char const rcsid[] = "$Id: snpPAR.c,v 1.3 2006/04/19 22:09:19 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *outputFileHandle = NULL;
@@ -27,6 +27,7 @@ struct sqlResult *sr;
 char **row;
 int start = 0;
 int end = 0;
+int bin = 0;
 
 safef(query, sizeof(query), "select * from chrX_snp125 where chromEnd < 2642881");
 sr = sqlGetResult(conn, query);
@@ -47,8 +48,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     end = sqlUnsigned(row[3]);
     start = start - 97122574;
     end = end - 97122574;
-    fprintf(outputFileHandle, "%s\t%s\t%d\t%d\t%s\t%s\t%s\t%s\t%s\t", 
-                              row[0], "chrY", start, end, row[4], row[5], row[6], row[7], row[8]);
+    bin = hFindBin(start, end);
+    fprintf(outputFileHandle, "%d\t%s\t%d\t%d\t%s\t%s\t%s\t%s\t%s\t", 
+                              bin, "chrY", start, end, row[4], row[5], row[6], row[7], row[8]);
     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
                               row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16]);
     }
