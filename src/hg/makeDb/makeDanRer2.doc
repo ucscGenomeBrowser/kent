@@ -5230,7 +5230,7 @@ awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4,
     md5sum *.gz > md5sum.txt
 
 ###########################################################################
-# LIFTOVER CHAINS TO DANRER3 (in progress, 2006-04-17, hartera)
+# LIFTOVER CHAINS TO DANRER3 (DONE, 2006-04-18, hartera)
     # Split (using makeLoChain-split) of panTro3 is doc'ed in makeDanRer3.doc
     # Do what makeLoChain-split says to do next (start blat alignment)
     ssh kk
@@ -5244,9 +5244,46 @@ awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4,
     cd /cluster/data/danRer2/bed/blat.danRer3.2006-04-17/run
     para try, check, push, check, ...
     para time >&! run.time
-    # BLAT JOBS ARE RUNNING NOW
+# Completed: 784 of 784 jobs
+# CPU time in finished jobs:    4022758s   67045.97m  1117.43h   46.56d  0.128 y
+# IO & Wait Time:                 71872s    1197.86m    19.96h    0.83d  0.002 y
+# Average job time:                5223s      87.05m     1.45h    0.06d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           42935s     715.58m    11.93h    0.50d
+# Submission to last job:         42935s     715.58m    11.93h    0.50d
 
     # lift alignments
+    ssh kkr1u00
+    cd /cluster/data/danRer2/bed/liftOver
+    makeLoChain-lift danRer2 danRer3 >&! lift.log &
+    # Took about 10 minutes to run.
+
+    # chain alignments
+    ssh kki
+    cd /cluster/data/danRer2/bed/liftOver
+    makeLoChain-chain danRer2 /iscratch/i/danRer2/nib \
+                danRer3 /iscratch/i/danRer3/nib >&! chain.log &
+    # Do what its output says to do next (start cluster job)
+    cd /cluster/data/danRer2/bed/blat.danRer3.2006-04-17/chainRun
+    para try, check, push ...
+    para time >&! run.time
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:       2697s      44.95m     0.75h    0.03d  0.000 y
+# IO & Wait Time:                   548s       9.13m     0.15h    0.01d  0.000 y
+# Average job time:                 116s       1.93m     0.03h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             439s       7.32m     0.12h    0.01d
+# Submission to last job:           439s       7.32m     0.12h    0.01d
+    # net alignment chains
     ssh kkstore04
     cd /cluster/data/danRer2/bed/liftOver
-    makeLoChain-lift.csh danRer2 danRer3 >&! lift.log &
+    makeLoChain-net danRer2 danRer3 >&! net.log &
+    # Took about 20 minutes to run.
+    # load reference to over.chain into database table,
+    # and create symlinks  /gbdb  and download area
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/liftOver
+    makeLoChain-load danRer2 danRer3 >&! load.log &
+    # test by converting a region using the "convert" link on
+    # the browser, and comparing to blat of the same region
+    
