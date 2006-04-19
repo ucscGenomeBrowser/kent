@@ -184,7 +184,7 @@ otherDb mm5
 searchTable ctgPos2
 searchMethod exact
 shortCircuit 1
-termRegex (ctg|BX|AL)[0-9]+
+termRegex (ctg|BX|AL)[0-9]+\.[0-9]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
                                                                                 
@@ -242,7 +242,7 @@ searchMethod exact
 searchType bed
 xrefTable bacCloneXRef
 xrefQuery select name,sangerName from %s where sangerName like '%s'  
-termRegex (et|st)ID[0-9]+\.[0-9]+
+termRegex (et|st)ID[0-9\.]+
 searchPriority 10
 
 searchName bacSinglesSangerSts
@@ -251,7 +251,7 @@ searchMethod exact
 searchType bed
 xrefTable bacCloneXRef
 xrefQuery select name,sangerName from %s where sangerName like '%s'  
-termRegex (et|st)ID[0-9]+\.[0-9]+
+termRegex (et|st)ID[0-9\.]+
 searchPriority 10
 
 searchTable rhMap

@@ -281,7 +281,7 @@ searchMethod exact
 searchTable ctgPos2
 searchMethod exact
 shortCircuit 1
-termRegex (ctg|BX|AL)[0-9]+
+termRegex (ctg|BX|AL|Zv5_scaffold)[0-9\.]+
 query select chrom,chromStart,chromEnd,contig from %s where contig like '%s'
 searchPriority 5
 
@@ -303,7 +303,7 @@ searchMethod exact
 searchType bed
 xrefTable bacCloneXRef
 xrefQuery select name,intName from %s where intName like '%s'
-termRegex (zC|zK|bZ|dZ|bY|zH|bP)[[:alnum:]]+
+termRegex (zC|zK|bZ|dZ|bY|zH|bP|CHORI73_)[[:alnum:]]+
 searchPriority 8.5
                                                                                 
 searchName bacSinglesIntName
@@ -312,7 +312,7 @@ searchMethod exact
 searchType bed
 xrefTable bacCloneXRef
 xrefQuery select name,intName from %s where intName like '%s'
-termRegex (zC|zK|bZ|dZ|bY|zH|bP)[[:alnum:]]+
+termRegex (zC|zK|bZ|dZ|bY|zH|bP|CHORI73_)[[:alnum:]]+
 searchPriority 8.5
                                                                                 
 searchName bacPairsAliases
@@ -339,7 +339,7 @@ searchMethod exact
 searchType bed
 xrefTable bacCloneXRef
 xrefQuery select name,sangerName from %s where sangerName like '%s'
-termRegex (et|st)ID[0-9]+\.[0-9]+
+termRegex (et|st)ID[0-9\.]+
 searchPriority 10
                                                                                 
 searchName bacSinglesSangerSts
@@ -348,13 +348,13 @@ searchMethod exact
 searchType bed
 xrefTable bacCloneXRef
 xrefQuery select name,sangerName from %s where sangerName like '%s'
-termRegex (et|st)ID[0-9]+\.[0-9]+
+termRegex (et|st)ID[0-9\.]+
 searchPriority 10
 
 searchTable rhMap
 searchMethod prefix
 searchType psl
-termRegex [[:alnum:]]*-?[[:alnum:]\._:]+
+termRegex [[:alnum:]]*-?[[:alnum:]\._:\-]+
 searchPriority 11
 
 track blastHg17KG
