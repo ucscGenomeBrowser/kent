@@ -269,10 +269,8 @@ cd $tmpDir/xenTro2/$2
     mkdir /gbdb/xenTro2
     ln -s /cluster/data/xenTro2/xenTro2.2bit /gbdb/xenTro2/
     # Load /gbdb/xenTro2/xenTro2.2bit paths into database and save size info.
-    hgsql xenTro2  < $HOME/kent/src/hg/lib/chromInfo.sql
-    hgsql xenTro2 -e 'load data local infile \
-      "/cluster/data/xenTro2/bed/chromInfo/chromInfo.tab" \
-      into table chromInfo;'
+    hgLoadSqlTab xenTro2 chromInfo $HOME/kent/src/hg/lib/chromInfo.sql \
+      /cluster/data/xenTro2/bed/chromInfo/chromInfo.tab
     echo "select chrom,size from chromInfo" | hgsql -N xenTro2 > chrom.sizes
     # take a look at chrom.sizes size
     wc chrom.sizes
@@ -345,9 +343,198 @@ cd $tmpDir/xenTro2/$2
 #Wrote 25734 overused 11-mers to /cluster/bluearc/xenTro2/11.ooc
 
 
-# GENBANK
-# GENSCAN
-# CPGS (wustl and andy)
+# GENSCAN GENE PREDICTIONS (DONE 4/17/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/xenTro2/bed/genscan
+    cd /cluster/data/xenTro2/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+
+    # create hard masked .fa files
+    ssh kkstore04
+    cd /cluster/data/xenTro2
+    mkdir hardMasked
+    faSplit about xenTro2.fa.masked 5000000 hardMasked/
+    # Generate a list file, genome.list, of all the hard-masked contig chunks:
+    ls -1S /cluster/data/xenTro2/hardMasked/* > bed/genscan/genome.list
+    wc -l bed/genscan/genome.list
+#262 bed/genscan/genome.list
+
+    # Run on small cluster (more mem than big cluster).
+    ssh kki
+    cd /cluster/data/xenTro2/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # << emacs
+    gensub2 genome.list single gsub jobList
+    para make jobList
+    para time
+#Completed: 261 of 262 jobs
+#Crashed: 1 jobs
+#CPU time in finished jobs:      33758s     562.63m     9.38h    0.39d  0.001 y
+#IO & Wait Time:                   905s      15.08m     0.25h    0.01d  0.000 y
+#Average job time:                 133s       2.21m     0.04h    0.00d
+#Longest finished job:             320s       5.33m     0.09h    0.00d
+#Submission to last job:          3605s      60.08m     1.00h    0.04d
+
+    # If there are crashes, diagnose with "para problems" and "para crashed".  
+    # If a job crashes due to genscan running out of memory, re-run it 
+    # manually with "-window=1200000" instead of "-window=2400000".
+    ssh kkr8u00
+    cd /cluster/data/xenTro2/bed/genscan
+    /cluster/bin/x86_64/gsBig /cluster/data/xenTro2/hardMasked/30.fa gtf/30.gtf -trans=pep/30.pep -subopt=subopt/30.bed -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=1200000
+
+    ls -1 gtf | wc -l
+#262
+    endsInLf gtf/*
+
+    # Concatenate results:
+    ssh kkstore04
+    cd /cluster/data/xenTro2/bed/genscan
+    cat gtf/*.gtf > genscan.gtf
+    cat pep/*.pep > genscan.pep
+    cat subopt/*.bed > genscanSubopt.bed
+
+    # Load into the database (without -genePredExt because no frame info):
+    # Don't load the Pep anymore -- redundant since it's from genomic.
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/genscan
+    ldHgGene -gtf xenTro2 genscan genscan.gtf
+    hgLoadBed xenTro2 genscanSubopt genscanSubopt.bed
+    featureBits -chrom=scaffold_1 xenTro2 genscan
+#249658 bases of 7578677 (3.294%) in intersection
+    featureBits -chrom=scaffold_1 xenTro1 genscan
+#275145 bases of 7406505 (3.715%) in intersection
+    # Strange that the coverage dropped a bit.  Well, more seq is masked...?
+
+
+# GENBANK AUTO UPDATE (DONE 4/18/06 angie)
+    # align with revised genbank process. drop xeno ESTs.
+    cd ~/kent/src/makeDb/genbank
+    cvsup
+    # edit etc/genbank.conf to add xenTro2
+
+# xenTro2 (X. tropicalis) 19579 scaffolds
+xenTro2.serverGenome = /cluster/data/xenTro2/xenTro2.2bit
+xenTro2.clusterGenome = /scratch/hg/xenTro2/xenTro2.2bit
+xenTro2.ooc = /cluster/bluearc/xenTro2/11.ooc
+xenTro2.lift = no
+xenTro2.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+xenTro2.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+xenTro2.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+xenTro2.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+xenTro2.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+xenTro2.refseq.mrna.native.load = no
+xenTro2.genbank.mrna.xeno.load = no
+xenTro2.downloadDir = xenTro2
+xenTro2.perChromTables = no
+xenTro2.mgcTables.default = full
+xenTro2.mgcTables.mgc = all
+
+    cvs ci etc/genbank.conf
+    # update /cluster/data/genbank/
+    make etc-update
+
+    ssh kkstore02
+    cd /cluster/data/genbank
+    nice bin/gbAlignStep -initial xenTro2 &
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    nice ./bin/gbDbLoadStep -drop -initialLoad xenTro2 &
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/makeDb/genbank
+    cvsup
+    # add xenTro2 to:
+        etc/align.dbs
+        etc/hgwdev.dbs 
+    cvs commit
+    make etc-update
+
+
+# CPGISSLANDS (WUSTL) (DONE 4/18/06 angie)
+    ssh hgwdev
+    mkdir -p /cluster/data/xenTro2/bed/cpgIsland
+    cd /cluster/data/xenTro2/bed/cpgIsland
+    # Build software from Asif Chinwalla (achinwal@watson.wustl.edu)
+    cvs co hg3rdParty/cpgIslands
+    cd hg3rdParty/cpgIslands
+    make
+    mv cpglh.exe /cluster/data/xenTro2/bed/cpgIsland/
+    
+    ssh kkr8u00
+    cd /cluster/data/xenTro2/bed/cpgIsland
+    ./cpglh.exe ../../xenTro2.fa > xenTro2.cpg
+
+    # Transform cpglh output to bed +
+    cat << '_EOF_' > filter.awk
+/* Input columns: */
+/* chrom, start, end, len, CpG: cpgNum, perGc, cpg:gpc, observed:expected */
+/* chr1\t 41776\t 42129\t 259\t CpG: 34\t 65.8\t 0.92\t 0.94 */
+/* Output columns: */
+/* chrom, start, end, name, length, cpgNum, gcNum, perCpg, perGc, obsExp */
+/* chr1\t41775\t42129\tCpG: 34\t354\t34\t233\t19.2\t65.8\to0.94 */
+{
+$2 = $2 - 1;
+width = $3 - $2;
+printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
+       $1, $2, $3, $5,$6, width,
+       $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
+}
+'_EOF_'
+    # << this line makes emacs coloring happy
+    awk -f filter.awk *.cpg > cpgIsland.bed
+    wc -l cpgIsland.bed 
+#  42984 cpgIsland.bed
+
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/cpgIsland
+    hgLoadBed xenTro2 cpgIslandExt -tab \
+      -sqlTable=$HOME/kent/src/hg/lib/cpgIslandExt.sql cpgIsland.bed
+    featureBits -chrom=scaffold_1 xenTro2 cpgIslandExt
+#54127 bases of 7578677 (0.714%) in intersection
+    featureBits -chrom=scaffold_1 xenTro1 cpgIslandExt
+#48512 bases of 7406505 (0.655%) in intersection
+    featureBits xenTro1 cpgIslandExt
+#19279778 bases of 1381238994 (1.396%) in intersection
+
+
+# CPGISLANDS (ANDY LAW) (DONE 4/18/06 angie)
+    # See notes in makeGalGal2.doc
+    ssh kr8u00
+    mkdir /cluster/data/xenTro2/bed/cpgIslandGgfAndy
+    cd /cluster/data/xenTro2/bed/cpgIslandGgfAndy
+    #	Build the preProcGgfAndy program in
+    #	kent/src/oneShot/preProcGgfAndy into your ~/bin/$MACHTYPE
+    # Use soft-masked sequence since this is not a mammal...
+    ~/bin/x86_64/preProcGgfAndy ../../xenTro2.fa \
+    | /cluster/home/angie/ggf-andy-cpg-island-ucsc.pl \
+      > cpgIslandGgfAndy.bed
+    wc -l ../cpgIsland/cpgIsland.bed *bed
+#   42984 ../cpgIsland/cpgIsland.bed
+#  184980 cpgIslandGgfAndy.bed
+
+    # load into database:
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/cpgIslandGgfAndy
+    sed -e 's/cpgIslandExt/cpgIslandGgfAndy/g' \
+      $HOME/kent/src/hg/lib/cpgIslandExt.sql > cpgIslandGgfAndy.sql
+    hgLoadBed xenTro2 cpgIslandGgfAndy -tab \
+      -sqlTable=cpgIslandGgfAndy.sql cpgIslandGgfAndy.bed
+    featureBits -chrom=scaffold_1 xenTro2 cpgIslandExt
+#54127 bases of 7578677 (0.714%) in intersection
+    featureBits -chrom=scaffold_1 xenTro2 cpgIslandGgfAndy
+#251543 bases of 7578677 (3.319%) in intersection
+
+
 # ENSEMBL is on 4.0 not 4.1... do the coords mostly carry over???
 # COMPARATIVE: chicken, opossum, human, mouse, zebrafish
 
