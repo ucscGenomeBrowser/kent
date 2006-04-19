@@ -20647,7 +20647,7 @@ cd human
 # get hg17 ctgPos, load into dbSnpHumanBuild125, compare contig list between ctgPos and ContigInfo
 
 # get gnl files
-cd /cluster/data/dbSnp/125/organisms/human_9606/rs_fasta/*.gnl .
+cp /cluster/data/dbSnp/125/organisms/human_9606/rs_fasta/*.gnl .
 
 # examine ContigInfo for group_term and edit pipeline.csh
 # use "ref_haplotype" 
