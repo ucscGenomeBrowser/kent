@@ -1907,6 +1907,7 @@ table ctgPos2
 # ADDED MORE INDICES FOR bacCloneXRef AND REMOVED BAC INTERNAL NAMES
 # FROM bacCloneAlias TABLE, MADE CORRRECTED FILE OF SANGER AND UNISTS IDS 
 # AND RELOADED DATA FOR THESE TABLES (DONE, 2005-05-25, hartera)
+# REMOVED INCORRECT ROW FROM bacCloneXRef TABLE (DONE, 2006-04-20, hartera)
 # Provided by Anthony DiBiase, Yi Zhou and Leonard Zon at the Boston
 # Children's Hospital. Collaborated with them on this track.
 # Anthony DiBiase:adibiase@enders.tch.harvard.edu
@@ -2620,10 +2621,21 @@ close MARKERS;
     # checked data in tables to check that everything was correctly loaded
     # from the files and errors were corrected - see TEST section below
     # (DONE, 2005-05-24, hartera)
+    # Remove incorrect row from bacCloneXRef table (hartera, 2006-04-19)
+    # There is one row where the name is "CH211-155M11__" and the
+    # intName is "zC155M11__" which is incorrect.
+    # There is a correct row for intName zC155M11 and zC155M11__ and
+    # CH211-155M11__ is not in bacEnd{Singles,Pairs,PairsBad} tables and
+    # zC155M11__ is not an alias in bacEndAlias.
+    hgsql -e 'delete from bacCloneXRef where name = "CH211-155M11__";' danRer1
+
     cd $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer1
     # edit trackDb.ra to add searches for the alias table
     # added dontCheckXrefQueryFormat so now a table join can be performed
     # (2005-05-17, hartera)
+    # corrected termRegex for some bacCloneXRef searches so that they work 
+    # correctly (bacPairsSangerSts and bacSinglesSangerSts)
+    # (2006-04-19, hartera)
 # searchName bacPairsAliases
 # searchTable bacEndPairs
 # searchMethod exact

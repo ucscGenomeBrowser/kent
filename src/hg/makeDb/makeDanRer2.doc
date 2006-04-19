@@ -2667,6 +2667,7 @@ axtChain $1 /iscratch/i/danRer2/nib \
 # enrich 4.59x
 
 # BACENDS (DONE, 2005-05-20, hartera)
+# Removed incorrect row from bacCloneXRef table (DONE, 2006-04-19, hartera)
 # provided by Anthony DiBiase, Yi Zhou and Leonard Zon at the Boston
 # Children's Hospital. Collaborated with them on this track.
 # Anthony DiBiase:adibiase@enders.tch.harvard.edu
@@ -3461,6 +3462,17 @@ close MARKERS;
 # of filtering alignments so that there is only one pair of sequence reads 
 # for each BAC pair and only one sequence read for each BAC single alignment.
 
+    # Remove incorrect row from bacCloneXRef table (hartera, 2006-04-19)
+    # There is one row where the name is "CH211-155M11__" and the 
+    # intName is "zC155M11__" which is incorrect.
+    # There is a correct row for intName zC155M11 and zC155M11__ and 
+    # CH211-155M11__ is not in bacEnd{Singles,Pairs,PairsBad} tables and
+    # zC155M11__ is not an alias in bacEndAlias.
+    hgsql -e 'delete from bacCloneXRef where name = "CH211-155M11__";' danRer2
+    # corrected termRegex for some bacCloneXRef searches so that they work
+    # correctly (bacPairsSangerSts and bacSinglesSangerSts)
+    # (2006-04-19, hartera)
+ 
 # BACENDS: TESTING FOR bacCloneAlias and bacCloneXRef TABLES
 # (DONE, 2005-05-25, hartera)
 # ADDED TEST TO CHECK SANGERNAMES IN ALIAS AND XREF TABLES 
