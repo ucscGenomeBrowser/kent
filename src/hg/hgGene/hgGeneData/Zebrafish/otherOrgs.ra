@@ -4,7 +4,7 @@ tables hgBlastTab ensGtp
 idSql select hgBlastTab.target from hgBlastTab, ensGtp where hgBlastTab.query = ensGtp.protein and ensGtp.transcript = '%s'
 
 name mouse
-db mm7
+db mm8
 tables mmBlastTab ensGtp
 idSql select mmBlastTab.target from mmBlastTab, ensGtp where mmBlastTab.query = ensGtp.protein and ensGtp.transcript = '%s'
 
@@ -15,7 +15,7 @@ idSql select rnBlastTab.target from rnBlastTab, ensGtp where rnBlastTab.query = 
 otherUrl http://rgd.mcw.edu/generalSearch/RgdSearch.jsp?quickSearch=1&searchKeyword=%s 
 
 name drosophila
-db dm1
+db dm2
 tables dmBlastTab ensGtp
 idSql select dmBlastTab.target from dmBlastTab, ensGtp where dmBlastTab.query = ensGtp.protein and ensGtp.transcript = '%s'
 
