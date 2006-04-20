@@ -13,7 +13,7 @@
 #include "dystring.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: hgFindSpec.c,v 1.4 2005/04/04 23:44:20 angie Exp $";
+static char const rcsid[] = "$Id: hgFindSpec.c,v 1.5 2006/04/20 17:30:38 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -45,9 +45,6 @@ void addVersion(boolean strict, char *database, char *dirName, char *raName,
 {
 struct hgFindSpec *hfsList = NULL, *hfs = NULL;
 struct hgFindSpec *hfsNext = NULL;
-struct slName *allChroms = hAllChromNames();
-struct slName *chromPtr;
-char fileName[512];
 
 hfsList = hgFindSpecFromRa(raName);
 if (strict) 
