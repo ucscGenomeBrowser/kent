@@ -255,10 +255,11 @@ sqlFreeResult(&sr);
 
 
 boolean isStrNull(char *s)
-/* see if string is "0" or "(null)" */
+/* see if string is "0" or NULL */
 {
 return (s == NULL);
- /* used to do comparison to "0" but that was based on the old Sybase import which didn't handle nulls */
+ /* used to do comparison to "0"
+  * but that was based on the old Sybase import which didn't handle nulls */
 }
 
 void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, struct sqlConnection *connSp,
@@ -281,6 +282,7 @@ int imageWidth = 0, imageHeight = 0;
 char path[PATH_LEN];
 struct dyString *caption = dyStringNew(0);
 struct dyString *copyright = dyStringNew(0);
+struct dyString *probeNotes = dyStringNew(0);
 boolean lookedForCopyright = FALSE;
 	
 safef(raName, sizeof(raName), "%s.ra", fileRoot);
@@ -674,12 +676,6 @@ while ((row = sqlNextRow(sr)) != NULL)
         abSubmitId = cloneString("");
 
     /* Get rPrimer, lPrimer */
-    /* Note that this code seems to be correct, but the
-     * Jackson database actually stores the primers very
-     * erratically.  In all the cases I can find for in situs
-     * the primers are actually stored in free text in the PRB_Notes
-     * tabel. At this point I'm going to move on rather than figure out
-     * how to dig it out of there. */
     if (!isStrNull(probePrepKey))
         {
 	struct sqlResult *sr = NULL;
@@ -700,6 +696,64 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    }
 	sqlFreeResult(&sr);
 	}
+
+    /* Note Jackson database actually stores the primers very
+     * erratically.  In all the cases I can find for in situs
+     * the primers are actually stored in free text in the PRB_Notes
+     * e.g.  ... primers CGCGGATCCAGGGGAAACAGAAGGGCTGCG and CCCAAGCTTAGACTGTACAGGCTGAGCC ...
+     */
+    if (fPrimer == NULL || fPrimer[0]==0)
+        {
+	struct sqlResult *sr = NULL;
+	char **row;
+	dyStringClear(query);
+	dyStringPrintf(query,
+	    "select PRB_Notes.note from GXD_ProbePrep, PRB_Notes"
+	    " where GXD_ProbePrep._ProbePrep_key = %s"
+	    "  and GXD_ProbePrep._Probe_key = PRB_Notes._Probe_key"
+	    " order by PRB_Notes.sequenceNum"
+	    , probePrepKey);
+	sr = sqlGetResultVerbose(conn2, query->string);
+	dyStringClear(probeNotes);
+	while ((row = sqlNextRow(sr)) != NULL)
+	   dyStringAppend(probeNotes, row[0]);
+	sqlFreeResult(&sr);
+
+	if (probeNotes->stringSize > 0)
+	    {
+	    char f[256];
+	    char r[256];
+	    int i = 0;
+	    char *s = strstr(probeNotes->string," primers ");
+	    if (s)
+		{
+		s += strlen(" primers ");
+		i = 0;
+		while (strchr("ACGT",*s) && (i<sizeof(f)))
+		    f[i++] = *s++;
+		f[i]=0;
+		if (strstr(s," and ")==s)
+		    {
+		    s += strlen(" and ");
+		    i = 0;
+    		    while (strchr("ACGT",*s) && (i<sizeof(r)))
+    			r[i++] = *s++;
+    		    r[i]=0;
+		    if (strlen(f) >= 10 && strlen(r) >= 10)
+			{
+			fPrimer = cloneString(f);
+			rPrimer = cloneString(r);
+			}
+		    else
+			{
+			verbose(1, "bad primer parse:_ProbePrep_key=%s fPrimer=[%s], rPrimer=[%s]\n",
+			    probePrepKey,f,r);
+			}
+		    }
+		}
+	    }
+	}
+	
     if (fPrimer == NULL)
         fPrimer = cloneString("");
     if (rPrimer == NULL)
@@ -819,6 +873,7 @@ else
     remove(capName);
     }
 remove(tmpName);
+dyStringFree(&probeNotes);
 dyStringFree(&copyright);
 dyStringFree(&caption);
 dyStringFree(&query);
