@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.28 2006/04/19 19:30:45 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.29 2006/04/20 17:50:43 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -3275,7 +3275,8 @@ nice featureBits mm7 refGene:cds knownGene:cds
 
 #############################################################################
 # 17-WAY VAR_MULTIZ - ALIGNMENTS (DONE - 2006-02-28 - 2006-03-02 - Hiram)
-    ssh kkstore01
+#	Re-DONE with panTro2 in place of panTro1 - 2006-04-19 - Hiram)
+    ssh kkstore02
     mkdir /cluster/data/mm8/bed/multiz17way
     cd /cluster/data/mm8/bed/multiz17way
 
@@ -3287,7 +3288,7 @@ nice featureBits mm7 refGene:cds knownGene:cds
 
     cat << '_EOF_' > 17way.nh
 (((((((((
-(human_hg18:0.006690,chimp_panTro1:0.007571):0.024272,
+(human_hg18:0.006690,chimp_panTro2:0.007571):0.024272,
   macaque_rheMac2:0.0592):0.023960,
 
   ((rat_rn4:0.081728,mouse_mm8:0.077017):0.229273,
@@ -3308,7 +3309,7 @@ xenopus_xenTro1:0.782453):0.156067,
 ((tetraodon_tetNig1:0.199381,fugu_fr1:0.239894):0.492961,
     zebrafish_danRer3:0.782561):0.156067);
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     /cluster/bin/phast/draw_tree 17way.nh > 17way.ps
     /cluster/bin/phast/all_dists 17way.nh > 17way.distances.txt
@@ -3321,11 +3322,11 @@ xenopus_xenTro1:0.782453):0.156067,
     #	succeeded in finishing all the alignments required.
     #
 #                         featureBits chainLink measures
-#                                           chainMm7Link   chain   linearGap
-#    distance                       on Mm7      on other   minScore
+#                                           chainMm8Link   chain   linearGap
+#    distance                       on Mm8      on other   minScore
 #  1  0.1587 - rat rn4            (% 68.957)  (% 69.651)   3000     medium
 #  2  0.4677 - human hg18         (% 38.343)  (% 34.514)   3000     medium
-#  3  0.4686 - chimp panTro1      (% 35.106)  (% 32.992)   3000     medium
+#  3  0.4686 - chimp panTro2      (% 37.549)  (% 33.614)   3000     medium
 #  4  0.4960 - macaque rheMac2    (% 34.718)  (% 33.170)   3000     medium
 #  5  0.5131 - rabbit oryCun1     (% 19.322)  (no swap )   3000     medium
 #  6  0.6142 - armadillo dasNov1  (% 16.825)  (no swap )   3000     medium
@@ -3344,7 +3345,7 @@ xenopus_xenTro1:0.782453):0.156067,
     #	bash shell syntax here ...
     export H=/cluster/data/mm8/bed
     mkdir mafLinks
-    for G in rn4 hg18 panTro1 rheMac2 oryCun1 dasNov1 canFam2 \
+    for G in rn4 hg18 panTro2 rheMac2 oryCun1 dasNov1 canFam2 \
 	loxAfr1 bosTau2 echTel1 monDom4 galGal2 xenTro1 tetNig1 fr1 danRer3
     do
 	mkdir mafLinks/$G
@@ -3356,10 +3357,10 @@ xenopus_xenTro1:0.782453):0.156067,
     done
 
     #	Copy MAFs to some appropriate NFS server for kluster run
-    ssh kkstore01
+    ssh kkstore04
     mkdir /san/sanvol1/scratch/mm8/multiz17way
     cd /san/sanvol1/scratch/mm8/multiz17way
-    rsync -a --copy-links --progress \
+    time rsync -a --copy-links --progress \
 	/cluster/data/mm8/bed/multiz17way/mafLinks/ .
 
     #	We have about 5.9 Gb of data here, takes ~ 10 minutes to copy
@@ -3369,7 +3370,7 @@ xenopus_xenTro1:0.782453):0.156067,
     cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
     cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
 
-    # make output dir and run dir
+    # the autoMultiz cluster run
     ssh pk
     cd /cluster/data/mm8/bed/multiz17way/
 
@@ -3433,29 +3434,30 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     # 34 jobs
     para try ... check ... push ... etc ...
 # Completed: 34 of 34 jobs
-# CPU time in finished jobs:     209432s    3490.54m    58.18h    2.42d  0.007 y
-# IO & Wait Time:                  4685s      78.08m     1.30h    0.05d  0.000 y
-# Average job time:                6298s     104.96m     1.75h    0.07d
-# Longest finished job:           17491s     291.52m     4.86h    0.20d
-# Submission to last job:         17519s     291.98m     4.87h    0.20d
+# CPU time in finished jobs:     211213s    3520.21m    58.67h    2.44d  0.007 y
+# IO & Wait Time:                  5014s      83.57m     1.39h    0.06d  0.000 y
+# Average job time:                6360s     105.99m     1.77h    0.07d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           17550s     292.50m     4.88h    0.20d
+# Submission to last job:         17550s     292.50m     4.88h    0.20d
 
     #	combine results into a single file for loading and gbdb reference
-    ssh kkstore01
+    ssh kkstore04
     cd /cluster/data/mm8/bed/multiz17way
     #	There used to be a mafFilter here with a minScore of 500, but it
     #	turns out that the scores in these maf files are pretty much
     #	useless.  They range from very large negatives to very large
     #	positives.
     time catDir maf > multiz17way.maf
-    #	real    12m26.098s
+    #	real    10m17.400s
     #	makes an 17 Gb file:
-    #	-rw-rw-r--   1 17284343601 Mar  2 10:14 multiz17way.maf
+    #	-rw-rw-r--   1 17334936245 Apr 20 10:31 multiz17way.maf
 
     #	Create per-chrom individual maf files for downloads
-    ssh kkstore01
+    ssh kkstore04
     cd /cluster/data/mm8/bed/multiz17way
     mkdir mafDownloads
-    for M in maf/chr*.maf
+    time for M in maf/chr*.maf
     do
 	B=`basename $M`
 	cp -p ${M} mafDownloads/${B}
@@ -3513,7 +3515,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     #	10 minutes
 
     /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
---tree "((((((((((hg18,panTro1),rheMac2),((rn4,mm8),oryCun1)),(bosTau2,canFam2)),dasNov1),(loxAfr1,echTel1)),monDom4),galGal2),xenTro1),((tetNig1,fr1),danRer3))" \
+--tree "((((((((((hg18,panTro2),rheMac2),((rn4,mm8),oryCun1)),(bosTau2,canFam2)),dasNov1),(loxAfr1,echTel1)),monDom4),galGal2),xenTro1),((tetNig1,fr1),danRer3))" \
     --out-root starting-tree
     #	real    840m53.157s
     #	That is 14 hours !
@@ -3670,7 +3672,7 @@ RATE_MAT:
    0.189778   -0.878194    0.208718    0.479698
    0.444622    0.261535   -0.885604    0.179447
    0.234867    0.720815    0.215191   -1.170872
-TREE: (((((((((((((hg18:0.006690,panTro1:0.007571):0.024272,(colobus_monkey:0.015404,(baboon:0.008258,rheMac2:0.028617):0.008519):0.022120):0.023960,(dusky_titi:0.025662,(owl_monkey:0.012151,marmoset:0.029549):0.008236):0.027158):0.066101,(mouse_lemur:0.059024,galago:0.121375):0.032386):0.017073,((rn4:0.081728,mm8:0.077017):0.229273,oryCun1:0.206767):0.023340):0.023026,(((bosTau2:0.159182,canFam2:0.147731):0.004946,rfbat:0.138877):0.010150,(hedgehog:0.193396,shrew:0.261724):0.054246):0.024354):0.028505,dasNov1:0.149862):0.015994,(loxAfr1:0.104891,echTel1:0.259797):0.040371):0.218400,monDom4:0.371073):0.065268,platypus:0.468116):0.123856,galGal2:0.454691):0.123297,xenTro1:0.782453):0.156067,((tetNig1:0.199381,fr1:0.239894):0.492961,danRer3:0.782561):0.156067);
+TREE: (((((((((((((hg18:0.006690,panTro2:0.007571):0.024272,(colobus_monkey:0.015404,(baboon:0.008258,rheMac2:0.028617):0.008519):0.022120):0.023960,(dusky_titi:0.025662,(owl_monkey:0.012151,marmoset:0.029549):0.008236):0.027158):0.066101,(mouse_lemur:0.059024,galago:0.121375):0.032386):0.017073,((rn4:0.081728,mm8:0.077017):0.229273,oryCun1:0.206767):0.023340):0.023026,(((bosTau2:0.159182,canFam2:0.147731):0.004946,rfbat:0.138877):0.010150,(hedgehog:0.193396,shrew:0.261724):0.054246):0.024354):0.028505,dasNov1:0.149862):0.015994,(loxAfr1:0.104891,echTel1:0.259797):0.040371):0.218400,monDom4:0.371073):0.065268,platypus:0.468116):0.123856,galGal2:0.454691):0.123297,xenTro1:0.782453):0.156067,((tetNig1:0.199381,fr1:0.239894):0.492961,danRer3:0.782561):0.156067);
 
 
     cd /san/sanvol1/scratch/mm8/cons/consRun1
@@ -3680,7 +3682,7 @@ TREE: (((((((((((((hg18:0.006690,panTro1:0.007571):0.024272,(colobus_monkey:0.01
     #	These parameters:
     #	--rho 0.28 --expected-length 14 --target-coverage 0.008 --quiet \
     #	were taken from Kate's 17-way in Hg17, including the
-    #	-not-informative panTro1
+    #	-not-informative panTro2
     #	This job is I/O intensive in its output files, thus it is all
     #	working over in /scratch/tmp/
     cat > doPhast << '_EOF_'
@@ -3690,7 +3692,7 @@ cp -p ../ss/${1}/${2}.ss ../elliotsEncode.mod /scratch/tmp/${2}
 pushd /scratch/tmp/${2} > /dev/null
 /cluster/bin/phast/${MACHTYPE}/phastCons ${2}.ss elliotsEncode.mod \
    --rho 0.28 --expected-length 14 --target-coverage 0.008 --quiet \
-	--not-informative panTro1 \
+	--not-informative panTro2 \
 	--seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
 popd > /dev/null
 mkdir -p ppRaw/${1}
@@ -4955,3 +4957,45 @@ TMPDIR=/scratch/tmp
     #	990554882 bases of 2567283971 (38.584%) in intersection
     time nice -n +19 featureBits hg17 chainMm8Link > fb.hg17.chainMm8Link 2>&1
     #	997368618 bases of 2866216770 (34.797%) in intersection
+
+########################################################################
+# BLASTZ/CHAIN/NET XENTRO2 (WORKING - 2006-04-20 - Hiram)
+    ssh kk
+    mkdir /cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
+    cd /cluster/data/mm8/bed
+    ln -s blastz.xenTro2.2006-04-20 blastz.xenTro2
+    cd blastz.xenTro2.2006-04-20
+
+    cat << '_EOF_' > DEF
+# mouse vs. frog
+BLASTZ=/cluster/bin/penn/blastz.v7
+
+# Use same params as used for mammal-xenTro1 (see makeXenTro1.doc)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/cluster/data/mm8/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro2 - single chunk big enough to run two of the
+#               largest scaffolds in one job
+SEQ2_DIR=/scratch/hg/xenTro2/xenTro2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/xenTro2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
+'_EOF_'
+    # << emacs
+
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    #	 XXX running 2006-04-20
