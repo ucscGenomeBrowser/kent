@@ -57,7 +57,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgFlyBase.c,v 1.7 2006/02/07 18:29:01 angie Exp $";
+static char const rcsid[] = "$Id: hgFlyBase.c,v 1.8 2006/04/21 17:56:52 angie Exp $";
 
 char *tabDir = ".";
 boolean doLoad;
@@ -321,7 +321,6 @@ void getAllSplices(char *database, FILE *f)
  * are preserved.
 */
 {
-struct slName *geneList = NULL, *gene;
 struct sqlConnection *conn = sqlConnect(database);
 struct sqlResult *sr;
 char query[256], **row;
