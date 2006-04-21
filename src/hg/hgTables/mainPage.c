@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.91 2006/02/28 17:56:04 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.92 2006/04/21 04:55:19 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -524,6 +524,7 @@ void showMainControlTable(struct sqlConnection *conn)
 struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE;
 boolean gotClade = hGotClade();
+struct hTableInfo *hti = getHti(database, curTable);
 hPrintf("<TABLE BORDER=0>\n");
 
 /* Print clade, genome and assembly line. */
@@ -562,7 +563,6 @@ hPrintf("<TABLE BORDER=0>\n");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
     if (strchr(curTable, '.') == NULL)  /* In same database */
         {
-	struct hTableInfo *hti = getHti(database, curTable);
 	isPositional = htiIsPositional(hti);
 	}
     isWig = isWiggle(database, curTable);
@@ -630,7 +630,7 @@ else
     }
 
 /* Select identifiers line. */
-if (!isWig)
+if (!isWig && (!isPositional || isNotEmpty(hti->nameField)))
     {
     hPrintf("<TR><TD><B>identifiers (names/accessions):</B>\n");
     cgiMakeButton(hgtaDoPasteIdentifiers, "paste list");
