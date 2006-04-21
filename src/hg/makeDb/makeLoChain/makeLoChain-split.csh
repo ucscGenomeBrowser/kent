@@ -6,7 +6,7 @@
 #
 # Author:       angie
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh,v 1.3 2006/02/07 23:13:08 angie Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh,v 1.4 2006/04/21 21:58:12 hiram Exp $
 
 if ( $#argv != 2 ) then
     echo "$0 usage: <new-assembly> <new-nibdir>"
@@ -39,7 +39,9 @@ foreach f ($newNibDir/*.nib)
     | faSplit -lift=$destDir/$chr.lft -oneFile size stdin 10000 $destDir/$chr
 end
 
-iSync
+foreach R (2 3 4 5 6 7 8)
+    rsync -a --progress /iscratch/i/$newDb/ kkr${R}u00:/iscratch/i/$newDb/
+end
 
 set execDir = $0:h
 echo ""
