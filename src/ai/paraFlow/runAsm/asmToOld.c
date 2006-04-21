@@ -22,6 +22,7 @@ char *s = (char *)obj;
 
 obj->_pf_refCount = 1;
 obj->_pf_cleanup = _pf_class_cleanup;
+obj->_pf_cleanup = NULL;	// ugly
 obj->_pf_polyTable = base->polyTable;
 for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
     {
@@ -70,6 +71,7 @@ for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
 	case pf_stDir:
 	case pf_stFlowPt:
 	case pf_stToPt:
+	case pf_stString:
 	    v = va_arg(args, void *);
 	    *((void **)(output)) = v;
 	    break;
@@ -78,6 +80,7 @@ for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
 	    break;
 	}
     }
+
 return obj;
 }
 
