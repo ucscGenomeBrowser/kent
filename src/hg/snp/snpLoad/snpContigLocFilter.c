@@ -1,6 +1,7 @@
 /* snpContigLocFilter - first step in dbSNP processing.
  * Filter the ContigLoc table in 2 ways: remove contigs that aren't in the reference assembly,
    and remove SNPs that have weight = 10 */
+/* Note: all PAR SNPs have weight = 3. */
 /* Translate to N_random, using ctgPos table (must exist). */ 
 /* Create ContigLocFilter table. */
 #include "common.h"
@@ -8,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.27 2006/04/08 00:07:30 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.28 2006/04/21 16:36:08 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -116,7 +117,7 @@ verbose(1, "-------------\n");
 }
 
 void getPoorlyAlignedSNPs()
-/* hash all snp IDs that have weight = 10 into global weightHash */
+/* hash all snp IDs that have 10 into global weightHash */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -136,18 +137,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
-verbose(1, "getting weight = 3 from MapInfo...\n");
-safef(query, sizeof(query), "select snp_id from MapInfo where weight = 3");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    hashAdd(weightHash, cloneString(row[0]), NULL);
-    count++;
-    }
-sqlFreeResult(&sr);
-
 hFreeConn(&conn);
-verbose(1, "SNPs with weight 3 or 10 found = %d\n", count);
+verbose(1, "SNPs with weight 10 found = %d\n", count);
 }
 
 
