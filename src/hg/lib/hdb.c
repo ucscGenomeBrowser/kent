@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.293 2006/04/13 22:57:14 baertsch Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.294 2006/04/21 04:53:42 angie Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2576,7 +2576,8 @@ if (fitFields(hash, "chrom", "chromStart", "chromEnd", retChrom, retStart, retEn
     {
     if (!fitField(hash, "name", retName))
 	if (!fitField(hash, "acc", retName))
-	     fitField(hash, "frag", retName);
+	    if (!fitField(hash, "frag", retName))
+		fitField(hash, "contig", retName);
     fitField(hash, "score", retScore);
     fitField(hash, "strand", retStrand);
     fitField(hash, "thickStart", retCdsStart);
