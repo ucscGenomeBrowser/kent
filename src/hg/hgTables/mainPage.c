@@ -16,7 +16,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.92 2006/04/21 04:55:19 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.93 2006/04/21 21:59:22 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -524,7 +524,7 @@ void showMainControlTable(struct sqlConnection *conn)
 struct grp *selGroup;
 boolean isWig = FALSE, isPositional = FALSE, isMaf = FALSE, isBedGr = FALSE;
 boolean gotClade = hGotClade();
-struct hTableInfo *hti = getHti(database, curTable);
+struct hTableInfo *hti = NULL;
 hPrintf("<TABLE BORDER=0>\n");
 
 /* Print clade, genome and assembly line. */
@@ -561,6 +561,7 @@ hPrintf("<TABLE BORDER=0>\n");
     {
     hPrintf("<TR><TD>");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
+    hti = getHti(database, curTable);
     if (strchr(curTable, '.') == NULL)  /* In same database */
         {
 	isPositional = htiIsPositional(hti);
