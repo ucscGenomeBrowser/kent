@@ -9,7 +9,7 @@
 #include "jksql.h"
 #endif
 
-#define HGMUT_NUM_COLS 10
+#define HGMUT_NUM_COLS 11
 
 struct hgMut
 /* track for human mutation data */
@@ -18,15 +18,15 @@ struct hgMut
     char *chrom;	/* Chromosome */
     unsigned chromStart;	/* Start position in chrom */
     unsigned chromEnd;	/* End position in chrom */
-    char *name;	/* HGVS description of mutation. */
+    char *name;	/* HGVS style description of mutation. */
     char *mutId;	/* unique ID for this mutation */
     unsigned short srcId;	/* source ID for this mutation */
     char hasPhenData[2];	/* y or n, does this have phenotype data linked */
     char *baseChangeType;	/* enum('insertion', 'deletion', 'substitution','duplication','complex','unknown'). */
     char *location;	/* enum('intron', 'exon', '5'' UTR', '3'' UTR', 'not within known transcription unit'). */
+    unsigned char coordinateAccuracy;	/* 0=estimated, 1=definite, others? */
     unsigned short bin; /* A field to speed indexing */
     };
-/* moved bin to last so can cast struct to bed if needed */
 
 void hgMutStaticLoad(char **row, struct hgMut *ret);
 /* Load a row from hgMut table into ret.  The contents of ret will
@@ -254,7 +254,7 @@ struct hgMutLink
 /* links for human mutation detail page */
     {
     struct hgMutLink *next;  /* Next in singly linked list. */
-    int linkId;	/* ID for this source, links to hgMutRef table. */
+    int linkId;	/* ID for this source, links to hgMutExtLink table. */
     char *linkDisplayName;	/* Display name for this link. */
     char *url;	/* url to substitute ID in for links. */
     };

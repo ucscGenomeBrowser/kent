@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "hgMut.h"
 
-static char const rcsid[] = "$Id: hgMut.c,v 1.2 2005/11/29 18:19:43 giardine Exp $";
+static char const rcsid[] = "$Id: hgMut.c,v 1.3 2006/04/21 19:01:42 giardine Exp $";
 
 void hgMutStaticLoad(char **row, struct hgMut *ret)
 /* Load a row from hgMut table into ret.  The contents of ret will
@@ -25,6 +25,7 @@ ret->srcId = sqlUnsigned(row[6]);
 strcpy(ret->hasPhenData, row[7]);
 ret->baseChangeType = row[8];
 ret->location = row[9];
+ret->coordinateAccuracy = sqlUnsigned(row[10]);
 }
 
 struct hgMut *hgMutLoad(char **row)
@@ -44,6 +45,7 @@ ret->srcId = sqlUnsigned(row[6]);
 strcpy(ret->hasPhenData, row[7]);
 ret->baseChangeType = cloneString(row[8]);
 ret->location = cloneString(row[9]);
+ret->coordinateAccuracy = sqlUnsigned(row[10]);
 return ret;
 }
 
@@ -53,7 +55,7 @@ struct hgMut *hgMutLoadAll(char *fileName)
 {
 struct hgMut *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[11];
 
 while (lineFileRow(lf, row))
     {
@@ -71,7 +73,7 @@ struct hgMut *hgMutLoadAllByChar(char *fileName, char chopper)
 {
 struct hgMut *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[10];
+char *row[11];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -115,8 +117,8 @@ void hgMutSaveToDb(struct sqlConnection *conn, struct hgMut *el, char *tableName
  * If worried about this use hgMutSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s',%u,'%s','%s','%s')", 
-	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->mutId,  el->srcId,  el->hasPhenData,  el->baseChangeType,  el->location);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s',%u,'%s','%s','%s',%u)", 
+	tableName,  el->bin,  el->chrom,  el->chromStart,  el->chromEnd,  el->name,  el->mutId,  el->srcId,  el->hasPhenData,  el->baseChangeType,  el->location,  el->coordinateAccuracy);
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 }
@@ -139,8 +141,8 @@ hasPhenData = sqlEscapeString(el->hasPhenData);
 baseChangeType = sqlEscapeString(el->baseChangeType);
 location = sqlEscapeString(el->location);
 
-dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s',%u,'%s','%s','%s')", 
-	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name,  mutId, el->srcId ,  hasPhenData,  baseChangeType,  location);
+dyStringPrintf(update, "insert into %s values ( %u,'%s',%u,%u,'%s','%s',%u,'%s','%s','%s',%u)", 
+	tableName, el->bin ,  chrom, el->chromStart , el->chromEnd ,  name,  mutId, el->srcId ,  hasPhenData,  baseChangeType,  location, el->coordinateAccuracy );
 sqlUpdate(conn, update->string);
 freeDyString(&update);
 freez(&chrom);
@@ -170,6 +172,7 @@ ret->srcId = sqlUnsignedComma(&s);
 sqlFixedStringComma(&s, ret->hasPhenData, sizeof(ret->hasPhenData));
 ret->baseChangeType = sqlStringComma(&s);
 ret->location = sqlStringComma(&s);
+ret->coordinateAccuracy = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -236,6 +239,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->location);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->coordinateAccuracy);
 fputc(lastSep,f);
 }
 
@@ -855,7 +860,7 @@ void hgMutAliasSaveToDb(struct sqlConnection *conn, struct hgMutAlias *el, char 
  * If worried about this use hgMutAliasSaveToDbEscaped() */
 {
 struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s','%s')", 
+dyStringPrintf(update, "insert into %s values ( '%s',%s,'%s')", 
 	tableName,  el->mutId,  el->name,  el->nameType);
 sqlUpdate(conn, update->string);
 freeDyString(&update);

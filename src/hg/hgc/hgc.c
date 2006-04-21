@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1008 2006/04/07 05:06:35 kate Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1009 2006/04/21 19:01:24 giardine Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -17510,6 +17510,7 @@ sqlFreeResult(&sr);
 /* print location and mutation type fields */
 printf("<B>location:</B> %s<BR />\n", mut->location);
 printf("<B>type:</B> %s<BR />\n", mut->baseChangeType);
+/* add note here about exactness of coordinates */
 
 printf("<DL><DT><B>Outside Link(s):</B></DT>\n<DD> ");
 safef(query, sizeof(query),

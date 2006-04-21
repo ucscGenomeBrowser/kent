@@ -2,15 +2,16 @@ table hgMut
 "track for human mutation data"
     (
     ushort  bin;            "A field to speed indexing"
-    string  chrom;          "Reference sequence chromosome or scaffold"
+    string  chrom;          "Chromosome"
     uint    chromStart;     "Start position in chrom"
     uint    chromEnd;       "End position in chrom"
-    string  name;           "HGVS description of mutation."
+    string  name;           "HGVS style description of mutation."
     string  mutId;          "unique ID for this mutation"
     ushort  srcId;          "source ID for this mutation"
     char[1] hasPhenData;    "y or n, does this have phenotype data linked"
     string  baseChangeType; "enum('insertion', 'deletion', 'substitution','duplication','complex','unknown')."
     string  location;       "enum('intron', 'exon', '5'' UTR', '3'' UTR', 'not within known transcription unit')."
+    ubyte   coordinateAccuracy; "0=estimated, 1=definite, others?"
     )
 
 table hgMutSrc
@@ -32,7 +33,7 @@ table hgMutExtLink
 table hgMutLink 
 "links for human mutation detail page"
     (
-    int linkId;             "ID for this source, links to hgMutRef table."
+    int linkId;             "ID for this source, links to hgMutExtLink table."
     string linkDisplayName; "Display name for this link."
     string url;             "url to substitute ID in for links."
     )
@@ -41,7 +42,7 @@ table hgMutAlias
 "aliases for mutations"
     (
     string mutId;           "mutation ID from hgMut table."
-    string name;            "Another name for the mutation."
+    lstring name;           "Another name for the mutation."
     string nameType;	    "common, or ?"
     )
 
