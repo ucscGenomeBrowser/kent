@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: checkTableCoords.c,v 1.13 2006/04/04 23:57:26 angie Exp $";
+static char const rcsid[] = "$Id: checkTableCoords.c,v 1.14 2006/04/21 19:31:21 angie Exp $";
 
 /* Default parameter values */
 char *db = NULL;                        /* first arg */
@@ -103,10 +103,19 @@ while((row = sqlNextRow(sr)) != NULL)
     boolean gotMatch = FALSE;
     if (hoursOld)
 	{
-	int tableUpdateTime = sqlDateToUnixTime(row[11]);
-	int ageInSeconds = startTime - tableUpdateTime;
-	if (ageInSeconds > ageThresh)
-	    continue;
+	if (row[11] != NULL)
+	    {
+	    int tableUpdateTime = sqlDateToUnixTime(row[11]);
+	    int ageInSeconds = startTime - tableUpdateTime;
+	    if (ageInSeconds > ageThresh)
+		continue;
+	    }
+	else
+	    {
+	    verbose(1,
+		    "Got NULL update time for table %s.%s with hoursOld=%d\n",
+		    sqlGetDatabase(conn), row[0], hoursOld);
+	    }
 	}
     for (pat = excludePatterns;  pat != NULL;  pat=pat->next)
 	{
