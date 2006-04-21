@@ -3,6 +3,9 @@ test:
 	paraFlow cast.pf > expected/cast
 	paraFlow -asm cast.pf > output/cast
 	diff expected/cast output/cast
+	paraFlow class2.pf > expected/class2
+	paraFlow -asm class2.pf > output/class2
+	diff expected/class2 output/class2
 	paraFlow string.pf > expected/string
 	paraFlow -asm string.pf > output/string
 	diff expected/string output/string

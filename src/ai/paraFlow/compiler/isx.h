@@ -176,6 +176,7 @@ struct isxAddress
     struct isxReg *reg;	/* Register if any */
     float weight;	/* Number of uses, scaled for loops */
     int recodedType;	/* Recoded run-time type info. */
+    bool  isVar;	/* True if it is a variable type */
     };
 
 struct isxLiveVar;	/* Defined in isxLiveVar.h */

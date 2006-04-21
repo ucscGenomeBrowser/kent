@@ -557,6 +557,7 @@ else
     type = pp->ty;
     }
 iad->recodedType = recodedTypeId(pfc, type);
+iad->isVar = TRUE;
 return iad;
 }
 
@@ -606,8 +607,9 @@ static void isxCodeIn(struct pfCompile *pfc, struct isxAddress *sourceList,
 struct isxAddress *source, *dest;
 for (source = sourceList; source != NULL; source = source->next, ++offset)
     {
+    enum isxOpType op = (source->isVar ? poVarInput : poInput);
     dest = isxIoAddress(offset, source->valType, iadInStack);
-    isxAddNew(pfc, poInput, dest, source, NULL, iList);
+    isxAddNew(pfc, op, dest, source, NULL, iList);
     }
 }
 
