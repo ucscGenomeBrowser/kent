@@ -8826,3 +8826,42 @@ zcat gene_association.goa_uniprot.gz|\
 
 # Ask sys-admin to switch the database pointer go to point to go060330.
 
+
+# BLASTZ/CHAIN/NET XENTRO2 (DONE 4/20/06 angie)
+    ssh kkstore02
+    mkdir /cluster/data/hg18/bed/blastz.xenTro2.2006-04-20
+    cd /cluster/data/hg18/bed/blastz.xenTro2.2006-04-20
+    cat << '_EOF_' > DEF
+# human vs. frog
+BLASTZ=/cluster/bin/penn/x86_64/blastz.v7.x86_64
+
+# Use same params as used for mammal-xenTro1 (see makeXenTro1.doc)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=8000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Human hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/cluster/data/hg18/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: Frog xenTro2 - single chunk big enough to run two of the
+#               largest scaffolds in one job
+SEQ2_DIR=/scratch/hg/xenTro2/xenTro2.2bit
+SEQ2_LEN=/san/sanvol1/scratch/xenTro2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/hg18/bed/blastz.xenTro2.2006-04-20
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl -blastzOutRoot=/san/sanvol1/hg18XenTro2 \
+      -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose DEF \
+      >& do.log & tail -f do.log
+    ln -s blastz.xenTro2.2006-04-20 /cluster/data/hg18/bed/blastz.xenTro2
+
+
