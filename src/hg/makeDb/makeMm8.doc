@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.29 2006/04/20 17:50:43 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.30 2006/04/21 00:08:14 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -3464,7 +3464,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
 	gzip mafDownloads/${B}
 	echo ${B} done
     done
-    #	real    56m24.191s
+    #	real    51m7.389s
     #	deliver to downloads
     ssh hgwdev
     ln -s /cluster/data/mm8/bed/multiz17way/mafDownloads \
@@ -3477,7 +3477,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     ln -s /cluster/data/mm8/bed/multiz17way/multiz17way.maf \
 	/gbdb/mm8/multiz17way
     time nice -n +19 hgLoadMaf mm8 multiz17way
-    #	Loaded 11692972 mafs in 1 files from /gbdb/mm8/multiz17way
+    #	Loaded 11565656 mafs in 1 files from /gbdb/mm8/multiz17way
     #	real    27m25.451s
 
     time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
@@ -3495,6 +3495,181 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     # photoshop to enhance, reduce the amount of whitespace to make it
     # smaller, then save as jpg
 #    cp species10.jpg /usr/local/apache/htdocs/images/phylo/Mm7_17way.jpg
+
+# ANNOTATE MULTIZ17WAY MAF AND LOAD TABLES (DONE - 2006-04-20 - Hiram)
+    ssh kolossus
+    mkdir /cluster/data/mm8/bed/multiz17way/anno
+    cd /cluster/data/mm8/bed/multiz17way/anno
+    mkdir maf run
+    cd run
+    rm -f sizes nBeds
+    ln -s  /cluster/data/mm8/chrom.sizes mm8.len
+    twoBitInfo -nBed /cluster/data/mm8/mm8.{2bit,N.bed}
+    ln -s  /cluster/data/mm8/mm8.N.bed mm8.bed
+    for DB in `cat /cluster/data/mm8/bed/multiz17way/species.lst`
+    do
+      echo mm8.bed  >> nBeds
+      echo mm8.len  >> sizes
+      echo $DB
+    done
+
+    echo '#!/bin/csh -ef' > jobs.csh
+    echo date >> jobs.csh
+    # do smaller jobs first:
+    for F in `ls -1rS ../../maf/*.maf`
+    do
+      echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $F \
+        /cluster/data/mm8/mm8.2bit ../maf/`basename $F` >> jobs.csh
+      echo "echo $F" >> jobs.csh
+    done 
+    echo date >> jobs.csh
+    chmod +x jobs.csh
+    time ./jobs.csh > jobs.log 2>&1 &
+    #	to watch progress;
+    tail -f jobs.log
+    #	real    93m46.519s
+
+    # Load anno/maf
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/multiz17way/anno/maf
+    mkdir -p /gbdb/mm8/multiz17way/anno/maf
+    ln -s /cluster/data/mm8/bed/multiz17way/anno/maf/*.maf \
+      /gbdb/mm8/multiz17way/anno/maf
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/mm8/multiz17way/anno/maf mm8 multiz17way
+    #	Loaded 12445995 mafs in 34 files from /gbdb/mm8/multiz17way/anno/maf
+    #	real    43m49.973s
+
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # machine and then load on hgwdev:
+    ssh hgwdev64
+    cd /cluster/data/mm8/bed/multiz17way/anno/maf
+    time cat *.maf | \
+    	nice -n +19 hgLoadMafSummary mm8 -minSize=30000 -mergeGap=1500 \
+	-maxSize=200000 -test multiz17waySummary stdin
+    #	Created 3135695 summary blocks from 64831900 components
+    #	and 12445995 mafs from stdin
+    #	real    13m13.301s
+
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/multiz17way/anno/maf
+    sed -e 's/mafSummary/multiz17waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
+      > /tmp/multiz17waySummary.sql
+    time nice -n +19 hgLoadSqlTab mm8 multiz17waySummary \
+	/tmp/multiz17waySummary.sql multiz17waySummary.tab
+    #	real    12m17.422s
+    rm *.tab
+
+#######################################################################
+# MULTIZ17WAY MAF FRAMES (TBD)
+    ssh hgwdev
+    mkdir /cluster/data/mm8/bed/multiz17way/frames
+    cd /cluster/data/mm8/bed/multiz17way/frames
+    # The following is adapted from MarkD's Makefile used for mm7...
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using mrna table as genes: canFam2 bosTau2 danRer3
+    mkdir genes
+    foreach queryDb (canFam2 bosTau2 danRer3)
+      set tmpExt = `mktemp temp.XXXXXX`
+      set tmpMrnaCds = ${queryDb}.mrna-cds.${tmpExt}
+      set tmpMrna = ${queryDb}.mrna.${tmpExt}
+      set tmpCds = ${queryDb}.cds.${tmpExt}
+      echo $queryDb
+      hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
+                   from all_mrna,gbCdnaInfo,cds \
+                   where (all_mrna.qName = gbCdnaInfo.acc) and \
+                     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+       ${queryDb} > ${tmpMrnaCds}
+      cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+      cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+      mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} \
+        stdout \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$queryDb.tmp.gz
+      rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+      rm -f $tmpExt
+    end
+    # using knownGene for rn4 mm8 hg18
+    # using refGene for galGal2
+    # using mgcGenes for xenTro1
+    # no genes for monDom4
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    foreach queryDb (rn4 mm8 hg18 galGal2 xenTro1)
+      if ($queryDb == "xenTro1") then
+        set geneTbl = mgcGenes
+      else if ($queryDb == "galGal2") then
+        set geneTbl = refGene
+      else
+        set geneTbl = knownGene
+      endif
+      hgsql -N -e "select * from $geneTbl" ${queryDb} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$queryDb.tmp.gz
+      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+      rm -f $tmpExt
+    end
+
+    #------------------------------------------------------------------------
+    # create frames
+    set clusterDir = /cluster/bluearc/rn4/multiz9wayFrames
+    set multizDir = /cluster/data/rn4/bed/multiz9way.2006-03-30
+    set mafDir = $multizDir/mafDownloads
+    set geneDir = $multizDir/frames/genes
+    set clusterMafDir = ${clusterDir}/maf
+    set clusterGeneDir = ${clusterDir}/genes
+    set clusterFramesDir = ${clusterDir}/mafFrames.kki
+
+    # copy mafs to cluster storage
+    mkdir $clusterDir
+    ssh -x kkstore04 "rsync -av $mafDir/*.maf.gz $clusterMafDir/"
+
+    # copy genes to cluster storage
+    ssh -x kkstore04 "rsync -av $geneDir/*.gp.gz $clusterGeneDir/"
+
+    # run cluster jobs
+    set tmpExt = `mktemp temp.XXXXXX`
+    set paraDir = $multizDir/frames/para.${tmpExt}
+    mkdir mafFrames $paraDir
+    rm -f $paraDir/jobList
+    mkdir ${clusterFramesDir}
+    foreach queryDb (`cat /cluster/data/rn4/bed/multiz9way.2006-03-30/species.lst`)
+      mkdir ${clusterFramesDir}/${queryDb}
+      foreach c (`awk '{print $1;}' /cluster/data/rn4/chrom.sizes`)
+        if (-e ${clusterGeneDir}/${queryDb}.gp.gz) then
+          echo /cluster/bin/scripts/mkMafFrames.pl ${queryDb} rn4 \
+            ${clusterGeneDir}/${queryDb}.gp.gz ${clusterMafDir}/$c.maf.gz \
+            ${clusterFramesDir}/${queryDb}/$c.mafFrames \
+            >> $paraDir/jobList
+        endif
+      end
+    end
+    rm -f $tmpExt
+    ssh -x kki "cd ${paraDir} && para make jobList && para time"
+#Completed: 360 of 360 jobs
+#CPU time in finished jobs:       2027s      33.78m     0.56h    0.02d  0.000 y
+#IO & Wait Time:                  3816s      63.60m     1.06h    0.04d  0.000 y
+#Average job time:                  16s       0.27m     0.00h    0.00d
+#Longest finished job:             124s       2.07m     0.03h    0.00d
+#Submission to last job:           493s       8.22m     0.14h    0.01d
+
+    # combine results from cluster
+    foreach queryDb (`cat ../species.lst`)
+      echo $queryDb
+      ssh -x kolossus "cat ${clusterFramesDir}/${queryDb}/*.mafFrames | gzip -2c > ${multizDir}/frames/mafFrames/${queryDb}.mafFrames.gz"
+    end
+
+    #------------------------------------------------------------------------
+    # load the database
+    hgLoadMafFrames rn4 multiz9wayFrames mafFrames/*.mafFrames.gz
+
+    #------------------------------------------------------------------------
+    # clean up
+    rm -rf ${clusterDir}
 
 ############################################################################
 # CREATE CONSERVATION WIGGLE WITH PHASTCONS
