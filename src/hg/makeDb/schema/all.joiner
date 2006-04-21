@@ -1819,6 +1819,35 @@ identifier jaxPhenotypeName external=MGI
     mm6.jaxPhenotype.name dupeOk
     mm6.jaxPhenotypeAlias.name
 
+# links between Human Mutation and related tables (hgMut)
+
+identifier hgMutMutId
+"Human Mutation track mutation identifier for attributes and links"
+    hg17.hgMut.mutId dupeOk
+    hg17.hgMutAlias.mutId
+    hg17.hgMutExtLink.mutId
+    hg17.hgMutAttr.mutId
+
+identifier hgMutSrcId
+"Human Mutation track source ID"
+    hg17.hgMutSrc.srcId
+    hg17.hgMut.srcId
+
+identifier hgMutAttrClassId
+"Human Mutation track mutAttrClassId: controlled vocab for attribute categories"
+    hg17.hgMutAttrClass.mutAttrClassId
+    hg17.hgMutAttr.mutAttrClassId
+
+identifier hgMutAttrNameId
+"Human Mutation track mutAttrNameId: controlled vocab for attribute names"
+    hg17.hgMutAttrName.mutAttrNameId
+    hg17.hgMutAttr.mutAttrNameId
+
+identifier hgMutLinkId
+"Human Mutation track link ID: links from mutations to data sources +"
+    hg17.hgMutLink.linkId
+    hg17.hgMutExtLink.linkId
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio
