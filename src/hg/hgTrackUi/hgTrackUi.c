@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.268 2006/04/14 19:27:31 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.269 2006/04/22 00:34:10 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -157,8 +157,18 @@ for (snpMapType=0; snpMapType<snpMapTypeCartSize; snpMapType++)
 
 void snp125Ui(struct trackDb *tdb)
 {
+/* It would be nice to add a 'reset' button here to reset the snp
+ * variables to their defaults. */
 int i = 0;
 char *autoSubmit = "onchange=\"document.snp125UiForm.submit();\"";
+
+snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0"));
+printf("<BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
+cgiMakeDoubleVar("snp125AvHetCutoff",snp125AvHetCutoff,6);
+
+snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "0"));
+printf("<BR><B>Minimum Weight:</B>&nbsp;");
+cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,6);
 
 printf("Any type of data can be excluded from view by deselecting the checkbox below.\n");
 printf("<BR><BR>\n");

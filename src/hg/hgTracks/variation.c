@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.79 2006/04/14 03:46:10 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.80 2006/04/22 00:34:49 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -60,6 +60,26 @@ boolean snpAvHetFilterItem(struct track *tg, void *item)
 struct snp *el = item;
 
 if (el->avHet < atof(cartUsualString(cart, "snpAvHetCutoff", "0.0")))
+    return FALSE;
+return TRUE;
+}
+
+boolean snp125AvHetFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct snp125 *el = item;
+
+if (el->avHet < atof(cartUsualString(cart, "snp125AvHetCutoff", "0.0")))
+    return FALSE;
+return TRUE;
+}
+
+boolean snp125WeightFilterItem(struct track *tg, void *item)
+/* Return TRUE if item passes filter. */
+{
+struct snp125 *el = item;
+
+if (el->weight < atoi(cartUsualString(cart, "snp125WeightCutoff", "0")))
     return FALSE;
 return TRUE;
 }
@@ -276,6 +296,7 @@ void loadSnp125(struct track *tg)
 int i = 0;
 
 snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0.0"));
+snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "0"));
 
 for (i=0; i < snp125MolTypeCartSize; i++)
     {
@@ -311,6 +332,8 @@ for (i=0; i < snp125LocTypeCartSize; i++)
 
 bedLoadItem(tg, "snp125", (ItemLoader)snp125Load);
 
+filterSnpItems(tg, snp125AvHetFilterItem);
+filterSnpItems(tg, snp125WeightFilterItem);
 filterSnpItems(tg, snp125MolTypeFilterItem);
 filterSnpItems(tg, snp125ClassFilterItem);
 filterSnpItems(tg, snp125ValidFilterItem);
