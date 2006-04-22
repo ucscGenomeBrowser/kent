@@ -11,18 +11,18 @@ char *functionStrings[] = {
 /* From snpFixed.SnpFunctionCode. */
 "unknown",
 "locus",
-"coding",
+"coding", // not used
 "coding-synon",
 "coding-nonsynon",
 "untranslated",
 "intron",
 "splice-site",
-"cds-reference",
+// "cds-reference", not useful
 };
 
 boolean functionFound[ArraySize(functionStrings)];
 
-static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.6 2006/03/11 03:58:35 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocusIdCondense.c,v 1.7 2006/04/22 00:30:15 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -69,6 +69,7 @@ char *currentSnpString = NULL;
 int len = 0;
 char *finalString = NULL;
 int currentSnpNum = 0;
+int functionIndex = 0;
 
 f = hgCreateTabFile(".", "ContigLocusIdCondense");
 
@@ -78,6 +79,13 @@ initArray();
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    functionIndex = sqlUnsigned(row[1]);
+    if (functionIndex == 8) continue;
+    if (functionIndex > 8) 
+        {
+	verbose(1, "unexpected functionIndex %d\n", functionIndex);
+	continue;
+	}
     if (currentSnpString == NULL) 
         {
         currentSnpString = cloneString(row[0]);
@@ -93,7 +101,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	currentSnpString = cloneString(row[0]);
 	currentSnpNum = sqlUnsigned(row[0]);
 	}
-    functionFound[sqlUnsigned(row[1])] = TRUE;
+    functionFound[functionIndex] = TRUE;
     }
 fprintf(f, "%s\t", currentSnpString);
 printArray(f);
