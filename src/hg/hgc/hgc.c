@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1009 2006/04/21 19:01:24 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1010 2006/04/22 05:10:41 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12232,6 +12232,7 @@ printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
 printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n",   snp.molType);
 if (snp.avHet>0)
     printf("<BR><B><A HREF=\"#AvHet\">Average Heterozygosity</A>: </B>%.3f +/- %.3f", snp.avHet, snp.avHetSE);
+printf("<BR><B><A HREF=\"#Weight\">Weight</A>: </B>%d",             snp.weight);
 printf("<BR>\n");
 }   
     
