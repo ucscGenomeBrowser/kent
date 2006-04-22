@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.28 2006/04/21 16:36:08 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.29 2006/04/22 00:29:25 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -123,22 +123,49 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-int count = 0;
-
+int weight = 0;
+int count1 = 0;
+int count2 = 0;
+int count3 = 0;
+int count10 = 0;
+struct hashEl *hel = NULL;
+    
 weightHash = newHash(16);
 
-verbose(1, "getting weight = 10 from MapInfo...\n");
-safef(query, sizeof(query), "select snp_id from MapInfo where weight = 10");
+verbose(1, "hashing MapInfo...\n");
+safef(query, sizeof(query), "select snp_id, weight from MapInfo");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    hashAdd(weightHash, cloneString(row[0]), NULL);
-    count++;
+    hel = hashLookup(weightHash, row[0]);
+    // storing weight as a string
+    if (hel == NULL)
+        hashAdd(weightHash, cloneString(row[0]), cloneString(row[1]));
+    else
+        verbose(1, "duplicate entry for %s\n", row[0]);
+    weight = sqlUnsigned(row[1]);
+    switch (weight)
+        {
+        case 1:
+            count1++;
+	    break;
+       case 2:
+          count2++;
+	  break;
+       case 3:
+          count3++;
+	  break;
+       case 10:
+          count10++;
+	  break;
+       }
     }
 sqlFreeResult(&sr);
-
 hFreeConn(&conn);
-verbose(1, "SNPs with weight 10 found = %d\n", count);
+verbose(1, "count of snps with weight 1 = %d\n", count1);
+verbose(1, "count of snps with weight 2 = %d\n", count2);
+verbose(1, "count of snps with weight 3 = %d\n", count3);
+verbose(1, "count of snps with weight 10 = %d\n", count10);
 }
 
 
@@ -183,7 +210,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (el1 != NULL)
         {
 	el2 = hashLookup(weightHash, row[0]);
-	if (el2 != NULL) continue;
+	if (sameString(el2->val, "10")) continue;
 
 	cel = hashFindVal(contigCoords, row[1]);
 
@@ -200,8 +227,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    safef(endString, sizeof(endString), "%d", endNum);
 	    }
 	
-	fprintf(f, "%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\n", 
-	            row[0], row[1], cel->chrom, row[2], start, endString, row[7], row[8]);
+	fprintf(f, "%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%s\n", 
+	            row[0], row[1], cel->chrom, row[2], start, endString, row[7], row[8], (char *)el2->val);
 	}
     }
 sqlFreeResult(&sr);
@@ -223,7 +250,8 @@ char *createString =
 "    phys_pos_from int(11) not null,       \n"
 "    phys_pos varchar(32), \n"
 "    orientation tinyint(4) not null, \n"
-"    allele blob\n"
+"    allele blob,\n"
+"    weight int not null\n"
 ");\n";
 
 sqlRemakeTable(conn, "ContigLocFilter", createString);
