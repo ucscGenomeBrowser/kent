@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.25 2006/04/14 21:45:29 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.26 2006/04/22 00:32:06 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -131,6 +131,7 @@ if (locTypeInt == 1)
 	}
     else
         chromEnd = sqlUnsigned(rangeString);
+    size = chromEnd - chromStart;
     chromEnd++;
 
     if (chromEnd <= chromStart) 
@@ -138,7 +139,6 @@ if (locTypeInt == 1)
 	fprintf(errorFileHandle, "Chrom end <= chrom start for range\n");
         return (-1);
 	}
-    size = chromEnd - chromStart;
 
     /* only check size if we don't need to expand (that is next step in processing) */
     if (!needToExpand(allele) && alleleSize != size)
@@ -218,7 +218,7 @@ safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
 f = mustOpen(fileName, "w");
 
 safef(query, sizeof(query), 
-    "select snp_id, ctg_id, loc_type, phys_pos_from, phys_pos, orientation, allele from %s", tableName);
+    "select snp_id, ctg_id, loc_type, phys_pos_from, phys_pos, orientation, allele, weight from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -243,7 +243,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	chromStart = sqlUnsigned(row[3]);
 	chromStart++;
 	chromEnd++;
-        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\n", row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6]);
+        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\t%s\n", row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6], row[7]);
 	continue;
 	}
 
@@ -252,12 +252,12 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
 	chromStart = sqlUnsigned(row[3]);
 	chromStart++;
-        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\n", row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6]);
+        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\t%s\n", row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6], row[7]);
 	continue;
 	}
 
-    fprintf(f, "%s\t%s\t%s\t%d\t%s\t%s\t%s\n", 
-               row[0], row[1], row[3], chromEnd, row[2], row[5], row[6]);
+    fprintf(f, "%s\t%s\t%s\t%d\t%s\t%s\t%s\t%s\n", 
+               row[0], row[1], row[3], chromEnd, row[2], row[5], row[6], row[7]);
 
     }
 sqlFreeResult(&sr);
@@ -282,7 +282,8 @@ char *createString =
 "    chromEnd int(11) not null,\n"
 "    loc_type tinyint(4) not null,\n"
 "    orientation tinyint(4) not null,\n"
-"    allele blob\n"
+"    allele blob,\n"
+"    weight int\n"
 ");\n";
 
 struct dyString *dy = newDyString(1024);

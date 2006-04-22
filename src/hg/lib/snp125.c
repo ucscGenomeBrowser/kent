@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "snp125.h"
 
-static char const rcsid[] = "$Id: snp125.c,v 1.16 2006/02/22 23:35:26 heather Exp $";
+static char const rcsid[] = "$Id: snp125.c,v 1.17 2006/04/22 00:32:49 heather Exp $";
 
 void snp125StaticLoad(char **row, struct snp125 *ret)
 /* Load a row from snp125 table into ret.  The contents of ret will
@@ -31,6 +31,7 @@ ret->avHet = atof(row[12]);
 ret->avHetSE = atof(row[13]);
 ret->func = row[14];
 ret->locType = row[15];
+ret->weight = sqlUnsigned(row[16]);
 }
 
 struct snp125 *snp125Load(char **row)
@@ -56,6 +57,7 @@ ret->avHet = atof(row[12]);
 ret->avHetSE = atof(row[13]);
 ret->func = cloneString(row[14]);
 ret->locType = cloneString(row[15]);
+ret->weight = sqlUnsigned(row[16]);
 return ret;
 }
 
@@ -65,7 +67,7 @@ struct snp125 *snp125LoadAll(char *fileName)
 {
 struct snp125 *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[17];
 
 while (lineFileRow(lf, row))
     {
@@ -83,7 +85,7 @@ struct snp125 *snp125LoadAllByChar(char *fileName, char chopper)
 {
 struct snp125 *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[16];
+char *row[17];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -120,6 +122,7 @@ ret->avHet = sqlFloatComma(&s);
 ret->avHetSE = sqlFloatComma(&s);
 ret->func = sqlStringComma(&s);
 ret->locType = sqlStringComma(&s);
+ret->weight = sqlUnsignedComma(&s);
 *pS = s;
 return ret;
 }
@@ -214,6 +217,8 @@ fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->locType);
 if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%u", el->weight);
 fputc(lastSep,f);
 }
 
@@ -247,8 +252,9 @@ char *createString =
 "    func          set( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', \n"
 "                  'untranslated', 'intron','splice-site', 'cds-reference') \n"
 "                  DEFAULT 'unknown' NOT NULL,\n"
-"    locType enum ('unknown', 'range', 'exact', 'between',\n"
-"                  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL\n"
+"    locType       enum ('unknown', 'range', 'exact', 'between',\n"
+"                  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL\n,"
+"    weight        int not null\n"
 ")\n";
 
 struct dyString *dy = newDyString(1024);

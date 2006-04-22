@@ -11,7 +11,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.24 2006/04/05 23:02:59 heather Exp $";
+static char const rcsid[] = "$Id: snpExpandAllele.c,v 1.25 2006/04/22 00:32:06 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -181,16 +181,16 @@ while (oldAllele != NULL)
 return newAllele->string;
 }
 
-void writeToTabFile(char *snp_id, char *ctg_id, char *start, char *end, char *loc_type, char *orientation, char *allele)
+void writeToTabFile(char *snp_id, char *ctg_id, char *start, char *end, char *loc_type, char *orientation, char *allele, char *weight)
 {
-fprintf(tabFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\n", snp_id, ctg_id, start, end, loc_type, orientation, allele);
+fprintf(tabFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", snp_id, ctg_id, start, end, loc_type, orientation, allele, weight);
 }
 
-void writeToErrorFile(char *snp_id, char *ctg_id, char *start, char *end, char *loc_type, char *orientation, char *allele)
+void writeToErrorFile(char *snp_id, char *ctg_id, char *start, char *end, char *loc_type, char *orientation, char *allele, char *weight)
 {
 fprintf(errorFileHandle, 
-        "snp_id = %s\nctg=%s\nchromStart = %s\nchromEnd = %s\nloc_type = %s\norientation=%s\nallele = %s\n", 
-        snp_id, ctg_id, start, end, loc_type, orientation, allele);
+        "snp_id = %s\nctg=%s\nchromStart = %s\nchromEnd = %s\nloc_type = %s\norientation=%s\nallele = %s\nweight=%s\n", 
+        snp_id, ctg_id, start, end, loc_type, orientation, allele, weight);
 fprintf(errorFileHandle, "---------------------------------------\n");
 }
 
@@ -216,7 +216,7 @@ safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
 safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
 
 tabFileHandle = mustOpen(fileName, "w");
-safef(query, sizeof(query), "select snp_id, ctg_id, chromStart, chromEnd, loc_type, orientation, allele from %s ", tableName);
+safef(query, sizeof(query), "select snp_id, ctg_id, chromStart, chromEnd, loc_type, orientation, allele, weight from %s ", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -224,14 +224,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     /* no possible candidates in exact and between */
     if (sameString(row[4], "2") || sameString(row[4], "3"))
         {
-	writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
+	writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
 	continue;
 	}
 
     /* pass through alleles with no parens */
     if (!needToSplit(row[6]))
 	{
-	writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
+	writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
 	continue;
 	}
 
@@ -241,7 +241,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (sameString(allele, row[6]))
         {
         errorCount++;
-	writeToErrorFile(row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
+	writeToErrorFile(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
         }
 
     /* calculate end for locType 4, 5, 6 */
@@ -251,7 +251,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         end = start + strlen(allele);
 	verbose(5, "setting end coord for %s, locType = %s, startAllele = %s\n", row[0], row[4], row[6]);
 	sprintf(newEndString, "%d", end);
-        writeToTabFile(row[0], row[1], row[2], newEndString, row[4], row[5], allele);
+        writeToTabFile(row[0], row[1], row[2], newEndString, row[4], row[5], allele, row[7]);
 	continue;
 	}
 
@@ -265,7 +265,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	    writeToExceptionFile(chromName, start, end, row[0], "RefAlleleWrongSize");
 	}
 
-    writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5], allele);
+    writeToTabFile(row[0], row[1], row[2], row[3], row[4], row[5], allele, row[7]);
 
     count++;
     }

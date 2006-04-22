@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpFunction.c,v 1.9 2006/04/10 20:32:59 heather Exp $";
+static char const rcsid[] = "$Id: snpFunction.c,v 1.10 2006/04/22 00:32:06 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *functionHash = NULL;
@@ -70,7 +70,7 @@ f = mustOpen(fileName, "w");
 
 safef(query, sizeof(query),
     "select snp_id, chromStart, chromEnd, loc_type, class, orientation, "
-    "molType, allele, refUCSC, refUCSCReverseComp, observed from %s", tableName);
+    "molType, allele, refUCSC, refUCSCReverseComp, observed, weight from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -81,7 +81,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	fprintf(f, "unknown\t");
     else
         fprintf(f, "%s\t", (char *)el1->val);
-    fprintf(f, "%s\t%s\t%s\t%s\n", row[7], row[8], row[9], row[10]);
+    fprintf(f, "%s\t%s\t%s\t%s\t%s\n", row[7], row[8], row[9], row[10], row[11]);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -107,7 +107,8 @@ char *createString =
 "    allele blob,\n"
 "    refUCSC blob,\n"
 "    refUCSCReverseComp blob,\n"
-"    observed blob\n"
+"    observed blob,\n"
+"    weight int\n"
 ");\n";
 
 struct dyString *dy = newDyString(1024);

@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.11 2006/04/10 20:32:59 heather Exp $";
+static char const rcsid[] = "$Id: snpSNP.c,v 1.12 2006/04/22 00:32:06 heather Exp $";
 
 struct snpData
     {
@@ -87,7 +87,7 @@ f = mustOpen(fileName, "w");
 
 safef(query, sizeof(query), 
      "select snp_id, chromStart, chromEnd, loc_type, class, orientation, molType, fxn_class, "
-     "allele, refUCSC, refUCSCReverseComp, observed from %s ", tableName);
+     "allele, refUCSC, refUCSCReverseComp, observed, weight from %s ", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -97,14 +97,14 @@ while ((row = sqlNextRow(sr)) != NULL)
         fprintf(f, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3]);
 	fprintf(f, "%s\t%s\t%s\t%s\t", row[4], row[5], row[6], row[7]);
 	fprintf(f, "0\t0.0\t0.0\t");
-	fprintf(f, "%s\t%s\t%s\t%s\n", row[8], row[9], row[10], row[11]);
+	fprintf(f, "%s\t%s\t%s\t%s\t%s\n", row[8], row[9], row[10], row[11], row[12]);
         fprintf(errorFileHandle, "no match for snp_id %s\n", row[0]);
 	continue;
 	}
     fprintf(f, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3]);
     fprintf(f, "%s\t%s\t%s\t%s\t", row[4], row[5], row[6], row[7]);
     fprintf(f, "%d\t%s\t%s\t", sel->validation_status, sel->avHet, sel->avHetSE);
-    fprintf(f, "%s\t%s\t%s\t%s\n", row[8], row[9], row[10], row[11]);
+    fprintf(f, "%s\t%s\t%s\t%s\t%s\n", row[8], row[9], row[10], row[11], row[12]);
     }
 
 sqlFreeResult(&sr);
@@ -133,7 +133,8 @@ char *createString =
 "    allele blob,\n"
 "    refUCSC blob,\n"
 "    refUCSCReverseComp blob,\n"
-"    observed blob\n"
+"    observed blob,\n"
+"    weight int\n"
 ");\n";
 
 

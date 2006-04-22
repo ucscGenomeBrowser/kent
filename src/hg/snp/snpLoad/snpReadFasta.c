@@ -17,7 +17,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpReadFasta.c,v 1.15 2006/04/10 20:32:59 heather Exp $";
+static char const rcsid[] = "$Id: snpReadFasta.c,v 1.16 2006/04/22 00:32:06 heather Exp $";
 
 struct snpFasta
     {
@@ -141,7 +141,7 @@ safef(fileName, ArraySize(fileName), "%s_snpTmp.tab", chromName);
 f = mustOpen(fileName, "w");
 
 safef(query, sizeof(query), 
-     "select snp_id, chromStart, chromEnd, loc_type, orientation, allele, refUCSC, refUCSCReverseComp from %s ", tableName);
+     "select snp_id, chromStart, chromEnd, loc_type, orientation, allele, refUCSC, refUCSCReverseComp, weight from %s ", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -151,7 +151,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
         fprintf(f, "%s\t%s\t%s\t%d\t", row[0], row[1], row[2], loc_type);
 	fprintf(f, "%s\t%s\t%s\t%s\t", "unknown", row[4], "unknown", row[5]);
-	fprintf(f, "%s\t%s\t%s\n", row[6], row[7], "n/a");
+	fprintf(f, "%s\t%s\t%s\t%s\n", row[6], row[7], "n/a", row[8]);
 	continue;
 	}
     classString = fel->class;
@@ -165,7 +165,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     fprintf(f, "%s\t%s\t%s\t%d\t", row[0], row[1], row[2], loc_type);
     fprintf(f, "%s\t%s\t%s\t%s\t", classString, row[4], fel->molType, row[5]);
-    fprintf(f, "%s\t%s\t%s\n", row[6], row[7], fel->observed);
+    fprintf(f, "%s\t%s\t%s\t%s\n", row[6], row[7], fel->observed, row[8]);
     }
 
 sqlFreeResult(&sr);
@@ -191,7 +191,8 @@ char *createString =
 "    allele blob,\n"
 "    refUCSC blob,\n"
 "    refUCSCReverseComp blob,\n"
-"    observed blob\n"
+"    observed blob,\n"
+"    weight int\n"
 ");\n";
 
 struct dyString *dy = newDyString(1024);

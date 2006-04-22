@@ -2,6 +2,9 @@
 #include "snp125Ui.h"
 #include "common.h"
 
+float snp125AvHetCutoff = 0.0;
+int snp125WeightCutoff = 3;
+
 /****** Some stuff for snp colors *******/
 
 char *snp125ColorLabel[] = {
@@ -393,10 +396,6 @@ int snp125FuncDataNameSize = ArraySize(snp125FuncDataName);
 int snp125FuncDefaultSize  = ArraySize(snp125FuncDefault);
 int snp125FuncCartSize     = ArraySize(snp125FuncCart);
 int snp125FuncIncludeStringsSize     = ArraySize(snp125FuncIncludeStrings);
-
-/* minimum Average Heterozygosity cutoff  */
-
-float snp125AvHetCutoff = 0.0;
 
 
 /****** LocType related controls *******/

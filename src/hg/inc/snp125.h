@@ -5,7 +5,7 @@
 #ifndef SNP125_H
 #define SNP125_H
 
-#define SNP125_NUM_COLS 16
+#define SNP125_NUM_COLS 17
 
 struct snp125
 /* Polymorphism data from dbSnp database or genotyping arrays */
@@ -27,6 +27,7 @@ struct snp125
     float avHetSE;	/* The Standard Error for the average heterozygosity */
     char *func;	/* The functional category of the SNP (coding-synon, coding-nonsynon, intron, etc.) */
     char *locType;	/* How the variant affects the reference sequence */
+    unsigned weight;	/* The quality of the alignment */
     };
 
 void snp125StaticLoad(char **row, struct snp125 *ret);
@@ -71,6 +72,7 @@ void snp125Output(struct snp125 *el, FILE *f, char sep, char lastSep);
 /* Print out snp125 as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
+
 
 void snp125TableCreate(struct sqlConnection *conn, char *tableName);
 /* create a snp125 table */

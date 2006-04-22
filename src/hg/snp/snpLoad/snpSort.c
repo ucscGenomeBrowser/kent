@@ -7,7 +7,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSort.c,v 1.9 2006/03/11 04:04:33 heather Exp $";
+static char const rcsid[] = "$Id: snpSort.c,v 1.10 2006/04/22 00:32:06 heather Exp $";
 
 struct snpTmp
     {
@@ -19,6 +19,7 @@ struct snpTmp
     int loc_type;
     int orientation;
     char *allele;	
+    int weight;
     };
 
 static char *snpDb = NULL;
@@ -48,6 +49,7 @@ ret->end = sqlUnsigned(row[3]);
 ret->loc_type = sqlUnsigned(row[4]);
 ret->orientation = sqlUnsigned(row[5]);
 ret->allele   = cloneString(row[6]);
+ret->weight   = sqlUnsigned(row[7]);
 
 return ret;
 
@@ -133,7 +135,7 @@ char **row;
 char tableName[64];
 
 safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
-safef(query, sizeof(query), "select snp_id, ctg_id, chromStart, chromEnd, loc_type, orientation, allele from %s ", tableName);
+safef(query, sizeof(query), "select snp_id, ctg_id, chromStart, chromEnd, loc_type, orientation, allele, weight from %s ", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -158,8 +160,8 @@ safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
 f = mustOpen(fileName, "w");
 
 for (el = list; el != NULL; el = el->next)
-    fprintf(f, "%d\t%d\t%d\t%d\t%d\t%d\t%s\n", 
-            el->snp_id, el->ctg_id, el->start, el->end, el->loc_type, el->orientation, el->allele);
+    fprintf(f, "%d\t%d\t%d\t%d\t%d\t%d\t%s\t%d\n", 
+            el->snp_id, el->ctg_id, el->start, el->end, el->loc_type, el->orientation, el->allele, el->weight);
 
 carefulClose(&f);
 }

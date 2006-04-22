@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitByChrom.c,v 1.3 2006/03/06 19:42:06 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitByChrom.c,v 1.4 2006/04/22 00:32:06 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -78,7 +78,7 @@ char *chromName;
 verbose(1, "reading ContigLocFilter...\n");
 
 safef(query, sizeof(query), 
-    "select snp_id, ctg_id, chromName, loc_type, phys_pos_from, phys_pos, orientation, allele from ContigLocFilter");
+    "select snp_id, ctg_id, chromName, loc_type, phys_pos_from, phys_pos, orientation, allele, weight from ContigLocFilter");
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -90,7 +90,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	verbose(1, "%s not found\n", row[2]);
 	continue;
 	}
-    fprintf(hel->val, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7]);
+    fprintf(hel->val, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8]);
     }
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
@@ -111,7 +111,8 @@ char *createString =
 "    phys_pos_from int(11) not null,\n"
 "    phys_pos varchar(32),\n"
 "    orientation tinyint(4) not null,\n"
-"    allele blob\n"
+"    allele blob,\n"
+"    weight int\n"
 ");\n";
 
 struct dyString *dy = newDyString(1024);

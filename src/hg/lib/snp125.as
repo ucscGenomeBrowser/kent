@@ -17,4 +17,5 @@ table snp125
     float    avHetSE;    "The Standard Error for the average heterozygosity"
     string   func;       "The functional category of the SNP (coding-synon, coding-nonsynon, intron, etc.)"
     string   locType;    "How the variant affects the reference sequence"
+    uint     weight;     "The quality of the alignment"
     )

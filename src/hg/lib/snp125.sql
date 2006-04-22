@@ -21,19 +21,22 @@ CREATE TABLE snp125 (
                   'named', 'no var', 'mixed', 'mnp', 'insertion', 'deletion')  DEFAULT 'unknown' NOT NULL,
     					# The class of variant
 
-    valid      	set('unknown', 'by-cluster', 'by-frequency', 'by-submitter', 'by-2hit-2allele', 'by-hapmap') 
+    valid      	  set('unknown', 'by-cluster', 'by-frequency', 'by-submitter', 'by-2hit-2allele', 'by-hapmap') 
                                         DEFAULT 'unknown' NOT NULL,
     					# The validation status of the SNP
 
-    avHet 	float not null,	# The average heterozygosity from all observations
-    avHetSE 	float not null,	# The Standard Error for the average heterozygosity
+    avHet 	  float not null,	# The average heterozygosity from all observations
+    avHetSE 	  float not null,	# The Standard Error for the average heterozygosity
 
-    func       set( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', 
-    		     'untranslated', 'intron', 'splice-site', 'cds-reference') 
+    func          set( 'unknown', 'locus', 'coding', 'coding-synon', 'coding-nonsynon', 
+    		       'untranslated', 'intron', 'splice-site', 'cds-reference') 
 		     DEFAULT 'unknown' NOT NULL,
     			# The functional category of the SNP
 
-   locType  enum( 'unknown', 'range', 'exact', 'between', 
-   		  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL
+   locType        enum( 'unknown', 'range', 'exact', 'between', 
+   		  'rangeInsertion', 'rangeSubstitution', 'rangeDeletion') DEFAULT 'unknown' NOT NULL,
+
+   weight         int unsigned not null     # The quality of the alignment
+
 
 );

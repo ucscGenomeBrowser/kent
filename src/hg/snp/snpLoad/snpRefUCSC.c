@@ -18,7 +18,7 @@
 /* errAbort if larger SNP found */
 #define MAX_SNP_SIZE 1024
 
-static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.9 2006/03/11 04:05:26 heather Exp $";
+static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.10 2006/04/22 00:32:06 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -103,7 +103,7 @@ touppers(seq->dna);
 seqPtr = seq->dna;
 
 safef(query, sizeof(query), 
-    "select snp_id, ctg_id, chromStart, chromEnd, loc_type, orientation, allele from %s", tableName);
+    "select snp_id, ctg_id, chromStart, chromEnd, loc_type, orientation, allele, weight from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -116,8 +116,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (start == end)
         {
 	/* copy whatever convention dbSNP uses for insertion */
-        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\t%s\t%s\n", 
-                row[0], row[1], start, end, row[4], row[5], row[6], row[6], row[6]);
+        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+                row[0], row[1], start, end, row[4], row[5], row[6], row[6], row[6], row[7]);
 	continue;
 	}
     verbose(5, "building refUCSC for rs%s at %s:%d-%d\n", row[0], chromName, start, end);
@@ -129,7 +129,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     
     fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\t%s\t", row[0], row[1], start, end, row[4], row[5], row[6], refUCSC);
     reverseComplement(refUCSC, snpSize);
-    fprintf(f, "%s\n", refUCSC);
+    fprintf(f, "%s\t%s\n", refUCSC, row[7]);
 
     }
 sqlFreeResult(&sr);
@@ -156,7 +156,8 @@ char *createString =
 "    orientation tinyint(4) not null,\n"
 "    allele blob,\n"
 "    refUCSC blob,\n"
-"    refUCSCReverseComp blob\n"
+"    refUCSCReverseComp blob,\n"
+"    weight int\n"
 ");\n";
 
 struct dyString *dy = newDyString(1024);

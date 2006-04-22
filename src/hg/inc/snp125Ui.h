@@ -136,6 +136,7 @@ extern int snp125LocTypeIncludeStringsSize;
 /* minimum Average Heterozygosity cutoff  */
 
 extern float snp125AvHetCutoff;
+extern int snp125WeightCutoff;
 
 #endif /* SNP125UI_H */
 
