@@ -304,6 +304,58 @@ cartRemove(cart, hgpStartAt);
 htmlEnd();
 }
 
+struct slInt *visiGeneForwardedImagesFiles(struct sqlConnection *conn,
+        int imageFile)
+/* Given imageFile ID, return list of all associated imageFile IDs
+ * using the imageFileFwd table. */
+{
+char query[256], **row;
+struct sqlResult *sr;
+struct slInt *el, *list = NULL;
+safef(query, sizeof(query),
+        "select toIf from imageFileFwd where fromIf = %d "
+        "order by toIf"
+        , imageFile);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = slIntNew(sqlUnsigned(row[0]));
+    slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+return list;
+}
+
+
+struct slInt *vgForwardedImages(struct sqlConnection *conn, int image)
+/* Return unique alphabetical list of all images mapping imageId's image file
+ * to any imageFile's in imageFileFwd, and then mapping those back to imageIds.
+ * We are working in image ids instead of imageFile ids only because much of
+ * the software works off image ids.
+ */
+{
+struct slInt *imageFileList, *imageFile;
+struct slInt *imageList=NULL,*el=NULL;
+int imageFileId = visiGeneImageFile(conn, image);
+
+imageFileList = visiGeneForwardedImagesFiles(conn, imageFileId);
+for (imageFile = imageFileList; imageFile != NULL; imageFile = imageFile->next)
+    {
+    char query[256];
+    int imageId = 0;
+    safef(query, sizeof(query), "select id from image where imageFile=%d limit 1",
+        imageFile->val);
+    imageId = sqlQuickNum(conn, query);
+    el = slIntNew(imageId);
+    slAddHead(&imageList, el);
+    }
+slFreeList(&imageFileList);
+return imageList;
+}
+
+
+
 void doImage(struct sqlConnection *conn)
 /* Put up image page. */
 {
@@ -342,6 +394,17 @@ if (imageId != 0)
     printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
 
     fullCaption(conn, imageId);
+
+    /* handle forwarded images if any */
+    {
+    struct slInt *forwardedImagesList = vgForwardedImages(conn, imageId);
+    struct slInt *image=NULL;
+    for (image = forwardedImagesList; image != NULL; image = image->next)
+	{
+	fullCaption(conn, image->val);
+	}
+    slFreeList(&forwardedImagesList);
+    }
     
     safef(buf,sizeof(buf),"%s%s%s", dir, name, extension);
     safef(url,sizeof(url),"../cgi-bin/%s?%s=go&%s&%s=%d",
