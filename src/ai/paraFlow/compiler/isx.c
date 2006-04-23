@@ -22,6 +22,7 @@
 #include "pfCompile.h"
 #include "ctar.h"
 #include "recodedType.h"
+#include "backEnd.h"
 #include "isxLiveVar.h"
 #include "isx.h"
 
@@ -150,6 +151,8 @@ switch (val)
         return "poVarAssign";
     case poVarInput:
         return "poVarInput";
+    case poIndirect:
+        return "poIndirect";
     default:
         internalErr();
 	return NULL;
@@ -514,6 +517,57 @@ isxAddNew(pfc, op, dest, target, NULL, iList);
 return dest;
 }
 
+static void calcFieldOffsets(struct pfCompile *pfc, struct pfBaseType *base)
+/* Figure out offset of fields in structure. */
+{
+struct pfBackEnd *backEnd = pfc->backEnd;
+int offset = 0;
+struct pfType *ty;
+uglyf("Calc field offsets\n");
+for (ty = base->fields; ty != NULL; ty = ty->next)
+    {
+    enum isxValType valType = isxValTypeFromTy(pfc, ty);
+    offset = backEnd->alignData(backEnd, offset, valType);
+    ty->fieldOffset  = offset;
+    uglyf("%s %d\n", ty->fieldName, offset);
+    offset += backEnd->dataSize(backEnd, valType);
+    }
+base->hasFieldOffsets = TRUE;
+}
+
+static int findFieldOffset(struct pfCompile *pfc,
+	struct pfBaseType *base, char *field)
+/* Figure out offset of field. */
+{
+struct pfType *ty;
+if (!base->hasFieldOffsets)
+    calcFieldOffsets(pfc, base);
+for (ty = base->fields; ty != NULL; ty = ty->next)
+    {
+    if (sameString(ty->fieldName, field))
+        return ty->fieldOffset;
+    }
+internalErr();
+return 0;
+}
+
+static struct isxAddress *isxDotRval(struct pfCompile *pfc, 
+	struct pfParse *pp, struct hash *varHash, 
+	double weight, struct dlList *iList)
+/* Generate intermediate code for obj.value (except for on left
+ * side of an equality) */
+{
+struct pfParse *ppObj = pp->children;
+struct pfParse *ppField = ppObj->next;
+struct isxAddress *left = isxExpression(pfc, ppObj, varHash, weight, iList);
+struct pfType *ty = ppObj->ty;
+struct pfBaseType *base = ty->base;
+
+uglyf("THeoretically doing isxDotRval\n");
+uglyf("Field offset of %s in %s is %d\n", ppField->name, base->name, findFieldOffset(pfc, base, ppField->name));
+return NULL; //uglyf
+}
+
 static void isxOpEquals(struct pfCompile *pfc, 
 	struct pfParse *pp, struct hash *varHash, 
 	enum isxOpType op, double weight, struct dlList *iList)
@@ -740,6 +794,8 @@ switch (pp->type)
         return isxCall(pfc, pp, varHash, weight, iList);
     case pptClassAllocFromTuple:
         return isxClassFromTuple(pfc, pp, varHash, weight, iList);
+    case pptDot:
+        return isxDotRval(pfc, pp, varHash, weight, iList);
     case pptCastBitToByte:
     case pptCastBitToChar:
     case pptCastBitToShort:

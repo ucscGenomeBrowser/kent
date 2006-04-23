@@ -208,6 +208,59 @@ static void emitPointer(struct pfBackEnd *backEnd, char *label, FILE *f)
 fprintf(f, "\t.long\t%s\n", label);
 }
 
+static int alignData(struct pfBackEnd *backEnd, int offset, 
+	enum isxValType type)
+/* Return offset plus any alignment needed */
+{
+switch (type)
+    {
+    case ivBit:
+    case ivByte:
+        return offset;
+    case ivShort:
+        return (offset+1)&(~1);
+    case ivInt:
+    case ivFloat:
+    case ivString:
+    case ivObject:
+    case ivVar:
+    case ivJump:
+        return (offset+3)&(~3);
+    case ivLong:
+    case ivDouble:
+        return (offset+7)&(~7);
+    default:
+        internalErr();
+	return offset;
+    }
+}
+
+static int dataSize(struct pfBackEnd *backEnd, enum isxValType type)
+/* Return size of data */
+{
+switch (type)
+    {
+    case ivBit:
+    case ivByte:
+        return 1;
+    case ivShort:
+        return 2;
+    case ivInt:
+    case ivFloat:
+    case ivString:
+    case ivObject:
+    case ivVar:
+    case ivJump:
+        return 4;
+    case ivLong:
+    case ivDouble:
+        return 8;
+    default:
+        internalErr();
+	return 0;
+    }
+}
+	
 struct pfBackEnd macPentiumBackEnd = {
 /* Interface to mac-pentium back end. */
     "mac-pentium",
@@ -226,5 +279,7 @@ struct pfBackEnd macPentiumBackEnd = {
     emitFloat,
     emitDouble,
     emitPointer,
+    alignData,
+    dataSize,
     };
 

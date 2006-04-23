@@ -76,6 +76,7 @@ enum isxOpType
     poVarInit,	 /* Variable type initialization */
     poVarAssign, /* Variable type (re)assignment */
     poVarInput,	 /* Variable type subroutine input */
+    poIndirect,	 /* dest = *(left+right) where right may be null */
     };
 
 char *isxOpTypeToString(enum isxOpType val);

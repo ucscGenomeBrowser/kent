@@ -68,3 +68,4 @@ struct backEndString *bes;
 for (bes = list; bes != NULL; bes=bes->next)
     emitLocalString(back, bes->id, bes->string, f);
 }
+

@@ -9,6 +9,8 @@
 #include "pfPreamble.h"
 #endif
 
+enum isxValType;
+
 enum pfbSegment {pfbNone, pfbData, pfbCode, pfbBss, pfbString};
 /* Types of segment */
 
@@ -44,6 +46,10 @@ struct pfBackEnd
     			/* Emit Double */
     void (*emitPointer)(struct pfBackEnd *backEnd, char *label, FILE *f);
     			/* Emit Pointer */
+    int (*alignData)(struct pfBackEnd *backEnd, int offset, 
+    	enum isxValType type);	/* Return offset plus any alignment needed */
+    int (*dataSize)(struct pfBackEnd *backEnd, enum isxValType type);	
+    	/* Return size of data */
     };
 
 struct pfBackEnd *backEndFind(char *name);

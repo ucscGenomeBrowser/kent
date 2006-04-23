@@ -29,8 +29,8 @@ struct pfBaseType
     bool isClass;		/* TRUE if it's a class */
     bool isInterface;		/* TRUE if it's a interface  */
     bool needsCleanup;		/* TRUE if it needs refCount/cleanup */
-    UBYTE access;	/* Is class usable outside module? */
-    bool reserved;		/* Currently zero. */
+    UBYTE access;		/* Is class usable outside module? */
+    bool hasFieldOffsets;	/* Set to true if have made field offsets. */
     int id;			/* Unique id. */
     struct pfType *fields;	/* List of (data) fields. */
     struct pfType *methods;	/* List of associated functions. */
@@ -92,6 +92,7 @@ struct pfType
     UBYTE access;		/* Access type. */
     bool isConst;		/* TRUE if it's a constant. */
     short polyOffset;		/* Offset in polymorphic function table. */
+    int fieldOffset;		/* Offset in structure, just in back end. */
     };
 
 struct pfType *pfTypeNew(struct pfBaseType *base);
