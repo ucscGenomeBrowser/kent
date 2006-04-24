@@ -1366,3 +1366,187 @@ if (-e /tmp/danRer4/$2/$2.cat) /bin/cp /tmp/danRer4/$2/$2.cat ./
     hgsql danRer4 -e "show index from gc5Base;"
     #   should see good numbers in Cardinality column
 
+###########################################################################
+# MAKE 10.OOC, 11.OOC FILES FOR BLAT (DONE, 2005-04-24, hartera)
+    # Use -repMatch=512 (based on size -- for human we use 1024, and
+    # the zebrafish genome is ~50% of the size of the human genome
+    ssh kkr1u00
+    mkdir /cluster/data/danRer4/bed/ooc
+    cd /cluster/data/danRer4/bed/ooc
+    mkdir -p /san/sanvol1/scratch/danRer4
+    ls -1 /cluster/data/danRer4/nib/chr*.nib > nib.lst
+    blat nib.lst /dev/null /dev/null -tileSize=11 \
+      -makeOoc=/san/sanvol1/scratch/danRer4/danRer4_11.ooc -repMatch=512
+    # Wrote 50424 overused 11-mers to /cluster/bluearc/danRer4/11.ooc
+    # For 10.ooc, repMatch = 4096 for human, so use 2048
+    blat nib.lst /dev/null /dev/null -tileSize=10 \
+      -makeOoc=/san/sanvol1/scratch/danRer4/danRer4_10.ooc -repMatch=2048
+    # Wrote 12231 overused 10-mers to /cluster/bluearc/danRer4/10.ooc 
+    # keep copies of ooc files in this directory and copy to iscratch
+    cp /san/sanvol1/scratch/danRer4/*.ooc .
+    cp -p /san/sanvol1/scratch/danRer4/*.ooc /iscratch/i/danRer4/
+    # rsync to iServers
+    foreach R (2 3 4 5 6 7 8)
+       rsync -a --progress /iscratch/i/danRer4/*.ooc \
+             kkr${R}u00:/iscratch/i/danRer4/
+    end
+      
+###########################################################################
+# AFFYMETRIX ZEBRAFISH GENOME ARRAY CHIP (DONE, 2006-04-24, hartera)
+# NOTE: Jim recommends that, in the future, all AFFY blat alignments should drop
+# -mask=lower for blat and drop -minIdentity=95 to -minIdentity=90 as the
+# higher minIdentity is causing alignments to be dropped that should not be. 
+# e.g.  /cluster/bin/i386/blat -fine -minIdentity=90 -ooc=11.ooc  
+# $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}
+# pslReps can be used to handle filtering at a later step. Blat's minIdentity 
+# seems to be more severe than that for pslReps as it takes insertions and 
+# deletions into account. 
+
+# array chip sequences already downloaded for danRer1
+    ssh hgwdev
+    # need to copy sequences to the bluearc first to transfer to the iServers
+    cd /projects/compbio/data/microarray/affyZebrafish
+    mkdir -p /cluster/bluearc/affy
+    cp -p \
+      /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \
+      /cluster/bluearc/affy/
+    # Set up cluster job to align Zebrafish consensus sequences to danRer3
+    ssh kkr1u00
+    mkdir -p /cluster/data/danRer4/bed/affyZebrafish.2006-04-24
+    ln -s /cluster/data/danRer4/bed/affyZebrafish.2006-04-24 \
+          /cluster/data/danRer4/bed/affyZebrafish
+    cd /cluster/data/danRer4/bed/affyZebrafish
+    mkdir -p /iscratch/i/affy
+    cp /cluster/bluearc/affy/Zebrafish_consensus.fa /iscratch/i/affy
+    foreach R (2 3 4 5 6 7 8)
+       rsync -a --progress /iscratch/i/affy/*.fa \
+             kkr${R}u00:/iscratch/i/affy/
+    end
+    # small cluster run to align sequences
+    ssh kki
+    cd /cluster/data/danRer4/bed/affyZebrafish
+    ls -1 /iscratch/i/affy/Zebrafish_consensus.fa > affy.lst
+    ls -1 /iscratch/i/danRer4/trfFa/chr[0-9M]*.fa > genome.lst
+    # for output:
+    mkdir -p psl
+    echo '#LOOP\n/cluster/bin/i386/blat -fine -minIdentity=90 -ooc=/iscratch/i/danRer4/danRer4_11.ooc $(path1) $(path2) {check out line+ psl/$(root1)_$(root2).psl}\n#ENDLOOP' > template.sub
+
+    gensub2 genome.lst affy.lst template.sub para.spec
+    para create para.spec
+    para try, check, push, check .... etc.
+# para time
+# CPU time in finished jobs:      13226s     220.44m     3.67h    0.15d  0.000 y
+# IO & Wait Time:                   647s      10.78m     0.18h    0.01d  0.000 y
+# Time in running jobs:             303s       5.05m     0.08h    0.00d  0.000 y
+# Average job time:                  59s       0.99m     0.02h    0.00d
+# Longest running job:               62s       1.03m     0.02h    0.00d
+# Longest finished job:             101s       1.68m     0.03h    0.00d
+# Submission to last job:          1368s      22.80m     0.38h    0.02d
+    # do pslSort and liftUp
+    ssh kkstore01
+    cd /cluster/data/danRer4/bed/affyZebrafish
+    # Do sort, best in genome filter, and convert to chromosome coordinates
+    # to create affyZebrafish.psl
+    pslSort dirs raw.psl tmp psl
+    # only use alignments that have at least 95% identity in aligned region.
+    # try minCover as now there is less sequence in chrUn and chrNA
+    # so less likely that genes are split up.
+    grep '>' /cluster/bluearc/affy/Zebrafish_consensus.fa | wc -l
+    # 15502
+    pslReps -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    # see how many sequences are aligned:
+    awk '{print $10;}' contig.psl > contigAligned
+    tail +6 contigAligned | sort | uniq -c | sort -nr > contigAligned.count
+    wc -l contigAligned.count 
+    # 14819 contigAligned.count 
+    tail +6 contig.psl | wc -l
+    # 21486
+    # 96% of sequences are aligned. The sequence with the most alignments 
+    # aligns 177 times, then the next is 105, then 86, 85, 69, 69, 54, 54 etc.
+    # for danRer3, 14335 were aligned (92% aligned). The sequence with 
+    # the most alignments aligned 96 times, then 31, 27, 22, 20, 19 times. 
+    # also 854 sequences aligned for danRer4 that did not align for danRer3.
+    # 370 were aligned in danRer3 but not for danRer4.
+    pslReps -minCover=0.30 -minAli=0.95 -nearTop=0.005 \
+            raw.psl contig2.psl /dev/null
+    # see how many sequences are aligned:
+    awk '{print $10;}' contig2.psl > contig2Aligned
+    tail +6 contig2Aligned | sort | uniq -c | sort -nr > contig2Aligned.count
+    wc -l contig2Aligned.count 
+    # 14528 contig2Aligned.count
+    tail +6 contig2.psl | wc -l
+    # 18744
+    # danRer3 has 21196 total alignments and 14335 sequences aligned. 
+    # 94% of sequences are aligned.
+    # 785 sequences were aligned for danRer4 using minCover but not for 
+    # danRer3 after using pslReps. 592 sequences were aligned for danRer3 
+    # but not for danRer4 using minCover after using pslReps.
+    # the sequence with the most alignments aligns 105 times, then 85, 69,
+    # 54, 50, 47, 44, 37, 26, 31, 29:
+# No. of alignments Sequence Name
+# 105 Zebrafish:Dr.15955.1.A1_at
+# 85 Zebrafish:Dr.20178.1.A1_at
+# 69 Zebrafish:Dr.885.1.S1_at
+# 54 Zebrafish:Dr.15958.1.S1_at
+# 50 Zebrafish:Dr.25427.1.A1_at
+# 47 Zebrafish:Dr.16470.1.A1_at
+# 44 Zebrafish:Dr.490.1.S1_at
+# 37 Zebrafish:Dr.7806.1.A1_at
+# 36 Zebrafish:Dr.19.1.A1_at
+# 31 Zebrafish:Dr.2825.1.A1_at
+# 29 Zebrafish:Dr.19556.1.A1_at
+    # aligning with the -mask=lower option doesn't make a difference to the
+    # number of alignments and sequences aligned.  
+    # there are 291 extra sequences that align when minCover option is
+    # not used. Only 7 of these have 22 or more alignments. 
+# 86 Zebrafish:Dr.24316.1.S1_at
+# 69 Zebrafish:Dr.14452.1.A1_at
+# 39 Zebrafish:Dr.12372.1.S1_at
+# 26 Zebrafish:Dr.18296.2.S1_a_at
+# 23 Zebrafish:Dr.7519.1.A1_at
+# 22 Zebrafish:Dr.8680.1.S1_at
+# 22 Zebrafish:Dr.22175.1.S1_at
+    # clean up 
+    rm contig* 
+    # use pslReps without the minCover option as it does allow quite a lot
+    # more alignments and the number of total alignments/number of sequences
+    # aligned is still close to that for danRer3. Using nearTop=0.001 does
+    # decrease the number of alignments but also means that some good 
+    # alignments are lost.  
+    pslReps -minAli=0.95 -nearTop=0.005 raw.psl contig.psl /dev/null
+    liftUp affyZebrafish.psl ../../jkStuff/liftAll.lft warn contig.psl
+    # shorten names in psl file:
+    sed -e 's/Zebrafish://' affyZebrafish.psl > affyZebrafish.psl.tmp
+    mv affyZebrafish.psl.tmp affyZebrafish.psl
+    pslCheck affyZebrafish.psl
+    # co-ordinates are ok. psl is good.
+    # load track into database
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/affyZebrafish
+    hgLoadPsl danRer4 affyZebrafish.psl
+    # Add consensus sequences for Zebrafish chip
+    # Copy sequences to gbdb if they are not there already
+    mkdir -p /gbdb/hgFixed/affyProbes
+    ln -s \
+       /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \
+      /gbdb/hgFixed/affyProbes
+
+    hgLoadSeq -abbr=Zebrafish: danRer4 \
+              /gbdb/hgFixed/affyProbes/Zebrafish_consensus.fa
+    # Clean up
+    rm batch.bak contig.psl raw.psl
+# trackDb.ra entry and html are already there in trackDb/zebrafish/
+    
+###########################################################################
+# CREATE ZEBRAFISH AND OTHER SPECIES LINEAGE-SPECIFIC REPEATS DIRECTORY AND 
+# ADD CHROM SIZES FOR BLASTZ CLUSTER RUNS (DONE, 2006-04-24, hartera)
+    # There are no lineage-specific repeats for zebrafish and other species
+    # so use all repeats.
+    ssh pk
+    mkdir -p /san/sanvol1/scratch/danRer4/linSpecRep.notInOthers
+    foreach f (/cluster/data/danRer4/*/chr*.fa.out)
+     cp -p $f \
+        /san/sanvol1/scratch/danRer4/linSpecRep.notInOthers/$f:t:r:r.out.spec
+    end
+    cp -p /cluster/data/danRer4/chrom.sizes \
+          /san/sanvol1/scratch/danRer4/
