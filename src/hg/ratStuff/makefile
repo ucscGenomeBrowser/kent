@@ -19,4 +19,5 @@ DIRS = \
 	mafSplit \
 	mafSplitPos \
 	mafsInRegion \
+	mafOrder \
 	stageMultiz 
