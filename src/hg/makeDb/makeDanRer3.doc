@@ -887,7 +887,7 @@ if (-e /tmp/danRer3/$2/$2.cat) /bin/cp /tmp/danRer3/$2/$2.cat ./
     # 28      56     409 chrom.sizes
     
     # Make one big 2bit file as well, and make a link to it in
-    # /gbdb/danRer2/nib because hgBlat looks there:
+    # /gbdb/danRer3/nib because hgBlat looks there:
     faToTwoBit */chr*.fa danRer3.2bit
     # add link to this 2bit file from gbdb danRer3 directory (2005-06-17)
     ln -s /cluster/data/danRer3/danRer3.2bit /gbdb/danRer3/
@@ -1052,6 +1052,8 @@ getSeqs.csh $(path1)
     echo "load data local infile 'ctgPos2.tab' into table ctgPos2" \
          | hgsql danRer3
 # create trackDb.ra entry and html page for ctgPos2 track.
+    # Changed termRegEx for ctgPos2 in trackDb.ra so that it handles 
+    # contigs named "Zv5_scaffold*". (2006-04-19, hartera)
 
 # CREATE gc5Base WIGGLE TRACK (DONE, 2005-06-16, hartera)
 # FIX LINK FOR WIB FILES TO POINT TO danRer3 ON store11 (2005-07-25, hartera)
@@ -1119,12 +1121,12 @@ getSeqs.csh $(path1)
 
 # AFFYMETRIX ZEBRAFISH GENOME ARRAY CHIP (DONE, 2005-07-22, hartera)
 # REMAKE THIS TRACK USING chrUn AND chrNA SCAFFOLDS (DONE, 2005-08-19, hartera)
-    # sequences already downloaded for danRer1
+    # array chip sequences already downloaded for danRer1
     ssh hgwdev
     cd /projects/compbio/data/microarray/affyZebrafish
     mkdir /cluster/bluearc/affy
     cp /projects/compbio/data/microarray/affyZebrafish/Zebrafish_consensus.fa \       /cluster/bluearc/affy/
-    # Set up cluster job to align Zebrafish consensus sequences to danRer2
+    # Set up cluster job to align Zebrafish consensus sequences to danRer3
     ssh kkr1u00
     mkdir -p /cluster/data/danRer3/bed/affyZebrafish.2005-08-19
     ln -s /cluster/data/danRer3/bed/affyZebrafish.2005-08-19 \
@@ -2035,7 +2037,7 @@ SEQ2_LEN=$BASE/S2.len
 
 # AUTO UPDATE GENBANK MRNA AND EST AND MGC GENES RUN (DONE, 2005-08-22, markd)
     # align with revised genbank process
-    cd ~kent/src/makeDb/genbank
+    cd ~kent/src/hg/makeDb/genbank
     cvs update -d etc
     # edit etc/genbank.conf to add danRer3, had to run on pk, due to kk
     # being down.  Set temporary locations for server files
@@ -2276,7 +2278,9 @@ chainOne $(path1)
     rm -rf blastOut
 # End tblastn
 
-# BACENDS TRACK (DONE, 2005-10-06, hartera)
+# BACENDS TRACK (DONE, 2005-09-28, hartera)
+# Track display is very slow on large regions. Split all_bacends table by
+# chromosome (DONE, 2006-04-19, hartera)
     ssh kkstore01
     # BAC ends sequence files provided by Mario Caccamo at Sanger
     # mc2@sanger.ac.uk
@@ -3251,7 +3255,45 @@ if ($found eq "TRUE")
     hgLoadPsl danRer3 -table=all_bacends bacEnds.load.psl
     # load of all_bacends did not go as planned: 7584708 record(s), 
     # 0 row(s) skipped, 526 warning(s) loading psl.tab
+    
+    # (hartera, 2006-04-19)
+    # Display is very slow for BAC ends on large regions. Try splitting
+    # all_bacends by chromosome.
+    ssh hgwdev
+    mkdir /cluster/data/danRer3/bed/bacends/all_bacends
+    cd /cluster/data/danRer3/bed/bacends/all_bacends
+    foreach c (`cat /cluster/data/danRer3/chrom.lst`)
+        echo "Processing $c ..."
+        awk '{if ($14 == "'chr${c}'") print;}' \
+            /cluster/data/danRer3/bed/bacends/scores/bacEnds.load.psl \
+            > chr${c}.bacEnds.load.psl
+    end
+    # rename old table
+    hgsql -e 'alter table all_bacends rename allBacendsOld;' danRer3
+    # load new tables
+    foreach c (`cat /cluster/data/danRer3/chrom.lst`)
+       hgLoadPsl danRer3 -table=chr${c}_all_bacends chr${c}.bacEnds.load.psl
+    end
+    # There are still warnings on loading, most (510) are for chrUn.
+    # This improves the performance a lot.
+    # The chrom-parsing code is confused by the double underscores in the
+    # chrN_all_bacends tables so change the names to chrN_allBacends
+    foreach c (`cat /cluster/data/danRer3/chrom.lst`)
+       hgsql -e "alter table chr${c}_all_bacends rename chr${c}_allBacends;" \
+             danRer3
+    end
+    # Then add correct table name to each of the bacEnd* tables
+    foreach t (bacEndPairs bacEndPairsBad bacEndSingles)
+       hgsql -e "update $t set pslTable = 'allBacends';" danRer3
+    end
+    # corrected termRegex for some bacCloneXRef searches in trackDb.ra so 
+    # that they work correctly (bacPairsIntName, bacSinglesIntName, 
+    # bacPairsSangerSts and bacSinglesSangerSts). (2006-04-19, hartera)
 
+# CREATE BAC CLONES ALIAS AND CROSS-REFERENCE TABLES 
+# (bacCloneAlias and bacCloneXRef) (DONE, 2005-10-06, hartera)
+    # Process data and create bacEndAlias table 
+    ssh kkstore02
     cd /cluster/data/danRer3/bed/bacends/bacends.1
     #  make bacEndAlias table with Genbank accessions for ends
     # need to run getBacEndInfo.pl for the BAC end names in the 
@@ -4831,6 +4873,8 @@ string rightPrimer; 	"Reverse primer sequence"
     # Add a rule to all.joiner to check that all names in rhMap also appear 
     # in rhMapInfo..
     # commit these to CVS.
+    # Changed termRegex for  rhMap search in trackDb.ra so that it works 
+    # for all IDs. (2006-04-19, hartera)
 
 # SELF BLASTZ, CHAIN, NET, AXTNET, MAFNET AND DOWNLOADS
 # (DONE, 2005-12-02, hartera)
@@ -5720,17 +5764,21 @@ done
     zcat orf_trans.fasta.jan26.gz > sgdPep.faa
 
 # HGNEAR PROTEIN BLAST TABLES (DONE, 2006-02-10, hartera)
+# RENAME SELF BLASTP TABLE AND CHANGE CONFIG.RA FILE (DONE, 2006-04-19, hartera)
+# NOTE: mmBlastTab was updated to mm8 as a result of running doHgNearBlastp.pl
+# for mm8 on 2006-03-13 (see makeMm8.doc).
     ssh hgwdev
     mkdir -p /cluster/data/danRer3/bed/hgNearBlastp
     cd /cluster/data/danRer3/bed/hgNearBlastp
     # zebrafish vs fly table has already been created as a result of 
-    # creating the blastp table for dm1 (see makeDm1.doc)
+    # creating the blastp table for dm2 (see makeDm2.doc)
+
 cat << _EOF_ > config.ra
 # Latest zebrafish vs. other Gene Sorter orgs:
 # human, mouse, rat, worm, yeast
-# zebrafish vs fly already done
+# zebrafish vs fly already done (dm2)
 
-targetGenesetPrefix flyBase
+targetGenesetPrefix ensZfish
 targetDb danRer3
 queryDbs hg18 mm7 rn3 ce2 sacCer1
 
@@ -5748,6 +5796,9 @@ _EOF_
     nice doHgNearBlastp.pl config.ra >& do.log &
     tail -f do.log
     # Took about 2 hours to finish.
+    # The target geneset (self Blastp) should be prefixed with ensZfish
+    # so change the config.ra and rename the table (2006-04-19, hartera)
+    hgsql -e 'alter table flyBaseBlastTab rename ensZfishBlastTab;' danRer3
 # END OF HGNEAR STUFF
 ####################################################
 # GENE SET BASED ON ENSEMBL GENES (PROTEIN CODING GENES) 
