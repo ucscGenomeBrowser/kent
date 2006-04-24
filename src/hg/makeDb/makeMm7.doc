@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.53 2006/04/24 17:59:43 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.54 2006/04/24 22:38:46 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -11837,7 +11837,7 @@ knownToVisiGene mm7
 
 
 #######################################################################
-## LIFTOVER To Mm8 (WORKING - 2006-04-21 - Hiram)
+## LIFTOVER To Mm8 (DONE - 2006-04-21 - 2006-04-24 - Hiram)
     ssh kkr1u00
     $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh \
       mm8 /cluster/data/mm8/nib
@@ -11849,6 +11849,44 @@ knownToVisiGene mm7
     # as it says, DO THIS NEXT:
     cd /cluster/data/mm7/bed/blat.mm8.2006-04-21/run
     para try, check, push, check, ...
+# Completed: 1360 of 1360 jobs
+# CPU time in finished jobs:    4087937s   68132.28m  1135.54h   47.31d  0.130 y
+# IO & Wait Time:                 15121s     252.02m     4.20h    0.18d  0.000 y
+# Average job time:                3017s      50.28m     0.84h    0.03d
+# Longest finished job:           25341s     422.35m     7.04h    0.29d
+# Submission to last job:         84772s    1412.87m    23.55h    0.98d
+    # as it says, DO THIS NEXT:
+    ssh kkr1u00
+    cd /cluster/data/mm7/bed
+    ln -s blat.mm8.2006-04-21 blat.mm8
+    #	runs liftUp to create the psl files
+    time $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh mm7 mm8
+    # as it says, DO THIS NEXT:
+    ssh kki
+    #	prepares the chain batch job
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh \
+	mm7 /cluster/data/mm7/nib mm8 /cluster/data/mm8/nib
+    # as it says, DO THIS NEXT:
+    cd /cluster/data/mm7/bed/blat.mm8.2006-04-21/chainRun
+    para try, check, push, check, ...
+# Completed: 34 of 34 jobs
+# CPU time in finished jobs:       5834s      97.23m     1.62h    0.07d  0.000 y
+# IO & Wait Time:                   852s      14.20m     0.24h    0.01d  0.000 y
+# Average job time:                 197s       3.28m     0.05h    0.00d
+# Longest finished job:             622s      10.37m     0.17h    0.01d
+# Submission to last job:          1367s      22.78m     0.38h    0.02d
     ssh kkstore02
-    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh \
-	mm7 mm8 /iscratch/i/mm8/split10k
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-net.csh mm7 mm8
+    #	Created /cluster/data/mm7/bed/liftOver/mm7ToMm8.over.chain.gz
+    # as it says, DO THIS NEXT:
+    ssh hgwdev
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-load.csh mm7 mm8
+    #	It says this:
+    #	Now, add link for
+    #	/usr/local/apache/htdocs/goldenPath/mm7/liftOver/mm7ToMm8.over.chain
+    #	to hgLiftOver
+    #	But I believe that link was already done:
+    cd /gbdb/mm7/liftOver
+    ls -og mm7ToMm8*
+    #	lrwxrwxrwx    1       53 Apr 24 14:22 mm7ToMm8.over.chain.gz -> \
+    #		/cluster/data/mm7/bed/liftOver/mm7ToMm8.over.chain.gz
