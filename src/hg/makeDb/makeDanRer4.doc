@@ -67,6 +67,8 @@ exit; # don't actually run this like a script :)
 
 ###########################################################################
 # CREATE LIST OF CHROMOSOMES (DONE, 2006-04-12, hartera)
+# Change names of random chroms to chrNA_random and chrUn_random
+# (DONE, hartera, 2006-04-21)
      ssh kkstore01
      cd /cluster/data/danRer4
      awk '{if ($1 !~ /Zv6/) print $1;}' Zv6.scaffolds.agp \
@@ -76,6 +78,10 @@ exit; # don't actually run this like a script :)
      echo "M" >> chrom.lst
      echo "NA" >> chrom.lst
      echo "Un" >> chrom.lst
+     # Change names of random chroms to reflect that
+     perl -pi.bak -e 's/NA/NA_random/' chrom.lst
+     perl -pi.bak -e 's/Un/Un_random/' chrom.lst
+     rm *.bak
 
 ###########################################################################
 # MAKE JKSTUFF AND BED DIRECTORIES (DONE, 2006-04-12, hartera)
@@ -294,67 +300,77 @@ if (exists($scafsHash{$prev}))
    
 ###########################################################################
 # CREATE AGP FILES FOR chrNA AND chrUn (DONE, 2006-04-13, hartera)
+# RECREATE AGP FILES WITH chrNA and chrUn RENAMED AS chrNA_random 
+# AND chrUn_random (DONE, 2006-04-21, hartera)
+# NOTE: IN THIS ASSEMBLY AND IN FUTURE, NAME chrNA AND chrUn AS 
+# chrNA_random AND chrUn_random TO REFLECT THAT THEY ARE UNORDERED 
+# COLLECTIONS OF SCAFFOLDS.  
    ssh kkstore01
-   # chrNA consists of WGS contigs that could not be related to any
+   # chrNA_random consists of WGS contigs that could not be related to any
    # FPC contig and the scaffolds and contigs are named Zv5_NAN in the
-   # first field of the agp files
+   # first field of the agp files where the second N is an number.
    cd /cluster/data/danRer4
-   mkdir ./NA
+   mkdir ./NA_random
    awk '{if ($1 ~ /Zv6_NA/) print;}' Zv6.chunks.agp \
-       > ./NA/NA.chunks.agp
+       > ./NA_random/NA_random.chunks.agp
    awk '{if ($1 ~ /Zv6_NA/) print;}' Zv6.scaffolds.agp \
-       > ./NA/NA.scaffolds.agp
-   # change the first field to "chrUn" then can use agpToFa to process
-   perl -pi.bak -e 's/Zv6_NA[0-9]+/chrNA/' ./NA/*.agp
-   wc -l ./NA/NA.scaffolds.agp
-   # 2898 ./NA/NA.scaffolds.agp
+       > ./NA_random/NA_random.scaffolds.agp
+   # change the first field to "chrNA_random" then can use agpToFa to process
+   perl -pi.bak -e 's/Zv6_NA[0-9]+/chrNA_random/' ./NA_random/*.agp
+   wc -l ./NA_random/NA_random.scaffolds.agp
+   # 2898 ./NA_random/NA_random.scaffolds.agp
    # check files and remove backup files
    # these are not sorted numerically by scaffold number
-   rm ./NA/*.bak
-   # then process chrUn - this is made from scaffolds and
+   rm ./NA_random/*.bak
+   # then process chrUn_random - this is made from scaffolds and
    # contigs where the name is Zv6_scaffoldN in the first field of the
    # agp files. These scaffolds and contigs are unmapped to chromosomes
-   # in the agp file. chrUn is made up of WGS scaffolds that mapped to
+   # in the agp file. chrUn_random is made up of WGS scaffolds that mapped to
    # FPC contigs, but the chromosome is unknown.
-   mkdir ./Un
+   mkdir ./Un_random
    awk '{if ($1 ~ /Zv6_scaffold/) print;}' Zv6.chunks.agp \
-       > ./Un/Un.chunks.agp
+       > ./Un_random/Un_random.chunks.agp
    awk '{if ($1 ~ /Zv6_scaffold/) print;}' Zv6.scaffolds.agp \
-       > ./Un/Un.scaffolds.agp
-   # change the first field to "chrUn" then can use agpToFa to process
-   perl -pi.bak -e 's/Zv6_scaffold[0-9]+/chrUn/' ./Un/*.agp
-   wc -l ./Un/Un.scaffolds.agp
-   # 68 ./Un/Un.scaffolds.agp
+       > ./Un_random/Un_random.scaffolds.agp
+   # change the first field to "chrUn_random" then can use agpToFa to process
+   perl -pi.bak -e 's/Zv6_scaffold[0-9]+/chrUn_random/' ./Un_random/*.agp
+   wc -l ./Un_random/Un_random.scaffolds.agp
+   # 68 ./Un_random/Un_random.scaffolds.agp
    # check files and remove backup files
-   rm ./Un/*.bak
-   # get FASTA file of sequences for NA and Un and create agp with
+   rm ./Un_random/*.bak
+   # get FASTA file of sequences for NA_random and Un_random and create agp with
    # Ns between scaffolds
    # from scaffolds agp, get name of scaffolds to be retrieved from the 
-   # FASTA file to make the NA and Un chromosomes.
+   # FASTA file to make the NA_random and Un_random chromosomes.
    cd /cluster/data/danRer4
-   foreach c (NA Un)
+   foreach c (NA_random Un_random)
      awk '{print $6;}' $c/$c.scaffolds.agp > $c/chr$c.scaffolds.lst
          $HOME/bin/i386/faSomeRecords /cluster/data/danRer4/Zv6_scaffolds.fa \
          $c/chr$c.scaffolds.lst $c/chr$c.fa
    end
-   # check that all scaffolds in the list are in the FASTA file for NA and Un.
+   # check that all scaffolds in the list are in the FASTA file for 
+   # NA_random and Un_random.
    # made a change to scaffoldFaToAgp.c so that the the number of Ns to be
    # inserted between scaffolds can be specified as an option.
    # There are less and smaller random scaffolds than before so use 50,000 Ns
    # between scaffolds as for the human random chromosomes.
-   foreach c (NA Un)              
+   foreach c (NA_random Un_random)              
      $HOME/bin/i386/scaffoldFaToAgp -scaffoldGapSize=50000 $c/chr$c.fa
      mv $c/chr$c.fa $c/chr$c.scaffolds.fa
    end
-   # change chrUn to chrNA for NA and D to W for NA and Un
-   sed -e 's/chrUn/chrNA/' ./NA/chrNA.agp | sed -e 's/D/W/' \
-       > ./NA/chrNA.scaffolds.agp
-   # the scaffolds agp for chrNA is now sorted numerically by scaffold number
-   sed -e 's/D/W/' ./Un/chrUn.agp > ./Un/chrUn.scaffolds.agp
-   # edit ./NA/chrNA.scaffolds.agp and ./Un/chrUn.scaffolds.agp and 
-   # remove last line as this just adds an extra 500 Ns at the 
+   # change chrUn to chrNA_random for NA_random, change chrUn to chrUn_random
+   # forUn_random. Change D to W for NA_random and Un_random..
+   sed -e 's/chrUn/chrNA_random/' ./NA_random/chrNA_random.agp \
+       | sed -e 's/D/W/' > ./NA_random/chrNA_random.scaffolds.agp
+   # the scaffolds agp for chrNA_random is now sorted numerically by 
+   # scaffold number
+   sed -e 's/chrUn/chrUn_random/' ./Un_random/chrUn_random.agp \
+       | sed -e 's/D/W/' > ./Un_random/chrUn_random.scaffolds.agp
+   # edit ./NA_random/chrNA_random.scaffolds.agp and 
+   # ./Un_random/chrUn_random.scaffolds.agp and remove last line as this 
+   # just adds an extra 50000 Ns at the 
    # end of the sequence.
-   rm ./NA/chrNA.agp ./Un/chrUn.agp
+   rm ./NA_random/chrNA_random.agp ./Un_random/chrUn_random.agp
 cat << '_EOF_' > ./jkStuff/createAgpWithGaps.pl
 #!/usr/bin/perl
 use strict;
@@ -417,15 +433,16 @@ $prev = $name;
 }
 '_EOF_'
    chmod +x ./jkStuff/createAgpWithGaps.pl
-   cd /cluster/data/danRer4/NA
-   # for NA, sort the chunks.agp by contig number
-   perl -pi.bak -e 's/Zv6_NA//' NA.chunks.agp
-   sort -k6,6n NA.chunks.agp > NA.chunks2.agp
+   cd /cluster/data/danRer4/NA_random
+   # for NA_random, sort the chunks.agp by contig number
+   perl -pi.bak -e 's/Zv6_NA//' NA_random.chunks.agp
+   sort -k6,6n NA_random.chunks.agp > NA_random.chunks2.agp
    # then put back Zv6_NA
-   perl -pi.bak -e 's/([0-9]+\.[0-9]+)/Zv6_NA$1/' NA.chunks2.agp
-   mv NA.chunks2.agp NA.chunks.agp
+   perl -pi.bak -e 's/([0-9]+\.[0-9]+)/Zv6_NA$1/' NA_random.chunks2.agp
+   mv NA_random.chunks2.agp NA_random.chunks.agp
+   # Un_random.chunks.agp is already sorted by scaffold number
    cd /cluster/data/danRer4
-   foreach c (NA Un)
+   foreach c (NA_random Un_random)
       cd $c
       perl /cluster/data/danRer4/jkStuff/createAgpWithGaps.pl \
            chr${c} 50000 contigs < ${c}.chunks.agp > chr${c}.chunks.agp
@@ -437,7 +454,7 @@ $prev = $name;
    # check that the difference between 7th and 8th fields is the same as the 
    # difference between 11th and 12th fields for chunks agp. 
    cd /cluster/data/danRer4
-   foreach c (NA Un)
+   foreach c (NA_random Un_random)
         awk '{if ($6 ~ /^Zv6/ && (($3-$2+1) != $8)) print $6;}' \
             $c/chr${c}.scaffolds.agp > $c/chr${c}.scaffolds.coordCheck 
         awk '{if ($6 ~ /^Zv6/ && (($3-$2+1) != $8)) print $6;}' \
@@ -446,31 +463,103 @@ $prev = $name;
             $c/chr${c}.chunks.agp > $c/chr${c}.chunks.coordCheck2 
    end
    # check the outputs are empty
-   wc -l NA/*.coord*
-   wc -l Un/*.coord*
-   rm NA/*.coord* Un/*.coord*
+   wc -l NA_random/*.coord*
+   wc -l Un_random/*.coord*
+   rm NA_random/*.coord* Un_random/*.coord*
    # check that the scaffolds and chunks agp files are consistent with
    # each other. 
-   foreach c (NA Un)
+cat << '_EOF_' > ./jkStuff/checkSizesInAgps.pl
+#!/usr/bin/perl -w
+use strict;
+
+my ($ch, $sc, %scafsHash);
+$sc = $ARGV[0]; # scaffolds agp
+$ch = $ARGV[1]; # chunks or contigs agp
+
+open(SCAFS, $sc) || die "Can not open $sc: $!\n";
+open(CHUNKS, $ch) || die "Can not open $ch: $!\n";
+
+while (<SCAFS>)
+{
+my ($l, @f, $name, $e);
+$l = $_;
+@f = split(/\t/, $l);
+if ($f[5] =~ /^Zv/)
+   {
+   $name = $f[5];
+   $e = $f[2];
+   $scafsHash{$name} = $e;
+   }
+}
+close SCAFS;
+
+my $scaf = "";
+my $prev = "";
+my $prevEnd = 0;
+
+while (<CHUNKS>)
+{
+my ($line, @fi);
+$line = $_;
+@fi = split(/\t/, $line);
+
+# if it is not a gap line
+if ($fi[4] ne "N")
+   {
+   $scaf = $fi[9];
+   if (($scaf ne $prev) && ($prev ne ""))
+      {
+      checkCoords($prev, $prevEnd);
+      }
+$prev = $scaf;
+$prevEnd = $fi[2];
+   }
+}
+# check last entry in file
+checkCoords($prev, $prevEnd);
+close CHUNKS;
+
+sub checkCoords {
+my ($name, $end) = @_;
+if (exists($scafsHash{$prev}))
+   {
+   if ($scafsHash{$prev} != $prevEnd)
+      {
+      my $ed = $scafsHash{$prev};
+      print "Scaffold $prev is not consistent between agps\n";
+      }
+   else
+      {
+      my $ed = $scafsHash{$prev};
+      print "Scaffold $prev - ok\n";
+      }
+   }
+}
+'_EOF_'
+   # <<< happy emacs   
+   chmod +x jkStuff/checkSizesInAgps.pl
+   foreach c (NA_random Un_random)
       perl /cluster/data/danRer4/jkStuff/checkSizesInAgps.pl \
            $c/chr${c}.scaffolds.agp $c/chr${c}.chunks.agp \
            > $c/${c}.scafsvschunks
    end
-   foreach c (NA Un)
+   foreach c (NA_random Un_random)
      grep "not consistent" $c/${c}.scafsvschunks
    end 
-   wc -l NA/NA.scafsvschunks 
-   wc -l Un/Un.scafsvschunks 
+   wc -l NA_random/NA_random.scafsvschunks 
+   wc -l Un_random/Un_random.scafsvschunks 
    # no lines were inconsistency was reported
-   rm NA/NA.scafsvschunks Un/Un.scafsvschunks
+   rm NA_random/NA_random.scafsvschunks Un_random/Un_random.scafsvschunks
    # clean up
-   foreach c (NA Un)
+   foreach c (NA_random Un_random)
       rm $c/${c}.scaffolds.agp $c/${c}.chunks.agp $c/chr${c}.scaffolds.fa \
          $c/chr${c}.scaffolds.lst $c/*.bak
    end
+'_EOF_'
 
 ###########################################################################
 # BUILD CHROM-LEVEL SEQUENCE (DONE, 2006-04-13, hartera)
+# REPEAT THIS FOR chrNA_random AND chrUn_random (DONE, 2006-04-21, hartera)
    ssh kkstore01
    cd /cluster/data/danRer4
    # Ignore warnings about chrM files not existing - this chrom has 
@@ -490,11 +579,28 @@ $prev = $name;
       mv chr${c}.*.agp ./agps/
       cd ..
    end
+   # Repeat just for chrNA_random and chrUn_random (2006-04-21, hartera)
+   foreach c (NA_random Un_random)
+     echo "Processing ${c}"
+     $HOME/bin/i386/agpToFa -simpleMultiMixed $c/chr$c.scaffolds.agp chr$c \
+         $c/chr$c.fa ./Zv6_scaffolds.fa
+     echo "${c} - DONE"
+   end
+   # move scaffolds agp to be chrom agp and clean up
+   foreach c (NA_random Un_random)
+      cd $c
+      cp chr${c}.scaffolds.agp chr${c}.agp
+      mkdir -p agps
+      mv chr${c}.*.agp ./agps/
+      cd ..
+   end
 
 ##########################################################################
 # CHECK CHROM AND VIRTUAL CHROM SEQUENCES (DONE, 2006-04-14, hartera)
+# RE-CHECK THESE AFTER CREATING chrNA_random AND chrUn_random SEQUENCE FILES 
+# (DONE, 2006-04-20, hartera)
    # Check that the size of each chromosome .fa file is equal to the last
-   # co-ordinate of the correcpsonding agp file.
+   # co-ordinate of the corresponding agp file.
    ssh hgwdev
    cd /cluster/data/danRer4
    foreach c (`cat chrom.lst`)
@@ -542,7 +648,8 @@ $prev = $name;
 
 ###########################################################################
 # MAKE HGCENTRALTEST ENTRY FOR DANRER4 (DONE, 2006-04-14, hartera)
-    # Make entry into dbDb and defuaultDb so test browser knows about it.
+# CHANGE DATE FORMAT ON HGCENTRALTEST ENTRY (DONE, 2006-04-21, hartera)
+    # Make entry into dbDb and defaultDb so test browser knows about it.
     ssh hgwdev
     # Add dbDb and defaultDb entries:
     echo 'insert into dbDb (name, description, nibPath, organism,  \
@@ -554,18 +661,22 @@ $prev = $name;
           "/gbdb/danRer4/html/description.html", 0,  0, \
           "Sanger Centre, Danio rerio Sequencing Project Zv6");' \
     | hgsql -h genome-testdb hgcentraltest
+    # reformat the date (2006-04-21, hartera)
+    echo 'update dbDb set description = "Mar. 2006" where name = "danRer4";' \
+         | hgsql -h genome-testdb hgcentraltest
+
+    # Create /gbdb directory for danRer4
+    mkdir /gbdb/danRer4
     # SET AS DEFAULT LATER WHEN READY FOR RELEASE
     # set danRer4 to be the default assembly for Zebrafish
     echo 'update defaultDb set name = "danRer4" \
           where genome = "Zebrafish";' \
           | hgsql -h genome-testdb hgcentraltest
-    # Create /gbdb directory for danRer4
-    mkdir /gbdb/danRer4
 
 ###########################################################################
 # BREAK UP SEQUENCE INTO 5MB CHUNKS AT CONTIGS/GAPS FOR CLUSTER RUNS
 # (DONE, 2006-04-14, hartera)
-
+# RE-DONE JUST FOR chrNA_random AND chrUn_random (DONE, 2006-04-20, hartera)
      ssh kkstore01
      cd /cluster/data/danRer4
      foreach c (`cat chrom.lst`)
@@ -579,15 +690,38 @@ $prev = $name;
          endif
        end
      end
+     
+     # Repeat just for chrNA_random and chrUn_random (2006-04-21, hartera)
+     ssh kkstore01
+     cd /cluster/data/danRer4
+     foreach c (NA_random Un_random)
+       foreach agp ($c/chr$c.agp)
+         if (-e $agp) then
+           set fa = $c/chr$c.fa
+           echo splitting $agp and $fa
+           cp -p $agp $agp.bak
+           cp -p $fa $fa.bak
+           splitFaIntoContigs $agp $fa . -nSize=5000000
+         endif
+       end
+     end
 
 ###########################################################################
 # MAKE LIFTALL.LFT (DONE, 2006-04-14, hartera)
+# REMAKE LIFTALL.LFT WITH chrNA_random AND chrUn_random 
+# (DONE, 2006-04-21, hartera)
      ssh kkstore01
      cd /cluster/data/danRer4
-     cat */lift/ordered.lft > jkStuff/liftAll.lft
+     rm jkStuff/liftAll.lft
+     foreach c (`cat chrom.lst`)
+       cat $c/lift/ordered.lft >> jkStuff/liftAll.lft
+     end
 
 ###########################################################################
 # MAKE TRACKDB ENTRY FOR DANRER4 (DONE, 2006-04-14, hartera)
+# Should add this later when adding gold/gap tracks. Angie created a 
+# temporary chromInfo table otherwise make update/alpha causes an error
+# (2006-04-17)
     # Make trackDb table so browser knows what tracks to expect.
     ssh hgwdev
     mkdir -p ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer4
@@ -602,13 +736,40 @@ $prev = $name;
     cvs commit -m "Added danRer4." makefile
 
 ###########################################################################
+# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (DONE, 2006-04-14, hartera)
+    ssh hgwdev
+    mkdir /cluster/data/danRer4/html
+    # make a symbolic link from /gbdb/danRer4/html to /cluster/data/danRer4/html
+    ln -s /cluster/data/danRer4/html /gbdb/danRer4/html
+    # Add a description page for zebrafish
+    cd /cluster/data/danRer4/html
+    cp $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer3/description.html .
+    # Edit this for zebrafish danRer4
+
+    # create a description.html page here
+    cd ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer4
+    # Add description page here too
+    cp /cluster/data/danRer4/html/description.html .
+    cvs add description.html
+    cvs commit -m "First draft of description page for danRer4." \
+        description.html
+    cd ~/kent/src/hg/makeDb/trackDb
+    make update DBS=danRer4
+    make alpha  DBS=danRer4
+
+###########################################################################
 # SIMPLE REPEAT [TRF] TRACK  (DONE, 2006-04-14, hartera)
+# RE-RUN FOR chrNA AND chrUn RENAMED AS chrNA_random AND chrUn_random
+# AND RELOAD THE TABLE (DONE, 2006-04-21, hartera)
+# MADE A NOTE IN THE HISTORY TABLE TO EXPLAIN WHY THE simpleRepeats TABLE
+# WAS RELOADED (DONE, 2006-04-22, hartera)
     # TRF can be run in parallel with RepeatMasker on the file server
     # since it doesn't require masked input sequence.
     # Run this on the kilokluster. Need to mask contig and chromosome 
     # sequences so run trf using contig sequences.
     # First copy over contig sequences to iscratch and then rsync to cluster.
     ssh kkr1u00
+    rm -r /iscratch/i/danRer4/contigsNoMask
     mkdir -p /iscratch/i/danRer4/contigsNoMask
     cd /cluster/data/danRer4
     foreach d (/cluster/data/danRer4/*/chr*_?{,?})
@@ -670,23 +831,58 @@ cat << '_EOF_' > gsub
 # Longest running job:                0s       0.00m     0.00h    0.00d
 # Longest finished job:            2732s      45.53m     0.76h    0.03d
 # Submission to last job:          4604s      76.73m     1.28h    0.05d
+
+    # Re-do only for chrNA_random and chrUn_random (2006-04-21, hartera)
+    ssh kki
+    cd /cluster/data/danRer4/bed/simpleRepeat
+    rm trf/chrNA*.bed
+    rm trf/chrUn*.bed
+    rm simpleRepeat.bed
+    mkdir -p randomsRun/trf
+    cd randomsRun
+    cp ../runTrf .
+    cp ../gsub .
+    ls -1S /iscratch/i/danRer4/contigsNoMask/chr*_random*.fa > genome.lst
+    gensub2 genome.lst single gsub jobList
+    para create jobList
+    # 46 jobs
+    para try, check, push, check etc...
+    para time
+# Completed: 46 of 46 jobs
+# CPU time in finished jobs:       1904s      31.73m     0.53h    0.02d  0.000 y
+# IO & Wait Time:                   103s       1.72m     0.03h    0.00d  0.000 y
+# Average job time:                  44s       0.73m     0.01h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             241s       4.02m     0.07h    0.00d
+# Submission to last job:           269s       4.48m     0.07h    0.00d 
+    cp ./trf/*.bed /cluster/data/danRer4/bed/simpleRepeat/trf/
     # lift up to chrom level
+    cd /cluster/data/danRer4/bed/simpleRepeat
+    rm simpleRepeat.bed
     liftUp simpleRepeat.bed /cluster/data/danRer4/jkStuff/liftAll.lft warn \
            trf/*.bed
-
-    # Load into the database
+    # Reload into the database
     ssh hgwdev
     cd /cluster/data/danRer4/bed/simpleRepeat
+    hgsql -e 'drop table simpleRepeat;' danRer4
     hgLoadBed danRer4 simpleRepeat simpleRepeat.bed \
       -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
     # Loaded 759659 elements of size 16
+    # Make a note in the history table to explain why the simpleRepeats
+    # table was reloaded (2006-04-22, hartera)
+    hgsql -e 'update history set errata = \
+      "Dropped table for reloading after changing names of random chroms." \
+      where ix = 2;' danRer4
 
 ###########################################################################
 # PROCESS SIMPLE REPEATS INTO MASK (DONE, 2005-06-14, hartera)
+# RE-DO AFTER RENAMING RANDOM CHROMS AS chrNA_random AND chrUn_random
+# (DONE, 2006-04-21, hartera)
    # After the simpleRepeats track has been built, make a filtered version
    # of the trf output: keep trf's with period <= 12:
    ssh kkstore01
    cd /cluster/data/danRer4/bed/simpleRepeat
+   rm -r trfMask
    mkdir -p trfMask
    foreach f (trf/chr*.bed)
      awk '{if ($5 <= 12) print;}' $f > trfMask/$f:t
@@ -694,6 +890,7 @@ cat << '_EOF_' > gsub
 
    # Lift up filtered trf output to chrom coords as well:
    cd /cluster/data/danRer4
+   rm -r ./bed/simpleRepeat/trfMaskChrom
    mkdir bed/simpleRepeat/trfMaskChrom
    
    foreach c (`cat chrom.lst`)
@@ -747,6 +944,8 @@ cat << '_EOF_' > gsub
  
 ###########################################################################
 # SPLIT SEQUENCE FOR REPEATMASKER RUN (DONE, 2006-04-14, hartera)
+# SPLIT SEQUENCE AGAIN JUST FOR chrNA_random AND chrUn_random AFTER RENAMING
+# THESE RANDOM CHROMS (DONE, 2006-04-21, hartera)
    ssh kkstore01
    cd /cluster/data/danRer4
    
@@ -761,12 +960,29 @@ cat << '_EOF_' > gsub
             -minGapSize=100
         cd ../..
       end
+   end
+   # took about 3 minutes. 
+   # split just for chrNA_random and chrUn_random (2006-04-21, hartera)
+   cd /cluster/data/danRer4
+   foreach c (NA_random Un_random)
+      foreach d ($c/chr${c}*_?{,?})
+        cd $d
+        echo "splitting $d"
+        set contig = $d:t
+        faSplit gap $contig.fa 500000 ${contig}_ -lift=$contig.lft \
+            -minGapSize=100
+        cd ../..
+      end
     end
-    # took about 3 minutes. 
 
 ###########################################################################
-# REPEATMASKER RUN (in progress, 2006-04-14, hartera)
-   # When a new library is added for this version of repeatMasker, need to 
+# REPEATMASKER RUN (DONE, 2006-04-21, hartera)
+   # Originally run 2006-04-14. There was one sequence chr16_4_10.fa that 
+   # failed with a division by zero error. Sent this as a test case with the 
+   # danio library to Robert Hubley who fixed the bug and sent a new
+   # version of ProcessRepeats. Checked this into CVS for 
+   # /cluster/bluearc/RepeatMasker on 2006-04-19.
+   # When a new library is added for this version of RepeatMasker, need to 
    # check in /cluster/bluearc/RepeatMasker/Libraries for a directory made 
    # up of a date e.g. 20060315 here and inside this are species directories
    # for which RepeatMasker has already been run. In this directory it creates
@@ -806,9 +1022,23 @@ if (-e /tmp/danRer4/$2/$2.cat) /bin/cp /tmp/danRer4/$2/$2.cat ./
 /bin/rmdir --ignore-fail-on-non-empty /tmp/danRer4/$2
 /bin/rmdir --ignore-fail-on-non-empty /tmp/danRer4
 '_EOF_'
-    chmod +x jkStuff/RMZebrafish
-    cp /dev/null RMRun/RMJobs
-    foreach c (`cat chrom.lst`)
+   # <<< emacs
+   chmod +x jkStuff/RMZebrafish
+
+   # move old files out the way and re-run on 2006-04-19
+   cd /cluster/data/danRer4
+   mkdir RMOutOld
+   foreach d (*/chr*_?{,?})
+      set contig = $d:t
+      echo $contig
+      foreach c ($d/$contig*.fa.*)
+         set t=$c:t
+         mv $c /cluster/data/danRer4/RMOutOld/$t.bak
+      end
+   end  
+ 
+   cp /dev/null RMRun/RMJobs
+   foreach c (`cat chrom.lst`)
       foreach d ($c/chr${c}_?{,?})
           set ctg = $d:t
           foreach f ( $d/${ctg}_?{,?}.fa )
@@ -819,38 +1049,320 @@ if (-e /tmp/danRer4/$2/$2.cat) /bin/cp /tmp/danRer4/$2/$2.cat ./
               >> RMRun/RMJobs
           end
       end
-    end
-    # Do the run
-    ssh pk
-    cd /cluster/data/danRer4/RMRun
-    para create RMJobs
-    # 4382 jobs written to batch
-    para try, check, push, check ... etc.
-    para time
-# 1 job failed with a division by zero error in ProcessRepeats. The sequence
-# is chr16_4_10.fa. Reported the error, sequence and zebrafish repeats library
-# to Arian Smit and Robert Hubley.
- 
+   end
+
+   # Do the run again with new version of ProcessRepeats used 
+   # for RepeatMasker.
+   ssh pk
+   cd /cluster/data/danRer4/RMRun
+   para create RMJobs
+   # 4382 jobs written to batch
+   para try, check, push, check ... etc.
+   para time
+# Completed: 4382 of 4382 jobs
+# CPU time in finished jobs:   11745656s  195760.94m  3262.68h  135.95d  0.372 y
+# IO & Wait Time:                 18953s     315.88m     5.26h    0.22d  0.001 y
+# Average job time:                2685s      44.75m     0.75h    0.03d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            3878s      64.63m     1.08h    0.04d
+# Submission to last job:         41887s     698.12m    11.64h    0.48d 
+   
+   #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
+   ssh kkstore01
+   cd /cluster/data/danRer4
+   foreach d (*/chr*_?{,?})
+     set contig = $d:t
+     echo $contig
+     liftUp $d/$contig.fa.out $d/$contig.lft warn $d/${contig}_*.fa.out \
+        > /dev/null
+   end
+
+   #- Lift pseudo-contigs to chromosome level
+   foreach c (`cat chrom.lst`)
+      echo lifting $c
+      cd $c
+      if (-e lift/ordered.lft && ! -z lift/ordered.lft) then
+        liftUp chr$c.fa.out lift/ordered.lft warn `cat lift/oOut.lst` \
+        > /dev/null
+      endif
+      cd ..
+   end
+   # Re-run for just chrNA_random and chrUn_random (start on 2006-04-21)
+   ssh kkstore01
+   mkdir /cluster/data/danRer4/RMRun/randomsRun
+   cd /cluster/data/danRer4
+   cp /dev/null RMRun/randomsRun/RMJobs
+   foreach c (NA_random Un_random)
+      foreach d ($c/chr${c}_?{,?})
+          set ctg = $d:t
+          foreach f ( $d/${ctg}_?{,?}.fa )
+            set f = $f:t
+            echo /cluster/data/danRer4/jkStuff/RMZebrafish \
+                 /cluster/data/danRer4/$d $f \
+               '{'check out line+ /cluster/data/danRer4/$d/$f.out'}' \
+              >> RMRun/randomsRun/RMJobs
+          end
+      end
+   end
+
+   # Do the run again for chrNA_random and chrUn_random.
+   ssh pk
+   cd /cluster/data/danRer4/RMRun/randomsRun
+   para create RMJobs
+   # 468 jobs written to batch
+   para try, check, push, check ... etc.
+   para time
+# Completed: 468 of 468 jobs
+# CPU time in finished jobs:     551863s    9197.71m   153.30h    6.39d  0.017 y
+# IO & Wait Time:                  2217s      36.96m     0.62h    0.03d  0.000 y
+# Average job time:                1184s      19.73m     0.33h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            3836s      63.93m     1.07h    0.04d
+# Submission to last job:          9086s     151.43m     2.52h    0.11d
+
+   #- Lift up the 500KB chunk .out's to 5MB ("pseudo-contig") level
+   ssh kkstore01
+   cd /cluster/data/danRer4
+   foreach c (NA_random Un_random)
+     foreach d (${c}/chr*_?{,?})
+       set contig = $d:t
+       echo $contig
+       liftUp $d/$contig.fa.out $d/$contig.lft warn $d/${contig}_*.fa.out \
+              > /dev/null
+     end
+   end
+
+   #- Lift pseudo-contigs to chromosome level
+   foreach c (NA_random Un_random)
+      echo lifting $c
+      cd $c
+      if (-e lift/ordered.lft && ! -z lift/ordered.lft) then
+        liftUp chr$c.fa.out lift/ordered.lft warn `cat lift/oOut.lst` \
+        > /dev/null
+      endif
+      cd ..
+   end
+
+   # Load tables
+   #- Load the .out files into the database with:
+   ssh hgwdev
+   cd /cluster/data/danRer4
+   hgLoadOut danRer4 */chr*.fa.out -verbose=2 >& load.log
+# bad rep range [5031, 4990] line 51895 of 14/chr14.fa.out 
+# bad rep range [4559, 4558] line 59431 of 16/chr16.fa.out 
+# bad rep range [1202, 1201] line 131633 of 16/chr16.fa.out 
+# bad rep range [280, 252] line 93608 of 17/chr17.fa.out 
+# bad rep range [429, 272] line 43230 of 22/chr22.fa.out 
+# bad rep range [262, 261] line 167346 of 3/chr3.fa.out 
+# bad rep range [889, 888] line 28495 of 5/chr5.fa.out 
+# bad rep range [349, 348] line 113404 of 5/chr5.fa.out 
+# bad rep range [1133, 1132] line 200654 of 5/chr5.fa.out 
+# bad rep range [965, 920] line 3567 of 8/chr8.fa.out 
+# bad rep range [292, 291] line 6354 of NA_random/chrNA_random.fa.out
+# note: 11 records dropped due to repStart > repEnd
+   # Not too many errors so just ignore, but send examples to Arian Smit
+   # and Robert Hubley. 
+   # check coverage of repeats masked
+   featureBits -chrom=chr1 danRer3 rmsk
+   # 25822888 bases of 55500710 (46.527%) in intersection 
+   featureBits -chrom=chr1 danRer4 rmsk 
+   # 32880041 bases of 70589895 (46.579%) in intersection
+
 ###########################################################################
-# MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (in progress, 2006-04-14, hartera)
+# MASK SEQUENCE WITH REPEATMASKER AND SIMPLE REPEAT/TRF AND BUILD NIB FILES
+# (DONE, 2006-04-22, hartera)
+    ssh kkstore01
+    cd /cluster/data/danRer4
+    # Soft-mask (lower-case) the contig and chr .fa's,
+    # then make hard-masked versions from the soft-masked.
+    set trfCtg=bed/simpleRepeat/trfMask
+    set trfChr=bed/simpleRepeat/trfMaskChrom
+    # for the chromosomes:
+    foreach f (*/chr*.fa)
+      echo "repeat- and trf-masking $f"
+      maskOutFa -soft $f $f.out $f
+      set chr = $f:t:r
+      maskOutFa -softAdd $f $trfChr/$chr.bed $f
+      echo "hard-masking $f"
+      maskOutFa $f hard $f.masked
+    end
+
+    # for the contigs:
+    foreach c (`cat chrom.lst`)
+      echo "repeat- and trf-masking contigs of chr$c"
+      foreach d ($c/chr*_?{,?})
+        set ctg=$d:t
+        set f=$d/$ctg.fa
+        maskOutFa -soft $f $f.out $f
+        maskOutFa -softAdd $f $trfCtg/$ctg.bed $f
+        maskOutFa $f hard $f.masked
+      end
+    end
+    
+    # check percent sequence masked
+    faSize /cluster/data/danRer4/1/chr1.fa
+    # 70589895 bases (904883 N's 69685012 real 36751306 upper 
+    # 32933706 lower) in 1 sequences in 1 files
+
+    faSize /cluster/data/danRer3/1/chr1.fa
+    # 55805710 bases (1047706 N's 54758004 real 28887275 upper 
+    # 25870729 lower) in 1 sequences in 1 files
+    # 47% of danRer4 chr1.fa is in lower case so masked
+    # Build nib files, using the soft masking in the fa
+    mkdir nib
+    foreach f (*/chr*.fa)
+      faToNib -softMask $f nib/$f:t:r.nib
+    end
+    ls ./nib/* | wc
+    # 28
+    
+###########################################################################
+# STORING O+O SEQUENCE AND ASSEMBLY INFORMATION AND CREATE 2BIT FILE
+# (DONE, 2006-04-23, hartera)
+    # Make symbolic links from /gbdb/danRer4/nib to the real nibs
     ssh hgwdev
-    mkdir /cluster/data/danRer4/html
-    # make a symbolic link from /gbdb/danRer4/html to /cluster/data/danRer4/html
-    ln -s /cluster/data/danRer4/html /gbdb/danRer4/html
-    # Add a description page for zebrafish
-    cd /cluster/data/danRer4/html
-    cp $HOME/kent/src/hg/makeDb/trackDb/zebrafish/danRer3/description.html .
-    # Edit this for zebrafish danRer4
+    cd /cluster/data/danRer4
+    mkdir -p /gbdb/danRer4/nib
+    foreach f (/cluster/data/danRer4/nib/chr*.nib)
+      ln -s $f /gbdb/danRer4/nib
+    end
+    # Load /gbdb/danRer4/nib paths into database and save size info
+    # hgNibSeq creates chromInfo table
+    hgNibSeq -preMadeNib danRer4 /gbdb/danRer4/nib */chr*.fa
+    echo "select chrom,size from chromInfo" | hgsql -N danRer4 > chrom.sizes
+    # take a look at chrom.sizes, should be 28 lines
+    wc chrom.sizes
+    # 28      56     422 chrom.sizes
 
-    # create a description.html page here
-    cd ~/kent/src/hg/makeDb/trackDb/zebrafish/danRer4
-    # Add description page here too
-    cp /cluster/data/danRer4/html/description.html .
-    cvs add description.html
-    cvs commit -m "First draft of description page for danRer4." \
-        description.html
-    cd ~/kent/src/hg/makeDb/trackDb
-    make update DBS=danRer4
-    make alpha  DBS=danRer4
+    # Make one big 2bit file as well, and make a link to it in
+    # /gbdb/danRer4 because hgBlat looks there:
+    faToTwoBit */chr*.fa danRer4.2bit
+    # check the 2bit file
+    twoBitInfo danRer4.2bit 2bit.tab
+    diff 2bit.tab chrom.sizes
+    # should be the same and they are so ok.
+    rm 2bit.tab
+    # add link to this 2bit file from gbdb danRer4 directory 
+    ln -s /cluster/data/danRer4/danRer4.2bit /gbdb/danRer4/
 
+###########################################################################
+# MAKE GOLD AND GAP TRACKS (DONE, 2006-04-23, hartera)
+    ssh hgwdev
+    cd /cluster/data/danRer4
+    # the gold and gap tracks are created from the chrN.agp file and this is
+    # the scaffolds or supercontigs agp 
+    hgGoldGapGl -noGl -chromLst=chrom.lst danRer4 /cluster/data/danRer4 .
+
+    # featureBits danRer4 gold
+    # 1626093931 bases of 1626093931 (100.000%) in intersection
+    # featureBits danRer3 gold
+    # 1630323462 bases of 1630323462 (100.000%) in intersection
+
+    # featureBits danRer4 gap
+    # 148566200 bases of 1626093931 (9.136%) in intersection
+    # featureBits danRer3 gap
+    # 13709500 bases of 1630323462 (0.841%) in intersection
+    # there are larger gaps now in chrNA and chrUn so compare just chr1
+    # featureBits -chrom=chr1 danRer4 gap
+    # 16000 bases of 70573895 (0.023%) in intersection
+    # featureBits -chrom=chr1 danRer3 gap
+    # 305000 bases of 55500710 (0.550%) in intersection
+    # without random or chrUn chroms:
+    # featureBits -noRandom danRer4 gap
+    # 366200 bases of 1546950119 (0.024%) in intersection
+    # featureBits -noRandom danRer3 gap
+    # 6240000 bases of 1200146216 (0.520%) in intersection
+# Add trackDb.ra entries for gold and gap tracks and also create
+# gap.html and gold.html pages.
+
+###########################################################################
+# PUT MASKED SEQUENCE OUT ON iSERVERS AND THE SAN FOR CLUSTER RUNS
+# (DONE, 2006-04-23, hartera)
+    ssh kkr1u00
+    # Chrom-level mixed nibs that have been repeat- and trf-masked:
+    rm -rf /iscratch/i/danRer4/nib
+    mkdir -p /iscratch/i/danRer4/nib
+    cp -p /cluster/data/danRer4/nib/chr*.nib /iscratch/i/danRer4/nib
+    # Pseudo-contig fa that have been repeat- and trf-masked:
+    rm -rf /iscratch/i/danRer4/trfFa
+    mkdir /iscratch/i/danRer4/trfFa
+    foreach d (/cluster/data/danRer4/*/chr*_?{,?})
+      cp -p $d/$d:t.fa /iscratch/i/danRer4/trfFa
+    end
+    rm -rf /iscratch/i/danRer4/rmsk
+    mkdir -p /iscratch/i/danRer4/rmsk
+    cp -p /cluster/data/danRer4/*/chr*.fa.out /iscratch/i/danRer4/rmsk
+    cp -p /cluster/data/danRer4/danRer4.2bit /iscratch/i/danRer4/
+    # rsync files - faster than using iSync
+    foreach R (2 3 4 5 6 7 8)
+      echo "rsync for kkr${R}u00 ..."
+      rsync -a --progress /iscratch/i/danRer4/ kkr${R}u00:/iscratch/i/danRer4/
+    end
+    # error rsyncing to kkr2u00: 
+    # connect to host kkr2u00 port 22: No route to host
+
+    # then add the same sequence files to the san
+    ssh kkstore01
+    # Chrom-level mixed nibs that have been repeat- and trf-masked:
+
+    mkdir -p /san/sanvol1/scratch/danRer4/nib
+    rm -rf /san/sanvol1/scratch/danRer4/nib
+    cp -p /cluster/data/danRer4/nib/chr*.nib /san/sanvol1/scratch/danRer4/nib
+    # Pseudo-contig fa that have been repeat- and trf-masked:
+    rm -rf /san/sanvol1/scratch/danRer4/trfFa
+    mkdir /san/sanvol1/scratch/danRer4/trfFa
+    foreach d (/cluster/data/danRer4/*/chr*_?{,?})
+      cp -p $d/$d:t.fa /san/sanvol1/scratch/danRer4/trfFa
+    end
+    cp /cluster/data/danRer4/danRer4.2bit /san/sanvol1/scratch/danRer4
+    
+###########################################################################
+# ADD CONTIGS TRACK (DONE, 2006-04-23, hartera)
+    # make ctgPos2 (contig name, size, chrom, chromStart, chromEnd) from 
+    # chunks (contigs) agp files.
+    ssh kkstore01
+    mkdir -p /cluster/data/danRer4/bed/ctgPos2
+    cd /cluster/data/danRer4/bed/ctgPos2
+    # ctgPos2 .sql .as .c and .h files exist - see makeDanRer1.doc
+    foreach c (`cat /cluster/data/danRer4/chrom.lst`)
+         awk 'BEGIN {OFS="\t"} \
+         {if ($5 != "N") print $6, $3-$2+1, $1, $2-1, $3, $5}' \
+         /cluster/data/danRer4/$c/agps/chr${c}.chunks.agp >> ctgPos2.tab
+    end
+    # load the ctgPos2 table
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/ctgPos2
+    # use hgLoadSqlTab as it gives more error messages than using 
+    # "load data local infile ...".
+    /cluster/bin/i386/hgLoadSqlTab danRer4 ctgPos2 \
+            ~/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
+# create trackDb.ra entry and html page for ctgPos2 track.
+# add search for the track and make sure the termRegex will handle
+# contigs named "Zv6_scaffoldN.N" where N is an integer and all the 
+# contig accessions in the *.chunks.agp files.
+
+###########################################################################
+# CREATE gc5Base WIGGLE TRACK (DONE, 2006-04-23, hartera)
+    ssh kkstore01
+    mkdir -p /cluster/data/danRer4/bed/gc5Base
+    cd /cluster/data/danRer4/bed/gc5Base
+    nice hgGcPercent -wigOut -doGaps -file=stdout -win=5 danRer4 \
+        /cluster/data/danRer4 | wigEncode stdin gc5Base.wig gc5Base.wib
+    #       Calculating gcPercent with window size 5
+    #       Using twoBit: /cluster/data/danRer4/danRer4.2bit
+    #       File stdout created
+    #   Converted stdin, upper limit 100.00, lower limit 0.00
+    # runs for about 7 minutes 
+
+    # load database with the .wig file and add .wib file to /gbdb/danRer4
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/gc5Base
+    mkdir /gbdb/danRer4/wib
+    ln -s `pwd`/gc5Base.wib /gbdb/danRer4/wib
+    time hgLoadWiggle -pathPrefix=/gbdb/danRer4/wib danRer4 gc5Base gc5Base.wig
+    # 17 second load time
+
+    #   verify index is correct:
+    hgsql danRer4 -e "show index from gc5Base;"
+    #   should see good numbers in Cardinality column
 
