@@ -521,9 +521,20 @@ static void calcFieldOffsets(struct pfCompile *pfc, struct pfBaseType *base)
 /* Figure out offset of fields in structure. */
 {
 struct pfBackEnd *backEnd = pfc->backEnd;
-int offset = 0;
+int offset = 0, i;
 struct pfType *ty;
-uglyf("Calc field offsets\n");
+static enum isxValType header[] = {
+    ivInt, /* _pf_refCount */
+    ivObject, /* _pf_cleanup */
+    ivObject, /* _pf_polyTable */
+    };
+
+/* Skip over header */
+for (i=0; i<ArraySize(header); ++i)
+    {
+    offset += backEnd->dataSize(backEnd, header[i]);
+    offset = backEnd->alignData(backEnd, offset, header[i]);
+    }
 for (ty = base->fields; ty != NULL; ty = ty->next)
     {
     enum isxValType valType = isxValTypeFromTy(pfc, ty);
@@ -562,10 +573,21 @@ struct pfParse *ppField = ppObj->next;
 struct isxAddress *left = isxExpression(pfc, ppObj, varHash, weight, iList);
 struct pfType *ty = ppObj->ty;
 struct pfBaseType *base = ty->base;
+struct isxAddress *right = NULL;
+struct isxAddress *dest = isxTempVarAddress(pfc, varHash, weight, 
+	ppToIsxValType(pfc,pp));
+int offset = findFieldOffset(pfc, base, ppField->name);
 
 uglyf("THeoretically doing isxDotRval\n");
-uglyf("Field offset of %s in %s is %d\n", ppField->name, base->name, findFieldOffset(pfc, base, ppField->name));
-return NULL; //uglyf
+uglyf("Field offset of %s in %s is %d\n", ppField->name, base->name, offset);
+if (offset != 0)
+    {
+    union pfTokVal tokVal;
+    tokVal.i = offset;
+    right = isxConstAddress(pftInt, tokVal, ivInt);
+    }
+isxAddNew(pfc, poIndirect, dest, left, right, iList);
+return dest;
 }
 
 static void isxOpEquals(struct pfCompile *pfc, 

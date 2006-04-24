@@ -1033,6 +1033,36 @@ static void pentVarInput(struct pfCompile *pfc,
 pentVarAssign(pfc, isx, nextNode, coder);
 }
 
+static void pentIndirect(struct pfCompile *pfc,
+	struct isx *isx, struct dlNode *nextNode,  
+	struct pentCoder *coder)
+/* Output code to fetch a field of an object */
+{
+struct isxAddress *source = isx->left;
+struct isxAddress *offset = isx->right;
+struct isxAddress *dest = isx->dest;
+struct isxReg *objReg = source->reg;
+struct isxReg *destReg;
+char *destName, *objName;
+if (objReg == NULL)
+    {
+    objReg = pentFreeReg(pfc, isx, ivObject, nextNode, coder);
+    pentCodeDestReg(pfc, opMov, source, objReg, coder);
+    pentLinkRegSave(pfc, source, objReg, coder);
+    }
+destReg = pentFreeReg(pfc, isx, dest->valType, nextNode, coder);
+destName = isxRegName(destReg, dest->valType);
+objName = isxRegName(objReg, ivObject);
+if (offset)
+    safef(coder->sourceBuf, pentCodeBufSize, "%d(%s)", 
+    	offset->val.isxTok.val.i, objName);
+else
+    safef(coder->sourceBuf, pentCodeBufSize, "(%s)", objName);
+pentCoderAdd(coder, pentOpOfType(opMov, dest->valType), 
+	coder->sourceBuf, destName);
+pentLinkRegSave(pfc, dest, destReg, coder);
+}
+
 static void pentBinaryOp(struct pfCompile *pfc,
 	struct isx *isx, struct dlNode *nextNode, 
 	enum pentDataOp opCode, boolean isSub,  struct pentCoder *coder)
@@ -2329,6 +2359,9 @@ for (node = iList->head; !dlEnd(node); node = nextNode)
 	    break;
 	case poVarInput:
 	    pentVarInput(pfc, isx, nextNode, coder);
+	    break;
+	case poIndirect:
+	    pentIndirect(pfc, isx, nextNode, coder);
 	    break;
 	default:
 	    warn("unimplemented\t%s\n", isxOpTypeToString(isx->opType));

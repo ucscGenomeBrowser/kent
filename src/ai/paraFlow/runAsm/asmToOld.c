@@ -32,6 +32,7 @@ for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
     _pf_Long l;
     double d;
     void *v;
+    struct _pf_string *string;
     struct _pf_var var;
     switch (st)
         {
@@ -71,9 +72,12 @@ for (fieldType = base->fields; fieldType != NULL; fieldType = fieldType->next)
 	case pf_stDir:
 	case pf_stFlowPt:
 	case pf_stToPt:
-	case pf_stString:
 	    v = va_arg(args, void *);
 	    *((void **)(output)) = v;
+	    break;
+	case pf_stString:
+	    string = va_arg(args, struct _pf_string *);
+	    *((struct _pf_string **)(output)) = string;
 	    break;
 	default:
 	    internalErr();
