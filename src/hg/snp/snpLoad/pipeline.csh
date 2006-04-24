@@ -1,4 +1,4 @@
-sql dbSnpHumanBuild125 < dropSplit125.sql
+hgsql dbSnpHumanBuild125 < dropSplit125.sql
 echo "split..."
 snpSplitByChrom dbSnpHumanBuild125 ref_haplotype
 echo ""
@@ -10,8 +10,8 @@ snpExpandAllele dbSnpHumanBuild125 ref_haplotype
 echo ""
 echo "sort by chromStart..."
 snpSort dbSnpHumanBuild125 ref_haplotype
-sql -e 'drop table chrM_snpTmp' dbSnpHumanBuild125
-sql -e 'rename table chrMT_snpTmp to chrM_snpTmp' dbSnpHumanBuild125
+hgsql -e 'drop table chrM_snpTmp' dbSnpHumanBuild125
+hgsql -e 'rename table chrMT_snpTmp to chrM_snpTmp' dbSnpHumanBuild125
 echo ""
 echo "nib lookup..."
 snpRefUCSC dbSnpHumanBuild125 
@@ -36,8 +36,8 @@ cp snpCheckAlleles.exceptions snpCheckAlleles.tab
 cp snpCheckClassAndObserved.exceptions snpCheckClassAndObserved.tab
 cp snpExpandAllele.exceptions snpExpandAllele.tab
 cp snpLocType.exceptions snpLocType.tab
-sql -e 'drop table snp125ExceptionsOld' dbSnpHumanBuild125
-sql -e 'rename table snp125Exceptions to snp125ExceptionsOld' dbSnpHumanBuild125
+hgsql -e 'drop table snp125ExceptionsOld' dbSnpHumanBuild125
+hgsql -e 'rename table snp125Exceptions to snp125ExceptionsOld' dbSnpHumanBuild125
 snpFinalTable dbSnpHumanBuild125
 rm snpCheckAlleles.tab
 rm snpCheckClassAndObserved.tab
@@ -50,14 +50,15 @@ rm snp125.tab
 /bin/sh concat.sh
 rm chr*snp125.tab
 
-sql dbSnpHumanBuild125 < dropTmp.sql
-sql -e 'drop table snp125old' dbSnpHumanBuild125
-sql -e 'rename table snp125 to snp125old' dbSnpHumanBuild125
-sql dbSnpHumanBuild125 < //////hg/lib/snp125.sql
-sql -e 'load data local infile "snp125.tab" into table snp125' dbSnpHumanBuild125
+hgsql dbSnpHumanBuild125 < dropTmp.sql
+hgsql -e 'drop table snp125old' dbSnpHumanBuild125
+hgsql -e 'rename table snp125 to snp125old' dbSnpHumanBuild125
+hgsql dbSnpHumanBuild125 < $HOME/kent/src/hg/lib/snp125.sql
+hgsql -e 'load data local infile "snp125.tab" into table snp125' dbSnpHumanBuild125
 
-sql -e 'rename table snp125 to snp125new' dbSnpHumanBuild125
+hgsql -e 'rename table snp125 to snp125new' dbSnpHumanBuild125
 snpCompareLoctype dbSnpHumanBuild125 snp124subset snp125new
-sql -e 'rename table snp125new to snp125' dbSnpHumanBuild125
+snpMissing dbSnpHumanBuild125 snp124subset snp125new
+hgsql -e 'rename table snp125new to snp125' dbSnpHumanBuild125
 snpMultiple dbSnpHumanBuild125
-sql -e 'load data local infile "snpMultiple.tab" into table snp125Exceptions' dbSnpHumanBuild125
+hgsql -e 'load data local infile "snpMultiple.tab" into table snp125Exceptions' dbSnpHumanBuild125
