@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.32 2006/04/24 22:39:20 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.33 2006/04/24 23:12:00 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -3276,6 +3276,7 @@ nice featureBits mm7 refGene:cds knownGene:cds
 #############################################################################
 # 17-WAY VAR_MULTIZ - ALIGNMENTS (DONE - 2006-02-28 - 2006-03-02 - Hiram)
 #	Re-DONE with panTro2 in place of panTro1 - 2006-04-19 - Hiram)
+#	And again with xenTro1 in place of xenTro2 - 2006-04-24
     ssh kkstore04
     mkdir /cluster/data/mm8/bed/multiz17way
     cd /cluster/data/mm8/bed/multiz17way
@@ -3495,7 +3496,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     # smaller, then save as jpg
 #    cp species10.jpg /usr/local/apache/htdocs/images/phylo/Mm7_17way.jpg
 
-# ANNOTATE MULTIZ17WAY MAF AND LOAD TABLES (DONE - 2006-04-20 - Hiram)
+# ANNOTATE MULTIZ17WAY MAF AND LOAD TABLES (DONE - 2006-04-24 - Hiram)
     ssh kolossus
     mkdir /cluster/data/mm8/bed/multiz17way/anno
     cd /cluster/data/mm8/bed/multiz17way/anno
@@ -3556,11 +3557,11 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
       > /tmp/multiz17waySummary.sql
     time nice -n +19 hgLoadSqlTab mm8 multiz17waySummary \
 	/tmp/multiz17waySummary.sql multiz17waySummary.tab
-    #	real    12m17.422s
+    #	real    47m22.468s
     rm *.tab
 
 #######################################################################
-# MULTIZ17WAY MAF FRAMES (TBD)
+# MULTIZ17WAY MAF FRAMES (WORKING - 2006-04-24 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/mm8/bed/multiz17way/frames
     cd /cluster/data/mm8/bed/multiz17way/frames
@@ -3570,12 +3571,10 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     # get the genes for all genomes
     # mRNAs with CDS.  single select to get cds+psl, then split that up and
     # create genePred
-rn4 oryCun1 hg18 panTro2 rheMac2 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom4
-sGroup_vertebrate galGal2 xenTro2 danRer3 tetNig1 fr1
-    # using mrna table as genes: canFam2 bosTau2 danRer3
+    # using mrna table as genes:
     mkdir genes
     for qDB in oryCun1 panTro2 rheMac2 canFam2 bosTau2 danRer3 loxAfr1 \
-	monDom4 tetNig1 fr1
+	tetNig1 fr1
     do
       tmpExt=`mktemp temp.XXXXXX`
       tmpMrnaCds=${qDB}.mrna-cds.${tmpExt}
@@ -3597,10 +3596,15 @@ sGroup_vertebrate galGal2 xenTro2 danRer3 tetNig1 fr1
       mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
       rm -f $tmpExt
     done
+    #	tried to use monDom4 in the above loop, but got this error:
+    #	(450211944 450214274) out of range (0 400000000) in binKeeperAdd
+    #	Which is interesting.  This should be looked into to see why
+    #	this is here.
+
     # using knownGene for rn4 mm8 hg18
     # using refGene for galGal2
     # using mgcGenes for xenTro2
-    # no genes for dasNov1 echTel1
+    # no genes for monDom4 dasNov1 echTel1
     # genePreds; (must keep only the first 10 columns for knownGene)
     for qDB in rn4 mm8 hg18 galGal2 xenTro2
     do
@@ -3611,6 +3615,7 @@ sGroup_vertebrate galGal2 xenTro2 danRer3 tetNig1 fr1
       else
         geneTbl=knownGene
       fi
+      echo hgsql -N -e 'select * from '"$geneTbl ${qDB}"
       hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 1-10 \
       | genePredSingleCover stdin stdout | gzip -2c \
         > /scratch/tmp/$qDB.tmp.gz
@@ -3620,13 +3625,13 @@ sGroup_vertebrate galGal2 xenTro2 danRer3 tetNig1 fr1
 
     #------------------------------------------------------------------------
     # create frames
-    set clusterDir = /cluster/bluearc/rn4/multiz9wayFrames
-    set multizDir = /cluster/data/rn4/bed/multiz9way.2006-03-30
-    set mafDir = $multizDir/mafDownloads
-    set geneDir = $multizDir/frames/genes
-    set clusterMafDir = ${clusterDir}/maf
-    set clusterGeneDir = ${clusterDir}/genes
-    set clusterFramesDir = ${clusterDir}/mafFrames.kki
+    clusterDir=/cluster/bluearc/mm8/multiz17wayFrames
+    multizDir=/cluster/data/mm8/bed/multiz17way
+    mafDir=$multizDir/mafDownloads
+    geneDir=$multizDir/frames/genes
+    clusterMafDir=${clusterDir}/maf
+    clusterGeneDir=${clusterDir}/genes
+    clusterFramesDir=${clusterDir}/mafFrames.kki
 
     # copy mafs to cluster storage
     mkdir $clusterDir
@@ -3636,30 +3641,26 @@ sGroup_vertebrate galGal2 xenTro2 danRer3 tetNig1 fr1
     ssh -x kkstore04 "rsync -av $geneDir/*.gp.gz $clusterGeneDir/"
 
     # run cluster jobs
-    set tmpExt = `mktemp temp.XXXXXX`
-    set paraDir = $multizDir/frames/para.${tmpExt}
+    tmpExt=`mktemp temp.XXXXXX`
+    paraDir=$multizDir/frames/para.${tmpExt}
     mkdir mafFrames $paraDir
-    rm -f $paraDir/jobList
     mkdir ${clusterFramesDir}
-    foreach queryDb (`cat /cluster/data/rn4/bed/multiz9way.2006-03-30/species.lst`)
-      mkdir ${clusterFramesDir}/${queryDb}
-      foreach c (`awk '{print $1;}' /cluster/data/rn4/chrom.sizes`)
-        if (-e ${clusterGeneDir}/${queryDb}.gp.gz) then
-          echo /cluster/bin/scripts/mkMafFrames.pl ${queryDb} rn4 \
-            ${clusterGeneDir}/${queryDb}.gp.gz ${clusterMafDir}/$c.maf.gz \
-            ${clusterFramesDir}/${queryDb}/$c.mafFrames \
+    for qDB in `cat /cluster/data/rn4/bed/multiz9way.2006-03-30/species.lst`
+    do
+      mkdir ${clusterFramesDir}/${qDB}
+      for C in `awk '{print $1;}' /cluster/data/rn4/chrom.sizes`
+      do
+        if [ -e ${clusterGeneDir}/${qDB}.gp.gz ]; then
+          echo /cluster/bin/scripts/mkMafFrames.pl ${qDB} rn4 \
+            ${clusterGeneDir}/${qDB}.gp.gz ${clusterMafDir}/$C.maf.gz \
+            ${clusterFramesDir}/${qDB}/$C.mafFrames \
             >> $paraDir/jobList
-        endif
-      end
-    end
+        fi
+      done
+    done
     rm -f $tmpExt
     ssh -x kki "cd ${paraDir} && para make jobList && para time"
-#Completed: 360 of 360 jobs
-#CPU time in finished jobs:       2027s      33.78m     0.56h    0.02d  0.000 y
-#IO & Wait Time:                  3816s      63.60m     1.06h    0.04d  0.000 y
-#Average job time:                  16s       0.27m     0.00h    0.00d
-#Longest finished job:             124s       2.07m     0.03h    0.00d
-#Submission to last job:           493s       8.22m     0.14h    0.01d
+XXXX - This is not working - 2006-04-24
 
     # combine results from cluster
     foreach queryDb (`cat ../species.lst`)
