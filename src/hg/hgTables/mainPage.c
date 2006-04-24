@@ -6,6 +6,7 @@
 #include "htmshell.h"
 #include "cheapcgi.h"
 #include "cart.h"
+#include "textOut.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "web.h"
@@ -16,7 +17,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.93 2006/04/21 21:59:22 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.94 2006/04/24 15:11:37 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -750,7 +751,7 @@ showOutputTypeRow((isWig || isBedGr), isPositional, isMaf);
 /* Print output destination line. */
     {
     char *compressType =
-	cartUsualString(cart, hgtaCompressType, hgtaCompressNone);
+	cartUsualString(cart, hgtaCompressType, textOutCompressNone);
     char *fileName = cartUsualString(cart, hgtaOutFileName, "");
     hPrintf("<TR><TD>\n");
     hPrintf("<B>output file:</B>&nbsp;");
@@ -758,11 +759,11 @@ showOutputTypeRow((isWig || isBedGr), isPositional, isMaf);
     hPrintf("&nbsp;(leave blank to keep output in browser)</TD></TR>\n");
     hPrintf("<TR><TD>\n");
     hPrintf("<B>file type returned:&nbsp;</B>");
-    cgiMakeRadioButton(hgtaCompressType, hgtaCompressNone,
-	sameWord(hgtaCompressNone,compressType));
+    cgiMakeRadioButton(hgtaCompressType, textOutCompressNone,
+	sameWord(textOutCompressNone, compressType));
     hPrintf("&nbsp;plain text&nbsp&nbsp");
-    cgiMakeRadioButton(hgtaCompressType, hgtaCompressGzip,
-	sameWord(hgtaCompressGzip,compressType));
+    cgiMakeRadioButton(hgtaCompressType, textOutCompressGzip,
+	sameWord(textOutCompressGzip, compressType));
     hPrintf("&nbsp;gzip compressed");
     hPrintf("</TD></TR>\n");
     }
