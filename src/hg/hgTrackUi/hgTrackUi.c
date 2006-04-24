@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.269 2006/04/22 00:34:10 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.270 2006/04/24 04:16:41 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -166,10 +166,11 @@ snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0"));
 printf("<BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;");
 cgiMakeDoubleVar("snp125AvHetCutoff",snp125AvHetCutoff,6);
 
-snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "0"));
-printf("<BR><B>Minimum Weight:</B>&nbsp;");
-cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,6);
+snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "3"));
+printf("<BR><B>Maximum Weight:</B>&nbsp;");
+cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,4);
 
+printf("<BR><BR>\n");
 printf("Any type of data can be excluded from view by deselecting the checkbox below.\n");
 printf("<BR><BR>\n");
 
@@ -223,6 +224,7 @@ for (i=0; i < snp125MolTypeLabelsSize; i++)
     cgiMakeCheckBox(snp125MolTypeIncludeStrings[i], snp125MolTypeIncludeCart[i]);
     printf(" %s", snp125MolTypeLabels[i]);
     }
+printf("<BR>\n");
 
 /* prematurely close the hgTracks FORM because forms cannot be nested */
 /* we will open another FORM here, and allow it to be closed later */
