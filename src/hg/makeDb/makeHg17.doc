@@ -6360,6 +6360,8 @@ mkdir -p $3:h
     cp $workingDir/maf/*.maf maf
 
     # copy to download area (2004-07-27 angie)
+    # moved gzipped files to mafDownload dir and recreated symlinks 
+    #   (2006-04-23 kate)
     cd /usr/local/apache/htdocs/goldenPath/hg17
     mkdir -p mzPt1Mm5Rn3Cf1Gg2Fr1Dr1
     # gzipped & copied maf files from /cluster/data/hg17/bed/multiz8way/maf
