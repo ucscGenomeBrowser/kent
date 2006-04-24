@@ -11,7 +11,7 @@
 #include "twoBit.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgGcPercent.c,v 1.22 2005/12/31 07:18:51 daryl Exp $";
+static char const rcsid[] = "$Id: hgGcPercent.c,v 1.23 2006/04/24 14:47:36 angie Exp $";
 
 /* Command line switches. */
 int winSize = 20000;            /* window size */
@@ -172,7 +172,6 @@ void writeBedLineCountFromSeq(struct dnaSeq *seq, char *chrom, int start, int en
 {
 static int dotMod = 0;
 DNA *dna = seq->dna;
-int minCount = winSize/4;
 int i, count, gcCount, val, gapCount;
 
 if ((++dotMod&127) == 0 && !noDots)
