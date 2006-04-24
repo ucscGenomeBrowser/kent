@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.30 2006/04/21 00:08:14 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.31 2006/04/24 18:00:14 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -3276,7 +3276,7 @@ nice featureBits mm7 refGene:cds knownGene:cds
 #############################################################################
 # 17-WAY VAR_MULTIZ - ALIGNMENTS (DONE - 2006-02-28 - 2006-03-02 - Hiram)
 #	Re-DONE with panTro2 in place of panTro1 - 2006-04-19 - Hiram)
-    ssh kkstore02
+    ssh kkstore04
     mkdir /cluster/data/mm8/bed/multiz17way
     cd /cluster/data/mm8/bed/multiz17way
 
@@ -3304,7 +3304,7 @@ monodelphis_monDom4:0.371073):0.189124,
 
 chicken_galGal2:0.454691):0.123297,
 
-xenopus_xenTro1:0.782453):0.156067,
+xenopus_xenTro2:0.782453):0.156067,
 
 ((tetraodon_tetNig1:0.199381,fugu_fr1:0.239894):0.492961,
     zebrafish_danRer3:0.782561):0.156067);
@@ -3336,7 +3336,7 @@ xenopus_xenTro1:0.782453):0.156067,
 # 10  0.7805 - tenrec echTel1     (% 11.412)  (no swap )   5000     loose
 # 11  1.0698 - opossum monDom4    (%  8.245)  (%  6.024)   5000     loose
 # 12  1.3425 - chicken galGal2    (%  2.552)  (%  5.414)   5000     loose
-# 13  1.7936 - frog xenTro1       (%  2.416)  (%  4.294)   5000     loose
+# 13  1.7936 - frog xenTro2       (%  2.651)  (%  4.294)   5000     loose
 # 14  2.0157 - tetraodon tetNig1  (%  1.962)  (% 13.734)   5000     loose
 # 15  2.0562 - fugu fr1           (%  1.907)  (% 13.524)   5000     loose
 # 16  2.1059 - zebrafish danRer3  (%  2.069)  (%  3.363)   5000     loose
@@ -3346,7 +3346,7 @@ xenopus_xenTro1:0.782453):0.156067,
     export H=/cluster/data/mm8/bed
     mkdir mafLinks
     for G in rn4 hg18 panTro2 rheMac2 oryCun1 dasNov1 canFam2 \
-	loxAfr1 bosTau2 echTel1 monDom4 galGal2 xenTro1 tetNig1 fr1 danRer3
+	loxAfr1 bosTau2 echTel1 monDom4 galGal2 xenTro2 tetNig1 fr1 danRer3
     do
 	mkdir mafLinks/$G
 	if [ ! -d ${H}/blastz.${G}/mafNet ]; then
@@ -3434,12 +3434,11 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     # 34 jobs
     para try ... check ... push ... etc ...
 # Completed: 34 of 34 jobs
-# CPU time in finished jobs:     211213s    3520.21m    58.67h    2.44d  0.007 y
-# IO & Wait Time:                  5014s      83.57m     1.39h    0.06d  0.000 y
-# Average job time:                6360s     105.99m     1.77h    0.07d
-# Longest running job:                0s       0.00m     0.00h    0.00d
-# Longest finished job:           17550s     292.50m     4.88h    0.20d
-# Submission to last job:         17550s     292.50m     4.88h    0.20d
+# CPU time in finished jobs:     211294s    3521.56m    58.69h    2.45d  0.007 y
+# IO & Wait Time:                  4531s      75.52m     1.26h    0.05d  0.000 y
+# Average job time:                6348s     105.80m     1.76h    0.07d
+# Longest finished job:           17611s     293.52m     4.89h    0.20d
+# Submission to last job:         17617s     293.62m     4.89h    0.20d
 
     #	combine results into a single file for loading and gbdb reference
     ssh kkstore04
@@ -3477,14 +3476,14 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     ln -s /cluster/data/mm8/bed/multiz17way/multiz17way.maf \
 	/gbdb/mm8/multiz17way
     time nice -n +19 hgLoadMaf mm8 multiz17way
-    #	Loaded 11565656 mafs in 1 files from /gbdb/mm8/multiz17way
-    #	real    27m25.451s
+    #	Loaded 11578210 mafs in 1 files from /gbdb/mm8/multiz17way
+    #	real    29m17.910s
 
     time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
 	-maxSize=50000 mm8 multiz17waySummary multiz17way.maf
-    #	Created 5758203 summary blocks from 64958819 components and
-    #	11692972 mafs from multiz17way.maf
-    #	real    33m54.608s
+    #	Created 5761346 summary blocks from 64923747 components and
+    #	11578210 mafs from multiz17way.maf
+    #	real    39m24.395s
 
     #	This was done for Mm7, same image can be reused
     # create tree image:
@@ -3596,11 +3595,11 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     end
     # using knownGene for rn4 mm8 hg18
     # using refGene for galGal2
-    # using mgcGenes for xenTro1
+    # using mgcGenes for xenTro2
     # no genes for monDom4
     # genePreds; (must keep only the first 10 columns for knownGene)
-    foreach queryDb (rn4 mm8 hg18 galGal2 xenTro1)
-      if ($queryDb == "xenTro1") then
+    foreach queryDb (rn4 mm8 hg18 galGal2 xenTro2)
+      if ($queryDb == "xenTro2") then
         set geneTbl = mgcGenes
       else if ($queryDb == "galGal2") then
         set geneTbl = refGene
@@ -3690,7 +3689,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     #	10 minutes
 
     /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
---tree "((((((((((hg18,panTro2),rheMac2),((rn4,mm8),oryCun1)),(bosTau2,canFam2)),dasNov1),(loxAfr1,echTel1)),monDom4),galGal2),xenTro1),((tetNig1,fr1),danRer3))" \
+--tree "((((((((((hg18,panTro2),rheMac2),((rn4,mm8),oryCun1)),(bosTau2,canFam2)),dasNov1),(loxAfr1,echTel1)),monDom4),galGal2),xenTro2),((tetNig1,fr1),danRer3))" \
     --out-root starting-tree
     #	real    840m53.157s
     #	That is 14 hours !
@@ -3847,7 +3846,7 @@ RATE_MAT:
    0.189778   -0.878194    0.208718    0.479698
    0.444622    0.261535   -0.885604    0.179447
    0.234867    0.720815    0.215191   -1.170872
-TREE: (((((((((((((hg18:0.006690,panTro2:0.007571):0.024272,(colobus_monkey:0.015404,(baboon:0.008258,rheMac2:0.028617):0.008519):0.022120):0.023960,(dusky_titi:0.025662,(owl_monkey:0.012151,marmoset:0.029549):0.008236):0.027158):0.066101,(mouse_lemur:0.059024,galago:0.121375):0.032386):0.017073,((rn4:0.081728,mm8:0.077017):0.229273,oryCun1:0.206767):0.023340):0.023026,(((bosTau2:0.159182,canFam2:0.147731):0.004946,rfbat:0.138877):0.010150,(hedgehog:0.193396,shrew:0.261724):0.054246):0.024354):0.028505,dasNov1:0.149862):0.015994,(loxAfr1:0.104891,echTel1:0.259797):0.040371):0.218400,monDom4:0.371073):0.065268,platypus:0.468116):0.123856,galGal2:0.454691):0.123297,xenTro1:0.782453):0.156067,((tetNig1:0.199381,fr1:0.239894):0.492961,danRer3:0.782561):0.156067);
+TREE: (((((((((((((hg18:0.006690,panTro2:0.007571):0.024272,(colobus_monkey:0.015404,(baboon:0.008258,rheMac2:0.028617):0.008519):0.022120):0.023960,(dusky_titi:0.025662,(owl_monkey:0.012151,marmoset:0.029549):0.008236):0.027158):0.066101,(mouse_lemur:0.059024,galago:0.121375):0.032386):0.017073,((rn4:0.081728,mm8:0.077017):0.229273,oryCun1:0.206767):0.023340):0.023026,(((bosTau2:0.159182,canFam2:0.147731):0.004946,rfbat:0.138877):0.010150,(hedgehog:0.193396,shrew:0.261724):0.054246):0.024354):0.028505,dasNov1:0.149862):0.015994,(loxAfr1:0.104891,echTel1:0.259797):0.040371):0.218400,monDom4:0.371073):0.065268,platypus:0.468116):0.123856,galGal2:0.454691):0.123297,xenTro2:0.782453):0.156067,((tetNig1:0.199381,fr1:0.239894):0.492961,danRer3:0.782561):0.156067);
 
 
     cd /san/sanvol1/scratch/mm8/cons/consRun1
@@ -5173,4 +5172,38 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
-    #	 XXX running 2006-04-20
+
+
+    #	Then to swap over to xenTro2
+    mkdir /cluster/data/xenTro2/bed/blastz.mm8.swap
+    cd /cluster/data/xenTro2/bed
+    ln -s blastz.mm8.swap blastz.mm8
+    cd blastz.mm8.swap
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap /cluster/data/mm8/bed/blastz.xenTro2.2006-04-20/DEF \
+	> swap.out 2>&1 &
+    #	 XXX running 2006-04-21 10:20
+
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
+    time nice -n +19 featureBits mm8 chainXenTro2Link \
+	> fb.mm8.chainXenTro2Link 2>&1 &
+    #	68050843 bases of 2567283971 (2.651%) in intersection
+
+#######################################################################
+## LIFTOVER To Mm7 (WORKING - 2006-04-21 - Hiram)
+    ssh kkr1u00
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh \
+      mm7 /cluster/data/mm7/nib
+    # as it says, DO THIS NEXT:
+    ssh kk
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh \
+	mm8 /scratch/hg/mm8/nib mm7 /iscratch/i/mm7/split10k \
+	/cluster/data/mm7/11.ooc
+    # as it says, DO THIS NEXT:
+    cd /cluster/data/mm8/bed/blat.mm7.2006-04-21/run
+    para try, check, push, check, ...
+    ssh kkstore02
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh \
+	mm8 mm7 /iscratch/i/mm7/split10k
