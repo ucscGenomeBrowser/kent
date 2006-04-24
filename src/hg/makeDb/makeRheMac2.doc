@@ -506,6 +506,14 @@ cd /cluster/data/hg17/bed/blastz.rheMac2
     time nice -n +19 featureBits rheMac2 chainMm8Link
     #   877906099 bases of 2646704109 (33.170%) in intersection
 
+    #	This was done before the loadUp script was improved to load
+    #	empty tables on chroms that have no chains, so sometime later:
+    ssh hgwdev
+    hgLoadChain rheMac2 chrUr_chainMm8 /dev/null
+    #	Loading 0 chains into rheMac2.chrUr_chainMm8
+    #	2006-04-24
+
+############################################################################
 # QUALITY SCORES (Done March 9, 2006 Robert)
     ssh kkstore01
     wget -q ftp://macftp:analysis@ftp.macaquegenome.hgsc.bcm.tmc.edu:21/Assemblies/VI/FinalMergeSplit/v1.edit4.chrm.qv.bz2
