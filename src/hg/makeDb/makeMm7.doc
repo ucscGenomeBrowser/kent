@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.52 2006/04/06 00:41:44 galt Exp $"
+#	"$Id: makeMm7.doc,v 1.53 2006/04/24 17:59:43 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -11835,3 +11835,20 @@ knownToVisiGene mm7
 ssh hgwdev
 knownToVisiGene mm7
 
+
+#######################################################################
+## LIFTOVER To Mm8 (WORKING - 2006-04-21 - Hiram)
+    ssh kkr1u00
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh \
+      mm8 /cluster/data/mm8/nib
+    # as it says, DO THIS NEXT:
+    ssh kk
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh \
+	mm7 /scratch/hg/mm7/nib mm8 /iscratch/i/mm8/split10k \
+	/cluster/data/mm8/11.ooc
+    # as it says, DO THIS NEXT:
+    cd /cluster/data/mm7/bed/blat.mm8.2006-04-21/run
+    para try, check, push, check, ...
+    ssh kkstore02
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh \
+	mm7 mm8 /iscratch/i/mm8/split10k
