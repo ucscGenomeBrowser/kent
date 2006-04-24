@@ -32,9 +32,9 @@ yLineOnOff Off
 autoScaleDefault Off
 summary multiz17waySummary
 speciesGroups mammal vertebrate
-sGroup_mammal rn4 oryCun1 hg18 panTro1 rheMac2 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom4
-sGroup_vertebrate galGal2 xenTro1 danRer3 tetNig1 fr1
-speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
+sGroup_mammal rn4 oryCun1 hg18 panTro2 rheMac2 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom4
+sGroup_vertebrate galGal2 xenTro2 danRer3 tetNig1 fr1
+speciesDefaultOff panTro2 rheMac2 bosTau2 echTel1 danRer3 fr1
 treeImage phylo/Mm7_17way.jpg
 
 track chainHg17
