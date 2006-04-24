@@ -976,6 +976,45 @@ TMPDIR=/scratch/tmp
     #	them individually on hgwdev64 and kolossus, they take many days
     #	each, perhaps a week, still trying to get them done after two
     #	weeks of messing with them.
+    #	last one took:
+    #	real    7343m55.064s
+    #	user    2270m9.968s
+    #	sys     5072m16.807s
+    #	that's 5 days and 2 hours, about 5 weeks for all:
+    #	-rw-rw-r--  1  138817724 Mar 10 17:48 monDom4.2bit:chrX:.chain
+    #	-rw-rw-r--  1  500083934 Mar 11 15:06 monDom4.2bit:chr7:.chain
+    #	-rw-rw-r--  1  681900033 Mar 11 20:27 monDom4.2bit:chr5:.chain
+    #	-rw-rw-r--  1  495478058 Mar 11 20:53 monDom4.2bit:chr6:.chain
+    #	-rw-rw-r--  1  948724278 Mar 12 12:55 monDom4.2bit:chrUn:.chain
+    #	-rw-rw-r--  1  668565678 Mar 12 18:03 monDom4.2bit:chr8:.chain
+    #	-rw-rw-r--  1 1214431534 Mar 23 21:39 monDom4.2bit:chr2:.chain
+    #	-rw-rw-r--  1 1755465687 Apr  9 19:31 monDom4.2bit:chr4:.chain
+    #	-rw-rw-r--  1 1739564535 Apr 10 15:55 monDom4.2bit:chr1:.chain
+    #	-rw-rw-r--  1 2041409562 Apr 16 13:58 monDom4.2bit:chr3:.chain
+
+    #	loading the tables on kolossus
+    ssh kolossus
+    cd /cluster/data/monDom4/bed/blastzSelf.2006-03-02/axtChai
+    cat << '_EOF_' > loadUp.csh
+#!/bin/csh -fe
+cd /cluster/data/monDom4/bed/blastzSelf.2006-03-02/axtChain/chain
+foreach c (`awk '{print $1;}' /cluster/bluearc/scratch/hg/monDom4/chrom.sizes`)
+    set f = $c.chain
+    if (! -e $f) then
+      echo no chains for $c
+      set f = /dev/null
+    endif
+    hgLoadChain monDom4 ${c}_chainSelf $f
+end
+'_EOF_'
+    #	<< emacs
+    chmod +x loadUp.csh
+    time ./loadUp.csh
+    #	real    211m16.852s
+    #	request push of *chainSelf* tables from kolossus to hgwdev
+    #	almost 32 Gb of data.
+
+
 
 ############################################################################
 ##  BLASTZ swap from mm8 alignments (DONE - 2006-02-23 - Hiram)
@@ -1463,7 +1502,7 @@ sed -e "s/^/..\//" ../${2}/${1} | xargs cat | \
     	sortingResults
     #	first set of results was in blastOut
     cd blastOut
-    for i in kg??
+    time for i in kg??
     do 
 	find ./$i -name "q.*.psl" | xargs cat \
 		| awk '($13 - $12)/$11 > 0.6 {print}' \
@@ -1477,10 +1516,11 @@ sed -e "s/^/..\//" ../${2}/${1} | xargs cat | \
 	   > /cluster/data/monDom4/bed/tblastn.hg18KG/sortingResults/m60.$i.psl
 	echo $i
     done
+    #	real    199m44.441s
 
     #	And then, adding the hippo results to those:
     cd ../hippoRun/psl
-    for C in 1 2 3 4
+    time for C in 1 2 3 4
     do
 	cd chr${C}
 	for D in *
@@ -1499,13 +1539,14 @@ sed -e "s/^/..\//" ../${2}/${1} | xargs cat | \
 	done
 	cd ..
     done
+    #	real    5m53.634s
 
     cd ../../sortingResults
     sort -u -k 14,14 -k 16,16n -k 18,18n u.*.psl m60* \
 	> /cluster/data/monDom4/bed/tblastn.hg18KG/blastHg18KG.psl
     cd ..
     wc -l blastHg18KG.psl
-    # 61188 blastHg18KG.psl
+    # 63130 blastHg18KG.psl
 
     #	what is this for ?
     cat kgfa/*fa | grep ">" | wc
@@ -1515,7 +1556,7 @@ sed -e "s/^/..\//" ../${2}/${1} | xargs cat | \
     cd /cluster/data/monDom4/bed/tblastn.hg18KG
     hgLoadPsl monDom4 blastHg18KG.psl
     featureBits monDom4 blastHg18KG
-# 35781547 bases of 2384996543 (1.500%) in intersection
+#	19403832 bases of 3501643220 (0.554%) in intersection
 
     # back to kksilo
     rm -rf blastOut
