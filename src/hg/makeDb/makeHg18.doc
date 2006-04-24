@@ -8794,6 +8794,7 @@ cat > downloads.csh << 'EOF'
     # edit this file to reflect the latest releases used.
     vi $dir/README.txt
 
+##########################################################################
 # RE-BUILT GO DATABASE (DONE 4/12/06, Fan)
 
 # GO changed the content of gene_association.goa_uniprot.gz.
@@ -8826,7 +8827,30 @@ zcat gene_association.goa_uniprot.gz|\
 
 # Ask sys-admin to switch the database pointer go to point to go060330.
 
+##########################################################################
+# GENEID GENE PREDICTIONS (DONE - 2006-04-21 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/geneid
+    cd /cluster/data/hg18/bed/geneid
+    for C in `awk '{print $1;}' ../../chrom.sizes`
+    do
+	wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200603/geneid_v1.2/$C.gtf
+	wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200603/geneid_v1.2/$C.prot
+    done
+    # Add ".1" suffix to each item in .prot's, to match transcript_id's in gtf
+    for F in chr*.prot
+    do
+      perl -wpe 's/^(>chr\S+)/$1.1/' $F
+    done >> geneid.fa
 
+    ldHgGene -gtf -genePredExt hg18 geneid *.gtf 
+    #	Read 33410 transcripts in 275347 lines in 49 files
+    #	33410 groups 49 seqs 1 sources 3 feature types
+    #	33410 gene predictions
+    hgPepPred hg18 generic geneidPep geneid.fa
+
+
+##########################################################################
 # BLASTZ/CHAIN/NET XENTRO2 (DONE 4/20/06 angie)
     ssh kkstore02
     mkdir /cluster/data/hg18/bed/blastz.xenTro2.2006-04-20
@@ -8863,5 +8887,3 @@ BASE=/cluster/data/hg18/bed/blastz.xenTro2.2006-04-20
       -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose DEF \
       >& do.log & tail -f do.log
     ln -s blastz.xenTro2.2006-04-20 /cluster/data/hg18/bed/blastz.xenTro2
-
-
