@@ -112,17 +112,17 @@ sub getTableFields {
     foreach my $f (@{$desc}) {
       $fields .= "$f,";
     }
-    $t =~ s/^chr\w+_(random_)?/chrN_/;
+    $t =~ s/^chr\w+_(\w+_)?/chrN_/;
     $fields = &simplifyFields($fields);
     if (defined $tableFields{$t} && 
 	$tableFields{$t} ne $fields) {
-      warn "Duplicate fieldSpec for table $t:\n$tableFields{$t}\n$fields";
+      warn "Duplicate fieldSpec for table $db.$t:\n$tableFields{$t}\n$fields";
     }
     my $tableInsens = $t;
     $tableInsens =~ tr/A-Z/a-z/;
     if (! defined $tableFields{$t} &&
 	defined $tableNamesInsens{$tableInsens}) {
-      warn "Case-insensitive duplicate for $t... dropping.";
+      warn "Case-insensitive duplicate for $db.$t... dropping.";
     } else {
       $tableFields{$t} = $fields;
       $tableNamesInsens{$tableInsens} = 1;
