@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.31 2006/04/24 18:00:14 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.32 2006/04/24 22:39:20 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -3463,7 +3463,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
 	gzip mafDownloads/${B}
 	echo ${B} done
     done
-    #	real    51m7.389s
+    #	real    52m59.743s
     #	deliver to downloads
     ssh hgwdev
     ln -s /cluster/data/mm8/bed/multiz17way/mafDownloads \
@@ -3526,7 +3526,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     time ./jobs.csh > jobs.log 2>&1 &
     #	to watch progress;
     tail -f jobs.log
-    #	real    93m46.519s
+    #	real    138m54.246s
 
     # Load anno/maf
     ssh hgwdev
@@ -3536,8 +3536,8 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
       /gbdb/mm8/multiz17way/anno/maf
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/mm8/multiz17way/anno/maf mm8 multiz17way
-    #	Loaded 12445995 mafs in 34 files from /gbdb/mm8/multiz17way/anno/maf
-    #	real    43m49.973s
+    #	Loaded 12457325 mafs in 34 files from #	/gbdb/mm8/multiz17way/anno/maf
+    #	real    35m52.115s
 
     # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
     # machine and then load on hgwdev:
@@ -3546,9 +3546,9 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     time cat *.maf | \
     	nice -n +19 hgLoadMafSummary mm8 -minSize=30000 -mergeGap=1500 \
 	-maxSize=200000 -test multiz17waySummary stdin
-    #	Created 3135695 summary blocks from 64831900 components
-    #	and 12445995 mafs from stdin
-    #	real    13m13.301s
+    #	Created 3140830 summary blocks from 64923747 components
+    #	and 12457325 mafs from stdin
+    #	real    13m35.714s
 
     ssh hgwdev
     cd /cluster/data/mm8/bed/multiz17way/anno/maf
@@ -3570,48 +3570,53 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     # get the genes for all genomes
     # mRNAs with CDS.  single select to get cds+psl, then split that up and
     # create genePred
+rn4 oryCun1 hg18 panTro2 rheMac2 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom4
+sGroup_vertebrate galGal2 xenTro2 danRer3 tetNig1 fr1
     # using mrna table as genes: canFam2 bosTau2 danRer3
     mkdir genes
-    foreach queryDb (canFam2 bosTau2 danRer3)
-      set tmpExt = `mktemp temp.XXXXXX`
-      set tmpMrnaCds = ${queryDb}.mrna-cds.${tmpExt}
-      set tmpMrna = ${queryDb}.mrna.${tmpExt}
-      set tmpCds = ${queryDb}.cds.${tmpExt}
-      echo $queryDb
+    for qDB in oryCun1 panTro2 rheMac2 canFam2 bosTau2 danRer3 loxAfr1 \
+	monDom4 tetNig1 fr1
+    do
+      tmpExt=`mktemp temp.XXXXXX`
+      tmpMrnaCds=${qDB}.mrna-cds.${tmpExt}
+      tmpMrna=${qDB}.mrna.${tmpExt}
+      tmpCds=${qDB}.cds.${tmpExt}
+      echo $qDB
       hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
                    from all_mrna,gbCdnaInfo,cds \
                    where (all_mrna.qName = gbCdnaInfo.acc) and \
                      (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
-       ${queryDb} > ${tmpMrnaCds}
+       ${qDB} > ${tmpMrnaCds}
       cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
       cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
       mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} \
         stdout \
       | genePredSingleCover stdin stdout | gzip -2c \
-        > /scratch/tmp/$queryDb.tmp.gz
+        > /scratch/tmp/$qDB.tmp.gz
       rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
-      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
       rm -f $tmpExt
-    end
+    done
     # using knownGene for rn4 mm8 hg18
     # using refGene for galGal2
     # using mgcGenes for xenTro2
-    # no genes for monDom4
+    # no genes for dasNov1 echTel1
     # genePreds; (must keep only the first 10 columns for knownGene)
-    foreach queryDb (rn4 mm8 hg18 galGal2 xenTro2)
-      if ($queryDb == "xenTro2") then
-        set geneTbl = mgcGenes
-      else if ($queryDb == "galGal2") then
-        set geneTbl = refGene
+    for qDB in rn4 mm8 hg18 galGal2 xenTro2
+    do
+      if [ $qDB = "xenTro2" ]; then
+        geneTbl=mgcGenes
+      elif [ $qDB = "galGal2" ]; then
+        geneTbl=refGene
       else
-        set geneTbl = knownGene
-      endif
-      hgsql -N -e "select * from $geneTbl" ${queryDb} | cut -f 1-10 \
+        geneTbl=knownGene
+      fi
+      hgsql -N -e "select * from $geneTbl" ${qDB} | cut -f 1-10 \
       | genePredSingleCover stdin stdout | gzip -2c \
-        > /scratch/tmp/$queryDb.tmp.gz
-      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+        > /scratch/tmp/$qDB.tmp.gz
+      mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
       rm -f $tmpExt
-    end
+    done
 
     #------------------------------------------------------------------------
     # create frames
@@ -5192,7 +5197,7 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     #	68050843 bases of 2567283971 (2.651%) in intersection
 
 #######################################################################
-## LIFTOVER To Mm7 (WORKING - 2006-04-21 - Hiram)
+## LIFTOVER To Mm7 (DONE - 2006-04-21 - 2006-04-24 - Hiram)
     ssh kkr1u00
     $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-split.csh \
       mm7 /cluster/data/mm7/nib
@@ -5204,6 +5209,47 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     # as it says, DO THIS NEXT:
     cd /cluster/data/mm8/bed/blat.mm7.2006-04-21/run
     para try, check, push, check, ...
-    ssh kkstore02
-    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh \
-	mm8 mm7 /iscratch/i/mm7/split10k
+# Completed: 1360 of 1360 jobs
+# CPU time in finished jobs:    3890058s   64834.31m  1080.57h   45.02d  0.123 y
+# IO & Wait Time:                 13326s     222.09m     3.70h    0.15d  0.000 y
+# Average job time:                2870s      47.84m     0.80h    0.03d
+# Longest finished job:           27224s     453.73m     7.56h    0.32d
+# Submission to last job:         80553s    1342.55m    22.38h    0.93d
+
+    # as it says, DO THIS NEXT:
+    #	this does the liftUp and makes the psl files
+    ssh kkr1u00
+    cd /cluster/data/mm8/bed
+    ln -s blat.mm7.2006-04-21 blat.mm7
+    time $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh mm8 mm7
+    #	real    16m5.091s
+    # as it says, DO THIS NEXT:
+    #	the prepares the batch to run for the chaining
+    ssh kki
+    time $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh \
+	mm8 /cluster/data/mm8/nib mm7 /cluster/data/mm7/nib
+    # as it says, DO THIS NEXT:
+    #	running the chain batch
+    cd /cluster/data/mm8/bed/blat.mm7.2006-04-21/chainRun
+    para try, check, push, check, ...
+    Completed: 40 of 40 jobs
+# CPU time in finished jobs:       5381s      89.68m     1.49h    0.06d  0.000 y
+# IO & Wait Time:                  2119s      35.32m     0.59h    0.02d  0.000 y
+# Average job time:                 188s       3.12m     0.05h    0.00d
+# Longest finished job:             652s      10.87m     0.18h    0.01d
+# Submission to last job:           685s      11.42m     0.19h    0.01d
+    ssh kkstore04
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-net.csh mm8 mm7
+    #	Created /cluster/data/mm8/bed/liftOver/mm8ToMm7.over.chain.gz
+    # as it says, DO THIS NEXT:
+    ssh hgwdev
+    $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-load.csh mm8 mm7
+    #	It says this:
+    # 	Now, add link for
+    #	/usr/local/apache/htdocs/goldenPath/mm8/liftOver/mm8ToMm7.over.chain
+    #	to hgLiftOver
+    #	But I believe that link was already done:
+    cd /gbdb/mm8/liftOver
+    ls -og mm8ToMm7*
+    #	lrwxrwxrwx    1       53 Apr 24 12:32 mm8ToMm7.over.chain.gz -> \
+    #		/cluster/data/mm8/bed/liftOver/mm8ToMm7.over.chain.gz
