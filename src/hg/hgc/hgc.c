@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1010 2006/04/22 05:10:41 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1011 2006/04/25 00:07:34 baertsch Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -476,26 +476,8 @@ printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s\">",
 }
 
 
-void hgcAnchorGenePsl(char *item, char *other, char *chrom, char *tag)
-/* Generate an anchor to htcGenePsl. */
-{
-struct dbDb *dbList = hGetAxtInfoDbs();
-struct axtInfo *aiList = NULL;
-char *db2;
-char *encodedItem = cgiEncode(item);
-if (dbList != NULL)
-    {
-    db2 = dbList->name;
-    aiList = hGetAxtAlignments(db2);
-    printf("<A HREF=\"%s&g=%s&i=%s&c=%s&l=%d&r=%d&o=%s&alignment=%s&db2=%s&xyzzy=xyzzy#%s\">",
-	   hgcPathAndSettings(), "htcGenePsl", encodedItem, chrom, winStart,
-	   winEnd, other, cgiEncode(aiList->alignment), db2, tag);
-    dbDbFreeList(&dbList);
-    }
-}
-
 void hgcAnchorJalview(char *item, char *fa)
-/* Generate an anchor to htcGenePsl. */
+/* Generate an anchor to jalview. */
 {
 struct dyString *dy = cgiUrlString();
     printf("<A HREF=\"%s?%s&jalview=YES\">",
@@ -1942,13 +1924,6 @@ hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 
-if (hTableExists("axtInfo"))
-    {
-    puts("<LI>\n");
-    hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
-    printf("Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
-    puts("</LI>\n");
-    }
 printf("</UL>\n");
 }
 
@@ -1967,13 +1942,6 @@ hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 
-if (hTableExists("axtInfo"))
-    {
-    puts("<LI>\n");
-    hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
-    printf("Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
-    puts("</LI>\n");
-    }
 printf("</UL>\n");
 }
 
@@ -8562,13 +8530,6 @@ hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 
-if (hTableExists("axtInfo"))
-    {
-    puts("<LI>\n");
-    hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
-    printf("Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
-    puts("</LI>\n");
-    }
 printf("</UL>\n");
 printTrackHtml(tdb);
 }
@@ -8732,14 +8693,6 @@ if (startsWith("genePred", tdb->type))
     printf("Genomic Sequence</A> from assembly\n");
     puts("</LI>\n");
 
-    if (hTableExists("axtInfo"))
-	{
-	puts("<LI>\n");
-	hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
-	printf("Comparative Sequence</A> Annotated codons and translated "
-	       "protein with alignment to another species <BR>\n");
-	puts("</LI>\n");
-	}
     printf("</UL>\n");
     }
 else if (startsWith("bed", tdb->type))
@@ -8894,13 +8847,6 @@ hgcAnchorSomewhere("htcGeneInGenome", geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
 
-if (hTableExists("axtInfo"))
-    {
-    puts("<LI>\n");
-    hgcAnchorGenePsl(geneName, geneTable, seqName, "startcodon");
-    printf("Comparative Sequence</A> Annotated codons and translated protein with alignment to another species <BR>\n");
-    puts("</LI>\n");
-    }
 printf("</UL>\n");
 printTrackHtml(tdb);
 }
@@ -9466,148 +9412,6 @@ if (hTableExists(chainTable_chrom) )
     sqlFreeResult(&sr);
     }
 return chainList;
-}
-
-void htcGenePsl(char *htcCommand, char *item)
-/* Interface for selecting & displaying alignments from axtInfo 
- * for an item from a genePred table. */
-{
-struct genePred *gp = NULL;
-struct axtInfo *aiList = NULL, *ai;
-struct axt *axtList = NULL;
-struct sqlConnection *conn = hAllocConn();
-char *track = cartString(cart, "o");
-char *chrom = cartString(cart, "c");
-char *name = cartOptionalString(cart, "i");
-char *alignment = cgiOptionalString("alignment");
-char *species = NULL;
-char *db2 = cartString(cart, "db2");
-int left = cgiInt("l");
-int right = cgiInt("r");
-char table[64];
-char query[512];
-char where[512];
-char nibFile[512];
-char indexFile[512];
-boolean hasBin; 
-boolean alignmentOK;
-struct lineFile *ixF = NULL, *lf = NULL;
-off_t offset = 0;
-char *line = NULL;
-int prevOffset = 0;
-
-cartWebStart(cart, "Alignment of %s in %s to %s using %s.",
-	     name, hOrganism(database), hOrganism(db2), alignment);
-hSetDb2(db2);
-
-/* get genePred including optional frame info */
-hFindSplitTable(chrom, track, table, &hasBin);
-snprintf(where, sizeof(where),
-	 "name = '%s' and chrom = '%s' and txStart < %d and txEnd > %d",
-	 name, chrom, right, left);
-gp = genePredReaderLoadQuery(conn, table, where);
-if (gp == NULL)
-    errAbort("Could not locate gene prediction (db=%s, table=%s, name=%s, in range %s:%d-%d)",
-	     database, table, name, chrom, left+1, right);
-/* if there is no reading frame, default to txStart,End, not a great solution */
-if (gp->cdsStart == 0)
-    gp->cdsStart = gp->txStart;
-if (gp->cdsEnd == 0)
-    gp->cdsEnd = gp->txEnd;
-
-
-puts("<FORM ACTION=\"/cgi-bin/hgc\" NAME=\"orgForm\" METHOD=\"GET\">");
-cartSaveSession(cart);
-cgiContinueHiddenVar("g");
-cgiContinueHiddenVar("i");
-cgiContinueHiddenVar("o");
-cgiContinueHiddenVar("c");
-cgiContinueHiddenVar("l");
-cgiContinueHiddenVar("r");
-puts("\n<TABLE><tr>");
-puts("<td align=center valign=baseline>genome/version</td>");
-puts("<td align=center valign=baseline>alignment</td>");
-puts("</tr>");
-puts("<tr>");
-puts("<td align=center>\n");
-printOrgAssemblyListAxtInfo("db2", onChangeAssemblyText);
-puts("</td>\n");
-puts("<td align=center>\n");
-printAlignmentListHtml(db2, "alignment", alignment);
-printf("</td>\n");
-printf("<td align=center>");
-cgiMakeButton("Submit", "Submit");
-printf("</td>\n");
-puts("</tr></TABLE>");
-puts("</FORM>");
-/* Make sure alignment is not just a leftover from previous db2. */
-if (gp->chrom != NULL)
-    aiList = hGetAxtAlignmentsChrom(db2, gp->chrom);
-if (alignment != NULL)
-    {
-    alignmentOK = FALSE;
-    for (ai=aiList;  ai != NULL;  ai=ai->next)
-	{
-	if (sameString(ai->alignment, alignment))
-	    {
-	    alignmentOK = TRUE;
-	    break;
-	    }
-	}
-    if (! alignmentOK)
-        {
-        species = NULL;
-	alignment = NULL;
-        }
-    }
-if ((alignment == NULL) && (aiList != NULL))
-    {
-    alignment = aiList->alignment;
-    species = aiList->species;
-    }
-if (species == NULL)
-    species = aiList->species;
-sprintf(query, "select fileName from chromInfo where chrom = '%s'",  gp->chrom);
-if (sqlQuickQuery(conn, query, nibFile, sizeof(nibFile)) == NULL)
-    errAbort("Sequence %s isn't in chromInfo", chrom);
-species[0] = (char)toupper(species[0]);
-safef(indexFile, 512, "%s.ix", aiList->fileName);
-ixF = lineFileMayOpen(indexFile, TRUE);
-if (ixF == NULL)
-    printf("<b>Warning - Axt Index File missing, page may be slow.</b><br>");
-else
-    {
-    while (lineFileNext(ixF, &line, NULL))
-        {
-        int refCount = 3;
-        char *words[3];
-        int wordCount = chopLine(line, words);
-        int start = atoi(words[0]);
-        if (wordCount != refCount)
-            lineFileExpectWords(ixF, refCount, wordCount);
-        offset = atoi(words[2]);
-        if (start > 0 && start > gp->txStart && offset > 0)
-            {
-            offset = prevOffset;
-            break;
-            }
-        else 
-            {
-            prevOffset = offset;
-            offset = 0;
-            }
-        }
-    }
-lineFileClose(&ixF);
-lf = lineFileOpen(aiList->fileName, TRUE);
-lineFileSeek(lf, offset, SEEK_SET);
-axtList = getAxtListForGene(gp, nibFile, hGetDb(), db2, lf);
-puts("<PRE><TT>");
-axtOneGeneOut(axtList, LINESIZE, stdout , gp, nibFile);
-puts("</TT></PRE>");
-axtInfoFreeList(&aiList);
-hFreeConn(&conn);
-webEnd();
 }
 
 void htcPseudoGene(char *htcCommand, char *item)
@@ -17914,10 +17718,6 @@ else if (containsStringNoCase(track, "blastzStrictChain")
 else if (sameWord(track, "htcLongXenoPsl2"))
     {
     htcLongXenoPsl2(track, item);
-    }
-else if (sameWord(track, "htcGenePsl"))
-    {
-    htcGenePsl(track, item);
     }
 else if (sameWord(track, "htcPseudoGene"))
     {
