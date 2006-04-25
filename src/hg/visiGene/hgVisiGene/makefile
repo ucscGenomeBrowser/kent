@@ -10,9 +10,7 @@ O = hgVisiGene.o captionElement.o configPage.o printCaption.o probePage.o visiSe
 
 include ../../../inc/cgi_build_rules.mk
 
-#CFLAGS=-DVISIGENE='"visiGene"'
-CFLAGS=-DVISIGENE='"visiJaxMahoney"'
-
+CFLAGS=-DVISIGENE='"visiGene"'
 
 my::
 	cd ../vgGetText && ${MAKE}
