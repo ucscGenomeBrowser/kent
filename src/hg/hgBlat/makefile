@@ -15,3 +15,7 @@ include ../../inc/cgi_build_rules.mk
 compile: $O 
 	${CC} $O ${MYLIBS} ${L} 
 	mv ${AOUT} $A${EXE}
+
+clean::
+	rm -f hgSs_*.fa hgSs_*.pslx
+
