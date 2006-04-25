@@ -5,7 +5,7 @@ DIFF = diff -u
 test:   oneExon splitExon revExon negNeg finishIsSplit \
 	queryDel multiMap multiMap2 multiMap3 multiMapMondo \
 	manyExonPos unalignedExonStart lostBlock splitNegStart \
-	dupFrames
+	dupFrames revStrand
 
 oneExon: mkout
 	genePredToMafFrames hg17 canHg10 input/BC101503.gp output/$@.mafFrames input/BC101503.maf
@@ -78,6 +78,11 @@ splitNegStart:
 # case that generated duplicate mafFrames rows
 dupFrames:
 	genePredToMafFrames panTro1 mm7 input/dupFrames.gp output/$@.mafFrames input/dupFrames.maf
+	${DIFF} expected/$@.mafFrames output/$@.mafFrames
+
+# test using two components that are both reverse strand
+revStrand:
+	genePredToMafFrames danRer3 rn4 input/revStrand.gp output/$@.mafFrames input/revStrand.maf
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 mkout:

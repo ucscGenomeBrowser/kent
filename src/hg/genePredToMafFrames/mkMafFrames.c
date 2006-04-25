@@ -324,7 +324,11 @@ while ((ali = mafNext(mafFile)) != NULL)
     struct mafComp *queryComp = mafMayFindComponentDb(ali, geneDb);
     struct mafComp *targetComp = mafMayFindComponentDb(ali, targetDb);
     if ((queryComp != NULL) && (targetComp != NULL))
+        {
+        if (targetComp->strand == '-')
+            mafFlipStrand(ali);  /* code requires target strand is + */
         mkCompFrames(genes, queryComp, targetComp);
+        }
     mafAliFree(&ali);
     }
 mafFileFree(&mafFile);
