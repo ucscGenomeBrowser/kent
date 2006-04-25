@@ -6,7 +6,7 @@
 #include "pipeline.h"
 #include "textOut.h"
 
-static char const rcsid[] = "$Id: textOut.c,v 1.1 2006/04/24 15:08:22 angie Exp $";
+static char const rcsid[] = "$Id: textOut.c,v 1.2 2006/04/25 00:00:04 angie Exp $";
 
 static void textOutWarnHandler(char *format, va_list args)
 /* Text mode error message handler. */
@@ -52,10 +52,10 @@ return NULL;
 static char **getCompressor(char *compressType)
 /* Return a compressor specification for pipelineOpen1(). */
 {
-static char *GZ_WRITE[] = {"/bin/gzip", "-qc", NULL};
-static char *Z_WRITE[] = {"./compress", "-c", NULL};
-static char *BZ2_WRITE[] = {"./bzip2", "-qzc", NULL};
-static char *ZIP_WRITE[] = {"./zip", "-q", NULL};
+static char *GZ_WRITE[] = {"gzip", "-qc", NULL};
+static char *Z_WRITE[] = {"compress", "-c", NULL};
+static char *BZ2_WRITE[] = {"bzip2", "-qzc", NULL};
+static char *ZIP_WRITE[] = {"zip", "-q", NULL};
 
 if (sameWord(compressType, textOutCompressGzip))
     return GZ_WRITE;
@@ -106,7 +106,7 @@ struct pipeline *textOutInit(char *fileName, char *compressType)
  * compressed file (if both fileName and compressType are specified -- 
  * see textOut.h for supported compression types).  
  * Return NULL if no compression, otherwise a pipeline handle on which 
- * the calling process should wait (after flushing and closing stdout). */
+ * textOutClose should be called when we're done writing stdout. */
 {
 struct pipeline *compressPipeline = NULL;
 
@@ -147,5 +147,18 @@ else
 pushWarnHandler(textOutWarnHandler);
 pushAbortHandler(textOutAbortHandler);
 return(compressPipeline);
+}
+
+void textOutClose(struct pipeline **pCompressPipeline)
+/* Flush and close stdout, wait for the pipeline to finish, and then free 
+ * the pipeline object. */
+{
+if (pCompressPipeline && *pCompressPipeline)
+    {
+    fflush(stdout);
+    fclose(stdout);
+    pipelineWait(*pCompressPipeline);
+    pipelineFree(pCompressPipeline);
+    }
 }
 
