@@ -28,7 +28,10 @@ type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons17
 spanList 1
+pairwiseHeight 12
 yLineOnOff Off
+frames multiz17wayFrames
+irows on
 autoScaleDefault Off
 summary multiz17waySummary
 speciesGroups mammal vertebrate
