@@ -8887,3 +8887,29 @@ BASE=/cluster/data/hg18/bed/blastz.xenTro2.2006-04-20
       -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose DEF \
       >& do.log & tail -f do.log
     ln -s blastz.xenTro2.2006-04-20 /cluster/data/hg18/bed/blastz.xenTro2
+
+#  Load firstEF track (DONE 2006-04-25 Fan)
+
+    ssh hgwdev
+    mkdir -p /cluster/data/hg18/bed/firstEF
+    cd /cluster/data/hg18/bed/firstEF 
+
+# receive the file firstEFMar05.bed.gz from email (ramana.davuluri@osumc.edu) into this subdirectory
+
+    cat << '_EOF_' > sedScript
+s/chr23/chrX/g
+s/chr24/chrY/g
+/^>/d 
+/^$/d
+/^No/d
+'_EOF_'
+
+    bash
+    zcat firstEFMar05.bed.gz | sed -f sedScript | awk  "{OFS=\"\t\"} {\$3 +=1; print  \$0}" > firstEF.bed
+    exit
+ 
+    hgLoadBed hg18 firstEF firstEF.bed
+    rm firstEF.tab
+    gzip *.bed
+
+#done firstEF
