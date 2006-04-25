@@ -12,6 +12,17 @@ include ../../../inc/cgi_build_rules.mk
 
 CFLAGS=-DVISIGENE='"visiGene"'
 
+
+my::
+	cd ../vgGetText && ${MAKE}
+
+alpha::
+	cd ../vgGetText && ${MAKE} alpha
+
+beta::
+	cd ../vgGetText && ${MAKE} alpha
+
+
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
