@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.53 2006/04/24 17:18:32 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.54 2006/04/25 14:36:36 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -588,9 +588,10 @@ cgiMakeHiddenVar(sessionVar, buf);
 static void cartDumpItem(struct hashEl *hel)
 /* Dump one item in cart hash */
 {
+struct dyString *dy = NULL;
 char *val = (char *)(hel->val);
 stripChar(val, '\r');
-struct dyString *dy = dyStringSub(val, "\n", "\\n");
+dy = dyStringSub(val, "\n", "\\n");
 printf("%s %s\n", hel->name, dy->string);
 dyStringFree(&dy);
 }
