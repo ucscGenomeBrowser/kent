@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.33 2006/04/24 23:12:00 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.34 2006/04/25 17:33:47 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -3561,7 +3561,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     rm *.tab
 
 #######################################################################
-# MULTIZ17WAY MAF FRAMES (WORKING - 2006-04-24 - Hiram)
+# MULTIZ17WAY MAF FRAMES (DONE - 2006-04-24 - 2006-04-25 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/mm8/bed/multiz17way/frames
     cd /cluster/data/mm8/bed/multiz17way/frames
@@ -3643,15 +3643,16 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     # run cluster jobs
     tmpExt=`mktemp temp.XXXXXX`
     paraDir=$multizDir/frames/para.${tmpExt}
+    cd /cluster/data/mm8/bed/multiz17way/frames
     mkdir mafFrames $paraDir
     mkdir ${clusterFramesDir}
-    for qDB in `cat /cluster/data/rn4/bed/multiz9way.2006-03-30/species.lst`
+    for qDB in `cat /cluster/data/mm8/bed/multiz17way/species.lst`
     do
       mkdir ${clusterFramesDir}/${qDB}
-      for C in `awk '{print $1;}' /cluster/data/rn4/chrom.sizes`
+      for C in `awk '{print $1;}' /cluster/data/mm8/chrom.sizes`
       do
         if [ -e ${clusterGeneDir}/${qDB}.gp.gz ]; then
-          echo /cluster/bin/scripts/mkMafFrames.pl ${qDB} rn4 \
+          echo /cluster/bin/scripts/mkMafFrames.pl ${qDB} mm8 \
             ${clusterGeneDir}/${qDB}.gp.gz ${clusterMafDir}/$C.maf.gz \
             ${clusterFramesDir}/${qDB}/$C.mafFrames \
             >> $paraDir/jobList
@@ -3660,17 +3661,26 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     done
     rm -f $tmpExt
     ssh -x kki "cd ${paraDir} && para make jobList && para time"
-XXXX - This is not working - 2006-04-24
+# Completed: 476 of 476 jobs
+# CPU time in finished jobs:       6226s     103.77m     1.73h    0.07d  0.000 y
+# IO & Wait Time:                  2533s      42.21m     0.70h    0.03d  0.000 y
+# Average job time:                  18s       0.31m     0.01h    0.00d
+# Longest finished job:             128s       2.13m     0.04h    0.00d
+# Submission to last job:           737s      12.28m     0.20h    0.01d
 
     # combine results from cluster
-    foreach queryDb (`cat ../species.lst`)
-      echo $queryDb
-      ssh -x kolossus "cat ${clusterFramesDir}/${queryDb}/*.mafFrames | gzip -2c > ${multizDir}/frames/mafFrames/${queryDb}.mafFrames.gz"
-    end
+    for qDB in `cat ../species.lst | egrep -v "dasNov1|echTel1|monDom4`
+    do
+      echo $qDB
+      ssh -x kolossus "cat ${clusterFramesDir}/${qDB}/*.mafFrames | gzip -2c > ${multizDir}/frames/mafFrames/${qDB}.mafFrames.gz"
+    done
 
     #------------------------------------------------------------------------
     # load the database
-    hgLoadMafFrames rn4 multiz9wayFrames mafFrames/*.mafFrames.gz
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/multiz17way/frames
+    time nice -n +19 hgLoadMafFrames mm8 multiz17wayFrames \
+	mafFrames/*.mafFrames.gz
 
     #------------------------------------------------------------------------
     # clean up
