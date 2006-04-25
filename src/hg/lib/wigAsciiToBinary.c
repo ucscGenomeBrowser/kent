@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.18 2005/08/01 21:29:33 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.19 2006/04/25 23:11:27 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -61,6 +61,7 @@ static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.18 2005/08/01 21:29:33 
  */
 static unsigned long lineCount = 0;	/* counting all input lines	*/
 static long long add_offset = 0;	/* to allow "lifting" of the data */
+static boolean noOverlap = FALSE;	/* check for overlapping data */
 static long long binsize = 1024;	/* # of data points per table row */
 static long long dataSpan = 1;		/* bases spanned per data point */
 
@@ -336,6 +337,8 @@ if (options != NULL)
     {
     if (options->lift != 0)
 	add_offset = options->lift;
+    if (options->noOverlap)
+	noOverlap = TRUE;
     }
 
 overallLowerLimit = 1.0e+300;	/* for the complete set of data */
@@ -441,6 +444,11 @@ while (lineFileNext(lf, &line, NULL))
 	    errAbort("missing chrom=<name> specification on fixedStep declaration at line %lu", lineCount);
 	if (!foundStart)
 	    errAbort("missing start=<position> specification on fixedStep declaration at line %lu", lineCount);
+	if (noOverlap && prevChromName)
+	    {
+	    if (sameWord(prevChromName,chromName) && (fixedStart <= chromStart))
+		errAbort("specified fixedStep chromStart %llu is less than previous chromEnd %llu", fixedStart, previousOffset);
+	    }
 	variableStep = FALSE;
 	bedData = FALSE;
 	fixedStep = TRUE;
@@ -526,11 +534,6 @@ while (lineFileNext(lf, &line, NULL))
 	dataValue = bedDataValue;
 	}
 
-    /*	the initial data point sets the chromStart position	*/
-    if (validLines == 1) {
-	chromStart = Offset;
-	verbose(2, "first offset: %llu\n", chromStart);
-    }
     /* see if this is the first time through, establish chromStart 	*/
     if (validLines == 1)
 	{

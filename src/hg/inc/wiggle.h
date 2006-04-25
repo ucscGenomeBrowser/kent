@@ -251,6 +251,7 @@ struct wigEncodeOptions
 /*	passing options to the wigAsciiToBinary function	*/
     {
     int lift;	/*	lift all incoming coordinates by this amount	*/
+    boolean noOverlap;	/*	enforce no overlapping data verification */
     };
 
 void wigAsciiToBinary(char *wigAscii, char *wigFile, char *wibFile,
