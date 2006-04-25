@@ -22,10 +22,12 @@ alpha::
 beta::
 	cd ../vgGetText && ${MAKE} alpha
 
-
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
+
+push: compile
+	mv $A${EXE} ${CGI_BIN}-${USER}
 
 html: bigImage.html
 	cp bigImage.html /usr/local/apache/htdocs/
