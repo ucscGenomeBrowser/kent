@@ -8,7 +8,7 @@
 #include "expRecord.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.4 2004/03/30 06:49:21 kent Exp $";
+static char const rcsid[] = "$Id: hgGnfMicroarray.c,v 1.5 2006/04/25 14:38:38 angie Exp $";
 
 char *chip = "HG-U95Av2";
 char *database = "hgFixed";
@@ -140,8 +140,7 @@ int *data;
 char *affyId;
 struct hash *hash = newHash(17);
 FILE *f = NULL;
-int dataCount = 0, pslCount = 0, bedCount = 0;
-int minExpVal = 20;
+int dataCount = 0;
 
 /* Open Atlas file and use first line to create experiment table. */
 if (!lineFileNextReal(lf, &line))
