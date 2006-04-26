@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.29 2005/12/31 08:23:56 daryl Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.30 2006/04/26 17:03:10 kent Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -280,7 +280,7 @@ char *liftOverRemapRange(struct hash *chainHash, double minRatio,
 struct bed *bed;
 char *error;
 
-error = remapRange(chainHash, minMatch, 0, 0, 0, 0, chrom, s, e, strand, minMatch,
+error = remapRange(chainHash, minRatio, 0, 0, 0, 0, chrom, s, e, strand, minMatch,
 		   NULL, NULL, NULL, &bed, NULL);
 if (error != NULL)
     return error;
@@ -528,7 +528,7 @@ while (lineFileNext(lf, &line, NULL))
 
     /* Convert seq/start/end/strand. */
     error = liftOverRemapRange(chainHash, minMatch, seq, start, end, *strand,
-	                minBlocks, &seq, &start, &end, strand);
+	                minMatch, &seq, &start, &end, strand);
     f = mapped;
     if (error != NULL)
 	{
