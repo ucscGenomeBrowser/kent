@@ -315,45 +315,11 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
-track multiz10way
-shortLabel 10-Way Conservation
-longLabel 10-Way Vertebrate Multiz Alignment & Conservation 
-group compGeno
-priority 109.11
-visibility hide
-#color 0, 10, 100
-#altColor 50,50,50
-#altColor 255,128,0
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons10way
-spanList 1
-yLineOnOff Off
-autoScaleDefault Off
-summary multiz10waySummary
-#pairwise netBlastz
-speciesGroups mammal vertebrate
-sGroup_mammal panTro1 mm5 rn3 canFam1
-sGroup_vertebrate galGal2 xenTro1 fr1 tetNig1 danRer1
-treeImage phylo/hg17_10way.jpg
-
-track phastConsElements10way
-shortLabel 10-Way Most Conserved
-longLabel PhastCons Conserved Elements, 10-Way Vertebrate Multiz Alignment
-group compGeno
-priority 109.12
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
-
 track multiz8way
 shortLabel 8-way Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
 group compGeno
-priority 109.51
+priority 105.1
 visibility hide
 #color 0, 10, 100
 altColor 50,50,50
@@ -372,7 +338,7 @@ track phastConsElements
 shortLabel 8-way Most Conserved
 longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
 group compGeno
-priority 109.52
+priority 105.2
 visibility hide
 exonArrows off
 showTopScorers 200
