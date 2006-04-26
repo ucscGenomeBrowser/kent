@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1012 2006/04/26 02:52:06 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1013 2006/04/26 21:48:01 acs Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -18317,7 +18317,7 @@ else if (sameString("allenBrainAli", track))
     {
     doAllenBrain(tdb, item);
     }
-else if (startsWith("dless", track))
+else if (sameString("dless", track) || sameString("encodeDless", track))
     {
     doDless(tdb, item);
     }
