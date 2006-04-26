@@ -46,12 +46,15 @@ build 125, available from
       <UL>
         <LI><B>Single</B> - single nucleotide variation: all observed alleles are single nucleotides
 	    (can have 2, 3 or 4 alleles)
+        <LI><B>In-del</B> - insertion/deletion (applies to RangeInsertion, RangeSubstitution, RangeDeletion)
+        <LI><B>Heterozygous</B> - heterozygous (undetermined) variation: allele contains string '(heterozygous)'
+        <LI><B>Microsatellite</B> - the observed allele from dbSNP is variation in counts of short tandem repeats
+        <LI><B>Named</B> - the observed allele from dbSNP is given as a text name
+        <LI><B>No Variation</B> - no variation asserted for sequence
+        <LI><B>Mixed</B> - the cluster contains submissions from multiple classes
+        <LI><B>Multiple Nucleotide Polymorphism</B> - alleles of the same length, length > 1, and from set of {A,T,C,G}
         <LI><B>Insertion</B> - the polymorphism is an insertion relative to the reference assembly
         <LI><B>Deletion</B> - the polymorphism is a deletion relative to the reference assembly
-        <LI><B>In-del</B> - insertion/deletion (applies to RangeInsertion, RangeSubstitution, RangeDeletion)
-        <LI><B>Mixed</B> - the cluster contains submissions from multiple classes
-        <LI><B>Named</B> - the observed allele from dbSNP is given as a text name
-        <LI><B>Microsatellite</B> - the observed allele from dbSNP is variation in counts of short tandem repeats
         <LI><B>Unknown</B> - no classification provided by data contributor
       </UL>
     </LI>
