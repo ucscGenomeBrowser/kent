@@ -2283,6 +2283,8 @@ tablesIgnored $hg
     slamNonCodingMouse
     slamRat
     slamNonCodingRat
+    snp
+    snp125
     syntenyMouse
     syntenyRat
     targetScanS
