@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.54 2006/04/24 22:38:46 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.55 2006/04/26 21:08:13 sugnet Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -11890,3 +11890,137 @@ knownToVisiGene mm7
     ls -og mm7ToMm8*
     #	lrwxrwxrwx    1       53 Apr 24 14:22 mm7ToMm8.over.chain.gz -> \
     #		/cluster/data/mm7/bed/liftOver/mm7ToMm8.over.chain.gz
+
+# ALTGRAPHX TRACK (sugnet) Wed Apr 26 14:00:54 PDT 2006
+
+# First make altGraphX track for hg18 (see makeHg18.doc)
+cd /cluster/store1/sugnet/altSplice/hg18-2006.04.13/
+mkdir orthoSplice.mm7
+cd orthoSplice.mm7/
+cp /cluster/data/mm7/bed/blastz.hg18/axtChain/mm7.hg18.all.chain.gz .
+cp /cluster/data/mm7/bed/blastz.hg18/axtChain/mm7.hg18.net.gz .
+gunzip *.gz
+echo 'select chrom, size from chromInfo' | hgsql mm7 | grep -v chrom > chromSizes.tab
+chainSplit chains mm7.hg18.all.chain 
+netSplit mm7.hg18.net nets
+mkdir agx report logs
+cat << '_EOF_' > makeRun.sh
+#!/usr/bin/perl -w
+
+open(IN, 'chromSizes.tab') or die "Can't open chromSizes.tab\n";
+while(<IN>) {
+    chomp;
+    @w = split;
+    print "/cluster/home/sugnet/bin/i386/orthoSplice -chromSize=$w[1] -trumpNum=3 -chrom=$w[0] -altInFile=../mm7/agxs/mm7.$w[0].agx -orthoAgxFile=../hg18/hg18.agx -db=mm7 -orthoDb=hg18 -netFile=nets/$w[0].net -chainFile=chains/$w[0].chain -commonFile=agx/$w[0].mm7.hg18.cons.t3.agx -reportFile=report/$w[0].mm7.report -edgeFile=report/$w[0].mm7.edge.report >& logs/$w[0].test.log\n";
+}
+'_EOF_'
+    # << this line keeps emacs coloring happy
+chmod 755 makeRun.sh
+./makeRun.sh > orthoSplice.para.spec
+
+cat agx/*.agx > mm7.hg18.t3.agx
+cp ~/latestJk/kent/src/hg/lib/altGraphX.sql .
+
+hgLoadBed -notItemRgb -sqlTable=altGraphX.sql mm7 altGraphX mm7.hg18.t3.agx 
+
+# done altGraphX track.
+
+# EXONWALK TRACK (sugnet) Wed Apr 26 14:04:28 PDT 2006
+
+# First build the altGraphX track above.
+cd /cluster/store1/sugnet/altSplice/hg18-2006.04.13/orthoSplice.mm7
+mkdir exonWalk
+cd exonWalk 
+mkdir beds
+
+foreach file (`ls ../agx/*.agx`)
+  set base=`basename $file .agx`
+  echo "/cluster/home/sugnet/bin/i386/exonWalk db=mm7 minPercent=0 trumpSize=100000 $file beds/$base.bed" >> exonWalk.para.spec
+end
+
+para create exonWalk.para.spec
+para push
+cat beds/*.bed > mm7.hg18.cons.t3.bed
+mkdir orfs
+cd orfs
+mkdir bedOrf beds fa borf
+splitFile ../../mm7.hg18.cons.t3.bed 500 exonWalk.
+
+cd ..
+cat << '_EOF_' > makeFa.sh
+#!/bin/sh
+
+for file in "$@"
+do
+ base=`basename $file`
+ echo "Doing $file"
+ echo "sequenceForBed -db=mm7 -bedIn=$file -fastaOut=fa/$base.fa "
+ sequenceForBed -db=mm7 -bedIn=$file -fastaOut=fa/$base.fa 
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+chmod 755 makeFa.sh
+makeFa.sh beds/*
+
+cat << '_EOF_' > makeGenePred.sh
+#!/bin/sh
+
+for file in "$@"
+do
+  base=`basename $file`
+  /cluster/home/sugnet/bin/i386/borfMatcher -keepNmd beds/$base borf/$base.borf bedOrf/$base.bed genePred/$base.gp 
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+cat << '_EOF_' > makeGenePredWithNmd.sh
+#!/bin/sh
+
+for file in "$@"
+do
+  base=`basename $file`
+  /cluster/home/sugnet/bin/i386/borfMatcher -keepNmd beds/$base borf/$base.borf bedOrfWithNmd/$base.bed genePredWithNmd/$base.gp 
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+chmod 755 *.sh
+mkdir genePred
+mkdir genePredWithNmd
+mkdir bedOrfWithNmd
+
+./makeGenePred.sh beds/*
+./makeGenePredWithNmd.sh beds/*
+
+cat beds/* > mm7.hg18.exonWalk.all.bed
+cat genePred/* > mm7.hg18.exonWalk.gp
+cat genePredWithNmd/* > mm7.hg18.exonWalk.withNmd.gp
+
+hgLoadBed mm7 exonWalkAll mm7.hg18.exonWalk.all.bed 
+ldHgGene -predTab mm7 exonWalk mm7.hg18.exonWalk.noNmd.gp 
+ldHgGene -predTab mm7 exonWalkWithNmd mm7.hg18.exonWalk.withNmd.gp
+
+trackGenome mm7 all refGene:cds trackGenome.spec 
+Track Specification      track  overlap track    cov   track   new    cum 
+                          size     size  geno  track     cov   cov    cov 
+-----------------------------------------------------------------------------
+exonWalk:cds          29568035 24053910  1.04%  81.35%  88.02% 88.02% 88.02%
+exonWalk              50860916 24360287  1.79%  47.90%  89.14% 89.14% 89.14%
+exonWalkWithNmd:cdf   50860916 24360287  1.79%  47.90%  89.14% 89.14% 89.14%
+exonWalk              50860916 24360287  1.79%  47.90%  89.14% 89.14% 89.14%
+exonWalkAll           58621025 25081327  2.06%  42.79%  91.78% 91.78% 91.78%
+mrna                  136069914 26020276  4.78%  19.12%  95.22% 95.22% 95.22%
+intronEst             52046578 21219340  1.83%  40.77%  77.65% 77.65% 77.65%
+est                   185259362 23838078  6.51%  12.87%  87.23% 87.23% 87.23%
+[hgwdev:orfs> trackGenome mm7 all refGene trackGenome.spec 
+Track Specification      track  overlap track    cov   track   new    cum 
+                          size     size  geno  track     cov   cov    cov 
+-----------------------------------------------------------------------------
+exonWalk:cds          29568035 24517871  1.04%  82.92%  52.77% 52.77% 52.77%
+exonWalk              50860916 38905251  1.79%  76.49%  83.74% 83.74% 83.74%
+exonWalkWithNmd:cdf   50860916 38905251  1.79%  76.49%  83.74% 83.74% 83.74%
+exonWalk              50860916 38905251  1.79%  76.49%  83.74% 83.74% 83.74%
+exonWalkAll           58621025 40837805  2.06%  69.66%  87.90% 87.90% 87.90%
+mrna                  136069914 44970708  4.78%  33.05%  96.79% 96.79% 96.79%
+intronEst             52046578 28482307  1.83%  54.72%  61.30% 61.30% 61.30%
+est                   185259362 41486850  6.51%  22.39%  89.30% 89.30% 89.30%
+
+# done exonWalk.
