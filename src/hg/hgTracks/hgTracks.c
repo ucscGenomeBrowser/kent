@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1090 2006/04/14 19:21:56 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1091 2006/04/26 21:47:15 acs Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10881,7 +10881,6 @@ registerTrackHandler("tfbsCons", tfbsConsMethods);
 registerTrackHandler("tfbsConsSites", tfbsConsSitesMethods);
 registerTrackHandler("pscreen", simpleBedTriangleMethods);
 registerTrackHandler("dless", dlessMethods);
-registerTrackHandler("dlessMD", dlessMethods);
 /* ENCODE related */
 registerTrackHandler("encodeGencodeGene", gencodeGeneMethods);
 registerTrackHandler("encodeGencodeGeneJun05", gencodeGeneMethods);
@@ -10894,6 +10893,7 @@ registerTrackHandler("hgMut", hgMutMethods);
 registerTrackHandler("landmark", landmarkMethods);
 registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
+registerTrackHandler("encodeDless", dlessMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
