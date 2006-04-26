@@ -17,16 +17,6 @@ build 125, available from
   of a single base, and multiple nucleotide variants are represented by a 
   block that spans two or more bases.
 </P>
-<P>
-  When the start coordinate for a SNP is shown as chromStart = chromEnd+1 on 
-  the SNP's details page, this is generally not an 
-  error; rather, it indicates that the variant is an insertion at this genomic
-  position.  
-  Note that insertions are represented as chromStart = 
-  chromEnd in the <em>snp</em> table accessible from the Table Browser 
-  or downloads server, due to the half-open zero-based representation of
-  data in the underlying database. 
-</P>
 
 <P>
   The configuration categories reflect the following definitions:
@@ -105,8 +95,23 @@ build 125, available from
         <LI><B>Unknown</B> - sample type not known
       </UL>
     </LI>
-
-
+    <LI>
+      <A name="Weight"></A>
+      <B>Weight</B>: Alignment quality assigned by dbSNP<BR>
+      <UL>
+      <LI>Weight can be 1, 2, 3 or 10.   
+      <LI>We excluded weight = 10 from the data set.
+      <LI>We support a filter on maximum weight value, which defaults to 3.
+      </UL>
+    </LI>
+    <LI>
+      <A name="AvHet"></A>
+      <B>Average heterozygosity</B>: Calculated by dbSNP as described 
+      <A HREF="http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html" target=_blank>here</A>.
+      <UL>
+      <LI> Average heterozygosity should not exceed .5 for bi-allelic single-base substitutions.
+      </UL>
+    </LI>
   </UL>
 </P>
 <H2>Insertions/Deletions</H2>
@@ -142,7 +147,7 @@ For the new location types, we preserve the class 'in-del'.
   <LI>We used b125_SNPContigLoc.bcp.gz for coordinates, orientation, location type
       and the dbSNP reference allele.  
   <LI>We used b125_SNPMapInfo.bcp.gz for alignment weights, filtering out 
-      alignments with weight = 3 or 10.
+      alignments with weight = 10.
   <LI>We obtained functional classification from b125_SNPContigLocusId.bcp.gz.
   <LI>We obtained validation status and heterozygosity from SNP.bcp.gz.
   <LI>We used the header line in the rs_fasta files for class, 
