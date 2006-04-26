@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.54 2006/04/25 14:36:36 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.55 2006/04/26 18:04:49 angie Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -35,12 +35,13 @@ else
     }
 }
 
-static void cartParseOverHash(char *input, struct hash *hash)
-/* Parse cgi-style input into a hash table.  This will
+void cartParseOverHash(struct cart *cart, char *contents)
+/* Parse cgi-style contents into a hash table.  This will
  * replace existing members of hash that have same name. */
 {
+struct hash *hash = cart->hash;
 char *namePt, *dataPt, *nextNamePt;
-namePt = input;
+namePt = contents;
 while (namePt != NULL && namePt[0] != 0)
     {
     dataPt = strchr(namePt, '=');
@@ -111,7 +112,7 @@ else
    }
 }
 
-struct cartDb *loadDbOverHash(struct sqlConnection *conn, char *table, int id, struct hash *hash)
+struct cartDb *loadDbOverHash(struct sqlConnection *conn, char *table, int id, struct cart *cart)
 /* Load bits from database and save in hash. */
 {
 struct cartDb *cdb;
@@ -119,7 +120,7 @@ char query[256];
 
 if ((cdb = cartDbLoadFromId(conn, table, id)) != NULL)
     {
-    cartParseOverHash(cdb->contents, hash);
+    cartParseOverHash(cart, cdb->contents);
     }
 else
     {
@@ -157,8 +158,8 @@ cart->hash = newHash(8);
 cart->exclude = newHash(7);
 cart->userId = userId;
 cart->sessionId = sessionId;
-cart->userInfo = loadDbOverHash(conn, "userDb", userId, cart->hash);
-cart->sessionInfo = loadDbOverHash(conn, "sessionDb", sessionId, cart->hash);
+cart->userInfo = loadDbOverHash(conn, "userDb", userId, cart);
+cart->sessionInfo = loadDbOverHash(conn, "sessionDb", sessionId, cart);
 
 /* First handle boolean variables and store in hash. */
 for (cv = cvList; cv != NULL; cv = cv->next)
@@ -220,16 +221,12 @@ dyStringFree(&dy);
 }
 
 
-static void saveState(struct cart *cart)
-/* Save out state to permanent storage in both user and session db. */
+void cartEncodeState(struct cart *cart, struct dyString *dy)
+/* Add a CGI-encoded var=val&... string of all cart variables to dy. */
 {
-struct sqlConnection *conn = cartDefaultConnector();
-struct dyString *encoded = newDyString(4096);
 struct hashEl *el, *elList = hashElListHash(cart->hash);
 boolean firstTime = TRUE;
 char *s = NULL;
-
-/* Make up encoded string holding all variables. */
 for (el = elList; el != NULL; el = el->next)
     {
     if (!hashLookup(cart->exclude, el->name))
@@ -237,14 +234,25 @@ for (el = elList; el != NULL; el = el->next)
 	if (firstTime)
 	    firstTime = FALSE;
 	else
-	    dyStringAppendC(encoded, '&');
-	dyStringAppend(encoded, el->name);
-	dyStringAppendC(encoded, '=');
+	    dyStringAppendC(dy, '&');
+	dyStringAppend(dy, el->name);
+	dyStringAppendC(dy, '=');
 	s = cgiEncode(el->val);
-	dyStringAppend(encoded, s);
+	dyStringAppend(dy, s);
 	freez(&s);
 	}
     }
+hashElFreeList(&elList);
+}
+
+static void saveState(struct cart *cart)
+/* Save out state to permanent storage in both user and session db. */
+{
+struct sqlConnection *conn = cartDefaultConnector();
+struct dyString *encoded = newDyString(4096);
+
+/* Make up encoded string holding all variables. */
+cartEncodeState(cart, encoded);
 
 /* Make up update statement unless it looks like a robot with
  * a great bunch of variables. */
@@ -261,7 +269,6 @@ else
 
 /* Cleanup */
 cartDefaultDisconnector(&conn);
-hashElFreeList(&elList);
 dyStringFree(&encoded);
 }
 
