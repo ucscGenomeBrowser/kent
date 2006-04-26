@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1011 2006/04/25 00:07:34 baertsch Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1012 2006/04/26 02:52:06 heather Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12029,9 +12029,9 @@ if (!sameString(snp.class, "insertion"))
     }
 
 
-printf("<BR><B><A HREF=\"#Class\">Loc Type</A>: </B>%s\n",          snp.locType);
-printf("<BR><B><A HREF=\"#Class\">Variant Class</A>: </B>%s\n",     snp.class);
-printf("<BR><B><A HREF=\"#Valid\">Validation Status</A>: </B>%s\n", snp.valid);
+printf("<BR><B><A HREF=\"#LocType\">Location Type</A>: </B>%s\n",          snp.locType);
+printf("<BR><B><A HREF=\"#Class\">Class</A>: </B>%s\n",     snp.class);
+printf("<BR><B><A HREF=\"#Valid\">Validation</A>: </B>%s\n", snp.valid);
 printf("<BR><B><A HREF=\"#Func\">Function</A>: </B>%s\n",           snp.func);
 printf("<BR><B><A HREF=\"#MolType\">Molecule Type</A>: </B>%s\n",   snp.molType);
 if (snp.avHet>0)
