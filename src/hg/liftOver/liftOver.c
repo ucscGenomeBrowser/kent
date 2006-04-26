@@ -10,7 +10,7 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.23 2006/03/17 16:24:48 angie Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.24 2006/04/26 21:05:35 aamp Exp $";
 
 int bedPlus = 0;
 bool fudgeThick = FALSE;
@@ -35,6 +35,7 @@ static struct optionSpec optionSpecs[] = {
     {"minSizeQ", OPTION_INT},
     {"minSizeT", OPTION_INT},
     {"multiple", OPTION_BOOLEAN},
+    {"positions", OPTION_BOOLEAN},
     {"pslT", OPTION_BOOLEAN},
     {"sample", OPTION_BOOLEAN},
     {"tab", OPTION_BOOLEAN},
@@ -62,6 +63,7 @@ errAbort(
   "   -genePred - File is in genePred format\n"
   "   -sample - File is in sample format\n"
   "   -bedPlus=N - File is bed N+ format\n"
+  "   -positions - File is in browser \"position\" format\n"
   "   -hasBin - File has bin value (used only with -bedPlus)\n"
   "   -tab - Separate by tabs rather than space (used only with -bedPlus)\n"
   "   -pslT - File is in psl format, map target side only\n"
@@ -116,12 +118,19 @@ else if (optionExists("bedPlus"))
                 minSizeT, minSizeQ, 
                 minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
 		chainTable, bedPlus, hasBin, tabSep, &errCt);
+else if (optionExists("positions"))
+    liftOverPositions(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
+		      mapped, unmapped, &errCt);
 else
     liftOverBed(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
                 minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
 		chainTable, &errCt);
-carefulClose(&mapped);
-carefulClose(&unmapped);
+if (!optionExists("positions"))
+/* I guess liftOverPositions closes these files.  This is a little akward though. */
+    {
+    carefulClose(&mapped);
+    carefulClose(&unmapped);
+    }
 }
 
 int main(int argc, char *argv[])
