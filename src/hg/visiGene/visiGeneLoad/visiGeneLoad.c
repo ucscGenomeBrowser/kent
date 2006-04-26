@@ -487,7 +487,7 @@ void doAntibodySource(struct sqlConnection *conn,
 	int antibody, int submissionSource, char *abSubmitId)
 /* Update antibodySource table if necessary and return antibody ID. */
 {
-if (antibody > 0 && submissionSource > 0 && abSubmitId != NULL && abSubmitId[0] != 0)
+if (antibody > 0 && abSubmitId != NULL && abSubmitId[0] != 0)
     {
     struct sqlResult *sr;
     char **row;
@@ -1099,7 +1099,7 @@ char *line, *words[256];
 struct sqlConnection *conn = sqlConnect(database);
 int rowSize;
 int submissionSetId;
-int submissionSourceId;
+int submissionSourceId = 0;
 struct hash *captionTextHash = readCaptions(captionFile);
 int imageProbeId = 0;
 
@@ -1167,6 +1167,8 @@ if (doLock)
 
 /* Create/find submission record. */
 submissionSetId = saveSubmissionSet(conn, raHash, copyrightCache, contributorCache, &submissionSourceId);
+if (submissionSourceId<1)
+    errAbort("submissionSourceId unexpected value: %d",submissionSourceId);
 
 /* Process rest of tab file. */
 while (lineFileNextReal(lf, &line))
