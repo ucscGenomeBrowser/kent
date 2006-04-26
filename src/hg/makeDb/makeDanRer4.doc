@@ -1022,7 +1022,7 @@ if (-e /tmp/danRer4/$2/$2.cat) /bin/cp /tmp/danRer4/$2/$2.cat ./
 /bin/rmdir --ignore-fail-on-non-empty /tmp/danRer4/$2
 /bin/rmdir --ignore-fail-on-non-empty /tmp/danRer4
 '_EOF_'
-   # <<< emacs
+   # << emacs
    chmod +x jkStuff/RMZebrafish
 
    # move old files out the way and re-run on 2006-04-19
@@ -1550,3 +1550,87 @@ if (-e /tmp/danRer4/$2/$2.cat) /bin/cp /tmp/danRer4/$2/$2.cat ./
     end
     cp -p /cluster/data/danRer4/chrom.sizes \
           /san/sanvol1/scratch/danRer4/
+
+
+###########################################################################
+# BLASTZ/CHAIN/NET PREP (DONE 4/25/06 angie)
+    ssh kkstore04
+    cd /cluster/data/danRer4
+    cp -p danRer4.2bit /san/sanvol1/scratch/danRer4/
+
+    # Create a 2bit file for danRer4 with all chroms (1-25 and M) and the
+    # scaffolds for NA and Un:
+    awk '$1 == $6 {print $1;}' Zv6.scaffolds.agp \
+    | faSomeRecords Zv6_scaffolds.fa stdin stdout \
+    | faToTwoBit [1-9]/chr*.fa [12][0-9]/chr*.fa M/chrM.fa stdin \
+       /san/sanvol1/scratch/danRer4/danRer4ChrUnNAScafs.2bit
+    twoBitInfo /san/sanvol1/scratch/danRer4/danRer4ChrUnNAScafs.2bit \
+      /san/sanvol1/scratch/danRer4/chromsUnNAScafs.sizes
+
+    # Make a lift file for scaffolds --> {chrUn, chrNA}:
+    mkdir /cluster/data/danRer4/liftSupertoChrom
+    cd /cluster/data/danRer4/liftSupertoChrom
+    /cluster/bin/scripts/agpToLift \
+      < ../NA_random/agps/chrNA_random.scaffolds.agp \
+      > chrNA_random.lft
+    /cluster/bin/scripts/agpToLift \
+      < ../Un_random/agps/chrUn_random.scaffolds.agp \
+      > chrUn_random.lft
+    cat chr*.lft > liftNAandUnScaffoldsToChrom.lft
+    cp -p liftNAandUnScaffoldsToChrom.lft /san/sanvol1/scratch/danRer4/
+
+    # Distribute on /iscratch/i too (danRer4.2bit is already there):
+    ssh kkr1u00
+    cd /iscratch/i/danRer4
+    cp -p /san/sanvol1/scratch/danRer4/danRer4ChrUnNAScafs.2bit .
+    twoBitInfo danRer4ChrUnNAScafs.2bit chromsUnNAScafs.sizes
+    cp -p \
+      /cluster/data/danRer4/liftSupertoChrom/liftNAandUnScaffoldsToChrom.lft .
+    iSync
+
+
+###########################################################################
+# BLASTZ/CHAIN/NET XENTRO2 (DONE 4/26/06 angie)
+    ssh kkstore04
+    mkdir /cluster/data/danRer4/bed/blastz.xenTro2.2006-04-25
+    cd /cluster/data/danRer4/bed/blastz.xenTro2.2006-04-25
+    cat << '_EOF_' > DEF
+# zebrafish vs. frog
+BLASTZ=/cluster/bin/penn/i386/blastz
+
+# Use same params as used for danRer1-xenTro1 (see makeXenTro1.doc)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer4
+SEQ1_DIR=/iscratch/i/danRer4/danRer4.2bit
+SEQ1_CTGDIR=/iscratch/i/danRer4/danRer4ChrUnNAScafs.2bit
+SEQ1_LIFT=/iscratch/i/danRer4/liftNAandUnScaffoldsToChrom.lft
+SEQ1_LEN=/cluster/data/danRer4/chrom.sizes
+SEQ1_CTGLEN=/iscratch/i/danRer4/chromsUnNAScafs.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Frog xenTro2 - single chunk big enough to run two of the
+#               largest scaffolds in one job
+SEQ2_DIR=/scratch/hg/xenTro2/xenTro2.2bit
+SEQ2_LEN=/cluster/bluearc/xenTro2/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/danRer4/bed/blastz.xenTro2.2006-04-25
+'_EOF_'
+    # << emacs
+    # kkstore04 can't see /iscratch so use an iServer as fileServer:
+    doBlastzChainNet.pl -blastzOutRoot=/cluster/bluearc/danRer4XenTro2 \
+      -bigClusterHub=kk -fileServer=kkr8u00 -workhorse=kkr8u00 \
+      -chainMinScore=5000 -chainLinearGap=loose DEF \
+      >& do.log & tail -f do.log
+    ln -s blastz.xenTro2.2006-04-25 /cluster/data/danRer4/bed/blastz.xenTro2
+
+
