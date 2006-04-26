@@ -103,7 +103,7 @@ else
     echo "full du list at $unit/du.$date\n" 
     head -40 outfile
     echo
-    # rm -f outfile du.$storeName.$date.temp
+    rm -f outfile du.$storeName.$date.temp
   end
 endif
 
