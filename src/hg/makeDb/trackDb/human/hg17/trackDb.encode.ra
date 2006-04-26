@@ -2562,6 +2562,16 @@ mafTrack multiz17way
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
+track encodeDless
+shortLabel DLESS
+longLabel Detection of LinEage Specific Selection (DLESS)
+group encodeCompGeno
+priority 100.191
+gainColor 0,255,0
+lossColor 255,0,0
+visibility hide
+type bed 4 +
+dataVersion ENCODE Oct 2005 Freeze
 
 searchTable encodeGisRnaPetHCT116
 searchMethod exact
