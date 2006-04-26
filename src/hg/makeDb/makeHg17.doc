@@ -6372,9 +6372,8 @@ mkdir -p $3:h
     hgsqldump --all -c --tab=. hg17 multiz8way
     ssh kkstore02 \
         'gzip /cluster/data/hg17/bed/multiz8way/mafDownloads/multiz8way.{sql,txt}'
-    ln -s multiz8way.{sql,txt}.gz \
+    ln -s /cluster/data/hg17/bed/multiz8way/mafDownloads/multiz8way.{sql,txt}.gz \
         /usr/local/apache/htdocs/goldenPath/hg17/multiz8way
-    ln -s *{txt,sql}.gz /usr/local/apache/htdocs/goldenPath/hg17/multiz8way
 
     # load summary table (2005-09-27)
     cd /cluster/data/hg17/bed/multiz.2004-07-13/maf
