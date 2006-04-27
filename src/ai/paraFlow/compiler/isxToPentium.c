@@ -1049,6 +1049,8 @@ if (objReg == NULL)
     objReg = pentFreeReg(pfc, isx, ivObject, nextNode, coder);
     pentCodeDestReg(pfc, opMov, source, objReg, coder);
     pentLinkReg(source, objReg);
+    /* NOte, could improve code by making this register less likely
+     * to get stomped, but it would be a moderate amount of work. */
     }
 destReg = pentFreeReg(pfc, isx, dest->valType, nextNode, coder);
 destName = isxRegName(destReg, dest->valType);

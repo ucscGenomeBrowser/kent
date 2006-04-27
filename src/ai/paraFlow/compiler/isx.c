@@ -540,7 +540,6 @@ for (ty = base->fields; ty != NULL; ty = ty->next)
     enum isxValType valType = isxValTypeFromTy(pfc, ty);
     offset = backEnd->alignData(backEnd, offset, valType);
     ty->fieldOffset  = offset;
-    uglyf("%s %d\n", ty->fieldName, offset);
     offset += backEnd->dataSize(backEnd, valType);
     }
 base->hasFieldOffsets = TRUE;
@@ -578,8 +577,6 @@ struct isxAddress *dest = isxTempVarAddress(pfc, varHash, weight,
 	ppToIsxValType(pfc,pp));
 int offset = findFieldOffset(pfc, base, ppField->name);
 
-uglyf("THeoretically doing isxDotRval\n");
-uglyf("Field offset of %s in %s is %d\n", ppField->name, base->name, offset);
 if (offset != 0)
     {
     union pfTokVal tokVal;
