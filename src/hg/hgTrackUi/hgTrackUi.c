@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.271 2006/04/26 03:50:13 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.272 2006/04/27 01:42:41 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -241,7 +241,7 @@ cgiMakeDropListFull(snp125ColorSourceDataName[0], snp125ColorSourceLabels, snp12
                     snp125ColorSourceLabelsSize, snp125ColorSourceCart[0], autoSubmit);
 printf("<BR><BR>\n");
 printf("The selected feature above has the following values below.  \n");
-printf("For each value, a selection of colors are available.<BR><BR>\n");
+printf("For each value, a selection of colors is available.<BR><BR>\n");
 
 snp125ColorSourceCart[0] = cartUsualString(cart, snp125ColorSourceDataName[0], snp125ColorSourceDefault[0]);
 if (sameString(snp125ColorSourceCart[0], "Location Type"))
