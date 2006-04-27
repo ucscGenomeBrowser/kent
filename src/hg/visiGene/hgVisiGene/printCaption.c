@@ -869,8 +869,8 @@ void fullCaption(struct sqlConnection *conn, int id)
 /* Print information about image. */
 {
 char *publication, *copyright;
-char *caption = visiGeneCaption(conn, id);
-int imageFile = visiGeneImageFile(conn, id);
+char *caption = NULL;
+int imageFile = -1;
 struct slInt *imageList;
 int imageCount=0;
 int oldId = 0;
@@ -882,6 +882,9 @@ if (forwardedId)
     oldId = id;
     id = forwardedId;
     }
+
+caption = visiGeneCaption(conn, id);
+imageFile = visiGeneImageFile(conn, id);
 
 showSource(conn, oldId);
 showSource(conn, id);
