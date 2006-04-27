@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.38 2006/04/24 22:59:21 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.39 2006/04/27 17:52:20 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -1476,11 +1476,6 @@ _EOF_
     print SCRIPT <<_EOF_
 rm -fr $buildDir/axtChain/net/
 rm -fr $buildDir/axtChain/chain/
-_EOF_
-      ;
-  } else {
-    print SCRIPT <<_EOF_
-rm -f  $buildDir/axtChain/*.tab
 _EOF_
       ;
   }
