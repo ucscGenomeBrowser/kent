@@ -376,6 +376,15 @@ CREATE TABLE image (
     INDEX(specimen)
 );
 
+# make imageFile forwarding table - map a Mahoney imageFile to JaxMahoney 
+CREATE TABLE imageFileFwd (
+    fromIf int not null,      # From imageFile
+    toIf   int not null,      #   To imageFile
+        #Indices
+    INDEX(fromIf),
+    INDEX(toIf)
+);
+
 #Associate probe and image
 CREATE TABLE imageProbe (
     id int auto_increment not null, # ID of imageProbe combination
