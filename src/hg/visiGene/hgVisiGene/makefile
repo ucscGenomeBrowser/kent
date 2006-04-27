@@ -10,6 +10,7 @@ O = hgVisiGene.o captionElement.o configPage.o printCaption.o probePage.o visiSe
 
 include ../../../inc/cgi_build_rules.mk
 
+# be sure to make clean after changing this:
 CFLAGS=-DVISIGENE='"visiGene"'
 
 my::
@@ -25,7 +26,8 @@ compile: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
 
-push: compile
+quick: compile
+	chmod a+rx $A${EXE}
 	mv $A${EXE} ${CGI_BIN}-${USER}
 
 html: bigImage.html
