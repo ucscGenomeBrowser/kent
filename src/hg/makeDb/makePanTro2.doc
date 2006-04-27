@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.16 2006/04/26 03:56:56 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.17 2006/04/27 01:04:22 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -198,8 +198,8 @@ cat > makeQuals.csh << 'EOF'
 #AC161123.3 not found
     # need special handling for chr7, that has both contigs
     # (with quality scores), and clones (w/o)
-    # probably we want to dummy up high qual scores for the
-    # finished clone
+    # For track, split chr7 into two pieces, with missing data between
+# TODO
 
 cat > toWig.csh << 'EOF'
     foreach f (qac/*.qac)
@@ -211,6 +211,31 @@ cat > toWig.csh << 'EOF'
     csh toWig.csh | 
         nice wigEncode stdin quality.wig quality.wib
     date
+
+    # For chimpHiQualDiffs, construct a chr7 in one piece, with
+    # missing data filled in with score=98 (manually assigned "low quality"),
+    # although these are clones, and should have high quality.
+    # By request of Daryl Thomas
+
+    sed 's/Contig/bld2_Cont/' /cluster/data/panTro2/7/chr7.agp > agp.tmp
+    nice zcat wustl/chr7.contigs.qvl.gz | \
+        nice qaToQac stdin stdout | \
+        nice qacAgpLift -mScore=98 agp.tmp stdin qac/chr7.qac
+
+    # Also, create dummy chrY, chrY_random, and chr21, all of which
+    # are finished sequence from clones
+cat > makeFakeQuals.csh << 'EOF'
+    date
+    foreach c (chr21 chrY chrY_random)
+        echo $c
+        set d = `echo $c | sed 's/chr//;s/_random//'`
+        # pick a small set of quality scores, needed so utils don't complain
+        nice zcat wustl/chr22_random.contigs.qvl.gz | \
+            nice qaToQac stdin stdout | \
+            nice qacAgpLift -mScore=98 /cluster/data/panTro2/$d/$c.agp stdin qac/$c.qac
+    end
+    date
+'EOF'
 
 
 ########################
