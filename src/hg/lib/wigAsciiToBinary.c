@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.20 2006/04/26 18:57:53 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.21 2006/04/27 23:28:31 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -446,7 +446,7 @@ while (lineFileNext(lf, &line, NULL))
 	    errAbort("missing chrom=<name> specification on fixedStep declaration at line %lu", lineCount);
 	if (!foundStart)
 	    errAbort("missing start=<position> specification on fixedStep declaration at line %lu", lineCount);
-	if (noOverlap && prevChromName)
+	if (noOverlap && validLines && prevChromName)
 	    {
 	    if (sameWord(prevChromName,chromName) && (fixedStart < chromStart))
 		errAbort("specified fixedStep chromStart %llu is less than expected next chromStart %llu", fixedStart, chromStart);
