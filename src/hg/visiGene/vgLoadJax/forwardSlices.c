@@ -7,7 +7,7 @@
  * 
  * After that, it tries to match remaining slices without primers,
  * using gene and age to link.  Probably also make some use of imageFile.id ordering.
- * Because wholeMount is bodyPart=20, we just find the ones not equal to 20.
+ * Because wholeMount is bodyPart=1 (varies with db), we just find the ones not equal to 1.
  *
  * Note that wholeMount preserved original images,
  * so we were able to use a different process based on md5sum of .jpg images.
@@ -32,9 +32,9 @@ void usage()
 errAbort(
   "forwardSlices - match slice imageFiles in Mahoney to JAX\n"
   "usage:\n"
-  "   forwardSlices visiGeneDb mahoneySlicesSubmissionSet jaxMahoneySubmissionSet\n"
+  "   forwardSlices visiGeneDb mahoneySlicesSubmissionSet jaxMahoneySubmissionSet wholeBodyPart\n"
   "e.g."
-  "   forwardSlices visiJaxMahoney 2 1\n"
+  "   forwardSlices visiJaxMahoney 2 1820 1\n"
   /*
   "options:\n"
   "   -testMax=N - for testing purposes only output first N directories\n"
@@ -51,7 +51,8 @@ static struct optionSpec options[] = {
 
 #define MAXPARTS 20
 
-void forwardSlices(char *database, int mahoneySlicesSS, int jaxMahoneySS, boolean isProbe)
+void forwardSlices(char *database, 
+    int mahoneySlicesSS, int jaxMahoneySS, int wholeBodyPart, boolean isProbe)
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct sqlConnection *connUpdate = sqlConnect(database);
@@ -71,9 +72,9 @@ if (isProbe)
 	" from imageFile, image, imageProbe, probe, specimen"
 	" where imageProbe.probe = probe.id and imageProbe.image=image.id"
 	" and imageFile.id=image.imageFile and image.specimen=specimen.id"
-	" and imageFile.submissionSet in (%d,%d) and bodyPart <> 20"
+	" and imageFile.submissionSet in (%d,%d) and bodyPart <> %d"
 	" order by probe.id, image.submissionSet, imageFile.id"
-	,mahoneySlicesSS,jaxMahoneySS);
+	,mahoneySlicesSS,jaxMahoneySS,wholeBodyPart);
     }    
 else  /* gene (not isProbe) */
     {
@@ -84,11 +85,11 @@ else  /* gene (not isProbe) */
 	" left join imageFileFwd iffb on iffb.toIf = imageFile.id"
 	" where imageProbe.probe = probe.id and imageProbe.image=image.id"
 	" and imageFile.id=image.imageFile and image.specimen=specimen.id"
-	" and bodyPart <> 20"
+	" and bodyPart <> %d"
 	" and (((iffa.fromIf is null) and (imageFile.submissionSet=%d))"
 	"   or ((iffb.toIf is null) and (imageFile.submissionSet=%d)))"
 	" order by probe.gene, image.submissionSet, imageFile.id"	
-	,mahoneySlicesSS,jaxMahoneySS);
+	,wholeBodyPart,mahoneySlicesSS,jaxMahoneySS);
     }    
 sr = sqlGetResult(conn, query->string);
 while (TRUE)
@@ -171,13 +172,14 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 testMax = optionInt("testMax", testMax);
-if (argc != 4)
+if (argc != 5)
     usage();
 int mSS = atoi(argv[2]);
 int jSS = atoi(argv[3]);
-if (mSS < 1 || jSS < 1)
+int wholeBodyPart = atoi(argv[3]);
+if (mSS < 1 || jSS < 1 || wholeBodyPart < 1)
     usage();
-forwardSlices(argv[1], mSS, jSS, TRUE );  /* do match on probe id */
-forwardSlices(argv[1], mSS, jSS, FALSE);  /* do match on gene  id */
+forwardSlices(argv[1], mSS, jSS, wholeBodyPart, TRUE );  /* do match on probe id */
+forwardSlices(argv[1], mSS, jSS, wholeBodyPart, FALSE);  /* do match on gene  id */
 return 0;
 }
