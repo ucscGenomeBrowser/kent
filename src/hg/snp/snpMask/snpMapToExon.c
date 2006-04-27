@@ -4,7 +4,7 @@
 #include "binRange.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMapToExon.c,v 1.1 2006/04/24 01:27:11 heather Exp $";
+static char const rcsid[] = "$Id: snpMapToExon.c,v 1.2 2006/04/27 22:12:23 heather Exp $";
 
 char *database = NULL;
 char *geneTable = NULL;
@@ -52,7 +52,7 @@ int count = 0;
 char *class = NULL;
 char *locType = NULL;
 
-safef(query, sizeof(query), "select name, chromStart, chromEnd, class, locType from snp where chrom='%s' ", chrom);
+safef(query, sizeof(query), "select name, chromStart, chromEnd, class, locType from %s where chrom='%s' ", snpTable, chrom);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
