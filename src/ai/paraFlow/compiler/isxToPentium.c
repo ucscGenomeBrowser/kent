@@ -1048,7 +1048,7 @@ if (objReg == NULL)
     {
     objReg = pentFreeReg(pfc, isx, ivObject, nextNode, coder);
     pentCodeDestReg(pfc, opMov, source, objReg, coder);
-    pentLinkRegSave(pfc, source, objReg, coder);
+    pentLinkReg(source, objReg);
     }
 destReg = pentFreeReg(pfc, isx, dest->valType, nextNode, coder);
 destName = isxRegName(destReg, dest->valType);
