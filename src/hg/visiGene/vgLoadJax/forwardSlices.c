@@ -176,7 +176,7 @@ if (argc != 5)
     usage();
 int mSS = atoi(argv[2]);
 int jSS = atoi(argv[3]);
-int wholeBodyPart = atoi(argv[3]);
+int wholeBodyPart = atoi(argv[4]);
 if (mSS < 1 || jSS < 1 || wholeBodyPart < 1)
     usage();
 forwardSlices(argv[1], mSS, jSS, wholeBodyPart, TRUE );  /* do match on probe id */
