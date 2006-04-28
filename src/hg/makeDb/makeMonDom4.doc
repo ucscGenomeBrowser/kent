@@ -1014,7 +1014,11 @@ end
     #	request push of *chainSelf* tables from kolossus to hgwdev
     #	almost 32 Gb of data.
 
-
+    ssh kolossus
+    cd /cluster/data/monDom4/bed/blastzSelf.2006-03-02
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=10000 -chainLinearGap=medium \
+	-continue=net `pwd`/DEF > net.out 2>&1 &
 
 ############################################################################
 ##  BLASTZ swap from mm8 alignments (DONE - 2006-02-23 - Hiram)
@@ -1679,4 +1683,64 @@ BASE=/cluster/data/monDom4/bed/blastz.xenTro2.2006-04-20
       >& do.log & tail -f do.log
     ln -s blastz.xenTro2.2006-04-20 /cluster/data/monDom4/bed/blastz.xenTro2
 
+##########################################################################
+# QUALITY (WORKING - 2006-04-27 - Hiram)
+    ssh kkstore04
+    #	this is actually a symlink to store8 to distribute the data on
+    #	the full filesystems on kkstore04
+    mkdir /cluster/data/monDom4/bed/quality
+    cd /cluster/data/monDom4/bed/quality
+    cp -p /cluster/data/monDom2/bed/quality/qaToWigEncode.pl .
+    #	using perl script from previous build
+    #	Update the file name in this file:
+my $AGP_FILE="/cluster/data/monDom4/broad.mit.edu/Monodelphis4.0.agp";
+
+    #	convert the qual.fa to wiggle single column input and then wigEncode:
+	time nice -n +19 \
+zcat /cluster/data/monDom4/broad.mit.edu/Monodelphis4.0.agp.chromosome.qual.gz \
+	| ./qaToWigEncode.pl /dev/stdin \
+	| $HOME/bin/$MACHTYPE/wigEncode -noOverlap \
+		stdin quality.wig quality.wib
+
+    #	Converted stdin, upper limit 63.00, lower limit 0.00
+    #	real    96m57.628s
+
+    #	Resulting files:
+    ls -og quality.wi?
+    #	-rw-rw-r--  1 3501643220 Apr 27 18:16 quality.wib
+    #	-rw-rw-r--  1  322734978 Apr 27 18:16 quality.wig
+    #	Note how the byte size of the .wib file is exactly equal
+    #	to the number of bases in a featureBits run without -countGaps
+    #	from the rmsk featureBits above:
+    #	1814099592 bases of 3501643220 (51.807%) in intersection
+    #	This means we have a valid quality score for every base that is
+    #	not in a gap, which is what we want.  If this doesn't work out,
+    #	you can turn this wiggle track into a bed file for each
+    #	contiguous run of data, and then intersect those bed files with
+    #	the gap track to see where they overlap.  This happened this
+    #	time when a new type of gap "clone" was found to be defined in
+    #	the agp file.  Previously there was only "fragment".  The perl
+    #	script had to be altered to recognize this new type of gap.
+    #	For example, this could be done after the table was loaded:
+    ssh kolossus
+    cd /tmp
+    awk '{print $1}' /cluster/data/monDom4/chrom.sizes | while read C
+    do
+	hgWiggle -doBed -db=monDom4 -chr=${C} quality > ${C}.qual.bed
+    done
+    #	then to intersect:
+    for C in 1 2 3 4 5 6 7 8 X Un
+    do
+	featureBits -chrom=chr${C} monDom4 gap chr${C}.qual.bed
+    done
+    #	should all be zero
+
+    ssh hgwdev
+    cd /cluster/data/monDom4/bed/quality
+    ln -s `pwd`/quality.wib /gbdb/monDom4/wib
+    time nice -n +19 hgLoadWiggle monDom4 quality quality.wig
+    #	real    3m29.459s
+    #	verify index:
+    hgsql -e "show index from quality;" monDom4
+    #	check that Cardinality is a number and is not NULL
 
