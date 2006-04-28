@@ -212,6 +212,7 @@ UTIL_DIRS = \
 	pslSwap \
 	pslToBed \
 	pslUnpile \
+	pslxToFa \
 	qa \
 	qaToQac \
 	qacAgpLift \
