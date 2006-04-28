@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.35 2006/04/26 23:19:17 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.36 2006/04/28 22:20:44 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -2101,7 +2101,7 @@ TMPDIR=/scratch/tmp
     #	901976621 bases of 2733948177 (32.992%) in intersection
 
 #########################################################################
-# BLASTZ danRer4 (WORKING - 2006-04-26 - Hiram)
+# BLASTZ danRer4 (DONE - 2006-04-26 - 2006-04-28 - Hiram)
     ssh pk
     mkdir /cluster/data/mm8/bed/blastzDanRer4.2006-04-26
     cd /cluster/data/mm8/bed
@@ -2147,17 +2147,23 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
-XXX - running 2006-04-26
-    #	real    216m23.425s
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=net `pwd`/DEF > net.out 2>&1 &
+
+    #	swap, see also makeDanRer4.doc
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap `pwd`/DEF > swap.out 2>&1 &
 
-
-    time nice -n +19 featureBits mm8 chainDanRer4Link
-    #	53125783 bases of 2567283971 (2.069%) in intersection
-    time nice -n +19 featureBits danRer4 chainMm8Link
-    #	54831876 bases of 1630323462 (3.363%) in intersection
+    time nice -n +19 featureBits mm8 chainDanRer4Link \
+	> fb.mm8.chainDanRer4Link 2>&1 &
+    cat fb.mm8.chainDanRer4Link
+    #	54036008 bases of 2567283971 (2.105%) in intersection
+    time nice -n +19 featureBits danRer4 chainMm8Link \
+	> fb.danRer4.chainDanRer4Link 2>&1 &
+    cat fb.danRer4.chainDanRer4Link
+    #	58145856 bases of 1626093931 (3.576%) in intersection
 
 #########################################################################
 # BLASTZ danRer3 (DONE - 2006-02-28 - Hiram)
@@ -5346,3 +5352,27 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     ls -og mm8ToMm7*
     #	lrwxrwxrwx    1       53 Apr 24 12:32 mm8ToMm7.over.chain.gz -> \
     #		/cluster/data/mm8/bed/liftOver/mm8ToMm7.over.chain.gz
+
+########################################################################
+##  cytoBand - ideogram track (DONE - 2006-04-28 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/mm8/pre_release
+    #	The .wgetrc is the anonymous user
+    WGETRC=`pwd`/.wgetrc
+    export WGETRC
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/genomes/M_musculus/pre_release/ideogram
+
+    mkdir /cluster/data/mm8/cytoBand
+    cd /cluster/data/mm8/cytoBand
+
+    # Create bed file
+    $HOME/kent/src/utils/createNcbiCytoBand.pl \
+	/cluster/data/mm8/pre_release/ideogram
+    # Load the bed file
+    hgLoadBed -strict -noBin \
+	-sqlTable=$HOME/kent/src/hg/lib/cytoBand.sql mm8 \
+	cytoBand cytoBand.bed
+    # Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
+    hgsql mm8 -e "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"
