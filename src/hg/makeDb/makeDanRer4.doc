@@ -1633,4 +1633,18 @@ BASE=/cluster/data/danRer4/bed/blastz.xenTro2.2006-04-25
       >& do.log & tail -f do.log
     ln -s blastz.xenTro2.2006-04-25 /cluster/data/danRer4/bed/blastz.xenTro2
 
+###########################################################################
+## SWAP MM8 blastz result (DONE - 2006-04-28 - Hiram)
+    ssh pk
+    cd /cluster/data/mm8/bed/blastzDanRer4.2006-04-26
 
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/blastzDanRer4.2006-04-26
+    time nice -n +19 featureBits danRer4 chainMm8Link \
+	> fb.danRer4.chainDanRer4Link 2>&1 &
+    cat fb.danRer4.chainDanRer4Link
+    #	58145856 bases of 1626093931 (3.576%) in intersection
