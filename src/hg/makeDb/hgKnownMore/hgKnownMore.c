@@ -7,7 +7,7 @@
 #include "hugoMulti.h"
 #include "knownInfo.h"
 
-static char const rcsid[] = "$Id: hgKnownMore.c,v 1.2 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgKnownMore.c,v 1.3 2006/04/29 16:45:46 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -135,7 +135,6 @@ struct hash *nameOmimHash = newHash(0);
 struct hash *omimNameHash = newHash(0);
 struct nameOmim *list = NULL, *el;
 char *row[2];
-char *omim;
 
 while (lineFileRow(lf, row))
     {
@@ -176,7 +175,7 @@ void hgKnownMore(char *database, char *loc2ref, char *mim2loc, char *omimIds, ch
 {
 struct hash *pgiHash = NULL;	/* Hash of rsInfo indexed by gi. */
 struct hash *locHash = NULL;	/* Hash of rsInfo indexed by locusLink IDs. */
-struct rsInfo *rsList, *rs;	/* List of rsInfo. */
+struct rsInfo *rs;
 struct hash *hmOmimHash = NULL, *hmSymbolHash = NULL;
 struct hash *mimHash = NULL;
 struct hugoMulti *hmList = NULL, *hm;
