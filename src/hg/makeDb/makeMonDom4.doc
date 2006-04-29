@@ -1683,6 +1683,11 @@ BASE=/cluster/data/monDom4/bed/blastz.xenTro2.2006-04-20
       >& do.log & tail -f do.log
     ln -s blastz.xenTro2.2006-04-20 /cluster/data/monDom4/bed/blastz.xenTro2
 
+    ssh kolossus
+    time nice -n +19 featureBits monDom4 chainXenTro2Link \
+	> fb.monDom4.chainXenTro2Link 2>&1 &
+    cat fb.monDom4.chainXenTro2Link
+
 ##########################################################################
 # QUALITY (WORKING - 2006-04-27 - Hiram)
     ssh kkstore04
@@ -1744,3 +1749,192 @@ zcat /cluster/data/monDom4/broad.mit.edu/Monodelphis4.0.agp.chromosome.qual.gz \
     hgsql -e "show index from quality;" monDom4
     #	check that Cardinality is a number and is not NULL
 
+
+####################################################################
+### swap Hg18 blastz (DONE - 2006-04-28 - Hiram)
+###
+    ssh pk
+    mkdir /cluster/data/monDom4/bed/blastz.hg18.swap
+    cd /cluster/data/monDom4/bed
+    ln -s blastz.hg18.swap blastz.hg18
+    cd blastz.hg18.swap
+    #	The original DEF file had iscratch directories for the monDom4
+    #	sequence, for this one we need san directories.  This is a copy
+    #	of the original one with the SEQ2_DIR and _LEN changed:
+    cat << '_EOF_' > DEF
+# human vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/parasol/bin
+
+BLASTZ=blastz.v7
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human (hg18)
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom4
+SEQ2_DIR=/san/sanvol1/scratch/monDom4/monDom4.2bit
+SEQ2_LEN=/san/sanvol1/scratch/monDom4/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzMonDom4.2006-02-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	<< happy emacs
+
+    cd /cluster/data/monDom4/bed/blastz.hg18.swap
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap DEF > swap.out 2>&1 &
+    #	real    118m44.093s
+
+    ssh kolossus
+    cd /cluster/data/monDom4/bed/blastz.hg18.swap
+    time nice -n +19 featureBits monDom4 chainHg18Link \
+	> fb.monDom4.chainHg18Link 2>&1
+    # XXXX running 2006-04-28 14:23
+
+#######################################################################
+### 7-Way conservation (WORKING - 2006-04-28 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/monDom4/bed/multiz7way
+    cd /cluster/data/monDom4/bed/multiz7way
+    cp /cluster/data/mm8/bed/multiz17way/17way.nh .
+
+    /cluster/bin/phast/tree_doctor --prune \
+	chimp_panTro2,macaque_rheMac2,rabbit_oryCun1,cow_bosTau2,dog_canFam2,armadillo_dasNov1,elephant_loxAfr1,tenrec_echTel1,tetraodon_tetNig1,fugu_fr1 \
+	17way.nh > 7way.nh
+
+    #	this leaves the tree we are working with here:
+    (((((human_hg18:0.054922,
+	(rat_rn4:0.081728,mouse_mm8:0.077017):0.335773):0.285925,
+	monodelphis_monDom4:0.371073):0.189124,
+	chicken_galGal2:0.454691):0.123297,
+	xenopus_xenTro2:0.782453):0.156067,
+	zebrafish_danRer3:0.938628);
+
+    /cluster/bin/phast/draw_tree 7way.nh > 7way.ps
+    /cluster/bin/phast/all_dists 7way.nh > 7way.distances.txt
+    grep -y monDom4 7way.distances.txt | sort -k3,3n
+
+    #	Print out that file for reference, and use the calculated
+    #	distances in the table below to order the organisms and check
+    #	the button order on the browser.  Zebrafish ends up before
+    #	tetraodon and fugu on the browser despite its distance.
+    #	And if you can fill in the table below entirely, you have
+    #	succeeded in finishing all the alignments required.
+    #
+#                         featureBits chainLink measures
+#                                      chainMonDom4Link      chain   linearGap
+#     distance                      on MonDom4    on other   minScore
+#  1  0.711920 - human hg18         (% xx.957)  (% 12.385)   5000     loose
+#  2  1.014888 - chicken galGal2    (% 03.050)  (% 09.092)   5000     loose
+#  3  1.069788 - mouse mm8          (% 06.024)  (% 08.245)   5000     loose
+#  4  1.074499 - rat rn4            (% 05.657)  (% xx.170)   5000     loose
+#  5  1.465947 - frog xenTro2       (% xx.322)  (no swap )   5000     loose
+#  6  1.778189 - zebrafish danRer3  (% 02.090)  (% 04.001)   5000     loose
+
+
+    cd /cluster/data/monDom4/bed/multiz7way
+    #	bash shell syntax here ...
+    export H=/cluster/data/monDom4/bed
+    mkdir mafLinks
+    for G in hg18 galGal2 mm8 rn4 xenTro2 danRer3
+    do
+	mkdir mafLinks/$G
+	if [ ! -d ${H}/blastz.${G}/mafNet ]; then
+	echo "missing directory blastz.${G}/mafNet"
+	fi
+	ln -s ${H}/blastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+    done
+
+    #	Copy MAFs to some appropriate NFS server for kluster run
+    ssh kkstore04
+    mkdir /san/sanvol1/scratch/monDom4/multiz7way
+    cd /san/sanvol1/scratch/monDom4/multiz7way
+    time rsync -a --copy-links --progress \
+	/cluster/data/monDom4/bed/multiz7way/mafLinks/ .
+
+    #	We have about 734 Mb of data here, takes ~ 30 seconds to copy
+
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+
+    # the autoMultiz cluster run
+    ssh pk
+    cd /cluster/data/monDom4/bed/multiz7way/
+
+    # create species list and stripped down tree for autoMZ
+    sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
+	7way.nh > tmp.nh
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    mkdir -p maf run
+    cd run
+
+    #	NOTE: you need to set the db properly in this script
+    #	And the binDir and pairs dir
+
+    cat > autoMultiz << '_EOF_'
+#!/bin/csh -ef
+set db = monDom4
+set c = $1
+set maf = $2
+set binDir = /san/sanvol1/scratch/$db/multiz7way/penn
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /san/sanvol1/scratch/$db/multiz7way
+rm -fr $tmp
+mkdir -p $tmp
+cp ../{tree.nh,species.lst} $tmp
+pushd $tmp
+foreach s (`cat species.lst`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if ($s == $db) then
+	continue
+    endif
+    if (-e $in.gz) then
+	zcat $in.gz > $out
+    else if (-e $in) then
+	cp $in $out
+    else
+	echo "##maf version=1 scoring=autoMZ" > $out
+    endif
+end
+set path = ($binDir $path); rehash
+$binDir/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+popd
+cp $tmp/$c.maf $maf
+rm -fr $tmp
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz
+
+cat  << '_EOF_' > template
+#LOOP
+autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    awk '{print $1}' /cluster/data/monDom4/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single template jobList
+    para create jobList
+    # 10 jobs
+    para try ... check ... push ... etc ...
+XXXX running 2006-04-28 17:00
