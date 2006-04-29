@@ -5,13 +5,14 @@
 #include "options.h"
 #include "md5.h"
 
-static char const rcsid[] = "$Id: gpShuffleData.c,v 1.1 2006/04/29 07:26:19 kent Exp $";
+static char const rcsid[] = "$Id: gpShuffleData.c,v 1.2 2006/04/29 07:26:58 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "gpShuffleData - Shuffle and obscure data, so can experiment with it publically.\n"
+  "Please run shuffleLines before running this\n"
   "usage:\n"
   "   gpShuffleData in out ID-col\n"
   "options:\n"
