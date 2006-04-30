@@ -7,7 +7,7 @@
 #include "hugoMulti.h"
 #include "knownInfo.h"
 
-static char const rcsid[] = "$Id: hgKnownMore.c,v 1.3 2005/10/04 22:59:31 donnak Exp $";
+static char const rcsid[] = "$Id: hgKnownMore.c,v 1.4 2006/04/30 16:20:05 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -77,7 +77,6 @@ struct hash *nameOmimHash = newHash(0);
 struct hash *omimNameHash = newHash(0);
 struct nameOmim *list = NULL, *el;
 char *row[2];
-char *omim;
 
 while (lineFileRow(lf, row))
     {
