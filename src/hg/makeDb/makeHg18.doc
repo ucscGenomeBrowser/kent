@@ -8888,6 +8888,54 @@ BASE=/cluster/data/hg18/bed/blastz.xenTro2.2006-04-20
       >& do.log & tail -f do.log
     ln -s blastz.xenTro2.2006-04-20 /cluster/data/hg18/bed/blastz.xenTro2
 
+###########################################################################
+# BLASTZ CHAIN SWAP FOR ZEBRAFISH (danRer4) (DONE, 2006-04-25, hartera)
+# CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET, LIFTOVER AND ALIGNMENT DOWNLOADS
+    # See also makeDanRer4.doc
+    # alignments are in: /cluster/data/hg18/bed/blastz.danRer4.swap
+    # Blastz parameters used were:
+    # BLASTZ_H=2000
+    # BLASTZ_Y=3400
+    # BLASTZ_L=6000
+    # BLASTZ_K=2200
+    # BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
+    # There are no lineage-specific repeats defined for this species pair so
+    # all repeats were used as lineage-specific.
+    ssh pk
+    cd /cluster/data/danRer4/bed/blastz.hg18.2006-04-24
+    nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF >& doSwap.log &
+    # Took about 15 minutes.
+ 
+    # check with featureBits and compare to danRer3 chains:
+    featureBits hg18 chainDanRer4Link
+    # 57415379 bases of 2881515245 (1.993%) in intersection
+    featureBits hg18 chainDanRer3Link
+    # 64801985 bases of 2881515245 (2.249%) in intersection
+ 
+    featureBits -chrom=chr1 hg18 refGene:cds chainDanRer4Link -enrichment
+    # refGene:cds 1.389%, chainDanRer4Link 2.337%, both 0.937%, cover 67.47%, 
+    # enrich 28.87x
+
+    featureBits -chrom=chr1 hg18 refGene:cds chainDanRer3Link -enrichment
+    # refGene:cds 1.389%, chainDanRer3Link 2.601%, both 0.931%, cover 67.01%, 
+    # enrich 25.76x
+
+    featureBits -chrom=chr1 hg17 refGene:cds chainDanRer2Link -enrichment
+    # refGene:cds 1.395%, chainDanRer2Link 2.742%, both 0.911%, cover 65.31%, 
+    # enrich 23.82x
+
+    # similar coverage and enrichment for danRer4 and danRer3 chains
+    # which is good.
+    featureBits -chrom=chr1 hg18 refGene:cds netDanRer4 -enrichment
+    # refGene:cds 1.389%, netDanRer4 31.001%, both 1.096%, cover 78.91%, 
+    # enrich 2.55x
+    featureBits -chrom=chr1 hg18 refGene:cds netDanRer3 -enrichment
+    # refGene:cds 1.389%, netDanRer3 29.929%, both 1.080%, cover 77.72%, 
+    # enrich 2.60x
+    # Similar coverage and enrichment for danRer4 net on hg18 as for danRer3.
+
 #  LOAD FIRSTEF TRACK (DONE 2006-04-25 Fan)
 
     ssh hgwdev
