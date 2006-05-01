@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.36 2006/04/28 22:20:44 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.37 2006/05/01 23:50:44 ann Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -4155,6 +4155,12 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	<< happy emacs
 
     display histo.png &
+
+
+# QA NOTE: (ASZ: 5/1/2006) changed name of phastConsElements table to phastConsElements17way
+# QA NOTE: (ASZ: 5/1/2006) changed name of phastCons17 table to phastCons17way
+
+
 
 #########################################################################
 # MAKE FOLDUTR TABLES (DONE 2006-02-28, Fan)
