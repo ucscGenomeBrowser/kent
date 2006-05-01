@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1091 2006/04/26 21:47:15 acs Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1092 2006/05/01 22:02:11 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9809,6 +9809,78 @@ tg->loadItems = loadBed12Source;
 tg->itemName = jaxPhenotypeName;
 }
 
+
+void getTransMapItemLabel(struct sqlConnection *conn,
+                          boolean useGeneName, boolean useAcc,
+                          struct linkedFeatures *lf)
+/* get label for a transMap item */
+{
+boolean labelStarted = FALSE;
+struct dyString *label = dyStringNew(64);
+char *org, acc[256], *dot;
+
+/* remove version and qualifier */
+safef(acc, sizeof(acc), "%s", lf->name);
+dot = strchr(acc, '.');
+if (dot != NULL)
+    *dot = '\0';
+org = getOrganismShort(conn, acc);
+if (org != NULL)
+    dyStringPrintf(label, "%s ", org);
+if (useGeneName)
+    {
+    char *gene = getGeneName(conn, acc);
+    if (gene != NULL)
+        {
+        dyStringAppend(label, gene);
+        labelStarted = TRUE;
+        }
+    }
+if (useAcc)
+    {
+    if (labelStarted)
+        dyStringAppendC(label, '/');
+    else
+        labelStarted = TRUE;
+    dyStringAppend(label, acc);
+    }
+lf->extra = dyStringCannibalize(&label);
+}
+
+void lookupTransMapLabels(struct track *tg)
+/* This converts the transMap ids to labels. */
+{
+struct linkedFeatures *lf;
+struct sqlConnection *conn = hAllocConn();
+boolean useGeneName = FALSE;  /* FIXME: need to add track UI */
+boolean useAcc =  TRUE;
+
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    getTransMapItemLabel(conn, useGeneName, useAcc, lf);
+hFreeConn(&conn);
+}
+
+void loadTransMap(struct track *tg)
+/* Load up transMap gene predictions. */
+{
+enum trackVisibility vis = tg->visibility;
+tg->items = lfFromGenePredInRange(tg, tg->mapName, chromName, winStart, winEnd);
+if (vis != tvDense)
+    {
+    lookupTransMapLabels(tg);
+    slSort(&tg->items, linkedFeaturesCmpStart);
+    }
+vis = limitVisibility(tg);
+}
+
+void transMapMethods(struct track *tg)
+/* Make track of transMap gene predictions. */
+{
+tg->loadItems = loadTransMap;
+tg->itemName = refGeneName;
+tg->mapItemName = refGeneMapName;
+}
+
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
 {
@@ -9918,6 +9990,7 @@ else if (sameWord(type, "bed6FloatScore"))
     bedMethods(track);
     track->loadItems = loadSimpleBed;
     }
+
 }
 
 static void compositeLoad(struct track *track)
@@ -10895,6 +10968,10 @@ registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);
 registerTrackHandler("encodeDless", dlessMethods);
 
+registerTrackHandler("transMap", transMapMethods);
+registerTrackHandler("transMapGene", transMapMethods);
+registerTrackHandler("transMapRefGene", transMapMethods);
+
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */
 loadFromTrackDb(&trackList);
@@ -11264,7 +11341,6 @@ if (showTrackControls)
 if (showTrackControls)
     hButton("submit", "refresh");
 hPrintf("</CENTER>\n");
-
 
 #ifdef SLOW
 /* We'll rely on the end of program to do the cleanup.
