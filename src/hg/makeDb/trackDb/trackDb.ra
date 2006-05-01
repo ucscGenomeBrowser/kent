@@ -371,6 +371,34 @@ visibility pack
 color 34,139,34
 type genePred
 
+track transMap
+compositeTrack on
+shortLabel TransMap
+longLabel TransMap Genes
+group genes
+priority 36.05
+visibility hide
+type genePred
+cdsDrawDefault genomic\ codons
+
+    track transMapRefGene
+    subTrack transMap
+    shortLabel TransMapRefGene
+    longLabel TransMap RefSeq Genes
+    color 12,12,120
+    priority 1
+    type genePred
+    cdsDrawDefault genomic\ codons
+
+    track transMapGene
+    subTrack transMap
+    shortLabel TransMapMRna
+    longLabel TransMap protein coding mRNAs
+    color 34,139,34
+    priority 2
+    type genePred
+    cdsDrawDefault genomic\ codons
+
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
