@@ -14,7 +14,7 @@
 #include <regex.h>
 #include "trackDb.h"
 
-static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.11 2005/11/28 19:54:00 kate Exp $";
+static char const rcsid[] = "$Id: hgFindSpecCustom.c,v 1.12 2006/05/01 17:49:28 angie Exp $";
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
@@ -340,6 +340,8 @@ else	/* Add to settings. */
     if (hfs->settingsHash == NULL)
 	hfs->settingsHash = hashNew(7);
     hashAdd(hfs->settingsHash, var, cloneString(value));
+    if (sameWord(var, "semiShortCircuit"))
+	hfs->shortCircuit = TRUE;
     }
 }
 
