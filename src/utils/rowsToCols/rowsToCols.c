@@ -4,8 +4,13 @@
 #include "hash.h"
 #include "obscure.h"
 #include "options.h"
+#include "tabRow.h"
 
-boolean variousWidth = FALSE;
+boolean varCol = FALSE;
+boolean fixed = FALSE;
+boolean tab = FALSE;
+char *fs = NULL;
+char *offsets = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -15,134 +20,65 @@ errAbort(
   "usage:\n"
   "   rowsToCols in.txt out.txt\n"
   "options:\n"
-  "   -variousWidth - rows may to have various numbers of columns.\n"
+  "   -varCol - rows may to have various numbers of columns.\n"
+  "   -tab - fields are separated by tab\n"
+  "   -fs=X - fields are separated by given character\n"
+  "   -fixed - fields are of fixed width with space padding\n"
+  "   -offsets=X,Y,Z - fields are of fixed width at given offsets\n"
   );
 }
 
 static struct optionSpec options[] = {
-   {"variousWidth", OPTION_BOOLEAN},
+   {"varCol", OPTION_BOOLEAN},
+   {"tab",	OPTION_BOOLEAN},
+   {"fs",	OPTION_STRING},
+   {"fixed",    OPTION_BOOLEAN},
+   {"offsets", OPTION_STRING},
    {NULL, 0},
 };
-
-struct row
-/* A parsed out row. */
-    {
-    struct row *next;
-    int colCount;
-    char *columns[1];
-    };
-
-int maxColCount(struct row *rowList)
-/* Return largest column count */
-{
-int maxCount = 0;
-struct row *row;
-for (row = rowList; row != NULL; row = row->next)
-    if (row->colCount > maxCount)
-        maxCount = row->colCount;
-return maxCount;
-}
-
-struct row *rowNew(int colCount)
-/* Return row of given size. */
-{
-struct row *row;
-row = needMem(sizeof(row) + colCount*sizeof(char*) );
-row->colCount = colCount;
-return row;
-}
-
-
-struct row *spacedLinesToRows(struct slName *lineList, char *fileName)
-/* Convert lines to rows based on spaces. */
-{
-struct slName *line;
-struct row *rowList = NULL, *row;
-
-if (variousWidth)
-    {
-    for (line = lineList; line != NULL; line = line->next)
-        {
-	char *s = line->name;
-	int rowSize = chopByWhite(s, NULL, 0);
-	row = rowNew(rowSize);
-	// uglyf("rowSize = %d\n", rowSize);
-	// uglyf("line: %s\n", s);
-	chopByWhite(s, row->columns, rowSize);
-	// {int i; for (i=0; i<rowSize; ++i) uglyf("\t%s", row->columns[i]); uglyf("\n");}
-	slAddHead(&rowList, row);
-	}
-    }
-else
-    {
-    if (lineList)
-        {
-	int rowSize = chopByWhite(lineList->name, NULL, 0);
-	int extraSize = rowSize+1;
-	int ix = 1;
-	for (line = lineList; line != NULL; line = line->next, ++ix)
-	    {
-	    int oneSize;
-	    row = rowNew(rowSize);
-	    oneSize = chopByWhite(line->name, row->columns, extraSize);
-	    if (oneSize != rowSize)
-	        {
-		if (oneSize > rowSize)
-		    errAbort("Got more than the expected %d columns line %d of %s",
-			    rowSize, ix, fileName);
-		else
-		    errAbort("Expecting %d columns got %d, line %d of %s",
-		    	rowSize, oneSize, ix, fileName);
-
-		}
-	    slAddHead(&rowList, row);
-	    }
-	}
-    }
-slReverse(&rowList);
-return rowList;
-}
-
-struct row *charSepLinesToRows(struct slName *lineList, char c, char *fileName)
-/* Convert lines to rows based on character separation. */
-{
-struct row *rowList = NULL;
-
-return rowList;
-}
 
 void rowsToCols(char *in, char *out)
 /* rowsToCols - Convert rows to columns and vice versa in a text file.. */
 {
 struct slName *lineList = readAllLines(in);
-struct row *row, *rowList;
+struct tabRow *row, *rowList;
 FILE *f;
 int i, origCols;
+char *s;
 
-rowList = spacedLinesToRows(lineList, in);
-origCols = maxColCount(rowList);
+if (fs != NULL)
+    rowList = tabRowByChar(lineList, fs[0], in, varCol);
+else if (fixed)
+    rowList = tabRowByFixedGuess(lineList, in);
+else if (offsets)
+    {
+    struct slName *nameList = commaSepToSlNames(offsets), *name;
+    struct slInt *offList=NULL, *off;
+    for (name = nameList; name != NULL; name = name->next)
+         {
+	 off = slIntNew(atoi(name->name));
+	 slAddTail(&offList, off);
+	 }
+    rowList = tabRowByFixedOffsets(lineList, offList, in);
+    }
+else
+    rowList = tabRowByWhite(lineList, in, varCol);
+origCols = tabRowMaxColCount(rowList);
 f = mustOpen(out, "w");
 for (i=0; i<origCols; ++i)
     {
     for (row = rowList; row != NULL; row = row->next)
         {
-	char *s = "";
 	if (i < row->colCount)
 	    s = row->columns[i];
+	else
+	    s = "";
 	fprintf(f, "%s", s);
 	if (row->next == NULL)
 	    fprintf(f, "\n");
 	else
 	    fprintf(f, "\t");
 	}
-    }
-uglyf("========\n");
-for (row = rowList; row != NULL; row = row->next)
-    {
-    uglyf("%d: ", row->colCount);
-    for (i=0; i<row->colCount; ++i)
-        uglyf("\t%s", row->columns[i]);
-    uglyf("\n");
     }
 carefulClose(&f);
 }
@@ -153,7 +89,14 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
-variousWidth = optionExists("variousWidth");
+varCol = optionExists("varCol");
+fixed = optionExists("fixed");
+fs = optionVal("fs", NULL);
+if (optionExists("tab"))
+    fs = "\t";
+if (fs != NULL && strlen(fs) != 1)
+    errAbort("fs option needs to be just one character");
+offsets = optionVal("offsets", NULL);
 rowsToCols(argv[1], argv[2]);
 return 0;
 }
