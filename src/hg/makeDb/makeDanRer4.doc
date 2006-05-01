@@ -2301,6 +2301,84 @@ TMPDIR=/scratch/tmp
    # Took about 22 minutes to run.
 
 ###########################################################################
+# MAKE DOWNLOADABLE SEQUENCE FILES (DONE, 2006-05-01, hartera)
+   ssh kkstore01
+   cd /cluster/data/danRer4
+   #- Build the .tar.gz and *.gz files for bigZips
+   cat << '_EOF_' > jkStuff/zipAll.csh
+rm -rf bigZips
+mkdir bigZips
+tar cvzf bigZips/chromAgp.tar.gz ?{,?}/chr*.agp
+tar cvzf bigZips/chromOut.tar.gz ?{,?}/chr*.fa.out
+tar cvzf bigZips/chromFa.tar.gz ?{,?}/chr*.fa
+tar cvzf bigZips/chromFaMasked.tar.gz ?{,?}/chr*.fa.masked
+# soft masked chrNA and chrUn scaffolds
+tar cvzf bigZips/scaffoldRandomsFa.tar.gz NA_random/scaffoldNA_random.fa \
+    Un_random/scaffoldUn_random.fa
+cd bed/simpleRepeat
+tar cvzf ../../bigZips/chromTrf.tar.gz trfMaskChrom/chr*.bed
+cd ../..
+# get GenBank native mRNAs
+cd /cluster/data/genbank
+./bin/i386/gbGetSeqs -db=danRer4 -native GenBank mrna \
+        /cluster/data/danRer4/bigZips/mrna.fa
+# get GenBank xeno mRNAs
+./bin/i386/gbGetSeqs -db=danRer4 -xeno GenBank mrna \
+        /cluster/data/danRer4/bigZips/xenoMrna.fa
+# get native RefSeq mRNAs
+./bin/i386/gbGetSeqs -db=danRer4 -native refseq mrna \
+/cluster/data/danRer4/bigZips/refMrna.fa
+# get native GenBank ESTs
+./bin/i386/gbGetSeqs -db=danRer4 -native GenBank est \
+/cluster/data/danRer4/bigZips/est.fa
+
+# gzip the Genbank sequences and create upstream sequence files for RefSeq.
+cd /cluster/data/danRer4/bigZips
+gzip *.fa
+end
+'_EOF_'
+   # << this line makes emacs coloring happy
+   chmod +x jkStuff/zipAll.csh
+   csh -ef ./jkStuff/zipAll.csh >& zipAll.log &
+   # Took about 35 minutes.    
+   #- Look at zipAll.log to make sure all file lists look reasonable.
+   # Make upstream files for zebrafish RefSeq and Copy the .gz files to
+   # hgwdev:/usr/local/apache/...
+   ssh hgwdev
+   cd /cluster/data/danRer4/bigZips
+   foreach I (1000 2000 5000)
+     featureBits danRer4 refGene:upstream:${I} -fa=stdout \
+              | gzip -c > upstream${I}.fa.gz
+     echo "upstream${I} done"
+   end
+   set gp = /usr/local/apache/htdocs/goldenPath/danRer4
+   mkdir -p $gp/bigZips
+   cp -p *.gz $gp/bigZips
+   mkdir -p $gp/chromosomes
+
+   # Add individual chromosomes and file of scaffolds for each random chrom
+   # to chromosomes downloads directory.
+   foreach f (../*/chr*.fa)
+     cp $f $gp/chromosomes
+   end
+   foreach c (NA_random Un_random)
+     cd /cluster/data/danRer4/$c
+     cp scaffold${c}.fa $gp/chromosomes
+   end
+   # create md5sum for bigZips
+   cd $gp/bigZips
+   md5sum *.gz > md5sum.txt
+   # gzip each chrom or scaffolds for chrom separately in chromosomes dir
+   cd $gp/chromosomes
+   foreach f (*.fa)
+      gzip $f
+   end
+   # create md5sum for chromosomes
+   md5sum *.gz > md5sum.txt
+   # Take a look at bigZips/* and chromosomes/*
+   # copy README.txt's from danRer3 and update
+
+###########################################################################
 # HUMAN (hg18) PROTEINS TRACK FOR hg18 (in progress, 2006-04-28, hartera)
    ssh kkstore01
    bash # if not using bash shell already
