@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1092 2006/05/01 22:02:11 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1093 2006/05/01 22:40:29 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9815,18 +9815,29 @@ void getTransMapItemLabel(struct sqlConnection *conn,
                           struct linkedFeatures *lf)
 /* get label for a transMap item */
 {
+static boolean checkForOrgTable = FALSE, haveOrgTable = FALSE;
 boolean labelStarted = FALSE;
 struct dyString *label = dyStringNew(64);
-char *org, acc[256], *dot;
+char *org = NULL, acc[256], *dot;
+
+/* need gbCdnaInfo and organism table to organism label */
+if (!checkForOrgTable)
+    {
+    haveOrgTable = hTableExists("gbCdnaInfo");
+    checkForOrgTable = TRUE;
+    }
 
 /* remove version and qualifier */
 safef(acc, sizeof(acc), "%s", lf->name);
 dot = strchr(acc, '.');
 if (dot != NULL)
     *dot = '\0';
-org = getOrganismShort(conn, acc);
-if (org != NULL)
-    dyStringPrintf(label, "%s ", org);
+if (haveOrgTable)
+    {
+    org = getOrganismShort(conn, acc);
+    if (org != NULL)
+        dyStringPrintf(label, "%s ", org);
+    }
 if (useGeneName)
     {
     char *gene = getGeneName(conn, acc);
