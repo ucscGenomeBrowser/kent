@@ -2664,3 +2664,48 @@ done
 
     time nice -n +19 featureBits tetNig1 chainMm8Link
     #   47024263 bases of 342403326 (13.734%) in intersection
+
+###########################################################################
+# BLASTZ SWAP TO CREATE CHAIN AND NET ALIGNMENTS FOR ZEBRAFISH (danRer4) 
+# AND CREATE AXNET, MAFNET, LIFTOVER AND ALIGNMENT DOWNLOADS 
+# (DONE, 2006-04-30, hartera)
+   ssh pk
+   # Used these BLASTZ parameters - see also makeDanRer4.doc
+   # BLASTZ_H=2500
+   # BLASTZ_M=50
+   # BLASTZ_Q=/cluster/data/blastz/HoxD55.q 
+   # and no lineage-specific repeats.
+   # swap directory for alignments is:
+   # /cluster/data/tetNig1/bed/blastz.danRer4.swap
+   cd /cluster/data/danRer4/bed/blastz.tetNig1.2006-04-29
+   nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF >& doSwap.log &
+   # Took about 22 minutes.
+   # Check coverage compared to danRer3:
+   featureBits tetNig1 chainDanRer4Link
+   # 82462283 bases of 342403326 (24.083%) in intersection  
+   featureBits tetNig1 chainDanRer3Link
+   # 76373873 bases of 342403326 (22.305%) in intersection
+   # No refGene table for tetNig1 so use mrna: 
+   featureBits -chrom=chr1 tetNig1 mrna chainDanRer4Link -enrichment
+   # mrna 2.624%, chainDanRer4Link 22.894%, both 1.297%, cover 49.42%, 
+   # enrich 2.16x
+   featureBits -chrom=chr1 tetNig1 mrna chainDanRer3Link -enrichment
+   # mrna 2.624%, chainDanRer3Link 21.321%, both 1.205%, cover 45.92%, 
+   # enrich 2.15x
+   featureBits -chrom=chr1 tetNig1 mrna netDanRer4 -enrichment
+   # mrna 2.624%, netDanRer4 78.279%, both 2.278%, cover 86.81%, enrich 1.11x
+   featureBits -chrom=chr1 tetNig1 mrna netDanRer3 -enrichment
+   # mrna 2.624%, netDanRer3 95.070%, both 2.435%, cover 92.80%, enrich 0.98x
+   # Similar coverage for chains and nets for danRer4 and danRer3. 
+   # nets coverage is a little lower for danRer4 than for danRer3.
+   # Try also Human Proteins (hg17):
+   featureBits -chrom=chr1 tetNig1 blastHg17KG netDanRer4 -enrichment
+   # blastHg17KG 5.728%, netDanRer4 78.279%, both 5.666%, cover 98.92%, 
+   # enrich 1.26x
+   featureBits -chrom=chr1 tetNig1 blastHg17KG netDanRer3 -enrichment
+   # blastHg17KG 5.728%, netDanRer3 95.070%, both 5.687%, cover 99.29%, 
+   # enrich 1.04x
+   # Similar coverage here too. Looked at chain and net tracks for danRer4
+   # on the tetNig1 Browser and they look ok.
