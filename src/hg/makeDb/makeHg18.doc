@@ -8888,13 +8888,13 @@ BASE=/cluster/data/hg18/bed/blastz.xenTro2.2006-04-20
       >& do.log & tail -f do.log
     ln -s blastz.xenTro2.2006-04-20 /cluster/data/hg18/bed/blastz.xenTro2
 
-#  Load firstEF track (DONE 2006-04-25 Fan)
+#  LOAD FIRSTEF TRACK (DONE 2006-04-25 Fan)
 
     ssh hgwdev
     mkdir -p /cluster/data/hg18/bed/firstEF
     cd /cluster/data/hg18/bed/firstEF 
 
-# receive the file firstEFMar05.bed.gz from email (ramana.davuluri@osumc.edu) into this subdirectory
+# receive the file firstEFMar05New.bed.gz from email (ramana.davuluri@osumc.edu) into this subdirectory
 
     cat << '_EOF_' > sedScript
 s/chr23/chrX/g
@@ -8905,12 +8905,11 @@ s/chr24/chrY/g
 '_EOF_'
     # << this line keeps emacs coloring happy
     bash
-    zcat firstEFMar05.bed.gz | sed -f sedScript | awk  "{OFS=\"\t\"} {\$3 +=1; print  \$0}" > firstEF.bed
+    zcat firstEFMar05New.bed.gz | sed -f sedScript | awk  "{OFS=\"\t\"} {\$3 +=1; print  \$0}" > firstEF.bed
     exit
  
     hgLoadBed hg18 firstEF firstEF.bed
-    rm firstEF.tab
-    gzip *.bed
+    rm firstEF.bed bed.tab
 
 #done firstEF
 
