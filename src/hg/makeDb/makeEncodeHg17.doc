@@ -1043,6 +1043,7 @@ cat > loadChipWig.csh << 'EOF'
 
 ##########################################################################
 # U North Carolina FAIRE  (2005-10-24 kate)
+#       Peaks data updated (2006-04-13 kate)
     # submitted by Paul Giresi, from Jason Lieb's lab
     # later, Paul submitted an "averages" file for the
     # raw data (but doesn't include the "peaks")
@@ -1102,6 +1103,16 @@ cat > load.csh << 'EOF'
     end
 'EOF'
     csh load.csh >&! load.log 
+
+    # update peaks data (2006-04-13 kate)
+    cd /cluster/data/encode
+    mkdir UNC/2006-04-13/lab
+    cd UNC/2006-04-13/lab
+
+    # trim precision
+    awk 'NR !=1 {printf("%s\t%d\t%d\t%.3f\n", $1, $2, $3, $4)}' \
+        lab/OfficialChIPOTle_PEAKS.gff > peaks.bedGraph
+    # data range: 0 - 3.627
     
 
 ##########################################################################
