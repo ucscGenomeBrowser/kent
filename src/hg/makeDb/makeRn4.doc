@@ -586,7 +586,7 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
         (name, description, nibPath, organism, \
                 defaultPos, active, orderKey, genome, scientificName, \
                 htmlPath, hgNearOk, hgPbOk, sourceName) values \
-        ("rn4", "Nov. 2004", "/gbdb/rn4/rn4.2bit", "Rat", \
+        ("rn4", "Nov. 2004", "/gbdb/rn4", "Rat", \
                "chr2:22845558-23004134", 1, 30, "Rat", \
                 "Rattus norvegicus", "/gbdb/rn4/html/description.html", \
                 0, 0, "Baylor HGSC v. 3.4");'
