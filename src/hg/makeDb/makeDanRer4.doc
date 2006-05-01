@@ -1390,7 +1390,19 @@ if (-e /tmp/danRer4/$2/$2.cat) /bin/cp /tmp/danRer4/$2/$2.cat ./
        rsync -a --progress /iscratch/i/danRer4/*.ooc \
              kkr${R}u00:/iscratch/i/danRer4/
     end
-      
+     
+###########################################################################
+# MAKE HGCENTRALTEST BLATSERVERS ENTRY FOR danRer4 (DONE, 2006-04-27, hartera)
+   ssh hgwdev
+   # DNA port is "0", trans prot port is "1"  
+   echo 'insert into blatServers values("danRer4", "blat17", "17788", "1", "0");  insert into blatServers values("danRer4", "blat17", "17789", "0", "1");' \
+    | hgsql hgcentraltest
+   # this enables blat and isPcr, isPcr is enabled by loading blat server
+   # with tilesize=5 (ask for this when request blat servers from
+   # cluster admin).
+   # if you need to delete those entries
+   echo 'delete from blatServers where db="danRer4";' | hgsql hgcentraltest
+ 
 ###########################################################################
 # AFFYMETRIX ZEBRAFISH GENOME ARRAY CHIP (DONE, 2006-04-24, hartera)
 # NOTE: Jim recommends that, in the future, all AFFY blat alignments should drop
@@ -1551,6 +1563,111 @@ if (-e /tmp/danRer4/$2/$2.cat) /bin/cp /tmp/danRer4/$2/$2.cat ./
     cp -p /cluster/data/danRer4/chrom.sizes \
           /san/sanvol1/scratch/danRer4/
 
+###########################################################################
+# BLASTZ, CHAIN, NET, MAFNET, AXTNET AND ALIGNMENT DOWNLOADS FOR
+# HUMAN (hg18) (DONE, 2006-04-24 - 2006-04-25, hartera)
+    ssh pk
+    # Blastz uses lineage-specific repeats. There are none for human
+    # and zebrafish so use all repeats.
+    # There is a lineage-specific repeats directory for zebrafish (see
+    # section on CREATE ZEBRAFISH AND OTHER SPECIES LINEAGE-SPECIFIC REPEATS
+    # DIRECTORY. lineage-specific repeats for hg18 already made - see
+    # makeHg18.doc (BLASTZ ZEBRAFISH section).
+    mkdir -p /cluster/data/danRer4/bed/blastz.hg18.2006-04-24
+    cd /cluster/data/danRer4/bed
+    ln -s blastz.hg18.2006-04-24 blastz.hg18
+    cd /cluster/data/danRer4/bed/blastz.hg18.2006-04-24
+    # only 5% of the danRer4 genome is now in the random unordered chroms
+    # so not running only scaffolds for these chroms - run as virtual chroms
+    # and use same parameters as for danRer2.
+    cat << 'EOF' > DEF
+# danRer4 zebrafish target, human hg18 query
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# use parameters suggested for human-fish evolutionary distance
+# recommended in doBlastzChainNet.pl help
+# (previously used for  hg16-fr1, danRer1-mm5)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
+
+# TARGET: zebrafish (danRer4)
+# Use all chroms, including both randoms (chrNA_random and chrUn_random)
+SEQ1_DIR=/san/sanvol1/scratch/danRer4/nib
+SEQ1_SMSK=/san/sanvol1/scratch/danRer4/linSpecRep.notInOthers
+SEQ1_LEN=/san/sanvol1/scratch/danRer4/chrom.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+
+# QUERY: human (hg18) - single chunk big enough to run each chrom by itself
+# Use all chroms, including all randoms 
+SEQ2_DIR=/san/sanvol1/scratch/hg18/nib
+SEQ2_LEN=/san/sanvol1/scratch/hg18/hg18Chroms.len
+SEQ2_SMSK=/san/sanvol1/scratch/hg18/linSpecRep.notInOthers
+SEQ2_CHUNK=300000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/danRer4/bed/blastz.hg18.2006-04-24
+TMPDIR=/scratch/tmp
+'EOF'
+   # << happy emacs
+   chmod +x DEF 
+   nohup nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        `pwd`/DEF >& doBlastz.log &
+   # Start: Mon Apr 24 19:20 Stop: Tues Apr 25 05:42
+   # Did not finish:
+   # netChains: looks like previous stage was not successful     
+   # (can't find [danRer4.hg18.]all.chain[.gz]).
+   # This file is there so run again. Continue chainMerge step so remove
+   # all.chain file and chain directory.
+   # NOTE: can leave these files and continue from the net step and it 
+   # will work.
+   cd /cluster/data/danRer4/bed/blastz.hg18.2006-04-24
+   rm ./axtChain/*.all.chain.gz
+   rm -r ./axtChain/chain
+   nohup nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -continue chainMerge `pwd`/DEF >& chainMerge.log &
+   # Took about 10 minutes.
+   # Check results with featureBits and compare to those 
+   # for danRer3 and danRer2:
+   ssh hgwdev
+   featureBits danRer4 chainHg18Link
+   # 64196991 bases of 1626093931 (3.948%) in intersection
+   featureBits danRer3 chainHg18Link
+   # 69559338 bases of 1630323462 (4.267%) in intersection
+   featureBits danRer2 chainHg17Link
+   # 70046373 bases of 1560497282 (4.489%) in intersection
+
+   # After Genbank tracks are loaded, (hartera, 2006-04-27)
+   featureBits -chrom=chr1 danRer4 refGene:cds chainHg18Link -enrichment
+   # refGene:cds 0.732%, chainHg18Link 4.140%, both 0.558%, cover 76.19%, 
+   # enrich 18.40x
+   featureBits -chrom=chr1 danRer3 refGene:cds chainHg18Link -enrichment
+   # refGene:cds 0.769%, chainHg18Link 4.124%, both 0.604%, cover 78.49%, 
+   # enrich 19.03x
+   featureBits -chrom=chr1 danRer4 refGene:cds netHg18 -enrichment
+   # refGene:cds 0.732%, netHg18 31.154%, both 0.624%, cover 85.21%, 
+   # enrich 2.73x
+   featureBits -chrom=chr1 danRer3 refGene:cds netHg18 -enrichment
+   # refGene:cds 0.774%, netHg18 35.434%, both 0.679%, cover 87.73%, 
+   # enrich 2.48x
+   # Similar coverage and enrichment as for hg18 chains and net on danRer3.
+   # do the swap for Blastz chains over to human (hg18) and create net,
+   # axtNet, mafNet, liftOver and Downloads. see also makeHg18.doc for
+   # featureBits on these alignments.
+   ssh pk
+   cd /cluster/data/danRer4/bed/blastz.hg18.2006-04-24
+   nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF >& doSwap.log &
+   # Took about 15 minutes.
 
 ###########################################################################
 # BLASTZ/CHAIN/NET PREP (DONE 4/25/06 angie)
@@ -1634,6 +1751,240 @@ BASE=/cluster/data/danRer4/bed/blastz.xenTro2.2006-04-25
     ln -s blastz.xenTro2.2006-04-25 /cluster/data/danRer4/bed/blastz.xenTro2
 
 ###########################################################################
+# CREATE LIFT FILES FOR RANDOM CHROMOSOMES' SCAFFOLDS
+# (DONE, 2006-04-25, hartera)
+   # scaffolds lift files created by scaffoldFaToAgp when agp files created 
+   # for chrNA_random and chrUn_random. remove last line as this is an extra
+   # gap line that was removed from the agp.
+
+   ssh kkstore01
+   cd /cluster/data/danRer4
+   foreach c (NA_random Un_random)
+     mkdir -p /cluster/data/danRer4/$c/tmp
+   end
+   # NA_random doesn't have .lft and .gap files from scaffoldFaToAgp so
+   # recreate. It had no tmp dir with the NA_random.scaffolds.agp.
+   awk '{if ($1 ~ /Zv6_NA/) print;}' Zv6.scaffolds.agp \
+       > ./NA_random/tmp/NA_random.scaffolds.agp
+   # change the first field to "chrNA_random" then can use agpToFa to process
+   perl -pi.bak -e 's/Zv6_NA[0-9]+/chrNA_random/' ./NA_random/tmp/*.agp
+   wc -l ./NA_random/tmp/NA_random.scaffolds.agp
+   # 2898 ./NA_random/tmp/NA_random.scaffolds.agp
+
+   cd /cluster/data/danRer4
+   foreach c (NA_random)
+     awk '{print $6;}' $c/tmp/$c.scaffolds.agp > $c/tmp/chr$c.scaffolds.lst
+         $HOME/bin/i386/faSomeRecords /cluster/data/danRer4/Zv6_scaffolds.fa \
+         $c/tmp/chr$c.scaffolds.lst $c/tmp/chr$c.fa
+   end
+   cd /cluster/data/danRer4/NA_random/tmp
+   scaffoldFaToAgp -scaffoldGapSize=50000 chrNA_random.fa
+   # change chrUn to chrNA_random for NA_random, change chrUn to chrUn_random
+   # forUn_random. Change D to W for NA_random and Un_random..
+   sed -e 's/chrUn/chrNA_random/' chrNA_random.agp \
+       | sed -e 's/D/W/' > chrNA_random.scaffolds.agp
+   mv chrNA_random.fa chrNA_random.scaffolds.fa
+   # also move the Un_random .lft and .gap files to Un_random/tmp
+   mv ./Un_random/chrUn_random.lft ./Un_random/tmp/chrUn_random.lft
+   mv ./Un_random/chrUn_random.gap ./Un_random/tmp/chrUn_random.gap
+   # for chrNA_random and chrUn_random: remove last line as this is an extra
+   # gap line that was removed from the chrN_random.agp. Add these 
+   # scaffold lift files to liftAll.lft. Also need to change the last 
+   # field so that the correct total number of bases is being shown in the
+   # last column.
+   cd /cluster/data/danRer4
+   foreach c (NA_random Un_random)
+     head -n -1 $c/tmp/chr${c}.lft > $c/tmp/chr${c}.scaffolds.lft
+     perl -pi.bak -e "s/chrUn/chr${c}/" $c/tmp/chr${c}.scaffolds.lft
+     if ($c == "NA_random") then
+        perl -pi.bak -e 's/208064280/208014280/' \
+             $c/tmp/chrNA_random.scaffolds.lft
+     else
+        perl -pi.bak -e 's/19379532/19329532/' \
+             $c/tmp/chrUn_random.scaffolds.lft
+     endif
+     cat $c/tmp/chr${c}.scaffolds.lft >> ./jkStuff/liftAll.lft
+     rm $c/tmp/chr${c}.lft $c/tmp/chr${c}.gap *.bak
+   end
+
+###########################################################################
+# AUTO UPDATE GENBANK MRNA AND EST AND MGC GENES RUN 
+# (DONE, 2006-04-25 - 2006-04-26, hartera)
+   ssh hgwdev
+   cd ~kent/src/hg/makeDb/genbank
+   cvs update -d -P etc
+   # edit etc/genbank.conf to add danRer4 and commit this to CVS.
+# danRer4 (zebrafish)
+# Lift file partitions unplaced sequence pseudo-chroms
+danRer4.serverGenome = /cluster/data/danRer4/danRer4.2bit
+danRer4.clusterGenome = /iscratch/i/danRer4/danRer4.2bit
+danRer4.ooc = /iscratch/i/danRer4/danRer4_11.ooc
+danRer4.align.unplacedChroms = chrNA_random chrUn_random
+danRer4.lift = /cluster/data/danRer4/jkStuff/liftAll.lft
+danRer4.refseq.mrna.native.pslCDnaFilter  = ${ordered.refseq.mrna.native.pslCDnaFilter}
+danRer4.refseq.mrna.xeno.pslCDnaFilter    = ${ordered.refseq.mrna.xeno.pslCDnaFilter}
+danRer4.genbank.mrna.native.pslCDnaFilter = ${ordered.genbank.mrna.native.pslCDnaFilter}
+danRer4.genbank.mrna.xeno.pslCDnaFilter   = ${ordered.genbank.mrna.xeno.pslCDnaFilter}
+danRer4.genbank.est.native.pslCDnaFilter  = ${ordered.genbank.est.native.pslCDnaFilter}
+danRer4.downloadDir = danRer4
+danRer4.mgcTables.default = full
+danRer4.mgcTables.mgc = all
+   # end of section added to etc/genbank.conf
+   cvs commit -m "Added danRer4." etc/genbank.conf
+   # update /cluster/data/genbank/
+   make etc-update
+
+   # ~/kent/src/hg/makeDb/genbank/src/lib/gbGenome.c already contains
+   # danRer genome information
+
+   ssh kkstore02
+   cd /cluster/data/genbank
+   nice bin/gbAlignStep -initial danRer4 &
+   # Start: Tues Apr 25 12:53 Finish: Wed Apr 26 08:38
+   # logFile: var/build/logs/2006.04.25-12:53:39.danRer4.initalign.log
+   # check log file
+   tail -f var/build/logs/2006.04.25-12:53:39.danRer4.initalign.log
+   # check it has finished (last line in log file):
+   # kkstore02 2006.04.26-08:38:36 danRer4.initalign: finish
+   # load database when finished
+   ssh hgwdev
+   cd /cluster/data/genbank
+   nice ./bin/gbDbLoadStep -drop -initialLoad danRer4 &
+   # logFile: var/dbload/hgwdev/logs/2006.04.26-15:45:19.dbload.log
+   # check it is finished: hgwdev 2006.04.26-17:48:07 dbload: finish
+   # Took about 2 hours.
+
+###########################################################################
+# SPLIT UP ZEBRAFISH MASKED SEQUENCE FROM chrUn AND chrNA INTO SCAFFOLDS
+# ADD SOFT-MASKED SCAFFOLDS TO ISERVERS AND THE SAN FOR CLUSTER RUNS
+# (DONE, 2006-04-27, hartera)
+
+    ssh kkstore01
+    cd /cluster/data/danRer4
+    # for chrNA_random and chrUn_random, get soft-masked sequence.
+    foreach c (NA_random Un_random)
+      cd $c
+      mkdir scaffoldsSoftMask
+      awk 'BEGIN {FS="\t"}{if ($5 != "N") \
+       print "faFrag -mixed chr'${c}'.fa",$2-1, $3, $6".fa";}' chr${c}.agp \
+       >> ./scaffoldsSoftMask/faFragSoftMask.csh
+      cd ..
+    end
+    # change permissions run scripts to get sequences
+    foreach d (NA_random Un_random)
+       chmod +x $d/scaffoldsSoftMask/faFragSoftMask.csh
+    end
+    # wrapper shell script to run script to get the soft-masked scaffolds
+    cat << '_EOF_' > jkStuff/getMaskedScaffolds.csh
+#!/bin/csh
+foreach c (NA_random Un_random)
+   set dir=/cluster/data/danRer4
+   echo "Processing $c"
+   cd $dir/$c/scaffoldsSoftMask
+   cp ../chr${c}.fa .
+   echo "Getting soft-masked sequences ..."
+   nice faFragSoftMask.csh >& faFrag.log
+end
+'_EOF_'
+   chmod +x jkStuff/getMaskedScaffolds.csh
+   nice ./jkStuff/getMaskedScaffolds.csh &
+   # Took about 2.5 hours.
+   # check a few sequences that they are correct
+   # add name of scaffold to sequence fasta and cat together
+   foreach c (NA_random Un_random)
+      set dir = /cluster/data/danRer4
+      cd $dir/$c/scaffoldsSoftMask
+      foreach f (Zv*)
+        set g=$f:r
+        set sc=scaffold${c}.fa
+        perl -pi.bak -e "s/>chr[0-9A-Za-z\-\:_]+/>$g/" $f
+        cat $f >> $sc
+        rm *.bak
+      end
+      cp scaffold* $dir/$c/
+   end
+   grep '>' NA_random/scaffoldNA_random.fa | wc -l
+   # 2898
+   grep '>' Un_random/scaffoldUn_random.fa | wc -l
+   # 68
+   # check sizes of final FASTA file with all sequences. check a few
+   # sequence files to see that they are correct - ok 
+   cd /cluster/data/danRer4
+cat << '_EOF_' > ./jkStuff/checkFastaSizes.csh
+#!/bin/csh -fe
+
+set scafName=$1
+set agpLen=$2
+
+set pref=`echo $scafName | cut -c1-2`
+if ($pref == "Zv") then
+  set g=/cluster/data/danRer4/*/scaffoldsSoftMask/${scafName}.fa
+  set h=$g:t
+  echo "Getting size of $h"
+  set faLen = `faSize $g | awk '{print $1;}'`
+
+  if ($agpLen == $faLen) then
+     echo "   OK: apg length = $h length = $faLen"
+  else
+     echo "ERROR:  length = $agpLen, but $h length = $faLen"
+  endif
+endif
+'_EOF_'
+   # << happy emacs
+   chmod +x ./jkStuff/checkFastaSizes.csh
+   # use bash as doing a cat in C shell seems to split the line up by space
+   bash
+   for c in NA_random Un_random
+   do
+     echo "Processing $c scaffolds ..."; 
+     cat $c/chr${c}.agp  | while read line;
+     do
+     scaf=`echo $line | cut -d " " -f6`;
+     size=`echo $line | cut -d " " -f8`; 
+     nice ./jkStuff/checkFastaSizes.csh $scaf $size >> checkFastaSizes.log;
+     done
+   done 
+   exit # back to C shell
+   grep "ERROR:" checkFastaSizes.log | wc -l
+
+   # No errors so all are the OK so FASTA files are the expected size
+   # Add soft-masked scaffolds to the Iservers and the san for cluster runs 
+   
+   ssh kkr1u00
+   cd /cluster/data/danRer4
+   mkdir /iscratch/i/danRer4/scaffoldsSoftMask
+   foreach c (NA_random Un_random)
+      foreach f (/cluster/data/danRer4/$c/scaffoldsSoftMask/Zv*.fa)
+         cp -p $f /iscratch/i/danRer4/scaffoldsSoftMask
+      end
+      cp -p /cluster/data/danRer4/$c/scaffold${c}.fa /iscratch/i/danRer4
+   end
+   ls /iscratch/i/danRer4/scaffoldsSoftMask/ | wc
+   # 2966
+   # all files are there   
+   # rsync to cluster machines
+   foreach R (2 3 4 5 6 7 8)
+      rsync -a --progress /iscratch/i/danRer4/ kkr${R}u00:/iscratch/i/danRer4/
+   end
+
+   ssh pk
+   mkdir -p /san/sanvol1/scratch/danRer4/scaffoldsSoftMask
+   foreach c (NA_random Un_random)
+      foreach f (/cluster/data/danRer4/$c/scaffoldsSoftMask/Zv*.fa)
+        rsync -a --progress $f /san/sanvol1/scratch/danRer4/scaffoldsSoftMask/
+      end
+      rsync -a --progress /cluster/data/danRer4/${c}/scaffold${c}.fa \
+            /san/sanvol1/scratch/danRer4/
+   end
+   foreach f (/san/sanvol1/scratch/danRer4/scaffoldsSoftMask/*.fa)
+     echo $f >> files.log
+   end
+   wc -l files.log 
+   # 2966 files.log
+   rm files.log
+   # All files have transferred.
+
+###########################################################################
 ## SWAP MM8 blastz result (DONE - 2006-04-28 - Hiram)
     ssh pk
     cd /cluster/data/mm8/bed/blastzDanRer4.2006-04-26
@@ -1648,3 +1999,458 @@ BASE=/cluster/data/danRer4/bed/blastz.xenTro2.2006-04-25
 	> fb.danRer4.chainDanRer4Link 2>&1 &
     cat fb.danRer4.chainDanRer4Link
     #	58145856 bases of 1626093931 (3.576%) in intersection
+
+###########################################################################
+# BLASTZ, CHAIN, NET, MAFNET, AXTNET AND ALIGNMENT DOWNLOADS FOR
+# OPOSSUM (monDom4) (DONE, 2006-04-28 - 2006-04-29, hartera)
+    ssh hgwdev
+    # Remove all test chain and net tables and start again
+    foreach c (`cat chrom.lst`)
+       hgsql -e "drop table chr${c}_chainMonDom4;" danRer4
+       hgsql -e "drop table chr${c}_chainMonDom4Link;" danRer4
+       hgsql -e "drop table chr${c}_chainMonDom4NoDyMsk;" danRer4
+       hgsql -e "drop table chr${c}_chainMonDom4NoDyMskLink;" danRer4
+    end
+    hgsql -e "drop table netMonDom4;" danRer4
+    hgsql -e "drop table netMonDom4NoDyMsk;" danRer4
+    # remove downloads
+    rm -r /usr/local/apache/htdocs/goldenPath/danRer4/vsMonDom4
+    rm \
+    /usr/local/apache/htdocs/goldenPath/danRer4/liftOver/danRer4ToMonDom4.over.chain.gz
+    rm /cluster/data/danRer4/bed/liftOver/danRer4ToMonDom4.over.chain.gz
+    # remove old Blastz swap
+    rm -r /cluster/data/danRer4/bed/blastz.monDom4.swap
+    # remove link to old blastz directory
+    rm -r /cluster/data/danRer4/bed/blastz.monDom4
+
+    # see makeMonDom4.doc for removal of test tables and download files
+    # and swap directory on monDom4.
+    
+    ssh pk
+    # Blastz uses lineage-specific repeats. There are none for human
+    # and zebrafish so use all repeats.
+    # There is a lineage-specific repeats directory for zebrafish (see
+    # section on CREATE ZEBRAFISH AND OTHER SPECIES LINEAGE-SPECIFIC REPEATS
+    # DIRECTORY. lineage-specific repeats for monDom4 made and also nibs - see
+    # makeMonDom4.doc. Need nib files when running Blastz with
+    # lineage-specific repeats.
+    
+    mkdir -p /cluster/data/danRer4/bed/blastz.monDom4.2006-04-28
+    cd /cluster/data/danRer4/bed
+    ln -s blastz.monDom4.2006-04-28 blastz.monDom4
+    cd /cluster/data/danRer4/bed/blastz.monDom4.2006-04-28
+    # only 5% of the danRer4 genome is now in the random unordered chroms
+    # so not running only scaffolds for these chroms - run as virtual chroms
+    # and use same parameters as for danRer2 but use all repeats as 
+    # lineage-specific as monDom4 is now mapped to chroms.
+    cat << 'EOF' > DEF
+# danRer4 zebrafish target, opossum monDom4 query
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# use parameters suggested for human-fish evolutionary distance
+# recommended in doBlastzChainNet.pl help.
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
+
+# TARGET: zebrafish (danRer4)
+# Use all chroms, including both randoms (chrNA_random and chrUn_random)
+SEQ1_DIR=/san/sanvol1/scratch/danRer4/nib
+SEQ1_SMSK=/san/sanvol1/scratch/danRer4/linSpecRep.notInOthers
+SEQ1_LEN=/san/sanvol1/scratch/danRer4/chrom.sizes
+SEQ1_CHUNK=100000000
+SEQ1_LAP=10000
+
+# QUERY: opossum (monDom4) 
+SEQ2_DIR=/san/sanvol1/scratch/monDom4/nib
+SEQ2_LEN=/san/sanvol1/scratch/monDom4/chrom.sizes
+SEQ2_SMSK=/san/sanvol1/scratch/monDom4/linSpecRep.notInOthers
+SEQ2_CHUNK=50000000
+SEQ2_LIMIT=100
+SEQ2_LAP=0
+
+BASE=/cluster/data/danRer4/bed/blastz.monDom4.2006-04-28
+TMPDIR=/scratch/tmp
+'EOF'
+   # << happy emacs
+   chmod +x DEF 
+   nohup nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        `pwd`/DEF >& doBlastz.log &
+   # Start: Fri Apr 28 13:27 Finish: Apr 29 01:28
+   # Stopped after making and merging chains:
+   # netChains: looks like previous stage was not successful 
+   # (can't find [danRer4.monDom4.]all.chain[.gz]). 
+   # Start again with net step and continue:
+
+   cd /cluster/data/danRer4/bed/blastz.monDom4.2006-04-28
+   nohup nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -continue net `pwd`/DEF >& net.log &
+   # Took about 15 minutes to finish.
+   # Do swap to get danRer4 alignments on monDom4:
+   # see also makeMonDom4.doc  
+   cd /cluster/data/danRer4/bed/blastz.monDom4.2006-04-28
+   nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF >& doSwap.log &
+   # Took about 15 minutes.
+
+###########################################################################
+# BLASTZ FOR FUGU (fr1) (DONE, 2006-04-28 - 2006-04-29, hartera)
+# CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET AND ALIGNMENT DOWNLOADS
+    # No lineage-specific repeats for this species pair. fr1 is in scaffolds
+    # so not so easy to use repeats with this run anyway. There is a 2bit 
+    # file of scaffolds on the Iservers. 
+    # Run this with dynamic masking instead. 
+    # copy masked fr1 scaffolds 2 bit file to the san - see makeFr1.doc    
+    # size of scaffolds FASTA file:
+    ssh kkr1u00
+    faSize /panasas/store/fr1/scaffolds/scaffoldMaskedUnFr1.fa
+    # 329140338 bases
+    ssh pk
+    mkdir /cluster/data/danRer4/bed/blastz.fr1.2006-04-28
+    cd /cluster/data/danRer4/bed
+    ln -s blastz.fr1.2006-04-28 blastz.fr1
+    cd /cluster/data/danRer4/bed/blastz.fr1.2006-04-28
+# use parameters for fr1 in makeDanRer2.doc. Using scaffolds makes this run
+# slower so it is best to have the scaffolds in the query. Use HoxD55.q 
+# matrix as Fugu is quite distant from zebrafish. Blastz uses 
+# lineage-specfic repeats but there are none for these two species.
+# Use soft-masked scaffolds and dynamic masking.
+cat << '_EOF_' > DEF
+# zebrafish (danRer4) vs. Fugu (fr1)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=0
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2000
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - zebrafish (danRer4)
+SEQ1_DIR=/san/sanvol1/scratch/danRer4/danRer4.2bit
+SEQ1_LEN=/san/sanvol1/scratch/danRer4/chrom.sizes
+# 0.5 Mb chunk for target with 5 kb overlap
+SEQ1_LIMIT=30
+SEQ1_CHUNK=500000
+SEQ1_LAP=5000
+
+# QUERY - Fugu (fr1)
+SEQ2_DIR=/san/sanvol1/scratch/fr1/fr1.2bit
+# soft-masked scaffolds in 2bit format
+SEQ2_CTGDIR=/san/sanvol1/scratch/fr1/UnScaffolds/fr1UnScaffolds.2bit
+SEQ2_LIFT=/san/sanvol1/scratch/fr1/UnScaffolds/ordered.lft
+SEQ2_LEN=/san/sanvol1/scratch/fr1/chrom.sizes
+SEQ2_CTGLEN=/san/sanvol1/scratch/fr1/UnScaffolds/scaffolds.sizes
+# large enough chunk to do whole genome at once
+SEQ2_CHUNK=500000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/danRer4/bed/blastz.fr1.2006-04-28
+TMPDIR=/scratch/tmp
+'_EOF_'
+   # << this line keeps emacs coloring happy
+   chmod +x DEF
+   nohup nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        `pwd`/DEF >& doBlastz.log &
+
+   # Start: Fri Apr 28 18:54 Finish: Apr 29 06:35
+   # Stopped after making and merging chains:
+   # netChains: looks like previous stage was not successful 
+   # (can't find [danRer4.fr1.]all.chain[.gz]). 
+   # Start again with net step and continue:
+
+   cd /cluster/data/danRer4/bed/blastz.fr1.2006-04-28
+   nohup nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -continue net `pwd`/DEF >& net.log &
+   # Took about an hour to finish.
+   # check coverage:
+   featureBits danRer4 chainFr1Link
+   # 139280554 bases of 1626093931 (8.565%) in intersection
+   featureBits danRer3 chainFr1Link
+   # 137698495 bases of 1630323462 (8.446%) in intersection
+
+   featureBits -chrom=chr1 danRer4 refGene:cds chainFr1Link -enrichment
+   # refGene:cds 0.732%, chainFr1Link 8.464%, both 0.660%, 
+   # cover 90.18%, enrich 10.66x
+   featureBits -chrom=chr1 danRer3 refGene:cds chainFr1Link -enrichment
+   # refGene:cds 0.774%, chainFr1Link 8.364%, both 0.713%, 
+   # cover 92.09%, enrich 11.01x
+   featureBits -chrom=chr1 danRer4 refGene:cds netFr1 -enrichment
+   # refGene:cds 0.732%, netFr1 52.712%, both 0.710%, 
+   # cover 96.97%, enrich 1.84x
+   featureBits -chrom=chr1 danRer3 refGene:cds netFr1 -enrichment
+   # refGene:cds 0.774%, netFr1 58.353%, both 0.759%, 
+   # cover 97.95%, enrich 1.68x
+   # Do the Blastz swap to get danRer4 alignments on fr1
+   # see also makeFr1.doc for featureBits on these alignments.
+   ssh pk
+   cd /cluster/data/danRer4/bed/blastz.fr1.2006-04-28
+   nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF >& doSwap.log &
+   # Took about 30 minutes.
+
+###########################################################################
+# BLASTZ FOR TETRAODON (tetNig1) (DONE, 2006-04-29 - 2006-04-30, hartera)
+# CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET AND ALIGNMENT DOWNLOADS
+    # No lineage-specific repeats for this species pair. 
+    # Tetraodon also has no species-specific repeats in the RepeatMasker
+    # library so run this using dynamic masking instead as for danRer2 and
+    # danRer3.
+    # The tetraodon 2bit file of chroms and scaffolds 
+    # (tetNig1ChromsRandomScafs.2bit) - this contains sequences for chroms
+    # and for scaffolds of random chroms.
+    ssh pk
+    mkdir /cluster/data/danRer4/bed/blastz.tetNig1.2006-04-29
+    cd /cluster/data/danRer4/bed
+    ln -s blastz.tetNig1.2006-04-29 blastz.tetNig1
+    cd /cluster/data/danRer4/bed/blastz.tetNig1.2006-04-29
+# use parameters for tetNig1 in makeDanRer3.doc. Using scaffolds makes this run
+# slower so it is best to have the scaffolds in the query. Use HoxD55.q 
+# matrix as tetraodon is quite distant from zebrafish. Blastz uses 
+# lineage-specfic repeats but there are none for these two species.
+# Use soft-masked scaffolds and dynamic masking.
+cat << '_EOF_' > DEF
+# zebrafish (danRer4) vs. tetraodon (tetNig1)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=0
+
+ALIGN=blastz-run
+BLASTZ=blastz
+BLASTZ_H=2500
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET - zebrafish (danRer4)
+SEQ1_DIR=/san/sanvol1/scratch/danRer4/danRer4.2bit
+SEQ1_LEN=/san/sanvol1/scratch/danRer4/chrom.sizes
+# 0.5 Mb chunk for target with 5 kb overlap
+SEQ1_LIMIT=30
+SEQ1_CHUNK=500000
+SEQ1_LAP=5000
+
+# QUERY - Tetraodon (tetNig1)
+SEQ2_DIR=/san/sanvol1/scratch/tetNig1/tetNig1.2bit
+# soft-masked chroms and random scaffolds in 2bit format
+SEQ2_CTGDIR=/san/sanvol1/scratch/tetNig1/chromsAndScafs/tetNig1ChromsRandomScafs.2bit
+SEQ2_LIFT=/san/sanvol1/scratch/tetNig1/chromsAndScafs/chromsAndScafs.lft
+SEQ2_LEN=/san/sanvol1/scratch/tetNig1/chrom.sizes
+SEQ2_CTGLEN=/san/sanvol1/scratch/tetNig1/chromsAndScafs/chromsAndScafs.sizes
+# large enough chunk to do whole genome at once
+SEQ2_CHUNK=1000000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/danRer4/bed/blastz.tetNig1.2006-04-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+   # << this line keeps emacs coloring happy
+   chmod +x DEF
+   nohup nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        `pwd`/DEF >& doBlastz.log &
+   # Start: Sat Apr 29 18:10 Finish: Apr 29 22:41 
+   # Stopped after making and merging chains:
+   # netChains: looks like previous stage was not successful 
+   # (can't find [danRer4.tetNig1.]all.chain[.gz]). However, this file
+   # is there so start again with net step and continue:
+
+   cd /cluster/data/danRer4/bed/blastz.tetNig1.2006-04-29
+   nohup nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -continue net `pwd`/DEF >& net.log &
+   # Took about 20 minutes to finish.
+   # check coverage compared to danRer3:
+   featureBits danRer4 chainTetNig1Link
+   # 119439512 bases of 1626093931 (7.345%) in intersection
+   featureBits danRer3 chainTetNig1Link
+   # 109205244 bases of 1630323462 (6.698%) in intersection
+   featureBits -chrom=chr1 danRer4 refGene:cds chainTetNig1Link -enrichment
+   # refGene:cds 0.732%, chainTetNig1Link 7.536%, both 0.645%, 
+   # cover 88.08%, enrich 11.69x
+   featureBits -chrom=chr1 danRer3 refGene:cds chainTetNig1Link -enrichment
+   # refGene:cds 0.774%, chainTetNig1Link 6.821%, both 0.692%, 
+   # cover 89.34%, enrich 13.10x
+   featureBits -chrom=chr1 danRer4 refGene:cds netTetNig1 -enrichment
+   # refGene:cds 0.732%, netTetNig1 55.116%, both 0.705%, 
+   # cover 96.33%, enrich 1.75x
+   featureBits -chrom=chr1 danRer3 refGene:cds netTetNig1 -enrichment
+   # refGene:cds 0.774%, netTetNig1 61.540%, both 0.753%, 
+   # cover 97.24%, enrich 1.58x
+   # Similar coverage as for tetNig1 chains and nets on zebrafish danRer3.
+   # Do the Blastz swap to get danRer4 alignments on tetNig1
+   # see also makeTetNig1.doc for featureBits for these alignments on tetNig1.
+   ssh pk
+   cd /cluster/data/danRer4/bed/blastz.tetNig1.2006-04-29
+   nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF >& doSwap.log &
+   # Took about 22 minutes to run.
+
+###########################################################################
+# HUMAN (hg18) PROTEINS TRACK FOR hg18 (in progress, 2006-04-28, hartera)
+   ssh kkstore01
+   bash # if not using bash shell already
+   # make Blast database for non-random chrom sequences
+   mkdir -p /cluster/data/danRer4/blastDb
+   cd /cluster/data/danRer4/blastDb
+   cut -f 1 ../chrom.sizes | sed "s/chr//" | sed "/NA_random/d" \ 
+       | sed "/Un_random/d" > chrom.list
+   for i in `cat chrom.list`; 
+       do ls -1 ../$i/*/*.fa . ; done | sed -n "/.*_.*_.*_.*/p" > list
+   ln -s `cat list` .
+   for i in *.fa
+    do
+        /projects/compbio/bin/i686/formatdb -i $i -p F
+    done
+   rm *.log *.fa list
+   cd /cluster/data/danRer4
+   for i in `cat blastDb/chrom.list`; 
+       do cat  $i/chr*/*.lft  ; done > jkStuff/subChr.lft
+   rm blastDb/chrom.list
+   # Now make Blast database for random scaffolds sequences.
+   mkdir /cluster/data/danRer4/scaffoldBlastDb
+   cd /cluster/data/danRer4/scaffoldBlastDb
+
+   # Take file of all scaffolds for NA_random and Un_random and cat together
+   cat ../NA_random/scaffoldNA_random.fa ../Un_random/scaffoldUn_random.fa \
+       > allRandomScafs.fasta
+   grep '>' allRandomScafs.fasta | wc -l
+   # 2966
+   faSplit sequence allRandomScafs.fasta 500 scaf
+   rm allRandomScafs.fasta
+   for i in *.fa
+     do
+       /projects/compbio/bin/i686/formatdb -i $i -p F
+     done
+   rm *.log *.fa
+   # combine databases for chroms and random chroms 
+   mkdir -p /san/sanvol1/scratch/danRer4/comboBlastDb
+   cd /cluster/data/danRer4/blastDb
+   for i in nhr nin nsq; 
+    do cp *.$i /san/sanvol1/scratch/danRer4/comboBlastDb; 
+    done
+   cd /cluster/data/danRer4/scaffoldBlastDb
+   for i in nhr nin nsq; 
+     do cp *.$i /san/sanvol1/scratch/danRer4/comboBlastDb; 
+     done
+   mkdir -p /cluster/data/danRer4/bed/tblastn.hg18KG
+   cd /cluster/data/danRer4/bed/tblastn.hg18KG
+   echo  /san/sanvol1/scratch/danRer4/comboBlastDb/*.nsq  \
+         | xargs ls -S | sed "s/\.nsq//"  > query.lst
+   wc -l query.lst
+   # 4377 query.lst
+   # we want around 250000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk "{print \\\$1}"`/\(250000/`wc query.lst | awk "{print \\\$1}"`\)
+   # 36727/(250000/4377) = 643.016316
+   mkdir -p /cluster/bluearc/danRer4/bed/tblastn.hg18KG/kgfa
+   split -l 643 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl \
+        /cluster/bluearc/danRer4/bed/tblastn.hg18KG/kgfa/kg
+   ln -s /cluster/bluearc/danRer4/bed/tblastn.hg18KG/kgfa kgfa
+   cd kgfa
+   for i in *; do 
+     nice /cluster/home/braney/bin/x86_64/pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   mkdir -p /cluster/bluearc/danRer4/bed/tblastn.hg18KG/blastOut
+   ln -s /cluster/bluearc/danRer4/bed/tblastn.hg18KG/blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   exit # back to tcsh
+   cd /cluster/data/danRer4/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+        liftUp -nosort -type=".psl" -nohead $f.3 /cluster/data/danRer4/jkStuff/subChr.lft carry $f.2
+        liftUp -nosort -type=".psl" -nohead $f.4 /cluster/data/danRer4/jkStuff/liftAll.lft carry $f.3
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.4
+
+        if pslCheck -prot $3.tmp                                                  
+        then                                                                      
+            mv $3.tmp $3                                                          
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0                                                                    
+    fi                                                                            
+fi                                                                                
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    
+    # then run the Blast cluster jobs
+    ssh kk
+    cd /cluster/data/danRer4/bed/tblastn.hg18KG
+    para create blastSpec
+    para try, check, push, check etc.
+    # pushed 100,000 jobs at a time so need to do para push again later
+    para time
+# Completed: 253866 of 253866 jobs
+# CPU time in finished jobs:   52410110s  873501.83m 14558.36h  606.60d  1.662 y
+# IO & Wait Time:               5508786s   91813.10m  1530.22h   63.76d  0.175 y
+# Average job time:                 228s       3.80m     0.06h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            2162s      36.03m     0.60h    0.03d
+# Submission to last job:        147825s    2463.75m    41.06h    1.71d
+
+    # Took a while as had to repush some crashed jobs.
+    ssh kkstore01
+    cd /cluster/data/danRer4/bed/tblastn.hg18KG
+    tcsh
+    mkdir chainRun
+    cd chainRun
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=75000 stdin /cluster/bluearc/danRer4/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS \
+      /cluster/bluearc/danRer4/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    ssh kk
+    cd /cluster/data/danRer4/bed/tblastn.hg18KG/chainRun
+    para create chainSpec
+    para try, check, push, check etc.
