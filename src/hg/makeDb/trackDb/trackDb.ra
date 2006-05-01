@@ -2371,6 +2371,7 @@ searchTable knownGene
 searchMethod exact
 searchType knownGene
 shortCircuit 1
+semiShortCircuit 1
 termRegex [a-z][a-z0-9][0-9]+
 searchPriority 9
 
@@ -2379,6 +2380,7 @@ searchTable all_mrna
 searchMethod prefix
 searchType mrnaAcc
 shortCircuit 1
+semiShortCircuit 1
 termRegex [a-z][a-z0-9][0-9]+
 searchPriority 10
 
