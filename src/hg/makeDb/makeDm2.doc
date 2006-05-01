@@ -4037,6 +4037,7 @@ BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
 
 
 # HGNEAR PROTEIN BLAST TABLES (DONE 1/31/06 angie)
+# mmBlastTab redone 5/1/06 -- makeMm8.doc run used outdated proteins
     ssh hgwdev
     mkdir /cluster/data/dm2/bed/hgNearBlastp
     cd /cluster/data/dm2/bed/hgNearBlastp
@@ -4065,6 +4066,21 @@ _EOF_
 # *** flyBaseBlastTab hgBlastTab mmBlastTab rnBlastTab drBlastTab ceBlastTab scBlastTab 
 # *** and dmBlastTab in these databases:
 # *** hg17 mm7 rn3 danRer3 ce2 sacCer1 
+    # 5/1/06: redo dm2.mmBlastTab and mm8.dmBlastTab
+    cat << _EOF_ > config.ra.mm
+# Redo vs. mm8:
+
+targetGenesetPrefix flyBase
+targetDb dm2
+queryDbs mm8
+
+dm2Fa /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
+mm8Fa /cluster/data/mm8/bed/geneSorter/blastp/known.faa
+
+buildDir /cluster/data/dm2/bed/hgNearBlastp
+scratchDir /san/sanvol1/scratch/dm2HgNearBlastp
+_EOF_
+    doHgNearBlastp.pl -noSelf config.ra.mm >& doMm.log & tail -f doMm.log
 
 
 # CLUSTER GENES AND MAP TO OTHER DATA (DONE 2/6/06 angie)
