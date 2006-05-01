@@ -231,6 +231,16 @@ priority 86
 visibility hide
 type psl .
 
+track phastConsElements17way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track blatFish
 shortLabel Tetraodon Blat
 longLabel Tetraodon nigroviridis Translated Blat Alignments
