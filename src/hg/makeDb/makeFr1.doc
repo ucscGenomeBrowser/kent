@@ -2095,6 +2095,8 @@ chainSome $(path1)
     # BLASTZ_M=50
     # BLASTZ_Q=/cluster/data/blastz/HoxD55.q 
     # and no lineage-specific repeats.
+    # Alignments are in: /cluster/data/fr1/bed/blastz.danRer4.swap
+
     cd /cluster/data/danRer4/bed/blastz.fr1.2006-04-28
     nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
         -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
