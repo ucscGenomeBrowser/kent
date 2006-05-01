@@ -480,7 +480,7 @@ group compGeno
 priority 290.1
 visibility hide
 spectrum on
-type netAlign panTro1 chainPanTro2
+type netAlign panTro2 chainPanTro2
 otherDb panTro2
 
 track chainPanTro1
