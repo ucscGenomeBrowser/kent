@@ -1096,11 +1096,11 @@ altColor 0,0,255
 type sample
 
 track snp125
-shortLabel SNP 125
-longLabel dbSNP build 125
+shortLabel SNPs 
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 125) 
 group varRep
 priority 143.1
-visibility hide
+visibility dense 
 type bed 6 +
 
 track snp
