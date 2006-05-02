@@ -444,7 +444,7 @@ cdsDrawDefault genomic\ codons
 
     track encodePseudogeneUcsc
     subTrack encodePseudogene
-    shortLabel UCSC Pseudogenes
+    shortLabel UCSC Retrogenes
     longLabel UCSC Retrogene Predictions
     priority 4
 
@@ -3615,7 +3615,6 @@ dataVersion ENCODE June 2005 Freeze
 searchTable encodeGencodeGeneKnownOct05
 searchType genePred
 termRegex (AC|AF|AL|AP|CT|GS|LA|LL|RP|SC|U|X|Z)[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
-#termRegex [A-Z]+[_A-Z0-9\-]+\.[0-9]+-[0-9][0-9][0-9]
 searchPriority 1.5
 
 searchTable encodeGencodeGeneKnownOct05
@@ -3646,6 +3645,23 @@ searchMethod prefix
 query select chrom, txStart,txEnd, name from %s where name like '%s%%'
 searchPriority 50
 
+searchTable encodePseudogeneConsensus
+searchType genePred
+searchPriority 50
+
+searchTable encodePseudogeneHavana
+searchType genePred
+searchPriority 50
+
+searchTable encodePseudogeneYale
+searchType genePred
+searchPriority 50
+
+searchTable encodePseudogeneGIS
+searchType genePred
+termRegex [[:alnum:]]+_GISPgene_[0-9]+
+searchPriority 50
+
 searchTable encodeIndels
 query select chrom, chromStart, chromEnd, name from %s where traceName like '%s'
 searchPriority 10
@@ -3656,3 +3672,4 @@ searchType bed
 termRegex [0-9]+-[0-9]+
 shortCircuit 1
 searchPriority 50
+
