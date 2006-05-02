@@ -3,15 +3,13 @@ include ../../../inc/common.mk
 L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+#CFLAGS=-ggdb
 
-O = arrayCheck.o snpMapToExon.o snpMaskChrom.o snpMaskFlank.o \
+O = snpMapToExon.o snpMaskChrom.o snpMaskFlank.o \
     snpMaskFlankSubset.o snpMaskGenes.o
 
-all: arrayCheck snpMapToExon snpMaskChrom snpMaskFlank \
+all: snpMapToExon snpMaskChrom snpMaskFlank \
     snpMaskFlankSubset snpMaskGenes
-
-arrayCheck: arrayCheck.o ${MYLIBS}
-	${CC} ${COPT} -O -o arrayCheck arrayCheck.o ${MYLIBS} $L
 
 snpMapToExon: snpMapToExon.o ${MYLIBS}
 	${CC} ${COPT} -O -o snpMapToExon snpMapToExon.o ${MYLIBS} $L
