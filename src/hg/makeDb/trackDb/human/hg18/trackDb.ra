@@ -7,6 +7,16 @@ visibility hide
 color 34,139,34
 type genePred
 
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl (Build 38) Gene Predictions
+group genes
+priority 40
+visibility hide
+color 150,0,0
+type genePred ensPep
+url http://www.ensembl.org/perl/transview?transcript=$$
+
 track multiz17way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation (17 Species)
