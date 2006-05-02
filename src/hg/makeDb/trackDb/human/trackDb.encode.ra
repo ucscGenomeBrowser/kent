@@ -2214,7 +2214,7 @@ windowingFunction mean
 autoScale off
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
-release alpha
+release beta
 
         track encodeUcsdNgChip
         compositeTrack on
@@ -2231,7 +2231,7 @@ release alpha
         autoScale off
         origAssembly hg16
         dataVersion ENCODE June 2005 Freeze
-        release beta
+        release alpha
 
     track encodeUcsdNgChipSignal
     subTrack encodeUcsdNgChip
