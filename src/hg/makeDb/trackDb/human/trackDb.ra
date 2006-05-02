@@ -606,7 +606,7 @@ track affyTxnPhase2
 shortLabel Affy Txn Phase2
 longLabel Affymetrix Transcriptome Project Phase 2
 compositeTrack on smart
-visibility dense
+visibility hide
 defaultViewLimits 0:150
 autoScaleDefault Off
 group regulation
@@ -615,6 +615,22 @@ maxHeightPixels 100:30:10
 canPack off
 centerLabelsDense on
 type wig 0 1000
+release beta
+
+    track affyTxnPhase2
+    shortLabel Affy Txn Phase2
+    longLabel Affymetrix Transcriptome Project Phase 2
+    compositeTrack on smart
+    visibility hide
+    defaultViewLimits 0:150
+    autoScaleDefault Off
+    group regulation
+    priority 98.9
+    maxHeightPixels 100:30:10
+    canPack off
+    centerLabelsDense on
+    type wig 0 1000
+    release alpha
 
 track A375CytosolicPolyAPlusTxn
 shortLabel A375 Txn

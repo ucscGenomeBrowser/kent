@@ -2198,6 +2198,7 @@ dataVersion ENCODE June 2005 Freeze
     priority 14
     color 109,51,43
 
+
 track encodeUcsdNgChip
 compositeTrack on
 shortLabel LI Ng TAF1 IMR90
@@ -2213,6 +2214,24 @@ windowingFunction mean
 autoScale off
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
+release alpha
+
+        track encodeUcsdNgChip
+        compositeTrack on
+        shortLabel LI Ng TAF1 IMR90
+        longLabel Ludwig Institute NimbleGen ChIP/Chip: TAF1 antibody, IMR90 cells
+        group encodeChip
+        priority 51.0
+        visibility dense
+        maxHeightPixels 128:16:16
+        type wig -5.61 6.47
+        spanList 50
+        viewLimits -1:2
+        windowingFunction mean
+        autoScale off
+        origAssembly hg16
+        dataVersion ENCODE June 2005 Freeze
+        release beta
 
     track encodeUcsdNgChipSignal
     subTrack encodeUcsdNgChip
@@ -2225,6 +2244,7 @@ dataVersion ENCODE June 2005 Freeze
     shortLabel TAF1 Known Sites
     longLabel Ludwig Institute TAF1 Sites Matching to Known Transcripts
     noInherit on
+    visibility hide
     type bed 3
     color 0,0,200
     priority 2
@@ -2234,6 +2254,7 @@ dataVersion ENCODE June 2005 Freeze
     shortLabel TAF1 Novel Sites
     longLabel Ludwig Institute TAF1 Sites Matching No Known Transcripts
     noInherit on
+    visibility hide
     type bed 3
     color 0,200,0
     priority 3
