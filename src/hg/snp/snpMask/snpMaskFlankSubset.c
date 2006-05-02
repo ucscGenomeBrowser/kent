@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: snpMaskFlankSubset.c,v 1.4 2006/05/02 10:24:21 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlankSubset.c,v 1.5 2006/05/02 10:39:46 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -229,6 +229,7 @@ sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     el = genePredLoad(row);
+    assert (el->exonCount < MAX_EXONS);
     slAddHead(&list,el);
     count++;
     }
