@@ -820,23 +820,6 @@ drop table mahoneyWholeMountMd5;
 drop table jaxMahoneyWholeMountMd5;
 drop table jaxMahoneySlicesMap;
 
-# !!! DELETE this next block soon (FIRST ATTEMPT, REPLACED BY OCR ON CAPTION INSTEAD)
-# Use the forwardSlices utility 
-cd ~/kent/src/hg/visiGene/vgLoadJax
-make forwardSlices
-# with mahoneySlices, jaxMahoney, and bodyPart ids,
-#  thus change them for the current situation below:
-forwardSlices visiGene 2 1820 1 >& forwardSlices.output 
-# (it actually finds the ones where bodyPart is NOT equal to 1).
-# tail -2 forwardSlices.output
-#added 3146 new records to imageFileFwd for isProbe=1
-#added 474 new records to imageFileFwd for isProbe=0
-
-
-
 #############################################################
-
-
-
 
 
