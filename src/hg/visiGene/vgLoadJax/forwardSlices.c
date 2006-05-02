@@ -73,8 +73,8 @@ if (isProbe)
 	" where imageProbe.probe = probe.id and imageProbe.image=image.id"
 	" and imageFile.id=image.imageFile and image.specimen=specimen.id"
 	" and imageFile.submissionSet in (%d,%d) and bodyPart <> %d"
-	" order by probe.id, image.submissionSet, imageFile.id"
-	,mahoneySlicesSS,jaxMahoneySS,wholeBodyPart);
+	" order by probe.id, image.submissionSet%s, imageFile.id"
+	,mahoneySlicesSS,jaxMahoneySS,wholeBodyPart, (mahoneySlicesSS < jaxMahoneySS) ? " desc" : "");
     }    
 else  /* gene (not isProbe) */
     {
@@ -88,8 +88,8 @@ else  /* gene (not isProbe) */
 	" and bodyPart <> %d"
 	" and (((iffa.fromIf is null) and (imageFile.submissionSet=%d))"
 	"   or ((iffb.toIf is null) and (imageFile.submissionSet=%d)))"
-	" order by probe.gene, image.submissionSet, imageFile.id"	
-	,wholeBodyPart,mahoneySlicesSS,jaxMahoneySS);
+	" order by probe.gene, image.submissionSet%s, imageFile.id"	
+	,wholeBodyPart,mahoneySlicesSS,jaxMahoneySS, (mahoneySlicesSS < jaxMahoneySS) ? " desc" : "" );
     }    
 sr = sqlGetResult(conn, query->string);
 while (TRUE)
@@ -129,7 +129,7 @@ while (TRUE)
 	}
     else
 	{
-	if (partCount > 0)  // don't do anything unless we have something
+	if (partCount > 0)  /* don't do anything unless we have something */
 	    {
 	    char query[256];
 	    if (!sameString(fileName,lastFile))
@@ -145,8 +145,7 @@ while (TRUE)
 		}
 	    safef(query,sizeof(query),"insert into imageFileFwd set fromIf=%d, toIf=%d",
 		imf,imageFiles[partIndex]);
-	    //debug
-	    //printf("%d\t%d\n",imf,imageFiles[partIndex]);
+	    verbose(2,"%d\t%d\n",imf,imageFiles[partIndex]);
 	    sqlUpdate(connUpdate,query);
 	    ++count;
 	    }
@@ -162,7 +161,7 @@ sqlFreeResult(&sr);
 dyStringFree(&query);
 sqlDisconnect(&conn);
 sqlDisconnect(&connUpdate);
-//debug
+
 printf("added %d new records to imageFileFwd for isProbe=%d\n", count, isProbe);
 }
 
