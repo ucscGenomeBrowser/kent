@@ -10,7 +10,7 @@
 #include "chainNet.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadNet.c,v 1.14 2004/10/24 19:25:46 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadNet.c,v 1.15 2006/05/02 15:51:28 angie Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -128,6 +128,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
 	if (fill->type == NULL)
 	    errAbort("No type field, please run netSyntenic on input");
 	if (fill->tN < 0)
+	    {
             if (warnFlag)
                 {
                 if (!warned)
@@ -138,6 +139,7 @@ for (fill = fillList; fill != NULL; fill = fill->next)
                 }
             else
                 errAbort("Missing fields.  Please run netClass on input");
+	    }
 	}
     if (fill->score < 0)
         fill->score = 0;
@@ -184,9 +186,6 @@ void hgLoadNet(char *database, char *track, int netCount, char *netFiles[])
 /* hgLoadNet - Load a net file into database. */
 {
 int i;
-struct hash *qHash, *tHash;
-struct chrom *chromList = NULL, *chrom;
-struct chainNet *cn;
 struct lineFile *lf ;
 struct chainNet *net;
 char alignFileName[] ="align.tab";
