@@ -1884,27 +1884,37 @@ TMPDIR=/scratch/tmp
 	ln -s ${H}/blastz.$G/mafNet/*.maf.gz ./mafLinks/$G
     done
 
+    #	Usually these MAFs are copied to the san for a pk kluster run.
+    #	in this case they are small enough that there is no need to copy
+    #	them anywhere.  The alignment can be done right here on the
+    #	kkstore04 filesystem.
     #	Copy MAFs to some appropriate NFS server for kluster run
-    ssh kkstore04
-    mkdir /san/sanvol1/scratch/monDom4/multiz7way
-    cd /san/sanvol1/scratch/monDom4/multiz7way
-    time rsync -a --copy-links --progress \
-	/cluster/data/monDom4/bed/multiz7way/mafLinks/ .
+    # ssh kkstore04
+    # mkdir /san/sanvol1/scratch/monDom4/multiz7way
+    # cd /san/sanvol1/scratch/monDom4/multiz7way
+    # time rsync -a --copy-links --progress \
+    #	    /cluster/data/monDom4/bed/multiz7way/mafLinks/ .
 
     #	We have about 734 Mb of data here, takes ~ 30 seconds to copy
 
-    mkdir penn
-    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
-    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
-    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
-
     # the autoMultiz cluster run
-    ssh pk
-    cd /cluster/data/monDom4/bed/multiz7way/
+    ssh kk
+
+    mkdir /cluster/data/monDom4/bed/multiz7way/autoMultiz
+    cd /cluster/data/monDom4/bed/multiz7way/autoMultiz
+    
+    mkdir penn
+    #	cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    #	cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    #	cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+    cp -p /cluster/bin/penn/multiz.v11.i386/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.i386/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.i386/multiz-tba/autoMZ penn
+
 
     # create species list and stripped down tree for autoMZ
     sed 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//; /^ *$/d' \
-	7way.nh > tmp.nh
+	../7way.nh > tmp.nh
     echo `cat tmp.nh` > tree-commas.nh
     echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
     sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
@@ -1920,9 +1930,9 @@ TMPDIR=/scratch/tmp
 set db = monDom4
 set c = $1
 set maf = $2
-set binDir = /san/sanvol1/scratch/$db/multiz7way/penn
+set binDir = /cluster/data/monDom4/bed/multiz7way/autoMultiz/penn
 set tmp = /scratch/tmp/$db/multiz.$c
-set pairs = /san/sanvol1/scratch/$db/multiz7way
+set pairs = /cluster/data/monDom4/bed/multiz7way/mafLinks
 rm -fr $tmp
 mkdir -p $tmp
 cp ../{tree.nh,species.lst} $tmp
@@ -1962,7 +1972,445 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     para create jobList
     # 10 jobs
     para try ... check ... push ... etc ...
-XXXX running 2006-04-28 17:00
+# Completed: 10 of 10 jobs
+# CPU time in finished jobs:      38783s     646.38m    10.77h    0.45d  0.001 y
+# IO & Wait Time:                  1184s      19.73m     0.33h    0.01d  0.000 y
+# Average job time:                3997s      66.61m     1.11h    0.05d
+# Longest finished job:            8706s     145.10m     2.42h    0.10d
+# Submission to last job:          8706s     145.10m     2.42h    0.10d
+
+    #	combine results into a single file for loading and gbdb reference
+    ssh kkstore04
+    cd /cluster/data/monDom4/bed/multiz7way
+    #	There used to be a mafFilter here with a minScore of 500, but it
+    #	turns out that the scores in these maf files are pretty much
+    #	useless.  They range from very large negatives to very large
+    #	positives.
+    time catDir maf > multiz7way.maf
+    #	real    1m18.849s
+    #	makes a 2 Gb file:
+    #	-rw-rw-r--  1 2119554905 May  1 14:23 multiz7way.maf
+
+    #	Create per-chrom individual maf files for downloads
+    ssh kkstore04
+    cd /cluster/data/monDom4/bed/multiz7way
+    mkdir mafDownloads
+    time for M in maf/chr*.maf
+    do
+	B=`basename $M`
+	cp -p ${M} mafDownloads/${B}
+	gzip mafDownloads/${B}
+	echo ${B} done
+    done
+    #	real    7m21.713s
+    #	deliver to downloads
+    ssh hgwdev
+    ln -s /cluster/data/monDom4/bed/multiz7way/mafDownloads \
+	/usr/local/apache/htdocs/goldenPath/monDom4/multiz7way
+
+    # Load into database
+    ssh hgwdev
+    cd /cluster/data/monDom4/bed/multiz7way
+    mkdir /gbdb/monDom4/multiz7way
+    ln -s /cluster/data/monDom4/bed/multiz7way/multiz7way.maf \
+	/gbdb/monDom4/multiz7way
+    time nice -n +19 hgLoadMaf monDom4 multiz7way
+    #	Loaded 2180653 mafs in 1 files from /gbdb/monDom4/multiz7way
+    #	real    3m35.280s
+
+    time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
+	-maxSize=50000 monDom4 multiz7waySummary multiz7way.maf
+    #	Created 1423996 summary blocks from 5463968 components and
+    #	2180653 mafs from multiz7way.maf
+    #	real    5m40.531s
+
+    # create tree image:
+    cat << '_EOF_' > species.nh
+(((((human,(rat,mouse)),opossum),chicken),frog),zebrafish)
+'_EOF_'
+    /cluster/bin/phast/draw_tree -b -s species.nh > species7.ps
+    # photoshop to enhance, reduce the amount of whitespace to make it
+    # smaller, then save as jpg
+    ln -s /cluster/data/monDom4/bed/multiz7way/species7.jpg \
+	/usr/local/apache/htdocs/images/phylo/monDom4_7way.jpg
+    #	the chopping of whitespace can be done with Imagemagick
+    #	'display' - use the "transform -> chop" menu, select horizontal
+    #	or vertical chop, highlight an area to cut
+
+############################################################################
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS
+#		(WORKING - 2006-05-01 - Hiram)
+
+    # Estimate phastCons parameters
+    ssh kkstore04
+    mkdir /cluster/data/monDom4/bed/multiz7way/cons
+    cd /cluster/data/monDom4/bed/multiz7way/cons
+
+    # Create a starting-tree.mod based on chr1 (the largest one)
+    time /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chr1.maf \
+	--refseq ../../../1/chr1.fa --in-format MAF \
+	--windows 100000000,1000 --out-format SS \
+	--between-blocks 5000 --out-root s1
+    #	real    5m50.239s
+
+    /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+--tree "(((((hg18,(rn4,mm8)),monDom4),galGal2),xenTro2),danRer3)" \
+    --out-root starting-tree
+    #	real    1m11.568s
+
+    rm s1.*.ss
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.398
+    #	This 0.398 is used in the --gc argument below
+
+    # Create big bad bloated SS files on san filesystem (takes ~ 2h 20m)
+    #	Increasing their size this time from 1,000,000 to 10,000,000 to
+    #	slow down the phastCons pk jobs
+    ssh kkstore04
+    mkdir -p  /san/sanvol1/scratch/monDom4/cons/ss
+    cd  /san/sanvol1/scratch/monDom4/cons/ss
+    time for C in `awk '{print $1}' /cluster/data/monDom4/chrom.sizes`
+    do
+      if [ -s /cluster/data/monDom4/bed/multiz7way/maf/${C}.maf ]; then
+	mkdir ${C}
+	echo msa_split $C
+	chrN=${C/chr/}
+	chrN=${chrN/_random/}
+	/cluster/bin/phast/$MACHTYPE/msa_split \
+	    /cluster/data/monDom4/bed/multiz7way/maf/${C}.maf \
+	    --refseq /cluster/data/monDom4/${chrN}/${C}.fa \
+	    --in-format MAF --windows 10000000,0 --between-blocks 5000 \
+	    --out-format SS --out-root ${C}/${C}
+      fi
+    done &
+    #	real    28m44.827s
+
+    # Create a random list of 50 1 mb regions  (do not use the _randoms)
+    cd /san/sanvol1/scratch/monDom4/cons/ss
+    ls -1l chr*/chr*.ss | grep -v random | \
+	awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs.list
+
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh kk
+    mkdir /san/sanvol1/scratch/monDom4/cons/treeRun1
+    cd /san/sanvol1/scratch/monDom4/cons/treeRun1
+    mkdir tree log
+
+    #	Tuning this loop should come back to here to recalculate 
+    # Create little script that calls phastCons with right arguments
+    #	--target-coverage of 0.20 is about right for mouse, will be
+    #	tuned exactly below
+    cat > makeTree.csh << '_EOF_'
+#!/bin/csh -fe
+set C=$1:h
+mkdir -p log/${C} tree/${C}
+    /cluster/bin/phast/$MACHTYPE/phastCons ../ss/$1 \
+      /cluster/data/monDom4/bed/multiz7way/cons/starting-tree.mod \
+      --gc 0.398 --nrates 1,1 --no-post-probs --ignore-missing \
+      --expected-lengths 12 --target-coverage 0.17 \
+      --quiet --log log/$1 --estimate-trees tree/$1
+'_EOF_'
+#	<< happy emacs
+      chmod a+x makeTree.csh
+
+# Create gensub file
+      cat > template << '_EOF_'
+#LOOP
+makeTree.csh $(path1)
+#ENDLOOP
+'_EOF_'
+#	<< happy emacs
+
+# Make cluster job and run it
+    gensub2 ../randomSs.list single template jobList
+    para create jobList
+    para try/push/check/etc
+# Completed: 50 of 50 jobs
+# CPU time in finished jobs:      38161s     636.02m    10.60h    0.44d  0.001 y
+# IO & Wait Time:                   385s       6.41m     0.11h    0.00d  0.000 y
+# Average job time:                 771s      12.85m     0.21h    0.01d
+# Longest finished job:            1672s      27.87m     0.46h    0.02d
+# Submission to last job:          1693s      28.22m     0.47h    0.02d
+
+
+# Now combine parameter estimates.  We can average the .mod files
+# using phyloBoot.  This must be done separately for the conserved
+# and nonconserved models
+    ssh kkstore04
+    cd /san/sanvol1/scratch/monDom4/cons/treeRun1
+    ls -1 tree/chr*/*.cons.mod > cons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.list' \
+	--output-average ../ave.cons.mod > cons_summary.txt
+    ls -1 tree/chr*/*.noncons.mod > noncons.list
+    /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.list' \
+	--output-average ../ave.noncons.mod > noncons_summary.txt
+    cd ..
+    cp -p ave.*.mod /cluster/data/monDom4/bed/multiz7way/cons
+
+#	measuring entropy
+#	consEntopy <target coverage> <expected lengths>
+#		 ave.cons.mod ave.noncons.mod --NH 9.78
+#	never stops with the --NH argument
+/cluster/bin/phast/$MACHTYPE/consEntropy .17 12 --NH 9.78 \
+	ave.cons.mod ave.noncons.mod
+# ( Solving for new omega: 12.000000 9.952747 9.669713 9.663148 )
+# Trans parameters: gamma=0.170000, omega=12.000000, mu=0.083333, nu=0.017068
+# Relative entropy: H=1.090778 bits/site
+# Expected min. length: L_min=9.400348 sites
+# Expected max. length: L_max=6.597224 sites
+# Phylogenetic information threshold: PIT=L_min*H=10.253692 bits
+# Recommended expected length: omega=9.663148 sites (for L_min*H=9.780000)
+XXXX - working 2006-05-01 17:00
+
+
+### !!! ***  This one with .17 and 12 is the one that was finally used
+# consEntropy .17 12 ave.cons.mod.4 ave.noncons.mod.4
+# Transition params: gamma=0.170000, omega=12.000000, mu=0.083333, nu=0.017068
+# Relative entropy: H=1.478838 bits/site
+# Required length: N=6.753382 sites
+# Total entropy: NH=9.987159 bits
+
+#	SKIP to here passing by the tuning numbers
+ssh kk
+# Create cluster dir to do main phastCons run
+mkdir /san/sanvol1/scratch/monDom4/cons/consRun1
+cd /san/sanvol1/scratch/monDom4/cons
+cp /san/sanvol1/scratch/mm8/cons/elliotsEncode.mod .
+#	This file looks like:
+ALPHABET: A C G T
+ORDER: 0
+SUBST_MOD: REV
+TRAINING_LNL: -988246.132962
+BACKGROUND: 0.295 0.205 0.205 0.295
+RATE_MAT:
+-1.165221    0.315494    0.589884    0.259843
+   0.189778   -0.878194    0.208718    0.479698
+   0.444622    0.261535   -0.885604    0.179447
+   0.234867    0.720815    0.215191   -1.170872
+TREE: (((((((((((((hg18:0.006690,panTro2:0.007571):0.024272,(colobus_monkey:0.015404,(baboon:0.008258,rheMac2:0.028617):0.008519):0.022120):0.023960,(dusky_titi:0.025662,(owl_monkey:0.012151,marmoset:0.029549):0.008236):0.027158):0.066101,(mouse_lemur:0.059024,galago:0.121375):0.032386):0.017073,((rn4:0.081728,monDom4:0.077017):0.229273,oryCun1:0.206767):0.023340):0.023026,(((bosTau2:0.159182,canFam2:0.147731):0.004946,rfbat:0.138877):0.010150,(hedgehog:0.193396,shrew:0.261724):0.054246):0.024354):0.028505,dasNov1:0.149862):0.015994,(loxAfr1:0.104891,echTel1:0.259797):0.040371):0.218400,monDom4:0.371073):0.065268,platypus:0.468116):0.123856,galGal2:0.454691):0.123297,xenTro2:0.782453):0.156067,((tetNig1:0.199381,fr1:0.239894):0.492961,danRer3:0.782561):0.156067);
+
+
+    cd /san/sanvol1/scratch/monDom4/cons/consRun1
+    mkdir ppRaw bed
+
+    # Create script to run phastCons with right parameters
+    #	These parameters:
+    #	--rho 0.28 --expected-length 14 --target-coverage 0.008 --quiet \
+    #	were taken from Kate's 17-way in Hg17, including the
+    #	-not-informative panTro2
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    cat > doPhast << '_EOF_'
+#!/bin/csh -fe
+mkdir /scratch/tmp/${2}
+cp -p ../ss/${1}/${2}.ss ../elliotsEncode.mod /scratch/tmp/${2}
+pushd /scratch/tmp/${2} > /dev/null
+/cluster/bin/phast/${MACHTYPE}/phastCons ${2}.ss elliotsEncode.mod \
+   --expected-lengths 12 --target-coverage 0.17 --quiet \
+	--seqname ${1} --idpref ${1} --viterbi ${2}.bed --score \
+	    --require-informative 0 > ${2}.pp
+popd > /dev/null
+mkdir -p ppRaw/${1}
+mkdir -p bed/${1}
+mv /scratch/tmp/${2}/${2}.pp ppRaw/${1}
+mv /scratch/tmp/${2}/${2}.bed bed/${1}
+rm /scratch/tmp/${2}/elliotsEncode.mod
+rm /scratch/tmp/${2}/${2}.ss
+rmdir /scratch/tmp/${2}
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create gsub file
+    cat > template << '_EOF_'
+#LOOP
+doPhast $(root1) $(file1)
+#ENDLOOP
+'_EOF_'
+    #	<< happy emacs
+
+    # Create parasol batch and run it
+    ls -1 ../ss/chr*/chr*.ss | sed 's/.ss$//' > in.list
+
+    gensub2 in.list single template jobList
+    para create jobList
+    para try/check/push/etc.
+    #	These jobs are very fast and very I/O intensive, even on the san
+    #	they will hang it up as they work at full tilt.
+# Completed: 366 of 366 jobs
+# CPU time in finished jobs:      29300s     488.33m     8.14h    0.34d  0.001 y
+# IO & Wait Time:                 19643s     327.39m     5.46h    0.23d  0.001 y
+# Average job time:                 134s       2.23m     0.04h    0.00d
+# Longest finished job:             247s       4.12m     0.07h    0.00d
+# Submission to last job:          1880s      31.33m     0.52h    0.02d
+
+    # combine predictions and transform scores to be in 0-1000 interval
+    #	it uses a lot of memory, so on kolossus:
+    ssh kolossus
+    cd /san/sanvol1/scratch/monDom4/cons/consRun1
+    #	The sed's and the sort get the file names in chrom,start order
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+	| awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+	| /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #	~ 1 minute
+    cp -p mostConserved.bed /cluster/data/monDom4/bed/multiz7way
+
+    # Figure out how much is actually covered by the bed files as so:
+    #	The 2583393846 comes from the non-n genome size,
+    #	from faSize on all chroms:
+    ssh kkstore04
+    cd /cluster/data/monDom4
+    faSize ?{,?}/chr*.fa
+    #	3605614649 bases (103971429 N's 3501643220 real 1551686450 upper
+    #	1949956770 lower) in 10 sequences in 10 files
+
+    cd /san/sanvol1/scratch/monDom4/cons/consRun1
+    awk '
+{sum+=$3-$2}
+END{printf "%% %.2f = 100.0*%d/3501643220\n",100.0*sum/3501643220,sum}' \
+	mostConserved.bed
+    #	--expected-lengths 12 --target-coverage 0.17 --quiet \
+    #	% 4.80 = 100.0*168149380/3501643220
+
+    ssh kolossus
+    cd /san/sanvol1/scratch/monDom4/cons/consRun1
+    #	Aiming for %70 coverage in
+    #	the following featureBits measurement on CDS:
+    # Beware of negative scores when too high.  The logToBedScore
+    # will output an error on any negative scores.
+
+    #	I don't think this will work for opossum because we don't have
+    #	enough refGene:cds coverage:
+    time nice -n +19 featureBits monDom4 refGene:cds
+    #	34857 bases of 3501643220 (0.001%) in intersection
+
+    HGDB_CONF=~/.hg.conf.read-only time nice -n +19 featureBits monDom4 \
+	-enrichment refGene:cds mostConserved.bed
+    #	--expected-lengths 12 --target-coverage 0.17 --quiet \
+    #	refGene:cds 0.001%, mostConserved.bed 4.802%, both 0.001%, cover
+    #	75.13%, enrich 15.65x
+
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/monDom4/bed/multiz7way
+    time nice -n +19 hgLoadBed -strict monDom4 \
+	phastConsElements7way mostConserved.bed
+    #	real    2m31.673s
+    #	Loaded 1882640 elements of size 5
+
+    #	should measure the same as above
+    time nice -n +19 featureBits monDom4 -enrichment refGene:cds \
+	phastConsElements7way
+    #	refGene:cds 0.001%, phastConsElements7way 4.802%, both 0.001%,
+    #	cover 75.13%, enrich 15.65x
+
+    # Create merged posterier probability file and wiggle track data files
+    ssh kkstore04
+    cd /san/sanvol1/scratch/monDom4/cons/consRun1
+    # the sed business gets the names sorted by chromName, chromStart
+    #	so that everything goes in numerical order into wigEncode
+    #	You will want to test this to make sure it is sorting correctly,
+    #	run this command and see if everything is in order by chrom and
+    #	position:
+    find ./ppRaw -type f \
+	| sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | less
+
+    time nice -n +19 find ./ppRaw -type f \
+	| sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+	    | $HOME/bin/$MACHTYPE/wigEncode -noOverlap stdin \
+		phastCons7.wig phastCons7.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    4m4.694s
+
+    #	-rw-rw-r--    1 465425363 May  2 12:42 phastCons7.wib
+    #	-rw-rw-r--    1  79633105 May  2 12:42 phastCons7.wig
+
+    cp -p phastCons7.wi? /cluster/data/monDom4/bed/multiz7way/
+
+    #	prepare compressed copy of ascii data values for downloads
+    ssh kkstore04
+    cd /san/sanvol1/scratch/monDom4/cons/consRun1
+    cat << '_EOF_' > gzipAscii.sh
+#!/bin/sh
+
+TOP=`pwd`
+export TOP
+
+mkdir -p phastCons7Scores
+
+for D in ppRaw/chr*
+do
+    C=${D/ppRaw\/}
+    out=phastCons7Scores/${C}.data.gz
+    echo "========================== ${C} ${D}"
+    find ./${D} -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat |
+	    gzip > ${out}
+done
+'_EOF_'
+    #	<< happy emacs
+    chmod +x gzipAscii.sh
+    time nice -n +19 ./gzipAscii.sh
+    #	real    18m24.291s
+
+    #	copy them for downloads
+    ssh kkstore04
+    #	this directory is actually a symlink from store9 to store8 to
+    #	avoid the data full problem on store9
+    mkdir /cluster/data/monDom4/bed/multiz7way/phastCons7Scores
+    cd /cluster/data/monDom4/bed/multiz7way/phastCons7Scores
+    cp -p  /san/sanvol1/scratch/monDom4/cons/consRun1/phastCons7Scores/* .
+
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/monDom4
+    ln -s /cluster/data/monDom4/bed/multiz7way/phastCons7Scores .
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/monDom4/bed/multiz7way
+    ln -s `pwd`/phastCons7.wib /gbdb/monDom4/wib/phastCons7.wib
+    time nice -n +19 hgLoadWiggle monDom4 phastCons7 phastCons7.wig
+    #	real    2m23.715s
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/monDom4/bed/multiz7way
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+	    -db=monDom4 phastCons7 > histogram.data 2>&1
+    #	real    22m52.748s
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Mouse Mm8 Histogram phastCons7 track"
+set xlabel " phastCons7 score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
 
 ###########################################################################
 # BLASTZ SWAP OF ZEBRAFISH (danRer4) CHAIN AND NET ALIGNMENTS OVER TO 
