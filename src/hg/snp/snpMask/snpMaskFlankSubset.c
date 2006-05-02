@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: snpMaskFlankSubset.c,v 1.3 2006/04/26 04:10:45 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlankSubset.c,v 1.4 2006/05/02 10:24:21 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -21,7 +21,7 @@ struct dnaSeq *seqAll;
 char geneTable[] = "refGene";
 
 #define FLANKSIZE 25
-#define MAX_EXONS 100
+#define MAX_EXONS 400
 
 void usage()
 /* Explain usage and exit. */
@@ -196,7 +196,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     end = sqlUnsigned(row[2]);
     if (end != start + 1) continue;
     count++;
-
 
     /* check in hash */
     helName = hashLookup(snpHash, row[0]);
@@ -473,7 +472,6 @@ newSeq->dna = needMem(size + 1);
 
 if (startExon == endExon)
     {
-    verbose(1, "    single exonPos = %d\n", startExon);
     exonSize = end - start;
     assert (exonSize <= exonSeqArray[startExon]->size);
     offset = start - gene->exonStarts[startExon];
@@ -528,9 +526,7 @@ struct dnaSeq *getSeqFrag(int start, int size)
 struct dnaSeq *seq;
 DNA *dna = needMem(size+1);
 
-// verbose(1, "calling memcpy\n");
 memcpy(dna, seqAll->dna + start, size);
-// verbose(1, "back from memcpy\n");
 
 AllocVar(seq);
 seq->dna = dna;
@@ -567,6 +563,7 @@ char *nibFile2;
 nibFile2 = needMem(128);
 strcpy(nibFile2, nibFile);
 
+verbose(1, "reading snps into binKeeper\n");
 snps = readSnps(chromName);
 genes = readGenes(chromName);
 
@@ -699,10 +696,13 @@ if(hgOfficialChromName(chromName) == NULL)
 // or, use hNibForChrom from hdb.c
 // hNibForChrom(chromName, nibName);
 dnaUtilOpen();
+verbose(1, "getting sequence\n");
 seqAll = nibLoadPartMasked(NIB_MASK_MIXED, argv[3], 0, hChromSize(chromName));
 // seqAll = hFetchSeq(argv[3], chromName, 0, hChromSize(chromName));
 
+verbose(1, "getting snps from file\n");
 readSnpsFromFile(argv[4]);
+verbose(1, "calling snpMaskFlankSubset\n");
 snpMaskFlankSubset(argv[3], argv[5]);
 return 0;
 }
