@@ -615,19 +615,6 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
       --rename="rat_rn3 -> rat_rn4 ; mouse_mm7 -> mouse_mm8 ; human_hg17 -> human_hg18 ; monodelphis_monDom2 -> monodelphis_monDom4 ; xenopus_xenTro1 -> xenopus_xenTro2 ; zebrafish_danRer3 -> zebrafish_danRer4" \
       /cluster/data/hg17/bed/multiz17way/17way.nh > 7way.nh
     # *carefully* edit 7way.nh to put frog first.
-    /cluster/bin/phast/all_dists 7way.nh > 7way.distances.txt
-    grep xenTro2 7way.distances.txt | sort -k3,3n | \
-        awk '{printf ("%.4f\t%s\n", $3, $2)}' > distances.txt
-    cat distances.txt
-#1.3604  chicken_galGal2
-#1.4357  human_hg18
-#1.4659  monodelphis_monDom4
-#1.7936  mouse_mm8
-#1.7983  rat_rn4
-#1.8771  zebrafish_danRer4
-    # the order in the browser display will be by tree topology,
-    # not by distance, but in this case (unlike human) they happen to match.
-
     # create species list and stripped down tree for autoMZ
     sed -e 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//' 7way.nh \
       > tree-commas.nh
@@ -729,17 +716,6 @@ cat  << 'EOF' > spec
 #Longest finished job:              44s       0.73m     0.01h    0.00d
 #Submission to last job:          3771s      62.85m     1.05h    0.04d
 
-    # Make .jpg for tree and install in htdocs/images/phylo/... don't forget
-    # to request a push of that file.  The treeImage setting in trackDb.ra 
-    # is phylo/xenTro2_7way.jpg (relative to htdocs/images).
-    ssh hgwdev
-    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
-    /cluster/bin/phast/draw_tree 7way.nh > 7way.ps
-    ps2pdf 7way.ps > 7way.pdf
-    pstopnm -stdout 7way.ps | pnmtojpeg > xenTro2_7way.jpg
-    ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/xenTro2_7way.jpg \
-      /usr/local/apache/htdocs/images/phylo/xenTro2_7way.jpg
-
 
 # MULTIZ7WAY DOWNLOADABLES (UNANNOTATED) (DONE 4/28/2006 angie)
     # We haven't publicly documented the annotated maf format yet,
@@ -766,6 +742,9 @@ cat > mafFrags.csh << 'EOF'
 #628.650u 89.300s 14:54.56 80.2% 0+0k 0+0io 4617pf+0w
 
     # Consolidate multi-level maf to monolithic file
+    # No need to sort chunks by position because the chunk size is greater 
+    # than the largest scaffold size.  That may not be true in other 
+    # assemblies.
     ssh kkstore04
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
     mkdir mafDownloads
@@ -837,6 +816,9 @@ cat > mafFrags.csh << 'EOF'
 #Submission to last job:          5667s      94.45m     1.57h    0.07d
 
     # Consolidate multi-level maf to monolithic file
+    # No need to sort chunks by position because the chunk size is greater 
+    # than the largest scaffold size.  That may not be true in other 
+    # assemblies.
     ssh kkstore04
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
     cp /dev/null xenTro2.maf
@@ -986,7 +968,7 @@ cat > mafFrags.csh << 'EOF'
     rm -rf ${clusterDir}
 
 
-# PHASTCONS (IN PROGRESS 4/29/2006 angie)
+# PHASTCONS (DONE 5/2/2006 angie)
 # Using Kate's process from makeHg17.doc.
 # This process is distilled from Hiram and Adam's experiments
 # on mouse (mm7) 17way track.  Many parameters are now fixed, without
@@ -1088,6 +1070,14 @@ cat > mafFrags.csh << 'EOF'
 
     # The elliotsEncode.mod is giving about twice as much coverage as 
     # we want, despite extremely low --target-coverage, so use phyloFit.tree.
+    # Also, when I loaded wiggles made with elliotsEncode and phyloFit into 
+    # the browser for visual comparison, the elliotsEncode wiggle was maxed 
+    # out (~1 wherever anything aligned) while the phyloFit wiggle showed a 
+    # lot more dynamics.  It bothers me that the elements' coverage was so 
+    # low with the phyloFit model... a lot more than 1.3% must be conserved!
+    # But the elliotsEncode seems off in the other direction, and not much 
+    # more informative than looking at the multiz alignment to see where 
+    # something aligns.
 
     # Run phastCons
     #	This job is I/O intensive in its output files, thus it is all
@@ -1120,7 +1110,6 @@ rm -fr $tmp
     # << emacs
     chmod a+x doPhast.csh
 
-#TODO
     # Create gsub file
     cat > template << 'EOF'
 #LOOP
@@ -1198,52 +1187,90 @@ doPhast.csh $(dir1) $(file1) 12 .50 .339
 
 
     # When happy:
-    hgLoadBed -strict xenTro2 phastConsElements7way phastConsElements7way.bed
+    hgLoadBed -strict xenTro2 phastConsElements7way phastConsElements7way_12_500_339.bed
 
     # Create merged posterior probability file and wiggle track data files
     ssh kolossus
     cd /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/
     # sort by chromName, chromStart so that items are in numerical order 
     #  for wigEncode
-    #next time try Angie's simpler sort, below
     time find ./pp -name "*.pp" | \
         sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
-	sort -k7,7 -k9,9n | \
-	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
-	xargs cat | \
-        nice wigEncode stdin phastCons7way.wig phastCons7way.wib
-    # about 23 minutes for above
+        sort -k7,7 -k9,9n | \
+        sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+        xargs cat | \
+        nice wigEncode -noOverlap stdin phastCons7way.wig phastCons7way.wib
 
-    cp -p phastCons7way.wi? /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
+    cp -p phastCons7way.wi? \
+      /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
 
     # Load gbdb and database with wiggle.
     ssh hgwdev
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
-    ln -s `pwd`/phastCons7way.wib /gbdb/xenTro2/multiz7way/phastCons7way.wib
+    ln -s `pwd`/phastCons7way.wib /gbdb/xenTro2/multiz7way/
     hgLoadWiggle -pathPrefix=/gbdb/xenTro2/multiz7way xenTro2 \
         phastCons7way phastCons7way.wig
-    #  ~ 3 minute load
 
-
-# PHASTCONS SCORES DOWNLOADABLES FOR 7WAY (TODO 4//2006 angie)
-    ssh kolossus
+    # Make .jpg for tree and install in htdocs/images/phylo/... don't forget
+    # to request a push of that file.  The treeImage setting in trackDb.ra 
+    # is phylo/xenTro2_7way.jpg (relative to htdocs/images).
+    # Since we used the phyloFit.tree.mod instead of elliotsEncodePruned.mod 
+    # in the final phastCons run, regenerate 7way.nh from phyloFit.tree.mod 
+    # so that those numbers are used to generate the picture.
+    ssh hgwdev
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
-    mkdir phastConsDownloads
-    cd phastConsDownloads
-cat > downloads.csh << 'EOF'
-    date
-    cd /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/pp
-    foreach chr (`awk '{print $1}' /cluster/data/xenTro2/chrom.sizes`)
-      echo $chr
-      cat `ls -1 $chr/$chr.*.pp | sort -t\. -k2,2n` \
-        | nice gzip -c \
-            > /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastConsDownloads/$chr.gz
+    mv 7way.nh 7way.elliotsEncode.nh
+    tail -1 phastCons/phyloFit.tree.mod | sed -e 's/^TREE: //' \
+      > 7way.nh
+
+    /cluster/bin/phast/all_dists 7way.nh > 7way.distances.txt
+    grep xenTro2 7way.distances.txt | sort -k3,3n | \
+        awk '{printf ("%.4f\t%s\n", $3, $2)}' > distances.txt
+    cat distances.txt
+#0.4899  galGal2
+#0.5621  monDom4
+#0.5738  hg18
+#0.6038  mm8
+#0.6074  danRer4
+#0.6075  rn4
+    # the order in the browser display will be by tree topology,
+    # not by distance.
+
+    # Just for reference, these were the distances from elliotsEncode.mod...
+    # Quite different!
+#1.3604  chicken_galGal2
+#1.4357  human_hg18
+#1.4659  monodelphis_monDom4
+#1.7936  mouse_mm8
+#1.7983  rat_rn4
+#1.8771  zebrafish_danRer4
+
+    /cluster/bin/phast/draw_tree 7way.nh > 7way.ps
+    ps2pdf 7way.ps > 7way.pdf
+    pstopnm -stdout 7way.ps | pnmtojpeg > xenTro2_7way.jpg
+    ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/xenTro2_7way.jpg \
+      /usr/local/apache/htdocs/images/phylo/xenTro2_7way.jpg
+
+
+# PHASTCONS SCORES DOWNLOADABLES FOR 7WAY (DONE 5/2/2006 angie)
+    ssh kolossus
+    mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastConsDownloads
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastConsDownloads
+    set ppDir = /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/pp
+    cp /dev/null xenTro2.pp
+    # No need to sort chunks by position because the chunk size is greater 
+    # than the largest scaffold size.  That may not be true in other 
+    # assemblies.
+    foreach scaf (`awk '{print $1;}' /cluster/data/xenTro2/chrom.sizes`)
+      set d = `echo $scaf | perl -wpe 's/scaffold_(\d+)//; \
+                              $d0 = $1 % 10; $d1 = ($1/10) % 10; \
+                              print "$d1/$d0";'`
+      set f = `ls -1 $ppDir/$d | egrep ^$scaf'\.1-[0-9]+\.pp'`
+      if ("x$f" != "x") then
+        cat $ppDir/$d/$f >> xenTro2.pp
+      endif
     end
-    date
-'EOF'
-    # << emacs
-    csh -efx downloads.csh >&! downloads.log & tail -f downloads.log
-    # ~20min
+    nice gzip xenTro2.pp
     md5sum *.gz > md5sum.txt
 
     ssh hgwdev
@@ -1251,14 +1278,12 @@ cat > downloads.csh << 'EOF'
     set dir = /usr/local/apache/htdocs/goldenPath/xenTro2/phastCons7way
     mkdir $dir
     ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastConsDownloads/{*.gz,md5sum.txt} $dir
-    cp /usr/local/apache/htdocs/goldenPath/mm7/phastCons17Scores/README.txt $dir
+    cp /usr/local/apache/htdocs/goldenPath/rn4/phastCons9way/README.txt $dir
     # edit README.txt
     # Clean up after phastCons run.
     ssh kkstore04
     rm /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons/*.tab
     rm -r /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons
-
-
 
 
 # ENSEMBL is on 4.0 not 4.1... do the coords mostly carry over???
