@@ -29,7 +29,7 @@ set anoGam anoGam1
 set apiMel apiMel1,apiMel2
 set cioSav cioSav1
 set tetNig tetNig1
-set xenTro xenTro1
+set xenTro xenTro1,xenTro2
 set monDom monDom1,monDom2
 set bosTau bosTau1,bosTau2
 set rheMac rheMac1,rheMac2
@@ -65,7 +65,7 @@ databasesChecked $gbd,$otherDb,$snp125
 databasesIgnored mysql,lost+found,$proteinDb,$zooDb,sc1,hgcentraltest,hgcentralbeta,test,sp040915,sp040515,sp040315,sp040115,proteins040915,proteins040515,proteins040315
 
 # Define various non-self chains
-set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dp1,Dp2,Dp3,PanTro1,GalGal2,Fr1,DanRer1,DanRer2,DanRer3,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSim1,droGri1,DroPer1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,MonDom1,RheMac1,RheMac2,BosTau1,BosTau2
+set chainDest Hg15,Hg16,Hg17,Hg18,Pt0,Mm2,Mm3,Mm4,Mm5,Mm6,Mm7,Mm8,Rn2,Rn3,Rn4,Cb1,Dm1,Dm2,Dp1,Dp2,Dp3,PanTro1,PanTro2,GalGal2,Fr1,DanRer1,DanRer2,DanRer3,DanRer4,CanFam1,CanFam2,DroYak1,DroYak2,DroAna1,DroAna2,DroMoj1,DroMoj2,DroVir1,DroVir2,DroEre1,DroSim1,droGri1,DroPer1,AnoGam1,ApiMel1,ApiMel2,TetNig1,XenTro1,XenTro2,MonDom1,MonDom2,MonDom4,RheMac1,RheMac2,BosTau1,BosTau2
 
 # Define databases that support known genes
 set kgDb $hg,$mm,$rn
