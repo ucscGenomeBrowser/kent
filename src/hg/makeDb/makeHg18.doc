@@ -9202,3 +9202,59 @@ Track Specification      track  overlap track    cov   track   new    cum
 -----------------------------------------------------------------------------
 exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
 # end ExonWalk track.
+
+# LOAD ENSEMBL GENES (DONE, 2006-05-02, Fan)
+
+    mkdir /cluster/data/hg18/bed/ensembl
+    cd /cluster/data/hg18/bed/ensembl
+    # Get the ensembl protein data from 
+    # http://www.ensembl.org/Homo_sapiens/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Structures" box. 
+    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
+    # Save as ensemblGene.gtf.gz
+
+    # Ensembl handles random chromosomes differently than us, so we
+    # strip this data.  Fortunately it just loses a couple of genes.
+    # Add "chr" to front of each line in the gene data gtf file to make 
+    # it compatible with our software.
+    # Finally, get rid of the ".1" or ".2" after the name
+    gunzip -c ensemblGene.gtf.gz \
+    |sed -e 's/c22_H2/22_h2_hap1/'\
+    |sed -e 's/c5_H2/5_h2_hap1/'\
+    |sed -e 's/c6_COX/6_cox_hap1/'\
+    |sed -e 's/c6_QBL/6_qbl_hap2/'\
+    | perl -wpe 's/^([0-9]|X|Y|Un|MT|5_h2_hap1|22_h2_hap1|6_cox_hap1|6_qbl_hap2)/chr$1/ || die "Line $. doesnt start with human chrom:\n$_"' \
+    | sed -e 's/\..\"/\"/g' \
+    | sed -e 's/chrMT/chrM/' \
+    > ensGene.gtf
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/ensembl
+    /cluster/bin/i386/ldHgGene hg18 ensGene ensGene.gtf
+    # Read 59069 transcripts in 1025803 lines in 1 files
+    # 59069 groups 29 seqs 1 sources 4 feature types
+    # 59069 gene predictions
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.txt.gz
+    gunzip ensGtp.txt.gz
+    hgsql hg18 < ~/kent/src/hg/lib/ensGtp.sql
+    # remove header line from ensGtp.txt
+    echo "load data local infile 'ensGtp.txt' into table ensGtp ignore 1 lines" | hgsql -N hg18
+
+    # Load Ensembl peptides:
+    # Get them from ensembl as above in the gene section except for
+    # Page 2) Choose protein_coding for gene type
+    # Page 3) Choose the "Sequences" box. 
+    # Page 4) check Ensembl Gene ID, Transcript ID, and Peptid ID, uncheck chrom, Transcripts/Proteins.  Peptide.  Format = FASTA.
+    # Save file as ensemblPep.fa.gz
+    gunzip ensemblPep.fa.gz
+    hgPepPred hg18 ensembl ensemblPep.fa
+
