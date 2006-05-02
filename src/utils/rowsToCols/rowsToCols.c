@@ -19,6 +19,8 @@ errAbort(
   "rowsToCols - Convert rows to columns and vice versa in a text file.\n"
   "usage:\n"
   "   rowsToCols in.txt out.txt\n"
+  "By default all columns are space-separated, and all rows must have the\n"
+  "same number of columns.\n"
   "options:\n"
   "   -varCol - rows may to have various numbers of columns.\n"
   "   -tab - fields are separated by tab\n"
