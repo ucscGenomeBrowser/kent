@@ -1,3 +1,37 @@
+track multiz7way
+shortLabel Conservation
+longLabel Vertebrate Multiz Alignment & Conservation 
+group compGeno
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons7
+spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+# frames multiz7wayFrames
+# irows on
+autoScaleDefault Off
+summary multiz7waySummary
+speciesGroups mammal vertebrate
+sGroup_mammal mm8 rn4 hg18
+sGroup_vertebrate galGal2 xenTro2 danRer3
+speciesDefaultOff danRer3
+treeImage phylo/monDom4_7way.jpg
+
+track phastConsElements7way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track chainHg17
 shortLabel Hg17 Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
