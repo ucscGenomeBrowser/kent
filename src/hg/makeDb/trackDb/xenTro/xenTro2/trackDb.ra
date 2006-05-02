@@ -38,7 +38,7 @@ frames multiz7wayFrames
 irows on
 speciesGroups bird mammal fish
 sGroup_bird galGal2 
-sGroup_mammal hg18 mm8 rn4 monDom4
+sGroup_mammal monDom4 hg18 mm8 rn4
 sGroup_fish danRer4
 treeImage phylo/xenTro2_7way.jpg
 
