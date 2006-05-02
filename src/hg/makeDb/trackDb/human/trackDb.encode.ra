@@ -2222,7 +2222,7 @@ release beta
         longLabel Ludwig Institute NimbleGen ChIP/Chip: TAF1 antibody, IMR90 cells
         group encodeChip
         priority 51.0
-        visibility dense
+        visibility full
         maxHeightPixels 128:16:16
         type wig -5.61 6.47
         spanList 50
