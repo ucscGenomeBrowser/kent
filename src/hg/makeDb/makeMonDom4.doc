@@ -1688,6 +1688,31 @@ BASE=/cluster/data/monDom4/bed/blastz.xenTro2.2006-04-20
 	> fb.monDom4.chainXenTro2Link 2>&1 &
     cat fb.monDom4.chainXenTro2Link
 
+###########################################################################
+# CREATE OPOSSUM AND OTHER SPECIES LINEAGE-SPECIFIC REPEATS DIRECTORY
+# AND NIB DIRECTORY ON THE SAN FOR BLASTZ CLUSTER RUNS 
+# (DONE, 2006-04-26, hartera)
+    # If there are no lineage-specific repeats for opossum and other species
+    # then use all repeats.
+    ssh pk
+    mkdir -p /san/sanvol1/scratch/monDom4/linSpecRep.notInOthers
+    foreach f (/cluster/data/monDom4/*/chr*.fa.out)
+     cp -p $f \
+        /san/sanvol1/scratch/monDom4/linSpecRep.notInOthers/$f:t:r:r.out.spec
+    end
+    # need nib files when running Blastz with lineage-specific repeats
+    # so create these and move to the san.
+    ssh kkstore04
+    mkdir -p /cluster/data/monDom4/nib
+    cd /cluster/data/monDom4
+    foreach f (*/chr*.fa)
+      echo "Processing $f ..."
+      nice faToNib -softMask $f nib/$f:t:r.nib
+    end
+    # move nibs to the san as taking up a lot of space on /cluster/data/ 
+    ssh pk
+    mv /cluster/data/monDom4/nib /san/sanvol1/scratch/monDom4/
+
 ##########################################################################
 # QUALITY (WORKING - 2006-04-27 - Hiram)
     ssh kkstore04
@@ -1938,3 +1963,84 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     # 10 jobs
     para try ... check ... push ... etc ...
 XXXX running 2006-04-28 17:00
+
+###########################################################################
+# BLASTZ SWAP OF ZEBRAFISH (danRer4) CHAIN AND NET ALIGNMENTS OVER TO 
+# monDom4 AND CREATE AXNET, MAFNET, LIFTOVER AND ALIGNMENT DOWNLOADS 
+# (DONE, 2006-04-29, hartera)
+    # see also makeDanRer4.doc
+    # Remove test tables and directories and start again:
+    ssh hgwdev
+    cd /cluster/data/monDom4
+    foreach c (`cat chrom.lst`)
+       hgsql -e "drop table chr${c}_chainDanRer4;" monDom4
+       hgsql -e "drop table chr${c}_chainDanRer4Link;" monDom4
+       hgsql -e "drop table chr${c}_chainDanRer4NoDyMsk;" monDom4
+       hgsql -e "drop table chr${c}_chainDanRer4NoDyMskLink;" monDom4
+    end
+    hgsql -e "drop table netDanRer4;" monDom4
+    hgsql -e "drop table netDanRer4NoDyMsk;" monDom4
+    # remove downloads
+    rm -r /usr/local/apache/htdocs/goldenPath/monDom4/vsDanRer4
+    rm \
+    /usr/local/apache/htdocs/goldenPath/monDom4/liftOver/monDom4ToDanRer4.over.chain.gz
+    rm /cluster/data/monDom4/bed/liftOver/monDom4ToDanRer4.over.chain.gz
+    # remove old Blastz swap
+    rm -r /cluster/data/monDom4/bed/blastz.danRer4.swap
+    # remove link to old blastz directory
+    rm -r /cluster/data/monDom4/bed/blastz.danRer4
+
+    # Used the following BLASTZ parameters:
+    # BLASTZ_H=2000
+    # BLASTZ_Y=3400
+    # BLASTZ_L=6000
+    # BLASTZ_K=2200
+    # BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
+    # Used all repeats as lineage-specific repeats.
+    # Swap directory is: /cluster/data/monDom4/bed/blastz.danRer4.swap
+    ssh pk
+    cd /cluster/data/danRer4/bed/blastz.monDom4.2006-04-28
+    nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF >& doSwap.log &
+    
+    featureBits monDom4 chainDanRer4Link 
+    # 62249730 bases of 3501643220 (1.778%) in intersection
+    featureBits monDom4 chainDanRer3Link 
+    # 73187496 bases of 3501643220 (2.090%) in intersection
+    featureBits monDom4 netDanRer4
+    # 745122163 bases of 3501643220 (21.279%) in intersection
+    featureBits monDom4 netDanRer3
+    # 672446285 bases of 3501643220 (19.204%) in intersection
+    featureBits -chrom=chr1 monDom4 refGene:cds chainDanRer4Link -enrichment
+    # refGene:cds 0.001%, chainDanRer4Link 1.807%, both 0.000%, 
+    # cover 43.85%, enrich 24.27x 
+    featureBits -chrom=chr1 monDom4 refGene:cds chainDanRer3Link -enrichment
+    # refGene:cds 0.001%, chainDanRer3Link 2.044%, both 0.000%, 
+    # cover 49.24%, enrich 24.09x
+
+    # Only 36 RefSeqs in monDom4 refGene so try xenoRefGene (78707 sequences)
+    # and mrna (174 sequences):
+    featureBits -chrom=chr1 monDom4 xenoRefGene:cds chainDanRer4Link -enrichment
+    # xenoRefGene:cds 0.820%, chainDanRer4Link 1.807%, both 0.661%, 
+    # cover 80.63%, enrich 44.63x
+    featureBits -chrom=chr1 monDom4 xenoRefGene:cds chainDanRer3Link -enrichment
+    # xenoRefGene:cds 0.820%, chainDanRer3Link 2.044%, both 0.577%, 
+    # cover 70.45%, enrich 34.47x
+    featureBits -chrom=chr1 monDom4 mrna chainDanRer4Link -enrichment
+    # mrna 0.004%, chainDanRer4Link 1.807%, both 0.002%, 
+    # cover 52.67%, enrich 29.15x
+    featureBits -chrom=chr1 monDom4 mrna chainDanRer3Link -enrichment
+    # mrna 0.004%, chainDanRer3Link 2.044%, both 0.002%, 
+    # cover 54.50%, enrich 26.66x
+ 
+    featureBits -chrom=chr1 monDom4 xenoRefGene:cds netDanRer4 -enrichment
+    # xenoRefGene:cds 0.820%, netDanRer4 24.539%, both 0.720%, 
+    # cover 87.79%, enrich 3.58x
+    featureBits -chrom=chr1 monDom4 xenoRefGene:cds netDanRer3 -enrichment
+    # xenoRefGene:cds 0.820%, netDanRer3 22.272%, both 0.640%, 
+    # cover 78.12%, enrich 3.51x
+    featureBits -chrom=chr1 monDom4 mrna netDanRer4 -enrichment
+    # mrna 0.004%, netDanRer4 24.539%, both 0.002%, cover 56.90%, enrich 2.32x
+    featureBits -chrom=chr1 monDom4 mrna netDanRer3 -enrichment
+    # mrna 0.004%, netDanRer3 22.272%, both 0.002%, cover 62.62%, enrich 2.81x
