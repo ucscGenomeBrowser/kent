@@ -17,7 +17,7 @@ chromosomes chr1,chr10,chr10_random,chr11,chr11_random,chr12,chr12_random,chr13,
 
 track refGene
 shortLabel RefSeq
-longLabel Human and Chimp RefSeq Genes
+longLabel Chimp and Human RefSeq Genes
 group genes
 priority 35
 visibility dense
