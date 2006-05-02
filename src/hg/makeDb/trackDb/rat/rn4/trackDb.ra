@@ -93,6 +93,15 @@ spectrum on
 type netAlign mm7 chainMm7
 otherDb mm7
 
+track gold
+shortLabel Assembly
+longLabel Assembly from Fragments
+group map
+priority 10
+visibility hide
+color 150,100,30
+altColor 230,170,40
+type bed 3 +
 
 
 searchTable gold
