@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1014 2006/05/01 22:27:17 hartera Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1015 2006/05/03 22:13:41 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15990,8 +15990,10 @@ if (pos != NULL)
 	char *assembly;
 	if (sameString("blastHg16KG", tdb->tableName))
 	    assembly = "hg16";
-	else
+	else if (sameString("blastHg17KG", tdb->tableName))
 	    assembly = "hg17";
+	else
+	    assembly = "hg18";
 	printf("<B>Human position:</B>\n");
 	printf("<A TARGET=_blank HREF=\"%s?position=%s&db=%s\">",
 	    hgTracksName(), pos, assembly);
@@ -17738,7 +17740,8 @@ else if (sameWord(track, "firstEF"))
     }
 else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
         startsWith("blastDm",  track) || sameWord(track, "blastMm6KG") || 
-        sameWord(track, "blastSacCer1SG") || sameWord(track, "blastHg17KG") )
+        sameWord(track, "blastSacCer1SG") || sameWord(track, "blastHg17KG") ||
+        sameWord(track, "blastHg18KG") )
     {
     blastProtein(tdb, item);
     }
