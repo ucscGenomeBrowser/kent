@@ -12,7 +12,7 @@
 
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgNetDist.c,v 1.5 2005/12/17 06:27:47 kent Exp $";
+static char const rcsid[] = "$Id: hgNetDist.c,v 1.6 2006/05/03 03:20:54 galt Exp $";
 
 boolean first=FALSE;
 boolean weighted=FALSE;
@@ -39,7 +39,7 @@ errAbort(
   "the results in the database.table specified, for use with Gene Sorter.\n"
   "Input .tab file format is 3 columns: gene1 gene2 value.\n"
   "By default, the first row and the last column are ignored,\n"
-  "assuming the first row is a header and the last value is not\n"
+  "assuming the first row is a header and the last value is \n"
   "the edge-weight/distance.\n"
   "options:\n"
   "   -first  - include 1st row in input, do not skip.\n"
