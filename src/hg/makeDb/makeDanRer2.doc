@@ -5243,7 +5243,7 @@ awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4,
 
 ###########################################################################
 # LIFTOVER CHAINS TO DANRER3 (DONE, 2006-04-18, hartera)
-    # Split (using makeLoChain-split) of panTro3 is doc'ed in makeDanRer3.doc
+    # Split (using makeLoChain-split) of danRer3 is doc'ed in makeDanRer3.doc
     # Do what makeLoChain-split says to do next (start blat alignment)
     ssh kk
     mkdir -p /cluster/data/danRer2/bed/liftOver
@@ -5298,4 +5298,14 @@ awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4,
     makeLoChain-load danRer2 danRer3 >&! load.log &
     # test by converting a region using the "convert" link on
     # the browser, and comparing to blat of the same region
-    
+   
+###########################################################################
+# SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM DANRER3 (DONE, 2006-04-25, hartera)
+    # followed instructions used in makePanTro2.doc
+    ssh kkr1u00
+    cd /cluster/data/danRer2/bed
+    mkdir -p liftOver
+    cd liftOver
+    makeLoChain-split danRer2 /cluster/data/danRer2/nib >&! split.log &
+    # Took about 30 minutes to run.
+ 
