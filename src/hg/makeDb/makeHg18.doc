@@ -9258,3 +9258,14 @@ exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
     gunzip ensemblPep.fa.gz
     hgPepPred hg18 ensembl ensemblPep.fa
 
+# SGP GENES (DONE 5/3/06 Fan)
+    ssh hgwdev 
+    mkdir /cluster/data/hg18/bed/sgp
+    cd /cluster/data/hg18/bed/sgp
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200603/SGP/$chr.gtf
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200603/SGP/$chr.prot
+    end
+
+    ldHgGene -gtf -genePredExt hg18 sgpGene chr*.gtf
+
