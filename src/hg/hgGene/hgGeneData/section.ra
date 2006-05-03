@@ -55,7 +55,7 @@ priority 100
 
 name mrnaDescriptions
 shortLabel mRNA Descriptions
-longLabel Descriptions from all associated mRNAs.
+longLabel Descriptions from all associated GenBank mRNAs
 priority 120
 
 name pseudoGene
