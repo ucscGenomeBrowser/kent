@@ -597,6 +597,14 @@ sGroup_placental rabbit rn3 mm3 cow pig horse cat dog ajbat cpbat hedgehog
 sGroup_mammal opossum dunnart platypus 
 sGroup_vertebrate chicken zfish tetra fr1
 
+track snpMap
+shortLabel SNP Map
+longLabel Simple Nucleotide Polymorphisms (SNPs)
+group varRep
+priority 144
+visibility hide
+type bed 4 .
+
 track hapmapLd
 compositeTrack on
 shortLabel HapMap LD
