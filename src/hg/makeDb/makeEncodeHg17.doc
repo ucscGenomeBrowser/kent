@@ -1485,6 +1485,8 @@ cat > load.csh << 'EOF'
 # metadata.txt file in Elliott's MSA release
 # Assemblies in this freeze are: canFam1 danRer2 fr1 galGal2 mm6
 #       monDom1 panTro1 rheMac1 rn3 tetNig1
+# NOTE: reloaded phastCons scores (previously only manual regions
+#       were loaded (2006-05-03 kate)
 
     # TBA alignments
     cd /cluster/data/encode/TBA
@@ -1652,30 +1654,31 @@ cat > load.csh << 'EOF'
     cd SEP-05/conservation/lab
     wget ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/SEP-2005/cons/phastCons.wig.tar.gz
     cd ..
+
 cat > load.csh << 'EOF'
     # TBA
-    gunzip -c lab/tba/*/phast/human.ENm*.gz | \
+    gunzip -c lab/tba/*/phast/human.EN*.gz | \
         wigEncode stdin tbaPhastCons.wig tbaPhastCons.wib
     set d = /gbdb/hg17/encode/TBA/SEP-05
     ln -s `pwd`/tbaPhastCons.wib $d
     hgLoadWiggle -pathPrefix=$d hg17 encodeTbaPhastCons tbaPhastCons.wig
 
     # MLAGAN
-    gunzip -c lab/mlagan/*/phast/human.ENm*.gz | \
+    gunzip -c lab/mlagan/*/phast/human.EN*.gz | \
         wigEncode stdin mlaganPhastCons.wig mlaganPhastCons.wib
     set d = /gbdb/hg17/encode/MLAGAN/SEP-05
     ln -s `pwd`/mlaganPhastCons.wib $d
     hgLoadWiggle -pathPrefix=$d hg17 encodeMlaganPhastCons mlaganPhastCons.wig
 
     # MAVID
-    gunzip -c lab/mavid/*/phast/human.ENm*.gz | \
+    gunzip -c lab/mavid/*/phast/human.EN*.gz | \
         wigEncode stdin mavidPhastCons.wig mavidPhastCons.wib
     set d = /gbdb/hg17/encode/MAVID/SEP-05
     ln -s `pwd`/mavidPhastCons.wib $d
     hgLoadWiggle -pathPrefix=$d hg17 encodeMavidPhastCons mavidPhastCons.wig
 
 'EOF'
-    csh load.csh >&! load.log
+    csh load.csh >&! load.log &
 
 ##########################################################################
 # MSA GERP Conservation (2005-02-06 kate)
