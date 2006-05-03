@@ -2462,7 +2462,7 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeMsaElModerate
     subTrack encodeMsaElements
     shortLabel Moderate
-    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Strict Conserved Elements
+    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Moderate Conserved Elements
     priority 2
     color 80,105,148
 
