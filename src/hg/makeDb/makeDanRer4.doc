@@ -2001,6 +2001,82 @@ endif
     #	58145856 bases of 1626093931 (3.576%) in intersection
 
 ###########################################################################
+# MONDOM4 BLASTZ TESTS USING LINEAGE-SPECIFIC REPEATS OR DYNAMIC MASKING
+# AND SWAP (DONE, 2006-04-28, hartera)
+   # used no lineage specific-repeats and M=50 for dynamic masking
+   featureBits danRer4 chainMonDom4
+   # 541863023 bases of 1626093931 (33.323%) in intersection
+   featureBits danRer4 chainMonDom4NoDyMsk
+   # 534445657 bases of 1626093931 (32.867%) in intersection
+   featureBits monDom4 chainDanRer4
+   # 856404995 bases of 3501643220 (24.457%) in intersection
+   featureBits monDom4 chainDanRer4NoDyMsk
+   # 812142533 bases of 3501643220 (23.193%) in intersection
+   featureBits -chrom=chr1 danRer4 refGene:cds chainMonDom4Link -enrichment
+   # refGene:cds 0.732%, chainMonDom4Link 5.573%, both 0.550%, cover 75.20%, 
+   # enrich 13.49x
+   featureBits -chrom=chr1 danRer4 refGene:cds chainMonDom4NoDyMskLink 
+   -enrichment
+   # refGene:cds 0.732%, chainMonDom4NoDyMskLink 4.083%, both 0.550%, 
+   # cover 75.15%, enrich 18.40x
+   featureBits -chrom=chr1 monDom4 refGene:cds chainDanRer4Link -enrichment
+   # refGene:cds 0.001%, chainDanRer4Link 2.448%, both 0.000%, 
+   # cover 55.63%, enrich 22.73x 
+   featureBits -chrom=chr1 monDom4 refGene:cds chainDanRer4NoDyMskLink 
+   -enrichment
+   # refGene:cds 0.001%, chainDanRer4NoDyMskLink 1.807%, both 0.000%, 
+   # cover 43.85%, enrich 24.27x
+   # There are only 36 RefSeq genes for monDom4 so results are misleading.
+   # Try mrna and xenoRefGene table.
+   # for mrna tables, not much difference:
+   featureBits -chrom=chr1 monDom4 mrna chainDanRer4Link -enrichment
+   # mrna 0.004%, chainDanRer4Link 2.448%, both 0.002%, cover 54.59%, 
+   # enrich 22.30x
+   featureBits -chrom=chr1 monDom4 mrna chainDanRer4NoDyMskLink -enrichment
+   # mrna 0.004%, chainDanRer4NoDyMskLink 1.807%, both 0.002%, 
+   # cover 52.67%, enrich 29.15x
+   featureBits -chrom=chr1 monDom4 xenoRefGene:cds chainDanRer4Link -enrichment
+   # xenoRefGene:cds 0.820%, chainDanRer4Link 2.448%, both 0.655%, 
+   # cover 79.88%, enrich 32.63x
+   featureBits -chrom=chr1 monDom4 xenoRefGene:cds chainDanRer4NoDyMskLink 
+   -enrichment
+   # xenoRefGene:cds 0.820%, chainDanRer4NoDyMskLink 1.807%, both 0.661%, 
+   # cover 80.63%, enrich 44.63x
+
+   # For the nets:
+   featureBits -chrom=chr1 danRer4 refGene:cds netMonDom4 -enrichment
+   # refGene:cds 0.732%, netMonDom4 31.056%, both 0.612%, 
+   # cover 83.58%, enrich 2.69x
+   featureBits -chrom=chr1 danRer4 refGene:cds netMonDom4NoDyMsk -enrichment
+   # refGene:cds 0.732%, netMonDom4NoDyMsk 31.002%, both 0.617%, 
+   # cover 84.31%, enrich 2.72x
+   featureBits -chrom=chr1 monDom4 refGene:cds netDanRer4 -enrichment
+   # refGene:cds 0.001%, netDanRer4 25.224%, both 0.000%, 
+   # cover 66.95%, enrich 2.65x
+   featureBits -chrom=chr1 monDom4 refGene:cds netDanRer4NoDyMsk -enrichment
+   # refGene:cds 0.001%, netDanRer4NoDyMsk 24.539%, both 0.000%, 
+   # cover 49.19%, enrich 2.00x
+   # rows in tables for chr1
+   # Assembly  Table 		Number of rows
+   # danRer4   chainMonDom4          	36931
+   # danRer4   chainMonDom4Link        	426659 
+   # danRer4   chainMonDom4NoDyMsk    	34363
+   # danRer4   chainMonDom4NoDyMskLink	361572
+   # monDom4   chainDanRer4            	170759
+   # monDom4   chainDanRer4Link	        2552995
+   # monDom4   chainDanRer4NoDyMsk	139797	
+   # monDom4   chainDanRer4NoDyMskLink	1806858
+   # all chroms:
+   # danRer4   netMonDom4	        399531
+   # danRer4   netMonDom4NoDyMsk	346482
+   # monDom4   netDanRer4		395881
+   # monDom4   netDanRer4NoDyMsk	321288
+
+   # Use lineage-specific repeats and no dynamic masking, seem to get 
+   # better enrichment and coverage compared to gene CDS regions and also 
+   # there are less chains being produced.
+
+###########################################################################
 # BLASTZ, CHAIN, NET, MAFNET, AXTNET AND ALIGNMENT DOWNLOADS FOR
 # OPOSSUM (monDom4) (DONE, 2006-04-28 - 2006-04-29, hartera)
     ssh hgwdev
@@ -2379,7 +2455,7 @@ end
    # copy README.txt's from danRer3 and update
 
 ###########################################################################
-# HUMAN (hg18) PROTEINS TRACK FOR hg18 (in progress, 2006-04-28, hartera)
+# HUMAN (hg18) PROTEINS TRACK FOR hg18 (DONE, 2006-04-28 - 2006-05-03, hartera)
    ssh kkstore01
    bash # if not using bash shell already
    # make Blast database for non-random chrom sequences
@@ -2532,3 +2608,107 @@ chainOne $(path1)
     cd /cluster/data/danRer4/bed/tblastn.hg18KG/chainRun
     para create chainSpec
     para try, check, push, check etc.
+# Completed: 58 of 58 jobs
+# CPU time in finished jobs:     759034s   12650.56m   210.84h    8.79d  0.024 y
+# IO & Wait Time:                217724s    3628.74m    60.48h    2.52d  0.007 y
+# Average job time:               16841s     280.68m     4.68h    0.19d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:          208828s    3480.47m    58.01h    2.42d
+# Submission to last job:        208891s    3481.52m    58.03h    2.42d
+    ssh kkstore01
+    cd /cluster/data/danRer4/bed/tblastn.hg18KG/blastOut
+    bash # if using another shell
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    liftUp -nohead -type=.psl stdout \
+           /cluster/data/danRer4/jkStuff/liftAll.lft carry u.*.psl m60* | \
+           sort -T /tmp -k 14,14 -k 16,16n -k 17,17n | uniq \
+           > /cluster/data/danRer4/bed/tblastn.hg18KG/blastHg18KG.psl
+    pslCheck blastHg18KG.psl
+    # this is ok.
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/tblastn.hg18KG
+    hgLoadPsl danRer4 blastHg18KG.psl
+    # check coverage
+    featureBits danRer4 blastHg18KG
+    # 21159392 bases of 1626093931 (1.301%) in intersection 
+    
+    featureBits danRer3 blastHg17KG
+    # 21063005 bases of 1630323462 (1.292%) in intersection
+    
+    featureBits -chrom=chr1 danRer4 refGene:cds blastHg18KG -enrichment
+    # refGene:cds 0.732%, blastHg18KG 1.333%, both 0.428%, cover 58.43%, 
+    # enrich 43.83x
+    featureBits -chrom=chr1 danRer3 refGene:cds blastHg17KG -enrichment
+    # refGene:cds 0.774%, blastHg17KG 1.370%, both 0.450%, cover 58.05%, 
+    # enrich 42.38x
+    # Similar coverage compared to refGene CDS as for hg17 proteins on danRer3.
+    # back to kkstore04 to clean up
+    ssh kkstore04
+    rm -rf /cluster/data/danRer4/bed/tblastn.hg18KG/blastOut
+    rm -rf /cluster/bluearc/danRer4/bed/tblastn.hg18KG/blastOut
+
+    # add trackDb.ra entry and html to trackDb/zebrafish/
+    # blastKGRef* table missing from hg18 - needed for track.
+
+###########################################################################
+# BACENDS TRACK (in progress, 2006-05-02, hartera)
+    # Obtain these from the NCBI Trace archive
+    ssh kkstore04
+    mkdir -p /cluster/data/danRer4/bed/bacEnds/sequences
+    cd /cluster/data/danRer4/bed/bacEnds/sequences
+    # go to NCBI Trace Archive
+    # http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?
+    cat << '_EOF_' > query_tracedb
+#!/usr/bin/perl -w
+use strict;
+use LWP::UserAgent;
+use HTTP::Request::Common 'POST';
+
+$ENV{'LANG'}='C';
+$ENV{'LC_ALL'}='C';
+
+my $query = join ' ', @ARGV;
+$query = 'help' if $query =~ /^(\-h|\-\-help|\-)$/;
+$query = join('', <STDIN>) if ! $query;
+
+my $req = POST 'http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?cmd=raw', [query=>$query];
+my $res =  LWP::UserAgent->new->request($req, sub { print $_[0] });
+die "Couldn't connect to TRACE server\n" if ! $res->is_success;
+'_EOF_'
+   chmod +x query_tracedb
+   # ./query_tracedb usage
+   # command to see the help screen with usage examples
+   # count number of entries for zebrafish
+   query_tracedb "query count species_code='DANIO RERIO' AND trace_type_code = 'CLONEEND'"
+   # 473060
+   # Therefore this is 12 files. 
+   # so get from ftp site:
+   
+   cat << '_EOF_' > getZfishSeqs.csh
+#!/bin/csh -fe
+foreach n (0 1 2 3 4 5 6 7 8 9 10 11)
+   echo "Fetching page $n ..."
+   (echo -n "retrieve_tgz all 0b"; query_tracedb "query page_size 40000 page_number $n binary species_code='DANIO RERIO' AND trace_type_code = 'CLONEEND'") | query_tracedb > data${n}.tgz
+end
+'_EOF_'
+   chmod +x getZfishSeqs.csh
+   mkdir -p /cluster/bluearc/danRer4/bacEnds/downloads
+   ln -s /cluster/bluearc/danRer4/bacEnds/downloads
+   cp query_tracedb getZfishSeqs.csh ./downloads
+   cd downloads
+   nohup nice getZfishSeqs.csh >& zfishSeqs.log &
+   # Start: May  2 21:43 Finish: May 3 03:08
+   ssh kkstore04
+   cd /cluster/data/danRer4/bed/bacEnds/sequences/downloads
+   time wget --timestamping  \
+        ftp://ftp.ensembl.org/pub/traces/danio_rerio/fasta/*cloneEnd*.fasta.gz
+   wget --timestamping \
+        ftp://ftp.ensembl.org/pub/traces/danio_rerio/fasta/*cloneEnd*.gz
+
