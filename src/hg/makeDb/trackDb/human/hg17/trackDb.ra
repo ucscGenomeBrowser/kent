@@ -305,6 +305,52 @@ sGroup_vertebrate galGal2 xenTro1 danRer3 tetNig1 fr1
 speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
 treeImage phylo/Mm7_17way.jpg
 
+track altConservation
+compositeTrack on
+shortLabel Alt Conservation
+longLabel  Alternate Conservation
+group compGeno
+priority 104.2
+type wig 0.0 1.0
+spanList 1
+maxHeightPixels 100:25:11
+autoScaleDefault Off
+windowingFunction mean
+chromosomes chr7
+
+    track phastConsPlacental
+    subTrack altConservation
+    shortLabel Placental
+    longLabel Conservation in Placental Mammals
+    priority 1
+
+    track phastConsMammal
+    subTrack altConservation
+    shortLabel Mammal
+    longLabel Conservation in Mammals
+    priority 2
+
+    track phastConsPlacentalHigh
+    subTrack altConservation
+    shortLabel Placental High
+    longLabel Conservation in Placental Mammals (High Cov Only)
+    priority 3
+    color 0, 100, 100
+
+    track phastConsMammalHigh
+    subTrack altConservation
+    shortLabel Mammal High
+    longLabel Conservation in Mammals (High Cov Only)
+    priority 4
+    color 0, 100, 100
+
+    track phastConsVertebrateHigh
+    subTrack altConservation
+    shortLabel Vertebrate High
+    longLabel Conservation in Vertebrates (High Cov Only)
+    priority 5
+    color 0, 100, 100
+
 track phastConsElements17way
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
@@ -314,6 +360,51 @@ visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
+
+track phastConsElementsAlt
+compositeTrack on
+shortLabel Alt Most Conserved
+longLabel Alternate PhastCons Conserved Elements, Vertebrate Multiz Alignment
+group compGeno
+priority 104.4
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+chromosomes chr7
+
+    track phastConsElementsPlacental
+    subTrack phastConsElementsAlt
+    shortLabel Placental
+    longLabel Elements Conserved in Placental Mammals
+    priority 1
+
+    track phastConsElementsMammal
+    subTrack phastConsElementsAlt
+    shortLabel Mammal
+    longLabel Elements Conserved in Mammals
+    priority 2
+
+    track phastConsElementsPlacentalHigh
+    subTrack phastConsElementsAlt
+    shortLabel Placental High
+    longLabel Elements Conserved in Placental Mammals (High-Cov Only)
+    priority 3
+    color 0, 100, 100
+
+    track phastConsElementsMammalHigh
+    subTrack phastConsElementsAlt
+    shortLabel Mammal High
+    longLabel Elements Conserved in Mammals (High-Cov Only)
+    priority 4
+    color 0, 100, 100
+
+    track phastConsElementsVertebrateHigh
+    subTrack phastConsElementsAlt
+    shortLabel Vertebrate High
+    longLabel Elements Conserved in Vertebrates (High-Cov Only)
+    color 0, 100, 100
+    priority 5
 
 track multiz8way
 shortLabel 8-way Conservation
