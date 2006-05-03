@@ -162,6 +162,7 @@ UTIL_DIRS = \
 	liftFrags \
 	liftOver \
 	liftUp \
+	lfsOverlap \
 	makeDb \
 	maskOutFa \
 	mdToNcbiLift \
