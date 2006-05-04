@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1095 2006/05/04 18:40:07 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1096 2006/05/04 18:41:27 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -5504,7 +5504,7 @@ char *chromPrefixes[] = { "chr", "Group",
 			  NULL };
 
 char *scaffoldPrefixes[] = { "scaffold_", "contig_", "SCAFFOLD", "Scaffold", 
-			     "Contig", "SuperCont", "super_",
+			     "Contig", "SuperCont", "super_", "scaffold",
 			     NULL };
 
 char *maybeSkipPrefix(char *name, char *prefixes[])
