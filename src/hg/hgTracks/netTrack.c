@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.18 2005/05/20 22:46:57 angie Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.19 2006/05/04 18:40:30 hiram Exp $";
 
 struct netItem
 /* A net track item. */
@@ -83,6 +83,8 @@ static Color netColor(char *chrom)
 static Color color;
 if (!sameString(chrom, netColorLastChrom))
     color = getSeqColor(chrom, rVg);
+if (0 == color)
+    color = 1;	/*	don't display in white	*/
 netColorLastChrom = chrom;
 return color;
 }
