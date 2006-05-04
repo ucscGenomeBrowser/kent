@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.38 2006/05/03 21:36:50 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.39 2006/05/04 03:52:37 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5383,7 +5383,7 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     #		/cluster/data/mm8/bed/liftOver/mm8ToMm7.over.chain.gz
 
 ########################################################################
-##  cytoBand - ideogram track (DONE - 2006-04-28 - Hiram)
+##  CYTOBAND - ideogram track (DONE - 2006-04-28 - Hiram)
     ssh hgwdev
     cd /cluster/data/mm8/pre_release
     #	The .wgetrc is the anonymous user
@@ -5406,3 +5406,112 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
     hgsql -e "drop table cytoBandIdeo;" mm8
     hgsql mm8 -e "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"
+
+
+#########################################################################
+# GENSCAN PREDICTIONS (DONE - 2006-05-03 - Hiram)
+    ssh kkstore04
+    cd /cluster/data/mm8
+    time nice -n +19 cat ?{,?}/chr*.fa.masked > allChroms.fa.masked
+
+    #	creating 4,000,000 sized chunks split on gaps > 1000
+    mkdir hardChunks
+    time nice -n +19 faSplit gap allChroms.fa.masked 4000000 hardChunks/c_ \
+	-lift=hardChunks.lft -verbose=2
+    #	make sure we haven't lost any sequence, losing N's are OK since
+    #	they are gap garbage
+    faSize allChroms.fa.masked
+    #	2664455088 bases (1186522085 N's 1477933003 real 1477933003
+    #	upper 0 lower) in 34 sequences in 1 files
+    catDir hardChunks | faSize stdin
+    #	2585871119 bases (1107938116 N's 1477933003 real 1477933003
+    #	upper 0 lower) in 673 sequences in 1 files
+    #	same number of 'real' bases left. 78583969 N's chopped out
+
+    mkdir /cluster/bluearc/mm8/hardChunks
+    rsync -a --progress  hardChunks/ /cluster/bluearc/mm8/hardChunks/
+
+    ssh hgwdev
+    mkdir /cluster/data/mm8/bed/genscan
+    cd /cluster/data/mm8/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+    # Run on small cluster (more mem than big cluster).
+    ssh kki
+    cd /cluster/data/mm8/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    #	Since we split on gaps, we have no chunks like that.  You can
+    #	verify with faCount on the chunks.
+    ls -1S /cluster/bluearc/mm8/hardChunks/c_*.fa > genome.list
+
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > gsub
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # happy emacs
+    gensub2 genome.list single gsub jobList
+    para create jobList
+    para try, check, push, check, ...
+# Completed: 673 of 673 jobs
+# CPU time in finished jobs:      76339s    1272.32m    21.21h    0.88d  0.002 y
+# IO & Wait Time:                  2327s      38.78m     0.65h    0.03d  0.000 y
+# Average job time:                 117s       1.95m     0.03h    0.00d
+# Longest finished job:            1993s      33.22m     0.55h    0.02d
+# Submission to last job:          7526s     125.43m     2.09h    0.09d
+
+
+    # cat and lift the results into single files
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/genscan
+    cat gtf/c_*.gtf | liftUp -type=.gtf genscan.gtf \
+	../../hardChunks.lft carry stdin
+    cat subopt/c_*.bed | liftUp -type=.bed genscanSubopt.bed \
+	../../hardChunks.lft carry stdin
+    cat pep/c_*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/genscan
+    ldHgGene mm8 -gtf genscan genscan.gtf
+    #	Read 45393 transcripts in 324338 lines in 1 files
+    #	45393 groups 34 seqs 1 sources 1 feature types
+    #	45393 gene predictions
+    hgPepPred mm8 generic genscanPep genscan.pep
+    hgLoadBed -strict mm8 genscanSubopt genscanSubopt.bed
+    #	Loaded 528146 elements of size 6
+
+    #	check the numbers
+    time nice -n +19 featureBits mm8 genscan
+    #	54724050 bases of 2567283971 (2.132%) in intersection
+    time nice -n +19 featureBits mm8 knownGene:cds
+    #	28459053 bases of 2567283971 (1.109%) in intersection
+    featureBits mm7 genscan
+    #	54864694 bases of 2583394090 (2.124%) in intersection
+    time nice -n +19 featureBits mm7 knownGene:cds
+    #	27531524 bases of 2583394090 (1.066%) in intersection
+    featureBits mm6 genscan
+    #	54894283 bases of 2597150411 (2.114%) in intersection
+    featureBits mm5 genscan
+    #	55024722 bases of 2615483787 (2.104%) in intersection
+    featureBits mm4 genscan
+    #	56164126 bases of 2627444668 (2.138%) in intersection
+    featureBits mm3 genscan
+    #	51697165 bases of 2505900260 (2.063%) in intersection
+
+    featureBits mm8 genscanSubopt
+    #	56960677 bases of 2567283971 (2.219%) in intersection
+    featureBits mm7 genscanSubopt
+    #	57512333 bases of 2583394090 (2.226%) in intersection
+    featureBits mm6 genscanSubopt
+    #	57856316 bases of 2597150411 (2.228%) in intersection
+    featureBits mm5 genscanSubopt
+    #	58474899 bases of 2615483787 (2.236%) in intersection
+    featureBits mm4 genscanSubopt
+    #	59601009 bases of 2627444668 (2.268%) in intersection
+    featureBits mm3 genscanSubopt
+    #	56085184 bases of 2505900260 (2.238%) in intersection
