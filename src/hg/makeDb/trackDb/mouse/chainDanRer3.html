@@ -27,18 +27,19 @@ location (in thousands) of the match for each matching alignment.</P>
 <P>
 Transposons that have been inserted since the $o_organism/$organism
 split were removed from the assemblies. The abbreviated genomes were
-aligned with blastz, and the transposons were then added back in.  
-Because the $organism random chromosomes and the $o_organism chrNA and 
-chrUn chromosomes are comprised of unordered scaffolds separated by 
-500 <em>N</em>s, the blastz alignments and subsequent chaining were first 
-performed on the scaffolds (without using lineage-specific repeats), and the 
-coordinates were then lifted up to the chromosome level. This avoided false 
-alignments across the <em>N</em>s. The resulting alignments were converted into psl format using the lavToPsl program. The axt alignments were fed into 
-axtChain, which organizes all alignments between a single $o_organism 
-chromosome and a single $organism chromosome into a group and creates a kd-tree out of the gapless subsections (blocks) of the alignments. A dynamic program
+aligned with blastz, and the transposons were then added back in.
+The resulting alignments were converted into axt format using the lavToAxt
+program. The axt alignments were fed into axtChain, which organizes all
+alignments between a single $o_organism chromosome and a single
+$organism chromosome into a group and creates a kd-tree out
+of the gapless subsections (blocks) of the alignments. A dynamic program
 was then run over the kd-trees to find the maximally scoring chains of these
-blocks. Chains scoring below a threshold of 5000 were discarded; the remaining
-chains are displayed in this track.  </P>
+blocks.
+
+$matrix
+
+Chains scoring below a threshold were discarded; the remaining
+chains are displayed in this track.</P>
 
 <H2>Credits</H2>
 <P>
