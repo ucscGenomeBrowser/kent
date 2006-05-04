@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.39 2006/05/04 03:52:37 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.40 2006/05/04 22:52:33 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -623,7 +623,10 @@ done
     #	check the browser, make sure it is functioning OK
 
     #	Generate fasta file for random contigs
-    #	THIS IS OPTIONAL STUFF, not really needed
+    #	THIS IS OPTIONAL STUFF, not really needed, well, it is used in
+    #	genscan to make the gene names there look pretty.  This script
+    #	has been checked into the source tree in hg/utils/lft2BitToFa.pl
+    #	use it from there next time
     cp -p /cluster/data/mm7/jkStuff/lft2BitToFa.pl ./jkStuff
 
     mkdir randomContigs
@@ -5410,32 +5413,57 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
 
 #########################################################################
 # GENSCAN PREDICTIONS (DONE - 2006-05-03 - Hiram)
+
     ssh kkstore04
-    cd /cluster/data/mm8
-    time nice -n +19 cat ?{,?}/chr*.fa.masked > allChroms.fa.masked
+    #	Create a 2bit file with the full chrom sequences and the
+    #	random contigs, all hard masked
+    cat ?/chr?.fa ??/chr??.fa randomContigs/chr*.ctg.fa \
+	| maskOutFa stdin hard stdout \
+	    | faToTwoBit stdin mm8Chroms_RandomContigs.hard.2bit
+    #	make sure it still has all the unmasked sequence in it:
+    twoBitToFa mm8Chroms_RandomContigs.hard.2bit stdout \
+	| faSize stdin
+    #	2661205088 bases (1183272085 N's 1477933003 real 1477933003
+    #	upper 0 lower) in 99 sequences in 1 files
+    twoBitToFa mm8.2bit stdout | faSize stdin
+    #	2664455088 bases (97171400 N's 2567283688 real 1477933003 upper
+    #	1089350685 lower) in 34 sequences in 1 files
+    #	note the 'real' bases are the same, the lowers have become N's
+    #	1089350685 + 97171400 = 1186522085 
+    #	1186522085 - 1183272085  = 3250000 == N's in gaps between contigs
 
-    #	creating 4,000,000 sized chunks split on gaps > 1000
+    #	And, make sure there aren't any sequences in this lot that have
+    #	become all N's with no sequence left in them:
+    twoBitToFa mm8Chroms_RandomContigs.hard.2bit stdout \
+	| faCount stdin > chroms_randoms.faCount
+    #	the lowest three are:
+    egrep -v "^#|^total" chroms_randoms.faCount \
+	| awk '{print $1,$2-$7}' | sort -k2,2nr | tail -3
+    #	MmUn_162590_36 1631
+    #	Mm1_163269_36 1581
+    #	MmUn_102813_36 1479
+
+    #	creating 4,000,000 sized chunks, the chroms stay together as
+    #	single pieces.  The contigs get grouped together into 4,000,000
+    #	sized fasta files.  You don't want to break these things up
+    #	because genscan will be doing its own internal 2.4 million
+    #	window on these pieces, and the gene names are going to be
+    #	constructed from the sequence name in these fasta files.  The
+    #	gene names are much better when they are this simple chrN.M
+    #	numbering scheme, or in the case of a contig: contig_name.M
+    #	where the M is a sequence number that genscan will assign to
+    #	each gene it discovers.
     mkdir hardChunks
-    time nice -n +19 faSplit gap allChroms.fa.masked 4000000 hardChunks/c_ \
-	-lift=hardChunks.lft -verbose=2
-    #	make sure we haven't lost any sequence, losing N's are OK since
-    #	they are gap garbage
-    faSize allChroms.fa.masked
-    #	2664455088 bases (1186522085 N's 1477933003 real 1477933003
-    #	upper 0 lower) in 34 sequences in 1 files
-    catDir hardChunks | faSize stdin
-    #	2585871119 bases (1107938116 N's 1477933003 real 1477933003
-    #	upper 0 lower) in 673 sequences in 1 files
-    #	same number of 'real' bases left. 78583969 N's chopped out
-
-    mkdir /cluster/bluearc/mm8/hardChunks
-    rsync -a --progress  hardChunks/ /cluster/bluearc/mm8/hardChunks/
+    twoBitToFa mm8Chroms_RandomContigs.hard.2bit stdout \
+	| faSplit about stdin 4000000 hardChunks/c_
+    rsync -a --progress hardChunks/ /cluster/bluearc/mm8/hardChunks/
 
     ssh hgwdev
     mkdir /cluster/data/mm8/bed/genscan
     cd /cluster/data/mm8/bed/genscan
     # Check out hg3rdParty/genscanlinux to get latest genscan:
     cvs co hg3rdParty/genscanlinux
+
     # Run on small cluster (more mem than big cluster).
     ssh kki
     cd /cluster/data/mm8/bed/genscan
@@ -5448,13 +5476,13 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     ls -1S /cluster/bluearc/mm8/hardChunks/c_*.fa > genome.list
 
     # Create template file, gsub, for gensub2.  For example (3-line file):
-    cat << '_EOF_' > gsub
+    cat << '_EOF_' > template
 #LOOP
-/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
 #ENDLOOP
 '_EOF_'
     # happy emacs
-    gensub2 genome.list single gsub jobList
+    gensub2 genome.list single template jobList
     para create jobList
     para try, check, push, check, ...
 # Completed: 673 of 673 jobs
