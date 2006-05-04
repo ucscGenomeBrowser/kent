@@ -1492,7 +1492,7 @@ track chainDanRer4
 shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 160
+priority 159.1
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -1506,7 +1506,7 @@ track netDanRer4
 shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 160.1
+priority 159.2
 visibility hide
 spectrum on
 type netAlign danRer4 chainDanRer4
@@ -2214,6 +2214,17 @@ colorChromDefault off
 type psl protein
 pred hg17.blastKGPep01
 blastRef hg17.blastKGRef01
+
+track blastHg18KG
+shortLabel Hg18  Proteins
+longLabel Hg18 Proteins
+group compGeno
+priority 142.1
+visibility pack
+colorChromDefault off
+type psl protein
+pred hg18.blastKGPep04
+blastRef hg18.blastKGRef04
 
 track BRout
 shortLabel BRout
