@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.272 2006/04/27 01:42:41 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.273 2006/05/04 01:56:39 braney Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1930,6 +1930,7 @@ else if (startsWith("blastDm", track))
 else if (sameString(track, "blastSacCer1SG"))
         blastSGUi(tdb);
 else if (sameString(track, "blastHg17KG") || sameString(track, "blastHg16KG") 
+        || sameString(track, "blastHg18KG")
         || sameString(track, "blatzHg17KG")|| startsWith("mrnaMap", track)|| startsWith("mrnaXeno", track))
         blastUi(tdb);
 else if (startsWith("bedGraph", tdb->type))
