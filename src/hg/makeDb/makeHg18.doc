@@ -3475,7 +3475,62 @@ rm j1.out j2.out
 # 797412909 bases of 2866216770 (27.821%) in intersection
 
 ##########################################################################
-# BLASTZ OPOSSUM monDom2 (STARTED - 2006-01-23 - Hiram)
+# BLASTZ OPOSSUM monDom2 second time (DONE - 2006-02-13 - Hiram)
+
+    ssh kk
+    mkdir /cluster/data/hg18/bed/blastzMonDom2.2006-02-13
+    cd /cluster/data/hg18/bed
+    ln -s blastzMonDom2.2006-02-13 blastz.monDom4
+    cd blastzMonDom2.2006-02-13
+    
+    cat << '_EOF_' > DEF
+# human vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/parasol/bin
+
+BLASTZ=blastz.v7
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human (hg18)
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom4
+SEQ2_DIR=/iscratch/i/monDom4/monDom4RMExtra.2bit
+SEQ2_LEN=/iscratch/i/monDom4/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzMonDom4.2006-02-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	<< happy emacs
+
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-02-13
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+
+    ssh kolossus
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-02-13
+    time nice -n +19 featureBits hg18 chainMonDom4Link \
+	> fb.hg18.chainMonDom4Link 2>&1 &
+    cat fb.hg18.chainMonDom4Link
+    #	356865888 bases of 2881515245 (12.385%) in intersection
+
+    #	for the swap, see makeMonDom4.doc 2006-04-28
+
+##########################################################################
+# BLASTZ OPOSSUM monDom2 first time (EXPERIMENT - 2006-01-23 - Hiram)
 
     ssh pk
     mkdir /cluster/data/hg18/bed/blastzMonDom2.2006-01-23
@@ -4897,6 +4952,13 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	-continue=load -stop=load `pwd`/DEF > load.out 2>&1 &
+
+    ssh kolossus
+    cd /cluster/data/hg18/bed/blastz.monDom4
+    time nice -n +19 featureBits hg18 chainMonDom4Link \
+	> fb.hg18.chainMonDom4Link 2>&1 &
+    cat fb.hg18.chainMonDom4Link
+    #	356865888 bases of 2881515245 (12.385%) in intersection
 
 ####################################################################################
 # BUILD KNOWN GENES TABLES (STARTED 2/1/06, DONE 2/13/06 Fan)
@@ -9090,6 +9152,7 @@ hgLoadBed -notItemRgb -sqlTable=altGraphX.sql hg18 altGraphX hg18.mm7.t3.exoniph
 
 # end AltGraphX track.
 
+####################################################################
 # EXONWALK TRACK (sugnet) Wed Apr 26 13:51:14 PDT 2006
 
 # first make altGraphX track (see above)
@@ -9203,6 +9266,7 @@ Track Specification      track  overlap track    cov   track   new    cum
 exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
 # end ExonWalk track.
 
+####################################################################
 # LOAD ENSEMBL GENES (DONE, 2006-05-02, Fan)
 
     mkdir /cluster/data/hg18/bed/ensembl
