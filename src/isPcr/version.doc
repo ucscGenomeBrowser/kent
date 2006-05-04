@@ -1,9 +1,0 @@
-This describes changes from version to version.
-
-33 - Added checking of command line so that misspelled options
-     result in an error message instead of being silently
-     ignored.
-32 - No change, just syncing with blat version
-31 - Fixed bug that made isPcr stand-alone program pretty useless
-     when run on databases with more than one sequence.
-30 - Initial version.
