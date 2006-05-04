@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1094 2006/05/03 22:14:14 braney Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1095 2006/05/04 18:40:07 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11010,11 +11010,9 @@ for (track = trackList; track != NULL; track = track->next)
 	    cartSetString(cart, track->mapName, s);
 	}
     if (s != NULL)
-	{
 	track->visibility = hTvFromString(s);
-	if (isCompositeTrack(track))
-            compositeTrackVis(track);
-	}
+    if (isCompositeTrack(track))
+        compositeTrackVis(track);
     }
 
 return trackList;
