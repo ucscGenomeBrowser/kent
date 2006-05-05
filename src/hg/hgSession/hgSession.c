@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.1 2006/04/26 18:12:46 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.2 2006/05/05 21:15:28 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -86,31 +86,10 @@ void showCartLinks()
 char *session = cartSidUrlString(cart);
 char returnAddress[512];
 
-printf("<P><A HREF=\"/cgi-bin/cartDump?%s\" TARGET=_BLANK>"
-       "View/edit current settings</A>&nbsp;&nbsp;&nbsp;\n",
-       session);
-
 safef(returnAddress, sizeof(returnAddress), "/cgi-bin/hgSession?%s", session);
 printf("<A HREF=\"/cgi-bin/cartReset?%s&destination=%s\">Reset session</A>"
        "</P>\n",
        session, cgiEncode(returnAddress));
-}
-
-void showNewSessionOptions()
-/* Print out inputs for saving current settings to a new session. */
-{
-printf("<P>Save current settings as named session:<BR>\n"
-       "&nbsp;&nbsp;&nbsp;Name: \n");
-cgiMakeTextVar(hgsNewSessionName,
-	       cartUsualString(cart, hgsNewSessionName, "session1"),
-	       20);
-printf("&nbsp;&nbsp;&nbsp;");
-cgiMakeCheckBox(hgsNewSessionShare,
-		cartUsualBoolean(cart, hgsNewSessionShare, TRUE));
-printf("Allow this session to be loaded by others\n");
-printf("&nbsp;&nbsp;&nbsp;");
-cgiMakeButton(hgsDoNewSession, "submit");
-printf("</P>\n");
 }
 
 void showExistingSessions(char *userName)
@@ -123,8 +102,8 @@ char **row = NULL;
 char query[512];
 boolean foundAny = FALSE;
 
-printf("<P>Previously saved sessions:<BR>\n");
 printf("<TABLE BORDERWIDTH=0>\n");
+printf("<TR><TD colspan=5>Previously saved sessions:</TD></TR>\n");
 safef(query, sizeof(query), "SELECT sessionName, shared from %s "
       "WHERE userName = '%s';",
       namedSessionTable, userName);
@@ -134,7 +113,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *sessionName = row[0];
     boolean shared = atoi(row[1]);
     char buf[512];
-    printf("<TR><TD>&nbsp;</TD><TD>%s</TD><TD>", sessionName);
+    printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>%s</TD><TD>", sessionName);
+    safef(buf, sizeof(buf), "%s%s", hgsLoadPrefix, sessionName);
+    cgiMakeButton(buf, "load as current session");
+    printf("</TD><TD>");
+    safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, sessionName);
+    cgiMakeButton(buf, "delete");
+    printf("</TD><TD>");
     if (shared)
 	{
 	safef(buf, sizeof(buf), "%s%s", hgsUnsharePrefix, sessionName);
@@ -145,19 +130,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 	safef(buf, sizeof(buf), "%s%s", hgsSharePrefix, sessionName);
 	cgiMakeButton(buf, "share");
 	}
-    printf("</TD><TD>");
-    safef(buf, sizeof(buf), "%s%s", hgsLoadPrefix, sessionName);
-    cgiMakeButton(buf, "load into current session");
-    printf("</TD><TD>");
-    safef(buf, sizeof(buf), "%s%s", hgsDeletePrefix, sessionName);
-    cgiMakeButton(buf, "delete");
     printf("</TD></TR>\n");
     foundAny = TRUE;
     }
-printf("</TABLE>\n");
 if (!foundAny)
-    printf("&nbsp;&nbsp;&nbsp;(none)\n");
-printf("</P>\n");
+    printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>(none)</TD>"
+	   "<TD colspan=3></TD></TR>\n");
+printf("<TR><TD colspan=5></TD></TR>\n");
+printf("</TABLE>\n");
+printf("<P></P>\n");
 sqlFreeResult(&sr);
 hDisconnectCentral(&conn);
 }
@@ -165,29 +146,81 @@ hDisconnectCentral(&conn);
 void showOtherUserOptions()
 /* Print out inputs for loading another user's saved session. */
 {
-printf("<P>Load settings from another user's saved session:<BR>\n"
-       "&nbsp;&nbsp;&nbsp;User: \n");
+printf("<TABLE BORDERWIDTH=0>\n");
+printf("<TR><TD colspan=2>"
+       "Load settings from another user's saved session:</TD></TR>\n"
+       "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>user: \n");
 cgiMakeTextVar(hgsOtherUserName,
 	       cartUsualString(cart, hgsOtherUserName, ""),
 	       20);
-printf("&nbsp;&nbsp;&nbsp;Session name: \n");
+printf("&nbsp;&nbsp;&nbsp;session name: \n");
 cgiMakeTextVar(hgsOtherUserSessionName,
 	       cartUsualString(cart, hgsOtherUserSessionName, ""),
 	       20);
-printf("&nbsp;&nbsp;&nbsp;");
+printf("&nbsp;&nbsp;");
 cgiMakeButton(hgsDoOtherUser, "submit");
-printf("</P>\n");
+printf("</TD></TR>\n");
+printf("<TR><TD colspan=2></TD></TR>\n");
+printf("</TABLE>\n");
 }
 
-void showSaveLoadOptions()
-/* Print out inputs for saving current settings to a local file, 
- * loading from a local file, and loading from a URL. */
+void showLoadingOptions(char *userName, boolean savedSessionsSupported)
+/* Show options for loading settings from another user's session, a file 
+ * or URL. */
+{
+if (savedSessionsSupported)
+    showOtherUserOptions();
+
+printf("<TABLE BORDERWIDTH=0>\n");
+printf("<TR><TD colspan=2>Load settings from a local file:</TD>\n");
+printf("<TD><INPUT TYPE=FILE NAME=\"%s\">\n", hgsLoadLocalFileName);
+printf("&nbsp;&nbsp;");
+cgiMakeButton(hgsDoLoadLocal, "submit");
+printf("</TD></TR>\n");
+printf("<TR><TD colspan=2></TD></TR>\n");
+
+printf("<TR><TD colspan=2>Load settings from a URL:</TD>\n");
+printf("<TD>\n");
+cgiMakeTextVar(hgsLoadUrlName,
+	       cartUsualString(cart, hgsLoadUrlName, ""),
+	       20);
+printf("&nbsp;&nbsp;");
+cgiMakeButton(hgsDoLoadUrl, "submit");
+printf("</TD></TR>\n");
+printf("</TABLE>\n");
+printf("<P></P>\n");
+}
+
+void showSavingOptions(char *userName)
+/* Show options for saving a new named session in our db or to a file. */
 {
 static char *textOutCompressMenu[] = textOutCompressMenuContents;
 static char *textOutCompressValues[] = textOutCompressValuesContents;
 static int textOutCompressMenuSize = ArraySize(textOutCompressMenu) - 1;
 
-printf("<P>Save current settings to a local file:\n");
+printf("<TABLE BORDERWIDTH=0>\n");
+
+if (isNotEmpty(userName))
+    {
+    printf("<TR><TD colspan=4>Save current settings as named session:"
+	   "</TD></TR>\n"
+	   "<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>name:</TD><TD>\n");
+    cgiMakeTextVar(hgsNewSessionName,
+		   cartUsualString(cart, "db", hGetDb()),
+		   20);
+    printf("&nbsp;&nbsp;&nbsp;");
+    cgiMakeCheckBox(hgsNewSessionShare,
+		    cartUsualBoolean(cart, hgsNewSessionShare, TRUE));
+    printf("allow this session to be loaded by others\n");
+    printf("</TD><TD>");
+    printf("&nbsp;");
+    cgiMakeButton(hgsDoNewSession, "submit");
+    printf("</TD></TR>\n");
+    printf("<TR><TD colspan=4></TD></TR>\n");
+    }
+
+printf("<TR><TD colspan=4>Save current settings to a local file:</TD></TR>\n");
+printf("<TR><TD>&nbsp;&nbsp;&nbsp;</TD><TD>file:</TD><TD>\n");
 cgiMakeTextVar(hgsSaveLocalFileName,
 	       cartUsualString(cart, hgsSaveLocalFileName, ""),
 	       20);
@@ -197,23 +230,14 @@ cgiMakeDropListFull(hgsSaveLocalFileCompress,
 	textOutCompressMenu, textOutCompressValues, textOutCompressMenuSize, 
 	cartUsualString(cart, hgsSaveLocalFileCompress, textOutCompressNone),
 	NULL);
-printf("&nbsp;&nbsp;&nbsp;");
+printf("</TD><TD>");
+printf("&nbsp;");
 cgiMakeButton(hgsDoSaveLocal, "submit");
-printf("</P>\n");
-
-printf("<P>Load settings from a local file:\n");
-printf("<INPUT TYPE=FILE NAME=\"%s\">\n", hgsLoadLocalFileName);
-printf("&nbsp;&nbsp;&nbsp;");
-cgiMakeButton(hgsDoLoadLocal, "submit");
-printf("</P>\n");
-
-printf("<P>Load settings from a URL:\n");
-cgiMakeTextVar(hgsLoadUrlName,
-	       cartUsualString(cart, hgsLoadUrlName, ""),
-	       20);
-printf("&nbsp;&nbsp;&nbsp;");
-cgiMakeButton(hgsDoLoadUrl, "submit");
-printf("</P>\n");
+printf("</TD></TR>\n");
+printf("<TR><TD></TD><TD colspan=3>(leave file blank to get output in "
+       "browser window)</TD></TR>\n");
+printf("<TR><TD colspan=4></TD></TR>\n");
+printf("</TABLE>\n");
 }
 
 void showSessionControls(char *userName, boolean savedSessionsSupported,
@@ -236,18 +260,11 @@ printf("<FORM ACTION=\"/cgi-bin/hgSession\" NAME=\"mainForm\" METHOD=%s "
        "ENCTYPE=\"multipart/form-data\">\n",
        formMethod);
 cartSaveSession(cart);
-if (userName != NULL)
-    {
-    showNewSessionOptions();
+
+if (isNotEmpty(userName))
     showExistingSessions(userName);
-    }
-
-if (savedSessionsSupported)
-    {
-    showOtherUserOptions();
-    }
-
-showSaveLoadOptions();
+showLoadingOptions(userName, savedSessionsSupported);
+showSavingOptions(userName);
 printf("</FORM>\n");
 }
 
