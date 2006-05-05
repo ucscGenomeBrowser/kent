@@ -98,3 +98,9 @@ visibility hide
 spectrum on
 type netAlign mm8 chainSelf
 otherDb mm8
+
+searchTable genscan
+searchMethod prefix
+searchType genePred
+termRegex [[:alnum:]_]+(\.[0-9]+)?
+searchPriority 50
