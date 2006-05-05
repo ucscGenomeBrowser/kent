@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.56 2006/05/05 18:07:37 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.57 2006/05/05 21:24:23 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12032,3 +12032,27 @@ intronEst             52046578 28482307  1.83%  54.72%  61.30% 61.30% 61.30%
 est                   185259362 41486850  6.51%  22.39%  89.30% 89.30% 89.30%
 
 # done exonWalk.
+
+############################################################################
+# SGP GENES (DONE - 2006-05-05 - Fan)
+    ssh kkstore02
+    cd  mkdir /cluster/data/mm7/bed
+    mv sgp sgp_old
+    mkdir /cluster/data/mm7/bed/sgp
+    cd /cluster/data/mm7/bed/sgp
+    #   They don't do chrM
+    bash
+    for CHR in `awk '{print $1}' ../../chrom.sizes | grep -v chrM`
+    do
+        wget --timestamping \
+"http://genome.imim.es/genepredictions/M.musculus/mmDec2005/SGP/humangp200603/${CHR}.gtf" \
+        -O "${CHR}.gtf"
+    done
+
+    ssh hgwdev
+    cd /cluster/data/mm7/bed/sgp
+    ldHgGene -gtf -genePredExt mm7 sgpGene chr*.gtf
+
+    featureBits mm7 -enrichment refGene:CDS sgpGene
+refGene:CDS 1.059%, sgpGene 1.451%, both 0.912%, cover 86.18%, enrich 59.39x
+
