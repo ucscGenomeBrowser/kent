@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.270 2006/04/24 04:16:41 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.271 2006/04/26 03:50:13 heather Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -167,7 +167,7 @@ printf("<BR><B>Minimum <A HREF=\"#AvHet\">Average Heterozygosity</A>:</B>&nbsp;"
 cgiMakeDoubleVar("snp125AvHetCutoff",snp125AvHetCutoff,6);
 
 snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "3"));
-printf("<BR><B>Maximum Weight:</B>&nbsp;");
+printf("<BR><B>Maximum <A HREF=\"#Weight\">Weight</A>:</B>&nbsp;");
 cgiMakeIntVar("snp125WeightCutoff",snp125WeightCutoff,4);
 
 printf("<BR><BR>\n");

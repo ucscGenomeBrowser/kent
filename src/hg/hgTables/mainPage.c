@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.94 2006/04/24 15:11:37 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.95 2006/04/25 18:19:35 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -562,9 +562,9 @@ hPrintf("<TABLE BORDER=0>\n");
     {
     hPrintf("<TR><TD>");
     curTable = showTableField(curTrack, hgtaTable, TRUE);
-    hti = getHti(database, curTable);
     if (strchr(curTable, '.') == NULL)  /* In same database */
         {
+	hti = getHti(database, curTable);
 	isPositional = htiIsPositional(hti);
 	}
     isWig = isWiggle(database, curTable);
@@ -632,7 +632,7 @@ else
     }
 
 /* Select identifiers line. */
-if (!isWig && (!isPositional || isNotEmpty(hti->nameField)))
+if (!isWig && (!isPositional || !hti || isNotEmpty(hti->nameField)))
     {
     hPrintf("<TR><TD><B>identifiers (names/accessions):</B>\n");
     cgiMakeButton(hgtaDoPasteIdentifiers, "paste list");
