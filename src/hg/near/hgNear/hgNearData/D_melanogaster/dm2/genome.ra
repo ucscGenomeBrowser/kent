@@ -4,7 +4,7 @@ geneTable flyBaseGene
 canonicalTable flyBaseCanonical
 isoformTable flyBaseIsoforms
 pepTable flyBasePep
-allTranscriptQuery select name,chrom,txStart,txEnd,proteinID from flyBaseGene
+allTranscriptQuery select flyBaseGene.name,chrom,txStart,txEnd,flyBaseToUniProt.alias from flyBaseGene,flyBaseToUniProt where flyBaseGene.name = flyBaseToUniProt.name
 allGeneQuery select transcript,chrom,chromStart,chromEnd,protein from flyBaseCanonical
-oneGeneQuery select name,chrom,txStart,txEnd,proteinId from flyBaseGene where name = '%s'
+oneGeneQuery select flyBaseGene.name,chrom,txStart,txEnd,flyBaseToUniProt.alias from flyBaseGene,flyBaseToUniProt where flyBaseGene.name = "%s" and flyBaseGene.name = flyBaseToUniProt.name
 idColumn acc
