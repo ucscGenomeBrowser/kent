@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.55 2006/04/26 21:08:13 sugnet Exp $"
+#	"$Id: makeMm7.doc,v 1.56 2006/05/05 18:07:37 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -1047,6 +1047,10 @@ mm7.mgcTables.mgc = all
     # *do not* consist of all-N's (which would cause genscan to blow up)
     ls -1S /cluster/bluearc/mm7/hardChunks/c_*.fa > genome.list
 
+    # XXX There is an error in the following template, note the extra
+    # space between the - and par=
+    #	It turns out the default for the -par argument is this same
+    #	matrix so the extra space had no effect on the end result.
     # Create template file, gsub, for gensub2.  For example (3-line file):
     cat << '_EOF_' > gsub
 #LOOP
@@ -1072,6 +1076,10 @@ mm7.mgcTables.mgc = all
     #	These jobs can take over 4 hours on kolossus.
     ssh kolossus
     cd /cluster/data/mm7/bed/genscan
+    # XXX There is an error in the following commands, note the extra
+    # space between the - and par=
+    #	It turns out the default for the -par argument is this same
+    #	matrix so the extra space had no effect on the end result.
     /cluster/bin/x86_64/gsBig /cluster/bluearc/mm7/hardChunks/c_03.fa gtf/c_03.gtf -trans=pep/c_03.pep -subopt=subopt/c_03.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2000000
 
     /cluster/bin/x86_64/gsBig /cluster/bluearc/mm7/hardChunks/c_12.fa gtf/c_12.gtf -trans=pep/c_12.pep -subopt=subopt/c_12.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2000000
