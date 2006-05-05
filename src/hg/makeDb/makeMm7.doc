@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.57 2006/05/05 21:24:23 fanhsu Exp $"
+#	"$Id: makeMm7.doc,v 1.58 2006/05/05 21:26:30 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12053,6 +12053,8 @@ est                   185259362 41486850  6.51%  22.39%  89.30% 89.30% 89.30%
     cd /cluster/data/mm7/bed/sgp
     ldHgGene -gtf -genePredExt mm7 sgpGene chr*.gtf
 
+# Dropped the sgpPep table, just let hgc calculate predict protein sequence.
+    hgsql mm7 -e 'drop table sgpPep'
     featureBits mm7 -enrichment refGene:CDS sgpGene
 refGene:CDS 1.059%, sgpGene 1.451%, both 0.912%, cover 86.18%, enrich 59.39x
 
