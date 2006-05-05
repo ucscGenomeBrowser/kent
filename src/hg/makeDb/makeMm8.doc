@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.40 2006/05/04 22:52:33 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.41 2006/05/05 16:31:11 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5412,8 +5412,7 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
 
 
 #########################################################################
-# GENSCAN PREDICTIONS (DONE - 2006-05-03 - Hiram)
-
+# GENSCAN PREDICTIONS (DONE - 2006-05-03 - 2006-05-05 - Hiram)
     ssh kkstore04
     #	Create a 2bit file with the full chrom sequences and the
     #	random contigs, all hard masked
@@ -5492,30 +5491,41 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
 # Longest finished job:            1993s      33.22m     0.55h    0.02d
 # Submission to last job:          7526s     125.43m     2.09h    0.09d
 
+    #	There was a failed job, going to kolossus and running with a
+    #	reduced window size:
+    ssh kolossus
+    cd /cluster/data/mm8/bed/genscan
+    /cluster/bin/x86_64/gsBig /cluster/bluearc/mm8/hardChunks/c_01.fa \
+        gtf/c_01.gtf -trans=pep/c_01.pep -subopt=subopt/c_01.bed \
+        -exe=hg3rdParty/genscanlinux/genscan \
+        -par=hg3rdParty/genscanlinux/HumanIso.smat \
+	-tmp=/scratch/tmp -window=2000000
+
 
     # cat and lift the results into single files
     ssh kkstore04
     cd /cluster/data/mm8/bed/genscan
     cat gtf/c_*.gtf | liftUp -type=.gtf genscan.gtf \
-	../../hardChunks.lft carry stdin
+	../../jkStuff/liftAll.lft carry stdin
     cat subopt/c_*.bed | liftUp -type=.bed genscanSubopt.bed \
-	../../hardChunks.lft carry stdin
+	../../jkStuff/liftAll.lft carry stdin
     cat pep/c_*.pep > genscan.pep
 
     # Load into the database as so:
     ssh hgwdev
     cd /cluster/data/mm8/bed/genscan
     ldHgGene mm8 -gtf genscan genscan.gtf
-    #	Read 45393 transcripts in 324338 lines in 1 files
-    #	45393 groups 34 seqs 1 sources 1 feature types
-    #	45393 gene predictions
+    #	Read 44899 transcripts in 323099 lines in 1 files
+    #	44899 groups 34 seqs 1 sources 1 feature types
+    #	44899 gene predictions
+
     hgPepPred mm8 generic genscanPep genscan.pep
     hgLoadBed -strict mm8 genscanSubopt genscanSubopt.bed
-    #	Loaded 528146 elements of size 6
+    #	Loaded 530201 elements of size 6
 
     #	check the numbers
     time nice -n +19 featureBits mm8 genscan
-    #	54724050 bases of 2567283971 (2.132%) in intersection
+    #	54455852 bases of 2567283971 (2.121%) in intersection
     time nice -n +19 featureBits mm8 knownGene:cds
     #	28459053 bases of 2567283971 (1.109%) in intersection
     featureBits mm7 genscan
@@ -5532,7 +5542,7 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     #	51697165 bases of 2505900260 (2.063%) in intersection
 
     featureBits mm8 genscanSubopt
-    #	56960677 bases of 2567283971 (2.219%) in intersection
+    #	57048581 bases of 2567283971 (2.222%) in intersection
     featureBits mm7 genscanSubopt
     #	57512333 bases of 2583394090 (2.226%) in intersection
     featureBits mm6 genscanSubopt
