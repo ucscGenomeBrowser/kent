@@ -14,7 +14,7 @@
 #include "wikiLink.h"
 #include "hgSession.h"
 
-static char const rcsid[] = "$Id: hgSession.c,v 1.2 2006/05/05 21:15:28 angie Exp $";
+static char const rcsid[] = "$Id: hgSession.c,v 1.3 2006/05/06 00:01:26 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -44,15 +44,8 @@ printf("If you are not %s (on the wiki at "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>%s</A>) "
        "and would like to log out or change identity, \n",
        wikiUserName, wikiHost, wikiHost);
-printf("<UL><LI>\n");
-printf("<A HREF=\"%s\" TARGET=_BLANK><B>click here to log out</B></A>\n",
-       wikiLinkUserLogoutUrl());
-printf("in a new window (and if desired, to log in as somebody else).  ");
-printf("</LI><LI>\n");
-printf("When that is complete, return to this window and " 
-       "<A HREF=\"/cgi-bin/hgSession?%s\"><B>click here to refresh</B></A>.\n",
-       cartSidUrlString(cart));
-printf("</LI></UL>\n");
+printf("<A HREF=\"%s\"><B>click here to log out.</B></A>\n",
+       wikiLinkUserLogoutUrl(cartSessionId(cart)));
 }
 
 void offerLogin()
@@ -69,15 +62,9 @@ printf("Logging in enables you to save current settings into a "
        "to share knowledge and ideas.\n");
 printf("<P>The log in page is handled by our "
        "<A HREF=\"http://%s/\" TARGET=_BLANK>wiki system</A>:\n", wikiHost);
-printf("<UL><LI>\n");
-printf("<A HREF=\"%s\" TARGET=_BLANK><B>click here to log in</B></A>\n",
-       wikiLinkUserLoginUrl());
-printf("in a new window.  ");
-printf("</LI><LI>\n");
-printf("When that is complete, return to this window and "
-       "<A HREF=\"/cgi-bin/hgSession?%s\"><B>click here to refresh</B></A>.\n",
-       cartSidUrlString(cart));
-printf("</LI></UL></P>\n");
+printf("<A HREF=\"%s\"><B>click here to log in.</B></A>\n",
+       wikiLinkUserLoginUrl(cartSessionId(cart)));
+printf("</P>\n");
 }
 
 void showCartLinks()
