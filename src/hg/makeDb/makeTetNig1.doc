@@ -869,6 +869,10 @@ axtChain -linearGap=../../chickenHumanTuned.gap $1 \
     # featureBits tetNig1 all_mrna netHg17 -enrichment
     # all_mrna 3.204%, netHg17 42.716%, both 1.698%, cover 53.00%, enrich 1.24x
 
+    # create symlinks to make consistent with newer builds 2006-04-09 markd
+    ln -s all.chain.gz  /cluster/data/tetNig1/bed/blastz.hg17/axtChain/tetNig1.hg17.all.chain.gz
+    ln -s hg17.net.gz  /cluster/data/tetNig1/bed/blastz.hg17/axtChain/tetNig1.hg17.net.gz
+
 # BLASTZ FOR FR1 (FUGU) (DONE, 2004-08-31, hartera)
 
     ssh kkr1u00

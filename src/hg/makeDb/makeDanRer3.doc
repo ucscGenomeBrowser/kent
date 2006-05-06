@@ -6126,6 +6126,12 @@ _EOF_
 	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	/cluster/data/hg17/bed/blastz.danRer3/DEF >& swap.out&
 
+   # create the net filee (DONE 2006-04-09 markd)
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/blastz.hg17.swap/axtChain
+    nice netClass -verbose=0 -noAr noClass.net danRer3 hg17 danRer3.hg17.net
+    nice gzip danRer3.hg17.net
+
 ###########################################################################
 # SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM DANRER2 (DONE, 2006-04-17, hartera)
     # followed instructions used in makePanTro2.doc

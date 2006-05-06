@@ -2085,6 +2085,11 @@ chainSome $(path1)
 	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	./DEF >& swap.out&
 
+   # create the net filee (DONE 2006-04-10 markd)
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blastz.hg17.swap/axtChain
+    nice netClass -verbose=0 -noAr noClass.net fr1 hg17 fr1.hg17.net
+    nice gzip fr1.hg17.net
 ###########################################################################
 # BLASTZ SWAP TO CREATE CHAIN AND NET ALIGNMENTS FOR ZEBRAFISH (danRer4) 
 # AND CREATE AXNET, MAFNET, LIFTOVER AND ALIGNMENT DOWNLOADS 
