@@ -4,11 +4,9 @@
 #include "dystring.h"
 #include "linefile.h"
 #include "hash.h"
-#include "obscure.h"
-#include "jksql.h"
-#include "chain.h"
+#include "binRange.h"
 
-static char const rcsid[] = "$Id: freen.c,v 1.65 2006/05/05 18:45:30 kent Exp $";
+static char const rcsid[] = "$Id: freen.c,v 1.66 2006/05/07 18:21:55 kent Exp $";
 
 void usage()
 {
@@ -22,11 +20,8 @@ int level = 0;
 void freen(char *fileName)
 /* Test some hair-brained thing. */
 {
-struct chain *chainList = NULL, *chain;
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-while ((chain = chainRead(lf)) != NULL)
-    slAddHead(&chainList, chain);
-printf("Got %d chains\n", slCount(chainList));
+int size = atoi(fileName);
+binKeeperNew(0, size);
 }
 
 int main(int argc, char *argv[])
