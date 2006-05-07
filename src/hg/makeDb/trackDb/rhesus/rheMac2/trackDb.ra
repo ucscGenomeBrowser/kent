@@ -16,6 +16,28 @@ color 150,100,30
 altColor 230,170,40
 type bed 3 +
 
+track multiz5waySyn
+shortLabel Conservation 
+longLabel Human/Mouse/Rat/Dog Multiz Alignment & Conservation using syntenic alignments
+group compGeno
+priority 104.1
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons5waySyn
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz5waySummary
+frames multiz5wayFrames
+irows on
+speciesGroups mammal 
+sGroup_mammal hg18 mm8 rn4 canFam2 
+speciesDefaultOff 
+
 track chainHg18
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
