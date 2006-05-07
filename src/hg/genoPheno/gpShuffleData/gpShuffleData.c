@@ -4,8 +4,9 @@
 #include "hash.h"
 #include "options.h"
 #include "md5.h"
+#include "sqlNum.h"
 
-static char const rcsid[] = "$Id: gpShuffleData.c,v 1.2 2006/04/29 07:26:58 kent Exp $";
+static char const rcsid[] = "$Id: gpShuffleData.c,v 1.3 2006/05/07 18:20:58 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -43,7 +44,7 @@ void randomizeNum(char *s, FILE *f)
 /* Output slightly randomized x. */
 {
 if (s[0])
-    randOut(atof(s), f, strchr(s, '.') != NULL);
+    randOut(sqlDouble(s), f, strchr(s, '.') != NULL);
 else
     fprintf(f, "\t");
 }
@@ -52,7 +53,7 @@ void randomizeDiff(char *a, char *b, FILE *f)
 /* Output randomized difference */
 {
 if (a[0] && b[0])
-    randOut(atof(a) - atof(b), f, TRUE);
+    randOut(sqlDouble(a) - sqlDouble(b), f, TRUE);
 else
     fprintf(f, "\t");
 }
