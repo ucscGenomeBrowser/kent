@@ -19,6 +19,6 @@ CREATE TABLE bacEndPairsBad (
     lfNames longblob not null,	# Comma separated list of names of linked features
               #Indices
     INDEX(bin),
-    INDEX(chrom,chromStart)
+    INDEX(chrom,chromStart),
     INDEX(name(16))
 );
