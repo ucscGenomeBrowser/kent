@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1096.2.1 2006/05/08 19:37:31 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1096.2.2 2006/05/08 20:36:35 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -507,10 +507,14 @@ int packCountRows(struct track *tg, int maxCount, boolean withLabels)
 return packCountRowsOverflow(tg, maxCount, withLabels, FALSE);
 }
 
-int maximumTrackHeight()
+static int maximumTrackHeight(struct track *tg)
 /* Return the maximum track height allowed in pixels. */
 {
-return maxItemsInFullTrack * tl.fontHeight;
+int maxItems = maxItemsInFullTrack;
+char *maxItemsString = trackDbSetting(tg->tdb, "maxItems");
+if (maxItemsString != NULL)
+    maxItems = sqlUnsigned(maxItemsString);
+return maxItems * tl.fontHeight;
 }
 
 int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vis, 
@@ -519,7 +523,7 @@ int tgFixedTotalHeightOptionalOverflow(struct track *tg, enum trackVisibility vi
  * they use. */
 {
 int rows;
-double maxHeight = maximumTrackHeight();
+double maxHeight = maximumTrackHeight(tg);
 int itemCount = slCount(tg->items);
 tg->heightPer = heightPer;
 tg->lineHeight = lineHeight;
@@ -983,6 +987,7 @@ const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
 return a->start - b->start;
 }
 
+
 char *linkedFeaturesName(struct track *tg, void *item)
 /* Return name of item. */
 {
@@ -1101,6 +1106,7 @@ slFreeList(&exonList);
 }
 
 enum {blackShadeIx=9,whiteShadeIx=0};
+
 
 char *linkedFeaturesSeriesName(struct track *tg, void *item)
 /* Return name of item */
@@ -1408,7 +1414,7 @@ if (x2 > vg->width) x2 = vg->width;
 width = x2 - x;
 if (width > 0)
     vgBarbedHorizontalLine(vg, x, y, width, barbHeight, barbSpacing, barbDir,
-			   color, needDrawMiddle);
+	    color, needDrawMiddle);
 }
 
 void innerLine(struct vGfx *vg, int x, int y, int w, Color color)
@@ -1616,13 +1622,11 @@ for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; s
         if (zoomedToCdsColorLevel && drawOptionNum>0 && vis != tvDense &&
             e + 6 >= winStart && s - 6 < winEnd &&
 		(e-s <= 3 || pslSequenceBases)) 
-	    {
-	    drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, 
+                drawCdsColoredBox(tg, lf, sf->grayIx, cdsColor, vg, xOff, y, 
                                     scale, font, s, e, heightPer, 
                                     zoomedToCodonLevel, mrnaSeq, psl, 
                                     drawOptionNum, errorColor, foundStartPtr,
                                     MAXPIXELS, winStart, color);
-	    }
         else
             {
             drawScaledBoxSample(vg, s, e, scale, xOff, y, heightPer, 
@@ -1808,6 +1812,7 @@ double scaleForWindow(double width, int seqStart, int seqEnd)
 return width / (seqEnd - seqStart);
 }
 
+
 void genericDrawItems(struct track *tg, 
         int seqStart, int seqEnd,
         struct vGfx *vg, int xOff, int yOff, int width, 
@@ -1829,7 +1834,7 @@ if (vis == tvPack || vis == tvSquish)
     struct spaceNode *sn;
     /* These variables keep track of state if there are
        too many items and there is going to be an overflow row. */
-    int maxHeight = maximumTrackHeight();
+    int maxHeight = maximumTrackHeight(tg);
     int overflowRow = (maxHeight - tl.fontHeight +1) / lineHeight;
     int overflowCount = 0;
     boolean overflowDrawn = FALSE;
@@ -1886,6 +1891,7 @@ if (vis == tvPack || vis == tvSquish)
             {
             int nameWidth = mgFontStringWidth(font, name);
             int dotWidth = tl.nWidth/2;
+	    boolean snapLeft = FALSE;
 	    drawNameInverted = highlightItem(tg, item);
             textX -= nameWidth + dotWidth;
 	    snapLeft = (textX < insideX);
@@ -1981,8 +1987,8 @@ if (vis == tvPack || vis == tvSquish)
 		    mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
 				      tg->mapItemName(tg, item), name, directUrl, withHgsid);
 		}
-	    }
-	
+            }
+
 	/* If printing things to the "overflow" row return state to original 
 	   configuration and print label. */
 	if(doingOverflow)
@@ -3056,10 +3062,8 @@ boolean labelStarted = FALSE;
 	
 if (hTableExists("kgXref"))
     {
-    char *omimAvail = NULL;
-    char query[128];
-    safef(query, sizeof(query), "select kgXref.kgID from kgXref,refLink where kgXref.refseq = refLink.mrnaAcc and refLink.omimId != 0 limit 1");
-    omimAvail = sqlQuickString(conn, query);
+    char omimLabel[48];
+    safef(omimLabel, sizeof(omimLabel), "omim%s", cartString(cart, "db"));
 
     if (knownGeneLabels == NULL)
         {
@@ -3076,26 +3080,15 @@ if (hTableExists("kgXref"))
             useKgId = TRUE;
         else if (endsWith(label->name, "prot") && differentString(label->val, "0"))
             useProtDisplayId = TRUE;
-        else if (endsWith(label->name, "omim") && differentString(label->val, "0"))
+        else if (endsWith(label->name, omimLabel) && differentString(label->val, "0"))
             useMimId = TRUE;
         else if (!endsWith(label->name, "gene") && 
                  !endsWith(label->name, "kgId") &&
                  !endsWith(label->name, "prot") &&
-                 !endsWith(label->name, "omim") )
+                 !endsWith(label->name, omimLabel) )
             {
             useGeneSymbol = TRUE;
             cartRemove(cart, label->name);
-            }
-        }
-
-    /* cart may be from another build which has OMIM */
-    if (omimAvail == NULL && useMimId) 
-        {
-        useMimId = FALSE;
-        if (!useGeneSymbol && !useKgId && !useProtDisplayId)
-            {  
-            useGeneSymbol = TRUE; /* set default */
-            cartSetBoolean(cart, "knownGene.label.gene", TRUE);
             }
         }
 
@@ -3162,14 +3155,6 @@ loadGenePredWithName2(tg);
 lookupKnownGeneNames(tg->items);
 slSort(&tg->items, linkedFeaturesCmpStart);
 limitVisibility(tg);
-}
-
-void knownGeneFreeItems(struct track *tg)
-/* Free up the items in a known genes track. */
-{
-struct linkedFeatures *lfList = tg->items;
-linkedFeaturesFreeList(&lfList);
-tg->items = NULL;
 }
 
 Color knownGeneColor(struct track *tg, void *item, struct vGfx *vg)
@@ -3282,7 +3267,6 @@ tg->loadItems   = loadKnownGene;
 tg->itemName 	= knownGeneName;
 tg->mapItemName = knownGeneMapName;
 tg->itemColor 	= knownGeneColor;
-tg->freeItems = knownGeneFreeItems;
 }
 
 char *superfamilyName(struct track *tg, void *item)
@@ -3628,10 +3612,8 @@ boolean useMim =  FALSE;
 
 struct hashEl *refGeneLabels = cartFindPrefix(cart, (isNative ? "refGene.label" : "xenoRefGene.label"));
 struct hashEl *label;
-int omimAvail = 0;
-char query[128];
-safef(query, sizeof(query), "select omimId from refLink where refLink.omimId != 0 limit 1");
-omimAvail = sqlQuickNum(conn, query);
+char omimLabel[48];
+safef(omimLabel, sizeof(omimLabel), "omim%s", cartString(cart, "db"));
 
 if (refGeneLabels == NULL)
     {
@@ -3646,26 +3628,14 @@ for (label = refGeneLabels; label != NULL; label = label->next)
         useGeneName = TRUE;
     else if (endsWith(label->name, "acc") && differentString(label->val, "0"))
         useAcc = TRUE;
-    else if (endsWith(label->name, "omim") && differentString(label->val, "0"))
+    else if (endsWith(label->name, omimLabel) && differentString(label->val, "0"))
         useMim = TRUE;
     else if (!endsWith(label->name, "gene") &&
              !endsWith(label->name, "acc")  &&
-             !endsWith(label->name, "omim") )
+             !endsWith(label->name, omimLabel) )
         {
         useGeneName = TRUE;
         cartRemove(cart, label->name);
-        }
-    }
-
-/* cart may be from another build which has OMIM */
-if (omimAvail == 0 && useMim)
-    {
-    useMim = FALSE;
-    if (!useGeneName && !useAcc) 
-        {
-        useGeneName = TRUE; /* set default */
-        if (isNative) cartSetBoolean(cart, "refGene.label.gene", TRUE);
-        else cartSetBoolean(cart, "xenoRefGene.label.gene", TRUE);
         }
     }
 
@@ -6083,20 +6053,6 @@ switch (stsMapMouseType)
     }
 }
 
-int stsMapMouseSelectColor(struct track *tg, void *item)
-/* Return TRUE if item passes filter. */
-{
-struct stsMapMouseNew *el = item;
-if((el->wigChr[0] != '\0' || el->mgiChrom[0] != '\0') && el->rhChrom[0] != '\0')
-    return 3;
-else if(el->wigChr[0] != '\0' || el->mgiChrom[0] != '\0')
-    return 2;
-else if(el->rhChrom[0] != '\0')
-    return 1;
-else
-    return 0;
-}
-
 void loadStsMapMouse(struct track *tg)
 /* Load up stsMarkers from database table to track items. */
 {
@@ -6105,7 +6061,7 @@ stsMapMouseMap = cartUsualString(cart, "stsMapMouse.type", smmoeEnumToString(0))
 stsMapMouseType = smmoeStringToEnum(stsMapMouseMap);
 bedLoadItem(tg, "stsMapMouseNew", (ItemLoader)stsMapMouseNewLoad);
 filterItems(tg, stsMapMouseFilterItem, stsMapMouseFilter);
-//stsMapMouseFilterColor = getFilterColor(stsMapMouseFilter, MG_BLACK);
+stsMapMouseFilterColor = getFilterColor(stsMapMouseFilter, MG_BLACK);
 
 }
 
@@ -6118,48 +6074,38 @@ stsMapMouseNewFreeList((struct stsMapMouseNew**)&tg->items);
 Color stsMapMouseColor(struct track *tg, void *item, struct vGfx *vg)
 /* Return color of stsMap track item. */
 {
-int colIdx = stsMapMouseSelectColor(tg, item);
-int col=tg->ixColor;
 struct stsMapMouseNew *el = item;
-switch(colIdx)
+if (stsMapMouseFilterItem(tg, item))
     {
-    case 0:
-	col = MG_BLACK;
-	break;
-    case 1:
-	col = MG_BLUE;
-	break;
-    case 2:
-	col = MG_YELLOW;
-	break;
-    case 3:
-	col = MG_GREEN;
-	break;
-    default:
-	col = MG_BLACK;
-    }
-
-if (el->score < 900)
-    {
-    switch(colIdx)
+    if(el->score >= 900)
+	return stsMapMouseFilterColor;
+    else
 	{
-	case 0:
-	    col = MG_GRAY;
-	    break;
-	case 1:
-	    col = vgFindColorIx(vg,30, 144, 255);
-	    break;
-	case 2:
-	    col = vgFindColorIx(vg, 205, 173, 0);
-	    break;
-	case 3:
-	    col = vgFindColorIx(vg, 154, 205, 50);
-	    break;
-	default:
-	    col = MG_GRAY;
+	switch(stsMapMouseFilterColor)
+	    {
+	    case 1:
+		return MG_GRAY;
+		break;
+	    case 2:
+		return (vgFindColorIx(vg, 240, 128, 128)); //Light red
+		break;
+	    case 3:
+		return (vgFindColorIx(vg, 154, 205, 154)); // light green	
+		break;
+	    case 4:
+		return (vgFindColorIx(vg, 176, 226, 255)); // light blue
+	    default:
+		return MG_GRAY;
+	    }
 	}
     }
-return col;
+else
+    {
+    if(el->score < 900)
+	return MG_GRAY;
+    else
+	return MG_BLACK;
+    }
 }
 
 void stsMapMouseMethods(struct track *tg)
@@ -7849,8 +7795,6 @@ vgUnclip(vg);
 return y;
 }
 
-
-
 static void doLabelNextItemButtons(struct track *track, struct track *parentTrack, struct vGfx *vg, MgFont *font, int y,
 			      int trackPastTabX, int trackPastTabWidth, int fontHeight,
 			      int insideHeight, Color labelColor)
@@ -7887,8 +7831,6 @@ if (track->limitedVis != tvHide)
     {
     Color labelColor = (track->labelColor ? 
                         track->labelColor : track->ixColor);
-    char *tdbsetting = trackDbSetting(track->tdb, "nextItemButton");
-    tdbsetting = (tdbsetting != NULL) ? tdbsetting : "crap";
     vgTextCentered(vg, insideX, y+1, insideWidth, insideHeight, 
                         labelColor, font, track->longLabel);
     if (withNextItemArrows && track->nextItemButtonable && track->labelNextPrevItem)
@@ -7897,6 +7839,8 @@ if (track->limitedVis != tvHide)
     else
 	mapBoxToggleVis(trackPastTabX, y+1, 
 			trackPastTabWidth, insideHeight, parentTrack);
+    mapBoxToggleVis(trackPastTabX, y+1, 
+                    trackPastTabWidth, insideHeight, parentTrack);
     y += fontHeight;
     y += track->height;
     }
@@ -8098,7 +8042,7 @@ if (!tg->limitedVisSet)
     {
     enum trackVisibility vis = tg->visibility;
     int h;
-    int maxHeight = maximumTrackHeight();
+    int maxHeight = maximumTrackHeight(tg);
     tg->limitedVisSet = TRUE;
     if (vis == tvHide)
 	{
@@ -10194,7 +10138,6 @@ if (sameWord(type, "bed"))
 	linkedFeaturesMethods(track);
 	track->extraUiData = newBedUiData(track->mapName);
 	track->loadItems = loadGappedBed;
-
 	}
     }
 else if (sameWord(type, "bedGraph"))
@@ -10483,7 +10426,7 @@ if (exonArrows == NULL)
        exonArrows = "on";
     }
 track->exonArrows = sameString(exonArrows, "on");
-track->nextItemButtonable = (nextItem && sameString(nextItem, "on")) ? TRUE: FALSE;
+
 iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
@@ -11091,6 +11034,7 @@ registerTrackHandler("blastDm1FB", blastMethods);
 registerTrackHandler("blastDm2FB", blastMethods);
 registerTrackHandler("blastHg16KG", blastMethods);
 registerTrackHandler("blastHg17KG", blastMethods);
+registerTrackHandler("blastHg18KG", blastMethods);
 registerTrackHandler("blatHg16KG", blastMethods);
 registerTrackHandler("blatzHg17KG", blatzMethods);
 registerTrackHandler("mrnaMapHg17KG", blatzMethods);
@@ -11323,6 +11267,8 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracks
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
 cartSaveSession(cart);
 
+
+
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
 if (userSeqString && !ssFilesExist(userSeqString))
@@ -11351,6 +11297,7 @@ if (cgiVarExists("hgt.nextItem"))
     doNextPrevItem("nextItem", cgiUsualString("hgt.nextItem", NULL));
 else if (cgiVarExists("hgt.prevItem"))
     doNextPrevItem("prevItem", cgiUsualString("hgt.prevItem", NULL));
+
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
     {
@@ -12011,6 +11958,8 @@ if (cgiVarExists("hgt.psOutput"))
 else
     doTrackForm(NULL);
 }
+
+
 
 void customTrackPage()
 /* Put up page that lets user upload custom tracks. */
