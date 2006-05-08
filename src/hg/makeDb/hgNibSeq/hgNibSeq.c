@@ -7,7 +7,7 @@
 #include "jksql.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgNibSeq.c,v 1.6 2004/08/03 16:40:45 angie Exp $";
+static char const rcsid[] = "$Id: hgNibSeq.c,v 1.7 2006/05/08 15:35:20 angie Exp $";
 
 boolean preMadeNib = FALSE;
 char *tableName = "chromInfo";
@@ -58,7 +58,7 @@ char dir[256], name[128], chromName[128], ext[64];
 char nibName[512];
 struct sqlConnection *conn = sqlConnect(database);
 char query[512];
-int i, seqCount;
+int i;
 char *faName;
 struct dnaSeq *seq = NULL;
 unsigned long total = 0;
