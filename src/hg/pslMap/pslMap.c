@@ -4,12 +4,13 @@
 #include "pslTransMap.h"
 #include "options.h"
 #include "linefile.h"
-#include "hash.h"
+#include "binRange.h"
+#include "chromBins.h"
 #include "psl.h"
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.12 2006/02/28 21:07:10 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.13 2006/05/08 19:51:02 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -56,7 +57,6 @@ errAbort("%s\n%s", msg, usageMsg);
 struct mapAln
 /* Mapping alignment, psl plus additional information. */
 {
-    struct mapAln *next;  /* link for entries for same query */
     struct psl *psl;  /* psl, maybe created from a chain */
     int id;           /* chain id, or psl file row  */
 };
@@ -97,40 +97,35 @@ if (swapMap)
 return mapAlnNew(psl, ch->id);
 }
 
-static struct hash* loadMapChains(char *chainFile)
-/* read a chain file, convert to mapAln object and hash by query, linking multiple PSLs
- * for the same query.*/
+static struct chromBins* loadMapChains(char *chainFile)
+/* read a chain file, convert to mapAln object and chromBins by query locations. */
 {
-struct hash* mapAlns = hashNew(20);
+struct chromBins* mapAlns = chromBinsNew((chromBinsFreeFunc*)pslFree);
 struct chain *ch;
 struct lineFile *chLf = lineFileOpen(chainFile, TRUE);
-struct hashEl *hel;
 while ((ch = chainRead(chLf)) != NULL)
     {
     struct mapAln *mapAln = chainToPsl(ch);
-    hel = hashStore(mapAlns, mapAln->psl->qName);
-    slAddHead((struct mapAln**)&hel->val, mapAln);
+    chromBinsAdd(mapAlns, mapAln->psl->qName, mapAln->psl->qStart, mapAln->psl->qEnd, mapAln);
     chainFree(&ch);
     }
 lineFileClose(&chLf);
 return mapAlns;
 }
 
-static struct hash* loadMapPsls(char *pslFile)
-/* read a psl file and hash by query, linking multiple PSLs for the
+static struct chromBins* loadMapPsls(char *pslFile)
+/* read a psl file and chromBins by query, linking multiple PSLs for the
  * same query.*/
 {
-struct hash* mapAlns = hashNew(20);
+struct chromBins* mapAlns = chromBinsNew((chromBinsFreeFunc*)pslFree);
 int id = 0;
 struct psl* psl;
 struct lineFile *pslLf = pslFileOpen(pslFile);
-struct hashEl *hel;
 while ((psl = pslNext(pslLf)) != NULL)
     {
     if (swapMap)
         pslSwap(psl, FALSE);
-    hel = hashStore(mapAlns, psl->qName);
-    slSafeAddHead((struct mapAln**)&hel->val, mapAlnNew(psl, id));
+    chromBinsAdd(mapAlns, psl->qName, psl->qStart, psl->qEnd, mapAlnNew(psl, id));
     id++;
     }
 lineFileClose(&pslLf);
@@ -214,20 +209,21 @@ if (mappedPsl != NULL)
 pslFree(&mappedPsl);
 }
 
-static void mapQueryPsl(struct psl* inPsl, struct hash *mapAlns,
+static void mapQueryPsl(struct psl* inPsl, struct chromBins *mapAlns,
                         FILE* outPslFh, FILE *mapInfoFh)
 /* map a query psl to all targets  */
 {
-struct mapAln *mapAln;
-
-for (mapAln = hashFindVal(mapAlns, inPsl->tName); mapAln != NULL; mapAln = mapAln->next)
-    mapPslPair(inPsl, mapAln, outPslFh, mapInfoFh);
+struct binElement *overMapAlns = chromBinsFind(mapAlns, inPsl->tName, inPsl->tStart, inPsl->tEnd);
+struct binElement *overMapAln;
+for (overMapAln = overMapAlns; overMapAln != NULL; overMapAln = overMapAln->next)
+    mapPslPair(inPsl, (struct mapAln *)overMapAln->val, outPslFh, mapInfoFh);
+slFreeList(&overMapAlns);
 }
 
 static void pslMap(char* inPslFile, char *mapFile, char *outPslFile)
 /* map SNPs to proteins */
 {
-struct hash *mapAlns;
+struct chromBins *mapAlns;
 struct psl* inPsl;
 struct lineFile* inPslLf = pslFileOpen(inPslFile);
 FILE *outPslFh, *mapInfoFh = NULL;
