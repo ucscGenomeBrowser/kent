@@ -257,7 +257,7 @@ summary multiz17wayAnnoSummary
 speciesGroups mammal vertebrate
 sGroup_mammal rn3 oryCun1 hg17 panTro1 rheMac1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom2
 sGroup_vertebrate galGal2 xenTro1 danRer3 tetNig1 fr1
-speciesDefaultOff panTro1 rheMac1 bosTau2 echTel1 danRer3 fr1
+speciesDefaultOff oryCun1 panTro1 rheMac1 bosTau2 dasNov1 loxAfr1 echTel1 danRer3 fr1
 treeImage phylo/Mm7_17way.jpg
 irows on
 frames multiz17wayFrames
@@ -280,7 +280,7 @@ summary multiz17waySummary
 speciesGroups mammal vertebrate
 sGroup_mammal rn3 oryCun1 hg17 panTro1 rheMac1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom2
 sGroup_vertebrate galGal2 xenTro1 danRer3 tetNig1 fr1
-speciesDefaultOff panTro1 rheMac1 bosTau2 echTel1 danRer3 fr1
+speciesDefaultOff oryCun1 panTro1 rheMac1 bosTau2 dasNov1 loxAfr1 echTel1 danRer3 fr1
 treeImage phylo/Mm7_17way.jpg
 
 track linSpecRepNotHg
