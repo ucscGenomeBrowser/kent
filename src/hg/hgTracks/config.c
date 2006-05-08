@@ -210,6 +210,11 @@ hCheckBox("trackControlsOnMain", cartUsualBoolean(cart, "trackControlsOnMain", T
 hPrintf("</TD><TD>");
 hPrintf("Show track controls under main graphic");
 hPrintf("</TD></TR>");
+hPrintf("<TR><TD>");
+hCheckBox("nextItemArrows", cartUsualBoolean(cart, "nextItemArrows", FALSE));
+hPrintf("</TD><TD>");
+hPrintf("Next/previous item navigation");
+hPrintf("</TD></TR>");
 hTableEnd();
 
 webNewSection("Configure Tracks");

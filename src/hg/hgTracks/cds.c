@@ -17,7 +17,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.38 2006/03/06 17:52:47 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.38.10.1 2006/05/08 19:37:30 aamp Exp $";
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
                                         int chromStart, int chromEnd,
@@ -421,7 +421,7 @@ void lfSplitByCodonFromPslX(char *chromName, struct linkedFeatures *lf,
 struct simpleFeature *sfList = splitPslByCodon(chromName, lf, psl, sizeMul,
                                                isXeno, maxShade, displayOption);
 slReverse(&sfList);
-lf->components = sfList;
+lf->codons = sfList;
 }
 
 
