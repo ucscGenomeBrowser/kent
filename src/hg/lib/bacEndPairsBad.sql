@@ -20,4 +20,5 @@ CREATE TABLE bacEndPairsBad (
               #Indices
     INDEX(bin),
     INDEX(chrom,chromStart)
+    INDEX(name(16))
 );
