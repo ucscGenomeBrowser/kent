@@ -15,6 +15,7 @@
 #define SUMMARY_VAR             "summary"
 #define BASE_COLORS_VAR         "baseColors"
 #define BASE_COLORS_OFFSET_VAR  "baseColorsOffset"
+#define CONS_WIGGLE             "wiggle"
 
 struct mafAli *mafLoadInRegion(struct sqlConnection *conn, char *table,
 	char *chrom, int start, int end);

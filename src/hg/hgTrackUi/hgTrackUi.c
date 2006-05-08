@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.273 2006/05/04 01:56:39 braney Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.274 2006/05/08 23:37:31 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1507,6 +1507,8 @@ int speciesCt = 0, groupCt = 1;
 int i;
 char option[64];
 struct phyloTree *tree;
+char *consWiggle;
+char *consNames[10];
 
 if (speciesOrder == NULL && speciesGroup == NULL)
     errAbort(
@@ -1674,9 +1676,23 @@ else
 #endif
     }
 
-if (trackDbSetting(tdb, "wiggle"))
+consWiggle = trackDbSetting(tdb, CONS_WIGGLE);
+if (consWiggle)
     {
+    int i, j;
+    int fieldCt;
+    char *fields[20];
+
     puts("<P><B>Conservation graph:</B>" );
+    safef(option, sizeof(option), "%s.%s", tdb->tableName, CONS_WIGGLE);
+    fieldCt = chopLine(consWiggle, fields);
+    if (fieldCt > 2)
+        {
+        for (i=1, j=0; i < fieldCt; i+=2, j++)
+            consNames[j] = fields[i];
+        cgiMakeDropList(option, consNames, fieldCt/2,
+            cartCgiUsualString(cart, option, consNames[0]));
+        }
     wigUi(tdb);
     }
 }

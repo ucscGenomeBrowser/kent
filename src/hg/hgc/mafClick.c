@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.35 2006/03/13 23:22:26 braney Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.36 2006/05/08 23:37:31 kate Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -459,7 +459,7 @@ else
     char dbChrom[64];
     char option[128];
     char *capTrack;
-    char *wigTable = trackDbSetting(tdb, "wiggle");
+    char *wigTable = trackDbSetting(tdb, CONS_WIGGLE);
     struct hash *speciesOffHash = NULL;
     char *speciesOrder = NULL;
     char *speciesTarget = trackDbSetting(tdb, SPECIES_TARGET_VAR);
