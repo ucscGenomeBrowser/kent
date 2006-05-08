@@ -8144,6 +8144,23 @@ time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 -stop=load \
 `pwd`/DEF > load4.out 2>&1 &
 
+# Finally, a success!
+
+tail load4.out
+#...
+# cd /cluster/data/hg18/bed/blastzLoxAfr1.2006-01-03/axtChain
+#netClass -verbose=0 -noAr noClass.net hg18 loxAfr1 hg18.loxAfr1.net
+#netFilter -minGap=10 hg18.loxAfr1.net
+#hgLoadNet -verbose=0 hg18 netLoxAfr1 stdin
+#startStep: 5, at step 7 download to stopStep 6
+
+# *** All done!
+# *** Add {chain,net}LoxAfr1 tracks to trackDb.ra if necessary.
+
+# The swap-load was not successful, after several tries.
+# Last one seems was due to out of memory problem.
+# Per Hiram, we no longer do swap for 2X genomes, unless specifically requested.
+# Mark made an inquiry, but said he can get by with hg18->loxAfr1 nets.
 #########################################################################
 # BLASTZ COW BosTau2 second time (STARTED - 2006-01-07 Fan)
 
