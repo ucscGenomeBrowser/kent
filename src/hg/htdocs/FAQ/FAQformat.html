@@ -35,6 +35,8 @@
                 		<LI><A HREF="#format4">GTF format</A>
                 		<LI><A HREF="#format5">MAF format</A>
                 		<LI><A HREF="#format6">WIG format</A>
+                		<LI><A HREF="../goldenPath/help/chain.html">chain format</A>
+                		<LI><A HREF="../goldenPath/help/net.html">net format</A>
                 		<LI><A HREF="#format7">.2bit format</A>
                 		<LI><A HREF="#format8">.nib format</A>
 				</UL>
@@ -409,10 +411,13 @@ exon_number 1</tt>
                     word of a line indicates its type.  Each multiple
                     alignment is in a separate paragraph that begins
                     with an &quot;a&quot; line and contains an &quot;s&quot; line 
-		    for each sequence in the multiple alignment.  For now,
-                    parsers should ignore other types of paragraphs
-                    and other types of lines within an alignment
-                    paragraph.
+		    for each sequence in the multiple alignment.  
+		    Some MAF files may contain two  optional line types: an 
+		    "i" line containing information about what is in the aligned
+		    species DNA before and after the immediately preceding "s" 
+		    line, and an "e" line containing information about the size 		    of the gap between the alignments that span the current 
+		    block. Parsers may ignore any other types of paragraphs and 
+		    other types of lines within an alignment paragraph. 
                     <P>
 		    <B>The Header Line</B>
 		    <P>
@@ -513,6 +518,102 @@ exon_number 1</tt>
                                (dashes) as well.  </LI> 
                     </UL>          
                                    
+  		    <P>
+		    <B>Lines starting with 'i' -- information about what's 
+		    happening before and after this block in the aligning 
+		    species</B> 
+                    <P><FONT color=#0000ff><PRE><TT>
+ s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca s panTro1.chr6 28869787 13 + 161576975 gcagctgaaaaca
+ i panTro1.chr6 N 0 C 0
+ s baboon         249182 13 +   4622798 gcagctgaaaaca
+ i baboon       I 234 n 19</TT></PRE></FONT>
+		    <P>
+		    The 'i' lines contain information about the context of the 
+		    sequence lines immediately preceeding them. The following 
+		    fields are defined by position rather than name=value pairs:
+                    <UL>
+                    <LI>src -- The name of the source sequence for the 
+		    alignment. Should be the same as the 's' line immediately 
+		    above this line.             
+		    <LI>leftStatus -- A character that specifies the 
+		    relationship between the sequence in this block and the 
+		    sequence that appears in the previous block.
+		    <LI>leftCount -- Usually the number of bases in the aligning
+                    species between the start of this alignment and the end of 
+		    the previous one.                          
+		    <LI>rightStatus -- A character that specifies the 
+		    relationship between the sequence in this block and the 
+		    sequence that appears in the subsequent block.
+	            <LI>rightCount -- Usually the number of bases in the 
+		    aligning species between the end of this alignment and the 
+		    start of the next one. 
+		    </UL>
+		    <P>
+		    The status characters can be one of the following values:
+                    <UL>                          
+		    <LI>C -- the sequence before or after is contiguous with 
+		    this block.
+		    <LI>I -- there are bases between the bases in this block 
+		    and the one before or after it.                          
+		    <LI>N -- this is the first sequence from this src chrom or 
+		    scaffold.
+		    <LI>n -- this is the first sequence from this src chrom or 
+		    scaffold but it is bridged by another alignment from a 
+		    different chrom or scaffold.                          
+		    <LI>M -- there is missing data before or after this block 
+		    (Ns in the sequence).
+		    </UL>                        
+		    <P>
+		    <B>Lines starting with 'e' -- information about empty parts 
+		    of the alignment block</B>                        
+		    <P><FONT color=#0000ff><PRE><TT>
+ s hg16.chr7    27707221 13 + 158545518 gcagctgaaaaca
+ e mm4.chr6     53310102 13 + 151104725 I</TT></PRE></FONT>
+		    <P>
+		    The 'e' lines indicate that there isn't aligning DNA for a 
+		    species but that the current block is bridged by a chain 
+		    that connects blocks before and after this block. The 
+		    following fields are defined by position rather than 
+		    name=value pairs.
+                    <UL>                          
+		    <LI>src -- The name of one of the source sequences for the 
+		    alignment.                          
+		    <LI>start -- The start of the non-aligning region in the
+                    source sequence. This is a zero-based number. If the
+		    strand field is '-' then this is the start relative to 
+                    the reverse-complemented source sequence.
+		    <LI>size -- The size in base pairs of the non-aligning 
+		    region in the source sequence.                          
+		    <LI>strand -- Either '+' or '-'. If '-', then the
+                    alignment is to the reverse-complemented source.
+                    <LI>srcSize -- The size of the entire source sequence, 
+                    not just the parts involved in the alignment.
+                    alignment and any insertions (dashes) as well.
+		    <LI>status -- A character that specifies the 
+		    relationship between the non-aligning sequence in this 
+		    block and the sequence that appears in the previous and 
+		    subsequent blocks.
+		    </UL>
+		    <P>
+		    The status character can be one of the following values:
+                    <UL>                          
+		    <LI>C -- the sequence before and after is contiguous 
+		    implying that this region was either deleted in the source 
+		    or inserted in the reference sequence. The browser draws a 
+		    single line or a '-' in base mode in these blocks.
+		    <LI>I -- there are non-aligning bases in the source species 
+		    between chained alignment blocks before and after this 
+		    block. The browser shows a double line or '=' in base mode.
+		    <LI>M -- there are non-aligning bases in the source and 
+		    more than 90% of them are Ns in the source. The browser 
+		    shows a pale yellow bar.                         
+		    <LI>n -- there are non-aligning bases in the source and the 
+		    next aligning block starts in a new chromosome or scaffold 
+		    that is bridged by a chain between still other blocks. The 
+		    browser shows either a single line or a double line based 
+		    on how many bases are in the gap between the bridging 
+		    alignments.
+		    </UL>
                     <P>
 		    <B>A Simple Example</B>
 		    <P>                     
