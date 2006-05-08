@@ -821,5 +821,26 @@ drop table jaxMahoneyWholeMountMd5;
 drop table jaxMahoneySlicesMap;
 
 #############################################################
+#
+# Patch contributors so we can search submission sets
+#  by specifying Mahoney in the search box.
+#
 
+select id from submissionSource where name like 'Mahoney%';
++----+
+| id |
++----+
+| 1  |
++----+
+
+# note: we have to double the search word or else the search doesn't work
+insert into contributor set name = 'Mahoney mahoney';
+mysql> select * from contributor where name in ('Mahoney mahoney');
++------+-----------------+
+| id   | name            |
++------+-----------------+
+| 3987 | Mahoney mahoney |
++------+-----------------+
+
+insert into submissionContributor select id, '3987' from submissionSet where submissionSource = 1;
 
