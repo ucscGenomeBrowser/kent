@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1096.2.2 2006/05/08 20:36:35 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1096.2.3 2006/05/08 23:24:45 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10426,7 +10426,8 @@ if (exonArrows == NULL)
        exonArrows = "on";
     }
 track->exonArrows = sameString(exonArrows, "on");
-
+if (nextItem)
+    track->nextItemButtonable = sameString(nextItem, "on");
 iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
