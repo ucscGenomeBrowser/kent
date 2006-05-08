@@ -1,3 +1,16 @@
+track knownGene
+shortLabel Known Genes
+longLabel UCSC Known Genes Based on UniProt, RefSeq, and GenBank mRNA
+group genes
+priority 34
+visibility pack
+color 12,12,120
+type genePred knownGenePep knownGeneMrna
+hgGene on
+hgsid on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+cdsDrawDefault genomic\ codons
+
 track multiz9way
 shortLabel Conservation 
 longLabel Vertebrate Multiz Alignment & Conservation
