@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.30 2006/04/26 17:03:10 kent Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.31 2006/05/08 21:18:01 aamp Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -1069,8 +1069,11 @@ return liftOverBedPlus(fileName, chainHash, minMatch, minBlocks,
 #define BEDSTART_TO_POSITION(coord)     (coord+1)
 
 int liftOverPositions(char *fileName, struct hash *chainHash, 
-                        double minMatch,  double minBlocks, bool fudgeThick,
-                                FILE *mapped, FILE *unmapped, int *errCt)
+                        double minMatch,  double minBlocks, 
+                        int minSizeT, int minSizeQ,
+                        int minChainT, int minChainQ,
+		        bool fudgeThick, FILE *mapped, FILE *unmapped, 
+		        bool multiple, char *chainTable, int *errCt)
 /* Create bed file from positions (chrom:start-end) and lift.
  * Then convert back to positions.  (TODO: line-by-line instead of by file)
  * Return the number of records successfully converted */
@@ -1113,8 +1116,8 @@ makeTempName(&mappedBedTn, LIFTOVER_FILE_PREFIX, ".bedmapped");
 makeTempName(&unmappedBedTn, LIFTOVER_FILE_PREFIX, ".bedunmapped");
 mappedBed = mustOpen(mappedBedTn.forCgi, "w");
 unmappedBed = mustOpen(unmappedBedTn.forCgi, "w");
-ct = liftOverBed(bedTn.forCgi, chainHash, minMatch, 0, 0, 0, 0, 0, FALSE, 
-                        mappedBed, unmappedBed, FALSE, NULL, errCt);
+ct = liftOverBed(bedTn.forCgi, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, minChainT, minChainQ, fudgeThick, 
+                        mappedBed, unmappedBed, multiple, chainTable, errCt);
 carefulClose(&mappedBed);
 chmod(mappedBedTn.forCgi, 0666);
 carefulClose(&unmappedBed);

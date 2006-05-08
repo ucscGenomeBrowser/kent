@@ -10,7 +10,7 @@
 #include "sample.h"
 #include "liftOver.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.24 2006/04/26 21:05:35 aamp Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.25 2006/05/08 21:17:47 aamp Exp $";
 
 int bedPlus = 0;
 bool fudgeThick = FALSE;
@@ -119,8 +119,9 @@ else if (optionExists("bedPlus"))
                 minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
 		chainTable, bedPlus, hasBin, tabSep, &errCt);
 else if (optionExists("positions"))
-    liftOverPositions(oldFile, chainHash, minMatch, minBlocks, fudgeThick,
-		      mapped, unmapped, &errCt);
+    liftOverPositions(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
+                minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
+		chainTable, &errCt);
 else
     liftOverBed(oldFile, chainHash, minMatch, minBlocks, minSizeT, minSizeQ, 
                 minChainT, minChainQ, fudgeThick, mapped, unmapped, multiple, 
