@@ -2423,6 +2423,19 @@ semiShortCircuit 1
 termRegex [a-z][a-z0-9][0-9]+
 searchPriority 10
 
+searchName stsMapAliasMrnaAcc
+searchTable stsMap
+searchType bed
+shortCircuit 1
+semiShortCircuit 1
+xrefTable stsAlias
+xrefQuery select trueName,alias from %s where alias like '%s'
+searchBoth on
+termRegex [a-z][a-z0-9][0-9]+
+searchDescription Alias of STS Marker
+searchPriority 11
+padding 100000
+
 searchTable encodeRegions
 searchMethod prefix
 searchType bed
@@ -2603,7 +2616,7 @@ searchType bed
 termRegex ([[:alnum:]]+|(RP|CT|GS)[[:alnum:]]+-[[:alnum:]]+|-[[:alnum:]]+-[[:alnum:]]+)
 searchPriority 10
 
-searchName stsMapAlias
+searchName stsMapAliasComprehensive
 searchTable stsMap
 searchType bed
 xrefTable stsAlias

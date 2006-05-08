@@ -813,7 +813,20 @@ shortCircuit 1
 termRegex (AC|AF|AL|AY|BX|CAAA|CR)[0-9]+(\.[0-9]+)?
 searchPriority 8
 
-searchName stsMapAlias
+searchName stsMapAliasMrnaAcc
+searchTable stsMapMouseNew
+searchType bed
+semiShortCircuit 1
+shortCircuit 1
+xrefTable stsAlias
+xrefQuery select trueName,alias from %s where alias like '%s'
+searchBoth on
+termRegex [a-z][a-z0-9][0-9]+
+searchDescription Alias of STS Marker
+searchPriority 11
+padding 100000
+
+searchName stsMapAliasComprehensive
 searchTable stsMapMouseNew
 searchType bed
 xrefTable stsAlias
