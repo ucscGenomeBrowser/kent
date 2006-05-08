@@ -133,12 +133,12 @@ if (pslTStrand(mappedPsl) == '-')
     reverseIntRange(&mappedPsl->tStart, &mappedPsl->tEnd, mappedPsl->tSize);
 }
 
-static void adjustOrientation(unsigned opts, struct psl *inPsl, char *mapPslOrigStrand,
+static void adjustOrientation(unsigned opts, struct psl *inPsl, char *inPslOrigStrand,
                               struct psl* mappedPsl)
 /* adjust strand, possibly reverse complementing, based on
  * pslTransMapKeepTrans option and input psls. */
 {
-if (!(opts&pslTransMapKeepTrans) || ((inPsl->strand[1] == '\0') && (mapPslOrigStrand[1] == '\0')))
+if (!(opts&pslTransMapKeepTrans) || ((inPslOrigStrand[1] == '\0') && (mappedPsl->strand[1] == '\0')))
     {
     /* make untranslated */
     if (pslTStrand(mappedPsl) == '-')
@@ -262,8 +262,8 @@ struct psl* pslTransMap(unsigned opts, struct psl *inPsl, struct psl *mapPsl)
 {
 int mappedPslMax = 8; /* allocated space in output psl */
 int iMapBlk = 0;
-char mapPslOrigStrand[3];
-boolean rcMapPsl = (pslTStrand(inPsl) != pslQStrand(mapPsl));
+char inPslOrigStrand[3];
+boolean rcInPsl = (pslTStrand(inPsl) != pslQStrand(mapPsl));
 boolean cnv1 = (pslIsProtein(inPsl) && !pslIsProtein(mapPsl));
 boolean cnv2 = (pslIsProtein(mapPsl) && !pslIsProtein(inPsl));
 int iBlock;
@@ -282,10 +282,10 @@ if (cnv1)
 if (cnv2)
     pslProtToNA(mapPsl);
 
-/* need to ensure common sequence in same orientation, save strand for later */
-safef(mapPslOrigStrand, sizeof(mapPslOrigStrand), "%s", mapPsl->strand);
-if (rcMapPsl)
-    pslRc(mapPsl);
+/* need to ensure common sequence is in same orientation, save strand for later */
+safef(inPslOrigStrand, sizeof(inPslOrigStrand), "%s", inPsl->strand);
+if (rcInPsl)
+    pslRc(inPsl);
 
 mappedPsl = createMappedPsl(inPsl, mapPsl, mappedPslMax);
 
@@ -300,13 +300,13 @@ for (iBlock = 0; iBlock < inPsl->blockCount; iBlock++)
 
 /* finish up psl */
 setPslBounds(mappedPsl);
-adjustOrientation(opts, inPsl, mapPslOrigStrand, mappedPsl);
+adjustOrientation(opts, inPsl, inPslOrigStrand, mappedPsl);
 
 /* restore input */
-if (rcMapPsl)
+if (rcInPsl)
     {
-    pslRc(mapPsl);
-    strcpy(mapPsl->strand, mapPslOrigStrand);
+    pslRc(inPsl);
+    strcpy(inPsl->strand, inPslOrigStrand);
     }
 if (cnv1)
     pslNAToProt(inPsl);
