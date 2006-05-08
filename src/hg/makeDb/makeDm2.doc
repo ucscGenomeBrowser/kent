@@ -4230,3 +4230,20 @@ _EOF_
     #	59881 bases of 131698467 (0.045%) in intersection
     nice -n +19 featureBits dm2 picTarMiRNAS3
     #	26231 bases of 131698467 (0.020%) in intersection
+
+
+# FLYBASE IN SITU IMAGES / EXPRESSION (DONE 5/3/06 angie)
+    # FlyBase has downloadable in situ images for BACs:
+    # ftp://flybase.net/flybase/images/bac_insitu_pic/*
+    # and FBti's:
+    # ftp://flybase.net/flybase/images/in-situ-images/insitus.zip
+    # but what Jim is interested in is the insitus for expression data.
+    # Don't see that in the ftp listing, but they do make it easy to link in.
+    ssh hgwdev
+    cd /cluster/data/dm2/bed/flyBase
+    wget -O summary.txt.060503 \
+    'http://www.fruitfly.org/cgi-bin/ex/bquery.pl?qpage=entry&qtype=summarytext'
+    hgLoadSqlTab dm2 bdgpExprLink ~/kent/src/hg/lib/bdgpExprLink.sql \
+      summary.txt.060503
+
+
