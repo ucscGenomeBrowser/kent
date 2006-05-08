@@ -15,7 +15,7 @@ set cb cb1
 set dm dm1,dm2
 set dp dp2,dp3
 set sacCer sacCer1
-set panTro panTro1
+set panTro panTro1,panTro2
 set galGal galGal2
 set ci ci1,ci2
 set danRer danRer1,danRer2,danRer3,danRer4
