@@ -276,6 +276,7 @@ wiggle phastCons17
 spanList 1
 yLineOnOff Off
 autoScaleDefault Off
+windowingFunction mean
 summary multiz17waySummary
 speciesGroups mammal vertebrate
 sGroup_mammal rn3 oryCun1 hg17 panTro1 rheMac1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom2

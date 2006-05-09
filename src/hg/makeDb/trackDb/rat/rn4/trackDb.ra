@@ -26,6 +26,7 @@ pairwiseHeight 12
 spanList 1
 yLineOnOff Off
 autoScaleDefault Off
+windowingFunction mean
 summary multiz9waySummary
 frames multiz9wayFrames
 irows on

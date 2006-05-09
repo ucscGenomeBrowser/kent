@@ -34,6 +34,7 @@ yLineOnOff Off
 frames multiz17wayFrames
 irows on
 autoScaleDefault Off
+windowingFunction mean
 summary multiz17waySummary
 speciesGroups mammal vertebrate
 sGroup_mammal panTro1 rheMac2 mm8 rn4 oryCun1 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom4

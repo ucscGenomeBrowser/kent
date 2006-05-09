@@ -296,6 +296,7 @@ pairwiseHeight 12
 spanList 1
 yLineOnOff Off
 autoScaleDefault Off
+windowingFunction mean
 summary multiz17waySummary
 frames multiz17wayFrames
 irows on

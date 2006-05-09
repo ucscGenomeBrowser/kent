@@ -36,6 +36,7 @@ maxHeightPixels 100:40:11
 wiggle phastCons
 yLineOnOff Off
 autoScaleDefault Off
+windowingFunction mean
 pairwise netBlastz
 speciesOrder rn3 hg17 canFam1 galGal2
 

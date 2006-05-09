@@ -103,6 +103,7 @@ wiggle phastCons10
 spanList 1
 yLineOnOff Off
 autoScaleDefault Off
+windowingFunction mean
 summary multiz10waySummary
 #pairwise netBlastz
 speciesGroups mammal vertebrate
