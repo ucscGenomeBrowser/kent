@@ -9,7 +9,7 @@
 #include "expData.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgRatioMicroarray.c,v 1.3 2006/03/15 22:47:45 aamp Exp $";
+static char const rcsid[] = "$Id: hgRatioMicroarray.c,v 1.4 2006/05/09 14:36:05 angie Exp $";
 
 /* Command line overridable options. */
 char *database = "hgFixed";
@@ -131,7 +131,7 @@ float median;
 AllocArray(selVals, valCount);
 for (clump = clumpList; clump != NULL; clump = clump->next, ++clumpIx)
     {
-    int i, ix, realCount = 0;
+    int i, realCount = 0;
     if (clump->count > valCount)
         internalErr();
     for (i=0; i<clump->count; ++i)
@@ -233,7 +233,7 @@ char **row;
 char query[512];
 struct expData *ex;
 FILE *f = hgCreateTabFile(tabDir, relTable);
-int rowCount = 0, i;
+int rowCount = 0;
 
 if (clump != NULL)
     clumpList = medSpecReadAll(clump);
