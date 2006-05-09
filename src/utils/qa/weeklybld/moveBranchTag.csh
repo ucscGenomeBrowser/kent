@@ -2,8 +2,8 @@
 #following line using source .cshrc doesnt really work?
 cd $WEEKLYBLD
 
-if ( "$HOST" != "hgwdev" ) then
- echo "error: you must run this script on dev!"
+if ( "$HOST" != "hgwbeta" ) then
+ echo "error: you must run this script on beta!"
  exit 1
 endif
 
@@ -94,7 +94,8 @@ while ( $i <= $#files )
 	set err=1
 	break
     endif
-    echo "$f $p --> $r" >> $WEEKLYBLD/mbt-tag.txt
+    # delete the following line soon
+    #echo "$f $p --> $r" >> $WEEKLYBLD/mbt-tag.txt 
     # move the beta tag in cvs to track the change to this week's branch.
     set cmd = "cvs rtag -rv${BRANCHNN}_branch -F beta kent/src/$f"
     echo $cmd
@@ -108,9 +109,13 @@ while ( $i <= $#files )
     if ( -d $dir/$f:h ) then
 	cd $dir/$f:h    # just dir and update one file
     	set cmd = "cvs up -dP $f:t"
+	# update 32-bit sandbox too
+	set cmd32 = "cd /scratch/releaseBuild/v${BRANCHNN}_branch/kent/src/$f:h;cvs up -dP $f:t"
     else
 	cd $dir/$f:h:h   # just go to parent and update because dir does not exist yet
 	set cmd = "cvs up -dP $f:h:t"
+	# update 32-bit sandbox too
+	set cmd32 = "cd /scratch/releaseBuild/v${BRANCHNN}_branch/kent/src/$f:h:h;cvs up -dP $f:h:t"
     endif
     pwd
     echo $cmd
@@ -120,13 +125,17 @@ while ( $i <= $#files )
 	set err=1
 	break
     endif
-    echo "$f $p --> $r" >> $WEEKLYBLD/mbt-up.txt  
+    # update 32bit sandbox on hgwdev too
+    echo "$cmd32"
+    ssh hgwdev "$cmd32"
+    # delete the following line soon
+    #echo "$f $p --> $r" >> $WEEKLYBLD/mbt-up.txt  
     set msg = "$msg $f $p --> $r\n"
     @ i++
 end
 if ( "$err" == "1" ) then
- echo "some error updating."
- exit 1
+    echo "error updating."
+    exit 1
 endif
 
 set mailMsg = "The v${BRANCHNN} branch-tag has been re-moved to the following:\n$msg"

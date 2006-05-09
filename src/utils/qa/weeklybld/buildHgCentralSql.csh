@@ -1,8 +1,8 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
 
-if ( "$HOST" != "hgwdev" ) then
-	echo "error: you must run this script on dev!"
+if ( "$HOST" != "hgwbeta" ) then
+	echo "error: you must run this script on hgwbeta!"
 	exit 1
 endif
 
@@ -36,7 +36,7 @@ cp -p /tmp/hgcentral.sql hiding/hgcent/hgcentral.sql
 cd hiding/hgcent
 set CVSROOT=/projects/hg/cvsroot 
 set temp = '"'"v${BRANCHNN}"'"'
-cvs commit -m $temp  hgcentral.sql
+cvs -d hgwdev:$CVSROOT commit -m $temp  hgcentral.sql
 if ( $status ) then
 	echo "error during cvs commit of hgcentral.sql."
 	exit 1

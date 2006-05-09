@@ -2,7 +2,7 @@
 cd $WEEKLYBLD
 
 if ( "$HOST" != "hgwbeta" ) then
-echo "error: you must run this script on beta!"
+echo "error: you must run this script on hgwbeta!"
 exit 1
 endif
 

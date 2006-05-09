@@ -1,12 +1,28 @@
 #!/bin/tcsh
-#following line using source .cshrc doesnt really work?
 cd $WEEKLYBLD
+if ( "$HOST" != "hgwbeta" ) then
+    echo "error: makezip.csh must be executed from hgwbeta!"
+    exit 1
+endif
 
 cd $BUILDDIR
 cd zips
-cd kent
+if ( -e kent ) then
+    echo "cleaning out old zips/kent."
+    rm -fr kent
+endif
+
+set zip = "jksrc.v"$BRANCHNN".zip"
+echo "unzipping $zip."
+unzip $zip >& /dev/null
+set err = $status
+if ( $err ) then
+    echo "error unzipping $zip: $err" 
+    exit 1
+endif 
 
 echo "Make libs."
+cd kent
 cd src
 make libs >& make.log
 sed -i -e "s/-DJK_WARN//" make.log
@@ -16,9 +32,9 @@ sed -i -e "s/-Werror//" make.log
 set res = `/bin/egrep -i "error|warn" make.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
- echo "errs found:"
- echo "$res"
- exit 1
+    echo "errs found:"
+    echo "$res"
+    exit 1
 endif
 #
 echo "Make compile."
@@ -31,11 +47,19 @@ sed -i -e "s/-Werror//" make.compile.log
 set res = `/bin/egrep -i "error|warn" make.compile.log`
 set wc = `echo "$res" | wc -w` 
 if ( "$wc" != "0" ) then
- echo "errs found:"
- echo "$res"
- exit 1
+    echo "errs found:"
+    echo "$res"
+    exit 1
 endif
 #
+# clean up temp kent
+cd $BUILDDIR
+cd zips
+if ( -e kent ) then
+    echo "cleaning up temp kent dir in zips."
+    rm -fr kent
+endif
+
 echo "Build libs, cgi done."
 exit 0
 

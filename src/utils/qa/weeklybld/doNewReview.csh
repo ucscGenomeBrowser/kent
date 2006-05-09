@@ -4,8 +4,8 @@
 #  Heather says perhaps running with "nohup" in front of the command might
 #  make it work better.
 #
-if ( "$HOST" != "hgwdev" ) then
- echo "Error: this script must be run from hgwdev."
+if ( "$HOST" != "hgwbeta" ) then
+ echo "Error: this script must be run from hgwbeta."
  exit 1
 endif
 
@@ -61,7 +61,7 @@ echo "tagReview.csh done on $HOST"
 echo "tag review moved to HEAD."
 
 #echo debug: disabled buildCvsReports
-./buildCvsReports.csh review real
+ssh hgwdev $WEEKLYBLD/buildCvsReports.csh review real
 
 if ( $status ) then
  echo "buildCvsReports.csh  failed on $HOST"

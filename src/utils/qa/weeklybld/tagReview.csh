@@ -1,6 +1,6 @@
 #!/bin/tcsh
-if ( "$HOST" != "hgwdev" ) then
- echo "Error: this script must be run from hgwdev."
+if ( "$HOST" != "hgwbeta" ) then
+ echo "Error: this script must be run from hgwbeta."
  exit 1
 endif
 
@@ -19,7 +19,7 @@ echo "Moving review tag to current tip versions"
 echo
 echo "moving tag review..."
 # new way should be must faster:
-cvs rtag -Fa review kent >& /dev/null
+cvs -d hgwdev:$CVSROOT rtag -Fa review kent >& /dev/null
 # note: if this breaks the cvs-reports just return it to the old way.
 # old way:
 #cvs -d hgwdev:$CVSROOT rtag -da review kent >& /dev/null

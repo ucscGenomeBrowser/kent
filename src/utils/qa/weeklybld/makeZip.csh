@@ -1,7 +1,7 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
-if ( "$HOST" != "kkstore" ) then
- echo "error: makezip.csh must be executed from kkstore!"
+if ( "$HOST" != "hgwbeta" ) then
+ echo "error: makezip.csh must be executed from hgwbeta!"
  exit 1
 endif
 cd $BUILDDIR
@@ -31,17 +31,13 @@ if ( $err ) then
  echo "error zipping $zip: $err" 
  exit 1
 endif 
-cd ../zips
-set zip = "jksrc.v"$BRANCHNN".zip"
-echo "cleaning out old zips/kent."
-rm -fr kent
-echo "unzipping $zip."
-unzip $zip >& /dev/null
-set err = $status
-if ( $err ) then
- echo "error unzipping $zip: $err" 
- exit 1
-endif 
+# remove temp directory branch_zip
+cd $BUILDDIR
+set dir = "v"$BRANCHNN"_branch_zip"
+if ( -e $dir ) then
+    echo "cleaning up branch_zip dir."
+    rm -fr $dir
+endif
 echo Done.
 exit 0
 

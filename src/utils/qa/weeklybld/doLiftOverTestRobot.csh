@@ -1,4 +1,5 @@
 #!/bin/tcsh
+# note this uses java and ant, so it will not work on beta, so run from dev instead
 cd $WEEKLYBLD
 if ( "$HOST" != "hgwdev" ) then
  echo "error: doLiftOverTestRobot.csh must be executed from hgwdev!"

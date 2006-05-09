@@ -1,21 +1,21 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
-if ( "$HOST" != "hgwdev" ) then
- echo "error: dozip.csh must be executed from hgwdev!"
- exit 1
+if ( "$HOST" != "hgwbeta" ) then
+    echo "error: dozip.csh must be executed from hgwbeta!"
+    exit 1
 endif
 
-ssh kkstore $WEEKLYBLD/makezip.csh
+./makezip.csh
 set err = $status
 if ( $err ) then
- echo "error running makezip.csh: $err" 
- exit 1
+    echo "error running makezip.csh: $err" 
+    exit 1
 endif 
-ssh hgwbeta $WEEKLYBLD/buildzip.csh
+./buildzip.csh
 set err = $status
 if ( $err ) then
- echo "error running buildzip.csh: $err" 
- exit 1
+    echo "error running buildzip.csh: $err" 
+    exit 1
 endif
 cp $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" /usr/local/apache/htdocs/admin/jksrc.zip
 echo

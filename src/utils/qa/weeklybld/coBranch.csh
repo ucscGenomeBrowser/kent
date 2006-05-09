@@ -1,6 +1,7 @@
 #!/bin/tcsh
-if ( "$HOST" != "kkstore" ) then
- echo "Error: this script must be run from hgwdev."
+
+if (( "$HOST" != "hgwbeta" ) && ( "$HOST" != "hgwdev" )) then
+ echo "Error: this script must be run from hgwbeta or hgwdev."
  exit 1
 endif
 
@@ -13,7 +14,7 @@ if ( "$BRANCHNN" == "" ) then
 endif
 
 echo
-echo "now unpacking new branch $BRANCHNN on kkstore"
+echo "now unpacking new branch $BRANCHNN on `uname -n`"
 
 #unpack the new branch on BUILDDIR for beta
 # for later: is this faster to co on kkstore or not?

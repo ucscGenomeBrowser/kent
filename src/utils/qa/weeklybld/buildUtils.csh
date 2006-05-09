@@ -20,7 +20,7 @@ endif
 set branch=v${BRANCHNN}_branch
 
 if ( "$1" == "tip" ) then
-    set base=$WEEKLYBLD/hiding
+    set base=$BUILDDIR/tip
     echo "updating tip sandbox"
     cd $base/kent
     cvs up -dP  >& /dev/null
@@ -43,13 +43,6 @@ endif
 echo "Symlink Trick."
 ./symtrick.csh
 
-if ( "$MACHTYPE" == "i386" ) then
-    echo
-    echo "Doing make clean on src."
-    cd $base/kent/src
-    make clean>& make.clean.log
-endif
-
 echo
 echo "Building src utils."
 cd $base/kent/src
@@ -70,13 +63,6 @@ endif
 # Undo Symlink trick
 $WEEKLYBLD/unsymtrick.csh
 echo "Restore: undoing Symlink Trick."
-
-if ( "$MACHTYPE" == "i386" ) then
-    echo
-    echo "Doing make clean on src."
-    cd $base/kent/src
-    make clean>& make.clean.log
-endif
 
 echo
 echo "Build of Utils on $HOST complete."

@@ -1,9 +1,12 @@
 #!/bin/tcsh
-#following line using source .cshrc doesnt really work?
 cd $WEEKLYBLD
 
-if ( "$HOST" != "hgwdev" ) then
- echo "error: you must run this script on dev!"
+echo "This script has not been updated to handle the new separate 64/32 bit sandboxes yet."
+echo "Do not use this script."
+exit 1
+
+if ( "$HOST" != "hgwbeta" ) then
+ echo "error: you must run this script on hgwbeta!"
  exit 1
 endif
 
@@ -81,7 +84,8 @@ while ( $i <= $#files )
 	set err=1
 	break
     endif
-    echo $f >> ~/pb-merge.txt
+    # remove next line soon
+    #echo $f >> ~/pb-merge.txt
     # commit the update to the branch sandbox.
     set commsg = '"'"merge rev $r into branch"'"'
     set cmd = "cvs commit -m "$commsg" $f:t"
@@ -92,8 +96,9 @@ while ( $i <= $#files )
 	set err=1
 	break
     endif
-    echo $f >> ~/pb-commit.txt  
-    set msg = "$msg $f $r \n"
+    # remove next line soon
+    #echo $f >> ~/pb-commit.txt  
+    set msg = "$msg $f $p --> $r\n"
     @ i++
 end
 if ( "$err" == "1" ) then
@@ -104,6 +109,7 @@ endif
 set msg = "The v${BRANCHNN} branch has been merged for the following:\n $msg"
 set subject = '"'"Branch merge complete."'"'
 echo "$msg" | mail -s "$subject" galt heather ann
-
+date +%Y-%m-%d   >> $BUILDDIR/v${BRANCHNN}_branch/branchPatches.log
+echo "$msg"      >> $BUILDDIR/v${BRANCHNN}_branch/branchPatches.log
 exit 0
 

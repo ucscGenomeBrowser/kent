@@ -1,7 +1,7 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
-if ( "$HOST" != "hgwdev" ) then
- echo "error: doRobots.csh must be executed from hgwdev!"
+if ( "$HOST" != "hgwbeta" ) then
+ echo "error: doRobots.csh must be executed from hgwbeta!"
  exit 1
 endif
 
@@ -22,28 +22,30 @@ set returnCode=0
 echo "Symlink Trick."
 ./symtrick.csh
 
-ssh hgwbeta $WEEKLYBLD/doHgNearTestRobot.csh
+./doHgNearTestRobot.csh
 set err = $status
 if ( $err ) then
     echo "error running doHgNearTestRobot.csh: $err" 
     set returnCode=1
 endif
 
-ssh hgwbeta $WEEKLYBLD/doHgTablesTestRobot.csh
+./doHgTablesTestRobot.csh
 set err = $status
 if ( $err ) then
     echo "error running doHgTablesTestRobot.csh: $err" 
     set returnCode=1
 endif
 
-./doTrackCheckRobot.csh
+# note this uses java and ant, so it will not work on beta, so run from dev instead
+ssh hgwdev $WEEKLYBLD/doTrackCheckRobot.csh
 set err = $status
 if ( $err ) then
     echo "error running doTrackCheckRobot.csh: $err" 
     set returnCode=1
 endif 
 
-./doLiftOverTestRobot.csh
+# note this uses java and ant, so it will not work on beta, so run from dev instead
+ssh hgwdev $WEEKLYBLD/doLiftOverTestRobot.csh
 set err = $status
 if ( $err ) then
     echo "error running doLiftOverTestRobot.csh: $err" 

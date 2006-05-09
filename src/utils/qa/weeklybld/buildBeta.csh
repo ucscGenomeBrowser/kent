@@ -13,7 +13,7 @@ cd $WEEKLYBLD
 #setenv HOSTNAME $HOST
 
 if ( "$HOST" != "hgwbeta" ) then
- echo "error: you must run this script on beta!"
+ echo "error: you must run this script on hgwbeta!"
  exit 1
 endif
 

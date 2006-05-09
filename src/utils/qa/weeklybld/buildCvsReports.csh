@@ -31,6 +31,10 @@ if ( "$LASTREVIEWDAY" == "" ) then
  exit 1
 endif
 
+if ( -e CvsReports.ok ) then
+    rm CvsReports.ok
+endif    
+
 echo
 echo "now building CVS reports."
 
@@ -93,6 +97,7 @@ endif
 echo "</ul></body></html>" >> index.html
 cd $WEEKLYBLD
 
+echo "success CVS Reports v${BRANCHNN} $mode" > CvsReports.ok
 
 exit 0
 

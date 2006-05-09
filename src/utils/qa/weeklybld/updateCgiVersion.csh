@@ -1,6 +1,6 @@
 #!/bin/tcsh
-if ( "$HOST" != "hgwdev" ) then
- echo "Error: this script must be run from hgwdev."
+if ( "$HOST" != "hgwbeta" ) then
+ echo "Error: this script must be run from hgwbeta."
  exit 1
 endif
 
@@ -29,7 +29,7 @@ if ( -d cgiVersion ) then
  rm -fr cgiVersion
 endif
 
-cvs co -d cgiVersion kent/src/hg/inc/versionInfo.h
+cvs -d hgwdev:$CVSROOT co -d cgiVersion kent/src/hg/inc/versionInfo.h
 if ( $status ) then
  echo "cvs check-out failed for versionInfo.h on $HOST"
  exit 1

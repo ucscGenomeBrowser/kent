@@ -4,8 +4,8 @@
 #  Heather says perhaps running with "nohup" in front of the command might
 #  make it work better.
 #
-if ( "$HOST" != "hgwdev" ) then
- echo "Error: this script must be run from hgwdev."
+if ( "$HOST" != "hgwbeta" ) then
+ echo "Error: this script must be run from hgwbeta."
  exit 1
 endif
 
@@ -51,11 +51,8 @@ echo "Now beginning to build new branch $BRANCHNN"
 
 echo
 
-#cleanup
-rm -f mbt*.txt
-
-#echo debug: disabled cgiVersion
-./updateCgiVersion.csh real
+echo debug: disabled cgiVersion
+#./updateCgiVersion.csh real
 
 if ( $status ) then
  echo "cvs-cgi-version-update failed on $HOST"
@@ -63,11 +60,10 @@ if ( $status ) then
 endif
 echo "cvs-cgi-version-update done on $HOST"
 
-echo
 
 echo
-#echo debug: disabled tagging
-./tagNewBranch.csh real
+echo debug: disabled tagging
+#./tagNewBranch.csh real
 if ( $status ) then
  echo "tagNewBranch.csh failed on $HOST"
  exit 1
@@ -75,9 +71,13 @@ endif
 echo "tagNewBranch.csh done on $HOST"
 echo "new branch v$BRANCHNN created."
 
-#echo debug: disabled buildCvsReports
-./buildCvsReports.csh branch real
-
+echo
+echo
+echo  "NOW STARTING CVS-Reports ON HGWDEV IN PARALLEL"
+echo
+echo debug: disabled buildCvsReports
+#ssh hgwdev $WEEKLYBLD/buildCvsReports.csh branch real &
+# note - we are not trying running it in the background on dev
 if ( $status ) then
  echo "buildCvsReports.csh  failed on $HOST"
  exit 1
@@ -87,17 +87,23 @@ echo "buildCvsReports.csh done on $HOST"
 #---------------------
 
 echo
+echo  "NOW STARTING 32-BIT BUILD ON HGWDEV IN PARALLEL"
+echo
+echo debug: disabled parallel build 32bit utils on dev
+#ssh hgwdev "$WEEKLYBLD/doNewBranch32.csh opensesame" &
+
+echo
 #unpack the new branch on BUILDDIR for beta
-# This faster to co on kkstore and should use -d hgwdev:$CVSROOT
-#echo debug: disabled coBranch.csh
-ssh kkstore $WEEKLYBLD/coBranch.csh
+echo debug: disabled coBranch.csh
+#./coBranch.csh
 if ( $status ) then
  exit 1
 endif
 
 echo
 # build branch sandbox on beta
-ssh hgwbeta $WEEKLYBLD/buildBeta.csh
+#echo debug: disabled build branch sandbox on beta
+./buildBeta.csh
 if ( $status ) then
  echo "build on beta failed for v$BRANCHNN"
  echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" galt heather kuhn ann kayla rhead
@@ -107,6 +113,14 @@ echo "build on beta done for v$BRANCHNN"
 echo "v$BRANCHNN built successfully on beta." | mail -s "'v$BRANCHNN Build complete on beta'" galt heather kuhn kent ann kayla rhead
 
 echo
+#echo debug: disabled build utils on beta
+./buildUtils.csh
+if ( $status ) then
+    exit 1
+endif
+
+echo
+#echo debug: disabled doRobots
 ./doRobots.csh
 if ( $status ) then
     echo "One or more of the robots had errors.  See the logs."
@@ -114,16 +128,13 @@ else
     echo "Robots done. No errors reported."
 endif
 
-echo
-ssh hgwbeta $WEEKLYBLD/buildUtils.csh
-if ( $status ) then
- exit 1
-endif
 
-echo
-buildUtils.csh
+# do not do this here this way - we might as well wait until
+#  later in the week to run this after most branch-tag moves will have been applied.
+#ssh hgwdev $WEEKLYBLD/buildCgis.csh
 if ( $status ) then
- exit 1
+    echo "build 32-bit CGIs on hgwdev failed"
+    exit 1
 endif
 
 exit 0
