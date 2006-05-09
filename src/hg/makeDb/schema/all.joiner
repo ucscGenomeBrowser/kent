@@ -1674,20 +1674,20 @@ identifier extFileId
     hg16.multizMm3Rn3GalGal2_phyloHMM.extFile
     hg15.multizMm3Rn2.extFile
     rn3.multizHg15Mm3.extFile
-    $gbd.multiz4way.extFile
-    $gbd.multiz5way.extFile
-    $gbd.multiz6way.extFile
-    $gbd.multiz7way.extFile
-    $gbd.multiz8way.extFile
-    $gbd.multiz9way.extFile
-    $gbd.multiz10way.extFile
-    $gbd.multiz11way.extFile
-    $gbd.multiz12way.extFile
-    $gbd.multiz17way.extFile
     $sacCer.multizYeast.extFile
     $dm.a_gambiae_mypa.extFile
     $dm.d_pseudoobscura_mypa.extFile
     $dm.d_yakuba_mypa.extFile
+    #$gbd.multiz4way.extFile
+    #$gbd.multiz5way.extFile
+    #$gbd.multiz6way.extFile
+    #$gbd.multiz7way.extFile
+    #$gbd.multiz8way.extFile
+    #$gbd.multiz9way.extFile
+    #$gbd.multiz10way.extFile
+    #$gbd.multiz11way.extFile
+    #$gbd.multiz12way.extFile
+    #$gbd.multiz17way.extFile
 
 identifier gbExtFileId
 "External file ID for GenBank incremental update system"
