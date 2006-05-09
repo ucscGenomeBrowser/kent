@@ -8907,7 +8907,7 @@ zcat gene_association.goa_uniprot.gz|\
 # Ask sys-admin to switch the database pointer go to point to go060330.
 
 ##########################################################################
-# GENEID GENE PREDICTIONS (DONE - 2006-04-21 - Hiram)
+# GENEID GENE PREDICTIONS (DONE - 2006-04-21 FIXED: 2006-05-09 - Hiram)
     ssh hgwdev
     mkdir /cluster/data/hg18/bed/geneid
     cd /cluster/data/hg18/bed/geneid
@@ -8921,13 +8921,40 @@ zcat gene_association.goa_uniprot.gz|\
     do
       perl -wpe 's/^(>chr\S+)/$1.1/' $F
     done >> geneid.fa
-
+    #	one of the files in this delivery, chr1.prot, did *not* have a
+    #	terminal <CR> character and it caused the next protein in the
+    #	next file processed, chr10.prot, to be a continuation of the
+    #	last protein in chr1.prot.  To check for this:
+    grep ">" geneid.fa | grep -v "^>"
+    #	shows a line:
+    #	AVSET>chr10_1.1
+    #	This turns out to have been the result of a truncated file.
+    #	Fetch that file again:
+    mv chr1.prot chr1.prot.orig
+    wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200603/geneid_v1.2/chr1.prot
+    #	That's better:
+    wc -l chr1.prot chr1.prot.orig
+    #	24494 chr1.prot
+    #	4524 chr1.prot.orig
+    rm chr1.prot.orig
+    #	run the above loop again to generate geneid.fa after:
+    rm geneid.fa
+    
     ldHgGene -gtf -genePredExt hg18 geneid *.gtf 
     #	Read 33410 transcripts in 275347 lines in 49 files
     #	33410 groups 49 seqs 1 sources 3 feature types
     #	33410 gene predictions
     hgPepPred hg18 generic geneidPep geneid.fa
 
+    #	verify same names in both tables:
+    awk '{print $1}' geneidPep.tab | sort > pep.names
+    awk '{print $1}' genePred.tab | sort > id.names
+    wc -l pep.names id.names
+    #	33410 pep.names
+    #	33410 id.names
+
+    comm -12 pep.names id.names | wc -l
+    #	33410
 
 ##########################################################################
 # BLASTZ/CHAIN/NET XENTRO2 (DONE 4/20/06 angie)
