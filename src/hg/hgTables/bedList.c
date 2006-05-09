@@ -19,7 +19,7 @@
 #include "wiggle.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.44 2006/05/04 00:30:28 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.45 2006/05/09 22:34:44 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -691,7 +691,7 @@ else if (doCt)
 	char headerText[512];
 	int redirDelay = 3;
 	safef(browserUrl, sizeof(browserUrl),
-	      "%s?db=%s", hgTracksName(), database);
+	      "%s?%s&db=%s", hgTracksName(), cartSidUrlString(cart), database);
 	safef(headerText, sizeof(headerText),
 	      "<META HTTP-EQUIV=\"REFRESH\" CONTENT=\"%d;URL=%s\">",
 	      redirDelay, browserUrl);
