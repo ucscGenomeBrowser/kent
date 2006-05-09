@@ -29,3 +29,28 @@ type psl xeno
 spectrum on
 blastRef hg17.blastKGRef02
 
+track chainSelf
+shortLabel Self Chain 
+longLabel $Organism Chained Self Alignments
+group varRep
+priority 163
+visibility hide
+color 100,50,0
+altColor 255,240,200
+chainColor Normalized Score
+spectrum on
+type chain canHg10
+otherDb canHg10
+
+track chainDasNov1
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 255.1
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+type chain dasNov1
+otherDb dasNov1
