@@ -12,7 +12,7 @@ O = $A.o
 include ../../../inc/cgi_build_rules.mk
 
 lib::
-	cd ../../../lib; make
+	cd ../../../lib && ${MAKE}
 
 compile: $O 
 	${CC} -o $A $O ${MYLIBS} ${L}
