@@ -22,6 +22,9 @@ struct customTrack
     boolean needsLift;		/* True if coordinates need lifting. */
     boolean fromPsl;		/* Track was derived from psl file. */
     boolean wiggle;		/* This is a wiggle track */
+    boolean dbTrack;		/* This track is in the trash database */
+    char *dbTrackName;		/* name of table in trash database */
+    char *dbTrackType;		/* name of table in trash database */
     char *wigFile;		/* name of .wig file in trash */
     char *wibFile;		/* name of .wib file in trash */
     char *wigAscii;		/* wiggle ascii data file name in trash .wia */
