@@ -54,6 +54,7 @@ maxHeightPixels 100:40:11
 wiggle phastCons7way
 yLineOnOff Off
 autoScaleDefault Off
+windowingFunction mean
 pairwise netBlastz
 speciesOrder hg17 mm5 monDom1 xenTro1 danRer2 tetNig1
 
