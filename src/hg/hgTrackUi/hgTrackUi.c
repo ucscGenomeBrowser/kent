@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.274 2006/05/08 23:37:31 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.275 2006/05/09 21:08:23 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1504,12 +1504,30 @@ char *treeImage = NULL;
 struct wigMafSpecies *wmSpecies, *wmSpeciesList = NULL;
 int group, prevGroup;
 int speciesCt = 0, groupCt = 1;
-int i;
+int i, j;
 char option[64];
+int fieldCt;
+char *fields[20];
 struct phyloTree *tree;
-char *consWiggle;
 char *consNames[10];
+char *consWiggle = trackDbSetting(tdb, CONS_WIGGLE);
 
+/* check for alternate conservation wiggles -- create dropbox */
+if (consWiggle)
+    {
+    safef(option, sizeof(option), "%s.%s", tdb->tableName, CONS_WIGGLE);
+    fieldCt = chopLine(consWiggle, fields);
+    if (fieldCt > 2)
+        {
+        puts("<P><B>Conservation:</B>" );
+        for (i=1, j=0; i < fieldCt; i+=2, j++)
+            consNames[j] = fields[i];
+        cgiMakeDropList(option, consNames, fieldCt/2,
+            cartCgiUsualString(cart, option, consNames[0]));
+        }
+    }
+
+/* determine species and groups for pairwise -- create checkboxes */
 if (speciesOrder == NULL && speciesGroup == NULL)
     errAbort(
       "Track %s missing required trackDb setting: speciesOrder or speciesGroup",
@@ -1676,23 +1694,9 @@ else
 #endif
     }
 
-consWiggle = trackDbSetting(tdb, CONS_WIGGLE);
-if (consWiggle)
+if (trackDbSetting(tdb, CONS_WIGGLE) != NULL)
     {
-    int i, j;
-    int fieldCt;
-    char *fields[20];
-
     puts("<P><B>Conservation graph:</B>" );
-    safef(option, sizeof(option), "%s.%s", tdb->tableName, CONS_WIGGLE);
-    fieldCt = chopLine(consWiggle, fields);
-    if (fieldCt > 2)
-        {
-        for (i=1, j=0; i < fieldCt; i+=2, j++)
-            consNames[j] = fields[i];
-        cgiMakeDropList(option, consNames, fieldCt/2,
-            cartCgiUsualString(cart, option, consNames[0]));
-        }
     wigUi(tdb);
     }
 }
