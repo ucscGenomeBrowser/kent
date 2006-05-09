@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.41 2005/09/19 23:01:10 kate Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.42 2006/05/09 02:43:48 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -488,17 +488,21 @@ if (userData != NULL && userData[0] != '\0')
             {}
     else if (sameString(dataFormat, POSITION_FORMAT))
         {
-        ct = liftOverPositions(oldTn.forCgi, chainHash, 
-                        minMatch, minBlocks,
-                        fudgeThick, mapped, unmapped, &errCt);
+/* minSizeT here and in liftOverChain.c/h has been renamed minChainT in liftOver.c */
+	ct = liftOverPositions(oldTn.forCgi, chainHash, 
+			minMatch, minBlocks, 0, minSizeQ,
+			minSizeT, 0, 
+			fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
+
+	
         }
     else if (sameString(dataFormat, BED_FORMAT))
         {
 /* minSizeT here and in liftOverChain.c/h has been renamed minChainT in liftOver.c */
         ct = liftOverBed(oldTn.forCgi, chainHash, 
-			 minMatch, minBlocks, 0, minSizeQ,
-			 minSizeT, 0,
-			 fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
+			minMatch, minBlocks, 0, minSizeQ,
+			minSizeT, 0,
+			fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
         }
     else
         /* programming error */
