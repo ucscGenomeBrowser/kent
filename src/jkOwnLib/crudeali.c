@@ -14,7 +14,7 @@
 #include "dnaseq.h"
 #include "crudeali.h"
 
-static char const rcsid[] = "$Id: crudeali.c,v 1.4 2006/03/14 19:02:31 angie Exp $";
+static char const rcsid[] = "$Id: crudeali.c,v 1.5 2006/05/09 01:05:55 markd Exp $";
 
 #define maxTileSize 16
 
@@ -473,7 +473,7 @@ int tOffset = 0;
 
 /* Handle big/little endian problem. */
 bits32 endianTest = 0x12345678;
-bits16 *endianPt = (bits16*)(&endianTest);
+bits16 *endianPt = (bits16*)(void*)(&endianTest);
 boolean needSwap = (*endianPt == 0x5678);
 int swapOffset[2];
 int swapIx = 0;

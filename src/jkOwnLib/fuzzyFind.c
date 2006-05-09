@@ -40,7 +40,7 @@
  * scanned for.
  */
 
-static char const rcsid[] = "$Id: fuzzyFind.c,v 1.16 2006/03/14 19:02:31 angie Exp $";
+static char const rcsid[] = "$Id: fuzzyFind.c,v 1.17 2006/05/09 01:05:55 markd Exp $";
 
 #include "common.h"
 #include "dnautil.h"
@@ -1135,7 +1135,7 @@ protoList = (struct protoGene *)ffMakeRightLinks((struct ffAli*)protoList);
 
 /* Lump together any other ones that can, starting with ones
  * that go together best. */
-ffAliSort((struct ffAli**)&protoList, cmpProtoNeedle);
+ffAliSort((struct ffAli**)(void*)&protoList, cmpProtoNeedle);
 lumpProtoGenes(&protoList, ns, hs, stringency );
 for (proto = protoList; proto != NULL; proto = proto->right)
     {
@@ -1145,7 +1145,7 @@ for (proto = protoList; proto != NULL; proto = proto->right)
     }
 
 /* Sort by score and return the best. */
-ffAliSort((struct ffAli **)&protoList, cmpProtoScore);
+ffAliSort((struct ffAli **)(void*)&protoList, cmpProtoScore);
 *rBestVal = protoList->score;
 return protoList->hits;
 }
