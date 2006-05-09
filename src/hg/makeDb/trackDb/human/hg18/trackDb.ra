@@ -1,3 +1,12 @@
+track geneid
+shortLabel Geneid Genes
+longLabel Geneid Gene Predictions
+group genes
+priority 49
+visibility hide
+color 0,90,100
+type genePred
+
 track mgcGenes
 shortLabel MGC Genes
 longLabel Mammalian Gene Collection Full ORF mRNAs
