@@ -378,7 +378,8 @@ longLabel TransMap Genes
 group genes
 priority 36.05
 visibility hide
-type genePred
+type psl
+noInherit on
 cdsDrawDefault genomic\ codons
 
     track transMapRefGene
@@ -387,16 +388,40 @@ cdsDrawDefault genomic\ codons
     longLabel TransMap RefSeq Genes
     color 12,12,120
     priority 1
+    noInherit on
     type genePred
     cdsDrawDefault genomic\ codons
 
-    track transMapGene
+    track transMapRefAli
     subTrack transMap
-    shortLabel TransMapMRna
+    shortLabel TransMapRefAli
+    longLabel TransMap RefSeq Alignments
+    color 120,12,120
+    priority 2
+    visibility hide
+    noInherit on
+    type psl
+    cdsDrawDefault genomic\ codons
+
+    track transMapMRnaGene
+    subTrack transMap
+    shortLabel TransMapMRnaGene
     longLabel TransMap protein coding mRNAs
     color 34,139,34
-    priority 2
+    priority 3
+    noInherit on
     type genePred
+    cdsDrawDefault genomic\ codons
+
+    track transMapMRnaAli
+    subTrack transMap
+    shortLabel TransMapMRnaAli
+    longLabel TransMap mRNA alignments
+    color 134,139,34
+    priority 4
+    visibility hide
+    noInherit on
+    type psl
     cdsDrawDefault genomic\ codons
 
 track genieAlt
