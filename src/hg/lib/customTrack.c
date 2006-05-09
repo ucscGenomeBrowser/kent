@@ -20,8 +20,9 @@
 #include "hui.h"
 #include "cheapcgi.h"
 #include "wiggle.h"
+#include "hgConfig.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.71 2006/03/09 18:26:57 angie Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.72 2006/05/09 23:21:23 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -156,6 +157,22 @@ char *val;
 
 AllocVar(track);
 track->tdb = tdb;
+/*	check if there is a db= specification which is asking for a
+ *	database instance of this track
+ */
+if ((val = hashFindVal(hash, "db")) != NULL)
+    {
+    char *db = cfgOptionDefault("customTracks.db", NULL);
+    char *host = cfgOptionDefault("customTracks.host", NULL);
+    char *user = cfgOptionDefault("customTracks.user", NULL);
+    char *pass = cfgOptionDefault("customTracks.password", NULL);
+    if (db && host && user && pass)
+	{
+	track->dbTrack = TRUE;
+	}
+    else
+	uglyf("warning: asked for database custom track type, but no db conf items in hg.conf<BR>\n");
+    }
 if ((val = hashFindVal(hash, "type")) != NULL)
     {
     if (sameString(val,"wiggle_0"))
@@ -1207,14 +1224,18 @@ while (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 }
 
-static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb)
+static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb,
+	boolean dbTrack)
 /* Write 'track' line that save trackDb info.  Only
  * write parts that aren't default. */
 {
 struct trackDb *def = tdbDefault();
 
-fprintf(f, "track");
-if (!sameString(tdb->shortLabel, def->shortLabel))
+if (dbTrack)
+    fprintf(f, "track\tdb=1");
+else
+    fprintf(f, "track");
+//if (!sameString(tdb->shortLabel, def->shortLabel))
     fprintf(f, "\t%s='%s'", "name", tdb->shortLabel);
 if (!sameString(tdb->longLabel, def->longLabel))
     fprintf(f, "\t%s='%s'", "description", tdb->longLabel);
@@ -1310,7 +1331,7 @@ for (track = trackList; track != NULL; track = track->next)
 	    }
 	}
 
-    saveTdbLine(f, fileName, track->tdb);
+    saveTdbLine(f, fileName, track->tdb, track->dbTrack);
 
 
     if (!track->wiggle)
