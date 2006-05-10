@@ -14,7 +14,5 @@ CREATE TABLE mafSummary (
     leftStatus char(1) not null,    # Gap/break annotation for preceding block
     rightStatus char(1) not null,   # Gap/break annotation for following block
               #Indices
-    INDEX(chrom(20),bin),
-    INDEX(chrom(20),chromStart),
-    INDEX(chrom(20),chromEnd)
+    INDEX(chrom(20),bin)
 );

@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: mafSummary.c,v 1.2 2005/04/20 01:15:06 kate Exp $";
+static char const rcsid[] = "$Id: mafSummary.c,v 1.3 2006/05/10 00:30:24 kate Exp $";
 
 void mafSummaryStaticLoad(char **row, struct mafSummary *ret)
 /* Load a row from mafSummary table into ret.  The contents of ret will
@@ -231,9 +231,7 @@ char *createString =
 "          #Indices\n"
 "       leftStatus char(1),     # Status WRT preceding block\n"
 "       rightStatus char(1),    # Status WRT following block\n"
-"    INDEX(chrom(%d),bin),\n"
-"    INDEX(chrom(%d),chromStart),\n"
-"    INDEX(chrom(%d),chromEnd)\n"
+"    INDEX(chrom(%d),bin)\n"
 ")\n";
 struct dyString *dy = newDyString(1024);
 dyStringPrintf(dy, createString, tableName, indexSize, indexSize, indexSize);
