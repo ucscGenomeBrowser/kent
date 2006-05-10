@@ -7,7 +7,7 @@
 #include "bed.h"
 #include "rnaGene.h"
 
-static char const rcsid[] = "$Id: hgRnaGenes.c,v 1.4 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgRnaGenes.c,v 1.5 2006/05/10 14:28:00 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -88,11 +88,8 @@ while (lineFileNext(lf, &line, &lineSize))
     {
     if (line[0] != '#')
 	{
-	int wordCount;
 	int i;
 	char *words[9];
-	struct hashEl *hel;
-	struct gffLine *gl;
 	for (i=0; i<8; ++i)
 	    {
 	    if ((words[i] = nextWord(&line)) == NULL)
