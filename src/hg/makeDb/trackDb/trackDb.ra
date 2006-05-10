@@ -312,6 +312,15 @@ visibility dense
 color 12,12,120
 type genePred refPep refMrna
 
+track augustusAbinito
+shortLabel Augustus Abinito
+longLabel Augustus Abinito Gene Predictions
+group genes
+priority 51.7
+visibility hide
+color 180,0,0
+type genePred
+
 track rgdEst
 shortLabel RGD EST
 longLabel RGD EST
