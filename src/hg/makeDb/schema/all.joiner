@@ -316,6 +316,7 @@ identifier vgSubmissionSource
 "Source of data - an external database, a contributor, etc."
     visiGene.submissionSource.id
     visiGene.submissionSet.submissionSource
+    visiGene.antibodySource.submissionSource exclude=0
 
 identifier vgSubmissionSet
 "Info on a batch of images submitted at once"
@@ -333,6 +334,7 @@ identifier vgAntibody
 "Info on an antibody"
     visiGene.antibody.id
     visiGene.probe.antibody exclude=0
+    visiGene.antibodySource.antibody exclude=0
 
 identifier vgBac
 "Info on a BAC"
@@ -381,6 +383,7 @@ identifier vgProbe
 "Information on a probe used to stain or hilight image"
     visiGene.probe.id
     visiGene.imageProbe.probe
+    visiGene.vgPrbMap.probe
     
 identifier vgProbeColor
 "Color - what color probe is in"
@@ -396,6 +399,8 @@ identifier vgImageFile
 "A biological image file"
     visiGene.imageFile.id
     visiGene.image.imageFile
+    visiGene.imageFileFwd.fromIf
+    visiGene.imageFileFwd.toIf
 
 identifier vgImage
 "Master identifier for a visiGene image.  May be just a pane in an image file."
@@ -417,6 +422,11 @@ identifier vgLifeStageScheme
 "A scheme for describing stages of development for an organism"
     visiGene.lifeStageScheme.id
     visiGene.lifeStage.lifeStageScheme
+
+identifier vgPrb
+"Permanent ID/Probe Sequence table"
+    visiGene.vgPrb.id
+    visiGene.vgPrbMap.vgPrb
 
 # Various types of gene predictions in UCSC Genome Browser
 
@@ -2121,6 +2131,10 @@ type geneAndProt
 tablesIgnored go
     instance_data
     source_audit
+
+tablesIgnored visiGene
+    vgPrbAli
+    vgPrbAliAll
 
 tablesIgnored $gbd
     NIAGene
