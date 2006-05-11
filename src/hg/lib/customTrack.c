@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.73 2006/05/11 19:03:27 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.74 2006/05/11 19:05:21 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1436,9 +1436,9 @@ for (track = trackList; track != NULL; track = track->next)
 	    {
 	    struct dyString *loadCommand = newDyString(0);
 	    char *db = cfgOptionDefault("customTracks.db", NULL);
-	    char *host = cfgOptionDefault("customTracks.host", NULL);
-	    char *user = cfgOptionDefault("customTracks.user", NULL);
-	    char *pass = cfgOptionDefault("customTracks.password", NULL);
+	    /*char *host = cfgOptionDefault("customTracks.host", * NULL);*/
+	    /*char *user = cfgOptionDefault("customTracks.user", NULL);  */
+	    /*char *pass = cfgOptionDefault("customTracks.password", NULL); */
 	    int sysResult = 0;
 
 	    dyStringPrintf(loadCommand, "loader/hgLoadBed -maxChromNameLength=15 %s %s %s",
