@@ -10,7 +10,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.38 2006/04/07 17:29:35 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.39 2006/05/11 19:04:10 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -24,6 +24,7 @@ boolean notItemRgb = FALSE;	/* do NOT parse field nine as r,g,b */
 boolean strict = FALSE;		/* do sanity checks on chrom start,end */
 int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
+int maxChromNameLength = 0;		/* specify to avoid chromInfo */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -39,6 +40,7 @@ static struct optionSpec optionSpecs[] = {
     {"bedGraph", OPTION_INT},
     {"notItemRgb", OPTION_BOOLEAN},
     {"strict", OPTION_BOOLEAN},
+    {"maxChromNameLength", OPTION_INT},
     {NULL, 0}
 };
 
@@ -63,6 +65,8 @@ errAbort(
   "   -bedGraph=N - wiggle graph column N of the input file as float dataValue\n"
   "               - bedGraph N is typically 4: -bedGraph=4\n"
   "               - and it must be the last column of the input file.\n"
+  "   -maxChromNameLength=N  - specify max chromName length to avoid\n"
+  "               - reference to chromInfo table\n"
   "   -strict  - do sanity testing,\n"
   "            - issue warnings when: chromStart >= chromEnd\n"
   "   -verbose=N - verbose level for extra information to STDERR"
@@ -246,8 +250,11 @@ else if (!oldTable)
     hSetDb(database);
     if (noLoad)
 	minLength=6;
+    else if (maxChromNameLength)
+	minLength = maxChromNameLength;
     else
 	minLength = hGetMinIndexLength();
+    verbose(2, "INDEX chrom length: %d\n", minLength);
 
     /* Create definition statement. */
     verbose(1, "Creating table definition for %s\n", track);
@@ -375,6 +382,7 @@ noLoad = optionExists("noLoad");
 bedGraph = optionInt("bedGraph",0);
 notItemRgb = optionExists("notItemRgb");
 if (notItemRgb) itemRgb = FALSE;
+maxChromNameLength = optionInt("maxChromNameLength",0);
 strict = optionExists("strict");
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
