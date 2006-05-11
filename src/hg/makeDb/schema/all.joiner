@@ -930,10 +930,12 @@ identifier estOrMrnaAccession typeOf=genbankAccession
     $gbd.gbStatus.acc unique
     $gbd.gbCdnaInfo.acc unique
     $gbd.imageClone.acc
-    $gbd,!ce2,!hg16,!hg17.altGraphX.mrnaRefs comma
+    $gbd,!ce2,!hg16,!hg17,!hg18,!mm7.altGraphX.mrnaRefs comma
     ce2.altGraphX.mrnaRefs comma minCheck=0.97
     hg16.altGraphX.mrnaRefs comma minCheck=0.99
     hg17.altGraphX.mrnaRefs comma minCheck=0.99
+    hg18.altGraphX.mrnaRefs comma minCheck=0.99
+    mm7.altGraphX.mrnaRefs comma minCheck=0.99
 
 identifier estAccession typeOf=estOrMrnaAccession
 "Genbank EST accession"
