@@ -249,7 +249,8 @@ color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-wiggle phastCons17way
+#wiggle phastCons17way
+wiggle phastCons17
 spanList 1
 yLineOnOff Off
 autoScaleDefault Off
