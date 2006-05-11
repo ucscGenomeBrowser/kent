@@ -29,12 +29,14 @@ Options:
           the selectFile.
   -inFmt=fmt - specify inFile format, same values as -selectFmt.
   -inCoordCols=spec - inFile is tab-separate with coordinates specified by
-          spec, in format described above.
+      spec, in format described above.
   -inCds - Use only CDS in the inFile
   -inRange - Use entire range instead of blocks of records in the inFile.
   -nonOverlapping - select non-overlaping instead of overlaping records
   -strand - must be on the same strand to be considered overlaping
   -excludeSelf - don't compare records with the same coordinates and name.
+      Warning: using only one of -inCds or -selectCds will result in different
+      coordinates for the same record.
   -idMatch - only select overlapping records if they have the same id
   -aggregate - instead of computing overlap bases on individual select entries, 
       compute it based on the total number of inFile bases overlap by selectFile
@@ -57,8 +59,8 @@ Options:
       record and selectOverlap is the fraction of the select record overlap by inFile
       records.  With -aggregate, output is:
          inId inOverlap inOverBases inBases
-  -statsOutputAll - like -statsOutput, only include all inFile records,
-   including ones that are not overlapped.
+  -statsOutputAll - like -statsOutput, however output all inFile records,
+      even ones that are not overlapped.
   -mergeOutput - output file with be a merge of the input file with the
       selectFile records that selected it.  The format is
          inRec<tab>selectRec.
