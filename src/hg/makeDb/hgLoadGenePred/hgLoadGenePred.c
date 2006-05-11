@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.2 2005/06/29 00:31:32 markd Exp $";
+static char const rcsid[] = "$Id: hgLoadGenePred.c,v 1.3 2006/05/11 00:55:22 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -27,7 +27,7 @@ void usage(char *msg)
 errAbort("%s\n"
          "hgLoadGenePred - Load up a mySQL database genePred table\n"
          "usage:\n"
-         "   hgLoadGenePred database table genePredFile\n"
+         "   hgLoadGenePred database table genePredFile [...]\n"
          "\n"
          "This will sort the input file by chromsome and validated\n"
          "the genePreds/\n"
@@ -49,6 +49,17 @@ unsigned fldOpts =  gGenePredExt ? genePredAllFlds : 0;
 char* sqlCmd = genePredGetCreateSql(table, fldOpts, sqlOpts, hGetMinIndexLength());
 sqlRemakeTable(conn, table, sqlCmd);
 freez(&sqlCmd);
+}
+
+struct genePred *loadGenes(int numGenePreds, char **genePredFiles)
+/* load and sort genes */
+{
+int i;
+struct genePred *genes = NULL;
+for (i = 0; i < numGenePreds; i++)
+    genes = slCat(genes, genePredReaderLoadFile(genePredFiles[i], NULL));
+slSort(&genes, genePredCmp);
+return genes;
 }
 
 boolean checkGene(struct genePred *gene)
@@ -89,28 +100,27 @@ if (checkGene(gene))
     }
 }
 
-void mkTabFile(char *genePredFile, FILE *tabFh)
-/* create a tab file to load from a genePred, optionally
- * adding binning or stripping extended fields if not requested */
+void mkTabFile(struct genePred *genes, FILE *tabFh)
+/* create a tab file to load, optionally adding binning or stripping extended
+ * fields if not requested */
 {
-struct genePred *genes = genePredReaderLoadFile(genePredFile, NULL);
 struct genePred *gene;
 
-slSort(&genes, genePredCmp);
 for (gene = genes; gene != NULL; gene = gene->next)
     copyGene(gene, tabFh);
-genePredFreeList(&genes);
 }
 
-void hgLoadGenePred(char *db, char *table, char *genePredFile)
+void hgLoadGenePred(char *db, char *table, int numGenePreds, char **genePredFiles)
 /* hgLoadGenePred - Load up a mySQL database genePred table. */
 {
+struct genePred *genes = loadGenes(numGenePreds, genePredFiles);
 struct sqlConnection *conn = sqlConnect(db);
 char *tmpDir = ".";
 FILE *tabFh = hgCreateTabFile(tmpDir, table);
 
 hSetDb(db);
-mkTabFile(genePredFile, tabFh);
+mkTabFile(genes, tabFh);
+genePredFreeList(&genes);
 setupTable(conn, table);
 hgLoadTabFile(conn, tmpDir, table, &tabFh);
 sqlDisconnect(&conn);
@@ -121,11 +131,11 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
-if (argc != 4)
+if (argc < 4)
     usage("wrong # args");
 gBin = optionExists("bin");
 gGenePredExt = optionExists("genePredExt");
 gSkipInvalid = optionExists("skipInvalid");
-hgLoadGenePred(argv[1], argv[2], argv[3]);
+hgLoadGenePred(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
