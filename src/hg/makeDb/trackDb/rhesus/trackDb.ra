@@ -39,3 +39,13 @@ visibility hide
 spectrum on
 type netAlign mm8 chainMm8
 otherDb mm8
+
+track netSyntenyCanFam2
+shortLabel $o_Organism Syn Net
+longLabel $o_Organism ($o_date/$o_db) Syntenic Alignment Net
+group compGeno
+priority 230.1
+visibility hide
+spectrum on
+type netAlign canFam2 chaincanFam2
+otherDb canFam2
