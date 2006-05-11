@@ -21,8 +21,9 @@
 #include "cheapcgi.h"
 #include "wiggle.h"
 #include "hgConfig.h"
+#include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.72 2006/05/09 23:21:23 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.73 2006/05/11 19:03:27 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -108,7 +109,7 @@ static int wigOptCount = sizeof(wigOptions) / sizeof(char *);
  *	the name=contents format in saveTdbLine()
  */
 static void parseWiggleSettings(struct trackDb *tdb, struct hash *hash)
-/*	parse the track line looking for only the wiggle variables,
+/*	parse the hash variables looking for only the wiggle variables,
  *	place them in the tdb->settings string in .ra format (one to a
  *	line, no = sign)
  */
@@ -131,6 +132,40 @@ for (i = 0; i < wigOptCount; ++i)
 	}
     }
 tdb->settings = dyStringCannibalize(&wigSettings);
+}
+
+static char *dbOptions[] =
+{
+    "dbTrackName",
+    "dbTrackType",
+};
+static int dbOptCount = sizeof(dbOptions) / sizeof(char *);
+
+static void parseDbSettings(struct trackDb *tdb, struct hash *hash)
+/*	parse the hash variables looking for only the database variables,
+ *	place them in the tdb->settings string in .ra format (one to a
+ *	line, no = sign)
+ */
+{
+struct dyString *dbSettings = newDyString(0);
+int i;
+char *format0="db=1\n";	/* first one is special */
+char *format1="%s %s\n";		/* all following, like this */
+
+/* always at least one setting, our special type variable */
+
+dyStringPrintf(dbSettings, format0);
+
+for (i = 0; i < dbOptCount; ++i)
+    {
+    char *val;
+    if ((val = hashFindVal(hash, dbOptions[i])) != NULL)
+	{
+printf("dbSetting: %s=%s<BR>\n", dbOptions[i], val);
+	    dyStringPrintf(dbSettings, format1, dbOptions[i], val);
+	}
+    }
+tdb->settings = dyStringCannibalize(&dbSettings);
 }
 
 char *customTrackTableFromLabel(char *label)
@@ -158,20 +193,61 @@ char *val;
 AllocVar(track);
 track->tdb = tdb;
 /*	check if there is a db= specification which is asking for a
- *	database instance of this track
+ *	database instance of this track.  Currently this is always db=1
  */
 if ((val = hashFindVal(hash, "db")) != NULL)
     {
-    char *db = cfgOptionDefault("customTracks.db", NULL);
-    char *host = cfgOptionDefault("customTracks.host", NULL);
-    char *user = cfgOptionDefault("customTracks.user", NULL);
-    char *pass = cfgOptionDefault("customTracks.password", NULL);
-    if (db && host && user && pass)
+    /*	for these tracks, we *must* have a type specified	*/
+    if ( (NULL != (val = hashFindVal(hash, "dbTrackType"))) ||
+	    (NULL != (val = hashFindVal(hash, "type"))) )
 	{
-	track->dbTrack = TRUE;
+	char *db = cfgOptionDefault("customTracks.db", NULL);
+	char *host = cfgOptionDefault("customTracks.host", NULL);
+	char *user = cfgOptionDefault("customTracks.user", NULL);
+	char *pass = cfgOptionDefault("customTracks.password", NULL);
+	if (db && host && user && pass)
+	    {
+	    char *dbStrings;
+	    if ((dbStrings = hashFindVal(hash, "dbTrackName")) == NULL)
+		{
+		char *baseName;
+		FILE *FH;
+		static struct tempName tn;
+		makeTempName(&tn, "ct", ".dbData.gz");
+		track->dbDataFile = cloneString(tn.forCgi);
+printf("request for data file to %s<BR>\n", track->dbDataFile);
+		track->dbTrackName = cloneString(tn.forCgi);
+		/*	SQL table names can not have - signs, change to _ */
+		subChar(track->dbTrackName, '-', '_');
+		stripString(track->dbTrackName, ".dbData.gz");
+		/*	remove the ../trash/ prefix from the file name	*/
+		baseName = rStringIn("/",track->dbTrackName);
+		if (baseName)
+		    track->dbTrackName = baseName + 1;
+		hashAdd(hash, "dbTrackName", cloneString(track->dbTrackName));
+		/*	the open and close here verifies file creation is OK	*/
+		FH= mustOpen(track->dbDataFile, "w");
+		carefulClose(&FH);
+		track->dbTrackType = cloneString(val);
+		hashAdd(hash, "dbTrackType", cloneString(track->dbTrackType));
+printf("creating db custom track %s<BR>\n", track->dbTrackName);
+		}
+	    else
+		{
+		track->dbTrackName = cloneString(dbStrings);
+		if ((dbStrings = hashFindVal(hash, "dbTrackType")) == NULL)
+		    errAbort("found dbTrackName but missing dbTrackType ?");
+		track->dbTrackType = cloneString(dbStrings);
+printf("reusing existing db custom track: %s<BR>\n",  track->dbTrackName);
+		}
+	    track->dbTrack = TRUE;
+	    parseDbSettings(tdb, hash);
+	    }
+	else
+	    uglyf("warning: asked for database custom track, but no db conf items in hg.conf<BR>\n");
 	}
-    else
-	uglyf("warning: asked for database custom track type, but no db conf items in hg.conf<BR>\n");
+	else
+	    uglyf("warning: asked for database custom track, but no type specified<BR>\n");
     }
 if ((val = hashFindVal(hash, "type")) != NULL)
     {
@@ -244,6 +320,8 @@ if (!track->wiggle)
 	    struct dyString *bedSettings = newDyString(0);
 	    char *format0="itemRgb On\n";
 
+	    if (tdb->settings)
+		dyStringPrintf(bedSettings, "%s\n", tdb->settings);
 	    dyStringPrintf(bedSettings, format0);
 	    tdb->settings = dyStringCannibalize(&bedSettings);
 	    }
@@ -296,7 +374,7 @@ if ((val = hashFindVal(hash, "offset")) != NULL)
 freeHashAndVals(&hash);
 
 return track;
-}
+}	/*	static struct customTrack *trackFromLine()	*/
 
 static void customDefaultRows(char *row[13])
 /* Set up default row for custom track, so it will make sense if have
@@ -799,8 +877,11 @@ struct lineFile *lf = NULL;
 float prio = 0.0;
 boolean pslIsProt = FALSE;
 boolean inWiggle = FALSE;	/* working on wiggle data */
+boolean inDbData = FALSE;	/* working on database data */
 unsigned trackDataLineCount = 0;
 FILE *wigAsciiFH = (FILE *)NULL;
+FILE *dbDataFH = (FILE *)NULL;
+struct pipeline *dbDataPL = (struct pipeline *)NULL;
 
 customDefaultRows(row);
 if (isFile)
@@ -866,35 +947,67 @@ for (;;)
 	    continue; /* may have expired wig, wib files */
 	    /* !!! next line of data !!!  */
 
-	if (track->wiggle)
+	/*	close previous track data file if in use	*/
+	if (inDbData && (dbDataPL != (struct pipeline *)NULL))
+	    {
+	    pipelineWait(dbDataPL);
+	    pipelineFree(&dbDataPL);
+	    }
+	inDbData = FALSE;
+	/*	close previous wiggle data file if in use	*/
+	if (inWiggle && (wigAsciiFH != (FILE *)NULL))
+	    carefulClose(&wigAsciiFH);
+	inWiggle = FALSE;
+
+	if (track->wiggle || track->dbTrack)
 	    {
 	    slAddTail(&trackList, track);
-	    if (track->wigAscii != (char *)NULL)
+	    if (track->dbTrack)
 		{
-		if (inWiggle && (wigAsciiFH != (FILE *)NULL))
-		    carefulClose(&wigAsciiFH);
-		wigAsciiFH = mustOpen(track->wigAscii, "w");
+		if (track->dbDataFile != (char *)NULL)
+		    {
+		    static char *cmd[] = {"gzip", "-c3", NULL};
+printf("compress pipeline to %s<BR>\n", track->dbDataFile);
+		    dbDataPL = pipelineOpen1(cmd, pipelineWrite,
+			track->dbDataFile);
+		    dbDataFH = pipelineFile(dbDataPL);
 #if defined(DEBUG)	/*	dbg	*/
-		/* allow file readability for debug	*/
-		chmod(track->wigAscii, 0666);
+		    /* allow file readability for debug	*/
+		    chmod(track->dbDataFile, 0666);
 #endif
+		    inDbData = TRUE;
+		    }
 		}
-	    inWiggle = TRUE;
-	    trackDataLineCount = 0;
+	    else
+		{
+		if (track->wigAscii != (char *)NULL)
+		    {
+		    wigAsciiFH = mustOpen(track->wigAscii, "w");
+    #if defined(DEBUG)	/*	dbg	*/
+		    /* allow file readability for debug	*/
+		    chmod(track->wigAscii, 0666);
+    #endif
+		    }
+		inWiggle = TRUE;
+		}
 	    }
 	else
 	    {
-	    if (inWiggle && (wigAsciiFH != (FILE *)NULL))
-		carefulClose(&wigAsciiFH);
-
 	    slAddTail(&trackList, track);
 	    inWiggle = FALSE;
-	    trackDataLineCount = 0;
+	    inDbData = FALSE;
 	    }
+	trackDataLineCount = 0;
 	continue;			/* !!! next line of data !!!  */
 	}
 
     ++trackDataLineCount;
+
+    if (inDbData && (dbDataFH != (FILE *)NULL))
+	{
+	fprintf(dbDataFH, "%s\n", line);
+	continue;			/* !!! next line of data !!!	*/
+	}
 
     if (inWiggle && (wigAsciiFH != (FILE *)NULL))
 	{
@@ -973,6 +1086,12 @@ printf(" wc:%d <BR>\n", wordCount);
 	}
     }	/* end of reading input */
 
+if (inDbData && (dbDataPL != (struct pipeline *)NULL))
+    {
+    pipelineWait(dbDataPL);
+    pipelineFree(&dbDataPL);
+    inDbData = FALSE;
+    }
 if (inWiggle && (wigAsciiFH != (FILE *)NULL))
     {
     carefulClose(&wigAsciiFH);
@@ -1015,7 +1134,7 @@ for (track = trackList; track != NULL; track = track->next)
 if (retBrowserLines != NULL)
     slReverse(retBrowserLines);
 return trackList;
-}
+}	/*	struct customTrack *customTracksParse()	*/
 
 /*	the following two routines are only referenced from the test
  *	section at the end of this file.  They are unused elsewhere.
@@ -1224,17 +1343,13 @@ while (lineFileNext(lf, &line, NULL))
 lineFileClose(&lf);
 }
 
-static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb,
-	boolean dbTrack)
+static void saveTdbLine(FILE *f, char *fileName, struct trackDb *tdb )
 /* Write 'track' line that save trackDb info.  Only
  * write parts that aren't default. */
 {
 struct trackDb *def = tdbDefault();
 
-if (dbTrack)
-    fprintf(f, "track\tdb=1");
-else
-    fprintf(f, "track");
+fprintf(f, "track");
 //if (!sameString(tdb->shortLabel, def->shortLabel))
     fprintf(f, "\t%s='%s'", "name", tdb->shortLabel);
 if (!sameString(tdb->longLabel, def->longLabel))
@@ -1315,8 +1430,24 @@ FILE *f = mustOpen(fileName, "w");
 
 for (track = trackList; track != NULL; track = track->next)
     {
-    if (track->wiggle)
+    if (track->wiggle || track->dbTrack)
 	{
+	if (track->dbDataFile)
+	    {
+	    struct dyString *loadCommand = newDyString(0);
+	    char *db = cfgOptionDefault("customTracks.db", NULL);
+	    char *host = cfgOptionDefault("customTracks.host", NULL);
+	    char *user = cfgOptionDefault("customTracks.user", NULL);
+	    char *pass = cfgOptionDefault("customTracks.password", NULL);
+	    int sysResult = 0;
+
+	    dyStringPrintf(loadCommand, "loader/hgLoadBed -maxChromNameLength=15 %s %s %s",
+		db, track->dbTrackName, track->dbDataFile);
+	    printf("%s<BR>\n", loadCommand->string);
+	    sysResult = system(dyStringCannibalize(&loadCommand));
+	    printf("sysResult: %d<BR>\n", sysResult);
+	    unlink(track->dbDataFile); /*	done with this, remove it */
+	    }
 	if (track->wigAscii)
 	    {
 	    double upperLimit, lowerLimit;
@@ -1331,17 +1462,17 @@ for (track = trackList; track != NULL; track = track->next)
 	    }
 	}
 
-    saveTdbLine(f, fileName, track->tdb, track->dbTrack);
+    saveTdbLine(f, fileName, track->tdb);
 
 
-    if (!track->wiggle)
+    if (!(track->wiggle || track->dbTrack))
 	{
 	for (bed = track->bedList; bed != NULL; bed = bed->next)
 	     saveBedPart(f, fileName, bed, track->fieldCount);
 	}
     }
 carefulClose(&f);
-}
+}	/*	void customTrackSave()	*/
 
 static char *testData = 
 "track shortLabel='Colors etc.' undefined=nothing longLabel='Some colors you might use'\n"
@@ -1377,4 +1508,3 @@ if (slCount(trackList) != 0)
 warn("Passed customTrackTest()");
 return TRUE;
 }
-
