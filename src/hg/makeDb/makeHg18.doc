@@ -8956,6 +8956,11 @@ zcat gene_association.goa_uniprot.gz|\
     comm -12 pep.names id.names | wc -l
     #	33410
 
+# QA NOTE (ASZ 5-11-2006) I dropped the geneidPep table and the reference
+# to it from the trackDb.ra file.  This functionality is now done on the
+# fly and this table is no longer needed.
+
+
 ##########################################################################
 # BLASTZ/CHAIN/NET XENTRO2 (DONE 4/20/06 angie)
     ssh kkstore02
