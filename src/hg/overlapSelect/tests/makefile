@@ -16,7 +16,8 @@ test:   pslSelectTests \
 	aggregateTests \
 	protTests \
 	idMatchTests \
-	rangeTests
+	rangeTests \
+	cds_id_out_gp
 
 ###
 # selecting PSLs
@@ -575,6 +576,11 @@ range_nostrand_gp_nonover_gp: mkout
 range_strand_gp_nonover_gp: mkout
 	${OVERSEL} -selectRange -strand -nonOverlapping input/rangeSel1.gp input/rangeIn1.gp output/$@.gp
 	${DIFF} expected/$@.gp output/$@.gp
+
+# bug were  -selectCds cause idOutput to ignore -excludeSelf
+cds_id_out_gp: mkout
+	${OVERSEL} -selectCds -idOutput -strand -excludeSelf input/cdsIdBugSelect.gp input/cdsIdBugIn.gp output/$@.ids
+	${DIFF} expected/$@.ids output/$@.ids
 
 mkout:
 	@${MKDIR} output
