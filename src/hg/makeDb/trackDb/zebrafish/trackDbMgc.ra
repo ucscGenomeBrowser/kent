@@ -1,6 +1,6 @@
 track mgcGenes
 shortLabel ZGC Genes
-longLabel Zerbafish Gene Collection Full ORF mRNAs
+longLabel Zebrafish Gene Collection Full ORF mRNAs
 group mgc
 priority 10
 visibility pack
@@ -11,7 +11,7 @@ cdsDrawDefault genomic\ codons
 
 track mgcIncompleteMrna
 shortLabel ZGC Incomplete
-longLabel Zerbafish Gene Collection Incomplete mRNAs
+longLabel Zebrafish Gene Collection Incomplete mRNAs
 group mgc
 priority 11
 visibility pack
@@ -22,7 +22,7 @@ cdsDrawDefault off
 
 track mgcPickedEst
 shortLabel ZGC In-progress
-longLabel Zerbafish Gene Collection ESTs in Sequencing Pipeline
+longLabel Zebrafish Gene Collection ESTs in Sequencing Pipeline
 group mgc
 priority 12
 visibility pack
@@ -32,7 +32,7 @@ cdsDrawDefault off
 
 track mgcFailedEst
 shortLabel ZGC Failed
-longLabel Zerbafish Gene Collection Failed ESTs
+longLabel Zebrafish Gene Collection Failed ESTs
 group mgc
 priority 13
 visibility pack
@@ -43,7 +43,7 @@ cdsDrawDefault off
 
 track mgcUnpickedEst
 shortLabel ZGC ESTs
-longLabel Zerbafish Gene Collection EST Libraries
+longLabel Zebrafish Gene Collection EST Libraries
 group mgc
 priority 14
 visibility pack
