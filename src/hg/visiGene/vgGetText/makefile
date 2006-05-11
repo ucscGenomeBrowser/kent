@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-DBS = mm7 hg17
+DBS = mm8 hg18
 
 O = vgGetText.o visiGene.o
 
