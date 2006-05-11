@@ -24,7 +24,8 @@ struct customTrack
     boolean wiggle;		/* This is a wiggle track */
     boolean dbTrack;		/* This track is in the trash database */
     char *dbTrackName;		/* name of table in trash database */
-    char *dbTrackType;		/* name of table in trash database */
+    char *dbTrackType;		/* type of data in this db table */
+    char *dbDataFile;		/* incoming data file to be loaded into db */
     char *wigFile;		/* name of .wig file in trash */
     char *wibFile;		/* name of .wib file in trash */
     char *wigAscii;		/* wiggle ascii data file name in trash .wia */
