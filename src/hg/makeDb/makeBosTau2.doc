@@ -991,6 +991,9 @@ bosTau2.genbank.est.xeno.load = no
 bosTau2.downloadDir = bosTau2
 bosTau2.perChromTables = no
 
+# N.B. above was changed later to include refseqs don't just copy this or a spell will be
+# cast on your descendents.
+
     # update /cluster/data/genbank/
     make etc-update
 
@@ -1013,6 +1016,13 @@ bosTau2.perChromTables = no
     cvs commit
     make etc-update
 
+# enabled native refSeq: 2006-05-11 markd
+    # set this in genbank.conf:
+    bosTau2.refseq.mrna.native.load = yes
+    # kick off an alignment to verify
+    ssh kkstore02
+    cd /cluster/data/genbank
+    (nice ./bin/gbAlignStep bosTau2)|&mail markd&
 
 
 # GENBANK DOWNLOAD FILES
