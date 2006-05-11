@@ -31,7 +31,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.275 2006/05/09 21:08:23 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.276 2006/05/11 00:49:36 markd Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -770,7 +770,7 @@ printf("<p><b>Filter out NMD targets.</b>");
 cgiMakeCheckBox(buff, nmdDefault);
 }
 
-void cdsColorOptions(struct trackDb *tdb, int value)
+void cdsColorOptions(struct trackDb *tdb, int numValues)
 /*Codon coloring options*/
 {
     char *drawOption;
@@ -778,7 +778,7 @@ void cdsColorOptions(struct trackDb *tdb, int value)
     char *cdsDrawDefault;
     char cdsColorVar[128];
 
-    boolean isGenePred = (value >= 0);
+    boolean isGenePred = (numValues >= 0);
     
     if (isGenePred)
         drawOptionsDefault = "enabled";
@@ -792,8 +792,8 @@ void cdsColorOptions(struct trackDb *tdb, int value)
     safef(cdsColorVar, 128, "%s.cds.draw", tdb->tableName );
     cdsDrawDefault = trackDbSettingOrDefault(tdb, "cdsDrawDefault", CDS_DRAW_DEFAULT);
     drawOption = cartUsualString(cart, cdsColorVar, cdsDrawDefault);
-    cdsColorDropDown(cdsColorVar, drawOption, value);
-    if(value>0)
+    cdsColorDropDown(cdsColorVar, drawOption, numValues);
+    if(numValues > 0)
         printf("<BR><BR><a href=%s>Help on codon coloring</a><br>",CDS_HELP_PAGE);
     else
         printf("<BR><BR><a href=%s>Help on mRNA coloring</a><br>",CDS_MRNA_HELP_PAGE);

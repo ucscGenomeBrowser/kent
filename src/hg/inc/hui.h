@@ -473,7 +473,7 @@ enum cdsColorOptEnum cdsColorStringToEnum(char *string);
 char *cdsColorEnumToString(enum cdsColorOptEnum x);
 /* Convert from enum to string representation. */
 
-void cdsColorDropDown(char *var, char *curVal, int size);
+void cdsColorDropDown(char *var, char *curVal, int numValues);
 /* Make drop down of options.*/
 
 /*** Some Stuff for the base position (ruler) controls ***/
