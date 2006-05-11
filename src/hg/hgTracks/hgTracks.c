@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1097 2006/05/09 00:18:31 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1098 2006/05/11 05:57:51 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3377,9 +3377,12 @@ char *getOrganismShort(struct sqlConnection *conn, char *acc)
 {
 int maxOrgSize = 7;
 char *org = getOrganism(conn, acc);
-org = firstWordInLine(org);
-if (strlen(org) > maxOrgSize)
-    org[maxOrgSize] = 0;
+if (org != NULL)
+    {
+    org = firstWordInLine(org);
+    if (strlen(org) > maxOrgSize)
+        org[maxOrgSize] = 0;
+    }
 return org;
 }
 
@@ -9815,29 +9818,29 @@ void getTransMapItemLabel(struct sqlConnection *conn,
                           struct linkedFeatures *lf)
 /* get label for a transMap item */
 {
-static boolean checkForOrgTable = FALSE, haveOrgTable = FALSE;
+static struct sqlConnection *defDbConn = NULL;
 boolean labelStarted = FALSE;
 struct dyString *label = dyStringNew(64);
 char *org = NULL, acc[256], *dot;
 
-/* need gbCdnaInfo and organism table to organism label */
-if (!checkForOrgTable)
-    {
-    haveOrgTable = hTableExists("gbCdnaInfo");
-    checkForOrgTable = TRUE;
-    }
 
 /* remove version and qualifier */
 safef(acc, sizeof(acc), "%s", lf->name);
 dot = strchr(acc, '.');
 if (dot != NULL)
     *dot = '\0';
-if (haveOrgTable)
+
+/* get organism prefix using defaultDb, since we might not have genbank,
+ * or have xeno genbank.  However the db caching mechanism only handles
+ * 2 databases, so just open a connection on first use and keep it open. */
+if (defDbConn == NULL)
     {
-    org = getOrganismShort(conn, acc);
-    if (org != NULL)
-        dyStringPrintf(label, "%s ", org);
+    defDbConn = sqlConnect(hDefaultDb());
     }
+org = getOrganismShort(defDbConn, acc);
+if (org != NULL)
+    dyStringPrintf(label, "%s ", org);
+
 if (useGeneName)
     {
     char *gene = getGeneName(conn, acc);

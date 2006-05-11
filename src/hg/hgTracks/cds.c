@@ -17,7 +17,7 @@
 #include "genbank.h"
 #include "hgTracks.h"
 
-static char const rcsid[] = "$Id: cds.c,v 1.38 2006/03/06 17:52:47 angie Exp $";
+static char const rcsid[] = "$Id: cds.c,v 1.39 2006/05/11 05:57:51 markd Exp $";
 
 static void drawScaledBoxSampleWithText(struct vGfx *vg, 
                                         int chromStart, int chromEnd,
@@ -321,24 +321,22 @@ static void getMrnaCds(char *acc, struct genbankCds* cds)
 /* Get cds start and stop from genbank, if available. Otherwise it
  * does nothing */
 {
-char query[256];
-struct sqlConnection *conn;
-struct sqlResult *sr;
-char **row;
-
-conn = hAllocConn();
-sprintf(query, "select cds from gbCdnaInfo where acc = '%s'", acc);
-sr = sqlGetResult(conn, query);
-if((row = sqlNextRow(sr)) != NULL)
+static boolean first = TRUE, haveGbCdnaInfo = FALSE;
+if (first)
     {
-    sprintf(query, "select name from cds where id = '%d'", atoi(row[0]));
-    sqlFreeResult(&sr);
-    sr = sqlGetResult(conn, query);
-    if((row = sqlNextRow(sr)) != NULL)
-	genbankCdsParse(row[0], cds);
+    haveGbCdnaInfo = hTableExists("gbCdnaInfo");
+    first = FALSE;
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
+if (haveGbCdnaInfo)
+    {
+    char query[256], buf[256], *cdsStr;
+    struct sqlConnection *conn = hAllocConn();
+    sprintf(query, "select cds.name from gbCdnaInfo,cds where (acc = '%s') and (gbCdnaInfo.cds = cds.id)", acc);
+    cdsStr = sqlQuickQuery(conn, query, buf, sizeof(buf));
+    if (cdsStr != NULL)
+        genbankCdsParse(cdsStr, cds);
+    hFreeConn(&conn);
+    }
 }
 
 static void getHiddenGaps(struct psl *psl, unsigned *gaps)
