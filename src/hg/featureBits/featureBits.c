@@ -15,7 +15,7 @@
 #include "chain.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: featureBits.c,v 1.44 2006/02/24 22:05:40 hiram Exp $";
+static char const rcsid[] = "$Id: featureBits.c,v 1.45 2006/05/11 00:47:36 markd Exp $";
 
 static struct optionSpec optionSpecs[] =
 /* command line option specifications */
@@ -161,13 +161,24 @@ return ret;
 boolean isFileType(char *file, char *suffix)
 /* determine if file ends with .suffix, or .suffix.gz */
 {
-if (endsWith(file, suffix))
+char cleaned[PATH_LEN], *p;
+
+/* remove any : qualifiers */
+strcpy(cleaned, file);
+p = strrchr (cleaned, '/');
+if (p == NULL)
+    p = cleaned;
+p = strchr(p, ':');
+if (p != NULL)
+    *p = '\0';
+
+if (endsWith(cleaned, suffix))
     return TRUE;
 else
     {
     char sbuf[64];
     safef(sbuf, sizeof(sbuf), "%s.gz", suffix);
-    return endsWith(file, sbuf);
+    return endsWith(cleaned, sbuf);
     }
 }
 
