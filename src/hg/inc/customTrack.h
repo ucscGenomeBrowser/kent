@@ -19,6 +19,7 @@ struct customTrack
     struct trackDb *tdb;	/* TrackDb description of track. */
     struct bed *bedList;	/* List of beds. */
     int fieldCount;		/* Number of fields in bed. */
+    int maxChromName;		/* max chromName length	*/
     boolean needsLift;		/* True if coordinates need lifting. */
     boolean fromPsl;		/* Track was derived from psl file. */
     boolean wiggle;		/* This is a wiggle track */
