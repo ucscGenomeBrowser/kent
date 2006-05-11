@@ -80,9 +80,10 @@ The format of the type fields:
    [mrna_table] - optional associated representative mRNA table
    [autoTranslate] - if set to 0 then translated protein won't be generated
       in the details page.
-   Optional field to be defined elsewhere in the trackDb.ra record:
+   Optional fields to be defined elsewhere in the trackDb.ra record:
 	itemAttrTbl - table used to color individual items in a track, 
-                      selected by name and locations.  
+                      selected by name and locations.
+                     
 8. type maf 
     A type of multiple alignment track, becoming obsolete, 
         to be replaced by wigMaf 
