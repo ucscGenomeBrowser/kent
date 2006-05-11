@@ -6234,3 +6234,22 @@ _EOF_
     rm *.log
     # test by converting a region using the "convert" link on
     # the browser, and comparing to blat of the same region
+
+############################################################################
+##  BLASTZ swap from panTro2 alignments (DONE 2006-05-07 markd)
+    ssh hgwdev64
+    mkdir /cluster/data/danRer3/bed/blastz.panTro2.swap
+    ln -s blastz.panTro2.swap /cluster/data/danRer3/bed/blastz.panTro2
+    cd /cluster/data/danRer3/bed/blastz.panTro2.swap
+    
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -stop=net \
+	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	/cluster/data/panTro2/bed/blastz.danRer3/DEF >& swap.out&
+
+   # create the net files
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/blastz.panTro2.swap/axtChain
+    nice netClass -verbose=0 -noAr noClass.net danRer3 panTro2 danRer3.panTro2.net
+    nice gzip danRer3.panTro2.net
+
+
