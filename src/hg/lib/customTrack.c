@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.74 2006/05/11 19:05:21 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.75 2006/05/11 22:31:24 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -134,10 +134,30 @@ for (i = 0; i < wigOptCount; ++i)
 tdb->settings = dyStringCannibalize(&wigSettings);
 }
 
+static char *trackLoader(char *type)
+/*	return string that is the loader command for this type of track
+ *	NULL return means unrecognized type
+ */
+{
+static char loader[64];
+
+if (startsWith("bed", type))
+    safef(loader, sizeof(loader), "hgLoadBed");
+else if (startsWith("wiggle_0", type))
+    safef(loader, sizeof(loader), "wigLoader");
+else
+    {
+    uglyf("unrecognized custom track type: '%s'<BR>\n", type);
+    return ((char *)NULL);
+    }
+
+return (loader);
+}
+
 static char *dbOptions[] =
 {
+    "db",
     "dbTrackName",
-    "dbTrackType",
 };
 static int dbOptCount = sizeof(dbOptions) / sizeof(char *);
 
@@ -149,20 +169,18 @@ static void parseDbSettings(struct trackDb *tdb, struct hash *hash)
 {
 struct dyString *dbSettings = newDyString(0);
 int i;
-char *format0="db=1\n";	/* first one is special */
-char *format1="%s %s\n";		/* all following, like this */
+char *format0="%s %s\n";		/* all are like this */
+char *val;
 
-/* always at least one setting, our special type variable */
-
-dyStringPrintf(dbSettings, format0);
+/* always at least one setting, our special db=type variable,
+	already proven to exist in the hash during previous processin */
 
 for (i = 0; i < dbOptCount; ++i)
     {
-    char *val;
     if ((val = hashFindVal(hash, dbOptions[i])) != NULL)
 	{
 printf("dbSetting: %s=%s<BR>\n", dbOptions[i], val);
-	    dyStringPrintf(dbSettings, format1, dbOptions[i], val);
+	    dyStringPrintf(dbSettings, format0, dbOptions[i], val);
 	}
     }
 tdb->settings = dyStringCannibalize(&dbSettings);
@@ -193,18 +211,19 @@ char *val;
 AllocVar(track);
 track->tdb = tdb;
 /*	check if there is a db= specification which is asking for a
- *	database instance of this track.  Currently this is always db=1
+ *	database instance of this track, and it specifies the type.
  */
 if ((val = hashFindVal(hash, "db")) != NULL)
     {
-    /*	for these tracks, we *must* have a type specified	*/
-    if ( (NULL != (val = hashFindVal(hash, "dbTrackType"))) ||
-	    (NULL != (val = hashFindVal(hash, "type"))) )
+    /*	for these tracks, we *must* have db connections specified	*/
+    char *db = cfgOptionDefault("customTracks.db", NULL);
+    char *host = cfgOptionDefault("customTracks.host", NULL);
+    char *user = cfgOptionDefault("customTracks.user", NULL);
+    char *pass = cfgOptionDefault("customTracks.password", NULL);
+    track->dbTrackType = cloneString(val);
+    /*	verify known track type	*/
+    if (NULL != trackLoader(track->dbTrackType))
 	{
-	char *db = cfgOptionDefault("customTracks.db", NULL);
-	char *host = cfgOptionDefault("customTracks.host", NULL);
-	char *user = cfgOptionDefault("customTracks.user", NULL);
-	char *pass = cfgOptionDefault("customTracks.password", NULL);
 	if (db && host && user && pass)
 	    {
 	    char *dbStrings;
@@ -215,7 +234,7 @@ if ((val = hashFindVal(hash, "db")) != NULL)
 		static struct tempName tn;
 		makeTempName(&tn, "ct", ".dbData.gz");
 		track->dbDataFile = cloneString(tn.forCgi);
-printf("request for data file to %s<BR>\n", track->dbDataFile);
+    printf("request for data file to %s<BR>\n", track->dbDataFile);
 		track->dbTrackName = cloneString(tn.forCgi);
 		/*	SQL table names can not have - signs, change to _ */
 		subChar(track->dbTrackName, '-', '_');
@@ -228,28 +247,21 @@ printf("request for data file to %s<BR>\n", track->dbDataFile);
 		/*	the open and close here verifies file creation is OK	*/
 		FH= mustOpen(track->dbDataFile, "w");
 		carefulClose(&FH);
-		track->dbTrackType = cloneString(val);
-		hashAdd(hash, "dbTrackType", cloneString(track->dbTrackType));
-printf("creating db custom track %s<BR>\n", track->dbTrackName);
+    printf("creating db custom track %s<BR>\n", track->dbTrackName);
 		}
 	    else
 		{
 		track->dbTrackName = cloneString(dbStrings);
-		if ((dbStrings = hashFindVal(hash, "dbTrackType")) == NULL)
-		    errAbort("found dbTrackName but missing dbTrackType ?");
-		track->dbTrackType = cloneString(dbStrings);
-printf("reusing existing db custom track: %s<BR>\n",  track->dbTrackName);
+    printf("reusing existing db custom track: %s<BR>\n",  track->dbTrackName);
 		}
 	    track->dbTrack = TRUE;
 	    parseDbSettings(tdb, hash);
 	    }
 	else
-	    uglyf("warning: asked for database custom track, but no db conf items in hg.conf<BR>\n");
+	    uglyf("asked for database custom track, but no db conf items in hg.conf<BR>\n");
 	}
-	else
-	    uglyf("warning: asked for database custom track, but no type specified<BR>\n");
     }
-if ((val = hashFindVal(hash, "type")) != NULL)
+if ((!track->dbTrack) && ((val = hashFindVal(hash, "type")) != NULL))
     {
     if (sameString(val,"wiggle_0"))
 	{
@@ -314,12 +326,12 @@ if (!track->wiggle)
     {
     if ((val = hashFindVal(hash, "itemRgb")) != NULL)
 	{
-	/*	There are no other tdb->settings for non-Wiggle track types */
 	if (differentWord(val,"Off"))
 	    {
 	    struct dyString *bedSettings = newDyString(0);
 	    char *format0="itemRgb On\n";
 
+	    /*	get existing settings if any to append to	*/
 	    if (tdb->settings)
 		dyStringPrintf(bedSettings, "%s\n", tdb->settings);
 	    dyStringPrintf(bedSettings, format0);
@@ -371,6 +383,8 @@ else
     }
 if ((val = hashFindVal(hash, "offset")) != NULL)
     track->offset = atoi(val);
+if ((val = hashFindVal(hash, "maxChromName")) != NULL)
+    track->maxChromName = sqlSigned(val);
 freeHashAndVals(&hash);
 
 return track;
@@ -944,7 +958,7 @@ for (;;)
     if (parseTrackLine(line, lineIx, &track))
         {
 	if (track == (struct customTrack *)NULL)
-	    continue; /* may have expired wig, wib files */
+	    continue; /* may have expired data files or db tables */
 	    /* !!! next line of data !!!  */
 
 	/*	close previous track data file if in use	*/
@@ -958,6 +972,7 @@ for (;;)
 	if (inWiggle && (wigAsciiFH != (FILE *)NULL))
 	    carefulClose(&wigAsciiFH);
 	inWiggle = FALSE;
+
 
 	if (track->wiggle || track->dbTrack)
 	    {
@@ -1005,6 +1020,13 @@ printf("compress pipeline to %s<BR>\n", track->dbDataFile);
 
     if (inDbData && (dbDataFH != (FILE *)NULL))
 	{
+	char *firstSpace = skipToSpaces(line);
+	int chrLength = 0;
+	if (firstSpace)
+	    chrLength=(int)(firstSpace-line);
+	else
+	    chrLength=strlen(line);
+	track->maxChromName = max(chrLength,track->maxChromName);
 	fprintf(dbDataFH, "%s\n", line);
 	continue;			/* !!! next line of data !!!	*/
 	}
@@ -1430,22 +1452,50 @@ FILE *f = mustOpen(fileName, "w");
 
 for (track = trackList; track != NULL; track = track->next)
     {
+    boolean validTrack = TRUE;
     if (track->wiggle || track->dbTrack)
 	{
 	if (track->dbDataFile)
 	    {
 	    struct dyString *loadCommand = newDyString(0);
 	    char *db = cfgOptionDefault("customTracks.db", NULL);
-	    /*char *host = cfgOptionDefault("customTracks.host", * NULL);*/
-	    /*char *user = cfgOptionDefault("customTracks.user", NULL);  */
-	    /*char *pass = cfgOptionDefault("customTracks.password", NULL); */
+	    char *host = cfgOptionDefault("customTracks.host", NULL);
+	    char *user = cfgOptionDefault("customTracks.user", NULL);
+	    char *pass = cfgOptionDefault("customTracks.password", NULL);
+	    char envHost[128];
+	    char envUser[64];
+	    char envPass[64];
 	    int sysResult = 0;
 
-	    dyStringPrintf(loadCommand, "loader/hgLoadBed -maxChromNameLength=15 %s %s %s",
-		db, track->dbTrackName, track->dbDataFile);
+	    /*	the different loaders require different arguments */
+	    if (startsWith("bed", track->dbTrackType))
+		dyStringPrintf(loadCommand,
+		    "loader/%s -verbose=0 -maxChromNameLength=%d %s %s %s",
+			trackLoader(track->dbTrackType), track->maxChromName,
+			    db, track->dbTrackName, track->dbDataFile);
+	    else if (startsWith("wiggle_0", track->dbTrackType))
+		dyStringPrintf(loadCommand,
+		    "loader/%s -verbose=0 -maxChromNameLength=%d %s %s %s",
+			trackLoader(track->dbTrackType), track->maxChromName,
+			    db, track->dbTrackName, track->dbDataFile);
+
 	    printf("%s<BR>\n", loadCommand->string);
+	    safef(envHost, sizeof(envHost), "HGDB_HOST=%s", host);
+	    putenv(envHost);
+	    safef(envUser, sizeof(envUser), "HGDB_USER=%s", user);
+	    putenv(envUser);
+	    safef(envPass, sizeof(envPass), "HGDB_PASSWORD=%s", pass);
+	    putenv(envPass);
 	    sysResult = system(dyStringCannibalize(&loadCommand));
+	    unsetenv("HGDB_HOST");
+	    unsetenv("HGDB_USER");
+	    unsetenv("HGDB_PASSWORD");
 	    printf("sysResult: %d<BR>\n", sysResult);
+	    if (0 != sysResult)
+		{
+		uglyf("custom track '%s' failed database loading<BR>\n", track->tdb->shortLabel);
+		validTrack = FALSE;
+		}
 	    unlink(track->dbDataFile); /*	done with this, remove it */
 	    }
 	if (track->wigAscii)
@@ -1462,13 +1512,15 @@ for (track = trackList; track != NULL; track = track->next)
 	    }
 	}
 
-    saveTdbLine(f, fileName, track->tdb);
-
-
-    if (!(track->wiggle || track->dbTrack))
+    if (validTrack)
 	{
-	for (bed = track->bedList; bed != NULL; bed = bed->next)
-	     saveBedPart(f, fileName, bed, track->fieldCount);
+	saveTdbLine(f, fileName, track->tdb);
+
+	if (!(track->wiggle || track->dbTrack))
+	    {
+	    for (bed = track->bedList; bed != NULL; bed = bed->next)
+		 saveBedPart(f, fileName, bed, track->fieldCount);
+	    }
 	}
     }
 carefulClose(&f);
