@@ -45,6 +45,9 @@ struct sqlConnection *sqlConnectRemote(char *host,
 	char *user, char *password, char *database);
 /* Connect to database somewhere as somebody. */
 
+struct sqlConnection *sqlCtConn(boolean abort);
+/* Connect to customTrash database, optionally abort on failure */
+
 struct hash *sqlHashOfDatabases();
 /* Get hash table with names of all databases that are online. */
 
