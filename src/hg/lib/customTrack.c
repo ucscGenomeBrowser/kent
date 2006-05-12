@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.77 2006/05/12 19:34:59 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.78 2006/05/12 22:26:14 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -181,7 +181,6 @@ for (i = 0; i < dbOptCount; ++i)
     {
     if ((val = hashFindVal(hash, dbOptions[i])) != NULL)
 	{
-printf("dbSetting: %s=%s<BR>\n", dbOptions[i], val);
 	    dyStringPrintf(dbSettings, format0, dbOptions[i], val);
 	}
     }
@@ -236,7 +235,6 @@ if ((val = hashFindVal(hash, "db")) != NULL)
 		static struct tempName tn;
 		makeTempName(&tn, "ct", ".dbData.gz");
 		track->dbDataFile = cloneString(tn.forCgi);
-    printf("request for data file to %s<BR>\n", track->dbDataFile);
 		track->dbTrackName = cloneString(tn.forCgi);
 		/*	SQL table names can not have - signs, change to _ */
 		subChar(track->dbTrackName, '-', '_');
@@ -249,16 +247,14 @@ if ((val = hashFindVal(hash, "db")) != NULL)
 		/*	the open and close here verifies file creation is OK	*/
 		FH= mustOpen(track->dbDataFile, "w");
 		carefulClose(&FH);
-    printf("creating db custom track %s<BR>\n", track->dbTrackName);
 		}
 	    else
 		{
-printf("reusing existing db custom track: %s<BR>\n",  track->dbTrackName);
 		track->dbTrackName = cloneString(dbStrings);
 		if ((val = hashFindVal(hash, "fieldCount")) != NULL)
 		    track->fieldCount = sqlSigned(val);
 		else
-printf("warning: no fieldCount value found for db custom track<BR>\n");
+		    errAbort("no fieldCount value found for db custom track<BR>\n");
 
 		}
 	    track->dbTrack = TRUE;
@@ -533,8 +529,14 @@ printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", line
     i = bed->blockCount-1;
     if ((bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i]) !=
 	bed->chromEnd)
+	{
+	printf("chromStart %d + chromStarts[last] %d + blockSizes[last] %d = %d != chromEnd %d<BR>\n",
+		bed->chromStart, bed->chromStarts[i], bed->blockSizes[i],
+		bed->chromStart+bed->chromStarts[i]+bed->blockSizes[i],
+		bed->chromEnd);
 	errAbort("line %d of custom input: BED blocks must span chromStart to chromEnd.  (chromStart + chromStarts[last] + blockSizes[last]) must equal chromEnd.",
 		 lineIx);
+	}
     }
 return bed;
 }
@@ -989,7 +991,6 @@ for (;;)
 		if (track->dbDataFile != (char *)NULL)
 		    {
 		    static char *cmd[] = {"gzip", "-c3", NULL};
-printf("compress pipeline to %s<BR>\n", track->dbDataFile);
 		    dbDataPL = pipelineOpen1(cmd, pipelineWrite,
 			track->dbDataFile);
 		    dbDataFH = pipelineFile(dbDataPL);
@@ -1496,7 +1497,6 @@ for (track = trackList; track != NULL; track = track->next)
 			trackLoader(track->dbTrackType), track->maxChromName,
 			    db, track->dbTrackName, track->dbDataFile);
 
-	    printf("%s<BR>\n", loadCommand->string);
 	    safef(envHost, sizeof(envHost), "HGDB_HOST=%s", host);
 	    putenv(envHost);
 	    safef(envUser, sizeof(envUser), "HGDB_USER=%s", user);
@@ -1507,7 +1507,6 @@ for (track = trackList; track != NULL; track = track->next)
 	    unsetenv("HGDB_HOST");
 	    unsetenv("HGDB_USER");
 	    unsetenv("HGDB_PASSWORD");
-	    printf("sysResult: %d<BR>\n", sysResult);
 	    if (0 != sysResult)
 		{
 		uglyf("custom track '%s' failed database loading<BR>\n", track->tdb->shortLabel);
