@@ -2721,7 +2721,7 @@ searchPriority 50
 
 searchTable sgpGene
 searchType genePred
-termRegex chr[^_]+_(random_|hla_hap[0-9]_)?[0-9]+\.[0-9]+
+termRegex chr[^_]+_(random_|h2_hap[0-9]_|cox_hap[0-9]_|qbl_hap[0-9]_|hla_hap[0-9]_)?[0-9]+(\.[0-9]+)?
 searchPriority 50
 
 searchTable geneid
