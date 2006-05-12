@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.58 2006/05/05 21:26:30 fanhsu Exp $"
+#	"$Id: makeMm7.doc,v 1.59 2006/05/12 17:46:20 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12057,4 +12057,102 @@ est                   185259362 41486850  6.51%  22.39%  89.30% 89.30% 89.30%
     hgsql mm7 -e 'drop table sgpPep'
     featureBits mm7 -enrichment refGene:CDS sgpGene
 refGene:CDS 1.059%, sgpGene 1.451%, both 0.912%, cover 86.18%, enrich 59.39x
+
+###########################################################################
+#### LOAD ENSEMBL GENES (DONE 5/12/06, Fan)
+#	needed for Gene Sorter procedure below
+#	Ensembl released Mouse build 34 the week of August 10th, 2005
+   mkdir -p /cluster/store5/mm7/bed/ensGene
+#   ln -s /cluster/store5/mm7/bed/ensGene /cluster/data/mm7/bed
+   cd /cluster/data/mm7/bed/ensGene
+
+        # Get the Ensembl BioMart at http://www.ensembl.org/Multi/martview
+        # Choose Ensembl 38 and Mus musculus genes (NCBIM35), click next
+        # Follow this sequence through the pages:
+1) Select "Known genes" in the Gene section. Hit next.
+2) Uncheck everything on "Filter" page. Then hit next.
+        3) Select "Structures". 
+        4) Choose GTF as the output, choose gzip compression, name the
+	output file ensGeneMm7.gtf.gz and then hit Export
+
+# Ensembl handles random chromosomes differently than us, so we
+# strip this data.  Fortunately it just loses a couple of genes.
+    gzip -d ensGeneMm7.gtf.gz
+    cat ensGeneMm7.gtf | grep -v ^6_DR51 | grep -v NT_ > unrandom.gtf
+#	Let's see how much it loses:
+# 614986 8609804 87362912 ensGeneMm7.gtf
+# 603148 8444072 85668522 unrandom.gtf
+
+# Add "chr" to front of each line in the gene data gtf file to make 
+# it compatible with ldHgGene
+
+    sed -e "s/^/chr/" unrandom.gtf | sed -e "s/chrMT/chrM/"| sed -e 's/\..\"/\"/g' > ensGene.gtf
+    ldHgGene mm7 ensGene ensGene.gtf
+# Read 33902 transcripts in 603148 lines in 1 files
+#   33902 groups 22 seqs 1 sources 4 feature types
+# 33902 gene predictions
+
+#	save space, gzip them:
+    gzip unrandom.gtf
+    gzip ensGene.gtf
+
+# ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.tsv.gz
+    gunzip ensGtp.tsv.gz
+    hgsql mm7 < ~/kent/src/hg/lib/ensGtp.sql
+    # remove header line from ensGtp.txt
+    echo "load data local infile 'ensGtp.tsv' into table ensGtp ignore 1 lines" | hgsql -N mm7
+
+# Load Ensembl peptides:
+    # Get them from ensembl as above in the gene section except for
+    # Page 3) Choose the "Sequences" box. 
+    # Page 4) check Peptide, then Ensembl Gene ID, Ensembl Transcript ID, 
+    # and Ensembl Peptide ID, uncheck others (chrom, bioType, etc).  Format = FASTA.
+    # Save file as ensemblPep5.fa.gz (several previous trials failed).
+   
+   gunzip ensemblPep5.fa.gz   
+   cat ensemblPep5.fasta | faToTab -type=protein stdin stdout | grep -v SEQXENCEXNAVAILAXLE > j.tab
+   cat j.tab |grep -v "Reading"|awk '{print ">" $1;print $2}' > ensPep.fa
+   hgPepPred mm7 ensembl ensPep.fa
+   rm j.tab
+   gzip *
+
+# Create knownToEnsembl column
+    hgMapToGene mm7 ensGene knownGene knownToEnsembl
+
+# Compress everthing to save space
+    gzip *
+    
+#### BUILD Ensembl cross-reference table, ensemblXref3 (TBD)
+
+# PLEASE NOTE THAT THE ENSEMBLXREF3 TABLE IS BUILT USING ENSEMBL BIOMART DATA OF MOUSE BUILD 34.
+# THIS TABLE IS NEEDED TO SUPPORT SUPERFAMILY TRACK OF THE PROTEOME BROWSER.
+# SINCE ENSEMBL CHANGED THE DATA FORMAT AGAIN (AS USUAL :-(  ), THERE IS NO VERSION NUMBER
+# IN THEIR IDs, A FAKE "0" IS GENERATED FOR EACH ID IN ensemblXref3 TABLE.
+    # Get the ensembl gene/protein cross-reference data BioMart
+    # Follow this sequence through the pages:
+    # 1) Make sure that the Mus musculus choice is selected. Hit next.
+    # 2) Choose the "Feature" box, select Ensembl gene, Ensembl transcript, 
+    #    and Ensembl peptid IDs, UniProt/SPTREMBL ID, UniProt/Swiss-Prot ID, 
+    #    and UniProt/Swiss-Prot Accession 
+    # 3) Choose "Text, tab separated".  choose gzip compression.  hit export.
+    # Save as ensXref2.tsv.gz
+    gzip -d ensXref2.tsv.gz
+    hgsql mm7 < ~/hg/lib/ensemblXref3Temp.sql
+    hgsql mm7 -e 'load data local infile "ensXref2.tsv" into table ensemblXref3Temp ignore 1 lines'
+
+    hgsql mm7 -N -e 'select gene, "0", transcript, "0", protein, "0", tremblAcc, swissDisplayId, swissAcc from ensemblXref3Temp' \
+    > ensemblXref3.tab
+
+    hgsql mm7 -e 'drop table ensemblXref3'
+    hgsql mm7 <~/src/hg/lib/ensemblXref3.sql
+    hgsql mm7 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3'
+    
+# load the table into proteome DB also   
+    hgsql proteome <~/src/hg/lib/ensemblXref3.sql
+    hgsql proteome -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3'
 
