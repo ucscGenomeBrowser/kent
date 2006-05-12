@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.76 2006/05/12 17:49:50 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.77 2006/05/12 19:34:59 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -442,7 +442,7 @@ checkChromName(bed->chrom, lineIx);
 bed->chromStart = needNum(row[1], lineIx, 1);
 bed->chromEnd = needNum(row[2], lineIx, 2);
 if (bed->chromEnd < bed->chromStart)
-    errAbort("line %d of custom input: chromStart after chromEnd", lineIx);
+    errAbort("line %d of custom input: chromStart after chromEnd (%d > %d)", lineIx, bed->chromStart, bed->chromEnd);
 
 if (wordCount > 3)
      bed->name = cloneString(row[3]);
