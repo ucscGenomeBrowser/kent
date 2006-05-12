@@ -19,7 +19,7 @@
 #include "wiggle.h"
 #include "correlate.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.45 2006/05/09 22:34:44 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.46 2006/05/12 20:50:18 angie Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -592,7 +592,7 @@ for (region = regionList; region != NULL; region = region->next)
 		fields = 4;
 	    else
 		fields = 3;
-	    if (doCt)
+	    if (doCt && ctNew)
 		{
 		ctNew->fieldCount = fields;
 		safef(ctNew->tdb->type, strlen(ctNew->tdb->type)+1,
