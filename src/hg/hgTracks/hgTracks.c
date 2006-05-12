@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1098 2006/05/11 05:57:51 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1099 2006/05/12 22:27:49 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10269,13 +10269,35 @@ void ctLoadSimpleBed(struct track *tg)
 {
 struct customTrack *ct = tg->customPt;
 struct bed *bed, *nextBed, *list = NULL;
-for (bed = ct->bedList; bed != NULL; bed = nextBed)
+
+if (ct->dbTrack)
     {
-    nextBed = bed->next;
-    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
-    		&& sameString(chromName, bed->chrom))
+    int fieldCount = ct->fieldCount;
+    char query[512];
+    int rowOffset;
+    char **row;
+    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlResult *sr = NULL;
+
+    safef(query, sizeof(query), "select * from %s", ct->dbTrackName);
+    sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
+		     NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
 	{
+	bed = bedLoadN(row+rowOffset, fieldCount);
 	slAddHead(&list, bed);
+	}
+    }
+else
+    {
+    for (bed = ct->bedList; bed != NULL; bed = nextBed)
+	{
+	nextBed = bed->next;
+	if (bed->chromStart < winEnd && bed->chromEnd > winStart 
+		    && sameString(chromName, bed->chrom))
+	    {
+	    slAddHead(&list, bed);
+	    }
 	}
     }
 slSort(&list, bedCmp);
@@ -10292,11 +10314,20 @@ boolean useItemRgb = FALSE;
 
 useItemRgb = bedItemRgb(ct->tdb);
 
-for (bed = ct->bedList; bed != NULL; bed = bed->next)
+if (ct->dbTrack)
     {
-    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
-    		&& sameString(chromName, bed->chrom))
+    char query[512];
+    int rowOffset;
+    char **row;
+    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlResult *sr = NULL;
+
+    safef(query, sizeof(query), "select * from %s", ct->dbTrackName);
+    sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
+		     NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
 	{
+	bed = bedLoadN(row+rowOffset, 9);
 	bed8To12(bed);
 	lf = lfFromBed(bed);
 	if (useItemRgb)
@@ -10305,6 +10336,24 @@ for (bed = ct->bedList; bed != NULL; bed = bed->next)
 	    lf->filterColor=bed->itemRgb;
 	    }
 	slAddHead(&lfList, lf);
+	}
+    }
+else
+    {
+    for (bed = ct->bedList; bed != NULL; bed = bed->next)
+	{
+	if (bed->chromStart < winEnd && bed->chromEnd > winStart 
+		    && sameString(chromName, bed->chrom))
+	    {
+	    bed8To12(bed);
+	    lf = lfFromBed(bed);
+	    if (useItemRgb)
+		{
+		lf->extra = (void *)USE_ITEM_RGB;	/* signal for coloring */
+		lf->filterColor=bed->itemRgb;
+		}
+	    slAddHead(&lfList, lf);
+	    }
 	}
     }
 slReverse(&lfList);
@@ -10320,14 +10369,37 @@ struct customTrack *ct = tg->customPt;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
 
-for (bed = ct->bedList; bed != NULL; bed = bed->next)
+if (ct->dbTrack)
     {
-    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
-    		&& sameString(chromName, bed->chrom))
+    int fieldCount = ct->fieldCount;
+    char query[512];
+    int rowOffset;
+    char **row;
+    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlResult *sr = NULL;
+
+    safef(query, sizeof(query), "select * from %s", ct->dbTrackName);
+    sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
+		     NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
 	{
+	bed = bedLoadN(row+rowOffset, fieldCount);
 	bed8To12(bed);
 	lf = lfFromBed(bed);
 	slAddHead(&lfList, lf);
+	}
+    }
+else
+    {
+    for (bed = ct->bedList; bed != NULL; bed = bed->next)
+	{
+	if (bed->chromStart < winEnd && bed->chromEnd > winStart 
+		    && sameString(chromName, bed->chrom))
+	    {
+	    bed8To12(bed);
+	    lf = lfFromBed(bed);
+	    slAddHead(&lfList, lf);
+	    }
 	}
     }
 slReverse(&lfList);
@@ -10341,14 +10413,49 @@ void ctLoadGappedBed(struct track *tg)
 struct customTrack *ct = tg->customPt;
 struct bed *bed;
 struct linkedFeatures *lfList = NULL, *lf;
+boolean useItemRgb = FALSE;
 
-for (bed = ct->bedList; bed != NULL; bed = bed->next)
+useItemRgb = bedItemRgb(ct->tdb);
+
+if (ct->dbTrack)
     {
-    if (bed->chromStart < winEnd && bed->chromEnd > winStart 
-    		&& sameString(chromName, bed->chrom))
+    int fieldCount = ct->fieldCount;
+    char query[512];
+    int rowOffset;
+    char **row;
+    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlResult *sr = NULL;
+
+    safef(query, sizeof(query), "select * from %s", ct->dbTrackName);
+    sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
+		     NULL, &rowOffset);
+    while ((row = sqlNextRow(sr)) != NULL)
 	{
+	bed = bedLoadN(row+rowOffset, fieldCount);
 	lf = lfFromBed(bed);
+	if (useItemRgb)
+	    {
+	    lf->extra = (void *)USE_ITEM_RGB;	/* signal for coloring */
+	    lf->filterColor=bed->itemRgb;
+	    }
 	slAddHead(&lfList, lf);
+	}
+    }
+else
+    {
+    for (bed = ct->bedList; bed != NULL; bed = bed->next)
+	{
+	if (bed->chromStart < winEnd && bed->chromEnd > winStart 
+		    && sameString(chromName, bed->chrom))
+	    {
+	    lf = lfFromBed(bed);
+	    if (useItemRgb)
+		{
+		lf->extra = (void *)USE_ITEM_RGB; /* signal for coloring */
+		lf->filterColor=bed->itemRgb;
+		}
+	    slAddHead(&lfList, lf);
+	    }
 	}
     }
 slReverse(&lfList);
@@ -10371,6 +10478,15 @@ struct track *newCustomTrack(struct customTrack *ct)
 struct track *tg;
 boolean useItemRgb = FALSE;
 tg = trackFromTrackDb(ct->tdb);
+
+if (ct->dbTrack)
+    {
+    struct sqlConnection *conn = sqlCtConn(FALSE);
+    if ((struct sqlConnection *)NULL == conn)
+	errAbort("can not connect to customTracks DB");
+    else
+	hFreeOrDisconnect(&conn);
+    }
 
 useItemRgb = bedItemRgb(ct->tdb);
 
