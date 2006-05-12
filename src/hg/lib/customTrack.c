@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.75 2006/05/11 22:31:24 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.76 2006/05/12 17:49:50 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -158,6 +158,7 @@ static char *dbOptions[] =
 {
     "db",
     "dbTrackName",
+    "fieldCount",
 };
 static int dbOptCount = sizeof(dbOptions) / sizeof(char *);
 
@@ -173,7 +174,8 @@ char *format0="%s %s\n";		/* all are like this */
 char *val;
 
 /* always at least one setting, our special db=type variable,
-	already proven to exist in the hash during previous processin */
+ *	already proven to exist in the hash during previous processing
+ */
 
 for (i = 0; i < dbOptCount; ++i)
     {
@@ -251,8 +253,13 @@ if ((val = hashFindVal(hash, "db")) != NULL)
 		}
 	    else
 		{
+printf("reusing existing db custom track: %s<BR>\n",  track->dbTrackName);
 		track->dbTrackName = cloneString(dbStrings);
-    printf("reusing existing db custom track: %s<BR>\n",  track->dbTrackName);
+		if ((val = hashFindVal(hash, "fieldCount")) != NULL)
+		    track->fieldCount = sqlSigned(val);
+		else
+printf("warning: no fieldCount value found for db custom track<BR>\n");
+
 		}
 	    track->dbTrack = TRUE;
 	    parseDbSettings(tdb, hash);
@@ -1018,19 +1025,6 @@ printf("compress pipeline to %s<BR>\n", track->dbDataFile);
 
     ++trackDataLineCount;
 
-    if (inDbData && (dbDataFH != (FILE *)NULL))
-	{
-	char *firstSpace = skipToSpaces(line);
-	int chrLength = 0;
-	if (firstSpace)
-	    chrLength=(int)(firstSpace-line);
-	else
-	    chrLength=strlen(line);
-	track->maxChromName = max(chrLength,track->maxChromName);
-	fprintf(dbDataFH, "%s\n", line);
-	continue;			/* !!! next line of data !!!	*/
-	}
-
     if (inWiggle && (wigAsciiFH != (FILE *)NULL))
 	{
 	fprintf(wigAsciiFH, "%s\n", line);
@@ -1043,6 +1037,14 @@ printf("compress pipeline to %s<BR>\n", track->dbDataFile);
 	AllocVar(track);
 	track->tdb = tdbDefault();
 	slAddTail(&trackList, track);
+	}
+
+    /*	if we are saving for db loading, save the line before it is
+     *	chopped up below
+     */
+    if (inDbData && (dbDataFH != (FILE *)NULL))
+	{
+	fprintf(dbDataFH, "%s\n", line);
 	}
 
     /* Classify track based on first line of track.   First time through
@@ -1061,26 +1063,38 @@ printf("compress pipeline to %s<BR>\n", track->dbDataFile);
 	    track->fromPsl = rowIsPsl(row, wordCount);
 	    }
 	track->fieldCount = wordCount;
+	/*	dbTracks need to remember this in settings so it gets
+ 	 *	returned on the next view click from the trash file track line
+	 */
+	if (track->dbTrack)
+	    {
+	    struct dyString *bedSettings = newDyString(0);
+
+	    /*	get existing settings if any to append to	*/
+	    if (track->tdb->settings)
+		dyStringPrintf(bedSettings, "%s\n", track->tdb->settings);
+	    dyStringPrintf(bedSettings, "fieldCount=%d", track->fieldCount);
+	    track->tdb->settings = dyStringCannibalize(&bedSettings);
+	    }
 	}
     else
         {
-/*
-printf("%s ", line);
-*/
 	/* Chop up line and skip empty lines. */
 	if (track->gffHelper != NULL)
 	    wordCount = chopTabs(line, row);
 	else
 	    wordCount = chopLine(line, row);
-/*
-printf(" wc:%d <BR>\n", wordCount);
-*/
 	}
+
+    if (inDbData)
+	track->maxChromName = max(strlen(row[0]),track->maxChromName);
 
     /* Save away this line of data. */
     if (track->gffHelper)
 	{
 	checkChromName(row[0], lineIx);
+	if (inDbData)
+	    continue;			/* !!! next line of data !!!	*/
         gffFileAddRow(track->gffHelper, 0, row, wordCount, "custom input", lineIx);
 	}
     else 
@@ -1097,6 +1111,8 @@ printf(" wc:%d <BR>\n", wordCount);
 	    errAbort("line %d of custom input: Track has %d fields in one place and %d another", 
 		    lineIx, track->fieldCount, wordCount);
 	    }
+	if (inDbData)
+	    continue;			/* !!! next line of data !!!	*/
 	/* Create bed data structure from row and hang on list in track. */
 	if (track->fromPsl)
 	    bed = customTrackPsl(pslIsProt, row, wordCount, chromHash, lineIx);
@@ -1128,11 +1144,12 @@ for (track = trackList; track != NULL; track = track->next)
          track->fieldCount = 12;
      if (track->gffHelper)
 	 {
-         track->bedList = gffHelperFinish(track->gffHelper, chromHash);
+	 if (!track->dbTrack)
+	     track->bedList = gffHelperFinish(track->gffHelper, chromHash);
 	 gffFileFree(&track->gffHelper);
          track->fieldCount = 12;
 	 }
-     if (track->offset != 0)
+     if (!track->dbTrack && track->offset != 0)
 	 {
 	 int offset = track->offset;
 	 for (bed = track->bedList; bed != NULL; bed = bed->next)

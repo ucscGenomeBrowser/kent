@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.86 2006/03/24 00:15:54 galt Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.87 2006/05/12 17:49:50 hiram Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -418,6 +418,25 @@ struct sqlConnection *sqlConnectRemote(char *host,
 /* Connect to database somewhere as somebody. */
 {
 return sqlConnRemote(host, user, password, database, TRUE);
+}
+
+struct sqlConnection *sqlCtConn(boolean abort)
+/* Connect to customTrash database, optionally abort on failure */
+{
+char *database = cfgOptionDefault("customTracks.db", NULL);
+char *host = cfgOptionDefault("customTracks.host", NULL);
+char *user = cfgOptionDefault("customTracks.user", NULL);
+char *password = cfgOptionDefault("customTracks.password", NULL);
+if (database && host && user && password)
+    return sqlConnRemote(host, user, password, database, abort);
+else
+    {
+    if (abort)
+	errAbort("can not find customTracks DB conn info in hg.conf");
+    else
+	return NULL;
+    }
+return NULL;
 }
 
 struct sqlConnection *sqlConn(char *database, boolean abort)
