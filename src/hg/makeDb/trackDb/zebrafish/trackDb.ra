@@ -270,7 +270,7 @@ type netAlign xenTro1 chainXenTro1
 otherDb xenTro1
 
 track chainMm8
-shortLabel $Organism Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 210
