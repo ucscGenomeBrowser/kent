@@ -14,7 +14,8 @@ ci1
 ci2
 danRer1
 danRer2
-danRer3
+##danRer3
+#####danRer4
 dm1
 dm2
 dp2
@@ -29,7 +30,7 @@ droSim1
 droPer1
 droVir1
 droVir2
-droYak1
+##droYak1
 droYak2
 fr1
 galGal2
@@ -46,6 +47,6 @@ rheMac1
 rheMac2
 rn3
 sacCer1
-strPur1
+##strPur1
 tetNig1
 xenTro1
