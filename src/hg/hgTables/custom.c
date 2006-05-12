@@ -507,18 +507,45 @@ static void customTrackFilteredBedOnRegion(
 /* Get the custom tracks passing filter on a single region. */
 {
 struct bed *bed;
-for (bed = ct->bedList; bed != NULL; bed = bed->next)
+
+if (ct->dbTrack)
     {
-    if (idHash == NULL || hashLookup(idHash, bed->name))
+    int fieldCount = ct->fieldCount;
+    char query[512];
+    int rowOffset;
+    char **row;
+    struct sqlConnection *conn = sqlCtConn(TRUE);
+    struct sqlResult *sr = NULL;
+
+    safef(query, sizeof(query), "select * from %s", ct->dbTrackName);
+    sr = hRangeQuery(conn, ct->dbTrackName, region->chrom,
+	region->start, region->end, NULL, &rowOffset);
+
+    while ((row = sqlNextRow(sr)) != NULL)
 	{
-	if (sameString(bed->chrom, region->chrom))
+	bed = bedLoadN(row+rowOffset, fieldCount);
+	if (bf == NULL || bedFilterOne(bf, bed))
 	    {
-	    if (bed->chromStart < region->end && bed->chromEnd > region->start)
+	    struct bed *copy = lmCloneBed(bed, lm);
+	    slAddHead(pBedList, copy);
+	    }
+	}
+    }
+else
+    {
+    for (bed = ct->bedList; bed != NULL; bed = bed->next)
+	{
+	if (idHash == NULL || hashLookup(idHash, bed->name))
+	    {
+	    if (sameString(bed->chrom, region->chrom))
 		{
-		if (bf == NULL || bedFilterOne(bf, bed))
+		if (bed->chromStart < region->end && bed->chromEnd > region->start)
 		    {
-		    struct bed *copy = lmCloneBed(bed, lm);
-		    slAddHead(pBedList, copy);
+		    if (bf == NULL || bedFilterOne(bf, bed))
+			{
+			struct bed *copy = lmCloneBed(bed, lm);
+			slAddHead(pBedList, copy);
+			}
 		    }
 		}
 	    }
