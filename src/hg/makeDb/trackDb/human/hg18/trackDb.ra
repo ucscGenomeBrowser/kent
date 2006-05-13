@@ -642,6 +642,16 @@ defaultViewLimits 0:4000
 spanList 1
 type wig 0 10310 
 
+track evofold
+shortLabel EvoFold
+longLabel EvoFold Predictions of RNA Secondary Structure 
+group genes
+priority 63
+visibility hide
+color 20,90,0
+type bed 6 +
+mafTrack multiz17way
+
 track wgRna
 shortLabel sno/miRNA
 longLabel C/D and H/ACA Box snoRNAs, scaRNAs, and microRNAs from Weber and Griffiths-Jones
