@@ -942,3 +942,13 @@ chain.csh {check in exists $(path1).gz} {check out line+ chain/$(root1).chain}
 
 # realigned and reload genbank/refseq, since alignment was never enabled
 # and the old releases were dropped. (DONE 2006-04-12)
+
+############################################################################
+## create missing hg18 nets     (DONE 2006-04-12 markd)
+## hg18 chains exist, but are documented in not in this file.
+   # create the net filee
+    ssh hgwdev
+    cd /cluster/data/oryCun1/bed/blastz.hg18.swap/axtChain
+    nice netClass -verbose=0 -noAr noClass.net oryCun1 hg18 oryCun1.hg18.net 
+    nice gzip oryCun1.hg18.net
+

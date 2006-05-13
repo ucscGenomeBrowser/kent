@@ -917,3 +917,13 @@ chain.csh {check in exists $(path1).gz} {check out line+ chain/$(root1).chain}
         -continue=chainMerge \
 	-bigClusterHub=pk \
 	`pwd`/DEF >& blastz.out &
+
+############################################################################
+## create missing hg18 nets     (DONE 2006-05-12 markd)
+## hg18 chains exist, but are documented in not in this file.
+   # create the net filee
+    ssh hgwdev
+    cd /cluster/data/loxAfr1/bed/blastz.hg18.swap/axtChain
+    nice netClass -verbose=0 -noAr noClass.net loxAfr1 hg18 loxAfr1.hg18.net 
+    nice gzip loxAfr1.hg18.net
+
