@@ -12,7 +12,7 @@
 #include "portable.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: osunix.c,v 1.27 2006/03/23 06:30:16 galt Exp $";
+static char const rcsid[] = "$Id: osunix.c,v 1.28 2006/05/13 05:38:48 markd Exp $";
 
 
 /* Return how long the named file is in bytes. 
@@ -343,3 +343,11 @@ if (tcsetattr(STDIN_FILENO, TCSANOW, &attr) == -1)
 return c;
 }
 
+boolean isPipe(int fd)
+/* determine in an open file is a pipe  */
+{
+struct stat buf;
+if (fstat(fd, &buf) < 0)
+    errnoAbort("fstat failed");
+return S_ISFIFO(buf.st_mode);
+}
