@@ -7,8 +7,9 @@
 #include "dnautil.h"
 #include "rbTree.h"
 #include "chainBlock.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: chainNet.c,v 1.34 2005/08/18 07:41:16 baertsch Exp $";
+static char const rcsid[] = "$Id: chainNet.c,v 1.35 2006/05/13 05:39:56 markd Exp $";
 
 int minSpace = 25;	/* Minimum gap size to fill. */
 int minFill;		/* Minimum fill to record. */
@@ -792,6 +793,17 @@ verbose(1, "writing %s\n", tNet);
 outputNetSide(tChromList, tNetFile, FALSE);
 verbose(1, "writing %s\n", qNet);
 outputNetSide(qChromList, qNetFile, TRUE);
+
+/* prevent SIGPIPE in preceding process if input is a pipe, consume remainder
+ * of input file since we stop before EOF. */
+if (isPipe(lf->fd))
+    {
+    char *line;
+    while(lineFileNext(lf, &line, NULL))
+        continue;
+    }
+lineFileClose(&lf);
+
 if (verboseLevel() > 1)
     printMem(stderr);
 }
