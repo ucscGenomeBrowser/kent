@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.42 2006/05/15 17:45:24 kuhn Exp $"
+#	"$Id: makeMm8.doc,v 1.43 2006/05/15 20:27:09 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -691,6 +691,8 @@ done
     mkdir /cluster/data/mm8/downloads/bigZips
     mkdir /cluster/data/mm8/downloads/chromosomes
     cd /cluster/data/mm8/downloads/chromosomes
+    cp -p ../../?/chr?.fa ../../??/chr??.fa \
+	../../?/chr?_random.fa ../../??/chr??_random.fa.
     gzip chr*.fa
     #	12 minutes
     #	copy previous release README.txt
@@ -5495,12 +5497,12 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     #	reduced window size:
     ssh kolossus
     cd /cluster/data/mm8/bed/genscan
-    /cluster/bin/x86_64/gsBig /cluster/bluearc/mm8/hardChunks/c_01.fa \
+    time /cluster/bin/x86_64/gsBig /cluster/bluearc/mm8/hardChunks/c_01.fa \
         gtf/c_01.gtf -trans=pep/c_01.pep -subopt=subopt/c_01.bed \
         -exe=hg3rdParty/genscanlinux/genscan \
         -par=hg3rdParty/genscanlinux/HumanIso.smat \
 	-tmp=/scratch/tmp -window=2000000
-
+    #	real    258m34.800s
 
     # cat and lift the results into single files
     ssh kkstore04
