@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1096.2.3 2006/05/08 23:24:45 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1096.2.4 2006/05/15 22:39:26 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -987,7 +987,6 @@ const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
 return a->start - b->start;
 }
 
-
 char *linkedFeaturesName(struct track *tg, void *item)
 /* Return name of item. */
 {
@@ -1029,6 +1028,24 @@ int exonSlRefReverseCmp(const void *va, const void *vb)
 return -1 * exonSlRefCmp(va, vb);
 }
 
+void linkedFeaturesMoveWinStart(int exonStart, int bufferToEdge, int newWinSize, int *pNewWinStart, int *pNewWinEnd)
+/* A function used by linkedFeaturesNextPrevItem to make that function */
+/* easy to read. Move the window so that the start of the exon in question */
+/* is near the start of the window. */
+{
+*pNewWinStart = exonStart - bufferToEdge;
+*pNewWinEnd = *pNewWinStart + newWinSize;
+}
+
+void linkedFeaturesMoveWinEnd(int exonEnd, int bufferToEdge, int newWinSize, int *pNewWinStart, int *pNewWinEnd)
+/* A function used by linkedFeaturesNextPrevItem to make that function */
+/* easy to read. Move the window so that the end of the exon in question */
+/* is near the end of the browser window. */
+{
+*pNewWinEnd = exonEnd + bufferToEdge;
+*pNewWinStart = *pNewWinEnd - newWinSize;
+}
+
 void linkedFeaturesNextPrevItem(struct track *tg, void *item, int x, int y, int w, int h, boolean next)
 /* Draw a mapBox over the arrow-button on an *item already in the window*. */
 /* Clicking this will do one of several things: */
@@ -1037,6 +1054,7 @@ struct linkedFeatures *lf = item;
 struct simpleFeature *exons = lf->components;
 struct simpleFeature *exon = exons;
 int newWinSize = winEnd - winStart;
+int bufferToEdge = 0.05 * newWinSize;
 int newWinStart, newWinEnd;
 struct slRef *exonList = NULL, *ref;
 while (exon != NULL)
@@ -1047,61 +1065,40 @@ while (exon != NULL)
     exon = exon->next;
     }
 if (next)
-/* Next (or end of current) exon button. */
-    {
     slSort(&exonList, exonSlRefCmp);
-    ref = exonList;
-    while (ref != NULL)
-	{
-	exon = ref->val;
-	if (exon->end > winEnd)
-	    {	    
-	    if (exon->start < winEnd)
-		/* In case the button is on an exon. */
-		{
-		newWinEnd = exon->end + (0.05 * newWinSize);
-		newWinStart = newWinEnd - newWinSize;
-		}
-	    else
-		/* In case the button is on an intron. */
-		{		
-		newWinStart = exon->start - (0.05 * newWinSize);
-		newWinEnd = newWinStart + newWinSize;
-		}
-	    mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, "Next Feature");
-	    break;
-	    }
-	ref = ref->next;
-	}
-    }
 else 
-/* Previous (or beginning of current) exon button. */
-    {
     slSort(&exonList, exonSlRefReverseCmp);
-    ref = exonList;
-    while (ref != NULL)
+for (ref = exonList; ref != NULL; ref = ref->next)
+    {
+    boolean bigExon = FALSE;
+    exon = ref->val;
+    if ((exon->end - exon->start) > (newWinSize - (2 * bufferToEdge)))
+	bigExon = TRUE;
+    if (next && (exon->end > winEnd))
 	{
-	exon = ref->val;
-	if (exon->start < winStart)
-	    {
-	    if (exon->end > winStart)
-		/* In case the button is on an exon. */
-		{
-		newWinStart = exon->start - (0.05 * newWinSize);
-		newWinEnd = newWinStart + newWinSize;		
-		}
-	    else
-		/* In case the button is on an intron. */
-		{
-		newWinEnd = exon->end + (0.05 * newWinSize);
-		newWinStart = newWinEnd - newWinSize;		
-		}
-	    mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, "Previous Feature");
-	    break;
-	    }
-	ref = ref->next;
+	if (exon->start < winEnd)
+	    /* not an intron hanging over edge. */
+	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	else if (bigExon)
+	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	else
+	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, "Next Feature");
+	break;
 	}
-    }
+    else if (!next && (exon->start < winStart))
+	{
+	if (exon->end > winStart)
+	    /* not an inron hanging over the edge. */
+	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	else if (bigExon)
+	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	else
+	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, "Previous Feature");
+	break;
+	}				     
+    }    
 slFreeList(&exonList);
 }
 
@@ -3022,12 +3019,12 @@ char *knownGeneName(struct track *tg, void *item)
 {
 static char cat[128];
 struct linkedFeatures *lf = item;
-if (lf->extra != NULL) 
+if (lf->extra != NULL)
     {
     safef(cat, sizeof(cat), "%s",((struct knownGenesExtra *)(lf->extra))->name);
     return cat;
     }
-else 
+else
     return lf->name;
 }
 
@@ -3258,6 +3255,8 @@ if (pdbID != NULL)
 hFreeConn(&conn);
 return(col);
 }
+
+
 
 void knownGeneMethods(struct track *tg)
 /* Make track of known genes. */
@@ -7804,12 +7803,12 @@ static void doLabelNextItemButtons(struct track *track, struct track *parentTrac
 /* signal the browser to find the next thing on the track before it */
 /* does anything else. */
 {
-int arrowWidth = insideHeight - 2;
+int arrowWidth = insideHeight - 1;
 int arrowButtonWidth = arrowWidth + 2 * NEXT_ITEM_ARROW_BUFFER;
 int rightButtonX = insideX + insideWidth - arrowButtonWidth;
 char buttonText[100];
-vgNextItemButton(vg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y + 1, arrowWidth, arrowWidth, labelColor, labelColor, TRUE);
-vgNextItemButton(vg, insideX + NEXT_ITEM_ARROW_BUFFER, y + 1, arrowWidth, arrowWidth, labelColor, labelColor, FALSE);
+vgNextItemButton(vg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, labelColor, TRUE);
+vgNextItemButton(vg, insideX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, labelColor, FALSE);
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->mapName);
 mapBoxReinvokeExtra(insideX, y + 1, arrowButtonWidth, insideHeight, NULL,
  		    NULL, 0, 0, "Previous item", buttonText);
