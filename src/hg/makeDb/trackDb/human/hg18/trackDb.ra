@@ -98,6 +98,7 @@ color 12,12,120
 type genePred knownGenePep knownGeneMrna
 hgGene on
 hgsid on
+nextItemButton on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
 
