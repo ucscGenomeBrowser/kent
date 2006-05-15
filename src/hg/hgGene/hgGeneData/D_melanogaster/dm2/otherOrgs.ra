@@ -1,11 +1,11 @@
 name human
-db hg17
+db hg18
 
 name zebrafish
-db danRer2
+db danRer3
 
 name mouse
-db mm7
+db mm8
 
 name rat
 db rn3
