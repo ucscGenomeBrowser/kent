@@ -6,7 +6,7 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh,v 1.6 2006/05/15 20:42:19 hiram Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh,v 1.7 2006/05/15 20:45:30 hiram Exp $
 
 if ( $#argv != 4 ) then
     echo "usage: $0 <old-assembly> <old-nibdir> <new-assembly> <new-nibdir>"
@@ -59,6 +59,8 @@ echo ""
 echo "First two lines of para jobList:"
 head -2 jobList
 echo ""
+echo "Verify enough disk space on this filesystem:"
+df -h .
 echo "DO THIS NEXT:"
 echo "    cd $blatDir/chainRun"
 echo "    para try, check, push, check, ..."
