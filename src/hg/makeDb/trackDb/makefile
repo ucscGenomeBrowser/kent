@@ -60,10 +60,10 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 
 MGC_DBS = \
 	hg16 hg17 hg18\
-	mm5 mm6 \
-	rn3 \
+	mm5 mm6 mm7 mm8 \
+	rn3 rn4 \
 	danRer1	danRer2 danRer3 danRer4 \
-	xenTro1
+	xenTro1 xenTro2
 
 ARCH_DBS = \
 	pyrAer1 aerPer1\
