@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.41 2006/05/05 16:31:11 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.42 2006/05/15 17:45:24 kuhn Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -4733,7 +4733,7 @@ hgLoadBed -strict mm8 affyGnfU74C affyGnfU74C.bed
     # Note that the unmapped 5000 records are from all-N sequences.
     hgLoadBed -strict mm8 gnfAtlas2 gnfAtlas2.bed
 
-# MOUSE AFFYMETRIX MOE430 TRACK (TBD)
+# MOUSE AFFYMETRIX MOE430 TRACK (DONE  Fan  2006-03-09)
 #    mkdir -p /projects/compbio/data/microarray/affyMouse
     # Download MOE430A and MOE430B consensus sequences from Affymetrix web site
     # http://www.affymetrix.com/support/technical/byproduct.affx?product=moe430
