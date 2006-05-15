@@ -11,8 +11,8 @@ hgLoadBed: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/hgLoadBed${EXE}
 
-compile:	${O} hgWiggle.o wigEncode.o ${MYLIBS}
-	${CC} -o ${A} $O ${MYLIBS} $L
+compile:	${O} ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${A} $O ${MYLIBS} $L
 
 clean::
 	rm -f ${O} ${A} tests/bed.tab
