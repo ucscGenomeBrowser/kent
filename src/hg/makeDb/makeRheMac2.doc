@@ -651,6 +651,7 @@ makeSynMaf.sh rheMac2 rn4 /cluster/data/rheMac2/bed/blastz.rn4 /san/sanvol1/scra
     cd runSyn
 
     # create scripts to run multiz on cluster
+cat > autoMultiz.csh << 'EOF'
 #!/bin/csh -ef
 
     set path=(/cluster/bin/penn/multiz.v11.x86_64/ $path )
@@ -822,7 +823,8 @@ cat > downloads.csh << 'EOF'
     # request push to hgwdev
 
 ###############################################################
-# PHASTCONS CONSERVATION (DONE, 2006-05-06 Robert)
+# PHASTCONS CONSERVATION (NOT DONE yet, 2006-05-06 Robert)
+# coverage is only 3% and needs more tweaking
 # These parameters are:
 # --rho
 # --expected-length
