@@ -5,7 +5,7 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh,v 1.6 2006/04/06 19:12:28 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-align.csh,v 1.7 2006/05/15 20:41:36 hiram Exp $
 
 if ( $#argv != 4 && $#argv != 5 ) then
     echo "usage: $0 <old-assembly> <old-nibdir> <new-assembly> <new-splitdir> [.ooc-file]"
@@ -44,11 +44,11 @@ cd $blatDir
 mkdir raw psl run
 cd run
 
-echo '#LOOP' > gsub
+echo '#LOOP' > template
 echo 'blat $(path1) $(path2) {check out line+ ../raw/$(root1)_$(root2).psl} ' \
        '-tileSize=11 '$ooc' -minScore=100 -minIdentity=98 -fastMap' \
-  >> gsub
-echo '#ENDLOOP' >> gsub
+  >> template
+echo '#ENDLOOP' >> template
 
 
 # target
@@ -56,15 +56,15 @@ ls -1S $oldNibDir/*.{nib,2bit} > old.lst
 # query
 ls -1S $newSplitDir/*.{nib,fa} > new.lst
 
-gensub2 old.lst new.lst gsub spec
-/parasol/bin/para create spec
+gensub2 old.lst new.lst template jobList
+/parasol/bin/para create jobList
 
 set execDir = $0:h
 set fs = `fileServer $blatDir`
 
 echo ""
-echo "First two lines of para spec:"
-head -2 spec
+echo "First two lines of para jobList:"
+head -2 jobList
 echo ""
 echo "DO THIS NEXT:"
 echo "    cd $blatDir/run"
