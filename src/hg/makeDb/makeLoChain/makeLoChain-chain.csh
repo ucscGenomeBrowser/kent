@@ -6,7 +6,7 @@
 #
 # Author:       kate
 #
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh,v 1.5 2006/04/05 19:06:10 kate Exp $
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh,v 1.6 2006/05/15 20:42:19 hiram Exp $
 
 if ( $#argv != 4 ) then
     echo "usage: $0 <old-assembly> <old-nibdir> <new-assembly> <new-nibdir>"
@@ -42,22 +42,22 @@ rm -fr chainRun chainRaw
 mkdir chainRun chainRaw
 cd chainRun
 
-cat > gsub << EOF
+cat > template << EOF
 #LOOP
 axtChain -verbose=0 -linearGap=medium -psl \$(path1) $oldNibDir $newNibDir {check out line+ ../chainRaw/\$(root1).chain}
 #ENDLOOP
 EOF
 
 ls -1S ../psl/*.psl > in.lst
-gensub2 in.lst single gsub spec
-para create spec
+gensub2 in.lst single template jobList
+para create jobList
 
 set execDir = $0:h
 set fs = `fileServer $blatDir`
 
 echo ""
-echo "First two lines of para spec:"
-head -2 spec
+echo "First two lines of para jobList:"
+head -2 jobList
 echo ""
 echo "DO THIS NEXT:"
 echo "    cd $blatDir/chainRun"
