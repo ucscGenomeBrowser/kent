@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1099 2006/05/12 22:27:49 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1100 2006/05/15 22:49:43 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -189,6 +189,7 @@ boolean ideogramAvail = FALSE;           /* Is the ideogram data available for t
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
+boolean withNextItemArrows = TRUE;	/* Display next exon/feature navigation buttons near center labels? */
 boolean hideControls = FALSE;		/* Hide all controls? */
 
 int rulerMode = tvHide;         /* on, off, full */
@@ -986,7 +987,6 @@ const struct linkedFeatures *b = *((struct linkedFeatures **)vb);
 return a->start - b->start;
 }
 
-
 char *linkedFeaturesName(struct track *tg, void *item)
 /* Return name of item. */
 {
@@ -999,7 +999,10 @@ void linkedFeaturesFreeList(struct linkedFeatures **pList)
 {
 struct linkedFeatures *lf;
 for (lf = *pList; lf != NULL; lf = lf->next)
+    {
     slFreeList(&lf->components);
+    slFreeList(&lf->codons);
+    }
 slFreeList(pList);
 }
 
@@ -1007,6 +1010,96 @@ void linkedFeaturesFreeItems(struct track *tg)
 /* Free up linkedFeaturesTrack items. */
 {
 linkedFeaturesFreeList((struct linkedFeatures**)(&tg->items));
+}
+
+int exonSlRefCmp(const void *va, const void *vb)
+/* Sort the exons put on an slRef. */
+{
+const struct slRef *a = *((struct slRef **)va);
+const struct slRef *b = *((struct slRef **)vb);
+struct simpleFeature *sfA = a->val;
+struct simpleFeature *sfB = b->val;
+return sfA->start - sfB->start;
+}
+
+int exonSlRefReverseCmp(const void *va, const void *vb)
+/* Reverse of the exonSlRefCmp sort. */
+{
+return -1 * exonSlRefCmp(va, vb);
+}
+
+void linkedFeaturesMoveWinStart(int exonStart, int bufferToEdge, int newWinSize, int *pNewWinStart, int *pNewWinEnd)
+/* A function used by linkedFeaturesNextPrevItem to make that function */
+/* easy to read. Move the window so that the start of the exon in question */
+/* is near the start of the window. */
+{
+*pNewWinStart = exonStart - bufferToEdge;
+*pNewWinEnd = *pNewWinStart + newWinSize;
+}
+
+void linkedFeaturesMoveWinEnd(int exonEnd, int bufferToEdge, int newWinSize, int *pNewWinStart, int *pNewWinEnd)
+/* A function used by linkedFeaturesNextPrevItem to make that function */
+/* easy to read. Move the window so that the end of the exon in question */
+/* is near the end of the browser window. */
+{
+*pNewWinEnd = exonEnd + bufferToEdge;
+*pNewWinStart = *pNewWinEnd - newWinSize;
+}
+
+void linkedFeaturesNextPrevItem(struct track *tg, void *item, int x, int y, int w, int h, boolean next)
+/* Draw a mapBox over the arrow-button on an *item already in the window*. */
+/* Clicking this will do one of several things: */
+{
+struct linkedFeatures *lf = item;
+struct simpleFeature *exons = lf->components;
+struct simpleFeature *exon = exons;
+int newWinSize = winEnd - winStart;
+int bufferToEdge = 0.05 * newWinSize;
+int newWinStart, newWinEnd;
+struct slRef *exonList = NULL, *ref;
+while (exon != NULL)
+/* Make a stupid list of exons separate from what's given. */
+/* It seems like lf->components isn't necessarily sorted. */
+    {
+    refAdd(&exonList, exon);    
+    exon = exon->next;
+    }
+if (next)
+    slSort(&exonList, exonSlRefCmp);
+else 
+    slSort(&exonList, exonSlRefReverseCmp);
+for (ref = exonList; ref != NULL; ref = ref->next)
+    {
+    boolean bigExon = FALSE;
+    exon = ref->val;
+    if ((exon->end - exon->start) > (newWinSize - (2 * bufferToEdge)))
+	bigExon = TRUE;
+    if (next && (exon->end > winEnd))
+	{
+	if (exon->start < winEnd)
+	    /* not an intron hanging over edge. */
+	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	else if (bigExon)
+	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	else
+	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, "Next Feature");
+	break;
+	}
+    else if (!next && (exon->start < winStart))
+	{
+	if (exon->end > winStart)
+	    /* not an inron hanging over the edge. */
+	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	else if (bigExon)
+	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	else
+	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
+	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, "Previous Feature");
+	break;
+	}				     
+    }    
+slFreeList(&exonList);
 }
 
 enum {blackShadeIx=9,whiteShadeIx=0};
@@ -1395,6 +1488,27 @@ lfColors(tg, item, vg, &col, &barbCol);
 return col;
 }
 
+struct simpleFeature *simpleFeatureCloneList(struct simpleFeature *list)
+/* Just copies the simpleFeature list. This is good for making a copy */
+/* when the codon list is made. */
+{
+struct simpleFeature *ret = NULL;
+struct simpleFeature *cur;
+for (cur = list; cur != NULL; cur = cur->next)
+    {
+    struct simpleFeature *newSf = NULL;
+    AllocVar(newSf);
+    newSf->start = cur->start;
+    newSf->end = cur->end;
+    newSf->qStart = cur->qStart;
+    newSf->qEnd = cur->qEnd;
+    newSf->grayIx = cur->grayIx;
+    slAddHead(&ret, newSf);
+    }
+slReverse(&ret);
+return ret;
+}
+
 void linkedFeaturesDrawAt(struct track *tg, void *item,
 	struct vGfx *vg, int xOff, int y, double scale, 
 	MgFont *font, Color color, enum trackVisibility vis)
@@ -1480,7 +1594,7 @@ if (!hideLine)
 	}
     }
 
-for (sf = lf->components; sf != NULL; sf = sf->next)
+for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; sf != NULL; sf = sf->next)
     {
     s = sf->start; e = sf->end;
 
@@ -1751,6 +1865,7 @@ if (vis == tvPack || vis == tvSquish)
 	boolean drawNameInverted = FALSE;
 	int origRow = sn->row;
 	boolean doingOverflow = FALSE;
+	boolean snapLeft = FALSE;
 
 	if(tg->itemNameColor != NULL) 
 	    color = tg->itemNameColor(tg, item, vg);
@@ -1812,9 +1927,63 @@ if (vis == tvPack || vis == tvSquish)
         if (!tg->mapsSelf && !doingOverflow)
             {
             int w = x2-textX;
-            if (w > 0)
-                mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
-				  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+	    /* Arrows? */
+	    if (w > 0)
+		{
+		if (tg->nextItemButtonable && tg->nextPrevItem)
+		    {
+		    int buttonW = heightPer-1 + 2*NEXT_ITEM_ARROW_BUFFER;
+		    boolean rButton = FALSE;
+		    boolean lButton = FALSE;
+		    /* prev item arrow */
+		    if (tg->itemStart(tg, item) < winStart)
+			{
+			lButton = TRUE;
+			vgNextItemButton(vg, insideX + NEXT_ITEM_ARROW_BUFFER, y, 
+					 heightPer-1, heightPer-1, color, MG_WHITE, FALSE);
+			}
+		    if (tg->itemEnd(tg, item) > winEnd)
+			{
+			rButton = TRUE;
+			vgNextItemButton(vg, insideX + insideWidth - NEXT_ITEM_ARROW_BUFFER - heightPer, 
+					 y, heightPer-1, heightPer-1, color, MG_WHITE, TRUE);
+			}
+		    /* If the */
+		    if (lButton)
+			{
+			mapBoxHgcOrHgGene(s, e, textX, y, insideX-textX, heightPer, tg->mapName, 
+					  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+			tg->nextPrevItem(tg, item, insideX, y, buttonW, heightPer, FALSE);
+			if (rButton)
+			    {
+			    mapBoxHgcOrHgGene(s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer, tg->mapName, 
+					      tg->mapItemName(tg, item), name, directUrl, withHgsid);				    
+			    tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			    
+			    }
+			else 
+			    mapBoxHgcOrHgGene(s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer, tg->mapName, 
+						      tg->mapItemName(tg, item), name, directUrl, withHgsid);
+			}
+		    else if (snapLeft && rButton)
+			{
+			mapBoxHgcOrHgGene(s, e, textX, y, x2 - buttonW - textX, heightPer, tg->mapName, 
+					  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+			tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
+			}
+		    else if (rButton)
+			{
+			mapBoxHgcOrHgGene(s, e, textX, y, w - buttonW, heightPer, tg->mapName, 
+					  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+			tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
+			}
+		    else
+			mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
+					  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+		    }
+		else
+		    mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
+				      tg->mapItemName(tg, item), name, directUrl, withHgsid);
+		}
             }
 
 	/* If printing things to the "overflow" row return state to original 
@@ -2116,6 +2285,7 @@ tg->itemHeight = tgFixedItemHeight;
 tg->itemStart = linkedFeaturesItemStart;
 tg->itemEnd = linkedFeaturesItemEnd;
 tg->itemNameColor = linkedFeaturesNameColor;
+tg->nextPrevItem = linkedFeaturesNextPrevItem;
 }
 
 int linkedFeaturesSeriesItemStart(struct track *tg, void *item)
@@ -2567,10 +2737,10 @@ while ((gp = genePredReaderNext(gpr)) != NULL)
     lf->orientation = orientFromChar(gp->strand[0]);
 
     if (drawOptionNum>0 && zoomedToCdsColorLevel && gp->cdsStart != gp->cdsEnd)
-        lf->components = splitGenePredByCodon(chrom, lf, gp,NULL,
+        lf->codons = splitGenePredByCodon(chrom, lf, gp,NULL,
                 gp->optFields >= genePredExonFramesFld);
-    else
-        lf->components = sfFromGenePred(gp, grayIx);
+   
+    lf->components = sfFromGenePred(gp, grayIx);
 
     if (tg->itemAttrTbl != NULL)
         lf->itemAttr = itemAttrTblGet(tg->itemAttrTbl, gp->name,
@@ -2849,12 +3019,12 @@ char *knownGeneName(struct track *tg, void *item)
 {
 static char cat[128];
 struct linkedFeatures *lf = item;
-if (lf->extra != NULL) 
+if (lf->extra != NULL)
     {
-    sprintf(cat,"%s",((struct knownGenesExtra *)(lf->extra))->name);
+    safef(cat, sizeof(cat), "%s",((struct knownGenesExtra *)(lf->extra))->name);
     return cat;
     }
-else 
+else
     return lf->name;
 }
 
@@ -3085,6 +3255,8 @@ if (pdbID != NULL)
 hFreeConn(&conn);
 return(col);
 }
+
+
 
 void knownGeneMethods(struct track *tg)
 /* Make track of known genes. */
@@ -7625,6 +7797,30 @@ vgUnclip(vg);
 return y;
 }
 
+static void doLabelNextItemButtons(struct track *track, struct track *parentTrack, struct vGfx *vg, MgFont *font, int y,
+			      int trackPastTabX, int trackPastTabWidth, int fontHeight,
+			      int insideHeight, Color labelColor)
+/* If the track allows label next-item buttons (next gene), draw them. */
+/* The button will cause hgTracks to run again with the additional CGI */
+/* vars nextItem=trackName or prevItem=trackName, which will then  */
+/* signal the browser to find the next thing on the track before it */
+/* does anything else. */
+{
+int arrowWidth = insideHeight - 1;
+int arrowButtonWidth = arrowWidth + 2 * NEXT_ITEM_ARROW_BUFFER;
+int rightButtonX = insideX + insideWidth - arrowButtonWidth;
+char buttonText[100];
+vgNextItemButton(vg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, labelColor, TRUE);
+vgNextItemButton(vg, insideX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, labelColor, FALSE);
+safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->mapName);
+mapBoxReinvokeExtra(insideX, y + 1, arrowButtonWidth, insideHeight, NULL,
+ 		    NULL, 0, 0, "Previous item", buttonText);
+mapBoxToggleVis(insideX + arrowButtonWidth, y + 1, insideWidth - (2 * arrowButtonWidth), insideHeight, parentTrack);
+safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->mapName);
+mapBoxReinvokeExtra(insideX + insideWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL,
+ 		    NULL, 0, 0, "Next item", buttonText);
+}
+
 static int doCenterLabels(struct track *track, struct track *parentTrack,
                                 struct vGfx *vg, MgFont *font, int y)
 /* Draw center labels.  Return y coord */
@@ -7639,6 +7835,12 @@ if (track->limitedVis != tvHide)
                         track->labelColor : track->ixColor);
     vgTextCentered(vg, insideX, y+1, insideWidth, insideHeight, 
                         labelColor, font, track->longLabel);
+    if (withNextItemArrows && track->nextItemButtonable && track->labelNextPrevItem)
+	doLabelNextItemButtons(track, parentTrack, vg, font, y, trackPastTabX,
+			  trackPastTabWidth, fontHeight, insideHeight, labelColor);
+    else
+	mapBoxToggleVis(trackPastTabX, y+1, 
+			trackPastTabWidth, insideHeight, parentTrack);
     mapBoxToggleVis(trackPastTabX, y+1, 
                     trackPastTabWidth, insideHeight, parentTrack);
     y += fontHeight;
@@ -10185,6 +10387,7 @@ struct track *trackFromTrackDb(struct trackDb *tdb)
 struct track *track = trackNew();
 char *iatName = NULL;
 char *exonArrows;
+char *nextItem;
 
 track->mapName = cloneString(tdb->tableName);
 track->visibility = tdb->visibility;
@@ -10215,6 +10418,7 @@ if (tdb->useScore)
 track->tdb = tdb;
 
 exonArrows = trackDbSetting(tdb, "exonArrows");
+nextItem = trackDbSetting(tdb, "nextItemButton");
 /* default exonArrows to on, except for tracks in regulation/expression group */
 if (exonArrows == NULL)
     {
@@ -10224,7 +10428,8 @@ if (exonArrows == NULL)
        exonArrows = "on";
     }
 track->exonArrows = sameString(exonArrows, "on");
-
+if (nextItem)
+    track->nextItemButtonable = sameString(nextItem, "on");
 iatName = trackDbSetting(tdb, "itemAttrTbl");
 if (iatName != NULL)
     track->itemAttrTbl = itemAttrTblNew(iatName);
@@ -11138,6 +11343,21 @@ for (track = trackList; track != NULL; track = track->next)
 return trackList;
 }
 
+void doNextPrevItem(char *whichWay, char *trackName)
+/* In case a next/previous item arrow was clicked on a track, change */
+/* position (i.e. winStart, winEnd, etc.) based on what track it was */
+{
+struct track *track = trackList;
+if (trackName == NULL)
+    return;
+while ((track != NULL) && (!sameString(track->mapName, trackName)))
+    track = track->next;
+if (track == NULL)
+    return;
+if (track->labelNextPrevItem != NULL)
+    track->labelNextPrevItem(track, sameString(whichWay, "nextItem"));
+}
+
 void doTrackForm(char *psOutput)
 /* Make the tracks display form with the zoom/scroll
  * buttons and the active image. */
@@ -11191,6 +11411,12 @@ if(hideAll || defaultTracks)
     int vis = (hideAll ? tvHide : -1);
     changeTrackVis(groupList, NULL, vis);
     }
+
+/* Before loading items, deal with the next/prev item arrow buttons if pressed. */
+if (cgiVarExists("hgt.nextItem"))       
+    doNextPrevItem("nextItem", cgiUsualString("hgt.nextItem", NULL));
+else if (cgiVarExists("hgt.prevItem"))
+    doNextPrevItem("prevItem", cgiUsualString("hgt.prevItem", NULL));
 
 /* Tell tracks to load their items. */
 for (track = trackList; track != NULL; track = track->next)
@@ -11762,6 +11988,7 @@ withIdeogram = cartUsualBoolean(cart, "ideogram", TRUE);
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
+withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
 
