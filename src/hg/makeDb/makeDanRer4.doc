@@ -1566,6 +1566,8 @@ if (-e /tmp/danRer4/$2/$2.cat) /bin/cp /tmp/danRer4/$2/$2.cat ./
 ###########################################################################
 # BLASTZ, CHAIN, NET, MAFNET, AXTNET AND ALIGNMENT DOWNLOADS FOR
 # HUMAN (hg18) (DONE, 2006-04-24 - 2006-04-25, hartera)
+# LOAD BLASTZ PSLS INTO DATABASE AND CHECK FOR HUMAN CONTAMINATION
+# (DONE, 2006-05-11, hartera)
     ssh pk
     # Blastz uses lineage-specific repeats. There are none for human
     # and zebrafish so use all repeats.
@@ -1668,6 +1670,45 @@ TMPDIR=/scratch/tmp
         -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
         -swap `pwd`/DEF >& doSwap.log &
    # Took about 15 minutes.
+   # Load Blastz results into database (DONE, 2006-05-11, hartera)
+   ssh kkstore04
+   cd /cluster/data/danRer4/bed/blastz.hg18/pslParts
+   # cat together Blastz for each chrom
+   mkdir pslChrom
+   foreach c (`cat /cluster/data/danRer4/chrom.lst`)
+      echo "Processing $c ..."
+      foreach p (chr${c}.nib*)
+         zcat $p >> ./pslChrom/chr${c}_blastzHg18.psl
+      end
+   end
+   # load Blastz psls into the database
+   ssh hgwdev
+   cd /cluster/data/danRer4/bed/blastz.hg18/pslParts/pslChrom
+   foreach f (*.psl)
+      /cluster/bin/i386/hgLoadPsl danRer4 $f
+      echo "$f Done"
+   end
+   # Then determine how much sequence has 100% identity to human with a 
+   # stretch of at least 300 bp. Human contamination was also found in
+   # danRer1 and a user reported it more recently.
+
+   foreach c (`cat /cluster/data/danRer4/chrom.lst`)
+      echo "chr$c" >> humanContamination.txt
+      hgsql -e "select count(*) from chr${c}_blastzHg18 where matches >= 300 and        misMatches = 0;" danRer4 >> humanContamination.txt
+   end
+   # There are 4 on chr11 that fit this criteria (same if decrease to regions
+   # of >= 200 bp with 100% ID).
+   hgsql -e \
+   'select * from chr11_blastzHg18 where matches >= 300 and mismatches = 0;' \
+   danRer4 > chr11HumanSeq
+   # only 2 of these also have no query inserts and 1 of the others only has
+   # a 1 base insert: regions are of size 303, 310 and 367 bp. The region of 
+   # 330 bp has a 45 bp insert on the query side - see below
+#bin	matches	misMatches	repMatches	nCount	qNumInsert	qBaseInsert	tNumInsert	tBaseInsert	strand	qName	qSize	qStart	qEnd	tName	tSize	tStart	tEnd	blockCount	blockSizes	qStarts	tStarts
+#588	303	0	0	0	0	0	0	0	-	chr4	191273063	69879746	69880049	chr11	52342180	502145	502448	1	303,	121393014,	502145,
+#588	330	0	0	0	1	45	0	0	-	chr4	191273063	69879319	69879694	chr11	52342180	502545	502875	2	1,329,	121393369,121393415,	502545,502546,
+#588	310	0	0	0	0	0	0	0	-	chr4	191273063	69878956	69879266	chr11	52342180	502928	503238	1	310,	121393797,	502928,
+#588	667	0	0	0	1	1	0	0	-	chr4	191273063	69878268	69878936	chr11	52342180	503258	503925	2	453,214,	121394127,121394581,	503258,503711,
 
 ###########################################################################
 # BLASTZ/CHAIN/NET PREP (DONE 4/25/06 angie)
@@ -1986,6 +2027,7 @@ endif
 
 ###########################################################################
 ## SWAP MM8 blastz result (DONE - 2006-04-28 - Hiram)
+# ADD SYMBOLIC LINK TO SWAP DIR (DONE, 2006-05-04, hartera)
     ssh pk
     cd /cluster/data/mm8/bed/blastzDanRer4.2006-04-26
 
@@ -1999,7 +2041,11 @@ endif
 	> fb.danRer4.chainDanRer4Link 2>&1 &
     cat fb.danRer4.chainDanRer4Link
     #	58145856 bases of 1626093931 (3.576%) in intersection
-
+    # Add symbolic link to swap directory (2006-05-04, hartera)
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed
+    ln -s blastz.mm8.swap blastz.mm8
+   
 ###########################################################################
 # MONDOM4 BLASTZ TESTS USING LINEAGE-SPECIFIC REPEATS OR DYNAMIC MASKING
 # AND SWAP (DONE, 2006-04-28, hartera)
@@ -2654,18 +2700,360 @@ chainOne $(path1)
     rm -rf /cluster/data/danRer4/bed/tblastn.hg18KG/blastOut
     rm -rf /cluster/bluearc/danRer4/bed/tblastn.hg18KG/blastOut
 
-    # add trackDb.ra entry and html to trackDb/zebrafish/
-    # blastKGRef* table missing from hg18 - needed for track.
+    # add trackDb.ra entry and html to ~/kent/src/hg/makeDb/trackDb/trackDb.ra
+    # also added the blastHg18KG.html here. 
+    # blastKGPep04 and blastKGRef04 tables required on hg18 - these have
+    # been created - see makeHg18.doc. update of hgc.c, hgTrackUi.c and 
+    # hgTracks.c was required - done by Brian.
 
 ###########################################################################
-# BACENDS TRACK (in progress, 2006-05-02, hartera)
-    # Obtain these from the NCBI Trace archive
+# MULTIZ7WAY ALIGNMENTS FOR CONSERVATION TRACK 
+# (DONE, 2006-05-04 - 2006-05-10, hartera)
+#   for tetNig1, fr1, xenTro2, monDom4, mm8 and hg18.
     ssh kkstore04
-    mkdir -p /cluster/data/danRer4/bed/bacEnds/sequences
-    cd /cluster/data/danRer4/bed/bacEnds/sequences
-    # go to NCBI Trace Archive
-    # http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?
-    cat << '_EOF_' > query_tracedb
+    mkdir /cluster/data/danRer4/bed/multiz7way.2006-05-04
+    cd /cluster/data/danRer4/bed
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-04
+    # copy MAFs to a cluster-friendly server
+    mkdir /san/sanvol1/scratch/danRer4/mafNet
+    foreach s (tetNig1 fr1 xenTro2 monDom4 mm8 hg18)
+       echo $s
+       rsync -av /cluster/data/danRer4/bed/blastz.$s/mafNet/* \
+        /san/sanvol1/scratch/danRer4/mafNet/$s/
+    end
+    # prune the hg17 17way tree to just these 7 and update db names:
+    /cluster/bin/phast/tree_doctor \
+      --prune-all-but=mouse_mm8,human_hg18,monodelphis_monDom4,xenopus_xenTro1,tetraodon_tetNig1,fugu_fr1,zebrafish_danRer3 \
+      --rename="xenopus_xenTro1 -> xenopus_xenTro2 ; zebrafish_danRer3 -> zebrafish_danRer4" \
+      /cluster/data/hg18/bed/multiz17way/17way.nh > 7way.nh
+    # carefully edit so that danRer4 is first. copy first to new file
+    cp 7way.nh 7way_zfishFirst.nh
+    /cluster/bin/phast/draw_tree 7way_zfishFirst.nh > 7way.ps
+    # also made the ps file for the 7way.nh and compared to make sure
+    # that the tree with zebrafish at the top looks correct.
+    /cluster/bin/phast/all_dists 7way_zfishFirst.nh > 7way.distances
+    grep danRer4 7way.distances | sort -k3,3n | \
+        awk '{printf ("%.4f\t%s\n", $3, $2)}' > distances.txt
+    cat distances.txt
+# 1.4749  tetraodon_tetNig1
+# 1.5154  fugu_fr1
+# 1.7480  human_hg18
+# 1.7782  monodelphis_monDom4
+# 1.8771  xenopus_xenTro2
+# 2.1058  mouse_mm8
+    # the order in the browser display will be by tree topology,
+    # not by distance, so they will be:
+    # danRer4
+    # 1.5154  fugu_fr1
+    # 1.4749  tetraodon_tetNig1
+    # 1.8771  xenopus_xenTro2
+    # 1.7782  monodelphis_monDom4
+    # 2.1058  mouse_mm8
+    # 1.7480  human_hg18
+
+    # create species list and stripped down tree for autoMZ
+    sed -e 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//' \
+        7way_zfishFirst.nh > tree-commas.nh
+    sed -e 's/ //g; s/,/ /g' tree-commas.nh > tree.nh
+    sed -e 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    ssh pk
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-04
+    mkdir maf run
+    cd run
+
+    # stash binaries
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+
+cat > autoMultiz.csh << 'EOF'
+#!/bin/csh -ef
+    set db = danRer4
+    set c = $1
+    set maf = $2
+    set run = `pwd`
+    set tmp = /scratch/tmp/$db/multiz.$c
+    set pairs = /san/sanvol1/scratch/$db/mafNet
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp ../{tree.nh,species.lst} $tmp
+    pushd $tmp
+    foreach s (`cat species.lst`)
+        set in = $pairs/$s/$c.maf
+        set out = $db.$s.sing.maf
+        if ($s == $db) then
+            continue
+        endif
+        if (-e $in.gz) then
+            zcat $in.gz > $out
+        else if (-e $in) then
+            cp $in $out
+        else
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    end
+    set path = ($run/penn $path); rehash
+    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+    popd
+    cp $tmp/$c.maf $maf
+    rm -fr $tmp
+'EOF'
+    # << emacs
+    chmod +x autoMultiz.csh
+
+cat  << 'EOF' > spec
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/danRer4/bed/multiz7way.2006-05-04/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+    # << emacs
+    awk '{print $1}' /cluster/data/danRer4/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single spec jobList
+    para create jobList
+    para try, check, push, check etc. ...
+    para time
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:       6950s     115.84m     1.93h    0.08d  0.000 y
+# IO & Wait Time:                   132s       2.19m     0.04h    0.00d  0.000 y
+# Average job time:                 253s       4.22m     0.07h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             369s       6.15m     0.10h    0.00d
+# Submission to last job:          1635s      27.25m     0.45h    0.02d
+   # Make .jpg for tree and install in htdocs/images/phylo/... don't forget
+   # to request a push of that file.  The treeImage setting in trackDb.ra 
+   # is phylo/danRer4_7way.jpg (relative to htdocs/images).
+   ssh hgwdev
+   cd /cluster/data/danRer4/bed/multiz7way.2006-05-04
+   pstopnm -stdout 7way.ps | pnmtojpeg > danRer4_7way.jpg
+   # ask Bob to resize image for Browser track description page.
+
+   # Build maf annotation and load dataabase
+   ssh kolossus
+   mkdir /cluster/data/danRer4/bed/multiz7way.2006-05-04/anno
+   cd /cluster/data/danRer4/bed/multiz7way.2006-05-04/anno
+   mkdir maf run
+   cd run
+   rm -f sizes nBeds
+ foreach db (`cat /cluster/data/danRer4/bed/multiz7way.2006-05-04/species.lst`)
+      ln -s  /cluster/data/$db/chrom.sizes $db.len
+      if (! -e /cluster/data/$db/$db.N.bed) then
+        twoBitInfo -nBed /cluster/data/$db/$db.{2bit,N.bed}
+      endif
+      ln -s  /cluster/data/$db/$db.N.bed $db.bed
+      echo $db.bed  >> nBeds
+      echo $db.len  >> sizes
+  end
+    echo date > jobs.csh
+    # do smaller jobs first:
+    foreach f (`ls -1rS ../../maf/*.maf`)
+      echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $f \
+        /cluster/data/danRer4/danRer4.2bit ../maf/`basename $f` \
+        >> jobs.csh
+      echo "echo $f" >> jobs.csh
+    end
+    echo date >> jobs.csh
+    csh -efx jobs.csh >&! jobs.log & 
+    tail -f jobs.log
+    # Took 30 minutes to run.
+
+    # Load anno/maf
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-04/anno/maf
+    mkdir -p /gbdb/danRer4/multiz7way/anno/maf
+    ln -s /cluster/data/danRer4/bed/multiz7way.2006-05-04/anno/maf/*.maf \
+      /gbdb/danRer4/multiz7way/anno/maf
+    cat > loadMaf.csh << 'EOF'
+date
+nice hgLoadMaf -pathPrefix=/gbdb/danRer4/multiz7way/anno/maf danRer4 multiz7way
+date
+'EOF'
+    # << emacs
+    csh -efx loadMaf.csh >&! loadMaf.log & tail -f loadMaf.log
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # machine and then load on hgwdev:
+    ssh kkr7u00
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-04/anno/maf
+    cat *.maf \
+    | nice hgLoadMafSummary danRer4 -minSize=30000 -mergeGap=1500 \
+    -maxSize=200000 -test multiz7waySummary stdin
+    # Created 815350 summary blocks from 4213676 components and 
+    # 2115438 mafs from stdin 
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-04/anno/maf
+    sed -e 's/mafSummary/multiz7waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
+      > /tmp/multiz7waySummary.sql
+    time nice hgLoadSqlTab danRer4 multiz7waySummary \
+         /tmp/multiz7waySummary.sql multiz7waySummary.tab
+    # 0.000u 0.000s 2:05.26 0.0%      0+0k 0+0io 209pf+0w
+    rm *.tab /tmp/multiz7waySummary.sql
+    ln -s multiz7way.2006-05-04 /cluster/data/danRer4/bed/multiz7way
+    ln -s /cluster/data/danRer4/bed/multiz7way.2006-05-04/danRer4_7way.jpg \
+          /usr/local/apache/htdocs/images/phylo/danRer4_7way.jpg
+    # change permissions for display if not already readable to all
+    chmod +r /usr/local/apache/htdocs/images/phylo/danRer4_7way.jpg
+
+# check for all.joiner entry for 7-way - it is there already.
+# add trackDb.ra entry for danRer4:
+# track multiz7way
+# shortLabel Conservation
+# longLabel Vertebrate Multiz Alignment & Conservation
+# group compGeno
+# priority 104
+# visibility pack
+# color 0, 10, 100
+# altColor 0,90,10
+# type wigMaf 0.0 1.0
+# maxHeightPixels 100:40:11
+#wiggle phastCons7way
+# pairwiseHeight 12
+# spanList 1
+# yLineOnOff Off
+# autoScaleDefault Off
+# windowingFunction mean
+# summary multiz7waySummary
+# frames multiz7wayFrames
+# irows on
+# speciesGroups mammal vertebrate
+# sGroup_mammal hg18 mm8 monDom4
+# sGroup_vertebrate xenTro2 tetNig1 fr1
+# treeImage phylo/danRer4_7way.jpg
+
+###########################################################################
+# PHYLO-HMM (PHASTCONS) CONSERVATION TRACK FOR 7-WAY ALIGNMENT 
+# (in progress, 2006-05-12, hartera)
+   ssh kkstore04
+   mkdir /cluster/data/danRer4/bed/multiz7way/phastCons
+   cd /cluster/data/danRer4/bed/multiz7way/phastCons
+   /cluster/bin/phast/tree_doctor \
+      --prune-all-but=mm7,hg17,monDom2,xenTro1,tetNig1,fr1,danRer3 \
+      --rename="hg17 -> hg18 ; mm7 -> mm8 ; monDom2 -> monDom4 ; xenTro1->xenTro2; danRer3->danRer4" \
+      /san/sanvol1/scratch/mm7/cons/elliotsEncode.mod \
+      > elliotsEncodePruned.mod
+
+   # create a starting-tree.mod based on chr14 (92 Mb)
+   # chr14 is the largest chrom apart from chrNA_random
+   /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chr14.maf \
+        --refseq ../../../14/chr14.fa --in-format MAF \
+        --windows 100000000,1000 --out-format SS \
+        --between-blocks 5000 --out-root s1
+  /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+        --tree "((danRer3,(tetNig1,fr1)),(mm7,hg18))" \
+        --out-root starting-tree
+    /cluster/bin/phast/$MACHTYPE/phyloFit -i SS -E -p MED -s HKY85 \
+        --tree "`cat ../tree-commas.nh`" \
+        s1.*ss
+        -o phyloFit.tree
+    /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+        --tree "`cat ../tree-commas.nh`" \
+        --out-root starting-tree
+ 
+###########################################################################
+# CREATED RECIPROCAL BEST NETS AND MAF NETS FOR ALL SPECIES WITH PAIRWISE
+# ALIGNMENTS USED FOR MULTIZ MULTIPLE ALIGNMENT 
+# (DONE, 2006-05-12 - 2006-05-15 , hartera)
+#   for tetNig1, fr1, xenTro2, monDom4, mm8 and hg18.
+    ssh kolossus
+    mkdir /cluster/data/danRer4/bed/rBestRunForMultiz/
+    cd /cluster/data/danRer4/bed/rBestRunForMultiz
+    # need to re-run chainNet and keep first output (target-referenced,
+    # target-centric nets) and second output that we usually /dev/null
+    # (query-referenced, target-centric nets).
+cat > rBestNet.csh << 'EOF'
+#!/bin/csh -ef
+foreach s (tetNig1 fr1 xenTro2 monDom4 mm8 hg18)
+  echo "Creating Reciprocal Best Net for $s..."
+  set binDir=/cluster/home/hartera/bin/i386
+  set dir=/cluster/data/danRer4/bed/blastz.$s/axtChain
+  cd $dir
+# Run chainNet again, this time keeping the second output:
+  chainPreNet danRer4.$s.all.chain.gz /cluster/data/danRer4/chrom.sizes \
+       /cluster/data/$s/chrom.sizes stdout \
+       | $binDir/chainNet stdin /cluster/data/danRer4/chrom.sizes \
+       /cluster/data/$s/chrom.sizes /dev/null stdout | \
+       netSyntenic stdin $dir/$s.danRer4_ref.net
+# get the other species chains from the other species-referenced 
+# (but danRer4-centric) net:
+  chainSwap danRer4.$s.all.chain.gz $s.danRer4.all.chain
+  netChainSubset -verbose=0 $s.danRer4_ref.net \
+       $s.danRer4.all.chain stdout \
+       | chainSort stdin $s.danRer4_ref.subset.chain
+# Net those (sorted) danRer4 chains, and keep both outputs, to get
+# reciprocal best nets referenced to both species:
+  chainPreNet $s.danRer4_ref.subset.chain \
+       /cluster/data/$s/chrom.sizes /cluster/data/danRer4/chrom.sizes stdout \
+       | $binDir/chainNet stdin /cluster/data/$s/chrom.sizes \
+       /cluster/data/danRer4/chrom.sizes tmp1 tmp2
+
+  netSyntenic tmp1 $s.danRer4.rbest.net
+  netSyntenic tmp2 danRer4.$s.rbest.net
+  rm tmp1 tmp2
+  nice gzip *.rbest.net
+end
+'EOF'
+    chmod +x rBestNet.csh
+    nice rBestNet.csh >& rBestNet.log &
+    # Took about 11 minutes to complete.
+    # Then make axtNet and mafNet 
+cat > makeMafRBestNet.csh << 'EOF'
+#!/bin/csh -ef
+foreach s (tetNig1 fr1 xenTro2 monDom4 mm8 hg18)
+  echo "Creating mafs for $s ..."
+  set dir=/cluster/data/danRer4/bed/blastz.$s/axtChain
+  set seqDir=/san/sanvol1/scratch
+  cd $dir
+# extract recriprocal best chains from the zebrafish-other species rbest.net
+  echo "Get reciprocal best chains for best zebrafish-$s"
+  netChainSubset danRer4.$s.rbest.net.gz danRer4.$s.all.chain.gz \
+      danRer4.$s.rbest.chain
+# need to make sure this is sorted and assing unique chain IDs
+  chainSort danRer4.$s.rbest.chain stdout | chainMergeSort stdin \
+       > danRer4.$s.rbest.newids.chain
+# need to re-net with new ids 
+  chainNet danRer4.$s.rbest.newids.chain /cluster/data/danRer4/chrom.sizes \
+          /cluster/data/$s/chrom.sizes danRer4.$s.rbest.newids.net /dev/null
+# split reciprocal best chains and net
+  chainSplit rBestChain danRer4.$s.rbest.newids.chain 
+  netSplit danRer4.$s.rbest.newids.net rBestNet
+  mkdir ../axtRBestNet
+# make axtNet for reciprocal best
+  echo "Making axtRBestNet for $s ..."
+  foreach f (rBestNet/*.net)
+    netToAxt $f rBestChain/$f:t:r.chain \
+      $seqDir/danRer4/danRer4.2bit $seqDir/$s/$s.2bit stdout \
+      | axtSort stdin stdout \
+      | gzip -c > ../axtRBestNet/$f:t:r.danRer4.$s.net.axt.gz
+  end
+# make mafNet for reciprocal best
+  cd ..
+  mkdir mafRBestNet  
+  echo "Making mafRBestNet for $s ..."
+  foreach f (axtRBestNet/*.danRer4.$s.net.axt.gz)
+  axtToMaf -tPrefix=danRer4. -qPrefix=$s. $f \
+     /cluster/data/danRer4/chrom.sizes /cluster/data/$s/chrom.sizes stdout \
+     | gzip -c > mafRBestNet/$f:t:r:r:r:r:r.maf.gz
+  end
+end
+'EOF'
+    chmod +x makeMafRBestNet.csh 
+    nice makeMafRBestNet.csh >& mafRBestNet.log &
+    # Took about an hour.
+    # NOTE: Must use chainSort and chainMergeSort to reassign unique IDs
+    # to the chains extracted from the rbest.net and then re-net the chains
+    # with the new IDs ortherwise netToAxt crashes due to duplicate chain IDs. 
+    # Now do the multiple alignment using reciprocal best mafNets as input
+    # for multiz.
+
+###########################################################################
+# BACENDS TRACK (in progress, 2006-05-10, hartera)
+   # Obtain these from the NCBI Trace archive
+   ssh kolossus
+   mkdir -p /cluster/data/danRer4/bed/bacEnds/sequences
+   cd /cluster/data/danRer4/bed/bacEnds/sequences
+   # go to NCBI Trace Archive
+   # http://www.ncbi.nlm.nih.gov/Traces/trace.cgi?
+   cat << '_EOF_' > query_tracedb
 #!/usr/bin/perl -w
 use strict;
 use LWP::UserAgent;
@@ -2688,7 +3076,7 @@ die "Couldn't connect to TRACE server\n" if ! $res->is_success;
    # count number of entries for zebrafish
    query_tracedb "query count species_code='DANIO RERIO' AND trace_type_code = 'CLONEEND'"
    # 473060
-   # Therefore this is 12 files. 
+   # Therefore this is 12 files of 40000 results each.
    # so get from ftp site:
    
    cat << '_EOF_' > getZfishSeqs.csh
@@ -2704,11 +3092,76 @@ end
    cp query_tracedb getZfishSeqs.csh ./downloads
    cd downloads
    nohup nice getZfishSeqs.csh >& zfishSeqs.log &
+   # Start: Wed May 10 09:57 Finished: 14:51
    # Start: May  2 21:43 Finish: May 3 03:08
    ssh kkstore04
+   # unzip and untar the downloads
    cd /cluster/data/danRer4/bed/bacEnds/sequences/downloads
-   time wget --timestamping  \
-        ftp://ftp.ensembl.org/pub/traces/danio_rerio/fasta/*cloneEnd*.fasta.gz
+   gunzip *.tgz
+cat << '_EOF_' > unTarBacs.csh
+#!/bin/csh -fe
+foreach t (0 1 2 3 4 5 6 7 8 9 10 11)
+   tar xvf data${t}.tar
+end
+'_EOF_'
+   chmod +x unTarBacs.csh
+   nohup unTarBacs.csh >& unTarBacs.log &
+   # PID: 26198 Start: Wed May 10 17:19
+   # PID: 12235	Start: Tue May  9 22:30
+foreach d (2006*)
+   echo "Processing $d"
+   nice cat ${d}/TRACEINFO.xml >> allTraceInfo.xml
+   foreach f (${d}/DANIO_RERIO/*/fasta/*.fasta)
+      nice cat $f >> Zv6BACends.fasta
+      echo $f >> Zv6BACends.lst
+   end
+end
+'_EOF_'
+   chmod +x catBacs.csh
+   nice catBacs.csh >& catBacs.log &
+   # The last archive obtained is empty so try downloading from the ftp site
+   # to be sure to get everything.
+
+   ssh kolossus
+   mkdir -p /san/sanvol1/scratch/danRer4/bacEnds/downloads 
+   cd /san/sanvol1/scratch/danRer4/bacEnds/downloads
+   wget --timestamping \
+       ftp://ftp.ncbi.nlm.nih.gov/pub/TraceDB/danio_rerio/
+   # gets index.html page, then get ancillary information files and 
+   # grab just the ftp link for each file.
+   grep "anc" index.html > ancillary.lst
+   perl -pi.bak -e 's/.+<a href=\"(ftp.+)\">[a-zA-Z]+.+/$1/' ancillary.lst
+   rm *.bak
+   # this contains just the ftp link for each file
+cat << '_EOF_' > getFtpFiles.csh
+#!/bin/csh -fe
+set s=$1
+foreach f (`cat "${s}"`)
+   echo $f
+   nice wget --timestamping $f 
+end
+'_EOF_'
+   chmod +x getFtpFiles.csh 
+   getFtpFiles.csh ancillary.lst >& ancillary.log &
+   # PID: 29247     Start: Sat May 13 23:48
+   # from the list, can find out which files are needed to get the CLONEENDS
+   # and the library names: need CHORI-211, DKEY, DKEYP, CHORI-73,  RPCI-71
+   # and BUSM1 PAC. 
+ ssh kkstore04
+   cd /cluster/data/danRer4/bed/bacEnds/sequences/downloads
+   wget --timestamping  \
+        ftp://ftp.ensembl.org/pub/traces/danio_rerio/fasta/
+   # gets index.html page
+   # get list of cloneEnd files
+   grep cloneEnd index.html > cloneEndsFile
+   perl -pi.bak -e 's/.+<a href=\"(ftp.+)\">[a-zA-Z]+.+/$1/' cloneEndsFile
+   rm *.bak
+   # this contains just the ftp link for each file
+   foreach f (`cat cloneEndsFile`)
+     echo $f
+     wget --timestamping $f 
+   end
+ 
    wget --timestamping \
         ftp://ftp.ensembl.org/pub/traces/danio_rerio/fasta/*cloneEnd*.gz
 
