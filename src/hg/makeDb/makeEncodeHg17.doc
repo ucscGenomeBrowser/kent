@@ -1043,7 +1043,7 @@ cat > loadChipWig.csh << 'EOF'
 
 ##########################################################################
 # U North Carolina FAIRE  (2005-10-24 kate)
-#       Peaks data updated (2006-04-13 kate)
+#       Peaks data updated (2006-04-13 kate and 2006-05-01, hartera)
     # submitted by Paul Giresi, from Jason Lieb's lab
     # later, Paul submitted an "averages" file for the
     # raw data (but doesn't include the "peaks")
@@ -1108,12 +1108,40 @@ cat > load.csh << 'EOF'
     cd /cluster/data/encode
     mkdir UNC/2006-04-13/lab
     cd UNC/2006-04-13/lab
+    # lab/OfficialChIPOTle_PEAKS.gff is a bedGraph format and this contains
+    # the new peaks data after a data reanalysis.
+    # lab/FAIREavg_OfficialPeaks.gff is a file in wiggle format with
+    # the Signal track data first (the same as for the original track)
+    # and then the new Peaks data.
 
-    # trim precision
+    # trim precision for the peaks data:
     awk 'NR !=1 {printf("%s\t%d\t%d\t%.3f\n", $1, $2, $3, $4)}' \
         lab/OfficialChIPOTle_PEAKS.gff > peaks.bedGraph
     # data range: 0 - 3.627
-    
+    # load data as bedGraph (2006-05-01, hartera)
+    # edit file and remove line: track    0       0       0.000
+    # and then load
+    hgLoadBed -strict -bedGraph=4 hg17 \
+              encodeUncFairePeaksApr2006 peaks.bedGraph
+    # added this as a new subtrack to human/trackDb.encode.ra to see what
+    # it looks like. 
+    # In ~/kent/src/hg/makeDb/trackDb/human/trackDb.encode.ra
+    # add the following lines to the subtrack entry since it will inherit
+    # from the parent track otherwise which is a wiggle type.
+    # track encodeUncFairePeaksApr2006
+    subTrack encodeUncFaire
+    shortLabel UNC FAIRE Peaks Apr. 06
+    longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements) Apr. 2006 Update
+    noInherit on
+    type bedGraph 4
+    maxHeightPixels 128:16:16
+    autoScale off
+    windowingFunction mean
+    viewLimits .2:2.6
+    color 20,150,20
+    altColor 50,100,50
+    priority 3
+    # Waiting for methods update from track providers for the description.
 
 ##########################################################################
 # Gencode Genes (2005-10-10 kate)
@@ -1940,7 +1968,7 @@ cat > load.csh << 'EOF'
     csh load.csh >&! load.log &
     # loaded 23996 elements for 5 tables
 
-# ENCODE PSEUDOGENE TRACK (in progress, hartera)
+# ENCODE PSEUDOGENE TRACK (DONE, 2006-03-30, hartera)
     # Yontao reloaded the encodePseudogeneUcsc2 table with shorter 
     # names for the pseudogenes as they were cut off in the browser so now
     # NM_001017421|chr2|+|1 would be NM_001017421|1
@@ -2006,3 +2034,4 @@ cat > load.csh << 'EOF'
     echo "load data local infile 'encodePseudogeneClass2.txt' into \
          table encodePseudogeneClass" | hgsql hg17
 
+# UPDATE OF 
