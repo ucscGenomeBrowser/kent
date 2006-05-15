@@ -1549,14 +1549,15 @@ sed -e "s/^/..\//" ../${2}/${1} | xargs cat | \
 	done
 	cd ..
     done
-    #	real    5m53.634s
+    #	real    14m49.721s
+
 
     cd ../../sortingResults
     sort -u -k 14,14 -k 16,16n -k 18,18n u.*.psl m60* \
 	> /cluster/data/monDom4/bed/tblastn.hg18KG/blastHg18KG.psl
     cd ..
     wc -l blastHg18KG.psl
-    # 63130 blastHg18KG.psl
+    # 63264 blastHg18KG.psl
 
     #	what is this for ?
     cat kgfa/*fa | grep ">" | wc
@@ -1566,13 +1567,12 @@ sed -e "s/^/..\//" ../${2}/${1} | xargs cat | \
     cd /cluster/data/monDom4/bed/tblastn.hg18KG
     hgLoadPsl monDom4 blastHg18KG.psl
     time nice -n +19 featureBits monDom4 blastHg18KG
-#	19403832 bases of 3501643220 (0.554%) in intersection
+    #	19424941 bases of 3501643220 (0.555%) in intersection
 
     # back to kksilo
     rm -rf blastOut
 
 # End tblastn
-
 
 ############################################################################
 # SWAP CHAINS/NET RN4 (DONE 3/28/06 angie)
@@ -2631,3 +2631,58 @@ XXXX - running 2006-05-04 14:13
     cd ..
     rmdir monDom4
 
+#########################################################################
+#  creating bigZips downloads (DONE - 2006-05-15 - Hiram)
+    ssh hgwdev
+    mkdir /cluster/data/monDom4/downloads
+    mkdir /cluster/data/monDom4/downloads/bigZips
+    mkdir /cluster/data/monDom4/downloads/chromosomes
+    cd /cluster/data/monDom4/downloads/chromosomes
+    #	There wasn't a README for a previous assembly, these things are
+    #	pretty generic, the mm8 one can be used with only slight edits.
+    #	Next time use the previous Opossum assembly README.
+    cp /usr/local/apache/htdocs/goldenPath/mm8/chromosomes/README.txt .
+    #	edit that readme to provide correct references and details
+    ln -s `pwd` /usr/local/apache/htdocs/goldenPath/monDom4/chromosomes
+
+    ssh kkstore04
+    cd /cluster/data/monDom4/downloads/chromosomes
+    for C in 1 2 3 4 5 6 7 8 X Un
+    do
+	echo "gzip -c ../../${C}/chr${C}.fa > chr${C}.fa.gz"
+	gzip -c ../../${C}/chr${C}.fa > chr${C}.fa.gz
+    done
+    md5sum *.fa.gz R*.txt > md5sum.txt
+
+    cd ../bigZips
+    gzip -c ../../broad.mit.edu/Monodelphis4.0.agp > Monodelphis4.0.agp.gz
+    cd ../..
+    tar cvzf downloads/bigZips/chromFa.tar.gz ?/chr*.fa Un/chrUn.fa
+    #	16 minutes
+    tar cvzf downloads/bigZips/chromFaMasked.tar.gz ?/chr*.fa.masked \
+	Un/chrUn.fa.masked
+    #	8 minutes
+    tar cvzf downloads/bigZips/chromOut.tar.gz ?/chr*.fa.out Un/chrUn.fa.out
+    cd bed/simpleRepeat
+    mkdir trfMask
+    cd trfMask
+    for C in 1 2 3 4 5 6 7 8 X Un
+    do
+	ln -s ../chromMask/chr${C}_Mask.bed chr${C}.bed
+    done
+    tar --dereference cvzf ../../downloads/bigZips/chromTrf.tar.gz ./trfMask
+
+    ssh hgwdev
+    cd /cluster/data/monDom4/downloads/bigZips
+    cp /usr/local/apache/htdocs/goldenPath/mm8/bigZips/README.txt .
+
+    ln -s /cluster/data/monDom4/downloads/bigZips \
+	/usr/local/apache/htdocs/goldenPath/monDom4/bigZips
+    cd /usr/local/apache/htdocs/goldenPath/monDom4/bigZips
+    ln -s /cluster/data/monDom4/monDom4.2bit .
+
+    ssh kkstore04
+    cd /cluster/data/monDom4/downloads/bigZips
+    md5sum *.gz *.2bit R*.txt > md5sum.txt
+
+    
