@@ -20532,7 +20532,7 @@ ssh hgwdev
 knownToVisiGene hg17 -fromProbePsl=vgAllProbes
 
 ########################################################################
-### microRNA targets tracks  (WORKING - 2006-03-17 - Hiram)
+### microRNA targets tracks  (DONE - 2006-03-17 - 2006-04-27 - Hiram)
 ### from: http://pictar.bio.nyu.edu/ Rajewsky Lab
 ### Nikolaus Rajewsky nr@scarbo.bio.nyu.edu
 ### Yi-Lu Wang ylw205@nyu.edu

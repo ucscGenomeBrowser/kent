@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.59 2006/05/12 17:46:20 fanhsu Exp $"
+#	"$Id: makeMm7.doc,v 1.60 2006/05/16 16:48:19 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12156,3 +12156,31 @@ refGene:CDS 1.059%, sgpGene 1.451%, both 0.912%, cover 86.18%, enrich 59.39x
     hgsql proteome <~/src/hg/lib/ensemblXref3.sql
     hgsql proteome -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3'
 
+
+########################################################################
+### microRNA targets tracks  (DONE - 2006-05-16 - Hiram)
+### from: http://pictar.bio.nyu.edu/ Rajewsky Lab
+### Nikolaus Rajewsky nr@scarbo.bio.nyu.edu
+### Yi-Lu Wang ylw205@nyu.edu
+### dg@thp.Uni-Koeln.DE
+    ssh hgwdev
+    mkdir /cluster/data/mm7/bed/picTar
+    cd /cluster/data/mm7/bed/picTar
+    wget --timestamping \
+	'http://pictar.bio.nyu.edu/ucsc/mouse/mouse_bed' -O mouse_dog.bed
+
+    wget --timestamping \
+	'http://pictar.bio.nyu.edu/ucsc/mouse/mouse_chicken_bed' \
+	-O mouse_chicken.bed
+
+    grep -v "^track" mouse_dog.bed \
+	| hgLoadBed -strict mm7 picTarMiRNADog stdin
+    #	Loaded 127119 elements of size 9
+    grep -v "^track" mouse_chicken.bed \
+	| hgLoadBed -strict mm7 picTarMiRNAChicken stdin
+    #	Loaded 12298 elements of size 9
+
+    nice -n +19 featureBits mm7 picTarMiRNADog
+    #	449871 bases of 2583394090 (0.017%) in intersection
+    nice -n +19 featureBits mm7 picTarMiRNAChicken
+    #	35586 bases of 2583394090 (0.001%) in intersection
