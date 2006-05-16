@@ -314,3 +314,25 @@ visibility dense
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
 
+track picTar
+compositeTrack on
+shortLabel PicTar miRNA
+longLabel MicroRNA target sites in 3' UTRs as predicted by PicTar
+group regulation
+priority 102
+visibility hide
+type bed 9
+
+    track picTarMiRNADog
+    subTrack picTar
+    shortLabel PicTar 4 Species
+    longLabel PicTar microRNA sites, 4 species conservation constraint: Human/Mouse/Rat/Dog
+    color 128,0,128
+    priority 1
+
+    track picTarMiRNAChicken
+    subTrack picTar
+    shortLabel PicTar 5 Species
+    longLabel PicTar microRNA sites, 5 species conservation constraint: Human/Mouse/Rat/Dog/Chicken
+    color 128,0,128
+    priority 2
