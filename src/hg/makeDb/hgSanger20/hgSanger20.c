@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: hgSanger20.c,v 1.3 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgSanger20.c,v 1.4 2006/05/16 18:13:50 angie Exp $";
 
 
 void usage()
@@ -102,7 +102,7 @@ struct sanger22extra *processGff(char *fileName, struct hash *infoHash)
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 struct hash *hash = newHash(0);
 struct sanger22extra *sxList = NULL, *sx, *info;
-char *line, *source, *type, *word, *row[12];
+char *line, *source, *type, *word;
 
 while (lineFileNext(lf, &line, NULL))
     {
