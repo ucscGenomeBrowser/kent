@@ -1,8 +1,8 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
 
-if ( "$HOST" != "hgwbeta" ) then
-	echo "error: you must run this script on hgwbeta!"
+if ( "$HOST" != "hgwdev" ) then
+	echo "error: you must run this script on hgwdev!"
 	exit 1
 endif
 

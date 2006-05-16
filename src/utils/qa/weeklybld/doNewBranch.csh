@@ -51,8 +51,8 @@ echo "Now beginning to build new branch $BRANCHNN"
 
 echo
 
-echo debug: disabled cgiVersion
-#./updateCgiVersion.csh real
+#echo debug: disabled cgiVersion
+./updateCgiVersion.csh real
 
 if ( $status ) then
  echo "cvs-cgi-version-update failed on $HOST"
@@ -62,8 +62,8 @@ echo "cvs-cgi-version-update done on $HOST"
 
 
 echo
-echo debug: disabled tagging
-#./tagNewBranch.csh real
+#echo debug: disabled tagging
+./tagNewBranch.csh real
 if ( $status ) then
  echo "tagNewBranch.csh failed on $HOST"
  exit 1
@@ -75,9 +75,9 @@ echo
 echo
 echo  "NOW STARTING CVS-Reports ON HGWDEV IN PARALLEL"
 echo
-echo debug: disabled buildCvsReports
-#ssh hgwdev $WEEKLYBLD/buildCvsReports.csh branch real &
-# note - we are not trying running it in the background on dev
+#echo debug: disabled buildCvsReports
+ssh hgwdev $WEEKLYBLD/buildCvsReports.csh branch real &
+# note - we are now trying running it in the background on dev
 if ( $status ) then
  echo "buildCvsReports.csh  failed on $HOST"
  exit 1
@@ -89,13 +89,13 @@ echo "buildCvsReports.csh done on $HOST"
 echo
 echo  "NOW STARTING 32-BIT BUILD ON HGWDEV IN PARALLEL"
 echo
-echo debug: disabled parallel build 32bit utils on dev
-#ssh hgwdev "$WEEKLYBLD/doNewBranch32.csh opensesame" &
+#echo debug: disabled parallel build 32bit utils on dev
+ssh hgwdev "$WEEKLYBLD/doNewBranch32.csh opensesame" &
 
 echo
 #unpack the new branch on BUILDDIR for beta
-echo debug: disabled coBranch.csh
-#./coBranch.csh
+#echo debug: disabled coBranch.csh
+./coBranch.csh
 if ( $status ) then
  exit 1
 endif
@@ -131,7 +131,12 @@ endif
 
 # do not do this here this way - we might as well wait until
 #  later in the week to run this after most branch-tag moves will have been applied.
-#ssh hgwdev $WEEKLYBLD/buildCgis.csh
+# Besides it does not work to run this script
+#  from beta because when ssh wants the password
+#  it fails to get input from stdin redirected across machines,
+#  so that means actually logging into hgwdev and then running it.
+#  But it will take care of the rest.
+#ssh hgwdev $WEEKLYBLD/buildCgi32.csh
 if ( $status ) then
     echo "build 32-bit CGIs on hgwdev failed"
     exit 1

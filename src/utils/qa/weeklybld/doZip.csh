@@ -5,13 +5,13 @@ if ( "$HOST" != "hgwbeta" ) then
     exit 1
 endif
 
-./makezip.csh
+./makeZip.csh
 set err = $status
 if ( $err ) then
     echo "error running makezip.csh: $err" 
     exit 1
 endif 
-./buildzip.csh
+./buildZip.csh
 set err = $status
 if ( $err ) then
     echo "error running buildzip.csh: $err" 
@@ -21,7 +21,7 @@ cp $BUILDDIR/zips/"jksrc.v"$BRANCHNN".zip" /usr/local/apache/htdocs/admin/jksrc.
 echo
 echo "Zip Done. Make Push Request:"
 echo
-echo "Please push hgwdev --> hgdownload, "
+echo "Please push hgwbeta --> hgdownload, "
 echo "   /usr/local/apache/htdocs/admin/jksrc.zip"
 echo "Thanks!"
 echo
