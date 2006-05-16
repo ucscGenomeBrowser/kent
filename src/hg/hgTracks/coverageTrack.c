@@ -489,7 +489,7 @@ if (realiCloneList == NULL)
 	    *s = 0;
 	if ((hel = hashLookup(realiCloneHash, cloneName)) == NULL)
 	    {
-	    warn("%s not in range in cloneAliPos");
+	    warn("%s not in range in cloneAliPos", cloneName);
 	    continue;
 	    }
 	ci = hel->val;
