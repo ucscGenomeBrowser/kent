@@ -18,8 +18,9 @@
 #include "hgTables.h"
 #include "wiggle.h"
 #include "correlate.h"
+#include "bedCart.h"
 
-static char const rcsid[] = "$Id: bedList.c,v 1.46 2006/05/12 20:50:18 angie Exp $";
+static char const rcsid[] = "$Id: bedList.c,v 1.47 2006/05/16 18:16:17 hiram Exp $";
 
 boolean htiIsPsl(struct hTableInfo *hti)
 /* Return TRUE if table looks to be in psl format. */
@@ -577,7 +578,12 @@ for (region = regionList; region != NULL; region = region->next)
 		    slAddHead(&ctNew->bedList, dupe);
 		    }
 		else
-		    bedTabOutN(bed, fields, stdout);
+		    {
+		    if (bedItemRgb(curTrack))
+			bedTabOutNitemRgb(bed, fields, stdout);
+		    else
+			bedTabOutN(bed, fields, stdout);
+		    }
 
 		gotResults = TRUE;
 		}
