@@ -256,7 +256,7 @@ struct hgMutLink
     struct hgMutLink *next;  /* Next in singly linked list. */
     int linkId;	/* ID for this source, links to hgMutExtLink table. */
     char *linkDisplayName;	/* Display name for this link. */
-    char *url;	/* url to substitute ID in for links. */
+    char *url;	/* url to substitute acc in for links. */
     };
 
 void hgMutLinkStaticLoad(char **row, struct hgMutLink *ret);
@@ -402,7 +402,7 @@ void hgMutAliasOutput(struct hgMutAlias *el, FILE *f, char sep, char lastSep);
 #define hgMutAliasCommaOut(el,f) hgMutAliasOutput(el,f,',',',');
 /* Print out hgMutAlias as a comma separated list including final comma. */
 
-#define HGMUTATTR_NUM_COLS 4
+#define HGMUTATTR_NUM_COLS 5
 
 struct hgMutAttr
 /* attributes asssociated with the mutation */
@@ -411,6 +411,7 @@ struct hgMutAttr
     char *mutId;	/* mutation ID. */
     int mutAttrClassId;	/* id for attribute class or category, foreign key. */
     int mutAttrNameId;	/* id for attribute name, foreign key. */
+    int mutAttrLinkId;	/* id for links from this attribute. */
     char *mutAttrVal;	/* value for this attribute */
     };
 
@@ -633,6 +634,83 @@ void hgMutAttrNameOutput(struct hgMutAttrName *el, FILE *f, char sep, char lastS
 
 #define hgMutAttrNameCommaOut(el,f) hgMutAttrNameOutput(el,f,',',',');
 /* Print out hgMutAttrName as a comma separated list including final comma. */
+
+#define HGMUTATTRLINK_NUM_COLS 3
+
+struct hgMutAttrLink
+/* links internal or external tied to this attribute */
+    {
+    struct hgMutAttrLink *next;  /* Next in singly linked list. */
+    int mutAttrLinkId;	/* id for attribute link. */
+    char *mutAttrLink;	/* key into .ra file on how to do link. */
+    char *mutAttrAcc;	/* accession or id used by link. */
+    };
+
+void hgMutAttrLinkStaticLoad(char **row, struct hgMutAttrLink *ret);
+/* Load a row from hgMutAttrLink table into ret.  The contents of ret will
+ * be replaced at the next call to this function. */
+
+struct hgMutAttrLink *hgMutAttrLinkLoad(char **row);
+/* Load a hgMutAttrLink from row fetched with select * from hgMutAttrLink
+ * from database.  Dispose of this with hgMutAttrLinkFree(). */
+
+struct hgMutAttrLink *hgMutAttrLinkLoadAll(char *fileName);
+/* Load all hgMutAttrLink from whitespace-separated file.
+ * Dispose of this with hgMutAttrLinkFreeList(). */
+
+struct hgMutAttrLink *hgMutAttrLinkLoadAllByChar(char *fileName, char chopper);
+/* Load all hgMutAttrLink from chopper separated file.
+ * Dispose of this with hgMutAttrLinkFreeList(). */
+
+#define hgMutAttrLinkLoadAllByTab(a) hgMutAttrLinkLoadAllByChar(a, '\t');
+/* Load all hgMutAttrLink from tab separated file.
+ * Dispose of this with hgMutAttrLinkFreeList(). */
+
+struct hgMutAttrLink *hgMutAttrLinkLoadByQuery(struct sqlConnection *conn, char *query);
+/* Load all hgMutAttrLink from table that satisfy the query given.  
+ * Where query is of the form 'select * from example where something=something'
+ * or 'select example.* from example, anotherTable where example.something = 
+ * anotherTable.something'.
+ * Dispose of this with hgMutAttrLinkFreeList(). */
+
+void hgMutAttrLinkSaveToDb(struct sqlConnection *conn, struct hgMutAttrLink *el, char *tableName, int updateSize);
+/* Save hgMutAttrLink as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size
+ * of a string that would contain the entire query. Arrays of native types are
+ * converted to comma separated strings and loaded as such, User defined types are
+ * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
+ * For example "autosql's features include" --> "autosql\'s features include" 
+ * If worried about this use hgMutAttrLinkSaveToDbEscaped() */
+
+void hgMutAttrLinkSaveToDbEscaped(struct sqlConnection *conn, struct hgMutAttrLink *el, char *tableName, int updateSize);
+/* Save hgMutAttrLink as a row to the table specified by tableName. 
+ * As blob fields may be arbitrary size updateSize specifies the approx size.
+ * of a string that would contain the entire query. Automatically 
+ * escapes all simple strings (not arrays of string) but may be slower than hgMutAttrLinkSaveToDb().
+ * For example automatically copies and converts: 
+ * "autosql's features include" --> "autosql\'s features include" 
+ * before inserting into database. */ 
+
+struct hgMutAttrLink *hgMutAttrLinkCommaIn(char **pS, struct hgMutAttrLink *ret);
+/* Create a hgMutAttrLink out of a comma separated string. 
+ * This will fill in ret if non-null, otherwise will
+ * return a new hgMutAttrLink */
+
+void hgMutAttrLinkFree(struct hgMutAttrLink **pEl);
+/* Free a single dynamically allocated hgMutAttrLink such as created
+ * with hgMutAttrLinkLoad(). */
+
+void hgMutAttrLinkFreeList(struct hgMutAttrLink **pList);
+/* Free a list of dynamically allocated hgMutAttrLink's */
+
+void hgMutAttrLinkOutput(struct hgMutAttrLink *el, FILE *f, char sep, char lastSep);
+/* Print out hgMutAttrLink.  Separate fields with sep. Follow last field with lastSep. */
+
+#define hgMutAttrLinkTabOut(el,f) hgMutAttrLinkOutput(el,f,'\t','\n');
+/* Print out hgMutAttrLink as a line in a tab-separated file. */
+
+#define hgMutAttrLinkCommaOut(el,f) hgMutAttrLinkOutput(el,f,',',',');
+/* Print out hgMutAttrLink as a comma separated list including final comma. */
 
 /* -------------------------------- End autoSql Generated Code -------------------------------- */
 
