@@ -9,8 +9,9 @@
 #include "bed.h"
 #include "hdb.h"
 #include "hgRelate.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.39 2006/05/11 19:04:10 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.40 2006/05/16 00:01:31 hiram Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -25,6 +26,7 @@ boolean strict = FALSE;		/* do sanity checks on chrom start,end */
 int bedGraph = 0;		/* bedGraph column option, non-zero means yes */
 char *sqlTable = NULL;		/* Read table from this .sql if non-NULL. */
 int maxChromNameLength = 0;		/* specify to avoid chromInfo */
+char *tmpDir = (char *)NULL;	/*	location to create a temporary file */
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -41,6 +43,7 @@ static struct optionSpec optionSpecs[] = {
     {"notItemRgb", OPTION_BOOLEAN},
     {"strict", OPTION_BOOLEAN},
     {"maxChromNameLength", OPTION_INT},
+    {"tmpDir", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -67,6 +70,8 @@ errAbort(
   "               - and it must be the last column of the input file.\n"
   "   -maxChromNameLength=N  - specify max chromName length to avoid\n"
   "               - reference to chromInfo table\n"
+  "   -tmpDir=<path>  - path to directory for creation of temporary .tab file\n"
+  "                   - which will be removed after loading\n"
   "   -strict  - do sanity testing,\n"
   "            - issue warnings when: chromStart >= chromEnd\n"
   "   -verbose=N - verbose level for extra information to STDERR"
@@ -220,12 +225,17 @@ static void loadDatabase(char *database, char *track, int bedSize, struct bedStu
 {
 struct sqlConnection *conn;
 struct dyString *dy = newDyString(1024);
-char *tab = "bed.tab";
+char *tab = (char *)NULL;
 int loadOptions = (optionExists("onServer") ? SQL_TAB_FILE_ON_SERVER : 0);
 char comment[256];
 
 if ( ! noLoad )
     conn = sqlConnect(database);
+
+if ((char *)NULL != tmpDir)
+    tab = cloneString(rTempName(tmpDir,"loadBed",".bed"));
+else
+    tab = cloneString("bed.tab");
 
 /* First make table definition. */
 if (sqlTable != NULL)
@@ -321,10 +331,14 @@ if ( ! noLoad )
 	    slCount(bedList), track);
     hgHistoryComment(conn, comment);
     sqlDisconnect(&conn);
+    /*	if temp dir specified, unlink file to make it disappear */
+    if ((char *)NULL != tmpDir)
+	unlink(tab);
     }
 else
     verbose(1, "No load option selected, see file: %s\n", tab);
-}
+
+}	/*	static void loadDatabase()	*/
 
 void hgLoadBed(char *database, char *track, int bedCount, char *bedFiles[])
 /* hgLoadBed - Load a generic bed file into database. */
@@ -384,6 +398,7 @@ notItemRgb = optionExists("notItemRgb");
 if (notItemRgb) itemRgb = FALSE;
 maxChromNameLength = optionInt("maxChromNameLength",0);
 strict = optionExists("strict");
+tmpDir = optionVal("sqlTable", tmpDir);
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
