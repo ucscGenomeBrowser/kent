@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: schema.c,v 1.34 2006/02/04 00:41:31 angie Exp $";
+static char const rcsid[] = "$Id: schema.c,v 1.35 2006/05/16 18:15:42 hiram Exp $";
 
 static char *nbForNothing(char *val)
 /* substitute &nbsp; for empty strings to keep table formating sane */
@@ -409,19 +409,30 @@ hPrintf("<B>Field Count:</B> %d<BR>", ct->fieldCount);
 hPrintf("On loading all custom tracks are converted to ");
 hPrintf("<A HREF=\"/goldenPath/help/customTrack.html#BED\">BED</A> ");
 hPrintf("format.");
-webNewSection("Sample Rows");
-hPrintf("<TT><PRE>");
-if (showItemRgb)
+
+if (ct->dbTrack)
     {
-    for (bed = ct->bedList; bed != NULL && count < 10; bed = bed->next, ++count)
-	bedTabOutNitemRgb(bed, ct->fieldCount, stdout);
+    struct sqlConnection *conn = sqlCtConn(TRUE);
+    webNewSection("Sample Rows");
+    printSampleRows(10, conn, ct->dbTrackName);
+    printTrackHtml(ct->tdb);
     }
 else
     {
-    for (bed = ct->bedList; bed != NULL && count < 10; bed = bed->next, ++count)
-	bedTabOutN(bed, ct->fieldCount, stdout);
+    webNewSection("Sample Rows");
+    hPrintf("<TT><PRE>");
+    if (showItemRgb)
+	{
+	for(bed = ct->bedList;bed != NULL && count < 10;bed = bed->next,++count)
+	    bedTabOutNitemRgb(bed, ct->fieldCount, stdout);
+	}
+    else
+	{
+	for(bed = ct->bedList;bed != NULL && count < 10;bed = bed->next,++count)
+	    bedTabOutN(bed, ct->fieldCount, stdout);
+	}
+    hPrintf("</PRE></TT>\n");
     }
-hPrintf("</PRE></TT>\n");
 }
 
 static void showSchemaCt(char *table)
