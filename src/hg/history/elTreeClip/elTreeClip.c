@@ -7,7 +7,7 @@
 #include "element.h"
 #include "psGfx.h"
 
-static char const rcsid[] = "$Id: elTreeClip.c,v 1.2 2006/03/07 22:25:55 braney Exp $";
+static char const rcsid[] = "$Id: elTreeClip.c,v 1.3 2006/05/17 15:13:02 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,7 +32,7 @@ void removeInodes(struct phyloTree *node)
 {
 struct phyloTree *child;
 
-removeIs(node->priv);
+removeXs(node->priv, 'I');
 if (node->numEdges == 0)
     return;
 
@@ -48,7 +48,7 @@ while (child && (node->numEdges == 1)  && ( child->ident->name[strlen(child->ide
     for(e=g->elements; e; e=e->next)
 	e->parent = e->parent->parent;
     node->ident->length += child->ident->length;
-    removeIs(node->priv);
+    removeXs(node->priv, 'I');
     if (node->numEdges == 0)
 	break;
 
