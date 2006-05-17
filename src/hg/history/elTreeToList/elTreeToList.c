@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: elTreeToList.c,v 1.4 2006/03/03 21:26:26 braney Exp $";
+static char const rcsid[] = "$Id: elTreeToList.c,v 1.5 2006/05/17 15:14:32 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -46,7 +46,7 @@ if ((node->numEdges == 0) || !JustLeaf)
     struct genome *g = node->priv;
     struct element *e;
     if (SpecialNames)
-	removeIs(g);
+	removeXs(g, 'I');
 
     fprintf(f, ">%s %d\n",g->name,slCount(g->elements));
     for(e=g->elements; e ; e= e->next)

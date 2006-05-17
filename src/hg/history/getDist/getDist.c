@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: getDist.c,v 1.4 2006/03/03 21:37:10 braney Exp $";
+static char const rcsid[] = "$Id: getDist.c,v 1.5 2006/05/17 15:14:58 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -174,7 +174,7 @@ void removeAllIs(struct phyloTree *node)
 {
 int ii;
 
-removeIs(node->priv);
+removeXs(node->priv, 'I');
 
 for(ii=0; ii < node->numEdges; ii++)
     removeAllIs(node->edges[ii]);
