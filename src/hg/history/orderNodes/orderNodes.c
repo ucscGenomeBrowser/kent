@@ -6,7 +6,8 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: orderNodes.c,v 1.13 2006/03/11 16:40:25 braney Exp $";
+//#define warn errAbort
+static char const rcsid[] = "$Id: orderNodes.c,v 1.14 2006/05/17 15:17:09 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -140,7 +141,7 @@ void doOwn(struct possibleEdge *p, struct possibleEdge **outList, boolean doFlip
 if ((findEdge(*outList, p->element, p->doFlip)) != NULL)
     errAbort("in doOwn , already on list");
 if (e == p->element)
-    errAbort("adding edge to itself");
+    warn("adding edge to itself");
 if (*outList != NULL)
     errAbort("own edge should be alone");
 addPair(outList, p->element, p->doFlip, p->count);
@@ -184,7 +185,7 @@ for(p = *inList; p ; p = p->next)
 return totalCount;
 }
 
-void purgeList(struct possibleEdge **inList)
+void purgeList(struct possibleEdge **inList, struct element *e)
 {
 struct possibleEdge *p;
 struct possibleEdge *edge;
@@ -204,6 +205,7 @@ for(p = *inList; p ; p = p->next)
 	}
     else 
 	{
+	//printf("purging path %s to %s\n",eleName(e),eleName(p->element));
 	if (prev == NULL)
 	    *inList = p->next;
 	else
@@ -238,12 +240,27 @@ for(p = inList; p ; p = p->next)
 	}
     else
 	{
+	/*
+	if ((sameString(edge->element->edges[0]->species, e->species))
+	&& (sameString(edge->element->edges[1]->species, e->species)))
+	    errAbort("both child is right\n");*/
+	/*
 	if (sameString(edge->element->edges[0]->species, e->species))
+	    {
 	    nextChild = edge->element->edges[0];
+	    if (childNum)
+		errAbort("not choosing correct child");
+	    }
 	else if (sameString(edge->element->edges[1]->species, e->species))
+	    {
 	    nextChild = edge->element->edges[1];
+	    if (childNum != 1)
+		errAbort("not choosing correct child");
+	    }
 	else
 	    errAbort("neither child is right\n");
+	    */
+	    nextChild = edge->element->edges[childNum];
 	}
 
     if (nextChild == NULL)
@@ -251,6 +268,9 @@ for(p = inList; p ; p = p->next)
 
     if (!sameString(e->species, nextChild->species))
 	errAbort("not same species");
+    if (e == nextChild)
+	warn("edge to itself");
+    //else
     addPair(outList, nextChild, p->doFlip, p->count);
     }
 }
@@ -382,8 +402,35 @@ else if (node->numEdges)
 	    else
 		doOwn(e->calced.next, &e->down[0].next, FALSE, e);
 	    }
+	else if (node->numEdges == 1)
+	    {
+	    if (e->calced.prev == NULL)
+		{
+		doDownList(parent->down[num].prev, &e->down[0].prev, num, e);
+		doDownList(parent->down[num].prev, &e->down[1].prev, num, e);
+		}
+	    else
+		{
+		doOwn(e->calced.prev, &e->down[0].prev, TRUE, e);
+		doOwn(e->calced.prev, &e->down[1].prev, TRUE, e);
+		}
+
+	    if (e->calced.next == NULL)
+		{
+		doDownList(parent->down[num].next, &e->down[0].next, num, e);
+		doDownList(parent->down[num].next, &e->down[1].next, num, e);
+		}
+	    else
+		{
+		doOwn(e->calced.next, &e->down[0].next, FALSE, e);
+		doOwn(e->calced.next, &e->down[1].next, FALSE, e);
+		}
+	    }
 	else
 	    {
+	    if (sameString(e->edges[0]->species, e->edges[1]->species))
+		errAbort("same species\n");
+
 	    if (e->calced.prev == NULL)
 		{
 		doUpList(e->edges[0]->up.prev,&e->down[1].prev, e);
@@ -434,22 +481,110 @@ if (!((slCount(left) == 1) ||  (slCount(right) == 1) || (slCount(top) ==1)))
     errAbort("breaks infinite sites 1 must be 1");
 if (slCount(left) + slCount(right) + slCount(top) < 3)
     errAbort("breaks infinite sites < 3");
-//if (slCount(left) + slCount(right) + slCount(top) > 4)
-if (slCount(left) + slCount(right) > 3)
-    warn("breaks infinite sites > 3");
+if (slCount(left) + slCount(right) + slCount(top) > 4)
+//if (slCount(left) + slCount(right) > 3)
+    {
+    warn("breaks infinite sites > 3 genome %s", left->element->species);
+    warn("slCount right %d left %d top %d\n",slCount(right),slCount(left),slCount(top));
+    }
 
+
+#define sameElement(a, b)  ((a->element == b->element) && (a->doFlip == b->doFlip))
+//#define errAbort warn
+p = NULL;
+if (slCount(left) == 1)
+    {
+    p = left;
+    if (slCount(right) == 1)
+	{
+	if (!sameElement(left, right))
+	    {
+	    struct possibleEdge *pTemp = top;
+
+	    for(; pTemp ; pTemp = pTemp->next)
+		{
+		if (sameElement(left, pTemp))
+		    break;
+		}
+	    if (pTemp == NULL)
+		{
+		struct possibleEdge *pTemp = top;
+
+		p = right;
+
+		for(; pTemp ; pTemp = pTemp->next)
+		    {
+		    if (sameElement(right, pTemp))
+			break;
+		    }
+		if (pTemp == NULL)
+		    {
+		    if (sameString(left->element->name, top->element->name))
+			p = left;
+		    else if (sameString(right->element->name, top->element->name))
+			p = right;
+		    else
+			errAbort("one");
+		    }
+		}
+	    }
+	}
+    else if (slCount(top) == 1)
+	{
+	if (left->element != top->element)
+	    {
+	    struct possibleEdge *pTemp = right;
+
+	    for(; pTemp ; pTemp = pTemp->next)
+		{
+		if (sameElement(left, pTemp))
+		    break;
+		}
+	    if (pTemp == NULL)
+		errAbort("four");
+	    }
+	}
+    }
+else if (slCount(right) == 1)
+    {
+    struct possibleEdge *pTemp = top;
+
+    p = right;
+    for(; pTemp ; pTemp = pTemp->next)
+	{
+	if (sameElement(right, pTemp))
+	    break;
+	}
+    if (pTemp == NULL)
+	{
+	struct possibleEdge *pTemp = left;
+
+	for(; pTemp ; pTemp = pTemp->next)
+	    {
+	    if (sameElement(right, pTemp))
+		break;
+	    }
+	if (pTemp == NULL)
+	    errAbort("three");
+	}
+    }
+else 
+    errAbort("two");
+#undef errAbort
+#ifdef NOWNOW
 p = left;
-if ((left->element != top->element) || (left->doFlip!= top->doFlip))
+if ((slCount(left) > 1) || (left->element != top->element) || (left->doFlip!= top->doFlip))
     {
     p = right;
     if (slCount(right) != 1)
-	;//errAbort("fon");
+	errAbort("gon");
 	}
 else
     if (slCount(left) != 1)
-	;//errAbort("fon");
+	errAbort("fon");
 
 
+#endif
 #ifdef NOWNOW
 p = left;
 if (slCount(left) == 2)
@@ -482,14 +617,14 @@ if ((p == right) && (slCount(right) != 1))
 	}
 	*/
 
-/*
 AllocVar(newEdge);
 newEdge->element = p->element;
 newEdge->doFlip = p->doFlip;
 newEdge->count = p->count;
 slAddHead(median, newEdge);
-*/
+/*
 slAddHead(median, p);
+*/
 }
 
 void chooseMedian2(struct possibleEdge *left, struct possibleEdge *right, struct possibleEdge **median) 
@@ -534,7 +669,11 @@ struct possibleEdge *p = NULL;
 if (node->numEdges == 0)
     return;
 
-if (node->parent == NULL)
+if (node->numEdges == 1)
+    {
+    //printf("genome %s\n",node->ident->name);
+    }
+else if (node->parent == NULL)
     {
     for(e=g->elements; e; e = e->next)
 	{
@@ -585,6 +724,7 @@ else if (node->numEdges)
 
 	if (e->numEdges == 1)
 	    {
+	    errAbort("not here");
 	    doUpList(e->edges[0]->up.prev, &rightListPrev, e);
 	    doDownList(parent->down[num].prev, &topListPrev, num, e);
 
@@ -597,6 +737,7 @@ else if (node->numEdges)
 	    }
 	else
 	    {
+	    //warn("working on %s in %s\n",eleName(e), e->species);
 	    doUpList(e->edges[0]->up.prev,&rightListPrev, e);
 	    doUpList(e->edges[1]->up.prev,&leftListPrev, e);
 	    doDownList(parent->down[num].prev, &topListPrev, num, e);
@@ -753,7 +894,7 @@ void reOrderTree(FILE *f, struct phyloTree *node)
 int ii;
 struct genome *g = node->priv;
 
-if (node->numEdges)
+if (node->parent && node->numEdges == 2)
     reOrderNode(f, g);
 else
     {
@@ -814,11 +955,14 @@ if (node->numEdges == 0)
 for(ii=0; ii < node->numEdges; ii++)
     findBestEdge(node->edges[ii], pEdge, bestYet, neg, pEvent);
 
+if (node->numEdges == 1)
+    return;
+
 for(e=g->elements; e; e = e->next)
     {
     if ((e->calced.prev == NULL) && (e->mix.prev ))
     {
-    purgeList(&e->mix.prev);
+    purgeList(&e->mix.prev, e);
     for(edge = e->mix.prev; edge; edge = edge->next)
 	{
 	if (edge->count > *bestYet)
@@ -832,7 +976,7 @@ for(e=g->elements; e; e = e->next)
     }
     if ((e->calced.next == NULL) && (e->mix.next))
     {
-    purgeList(&e->mix.next);
+    purgeList(&e->mix.next, e);
     for(edge = e->mix.next; edge; edge = edge->next)
 	{
 	if (edge->count > *bestYet)
@@ -861,13 +1005,15 @@ newEdge->element = edge->element;
 if (doFlip)
     {
     if (e->calced.prev != NULL)
-	errAbort("calced edge already set");
+	if (!(e->calced.prev->doFlip == newEdge->doFlip) && (e->calced.prev->element == newEdge->element))
+	    errAbort("calced edge already set");
     e->calced.prev = newEdge;
     }
 else 
     {
     if (e->calced.next != NULL)
-	errAbort("calced edge already set");
+	if (!(e->calced.next->doFlip == newEdge->doFlip) && (e->calced.next->element == newEdge->element))
+	    errAbort("calced edge already set");
     e->calced.next = newEdge;
     }
 
@@ -878,13 +1024,15 @@ newEdge->doFlip = doFlip ? FALSE : TRUE ;
 if (!edge->doFlip)
     {
     if (edge->element->calced.prev != NULL)
-	errAbort("calced edge already set");
+	if (!(e->calced.prev->doFlip == newEdge->doFlip) && (e->calced.prev->element == newEdge->element))
+	    errAbort("calced edge already set");
     edge->element->calced.prev = newEdge;
     }
 else 
     {
     if (edge->element->calced.next != NULL)
-	errAbort("calced edge already set");
+	if (!(e->calced.next->doFlip == newEdge->doFlip) && (e->calced.next->element == newEdge->element))
+	    errAbort("calced edge already set");
     edge->element->calced.next = newEdge;
     }
 }
@@ -929,11 +1077,11 @@ for(;;)
     else
 	totalCount = getTotalCount( &bestElement->up.next);
 
-    printf("best adjacency %c%s to %c%s count %d\n",doFlip ? '-' : ' ', 
-	eleName(bestElement),edge->doFlip ? '-' : ' ',eleName(edge->element),best);
+    //printf("best adjacency %c%s to %c%s count %d\n",doFlip ? '-' : ' ', 
+	//eleName(bestElement),edge->doFlip ? '-' : ' ',eleName(edge->element),best);
     setEdge(bestElement, edge, doFlip, totalCount);
-    putchar('.');
-    fflush(stdout);
+ //   putchar('.');
+  //  fflush(stdout);
     }
 
 reOrderTree(f, node);
