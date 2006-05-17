@@ -73,10 +73,12 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	elementsLeft = atoi(words[1]);
 	numChildren = atoi(words[2]);
 	node->ident->length =  atof(words[3]);
-	needGenome = FALSE;
 	elements = NULL;
 	if (elementsLeft)
+	    {
+	    needGenome = FALSE;
 	    elements = needMem((elementsLeft + 2) * sizeof(struct element *));
+	    }
 
 	verbose(2, "adding genome %s\n",genome->name);
 	}
@@ -89,7 +91,7 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    errAbort("must specify genome name before listing elements");
 
 	if (wordsRead /2> elementsLeft)
-	    errAbort("too many elements in genome %s",genome->name);
+	    errAbort("too many elements in genome (%d vs %d)  %s",wordsRead,elementsLeft,genome->name);
 	if ( (words[0][0] == '>'))
 	    errAbort("too few elements in genome %s elementsLeft %d\n",genome->name,elementsLeft);
 	elementsLeft -= wordsRead/2;
@@ -151,7 +153,7 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    *ptr++ = 0;
 	    element->version = ptr;
 	    if(element->parent && !sameString(element->name, element->parent->name))
-		errAbort("parent named %s doesn't have same name as child %s: line %d\n",
+		warn("element named %s doesn't have same name as parent %s: line %d",
 		    element->name, element->parent->name, lf->lineIx);
 
 	    verbose(2, "added element %s.%s\n",element->name,element->version);
@@ -237,7 +239,7 @@ struct genome *readGenomes(char *fileName)
 {
 struct genome *allGenomes = NULL, *genome = NULL;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *words[2048];
+char *words[8*2048];
 int wordsRead, wordsLeft = 0;
 boolean needGenome = TRUE;
 
@@ -254,7 +256,8 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	wordsLeft = atoi(words[1]);
 	verbose(2, "adding genome %s\n",genome->name);
 	genome->elementHash = newHash(8);
-	needGenome = FALSE;
+	if (wordsLeft)
+	    needGenome = FALSE;
 	}
     else
 	{
@@ -264,7 +267,7 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *)) ))
 	    errAbort("must specify genome name before listing elements");
 
 	if (wordsRead > wordsLeft)
-	    errAbort("too many elements in genome %s",genome->name);
+	    errAbort("too many elements in genome (%d vs %d)  %s",wordsRead,wordsLeft,genome->name);
 	if ( (words[0][0] == '>'))
 	    errAbort("too few elements in genome %s\n",genome->name);
 	wordsLeft -= wordsRead;
@@ -454,7 +457,7 @@ struct distance *readDistances(char *fileName, struct hash *genomeHash,
     struct hash **pDistHash, struct hash **pDistEleHash)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *words[256];
+char *words[16 * 1024];
 int wordsRead;
 struct distance *distances = NULL;
 
@@ -470,11 +473,14 @@ while( (wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *))))
 
     rowNames = (char **)needMem(count * sizeof(char *));
     rowValues = (double **)needMem(count * sizeof(double *));
+    if (count + 1 > sizeof(words)/sizeof(char *))
+	errAbort("buffer not big enough for %d words in readDistances", count + 1);
+
     for(ii=0; ii < count; ii++)
 	{
 	wordsRead = lineFileChopNext(lf, words, sizeof(words)/sizeof(char *));
 	if (wordsRead != count + 1)
-	    errAbort("number of words in distance matrix row must be %d\n",count+1);
+	    errAbort("number of words in distance matrix row must be %d line %d\n",count+1,lf->lineIx);
 
 	rowNames[ii] = cloneString(words[0]);
 	rowValues[ii] = needMem(sizeof(double) * count);
@@ -664,7 +670,7 @@ count++;
 return buffer;
 }
 
-void removeIs(struct genome *list)
+void removeXs(struct genome *list, char ch)
 {
 for(; list; list = list->next)
     {
@@ -672,7 +678,7 @@ for(; list; list = list->next)
 
     lastPtr = &list->name[strlen(list->name)];
     for(ptr = list->name; *ptr; )
-	if (*ptr == 'I')
+	if (*ptr == ch)
 	    memcpy(ptr, ptr+1, (lastPtr - ptr)); 
 	else 
 	    ptr++;
