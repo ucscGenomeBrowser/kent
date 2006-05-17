@@ -7,7 +7,9 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: synthElemTree.c,v 1.8 2006/03/11 15:51:26 braney Exp $";
+static char const rcsid[] = "$Id: synthElemTree.c,v 1.9 2006/05/17 15:17:53 braney Exp $";
+
+int generation = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -30,6 +32,7 @@ errAbort(
   "   -DelWt          divided by total weight to get probablity a node will have a deletion\n"
   "   -InverseWt      divided by total weight to get probablity a node will have an inversion\n"
   "   -NoWt           divided by total weight to get probablity a node will just clock branch length\n"
+  "   -history=file   put rearrangement history in file \n"
   );
 }
 
@@ -45,6 +48,7 @@ static struct optionSpec options[] = {
     {"DupWt", OPTION_INT},
     {"NoWt", OPTION_INT},
     {"InverseWt", OPTION_INT},
+    {"history", OPTION_STRING},
    {NULL, 0},
 };
 
@@ -62,13 +66,15 @@ int NoWt = 0;
 int InverseWt = 0;
 
 
-void speciate(struct genome **list, struct genome *g)
+void speciate(struct genome **list, struct genome *g, FILE *hf)
 {
 struct genome *g1, *g2;
 struct phyloTree *t1, *t2;
 struct element *p;
 char buffer[512];
 
+if (hf)
+    fprintf(hf, "%d S %s\n",generation,g->name);
 AllocVar(t1);
 AllocVar(t1->ident);
 safef(buffer, sizeof(buffer), "%s0",g->name);
@@ -134,6 +140,7 @@ if (e->isFlipped)
     safef(buffer, sizeof(buffer), "+%s",e->name);
 else
     safef(buffer, sizeof(buffer), "%s+",e->name);
+//verbose(2, "checking %s\n", buffer);
 if (hashLookup(InfHash, buffer))
     {
     return NULL;
@@ -149,6 +156,7 @@ if (e->isFlipped)
     safef(buffer, sizeof(buffer), "%s+",e->name);
 else
     safef(buffer, sizeof(buffer), "+%s",e->name);
+//verbose(2, "checking %s\n", buffer);
 if (hashLookup(InfHash, buffer))
     {
     return NULL;
@@ -161,11 +169,13 @@ boolean checkInf(struct element *e1, struct element *e2, struct element *e3, str
 {
 char *ptr1, *ptr2, *ptr3, *ptr4;
 
+verbose(2,"check4\n");
 if (ptr1 = checkAfter(e1))
     if (ptr2 = checkBefore(e2))
 	if (ptr3 = checkAfter(e3))
 	    if (ptr4 = checkBefore(e4))
 		{
+		verbose(2,"check %s %s %s %s\n",ptr1,ptr2,ptr3,ptr4);
 		hashAdd(InfHash, ptr1, NULL);
 		hashAdd(InfHash, ptr2, NULL);
 		hashAdd(InfHash, ptr3, NULL);
@@ -186,6 +196,7 @@ boolean checkInf6(struct element *e1, struct element *e2, struct element *e3, st
 {
 char *ptr1, *ptr2, *ptr3, *ptr4, *ptr5, *ptr6;
 
+verbose(2,"check6\n");
 if (ptr1 = checkAfter(e1))
     if (ptr2 = checkBefore(e2))
 	if (ptr3 = checkAfter(e3))
@@ -193,6 +204,7 @@ if (ptr1 = checkAfter(e1))
 		if (ptr5 = checkAfter(e5))
 		    if (ptr6 = checkBefore(e6))
 		{
+		verbose(2,"check %s %s %s %s %s %s\n",ptr1,ptr2,ptr3,ptr4, ptr5,ptr6);
 		hashAdd(InfHash, ptr1, NULL);
 		hashAdd(InfHash, ptr2, NULL);
 		hashAdd(InfHash, ptr3, NULL);
@@ -254,7 +266,7 @@ phyloAddEdge(parent->node, t1);
 return g1;
 }
 
-boolean invert(struct genome **list, struct genome *g)
+boolean invert(struct genome **list, struct genome *g, FILE *hf)
 {
 struct genome *g1;
 struct phyloTree *t1;
@@ -263,8 +275,10 @@ struct element *e1 , *e2, *e3, *e4;
 int ii;
 char buffer[512];
 int r = 1 + random() % (slCount(g->elements) - 2);
-int n = random() % (slCount(g->elements) - 1 - r  ) ;
+int n = 1 + random() % (slCount(g->elements)  - r - 1  ) ;
 
+if (hf)
+    fprintf(hf, "%d I %s %d %d\n",generation,g->name, r, r + n);
 assert(r > 0);
 
 if (InfHash)
@@ -276,7 +290,7 @@ if (InfHash)
     e1 = p;
     e2 = p->next;
 
-    for(; (ii < r + n  ) && p; ii++,p=p->next)
+    for(; (ii < r + n - 1  ) && p; ii++,p=p->next)
 	;
 
     e3 = p;
@@ -296,11 +310,13 @@ for(ii=0, p = g1->elements; ii < r  ; prev = p, ii++, p=p->next)
     ;
 
 start = p;
-for(; ii < r + n  ;  ii++, p=p->next)
+for(; ii < r + n - 1  ;  ii++, p=p->next)
     ;
 
 afterStart = p->next;
 p->next = NULL;
+if (slCount(start) != n)
+    errAbort("not working");
 
 slReverse(&start);
 prev->next = start;
@@ -335,7 +351,7 @@ for(ii=0, p = list; (ii < r ) && p; ii++,p=p->next)
 
 if  ( p == list)
     errAbort("bad bad");
-for(; (ii < r + n + 1  ) && p; ii++,p=p->next)
+for(; (ii < r + n   ) && p; ii++,p=p->next)
     {
     AllocVar(e);
     e->genome = p->genome;
@@ -359,15 +375,15 @@ slReverse(&copy);
 return copy;
 }
 
-boolean duplicate(struct genome **list, struct genome *g)
+boolean duplicate(struct genome **list, struct genome *g, FILE *hf)
 {
 int ii;
 struct genome *g1;
 struct phyloTree *t1;
 struct element *p, *end, *e1, *e2, *e3, *e4, *e5, *e6;
 char buffer[512];
-int r = 1 + random() % (slCount(g->elements) - 2);
-int n = random() % (slCount(g->elements) - 1 - r  ) ;
+int r = 1 + random() % (slCount(g->elements) - 3);
+int n = 1 + random() % (slCount(g->elements) - 2 - r  ) ;
 int t = random() % (slCount(g->elements) - 2);
 int didIt = 0;
 struct element *eList;
@@ -379,6 +395,9 @@ for (count = 0; (count < 100) && (t >= r - 1) && ( t < r + n + 1); count++)
 if (count == 100)
     return FALSE;
 
+if (hf)
+    fprintf(hf, "%d D %s %d %d %d\n",generation,g->name, r, r + n, t);
+
 if (InfSites)
     {
     int ii;
@@ -388,7 +407,7 @@ if (InfSites)
     e1 = p;
     e2 = p->next;
 
-    for(; (ii < r + n  ) && p; ii++,p=p->next)
+    for(; (ii < r + n - 1  ) && p; ii++,p=p->next)
 	;
 
     e3 = p;
@@ -406,20 +425,57 @@ if (InfSites)
 g1 = newGenome(g, 'D');
 slAddHead(list, g1);
 copyDownElements(g, g1);
+verbose(2,"genome %s start %d end %d\n",g1->name, r, r+n);
 
 eList = getElementCopy(g1->elements, r, n);
+{
+struct element *e2List = eList;
+for(ii=0; ii < n; ii++)
+    {
+    verbose(2,"copied %s\n",e2List->name);
+    e2List = e2List->next;
+    }
+
+}
+
+{
+struct element *e2List = g1->elements;
+int N = slCount(e2List);
+verbose(2,"old genome %s\n",g1->name);
+for(ii=0; ii < N; ii++)
+    {
+    verbose(2,"%s ",e2List->name);
+    e2List = e2List->next;
+    }
+    verbose(2,"\n");
+
+}
 for(ii=0, p = g1->elements; (ii < t - 1) && p; ii++,p=p->next)
     ;
 end = p->next;
+verbose(2, "adding after %s before %s\n",p->name,end->name);
 p->next = eList;
 while(eList->next)
     eList = eList->next;
 eList->next = end;
 
+{
+struct element *e2List = g1->elements;
+int N = slCount(e2List);
+verbose(2,"new genome %s\n",g1->name);
+for(ii=0; ii < N; ii++)
+    {
+    verbose(2,"%s ",e2List->name);
+    e2List = e2List->next;
+    }
+    verbose(2,"\n");
+
+}
+
 return TRUE;
 }
 
-boolean delete(struct genome **list, struct genome *g)
+boolean delete(struct genome **list, struct genome *g, FILE *hf)
 {
 struct genome *g1;
 struct phyloTree *t1;
@@ -436,6 +492,8 @@ if (slCount(g->elements) == 2)
 r = 1 + random() % (slCount(g->elements) - 2);
 n = random() % (slCount(g->elements) - 1 - r  ) ;
 
+if (hf)
+    fprintf(hf, "%d X %s %d %d\n",generation,g->name, r, r + n);
 g1 = newGenome(g, 'X');
 slAddHead(list, g1);
 copyDownElements(g, g1);
@@ -496,10 +554,11 @@ slReverse(&g1->elements);
 }
 
 
-void synthElemTree(char *outFile)
+void synthElemTree(char *outFile, char *historyFile)
 {
 boolean firstTime = TRUE;
 FILE *f = mustOpen(outFile,"w");
+FILE *hf = NULL;
 struct phyloTree *root = NULL;
 struct phyloTree *uroot = NULL;
 struct phyloTree *node = NULL;
@@ -507,8 +566,9 @@ struct genome *g;
 int ii;
 char name[512];
 struct genome *gList = NULL;
-int generation = 0;
 
+if (historyFile)
+    hf = mustOpen(historyFile,"w");
 AllocVar(root);
 AllocVar(root->ident);
 root->ident->name = cloneString("U");
@@ -527,7 +587,7 @@ for (ii=0; ii < NumElements; ii++)
 newElement(g, cloneString("END"), NULL);
 slReverse(&g->elements);
 
-speciate(&gList, g);
+speciate(&gList, g, hf);
 
 g = gList->next;
 node = g->node;
@@ -568,11 +628,11 @@ for (; generation < MaxGeneration ;generation++)
 	if (firstTime || (r -= SpeciesWt) < 0)
 	    {
 	    firstTime = FALSE;
-	    speciate(&nextList, g);
+	    speciate(&nextList, g,hf);
 	    }
 	else if ((r -= DelWt) < 0)
 	    {
-	    didIt = delete(&nextList, g);
+	    didIt = delete(&nextList, g,hf);
 	    }
 	else if ((r -= DupWt) < 0)
 	    {
@@ -580,7 +640,7 @@ for (; generation < MaxGeneration ;generation++)
 		//|| (g->name[strlen(g->name) - 1] == 'I'))
 		//didIt = FALSE;
 	    //else
-	    didIt = duplicate(&nextList, g);
+	    didIt = duplicate(&nextList, g,hf);
 	    }
 	else if ((r -= InverseWt) < 0)
 	    {
@@ -588,7 +648,7 @@ for (; generation < MaxGeneration ;generation++)
 //		|| (g->name[strlen(g->name) - 1] == 'I'))
 //		didIt = FALSE;
 //	    else
-	    didIt = invert(&nextList, g);
+	    didIt = invert(&nextList, g,hf);
 	    }
 	else if ((r -= NoWt) < 0)
 	    {
@@ -615,6 +675,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 long seed = time(NULL) + getpid();
+char *historyFile;
 optionInit(&argc, argv, options);
 
 if (argc != 2)
@@ -631,6 +692,7 @@ seed = optionInt( "seed", seed);
 Trace = optionExists("trace");
 InverseWt = optionInt( "InverseWt", 0);
 InfSites = optionExists( "InfSites");
+historyFile = optionVal( "history", NULL);
 if (InfSites)
     InfHash = newHash(5);
 
@@ -639,6 +701,6 @@ if (0 == SpeciesWt + DupWt + InverseWt + DelWt)
 
 printf("using seed: %ld\n",seed);
 srandom(seed);
-synthElemTree(argv[1]);
+synthElemTree(argv[1], historyFile);
 return 0;
 }
