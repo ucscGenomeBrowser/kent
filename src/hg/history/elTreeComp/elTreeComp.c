@@ -6,7 +6,7 @@
 #include "phyloTree.h"
 #include "element.h"
 
-static char const rcsid[] = "$Id: elTreeComp.c,v 1.4 2006/03/07 22:26:15 braney Exp $";
+static char const rcsid[] = "$Id: elTreeComp.c,v 1.5 2006/05/17 15:13:49 braney Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -19,23 +19,33 @@ errAbort(
   "   elementTreeFile      name of file containing element tree\n"
   "options:\n"
   "   -sort      sort elements first so element order isn't important\n"
+  "   -triple    only check nodes with two children and a parent\n"
+  "   -noStrand  don't count strand errors\n"
   );
 }
 
 static struct optionSpec options[] = {
     {"sort", OPTION_BOOLEAN},
+    {"triple", OPTION_BOOLEAN},
+    {"noStrand", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
 boolean DoSort = FALSE;
+boolean OnlyTriple = FALSE;
+boolean NoStrand = FALSE;
 
 
 int elemComp(const void *one, const void *two)
 {
 struct element *e1 = *(struct element **)one;
 struct element *e2 = *(struct element **)two;
+int d;
 
-return strcmp(e1->name, e2->name);
+if ((d = strcmp(e1->name, e2->name)) == 0)
+    d = strcmp(e1->version, e2->version);
+
+return d;
 }
 
 void compGenome(struct genome *g1, struct genome *g2)
@@ -57,11 +67,17 @@ for(e1=g1->elements, e2=g2->elements; e1 && e2 ; e1 = e1->next, e2=e2->next,coun
     {
     if (!sameString(e1->name, e2->name))
 	{
-	warn("in genomes %s and %s element %d not equal (%s and %s)",
-	    g1->name, g2->name, count, e1->name, e2->name);
+	warn("in genomes %s element %d name not equal (%s and %s)",
+	    g1->name,  count, e1->name, e2->name);
 	break;
 	}
-    else if (!DoSort && (e1->isFlipped != e2->isFlipped))
+    if (!sameString(e1->version, e2->version))
+	{
+	warn("in genome %s element %s version not equal (%s and %s)",
+	    g1->name,  e1->name, e1->version, e2->version);
+	break;
+	}
+    else if (!NoStrand && !DoSort && (e1->isFlipped != e2->isFlipped))
 	warn("in genomes %s element %s not same strand (%d and %d)",
 	    g1->name,  eleName(e1), e1->isFlipped, e2->isFlipped);
     }
@@ -72,6 +88,14 @@ void compNode(struct phyloTree *node1, struct phyloTree *node2)
 struct genome *g1 = node1->priv;
 struct genome *g2 = node2->priv;
 
+//if (OnlyTriple && ((node1->parent == NULL) || (node1->parent->numEdges != 2) ||  (node1->numEdges != 2)))
+if (OnlyTriple && ((node1->parent == NULL) || (node1->numEdges != 2)))
+    {
+    verbose(2, "not checking %s\n",node1->ident->name);
+    return;
+    }
+
+verbose(2, "checking %s\n",node1->ident->name);
 if (!sameString(node1->ident->name, node2->ident->name))
     warn("diff: nodes %s and %s have different names",
 	node1->ident->name,node2->ident->name);
@@ -119,8 +143,9 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 
-if (optionExists("sort"))
-    DoSort = TRUE;
+DoSort = optionExists("sort");
+OnlyTriple = optionExists("triple");
+NoStrand = optionExists("noStrand");
 
 //verboseSetLevel(2);
 elTreeComp(argv[1], argv[2]);
