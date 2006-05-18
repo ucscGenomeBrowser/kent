@@ -69,6 +69,15 @@ exit
     # terms of use
     cp /usr/local/apache/htdocs/goldenPath/hg16/encode/alignments/README.txt .
 
+    # Shuffle-Lagan processed sequences, submitted 5/18/06
+    #  by George Asimenos, Stanford
+    ssh store03
+    cd /cluster/data/encode/MSA/SEP-05
+    mkdir shuffle
+    cd shuffle
+    wget http://ai.stanford.edu/~asimenos/rearranged_sep05.tar.bz2
+
+
 
 !##########################################################################
 ###########################################################################
