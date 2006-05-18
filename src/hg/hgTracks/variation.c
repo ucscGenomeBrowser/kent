@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.80 2006/04/22 00:34:49 heather Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.81 2006/05/18 17:16:17 daryl Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -79,7 +79,7 @@ boolean snp125WeightFilterItem(struct track *tg, void *item)
 {
 struct snp125 *el = item;
 
-if (el->weight < atoi(cartUsualString(cart, "snp125WeightCutoff", "0")))
+if (el->weight > atoi(cartUsualString(cart, "snp125WeightmaCutoff", "3")))
     return FALSE;
 return TRUE;
 }
@@ -296,7 +296,7 @@ void loadSnp125(struct track *tg)
 int i = 0;
 
 snp125AvHetCutoff = atof(cartUsualString(cart, "snp125AvHetCutoff", "0.0"));
-snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "0"));
+snp125WeightCutoff = atoi(cartUsualString(cart, "snp125WeightCutoff", "3"));
 
 for (i=0; i < snp125MolTypeCartSize; i++)
     {
