@@ -326,13 +326,13 @@ type bed 9
     track picTarMiRNADog
     subTrack picTar
     shortLabel PicTar 4 Species
-    longLabel PicTar microRNA sites, 4 species conservation constraint: Human/Mouse/Rat/Dog
+    longLabel PicTar microRNA sites, conservation constraint: Mouse/Rat/Rabbit/Human/Chimp/Macaque/Dog
     color 128,0,128
     priority 1
 
     track picTarMiRNAChicken
     subTrack picTar
     shortLabel PicTar 5 Species
-    longLabel PicTar microRNA sites, 5 species conservation constraint: Human/Mouse/Rat/Dog/Chicken
+    longLabel PicTar microRNA sites, conservation constraint: Mouse/Rat/Rabbit/Human/Chimp/Macaque/Dog/Cow/Armadillo/Elephant/Tenrec/Opossum/Chicken
     color 128,0,128
     priority 2
