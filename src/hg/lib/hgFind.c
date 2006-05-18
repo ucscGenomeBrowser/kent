@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.185 2006/05/01 17:49:27 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.186 2006/05/18 18:03:12 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -131,7 +131,7 @@ static char buf[HGPOSRANGESIZE];
 if (range == NULL)
     range = buf;
 safef(range, HGPOSRANGESIZE, "%s:%d-%d",
-      pos->chrom, pos->chromStart, pos->chromEnd);
+      pos->chrom, pos->chromStart+1, pos->chromEnd);
 return range;
 }
 
