@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.87 2006/05/12 17:49:50 hiram Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.88 2006/05/18 21:24:33 hiram Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1537,7 +1537,7 @@ else
 ret = (char *)needMem(25*sizeof(char));  /* 25 is good for a billion years */
 
 snprintf(ret, 25*sizeof(char), "%d-%02d-%02d %02d:%02d:%02d",
-    1900+tm->tm_year, 1+tm->tm_mon, 1+tm->tm_mday,
+    1900+tm->tm_year, 1+tm->tm_mon, tm->tm_mday,
     tm->tm_hour, tm->tm_min, tm->tm_sec);
 return(ret);
 }
