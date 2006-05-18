@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1016 2006/05/18 17:37:21 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1017 2006/05/18 17:56:32 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -18274,7 +18274,8 @@ else if (startsWith("flyreg", track))
     doFlyreg(tdb, item);
     }
 /* ENCODE tracks */
-else if (startsWith("encodeGencodeIntron", track))
+else if (startsWith("encodeGencodeIntron", track) &&
+	 sameString(tdb->type, "bed 6 +"))
     {
     doGencodeIntron(tdb, item);
     }
