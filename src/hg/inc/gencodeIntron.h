@@ -45,7 +45,7 @@ struct gencodeIntron *gencodeIntronLoadAllByChar(char *fileName, char chopper);
 /* Load all gencodeIntron from tab separated file.
  * Dispose of this with gencodeIntronFreeList(). */
 
-struct gencodeIntron *gencodeIntronLoadByQuery(struct sqlConnection *conn, char *query);
+struct gencodeIntron *gencodeIntronLoadByQuery(struct sqlConnection *conn, char *query, int rowOffset);
 /* Load all gencodeIntron from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 

@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1015 2006/05/03 22:13:41 braney Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1016 2006/05/18 17:37:21 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -16364,12 +16364,13 @@ struct sqlConnection *conn = hAllocConn();
 int start = cartInt(cart, "o");
 struct gencodeIntron *intron, *intronList = NULL;
 char query[256];
+int rowOffset = hOffsetPastBin(seqName, tdb->tableName);
 
 genericHeader(tdb, item);
 safef(query, sizeof query, 
         "select * from %s where name='%s' and chrom='%s' and chromStart=%d",
                 tdb->tableName, item, seqName, start);
-intronList = gencodeIntronLoadByQuery(conn, query);
+intronList = gencodeIntronLoadByQuery(conn, query, rowOffset);
 for (intron = intronList; intron != NULL; intron = intron->next)
     {
     printf("<B>Intron:</B> %s<BR>\n", intron->name);

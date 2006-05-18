@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "gencodeIntron.h"
 
-static char const rcsid[] = "$Id: gencodeIntron.c,v 1.2 2005/10/11 02:15:50 kate Exp $";
+static char const rcsid[] = "$Id: gencodeIntron.c,v 1.3 2006/05/18 17:37:21 angie Exp $";
 
 void gencodeIntronStaticLoad(char **row, struct gencodeIntron *ret)
 /* Load a row from gencodeIntron table into ret.  The contents of ret will
@@ -79,7 +79,7 @@ slReverse(&list);
 return list;
 }
 
-struct gencodeIntron *gencodeIntronLoadByQuery(struct sqlConnection *conn, char *query)
+struct gencodeIntron *gencodeIntronLoadByQuery(struct sqlConnection *conn, char *query, int rowOffset)
 /* Load all gencodeIntron from table that satisfy the query given.  
  * Where query is of the form 'select * from example where something=something'
  * or 'select example.* from example, anotherTable where example.something = 
@@ -93,7 +93,7 @@ char **row;
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    el = gencodeIntronLoad(row);
+    el = gencodeIntronLoad(row+rowOffset);
     slAddHead(&list, el);
     }
 slReverse(&list);
