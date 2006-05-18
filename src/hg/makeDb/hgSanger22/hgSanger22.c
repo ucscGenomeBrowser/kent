@@ -10,7 +10,7 @@
 #include "gff.h"
 #include "genePred.h"
 
-static char const rcsid[] = "$Id: hgSanger22.c,v 1.7 2004/02/24 03:42:01 markd Exp $";
+static char const rcsid[] = "$Id: hgSanger22.c,v 1.8 2006/05/18 15:27:22 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -103,7 +103,7 @@ fprintf(f, "%s\n", fields[8]);
 char *findVal(struct lineFile *lf, char *group, char *key)
 /* Return value that matches key in group or NULL. */
 {
-char *s, *e, *var, *val;
+char *s, *var, *val;
 static char buf[512];
 
 if (strlen(group) >= sizeof(buf))
@@ -210,9 +210,8 @@ struct sanger22extra *makeFixedGffAndReadExtra(char *txGff, char *cdsGff,
 /* Combine txGff and cdsGff into something our regular GFF to
  * genePred routine can handle. */
 {
-char *fields[9];
 FILE *f = mustOpen(fixedGff, "w");
-struct sanger22extra *extra, *extraList = NULL;
+struct sanger22extra *extraList = NULL;
 
 processOneGff(txGff, f, "exon", extraHash, &extraList, FALSE);
 processOneGff(cdsGff, f, "CDS", extraHash, &extraList, TRUE);
@@ -287,7 +286,7 @@ void hgSanger22(char *database, char *txGff, char *cdsGff, char *mrnaFa, char *a
 char *fixedGff = "fixed.gff";
 char *extraBed = "extras.bed";
 struct hash *extraHash = newHash(0);
-struct sanger22extra *extraList, *extra;
+struct sanger22extra *extraList;
 
 extraList = makeFixedGffAndReadExtra(txGff, cdsGff, fixedGff, extraHash);
 saveExtras(extraBed, extraList);
