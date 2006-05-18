@@ -11,7 +11,7 @@
 #include "hgRelate.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadBed.c,v 1.40 2006/05/16 00:01:31 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadBed.c,v 1.41 2006/05/18 16:33:14 angie Exp $";
 
 /* Command line switches. */
 boolean noSort = FALSE;		/* don't sort */
@@ -398,7 +398,7 @@ notItemRgb = optionExists("notItemRgb");
 if (notItemRgb) itemRgb = FALSE;
 maxChromNameLength = optionInt("maxChromNameLength",0);
 strict = optionExists("strict");
-tmpDir = optionVal("sqlTable", tmpDir);
+tmpDir = optionVal("tmpDir", tmpDir);
 hgLoadBed(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
