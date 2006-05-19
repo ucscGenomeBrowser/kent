@@ -40,16 +40,11 @@ level above.
 <P>
 Chains were derived from blastz alignments, using the methods
 described on the chain tracks description pages, and sorted with the 
-highest-scoring chains in the genome ranked first.  Because
-the $o_organism chrNA and chrUn chromosomes are comprised of unordered scaffolds
-separated by 500 <em>N</em>s, the blastz alignments and subsequent chaining were
-first performed on the scaffolds (without using lineage-specific repeats), and 
-the coordinates were then lifted up to the chromosome level. This avoided 
-false alignments across the <em>N</em>s. </P>
-<P>
-The program chainNet was used to place the chains one at a time, 
-trimming them as necessary to fit into sections not already covered by a 
-higher-scoring chain. During this process, a natural hierarchy emerged in which a chain that filled a gap in a higher-scoring chain was placed underneath that 
+highest-scoring chains in the genome ranked first.  The program 
+chainNet was used to place the chains one at a time, trimming them as 
+necessary to fit into sections not already covered by a higher-scoring 
+chain. During this process, a natural hierarchy emerged in which a chain 
+that filled a gap in a higher-scoring chain was placed underneath that 
 chain. The program netSyntenic was used to fill in information about the 
 relationship between higher- and lower-level chains, such as whether a 
 lower-level chain was syntenic or inverted relative to the higher-level chain. 
