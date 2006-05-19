@@ -5,9 +5,9 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: toDev64.c,v 1.2 2006/05/19 01:44:01 kent Exp $";
+static char const rcsid[] = "$Id: toDev64.c,v 1.3 2006/05/19 01:58:08 kent Exp $";
 
-boolean chrom = FALSE, prefix=FALSE, really=FALSE;
+boolean chrom = FALSE, prefix=FALSE, test=FALSE;
 
 void usage()
 /* Explain usage and exit. */
@@ -18,9 +18,9 @@ errAbort(
   "usage:\n"
   "   toDev64 database table\n"
   "options:\n"
-  "   -chrom - if set will copy will tables split by chromosome\n"
+  "   -chrom - if set will copy tables split by chromosome\n"
   "   -prefix - if set will copy all tables that start with 'table'\n"
-  "   -really - if set it will actually do the copy. (If not set just\n"
+  "   -test - if set it not will actually do the copy. (It just\n"
   "             prints the commands it will execute.)\n"
   );
 }
@@ -28,7 +28,7 @@ errAbort(
 static struct optionSpec options[] = {
    {"chrom", OPTION_BOOLEAN},
    {"prefix", OPTION_BOOLEAN},
-   {"really", OPTION_BOOLEAN},
+   {"test", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -48,7 +48,7 @@ void execAndCheck(char *command)
  * it fails */
 {
 puts(command);
-if (really)
+if (!test)
     {
     int err = system(command);
     if (err != 0)
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 chrom = optionExists("chrom");
 prefix = optionExists("prefix");
-really = optionExists("really");
+test = optionExists("test");
 if (argc != 3)
     usage();
 toDev64(argv[1], argv[2]);
