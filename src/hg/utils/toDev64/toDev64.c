@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: toDev64.c,v 1.1 2006/05/19 01:18:10 kent Exp $";
+static char const rcsid[] = "$Id: toDev64.c,v 1.2 2006/05/19 01:44:01 kent Exp $";
 
 boolean chrom = FALSE, prefix=FALSE, really=FALSE;
 
@@ -56,7 +56,7 @@ if (really)
     }
 }
 
-void copyTable(char *oldHost, char *oldDir, char *newHost, char *newDir,
+void copyTable(char *oldHost, char *oldDir, char *newDir,
 	char *database, char *table, boolean chrom, boolean prefix)
 /* Copy table, maybe a bunch of related tables, from old to new. */
 {
@@ -65,11 +65,11 @@ if (sameWord(database, "mysql"))
     errAbort("Sorry, contact cluster-admin to work on accounts database.");
 if (!isAllGoodChars(database) || !isAllGoodChars(table))
     errAbort("Database and table can only have alphanumeric chars or _");
-if (!isAllGoodChars(oldHost) || !isAllGoodChars(newHost))
+if (!isAllGoodChars(oldHost) )
     errAbort("Host names can only have alphanumeric chars or _");
 
 /* Compose and execute rsync command. */
-dyStringAppend(dy, "rsync -av --progress ");
+dyStringAppend(dy, "rsync --rsh=rsh -av --progress ");
 dyStringPrintf(dy, "%s:%s/%s/", oldHost, oldDir, database);
 if (chrom)
     dyStringPrintf(dy, "chr*_");
@@ -82,20 +82,19 @@ if (prefix)
     }
 else
     dyStringPrintf(dy, ".*");
-dyStringPrintf(dy, " %s:%s/%s/", newHost, newDir, database);
+dyStringPrintf(dy, " %s/%s/", newDir, database);
 execAndCheck(dy->string);
 
 /* Compose and execute chown command */
 dyStringClear(dy);
-dyStringPrintf(dy, "rsh %s chown mysql.mysql %s/%s", newHost, newDir, database);
+dyStringPrintf(dy, "chown mysql.mysql %s/%s", newDir, database);
 execAndCheck(dy->string);
 
 
 /* Compose and execute flush command */
 dyStringClear(dy);
 dyStringPrintf(dy, 
-	"rsh %s mysqladmin --user=hguser --password=hguserstuff flush-tables",
-	newHost);
+	"mysqladmin --user=hguser --password=hguserstuff flush-tables");
 execAndCheck(dy->string);
 }
 
@@ -103,7 +102,7 @@ void toDev64(char *database, char *table)
 /* toDev64 - A program that copies data from the old hgwdev database 
  * to the new hgwdev database.. */
 {
-copyTable("hgwdevold", "/var/lib/mysql", "hgwdev", 
+copyTable("hgwdevold", "/var/lib/mysql", 
 	"/var/lib/mysql", database, table, chrom, prefix);
 }
 
