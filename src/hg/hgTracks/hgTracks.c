@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1101 2006/05/19 22:06:21 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1102 2006/05/19 23:26:19 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10479,13 +10479,11 @@ struct bed *bed, *nextBed, *list = NULL;
 if (ct->dbTrack)
     {
     int fieldCount = ct->fieldCount;
-    char query[512];
     int rowOffset;
     char **row;
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    safef(query, sizeof(query), "select * from %s", ct->dbTrackName);
     sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -10522,13 +10520,11 @@ useItemRgb = bedItemRgb(ct->tdb);
 
 if (ct->dbTrack)
     {
-    char query[512];
     int rowOffset;
     char **row;
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    safef(query, sizeof(query), "select * from %s", ct->dbTrackName);
     sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -10578,13 +10574,11 @@ struct linkedFeatures *lfList = NULL, *lf;
 if (ct->dbTrack)
     {
     int fieldCount = ct->fieldCount;
-    char query[512];
     int rowOffset;
     char **row;
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    safef(query, sizeof(query), "select * from %s", ct->dbTrackName);
     sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
@@ -10626,13 +10620,11 @@ useItemRgb = bedItemRgb(ct->tdb);
 if (ct->dbTrack)
     {
     int fieldCount = ct->fieldCount;
-    char query[512];
     int rowOffset;
     char **row;
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    safef(query, sizeof(query), "select * from %s", ct->dbTrackName);
     sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
