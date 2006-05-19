@@ -9,10 +9,10 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: safePush.c,v 1.2 2006/05/19 06:18:19 kent Exp $";
+static char const rcsid[] = "$Id: safePush.c,v 1.3 2006/05/19 06:29:25 kent Exp $";
 
 /* Command line flags - all default to false. */
-boolean oldOk, partOk, chrom, prefix, allTables, allDatabases, test;
+boolean oldOk, chrom, prefix, allTables, allDatabases, test;
 
 /* Command line string options - null by default. */
 char *list, *single;
@@ -36,7 +36,7 @@ errAbort(
   "usage:\n"
   "   safePush database table destType\n"
   "Where destType is either:\n"
-  "     beta - to push from hgwdev to hgdevBeta\n"
+  "     beta - to push from hgwdev to hgbeta\n"
   "     hgw1 - to push from hgwbeta to hgw1\n"
   "     rr - to push from hgwbeta to the round robin\n"
   "     list - to push from hgwbeta to the list of machines, used with -list\n"
@@ -44,9 +44,9 @@ errAbort(
   "options:\n"
   "   -oldOk - if set will let you overwrite a new table on the dest with\n"
   "            an older source table\n"
-  "   -partOk - will let you push a single chromosome table without pushing all\n"
   "   -chrom - if set will copy tables split by chromosome\n"
-  "   -prefix - if set will copy all tables that start with prefix\n"
+  "   -prefix - if set will treat table as a prefix, and copy all tables\n"
+  "             starting with that prefix\n"
   "   -allTables - if set will copy all tables in database. The table\n"
   "                table parameter should be 'all' in this case\n"
   "   -allDatabases - if set will copy table in all databases. The database\n"
@@ -61,7 +61,6 @@ char *user, *password;	/* Database user and password. */
 
 static struct optionSpec options[] = {
    {"oldOk", OPTION_BOOLEAN},
-   {"partOk", OPTION_BOOLEAN},
    {"chrom", OPTION_BOOLEAN},
    {"prefix", OPTION_BOOLEAN},
    {"allTables", OPTION_BOOLEAN},
@@ -392,7 +391,6 @@ optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
 oldOk = optionExists("oldOk");
-partOk = optionExists("partOk");
 chrom = optionExists("chrom");
 prefix = optionExists("prefix");
 allTables = optionExists("allTables");
