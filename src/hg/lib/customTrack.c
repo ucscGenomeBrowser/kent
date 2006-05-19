@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.79 2006/05/16 18:13:39 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.80 2006/05/19 22:58:35 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -186,7 +186,7 @@ if (startsWith("bed", track->dbTrackType))
     tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "%s", track->dbTrackName);
     bedCmd[5] = dyStringCannibalize(&tmpDy);
-    /* the "/dev/null" file isn't actually used for anything, but it be used
+    /* the "/dev/null" file isn't actually used for anything, but it is used
      * in the pipeLineOpen to properly get a pipe started that isn't simply
      * to STDOUT which is what a NULL would do here instead of this name.
      *	This function exits if it can't get the pipe created
