@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1017 2006/05/18 17:56:32 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1018 2006/05/19 23:23:45 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15865,7 +15865,7 @@ void hgCustom(char *trackId, char *fileItem)
 char *fileName, *itemName;
 struct customTrack *ctList = getCtList();
 struct customTrack *ct;
-struct bed *bed;
+struct bed *bed = (struct bed *)NULL;
 int start = cartInt(cart, "o");
 
 cartWebStart(cart, "Custom Track");
@@ -15884,10 +15884,32 @@ if (ct->wiggle)
     }
 else
     {
-    for (bed = ct->bedList; bed != NULL; bed = bed->next)
-	if (bed->chromStart == start && sameString(seqName, bed->chrom))
-	    if (bed->name == NULL || sameString(itemName, bed->name) )
-		break;
+    if (ct->dbTrack)
+	{
+	char where[512];
+	int rowOffset;
+	char **row;
+	struct sqlConnection *conn = sqlCtConn(TRUE);
+	struct sqlResult *sr = NULL;
+	int rcCount = 0;
+
+	safef(where, sizeof(where), "name = '%s'", itemName);
+	sr = hRangeQuery(conn, ct->dbTrackName, seqName, winStart, winEnd,
+                     where, &rowOffset);
+	while ((row = sqlNextRow(sr)) != NULL)
+	    {
+	    bedFree(&bed);
+	    bed = bedLoadN(row+rowOffset, ct->fieldCount);
+	    ++rcCount;
+	    }
+	}
+    else
+	{
+	for (bed = ct->bedList; bed != NULL; bed = bed->next)
+	    if (bed->chromStart == start && sameString(seqName, bed->chrom))
+		if (bed->name == NULL || sameString(itemName, bed->name) )
+		    break;
+	}
     if (bed == NULL)
 	errAbort("Couldn't find %s@%s:%d in %s", itemName, seqName,
 		start, fileName);
