@@ -608,7 +608,6 @@ dataVersion ENCODE June & Oct 2005 Freezes
     dataVersion Jan 2006
     priority 15
     color 10,10,10
-release alpha
 
     track encodeSangerChipH3K4me2HFL1
     subTrack encodeSangerChip
@@ -618,7 +617,6 @@ release alpha
     dataVersion Jan 2006
     priority 16
     color 10,10,10
-release alpha
 
     track encodeSangerChipH3K4me3HFL1
     subTrack encodeSangerChip
@@ -628,7 +626,6 @@ release alpha
     dataVersion Jan 2006
     priority 17
     color 10,10,10
-release alpha
 
     track encodeSangerChipH3acHFL1
     subTrack encodeSangerChip
@@ -638,7 +635,6 @@ release alpha
     dataVersion Jan 2006
     priority 18
     color 10,10,10
-release alpha
 
     track encodeSangerChipH4acHFL1
     subTrack encodeSangerChip
@@ -648,7 +644,6 @@ release alpha
     dataVersion Jan 2006
     priority 19
     color 10,10,10
-release alpha
 
 track encodeSangerChipHits
 compositeTrack on
