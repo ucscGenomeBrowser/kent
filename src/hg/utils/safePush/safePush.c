@@ -9,7 +9,7 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: safePush.c,v 1.3 2006/05/19 06:29:25 kent Exp $";
+static char const rcsid[] = "$Id: safePush.c,v 1.4 2006/05/19 15:58:58 kent Exp $";
 
 /* Command line flags - all default to false. */
 boolean oldOk, chrom, prefix, allTables, allDatabases, test;
@@ -168,6 +168,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     char *table = row[0];
     char *time = row[11];  /* TODO: Check is5 here soon */
+    verbose(3, "%s:%s.%s %s\n", host, database, table, time);
     hashAdd(hash, table, cloneString(time));
     }
 sqlDisconnect(&conn);
@@ -195,7 +196,9 @@ if (!oldOk)
          {
 	 int s = sqlDateToUnixTime(sTime);
 	 int d = sqlDateToUnixTime(dTime);
-	 if (dTime > sTime)
+	 verbose(2, "%s.%s source time %s (%d), dest time %s (%d)\n", 
+	 	database, table, sTime, s, dTime, d);
+	 if (d > s)
 	     errAbort("%s.%s is newer on %s than on %s", database, table,
 	     	destHost, sourceHost);
 	 }
