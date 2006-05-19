@@ -9,7 +9,7 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: safePush.c,v 1.1 2006/05/19 06:10:50 kent Exp $";
+static char const rcsid[] = "$Id: safePush.c,v 1.2 2006/05/19 06:18:19 kent Exp $";
 
 /* Command line flags - all default to false. */
 boolean oldOk, partOk, chrom, prefix, allTables, allDatabases, test;
@@ -202,7 +202,7 @@ if (!oldOk)
 	 }
     }
 safef(command, sizeof(command),
-    "rsync -av --progress %s/%s/%s.* %s:/%s/%s/",
+    "rsync -av --progress --rsh=rsh %s/%s/%s.* %s:/%s/%s/",
     mysqlDataDir, database, table, destHost, mysqlDataDir, database);
 execAndCheck(command);
 }
@@ -342,6 +342,8 @@ if (allTables && allDatabases)
     errAbort("Please contact cluster-admin to do allTables and allDatabases");
 if (sameWord(table, "mysql"))
     errAbort("Please contact cluster-admin to update 'mysql' database");
+if (prefix && strlen(table) < 3)
+    errAbort("You can only use -prefix if have at least 3 letters in table name.");
 
 /* Figure out sourceHost, destHost from destType */
 if (sameString(destType, "beta"))
