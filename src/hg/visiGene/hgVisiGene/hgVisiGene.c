@@ -347,10 +347,23 @@ if (imageId != 0)
     safef(buf,sizeof(buf),"%s%s%s", dir, name, extension);
     safef(url,sizeof(url),"../cgi-bin/%s?%s=go&%s&%s=%d",
     	hgVisiGeneCgiName(), hgpDoDownload, sidUrl, hgpId, imageId);
-    
+   
+
+    /* Currently this is dangerous for users with less than 1 GB RAM to use 
+       on large images, because their machines can thrash themselves into a coma.
+       X-windows (i.e. used by FireFox) will allocate 5 bytes per pixel.
+       If the image size in pixels times 5 exceeds real ram size, then
+       Linux thrashes incessantly.  But you can hit ctrl-alt-F1 to 
+       get a text only screen, then kill the bad processes (FF) and then
+       you can restore desktop with ctrl-alt-F7.  Hiram says that's a
+       feature credited to SCO-Unix.  On my 1GB machines at work/home,
+       I never encountered any problem what-so-ever, even with the 
+       largest visiGene AllenBrain - about 19000x9000 pix.
+       
     printf("<B>Full-size image:</B> %d x %d &nbsp; "
 	"<A HREF='%s'> download </A> &nbsp;&nbsp; <A HREF='%s'> view </A>\n", 
 	w, h, url, buf);
+    */
     
     }
 htmlEnd();
