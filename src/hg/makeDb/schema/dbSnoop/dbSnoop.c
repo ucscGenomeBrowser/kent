@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "tableStatus.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.8 2005/11/05 07:14:54 kent Exp $";
+static char const rcsid[] = "$Id: dbSnoop.c,v 1.9 2006/05/20 00:55:14 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -382,6 +382,7 @@ void dbSnoop(char *database, char *output)
 FILE *f = mustOpen(output, "w");
 struct sqlConnection *conn = sqlConnect(database);
 struct sqlConnection *conn2 = sqlConnect(database);
+int majorVersion = sqlMajorVersion(conn);
 struct sqlResult *sr = sqlGetResult(conn, "show table status");
 char **row;
 struct hash *fieldHash = hashNew(0);
@@ -398,7 +399,10 @@ int indexCount = 0;	/* # of indexes, not bytes in indexes */
 /* Collect info from database. */
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct tableStatus *status = tableStatusLoad(row);
+    struct tableStatus *status;
+    if (majorVersion > 4)
+	memcpy(row+2, row+3, (TABLESTATUS_NUM_COLS-2)*sizeof(char*));
+    status = tableStatusLoad(row);
     tableSummary(status, conn2, f, 
     	fieldHash, &fiList, tableHash, &tiList, typeHash, &ttList);
     }
