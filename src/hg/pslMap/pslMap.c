@@ -10,7 +10,7 @@
 #include "dnautil.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: pslMap.c,v 1.13 2006/05/08 19:51:02 markd Exp $";
+static char const rcsid[] = "$Id: pslMap.c,v 1.14 2006/05/20 23:59:44 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -77,11 +77,14 @@ static struct mapAln *chainToPsl(struct chain *ch)
 struct psl *psl;
 struct cBlock *cBlk;
 int iBlk;
+int qStart = ch->qStart, qEnd = ch->qEnd;
 char strand[2];
 strand[0] = ch->qStrand;
 strand[1] = '\0';
+if (ch->qStrand == '-')
+    reverseIntRange(&qStart, &qEnd, ch->qSize);
 
-psl = pslNew(ch->qName, ch->qSize, ch->qStart, ch->qEnd,
+psl = pslNew(ch->qName, ch->qSize, qStart, qEnd,
              ch->tName, ch->tSize, ch->tStart, ch->tEnd,
              strand, slCount(ch->blockList), 0);
 for (cBlk = ch->blockList, iBlk = 0; cBlk != NULL; cBlk = cBlk->next, iBlk++)

@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 all:
 
 test:	kgProt gapBoth mrnaMrnaMap mrnaMrnaXMap mrnaMapOver mrnaMapOverSwap \
-	mrnaMapOverChain mrnaMapOverChainSwap
+	mrnaMapOverChain mrnaMapOverChainSwap negQChain
 
 
 # basic tests of protein -> mrna -> genome mapping
@@ -60,6 +60,13 @@ mrnaMapOverChainSwap: mkdirs
 	../pslMap -chainMapFile -swapMap input/mrnaToMm6.psl output/hg17ToMm6.chain output/$@.psl
 	pslCheck output/$@.psl
 	diff -u expected/mrnaMapOver.psl output/$@.psl
+
+# bug created with binKeeper optimization where negative strand query chains
+# would get lost
+negQChain: mkdirs
+	../pslMap -chainMapFile input/negQ.refSeq.psl input/negQ.chain output/$@.psl
+	pslCheck output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
 
 clean::
 	rm -rf output
