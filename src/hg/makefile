@@ -1,5 +1,7 @@
 # Build all directories in utils
 
+# 	$Id: makefile,v 1.108 2006/05/20 14:56:35 hiram Exp $
+
 BROWSER_BINS=cartReset das hgBlat hgConvert \
         hgGateway hgGene hgPcr hgSession hgTables hgText hgTracks \
 	hgTrackUi hgc cartDump near/hgNear \
@@ -236,6 +238,7 @@ UTIL_DIRS = \
 	sqlToXml \
 	test \
 	trfBig \
+	utils \
 	uniqSize \
 	updateStsInfo \
 	xmlCat \
