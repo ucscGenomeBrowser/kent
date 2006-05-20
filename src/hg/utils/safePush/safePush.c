@@ -9,7 +9,7 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: safePush.c,v 1.4 2006/05/19 15:58:58 kent Exp $";
+static char const rcsid[] = "$Id: safePush.c,v 1.5 2006/05/20 00:59:31 kent Exp $";
 
 /* Command line flags - all default to false. */
 boolean oldOk, chrom, prefix, allTables, allDatabases, test;
@@ -167,7 +167,7 @@ char **row;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *table = row[0];
-    char *time = row[11];  /* TODO: Check is5 here soon */
+    char *time = (is5 ? row[12] : row[11]);
     verbose(3, "%s:%s.%s %s\n", host, database, table, time);
     hashAdd(hash, table, cloneString(time));
     }
