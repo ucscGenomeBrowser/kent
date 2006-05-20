@@ -6,6 +6,15 @@ priority 9
 visibility hide
 color 150,0,0
 
+track exoniphy
+shortLabel Exoniphy
+longLabel Exoniphy lifted from Hg17 using chains
+group genes
+priority 50.9
+visibility pack
+color 173,17,162
+type genePred
+
 track gold
 shortLabel Assembly 
 longLabel Assembly from Fragments 
@@ -25,6 +34,29 @@ visibility dense
 color 12,12,120
 type genePred refPep refMrna
 
+track multiz6waySyn
+shortLabel Conservation 
+longLabel Human/Chimp/Mouse/Rat/Dog Multiz Alignment & Conservation using syntenic alignments
+group compGeno
+priority 104.1
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+#wiggle phastCons6way
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+autoScaleDefault Off
+#summary multiz6waySummary
+#frames multiz6wayFrames
+#irows on
+speciesGroups mammal 
+sGroup_mammal hg18 panTro2 mm8 rn4 canFam2 
+speciesDefaultOff 
+#treeImage phylo/rheMac2_6waySyn.jpg
+
 track multiz5waySyn
 shortLabel Conservation 
 longLabel Human/Mouse/Rat/Dog Multiz Alignment & Conservation using syntenic alignments
@@ -42,10 +74,21 @@ yLineOnOff Off
 autoScaleDefault Off
 summary multiz5waySummary
 frames multiz5wayFrames
-irows on
+#irows on
 speciesGroups mammal 
 sGroup_mammal hg18 mm8 rn4 canFam2 
 speciesDefaultOff 
+treeImage phylo/rheMac2_5waySyn.jpg
+
+track phastConsElements5way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, Human/Dog/Mouse/Rat Multiz Alignment
+group compGeno
+priority 104.3
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
 
 track phastConsElements5way
 shortLabel Most Conserved
