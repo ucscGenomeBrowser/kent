@@ -14,7 +14,7 @@
 #include "sqlNum.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: jksql.c,v 1.88 2006/05/18 21:24:33 hiram Exp $";
+static char const rcsid[] = "$Id: jksql.c,v 1.89 2006/05/20 00:54:56 kent Exp $";
 
 /* flags controlling sql monitoring facility */
 static unsigned monitorInited = FALSE;      /* initialized yet? */
@@ -1612,6 +1612,35 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 return key;
 }
+
+char *sqlVersion(struct sqlConnection *conn)
+/* Return version of MySQL database.  This will be something
+ * of the form 5.0.18-standard. */
+{
+char **row;
+struct sqlResult *sr = sqlGetResult(conn, "show variables like 'version'");
+char *version = NULL;
+if ((row = sqlNextRow(sr)) != NULL)
+    version = cloneString(row[1]);
+else
+    errAbort("No mySQL version var.");
+sqlFreeResult(&sr);
+return version;
+}
+    
+int sqlMajorVersion(struct sqlConnection *conn)
+/* Return major version of database. */
+{
+char *s = sqlVersion(conn);
+int ver;
+if (!isdigit(s[0]))
+    errAbort("Unexpected format in version: %s", s);
+ver = atoi(s);		/* NOT sqlUnsigned please! */
+freeMem(s);
+return ver;
+}
+
+
 
 
 char** sqlGetEnumDef(struct sqlConnection *conn, char* table, char* colName)

@@ -399,5 +399,10 @@ int sqlSaveQuery(struct sqlConnection *conn, char *query, char *outPath, boolean
  * If isFa is true, than assume it is a two column fasta query and format accordingly.
  * Return count of rows in result set.  Abort on error. */
 
+char *sqlVersion(struct sqlConnection *conn);
+/* Return version of MySQL database.  This will be something
+ * of the form 5.0.18-standard. */
 
+int sqlMajorVersion(struct sqlConnection *conn);
+/* Return major version of database. */
 #endif /* JKSQL_H */
