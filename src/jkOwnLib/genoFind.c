@@ -17,7 +17,7 @@
 #include "trans3.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: genoFind.c,v 1.21 2006/03/15 18:36:15 angie Exp $";
+static char const rcsid[] = "$Id: genoFind.c,v 1.22 2006/05/20 00:28:17 kent Exp $";
 
 char *gfSignature()
 /* Return signature that starts each command to gfServer. Helps defend 
@@ -2095,7 +2095,7 @@ for (fTileIx=0; fTileIx<fTileCount; ++fTileIx)
 		for (rPosIx=0; rPosIx < rPosListSize; ++rPosIx)
 		    {
 		    rPos = rPosList[rPosIx];
-		    if (rPos >= fPos)
+		    if (rPos > fPos)
 		        {
 			int distance = rPos - fPos;
 			if (distance >= minDistance && distance <= maxDistance)
