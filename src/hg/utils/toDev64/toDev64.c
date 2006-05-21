@@ -9,7 +9,7 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: toDev64.c,v 1.5 2006/05/21 02:49:24 kent Exp $";
+static char const rcsid[] = "$Id: toDev64.c,v 1.6 2006/05/21 15:39:18 kent Exp $";
 
 /* Command line flags - all default to false. */
 boolean oldOk, chrom, prefix, allTables, test;
@@ -49,17 +49,6 @@ static struct optionSpec options[] = {
    {"test", OPTION_BOOLEAN},
    {NULL, 0},
 };
-
-static char* getCfgValue(char* envName, char* cfgName)
-/* get a configuration value, from either the environment or the cfg file,
- * with the env take precedence.
- */
-{
-char *val = getenv(envName);
-if (val == NULL)
-    val = cfgOption(cfgName);
-return val;
-}
 
 boolean isAllGoodChars(char *s)
 /* Return TRUE if all characters are alphanumeric or _ */
@@ -174,7 +163,7 @@ if (!oldOk)
 	 if (d == s)
 	     {
 	     warn("%s.%s has same timestamp on %s and %s. Skipping...",
-	         destHost, sourceHost);
+	         database, table, destHost, sourceHost);
 	     return;
 	     }
 	 }
