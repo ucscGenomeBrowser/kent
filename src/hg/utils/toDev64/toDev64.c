@@ -9,10 +9,10 @@
 #include "options.h"
 #include "hgConfig.h"
 
-static char const rcsid[] = "$Id: toDev64.c,v 1.4 2006/05/21 02:36:06 kent Exp $";
+static char const rcsid[] = "$Id: toDev64.c,v 1.5 2006/05/21 02:49:24 kent Exp $";
 
 /* Command line flags - all default to false. */
-boolean oldOk, chrom, prefix, allTables, allDatabases, test;
+boolean oldOk, chrom, prefix, allTables, test;
 
 char *dev32 = "hgwdevold";	/* Old dev machine. */
 char *dev64 = "hgwdev";		/* New dev machine. */
@@ -30,6 +30,8 @@ errAbort(
   "options:\n"
   "   -chrom - if set will copy tables split by chromosome\n"
   "   -prefix - if set will copy all tables that start with 'table'\n"
+  "   -oldOk - if set will let you overwrite a new table on the dest with\n"
+  "            an older source table\n"
   "   -allTables - if set will copy all tables in database. The table\n"
   "                table parameter should be 'all' in this case\n"
   "   -test - if set it not will actually do the copy. (It just\n"
@@ -265,24 +267,8 @@ forceAllGoodChars(sourceHost);
 forceAllGoodChars(destHost);
 forceAllGoodChars(database);
 forceAllGoodChars(table);
-if (allDatabases)
-    {
-    struct sqlConnection *conn = 
-    	sqlConnectRemote(sourceHost, user, password, "mysql");
-    struct sqlResult *sr = sqlGetResult(conn, "show databases");
-    char **row;
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	char *db = row[0];
-	if (!sameWord(db, "mysql"))
-	    pushDatabase(sourceHost, sourceIs5, destHost, destIs5, db,
-	    	table, FALSE);
-	}
-    sqlDisconnect(&conn);
-    }
-else
-    pushDatabase(sourceHost, sourceIs5, destHost, destIs5, database, table,
-    	TRUE);
+pushDatabase(sourceHost, sourceIs5, destHost, destIs5, database, table,
+    TRUE);
 flushTables(destHost);
 }
 
