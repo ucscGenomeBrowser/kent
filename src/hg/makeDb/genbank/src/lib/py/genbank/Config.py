@@ -1,7 +1,7 @@
 #
 # genbank configuration file parser object
 #
-# $Id: Config.py,v 1.7 2005/09/18 07:37:12 markd Exp $
+# $Id: Config.py,v 1.8 2006/05/21 08:12:41 markd Exp $
 #
 
 import re, string
@@ -199,3 +199,7 @@ class Config(dict):
             raise Exception("invalid value for " + db + "." + key + ": \""
                             + val + "\", expected \"yes\" or \"no\"")
 
+    def getvDbBoolNone(self, db, *keys):
+        """Combine keys into '.' separate key, Get a boolean configuration
+        value for a database, or the default, or None if neither are
+        specified"""

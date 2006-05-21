@@ -1,6 +1,6 @@
 #!/usr/bin/env /cluster/data/genbank/bin/gbPython
 #
-# $Id: gbAlignSetup,v 1.22 2006/05/12 06:35:15 markd Exp $
+# $Id: gbAlignSetup,v 1.23 2006/05/21 08:12:41 markd Exp $
 #
 
 usage="""gbAlignSetup [options] database ...
@@ -552,7 +552,7 @@ class JobGenDb(object):
         "determine orgCats that are to be loaded"
         orgCats = set()
         for orgCat in cmdOpts.orgCats:
-            if self.conf.getvDbBool(self.db, rel.srcDb, cdnaType, orgCat, "load") or self.conf.getvDbBool(self.db, rel.srcDb, cdnaType, orgCat, "align"):
+            if self.conf.getvDbBoolNone(self.db, rel.srcDb, cdnaType, orgCat, "load") or self.conf.getvDbBoolNone(self.db, rel.srcDb, cdnaType, orgCat, "align"):
                 orgCats.add(orgCat)
         return orgCats
 
