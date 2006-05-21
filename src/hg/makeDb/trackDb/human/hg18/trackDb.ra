@@ -61,6 +61,30 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
+track multiz6waySyn
+shortLabel Syn Conservation
+longLabel Vertebrate Multiz Alignment & Conservation (6 Species) using syntenic alignments
+group compGeno
+priority 104.6
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+#wiggle phastCons6way
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+#frames multiz6wayFrames
+irows on
+autoScaleDefault Off
+windowingFunction mean
+summary multiz6waySummary
+speciesGroups mammal 
+sGroup_mammal panTro2 rheMac2 mm8 rn4 canFam2 
+speciesDefaultOff 
+#treeImage phylo/syn_6way.jpg
+
 track stsMap
 shortLabel STS Markers
 longLabel STS Markers on Genetic (blue) and Radiation Hybrid (black) Maps
