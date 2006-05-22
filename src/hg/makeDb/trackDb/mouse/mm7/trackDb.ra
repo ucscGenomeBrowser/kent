@@ -19,6 +19,16 @@ hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
 
+track ensGene
+shortLabel Ensembl Genes
+longLabel Ensembl (Build 38) Gene Predictions
+group genes
+priority 40
+visibility dense
+color 150,0,0
+type genePred ensPep
+url http://www.ensembl.org/Mus_musculus/transview?transcript=$$
+
 track netFr1
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
