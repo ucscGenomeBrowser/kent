@@ -11,7 +11,7 @@
 #include "genbank.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: genePred.c,v 1.84 2006/03/09 18:26:57 angie Exp $";
+static char const rcsid[] = "$Id: genePred.c,v 1.85 2006/05/22 18:32:43 markd Exp $";
 
 /* SQL to create a genePred table */
 static char *createSql = 
@@ -1012,8 +1012,15 @@ struct genePred *genePredFromPsl3(struct psl *psl,  struct genbankCds* cds,
  * annotation.  If cds is null, it will set status fields to cdsNone.  */
 {
 struct genePred *gene;
+#if 0
+/* FIXME; the browser calls this on a protein psl when rendering the amino
+ * acids of a protein alignment track.  Some of this code doesn't really make
+ * sense for proteins and I really don't see how this produces the right
+ * results, however the check is disabled until this can be investigated
+ * because it *seems* to work.  markd 2006-05-22 */
 if (pslIsProtein(psl))
     errAbort("can't convert protein psls to genePreds");
+#endif
 
 AllocVar(gene);
 gene->name = cloneString(psl->qName);
