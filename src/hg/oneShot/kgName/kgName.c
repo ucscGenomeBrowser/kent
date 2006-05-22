@@ -35,6 +35,21 @@ char *hugoID;
 char cond_str[256];
 char *name = id;
 
+if (hTableExists("kgXref"))
+    {
+    struct sqlResult *sr;
+    char **row;
+
+    sprintf(query, "select geneSymbol from kgXref where mRNA = '%s'", id);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	name = cloneString(row[0]);
+	}
+    sqlFreeResult(&sr);
+    }
+#ifdef NOTNOW
 if (hTableExists("refLink") && hTableExists("knownGeneLink"))
     {
     struct sqlResult *sr;
@@ -90,22 +105,38 @@ if (hTableExists("refLink") && hTableExists("knownGeneLink"))
 	    }
 	}
     }
+#endif
 return name;
 }
 
 char *getSwiss( struct sqlConnection *conn , char *id)
 {
-char cond_str[256];
+char query[256];
+char *name = NULL;
+if (hTableExists("kgXref"))
+    {
+    struct sqlResult *sr;
+    char **row;
 
-sprintf(cond_str, "mrnaID='%s'", id);
-return sqlGetField(conn, database, "spMrna", "spID", cond_str);
+    sprintf(query, "select spID from kgXref where mRNA = '%s'", id);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+	{
+	name = cloneString(row[0]);
+	sqlFreeResult(&sr);
+	return name;
+	}
+	sqlFreeResult(&sr);
+    }
+errAbort("no kgXref");
 }
 
 void kgName(char *database, char *protDb, char *refPsl,  char *outAssoc)
 /* kgName - builds association table between knownPep and gene common name. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct sqlConnection *conn2 = sqlConnect("uniProt");
+//struct sqlConnection *conn2 = sqlConnect("uniProt");
 char *words[1], **row;
 FILE *f = mustOpen(outAssoc, "w");
 int count = 0, found = 0;
@@ -122,7 +153,7 @@ while (lineFileRow(lf, words))
     fprintf(f,"%s\t%s\t%s\n",words[0], lookupName(conn,words[0]), getSwiss(conn, words[0]));
     }
     */
-hFreeConn(&conn);
+//hFreeConn(&conn);
 }
 
 int main(int argc, char *argv[])
