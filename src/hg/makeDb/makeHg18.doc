@@ -9410,3 +9410,35 @@ exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
 
     ldHgGene -gtf -genePredExt hg18 sgpGene chr*.gtf
 
+# VEGA LIFT FROM HG17 (DONE 5/22/06 acs)
+# This can be replaced when the new version comes out (Tim Hubbard says soon)
+    ssh hgwdev
+    cd /cluster/store8/ensembl/vega33_35f
+
+    # there's a bad record at the top of both of these files
+    awk 'NF == 15 ' vegaGene.gp > tmp.gp
+    awk 'NF == 15 ' vegaPseudo.gp > tmp2.gp
+
+    zcat /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz | liftOver tmp.gp stdin vegaGeneHg18.gp unMapped.gp -genePred
+    # only 6 dropped
+    zcat /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz | liftOver tmp2.gp stdin vegaPseudoGeneHg18.gp unMappedPseudo.gp -genePred
+    # only 11 dropped
+
+    ldHgGene hg18 vegaGene -predTab vegaGeneHg18.gp -genePredExt
+    ldHgGene hg18 vegaPseudoGene -predTab vegaPseudoGeneHg18.gp -genePredExt
+
+    hgsql hg18 -N -B < /cluster/home/acs/kent/src/hg/lib/vegaInfo.sql
+    echo 'load data local infile "vegaInfo.tab" into table vegaInfo' | hgsql hg18 -N -B
+
+# SYNTENIC NETS FOR PANTRO2, RHEMAC2, MM8, RN4, AND CANFAM2 AS COMPOSITE TRACK (DONE 5/22/06 acs)
+# (for use in defining orthologs for macaque paper)
+    ssh hgwdev
+
+    # load syntenic nets created previously by Robert
+    hgLoadNet hg18 netSyntenyPanTro2 /cluster/data/hg18/bed/blastz.panTro2/axtChain/hg18.panTro2.syn.net
+    zcat /cluster/data/hg18/bed/blastz.rheMac2/axtChain/hg18.rheMac2.syn.net.gz | hgLoadNet hg18 netSyntenyRheMac2 stdin 
+    zcat /cluster/data/hg18/bed/blastz.mm8/axtChain/hg18.mm8.syn.net.gz | hgLoadNet hg18 netSyntenyMm8 stdin
+    zcat /cluster/data/hg18/bed/blastz.rn4/axtChain/hg18.rn4.syn.net.gz | hgLoadNet hg18 netSyntenyRn4 stdin
+    zcat /cluster/data/hg18/bed/blastz.canFam2/axtChain/hg18.canFam2.syn.net.gz | hgLoadNet hg18 netSyntenyCanFam2 stdin
+
+    # (set up trackDb.ra entry for composite track)
