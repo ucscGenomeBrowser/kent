@@ -4038,6 +4038,7 @@ BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
 
 # HGNEAR PROTEIN BLAST TABLES (DONE 1/31/06 angie)
 # mmBlastTab redone 5/1/06 -- makeMm8.doc run used outdated proteins
+# hgBlastTab redone 5/9/06 -- makeHg18.doc run used outdated proteins
     ssh hgwdev
     mkdir /cluster/data/dm2/bed/hgNearBlastp
     cd /cluster/data/dm2/bed/hgNearBlastp
@@ -4081,14 +4082,31 @@ buildDir /cluster/data/dm2/bed/hgNearBlastp
 scratchDir /san/sanvol1/scratch/dm2HgNearBlastp
 _EOF_
     doHgNearBlastp.pl -noSelf config.ra.mm >& doMm.log & tail -f doMm.log
+    # 5/9/06: redo dm2.hgBlastTab and hg18.dmBlastTab
+    cat << _EOF_ > config.ra.hg
+# Redo vs. hg18:
+
+targetGenesetPrefix flyBase
+targetDb dm2
+queryDbs hg18
+
+dm2Fa /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
+hg18Fa /cluster/data/hg18/bed/geneSorter/blastp/known.faa
+
+buildDir /cluster/data/dm2/bed/hgNearBlastp
+scratchDir /san/sanvol1/scratch/dm2HgNearBlastp
+_EOF_
+    doHgNearBlastp.pl -noSelf config.ra.hg >& doHg.log & tail -f doHg.log
 
 
 # CLUSTER GENES AND MAP TO OTHER DATA (DONE 2/6/06 angie)
+# flyBaseToRefSeq regenerated 5/9/06
     ssh hgwdev
     # First we have to add a proteinId column to flyBaseGene.
     hgClusterGenes dm2 flyBaseGene flyBaseIsoforms flyBaseCanonical \
       -protAccQuery='select name,alias from flyBaseToUniProt'
     # Create table that maps between flyBase genes and RefSeq
+    # Re-ran 5/9/06 to resolve some joinerCheck errors about retired refSeqs:
     hgMapToGene dm2 refGene flyBaseGene flyBaseToRefSeq
     # Create table that maps between known genes and Pfam domains
     hgMapViaSwissProt dm2 flyBaseToUniProt name alias Pfam flyBaseToPfam
