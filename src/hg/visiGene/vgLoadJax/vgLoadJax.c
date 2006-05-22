@@ -152,28 +152,6 @@ if (isUnknown(text))
 return text;
 }
 
-void undupeCopyFile(char *source, char *dest)
-/* Copy file, removing duplicate lines in process.  */
-{
-struct lineFile *lf = lineFileOpen(source, TRUE);
-int size;
-char *line;
-char *lastLine = strdup("");
-FILE *f = mustOpen(dest, "w");
-
-while (lineFileNext(lf, &line, &size))
-    {
-    if (lastLine == NULL || differentString(line, lastLine))
-        {
-	fprintf(f, "%s\n", line);
-	freeMem(lastLine);
-	lastLine = cloneString(line);
-	}
-    }
-freeMem(lastLine);
-lineFileClose(&lf);
-carefulClose(&f);
-}
 
 void genotypeAndStrainFromKey(char *genotypeKey, struct sqlConnection *conn,
 	char **retGenotype, char **retStrain)
@@ -226,20 +204,28 @@ if (strain == NULL)
 *retStrain = strain;
 }
 
-void printExpression(FILE *f, char *assayKey, struct sqlConnection *conn)
-/* Print associated expression info on assay as indented lines. */
+void printExpression(FILE *f, struct sqlConnection *conn, 
+    char *assayKey, char *imagePaneKey)
+/* Print associated expression info on assay/pane as indented lines. */
 {
 struct dyString *query = dyStringNew(0);
 struct sqlResult *sr;
 char **row;
 
 dyStringPrintf(query, 
-	"select GXD_StructureName.structure,GXD_Expression.expressed "
-	"from GXD_Expression,GXD_Structure,GXD_StructureName "
-	"where GXD_Expression._Assay_key = %s "
-	"and GXD_Expression._Structure_key = GXD_Structure._Structure_key "
-	"and GXD_Structure._StructureName_key = GXD_StructureName._StructureName_key"
-	, assayKey);
+    "select DISTINCT GXD_Structure.printName,GXD_Expression.expressed "
+    "from GXD_Expression,GXD_Structure,GXD_Assay,GXD_Specimen,GXD_InSituResult,"
+    "GXD_InSituResultImage,GXD_ISResultStructure "
+    "where GXD_Expression._Assay_key = %s "
+    "and GXD_InSituResultImage._ImagePane_key = %s "
+    "and GXD_Expression._Structure_key = GXD_Structure._Structure_key "
+    "and GXD_Assay._Assay_key = GXD_Specimen._Assay_key "
+    "and GXD_Specimen._Specimen_key = GXD_InSituResult._Specimen_key "
+    "and GXD_InSituResult._Result_key = GXD_ISResultStructure._Result_key "
+    "and GXD_InSituResultImage._Result_key = GXD_ISResultStructure._Result_key "
+    "and GXD_Expression._Assay_key = GXD_Assay._Assay_key "
+    "and GXD_Expression._Structure_key = GXD_ISResultStructure._Structure_key\n"
+    , assayKey, imagePaneKey);
 sr = sqlGetResultVerbose(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -271,7 +257,7 @@ void submitRefToFiles(struct sqlConnection *conn, struct sqlConnection *conn2, s
 {
 /* Initially the tab file will have some duplicate lines, so
  * write to temp file, and then filter. */
-char raName[PATH_LEN], tabName[PATH_LEN], tmpName[PATH_LEN], capName[PATH_LEN];
+char raName[PATH_LEN], tabName[PATH_LEN], capName[PATH_LEN];
 FILE *ra = NULL, *tab = NULL, *cap = NULL;
 struct dyString *query = dyStringNew(0);
 struct sqlResult *sr;
@@ -291,8 +277,7 @@ boolean lookedForCopyright = FALSE;
 safef(raName, sizeof(raName), "%s.ra", fileRoot);
 safef(tabName, sizeof(tabName), "%s.tab", fileRoot);
 safef(capName, sizeof(capName), "%s.txt", fileRoot);
-safef(tmpName, sizeof(tmpName), "%s.tmp", fileRoot);
-tab = mustOpen(tmpName, "w");
+tab = mustOpen(tabName, "w");
 cap = mustOpen(capName, "w");
 
 
@@ -377,7 +362,8 @@ dyStringAppend(query,
 	       "GXD_EmbeddingMethod.embeddingMethod as embedding,"
 	       "GXD_Assay._Assay_key as assayKey,"
 	       "GXD_Specimen.hybridization as sliceType,"
-	       "GXD_Specimen._Genotype_key as genotypeKey\n"
+	       "GXD_Specimen._Genotype_key as genotypeKey,"
+	       "IMG_ImagePane._ImagePane_key as imagePaneKey\n"
 	"from MRK_Marker,"
 	     "GXD_Assay,"
 	     "GXD_Specimen,"
@@ -447,6 +433,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *assayKey = row[13];
     char *sliceType = row[14];
     char *genotypeKey = row[15];
+    char *imagePaneKey = row[16];
     double calcAge = -1;
     char *probeColor = "";
     char *bodyPart = "";
@@ -854,7 +841,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%d\t", imageWidth);
     fprintf(tab, "%d\n", imageHeight);
 
-    printExpression(tab, assayKey, conn2);
+    printExpression(tab,  conn2,  assayKey, imagePaneKey);
     gotAny = TRUE;
     freez(&genotype);
     freez(&abName);
@@ -868,14 +855,12 @@ carefulClose(&ra);
 carefulClose(&tab);
 carefulClose(&cap);
 
-if (gotAny)
-    undupeCopyFile(tmpName, tabName);
-else
+if (!gotAny)
     {
     remove(raName);
     remove(capName);
+    remove(tabName);
     }
-remove(tmpName);
 dyStringFree(&probeNotes);
 dyStringFree(&copyright);
 dyStringFree(&caption);
