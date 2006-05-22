@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.4 2006/05/22 22:55:37 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.5 2006/05/22 22:59:57 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -15,11 +15,12 @@ void usage()
 errAbort(
   "dbTrash - drop tables from a database older than specified N hours\n"
   "usage:\n"
-  "   dbTrash -age=N [-drop] [-db=<DB>]\n"
+  "   dbTrash -age=N [-drop] [-historyToo] [-db=<DB>] [-verbose=N]\n"
   "options:\n"
   "   -age=N - number of hours old to qualify for drop.  N can be a float.\n"
   "   -drop - actually drop the tables, default is merely to display tables.\n"
-  "   -db=<DB> - Specify a database to work with, default is customTrash.\n"
+  "   -db=<DB> - Specify a database to work with, default is "
+	CUSTOM_TRASH ".\n"
   "   -historyToo - also consider the table called 'history' for deletion.\n"
   "               - default is to leave 'history' alone no matter how old.\n"
   "   -verbose=N - 2 == show arguments, dates, and dropped tables,\n"
