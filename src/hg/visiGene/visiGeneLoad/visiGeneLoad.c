@@ -490,16 +490,14 @@ void doAntibodySource(struct sqlConnection *conn,
 if (antibody > 0 && abSubmitId != NULL && abSubmitId[0] != 0)
     {
     struct sqlResult *sr;
-    char **row;
     struct dyString *dy = dyStringNew(0);
 
     /* Try to hook up with existing antibody record. */
     dyStringAppend(dy, "select abSubmitId from antibodySource");
     dyStringPrintf(dy, " where antibody=%d and submissionSource=%d", antibody, submissionSource);
-    sr = sqlGetResult(conn, dy->string);
-    if ((row = sqlNextRow(sr)) != NULL)
+    char *submitId = sqlQuickString(conn, dy->string);
+    if (submitId != NULL)
 	{
-	char *submitId = row[0];
 	if (submitId[0] != 0)
 	    {
 	    if (differentString(submitId,abSubmitId))
@@ -522,7 +520,7 @@ if (antibody > 0 && abSubmitId != NULL && abSubmitId[0] != 0)
 	verbose(2, "%s\n", dy->string);
 	sqlUpdate(conn, dy->string);
 	}
-    sqlFreeResult(&sr);
+    freez(&submitId);
     dyStringFree(&dy);
     }
 
