@@ -5,7 +5,7 @@
 #include "dystring.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgSoftberryHom.c,v 1.4 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgSoftberryHom.c,v 1.5 2006/05/22 17:34:58 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -22,7 +22,7 @@ void makeTabLines(char *fileName, FILE *f)
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *s, *e, *protParts[128];
 int lineSize, protCount;
-int i,j;
+int i;
 char *label, *gi;
 
 while (lineFileNext(lf, &line, &lineSize))
@@ -46,7 +46,7 @@ while (lineFileNext(lf, &line, &lineSize))
         {
 	s = protParts[i];
 	gi = nextWord(&s);
-	if (s == NULL) s == "";
+	if (s == NULL) s = "";
 	fprintf(f, "%s\t%s\t%s\n", label, gi, s);
 	}
     }
