@@ -34,6 +34,16 @@ visibility dense
 color 12,12,120
 type genePred refPep refMrna
 
+track refGeneBlatz
+shortLabel refSeq Blatz 
+longLabel Human mRNAs aligned with Blatz ident > 83% nearBest .5%
+group genes
+priority 35.1
+visibility pack
+color 12,12,120
+type genePred
+cdsDrawDefault genomic\ codons
+
 track multiz6waySyn
 shortLabel Conservation 
 longLabel Human/Chimp/Mouse/Rat/Dog Multiz Alignment & Conservation using syntenic alignments
