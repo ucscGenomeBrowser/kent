@@ -6201,6 +6201,7 @@ BASE=/cluster/data/hg18/bed/blastz.rn4.2006-02-17
     rm -f /cluster/data/hg18/bed/blastz.rn4
     ln -s blastz.rn4.2006-02-17 /cluster/data/hg18/bed/blastz.rn4
 
+#############################################################################
 # BUILD WGRNA TRACK (DONE, 2006-02-22, Fan)
 
   ssh hgwdev
@@ -6214,6 +6215,24 @@ BASE=/cluster/data/hg18/bed/blastz.rn4.2006-02-17
 # and place it under cd /cluster/data/hg18/bed/wgRna-2006-02-22.
 
   cp -p wg_hg18_track.txt wgRna.tab
+
+  hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
+
+#############################################################################
+# RE-BUILD WGRNA TRACK (DONE, 2006-05-15, Fan)
+
+  ssh hgwdev
+  cd /cluster/data/hg18/bed
+
+  mkdir wgRna-2006-05-12
+  cd wgRna-2006-05-12
+
+# Received the data file, wgtrack_hg18_12may2006.txt, from Michel Weber's email
+# (Michel.Weber@ibcg.biotoul.fr)
+# and place it under cd /cluster/data/hg18/bed/wgRna-2006-05-12.
+
+  cp -p wgtrack_hg18_12may2006.txt wgRna.tab
+# edit wgRna.tab to replace all space to tab.
 
   hgLoadBed -sqlTable=/cluster/home/fanhsu/src/hg/lib/wgRna.sql hg18 wgRna wgRna.tab
 
