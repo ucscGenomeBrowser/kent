@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.3 2006/05/22 22:41:47 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.4 2006/05/22 22:55:37 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -98,6 +98,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	}
     tm.tm_year -= 1900;
     tm.tm_mon -= 1;
+    tm.tm_isdst = -1;	/*	do not know timezone, figure it out */
     timep = mktime(&tm);
     if (timep < dropTime)
 	{
