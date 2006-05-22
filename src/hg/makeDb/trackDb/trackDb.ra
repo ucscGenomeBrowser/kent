@@ -389,7 +389,6 @@ priority 36.05
 visibility hide
 type psl
 noInherit on
-cdsDrawDefault genomic\ codons
 
     track transMapRefGene
     subTrack transMap
@@ -402,7 +401,7 @@ cdsDrawDefault genomic\ codons
     cdsDrawDefault genomic\ codons
 
     track transMapRefAli
-    subTrack transMap
+    subTrack transMap off
     shortLabel TransMapRefAli
     longLabel TransMap RefSeq Alignments
     color 120,12,120
@@ -423,7 +422,7 @@ cdsDrawDefault genomic\ codons
     cdsDrawDefault genomic\ codons
 
     track transMapMRnaAli
-    subTrack transMap
+    subTrack transMap off
     shortLabel TransMapMRnaAli
     longLabel TransMap mRNA alignments
     color 134,139,34
