@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.43 2006/05/15 20:27:09 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.44 2006/05/22 18:13:08 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5555,3 +5555,26 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     #	59601009 bases of 2627444668 (2.268%) in intersection
     featureBits mm3 genscanSubopt
     #	56085184 bases of 2505900260 (2.238%) in intersection
+
+#############################################################################
+#  miRNA track (DONE - 2006-05-22 - Fan)
+    #   data from: Michel.Weber@ibcg.biotoul.fr
+    #   notify them when done.
+    ssh hgwdev
+    cd /cluster/data/mm8/bed
+    mkdir miRNA-2006-05-22
+    cd miRNA-2006-0522
+    # save the mm8_miRNA_track_may2006.txt file from email
+    cat mm8_miRNA_track_may2006.txt|sed -e 's/ /\t/g' >miRNA.tab
+
+    hgLoadBed -strict mm8 miRNA miRNA.tab
+
+# check previous release track before update
+    featureBits mm8 miRNA
+    #   28630 bases of 2567283971 (0.001%) in intersection
+    featureBits mm7 miRNA
+    #   20620 bases of 2583394090 (0.001%) in intersection
+    featureBits mm6 miRNA
+    #   21167 bases of 2597150411 (0.001%) in intersection
+    featureBits mm5 miRNA
+    #   17957 bases of 2615483787 (0.001%) in intersection
