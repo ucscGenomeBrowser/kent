@@ -1,21 +1,21 @@
 <H2>Description</H2>
 <P>
-This track shows alignments of $o_Organism ($o_db, $o_date) to the
-$organism genome using a gap scoring system that allows longer gaps 
+This track shows alignments of $o_organism ($o_db, $o_date) to the
+$Organism genome using a gap scoring system that allows longer gaps 
 than traditional affine gap scoring systems. It can also tolerate gaps in both
-$o_Organism and $organism simultaneously. These 
+$o_organism and $Organism simultaneously. These 
 &quot;double-sided&quot; gaps can be caused by local inversions and 
 overlapping deletions in both species. 
 <P>
 The chain track displays boxes joined together by either single or
 double lines. The boxes represent aligning regions.
 Single lines indicate gaps that are largely due to a deletion in the
-$o_Organism assembly or an insertion in the $organism 
+$o_organism assembly or an insertion in the $Organism 
 assembly.  Double lines represent more complex gaps that involve substantial
 sequence in both species. This may result from inversions, overlapping
 deletions, an abundance of local mutation, or an unsequenced gap in one
 species.  In cases where multiple chains align over a particular region of
-the $organism genome, the chains with single-lined gaps are often 
+the $Organism genome, the chains with single-lined gaps are often 
 due to processed pseudogenes, while chains with double-lined gaps are more 
 often due to paralogs and unprocessed pseudogenes.</P> 
 <P>
@@ -27,15 +27,15 @@ location (in thousands) of the match for each matching alignment.</P>
 <P>
 The genomes were aligned with blastz using dynamic masking and no 
 lineage-specific repeats. 
-Because the $organism chrUn is composed of unordered scaffolds separated 
+Because the $Organism chrUn is composed of unordered scaffolds separated 
 by 1000 <em>N</em>s, the blastz alignments and subsequent chaining were 
 first performed on the scaffolds, and the coordinates were then lifted up to 
 the chromosome level. This avoided false alignments across the <em>N</em>s.
 </P>
 The resulting alignments were converted into axt format using the lavToAxt
 program. The axt alignments were fed into axtChain, which organizes all
-alignments between a single $o_Organism chromosome and a single
-$organism chromosome into a group and creates a kd-tree out
+alignments between a single $o_organism chromosome and a single
+$Organism chromosome into a group and creates a kd-tree out
 of the gapless subsections (blocks) of the alignments. A dynamic program
 was then run over the kd-trees to find the maximally scoring chains of these
 blocks. 
