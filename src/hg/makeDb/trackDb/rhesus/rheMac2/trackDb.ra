@@ -35,7 +35,7 @@ color 12,12,120
 type genePred refPep refMrna
 
 track refGeneBlatz
-shortLabel refSeq Blatz 
+shortLabel Human RefSeq Blatz 
 longLabel Human mRNAs aligned with Blatz ident > 83% nearBest .5%
 group genes
 priority 35.1
