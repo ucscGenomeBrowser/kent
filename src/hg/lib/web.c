@@ -10,7 +10,7 @@
 #include "hgColors.h"
 #include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.87 2006/04/26 18:09:03 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.88 2006/05/22 23:46:58 hiram Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -218,7 +218,8 @@ else
 	   uiState);
     puts("           Genomes</A> &nbsp;&nbsp;&nbsp;");
     if (endsWith(scriptName, "hgTracks") || endsWith(scriptName, "hgGene") ||
-	endsWith(scriptName, "hgTrackUi") || endsWith(scriptName, "hgc"))
+	endsWith(scriptName, "hgTables") || endsWith(scriptName, "hgTrackUi") ||
+	endsWith(scriptName, "hgc"))
 	{
 	printf("       <A HREF=\"/cgi-bin/hgTracks%s\" class=\"topbar\">\n",
 	       uiState);
