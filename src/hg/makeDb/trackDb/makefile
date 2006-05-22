@@ -56,7 +56,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	falciparum \
 	sacCer1 \
 	sc1 \
-	canHg4 canHg9 canHg10 canHg11 canHg12 borEut13
+	canHg12 borEut13
 
 MGC_DBS = \
 	hg16 hg17 hg18\
