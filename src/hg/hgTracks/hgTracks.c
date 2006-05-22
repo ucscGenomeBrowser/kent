@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1102 2006/05/19 23:26:19 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1103 2006/05/22 20:00:13 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -189,7 +189,7 @@ boolean ideogramAvail = FALSE;           /* Is the ideogram data available for t
 boolean withLeftLabels = TRUE;		/* Display left labels? */
 boolean withCenterLabels = TRUE;	/* Display center labels? */
 boolean withGuidelines = TRUE;		/* Display guidelines? */
-boolean withNextItemArrows = TRUE;	/* Display next exon/feature navigation buttons near center labels? */
+boolean withNextItemArrows = FALSE;	/* Display next exon/feature navigation buttons near center labels? */
 boolean hideControls = FALSE;		/* Hide all controls? */
 
 int rulerMode = tvHide;         /* on, off, full */
@@ -1930,7 +1930,7 @@ if (vis == tvPack || vis == tvSquish)
 	    /* Arrows? */
 	    if (w > 0)
 		{
-		if (tg->nextItemButtonable && tg->nextPrevItem)
+		if (withNextItemArrows && tg->nextItemButtonable && tg->nextPrevItem)
 		    {
 		    int buttonW = heightPer-1 + 2*NEXT_ITEM_ARROW_BUFFER;
 		    boolean rButton = FALSE;
