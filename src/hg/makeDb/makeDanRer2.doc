@@ -4731,6 +4731,13 @@ cat  << 'EOF' > template
         multiz6waySummary multiz6way.maf
     # Processed 2565228 components in 1230321 mafs from multiz6way.maf
     # took about 2 minutes to load
+
+    # Dropped unused indexes (2006-05-09 kate)
+    # NOTE: this is not required in the future, as the loader
+    # has been fixed to not generate these indexes
+    hgsql danRer2 -e "alter table multiz6waySummary drop index chrom_2"
+    hgsql danRer2 -e "alter table multiz6waySummary drop index chrom_3"
+
     # create tree image - like tree.nh but with common names, added zebrafish
     # to tree (2005-06-07, hartera):
     cat << '_EOF_' > species6.nh

@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.44 2006/05/22 18:13:08 fanhsu Exp $"
+#	"$Id: makeMm8.doc,v 1.45 2006/05/23 18:29:47 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -3561,6 +3561,12 @@ autoMultiz $(root1) {check out line+ /cluster/store8/mm8/bed/multiz17way/maf/$(r
     #	11601035 mafs from multiz17way.maf
     #	real    32m34.791s
 
+    # Dropped unused indexes (2006-05-09 kate)
+    # NOTE: this is not required in the future, as the loader
+    # has been fixed to not generate these indexes
+    hgsql mm8 -e "alter table multiz17waySummary drop index chrom_2"
+    hgsql mm8 -e "alter table multiz17waySummary drop index chrom_3"
+
     #	This was done for Mm7, same image can be reused
     # create tree image:
     #	cat << '_EOF_' > species.nh
@@ -5139,6 +5145,64 @@ TMPDIR=/scratch/tmp
 ssh hgwdev
 knownToVisiGene mm8
 
+
+############################################################################
+# LIFTOVER (DROPUNDER) CHAINS TO MM7 (2006-04-06 kate)
+
+    # Split (using makeLoChain-split) of mm7 is doc'ed in makeMm7.doc
+    # Do what makeLoChain-split says to do next (start blat alignment)
+    ssh kk
+    cd /cluster/data/mm8/bed/liftOver
+    makeLoChain-align mm8 /scratch/hg/mm8/nib mm7 \
+        /iscratch/i/mm7/split10k \
+        /cluster/bluearc/mm7/11.ooc >&! align.log &
+    # Do what its output says to do next (start cluster job)
+    cd /cluster/data/mm8/bed/blat.mm7.2006-04-06/run
+    para shove
+    para time >&! run.time
+#CPU time in finished jobs:     906023s   15100.39m   251.67h   10.49d  0.029 y
+#IO & Wait Time:                 22074s     367.90m     6.13h    0.26d  0.001 y
+#Average job time:                 343s       5.72m     0.10h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:            4260s      71.00m     1.18h    0.05d
+#Submission to last job:          4965s      82.75m     1.38h    0.06d
+
+    # lift alignments
+    ssh kkr1u00
+    cd /cluster/data/mm8/bed/liftOver
+    makeLoChain-lift mm8 mm7 >&! lift.log &
+
+    # chain alignments
+    ssh kki
+    cd /cluster/data/mm8/bed/liftOver
+    makeLoChain-chain mm8 /scratch/hg/mm8/nib \
+                mm7 /scratch/hg/mm7/nib >&! chain.log &
+    # Do what its output says to do next (start cluster job)
+    cd /cluster/data/mm8/bed/blat.mm7.2006-04-06/chainRun
+    para shove
+    para time >&! run.time
+#CPU time in finished jobs:       3884s      64.73m     1.08h    0.04d  0.000 y
+#IO & Wait Time:                   594s       9.91m     0.17h    0.01d  0.000 y
+#Average job time:                  86s       1.44m     0.02h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:             245s       4.08m     0.07h    0.00d
+#Submission to last job:           401s       6.68m     0.11h    0.00d
+
+    # net alignment chains
+    ssh kkstore03
+    cd /cluster/data/mm8/bed/liftOver
+    makeLoChain-net mm8 mm7 >&! net.log &
+
+    # load reference to over.chain into database table, 
+    # and create symlinks  /gbdb  and download area
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/liftOver
+    makeLoChain-load mm8 mm7 >&! load.log &
+
+    # test by converting a region using the "convert" link on
+    # the browser, and comparing to blat of the same region
+
+=======
 #############################################################################
 # Create Allen Brain Atlas mapping. (DONE 2006-04-12 galt)
 
@@ -5261,6 +5325,10 @@ TMPDIR=/scratch/tmp
 	> swap.out 2>&1 &
 
     ssh hgwdev
+    time nice -n +19 featureBits mm8 chainHg17Link
+    #	984380268 bases of 2567283971 (38.343%) in intersection
+    time nice -n +19 featureBits hg17 chainMm8Link
+    #	994530172 bases of 2881515245 (34.514%) in intersection
     cd /cluster/data/mm8/bed/blastzHg17.2006-04-13
     time nice -n +19 featureBits mm8 chainHg17Link > fb.mm8.chainHg17Link 2>&1
     #	990554882 bases of 2567283971 (38.584%) in intersection
@@ -5307,6 +5375,7 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	`pwd`/DEF > blastz.out 2>&1 &
+    #	 XXX running 2006-04-20
 
 
     #	Then to swap over to xenTro2

@@ -5289,6 +5289,12 @@ ssh hgwdev
 cd /cluster/data/danRer3/bed/multiz5way/anno/mafs
 cat *.maf | hgLoadMafSummary danRer3 multiz5way stdin       
 
+# Dropped unused indexes (2006-05-09 kate)
+# NOTE: this is not required in the future, as the loader
+# has been fixed to not generate these indexes
+hgsql danRer3 -e "alter table multiz5waySummary drop index chrom_2"
+hgsql danRer3 -e "alter table multiz5waySummary drop index chrom_3"
+
 mkdir /gbdb/danRer3/multiz5way
 for i in *.maf
 do

@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.60 2006/05/16 16:48:19 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.61 2006/05/23 18:29:48 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -4050,6 +4050,12 @@ cat  << 'EOF' > template
     #	Processed 66508536 components in 11964967 mafs from multiz17way.maf
     #	real    37m56.218s
 
+    # Dropped unused indexes (2006-05-09 kate)
+    # NOTE: this is not required in the future, as the loader
+    # has been fixed to not generate these indexes
+    hgsql mm7 -e "alter table multiz17waySummary drop index chrom_2"
+    hgsql mm7 -e "alter table multiz17waySummary drop index chrom_3"
+
     # create tree image:
     cat << '_EOF_' > species.nh
 ((((((human,(mouse,rat)),(dog,cow)),opossum),chicken),frog),(tetraodon,zebrafish))
@@ -4071,8 +4077,8 @@ cat  << 'EOF' > template
     # Create a starting-tree.mod based on chr2 (the largest one)
     /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chr2.maf \
 	--refseq ../../../2/chr2.fa --in-format MAF \
-	--windows 100000000,1000 --out-format SS \
-	--between-blocks 5000 --out-root s1
+        --windows 100000000,1000 --out-format SS \
+        --between-blocks 5000 --out-root s1
     #	10 minutes
 
     /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
@@ -9167,6 +9173,7 @@ BASE=/cluster/data/mm7/bed/blastzEchTel1.2005-10-20
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-continue=cat -bigClusterHub=pk \
 	`pwd`/DEF > continue.cat.out 2>&1 &
@@ -9252,6 +9259,7 @@ BASE=/cluster/data/mm7/bed/blastzOryCun1.2005-10-20
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-continue=cat -bigClusterHub=pk \
 	`pwd`/DEF > continue.cat.out 2>&1 &
@@ -9349,6 +9357,7 @@ BASE=/cluster/data/mm7/bed/blastzDasNov1.2005-10-20
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk \
 	`pwd`/DEF > blastz.out 2>&1 &
+
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-continue=cat -bigClusterHub=pk \
 	`pwd`/DEF > continue.cat.out 2>&1 &
@@ -11843,6 +11852,16 @@ knownToVisiGene mm7
 ssh hgwdev
 knownToVisiGene mm7
 
+
+###########################################################################
+# SPLIT SEQUENCE FOR LIFTOVER (DROPUNDER) CHAINS FROM MM8  (2006-04-06 kate)
+    
+    ssh kkr1u00
+    cd /cluster/data/mm7/bed
+    mkdir bed/liftOver
+    cd bed/liftOver
+    makeLoChain-split mm7 /cluster/data/mm7/nib >&! split.log &
+    
 
 #######################################################################
 ## LIFTOVER To Mm8 (DONE - 2006-04-21 - 2006-04-24 - Hiram)

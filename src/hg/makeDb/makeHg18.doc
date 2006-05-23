@@ -7172,6 +7172,12 @@ cat > loadMaf.csh << 'EOF'
 'EOF'
     csh loadMaf.csh > loadMaf.log
 
+    # Dropped unused indexes (2006-05-09 kate)
+    # NOTE: this is not required in the future, as the loader
+    # has been fixed to not generate these indexes
+    hgsql hg18 -e "alter table multiz17waySummary drop index chrom_2"
+    hgsql hg18 -e "alter table multiz17waySummary drop index chrom_3"
+
     ssh kkstore02
     cd /cluster/data/hg18/bed/multiz17way
     mkdir frames

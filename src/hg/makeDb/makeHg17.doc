@@ -19649,7 +19649,245 @@ doPhast.csh $(root1) $(file1) 14 .008 .28
         /gbdb/hg17/multiz17way/phastCons17way.wib
     hgLoadWiggle -pathPrefix=/gbdb/hg17/multiz17way hg17 \
         phastCons17way phastCons17way.wig
-    #  ~ 3 minute load
+
+############################################################################
+    ## Run phastCons on Placental mammals
+    ssh pk
+    cd /cluster/data/hg17/bed/multiz17way.2005-12-20/cons
+    mkdir run.cons.alt
+    cd run.cons.alt
+
+    # create pruned trees 
+    set tree_doctor = /cluster/bin/phast/tree_doctor
+    sed 's/ /,/g' ../../species.lst 
+    # hg17,panTro1,rheMac2,rn3,mm7,oryCun1,bosTau2,canFam2,dasNov1,loxAfr1,echTel1,monDom2,galGal2,xenTro1,tetNig1,fr1,danRer3
+    mkdir placental
+    $tree_doctor ../elliotsEncode.mod \
+        --prune-all-but=hg17,panTro1,rheMac2,rn3,mm7,oryCun1,bosTau2,canFam2,dasNov1,loxAfr1,echTel1 \
+                > placental/placental.mod
+
+    cat > doPhast.csh << 'EOF'
+#!/bin/csh -fe
+set c = $1
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $6
+set tmp = /scratch/tmp/hg17/$grp/$f
+mkdir -p $tmp
+set san = /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons
+cp -p $san/ss/$c/$f.ss $grp/$grp.mod $tmp
+pushd $tmp > /dev/null
+/cluster/bin/phast/$MACHTYPE/phastCons $f.ss $grp.mod \
+   --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative panTro1,rheMac2 \
+	--seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p $san/$grp/pp/$c $san/$grp/bed/$c
+sleep 1
+mv $tmp/$f.pp $san/$grp/pp/$c
+mv $tmp/$f.bed $san/$grp/bed/$c
+rm -fr $tmp
+'EOF'
+    # << emacs happy
+
+    chmod a+x doPhast.csh
+
+    # Create gsub file
+    cat > template << 'EOF'
+#LOOP
+doPhast.csh $(root1) $(file1) 14 .2 .28 placental
+#ENDLOOP
+'EOF'
+    #	happy emacs
+
+    # Create parasol batch and run it
+    pushd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons
+    ls -1 ss/chr*/chr*.ss | sed 's/.ss$//' > \
+        /cluster/data/hg17/bed/multiz17way/cons/run.cons.alt/in.list
+    popd
+
+    gensub2 in.list single template jobList
+    para create jobList
+        # 333 jobs
+    para try
+    para check
+    para push
+
+############################################################################
+    ## Run phastCons on subgroups (mammals, placentals, and w/o low-cov)
+    ssh pk
+    cd /cluster/data/hg17/bed/multiz17way.2005-12-20/cons
+    mkdir run.cons.groups
+    cd run.cons.groups
+
+    # create pruned trees 
+    set tree_doctor = /cluster/bin/phast/tree_doctor
+    sed 's/ /,/g' ../../species.lst 
+    # hg17,panTro1,rheMac2,rn3,mm7,oryCun1,bosTau2,canFam2,dasNov1,loxAfr1,echTel1,monDom2,galGal2,xenTro1,tetNig1,fr1,danRer3
+
+    $tree_doctor ../elliotsEncode.mod \
+        --prune-all-but=hg17,panTro1,rheMac2,rn3,mm7,bosTau2,canFam2,monDom2,galGal2,xenTro1,tetNig1,fr1,danRer3 \
+                > vertebrate-high.mod
+    $tree_doctor ../elliotsEncode.mod \
+        --prune-all-but=hg17,panTro1,rheMac2,rn3,mm7,bosTau2,canFam2,monDom2 \
+                > mammal-high.mod
+    $tree_doctor ../elliotsEncode.mod \
+        --prune-all-but=hg17,panTro1,rheMac2,rn3,mm7,bosTau2,canFam2 \
+                > placental-high.mod
+    $tree_doctor ../elliotsEncode.mod \
+        --prune-all-but=hg17,panTro1,rheMac2,rn3,mm7,oryCun1,bosTau2,canFam2,dasNov1,loxAfr1,echTel1,monDom2 \
+                > mammal.mod
+    $tree_doctor ../elliotsEncode.mod \
+        --prune-all-but=hg17,panTro1,rheMac2,rn3,mm7,oryCun1,bosTau2,canFam2,dasNov1,loxAfr1,echTel1 \
+                > placental.mod
+    foreach f (*.mod)
+        mkdir $f:r
+        mv $f $f:r
+    end
+    cat > doPhast.csh << 'EOF'
+#!/bin/csh -fe
+set c = $1
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set grp = $6
+set tmp = /scratch/tmp/hg17/$grp/$f
+mkdir -p $tmp
+set san = /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons
+cp -p $san/ss/$c/$f.ss $grp/$grp.mod $tmp
+pushd $tmp > /dev/null
+/cluster/bin/phast/$MACHTYPE/phastCons $f.ss $grp.mod \
+   --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative panTro1,rheMac2 \
+	--seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p $san/$grp/pp/$c $san/$grp/bed/$c
+sleep 1
+mv $tmp/$f.pp $san/$grp/pp/$c
+mv $tmp/$f.bed $san/$grp/bed/$c
+rm -fr $tmp
+'EOF'
+    # emacs happy
+    chmod a+x doPhast.csh
+
+    #	root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create gsub file
+    cat > template << 'EOF'
+#LOOP
+doPhast.csh $(root1) $(file1) 14   .21 .28 placental-high
+doPhast.csh $(root1) $(file1) 14   .2 .28 placental
+doPhast.csh $(root1) $(file1) 14   .11 .28 mammal
+doPhast.csh $(root1) $(file1) 14   .1 .28 mammal-high
+doPhast.csh $(root1) $(file1) 14 .0028 .28 vertebrate-high
+#ENDLOOP
+
+'EOF'
+    #	happy emacs
+
+    # Create parasol batch for just chr7 (for test purposes) and run it
+    pushd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons
+    ls -1 ss/chr7/chr*.ss | sed 's/.ss$//' > \
+        /cluster/data/hg17/bed/multiz17way/cons/run.cons.groups/in.list
+    popd
+
+    gensub2 in.list single template jobList
+    para create jobList
+        # 80 jobs
+    para try
+    para check
+    para push
+    # 24 minutes
+
+
+    ## create Alt Most Conserved track
+    ssh hgwdev
+    cd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons
+cat > loadAltElements.csh << 'EOF'
+    set b = /cluster/data/hg17/bed/multiz17way/cons/run.cons.groups
+    foreach d (mammal* placental* vertebrate*)
+      echo $d
+      cd $d
+      find ./bed -name "chr*.bed" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+	sort -k7,7 -k9,9n | \
+	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+	xargs cat | \
+	awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' | \
+	/cluster/bin/scripts/lodToBedScore /dev/stdin \
+            > $b/$d/mostConserved.bed
+        set table = `echo $d | perl -wpe "s/(.*)/phastConsElements\u$1/;s/-(.*)/\u$1/"`
+        hgLoadBed -strict hg17 $table $b/$d/mostConserved.bed
+        featureBits hg17 -enrichment refGene:cds -chrom=chr7 $table
+      cd ..
+    end
+'EOF'
+    csh loadAltElements.csh >&! loadAltElements.log &
+    grep refGene loadAltElements.log | sort -n -k4
+# refGene:cds 0.884%, phastConsElementsPlacentalHigh 4.828%, both 0.606%, cover 68.51%, enrich 14.19x
+# refGene:cds 0.884%, phastConsElementsMammal 4.869%, both 0.580%, cover 65.62%, enrich 13.48x
+# refGene:cds 0.884%, phastConsElementsMammalHigh 4.887%, both 0.624%, cover 70.60%, enrich 14.45x
+# refGene:cds 0.884%, phastConsElementsPlacental 4.904%, both 0.558%, cover 63.14%, enrich 12.88x
+# refGene:cds 0.884%, phastConsElementsVertebrateHigh 4.965%, both 0.652%, cover 73.74%, enrich 14.85x
+
+    featureBits hg17 -enrichment refGene:cds -chrom=chr7 phastConsElements17way
+# refGene:cds 0.884%, phastConsElements17way 4.851%, both 0.623%, cover 70.48%, enrich 14.53x
+
+    ssh kkstore02
+    cd /cluster/data/hg17/bed/multiz17way/cons/run.cons.groups
+cat > makeAltWiggle.csh << 'EOF'
+    set b = `pwd`
+    set san = /san/sanvol1/scratch/hg17/multiz17way/cons
+    pushd $san
+    foreach d (mammal* placental* vertebrate*)
+      echo $d
+      cd $d
+      set table = `echo $d | perl -wpe 's/(.*)/phastCons\u$1/;s/-(.*)/\u$1/'`
+      echo $table
+      find ./pp -name "chr*.pp" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+	sort -k7,7 -k9,9n | \
+	sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+	xargs cat | \
+        nice wigEncode stdin $table.wig $table.wib
+      mv $table.wig $table.wib $b/$d
+      cd ..
+    end
+    popd
+'EOF'
+    csh makeAltWiggle.csh >&! makeAltWiggle.log &
+
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz17way/cons/run.cons.groups
+cat > loadAltWiggle.csh << 'EOF'
+    set b = `pwd`
+    foreach d (mammal* placental* vertebrate*)
+        echo $d
+        cd $d
+        set table = `echo $d | perl -wpe 's/(.*)/phastCons\u$1/;s/-(.*)/\u$1/'`
+        echo $table
+        ln -s `pwd`/$table.wib /gbdb/hg17/multiz17way
+        hgLoadWiggle -pathPrefix=/gbdb/hg17/multiz17way hg17 $table $table.wig
+        cd ..
+    end
+'EOF'
+    csh loadAltWiggle.csh >&! loadAltWiggle.log &
+
+    # Create parasol batch for just chr7 (for test purposes) and run it
+    pushd /san/sanvol1/scratch/hg17/multiz17way.2005-12-20/cons
+    ls -1 ss/chr7/chr*.ss | sed 's/.ss$//' > \
+        /cluster/data/hg17/bed/multiz17way/cons/run.cons.groups/in.list
+    popd
+
+    gensub2 in.list single template jobList
+    para create jobList
+        # 80 jobs
+    para try
+    para check
+    para push
+    # 24 minutes
 
     # Downloads  (2006-02-22 kate)
     ssh hgwdev
@@ -20120,6 +20358,12 @@ cat > loadMaf.csh << 'EOF'
 
         # Created 3212623 summary blocks from 114139253 components and 17522217 mafs from stdin
     # request push to hgwdev
+
+    # Dropped unused indexes (2006-05-09 kate)
+    # NOTE: this is not required in the future, as the loader
+    # has been fixed to not generate these indexes
+    hgsql hg17 -e "alter table multiz17waySummary drop index chrom_2"
+    hgsql hg17 -e "alter table multiz17waySummary drop index chrom_3"
 
     ssh kkstore02
     cd /cluster/data/hg17/bed/multiz17way

@@ -3186,6 +3186,12 @@ rmdir $tmpDir
     cat /cluster/data/dm2/bed/multiz12way/maf/chr*.maf \
     | nice hgLoadMafSummary dm2 multiz12waySummary stdin
 
+    # Dropped unused indexes (2006-05-09 kate)
+    # NOTE: this is not required in the future, as the loader
+    # has been fixed to not generate these indexes
+    hgsql dm2 -e "alter table multiz9waySummary drop index chrom_2"
+    hgsql dm2 -e "alter table multiz9waySummary drop index chrom_3"
+
     # put 12way MAF out for download
     ssh kolossus
     cd /cluster/data/dm2/bed/multiz12way

@@ -715,6 +715,12 @@ cat > loadMaf.csh << 'EOF'
 'EOF'
 #<< happy emacs
 
+    # Dropped unused indexes (2006-05-09 kate)
+    # NOTE: this is not required in the future, as the loader
+    # has been fixed to not generate these indexes
+    hgsql rheMac2 -e "alter table multiz5waySummary drop index chrom_2"
+    hgsql rheMac2 -e "alter table multiz5waySummary drop index chrom_3"
+
     # expect lengthy load time for this -- a few hours ?
     csh loadMaf.csh >&! loadMaf.log &
 #Loading multiz5waySyn into database

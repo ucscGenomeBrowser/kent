@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.112 2006/05/15 21:12:43 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.113 2006/05/23 18:29:48 kate Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -4097,6 +4097,11 @@ cat  << 'EOF' > template
     # Processed 18067226 components in 6284892 mafs from multiz10way.maf
     #	19m 15s
 
+    # Dropped unused indexes (2006-05-09 kate)
+    # NOTE: this is not required in the future, as the loader
+    # has been fixed to not generate these indexes
+    hgsql mm6 -e "alter table multiz10waySummary drop index chrom_2"
+    hgsql mm6 -e "alter table multiz10waySummary drop index chrom_3"
 
     # create tree image:
     cat << '_EOF_' > species.nh

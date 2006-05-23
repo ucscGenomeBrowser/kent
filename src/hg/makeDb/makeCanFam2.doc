@@ -96,6 +96,7 @@ exit; # don't actually run this like a script :)
       cp -p $fa $fa.bak
       nice splitFaIntoContigs $agp $fa . -nSize=5000000
     end
+
     # No _random's in this assembly, so no need to clean up after them.
     # Make a "pseudo-contig" for processing chrM too:
     mkdir M/chrM_1
@@ -1490,6 +1491,12 @@ rmdir $tmpDir
     # load summary table to replace pairwise
     cat /cluster/data/canFam2/bed/multiz4way/maf/chr*.maf \
     | nice hgLoadMafSummary canFam2 multiz4waySummary stdin
+
+    # Dropped unused indexes (2006-05-09 kate)
+    # NOTE: this is not required in the future, as the loader
+    # has been fixed to not generate these indexes
+    hgsql canFam2 -e "alter table multiz4waySummary drop index chrom_2"
+    hgsql canFam2 -e "alter table multiz4waySummary drop index chrom_3"
 
     # put 4way MAF out for download
     ssh kolossus
