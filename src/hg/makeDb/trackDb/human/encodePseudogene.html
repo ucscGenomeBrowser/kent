@@ -44,7 +44,7 @@ assigned to either the processed or the duplicated category</TD>
 <H3>Description</H3>
 <P>
 This subtrack shows pseudogenes derived from a consensus of the five 
-methods listed above. In this January 6, 2006 Pseudogene.org Data Freeze, 
+methods listed above. In the pseudogene.org data freeze dated 6 Jan. 2006, 
 201 consensus pseudogenes were found.
 Here, pseudogenes are defined as genomic sequences that are similar to known 
 genes but exhibit various inactivating disablements (<em>e.g.</em> premature 
@@ -100,8 +100,8 @@ This track shows pseudogenes annotated by the
 at the Wellcome Trust Sanger Institute.  Pseudogenes have homology to protein
 sequences but generally have a disrupted CDS.  For all annotated
 pseudogenes, an active homologous gene (the parent) can be identified
-elsewhere in the genome.  Pseudogenes are classified as Processed or
-Unprocessed.
+elsewhere in the genome.  Pseudogenes are classified as processed or
+unprocessed.
 
 <H3>Methods</H3>
 <P>
@@ -109,39 +109,45 @@ Prior to manual annotation, finished sequence is submitted to an
 automated analysis pipeline for similarity searches and ab initio gene
 predictions.  The searches are run on a computer farm and stored in an
 Ensembl MySQL database using the Ensembl analysis pipeline system
-(Searle et al, 2004, Harrow et al. 2006).  A pseudogene is annotated
+(Searle <em>et al.</em>, 2004, Harrow <em>et al.</em>, 2006).</P>
+<P>
+A pseudogene is annotated
 where the total length of the protein homology to the genomic sequence
-is >20% of the length of the parent protein or >100aa in length,
+is &gt;20% of the length of the parent protein or &gt;100 aa in length,
 whichever is shortest.  If a gene structure has an ORF but has lost
-the structure of parent gene, a pseudogene is annotated provided there
-is no evidence of transcription from the pseudogene locus.  Where an
-open but truncated reading frame is present other evidence is used
-(for example 3' genomic polyA tract) to allow classification as a
-pseudogene.  Where a parent gene has only a single coding exon (e.g.
+the structure of the parent gene, a pseudogene is annotated provided there
+is no evidence of transcription from the pseudogene locus.  When an
+open but truncated reading frame is present, other evidence is used
+(for example, 3' genomic polyA tract) to allow classification as a
+pseudogene.  When a parent gene has only a single coding exon (e.g.
 olfactory receptors), a small 5' or 3' truncation to the CDS at the
 pseudogene locus (compared to other family members) is sufficient to
 confirm pseudogene status where the truncation is predicted to
 significantly affect secondary structure by the literature and/or
-expert community.  Processed and unprocessed pseudogenes are
+expert community.  </P>
+<P>
+Processed and unprocessed pseudogenes are
 distinguished on the basis of structure and genomic context. 
 Processed pseudogenes, which arise via retrotransposition, lose the
 intron-exon structure of the parent gene, often have an A-rich tract
-indicative of the insertion site at their 3' end and are flanked by
+indicative of the insertion site at their 3' end, and are flanked by
 different genomic sequence to the parent gene.  Unprocessed
 pseudogenes, which arise via gene duplication, share both the
 intron-exon structure and flanking genomic sequence with the parent
 gene.  Transcribed pseudogenes are indicated by the annotation of a
-pseudogene and transcript variant alongside each other.
+pseudogene and transcript variant alongside each other.</P>
 
 <H3>References</H3>
 <P>
 Harrow, J., Denoeud, F., Frankish, A., Reymond, A., Chen, C., 
 Chrast, J., Lagarde, J., Gilbert, J.G.R., Storey, R., Swarbreck, D., 
 Ucla, C., Hubbard, T., Antonarakis, S.E. and Guigo, R.  GENCODE: Producing 
-a reference annotation for ENCODE. <em>Genome Biology</em> (In Press)
-
-Searle, S.M., Gilbert, J., Iyer, V. and Clamp, M. The otter annotation system
-<em>Genome Res</em> <B>14</B>(5), 963-970 (2004).</P>
+a reference annotation for ENCODE. <em>Genome Biology</em> (in press).</P>
+<P>
+Searle, S.M., Gilbert, J., Iyer, V. and Clamp, M. 
+<A HREF="http://www.genome.org/cgi/content/full/14/5/963"
+TARGET=_blank>The otter annotation system</A>.
+<em>Genome Res</em> <B>14</B>(5), 963-70 (2004).</P>
 </P>
 <P></P>
 <HR>
