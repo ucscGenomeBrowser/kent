@@ -34,6 +34,9 @@ void webNewSection(char* format, ...);
 void webEnd();
 /* output the footer of the HTML page */
 
+void webEndSection();
+/* Close down a section */
+
 void webEndSectionTables();
 /* Finish with section tables (but don't do /BODY /HTML lik
  * webEnd does. */
