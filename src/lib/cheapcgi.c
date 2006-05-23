@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.76 2006/03/10 17:43:36 angie Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.77 2006/05/23 00:14:22 kate Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -733,6 +733,12 @@ printf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\"", name, value);
 if (disabled)
     printf(" DISABLED");
 printf(">"); 
+}
+
+void cgiMakeFileEntry(char *name, char *value)
+/* Make file entry box/browser */
+{
+printf("<INPUT TYPE=FILE NAME=\"%s\" VALUE=\"%s\">", name, value);
 }
 
 void cgiSimpleTableStart()
