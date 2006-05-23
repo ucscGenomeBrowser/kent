@@ -9,7 +9,7 @@
 #include "hdb.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgStanfordMicroarray.c,v 1.4 2003/10/17 19:52:52 angie Exp $";
+static char const rcsid[] = "$Id: hgStanfordMicroarray.c,v 1.5 2006/05/23 17:24:51 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -143,7 +143,7 @@ void addOneXls(char *fileName, int maxExps, struct experiment **pExpList,
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, **row;
-int columnCount, i;
+int columnCount;
 int dataIx, geneIx, expIx = *pExpCount;
 
 /* First read preamble - everything that starts with '!' */
@@ -220,7 +220,7 @@ int dataIx, geneIx, expIx = *pExpCount;
 	struct geneSpots *gene;
 	if (chopByChar(line, '\t', row, columnCount) != columnCount)
 	    errAbort("Expecting %d fields line %d of %s", 
-	    	lf->lineIx, lf->fileName);
+	    	columnCount, lf->lineIx, lf->fileName);
 	data = row[dataIx];
 	if (data[0] != 0)
 	    {
@@ -351,8 +351,8 @@ void hgStanfordMicroarray(char *database, char *table, char *expTable,
 /* hgStanfordMicroarray - Load up from Stanford Microarray Database files. */
 {
 struct fileInfo *dirEl, *dirList = listDirX(dir, "*.xls", TRUE);
-struct experiment *expList = NULL, *exp;
-struct geneSpots *geneList = NULL, *gene;
+struct experiment *expList = NULL;
+struct geneSpots *geneList = NULL;
 struct hash *geneHash = newHash(17);
 int maxExps = slCount(dirList);
 int expCount = 0;
