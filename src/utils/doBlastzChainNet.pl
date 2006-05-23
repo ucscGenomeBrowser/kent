@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/utils/doBlastzChainNet.pl instead.
 
-# $Id: doBlastzChainNet.pl,v 1.39 2006/04/27 17:52:20 angie Exp $
+# $Id: doBlastzChainNet.pl,v 1.40 2006/05/23 21:15:41 angie Exp $
 
 # to-do items:
 # - lots of testing
@@ -1431,7 +1431,8 @@ ln -s $liftOverDir/$over $gpLiftOverDir/$over
 mkdir -p $gbdbLiftOverDir
 rm -f $gbdbLiftOverDir/$over
 ln -s $liftOverDir/$over $gbdbLiftOverDir/$over
-hgAddLiftOverChain $tDb $qDb -multiple -path=$gbdbLiftOverDir/$over
+hgAddLiftOverChain -minMatch=0.1 -multiple -path=$gbdbLiftOverDir/$over \\
+  $tDb $qDb
 
 _EOF_
       ;
