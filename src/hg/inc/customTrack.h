@@ -74,4 +74,7 @@ char *customTrackTableFromLabel(char *label);
 boolean customTrackTest();
 /* Tests module - returns FALSE and prints warning message on failure. */
 
+#define CUSTOM_TRASH	"customTrash"
+/*	custom tracks database name	*/
+
 #endif
