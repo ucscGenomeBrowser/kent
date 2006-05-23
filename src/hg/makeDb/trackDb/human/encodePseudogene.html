@@ -44,7 +44,8 @@ assigned to either the processed or the duplicated category</TD>
 <H3>Description</H3>
 <P>
 This subtrack shows pseudogenes derived from a consensus of the five 
-methods listed above. In this analysis, 201 consensus pseudogenes were found.
+methods listed above. In this January 6, 2006 Pseudogene.org Data Freeze, 
+201 consensus pseudogenes were found.
 Here, pseudogenes are defined as genomic sequences that are similar to known 
 genes but exhibit various inactivating disablements (<em>e.g.</em> premature 
 stop codons or frameshifts) in their putative protein-coding regions and are 
@@ -94,10 +95,54 @@ HREF=http://www.pseudogene.org/ENCODE TARGET=_blank>pseudogene.org/ENCODE</A>.
 <H2>Havana-Gencode Annotated Pseudogenes and Immunglobulin Segments</H2>
 <H3>Description</H3>
 <P>
-The <A HREF=http://www.sanger.ac.uk/HGP/havana/ TARGET=_blank>Havana</A> group
-is based at the The Wellcome Trust Sanger Institute; the 
-<A HREF=http://genome.imim.es/gencode/participants.html TARGET=_blank>
-Gencode</A> group involves participants from several institutions.</P>
+This track shows pseudogenes annotated by the 
+<A HREF=http://www.sanger.ac.uk/HGP/havana/ TARGET=_blank>HAVANA</A> group 
+at the Wellcome Trust Sanger Institute.  Pseudogenes have homology to protein
+sequences but generally have a disrupted CDS.  For all annotated
+pseudogenes, an active homologous gene (the parent) can be identified
+elsewhere in the genome.  Pseudogenes are classified as Processed or
+Unprocessed.
+
+<H3>Methods</H3>
+<P>
+Prior to manual annotation, finished sequence is submitted to an
+automated analysis pipeline for similarity searches and ab initio gene
+predictions.  The searches are run on a computer farm and stored in an
+Ensembl MySQL database using the Ensembl analysis pipeline system
+(Searle et al, 2004, Harrow et al. 2006).  A pseudogene is annotated
+where the total length of the protein homology to the genomic sequence
+is >20% of the length of the parent protein or >100aa in length,
+whichever is shortest.  If a gene structure has an ORF but has lost
+the structure of parent gene, a pseudogene is annotated provided there
+is no evidence of transcription from the pseudogene locus.  Where an
+open but truncated reading frame is present other evidence is used
+(for example 3' genomic polyA tract) to allow classification as a
+pseudogene.  Where a parent gene has only a single coding exon (e.g.
+olfactory receptors), a small 5' or 3' truncation to the CDS at the
+pseudogene locus (compared to other family members) is sufficient to
+confirm pseudogene status where the truncation is predicted to
+significantly affect secondary structure by the literature and/or
+expert community.  Processed and unprocessed pseudogenes are
+distinguished on the basis of structure and genomic context. 
+Processed pseudogenes, which arise via retrotransposition, lose the
+intron-exon structure of the parent gene, often have an A-rich tract
+indicative of the insertion site at their 3' end and are flanked by
+different genomic sequence to the parent gene.  Unprocessed
+pseudogenes, which arise via gene duplication, share both the
+intron-exon structure and flanking genomic sequence with the parent
+gene.  Transcribed pseudogenes are indicated by the annotation of a
+pseudogene and transcript variant alongside each other.
+
+<H3>References</H3>
+<P>
+Harrow, J., Denoeud, F., Frankish, A., Reymond, A., Chen, C., 
+Chrast, J., Lagarde, J., Gilbert, J.G.R., Storey, R., Swarbreck, D., 
+Ucla, C., Hubbard, T., Antonarakis, S.E. and Guigo, R.  GENCODE: Producing 
+a reference annotation for ENCODE. <em>Genome Biology</em> (In Press)
+
+Searle, S.M., Gilbert, J., Iyer, V. and Clamp, M. The otter annotation system
+<em>Genome Res</em> <B>14</B>(5), 963-970 (2004).</P>
+</P>
 <P></P>
 <HR>
 
@@ -109,9 +154,8 @@ Pseudogene Pipeline. In this analysis, pseudogenes are defined as genomic
 sequences that are similar to known genes with various inactivating 
 disablements (e.g. premature stop codons or frameshifts) in their 
 putative protein-coding regions. Pseudogenes are flagged as 
-recently processed, 
-recently duplicated, or of uncertain origin (either ancient fragments or 
-resulting from a single-exon parent).</P>
+recently processed, recently duplicated, or of uncertain origin (either 
+ancient fragments or resulting from a single-exon parent).</P>
 
 <H3>Methods</H3>
 <P>
@@ -225,8 +269,9 @@ Duplication, deletion, and rearrangement in the mouse and human genomes</A>.
 <P>
 Schwartz, S., Kent, W.J., Smit, A., Zhang, Z., Baertsch, R., Hardison, R., 
 Haussler, D., and Miller, W.
-<A HREF="http://www.genome.org/cgi/content/abstract/13/1/103" TARGET=_blank>Human-Mouse 
-Alignments with BLASTZ</A>. <em>Genome Res.</em> <B>13</B>(1), 103-7 (2003).
+<A HREF="http://www.genome.org/cgi/content/abstract/13/1/103" TARGET=_blank>
+Human-Mouse Alignments with BLASTZ</A>. 
+<em>Genome Res.</em> <B>13</B>(1), 103-7 (2003).
 </P>
 <P></P>
 <HR>
