@@ -128,3 +128,10 @@ void htmlNoEscape();
 
 /* tell htmlOut to escape special HTML chars '<', '>' */
 void htmlDoEscape();
+
+/* Include an HTML file in a CGI.
+ *   The file path is relative to the web server document root */
+void htmlIncludeWebFile(char *file);
+
+/* Include an HTML file in a CGI */
+void htmlIncludeFile(char *path);

@@ -11,12 +11,13 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+#include "obscure.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
 #include "errabort.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: htmshell.c,v 1.29 2006/01/26 19:56:46 markd Exp $";
+static char const rcsid[] = "$Id: htmshell.c,v 1.30 2006/05/23 00:12:41 kate Exp $";
 
 jmp_buf htmlRecover;
 
@@ -405,3 +406,34 @@ htmEmptyShell(doMiddle, method);
 /* Post-script. */
 htmlEnd();
 }
+
+/* Include an HTML file in a CGI */
+void htmlIncludeFile(char *path)
+{
+char *str = NULL;
+size_t len = 0;
+
+if (path == NULL)
+    errAbort("Program error: including null file");
+if (!fileExists(path))
+   errAbort("Missing file %s", path); 
+readInGulp(path, &str, &len);
+
+if (len <= 0)
+    errAbort("Error reading included file: %s", path);
+
+puts(str);
+freeMem(str);
+}
+
+/* Include an HTML file in a CGI.
+ *   The file path is relative to the web server document root */
+void htmlIncludeWebFile(char *file)
+{
+char path[256];
+char *docRoot = "/usr/local/apache/htdocs";
+
+safef(path, sizeof path, "%s/%s", docRoot, file);
+htmlIncludeFile(path);
+}
+
