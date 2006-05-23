@@ -1347,3 +1347,34 @@ end
     cd /cluster/data/sacCer1/bed/blastp/mm7/run/out
     hgLoadBlastTab sacCer1 mmBlastTab -maxPer=1 *.tab
 
+
+##########################################################################
+# HGNEAR PROTEIN BLAST TABLES (DONE 5/22/06 angie)
+    ssh hgwdev
+    mkdir /cluster/data/sacCer1/bed/hgNearBlastp
+    cd /cluster/data/sacCer1/bed/hgNearBlastp
+    # Re-fetch current sgdPep because the one in ../blastz/sgdPep.faa 
+    # has been overwritten with more recent data from SGD.  That's OK 
+    # for other organisms who will be linking straight to SGD instead 
+    # of to sacCer1, but sacCer1 *BlastTab should jive with sgdGene.
+    pepPredToFa sacCer1 sgdPep sgdPep.faa
+    cat << _EOF_ > config.ra
+# Yeast vs. other Gene Sorter orgs that have recently been updated:
+# human, mouse, fly
+
+targetGenesetPrefix sgd
+targetDb sacCer1
+queryDbs hg18 mm8 dm2
+
+sacCer1Fa /cluster/data/sacCer1/bed/hgNearBlastp/sgdPep.faa
+hg18Fa /cluster/data/hg18/bed/blastp/known.faa
+mm8Fa /cluster/data/mm8/bed/geneSorter/blastp/known.faa
+dm2Fa /cluster/data/dm2/bed/flybase4.2/flybasePep.fa
+
+buildDir /cluster/data/sacCer1/bed/hgNearBlastp
+scratchDir /san/sanvol1/scratch/sacCer1HgNearBlastp
+_EOF_
+    doHgNearBlastp.pl -noSelf -targetOnly config.ra >& do.log & tail -f do.log
+# *** hgBlastTab mmBlastTab dmBlastTab 
+
+
