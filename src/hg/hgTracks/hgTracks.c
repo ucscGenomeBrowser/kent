@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1104 2006/05/22 22:53:32 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1105 2006/05/23 17:28:28 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11373,6 +11373,7 @@ if (psOutput != NULL)
    {
    suppressHtml = TRUE;
    hideControls = TRUE;
+   withNextItemArrows = FALSE;
    hgFindMatches = NULL;
    }
 
