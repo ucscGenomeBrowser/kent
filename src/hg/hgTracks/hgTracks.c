@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1108 2006/05/24 18:36:23 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1109 2006/05/24 22:51:26 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7980,7 +7980,7 @@ for (item = track->items; item != NULL; item = item->next)
         }
     else
         {
-        if (!track->mapsSelf && nextItemCompatible(track))
+        if (!track->mapsSelf)
             {
             mapBoxHgcOrHgGene(track->itemStart(track, item),
                     track->itemEnd(track, item), trackPastTabX,
@@ -8153,7 +8153,7 @@ switch (track->limitedVis)
 	y += trackPlusLabelHeight(track, fontHeight);
 	break;
     case tvFull:
-	if (!track->nextItemButtonable)
+	if (!nextItemCompatible(track))
 	    {
 	    if (isCompositeTrack(track))
 		{
