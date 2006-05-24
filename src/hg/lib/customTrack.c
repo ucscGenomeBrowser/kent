@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.80 2006/05/19 22:58:35 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.81 2006/05/24 00:09:49 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -37,6 +37,8 @@ static char const rcsid[] = "$Id: customTrack.c,v 1.80 2006/05/19 22:58:35 hiram
  *  priority = number.
  */
 
+/*	forward declaration, function used before the code appears	*/
+static void saveBedPart(FILE *f, struct bed *bed, int fieldCount);
 
 static struct trackDb *tdbDefault()
 /* Return default custom table: black, dense, etc. */
@@ -143,6 +145,8 @@ static char loader[32];
 
 if (startsWith("bed", type))
     safef(loader, sizeof(loader), "loader/hgLoadBed");
+else if (startsWith("gff", type))
+    safef(loader, sizeof(loader), "loader/hgLoadBed");
 else if (startsWith("wiggle_0", type))
     safef(loader, sizeof(loader), "loader/wigLoader");
 else
@@ -175,7 +179,8 @@ safef(envPass, sizeof(envPass), "HGDB_PASSWORD=%s", pass);
 putenv(envPass);
 
 /*	the different loaders require different arguments */
-if (startsWith("bed", track->dbTrackType))
+if (startsWith("bed", track->dbTrackType)
+	|| startsWith("gff", track->dbTrackType))
     {
     bedCmd[0] = trackLoader(track->dbTrackType);
     dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
@@ -311,7 +316,14 @@ if ((val = hashFindVal(hash, "db")) != NULL)
 	    parseDbSettings(tdb, hash);
 	    }
 	else
-	    uglyf("asked for database custom track, but no db conf items in hg.conf<BR>\n");
+	    {
+	    static boolean msgOnce = TRUE;
+	    if (msgOnce)
+		{
+		uglyf("asked for database custom track, but no db conf items in hg.conf<BR>\n");
+		msgOnce = FALSE;
+		}
+	    }
 	}
     }
 if ((!track->dbTrack) && ((val = hashFindVal(hash, "type")) != NULL))
@@ -933,7 +945,36 @@ for (track = trackList; track != NULL; track = track->next)
     }
 }
 
+static void finishDbPipeline(struct customTrack *track,
+	struct pipeline **dbDataPL, FILE *dbDataFH,
+	struct hash *chromHash)
+{
+/* gff data has been accumulating, waiting to output */
+if (track->gffHelper)
+    {
+    int offset = track->offset;
+    struct bed *bed;
 
+printf("finishDbPipeline for gff track '%s'<BR>\n", track->tdb->shortLabel);
+
+    track->bedList =
+	    gffHelperFinish(track->gffHelper, chromHash);
+    gffFileFree(&track->gffHelper);
+    track->fieldCount = 12;
+    for (bed = track->bedList; bed != NULL; bed = bed->next)
+	{
+	if (offset)
+	    {
+	    bed->chromStart += offset;
+	    bed->chromEnd += offset;
+	    }
+	saveBedPart(dbDataFH, bed, track->fieldCount);
+	}
+    }
+if (pipelineWait(*dbDataPL))
+    track->dbDataLoad = FALSE;	/* failed */
+pipelineFree(dbDataPL);
+}
 
 struct customTrack *customTracksParse(char *text, boolean isFile,
 	struct slName **retBrowserLines)
@@ -956,6 +997,7 @@ FILE *wigAsciiFH = (FILE *)NULL;
 struct pipeline *dbDataPL = (struct pipeline *)NULL;
 FILE *dbDataFH = (FILE *)NULL;
 struct customTrack *loadingTrack = NULL;
+     /* to remember track currently being loaded when next one comes along */
 
 customDefaultRows(row);
 if (isFile)
@@ -1024,9 +1066,7 @@ for (;;)
 	/*	close previous track data file if in use	*/
 	if (inDbData && (dbDataPL != (struct pipeline *)NULL))
 	    {
-	    if (pipelineWait(dbDataPL))
-		loadingTrack->dbDataLoad = FALSE;	/* failed */
-	    pipelineFree(&dbDataPL);
+	    finishDbPipeline(loadingTrack, &dbDataPL, dbDataFH, chromHash);
 	    }
 	inDbData = FALSE;
 	/*	close previous wiggle data file if in use	*/
@@ -1098,8 +1138,9 @@ for (;;)
     /*	if we are writing to db loading, write the line to the pipeline
      *	before it is broken up below.	After this, the line will be
      *	broken up to verify it has the expected number of fields.
+     *	*NOT* when it is gff data, that data is output after processing ...
      */
-    if (track->dbTrack)
+    if (track->dbTrack && (! startsWith("gff", track->dbTrackType)))
 	fprintf(dbDataFH, "%s\n", line);
 
     /* Classify track based on first line of track.   First time through
@@ -1110,6 +1151,7 @@ for (;;)
 	if (lineIsGff(line))
 	    {
 	    wordCount = chopTabs(line, row);
+printf("have gffHelper for track '%s'<BR>\n", track->tdb->shortLabel);
 	    track->gffHelper = gffFileNew("custom input");
 	    }
 	else
@@ -1146,9 +1188,9 @@ for (;;)
     if (track->gffHelper)
 	{
 	checkChromName(row[0], lineIx);
+        gffFileAddRow(track->gffHelper, 0, row, wordCount, "custom input", lineIx);
 	if (inDbData)
 	    continue;			/* !!! next line of data !!!	*/
-        gffFileAddRow(track->gffHelper, 0, row, wordCount, "custom input", lineIx);
 	}
     else 
 	{
@@ -1179,9 +1221,7 @@ for (;;)
 
 if (inDbData && (dbDataPL != (struct pipeline *)NULL))
     {
-    if (pipelineWait(dbDataPL))
-	loadingTrack->dbDataLoad = FALSE;	/*	failed	*/
-    pipelineFree(&dbDataPL);
+    finishDbPipeline(loadingTrack, &dbDataPL, dbDataFH, chromHash);
     inDbData = FALSE;
     }
 if (inWiggle && (wigAsciiFH != (FILE *)NULL))
@@ -1470,7 +1510,7 @@ if (ferror(f))
 trackDbFree(&def);
 }
 
-static void saveBedPart(FILE *f, char *fileName, struct bed *bed, int fieldCount)
+static void saveBedPart(FILE *f, struct bed *bed, int fieldCount)
 /* Write out bed that may not include all lines as a line in file. */
 {
 int i, count = 0, *pt;
@@ -1555,7 +1595,7 @@ for (track = trackList; track != NULL; track = track->next)
 	if (!(track->wiggle || track->dbTrack))
 	    {
 	    for (bed = track->bedList; bed != NULL; bed = bed->next)
-		 saveBedPart(f, fileName, bed, track->fieldCount);
+		 saveBedPart(f, bed, track->fieldCount);
 	    }
 	}
     }
