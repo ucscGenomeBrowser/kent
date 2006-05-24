@@ -34,7 +34,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	cioSav1 \
 	danRer1 danRer2 danRer3 danRer4 \
 	dm1 dm2 \
-	dp1 dp2 dp3 \
+	dp2 dp3 \
 	droYak1 droYak2 \
 	droAna1 droAna2 \
 	droMoj1 droMoj2 \
@@ -47,7 +47,7 @@ DBS = 	hg13 hg15 hg16 hg17 hg18\
 	anoGam1 \
 	apiMel1 \
 	apiMel2	\
-	triCas1 triCas2 \
+	triCas2 \
 	ci1 ci2 cioSav2 \
 	strPur1 \
 	ce1 ce2 ce3 \
@@ -76,6 +76,14 @@ ARCH_DBS = \
 	therAcid1 therVolc1 ferrAcid1 picrTorr1 \
 	nanEqu1 natrPhar1 methStad1 methHung1\
 	vibrChol1\
+
+BACT_DBS = \
+	campJeju1 campJeju_RM1221_1 \
+	eschColi_CFT073_1 eschColi_K12_1 eschColi_O157H7EDL933_1 \
+	eschColi_O157H7_1 \
+	heliHepa1 heliPylo_26695_1 heliPylo_J99_1 \
+	vibrChol1 vibrChol_MO10_1 vibrChol_O395_1 vibrFisc_ES114_1 \
+	vibrPara1 vibrVuln_CMCP6_1 vibrVuln_YJ016_1
 
 
 update: #clean
