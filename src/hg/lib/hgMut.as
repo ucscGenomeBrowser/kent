@@ -35,7 +35,7 @@ table hgMutLink
     (
     int linkId;             "ID for this source, links to hgMutExtLink table."
     string linkDisplayName; "Display name for this link."
-    string url;             "url to substitute ID in for links."
+    string url;             "url to substitute acc in for links."
     )
 
 table hgMutAlias
@@ -52,6 +52,7 @@ table hgMutAttr
     string mutId;	    "mutation ID."
     int mutAttrClassId;     "id for attribute class or category, foreign key."
     int mutAttrNameId;      "id for attribute name, foreign key."
+    int mutAttrLinkId;      "id for links from this attribute."
     string mutAttrVal;      "value for this attribute"
     )
 
@@ -69,4 +70,12 @@ table hgMutAttrName
     int mutAttrNameId;     "id for attribute name."
     int mutAttrClassId;    "id for class this name belongs to."
     string mutAttrName;    "name"
+    )
+
+table hgMutAttrLink
+"links internal or external tied to this attribute"
+    (
+    int mutAttrLinkId;     "id for attribute link."
+    string mutAttrLink;    "key into .ra file on how to do link."
+    string mutAttrAcc;     "accession or id used by link."
     )
