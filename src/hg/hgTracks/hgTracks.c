@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1106 2006/05/24 00:10:16 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1107 2006/05/24 02:03:14 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1809,6 +1809,105 @@ double scaleForWindow(double width, int seqStart, int seqEnd)
 return width / (seqEnd - seqStart);
 }
 
+boolean nextItemCompatible(struct track *tg)
+/* Check to see if we draw nextPrev item buttons on a track. */
+{
+return (withNextItemArrows && tg->nextItemButtonable && tg->nextPrevItem);
+}
+
+void genericDrawNextItemStuff(struct track *tg, struct vGfx *vg, enum trackVisibility vis, struct slList *item, 
+			      int x2, int textX, int y, int heightPer,
+			      boolean snapLeft, Color color, char *name, char *directUrl, boolean withHgsid)
+/* After the item is drawn in genericDrawItems, draw next/prev item related */
+/* buttons and the corresponding mapboxes. */
+{
+int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
+int buttonW = heightPer-1 + 2*NEXT_ITEM_ARROW_BUFFER;
+int s = tg->itemStart(tg, item);
+int e = tg->itemEnd(tg, item);
+boolean rButton = FALSE;
+boolean lButton = FALSE;
+/* Draw the actual triangles.  These are always at the edge of the window. */
+if (s < winStart)
+    {
+    lButton = TRUE;
+    vgNextItemButton(vg, insideX + NEXT_ITEM_ARROW_BUFFER, y, 
+		     heightPer-1, heightPer-1, color, MG_WHITE, FALSE);
+    }
+if (e > winEnd)
+    {
+    rButton = TRUE;
+    vgNextItemButton(vg, insideX + insideWidth - NEXT_ITEM_ARROW_BUFFER - heightPer, 
+		     y, heightPer-1, heightPer-1, color, MG_WHITE, TRUE);
+    }
+/* If we're in pack, there's some crazy logic. */
+if (vis == tvPack)
+    {
+    int w = x2-textX;
+    if (lButton)
+	{
+	mapBoxHgcOrHgGene(s, e, textX, y, insideX-textX, heightPer, tg->mapName, 
+			  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+	tg->nextPrevItem(tg, item, insideX, y, buttonW, heightPer, FALSE);
+	if (rButton)
+	    {
+	    mapBoxHgcOrHgGene(s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer, tg->mapName, 
+			      tg->mapItemName(tg, item), name, directUrl, withHgsid);				    
+	    tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			    
+	    }
+	else 
+	    mapBoxHgcOrHgGene(s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer, tg->mapName, 
+			      tg->mapItemName(tg, item), name, directUrl, withHgsid);
+	}
+    else if (snapLeft && rButton)
+	/* This is a special case where there's a next-item button, NO */
+	/* prev-item button, AND the gene name is drawn left of the browser window. */
+	{
+	mapBoxHgcOrHgGene(s, e, textX, y, x2 - buttonW - textX, heightPer, tg->mapName, 
+			  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+	tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
+	}
+    else if (rButton)
+	{
+	mapBoxHgcOrHgGene(s, e, textX, y, w - buttonW, heightPer, tg->mapName, 
+			  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+	tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
+	}
+    else
+	mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
+			  tg->mapItemName(tg, item), name, directUrl, withHgsid);
+    }
+/* Full mode is a little easier to deal with. */
+else if (vis == tvFull)
+    {
+    int geneMapBoxX = insideX;
+    int geneMapBoxW = insideWidth;
+    /* Draw the first gene mapbox, in the left margin. */
+    mapBoxHgcOrHgGene(s, e, trackPastTabX, y, insideX - trackPastTabX, heightPer, 
+		      tg->mapName, tg->mapItemName(tg, item), name, directUrl, 
+		      withHgsid);
+    /* Make the button mapboxes. */
+    if (lButton)
+	tg->nextPrevItem(tg, item, insideX, y, buttonW, heightPer, FALSE);
+    if (rButton)
+	tg->nextPrevItem(tg, item, insideX + insideWidth - buttonW, y, buttonW, heightPer, TRUE);
+    /* Depending on which button mapboxes we drew, draw the remaining mapbox. */
+    if (lButton && rButton)
+	{
+	geneMapBoxX += buttonW;
+	geneMapBoxW -= 2 * buttonW;
+	}
+    else if (lButton)
+	{
+	geneMapBoxX += buttonW;
+	geneMapBoxW -= buttonW;
+	}
+    else if (rButton)
+	geneMapBoxW -= buttonW;
+    mapBoxHgcOrHgGene(s, e, geneMapBoxX, y, geneMapBoxW, heightPer, tg->mapName, 
+		      tg->mapItemName(tg, item), name, directUrl, withHgsid);
+    }
+}
 
 void genericDrawItems(struct track *tg, 
         int seqStart, int seqEnd,
@@ -1930,56 +2029,9 @@ if (vis == tvPack || vis == tvSquish)
 	    /* Arrows? */
 	    if (w > 0)
 		{
-		if (withNextItemArrows && tg->nextItemButtonable && tg->nextPrevItem)
-		    {
-		    int buttonW = heightPer-1 + 2*NEXT_ITEM_ARROW_BUFFER;
-		    boolean rButton = FALSE;
-		    boolean lButton = FALSE;
-		    /* prev item arrow */
-		    if (tg->itemStart(tg, item) < winStart)
-			{
-			lButton = TRUE;
-			vgNextItemButton(vg, insideX + NEXT_ITEM_ARROW_BUFFER, y, 
-					 heightPer-1, heightPer-1, color, MG_WHITE, FALSE);
-			}
-		    if (tg->itemEnd(tg, item) > winEnd)
-			{
-			rButton = TRUE;
-			vgNextItemButton(vg, insideX + insideWidth - NEXT_ITEM_ARROW_BUFFER - heightPer, 
-					 y, heightPer-1, heightPer-1, color, MG_WHITE, TRUE);
-			}
-		    /* If the */
-		    if (lButton)
-			{
-			mapBoxHgcOrHgGene(s, e, textX, y, insideX-textX, heightPer, tg->mapName, 
-					  tg->mapItemName(tg, item), name, directUrl, withHgsid);
-			tg->nextPrevItem(tg, item, insideX, y, buttonW, heightPer, FALSE);
-			if (rButton)
-			    {
-			    mapBoxHgcOrHgGene(s, e, insideX + buttonW, y, x2 - (insideX + 2*buttonW), heightPer, tg->mapName, 
-					      tg->mapItemName(tg, item), name, directUrl, withHgsid);				    
-			    tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			    
-			    }
-			else 
-			    mapBoxHgcOrHgGene(s, e, insideX + buttonW, y, x2 - (insideX + buttonW), heightPer, tg->mapName, 
-						      tg->mapItemName(tg, item), name, directUrl, withHgsid);
-			}
-		    else if (snapLeft && rButton)
-			{
-			mapBoxHgcOrHgGene(s, e, textX, y, x2 - buttonW - textX, heightPer, tg->mapName, 
-					  tg->mapItemName(tg, item), name, directUrl, withHgsid);
-			tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
-			}
-		    else if (rButton)
-			{
-			mapBoxHgcOrHgGene(s, e, textX, y, w - buttonW, heightPer, tg->mapName, 
-					  tg->mapItemName(tg, item), name, directUrl, withHgsid);
-			tg->nextPrevItem(tg, item, x2-buttonW, y, buttonW, heightPer, TRUE);			
-			}
-		    else
-			mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
-					  tg->mapItemName(tg, item), name, directUrl, withHgsid);
-		    }
+		if (nextItemCompatible(tg))
+		    genericDrawNextItemStuff(tg, vg, vis, item, x2, textX, y, heightPer, snapLeft, 
+					     color, name, directUrl, withHgsid);
 		else
 		    mapBoxHgcOrHgGene(s, e, textX, y, w, heightPer, tg->mapName, 
 				      tg->mapItemName(tg, item), name, directUrl, withHgsid);
@@ -2023,7 +2075,15 @@ else
 	if(tg->itemColor != NULL) 
 	    color = tg->itemColor(tg, item, vg);
 	tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
-	if (isFull) y += lineHeight;
+	if (isFull) 
+	    {
+	    /* The doMapItems will make the mapboxes normally but make */
+	    /* them here if we're drawing nextItem buttons. */
+	    if (nextItemCompatible(tg))
+		genericDrawNextItemStuff(tg, vg, vis, item, -1, -1, y, heightPer, FALSE, 
+					 color, tg->itemName(tg, item), directUrl, withHgsid);
+	    y += lineHeight;
+	    }
 	} 
     }
 }
@@ -7922,7 +7982,7 @@ for (item = track->items; item != NULL; item = item->next)
         }
     else
         {
-        if (!track->mapsSelf)
+        if (!track->mapsSelf && nextItemCompatible(track))
             {
             mapBoxHgcOrHgGene(track->itemStart(track, item),
                     track->itemEnd(track, item), trackPastTabX,
@@ -8095,16 +8155,19 @@ switch (track->limitedVis)
 	y += trackPlusLabelHeight(track, fontHeight);
 	break;
     case tvFull:
-	if (isCompositeTrack(track))
+	if (!track->nextItemButtonable)
 	    {
-	    struct track *subtrack;
-	    for (subtrack = track->subtracks;  subtrack != NULL;
-		 subtrack = subtrack->next)
-		if (isSubtrackVisible(subtrack))
-		    y = doMapItems(subtrack, fontHeight, y);
+	    if (isCompositeTrack(track))
+		{
+		struct track *subtrack;
+		for (subtrack = track->subtracks;  subtrack != NULL;
+		     subtrack = subtrack->next)
+		    if (isSubtrackVisible(subtrack))
+			y = doMapItems(subtrack, fontHeight, y);
+		}
+	    else
+		y = doMapItems(track, fontHeight, y);
 	    }
-	else
-	    y = doMapItems(track, fontHeight, y);
 	break;
     case tvDense:
 	if (isWithCenterLabels(track))
