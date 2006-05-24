@@ -9372,18 +9372,14 @@ exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
     ssh hgwdev
     cd /cluster/data/hg18/bed/ensembl
 
-    # Fix hap chroms because Ensembl is using ref chrom positions.
+    # Remove hap chroms entries because Ensembl is using different genomic coordinates.
 
-    cat ensGene.gtf\
-    |sed -e 's/22_h2_hap1/22/'\
-    |sed -e 's/5_h2_hap1/5/'\
-    |sed -e 's/6_cox_hap1/6/'\
-    |sed -e 's/6_qbl_hap2/6/' >ensGeneNew.gtf
-					    
+    fgrep -v hap ensGene.gtf > ensGeneNew.gtf
+
     /cluster/bin/i386/ldHgGene hg18 ensGene ensGeneNew.gtf
-    # Read 59069 transcripts in 1025803 lines in 1 files
-    # 59069 groups 29 seqs 1 sources 4 feature types
-    # 59069 gene predictions
+    #  Read 58424 transcripts in 1014240 lines in 1 files
+    #  58424 groups 25 seqs 1 sources 4 feature types
+    #  58424 gene predictions
 
     # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
     # hgKnownToSuper.  Use ensMart to create it as above, except:
