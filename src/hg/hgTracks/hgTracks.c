@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1105 2006/05/23 17:28:28 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1106 2006/05/24 00:10:16 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10491,6 +10491,7 @@ if (ct->dbTrack)
 	bed = bedLoadN(row+rowOffset, fieldCount);
 	slAddHead(&list, bed);
 	}
+    hFreeOrDisconnect(&conn);
     }
 else
     {
@@ -10539,6 +10540,7 @@ if (ct->dbTrack)
 	    }
 	slAddHead(&lfList, lf);
 	}
+    hFreeOrDisconnect(&conn);
     }
 else
     {
@@ -10588,6 +10590,7 @@ if (ct->dbTrack)
 	lf = lfFromBed(bed);
 	slAddHead(&lfList, lf);
 	}
+    hFreeOrDisconnect(&conn);
     }
 else
     {
@@ -10638,6 +10641,7 @@ if (ct->dbTrack)
 	    }
 	slAddHead(&lfList, lf);
 	}
+    hFreeOrDisconnect(&conn);
     }
 else
     {
