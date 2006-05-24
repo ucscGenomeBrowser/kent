@@ -319,6 +319,8 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
 
 
 # MAKE DOWNLOADABLE FILES (DONE 11/4/04 angie)
+# RECREATE BIGZIPS DOWNLOADS AND README FILE (DONE, 2006-05-05, hartera)
+# MOVED LIFTOVER FILES FOR DOWNLOAD (DONE, 2006-05-23, hartera)
     ssh kkstore01
     mkdir /cluster/data/oryCun1/zips
     cd /cluster/data/oryCun1
@@ -338,8 +340,60 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     cd bigZips
     cp -p /cluster/data/oryCun1/zips/*.zip .
     md5sum *.zip > md5sum.txt
-
-
+    
+    # Add more bigZips downloads. Some of the above downloads don't exist 
+    # anymore in bigZips in /usr/local/apache/htdocs/goldenPath/... on hgwdev
+    # (2006-05-05, hartera)
+    ssh kkstore04
+    mkdir /cluster/data/oryCun1/bigZips
+    cd /cluster/data/oryCun1
+    # soft-masked scaffolds sequences
+    cp -p oryCun1.masked.fa.gz ./bigZips/scaffoldSoftMask.fa.gz
+    # assembly agp
+    cp -p ./broad/assembly.agp ./bigZips/
+    # Simple Repeats
+    cp -p ./bed/simpleRepeat/trfMask.bed ./bigZips/trf.bed
+    # RepeatMasker output
+    cp -p ./RMOut/oryCun1.out ./bigZips/rmsk.out
+    # unmasked scaffolds sequences
+    cp -p oryCun1.unmasked.fa.gz ./bigZips/scaffold.fa.gz
+    cd bigZips
+    gzip assembly.agp
+    gzip trf.bed
+    gzip rmsk.out
+    # check integrity of files
+    foreach f (*.gz)
+      echo $f
+      gunzip -t $f | tail -1
+    end
+    md5sum *.gz > md5sum.txt
+    
+    # link the *.gz and *.txt files to hgwdev:/usr/local/apache/....
+    ssh hgwdev
+    set gp=/usr/local/apache/htdocs/goldenPath/oryCun1
+    rm -r $gp/bigZips
+    mkdir -p $gp/bigZips
+    ln -s /cluster/data/dasNov1/bigZips/{*.gz,*.txt} $gp/bigZips
+    # copy over README.txt and edit for bigZips
+    # oryCun1.mm7.over.chain.gz liftOver chain is in the md5sum.txt in the
+    # vsMm7 directory. It should be in the liftOver directory so move it there
+    # and re-make md5sum.txt for vsMm7 dir (hartera, 2006-05-23)
+    ssh hgwdev
+    set gp=/usr/local/apache/htdocs/goldenPath/oryCun1
+    # copy over from hgwdevold
+    cd /cluster/data/oryCun1/bed/liftOver
+    scp \
+    hgwdevold:/usr/local/apache/htdocs/goldenPath/oryCun1/liftOver/oryCun1ToMm7.over.chain.gz .
+    # make link for this and oryCun1ToHg18 liftOver chains to the 
+    # goldenPath liftOver directory.
+    ln -s /cluster/data/oryCun1/bed/liftOver/*.gz $gp/liftOver
+    # create md5sum.txt
+    md5sum *.gz > md5sum.txt
+    # then re-make md5sum.txt for vsMm7 files
+    cd $gp/vsMm7
+    rm md5sum.txt
+    md5sum *.gz > md5sum.txt
+        
 # SWAP DM1-DROANA1 BLASTZ (DONE 11/4/04 angie)
     ssh kkstore01
     mkdir /cluster/data/oryCun1/bed/blastz.dm1.swap.2004-11-03
