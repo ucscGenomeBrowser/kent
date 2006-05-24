@@ -383,7 +383,7 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     # copy over from hgwdevold
     cd /cluster/data/oryCun1/bed/liftOver
     scp \
-    hgwdevold:/usr/local/apache/htdocs/goldenPath/oryCun1/liftOver/oryCun1ToMm7.over.chain.gz .
+    hgwdevold:$gp/liftOver/oryCun1ToMm7.over.chain.gz .
     # make link for this and oryCun1ToHg18 liftOver chains to the 
     # goldenPath liftOver directory.
     ln -s /cluster/data/oryCun1/bed/liftOver/*.gz $gp/liftOver
@@ -393,7 +393,8 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     cd $gp/vsMm7
     rm md5sum.txt
     md5sum *.gz > md5sum.txt
-        
+    # check that README.txt for vsMm7 is correct.
+    
 # SWAP DM1-DROANA1 BLASTZ (DONE 11/4/04 angie)
     ssh kkstore01
     mkdir /cluster/data/oryCun1/bed/blastz.dm1.swap.2004-11-03
