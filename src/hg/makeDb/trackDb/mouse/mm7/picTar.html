@@ -1,14 +1,15 @@
 <H2>Description</H2>
 <P>
 MicroRNA target sites in 3' UTRs as predicted by PicTar, based on the
-RefSeq annotation of 3' UTRs. 
+RefSeq annotation of 3' UTRs.
 </P>
 
 <H2>Methods</H2>
 <P>
 The original PicTar algorithm was published in Krek <EM>et al.</EM>,
-Nature Genetics, 2005. Displayed are updated predictions as published in
-Lall <EM>et al.</EM>, Current Biology 2006. Briefly, PicTar is a Hidden 
+Nature Genetics, 2005. Displayed are predictions based on mouse as the
+reference species using the improved PicTar method as published in
+Lall <EM>et al.</EM>, Current Biology 2006.  Briefly, PicTar is a Hidden
 Markov Model
 that assigns probabilities to 3' UTR subsequences to be a binding site for a
 microRNA, considers all possible ways the 3' UTR could be bound by microRNAs,
@@ -25,18 +26,34 @@ the score, even if they appear to be non-conserved. Because the score for
 a 3' UTR is a "phylo" average over all orthologous 3' UTRs used, "scattered"
 sites that appear in many species may boost the score, and individual sites
 shown in the display may not be aligned and conserved in all species under
-consideration. 
+consideration.
 </P>
 
 <P>
-Two levels of conservation can be chosen: conservation among
-human/mouse/rat/dog, and conservation among human/mouse/rat/dog/chicken.
-The latter settings have improved quality, but lower sensitivity.
+Two levels of conservation can be chosen: conservation among 
+mouse/rat/rabbit/human/chimp/macaque/dog, and conservation among 
+mouse/rat/rabbit/human/chimp/macaque/dog/cow/armadillo/elephant/tenrec/opossum/c
+hicken. The latter settings have improved quality, but lower sensitivity.
 </P>
 
 <P>
-For a detailed analysis of signal-to-noise ratios and sensitivity
-please refer to Lall <EM>et al.</EM>, 2006. 
+To produce the phylogenetic scoring as describe in Krek et al., Nature 
+Genetics, 2005, the following phylogenetic groupings where used:
+<TABLE BORDER=0>
+<TR><TD ALIGN=LEFT>(i)</TD><TD ALIGN=LEFT>mouse/rat/rabbit</TD></TR>
+<TR><TD ALIGN=LEFT>(ii)</TD><TD ALIGN=LEFT>human/chimp/macaque</TD></TR>
+<TR><TD ALIGN=LEFT>(iii)</TD><TD ALIGN=LEFT>dog/cow</TD></TR>
+<TR><TD ALIGN=LEFT>(iv)</TD><TD ALIGN=LEFT>armadillo</TD></TR>
+<TR><TD ALIGN=LEFT>(v)</TD><TD ALIGN=LEFT>elephant/tenrec</TD></TR>
+<TR><TD ALIGN=LEFT>(vi)</TD><TD ALIGN=LEFT>opossum</TD></TR>
+<TR><TD ALIGN=LEFT>(vii)</TD><TD ALIGN=LEFT>chicken</TD></TR>
+<TR><TD ALIGN=LEFT>(viii)</TD><TD ALIGN=LEFT>xenopus</TD></TR>
+<TR><TD ALIGN=LEFT>(ix)</TD><TD ALIGN=LEFT>tetraodon/fugu/zebrafish</TD></TR>
+</TABLE>
+</P>
+<P>
+mammalian score =( 1/3 *((i) + (ii) + (iii)) + (iv) + (v) + (vi) )<BR>
+final score =1/2*(1/2*( 1/2*(mammalian score + (vii)) + (viii)) + (ix))
 </P>
 
 <H2>References</H2>
