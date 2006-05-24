@@ -13,7 +13,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.7 2006/05/23 00:11:43 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.8 2006/05/24 23:55:05 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -103,7 +103,7 @@ cgiSimpleTableRowStart();
 cgiTableField("&nbsp;Or upload data from a file:");
 
 cgiSimpleTableFieldStart();
-cgiMakeFileEntry(hgCtAddFile, cartCgiUsualString(cart, hgCtAddFileName, ""));
+cgiMakeFileEntry(hgCtAddFile);
 cgiTableFieldEnd();
 
 cgiSimpleTableFieldStart();
@@ -118,7 +118,7 @@ cgiSimpleTableRowStart();
 cgiTableField("&nbsp;Optional description file (HTML):");
 
 cgiSimpleTableFieldStart();
-cgiMakeFileEntry(hgCtHtmlFile, "");
+cgiMakeFileEntry(hgCtHtmlFile);
 cgiTableFieldEnd();
 
 cgiTableRowEnd();
@@ -171,6 +171,7 @@ struct tempName tn;
 struct customTrack *addCts = NULL;
 struct customTrack *ct;
 struct errCatch *errCatch;
+struct hash *ctHash;
 
 cart = theCart;
 /* needed ? */
@@ -185,25 +186,49 @@ addCustom();
 /* get existing custom tracks from cart */
 ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
 //uglyf("<BR><FONT COLOR='GRAY'>Starting with %d cts<BR>", slCount(ctList));
+ctHash = hashNew(5);
+for (ct = ctList; ct != NULL; ct = ct->next)
+    hashAdd(ctHash, ct->tdb->tableName, ct);
 
 /* process submit buttons */
 if (cartVarExists(cart,"SubmitFile"))
     {
     /* add from file */
-    //uglyf("<BR><FONT COLOR=GRAY>file input</FONT><BR>");
-    errCatch = errCatchNew();
-    if (errCatchStart(errCatch))
+    if (cartNonemptyString(cart, hgCtAddFile))
         {
-        addCts = customTracksParse(cartString(cart, hgCtAddFile), 
-                TRUE, &browserLines);
-        slAddTail(&ctList, addCts);
-        cartRemovePrefix(cart, hgCtAddFile);
+        errCatch = errCatchNew();
+        if (errCatchStart(errCatch))
+            {
+            addCts = customTracksParse(cartString(cart, hgCtAddFile), 
+                            FALSE, &browserLines);
+            for (ct = addCts; ct != NULL; ct = ct->next)
+                {
+                struct customTrack *oldCt;
+                if ((oldCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
+                    {
+                    printf("<BR>&nbsp; &nbsp; <FONT COLOR='GREEN'>Replacing track: %s <BR>", ct->tdb->tableName);
+                    slRemoveEl(&ctList, oldCt);
+                    }
+                slAddTail(&ctList, ct);
+                }
+            cartRemovePrefix(cart, hgCtAddFile);
+            }
+
+        else {}
+        errCatchEnd(errCatch);
+        if (errCatch->gotError)
+            printf("<BR><FONT COLOR='RED'>%s</FONT>", errCatch->message->string);
+        errCatchFree(&errCatch);
         }
-    else {}
-    errCatchEnd(errCatch);
-    if (errCatch->gotError)
-        warn("<FONT COLOR='RED'>%s</FONT>", errCatch->message->string);
-    errCatchFree(&errCatch);
+    else
+        {
+        char *file = cartString(cart, hgCtAddFileName);
+        if (sameString(file, ""))
+            printf("<BR><FONT COLOR='RED'>No file specified</FONT>");
+        else
+            printf("<BR><FONT COLOR='RED'>Error reading file:  %s</FONT>", 
+                        cartString(cart, hgCtAddFileName));
+        }
     }
 else if (cartVarExists(cart, hgCtDoDelete))
     {
@@ -213,7 +238,7 @@ else if (cartVarExists(cart, hgCtDoDelete))
         {
         char var[64];
         safef(var, sizeof var, "%s_%s", hgCtDeletePrefix, ct->tdb->tableName);
-        if (cartVarExists(cart, var))
+        if (cartBoolean(cart, var))
             slRemoveEl(&ctList, ct);
         }
     }
@@ -226,15 +251,24 @@ else if (cartNonemptyString(cart, hgCtAddText))
     if (errCatchStart(errCatch))
         {
         addCts = customTracksParse(cartString(cart, hgCtAddText), 
-                FALSE, &browserLines);
+                        FALSE, &browserLines);
         //uglyf("<BR>adding %d tracks<BR>", slCount(addCts));
-        slAddTail(&ctList, addCts);
+        for (ct = addCts; ct != NULL; ct = ct->next)
+            {
+            struct customTrack *oldCt;
+            if ((oldCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
+                {
+                printf("<BR><FONT COLOR='GREEN'>Replacing track: %s <BR>", ct->tdb->tableName);
+                slRemoveEl(&ctList, oldCt);
+                }
+            slAddTail(&ctList, ct);
+            }
         cartRemove(cart, hgCtAddText);
         }
     else {}
     errCatchEnd(errCatch);
     if (errCatch->gotError)
-        warn("<FONT COLOR='RED'>%s", errCatch->message->string);
+        printf("<BR><FONT COLOR='RED'>%s", errCatch->message->string);
     errCatchFree(&errCatch);
     }
 
