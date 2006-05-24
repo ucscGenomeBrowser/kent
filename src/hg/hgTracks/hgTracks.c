@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1107 2006/05/24 02:03:14 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1108 2006/05/24 18:36:23 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -812,7 +812,6 @@ void mapBoxHgcOrHgGene(int start, int end, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke the hgc (human genome click)
  * program. */
 {
-struct sqlConnection *conn = hAllocConn();
 int xEnd = x+width;
 int yEnd = y+height;
 if (x < 0) x = 0;
@@ -823,7 +822,7 @@ if (x < xEnd)
 
     hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", x, y, xEnd, yEnd);
     if (directUrl)
-        {
+	{
 	hPrintf("HREF=\"");
 	hPrintf(directUrl, item, chromName, start, end, track, database);
 	if (withHgsid)
@@ -841,7 +840,6 @@ if (x < xEnd)
     hPrintf(">\n");
     freeMem(encodedItem);
     }
-hFreeConn(&conn);
 }
 
 void mapBoxHc(int start, int end, int x, int y, int width, int height, 
@@ -10733,7 +10731,10 @@ char *ctMapItemName(struct track *tg, void *item)
 {
   char *itemName = tg->itemName(tg, item);
   static char buf[256];
-  sprintf(buf, "%s %s", ctFileName, itemName);
+  if (strlen(itemName) > 0)
+      sprintf(buf, "%s %s", ctFileName, itemName);
+  else
+      sprintf(buf, "%s NoItemName", ctFileName);
   return buf;
 }
 
