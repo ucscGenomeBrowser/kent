@@ -315,6 +315,9 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
 
 
 # MAKE DOWNLOADABLE FILES (DONE 11/4/04 angie)
+# RECREATE BIGZIPS DOWNLOADS CREATE README FILE (DONE, 2006-05-04, hartera)
+# ADDED md5sum.txt FILE FOR LIFTOVER DOWNLOADS AND CREATED CORRECT md5sum.txt
+# FOR vsMm7 AND vsHg18 DOWNLOADS (DONE, 2006-05-23, hartera)
     ssh kkstore02
     mkdir /cluster/data/echTel1/zips
     cd /cluster/data/echTel1
@@ -334,6 +337,64 @@ gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check 
     cd bigZips
     cp -p /cluster/data/echTel1/zips/*.zip .
     md5sum *.zip > md5sum.txt
+
+    # Add more bigZips downloads. Some of the above downloads don't exist 
+    # anymore in bigZips in /usr/local/apache/htdocs/goldenPath/... on hgwdev
+    # (2006-05-04, hartera)
+    ssh kkstore02
+    mkdir /cluster/data/echTel1/bigZips
+    cd /cluster/data/echTel1
+    # soft-masked scaffolds sequence
+    cp -p echTel1.masked.fa.gz ./bigZips/scaffoldSoftMask.fa.gz
+    # assembly agp file
+    cp -p ./broad/assembly.agp ./bigZips/
+    # Simple Repeats
+    cp -p ./bed/simpleRepeat/trfMask.bed ./bigZips/trf.bed
+    # RepeatMasker output
+    cp -p ./RMOut/echTel1.out ./bigZips/rmsk.out
+    # unmasked scaffolds sequences
+    cp -p echTel1.fa.gz ./bigZips/scaffold.fa.gz
+    cd bigZips
+    gzip assembly.agp
+    gzip trf.bed
+    gzip rmsk.out
+    # check integrity of files
+    foreach f (*.gz)
+      echo $f
+      gunzip -t $f | tail -1
+    end
+    md5sum *.gz > md5sum.txt
+    
+    # link the *.gz and *.txt files to hgwdev:/usr/local/apache/....
+    ssh hgwdev
+    set gp=/usr/local/apache/htdocs/goldenPath/echTel1 
+    mkdir -p $gp/bigZips
+    ln -s /cluster/data/echTel1/bigZips/{*.gz,*.txt} $gp/bigZips
+    # copy over README.txt from another bigZips directory and edit.
+    # echTel1ToMm7.over.chain.gz is in the md5sum.txt in the
+    # vsMm7 directory. It should be in the liftOver directory so move it there
+    # and re-make md5sum.txt for vsMm7 dir.
+    # Add liftOver md5sum.txt (hartera, 2006-05-23)
+    ssh hgwdev
+    set gp=/usr/local/apache/htdocs/goldenPath/echTel1
+    # copy over from hgwdevold
+    cd /cluster/data/echTel1/bed/liftOver
+    scp hgwdevold:$gp/liftOver/echTel1ToMm7.over.chain.gz .
+    ln -s /cluster/data/echTel1/bed/liftOver/*.gz $gp/liftOver
+    cd $gp/liftOver
+    # create md5sum.txt
+    md5sum *.gz > md5sum.txt
+    # recreate md5sum.txt for vsMm7 files
+    cd $gp/vsMm7
+    rm md5sum.txt
+    md5sum *.gz > md5sum.txt
+    # recreate md5sum.txt for vsHg18 files as this includes files in an axtNet 
+    # directory that is not in this directory.
+    cd $gp/vsHg18
+    rm md5sum.txt
+    md5sum *.gz > md5sum.txt
+    # Check that README.txt is correct for vsMm7 and vsHg18.
+
 
 
 # SWAP DM1-DROANA1 BLASTZ (DONE 11/4/04 angie)
@@ -925,3 +986,4 @@ chain.csh {check in exists $(path1).gz} {check out line+ chain/$(root1).chain}
         -continue=chainMerge \
 	-bigClusterHub=pk \
 	`pwd`/DEF >& blastz.out &
+
