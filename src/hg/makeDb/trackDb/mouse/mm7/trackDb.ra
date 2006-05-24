@@ -346,3 +346,21 @@ type bed 9
     longLabel PicTar microRNA sites, 13 species conservation constraint: Mouse/Rat/Rabbit/Human/Chimp/Macaque/Dog/Cow/Armadillo/Elephant/Tenrec/Opossum/Chicken
     color 128,0,128
     priority 2
+
+searchName picTarPrefix
+searchTable picTarMiRNADog
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex NM_[0-9]+:mmu-(mir|let)-[0-9]+[a-z]?
+dontCheck NM_[0-9]+:mmu-(mir|let)-[0-9]+[a-z]?(-[0-9]+)?
+searchPriority 18
+
+searchName picTarPrefix
+searchTable picTarMiRNAChicken
+searchMethod prefix
+searchType bed
+shortCircuit 1
+termRegex NM_[0-9]+:mmu-(mir|let)-[0-9]+[a-z]?
+dontCheck NM_[0-9]+:mmu-(mir|let)-[0-9]+[a-z]?(-[0-9]+)?
+searchPriority 18
