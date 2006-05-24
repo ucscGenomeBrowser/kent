@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: hgStsMarkers.c,v 1.2 2003/05/06 07:22:25 kate Exp $";
+static char const rcsid[] = "$Id: hgStsMarkers.c,v 1.3 2006/05/24 23:24:55 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -124,7 +124,6 @@ void hgStsMarkers(char *database, char *markerDir)
 /* hgStsMarkers - Load STS markers into database. */
 {
 char *table = "stsMarker";
-char *unsortedName = "stsMarkers.raw";
 char *tabName = "stsMarkers.tab";
 struct sqlConnection *conn = NULL;
 char query[256];
