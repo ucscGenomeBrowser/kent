@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.81 2006/05/24 00:09:49 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.82 2006/05/24 17:45:03 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1101,10 +1101,10 @@ for (;;)
 		if (track->wigAscii != (char *)NULL)
 		    {
 		    wigAsciiFH = mustOpen(track->wigAscii, "w");
-    #if defined(DEBUG)	/*	dbg	*/
+#if defined(DEBUG)	/*    dbg	*/
 		    /* allow file readability for debug	*/
 		    chmod(track->wigAscii, 0666);
-    #endif
+#endif
 		    }
 		inWiggle = TRUE;
 		}
@@ -1170,7 +1170,10 @@ printf("have gffHelper for track '%s'<BR>\n", track->tdb->shortLabel);
 	    /*	get existing settings if any to append to	*/
 	    if (track->tdb->settings)
 		dyStringPrintf(bedSettings, "%s\n", track->tdb->settings);
-	    dyStringPrintf(bedSettings, "fieldCount=%d", track->fieldCount);
+	    if (startsWith("gff", track->dbTrackType))
+		dyStringPrintf(bedSettings, "fieldCount=12");
+	    else
+		dyStringPrintf(bedSettings, "fieldCount=%d", track->fieldCount);
 	    track->tdb->settings = dyStringCannibalize(&bedSettings);
 	    }
 	}
@@ -1559,14 +1562,14 @@ FILE *f = mustOpen(fileName, "w");
 #if defined(DEBUG)	/*	dbg	*/
     /* allow file readability for debug	*/
     chmod(fileName, 0666);
-#endif
+ #endif
 
 for (track = trackList; track != NULL; track = track->next)
     {
     boolean validTrack = TRUE;
     if (track->wiggle || track->dbTrack)
 	{
-	if (!track->dbDataLoad)	/* was loading successful ?	*/
+	if (track->dbTrack && (!track->dbDataLoad))/* was loading successful ?	*/
 	    {
 	    validTrack = FALSE;	/*	failed	*/
 	    warn("track: %s failed database loading<BR>\n",track->tdb->shortLabel);
