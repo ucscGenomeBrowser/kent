@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1018 2006/05/19 23:23:45 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1019 2006/05/24 18:35:09 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15877,6 +15877,11 @@ for (ct = ctList; ct != NULL; ct = ct->next)
 	break;
 if (ct == NULL)
     errAbort("Couldn't find '%s' in '%s'", trackId, fileName);
+if (ct->fieldCount < 4)
+    {
+    printf("<H3>Item information is not available for bed 3 type data</H3>\n");
+    return;
+    }
 if (ct->wiggle)
     {
     /*	the NULL is for conn, don't need that for custom tracks */
