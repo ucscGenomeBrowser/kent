@@ -8,7 +8,7 @@
 #include "portable.h"
 #include "rle.h"
 
-static char const rcsid[] = "$Id: chimpHiQualDiffs.c,v 1.2 2006/03/20 08:35:13 daryl Exp $";
+static char const rcsid[] = "$Id: chimpHiQualDiffs.c,v 1.3 2006/05/24 11:23:40 daryl Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -23,6 +23,10 @@ errAbort(
   "   -winQualMin   Min quality score for window (25)\n"
   "   -winMaxDiff   Maximum number of differences in window (0)\n"
   "   -indelOk      Allow indels in window (currently not implemented)\n"
+  "   -ignore98     Do not allow chimp quality score of 98 for difference\n"
+  "   -chimpPos     Print chimp positions in addition to human positions\n"
+  "output format:\n"
+  "   humanChrom humanStart humanEnd humanBase chimpBase [chimpChrom chimpStart chimpEnd]\n"
   );
 }
 
@@ -32,6 +36,8 @@ static struct optionSpec options[] = {
     {"winQualMin", OPTION_INT},
     {"winMaxDiff", OPTION_INT},
     {"indelOk", OPTION_BOOLEAN},
+    {"ignore98", OPTION_BOOLEAN},
+    {"chimpPos", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -92,6 +98,8 @@ int qQualMin     = optionInt("diffQualMin", 30);
 int qWinQualMin  = optionInt("winQualMin",  25);
 int qWinMaxDiff  = optionInt("winMaxDiff",  2);
 boolean qIndelOk = optionExists("indelOk");
+boolean qIgnore98 = optionExists("ignore98");
+boolean chimpPos = optionExists("chimpPos");
 int qHalfWinSize = qWinSize/2;
 
 while ((axt = axtRead(lf)) != NULL)
@@ -165,9 +173,15 @@ while ((axt = axtRead(lf)) != NULL)
 				if (qc != tc)
 				    ++diffCount;
 				}
-			    if (ok && diffCount <= qWinMaxDiff)
-				fprintf(f, "%s\t%d\t%d\t%c\t%c\n",
-					axt->tName, tPos, tPos+1, tSym[symIx], qSym[symIx]);
+			    if (ok && diffCount <= qWinMaxDiff && (!qIgnore98 || qQuals[qPos] != 98) )
+				{
+				if (chimpPos)
+				    fprintf(f, "%s\t%d\t%d\t%c\t%c\t%s\t%d\t%d\n",
+					    axt->tName, tPos, tPos+1, tSym[symIx], qSym[symIx], axt->qName, qPos, qPos+1);
+				else
+				    fprintf(f, "%s\t%d\t%d\t%c\t%c\n",
+					    axt->tName, tPos, tPos+1, tSym[symIx], qSym[symIx]);
+				}
 			    }
 			}
 		    }
@@ -188,6 +202,8 @@ struct hash *qacHash = qacReadToHash(qacName);
 struct fileInfo *axtEl, *axtList = listDirX(axtDir, "*.axt", TRUE);
 FILE *f = mustOpen(bedName, "w");
 
+if (axtList==NULL)
+    axtList = listDirX(axtDir, "*.axt.gz", TRUE);
 if (axtList==NULL)
     printf("No axt files were found in the '%s' directory.\n",axtDir);
 for (axtEl = axtList; axtEl != NULL; axtEl = axtEl->next)
