@@ -249,7 +249,7 @@ void cgiMakeResetButton();
 void cgiMakeClearButton(char *form, char *field);
 /* Make button to clear a text field. */
 
-void cgiMakeFileEntry(char *name, char *value);
+void cgiMakeFileEntry(char *name);
 /* Make file entry box/browser */
 
 void cgiSimpleTableRowStart();
