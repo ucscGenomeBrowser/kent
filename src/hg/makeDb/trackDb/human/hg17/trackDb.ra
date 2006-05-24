@@ -305,6 +305,52 @@ sGroup_vertebrate galGal2 xenTro1 danRer3 tetNig1 fr1
 speciesDefaultOff panTro1 rheMac2 bosTau2 echTel1 danRer3 fr1
 treeImage phylo/Mm7_17way.jpg
 
+track altConservation
+compositeTrack on
+shortLabel Alt Conservation
+longLabel  Alternate Conservation
+group compGeno
+priority 104.2
+type wig 0.0 1.0
+spanList 1
+maxHeightPixels 100:25:11
+autoScaleDefault Off
+windowingFunction mean
+chromosomes chr7
+
+    track phastConsPlacental
+    subTrack altConservation
+    shortLabel Placental
+    longLabel Conservation in Placental Mammals
+    priority 1
+
+    track phastConsMammal
+    subTrack altConservation
+    shortLabel Mammal
+    longLabel Conservation in Mammals
+    priority 2
+
+    track phastConsPlacentalHigh
+    subTrack altConservation
+    shortLabel Placental High
+    longLabel Conservation in Placental Mammals (High Cov Only)
+    priority 3
+    color 0, 100, 100
+
+    track phastConsMammalHigh
+    subTrack altConservation
+    shortLabel Mammal High
+    longLabel Conservation in Mammals (High Cov Only)
+    priority 4
+    color 0, 100, 100
+
+    track phastConsVertebrateHigh
+    subTrack altConservation
+    shortLabel Vertebrate High
+    longLabel Conservation in Vertebrates (High Cov Only)
+    priority 5
+    color 0, 100, 100
+
 track phastConsElements17way
 shortLabel Most Conserved
 longLabel PhastCons Conserved Elements, Vertebrate Multiz Alignment
@@ -315,45 +361,56 @@ exonArrows off
 showTopScorers 200
 type bed 5 .
 
-track multiz10way
-shortLabel 10-Way Conservation
-longLabel 10-Way Vertebrate Multiz Alignment & Conservation 
+track phastConsElementsAlt
+compositeTrack on
+shortLabel Alt Most Conserved
+longLabel Alternate PhastCons Conserved Elements, Vertebrate Multiz Alignment
 group compGeno
-priority 109.11
-visibility hide
-#color 0, 10, 100
-#altColor 50,50,50
-#altColor 255,128,0
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons10way
-spanList 1
-yLineOnOff Off
-autoScaleDefault Off
-summary multiz10waySummary
-#pairwise netBlastz
-speciesGroups mammal vertebrate
-sGroup_mammal panTro1 mm5 rn3 canFam1
-sGroup_vertebrate galGal2 xenTro1 fr1 tetNig1 danRer1
-treeImage phylo/hg17_10way.jpg
-
-track phastConsElements10way
-shortLabel 10-Way Most Conserved
-longLabel PhastCons Conserved Elements, 10-Way Vertebrate Multiz Alignment
-group compGeno
-priority 109.12
+priority 104.4
 visibility hide
 exonArrows off
 showTopScorers 200
 type bed 5 .
+chromosomes chr7
+
+    track phastConsElementsPlacental
+    subTrack phastConsElementsAlt
+    shortLabel Placental
+    longLabel Elements Conserved in Placental Mammals
+    priority 1
+
+    track phastConsElementsMammal
+    subTrack phastConsElementsAlt
+    shortLabel Mammal
+    longLabel Elements Conserved in Mammals
+    priority 2
+
+    track phastConsElementsPlacentalHigh
+    subTrack phastConsElementsAlt
+    shortLabel Placental High
+    longLabel Elements Conserved in Placental Mammals (High-Cov Only)
+    priority 3
+    color 0, 100, 100
+
+    track phastConsElementsMammalHigh
+    subTrack phastConsElementsAlt
+    shortLabel Mammal High
+    longLabel Elements Conserved in Mammals (High-Cov Only)
+    priority 4
+    color 0, 100, 100
+
+    track phastConsElementsVertebrateHigh
+    subTrack phastConsElementsAlt
+    shortLabel Vertebrate High
+    longLabel Elements Conserved in Vertebrates (High-Cov Only)
+    color 0, 100, 100
+    priority 5
 
 track multiz8way
 shortLabel 8-way Conservation
 longLabel Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish Multiz Alignments & Conservation 
 group compGeno
-priority 109.51
+priority 105.1
 visibility hide
 #color 0, 10, 100
 altColor 50,50,50
@@ -372,7 +429,7 @@ track phastConsElements
 shortLabel 8-way Most Conserved
 longLabel PhastCons Conserved Elements, Hu/Chimp/Mouse/Rat/Dog/Chick/Fugu/Zfish 
 group compGeno
-priority 109.52
+priority 105.2
 visibility hide
 exonArrows off
 showTopScorers 200
@@ -510,6 +567,14 @@ exonArrows off
 useScore 1
 showTopScorers 200
 type bed 5 .
+
+track snp
+shortLabel snp124
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 124)
+group varRep
+priority 143
+visibility hide 
+type bed 6 +
 
 track varMultizHMRDEC
 shortLabel varMultiz6Way

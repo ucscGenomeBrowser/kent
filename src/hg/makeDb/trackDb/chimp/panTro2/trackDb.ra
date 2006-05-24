@@ -1,6 +1,23 @@
+track quality
+shortLabel Quality Scores
+longLabel $Organism Sequencing Quality Scores
+group map
+priority 23.6
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+windowingFunction Mean
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+spanList 1,1024
+type wig 0 99
+chromosomes chr1,chr10,chr10_random,chr11,chr11_random,chr12,chr12_random,chr13,chr13_random,chr14,chr14_random,chr15,chr15_random,chr16,chr16_random,chr17,chr17_random,chr18,chr18_random,chr19,chr19_random,chr1_random,chr20,chr20_random,chr21,chr22,chr22_random,chr2a,chr2a_random,chr2b,chr2b_random,chr3,chr3_random,chr4,chr4_random,chr5,chr5_random,chr6,chr6_hla_hap1,chr6_random,chr7,chr7_random,chr8,chr8_random,chr9,chr9_random,chrUn,chrX,chrX_random,
+
 track refGene
-shortLabel RefSeq Genes
-longLabel Human and Chimp RefSeq Genes
+shortLabel RefSeq
+longLabel Chimp and Human RefSeq Genes
 group genes
 priority 35
 visibility dense

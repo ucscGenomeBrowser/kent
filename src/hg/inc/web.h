@@ -75,6 +75,9 @@ void printGenomeListForCladeHtml(char *db, char *onChangeText);
 void webPushErrHandlers();
 /* Push warn and abort handler for errAbort(). */
 
+void webPushErrHandlersCart(struct cart *cart);
+/* Push warn and abort handler for errAbort(); save cart for use in handlers. */
+
 void webPopErrHandlers();
 /* Pop warn and abort handler for errAbort(). */
 

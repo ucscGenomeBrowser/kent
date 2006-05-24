@@ -9,7 +9,7 @@
 #include "agpFrag.h"
 #include "agpGap.h"
 
-static char const rcsid[] = "$Id: qacAgpLift.c,v 1.1 2005/08/10 19:39:47 angie Exp $";
+static char const rcsid[] = "$Id: qacAgpLift.c,v 1.2 2006/04/27 00:30:37 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -18,10 +18,16 @@ errAbort(
   "qacAgpLift - Use AGP to combine per-scaffold qac into per-chrom qac.\n"
   "usage:\n"
   "   qacAgpLift scaffoldToChrom.agp scaffolds.qac chrom.qac\n"
+  "options:\n"
+  "    -mScore=N - score to use for missing data (otherwise fail)\n"
+  "            range: 0-99, recommended values are 98 (low qual) or 99 (high)"
   );
 }
 
+int mScore = -1;               /* use this only if positive value */
+
 static struct optionSpec options[] = {
+   {"mScore", OPTION_INT},
    {NULL, 0},
 };
 
@@ -176,18 +182,30 @@ for (chrom = chromList; chrom != NULL; chrom = chrom->next)
     /* Uncompress contig quality scores and copy into chrom's quality buffer. */
     for (frag = chrom->list; frag != NULL; frag = frag->next)
         {
-	qac = hashMustFindVal(qacHash, frag->frag);
-	if (bufSize < qac->uncSize)
-	    {
-	    freez(&buf);
-	    bufSize = qac->uncSize;
-	    buf = needMem(bufSize);
-	    }
-	rleUncompress(qac->data, qac->compSize, buf, qac->uncSize);
-        if (frag->strand[0] == '-')
-            reverseBytes(buf, qac->uncSize);
-	fragSize = frag->fragEnd - frag->fragStart;
-	memcpy(qa.qa + frag->chromStart, buf + frag->fragStart, fragSize);
+        struct hashEl *hel;
+        fragSize = frag->fragEnd - frag->fragStart;
+        if ((hel = hashLookup(qacHash, frag->frag)) != NULL)
+            {
+            qac = (struct qac *) hel->val;
+            if (bufSize < qac->uncSize)
+                {
+                freez(&buf);
+                bufSize = qac->uncSize;
+                buf = needMem(bufSize);
+                }
+            rleUncompress(qac->data, qac->compSize, buf, qac->uncSize);
+            if (frag->strand[0] == '-')
+                reverseBytes(buf, qac->uncSize);
+            memcpy(qa.qa + frag->chromStart, buf + frag->fragStart, fragSize);
+            }
+        else
+            {
+            /* agp frag not found in qac hash -- missing data */
+            if (mScore < 0)
+                errAbort("missing data: no quality scores for %s", frag->frag);
+            /* fill in missing data with specified score */
+            memset(qa.qa + frag->chromStart, mScore, fragSize);
+            }
 	}
 
     /* Compress and write it out. */
@@ -201,6 +219,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+mScore = optionInt("mScore", mScore);
 if (argc != 4)
     usage();
 qacAgpLift(argv[1], argv[2], argv[3]);

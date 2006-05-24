@@ -12,7 +12,7 @@
 #include "dystring.h"
 #include "mafSummary.h"
 
-static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.14 2006/02/06 20:20:52 kate Exp $";
+static char const rcsid[] = "$Id: hgLoadMafSummary.c,v 1.15 2006/05/01 16:34:29 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -27,7 +27,7 @@ int mergeGap = 500;
 int minSize = 10000;
 int maxSize = 50000;
 char *database = NULL;
-int summaryCount = 0;
+long summaryCount = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -112,7 +112,7 @@ if (mcMaster == NULL)
 return mcMaster;
 }
 
-int processMaf(struct mafAli *maf, struct hash *componentHash, 
+long processMaf(struct mafAli *maf, struct hash *componentHash, 
                 FILE *f, struct mafFile *mf, char *fileName)
 /* Compute scores for each pairwise component in the maf and output to .tab file */
 {
@@ -218,7 +218,6 @@ struct sqlConnection *conn;
 FILE *f = hgCreateTabFile(".", table);
 long componentCount = 0;
 struct hash *componentHash = newHash(0);
-struct mafSummary *ms;
 
 if (!test)
     {

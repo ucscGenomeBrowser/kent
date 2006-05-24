@@ -303,7 +303,7 @@ cd $tmpDir/xenTro2/$2
         (name, description, nibPath, organism, \
                 defaultPos, active, orderKey, genome, scientificName, \
                 htmlPath, hgNearOk, hgPbOk, sourceName) values \
-        ("xenTro2", "Aug. 2005", "/gbdb/xenTro2/xenTro2.2bit", "X. tropicalis", \
+        ("xenTro2", "Aug. 2005", "/gbdb/xenTro2", "X. tropicalis", \
                "scaffold_19", 1, 36, "X. tropicalis", \
                 "Xenopus tropicalis", "/gbdb/xenTro2/html/description.html", \
                 0, 0, "JGI v4.1");'
@@ -535,7 +535,757 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
 #251543 bases of 7578677 (3.319%) in intersection
 
 
+# SWAP CHAINS/NET MM8 (DONE 4/21/06 hiram -- see makeMm8.doc)
+
+
+# SWAP CHAINS/NET HG18 (DONE 4/24/06 angie)
+    ssh kkstore04
+    mkdir /cluster/data/xenTro2/bed/blastz.hg18.swap
+    cd /cluster/data/xenTro2/bed/blastz.hg18.swap
+    doBlastzChainNet.pl -swap /cluster/data/hg18/bed/blastz.xenTro2/DEF \
+      -workhorse kkr8u00 >& do.log & tail -f do.log
+    ln -s blastz.hg18.swap /cluster/data/xenTro2/bed/blastz.hg18
+    
+
+# SWAP CHAINS/NET RN4 (DONE 4/24/06 angie)
+    ssh kkstore04
+    mkdir /cluster/data/xenTro2/bed/blastz.rn4.swap
+    cd /cluster/data/xenTro2/bed/blastz.rn4.swap
+    doBlastzChainNet.pl -swap /cluster/data/rn4/bed/blastz.xenTro2/DEF \
+      -workhorse kkr8u00 >& do.log & tail -f do.log
+    ln -s blastz.rn4.swap /cluster/data/xenTro2/bed/blastz.rn4
+
+
+# SWAP CHAINS/NET MONDOM4 (DONE 4/27/06 angie)
+    ssh kkstore04
+    mkdir /cluster/data/xenTro2/bed/blastz.monDom4.swap
+    cd /cluster/data/xenTro2/bed/blastz.monDom4.swap
+    doBlastzChainNet.pl -swap /cluster/data/monDom4/bed/blastz.xenTro2/DEF \
+      -workhorse kkr8u00 >& do.log & tail -f do.log
+    # hgLoadChain ran out of memory while sorting the giant chain set.
+    # Pre-sort on a machine with big RAM:
+    ssh kkr8u00
+    cd /cluster/data/xenTro2/bed/blastz.monDom4.swap
+    time nice chainSort -target axtChain/xenTro2.monDom4.all.chain.gz \
+      axtChain/all.tSorted.chain
+#176.750u 66.580s 4:36.82 87.9%  0+0k 0+0io 0pf+0w
+    # -- it's a 5-minute job on a machine with sufficient memory, but will 
+    # thrash all day on a machine that doesn't have enough.
+    # Manually run hgLoadChain -noSort, then run the rest of loadUp.csh:
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/blastz.monDom4.swap/axtChain
+    nice hgLoadChain -noSort -tIndex xenTro2 chainMonDom4 all.tSorted.chain
+#Loading 10580431 chains into xenTro2.chainMonDom4
+    grep -v hgLoadChain loadUp.csh > tmp.csh
+    nice csh -efx tmp.csh >>& ../do.log & tail -f ../do.log
+    # back on kkstore04
+    cd /cluster/data/xenTro2/bed/blastz.monDom4.swap
+    doBlastzChainNet.pl -swap /cluster/data/monDom4/bed/blastz.xenTro2/DEF \
+      -continue download -workhorse kkr8u00 >>& do.log & tail -f do.log
+    ln -s blastz.monDom4.swap /cluster/data/xenTro2/bed/blastz.monDom4
+
+
+# SWAP CHAINS/NET GALGAL2 (DONE 4/27/06 angie)
+    ssh kkstore04
+    mkdir /cluster/data/xenTro2/bed/blastz.galGal2.swap
+    cd /cluster/data/xenTro2/bed/blastz.galGal2.swap
+    doBlastzChainNet.pl -swap /cluster/data/galGal2/bed/blastz.xenTro2/DEF \
+      -workhorse kkr8u00 >& do.log & tail -f do.log
+    ln -s blastz.galGal2.swap /cluster/data/xenTro2/bed/blastz.galGal2
+
+
+# SWAP CHAINS/NET DANRER4 (DONE 4/27/06 angie)
+    ssh kkstore04
+    mkdir /cluster/data/xenTro2/bed/blastz.danRer4.swap
+    cd /cluster/data/xenTro2/bed/blastz.danRer4.swap
+    doBlastzChainNet.pl -swap /cluster/data/danRer4/bed/blastz.xenTro2/DEF \
+      -workhorse kkr8u00 >& do.log & tail -f do.log
+    ln -s blastz.danRer4.swap /cluster/data/xenTro2/bed/blastz.danRer4
+
+
+# MULTIZ7WAY (DONE 4/28/06 angie)
+# ((xenTro2 (galGal2 (monDom4 (hg18 (mm8 rn4))))) danRer4)
+    ssh kkstore04
+    mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
+
+    # Prune the hg17 17way tree to just these 7 and update db names:
+    /cluster/bin/phast/tree_doctor \
+      --prune-all-but=rat_rn3,mouse_mm7,human_hg17,monodelphis_monDom2,chicken_galGal2,xenopus_xenTro1,zebrafish_danRer3 \
+      --rename="rat_rn3 -> rat_rn4 ; mouse_mm7 -> mouse_mm8 ; human_hg17 -> human_hg18 ; monodelphis_monDom2 -> monodelphis_monDom4 ; xenopus_xenTro1 -> xenopus_xenTro2 ; zebrafish_danRer3 -> zebrafish_danRer4" \
+      /cluster/data/hg17/bed/multiz17way/17way.nh > 7way.nh
+    # *carefully* edit 7way.nh to put frog first.
+    # create species list and stripped down tree for autoMZ
+    sed -e 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//' 7way.nh \
+      > tree-commas.nh
+    sed -e 's/ //g; s/,/ /g' tree-commas.nh > tree.nh
+    sed -e 's/[()]//g; s/,/ /g' tree.nh > species.lst
+
+    # Split MAFs by sequence onto cluster-friendly server
+    mkdir /cluster/bluearc/xenTro2/mafNet
+    foreach s (galGal2 monDom4 hg18 mm8 rn4 danRer4)
+      echo $s
+      mafSplit -byTarget -outDirDepth=2 -useSequenceName \
+        dummyArg /cluster/bluearc/xenTro2/mafNet/$s/split \
+        /cluster/data/xenTro2/bed/blastz.$s/mafNet/*
+    end
+    # Change the split%05d names to scaffold_1 etc. so they exactly match
+    # sequence names.
+    cd /cluster/bluearc/xenTro2/mafNet
+    foreach db ( danRer4 galGal2 hg18 mm8 monDom4 rn4 )
+      echo $db
+      foreach d0 ($db/*)
+        foreach f ($d0/*/*)
+          set g = `echo $f | sed -e 's/split0*/scaffold_/'`
+          mv $f $g
+        end
+      end
+    end
+
+    ssh kki
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
+    mkdir maf run
+    cd run
+
+    # stash binaries 
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+
+cat > autoMultiz.csh << 'EOF'
+#!/bin/csh -ef
+    set db = xenTro2
+    set d = $1
+    set c = $2
+    set mafOut = $3
+    set run = `pwd`
+    set tmp = /scratch/tmp/$db/multiz.$c
+    set pairs = /cluster/bluearc/$db/mafNet
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp ../{tree.nh,species.lst} $tmp
+    pushd $tmp
+    foreach s (`cat species.lst`)
+        if ($s == $db) then
+            continue
+        endif
+        set clusterMaf = $pairs/$s/$d/$c.maf
+        set localMaf = $db.$s.sing.maf
+        if (-e $clusterMaf) then
+            cp $clusterMaf $localMaf
+        else
+            echo "##maf version=1 scoring=autoMZ" > $localMaf
+        endif
+    end
+    set path = ($run/penn $path); rehash
+    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+    popd
+    cp $tmp/$c.maf $mafOut
+    rm -fr $tmp
+'EOF'
+    # << emacs
+    chmod +x autoMultiz.csh
+
+cat  << 'EOF' > spec
+#LOOP
+./autoMultiz.csh $(dir1) $(root1) {check out line+ /cluster/data/xenTro2/bed/multiz7way.2006-04-27/maf/$(dir1)/$(root1).maf}
+#ENDLOOP
+'EOF'
+    # << emacs
+
+    # List scaffolds in the dir structure created by mafSplit above:
+    perl -wpe 's/^scaffold_(\d+)\s+.*$//; $d0 = $1 % 10; $d1 = ($1/10) % 10; \
+               print "$d1/$d0/scaffold_$1";' \
+      /cluster/data/xenTro2/chrom.sizes > scaf.lst
+    # Make corresponding output directory structure:
+    foreach d1 (0 1 2 3 4 5 6 7 8 9)
+      mkdir ../maf/$d1
+      foreach d0 (0 1 2 3 4 5 6 7 8 9)
+        mkdir ../maf/$d1/$d0
+      end
+    end
+
+    gensub2 scaf.lst single spec jobList
+    para make jobList
+    para time
+#Completed: 19759 of 19759 jobs
+#CPU time in finished jobs:       8981s     149.68m     2.49h    0.10d  0.000 y
+#IO & Wait Time:                 51309s     855.15m    14.25h    0.59d  0.002 y
+#Average job time:                   3s       0.05m     0.00h    0.00d
+#Longest finished job:              44s       0.73m     0.01h    0.00d
+#Submission to last job:          3771s      62.85m     1.05h    0.04d
+
+
+# MULTIZ7WAY DOWNLOADABLES (UNANNOTATED) (DONE 4/28/2006 angie)
+    # We haven't publicly documented the annotated maf format yet,
+    # so put the unannotated mafs out for download.
+    ssh hgwdev
+    mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
+    # upstream mafs 
+cat > mafFrags.csh << 'EOF'
+    date
+    foreach i (1000 2000 5000)
+        echo "making upstream$i.maf"
+        nice featureBits xenTro2 mgcGenes:upstream:$i -fa=/dev/null -bed=up.bad
+        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
+        rm up.bad
+        nice mafFrags xenTro2 multiz7way up.bed upstream$i.maf \
+                -orgs=../species.lst
+        rm up.bed
+    end
+    date
+'EOF'
+    # << emacs
+    time csh mafFrags.csh >&! mafFrags.log & tail -f mafFrags.log
+#628.650u 89.300s 14:54.56 80.2% 0+0k 0+0io 4617pf+0w
+
+    # Consolidate multi-level maf to monolithic file
+    # No need to sort chunks by position because the chunk size is greater 
+    # than the largest scaffold size.  That may not be true in other 
+    # assemblies.
+    ssh kkstore04
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
+    mkdir mafDownloads
+    cp /dev/null mafDownloads/xenTro2.maf
+    foreach scaf (`awk '{print $1;}' /cluster/data/xenTro2/chrom.sizes`)
+      set f = `echo $scaf | perl -wpe 's/scaffold_(\d+)//; \
+                              $d0 = $1 % 10; $d1 = ($1/10) % 10; \
+                              print "maf/$d1/$d0/scaffold_$1.maf";'`
+      cat $f >> mafDownloads/xenTro2.maf
+    end
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
+    time nice gzip xenTro2.maf
+#171.259u 2.665s 2:54.58 99.6%   0+0k 0+0io 1pf+0w
+    nice gzip up*.maf
+    nice md5sum *.gz > md5sum.txt
+
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/xenTro2/multiz7way
+    mkdir $dir
+    ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads/{*.gz,md5sum.txt} $dir
+    cp /usr/local/apache/htdocs/goldenPath/rn4/multiz9way/README.txt $dir
+    # edit README.txt
+
+
+# ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE 4/28/2006 angie)
+    ssh kkr8u00
+    mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
+    mkdir maf run
+    cd run
+    rm -f sizes nBeds
+    foreach db (`cat /cluster/data/xenTro2/bed/multiz7way.2006-04-27/species.lst`)
+      ln -s /cluster/data/$db/chrom.sizes $db.len
+      if (! -e /cluster/data/$db/$db.N.bed) then
+        twoBitInfo -nBed /cluster/data/$db/$db.{2bit,N.bed}
+      endif
+      ln -s  /cluster/data/$db/$db.N.bed $db.bed
+      echo $db.bed  >> nBeds
+      echo $db.len  >> sizes
+    end
+
+    ssh kki
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno/run
+    cp /dev/null jobList
+    foreach d1 (/cluster/data/xenTro2/bed/multiz7way.2006-04-27/maf/*)
+      echo $d1
+      foreach f ($d1/*/*.maf)
+        set maf = $f:t
+        set d1 = $f:h:h:t
+        set d0 = $f:h:t
+        echo mafAddIRows -nBeds=nBeds -sizes=sizes $f \
+          /scratch/hg/xenTro2/xenTro2.2bit ../maf/$d1/$d0/$maf >> jobList
+      end
+    end
+    # Make corresponding output directory structure:
+    foreach d1 (0 1 2 3 4 5 6 7 8 9)
+      mkdir ../maf/$d1
+      foreach d0 (0 1 2 3 4 5 6 7 8 9)
+        mkdir ../maf/$d1/$d0
+      end
+    end
+    para make jobList
+    para time
+#Completed: 19759 of 19759 jobs
+#CPU time in finished jobs:      40336s     672.27m    11.20h    0.47d  0.001 y
+#IO & Wait Time:                 50270s     837.83m    13.96h    0.58d  0.002 y
+#Average job time:                   5s       0.08m     0.00h    0.00d
+#Longest finished job:               8s       0.13m     0.00h    0.00d
+#Submission to last job:          5667s      94.45m     1.57h    0.07d
+
+    # Consolidate multi-level maf to monolithic file
+    # No need to sort chunks by position because the chunk size is greater 
+    # than the largest scaffold size.  That may not be true in other 
+    # assemblies.
+    ssh kkstore04
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
+    cp /dev/null xenTro2.maf
+    foreach scaf (`awk '{print $1;}' /cluster/data/xenTro2/chrom.sizes`)
+      set f = `echo $scaf | perl -wpe 's/scaffold_(\d+)//; \
+                              $d0 = $1 % 10; $d1 = ($1/10) % 10; \
+                              print "maf/$d1/$d0/scaffold_$1.maf";'`
+      cat $f >> xenTro2.maf
+    end
+
+    # Load annotated maf
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
+    mkdir -p /gbdb/xenTro2/multiz7way/anno
+    ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno/xenTro2.maf \
+      /gbdb/xenTro2/multiz7way/anno/
+    time nice hgLoadMaf -pathPrefix=/gbdb/xenTro2/multiz7way/anno xenTro2 multiz7way
+#Loaded 1610298 mafs in 1 files from /gbdb/xenTro2/multiz7way/anno
+#126.780u 41.500s 7:15.57 38.6%  0+0k 0+0io 264pf+0w
+
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
+    # machine and then load on hgwdev:
+    ssh kkr8u00
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
+    time nice hgLoadMafSummary xenTro2 -minSize=30000 -mergeGap=1500 \
+             -maxSize=200000 -test multiz7waySummary xenTro2.maf
+#Created 570630 summary blocks from 3284353 components and 1610298 mafs from xenTro2.maf
+#50.727u 7.354s 0:59.16 98.1%    0+0k 0+0io 3pf+0w
+
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
+    sed -e 's/mafSummary/multiz7waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
+      > /tmp/multiz7waySummary.sql
+    time nice hgLoadSqlTab xenTro2 multiz7waySummary \
+      /tmp/multiz7waySummary.sql multiz7waySummary.tab
+#0.000u 0.000s 2:01.79 0.0%      0+0k 0+0io 234pf+0w
+    rm *.tab
+    ln -s multiz7way.2006-04-27 /cluster/data/xenTro2/bed/multiz7way
+
+
+# MULTIZ7WAY MAF FRAMES (DONE 4/28/2006 angie)
+    ssh hgwdev
+    mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/frames
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/frames
+    # The following is adapted from MarkD's Makefile used for mm7...
+
+    #------------------------------------------------------------------------
+    # get the genes for all genomes
+    # mRNAs with CDS.  single select to get cds+psl, then split that up and
+    # create genePred
+    # using mrna table as genes: danRer4
+    mkdir genes
+    foreach queryDb (danRer4)
+      set tmpExt = `mktemp temp.XXXXXX`
+      set tmpMrnaCds = ${queryDb}.mrna-cds.${tmpExt}
+      set tmpMrna = ${queryDb}.mrna.${tmpExt}
+      set tmpCds = ${queryDb}.cds.${tmpExt}
+      echo $queryDb
+      hgsql -N -e 'select all_mrna.qName,cds.name,all_mrna.* \
+                   from all_mrna,gbCdnaInfo,cds \
+                   where (all_mrna.qName = gbCdnaInfo.acc) and \
+                     (gbCdnaInfo.cds != 0) and (gbCdnaInfo.cds = cds.id)' \
+       ${queryDb} > ${tmpMrnaCds}
+      cut -f 1-2  ${tmpMrnaCds} > ${tmpCds}
+      cut -f 4-100  ${tmpMrnaCds} > ${tmpMrna}
+      mrnaToGene -cdsFile=${tmpCds} -smallInsertSize=8 -quiet ${tmpMrna} \
+        stdout \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$queryDb.tmp.gz
+      rm ${tmpMrnaCds} ${tmpMrna} ${tmpCds}
+      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+      rm -f $tmpExt
+    end
+    # using mgcGenes for xenTro2
+    # using knownGene for rn4 mm8 hg18
+    # using refGene for galGal2
+    # no genes for monDom4
+    # genePreds; (must keep only the first 10 columns for knownGene)
+    foreach queryDb (xenTro2 rn4 mm8 hg18 galGal2)
+      if ($queryDb == "xenTro2") then
+        set geneTbl = mgcGenes
+      else if ($queryDb == "galGal2") then
+        set geneTbl = refGene
+      else
+        set geneTbl = knownGene
+      endif
+      hgsql -N -e "select * from $geneTbl" ${queryDb} | cut -f 1-10 \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/$queryDb.tmp.gz
+      mv /scratch/tmp/$queryDb.tmp.gz genes/$queryDb.gp.gz
+      rm -f $tmpExt
+    end
+
+    #------------------------------------------------------------------------
+    # create frames
+    set clusterDir = /cluster/bluearc/xenTro2/multiz7wayFrames
+    set multizDir = /cluster/data/xenTro2/bed/multiz7way.2006-04-27
+    set mafDir = $multizDir/mafDownloads
+    set geneDir = $multizDir/frames/genes
+    set clusterMafDir = ${clusterDir}/maf
+    set clusterGeneDir = ${clusterDir}/genes
+    set clusterFramesDir = ${clusterDir}/mafFrames.kki
+
+    # copy mafs to cluster storage
+    mkdir $clusterDir
+    ssh -x kkstore04 "rsync -av $mafDir/xenTro2.maf.gz $clusterMafDir/"
+
+    # copy genes to cluster storage
+    ssh -x kkstore04 "rsync -av $geneDir/*.gp.gz $clusterGeneDir/"
+
+    # run cluster jobs
+    set tmpExt = `mktemp temp.XXXXXX`
+    set paraDir = $multizDir/frames/para.${tmpExt}
+    mkdir mafFrames $paraDir
+    rm -f $paraDir/jobList
+    mkdir ${clusterFramesDir}
+    foreach queryDb (`cat /cluster/data/xenTro2/bed/multiz7way.2006-04-27/species.lst`)
+      mkdir ${clusterFramesDir}/${queryDb}
+      if (-e ${clusterGeneDir}/${queryDb}.gp.gz) then
+        echo /cluster/bin/scripts/mkMafFrames.pl ${queryDb} xenTro2 \
+          ${clusterGeneDir}/${queryDb}.gp.gz ${clusterMafDir}/xenTro2.maf.gz \
+          ${clusterFramesDir}/${queryDb}/xenTro2.mafFrames \
+          >> $paraDir/jobList
+      endif
+    end
+    rm -f $tmpExt
+    ssh -x kki "cd ${paraDir} && para make jobList && para time"
+#Completed: 12 of 12 jobs
+#CPU time in finished jobs:        354s       5.89m     0.10h    0.00d  0.000 y
+#IO & Wait Time:                    46s       0.77m     0.01h    0.00d  0.000 y
+#Average job time:                  33s       0.56m     0.01h    0.00d
+#Longest finished job:              37s       0.62m     0.01h    0.00d
+#Submission to last job:            37s       0.62m     0.01h    0.00d
+
+    # combine results from cluster
+    foreach queryDb (`cat ../species.lst`)
+      echo $queryDb
+      ssh -x kolossus "cat ${clusterFramesDir}/${queryDb}/*.mafFrames | gzip -2c > ${multizDir}/frames/mafFrames/${queryDb}.mafFrames.gz"
+    end
+
+    #------------------------------------------------------------------------
+    # load the database
+    hgLoadMafFrames xenTro2 multiz7wayFrames mafFrames/*.mafFrames.gz
+
+    #------------------------------------------------------------------------
+    # clean up
+    rm -rf ${clusterDir}
+
+
+# PHASTCONS (DONE 5/2/2006 angie)
+# Using Kate's process from makeHg17.doc.
+# This process is distilled from Hiram and Adam's experiments
+# on mouse (mm7) 17way track.  Many parameters are now fixed, without
+# being experimentally derived, either because the experiments
+# were lengthy and produced similar results, or because they
+# weren't runnable given the alignment size.
+# These parameters are:
+# --rho
+# --expected-length
+# --target-coverage
+# Also, instead of generating cons and noncons tree models,
+# we use a single, pre-existing tree model -- Elliot Margulies' model 
+# from the (37-way) ENCODE alignments.
+
+    ssh kki
+    # Prune Elliot's model to just our 7 species:
+    mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
+    /cluster/bin/phast/tree_doctor \
+      --prune-all-but=rn3,mm7,hg17,monDom2,galGal2,xenTro1,danRer3 \
+      --rename="rn3 -> rn4 ; mm7 -> mm8 ; hg17 -> hg18 ; monDom2 -> monDom4 ; \
+                xenTro1 -> xenTro2 ; danRer3 -> danRer4" \
+      /cluster/data/hg17/bed/multiz17way/cons/elliotsEncode.mod \
+      > elliotsEncodePruned.mod
+
+    # Split MAF into windows and use to generate
+    # "sufficient statistics" (ss) files for phastCons input
+    mkdir run.split
+    cd run.split
+    set WINDOWS = /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/ss
+    rm -fr $WINDOWS
+    mkdir -p $WINDOWS
+    # Make directory structure corresponding to maf:
+    foreach d1 (0 1 2 3 4 5 6 7 8 9)
+      mkdir $WINDOWS/$d1
+      foreach d0 (0 1 2 3 4 5 6 7 8 9)
+        mkdir $WINDOWS/$d1/$d0
+      end
+    end
+
+    cat << 'EOF' > doSplit.csh
+#!/bin/csh -ef
+    set MAFS = /cluster/data/xenTro2/bed/multiz7way.2006-04-27/maf
+    set WINDOWS = /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/ss
+    set d = $1
+    set c = $2
+    # skip the maf files that have only comments -- those crash msa_split:
+    if (`grep -v ^\# $MAFS/$d/$c.maf | wc -l`) then
+      set tmpDir = /scratch/tmp
+      twoBitToFa /scratch/hg/xenTro2/xenTro2.2bit -seq=$c $tmpDir/$c.fa
+      cd $WINDOWS
+      /cluster/bin/phast/$MACHTYPE/msa_split $MAFS/$d/$c.maf -i MAF \
+          -M $tmpDir/$c.fa \
+          -o SS -r $d/$c -w 10000000,0 -I 1000 -B 5000
+      rm -f $tmpDir/$c.fa
+    endif
+    echo "Done" >> $WINDOWS/$d/$c.done
+'EOF'
+# << emacs
+    chmod +x doSplit.csh
+
+    rm -f jobList
+    foreach path (../../maf/*/*) 
+      set d1 = $path:h:t
+      set d0 = $path:t
+      set d = "$d1/$d0"
+      foreach f ($path/*.maf)
+        set c = $f:t:r
+        echo "doSplit.csh $d $c {check out line+ $WINDOWS/$d/$c.done}" \
+          >> jobList
+      end
+    end
+    para make jobList
+    para time
+# Wow... looks like a single job on the fileserver would have finished 
+# quite a bit sooner:
+#Completed: 19759 of 19759 jobs
+#CPU time in finished jobs:        637s      10.61m     0.18h    0.01d  0.000 y
+#IO & Wait Time:                 53363s     889.39m    14.82h    0.62d  0.002 y
+#Average job time:                   3s       0.05m     0.00h    0.00d
+#Longest finished job:              10s       0.17m     0.00h    0.00d
+#Submission to last job:          3378s      56.30m     0.94h    0.04d
+
+    # check tree model on a single chunk, using params recommended by Adam,
+    # (to verify branch lengths on 2X species -- though we aren't using any 
+    #  of those here)
+    ssh kolossus
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
+    /cluster/bin/phast/$MACHTYPE/phyloFit -i SS -E -p MED -s HKY85 \
+        --tree "`cat ../tree-commas.nh`" \
+        /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/ss/0/1/scaffold_1.1-7817814.ss \
+        -o phyloFit.tree
+    # Comment from makeHg17.doc:
+    # # he ok'ed the results -- not necessary for next human run
+
+    # TODO: maybe run these by Adam... the numbers in the RATE_MAT and 
+    # TREE are different between the phyloFit and elliotsEncode models,
+    # not sure if the differences are significant.  
+
+    # The elliotsEncode.mod is giving about twice as much coverage as 
+    # we want, despite extremely low --target-coverage, so use phyloFit.tree.
+    # Also, when I loaded wiggles made with elliotsEncode and phyloFit into 
+    # the browser for visual comparison, the elliotsEncode wiggle was maxed 
+    # out (~1 wherever anything aligned) while the phyloFit wiggle showed a 
+    # lot more dynamics.  It bothers me that the elements' coverage was so 
+    # low with the phyloFit model... a lot more than 1.3% must be conserved!
+    # But the elliotsEncode seems off in the other direction, and not much 
+    # more informative than looking at the multiz alignment to see where 
+    # something aligns.
+
+    # Run phastCons
+    #	This job is I/O intensive in its output files, thus it is all
+    #	working over in /scratch/tmp/
+    mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons/run.cons
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons/run.cons
+    cat > doPhast.csh << 'EOF'
+#!/bin/csh -fe
+set d = $1
+set f = $2
+set len = $3
+set cov = $4
+set rho = $5
+set tmp = /scratch/tmp/$f
+mkdir -p $tmp
+set san = /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons
+cp -p $san/ss/$d/$f.ss ../phyloFit.tree.mod $tmp
+pushd $tmp > /dev/null
+set c = $f:r:r
+/cluster/bin/phast/$MACHTYPE/phastCons $f.ss phyloFit.tree.mod \
+  --rho $rho --expected-length $len --target-coverage $cov --quiet \
+  --seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
+popd > /dev/null
+mkdir -p $san/pp/$d $san/bed/$d
+sleep 1
+mv $tmp/$f.pp $san/pp/$d
+mv $tmp/$f.bed $san/bed/$d
+rm -fr $tmp
+'EOF'
+    # << emacs
+    chmod a+x doPhast.csh
+
+    # Create gsub file
+    cat > template << 'EOF'
+#LOOP
+doPhast.csh $(dir1) $(file1) 12 .50 .339
+#ENDLOOP
+'EOF'
+    # << emacs
+
+    # Create parasol batch and run it
+    ssh kki
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons/run.cons
+    pushd /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/ss
+    cp /dev/null /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons/run.cons/in.list
+    foreach d (*/*)
+      ls -1S $d/*.ss | sed 's/.ss$//' \
+        >> /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons/run.cons/in.list
+    end
+    popd
+
+    gensub2 in.list single template jobList
+    para make jobList
+    para time
+#Completed: 5587 of 5587 jobs
+#CPU time in finished jobs:       3281s      54.68m     0.91h    0.04d  0.000 y
+#IO & Wait Time:                 20478s     341.31m     5.69h    0.24d  0.001 y
+#Average job time:                   4s       0.07m     0.00h    0.00d
+#Longest finished job:              28s       0.47m     0.01h    0.00d
+#Submission to last job:          1489s      24.82m     0.41h    0.02d
+
+    # create Most Conserved track
+    ssh kolossus
+    cd /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons
+    #	The sed's and the sort get the file names in chrom,start order
+    # (Hiram tricks -- split into columns on [.-/] with 
+    #    identifying x,y,z, to allow column sorting and
+    #    restoring the filename.  Warning: the sort column
+    # will depend on how deep you are in the dir
+    find ./bed -name "*.bed" \
+    | sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" \
+    | sort -k7,7 -k9,9n \
+    | sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" \
+    | xargs cat \
+    | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+    | /cluster/bin/scripts/lodToBedScore /dev/stdin > phastConsElements7way.bed
+    cp -p phastConsElements7way.bed /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
+
+    # Measure coverage.  If good, load elements into database and proceed with wiggle.
+    # Try for somewhere in the neighborhood of 5% overall cov, and 70% CDS cov.
+    # (Jim tried for 4% overall in xenTro1)
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
+    featureBits xenTro2 -enrichment mgcGenes:cds phastConsElements7way.bed
+
+    # FIRST ITERATION: elliotsEncode, doPhast (len cov rho) = (14 .007 .27)
+#mgcGenes:cds 0.235%, phastConsElements7way.bed 10.972%, both 0.196%, cover 83.49%, enrich 7.61x
+    mv phastConsElements7way.bed phastConsElements7way_14_007_27.bed
+
+    # SECOND ITERATION: elliotsEncode, doPhast (len cov rho) = (12 .005 .27)
+#mgcGenes:cds 0.235%, phastConsElements7way.bed 10.561%, both 0.195%, cover 82.94%, enrich 7.85x
+# just scaffold_1:
+#mgcGenes:cds 0.246%, phastConsElements7way.bed 11.117%, both 0.212%, cover 86.33%, enrich 7.77x
+    mv phastConsElements7way.bed phastConsElements7way_12_005_27.bed
+
+    # THIRD ITERATION: phyloFit, doPhast (len cov rho) = (12 .100 .339)
+#mgcGenes:cds 0.235%, phastConsElements7way.bed 0.727%, both 0.059%, cover 25.02%, enrich 34.43x
+    mv phastConsElements7way.bed phastConsElements7way_12_100_339.bed
+
+    # FOURTH ITERATION: phyloFit, doPhast (len cov rho) = (12 .100 .3)
+#mgcGenes:cds 0.235%, phastConsElements7way.bed 0.683%, both 0.054%, cover 22.86%, enrich 33.45x
+    mv phastConsElements7way.bed phastConsElements7way_12_100_300.bed
+
+    # FIFTH ITERATION: phyloFit, 12 .50 .339
+#mgcGenes:cds 0.235%, phastConsElements7way.bed 1.353%, both 0.091%, cover 38.78%, enrich 28.67x
+    mv phastConsElements7way.bed phastConsElements7way_12_500_339.bed
+
+
+    # When happy:
+    hgLoadBed -strict xenTro2 phastConsElements7way phastConsElements7way_12_500_339.bed
+
+    # Create merged posterior probability file and wiggle track data files
+    ssh kolossus
+    cd /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/
+    # sort by chromName, chromStart so that items are in numerical order 
+    #  for wigEncode
+    time find ./pp -name "*.pp" | \
+        sed -e "s/\// x /g" -e "s/\./ y /g" -e "s/-/ z /g" | \
+        sort -k7,7 -k9,9n | \
+        sed -e "s/ x /\//g" -e "s/ y /\./g" -e "s/ z /-/g" | \
+        xargs cat | \
+        nice wigEncode -noOverlap stdin phastCons7way.wig phastCons7way.wib
+
+    cp -p phastCons7way.wi? \
+      /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
+
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
+    ln -s `pwd`/phastCons7way.wib /gbdb/xenTro2/multiz7way/
+    hgLoadWiggle -pathPrefix=/gbdb/xenTro2/multiz7way xenTro2 \
+        phastCons7way phastCons7way.wig
+
+    # Make .jpg for tree and install in htdocs/images/phylo/... don't forget
+    # to request a push of that file.  The treeImage setting in trackDb.ra 
+    # is phylo/xenTro2_7way.jpg (relative to htdocs/images).
+    # Since we used the phyloFit.tree.mod instead of elliotsEncodePruned.mod 
+    # in the final phastCons run, regenerate 7way.nh from phyloFit.tree.mod 
+    # so that those numbers are used to generate the picture.
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
+    mv 7way.nh 7way.elliotsEncode.nh
+    tail -1 phastCons/phyloFit.tree.mod | sed -e 's/^TREE: //' \
+      > 7way.nh
+
+    /cluster/bin/phast/all_dists 7way.nh > 7way.distances.txt
+    grep xenTro2 7way.distances.txt | sort -k3,3n | \
+        awk '{printf ("%.4f\t%s\n", $3, $2)}' > distances.txt
+    cat distances.txt
+#0.4899  galGal2
+#0.5621  monDom4
+#0.5738  hg18
+#0.6038  mm8
+#0.6074  danRer4
+#0.6075  rn4
+    # the order in the browser display will be by tree topology,
+    # not by distance.
+
+    # Just for reference, these were the distances from elliotsEncode.mod...
+    # Quite different!
+#1.3604  chicken_galGal2
+#1.4357  human_hg18
+#1.4659  monodelphis_monDom4
+#1.7936  mouse_mm8
+#1.7983  rat_rn4
+#1.8771  zebrafish_danRer4
+
+    /cluster/bin/phast/draw_tree 7way.nh > 7way.ps
+    ps2pdf 7way.ps > 7way.pdf
+    pstopnm -stdout 7way.ps | pnmtojpeg > xenTro2_7way.jpg
+    ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/xenTro2_7way.jpg \
+      /usr/local/apache/htdocs/images/phylo/xenTro2_7way.jpg
+
+
+# PHASTCONS SCORES DOWNLOADABLES FOR 7WAY (DONE 5/2/2006 angie)
+    ssh kolossus
+    mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastConsDownloads
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastConsDownloads
+    set ppDir = /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/pp
+    cp /dev/null xenTro2.pp
+    # No need to sort chunks by position because the chunk size is greater 
+    # than the largest scaffold size.  That may not be true in other 
+    # assemblies.
+    foreach scaf (`awk '{print $1;}' /cluster/data/xenTro2/chrom.sizes`)
+      set d = `echo $scaf | perl -wpe 's/scaffold_(\d+)//; \
+                              $d0 = $1 % 10; $d1 = ($1/10) % 10; \
+                              print "$d1/$d0";'`
+      set f = `ls -1 $ppDir/$d | egrep ^$scaf'\.1-[0-9]+\.pp'`
+      if ("x$f" != "x") then
+        cat $ppDir/$d/$f >> xenTro2.pp
+      endif
+    end
+    nice gzip xenTro2.pp
+    md5sum *.gz > md5sum.txt
+
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastConsDownloads
+    set dir = /usr/local/apache/htdocs/goldenPath/xenTro2/phastCons7way
+    mkdir $dir
+    ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastConsDownloads/{*.gz,md5sum.txt} $dir
+    cp /usr/local/apache/htdocs/goldenPath/rn4/phastCons9way/README.txt $dir
+    # edit README.txt
+    # Clean up after phastCons run.
+    ssh kkstore04
+    rm /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons/*.tab
+    rm -r /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons
+
+
 # ENSEMBL is on 4.0 not 4.1... do the coords mostly carry over???
-# COMPARATIVE: chicken, opossum, human, mouse, zebrafish
 
 

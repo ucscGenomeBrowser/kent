@@ -288,6 +288,14 @@ table image
     int preparation;	"Pointer to info on how specimen prepared"
     )
 
+table imageFileFwd 
+"make imageFile forwarding table"
+    (
+    int fromIf;      "From imageFile"
+    int toIf;        "To imageFile"
+    )
+
+
 table imageProbe
 "Associate probe and image"
     (

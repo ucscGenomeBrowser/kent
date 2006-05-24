@@ -7,7 +7,7 @@
 #include "kgXref.h"
 #include "spDb.h"
 
-static char const rcsid[] = "$Id: hgKgGetText.c,v 1.3 2006/01/26 03:10:27 kent Exp $";
+static char const rcsid[] = "$Id: hgKgGetText.c,v 1.4 2006/04/27 17:42:44 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -115,8 +115,7 @@ void getText(struct kgXref *kg, struct hash *refSeqHash,
 	FILE *f)
 /* Get loads of text and write it out. */
 {
-char query[512], **row;
-struct sqlResult *sr;
+char query[512];
 struct hash *uniqHash = hashNew(0);
 char *spAcc = spFindAcc(spConn, kg->spID);
 

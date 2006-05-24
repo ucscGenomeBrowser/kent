@@ -1,6 +1,6 @@
 /* wigEncode - Convert wiggle ascii to wiggle binary format */
 
-static char const rcsid[] = "$Id: wigEncode.c,v 1.6 2005/08/11 17:43:39 hiram Exp $";
+static char const rcsid[] = "$Id: wigEncode.c,v 1.7 2006/04/25 23:12:06 hiram Exp $";
 
 #include "common.h"
 #include "wiggle.h"
@@ -22,6 +22,9 @@ errAbort("wigEncode - convert Wiggle ascii data to binary format\n\n"
     "options:\n"
     "    -lift=<D> - lift all input coordinates by D amount, default 0\n"
     "              - can be negative as well as positive\n"
+    "    -noOverlap - check for overlapping data, default: overlap allowed\n"
+    "               - only works for fixedStep and if fixedStep declarations\n"
+    "               - are in order by chromName,chromStart\n"
     "\n"
     "Example:\n"
     "    hgGcPercent -wigOut -doGaps -file=stdout -win=5 xenTro1 \\\n"
@@ -35,26 +38,29 @@ errAbort("wigEncode - convert Wiggle ascii data to binary format\n\n"
 
 static struct optionSpec optionSpecs[] = {
     {"lift", OPTION_INT},
+    {"noOverlap", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
 static int lift = 0;		/*	offset to lift positions on input */
+static boolean noOverlap = FALSE;	/*	check for overlapping data */
 
 void wigEncode(char *bedFile, char *wigFile, char *wibFile)
 /* Convert BED file to wiggle binary representation */
 {
 double upper, lower;
-if (lift != 0)
+if (lift != 0 || noOverlap)
     {
     struct wigEncodeOptions options;
 
     ZeroVar(&options);	/*	make sure everything is zero	*/
     options.lift = lift;
+    options.noOverlap = noOverlap;
     wigAsciiToBinary(bedFile, wigFile, wibFile, &upper, &lower, &options);
     }
 else
     wigAsciiToBinary(bedFile, wigFile, wibFile, &upper, &lower, NULL);
-fprintf(stderr, "Converted %s, upper limit %.2f, lower limit %.2f\n",
+verbose(1, "Converted %s, upper limit %.2f, lower limit %.2f\n",
                         bedFile, upper, lower);
 }
 
@@ -64,12 +70,15 @@ int main( int argc, char *argv[] )
 optionInit(&argc, argv, optionSpecs);
 
 lift = optionInt("lift", 0);
+noOverlap = optionExists("noOverlap");
 
 if (argc < 4)
     usage();
 
 if (lift != 0)
     verbose(2,"option lift=%d to lift all positions by %d\n", lift, lift);
+if (noOverlap)
+    verbose(2,"option noOverlap on, will check for overlapping data\n" );
 verbose(2,"input ascii data file: %s\n", argv[1]);
 verbose(2,"output .wig file: %s\n", argv[2]);
 verbose(2,"output .wib file: %s\n", argv[3]);

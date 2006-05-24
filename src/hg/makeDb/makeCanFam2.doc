@@ -2189,3 +2189,19 @@ TMPDIR=/scratch/tmp
     time nice -n +19 featureBits canFam2 chainMm8Link
     #   816262344 bases of 2384996543 (34.225%) in intersection
 
+############################################################################
+##  BLASTZ swap from panTro2 alignments (DONE 2006-05-04 markd)
+    ssh hgwdev
+    mkdir /cluster/data/canFam2/bed/blastz.panTro2.swap
+    ln -s blastz.panTro2.swap /cluster/data/canFam2/bed/blastz.panTro2
+    cd /cluster/data/canFam2/bed/blastz.panTro2.swap
+    
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -stop=net \
+	-swap -bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
+	/cluster/data/panTro2/bed/blastz.canFam2/DEF >& swap.out&
+
+   # create the net files
+    ssh hgwdev
+    cd /cluster/data/canFam2/bed/blastz.panTro2.swap/axtChain
+    nice netClass -verbose=0 -noAr noClass.net canFam2 panTro2 canFam2.panTro2.net
+    nice gzip canFam2.panTro2.net

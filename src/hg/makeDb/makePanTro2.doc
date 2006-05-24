@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.15 2006/04/05 19:25:44 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.18 2006/05/02 04:50:30 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -198,19 +198,55 @@ cat > makeQuals.csh << 'EOF'
 #AC161123.3 not found
     # need special handling for chr7, that has both contigs
     # (with quality scores), and clones (w/o)
-    # probably we want to dummy up high qual scores for the
-    # finished clone
 
+    # For chimpHiQualDiffs, construct a chr7 in one piece, with
+    # missing data filled in with score=98 (manually assigned "low quality"),
+    # although these are clones, and should have high quality.
+    # By request of Daryl Thomas
+
+    sed 's/Contig/bld2_Cont/' /cluster/data/panTro2/7/chr7.agp > agp.tmp
+    nice zcat wustl/chr7.contigs.qvl.gz | \
+        nice qaToQac stdin stdout | \
+        nice qacAgpLift -mScore=98 agp.tmp stdin qac/chr7.qac
+
+    # Also, create dummy chrY, chrY_random,  chr21, all of which
+    # are finished sequence from clones
+cat > makeFakeQuals.csh << 'EOF'
+    date
+    foreach c (chr21 chrY chrY_random)
+        echo $c
+        set d = `echo $c | sed 's/chr//;s/_random//'`
+        # pick a small set of quality scores, needed so utils don't complain
+        nice zcat wustl/chr22_random.contigs.qvl.gz | \
+            nice qaToQac stdin stdout | \
+            nice qacAgpLift -mScore=98 /cluster/data/panTro2/$d/$c.agp \
+                stdin qac/$c.qac
+    end
+    date
+'EOF'
+
+    # And a dummy chrM
+    echo 'chrM	1	16554	1       W       Unknown  1	16554    +' \
+        > agp.tmp
+    nice zcat wustl/chr7.contigs.qvl.gz | \
+        nice qaToQac stdin stdout | \
+        nice qacAgpLift -mScore=98 agp.tmp stdin qac/chrM.qac
+    
+    # Load track table, excluding "dummy" chroms
 cat > toWig.csh << 'EOF'
-    foreach f (qac/*.qac)
-        qacToWig $f stdout
+    foreach f (`ls qac/chr*.qac | egrep -v 'chrY|chr21|chrM'`)
+        qacToWig -fixed $f stdout
     end 
 'EOF'
     # << happy emacs
     date
-    csh toWig.csh | 
-        nice wigEncode stdin quality.wig quality.wib
+    csh toWig.csh | nice wigEncode stdin quality.wig quality.wib
     date
+
+    ssh hgwdev
+    cd /cluster/data/panTro2/bed/quality
+    ln -s /cluster/data/panTro2/bed/quality/quality.wib /gbdb/panTro2/wib
+    hgLoadWiggle panTro2 quality quality.wig
 
 
 ########################
@@ -856,6 +892,19 @@ cat > makeLSR.csh << 'EOF'
                 notInOthers/$c.out.spec
     cp -rp notInRodent $d
     cp -rp notInOthers $d
+
+
+# CREATE LINEAGE-SPECIFIC REPEATS FOR BLASTZ WITH ZEBRAFISH (2006-04-07 kate)
+# Treat all repeats as lineage-specific
+    ssh kkstore04
+    cd /cluster/data/panTro2
+    set d = /cluster/bluearc/panTro2/linSpecRep/notInZebrafish
+    mkdir $d
+    foreach f ({{?{,?}},6_hla_hap1}/chr*.fa.out)
+    set c = $f:t:r:r
+    echo $c
+    cp -p $f $d/$c.out.spec
+    end
 
 
 # SET UP BLAT SERVER (2006-03-06 kate)
@@ -1887,4 +1936,181 @@ TMPDIR=/scratch/tmp
     mkdir liftOver
     cd liftOver
     makeLoChain-split panTro2 /cluster/data/panTro2/nib >&! split.log &
+
+########################
+# BLASTZ HUMAN HG17 (2006-04-05 kate)
+# Do not use lineage-specific repeats, on recommendation of Arian Smit
+# NOTE: next time try alternate scoring matrix (blastz and chainer)
+# and chain score recommended by Jim:
+#                    Try first    Alternate
+#  A/A and T/T:         93        93
+#  C/C and G/G:         100      100
+#  Transversions:      -400     -300
+#  Transitions:        -300     -200
+#  Min chain Score:    2000     2500
+
+#e.g.
+     A    C    G    T
+    93 -400 -300 -400
+  -400  100 -400 -300
+  -300 -400  100 -400
+  -400 -300 -400   93
+# Also, try filtering psl's for >80% identity, using pslCDnaFilter -minId=80
+
+    ssh pk
+    cd /cluster/data/panTro2/bed
+    mkdir blastz.hg17.2006-04-05
+    ln -s blastz.hg17.2006-04-05 blastz.hg17
+    cd blastz.hg17
+
+    cat << '_EOF_' > DEF
+# chimp vs human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Chimmp panTro2
+SEQ1_DIR=/scratch/hg/panTro2/panTro2.2bit
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/bluearc/panTro2/chrom.sizes
+
+# QUERY: Human hg17 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/hg17/hg17.2bit
+SEQ2_LEN=/cluster/bluearc/hg17/chrom.sizes
+SEQ2_CHUNK=3000000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/panTro2/bed/blastz.hg17.2006-04-05
+TMPDIR=/scratch/tmp
+'_EOF_'
+
+# << happy emacs
+    # NOTE: next time use minScore=10000, like self chains
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
+        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg17 \
+        `pwd`/DEF >&! blastz.out &
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
+        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg17 \
+        -continue=cat \
+        `pwd`/DEF >&! blastz.cat.out &
+
+    # failed due to missing 2bit file on iservers
+    ssh kkr1u00
+    cp -p /cluster/data/hg17/hg17.2bit /scratch/hg/hg17
+    ~kent/bin/iSync
+       # failed for some reason, so I copied the files manually to
+       # kkr*u00
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.hg17
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
+        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg17 \
+        -continue=chainRun \
+        `pwd`/DEF >&! blastz.chainRun.out &
+
+    # chaining failed on chr19, ran mini-cluster node out of memory
+    # ran manually on hgwdev64  with higher minScore.
+    # this should reduce chains ~12%.  Note that hg18 chr19 chains
+    #  number 5M, while chr18 are only 200K!
+    ssh kki
+    cd /cluster/data/panTro2/bed/blastz.hg17/axtChain/run
+cat > chain.csh << 'EOF'
+#!/bin/csh -ef
+zcat ../../pslParts/$1*.psl.gz \
+| pslCDnaFilter -minId=70 stdin stdout \
+| axtChain -psl -verbose=0  -minScore=5000 -linearGap=medium stdin \
+    /scratch/hg/panTro2/panTro2.2bit \
+    /scratch/hg/hg17/hg17.2bit \
+    stdout \
+| chainAntiRepeat /scratch/hg/panTro2/panTro2.2bit \
+    /scratch/hg/hg17/hg17.2bit \
+    stdin $2
+'EOF'
+    csh doChainRun.csh >&! doChainRun.log &
+    cd ../../
+
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
+        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg17 \
+        -continue=chainMerge \
+        `pwd`/DEF >&! blastz.chainMerge.out &
+
+    # swap alignments to hg17 reference
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -swap -bigClusterHub=pk \
+        `pwd`/DEF >&! swap.out &
+    
+
+#########################################################################
+# BLASTZ danRer3 (2006-04-07 kate)
+# Includes both randoms
+ssh pk
+mkdir /cluster/data/panTro2/bed/blastz.danRer3.2006-04-07
+cd /cluster/data/panTro2/bed
+ln -s blastz.danRer3.2006-04-07 blastz.danRer3
+cd blastz.danRer3
+
+cat << 'EOF' > DEF
+# human target, zebrafish query
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# use parameters suggested for human-fish evolutionary distance
+# recommended in doBlastzChainNet.pl help
+# (previously used for  hg16-fr1, danrer1-mm5)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
+
+# TARGET: Human panTro2
+SEQ1_DIR=/scratch/hg/panTro2/nib
+SEQ1_SMSK=/cluster/bluearc/panTro2/linSpecRep/notInZebrafish
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/scratch/hg/panTro2/chrom.sizes
+
+# QUERY: zebrafish danRer3
+# Use all chroms, including both randoms (chrUn and chrNA)
+SEQ2_DIR=/san/sanvol1/scratch/danRer3/nib
+SEQ2_SMSK=/san/sanvol1/scratch/danRer3/linSpecRep.notInOthers
+SEQ2_LEN=/cluster/bluearc/danRer3/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=1000
+
+BASE=/cluster/data/panTro2/bed/blastz.danRer3.2006-04-07
+TMPDIR=/scratch/tmp
+'EOF'
+# << happy emacs
+
+/cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose  \
+    -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.danRer3 \
+    `pwd`/DEF >& blastz.out &
+
+# failed on 'cat.run' step, for no good reason.
+# continuing manually with 'para shove -retries=20'...
+
+    ssh kki
+    cd /cluster/data/panTro2/bed/blastz.danRer3/run.cat
+    para time > run.time
+
+    ssh pk
+    cd /cluster/data/panTro2/bed/blastz.danRer3
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose  \
+    -continue=chainMerge \
+    `pwd`/DEF >& blastz.chainMerge.out &
+
+# failed due to bad NFS mount on one of the mini-cluster nodes.
+# finished manually, and created run,time
+
 

@@ -6,7 +6,7 @@
 #include "vGfx.h"
 #include "browserGfx.h"
 
-static char const rcsid[] = "$Id: browserGfx.c,v 1.7 2003/09/29 19:39:19 braney Exp $";
+static char const rcsid[] = "$Id: browserGfx.c,v 1.8 2006/05/08 09:43:31 aamp Exp $";
 
 
 static long figureTickSpan(long totalLength, int maxNumTicks)
@@ -136,3 +136,42 @@ for (offset = startOffset; offset < endOffset; offset += barbSpacing)
     }
 }
 
+void vgNextItemButton(struct vGfx *vg, int x, int y, int w, int h, 
+		      Color color, Color bgColor, boolean nextItem)
+/* Draw a button that looks like a fast-forward or rewind button on */
+/* a remote control. If nextItem is TRUE, it points right, otherwise */
+/* left. color is the outline color, and bgColor is the fill color. */
+{
+struct gfxPoly *t1, *t2;
+/* Make the triangles */
+t1 = gfxPolyNew();
+t2 = gfxPolyNew();
+if (nextItem)
+    /* point right. */
+    {
+    gfxPolyAddPoint(t1, x, y);
+    gfxPolyAddPoint(t1, x+w/2, y+h/2);
+    gfxPolyAddPoint(t1, x, y+h);
+    gfxPolyAddPoint(t2, x+w/2, y);
+    gfxPolyAddPoint(t2, x+w, y+h/2);
+    gfxPolyAddPoint(t2, x+w/2, y+h);    
+    }
+else
+    /* point left. */
+    {
+    gfxPolyAddPoint(t1, x, y+h/2);
+    gfxPolyAddPoint(t1, x+w/2, y);
+    gfxPolyAddPoint(t1, x+w/2, y+h);
+    gfxPolyAddPoint(t2, x+w/2, y+h/2);
+    gfxPolyAddPoint(t2, x+w, y);
+    gfxPolyAddPoint(t2, x+w, y+h);
+    }
+/* The two filled triangles. */
+vgDrawPoly(vg, t1, bgColor, TRUE);
+vgDrawPoly(vg, t2, bgColor, TRUE);
+/* The two outline triangles. */
+vgDrawPoly(vg, t1, color, FALSE);
+vgDrawPoly(vg, t2, color, FALSE);
+gfxPolyFree(&t1);
+gfxPolyFree(&t2);
+}

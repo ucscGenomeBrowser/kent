@@ -987,4 +987,174 @@ EOF
     cd /cluster/data/strPur1/bed/tblastn.hg17KG
     hgLoadPsl strPur1 blastHg17KG.psl
 
+# HUMAN BLASTZ (DONE 2/9/2006 Andy)
+    ssh hgwdev
+    cd san/strPur1/
+    mkdir blastz.hg18.2006-02-09
+    ln -s blastz.hg18.2006-02-09 blastz.hg18
+    cd blastz.hg18/
+    cp /cluster/data/strPur1/{strPur1.2bit,chrom.sizes} .
+    cat << "_EOF_" > DEF
+# Sea urchin vs. Human
+
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/h
+ome/angie/schwartzbin:/parasol/bin
+
+BASE=/san/sanVol1/scratch/strPur1/blastz.hg18.2006-02-09
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=4000
+BLASTZ_K=2200
+BLASTZ_Q=$BASE/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - Human hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+
+# QUERY - Sea urchin
+SEQ2_DIR=$BASE/strPur1.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=0
+SEQ2_LEN=$BASE/chrom.sizes
+SEQ2_LIMIT=5000
+
+TMPDIR=/scratch/tmp
+_EOF_
+   screen
+   doBlastzChainNet.pl -bigClusterHub pk -smallClusterHub pk DEF >& run.log &
+   screen -d
+   # monitor and continue where it breaks
+   ./cleanUp.csh
+   cd ../
+   cp -r blastz.apiMel2.2005-10-22/ /cluster/data/triCas2/bed/
+
+# CIONA BLASTZ (DONE 2/9/2006 Andy)
+    ssh hgwdev
+    cd san/strPur1/
+    mkdir blastz.ci2.2006-02-10
+    ln -s blastz.ci2.2006-02-10 blastz.ci2
+    cd blastz.hg18/
+    cp /cluster/data/strPur1/{strPur1.2bit,chrom.sizes} .
+    cat << "_EOF_" > DEF
+# Sea urchin vs. Human
+
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/h
+ome/angie/schwartzbin:/parasol/bin
+
+BASE=/san/sanVol1/scratch/strPur1/blastz.ci2.2006-02-10
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=$BASE/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET - Human hg18
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+
+# QUERY - Sea urchin
+SEQ2_DIR=$BASE/strPur1.2bit
+SEQ2_CHUNK=5000000
+SEQ2_LAP=0
+SEQ2_LEN=$BASE/chrom.sizes
+SEQ2_LIMIT=5000
+
+TMPDIR=/scratch/tmp
+_EOF_
+   screen
+   doBlastzChainNet.pl -bigClusterHub pk -smallClusterHub pk DEF >& run.log &
+   screen -d
+   # monitor and continue where it breaks
+   ./cleanUp.csh
+   cd ../
+   cp -r blastz.apiMel2.2005-10-22/ /cluster/data/triCas2/bed/
+
+
+# REFSEQ MRNA (TRIED 2/8/2006)
+    # I already have genbank.conf configured.
+    ssh `fileServer /cluster/data/genbank/`
+    cd /cluster/data/genbank
+    nice ./bin/gbAlignStep -srcDb=refseq -type=mrna -orgCat=native -verbose=1 -initial strPur1 &
   
+# GENBANK EST
+    ssh kkstore02
+    cd /cluster/data/genbank
+    screen
+    nice ./bin/gbAlignStep -srcDb=genbank -verbose=1 -initial strPur1 &
+
+# QUALITY SCORES (DONE 2/13/06 Andy)
+    ssh kkstore02
+    mkdir /cluster/data/strPur1/bed/quality
+    cd /cluster/data/strPur1/bed/quality
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Spurpuratus/fasta/Spur20050415/contigs/Spur20041123-contigs.qual.gz
+    wget ftp://ftp.hgsc.bcm.tmc.edu/pub/data/Spurpuratus/fasta/Spur20050415/contigs/Spur20041123-reptigs.qual.gz
+    sed 's/AAG.*|//' ../../downloads/urchin.agp > urchin.agp
+    zcat Spur20041123-*.gz > all.qual
+    qaToQac all.qual all.qac
+    qacAgpLift urchin.agp all.qac lifted.qac
+    qacToWig -fixed lifted.qac stdout \
+      | wigEncode stdin strPur1.{wig,wib}
+    ssh hgwdev
+    cd /cluster/data/strPur1/bed/quality
+    mkdir -p /gbdb/strPur1/wib
+    ln -s `pwd`/strPur1.wib /gbdb/strPur1/wib
+    hgLoadWiggle strPur1 quality strPur1.wig
+
+# GENSCAN PREDICTIONS AGAIN (DONE 2/27/2006 Andy)
+    # 3 tables are messed up.  liftUp didn't give the split 
+    hgsql strPur1 -e "select * from genscan" | tail +2 | sort -k2,2 -k4,4n > genscan.txt
+    hgsql strPur1 -e "select * from genscanPep" | tail +2  > genscanPep.txt
+    echo > genscanClean.py << "_EOF_"
+import sys, string
+
+# Deal with first table
+genscanTable = open(sys.argv[1])
+genscanTableNew = sys.argv[1] + ".new"
+output = open(genscanTableNew, 'w')
+lines = genscanTable.readlines()
+counter = 1
+scaff = ""
+hash = {}
+for line in lines:
+    words = string.split(line.strip(), '\t', 2)
+    if (words[1] != scaff):
+	counter = 1
+	scaff = words[1]
+    newname = scaff + ".%d" %(counter)
+    hash[words[0]] = newname
+    words[0] = newname
+    counter = counter + 1
+    output.write(string.join(words,'\t') + '\n')
+output.close()
+genscanTable.close()
+print("Done with main table")
+# Deal with Pep table
+pepTable = open(sys.argv[2])
+pepTableNew = sys.argv[2] + ".new"
+lines = pepTable.readlines()
+output = open(pepTableNew, 'w')
+for line in lines:
+    words = string.split(line.strip(), '\t')
+    words[0] = hash[words[0]]
+    output.write(string.join(words, '\t') + '\n')
+output.close()
+pepTable.close()
+print("All done")
+_EOF_
+    python genscanClean.py genscan.txt genscanPep.txt
+    hgsqldump -d strPur1 genscanPep > genscanPep.sql
+    hgsql strPur1 -e 'drop table genscanPep'
+    hgLoadSqlTab strPur1 genscanPep genscanPep.sql genscanPep.txt.new 
+    ldHgGene -predTab strPur1 genscan genscan.txt.new 
+    rm genscan*{new,txt,sql}
+

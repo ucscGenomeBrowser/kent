@@ -1830,6 +1830,9 @@ chainSome $(path1)
 
 # SPLIT MASKED chrUn SEQUENCE INTO SCAFFOLDS AND MAKE SCAFFOLDS 2BIT FILE
 # (DONE, 2005-08-13, hartera)
+# ADDED SOFT-MASKED SCAFFOLDS 2BIT FILE AND LIFT FILE AND chrUn 2BIT FILE
+# TO SAN FOR CLUSTER RUNS AND CREATE FILE OF SCAFFOLD SIZES 
+# (DONE, 2005-08-13 and 2006-04-28, hartera)
      ssh eieio
      cd /cluster/data/fr1/Un
      # for chrUn get masked sequence for soft-masked
@@ -1897,6 +1900,18 @@ faFrag -mixed $inFa $st $end $outFa >& $outLog
      mkdir -p /iscratch/i/fr1/UnScaffolds
      cp /cluster/data/fr1/fr1UnScaffolds.2bit /iscratch/i/fr1/UnScaffolds/
      /cluster/bin/iSync 
+     # add to the san for cluster runs on pk 
+     ssh hgwdev
+     mkdir -p /san/sanvol1/scratch/fr1
+     # already added to /san/sanvol1/scratch/fr1/UnScaffolds 
+     # (2005-08-13, hiram)  - file is fr1UnScaffolds.2bit
+     # also put lift file and chrUn 2 bit file on the san (2006-04-28, hartera)
+     cp /cluster/data/fr1/Un/lift/ordered.lft \
+        /san/sanvol1/scratch/fr1/UnScaffolds
+     cp /cluster/data/fr1/fr1.2bit /san/sanvol1/scratch/fr1/
+     # create scaffolds sizes file (2006-04-28, hartera)
+     cd /san/sanvol1/scratch/fr1/UnScaffolds
+     twoBitInfo fr1UnScaffolds.2bit scaffolds.sizes
 
 # BLASTZ SWAP FOR FUGU (fr1) vs ZEBRAFISH (danRer3) (DONE, 2005-08-18, hartera)
 # CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET AND ALIGNMENT DOWNLOADS
@@ -2070,4 +2085,40 @@ chainSome $(path1)
 	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	./DEF >& swap.out&
 
+   # create the net filee (DONE 2006-04-10 markd)
+    ssh hgwdev
+    cd /cluster/data/fr1/bed/blastz.hg17.swap/axtChain
+    nice netClass -verbose=0 -noAr noClass.net fr1 hg17 fr1.hg17.net
+    nice gzip fr1.hg17.net
+###########################################################################
+# BLASTZ SWAP TO CREATE CHAIN AND NET ALIGNMENTS FOR ZEBRAFISH (danRer4) 
+# AND CREATE AXNET, MAFNET, LIFTOVER AND ALIGNMENT DOWNLOADS 
+# (DONE, 2006-04-29, hartera)
+    ssh pk
+    # Used these BLASTZ parameters - see also makeDanRer4.doc
+    # BLASTZ_H=2000
+    # BLASTZ_M=50
+    # BLASTZ_Q=/cluster/data/blastz/HoxD55.q 
+    # and no lineage-specific repeats.
+    # Alignments are in: /cluster/data/fr1/bed/blastz.danRer4.swap
+
+    cd /cluster/data/danRer4/bed/blastz.fr1.2006-04-28
+    nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF >& doSwap.log &
+    # Took about 30 minutes.
+
+   # check coverage compared to danRer3:
+   featureBits fr1 chainDanRer4Link
+   # 86236583 bases of 315518167 (27.332%) in intersection  
+   # There is no refGene table for fr1 so use mrna:
+   featureBits fr1 mrna chainDanRer4Link -enrichment
+   # mrna 0.187%, chainDanRer4Link 27.332%, both 0.153%, cover 82.08%, 
+   # enrich 3.00x
+   featureBits fr1 mrna netDanRer4 -enrichment
+   # mrna 0.187%, netDanRer4 69.291%, both 0.172%, cover 92.16%, enrich 1.33x
+   featureBits fr1 mrna netDanRer3 -enrichment
+   # mrna 0.187%, netDanRer3 68.354%, both 0.171%, cover 91.52%, enrich 1.34x
+   # Runs out of memory for danRer3 chains. For nets, similar coverage for
+   # danRer4 and danRer3 nets on fr1.
 

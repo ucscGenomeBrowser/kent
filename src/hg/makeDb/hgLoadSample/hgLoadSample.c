@@ -9,7 +9,7 @@
 #include "sample.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadSample.c,v 1.4 2004/02/23 09:07:21 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadSample.c,v 1.5 2006/05/03 15:41:18 angie Exp $";
 
 /* Command line switches. */
 boolean noBin = FALSE;		/* Suppress bin field. */
@@ -196,7 +196,7 @@ void hgLoadBed(char *database, char *track, int bedCount, char *bedFiles[])
 /* hgLoadBed - Load a generic bed file into database. */
 {
 int bedSize = findBedSize(bedFiles[0]);
-struct bedStub *bedList = NULL, *bed;
+struct bedStub *bedList = NULL;
 int i;
 
 for (i=0; i<bedCount; ++i)

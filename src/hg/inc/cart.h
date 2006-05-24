@@ -5,14 +5,9 @@
 #ifndef CART_H
 #define CART_H
 
-#ifndef JKSQL_H
 #include "jksql.h"
-#endif
-
-#ifndef ERRABORT_H
 #include "errabort.h"
-#endif
-
+#include "dystring.h"
 
 typedef struct sqlConnection *(*DbConnector)();  
 /* funtion type used to get a connection to database */
@@ -41,6 +36,13 @@ struct cart *cartNew(unsigned int userId, unsigned int sessionId,
 
 void cartCheckout(struct cart **pCart);
 /* Save cart to database and free it up. */
+
+void cartEncodeState(struct cart *cart, struct dyString *dy);
+/* Add a CGI-encoded var=val&... string of all cart variables to dy. */
+
+void cartParseOverHash(struct cart *cart, char *contents);
+/* Parse cgi-style contents into cart's hash table.  This will
+ * replace existing members of hash that have same name. */
 
 char *cartSessionVarName();
 /* Return name of CGI session ID variable. */

@@ -1,9 +1,9 @@
 #!/usr/bin/env perl
 
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
-# edit ~/kent/src/utils/dumpDb.pl instead.
+# edit ~/kent/src/hg/utils/dumpDb.pl instead.
 
-# $Id: dumpDb.pl,v 1.4 2006/04/18 19:35:14 hiram Exp $
+# $Id: dumpDb.pl,v 1.1 2006/05/04 16:13:05 hiram Exp $
 
 use strict;
 use warnings;

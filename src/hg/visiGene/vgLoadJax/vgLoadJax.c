@@ -13,6 +13,7 @@
 #include "jpegSize.h"
 
 int testMax=0;
+int oneSubmissionSet=0;
 
 void usage()
 /* Explain usage and exit. */
@@ -31,11 +32,13 @@ errAbort(
   " size (width and height in pixels)\n"
   "options:\n"
   "   -testMax=N - for testing purposes only output first N directories\n"
+  "   -oneSubmissionSet=N - limit output to the one submissionSet id specified\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"testMax", OPTION_INT},
+   {"oneSubmissionSet", OPTION_INT},
    {NULL, 0},
 };
 
@@ -915,8 +918,7 @@ for (ref = refList; ref != NULL; ref = ref->next)
 	continue;
 	}
 
-    skip = sameString(pub, 
-	"Mouse Brain Organization Revealed Through Direct Genome-Scale TF Expression Analysis.");
+    skip = oneSubmissionSet ?  oneSubmissionSet != sqlSigned(ref->name) : FALSE;
 
     if (!skip)
 	{
@@ -968,6 +970,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 testMax = optionInt("testMax", testMax);
+oneSubmissionSet = optionInt("oneSubmissionSet", oneSubmissionSet);
 if (argc != 4)
     usage();
 vgLoadJax(argv[1], argv[2], argv[3]);

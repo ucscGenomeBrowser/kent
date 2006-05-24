@@ -1651,8 +1651,8 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     rm -fr axtChain/chain/
 
 ############################################################################
-##  BLASTZ swap from canFam2 alignments (DONE 2006-04-09 markd)
-    ssh pk  # not sure why this was done in hg17 swap
+##  BLASTZ swap from canFam2 alignments (DONE 2006-05-04 markd)
+    ssh pk  # not sure why this was done
     mkdir /cluster/data/bosTau2/bed/blastz.canFam2.swap
     cd /cluster/data/bosTau2/bed
     ln -s blastz.canFam2.swap blastz.canFam2
@@ -1667,6 +1667,6 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
     ssh kolossus
     ./netChains.csh
     ssh hgwdev
-    cd /cluster/data/bosTau2/bed/blastz.hg17.swap/axtChain
-    nice netClass -verbose=0 -noAr noClass.net bosTau2 hg17 bosTau2.hg17.net
-    nice gzip bosTau2.hg17.net
+    cd /cluster/data/bosTau2/bed/blastz.canFam2.swap/axtChain
+    nice netClass -verbose=0 -noAr noClass.net bosTau2 canFam2 bosTau2.canFam2.net
+    nice gzip bosTau2.canFam2.net

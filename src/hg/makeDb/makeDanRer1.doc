@@ -597,6 +597,8 @@ while (<STDIN>) {
 # (2004-08-19, hartera)
     echo 'update dbDb set scientificName = "Danio rerio" where \
          name = "danRer1";' | hgsql -h genome-testdb hgcentraltest
+    # set active = 0 for danRer1 in dbDb on hgcentralbeta and hgcentral
+    # (see section on ARCHIVING danRer1) (2006-05-02, hartera)
 
 # MAKE DESCRIPTION/SAMPLE POSITION HTML PAGE (DONE, 2004-06-30, hartera)
     ssh hgwdev
@@ -3064,6 +3066,9 @@ close MARKERS;
     # to check the entries:
     echo 'select * from blatServers where db="danRer1";' \
     | hgsql -h genome-testdb hgcentraltest
+    # Remove Blat servers entries for danRer1 from blatServers table in
+    # hgcentralbeta and hgcentral (see section on ARCHIVING danRer1)
+    # (2006-05-02, hartera)
 
 # MAKE DOWNLOADABLE SEQUENCE FILES (DONE, 2004-07-20, hartera)
 # CORRECTION MADE TO chrM.agp FILE - MADE TAB DELIMITED INSTEAD OF
@@ -5007,4 +5012,16 @@ cat > template << 'EOF'
          | hgsql hgcentraltest
     # add an entry to the pushQ in the liftOver subqueue - liftOverQueue
    
-
+#########################################################################
+# ARCHIVING danRer1 (in progress, 2006-05-03, hartera)
+   ssh hgwdev
+   # remove Blat servers for danRer1 on hgwbeta and the RR
+   hgsql -h hgwbeta -e 'delete from blatServers where db = "danRer1";' \
+         hgcentralbeta
+   hgsql -h genome-centdb -e 'delete from blatServers where db = "danRer1";' \
+         hgcentral
+   # set active = 0 for danRer1 on hgwbeta and the RR
+   hgsql -h hgwbeta -e 'update dbDb set active = 0 where name = "danRer1";' \
+         hgcentralbeta
+   hgsql -h genome-centdb -e \
+         'update dbDb set active = 0 where name = "danRer1";' hgcentral

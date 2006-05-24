@@ -6207,6 +6207,7 @@ cat > makeMaf.csh << 'EOF'
 
 # 8-WAY MULTIZ MULTIPLE ALIGNMENT WITH MM5 (DONE 2004-07-13 kate)
 #       Redo, below to fix overlapping alignments (2005-08-16 kate)
+
     ssh eieio
     set multizDir = multiz.2004-07-13
     set workingDir = /cluster/bluearc/hg17/$multizDir
@@ -6365,6 +6366,14 @@ mkdir -p $3:h
     cd /usr/local/apache/htdocs/goldenPath/hg17
     mkdir -p mzPt1Mm5Rn3Cf1Gg2Fr1Dr1
     # gzipped & copied maf files from /cluster/data/hg17/bed/multiz8way/maf
+    # dumped table and gzipped for download (user request to after file
+    # removed when the track was replaced by 18way).
+    cd /cluster/data/hg17/bed/multiz8way/mafDownloads
+    hgsqldump --all -c --tab=. hg17 multiz8way
+    ssh kkstore02 \
+        'gzip /cluster/data/hg17/bed/multiz8way/mafDownloads/multiz8way.{sql,txt}'
+    ln -s /cluster/data/hg17/bed/multiz8way/mafDownloads/multiz8way.{sql,txt}.gz \
+        /usr/local/apache/htdocs/goldenPath/hg17/multiz8way
 
     # load summary table (2005-09-27)
     cd /cluster/data/hg17/bed/multiz.2004-07-13/maf

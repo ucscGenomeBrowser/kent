@@ -12,7 +12,7 @@
 #include "scoredRef.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.17 2004/11/09 17:42:26 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadMaf.c,v 1.18 2006/05/01 16:33:35 angie Exp $";
 
 /* Command line options */
 
@@ -69,7 +69,6 @@ return NULL;
 void hgLoadMaf(char *database, char *table)
 /* hgLoadMaf - Load a maf file index into the database. */
 {
-int i;
 struct fileInfo *fileList = NULL, *fileEl;
 struct sqlConnection *conn;
 long mafCount = 0;

@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.33 2006/04/24 23:12:00 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.41 2006/05/05 16:31:11 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -401,7 +401,7 @@ cp -p /scratch/tmp/$outputFN/$outputFN $outpath
 rm -fr /scratch/tmp/$outputFN/*
 rmdir --ignore-fail-on-non-empty /scratch/tmp/$outputFN
 '_EOF_'
-    # happy emacs
+    # << happy emacs
     chmod +x runTrf
 
     cat << '_EOF_' > template
@@ -488,7 +488,7 @@ if (-e /scratch/tmp/mm8/$R/$R.fa.cat) /bin/cp /scratch/tmp/mm8/$R/$R.fa.cat ./
 /bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/mm8/$R
 /bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/mm8
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
     chmod +x ../jkStuff/RMMouse
 
     cat << '_EOF_' > template
@@ -496,7 +496,7 @@ if (-e /scratch/tmp/mm8/$R/$R.fa.cat) /bin/cp /scratch/tmp/mm8/$R/$R.fa.cat ./
 ../jkStuff/RMMouse $(path1) {check out line ../$(dir1)/$(root1).fa.out}
 #ENDLOOP
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     gensub2 ../contig500K.lst single template jobList
     para create jobList
@@ -540,7 +540,7 @@ do
     cd ..
 done
 '_EOF_'
-    # happy emacs
+    # << happy emacs
     chmod +x jkStuff/liftRM_out_to_chr.sh
     ./jkStuff/liftRM_out_to_chr.sh > tmp/liftRM_out_to_chr.out 2>&1
     #	real    0m24.873s
@@ -623,7 +623,10 @@ done
     #	check the browser, make sure it is functioning OK
 
     #	Generate fasta file for random contigs
-    #	THIS IS OPTIONAL STUFF, not really needed
+    #	THIS IS OPTIONAL STUFF, not really needed, well, it is used in
+    #	genscan to make the gene names there look pretty.  This script
+    #	has been checked into the source tree in hg/utils/lft2BitToFa.pl
+    #	use it from there next time
     cp -p /cluster/data/mm7/jkStuff/lft2BitToFa.pl ./jkStuff
 
     mkdir randomContigs
@@ -768,7 +771,7 @@ pushd /iscratch/i/mm8/rmsk
 popd
 /bin/cp -p /iscratch/i/mm8/rmsk/$1_homo-sapiens_rattus_canis-familiaris_bos-taurus_oryctolagus-cuniculus .
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
     chmod +x mkLSR.csh
 
     cat << '_EOF_' > template
@@ -776,7 +779,7 @@ popd
 ./mkLSR.csh $(path1) {check out line+ $(path1)_homo-sapiens_rattus_canis-familiaris_bos-taurus_oryctolagus-cuniculus}
 #ENDLOOP
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     gensub2 fa.list single template jobList
     para try ... check ... push ... etc...
@@ -893,7 +896,7 @@ printf("%s\t%d\t%s\t%s %s\t%s\t%s\t%0.0f\t%0.1f\t%s\t%s\n",
        $6, width*$7*0.01, 100.0*2*$6/width, $7, $9);
 }
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
     awk -f filter.awk chr*.cpg | sort -k1,1 -k2,2n > cpgIsland.bed
 
     ssh hgwdev
@@ -1148,7 +1151,7 @@ while (my $line = <>) {
     }
 }
 '_EOF_'
-    # < happy emacs
+    # << happy emacs
     chmod +x convert.pl
     zcat all.mfa.gz | ./convert.pl | gzip > cloneEnds.fa.gz
 
@@ -1270,7 +1273,7 @@ rm -f ${result}
 mv /scratch/tmp/${root1}_${root2}/${root1}.${root2}.psl ${result}
 rm -fr /scratch/tmp/${root1}_${root2}
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
     chmod +x runBlat.sh
 
     cat << '_EOF_' > template
@@ -1500,7 +1503,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastz.rheMac2.2006-02-17
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
@@ -1560,7 +1563,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzCanFam2.2006-02-18
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
@@ -1605,7 +1608,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzBosTau.2006-02-18
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
@@ -1652,7 +1655,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzGalGal2.2006-02-18
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
@@ -1702,7 +1705,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzDasNov1.2006-02-19
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
@@ -1744,7 +1747,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzEchTel1.2006-02-19
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
@@ -1795,7 +1798,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzFr1.2006-02-19
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
@@ -1841,7 +1844,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzLoxAfr1.2006-02-19
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=3000 -chainLinearGap=medium \
@@ -1889,7 +1892,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzTetNig1.2006-02-19
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
@@ -1940,7 +1943,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzOryCun1.2006-02-21
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
@@ -1987,7 +1990,7 @@ SEQ2_LIMIT=100
 BASE=/cluster/data/mm8/bed/blastzXenTro1.2006-02-21
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
@@ -2042,7 +2045,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzMonDom4.2006-02-23
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
@@ -2086,7 +2089,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzPanTro1.2006-02-23
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
@@ -2099,6 +2102,71 @@ TMPDIR=/scratch/tmp
     #	901276629 bases of 2567283971 (35.106%) in intersection
     time nice -n +19 featureBits panTro1 chainMm8Link
     #	901976621 bases of 2733948177 (32.992%) in intersection
+
+#########################################################################
+# BLASTZ danRer4 (DONE - 2006-04-26 - 2006-04-28 - Hiram)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastzDanRer4.2006-04-26
+    cd /cluster/data/mm8/bed
+    ln -s blastzDanRer4.2006-04-26 blastz.danRer4
+    cd blastz.danRer4
+
+    cat << '_EOF_' > DEF
+# mouse vs zebrafish
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn/x86_64:/cluster/bin/x86_64:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=1
+
+# Reuse parameters from hg16-fr1, danRer-hg17 and mm5-danRer
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Mouse Mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_SMSK=/scratch/hg/mm8/linSpecRep/notInOthers
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish (danRer4)
+#  large enough chunk to do complete chroms at once
+SEQ2_DIR=/san/sanvol1/scratch/danRer4/chromNib
+SEQ2_LEN=/san/sanvol1/scratch/danRer4/chromNib.sizes
+SEQ2_SMSK=/san/sanvol1/scratch/danRer4/linSpecRep.notInOthers
+SEQ2_CHUNK=100000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastzDanRer4.2006-04-26
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	<< happy emacs
+
+    cd /cluster/data/mm8/bed/blastzDanRer4.2006-04-26
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-continue=net `pwd`/DEF > net.out 2>&1 &
+
+    #	swap, see also makeDanRer4.doc
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap `pwd`/DEF > swap.out 2>&1 &
+
+    time nice -n +19 featureBits mm8 chainDanRer4Link \
+	> fb.mm8.chainDanRer4Link 2>&1 &
+    cat fb.mm8.chainDanRer4Link
+    #	54036008 bases of 2567283971 (2.105%) in intersection
+    time nice -n +19 featureBits danRer4 chainMm8Link \
+	> fb.danRer4.chainDanRer4Link 2>&1 &
+    cat fb.danRer4.chainDanRer4Link
+    #	58145856 bases of 1626093931 (3.576%) in intersection
 
 #########################################################################
 # BLASTZ danRer3 (DONE - 2006-02-28 - Hiram)
@@ -2138,7 +2206,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzDanRer3.2006-02-28
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
@@ -2347,7 +2415,7 @@ set out = $3
 /cluster/bin/i386/blat.2 ${fa} ${primer} -ooc=${ooc} \
         -minMatch=1 -minScore=0 -minIdentity=80 -oneOff ${out}
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
     chmod +x runBlat2.csh
 
     cat << '_EOF_' > template
@@ -2355,7 +2423,7 @@ set out = $3
 ./runBlat2.csh $(path1) $(path2) {check out line+ out/$(root2)/$(root1).psl}
 #ENDLOOP
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     gensub2 primers.list chr.list template jobList
     para create jobList
@@ -2425,7 +2493,7 @@ set out = $3
 /cluster/bin/x86_64/e-PCR /cluster/data/mm8/bed/STSmarkers/mouseP.info \
 	/cluster/bluearc/mm8/stsMarkers/chroms/$1 N=1 M=50 W=5 > $2
 '_EOF_'
-    # emacs happy ?
+    # << happy emacs
     chmod +x runPCR
 
     cat << '_EOF_' > template
@@ -3277,6 +3345,7 @@ nice featureBits mm7 refGene:cds knownGene:cds
 # 17-WAY VAR_MULTIZ - ALIGNMENTS (DONE - 2006-02-28 - 2006-03-02 - Hiram)
 #	Re-DONE with panTro2 in place of panTro1 - 2006-04-19 - Hiram)
 #	And again with xenTro1 in place of xenTro2 - 2006-04-24
+#	And again with danRer4 in place of danRer3 - 2006-05-02
     ssh kkstore04
     mkdir /cluster/data/mm8/bed/multiz17way
     cd /cluster/data/mm8/bed/multiz17way
@@ -3308,7 +3377,7 @@ chicken_galGal2:0.454691):0.123297,
 xenopus_xenTro2:0.782453):0.156067,
 
 ((tetraodon_tetNig1:0.199381,fugu_fr1:0.239894):0.492961,
-    zebrafish_danRer3:0.782561):0.156067);
+    zebrafish_danRer4:0.782561):0.156067);
 '_EOF_'
     #	<< happy emacs
 
@@ -3337,17 +3406,17 @@ xenopus_xenTro2:0.782453):0.156067,
 # 10  0.7805 - tenrec echTel1     (% 11.412)  (no swap )   5000     loose
 # 11  1.0698 - opossum monDom4    (%  8.245)  (%  6.024)   5000     loose
 # 12  1.3425 - chicken galGal2    (%  2.552)  (%  5.414)   5000     loose
-# 13  1.7936 - frog xenTro2       (%  2.651)  (%  4.294)   5000     loose
+# 13  1.7936 - frog xenTro2       (%  2.651)  (%  5.358)   5000     loose
 # 14  2.0157 - tetraodon tetNig1  (%  1.962)  (% 13.734)   5000     loose
 # 15  2.0562 - fugu fr1           (%  1.907)  (% 13.524)   5000     loose
-# 16  2.1059 - zebrafish danRer3  (%  2.069)  (%  3.363)   5000     loose
+# 16  2.1059 - zebrafish danRer4  (%  2.105)  (%  3.576)   5000     loose
 
     cd /cluster/data/mm8/bed/multiz17way
     #	bash shell syntax here ...
     export H=/cluster/data/mm8/bed
     mkdir mafLinks
     for G in rn4 hg18 panTro2 rheMac2 oryCun1 dasNov1 canFam2 \
-	loxAfr1 bosTau2 echTel1 monDom4 galGal2 xenTro2 tetNig1 fr1 danRer3
+	loxAfr1 bosTau2 echTel1 monDom4 galGal2 xenTro2 tetNig1 fr1 danRer4
     do
 	mkdir mafLinks/$G
 	if [ ! -d ${H}/blastz.${G}/mafNet ]; then
@@ -3382,7 +3451,11 @@ xenopus_xenTro2:0.782453):0.156067,
     echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
     sed 's/[()]//g; s/,/ /g' tree.nh > species.lst
 
-    mkdir -p maf run
+    #	the maf directory here is a symlink to a /cluster/store8 
+    #	directory to even out the data load on store9 and store8 on kkstore04
+    mkdir /cluster/store8/mm8/bed/multiz17way/maf
+    ln -s /cluster/store8/mm8/bed/multiz17way/maf ./maf
+    mkdir run
     cd run
 
     #	NOTE: you need to set the db properly in this script
@@ -3424,7 +3497,7 @@ rm -fr $tmp
 
 cat  << '_EOF_' > template
 #LOOP
-autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
+autoMultiz $(root1) {check out line+ /cluster/store8/mm8/bed/multiz17way/maf/$(root1).maf}
 #ENDLOOP
 '_EOF_'
 # << happy emacs
@@ -3435,11 +3508,11 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     # 34 jobs
     para try ... check ... push ... etc ...
 # Completed: 34 of 34 jobs
-# CPU time in finished jobs:     211294s    3521.56m    58.69h    2.45d  0.007 y
-# IO & Wait Time:                  4531s      75.52m     1.26h    0.05d  0.000 y
-# Average job time:                6348s     105.80m     1.76h    0.07d
-# Longest finished job:           17611s     293.52m     4.89h    0.20d
-# Submission to last job:         17617s     293.62m     4.89h    0.20d
+# CPU time in finished jobs:     210573s    3509.55m    58.49h    2.44d  0.007 y
+# IO & Wait Time:                  4870s      81.17m     1.35h    0.06d  0.000 y
+# Average job time:                6337s     105.61m     1.76h    0.07d
+# Longest finished job:           17786s     296.43m     4.94h    0.21d
+# Submission to last job:         41755s     695.92m    11.60h    0.48d
 
     #	combine results into a single file for loading and gbdb reference
     ssh kkstore04
@@ -3464,7 +3537,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
 	gzip mafDownloads/${B}
 	echo ${B} done
     done
-    #	real    52m59.743s
+    #	real    56m3.024s
     #	deliver to downloads
     ssh hgwdev
     ln -s /cluster/data/mm8/bed/multiz17way/mafDownloads \
@@ -3477,14 +3550,14 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     ln -s /cluster/data/mm8/bed/multiz17way/multiz17way.maf \
 	/gbdb/mm8/multiz17way
     time nice -n +19 hgLoadMaf mm8 multiz17way
-    #	Loaded 11578210 mafs in 1 files from /gbdb/mm8/multiz17way
-    #	real    29m17.910s
+    #	Loaded 11601035 mafs in 1 files from /gbdb/mm8/multiz17way
+    #	real    27m29.960s
 
     time nice -n +19 hgLoadMafSummary -minSize=10000 -mergeGap=500 \
 	-maxSize=50000 mm8 multiz17waySummary multiz17way.maf
-    #	Created 5761346 summary blocks from 64923747 components and
-    #	11578210 mafs from multiz17way.maf
-    #	real    39m24.395s
+    #	Created 5782229 summary blocks from 65123362 components and
+    #	11601035 mafs from multiz17way.maf
+    #	real    32m34.791s
 
     #	This was done for Mm7, same image can be reused
     # create tree image:
@@ -3496,7 +3569,9 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     # smaller, then save as jpg
 #    cp species10.jpg /usr/local/apache/htdocs/images/phylo/Mm7_17way.jpg
 
+############################################################################
 # ANNOTATE MULTIZ17WAY MAF AND LOAD TABLES (DONE - 2006-04-24 - Hiram)
+#	RE-DONE 2006-05-03 with danRer4 in place of danRer3
     ssh kolossus
     mkdir /cluster/data/mm8/bed/multiz17way/anno
     cd /cluster/data/mm8/bed/multiz17way/anno
@@ -3515,7 +3590,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
 
     echo '#!/bin/csh -ef' > jobs.csh
     echo date >> jobs.csh
-    # do smaller jobs first:
+    # do smaller jobs first so you can see some progress immediately:
     for F in `ls -1rS ../../maf/*.maf`
     do
       echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $F \
@@ -3527,7 +3602,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     time ./jobs.csh > jobs.log 2>&1 &
     #	to watch progress;
     tail -f jobs.log
-    #	real    138m54.246s
+    #	real    102m8.005s
 
     # Load anno/maf
     ssh hgwdev
@@ -3537,8 +3612,8 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
       /gbdb/mm8/multiz17way/anno/maf
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/mm8/multiz17way/anno/maf mm8 multiz17way
-    #	Loaded 12457325 mafs in 34 files from #	/gbdb/mm8/multiz17way/anno/maf
-    #	real    35m52.115s
+    #	Loaded 12484353 mafs in 34 files from /gbdb/mm8/multiz17way/anno/maf
+    #	real    35m49.224s
 
     # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
     # machine and then load on hgwdev:
@@ -3547,21 +3622,22 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     time cat *.maf | \
     	nice -n +19 hgLoadMafSummary mm8 -minSize=30000 -mergeGap=1500 \
 	-maxSize=200000 -test multiz17waySummary stdin
-    #	Created 3140830 summary blocks from 64923747 components
-    #	and 12457325 mafs from stdin
-    #	real    13m35.714s
+    #	Created 3153839 summary blocks from 65123362 components and
+    #	12484353 mafs from stdin
+    #	real    12m56.199s
 
     ssh hgwdev
     cd /cluster/data/mm8/bed/multiz17way/anno/maf
     sed -e 's/mafSummary/multiz17waySummary/' ~/kent/src/hg/lib/mafSummary.sql \
-      > /tmp/multiz17waySummary.sql
+      > multiz17waySummary.sql
     time nice -n +19 hgLoadSqlTab mm8 multiz17waySummary \
-	/tmp/multiz17waySummary.sql multiz17waySummary.tab
-    #	real    47m22.468s
+	multiz17waySummary.sql multiz17waySummary.tab
+    #	real    13m46.003s
     rm *.tab
 
 #######################################################################
-# MULTIZ17WAY MAF FRAMES (WORKING - 2006-04-24 - Hiram)
+# MULTIZ17WAY MAF FRAMES (DONE - 2006-04-24 - 2006-04-25 - Hiram)
+#	RE-DONE 2006-05-03 to replace danRer3 with danRer4
     ssh hgwdev
     mkdir /cluster/data/mm8/bed/multiz17way/frames
     cd /cluster/data/mm8/bed/multiz17way/frames
@@ -3573,8 +3649,10 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     # create genePred
     # using mrna table as genes:
     mkdir genes
-    for qDB in oryCun1 panTro2 rheMac2 canFam2 bosTau2 danRer3 loxAfr1 \
+    for qDB in oryCun1 panTro2 rheMac2 canFam2 bosTau2 danRer4 loxAfr1 \
 	tetNig1 fr1
+    #	single danRer4 re-run 2006-05-03, removed danRer3
+    for qDB in danRer4
     do
       tmpExt=`mktemp temp.XXXXXX`
       tmpMrnaCds=${qDB}.mrna-cds.${tmpExt}
@@ -3625,6 +3703,7 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
 
     #------------------------------------------------------------------------
     # create frames
+    #	beware, BASH syntax here ...
     clusterDir=/cluster/bluearc/mm8/multiz17wayFrames
     multizDir=/cluster/data/mm8/bed/multiz17way
     mafDir=$multizDir/mafDownloads
@@ -3643,15 +3722,16 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     # run cluster jobs
     tmpExt=`mktemp temp.XXXXXX`
     paraDir=$multizDir/frames/para.${tmpExt}
+    cd /cluster/data/mm8/bed/multiz17way/frames
     mkdir mafFrames $paraDir
     mkdir ${clusterFramesDir}
-    for qDB in `cat /cluster/data/rn4/bed/multiz9way.2006-03-30/species.lst`
+    for qDB in `cat /cluster/data/mm8/bed/multiz17way/species.lst`
     do
       mkdir ${clusterFramesDir}/${qDB}
-      for C in `awk '{print $1;}' /cluster/data/rn4/chrom.sizes`
+      for C in `awk '{print $1;}' /cluster/data/mm8/chrom.sizes`
       do
         if [ -e ${clusterGeneDir}/${qDB}.gp.gz ]; then
-          echo /cluster/bin/scripts/mkMafFrames.pl ${qDB} rn4 \
+          echo /cluster/bin/scripts/mkMafFrames.pl ${qDB} mm8 \
             ${clusterGeneDir}/${qDB}.gp.gz ${clusterMafDir}/$C.maf.gz \
             ${clusterFramesDir}/${qDB}/$C.mafFrames \
             >> $paraDir/jobList
@@ -3660,17 +3740,28 @@ autoMultiz $(root1) {check out line+ ../maf/$(root1).maf}
     done
     rm -f $tmpExt
     ssh -x kki "cd ${paraDir} && para make jobList && para time"
-XXXX - This is not working - 2006-04-24
+# Completed: 476 of 476 jobs
+# CPU time in finished jobs:       6235s     103.91m     1.73h    0.07d  0.000 y
+# IO & Wait Time:                 13538s     225.64m     3.76h    0.16d  0.000 y
+# Average job time:                  42s       0.69m     0.01h    0.00d
+# Longest finished job:             237s       3.95m     0.07h    0.00d
+# Submission to last job:          1242s      20.70m     0.34h    0.01d
 
     # combine results from cluster
-    foreach queryDb (`cat ../species.lst`)
-      echo $queryDb
-      ssh -x kolossus "cat ${clusterFramesDir}/${queryDb}/*.mafFrames | gzip -2c > ${multizDir}/frames/mafFrames/${queryDb}.mafFrames.gz"
-    end
+    for qDB in \
+	`sed -e "s/ dasNov1//; s/ echTel1//; s/ monDom4//;" ../species.lst`
+    do
+      ssh -x kolossus "cat ${clusterFramesDir}/${qDB}/*.mafFrames | gzip -2c > ${multizDir}/frames/mafFrames/${qDB}.mafFrames.gz"
+      echo "${qDB}"
+    done
 
     #------------------------------------------------------------------------
     # load the database
-    hgLoadMafFrames rn4 multiz9wayFrames mafFrames/*.mafFrames.gz
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/multiz17way/frames
+    time nice -n +19 hgLoadMafFrames mm8 multiz17wayFrames \
+	mafFrames/*.mafFrames.gz
+    #	real    1m11.457s
 
     #------------------------------------------------------------------------
     # clean up
@@ -3679,6 +3770,8 @@ XXXX - This is not working - 2006-04-24
 ############################################################################
 # CREATE CONSERVATION WIGGLE WITH PHASTCONS
 #		(DONE - 2006-03-02 - Hiram)
+#	(RE-DONE - 2006-04-25 with panTro2 and xenTro2 - Hiram)
+#	(RE-DONE - 2006-05-03 with danRer4 instead of danRer3 - Hiram)
 
     #	Will skip this estimate for Mm8 since it was well done in Mm7
     #	and in Hg17, skip to the creation of the SS files
@@ -3695,7 +3788,7 @@ XXXX - This is not working - 2006-04-24
     #	10 minutes
 
     /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
---tree "((((((((((hg18,panTro2),rheMac2),((rn4,mm8),oryCun1)),(bosTau2,canFam2)),dasNov1),(loxAfr1,echTel1)),monDom4),galGal2),xenTro2),((tetNig1,fr1),danRer3))" \
+--tree "((((((((((hg18,panTro2),rheMac2),((rn4,mm8),oryCun1)),(bosTau2,canFam2)),dasNov1),(loxAfr1,echTel1)),monDom4),galGal2),xenTro2),((tetNig1,fr1),danRer4))" \
     --out-root starting-tree
     #	real    840m53.157s
     #	That is 14 hours !
@@ -3710,7 +3803,7 @@ XXXX - This is not working - 2006-04-24
     # Create big bad bloated SS files on san filesystem (takes ~ 2h 20m)
     #	Increasing their size this time from 1,000,000 to 10,000,000 to
     #	slow down the phastCons pk jobs
-    ssh kkstore01
+    ssh kkstore04
     mkdir -p  /san/sanvol1/scratch/mm8/cons/ss
     cd  /san/sanvol1/scratch/mm8/cons/ss
     time for C in `awk '{print $1}' /cluster/data/mm8/chrom.sizes`
@@ -3723,11 +3816,11 @@ XXXX - This is not working - 2006-04-24
 	/cluster/bin/phast/$MACHTYPE/msa_split \
 	    /cluster/data/mm8/bed/multiz17way/maf/${C}.maf \
 	    --refseq /cluster/data/mm8/${chrN}/${C}.fa \
-	    --in-format MAF --windows 10000000,0 --between-blocks 5000 \
+	    --in-format MAF --windows 4000000,0 --between-blocks 5000 \
 	    --out-format SS --out-root ${C}/${C}
       fi
     done &
-    #	real    101m9.118s
+    #	real    94m49.273s
 
     #  Again, going to SKIP this tuning business this time and use the
     #  previous numbers.
@@ -3757,7 +3850,7 @@ mkdir -p log/${C} tree/${C}
       --expected-lengths 12 --target-coverage 0.17 \
       --quiet --log log/$1 --estimate-trees tree/$1
 '_EOF_'
-    #	emacs happy
+    #	<< happy emacs
     chmod a+x makeTree.csh
 
     # Create gensub file
@@ -3766,7 +3859,7 @@ mkdir -p log/${C} tree/${C}
 makeTree.csh $(path1)
 #ENDLOOP
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     # Make cluster job and run it
     gensub2 ../randomSs.list single template jobList
@@ -3799,7 +3892,7 @@ makeTree.csh $(path1)
     #	never stops with the --NH argument
     /cluster/bin/phast/$MACHTYPE/consEntropy .17 12 \
                         ave.cons.mod ave.noncons.mod
-XXXX - doesn not work:  2005-11-28
+XXXX - does not work:  2005-11-28
 [hiram@kkstore01 /san/sanvol1/scratch/mm8/cons] /cluster/bin/phast/$MACHTYPE/consEntropy .17 12 ave.cons.mod ave.noncons.mod
 ERROR: with no separate source alignment, ss_from_msas expects sequences of positive length and no SS object.
 
@@ -3836,11 +3929,12 @@ ERROR: with no separate source alignment, ss_from_msas expects sequences of posi
     #	SKIP to here passing by the tuning numbers
     ssh pk
     # Create cluster dir to do main phastCons run
-    mkdir /san/sanvol1/scratch/mm8/cons/consRun1
+    mkdir /san/sanvol1/scratch/mm8/cons/consRun3
     cd /san/sanvol1/scratch/mm8/cons
     cp /san/sanvol1/scratch/mm7/cons/elliotsEncode.mod .
     #	edit, change monDom2 to monDom4, hg17 to hg18, rheMac1 to
     #	rheMac2, rn3 to rn4, mm7 to mm8
+    #	danRer3 to danRer4
     #	It looks like:
 ALPHABET: A C G T
 ORDER: 0
@@ -3852,17 +3946,19 @@ RATE_MAT:
    0.189778   -0.878194    0.208718    0.479698
    0.444622    0.261535   -0.885604    0.179447
    0.234867    0.720815    0.215191   -1.170872
-TREE: (((((((((((((hg18:0.006690,panTro2:0.007571):0.024272,(colobus_monkey:0.015404,(baboon:0.008258,rheMac2:0.028617):0.008519):0.022120):0.023960,(dusky_titi:0.025662,(owl_monkey:0.012151,marmoset:0.029549):0.008236):0.027158):0.066101,(mouse_lemur:0.059024,galago:0.121375):0.032386):0.017073,((rn4:0.081728,mm8:0.077017):0.229273,oryCun1:0.206767):0.023340):0.023026,(((bosTau2:0.159182,canFam2:0.147731):0.004946,rfbat:0.138877):0.010150,(hedgehog:0.193396,shrew:0.261724):0.054246):0.024354):0.028505,dasNov1:0.149862):0.015994,(loxAfr1:0.104891,echTel1:0.259797):0.040371):0.218400,monDom4:0.371073):0.065268,platypus:0.468116):0.123856,galGal2:0.454691):0.123297,xenTro2:0.782453):0.156067,((tetNig1:0.199381,fr1:0.239894):0.492961,danRer3:0.782561):0.156067);
+TREE: (((((((((((((hg18:0.006690,panTro2:0.007571):0.024272,(colobus_monkey:0.015404,(baboon:0.008258,rheMac2:0.028617):0.008519):0.022120):0.023960,(dusky_titi:0.025662,(owl_monkey:0.012151,marmoset:0.029549):0.008236):0.027158):0.066101,(mouse_lemur:0.059024,galago:0.121375):0.032386):0.017073,((rn4:0.081728,mm8:0.077017):0.229273,oryCun1:0.206767):0.023340):0.023026,(((bosTau2:0.159182,canFam2:0.147731):0.004946,rfbat:0.138877):0.010150,(hedgehog:0.193396,shrew:0.261724):0.054246):0.024354):0.028505,dasNov1:0.149862):0.015994,(loxAfr1:0.104891,echTel1:0.259797):0.040371):0.218400,monDom4:0.371073):0.065268,platypus:0.468116):0.123856,galGal2:0.454691):0.123297,xenTro2:0.782453):0.156067,((tetNig1:0.199381,fr1:0.239894):0.492961,danRer4:0.782561):0.156067);
 
 
-    cd /san/sanvol1/scratch/mm8/cons/consRun1
+    cd /san/sanvol1/scratch/mm8/cons/consRun3
     mkdir ppRaw bed
 
     # Create script to run phastCons with right parameters
     #	These parameters:
     #	--rho 0.28 --expected-length 14 --target-coverage 0.008 --quiet \
-    #	were taken from Kate's 17-way in Hg17, including the
-    #	-not-informative panTro2
+    #	were taken from Kate's 17-way in Hg17, removing the
+    #	--not-informative panTro2 since that isn't relevant here, nor
+    #	would be --not-informative rn4 - Jim says rn4 is far enough away
+    #	from mm8 that it is informative.
     #	This job is I/O intensive in its output files, thus it is all
     #	working over in /scratch/tmp/
     cat > doPhast << '_EOF_'
@@ -3872,7 +3968,6 @@ cp -p ../ss/${1}/${2}.ss ../elliotsEncode.mod /scratch/tmp/${2}
 pushd /scratch/tmp/${2} > /dev/null
 /cluster/bin/phast/${MACHTYPE}/phastCons ${2}.ss elliotsEncode.mod \
    --rho 0.28 --expected-length 14 --target-coverage 0.008 --quiet \
-	--not-informative panTro2 \
 	--seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
 popd > /dev/null
 mkdir -p ppRaw/${1}
@@ -3883,7 +3978,7 @@ rm /scratch/tmp/${2}/elliotsEncode.mod
 rm /scratch/tmp/${2}/${2}.ss
 rmdir /scratch/tmp/${2}
 '_EOF_'
-    # emacs happy
+    # << happy emacs
     chmod a+x doPhast
 
     #	root1 == chrom name, file1 == ss file name without .ss suffix
@@ -3893,7 +3988,7 @@ rmdir /scratch/tmp/${2}
 doPhast $(root1) $(file1)
 #ENDLOOP
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     # Create parasol batch and run it
     ls -1 ../ss/chr*/chr*.ss | sed 's/.ss$//' > in.list
@@ -3903,18 +3998,27 @@ doPhast $(root1) $(file1)
     para try/check/push/etc.
     #	These jobs are very fast and very I/O intensive, even on the san
     #	they will hang it up as they work at full tilt.
-# Completed: 290 of 290 jobs
-# CPU time in finished jobs:      12367s     206.11m     3.44h    0.14d  0.000 y
-# IO & Wait Time:                  2000s      33.34m     0.56h    0.02d  0.000 y
-# Average job time:                  50s       0.83m     0.01h    0.00d
-# Longest finished job:              80s       1.33m     0.02h    0.00d
-# Submission to last job:           359s       5.98m     0.10h    0.00d
+# Completed: 689 of 689 jobs
+# CPU time in finished jobs:      12806s     213.44m     3.56h    0.15d  0.000 y
+# IO & Wait Time:                 16079s     267.98m     4.47h    0.19d  0.001 y
+# Average job time:                  42s       0.70m     0.01h    0.00d
+# Longest finished job:              94s       1.57m     0.03h    0.00d
+# Submission to last job:           350s       5.83m     0.10h    0.00d
 
     # combine predictions and transform scores to be in 0-1000 interval
     #	it uses a lot of memory, so on kolossus:
     ssh kolossus
-    cd /san/sanvol1/scratch/mm8/cons/consRun1
+    cd /san/sanvol1/scratch/mm8/cons/consRun3
     #	The sed's and the sort get the file names in chrom,start order
+    #	You might like to verify it is correct by first looking at the
+    #	list it produces:
+    find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+	| sort -k7,7 -k9,9n \
+	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | less
+    #	if that looks right, then let it run:
+    #	FOR NEXT TIME - the result file should be named:
+    #	phastConsElements17way.bed since that is the name of the DB
+    #	table that it is loaded into.  (instead of mostConserved.bed)
     find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
 	| sort -k7,7 -k9,9n \
 	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
@@ -3923,73 +4027,88 @@ doPhast $(root1) $(file1)
     #	~ 1 minute
     cp -p mostConserved.bed /cluster/data/mm8/bed/multiz17way
 
-    # Figure out how much is actually covered by the bed files as so:
-    #	The 2583393846 comes from the non-n genome size,
-    #	from faSize on all chroms:
+    # Figure out how much is actually covered by the bed file as so:
+    #	Get the non-n genome size from faSize on all chroms:
     ssh kkstore01
     cd /cluster/data/mm8
-    faSize ?/chr*.fa ??/chr*.fa
     faSize ?{,?}/chr*.fa
     #	2664455088 bases (97171400 N's 2567283688 real 1477933003 upper
     #	1089350685 lower) in 34 sequences in 34 files
 
-    #	2847717329 bases (264323483 N's 2583393846 real 1489414119
-    #	upper 1093979727
-
-    cd /san/sanvol1/scratch/mm8/cons/consRun1
+    cd /san/sanvol1/scratch/mm8/cons/consRun3
+    #	The 2567283688 comes from the non-n genome as counted above.
     awk '
 {sum+=$3-$2}
 END{printf "%% %.2f = 100.0*%d/2567283688\n",100.0*sum/2567283688,sum}' \
 	mostConserved.bed
     #	--rho 0.28 --expected-length 14 --target-coverage 0.008
-    #		% 5.39 = 100.0*138300407/2567283688
+    #	% 5.40 = 100.0*138575691/2567283688 danRer4 instead of danRer3
+    #	% 5.43 = 100.0*139309333/2567283688 panTro2 and xenTro2
+    #	% 5.39 = 100.0*138300407/2567283688 panTro1 and xenTro1
 
     #	Aiming for %70 coverage in
     #	the following featureBits measurement on CDS:
     # Beware of negative scores when too high.  The logToBedScore
     # will output an error on any negative scores.
 
-    HGDB_CONF=~/.hg.conf.read-only featureBits mm8 \
+    HGDB_CONF=~/.hg.conf.read-only time nice -n +19 featureBits mm8 \
 	-enrichment refGene:cds mostConserved.bed
     #	--rho 0.28 --expected-length 14 --target-coverage 0.008
+    #	with danRer4 instead of danRer3:
+    #	refGene:cds 1.062%, mostConserved.bed 5.398%, both 0.743%, cover
+    #	69.99%, enrich 12.97x
+    #	with panTro2 and xenTro2:
+    #	refGene:cds 1.060%, mostConserved.bed 5.426%, both 0.740%, cover
+    #	69.85%, enrich 12.87x
+    #	with panTro1 and xenTro1:
     #	refGene:cds 1.060%, mostConserved.bed 5.387%, both 0.739%, cover
     #	69.71%, enrich 12.94x
 
     # Load most conserved track into database
     ssh hgwdev
     cd /cluster/data/mm8/bed/multiz17way
-    cp -p /san/sanvol1/scratch/mm8/cons/consRun1/mostConserved.bed .
-    time nice -n +19 hgLoadBed -strict mm8 phastConsElements mostConserved.bed
-    #	real    2m45.281s
-    #	Loaded 1885142 elements of size 5
+    #	the copy was already done above
+    # cp -p /san/sanvol1/scratch/mm8/cons/consRun3/mostConserved.bed .
+    time nice -n +19 hgLoadBed -strict mm8 phastConsElements17way \
+	mostConserved.bed
+    #	Loaded 1883370 elements of size 5
+    #	real    2m54.033s
 
     #	should measure the same as above
-    time nice -n +19 featureBits mm8 -enrichment refGene:cds phastConsElements
+    time nice -n +19 featureBits mm8 -enrichment refGene:cds \
+	phastConsElements17way
+    #	with danRer4 in place of danRer3:
+    #	refGene:cds 1.062%, phastConsElements17way 5.398%, both 0.743%,
+    #	cover 69.99%, enrich 12.97x
+    #	with panTro2 and xenTro2:
+    #	refGene:cds 1.060%, phastConsElements 5.426%, both 0.740%, cover
+    #	69.85%, enrich 12.87x
+    #	with panTro1 and xenTro1:
     #	refGene:cds 1.060%, phastConsElements 5.387%, both 0.739%, cover
     #	69.71%, enrich 12.94x
 
     # Create merged posterier probability file and wiggle track data files
-    ssh kkstore01
-    cd /san/sanvol1/scratch/mm8/cons/consRun1
+    ssh kkstore04
+    cd /san/sanvol1/scratch/mm8/cons/consRun3
     # the sed business gets the names sorted by chromName, chromStart
     #	so that everything goes in numerical order into wigEncode
+    #	This was verified above to be correct
     time nice -n +19 find ./ppRaw -type f \
 	| sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
 	| sort -k7,7 -k9,9n \
 	| sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
-	    | wigEncode stdin phastCons17.wig phastCons17.wib
-    #	real    17m8.609s
-    #	-rw-rw-r--   1 1963282005 Mar  2 16:49 phastCons17.wib
-    #	-rw-rw-r--   1  236751796 Mar  2 16:49 phastCons17.wig
-
-
+	    | $HOME/bin/$MACHTYPE/wigEncode -noOverlap stdin \
+		phastCons17.wig phastCons17.wib
+    #	real    15m59.846s
+    #	-rw-rw-r--   1 1961998053 May  3 12:22 phastCons17.wib
+    #	-rw-rw-r--   1  237229239 May  3 12:22 phastCons17.wig
 
     time nice -n +19 cp -p phastCons17.wi? /cluster/data/mm8/bed/multiz17way/
-    #	real    0m33.014s
+    #	real    1m21.329s
 
     #	prepare compressed copy of ascii data values for downloads
     ssh pk
-    cd /san/sanvol1/scratch/mm8/cons/consRun1
+    cd /san/sanvol1/scratch/mm8/cons/consRun3
     cat << '_EOF_' > gzipAscii.sh
 #!/bin/sh
 
@@ -4009,27 +4128,29 @@ do
 	    gzip > ${out}
 done
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
     chmod +x gzipAscii.sh
-    time ./gzipAscii.sh
-    #	takes about 40 minutes, makes 2.9 Gb of data
+    time nice -n +19 ./gzipAscii.sh
+    #	real    18m15.212s
+
     #	copy them for downloads
-    ssh hgwdev
+    ssh kkstore04
+    #	this directory is actually a symlink from store9 to store8 to
+    #	avoid the data full problem on store9
     mkdir /cluster/data/mm8/bed/multiz17way/phastCons17Scores
     cd /cluster/data/mm8/bed/multiz17way/phastCons17Scores
-    cp -p  /san/sanvol1/scratch/mm8/cons/consRun1/phastCons17Scores/* .
-    #	~12 minute copy
+    cp -p  /san/sanvol1/scratch/mm8/cons/consRun3/phastCons17Scores/* .
 
-    mkdir /usr/local/apache/htdocs/goldenPath/mm8/phastCons17Scores
-    cd /usr/local/apache/htdocs/goldenPath/mm8/phastCons17Scores
-    ln -s /cluster/data/mm8/bed/multiz17way/phastCons17Scores/*.gz .
+    ssh hgwdev
+    cd /usr/local/apache/htdocs/goldenPath/mm8
+    ln -s /cluster/data/mm8/bed/multiz17way/phastCons17Scores .
 
     # Load gbdb and database with wiggle.
     ssh hgwdev
     cd /cluster/data/mm8/bed/multiz17way
     ln -s `pwd`/phastCons17.wib /gbdb/mm8/wib/phastCons17.wib
     time nice -n +19 hgLoadWiggle mm8 phastCons17 phastCons17.wig
-    #	time nice -n +19 hgLoadWiggle mm8 phastCons17 phastCons17.wig
+    #	real    2m55.836s
 
     #  Create histogram to get an overview of all the data
     ssh hgwdev
@@ -4037,7 +4158,8 @@ done
     time nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
 	    -db=mm8 phastCons17 > histogram.data 2>&1
-    #	real    26m31.261s
+    #	real    28m24.388s
+
     #	create plot of histogram:
 
     cat << '_EOF_' | gnuplot > histo.png
@@ -4058,10 +4180,15 @@ set yrange [0:0.02]
 plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     display histo.png &
 
+# QA NOTE: (ASZ: 5/1/2006) changed name of phastConsElements table to phastConsElements17way
+# QA NOTE: (ASZ: 5/1/2006) changed name of phastCons17 table to phastCons17way
+# Hiram Note:  phastCons17 never changed to phastCons17way at any time
+
+#########################################################################
 # MAKE FOLDUTR TABLES (DONE 2006-02-28, Fan)
 # First set up directory structure and extract UTR sequence on hgwdev
     ssh hgwdev
@@ -4848,7 +4975,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzPanTro2.2006-03-28
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
@@ -4926,7 +5053,7 @@ SEQ2_LAP=0
 BASE=/cluster/data/mm8/bed/blastzPanTro2.2006-03-15
 TMPDIR=/scratch/tmp
 '_EOF_'
-    #	happy emacs
+    #	<< happy emacs
 
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=pk -chainMinScore=3000 -chainLinearGap=medium \
@@ -5189,13 +5316,16 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	-swap /cluster/data/mm8/bed/blastz.xenTro2.2006-04-20/DEF \
 	> swap.out 2>&1 &
-    #	 XXX running 2006-04-21 10:20
 
     ssh hgwdev
     cd /cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     time nice -n +19 featureBits mm8 chainXenTro2Link \
 	> fb.mm8.chainXenTro2Link 2>&1 &
     #	68050843 bases of 2567283971 (2.651%) in intersection
+    cd /cluster/data/xenTro2/bed/blastz.mm8.swap
+    time nice -n +19 featureBits xenTro2 chainMm8Link \
+	> fb.xenTro2.chainMm8Link 2>&1
+    #	72840135 bases of 1359412157 (5.358%) in intersection
 
 #######################################################################
 ## LIFTOVER To Mm7 (DONE - 2006-04-21 - 2006-04-24 - Hiram)
@@ -5254,3 +5384,172 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     ls -og mm8ToMm7*
     #	lrwxrwxrwx    1       53 Apr 24 12:32 mm8ToMm7.over.chain.gz -> \
     #		/cluster/data/mm8/bed/liftOver/mm8ToMm7.over.chain.gz
+
+########################################################################
+##  CYTOBAND - ideogram track (DONE - 2006-04-28 - Hiram)
+    ssh hgwdev
+    cd /cluster/data/mm8/pre_release
+    #	The .wgetrc is the anonymous user
+    WGETRC=`pwd`/.wgetrc
+    export WGETRC
+    wget --timestamping \
+	ftp://ftp.ncbi.nih.gov/genomes/M_musculus/pre_release/ideogram
+
+    mkdir /cluster/data/mm8/cytoBand
+    cd /cluster/data/mm8/cytoBand
+
+    # Create bed file
+    $HOME/kent/src/utils/createNcbiCytoBand.pl \
+	/cluster/data/mm8/pre_release/ideogram
+    # Load the bed file
+    hgLoadBed -strict -noBin \
+	-sqlTable=$HOME/kent/src/hg/lib/cytoBand.sql mm8 \
+	cytoBand cytoBand.bed
+    # Make cytoBandIdeo track for ideogram gif on hgTracks page.
+    # For mouse cytoBandIdeo is just a replicate of the cytoBand track.
+    hgsql -e "drop table cytoBandIdeo;" mm8
+    hgsql mm8 -e "create table cytoBandIdeo (index(chrom(10),chromStart)) as select * from cytoBand;"
+
+
+#########################################################################
+# GENSCAN PREDICTIONS (DONE - 2006-05-03 - 2006-05-05 - Hiram)
+    ssh kkstore04
+    #	Create a 2bit file with the full chrom sequences and the
+    #	random contigs, all hard masked
+    cat ?/chr?.fa ??/chr??.fa randomContigs/chr*.ctg.fa \
+	| maskOutFa stdin hard stdout \
+	    | faToTwoBit stdin mm8Chroms_RandomContigs.hard.2bit
+    #	make sure it still has all the unmasked sequence in it:
+    twoBitToFa mm8Chroms_RandomContigs.hard.2bit stdout \
+	| faSize stdin
+    #	2661205088 bases (1183272085 N's 1477933003 real 1477933003
+    #	upper 0 lower) in 99 sequences in 1 files
+    twoBitToFa mm8.2bit stdout | faSize stdin
+    #	2664455088 bases (97171400 N's 2567283688 real 1477933003 upper
+    #	1089350685 lower) in 34 sequences in 1 files
+    #	note the 'real' bases are the same, the lowers have become N's
+    #	1089350685 + 97171400 = 1186522085 
+    #	1186522085 - 1183272085  = 3250000 == N's in gaps between contigs
+
+    #	And, make sure there aren't any sequences in this lot that have
+    #	become all N's with no sequence left in them:
+    twoBitToFa mm8Chroms_RandomContigs.hard.2bit stdout \
+	| faCount stdin > chroms_randoms.faCount
+    #	the lowest three are:
+    egrep -v "^#|^total" chroms_randoms.faCount \
+	| awk '{print $1,$2-$7}' | sort -k2,2nr | tail -3
+    #	MmUn_162590_36 1631
+    #	Mm1_163269_36 1581
+    #	MmUn_102813_36 1479
+
+    #	creating 4,000,000 sized chunks, the chroms stay together as
+    #	single pieces.  The contigs get grouped together into 4,000,000
+    #	sized fasta files.  You don't want to break these things up
+    #	because genscan will be doing its own internal 2.4 million
+    #	window on these pieces, and the gene names are going to be
+    #	constructed from the sequence name in these fasta files.  The
+    #	gene names are much better when they are this simple chrN.M
+    #	numbering scheme, or in the case of a contig: contig_name.M
+    #	where the M is a sequence number that genscan will assign to
+    #	each gene it discovers.
+    mkdir hardChunks
+    twoBitToFa mm8Chroms_RandomContigs.hard.2bit stdout \
+	| faSplit about stdin 4000000 hardChunks/c_
+    rsync -a --progress hardChunks/ /cluster/bluearc/mm8/hardChunks/
+
+    ssh hgwdev
+    mkdir /cluster/data/mm8/bed/genscan
+    cd /cluster/data/mm8/bed/genscan
+    # Check out hg3rdParty/genscanlinux to get latest genscan:
+    cvs co hg3rdParty/genscanlinux
+
+    # Run on small cluster (more mem than big cluster).
+    ssh kki
+    cd /cluster/data/mm8/bed/genscan
+    # Make 3 subdirectories for genscan to put their output files in
+    mkdir gtf pep subopt
+    # Generate a list file, genome.list, of all the hard-masked contigs that 
+    # *do not* consist of all-N's (which would cause genscan to blow up)
+    #	Since we split on gaps, we have no chunks like that.  You can
+    #	verify with faCount on the chunks.
+    ls -1S /cluster/bluearc/mm8/hardChunks/c_*.fa > genome.list
+
+    # Create template file, gsub, for gensub2.  For example (3-line file):
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
+#ENDLOOP
+'_EOF_'
+    # happy emacs
+    gensub2 genome.list single template jobList
+    para create jobList
+    para try, check, push, check, ...
+# Completed: 673 of 673 jobs
+# CPU time in finished jobs:      76339s    1272.32m    21.21h    0.88d  0.002 y
+# IO & Wait Time:                  2327s      38.78m     0.65h    0.03d  0.000 y
+# Average job time:                 117s       1.95m     0.03h    0.00d
+# Longest finished job:            1993s      33.22m     0.55h    0.02d
+# Submission to last job:          7526s     125.43m     2.09h    0.09d
+
+    #	There was a failed job, going to kolossus and running with a
+    #	reduced window size:
+    ssh kolossus
+    cd /cluster/data/mm8/bed/genscan
+    /cluster/bin/x86_64/gsBig /cluster/bluearc/mm8/hardChunks/c_01.fa \
+        gtf/c_01.gtf -trans=pep/c_01.pep -subopt=subopt/c_01.bed \
+        -exe=hg3rdParty/genscanlinux/genscan \
+        -par=hg3rdParty/genscanlinux/HumanIso.smat \
+	-tmp=/scratch/tmp -window=2000000
+
+
+    # cat and lift the results into single files
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/genscan
+    cat gtf/c_*.gtf | liftUp -type=.gtf genscan.gtf \
+	../../jkStuff/liftAll.lft carry stdin
+    cat subopt/c_*.bed | liftUp -type=.bed genscanSubopt.bed \
+	../../jkStuff/liftAll.lft carry stdin
+    cat pep/c_*.pep > genscan.pep
+
+    # Load into the database as so:
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/genscan
+    ldHgGene mm8 -gtf genscan genscan.gtf
+    #	Read 44899 transcripts in 323099 lines in 1 files
+    #	44899 groups 34 seqs 1 sources 1 feature types
+    #	44899 gene predictions
+
+    hgPepPred mm8 generic genscanPep genscan.pep
+    hgLoadBed -strict mm8 genscanSubopt genscanSubopt.bed
+    #	Loaded 530201 elements of size 6
+
+    #	check the numbers
+    time nice -n +19 featureBits mm8 genscan
+    #	54455852 bases of 2567283971 (2.121%) in intersection
+    time nice -n +19 featureBits mm8 knownGene:cds
+    #	28459053 bases of 2567283971 (1.109%) in intersection
+    featureBits mm7 genscan
+    #	54864694 bases of 2583394090 (2.124%) in intersection
+    time nice -n +19 featureBits mm7 knownGene:cds
+    #	27531524 bases of 2583394090 (1.066%) in intersection
+    featureBits mm6 genscan
+    #	54894283 bases of 2597150411 (2.114%) in intersection
+    featureBits mm5 genscan
+    #	55024722 bases of 2615483787 (2.104%) in intersection
+    featureBits mm4 genscan
+    #	56164126 bases of 2627444668 (2.138%) in intersection
+    featureBits mm3 genscan
+    #	51697165 bases of 2505900260 (2.063%) in intersection
+
+    featureBits mm8 genscanSubopt
+    #	57048581 bases of 2567283971 (2.222%) in intersection
+    featureBits mm7 genscanSubopt
+    #	57512333 bases of 2583394090 (2.226%) in intersection
+    featureBits mm6 genscanSubopt
+    #	57856316 bases of 2597150411 (2.228%) in intersection
+    featureBits mm5 genscanSubopt
+    #	58474899 bases of 2615483787 (2.236%) in intersection
+    featureBits mm4 genscanSubopt
+    #	59601009 bases of 2627444668 (2.268%) in intersection
+    featureBits mm3 genscanSubopt
+    #	56085184 bases of 2505900260 (2.238%) in intersection

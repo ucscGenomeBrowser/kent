@@ -1,8 +1,40 @@
-track chainHg17
-shortLabel Hg17 Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+track multiz7way
+shortLabel Conservation
+longLabel Vertebrate Multiz Alignment & Conservation 
 group compGeno
-priority 153.7
+priority 104.2
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons7
+spanList 1
+pairwiseHeight 12
+yLineOnOff Off
+# frames multiz7wayFrames
+# irows on
+autoScaleDefault Off
+summary multiz7waySummary
+speciesGroups vertebrate
+sGroup_vertebrate hg18 galGal2 mm8 rn4 xenTro2 danRer3
+treeImage phylo/monDom4_7way.jpg
+
+track phastConsElements7way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements
+group compGeno
+priority 105
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
+track chainHg17
+shortLabel $o_db Chain
+longLabel $o_db ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 257
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -11,10 +43,10 @@ type chain hg17
 otherDb hg17
 
 track netHg17
-shortLabel Hg17 Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+shortLabel $o_db Net
+longLabel $o_db ($o_date/$o_db) Alignment Net
 group compGeno
-priority 153.8
+priority 258
 visibility hide
 spectrum on
 type netAlign hg17 chainHg17

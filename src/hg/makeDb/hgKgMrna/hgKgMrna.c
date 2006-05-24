@@ -172,7 +172,7 @@ void parseCds(char *gbCds, int start, int end, int *retStart, int *retEnd)
 /* Parse genBank style cds string into something we can use... */
 {
 char *s = gbCds;
-boolean gotStart = FALSE, gotEnd = TRUE;
+boolean gotStart = FALSE;
 
 char *startP, *endP;
 
@@ -256,7 +256,6 @@ void writeSeqTable(char *faName, FILE *out, boolean unburyAccession, boolean isP
 struct lineFile *lf = lineFileOpen(faName, TRUE);
 bioSeq seq;
 int dotMod = 0;
-char *dotIndex = 0;
 
 printf("Reading %s\n", faName);
 while (faSomeSpeedReadNext(lf, &seq.dna, &seq.size, &seq.name, !isPep))
@@ -290,7 +289,7 @@ struct exon *pslToExonList(struct psl *psl)
  * separated by small inserts as necessary. */
 {
 struct exon *exonList = NULL, *exon = NULL;
-int i, tStart, tEnd, temp;
+int i, tStart, tEnd;
 for (i=0; i<psl->blockCount; ++i)
     {
     tStart = psl->tStarts[i];
@@ -318,16 +317,14 @@ struct hash *raHash, *rsiHash = newHash(0);
 struct hash *loc2mimHash = newHash(0);
 struct refSeqInfo *rsiList = NULL, *rsi;
 char *s, *line, *row[5];
-int i, wordCount, dotMod = 0;
+int wordCount, dotMod = 0;
 int noLocCount = 0;
 int rsiCount = 0;
 int noProtCount = 0;
 struct psl *psl;
-int cdsStart, cdsEnd;
 struct sqlConnection *conn = hgStartUpdate();
 struct hash *productHash = loadNameTable(conn, "productName", 16);
 struct hash *geneHash = loadNameTable(conn, "geneName", 16);
-struct hash *kgHash = newHash(0);
 char *kgName = "refGene";
 
 FILE *kgTab = hgCreateTabFile(".", kgName);
@@ -337,7 +334,6 @@ FILE *refLinkTab = hgCreateTabFile(".", "refLink");
 FILE *refPepTab = hgCreateTabFile(".", "refPep");
 FILE *refMrnaTab = hgCreateTabFile(".", "refMrna");
 
-int productNameId, geneNameId;
 struct exon *exonList = NULL, *exon;
 char *answer;
 char cond_str[200];
@@ -412,7 +408,6 @@ printf("Scanning %s\n", loc2refFile);
 lf = lineFileOpen(loc2refFile, TRUE);
 while (lineFileNext(lf, &line, NULL))
     {
-    int mimVal;
     char *mrnaAcc;
 
     if (line[0] == '#')
@@ -429,7 +424,6 @@ while (lineFileNext(lf, &line, NULL))
 		mrnaAcc, lf->lineIx, lf->fileName);
     if ((rsi = hashFindVal(rsiHash, mrnaAcc)) != NULL)
         {
-	void *v;
 	rsi->locusLinkId = lineFileNeedNum(lf, row, 0);
 	rsi->omimId = ptToInt(hashFindVal(loc2mimHash, row[0]));
 	rsi->proteinAcc = cloneString(accWithoutSuffix(row[4]));

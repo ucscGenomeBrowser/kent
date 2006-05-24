@@ -16,6 +16,19 @@ group map
 visibility hide
 type bed 3 +
 
+track knownGene
+shortLabel Known Genes
+longLabel UCSC Known Genes Based on UniProt, RefSeq, and GenBank mRNA
+group genes
+priority 34
+visibility pack
+color 12,12,120
+type genePred knownGenePep knownGeneMrna
+hgGene on
+hgsid on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+cdsDrawDefault genomic\ codons
+
 track multiz17way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation 
@@ -26,15 +39,18 @@ color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
-wiggle phastCons17
+wiggle phastCons17way
 spanList 1
+pairwiseHeight 12
 yLineOnOff Off
+frames multiz17wayFrames
+irows on
 autoScaleDefault Off
 summary multiz17waySummary
 speciesGroups mammal vertebrate
 sGroup_mammal rn4 oryCun1 hg18 panTro2 rheMac2 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom4
-sGroup_vertebrate galGal2 xenTro2 danRer3 tetNig1 fr1
-speciesDefaultOff panTro2 rheMac2 bosTau2 echTel1 danRer3 fr1
+sGroup_vertebrate galGal2 xenTro2 danRer4 tetNig1 fr1
+speciesDefaultOff oryCun1 panTro2 rheMac2 bosTau2 dasNov1 loxAfr1 echTel1 danRer4 fr1
 treeImage phylo/Mm7_17way.jpg
 
 track chainHg17
@@ -59,6 +75,20 @@ spectrum on
 type netAlign hg17 chainHg17
 otherDb hg17
 
+track chainGalGal2
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 180
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-114,-31,-123,-114,100,-125,-31,-31,-125,100,-114,-123,-31,-114,91
+matrixHeader A, C, G, T
+type chain galGal2
+otherDb galGal2
+
 track chainSelf
 shortLabel Self Chain 
 longLabel $Organism Chained Self Alignments
@@ -81,3 +111,9 @@ visibility hide
 spectrum on
 type netAlign mm8 chainSelf
 otherDb mm8
+
+searchTable genscan
+searchMethod prefix
+searchType genePred
+termRegex [[:alnum:]_]+(\.[0-9]+)?
+searchPriority 50

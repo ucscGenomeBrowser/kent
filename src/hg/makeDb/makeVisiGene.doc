@@ -541,4 +541,306 @@ mysql> select * from contributor where name in ('JAX JAX','MGI MGI');
 insert into submissionContributor select id, '3981' from submissionSet where submissionSource = 6;
 insert into submissionContributor select id, '3982' from submissionSet where submissionSource = 6;
 
+##### ADD SUPPORT FOR ABURL (DONE 2006-04-19 galt)
+# I manually updated this, currently needed only by JAX,
+# adding antibodySource table that maps abSubmitId to antibody and submissionSource
+# and adding field abUrl to submissionSource table.
+# The code for vgLoadJax and visiGeneLoad were also updated to support this new 
+# link from antibody probe to submissionSource website for further details.
+# Since this will be automatically maintained in future, no point in belaboring the makefile.
+# This also involved an update to hgVisiGene including passing submissionSource id on
+# the url to the primers page so that the external link can be made when it is an antibody.
+
+##### REPLICATED submissionSet.privateUser SETTINGS TO NEW VISIGENE DB (DONE 2006-04-24 galt)
+# This was an oversight caused by full removal of all old jax submissionSets 
+# when we did the jax 2006-03-28 update.  Since we had lost the privateUser settings,
+# I just replicated it from visiGeneOld with a simple query.
+update visiGene.submissionSet n, visiGeneOld.submissionSet o set n.privateUser=-1
+where o.privateUser=-1 and o.name = n.name;
+# currently this is just jax submissionSets for which we have not received permissions to use.
+
+
+##### ADDED IMAGEFILE-FORWARDING TO COMBINE MAHONEY AND JAX-MAHONEY ANNOTATIONS (DONE 2006-04-26 galt)
+# The idea here is that JAX has some useful annotations, but including them made a lot of 
+# unnecessary duplication in the system.  Although it wasn't easy, we have come up with
+# a method to map the imageFiles from Mahoney to the ones in JAX.  We have made imageFileFwd table
+# to store that mapping information, and added code to hgVisiGene to use it.  Wholemount steps
+# are manual, while slices steps use hg/visiGene/vgLoadJax/forwardSlices.c I wrote to map them Mah->JAX.
+# Additional complications are that JAX combined several slices together into one image
+# following a certain pattern.  Luckily for the wholemounts, the original images were not modified by JAX.
+# This means that we can get a perfect match Mah->JAX for the wholemounts using md5sum (produced unique values).
+# Because both we and JAX imported the Mahoney data/spreadsheet into auto-incremented primary keyfield
+# tables, the original order is preserved and allows a surprisingly good mah->jax many-to-one slices mapping.
+# I also extended vgLoadJax to be able to find the primers in the PRB_Notes which was useful both 
+# for mapping the slices, and because we end up using JAX annotations for the fullCaption() page,
+# so that we don't lose primer info. For the remaining fraction where Mahoney never supplied primers
+# (actually they have since updated the info, but neither JAX nor we have gotten that yet),
+# something over 20%, we have managed to instead just map on gene. This worked surprisingly well,
+# and made either correct or very close matches.
+
+# Since previously, vgLoadJax looked for the mahoney set in jax and excluded it, we need to 
+# make and import it into visiGene.  I have removed the skipping of mahoney set from the 
+# vgLoadJax code (so that next time we update jax, the mahoney set will not be excluded)
+# and added a commandline option to do just a single submission set.  I happen to know that
+# the mahoney set in jax is jax92242.  THIS STEP WON'T BE NEEDED IN FUTURE.
+
+# the latest jax sybase db conversion is on kkr3u00 because it had space and little use.
+ssh kkr3u00
+cd ~/kent/src/hg/visiGene/vgLoadJax
+# clean out any old subdirectory
+rm -fr visiJaxMahoney
+# process just the jaxMahoney submissionSet
+${HOME}/bin/i386/vgLoadJax -oneSubmissionSet=92242 /san/sanvol1/visiGene/gbdb jackson20060328 visiJaxMahoney
+
+# load it into visiGene db
+ssh hgwdev
+visiGeneLoad visiJaxMahoney/92242.ra  visiJaxMahoney/92242.tab  visiJaxMahoney/92242.txt
+
+# we are going to treat the jax version of Mahoney as "privateUser" 
+# in order to suppress it and reduce the duplication of Mahoney images
+hgsql visiGene -e 'update submissionSet set privateUser=-1 where name like "jax92242"'
+
+submissionSets:  (for reference)
+name       id
+-----------------------------------
+mahoneyWhole    = 1
+mahoneySlices01 = 2
+jax92242        = 1820
+
+			  
+ssh hgwdev
+cd /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/mahoney/wholeMount
+md5sum *.jpg | sed -e 's/  /\t/' | sort > ~/kent/src/hg/visiGene/vgLoadJax/mahoneyWholeMount.md5
+#(quick - 1 or 2 minutes only)
+
+#Find the jax-Mahoney images that are WholeMount
+ssh hgwdev
+cd /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/jax
+
+# WARNING: change database name and submissionSet id constants in text below if needed!!!
+#  jaxMahoney = 1820, bodyPart.id = 1 for name="whole"
+hgsql visiGene -BN -e 'select distinct imageFile.fileName from imageFile, image, specimen, bodyPart \
+where imageFile.submissionSet=1820 and bodyPart=1 \
+and image.imageFile=imageFile.id and image.specimen=specimen.id' \
+ | xargs md5sum | sed -e 's/  /\t/' | sort > ~/kent/src/hg/visiGene/vgLoadJax/jaxMahoneyWholeMount.md5
+
+cd ~/kent/src/hg/visiGene/vgLoadJax
+
+# verify that they are unique by md5sum:
+wc -l *.md5
+   1833 jaxMahoneyWholeMount.md5
+   1843 mahoneyWholeMount.md5
+sort -k 1,1 -u jaxMahoneyWholeMount.md5 | wc -l
+   1833
+sort -k 1,1 -u mahoneyWholeMount.md5 | wc -l
+   1843
+
+hgsql visiGene
+
+create table mahoneyWholeMountMd5 (
+    md5 char(32) not null,         # md5 sum of .jpg
+    fileName varchar(10) not null, # .jpg fileName
+    INDEX(md5),
+    INDEX(fileName)
+);
+load data local infile 'mahoneyWholeMount.md5' into table mahoneyWholeMountMd5;
+analyze table mahoneyWholeMountMd5;
+
+create table jaxMahoneyWholeMountMd5 (
+    md5 char(32) not null,         # md5 sum of .jpg
+    fileName varchar(10) not null, # .jpg fileName
+    INDEX(md5),
+    INDEX(fileName)
+);
+load data local infile 'jaxMahoneyWholeMount.md5' into table jaxMahoneyWholeMountMd5;
+analyze table jaxMahoneyWholeMountMd5;
+
+# verify that they match uniquely and completely:
+select count(*) from mahoneyWholeMountMd5 m, jaxMahoneyWholeMountMd5 j where m.md5 = j.md5;
++----------+
+| count(*) |
++----------+
+|     1833 |
++----------+
+
+# make forwarding table (NO NEED TO DO IN FUTURE, IS IN visiGene.as,.sql)
+CREATE TABLE imageFileFwd (
+    fromIf int not null,      # From imageFile
+    toIf   int not null,      #   To imageFile
+        #Indices
+    INDEX(fromIf),
+    INDEX(toIf)
+);
+
+# WARNING: change submissionSet ids!!!
+# find how the mahoney matches to the jaxMahoney
+#    (I verified that all filenames are unique in all 3 submissionSets: jaxM, mWhole, mSlices)
+insert into imageFileFwd
+select mi.id, ji.id from imageFile mi, imageFile ji, mahoneyWholeMountMd5 m, jaxMahoneyWholeMountMd5 j
+where m.md5 = j.md5 and mi.fileName=m.fileName and ji.fileName=j.fileName
+ and mi.submissionSet=1 and ji.submissionSet=1820;
+# Records: 1828
+
+# the wholemounts are now done, so let's do the slices next!
+
+
+
+# Cluster Run to do OCR on jaxMahoneySlices (Galt 2006-04-28)
+#  if program ocrad is not in /cluster/bin/i386, download and compile it (very easy)
+#  ocrad is a gnu program
+
+# Create parasol directory and a list of the jpg files.
+ssh hgwdev
+cd /san/sanvol1/visiGene/offline/jax
+mkdir ocrJaxMahoneyRun
+cd ocrJaxMahoneyRun
+mkdir output
+
+# make list of jaxMahoneySlice .jpgs
+# WARNING: change database and submissionSet ids!!!
+hgsql visiGene -BN -e 'select distinct imageFile.fileName from \
+imageFile, image, specimen \
+where imageFile.submissionSet=1820 and bodyPart<>1 \
+and image.imageFile=imageFile.id and image.specimen=specimen.id' \
+ > jaxMahoneySlices.list
+
+# Create parasol batch
+cat << '_EOF_' > gsub
+#LOOP
+./ocrSlices.csh $(file1) $(root1)
+#ENDLOOP
+'_EOF_'
+# << this line makes emacs coloring happy
+
+cat << '_EOF_' > ocrSlices.csh
+#!/bin/tcsh -ef
+if ( -e output/$2.map ) then
+    rm output/$2.map
+endif
+if ( -e output/$2.ocr ) then
+    rm output/$2.ocr
+endif
+convert /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/jax/$1 output/$2.pgm
+# There wasn't a single threshold value that worked, so do entire series
+/cluster/bin/i386/ocrad --threshold=.4 --charset=ascii output/$2.pgm >> output/$2.ocr
+/cluster/bin/i386/ocrad --threshold=.5 --charset=ascii output/$2.pgm >> output/$2.ocr
+/cluster/bin/i386/ocrad --charset=ascii output/$2.pgm >> output/$2.ocr
+/cluster/bin/i386/ocrad --threshold=.6 --charset=ascii output/$2.pgm >> output/$2.ocr
+/cluster/bin/i386/ocrad --threshold=.7 --charset=ascii output/$2.pgm >> output/$2.ocr
+/cluster/bin/i386/ocrad --threshold=.8 --charset=ascii output/$2.pgm >> output/$2.ocr
+/cluster/bin/i386/ocrad --threshold=.9 --charset=ascii output/$2.pgm >> output/$2.ocr
+
+@ x = $2
+# special handling for 7996.jpg thru 8060.jpg, the Accession does not end in "aa" for these.
+if ( ($x >= 7996) && ($x <= 8060) ) then
+    cat output/$2.ocr | tr lOoiI 10011 | tr -d . | perl -0ne 'print "$1\n" while ( /(T\d{8})/gs )' | sort -u > output/$2.temp
+else
+    cat output/$2.ocr | tr lOoiI 10011 | tr -d . | perl -0ne 'print "$1\n" while ( /(T\d{8}aa)/gs )' | sort -u > output/$2.temp
+endif
+
+set tempTs = ( `cat output/$2.temp` )
+if ( $#tempTs > 0 ) then
+    foreach t ( $tempTs )
+        if ( ($x >= 7996) && ($x <= 8060) ) then  # special handling for these
+            if (-e /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/mahoney/slices/${t}aa) then
+                set t = "${t}aa"
+            endif
+            if (-e /san/sanvol1/visiGene/gbdb/full/inSitu/Mouse/mahoney/slices/${t}00) then
+                set t = "${t}00"
+            endif
+        endif
+        echo "$1\t$t" >> output/$2.map
+    end
+else
+    echo "$1\tNO_TEXT" > output/$2.map
+endif
+rm output/$2.temp
+
+'_EOF_'
+# << this line makes emacs coloring happy
+
+chmod a+x ocrSlices.csh
+
+ssh pk
+cd /san/sanvol1/visiGene/offline/jax/ocrJaxMahoneyRun
+
+gensub2 jaxMahoneySlices.list single gsub spec
+para create spec
+para try
+para push
+para check
+para time
+#2095 jobs in batch
+#292661 jobs (including everybody's) in Parasol queue.
+#Checking finished jobs
+#Completed: 2095 of 2095 jobs
+#CPU time in finished jobs:       1059s      17.65m     0.29h    0.01d  0.000 y
+#IO & Wait Time:                  5687s      94.79m     1.58h    0.07d  0.000 y
+#Average job time:                   3s       0.05m     0.00h    0.00d
+#Longest running job:                0s       0.00m     0.00h    0.00d
+#Longest finished job:               7s       0.12m     0.00h    0.00d
+#Submission to last job:           134s       2.23m     0.04h    0.00d
+
+cat output/*.map | sort > ~/kent/src/hg/visiGene/vgLoadJax/jaxMahoneySlices.map
+
+--------------------------
+
+ssh hgwdev
+cd ~/kent/src/hg/visiGene/vgLoadJax
+
+cat *.map | wc -l
+   4066
+cat *.map | grep NO_TEXT | wc -l
+    1  (turns out to be a jax annotation caption error - missing leading zero in mtf#, ignoring)
+
+hgsql visiGene
+
+create table jaxMahoneySlicesMap (
+    jFileName varchar(10) not null, # jaxMahoney .jpg fileName
+    mFileName varchar(20) not null  #    mahoney .jpg fileName
+);
+load data local infile 'jaxMahoneySlices.map' into table jaxMahoneySlicesMap;
+update jaxMahoneySlicesMap set mFileName = concat(mFileName,".jpg") where mFileName <> "NO_TEXT";
+create index jFileName on jaxMahoneySlicesMap(jFileName);
+create index mFileName on jaxMahoneySlicesMap(mFileName);
+analyze table jaxMahoneySlicesMap;
+
+
+# WARNING: change submissionSet ids!!!
+insert into imageFileFwd
+select mi.id, ji.id from imageFile mi, imageFile ji, jaxMahoneySlicesMap map
+where ji.fileName=map.jFileName and mi.fileName=map.mFileName
+ and mi.submissionSet=2 and ji.submissionSet=1820;
+# Records: 3896
+
+# It's looking good.
+
+# clean up
+drop table mahoneyWholeMountMd5;
+drop table jaxMahoneyWholeMountMd5;
+drop table jaxMahoneySlicesMap;
+
+#############################################################
+#
+# Patch contributors so we can search submission sets
+#  by specifying Mahoney in the search box.
+#
+
+select id from submissionSource where name like 'Mahoney%';
++----+
+| id |
++----+
+| 1  |
++----+
+
+# note: we have to double the search word or else the search doesn't work
+insert into contributor set name = 'Mahoney mahoney';
+mysql> select * from contributor where name in ('Mahoney mahoney');
++------+-----------------+
+| id   | name            |
++------+-----------------+
+| 3987 | Mahoney mahoney |
++------+-----------------+
+
+insert into submissionContributor select id, '3987' from submissionSet where submissionSource = 1;
 

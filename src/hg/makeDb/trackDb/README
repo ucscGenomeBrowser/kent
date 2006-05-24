@@ -119,8 +119,13 @@ The format of the type fields:
         maxHeightPixels, yLineOnOff, autoScaleDefault).  These
         apply to both conservation and pairwise wiggles
    Settings in the trackDb.ra record:
-      wiggle - contains table name of conservation wiggle 
+      wiggle - contains table names of conservation wiggles
                           (loaded with hgLoadWiggle)
+        in the format "wiggle <table1> <label1>... <tableN> <labelN>"
+           where the first table is the default, and the labels are displayed
+           in the left label area of the conservation wiggle.  If only
+           one table is listed, and no label is present, the default
+           label "Conservation" will be displayed.
       speciesOrder - specifies the order of each pairwise items in the display
         Each species is specified as in the MAF file
         Organism names with embedded dots and/or spaces,
@@ -285,21 +290,21 @@ altColor 50,50,50
 visibility hide
 type bed 3
 
-track encodeDnaRep0
-subTrack encodeDnaRep
-shortLabel 0-2hr
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
-priority 1
+    track encodeDnaRep0
+    subTrack encodeDnaRep
+    shortLabel 0-2hr
+    longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
+    priority 1
 
-track encodeDnaRep2
-subTrack encodeDnaRep off
-shortLabel 2-4hr
-longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
-priority 2
+    track encodeDnaRep2
+    subTrack encodeDnaRep off
+    shortLabel 2-4hr
+    longLabel Univ. Virginia Temporal Profiling of DNA Replication (0-2 hrs) in ENCODE Regions
+    priority 2
 
-track encodeDnaRep3
-subTrack encodeDnaRep
-shortLabel 2-4hr
-priority 3
----------------------
+    track encodeDnaRep3
+    subTrack encodeDnaRep
+    shortLabel 2-4hr
+    priority 3
+    ---------------------
 

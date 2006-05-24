@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.110 2006/04/06 00:41:43 galt Exp $"
+#	"$Id: makeMm6.doc,v 1.111 2006/05/05 18:07:36 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -920,6 +920,10 @@ mm6.mgcTables.mgc = all
     # *do not* consist of all-N's (which would cause genscan to blow up)
     ls -1S /panasas/store/mm6/fasta/*.masked > genome.list
 
+    # XXX There is an error in the following template, note the extra
+    # space between the - and par=
+    #	It turns out the default for the -par argument is this same
+    #	matrix so the extra space had no effect on the end result.
     # Create template file, gsub, for gensub2.  For example (3-line file):
     cat << '_EOF_' > gsub
 #LOOP
@@ -947,6 +951,10 @@ mm6.mgcTables.mgc = all
     #	get them to complete.  Lower that number if the error persists.
     ssh kolossus
     cd /cluster/data/mm6/bed/genscan
+    # XXX There is an error in the following commands, note the extra
+    # space between the - and par=
+    #	It turns out the default for the -par argument is this same
+    #	matrix so the extra space had no effect on the end result.
     /cluster/bin/x86_64/gsBig /panasas/store/mm6/fasta/chr2.fa.masked gtf/chr2.fa.gtf -trans=pep/chr2.fa.pep -subopt=subopt/chr2.fa.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2000000
     /cluster/bin/x86_64/gsBig /panasas/store/mm6/fasta/chr14.fa.masked gtf/chr14.fa.gtf -trans=pep/chr14.fa.pep -subopt=subopt/chr14.fa.bed -exe=hg3rdParty/genscanlinux/genscan - par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2000000
 

@@ -813,18 +813,41 @@ if (bundleCount > 1)
     printf("<HR>\n");
 }
 
-void fullCaption(struct sqlConnection *conn, int id)
-/* Print information about image. */
+static int visiGeneForwardedImageFile(struct sqlConnection *conn,
+        int imageFile)
+/* Given imageFile ID, return ID of imageFile with better
+ * caption info.  If no such better info, just return zero. */
 {
-char *publication, *copyright, *acknowledgement;
-char *itemUrl;
-char *caption = visiGeneCaption(conn, id);
-int imageFile = visiGeneImageFile(conn, id);
-struct slInt *imageList;
-int imageCount=0;
-struct captionElement *captionElements;
+char query[256];
+safef(query, sizeof(query),
+        "select toIf from imageFileFwd where fromIf = %d "
+        , imageFile);
+return sqlQuickNum(conn, query);
+}
 
-itemUrl = visiGeneItemUrl(conn, id);
+static int vgForwardedImage(struct sqlConnection *conn, int image)
+/* Return id of image with better caption information if available.
+ * Otherwise return zero.  We are working in image ids instead of 
+ * imageFile ids only because much of the software works off image ids.  */
+{
+int imageFile = visiGeneImageFile(conn, image);
+int forwardedImage = 0;
+int forwardedImageFile = visiGeneForwardedImageFile(conn, imageFile);
+if (forwardedImageFile)
+     {
+     char query[256];
+     safef(query, sizeof(query), 
+     	"select id from image where imageFile=%d",
+        forwardedImageFile);
+     forwardedImage = sqlQuickNum(conn, query);
+     }
+return forwardedImage;
+}
+
+static void showSource(struct sqlConnection *conn, int id)
+/* Put up source info for id if available. */
+{
+char *itemUrl = visiGeneItemUrl(conn, id);
 if (itemUrl != NULL)
     {
     printf("<B>source:</B> ");
@@ -832,6 +855,40 @@ if (itemUrl != NULL)
     printf(itemUrl, visiGeneSubmitId(conn, id));
     printf("\" target=_blank>%s</A> ", visiGeneSubmissionSource(conn, id));
     }
+}
+
+static void showAcknowledgement(struct sqlConnection *conn, int id)
+/* Print acknowledgement info if any. */
+{
+char *acknowledgement = visiGeneAcknowledgement(conn, id);
+if (acknowledgement != NULL)
+    printf("<B>Acknowledgements:</B> %s<BR>\n", acknowledgement);
+}
+
+void fullCaption(struct sqlConnection *conn, int id)
+/* Print information about image. */
+{
+char *publication, *copyright;
+char *caption = NULL;
+int imageFile = -1;
+struct slInt *imageList;
+int imageCount=0;
+int oldId = 0;
+struct captionElement *captionElements;
+int forwardedId = vgForwardedImage(conn, id);
+
+if (forwardedId)
+    {
+    oldId = id;
+    id = forwardedId;
+    }
+
+caption = visiGeneCaption(conn, id);
+imageFile = visiGeneImageFile(conn, id);
+
+showSource(conn, oldId);
+showSource(conn, id);
+
 publication = visiGenePublication(conn,id);
 if (publication != NULL)
     {
@@ -858,29 +915,12 @@ imageCount = slCount(imageList);
 captionElements = makePaneCaptionElements(conn, imageList);
 printCaptionElements(conn, captionElements, imageList);
 
-#ifdef OLD
-setUrl = visiGeneSetUrl(conn, id);
-itemUrl = visiGeneItemUrl(conn, id);
-if (setUrl != NULL || itemUrl != NULL)
-    {
-    printf("<B>%s links:</B> ", visiGeneSubmissionSource(conn, id));
-    if (setUrl != NULL)
-        printf("<A HREF=\"%s\" target=_blank>top level</A> ", setUrl);
-    if (itemUrl != NULL)
-	{
-        printf("<A HREF=\"");
-	printf(itemUrl, visiGeneSubmitId(conn, id));
-	printf("\" target=_blank>this image</A>");
-	}
-    printf("<BR>\n");
-    }
-#endif /* OLD */
 copyright = visiGeneCopyright(conn, id);
 if (copyright != NULL)
     printf("<B>Copyright:</B> %s<BR>\n", copyright);
-acknowledgement = visiGeneAcknowledgement(conn, id);
-if (acknowledgement != NULL)
-    printf("<B>Acknowledgements:</B> %s<BR>\n", acknowledgement);
+showAcknowledgement(conn, oldId);
+showAcknowledgement(conn, id);
+
 printf("<BR>\n");
 }
 

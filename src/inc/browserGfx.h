@@ -28,4 +28,10 @@ void vgDrawRuler(struct vGfx *vg, int xOff, int yOff, int height, int width,
 /* Draw a ruler inside the indicated part of mg with numbers that start at
  * startNum and span range.  */
 
+void vgNextItemButton(struct vGfx *vg, int x, int y, int w, int h, 
+		      Color color, Color bgColor, boolean nextItem);
+/* Draw a button that looks like a fast-forward or rewind button on */
+/* a remote control. If nextItem is TRUE, it points right, otherwise */
+/* left. color is the outline color, and bgColor is the fill color. */
+
 #endif /* BROWSERGFX_H */

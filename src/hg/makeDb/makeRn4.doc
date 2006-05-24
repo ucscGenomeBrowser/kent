@@ -586,7 +586,7 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
         (name, description, nibPath, organism, \
                 defaultPos, active, orderKey, genome, scientificName, \
                 htmlPath, hgNearOk, hgPbOk, sourceName) values \
-        ("rn4", "Nov. 2004", "/gbdb/rn4/rn4.2bit", "Rat", \
+        ("rn4", "Nov. 2004", "/gbdb/rn4", "Rat", \
                "chr2:22845558-23004134", 1, 30, "Rat", \
                 "Rattus norvegicus", "/gbdb/rn4/html/description.html", \
                 0, 0, "Baylor HGSC v. 3.4");'
@@ -2477,6 +2477,7 @@ BASE=/cluster/data/rn4/bed/blastz.rheMac2.2006-03-22
     ln -s blastz.rheMac2.2006-03-22 /cluster/data/rn4/bed/blastz.rheMac2
 
 
+#######################################################################
 # BLASTZ/CHAIN/NET MONDOM4 (DONE 3/24/06 angie)
     ssh pk
     mkdir /cluster/data/rn4/bed/blastz.monDom4.2006-03-23
@@ -2516,7 +2517,14 @@ BASE=/cluster/data/rn4/bed/blastz.monDom4.2006-03-23
       -workhorse kkr7u00 >& do.log & tail -f do.log
     ln -s blastz.monDom4.2006-03-23 /cluster/data/rn4/bed/blastz.monDom4
 
+    ssh kolossus
+    cd /cluster/data/rn4/bed/blastz.monDom4
+    time nice -n +19 featureBits rn4 chainMonDom4Link \
+	> fb.rn4.chainMonDom4Link 2>&1
+    cat fb.rn4.chainMonDom4Link
+    #	200166664 bases of 2571531505 (7.784%) in intersection
 
+#######################################################################
 # BLASTZ/CHAIN/NET BOSTAU2 (DONE 3/24/06 angie)
     ssh pk
     mkdir /cluster/data/rn4/bed/blastz.bosTau2.2006-03-23

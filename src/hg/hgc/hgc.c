@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1012 2006/04/26 02:52:06 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1015 2006/05/03 22:13:41 braney Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -12812,6 +12812,7 @@ char **row, **row1, **row2, **rowb;
 char *lfLabel = NULL;
 char *table = NULL;
 char *intName = NULL;
+char pslTable[64];
 int start = cartInt(cart, "o");
 int end = cartInt(cart, "t");
 int length = end - start;
@@ -12977,10 +12978,10 @@ if (row != NULL)
     for (i = 0; i < lfs->lfCount; i++) 
 	{
 	sqlFreeResult(&sr);
+        hFindSplitTable(seqName, lfs->pslTable, pslTable, &hasBin);
 	sprintf(query, "SELECT * FROM %s WHERE qName = '%s'", 
-	        lfs->pslTable, lfs->lfNames[i]);  
+	               pslTable, lfs->lfNames[i]);  
 	sr = sqlMustGetResult(conn, query);
-	hasBin = hOffsetPastBin(seqName, lfs->pslTable);
 	while ((row1 = sqlNextRow(sr)) != NULL)
 	    {
 	    psl = pslLoad(row1+hasBin);
@@ -15989,8 +15990,10 @@ if (pos != NULL)
 	char *assembly;
 	if (sameString("blastHg16KG", tdb->tableName))
 	    assembly = "hg16";
-	else
+	else if (sameString("blastHg17KG", tdb->tableName))
 	    assembly = "hg17";
+	else
+	    assembly = "hg18";
 	printf("<B>Human position:</B>\n");
 	printf("<A TARGET=_blank HREF=\"%s?position=%s&db=%s\">",
 	    hgTracksName(), pos, assembly);
@@ -17737,7 +17740,8 @@ else if (sameWord(track, "firstEF"))
     }
 else if ( sameWord(track, "blastHg16KG") ||  sameWord(track, "blatHg16KG" ) ||
         startsWith("blastDm",  track) || sameWord(track, "blastMm6KG") || 
-        sameWord(track, "blastSacCer1SG") || sameWord(track, "blastHg17KG") )
+        sameWord(track, "blastSacCer1SG") || sameWord(track, "blastHg17KG") ||
+        sameWord(track, "blastHg18KG") )
     {
     blastProtein(tdb, item);
     }
@@ -18317,7 +18321,7 @@ else if (sameString("allenBrainAli", track))
     {
     doAllenBrain(tdb, item);
     }
-else if (startsWith("dless", track))
+else if (sameString("dless", track) || sameString("encodeDless", track))
     {
     doDless(tdb, item);
     }

@@ -8,8 +8,9 @@
 #include "dbDb.h"
 #include "axtInfo.h"
 #include "hgColors.h"
+#include "wikiLink.h"
 
-static char const rcsid[] = "$Id: web.c,v 1.86 2006/03/23 00:51:58 angie Exp $";
+static char const rcsid[] = "$Id: web.c,v 1.87 2006/04/26 18:09:03 angie Exp $";
 
 /* flag that tell if the CGI header has already been outputed */
 boolean webHeadAlreadyOutputed = FALSE;
@@ -19,6 +20,9 @@ static char *dbCgiName = "db";
 static char *orgCgiName = "org";
 static char *cladeCgiName = "clade";
 static char *extraStyle = NULL;
+
+/* global: a cart for use in error handlers. */
+static struct cart *errCart = NULL;
 
 void textVaWarn(char *format, va_list args)
 {
@@ -39,6 +43,13 @@ if (webInTextMode)
 else
     pushWarnHandler(webVaWarn);
 pushAbortHandler(softAbort);
+}
+
+void webPushErrHandlersCart(struct cart *cart)
+/* Push warn and abort handler for errAbort(); save cart for use in handlers. */
+{
+errCart = cart;
+webPushErrHandlers();
 }
 
 void webPopErrHandlers()
@@ -276,6 +287,20 @@ else
     puts("           Help</A> ");
     }
     
+if (wikiLinkEnabled())
+    {
+    char *wikiUser = wikiLinkUserName();
+    puts("&nbsp;&nbsp;&nbsp;");
+    if (wikiUser)
+	printf("<A HREF=\"/cgi-bin/hgSession%s&hgS_doMainPage=1\" "
+	       "class=\"topbar\">User: %s</A>\n",
+	       uiState, wikiUser);
+    else
+	printf("<A HREF=\"/cgi-bin/hgSession%s&hgS_doMainPage=1\" "
+	       "class=\"topbar\">Log in</A>",
+	       uiState);
+    }
+
 puts("&nbsp;</font></TD>" "\n"
      "       </TR></TABLE>" "\n"
      "</TD></TR></TABLE>" "\n"
@@ -419,7 +444,7 @@ void webVaWarn(char *format, va_list args)
  * the fancy form. */
 {
 if (! webHeadAlreadyOutputed)
-    webStart(NULL, "Error");
+    webStart(errCart, "Error");
 htmlVaWarn(format, args);
 printf("\n<!-- HGERROR -->\n");
 printf("\n\n");
@@ -435,7 +460,7 @@ va_start(args, format);
 
 /* output the header */
 if(!webHeadAlreadyOutputed)
-	webStart(NULL, title);
+	webStart(errCart, title);
 
 /* in text mode, have a different error */
 if(webInTextMode)

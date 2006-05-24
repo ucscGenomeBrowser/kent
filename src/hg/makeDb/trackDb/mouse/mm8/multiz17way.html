@@ -2,7 +2,7 @@
 <P>
 This track shows a measure of evolutionary conservation in 17 vertebrates, 
 including mammalian, amphibian, bird, and fish species, 
-based on a phylogenetic hidden Markov model (phastCons).
+based on a phylogenetic hidden Markov model, phastCons (Siepel et al., 2005).
 Multiz alignments of the following assemblies were used to generate this
 annotation: 
 <UL>
@@ -20,42 +20,133 @@ annotation:
 <LI>opossum (Jan 2006, monDom4)
 <LI>chicken (Feb 2004, galGal2)
 <LI>frog (Aug 2005, xenTro2)
-<LI>zebrafish (May 2005, danRer3)
+<LI>zebrafish (Mar 2006, danRer4)
 <LI>Tetraodon (Feb 2004, tetNig1)
 <LI>Fugu (Aug 2002, fr1)
 </UL></P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-In full display mode, this track shows the overall conservation score across 
-all species as well as pairwise alignments of each species aligned to the 
-$organism genome.  The pairwise alignments are
-shown in dense display mode using a grayscale 
-density gradient.  Checkboxes in the track configuration section allow
-the exclusion of species from the pairwise display; however, this does not
-remove them from the conservation score display.  </P>
+In full and pack display modes, conservation scores are displayed as
+a &quot;wiggle&quot; (histogram), where the height reflects the
+size of the score. Pairwise alignments of each
+species to the $organism genome are displayed below as
+a grayscale density plot (in pack mode) or as a &quot;wiggle&quot;
+(in full mode) that indicates alignment quality.
+In dense display mode, conservation is shown in grayscale using
+darker values to indicate higher levels of overall conservation
+as scored by phastCons. </P>
 <P>
-When zoomed-in to the base-display level, the track shows the base 
-composition of each alignment. The numbers and symbols on the Gaps
-line indicate the lengths of gaps in the $organism sequence at those 
-alignment positions relative to the longest non-$organism sequence. If the gap 
-size is greater than 9, a non-numeric symbol is shown: a &quot;*&quot if the 
-gap size is a multiple of 3; otherwise &quot;+&quot;. 
-To view detailed information about the alignments at a specific position,
-zoom in the display to 30,000 or fewer bases, then click on the alignment.</P>
+The conservation wiggle can be configured in a variety of ways to
+highlight different aspects of the displayed information.
+Click the <A HREF="../goldenPath/help/hgWiggleTrackHelp.html"
+TARGET=_blank>Graph configuration help</A> link for an explanation
+of the configuration options.</P>
 <P>
-This track may be configured in a variety of ways to highlight different 
-aspects of the displayed information. Click the 
-<A HREF="../goldenPath/help/hgWiggleTrackHelp.html" TARGET=_blank>Graph 
-configuration help</A> link for an explanation of the configuration options.</P>
+Checkboxes in the track configuration section allow excluding
+species from the pairwise display; however, this does not remove them
+from the conservation score display.
+To view detailed information about the alignments at a specific
+position, zoom in the display to 30,000 or fewer bases, then click on
+the alignment.</P>
+
+<H3>Gap Annotation</H3>
+<P>
+The &quot;Display chains between alignments&quot; configuration option
+enables display of gaps between alignment blocks in the pairwise alignments in
+a manner similar to the Chain track display.  The following
+conventions are used:
+<UL>
+<LI><B>Single line:</B> no bases in the aligned species. Possibly due to a
+lineage-specific insertion between the aligned blocks in the $organism genome
+or a lineage-specific deletion between the aligned blocks in the aligning
+species.
+<LI><B>Double line:</B> aligning species has one or more unalignable bases in
+the gap region. Possibly due to excessive evolutionary distance between
+species or independent indels in the region between the aligned blocks in both
+species.
+<LI><B>Pale yellow coloring:</B> aligning species has Ns in the gap region.
+Reflects uncertainty in the relationship between the DNA of both species, due
+to lack of sequence in relevant portions of the aligning species.
+</UL></P>
+
+<H3>Genomic Breaks</H3>
+<P>
+Discontinuities in the genomic context (chromosome, scaffold or region) of the
+aligned DNA in the aligning species are shown as follows:
+<UL>
+<LI>
+<B>Vertical blue bar:</B> represents a discontinuity that persists indefinitely
+on either side, <em>e.g.</em> a large region of DNA on either side of the bar
+comes from a different chromosome in the aligned species due to a large scale
+rearrangement.
+<LI>
+<B>Green square brackets:</B> enclose shorter alignments consisting of DNA from
+one genomic context in the aligned species nested inside a larger chain of
+alignments from a different genomic context. The alignment within the
+brackets may represent a short misalignment, a lineage-specific insertion of a
+transposon in the $organism genome that aligns to a paralogous copy somewhere
+else in the aligned species, or other similar occurrence.
+</UL></P>
+
+<H3>Base Level</H3>
+<P>
+When zoomed-in to the base-level display, the track shows the base
+composition of each alignment, with bases in annotated repetitive
+elements displayed in lower case. The numbers and symbols on the Gaps
+line indicate the lengths of gaps in the $organism sequence at those
+alignment positions relative to the longest non-$organism sequence. If the gap
+size is greater than 9, a non-numeric symbol is shown: a &quot;*&quot if the
+gap size is a multiple of 3; otherwise &quot;+&quot;. </P>
+<P>
+Codon translation is available in base-level display mode if the
+displayed region is identified as a coding segment. To display this annotation,
+select the species for translation from the pull-down menu in the Codon
+Translation configuration section at the top of the page. Then, select one of
+the following modes:
+<UL>
+<LI>
+<B>No codon translation:</B> the gene annotation is not used; the bases are
+displayed without translation.
+<LI>
+<B>Use default species reading frames for translation:</B> the annotations from the genome
+displayed
+in the &quot;Default species for translation&quot; pull-down menu are used to
+translate all the aligned species present in the alignment.
+<LI>
+<B>Use reading frames for species if available, otherwise no translation:</B> codon
+translation is performed only for those species where the region is
+annotated as protein coding.
+<LI><B>Use reading frames for species if available, otherwise use default species:</B>
+codon translation is done on those species that are annotated as being protein
+coding over the aligned region using species-specific annotation; the remaining
+species are translated using the default species annotation.
+</UL></P>
+<P>
+Codon translation uses the following gene tracks as the basis for
+translation, depending on the species chosen:
+
+<BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
+<TR ALIGN=left><TD><B>Gene Track</B></TD><TD><B>Species</B></TD></TR>
+<TR ALIGN=left><TD>Known Genes</TD><TD>mouse, rat, human</TD></TR>
+<TR ALIGN=left><TD>RefSeq Genes</TD><TD>chicken</TD></TR>
+<TR ALIGN=left><TD>MGC Genes</TD><TD>X. tropicalis</TD></TR>
+<TR ALIGN=left><TD>mRNAs</TD><TD>rabbit, rhesus, chimp, dog, cow, zebrafish, elephant, Tetraodon, Fugu</TD></TR><TR ALIGN=left><TD>not translated</TD><TD>opossum, armadillo, tenrec</TD></TR>
+</TABLE></BLOCKQUOTE>
+</P>
 
 <H2>Methods</H2>
-<P> 
-Best-in-genome pairwise alignments were generated for each species 
+<P>
+Best-in-genome pairwise alignments were generated for each species
 using blastz, followed by chaining and netting.  The pairwise alignments
-were then multiply aligned using multiz, beginning with $organism-rat and
-subsequently adding in the other species as diagrammed above. The resulting 
-multiple alignments were then assigned conservation scores by phastCons.</P>
+were then multiply aligned using multiz, following the ordering of the
+species tree diagrammed above.
+The resulting multiple alignments were then assigned conservation scores by
+phastCons,
+using a tree model with branch lengths derived from the ENCODE project
+Multi-Species Sequence Analysis group, September 2005 tree model.
+This tree was generated from TBA alignments over 23 vertebrate species and is
+based on 4D sites.</P>
 <P>
 The phastCons program computes conservation scores based on a phylo-HMM, a
 type of probabilistic model that describes both the process of DNA

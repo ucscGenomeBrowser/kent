@@ -1,10 +1,10 @@
 # Build all directories in utils
 
 BROWSER_BINS=cartReset das hgBlat hgConvert \
-        hgGateway hgGene hgPcr hgTables hgText hgTracks \
+        hgGateway hgGene hgPcr hgSession hgTables hgText hgTracks \
 	hgTrackUi hgc cartDump near/hgNear \
 	protein/pbGateway protein/pbTracks protein/pbGlobal \
-	hgLiftOver hgc/cgiClustalw visiGene/vgGetText visiGene/hgVisiGene \
+	hgLiftOver hgc/cgiClustalw visiGene/hgVisiGene \
 	encode/mkEncodeFrameset encode/hgEncodeDataVersions
 
 TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
@@ -162,6 +162,7 @@ UTIL_DIRS = \
 	liftFrags \
 	liftOver \
 	liftUp \
+	lfsOverlap \
 	makeDb \
 	maskOutFa \
 	mdToNcbiLift \
@@ -212,6 +213,7 @@ UTIL_DIRS = \
 	pslSwap \
 	pslToBed \
 	pslUnpile \
+	pslxToFa \
 	qa \
 	qaToQac \
 	qacAgpLift \

@@ -10,7 +10,7 @@
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.7 2006/02/12 07:08:37 markd Exp $";
+static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.8 2006/04/25 01:05:58 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -106,7 +106,7 @@ errAbort("%s\n"
     "\n"
     "Arguments:\n"
     "  o geneDb - db in MAF that corresponds to genePred's organism.\n"
-    "  o targetDb - db of target track in MAF\n"
+    "  o targetDb - db of target genome\n"
     "  o genePred - genePred file.  Overlapping annotations ahould have\n"
     "    be removed.  This file may optionally include frame annotations\n"
     "  o mafFrames - output file\n"

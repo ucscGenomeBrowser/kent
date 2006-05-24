@@ -12,7 +12,7 @@
 #include "glDbRep.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: hgLoadGap.c,v 1.3 2004/11/05 23:45:17 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadGap.c,v 1.4 2006/04/26 16:23:16 angie Exp $";
 
 
 /* Command line switches. */
@@ -91,7 +91,6 @@ void gapFileToTable(struct sqlConnection *conn, char *gapFileName,
 struct lineFile *lf = lineFileOpen(gapFileName, TRUE);
 char tabFileName[256];
 FILE *tabFile = NULL;
-char *line = NULL;
 char *words[16];
 int wordCount;
 
@@ -179,7 +178,7 @@ else
     for (chrFi = chrFiList; chrFi != NULL; chrFi = chrFi->next)
 	{
 	if (chrFi->isDir &&
-	    (strlen(chrFi->name) <= 2) || startsWith("NA_", chrFi->name))
+	    ((strlen(chrFi->name) <= 2) || startsWith("NA_", chrFi->name)))
 	    {
 	    if (oneChrom == NULL || sameWord(chrFi->name, oneChrom))
 		{

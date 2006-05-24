@@ -16,6 +16,47 @@ color 150,100,30
 altColor 230,170,40
 type bed 3 +
 
+track refGene
+shortLabel Human RefSeq
+longLabel Human RefSeq Genes aligned with Blatz
+group genes
+priority 35
+visibility dense
+color 12,12,120
+type genePred refPep refMrna
+
+track multiz5waySyn
+shortLabel Conservation 
+longLabel Human/Mouse/Rat/Dog Multiz Alignment & Conservation using syntenic alignments
+group compGeno
+priority 104.1
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons5way
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+autoScaleDefault Off
+summary multiz5waySummary
+frames multiz5wayFrames
+irows on
+speciesGroups mammal 
+sGroup_mammal hg18 mm8 rn4 canFam2 
+speciesDefaultOff 
+
+track phastConsElements5way
+shortLabel Most Conserved
+longLabel PhastCons Conserved Elements, Human/Dog/Mouse/Rat Multiz Alignment
+group compGeno
+priority 104.3
+visibility hide
+exonArrows off
+showTopScorers 200
+type bed 5 .
+
 track chainHg18
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments

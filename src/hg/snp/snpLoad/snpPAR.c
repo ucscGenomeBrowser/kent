@@ -3,7 +3,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpPAR.c,v 1.3 2006/04/19 22:09:19 heather Exp $";
+static char const rcsid[] = "$Id: snpPAR.c,v 1.4 2006/04/25 21:58:04 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *outputFileHandle = NULL;
@@ -35,8 +35,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t", 
                               row[0], "chrY", row[2], row[3], row[4], row[5], row[6], row[7], row[8]);
-    fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
-                              row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16]);
+    fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+                              row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17]);
     }
 sqlFreeResult(&sr);
 
@@ -51,8 +51,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     bin = hFindBin(start, end);
     fprintf(outputFileHandle, "%d\t%s\t%d\t%d\t%s\t%s\t%s\t%s\t%s\t", 
                               bin, "chrY", start, end, row[4], row[5], row[6], row[7], row[8]);
-    fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
-                              row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16]);
+    fprintf(outputFileHandle, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", 
+                              row[9], row[10], row[11], row[12], row[13], row[14], row[15], row[16], row[17]);
     }
 sqlFreeResult(&sr);
 

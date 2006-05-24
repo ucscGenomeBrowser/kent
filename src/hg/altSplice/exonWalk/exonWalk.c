@@ -17,7 +17,7 @@
 #include "verbose.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: exonWalk.c,v 1.15 2005/09/23 20:37:25 sugnet Exp $";
+static char const rcsid[] = "$Id: exonWalk.c,v 1.16 2006/04/26 20:33:30 sugnet Exp $";
 
 static struct optionSpec optionSpecs[] = 
 /* Our acceptable options to be called with. */
@@ -1961,8 +1961,8 @@ for(ep = eg->paths; ep != NULL; ep = ep->next)
     maxExons = max(ep->nodeCount, maxExons);
 
 /* Now remove paths that don't meet threshold. */
-/* threshold = max(floor(log2(maxExons)-2), 2); */
-threshold = 2; 
+threshold = max(floor(log2(maxExons)-2), 2); 
+/* threshold = 2; */
 for(ep = eg->paths; ep != NULL; ep = epNext)
     {
     epNext = ep->next;

@@ -13,10 +13,10 @@ introns) were initially screened. Next, a series of features were scored to
 determine candidates for retrotranspostion events. These features include
 position and length of the polyA tail, degree of synteny with mouse, coverage 
 of repetitive elements, number of exons that can still be aligned to the 
-retroGene and degree of divergence from the parent gene.  These features are 
-combined heuristic weighting based on analysis of known processed pseudogenes.
-RetroGenes in the final set have a score threshold greater than 425 based on a
-ROC plot against the Vega annotated pseudogenes.
+retroGene and degree of divergence from the parent gene. Retrogenes are 
+classified using a threshold score function that is a linear combination 
+of this set of features. RetroGenes in the final set have a score threshold 
+greater than 425 based on a ROC plot against the Vega annotated pseudogenes.
 <P>
 The "type" field has four possible values: 
 <UL>

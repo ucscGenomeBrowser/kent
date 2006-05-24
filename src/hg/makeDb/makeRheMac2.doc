@@ -592,3 +592,209 @@ cd /cluster/data/hg17/bed/blastz.rheMac2
     ln -s blastz.rn4.swap /cluster/data/rheMac2/bed/blastz.rn4
 
 
+###########################################################################
+# 5 way multiz WITH RheMac2 (robert, 5/3/06) -- MM8, RN4, CANFAM2, HG18
+
+    # first build 5-way multiz alignment from syntenic nets (helps reduce
+    # false positive predictions due to paralogous alignments)
+    # (prepare mafNet files from syntenic nets and copy to
+    # /san/sanvol1/scratch/rheMac2/mafNetSyn; do this for mm8, rn4, canFam2, rheMac2
+
+ssh kkstore02
+cd /cluster/data/rheMac2/bed
+mkdir exoniphy
+cd exoniphy
+    cat > makeSynMaf.sh << 'EOF'
+#!/bin/bash
+fromdb=$1
+todb=$2
+DIR=$3
+outdir=$4/$2
+
+base=`pwd`
+cut -f1 /cluster/data/$fromdb/chrom.sizes > chrom.lst
+echo making syntenic mafs for $todb in $DIR from $base
+cd $DIR
+cd axtChain
+nice netFilter -syn $fromdb.$todb.net.gz > $fromdb.$todb.syn.net
+mkdir -p netSynSplit
+echo splitting nets
+nice netSplit $fromdb.$todb.syn.net netSynSplit
+mkdir -p chain
+echo splitting chains $fromdb.$todb.all.chain.gz
+nice chainSplit chain $fromdb.$todb.all.chain.gz
+echo making mafs
+mkdir -p $outdir
+for i in `cat $base/chrom.lst` ; do echo "netToAxt netSynSplit/$i.net chain/$i.chain /cluster/data/$fromdb/nib /cluster/data/$todb/nib stdout | axtToMaf stdin -tPrefix=$fromdb. -qPrefix=$todb. /cluster/data/$fromdb/chrom.sizes /cluster/data/$todb/chrom.sizes $outdir/$i.maf " ; nice netToAxt netSynSplit/$i.net chain/$i.chain /cluster/data/$fromdb/nib /cluster/data/$todb/nib stdout | axtToMaf stdin -tPrefix=$fromdb. -qPrefix=$todb. /cluster/data/$fromdb/chrom.sizes /cluster/data/$todb/chrom.sizes $outdir/$i.maf ; done
+echo removing temporary files
+rm -rf axtChain/chain
+rm -rf axtChain/netSynSplit/
+# makes syntenic net from net 
+#   with $1 as reference and $2 as query 
+#   uses blastz alignment in $3 then converts to maf written to $4
+# sample usage
+# makeSynMaf.sh rheMac2 canFam2 /cluster/data/rheMac2/bed/blastz.canFam2 /san/sanvol1/scratch/rheMac2/mafNetSyn
+'EOF'
+# << for emacs
+
+makeSynMaf.sh rheMac2 canFam2 /cluster/data/rheMac2/bed/blastz.canFam2 /san/sanvol1/scratch/rheMac2/mafNetSyn
+makeSynMaf.sh rheMac2 hg18 /cluster/data/rheMac2/bed/blastz.hg18 /san/sanvol1/scratch/rheMac2/mafNetSyn
+makeSynMaf.sh rheMac2 mm8 /cluster/data/rheMac2/bed/blastz.mm8 /san/sanvol1/scratch/rheMac2/mafNetSyn
+makeSynMaf.sh rheMac2 rn4 /cluster/data/rheMac2/bed/blastz.rn4 /san/sanvol1/scratch/rheMac2/mafNetSyn
+
+    # make output dir and run dir
+    ssh pk
+    mkdir -p /cluster/data/rheMac2/bed/multiz.syn.rheMac2Hg18Mm8Rn4CanFam2
+    cd /cluster/data/rheMac2/bed/multiz.syn.rheMac2Hg18Mm8Rn4CanFam2
+
+    mkdir -p mafSyn runSyn
+    cd runSyn
+
+    # create scripts to run multiz on cluster
+#!/bin/csh -ef
+
+    set path=(/cluster/bin/penn/multiz.v11.x86_64/ $path )
+    set db = rheMac2
+    set c = $1
+    set maf = $2
+    set run = /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/
+    set tmp = /scratch/tmp/$db/multiz.syn.$c
+    set pairs = /san/sanvol1/scratch/$db/mafNetSyn
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp ../{tree.nh,species.lst} $tmp
+    pushd $tmp
+    foreach s (`cat species.lst`)
+        set in = $pairs/$s/$c.maf
+        set out = $db.$s.sing.maf
+        if ($s == rheMac2) then
+            continue
+        endif
+        if (-e $in.gz) then
+            zcat $in.gz > $out
+        else if (-e $in) then
+            cp $in $out
+        else
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    end
+    set path = ($run $path); rehash
+    $run/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+    popd
+    cp $tmp/$c.maf $maf
+    rm -fr $tmp
+'EOF'
+# << for emacs
+    chmod +x autoMultiz.csh
+
+cat > gsub << 'EOF'
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/rheMac2/bed/multiz.rheMac2Hg18Mm8Rn4CanFam2/mafSyn/$(root1).maf}
+#ENDLOOP
+'EOF'
+# << for emacs
+    cut -f 1 /cluster/data/rheMac2/chrom.sizes > chrom.lst
+    set path = (/parasol/bin $path);rehash
+    gensub2 chrom.lst single gsub jobList
+    para create jobList
+        # 46 jobs
+    para try; para check
+    para push
+
+    # build chromosome-by-chromosome SS files
+
+    cd /cluster/data/rheMac2/bed/multiz.rheMac2Hg18Mm8Rn4CanFam2
+    mkdir run-ss-syn
+    cd run-ss-syn
+    mkdir -p /san/sanvol1/scratch/rheMac2/multiz.rheMac2Hg18Mm8Rn4CanFam2/ssSyn
+    cat > makeSS.csh << 'EOF'
+#!/bin/csh -fe
+set c = $1
+/cluster/bin/phast/msa_view -i MAF -o SS /cluster/data/rheMac2/bed/multiz.rheMac2Hg18Mm8Rn4CanFam2/mafSyn/$c.maf --refseq /cluster/bluearc/rheMac2/chrom/$c.fa | gzip -c >  /san/sanvol1/scratch/rheMac2/multiz.rheMac2Hg18Mm8Rn4CanFam2/ssSyn/$c.ss.gz
+'EOF'
+# << for emacs
+    chmod +x makeSS.csh
+
+    foreach chr (`cut -f 1 /cluster/data/rheMac2/chrom.sizes`)
+	echo "makeSS.csh $chr" >> jobList.ss
+    end
+
+    para create jobList.ss
+        # 46 jobs
+    para try; para check
+    para push
+
+
+    # load summary table on kolossus, as it crashes on hgwdev
+    ssh kolossus
+    cd /cluster/data/rheMac2/bed/multiz.syn.rheMac2Hg18Mm8Rn4CanFam2/mafSyn
+    cat *.maf | \
+        nice hgLoadMafSummary rheMac2 -minSize=30000 -mergeGap=1500 \
+            -maxSize=200000  multiz5waySummary stdin
+
+    # request push to hgwdev
+
+    ssh kkstore01
+    cd /cluster/data/rheMac2/bed/multiz.syn.rheMac2Hg18Mm8Rn4CanFam2/
+    set sanDir = /san/sanvol1/scratch/rheMac2/multiz5waySyn/frames
+    mkdir -p $sanDir/maf
+    cp -rp maf/* $sanDir/maf
+    mkdir frames
+    cd frames
+    cp /cluster/data/mm7/bed/multiz17wayFrames/mkMafFrames .
+    cp /cluster/data/mm7/bed/multiz17wayFrames/Makefile .
+    #edit Makefile to correct species names and set and sanDir
+
+    ssh hgwdev
+    cd /cluster/data/rheMac2/bed/multiz.syn.rheMac2Hg18Mm8Rn4CanFam2/frames
+    make getGenes >&! getGenes.log &
+        # ~1 minute
+    make getFrames >&! getFrames.log &
+    # NOTE: if jobs get hung up (e.g. running for hours, when
+    #   they should run for minutes, do 'para stop' so that
+    #   the 'para make' can restart the job
+    make loadDb >&! loadDb.log &
+
+    ssh kkstore01
+    cd cluster/data/hg17/bed/ multiz.syn.rheMac2Hg18Mm8Rn4CanFam2/mafDownloads
+cat > downloads.csh << 'EOF'
+    date
+    foreach f (../mafSyn/chr*.maf)
+	set c = $f:t:r
+        echo $c
+	nice gzip -c $f > $c.maf.gz
+    end
+    md5sum *.gz > md5sum.txt
+    date
+'EOF'
+    time csh downloads.csh >&! downloads.log
+        # ~2 hours
+        # GOT HERE
+
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/rheMac2/multiz5waySyn
+    mkdir $dir
+    ln -s /cluster/data/rheMac2/bed/multiz5waySyn/mafDownloads/{*.gz,md5sum.txt} $dir
+    cp README.txt $dir
+#trackDb entry
+#track multiz5waySyn
+#shortLabel Conservation 
+#longLabel Human/Mouse/Rat/Dog Multiz Alignment & Conservation using syntenic alignments
+#group compGeno
+#priority 104.1
+#visibility pack
+#color 0, 10, 100
+#altColor 0,90,10
+#type wigMaf 0.0 1.0
+#maxHeightPixels 100:40:11
+#wiggle phastCons5waySyn
+#pairwiseHeight 12
+#spanList 1
+#yLineOnOff Off
+#autoScaleDefault Off
+#summary multiz5waySummary
+#frames multiz5wayFrames
+#irows on
+#speciesGroups mammal 
+#sGroup_mammal hg18 mm8 rn4 canFam2 
+#speciesDefaultOff 

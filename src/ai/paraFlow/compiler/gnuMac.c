@@ -225,10 +225,9 @@ switch (type)
     case ivObject:
     case ivVar:
     case ivJump:
-        return (offset+3)&(~3);
     case ivLong:
     case ivDouble:
-        return (offset+7)&(~7);
+        return (offset+3)&(~3);
     default:
         internalErr();
 	return offset;

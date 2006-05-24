@@ -6126,6 +6126,12 @@ _EOF_
 	-swap -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
 	/cluster/data/hg17/bed/blastz.danRer3/DEF >& swap.out&
 
+   # create the net filee (DONE 2006-04-09 markd)
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/blastz.hg17.swap/axtChain
+    nice netClass -verbose=0 -noAr noClass.net danRer3 hg17 danRer3.hg17.net
+    nice gzip danRer3.hg17.net
+
 ###########################################################################
 # SPLIT SEQUENCE FOR LIFTOVER CHAINS FROM DANRER2 (DONE, 2006-04-17, hartera)
     # followed instructions used in makePanTro2.doc
@@ -6135,3 +6141,96 @@ _EOF_
     cd liftOver
     makeLoChain-split danRer3 /cluster/data/danRer3/nib >&! split.log &
     # Took about 30 minutes.
+
+###########################################################################
+# LIFTOVER CHAINS TO DANRER2 (DONE, 2006-04-25 - 2006-05-03, hartera)
+    # Split (using makeLoChain-split) of danRer2 is doc'ed in makeDanRer2.doc
+    # Do what makeLoChain-split says to do next (start blat alignment)
+    ssh kk
+    mkdir -p /cluster/data/danRer3/bed/liftOver
+    cd /cluster/data/danRer3/bed/liftOver
+    makeLoChain-align danRer3 /iscratch/i/danRer3/nib danRer2 \
+        /iscratch/i/danRer2/split10k \
+        /iscratch/i/danRer2/11.ooc >&! align.log &
+    # Took about 5 minutes.
+    # Do what its output says to do next (start cluster job)
+    cd /cluster/data/danRer3/bed/blat.danRer2.2006-04-25/run
+    para try, check, push, check, ...
+    para time >&! run.time
+# Completed: 782 of 784 jobs
+# Crashed: 2 jobs
+# CPU time in finished jobs:    4324484s   72074.73m  1201.25h   50.05d  0.137 y
+# IO & Wait Time:                 35200s     586.67m     9.78h    0.41d  0.001 y
+# Average job time:                5575s      92.92m     1.55h    0.06d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           62741s    1045.68m    17.43h    0.73d
+# Submission to last job:        355469s    5924.48m    98.74h    4.11d
+
+    # 2 jobs keep crashing so try them on the pk: chrUn_chrUn and chrUn_chr20
+    # need to copy the danRer2 split10k over to the pk
+    ssh kkr1u00
+    mkdir -p /san/sanvol1/scratch/danRer2/split10k
+    rsync -a --progress /iscratch/i/danRer2/split10k/* \
+          /san/sanvol1/scratch/danRer2/split10k/
+    # copy over 11.ooc file for danRer2
+    cp /iscratch/i/danRer2/11.ooc /san/sanvol1/scratch/danRer2
+    ssh pk
+    cd /cluster/data/danRer3/bed/blat.danRer2.2006-04-25/run
+    mkdir extraRun raw
+    cd extraRun
+    grep chrUn_chrUn ../spec > spec
+    grep chrUn_chr20 ../spec >> spec
+    # change directories for spec file
+    perl -pi.bak -e 's#/iscratch/i#/san/sanvol1/scratch#g' spec
+    rm spec.bak 
+    para create spec
+    para push, check etc.
+    para time >& run.time
+# Completed: 2 of 2 jobs
+# CPU time in finished jobs:     263163s    4386.05m    73.10h    3.05d  0.008 y
+# IO & Wait Time:                    62s       1.04m     0.02h    0.00d  0.000 y
+# Average job time:              131613s    2193.54m    36.56h    1.52d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:          147104s    2451.73m    40.86h    1.70d
+# Submission to last job:        147104s    2451.73m    40.86h    1.70d
+
+    ssh kkr1u00
+    # merge all raw output:
+    cd /cluster/data/danRer3/bed/blat.danRer2.2006-04-25
+    mv ./run/raw/*.psl ./raw/
+    # lift alignments
+    cd /cluster/data/danRer3/bed/liftOver
+    makeLoChain-lift danRer3 danRer2 >&! lift.log &
+    # Took about 8 minutes to run.
+
+    # chain alignments
+    ssh kki
+    cd /cluster/data/danRer3/bed/liftOver
+    makeLoChain-chain danRer3 /iscratch/i/danRer3/nib \
+                danRer2 /iscratch/i/danRer2/nib >&! chain.log &
+    # Do what its output says to do next (start cluster job)
+    cd /cluster/data/danRer3/bed/blat.danRer2.2006-04-25/chainRun
+    para try, check, push, check etc. ...
+    para time >&! run.time
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:       2751s      45.86m     0.76h    0.03d  0.000 y
+# IO & Wait Time:                   879s      14.64m     0.24h    0.01d  0.000 y
+# Average job time:                 130s       2.16m     0.04h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             598s       9.97m     0.17h    0.01d
+# Submission to last job:          1520s      25.33m     0.42h    0.02d
+
+    # net alignment chains
+    ssh kkstore02
+    cd /cluster/data/danRer3/bed/liftOver
+    makeLoChain-net danRer3 danRer2 >&! net.log &
+    # Took about 24 minutes to run.
+    # load reference to over.chain into database table,
+    # and create symlinks  /gbdb  and download area
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/liftOver
+    makeLoChain-load danRer3 danRer2 >&! load.log &
+    # clean up
+    rm *.log
+    # test by converting a region using the "convert" link on
+    # the browser, and comparing to blat of the same region

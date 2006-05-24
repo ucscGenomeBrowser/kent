@@ -106,7 +106,7 @@ track chainGalGal2
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 153.3
+priority 253
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -118,7 +118,7 @@ track netGalGal2
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 153.4
+priority 254
 visibility hide
 spectrum on
 type netAlign galGal2 chainGalGal2
@@ -128,7 +128,7 @@ track chainRn4
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 153.45
+priority 208
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -142,7 +142,7 @@ track netRn4
 shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 153.46
+priority 209
 visibility hide 
 spectrum on
 type netAlign rn4 chainRn4
@@ -193,10 +193,10 @@ type netAlign mm6 chainMm6
 otherDb mm6
 
 track chainHg17
-shortLabel $o_Organism Chain
-longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+shortLabel $o_db Chain
+longLabel $o_db ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 153.7
+priority 257
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -205,10 +205,10 @@ type chain hg17
 otherDb hg17
 
 track netHg17
-shortLabel $o_Organism Net
-longLabel $o_Organism ($o_date/$o_db) Alignment Net
+shortLabel $o_db Net
+longLabel $o_db ($o_date/$o_db) Alignment Net
 group compGeno
-priority 153.8
+priority 258
 visibility hide
 spectrum on
 type netAlign hg17 chainHg17
@@ -216,10 +216,10 @@ otherDb hg17
 
 
 track chainHg18
-shortLabel Hg18 Chain
-longLabel Hg18 ($o_date/$o_db) Chained Alignments
+shortLabel $o_Organism Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 153.7
+priority 255
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -228,10 +228,10 @@ type chain hg18
 otherDb hg18
 
 track netHg18
-shortLabel Hg18 Net
-longLabel Hg18 ($o_date/$o_db) Alignment Net
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 153.8
+priority 256
 visibility full
 spectrum on
 type netAlign hg18 chainHg18

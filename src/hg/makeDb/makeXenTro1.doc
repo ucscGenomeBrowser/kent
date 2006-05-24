@@ -1269,6 +1269,13 @@ cat > fix.csh << 'EOF'
     hgLoadChain -tIndex xenTro1 chainHg17 all.chain
     rm chain.tab link.tab
 
+    # compressed and create symlinks to make consistent with newer builds
+    # 2006-04-09 markd
+    ln -s zb.hg17  /cluster/data/xenTro1/bed/blastz.hg17
+    cd /cluster/data/xenTro1/bed/zb.hg17/axtChain
+    gzip all.chain human.net 
+    ln -s all.chain.gz xenTro1.hg17.all.chain.gz
+    ln -s human.net.gz xenTro1.hg17.net.gz
 
 # ALIGN TO MOUSE (BLASTZ/CHAIN/NET DONE 10/24/04 JK))
   ssh kk
@@ -2518,3 +2525,5 @@ doBlatz $(root1) $(root2) {check out exists psl/$(root1)_$(root2).psl}
 
     time nice -n +19 featureBits xenTro1 chainMm8Link
     #   59307185 bases of 1381238994 (4.294%) in intersection
+
+

@@ -3475,7 +3475,62 @@ rm j1.out j2.out
 # 797412909 bases of 2866216770 (27.821%) in intersection
 
 ##########################################################################
-# BLASTZ OPOSSUM monDom2 (STARTED - 2006-01-23 - Hiram)
+# BLASTZ OPOSSUM monDom2 second time (DONE - 2006-02-13 - Hiram)
+
+    ssh kk
+    mkdir /cluster/data/hg18/bed/blastzMonDom2.2006-02-13
+    cd /cluster/data/hg18/bed
+    ln -s blastzMonDom2.2006-02-13 blastz.monDom4
+    cd blastzMonDom2.2006-02-13
+    
+    cat << '_EOF_' > DEF
+# human vs. opossum
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/i386:/parasol/bin
+
+BLASTZ=blastz.v7
+
+# settings for more distant organism alignments
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Human (hg18)
+SEQ1_DIR=/scratch/hg/hg18/nib
+SEQ1_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Opossum monDom4
+SEQ2_DIR=/iscratch/i/monDom4/monDom4RMExtra.2bit
+SEQ2_LEN=/iscratch/i/monDom4/chrom.sizes
+SEQ2_CHUNK=30000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/hg18/bed/blastzMonDom4.2006-02-13
+TMPDIR=/scratch/tmp
+'_EOF_'
+    #	<< happy emacs
+
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-02-13
+    time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
+	`pwd`/DEF > blastz.out 2>&1 &
+
+    ssh kolossus
+    cd /cluster/data/hg18/bed/blastzMonDom2.2006-02-13
+    time nice -n +19 featureBits hg18 chainMonDom4Link \
+	> fb.hg18.chainMonDom4Link 2>&1 &
+    cat fb.hg18.chainMonDom4Link
+    #	356865888 bases of 2881515245 (12.385%) in intersection
+
+    #	for the swap, see makeMonDom4.doc 2006-04-28
+
+##########################################################################
+# BLASTZ OPOSSUM monDom2 first time (EXPERIMENT - 2006-01-23 - Hiram)
 
     ssh pk
     mkdir /cluster/data/hg18/bed/blastzMonDom2.2006-01-23
@@ -4897,6 +4952,13 @@ TMPDIR=/scratch/tmp
     time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 	-bigClusterHub=kk -chainMinScore=5000 -chainLinearGap=loose \
 	-continue=load -stop=load `pwd`/DEF > load.out 2>&1 &
+
+    ssh kolossus
+    cd /cluster/data/hg18/bed/blastz.monDom4
+    time nice -n +19 featureBits hg18 chainMonDom4Link \
+	> fb.hg18.chainMonDom4Link 2>&1 &
+    cat fb.hg18.chainMonDom4Link
+    #	356865888 bases of 2881515245 (12.385%) in intersection
 
 ####################################################################################
 # BUILD KNOWN GENES TABLES (STARTED 2/1/06, DONE 2/13/06 Fan)
@@ -8082,6 +8144,23 @@ time /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
 -stop=load \
 `pwd`/DEF > load4.out 2>&1 &
 
+# Finally, a success!
+
+tail load4.out
+#...
+# cd /cluster/data/hg18/bed/blastzLoxAfr1.2006-01-03/axtChain
+#netClass -verbose=0 -noAr noClass.net hg18 loxAfr1 hg18.loxAfr1.net
+#netFilter -minGap=10 hg18.loxAfr1.net
+#hgLoadNet -verbose=0 hg18 netLoxAfr1 stdin
+#startStep: 5, at step 7 download to stopStep 6
+
+# *** All done!
+# *** Add {chain,net}LoxAfr1 tracks to trackDb.ra if necessary.
+
+# The swap-load was not successful, after several tries.
+# Last one seems was due to out of memory problem.
+# Per Hiram, we no longer do swap for 2X genomes, unless specifically requested.
+# Mark made an inquiry, but said he can get by with hg18->loxAfr1 nets.
 #########################################################################
 # BLASTZ COW BosTau2 second time (STARTED - 2006-01-07 Fan)
 
@@ -8887,3 +8966,387 @@ BASE=/cluster/data/hg18/bed/blastz.xenTro2.2006-04-20
       -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose DEF \
       >& do.log & tail -f do.log
     ln -s blastz.xenTro2.2006-04-20 /cluster/data/hg18/bed/blastz.xenTro2
+
+###########################################################################
+# BLASTZ CHAIN SWAP FOR ZEBRAFISH (danRer4) (DONE, 2006-04-25, hartera)
+# CREATE CHAIN AND NET TRACKS, AXTNET, MAFNET, LIFTOVER AND ALIGNMENT DOWNLOADS
+    # See also makeDanRer4.doc
+    # alignments are in: /cluster/data/hg18/bed/blastz.danRer4.swap
+    # Blastz parameters used were:
+    # BLASTZ_H=2000
+    # BLASTZ_Y=3400
+    # BLASTZ_L=6000
+    # BLASTZ_K=2200
+    # BLASTZ_Q=/san/sanvol1/scratch/blastz/HoxD55.q
+    # There are no lineage-specific repeats defined for this species pair so
+    # all repeats were used as lineage-specific.
+    ssh pk
+    cd /cluster/data/danRer4/bed/blastz.hg18.2006-04-24
+    nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF >& doSwap.log &
+    # Took about 15 minutes.
+ 
+    # check with featureBits and compare to danRer3 chains:
+    featureBits hg18 chainDanRer4Link
+    # 57415379 bases of 2881515245 (1.993%) in intersection
+    featureBits hg18 chainDanRer3Link
+    # 64801985 bases of 2881515245 (2.249%) in intersection
+ 
+    featureBits -chrom=chr1 hg18 refGene:cds chainDanRer4Link -enrichment
+    # refGene:cds 1.389%, chainDanRer4Link 2.337%, both 0.937%, cover 67.47%, 
+    # enrich 28.87x
+
+    featureBits -chrom=chr1 hg18 refGene:cds chainDanRer3Link -enrichment
+    # refGene:cds 1.389%, chainDanRer3Link 2.601%, both 0.931%, cover 67.01%, 
+    # enrich 25.76x
+
+    featureBits -chrom=chr1 hg17 refGene:cds chainDanRer2Link -enrichment
+    # refGene:cds 1.395%, chainDanRer2Link 2.742%, both 0.911%, cover 65.31%, 
+    # enrich 23.82x
+
+    # similar coverage and enrichment for danRer4 and danRer3 chains
+    # which is good.
+    featureBits -chrom=chr1 hg18 refGene:cds netDanRer4 -enrichment
+    # refGene:cds 1.389%, netDanRer4 31.001%, both 1.096%, cover 78.91%, 
+    # enrich 2.55x
+    featureBits -chrom=chr1 hg18 refGene:cds netDanRer3 -enrichment
+    # refGene:cds 1.389%, netDanRer3 29.929%, both 1.080%, cover 77.72%, 
+    # enrich 2.60x
+    # Similar coverage and enrichment for danRer4 net on hg18 as for danRer3.
+
+#  LOAD FIRSTEF TRACK (DONE 2006-04-25 Fan)
+
+    ssh hgwdev
+    mkdir -p /cluster/data/hg18/bed/firstEF
+    cd /cluster/data/hg18/bed/firstEF 
+
+# receive the file firstEFMar05New.bed.gz from email (ramana.davuluri@osumc.edu) into this subdirectory
+
+    cat << '_EOF_' > sedScript
+s/chr23/chrX/g
+s/chr24/chrY/g
+/^>/d 
+/^$/d
+/^No/d
+'_EOF_'
+    # << this line keeps emacs coloring happy
+    bash
+    zcat firstEFMar05New.bed.gz | sed -f sedScript | awk  "{OFS=\"\t\"} {\$3 +=1; print  \$0}" > firstEF.bed
+    exit
+ 
+    hgLoadBed hg18 firstEF firstEF.bed
+    rm firstEF.bed bed.tab
+
+#done firstEF
+
+# ALTGRAPHX TRACK (sugnet) Wed Apr 26 13:46:46 PDT 2006
+
+cd /cluster/store1/sugnet/altSplice/
+mkdir hg18-2006.04.13
+cd hg18-2006.04.13
+mkdir rnaCluster
+cd rnaCluster
+
+# Don't use RAGE libraries for clone bounds.
+~/latestJk/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh  hg18 rage.libs
+
+# Make spec file to run.
+foreach c (`echo 'select chrom from chromInfo' | hgsql hg18 | grep -v chrom`)
+    set out = chrom/$c.bed
+    echo "clusterRna -mrnaExclude=hg18.rage.libs hg18 /dev/null $out -chrom=$c" >> clusterRna.spec
+end
+
+
+# Tried running it on the minicluster, but can't connect to the 
+# cluster accounts so run it from here on hgwdev.
+chmod 755 clusterRna.spec
+mkdir chrom
+./clusterRna.spec >& clusterRna.log
+
+cd ..
+
+# Make script to setup parasol job file for raw altGraphX files on human
+cat << '_EOF_' > makeRun.sh
+#!/bin/sh
+
+for chrom in `echo "select chrom from chromInfo" | hgsql hg18 | grep -v chrom`; do
+echo 'echo "Doing $chrom"'
+echo "/cluster/home/sugnet/bin/i386/altSplice -db=hg18   -beds=rnaCluster/chrom/$chrom.bed -agxOut=agxs/hg18.$chrom.agx -consensus -weightMrna -localMem -minAli=.95 -minCover=.5 -chromNib=/cluster/data/hg18/nib/$chrom.nib"
+done
+'_EOF_'
+    # << this line makes emacs coloring happy
+
+mkdir agxs
+chmod 755 makeRun.sh
+chmod 755 toRun.sh
+./toRun.sh >& toRun.log &
+
+cat agxs/*.agx > hg18.agx
+
+mkdir hg18
+mv agxs/ makeRun.sh toRun.log toRun.sh hg18.agx hg18
+cd ..
+
+mkdir mm7
+cd mm7
+# make the rnaClusters
+mkdir rnaCluster
+cd rnaCluster/
+mkdir chrom
+
+# Don't use RAGE libraries for clone bounds.
+~/latestJk/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh  mm7 rage.libs
+
+foreach c (`echo 'select chrom from chromInfo' | hgsql mm7 | grep -v chrom`)
+    set out = chrom/$c.bed
+    echo "clusterRna -mrnaExclude=mm7.rage.libs mm7 /dev/null $out -chrom=$c" >> clusterRna.spec
+end
+
+# tried to run on kki, but no longer can access db from minicluster.
+chmod 755 clusterRna.spec
+./clusterRna.spec >& clusterRna.log &
+
+cd ..
+
+cat << '_EOF_' > makeRun.sh
+#!/bin/sh
+
+for chrom in `echo "select chrom from chromInfo" | hgsql mm7 | grep -v chrom`; do
+echo 'echo "Doing $chrom"'
+echo "/cluster/home/sugnet/bin/i386/altSplice -db=mm7   -beds=rnaCluster/chrom/$chrom.bed -agxOut=agxs/mm7.$chrom.agx -consensus -weightMrna -localMem -minAli=.95 -minCover=.5 -chromNib=/cluster/data/mm7/nib/$chrom.nib"
+done
+'_EOF_'
+    # << this line keeps emacs coloring happy
+chmod 755 makeRun.sh
+./makeRun.sh > toRun.sh
+chmod 755 toRun.sh
+mkdir agxs
+./toRun.sh >& toRun.log & 
+
+cat agxs/*.agx > mm7.agxc
+cd ..
+mkdir orthoSpliceExoniphy
+cd orthoSpliceExoniphy/
+
+echo "select chrom, txStart, txEnd, name, id, strand from exoniphy order by chrom, txStart;" | hgsql hg17 | grep -v txStart > hg17.exoniphy.bed
+liftOver hg17.exoniphy.bed /gbdb/hg17/liftOver/hg17ToHg18.over.chain.gz hg18.exoniphy.bed hg17.exoniphy.unmapped.bed
+mkdir orthoSplice
+cd orthoSplice
+ln -s ../orthoSpliceExoniphy/hg18.exoniphy.bed .
+echo 'select chrom, size from chromInfo' | hgsql hg18 | grep -v chrom > chromSizes.tab
+cp /cluster/data/hg18/bed/blastz.mm7/axtChain/hg18.mm7.all.chain.gz .
+chainSplit chains hg18.mm7.all.chain 
+cp /cluster/data/hg18/bed/blastz.mm7/axtChain/hg18.mm7.net.gz .
+netSplit hg18.mm7.net.gz nets
+
+mkdir agx report logs
+cat << '_EOF_' > makeRun.sh
+#!/usr/bin/perl -w
+
+open(IN, 'chromSizes.tab') or die "Can't open chromSizes.tab\n";
+while(<IN>) {
+    chomp;
+    @w = split;
+    print "/cluster/home/sugnet/bin/i386/orthoSplice -chromSize=$w[1] -exonFile=hg18.exoniphy.bed -trumpNum=3 -chrom=$w[0] -altInFile=../hg18/agxs/hg18.$w[0].agx -orthoAgxFile=../mm7/mm7.agx -db=hg18 -orthoDb=mm7 -netFile=nets/$w[0].net -chainFile=chains/$w[0].chain -commonFile=agx/$w[0].hg18.mm7.cons.t3.agx -reportFile=report/$w[0].hg18.report -edgeFile=report/$w[0].hg18.edge.report >& logs/$w[0].test.log\n";
+}
+'_EOF_'
+    # << this line keeps emacs coloring happy
+
+# clean up disk space we're not using
+rm hg18.mm7.all.chain hg18.mm7.net.gz nets/* chains/* 
+chmod 755 makeRun.sh
+./makeRun.sh > orthoSplice.para.spec
+
+ssh kki
+cd /cluster/store1/sugnet/altSplice/hg18-2006.04.13/orthoSplice
+para create orthoSplice.para.spec 
+para push
+
+cat agx/*.agx > hg18.mm7.t3.exoniphy.agx
+cp ~/latestJk/kent/src/hg/lib/altGraphX.sql .
+hgLoadBed -notItemRgb -sqlTable=altGraphX.sql hg18 altGraphX hg18.mm7.t3.exoniphy.agx 
+
+# end AltGraphX track.
+
+####################################################################
+# EXONWALK TRACK (sugnet) Wed Apr 26 13:51:14 PDT 2006
+
+# first make altGraphX track (see above)
+cd /cluster/store1/sugnet/altSplice/hg18-2006.04.13/orthoSplice
+mkdir exonWalk
+mkdir beds
+cd exonWalk
+mkdir beds
+foreach file (`ls ../agx/*.agx`)
+  set base=`basename $file .agx`
+  echo "/cluster/home/sugnet/bin/i386/exonWalk db=hg18 minPercent=0 trumpSize=100000 $file beds/$base.bed" >> exonWalk.para.spec
+end
+
+para create exonWalk.para.spec
+para push
+cat beds/*.bed > hg18.mm7.cons.t3.exoniphy.bed
+
+mkdir orfs
+cd orfs
+mkdir bedOrf beds fa borf
+cp ~/store1/altSplice/hg17-2005.01.09/orthoSpliceExonify/exonWalk/orfs.mrna2/*.sh ./
+splitFile ../../hg18.mm7.cons.t3.exoniphy.bed 500 exonWalk.
+cat << '_EOF_' > makeFa.sh
+#!/bin/sh
+
+for file in "$@"
+do
+ base=`basename $file`
+ echo "Doing $file"
+ echo "sequenceForBed -db=hg18 -bedIn=$file -fastaOut=fa/$base.fa "
+ sequenceForBed -db=hg18 -bedIn=$file -fastaOut=fa/$base.fa 
+done
+'_EOF_'
+chmod 755 makeFa.sh
+makeFa.sh beds/*
+
+
+cat << '_EOF_' > makeGenePred.sh
+#!/bin/sh
+
+for file in "$@"
+do
+  base=`basename $file`
+  /cluster/home/sugnet/bin/i386/borfMatcher -keepNmd beds/$base borf/$base.borf bedOrf/$base.bed genePred/$base.gp 
+done
+'_EOF_'
+chmod 755 makeGenePred.sh 
+
+makeGenePred.sh beds/*
+cat beds/* > hg18.mm7.exonWalk.bed
+cat genePred/*.gp > hg18.mm7.exonWalk.gp
+ldHgGene -predTab hg18 exonWalk hg18.mm7.exonWalk.gp 
+
+cat << '_EOF_' > makeNoNmdGenePred.sh
+#!/bin/sh
+
+for file in "$@"
+do
+  base=`basename $file`
+  /cluster/home/sugnet/bin/i386/borfMatcher beds/$base borf/$base.borf bedOrfNoNmd/$base.bed genePredNoNmd/$base.gp 
+done
+'_EOF_'
+
+mkdir bedOrfNoNmd genePredNoNmd
+chmod 755 ./makeNoNmdGenePred.sh 
+
+wc beds/*
+ 275987 3311844 57319256 total
+wc genePredNoNmd/*.gp
+ 169203 1692030 59907679 total
+wc genePred/*.gp
+ 225252 2252520 83619240 total
+
+
+cat genePred/*.gp > hg18.mm7.exonWalk.nmd.gp
+cat genePredNoNmd/*.gp > hg18.mm7.exonWalk.noNmd.gp
+cat beds/* > hg18.mm7.exonWalk.all.bed
+
+# Plain "exonWalk" track is the only one used on regular genome browser.
+ldHgGene -predTab hg18 exonWalk hg18.mm7.exonWalk.noNmd.gp 
+hgLoadBed hg18 exonWalkAll hg18.mm7.exonWalk.all.bed 
+ldHgGene -predTab hg18 exonWalkWithNmd hg18.mm7.exonWalk.nmd.gp 
+
+cat hg18.mm7.exonWalk.noNmd.gp  | cut -f 1,2 -d '.' | sort | uniq -c | sort -rnk 1 > counts.txt
+Q1 1.000000
+median 3.000000
+Q3 7.000000
+average 10.670556
+min 1.000000
+max 3844.000000
+count 15857
+total 169203.000000
+standard deviation 63.330761
+
+cat hg18.mm7.exonWalk.nmd.gp  | cut -f 1,2 -d '.' | sort | uniq -c | sort -rnk 1 > counts.txt
+ave counts.txt
+Q1 1.000000
+median 3.000000
+Q3 8.000000
+average 14.037891
+min 1.000000
+max 7278.000000
+count 16046
+total 225252.000000
+standard deviation 99.406890
+
+trackGenome hg18 all refGene:cds trackGenome.spec
+Track Specification      track  overlap track    cov   track   new    cum 
+                          size     size  geno  track     cov   cov    cov 
+-----------------------------------------------------------------------------
+exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
+# end ExonWalk track.
+
+####################################################################
+# LOAD ENSEMBL GENES (DONE, 2006-05-02, Fan)
+
+    mkdir /cluster/data/hg18/bed/ensembl
+    cd /cluster/data/hg18/bed/ensembl
+    # Get the ensembl protein data from 
+    # http://www.ensembl.org/Homo_sapiens/martview
+    # Follow this sequence through the pages:
+    # Page 1) Make sure that the Homo_sapiens choice is selected. Hit next.
+    # Page 2) Uncheck the "Limit to" box in the region choice. Then hit next.
+    # Page 3) Choose the "Structures" box. 
+    # Page 4) Choose GTF as the ouput.  choose gzip compression.  hit export.
+    # Save as ensemblGene.gtf.gz
+
+    # Ensembl handles random chromosomes differently than us, so we
+    # strip this data.  Fortunately it just loses a couple of genes.
+    # Add "chr" to front of each line in the gene data gtf file to make 
+    # it compatible with our software.
+    # Finally, get rid of the ".1" or ".2" after the name
+    gunzip -c ensemblGene.gtf.gz \
+    |sed -e 's/c22_H2/22_h2_hap1/'\
+    |sed -e 's/c5_H2/5_h2_hap1/'\
+    |sed -e 's/c6_COX/6_cox_hap1/'\
+    |sed -e 's/c6_QBL/6_qbl_hap2/'\
+    | perl -wpe 's/^([0-9]|X|Y|Un|MT|5_h2_hap1|22_h2_hap1|6_cox_hap1|6_qbl_hap2)/chr$1/ || die "Line $. doesnt start with human chrom:\n$_"' \
+    | sed -e 's/\..\"/\"/g' \
+    | sed -e 's/chrMT/chrM/' \
+    > ensGene.gtf
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/ensembl
+    /cluster/bin/i386/ldHgGene hg18 ensGene ensGene.gtf
+    # Read 59069 transcripts in 1025803 lines in 1 files
+    # 59069 groups 29 seqs 1 sources 4 feature types
+    # 59069 gene predictions
+
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  Use ensMart to create it as above, except:
+    # Page 3) Choose the "Features" box. In "Ensembl Attributes", check 
+    # Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID.  
+    # Choose Text, tab-separated as the output format.  Result name ensGtp.
+    # Save file as ensGtp.txt.gz
+    gunzip ensGtp.txt.gz
+    hgsql hg18 < ~/kent/src/hg/lib/ensGtp.sql
+    # remove header line from ensGtp.txt
+    echo "load data local infile 'ensGtp.txt' into table ensGtp ignore 1 lines" | hgsql -N hg18
+
+    # Load Ensembl peptides:
+    # Get them from ensembl as above in the gene section except for
+    # Page 2) Choose protein_coding for gene type
+    # Page 3) Choose the "Sequences" box. 
+    # Page 4) check Ensembl Gene ID, Transcript ID, and Peptid ID, uncheck chrom, Transcripts/Proteins.  Peptide.  Format = FASTA.
+    # Save file as ensemblPep.fa.gz
+    gunzip ensemblPep.fa.gz
+    hgPepPred hg18 ensembl ensemblPep.fa
+
+# SGP GENES (DONE 5/3/06 Fan)
+    ssh hgwdev 
+    mkdir /cluster/data/hg18/bed/sgp
+    cd /cluster/data/hg18/bed/sgp
+    foreach chr (`awk '{print $1;}' ../../chrom.sizes`)
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200603/SGP/$chr.gtf
+      wget http://genome.imim.es/genepredictions/H.sapiens/golden_path_200603/SGP/$chr.prot
+    end
+
+    ldHgGene -gtf -genePredExt hg18 sgpGene chr*.gtf
+

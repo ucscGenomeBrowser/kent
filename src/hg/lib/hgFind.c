@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.184 2006/04/07 05:26:23 kate Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.185 2006/05/01 17:49:27 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -2945,7 +2945,8 @@ else
 			    multiTerm))
 	    {
 	    done = TRUE;
-	    break;
+	    if (! hgFindSpecSetting(hfs, "semiShortCircuit"))
+		break;
 	    }
 	}
     if (! done)

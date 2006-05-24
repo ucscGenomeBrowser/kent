@@ -10,11 +10,12 @@
 #include "chainBlock.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: hgLoadChain.c,v 1.15 2006/01/18 17:38:33 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadChain.c,v 1.16 2006/04/26 18:53:38 angie Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
         {"noBin", OPTION_BOOLEAN},
+	{"noSort", OPTION_BOOLEAN},
         {"tIndex", OPTION_BOOLEAN},
         {"oldTable", OPTION_BOOLEAN},
         {"normScore", OPTION_BOOLEAN},
@@ -26,6 +27,7 @@ static struct optionSpec optionSpecs[] = {
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
+static boolean noSort = FALSE;		/* Suppress sorting of input. */
 static boolean tIndex = FALSE;		/* Include tName in index. */
 static boolean oldTable = FALSE;	/* Don't redo table. */
 static boolean normScore = FALSE;	/* Add normScore column */
@@ -43,6 +45,8 @@ errAbort(
   "options:\n"
   "   -tIndex  Include tName in indexes (for non-split chain tables)\n"
   "   -noBin   suppress bin field, default: bin field is added\n"
+  "   -noSort  Don't sort by target (memory-intensive) -- input *must* be\n"
+  "            sorted by target already if this option is used.\n"
   "   -oldTable add to existing table, default: create new table\n"
   "   -sqlTable=table.sql Create table from .sql file\n"
   "   -normScore add normalized score column to table, default: not added\n"
@@ -135,11 +139,12 @@ sqlUpdate(conn, dy->string);
 sqlDisconnect(&conn);
 }
 
-static void loadDatabaseChain(char *database, char *tab, char *track)
+static void loadDatabaseChain(char *database, char *tab, char *track, int count)
 /* Load database from tab file. */
 {
 struct sqlConnection *conn = sqlConnect(database);
 struct dyString *dy = newDyString(1024);
+char comment[256];
 /* First make table definition. */
 if (sqlTable != NULL)
     {
@@ -201,6 +206,10 @@ else if (!oldTable)
 dyStringClear(dy);
 dyStringPrintf(dy, "load data local infile '%s' into table %s", tab, track);
 sqlUpdate(conn, dy->string);
+/* add a comment to the history table and finish up connection */
+safef(comment, sizeof(comment),
+      "Loaded %d chains into %s chain table", count, track);
+hgHistoryComment(conn, comment);
 sqlDisconnect(&conn);
 }
 
@@ -236,28 +245,41 @@ sprintf(linkTrack, "%sLink",track);
 lf = lineFileOpen(fileName, TRUE);
 while ((chain = chainRead(lf)) != NULL)
     {
-    slAddHead(&chainList, chain);
+    if (noSort)
+	{
+	oneChain(chain, linkFile, chainFile);
+	/* Freeing slows us down a bit but the purpose of the noSort option */
+	/* is to prevent us from running out of memory: */
+	chainFree(&chain);
+	}
+    else
+	{
+	slAddHead(&chainList, chain);
+	}
     ++count;
     }
-slSort(&chainList, chainCmpTarget);
-for (chain = chainList; chain != NULL; chain = chain->next)
-    oneChain(chain, linkFile, chainFile);
+if (!noSort)
+    {
+    slSort(&chainList, chainCmpTarget);
+    for (chain = chainList; chain != NULL; chain = chain->next)
+	oneChain(chain, linkFile, chainFile);
 /* chainFreeList(&chainList); */ /* This slows things way down, especially on
                                   * chromosome 19.  I'm not sure if it's just
 				  * the usual slow Linux free on 100 million
 				  * items or so, or something else. It's a
 				  * good thing hgTracks uses lmAlloc on the
 				  * chain links it looks like! */
+    }
 fclose(chainFile);
 fclose(linkFile);
 if (!test)
     {
     verbose(1, "Loading %d chains into %s.%s\n", count, database, track);
-    loadDatabaseChain(database, chainFileName, track);
+    loadDatabaseChain(database, chainFileName, track, count);
     loadDatabaseLink(database, linkFileName, linkTrack);
+    remove(chainFileName);
+    remove(linkFileName);
     }
-//remove(chainFile);
-//remove(linkFile);
 }
 
 int main(int argc, char *argv[])
@@ -267,6 +289,7 @@ optionInit(&argc, argv, optionSpecs);
 if (argc != 4)
     usage();
 noBin = optionExists("noBin");
+noSort = optionExists("noSort");
 oldTable = optionExists("oldTable");
 normScore = optionExists("normScore");
 sqlTable = optionVal("sqlTable", NULL);

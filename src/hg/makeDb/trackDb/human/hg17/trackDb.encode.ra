@@ -2462,7 +2462,7 @@ dataVersion ENCODE Oct 2005 Freeze
     track encodeMsaElModerate
     subTrack encodeMsaElements
     shortLabel Moderate
-    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Strict Conserved Elements
+    longLabel TBA/MLAGAN/MAVID PhastCons/BinCons/GERP Moderate Conserved Elements
     priority 2
     color 80,105,148
 
@@ -2562,6 +2562,17 @@ mafTrack multiz17way
 origAssembly hg16
 dataVersion ENCODE June 2005 Freeze
 
+track encodeDless
+shortLabel DLESS
+longLabel Detection of LinEage Specific Selection (DLESS)
+group encodeCompGeno
+priority 100.191
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+gainColor 0,255,0
+lossColor 255,0,0
+visibility hide
+type bed 4 +
+dataVersion ENCODE Oct 2005 Freeze
 
 searchTable encodeGisRnaPetHCT116
 searchMethod exact

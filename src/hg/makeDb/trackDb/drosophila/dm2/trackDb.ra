@@ -156,18 +156,6 @@ showTopScorers 200
 type bed 5 .
 
 track flyBaseGene
-release beta
-shortLabel FlyBase Genes
-longLabel FlyBase Protein-Coding Genes
-group genes
-priority 34
-visibility pack
-color 0,100,180
-type genePred flyBasePep
-symbolTable flyBase2004Xref
-
-track flyBaseGene
-release alpha
 shortLabel FlyBase Genes
 longLabel FlyBase Protein-Coding Genes
 group genes

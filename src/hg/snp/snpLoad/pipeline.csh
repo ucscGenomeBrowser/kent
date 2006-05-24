@@ -38,27 +38,37 @@ cp snpExpandAllele.exceptions snpExpandAllele.tab
 cp snpLocType.exceptions snpLocType.tab
 hgsql -e 'drop table snp125ExceptionsOld' dbSnpHumanBuild125
 hgsql -e 'rename table snp125Exceptions to snp125ExceptionsOld' dbSnpHumanBuild125
-snpFinalTable dbSnpHumanBuild125
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpFinalTable dbSnpHumanBuild125
 rm snpCheckAlleles.tab
 rm snpCheckClassAndObserved.tab
 rm snpExpandAllele.tab
 rm snpLocType.tab
  
+# done with tmp files
 rm chr*snpTmp.tab
+hgsql dbSnpHumanBuild125 < dropTmp.sql
+
+# PAR SNPs
+snpPAR dbSnpHumanBuild125
+hgsql -e 'load data local infile "snpPARexceptions.tab" into table snp125Exceptions' dbSnpHumanBuild125
  
+# load including PAR SNPs
 rm snp125.tab
 /bin/sh concat.sh
-rm chr*snp125.tab
-
-hgsql dbSnpHumanBuild125 < dropTmp.sql
+ rm chr*snp125.tab
 hgsql -e 'drop table snp125old' dbSnpHumanBuild125
 hgsql -e 'rename table snp125 to snp125old' dbSnpHumanBuild125
 hgsql dbSnpHumanBuild125 < $HOME/kent/src/hg/lib/snp125.sql
 hgsql -e 'load data local infile "snp125.tab" into table snp125' dbSnpHumanBuild125
+rm snp125.tab
 
+# compareLoctype
 hgsql -e 'rename table snp125 to snp125new' dbSnpHumanBuild125
 snpCompareLoctype dbSnpHumanBuild125 snp124subset snp125new
-snpMissing dbSnpHumanBuild125 snp124subset snp125new
 hgsql -e 'rename table snp125new to snp125' dbSnpHumanBuild125
+
+# multiples
 snpMultiple dbSnpHumanBuild125
 hgsql -e 'load data local infile "snpMultiple.tab" into table snp125Exceptions' dbSnpHumanBuild125
+
+hgsql -e 'select count(*), exception from snp125Exceptions group by exception' dbSnpHumanBuild125

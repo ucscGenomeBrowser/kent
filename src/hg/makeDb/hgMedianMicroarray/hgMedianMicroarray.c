@@ -11,7 +11,7 @@
 #include "expRecord.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: hgMedianMicroarray.c,v 1.4 2004/05/21 21:24:36 kent Exp $";
+static char const rcsid[] = "$Id: hgMedianMicroarray.c,v 1.5 2006/05/05 15:43:14 angie Exp $";
 
 char *tabDir = ".";
 boolean doLoad;
@@ -156,7 +156,6 @@ void makeNewDataTable(char *database, char *oldTable, struct medSpec *medList, c
  * in old table as defined by medList. */
 {
 struct medSpec *med;
-struct expRecord *oldExp, newExp;
 struct sqlConnection *conn = sqlConnect(database);
 FILE *f = hgCreateTabFile(tabDir, newTable);
 char query[256], **row;
@@ -185,7 +184,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     sqlDoubleDynamicArray(row[1], &vals, &valCount);
     for (med = medList; med != NULL; med = med->next)
 	{
-	int i, ix, realCount = 0;
+	int i, realCount = 0;
 	double *selVals, val;
 	AllocArray(selVals, med->count);
 	for (i=0; i<med->count; ++i)
@@ -227,7 +226,7 @@ void hgMedianMicroarray(char *database, char *table, char *expTable,
 /* hgMedianMicroarray - Create a copy of microarray database that contains 
  * the median value of replicas. */
 {
-struct medSpec *med, *medList = medSpecReadAll(specFile);
+struct medSpec *medList = medSpecReadAll(specFile);
 makeNewExpTable(expTable, medList, newExpTable);
 makeNewDataTable(database, table, medList, newTable);
 }

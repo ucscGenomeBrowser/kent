@@ -25,3 +25,7 @@ compile: $O
 
 wigTrack.o:	wigCommon.h
 bedGraph.o:	wigCommon.h
+
+clean::
+	rm -f ct_hgwdev_*.bed hgtIdeo_*.gif hgt_*.gif
+

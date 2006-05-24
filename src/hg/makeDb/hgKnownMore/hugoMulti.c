@@ -6,14 +6,12 @@
 #include "jksql.h"
 #include "hugoMulti.h"
 
-static char const rcsid[] = "$Id: hugoMulti.c,v 1.3 2003/06/10 17:03:54 kent Exp $";
+static char const rcsid[] = "$Id: hugoMulti.c,v 1.4 2006/04/29 16:45:46 angie Exp $";
 
 void hugoMultiStaticLoad(char **row, struct hugoMulti *ret)
 /* Load a row from hugoMulti table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
 
 ret->hgnc = sqlUnsigned(row[0]);
 ret->symbol = row[1];
@@ -34,8 +32,6 @@ struct hugoMulti *hugoMultiLoad(char **row)
  * from database.  Dispose of this with hugoMultiFree(). */
 {
 struct hugoMulti *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->hgnc = sqlUnsigned(row[0]);
@@ -59,7 +55,6 @@ struct hugoMulti *hugoMultiCommaIn(char **pS, struct hugoMulti *ret)
  * return a new hugoMulti */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -113,7 +108,6 @@ for (el = *pList; el != NULL; el = next)
 void hugoMultiOutput(struct hugoMulti *el, FILE *f, char sep, char lastSep) 
 /* Print out hugoMulti.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%u", el->hgnc);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);

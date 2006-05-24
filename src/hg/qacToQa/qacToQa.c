@@ -4,8 +4,9 @@
 #include "linefile.h"
 #include "qaSeq.h"
 #include "options.h"
+#include "verbose.h"
 
-static char const rcsid[] = "$Id: qacToQa.c,v 1.4 2004/01/28 02:28:59 kate Exp $";
+static char const rcsid[] = "$Id: qacToQa.c,v 1.5 2006/04/27 00:49:51 kate Exp $";
 
 static struct optionSpec optionSpecs[] = {
         {"name", OPTION_STRING},
@@ -35,15 +36,18 @@ boolean isSwapped;
 FILE *in = qacOpenVerify(inName, &isSwapped);
 FILE *out = mustOpen(outName, "wb");
 struct qaSeq *qa;
+int size = 0;
 
 while ((qa = qacReadNext(in, isSwapped)) != NULL)
     {
     if (name != NULL)
         if (!sameString(qa->name, name))
             continue;
+    size += qa->size;
     qaWriteNext(out, qa);
     qaSeqFree(&qa);
     }
+verbose(3, "qa total size: %d\n", size);
 fclose(in);
 fclose(out);
 }

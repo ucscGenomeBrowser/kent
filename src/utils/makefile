@@ -94,6 +94,7 @@ DIRS = \
 	fixCr \
 	gffPeek \
 	gtfToGenePred \
+	headRest \
 	htmlPics \
 	htmlCheck \
 	jkUniq \
@@ -105,6 +106,7 @@ DIRS = \
 	pslToXa \
 	randomLines \
 	rmFaDups \
+	rowsToCols \
 	scaffoldFaToAgp \
 	scrambleFa \
 	spacedToTab \

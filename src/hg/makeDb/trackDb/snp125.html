@@ -17,16 +17,6 @@ build 125, available from
   of a single base, and multiple nucleotide variants are represented by a 
   block that spans two or more bases.
 </P>
-<P>
-  When the start coordinate for a SNP is shown as chromStart = chromEnd+1 on 
-  the SNP's details page, this is generally not an 
-  error; rather, it indicates that the variant is an insertion at this genomic
-  position.  
-  Note that insertions are represented as chromStart = 
-  chromEnd in the <em>snp</em> table accessible from the Table Browser 
-  or downloads server, due to the half-open zero-based representation of
-  data in the underlying database. 
-</P>
 
 <P>
   The configuration categories reflect the following definitions:
@@ -41,7 +31,7 @@ build 125, available from
         <LI><B>Between</B> - the flank alignments are contiguous; the variation is an insertion
         <LI><B>RangeInsertion</B> - the flank alignments surround a distinct polymorphism between
 	                            the submitted sequence and reference assembly;    
-				    the submitted sequence is shorter.
+				    the submitted sequence is shorter
         <LI><B>RangeSubstitution</B> - the flank alignments surround a distinct polymorphism between
 	                            the submitted sequence and reference assembly;
 				    the submitted sequence and the reference assembly sequence are of equal length
@@ -56,12 +46,15 @@ build 125, available from
       <UL>
         <LI><B>Single</B> - single nucleotide variation: all observed alleles are single nucleotides
 	    (can have 2, 3 or 4 alleles)
+        <LI><B>In-del</B> - insertion/deletion (applies to RangeInsertion, RangeSubstitution, RangeDeletion)
+        <LI><B>Heterozygous</B> - heterozygous (undetermined) variation: allele contains string '(heterozygous)'
+        <LI><B>Microsatellite</B> - the observed allele from dbSNP is variation in counts of short tandem repeats
+        <LI><B>Named</B> - the observed allele from dbSNP is given as a text name
+        <LI><B>No Variation</B> - no variation asserted for sequence
+        <LI><B>Mixed</B> - the cluster contains submissions from multiple classes
+        <LI><B>Multiple Nucleotide Polymorphism</B> - alleles of the same length, length > 1, and from set of {A,T,C,G}
         <LI><B>Insertion</B> - the polymorphism is an insertion relative to the reference assembly
         <LI><B>Deletion</B> - the polymorphism is a deletion relative to the reference assembly
-        <LI><B>In-del</B> - insertion/deletion (applies to RangeInsertion, RangeSubstitution, RangeDeletion)
-        <LI><B>Mixed</B> - the cluster contains submissions from multiple classes
-        <LI><B>Named</B> - the observed allele from dbSNP is given as a text name
-        <LI><B>Microsatellite</B> - the observed allele from dbSNP is variation in counts of short tandem repeats
         <LI><B>Unknown</B> - no classification provided by data contributor
       </UL>
     </LI>
@@ -105,8 +98,23 @@ build 125, available from
         <LI><B>Unknown</B> - sample type not known
       </UL>
     </LI>
-
-
+    <LI>
+      <A name="Weight"></A>
+      <B>Weight</B>: Alignment quality assigned by dbSNP<BR>
+      <UL>
+      <LI>Weight can be 1, 2, 3 or 10.   
+      <LI>We excluded weight = 10 from the data set.
+      <LI>We support a filter on maximum weight value, which defaults to 3.
+      </UL>
+    </LI>
+    <LI>
+      <A name="AvHet"></A>
+      <B>Average heterozygosity</B>: Calculated by dbSNP as described 
+      <A HREF="http://www.ncbi.nlm.nih.gov/SNP/Hetfreq.html" target=_blank>here</A>
+      <UL>
+      <LI> Average heterozygosity should not exceed .5 for bi-allelic single-base substitutions.
+      </UL>
+    </LI>
   </UL>
 </P>
 <H2>Insertions/Deletions</H2>
@@ -128,7 +136,7 @@ For the new location types, we preserve the class 'in-del'.
       flanking sequences are adjacent or have a gap of more than one base.</LI>
   <LI>We note if the observed alleles are not available from the rs_fasta files.</LI>
   <LI>We note if the observed alleles have an unexpected format.</LI>
-  <LI>We check that the length of the observed alleles match the coordinate span.</LI>
+  <LI>We check that the length of the observed alleles matches the coordinate span.</LI>
   <LI>For simple deletions, we check that the observed allele matches the reference allele.</LI>
   <LI>For single-base substitutions, we check that one of the observed alleles matches the reference allele.</LI>
   <LI>We note tri-allelic and quad-allelic single-base substitutions.</LI>
@@ -142,7 +150,7 @@ For the new location types, we preserve the class 'in-del'.
   <LI>We used b125_SNPContigLoc.bcp.gz for coordinates, orientation, location type
       and the dbSNP reference allele.  
   <LI>We used b125_SNPMapInfo.bcp.gz for alignment weights, filtering out 
-      alignments with weight = 3 or 10.
+      alignments with weight = 10.
   <LI>We obtained functional classification from b125_SNPContigLocusId.bcp.gz.
   <LI>We obtained validation status and heterozygosity from SNP.bcp.gz.
   <LI>We used the header line in the rs_fasta files for class, 
