@@ -1,8 +1,8 @@
 name human
-db hg16
+db hg18
 
 name mouse
-db mm7
+db mm8
 
 name zebrafish
 db danRer1
