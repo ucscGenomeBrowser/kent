@@ -205,10 +205,10 @@ termRegex SINFRUP[0-9]+(\.[0-9]+)?
 searchPriority 50
 
 track chainDanRer4
-shortLabel $o_db Chain
+shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 159.1
+priority 226.5
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -219,20 +219,20 @@ type chain danRer4
 otherDb danRer4
 
 track netDanRer4
-shortLabel $o_db Net
+shortLabel $o_Organism Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 159.2
+priority 226.6
 visibility hide
 spectrum on
 type netAlign danRer4 chainDanRer4
 otherDb danRer4
 
 track chainDanRer3
-shortLabel $o_Organism Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 226.2
+priority 226.4
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -242,10 +242,10 @@ type chain danRer3
 otherDb danRer3
                                                                                 
 track netDanRer3
-shortLabel $o_Organism Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 226.3
+priority 226.5
 visibility hide
 spectrum on
 type netAlign danRer3 chainDanRer3
@@ -264,7 +264,7 @@ type psl xeno danRer2
 otherDb danRer2
 
 track chainDanRer2
-shortLabel $o_Organism Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
 priority 226.2
@@ -276,7 +276,7 @@ type chain danRer2
 otherDb danRer2
                                                                                 
 track netDanRer2
-shortLabel $o_Organism Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
 priority 226.3
