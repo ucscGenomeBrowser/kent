@@ -77,4 +77,7 @@ boolean customTrackTest();
 #define CUSTOM_TRASH	"customTrash"
 /*	custom tracks database name	*/
 
+boolean ctDbAvailable();
+/*	determine if custom tracks database is available	*/
+
 #endif
