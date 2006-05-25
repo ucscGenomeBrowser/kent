@@ -7,11 +7,12 @@
 #include "linefile.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: getRna.c,v 1.5 2005/05/29 16:31:22 markd Exp $";
+static char const rcsid[] = "$Id: getRna.c,v 1.6 2006/05/25 05:18:10 markd Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
     {"cdsUpper", OPTION_BOOLEAN},
+    {"cdsUpperAll", OPTION_BOOLEAN},
     {"inclVer", OPTION_BOOLEAN},
     {"peptides", OPTION_BOOLEAN},
     {NULL, 0}
@@ -19,6 +20,7 @@ static struct optionSpec optionSpecs[] = {
 
 /* command line options */
 boolean cdsUpper = FALSE;
+boolean cdsUpperAll = FALSE;
 boolean inclVer = FALSE;
 boolean peptides = FALSE;
 
@@ -35,6 +37,7 @@ errAbort(
   "Options:\n"
   "  -cdsUpper - lookup CDS and output it as upper case. If CDS annotation\n"
   "    can't be obtained, the sequence is skipped with a warning.\n"
+  "  -cdsUpperAll - like -cdsUpper, except keep sequeneces without CDS\n"
   "  -inclVer - include version with sequence id.\n"
   "  -peptides - translate mRNAs to peptides\n"
   "\n");
@@ -52,7 +55,7 @@ return sqlQuickString(conn, query);
 }
 
 boolean getCds(struct sqlConnection *conn, char *acc, int mrnaLen,
-               struct genbankCds *cds)
+               boolean warnOnNoCds, struct genbankCds *cds)
 /* get the CDS range for an mRNA, warning and return FALSE if can't obtain
  * CDS or it is longer than mRNA. */
 {
@@ -60,18 +63,21 @@ char *cdsStr = getCdsString(conn, acc);
 
 if (cdsStr == NULL)
     {
-    fprintf(stderr, "%s\tno CDS defined\n", acc);
+    if (warnOnNoCds)
+        fprintf(stderr, "%s\tno CDS defined\n", acc);
     return FALSE;
     }
 if (!genbankCdsParse(cdsStr, cds))
     {
-    fprintf(stderr, "%s\tcan't parse CDS: %s\n", acc, cdsStr);
+    if (warnOnNoCds)
+        fprintf(stderr, "%s\tcan't parse CDS: %s\n", acc, cdsStr);
     free(cdsStr);
     return FALSE;
     }
 if (cds->end > mrnaLen)
     {
-    fprintf(stderr, "%s\tCDS exceeds mRNA length: %s\n", acc, cdsStr);
+    if (warnOnNoCds)
+        fprintf(stderr, "%s\tCDS exceeds mRNA length: %s\n", acc, cdsStr);
     free(cdsStr);
     return FALSE;
     }
@@ -115,7 +121,7 @@ void getAccMrna(char *acc, struct sqlConnection *conn, FILE *outFa)
 HGID seqId;
 char *faSeq;
 struct dnaSeq *dna;
-boolean isOk = TRUE;
+boolean cdsOk = TRUE;
 char accBuf[512];
 struct genbankCds cds;
 
@@ -128,18 +134,18 @@ if (faSeq == NULL)
 dna = faFromMemText(faSeq);
 
 if (cdsUpper || peptides)
-    isOk = getCds(conn, acc, dna->size, &cds);
+    cdsOk = getCds(conn, acc, dna->size, !cdsUpperAll, &cds);
 
-if (isOk && cdsUpper)
+if (cdsOk && cdsUpper)
     upperCaseCds(dna, &cds);
-if (isOk && inclVer)
+if ((cdsOk || cdsUpperAll) && inclVer)
     {
     int ver = getVersion(conn, acc);
     safef(accBuf, sizeof(accBuf), "%s.%d", acc, ver);
     acc = accBuf;
     }
 
-if (isOk)
+if ((cdsOk || cdsUpperAll))
     {
     if (peptides)
         writePeptide(outFa, acc, dna, &cds);
@@ -186,8 +192,13 @@ database = argv[1];
 accFile = argv[2];
 outFaFile = argv[3];
 cdsUpper = optionExists("cdsUpper");
+cdsUpperAll = optionExists("cdsUpperAll");
+if (cdsUpperAll)
+    cdsUpper = TRUE;
 inclVer = optionExists("inclVer");
 peptides = optionExists("peptides");
+if (peptides && (cdsUpper || cdsUpperAll))
+    errAbort("can't specify -peptides with -cdsUpper or -cdsUpperAll");
 getRna(database, accFile, outFaFile);
 return 0;
 }
