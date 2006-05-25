@@ -132,7 +132,6 @@ if (lineList)
     char *spaceRec = cloneString(lineList->name), *s;
     int lineSize = strlen(spaceRec);
     struct slName *line;
-    struct slInt *offsetList = NULL, *offset;
     int lineIx=1;
 
     /* First 'or' together all lines into spaceRec, which will
@@ -198,7 +197,6 @@ if (lineList)
 	row = tabRowNew(rowSize);
 	for (off = offList; off != NULL; off = off->next, ++offIx)
 	    {
-	    char *s, *e;
 	    int start = off->val, end;
 	    if (off->next != NULL)
 		{
