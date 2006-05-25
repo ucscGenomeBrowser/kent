@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.83 2006/05/25 17:17:43 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.84 2006/05/25 18:30:41 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -236,7 +236,7 @@ else
 return (dbDataPipe);
 }
 
-static void addToSettings(struct trackDb *tdb, char *format, ...)
+void ctAddToSettings(struct trackDb *tdb, char *format, ...)
 /*	add a variable to tdb->settings string	*/
 {
 va_list args;
@@ -432,7 +432,7 @@ if (!track->wiggle)
 	{
 	if (differentWord(val,"Off"))
 	    {
-	    addToSettings(tdb, "itemRgb On");
+	    ctAddToSettings(tdb, "itemRgb On");
 	    }
 	}
     }
@@ -1189,9 +1189,9 @@ for (;;)
 	if (track->dbTrack)
 	    {
 	    if ((track->gffHelper != NULL) || track->fromPsl)
-		addToSettings(track->tdb, "fieldCount 12");
+		ctAddToSettings(track->tdb, "fieldCount 12");
 	    else
-		addToSettings(track->tdb, "fieldCount %d", track->fieldCount);
+		ctAddToSettings(track->tdb, "fieldCount %d", track->fieldCount);
 	    }
 	}
     else
@@ -1602,7 +1602,7 @@ for (track = trackList; track != NULL; track = track->next)
 		safef(buf, sizeof(buf), "wig %g %g", lowerLimit, upperLimit);
 		freeMem(track->tdb->type);
 		track->tdb->type = cloneString(buf);
-		unlink(track->wigAscii);	/*	done with this, remove it */
+		unlink(track->wigAscii);	/* done with this, remove it */
 		}
 	    }
 	}
