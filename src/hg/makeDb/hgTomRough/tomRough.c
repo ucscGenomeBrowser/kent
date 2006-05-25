@@ -6,15 +6,12 @@
 #include "jksql.h"
 #include "tomRough.h"
 
-static char const rcsid[] = "$Id: tomRough.c,v 1.3 2003/06/10 17:09:59 kent Exp $";
+static char const rcsid[] = "$Id: tomRough.c,v 1.4 2006/05/25 17:51:31 angie Exp $";
 
 void tomRoughStaticLoad(char **row, struct tomRough *ret)
 /* Load a row from tomRough table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
-int sizeOne,i;
-char *s;
-
 ret->omimId = sqlSigned(row[0]);
 ret->chromosome = row[1];
 ret->startBand = row[2];
@@ -27,8 +24,6 @@ struct tomRough *tomRoughLoad(char **row)
  * from database.  Dispose of this with tomRoughFree(). */
 {
 struct tomRough *ret;
-int sizeOne,i;
-char *s;
 
 AllocVar(ret);
 ret->omimId = sqlSigned(row[0]);
@@ -45,7 +40,6 @@ struct tomRough *tomRoughCommaIn(char **pS, struct tomRough *ret)
  * return a new tomRough */
 {
 char *s = *pS;
-int i;
 
 if (ret == NULL)
     AllocVar(ret);
@@ -88,7 +82,6 @@ for (el = *pList; el != NULL; el = next)
 void tomRoughOutput(struct tomRough *el, FILE *f, char sep, char lastSep) 
 /* Print out tomRough.  Separate fields with sep. Follow last field with lastSep. */
 {
-int i;
 fprintf(f, "%d", el->omimId);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
