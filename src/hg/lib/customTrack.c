@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.82 2006/05/24 17:45:03 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.83 2006/05/25 17:17:43 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -136,6 +136,28 @@ for (i = 0; i < wigOptCount; ++i)
 tdb->settings = dyStringCannibalize(&wigSettings);
 }
 
+boolean ctDbAvailable()
+/*	determine if custom tracks database is available	*/
+{
+static boolean checked = FALSE;
+static boolean status = FALSE;
+
+if (! checked)
+    {
+    struct sqlConnection *conn = sqlCtConn(FALSE);
+
+    checked = TRUE;
+    if ((struct sqlConnection *)NULL == conn)
+	status = FALSE;
+    else
+	{
+	status = TRUE;
+	sqlDisconnect(&conn);
+	}
+    }
+return(status);
+}
+
 static char *trackLoader(char *type)
 /*	return string that is the loader command for this type of track
  *	NULL return means unrecognized type
@@ -145,13 +167,16 @@ static char loader[32];
 
 if (startsWith("bed", type))
     safef(loader, sizeof(loader), "loader/hgLoadBed");
-else if (startsWith("gff", type))
+else if (startsWith("psl", type))
+    safef(loader, sizeof(loader), "loader/hgLoadBed");
+else if (startsWith("gff", type) || startsWith("gtf",type))
     safef(loader, sizeof(loader), "loader/hgLoadBed");
 else if (startsWith("wiggle_0", type))
     safef(loader, sizeof(loader), "loader/wigLoader");
 else
     {
-    errAbort("unrecognized custom track type: '%s'<BR>\n", type);
+    errAbort("unrecognized custom track type: 'db=%s'<BR>\n"
+	"known types: bed, psl, gff, gtf, wiggle_0<BR>\n", type);
     }
 
 return (loader);
@@ -179,8 +204,8 @@ safef(envPass, sizeof(envPass), "HGDB_PASSWORD=%s", pass);
 putenv(envPass);
 
 /*	the different loaders require different arguments */
-if (startsWith("bed", track->dbTrackType)
-	|| startsWith("gff", track->dbTrackType))
+if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
+	|| startsWith("psl", track->dbTrackType) || track->fromPsl)
     {
     bedCmd[0] = trackLoader(track->dbTrackType);
     dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
@@ -191,6 +216,7 @@ if (startsWith("bed", track->dbTrackType)
     tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "%s", track->dbTrackName);
     bedCmd[5] = dyStringCannibalize(&tmpDy);
+
     /* the "/dev/null" file isn't actually used for anything, but it is used
      * in the pipeLineOpen to properly get a pipe started that isn't simply
      * to STDOUT which is what a NULL would do here instead of this name.
@@ -202,8 +228,28 @@ else if (startsWith("wiggle_0", track->dbTrackType))
     {
     errAbort("wiggle loader not yet implemented at this time");
     }
+else
+    {
+    errAbort("unrecognized data base custom track type");
+    }
 
 return (dbDataPipe);
+}
+
+static void addToSettings(struct trackDb *tdb, char *format, ...)
+/*	add a variable to tdb->settings string	*/
+{
+va_list args;
+struct dyString *settings = newDyString(0);
+
+va_start(args, format);
+
+/*	get existing settings if any to append to	*/
+if (tdb->settings)
+    dyStringPrintf(settings, "%s\n", tdb->settings);
+dyStringVaPrintf(settings, format, args);
+va_end(args);
+tdb->settings = dyStringCannibalize(&settings);
 }
 
 static char *dbOptions[] =
@@ -264,68 +310,61 @@ static int trackCount = 0;
 
 AllocVar(track);
 track->tdb = tdb;
+
+if ((val = hashFindVal(hash, "name")) != NULL)
+    {
+    tdb->shortLabel = cloneString(val);
+    tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
+    }
+
 /*	check if there is a db= specification which is asking for a
  *	database instance of this track, and it specifies the type.
+ *	When the DB isn't available, the fall back position is normal
+ *	file processing.
  */
-if ((val = hashFindVal(hash, "db")) != NULL)
+if (((val = hashFindVal(hash, "db")) != NULL) && (ctDbAvailable()))
     {
-    /*	for these tracks, we *must* have db connections specified	*/
-    char *db = cfgOptionDefault("customTracks.db", NULL);
-    char *host = cfgOptionDefault("customTracks.host", NULL);
-    char *user = cfgOptionDefault("customTracks.user", NULL);
-    char *pass = cfgOptionDefault("customTracks.password", NULL);
+    char *dbStrings;
     track->dbTrackType = cloneString(val);
-    /*	verify known track type	*/
-    if (NULL != trackLoader(track->dbTrackType))
+    /*	verify known track type, this fails and exits when no good	*/
+    trackLoader(track->dbTrackType);
+
+    /*	is this data already in the database ?	*/
+    if ((dbStrings = hashFindVal(hash, "dbTrackName")) == NULL)
 	{
-	if (db && host && user && pass)
-	    {
-	    char *dbStrings;
-	    if ((dbStrings = hashFindVal(hash, "dbTrackName")) == NULL)
-		{
-		char count[16];
-		char *baseName;
-		static struct tempName tn;
-		/* the makeTempName() function is getting confused
-		 * because we aren't actually making any trash files,
-		 *	so, help it out by adding a count to our names.
-		 */
-		safef(count, sizeof(count), "ct_%d", trackCount++);
-		makeTempName(&tn, count, ".dbData.gz");
-		track->dbTrackName = cloneString(tn.forCgi);
-		track->dbDataLoad = FALSE;	/*	not yet	*/
-		/*	SQL table names can not have - signs, change to _ */
-		subChar(track->dbTrackName, '-', '_');
-		stripString(track->dbTrackName, ".dbData.gz");
-		/*	remove the ../trash/ prefix from the file name	*/
-		baseName = rStringIn("/",track->dbTrackName);
-		if (baseName)
-		    track->dbTrackName = baseName + 1;
-		hashAdd(hash, "dbTrackName", cloneString(track->dbTrackName));
-		}
-	    else
-		{
-		track->dbTrackName = cloneString(dbStrings);
-		track->dbDataLoad = TRUE;	/* already in DB */
-		if ((val = hashFindVal(hash, "fieldCount")) != NULL)
-		    track->fieldCount = sqlSigned(val);
-		else
-		    errAbort("no fieldCount value found for db custom track<BR>\n");
-		}
-	    track->dbTrack = TRUE;
-	    parseDbSettings(tdb, hash);
-	    }
-	else
-	    {
-	    static boolean msgOnce = TRUE;
-	    if (msgOnce)
-		{
-		uglyf("asked for database custom track, but no db conf items in hg.conf<BR>\n");
-		msgOnce = FALSE;
-		}
-	    }
+	char count[16];
+	char *baseName;
+	static struct tempName tn;
+	/* the makeTempName() function is getting confused
+	 * because we aren't actually making any trash files,
+	 *	so, help it out by adding a count to our names.
+	 */
+	safef(count, sizeof(count), "ct_%d", trackCount++);
+	makeTempName(&tn, count, ".dbData.gz");
+	track->dbTrackName = cloneString(tn.forCgi);
+	track->dbDataLoad = FALSE;	/*	not yet	*/
+	/*	SQL table names can not have - signs, change to _ */
+	subChar(track->dbTrackName, '-', '_');
+	stripString(track->dbTrackName, ".dbData.gz");
+	/*	remove the ../trash/ prefix from the file name	*/
+	baseName = rStringIn("/",track->dbTrackName);
+	if (baseName)
+	    track->dbTrackName = baseName + 1;
+	hashAdd(hash, "dbTrackName", cloneString(track->dbTrackName));
 	}
+    else
+	{
+	track->dbTrackName = cloneString(dbStrings);
+	track->dbDataLoad = TRUE;	/* already in DB */
+	if ((val = hashFindVal(hash, "fieldCount")) != NULL)
+	    track->fieldCount = sqlSigned(val);
+	else
+	    errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
+	}
+    track->dbTrack = TRUE;
+    parseDbSettings(tdb, hash);	/* adds our new values to settings */
     }
+
 if ((!track->dbTrack) && ((val = hashFindVal(hash, "type")) != NULL))
     {
     if (sameString(val,"wiggle_0"))
@@ -381,7 +420,7 @@ if ((!track->dbTrack) && ((val = hashFindVal(hash, "type")) != NULL))
 	    track->wigAscii = (char *) NULL;
 	    }
 
-	parseWiggleSettings(tdb, hash);
+	parseWiggleSettings(tdb, hash);	/* adds wig variables to settings */
 	track->wiggle = TRUE;
 	if ((val = hashFindVal(hash, "wigType")) != NULL)
 	    tdb->type = cloneString(val);
@@ -393,23 +432,10 @@ if (!track->wiggle)
 	{
 	if (differentWord(val,"Off"))
 	    {
-	    struct dyString *bedSettings = newDyString(0);
-	    char *format0="itemRgb On\n";
-
-	    /*	get existing settings if any to append to	*/
-	    if (tdb->settings)
-		dyStringPrintf(bedSettings, "%s\n", tdb->settings);
-	    dyStringPrintf(bedSettings, format0);
-	    tdb->settings = dyStringCannibalize(&bedSettings);
+	    addToSettings(tdb, "itemRgb On");
 	    }
 	}
     }
-if ((val = hashFindVal(hash, "name")) != NULL)
-    {
-    tdb->shortLabel = cloneString(val);
-    tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
-    }
-
 
 if ((val = hashFindVal(hash, "description")) != NULL)
     tdb->longLabel = cloneString(val);
@@ -586,8 +612,8 @@ printf("%d:%d %s %s s:%d c:%u cs:%u ce:%u csI:%d bsI:%d ls:%d le:%d<BR>\n", line
 	lastEnd = bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i];
 	}
     if (bed->chromStarts[0] != 0)
-	errAbort("line %d of custom input: BED blocks must span chromStart to chromEnd.  BED chromStarts[0] must be 0 so that (chromStart + chromStarts[0]) equals chromStart.",
-		 lineIx);
+	errAbort("line %d of custom input: BED blocks must span chromStart to chromEnd.  BED chromStarts[0] must be 0 (==%d) so that (chromStart + chromStarts[0]) equals chromStart.",
+		 lineIx, bed->chromStarts[0]);
     i = bed->blockCount-1;
     if ((bed->chromStart + bed->chromStarts[i] + bed->blockSizes[i]) !=
 	bed->chromEnd)
@@ -949,27 +975,33 @@ static void finishDbPipeline(struct customTrack *track,
 	struct pipeline **dbDataPL, FILE *dbDataFH,
 	struct hash *chromHash)
 {
-/* gff data has been accumulating, waiting to output */
+struct bed *bed;
+int offset = track->offset;
+
+/* the data has been accumulating as a bedList, waiting to output */
+
+/*	And gff types have been accumulating as a genePred list waiting
+ *	to be turned into bed output
+ */
 if (track->gffHelper)
     {
-    int offset = track->offset;
-    struct bed *bed;
-
-printf("finishDbPipeline for gff track '%s'<BR>\n", track->tdb->shortLabel);
-
     track->bedList =
 	    gffHelperFinish(track->gffHelper, chromHash);
     gffFileFree(&track->gffHelper);
     track->fieldCount = 12;
-    for (bed = track->bedList; bed != NULL; bed = bed->next)
+    }
+else
+    slReverse(&track->bedList);
+
+for (bed = track->bedList; bed != NULL; bed = bed->next)
+    {
+    if (offset)
 	{
-	if (offset)
-	    {
-	    bed->chromStart += offset;
-	    bed->chromEnd += offset;
-	    }
-	saveBedPart(dbDataFH, bed, track->fieldCount);
+	bed->chromStart += offset;
+	bed->chromEnd += offset;
 	}
+    bed->strand[1] = (char)NULL;
+    saveBedPart(dbDataFH, bed, track->fieldCount);
     }
 if (pipelineWait(*dbDataPL))
     track->dbDataLoad = FALSE;	/* failed */
@@ -1101,7 +1133,7 @@ for (;;)
 		if (track->wigAscii != (char *)NULL)
 		    {
 		    wigAsciiFH = mustOpen(track->wigAscii, "w");
-#if defined(DEBUG)	/*    dbg	*/
+#if defined(DEBUG)	/*	dbg	*/
 		    /* allow file readability for debug	*/
 		    chmod(track->wigAscii, 0666);
 #endif
@@ -1135,14 +1167,6 @@ for (;;)
 	slAddTail(&trackList, track);
 	}
 
-    /*	if we are writing to db loading, write the line to the pipeline
-     *	before it is broken up below.	After this, the line will be
-     *	broken up to verify it has the expected number of fields.
-     *	*NOT* when it is gff data, that data is output after processing ...
-     */
-    if (track->dbTrack && (! startsWith("gff", track->dbTrackType)))
-	fprintf(dbDataFH, "%s\n", line);
-
     /* Classify track based on first line of track.   First time through
      *	the fieldCount is zero, this will be setting it.  Chop line
      * into words and make sure all lines have same number of words. */
@@ -1151,7 +1175,6 @@ for (;;)
 	if (lineIsGff(line))
 	    {
 	    wordCount = chopTabs(line, row);
-printf("have gffHelper for track '%s'<BR>\n", track->tdb->shortLabel);
 	    track->gffHelper = gffFileNew("custom input");
 	    }
 	else
@@ -1165,16 +1188,10 @@ printf("have gffHelper for track '%s'<BR>\n", track->tdb->shortLabel);
 	 */
 	if (track->dbTrack)
 	    {
-	    struct dyString *bedSettings = newDyString(0);
-
-	    /*	get existing settings if any to append to	*/
-	    if (track->tdb->settings)
-		dyStringPrintf(bedSettings, "%s\n", track->tdb->settings);
-	    if (startsWith("gff", track->dbTrackType))
-		dyStringPrintf(bedSettings, "fieldCount=12");
+	    if ((track->gffHelper != NULL) || track->fromPsl)
+		addToSettings(track->tdb, "fieldCount 12");
 	    else
-		dyStringPrintf(bedSettings, "fieldCount=%d", track->fieldCount);
-	    track->tdb->settings = dyStringCannibalize(&bedSettings);
+		addToSettings(track->tdb, "fieldCount %d", track->fieldCount);
 	    }
 	}
     else
@@ -1209,8 +1226,6 @@ printf("have gffHelper for track '%s'<BR>\n", track->tdb->shortLabel);
 	    errAbort("line %d of custom input: Track has %d fields in one place and %d another", 
 		    lineIx, track->fieldCount, wordCount);
 	    }
-	if (inDbData)
-	    continue;			/* !!! next line of data !!!	*/
 	/* Create bed data structure from row and hang on list in track. */
 	if (track->fromPsl)
 	    bed = customTrackPsl(pslIsProt, row, wordCount, chromHash, lineIx);
@@ -1409,6 +1424,7 @@ if (customTrackNeedsLift(ctList))
     customTrackLift(ctList, ctgHash);
     ctgPosFreeList(&ctgList);
     hashFree(&ctgHash);
+    hFreeConn(&conn);
     }
 
 if (retCtFileName != NULL)
@@ -1562,7 +1578,7 @@ FILE *f = mustOpen(fileName, "w");
 #if defined(DEBUG)	/*	dbg	*/
     /* allow file readability for debug	*/
     chmod(fileName, 0666);
- #endif
+#endif
 
 for (track = trackList; track != NULL; track = track->next)
     {
