@@ -80,4 +80,7 @@ boolean customTrackTest();
 boolean ctDbAvailable();
 /*	determine if custom tracks database is available	*/
 
+void ctAddToSettings(struct trackDb *tdb, char *format, ...);
+/*	add a variable to tdb->settings string	*/
+
 #endif
