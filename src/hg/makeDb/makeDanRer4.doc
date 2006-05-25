@@ -1219,6 +1219,8 @@ if (-e /tmp/danRer4/$2/$2.cat) /bin/cp /tmp/danRer4/$2/$2.cat ./
 ###########################################################################
 # STORING O+O SEQUENCE AND ASSEMBLY INFORMATION AND CREATE 2BIT FILE
 # (DONE, 2006-04-23, hartera)
+# CHANGE FILENAME TO 2BIT FILE IN CHROMINFO AND REMOVE NIB DIR IN /gbdb
+# (DONE, 2006-05-24, hartera)
     # Make symbolic links from /gbdb/danRer4/nib to the real nibs
     ssh hgwdev
     cd /cluster/data/danRer4
@@ -1244,6 +1246,13 @@ if (-e /tmp/danRer4/$2/$2.cat) /bin/cp /tmp/danRer4/$2/$2.cat ./
     rm 2bit.tab
     # add link to this 2bit file from gbdb danRer4 directory 
     ln -s /cluster/data/danRer4/danRer4.2bit /gbdb/danRer4/
+    # (hartera, 2006-05-24)
+    # change chromInfo table to have 2bit file for filename
+    hgsql -e 'update chromInfo set fileName = "/gbdb/danRer4/danRer4.2bit";' \
+          danRer4
+    # then remove nib directory in /gbdb/danRer4 as do not need both nibs
+    # and 2 bit file which is in /gbdb/danRer4.
+    rm -r /gbdb/danRer4/nib
 
 ###########################################################################
 # MAKE GOLD AND GAP TRACKS (DONE, 2006-04-23, hartera)
@@ -2888,6 +2897,8 @@ date
          /tmp/multiz7waySummary.sql multiz7waySummary.tab
     # 0.000u 0.000s 2:05.26 0.0%      0+0k 0+0io 209pf+0w
     rm *.tab /tmp/multiz7waySummary.sql
+    # add Frames table:
+    
     ln -s multiz7way.2006-05-04 /cluster/data/danRer4/bed/multiz7way
     ln -s /cluster/data/danRer4/bed/multiz7way.2006-05-04/danRer4_7way.jpg \
           /usr/local/apache/htdocs/images/phylo/danRer4_7way.jpg
@@ -2922,15 +2933,10 @@ date
 
 ###########################################################################
 # PHYLO-HMM (PHASTCONS) CONSERVATION TRACK FOR 7-WAY ALIGNMENT 
-# (in progress, 2006-05-12, hartera)
+# (DONE, 2006-05-17 - 2006-05-24, hartera)
    ssh kkstore04
-   mkdir /cluster/data/danRer4/bed/multiz7way/phastCons
-   cd /cluster/data/danRer4/bed/multiz7way/phastCons
-   /cluster/bin/phast/tree_doctor \
-      --prune-all-but=mm7,hg17,monDom2,xenTro1,tetNig1,fr1,danRer3 \
-      --rename="hg17 -> hg18 ; mm7 -> mm8 ; monDom2 -> monDom4 ; xenTro1->xenTro2; danRer3->danRer4" \
-      /san/sanvol1/scratch/mm7/cons/elliotsEncode.mod \
-      > elliotsEncodePruned.mod
+   mkdir /cluster/data/danRer4/bed/multiz7way.2006-05-04/phastCons
+   cd /cluster/data/danRer4/bed/multiz7way.2006-05-04/phastCons
 
    # create a starting-tree.mod based on chr14 (92 Mb)
    # chr14 is the largest chrom apart from chrNA_random
@@ -2938,17 +2944,379 @@ date
         --refseq ../../../14/chr14.fa --in-format MAF \
         --windows 100000000,1000 --out-format SS \
         --between-blocks 5000 --out-root s1
-  /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
-        --tree "((danRer3,(tetNig1,fr1)),(mm7,hg18))" \
-        --out-root starting-tree
-    /cluster/bin/phast/$MACHTYPE/phyloFit -i SS -E -p MED -s HKY85 \
-        --tree "`cat ../tree-commas.nh`" \
-        s1.*ss
-        -o phyloFit.tree
-    /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+   /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
         --tree "`cat ../tree-commas.nh`" \
         --out-root starting-tree
- 
+   # took less than a minute
+   rm s1.*ss
+   
+   # Get genome-wide average GC content (for all species together,
+   # not just the reference genome).  If you have a globally
+   # estimated tree model, as above, you can get this from the
+   # BACKGROUND line in the .mod file.  E.g.,
+# ALPHABET: A C G T
+# ...
+# BACKGROUND: 0.305239 0.194225 0.194292 0.306244
+   # add up the C and G:
+   grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+   # 0.389 is the GC content. This is used in the -gc argument below.
+   # If you do *not* have a global tree model and you do not know your
+   # GC content, you can get it directly from the MAFs with a command
+   # like:
+   /cluster/bin/phast/$MACHTYPE/msa_view \
+    --aggregate danRer4,tetNig1,fr1,xenTro2,monDom4,mm8,hg18 -i MAF \
+    -S /cluster/data/danRer4/bed/multiz7way/maf/chr*.maf > maf_summary.txt
+   # This gives a GC content of 0.426 so use this as it is from mafs for
+   # the whole genome.
+   # break up the genome-wide MAFs into pieces on the san filesystem
+   ssh pk
+   # should use a directory on the san but it is down and para create is
+   # not working on kk.
+   set WINDOWS=/cluster/bluearc/danRer4/multiz7way.2006-05-04/phastCons/ss
+   mkdir -p $WINDOWS
+   cd $WINDOWS
+   cat << 'EOF' > doSplit.csh
+#!/bin/csh -ef
+set MAFS = /cluster/data/danRer4/bed/multiz7way.2006-05-04/maf
+set WINDOWS=/cluster/bluearc/danRer4/multiz7way.2006-05-04/phastCons/ss
+cd $WINDOWS
+set c = $1
+echo $c
+rm -fr $c
+mkdir $c
+set N = `echo $c | sed -e 's/chr//'`
+/cluster/bin/phast/$MACHTYPE/msa_split $MAFS/$c.maf -i MAF \
+       -M /cluster/data/danRer4/$N/$c.fa \
+       -o SS -w 10000000,0 -I 1000 -B 5000 -r $c/$c
+echo "Done" >> $c.done
+'EOF'
+# << emacs
+   chmod +x doSplit.csh
+   rm -f jobList
+   foreach c (`cat /cluster/data/danRer4/chrom.lst`)
+    echo "doSplit.csh chr${c} {check out line+ $WINDOWS/chr$c.done}" >> jobList
+   end
+
+   para create jobList
+   para push, check etc.
+   para time
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:        763s      12.71m     0.21h    0.01d  0.000 y
+# IO & Wait Time:                 13297s     221.62m     3.69h    0.15d  0.000 y
+# Average job time:                 502s       8.37m     0.14h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             701s      11.68m     0.19h    0.01d
+# Submission to last job:           707s      11.78m     0.20h    0.01d
+    # Create a random list of 50 1 mb regions (do not use chrNA and chrUn)
+
+    ls -1l chr*/chr*.ss | grep -v NA | grep -v Un | \
+       awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs.list
+    
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh pk
+    set dir = /cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons
+    mkdir -p $dir
+    cd $dir
+    # now set up cluster job to estimate model parameters.  Parameters
+    # will be estimated separately for each alignment fragment then
+    # will be combined across fragments. Tuning this loop should come
+    # back to here to recalculate. Tuning target-coverage and expected-length.
+    # Create little script that calls phastCons with right arguments
+
+    cat > makeTree.csh << 'EOF'
+#!/bin/csh -fe
+set C = $1:h
+set treeRun = $2
+set cov = $3
+set len = $4
+set dir = /cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons
+mkdir -p $dir/$treeRun/log/${C} $dir/$treeRun/tree/${C}
+/cluster/bin/phast/x86_64/phastCons $dir/ss/$1 \
+  /cluster/data/danRer4/bed/multiz7way.2006-05-04/phastCons/starting-tree.mod \
+  --gc 0.426 --nrates 1,1 --no-post-probs --ignore-missing \
+  --expected-length $len --target-coverage $cov \
+  --quiet --log $dir/$treeRun/log/$1 --estimate-trees $dir/$treeRun/tree/$1
+'EOF'
+    # << emacs
+    chmod a+x makeTree.csh
+    # Make sure that the correct GC content is substituted in here. Notice
+    # the target coverage of 0.17. Here we are going to aim
+    # for 65% coverage of coding regions by conserved elements.
+    # Create gensub file
+# need to add cov and len parameters
+    cat > template << '_EOF_'
+#LOOP
+makeTree.csh $(path1) $(path2)
+#ENDLOOP
+'_EOF_'
+    #   happy emacs
+    # Make cluster job and run it
+    echo "treeRun1 0.17 12" > tree.lst
+    echo "treeRun2 0.32 18" >> tree.lst
+    echo "treeRun3 0.32 20" >> tree.lst
+    echo "treeRun4 0.35 18" >> tree.lst
+    gensub2 randomSs.list tree.lst template jobList
+    para create jobList
+    para try,check,push,check etc.
+# para time
+# Completed: 200 of 200 jobs
+# CPU time in finished jobs:      70372s    1172.87m    19.55h    0.81d  0.002 y
+# IO & Wait Time:                 42152s     702.53m    11.71h    0.49d  0.001 y
+# Average job time:                 563s       9.38m     0.16h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             840s      14.00m     0.23h    0.01d
+# Submission to last job:          1279s      21.32m     0.36h    0.01d
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    set dir = /cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons
+    foreach d ($dir/treeRun*)
+       cd $d
+       ls tree/chr*/*.cons.mod > cons.txt
+       /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.txt' \
+         --output-average ave.cons.mod > cons_summary.txt
+       ls tree/chr*/*.noncons.mod > noncons.txt
+       /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.txt' \
+         --output-average ave.noncons.mod > noncons_summary.txt
+    end
+       #   measuring entropy
+    #   consEntropy <target coverage> <expected lengths>
+    #            ave.cons.mod ave.noncons.mod --NH 9.78
+    #   never stops with the --NH argument
+    # target entropy should be L_min*H=9.8 bits, (between 9.5 to 10.5 is ok)
+    # the expected length that produces this entropy is the one
+    # to use for phastCons.
+    # foreach treeRun, set the appropriate coverage and length
+    # file: treeRunN cov len
+    # use awk to split up
+    cd /cluster/bluearc/danRer4/multiz7way.2006-05-04/phastCons
+    cp tree.lst entropy.csh 
+    perl -pi.bak -e 's/^(treeRun[0-9]+)\s*([0-9\.]+)\s*([0-9]+)/echo \"Coverage = $2 Length = $3\"\ncd $1\n\/cluster\/bin\/phast\/x86_64\/consEntropy $2 $3 ave.cons.mod ave.noncons.mod\ncd \.\./' entropy.csh 
+    chmod +x entropy.csh
+    entropy.csh >& entropy.out
+# entropy.out
+#Coverage = 0.17 Length = 12
+#Transition parameters:gamma=0.170000, omega=12.000000, mu=0.083333, nu=0.017068
+#Relative entropy: H=0.867597 bits/site
+#Expected min. length: L_min=12.136001 sites
+#Expected max. length: L_max=8.061143 sites
+#Phylogenetic information threshold: PIT=L_min*H=10.529156 bits
+
+#### !!! THESE PARAMETERS BELOW WERE THOSE THAT WERE FINALLY USED ####
+# These are the same as for danRer2 and give the targeted L_min*H value.
+# This is from treeRun2.
+#Coverage = 0.32 Length = 18
+#Transition parameters:gamma=0.320000, omega=18.000000, mu=0.055556, nu=0.026144
+#Relative entropy: H=0.821953 bits/site
+#Expected min. length: L_min=11.966706 sites
+#Expected max. length: L_max=9.229108 sites
+#Phylogenetic information threshold: PIT=L_min*H=9.836072 bits
+###
+
+#Coverage = 0.32 Length = 20
+#Transition parameters:gamma=0.320000, omega=20.000000, mu=0.050000, nu=0.023529
+#Relative entropy: H=0.799776 bits/site
+#Expected min. length: L_min=12.659686 sites
+#Expected max. length: L_max=9.869911 sites
+#Phylogenetic information threshold: PIT=L_min*H=10.124912 bits
+
+#Coverage = 0.35 Length = 18
+#Transition parameters:gamma=0.350000, omega=18.000000, mu=0.055556, nu=0.029915
+#Relative entropy: H=0.830291 bits/site
+#Expected min. length: L_min=11.503461 sites
+#Expected max. length: L_max=9.024799 sites
+#Phylogenetic information threshold: PIT=L_min*H=9.551218 bits
+
+# need to iterate and get the right coverage and parameters
+# try running phastCons below with parameters used above and check the
+# coverage of coding regions by the most conserved elements
+    # Create cluster dir to do main phastCons run
+    ssh pk
+    mkdir -p \
+       /cluster/bluearc/danRer4/multiz7way.2006-05-04/phastCons/consRun
+    cd /cluster/bluearc/danRer4/multiz7way.2006-05-04/phastCons/consRun
+    cp -p ../treeRun2/ave.*.mod .
+    cp -p ../treeRun2/ave.*.mod \
+       /cluster/data/danRer4/bed/multiz7way.2006-05-04/phastCons
+    mkdir ppRaw bed
+    # Create script to run phastCons with right parameters
+    #   This job is I/O intensive in its output files, thus it is all
+    #   working over in /scratch/tmp/
+    # Use the expected length and target coverage determined above and 
+    # the corresponding average conserved and nonconserved models
+    cat > doPhast.csh << '_EOF_'
+#!/bin/csh -fe
+mkdir /scratch/tmp/${2}
+cp -p ../ss/${1}/${2}.ss ave.*.mod /scratch/tmp/${2}
+pushd /scratch/tmp/${2} > /dev/null
+/cluster/bin/phast/x86_64/phastCons ${2}.ss ave.cons.mod,ave.noncons.mod \
+        --expected-length 18 --target-coverage 0.32 --quiet \
+        --seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
+popd > /dev/null
+mkdir -p ppRaw/${1}
+mkdir -p bed/${1}
+mv /scratch/tmp/${2}/${2}.pp ppRaw/${1}
+mv /scratch/tmp/${2}/${2}.bed bed/${1}
+rm /scratch/tmp/${2}/ave.*.mod
+rm /scratch/tmp/${2}/${2}.ss
+rmdir /scratch/tmp/${2}
+'_EOF_'
+    # emacs happy
+    chmod a+x doPhast.csh
+
+    #   root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create gsub file
+cat > template << '_EOF_'
+#LOOP
+doPhast.csh $(root1) $(file1)
+#ENDLOOP
+'_EOF_'
+   #   happy emacs
+
+   # Create parasol batch and run it
+   ls -1 ../ss/chr*/chr*.ss | sed 's/.ss$//' > in.list
+
+   gensub2 in.list single template jobList
+   para create jobList
+   para try/check/push/etc.
+   para time
+# Completed: 191 of 191 jobs
+# CPU time in finished jobs:       4677s      77.95m     1.30h    0.05d  0.000 y
+# IO & Wait Time:                120160s    2002.67m    33.38h    1.39d  0.004 y
+# Average job time:                 654s      10.89m     0.18h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             738s      12.30m     0.20h    0.01d
+# Submission to last job:           872s      14.53m     0.24h    0.01d
+  
+# combine predictions and transform scores to be in 0-1000 interval
+   ssh kkstore04
+   cd /cluster/bluearc/danRer4/multiz7way.2006-05-04/phastCons/consRun
+   #   The sed's and the sort get the file names in chrom,start order 
+   # (Hiram tricks -- split into columns on [.-/] with
+   #    identifying x,y,z, to allow column sorting and
+   #    restoring the filename.  Warning: the sort column
+   # will depend on how deep you are in the dir
+   find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+        | sort -k7,7 -k9,9n \
+        | sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+        | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+        | /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    #   ~ 1 minute
+    cp -p mostConserved.bed \
+        /cluster/data/danRer4/bed/multiz7way.2006-05-04/phastCons
+# Figure out how much is actually covered by the mostConserved data as so:
+    cd /cluster/data/danRer4
+    faSize */chr*.fa
+    # 1774660131 bases (175779328 N's 1598880803 real 816338509 upper 
+    # 782542294 lower) in 28 sequences in 28 files
+    # Total size: mean 63380719.0 sd 33877121.9 min 16596 (chrM) 
+    # max 208014280 (chrNA_random) median 59765243
+    # The non-N size is 1598880803 bases
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-04/phastCons
+    awk '{sum+=$3-$2}
+END{printf "%% %.2f = 100.0*%d/1598880803\n",100.0*sum/1598880803,sum}' \
+        mostConserved.bed
+    -target-coverage 0.32: % 3.19 = 100.0*50986578/1598880803 length=18
+
+    # want to aim for 65% coverage of coding regions
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/multiz7way/phastCons
+    # get an or of refGene and mgcGenes CDS regions
+    featureBits danRer4 refGene:cds mgcGenes:cds -or -bed=refSeqOrMgcCds.bed
+    # 11745876 bases of 1626093931 (0.722%) in intersection
+
+    featureBits danRer3 refGene:cds mgcGenes:cds -or \
+                -bed=refSeqOrMgcCdsDanRer3.bed
+    # 11633092 bases of 1630323462 (0.714%) in intersection
+    featureBits danRer4 refSeqOrMgcCds.bed mostConserved.bed -enrichment
+    # refSeqOrMgcCds.bed 0.722%, mostConserved.bed 3.136%, both 0.463%, 
+    # cover 64.06%, enrich 20.43x
+
+    # for danRer3:
+    featureBits danRer3 refSeqOrMgcCdsDanRer3.bed \
+      /cluster/data/danRer3/bed/multiz5way/mostConserved.bed -enrichment
+    # refSeqOrMgcCdsDanRer3.bed 0.714%, 
+    # /cluster/data/danRer3/bed/multiz5way/mostConserved.bed 2.998%, 
+    # both 0.474%, cover 66.40%, enrich 22.14x
+    # so use this result for -target-coverage=0.32 -expected-lengths=18
+    # with L_min*H entropy (PIT) value of 9.84 (aiming for around 9.8) and
+    # 64.1% coverage of coding regions with most conserved elements
+    # (aiming for about 65%)
+    # FINISHED 05/18. 
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-04/phastCons
+    hgLoadBed danRer4 phastConsElements mostConserved.bed
+    # Loaded 676733 elements of size 5
+    featureBits danRer4 mgcGenes:cds phastConsElements -enrichment
+    # mgcGenes:cds 0.560%, phastConsElements 3.136%, both 0.367%, 
+    # cover 65.43%, enrich 20.87x
+    # Create merged posterier probability file and wiggle track data files
+    # the sed business gets the names sorted by chromName, chromStart
+    # so that everything goes in numerical order into wigEncode
+    ssh kkstore04
+    cd /cluster/bluearc/danRer4/multiz7way.2006-05-04/phastCons/consRun
+    find ./ppRaw -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+        | sort -k7,7 -k9,9n \
+        | sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+        | wigEncode stdin phastCons7way.wig phastCons7way.wib
+    # takes a few minutes
+    ls -l phastCons*
+    # -rw-rw-r--  1 hartera protein 255412409 May 24 16:28 phastCons7way.wib
+    # -rw-rw-r--  1 hartera protein  61504790 May 24 16:28 phastCons7way.wig
+    cp -p phastCons7way.wi? /cluster/data/danRer4/bed/multiz7way/phastCons
+
+    # Load gbdb and database with wiggle.
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-04/phastCons
+    mkdir -p /gbdb/danRer4/wib
+    ln -s `pwd`/phastCons7way.wib /gbdb/danRer4/wib/phastCons7way.wib
+    # use this if need to reload table
+    hgsql -e 'drop table phastCons7way;' danRer4
+    # load table
+    hgLoadWiggle danRer4 phastCons7way phastCons7way.wig
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-04/phastCons
+    bash
+    time hgWiggle -doHistogram \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+            -db=danRer4 phastCons7way > histogram.data 2>&1
+# real    2m33.069s
+# user    1m58.310s
+# sys     0m16.170s
+
+        #   create plot of histogram:
+    cat << '_EOF_' > histo.gp
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Zebrafish danRer4 Histogram phastCons7 track"
+set xlabel " phastCons7 score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+     "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+
+    #   happy emacs
+    gnuplot histo.gp > histo.png
+    display histo.png &
+
+# add line: wiggle phastCons7way to trackDb.ra for multiz7way to display the
+# wiggle for the conservation track.
+# check all.joiner for entries for phastCons7way and phastConsElements7way -ok
+# copy over html for multiz and edit.
+
+
 ###########################################################################
 # CREATED RECIPROCAL BEST NETS AND MAF NETS FOR ALL SPECIES WITH PAIRWISE
 # ALIGNMENTS USED FOR MULTIZ MULTIPLE ALIGNMENT 
@@ -3046,6 +3414,753 @@ end
     # for multiz.
 
 ###########################################################################
+# MULTIZ7WAY ALIGNMENTS FOR CONSERVATION TRACK - USING RECIPROCAL BEST NETS
+# (DONE, 2006-05-18 - 2006-05-24, hartera)
+#   for tetNig1, fr1, xenTro2, monDom4, mm8 and hg18.
+    ssh kkstore04
+    mkdir /cluster/data/danRer4/bed/multiz7way.2006-05-18
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-18
+
+    # copy MAFs to a cluster-friendly server
+    # use bluearc as the san is down
+    mkdir /cluster/bluearc/danRer4/mafRBestNet
+    foreach s (tetNig1 fr1 xenTro2 monDom4 mm8 hg18)
+       echo $s
+       rsync -av /cluster/data/danRer4/bed/blastz.$s/mafRBestNet/* \
+        /cluster/bluearc/danRer4/mafRBestNet/$s/
+    end
+    # prune the hg17 17way tree to just these 7 and update db names:
+    /cluster/bin/phast/tree_doctor \
+      --prune-all-but=mouse_mm8,human_hg18,monodelphis_monDom4,xenopus_xenTro1,tetraodon_tetNig1,fugu_fr1,zebrafish_danRer3 \
+      --rename="xenopus_xenTro1 -> xenopus_xenTro2 ; zebrafish_danRer3 -> zebrafish_danRer4" \
+      /cluster/data/hg18/bed/multiz17way/17way.nh > 7way.nh
+    # carefully edit so that danRer4 is first. copy first to new file
+    cp 7way.nh 7way_zfishFirst.nh
+    # DO THIS LATER AND CREATE FROM TREE WITHOUT DISTANCES
+    /cluster/bin/phast/draw_tree 7way_zfishFirst.nh > 7way.ps
+    # also made the ps file for the 7way.nh and compared to make sure
+    # that the tree with zebrafish at the top looks correct.
+    /cluster/bin/phast/all_dists 7way_zfishFirst.nh > 7way.distances
+    grep danRer4 7way.distances | sort -k3,3n | \
+        awk '{printf ("%.4f\t%s\n", $3, $2)}' > distances.txt
+    cat distances.txt
+# 1.4749  tetraodon_tetNig1
+# 1.5154  fugu_fr1
+# 1.7480  human_hg18
+# 1.7782  monodelphis_monDom4
+# 1.8771  xenopus_xenTro2
+# 2.1058  mouse_mm8
+    # the order in the browser display will be by tree topology,
+    # not by distance, so they will be:
+    # danRer4
+    # 1.5154  fugu_fr1
+    # 1.4749  tetraodon_tetNig1
+    # 1.8771  xenopus_xenTro2
+    # 1.7782  monodelphis_monDom4
+    # 2.1058  mouse_mm8
+    # 1.7480  human_hg18
+
+    # create species list and stripped down tree for autoMZ
+    sed -e 's/[a-z][a-z]*_//g; s/:[0-9\.][0-9\.]*//g; s/;//' \
+        7way_zfishFirst.nh > tree-commas.nh
+    sed -e 's/ //g; s/,/ /g' tree-commas.nh > tree.nh
+    sed -e 's/[()]//g; s/,/ /g' tree.nh > species.lst
+    cp tree-commas.nh 7way.nh
+
+    ssh pk
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-18
+    mkdir maf run
+    cd run
+
+    # stash binaries
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/multiz penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/maf_project penn
+    cp -p /cluster/bin/penn/multiz.v11.x86_64/multiz-tba/autoMZ penn
+
+cat > autoMultiz.csh << 'EOF'
+#!/bin/csh -ef
+    set db = danRer4
+    set c = $1
+    set maf = $2
+    set run = `pwd`
+    set tmp = /scratch/tmp/$db/multiz.$c
+    set pairs = /cluster/bluearc/$db/mafRBestNet
+    rm -fr $tmp
+    mkdir -p $tmp
+    cp ../{tree.nh,species.lst} $tmp
+    pushd $tmp
+    foreach s (`cat species.lst`)
+        set in = $pairs/$s/$c.maf
+        set out = $db.$s.sing.maf
+        if ($s == $db) then
+            continue
+        endif
+        if (-e $in.gz) then
+            zcat $in.gz > $out
+        else if (-e $in) then
+            cp $in $out
+        else
+            echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    end
+    set path = ($run/penn $path); rehash
+    $run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf
+    popd
+    cp $tmp/$c.maf $maf
+    rm -fr $tmp
+'EOF'
+    # << emacs
+    chmod +x autoMultiz.csh
+
+cat  << 'EOF' > spec
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /cluster/data/danRer4/bed/multiz7way.2006-05-18/maf/$(root1).maf}
+#ENDLOOP
+'EOF'
+    # << emacs
+    awk '{print $1}' /cluster/data/danRer4/chrom.sizes > chrom.lst
+    gensub2 chrom.lst single spec jobList
+    para create jobList
+    para try, check, push, check etc. ...
+    # Took less than 10 minutes to run 
+   # Make .jpg for tree and install in htdocs/images/phylo/... don't forget
+   # to request a push of that file.  The treeImage setting in trackDb.ra
+   # is phylo/danRer4_7way.jpg (relative to htdocs/images).
+ #  ssh hgwdev
+  # DO LATER
+#   cd /cluster/data/danRer4/bed/multiz7way.2006-05-04
+#   pstopnm -stdout 7way.ps | pnmtojpeg > danRer4_7way.jpg
+   # ask Bob to resize image for Browser track description page.
+
+   # Build maf annotation and load database
+   ssh kolossus
+   mkdir /cluster/data/danRer4/bed/multiz7way.2006-05-18/anno
+   cd /cluster/data/danRer4/bed/multiz7way.2006-05-18/anno
+   mkdir maf run
+   cd run
+   rm -f sizes nBeds
+ foreach db (`cat /cluster/data/danRer4/bed/multiz7way.2006-05-18/species.lst`)
+      ln -s  /cluster/data/$db/chrom.sizes $db.len
+      if (! -e /cluster/data/$db/$db.N.bed) then
+        twoBitInfo -nBed /cluster/data/$db/$db.{2bit,N.bed}
+      endif
+      ln -s  /cluster/data/$db/$db.N.bed $db.bed
+      echo $db.bed  >> nBeds
+      echo $db.len  >> sizes
+  end
+    echo date > jobs.csh
+    # do smaller jobs first:
+    foreach f (`ls -1rS ../../maf/*.maf`)
+      echo nice mafAddIRows -nBeds=nBeds -sizes=sizes $f \
+        /cluster/data/danRer4/danRer4.2bit ../maf/`basename $f` \
+        >> jobs.csh
+      echo "echo $f" >> jobs.csh
+    end
+    echo date >> jobs.csh
+    csh -efx jobs.csh >&! jobs.log &
+    tail -f jobs.log
+
+    # Load anno/maf  
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-18/anno/maf
+    mkdir -p /gbdb/danRer4/multiz7wayRBest/anno/maf
+    ln -s /cluster/data/danRer4/bed/multiz7way.2006-05-18/anno/maf/*.maf \
+      /gbdb/danRer4/multiz7wayRBest/anno/maf
+    # Reload as not working correctly. 
+    hgsql -e 'drop table multiz7wayRBest;' danRer4
+    hgsql -e 'delete from extFile where path like "%multiz7wayRBest%";' \
+          danRer4
+    cat > loadMaf.csh << 'EOF'
+date
+nice hgLoadMaf -pathPrefix=/gbdb/danRer4/multiz7wayRBest/anno/maf danRer4 multiz7wayRBest
+date
+'EOF'
+    # << emacs
+    csh -efx loadMaf.csh >&! loadMaf.log & tail -f loadMaf.log
+    # Do the computation-intensive part of hgLoadMafSummary on a workhorse
+    # machine and then load on hgwdev:
+    ssh kkr7u00
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-18/anno/maf
+    cat *.maf \
+    | nice hgLoadMafSummary danRer4 -minSize=30000 -mergeGap=1500 \
+    -maxSize=200000 -test multiz7wayRBestSummary stdin
+    # Created 526386 summary blocks from 1972659 components and 1105457 mafs 
+    # from stdin
+
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-18/anno/maf
+    sed -e 's/mafSummary/multiz7wayRBestSummary/' \
+      ~/kent/src/hg/lib/mafSummary.sql \
+      > /tmp/multiz7wayRBestSummary.sql
+    time nice hgLoadSqlTab danRer4 multiz7wayRBestSummary \
+         /tmp/multiz7wayRBestSummary.sql multiz7wayRBestSummary.tab
+    # 0.000u 0.000s 0:07.56 0.0%      0+0k 0+0io 4pf+0w
+    rm *.tab /tmp/multiz7wayRBestSummary.sql
+  #  ln -s multiz7way.2006-05-18 /cluster/data/danRer4/bed/multiz7way
+  #  ln -s /cluster/data/danRer4/bed/multiz7way.2006-05-18/danRer4_7way.jpg \
+   #       /usr/local/apache/htdocs/images/phylo/danRer4_7way.jpg
+    # change permissions for display if not already readable to all
+  #  chmod +r /usr/local/apache/htdocs/images/phylo/danRer4_7way.jpg
+
+# check for all.joiner entry for 7-way - it is there already.
+# add trackDb.ra entry for danRer4:
+
+###########################################################################
+# PHYLO-HMM (PHASTCONS) CONSERVATION TRACK FOR 7-WAY ALIGNMENT USING MAFS
+# FROM RECIPROCAL BEST NET (DONE, 2006-05-19 - 2005-05-24, hartera)
+   ssh kkstore04
+   mkdir /cluster/data/danRer4/bed/multiz7way.2006-05-18/phastCons
+   cd /cluster/data/danRer4/bed/multiz7way.2006-05-18/phastCons
+
+   # create a starting-tree.mod based on chr14 (92 Mb)
+   # chr14 is the largest chrom apart from chrNA_random
+   /cluster/bin/phast/$MACHTYPE/msa_split ../maf/chr14.maf \
+        --refseq ../../../14/chr14.fa --in-format MAF \
+        --windows 100000000,1000 --out-format SS \
+        --between-blocks 5000 --out-root s1
+   /cluster/bin/phast/$MACHTYPE/phyloFit -i SS s1.*.ss \
+        --tree "`cat ../tree-commas.nh`" \
+        --out-root starting-tree
+   # took less than a minute
+   rm s1.*ss
+   
+   # Get genome-wide average GC content (for all species together,
+   # not just the reference genome).  If you have a globally
+   # estimated tree model, as above, you can get this from the
+   # BACKGROUND line in the .mod file.  E.g.,
+# ALPHABET: A C G T
+# ...
+# BACKGROUND: 0.309665 0.189697 0.189720 0.310918
+   # add up the C and G:
+   grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+   # 0.379 is the GC content. This is used in the -gc argument below.
+   # If you do *not* have a global tree model and you do not know your
+   # GC content, you can get it directly from the MAFs with a command
+   # like:
+   /cluster/bin/phast/$MACHTYPE/msa_view \
+    --aggregate danRer4,tetNig1,fr1,xenTro2,monDom4,mm8,hg18 -i MAF \
+    -S /cluster/data/danRer4/bed/multiz7way/maf/chr*.maf > maf_summary.txt
+   # This gives a GC content of 0.426 so use this as it is from mafs for
+   # the whole genome.
+   # break up the genome-wide MAFs into pieces on the san filesystem
+   ssh pk
+   # should use a directory on the san but it is down and para create is
+   # not working on kk.
+   set WINDOWS=/cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons/ss
+   mkdir -p $WINDOWS
+   cd $WINDOWS
+   cat << 'EOF' > doSplit.csh
+#!/bin/csh -ef
+set MAFS = /cluster/data/danRer4/bed/multiz7way.2006-05-18/maf
+set WINDOWS=/cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons/ss
+cd $WINDOWS
+set c = $1
+echo $c
+rm -fr $c
+mkdir $c
+set N = `echo $c | sed -e 's/chr//'`
+/cluster/bin/phast/$MACHTYPE/msa_split $MAFS/$c.maf -i MAF \
+       -M /cluster/data/danRer4/$N/$c.fa \
+       -o SS -w 10000000,0 -I 1000 -B 5000 -r $c/$c
+echo "Done" >> $c.done
+'EOF'
+# << emacs
+   chmod +x doSplit.csh
+   rm -f jobList
+   foreach c (`cat /cluster/data/danRer4/chrom.lst`)
+    echo "doSplit.csh chr${c} {check out line+ $WINDOWS/chr$c.done}" >> jobList
+   end
+
+   para create jobList
+   para push, check etc.
+   para time
+# Completed: 28 of 28 jobs
+# CPU time in finished jobs:        847s      14.12m     0.24h    0.01d  0.000 y
+# IO & Wait Time:                  9741s     162.35m     2.71h    0.11d  0.000 y
+# Average job time:                 378s       6.30m     0.11h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             539s       8.98m     0.15h    0.01d
+# Submission to last job:           581s       9.68m     0.16h    0.01d
+
+    # Create a random list of 50 1 mb regions (do not use chrNA and chrUn)
+
+    ls -1l chr*/chr*.ss | grep -v NA | grep -v Un | \
+       awk '$5 > 4000000 {print $9;}' | randomLines stdin 50 ../randomSs.list
+    
+    # Set up parasol directory to calculate trees on these 50 regions
+    ssh pk
+    set dir = /cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons
+    mkdir -p $dir
+    cd $dir
+    # now set up cluster job to estimate model parameters.  Parameters
+    # will be estimated separately for each alignment fragment then
+    # will be combined across fragments. Tuning this loop should come
+    # back to here to recalculate. Tuning target-coverage and expected-length.
+    # Create little script that calls phastCons with right arguments
+
+    cat > makeTree.csh << 'EOF'
+#!/bin/csh -fe
+set C = $1:h
+set treeRun = $2
+set cov = $3
+set len = $4
+set dir = /cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons
+mkdir -p $dir/$treeRun/log/${C} $dir/$treeRun/tree/${C}
+/cluster/bin/phast/x86_64/phastCons $dir/ss/$1 \
+  /cluster/data/danRer4/bed/multiz7way.2006-05-18/phastCons/starting-tree.mod \
+  --gc 0.426 --nrates 1,1 --no-post-probs --ignore-missing \
+  --expected-length $len --target-coverage $cov \
+  --quiet --log $dir/$treeRun/log/$1 --estimate-trees $dir/$treeRun/tree/$1
+'EOF'
+    # << emacs
+    chmod a+x makeTree.csh
+    # Make sure that the correct GC content is substituted in here. Notice
+    # the target coverage of 0.17. Here we are going to aim
+    # for 65% coverage of coding regions by conserved elements.
+    # Create gensub file
+# need to add cov and len parameters
+    cat > template << '_EOF_'
+#LOOP
+makeTree.csh $(path1) $(path2)
+#ENDLOOP
+'_EOF_'
+    #   happy emacs
+    # Make cluster job and run it
+    echo "treeRun1 0.17 12" > tree.lst
+    echo "treeRun2 0.32 18" >> tree.lst
+    echo "treeRun3 0.32 20" >> tree.lst
+    echo "treeRun4 0.35 18" >> tree.lst
+    gensub2 randomSs.list tree.lst template jobList
+    para create jobList
+    para try,check,push,check etc.
+# para time
+# Completed: 200 of 200 jobs
+# CPU time in finished jobs:      45500s     758.33m    12.64h    0.53d  0.001 y
+# IO & Wait Time:                 31478s     524.64m     8.74h    0.36d  0.001 y
+# Average job time:                 385s       6.41m     0.11h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             622s      10.37m     0.17h    0.01d
+# Submission to last job:           821s      13.68m     0.23h    0.01d
+    # try again, mkdir test2. if aim for about 5% coverage and for chr1 on
+    # hg18, netDanRer4 covers about 31% of bases then 0.05/0.30 = 0.156
+    # want length of about 20 bp to influence the model towards detecting
+    # shorter conserved regions such as TFBSs.
+    cd test2
+    echo "treeRun5 0.156 20" > tree.lst
+    gensub2 ../randomSs.list tree.lst template jobList
+    para create jobList
+    cd test3
+    echo "treeRun6 0.156 15" > tree.lst
+    gensub2 ../randomSs.list tree.lst template jobList
+    para create jobList
+    cd test4
+    # increase coverage and compensate a bit by lowering the expected length
+    echo "treeRun7 0.25 8" > tree.lst
+    gensub2 ../randomSs.list tree.lst template jobList
+    para create jobList
+    cd test5
+    echo "treeRun8 0.35 12" > tree.lst
+    gensub2 ../randomSs.list tree.lst template jobList
+    para create jobList
+    cd test6
+    echo "treeRun9 0.5 20" > tree.lst
+    gensub2 ../randomSs.list tree.lst template jobList
+    para create jobList
+    cd test7
+    echo "treeRun10 0.5 24" > tree.lst
+    gensub2 ../randomSs.list tree.lst template jobList
+    para create jobList
+    cd test8
+    echo "treeRun11 0.45 22" > tree.lst
+    echo "treeRun12 0.5 26" >> tree.lst
+    echo "treeRun13 0.5 28" >> tree.lst
+    gensub2 ../randomSs.list tree.lst template jobList
+    para create jobList
+    cd test9
+    echo "treeRun14 0.45 24" > tree.lst
+    echo "treeRun15 0.45 20" >> tree.lst
+    gensub2 ../randomSs.list tree.lst template jobList
+    para create jobList
+    cd test10
+    echo "treeRun16 0.40 24" > tree.lst
+    echo "treeRun17 0.40 20" >> tree.lst
+    echo "treeRun18 0.42 20" >> tree.lst
+    gensub2 ../randomSs.list tree.lst template jobList
+    para create jobList
+    cd test11
+    echo "treeRun19 0.38 24" > tree.lst
+    echo "treeRun20 0.38 22" >> tree.lst
+    echo "treeRun21 0.38 20" >> tree.lst
+    gensub2 ../randomSs.list tree.lst template jobList
+    para create jobList
+    # Now combine parameter estimates.  We can average the .mod files
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    set dir = /cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons
+    foreach d ($dir/treeRun*)
+       cd $d
+       ls tree/chr*/*.cons.mod > cons.txt
+       /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*cons.txt' \
+         --output-average ave.cons.mod > cons_summary.txt
+       ls tree/chr*/*.noncons.mod > noncons.txt
+       /cluster/bin/phast/$MACHTYPE/phyloBoot --read-mods '*noncons.txt' \
+         --output-average ave.noncons.mod > noncons_summary.txt
+    end
+       #   measuring entropy
+    #   consEntropy <target coverage> <expected lengths>
+    #            ave.cons.mod ave.noncons.mod --NH 9.78
+    #   never stops with the --NH argument
+    # target entropy should be L_min*H=9.8 bits, (between 9.5 to 10.5 is ok)
+    # the expected length that produces this entropy is the one
+    # to use for phastCons.
+    # foreach treeRun, set the appropriate coverage and length
+    # file: treeRunN cov len
+    # use awk to split up
+    cd /cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons
+    cp tree.lst entropy.csh 
+    perl -pi.bak -e 's/^(treeRun[0-9]+)\s*([0-9\.]+)\s*([0-9]+)/echo \"Coverage = $2 Length = $3\"\ncd $1\n\/cluster\/bin\/phast\/x86_64\/consEntropy $2 $3 ave.cons.mod ave.noncons.mod\ncd \.\./' entropy.csh 
+    chmod +x entropy.csh
+    entropy.csh >& entropy.out
+# entropy.out
+#Coverage = 0.17 Length = 12
+#Transition parameters:gamma=0.170000, omega=12.000000, mu=0.083333, nu=0.017068
+#Relative entropy: H=0.782279 bits/site
+#Expected min. length: L_min=13.655129 sites
+#Expected max. length: L_max=8.801144 sites
+#Phylogenetic information threshold: PIT=L_min*H=10.682123 bits
+
+#Coverage = 0.32 Length = 18
+#Transition parameters:gamma=0.320000, omega=18.000000, mu=0.055556, nu=0.026144
+#Relative entropy: H=0.757117 bits/site
+#Expected min. length: L_min=13.055080 sites
+#Expected max. length: L_max=9.912578 sites
+#Phylogenetic information threshold: PIT=L_min*H=9.884225 bits
+
+#Coverage = 0.32 Length = 20
+#Transition parameters:gamma=0.320000, omega=20.000000, mu=0.050000, nu=0.023529
+#Relative entropy: H=0.736191 bits/site
+#Expected min. length: L_min=13.815340 sites
+#Expected max. length: L_max=10.615242 sites
+#Phylogenetic information threshold: PIT=L_min*H=10.170732 bits
+
+#Coverage = 0.35 Length = 18
+#Transition parameters:gamma=0.350000, omega=18.000000, mu=0.055556, nu=0.029915
+#Relative entropy: H=0.768872 bits/site
+#Expected min. length: L_min=12.471015 sites
+#Expected max. length: L_max=9.642561 sites
+#Phylogenetic information threshold: PIT=L_min*H=9.588610 bits
+
+#Coverage = 0.156 Length = 20
+#Transition parameters:gamma=0.156000, omega=20.000000, mu=0.050000, nu=0.009242
+#Relative entropy: H=0.676147 bits/site
+#Expected min. length: L_min=17.857722 sites
+#Expected max. length: L_max=12.694666 sites
+#Phylogenetic information threshold: PIT=L_min*H=12.074436 bits
+
+#Coverage = 0.156 Length = 15
+#Transition parameters:gamma=0.156000, omega=15.000000, mu=0.066667, nu=0.012322
+#Relative entropy: H=0.726430 bits/site
+#Expected min. length: L_min=15.713919 sites
+
+#Transition parameters: gamma=0.250000, omega=8.000000, mu=0.125000, nu=0.041667
+#Relative entropy: H=0.950194 bits/site
+#Expected min. length: L_min=8.951612 sites
+#Expected max. length: L_max=5.560228 sites
+#Phylogenetic information threshold: PIT=L_min*H=8.505767 bits
+
+#Coverage = 0.5 Length = 20
+#Transition parameters:gamma=0.500000, omega=20.000000, mu=0.050000, nu=0.050000
+#Relative entropy: H=0.817081 bits/site
+#Expected min. length: L_min=10.397809 sites
+#Expected max. length: L_max=9.006386 sites
+#Phylogenetic information threshold: PIT=L_min*H=8.495855 bits
+
+# Coverage = 0.5 Length = 24
+#Transition parameters:gamma=0.500000, omega=24.000000, mu=0.041667, nu=0.041667
+#Relative entropy: H=0.772807 bits/site
+#Expected min. length: L_min=11.706841 sites
+#Expected max. length: L_max=10.170845 sites
+#Phylogenetic information threshold: PIT=L_min*H=9.047124 bits
+
+# Coverage = 0.5 Length = 26
+#Transition parameters:gamma=0.500000,omega=26.000000, mu=0.038462, nu=0.038462
+#Relative entropy: H=0.755159 bits/site
+#Expected min. length: L_min=12.299010 sites
+#Expected max. length: L_max=10.697444 sites
+#Phylogenetic information threshold: PIT=L_min*H=9.287712 bits
+
+#Coverage = 0.5 Length = 28
+#Transition parameters:gamma=0.500000,omega=28.000000, mu=0.035714, nu=0.035714
+#Relative entropy: H=0.739661 bits/site
+#Expected min. length: L_min=12.856932 sites
+#Expected max. length: L_max=11.193931 sites
+#Phylogenetic information threshold: PIT=L_min*H=9.509775 bits
+
+########USED THESE PARAMETERS##################
+#Coverage = 0.45 Length = 24
+#Transition parameters:gamma=0.450000, omega=24.000000, mu=0.041667, nu=0.034091
+#Relative entropy: H=0.749572 bits/site
+#Expected min. length: L_min=12.663020 sites
+#Expected max. length: L_max=10.634682 sites
+#Phylogenetic information threshold: PIT=L_min*H=9.491841 bits
+
+#Coverage = 0.40 Length = 24
+#Transition parameters:gamma=0.400000, omega=24.000000, mu=0.041667, nu=0.027778
+#Relative entropy: H=0.730161 bits/site
+#Expected min. length: L_min=13.607002 sites
+#Expected max. length: L_max=11.092981 sites
+#Phylogenetic information threshold: PIT=L_min*H=9.935307 bits
+
+#Coverage = 0.38 Length = 20
+#Transition parameters:gamma=0.380000, omega=20.000000, mu=0.050000, nu=0.030645
+#Relative entropy: H=0.758676 bits/site
+#Expected min. length: L_min=12.652818 sites
+#Expected max. length: L_max=10.063048 sites
+#Phylogenetic information threshold: PIT=L_min*H=9.599385 bits
+ 
+#Coverage = 0.38 Length = 24
+#Transition parameters:gamma=0.380000, omega=24.000000, mu=0.041667, nu=0.025538
+#Relative entropy: H=0.723105 bits/site
+#Expected min. length: L_min=13.987286 sites
+#Expected max. length: L_max=11.279443 sites
+#Phylogenetic information threshold: PIT=L_min*H=10.114270 bits
+
+    # Create cluster dir to do main phastCons run
+    ssh pk
+    mkdir -p \
+       /cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons/consRun
+    cd /cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons/consRun
+    cp -p ../treeRun1/ave.*.mod .
+    cp -p ../treeRun1/ave.*.mod \
+       /cluster/data/danRer4/bed/multiz7way.2006-05-18/phastCons
+    mkdir ppRaw bed
+    # Create script to run phastCons with right parameters
+    #   This job is I/O intensive in its output files, thus it is all
+    #   working over in /scratch/tmp/
+    # Use the expected length and target coverage determined above and 
+    # the corresponding average conserved and nonconserved models
+    cat > doPhast.csh << '_EOF_'
+#!/bin/csh -fe
+mkdir /scratch/tmp/${2}
+cp -p ../ss/${1}/${2}.ss ave.*.mod /scratch/tmp/${2}
+pushd /scratch/tmp/${2} > /dev/null
+/cluster/bin/phast/x86_64/phastCons ${2}.ss ave.cons.mod,ave.noncons.mod \
+        --expected-length 18 --target-coverage 0.32 --quiet \
+        --seqname ${1} --idpref ${1} --viterbi ${2}.bed --score > ${2}.pp
+popd > /dev/null
+mkdir -p ppRaw/${1}
+mkdir -p bed/${1}
+mv /scratch/tmp/${2}/${2}.pp ppRaw/${1}
+mv /scratch/tmp/${2}/${2}.bed bed/${1}
+rm /scratch/tmp/${2}/ave.*.mod
+rm /scratch/tmp/${2}/${2}.ss
+rmdir /scratch/tmp/${2}
+'_EOF_'
+    # emacs happy
+    chmod a+x doPhast.csh
+
+    #   root1 == chrom name, file1 == ss file name without .ss suffix
+    # Create gsub file
+cat > template << '_EOF_'
+#LOOP
+doPhast.csh $(root1) $(file1)
+#ENDLOOP
+'_EOF_'
+   #   happy emacs
+
+   # Create parasol batch and run it
+   ls -1 ../ss/chr*/chr*.ss | sed 's/.ss$//' > in.list
+
+   gensub2 in.list single template jobList
+   para create jobList
+   para try/check/push/etc.
+   para time
+# Completed: 191 of 191 jobs
+# CPU time in finished jobs:       4421s      73.69m     1.23h    0.05d  0.000 y
+# IO & Wait Time:                121036s    2017.26m    33.62h    1.40d  0.004 y
+# Average job time:                 657s      10.95m     0.18h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             726s      12.10m     0.20h    0.01d
+# Submission to last job:           874s      14.57m     0.24h    0.01d
+ 
+# combine predictions and transform scores to be in 0-1000 interval
+   ssh kkstore04
+   cd /cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons/consRun
+   #   The sed's and the sort get the file names in chrom,start order 
+   # (Hiram tricks -- split into columns on [.-/] with
+   #    identifying x,y,z, to allow column sorting and
+   #    restoring the filename.  Warning: the sort column
+   # will depend on how deep you are in the dir
+   find ./bed -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+        | sort -k7,7 -k9,9n \
+        | sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+        | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+        | /cluster/bin/scripts/lodToBedScore /dev/stdin > mostConserved.bed
+    cp -p mostConserved.bed \
+        /cluster/data/danRer4/bed/multiz7way.2006-05-18/phastCons
+# Figure out how much is actually covered by the mostConserved data as so:
+    cd /cluster/data/danRer4
+    faSize */chr*.fa
+    # 1774660131 bases (175779328 N's 1598880803 real 816338509 upper 
+    # 782542294 lower) in 28 sequences in 28 files
+    # Total size: mean 63380719.0 sd 33877121.9 min 16596 (chrM) 
+    # max 208014280 (chrNA_random) median 59765243
+    # 782542294 lower) in 28 sequences in 28 files
+    # Total size: mean 63380719.0 sd 33877121.9 min 16596 (chrM) 
+    # max 208014280 (chrNA_random) median 59765243
+    # The non-N size is 1598880803 bases
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-18/phastCons
+    awk '{sum+=$3-$2}
+END{printf "%% %.2f = 100.0*%d/1598880803\n",100.0*sum/1598880803,sum}' \
+        mostConserved.bed
+    -target-coverage 0.17: % 1.51 = 100.0*24186350/1598880803 length=12
+    -target-coverage 0.156: % 1.44 = 100.0*22973222/1598880803 length=20
+    -target-coverage 0.156: % 1.32 = 100.0*21177329/1598880803 length=15
+    -target-coverage 0.25: % 1.32 = 100.0*21104503/1598880803 length=8
+    -target-coverage 0.32: % 1.88 = 100.0*30014509/1598880803 length=20
+    -target-coverage 0.5: % 3.00 = 100.0*47931076/1598880803 length=20
+    -target-coverage 0.5: % 2.95 = 100.0*47170018/1598880803 length=24
+    -target-coverage 0.5: % 2.24 = 100.0*35801661/1598880803 length=28
+    -target-coverage 0.45: % 2.50 = 100.0*39965003/1598880803 length=24
+    -target-coverage 0.40: % 2.22 = 100.0*35436744/1598880803 length=24
+    -target-coverage 0.38: % 2.12 = 100.0*33911465/1598880803 length=20
+    -target-coverage 0.38: % 2.13 = 100.0*33986115/1598880803 length=24
+
+    # want to aim for 65% coverage of coding regions
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-18/phastCons
+    # get an or of refGene and mgcGenes CDS regions
+    featureBits danRer4 refGene:cds mgcGenes:cds -or -bed=refSeqOrMgcCds.bed
+    # 11753378 bases of 1626093931 (0.723%) in intersection
+
+#    featureBits danRer3 refGene:cds mgcGenes:cds -or \
+ #               -bed=refSeqOrMgcCdsDanRer3.bed
+    # 11633092 bases of 1630323462 (0.714%) in intersection
+    featureBits danRer4 refSeqOrMgcCds.bed mostConserved.bed -enrichment
+    # refSeqOrMgcCds.bed 0.723%, mostConserved.bed 1.487%, both 0.332%, 
+    # cover 45.97%, enrich 30.90x
+    # for length = 12 and cov = 0.17 PIT=10.7
+    # refSeqOrMgcCds.bed 0.723%, mostConserved.bed 1.846%, both 0.388%, 
+    # cover 53.74%, enrich 29.12x
+    # for length = 20 and cov = 0.156 PIT=12.1
+    # refSeqOrMgcCds.bed 0.723%, mostConserved.bed 1.413%, both 0.333%, 
+    # cover 46.04%, enrich 32.59x
+    # for length = 15 and cov = 0.156 PIT=11.4
+    # refSeqOrMgcCds.bed 0.723%, mostConserved.bed 1.302%, both 0.313%, 
+    # cover 43.36%, enrich 33.30x
+    # decrease length and increase coverage to compensate
+    # for length = 8 and cov = 0.25 PIT=8.5, PIT is too low
+    # refSeqOrMgcCds.bed 0.723%, mostConserved.bed 1.298%, both 0.304%, 
+    # cover 42.06%, enrich 32.40x
+    # try length = 20 and cov = 0.32 PIT=10.8
+    # refSeqOrMgcCds.bed 0.723%, mostConserved.bed 1.846%, both 0.388%, 
+    # cover 53.74%, enrich 29.12x
+    # length = 20 and cov = 0.5 PIT=8.5
+    # refSeqOrMgcCds.bed 0.723%, mostConserved.bed 2.948%, both 0.459%, 
+    # cover 63.53%, enrich 21.55x
+    # coverage good, need to increase the PIT value so increase the length.
+    # length = 24 and cov = 0.5 PIT=9.05
+    # refSeqOrMgcCds.bed 0.723%, mostConserved.bed 2.901%, both 0.458%, 
+    # cover 63.35%, enrich 21.84x
+    # length = 28 and cov = 0.5 PIT=9.5
+    # refSeqOrMgcCds.bed 0.724%, mostConserved.bed 2.202%, both 0.431%, 
+    # cover 59.57%, enrich 27.06x
+    # length = 24 and cov = 0.45 PIT=9.5
+    featureBits danRer4 refGene:cds mgcGenes:cds -or -bed=refSeqOrMgcCds.bed
+    # 11770580 bases of 1626093931 (0.724%) in intersection
+    featureBits danRer4 refSeqOrMgcCds.bed mostConserved.bed -enrichment
+    # refSeqOrMgcCds.bed 0.724%, mostConserved.bed 2.458%, both 0.438%, 
+    # cover 60.57% enrich 24.64x
+    # length = 20 and cov = 0.38 PIT=9.6
+    # refSeqOrMgcCds.bed 0.724%, mostConserved.bed 2.085%, both 0.411%, 
+    # cover 56.76%, enrich 27.22x
+    # length = 24 and cov = 0.38 PIT=10.1
+    # refSeqOrMgcCds.bed 0.724%, mostConserved.bed 2.090%, both 0.413%, 
+    # cover 57.07%, enrich 27.30x
+    # with L_min*H entropy (PIT) value of 9.84 (aiming for around 9.8) and
+    # 53.3% coverage of coding regions with most conserved elements
+    # (aiming for about 65%)
+
+    # use consRun14 length = 24 cov=0.45
+    # Load most conserved track into database
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-18/phastCons
+    hgLoadBed danRer4 phastConsRBestElements mostConserved.bed
+    # Loaded  elements of size 5
+    featureBits danRer4 mgcGenes:cds phastConsRBestElements -enrichment
+    # mgcGenes:cds 0.560%, phastConsRBestElements 2.458%, both 0.349%, 
+    # cover 62.23%, enrich 25.32x
+    # Create merged posterier probability file and wiggle track data files
+    # the sed business gets the names sorted by chromName, chromStart
+    # so that everything goes in numerical order into wigEncode
+    ssh kkstore04
+    cd /cluster/bluearc/danRer4/multiz7way.2006-05-18/phastCons/consRun14
+    find ./ppRaw -type f | sed -e "s#/# x #g; s#\.# y #g; s#-# z #g" \
+        | sort -k7,7 -k9,9n \
+        | sed -e "s# z #-#g; s# y #\.#g; s# x #/#g" | xargs cat \
+        | wigEncode stdin phastConsRBest7way.wig phastConsRBest7way.wib
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+    # takes a few minutes
+    ls -l phastCons*
+    #-rw-rw-r--  1 hartera protein 133817339 May 24 22:48 phastConsRBest7way.wib
+    #-rw-rw-r--  1 hartera protein  36947021 May 24 22:48 phastConsRBest7way.wig 
+    cp -p phastConsRBest7way.wi? \
+          /cluster/data/danRer4/bed/multiz7way.2006-05-18/phastCons
+    
+    # Load gbdb and database with wiggle.
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-18/phastCons
+    mkdir -p /gbdb/danRer4/wib
+    ln -s `pwd`/phastConsRBest7way.wib /gbdb/danRer4/wib/phastConsRBest7way.wib
+    # use this if need to reload table
+    hgsql -e 'drop table phastConsRBest7way;' danRer4
+    # load table
+    hgLoadWiggle danRer4 phastConsRBest7way phastConsRBest7way.wig
+
+    #  Create histogram to get an overview of all the data
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-04/phastCons
+    bash
+    time hgWiggle -doHistogram \
+        -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
+            -db=danRer4 phastCons7way > histogram.data 2>&1
+# real    2m33.069s
+# user    1m58.310s
+# sys     0m16.170s
+
+        #   create plot of histogram:
+    cat << '_EOF_' > histo.gp
+set terminal png small color \
+        x000000 xffffff xc000ff x66ff66 xffff00 x00ffff xff0000
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Zebrafish danRer4 Histogram phastCons7 track"
+set xlabel " phastCons7 score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.02]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+     "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+
+    #   happy emacs
+    gnuplot histo.gp > histo.png
+    display histo.png &
+
+# add line: wiggle phastCons7way to trackDb.ra for multiz7way to display the
+# wiggle for the conservation track.
+# check all.joiner for entries for phastCons7way and phastConsElements7way -ok
+# copy over html for multiz and edit.
+
+
+###########################################################################
 # BACENDS TRACK (in progress, 2006-05-10, hartera)
    # Obtain these from the NCBI Trace archive
    ssh kolossus
@@ -3111,23 +4226,11 @@ end
 foreach d (2006*)
    echo "Processing $d"
    nice cat ${d}/TRACEINFO.xml >> allTraceInfo.xml
-   foreach f (${d}/DANIO_RERIO/*/fasta/*.fasta)
-      nice cat $f >> Zv6BACends.fasta
-      echo $f >> Zv6BACends.lst
-   end
-end
-'_EOF_'
-   chmod +x catBacs.csh
    nice catBacs.csh >& catBacs.log &
    # The last archive obtained is empty so try downloading from the ftp site
    # to be sure to get everything.
 
    ssh kolossus
-   mkdir -p /san/sanvol1/scratch/danRer4/bacEnds/downloads 
-   cd /san/sanvol1/scratch/danRer4/bacEnds/downloads
-   wget --timestamping \
-       ftp://ftp.ncbi.nlm.nih.gov/pub/TraceDB/danio_rerio/
-   # gets index.html page, then get ancillary information files and 
    # grab just the ftp link for each file.
    grep "anc" index.html > ancillary.lst
    perl -pi.bak -e 's/.+<a href=\"(ftp.+)\">[a-zA-Z]+.+/$1/' ancillary.lst
