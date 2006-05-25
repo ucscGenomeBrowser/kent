@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1109 2006/05/24 22:51:26 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1110 2006/05/25 15:38:45 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -312,99 +312,12 @@ va_end(args);
 }
 
 
-void setPicWidth(char *s)
-/* Set pixel width from ascii string. */
-{
-if (s != NULL && isdigit(s[0]))
-    {
-    tl.picWidth = atoi(s);
-    if (tl.picWidth > 5000)
-        tl.picWidth = 5000;
-    if (tl.picWidth < 320)
-        tl.picWidth = 320;
-    }
-tl.trackWidth = tl.picWidth - tl.leftLabelWidth;
-}
-
-boolean inclFontExtras()
-/* Check if fonts.extra is set to use "yes" in the config.  This enables
- * extra fonts and related options that are not part of the public browser */
-{
-static boolean first = TRUE;
-static boolean enabled = FALSE;
-if (first)
-    {
-    char *val = cfgOptionDefault("fonts.extra", NULL);
-    if (val != NULL)
-        enabled = sameString(val, "yes");
-    first = FALSE;
-    }
-return enabled;
-}
-
 void initTl()
 /* Initialize layout around small font and a picture about 600 pixels
  * wide. */
 {
-char *fontType = cartUsualString(cart, "fontType", "medium");
-boolean fontExtras = inclFontExtras();
-
-MgFont *font = (MgFont *)NULL;
-tl.textSize = cartUsualString(cart, textSizeVar, "small");
-if (fontExtras && sameString(fontType,"bold"))
-    {
-    if (sameString(tl.textSize, "small"))
-	 font = mgSmallBoldFont();
-    else if (sameString(tl.textSize, "tiny"))
-	 font = mgTinyBoldFont();
-    else if (sameString(tl.textSize, "medium"))
-	 font = mgMediumBoldFont();
-    else if (sameString(tl.textSize, "large"))
-	 font = mgLargeBoldFont();
-    else if (sameString(tl.textSize, "huge"))
-	 font = mgHugeBoldFont();
-    else
-	 font = mgSmallBoldFont();	/*	default to small	*/
-    }
-else if (fontExtras && sameString(fontType,"fixed"))
-    {
-    if (sameString(tl.textSize, "small"))
-	 font = mgSmallFixedFont();
-    else if (sameString(tl.textSize, "tiny"))
-	 font = mgTinyFixedFont();
-    else if (sameString(tl.textSize, "medium"))
-	 font = mgMediumFixedFont();
-    else if (sameString(tl.textSize, "large"))
-	 font = mgLargeFixedFont();
-    else if (sameString(tl.textSize, "huge"))
-	 font = mgHugeFixedFont();
-    else
-	 font = mgSmallFixedFont();	/*	default to small	*/
-    }
-else
-    {
-    if (sameString(tl.textSize, "small"))
-	 font = mgSmallFont();
-    else if (sameString(tl.textSize, "tiny"))
-	 font = mgTinyFont();
-    else if (sameString(tl.textSize, "medium"))
-	 font = mgMediumFont();
-    else if (sameString(tl.textSize, "large"))
-	 font = mgLargeFont();
-    else if (sameString(tl.textSize, "huge"))
-	 font = mgHugeFont();
-    else
-	font = mgSmallFont(); /* default to small */
-    }
-tl.font = font;
-tl.mWidth = mgFontStringWidth(font, "M");
-tl.nWidth = mgFontStringWidth(font, "n");
-tl.fontHeight = mgFontLineHeight(font);
-tl.barbHeight = tl.fontHeight/4;
-tl.barbSpacing = (tl.fontHeight+1)/2;
+trackLayoutInit(&tl, cart);
 tl.leftLabelWidth = 17*tl.nWidth + trackTabWidth;
-tl.picWidth = hgDefaultPixWidth;
-setPicWidth(cartOptionalString(cart, "pix"));
 }
 
 
@@ -10873,7 +10786,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    {
 	    if (wordCount != 3)
 	        errAbort("Expecting 3 words in pix line");
-	    setPicWidth(words[2]);
+	    trackLayoutSetPicWidth(&tl, words[2]);
 	    }
 	}
     }

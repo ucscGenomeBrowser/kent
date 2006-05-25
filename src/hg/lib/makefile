@@ -70,7 +70,8 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     tableDescriptions.o tableStatus.o tfbsConsMap.o \
     taxonDivision.o taxonGeneticCode.o taxonName.o taxonNode.o taxonXref.o \
     tigrCmrGene.o tigrOperon.o tilingPath.o traceInfo.o trackDb.o \
-    trackDbCustom.o trackTable.o transRegCode.o transRegCodeCondition.o \
+    trackDbCustom.o trackLayout.o trackTable.o \
+    transRegCode.o transRegCodeCondition.o \
     transRegCodeProbe.o vegaInfo.o visiGene.o vntr.o wabAli.o web.o wgRna.o \
     wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o wiggleUtils.o \
     wikiLink.o zdobnovSynt.o landmark.o landmarkUi.o

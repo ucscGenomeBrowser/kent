@@ -168,7 +168,7 @@ hIntVar("pix", tl.picWidth, 4);
 hPrintf(" text size: ");
 textSizeDropDown();
 hPrintf("&nbsp;");
-if (inclFontExtras())
+if (trackLayoutInclFontExtras())
     {
     char *defaultStyle = cartUsualString(cart, "fontType", "medium");
     cartMakeRadioButton(cart, "fontType", "medium", defaultStyle);

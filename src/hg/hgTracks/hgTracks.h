@@ -15,6 +15,11 @@
 #ifndef CART_H
 #include "cart.h"
 #endif
+
+#ifndef TRACKLAYOUT_H
+#include "trackLayout.h"
+#endif /* TRACKLAYOUT_H */
+
 struct itemAttr;
 struct itemAttrTbl;
 
@@ -240,21 +245,6 @@ struct knownGenesExtra
     char *name;                 /* name to be used on label */
     };
 
-struct trackLayout
-/* This structure controls the basic dimensions of display. */
-    {
-    char *textSize;		/* Symbolic name of text size. */
-    MgFont *font;		/* What font to use. */
-    int leftLabelWidth;		/* Width of left labels. */
-    int trackWidth;		/* Width of tracks. */
-    int picWidth;		/* Width of entire picture. */
-    int mWidth;			/* Width of 'M' in font. */
-    int nWidth;			/* Width of 'N' in font. */
-    int fontHeight;		/* Height of font. */
-    int barbHeight;		/* Height of arrows on introns. */
-    int barbSpacing;		/* Space between arrows on introns. */
-    };
-
 extern struct trackLayout tl;
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
@@ -350,10 +340,6 @@ void printHtmlComment(char *format, ...);
 /* Function to print output as a comment so it is not seen in the HTML
  * output but only in the HTML source. */
 
-boolean inclFontExtras();
-/* Check if fonts.extra is set to use "yes" in the config.  This enables
- * extra fonts and related options that are not part of the public browser */
-    
 int orientFromChar(char c);
 /* Return 1 or -1 in place of + or - */
 
@@ -865,8 +851,6 @@ void affyTxnPhase2Methods(struct track *track);
 
 void loadGenePred(struct track *tg);
 /* Convert gene pred in window to linked feature. */
-
-#define textSizeVar "textSize"	/* Variable name used for text size. */
 
 #define NEXT_ITEM_ARROW_BUFFER 5
 /* Space around "next item" arrow (in pixels). */
