@@ -204,8 +204,7 @@ if (strain == NULL)
 *retStrain = strain;
 }
 
-void printExpression(FILE *f, struct sqlConnection *conn, 
-    char *assayKey, char *imagePaneKey)
+void printExpression(FILE *f, struct sqlConnection *conn, char *imagePaneKey)
 /* Print associated expression info on assay/pane as indented lines. */
 {
 struct dyString *query = dyStringNew(0);
@@ -213,30 +212,28 @@ struct sqlResult *sr;
 char **row;
 
 dyStringPrintf(query, 
-    "select DISTINCT GXD_Structure.printName,GXD_Expression.expressed "
-    "from GXD_Expression,GXD_Structure,GXD_Assay,GXD_Specimen,GXD_InSituResult,"
-    "GXD_InSituResultImage,GXD_ISResultStructure "
-    "where GXD_Expression._Assay_key = %s "
-    "and GXD_InSituResultImage._ImagePane_key = %s "
-    "and GXD_Expression._Structure_key = GXD_Structure._Structure_key "
-    "and GXD_Assay._Assay_key = GXD_Specimen._Assay_key "
-    "and GXD_Specimen._Specimen_key = GXD_InSituResult._Specimen_key "
-    "and GXD_InSituResult._Result_key = GXD_ISResultStructure._Result_key "
+    "select GXD_Structure.printName,GXD_InSituResult._Strength_key "
+    "from GXD_Structure,GXD_InSituResult, GXD_InSituResultImage,GXD_ISResultStructure "
+    "where GXD_InSituResultImage._ImagePane_key = %s "
     "and GXD_InSituResultImage._Result_key = GXD_ISResultStructure._Result_key "
-    "and GXD_Expression._Assay_key = GXD_Assay._Assay_key "
-    "and GXD_Expression._Structure_key = GXD_ISResultStructure._Structure_key\n"
-    , assayKey, imagePaneKey);
+    "and GXD_InSituResultImage._Result_key = GXD_InSituResult._Result_key "
+    "and GXD_ISResultStructure._Structure_key = GXD_Structure._Structure_key "
+    , imagePaneKey);
 sr = sqlGetResultVerbose(conn, query->string);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *bodyPart = skipLeadingSpaces(row[0]);
     if (bodyPart[0] != 0)
 	{
+	int expression = sqlSigned(row[1]);
+	float level = (float)expression;
+	if (level > 0.0) 
+	    level = (level - 1.0) / 7.0;
 	/* Strip trailing # if any from body part. */
 	int lastChar = strlen(bodyPart)-1;
 	if (bodyPart[lastChar] == '#')
 	    bodyPart[lastChar] = 0;
-	fprintf(f, "\texpression\t%s\t%s\n", bodyPart, row[1]);
+	fprintf(f, "\texpression\t%s\t%f\n", bodyPart, level);
 	}
     }
 sqlFreeResult(&sr);
@@ -841,7 +838,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     fprintf(tab, "%d\t", imageWidth);
     fprintf(tab, "%d\n", imageHeight);
 
-    printExpression(tab,  conn2,  assayKey, imagePaneKey);
+    printExpression(tab,  conn2,  imagePaneKey);
     gotAny = TRUE;
     freez(&genotype);
     freez(&abName);
