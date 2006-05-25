@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.45 2006/05/23 18:29:47 kate Exp $"
+#	"$Id: makeMm8.doc,v 1.46 2006/05/25 17:53:23 angie Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5551,7 +5551,7 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
 /cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=hg3rdParty/genscanlinux/genscan -par=hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=2400000
 #ENDLOOP
 '_EOF_'
-    # happy emacs
+    # << emacs
     gensub2 genome.list single template jobList
     para create jobList
     para try, check, push, check, ...
@@ -5647,3 +5647,47 @@ BASE=/cluster/data/mm8/bed/blastz.xenTro2.2006-04-20
     #   21167 bases of 2597150411 (0.001%) in intersection
     featureBits mm5 miRNA
     #   17957 bases of 2615483787 (0.001%) in intersection
+
+
+#########################################################################
+# BLASTZ CHICKEN galGal3 (DONE 5/24/06 angie)
+    ssh pk
+    mkdir /cluster/data/mm8/bed/blastz.galGal3.2006-05-23
+    cd /cluster/data/mm8/bed/blastz.galGal3.2006-05-23
+    cat << '_EOF_' > DEF
+# mouse vs chicken
+BLASTZ=blastz.v7.x86_64
+
+# Specific settings for chicken (per Webb email to Brian Raney)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=10000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+BLASTZ_ABRIDGE_REPEATS=1
+
+# TARGET: Mouse mm8
+SEQ1_DIR=/scratch/hg/mm8/nib
+SEQ1_SMSK=/san/sanvol1/scratch/mm8/linSpecRep/notInNonMammal
+SEQ1_LEN=/scratch/hg/mm8/chrom.sizes
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+
+# QUERY: Chicken galGal3 - single chunk big enough to run entire chrom
+SEQ2_DIR=/san/sanvol1/galGal3/nib
+SEQ2_LEN=/cluster/data/galGal3/chrom.sizes
+SEQ2_SMSK=/san/sanvol1/galGal3/linSpecRep
+SEQ2_CHUNK=200000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl DEF -blastzOutRoot /san/sanvol1/scratch/gg3vsmm8 \
+      -bigClusterHub=pk -smallClusterHub=pk \
+      -chainMinScore=5000 -chainLinearGap=loose \
+      >& do.log & tail -f do.log
+    ln -s blastz.galGal3.2006-05-23 /cluster/data/mm8/bed/blastz.galGal3
+
+
+#########################################################################
