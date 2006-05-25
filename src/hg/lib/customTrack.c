@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.84 2006/05/25 18:30:41 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.85 2006/05/25 23:55:51 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -192,9 +192,48 @@ char *pass = cfgOptionDefault("customTracks.password", NULL);
 char envHost[128];
 char envUser[64];
 char envPass[64];
-char *bedCmd[] = {NULL, "-verbose=0", "-tmpDir=../trash",
-	NULL, NULL, NULL, "stdin", NULL};
+char *bedCmd[] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 struct pipeline *dbDataPipe = (struct pipeline *)NULL;
+
+/*	the different loaders require different arguments */
+if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
+	|| startsWith("psl", track->dbTrackType) || track->fromPsl)
+    {
+    bedCmd[0] = trackLoader(track->dbTrackType);
+    dyStringPrintf(tmpDy, "-verbose=0");
+    bedCmd[1] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "-tmpDir=../trash");
+    bedCmd[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
+    bedCmd[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "%s", db);
+    bedCmd[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "%s", track->dbTrackName);
+    bedCmd[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "stdin");
+    bedCmd[6] = dyStringCannibalize(&tmpDy);
+    }
+else if (startsWith("wiggle_0", track->dbTrackType))
+    {
+    bedCmd[0] = trackLoader(track->dbTrackType);
+    dyStringPrintf(tmpDy, "%s", track->wibFile);	/* arg 1 = wibFile */
+    bedCmd[1] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "../trash");	/* arg 2 = pathPrefix */
+    bedCmd[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "%s", db);	/* arg 3 = database to load */
+    bedCmd[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "%s", track->dbTrackName); /* arg 4 = table name */
+    bedCmd[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "%d", track->maxChromName);
+				/* arg 5 = maxChromNameLength */
+    bedCmd[5] = dyStringCannibalize(&tmpDy);
+    bedCmd[6] = NULL;
+    }
+else
+    {
+    errAbort("unrecognized custom track type: 'db=%s'<BR>\n"
+	"known types: bed, psl, gff, gtf, wiggle_0<BR>\n", track->dbTrackType);
+    }
 
 safef(envHost, sizeof(envHost), "HGDB_HOST=%s", host);
 putenv(envHost);
@@ -203,36 +242,12 @@ putenv(envUser);
 safef(envPass, sizeof(envPass), "HGDB_PASSWORD=%s", pass);
 putenv(envPass);
 
-/*	the different loaders require different arguments */
-if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
-	|| startsWith("psl", track->dbTrackType) || track->fromPsl)
-    {
-    bedCmd[0] = trackLoader(track->dbTrackType);
-    dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
-    bedCmd[3] = dyStringCannibalize(&tmpDy);
-    tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "%s", db);
-    bedCmd[4] = dyStringCannibalize(&tmpDy);
-    tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "%s", track->dbTrackName);
-    bedCmd[5] = dyStringCannibalize(&tmpDy);
-
-    /* the "/dev/null" file isn't actually used for anything, but it is used
-     * in the pipeLineOpen to properly get a pipe started that isn't simply
-     * to STDOUT which is what a NULL would do here instead of this name.
-     *	This function exits if it can't get the pipe created
-     */
-    dbDataPipe = pipelineOpen1(bedCmd, pipelineWrite, "/dev/null");
-    }
-else if (startsWith("wiggle_0", track->dbTrackType))
-    {
-    errAbort("wiggle loader not yet implemented at this time");
-    }
-else
-    {
-    errAbort("unrecognized data base custom track type");
-    }
-
+/* the "/dev/null" file isn't actually used for anything, but it is used
+ * in the pipeLineOpen to properly get a pipe started that isn't simply
+ * to STDOUT which is what a NULL would do here instead of this name.
+ *	This function exits if it can't get the pipe created
+ */
+dbDataPipe = pipelineOpen1(bedCmd, pipelineWrite, "/dev/null");
 return (dbDataPipe);
 }
 
@@ -359,28 +374,61 @@ if (((val = hashFindVal(hash, "db")) != NULL) && (ctDbAvailable()))
 	if ((val = hashFindVal(hash, "fieldCount")) != NULL)
 	    track->fieldCount = sqlSigned(val);
 	else
-	    errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
+	    {
+	    if ((val = hashFindVal(hash, "type")) == NULL)
+errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
+	    if (differentString(val,"wiggle_0"))
+errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
+	    }
 	}
     track->dbTrack = TRUE;
     parseDbSettings(tdb, hash);	/* adds our new values to settings */
     }
 
-if ((!track->dbTrack) && ((val = hashFindVal(hash, "type")) != NULL))
+if (((val = hashFindVal(hash, "type")) != NULL) && (sameString(val,"wiggle_0")))
     {
-    if (sameString(val,"wiggle_0"))
-	{
-	char *wigFileNames;
-	static struct tempName tn;
+    char *wigFileNames;
+    static struct tempName tn;
 
-	/*	if these two names are not yet in settings, the file
-	 *	names (and files) need to be created and added to settings.
-	 *	To do this, add the new names to the hash, that will get them
-	 *	into the settings string.  Also, this means that we are
-	 *	parsing the input from the hgTracks "Add Custom Track"
-	 *	form and therefore we will need a wigAscii data file to
-	 *	keep the input in.
-	 */
-	if ((wigFileNames = hashFindVal(hash, "wigFile")) == NULL)
+    /*	If we previously loaded, then the wibFile string will be in the hash
+     *	if it isn't then we will need one, so create it and get its name
+     *	into the hash so it will be saved in the tdb settings.
+     */
+    if ((wigFileNames = hashFindVal(hash, "wibFile")) == NULL)
+	{
+	FILE *wigFH;
+	makeTempName(&tn, "ct", ".wib");
+	track->wibFile = cloneString(tn.forCgi);
+	hashAdd(hash, "wibFile", cloneString(track->wibFile));
+	wigFH= mustOpen(track->wibFile, "w");
+	carefulClose(&wigFH);
+	}
+    else
+	{
+	track->wibFile = cloneString(wigFileNames);
+	/*	the wib file may have expired	*/
+	if (!fileExists(track->wibFile))
+	    return ((struct customTrack *)NULL);	/* !! EXPIRED TRACK */
+	track->wigAscii = (char *) NULL;
+	}
+
+    /*	Same situation for the .wig file, but in the case of a dbTrack
+     *	and loading up new data, its name is simply 'pipeout' and we will
+     *	not need the wigFile since that data will go directly via
+     *	the pipe to the loader and into the database.  The name
+     *	'pipeout' isn't actually used for anything, it is just a signal
+     *	to the line by line processor that we are writing data.  At that
+     *	time the test will be made of where to write the data and it
+     *	will go to the pipe established to the loader.
+     */
+    if ((wigFileNames = hashFindVal(hash, "wigFile")) == NULL)
+	{
+	if (track->dbTrack)
+	    {
+	    track->wigAscii = cloneString("pipeout");
+	    track->wigFile = (char *)NULL;
+	    }
+	else
 	    {
 	    FILE *wigFH;
 	    makeTempName(&tn, "ct", ".wig");
@@ -393,39 +441,25 @@ if ((!track->dbTrack) && ((val = hashFindVal(hash, "type")) != NULL))
 	    wigFH= mustOpen(track->wigAscii, "w");
 	    carefulClose(&wigFH);
 	    }
-	else
+	}
+    else
+	{
+	if (!track->dbTrack)	/*	dbTrack was already loaded	*/
 	    {
 	    track->wigFile = cloneString(wigFileNames);
 	    /*	the wig file may have expired	*/
 	    if (!fileExists(track->wigFile))
-		return ((struct customTrack *)NULL);
+		return ((struct customTrack *)NULL);	/* !! EXPIRED TRACK */
 	    track->wigAscii = (char *) NULL;
 	    }
-
-	if ((wigFileNames = hashFindVal(hash, "wibFile")) == NULL)
-	    {
-	    FILE *wigFH;
-	    makeTempName(&tn, "ct", ".wib");
-	    track->wibFile = cloneString(tn.forCgi);
-	    hashAdd(hash, "wibFile", cloneString(track->wibFile));
-	    wigFH= mustOpen(track->wibFile, "w");
-	    carefulClose(&wigFH);
-	    }
-	else
-	    {
-	    track->wibFile = cloneString(wigFileNames);
-	    /*	the wib file may have expired	*/
-	    if (!fileExists(track->wibFile))
-		return ((struct customTrack *)NULL);
-	    track->wigAscii = (char *) NULL;
-	    }
-
-	parseWiggleSettings(tdb, hash);	/* adds wig variables to settings */
-	track->wiggle = TRUE;
-	if ((val = hashFindVal(hash, "wigType")) != NULL)
-	    tdb->type = cloneString(val);
 	}
+
+    parseWiggleSettings(tdb, hash);	/* adds wig variables to settings */
+    track->wiggle = TRUE;
+    if ((val = hashFindVal(hash, "wigType")) != NULL)
+	tdb->type = cloneString(val);
     }
+
 if (!track->wiggle)
     {
     if ((val = hashFindVal(hash, "itemRgb")) != NULL)
@@ -978,30 +1012,34 @@ static void finishDbPipeline(struct customTrack *track,
 struct bed *bed;
 int offset = track->offset;
 
-/* the data has been accumulating as a bedList, waiting to output */
-
-/*	And gff types have been accumulating as a genePred list waiting
- *	to be turned into bed output
- */
-if (track->gffHelper)
+/*	wiggle data has already gone out the pipe	*/
+if (!track->wiggle)
     {
-    track->bedList =
-	    gffHelperFinish(track->gffHelper, chromHash);
-    gffFileFree(&track->gffHelper);
-    track->fieldCount = 12;
-    }
-else
-    slReverse(&track->bedList);
+    /* the data has been accumulating as a bedList, waiting to output */
 
-for (bed = track->bedList; bed != NULL; bed = bed->next)
-    {
-    if (offset)
+    /*	And gff types have been accumulating as a genePred list waiting
+     *	to be turned into bed output
+     */
+    if (track->gffHelper)
 	{
-	bed->chromStart += offset;
-	bed->chromEnd += offset;
+	track->bedList =
+		gffHelperFinish(track->gffHelper, chromHash);
+	gffFileFree(&track->gffHelper);
+	track->fieldCount = 12;
 	}
-    bed->strand[1] = (char)NULL;
-    saveBedPart(dbDataFH, bed, track->fieldCount);
+    else
+	slReverse(&track->bedList);
+
+    for (bed = track->bedList; bed != NULL; bed = bed->next)
+	{
+	if (offset)
+	    {
+	    bed->chromStart += offset;
+	    bed->chromEnd += offset;
+	    }
+	bed->strand[1] = (char)NULL;
+	saveBedPart(dbDataFH, bed, track->fieldCount);
+	}
     }
 if (pipelineWait(*dbDataPL))
     track->dbDataLoad = FALSE;	/* failed */
@@ -1099,6 +1137,8 @@ for (;;)
 	if (inDbData && (dbDataPL != (struct pipeline *)NULL))
 	    {
 	    finishDbPipeline(loadingTrack, &dbDataPL, dbDataFH, chromHash);
+	    if (inWiggle)
+		wigAsciiFH = (FILE *)NULL;
 	    }
 	inDbData = FALSE;
 	/*	close previous wiggle data file if in use	*/
@@ -1106,10 +1146,10 @@ for (;;)
 	    carefulClose(&wigAsciiFH);
 	inWiggle = FALSE;
 
+	slAddTail(&trackList, track); /* this track is ready to go */
 
 	if (track->wiggle || track->dbTrack)
 	    {
-	    slAddTail(&trackList, track);
 	    if (track->dbTrack)
 		{
 		if (!track->dbDataLoad)	/* loaded already ?	*/
@@ -1119,10 +1159,16 @@ for (;;)
 		    /*	open pipeline to loader	*/
 		    dbDataPL = pipeToLoader(track);
 		    dbDataFH = pipelineFile(dbDataPL);
-		    /* remember this track for successful pipe check at write end */
+	    /* remember this track for successful pipe check at write end */
 		    loadingTrack = track;
 		    inDbData = TRUE;
 		    track->dbDataLoad = TRUE;	/* assumed true until failed */
+		    /*	it could be the wiggle loader	*/
+		    if (track->wigAscii != (char *)NULL)
+			{
+			wigAsciiFH = dbDataFH;
+			inWiggle = TRUE;
+			}
 		    }
 		else
 		    continue; /* this track is done */
@@ -1143,7 +1189,6 @@ for (;;)
 	    }
 	else
 	    {
-	    slAddTail(&trackList, track);
 	    inWiggle = FALSE;
 	    inDbData = FALSE;
 	    }
@@ -1153,6 +1198,9 @@ for (;;)
 
     ++trackDataLineCount;
 
+    /*	if this is a dbTrack, the wigAsciiFH has been set to the pipe FH
+     *	and the data is going to the database loader
+     */
     if (inWiggle && (wigAsciiFH != (FILE *)NULL))
 	{
 	fprintf(wigAsciiFH, "%s\n", line);
@@ -1237,15 +1285,20 @@ for (;;)
 	}
     }	/* end of reading input */
 
+/*	check this one before the inDbData since if going to db for
+ *	wiggle data, it needs to be closed down in finishDbPipeline
+ */
+if (inWiggle && (wigAsciiFH != (FILE *)NULL))
+    {
+    if (!inDbData)
+	carefulClose(&wigAsciiFH);
+    wigAsciiFH = (FILE *)NULL;
+    inWiggle = FALSE;
+    }
 if (inDbData && (dbDataPL != (struct pipeline *)NULL))
     {
     finishDbPipeline(loadingTrack, &dbDataPL, dbDataFH, chromHash);
     inDbData = FALSE;
-    }
-if (inWiggle && (wigAsciiFH != (FILE *)NULL))
-    {
-    carefulClose(&wigAsciiFH);
-    inWiggle = FALSE;
     }
 
 for (track = trackList; track != NULL; track = track->next)
@@ -1594,15 +1647,39 @@ for (track = trackList; track != NULL; track = track->next)
 	    {
 	    if (track->wigAscii)
 		{
-		double upperLimit, lowerLimit;
 		char buf[128];
-		wigAsciiToBinary(track->wigAscii, track->wigFile, track->wibFile,
-		    &upperLimit, &lowerLimit, NULL);
-		fprintf(f, "#\tascii data file: %s\n", track->wigAscii);
-		safef(buf, sizeof(buf), "wig %g %g", lowerLimit, upperLimit);
+		double upperLimit, lowerLimit;
+		lowerLimit = 0.0;
+		upperLimit = 100.0;
+		if (track->dbTrack)
+		    {
+		    char **row;
+		    struct sqlConnection *conn = sqlCtConn(TRUE);
+		    struct sqlResult *sr;
+		    char query[256];
+
+		    safef(query,sizeof(query),
+		     "select min(lowerLimit),max(lowerLimit+dataRange) from %s",
+			track->dbTrackName);
+		    sr = sqlGetResult(conn, query);
+		    if ((row = sqlNextRow(sr)) != NULL);
+			{
+			if (row[0]) lowerLimit = sqlDouble(row[0]);
+			if (row[1]) upperLimit = sqlDouble(row[1]);
+			}
+		    sqlFreeResult(&sr);
+		    sqlDisconnect(&conn);
+		    }
+		else
+		    {
+		    wigAsciiToBinary(track->wigAscii, track->wigFile,
+			track->wibFile, &upperLimit, &lowerLimit, NULL);
+		    fprintf(f, "#\tascii data file: %s\n", track->wigAscii);
+		    unlink(track->wigAscii);	/* done with this, remove it */
+		    }
+		safef(buf, sizeof(buf), "wig %g %g",lowerLimit, upperLimit);
 		freeMem(track->tdb->type);
 		track->tdb->type = cloneString(buf);
-		unlink(track->wigAscii);	/* done with this, remove it */
 		}
 	    }
 	}
@@ -1610,7 +1687,6 @@ for (track = trackList; track != NULL; track = track->next)
     if (validTrack)
 	{
 	saveTdbLine(f, fileName, track->tdb);
-
 	if (!(track->wiggle || track->dbTrack))
 	    {
 	    for (bed = track->bedList; bed != NULL; bed = bed->next)
