@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.85 2006/05/25 23:55:51 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.86 2006/05/26 18:34:25 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -121,6 +121,10 @@ int i;
 char *format0="type='wiggle_0'\n";	/* first one is special */
 char *format1="%s %s\n";		/* all following, like this */
 
+/*	get existing settings if any to append to	*/
+if (tdb->settings)
+    dyStringPrintf(wigSettings, "%s\n", tdb->settings);
+
 /* always at least one setting, our special type variable */
 
 dyStringPrintf(wigSettings, format0);
@@ -172,7 +176,7 @@ else if (startsWith("psl", type))
 else if (startsWith("gff", type) || startsWith("gtf",type))
     safef(loader, sizeof(loader), "loader/hgLoadBed");
 else if (startsWith("wiggle_0", type))
-    safef(loader, sizeof(loader), "loader/wigLoader");
+    safef(loader, sizeof(loader), "loader/wigEncode");
 else
     {
     errAbort("unrecognized custom track type: 'db=%s'<BR>\n"
@@ -184,7 +188,6 @@ return (loader);
 
 struct pipeline *pipeToLoader(struct customTrack *track)
 {
-struct dyString *tmpDy = newDyString(0);
 char *db = cfgOptionDefault("customTracks.db", NULL);
 char *host = cfgOptionDefault("customTracks.host", NULL);
 char *user = cfgOptionDefault("customTracks.user", NULL);
@@ -192,49 +195,9 @@ char *pass = cfgOptionDefault("customTracks.password", NULL);
 char envHost[128];
 char envUser[64];
 char envPass[64];
-char *bedCmd[] = {NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};
 struct pipeline *dbDataPipe = (struct pipeline *)NULL;
 
-/*	the different loaders require different arguments */
-if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
-	|| startsWith("psl", track->dbTrackType) || track->fromPsl)
-    {
-    bedCmd[0] = trackLoader(track->dbTrackType);
-    dyStringPrintf(tmpDy, "-verbose=0");
-    bedCmd[1] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "-tmpDir=../trash");
-    bedCmd[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
-    bedCmd[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "%s", db);
-    bedCmd[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "%s", track->dbTrackName);
-    bedCmd[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "stdin");
-    bedCmd[6] = dyStringCannibalize(&tmpDy);
-    }
-else if (startsWith("wiggle_0", track->dbTrackType))
-    {
-    bedCmd[0] = trackLoader(track->dbTrackType);
-    dyStringPrintf(tmpDy, "%s", track->wibFile);	/* arg 1 = wibFile */
-    bedCmd[1] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "../trash");	/* arg 2 = pathPrefix */
-    bedCmd[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "%s", db);	/* arg 3 = database to load */
-    bedCmd[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "%s", track->dbTrackName); /* arg 4 = table name */
-    bedCmd[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "%d", track->maxChromName);
-				/* arg 5 = maxChromNameLength */
-    bedCmd[5] = dyStringCannibalize(&tmpDy);
-    bedCmd[6] = NULL;
-    }
-else
-    {
-    errAbort("unrecognized custom track type: 'db=%s'<BR>\n"
-	"known types: bed, psl, gff, gtf, wiggle_0<BR>\n", track->dbTrackType);
-    }
-
+/*	set environment for pipeline commands	*/
 safef(envHost, sizeof(envHost), "HGDB_HOST=%s", host);
 putenv(envHost);
 safef(envUser, sizeof(envUser), "HGDB_USER=%s", user);
@@ -242,12 +205,66 @@ putenv(envUser);
 safef(envPass, sizeof(envPass), "HGDB_PASSWORD=%s", pass);
 putenv(envPass);
 
-/* the "/dev/null" file isn't actually used for anything, but it is used
- * in the pipeLineOpen to properly get a pipe started that isn't simply
- * to STDOUT which is what a NULL would do here instead of this name.
- *	This function exits if it can't get the pipe created
- */
-dbDataPipe = pipelineOpen1(bedCmd, pipelineWrite, "/dev/null");
+/*	the different loaders require different pipeline commands */
+if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
+	|| startsWith("psl", track->dbTrackType) || track->fromPsl)
+    {
+    /* running the single command:
+     *	hgLoadBed -verbose=0 -tmpDir=../trash
+     *	--maxChromNameLength=${nameLength}
+     */
+    struct dyString *tmpDy = newDyString(0);
+    char *cmd1[] = {NULL, "-verbose=0", "-tmpDir=../trash", NULL, NULL, NULL, "stdin", NULL};
+    cmd1[0] = trackLoader(track->dbTrackType);
+    dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
+    cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "%s", db);
+    cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "%s", track->dbTrackName);
+    cmd1[5] = dyStringCannibalize(&tmpDy);
+    /* the "/dev/null" file isn't actually used for anything, but it is used
+     * in the pipeLineOpen to properly get a pipe started that isn't simply
+     * to STDOUT which is what a NULL would do here instead of this name.
+     *	This function exits if it can't get the pipe created
+     */
+    dbDataPipe = pipelineOpen1(cmd1, pipelineWrite, "/dev/null");
+    }
+else if (startsWith("wiggle_0", track->dbTrackType))
+    {
+    /*	running the two commands in a pipeline:
+     *	loader/wigEncode -verbose=0 stdin stdout ${wibFile} | \
+     *	    loader/hgLoadWiggle -verbose=0 -tmpDir=../trash \
+     *		-maxChromNameLength=${nameLength} -chromInfoDb=${database} \
+     *		    -pathPrefix=${pathPrefix} ${db} ${table} stdin
+     */
+    struct dyString *tmpDy = newDyString(0);
+    char *cmd1[] = {NULL, "-verbose=0", "stdin", "stdout", NULL, NULL};
+    char *cmd2[] = {"loader/hgLoadWiggle", "-verbose=0", "-tmpDir=../trash",
+	NULL, NULL, NULL, NULL, NULL, "stdin", NULL};
+    char **cmds[] = {cmd1, cmd2, NULL};
+    cmd1[0] = trackLoader(track->dbTrackType);
+    dyStringPrintf(tmpDy, "%s", track->wibFile);
+    cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+
+    dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
+    cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "-chromInfoDb=%s", "hg18");
+    cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "-pathPrefix=../trash");
+    cmd2[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "%s", db);
+    cmd2[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    dyStringPrintf(tmpDy, "%s", track->dbTrackName);
+    cmd2[7] = dyStringCannibalize(&tmpDy);
+
+    dbDataPipe = pipelineOpen(cmds, pipelineWrite, "/dev/null");
+    }
+else
+    {
+    errAbort("unrecognized custom track type: 'db=%s'<BR>\n"
+	"known types: bed, psl, gff, gtf, wiggle_0<BR>\n", track->dbTrackType);
+    }
+
 return (dbDataPipe);
 }
 
@@ -289,6 +306,10 @@ char *val;
 /* always at least one setting, our special db=type variable,
  *	already proven to exist in the hash during previous processing
  */
+
+/*	get existing settings if any to append to	*/
+if (tdb->settings)
+    dyStringPrintf(dbSettings, "%s\n", tdb->settings);
 
 for (i = 0; i < dbOptCount; ++i)
     {
