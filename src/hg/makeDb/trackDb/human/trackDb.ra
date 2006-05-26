@@ -1249,7 +1249,7 @@ type bed 4 +
     track delConrad
     subTrack cnp
     shortLabel Deletions (Conrad)
-    longLabel Deletions from Conrad
+    longLabel Deletions from Genotype Analysis (Conrad)
     noInherit on
     type genePred 
     priority 146.6
