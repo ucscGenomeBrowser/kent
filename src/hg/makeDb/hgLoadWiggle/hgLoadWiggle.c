@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.16 2006/05/26 16:50:05 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.17 2006/05/26 18:12:19 hiram Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -40,7 +40,7 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-void usage()
+static void usage()
 /* Explain usage and exit. */
 {
 errAbort(
@@ -97,24 +97,6 @@ if (el == NULL)
 return *(unsigned *)el->val;
 }
 
-
-static int findWiggleSize(char *fileName)
-/* Read first line of file and figure out how many words in it. */
-{
-struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *words[64], *line;
-int wordCount;
-lineFileNeedNext(lf, &line, NULL);
-if (strictTab)
-    wordCount = chopTabs(line, words);
-else
-    wordCount = chopLine(line, words);
-if (wordCount == 0)
-    errAbort("%s appears to be empty", fileName);
-lineFileClose(&lf);
-return wordCount;
-}
-
 struct wiggleStub
 /* A line in a wiggle file with chromosome, start, end position parsed out. */
     {
@@ -125,7 +107,7 @@ struct wiggleStub
     char *line;                 /* Line. */
     };
 
-int wiggleStubCmp(const void *va, const void *vb)
+static int wiggleStubCmp(const void *va, const void *vb)
 /* Compare to sort based on query. */
 {
 const struct wiggleStub *a = *((struct wiggleStub **)va);
@@ -138,8 +120,9 @@ return dif;
 }
 
 
-void loadOneWiggle(char *fileName, int wiggleSize, struct wiggleStub **pList)
-/* Load one wiggle file.  Make sure all lines have wiggleSize fields.
+static void loadOneWiggle(char *fileName, struct wiggleStub **pList)
+/* Load one wiggle file.  Make sure all lines have same number of fields.
+ *	The first line is taken as the proper count.
  * Put results in *pList. */
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
@@ -147,6 +130,7 @@ char *words[64], *line, *dupe;
 int wordCount;
 struct wiggleStub *wiggle;
 int lineCount = 0;
+int wiggleSize = 0;
 
 while (lineFileNext(lf, &line, NULL))
     {
@@ -160,7 +144,14 @@ while (lineFileNext(lf, &line, NULL))
 	wordCount = chopTabs(line, words);
     else
 	wordCount = chopLine(line, words);
-    lineFileExpectWords(lf, wiggleSize, wordCount);
+    if (wiggleSize)
+	lineFileExpectWords(lf, wiggleSize, wordCount);
+    else
+	{
+	wiggleSize = wordCount;
+	/*	current wiggle standard expects 13 words	*/
+	lineFileExpectWords(lf, wiggleSize, 13);
+	}
     chrName = cloneString(words[0]);
     chrStart = lineFileNeedNum(lf, words, 1);
     chrEnd = lineFileNeedNum(lf, words, 2);
@@ -175,8 +166,8 @@ lineFileClose(&lf);
 verbose(2, "Read %d lines from %s\n", lineCount, fileName);
 }
 
-void writeWiggleTab(char *fileName, struct wiggleStub *wiggleList,
-	int wiggleSize, char *database)
+static void writeWiggleTab(char *fileName, struct wiggleStub *wiggleList,
+	char *database)
 /* Write out wiggle list to tab-separated file. */
 {
 struct wiggleStub *wiggle;
@@ -207,13 +198,13 @@ for (wiggle = wiggleList; wiggle != NULL; wiggle = wiggle->next)
 	{
 	chrom = words[0];
 	size = chromosomeSize(chrom);
-verbose(3, "chrom: %s size: %u\n", chrom, size);
+	verbose(3, "chrom: %s size: %u\n", chrom, size);
 	}
     else if (!chrom)
 	{
 	chrom = words[0];
 	size = chromosomeSize(chrom);
-verbose(3, "chrom: %s size: %u\n", chrom, size);
+	verbose(3, "chrom: %s size: %u\n", chrom, size);
 	}
     valid = TRUE;
     if (end > size)
@@ -274,7 +265,7 @@ verbose(3, "chrom: %s size: %u\n", chrom, size);
 fclose(f);
 }
 
-static void loadDatabase(char *database, char *track, int wiggleSize, struct wiggleStub *wiggleList)
+static void loadDatabase(char *database, char *track, struct wiggleStub *wiggleList)
 /* Load database from wiggleList. */
 {
 struct sqlConnection *conn = (struct sqlConnection *)NULL;
@@ -305,8 +296,8 @@ if ((!oldTable) && (!noLoad))
     verbose(2, "INDEX chrom length: %d\n", indexLen);
 
     /* Create definition statement. */
-    verbose(1, "Creating table definition with %d columns in %s.%s\n",
-	    wiggleSize, database, track);
+    verbose(1, "Creating wiggle table definition in %s.%s\n",
+	    database, track);
     dyStringPrintf(dy, "CREATE TABLE %s (\n", track);
     if (!noBin)
        dyStringAppend(dy, "  bin smallint unsigned not null,\n");
@@ -337,7 +328,7 @@ if ((!oldTable) && (!noLoad))
     }
 
 verbose(1, "Saving %s\n", tab);
-writeWiggleTab(tab, wiggleList, wiggleSize, database);
+writeWiggleTab(tab, wiggleList, database);
 
 if (! noLoad)
     {
@@ -372,10 +363,10 @@ else
     verbose(1, "noLoad option requested, see resulting file: %s\n", tab);
 }
 
-void hgLoadWiggle(char *database, char *track, int wiggleCount, char *wiggleFiles[])
+static void hgLoadWiggle(char *database, char *track,
+	int wiggleCount, char *wiggleFiles[])
 /* hgLoadWiggle - Load a generic wiggle file into database. */
 {
-int wiggleSize = findWiggleSize(wiggleFiles[0]);
 struct wiggleStub *wiggleList = NULL;
 int i;
 
@@ -401,9 +392,9 @@ if (verboseLevel() > 2)
     }
 
 for (i=0; i<wiggleCount; ++i)
-    loadOneWiggle(wiggleFiles[i], wiggleSize, &wiggleList);
+    loadOneWiggle(wiggleFiles[i], &wiggleList);
 slSort(&wiggleList, wiggleStubCmp);
-loadDatabase(database, track, wiggleSize, wiggleList);
+loadDatabase(database, track, wiggleList);
 }
 
 int main(int argc, char *argv[])
