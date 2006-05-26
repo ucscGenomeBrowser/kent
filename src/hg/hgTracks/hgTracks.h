@@ -631,6 +631,9 @@ struct linkedFeatures *lfFromPsl(struct psl *psl, boolean isXeno);
 /* Create a linked feature item from psl. */
 
 void ctWigLoadItems(struct track *tg);
+/*	load custom wiggle track data	*/
+void wigLoadItems(struct track *tg);
+/*	load wiggle track data from database	*/
 void wigMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[]);
 void bedGraphMethods(struct track *track, struct trackDb *tdb, 
