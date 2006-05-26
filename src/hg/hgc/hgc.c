@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1020 2006/05/25 17:15:01 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1021 2006/05/26 22:13:06 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -1991,12 +1991,24 @@ void genericGenePredClick(struct sqlConnection *conn, struct trackDb *tdb,
 geneShowCommon(item, tdb, pepTable);
 }
 
+void pslDumpHtml(struct psl *pslList)
+/* print out psl header and data */
+{
+struct psl* psl;
+printf("<PRE><TT>\n");
+printf("#match\tmisMatches\trepMatches\tnCount\tqNumInsert\tqBaseInsert\ttNumInsert\tBaseInsert\tstrand\tqName\tqSize\tqStart\tqEnd\ttName\ttSize\ttStart\ttEnd\tblockCount\tblockSizes\tqStarts\ttStarts\n");
+for (psl = pslList; psl != NULL; psl = psl->next)
+    {
+    pslTabOut(psl, stdout);
+    }
+printf("</TT></PRE>\n");
+}
+
 void genericPslClick(struct sqlConnection *conn, struct trackDb *tdb, 
 		     char *item, int start, char *subType)
 /* Handle click in generic psl track. */
 {
 struct psl* pslList = getAlignments(conn, tdb->tableName, item);
-struct psl* psl;
 
 /* check if there is an alignment available for this sequence.  This checks
  * both genbank sequences and other sequences in the seq table.  If so,
@@ -2009,13 +2021,7 @@ if (hGenBankHaveSeq(item, NULL))
 else
     {
     /* just dump the psls */
-    printf("<PRE><TT>\n");
-    printf("#match\tmisMatches\trepMatches\tnCount\tqNumInsert\tqBaseInsert\ttNumInsert\tBaseInsert\tstrand\tqName\tqSize\tqStart\tqEnd\ttName\ttSize\ttStart\ttEnd\tblockCount\tblockSizes\tqStarts\ttStarts\n");
-    for (psl = pslList; psl != NULL; psl = psl->next)
-        {
-        pslTabOut(psl, stdout);
-        }
-    printf("</TT></PRE>\n");
+    pslDumpHtml(pslList);
     }
 pslFreeList(&pslList);
 }
@@ -17465,6 +17471,55 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doIgtc(struct trackDb *tdb, char *itemName) 
+/* Details for International Gene Trap Consortium. */
+{
+char *name = cloneString(itemName);
+char *source = strrchr(name, '_');
+
+if (source == NULL)
+    source = "Unknown";
+else
+    {
+    *source = '\0';
+    source++;
+    }
+cgiDecode(name, name, strlen(name));
+
+genericHeader(tdb, itemName);
+printf("<B>Source:</B> %s<BR>\n", source);
+printCustomUrl(tdb, name, TRUE);
+if (startsWith("psl", tdb->type))
+    {
+    struct sqlConnection *conn = hAllocConn();
+    struct sqlResult *sr = NULL;
+    struct dyString *query = dyStringNew(512);
+    char **row = NULL;
+    int rowOffset = hOffsetPastBin(seqName, tdb->tableName);
+    int start = cartInt(cart, "o");
+    int end = cartInt(cart, "t");
+    dyStringPrintf(query, "select * from %s where tName = '%s' and ",
+		   tdb->tableName, seqName);
+    if (rowOffset)
+	hAddBinToQuery(start, end, query);
+    dyStringPrintf(query, "tStart = %d and qName = '%s'", start, itemName);
+    sr = sqlGetResult(conn, query->string);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	struct psl *psl = pslLoad(row+rowOffset);
+	printPos(psl->tName, psl->tStart, psl->tEnd, psl->strand, TRUE,
+		 psl->qName);
+	printf("<B>Alignment details:</B>\n");
+	pslDumpHtml(psl);
+	}
+    sqlFreeResult(&sr);
+    hFreeConn(&conn);
+    }
+else
+    warn("Unsupported type \"%s\" for IGTC (expecting psl).", tdb->type);
+printTrackHtml(tdb);
+}
+
 
 void doMiddle()
 /* Generate body of HTML. */
@@ -18353,6 +18408,10 @@ else if (sameString("allenBrainAli", track))
 else if (sameString("dless", track) || sameString("encodeDless", track))
     {
     doDless(tdb, item);
+    }
+else if (sameString("igtc", track))
+    {
+    doIgtc(tdb, item);
     }
 else if (tdb != NULL)
     {

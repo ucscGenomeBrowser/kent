@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1111 2006/05/26 21:04:39 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1112 2006/05/26 22:13:05 angie Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10071,6 +10071,58 @@ tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
 }
 
+char *igtcName(struct track *tg, void *item)
+/* Return name (stripping off the source suffix) of IGTC item. */
+{
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+char *name = cloneString(lf->name);
+char *ptr = strrchr(name, '_');
+if (ptr != NULL)
+    *ptr = '\0';
+/* Some names contain spaces.  IGTC has cgi-encoded names to get them through 
+ * BLAT and we keep that to get them through hgLoadPsl which splits on 
+ * whitespace not tabs.  Decode for display: */
+cgiDecode(name, name, strlen(name));
+return name;
+}
+
+Color igtcColor(struct track *tg, void *item, struct vGfx *vg)
+/* Color IGTC items by source. */
+{
+struct linkedFeatures *lf = (struct linkedFeatures *)item;
+Color color = MG_BLACK;
+char *source = strrchr(lf->name, '_');
+if (source == NULL)
+    return color;
+source++;
+/* reverse-alphabetical acronym rainbow: */
+if (sameString(source, "BG"))
+    color = vgFindColorIx(vg, 0x99, 0x00, 0xcc); /* purple */
+else if (sameString(source, "CMHD"))
+    color = vgFindColorIx(vg, 0x00, 0x00, 0xcc); /* dark blue */
+else if (sameString(source, "EGTC"))
+    color = vgFindColorIx(vg, 0x66, 0x99, 0xff); /* light blue */
+else if (sameString(source, "ESDB"))
+    color = vgFindColorIx(vg, 0x00, 0xcc, 0x00); /* green */
+else if (sameString(source, "FHCRC"))
+    color = vgFindColorIx(vg, 0xcc, 0x99, 0x00); /* dark yellow */
+else if (sameString(source, "GGTC"))
+    color = vgFindColorIx(vg, 0xff, 0x99, 0x00); /* orange */
+else if (sameString(source, "SIGTR"))
+    color = vgFindColorIx(vg, 0x99, 0x66, 0x00); /* brown */
+else if (sameString(source, "TIGEM"))
+    color = vgFindColorIx(vg, 0xcc, 0x00, 0x00); /* red */
+return color;
+}
+
+void igtcMethods(struct track *tg)
+/* International Gene Trap Consortium: special naming & coloring. */
+{
+tg->itemName = igtcName;
+tg->itemColor = igtcColor;
+tg->itemNameColor = igtcColor;
+}
+
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
 {
@@ -11208,6 +11260,7 @@ registerTrackHandler("triangleSelf", triangleMethods );
 registerTrackHandler("transfacHit", triangleMethods );
 registerTrackHandler("esRegGeneToMotif", eranModuleMethods );
 registerTrackHandler("leptin", mafMethods );
+registerTrackHandler("igtc", igtcMethods );
 /* Lowe lab related */
 registerTrackHandler("refSeq", archaeaGeneMethods);
 registerTrackHandler("gbProtCode", gbGeneMethods);
