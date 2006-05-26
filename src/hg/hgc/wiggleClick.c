@@ -22,7 +22,7 @@ unsigned long long valuesMatched = 0;
 struct histoResult *histoGramResult;
 float *valuesArray = NULL;
 size_t valueCount = 0;
-struct customTrack *ct;
+struct customTrack *ct = NULL;
 boolean isCustom = FALSE;
 int operations = wigFetchStats;	/*	default operation */
 
@@ -39,9 +39,17 @@ if (startsWith("ct_", tdb->tableName))
         warn("<P>wiggleClick: called to do stats on a custom track that isn't wiggle data ?</P>");
         return;
         }
-    safef(table,ArraySize(table), "%s", ct->wigFile);
+    if (ct->dbTrack)
+	{
+	safef(table,ArraySize(table), "%s", ct->dbTrackName);
+	span = minSpan(conn, table, chrom, winStart, winEnd, cart, tdb);
+	}
+    else
+	{
+	safef(table,ArraySize(table), "%s", ct->wigFile);
+	span = 0;	/*	cause all spans to be examined	*/
+	}
     isCustom = TRUE;
-    span = 0;	/*	cause all spans to be examined	*/
     }
 else
     {
@@ -72,7 +80,12 @@ if ((winEnd - winStart) < 1000001)
  */
 
 if (isCustom)
-    valuesMatched = wds->getData(wds, (char *)NULL, table, operations);
+    {
+    if (ct->dbTrack)
+	valuesMatched = wds->getData(wds, CUSTOM_TRASH, table, operations);
+    else
+	valuesMatched = wds->getData(wds, (char *)NULL, table, operations);
+    }
 else
     valuesMatched = wds->getData(wds, database, table, operations);
 
