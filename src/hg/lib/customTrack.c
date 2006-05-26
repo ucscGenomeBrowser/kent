@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.87 2006/05/26 18:57:19 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.88 2006/05/26 21:53:06 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -94,6 +94,7 @@ static char *wigOptions[] =
     "smoothingWindow",
     "wigFile",
     "wibFile",
+    "spanList",
 };
 static int wigOptCount = sizeof(wigOptions) / sizeof(char *);
 
