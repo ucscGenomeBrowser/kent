@@ -1241,7 +1241,7 @@ type bed 4 +
     track delMccarroll
     subTrack cnp
     shortLabel Deletions (McCarroll)
-    longLabel Deletions from Genotype Analysis
+    longLabel Deletions from Genotype Analysis (McCarroll)
     noInherit on
     type bed 3 .
     priority 146.5
