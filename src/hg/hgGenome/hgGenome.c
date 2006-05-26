@@ -14,7 +14,7 @@
 #include "trackLayout.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.2 2006/05/26 02:08:12 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.3 2006/05/26 21:49:32 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -43,7 +43,25 @@ struct chromosome
      char *shortName;	/* Name without chr prefix. */
      int size;		/* Size in bases. */
      struct cytoBand *bands;	/* May be NULL */
+     int x;		/* Start pixel x coordinate */
+     int width; 	/* Pixel width */
      };
+
+struct chromLayout
+/* This has information on how to lay out chromosomes. */
+    {
+    MgFont *font;		/* Font used for labels */
+    int picWidth;			/* Total picture width */
+    struct chromosome *leftList;	/* Left chromosomes. */
+    struct chromosome *rightList;	/* Right chromosomes. */
+    struct chromosome *bottomList;	/* Sex chromosomes are on bottom. */
+    int lineCount;			/* Number of chromosome lines. */
+    int leftLabelWidth, rightLabelWidth;/* Pixels for left/right labels */
+    int lineHeight;			/* Height for one line */
+    int totalHeight;	/* Total width/height in pixels */
+    double basesPerPixel;	/* Bases per pixel */
+    };
+
 
 int chromosomeCmpAscii(const void *va, const void *vb)
 /* Compare two slNames. */
@@ -112,17 +130,6 @@ else
 return chromList;
 }
 
-struct chromLayout
-/* This hash information on how to lay out chromosomes. */
-    {
-    struct chromosome *leftList;	/* Left chromosomes. */
-    struct chromosome *rightList;	/* Right chromosomes. */
-    struct chromosome *bottomList;	/* Sex chromosomes are on bottom. */
-    int lineCount;			/* Number of chromosome lines. */
-    int maxBaseWidth;			/* Maximum bases in a line. */
-    int maxChromInLine;			/* Maximum chromosomes in a line. */
-    };
-
 void separateSexChroms(struct chromosome *in,
 	struct chromosome **retAutoList, struct chromosome **retSexList)
 /* Separate input chromosome list into sex and non-sex chromosomes. */
@@ -148,15 +155,27 @@ slReverse(&autoList);
 *retSexList = sexList;
 }
 
-struct chromLayout *chromLayoutCreate(struct chromosome *chromList)
+struct chromLayout *chromLayoutCreate(struct chromosome *chromList,
+	MgFont *font, int picWidth)
 /* Figure out layout.  For human and most mammals this will be
- * two columns with sex chromosomes on bottom. */
+ * two columns with sex chromosomes on bottom.  This is complicated
+ * by the platypus having a bunch of sex chromosomes. */
 {
+int margin = 2;
 struct chromosome *chrom, *left, *right;
 struct chromLayout *cl;
 int autoCount, halfCount, bases, chromInLine;
+int leftLabelWidth=0, rightLabelWidth=0, labelWidth;
+int spaceWidth = mgFontCharWidth(font, ' ');
+int autosomeOtherPixels=0, sexOtherPixels=0;
+int autosomeBasesInLine=0;	/* Maximum bases in a line for autosome. */
+int sexBasesInLine=0;		/* Bases in line for sex chromsome. */
+double sexBasesPerPixel, autosomeBasesPerPixel, basesPerPixel;
+int pos = 0;
 
 AllocVar(cl);
+cl->font = font;
+cl->picWidth = picWidth;
 
 /* Put sex chromosomes on bottom, and rest on left. */
 separateSexChroms(chromList, &chromList, &cl->bottomList);
@@ -174,7 +193,7 @@ if (autoCount > 12)
     slReverse(&cl->rightList);
     }
 
-/* Figure out bases in each line, and widest line. */
+/* Figure out space needed for autosomes. */
 left = cl->leftList;
 right = cl->rightList;
 while (left || right)
@@ -183,37 +202,96 @@ while (left || right)
     chromInLine = 0;
     if (left)
         {
+	labelWidth = mgFontStringWidth(font, left->shortName) + spaceWidth;
+	if (leftLabelWidth < labelWidth)
+	    leftLabelWidth = labelWidth;
 	bases = left->size;
-	chromInLine = 1;
 	left = left->next;
 	}
     if (right)
         {
+	labelWidth = mgFontStringWidth(font, right->shortName) + spaceWidth;
+	if (rightLabelWidth < labelWidth)
+	    rightLabelWidth = labelWidth;
 	bases += right->size;
-	chromInLine += 1;
 	right = right->next;
 	}
-    if (cl->maxBaseWidth < bases)
-        cl->maxBaseWidth = bases;
-    if (cl->maxChromInLine < chromInLine)
-        cl->maxChromInLine = chromInLine;
+    if (autosomeBasesInLine < bases)
+        autosomeBasesInLine = bases;
     cl->lineCount += 1;
     }
+
+/* Figure out space needed for sex chromosomes. */
 if (cl->bottomList)
     {
     cl->lineCount += 1;
     bases = 0;
-    chromInLine = 0;
+    sexOtherPixels = spaceWidth + 2*margin;
     for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
 	{
-	bases += chrom->size;
-	chromInLine += 1;
+	sexBasesInLine += chrom->size;
+	labelWidth = mgFontStringWidth(font, chrom->shortName) + spaceWidth;
+	if (chrom == cl->bottomList )
+	    {
+	    if (leftLabelWidth < labelWidth)
+		leftLabelWidth  = labelWidth;
+	    sexOtherPixels = leftLabelWidth;
+	    }
+	else if (chrom->next == NULL)
+	    {
+	    if (rightLabelWidth < labelWidth)
+		rightLabelWidth  = labelWidth;
+	    sexOtherPixels += rightLabelWidth + spaceWidth;
+	    }
+	else
+	    {
+	    sexOtherPixels += labelWidth + spaceWidth;
+	    }
 	}
-    if (cl->maxBaseWidth < bases)
-	cl->maxBaseWidth = bases;
-    if (cl->maxChromInLine < chromInLine)
-	cl->maxChromInLine = chromInLine;
     }
+
+/* Figure out the number of bases needed per pixel. */
+autosomeOtherPixels = 2*margin + spaceWidth + leftLabelWidth + rightLabelWidth;
+basesPerPixel = autosomeBasesPerPixel 
+	= autosomeBasesInLine/(picWidth-autosomeOtherPixels);
+if (cl->bottomList)
+    {
+    sexBasesPerPixel = sexBasesInLine/(picWidth-sexOtherPixels);
+    if (sexBasesPerPixel > basesPerPixel)
+        basesPerPixel = sexBasesPerPixel;
+    }
+cl->leftLabelWidth = leftLabelWidth;
+cl->rightLabelWidth = rightLabelWidth;
+cl->basesPerPixel = basesPerPixel;
+uglyf("autosomeOtherPixels %d, sexOtherPixels %d, picWidth %d<BR>\n", autosomeOtherPixels, sexOtherPixels, picWidth);
+
+/* Set pixel positions for left autosomes */
+for (chrom = cl->leftList; chrom != NULL; chrom = chrom->next)
+    {
+    chrom->x = leftLabelWidth + margin;
+    chrom->width = round(chrom->size/basesPerPixel);
+    }
+
+/* Set pixel positions for right autosomes */
+for (chrom = cl->rightList; chrom != NULL; chrom = chrom->next)
+    {
+    chrom->width = round(chrom->size/basesPerPixel);
+    chrom->x = picWidth - margin - rightLabelWidth - chrom->width;
+    }
+
+/* Set pixel positions for sex chromosomes */
+for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
+    {
+    chrom->width = round(chrom->size/basesPerPixel);
+    if (chrom == cl->bottomList)
+	chrom->x = leftLabelWidth + margin;
+    else if (chrom->next == NULL)
+        chrom->x = picWidth - margin - rightLabelWidth - chrom->width;
+    else
+	chrom->x = 2*spaceWidth+mgFontStringWidth(font,chrom->shortName) + pos;
+    pos = chrom->x + chrom->width;
+    }
+
 return cl;
 }
 
@@ -322,25 +400,21 @@ struct chromLayout *cl;
 int total;
 trackLayoutInit(&tl, cart);
 chromList = getChromosomes(conn);
-for (chrom = chromList; chrom != NULL; chrom = chrom->next)
-    {
-    uglyf("%s %d<BR>\n", chrom->fullName, chrom->size);
-    }
-cl = chromLayoutCreate(chromList);
-uglyf("cl: lineCount %d, maxBaseWidth %d, maxChromInLine %d<BR>\n",
-	cl->lineCount, cl->maxBaseWidth, cl->maxChromInLine);
+cl = chromLayoutCreate(chromList, tl.font, tl.picWidth);
+uglyf("cl: lineCount %d, leftLabelWidth %d, rightLabelWidth %d, basesPerPixel %f<BR>\n",
+	cl->lineCount, cl->leftLabelWidth, cl->rightLabelWidth, cl->basesPerPixel);
 for (left = cl->leftList, right = cl->rightList; left != NULL || right != NULL;)
     {
     total=0;
     if (left != NULL)
 	{
-	uglyf("%s %d ----  ", left->shortName, left->size);
+	uglyf("%s@%d[%d] %d ----  ", left->fullName, left->x, left->width, left->size);
 	total += left->size;
         left = left->next;
 	}
     if (right != NULL)
 	{
-	uglyf("%d  %s", right->size, right->shortName);
+	uglyf("%d  %s@%d[%d]", right->size, right->fullName, right->x, right->width);
 	total += right->size;
         right = right->next;
 	}
@@ -350,7 +424,7 @@ total=0;
 for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
     {
     total += chrom->size;
-    uglyf("%s  ", chrom->shortName);
+    uglyf("%s@%d %d ...  ", chrom->fullName, chrom->x, chrom->size);
     }
 uglyf(" : %d<BR>", total);
 }
