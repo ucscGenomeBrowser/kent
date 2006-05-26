@@ -118,6 +118,7 @@ DIRS = \
 	textHist2 \
 	textHistogram \
 	tickToDate \
+	timing \
 	toLower \
 	toUpper \
 	twoBitInfo \
