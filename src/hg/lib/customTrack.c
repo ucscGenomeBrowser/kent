@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.86 2006/05/26 18:34:25 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.87 2006/05/26 18:57:19 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1678,6 +1678,8 @@ for (track = trackList; track != NULL; track = track->next)
 		    struct sqlConnection *conn = sqlCtConn(TRUE);
 		    struct sqlResult *sr;
 		    char query[256];
+		    struct dyString *spanList = newDyString(0);
+		    int spanListCount = 0;
 
 		    safef(query,sizeof(query),
 		     "select min(lowerLimit),max(lowerLimit+dataRange) from %s",
@@ -1689,6 +1691,25 @@ for (track = trackList; track != NULL; track = track->next)
 			if (row[1]) upperLimit = sqlDouble(row[1]);
 			}
 		    sqlFreeResult(&sr);
+		    safef(query,sizeof(query),
+		     "select span from %s group by span", track->dbTrackName);
+		    sr = sqlGetResult(conn, query);
+		    if ((row = sqlNextRow(sr)) != NULL);
+			{
+			if (spanListCount)
+			    dyStringPrintf(spanList,",%s", row[0]);
+			else
+			    dyStringPrintf(spanList,"%s", row[0]);
+			++spanListCount;
+			}
+		    if (spanListCount)
+			{
+			ctAddToSettings(track->tdb, "spanList %s",
+			    dyStringCannibalize(&spanList));
+			}
+		    else
+			ctAddToSettings(track->tdb, "spanList 1");
+
 		    sqlDisconnect(&conn);
 		    }
 		else
