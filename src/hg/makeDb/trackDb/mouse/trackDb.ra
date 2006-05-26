@@ -41,6 +41,15 @@ group map
 visibility hide
 type bed 3 +
 
+track bacEndPairs
+shortLabel BAC End Pairs
+longLabel BAC End Pairs
+group map
+priority 15
+visibility hide
+type bed 6 +
+exonArrows off
+
 track jaxQTL
 shortLabel QTL
 longLabel Quantitative Trait Loci From Jax/MGI
@@ -71,12 +80,22 @@ color 200,100,0
 type bed 8 +
 url http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
 
+track igtc
+shortLabel Gene Trap
+longLabel International Gene Trap Consortium Sequence Tag Alignments
+group map
+priority 30
+visibility hide
+type psl .
+url http://wwwtest.genetrap.org/cgi-bin/annotation.py?cellline=$$
+urlLabel IGTC Cell Line Annotation: 
+
 track xenoRefGene
 shortLabel Other RefSeq
 longLabel Non-$Organism RefSeq Genes
 group genes
 priority 35.1
-visibility hide
+visibility dense
 color 12,12,120
 type genePred xenoRefPep xenoRefMrna
 
@@ -800,6 +819,8 @@ spectrum on
 type netAlign rn3 chainRn3
 otherDb rn3
 
+
+
 searchTable cytoBand
 searchType cytoBand
 shortCircuit 1
@@ -913,23 +934,9 @@ searchType bed
 searchMethod fuzzy
 searchPriority 50
 
-track bacEndPairs
-shortLabel BAC End Pairs
-longLabel BAC End Pairs
-group map
-priority 15
-visibility hide
-type bed 6 +
-exonArrows off
-
-
-track xenoRefGene
-shortLabel Other RefSeq
-longLabel Non-$Organism RefSeq Genes
-group genes
-priority 35.1
-visibility dense
-color 12,12,120
-type genePred xenoRefPep xenoRefMrna
-
+searchTable igtc
+searchType psl
+searchMethod prefix
+searchPriority 50
+termRegex [A-Z0-9\._+-]+
 
