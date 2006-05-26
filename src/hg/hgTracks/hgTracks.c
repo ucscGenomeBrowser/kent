@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1112 2006/05/26 22:13:05 angie Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1113 2006/05/26 22:24:40 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10722,7 +10722,12 @@ if (ct->dbTrack)
 useItemRgb = bedItemRgb(ct->tdb);
 
 if (ct->wiggle)
-    tg->loadItems = ctWigLoadItems;
+    {
+    if (ct->dbTrack)
+	tg->loadItems = wigLoadItems;
+    else
+	tg->loadItems = ctWigLoadItems;
+    }
 else
     {
     if (ct->fieldCount < 8)
