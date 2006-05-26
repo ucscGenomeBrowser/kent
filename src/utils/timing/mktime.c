@@ -4,7 +4,7 @@
 #include	<unistd.h>
 #include	<stdlib.h>
 
-static char const rcsid[] = "$Id: mktime.c,v 1.1 2006/05/19 23:49:20 hiram Exp $";
+static char const rcsid[] = "$Id: mktime.c,v 1.2 2006/05/26 16:23:20 hiram Exp $";
 
 void usage()
 {
@@ -20,7 +20,6 @@ time_t timep = 0;
 struct tm tm;
 
 if (argc != 3){ usage(); exit(255);}
-printf("%s %s\n", argv[1], argv[2]);
 
 if (sscanf(argv[1], "%4d-%2d-%2d",
            &(tm.tm_year), &(tm.tm_mon), &(tm.tm_mday)) != 3)
@@ -28,8 +27,6 @@ if (sscanf(argv[1], "%4d-%2d-%2d",
     fprintf(stderr,"Couldn't parse given date \"%s\"", argv[1]);
     exit(255);
     }
-tm.tm_year -= 1900;
-tm.tm_mon  -= 1;
 if (sscanf(argv[2], "%2d:%2d:%2d",
            &(tm.tm_hour), &(tm.tm_min), &(tm.tm_sec))  != 3)
     {
@@ -37,22 +34,9 @@ if (sscanf(argv[2], "%2d:%2d:%2d",
     exit(255);
     }
 
-printf("%d-%02d-%02d %02d:%02d:%02d %ld\n",
-    1900+tm.tm_year, 1+tm.tm_mon, tm.tm_mday,
-	tm.tm_hour, tm.tm_min, tm.tm_sec, (unsigned long)timep);
-
-timep = mktime(&tm);
-
-printf("%d-%02d-%02d %02d:%02d:%02d %ld\n",
-    1900+tm.tm_year, 1+tm.tm_mon, tm.tm_mday,
-	tm.tm_hour, tm.tm_min, tm.tm_sec, (unsigned long)timep);
-
-timep = mktime(&tm);
-
-printf("%d-%02d-%02d %02d:%02d:%02d %ld\n",
-    1900+tm.tm_year, 1+tm.tm_mon, tm.tm_mday,
-	tm.tm_hour, tm.tm_min, tm.tm_sec, (unsigned long)timep);
-
+tm.tm_year -= 1900;
+tm.tm_mon  -= 1;
+tm.tm_isdst = -1;	/*	do not know, figure it out	*/
 timep = mktime(&tm);
 
 printf("%d-%02d-%02d %02d:%02d:%02d %ld\n",
