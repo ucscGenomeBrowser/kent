@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1021 2006/05/26 22:13:06 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1022 2006/05/26 22:22:28 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15885,8 +15885,15 @@ if (ct == NULL)
     errAbort("Couldn't find '%s' in '%s'", trackId, fileName);
 if (ct->wiggle)
     {
+    if (ct->dbTrack)
+	{
+	struct sqlConnection *conn = sqlCtConn(TRUE);
+	genericWiggleClick(conn, ct->tdb, fileItem, start);
+	sqlDisconnect(&conn);
+	}
+    else
+	genericWiggleClick(NULL, ct->tdb, fileItem, start);
     /*	the NULL is for conn, don't need that for custom tracks */
-    genericWiggleClick(NULL, ct->tdb, fileItem, start);
     }
 else
     {
