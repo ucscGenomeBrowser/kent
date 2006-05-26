@@ -8,8 +8,9 @@
 #include "wiggle.h"
 #include "hCommon.h"
 #include "obscure.h"
+#include "customTrack.h"
 
-static char const rcsid[] = "$Id: wiggleUtils.c,v 1.40 2005/06/02 22:50:03 hiram Exp $";
+static char const rcsid[] = "$Id: wiggleUtils.c,v 1.41 2006/05/26 21:52:28 hiram Exp $";
 
 void printHistoGram(struct histoResult *histoResults, boolean html)
 {
@@ -187,8 +188,11 @@ if  ( prevTable && prevChrom && prevConn &&
 
 spans = newHash(0);	/* list of spans in this table */
 
-/*	Not here before with this one, seems to be new	*/
-prevConn = conn;
+/*	Not here before with this one, seems to be new
+ *	Does not work for customTrash database
+ */
+if (differentWord(sqlGetDatabase(conn),CUSTOM_TRASH))
+    prevConn = conn;
 prevTable = table;
 prevChrom = chrom;
 prevWinStart = winStart;
