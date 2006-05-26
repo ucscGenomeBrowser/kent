@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.69 2005/06/06 23:07:46 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.70 2006/05/26 22:24:07 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -304,9 +304,15 @@ struct wigItem *wiList = NULL;
 int itemsLoaded = 0;
 struct hash *spans = NULL;	/* Spans encountered during load */
 
+ct = tg->customPt;
+
 /*	Verify this is a custom track	*/
-if (tg->customPt == (void *)NULL)
+if (ct == (void *)NULL)
     errAbort("ctWigLoadItems: did not find a custom wiggle track: %s", tg->mapName);
+
+/*	and should *not* be here for a database custom track	*/
+if (ct->dbTrack)
+    errAbort("ctWigLoadItems: this custom wiggle track is in database: %s", tg->mapName);
 
 /*	Each instance of this LoadItems will create a new spans hash
  *	It will be the value included in the trackSpans hash
@@ -317,13 +323,11 @@ spans = newHash(3);
  */
 itemsLoaded = 0;
 
-ct = tg->customPt;
 tg->items = wiList;
 
 lf = lineFileOpen(ct->wigFile, TRUE);
 while (lineFileChopNextTab(lf, row, ArraySize(row)))
     {
-    struct wigItem *wi;
 
     wiggleStaticLoad(row, &wiggle); 
     /*	we have to do hRangeQuery's job here since we are reading a
@@ -334,6 +338,7 @@ while (lineFileChopNextTab(lf, row, ArraySize(row)))
 	{
 	if ((winStart < wiggle.chromEnd) && (winEnd > wiggle.chromStart))
 	    {
+	    struct wigItem *wi;
 	    ++itemsLoaded;
 	    AllocVar(wi);
 	    wigSetItemData(tg, wi, &wiggle, spans);
@@ -341,6 +346,7 @@ while (lineFileChopNextTab(lf, row, ArraySize(row)))
 	    }	/*	if in viewing window	*/
 	}	/*	if in same chromosome	*/
     }	/*	while reading lines	*/
+
 slReverse(&wiList);
 tg->items = wiList;
 tg->mapsSelf = TRUE;
@@ -367,7 +373,7 @@ lineFileClose(&lf);
  *	With 1K zoom Spans available, no more than approximately 1024
  *	rows will need to be loaded at any one time.
  */
-static void wigLoadItems(struct track *tg) {
+void wigLoadItems(struct track *tg) {
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -389,10 +395,25 @@ char *span1K = "Span >= 1000 limit 1";
 char *spanOver1K = "Span >= 1000";
 char whereSpan[64];
 int spanMinimum = 1;
+struct customTrack *ct = NULL;
+char *dbTableName = NULL;
+struct trackDb *tdb = NULL; 
 
-/*	Verify this is NOT a custom track	*/
+
+/*	custom tracks have different database	*/
 if (tg->customPt != (void *)NULL)
-    errAbort("wigLoadItems: encountered a custom wiggle track: %s in the wrong place", tg->mapName);
+    {
+    hFreeConn(&conn);
+    conn = sqlCtConn(TRUE);
+    ct = tg->customPt;
+    dbTableName = ct->dbTrackName;
+    tdb = ct->tdb;
+    }
+else
+    {
+    dbTableName = tg->mapName;
+    tdb = tg->tdb;
+    }
 
 /*	Allocate trackSpans one time only	*/
 if (! trackSpans)
@@ -404,13 +425,16 @@ if (! trackSpans)
  *	protect against less than 1 with the max(1,minSpan());
  *	This business will fix the problem mentioned in RT #1186
  */
+
 spanMinimum = max(1,
-	minSpan(conn, tg->mapName, chromName, winStart, winEnd, cart, tg->tdb));
+	minSpan(conn, dbTableName, chromName, winStart, winEnd, cart, tdb));
 
 itemsLoaded = 0;
 safef(whereSpan, ArraySize(whereSpan), "span=%d limit 1", spanMinimum);
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
-	whereSpan, &rowOffset);
+
+sr = hRangeQuery(conn, dbTableName, chromName, winStart, winEnd,
+    whereSpan, &rowOffset);
+
 while ((row = sqlNextRow(sr)) != NULL)
     ++itemsLoaded;
 sqlFreeResult(&sr);
@@ -419,15 +443,15 @@ sqlFreeResult(&sr);
 if (itemsLoaded < 1)
     {
     tg->items = (struct wigItem *)NULL;
-    hFreeConn(&conn);
+    hFreeOrDisconnect(&conn);
     return;
     }
 
 itemsLoaded = 0;
 if (basesPerPixel >= 1000)
     {
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
-	    span1K, &rowOffset);
+    sr = hRangeQuery(conn, dbTableName, chromName, winStart, winEnd,
+	span1K, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	    ++itemsLoaded;
     sqlFreeResult(&sr);
@@ -442,12 +466,12 @@ if (basesPerPixel >= 1000)
  */
 if (itemsLoaded)
     {
-    sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
-		     spanOver1K, &rowOffset);
+    sr = hRangeQuery(conn, dbTableName, chromName, winStart, winEnd,
+	     spanOver1K, &rowOffset);
     }
 else
     {
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+sr = hRangeQuery(conn, dbTableName, chromName, winStart, winEnd,
 	whereNULL, &rowOffset);
     }
 
@@ -474,7 +498,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 sqlFreeResult(&sr);
-hFreeConn(&conn);
+hFreeOrDisconnect(&conn);
 
 slReverse(&wiList);
 tg->items = wiList;
