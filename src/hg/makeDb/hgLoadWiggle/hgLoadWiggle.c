@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.15 2006/03/03 22:23:07 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.16 2006/05/26 16:50:05 hiram Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -20,6 +20,9 @@ static boolean noLoad = FALSE;		/* Do not load table, create tab file */
 static boolean strictTab = FALSE;	/* Separate on tabs. */
 static boolean oldTable = FALSE;	/* Don't redo table. */
 static char *pathPrefix = NULL;	/* path prefix instead of /gbdb/hg16/wib */
+static char *chromInfoDb = NULL;	/* DB for chromInfo information */
+static int maxChromNameLength = 0;	/* specify to avoid chromInfo */
+static char *tmpDir = (char *)NULL;	/*location to create a temporary file */
 
 static struct hash *chromHash = NULL;
 
@@ -31,6 +34,9 @@ static struct optionSpec optionSpecs[] = {
     {"noLoad", OPTION_BOOLEAN},
     {"oldTable", OPTION_BOOLEAN},
     {"pathPrefix", OPTION_STRING},
+    {"chromInfoDb", OPTION_STRING},
+    {"maxChromNameLength", OPTION_INT},
+    {"tmpDir", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -48,6 +54,11 @@ errAbort(
   "   -tab\t\tSeparate by tabs rather than space\n"
   "   -pathPrefix=<path>\t.wib file path prefix to use "
       "(default /gbdb/<DB>/wib)\n"
+  "   -chromInfoDb=<DB>\tdatabase to extract chromInfo size information\n"
+  "   -maxChromNameLength=N  - specify max chromName length to avoid\n"
+  "               - reference to chromInfo table\n"
+  "   -tmpDir=<path>  - path to directory for creation of temporary .tab file\n"
+  "                   - which will be removed after loading\n"
   "   -verbose=N\tN=2 see # of lines input and SQL create statement,\n"
   "\t\tN=3 see chrom size info, N=4 see details on chrom size info"
   );
@@ -263,12 +274,12 @@ verbose(3, "chrom: %s size: %u\n", chrom, size);
 fclose(f);
 }
 
-void loadDatabase(char *database, char *track, int wiggleSize, struct wiggleStub *wiggleList)
+static void loadDatabase(char *database, char *track, int wiggleSize, struct wiggleStub *wiggleList)
 /* Load database from wiggleList. */
 {
 struct sqlConnection *conn = (struct sqlConnection *)NULL;
 struct dyString *dy = newDyString(1024);
-char *tab = "wiggle.tab";
+char *tab = (char *)NULL;
 
 if (! noLoad)
     {
@@ -277,10 +288,21 @@ if (! noLoad)
     verbose(1, "Connected to database %s for track %s\n", database, track);
     }
 
+if ((char *)NULL != tmpDir)
+    tab = cloneString(rTempName(tmpDir,"loadWig",".tab"));
+else
+    tab = cloneString("wiggle.tab");
+
 /* First make table definition. */
 if ((!oldTable) && (!noLoad))
     {
-    int indexLen = hGetMinIndexLength();
+    int indexLen = 0;
+
+    if (maxChromNameLength)
+	indexLen = maxChromNameLength;
+    else
+	indexLen = hGetMinIndexLength();
+    verbose(2, "INDEX chrom length: %d\n", indexLen);
 
     /* Create definition statement. */
     verbose(1, "Creating table definition with %d columns in %s.%s\n",
@@ -340,6 +362,11 @@ if (! noLoad)
     hgHistoryComment(conn, comment);
     verbose(2, "#\t%s\n", comment);
     sqlDisconnect(&conn);
+    /*	if temp dir specified, unlink file to make it disappear */
+/*
+    if ((char *)NULL != tmpDir)
+	unlink(tab);
+*/
     }
 else
     verbose(1, "noLoad option requested, see resulting file: %s\n", tab);
@@ -352,7 +379,10 @@ int wiggleSize = findWiggleSize(wiggleFiles[0]);
 struct wiggleStub *wiggleList = NULL;
 int i;
 
-chromHash = loadAllChromInfo(database);
+if (chromInfoDb)
+    chromHash = loadAllChromInfo(chromInfoDb);
+else
+    chromHash = loadAllChromInfo(database);
 
 if (verboseLevel() > 2)
     {
@@ -388,13 +418,19 @@ noLoad = optionExists("noLoad");
 strictTab = optionExists("tab");
 oldTable = optionExists("oldTable");
 pathPrefix = optionVal("pathPrefix",NULL);
+chromInfoDb = optionVal("chromInfoDb",NULL);
+maxChromNameLength = optionInt("maxChromNameLength",0);
+tmpDir = optionVal("tmpDir", tmpDir);
+
 verbose(2, "noBin: %s, noLoad: %s, tab: %s, oldTable: %s\n",
 	noBin ? "TRUE" : "FALSE",
 	noLoad ? "TRUE" : "FALSE",
 	strictTab ? "TRUE" : "FALSE",
 	oldTable ? "TRUE" : "FALSE");
 if (pathPrefix)
-    verbose(2, "pathPrefix: %s\n", pathPrefix);
+    verbose(2, " pathPrefix: %s\n", pathPrefix);
+if (chromInfoDb)
+    verbose(2, "chromInfoDb: %s\n", chromInfoDb);
 hgLoadWiggle(argv[1], argv[2], argc-3, argv+3);
 return 0;
 }
