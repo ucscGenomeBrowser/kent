@@ -20,7 +20,7 @@
 #include "fa.h"
 #include "traceInfo.h"
 
-static char const rcsid[] = "$Id: hgTraceInfo.c,v 1.4 2003/05/06 07:22:26 kate Exp $";
+static char const rcsid[] = "$Id: hgTraceInfo.c,v 1.5 2006/05/26 16:14:35 angie Exp $";
 
 static char* TMP_TAB_FILE = "traceInfo.tab";
 static char* TRACE_ID_PREFIX = "gnl|";
@@ -66,7 +66,6 @@ static struct traceInfo* parseFastaRecord(FILE* fh, char* fastaName)
  * parses the sequence id and comment for the read and clone name. */
 {
 struct dnaSeq* dna;
-int size;
 char* comment;
 struct traceInfo* traceInfo;
 
