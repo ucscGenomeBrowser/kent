@@ -963,15 +963,15 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     $gbd.all_mrna.qName dupeOk
     $gbd,!ce2.mrnaOrientInfo.name minCheck=0.01
     ce2.mrnaOrientInfo.name minCheck=0.08
-    $gbd,!mm6,!mm7,!mm8,!hg17,!hg18.dupSpMrna.mrnaID minCheck=0.80
-    $gbd,!mm6,!mm7,!mm8,!hg17,!hg18.dupSpMrna.dupMrnaID minCheck=0.95
-    $gbd,!mm6,!mm7,!mm8,!hg17,!rn2,!rn3.mrnaRefseq.mrna minCheck=0.25
+    $gbd,!mm6,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.mrnaID minCheck=0.80
+    $gbd,!mm6,!mm7,!mm8,!hg17,!hg18,!rn4.dupSpMrna.dupMrnaID minCheck=0.95
+    $gbd,!mm6,!mm7,!mm8,!hg17,!rn2,!rn3,!rn4.mrnaRefseq.mrna minCheck=0.25
     mm6.mrnaRefseq.mrna minCheck=0.80
     mm7.mrnaRefseq.mrna minCheck=0.30
     mm8.mrnaRefseq.mrna minCheck=0.30
     hg17.mrnaRefseq.mrna minCheck=0.80
-    rn2,rn3.mrnaRefseq.mrna minCheck=0.03
-    $gbd,!mm6,!mm7,!mm8,!hg17,!hg18.spMrna.mrnaID minCheck=0.98
+    $rn.mrnaRefseq.mrna minCheck=0.03
+    $gbd,!mm6,!mm7,!mm8,!hg17,!hg18,!rn4.spMrna.mrnaID minCheck=0.98
     $mm.spMrna.mrnaID minCheck=0.20
     $mm.dupSpMrna.mrnaID minCheck=0.10
     $mm.dupSpMrna.dupMrnaID minCheck=0.10
@@ -981,6 +981,8 @@ identifier nativeMrnaAccession typeOf=mrnaAccession
     hg17.dupSpMrna.dupMrnaID minCheck=0.20
     hg18.dupSpMrna.mrnaID minCheck=0.20
     hg18.dupSpMrna.dupMrnaID minCheck=0.70
+    rn4.dupSpMrna.mrnaID minCheck=0.15
+    rn4.dupSpMrna.dupMrnaID minCheck=0.60
 
 identifier mgcAccession typeOf=nativeMrnaAccession
 "Mammalian Gene Collection Genbank mRNA accession."
