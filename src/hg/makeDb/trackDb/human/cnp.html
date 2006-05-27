@@ -106,10 +106,10 @@ Note that CNP intervals, as detailed by Sebat <em>et al</em>. (2004), were
 converted from the April 2003 human genome assembly (NCBI Build 33) to the 
 July 2003 assembly (NCBI Build 34) using the UCSC liftOver tool.</P>
 
-<H3>Fosmid mapping</H3>
+<H3>Tuzun fosmid mapping</H3>
 <P>
-Paired-end sequences from a human fosmid DNA library were mapped to the July 
-2003 human genome assembly (NCBI Build 34). The average resolution of this 
+Paired-end sequences from a human fosmid DNA library were mapped to the assembly. 
+The average resolution of this 
 technique was ~8kb, and included 56 sites of inversion not detectable by 
 the array-based approaches.  However, because of the physical constraints of 
 fosmid insert size, this technique was unable to detect insertions greater than 
@@ -138,6 +138,15 @@ was statistically unexpected based on chance.  A set of statistical thresholds w
 tailored to each mode of failure, genotyping center and genotyping platform used in the
 project.  The same procedure could readily apply to dense SNP data from any
 platform or study.</P>
+
+
+<H3>Conrad genotype analysis</H3>
+<P>
+SNPs in regions that are hemizygous for a deletion are generally miscalled as homozygous 
+for the allele that is present.  Hence, when a deletion is transmitted from parent to child, 
+the genotypes at SNPs within the deletion region will often appear to violate the rules of Mendelian 
+transmission.  The authors developed a simple algorithm for scanning trio data for unusual runs of 
+consecutive SNPs that, in a single family, have genotype configurations consistent with the presence of a deletion. 
 
 <H2>Validation</H2>
 <H3>McCarroll genotype analysis</H3>
@@ -179,6 +188,16 @@ close to 50%.   This suggests that the deletions behave as a stable, heritable
 genetic polymorphism.
 </P>
 
+<H3>Conrad genotype analysis</H3>
+<P>
+The authors first tested 12 predicted deletions using quantitative PCR. 
+For all 12 deletions they observed DNA concentrations consistent with transmission of a deletion 
+from parent to child. 
+<P>To provide more extensive validation by comparative genome hybridization (CGH), the authors designed a 
+custom oligonucleotide microarray comprised of 380,000 probes that tile across all 134 candidate deletions 
+identified in nine HapMap offspring (8 YRI and 1 CEU). 
+The results of this CGH analysis indicate that the majority (about 85%) of candidate deletions detected 
+by our method are real.
 
 <H2>References</H2>
 <P>
