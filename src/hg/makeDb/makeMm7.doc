@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.61 2006/05/23 18:29:48 kate Exp $"
+#	"$Id: makeMm7.doc,v 1.62 2006/05/27 19:11:48 angie Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12203,3 +12203,17 @@ refGene:CDS 1.059%, sgpGene 1.451%, both 0.912%, cover 86.18%, enrich 59.39x
     #	449871 bases of 2583394090 (0.017%) in intersection
     nice -n +19 featureBits mm7 picTarMiRNAChicken
     #	35586 bases of 2583394090 (0.001%) in intersection
+
+
+#########################################################################
+### IGTC (Int'l GeneTrap Consortium) (DONE - 2006-05-26 - angie)
+### Doug Stryke <stryke@cgl.ucsf.edu> in Tom Ferrin's lab
+    ssh hgwdev
+    mkdir /cluster/data/mm7/bed/igtc
+    cd /cluster/data/mm7/bed/igtc
+    wget http://wwwtest.genetrap.org/blattrack/genetrap.psl
+    grep -v ^track genetrap.psl \
+    | sed -e 's/%20/+/' \
+    | hgLoadPsl mm7 -table=igtc stdin
+
+
