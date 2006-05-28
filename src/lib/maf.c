@@ -6,9 +6,10 @@
 #include "dnautil.h"
 #include "axt.h"
 #include "maf.h"
+#include "hash.h"
 #include <fcntl.h>
 
-static char const rcsid[] = "$Id: maf.c,v 1.24 2005/11/23 17:21:38 braney Exp $";
+static char const rcsid[] = "$Id: maf.c,v 1.25 2006/05/28 22:48:41 baertsch Exp $";
 
 struct mafFile *mafMayOpen(char *fileName)
 /* Open up a maf file and verify header. */
@@ -473,6 +474,19 @@ if (mc == NULL)
 return mc;
 }
 
+struct mafComp *mafMayFindComponentInHash(struct mafAli *maf, struct hash *cHash) 
+/* Find component of given source that starts matches any string in the cHash.
+   Return NULL if not found. */
+{
+struct mafComp *mc;
+
+for (mc = maf->components; mc != NULL; mc = mc->next)
+    {
+    if (hashFindVal(cHash, mc->src))
+        return mc;
+    }
+return NULL;
+}
 
 struct mafAli *mafSubset(struct mafAli *maf, char *componentSource,
 	int newStart, int newEnd)
