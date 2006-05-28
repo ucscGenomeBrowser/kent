@@ -10,11 +10,13 @@
 #include "dbDb.h"
 #include "hdb.h"
 #include "web.h"
+#include "portable.h"
 #include "hgColors.h"
 #include "trackLayout.h"
 #include "chromInfo.h"
+#include "vGfx.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.3 2006/05/26 21:49:32 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.4 2006/05/28 16:50:04 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -43,8 +45,8 @@ struct chromosome
      char *shortName;	/* Name without chr prefix. */
      int size;		/* Size in bases. */
      struct cytoBand *bands;	/* May be NULL */
-     int x;		/* Start pixel x coordinate */
-     int width; 	/* Pixel width */
+     int x,y;		/* Upper left corner pixel coordinates*/
+     int width,height; 	/* Pixel width and height */
      };
 
 struct chromLayout
@@ -52,6 +54,9 @@ struct chromLayout
     {
     MgFont *font;		/* Font used for labels */
     int picWidth;			/* Total picture width */
+    int picHeight;			/* Total picture height */
+    int margin;				/* BLank area around sides */
+    int spaceWidth;			/* Width of a space. */
     struct chromosome *leftList;	/* Left chromosomes. */
     struct chromosome *rightList;	/* Right chromosomes. */
     struct chromosome *bottomList;	/* Sex chromosomes are on bottom. */
@@ -156,7 +161,7 @@ slReverse(&autoList);
 }
 
 struct chromLayout *chromLayoutCreate(struct chromosome *chromList,
-	MgFont *font, int picWidth)
+	MgFont *font, int picWidth, int lineHeight)
 /* Figure out layout.  For human and most mammals this will be
  * two columns with sex chromosomes on bottom.  This is complicated
  * by the platypus having a bunch of sex chromosomes. */
@@ -171,11 +176,14 @@ int autosomeOtherPixels=0, sexOtherPixels=0;
 int autosomeBasesInLine=0;	/* Maximum bases in a line for autosome. */
 int sexBasesInLine=0;		/* Bases in line for sex chromsome. */
 double sexBasesPerPixel, autosomeBasesPerPixel, basesPerPixel;
-int pos = 0;
+int pos = margin;
+int y = 0;
 
 AllocVar(cl);
 cl->font = font;
 cl->picWidth = picWidth;
+cl->margin = margin;
+cl->spaceWidth = spaceWidth;
 
 /* Put sex chromosomes on bottom, and rest on left. */
 separateSexChroms(chromList, &chromList, &cl->bottomList);
@@ -269,20 +277,31 @@ uglyf("autosomeOtherPixels %d, sexOtherPixels %d, picWidth %d<BR>\n", autosomeOt
 for (chrom = cl->leftList; chrom != NULL; chrom = chrom->next)
     {
     chrom->x = leftLabelWidth + margin;
+    chrom->y = y;
     chrom->width = round(chrom->size/basesPerPixel);
+    chrom->height = lineHeight;
+    y += lineHeight;
     }
 
 /* Set pixel positions for right autosomes */
+y = 0;
 for (chrom = cl->rightList; chrom != NULL; chrom = chrom->next)
     {
     chrom->width = round(chrom->size/basesPerPixel);
+    chrom->height = lineHeight;
     chrom->x = picWidth - margin - rightLabelWidth - chrom->width;
+    chrom->y = y;
+    y += lineHeight;
     }
+cl->picHeight = 2*margin + lineHeight * cl->lineCount;
+y = cl->picHeight - margin - lineHeight;
 
 /* Set pixel positions for sex chromosomes */
 for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
     {
+    chrom->y = y;
     chrom->width = round(chrom->size/basesPerPixel);
+    chrom->height = lineHeight;
     if (chrom == cl->bottomList)
 	chrom->x = leftLabelWidth + margin;
     else if (chrom->next == NULL)
@@ -291,54 +310,83 @@ for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
 	chrom->x = 2*spaceWidth+mgFontStringWidth(font,chrom->shortName) + pos;
     pos = chrom->x + chrom->width;
     }
-
 return cl;
 }
 
-void genomeGif()
+void drawChrom(struct vGfx *vg, struct chromosome *chrom, int chromBoxHeight,
+	int color)
+{
+vgBox(vg, chrom->x, chrom->y + chrom->height - chromBoxHeight, 
+    chrom->width, chromBoxHeight, color);
+}
+
+void leftChromAndLabel(struct vGfx *vg, struct chromLayout *cl,
+	struct chromosome *chrom, int fontHeight, int chromBoxHeight,
+	int color)
+/* Draw a chromosome with label on left. */
+{
+vgTextRight(vg, cl->margin, chrom->y + chrom->height - fontHeight, 
+    chrom->x - cl->margin - cl->spaceWidth, fontHeight, color,
+    cl->font, chrom->shortName);
+drawChrom(vg, chrom, chromBoxHeight, color);
+}
+
+void rightChromAndLabel(struct vGfx *vg, struct chromLayout *cl,
+	struct chromosome *chrom, int fontHeight, int chromBoxHeight,
+	int color)
+/* Draw a chromosome with label on left. */
+{
+vgText(vg, chrom->x + chrom->width + cl->spaceWidth,
+	chrom->y + chrom->height - fontHeight, 
+	color, cl->font, chrom->shortName);
+drawChrom(vg, chrom, chromBoxHeight, color);
+}
+
+void midChromAndLabel(struct vGfx *vg, struct chromLayout *cl,
+	struct chromosome *chrom, int fontHeight, int chromBoxHeight,
+	int color)
+/* Draw a chromosome with label on left. */
+{
+MgFont *font = cl->font;
+int textWidth = mgFontStringWidth(font, chrom->shortName);
+vgTextRight(vg, chrom->x - textWidth - cl->spaceWidth, 
+    chrom->y + chrom->height - fontHeight, 
+    textWidth, fontHeight, color,
+    font, chrom->shortName);
+drawChrom(vg, chrom, chromBoxHeight, color);
+}
+
+void genomeGif(struct sqlConnection *conn, struct chromLayout *cl)
 /* Create genome GIF file and HTML that includes it. */
 {
-#ifdef SOMEDAY
-MgFont *font = tl.font;
-int wigHeight = tl.fontHeight*3;
-int ideoHeight = tl.fontHeight;
-
-char *mapName = "genome";
 struct vGfx *vg;
 struct tempName gifTn;
-boolean doIdeo = TRUE;
-int ideoWidth = round(.8 *tl.picWidth);
-int ideoHeight = 0;
-int textWidth = 0;
+struct chromosome *chrom;
+int chromBoxHeight = 8;
+MgFont *font = cl->font;
+int fontHeight = mgFontPixelHeight(font);
+int color = MG_BLACK;
 
-ideoTrack = chromIdeoTrack(*pTrackList);
+makeTempName(&gifTn, "hgtIdeo", ".gif");
+vg = vgOpenGif(cl->picWidth, cl->picHeight, gifTn.forCgi);
+printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d>",
+	    gifTn.forHtml, cl->picWidth, cl->picHeight);
 
-/* If no ideogram don't draw. */
-if(ideoTrack == NULL)
-    doIdeo = FALSE;
-else
+for (chrom = cl->leftList; chrom != NULL; chrom = chrom->next)
+    leftChromAndLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
+for (chrom = cl->rightList; chrom != NULL; chrom = chrom->next)
+    rightChromAndLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
+for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
     {
-    ideogramAvail = TRUE;
-    /* Remove the track from the group and track list. */
-    removeTrackFromGroup(ideoTrack);
-    slRemoveEl(pTrackList, ideoTrack);
-
-    /* Fix for hide all button hiding the ideogram as well. */
-    if(withIdeogram && ideoTrack->items == NULL)
-	{
-	ideoTrack->visibility = tvDense;
-	ideoTrack->loadItems(ideoTrack);
-	}
-    limitVisibility(ideoTrack);
-    
-    /* If hidden don't draw. */
-    if(ideoTrack->limitedVis == tvHide || !withIdeogram)
-	doIdeo = FALSE;
-
-    /* If doing postscript, skip ideogram. */
-    if(psOutput)
-	doIdeo = FALSE;
+    if (chrom == cl->bottomList)
+	leftChromAndLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
+    else if (chrom->next == NULL)
+	rightChromAndLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
+    else
+        midChromAndLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
     }
+
+#ifdef SOMEDAY
 if(doIdeo)
     {
     char startBand[16];
@@ -389,6 +437,7 @@ if(ideoTrack != NULL)
     ideoTrack->limitedVis = tvHide; /* Don't draw in main gif. */
     }
 #endif /* SOMEDAY */
+vgClose(&vg);
 }
 
 void webMain(struct sqlConnection *conn)
@@ -398,9 +447,12 @@ void webMain(struct sqlConnection *conn)
 struct chromosome *chromList, *chrom, *left, *right;
 struct chromLayout *cl;
 int total;
+int fontHeight, lineHeight;
 trackLayoutInit(&tl, cart);
+fontHeight = mgFontLineHeight(tl.font);
+lineHeight = fontHeight*3;
 chromList = getChromosomes(conn);
-cl = chromLayoutCreate(chromList, tl.font, tl.picWidth);
+cl = chromLayoutCreate(chromList, tl.font, tl.picWidth, lineHeight);
 uglyf("cl: lineCount %d, leftLabelWidth %d, rightLabelWidth %d, basesPerPixel %f<BR>\n",
 	cl->lineCount, cl->leftLabelWidth, cl->rightLabelWidth, cl->basesPerPixel);
 for (left = cl->leftList, right = cl->rightList; left != NULL || right != NULL;)
@@ -424,9 +476,10 @@ total=0;
 for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
     {
     total += chrom->size;
-    uglyf("%s@%d %d ...  ", chrom->fullName, chrom->x, chrom->size);
+    uglyf("%s@%d[%d] %d ...  ", chrom->fullName, chrom->x, chrom->width, chrom->size);
     }
 uglyf(" : %d<BR>", total);
+genomeGif(conn, cl);
 }
 
 void cartMain(struct cart *theCart)
