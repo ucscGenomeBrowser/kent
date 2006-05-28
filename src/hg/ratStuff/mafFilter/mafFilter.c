@@ -6,7 +6,7 @@
 #include "options.h"
 #include "maf.h"
 
-static char const rcsid[] = "$Id: mafFilter.c,v 1.10 2005/09/13 19:37:08 braney Exp $";
+static char const rcsid[] = "$Id: mafFilter.c,v 1.11 2006/05/28 22:49:33 baertsch Exp $";
 
 #define DEFAULT_MIN_ROW 2
 #define DEFAULT_MIN_COL 1
@@ -29,7 +29,8 @@ errAbort(
   "   -minScore=N - Minimum allowed score (alternative to -minFactor)\n"
   "   -reject=filename - Save rejected blocks in filename\n"
   "   -needComp=species - all alignments must have species as one of the component\n"
-  "   -overlap - Reject overlapping blocks in reference (assumes ordered blocks)\n",
+  "   -overlap - Reject overlapping blocks in reference (assumes ordered blocks)\n"
+  "   -componentFilter=filename - Filter out blocks without a component listed in filename \n",
         DEFAULT_MIN_COL, DEFAULT_MIN_ROW, DEFAULT_FACTOR
   );
 }
@@ -42,6 +43,7 @@ static struct optionSpec options[] = {
    {"factor", OPTION_BOOLEAN},
    {"minFactor", OPTION_INT},
    {"reject", OPTION_STRING},
+   {"componentFilter", OPTION_STRING},
    {"needComp", OPTION_STRING},
    {"overlap", OPTION_BOOLEAN},
    {NULL, 0},
@@ -53,6 +55,8 @@ boolean gotMinScore = FALSE;
 double minScore;
 boolean gotMinFactor = FALSE;
 int minFactor = DEFAULT_FACTOR;
+char *componentFile = NULL;
+struct hash *cHash = NULL;
 char *rejectFile = NULL;
 char *needComp = NULL;
 /* for overlap detection */
@@ -71,6 +75,20 @@ else
     exit(-1);
 }
 
+struct hash *hashComponentList(char *fileName)
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+char *row[1];
+struct hash *cHash = newHash(0);
+while (lineFileRow(lf, row))
+    {
+    char *name = row[0];
+    hashAdd(cHash, name, name);
+    }
+lineFileClose(&lf);
+return cHash;
+}
+
 boolean filterOne(struct mafAli *maf)
 /* Return TRUE if maf passes filters. */
 {
@@ -84,6 +102,8 @@ int refEnd = refStart + maf->components->size;
 if (needComp && (mafMayFindCompPrefix(maf, needComp, "." ) == NULL))
     return FALSE;
 
+if (componentFile != NULL && (mafMayFindComponentInHash(maf, cHash) == NULL))
+    return FALSE;
 if (nrow < minRow || ncol < minCol ||
     (gotMinScore && maf->score < minScore) ||
     (gotMinFactor && maf->score < fscore))
@@ -176,6 +196,9 @@ if (optionExists("factor"))
     }
 minCol = optionInt("minCol", DEFAULT_MIN_COL);
 minRow = optionInt("minRow", DEFAULT_MIN_ROW);
+componentFile = optionVal("componentFilter", NULL);
+if (componentFile != NULL)
+    cHash = hashComponentList(componentFile);
 rejectFile = optionVal("reject", NULL);
 needComp = optionVal("needComp", NULL);
 verbose(3, "minCol=%d, minRow=%d, gotMinScore=%d, minScore=%f, gotMinFactor=%d, minFactor=%d\n", 
