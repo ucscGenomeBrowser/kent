@@ -39,7 +39,7 @@
 #define NOTPSEUDO -1
 #define EXPRESSED -2
 
-static char const rcsid[] = "$Id: pslPseudo.c,v 1.48 2006/05/28 23:16:08 baertsch Exp $";
+static char const rcsid[] = "$Id: pslPseudo.c,v 1.49 2006/05/28 23:32:26 baertsch Exp $";
 
 char *db;
 char *nibDir;
@@ -50,7 +50,7 @@ float maxRep = 0.60;
 float minAliPseudo = 0.60;
 float nearTop = 0.005;
 float repsPerIntron = 0.7;
-float splicedOverlapRatio = 0.3;
+float splicedOverlapRatio = 0.1;
 float minCover = 0.50;
 float minCoverPseudo = 0.01;
 int maxBlockGap = 50;
