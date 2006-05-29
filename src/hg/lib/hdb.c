@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.295 2006/05/29 04:49:14 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.296 2006/05/29 05:16:16 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3250,8 +3250,9 @@ static void subtrackInherit(struct trackDb *subtrackTdb,
 {
 if (!trackDbSetting(subtrackTdb, "noInherit"))
     {
-    /* no longer necessary -- this is done in hgTrackDb now */
-    subtrackTdb->type = cloneString(compositeTdb->type); 
+    /* no longer necessary ? -- this is done in hgTrackDb now */
+    if (subtrackTdb->type == NULL)
+        subtrackTdb->type = cloneString(compositeTdb->type); 
     subtrackTdb->grp = cloneString(compositeTdb->grp);
 
     /* inherit items in parent's settings hash that aren't 
