@@ -9342,7 +9342,7 @@ exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
 
 ####################################################################
 # LOAD ENSEMBL GENES (DONE, 2006-05-02, Fan)
-
+# ADDED STABLE URL TO TRACKDB (DONE, 2006-05-29, hartera)
     mkdir /cluster/data/hg18/bed/ensembl
     cd /cluster/data/hg18/bed/ensembl
     # Get the ensembl protein data from 
@@ -9400,6 +9400,10 @@ exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
     # Save file as ensemblPep.fa.gz
     gunzip ensemblPep.fa.gz
     hgPepPred hg18 ensembl ensemblPep.fa
+    # Added stable archive URL for Ensembl v38 to human/hg18/trackDb.ra
+    # (2006-05-29, hartera)
+    # Changed url line for ensGene entry to:
+    # url http://apr2006.archive.ensembl.org/perl/transview?transcript=$$
 
 # SGP GENES (DONE 5/3/06 Fan)
     ssh hgwdev 
