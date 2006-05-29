@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.294 2006/04/21 04:53:42 angie Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.295 2006/05/29 04:49:14 kate Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3342,10 +3342,10 @@ static struct trackDb *loadAndLookupTrackDb(struct sqlConnection *conn,
 					    char *where)
 /* Load trackDb object(s). Nothing done for composite tracks here. */
 {
-struct trackDb *trackTdb = loadTrackDb(conn, where);
-if (trackTdb != NULL)
-    hLookupStringsInTdb(trackTdb, hGetDb());
-return trackTdb;
+struct trackDb *tdb, *tdbs = loadTrackDb(conn, where);
+for (tdb = tdbs; tdb != NULL; tdb = tdb->next)
+    hLookupStringsInTdb(tdb, hGetDb());
+return tdbs;
 }
 
 static struct trackDb *loadTrackDbForTrack(struct sqlConnection *conn,
