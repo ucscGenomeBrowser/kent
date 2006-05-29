@@ -23,6 +23,30 @@ group map
 visibility dense
 type bed 3 +
 
+track multiz7way
+shortLabel Conservation 
+longLabel Vertebrate Multiz Alignment & Conservation
+group compGeno
+priority 104.1
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+wiggle phastCons7way
+pairwiseHeight 12
+spanList 1
+yLineOnOff Off
+autoScaleDefault Off
+windowingFunction mean
+summary multiz7waySummary
+frames multiz7wayFrames
+irows on
+speciesGroups vertebrate mammal
+sGroup_vertebrate fr1 tetNig1 xenTro2
+sGroup_mammal monDom4 mm8 hg18
+treeImage phylo/danRer4_7way.jpg
+
 track chainHg18
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -50,30 +74,6 @@ matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
 matrixHeader A, C, G, T
 type chain fr1
 otherDb fr1
-
-track multiz7way
-shortLabel Conservation 
-longLabel Vertebrate Multiz Alignment & Conservation
-group compGeno
-priority 104
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-#wiggle phastCons7way
-pairwiseHeight 12
-spanList 1
-yLineOnOff Off
-autoScaleDefault Off
-windowingFunction mean
-summary multiz7waySummary
-frames multiz7wayFrames
-irows on
-speciesGroups mammal vertebrate
-sGroup_mammal hg18 mm8 monDom4
-sGroup_vertebrate xenTro2 tetNig1 fr1
-treeImage phylo/danRer4_7way.jpg
 
 searchTable ctgPos2
 searchMethod exact
