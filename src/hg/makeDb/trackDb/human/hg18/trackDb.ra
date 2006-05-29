@@ -24,7 +24,7 @@ priority 40
 visibility hide
 color 150,0,0
 type genePred ensPep
-url http://www.ensembl.org/perl/transview?transcript=$$
+url http://apr2006.archive.ensembl.org/perl/transview?transcript=$$
 
 track multiz17way
 shortLabel Conservation
@@ -168,6 +168,30 @@ visibility hide
 spectrum on
 type netAlign danRer3 chainDanRer3
 otherDb danRer3
+
+track chainDanRer4
+shortLabel DanRer4 Chain
+longLabel $o_Organism ($o_date/$o_db) Chained Alignments
+group compGeno
+priority 154.4
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+matrix 16 91,-90,-25,-100,-90,100,-100,-25,-25,-100,100,-90,-100,-25,-90,91
+matrixHeader A, C, G, T
+type chain danRer4
+otherDb danRer4
+                                                                                
+track netDanRer4
+shortLabel DanRer4 Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 154.5
+visibility hide
+spectrum on
+type netAlign danRer4 chainDanRer4
+otherDb danRer4
 
 track chainMonDom1
 shortLabel MonDom1 Chain 
