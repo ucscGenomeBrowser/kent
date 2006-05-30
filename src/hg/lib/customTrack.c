@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.88 2006/05/26 21:53:06 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.89 2006/05/30 23:49:42 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1058,6 +1058,11 @@ if (!track->wiggle)
 	    {
 	    bed->chromStart += offset;
 	    bed->chromEnd += offset;
+	    if (track->fieldCount > 7)
+		{
+		bed->thickStart += offset;
+		bed->thickEnd += offset;
+		}
 	    }
 	bed->strand[1] = (char)NULL;
 	saveBedPart(dbDataFH, bed, track->fieldCount);
@@ -1343,6 +1348,11 @@ for (track = trackList; track != NULL; track = track->next)
 	     {
 	     bed->chromStart += offset;
 	     bed->chromEnd += offset;
+	    if (track->fieldCount > 7)
+		{
+		bed->thickStart += offset;
+		bed->thickEnd += offset;
+		}
 	     }
 	 }
     if (!track->wiggle)
