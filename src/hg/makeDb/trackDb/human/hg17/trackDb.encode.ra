@@ -1961,34 +1961,40 @@ dataVersion ENCODE Oct2005 Freeze
     color 60,50,240
     priority 16
 
-track encodeRegulomeCap
+track encodeRegulomeDnaseArray
 compositeTrack on
-shortLabel UW/Reg CAP
-longLabel ENCODE UW/Regulome Chromatin Accessibility Profiling (GM066990)
+shortLabel UW/Reg DNase/Array
+longLabel ENCODE UW/Regulome DNase I Array - Regulome DNase I sensitivity/hypersensitivity in GM06990 Cells
 group encodeChrom
 priority 66.5
 type bedGraph 4
-maxHeightPixels 128:16:16
+maxHeightPixels 128:32:16
 minLimit 0
 maxLimit 9.5
-viewLimits 0:1
-windowingFunction mean
+graphType bar
+viewLimits 0:4
+yLineMark 0.0
+yLineOnOff Off
+smoothingWindow Off
+windowingFunction maximum
 autoScale Off
 chromosomes chr1,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr5,chr6,chr7,chr8,chr9,chrX
 color 90,50,210
 
-    track encodeRegulomeCapSensGM06990
-    subTrack encodeRegulomeCap
+    track encodeRegulomeDnaseGM06990Sens
+    subTrack encodeRegulomeDnaseArray
     shortLabel DnaseI Sens
-    longLabel UW/Reg DNaseI Sensitivity GM06990 (DNase Array)
+    longLabel UW/Reg DNaseI Sensitivity in GM06990 Cells (DNase Array)
+    color 000,000,153
     priority 1
 
-    track encodeRegulomeCapSitesGM06990
-    subTrack encodeRegulomeCap
-    shortLabel DnaseI HSs
-    longLabel UW/Reg DNaseI HSs GM06990 (DNase Array)
+    track encodeRegulomeDnaseGM06990Sites
+    subTrack encodeRegulomeDnaseArray
+    shortLabel DnaseI HSs 
+    longLabel UW/Reg DNaseI HSs in GM06990 Cells (DNase Array)
     noInherit on
-    type bed 4
+    useScore 1
+    type bed5FloatScore
     priority 2
 
 track encodeNhgriDnaseHsChipRaw
