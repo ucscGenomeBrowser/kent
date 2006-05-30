@@ -1,5 +1,6 @@
 /* hgCustom - Custom track management CGI. */
 #include "common.h"
+#include "obscure.h"
 #include "linefile.h"
 #include "hash.h"
 #include "cart.h"
@@ -13,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.8 2006/05/24 23:55:05 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.9 2006/05/30 04:19:28 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -40,6 +41,7 @@ char *excludeVars[] = {"Submit", "submit", "SubmitFile", hgCtDoDelete, NULL};
 char *database;
 char *organism;
 struct customTrack *ctList = NULL;
+struct hash *ctHash;
 struct slName *browserLines = NULL;
 char *ctFileName;
 
@@ -115,11 +117,15 @@ cgiTableRowEnd();
 /* row for HTML file upload */
 cgiSimpleTableRowStart();
 
-cgiTableField("&nbsp;Optional description file (HTML):");
+cgiTableField("&nbsp;Optional <A TARGET=_BLANK HREF=\"/ENCODE/description.txt\">description file</A> (HTML):");
 
 cgiSimpleTableFieldStart();
 cgiMakeFileEntry(hgCtHtmlFile);
 cgiTableFieldEnd();
+/*cgiSimpleTableFieldStart();
+puts("<A TARGET=_BLANK HREF=\"/ENCODE/description.txt\">Template</A>");
+cgiTableFieldEnd();
+*/
 
 cgiTableRowEnd();
 
@@ -164,14 +170,41 @@ htmlIncludeWebFile("/goldenPath/help/loadingCustomTracks.html");
 webEndSection();
 }
 
+static struct customTrack *parseTracks(char *var)
+/* get tracks from CGI/cart variable and add to custom track list */
+{
+struct customTrack *addCts = NULL;
+struct customTrack *ct, *oldCt;
+struct errCatch *errCatch = errCatchNew();
+
+if (errCatchStart(errCatch))
+    {
+    addCts = customTracksParse(cartString(cart, var), FALSE, &browserLines);
+    for (ct = addCts; ct != NULL; ct = ct->next)
+        {
+        if ((oldCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
+            {
+            printf("<BR>&nbsp; &nbsp; <FONT COLOR='GREEN'>Replacing track: %s <BR>", ct->tdb->tableName);
+            slRemoveEl(&ctList, oldCt);
+            }
+        slAddTail(&ctList, ct);
+        }
+    cartRemovePrefix(cart, var);
+    }
+else {}
+errCatchEnd(errCatch);
+if (errCatch->gotError)
+    printf("<BR><FONT COLOR='RED'>%s</FONT>", errCatch->message->string);
+errCatchFree(&errCatch);
+return addCts;
+}
+
 void doMiddle(struct cart *theCart)
 /* create web page */
 {
 struct tempName tn;
-struct customTrack *addCts = NULL;
 struct customTrack *ct;
-struct errCatch *errCatch;
-struct hash *ctHash;
+struct customTrack *addCts = NULL;
 
 cart = theCart;
 /* needed ? */
@@ -188,38 +221,17 @@ ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
 //uglyf("<BR><FONT COLOR='GRAY'>Starting with %d cts<BR>", slCount(ctList));
 ctHash = hashNew(5);
 for (ct = ctList; ct != NULL; ct = ct->next)
+    {
+    uglyf("<BR>Existing ct: %s<BR>", ct->tdb->tableName);
     hashAdd(ctHash, ct->tdb->tableName, ct);
+    }
 
 /* process submit buttons */
 if (cartVarExists(cart,"SubmitFile"))
     {
     /* add from file */
     if (cartNonemptyString(cart, hgCtAddFile))
-        {
-        errCatch = errCatchNew();
-        if (errCatchStart(errCatch))
-            {
-            addCts = customTracksParse(cartString(cart, hgCtAddFile), 
-                            FALSE, &browserLines);
-            for (ct = addCts; ct != NULL; ct = ct->next)
-                {
-                struct customTrack *oldCt;
-                if ((oldCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
-                    {
-                    printf("<BR>&nbsp; &nbsp; <FONT COLOR='GREEN'>Replacing track: %s <BR>", ct->tdb->tableName);
-                    slRemoveEl(&ctList, oldCt);
-                    }
-                slAddTail(&ctList, ct);
-                }
-            cartRemovePrefix(cart, hgCtAddFile);
-            }
-
-        else {}
-        errCatchEnd(errCatch);
-        if (errCatch->gotError)
-            printf("<BR><FONT COLOR='RED'>%s</FONT>", errCatch->message->string);
-        errCatchFree(&errCatch);
-        }
+        addCts = parseTracks(hgCtAddFile);
     else
         {
         char *file = cartString(cart, hgCtAddFileName);
@@ -244,32 +256,7 @@ else if (cartVarExists(cart, hgCtDoDelete))
     }
 else if (cartNonemptyString(cart, hgCtAddText))
     {
-    /* add from textbox */
-    //uglyf("<BR><FONT COLOR='GREY'>textarea input<BR>");
-    //uglyf("<BR><FONT COLOR='GREY'>input=%s<BR></FONT>", cartString(cart, hgCtAddText));
-    errCatch = errCatchNew();
-    if (errCatchStart(errCatch))
-        {
-        addCts = customTracksParse(cartString(cart, hgCtAddText), 
-                        FALSE, &browserLines);
-        //uglyf("<BR>adding %d tracks<BR>", slCount(addCts));
-        for (ct = addCts; ct != NULL; ct = ct->next)
-            {
-            struct customTrack *oldCt;
-            if ((oldCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
-                {
-                printf("<BR><FONT COLOR='GREEN'>Replacing track: %s <BR>", ct->tdb->tableName);
-                slRemoveEl(&ctList, oldCt);
-                }
-            slAddTail(&ctList, ct);
-            }
-        cartRemove(cart, hgCtAddText);
-        }
-    else {}
-    errCatchEnd(errCatch);
-    if (errCatch->gotError)
-        printf("<BR><FONT COLOR='RED'>%s", errCatch->message->string);
-    errCatchFree(&errCatch);
+    addCts = parseTracks(hgCtAddText);
     }
 
 if (ctList != NULL)
@@ -287,8 +274,20 @@ if (ctList != NULL)
         cartSetString(cart, "ct", ctFileName);
         }
 
+    /* save HTML to a file */
+    if (addCts && cartNonemptyString(cart, hgCtHtmlFile))
+        {
+        char docFile[128];
+        char *f = cloneString(ctFileName);
+        char *html = cartString(cart, hgCtHtmlFile);
+        chopSuffix(f);
+        safef(docFile, sizeof docFile, "%s.%s.html", f, addCts->tdb->tableName);
+        writeGulp(docFile, html, strlen(html));
+        }
+
     /* save custom tracks to file */
     customTrackSave(ctList, ctFileName);
+
     //cartRemovePrefix(cart, "hgCt_");
     }
 else
