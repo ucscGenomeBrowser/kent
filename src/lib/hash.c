@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: hash.c,v 1.31 2006/03/08 23:09:23 hartera Exp $";
+static char const rcsid[] = "$Id: hash.c,v 1.32 2006/05/30 20:13:42 aamp Exp $";
 
 /*
  * Hash a string key.  This code is taken from Tcl interpreter. I was borrowed
@@ -279,6 +279,20 @@ else if (powerOfTwoSize < 16)
 hash->lm = lmInit(1<<memBlockPower);
 hash->mask = hash->size-1;
 hash->table = lmAlloc(hash->lm, sizeof(struct hashEl *) * hash->size);
+return hash;
+}
+
+struct hash *hashFromSlNameList(void *list)
+/* Create a hash out of a list of slNames or any kind of list where the */
+/* first field is the next pointer and the second is the name. */
+{
+struct hash *hash = NULL;
+struct slName *namedList = list, *item;
+if (!list)
+    return NULL;
+hash = newHash(0);
+for (item = namedList; item != NULL; item = item->next)
+    hashAdd(hash, item->name, item);
 return hash;
 }
 

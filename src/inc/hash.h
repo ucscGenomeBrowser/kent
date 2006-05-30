@@ -147,6 +147,10 @@ struct hash *newHash(int powerOfTwoSize);
 /* Returns new hash table. */
 #define hashNew(a) newHash(a)	/* Synonym */
 
+struct hash *hashFromSlNameList(void *list);
+/* Create a hash out of a list of slNames or any kind of list where the */
+/* first field is the next pointer and the second is the name. */
+
 void freeHash(struct hash **pHash);
 /* Free up hash table. */
 #define hashFree(a) freeHash(a)	/* Synonym */
