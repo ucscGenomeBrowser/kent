@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.94 2005/12/16 01:14:59 markd Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.95 2006/05/30 16:56:10 kent Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -409,7 +409,7 @@ struct dnaSeq *seqList = NULL, *seq;
 struct tempName pslTn, faTn;
 int maxSingleSize, maxTotalSize, maxSeqCount;
 int minSingleSize = 18;
-char *genome = cgiString("db");
+char *genome, *db;
 char *type = cgiString("type");
 char *seqLetters = cloneString(userSeq);
 struct serverTable *serve;
@@ -424,6 +424,7 @@ enum gfType qType, tType;
 struct hash *tFileCache = gfFileCacheNew();
 boolean feelingLucky = cgiBoolean("Lucky");
 
+getDbAndGenome(cart, &db, &genome);
 if(!feelingLucky)
     cartWebStart(cart, "%s BLAT Results", organism);
 /* Load user sequence and figure out if it is DNA or protein. */
@@ -498,7 +499,7 @@ faWriteAll(faTn.forCgi, seqList);
 makeTempName(&pslTn, "hgSs", ".pslx");
 f = mustOpen(pslTn.forCgi, "w");
 gvo = gfOutputPsl(0, qIsProt, FALSE, f, FALSE, TRUE);
-serve = findServer(genome, isTx);
+serve = findServer(db, isTx);
 /* Write header for extended (possibly protein) psl file. */
 if (isTx)
     {
