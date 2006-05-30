@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.57 2006/02/04 01:23:45 angie Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.58 2006/05/30 19:58:47 hiram Exp $";
 
 extern char *maxOutMenu[];
 
@@ -40,12 +40,16 @@ enum wigOutputType
 if (isCustomTrack(table)) \
     { \
     ct = lookupCt(table); \
+    isCustom = TRUE; \
     if (! ct->wiggle) \
 	errAbort("called to work on a custom track '%s' that isn't wiggle data ?", table); \
  \
-    safef(splitTableOrFileName,ArraySize(splitTableOrFileName), "%s", \
+    if (ct->dbTrack) \
+	safef(splitTableOrFileName,ArraySize(splitTableOrFileName), "%s", \
+		ct->dbTrackName); \
+    else \
+	safef(splitTableOrFileName,ArraySize(splitTableOrFileName), "%s", \
 		ct->wigFile); \
-    isCustom = TRUE; \
     hasConstraint = checkWigDataFilter("ct", table, &dataConstraint, &ll, &ul); \
     } \
 else \
@@ -289,10 +293,12 @@ unsigned long long valuesMatched = 0;
  *	table 2 since it was then inverted at that time so it is already
  *	"none" of itself.
  */
+
+
 /* If table2 is NULL, it means that the WIG_INIT macro recognized that we 
  * are working on table2 now, so we should not use intersectBedList 
  * (in fact we may be trying to compute it here). */
-if (anyIntersection() && (table2 != NULL))
+if ((table2 != NULL) && anyIntersection())
     {
     if (*intersectBedList)
 	{
@@ -489,7 +495,7 @@ static int wigOutRegion(char *table, struct sqlConnection *conn,
 {
 int linesOut = 0;
 char splitTableOrFileName[256];
-struct customTrack *ct;
+struct customTrack *ct = NULL;
 boolean isCustom = FALSE;
 boolean hasConstraint = FALSE;
 struct wiggleDataStream *wds = NULL;
@@ -513,7 +519,8 @@ switch (wigOutType)
 	break;
     };
 
-WIG_INIT;
+WIG_INIT;  /* ct, isCustom, hasConstraint, wds and table2 are set here */
+
 if (hasConstraint)
     freeMem(dataConstraint);	/* been cloned into wds */
 
@@ -526,19 +533,36 @@ if (table2)
 
 if (isCustom)
     {
-    valuesMatched = getWigglePossibleIntersection(wds, region, NULL, table2,
-	&intersectBedList, splitTableOrFileName, operations);
+    if (ct->dbTrack)
+	{
+	if (spanConstraint)
+	    wds->setSpanConstraint(wds,spanConstraint);
+	else
+	    {
+	    struct sqlConnection *trashConn = sqlCtConn(TRUE);
+	    struct trackDb *tdb = trackDbWithWiggleSettings(table);
+	    unsigned span = minSpan(trashConn, splitTableOrFileName,
+		region->chrom, region->start, region->end, cart, tdb);
+	    wds->setSpanConstraint(wds, span);
+	    }
+	valuesMatched = getWigglePossibleIntersection(wds, region,
+	    CUSTOM_TRASH, table2, &intersectBedList,
+		splitTableOrFileName, operations);
+	}
+    else
+	valuesMatched = getWigglePossibleIntersection(wds, region, NULL, table2,
+	    &intersectBedList, splitTableOrFileName, operations);
     }
 else
     {
-    struct trackDb *tdb = trackDbWithWiggleSettings(table);
-    boolean hasBin;
+    boolean hasBin = FALSE;
 
     if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
 	{
 	/* XXX TBD, watch for a span limit coming in as an SQL filter */
 	if (intersectBedList)
 	    {
+	    struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	    unsigned span;	
 	    span = minSpan(conn, splitTableOrFileName, region->chrom,
 		region->start, region->end, cart, tdb);
@@ -630,7 +654,9 @@ if (track == NULL)
 
 maxOut = wigMaxOutput();
 
+
 textOpen();
+
 
 if (track != NULL)
     {
@@ -791,7 +817,7 @@ struct bed *getWiggleAsBed(
 {
 struct bed *bedList=NULL;
 char splitTableOrFileName[256];
-struct customTrack *ct;
+struct customTrack *ct = NULL;
 boolean isCustom = FALSE;
 boolean hasConstraint = FALSE;
 struct wiggleDataStream *wds = NULL;
@@ -804,7 +830,8 @@ char *table2 = NULL;
 struct bed *intersectBedList = NULL;
 int maxOut;
 
-WIG_INIT;
+WIG_INIT;  /* ct, isCustom, hasConstraint, wds and table2 are set here */
+
 if (hasConstraint)
     freeMem(dataConstraint);	/* been cloned into wds */
 
@@ -820,12 +847,25 @@ if (table2)
 
 if (isCustom)
     {
-    valuesMatched = getWigglePossibleIntersection(wds, region, NULL, table2,
-	&intersectBedList, splitTableOrFileName, operations);
+    if (ct->dbTrack)
+	{
+	unsigned span = 0;
+	struct sqlConnection *trashConn = sqlCtConn(TRUE);
+	struct trackDb *tdb = trackDbWithWiggleSettings(table);
+	valuesMatched = getWigglePossibleIntersection(wds, region,
+	    CUSTOM_TRASH, table2, &intersectBedList,
+		splitTableOrFileName, operations);
+	span = minSpan(trashConn, splitTableOrFileName, region->chrom,
+	    region->start, region->end, cart, tdb);
+	wds->setSpanConstraint(wds, span);
+	sqlDisconnect(&trashConn);
+	}
+    else
+	valuesMatched = getWigglePossibleIntersection(wds, region, NULL, table2,
+	    &intersectBedList, splitTableOrFileName, operations);
     }
 else
     {
-    struct trackDb *tdb = trackDbWithWiggleSettings(table);
     boolean hasBin;
 
     if (conn == NULL)
@@ -833,6 +873,7 @@ else
 
     if (hFindSplitTable(region->chrom, table, splitTableOrFileName, &hasBin))
 	{
+	struct trackDb *tdb = trackDbWithWiggleSettings(table);
 	unsigned span = 0;
 
 	/* XXX TBD, watch for a span limit coming in as an SQL filter */
@@ -914,7 +955,7 @@ long long regionSize = 0;
 long long gapTotal = 0;
 long startTime = 0, wigFetchTime = 0;
 char splitTableOrFileName[256];
-struct customTrack *ct;
+struct customTrack *ct = NULL;
 boolean isCustom = FALSE;
 struct wiggleDataStream *wds = NULL;
 unsigned long long valuesMatched = 0;
@@ -954,7 +995,7 @@ if (anySubtrackMerge(database, curTable))
 
 fullGenome = fullGenomeRegion();
 
-WIG_INIT;
+WIG_INIT;  /* ct, isCustom, hasConstraint, wds and table2 are set here */
 
 for (region = regionList; region != NULL; region = region->next)
     {
@@ -990,15 +1031,30 @@ for (region = regionList; region != NULL; region = region->next)
      */
     if (isCustom)
 	{
-	valuesMatched = getWigglePossibleIntersection(wds, region, NULL,
-	    table2, &intersectBedList, splitTableOrFileName, operations);
+	if (ct->dbTrack)
+	    {
+	    struct sqlConnection *trashConn = sqlCtConn(TRUE);
+	    struct trackDb *tdb = trackDbWithWiggleSettings(table);
+	    span = minSpan(trashConn, splitTableOrFileName, region->chrom,
+		region->start, region->end, cart, tdb);
+	    wds->setSpanConstraint(wds, span);
+	    valuesMatched = getWigglePossibleIntersection(wds, region,
+		CUSTOM_TRASH, table2, &intersectBedList,
+		    splitTableOrFileName, operations);
+	    sqlDisconnect(&trashConn);
+	    }
+	else
+	    {
+	    valuesMatched = getWigglePossibleIntersection(wds, region, NULL,
+		table2, &intersectBedList, splitTableOrFileName, operations);
 
 	/*  XXX We need to properly get the smallest span for custom tracks */
-	/*	This is not necessarily the correct answer here	*/
-	if (wds->stats)
-	    span = wds->stats->span;
-	else
-	    span = 1;
+	    /*	This is not necessarily the correct answer here	*/
+	    if (wds->stats)
+		span = wds->stats->span;
+	    else
+		span = 1;
+	    }
 	}
     else
 	{
