@@ -8,7 +8,7 @@
 #include "hgColors.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: wigDataStream.c,v 1.75 2005/12/02 18:59:21 hiram Exp $";
+static char const rcsid[] = "$Id: wigDataStream.c,v 1.76 2006/05/30 19:59:26 hiram Exp $";
 
 /*	Routines that are not strictly part of the wigDataStream object,
 	but they are used to do things with the object.
@@ -766,6 +766,7 @@ static void setDataConstraint(struct wiggleDataStream *wds,
 {
 freeMem(wds->dataConstraint);	/*	potentially previously existing	*/
 wds->dataConstraint = cloneString(dataConstraint);
+
 if (differentWord(wds->dataConstraint, "in range"))
     {
     wds->limit_0 = lowerLimit;
@@ -927,6 +928,7 @@ for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
     struct wigAsciiData *wigAscii = NULL;
     struct asciiDatum *asciiOut = NULL;	/* to address data[] in wigAsciiData */
     unsigned chromPosition;
+    boolean range0TakesAll = FALSE;
 
     ++rowCount;
     wiggle = wiggleLoad(row);
@@ -1053,6 +1055,8 @@ for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
 		    wds->wigCmpSwitch);
 		break;
 	    }	/*	switch (wds->wigCmpSwitch)	*/
+	if (0.0 == wiggle->dataRange)
+	    range0TakesAll = takeIt;
 	if (takeIt)
 	    setCompareByte(wds, wiggle->lowerLimit, wiggle->dataRange);
 	else
@@ -1194,7 +1198,7 @@ for ( ; (!maxReached) && nextRow(wds, row, WIGGLE_NUM_COLS);
 			    wds->wigCmpSwitch);
 			break;
 		    }	/*	switch (wds->wigCmpSwitch)	*/
-		if (takeIt)
+		if (range0TakesAll || takeIt)
 		    {
 		    float value = 0.0;
 		    ++valuesMatched;
