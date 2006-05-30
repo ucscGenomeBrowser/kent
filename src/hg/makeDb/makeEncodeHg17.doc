@@ -69,15 +69,6 @@ exit
     # terms of use
     cp /usr/local/apache/htdocs/goldenPath/hg16/encode/alignments/README.txt .
 
-    # Shuffle-Lagan processed sequences, submitted 5/18/06
-    #  by George Asimenos, Stanford
-    ssh store03
-    cd /cluster/data/encode/MSA/SEP-05
-    mkdir shuffle
-    cd shuffle
-    wget http://ai.stanford.edu/~asimenos/rearranged_sep05.tar.bz2
-
-
 
 !##########################################################################
 ###########################################################################
@@ -1932,20 +1923,36 @@ cat > load.csh << 'EOF'
 ##########################################################################
 # UW/Regulome Chromatin Accessibility Profiling (CAP)
 #  Submitted 2006-1-17 by Scott Kuehn
-
+# update of data received on 2006-05-04 (sent to Kate) by Scott Kuehn
+# Not called CAP anymore, now called DNase array for DNaseI 
+# so track is: UW/Regulome DNase I Array - Regulome DNase I 
+# sensitivity/hypersensitivity. Date is for lymphoblastoid cells (GM06990).
+# Update done 2006-05-19 - 2006-05-23 (hartera)
     cd /cluster/data/encode/Regulome
-    mkdir -p 2006-01-17/lab
-    cd 2006-01-17/lab
+    mkdir -p 2006-05-04/lab
+    cd 2006-05-04
     awk '{printf("%s\t%s\t%s\t%.3f\n", $1, $2, $3, $5)}' \
-                lab/Encode.hs-baseline.hg17.bed | \
+                lab/Encode.DNase-Array-GM06990.Probes.hg17.bed | \
         sort -k1,1 -k2,2n  | \
         /cluster/data/encode/bin/scripts/trimOverlap.pl > sens.bed
-    hgLoadBed -strict -bedGraph=4 hg17 encodeRegulomeCapSensGM06990 sens.bed
+    hgLoadBed -strict -bedGraph=4 hg17 encodeRegulomeDnaseGM06990Sens sens.bed
 
-    sort -k1,1 -k2,2n lab/Encode.dhs.hg17.bed | \
-        hgLoadBed -strict hg17 encodeRegulomeCapSitesGM06990 stdin
-    
-    
+    # the Encode.DNase-Array-GM06990.DHSs.hg17.bed file has a float score
+    # use the encodeRegulomeDnaseSitesSKNSH.sql renamed as sites.sql which 
+    # has an int and a float score field
+    perl -pi.bak -e 's/SitesSKNSH/GM06990Sites/' sites.sql
+    rm *.bak
+    # scale scores to 0-1000. use linear transform.
+    awk '{printf "%s\t%d\t%d\t%s\t%d\t%s\n", $1,$2,$3,$4,($5 * 105),$5}' \
+        lab/Encode.DNase-Array-GM06990.DHSs.hg17.bed \
+        | sort -k1,1 -k2,2n > linearScaledSites.bed
+    hgLoadBed -sqlTable=sites.sql hg17 encodeRegulomeDnaseGM06990Sites \
+        linearScaledSites.bed
+    # authors provided track-description.html
+    # Add this to trackDb/human/hg17 as encodeRegulomeDnaseArray.html
+    # trackDb entry - track is renamed as encodeRegulomeDnaseArray
+    # Previously track was called encodeRegulomeCap.
+
 ##########################################################################
 # SANGER CHIP/CHIP  (2006-03-16 kate)
 #  5 histone mods in HFL cells, to be added to existing track
