@@ -1963,8 +1963,8 @@ dataVersion ENCODE Oct2005 Freeze
 
 track encodeRegulomeDnaseArray
 compositeTrack on
-shortLabel UW/Reg DNase/Array
-longLabel ENCODE UW/Regulome DNase I Array - Regulome DNase I sensitivity/hypersensitivity in GM06990 Cells
+shortLabel UW DNase/Array GM06690
+longLabel ENCODE UW DNase/Array GM06690 - DNase I sensitivity/hypersensitivity in GM06990 Cells
 group encodeChrom
 priority 66.5
 type bedGraph 4
