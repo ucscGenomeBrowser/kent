@@ -11,7 +11,8 @@
 
 void genericWiggleClick(struct sqlConnection *conn, struct trackDb *tdb, 
 	char *item, int start)
-/* Display details for Wiggle data tracks.   conn is NULL for custom tracks */
+/* Display details for Wiggle data tracks.
+ *	conn may be NULL for custom tracks when from file */
 {
 char *chrom = cartString(cart, "c");
 char table[64];
