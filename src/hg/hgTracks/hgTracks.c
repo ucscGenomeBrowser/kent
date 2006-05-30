@@ -102,10 +102,11 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1113 2006/05/26 22:24:40 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1114 2006/05/30 23:51:25 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
+static long enteredMainTime = 0;	/* time at beginning of main()	*/
 boolean isPrivateHost;		/* True if we're on genome-test. */
 char *protDbName;               /* Name of proteome database for this genome. */
 
@@ -12444,15 +12445,21 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 
 int main(int argc, char *argv[])
 {
+enteredMainTime = clock1000();
+uglyTime(NULL);
+isPrivateHost = hIsPrivateHost();
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which 
  * somehow can't be moved effectively into doMiddle. */
-uglyTime(NULL);
-isPrivateHost = hIsPrivateHost();
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
 htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"/style/HGStyle.css\">"); 
 cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, NULL);
+if (measureTiming)
+    {
+    fprintf(stdout, "Overall total time: %ld millis<BR>\n",
+	clock1000() - enteredMainTime);
+    }
 return 0;
 }
