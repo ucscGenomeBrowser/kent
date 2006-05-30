@@ -394,7 +394,7 @@ noInherit on
     subTrack transMap
     shortLabel TransMapRefGene
     longLabel TransMap RefSeq Genes
-    color 12,12,120
+    color 34,139,34
     priority 1
     noInherit on
     type genePred
