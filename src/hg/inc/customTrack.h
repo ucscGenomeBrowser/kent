@@ -24,7 +24,7 @@ struct customTrack
     boolean fromPsl;		/* Track was derived from psl file. */
     boolean wiggle;		/* This is a wiggle track */
     boolean dbTrack;		/* This track is in the trash database */
-    char *dbTrackName;		/* name of table in trash database */
+    char *dbTableName;		/* name of table in trash database */
     char *dbTrackType;		/* type of data in this db table */
     boolean dbDataLoad;		/* FALSE == failed loading */
     char *wigFile;		/* name of .wig file in trash */
@@ -77,8 +77,10 @@ boolean customTrackTest();
 #define CUSTOM_TRASH	"customTrash"
 /*	custom tracks database name	*/
 
-boolean ctDbAvailable();
-/*	determine if custom tracks database is available	*/
+boolean ctDbAvailable(char *tableName);
+/*	determine if custom tracks database is available
+ *	and if tableName non-NULL, verify table exists
+ */
 
 void ctAddToSettings(struct trackDb *tdb, char *format, ...);
 /*	add a variable to tdb->settings string	*/
