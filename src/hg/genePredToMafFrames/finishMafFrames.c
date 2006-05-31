@@ -65,13 +65,24 @@ else
 }
 
 static void joinFrames(struct exonFrames *ef0, struct exonFrames *ef1) 
-/* join if exonFrames objects that are adjacent */
+/* join if exonFrames objects that are adjacent, keeping ef0 */
 {
-ef0->mf.nextFramePos = ef1->mf.nextFramePos;
 if (ef0->mf.strand[0] == '+')
+    {
+    ef0->srcEnd = ef1->srcEnd;
     ef0->mf.chromEnd = ef1->mf.chromEnd;
+    }
 else
+    {
+    ef0->srcStart = ef1->srcStart;
     ef0->mf.chromStart = ef1->mf.chromStart;
+    }
+ef0->cdsEnd = ef1->cdsEnd;
+ef0->mf.nextFramePos = ef1->mf.nextFramePos;
+
+assert(ef0->srcStart < ef0->srcEnd);
+assert(ef0->cdsStart < ef0->cdsEnd);
+assert(ef0->mf.chromStart < ef0->mf.chromEnd);
 }
 
 static void joinExonFrames(struct cdsExon *exon) 
@@ -99,9 +110,10 @@ exon->frames = frames;
 static struct exonFrames *linkExonFrames(struct exonFrames *prevEf, struct cdsExon *exon)
 /* link split frames for an exon, if needed.  Assumes this is called in
  * transcription order, so preceeding exon frames for this gene have been
- * linked. Return new prefEf. */
+ * linked. Return new prevEf. */
 {
 struct exonFrames *ef;
+       
 for (ef = exon->frames; ef != NULL; ef = ef->next)
     {
     if ((prevEf != NULL) && isSplitCodon(prevEf, ef))
@@ -119,10 +131,9 @@ struct exonFrames *prevEf = NULL;
 geneSortFramesTargetOff(gene);
 
 for (exon = gene->exons; exon != NULL; exon = exon->next)
-    {
     joinExonFrames(exon);
+for (exon = gene->exons; exon != NULL; exon = exon->next)
     prevEf = linkExonFrames(prevEf, exon);
-    }
 }
 
 void finishMafFrames(struct geneBins *genes)
