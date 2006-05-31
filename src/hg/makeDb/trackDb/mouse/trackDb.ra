@@ -499,10 +499,10 @@ type netAlign rheMac1 chainRheMac1
 otherDb rheMac1
 
 track chainDanRer3
-shortLabel $o_Organism Chain
+shortLabel $o_db Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
 group compGeno
-priority 159.1
+priority 159.3
 visibility hide
 color 100,50,0
 altColor 255,240,200
@@ -513,10 +513,10 @@ type chain danRer3
 otherDb danRer3
                                                                                 
 track netDanRer3
-shortLabel $o_Organism Net
+shortLabel $o_db Net
 longLabel $o_Organism ($o_date/$o_db) Alignment Net
 group compGeno
-priority 159.2
+priority 159.4
 visibility hide
 spectrum on
 type netAlign danRer3 chainDanRer3
