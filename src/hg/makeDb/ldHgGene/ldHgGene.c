@@ -12,7 +12,7 @@
 #include "genePred.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: ldHgGene.c,v 1.34 2006/03/28 01:59:04 markd Exp $";
+static char const rcsid[] = "$Id: ldHgGene.c,v 1.35 2006/05/31 19:12:18 angie Exp $";
 
 char *exonType = "exon";	/* Type field that signifies exons. */
 boolean requireCDS = FALSE;     /* should genes with CDS be dropped */
@@ -138,8 +138,6 @@ boolean nonCoding = optionExists("noncoding") || optionExists("nonCoding");
 boolean isGtf = optionExists("gtf");
 
 boolean isSoftberry = sameWord("softberryGene", table);
-boolean isEnsembl = sameWord("ensGene", table);
-boolean isSanger22 = sameWord("sanger22", table);
 int nextId = 1;
 
 for (i=0; i<gtfCount; ++i)
