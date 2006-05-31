@@ -3,7 +3,7 @@
 
 #include "variation.h"
 
-static char const rcsid[] = "$Id: variation.c,v 1.82 2006/05/18 18:53:25 daryl Exp $";
+static char const rcsid[] = "$Id: variation.c,v 1.83 2006/05/31 19:25:16 heather Exp $";
 
 void filterSnpMapItems(struct track *tg, boolean (*filter)
 		       (struct track *tg, void *item))
@@ -1453,71 +1453,130 @@ tg->mapsSelf       = TRUE;
 tg->canPack        = FALSE;
 }
 
-
-
-void cnpLoadItems(struct track *tg)
+void cnpSharpLoadItems(struct track *tg)
 {
-struct track *subtrack = NULL;
-
-for (subtrack=tg->subtracks;subtrack!=NULL;subtrack=subtrack->next)
-    {
-    if(sameString(subtrack->mapName,"cnpIafrate"))
-	bedLoadItem(subtrack, "cnpIafrate", (ItemLoader)cnpIafrateLoad);
-    else if(sameString(subtrack->mapName,"cnpSebat"))
-	bedLoadItem(subtrack, "cnpSebat", (ItemLoader)cnpSebatLoad);
-    else if(sameString(subtrack->mapName,"cnpSharp"))
-	bedLoadItem(subtrack, "cnpSharp", (ItemLoader)cnpSharpLoad);
-    else if(sameString(subtrack->mapName,"cnpFosmid"))
-	bedLoadItem(subtrack, "cnpFosmid", (ItemLoader)bedLoad);
-    }
+bedLoadItem(tg, "cnpSharp", (ItemLoader)cnpSharpLoad);
 }
 
-void cnpFreeItems(struct track *tg)
+void cnpIafrateLoadItems(struct track *tg)
 {
-struct track *subtrack = NULL;
-
-for (subtrack=tg->subtracks;subtrack!=NULL;subtrack=subtrack->next)
-    if(sameString(tg->mapName,"cnpIafrate"))
-	cnpIafrateFreeList((struct cnpIafrate**)&tg->items);
-    else if(sameString(tg->mapName,"cnpSebat"))
-	cnpSebatFreeList((struct cnpSebat**)&tg->items);
-    else if(sameString(tg->mapName,"cnpSharp"))
-	cnpSharpFreeList((struct cnpSharp**)&tg->items);
-    else if(sameString(subtrack->mapName,"cnpFosmid"))
-	bedFreeList((struct bed**)&tg->items);
+bedLoadItem(tg, "cnpIafrate", (ItemLoader)cnpIafrateLoad);
 }
 
-Color cnpItemColor(struct track *tg, void *item, struct vGfx *vg)
+void cnpSebatLoadItems(struct track *tg)
 {
-struct cnpIafrate *cnpIa = item;
-struct cnpSebat   *cnpSe = item;
-struct cnpSharp   *cnpSh = item;
-struct bed        *cnpFo = item;
-char *type = NULL;
+bedLoadItem(tg, "cnpSebat", (ItemLoader)cnpSebatLoad);
+}
 
-if(sameString(tg->mapName,"cnpIafrate"))
-    type = cnpIa->variationType;
-else if(sameString(tg->mapName,"cnpSebat"))
-    type = cnpSe->name;
-else if(sameString(tg->mapName,"cnpSharp"))
-    type = cnpSh->variationType;
-else if(sameString(tg->mapName,"cnpFosmid"))
-    type = cnpFo->name;
+void cnpFosmidLoadItems(struct track *tg)
+{
+bedLoadItem(tg, "cnpFosmid", (ItemLoader)bedLoad);
+}
 
-if (sameString(type, "Gain")||type[0]=='I')
+void cnpSharpFreeItems(struct track *tg)
+{
+cnpSharpFreeList((struct cnpSharp**)&tg->items);
+}
+
+void cnpIafrateFreeItems(struct track *tg)
+{
+cnpIafrateFreeList((struct cnpIafrate**)&tg->items);
+}
+
+void cnpSebatFreeItems(struct track *tg)
+{
+cnpSebatFreeList((struct cnpSebat**)&tg->items);
+}
+
+void cnpFosmidFreeItems(struct track *tg)
+{
+bedFreeList((struct bed**)&tg->items);
+}
+
+Color cnpSharpItemColor(struct track *tg, void *item, struct vGfx *vg)
+{
+struct cnpSharp *cnpSh = item;
+
+if (sameString(cnpSh->variationType, "Gain"))
     return MG_GREEN;
-if (sameString(type, "Loss")||type[0]=='D')
+if (sameString(cnpSh->variationType, "Loss"))
     return MG_RED;
-if (sameString(type, "Gain and Loss"))
+if (sameString(cnpSh->variationType, "Gain and Loss"))
     return MG_BLUE;
 return MG_BLACK;
 }
 
-void cnpMethods(struct track *tg)
+Color cnpIafrateItemColor(struct track *tg, void *item, struct vGfx *vg)
 {
-tg->loadItems = cnpLoadItems;
-tg->freeItems = cnpFreeItems;
-tg->itemColor = cnpItemColor;
-tg->itemNameColor = cnpItemColor;
+struct cnpIafrate *cnpIa = item;
+
+if (sameString(cnpIa->variationType, "Gain"))
+    return MG_GREEN;
+if (sameString(cnpIa->variationType, "Loss"))
+    return MG_RED;
+if (sameString(cnpIa->variationType, "Gain and Loss"))
+    return MG_BLUE;
+return MG_BLACK;
+}
+
+Color cnpSebatItemColor(struct track *tg, void *item, struct vGfx *vg)
+{
+struct cnpSebat *cnpSe = item;
+
+if (sameString(cnpSe->name, "Gain"))
+    return MG_GREEN;
+if (sameString(cnpSe->name, "Loss"))
+    return MG_RED;
+if (sameString(cnpSe->name, "Gain and Loss"))
+    return MG_BLUE;
+return MG_BLACK;
+}
+
+Color cnpFosmidItemColor(struct track *tg, void *item, struct vGfx *vg)
+{
+struct bed *cnpFo = item;
+
+if (cnpFo->name[0] == 'I')
+    {
+    return MG_GREEN;
+    }
+if (cnpFo->name[0] == 'D')
+    {
+    return MG_RED;
+    }
+return MG_BLACK;
+}
+
+
+void cnpSharpMethods(struct track *tg)
+{
+tg->loadItems = cnpSharpLoadItems;
+tg->freeItems = cnpSharpFreeItems;
+tg->itemColor = cnpSharpItemColor;
+tg->itemNameColor = cnpSharpItemColor;
+}
+
+void cnpIafrateMethods(struct track *tg)
+{
+tg->loadItems = cnpIafrateLoadItems;
+tg->freeItems = cnpIafrateFreeItems;
+tg->itemColor = cnpIafrateItemColor;
+tg->itemNameColor = cnpIafrateItemColor;
+}
+
+void cnpSebatMethods(struct track *tg)
+{
+tg->loadItems = cnpSebatLoadItems;
+tg->freeItems = cnpSebatFreeItems;
+tg->itemColor = cnpSebatItemColor;
+tg->itemNameColor = cnpSebatItemColor;
+}
+
+void cnpFosmidMethods(struct track *tg)
+{
+tg->loadItems = cnpFosmidLoadItems;
+tg->freeItems = cnpFosmidFreeItems;
+tg->itemColor = cnpFosmidItemColor;
+tg->itemNameColor = cnpFosmidItemColor;
 }
 

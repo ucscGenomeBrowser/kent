@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1114 2006/05/30 23:51:25 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1115 2006/05/31 19:25:16 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11120,10 +11120,10 @@ registerTrackHandler("snpMap", snpMapMethods);
 registerTrackHandler("snp", snpMethods);
 registerTrackHandler("snp125", snp125Methods);
 registerTrackHandler("ld", ldMethods);
-registerTrackHandler("cnp", cnpMethods);
-//registerTrackHandler("cnpIafrate", cnpIafrateMethods);
-//registerTrackHandler("cnpSebat", cnpSebatMethods);
-//registerTrackHandler("cnpSharp", cnpSharpMethods);
+registerTrackHandler("cnpIafrate", cnpIafrateMethods);
+registerTrackHandler("cnpSebat", cnpSebatMethods);
+registerTrackHandler("cnpSharp", cnpSharpMethods);
+registerTrackHandler("cnpFosmid", cnpFosmidMethods);
 registerTrackHandler("hapmapLd", ldMethods);
 registerTrackHandler("rertyHumanDiversityLd", ldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
