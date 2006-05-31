@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.93 2006/05/31 23:32:02 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.94 2006/05/31 23:51:46 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1618,20 +1618,23 @@ char *line;
 lf = lineFileOnString("settings", TRUE, settings);
 while (lineFileNext(lf, &line, NULL))
     {
-    char *blank;
-    blank = strchr(line, ' ');
-    if (blank != (char *)NULL)
+    if ((char)NULL != line[0])
 	{
-	int nameLen = blank - line;
-	char name[256];
+	char *blank;
+	blank = strchr(line, ' ');
+	if (blank != (char *)NULL)
+	    {
+	    int nameLen = blank - line;
+	    char name[256];
 
-	nameLen = (nameLen < 256) ? nameLen : 255;
-	strncpy(name, line, nameLen);
-	name[nameLen] = (char)NULL;
-	fprintf(f, "\t%s='%s'", name, blank+1);
+	    nameLen = (nameLen < 256) ? nameLen : 255;
+	    strncpy(name, line, nameLen);
+	    name[nameLen] = (char)NULL;
+	    fprintf(f, "\t%s='%s'", name, blank+1);
+	    }
+	else
+	    fprintf(f, "\t%s", line);
 	}
-    else
-	fprintf(f, "\t%s", line);
     }
 lineFileClose(&lf);
 }
