@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.89 2006/05/30 23:49:42 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.90 2006/05/31 20:39:51 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -208,6 +208,8 @@ putenv(envPass);
 
 /*	the different loaders require different pipeline commands */
 if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
+	|| startsWith("gff", track->dbTrackType)
+	|| startsWith("gtf", track->dbTrackType)
 	|| startsWith("psl", track->dbTrackType) || track->fromPsl)
     {
     /* running the single command:
