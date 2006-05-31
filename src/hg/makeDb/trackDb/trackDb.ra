@@ -2871,6 +2871,26 @@ searchTable blastHg17KG
 searchMethod prefix
 searchType psl
 
+searchName blastHg18KGSprot
+searchTable blastHg18KG
+searchMethod prefix
+searchType psl
+xrefTable hg18.blastKGRef04
+xrefQuery select acc,extra1 from %s where extra1 like '%s%%'
+searchPriority 25
+
+searchName blastHg18KGGene
+searchTable blastHg18KG
+searchMethod prefix
+searchType psl
+xrefTable hg18.blastKGRef04
+xrefQuery select acc,geneId from %s where geneId like '%s%%'
+searchPriority 25
+
+searchTable blastHg18KG
+searchMethod prefix
+searchType psl
+
 searchName blastDm2FBGene
 searchTable blastDm2FB
 searchMethod prefix
