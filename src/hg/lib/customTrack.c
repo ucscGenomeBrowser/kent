@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.90 2006/05/31 20:39:51 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.91 2006/05/31 21:48:28 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -141,11 +141,14 @@ for (i = 0; i < wigOptCount; ++i)
 tdb->settings = dyStringCannibalize(&wigSettings);
 }
 
-boolean ctDbAvailable()
-/*	determine if custom tracks database is available	*/
+boolean ctDbAvailable(char *tableName)
+/*	determine if custom tracks database is available
+ *	and if tableName non-NULL, verify table exists
+ */
 {
+static boolean dbExists = FALSE;
 static boolean checked = FALSE;
-static boolean status = FALSE;
+boolean status = dbExists;
 
 if (! checked)
     {
@@ -157,9 +160,21 @@ if (! checked)
     else
 	{
 	status = TRUE;
+	dbExists = TRUE;
+	if (tableName)
+	    {
+	    status = sqlTableExists(conn, tableName);
+	    }
 	sqlDisconnect(&conn);
 	}
     }
+else if (dbExists && ((char *)NULL != tableName))
+    {
+    struct sqlConnection *conn = sqlCtConn(TRUE);
+    status = sqlTableExists(conn, tableName);
+    sqlDisconnect(&conn);
+    }
+
 return(status);
 }
 
@@ -361,19 +376,20 @@ if ((val = hashFindVal(hash, "name")) != NULL)
  *	When the DB isn't available, the fall back position is normal
  *	file processing.
  */
-if (((val = hashFindVal(hash, "db")) != NULL) && (ctDbAvailable()))
+if (((val = hashFindVal(hash, "db")) != NULL) && (ctDbAvailable((char *)NULL)))
     {
-    char *dbStrings;
     track->dbTrackType = cloneString(val);
-    /*	verify known track type, this fails and exits when no good	*/
-    trackLoader(track->dbTrackType);
 
     /*	is this data already in the database ?	*/
-    if ((dbStrings = hashFindVal(hash, "dbTrackName")) == NULL)
+    if ((val = hashFindVal(hash, "dbTrackName")) == NULL)
 	{
 	char count[16];
 	char *baseName;
 	static struct tempName tn;
+
+	/*	verify known track type, this fails and exits when no good */
+	trackLoader(track->dbTrackType);
+
 	/* the makeTempName() function is getting confused
 	 * because we aren't actually making any trash files,
 	 *	so, help it out by adding a count to our names.
@@ -393,17 +409,23 @@ if (((val = hashFindVal(hash, "db")) != NULL) && (ctDbAvailable()))
 	}
     else
 	{
-	track->dbTrackName = cloneString(dbStrings);
-	track->dbDataLoad = TRUE;	/* already in DB */
-	if ((val = hashFindVal(hash, "fieldCount")) != NULL)
-	    track->fieldCount = sqlSigned(val);
-	else
+	/*	verify database table has not disappeared on us	*/
+	if (ctDbAvailable(val))
 	    {
-	    if ((val = hashFindVal(hash, "type")) == NULL)
-errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
-	    if (differentString(val,"wiggle_0"))
-errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
+	    track->dbTrackName = cloneString(val);
+	    track->dbDataLoad = TRUE;	/* already in DB */
+	    if ((val = hashFindVal(hash, "fieldCount")) != NULL)
+		track->fieldCount = sqlSigned(val);
+	    else
+		{
+		if ((val = hashFindVal(hash, "type")) == NULL)
+    errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
+		if (differentString(val,"wiggle_0"))
+    errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
+		}
 	    }
+	else
+	    return ((struct customTrack *)NULL);	/* !! EXPIRED TRACK */
 	}
     track->dbTrack = TRUE;
     parseDbSettings(tdb, hash);	/* adds our new values to settings */
@@ -433,6 +455,9 @@ if (((val = hashFindVal(hash, "type")) != NULL) && (sameString(val,"wiggle_0")))
 	/*	the wib file may have expired	*/
 	if (!fileExists(track->wibFile))
 	    return ((struct customTrack *)NULL);	/* !! EXPIRED TRACK */
+	/* there is no wigAscii since it was used once only when loading
+	 * happened the first time around.
+	 */
 	track->wigAscii = (char *) NULL;
 	}
 
