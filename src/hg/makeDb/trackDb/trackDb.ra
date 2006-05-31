@@ -2249,8 +2249,8 @@ pred hg17.blastKGPep01
 blastRef hg17.blastKGRef01
 
 track blastHg18KG
-shortLabel Hg18  Proteins
-longLabel Hg18 Proteins
+shortLabel Human Proteins
+longLabel Human Proteins
 group compGeno
 priority 142.1
 visibility pack
