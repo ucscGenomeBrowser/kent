@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.91 2006/05/31 21:48:28 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.92 2006/05/31 22:18:48 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -178,6 +178,25 @@ else if (dbExists && ((char *)NULL != tableName))
 return(status);
 }
 
+static boolean ctUseAll()
+/* check if hg.conf says to try DB loaders for all incoming data tracks */
+{
+static boolean checked = FALSE;
+static boolean enabled = FALSE;
+
+if (!checked)
+    {
+    if (ctDbAvailable((char *)NULL))	/* must have DB for this to work */
+	{
+	char *val = cfgOptionDefault("customTracks.useAll", NULL);
+	if (val != NULL)
+	    enabled = sameString(val, "yes");
+	}
+    checked = TRUE;
+    }
+return enabled;
+}
+
 static char *trackLoader(char *type)
 /*	return string that is the loader command for this type of track
  *	NULL return means unrecognized type
@@ -238,7 +257,7 @@ if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
     cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "%s", db);
     cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "%s", track->dbTrackName);
+    dyStringPrintf(tmpDy, "%s", track->dbTableName);
     cmd1[5] = dyStringCannibalize(&tmpDy);
     /* the "/dev/null" file isn't actually used for anything, but it is used
      * in the pipeLineOpen to properly get a pipe started that isn't simply
@@ -272,7 +291,7 @@ else if (startsWith("wiggle_0", track->dbTrackType))
     cmd2[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "%s", db);
     cmd2[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "%s", track->dbTrackName);
+    dyStringPrintf(tmpDy, "%s", track->dbTableName);
     cmd2[7] = dyStringCannibalize(&tmpDy);
 
     dbDataPipe = pipelineOpen(cmds, pipelineWrite, "/dev/null");
@@ -305,7 +324,7 @@ tdb->settings = dyStringCannibalize(&settings);
 static char *dbOptions[] =
 {
     "db",
-    "dbTrackName",
+    "dbTableName",
     "fieldCount",
 };
 static int dbOptCount = sizeof(dbOptions) / sizeof(char *);
@@ -339,6 +358,34 @@ for (i = 0; i < dbOptCount; ++i)
 tdb->settings = dyStringCannibalize(&dbSettings);
 }
 
+static void establishDbNames(struct customTrack *track)
+/*	create dbTableName	*/
+{
+char count[16];
+char *baseName;
+static struct tempName tn;
+static int trackCount = 0;
+
+/*	verify known track type, this fails and exits when no good */
+trackLoader(track->dbTrackType);
+
+/* the makeTempName() function is getting confused
+ * because we aren't actually making any trash files,
+ *	so, help it out by adding a count to our names.
+ */
+safef(count, sizeof(count), "ct_%d", trackCount++);
+makeTempName(&tn, count, ".dbData.gz");
+track->dbTableName = cloneString(tn.forCgi);
+track->dbDataLoad = FALSE;	/*	not yet	*/
+/*	SQL table names can not have - signs, change to _ */
+subChar(track->dbTableName, '-', '_');
+stripString(track->dbTableName, ".dbData.gz");
+/*	remove the ../trash/ prefix from the file name	*/
+baseName = rStringIn("/",track->dbTableName);
+if (baseName)
+    track->dbTableName = baseName + 1;
+}
+
 char *customTrackTableFromLabel(char *label)
 /* Convert custom track short label to table name. */
 {
@@ -360,7 +407,6 @@ struct customTrack *track;
 struct trackDb *tdb = tdbDefault();	/* begin with default track */
 struct hash *hash = hashVarLine(line, lineIx);
 char *val;
-static int trackCount = 0;
 
 AllocVar(track);
 track->tdb = tdb;
@@ -381,38 +427,17 @@ if (((val = hashFindVal(hash, "db")) != NULL) && (ctDbAvailable((char *)NULL)))
     track->dbTrackType = cloneString(val);
 
     /*	is this data already in the database ?	*/
-    if ((val = hashFindVal(hash, "dbTrackName")) == NULL)
+    if ((val = hashFindVal(hash, "dbTableName")) == NULL)
 	{
-	char count[16];
-	char *baseName;
-	static struct tempName tn;
-
-	/*	verify known track type, this fails and exits when no good */
-	trackLoader(track->dbTrackType);
-
-	/* the makeTempName() function is getting confused
-	 * because we aren't actually making any trash files,
-	 *	so, help it out by adding a count to our names.
-	 */
-	safef(count, sizeof(count), "ct_%d", trackCount++);
-	makeTempName(&tn, count, ".dbData.gz");
-	track->dbTrackName = cloneString(tn.forCgi);
-	track->dbDataLoad = FALSE;	/*	not yet	*/
-	/*	SQL table names can not have - signs, change to _ */
-	subChar(track->dbTrackName, '-', '_');
-	stripString(track->dbTrackName, ".dbData.gz");
-	/*	remove the ../trash/ prefix from the file name	*/
-	baseName = rStringIn("/",track->dbTrackName);
-	if (baseName)
-	    track->dbTrackName = baseName + 1;
-	hashAdd(hash, "dbTrackName", cloneString(track->dbTrackName));
+	establishDbNames(track);
+	hashAdd(hash, "dbTableName", cloneString(track->dbTableName));
 	}
     else
 	{
 	/*	verify database table has not disappeared on us	*/
 	if (ctDbAvailable(val))
 	    {
-	    track->dbTrackName = cloneString(val);
+	    track->dbTableName = cloneString(val);
 	    track->dbDataLoad = TRUE;	/* already in DB */
 	    if ((val = hashFindVal(hash, "fieldCount")) != NULL)
 		track->fieldCount = sqlSigned(val);
@@ -1721,7 +1746,7 @@ for (track = trackList; track != NULL; track = track->next)
 
 		    safef(query,sizeof(query),
 		     "select min(lowerLimit),max(lowerLimit+dataRange) from %s",
-			track->dbTrackName);
+			track->dbTableName);
 		    sr = sqlGetResult(conn, query);
 		    if ((row = sqlNextRow(sr)) != NULL);
 			{
@@ -1730,7 +1755,7 @@ for (track = trackList; track != NULL; track = track->next)
 			}
 		    sqlFreeResult(&sr);
 		    safef(query,sizeof(query),
-		     "select span from %s group by span", track->dbTrackName);
+		     "select span from %s group by span", track->dbTableName);
 		    sr = sqlGetResult(conn, query);
 		    if ((row = sqlNextRow(sr)) != NULL);
 			{
@@ -1766,6 +1791,14 @@ for (track = trackList; track != NULL; track = track->next)
 
     if (validTrack)
 	{
+	/*	if we are going to attempt DB loading at this late point in
+ 	 *	the process, we need to setup everything for it to use
+	 */
+	if (!track->dbTrack && ctUseAll())
+	    {
+	    establishDbNames(track);
+	    }
+
 	saveTdbLine(f, fileName, track->tdb);
 	if (!(track->wiggle || track->dbTrack))
 	    {
