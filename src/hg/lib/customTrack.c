@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.92 2006/05/31 22:18:48 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.93 2006/05/31 23:32:02 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -317,6 +317,7 @@ va_start(args, format);
 if (tdb->settings)
     dyStringPrintf(settings, "%s\n", tdb->settings);
 dyStringVaPrintf(settings, format, args);
+dyStringPrintf(settings, "\n");
 va_end(args);
 tdb->settings = dyStringCannibalize(&settings);
 }
@@ -1082,6 +1083,9 @@ for (track = trackList; track != NULL; track = track->next)
 static void finishDbPipeline(struct customTrack *track,
 	struct pipeline **dbDataPL, FILE *dbDataFH,
 	struct hash *chromHash)
+/*	finish off the pipeline write, verify it is OK, set
+ *	track->dbDataLoad with success status
+ */
 {
 struct bed *bed;
 int offset = track->offset;
@@ -1720,12 +1724,25 @@ FILE *f = mustOpen(fileName, "w");
 for (track = trackList; track != NULL; track = track->next)
     {
     boolean validTrack = TRUE;
+
+    /*	have we been requested to use DB for all incoming tracks ? */
+    if (!track->dbTrack && ctUseAll())
+	{
+	char trackType[64];
+	if (track->wiggle)
+	    safef(trackType, sizeof(trackType), "wiggle_0");
+	else
+	    safef(trackType, sizeof(trackType), "bed%d", track->fieldCount);
+	track->dbTrackType = cloneString(trackType);
+	ctAddToSettings(track->tdb, "db='%s'", track->dbTrackType);
+	}
+
     if (track->wiggle || track->dbTrack)
 	{
 	if (track->dbTrack && (!track->dbDataLoad))/* was loading successful ?	*/
 	    {
 	    validTrack = FALSE;	/*	failed	*/
-	    warn("track: %s failed database loading<BR>\n",track->tdb->shortLabel);
+	    warn("track: '%s' failed database loading<BR>\n",track->tdb->shortLabel);
 	    }
 	else
 	    {
@@ -1796,14 +1813,39 @@ for (track = trackList; track != NULL; track = track->next)
 	 */
 	if (!track->dbTrack && ctUseAll())
 	    {
-	    establishDbNames(track);
-	    }
+	    struct pipeline *dbDataPL = (struct pipeline *)NULL;
+	    FILE *dbDataFH = (FILE *)NULL;
 
-	saveTdbLine(f, fileName, track->tdb);
-	if (!(track->wiggle || track->dbTrack))
+	    establishDbNames(track);
+
+	    ctAddToSettings(track->tdb, "dbTableName %s", track->dbTableName);
+	    ctAddToSettings(track->tdb, "fieldCount %d", track->fieldCount);
+
+	    track->dbTrack = TRUE;
+	    /*	we need the maxChromName for index creation */
+	    track->maxChromName = hGetMinIndexLength();
+	    /*	open pipeline to loader	*/
+	    dbDataPL = pipeToLoader(track);
+	    dbDataFH = pipelineFile(dbDataPL);
+	    track->dbDataLoad = TRUE;	/* assumed true until failed */
+	    if (track->gffHelper)
+		errAbort("should not have a gffHelper here\n");
+	    finishDbPipeline(track, &dbDataPL, dbDataFH, NULL);
+	    if (!track->dbDataLoad)	/* was loading successful ?	*/
+		{
+		validTrack = FALSE;	/*	failed	*/
+		warn("track: '%s' failed database loading<BR>\n",
+			track->tdb->shortLabel);
+		}
+	    }
+	if (validTrack)
 	    {
-	    for (bed = track->bedList; bed != NULL; bed = bed->next)
-		 saveBedPart(f, bed, track->fieldCount);
+	    saveTdbLine(f, fileName, track->tdb);
+	    if (!(track->wiggle || track->dbTrack))
+		{
+		for (bed = track->bedList; bed != NULL; bed = bed->next)
+		     saveBedPart(f, bed, track->fieldCount);
+		}
 	    }
 	}
     }
