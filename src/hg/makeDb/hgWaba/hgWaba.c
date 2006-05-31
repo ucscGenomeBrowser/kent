@@ -4,7 +4,7 @@
 #include "xa.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: hgWaba.c,v 1.5 2003/07/09 18:48:26 kent Exp $";
+static char const rcsid[] = "$Id: hgWaba.c,v 1.6 2006/05/31 00:56:01 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -83,7 +83,6 @@ struct sqlConnection *conn = sqlConnect(database);
 FILE *fullTab, *chromTab;
 FILE *in;
 struct xaAli *xa, *xaList = NULL;
-char *line, *words[32];
 char fullTabName[512], chromTabName[512];
 char fullTable[128], chromTable[128];
 char *inFile;
