@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1022 2006/05/26 22:22:28 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1023 2006/05/31 22:18:00 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -15912,7 +15912,7 @@ else
 	int rcCount = 0;
 
 	safef(where, sizeof(where), "name = '%s'", itemName);
-	sr = hRangeQuery(conn, ct->dbTrackName, seqName, winStart, winEnd,
+	sr = hRangeQuery(conn, ct->dbTableName, seqName, winStart, winEnd,
                      where, &rowOffset);
 	while ((row = sqlNextRow(sr)) != NULL)
 	    {

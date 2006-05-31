@@ -42,7 +42,7 @@ if (startsWith("ct_", tdb->tableName))
         }
     if (ct->dbTrack)
 	{
-	safef(table,ArraySize(table), "%s", ct->dbTrackName);
+	safef(table,ArraySize(table), "%s", ct->dbTableName);
 	span = minSpan(conn, table, chrom, winStart, winEnd, cart, tdb);
 	}
     else

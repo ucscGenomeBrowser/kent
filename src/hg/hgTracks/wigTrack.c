@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.70 2006/05/26 22:24:07 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.71 2006/05/31 22:17:38 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -406,7 +406,7 @@ if (tg->customPt != (void *)NULL)
     hFreeConn(&conn);
     conn = sqlCtConn(TRUE);
     ct = tg->customPt;
-    dbTableName = ct->dbTrackName;
+    dbTableName = ct->dbTableName;
     tdb = ct->tdb;
     }
 else

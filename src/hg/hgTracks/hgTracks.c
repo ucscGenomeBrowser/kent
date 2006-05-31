@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1115 2006/05/31 19:25:16 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1116 2006/05/31 22:17:37 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -10511,7 +10511,7 @@ if (ct->dbTrack)
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
+    sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -10553,7 +10553,7 @@ if (ct->dbTrack)
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
+    sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -10608,7 +10608,7 @@ if (ct->dbTrack)
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
+    sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
@@ -10655,7 +10655,7 @@ if (ct->dbTrack)
     struct sqlConnection *conn = sqlCtConn(TRUE);
     struct sqlResult *sr = NULL;
 
-    sr = hRangeQuery(conn, ct->dbTrackName, chromName, winStart, winEnd,
+    sr = hRangeQuery(conn, ct->dbTableName, chromName, winStart, winEnd,
 		     NULL, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	{
