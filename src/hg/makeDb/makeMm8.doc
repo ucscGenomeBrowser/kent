@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.46 2006/05/25 17:53:23 angie Exp $"
+#	"$Id: makeMm8.doc,v 1.47 2006/05/31 21:18:32 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5689,5 +5689,18 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
       >& do.log & tail -f do.log
     ln -s blastz.galGal3.2006-05-23 /cluster/data/mm8/bed/blastz.galGal3
 
-
 #########################################################################
+# ADD LINK TO GENENETWORK (DONE. 5/31/06 Fan).
+
+# Copy geneNetwork ID list from mm7
+
+    ssh hgwdev
+    mkdir -p /cluster/data/mm8/bed/geneNetwork
+    cd /cluster/data/mm8/bed/geneNetwork
+
+    hgsql mm7 -N -e 'select * from geneNetworkId' > geneNetworkId.tab
+
+    hgsql mm8 -e 'drop table geneNetworkId'
+    hgsql mm8 < ~/src/hg/lib/geneNetworkId.sql
+    hgsql mm8 -e \
+    'load data local infile "geneNetworkId.tab" into table geneNetworkId'
