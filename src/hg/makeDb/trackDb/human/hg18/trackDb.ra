@@ -24,7 +24,7 @@ priority 40
 visibility hide
 color 150,0,0
 type genePred ensPep
-url http://apr2006.archive.ensembl.org/perl/transview?transcript=$$
+url http://apr2006.archive.ensembl.org/Homo_sapiens/transview?transcript=$$
 
 track multiz17way
 shortLabel Conservation
