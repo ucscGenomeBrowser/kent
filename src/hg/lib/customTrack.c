@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.95 2006/06/01 21:31:45 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.96 2006/06/01 22:41:04 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -360,7 +360,7 @@ tdb->settings = dyStringCannibalize(&dbSettings);
 }
 
 static void establishDbNames(struct customTrack *track)
-/*	create dbTableName	*/
+/*	create dbTableName, sets dbTableName and dbDataLoad	*/
 {
 char count[16];
 char *baseName;
@@ -1252,7 +1252,7 @@ for (;;)
 	    {
 	    if (track->dbTrack)
 		{
-		if (!track->dbDataLoad)	/* loaded already ?	*/
+		if (!track->dbDataLoad)	/* not loaded yet ?	*/
 		    {
 		    /*	we need the maxChromName for index creation */
 		    track->maxChromName = hGetMinIndexLength();
@@ -1773,6 +1773,50 @@ for (track = trackList; track != NULL; track = track->next)
 		double upperLimit, lowerLimit;
 		lowerLimit = 0.0;
 		upperLimit = 100.0;
+		if (!track->dbTrack)
+		    {
+		    /* should we attempt to put it into the db ? */
+		    if (ctUseAll())
+			{
+			struct pipeline *dbDataPL = (struct pipeline *)NULL;
+			FILE *dbDataFH = (FILE *)NULL;
+			struct lineFile *lf = NULL;
+			char *line = NULL;
+
+			establishDbNames(track);
+			ctAddToSettings(track->tdb, "dbTableName %s",
+				track->dbTableName);
+			track->dbTrack = TRUE;
+			track->dbDataLoad = TRUE;/* assumed true until failed */
+			/*	we need the maxChromName for index creation */
+			track->maxChromName = hGetMinIndexLength();
+			/*	open pipeline to loader	*/
+			dbDataPL = pipeToLoader(track);
+			dbDataFH = pipelineFile(dbDataPL);
+			lf = lineFileOpen(track->wigAscii, TRUE);
+			while (lineFileNext(lf, &line, NULL))
+			    fprintf(dbDataFH, "%s\n", line);
+			finishDbPipeline(track, &dbDataPL, dbDataFH, NULL);
+			if (!track->dbDataLoad)	/* was loading successful ?*/
+			    {
+			    validTrack = FALSE;	/*	failed	*/
+			    warn("track: '%s' failed database loading<BR>\n",
+				    track->tdb->shortLabel);
+			    }
+			unlink(track->wigAscii);/* done with this, remove it */
+			unlink(track->wigFile);/* unused, remove it */
+			/* it would be nice to get rid of the wigFile
+ 			 * setting in the tdb
+			 */
+			}
+		    else
+			{
+			wigAsciiToBinary(track->wigAscii, track->wigFile,
+			    track->wibFile, &upperLimit, &lowerLimit, NULL);
+			fprintf(f, "#\tascii data file: %s\n", track->wigAscii);
+			unlink(track->wigAscii);/* done with this, remove it */
+			}
+		    }
 		if (track->dbTrack)
 		    {
 		    char **row;
@@ -1813,13 +1857,7 @@ for (track = trackList; track != NULL; track = track->next)
 
 		    sqlDisconnect(&conn);
 		    }
-		else
-		    {
-		    wigAsciiToBinary(track->wigAscii, track->wigFile,
-			track->wibFile, &upperLimit, &lowerLimit, NULL);
-		    fprintf(f, "#\tascii data file: %s\n", track->wigAscii);
-		    unlink(track->wigAscii);	/* done with this, remove it */
-		    }
+
 		safef(buf, sizeof(buf), "wig %g %g",lowerLimit, upperLimit);
 		freeMem(track->tdb->type);
 		track->tdb->type = cloneString(buf);
