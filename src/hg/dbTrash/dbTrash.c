@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.5 2006/05/22 22:59:57 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.6 2006/06/01 17:12:10 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -55,8 +55,11 @@ struct sqlResult *sr;
 char **row;
 int updateTimeIx;
 int createTimeIx;
+int dataLengthIx;
+int indexLengthIx;
 int nameIx;
 int timeIxUsed;
+unsigned long long totalSize = 0;
 struct slName *tableNames = NULL;	/*	subject to age limits	*/
 
 if (differentWord(db,CUSTOM_TRASH))
@@ -69,6 +72,8 @@ sr = sqlGetResult(conn, query);
 nameIx = sqlFieldColumn(sr, "Name");
 createTimeIx = sqlFieldColumn(sr, "Create_time");
 updateTimeIx = sqlFieldColumn(sr, "Update_time");
+dataLengthIx = sqlFieldColumn(sr, "Data_length");
+indexLengthIx = sqlFieldColumn(sr, "Index_length");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     struct tm tm;
@@ -106,6 +111,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	slNameAddHead(&tableNames, row[nameIx]);
 	verbose(3,"%s %ld drop %s\n",row[timeIxUsed], (unsigned long)timep,
 		row[nameIx]);
+	/*	 If sizes are non-NULL, add them up	*/
+	if ( ((char *)NULL != row[dataLengthIx]) &&
+		((char *)NULL != row[indexLengthIx]) )
+	    totalSize += sqlLongLong(row[dataLengthIx])
+		+ sqlLongLong(row[indexLengthIx]);
 	}
     else
 	verbose(3,"%s %ld   OK %s\n",row[timeIxUsed], (unsigned long)timep,
@@ -117,13 +127,20 @@ if (drop)
     {
     if (tableNames)
 	{
+	char comment[256];
 	struct slName *el;
+	int droppedCount = 0;
 	conn = sqlConnect(db);
 	for (el = tableNames; el != NULL; el = el->next)
 	    {
 	    verbose(2,"# drop %s\n", el->name);
 	    sqlDropTable(conn, el->name);
+	    ++droppedCount;
 	    }
+	/* add a comment to the history table and finish up connection */
+	safef(comment, sizeof(comment),
+	    "Dropped %d tables with total size %llu", droppedCount, totalSize);
+	hgHistoryComment(conn, comment);
 	sqlDisconnect(&conn);
 	}
     }
