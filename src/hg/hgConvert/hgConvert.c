@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.12 2006/03/06 17:35:15 angie Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.13 2006/06/01 04:44:41 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -149,8 +149,8 @@ if (choice == NULL && toOrg != NULL)
 	    {
 	    if (sameString(hOrganism(over->toDb), toOrg))
 	        {
-		choice = over;
-		break;
+		if (!choice || (compareDbs(over->toDb,choice->toDb)>0))
+		    choice = over;
 		}
 	    }
 	}
