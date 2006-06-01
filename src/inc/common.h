@@ -927,4 +927,13 @@ void uglyTime(char *label, ...);
 void makeDirs(char* path);
 /* make a directory, including parent directories */
 
+char *skipToNumeric(char *s);
+/* skip up to where numeric digits appear */
+
+char *splitOffNonNumeric(char *s);
+/* Split off non-numeric part, e.g. mm of mm8. Result should be freed when done */
+
+char *splitOffNumber(char *db);
+/* Split off number part, e.g. 8 of mm8. Result should be freed when done */
+
 #endif /* COMMON_H */

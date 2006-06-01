@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.90 2006/03/28 17:57:01 aamp Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.91 2006/06/01 04:41:46 galt Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1868,5 +1868,25 @@ while((*next != '\0')
     next++;
     }
 makeDir(pathBuf);
+}
+
+char *skipToNumeric(char *s)
+/* skip up to where numeric digits appear */
+{
+while (*s != 0 && (*s < '0' || *s > '9'))
+    ++s;
+return s;
+}
+
+char *splitOffNonNumeric(char *s)
+/* Split off non-numeric part, e.g. mm of mm8. Result should be freed when done */
+{
+return cloneStringZ(s,skipToNumeric(s)-s);
+}
+
+char *splitOffNumber(char *db)
+/* Split off number part, e.g. 8 of mm8. Result should be freed when done */
+{
+return cloneString(skipToNumeric(db));
 }
 
