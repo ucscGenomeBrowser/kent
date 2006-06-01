@@ -87,7 +87,7 @@ group map
 priority 30
 visibility hide
 type psl .
-url http://wwwtest.genetrap.org/cgi-bin/annotation.py?cellline=$$
+url http://www.genetrap.org/cgi-bin/annotation.py?cellline=$$
 urlLabel IGTC Cell Line Annotation: 
 
 track xenoRefGene
