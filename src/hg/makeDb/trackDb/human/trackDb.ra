@@ -1243,7 +1243,7 @@ type bed 4 +
     shortLabel Deletions (McCarroll)
     longLabel Deletions from Genotype Analysis (McCarroll)
     noInherit on
-    type bed 3 .
+    type bed 4 .
     priority 146.5
 
     track delConrad
@@ -1251,7 +1251,7 @@ type bed 4 +
     shortLabel Deletions (Conrad)
     longLabel Deletions from Genotype Analysis (Conrad)
     noInherit on
-    type genePred 
+    type bed 8 . 
     priority 146.6
 
 track fosmidDiscordant
