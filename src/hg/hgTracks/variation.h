@@ -190,3 +190,14 @@ Color cnpFosmidColor(struct track *tg, void *item, struct vGfx *vg);
 void cnpFosmidMethods(struct track *tg);
 /* methods for cnpFosmid */
 
+Color delConradColor(struct track *tg, void *item, struct vGfx *vg);
+/* always red */
+
+void delConradMethods(struct track *tg);
+/* methods for delConrad */
+
+Color delMccarrollColor(struct track *tg, void *item, struct vGfx *vg);
+/* always red */
+
+void delMccarrollMethods(struct track *tg);
+/* methods for delMccarroll */
