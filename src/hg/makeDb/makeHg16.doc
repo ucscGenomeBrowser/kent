@@ -11445,6 +11445,12 @@ hgLoadBed hg16 cnpIafrate -tab -sqlTable=cnpIafrate.sql cnpIafrate.bed
 cp Sebat.txt cnpSebat.bed
 hgLoadBed hg16 cnpSebat -tab -sqlTable=cnpSebat.sql cnpSebat.bed
 
+# deletions added May 2006
+# From mccarroll@molbio.mgh.harvard.edu
+genId.pl < mcCarrolldels.txt > mcCarrolldels.bed
+hgLoadBed hg16 -noBin -tab hg16 delMccarroll mcCarrolldels.bed
+
+
 ##########################################################################
 # sno/miRNA track from Michel Weber (DONE - 2005-06-16 - Hiram)
 #	received the data file UCSC_snotrack_hg16.txt via email
