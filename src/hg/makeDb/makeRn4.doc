@@ -3566,5 +3566,13 @@ BASE=/cluster/data/rn4/bed/blastz.galGal3.2006-05-24
       >& do.log & tail -f do.log
     ln -s blastz.galGal3.2006-05-24 /cluster/data/rn4/bed/blastz.galGal3
 
+#########################################################################
+###### ADD gdbPdb ENTRY FOR rn4 INTO THE CENTRAL DB. (DONE, 6/1/06, Fan)
+
+    mysql -u hgcat -p$HGPSWD -h genome-testdb -A hgcentraltest
+
+    	delete from gdbPdb where genomeDb='rn4';
+    	insert into gdbPdb values('rn4', 'proteins060115');
 
 #########################################################################
+
