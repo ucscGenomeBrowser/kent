@@ -11,7 +11,7 @@
 #include "obscure.h"
 #include "visiGene.h"
 
-static char const rcsid[] = "$Id: vgGetText.c,v 1.10 2006/04/18 19:44:58 galt Exp $";
+static char const rcsid[] = "$Id: vgGetText.c,v 1.11 2006/06/01 18:53:53 hiram Exp $";
 
 char *db = "visiGene";
 
@@ -81,7 +81,7 @@ void hashComplexTables(struct sqlConnection *conn)
 /* Make hashes for more complicated tables. */
 {
 struct sqlResult *sr;
-char query[512], **row;
+char **row;
 
 probeHash = hashSizedForTable(conn, "probe");
 sr = sqlGetResult(conn, "select * from probe");
@@ -118,7 +118,6 @@ for (i=0; i<knownDbCount; i += 1)
     struct sqlConnection *conn = sqlConnect(gdb);
     struct sqlResult *sr;
     char **row;
-    char query[256];
 
 
     sr = sqlGetResult(conn, "select kgID,geneSymbol,spID,spDisplayID,refseq,description from kgXref");
@@ -233,13 +232,7 @@ hashFree(&uniqHash);
 void imageText(struct sqlConnection *conn, char *image, FILE *f)
 /* Write out text associated with image to file */
 {
-char query[512], **row;
-struct sqlResult *sr;
 struct imageProbe *ipList, *ip;
-struct genotype *genotype = NULL;
-struct journal *journal;
-char *contributors;
-char *s;
 fprintf(f, "%s", image);
 
 /* Get list of probes associated with image. */
@@ -266,7 +259,7 @@ FILE *f = mustOpen(outText, "w");
 struct sqlConnection *conn = sqlConnect(db);
 struct sqlConnection *imageConn = sqlConnect(db);
 struct sqlResult *sr;
-char query[512], **row;
+char **row;
 
 hashComplexTables(conn);
 makeKnownGeneHashes(knownDbCount, knownDbs);
