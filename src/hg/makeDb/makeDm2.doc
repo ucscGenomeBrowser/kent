@@ -3819,6 +3819,10 @@ BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
 
 
 # FLYBASE 4.2 ANNOTATIONS (DONE (except for contacting flybase-help) 1/13/06 angie)
+# Reloaded flyBaseNoncoding and flyBase2004Xref 5/30/06 after changing 
+# extractGenes to catch some new RNA keywords after user reported loss of 
+# many mir's.  (They were marked "ncRNA" in 4.1 but "miRNA" in 4.2.)  
+# Now extractGenes catches [a-z]+RNA.
     ssh kkstore01
     mkdir /cluster/data/dm2/bed/flybase4.2
     cd /cluster/data/dm2/bed/flybase4.2
@@ -3876,9 +3880,8 @@ BASE=/cluster/data/dm2/bed/blastz.droSec1.2005-11-30
     # Noncoding genes:
     hgLoadBed dm2 flyBaseNoncoding flyBaseNoncoding.bed
     # Cross-referencing info for both coding and noncoding:
-    hgsql dm2 < $HOME/kent/src/hg/lib/flyBase2004Xref.sql
-    hgsql dm2 -e 'load data local infile "flyBase2004Xref.tab" \
-      into table flyBase2004Xref'
+    hgLoadSqlTab dm2 flyBase2004Xref ~/kent/src/hg/lib/flyBase2004Xref.sql \
+      flyBase2004Xref.tab
     # Some featureBits comparisons with refGene which shoudl be pretty much 
     # like version 4.0 with a few noncoding genes tossed in... but this is 
     # a bigger difference than we expect:
