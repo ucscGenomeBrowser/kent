@@ -33,6 +33,7 @@ irows on
 speciesGroups mammal vertebrate
 sGroup_mammal mm8 hg18 canFam2 bosTau2 monDom4
 sGroup_vertebrate galGal2 xenTro1 danRer3
+speciesDefaultOff bosTau2 danRer3
 treeImage phylo/rn4_9way.jpg
 
 track phastConsElements9way
