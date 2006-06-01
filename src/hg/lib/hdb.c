@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.296 2006/05/29 05:16:16 kate Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.297 2006/06/01 04:42:40 galt Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -4336,4 +4336,24 @@ boolean isNewChimp(char *database)
 return (startsWith("panTro", database) && !sameString("panTro1", database));
 }
 
+
+int compareDbs(char *dbA, char *dbB)
+/* Compare two org# e.g. mm6 vs. mm16 or mm6 vs. hg17
+ * Return > 0 if dbA > dbB, < 0 if less than, and 0 if equal */
+{
+char *dbAOrg = splitOffNonNumeric(dbA);
+char *dbBOrg = splitOffNonNumeric(dbB);
+int result = strcmp(dbAOrg,dbBOrg);
+if (result == 0)
+    {
+    char *dbANum = splitOffNumber(dbA);
+    char *dbBNum = splitOffNumber(dbB);
+    result = sqlUnsigned(dbANum) - sqlUnsigned(dbBNum);
+    freez(&dbANum);
+    freez(&dbBNum);
+    }
+freez(&dbAOrg);
+freez(&dbBOrg);
+return result;
+}
 
