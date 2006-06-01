@@ -2260,7 +2260,7 @@ track blastHg18KG
 shortLabel Human Proteins
 longLabel Human Proteins
 group compGeno
-priority 142.1
+priority 250.2
 visibility pack
 colorChromDefault off
 type psl protein
