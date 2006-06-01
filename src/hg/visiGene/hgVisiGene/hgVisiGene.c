@@ -348,6 +348,7 @@ if (imageId != 0)
     safef(url,sizeof(url),"../cgi-bin/%s?%s=go&%s&%s=%d",
     	hgVisiGeneCgiName(), hgpDoDownload, sidUrl, hgpId, imageId);
    
+    printf("<B>Full-size image:</B> %d x %d &nbsp; <A HREF='%s'> download </A> ", w, h, url);
 
     /* Currently this is dangerous for users with less than 1 GB RAM to use 
        on large images, because their machines can thrash themselves into a coma.
@@ -360,10 +361,9 @@ if (imageId != 0)
        I never encountered any problem what-so-ever, even with the 
        largest visiGene AllenBrain - about 19000x9000 pix.
        
-    printf("<B>Full-size image:</B> %d x %d &nbsp; "
-	"<A HREF='%s'> download </A> &nbsp;&nbsp; <A HREF='%s'> view </A>\n", 
-	w, h, url, buf);
+    printf(" &nbsp;&nbsp; <A HREF='%s'> view </A>\n", buf);
     */
+    printf("\n");
     
     }
 htmlEnd();

@@ -143,10 +143,10 @@ void ldMethods(struct track *tg);
 
 /****** CNP / Structural Variants ******/
 
-void loadCnpIafrate(struct track *tg);
+void cnpIafrateLoadItems(struct track *tg);
 /* loader for cnpIafrate table */
 
-void freeCnpIafrate(struct track *tg);
+void cnpIafrateFreeItems(struct track *tg);
 
 Color cnpIafrateColor(struct track *tg, void *item, struct vGfx *vg);
 /* green for GAIN, red for LOSS, blue for both */
@@ -155,10 +155,10 @@ void cnpIafrateMethods(struct track *tg);
 /* methods for cnpIafrate */
 
 
-void loadCnpSebat(struct track *tg);
+void cnpSebatLoadItems(struct track *tg);
 /* loader for cnpSebat table */
 
-void freeCnpSebat(struct track *tg);
+void cnpSebatFreeItems(struct track *tg);
 
 Color cnpSebatColor(struct track *tg, void *item, struct vGfx *vg);
 /* green for GAIN, red for LOSS, blue for both */
@@ -167,10 +167,10 @@ void cnpSebatMethods(struct track *tg);
 /* methods for cnpSharp */
 
 
-void loadCnpSharp(struct track *tg);
+void cnpSharpLoadItems(struct track *tg);
 /* loader for cnpSharp table */
 
-void freeCnpSharp(struct track *tg);
+void cnpSharpFreeItems(struct track *tg);
 
 Color cnpSharpColor(struct track *tg, void *item, struct vGfx *vg);
 /* green for GAIN, red for LOSS, blue for both */
@@ -178,6 +178,26 @@ Color cnpSharpColor(struct track *tg, void *item, struct vGfx *vg);
 void cnpSharpMethods(struct track *tg);
 /* methods for cnpSharp */
 
-void cnpMethods(struct track *tg);
-/* methods for cnp tracks */
 
+void cnpFosmidLoadItems(struct track *tg);
+/* loader for cnpFosmid table */
+
+void cnpFosmidFreeItems(struct track *tg);
+
+Color cnpFosmidColor(struct track *tg, void *item, struct vGfx *vg);
+/* green for I, red for D */
+
+void cnpFosmidMethods(struct track *tg);
+/* methods for cnpFosmid */
+
+Color delConradColor(struct track *tg, void *item, struct vGfx *vg);
+/* always red */
+
+void delConradMethods(struct track *tg);
+/* methods for delConrad */
+
+Color delMccarrollColor(struct track *tg, void *item, struct vGfx *vg);
+/* always red */
+
+void delMccarrollMethods(struct track *tg);
+/* methods for delMccarroll */
