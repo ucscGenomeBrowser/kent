@@ -1254,6 +1254,14 @@ type bed 4 +
     type bed 8 . 
     priority 6
 
+    track delHinds
+    subTrack cnp
+    shortLabel Deletions (Hinds)
+    longLabel Deletions (Hinds)
+    noInherit on
+    type bed 4 . 
+    priority 7
+
 track fosmidDiscordant
 shortLabel Fosmid Discordants
 longLabel Fosmid Discordants
