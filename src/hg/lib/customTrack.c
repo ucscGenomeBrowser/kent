@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.94 2006/05/31 23:51:46 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.95 2006/06/01 21:31:45 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -408,6 +408,8 @@ struct customTrack *track;
 struct trackDb *tdb = tdbDefault();	/* begin with default track */
 struct hash *hash = hashVarLine(line, lineIx);
 char *val;
+boolean isWiggle = FALSE;
+boolean dbRequested = FALSE;
 
 AllocVar(track);
 track->tdb = tdb;
@@ -418,6 +420,9 @@ if ((val = hashFindVal(hash, "name")) != NULL)
     tdb->tableName = customTrackTableFromLabel(tdb->shortLabel);
     }
 
+if (((val = hashFindVal(hash, "type")) != NULL) && (sameString(val,"wiggle_0")))
+    isWiggle = TRUE;
+
 /*	check if there is a db= specification which is asking for a
  *	database instance of this track, and it specifies the type.
  *	When the DB isn't available, the fall back position is normal
@@ -426,7 +431,21 @@ if ((val = hashFindVal(hash, "name")) != NULL)
 if (((val = hashFindVal(hash, "db")) != NULL) && (ctDbAvailable((char *)NULL)))
     {
     track->dbTrackType = cloneString(val);
+    dbRequested = TRUE;
+    }
 
+/*	see if this normal wiggle incoming should attempt to go to the DB
+ *	even in the case where it hasn't been requested
+ */
+if (!dbRequested && ctUseAll() && isWiggle)
+    {
+    hashAdd(hash, "db", "wiggle_0");
+    track->dbTrackType = cloneString("wiggle_0");
+    dbRequested = TRUE;
+    }
+
+if (dbRequested)
+    {
     /*	is this data already in the database ?	*/
     if ((val = hashFindVal(hash, "dbTableName")) == NULL)
 	{
@@ -444,9 +463,7 @@ if (((val = hashFindVal(hash, "db")) != NULL) && (ctDbAvailable((char *)NULL)))
 		track->fieldCount = sqlSigned(val);
 	    else
 		{
-		if ((val = hashFindVal(hash, "type")) == NULL)
-    errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
-		if (differentString(val,"wiggle_0"))
+		if (!isWiggle)
     errAbort("INTERNAL ERROR: no fieldCount value found for db custom track<BR>\n");
 		}
 	    }
@@ -457,7 +474,7 @@ if (((val = hashFindVal(hash, "db")) != NULL) && (ctDbAvailable((char *)NULL)))
     parseDbSettings(tdb, hash);	/* adds our new values to settings */
     }
 
-if (((val = hashFindVal(hash, "type")) != NULL) && (sameString(val,"wiggle_0")))
+if (isWiggle)
     {
     char *wigFileNames;
     static struct tempName tn;
@@ -1410,6 +1427,7 @@ for (track = trackList; track != NULL; track = track->next)
 		bed->thickEnd += offset;
 		}
 	     }
+	 track->offset = 0;	/*	so DB load later won't do this again */
 	 }
     if (!track->wiggle)
 	{
