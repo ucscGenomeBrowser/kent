@@ -4716,6 +4716,7 @@ echo "    $execDir/makeLoChain-chain $oldAssembly <$oldAssembly-nibdir> $newAsse
 echo ""
 exit 0
 '_EOF_'
+   # << emacs
    chmod +x lift.csh
    lift.csh danRer4 danRer3 >&! lift.log &
    # makeLoChain-chain can be run on pk. chain alignments
@@ -4859,3 +4860,49 @@ exit 0
    featureBits -chrom=chr1 danRer4 refGene:cds genscan:cds -enrichment
    # refGene:cds 0.746%, genscan:cds 4.195%, both 0.631%, cover 84.52%, 
    # enrich 20.15x 
+
+
+###########################################################################
+# BLASTZ/CHAIN/NET GALGAL3 (DONE 5/30/06 angie)
+    ssh pk
+    mkdir /cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
+    cd /cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
+    cat << '_EOF_' > DEF
+# zebrafish vs. chicken
+BLASTZ=/cluster/bin/penn/i386/blastz
+
+# Use same params as used for danRer1-xenTro1 (see makeXenTro1.doc)
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Zebrafish danRer4
+SEQ1_DIR=/san/sanvol1/scratch/danRer4/danRer4.2bit
+SEQ1_CTGDIR=/san/sanvol1/scratch/danRer4/danRer4ChrUnNAScafs.2bit
+SEQ1_LIFT=/san/sanvol1/scratch/danRer4/liftNAandUnScaffoldsToChrom.lft
+SEQ1_LEN=/cluster/data/danRer4/chrom.sizes
+SEQ1_CTGLEN=/san/sanvol1/scratch/danRer4/chromsUnNAScafs.sizes
+SEQ1_CHUNK=50000000
+SEQ1_LAP=10000
+SEQ1_LIMIT=100
+
+# QUERY: Chicken galGal3 - single chunk big enough to run while chrom
+SEQ2_DIR=/san/sanvol1/galGal3/nib
+SEQ2_LEN=/cluster/data/galGal3/chrom.sizes
+SEQ2_CHUNK=20000000
+SEQ2_LAP=0
+SEQ2_LIMIT=100
+
+BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
+'_EOF_'
+    # << emacs
+    doBlastzChainNet.pl -blastzOutRoot=/san/sanvol1/scratch/danRer4GalGal3 \
+      -bigClusterHub=pk -smallClusterHub=pk \
+      -chainMinScore=5000 -chainLinearGap=loose DEF \
+      >& do.log & tail -f do.log
+    ln -s blastz.galGal3.2006-05-30 /cluster/data/danRer4/bed/blastz.galGal3
+
+
+###########################################################################
