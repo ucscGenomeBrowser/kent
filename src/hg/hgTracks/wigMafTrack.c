@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.95 2006/05/08 23:37:30 kate Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.96 2006/06/02 17:03:54 braney Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -599,16 +599,6 @@ int i, outIx = 0, outPositions = 0;
 int insertSize = 0, previousInserts = 0;
 int previousBreaks = 0;
 
-/* count up insert counts in the existing line -- need to 
-   add these to determine where to start this sequence in the line */
-for (i=0; outLine[i]; i++)
-    {
-    if (outLine[i] == '|')
-        {
-        previousInserts++;
-        i++;    /* skip count after escape char */
-        }
-    }
 outLine = outLine + offset + previousBreaks + (previousInserts * 2);
 for (i=0; i < textSize /*&& outPositions < outSize*/;  i++)
     {
@@ -1130,11 +1120,7 @@ void alignSeqToUpperN(char *line)
 {
 int i;
 for (i=0; line[i] != 0; i++)
-    if (*line == '|')
-        /* escape char, indicating insert count */
-        i += 2;
-    else
-        line[i] = toupper(line[i]);
+    line[i] = toupper(line[i]);
 }
 
 void complementUpperAlignSeq(DNA *dna, int size)
@@ -1152,12 +1138,6 @@ for (i = 0; i < size; i++, dna++)
         *dna = 'C';
     else if (*dna == 'T')
         *dna = 'A';
-    else if (*dna == '|')
-        {
-        /* escape indicates skip next char -- it is an insert count */
-        dna++;
-        i++;
-        }
     }
 }
 
@@ -1560,8 +1540,13 @@ for (maf = mafList; maf != NULL; maf = maf->next)
         {
 	int subStart,subEnd;
 	int lineOffset, subSize;
+	int startInserts = 0;
+	char *ptr;
 
         /* process alignment for reference ("master") species */
+	for(ptr = mcMaster->text; *ptr == '-'; ptr++)
+	    startInserts++;
+
 	mcMaster = mafFindComponent(sub, dbChrom);
 	if (mcMaster->strand == '-')
 	    mafFlipStrand(sub);
@@ -1571,6 +1556,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 	lineOffset = subStart - seqStart;
         processInserts(mcMaster->text, sub, miHash,
                                 &insertCounts[lineOffset], subSize);
+	insertCounts[lineOffset] = max(insertCounts[lineOffset],startInserts);
 
         /* fill in bases for each species */
         for (mi = miList; mi != NULL; mi = mi->next)
@@ -1595,6 +1581,16 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 		    mi->inserts[mi->insertsSize] =  (subStart - seqStart)+ 1;
 		    mi->insertsSize++;
 		    }
+		}
+	    if (startInserts)
+		{
+		struct mafComp *mc1;
+		if (((mc1 = mafMayFindCompPrefix(maf, mi->db, "")) != NULL) && 
+		    ((mc1->text) && (countNonDash(mc1->text, startInserts) > 0)))
+			{
+			mi->inserts[mi->insertsSize] =  (subStart - seqStart)+ 1;
+			mi->insertsSize++;
+			}
 		}
             seq = mc->text;
             if ( mc->text == NULL )
@@ -1745,7 +1741,7 @@ for (maf = mafList; maf != NULL; maf = maf->next)
 /* draw inserts line */
 mi = miList;
 
-for(offset=startSub2*2; offset < winBaseCount + startSub2 * 2; offset++)
+for(offset=startSub2*2; (offset < alignLineLength) && (offset < winBaseCount + startSub2 * 2); offset++)
     {
     int  x1, x2;
 
