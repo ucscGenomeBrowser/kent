@@ -88,15 +88,15 @@ while ($checked < $size)
   endif
   set hitsPerMin=`echo $hitsPerHr | gawk '{printf  "%.1f", $1/60}'`
   
-if ($debug == "true") then
-  echo
-  echo "host = $host"
-  echo "hits = $num"
-  echo "timeSpan = $timeSpan"
-  echo "timeHours = $timeHours"
-  echo "hitsPerHr = $hitsPerHr"
-  echo "hitsPerMin = $hitsPerMin"
-endif
+  if ($debug == "true") then
+    echo
+    echo "host = $host"
+    echo "hits = $num"
+    echo "timeSpan = $timeSpan"
+    echo "timeHours = $timeHours"
+    echo "hitsPerHr = $hitsPerHr"
+    echo "hitsPerMin = $hitsPerMin"
+  endif
    
 
   if ($num > $max) then
