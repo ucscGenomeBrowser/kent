@@ -45,6 +45,7 @@ irows on
 speciesGroups vertebrate mammal
 sGroup_vertebrate fr1 tetNig1 xenTro2
 sGroup_mammal monDom4 mm8 hg18
+speciesDefaultOff fr1
 treeImage phylo/danRer4_7way.jpg
 
 track chainHg18
