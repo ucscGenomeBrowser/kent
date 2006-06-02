@@ -136,7 +136,7 @@ echo "expect all lines to be in common file:  all alignIDs are unique"
 echo "if any are in sort file more than once:"
 comm -23  $db.KG.alignID.sort $db.KG.alignID.uniq > $db.KG.alignID.dupes 
 wc -l $db*alignID* | grep -v "total"
-echo "three duplicate alignIDs
+echo "three duplicate alignIDs (may be blank):"
 head -3 $db.KG.alignID.dupes 
 echo
 
@@ -302,11 +302,10 @@ echo
 # -- and count lines remaining (genes used more than once):
 
 echo
-hgsql -N -e "SELECT name FROM knownGene" $db | sort -n | \
-  uniq -c | sort -nr > $db.KG.name.uniq.most
+sort  $db.KG.name.sort | uniq -c | sort -nr > $db.KG.name.uniq.most
 
 echo "number of genes that align more than once:"
-sed -e "/  1\t/d" $db.KG.name.uniq.most | wc -l
+sed -e "/  1 /d" $db.KG.name.uniq.most | wc -l
 echo
 
 echo
@@ -326,7 +325,7 @@ echo "look for same number of rows in kgXref, knownGenePep, knownGeneMrna:"
 echo "kgXref"
 set xrefNum=`hgsql -N -e "SELECT COUNT(*) FROM kgXref" $db`
 set xrefNumUniq=`hgsql -N -e "SELECT COUNT(DISTINCT(kgID)) FROM kgXref" $db`
-echo "$xrefNum   $refNumUniq (uniq)"
+echo "$xrefNum   $xrefNumUniq (uniq)"
 echo "knownGenePep"
 set kgPep=`hgsql -N -e "SELECT COUNT(*) FROM knownGenePep" $db`
 echo $kgPep
@@ -502,6 +501,8 @@ comm -12 $db.kgXref.maybeLink  $db.knownGeneLink.name | wc -l
 echo "expect knownGeneLink to be empty since KG2 "
 echo "   -- DNA-based refSeqs are already in the build."
 echo "   Push empty table to keep code happy."
+echo "   didn't do it for hg18 and no evidence of problems." 
+echo "   will also not do it for mm8 and see."
 echo
 
 
@@ -718,15 +719,13 @@ comm -23 $db.refGene.name.uniq  $db.mrnaRefseq.refseq.uniq | wc -l
 
 hgsql -N -e "SELECT name FROM knownGeneLink" $db | sort -u \
    > $db.KGLink.name.uniq
-echo "DNA-based genes that are in knownGeneLink.name:"
-comm -12 refGene.notin.mrnaRefseq $db.KGLink.name.uniq \
-   > $db.DNAbased.in.knownLink
-comm -12 refGene.notin.mrnaRefseq $db.KGLink.name.uniq | wc -l
-echo "DNA-based genes that are not in knownGeneLink.name:"
+echo "DNA-based genes:"
 comm -23 refGene.notin.mrnaRefseq $db.KGLink.name.uniq \
    > $db.DNAbased.notin.knownLink
 comm -23 refGene.notin.mrnaRefseq $db.KGLink.name.uniq | wc -l
 echo "this value should be small"
+echo "  -- check some:"
+comm -23 $db.refGene.name.uniq  $db.mrnaRefseq.refseq.uniq | head -3 
 echo
 
 
@@ -999,7 +998,7 @@ echo
 echo "flesh this out with checks on number of genes.  are any uniq, etc."
 echo "pipe a column into awk and get the proper other values"
 echo
-echo "add support for check previous assembly as parameter if not a rebuld"
+echo "add support for check previous assembly as parameter if not a rebuild"
 
 # -------------------------------------------------
 # -------------------------------------------------
@@ -1016,23 +1015,6 @@ echo "add support for check previous assembly as parameter if not a rebuld"
 # -------------------------------------------------
 # 
 # 
-echo  
-echo  " -------------------------------------------------"
-echo  "            check out indices:                    "
-echo  " -------------------------------------------------"
-echo
-
-
-# echo
-# echo "show indices:"
-# foreach table (`cat {$trackName}TablesAll`)
-#   echo
-# # " ================================================="
-# # " ooooooooooooooooooooooooooooooooooooooooooooooooo"
-#   hgsql -t -e "SHOW INDEX FROM $table" $db
-#   echo
-# end
-# echo
 
 echo  " -------------------------------------------------"
 echo  "check out proteinsYYMMDD tables :  hugo, etc.  see push protocols"
@@ -1051,6 +1033,8 @@ echo
 echo " -------------------------------------------------"
 echo "    check to see if .../htdocs/knownGeneLists.html has been updated"
 echo " -------------------------------------------------"
+echo "\n here are files for /usr/local/apache/htdocs/knownGeneList/$db"
+echo
 ls -l /usr/local/apache/htdocs/knownGeneList/$db
 echo
 
