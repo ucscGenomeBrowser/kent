@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.97 2006/06/02 17:45:09 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.98 2006/06/02 18:07:56 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -272,7 +272,7 @@ else if (startsWith("wiggle_0", track->dbTrackType))
      *	loader/wigEncode -verbose=0 stdin stdout ${wibFile} | \
      *	    loader/hgLoadWiggle -verbose=0 -tmpDir=../trash \
      *		-maxChromNameLength=${nameLength} -chromInfoDb=${database} \
-     *		    -pathPrefix=${pathPrefix} ${db} ${table} stdin
+     *		    -pathPrefix=. ${db} ${table} stdin
      */
     struct dyString *tmpDy = newDyString(0);
     char *cmd1[] = {NULL, "-verbose=0", "stdin", "stdout", NULL, NULL};
@@ -287,7 +287,8 @@ else if (startsWith("wiggle_0", track->dbTrackType))
     cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "-chromInfoDb=%s", "hg18");
     cmd2[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
-    dyStringPrintf(tmpDy, "-pathPrefix=../trash");
+    /*	the ../trash/ prefix is already encoded into the file column */
+    dyStringPrintf(tmpDy, "-pathPrefix=.");
     cmd2[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "%s", db);
     cmd2[6] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
