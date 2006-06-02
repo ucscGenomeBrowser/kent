@@ -36,8 +36,7 @@ CREATE TABLE genomicSuperDups (
     jcK float not null,	# K-value calculated with Jukes-Cantor
     k2K float not null,	# Kimura K
               #Indices
-    PRIMARY KEY(name(32)),
+    INDEX (name(32)),
     INDEX (chrom(8), bin),
-    INDEX (chrom(8), chromStart),
-    INDEX (chrom(8), chromEnd)
+    INDEX (chrom(8), chromStart)
 );
