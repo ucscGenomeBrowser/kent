@@ -3117,6 +3117,8 @@ cat << '_EOF_' > species7.nh
 
 ###########################################################################
 # MAF DOWNLOADS FOR MULTIZ7WAY (DONE, 2006-05-29, hartera)
+# GZIPPED UPSTREAM FILES AND ADDED TO DOWNLOADS AND RE-MADE md5sum.txt
+# (DONE, 2006-06-02, hartera)
    ssh hgwdev
    cd /cluster/data/danRer4/bed/multiz7way.2006-05-28
    mkdir mafDownloads
@@ -3160,6 +3162,21 @@ cat > downloads.csh << 'EOF'
     $dir
     cp /usr/local/apache/htdocs/goldenPath/danRer3/multiz5way/README.txt $dir
     # edit README.txt
+
+    # gzip the upstream maf downloads and remake md5sum.txt 
+    # (2006-06-02, hartera)
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/multiz7way.2006-05-28/mafDownloads
+    foreach f (upstream*.maf)
+      nice gzip -c $f > $f.maf.gz
+    end 
+    rm md5sum.txt
+    md5sum *.gz > md5sum.txt
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/danRer4/multiz7way
+    rm $dir/md5sum.txt
+    ln -s \
+/cluster/data/danRer4/bed/multiz7way.2006-05-28/mafDownloads/{upstream*.gz,md5sum.txt} $dir 
 
 ###########################################################################
 # PHYLO-HMM (PHASTCONS) CONSERVATION TRACK FOR 7-WAY ALIGNMENT 
@@ -4736,9 +4753,7 @@ exit 0
    # net alignment chains
    ssh kkstore04
    makeLoChain-net danRer4 danRer3 >&! net.log &
-   # 09:44
-   # 
-       # load reference to over.chain into database table,
+   # load reference to over.chain into database table,
    # and create symlinks  /gbdb  and download area
    ssh hgwdev
    cd /cluster/data/danRer4/bed/liftOver
