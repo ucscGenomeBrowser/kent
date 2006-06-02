@@ -308,10 +308,18 @@ echo "number of genes that align more than once:"
 sed -e "/  1 /d" $db.KG.name.uniq.most | wc -l
 echo
 
+echo "gene occurance profile"
+echo
+cat $db.KG.name.uniq.most | awk '{print $1}' > file         
+textHistogram file
+rm file
+
 echo
 echo "genes that align the most times:"
 head $db.KG.name.uniq.most
 echo
+
+
 
 # -------------------------------------------------
 # examine overlapping genes ???
