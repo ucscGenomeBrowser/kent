@@ -13,7 +13,7 @@
 #include "hui.h"
 #include "hCommon.h"
 
-static char const rcsid[] = "$Id: mafClick.c,v 1.36 2006/05/08 23:37:31 kate Exp $";
+static char const rcsid[] = "$Id: mafClick.c,v 1.37 2006/06/02 17:17:28 braney Exp $";
 
 #define ADDEXONCAPITAL
 
@@ -562,7 +562,7 @@ else
 
 	    slReverse(&maf->components);
 	    }
-	subset = mafSubset(maf, dbChrom, winStart, winEnd);
+	subset = mafSubsetE(maf, dbChrom, winStart, winEnd, TRUE);
 	if (subset != NULL)
 	    {
 	    /* Reformat MAF if needed so that sequence from current
