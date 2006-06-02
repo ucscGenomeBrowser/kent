@@ -17,7 +17,7 @@
 #include "hgGene.h"
 #include "ccdsGeneMap.h"
 
-static char const rcsid[] = "$Id: hgGene.c,v 1.70 2006/04/10 13:42:23 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgGene.c,v 1.71 2006/06/02 16:20:59 fanhsu Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -541,7 +541,7 @@ if (protAcc != NULL)
     spDisplayId = spAnyAccToId(spConn, protAcc);
     if (spDisplayId == NULL) 
     	{
-	errAbort("<br>%s seems no longer a valid protein ID in our latest UniProt DB.", protAcc);
+	errAbort("<br>%s seems to no longer be a valid protein ID in our latest UniProt DB.", protAcc);
 	}
 	
     /* defensive logic to guard against curProtId being NULL */
