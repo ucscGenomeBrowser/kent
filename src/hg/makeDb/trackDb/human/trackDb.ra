@@ -1257,7 +1257,7 @@ type bed 4 +
     track delHinds
     subTrack cnp
     shortLabel Deletions (Hinds)
-    longLabel Deletions (Hinds)
+    longLabel Deletions from Haploid Hybridization Analysis (Hinds)
     noInherit on
     type bed 4 . 
     priority 7
