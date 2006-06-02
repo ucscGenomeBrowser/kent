@@ -152,6 +152,10 @@ void mafFromAxtTemp(struct axt *axt, int tSize, int qSize,
 
 struct mafAli *mafSubset(struct mafAli *maf, char *componentSource,
 	int newStart, int newEnd);
+/* see mafSubsetE below  (called with getInitialDases = FALSE */
+
+struct mafAli *mafSubsetE(struct mafAli *maf, char *componentSource,
+	int newStart, int newEnd, bool getInitialDashes);
 /* Extract subset of maf that intersects a given range
  * in a component sequence.  The newStart and newEnd
  * are given in the forward strand coordinates of the
@@ -159,7 +163,9 @@ struct mafAli *mafSubset(struct mafAli *maf, char *componentSource,
  * something like 'mm3.chr1'.  This will return NULL
  * if maf does not intersect range.  The score field
  * in the returned maf will not be filled in (since
- * we don't know which scoring scheme to use). */
+ * we don't know which scoring scheme to use). 
+ * If getInitialDashes is TRUE then the initial -'s
+ * in the reference sequence are *not* removed*/
 
 boolean mafNeedSubset(struct mafAli *maf, char *componentSource,
 	int newStart, int newEnd);
