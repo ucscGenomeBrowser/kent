@@ -9405,6 +9405,9 @@ exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
     # Changed url line for ensGene entry to:
     # url http://apr2006.archive.ensembl.org/perl/transview?transcript=$$
 
+# Create knownToEnsembl column
+    hgMapToGene hg17 ensGene knownGene knownToEnsembl
+
 # SGP GENES (DONE 5/3/06 Fan)
     ssh hgwdev 
     mkdir /cluster/data/hg18/bed/sgp
