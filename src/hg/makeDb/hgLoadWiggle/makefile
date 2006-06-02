@@ -1,4 +1,5 @@
 include ../../../inc/common.mk
+HG_WARN=${HG_WARN_ERR}
 
 L = -lm ${MYSQLLIBS}
 MYLIBDIR = ../../../lib/${MACHTYPE}
@@ -8,7 +9,7 @@ O = hgLoadWiggle.o
 
 A = hgLoadWiggle
 
-all::	${A} hgWiggle wigEncode
+all::	${A} hgWiggle wigEncode cgi
 
 hgLoadWiggle: $O ${MYLIBS}
 	${CC} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
@@ -58,3 +59,40 @@ clean:
 	test_data/chr1_middle.ascii test_data/chrM.ascii test_data/chrM.wib \
 	test_data/chrM.wig test_data/wiggle.tab \
 	${O} hgDumpWiggle.o hgWiggle.o hgWiggle wigEncode.o wigEncode ${A}
+
+cgi:: compile
+	@if [ ! -d "${CGI_BIN}-${USER}/loader" ]; then \
+		${MKDIR} ${CGI_BIN}-${USER}/loader; \
+	fi
+	mv $A${EXE} ${CGI_BIN}-${USER}/loader/$A
+	mv wigEncode ${CGI_BIN}-${USER}/loader/wigEncode
+
+alpha:: strip
+	@if [ ! -d "${CGI_BIN}/loader" ]; then \
+		${MKDIR} ${CGI_BIN}/loader; \
+	fi
+	mv $A${EXE} ${CGI_BIN}/loader/$A
+	mv wigEncode ${CGI_BIN}/loader/wigEncode
+
+beta:: strip
+	@if [ ! -d "${CGI_BIN}-beta/loader" ]; then \
+		${MKDIR} ${CGI_BIN}-beta/loader; \
+	fi
+	mv $A${EXE} ${CGI_BIN}-beta/loader/$A
+	mv wigEncode ${CGI_BIN}-beta/loader/wigEncode
+
+strip::  compile
+	${STRIP} $A${EXE}
+	${STRIP} wigEncode
+	chmod g+w $A${EXE} wigEncode
+	chmod a+rx $A${EXE} wigEncode
+
+install::  strip
+	@if [ ! -d "${DESTDIR}${CGI_BIN}/loader" ]; then \
+		${MKDIR} "${DESTDIR}${CGI_BIN}/loader"; \
+	fi
+	mv $A${EXE} ${DESTDIR}${CGI_BIN}/loader/$A
+	mv wigEncode ${DESTDIR}${CGI_BIN}/loader/wigEncode
+
+debug:: $O
+	${CC} -o $A${EXE} $O ${MYLIBS} ${L}
