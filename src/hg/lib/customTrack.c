@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.96 2006/06/01 22:41:04 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.97 2006/06/02 17:45:09 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -437,7 +437,8 @@ if (((val = hashFindVal(hash, "db")) != NULL) && (ctDbAvailable((char *)NULL)))
 /*	see if this normal wiggle incoming should attempt to go to the DB
  *	even in the case where it hasn't been requested
  */
-if (!dbRequested && ctUseAll() && isWiggle)
+if (!dbRequested && ctUseAll() && isWiggle &&
+	((hashFindVal(hash, "wibFile")) == NULL))
     {
     hashAdd(hash, "db", "wiggle_0");
     track->dbTrackType = cloneString("wiggle_0");
