@@ -310,8 +310,7 @@ echo
 
 echo "gene occurance profile"
 echo
-cat $db.KG.name.uniq.most | awk '{print $1}' > file         
-textHistogram file
+textHistogram -col=1 $db.KG.name.uniq.most
 rm file
 
 echo
