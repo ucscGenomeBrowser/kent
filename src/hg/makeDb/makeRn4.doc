@@ -2139,7 +2139,7 @@ while (<>) {
     hgLoadSqlTab rn4 kgXref ~/kent/src/hg/lib/kgXref.sql kgXref.tab
 
     # Build spMrna table
-    hgsql rn4 -N -e 'select name, proteinID from knownGene' > kgSpMrna.tab
+    hgsql rn4 -N -e 'select proteinID, name from knownGene' > kgSpMrna.tab
     hgLoadSqlTab rn4 spMrna ~/kent/src/hg/lib/spMrna.sql kgSpMrna.tab
 
     # Build kgProtMap table
