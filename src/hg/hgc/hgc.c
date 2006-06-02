@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1023 2006/05/31 22:18:00 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1024 2006/06/02 20:10:46 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -13177,12 +13177,21 @@ if (startsWith("No.", pos))
     pos += strlen("No.");
 pos = cloneString(pos);
 wordCount = chopString(pos, sep, words, ArraySize(words));
-if (wordCount != 3)
+if (wordCount < 2 || wordCount > 3)
     errAbort("parseSuperDupsChromPointPos: Expected something like "
-	     "(No\\.)?[0-9]+[.,][a-zA-Z0-9_]+:[0-9]+ but got %s", origPos);
-*retID = sqlUnsigned(words[0]);
-safef(retChrom, 64, words[1]);
-*retPos = sqlUnsigned(words[2]);
+	     "(No\\.)?([0-9]+[.,])?[a-zA-Z0-9_]+:[0-9]+ but got %s", origPos);
+if (wordCount == 3)
+    {
+    *retID = sqlUnsigned(words[0]);
+    safef(retChrom, 64, words[1]);
+    *retPos = sqlUnsigned(words[2]);
+    }
+else
+    {
+    *retID = -1;
+    safef(retChrom, 64, words[0]);
+    *retPos = sqlUnsigned(words[1]);
+    }
 }
 
 
@@ -13214,8 +13223,10 @@ if (cgiVarExists("o"))
 		   track, seqName);
     if (rowOffset > 0)
 	hAddBinToQuery(start, end, query);
-    dyStringPrintf(query, "chromStart = %d and uid = %d and otherStart = %d",
-		   start, dupId, oStart);
+    if (dupId >= 0)
+	dyStringPrintf(query, "uid = %d and ", dupId);
+    dyStringPrintf(query, "chromStart = %d and otherStart = %d",
+		   start, oStart);
     sr = sqlGetResult(conn, query->string);
     while ((row = sqlNextRow(sr)))
 	{
