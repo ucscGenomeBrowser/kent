@@ -11,12 +11,12 @@ A = hgLoadBed
 hgLoadBed: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/hgLoadBed${EXE}
-	${MAKE} my
+	${MAKE} cgi
 
 compile:	${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${A} $O ${MYLIBS} $L
 
-my:: compile
+cgi:: compile
 	chmod a+rx $A${EXE}
 	@if [ ! -d "${CGI_BIN}-${USER}/loader" ]; then \
 		${MKDIR} ${CGI_BIN}-${USER}/loader; \
