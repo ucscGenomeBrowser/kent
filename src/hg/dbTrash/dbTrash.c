@@ -7,7 +7,7 @@
 #include "hdb.h"
 #include "customTrack.h"
 
-static char const rcsid[] = "$Id: dbTrash.c,v 1.6 2006/06/01 17:12:10 hiram Exp $";
+static char const rcsid[] = "$Id: dbTrash.c,v 1.7 2006/06/02 18:18:15 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -140,6 +140,7 @@ if (drop)
 	/* add a comment to the history table and finish up connection */
 	safef(comment, sizeof(comment),
 	    "Dropped %d tables with total size %llu", droppedCount, totalSize);
+	verbose(2,"# %s\n", comment);
 	hgHistoryComment(conn, comment);
 	sqlDisconnect(&conn);
 	}
