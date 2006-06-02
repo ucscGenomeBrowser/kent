@@ -41,9 +41,9 @@ return (sqlQuickNum(conn, query) > 0);
 
 static struct sqlDeleter*  buildIgnoredDeleters(struct sqlConnection *conn,
                                                 struct gbRelease* release,
-                                                char* workDir)
-/* Construct a deleter object with ignored acc that are in gbStatus.
- * return NULL if none. */
+                                                boolean force, char* workDir)
+/* Construct a deleter object with ignored acc that are in gbStatus.  return
+ * NULL if none. */
 {
 struct sqlDeleter* deleter = NULL;
 struct hashCookie cookie;
@@ -62,7 +62,7 @@ while ((hel = hashNext(&cookie)) != NULL)
     struct gbIgnoreAcc* igAcc;
     for (igAcc = hel->val; igAcc != NULL; igAcc = igAcc->next)
         {
-        if (inGbStatusTable(conn, igAcc->acc, igAcc->modDate))
+        if (force || inGbStatusTable(conn, igAcc->acc, igAcc->modDate))
             {
             if (deleter == NULL)
                 deleter = sqlDeleterNew(tmpDir, (gbVerbose >= 4));
@@ -76,16 +76,15 @@ while ((hel = hashNext(&cookie)) != NULL)
 return deleter;
 }
 
-static void deleteIgnoredRelease(struct gbRelease* release, char* workDir)
+static void deleteIgnoredRelease(struct gbRelease* release, boolean force, char* workDir)
 /* deleted any sequences in the ignore table from the database that are
  * in the gbStatus table for a release. */
 {
 struct sqlConnection *conn = hAllocConn();
 struct sqlDeleter* deleter =  NULL;
 
-
 if (sqlTableExists(conn, GB_STATUS_TBL))
-    deleter = buildIgnoredDeleters(conn, release, workDir);
+    deleter = buildIgnoredDeleters(conn, release, force, workDir);
 
 /* drop what we found in the gbStatus table */
 if (deleter != NULL)
@@ -96,19 +95,21 @@ if (deleter != NULL)
 hFreeConn(&conn);
 }
 
-void gbIgnoredDelete(struct gbSelect* selectList, char* workDir)
-/* Deleted any sequences in the ignore table from the database that are
- * in the gbStatus table for all selected releases. */
+void gbIgnoredDelete(struct gbSelect* selectList, boolean force, char* workDir)
+/* Deleted any sequences in the ignore table from the database that are in the
+ * gbStatus table for all selected releases. force will delete even if not in
+ * gbStatus. */
 {
 struct gbSelect* select = selectList;
 struct gbRelease *release = NULL;
 
-/* this works because list is grouped by release */
+/* only call one per release, this loop works because list is grouped by
+ * release */
 for (; select != NULL; select = select->next)
     {
     if (select->release != release)
         {
-        deleteIgnoredRelease(select->release, workDir);
+        deleteIgnoredRelease(select->release, force, workDir);
         release = select->release;
         }
     }
