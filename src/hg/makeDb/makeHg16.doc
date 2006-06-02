@@ -11448,7 +11448,7 @@ hgLoadBed hg16 cnpSebat -tab -sqlTable=cnpSebat.sql cnpSebat.bed
 # deletions added May 2006
 # From mccarroll@molbio.mgh.harvard.edu
 genId.pl < mcCarrolldels.txt > mcCarrolldels.bed
-hgLoadBed hg16 -noBin -tab hg16 delMccarroll mcCarrolldels.bed
+hgLoadBed hg16 -noBin -tab delMccarroll mcCarrolldels.bed
 
 
 ##########################################################################
