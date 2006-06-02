@@ -476,11 +476,12 @@ hgsql -N -e "SELECT mrnaID FROM dupSpMrna" $db | sort -u > $db.dupSp.uniq
 hgsql -N -e "SELECT mrnaID FROM spMrna" $db | sort -u > $db.spMrna.uniq
 comm -23 $db.dupSp.uniq $db.spMrna.uniq > $db.sp.diff
 set dupCheck=`wc -l $db.sp.diff | awk '{print $1}'`
-# echo $dupCheck
+set spTot=`wc -l $db.dupSp.uniq | awk '{print $1}'`
 if ($dupCheck == 0) then
   echo "  all dupSpMrna.mrnaID are in spMrna.mrnaID."
 else
-  echo "  $dupCheck dupSpMrna.mrnaID are not in spMrna.mrnaID."
+  echo
+  echo "  $dupCheck dupSpMrna.mrnaID out of $spTot are not in spMrna.mrnaID."
   echo "  see $db.sp.diff for list.  sample: \n"
   head $db.sp.diff
 endif
