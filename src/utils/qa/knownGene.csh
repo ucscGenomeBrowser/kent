@@ -490,6 +490,7 @@ echo
 echo "find out if any in diff list are in =other= column of spMrna "
 hgsql -N -e "SELECT spID FROM spMrna" $db | sort -u > $db.spMrna.spID.uniq
 comm -23 $db.sp.diff $db.spMrna.spID.uniq > $db.spMrna.leftOvers2
+echo "this many are not:"
 wc -l *leftOvers2
 echo "expect zero"
 
