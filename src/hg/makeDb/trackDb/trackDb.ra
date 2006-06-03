@@ -393,14 +393,14 @@ noInherit on
     track transMapRefGene
     subTrack transMap
     shortLabel TransMapRefGene
-    longLabel TransMap RefSeq Genes
+    longLabel TransMap RefSeq Gene Predictions
     color 34,139,34
     priority 1
     noInherit on
     type genePred
     cdsDrawDefault genomic\ codons
 
-    track transMapRefAli
+    track transMapRefAliGene
     subTrack transMap off
     shortLabel TransMapRefAli
     longLabel TransMap RefSeq Alignments
@@ -408,20 +408,20 @@ noInherit on
     priority 2
     visibility hide
     noInherit on
-    type psl
+    type genePred
     cdsDrawDefault genomic\ codons
 
     track transMapMRnaGene
     subTrack transMap
     shortLabel TransMapMRnaGene
-    longLabel TransMap protein coding mRNAs
+    longLabel TransMap Protein Coding mRNA Predictions
     color 34,139,34
     priority 3
     noInherit on
     type genePred
     cdsDrawDefault genomic\ codons
 
-    track transMapMRnaAli
+    track transMapMRnaAliGene
     subTrack transMap off
     shortLabel TransMapMRnaAli
     longLabel TransMap mRNA alignments
@@ -429,7 +429,7 @@ noInherit on
     priority 4
     visibility hide
     noInherit on
-    type psl
+    type genePred
     cdsDrawDefault genomic\ codons
 
 track genieAlt
@@ -2595,6 +2595,14 @@ searchTable xenoRefGene
 searchType refGene
 searchPriority 2.1
 grepIndex refLinkGrep/refLink.mrnaAccProduct
+
+searchTable transMapRefGene
+searchType genePred
+searchPriority 2.31
+
+searchTable transMapMRnaGene
+searchType genePred
+searchPriority 2.32
 
 searchTable pseudoGeneLink
 query select chrom, chromStart,chromEnd, refSeq from %s where refSeq = '%s'
