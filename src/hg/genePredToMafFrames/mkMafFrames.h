@@ -1,9 +1,9 @@
 /* mkMafFrames - build mafFrames objects for exons */
 #ifndef MKMAFFRAMES_H
 #define MKMAFFRAMES_H
-struct geneBins;
+struct orgGenes;
 
-void mkMafFramesForMaf(char *geneDb, char *targetDb, struct geneBins *genes,
+void mkMafFramesForMaf(char *targetDb, struct orgGenes *orgs,
                        char *mafFilePath);
 /* create mafFrames objects from an MAF file */
 #endif

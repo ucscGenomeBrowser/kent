@@ -4,7 +4,7 @@ Algorithm:
       which can be created with genePredSingleCover
 
     - load genes and break into CDS exons in a binKeeper table addressable
-      by source location. (module geneBins)
+      by source location. (module orgGenes)
 
     - scan MAF files and associated construct exonFrames objects
       mapping regions of the exons to the target genome.  This algorithm

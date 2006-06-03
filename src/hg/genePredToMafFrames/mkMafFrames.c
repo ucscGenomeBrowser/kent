@@ -5,7 +5,7 @@
 #include "frameIncr.h"
 #include "maf.h"
 #include "dnautil.h"
-#include "geneBins.h"
+#include "orgGenes.h"
 #include "chromBins.h"
 #include "binRange.h"
 #include "verbose.h"
@@ -152,7 +152,7 @@ else
     cdsOff = si->exon->cdsOff + (si->exonQEnd - si->sc->query.pos);
 
 /* create and link exon */
-ef = cdsExonAddFrames(si->exon, src, si->subQStart, si->sc->query.pos, si->sc->query.comp->strand,
+ef = cdsExonAddFrames(si->exon, si->subQStart, si->sc->query.pos, si->sc->query.comp->strand,
                       tName, si->subTStart, si->sc->target.pos,
                       frame, strand, cdsOff);
 
@@ -293,7 +293,7 @@ if (si.subTStart >= 0)
     addMafFrame(&si);
 }
 
-static void mkCompFrames(struct geneBins *genes,
+static void mkCompFrames(struct orgGenes *genes,
                          struct mafComp *queryComp,
                          struct mafComp *targetComp)
 /* create mafFrames objects for an mafComp */
@@ -303,7 +303,7 @@ struct scanCursor sc = scanCursorNew(queryComp, targetComp);
 /* n.b. the order of scanning is very important here or will miss some exons
  * if they share a block */
 int sortDir =  (queryComp->strand == targetComp->strand) ? 1 : -1;
-struct binElement *exonRefs = geneBinsFind(genes, queryComp, sortDir);
+struct binElement *exonRefs = orgGenesFind(genes, queryComp, sortDir);
 struct binElement *exonRef;
 
 for (exonRef = exonRefs; exonRef != NULL; exonRef = exonRef->next)
@@ -312,22 +312,32 @@ for (exonRef = exonRefs; exonRef != NULL; exonRef = exonRef->next)
 slFreeList(&exonRefs);
 }
 
-void mkMafFramesForMaf(char *geneDb, char *targetDb, struct geneBins *genes,
+static void mkFramesForOrg(struct mafAli *ali, struct mafComp *targetComp,
+                           struct orgGenes *genes)
+/* create frames for an organism and a maf alignment */
+{
+struct mafComp *queryComp = mafMayFindComponentDb(ali, genes->srcDb);
+if (queryComp != NULL)
+    mkCompFrames(genes, queryComp, targetComp);
+}
+
+void mkMafFramesForMaf(char *targetDb, struct orgGenes *orgs,
                        char *mafFilePath)
 /* create mafFrames objects from an MAF file */
 {
 struct mafFile *mafFile = mafOpen(mafFilePath);
 struct mafAli *ali;
+struct orgGenes *genes;
 
 while ((ali = mafNext(mafFile)) != NULL)
     {
-    struct mafComp *queryComp = mafMayFindComponentDb(ali, geneDb);
     struct mafComp *targetComp = mafMayFindComponentDb(ali, targetDb);
-    if ((queryComp != NULL) && (targetComp != NULL))
+    if (targetComp != NULL)
         {
         if (targetComp->strand == '-')
             mafFlipStrand(ali);  /* code requires target strand is + */
-        mkCompFrames(genes, queryComp, targetComp);
+        for (genes = orgs; genes != NULL; genes = genes->next)
+            mkFramesForOrg(ali, targetComp, genes);
         }
     mafAliFree(&ali);
     }

@@ -2,7 +2,7 @@
 #include "common.h"
 #include "finishMafFrames.h"
 #include "frameIncr.h"
-#include "geneBins.h"
+#include "orgGenes.h"
 #include "chromBins.h"
 #include "binRange.h"
 #include "localmem.h"
@@ -136,7 +136,7 @@ for (exon = gene->exons; exon != NULL; exon = exon->next)
     prevEf = linkExonFrames(prevEf, exon);
 }
 
-void finishMafFrames(struct geneBins *genes)
+void finishMafFrames(struct orgGenes *genes)
 /* Finish mafFrames build, linking mafFrames prev/next field for each gene */
 {
 struct gene *gene;
