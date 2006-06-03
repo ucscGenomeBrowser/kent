@@ -21174,4 +21174,9 @@ mysql> load data local file 'exception.template' into table snp125ExceptionDesc;
     # mapping to other species such as mouse, zebrafish, frog
     # requires visiGene probe track vgImageProbes be created first
     knownToVisiGene hg17 -fromProbePsl=vgImageProbes
+#############################################################
+# ADD A NEW TRACK GROUP (DONE, 6/3/06, Fan)
+# Create a new track group, "phenDis".
 
+    echo 'INSERT INTO grp (name, label, priority) VALUES ("phenDis", "Phenotype and Disease Associations", 2.5)' \
+   | hgsql hg17
