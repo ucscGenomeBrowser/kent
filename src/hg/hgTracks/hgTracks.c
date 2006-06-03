@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1118 2006/06/01 16:51:08 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1119 2006/06/03 18:29:09 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1894,7 +1894,6 @@ if (vis == tvPack || vis == tvSquish)
 	    }
 	y = yOff + origLineHeight * sn->row;
         tg->drawItemAt(tg, item, vg, xOff, y, scale, font, color, vis);
-
         if (withLabels)
             {
             int nameWidth = mgFontStringWidth(font, name);
@@ -3499,6 +3498,70 @@ tg->itemHeight 	= tgFixedItemHeight;
 tg->itemStart 	= superfamilyItemStart;
 tg->itemEnd 	= superfamilyItemEnd;
 tg->drawName 	= FALSE;
+}
+
+void rgdQtlDrawAt(struct track *tg, void *item, 
+	struct vGfx *vg, int xOff, int y, 
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single rgdQtl item at position. */
+{
+struct bed *bed = item;
+struct sqlConnection *conn = hAllocConn();
+char cond_str[256];
+char *chp;
+
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+struct trackDb *tdb = tg->tdb;
+int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
+int scoreMax = atoi(trackDbSettingOrDefault(tdb, "scoreMax", "1000"));
+char *directUrl = trackDbSetting(tdb, "directUrl");
+boolean withHgsid = (trackDbSetting(tdb, "hgsid") != NULL);
+
+if (tg->itemColor != NULL)
+    color = tg->itemColor(tg, bed, vg);
+else
+    {
+    if (tg->colorShades)
+	color = tg->colorShades[grayInRange(bed->score, scoreMin, scoreMax)];
+    }
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    vgBox(vg, x1, y, w, heightPer, color);
+    if (tg->drawName && vis != tvSquish)
+	{
+	char *s;
+	
+	/* get description from rgdQtlLink table */
+	sprintf(cond_str, "name='%s'", tg->itemName(tg, bed));
+        s  = sqlGetField(conn, database, "rgdQtlLink", "description", cond_str);
+
+	/* chop off text starting from " (human)" */
+	chp = strstr(s, " (human)");
+	if (chp != NULL) *chp = '\0';
+	
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = contrastingColor(vg, color);
+	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
+	    }
+	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+		tg->mapName, tg->mapItemName(tg, bed), s, directUrl, withHgsid);
+	}
+    }
+}
+
+void rgdQtlMethods(struct track *tg)
+/* Fill in methods for rgdQtl track. */
+{
+tg->drawItemAt 	= rgdQtlDrawAt;
+tg->drawName 	= TRUE;
 }
 
 char *getOrganism(struct sqlConnection *conn, char *acc)
@@ -11182,6 +11245,7 @@ registerTrackHandler("genieKnown", genieKnownMethods);
 registerTrackHandler("knownGene", knownGeneMethods);
 registerTrackHandler("hg17Kg", hg17KgMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
+registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("refGene", refGeneMethods);
 registerTrackHandler("blastMm6", blastMethods);
 registerTrackHandler("blastDm1FB", blastMethods);
