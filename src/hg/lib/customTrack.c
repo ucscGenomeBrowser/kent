@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.98 2006/06/02 18:07:56 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.99 2006/06/03 00:20:09 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -248,7 +248,7 @@ if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
     {
     /* running the single command:
      *	hgLoadBed -verbose=0 -tmpDir=../trash
-     *	--maxChromNameLength=${nameLength}
+     *		-maxChromNameLength=${nameLength} stdin
      */
     struct dyString *tmpDy = newDyString(0);
     char *cmd1[] = {NULL, "-verbose=0", "-tmpDir=../trash", NULL, NULL, NULL, "stdin", NULL};
