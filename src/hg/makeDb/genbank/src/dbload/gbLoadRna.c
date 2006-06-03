@@ -31,7 +31,7 @@
 #include "dbLoadPartitions.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: gbLoadRna.c,v 1.32 2006/06/02 05:46:01 markd Exp $";
+static char const rcsid[] = "$Id: gbLoadRna.c,v 1.33 2006/06/03 07:34:25 markd Exp $";
 
 /* FIXME: add optimize subcommand to sort all alignment tables */
 
@@ -559,7 +559,10 @@ if (gOptions.flags & DBLOAD_INITIAL)
 
 /* delete anything on the reload list up front */
 if (((gOptions.flags & DBLOAD_DRY_RUN) == 0) && (reloadList != NULL))
+    {
+    gbAlignDataInit(NULL, &gOptions);
     gbReloadDelete(reloadList, gWorkDir);
+    }
 
 selectList = dbLoadPartitionsGet(&gOptions, index);
 if ((gOptions.flags & DBLOAD_INITIAL) && (selectList == NULL))

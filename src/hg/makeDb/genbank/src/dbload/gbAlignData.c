@@ -28,7 +28,7 @@
 #include "gbSql.h"
 #include "sqlDeleter.h"
 
-static char const rcsid[] = "$Id: gbAlignData.c,v 1.24 2006/06/02 05:46:01 markd Exp $";
+static char const rcsid[] = "$Id: gbAlignData.c,v 1.25 2006/06/03 07:34:25 markd Exp $";
 
 /* table names */
 static char *REF_SEQ_ALI = "refSeqAli";
@@ -663,10 +663,11 @@ if (gXenoRefGeneInfo != NULL)
 
 static void deleteGenBankChromAligns(struct sqlConnection *conn,
                                      struct sqlDeleter* deleter,
-                                     unsigned type, char *table, char *typeStr)
+                                     unsigned type, char *typeStr)
 /* delete outdated genbank alignments from per-chrom tables. */
 {
 struct slName* chrom = gChroms;
+char table[64];
 while (chrom != NULL)
     {
     safef(table, sizeof(table), "%s_%s", chrom->name, typeStr);
@@ -692,7 +693,7 @@ safef(table, sizeof(table), "all_%s", typeStr);
 sqlDeleterDel(deleter, conn, table, "qName");
 
 if (gOptions->flags & DBLOAD_PER_CHROM_ALIGN)
-    deleteGenBankChromAligns(conn, deleter, type, table, typeStr);
+    deleteGenBankChromAligns(conn, deleter, type, typeStr);
 else 
     {
     if (type == GB_EST)
