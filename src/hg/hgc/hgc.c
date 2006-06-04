@@ -192,7 +192,7 @@
 #include "landmark.h"
 #include "ec.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1024 2006/06/02 20:10:46 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1025 2006/06/04 00:47:06 fanhsu Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -17329,8 +17329,17 @@ struct hgMutAttr attr;
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn2 = hAllocConn();
 struct sqlResult *sr;
+struct sqlResult *sr4;
 char **row;
 char query[256];
+
+struct dvXref2 *dvXref2;
+struct omimTitle *omimTitle;
+
+char query4[256];
+char *commentTypeIx;
+char *kgId, *spId=NULL, *geneSymbol=NULL;
+
 int i;
 char *prevClass = NULL, *prevName = NULL;
 
@@ -17348,6 +17357,22 @@ if ((row = sqlNextRow(sr)) != NULL)
     mut = hgMutLoad(row);
     printf("<B>HGVS name:</B> %s <BR />\n", mut->name);
     bedPrintPos((struct bed *)mut, 3);
+    }
+sqlFreeResult(&sr);
+
+if (mut->srcId == 3)
+    {
+    safef(query, sizeof(query),
+    "select kgId, kgXref.spId, geneSymbol from kgXref, dv where varId='%s' and dv.spId=kgXref.spId", 
+    mut->mutId);
+	  
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+    	{
+    	kgId = strdup(row[0]);
+    	spId = strdup(row[1]);
+    	geneSymbol = strdup(row[2]);
+    	}
     }
 sqlFreeResult(&sr);
 
@@ -17458,6 +17483,76 @@ if (prevClass != NULL)
     freeMem(prevName);
     }
 printf("</DD></DL>\n");
+
+if (spId == NULL) goto skip_dv;
+
+printf("<DL><DT><B>Variation and Disease Info Related to Gene Locus of %s (Protein %s):</B></DT>\n<DD> ", geneSymbol, spId);
+
+fflush(stdout);
+safef(query, sizeof(query), "select id from uniProt.commentType where val='POLYMORPHISM'");
+sr = sqlGetResult(protDbConn, query);
+row = sqlNextRow(sr);
+commentTypeIx = strdup(row[0]);
+sqlFreeResult(&sr);
+safef(query, sizeof(query), 
+"select commentVal.val from uniProt.comment, uniProt.commentVal where comment.acc='%s' and commentType=%s and comment.commentVal=commentVal.id", spId, commentTypeIx);
+sr = sqlGetResult(protDbConn, query);
+row = sqlNextRow(sr);
+if (row != NULL)
+    {
+    printf("<B>POLYMORPHISM:</B> ");
+    printf("%s<BR>\n", row[0]);fflush(stdout);
+    sqlFreeResult(&sr);
+    fflush(stdout);
+    }
+safef(query, sizeof(query), "select id from uniProt.commentType where val='DISEASE'");
+sr = sqlGetResult(protDbConn, query);
+row = sqlNextRow(sr);
+commentTypeIx = strdup(row[0]);
+sqlFreeResult(&sr);
+
+safef(query, sizeof(query), 
+"select commentVal.val from uniProt.comment, uniProt.commentVal where comment.acc='%s' and commentType=%s and comment.commentVal=commentVal.id", spId, commentTypeIx);
+sr = sqlGetResult(protDbConn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("<B>DISEASE:</B> ");
+    printf("%s<BR>\n", row[0]);fflush(stdout);
+    sqlFreeResult(&sr);
+    }
+    
+safef(query, sizeof(query), "select * from dvXref2 where varId = '%s' ", itemName);
+sr = sqlGetResult(protDbConn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    dvXref2 = dvXref2Load(row);
+    if (sameString("MIM", dvXref2->extSrc)) 
+        {
+        printf("<B>OMIM:</B> ");
+        printf("<A HREF=");
+        printOmimUrl(stdout, dvXref2->extAcc);
+        printf(" Target=_blank> %s</A> \n", dvXref2->extAcc);
+	/* nested query here */
+        if (hTableExists("omimTitle"))
+	    {
+            safef(query4, sizeof(query4), 
+	    	  "select * from omimTitle where omimId = '%s' ", dvXref2->extAcc);
+            sr4 = sqlGetResult(conn, query4);
+            while ((row = sqlNextRow(sr4)) != NULL)
+                {
+		omimTitle = omimTitleLoad(row);
+		printf("%s\n", omimTitle->title);
+		omimTitleFree(&omimTitle);
+		}
+	    }
+	    printf("<BR>\n");
+	}
+    dvXref2Free(&dvXref2);
+    }
+sqlFreeResult(&sr);
+printf("</DD></DL>");
+
+skip_dv:
 
 hgMutFree(&mut);
 printTrackHtml(tdb);
