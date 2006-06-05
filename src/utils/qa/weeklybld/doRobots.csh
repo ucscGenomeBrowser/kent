@@ -7,11 +7,11 @@ endif
 
 set branch=v${BRANCHNN}_branch
 
-if ( -d ~/bin/i386.orig ) then
+if ( -d ~/bin/$MACHTYPE.orig ) then
  echo "restoring from last failed symlink."
  ./unsymtrick.csh
 endif
-if ( ! -d ~/bin/i386.cluster ) then
+if ( ! -d ~/bin/$MACHTYPE.cluster ) then
  echo "something messed up in symlink"
  exit 1
 endif
@@ -22,21 +22,33 @@ set returnCode=0
 echo "Symlink Trick."
 ./symtrick.csh
 
-./doHgNearTestRobot.csh
+echo "disabled doHgNearTestRobot.csh"
+#./doHgNearTestRobot.csh
 set err = $status
 if ( $err ) then
     echo "error running doHgNearTestRobot.csh: $err" 
     set returnCode=1
 endif
 
-./doHgTablesTestRobot.csh
+echo "disabled doHgTablesTestRobot.csh"
+#./doHgTablesTestRobot.csh
 set err = $status
 if ( $err ) then
     echo "error running doHgTablesTestRobot.csh: $err" 
     set returnCode=1
 endif
 
-# note this uses java and ant, so it will not work on beta, so run from dev instead
+# note TrackCheck and LiftOver robots use java and ant, so it will not work on beta, 
+#  so run them from hgwdev instead.
+
+# need to create a mini-sandbox to build these robot utilities
+ssh hgwdev $WEEKLYBLD/doJavaUtilBuild.csh
+set err = $status
+if ( $err ) then
+    echo "error running doJavaUtilBuild.csh: $err" 
+    set returnCode=1
+endif 
+
 ssh hgwdev $WEEKLYBLD/doTrackCheckRobot.csh
 set err = $status
 if ( $err ) then

@@ -1,8 +1,8 @@
 #!/bin/tcsh
 cd $WEEKLYBLD
 
-if (( "$HOST" != "hgwdev" ) && ( "$HOST" != "hgwbeta" ) then
- echo "error: you must run this script on hgwdev or hgwbeta!"
+if (( "$HOST" != "$BOX32" ) && ( "$HOST" != "hgwbeta" ) then
+ echo "error: you must run this script on $BOX32 or hgwbeta!"
  exit 1
 endif
 

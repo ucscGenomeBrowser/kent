@@ -3,15 +3,15 @@ cd $WEEKLYBLD
 
 # ------------------------------------
 # Note - this script can NOT be launched from beta
-#  using something like ssh hgwdev $WEEKLYBLD/buildCgi32.csh
+#  using something like ssh $BOX32 $WEEKLYBLD/buildCgi32.csh
 #  because when scp needs the password typed in, apparently
 #  the stdin is not available from the terminal.
 # Instead, log directly into beta and execute the script.
 #  then when prompted for the password, put in the qateam pwd. 
 # ------------------------------------
 
-if ("$HOST" != "hgwdev") then
- echo "error: you must run this script on hgwdev!"
+if ("$HOST" != "$BOX32") then
+ echo "error: you must run this script on $BOX32!"
  exit 1
 endif
 

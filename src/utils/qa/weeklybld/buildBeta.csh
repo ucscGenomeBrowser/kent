@@ -1,16 +1,5 @@
 #!/bin/tcsh
-#following line using source .cshrc doesnt really work?
-# note- best to do co on kkstore, because fast and hgwdev identified in connect:
-#  ssh kkstore; cd $BUILDDIR/"v"$BRANCHNN"_branch"
-#   cvs -d hgwdev:$CVSROOT co kent
-#  then it will work even in trackDb make strict which calls cvs up
 cd $WEEKLYBLD
-
-# for cron job
-#source .cshrc
-#setenv SHELL /bin/tcsh
-#setenv PATH /bin:/usr/bin:/usr/X11R6/bin:/usr/local/bin:/cluster/bin/i386
-#setenv HOSTNAME $HOST
 
 if ( "$HOST" != "hgwbeta" ) then
  echo "error: you must run this script on hgwbeta!"

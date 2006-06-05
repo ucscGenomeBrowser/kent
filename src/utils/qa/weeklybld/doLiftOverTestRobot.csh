@@ -8,8 +8,7 @@ endif
 
 # run on hgwdev
 set log = LiftOverTest-v${BRANCHNN}.log
-cd $BUILDDIR/v${BRANCHNN}_branch/kent/java
-build
+cd $JAVABUILD
 nohup LiftOverTest default >& $WEEKLYBLD/logs/$log 
 
 echo "LiftOverTest robot done. Check to see if any errors in $WEEKLYBLD/logs/$log."

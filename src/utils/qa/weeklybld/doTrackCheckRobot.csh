@@ -7,9 +7,7 @@ endif
 
 # run on hgwdev
 set log = TrackCheck-v${BRANCHNN}.log
-cd $BUILDDIR/v${BRANCHNN}_branch/kent/java
-build
-cd src/edu/ucsc/genome/qa/cgiCheck
+cd $JAVABUILD/src/edu/ucsc/genome/qa/cgiCheck
 nohup TrackCheck full.props >& $WEEKLYBLD/logs/$log 
 # tail -f $WEELYBLD/logs/$log
 # egrep -i "not|warn|err" $WEEKLYBLD/logs/$log

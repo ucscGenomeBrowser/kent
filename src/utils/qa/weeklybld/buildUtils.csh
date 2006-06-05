@@ -5,8 +5,8 @@
 cd $WEEKLYBLD
 
 if ( "$MACHTYPE" == "i386" ) then
-    if ( "$HOST" != "hgwdev" ) then
-	echo "error: you must run this script on hgwdev!"
+    if ( "$HOST" != "$BOX32" ) then
+	echo "error: you must run this script on $BOX32!"
 	exit 1
     endif
 endif

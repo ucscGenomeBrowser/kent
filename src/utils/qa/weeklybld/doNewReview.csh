@@ -64,10 +64,10 @@ echo "tag review moved to HEAD."
 ssh hgwdev $WEEKLYBLD/buildCvsReports.csh review real
 
 if ( $status ) then
- echo "buildCvsReports.csh  failed on $HOST"
+ echo "buildCvsReports.csh  failed on hgwdev"
  exit 1
 endif
-echo "buildCvsReports.csh done on $HOST"
+echo "buildCvsReports.csh done on hgwdev"
 
 #---------------------
 
