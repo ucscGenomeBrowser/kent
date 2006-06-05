@@ -5,7 +5,7 @@
 #include "options.h"
 #include "vegaInfo.h"
 
-static char const rcsid[] = "$Id: vegaBuildInfo.c,v 1.1 2003/11/03 18:17:43 braney Exp $";
+static char const rcsid[] = "$Id: vegaBuildInfo.c,v 1.2 2006/06/05 15:38:29 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -30,11 +30,7 @@ return str;
 
 void vegaBuildInfo( char *gtfName, char *outName)
 {
-int size;
-char *name;
 struct hash *hash = newHash(0);
-struct psl *psl;
-char *start;
 FILE *out = mustOpen(outName, "w");
 struct lineFile *lf = lineFileOpen(gtfName, TRUE);
 struct vegaInfo vi;
@@ -43,7 +39,7 @@ char *p;
 int wordCount;
 int ii;
 
-while( wordCount = lineFileChopNext(lf, row, 30))
+while ((wordCount = lineFileChopNext(lf, row, 30)) > 0)
     {
     vi.method = row[1];
     for(ii=8; ii< wordCount; ii++)
