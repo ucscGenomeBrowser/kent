@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.10 2006/06/01 23:59:48 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.11 2006/06/05 04:14:58 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -67,82 +67,58 @@ cartSaveSession(cart);
 /* add your own: 
  *  text box and two buttons (submit, reset), 
  *  formatted in a table */
-cgiParagraph("&nbsp; Paste in URLs or data:\n");
 cgiSimpleTableStart();
 cgiSimpleTableRowStart();
-
-cgiSimpleTableFieldStart();
-cgiMakeTextArea(hgCtDataText, cartCgiUsualString(cart, hgCtDataText, ""), 8, 60);
+cgiTableField("Paste in URLs or data:\n");
+puts("<TD ALIGN='RIGHT'>");
+cgiMakeClearButton("mainForm", hgCtDataText);
 cgiTableFieldEnd();
 
-/* right element of table is a nested table
-       * with two buttons stacked on top of each other */
-cgiSimpleTableFieldStart();
-cgiSimpleTableStart();
+cgiTableField("&nbsp; Optional <A TARGET=_BLANK HREF=\"/goldenPath/help/ct_description.txt\">descriptions</A>:");
 
+puts("<TD ALIGN='RIGHT'>");
+cgiMakeClearButton("mainForm", hgCtDocText);
+cgiTableFieldEnd();
+cgiTableRowEnd();
+cgiSimpleTableFieldStart();
+cgiTableFieldEnd();
+
+/* second row - text entry boxes for URL's or data  and submit button */
 cgiSimpleTableRowStart();
+puts("<TD COLSPAN=2>");
+cgiMakeTextArea(hgCtDataText, cartCgiUsualString(cart, hgCtDataText, ""), 8, 55);
+cgiTableFieldEnd();
+puts("<TD COLSPAN=2>");
+cgiMakeTextArea(hgCtDocText, cartCgiUsualString(cart, hgCtDocText, ""), 8, 25);
+cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 cgiMakeSubmitButton();
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
-cgiSimpleTableRowStart();
-cgiSimpleTableFieldStart();
-cgiMakeClearButton("mainForm", hgCtDataText);
-//cgiMakeResetButton();
-cgiTableFieldEnd();
-cgiTableRowEnd();
-
-cgiTableEnd();
-cgiTableFieldEnd();
-
-cgiTableRowEnd();
-cgiTableEnd();
-
-/* file upload controls, formatted into a table */
-    
-cgiSimpleTableStart();
-
-/* first  row -- file upload controls,
+/* file upload controls, 
  *    consisting of a label, entry box/browser, and button */
 cgiSimpleTableRowStart();
-
-cgiTableField("&nbsp; Or upload data from a file:");
-
+cgiTableField("&nbsp;");
+cgiTableRowEnd();
+cgiSimpleTableRowStart();
+cgiTableField("&nbsp; Or upload from file:");
 cgiSimpleTableFieldStart();
 cgiMakeFileEntry(hgCtDataFile);
 cgiTableFieldEnd();
-
 cgiSimpleTableFieldStart();
-cgiMakeButton("SubmitFile", "Submit File");
-cgiTableFieldEnd();
-
-cgiTableRowEnd();
-
-/* fields for HTML entry/upload */
-cgiSimpleTableRowStart();
-cgiTableField("<P><BR>");
-cgiTableRowEnd();
-
-cgiSimpleTableRowStart();
-cgiTableField("&nbsp; Optional URLs of <A TARGET=_BLANK HREF=\"/goldenPath/help/ct_description.txt\">HTML descriptions</A>:");
-cgiSimpleTableFieldStart();
-cgiMakeTextArea(hgCtDocText, 
-        cartCgiUsualString(cart, hgCtDocText, ""), 2, 28);
-cgiTableFieldEnd();
-cgiSimpleTableFieldStart();
-cgiMakeClearButton("mainForm", hgCtDocText);
+cgiMakeButton("SubmitFile", "Submit Files");
 cgiTableFieldEnd();
 cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
-cgiTableField("&nbsp; Or upload description from a file:");
-cgiSimpleTableFieldStart();
+cgiTableField("&nbsp; Optional <A TARGET=_BLANK HREF=\"/goldenPath/help/ct_description.txt\">description file</A>:");
+puts("<TD>");
 cgiMakeFileEntry(hgCtDocFile);
 cgiTableFieldEnd();
 cgiTableRowEnd();
-cgiTableEnd();
 
+cgiTableEnd();
 }
 
 void showCustom()
