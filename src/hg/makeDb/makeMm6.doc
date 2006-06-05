@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.113 2006/05/23 18:29:48 kate Exp $"
+#	"$Id: makeMm6.doc,v 1.114 2006/06/05 23:48:58 hiram Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -10151,7 +10151,7 @@ ssh hgwdev
 knownToVisiGene mm6
 
 #######################################################################
-## LIFTOVER To Mm8 (WORKING - 2006-05-15 - Hiram)
+## LIFTOVER To Mm8 (DONE - 2006-05-15 - 2006-06-05 - Hiram)
     ssh kkr1u00
     #	do not need to run this command since /cluster/data/mm8/split10k
     #	already exists from previous liftOver jobs (mm7 to mm8)
@@ -10168,15 +10168,16 @@ knownToVisiGene mm6
     cd /cluster/data/mm6/bed/blat.mm8.2006-05-15/run
     para try, check, push, check, ...
 # Completed: 1360 of 1360 jobs
-# CPU time in finished jobs:    3890058s   64834.31m  1080.57h   45.02d  0.123 y
-# IO & Wait Time:                 13326s     222.09m     3.70h    0.15d  0.000 y
-# Average job time:                2870s      47.84m     0.80h    0.03d
-# Longest finished job:           27224s     453.73m     7.56h    0.32d
-# Submission to last job:         80553s    1342.55m    22.38h    0.93d
+# CPU time in finished jobs:    3975252s   66254.20m  1104.24h   46.01d  0.126 y
+# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+# Average job time:                2555s      42.58m     0.71h    0.03d
+# Longest finished job:           25347s     422.45m     7.04h    0.29d
+# Submission to last job:       1477498s   24624.97m   410.42h   17.10d
 
     # as it says, DO THIS NEXT:
     #	this does the liftUp and makes the psl files
-    ssh kkstore03
+    #	kkr1u00 is down at this time, fixup this script to work on kkr3u00
+    ssh kkr3u00
     cd /cluster/data/mm6/bed
     ln -s blat.mm8.2006-05-15 blat.mm8
     time $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh mm6 mm8
@@ -10188,15 +10189,18 @@ knownToVisiGene mm6
 	mm6 /cluster/data/mm6/nib mm8 /cluster/data/mm8/nib
     # as it says, DO THIS NEXT:
     #	running the chain batch
-    cd /cluster/data/mm6/bed/blat.mm8.2006-04-21/chainRun
+    cd /cluster/data/mm6/bed/blat.mm8.2006-05-15/chainRun
     para try, check, push, check, ...
     Completed: 40 of 40 jobs
-# CPU time in finished jobs:       5381s      89.68m     1.49h    0.06d  0.000 y
-# IO & Wait Time:                  2119s      35.32m     0.59h    0.02d  0.000 y
-# Average job time:                 188s       3.12m     0.05h    0.00d
-# Longest finished job:             652s      10.87m     0.18h    0.01d
-# Submission to last job:           685s      11.42m     0.19h    0.01d
-    ssh kkstore04
+# Completed: 34 of 34 jobs
+# CPU time in finished jobs:       6655s     110.92m     1.85h    0.08d  0.000 y
+# IO & Wait Time:                  1238s      20.63m     0.34h    0.01d  0.000 y
+# Average job time:                 232s       3.87m     0.06h    0.00d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:             759s      12.65m     0.21h    0.01d
+# Submission to last job:           759s      12.65m     0.21h    0.01d
+
+    ssh kkstore01
     $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-net.csh mm6 mm8
     #	Created /cluster/data/mm6/bed/liftOver/mm6ToMm8.over.chain.gz
     # as it says, DO THIS NEXT:
@@ -10209,5 +10213,5 @@ knownToVisiGene mm6
     #	But I believe that link was already done:
     cd /gbdb/mm6/liftOver
     ls -og mm6ToMm8*
-    #	lrwxrwxrwx    1       53 Apr 24 12:32 mm6ToMm8.over.chain.gz -> \
+    #	lrwxrwxrwx  1 53 Jun  5 16:35 mm6ToMm8.over.chain.gz ->
     #		/cluster/data/mm6/bed/liftOver/mm6ToMm8.over.chain.gz

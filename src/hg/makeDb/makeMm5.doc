@@ -7812,7 +7812,7 @@ ssh hgwdev
 knownToVisiGene mm5
 
 #######################################################################
-## LIFTOVER To Mm8 (WORKING - 2006-05-15 - Hiram)
+## LIFTOVER To Mm8 (DONE - 2006-05-15 - 2006-06-05 - Hiram)
     ssh kkr1u00
     #	do not need to run this command since /cluster/data/mm8/split10k
     #	already exists from previous liftOver jobs (mm7 to mm8)
@@ -7828,18 +7828,21 @@ knownToVisiGene mm5
     # as it says, DO THIS NEXT:
     cd /cluster/data/mm5/bed/blat.mm8.2006-05-15/run
     para try, check, push, check, ...
-# Completed: 1360 of 1360 jobs
-# CPU time in finished jobs:    3890058s   64834.31m  1080.57h   45.02d  0.123 y
-# IO & Wait Time:                 13326s     222.09m     3.70h    0.15d  0.000 y
-# Average job time:                2870s      47.84m     0.80h    0.03d
-# Longest finished job:           27224s     453.73m     7.56h    0.32d
-# Submission to last job:         80553s    1342.55m    22.38h    0.93d
+# Completed: 1462 of 1462 jobs
+# CPU time in finished jobs:    3990246s   66504.10m  1108.40h   46.18d  0.127 y
+# IO & Wait Time:                     0s       0.00m     0.00h    0.00d  0.000 y
+# Average job time:                2371s      39.51m     0.66h    0.03d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:           24307s     405.12m     6.75h    0.28d
+# Submission to last job:       1474509s   24575.15m   409.59h   17.07d
 
     # as it says, DO THIS NEXT:
     #	this does the liftUp and makes the psl files
-    ssh kkstore03
+    #	kkr1u00 is down these days
+    ssh kkr3u00
     cd /cluster/data/mm5/bed
     ln -s blat.mm8.2006-05-15 blat.mm8
+    #	edit this script to allow use on kkr3u00
     time $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-lift.csh mm5 mm8
     #	real    16m5.091s
     # as it says, DO THIS NEXT:
@@ -7847,18 +7850,21 @@ knownToVisiGene mm5
     ssh kki
     time $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-chain.csh \
 	mm5 /cluster/data/mm5/nib mm8 /cluster/data/mm8/nib
+
     # as it says, DO THIS NEXT:
     #	running the chain batch
-    cd /cluster/data/mm5/bed/blat.mm8.2006-04-21/chainRun
+    cd /cluster/data/mm5/bed/blat.mm8.2006-05-15/chainRun
     para try, check, push, check, ...
-    Completed: 40 of 40 jobs
-# CPU time in finished jobs:       5381s      89.68m     1.49h    0.06d  0.000 y
-# IO & Wait Time:                  2119s      35.32m     0.59h    0.02d  0.000 y
-# Average job time:                 188s       3.12m     0.05h    0.00d
-# Longest finished job:             652s      10.87m     0.18h    0.01d
-# Submission to last job:           685s      11.42m     0.19h    0.01d
-    ssh kkstore04
+# Completed: 34 of 34 jobs
+# CPU time in finished jobs:       6893s     114.88m     1.91h    0.08d  0.000 y
+# IO & Wait Time:                  7183s     119.72m     2.00h    0.08d  0.000 y
+# Average job time:                 414s       6.90m     0.12h    0.00d
+# Longest finished job:            1130s      18.83m     0.31h    0.01d
+# Submission to last job:          1130s      18.83m     0.31h    0.01d
+
+    ssh kkstore03
     $HOME/kent/src/hg/makeDb/makeLoChain/makeLoChain-net.csh mm5 mm8
+
     #	Created /cluster/data/mm5/bed/liftOver/mm5ToMm8.over.chain.gz
     # as it says, DO THIS NEXT:
     ssh hgwdev
@@ -7870,7 +7876,7 @@ knownToVisiGene mm5
     #	But I believe that link was already done:
     cd /gbdb/mm5/liftOver
     ls -og mm5ToMm8*
-    #	lrwxrwxrwx    1       53 Apr 24 12:32 mm5ToMm8.over.chain.gz -> \
+    #	lrwxrwxrwx  1 53 Jun  5 16:10 mm5ToMm8.over.chain.gz ->
     #		/cluster/data/mm5/bed/liftOver/mm5ToMm8.over.chain.gz
 
 
