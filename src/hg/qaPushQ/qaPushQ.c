@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.79 2006/03/23 06:27:54 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.80 2006/06/05 18:27:35 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -386,7 +386,7 @@ void replaceInStr(char *s, int ssize, char *t, char *r)
 char *temp = replaceChars(s,t,r);
 if (strlen(temp) >= ssize)
     {
-    errAbort("buf size exceeded. strlen(temp)=%d, size of buf= %d",strlen(temp),ssize);
+    errAbort("buf size exceeded. strlen(temp)=%ld, size of buf= %d",(unsigned long)strlen(temp),ssize);
     }
 safef(s,ssize,"%s",temp);
 freez(&temp);
@@ -1774,7 +1774,7 @@ else
     if (isNew)
 	{
 	/* save new record */
-	safef(msg, sizeof(msg), "%%0%dd", sizeof(q.qid)-1);
+	safef(msg, sizeof(msg), "%%0%dd", (int)sizeof(q.qid)-1);
 	safef(newQid,sizeof(newQid),msg,newqid);
 	safef(q.qid, sizeof(q.qid), newQid);
     	safef(msg, sizeof(msg), "%s", "");
@@ -1792,7 +1792,7 @@ if (sameString(clonebutton,"clone"))
     /* save new clone */
     safef(q.pqid,sizeof(q.pqid), q.qid);  /* daughter will point to parent */
     newqid = getNextAvailQid();
-    safef(msg, sizeof(msg), "%%0%dd", sizeof(q.qid)-1);
+    safef(msg, sizeof(msg), "%%0%dd", (int)sizeof(q.qid)-1);
     safef(newQid,sizeof(newQid),msg,newqid);
     safef(q.qid, sizeof(q.qid), newQid);
     safef(msg, sizeof(msg), "%s", "");
