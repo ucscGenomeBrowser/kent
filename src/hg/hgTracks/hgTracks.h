@@ -463,12 +463,14 @@ int tgFixedTotalHeightNoOverflow(struct track *tg, enum trackVisibility vis);
 /* Most fixed height track groups will use this to figure out the height 
  * they use. */
 
-void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis);
+void changeTrackVis(struct group *groupList, char *groupTarget, 
+        int changeVis, boolean ifVisible);
 /* Change track visibilities. If groupTarget is 
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should 
- * be tvHide, tvDense, etc. */
+ * be tvHide, tvDense, etc. The ifVisible flag when set, causes only
+ * visibility to change only for non-hidden tracks */
 
 void genericDrawItems(struct track *tg, 
 	int seqStart, int seqEnd,

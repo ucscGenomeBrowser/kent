@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1119 2006/06/03 18:29:09 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1120 2006/06/05 05:35:13 kate Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -501,12 +501,14 @@ int height = tgFixedTotalHeightOptionalOverflow(tg, vis, tl.fontHeight+1, tl.fon
 return height;
 }
 
-void changeTrackVis(struct group *groupList, char *groupTarget, int changeVis)
+void changeTrackVis(struct group *groupList, char *groupTarget, 
+        int changeVis, boolean ifVisible)
 /* Change track visibilities. If groupTarget is 
  * NULL then set visibility for tracks in all groups.  Otherwise,
  * just set it for the given group.  If vis is -2, then visibility is
  * unchanged.  If -1 then set visibility to default, otherwise it should 
- * be tvHide, tvDense, etc. */
+ * be tvHide, tvDense, etc. The ifVisible flag when set, causes only
+ * visibility to change only for non-hidden tracks */
 {
 struct group *group;
 if (changeVis == -2)
@@ -521,8 +523,8 @@ for (group = groupList; group != NULL; group = group->next)
 	    struct track *track = tr->track;
 	    if (changeVis == -1)
 	        track->visibility = track->tdb->visibility;
-	    else
-	        track->visibility = changeVis;
+            else if (track->visibility != tvHide || !ifVisible)
+                track->visibility = changeVis;
 	    cartSetString(cart, track->mapName, 
 	    	hStringFromTv(track->visibility));
 	    }
@@ -10915,14 +10917,13 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
     char *vis;
-
     tg = newCustomTrack(ct);
     vis = cartOptionalString(cart, tg->mapName);
     if (vis != NULL)
 	tg->visibility = hTvFromString(vis);
     slAddHead(pGroupList, tg);
     }
-}	/*	void loadCustomTracks(struct track **pGroupList)	*/
+}
 
 boolean restrictionEnzymesOk()
 /* Check to see if it's OK to do restriction enzymes. */
@@ -11184,9 +11185,9 @@ registerTrackHandler("snp", snpMethods);
 registerTrackHandler("snp125", snp125Methods);
 registerTrackHandler("snp126", snp125Methods);
 registerTrackHandler("ld", ldMethods);
+registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpIafrate", cnpIafrateMethods);
 registerTrackHandler("cnpSebat", cnpSebatMethods);
-registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpFosmid", cnpFosmidMethods);
 registerTrackHandler("delConrad", delConradMethods);
 registerTrackHandler("delMccarroll", delMccarrollMethods);
@@ -11422,7 +11423,7 @@ loadCustomTracks(&trackList);
 
 groupTracks(&trackList, pGroupList);
 if (cgiOptionalString( "hideTracks"))
-    changeTrackVis(groupList, NULL, tvHide);
+    changeTrackVis(groupList, NULL, tvHide, FALSE);
 
 /* Get visibility values if any from ui. */
 for (track = trackList; track != NULL; track = track->next)
@@ -11466,6 +11467,8 @@ struct group *group;
 struct track *track;
 char *freezeName = NULL;
 boolean hideAll = cgiVarExists("hgt.hideAll");
+boolean hideAllNotCt = cgiVarExists("hgt.hideAllNotCt");
+char *visAll = cgiUsualString("hgt.visAll", NULL);
 boolean defaultTracks = cgiVarExists("hgt.reset");
 boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
@@ -11489,8 +11492,6 @@ hPrintf("<FORM ACTION=\"%s\" NAME=\"TrackHeaderForm\" METHOD=GET>\n\n", hgTracks
 clearButtonJavascript = "document.TrackHeaderForm.position.value=''";
 cartSaveSession(cart);
 
-
-
 /* See if want to include sequence search results. */
 userSeqString = cartOptionalString(cart, "ss");
 if (userSeqString && !ssFilesExist(userSeqString))
@@ -11507,12 +11508,24 @@ trackList = getTrackList(&groupList);
 if (measureTiming)
     uglyTime("getTrackList");
 
-/* If hideAll flag set, make all tracks hidden */
+/* Honor hideAll and visAll variables */
 if(hideAll || defaultTracks)
     {
     int vis = (hideAll ? tvHide : -1);
-    changeTrackVis(groupList, NULL, vis);
+    changeTrackVis(groupList, NULL, vis, FALSE);
     }
+else if (hideAllNotCt)
+    {  
+    struct group *group;
+    for (group = groupList; group != NULL; group = group->next)
+        {
+        if (sameString("user", group->name))
+            continue;
+        changeTrackVis(groupList, group->name, tvHide, FALSE);
+        }
+    }
+else if (visAll)
+    changeTrackVis(groupList, NULL, hTvFromString(visAll), TRUE);
 
 /* Before loading items, deal with the next/prev item arrow buttons if pressed. */
 if (cgiVarExists("hgt.nextItem"))       
@@ -12507,7 +12520,8 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 			"hgt.left1", "hgt.left2", "hgt.left3", 
 			"hgt.right1", "hgt.right2", "hgt.right3", 
 			"hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
-			"hgt.tui", "hgt.hideAll", "hgt.psOutput", "hideControls",
+			"hgt.tui", "hgt.hideAll", "hgt.visAll", 
+                        "hgt.hideAllNotCt", "hgt.psOutput", "hideControls",
 			NULL };
 
 int main(int argc, char *argv[])

@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.11 2006/06/05 04:14:58 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.12 2006/06/05 05:35:12 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -34,15 +34,12 @@ errAbort(
 #define hgCtDocFile      "hgCt_docFile"
 #define hgCtDoDelete     "hgCt_do_Delete"
 #define hgCtDeletePrefix "hgCt_del"
-#define hgCtDoGenomeBrowser     "hgCt_do_GenomeBrowser"
-#define hgCtDoTableBrowser     "hgCt_do_TableBrowser"
 
 /* Global variables */
 struct cart *cart;
 struct hash *oldCart = NULL;
 char *excludeVars[] = {"Submit", "submit", "SubmitFile", 
-                        hgCtDoDelete, hgCtDoGenomeBrowser, 
-                        hgCtDoTableBrowser, NULL};
+                        hgCtDoDelete, NULL};
 char *database;
 char *organism;
 struct customTrack *ctList = NULL;
@@ -182,12 +179,15 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 		for (i=2; i<wordCount; ++i)
 		    {
 		    char *s = words[i];
-		    //struct track *tg;
-		    //boolean toAll = sameWord(s, "all");
-		        {
-			//if (toAll || sameString(s, tg->mapName))
-			    cartSetString(cart, s, command);
-			}
+		    if (sameWord(s, "all"))
+                        {
+                        if (sameString(command, "hide"))
+                            cartSetBoolean(cart, "hgt.hideAllNotCt", TRUE);
+                        else
+                            cartSetString(cart, "hgt.visAll", command);
+                        }
+                    else
+                        cartSetString(cart, s, command);
 		    }
 		}
 	    }
@@ -198,23 +198,6 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 	    if (!hgIsChromRange(words[2])) 
 	        errAbort("browser position needs to be in chrN:123-456 format");
             cartSetString(cart, "position", words[2]);
-	    ///hgParseChromRange(words[2], &chromName, &winStart, &winEnd);
-
-            /*Fix a start window of -1 that is returned when a custom track position
-              begins at 0
-            */
-            /*
-            if (winStart < 0) 
-                {
-                winStart = 0;
-                }
-	    }
-	else if (sameString(command, "pix"))
-	    {
-	    if (wordCount != 3)
-	        errAbort("Expecting 3 words in pix line");
-	    setPicWidth(words[2]);
-            */
 	    }
 	}
     }
@@ -391,6 +374,7 @@ if (ctList != NULL)
 
     /* save custom tracks to file */
     customTrackSave(ctList, ctFileName);
+    cartSetString(cart, "hgta_group", "user");
 
     //cartRemovePrefix(cart, "hgCt_");
     }
