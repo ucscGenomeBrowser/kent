@@ -201,3 +201,9 @@ Color delMccarrollColor(struct track *tg, void *item, struct vGfx *vg);
 
 void delMccarrollMethods(struct track *tg);
 /* methods for delMccarroll */
+
+Color delHindsColor(struct track *tg, void *item, struct vGfx *vg);
+/* always red */
+
+void delHindsMethods(struct track *tg);
+/* methods for delHinds */

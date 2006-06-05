@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1120 2006/06/05 05:35:13 kate Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1121 2006/06/05 20:14:41 heather Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -8190,6 +8190,7 @@ trackHash = newHash(8);
 /* Figure out dimensions and allocate drawing space. */
 pixWidth = tl.picWidth;
 
+fprintf(stderr, "hgTracks: makeActiveImage\n");
 if (rulerMode != tvFull)
     {
     rulerCds = FALSE; 
@@ -11182,7 +11183,9 @@ registerTrackHandler("stsMapMouseNew", stsMapMouseMethods);
 registerTrackHandler("stsMapRat", stsMapRatMethods);
 registerTrackHandler("snpMap", snpMapMethods);
 registerTrackHandler("snp", snpMethods);
+fprintf(stderr, "registerTrackHandler for snp125\n");
 registerTrackHandler("snp125", snp125Methods);
+fprintf(stderr, "registerTrackHandler for snp126\n");
 registerTrackHandler("snp126", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
@@ -11191,6 +11194,7 @@ registerTrackHandler("cnpSebat", cnpSebatMethods);
 registerTrackHandler("cnpFosmid", cnpFosmidMethods);
 registerTrackHandler("delConrad", delConradMethods);
 registerTrackHandler("delMccarroll", delMccarrollMethods);
+registerTrackHandler("delHinds", delHindsMethods);
 registerTrackHandler("hapmapLd", ldMethods);
 registerTrackHandler("rertyHumanDiversityLd", ldMethods);
 registerTrackHandler("recombRate", recombRateMethods);
@@ -11475,6 +11479,7 @@ boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
 char *clearButtonJavascript;
 
+fprintf(stderr, "hgTracks:doTrackForm\n");
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;
 zoomedToCdsColorLevel = (winBaseCount <= insideWidth*3);
@@ -11504,7 +11509,9 @@ if (!hideControls)
 
 if (measureTiming)
     uglyTime("Time before getTrackList");
+fprintf(stderr, "hgTracks calling getTrackList\n");
 trackList = getTrackList(&groupList);
+fprintf(stderr, "hgTracks back from getTrackList\n");
 if (measureTiming)
     uglyTime("getTrackList");
 
@@ -11543,6 +11550,7 @@ for (track = trackList; track != NULL; track = track->next)
 	}
     else if (track->visibility != tvHide)
 	{
+	fprintf(stderr, "call loadItems for %s\n", track->mapName);
 	if (measureTiming)
 	    lastTime = clock1000();
 	track->loadItems(track); 
@@ -12049,6 +12057,7 @@ void tracksDisplay()
 char newPos[256];
 char *defaultPosition = hDefaultPos(database);
 char titleVar[256];
+fprintf(stderr, "hgTracks:tracksDisplay\n");
 position = getPositionFromCustomTracks();
 if (NULL == position) 
     {
