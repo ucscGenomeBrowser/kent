@@ -410,24 +410,31 @@ struct slName *tissueList = NULL, *tissue;
 char query[512], **row;
 struct sqlResult *sr;
 safef(query, sizeof(query),
-   "select bodyPart.name,expressionLevel.level "
-   "from expressionLevel,bodyPart,imageProbe "
+   "select bodyPart.name,expressionLevel.level,expressionPattern.description "
+   "from expressionLevel,bodyPart,imageProbe,expressionPattern "
    "where imageProbe.image = %d "
    "and imageProbe.probe = %d "
    "and imageProbe.id = expressionLevel.imageProbe "
    "and expressionLevel.bodyPart = bodyPart.id "
+   "and expressionLevel.expressionPattern = expressionPattern.id "
    "order by bodyPart.name"
    , imageId, probeId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     double level = atof(row[1]);
+    char *pattern = row[2];
+    tolowers(pattern);
     dyStringClear(dy);
     dyStringAppend(dy, row[0]);
-    if (level >= 0.1)
+    if (level == 1.0)
        dyStringAppend(dy, "(+)");
-    else 
+    else if (level == 0.0)
        dyStringAppend(dy, "(-)");
+    else 
+       dyStringPrintf(dy, "(%.2f)",level);
+    if (!sameWord(pattern,"Not Applicable") && !sameWord(pattern,"Not Specified"))
+    	dyStringPrintf(dy, " %s",pattern);
     tissue = slNameNew(dy->string);
     slAddHead(&tissueList, tissue);
     }
