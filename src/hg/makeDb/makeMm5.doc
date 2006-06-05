@@ -7872,3 +7872,14 @@ knownToVisiGene mm5
     ls -og mm5ToMm8*
     #	lrwxrwxrwx    1       53 Apr 24 12:32 mm5ToMm8.over.chain.gz -> \
     #		/cluster/data/mm5/bed/liftOver/mm5ToMm8.over.chain.gz
+
+
+#####################################################################
+# SEGMENTAL DUPLICATIONS (DONE 6/2/06 angie)
+    # File emailed from Xinwei She <xws@u.washington.edu>
+    mkdir /cluster/data/mm5/bed/genomicSuperDups
+    cd /cluster/data/mm5/bed/genomicSuperDups
+    hgLoadBed mm5 genomicSuperDups mm5_genomicSuperDup.tab \
+      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
+

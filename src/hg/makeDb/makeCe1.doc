@@ -1436,6 +1436,7 @@ CREATE TABLE altGraphX (
   KEY tName (tName(16),tStart,tEnd)
 );
 '_EOF_'
+    # << emacs
 
     hgLoadBed -sqlTable=altGraphX.sql ce1 altGraphX altSplice.agx
 
@@ -1525,3 +1526,16 @@ type wig 0 100
     hgLoadBed ce1 miRNA worm.mir.bed
     # entry in trackDb/trackDb.ra already there for same track in Hg16
     #	see makeHg16.doc for more comments on this
+
+
+#####################################################################
+# SEGMENTAL DUPLICATIONS (DONE 6/2/06 angie)
+    # File emailed from Xinwei She <xws@u.washington.edu>
+    mkdir /cluster/data/ce1/bed/genomicSuperDups
+    cd /cluster/data/ce1/bed/genomicSuperDups
+    sed -e 's/CHROMOSOME_/chr/g;' \
+      ce1_genomicSuperDup.tab \
+    | hgLoadBed ce1 genomicSuperDups stdin \
+      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
+

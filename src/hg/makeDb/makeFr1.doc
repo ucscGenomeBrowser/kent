@@ -2010,6 +2010,7 @@ chainSome $(path1)
     cat << '_EOF_' > chainSome
 (cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=25000 stdin ../c.`basename $1`.psl)
 '_EOF_'
+    # << emacs
     chmod +x chainSome
 
     ls -1dS `pwd`/blastOut/kg?? > chain.lst
@@ -2121,4 +2122,16 @@ chainSome $(path1)
    # mrna 0.187%, netDanRer3 68.354%, both 0.171%, cover 91.52%, enrich 1.34x
    # Runs out of memory for danRer3 chains. For nets, similar coverage for
    # danRer4 and danRer3 nets on fr1.
+
+
+#####################################################################
+# SEGMENTAL DUPLICATIONS (DONE 6/2/06 angie)
+    # File emailed from Xinwei She <xws@u.washington.edu>
+    mkdir /cluster/data/fr1/bed/genomicSuperDups
+    cd /cluster/data/fr1/bed/genomicSuperDups
+    liftUp -type=.bed stdout /cluster/data/fr1/jkStuff/liftAll.lft warn \
+      fr1_genomicSuperDup.tab \
+    | hgLoadBed fr1 genomicSuperDups stdin \
+      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
 

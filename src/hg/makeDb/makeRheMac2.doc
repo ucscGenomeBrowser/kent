@@ -1115,3 +1115,13 @@ cat > downloads.csh << 'EOF'
     mkdir $dir
     ln -s /cluster/data/hg18/bed/multiz17way/mafDownloads/{*.gz,md5sum.txt} $dir
 
+
+#####################################################################
+# SEGMENTAL DUPLICATIONS (DONE 6/2/06 angie)
+    # File emailed from Xinwei She <xws@u.washington.edu>
+    mkdir /cluster/data/rheMac2/bed/genomicSuperDups
+    cd /cluster/data/rheMac2/bed/genomicSuperDups
+    hgLoadBed rheMac2 genomicSuperDups rheMac2_genomicSuperDup.tab \
+      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
+

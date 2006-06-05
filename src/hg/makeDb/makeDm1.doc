@@ -6554,3 +6554,14 @@ zcat `ls -1 /cluster/bluearc/dm1/multiz.dm1droYak1dp2anoGam1/phastCons/POSTPROBS
 
     # clean up bluearc.  Leave WINDOWS dir for now
     rm -r /cluster/bluearc/dm1/multiz.dm1droYak1dp2anoGam1/phastCons/{POSTPROBS,ELEMENTS,wib}
+
+
+#####################################################################
+# SEGMENTAL DUPLICATIONS (DONE 6/2/06 angie)
+    # File emailed from Xinwei She <xws@u.washington.edu>
+    mkdir /cluster/data/dm1/bed/genomicSuperDups
+    cd /cluster/data/dm1/bed/genomicSuperDups
+    hgLoadBed dm1 genomicSuperDups dm1_genomicSuperDup.tab \
+      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
+
