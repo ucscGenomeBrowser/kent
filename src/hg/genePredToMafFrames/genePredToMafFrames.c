@@ -10,11 +10,10 @@
 #include "binRange.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.9 2006/06/03 23:18:26 markd Exp $";
+static char const rcsid[] = "$Id: genePredToMafFrames.c,v 1.10 2006/06/05 03:58:48 markd Exp $";
 
 /* Command line option specifications */
 static struct optionSpec optionSpecs[] = {
-    {"org", OPTION_STRING|OPTION_MULTI},
     {"bed", OPTION_STRING},
     {NULL, 0}
 };
@@ -88,19 +87,16 @@ for (i = 0; i < numGeneDbs; i++)
 return orgs;
 }
 
-static void genePredToMafFrames(char *targetDb, int numGeneDbs, char **geneDbs,
-                                char **genePreds, char *mafFramesFile,
-                                char *bedFile, int numMafFiles, char **mafFiles)
+static void genePredToMafFrames(char *targetDb, char *mafFile, char *mafFramesFile,
+                                int numGeneDbs, char **geneDbs, char **genePreds,
+                                char *bedFile)
 /* create mafFrames tables from genePreds  */
 {
 /* get list of organisms and their genes */
 struct orgGenes *orgs = loadGenePreds(numGeneDbs, geneDbs, genePreds);
 struct orgGenes *genes;
-int i;
 
-/* process all organisms at once to avoid multiple maf reads */
-for (i = 0; i < numMafFiles; i++)
-    mkMafFramesForMaf(targetDb, orgs, mafFiles[i]);
+mkMafFramesForMaf(targetDb, orgs, mafFile);
 
 if (verboseLevel() >= 4)
     dumpGeneInfo("after load", orgs);
@@ -124,26 +120,20 @@ errAbort("%s\n"
     "\n"
     "genePredToMafFrames - create mafFrames tables from a genePreds\n"
     "\n"
-    "genePredToMafFrames [options] -org=geneDb1,genePred1 [...] targetDb mafFrames maf1 [maf2..]\n"
-    "or\n"
-    "genePredToMafFrames [options] geneDb targetDb genePred mafFrames maf1 [maf2..]\n"
+    "genePredToMafFrames [options] targetDb maf mafFrames geneDb1 genePred1 [geneDb2 genePred2...] \n"
     "\n"
-    "Create frame annotations for a component of aa set of MAFs.  The\n"
-    "resulting file maybe combined with mafFrames for other components.\n"
-    "The first form allows specifying multiple organisms at once.  This\n"
-    "is significanly faster, as most of the first is spent reading the MAF\n"
+    "Create frame annotations for one or more components of a MAF.\n"
+    "It is significantly faster to process multiple gene sets in the same\""
+    "run, as 95%% of the CPU time is spent reading the MAF\n"
     "\n"
     "Arguments:\n"
-    "  o geneDb - db in MAF that corresponds to genePred's organism.\n"
     "  o targetDb - db of target genome\n"
-    "  o genePred - genePred file.  Overlapping annotations ahould have\n"
-    "    be removed.  This file may optionally include frame annotations\n"
+    "  o maf - input MAF file\n"
     "  o mafFrames - output file\n"
-    "  o maf1,... - MAF files\n"
+    "  o geneDb1 - db in MAF that corresponds to genePred's organism.\n"
+    "  o genePred1 - genePred file.  Overlapping annotations ahould have\n"
+    "    be removed.  This file may optionally include frame annotations\n"
     "Options:\n"
-    "  -org=geneDb,genePred - specify a pair of a geneDb and a genePred file.\n"
-    "   these arguments maybe comma or whitespace separated (in which case they\n"
-    "   must be quoted).  Maybe specified multiple times.\n"
     "  -bed=file - output a bed of for each mafFrame region, useful for debugging.\n"
     "  -verbose=level - enable verbose tracing, the following levels are implemented:\n"
     "     3 - print information about data used to compute each record.\n"
@@ -153,49 +143,37 @@ errAbort("%s\n"
     "\n", msg);
 }
 
-static void parseOrgOpt(char *value, char **org, char **genePred)
-/* parse an org argument */
-{
-int i;
-char *sep = NULL;
-/* find first whitespace or comma (this will allow commas in file names */
-for (i = 0; (value[i] != '\0') && (sep == NULL); i++)
-    if (isspace(value[i]) || (value[i] == ','))
-        sep = &(value[i]);
-if (sep == NULL)
-    errAbort("-opt value should be whitespace or comma separate pair: %s", value);
-*sep = '\0';
-*org = trimSpaces(value);
-*genePred = trimSpaces(sep+1);
-}
-
 int main(int argc, char *argv[])
 /* Process command line. */
 {
+int numGeneDbs, i, j;
+char **geneDbs, **genePreds;
 optionInit(&argc, argv, optionSpecs);
-if (optionExists("org"))
+if ((argc < 6) || ((argc % 2) != 0))
+    usage("wrong # args");
+numGeneDbs = (argc - 4) / 2;
+AllocArray(geneDbs, numGeneDbs);
+AllocArray(genePreds, numGeneDbs);
+
+for (i = 0, j = 4; j < argc; i++, j += 2)
     {
-    struct slName *orgGps, *orgGp;
-    int numGeneDbs, i;
-    char **geneDbs, **genePreds;
-    if (argc < 4)
-        usage("wrong # args");
-    orgGps = optionMultiVal("org", NULL);
-    numGeneDbs = slCount(orgGps);
-    AllocArray(geneDbs, numGeneDbs);
-    AllocArray(genePreds, numGeneDbs);
-    i = 0;
-    for (orgGp = orgGps; orgGp != NULL; orgGp = orgGp->next, i++)
-        parseOrgOpt(orgGp->name, &(geneDbs[i]), &(genePreds[i]));
-    genePredToMafFrames(argv[1], numGeneDbs, geneDbs, genePreds, argv[2],
-                        optionVal("bed", NULL), argc-3, argv+3);
+    geneDbs[i] = argv[j];
+    genePreds[i] = argv[j+1];
     }
-else
-    {
-    if (argc < 6)
-        usage("wrong # args");
-    genePredToMafFrames(argv[2], 1, &(argv[1]), &(argv[3]), argv[4],
-                        optionVal("bed", NULL), argc-5, argv+5);
-    }
+/* try to detect old command line arguments, and warn user of change:
+ * genePredToMafFrames geneDb   targetDb genePred  mafFrames maf1 [maf2..]\n"
+ * 0                   1        2        3         4         5           
+  "genePredToMafFrames targetDb maf      mafFrames geneDb1   genePred1 [geneDb2 genePred2...] \n"
+ */
+
+if (endsWith(argv[3], ".gp") || sameString(argv[3], "stdin")
+    || endsWith(argv[4], "mafFrame") || sameString(argv[4], "stdout")
+    || endsWith(argv[5], "maf") || endsWith(argv[5], "maf.gz")
+    || sameString(argv[5], "stdin"))
+    errAbort("Error: appear to be using old command arguments, please review usage");
+
+genePredToMafFrames(argv[1], argv[2], argv[3], 
+                    numGeneDbs, geneDbs, genePreds,
+                    optionVal("bed", NULL));
 return 0;
 }

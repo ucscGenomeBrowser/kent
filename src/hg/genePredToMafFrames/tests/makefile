@@ -6,99 +6,89 @@ DIFF = diff -u
 test:   oneExon splitExon revExon negNeg finishIsSplit \
 	queryDel multiMap multiMap2 multiMap3 multiMapMondo \
 	manyExonPos unalignedExonStart lostBlock splitNegStart \
-	dupFrames revStrand oneOrg oneOrgComma twoOrg
+	dupFrames revStrand twoOrg
 
 oneExon: mkout
-	${genePredToMafFrames} hg17 canHg10 input/BC101503.gp output/$@.mafFrames input/BC101503.maf
+	${genePredToMafFrames} canHg10 input/BC101503.maf output/$@.mafFrames hg17 input/BC101503.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # exon over two MAF blocks
 splitExon: mkout
-	${genePredToMafFrames} hg17 canHg10 input/NM_003906.gp output/$@.mafFrames input/NM_003906.maf
+	${genePredToMafFrames} canHg10 input/NM_003906.maf output/$@.mafFrames hg17 input/NM_003906.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # reversed strand, with only discontiguous exons aligned.
 revExon: mkout
-	${genePredToMafFrames} hg17 canHg10 input/revExon.gp output/$@.mafFrames input/revExon.maf
+	${genePredToMafFrames} canHg10 input/revExon.maf output/$@.mafFrames hg17 input/revExon.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # negative strand gene and query
 negNeg: mkout
-	${genePredToMafFrames} hg17 canHg10 input/NM_020727.gp output/$@.mafFrames input/NM_020727.maf
+	${genePredToMafFrames} canHg10 input/NM_020727.maf output/$@.mafFrames hg17 input/NM_020727.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # finishMafFrames bug detected in isSplitCodoni
 finishIsSplit: mkout
-	${genePredToMafFrames} hg17 canHg10 input/NM_001214.gp output/$@.mafFrames input/NM_001214.maf
+	${genePredToMafFrames} canHg10 input/NM_001214.maf output/$@.mafFrames hg17 input/NM_001214.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # 3-base deletion in query or insert in target 
 queryDel: mkout
-	${genePredToMafFrames} hg17 canHg10 input/NM_016427.gp output/$@.mafFrames input/NM_016427.maf
+	${genePredToMafFrames} canHg10 input/NM_016427.maf output/$@.mafFrames hg17 input/NM_016427.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # gene that maps to multiple locations
 multiMap: mkout
-	${genePredToMafFrames} hg17 canHg10 input/NM_207435.gp output/$@.mafFrames input/NM_207435.maf
+	${genePredToMafFrames} canHg10 input/NM_207435.maf output/$@.mafFrames hg17 input/NM_207435.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # another gene that maps to multiple locations
 multiMap2: mkout
-	${genePredToMafFrames} hg17 canHg10 input/NM_001452.gp output/$@.mafFrames input/NM_001452.maf
+	${genePredToMafFrames} canHg10 input/NM_001452.maf output/$@.mafFrames hg17 input/NM_001452.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # another multiMap trouble maker
 multiMap3: mkout
-	${genePredToMafFrames} panTro1 mm7 input/multMap3.gp output/$@.mafFrames input/multMap3.maf
+	${genePredToMafFrames} mm7 input/multMap3.maf output/$@.mafFrames panTro1 input/multMap3.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # multiple mappings, this one is ugly.
 multiMapMondo: mkout
-	${genePredToMafFrames} hg17 canHg10 input/NM_020185.gp output/$@.mafFrames input/NM_020185.maf
+	${genePredToMafFrames} canHg10 input/NM_020185.maf output/$@.mafFrames hg17 input/NM_020185.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # positive strand, multiple exons
 manyExonPos: mkout
-	${genePredToMafFrames} hg17 canHg10 input/NM_005682.gp output/$@.mafFrames input/NM_005682.maf
+	${genePredToMafFrames} canHg10 input/NM_005682.maf output/$@.mafFrames hg17 input/NM_005682.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 unalignedExonStart: mkout
-	${genePredToMafFrames} hg17 canHg10 input/NM_013321.gp output/$@.mafFrames input/NM_013321.maf
+	${genePredToMafFrames} canHg10 input/NM_013321.maf output/$@.mafFrames hg17 input/NM_013321.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # part of exon lost in mm6 but not human
 lostBlock: mkout
-	${genePredToMafFrames} mm6 canHg10 input/NM_145830.gp output/$@.mafFrames input/NM_145830.maf
+	${genePredToMafFrames} canHg10 input/NM_145830.maf output/$@.mafFrames mm6 input/NM_145830.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # start codon on neg strand gene not spliced, but split between two maf blocks
 splitNegStart: mkout
-	${genePredToMafFrames} mm7 mm7 input/NM_027863.gp output/$@.mafFrames input/NM_027863.maf
+	${genePredToMafFrames} mm7 input/NM_027863.maf output/$@.mafFrames mm7 input/NM_027863.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # case that generated duplicate mafFrames rows
 dupFrames: mkout
-	${genePredToMafFrames} panTro1 mm7 input/dupFrames.gp output/$@.mafFrames input/dupFrames.maf
+	${genePredToMafFrames} mm7 input/dupFrames.maf output/$@.mafFrames panTro1 input/dupFrames.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 # test using two components that are both reverse strand
 revStrand: mkout
-	${genePredToMafFrames} danRer3 rn4 input/revStrand.gp output/$@.mafFrames input/revStrand.maf
+	${genePredToMafFrames} rn4 input/revStrand.maf output/$@.mafFrames danRer3 input/revStrand.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
-# -org argument with one database, should be same as oneExon test
-oneOrg: mkout
-	${genePredToMafFrames} -org="hg17 input/BC101503.gp" canHg10 output/$@.mafFrames input/BC101503.maf
-	${DIFF} expected/oneExon.mafFrames output/$@.mafFrames
-
-# -org argument, comma separated with one database , should be same as oneExon test
-oneOrgComma: mkout
-	${genePredToMafFrames} -org=hg17,input/BC101503.gp canHg10 output/$@.mafFrames input/BC101503.maf
-	${DIFF} expected/oneExon.mafFrames output/$@.mafFrames
-
-# -org with two organisms
+# two organisms
 twoOrg: mkout
-	${genePredToMafFrames} -org=mm6,input/NM_145830.gp -org='hg17  input/NM_006709.gp' canHg10 output/$@.mafFrames input/NM_145830.maf
+	${genePredToMafFrames} canHg10 input/NM_145830.maf output/$@.mafFrames mm6 input/NM_145830.gp hg17 input/NM_006709.gp
 	${DIFF} expected/$@.mafFrames output/$@.mafFrames
 
 mkout:
