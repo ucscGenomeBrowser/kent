@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.48 2006/06/06 17:35:59 fanhsu Exp $"
+#	"$Id: makeMm8.doc,v 1.49 2006/06/06 17:40:46 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5707,7 +5707,6 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
 
 #########################################################################
 # BUILD KNOWN GENE LIST FOR GOOGLE. (DONE.  6/6/06 Fan).
-# make knownGeneLists.html mm8GeneList.html mm5GeneList.html rm3GeneList.html
 
     cd /cluster/data/mm8/bed
     rm -rf knownGeneList/mm8
