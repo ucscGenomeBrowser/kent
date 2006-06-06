@@ -6,7 +6,7 @@
 #include "chainBlock.h"
 #include "bits.h"
 
-static char const rcsid[] = "$Id: chainPreNet.c,v 1.8 2005/08/18 07:41:42 baertsch Exp $";
+static char const rcsid[] = "$Id: chainPreNet.c,v 1.9 2006/06/06 21:49:56 angie Exp $";
 
 int dots = 0;  /* How often to put out a dot. */
 int pad = 1;   /* How much to pad around chain. */
@@ -138,8 +138,8 @@ while ((chain = chainRead(lf)) != NULL)
     score = chain->score;
     if (score > lastScore)
        {
-       errAbort("%s not sorted by score line %d of %s", 
-       	lf->lineIx, lf->fileName);
+       errAbort("%s not sorted by score line %d", 
+       		lf->fileName, lf->lineIx);
        }
     lastScore = score;
 
