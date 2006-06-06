@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.14 2006/06/06 00:50:37 galt Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.15 2006/06/06 01:21:13 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -112,90 +112,91 @@ puts("</FORM>");
 cartWebEnd();
 }
 
-struct liftOverChain *findLiftOver(struct liftOverChain *liftOverList, 
-	char *fromDb, char *toDb)
-/* Return TRUE if there's a liftOver with both fromDb and
- * toDb. */
+
+boolean sameOk(char *a, char *b)
+/* Return TRUE if the strings are the same, otherwise FALSE. 
+ * Tolerates NULL pointers */
 {
-struct liftOverChain *liftOver;
-if (!fromDb || !toDb)
-    return NULL;
-for (liftOver = liftOverList; liftOver != NULL; liftOver = liftOver->next)
-    if (sameString(liftOver->fromDb,fromDb) && sameString(liftOver->toDb,toDb))
-	return liftOver;
-return NULL;
+return differentStringNullOk(a,b) == 0;
 }
 
-struct liftOverChain *currentLiftOver(struct liftOverChain *liftOverList, 
-	char *fromOrg, char *fromDb, char *toOrg, char *toDb)
-/* Given list of liftOvers, and given databases find 
- * liftOver that goes between databases, or failing that
- * a liftOver that goes from the database to something else. */
+int scoreLiftOverChain(struct liftOverChain *chain,
+    char *fromOrg, char *fromDb, char *toOrg, char *toDb, char *orgFromDb, char *orgToDb, 
+    struct hash *dbRank )
+/* Score the chain in terms of best match for cart settings */
 {
+int score = 0;
+
+char *chainFromOrg = hArchiveOrganism(chain->fromDb);
+char *chainToOrg = hArchiveOrganism(chain->toDb);
+int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);
+int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
+int maxRank = hashIntVal(dbRank, "maxRank");
+
+if (fromRank == 0 || toRank == 0) /* not an active db in dbDb or archiveDbDb. */
+    return -1;    /*  toOrg and toDb lists would not display properly */
+
+if (sameOk(fromDb,chain->fromDb) && sameOk(toDb,chain->toDb))
+    score += 1000000;
+
+if (sameOk(fromDb,chain->fromDb)) 
+    score += 200000;
+if (sameOk(fromOrg,chainFromOrg)) 
+    score += 100000;
+
+if (sameOk(toDb,chain->toDb))
+    score += 20000;
+if (sameOk(toOrg,chainToOrg))
+    score += 10000;
+
+if (sameOk(orgFromDb,chainFromOrg)) 
+    score += 20000;
+if (sameOk(orgToDb,chainToOrg))
+    score += 10000;
+
+score += 10*(maxRank-fromRank);
+score += (maxRank - toRank);
+
+return score;
+}
+
+
+struct liftOverChain *defaultChoices(struct liftOverChain *chainList, char *fromOrg, char *fromDb)
+/* Out of a list of liftOverChains and a cart, choose a
+ * list to display. */
+{
+char *toOrg, *toDb, *orgFromDb, *orgToDb;
 struct liftOverChain *choice = NULL;
-struct liftOverChain *over;
+struct hash *dbRank = hGetDatabaseRank();
+int bestScore = -1;
+struct liftOverChain *this = NULL;
 
-/* See if we can find what user asked for. */
-if (toDb != NULL)
-    choice = findLiftOver(liftOverList,fromDb,toDb);
+/* Get the initial values. */
+toOrg = cartCgiUsualString(cart, HGLFT_TOORG_VAR, "0");
+toDb = cartCgiUsualString(cart, HGLFT_TODB_VAR, "0");
+orgFromDb = hArchiveOrganism(fromDb); 
+orgToDb = hArchiveOrganism(toDb);
 
-/* If we have no valid choice from user then try and get
- * a different assembly from same to organism. */
-if (choice == NULL && toOrg != NULL)
+if (sameWord(toOrg,"0"))
+    toOrg = NULL;
+if (sameWord(toDb,"0"))
+    toDb = NULL;
+
+for (this = chainList; this != NULL; this = this->next)
     {
-    for (over = liftOverList; over != NULL; over = over->next)
+    int score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, orgFromDb, orgToDb, dbRank);
+    if (score > bestScore)
 	{
-	if (sameString(over->fromDb, fromDb))
-	    {
-	    if (sameString(hOrganism(over->toDb), toOrg))
-	        {
-		if (!choice || (compareDbs(over->toDb,choice->toDb)>0))
-		    choice = over;
-		}
-	    }
+	choice = this;
+	bestScore = score;
 	}
-    }
+    }  
 
-/* If still no valid choice try and get to a different
- * assembly of the current organism. */
-if (choice == NULL)
-    {
-    /* First try to find a liftOver into another assembly of same organism. */
-    for (over = liftOverList; over != NULL; over = over->next)
-	{
-	if (sameString(over->fromDb, fromDb))
-	    {
-	    if (sameString(hOrganism(over->toDb), fromOrg))
-	        {
-		choice = over;
-		break;
-		}
-	    }
-	}
-    }
-
-
-/* If still can't find choice, then try and find any liftOver from
- * current assembly */
-if (choice == NULL)
-    {
-    for (over = liftOverList; over != NULL; over = over->next)
-	{
-	if (sameString(over->fromDb, fromDb))
-	    {
-	    choice = over;
-	    break;
-	    }
-	}
-    }
-
-
-/* If still can't find choice we give up */
-if (choice == NULL)
-    errAbort("Can't find a liftOver from %s to anywhere, sorry", fromDb);
-
+freeMem(orgFromDb);
+freeMem(orgToDb);
 return choice;
 }
+
 
 char *skipWord(char *s)
 /* Skip word, and any leading spaces before next word. */
@@ -340,9 +341,8 @@ getDbAndGenome(cart, &db, &organism);
 hSetDb(db);
 
 liftOverList = liftOverChainListFiltered();
-choice = currentLiftOver(liftOverList, organism, db, 
-	cartOptionalString(cart, HGLFT_TOORG_VAR),
-	cartOptionalString(cart, HGLFT_TODB_VAR));
+choice = defaultChoices(liftOverList, organism, db);
+
 dbList = hDbDbList();
 fromDb = matchingDb(dbList, choice->fromDb);
 toDb = matchingDb(dbList, choice->toDb);
