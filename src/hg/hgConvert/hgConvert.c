@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.13 2006/06/01 04:44:41 galt Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.14 2006/06/06 00:50:37 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -339,7 +339,7 @@ cart = theCart;
 getDbAndGenome(cart, &db, &organism);
 hSetDb(db);
 
-liftOverList = liftOverChainList();
+liftOverList = liftOverChainListFiltered();
 choice = currentLiftOver(liftOverList, organism, db, 
 	cartOptionalString(cart, HGLFT_TOORG_VAR),
 	cartOptionalString(cart, HGLFT_TODB_VAR));
