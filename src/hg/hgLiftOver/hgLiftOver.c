@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.42 2006/05/09 02:43:48 galt Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.43 2006/06/06 00:46:34 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -60,15 +60,11 @@ char *onChangeFromOrg =
 "onchange=\"document.dbForm.hglft_fromOrg.value = "
 "document.mainForm.hglft_fromOrg.options[document.mainForm.hglft_fromOrg.selectedIndex].value;"
 "document.dbForm.hglft_fromDb.value = 0;"
-"document.dbForm.hglft_toOrg.value = 0;"
-"document.dbForm.hglft_toDb.value = 0;"
 "document.dbForm.submit();\"";
 
 char *onChangeFromDb = 
 "onchange=\"document.dbForm.hglft_fromDb.value = "
 "document.mainForm.hglft_fromDb.options[document.mainForm.hglft_fromDb.selectedIndex].value;"
-"document.dbForm.hglft_toOrg.value = 0;"
-"document.dbForm.hglft_toDb.value = 0;"
 "document.dbForm.submit();\"";
 
 char *onChangeToOrg = 
@@ -286,9 +282,11 @@ cgiParagraph(
 " Run <I>liftOver</I> with no arguments to see the usage message.\n");
 }
 
+/* dead code will not need this
+
 struct liftOverChain *findLiftOverChain(struct liftOverChain *chainList, char *fromDb, char *toDb)
-/* Return TRUE if there's a chain with both fromDb and
- * toDb. */
+/ * Return TRUE if there's a chain with both fromDb and
+ * toDb. * /
 {
 struct liftOverChain *chain;
 if (!fromDb || !toDb)
@@ -299,16 +297,75 @@ for (chain = chainList; chain != NULL; chain = chain->next)
 return NULL;
 }
 
+*/
+
+boolean sameOk(char *a, char *b)
+/* Return TRUE if the strings are the same, otherwise FALSE. 
+ * Tolerates NULL pointers */
+{
+return differentStringNullOk(a,b) == 0;
+}
+
+int scoreLiftOverChain(struct liftOverChain *chain,
+    char *fromOrg, char *fromDb, char *toOrg, char *toDb, char *orgFromDb, char *orgToDb, 
+    char *cartOrg, char *cartDb, struct hash *dbRank )
+/* Score the chain in terms of best match for cart settings */
+{
+int score = 0;
+
+char *chainFromOrg = hArchiveOrganism(chain->fromDb);
+char *chainToOrg = hArchiveOrganism(chain->toDb);
+int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);
+int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
+int maxRank = hashIntVal(dbRank, "maxRank");
+
+if (fromRank == 0 || toRank == 0) /* not an active db in dbDb or archiveDbDb. */
+    return -1;    /*  toOrg and toDb lists would not display properly */
+
+if (sameOk(fromDb,chain->fromDb) && sameOk(toDb,chain->toDb))
+    score += 1000000;
+
+if (sameOk(fromDb,chain->fromDb)) 
+    score += 200000;
+if (sameOk(fromOrg,chainFromOrg)) 
+    score += 100000;
+
+if (sameOk(toDb,chain->toDb))
+    score += 20000;
+if (sameOk(toOrg,chainToOrg))
+    score += 10000;
+
+if (sameOk(orgFromDb,chainFromOrg)) 
+    score += 20000;
+if (sameOk(orgToDb,chainToOrg))
+    score += 10000;
+
+if (sameOk(cartDb,chain->fromDb)) 
+    score +=  5000;
+if (sameOk(cartDb,chain->toDb)) 
+    score +=  3000;
+
+if (sameOk(cartOrg,chainFromOrg)) 
+    score +=  2000;
+if (sameOk(cartOrg,chainToOrg)) 
+    score +=  1000;
+
+score += 10*(maxRank-fromRank);
+score += (maxRank - toRank);
+
+return score;
+}
+
+
 struct liftOverChain *defaultChoices(struct liftOverChain *chainList)
 /* Out of a list of liftOverChains and a cart, choose a
  * list to display. */
 {
-char *fromOrg, *fromDb, *toOrg, *toDb, *orgFromDb, *orgToDb;
-struct slName *fromOrgs = hLiftOverFromOrgs();
-struct slName *fromDbs = hLiftOverFromDbs();
-struct slName *toOrgs = hLiftOverToOrgs(NULL);
-struct slName *toDbs = hLiftOverToDbs(NULL);
-struct liftOverChain *choice = NULL;
+char *fromOrg, *fromDb, *toOrg, *toDb, *orgFromDb, *orgToDb, *cartDb, *cartOrg;
+struct liftOverChain *choice = chainList;  /* default to first one */
+struct hash *dbRank = hGetDatabaseRank();
+int bestScore = -1;
+struct liftOverChain *this = NULL;
 
 /* Get the initial values. */
 fromOrg = cartCgiUsualString(cart, HGLFT_FROMORG_VAR, "0");
@@ -317,6 +374,9 @@ toOrg = cartCgiUsualString(cart, HGLFT_TOORG_VAR, "0");
 toDb = cartCgiUsualString(cart, HGLFT_TODB_VAR, "0");
 orgFromDb = hArchiveOrganism(fromDb); 
 orgToDb = hArchiveOrganism(toDb);
+cartDb = cartCgiUsualString(cart, "db", "0");
+cartOrg = hArchiveOrganism(cartDb);
+
 if (sameWord(fromOrg,"0"))
     fromOrg = NULL;
 if (sameWord(fromDb,"0"))
@@ -325,71 +385,21 @@ if (sameWord(toOrg,"0"))
     toOrg = NULL;
 if (sameWord(toDb,"0"))
     toDb = NULL;
-choice = findLiftOverChain(chainList,fromDb,toDb);
-if (!choice)
+if (sameWord(cartDb,"0"))
+    cartDb = NULL;
+
+for (this = chainList; this != NULL; this = this->next)
     {
-    /* Check the validness of the stuff first. */
-    if (fromDb && toDb)
-	toDb = fromDb = toOrg = fromOrg = NULL;
-    if (fromDb && !slNameInList(fromDbs, fromDb))
-	fromDb = fromOrg = NULL;
-    if (toDb && !slNameInList(toDbs, toDb))
-	toDb = toOrg = NULL;
-    if (fromOrg && !slNameInList(fromOrgs, fromOrg))
-	toDb = fromDb = toOrg = fromOrg = NULL;
-    if (toOrg && !slNameInList(toOrgs, toOrg))
-	toOrg = toDb = NULL;
-    if (fromOrg && fromDb && orgFromDb && !sameWord(fromOrg,orgFromDb))
-	fromDb = fromOrg = toOrg = toDb = NULL;
-    if (toOrg && toDb && orgToDb && !sameWord(toOrg,orgToDb))
-	toDb = toOrg = NULL;
-    if (toOrg && !fromDb)
-	fromOrg = fromDb = toOrg = toDb = NULL;
-    if (toDb && !fromDb) 
-	fromOrg = fromDb = toOrg = toDb = NULL;
-    
-    /* Find some defaults. The branching is incomplete because of all
-     * the earlier variable manipulation. */
-    if (fromOrg && !fromDb)
+    int score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, orgFromDb, orgToDb, cartOrg, cartDb, dbRank);
+    if (score > bestScore)
 	{
-	for (choice = chainList; choice != NULL; choice = choice->next)
-	    {
-	    char *org = hArchiveOrganism(choice->fromDb);
-	    if (sameString(org,fromOrg))
-		{
-		freeMem(org);
-		break;
-		}
-	    freeMem(org);
-	    }
+	choice = this;
+	bestScore = score;
 	}
-    else if (fromOrg && fromDb && !toOrg)
-	{
-	for (choice = chainList; choice != NULL; choice = choice->next)
-	    if (sameString(fromDb,choice->fromDb))
-		break;
- 	}
-    else if (fromOrg && fromDb && toOrg && !toDb)
-	{
-	for (choice = chainList; choice != NULL; choice = choice->next)
-	    {
-	    char *org = hArchiveOrganism(choice->toDb);
-	    if (sameString(choice->fromDb,fromDb) && sameString(org,toOrg))
-		{
-		freeMem(org);
-		break;
-		}
-	    freeMem(org);
-	    }
-	}
-    }
+    }  
 
 if (!choice)
     choice = chainList;
-slFreeList(&fromOrgs);
-slFreeList(&fromDbs);
-slFreeList(&toOrgs);
-slFreeList(&toDbs);
 freeMem(orgFromDb);
 freeMem(orgToDb);
 return choice;
@@ -435,8 +445,10 @@ cartWebStart(cart, "Lift Genome Annotations");
 getDbAndGenome(cart, &db, &organism);
 previousDb = hPreviousAssembly(db);
 
-chainList = liftOverChainList();
+chainList = liftOverChainListFiltered();
+
 choice = defaultChoices(chainList);
+
 minSizeQ = cartCgiUsualInt(cart, HGLFT_MINSIZEQ, choice->minSizeQ);
 minSizeT = cartCgiUsualInt(cart, HGLFT_MINSIZET, choice->minSizeT);
 minBlocks = cartCgiUsualDouble(cart, HGLFT_MINBLOCKS, choice->minBlocks);
