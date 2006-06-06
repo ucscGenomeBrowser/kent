@@ -17,4 +17,5 @@ beta:
 # avoid the usual crud that collects in directories.
 doInstall:
 	rsync -t -r --relative --exclude='makefile' ${EXCL} `cvsFiles` ${DEST}
-	#ln -sf ENCODE ${DEST}/encode
+
+#	ln -sf ENCODE ${DEST}/encode
