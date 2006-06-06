@@ -712,7 +712,10 @@ echo
 
 
 echo
-echo "check that all DNA-based genes are in refGene.name"
+echo "FORMERLY: check that all DNA-based genes are in refGene.name"
+echo "NOW: find refGenes that have been updated since mrnRefseq was built."
+echo "(KG no longer has a separate DNA leg or knownGeneLink table.
+echo "  -- DNA-based refseqs are already in the build)"
 hgsql -N -e "SELECT name FROM refGene" $db | sort | uniq \
    > $db.refGene.name.uniq 
 wc -l $db.refGene.name.uniq
@@ -723,62 +726,12 @@ comm -12 $db.refGene.name.uniq  $db.mrnaRefseq.refseq.uniq | wc -l
 
 comm -23 $db.refGene.name.uniq  $db.mrnaRefseq.refseq.uniq \
    > refGene.notin.mrnaRefseq
-echo 'refGene.name not in mrnaRefseq.refseq (= "DNA-based" leg of KG):'
+echo 'refGene.name not in mrnaRefseq.refseq (new refseq since KG build):'
 comm -23 $db.refGene.name.uniq  $db.mrnaRefseq.refseq.uniq | wc -l
 
-hgsql -N -e "SELECT name FROM knownGeneLink" $db | sort -u \
-   > $db.KGLink.name.uniq
-echo "DNA-based genes:"
-comm -23 refGene.notin.mrnaRefseq $db.KGLink.name.uniq \
-   > $db.DNAbased.notin.knownLink
-comm -23 refGene.notin.mrnaRefseq $db.KGLink.name.uniq | wc -l
 echo "this value should be small"
 echo "  -- check some:"
 comm -23 $db.refGene.name.uniq  $db.mrnaRefseq.refseq.uniq | head -3 
-echo
-
-
-# -------------------------------------------------
-# knownGeneLink -- rowcount
-# knownGeneLink -- seqType is always "g"
-
-echo "knownGeneLink -- rowcount is significantly smaller than knownGene"
-hgsql -N -e "SELECT COUNT(*) FROM knownGeneLink" $db
-set totKG=`hgsql -N -e "SELECT COUNT(*) FROM knownGene" $db`
-echo "totKG = "$totKG
-echo
-
-echo
-echo "knownGeneLink -- seqType is always 'g'"
-echo "number not 'g':"
-hgsql -N -e 'SELECT COUNT(*) FROM knownGeneLink WHERE seqType != "g"' $db
-echo "expect zero"
-echo
-
-# -------------------------------------------------
-# knownGeneLink -- name column is uniq
-
-echo
-echo "knownGeneLink -- name column is uniq"
-hgsql -N  -e "SELECT COUNT(*) FROM knownGeneLink" $db 
-hgsql -N  -e "SELECT COUNT(*) FROM knownGeneLink" $db | sort | uniq
-echo "numbers should match"
-echo
-
-
-# -------------------------------------------------
-# knownGeneLink -- proteinID value has suffix.  Root matches protAcc in kgXref
-#  (sed command finds ".n" or "." at end of proteinID and strips it)
-
-echo
-echo "knownGeneLink -- proteinID value has suffix.  Root matches protAcc in kgXref:"
-hgsql -N -e "SELECT proteinID FROM knownGeneLink" $db > $db.KGLink.proteinID
-sed -e 's/\..$//; s/\.$//' $db.KGLink.proteinID | sort | uniq > $db.KGLink.proteinID.strip
-
-hgsql -N -e "SELECT protAcc FROM kgXref" $db | sort | uniq > $db.kgXref.protAcc.uniq
-comm -12 $db.KGLink.proteinID.strip $db.kgXref.protAcc.uniq | wc -l
-hgsql -N -e "SELECT COUNT(*) FROM knownGeneLink" $db 
-echo "numbers should match"
 echo
 
 
