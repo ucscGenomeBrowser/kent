@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.43 2006/06/06 00:46:34 galt Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.44 2006/06/06 00:57:45 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -362,7 +362,7 @@ struct liftOverChain *defaultChoices(struct liftOverChain *chainList)
  * list to display. */
 {
 char *fromOrg, *fromDb, *toOrg, *toDb, *orgFromDb, *orgToDb, *cartDb, *cartOrg;
-struct liftOverChain *choice = chainList;  /* default to first one */
+struct liftOverChain *choice = NULL;  
 struct hash *dbRank = hGetDatabaseRank();
 int bestScore = -1;
 struct liftOverChain *this = NULL;
@@ -398,8 +398,6 @@ for (this = chainList; this != NULL; this = this->next)
 	}
     }  
 
-if (!choice)
-    choice = chainList;
 freeMem(orgFromDb);
 freeMem(orgToDb);
 return choice;
