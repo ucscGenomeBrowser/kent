@@ -1972,7 +1972,7 @@ maxHeightPixels 128:32:16
 minLimit -5
 maxLimit 10
 graphType bar
-viewLimits -3:4
+viewLimits 0:4
 yLineMark 0.0
 yLineOnOff Off
 smoothingWindow Off
