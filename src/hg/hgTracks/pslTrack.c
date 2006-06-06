@@ -280,14 +280,10 @@ if (rcTarget)
   from psl to simple feature.*/
 if (drawOptionNum>0 && zoomedToCdsColorLevel)
         lfSplitByCodonFromPslX(chromName, lf, psl, sizeMul, isXeno, maxShade, drawOptionNum);
-    else
-        {
-        sfList = sfFromPslX(psl, grayIx, sizeMul);
-        slReverse(&sfList);
-        lf->components = sfList;
-        linkedFeaturesBoundsAndGrays(lf);
-        }
-
+sfList = sfFromPslX(psl, grayIx, sizeMul);
+slReverse(&sfList);
+lf->components = sfList;
+linkedFeaturesBoundsAndGrays(lf);
 
 lf->start = psl->tStart;	/* Correct for rounding errors... */
 lf->end = psl->tEnd;
