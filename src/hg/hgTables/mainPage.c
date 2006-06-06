@@ -17,7 +17,7 @@
 #include "hgTables.h"
 #include "joiner.h"
 
-static char const rcsid[] = "$Id: mainPage.c,v 1.95 2006/04/25 18:19:35 angie Exp $";
+static char const rcsid[] = "$Id: mainPage.c,v 1.96 2006/06/06 15:46:53 angie Exp $";
 
 int trackDbCmpShortLabel(const void *va, const void *vb)
 /* Sort track by shortLabel. */
@@ -388,7 +388,8 @@ for (name = nameList; name != NULL; name = name->next)
     if (sameString(selTable, name->name))
         hPrintf(" SELECTED");
     if (tdb != NULL)
-	if (differentWord(tdb->shortLabel, curTrack->shortLabel))
+	if ((curTrack == NULL) ||
+	    differentWord(tdb->shortLabel, curTrack->shortLabel))
 	    hPrintf(">%s (%s)\n", tdb->shortLabel, name->name);
 	else
 	    hPrintf(">%s\n", name->name);
