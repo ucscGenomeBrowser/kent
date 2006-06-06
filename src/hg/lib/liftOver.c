@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.31 2006/05/08 21:18:01 aamp Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.32 2006/06/06 00:39:10 galt Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -1552,6 +1552,34 @@ struct liftOverChain *list = NULL;
 
 list = liftOverChainLoadByQuery(conn, "select * from liftOverChain");
 hDisconnectCentral(&conn);
+return list;
+}
+
+void filterOutMissingChains(struct liftOverChain **pChainList) 
+/* Filter out chains that don't exist.  Helps partially mirrored sites. */
+{
+while(*pChainList)
+    {
+    if (fsize((*pChainList)->path)==-1)
+	{
+	struct liftOverChain *temp = *pChainList;
+	*pChainList = (*pChainList)->next;
+	liftOverChainFree(&temp);
+	}
+    else
+	{
+	pChainList = &((*pChainList)->next);
+	}
+    }
+}
+
+struct liftOverChain *liftOverChainListFiltered()
+/* Get list of all liftOver chains in the central database
+ * filtered to include only those chains whose liftover files exist.
+ * This helps partially mirrored sites */
+{
+struct liftOverChain *list = liftOverChainList();
+filterOutMissingChains(&list); 
 return list;
 }
 

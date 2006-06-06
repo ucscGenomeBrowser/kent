@@ -642,6 +642,10 @@ struct slName *hLiftOverToOrgs(char *fromDb);
  * If fromDb!=NULL, return only those with that
  * fromDb. */
 
+struct hash *hGetDatabaseRank();
+/* Get list of databases and make a hash of order rank
+ * Dispose of this with hashFree. */ 
+
 struct dbDb *hGetLiftOverFromDatabases();
 /* Get list of databases for which there is at least one liftOver chain file
  * Dispose of this with dbDbFreeList. */

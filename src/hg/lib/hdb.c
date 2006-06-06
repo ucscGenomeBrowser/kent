@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.297 2006/06/01 04:42:40 galt Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.298 2006/06/06 00:39:10 galt Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -3645,7 +3645,7 @@ struct slName *hLiftOverFromDbs()
  * fromDb column of the liftOverChain.*/
 {
 struct slName *names = NULL;
-struct liftOverChain *chainList = liftOverChainList(), *chain;
+struct liftOverChain *chainList = liftOverChainListFiltered(), *chain;
 for (chain = chainList; chain != NULL; chain = chain->next)
     slNameStore(&names, chain->fromDb);
 liftOverChainFreeList(&chainList);
@@ -3659,7 +3659,7 @@ struct slName *hLiftOverToDbs(char *fromDb)
  * fromDb. */
 {
 struct slName *names = NULL;
-struct liftOverChain *chainList = liftOverChainList(), *chain;
+struct liftOverChain *chainList = liftOverChainListFiltered(), *chain;
 for (chain = chainList; chain != NULL; chain = chain->next)
     {
     if (!fromDb || (fromDb && sameString(fromDb,chain->fromDb)))
@@ -3699,6 +3699,36 @@ struct slName *hLiftOverToOrgs(char *fromDb)
 return hLiftOverOrgs(FALSE,fromDb);
 }
 
+
+struct hash *hGetDatabaseRank()
+/* Get list of databases and make a hash of order rank
+ * Dispose of this with hashFree. */
+{
+struct dbDb *allDbList = NULL, *regDb = NULL, *archDb = NULL, *dbDb;
+struct hash *dbNameHash = newHash(3);
+int rank = 0;
+
+/* Get list of all current and archived databases */
+regDb = hDbDbList();
+archDb = hArchiveDbDbList();
+allDbList = slCat(regDb, archDb);
+
+/* Create a hash all dbs with rank number */
+for (dbDb = allDbList; dbDb != NULL; dbDb = dbDb->next)
+    {
+    if (!hashFindVal(dbNameHash, dbDb->name))
+	{
+	if (dbDb->active)
+    	    hashAddInt(dbNameHash, dbDb->name, ++rank);
+	}
+    }
+hashAddInt(dbNameHash, "maxRank", rank);
+dbDbFreeList(&allDbList);
+return dbNameHash;
+}
+
+
+
 struct dbDb *hGetLiftOverFromDatabases()
 /* Get list of databases for which there is at least one liftOver chain file
  * from this assembly to another.
@@ -3710,7 +3740,7 @@ struct liftOverChain *chainList = NULL, *chain;
 struct hash *hash = newHash(0), *dbNameHash = newHash(3);
 
 /* Get list of all liftOver chains in central database */
-chainList = liftOverChainList();
+chainList = liftOverChainListFiltered();
 
 /* Create hash of databases having liftOver chains from this database */
 for (chain = chainList; chain != NULL; chain = chain->next)
@@ -3756,7 +3786,7 @@ struct hash *hash = newHash(0);
 struct hash *dbNameHash = newHash(3);
 
 /* Get list of all liftOver chains in central database */
-chainList = liftOverChainList();
+chainList = liftOverChainListFiltered();
 
 /* Create hash of databases having liftOver chains from the fromDb */
 for (chain = chainList; chain != NULL; chain = chain->next)
