@@ -191,8 +191,9 @@
 #include "hgMut.h"
 #include "landmark.h"
 #include "ec.h"
+#include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1025 2006/06/04 00:47:06 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1026 2006/06/06 18:21:33 hiram Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -18561,6 +18562,8 @@ char *excludeVars[] = {"hgSeq.revComp", "bool.hcg.dna.rc", "Submit", "submit", "
 
 int main(int argc, char *argv[])
 {
+pushCarefulMemHandler(2147483647 * ((sizeof(size_t)/4)*(sizeof(size_t)/4)));
+	/*	== 2 Gb for 32 bit machines, 8 Gb for 64 bit machines */
 cgiSpoof(&argc,argv);
 cartEmptyShell(cartDoMiddle, hUserCookie(), excludeVars, NULL);
 return 0;
