@@ -21180,3 +21180,45 @@ mysql> load data local file 'exception.template' into table snp125ExceptionDesc;
 
     echo 'INSERT INTO grp (name, label, priority) VALUES ("phenDis", "Phenotype and Disease Associations", 2.5)' \
    | hgsql hg17
+
+#############################################################
+# hgMut - Human Mutation track - Belinda Giardine
+# list of tables by show tables like 'hgMut%'
+# summary of current load June 7, 2006
+#table definitions for autoSql
+autoSql hgMut.as hgMut -dbLink
+#move bin in struct so works as bed 4+
+#hgMut.sql: change INDEXes as needed, put in enums
+#shrink mutId to 64 chars, plus acc to 48
+#data files and details under ~giardine/humPhen/
+cd humPhen/hgMutData/April2006/
+cat hgMutHbVar.txt hgMutPah.txt hgMutBgmut.txt hgMutCftr.txt hgMutARdb.txt > hgMutUnsorted.txt
+grep "^chr" hgMutUnsorted.txt | sort -k1,1 -k2,2n > hgMut.bed
+#create tables
+hgsql hg17 < ../../hgMut.sql
+#loading
+hgLoadBed hg17 hgMut hgMut.bed -noSort -oldTable -tab
+#load small vocab control tables
+hgsql hg17 < hgMutLink.sql
+hgsql hg17 < hgMutAttrClass.sql
+hgsql hg17 < hgMutAttrName.sql
+hgsql hg17 < hgMutSrc.sql
+#from hgsql hg17
+load data local infile "hgMutExtLinkHbVar.txt" into table hgMutExtLink;
+load data local infile "hgMutExtLinkARdb.txt" into table hgMutExtLink;
+load data local infile "hgMutExtLinkBgmut.txt" into table hgMutExtLink;
+load data local infile "hgMutExtLinkCFTR.txt" into table hgMutExtLink;
+load data local infile "hgMutExtLinkPah.txt" into table hgMutExtLink;
+load data local infile "hgMutExtLinkSP.txt" into table hgMutExtLink;
+load data local infile "hgMutAttrHbVar2.txt" into table hgMutAttr;
+load data local infile "hgMutAttrHbvarProt2.txt" into table hgMutAttr;
+load data local infile "hgMutAttrARdb.txt" into table hgMutAttr;
+load data local infile "hgMutAttrARdbProt.txt" into table hgMutAttr;
+load data local infile "hgMutAliasHbVar.txt" into table hgMutAlias;
+load data local infile "hgMutAliasARdb.txt" into table hgMutAlias;
+load data local infile "hgMutAliasBgmut.txt" into table hgMutAlias;
+load data local infile "hgMutAliasPah.txt" into table hgMutAlias;
+load data local infile "hgMutExtLinkHbVarOmim.txt" into table hgMutExtLink;
+load data local infile "hgMutAttrLink.txt" into table hgMutAttrLink;
+load data local infile "hgMutAttrSP.txt" into table hgMutAttr;
+
