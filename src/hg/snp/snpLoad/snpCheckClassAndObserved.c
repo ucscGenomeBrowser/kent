@@ -19,7 +19,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.24 2006/04/06 23:43:29 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.25 2006/06/07 22:28:18 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
@@ -172,8 +172,8 @@ int span = end - start;
 if (loc_type == 2 || loc_type == 3) return TRUE;
 
 /* start with simple deletions */
-/* class is deletion if and only if loc_type is 1 */
-if (sameString(class, "deletion") && loc_type == 1)
+/* deletions can be range (loc_type 1) or exact (loc_type 2) */
+if (sameString(class, "deletion") && (loc_type == 1 || loc_type == 2))
     {
     if (observedLen != span)
         {
