@@ -9523,5 +9523,11 @@ BASE=/cluster/data/hg18/bed/blastz.galGal3.2006-05-22
       >& do.log & tail -f do.log
     ln -s blastz.galGal3.2006-05-22 /cluster/data/hg18/bed/blastz.galGal3
 
+#########################################################################
+# create md5sum.txt under bigZips (DONE, 6/7/06, Fan)
+
+    cd /cluster/store11/gs.19/build36/downloads/bigZips
+    md5sum *.zip *.2bit README.txt > md5sum.txt
+
 
 #########################################################################
