@@ -8,7 +8,7 @@
 #include "genePred.h"
 #include "genePredReader.h"
 
-static char const rcsid[] = "$Id: genePredToGtf.c,v 1.7 2004/05/03 16:09:18 markd Exp $";
+static char const rcsid[] = "$Id: genePredToGtf.c,v 1.8 2006/06/07 15:28:49 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -67,9 +67,9 @@ fprintf(f, "%s\t", source);
 fprintf(f, "%s\t", type);
 fprintf(f, "%d\t", start+1);
 fprintf(f, "%d\t", end);
+fprintf(f, ".\t");	/* Score. */
 fprintf(f, "%c\t", phase);
 fprintf(f, "%s\t", strand);
-fprintf(f, ".\t");	/* Score. */
 fprintf(f, "gene_id \"%s\"; ", name);
 fprintf(f, "transcript_id \"%s\"; ", name);
 fprintf(f, "exon_number \"%d\"; ", exonIx+1);
