@@ -193,7 +193,7 @@
 #include "ec.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1026 2006/06/06 18:21:33 hiram Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1027 2006/06/07 16:45:32 angie Exp $";
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -17589,16 +17589,14 @@ void doIgtc(struct trackDb *tdb, char *itemName)
 /* Details for International Gene Trap Consortium. */
 {
 char *name = cloneString(itemName);
-char *source = strrchr(name, '_');
+char *source = NULL;
 
+cgiDecode(name, name, strlen(name));
+source = strrchr(name, '_');
 if (source == NULL)
     source = "Unknown";
 else
-    {
-    *source = '\0';
     source++;
-    }
-cgiDecode(name, name, strlen(name));
 
 genericHeader(tdb, itemName);
 printf("<B>Source:</B> %s<BR>\n", source);
