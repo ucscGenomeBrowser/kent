@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1121 2006/06/05 20:14:41 heather Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1122 2006/06/07 21:31:37 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3515,6 +3515,7 @@ char *chp;
 int heightPer = tg->heightPer;
 int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
 int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int x3, x4;
 int w;
 struct trackDb *tdb = tg->tdb;
 int scoreMin = atoi(trackDbSettingOrDefault(tdb, "scoreMin", "0"));
@@ -3547,11 +3548,17 @@ if (color)
 	chp = strstr(s, " (human)");
 	if (chp != NULL) *chp = '\0';
 	
-	w = x2-x1;
+	x3 = x1;
+	x4 = x2;
+	
+	/* adjust range of text display to fit within the display window */
+	if (x3 < xOff) x3 = xOff;
+	if (x4 > (insideWidth + xOff)) x4 = insideWidth + xOff;
+	w = x4 - x3;
 	if (w > mgFontStringWidth(font, s))
 	    {
 	    Color textColor = contrastingColor(vg, color);
-	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
+	    vgTextCentered(vg, x3, y, w, heightPer, textColor, font, s);
 	    }
 	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
 		tg->mapName, tg->mapItemName(tg, bed), s, directUrl, withHgsid);
