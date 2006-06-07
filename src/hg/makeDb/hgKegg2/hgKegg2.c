@@ -18,26 +18,13 @@ errAbort(
 int main(int argc, char *argv[])
 {
 struct sqlConnection *conn, *conn2, *conn3;
-char query[256], query2[256], query3[256];
-struct sqlResult *sr, *sr2, *sr3;
-char **row, **row2, **row3;
-
-char *r1, *r2, *r3, *r4;
-    
-char *chp;
+char query[256], query3[256];
+struct sqlResult *sr, *sr3;
+char **row, **row3;
 FILE *o1, *o2;
 
 char *locusID;	/* LocusLink ID */
-char *gbAC;		/* GenBank accession.version */
-char *seqType;	/* sequence type m=mRNA g=genomic u=undefined */
-char *proteinAC;	/* protein accession.version */
-char *taxID;	/* tax id */
-    
-char *locusID2;	/* LocusLink ID */
 char *refAC;	/* Refseq accession.version */
-char *revStatus;	/* review status */
-char *proteinAC2;	/* protein accession.version */
-char *taxID2;	/* tax id */
 char *kgTempDbName, *roDbName; 
 char cond_str[200];
 char *kgID;
