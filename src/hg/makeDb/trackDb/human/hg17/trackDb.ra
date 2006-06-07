@@ -4,7 +4,7 @@ include trackDb.encode.ra
 track rgdQtl
 shortLabel RGD QTL
 longLabel Quantitative Trait Locus (from RGD)
-group map
+group phenDis
 priority 4.5
 visibility hide
 color 12,12,120
@@ -31,6 +31,26 @@ hgGene on
 hgsid on
 directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
 cdsDrawDefault genomic\ codons
+
+track dvBed
+shortLabel DV
+longLabel Disease Variation
+group phenDis
+priority 145
+visibility hide
+color 200,0,0
+type bed 4 +
+url http://www.expasy.org/cgi-bin/get-sprot-variant.pl?$$
+
+track kgProtMap
+shortLabel kgProtMap
+longLabel kgProtMap
+group genes
+priority 146
+visibility hide
+spectrum on
+type psl .
+cdsDrawOptions enabled
 
 track ensGene
 shortLabel Ensembl Genes
@@ -1278,9 +1298,9 @@ otherDb hg17
 track hgMut
 shortLabel Human Mutation
 longLabel Compilation of human disease variants and other mutations
-group varRep
+group phenDis
 priority 144.7
-visibility hide
+visibility pack
 color 150,0,150
 type bed 4 +
 
