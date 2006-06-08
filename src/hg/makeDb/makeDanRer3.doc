@@ -2281,8 +2281,8 @@ chainOne $(path1)
 # BACENDS TRACK (DONE, 2005-09-28, hartera)
 # Track display is very slow on large regions. Split all_bacends table by
 # chromosome (DONE, 2006-04-19, hartera)
-# RE-DO BACENDS FOR PAIRS, SINGLES, BAD PAIRS AND ALL BACENDS TABLES
-# (see separate section on RE-DO BACENDS, 2006-05-01 - 2006-05-08, hartera)    
+# REDO BACENDS FOR PAIRS, SINGLES, BAD PAIRS AND ALL BACENDS TABLES
+# (see separate section on REDO BACENDS, 2006-05-01 - 2006-05-08, hartera)    
     ssh kkstore01
     # BAC ends sequence files provided by Mario Caccamo at Sanger
     # mc2@sanger.ac.uk
@@ -6714,6 +6714,7 @@ _EOF_
    
 # REDO BACENDS - bacEndPairs, bacEndSingles, bacEndBadPairs and all_bacends
 # (split as chrN_allBacends) ONLY (DONE, 2006-05-01 - 2006-05-08, hartera) 
+# RELOADED chrN_allBacends TABLES (DONE, 2006-06-08, hartera)
      # NOTE: there are overlapping BAC clone ends for danRer3. Some of these
      # are only a few kb apart (from beginning of one to end of the other)
      # so use stricter pslPairs parameters as for human and mouse.
@@ -7076,36 +7077,47 @@ _EOF_
     # 512321 allBacEnds.names.uniq
     # 512321 bacEnds.names
    
+    # Reloaded split tables. Old bacEnds.load.psl was used 
+    # last time. (2006-06-08, hartera)
     ssh hgwdev
     cd /cluster/data/danRer3/bed/bacends/scoresAndCoords
+    # remove old all_bacends table. This was moved over from hgwbeta after
+    # the recent crash of hgwdevold after the power failure.
+    hgsql -e 'drop table all_bacends;' danRer3 
     # Display is very slow for BAC ends on large regions. Try splitting
     # bacEnds.load.psl and load tables as chrN_allBacends. The parsing
     # code is confused if there are two underscores in the table name.
     foreach c (`cat /cluster/data/danRer3/chrom.lst`)
         echo "Processing $c ..."
         awk '{if ($14 == "'chr${c}'") print;}' \
-            /cluster/data/danRer3/bed/bacends/scores/bacEnds.load.psl \
-            > chr${c}.bacEnds.load.psl
+           /cluster/data/danRer3/bed/bacends/scoresAndCoords/bacEnds.load.psl \
+           > chr${c}.bacEnds.load.psl
+    end
+    # drop old tables
+    foreach c (`cat /cluster/data/danRer3/chrom.lst`)
+       echo $c
+       hgsql -e "drop table chr${c}_allBacends;" danRer3
     end
     # load new tables
     foreach c (`cat /cluster/data/danRer3/chrom.lst`)
      nice hgLoadPsl danRer3 -table=chr${c}_allBacends chr${c}.bacEnds.load.psl
     end
-    # load of chr5_allBacends did not go as planned: 330739 record(s), 
+    # load of chr5_allBacends did not go as planned: 326147 record(s), 
     # 0 row(s) skipped, 1 warning(s) loading psl.tab
-    # load of chr8_allBacends did not go as planned: 215769 record(s), 
+    # load of chr8_allBacends did not go as planned: 212665 record(s), 
     # 0 row(s) skipped, 5 warning(s) loading psl.tab
-    # load of chr12_allBacends did not go as planned: 159214 record(s), 
+    # load of chr12_allBacends did not go as planned: 156947 record(s), 
     # 0 row(s) skipped, 1 warning(s) loading psl.tab
-    # load of chr15_allBacends did not go as planned: 183813 record(s), 
+    # load of chr15_allBacends did not go as planned: 181721 record(s), 
     # 0 row(s) skipped, 1 warning(s) loading psl.tab
-    # load of chr19_allBacends did not go as planned: 285899 record(s), 
-    # 0 row(s) skipped, 1 warning(s) loading psl.tab 
-    # load of chr20_allBacends did not go as planned: 319791 record(s), 
+    # load of chr19_allBacends did not go as planned: 282423 record(s), 
+    # 0 row(s) skipped, 1 warning(s) loading psl.tab
+    # load of chr20_allBacends did not go as planned: 315248 record(s), 
     # 0 row(s) skipped, 7 warning(s) loading psl.tab
-    # load of chrUn_allBacends did not go as planned: 1537886 record(s), 
-    # 0 row(s) skipped, 510 warning(s) loading psl.tab
-    # There are still warnings on loading, most (510) are for chrUn.
+    # load of chrUn_allBacends did not go as planned: 1524765 record(s), 
+    # 0 row(s) skipped, 487 warning(s) loading psl.tab    
+
+    # There are still warnings on loading, most (487) are for chrUn.
     # alter lfs (BED) tables so that pslTable field is "allBacends"
     # instead of all_bacends (this was set by the pslPairs program).
     foreach t (bacEndPairs bacEndSingles bacEndPairsBad)
