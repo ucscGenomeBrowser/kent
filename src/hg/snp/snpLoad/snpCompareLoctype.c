@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCompareLoctype.c,v 1.2 2006/04/08 00:08:15 heather Exp $";
+static char const rcsid[] = "$Id: snpCompareLoctype.c,v 1.3 2006/06/08 17:30:51 heather Exp $";
 
 struct snpSubsetList
     {
@@ -58,7 +58,7 @@ errAbort(
     "snpCompareLoctype - compare old and new snp tables\n"
     "must be in the same database\n"
     "usage:\n"
-    "    snpCompare snpDb oldTable newTable\n");
+    "    snpCompareLoctype snpDb oldTable newTable\n");
 }
 
 boolean addIfNew(struct hash *myhash, char *name)
