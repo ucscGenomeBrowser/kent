@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.91 2006/06/01 04:41:46 galt Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.92 2006/06/08 23:33:28 galt Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1873,7 +1873,7 @@ makeDir(pathBuf);
 char *skipToNumeric(char *s)
 /* skip up to where numeric digits appear */
 {
-while (*s != 0 && (*s < '0' || *s > '9'))
+while (*s != 0 && !isdigit(*s))
     ++s;
 return s;
 }
