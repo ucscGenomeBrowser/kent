@@ -219,7 +219,8 @@ while (kgIdCnt < totalKgId)
 	    printHtmlEnd(outf);
 	    newPage = TRUE;	
 	    fclose(outf);
-
+	    outf = NULL;
+	    
 	    if ((pageNum % LINKSPERPAGE) == 0 ) 
 	    	{
 	    	printf("Processing topLevel %d ...\n", topLevel);fflush(stdout);
@@ -259,17 +260,19 @@ while (kgIdCnt < totalKgId)
 sqlFreeResult(&sr2);
 
 /* flush out and close the last list page */
-fprintf(outf,"</TABLE>"); 
-strcpy(endSymbol[pageNum], geneSymbol);
-strcpy(pageEndSymbol[currentPage], endSymbol[pageNum]);
-fprintf(outf, "<BR>");
-fprintf(outf, "<A href=\"/knownGeneList/%s/%d/kgIndex%d.html\">",
-database, topLevel,topLevel);
-fprintf(outf, "Up");
-fprintf(outf,"</A><BR>\n");
-printHtmlEnd(outf);
-
-fclose(outf);
+if (outf != NULL)
+    {
+    fprintf(outf,"</TABLE>"); 
+    strcpy(endSymbol[pageNum], geneSymbol);
+    strcpy(pageEndSymbol[currentPage], endSymbol[pageNum]);
+    fprintf(outf, "<BR>");
+    fprintf(outf, "<A href=\"/knownGeneList/%s/%d/kgIndex%d.html\">",
+    database, topLevel,topLevel);
+    fprintf(outf, "Up");
+    fprintf(outf,"</A><BR>\n");
+    printHtmlEnd(outf);
+    fclose(outf);
+    }
 
 /* generate the last index page */
 safef(command, sizeof(command), "mkdir -p knownGeneList/%s/%d", database, topLevel);
