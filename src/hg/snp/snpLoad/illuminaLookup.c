@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup.c,v 1.1 2006/06/08 18:23:01 heather Exp $";
+static char const rcsid[] = "$Id: illuminaLookup.c,v 1.2 2006/06/08 20:22:49 heather Exp $";
 
 struct snpSubset 
     {
@@ -25,12 +25,36 @@ void usage()
 errAbort(
     "illuminaLookup - get coords using rsId\n"
     "usage:\n"
-    "    illuminaLookup db illuminaTable snpTable outputFile\n");
+    "    illuminaLookup db illuminaTable snpTable exceptionTable outputFile errorFile\n");
 }
 
 
-struct hash *storeSnps(char *tableName)
+struct hash *storeExceptions(char *tableName)
+/* store multiply-aligning SNPs */
+{
+struct hash *ret = NULL;
+char query[512];
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+
+verbose(1, "reading exceptions...\n");
+ret = newHash(0);
+safef(query, sizeof(query), "select name, exception from %s", tableName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (!sameString(row[1], "MultipleAlignments")) continue;
+    hashAdd(ret, cloneString(row[0]), NULL);
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+return ret;
+}
+
+struct hash *storeSnps(char *tableName, struct hash *exceptionHash, char *errorFileName)
 /* store subset data for SNPs in a hash */
+/* exclude SNPs that align multiple places */
 {
 struct hash *ret = NULL;
 char query[512];
@@ -38,8 +62,10 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 struct snpSubset *subsetElement = NULL;
+struct hashEl *hel = NULL;
+FILE *errors = mustOpen(errorFileName, "w");
 
-verbose(1, "creating hash...\n");
+verbose(1, "creating SNP hash...\n");
 ret = newHash(16);
 safef(query, sizeof(query), 
       "select name, chrom, chromStart, chromEnd, strand, observed, class, locType, func from %s", 
@@ -47,6 +73,12 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    hel = hashLookup(exceptionHash, row[0]);
+    if (hel != NULL)
+        {
+	fprintf(errors, "skipping %s, aligns more than one place\n", row[0]);
+	continue;
+	}
     AllocVar(subsetElement);
     subsetElement->chrom = cloneString(row[1]);
     subsetElement->start = sqlUnsigned(row[2]);
@@ -60,14 +92,21 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+carefulClose(&errors);
 return ret;
 }
 
 
-void processSnps(struct hash *snpHash, char *illuminaTable, char *fileName)
+
+
+
+
+void processSnps(struct hash *snpHash, char *illuminaTable, char *fileName, char *errorFileName)
 /* read illuminaTable */
-/* lookup details in snpHash*/
+/* lookup details in snpHash */
 /* report if SNP missing */
+/* report if class != single */
+/* report if locType != exact */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -76,6 +115,7 @@ char **row;
 struct hashEl *hel = NULL;
 struct snpSubset *subsetElement = NULL;
 FILE *fileHandle = mustOpen(fileName, "w");
+FILE *errors = mustOpen(errorFileName, "w");
 
 verbose(1, "process SNPs...\n");
 safef(query, sizeof(query), "select dbSnpId, chrom, name from %s", illuminaTable);
@@ -85,12 +125,20 @@ while ((row = sqlNextRow(sr)) != NULL)
     hel = hashLookup(snpHash, row[0]);
     if (hel == NULL) 
         {
-	fprintf(stderr, "%s not found\n", row[0]);
+	fprintf(errors, "%s not found\n", row[0]);
 	continue;
 	}
     subsetElement = (struct snpSubset *)hel->val;
-    fprintf(fileHandle, "%s\t%s\t%d\t%d\t%c\t%s\t%s\t%s\t%s\n", 
+    if (!sameString(subsetElement->class, "single"))
+	fprintf(errors, "unexpected class %s for snp %s\n", subsetElement->class, row[0]);
+    if (!sameString(subsetElement->locType, "exact"))
+	fprintf(errors, "unexpected locType %s for snp %s\n", subsetElement->locType, row[0]);
+    if (!sameString(subsetElement->chrom, row[1]))
+	fprintf(errors, "unexpected chrom %s for snp %s\n", row[1], row[0]);
+
+    fprintf(fileHandle, "%s\t%s\t%s\t%d\t%d\t%c\t%s\t%s\t%s\t%s\n", 
         row[0],
+	row[2],
         subsetElement->chrom,
         subsetElement->start,
         subsetElement->end,
@@ -103,6 +151,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 
 carefulClose(&fileHandle);
+carefulClose(&errors);
 }
 
 
@@ -112,17 +161,22 @@ int main(int argc, char *argv[])
 char *snpDb = NULL;
 char *illuminaTableName = NULL;
 char *snpTableName = NULL;
+char *exceptionTableName = NULL;
 char fileName[64];
+char errorFileName[64];
 
 struct hash *snpHash = NULL;
+struct hash *exceptionHash = NULL;
 
-if (argc != 5)
+if (argc != 7)
     usage();
 
 snpDb = argv[1];
 illuminaTableName = argv[2];
 snpTableName = argv[3];
-safef(fileName, ArraySize(fileName), "%s", argv[4]);
+exceptionTableName = argv[4];
+safef(fileName, ArraySize(fileName), "%s", argv[5]);
+safef(errorFileName, ArraySize(errorFileName), "%s", argv[6]);
 
 /* process args */
 hSetDb(snpDb);
@@ -130,9 +184,12 @@ if (!hTableExists(illuminaTableName))
     errAbort("no %s table in %s\n", illuminaTableName, snpDb);
 if (!hTableExists(snpTableName))
     errAbort("no %s table in %s\n", snpTableName, snpDb);
+if (!hTableExists(exceptionTableName))
+    errAbort("no %s table in %s\n", exceptionTableName, snpDb);
 
-snpHash = storeSnps(snpTableName);
-processSnps(snpHash, illuminaTableName, fileName);
+exceptionHash = storeExceptions(exceptionTableName);
+snpHash = storeSnps(snpTableName, exceptionHash, errorFileName);
+processSnps(snpHash, illuminaTableName, fileName, errorFileName);
 
 return 0;
 }
