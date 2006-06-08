@@ -75,3 +75,42 @@ TABLE.hgcCcds CAPTION {
     text-align: left;
     font: large, bold;
 }
+
+/* used by transMap details page in hgc */ 
+TABLE.transMap, TABLE.transMap TH, TABLE.transMap TD {
+    border: 3px lightgrey ridge;
+    border-collapse: collapse;
+    text-align: right;
+    vertical-align: top;
+}
+TABLE.transMap THEAD {
+    background-color: #a8c7ff;
+    text-align: center;
+}
+TABLE.transMap TBODY {
+    background-color: #D0FFD0;
+}
+TABLE.transMap CAPTION {
+    caption-side: top; 
+    text-align: left;
+    font: large, bold;
+}
+TABLE.transMapLayout TR TD {
+    vertical-align: top;
+}
+TR.transMapLayout {
+    vertical-align: top;
+}
+TR.transMapLeft TD {
+    text-align: left;
+}
+.transMapNoWrap {
+    white-space: nowrap;
+}
+.transMapError {
+    background-color: #ff704f;
+}
+.transMapWarn {
+    background-color: #f8ff30;
+}
+
