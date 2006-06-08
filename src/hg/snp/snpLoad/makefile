@@ -8,13 +8,13 @@ O = snpContigLocFilter.o snpContigLocusIdFilter.o snpContigLocusIdCondense.o \
     snpSplitByChrom.o snpLocType.o snpExpandAllele.o snpSort.o snpRefUCSC.o \
     snpCheckAlleles.o snpLoadFasta.o snpReadFasta.o snpCheckClassAndObserved.o \
     snpFunction.o snpSNP.o snpFinalTable.o snpMultiple.o snpMissing.o snpCompareLoctype.o \
-    snpPAR.o snpExceptionCheck.o
+    snpPAR.o snpExceptionCheck.o illuminaLookup.o
 
 all: snpContigLocFilter snpContigLocusIdFilter snpContigLocusIdCondense \
      snpSplitByChrom snpLocType snpExpandAllele snpSort snpRefUCSC \
      snpCheckAlleles snpLoadFasta snpReadFasta snpCheckClassAndObserved \
      snpFunction snpSNP snpFinalTable snpMultiple snpMissing snpCompareLoctype \
-     snpPAR snpExceptionCheck
+     snpPAR snpExceptionCheck illuminaLookup
 
 snpContigLocFilter: snpContigLocFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocFilter snpContigLocFilter.o ${MYLIBS} $L
@@ -75,3 +75,6 @@ snpPAR: snpPAR.o ${MYLIBS}
 
 snpExceptionCheck: snpExceptionCheck.o ${MYLIBS}
 	${CC} -O -o snpExceptionCheck snpExceptionCheck.o ${MYLIBS} $L
+
+illuminaLookup: illuminaLookup.o ${MYLIBS}
+	${CC} -O -o illuminaLookup illuminaLookup.o ${MYLIBS} $L
