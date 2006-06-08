@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.92 2006/06/08 23:33:28 galt Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.93 2006/06/08 23:40:57 galt Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1709,11 +1709,7 @@ int fd;
 if (sameString(fileName, "stdin")) return TRUE;
 if (sameString(fileName, "stdout")) return TRUE;
 
-/* Otherwise open file and close it to find out... */
-if ((fd = open(fileName, O_RDONLY)) < 0)
-    return FALSE;
-close(fd);
-return TRUE;
+return fileSize(fileName) != -1;
 }
 
 /*
