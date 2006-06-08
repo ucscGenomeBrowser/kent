@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1124 2006/06/08 00:22:18 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1125 2006/06/08 00:50:17 aamp Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -970,6 +970,8 @@ struct simpleFeature *exon = exons;
 int newWinSize = winEnd - winStart;
 int bufferToEdge = 0.05 * newWinSize;
 int newWinStart, newWinEnd;
+int numExons = 0;
+int exonIx = 0;
 struct slRef *exonList = NULL, *ref;
 while (exon != NULL)
 /* Make a stupid list of exons separate from what's given. */
@@ -982,8 +984,10 @@ if (next)
     slSort(&exonList, exonSlRefCmp);
 else 
     slSort(&exonList, exonSlRefReverseCmp);
-for (ref = exonList; ref != NULL; ref = ref->next)
+numExons = slCount(exonList);
+for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
     {
+    char mouseOverText[256];
     boolean bigExon = FALSE;
     exon = ref->val;
     if ((exon->end - exon->start) > (newWinSize - (2 * bufferToEdge)))
@@ -997,7 +1001,8 @@ for (ref = exonList; ref != NULL; ref = ref->next)
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
-	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, "Next Feature");
+	safef(mouseOverText, sizeof(mouseOverText), "Next Feature (%d/%d)", exonIx+1, numExons);
+	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
     else if (!next && (exon->start < winStart))
@@ -1009,9 +1014,10 @@ for (ref = exonList; ref != NULL; ref = ref->next)
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	else
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
-	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, "Previous Feature");
+	safef(mouseOverText, sizeof(mouseOverText), "Prev Feature (%d/%d)", numExons-exonIx, numExons);
+	mapBoxJumpTo(x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
-	}				     
+	}
     }    
 slFreeList(&exonList);
 }
