@@ -18,11 +18,9 @@ errAbort(
 int main(int argc, char *argv[])
 {
 struct sqlConnection *conn, *conn2, *conn3;
-char query[256], query2[256], query3[256];
-struct sqlResult *sr, *sr2, *sr3;
-char **row, **row2, **row3;
-
-char *r1, *r2, *r3, *r4;
+char query[256], query2[256];
+struct sqlResult *sr, *sr2;
+char **row, **row2;
     
 char *chp;
 FILE *o1;
