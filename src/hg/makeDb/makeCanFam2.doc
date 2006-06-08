@@ -2236,5 +2236,5 @@ TMPDIR=/scratch/tmp
     rm *.tab
 
     # update trackDb; need a canFam2-specific page to describe informants
-    rat/canFam2/nscanGene.html
-    rat/canFam2/trackDb.ra
+    dog/canFam2/nscanGene.html
+    dog/canFam2/trackDb.ra
