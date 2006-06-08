@@ -573,6 +573,14 @@ visibility hide
 type bed 6 +
 url https://www.affymetrix.com/LinkServlet?probeset=$$
 
+track illumina
+shortLabel Illumina Hap300
+longLabel Illumina HumanHap300 Array
+group varRep
+priority 145.8
+visibility hide
+type bed 4 +
+
 track chainSelf
 shortLabel Self Chain 
 longLabel Chained Self-Alignments
