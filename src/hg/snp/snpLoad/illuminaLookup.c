@@ -5,7 +5,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: illuminaLookup.c,v 1.2 2006/06/08 20:22:49 heather Exp $";
+static char const rcsid[] = "$Id: illuminaLookup.c,v 1.3 2006/06/08 21:18:47 heather Exp $";
 
 struct snpSubset 
     {
@@ -116,6 +116,7 @@ struct hashEl *hel = NULL;
 struct snpSubset *subsetElement = NULL;
 FILE *fileHandle = mustOpen(fileName, "w");
 FILE *errors = mustOpen(errorFileName, "w");
+int bin = 0;
 
 verbose(1, "process SNPs...\n");
 safef(query, sizeof(query), "select dbSnpId, chrom, name from %s", illuminaTable);
@@ -129,25 +130,21 @@ while ((row = sqlNextRow(sr)) != NULL)
 	continue;
 	}
     subsetElement = (struct snpSubset *)hel->val;
+
+    if (!sameString(subsetElement->chrom, row[1]))
+        {
+	fprintf(errors, "unexpected chrom %s for snp %s\n", row[1], row[0]);
+	continue;
+	}
+
     if (!sameString(subsetElement->class, "single"))
 	fprintf(errors, "unexpected class %s for snp %s\n", subsetElement->class, row[0]);
     if (!sameString(subsetElement->locType, "exact"))
 	fprintf(errors, "unexpected locType %s for snp %s\n", subsetElement->locType, row[0]);
-    if (!sameString(subsetElement->chrom, row[1]))
-	fprintf(errors, "unexpected chrom %s for snp %s\n", row[1], row[0]);
 
-    fprintf(fileHandle, "%s\t%s\t%s\t%d\t%d\t%c\t%s\t%s\t%s\t%s\n", 
-        row[0],
-	row[2],
-        subsetElement->chrom,
-        subsetElement->start,
-        subsetElement->end,
-	subsetElement->strand,
-	subsetElement->observed,
-	subsetElement->class,
-	subsetElement->locType,
-	subsetElement->func
-	);
+    bin = hFindBin(subsetElement->start, subsetElement->end);
+    fprintf(fileHandle, "%d\t%s\t%d\t%d\t%s\t%s\n", 
+        bin, subsetElement->chrom, subsetElement->start, subsetElement->end, row[0], row[2]);
     }
 
 carefulClose(&fileHandle);
