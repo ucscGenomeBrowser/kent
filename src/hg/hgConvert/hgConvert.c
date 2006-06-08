@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.15 2006/06/06 01:21:13 galt Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.16 2006/06/08 23:31:47 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -113,19 +113,11 @@ cartWebEnd();
 }
 
 
-boolean sameOk(char *a, char *b)
-/* Return TRUE if the strings are the same, otherwise FALSE. 
- * Tolerates NULL pointers */
-{
-return differentStringNullOk(a,b) == 0;
-}
-
-int scoreLiftOverChain(struct liftOverChain *chain,
-    char *fromOrg, char *fromDb, char *toOrg, char *toDb, char *orgFromDb, char *orgToDb, 
-    struct hash *dbRank )
+float scoreLiftOverChain(struct liftOverChain *chain,
+    char *fromOrg, char *fromDb, char *toOrg, char *toDb, struct hash *dbRank )
 /* Score the chain in terms of best match for cart settings */
 {
-int score = 0;
+float score = 0;
 
 char *chainFromOrg = hArchiveOrganism(chain->fromDb);
 char *chainToOrg = hArchiveOrganism(chain->toDb);
@@ -136,23 +128,22 @@ int maxRank = hashIntVal(dbRank, "maxRank");
 if (fromRank == 0 || toRank == 0) /* not an active db in dbDb or archiveDbDb. */
     return -1;    /*  toOrg and toDb lists would not display properly */
 
-if (sameOk(fromDb,chain->fromDb) && sameOk(toDb,chain->toDb))
+
+if (sameOk(fromOrg,chainFromOrg) &&
+    sameOk(fromDb,chain->fromDb) && 
+    sameOk(toOrg,chainToOrg) &&
+    sameOk(toDb,chain->toDb))
+    score += 10000000;
+
+if (sameOk(fromOrg,chainFromOrg)) 
+    score += 2000000;
+if (sameOk(fromDb,chain->fromDb)) 
     score += 1000000;
 
-if (sameOk(fromDb,chain->fromDb)) 
-    score += 200000;
-if (sameOk(fromOrg,chainFromOrg)) 
-    score += 100000;
-
-if (sameOk(toDb,chain->toDb))
-    score += 20000;
 if (sameOk(toOrg,chainToOrg))
-    score += 10000;
-
-if (sameOk(orgFromDb,chainFromOrg)) 
-    score += 20000;
-if (sameOk(orgToDb,chainToOrg))
-    score += 10000;
+    score += 200000;
+if (sameOk(toDb,chain->toDb))
+    score += 100000;
 
 score += 10*(maxRank-fromRank);
 score += (maxRank - toRank);
@@ -165,7 +156,7 @@ struct liftOverChain *defaultChoices(struct liftOverChain *chainList, char *from
 /* Out of a list of liftOverChains and a cart, choose a
  * list to display. */
 {
-char *toOrg, *toDb, *orgFromDb, *orgToDb;
+char *toOrg, *toDb;
 struct liftOverChain *choice = NULL;
 struct hash *dbRank = hGetDatabaseRank();
 int bestScore = -1;
@@ -174,8 +165,6 @@ struct liftOverChain *this = NULL;
 /* Get the initial values. */
 toOrg = cartCgiUsualString(cart, HGLFT_TOORG_VAR, "0");
 toDb = cartCgiUsualString(cart, HGLFT_TODB_VAR, "0");
-orgFromDb = hArchiveOrganism(fromDb); 
-orgToDb = hArchiveOrganism(toDb);
 
 if (sameWord(toOrg,"0"))
     toOrg = NULL;
@@ -184,7 +173,7 @@ if (sameWord(toDb,"0"))
 
 for (this = chainList; this != NULL; this = this->next)
     {
-    int score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, orgFromDb, orgToDb, dbRank);
+    int score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, dbRank);
     if (score > bestScore)
 	{
 	choice = this;
@@ -192,8 +181,6 @@ for (this = chainList; this != NULL; this = this->next)
 	}
     }  
 
-freeMem(orgFromDb);
-freeMem(orgToDb);
 return choice;
 }
 

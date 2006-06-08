@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.44 2006/06/06 00:57:45 galt Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.45 2006/06/08 23:31:57 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -28,6 +28,8 @@ static char const rcsid[] = "$Id: hgLiftOver.c,v 1.44 2006/06/06 00:57:45 galt E
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
 #define HGLFT_TODB_VAR   "hglft_toDb"           /* TO assembly */
 #define HGLFT_ERRORHELP_VAR "hglft_errorHelp"      /* Print explanatory text */
+#define HGLFT_REFRESHONLY_VAR "hglft_doRefreshOnly"      /* Just refresh drop-down lists */
+
 /* liftOver options: */
 #define HGLFT_MINMATCH "hglft_minMatch"          
 #define HGLFT_MINSIZEQ "hglft_minSizeQ"
@@ -56,22 +58,11 @@ char *formatList[] =
 /* Javascript to support New Assembly pulldown when Orig Assembly changes */
 /* Copies selected value from the Original Assembly pulldown to a hidden form
 */
-char *onChangeFromOrg = 
-"onchange=\"document.dbForm.hglft_fromOrg.value = "
-"document.mainForm.hglft_fromOrg.options[document.mainForm.hglft_fromOrg.selectedIndex].value;"
-"document.dbForm.hglft_fromDb.value = 0;"
-"document.dbForm.submit();\"";
-
-char *onChangeFromDb = 
-"onchange=\"document.dbForm.hglft_fromDb.value = "
-"document.mainForm.hglft_fromDb.options[document.mainForm.hglft_fromDb.selectedIndex].value;"
-"document.dbForm.submit();\"";
-
-char *onChangeToOrg = 
-"onchange=\"document.dbForm.hglft_toOrg.value = "
-"document.mainForm.hglft_toOrg.options[document.mainForm.hglft_toOrg.selectedIndex].value;"
-"document.dbForm.hglft_toDb.value = 0;"
-"document.dbForm.submit();\"";
+char *onChange = 
+"onchange=\"document.mainForm."
+HGLFT_REFRESHONLY_VAR
+".value = 1;"
+"document.mainForm.submit();\"";
 
 void webMain(struct liftOverChain *chain, char *dataFormat)
 /* set up page for entering data */
@@ -105,13 +96,13 @@ cgiSimpleTableRowStart();
 /* genome */
 cgiSimpleTableFieldStart();
 dbList = hGetLiftOverFromDatabases();
-printSomeGenomeListHtmlNamed(HGLFT_FROMORG_VAR, chain->fromDb, dbList, onChangeFromOrg);
+printSomeGenomeListHtmlNamed(HGLFT_FROMORG_VAR, chain->fromDb, dbList, onChange);
 cgiTableFieldEnd();
 
 /* from assembly */
 cgiSimpleTableFieldStart();
 printAllAssemblyListHtmlParm(chain->fromDb, dbList, HGLFT_FROMDB_VAR, 
-			     TRUE, onChangeFromDb);
+			     TRUE, onChange);
 cgiTableFieldEnd();
 
 /* to assembly */
@@ -119,7 +110,7 @@ cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
 dbDbFreeList(&dbList);
 dbList = hGetLiftOverToDatabases(chain->fromDb);
-printSomeGenomeListHtmlNamed(HGLFT_TOORG_VAR, chain->toDb, dbList, onChangeToOrg);
+printSomeGenomeListHtmlNamed(HGLFT_TOORG_VAR, chain->toDb, dbList, onChange);
 cgiTableFieldEnd();
 
 cgiSimpleTableFieldStart();
@@ -182,8 +173,6 @@ cgiTableRowEnd();
 cgiTableEnd();
 
 /* next row -- file format menu */
-//printf("Data input formats marked with star (*) are suitable for "
-        //"ENCODE data submission.&nbsp;&nbsp;"
 cgiParagraph(
          "&nbsp;For descriptions of the supported data formats, see the bottom of this page.");
 cgiSimpleTableStart();
@@ -236,19 +225,10 @@ printf("<TD><INPUT TYPE=FILE NAME=\"%s\"></TD>\n", HGLFT_DATAFILE_VAR);
 puts("<TD><INPUT TYPE=SUBMIT NAME=SubmitFile VALUE=\"Submit File\"></TD>\n");
 cgiTableRowEnd();
 cgiTableEnd();
+printf("<input type=\"hidden\" name=\"%s\" value=\"0\">\n",
+                        HGLFT_REFRESHONLY_VAR);
 puts("</FORM>\n");
 
-/* Hidden form to support menu pulldown behavior */
-printf("<FORM ACTION=\"/cgi-bin/hgLiftOver\""
-       " METHOD=\"GET\" NAME=\"dbForm\">");
-printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", 
-                        HGLFT_FROMORG_VAR, fromOrg);
-printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", 
-                        HGLFT_FROMDB_VAR, chain->fromDb);
-printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", 
-                        HGLFT_TOORG_VAR, toOrg);
-printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n",
-                        HGLFT_TODB_VAR, chain->toDb);
 cartSaveSession(cart);
 puts("</FORM>");
 freeMem(fromOrg);
@@ -261,7 +241,6 @@ webNewSection("Data Formats");
 puts("<LI>");
 puts(
     "<A HREF=\"/goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
-    //"<A HREF=\"http://genome.ucsc.edu/goldenPath/help/customTrack.html#BED\" TARGET=_blank>"
     "Browser Extensible Data (BED)</A>\n");
 puts("</LI>");
 puts("<LI>");
@@ -282,68 +261,43 @@ cgiParagraph(
 " Run <I>liftOver</I> with no arguments to see the usage message.\n");
 }
 
-/* dead code will not need this
 
-struct liftOverChain *findLiftOverChain(struct liftOverChain *chainList, char *fromDb, char *toDb)
-/ * Return TRUE if there's a chain with both fromDb and
- * toDb. * /
-{
-struct liftOverChain *chain;
-if (!fromDb || !toDb)
-    return NULL;
-for (chain = chainList; chain != NULL; chain = chain->next)
-    if (sameString(chain->fromDb,fromDb) && sameString(chain->toDb,toDb))
-	return chain;
-return NULL;
-}
-
-*/
-
-boolean sameOk(char *a, char *b)
-/* Return TRUE if the strings are the same, otherwise FALSE. 
- * Tolerates NULL pointers */
-{
-return differentStringNullOk(a,b) == 0;
-}
-
-int scoreLiftOverChain(struct liftOverChain *chain,
-    char *fromOrg, char *fromDb, char *toOrg, char *toDb, char *orgFromDb, char *orgToDb, 
+float scoreLiftOverChain(struct liftOverChain *chain,
+    char *fromOrg, char *fromDb, char *toOrg, char *toDb,
     char *cartOrg, char *cartDb, struct hash *dbRank )
 /* Score the chain in terms of best match for cart settings */
 {
-int score = 0;
+float score = 0;
 
 char *chainFromOrg = hArchiveOrganism(chain->fromDb);
 char *chainToOrg = hArchiveOrganism(chain->toDb);
-int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);
+int fromRank = hashIntValDefault(dbRank, chain->fromDb, 0);  /* values up to approx. #assemblies */
 int toRank = hashIntValDefault(dbRank, chain->toDb, 0);
-int maxRank = hashIntVal(dbRank, "maxRank");
+int maxRank = hashIntVal(dbRank, "maxRank"); 
 
 if (fromRank == 0 || toRank == 0) /* not an active db in dbDb or archiveDbDb. */
     return -1;    /*  toOrg and toDb lists would not display properly */
 
-if (sameOk(fromDb,chain->fromDb) && sameOk(toDb,chain->toDb))
+if (sameOk(fromOrg,chainFromOrg) &&
+    sameOk(fromDb,chain->fromDb) && 
+    sameOk(toOrg,chainToOrg) &&
+    sameOk(toDb,chain->toDb))
+    score += 10000000;
+
+if (sameOk(fromOrg,chainFromOrg)) 
+    score += 2000000;
+if (sameOk(fromDb,chain->fromDb)) 
     score += 1000000;
 
-if (sameOk(fromDb,chain->fromDb)) 
+if (sameOk(toOrg,chainToOrg))
     score += 200000;
-if (sameOk(fromOrg,chainFromOrg)) 
+if (sameOk(toDb,chain->toDb))
     score += 100000;
 
-if (sameOk(toDb,chain->toDb))
-    score += 20000;
-if (sameOk(toOrg,chainToOrg))
-    score += 10000;
-
-if (sameOk(orgFromDb,chainFromOrg)) 
-    score += 20000;
-if (sameOk(orgToDb,chainToOrg))
-    score += 10000;
-
 if (sameOk(cartDb,chain->fromDb)) 
-    score +=  5000;
+    score +=  20000;
 if (sameOk(cartDb,chain->toDb)) 
-    score +=  3000;
+    score +=  10000;
 
 if (sameOk(cartOrg,chainFromOrg)) 
     score +=  2000;
@@ -361,10 +315,10 @@ struct liftOverChain *defaultChoices(struct liftOverChain *chainList)
 /* Out of a list of liftOverChains and a cart, choose a
  * list to display. */
 {
-char *fromOrg, *fromDb, *toOrg, *toDb, *orgFromDb, *orgToDb, *cartDb, *cartOrg;
+char *fromOrg, *fromDb, *toOrg, *toDb, *cartDb, *cartOrg;
 struct liftOverChain *choice = NULL;  
 struct hash *dbRank = hGetDatabaseRank();
-int bestScore = -1;
+float bestScore = -1;
 struct liftOverChain *this = NULL;
 
 /* Get the initial values. */
@@ -372,8 +326,6 @@ fromOrg = cartCgiUsualString(cart, HGLFT_FROMORG_VAR, "0");
 fromDb = cartCgiUsualString(cart, HGLFT_FROMDB_VAR, "0");
 toOrg = cartCgiUsualString(cart, HGLFT_TOORG_VAR, "0");
 toDb = cartCgiUsualString(cart, HGLFT_TODB_VAR, "0");
-orgFromDb = hArchiveOrganism(fromDb); 
-orgToDb = hArchiveOrganism(toDb);
 cartDb = cartCgiUsualString(cart, "db", "0");
 cartOrg = hArchiveOrganism(cartDb);
 
@@ -390,7 +342,7 @@ if (sameWord(cartDb,"0"))
 
 for (this = chainList; this != NULL; this = this->next)
     {
-    int score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, orgFromDb, orgToDb, cartOrg, cartDb, dbRank);
+    float score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, cartOrg, cartDb, dbRank);
     if (score > bestScore)
 	{
 	choice = this;
@@ -398,8 +350,6 @@ for (this = chainList; this != NULL; this = this->next)
 	}
     }  
 
-freeMem(orgFromDb);
-freeMem(orgToDb);
 return choice;
 }
 
@@ -415,6 +365,7 @@ char *db, *previousDb;
 float minBlocks, minMatch;
 boolean multiple, fudgeThick;
 int minSizeQ, minSizeT;
+boolean refreshOnly = FALSE;
 
 /* char *err = NULL; */
 struct liftOverChain *chainList = NULL, *choice;
@@ -453,11 +404,12 @@ minBlocks = cartCgiUsualDouble(cart, HGLFT_MINBLOCKS, choice->minBlocks);
 minMatch = cartCgiUsualDouble(cart, HGLFT_MINMATCH, choice->minMatch);
 fudgeThick = cartCgiUsualBoolean(cart, HGLFT_FUDGETHICK, (choice->fudgeThick[0]=='Y') ? TRUE : FALSE);
 multiple = cartCgiUsualBoolean(cart, HGLFT_MULTIPLE, (choice->multiple[0]=='Y') ? TRUE : FALSE);
+refreshOnly = cartCgiUsualBoolean(cart, HGLFT_REFRESHONLY_VAR, 0);
 
 webMain(choice, dataFormat);
 liftOverChainFreeList(&chainList);
 
-if (userData != NULL && userData[0] != '\0')
+if (!refreshOnly && userData != NULL && userData[0] != '\0')
     {
     struct hash *chainHash = newHash(0);
     char *chainFile;
