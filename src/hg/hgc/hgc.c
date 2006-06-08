@@ -193,7 +193,7 @@
 #include "ec.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1028 2006/06/08 20:42:04 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1029 2006/06/08 23:22:07 heather Exp $";
 static char *rootDir = "hgGeneData"; /* needs different value? */
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17386,6 +17386,32 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
+void doIllumina (struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->tableName;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+int start = cartInt(cart, "o");
+// char *chrom = cartString(cart, "c");
+
+genericHeader(tdb, itemName);
+
+safef(query, sizeof(query),
+      "select chromEnd, illuminaName from %s where chrom = '%s' and chromStart=%d", table, seqName, start);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    printPos(seqName, start, sqlUnsigned(row[0]), NULL, TRUE, itemName);
+    printf("<B>Illumina name:</B> %s <BR />\n", row[1]);
+    }
+sqlFreeResult(&sr);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+
+}
+
 void doHgMut (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Human Mutation track */
 {
@@ -18593,6 +18619,10 @@ else if (sameString("dvBed", track))
 else if (startsWith("hapmapSnps", track))
     {
     doHapmapSnps(tdb, item);
+    }
+else if (sameString("illumina", track))
+    {
+    doIllumina(tdb, item);
     }
 else if (sameString("hgMut", track))
     {
