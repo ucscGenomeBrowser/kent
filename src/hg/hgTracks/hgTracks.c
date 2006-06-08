@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1123 2006/06/07 21:35:42 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1124 2006/06/08 00:22:18 fanhsu Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -3560,6 +3560,13 @@ if (color)
 	    Color textColor = contrastingColor(vg, color);
 	    vgTextCentered(vg, x3, y, w2, heightPer, textColor, font, s);
 	    }
+	else if (w2 > mgFontStringWidth(font, s)/2)
+	    {
+	    /* sqeez in the text for shorter QTL range */
+	    Color textColor = contrastingColor(vg, color);
+	    vgText(vg, x3+1, y+heightPer/2-2, textColor, font, s);
+	    }
+	/* enable mouse over */
 	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
 		tg->mapName, tg->mapItemName(tg, bed), s, directUrl, withHgsid);
 	}
