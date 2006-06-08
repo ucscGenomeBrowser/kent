@@ -193,7 +193,8 @@
 #include "ec.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1027 2006/06/07 16:45:32 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1028 2006/06/08 20:42:04 giardine Exp $";
+static char *rootDir = "hgGeneData"; /* needs different value? */
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
@@ -17294,15 +17295,17 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 char query[256];
+char *escName;
 
 int start = cartInt(cart, "o");
 
 genericHeader(tdb, itemName);
 
 /* postion, band, genomic size */
+escName = sqlEscapeString(itemName);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
-      "chromStart=%d and name = '%s'", table, seqName, start, itemName);
+      "chromStart=%d and name = '%s'", table, seqName, start, escName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -17315,8 +17318,72 @@ sqlFreeResult(&sr);
 
 /* fetch and print the source? */
 landmarkFree(&r);
+freeMem(escName);
 printTrackHtml(tdb);
 hFreeConn(&conn);
+}
+
+void printHgMutAttrLink (int attrLinkId)
+/* this prints the link for a hgMut attribute, internal or external */
+/* left off here adding links to attributes */
+{
+struct hgMutAttrLink *link = NULL;
+struct hash *linkInstructions = NULL;
+struct hash *thisLink = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *linktype, *label;
+
+hgReadRa(database, organism, rootDir, "hgMutAttr.ra", &linkInstructions);
+safef(query, sizeof(query), "select * from hgMutAttrLink "
+    "where mutAttrLinkId = %d", attrLinkId);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct sqlResult *sr2;
+    char **row2;
+
+    link = hgMutAttrLinkLoad(row);
+    if (link == NULL) 
+        continue; /* no link found */
+    /* determine how to do link from .ra file */
+    thisLink = hashFindVal(linkInstructions, link->mutAttrLink);
+    if (thisLink == NULL) 
+        continue; /* no link found */
+    /* link->mutAttrAcc - accession for link */
+    /* type determined by fields: url = external, dataSql = internal, others added later? */
+    linktype = hashFindVal(thisLink, "dataSql");
+    label = hashFindVal(thisLink, "label");
+    if (linktype != NULL) 
+        {
+        safef(query, sizeof(query), linktype, link->mutAttrAcc);
+        sr2 = sqlGetResult(conn2, query);
+        while ((row2 = sqlNextRow(sr2)) != NULL)
+            {
+            /* should this print more than 1 column, how know how many? */
+            if (row2[0] != NULL)
+                {
+                /* print label and result */
+                printf("%s - %s<BR />\n", label, row2[0]);
+                }
+            }
+        sqlFreeResult(&sr2);
+        }
+    else 
+        {
+        linktype = hashFindVal(thisLink, "url");
+        if (linktype != NULL)
+            {
+            char url[256];
+            safef(url, sizeof(url), linktype, link->mutAttrAcc);
+            printf("%s - <A HREF=\"%s\">%s</A><BR />\n", label, url, link->mutAttrAcc);
+            }
+        }
+    }
+sqlFreeResult(&sr);
 }
 
 void doHgMut (struct trackDb *tdb, char *itemName)
@@ -17330,16 +17397,19 @@ struct hgMutAttr attr;
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn2 = hAllocConn();
 struct sqlResult *sr;
-struct sqlResult *sr4;
+//struct sqlResult *sr4;
 char **row;
 char query[256];
+char *escName;
 
-struct dvXref2 *dvXref2;
-struct omimTitle *omimTitle;
+//struct dvXref2 *dvXref2;
+//struct omimTitle *omimTitle;
 
+/*
 char query4[256];
 char *commentTypeIx;
 char *kgId, *spId=NULL, *geneSymbol=NULL;
+*/
 
 int i;
 char *prevClass = NULL, *prevName = NULL;
@@ -17349,9 +17419,10 @@ int start = cartInt(cart, "o");
 genericHeader(tdb, itemName);
 
 /* postion, band, genomic size */
+escName = sqlEscapeString(itemName);
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
-      "chromStart=%d and mutId = '%s'", table, seqName, start, itemName);
+      "chromStart=%d and mutId = '%s'", table, seqName, start, escName);
 sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
@@ -17361,6 +17432,7 @@ if ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
+/*
 if (mut->srcId == 3)
     {
     safef(query, sizeof(query),
@@ -17376,6 +17448,7 @@ if (mut->srcId == 3)
     	}
     }
 sqlFreeResult(&sr);
+*/
 
 /* fetch and print the source */
 safef(query, sizeof(query),
@@ -17413,8 +17486,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (link != NULL) 
         {
         url = replaceChars(link->url, "$$", row[1]);
-        printf("<A HREF=%s", url);
-        printf(" Target=_blank> %s </A> <BR />\n", link->linkDisplayName);
+        printf("%s <A HREF=%s", link->linkDisplayName, url);
+        printf(" Target=_blank> %s </A> <BR />\n", row[1]);
         freeMem(url);
         }
     }
@@ -17453,8 +17526,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     hgMutAttrStaticLoad(row, &attr);
     safef(query, sizeof(query), "select * from hgMutAttrClass where mutAttrClassId = %d", attr.mutAttrClassId);
     class = hgMutAttrClassLoadByQuery(conn2, query);
+    if (class == NULL)
+        continue; /* skip this one if invalid classId */
     safef(query, sizeof(query), "select * from hgMutAttrName where mutAttrNameId = %d", attr.mutAttrNameId);
     name = hgMutAttrNameLoadByQuery(conn2, query);
+    if (name == NULL) 
+        continue;
     /* only print name and class if different */
     if (prevClass == NULL || differentString(prevClass, class->mutAttrClass))
         {
@@ -17475,6 +17552,13 @@ while ((row = sqlNextRow(sr)) != NULL)
         printf("</DD><DT><B>%s:</B></DT><DD>\n", name->mutAttrName);
         }
     printf("%s<BR />\n", attr.mutAttrVal);
+    if (attr.mutAttrLinkId != 0) 
+        {
+        /* indent attrLinks */
+        printf("<DL><DT></DT><DD>\n");
+        printHgMutAttrLink(attr.mutAttrLinkId);
+        printf("</DD></DL>");
+        }
     }
 sqlFreeResult(&sr);
 if (prevClass != NULL)
@@ -17485,6 +17569,7 @@ if (prevClass != NULL)
     }
 printf("</DD></DL>\n");
 
+/*
 if (spId == NULL) goto skip_dv;
 
 printf("<DL><DT><B>Variation and Disease Info Related to Gene Locus of %s (Protein %s):</B></DT>\n<DD> ", geneSymbol, spId);
@@ -17533,7 +17618,9 @@ while ((row = sqlNextRow(sr)) != NULL)
         printf("<A HREF=");
         printOmimUrl(stdout, dvXref2->extAcc);
         printf(" Target=_blank> %s</A> \n", dvXref2->extAcc);
+*/
 	/* nested query here */
+/*
         if (hTableExists("omimTitle"))
 	    {
             safef(query4, sizeof(query4), 
@@ -17554,8 +17641,10 @@ sqlFreeResult(&sr);
 printf("</DD></DL>");
 
 skip_dv:
+*/
 
 hgMutFree(&mut);
+freeMem(escName);
 printTrackHtml(tdb);
 hFreeConn(&conn);
 }
