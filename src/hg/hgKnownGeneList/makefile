@@ -1,11 +1,24 @@
 include ../../inc/common.mk
+HG_WARN=-Wall
 
+L = ${MYSQLLIBS} -lm
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a -lm /usr/lib/mysql/libmysqlclient.a -lz 
+A = hgKnownGeneList
 
-O = hgKnownGeneList.o
+O = $A.o
 
-hgKnownGeneList: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o $(HOME)/bin/$(MACHTYPE)/hgKnownGeneList $O $(MYLIBS)
-#	${STRIP} $(HOME)/bin/$(MACHTYPE)/hgKnownGeneList${EXE}
+$A:	compile
+	rm -f ${HOME}/bin/${MACHTYPE}/$A${EXE}
+	mv $A ${HOME}/bin/${MACHTYPE}/$A${EXE}
+
+mgsc: strip
+	mv $A ${HOME}/bin/${MACHTYPE}/$A
+
+compile: $O 
+	${CC} -o $A $O ${MYLIBS} ${L}
+
+clean::
+	rm -f *.o
+
