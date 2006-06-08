@@ -1307,8 +1307,8 @@ type bed 4 +
 track landmark
 shortLabel Landmarks
 longLabel Compilation of landmarks from locus experts
-group regulation
-priority 97
+group phenDis
+priority 144.8
 visibility hide
 color 30,130,210
 type bed 4 +
