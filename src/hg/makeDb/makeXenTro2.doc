@@ -727,58 +727,6 @@ cat  << 'EOF' > spec
 #Submission to last job:          3771s      62.85m     1.05h    0.04d
 
 
-# MULTIZ7WAY DOWNLOADABLES (UNANNOTATED) (DONE 4/28/2006 angie)
-    # We haven't publicly documented the annotated maf format yet,
-    # so put the unannotated mafs out for download.
-    ssh hgwdev
-    mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
-    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
-    # upstream mafs 
-cat > mafFrags.csh << 'EOF'
-    date
-    foreach i (1000 2000 5000)
-        echo "making upstream$i.maf"
-        nice featureBits xenTro2 mgcGenes:upstream:$i -fa=/dev/null -bed=up.bad
-        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
-        rm up.bad
-        nice mafFrags xenTro2 multiz7way up.bed upstream$i.maf \
-                -orgs=../species.lst
-        rm up.bed
-    end
-    date
-'EOF'
-    # << emacs
-    time csh mafFrags.csh >&! mafFrags.log & tail -f mafFrags.log
-#628.650u 89.300s 14:54.56 80.2% 0+0k 0+0io 4617pf+0w
-
-    # Consolidate multi-level maf to monolithic file
-    # No need to sort chunks by position because the chunk size is greater 
-    # than the largest scaffold size.  That may not be true in other 
-    # assemblies.
-    ssh kkstore04
-    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
-    mkdir mafDownloads
-    cp /dev/null mafDownloads/xenTro2.maf
-    foreach scaf (`awk '{print $1;}' /cluster/data/xenTro2/chrom.sizes`)
-      set f = `echo $scaf | perl -wpe 's/scaffold_(\d+)//; \
-                              $d0 = $1 % 10; $d1 = ($1/10) % 10; \
-                              print "maf/$d1/$d0/scaffold_$1.maf";'`
-      cat $f >> mafDownloads/xenTro2.maf
-    end
-    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
-    time nice gzip xenTro2.maf
-#171.259u 2.665s 2:54.58 99.6%   0+0k 0+0io 1pf+0w
-    nice gzip up*.maf
-    nice md5sum *.gz > md5sum.txt
-
-    ssh hgwdev
-    set dir = /usr/local/apache/htdocs/goldenPath/xenTro2/multiz7way
-    mkdir $dir
-    ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads/{*.gz,md5sum.txt} $dir
-    cp /usr/local/apache/htdocs/goldenPath/rn4/multiz9way/README.txt $dir
-    # edit README.txt
-
-
 # ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE 4/28/2006 angie)
     ssh kkr8u00
     mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
@@ -867,6 +815,61 @@ cat > mafFrags.csh << 'EOF'
 #0.000u 0.000s 2:01.79 0.0%      0+0k 0+0io 234pf+0w
     rm *.tab
     ln -s multiz7way.2006-04-27 /cluster/data/xenTro2/bed/multiz7way
+
+
+# MULTIZ7WAY DOWNLOADABLES (DONE 6/8/2006 angie)
+    # Annotated MAF is now documented, so use anno/maf for downloads.
+    ssh hgwdev
+    mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
+    # upstream mafs 
+cat > mafFrags.csh << 'EOF'
+    date
+    foreach i (1000 2000 5000)
+        echo "making upstream$i.maf"
+        nice featureBits xenTro2 mgcGenes:upstream:$i -fa=/dev/null -bed=up.bad
+        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
+        rm up.bad
+        nice mafFrags xenTro2 multiz7way up.bed upstream$i.maf \
+                -orgs=../species.lst
+        rm up.bed
+    end
+    date
+'EOF'
+    # << emacs
+    time csh mafFrags.csh >&! mafFrags.log & tail -f mafFrags.log
+# old hgwdev:
+#628.650u 89.300s 14:54.56 80.2% 0+0k 0+0io 4617pf+0w
+# new hgwdev:
+#89.631u 24.492s 2:58.28 64.0%   0+0k 0+0io 0pf+0w
+
+    # Consolidate multi-level maf to monolithic file
+    # No need to sort chunks by position because the chunk size is greater 
+    # than the largest scaffold size.  That may not be true in other 
+    # assemblies.
+    ssh kkstore04
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
+    cp /dev/null mafDownloads/xenTro2.maf
+    foreach scaf (`awk '{print $1;}' /cluster/data/xenTro2/chrom.sizes`)
+      set f = `echo $scaf | perl -wpe 's/scaffold_(\d+)//; \
+                              $d0 = $1 % 10; $d1 = ($1/10) % 10; \
+                              print "anno/maf/$d1/$d0/scaffold_$1.maf";'`
+      cat $f >> mafDownloads/xenTro2.maf
+    end
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
+    time nice gzip xenTro2.maf
+#350.856u 3.841s 5:55.18 99.8%   0+0k 0+0io 1pf+0w
+    time nice gzip up*.maf
+#6.301u 0.096s 0:06.50 98.3%     0+0k 0+0io 0pf+0w
+    time nice md5sum *.gz > md5sum.txt
+#1.812u 0.369s 0:02.24 96.8%     0+0k 0+0io 0pf+0w
+
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/xenTro2/multiz7way
+    mkdir $dir
+    ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads/{*.gz,md5sum.txt} $dir
+    cp /usr/local/apache/htdocs/goldenPath/rn4/multiz9way/README.txt $dir
+    # edit README.txt
 
 
 # MULTIZ7WAY MAF FRAMES (DONE 4/28/2006 angie)
