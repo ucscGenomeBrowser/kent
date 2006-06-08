@@ -21242,6 +21242,7 @@ hgsql -e "load data local infile 'trim.out' into table illuminaTmp" hg17
 # unexpected locType between for snp rs5019493
 # 16 with locType = range*
 # 402 not found!
+# None that have multiple alignments.
 hgsql hg17 < illumina.sql
 hgsql -e "load data local infile 'illuminaLookup.out' into table illumina" hg17
 hgsql -e "alter table illumina add index name (name)" hg17
