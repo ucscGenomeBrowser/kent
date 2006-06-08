@@ -101,9 +101,6 @@ unsigned long fileModTime(char *pathName);
  * later files having a larger time. */
 
 
-off_t fsize(char *pathname);
-/* get file size for pathname. return -1 if not found */
-
 boolean isPipe(int fd);
 /* determine in an open file is a pipe  */
 
