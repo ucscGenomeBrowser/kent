@@ -582,6 +582,9 @@ int differentStringNullOk(char *a, char *b);
  * the input.  If used in a sort the NULLs will end
  * up before any of the cases with data.   */
 
+#define sameOk(a,b) (differentStringNullOk(a,b) == 0)
+/* returns TRUE if two strings same, NULLs OK */
+
 #define sameString(a,b) (strcmp(a,b)==0)
 /* Returns TRUE if two strings same. */
 
