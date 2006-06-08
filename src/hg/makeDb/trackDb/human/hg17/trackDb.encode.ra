@@ -1963,7 +1963,7 @@ dataVersion ENCODE Oct2005 Freeze
 
 track encodeRegulomeDnaseArray
 compositeTrack on
-shortLabel UW DNase/Array GM06690
+shortLabel UW DNase GM
 longLabel ENCODE UW DNase/Array GM06690 - DNase I sensitivity/hypersensitivity in GM06990 Cells
 group encodeChrom
 priority 66.5
