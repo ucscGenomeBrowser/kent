@@ -66,7 +66,7 @@ shortLabel Syn Conservation
 longLabel Vertebrate Multiz Alignment & Conservation (6 Species) using syntenic alignments
 group compGeno
 priority 104.6
-visibility pack
+visibility hide
 color 0, 10, 100
 altColor 0,90,10
 type wigMaf 0.0 1.0
