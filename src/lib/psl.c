@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.71 2006/03/10 19:23:16 kent Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.72 2006/06/09 04:13:44 markd Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -1050,6 +1050,39 @@ tFloppyEnd = psl->tSize - psl->tEnd;
 *retEndTail = min(qFloppyEnd, tFloppyEnd);
 }
 
+static void rcSeqs(char **seqs, unsigned blockCount, unsigned *blockSizes)
+/* reverses complement sequences in list, maintain property that all strings
+ * are in one malloc block.   blockSizes should already be reversed. */
+{
+char *buf, *next;
+int i, memSz = 0;
+
+/* get a new memory block for strings */
+for (i = 0; i < blockCount; i++)
+    memSz += blockSizes[i]+1;
+next = buf = needLargeMem(memSz);
+
+/* reverse compliment and copy to new memory block */
+for (i = blockCount-1; i >= 0; i--)
+    {
+    int len = strlen(seqs[i]);
+    reverseComplement(seqs[i], len);
+    memcpy(next, seqs[i], len+1);
+    next += len+1;
+    }
+
+/* swap memory and update pointers */
+freeMem(seqs[0]);
+seqs[0] = buf;
+next = buf;
+
+for (i = 0; i < blockCount; i++)
+    {
+    seqs[i] = next;
+    next += blockSizes[i]+1;
+    }
+}
+
 void pslRcBoth(struct psl *psl)
 /* Swap around things in psl so it works as if the alignment
  * was done on the reverse strand of the target. */
@@ -1082,15 +1115,15 @@ for (i = 0; i < psl->blockCount; i++)
     {
     psl->qStarts[i] = psl->qSize - (psl->qStarts[i] + psl->blockSizes[i]);
     psl->tStarts[i] = psl->tSize - (psl->tStarts[i] + psl->blockSizes[i]);
-    if (psl->qSequence != NULL)
-        {
-        reverseComplement(psl->tSequence[i], psl->blockSizes[i]);
-        reverseComplement(psl->qSequence[i], psl->blockSizes[i]);
-        }
     }
 reverseUnsigned(psl->tStarts, psl->blockCount);
 reverseUnsigned(psl->qStarts, psl->blockCount);
 reverseUnsigned(psl->blockSizes, psl->blockCount);
+if (psl->qSequence != NULL)
+    {
+    rcSeqs(psl->qSequence, psl->blockCount, psl->blockSizes);
+    rcSeqs(psl->tSequence, psl->blockCount, psl->blockSizes);
+    }
 }
 
 /* macro to swap to variables */
@@ -1107,40 +1140,6 @@ for (i = 0; i < psl->blockCount; i++)
     swapVars(psl->qStarts[i], psl->tStarts[i], utmp);
     if (psl->qSequence != NULL)
         swapVars(psl->qSequence[i], psl->tSequence[i], stmp);
-    }
-}
-
-static void swapRcSeqs(char **seqs, unsigned blockCount, unsigned *blockSizes)
-/* swap order of sequences in list, maintain property that all strings
- * are in one malloc block.  seqs should have old order, while blockSizes
- * are already reversed */
-{
-char *buf, *next;
-int i, memSz = 0;
-
-/* get a new memory block for strings */
-for (i = 0; i < blockCount; i++)
-    memSz += blockSizes[i]+1;
-next = buf = needLargeMem(memSz);
-
-/* reverse compliment and copy to new memory block */
-for (i = blockCount-1; i >= 0; i--)
-    {
-    int len = strlen(seqs[i]);
-    reverseComplement(seqs[i], len);
-    memcpy(next, seqs[i], len+1);
-    next += len+1;
-    }
-
-/* swap memory and update pointers */
-freeMem(seqs[0]);
-seqs[0] = buf;
-next = buf;
-
-for (i = 0; i < blockCount; i++)
-    {
-    seqs[i] = next;
-    next += blockSizes[i]+1;
     }
 }
 
@@ -1166,8 +1165,8 @@ if (psl->qSequence != NULL)
     {
     /* note: all block sequences are stored in one malloc block, which is
      * entry zero */
-    swapRcSeqs(psl->qSequence, psl->blockCount, psl->blockSizes);
-    swapRcSeqs(psl->tSequence, psl->blockCount, psl->blockSizes);
+    rcSeqs(psl->qSequence, psl->blockCount, psl->blockSizes);
+    rcSeqs(psl->tSequence, psl->blockCount, psl->blockSizes);
     swapVars(psl->qSequence, psl->tSequence, satmp);
     }
 }
