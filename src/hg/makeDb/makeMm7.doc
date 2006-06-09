@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.63 2006/06/09 16:32:49 angie Exp $"
+#	"$Id: makeMm7.doc,v 1.64 2006/06/09 23:54:59 markd Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -11218,6 +11218,7 @@ o Build the pepPi table
 
 ############################################################################
 ## build multiz17way mafFrames (multiz17wayFrames) (markd 2005/11/13)
+## rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
 
 cd /cluster/data/mm7/bed/
 mkdir multiz17wayFrames/
@@ -11235,6 +11236,20 @@ nice make -j 3 getFrames
 nice make loadDb
 
 # need to do a make sanClean after track verified
+
+    ###
+    # rebuild frames to get bug fix, using 1-pass maf methodology
+    # (2006-06-09 markd)
+    ssh kkstore02
+    cd /cluster/data/mm7/bed/multiz17wayFrames
+    mv mafFrames/ mafFrames.old
+    nice tcsh # easy way to get process niced
+    (cat  ../maf/*.maf | time genePredToMafFrames mm7 stdin stdout bosTau2 genes/bosTau2.gp.gz canFam2 genes/canFam2.gp.gz danRer3 genes/danRer3.gp.gz fr1 genes/fr1.gp.gz galGal2 genes/galGal2.gp.gz hg17 genes/hg17.gp.gz mm7 genes/mm7.gp.gz oryCun1 genes/oryCun1.gp.gz panTro1 genes/panTro1.gp.gz rheMac1 genes/rheMac1.gp.gz rn3 genes/rn3.gp.gz xenTro1 genes/xenTro1.gp.gz  |  gzip >multiz17way.mafFrames.gz)>&log&
+    ssh hgwdev
+    cd /cluster/data/mm7/bed/multiz17wayFrames
+
+    hgLoadMafFrames mm7 multiz17wayFrames multiz17way.mafFrames.gz >&frameslog&
+
 
 ############################################################################
 #  BLASTZ Chimp panTro1 second time (DONE - 2005-11-20 - 2005-11-22 - Hiram)
