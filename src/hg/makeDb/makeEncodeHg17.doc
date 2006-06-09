@@ -2050,4 +2050,15 @@ cat > load.csh << 'EOF'
     echo "load data local infile 'encodePseudogeneClass2.txt' into \
          table encodePseudogeneClass" | hgsql hg17
 
-# UPDATE OF 
+
+##########################################################################
+# Univ. Uppsala, Sweden Chip/chip (butyrate-treated H3Ac, H4Ac)
+# Submitted 5/29/06 by Adam Ameur <mada@lcb.uu.se>
+# 6 subtracks
+
+    cd /cluster/data/encode/Uppsala
+    mkdir -p 2006-05-09/lab
+    cd 2006-05-09/lab
+    unzip H3H4ac_butyrate.zip
+
+
