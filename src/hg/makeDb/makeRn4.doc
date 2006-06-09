@@ -2789,54 +2789,6 @@ cat  << 'EOF' > spec
       /usr/local/apache/htdocs/images/phylo/rn4_9way.jpg
 
 
-# MULTIZ9WAY DOWNLOADABLES (UNANNOTATED) (DONE 4/3/2006 angie)
-    # We haven't publicly documented the annotated maf format yet,
-    # so put the unannotated mafs out for download.
-    ssh hgwdev
-    cd /cluster/data/rn4/bed/multiz9way.2006-03-30
-    mkdir mafDownloads
-    cd mafDownloads
-    # upstream mafs 
-cat > mafFrags.csh << 'EOF'
-    date
-    foreach i (1000 2000 5000)
-        echo "making upstream$i.maf"
-        nice featureBits rn4 refGene:upstream:$i -fa=/dev/null -bed=up.bad
-        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
-        rm up.bad
-        nice mafFrags rn4 multiz9way up.bed upstream$i.maf \
-                -orgs=../species.lst
-        rm up.bed
-    end
-    date
-'EOF'
-    time csh mafFrags.csh >&! mafFrags.log & tail -f mafFrags.log
-#75.280u 480.470s 17:07.43 54.0% 0+0k 0+0io 4640pf+0w
-
-    ssh kkstore04
-    mkdir /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads
-    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads
-cat > downloads.csh << 'EOF'
-    date
-    foreach f (../maf/chr*.maf)
-	set c = $f:t:r
-        echo $c
-	nice gzip -c $f > $c.maf.gz
-    end
-    md5sum *.gz > md5sum.txt
-    date
-'EOF'
-    time csh -efx downloads.csh >&! downloads.log
-    # ~30min
-
-    ssh hgwdev
-    set dir = /usr/local/apache/htdocs/goldenPath/rn4/multiz9way
-    mkdir $dir
-    ln -s /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads/{*.gz,md5sum.txt} $dir
-    cp /usr/local/apache/htdocs/goldenPath/mm7/multiz17way/README.txt $dir
-    # edit README.txt
-
-
 # ANNOTATE MULTIZ9WAY MAF AND LOAD TABLES (DONE 4/4/2006 angie)
     ssh kolossus
     mkdir /cluster/data/rn4/bed/multiz9way.2006-03-30/anno
@@ -2894,6 +2846,58 @@ date
 #0.000u 0.000s 4:04.62 0.0%      0+0k 0+0io 217pf+0w
     rm *.tab
     ln -s multiz9way.2006-03-30 /cluster/data/rn4/bed/multiz9way
+
+
+# MULTIZ9WAY DOWNLOADABLES (UNANNOTATED) (DONE 6/9/2006 angie)
+    # Annotated MAF is now documented, so use anno/maf for downloads.
+    ssh hgwdev
+    mkdir /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads
+    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads
+    # upstream mafs 
+cat > mafFrags.csh << 'EOF'
+    date
+    foreach i (1000 2000 5000)
+        echo "making upstream$i.maf"
+        nice featureBits rn4 refGene:upstream:$i -fa=/dev/null -bed=up.bad
+        awk -F '\t' '{printf("%s\t%s\t%s\t%s\t%s\t%s\n", $1, $2, $3, substr($4, 0, 9), 0, $5)}' up.bad > up.bed
+        rm up.bad
+        nice mafFrags rn4 multiz9way up.bed upstream$i.maf \
+                -orgs=../species.lst
+        rm up.bed
+    end
+    date
+'EOF'
+    # << emacs
+    time csh mafFrags.csh >&! mafFrags.log & tail -f mafFrags.log
+#old hgwdev:
+#75.280u 480.470s 17:07.43 54.0% 0+0k 0+0io 4640pf+0w
+#new hgwdev:
+#85.814u 171.368s 7:37.96 56.1%  0+0k 0+0io 0pf+0w
+
+    ssh kkstore04
+    cd /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads
+cat > downloads.csh << 'EOF'
+    date
+    foreach f (../anno/maf/chr*.maf)
+	set c = $f:t:r
+        echo $c
+	nice gzip -c $f > $c.maf.gz
+    end
+    md5sum *.gz > md5sum.txt
+    date
+'EOF'
+    # << emacs
+    time csh -efx downloads.csh >&! downloads.log
+#1897.874u 25.317s 32:58.19 97.2%        0+0k 0+0io 2pf+0w
+    nice gzip up*.maf
+    nice md5sum up*.maf.gz >> md5sum.txt
+
+    ssh hgwdev
+    set dir = /usr/local/apache/htdocs/goldenPath/rn4/multiz9way
+    mkdir $dir
+    ln -s /cluster/data/rn4/bed/multiz9way.2006-03-30/mafDownloads/{*.gz,md5sum.txt} $dir
+    cp /usr/local/apache/htdocs/goldenPath/mm7/multiz17way/README.txt $dir
+    # edit README.txt
 
 
 # MULTIZ9WAY MAF FRAMES (DONE 4/5/2006 angie)
