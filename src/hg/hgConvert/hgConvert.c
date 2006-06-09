@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.16 2006/06/08 23:31:47 galt Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.17 2006/06/09 01:10:03 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -30,11 +30,7 @@ struct hash *oldCart = NULL;
 
 /* Javascript to support New Assembly pulldown when New Genome changes. */
 /* Copies selected values to a hidden form */
-char *onChangeToOrg = 
-"onchange=\"document.dbForm.hglft_toOrg.value = "
-"document.mainForm.hglft_toOrg.options[document.mainForm.hglft_toOrg.selectedIndex].value;"
-"document.dbForm.hglft_toDb.value = 0;"
-"document.dbForm.submit();\"";
+char *onChangeToOrg = "onchange=\"document.mainForm.submit();\"";
 
 struct dbDb *matchingDb(struct dbDb *list, char *name)
 /* Find database of given name in list or die trying. */
@@ -100,15 +96,6 @@ cgiTableEnd();
 
 puts("</FORM>\n");
 
-/* Hidden form to support menu pulldown behavior */
-printf("<FORM ACTION=\"/cgi-bin/hgConvert\""
-       " METHOD=\"GET\" NAME=\"dbForm\">");
-printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n", 
-                        HGLFT_TOORG_VAR, toDb->organism);
-printf("<input type=\"hidden\" name=\"%s\" value=\"%s\">\n",
-                        HGLFT_TODB_VAR, liftOver->toDb);
-cartSaveSession(cart);
-puts("</FORM>");
 cartWebEnd();
 }
 
