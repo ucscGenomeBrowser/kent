@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.80 2006/06/05 18:27:35 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.81 2006/06/09 18:22:21 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2770,7 +2770,7 @@ if (!sameString(q.cgis,""))
 	    if (gVal[0]!=0) 
 		{
 		safef(cgiPath,sizeof(cgiPath),"%s%s","./",gVal);
-		size=fsize(cgiPath);
+		size=fileSize(cgiPath);
 		if (size == -1)
 		    {
 		    safef(nicenumber,sizeof(nicenumber),"not found");
@@ -2835,7 +2835,7 @@ if (!sameString(q.files,""))
 		if (strrchr(gVal, '*') == NULL)
 		    { /* no wildcards in filename, do it the normal way */
 		    safef(pathName,sizeof(pathName),"%s",gVal);
-		    size=fsize(pathName);
+		    size=fileSize(pathName);
 		    if (size == -1)
 			{
 			safef(nicenumber,sizeof(nicenumber),"not found");
