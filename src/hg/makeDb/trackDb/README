@@ -176,6 +176,15 @@ The format of the type fields:
       yLineOnOff        on|off         # default is off (draw y=yLineMark line)
       windowingFunction maximum|mean|minimum # default is maximum
       smoothingWindow   off|[2-16]           # default is off
+      spanList          s1,s2,s3...          # list of spans in the loaded table
+		#	you can find the spans by doing:
+		#	"select span from <table> group by span"
+		#	typically spanList is only one:
+		#	spanList 1
+		#	rarely it may be more:
+		#	spanList 1,1000
+		#	special efforts must be made to load extra spans
+		#	into the table for special purposes.
 15. type bedGraph [column]
    Same type of graphing function as #14 above 'type wig'
    In this case, the data table is a bed type of table loaded
