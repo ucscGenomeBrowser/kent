@@ -6,7 +6,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
-test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest mimeTests
+test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest mimeTests base64Tests
 	rm -r output
 	@echo tested all
 
@@ -140,6 +140,21 @@ ${BIN_DIR}/htmlMimeTest:  mkdirs htmlMimeTest.o ${MYLIBS}
 htmlMime1: ${BIN_DIR}/htmlMimeTest mkdirs
 	${BIN_DIR}/htmlMimeTest http://hgwdev.cse.ucsc.edu/cgi-bin/hgBlat input/htmlMime.txt 3490 3502 > output/$@.out
 	diff expected/$@.out output/$@.out
+
+
+base64Tests: base64Encode base64Decode
+
+${BIN_DIR}/testBase64:  mkdirs testBase64.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/testBase64 testBase64.o ${MYLIBS} $L
+
+base64Encode: ${BIN_DIR}/testBase64 mkdirs
+	${BIN_DIR}/testBase64 'My Test String' > output/$@.out
+	diff expected/$@.out output/$@.out
+
+base64Decode: ${BIN_DIR}/testBase64 mkdirs
+	${BIN_DIR}/testBase64 'TXkgVGVzdCBTdHJpbmc=' > output/$@.out
+	diff expected/$@.out output/$@.out
+
 
 
 clean:
