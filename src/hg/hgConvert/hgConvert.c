@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgConvert.c,v 1.17 2006/06/09 01:10:03 galt Exp $";
+static char const rcsid[] = "$Id: hgConvert.c,v 1.18 2006/06/09 05:17:53 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_TOORG_VAR   "hglft_toOrg"           /* TO organism */
@@ -100,11 +100,11 @@ cartWebEnd();
 }
 
 
-float scoreLiftOverChain(struct liftOverChain *chain,
+double scoreLiftOverChain(struct liftOverChain *chain,
     char *fromOrg, char *fromDb, char *toOrg, char *toDb, struct hash *dbRank )
 /* Score the chain in terms of best match for cart settings */
 {
-float score = 0;
+double score = 0;
 
 char *chainFromOrg = hArchiveOrganism(chain->fromDb);
 char *chainToOrg = hArchiveOrganism(chain->toDb);
@@ -146,7 +146,7 @@ struct liftOverChain *defaultChoices(struct liftOverChain *chainList, char *from
 char *toOrg, *toDb;
 struct liftOverChain *choice = NULL;
 struct hash *dbRank = hGetDatabaseRank();
-int bestScore = -1;
+double bestScore = -1;
 struct liftOverChain *this = NULL;
 
 /* Get the initial values. */
@@ -160,7 +160,7 @@ if (sameWord(toDb,"0"))
 
 for (this = chainList; this != NULL; this = this->next)
     {
-    int score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, dbRank);
+    double score = scoreLiftOverChain(this, fromOrg, fromDb, toOrg, toDb, dbRank);
     if (score > bestScore)
 	{
 	choice = this;
