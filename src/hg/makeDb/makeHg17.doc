@@ -20301,6 +20301,7 @@ TMPDIR=/scratch/tmp
 #########################################################################
 # BUILD MAF ANNOTATION FOR MULTIZ17WAY  (kate 2006-02-16)
 # Redo to fix overlaps (2006-04-09 kate)
+# rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
 
     ssh kkstore01
     cd /cluster/data/rheMac2
@@ -20387,8 +20388,18 @@ cat > loadMaf.csh << 'EOF'
     #   the 'para make' can restart the job
     make loadDb >&! loadDb.log &
 
+    ###
+    # rebuild frames to get bug fix, using 1-pass maf methodology
+    # (2006-06-09 markd)
+    ssh kkstore02
+    cd /cluster/data/hg17/bed/multiz17way/frames
+    mv mafFrames/ mafFrames.old
+    nice tcsh # easy way to get process niced
+    (cat  ../maf/*.maf | genePredToMafFrames hg17 stdin stdout bosTau2 genes/bosTau2.gp.gz canFam2 genes/canFam2.gp.gz danRer3 genes/danRer3.gp.gz fr1 genes/fr1.gp.gz galGal2 genes/galGal2.gp.gz hg17 genes/hg17.gp.gz mm7 genes/mm7.gp.gz oryCun1 genes/oryCun1.gp.gz panTro1 genes/panTro1.gp.gz rheMac2 genes/rheMac2.gp.gz rn3 genes/rn3.gp.gz xenTro1 genes/xenTro1.gp.gz |  gzip >multiz17way.mafFrames.gz)>&log&
+    ssh hgwdev
+    cd /cluster/data/hg17/bed/multiz17way/frames
 
-# EXTRACT LINEAGE-SPECIFIC REPEATS FOR RAT (DONE 2/8/06 angie)
+    hgLoadMafFrames hg17 multiz17wayFrames multiz17way.mafFrames.gz >&log&# EXTRACT LINEAGE-SPECIFIC REPEATS FOR RAT (DONE 2/8/06 angie)
     ssh kolossus
     mkdir /cluster/data/hg17/rmsk
     cd /cluster/data/hg17/rmsk
