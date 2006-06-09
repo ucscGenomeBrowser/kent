@@ -603,6 +603,16 @@ spectrum on
 type netAlign panTro1 chainPanTro1
 otherDb panTro1
 
+track netHomIni13
+shortLabel $o_Organism Net
+longLabel $o_Organism ($o_date/$o_db) Alignment Net
+group compGeno
+priority 301
+visibility hide
+spectrum on
+type netAlign homIni13 chainHomIni13
+otherDb homIni13
+
 track chainHomIni13
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
