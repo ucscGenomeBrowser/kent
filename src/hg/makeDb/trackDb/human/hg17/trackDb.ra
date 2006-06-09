@@ -2026,7 +2026,7 @@ compositeTrack on
 visibility hide 
 type genePred 
 group genes 
-priority 1000 
+priority 75
  
     track transmapSeg 
     subTrack seg 
