@@ -385,6 +385,74 @@ type genePred . xmMrnaAli
 exonArrows on
 cdsDrawDefault genomic\ codons
 
+track seg 
+shortLabel Novel SEGs 
+longLabel Predictions of Novel Single-Exon Genes 
+compositeTrack on 
+visibility hide 
+type genePred 
+group mgcCList
+priority 600
+ 
+    track transmapSeg 
+    subTrack seg 
+    shortLabel TransMap 
+    longLabel TransMap Novel SEGs 
+    color 34,139,34 
+    priority 1 
+ 
+    track exoniphySeg 
+    subTrack seg 
+    shortLabel ExoniPhy 
+    longLabel ExoniPhy Novel SEGs 
+    color 173,17,162 
+    priority 2 
+ 
+    track nscanGeneSeg 
+    subTrack seg 
+    shortLabel N-SCAN 
+    longLabel N-SCAN Novel SEGs 
+    color 84,119,34 
+    priority 3 
+ 
+    track twinscanSeg 
+    subTrack seg 
+    shortLabel Twinscan 
+    longLabel Twinscan Novel SEGs 
+    color 0,100,100 
+    type genePred twinscanPep 
+    priority 4 
+ 
+    track ensGeneSeg 
+    subTrack seg 
+    shortLabel Ensembl 
+    longLabel Ensembl Novel SEGs 
+    color 150,0,0 
+    type genePred ensPep 
+    url http://www.ensembl.org/perl/transview?transcript=$$ 
+    priority 5 
+ 
+    track sgpGeneSeg 
+    subTrack seg 
+    shortLabel SGP  
+    longLabel SGP Novel SEGs 
+    color 0,90,100 
+    priority 6 
+ 
+    track multipleSeg 
+    subTrack seg 
+    shortLabel Multiple 
+    longLabel Novel SEGs Predicted by Multiple Methods (Loci) 
+    color 0,0,0 
+    priority 7 
+
+    track bestSeg  
+    subTrack seg  
+    shortLabel Best  
+    longLabel Novel SEGs Passing All Filters (Loci)  
+    color 0,0,0  
+    priority 8  
+  
 # Vancouver BCGSC
 track gscMgc1
 compositeTrack on
