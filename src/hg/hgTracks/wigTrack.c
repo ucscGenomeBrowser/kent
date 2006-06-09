@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.71 2006/05/31 22:17:38 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.72 2006/06/09 21:45:15 hiram Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -1067,12 +1067,6 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
  *	drawing window in chrom coords: seqStart, seqEnd
  *	'basesPerPixel' is known, 'pixelsPerBase' is known
  */
-	lseek(wibFH, wi->offset, SEEK_SET);
-
-	readData = (unsigned char *) needMem((size_t) (wi->count + 1));
-	bytesRead = read(wibFH, readData,
-	    (size_t) wi->count * (size_t) sizeof(unsigned char));
- 
 	/*	let's check end point screen coordinates.  If they are
  	 *	the same, then this entire data block lands on one pixel,
  	 *	no need to walk through it, just use the block's specified
@@ -1085,6 +1079,11 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 
 	if (x2 > x1) {
 	    /*	walk through all the data in this block	*/
+	    lseek(wibFH, wi->offset, SEEK_SET);
+
+	    readData = (unsigned char *) needMem((size_t) (wi->count + 1));
+	    bytesRead = read(wibFH, readData,
+		(size_t) wi->count * (size_t) sizeof(unsigned char));
 	    for (dataOffset = 0; dataOffset < wi->count; ++dataOffset)
 		{
 		unsigned char datum = readData[dataOffset];
@@ -1111,6 +1110,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 			}
 		    }
 		}
+	    freeMem(readData);
 	} else {	/*	only one pixel for this block of data */
 	    int xCoord = preDrawZero + x1;
 	    /*	if the point falls within our array, record it.
@@ -1131,7 +1131,6 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		preDraw[xCoord].sumSquares += wi->sumSquares;
 		}
 	}
-	freeMem(readData);
 	}	/*	Draw if span is correct	*/
     }	/*	for (wi = tg->items; wi != NULL; wi = wi->next)	*/
 if (wibFH > 0)
