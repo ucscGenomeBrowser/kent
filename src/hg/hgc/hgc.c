@@ -193,7 +193,7 @@
 #include "ec.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1029 2006/06/08 23:22:07 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1030 2006/06/09 15:58:14 heather Exp $";
 static char *rootDir = "hgGeneData"; /* needs different value? */
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17404,7 +17404,7 @@ sr = sqlGetResult(conn, query);
 if ((row = sqlNextRow(sr)) != NULL)
     {
     printPos(seqName, start, sqlUnsigned(row[0]), NULL, TRUE, itemName);
-    printf("<B>Illumina name:</B> %s <BR />\n", row[1]);
+    printf("<B>Illumina ID:</B> %s <BR />\n", row[1]);
     }
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
