@@ -6,7 +6,7 @@
 #include "dystring.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mimeTester.c,v 1.2 2006/06/09 20:02:44 galt Exp $";
+static char const rcsid[] = "$Id: mimeTester.c,v 1.3 2006/06/09 20:25:26 galt Exp $";
 
 char *altHeader = NULL;
 
@@ -115,7 +115,7 @@ freez(&margin);
 
 
 
-static struct mimePart * cgiParseMultipart(int fd, FILE *out)
+static struct mimePart * cgiParseMultipart(int fd, FILE *out, boolean autoBoundary)
 /* process a multipart form */
 {
 char h[1024];  /* hold mime header line */
@@ -154,6 +154,8 @@ mb = initMimeBuf(fd);
 
 if (altHeader)
     mp = parseMultiParts(mb, cloneString(dy->string)); /* The Alternate Header will get freed */
+else if (autoBoundary)    
+    mp = parseMultiParts(mb, "autoBoundary"); 
 else    
     mp = parseMultiParts(mb, NULL); 
 
@@ -164,27 +166,6 @@ freeDyString(&dy);
 
 freez(&mb);
 
-
-printMimeInfo(mp, out, 0);
-
-return mp;
-}
-
-
-static struct mimePart * abParseMultipart(int fd, FILE *out)
-/* process a multipart form with "autoBoundary" */
-{
-struct mimeBuf *mb = NULL;
-struct mimePart *mp = NULL;
-
-mb = initMimeBuf(fd);
-
-mp = parseMultiParts(mb, "autoBoundary"); 
-
-if(!mp->multi) /* expecting multipart child parts */
-    errAbort("Malformatted multipart-form.");
-
-freez(&mb);
 
 printMimeInfo(mp, out, 0);
 
@@ -292,7 +273,7 @@ for (i=0;i<sizeSeries;++i)
     out = mustOpen(TESTFILEOUT, "w");
     makeTestFile(i);
     fd = open(TESTFILENAME, O_RDONLY);
-    mp = cgiParseMultipart(fd, out);
+    mp = cgiParseMultipart(fd, out, FALSE);
     fprintf(stderr,"ouput %d ok\n",i);
     close(fd);
     fd = -1;
@@ -326,14 +307,9 @@ if (optionExists("sizeSeries"))
     {
     doSizeSeries();
     }
-else if (optionExists("autoBoundary"))
-    {
-    struct mimePart *mp = abParseMultipart(STDIN_FILENO, stdout);
-    freeMimeParts(&mp);
-    }
 else    
     {
-    struct mimePart *mp = cgiParseMultipart(STDIN_FILENO, stdout);
+    struct mimePart *mp = cgiParseMultipart(STDIN_FILENO, stdout, optionExists("autoBoundary"));
     freeMimeParts(&mp);
     }
 
