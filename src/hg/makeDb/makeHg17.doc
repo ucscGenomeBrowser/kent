@@ -21167,6 +21167,46 @@ cd /cluster/data/dbSnp
 hgsql hg17 < snp125ExceptionDesc.sql
 mysql> load data local file 'exception.template' into table snp125ExceptionDesc;
 
+#######
+# Add new case for ObservedWrongSize (Heather June 9, 2006)
+# revisions 1.25 and 1.26 kent/src/hg/snp/snpLoad/snpCheckClassAndObserved.c
+ssh kkr5u00
+cd /scratch/snp/125/human
+/bin/csh pipeline.csh
+# wait 35 minutes
+grep ObservedWrongSize snpCheckClassAndObserved.exceptions > ObservedWrongSize
+grep ObservedWrongSize snpPARexceptions.tab >> ObservedWrongSize
+cp ObservedWrongSize /cluster/home/heather/transfer/snp
+ssh hgwdev
+hgsql -e 'alter table snp125Exceptions drop index name' hg17
+hgsql -e 'load data local infile "/cluster/home/heather/transfer/snp/ObservedWrongSize" into table snp125Exceptions' hg17
+hgsql -e 'alter table snp125Exceptions add index name'
+
+# fix counts
+hgsql -e 'select count(*), exception from snp125Exceptions group by exception' hg17
+
++----------+------------------------------------+
+| count(*) | exception                          |
++----------+------------------------------------+
+|   785903 | MultipleAlignments                 |
+|      623 | NamedClassWrongLocType             |
+|     7686 | ObservedMismatch                   |
+|     4333 | ObservedNotAvailable               |
+|       97 | ObservedWrongFormat                |
+|    73558 | ObservedWrongSize                  |
+|      466 | RangeSubstitutionLocTypeExactMatch |
+|       62 | RefAlleleMismatch                  |
+|    99849 | RefAlleleNotRevComp                |
+|     1278 | RefAlleleWrongSize                 |
+|    20749 | SingleClassBetweenLocType          |
+|     2306 | SingleClassQuadAllelic             |
+|    15639 | SingleClassRangeLocType            |
+|    19330 | SingleClassTriAllelic              |
++----------+------------------------------------+
+
+# edit /cluster/data/dbSNP/exception.template (need to automate this)
+hgsql -e 'delete from snp125ExceptionDesc' hg17
+hgsql -e 'load data local infile "/cluster/data/dbSNP/exception.template" into table snp125ExceptionDesc' hg17
 
 ############
 # UPDATE hg17 knownToVisiGene (2006-04-05 galt)
