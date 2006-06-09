@@ -728,6 +728,7 @@ cat  << 'EOF' > spec
 
 
 # ANNOTATE MULTIZ7WAY MAF AND LOAD TABLES (DONE 4/28/2006 angie)
+# -- mafFilter'd and reloaded 6/9/2006
     ssh kkr8u00
     mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
@@ -786,6 +787,13 @@ cat  << 'EOF' > spec
                               print "maf/$d1/$d0/scaffold_$1.maf";'`
       cat $f >> xenTro2.maf
     end
+    # 6/9/2006 -- mafFilter rejected two single-row (xenTro2 only) blocks due to 
+    # its default minRow of 2.  That's reasonable, so replace the original with 
+    # the filtered version (and reload the db tables based on the file).
+    mafFilter -overlap -reject=rf xenTro2.maf > xenTro2.mf.maf
+#rejected 2 blocks
+    gzip -c xenTro2.maf > xenTro2.preFilter.maf.gz
+    mv xenTro2.mf.maf xenTro2.maf
 
     # Load annotated maf
     ssh hgwdev
@@ -794,8 +802,11 @@ cat  << 'EOF' > spec
     ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno/xenTro2.maf \
       /gbdb/xenTro2/multiz7way/anno/
     time nice hgLoadMaf -pathPrefix=/gbdb/xenTro2/multiz7way/anno xenTro2 multiz7way
-#Loaded 1610298 mafs in 1 files from /gbdb/xenTro2/multiz7way/anno
+#Loaded 1610296 mafs in 1 files from /gbdb/xenTro2/multiz7way/anno
+#old hgwdev:
 #126.780u 41.500s 7:15.57 38.6%  0+0k 0+0io 264pf+0w
+#new hgwdev:
+#31.754u 8.324s 1:12.56 55.2%    0+0k 0+0io 3pf+0w
 
     # Do the computation-intensive part of hgLoadMafSummary on a workhorse 
     # machine and then load on hgwdev:
@@ -803,8 +814,8 @@ cat  << 'EOF' > spec
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
     time nice hgLoadMafSummary xenTro2 -minSize=30000 -mergeGap=1500 \
              -maxSize=200000 -test multiz7waySummary xenTro2.maf
-#Created 570630 summary blocks from 3284353 components and 1610298 mafs from xenTro2.maf
-#50.727u 7.354s 0:59.16 98.1%    0+0k 0+0io 3pf+0w
+#Created 570630 summary blocks from 3284353 components and 1610296 mafs from xenTro2.maf
+#55.767u 11.404s 1:08.32 98.3%   0+0k 0+0io 4pf+0w
 
     ssh hgwdev
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/anno
@@ -812,12 +823,15 @@ cat  << 'EOF' > spec
       > /tmp/multiz7waySummary.sql
     time nice hgLoadSqlTab xenTro2 multiz7waySummary \
       /tmp/multiz7waySummary.sql multiz7waySummary.tab
+#old hgwdev:
 #0.000u 0.000s 2:01.79 0.0%      0+0k 0+0io 234pf+0w
+#new hgwdev:
+#0.000u 0.001s 0:10.88 0.0%      0+0k 0+0io 3pf+0w
     rm *.tab
     ln -s multiz7way.2006-04-27 /cluster/data/xenTro2/bed/multiz7way
 
 
-# MULTIZ7WAY DOWNLOADABLES (DONE 6/8/2006 angie)
+# MULTIZ7WAY DOWNLOADABLES (DONE 6/9/2006 angie)
     # Annotated MAF is now documented, so use anno/maf for downloads.
     ssh hgwdev
     mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
@@ -843,22 +857,13 @@ cat > mafFrags.csh << 'EOF'
 # new hgwdev:
 #89.631u 24.492s 2:58.28 64.0%   0+0k 0+0io 0pf+0w
 
-    # Consolidate multi-level maf to monolithic file
-    # No need to sort chunks by position because the chunk size is greater 
-    # than the largest scaffold size.  That may not be true in other 
-    # assemblies.
+    # Make a gzipped version of the monolithic annotated maf file:
     ssh kkstore04
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
-    cp /dev/null mafDownloads/xenTro2.maf
-    foreach scaf (`awk '{print $1;}' /cluster/data/xenTro2/chrom.sizes`)
-      set f = `echo $scaf | perl -wpe 's/scaffold_(\d+)//; \
-                              $d0 = $1 % 10; $d1 = ($1/10) % 10; \
-                              print "anno/maf/$d1/$d0/scaffold_$1.maf";'`
-      cat $f >> mafDownloads/xenTro2.maf
-    end
+    time nice gzip -c anno/xenTro2.maf > mafDownloads/xenTro2.maf.gz
+#416.982u 2.804s 7:10.50 97.5%   0+0k 0+0io 0pf+0w
+
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/mafDownloads
-    time nice gzip xenTro2.maf
-#350.856u 3.841s 5:55.18 99.8%   0+0k 0+0io 1pf+0w
     time nice gzip up*.maf
 #6.301u 0.096s 0:06.50 98.3%     0+0k 0+0io 0pf+0w
     time nice md5sum *.gz > md5sum.txt
