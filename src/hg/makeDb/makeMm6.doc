@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.114 2006/06/05 23:48:58 hiram Exp $"
+#	"$Id: makeMm6.doc,v 1.115 2006/06/09 16:32:03 angie Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -10074,7 +10074,7 @@ BASE=/cluster/data/mm6/bed/blastzCanFam2.2005-12-02
 TMPDIR=/scratch/tmp
 
 '_EOF_'
-    #	happy emacs
+    # << emacs
 
     /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 -bigClusterHub=pk \
 	-chainMinScore=3000 -chainLinearGap=medium \
@@ -10215,3 +10215,16 @@ knownToVisiGene mm6
     ls -og mm6ToMm8*
     #	lrwxrwxrwx  1 53 Jun  5 16:35 mm6ToMm8.over.chain.gz ->
     #		/cluster/data/mm6/bed/liftOver/mm6ToMm8.over.chain.gz
+
+
+#########################################################################
+### IGTC (Int'l GeneTrap Consortium) (DONE - 2006-06-07 - angie)
+### Doug Stryke <stryke@cgl.ucsf.edu> in Tom Ferrin's lab
+    ssh hgwdev
+    mkdir /cluster/data/mm6/bed/igtc
+    cd /cluster/data/mm6/bed/igtc
+    wget http://www.genetrap.org/blattrack/genetrap_mm6.psl
+    grep -v ^track genetrap_mm6.psl \
+    | hgLoadPsl mm6 -table=igtc stdin
+
+
