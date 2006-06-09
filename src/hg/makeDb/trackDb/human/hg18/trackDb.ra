@@ -37,8 +37,8 @@ altColor 0,90,10
 type wigMaf 0.0 1.0
 maxHeightPixels 100:40:11
 wiggle phastCons17way
-pairwiseHeight 12
 spanList 1
+pairwiseHeight 12
 yLineOnOff Off
 frames multiz17wayFrames
 irows on
@@ -742,6 +742,23 @@ expScale 15.0
 expStep 3.0
 expProbeTable affyHumanExonProbe
 expTable affyHumanExonExps
+
+track regPotential7X
+shortLabel Reg Potential 7 species
+longLabel SPERR Regulatory Potential (7 species)
+group regulation
+priority 91
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.10
+windowingFunction mean
+spanList 1
+type wig 0.0 1.0
 
 searchTable wgRna
 searchMethod fuzzy
