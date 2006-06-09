@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.99 2006/06/03 00:20:09 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.100 2006/06/09 16:39:18 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -1468,7 +1468,7 @@ boolean bogusMacEmptyChars(char *s)
  * Mac browser putting in bogus chars into empty text box. */
 {
 char c = *s;
-return c != '_' && !isalnum(c);
+return (c != '_') && (c != '#') && !isalnum(c);
 }
 
 static struct customTrack *customTracksParseCartOrDie(struct cart *cart,
