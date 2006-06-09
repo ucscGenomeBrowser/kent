@@ -298,9 +298,15 @@ for (iBlock = 0; iBlock < inPsl->blockCount; iBlock++)
         continue;
     }
 
-/* finish up psl */
-setPslBounds(mappedPsl);
-adjustOrientation(opts, inPsl, inPslOrigStrand, mappedPsl);
+/* finish up psl, or free if no blocks were added */
+assert(mappedPsl->blockCount <= mappedPslMax);
+if (mappedPsl->blockCount == 0)
+    pslFree(&mappedPsl);  /* nothing made it */
+else
+    {
+    setPslBounds(mappedPsl);
+    adjustOrientation(opts, inPsl, inPslOrigStrand, mappedPsl);
+    }
 
 /* restore input */
 if (rcInPsl)
@@ -312,8 +318,6 @@ if (cnv1)
     pslNAToProt(inPsl);
 if (cnv2)
     pslNAToProt(mapPsl);
-if (mappedPsl->blockCount == 0)
-    pslFree(&mappedPsl);  /* nothing made it */
 
 return mappedPsl;
 }
