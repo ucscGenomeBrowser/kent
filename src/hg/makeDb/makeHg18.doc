@@ -7113,6 +7113,7 @@ cat > copy.csh << 'EOF'
 
 #########################################################################
 # Build maf annotation for multiz17way  (STARTED 2006-02-28, DONE 2006-03-09, Fan)
+# rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
 
     ssh kkstore01
     cd /cluster/data/monDom4
@@ -7208,6 +7209,20 @@ cat > copy.csh << 'EOF'
         # ~2 hours
 
     time make loadDb > loadDb.log 
+
+    ###
+    # rebuild frames to get bug fix, using 1-pass maf methodology
+    # (2006-06-09 markd)
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/multiz17way/frames
+    mv mafFrames/ mafFrames.old2
+    nice tcsh # easy way to get process niced
+    (cat  ../maf/*.maf | time genePredToMafFrames hg18 stdin stdout bosTau2 genes/bosTau2.gp.gz canFam2 genes/canFam2.gp.gz danRer3 genes/danRer3.gp.gz fr1 genes/fr1.gp.gz galGal2 genes/galGal2.gp.gz hg18 genes/hg18.gp.gz mm8 genes/mm8.gp.gz oryCun1 genes/oryCun1.gp.gz panTro1 genes/panTro1.gp.gz rheMac2 genes/rheMac2.gp.gz rn4 genes/rn4.gp.gz xenTro1 genes/xenTro1.gp.gz  |  gzip >multiz17way.mafFrames.gz)>&frames.log&
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/multiz17way/frames
+
+    hgLoadMafFrames hg18 multiz17wayFrames multiz17way.mafFrames.gz >&log&
+
 
 ##########################################################################
 # BUILD ALLEN BRAIN TRACK (DONE 03/11/06 Fan)
