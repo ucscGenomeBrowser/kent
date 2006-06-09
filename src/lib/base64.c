@@ -1,7 +1,7 @@
 #include "common.h"
 #include "base64.h"
 
-char *base64Encode(char *input)
+char *base64Encode(char *input, size_t inplen)
 /* Use base64 to encode a string.  Returns one long encoded
  * string which need to be freeMem'd. Note: big-endian algorithm.
  * For some applications you may need to break the base64 output
@@ -9,11 +9,10 @@ char *base64Encode(char *input)
  */
 {
 char b64[] = B64CHARS;
-int inplen = strlen(input);
 int words = (inplen+2)/3;
 int remains = inplen % 3;
 char *result = (char *)needMem(4*words+1);
-int i=0, j=0;
+size_t i=0, j=0;
 int word = 0;
 unsigned char *p = (unsigned char*) input;  
 /* p must be unsigned char*,  because without "unsigned",
@@ -46,19 +45,20 @@ return result;
 }
 
 
-char *base64Decode(char *input)
+char *base64Decode(char *input, size_t *returnSize)
 /* Use base64 to decode a string.  Return decoded
  * string which will be freeMem'd. Note: big-endian algorithm.
  * Call eraseWhiteSpace() and check for invalid input 
  * before passing in input if needed.  
+ * Optionally set retun size for use with binary data.
  */
 {
 static int *map=NULL;
 char b64[] = B64CHARS;
-int inplen = strlen(input);
+size_t inplen = strlen(input);
 int words = (inplen+3)/4;
 char *result = (char *)needMem(3*words+1);
-int i=0, j=0;
+size_t i=0, j=0;
 int word = 0;
 char *p = input;
 
@@ -89,7 +89,9 @@ for(i=0; i<words; i++)
     result[j++]=word >> 8 & 0xFF;
     result[j++]=word & 0xFF;
     }
-result[j] = 0;    
+result[j] = 0;
+if (returnSize)
+    *returnSize = j;
      
 return result;
 }
