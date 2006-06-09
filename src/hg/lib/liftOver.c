@@ -15,7 +15,7 @@
 #include "portable.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: liftOver.c,v 1.32 2006/06/06 00:39:10 galt Exp $";
+static char const rcsid[] = "$Id: liftOver.c,v 1.33 2006/06/09 00:08:11 galt Exp $";
 
 struct chromMap
 /* Remapping information for one (old) chromosome */
@@ -1560,7 +1560,7 @@ void filterOutMissingChains(struct liftOverChain **pChainList)
 {
 while(*pChainList)
     {
-    if (fsize((*pChainList)->path)==-1)
+    if (fileSize((*pChainList)->path)==-1)
 	{
 	struct liftOverChain *temp = *pChainList;
 	*pChainList = (*pChainList)->next;
