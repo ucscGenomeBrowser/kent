@@ -88,7 +88,7 @@ ${BIN_DIR}/dyStringTester:  mkdirs dyStringTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/dyStringTester dyStringTester.o ${MYLIBS} $L
 
 
-mimeTests: mime1 mime2 mime3 mime4 mimeBin mime5 mimeAltHead mimeBlat
+mimeTests: mime1 mime2 mime3 mime4 mimeBin mime5 mimeAltHead mimeAutoBoundary mimeBlat
 
 ${BIN_DIR}/mimeTester:  mkdirs mimeTester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/mimeTester mimeTester.o ${MYLIBS} $L
@@ -120,6 +120,10 @@ mime5: ${BIN_DIR}/mimeTester mkdirs
 
 mimeAltHead: ${BIN_DIR}/mimeTester mkdirs
 	${BIN_DIR}/mimeTester -altHeader='CONTENT_TYPE=multipart/form-data; boundary=----------0xKhTmLbOuNdArY' < input/$@.txt > output/$@.out
+	diff expected/$@.out output/$@.out
+
+mimeAutoBoundary: ${BIN_DIR}/mimeTester mkdirs
+	${BIN_DIR}/mimeTester -autoBoundary < input/$@.txt > output/$@.out
 	diff expected/$@.out output/$@.out
 
 mimeBlat: ${BIN_DIR}/mimeTester mkdirs
