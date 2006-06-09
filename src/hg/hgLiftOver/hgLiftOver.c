@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.46 2006/06/09 05:16:22 galt Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.47 2006/06/09 21:40:55 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -404,7 +404,7 @@ minBlocks = cartCgiUsualDouble(cart, HGLFT_MINBLOCKS, choice->minBlocks);
 minMatch = cartCgiUsualDouble(cart, HGLFT_MINMATCH, choice->minMatch);
 fudgeThick = cartCgiUsualBoolean(cart, HGLFT_FUDGETHICK, (choice->fudgeThick[0]=='Y') ? TRUE : FALSE);
 multiple = cartCgiUsualBoolean(cart, HGLFT_MULTIPLE, (choice->multiple[0]=='Y') ? TRUE : FALSE);
-refreshOnly = cartCgiUsualBoolean(cart, HGLFT_REFRESHONLY_VAR, 0);
+refreshOnly = cartCgiUsualInt(cart, HGLFT_REFRESHONLY_VAR, 0);
 
 webMain(choice, dataFormat);
 liftOverChainFreeList(&chainList);
