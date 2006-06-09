@@ -30,24 +30,8 @@ errAbort("Specify a string to encode/decode on commandline using quotes.\n"
 	    
 encoded = base64Encode(argv[1], strlen(argv[1]));
 
-eraseWhiteSpace(input);
+validB64 = base64Validate(input);  /* removes whitespace */
 
-l = strlen(p);
-for(i=0;i<l;i++)
-    {
-    char c = ' ';
-    if (!strchr(B64CHARS,c=*p++))
-	{
-	if (c != '=') 
-	    {
-	    validB64 = FALSE;
-	    break;
-	    }
-	}
-    }
-if (l%4)    
-    validB64 = FALSE;
-	
 if (validB64)
     decoded = base64Decode(input, NULL);
 

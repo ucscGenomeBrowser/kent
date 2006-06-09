@@ -45,12 +45,42 @@ return result;
 }
 
 
+boolean base64Validate(char *input)
+/* Return true if input is valid base64.
+ * Note that the input string is changed by 
+ * eraseWhiteSpace(). */
+{
+size_t i = 0, l = 0;
+char *p = input;
+boolean validB64 = TRUE;
+
+/* remove whitespace which is unnecessary and  */
+eraseWhiteSpace(input);  
+
+l = strlen(p);
+for(i=0;i<l;i++)
+    {
+    char c = ' ';
+    if (!strchr(B64CHARS,c=*p++))
+        {
+        if (c != '=')
+            {
+            validB64 = FALSE;
+            break;
+            }
+        }
+    }
+if (l%4)
+    validB64 = FALSE;
+return validB64;
+}
+
 char *base64Decode(char *input, size_t *returnSize)
 /* Use base64 to decode a string.  Return decoded
  * string which will be freeMem'd. Note: big-endian algorithm.
  * Call eraseWhiteSpace() and check for invalid input 
  * before passing in input if needed.  
- * Optionally set retun size for use with binary data.
+ * Optionally set return size for use with binary data.
  */
 {
 static int *map=NULL;
