@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mime.c,v 1.10 2006/06/09 20:03:52 galt Exp $";
+static char const rcsid[] = "$Id: mime.c,v 1.11 2006/06/10 19:19:28 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
@@ -216,8 +216,8 @@ static void readPartHeaderMB(struct mimeBuf *b, struct mimePart *p, char *altHea
 struct dyString *fullLine = dyStringNew(0);
 char *key=NULL, *val=NULL;
 struct lineFile *lf = NULL;
-boolean started = FALSE;
 char *line = NULL;
+char *lineAhead = NULL;
 int size = 0;
 p->hdr = newHash(3);
 	//debug
@@ -227,40 +227,37 @@ if (altHeader)
     {
     lf = lineFileOnString("MIME Header", TRUE, altHeader);
     }
-while(TRUE)
+/* read ahead one line, skipping any leading blanks lines */   
+do
     {
+    if (altHeader)
+	lineFileNext(lf, &lineAhead, &size);
+    else
+	lineAhead = getLineMB(b);
+    } 
+    while (sameString(lineAhead,""));
+
+do
+    {
+    /* accumulate a full header line - some emailers split into mpl lines */
     dyStringClear(fullLine);
-    while (TRUE) /* accumulate a full header line - some emailers split into mpl lines */
+    do 
 	{
+	line = lineAhead;
 	if (altHeader)
-	    lineFileNext(lf, &line, &size);
+	    lineFileNext(lf, &lineAhead, &size);
 	else
-	    line = getLineMB(b);
+	    lineAhead = getLineMB(b);
 	dyStringAppend(fullLine,line);    
 	if (!altHeader) 
 	    freez(&line);
-	if (fullLine->stringSize > 0)
-	    {
-	    if (lastChar(fullLine->string) == ';' ||
-		lastChar(fullLine->string) == ',')
-		continue;
-	    }
-	break;
-	}
+	} while (isspace(lineAhead[0]));
     line = fullLine->string;
-    if (sameString(line,"")) 
-	{
-	if (started)
-    	    break;
-	else	    
-	    continue;
-	}	    
-    started = TRUE;
     //fprintf(stderr,"found a line! [%s]\n",line);  //debug
     key = line;
     val = strchr(line,':');
     if (!val)
-	errAbort("readPartHeaderMB error - header-line colon not found");
+	errAbort("readPartHeaderMB error - header-line colon not found, line=[%s]",line);
     *val = 0;
     val++;
     key=trimSpaces(key);
@@ -273,13 +270,17 @@ while(TRUE)
     //fprintf(stderr,"MIME header: key=[%s], val=[%s]\n",key,val);
     //fflush(stderr); 
     
-    }
+    } while (!sameString(lineAhead,""));
 if (altHeader)
     {
     if (nlType == nlt_undet)
 	nlType = lf->nlType;
     lineFileClose(&lf);
-    }	    
+    }
+else
+    {
+    freez(&lineAhead);
+    }
 dyStringFree(&fullLine);
     
 }
@@ -449,12 +450,15 @@ if (sameOk(altHeader, "autoBoundary"))
 	}
     if (!found)
 	errAbort("autoBoundary: No initial boundary found.");
-    //debug
-    //fprintf(stderr,"autoBoundary: initial boundary found:%s\n",line);
-    //fflush(stderr); 
+
     dyStringPrintf(dy, "CONTENT-TYPE:multipart/form-data; boundary=%s%s%s", 
 	line+2, getNewLineByType(), getNewLineByType() );
     altHeader = dyStringCannibalize(&dy); 
+    
+    //debug
+    //fprintf(stderr,"autoBoundary altHeader = [%s]\n",altHeader);
+    //fflush(stderr); 
+
     freez(&prevPrevLine);	    
     freez(&prevLine);	    
     freez(&line);	    
