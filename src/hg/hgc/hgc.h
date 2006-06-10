@@ -1,6 +1,8 @@
 /* hgc - Human Genome Click processor - gets called when user clicks
  * on something in human tracks display. This file contains stuff
  * shared with other modules in hgc,  but not in other programs. */
+#ifndef HGC_H
+#define HGC_H
 
 #ifndef CART_H
 #include "cart.h"
@@ -48,6 +50,21 @@ void hgcAnchorWindow(char *group, char *item, int thisWinStart,
 void hgcAnchor(char *group, char *item, char *other);
 /* Generate an anchor that calls click processing program with item 
  * and other parameters. */
+
+void writeFramesetType();
+/* Write document type that shows a frame set, rather than regular HTML. */
+
+struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc);
+/* get the list of alignments for the specified acc */
+
+void printAlignments(struct psl *pslList, 
+		     int startFirst, char *hgcCommand, char *typeName, char *itemIn);
+/* Print list of mRNA alignments. */
+
+void showSomeAlignment(struct psl *psl, bioSeq *oSeq, 
+		       enum gfType qType, int qStart, int qEnd, 
+		       char *qName, int cdsS, int cdsE);
+/* Display protein or DNA alignment in a frame. */
 
 void linkToOtherBrowserTitle(char *otherDb, char *chrom, int start, int end, char *title);
 /* Make anchor tag to open another browser window with a title. */
@@ -173,3 +190,4 @@ void doTransRegCodeProbe(struct trackDb *tdb, char *item,
 void doFlyreg(struct trackDb *tdb, char *item);
 /* flyreg.org: Drosophila DNase I Footprint db. */
 
+#endif

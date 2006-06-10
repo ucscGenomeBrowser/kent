@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1125 2006/06/08 00:50:17 aamp Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1126 2006/06/10 21:48:23 markd Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -11433,6 +11433,10 @@ registerTrackHandler("transMap", transMapMethods);
 registerTrackHandler("transMapGene", transMapMethods);
 registerTrackHandler("transMapRefGene", transMapMethods);
 registerTrackHandler("transMapMRnaGene", transMapMethods);
+registerTrackHandler("transMapAnc", transMapMethods);
+registerTrackHandler("transMapAncGene", transMapMethods);
+registerTrackHandler("transMapAncRefGene", transMapMethods);
+registerTrackHandler("transMapAncMRnaGene", transMapMethods);
 
 /* Load regular tracks, blatted tracks, and custom tracks. 
  * Best to load custom last. */

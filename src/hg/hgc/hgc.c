@@ -191,9 +191,10 @@
 #include "hgMut.h"
 #include "landmark.h"
 #include "ec.h"
+#include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1030 2006/06/09 15:58:14 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1031 2006/06/10 21:48:24 markd Exp $";
 static char *rootDir = "hgGeneData"; /* needs different value? */
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -247,9 +248,6 @@ char *uniprotFormat = "http://www.expasy.org/cgi-bin/niceprot.pl?%s";
 struct customTrack *theCtList = NULL;
 
 /* forwards */
-struct psl *getAlignments(struct sqlConnection *conn, char *table, char *acc);
-void printAlignments(struct psl *pslList, 
-		     int startFirst, char *hgcCommand, char *typeName, char *itemIn);
 char *getPredMRnaProtSeq(struct genePred *gp);
 
 void hgcStart(char *title)
@@ -17828,6 +17826,10 @@ else if (sameWord(track, "htcGetDnaExtended1"))
     {
     doGetDnaExtended1();
     }
+else if (startsWith("transMap", track))
+    transMapClickHandler(tdb, item);
+else if (sameString(track, "hgcTransMapCdnaAli"))
+    transMapShowCdnaAli(item);
 else if (sameWord(track, "mrna") || sameWord(track, "mrna2") || 
 	 sameWord(track, "all_mrna") ||
 	 sameWord(track, "all_est") ||

@@ -56,7 +56,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o rgdQtl.o riken.o rikenBest.o rikenCluster.o rmskOut.o \
     rnaFold.o rnaGene.o rnaGroup.o tRNAs.o gbRNAs.o \
     rnaSecStr.o tfbsConsFactors.o \
-    roughAli.o sage.o sageCounts.o sageExp.o sample.o \
+    roughAli.o transMapInfo.o sage.o sageCounts.o sageExp.o sample.o \
     sqlProg.o tfbsCons.o tfbsConsSites.o \
     sanger22extra.o sangerGene.o sargassoSeaXra.o \
     scopDes.o scoredRef.o sgdAbundance.o \
