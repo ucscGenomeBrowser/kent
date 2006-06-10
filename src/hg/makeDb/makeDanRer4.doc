@@ -3063,11 +3063,26 @@ cat > zipMafs.csh << 'EOF'
     # load the database
     hgLoadMafFrames danRer4 multiz7wayFrames mafFrames/*.mafFrames.gz
 
+
     #------------------------------------------------------------------------
     # clean up
     rm -rf ${clusterDir}
 
+    ###
+    # rebuild frames to get bug fix, using 1-pass maf methodology
+    # (2006-06-09 markd)
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed/multiz7way/frames
+    mv mafFrames/ mafFrames.old
+    nice tcsh # easy way to get process niced
+    (zcat  ../maf/*.maf.gz | time genePredToMafFrames danRer4 stdin stdout danRer4 genes/danRer4.gp.gz fr1 genes/fr1.gp.gz hg18 genes/hg18.gp.gz mm8 genes/mm8.gp.gz xenTro2 genes/xenTro2.gp.gz | gzip >multiz7way.mafFrames.gz)>&log&
+    ssh hgwdev
+    cd /cluster/data/danRer4/bed/multiz7way/frames
+
+    hgLoadMafFrames danRer4 multiz7wayFrames multiz7way.mafFrames.gz >&log&
+
     # end of multiz7way frames and load
+
     cd /cluster/data/danRer4/bed
     ln -s multiz7way.2006-05-28 /cluster/data/danRer4/bed/multiz7way
     # create and add the tree image for the description page
