@@ -173,5 +173,14 @@ quotedPDecode: ${BIN_DIR}/testQuotedP mkdirs
 
 
 
+${BIN_DIR}/mimeDecodeTest:  mkdirs mimeDecodeTest.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/mimeDecodeTest mimeDecodeTest.o ${MYLIBS} $L
+
+
+mimeDecodeTest: ${BIN_DIR}/mimeDecodeTest mkdirs
+	${BIN_DIR}/mimeDecodeTest -cid -autoBoundary output < input/$@.txt
+	diff expected/noName1.html output/noName1.html
+		
+
 clean:
 	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out
