@@ -2901,6 +2901,7 @@ cat > downloads.csh << 'EOF'
 
 
 # MULTIZ9WAY MAF FRAMES (DONE 4/5/2006 angie)
+# rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
     ssh hgwdev
     mkdir /cluster/data/rn4/bed/multiz9way.2006-03-30/frames
     cd /cluster/data/rn4/bed/multiz9way.2006-03-30/frames
@@ -3010,7 +3011,17 @@ cat > downloads.csh << 'EOF'
     # clean up
     rm -rf ${clusterDir}
 
+    # rebuild frames to get bug fix, using 1-pass maf methodology
+    # (2006-06-09 markd)
+    ssh kkstore04
+    cd /cluster/data/rn4/bed/multiz9way/frames
+    mv mafFrames/ mafFrames.old
+    nice tcsh # easy way to get process niced
+    (cat  ../anno/maf/*.maf | time genePredToMafFrames rn4 stdin stdout bosTau2 genes/bosTau2.gp.gz canFam2 genes/canFam2.gp.gz danRer3 genes/danRer3.gp.gz galGal2 genes/galGal2.gp.gz hg18 genes/hg18.gp.gz mm8 genes/mm8.gp.gz rn4 genes/rn4.gp.gz xenTro1 genes/xenTro1.gp.gz |  gzip >multiz9way.mafFrames.gz)>&log&
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/multiz9way/frames
 
+    hgLoadMafFrames rn4 multiz9wayFrames multiz9way.mafFrames.gz >&log&
 # PHASTCONS (DONE 4/2/2006 angie)
 # Using Kate's process from makeHg17.doc.
 # This process is distilled from Hiram and Adam's experiments
