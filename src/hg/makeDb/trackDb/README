@@ -231,11 +231,11 @@ Some settings used by various tracks:
     o exonArrows - if specified to draw strand arrows on exons.
     o itemAttrTbl - table used to color individual items in a track, selected
       by name and locations.  Currently works for genePred tracks.
-url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
     o url - If present puts up a link to an external URL on the details
       page.  The url includes everything else on the line after the first word.
-      The string $$ will be replaced by the name of an item.   Example:
+      The string $$ will be replaced by the name of an item.   Examples:
       url http://www.ncbi.nlm.nih.gov/htbin-post/Entrez/query?form=4&db=n&term=$$
+      url http://www.ncbi.nih.gov/IEB/Research/Acembly/av.cgi?db=human&l=$$
     o maxItems - Maximum number of items to be displayed individually in full
       mode.  If there are more items than this they will be drawn on top of
       each other on the last line.  In packed mode this refers to the number
