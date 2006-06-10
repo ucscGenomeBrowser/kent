@@ -594,6 +594,7 @@ cd /cluster/data/hg17/bed/blastz.rheMac2
 
 ###########################################################################
 # 5 way multiz WITH RheMac2 (robert, 5/3/06) -- MM8, RN4, CANFAM2, HG18
+# rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
 
     # first build 5-way multiz alignment from syntenic nets (helps reduce
     # false positive predictions due to paralogous alignments)
@@ -827,6 +828,19 @@ cat > downloads.csh << 'EOF'
 #speciesDefaultOff 
 
     # request push to hgwdev
+
+    ###
+    # rebuild frames to get bug fix, using 1-pass maf methodology
+    # (2006-06-09 markd)
+    ssh kkstore01
+    cd /cluster/data/rheMac2/bed/multiz.syn.rheMac2Hg18Mm8Rn4CanFam2/frames
+    mv mafFrames/ mafFrames.old
+    nice tcsh # easy way to get process niced
+    (cat  ../mafSyn/*.maf | time genePredToMafFrames rheMac2 stdin stdout canFam2 genes/canFam2.gp.gz hg18 genes/hg18.gp.gz mm8 genes/mm8.gp.gz rheMac2 genes/rheMac2.gp.gz rn4 genes/rn4.gp.gz | gzip >multiz5wayFrames.mafFrames.gz)>&log
+    ssh hgwdev
+    cd /cluster/data/rheMac2/bed/multiz.syn.rheMac2Hg18Mm8Rn4CanFam2/frames
+    hgLoadMafFrames rheMac2 multiz5wayFrames multiz5wayFrames.mafFrames.gz >&log
+    
 
 ###############################################################
 # PHASTCONS CONSERVATION (NOT DONE yet, 2006-05-06 Robert)
