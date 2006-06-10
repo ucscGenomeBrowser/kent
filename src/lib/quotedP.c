@@ -35,6 +35,10 @@ for (i=0; i < l; ++i)
 	}
 	
     }
+/* add terminator to prevent extra newline */
+if (lastChar(dy->string) != '=')  
+    dyStringAppendC(dy, '=');
+    
 return dyStringCannibalize(&dy);
 }
 
