@@ -5095,6 +5095,8 @@ TMPDIR=/scratch/tmp
 # for monDom2 than monDom1 and the chains were shorter on average. The
 # reason for this is unknown so they will not be included in the 
 # conservation track at this time.
+# rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
+
 
     ssh kkstore02
     mkdir -p /cluster/data/danRer3/bed/multiz5way
@@ -5334,6 +5336,18 @@ make getGenes
 make getFrames
 make loadDb
 
+###
+# rebuild frames to get bug fix, using 1-pass maf methodology
+# (2006-06-09 markd)
+ssh kkstore02
+cd /cluster/data/danRer3/bed/multiz5way/frames
+mv mafFrames/ mafFrames.old
+nice tcsh # easy way to get process niced
+(zcat  ../maf/*.maf.gz | time genePredToMafFrames danRer3 stdin stdout danRer3 genes/danRer3.gp.gz fr1 genes/fr1.gp.gz hg18 genes/hg18.gp.gz mm7 genes/mm7.gp.gz tetNig1 genes/tetNig1.gp.gz | gzip >multiz5way.mafFrames.gz)>&log&
+ssh hgwdev
+cd /cluster/data/danRer3/bed/multiz5way/frames
+
+hgLoadMafFrames danRer3 multiz5wayFrames multiz5way.mafFrames.gz >&log&
 #end of multiz5way annotation and load
 
     # create tree image - like tree.nh but with common names
