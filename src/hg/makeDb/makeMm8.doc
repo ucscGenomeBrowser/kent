@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.49 2006/06/06 17:40:46 fanhsu Exp $"
+#	"$Id: makeMm8.doc,v 1.50 2006/06/10 00:21:52 markd Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -3712,6 +3712,7 @@ autoMultiz $(root1) {check out line+ /cluster/store8/mm8/bed/multiz17way/maf/$(r
     #------------------------------------------------------------------------
     # create frames
     #	beware, BASH syntax here ...
+    # rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
     clusterDir=/cluster/bluearc/mm8/multiz17wayFrames
     multizDir=/cluster/data/mm8/bed/multiz17way
     mafDir=$multizDir/mafDownloads
@@ -3774,6 +3775,19 @@ autoMultiz $(root1) {check out line+ /cluster/store8/mm8/bed/multiz17way/maf/$(r
     #------------------------------------------------------------------------
     # clean up
     rm -rf ${clusterDir}
+
+    ###
+    # rebuild frames to get bug fix, using 1-pass maf methodology (2006-06-09 markd)
+    ssh kkstore04
+    cd /cluster/data/mm8/bed/multiz17way/frames
+    mv mafFrames/ mafFrames.old
+    nice tcsh # easy way to get process niced
+    (cat  ../maf/*.maf | time genePredToMafFrames mm8 stdin stdout bosTau2 genes/bosTau2.gp.gz canFam2 genes/canFam2.gp.gz danRer4 genes/danRer4.gp.gz fr1 genes/fr1.gp.gz galGal2 genes/galGal2.gp.gz hg18 genes/hg18.gp.gz loxAfr1 genes/loxAfr1.gp.gz mm8 genes/mm8.gp.gz oryCun1 genes/oryCun1.gp.gz panTro2 genes/panTro2.gp.gz rheMac2 genes/rheMac2.gp.gz rn4 genes/rn4.gp.gz tetNig1 genes/tetNig1.gp.gz xenTro2 genes/xenTro2.gp.gz  bosTau2 genes/bosTau2.gp.gz |  gzip >multiz17way.mafFrames.gz)>&log&
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/multiz17way/frames
+
+    hgLoadMafFrames mm8 multiz17wayFrames multiz17way.mafFrames.gz |&mail markd&
+
 
 ############################################################################
 # CREATE CONSERVATION WIGGLE WITH PHASTCONS
