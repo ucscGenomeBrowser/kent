@@ -6,7 +6,8 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 BIN_DIR = bin/${MACHTYPE}
 
-test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest mimeTests base64Tests
+test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
+    mimeTests base64Tests quotedPTests
 	rm -r output
 	@echo tested all
 
@@ -153,6 +154,21 @@ base64Encode: ${BIN_DIR}/testBase64 mkdirs
 
 base64Decode: ${BIN_DIR}/testBase64 mkdirs
 	${BIN_DIR}/testBase64 'TXkgVGVzdCBTdHJpbmc=' > output/$@.out
+	diff expected/$@.out output/$@.out
+
+
+
+quotedPTests: quotedPEncode quotedPDecode
+
+${BIN_DIR}/testQuotedP:  mkdirs testQuotedP.o ${MYLIBS}
+	${CC} ${COPT} -o ${BIN_DIR}/testQuotedP testQuotedP.o ${MYLIBS} $L
+
+quotedPEncode: ${BIN_DIR}/testQuotedP mkdirs
+	${BIN_DIR}/testQuotedP 'taxes are quite high ' > output/$@.out
+	diff expected/$@.out output/$@.out
+
+quotedPDecode: ${BIN_DIR}/testQuotedP mkdirs
+	${BIN_DIR}/testQuotedP 'taxes=20are=20quite=20high=20=' > output/$@.out
 	diff expected/$@.out output/$@.out
 
 
