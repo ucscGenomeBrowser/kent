@@ -432,6 +432,58 @@ noInherit on
     type genePred
     cdsDrawDefault genomic\ codons
 
+track transMapAnc
+compositeTrack on
+shortLabel TransMap Ancestor
+longLabel TransMap via Ancestor Tree Genes
+group genes
+priority 36.06
+visibility hide
+type psl
+noInherit on
+
+    track transMapAncRefGene
+    subTrack transMapAnc
+    shortLabel TransMapAncRefGene
+    longLabel TransMap via Ancestor Tree RefSeq Gene Predictions
+    color 34,139,34
+    priority 1
+    noInherit on
+    type genePred
+    cdsDrawDefault genomic\ codons
+
+    track transMapAncRefAliGene
+    subTrack transMapAnc off
+    shortLabel TransMapAncRefAli
+    longLabel TransMapAnc via Ancestor Tree RefSeq Alignments
+    color 120,12,120
+    priority 2
+    visibility hide
+    noInherit on
+    type genePred
+    cdsDrawDefault genomic\ codons
+
+    track transMapAncMRnaGene
+    subTrack transMapAnc
+    shortLabel TransMapAncMRnaGene
+    longLabel TransMapAnc via Ancestor Tree Protein Coding mRNA Predictions
+    color 34,139,34
+    priority 3
+    noInherit on
+    type genePred
+    cdsDrawDefault genomic\ codons
+
+    track transMapAncMRnaAliGene
+    subTrack transMapAnc off
+    shortLabel TransMapAncMRnaAli
+    longLabel TransMapAnc via Ancestor Tree mRNA alignments
+    color 134,139,34
+    priority 4
+    visibility hide
+    noInherit on
+    type genePred
+    cdsDrawDefault genomic\ codons
+
 track genieAlt
 shortLabel AltGenie
 longLabel Genie Gene Predictions from Affymetrix
