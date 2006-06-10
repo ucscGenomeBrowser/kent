@@ -986,6 +986,21 @@ cat > mafFrags.csh << 'EOF'
     rm -rf ${clusterDir}
 
 
+
+    ###
+    # rebuild frames to get bug fix, using 1-pass maf methodology
+    # (2006-06-09 markd)
+    ssh kkstore04
+    cd /cluster/data/xenTro2/bed/multiz7way/frames
+    mv mafFrames/ mafFrames.old
+    nice tcsh # easy way to get process niced
+    (find  ../anno/maf -name '*.maf'|xargs cat | time genePredToMafFrames xenTro2 stdin stdout danRer4 genes/danRer4.gp.gz galGal2 genes/galGal2.gp.gz hg18 genes/hg18.gp.gz mm8 genes/mm8.gp.gz rn4 genes/rn4.gp.gz xenTro2 genes/xenTro2.gp.gz | gzip >multiz7way.mafFrames.gz)>&log&
+    ssh hgwdev
+    cd /cluster/data/xenTro2/bed/multiz7way/frames
+
+    hgLoadMafFrames xenTro2 multiz7wayFrames multiz7way.mafFrames.gz >&log&
+
+
 # PHASTCONS (DONE 5/2/2006 angie)
 # Using Kate's process from makeHg17.doc.
 # This process is distilled from Hiram and Adam's experiments
