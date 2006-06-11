@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgLoadSqlTab.c,v 1.1 2006/02/23 17:22:54 angie Exp $";
+static char const rcsid[] = "$Id: hgLoadSqlTab.c,v 1.2 2006/06/11 18:53:24 markd Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -20,12 +20,14 @@ errAbort(
 "file.sql contains a SQL create statement for table\n"
 "file.tab contains tab-separated text (rows of table)\n"
 "options:\n"
+"  -warn - warn or errors or warnings rather than abort\n"
 "  -notOnServer - file is *not* in a directory that the mysql server can see\n"
 "  -oldTable|-append - add to existing table\n"
   );
 }
 
 static struct optionSpec options[] = {
+    {"warn", OPTION_BOOLEAN},
     {"notOnServer", OPTION_BOOLEAN},
     {"oldTable", OPTION_BOOLEAN},
     {"append", OPTION_BOOLEAN},
@@ -38,9 +40,11 @@ void hgLoadSqlTab(char *database, char *table, char *createFile,
 {
 struct sqlConnection *conn = sqlConnect(database);
 char comment[256];
-int loadOptions = SQL_TAB_FILE_WARN_ON_ERROR;
+int loadOptions = 0;
 int i=0;
 boolean oldTable = optionExists("oldTable") || optionExists("append");
+if (optionExists("warn"))
+    loadOptions |= SQL_TAB_FILE_WARN_ON_ERROR;
 
 if (! optionExists("notOnServer"))
     loadOptions |= SQL_TAB_FILE_ON_SERVER;
