@@ -13,16 +13,16 @@ struct transMapInfo
     struct transMapInfo *next;  /* Next in singly linked list. */
     char srcDb[13];	/* source db */
     char chains[9];	/* type of chains used for mapping */
-    char srcId[23];	/* id of original gene */
-    char srcChrom[33];	/* source chromosome */
+    char *srcId;	/* id of original gene */
+    char *srcChrom;	/* source chromosome */
     unsigned srcStart;	/* source start location */
     unsigned srcEnd;	/* source end location */
     unsigned srcExonCnt;	/* number of exons in src gene */
     unsigned srcCdsExonCnt;	/* number of CDS exons in src gene */
     unsigned srcBaseCnt;	/* number of bases in src gene */
     unsigned srcCdsBaseCnt;	/* number of CDS bases in src gene */
-    char mappedId[23];	/* id of mapped gene */
-    char mappedChrom[33];	/* mapped chromosome */
+    char *mappedId;	/* id of mapped gene */
+    char *mappedChrom;	/* mapped chromosome */
     unsigned mappedStart;	/* mapped start location */
     unsigned mappedEnd;	/* mapped end location */
     unsigned mappedExonCnt;	/* number of exons mapped */

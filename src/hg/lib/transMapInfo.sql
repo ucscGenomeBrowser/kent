@@ -7,16 +7,16 @@
 CREATE TABLE transMapInfo (
     srcDb char(12) not null,	# source db
     chains char(8) not null,	# type of chains used for mapping
-    srcId char(22) not null,	# id of original gene
-    srcChrom char(32) not null,	# source chromosome
+    srcId varchar(255) not null,	# id of original gene
+    srcChrom varchar(255) not null,	# source chromosome
     srcStart int unsigned not null,	# source start location
     srcEnd int unsigned not null,	# source end location
     srcExonCnt int unsigned not null,	# number of exons in src gene
     srcCdsExonCnt int unsigned not null,	# number of CDS exons in src gene
     srcBaseCnt int unsigned not null,	# number of bases in src gene
     srcCdsBaseCnt int unsigned not null,	# number of CDS bases in src gene
-    mappedId char(22) not null,	# id of mapped gene
-    mappedChrom char(32) not null,	# mapped chromosome
+    mappedId varchar(255) not null,	# id of mapped gene
+    mappedChrom varchar(255) not null,	# mapped chromosome
     mappedStart int unsigned not null,	# mapped start location
     mappedEnd int unsigned not null,	# mapped end location
     mappedExonCnt int unsigned not null,	# number of exons mapped

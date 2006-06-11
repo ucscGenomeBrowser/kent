@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "transMapInfo.h"
 
-static char const rcsid[] = "$Id: transMapInfo.c,v 1.1 2006/06/10 21:48:25 markd Exp $";
+static char const rcsid[] = "$Id: transMapInfo.c,v 1.2 2006/06/11 19:40:55 markd Exp $";
 
 void transMapInfoStaticLoad(char **row, struct transMapInfo *ret)
 /* Load a row from transMapInfo table into ret.  The contents of ret will
@@ -17,16 +17,16 @@ void transMapInfoStaticLoad(char **row, struct transMapInfo *ret)
 
 strcpy(ret->srcDb, row[0]);
 strcpy(ret->chains, row[1]);
-strcpy(ret->srcId, row[2]);
-strcpy(ret->srcChrom, row[3]);
+ret->srcId = row[2];
+ret->srcChrom = row[3];
 ret->srcStart = sqlUnsigned(row[4]);
 ret->srcEnd = sqlUnsigned(row[5]);
 ret->srcExonCnt = sqlUnsigned(row[6]);
 ret->srcCdsExonCnt = sqlUnsigned(row[7]);
 ret->srcBaseCnt = sqlUnsigned(row[8]);
 ret->srcCdsBaseCnt = sqlUnsigned(row[9]);
-strcpy(ret->mappedId, row[10]);
-strcpy(ret->mappedChrom, row[11]);
+ret->mappedId = row[10];
+ret->mappedChrom = row[11];
 ret->mappedStart = sqlUnsigned(row[12]);
 ret->mappedEnd = sqlUnsigned(row[13]);
 ret->mappedExonCnt = sqlUnsigned(row[14]);
@@ -44,16 +44,16 @@ struct transMapInfo *ret;
 AllocVar(ret);
 strcpy(ret->srcDb, row[0]);
 strcpy(ret->chains, row[1]);
-strcpy(ret->srcId, row[2]);
-strcpy(ret->srcChrom, row[3]);
+ret->srcId = cloneString(row[2]);
+ret->srcChrom = cloneString(row[3]);
 ret->srcStart = sqlUnsigned(row[4]);
 ret->srcEnd = sqlUnsigned(row[5]);
 ret->srcExonCnt = sqlUnsigned(row[6]);
 ret->srcCdsExonCnt = sqlUnsigned(row[7]);
 ret->srcBaseCnt = sqlUnsigned(row[8]);
 ret->srcCdsBaseCnt = sqlUnsigned(row[9]);
-strcpy(ret->mappedId, row[10]);
-strcpy(ret->mappedChrom, row[11]);
+ret->mappedId = cloneString(row[10]);
+ret->mappedChrom = cloneString(row[11]);
 ret->mappedStart = sqlUnsigned(row[12]);
 ret->mappedEnd = sqlUnsigned(row[13]);
 ret->mappedExonCnt = sqlUnsigned(row[14]);
@@ -110,16 +110,16 @@ if (ret == NULL)
     AllocVar(ret);
 sqlFixedStringComma(&s, ret->srcDb, sizeof(ret->srcDb));
 sqlFixedStringComma(&s, ret->chains, sizeof(ret->chains));
-sqlFixedStringComma(&s, ret->srcId, sizeof(ret->srcId));
-sqlFixedStringComma(&s, ret->srcChrom, sizeof(ret->srcChrom));
+ret->srcId = sqlStringComma(&s);
+ret->srcChrom = sqlStringComma(&s);
 ret->srcStart = sqlUnsignedComma(&s);
 ret->srcEnd = sqlUnsignedComma(&s);
 ret->srcExonCnt = sqlUnsignedComma(&s);
 ret->srcCdsExonCnt = sqlUnsignedComma(&s);
 ret->srcBaseCnt = sqlUnsignedComma(&s);
 ret->srcCdsBaseCnt = sqlUnsignedComma(&s);
-sqlFixedStringComma(&s, ret->mappedId, sizeof(ret->mappedId));
-sqlFixedStringComma(&s, ret->mappedChrom, sizeof(ret->mappedChrom));
+ret->mappedId = sqlStringComma(&s);
+ret->mappedChrom = sqlStringComma(&s);
 ret->mappedStart = sqlUnsignedComma(&s);
 ret->mappedEnd = sqlUnsignedComma(&s);
 ret->mappedExonCnt = sqlUnsignedComma(&s);
@@ -137,6 +137,10 @@ void transMapInfoFree(struct transMapInfo **pEl)
 struct transMapInfo *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->srcId);
+freeMem(el->srcChrom);
+freeMem(el->mappedId);
+freeMem(el->mappedChrom);
 freez(pEl);
 }
 
