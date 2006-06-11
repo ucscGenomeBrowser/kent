@@ -14,14 +14,13 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.72 2006/06/09 21:45:15 hiram Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.73 2006/06/11 23:56:11 kent Exp $";
 
 struct wigItem
 /* A wig track item. */
     {
     struct wigItem *next;
     int start, end;	/* Start/end in chrom (aka browser) coordinates. */
-    char *name;		/* Common name */
     char *db;		/* Database */
     int ix;		/* Position in list. */
     int height;		/* Pixel height of item. */
@@ -179,8 +178,7 @@ static struct hash *trackSpans = NULL;	/* hash of hashes */
 static char *wigName(struct track *tg, void *item)
 /* Return name of wig level track. */
 {
-struct wigItem *wi = item;
-return wi->name;
+return tg->mapName;
 }
 
 /*	NOT used at this time, maybe later	*/
@@ -251,6 +249,7 @@ static void wigSetItemData(struct track *tg, struct wigItem *wi,
 static char *previousFileName = (char *)NULL;
 char spanName[128];
 struct hashEl *el;
+char *trackName = tg->mapName;
 
 /*	Allocate trackSpans one time only, for all tracks	*/
 if (! trackSpans)
@@ -258,8 +257,6 @@ if (! trackSpans)
 
 wi->start = wiggle->chromStart;
 wi->end = wiggle->chromEnd;
-/*	May need unique name here some day XXX	*/
-wi->name = tg->mapName;
 
 if ((previousFileName == (char *)NULL) ||
 	differentString(previousFileName,wiggle->file))
@@ -282,10 +279,10 @@ wi->sumData = wiggle->sumData;
 wi->sumSquares = wiggle->sumSquares;
 
 /*	see if we have a spans hash for this track already */
-el = hashLookup(trackSpans, wi->name);
+el = hashLookup(trackSpans, trackName);
 /*	no, then let's start one	*/
 if ( el == NULL)
-	hashAdd(trackSpans, wi->name, spans);
+	hashAdd(trackSpans, trackName, spans);
 /*	see if this span is already in our hash for this track */
 snprintf(spanName, sizeof(spanName), "%d", wi->span);
 el = hashLookup(spans, spanName);
@@ -294,8 +291,9 @@ if ( el == NULL)
 	hashAddInt(spans, spanName, wi->span);
 }
 
-void ctWigLoadItems(struct track *tg) {
+void ctWigLoadItems(struct track *tg) 
 /*	load custom wiggle track data	*/
+{
 struct customTrack *ct;
 char *row[13];
 struct lineFile *lf = NULL;
@@ -354,6 +352,7 @@ tg->mapsSelf = TRUE;
 lineFileClose(&lf);
 }
 
+void wigLoadItems(struct track *tg) 
 /*	wigLoadItems - read the table rows that hRangeQuery returns
  *	With appropriate adjustment to help hRangeQuery limit its
  *	result to specific "Span" based on the basesPerPixel.
@@ -373,7 +372,7 @@ lineFileClose(&lf);
  *	With 1K zoom Spans available, no more than approximately 1024
  *	rows will need to be loaded at any one time.
  */
-void wigLoadItems(struct track *tg) {
+{
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
@@ -398,7 +397,7 @@ int spanMinimum = 1;
 struct customTrack *ct = NULL;
 char *dbTableName = NULL;
 struct trackDb *tdb = NULL; 
-
+int loadStart = winStart, loadEnd = winEnd;
 
 /*	custom tracks have different database	*/
 if (tg->customPt != (void *)NULL)
@@ -432,7 +431,7 @@ spanMinimum = max(1,
 itemsLoaded = 0;
 safef(whereSpan, ArraySize(whereSpan), "span=%d limit 1", spanMinimum);
 
-sr = hRangeQuery(conn, dbTableName, chromName, winStart, winEnd,
+sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
     whereSpan, &rowOffset);
 
 while ((row = sqlNextRow(sr)) != NULL)
@@ -450,7 +449,7 @@ if (itemsLoaded < 1)
 itemsLoaded = 0;
 if (basesPerPixel >= 1000)
     {
-    sr = hRangeQuery(conn, dbTableName, chromName, winStart, winEnd,
+    sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
 	span1K, &rowOffset);
     while ((row = sqlNextRow(sr)) != NULL)
 	    ++itemsLoaded;
@@ -464,14 +463,16 @@ if (basesPerPixel >= 1000)
  *	256 rows at the 1K zoom level.  Otherwise, we go back to the
  *	regular query which will give us all rows.
  */
+/* JK - Can't we figure out here one, and only one span to load?  This
+ * would simplify drawing logic. */
 if (itemsLoaded)
     {
-    sr = hRangeQuery(conn, dbTableName, chromName, winStart, winEnd,
+    sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
 	     spanOver1K, &rowOffset);
     }
 else
     {
-sr = hRangeQuery(conn, dbTableName, chromName, winStart, winEnd,
+    sr = hRangeQuery(conn, dbTableName, chromName, loadStart, loadEnd,
 	whereNULL, &rowOffset);
     }
 
@@ -489,12 +490,12 @@ previousFileName = "";
 itemsLoaded = 0;
 while ((row = sqlNextRow(sr)) != NULL)
     {
-	struct wigItem *wi;
-	++itemsLoaded;
- 	wiggleStaticLoad(row + rowOffset, &wiggle);
-	AllocVar(wi);
-	wigSetItemData(tg, wi, &wiggle, spans);
-	slAddHead(&wiList, wi);
+    struct wigItem *wi;
+    ++itemsLoaded;
+    wiggleStaticLoad(row + rowOffset, &wiggle);
+    AllocVar(wi);
+    wigSetItemData(tg, wi, &wiggle, spans);
+    slAddHead(&wiList, wi);
     }
 
 sqlFreeResult(&sr);
@@ -740,6 +741,8 @@ void graphPreDraw(struct preDrawElement *preDraw, int preDrawZero, int width,
 /*	graph the preDraw array */
 {
 int x1;
+int lastRealX = -1;
+int lastRealY = -1;
 
 /*	right now this is a simple pixel by pixel loop.  Future
  *	enhancements could draw boxes where pixels
@@ -858,6 +861,8 @@ for (x1 = 0; x1 < width; ++x1)
 	    vgBox(vg, x1+xOff, yOff, 1,
 		boxHeight, drawColor);
 	    }	/*	vis == tvDense	*/
+	lastRealX = xOff + x1;
+	lastRealY = yOff + y1;
 	}	/*	if (preDraw[].count)	*/
     }	/*	for (x1 = 0; x1 < width; ++x1)	*/
 }	/*	graphPreDraw()	*/
@@ -950,9 +955,42 @@ if (tg->mapsSelf)
     }
 }
 
+int wigFindSpan(struct track *tg, double basesPerPixel)
+/* Return span to use at this scale */
+{
+int usingDataSpan = 1;
+int minimalSpan = 100000000;	/*	a lower limit safety check */
+struct hashEl *el, *elList;
+
+/*	Take a look through the potential spans, and given what we have
+ *	here for basesPerPixel, pick the largest usingDataSpan that is
+ *	not greater than the basesPerPixel
+ */
+el = hashLookup(trackSpans, tg->mapName);	/*  What Spans do we have */
+elList = hashElListHash(el->val);		/* Our pointer to spans hash */
+for (el = elList; el != NULL; el = el->next)
+    {
+    int Span;
+    Span = ptToInt(el->val);
+    if ((Span < basesPerPixel) && (Span > usingDataSpan))
+	usingDataSpan = Span;
+    if (Span < minimalSpan)
+	minimalSpan = Span;
+    }
+hashElFreeList(&elList);
+
+/*	There may not be a span of 1, use whatever is lowest	*/
+if (minimalSpan > usingDataSpan)
+    usingDataSpan = minimalSpan;
+
+return usingDataSpan;
+}
+
+
 static void wigDrawItems(struct track *tg, int seqStart, int seqEnd,
 	struct vGfx *vg, int xOff, int yOff, int width,
 	MgFont *font, Color color, enum trackVisibility vis)
+/* Draw wiggle items that resolve to doing a box for each pixel. */
 {
 struct wigItem *wi;
 double pixelsPerBase = scaleForPixels(width);
@@ -960,8 +998,8 @@ double basesPerPixel = 1.0;
 int itemCount = 0;
 char currentFile[PATH_LEN];
 int wibFH = 0;		/*	file handle to binary file */
-struct hashEl *el, *elList;
-struct wigCartOptions *wigCart;
+struct wigCartOptions *wigCart = tg->extraUiData;
+enum wiggleGraphOptEnum lineBar = wigCart->lineBar;
 struct preDrawElement *preDraw;	/* to accumulate everything in prep for draw */
 int preDrawZero;		/* location in preDraw where screen starts */
 int preDrawSize;		/* size of preDraw array */
@@ -976,7 +1014,7 @@ double epsilon;			/*	range of data in one pixel	*/
 int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
 Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
-wigCart = (struct wigCartOptions *) tg->extraUiData;
+int usingDataSpan = 1;		/* will become larger if possible */
 
 currentFile[0] = '\0';
 
@@ -990,38 +1028,15 @@ if (pixelsPerBase > 0.0)
 itemCount = 0;
 
 preDraw = initPreDraw(width, &preDrawSize, &preDrawZero);
+usingDataSpan = wigFindSpan(tg, basesPerPixel);
 
 /*	walk through all the data and prepare the preDraw array	*/
 for (wi = tg->items; wi != NULL; wi = wi->next)
     {
     size_t bytesRead;		/* to check fread being OK */
-    unsigned char *readData;	/* the bytes read in from the file */
     int dataOffset = 0;		/*	within data block during drawing */
-    int usingDataSpan = 1;		/* will become larger if possible */
-    int minimalSpan = 100000000;	/*	a lower limit safety check */
 
     ++itemCount;
-
-    /*	Take a look through the potential spans, and given what we have
-     *	here for basesPerPixel, pick the largest usingDataSpan that is
-     *	not greater than the basesPerPixel
-     */
-    el = hashLookup(trackSpans, wi->name);	/*  What Spans do we have */
-    elList = hashElListHash(el->val);		/* Our pointer to spans hash */
-    for (el = elList; el != NULL; el = el->next)
-	{
-	int Span;
-	Span = ptToInt(el->val);
-	if ((Span < basesPerPixel) && (Span > usingDataSpan))
-	    usingDataSpan = Span;
-	if (Span < minimalSpan)
-	    minimalSpan = Span;
-	}
-    hashElFreeList(&elList);
-
-    /*	There may not be a span of 1, use whatever is lowest	*/
-    if (minimalSpan > usingDataSpan)
-	usingDataSpan = minimalSpan;
 
 
     /*	Now that we know what Span to draw, see if this item should be
@@ -1077,7 +1092,13 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	x1 = (wi->start - seqStart) * pixelsPerBase;
 	x2 = ((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
 
-	if (x2 > x1) {
+	if (x2 > x1) 
+	    {
+	    unsigned char *readData;	/* the bytes read in from the file */
+	    lseek(wibFH, wi->offset, SEEK_SET);
+	    readData = (unsigned char *) needMem((size_t) (wi->count + 1));
+	    bytesRead = read(wibFH, readData,
+		(size_t) wi->count * (size_t) sizeof(unsigned char));
 	    /*	walk through all the data in this block	*/
 	    lseek(wibFH, wi->offset, SEEK_SET);
 
@@ -1111,7 +1132,9 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		    }
 		}
 	    freeMem(readData);
-	} else {	/*	only one pixel for this block of data */
+	    } 
+	else 
+	    {	/*	only one pixel for this block of data */
 	    int xCoord = preDrawZero + x1;
 	    /*	if the point falls within our array, record it.
 	     *	the (wi->validCount > 0) is a safety check.  It
@@ -1130,7 +1153,7 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 		preDraw[xCoord].sumData += wi->sumData;
 		preDraw[xCoord].sumSquares += wi->sumSquares;
 		}
-	}
+	    }
 	}	/*	Draw if span is correct	*/
     }	/*	for (wi = tg->items; wi != NULL; wi = wi->next)	*/
 if (wibFH > 0)
@@ -1171,7 +1194,7 @@ colorArray = allocColorArray(preDraw, width, preDrawZero,
 
 graphPreDraw(preDraw, preDrawZero, width,
     tg, vg, xOff, yOff, graphUpperLimit, graphLowerLimit, graphRange,
-    epsilon, colorArray, vis, wigCart->lineBar);
+    epsilon, colorArray, vis, lineBar);
 
 drawZeroLine(vis, wigCart->horizontalGrid, graphUpperLimit, graphLowerLimit,
     vg, xOff, yOff, width, tg->lineHeight);
@@ -1185,7 +1208,6 @@ wigMapSelf(tg, seqStart, seqEnd, xOff, yOff, width);
 freez(&colorArray);
 freeMem(preDraw);
 }	/*	wigDrawItems()	*/
-
 
 void wigFindItemLimits(void *items,
     double *graphUpperLimit, double *graphLowerLimit)
