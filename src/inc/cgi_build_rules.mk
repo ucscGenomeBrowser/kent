@@ -23,7 +23,7 @@ install::  strip
 	mv $A${EXE} ${DESTDIR}${CGI_BIN}/$A
 
 debug:: $O
-	${CC} $O ${MYLIBS} ${L}
+	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
 
 
