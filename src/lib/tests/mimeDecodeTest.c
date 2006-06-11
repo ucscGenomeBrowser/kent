@@ -12,7 +12,7 @@
 #include "base64.h"
 #include "quotedP.h"
 
-static char const rcsid[] = "$Id: mimeDecodeTest.c,v 1.1 2006/06/10 08:43:07 galt Exp $";
+static char const rcsid[] = "$Id: mimeDecodeTest.c,v 1.2 2006/06/11 20:22:54 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
@@ -43,6 +43,7 @@ errAbort(
     "    in the stdin input.\n"
     "  -autoBoundary - no boundary given, scan for --.\n"
     "  -cid - process html replacing cid urls with filenames.\n"
+    "  -noNames - ignore given filenames, use noNames for all.\n"
     "  --help - this help screen\n",
     msg);
 }
@@ -52,11 +53,33 @@ static struct optionSpec options[] =
     {"altHeader", OPTION_STRING},
     {"autoBoundary", OPTION_BOOLEAN},
     {"cid", OPTION_BOOLEAN},
+    {"noNames", OPTION_BOOLEAN},
     {"-help", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
 
+static void handleCID(char **html, char *ctMain)
+/* Handle CID replacements if needed */
+{
+if (optionExists("cid") && ctMain && sameWord(ctMain,"text/html"))
+    {
+    struct hashEl *el, *list = hashElListHash(cidHash);
+    for(el=list;el;el=el->next)
+	{
+	char *cid=addSuffix("cid:",el->name);
+	if (stringIn(cid,*html))
+	    {
+	    char *new = replaceChars(*html, cid, el->val);
+	    freez(html);
+	    *html = new;
+	    }
+	freez(&cid);
+	}
+    hashElFreeList(&list);
+    }
+}
+		
 
 void printMimeInfo(struct mimePart *mp, FILE *out, int level)
 /* print mimeParts info and decode and detach recursively if needed */
@@ -115,8 +138,9 @@ if (cd)
     	dyStringPrintf(dy,"%sbinary (contains zeros)\n",margin);
     if (mp->fileName)
 	dyStringPrintf(dy,"%sfileName=[%s]\n",margin, mp->fileName);
-    dyStringPrintf(dy,"%sdata:[%s]\n",margin,
-    	mp->binary && mp->data ? "<binary data not safe to print>" : mp->data);
+    if (!cidPass)
+    	dyStringPrintf(dy,"%sdata:[%s]\n",margin,
+	    mp->binary && mp->data ? "<binary data not safe to print>" : mp->data);
     dyStringPrintf(dy,"\n");
     }
 
@@ -138,7 +162,7 @@ if (mp->data) /* typical case in ram */
 	outName = cdFileName;
     else if (ctName) 
 	outName = ctName;
-    else
+    if (optionExists("noNames") || outName==NULL)
 	{
 	outName = noName;
 	++noNameCount;
@@ -167,24 +191,13 @@ if (mp->data) /* typical case in ram */
 	else if (ceMain && sameWord(ceMain,"quoted-printable"))
 	    {
 	    char *decoded = quotedPrintableDecode((char *)mp->data);
-	    if (optionExists("cid") && ctMain && sameWord(ctMain,"text/html"))
-		{
-		struct hashEl *el, *list = hashElListHash(cidHash);
-		for(el=list;el;el=el->next)
-		    {
-		    char *cid=addSuffix("cid:",el->name);
-		    char *new = replaceChars(decoded, cid, el->val);
-		    freez(&decoded);
-		    decoded = new;
-		    freez(&cid);
-		    }
-		hashElFreeList(&list);
-		}
+	    handleCID(&decoded, ctMain);
 	    mustWrite(f, decoded, strlen(decoded));
 	    freez(&decoded);
 	    }
 	else
 	    {
+	    handleCID(&mp->data, ctMain);
 	    mustWrite(f, mp->data, mp->size);
 	    }
 	carefulClose(&f);
