@@ -37,7 +37,7 @@ struct mappingInfo
 static void parseSrcId(struct mappingInfo *mi)
 /* parse srcId parts and save in mi */
 {
-char *dash, *dot;
+char *dash=NULL, *dot;
 dot = strchr(mi->tmi->srcId, '.');
 if (dot != NULL)
     dash = strchr(dot, '-');
