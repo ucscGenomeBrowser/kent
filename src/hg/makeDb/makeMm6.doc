@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.115 2006/06/09 16:32:03 angie Exp $"
+#	"$Id: makeMm6.doc,v 1.116 2006/06/12 21:41:06 hartera Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -10227,4 +10227,18 @@ knownToVisiGene mm6
     grep -v ^track genetrap_mm6.psl \
     | hgLoadPsl mm6 -table=igtc stdin
 
+#########################################################################
+# SPLIT MM6 SEQUENCES FOR LIFTOVER FROM OTHER ASSEMBLIES 
+# (DONE, 2006-06-11, hartera)
+    ssh kkr1u00
+    cd /cluster/data/mm6/bed
+    mkdir bed/liftOver
+    cd bed/liftOver
+    # split the mouse mm6 sequences first
+    makeLoChain-split mm6 /cluster/data/mm6/nib >&! split.log &
+    # also add these to the san for pk cluster runs
+    ssh pk
+    mkdir -p /san/sanvol1/scratch/mm6
+    rsync -a --progress \
+          kkr1u00:/iscratch/i/mm6/split10k /san/sanvol1/scratch/mm6/
 
