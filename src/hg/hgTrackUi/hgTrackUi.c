@@ -24,6 +24,7 @@
 #include "humanPhenotypeUi.h"
 #include "hgMutUi.h"
 #include "landmarkUi.h"
+#include "chromGraph.h"
 #include "hgConfig.h"
 
 #define CDS_HELP_PAGE "/goldenPath/help/hgCodonColoring.html"
@@ -31,7 +32,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.276 2006/05/11 00:49:36 markd Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.277 2006/06/12 19:06:02 kent Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1431,6 +1432,35 @@ freeMem(typeLine);
 
 }
 
+void chromGraphUi(struct trackDb *tdb)
+/* UI for the wiggle track */
+{
+char varName[chromGraphVarNameMaxSize];
+struct sqlConnection *conn = hAllocConn();
+char *track = tdb->tableName;
+double minVal,maxVal;
+struct chromGraphSettings *cgs = chromGraphSettingsGet(track,
+	conn, tdb, cart);
+
+printf("<b>Track height:&nbsp;</b>");
+chromGraphVarName(track, "pixels", varName);
+cgiMakeIntVar(varName, cgs->pixels, 3);
+printf("&nbsp;pixels&nbsp;&nbsp;(range:&nbsp;%d&nbsp;to&nbsp;%d)<BR>",
+	cgs->minPixels, cgs->maxPixels);
+
+printf("<b>Vertical viewing range</b>:&nbsp;&nbsp;\n<b>min:&nbsp;</b>");
+chromGraphVarName(track, "minVal", varName);
+cgiMakeDoubleVar(varName, cgs->minVal, 6);
+printf("&nbsp;&nbsp;&nbsp;&nbsp;<b>max:&nbsp;</b>");
+chromGraphVarName(track, "maxVal", varName);
+cgiMakeDoubleVar(varName, cgs->maxVal, 6);
+chromGraphDataRange(track, conn, &minVal, &maxVal);
+printf("\n&nbsp; &nbsp;(range: &nbsp;%g&nbsp;to&nbsp;%g)<BR>",
+    minVal, maxVal);
+
+hFreeConn(&conn);
+}
+
 void rulerUi(struct trackDb *tdb)
 /* UI for base position (ruler) */
 {
@@ -1962,6 +1992,8 @@ else if (startsWith("wig", tdb->type))
         else
             wigUi(tdb);
         }
+else if (startsWith("chromGraph", tdb->type))
+        chromGraphUi(tdb);
 else if (sameString(track, "affyRatio") || sameString(track, "gnfAtlas2") )
         affyUi(tdb);
 else if (sameString(track, "affyHumanExon"))
