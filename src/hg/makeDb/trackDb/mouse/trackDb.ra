@@ -322,6 +322,23 @@ priority 87
 visibility hide
 type psl .
 
+track regPotential7X
+shortLabel Reg Potential 7 species
+longLabel SPERR Regulatory Potential (7 species)
+group regulation
+priority 91
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.10
+windowingFunction mean
+spanList 1
+type wig -1.0 1.0
+
 track chainFr1
 shortLabel $o_Organism Chain
 longLabel $o_Organism ($o_date/$o_db) Chained Alignments
@@ -915,4 +932,3 @@ searchType psl
 searchMethod prefix
 searchPriority 50
 termRegex [A-Z0-9\._+-]+
-
