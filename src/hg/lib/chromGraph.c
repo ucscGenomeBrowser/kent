@@ -5,10 +5,11 @@
 #include "common.h"
 #include "linefile.h"
 #include "dystring.h"
+#include "obscure.h"
 #include "jksql.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.1 2006/06/12 16:13:15 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.2 2006/06/12 18:23:00 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -136,3 +137,99 @@ if (dif == 0)
 return dif;
 }
 
+#define varNameMaxSize 256
+
+void cgsCartVar(char *track, char *var, char output[varNameMaxSize])
+/* Fill in output with name of cart variable. */
+{
+safef(output, varNameMaxSize, "%s_%s_%s", "cgs", track, var);
+}
+
+struct chromGraphSettings *chromGraphSettingsGet(char *trackName,
+	struct sqlConnection *conn, struct trackDb *tdb, struct cart *cart)
+/* Get settings for chromGraph track.  If you pass in all NULLs
+ * you'll get a reasonable default. */
+{
+struct chromGraphSettings *cgs;
+
+/* Allocate in memory with default settings */
+AllocVar(cgs);
+cgs->maxGapToFill = 25000;
+cgs->minVal = 0;
+cgs->maxVal = 100;
+cgs->minPixels = 8;
+cgs->pixels = 32;
+cgs->maxPixels = 128;
+
+/* Try and fill in max/min from database. */
+if (conn != NULL)
+    {
+    char query[256];
+    struct sqlResult *sr;
+    char **row;
+    safef(query, sizeof(query), 
+    	"select minVal,maxVal from metaChromGraph where name='%s'",
+	trackName);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row == NULL)
+        errAbort("%s is not in metaChromGraph", trackName);
+    cgs->minVal = atof(row[0]);
+    cgs->maxVal = atof(row[1]);
+    sqlFreeResult(&sr);
+    }
+
+/* Try and fill in settings from tdb */
+if (tdb != NULL)
+    {
+    char *setting;
+    if ((setting = trackDbSetting(tdb, "maxGapToFill")) != NULL)
+        cgs->maxGapToFill = sqlUnsigned(setting);
+    if ((setting = trackDbSetting(tdb, "minMax")) != NULL)
+	{
+	struct slName *list = commaSepToSlNames(setting);
+	if (slCount(list) != 2)
+	    errAbort("minMax must have two values in %s", trackName);
+	cgs->minVal = atof(list->name);
+	cgs->maxVal = atof(list->next->name);
+	slFreeList(&list);
+	}
+    if ((setting = trackDbSetting(tdb, "linesAt")) != NULL)
+	{
+	struct slName *el, *list = commaSepToSlNames(setting);
+	int i;
+	cgs->linesAtCount = slCount(list);
+	if (cgs->linesAtCount <= 0)
+	    errAbort("Missing linesAt data in %s", trackName);
+	AllocArray(cgs->linesAt, cgs->linesAtCount);
+	for (i=0,el=list; el!=NULL; ++i,el=el->next)
+	    cgs->linesAt[i] = atof(el->name);
+	slFreeList(&list);
+	}
+    if ((setting = trackDbSetting(tdb, "maxHeightPixels")) != NULL)
+        {
+	struct slName *list = charSepToSlNames(setting, ':');
+	if (slCount(list) != 3)
+	    errAbort("maxHeightPixels in %s must have 3 : separated fields", 
+	    	trackName);
+	cgs->maxPixels = sqlUnsigned(list->name);
+	cgs->pixels = sqlUnsigned(list->next->name);
+	cgs->minPixels = sqlUnsigned(list->next->next->name);
+	}
+    }
+
+/* Finally try and fill in settings from cart */
+if (cart != NULL)
+    {
+    char varName[varNameMaxSize];
+    cgsCartVar(trackName, "maxGapToFill", varName);
+    cgs->maxGapToFill = cartUsualInt(cart, varName, cgs->maxGapToFill);
+    cgsCartVar(trackName, "minVal", varName);
+    cgs->minVal = cartUsualDouble(cart, varName, cgs->minVal);
+    cgsCartVar(trackName, "maxVal", varName);
+    cgs->maxVal = cartUsualDouble(cart, varName, cgs->maxVal);
+    cgsCartVar(trackName, "pixels", varName);
+    cgs->pixels = cartUsualInt(cart, varName, cgs->pixels);
+    }
+return cgs;
+}
