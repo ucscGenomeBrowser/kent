@@ -194,7 +194,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1031 2006/06/10 21:48:24 markd Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1032 2006/06/12 23:59:21 angie Exp $";
 static char *rootDir = "hgGeneData"; /* needs different value? */
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -3546,8 +3546,10 @@ else
 	char buf[256];
 	if ((hti->nameField[0] != 0) && (item[0] != 0))
 	    {
-	    safef(buf, sizeof(buf), "%s = '%s'", hti->nameField, item);
+	    char *quotedItem = makeQuotedString(item, '\'');
+	    safef(buf, sizeof(buf), "%s = %s", hti->nameField, quotedItem);
 	    where = buf;
+	    freeMem(quotedItem);
 	    }
 	itemCount = hgSeqItemsInRange(tbl, seqName, start, end, where);
 	}
@@ -6441,13 +6443,14 @@ void htcDnaNearGene(char *geneName)
 char *table    = cartString(cart, "o");
 char constraints[256];
 int itemCount;
-
-snprintf(constraints, sizeof(constraints), "name = '%s'", geneName);
+char *quotedItem = makeQuotedString(geneName, '\'');
+safef(constraints, sizeof(constraints), "name = %s", quotedItem);
 puts("<PRE>");
 itemCount = hgSeqItemsInRange(table, seqName, winStart, winEnd, constraints);
 if (itemCount == 0)
     printf("\n# No results returned from query.\n\n");
 puts("</PRE>");
+freeMem(quotedItem);
 }
 
 void doViralProt(struct trackDb *tdb, char *geneName)
