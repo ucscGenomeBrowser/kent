@@ -12,7 +12,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: cheapcgi.c,v 1.78 2006/05/24 21:05:30 kate Exp $";
+static char const rcsid[] = "$Id: cheapcgi.c,v 1.79 2006/06/12 21:00:12 angie Exp $";
 
 /* These three variables hold the parsed version of cgi variables. */
 static char *inputString = NULL;
@@ -271,7 +271,7 @@ struct cgiVar *list = NULL, *el;
 if(haveCookiesHash == TRUE)
 	return;
 
-str = getenv("HTTP_COOKIE");
+str = cloneString(getenv("HTTP_COOKIE"));
 if(str == NULL) /* don't have a cookie */
 	return;
 
