@@ -87,3 +87,15 @@ spectrum on
 type chain homIni13
 otherDb homIni13
 
+track chainMapHomIni13
+shortLabel $o_Organism Map
+longLabel $o_Organism ($o_date/$o_db) Mapping Chain
+group x
+priority 400
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain homIni13
+otherDb homIni13
+
