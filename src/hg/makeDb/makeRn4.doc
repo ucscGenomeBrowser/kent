@@ -766,7 +766,7 @@ rn4.mgcTables.mgc = all
     hgLoadWiggle -pathPrefix=/gbdb/rn4/wib rn4 gc5Base gc5Base.wig
 
 
-# ENSEMBL GENES (DONE 1/30/06 angie)
+# ENSEMBL GENES (DONE 1/30/06 angie - UPDATED 6/12/06)
     mkdir /cluster/data/rn4/bed/ensembl
     cd /cluster/data/rn4/bed/ensembl
     # Get the ensembl gene data from 
@@ -794,8 +794,7 @@ rn4.mgcTables.mgc = all
     # Choose Text, tab-separated as the output format.  Result name ensGtp.
     # Save file as ensGtp.txt.gz
     gunzip ensGtp.txt.gz
-    hgsql rn4 < ~/kent/src/hg/lib/ensGtp.sql
-    hgsql rn4 -e 'load data local infile "ensGtp.txt" into table ensGtp'
+    hgLoadSqlTab rn4 ensGtp ~/kent/src/hg/lib/ensGtp.sql ensGtp.txt
 
     # Load Ensembl peptides:
     # Get them from ensembl as above in the gene section except for
@@ -3487,7 +3486,7 @@ _EOF_
     # Create table that maps between known genes and RefSeq
     hgMapToGene rn4 refGene knownGene knownToRefSeq
 
-    # Create knownToEnsembl column
+    # Create knownToEnsembl column -- redone 6/12/06 after ensGene update
     hgMapToGene rn4 ensGene knownGene knownToEnsembl
 
 
