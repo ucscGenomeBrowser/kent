@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.82 2006/06/12 04:38:11 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.83 2006/06/12 21:34:35 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1127,10 +1127,10 @@ void doPushDone()
 /* Mark record pushState=D, move priority to L for Log, and set rank=0  */
 {
 
-struct pushQ *q; /* just so we get the size of q.qid */
+struct pushQ *q;
 char query[256];
 
-mustLoadPushQ(cgiString("qid"));
+q=mustLoadPushQ(cgiString("qid"));
 if (sameString(q->lockUser,"") && sameString(q->pushState,"Y"))
     { /* not already locked and pushState=Y */
 
