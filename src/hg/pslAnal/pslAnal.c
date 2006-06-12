@@ -17,7 +17,7 @@
 #include "dnautil.h"
 #include "dnaseq.h"
 #include "psl.h"
-#include "snp.h"
+#include "snp125.h"
 #include "fa.h"
 #include "psl.h"
 #include "options.h"
@@ -531,7 +531,7 @@ static boolean haveSnp = FALSE;
 verbose(4, "\tchecking for snp\n");
 if (!checked)
     {
-    haveSnp = sqlTableExists(conn, "snp");
+    haveSnp = sqlTableExists(conn, "snp125");
     checked = TRUE;
     if (!haveSnp)
         fprintf(stderr, "warning: no snp table in this databsae\n");
@@ -541,12 +541,12 @@ if (!checked)
 if (haveSnp)
     {
     verbose(4, "\tquerying snp table\n");
-    sr = hRangeQuery(conn, "snp", chr, position, position+1, NULL, &rowOff);
+    sr = hRangeQuery(conn, "snp125", chr, position, position+1, NULL, &rowOff);
     while ((row = sqlNextRow(sr)) != NULL) 
         {
-        struct snp snp;
+        struct snp125 snp;
 	verbose(4, "\tloading snp info\n");
-        snpStaticLoad(row+rowOff, &snp);
+        snp125StaticLoad(row+rowOff, &snp);
 	/* Check if this is a snp, not a indel */
         if (sameString(snp.class, "snp"))
 	  /* Check if the snp has been validated*/
