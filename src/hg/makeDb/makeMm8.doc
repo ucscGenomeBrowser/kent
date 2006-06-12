@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.51 2006/06/12 15:55:20 angie Exp $"
+#	"$Id: makeMm8.doc,v 1.52 2006/06/12 16:54:16 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5719,6 +5719,28 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
     hgsql mm8 -e \
     'load data local infile "geneNetworkId.tab" into table geneNetworkId'
 
+############################################################################
+# SGP GENES (DONE - 2006-06-12 - Hiram)
+    ssh kkstore02
+    cd  /cluster/data/mm8/bed
+    ln -s /cluster/store8/mm8/bed/sgp .
+    cd sgp
+    #   They don't do chrM
+    for C in `awk '{print $1}' /cluster/data/mm8/chrom.sizes | grep -v chrM`
+    do
+        wget --timestamping \
+"http://genome.imim.es/genepredictions/M.musculus/mmMar2006/SGP/humangp200603/${C}.gtf" \
+        -O "${C}.gtf"
+    done
+
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/sgp
+    ldHgGene -gtf -genePredExt mm8 sgpGene chr*.gtf
+
+    featureBits mm8 -enrichment refGene:CDS sgpGene
+    #	refGene:CDS 1.063%, sgpGene 1.455%, both 0.918%, cover 86.32%,
+    #	enrich 59.32x
+
 #########################################################################
 # BUILD KNOWN GENE LIST FOR GOOGLE. (DONE.  6/6/06 Fan).
 
@@ -5747,4 +5769,4 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
     grep -v ^track genetrap_mm8.psl \
     | hgLoadPsl mm8 -table=igtc stdin
 
-
+############################################################################
