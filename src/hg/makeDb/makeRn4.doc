@@ -3589,5 +3589,34 @@ BASE=/cluster/data/rn4/bed/blastz.galGal3.2006-05-24
     	delete from gdbPdb where genomeDb='rn4';
     	insert into gdbPdb values('rn4', 'proteins060115');
 
+###########################################################
+#BUILD KEGG PATHWAY TABLES. DONE 6/12/06.  Fan.
+   ssh hgwdev
+   cd /cluster/store11/kg/kgRn4A
+   md kegg
+   cd kegg
+
+   ~/src/hg/protein/KGpath.sh kgRn4A rn4 060115
+
+# This script exited early due to SOAP module of perl seems missing
+# So go to hgwdevold and manually ran the following:
+
+   ~/src/hg/protein/getKeggList2.pl rno > keggList.tab
+
+   hgsql rn4 < ~/kent/src/hg/lib/keggList.sql
+   hgsql -e 'LOAD DATA local INFILE "keggList.tab" into table keggList;' rn4
+
+# go back to hgwdev
+
+   hgKegg3 rn4 rn4
+ 
+   hgsql rn4 -e "drop table keggMapDesc"
+   hgsql rn4 -e "drop table keggPathway"
+   hgsql rn4 <~/src/hg/lib/keggMapDesc.sql
+   hgsql rn4 <~/src/hg/lib/keggPathway.sql
+   hgsql rn4 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
+   hgsql rn4 -e 'load data local infile "keggPathway.tab" into table keggPathway'
+  
+
 #########################################################################
 
