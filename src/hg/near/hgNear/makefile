@@ -12,21 +12,18 @@ O = $A.o advFilter.o afiAli.o association.o configure.o \
 include ../../../inc/cgi_build_rules.mk
 
 my::
-	rsync -ar --delete hgNearData ${CGI_BIN}-${USER}/
-	find ${CGI_BIN}-${USER} -type d -name CVS | xargs rm -fr
+	rsync -ar --exclude=CVS/ --delete hgNearData ${CGI_BIN}-${USER}/
 	chmod -R a+rX ${CGI_BIN}-${USER}/hgNearData
 
 alpha::
 	rm -fr ${CGI_BIN}/hgNearData
-	rsync -ar --delete hgNearData ${CGI_BIN}/
-	find ${CGI_BIN} -type d -name CVS | xargs rm -fr
+	rsync -ar --exclude=CVS/ --delete hgNearData ${CGI_BIN}/
 	chmod -R g+w ${CGI_BIN}/hgNearData
 	chmod -R a+rX ${CGI_BIN}/hgNearData
 
 beta::
 	rm -fr ${CGI_BIN}-beta/hgNearData
-	rsync -ar --delete hgNearData ${CGI_BIN}-beta/
-	find ${CGI_BIN}-beta -type d -name CVS | xargs rm -fr
+	rsync -ar --exclude=CVS/ --delete hgNearData ${CGI_BIN}-beta/
 	chmod -R g+w ${CGI_BIN}-beta/hgNearData
 	chmod -R a+rX ${CGI_BIN}-beta/hgNearData
 
