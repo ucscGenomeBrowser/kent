@@ -19,13 +19,13 @@ my::
 
 alpha::
 	rm -fr ${CGI_BIN}/hgGeneData
-	rsync -ar - --exclude=CVS/ -delete hgGeneData ${CGI_BIN}/
+	rsync -ar --exclude=CVS/ --delete hgGeneData ${CGI_BIN}/
 	chmod -R g+w ${CGI_BIN}/hgGeneData
 	chmod -R a+rX ${CGI_BIN}/hgGeneData
 
 beta::
 	rm -fr ${CGI_BIN}-beta/hgGeneData
-	rsync -ar - --exclude=CVS/ -delete hgGeneData ${CGI_BIN}-beta/
+	rsync -ar --exclude=CVS/ --delete hgGeneData ${CGI_BIN}-beta/
 	chmod -R g+w ${CGI_BIN}-beta/hgGeneData
 	chmod -R a+rX ${CGI_BIN}-beta/hgGeneData
 
