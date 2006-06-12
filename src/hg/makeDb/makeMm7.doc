@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.64 2006/06/09 23:54:59 markd Exp $"
+#	"$Id: makeMm7.doc,v 1.65 2006/06/12 21:41:51 hartera Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12230,4 +12230,144 @@ refGene:CDS 1.059%, sgpGene 1.451%, both 0.912%, cover 86.18%, enrich 59.39x
     grep -v ^track genetrap_mm7.psl \
     | hgLoadPsl mm7 -table=igtc stdin
 
+#########################################################################
+# LIFTOVER TO MM6 (DONE, 2006-06-11 - 2006-06-12, hartera)
+# Split of mm6 sequences done using makeLoChain-split and doc'd in 
+# makeMm6.doc: SPLIT MM6 SEQUENCES FOR LIFTOVER FROM OTHER ASSEMBLIS section.
+# Run on pk as faster than kk.
+    ssh pk
+    mkdir -p /cluster/data/mm7/bed/liftOver
+    cd /cluster/data/mm7/bed/liftOver
+cat << '_EOF_' > align.csh
+#!/bin/csh -fe
+set oldAssembly = $1
+set oldNibDir = $2
+set newAssembly = $3
+set newSplitDir = $4
+set ooc = $5
+if ("$ooc" != "") then
+    set ooc = '-ooc='$ooc
+endif
+
+set blatDir = /cluster/data/$oldAssembly/bed/blat.$newAssembly.`date +%Y-%m-%d`
+echo "Setting up blat in $blatDir"
+rm -fr $blatDir
+mkdir $blatDir
+cd $blatDir
+mkdir raw psl run
+cd run
+
+echo '#LOOP' > gsub
+echo 'blat $(path1) $(path2) {check out line+ ../raw/$(root1)_$(root2).psl} ' \
+       '-tileSize=11 '$ooc' -minScore=100 -minIdentity=98 -fastMap' \
+  >> gsub
+echo '#ENDLOOP' >> gsub
+
+# target
+ls -1S $oldNibDir/*.{nib,2bit} > old.lst
+# query
+ls -1S $newSplitDir/*.{nib,fa} > new.lst
+
+gensub2 old.lst new.lst gsub spec
+/parasol/bin/para create spec
+
+echo ""
+echo "First two lines of para spec:"
+head -2 spec
+echo ""
+echo "DO THIS NEXT:"
+echo "    cd $blatDir/run"
+echo "    para try, check, push, check, ..."
+echo ""
+exit 0
+'_EOF_'
+   # << emacs
+   chmod +x align.csh
+   align.csh mm7 /san/sanvol1/scratch/mm7/nib mm6 \
+       /san/sanvol1/scratch/mm6/split10k \
+       /san/sanvol1/scratch/mm6/11.ooc >&! align.log &
+   # Took a few seconds.
+   # Do what its output says to do next (start cluster job)
+   cd /cluster/data/mm7/bed/blat.mm6.2006-06-11/run
+   para try, check, push, check, ...
+   para time >&! run.time
+# Completed: 1600 of 1600 jobs
+# CPU time in finished jobs:    1483451s   24724.18m   412.07h   17.17d  0.047 y
+# IO & Wait Time:                  6704s     111.74m     1.86h    0.08d  0.000 y
+# Average job time:                 931s      15.52m     0.26h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            9049s     150.82m     2.51h    0.10d
+# Submission to last job:         12027s     200.45m     3.34h    0.14d
+ 
+   ssh pk
+   cd /cluster/data/mm7/bed/liftOver
+
+cat << '_EOF_' > lift.csh
+#!/bin/csh -ef
+set oldAssembly = $1
+set newAssembly = $2
+set newLiftDir = /san/sanvol1/scratch/$newAssembly/split10k
+
+set prefix = /cluster/data/$oldAssembly/bed/blat.$newAssembly
+set blatDir = `ls -td $prefix.20* | head -1`
+echo "using dir $blatDir"
+
+if ( ! -e $blatDir/raw ) then
+    echo "Can't find $blatDir/raw"
+endif
+
+if (`ls -1 $newLiftDir/*.lft | wc -l` < 1) then
+    echo "Can't find any .lft files in $newLiftDir"
+    exit 1
+endif
+cd $blatDir/raw
+
+foreach chr (`awk '{print $1;}' /cluster/data/$newAssembly/chrom.sizes`)
+    echo $chr
+    liftUp -pslQ ../psl/$chr.psl $newLiftDir/$chr.lft warn chr*_$chr.psl
+end
+
+set execDir = $0:h
+echo ""
+echo "DO THIS NEXT:"
+echo "    ssh pk"
+echo "    $execDir/makeLoChain-chain $oldAssembly <$oldAssembly-nibdir> $newAssembly <$newAssembly-nibdir>"
+echo ""
+exit 0
+'_EOF_'
+   # << emacs
+   chmod +x lift.csh
+   lift.csh mm7 mm6 >&! lift.log &
+   # makeLoChain-chain can be run on pk. chain alignments
+
+   makeLoChain-chain mm7 /san/sanvol1/scratch/mm7/nib \
+                     mm6 /san/sanvol1/scratch/mm6/nib >&! chain.log &
+   cd /cluster/data/mm7/bed/blat.mm6.2006-06-11/chainRun
+   para try, check, push, check, ...
+   para time >&! run.time
+# Completed: 40 of 40 jobs
+# CPU time in finished jobs:       7800s     130.00m     2.17h    0.09d  0.000 y
+# IO & Wait Time:                 15867s     264.45m     4.41h    0.18d  0.001 y
+# Average job time:                 592s       9.86m     0.16h    0.01d
+# Longest running job:                0s       0.00m     0.00h    0.00d
+# Longest finished job:            1323s      22.05m     0.37h    0.02d
+# Submission to last job:          1323s      22.05m     0.37h    0.02d
+   ssh kkstore02
+   cd /cluster/data/mm7/bed/liftOver
+   makeLoChain-net mm7 mm6 >&! net.log &
+   # Took about 50 minutes.
+   # load reference to over.chain into database table,
+   # and create symlinks  /gbdb  and download area
+   ssh hgwdev
+   cd /cluster/data/mm7/bed/liftOver
+   makeLoChain-load mm7 mm6 >&! load.log &
+   # clean up
+   rm *.log
+   # add md5sum.txt to include this new liftOver file
+   cd /usr/local/apache/htdocs/goldenPath/mm7/liftOver
+   rm md5sum.txt
+   md5sum *.gz > md5sum.txt
+   # copy README.txt from another liftOver directory.
+   # test by converting a region using the "convert" link on
+   # the browser, and comparing to blat of the same region
 
