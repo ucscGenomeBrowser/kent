@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.81 2006/06/09 18:22:21 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.82 2006/06/12 04:38:11 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -45,6 +45,7 @@ char *user     = NULL;
 char *password = NULL;
 
 struct sqlConnection *conn = NULL;
+struct sqlConnection *conn2 = NULL;
 
 char *qaUser = NULL;
 
@@ -358,7 +359,6 @@ mySqlReleaseLock("qapushq");
 }
 
 
-
 enum colEnum mapFieldToEnum(char *f, bool must)
 {
 int i = 0;
@@ -566,6 +566,7 @@ if (isNew)
     replaceInStr(html, sizeof(html), "<!lockbutton>", ""); 
     replaceInStr(html, sizeof(html), "<!sizesbutton>", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input TYPE=SUBMIT NAME=\"showSizes\" VALUE=\"Show Sizes\">"); 
     replaceInStr(html, sizeof(html), "<!refreshlink>", ""); 
+    replaceInStr(html, sizeof(html), "<!transferlink>", ""); 
     
     safef(tempLink, sizeof(tempLink), "<a href=\"/cgi-bin/qaPushQ?cb=%s\">CANCEL</a>&nbsp;&nbsp;",newRandState); 
     replaceInStr(html, sizeof(html), "<!cancellink>", tempLink ); 
@@ -620,6 +621,10 @@ else
 	
 	replaceInStr(html, sizeof(html), "<!refreshlink>", ""); 
 	
+	replaceInStr(html, sizeof(html), 
+	    "<!transferbutton>", 
+	    "<input TYPE=SUBMIT NAME=\"transfer\" VALUE=\"Transfer\">&nbsp;&nbsp;"); 
+	
 	replaceInStr(html, sizeof(html), "<!sizesbutton>", 
 	    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input TYPE=SUBMIT NAME=\"showSizes\" VALUE=\"Show Sizes\">"); 
 	
@@ -645,6 +650,7 @@ else
 	    ki->qid,newRandState); 
 	replaceInStr(html, sizeof(html), "<!refreshlink>", tempLink ); 
 	
+	replaceInStr(html, sizeof(html), "<!transferlink>", "");
 	replaceInStr(html, sizeof(html), "<!sizesbutton>", "");
 	if (sameString(ki->lockUser,""))
 	    {
@@ -1089,75 +1095,73 @@ pushQFreeList(&kiList);
 }
 
 
-bool loadPushQ(char *qid, struct pushQ *q, bool optional)
-/* we need to load q with existing values */
+struct pushQ *loadPushQ(char *qid)
+/* Return pushQ struct loading q with existing values.
+ * Use pushQFree() when done.*/
 {
 char **row;
 struct sqlResult *sr;
 char query[256];
-
+struct pushQ *q = NULL;
 safef(query, sizeof(query), "select * from %s where qid = '%s'",pushQtbl,qid);
 sr = sqlGetResult(conn, query);
 row = sqlNextRow(sr);
-if (row == NULL)
-    {
-    if (!optional)
-	{
-	errAbort("loadPushQ: Queue Id %s not found.",qid);
-	}
-    else 
-	{
-	return FALSE;
-	}
-    }
-else
-    {
-    pushQStaticLoad(row,q);
-    }
+if (row)
+    q = pushQLoad(row);
 sqlFreeResult(&sr);
-return TRUE;
+return q;
 }
+
+struct pushQ *mustLoadPushQ(char *qid)
+/* Load pushQ or die */
+{
+struct pushQ *q = loadPushQ(qid);
+if (!q)
+    errAbort("loadPushQ: Queue Id %s not found.",qid);
+return q;    
+}
+
 
 
 void doPushDone()
 /* Mark record pushState=D, move priority to L for Log, and set rank=0  */
 {
 
-struct pushQ q; /* just so we get the size of q.qid */
+struct pushQ *q; /* just so we get the size of q.qid */
 char query[256];
 
-safef(q.qid, sizeof(q.qid), cgiString("qid"));
-
-loadPushQ(q.qid, &q, FALSE);
-if (sameString(q.lockUser,"") && sameString(q.pushState,"Y"))
+mustLoadPushQ(cgiString("qid"));
+if (sameString(q->lockUser,"") && sameString(q->pushState,"Y"))
     { /* not already locked and pushState=Y */
 
-    safef(q.lastdate, sizeof(q.lastdate), q.qadate);
-    strftime (q.qadate  , sizeof(q.qadate  ), "%Y-%m-%d", loctime); /* today's date */
+    safef(q->lastdate, sizeof(q->lastdate), q->qadate);
+    strftime (q->qadate  , sizeof(q->qadate  ), "%Y-%m-%d", loctime); /* today's date */
 
     safef(query, sizeof(query), 
 	"update %s set rank = 0, priority ='L', pushState='D', qadate='%s', lastdate='%s' where qid = '%s' ", 
-	pushQtbl, q.qadate, q.lastdate, q.qid);
+	pushQtbl, q->qadate, q->lastdate, q->qid);
     sqlUpdate(conn, query);
 
 
     /* first close the hole where it was */
     safef(query, sizeof(query), 
 	"update %s set rank = rank - 1 where priority ='%s' and rank > %d ", 
-	pushQtbl, q.priority, q.rank);
+	pushQtbl, q->priority, q->rank);
     sqlUpdate(conn, query);
     }
 else
     {
-    if (sameString(q.lockUser,""))
+    if (sameString(q->lockUser,""))
 	{
-    	safef(msg, sizeof(msg), "Unable to mark record %s done. Record is locked by %s.",q.qid,q.lockUser);
+    	safef(msg, sizeof(msg), "Unable to mark record %s done-> Record is locked by %s->",q->qid,q->lockUser);
 	}
     else
 	{
-    	safef(msg, sizeof(msg), "Invalid operation for qid %s, pushState is not Y, = %s.",q.qid,q.pushState);
+    	safef(msg, sizeof(msg), "Invalid operation for qid %s, pushState is not Y, = %s->",q->qid,q->pushState);
 	}
     }
+
+pushQFree(&q);
 
 doDisplay();
 }
@@ -1168,25 +1172,25 @@ void XdoPromote(int change)
  * >0 means promote, <0 means demote */
 {
 
-struct pushQ q;
+struct pushQ *q;
 char query[256];
-char newQid[sizeof(q.qid)] = "";
+char newQid[sizeof(q->qid)] = "";
 
 safef(newQid, sizeof(newQid), cgiString("qid"));
 
-loadPushQ(newQid, &q,FALSE);
+q = mustLoadPushQ(newQid);
 
-if ((q.rank > 1) && (change>0))
+if ((q->rank > 1) && (change>0))
     {
     /* swap places with rank-1 */
     safef(query, sizeof(query), 
     "update %s set rank = rank + 1 where priority ='%s' and rank = %d ", 
-    pushQtbl, q.priority, q.rank-1);
+    pushQtbl, q->priority, q->rank-1);
     sqlUpdate(conn, query);
-    q.rank--;
+    q->rank--;
     safef(query, sizeof(query), 
     "update %s set rank = %d where qid ='%s'", 
-    pushQtbl, q.rank, q.qid);
+    pushQtbl, q->rank, q->qid);
     sqlUpdate(conn, query);
     }
 
@@ -1195,16 +1199,18 @@ if (change<0)
     /* swap places with rank+1 */
     safef(query, sizeof(query), 
     "update %s set rank = rank - 1 where priority ='%s' and rank = %d ", 
-    pushQtbl, q.priority, q.rank+1);
+    pushQtbl, q->priority, q->rank+1);
     if (sqlUpdateRows(conn, query, NULL)>0)
-    {
-    q.rank++;
-    safef(query, sizeof(query), 
-	"update %s set rank = %d where qid ='%s'", 
-	pushQtbl, q.rank, q.qid);
-    sqlUpdate(conn, query);
+	{
+	q->rank++;
+	safef(query, sizeof(query), 
+	    "update %s set rank = %d where qid ='%s'", 
+	    pushQtbl, q->rank, q->qid);
+	sqlUpdate(conn, query);
+	}
     }
-    }
+
+pushQFree(&q);
 
 doDisplay();
 }
@@ -1269,25 +1275,27 @@ return q.rank;
 void doTop()
 {
 
-struct pushQ q;
+struct pushQ *q;
 char query[256];
-char newQid[sizeof(q.qid)] = "";
+char newQid[sizeof(q->qid)] = "";
 
 safef(newQid, sizeof(newQid), cgiString("qid"));
 
-loadPushQ(newQid, &q,FALSE);
+q = mustLoadPushQ(newQid);
 
 /* first close the hole where it was */
 safef(query, sizeof(query), 
 "update %s set rank = rank + 1 where priority ='%s' and rank < %d ", 
-pushQtbl, q.priority, q.rank);
+pushQtbl, q->priority, q->rank);
 sqlUpdate(conn, query);
 
-q.rank = 1;
+q->rank = 1;
 safef(query, sizeof(query), 
 "update %s set rank = %d where qid = '%s' ", 
-pushQtbl, q.rank, q.qid);
+pushQtbl, q->rank, q->qid);
 sqlUpdate(conn, query);
+
+pushQFree(&q);
 
 doDisplay();
 }
@@ -1295,25 +1303,27 @@ doDisplay();
 void doBottom()
 {
 
-struct pushQ q;
+struct pushQ *q;
 char query[256];
-char newQid[sizeof(q.qid)] = "";
+char newQid[sizeof(q->qid)] = "";
 
 safef(newQid, sizeof(newQid), cgiString("qid"));
 
-loadPushQ(newQid, &q,FALSE);
+q = mustLoadPushQ(newQid);
 
 /* first close the hole where it was */
 safef(query, sizeof(query), 
 "update %s set rank = rank - 1 where priority ='%s' and rank > %d ", 
-pushQtbl, q.priority, q.rank);
+pushQtbl, q->priority, q->rank);
 sqlUpdate(conn, query);
 
-q.rank = getNextAvailRank(q.priority);
+q->rank = getNextAvailRank(q->priority);
 safef(query, sizeof(query), 
 "update %s set rank = %d where qid = '%s' ", 
-pushQtbl, q.rank, q.qid);
+pushQtbl, q->rank, q->qid);
 sqlUpdate(conn, query);
+
+pushQFree(&q);
 
 doDisplay();
 }
@@ -1452,6 +1462,7 @@ else
 
 
 
+void doTransfer();    /* forward reference needed */
 
 void doShowSizes();  /* forward reference needed */
 
@@ -1473,30 +1484,19 @@ char *clonebutton  = cgiUsualString("clonebutton" ,"");
 char *bouncebutton = cgiUsualString("bouncebutton","");
 char *lockbutton   = cgiUsualString("lockbutton"  ,"");
 char *showSizes    = cgiUsualString("showSizes"   ,"");
+char *transfer     = cgiUsualString("transfer"   ,"");
 
-struct pushQ q;
+struct pushQ *q;
 
 bool isNew  = FALSE;   /* new rec */
 bool isRedo = FALSE;   /* need to return to edit form with error msg */
 bool isOK   = TRUE;    /* is data valid length (not too large) */
 bool lockOK = TRUE;    /* assume for now lock state OK */
 
-char newQid     [sizeof(q.qid)]      = "";
-char newPriority[sizeof(q.priority)] = "";
+char newQid     [sizeof(q->qid)]      = "";
+char newPriority[sizeof(q->priority)] = "";
 
-ZeroVar(&q);
-
-/* example ALTERNATIVE method
-struct pushQ *q;
-AllocVar(q);
- ....
-freez(&q);
-
-*/
-
-q.next = NULL;
-
-safef(newQid,      sizeof(newQid)     , cgiString("qid"));
+safef(newQid, sizeof(newQid), cgiString("qid"));
 
 if (sameString(newQid,"")) 
     {
@@ -1512,7 +1512,7 @@ if (!isNew)
     /* we need to preload q with existing values 
      * because some fields like rank are not carried in form 
     */	
-    loadPushQ(newQid, &q,FALSE); 
+    q = mustLoadPushQ(newQid); 
 	/* true means optional, it was asked if we could tolerate this, 
 	 *  e.g. delete, then hit back-button
 	* user is trying to use back button to recover deleted rec 
@@ -1524,35 +1524,35 @@ if (!isNew)
 
     if (sameString(lockbutton,"Cancel"))  /* user cancelled */
 	{  /* unlock record */
-	safef(q.lockUser, sizeof(q.lockUser), "%s", "");
-	safef(q.lockDateTime, sizeof(q.lockDateTime), "%s", "");
-	pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
+	safef(q->lockUser, sizeof(q->lockUser), "%s", "");
+	safef(q->lockDateTime, sizeof(q->lockDateTime), "%s", "");
+	pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
 	lockOK = FALSE;
 	}
     else if (sameString(lockbutton,"Lock"))  /* try to lock the record for editing */
 	{
-	if (sameString(q.lockUser,""))  /* q.lockUser blank if nobody has lock */
+	if (sameString(q->lockUser,""))  /* q->lockUser blank if nobody has lock */
 	    {
-	    safef(q.lockUser, sizeof(q.lockUser), qaUser);
-	    strftime(q.lockDateTime, sizeof(q.lockDateTime), "%Y-%m-%d %H:%M", loctime);
-	    pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
+	    safef(q->lockUser, sizeof(q->lockUser), qaUser);
+	    strftime(q->lockDateTime, sizeof(q->lockDateTime), "%Y-%m-%d %H:%M", loctime);
+	    pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
 	    lockOK = FALSE;
 	    }
 	else
-	    { /* somebody else has lock. */
+	    { /* somebody else has lock-> */
 	    lockOK = FALSE;
 	    }
 	}
-    else if (!sameString(q.lockUser,qaUser))  /* User supposed to already have lock, verify. */
+    else if (!sameString(q->lockUser,qaUser))  /* User supposed to already have lock, verify. */
 	{ /* if lock was lost, what do we do now? */
-	if (sameString(q.lockUser,""))
+	if (sameString(q->lockUser,""))
 	    {
-	    safef(msg,sizeof(msg),"Lost lock. Must refresh data.");
+	    safef(msg,sizeof(msg),"Lost lock-> Must refresh data->");
 	    }
 	else
 	    {
-	    safef(msg,sizeof(msg),"Lost lock. User %s currently has lock on Queue Id %s since %s.",
-		q.lockUser,q.qid,q.lockDateTime);
+	    safef(msg,sizeof(msg),"Lost lock-> User %s currently has lock on Queue Id %s since %s->",
+		q->lockUser,q->qid,q->lockDateTime);
 	    }
 	lockOK = FALSE;
 	}
@@ -1560,6 +1560,7 @@ if (!isNew)
     if (!lockOK)
 	{
 	doEdit();
+	pushQFree(&q);
 	return;
 	}
 
@@ -1567,9 +1568,10 @@ if (!isNew)
 
 if (isNew) 
     {
+    AllocVar(q);
     newqid = getNextAvailQid();
-    safef(q.pqid, sizeof(q.pqid), "%s", "");
-    safef(q.pushState,sizeof(q.pushState),"N");  /* default to: push not done yet */
+    safef(q->pqid, sizeof(q->pqid), "%s", "");
+    safef(q->pushState,sizeof(q->pushState),"N");  /* default to: push not done yet */
     }
 
 
@@ -1577,45 +1579,45 @@ safef(newPriority, sizeof(newPriority), cgiString("priority"));
 
     
 /* dates */
-getCgiData(&isOK, FALSE, q.qadate    , sizeof(q.qadate    ), "qadate"    );
-getCgiData(&isOK, FALSE, q.initdate  , sizeof(q.initdate  ), "initdate"  );
+getCgiData(&isOK, FALSE, q->qadate    , sizeof(q->qadate    ), "qadate"    );
+getCgiData(&isOK, FALSE, q->initdate  , sizeof(q->initdate  ), "initdate"  );
 
 /* YN select listboxes */
-getCgiData(&isOK, FALSE, q.newYN     , sizeof(q.newYN     ), "newYN"     );
-getCgiData(&isOK, FALSE, q.makeDocYN , sizeof(q.makeDocYN ), "makeDocYN" );
-getCgiData(&isOK, FALSE, q.ndxYN     , sizeof(q.ndxYN     ), "ndxYN"     );
-getCgiData(&isOK, FALSE, q.joinerYN  , sizeof(q.joinerYN  ), "joinerYN"  );
+getCgiData(&isOK, FALSE, q->newYN     , sizeof(q->newYN     ), "newYN"     );
+getCgiData(&isOK, FALSE, q->makeDocYN , sizeof(q->makeDocYN ), "makeDocYN" );
+getCgiData(&isOK, FALSE, q->ndxYN     , sizeof(q->ndxYN     ), "ndxYN"     );
+getCgiData(&isOK, FALSE, q->joinerYN  , sizeof(q->joinerYN  ), "joinerYN"  );
 
 /* chr(255) strings */
-getCgiData(&isOK, TRUE ,&q.track     , 256                 , "track"     );
-getCgiData(&isOK, TRUE ,&q.dbs       , 256                 , "dbs"       );
-getCgiData(&isOK, TRUE ,&q.cgis      , 256                 , "cgis"      );
-getCgiData(&isOK, TRUE ,&q.stat      , 256                 , "stat"      );
+getCgiData(&isOK, TRUE ,&q->track     , 256                 , "track"     );
+getCgiData(&isOK, TRUE ,&q->dbs       , 256                 , "dbs"       );
+getCgiData(&isOK, TRUE ,&q->cgis      , 256                 , "cgis"      );
+getCgiData(&isOK, TRUE ,&q->stat      , 256                 , "stat"      );
 
 /* integers */
-if (sscanf(cgiString("sizeMB"),"%u",&q.sizeMB) != 1) 
+if (sscanf(cgiString("sizeMB"),"%u",&q->sizeMB) != 1) 
     {
-    q.sizeMB = 0;
+    q->sizeMB = 0;
     }
 
 /* strings of various sizes */
-getCgiData(&isOK, FALSE, q.currLoc   , sizeof(q.currLoc   ), "currLoc"   );
-getCgiData(&isOK, FALSE, q.onlineHelp, sizeof(q.onlineHelp), "onlineHelp");
-getCgiData(&isOK, FALSE, q.sponsor   , sizeof(q.sponsor   ), "sponsor"   );
-getCgiData(&isOK, FALSE, q.reviewer  , sizeof(q.reviewer  ), "reviewer"  );
-getCgiData(&isOK, FALSE, q.extSource , sizeof(q.extSource ), "extSource" );
+getCgiData(&isOK, FALSE, q->currLoc   , sizeof(q->currLoc   ), "currLoc"   );
+getCgiData(&isOK, FALSE, q->onlineHelp, sizeof(q->onlineHelp), "onlineHelp");
+getCgiData(&isOK, FALSE, q->sponsor   , sizeof(q->sponsor   ), "sponsor"   );
+getCgiData(&isOK, FALSE, q->reviewer  , sizeof(q->reviewer  ), "reviewer"  );
+getCgiData(&isOK, FALSE, q->extSource , sizeof(q->extSource ), "extSource" );
 
 /* blobs */
-getCgiData(&isOK, TRUE ,&q.tbls      , -1                  , "tbls"      );  
-getCgiData(&isOK, TRUE ,&q.files     , -1                  , "files"     );
-getCgiData(&isOK, TRUE ,&q.featureBits, -1                 , "featureBits");
-getCgiData(&isOK, TRUE ,&q.openIssues, -1                  , "openIssues");
-getCgiData(&isOK, TRUE ,&q.notes     , -1                  , "notes"     );
-getCgiData(&isOK, TRUE ,&q.releaseLog, -1                  , "releaseLog");
+getCgiData(&isOK, TRUE ,&q->tbls      , -1                  , "tbls"      );  
+getCgiData(&isOK, TRUE ,&q->files     , -1                  , "files"     );
+getCgiData(&isOK, TRUE ,&q->featureBits, -1                 , "featureBits");
+getCgiData(&isOK, TRUE ,&q->openIssues, -1                  , "openIssues");
+getCgiData(&isOK, TRUE ,&q->notes     , -1                  , "notes"     );
+getCgiData(&isOK, TRUE ,&q->releaseLog, -1                  , "releaseLog");
 
 
 /* debug!
-errAbort("Got to past loading q.qid priority data. %d %d <br>\n",newqid,sizeof(newQid));
+errAbort("Got to past loading q->qid priority data. %d %d <br>\n",newqid,sizeof(newQid));
 return;
 */
 
@@ -1624,84 +1626,85 @@ if (!isOK)
     {
     isRedo = TRUE;
     }
-if ((q.sizeMB < 0) || (q.sizeMB > 100000))
+if ((q->sizeMB < 0) || (q->sizeMB > 100000))
     {
-    safef(msg,sizeof(msg),"Size(MB): invalid size. <br>\n");
+    safef(msg,sizeof(msg),"Size(MB): invalid size-> <br>\n");
     isRedo = TRUE;
     }
 if (!isDateValid(cgiString("qadate")))
     {
-    safef(msg,sizeof(msg),"Date format invalid, should be YYYY-MM-DD. <br>\n");
+    safef(msg,sizeof(msg),"Date format invalid, should be YYYY-MM-DD-> <br>\n");
     isRedo = TRUE;
     }
 if (strlen(cgiString("track"))>255)
     {
-    safef(msg,sizeof(msg),"Track: too long for field, 255 char max. <br>\n");
+    safef(msg,sizeof(msg),"Track: too long for field, 255 char max-> <br>\n");
     isRedo = TRUE;
     }
 if (strlen(cgiString("dbs"))>255)
     {
-    safef(msg,sizeof(msg),"Database: too long for field, 255 char max. <br>\n");
+    safef(msg,sizeof(msg),"Database: too long for field, 255 char max-> <br>\n");
     isRedo = TRUE;
     }
 if (strlen(cgiString("cgis"))>255)
     {
-    safef(msg,sizeof(msg),"CGIs: too long for field, 255 char max. <br>\n");
+    safef(msg,sizeof(msg),"CGIs: too long for field, 255 char max-> <br>\n");
     isRedo = TRUE;
     }
 if (strlen(cgiString("stat"))>255)
     {
-    safef(msg,sizeof(msg),"Status: too long for field, 255 char max. <br>\n");
+    safef(msg,sizeof(msg),"Status: too long for field, 255 char max-> <br>\n");
     isRedo = TRUE;
     }
 
 
 /* need to do this before delete or will lose the record */
-if ((sameString(pushbutton,"push requested"))&&(q.sizeMB==0))
+if ((sameString(pushbutton,"push requested"))&&(q->sizeMB==0))
     {
-    safef(msg,sizeof(msg),"Size (MB) should not be zero. <br>\n");
+    safef(msg,sizeof(msg),"Size (MB) should not be zero-> <br>\n");
     isRedo = TRUE;
     }
 
-if ((sameString(pushbutton,"push requested"))&&(!sameString(q.currLoc,"hgwbeta")))
+if ((sameString(pushbutton,"push requested"))&&(!sameString(q->currLoc,"hgwbeta")))
     {
-    safef(msg,sizeof(msg),"Current Location should be hgwbeta. <br>\n");
+    safef(msg,sizeof(msg),"Current Location should be hgwbeta-> <br>\n");
     isRedo = TRUE;
     }
 
-if ((sameString(pushbutton,"push requested"))&&(sameString(q.makeDocYN,"N")))
+if ((sameString(pushbutton,"push requested"))&&(sameString(q->makeDocYN,"N")))
     {
-    safef(msg,sizeof(msg),"MakeDoc not verified. <br>\n");
+    safef(msg,sizeof(msg),"MakeDoc not verified-> <br>\n");
     isRedo = TRUE;
     }
 
-if ((sameString(pushbutton,"push requested"))&&(sameString(q.ndxYN,"N")))
+if ((sameString(pushbutton,"push requested"))&&(sameString(q->ndxYN,"N")))
     {
-    safef(msg,sizeof(msg),"Index not verified. <br>\n");
+    safef(msg,sizeof(msg),"Index not verified-> <br>\n");
     isRedo = TRUE;
     }
 
-if ((sameString(pushbutton,"push requested"))&&(sameString(q.joinerYN,"N")))
+if ((sameString(pushbutton,"push requested"))&&(sameString(q->joinerYN,"N")))
     {
-    safef(msg,sizeof(msg),"All.Joiner not verified. <br>\n");
+    safef(msg,sizeof(msg),"All->Joiner not verified-> <br>\n");
     isRedo = TRUE;
     }
 
-if ((sameString(bouncebutton,"bounce"))&&(!sameString(q.priority,"A")))
+if ((sameString(bouncebutton,"bounce"))&&(!sameString(q->priority,"A")))
     {
-    safef(msg,sizeof(msg),"Only priority A records should be bounced. <br>\n");
+    safef(msg,sizeof(msg),"Only priority A records should be bounced-> <br>\n");
     isRedo = TRUE;
     }
-if ((sameString(bouncebutton,"unbounce"))&&(sameString(q.priority,"A")))
+if ((sameString(bouncebutton,"unbounce"))&&(sameString(q->priority,"A")))
     {
-    safef(msg,sizeof(msg),"Priority A records should not be unbounced. <br>\n");
+    safef(msg,sizeof(msg),"Priority A records should not be unbounced-> <br>\n");
     isRedo = TRUE;
     }
 
 
 if (isRedo)
     {
-    replacePushQFields(&q, isNew);  
+    replacePushQFields(q, isNew);  
+    pushQFree(&q);
     return;
     }
 
@@ -1709,125 +1712,133 @@ if (isRedo)
 if (sameString(bouncebutton,"bounce")) 
     {
     safef(newPriority, sizeof(newPriority), "B");
-    safef(q.lastdate, sizeof(q.lastdate), q.qadate);
-    strftime (q.qadate, sizeof(q.qadate), "%Y-%m-%d", loctime); /* set to today's date */
-    q.bounces++;
+    safef(q->lastdate, sizeof(q->lastdate), q->qadate);
+    strftime (q->qadate, sizeof(q->qadate), "%Y-%m-%d", loctime); /* set to today's date */
+    q->bounces++;
     }
 if (sameString(bouncebutton,"unbounce")) 
     {
     safef(newPriority, sizeof(newPriority), "A");
-    safef(q.lastdate, sizeof(q.lastdate), q.qadate);
-    strftime (q.qadate, sizeof(q.qadate), "%Y-%m-%d", loctime); /* set to today's date */
+    safef(q->lastdate, sizeof(q->lastdate), q->qadate);
+    strftime (q->qadate, sizeof(q->qadate), "%Y-%m-%d", loctime); /* set to today's date */
     }
 
 
 /* check if priority class has changed, or deleted, then close ranks */
-if ( (!sameString(newPriority,q.priority)) || (sameString(delbutton,"delete")) )
+if ( (!sameString(newPriority,q->priority)) || (sameString(delbutton,"delete")) )
     {
     /* first close the hole where it was */
     safef(query, sizeof(query), 
     "update %s set rank = rank - 1 where priority ='%s' and rank > %d ", 
-    pushQtbl, q.priority, q.rank);
+    pushQtbl, q->priority, q->rank);
     sqlUpdate(conn, query);
     }
 
 /* if not deleted, then if new or priority class change, then take last rank */
 if (!sameString(delbutton,"delete")) 
     {
-    if ((!sameString(newPriority,q.priority)) || isNew)
+    if ((!sameString(newPriority,q->priority)) || isNew)
 	{
-	q.rank = getNextAvailRank(newPriority);
-	safef(q.priority, sizeof(q.priority), newPriority);
+	q->rank = getNextAvailRank(newPriority);
+	safef(q->priority, sizeof(q->priority), newPriority);
 	}
     }
 
-if (q.priority[0]=='L') 
+if (q->priority[0]=='L') 
     {
-    q.rank = 0;
+    q->rank = 0;
     }
 
 
 if (sameString(pushbutton,"push requested")) 
     {
-    /* reset pushState in case was prev. a log already */
-    safef(q.pushState,sizeof(q.pushState),"Y");
+    /* reset pushState in case was prev-> a log already */
+    safef(q->pushState,sizeof(q->pushState),"Y");
     }
 
 if (sameString(delbutton,"delete")) 
     {
     /* delete old record */
-    safef(query, sizeof(query), "delete from %s where qid ='%s'", pushQtbl, q.qid);
+    safef(query, sizeof(query), "delete from %s where qid ='%s'", pushQtbl, q->qid);
     sqlUpdate(conn, query);
     }
 else
     {
-    if (sameString(showSizes,"Show Sizes")) 
+    if (sameString(showSizes,"Show Sizes") || sameString(transfer,"Transfer")) 
 	{ /* mark record as locked */
-	safef(q.lockUser, sizeof(q.lockUser), qaUser);
-	strftime(q.lockDateTime, sizeof(q.lockDateTime), "%Y-%m-%d %H:%M", loctime);
+	safef(q->lockUser, sizeof(q->lockUser), qaUser);
+	strftime(q->lockDateTime, sizeof(q->lockDateTime), "%Y-%m-%d %H:%M", loctime);
 	}
     else
 	{ /* unlock record */
-	safef(q.lockUser, sizeof(q.lockUser), "%s", "");
-	safef(q.lockDateTime, sizeof(q.lockDateTime), "%s", "");
+	safef(q->lockUser, sizeof(q->lockUser), "%s", "");
+	safef(q->lockDateTime, sizeof(q->lockDateTime), "%s", "");
 	}
     if (isNew)
 	{
 	/* save new record */
-	safef(msg, sizeof(msg), "%%0%dd", (int)sizeof(q.qid)-1);
+	safef(msg, sizeof(msg), "%%0%dd", (int)sizeof(q->qid)-1);
 	safef(newQid,sizeof(newQid),msg,newqid);
-	safef(q.qid, sizeof(q.qid), newQid);
+	safef(q->qid, sizeof(q->qid), newQid);
     	safef(msg, sizeof(msg), "%s", "");
-	pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
+	pushQSaveToDbEscaped(conn, q, pushQtbl, updateSize);
 	}
     else
 	{  
 	/* update existing record */
-	pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
+	pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
 	}
     }
 
 if (sameString(clonebutton,"clone")) 
     {  
     /* save new clone */
-    safef(q.pqid,sizeof(q.pqid), q.qid);  /* daughter will point to parent */
+    safef(q->pqid,sizeof(q->pqid), q->qid);  /* daughter will point to parent */
     newqid = getNextAvailQid();
-    safef(msg, sizeof(msg), "%%0%dd", (int)sizeof(q.qid)-1);
+    safef(msg, sizeof(msg), "%%0%dd", (int)sizeof(q->qid)-1);
     safef(newQid,sizeof(newQid),msg,newqid);
-    safef(q.qid, sizeof(q.qid), newQid);
+    safef(q->qid, sizeof(q->qid), newQid);
     safef(msg, sizeof(msg), "%s", "");
-    if (q.priority[0]=='L') 
+    if (q->priority[0]=='L') 
 	{
-	q.rank = 0;
+	q->rank = 0;
 	}
     else
 	{
-	q.rank = getNextAvailRank(q.priority);
+	q->rank = getNextAvailRank(q->priority);
 	}
-    safef(q.pushState,sizeof(q.pushState),"N");  /* default to: push not done yet */
-    pushQSaveToDbEscaped(conn, &q, pushQtbl, updateSize);
+    safef(q->pushState,sizeof(q->pushState),"N");  /* default to: push not done yet */
+    pushQSaveToDbEscaped(conn, q, pushQtbl, updateSize);
     }
 
 
 if (sameString(showSizes,"Show Sizes")) 
     {
-    cgiVarSet("qid", q.qid); /* for new rec */
+    cgiVarSet("qid", q->qid); /* for new rec */
     doShowSizes();
-    return;
     }
 
-if (sameString(submitbutton,"Submit")) 
-    { /* if submit button, saved data, now return to readonly view.  */
+else if (sameString(transfer,"Transfer")) 
+    {
+    cgiVarSet("qid", q->qid); /* for new rec */
+    doTransfer();
+    }
+
+else if (sameString(submitbutton,"Submit")) 
+    { /* if submit button, saved data, now return to readonly view->  */
     
-    safef(msg, sizeof(msg), "Data saved.");
+    safef(msg, sizeof(msg), "Data saved->");
     
-    cgiVarSet("qid", q.qid); /* for new rec */
+    cgiVarSet("qid", q->qid); /* for new rec */
     doEdit();
-    return;
+    }
+else
+    {
+    doDisplay();
     }
 
+pushQFree(&q);
 
-doDisplay();
 
 }
 
@@ -1837,12 +1848,11 @@ void doEdit()
 /* Handle edit request for a pushQ entry */
 {
 int updateSize = 2456;
-struct pushQ q;
-ZeroVar(&q);
-safef(q.qid, sizeof(q.qid), cgiString("qid"));
-if (!loadPushQ(q.qid, &q,TRUE))
+struct pushQ *q;
+q = loadPushQ(cgiString("qid"));
+if (!q)
     {
-    printf("Queue Id %s not found.", q.qid);
+    printf("Queue Id %s not found.", cgiString("qid"));
     return;
     }
 
@@ -1853,15 +1863,11 @@ if ( sameString(qaUser,"kuhn") ||
     {
     if (sameString(action,"edit") || sameString(action,"setSize")) 
 	{
-	if (sameString(q.lockUser,""))  /* q.lockUser blank if nobody has lock */
+	if (sameString(q->lockUser,""))  /* q->lockUser blank if nobody has lock */
 	    {
-	    safef(q.lockUser, sizeof(q.lockUser), qaUser);
-	    strftime(q.lockDateTime, sizeof(q.lockDateTime), "%Y-%m-%d %H:%M", loctime);
-	    pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
-	    /* annoying! the call imm. above destroys the q variable, so reload */
-	    ZeroVar(&q);
-	    safef(q.qid, sizeof(q.qid), cgiString("qid"));
-            loadPushQ(q.qid, &q,TRUE);
+	    safef(q->lockUser, sizeof(q->lockUser), qaUser);
+	    strftime(q->lockDateTime, sizeof(q->lockDateTime), "%Y-%m-%d %H:%M", loctime);
+	    pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
 	    }
 	}
     else /* we are coming back from a post? so return to display automatically */
@@ -1871,32 +1877,33 @@ if ( sameString(qaUser,"kuhn") ||
 	}
     }
     
-replacePushQFields(&q, FALSE);  /* new rec = false */
+replacePushQFields(q, FALSE);  /* new rec = false */
+pushQFree(&q);
 }
 
 void doSetSize()
 /* save sizeMB */
 {
-struct pushQ q;
+struct pushQ *q;
 char tempSizeMB[10];
 int updateSize=2456;
-ZeroVar(&q);
-safef(q.qid, sizeof(q.qid), cgiString("qid"));
-if (!loadPushQ(q.qid, &q,TRUE))
+q = loadPushQ(cgiString("qid"));
+if (!q)
     {
-    printf("Queue Id %s not found.", q.qid);
+    printf("Queue Id %s not found.", cgiString("qid"));
     return;
     }
 safef(tempSizeMB,sizeof(tempSizeMB), cgiUsualString("sizeMB",""));
 if (!sameString(tempSizeMB,""))
     {
-    if (sscanf(tempSizeMB,"%u",&q.sizeMB) != 1)
+    if (sscanf(tempSizeMB,"%u",&q->sizeMB) != 1)
 	{
-	q.sizeMB = 0;
+	q->sizeMB = 0;
 	}
     }
-pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
+pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
 doEdit();
+pushQFree(&q);
 }
 
 
@@ -2581,8 +2588,8 @@ int i = 0, ii = 0, iii = 0;
 int j = 0, jj = 0, jjj = 0;
 int g = 0, gg = 0, ggg = 0;
 char nicenumber[1024]="";
-struct pushQ q;
-char newQid[sizeof(q.qid)] = "";
+struct pushQ *q;
+char newQid[sizeof(q->qid)] = "";
 
 char dbsComma[1024];
 char dbsSpace[1024];
@@ -2605,40 +2612,39 @@ char fileName[1024];
 char *found=NULL;
 struct fileInfo *fi = NULL;
 
-ZeroVar(&q);
-
 safef(newQid, sizeof(newQid), cgiString("qid"));
 
 printf("<H2>Show File Sizes </H2>\n");
 
-loadPushQ(newQid, &q, FALSE); 
+q = mustLoadPushQ(newQid); 
 
-printf("<a href=\"/cgi-bin/qaPushQ?action=showSizesHelp&qid=%s&cb=%s\" target=\"_blank\">HELP</a> \n",q.qid,newRandState);
+printf("<a href=\"/cgi-bin/qaPushQ?action=showSizesHelp&qid=%s&cb=%s\" target=\"_blank\">HELP</a> \n",
+    q->qid,newRandState);
 printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> \n",newQid,newRandState);
 printf(" <br>\n");
-printf("Location: %s <br>\n",q.currLoc);
-printf("Database: %s <br>\n",q.dbs    );
-printf("  Tables: %s <br>\n",q.tbls   );
-printf("    CGIs: %s <br>\n",q.cgis   );
-printf("   Files: %s <br>\n",q.files  );
+printf("Location: %s <br>\n",q->currLoc);
+printf("Database: %s <br>\n",q->dbs    );
+printf("  Tables: %s <br>\n",q->tbls   );
+printf("    CGIs: %s <br>\n",q->cgis   );
+printf("   Files: %s <br>\n",q->files  );
 printf(" <br>\n");
 
-cutParens(q.dbs);
-cutParens(q.tbls);
-cutParens(q.cgis);
-cutParens(q.files);
+cutParens(q->dbs);
+cutParens(q->tbls);
+cutParens(q->cgis);
+cutParens(q->files);
 
-whiteSpace(q.dbs);
-whiteSpace(q.tbls);
-whiteSpace(q.cgis);
-whiteSpace(q.files);
+whiteSpace(q->dbs);
+whiteSpace(q->tbls);
+whiteSpace(q->cgis);
+whiteSpace(q->files);
 
-q.tbls = replaceChars(q.tbls,"chrN_","chr*_");
-q.tbls = replaceChars(q.tbls,"\\","\\\\");
-q.tbls = replaceChars(q.tbls,"%","\\%");
-q.tbls = replaceChars(q.tbls,"_","\\_");
+q->tbls = replaceChars(q->tbls,"chrN_","chr*_");
+q->tbls = replaceChars(q->tbls,"\\","\\\\");
+q->tbls = replaceChars(q->tbls,"%","\\%");
+q->tbls = replaceChars(q->tbls,"_","\\_");
 
-for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
+for(j=0;parseList(q->dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
     {
     if (dbsComma[0]==0) 
 	{
@@ -2673,7 +2679,7 @@ for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 	    safef(db,sizeof(db),"%s",dbsVal);
 
 	    printf(" <br>\n");
-	    printf("<h4>%s on %s:</h4>\n",db,q.currLoc);
+	    printf("<h4>%s on %s:</h4>\n",db,q->currLoc);
 	    printf("<table cellpadding=5 >");
 	    printf("<th>Table</th>"
 	           "<th>data size</th>"
@@ -2682,7 +2688,7 @@ for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 	    );
 
 	    /* we parsed the db multiples, now parse the tbl mutiples  */
-	    for(i=0;parseList(q.tbls, ',' ,i,tempComma,sizeof(tempComma));i++)
+	    for(i=0;parseList(q->tbls, ',' ,i,tempComma,sizeof(tempComma));i++)
 		{
 		if (tempComma[0]==0) 
 		    {
@@ -2719,7 +2725,7 @@ for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
 		    if (tempVal[0]!=0) 
 			{
 			safef(tbl,sizeof(tbl),"%s",tempVal);
-			totalsize += pq_getTableSize(q.currLoc,db,tbl);
+			totalsize += pq_getTableSize(q->currLoc,db,tbl);
 			}
 		    }
 		}
@@ -2730,13 +2736,13 @@ for(j=0;parseList(q.dbs, ',' ,j,dbsComma,sizeof(dbsComma));j++)
      }
 
 
-if (!sameString(q.cgis,""))
+if (!sameString(q->cgis,""))
     {
     printf(" <br>\n");
     printf("<h4>CGIs on %s:</h4>\n",utsName.nodename);
     printf("<table cellpadding=5 >");
     printf("<th>cgi</th><th># bytes</th>");
-    for(g=0;parseList(q.cgis, ',' ,g,gComma,sizeof(gComma));g++)
+    for(g=0;parseList(q->cgis, ',' ,g,gComma,sizeof(gComma));g++)
 	{
 	if (gComma[0]==0) 
 	    {
@@ -2787,13 +2793,13 @@ if (!sameString(q.cgis,""))
     printf("</table>");
     }
 
-if (!sameString(q.files,""))
+if (!sameString(q->files,""))
     {
     printf(" <br>\n");
     printf("<h4>Files on %s:</h4>\n",utsName.nodename);
     printf("<table cellpadding=5 >");
     printf("<th>file</th><th># bytes</th>");
-    for(g=0;parseList(q.files, ',' ,g,gComma,sizeof(gComma));g++)
+    for(g=0;parseList(q->files, ',' ,g,gComma,sizeof(gComma));g++)
 	{
 	if (gComma[0]==0) 
 	    {
@@ -2900,7 +2906,112 @@ printf("<a href=\"/cgi-bin/qaPushQ?action=setSize&qid=%s&sizeMB=%lu&cb=%s\">"
        "Set Size as %s MB</a> <br>\n",newQid,sizeMB,newRandState,nicenumber);
 printf(" <br>\n");
 printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> <br>\n",newQid,newRandState);
+
+pushQFree(&q);
+
 }
+
+
+void listQueues(char *action);  /* forward decl */
+
+void doTransfer()
+/* Present choice of queues to which the selected and locked record may be transferred */
+{
+struct pushQ *q;
+char newQid[sizeof(q->qid)] = "";
+char tempUrl[256];
+
+ZeroVar(&q);
+
+safef(newQid, sizeof(newQid), cgiString("qid"));
+
+printf("<H2>Tranfer Queue Entry %s to Another Queue </H2>\n", newQid);
+
+q=mustLoadPushQ(newQid); 
+
+printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> \n",newQid,newRandState);
+printf("<br>\n");
+printf("<br>\n");
+
+safef(tempUrl, sizeof(tempUrl), "action=transferTo&qid=%s&toOrg", newQid);
+listQueues(tempUrl);
+
+printf("<a href=\"/cgi-bin/qaPushQ?action=edit&qid=%s&cb=%s\">RETURN</a> <br>\n",newQid,newRandState);
+pushQFree(&q);
+}
+
+
+void doTransferTo()
+/* Execute transfer of qid from current pushQtbl to named target Q table */
+{
+struct pushQ *q;
+int updateSize = 2456; /* almost anything works here */
+char *toOrg = cgiString("toOrg");  /* required cgi var */
+char *origQid = NULL;
+int newqid = 0;
+char newQid     [sizeof(q->qid)]      = "";
+char *savePushQtbl = cloneString(pushQtbl);
+char query[256];
+
+origQid = cloneString(cgiString("qid"));  /* required cgi var */
+
+/* get the data from the record */
+q = mustLoadPushQ(origQid);
+
+/* first close the hole where it was */
+safef(query, sizeof(query),
+"update %s set rank = rank - 1 where priority ='%s' and rank > %d ",
+pushQtbl, q->priority, q->rank);
+sqlUpdate(conn, query);
+
+/* delete old record */
+safef(query, sizeof(query), "delete from %s where qid ='%s'", pushQtbl, origQid);
+sqlUpdate(conn, query);
+
+/* temporarily set pushQtbl to target */
+safef(pushQtbl, sizeof(pushQtbl), "%s",toOrg);
+
+/* unlock record - don't want it to keep the lock status after xfer */
+safef(q->lockUser, sizeof(q->lockUser), "%s","");
+safef(q->lockDateTime, sizeof(q->lockDateTime), "%s","");
+
+/* get the maxQid from the target Q tbl */
+newqid = getNextAvailQid();
+safef(msg, sizeof(msg), "%%0%dd", (int)sizeof(q->qid)-1);
+safef(newQid,sizeof(newQid),msg,newqid);
+safef(q->qid, sizeof(q->qid), newQid);
+safef(msg, sizeof(msg), "%s", "");
+
+/* get the maxrank from the target Q tbl for given priority */
+if (q->priority[0]=='L')
+    {
+    q->rank = 0;
+    }
+else
+    {
+    q->rank = getNextAvailRank(q->priority);
+    }
+
+/* clear parent link since can not be maintained */
+safef(q->pqid, sizeof(q->pqid), "%s", "");
+
+/* save record into new target Q */
+pushQSaveToDbEscaped(conn, q, pushQtbl, updateSize);
+
+/* restore pushQtbl */
+safef(pushQtbl, sizeof(pushQtbl), "%s", savePushQtbl);
+
+/* set msg to display the new Qid to the user, visible on return */
+safef(msg,sizeof(msg),"Transferred %s Qid %s to %s Qid %s. <br>\n", pushQtbl, origQid, toOrg, q->qid);
+
+doDisplay();
+
+freez(&origQid);
+freez(&savePushQtbl);
+pushQFree(&q);
+}
+
+
 
 
 void doShowDisplayHelp()
@@ -2934,7 +3045,6 @@ printf("Queue Id - click to edit or see the details page for the record.<br>\n")
 printf("<br>\n");
 printf("<a href=\"javascript:window.close();\" >CLOSE</a> <br>\n");
 }
-
 
 
 void doShowEditHelp()
@@ -2976,6 +3086,7 @@ printf("delete button - delete this push queue record and return to main display
 printf("push requested button - press only if you are QA staff and about to submit the push-request. It will try to verify that required entries are present.<br>\n");
 printf("clone button - press if you wish to split the original push queue record into multiple parts. Saves typing, used rarely.<br>\n");
 printf("bounce button - press to bounce from priority A, the QA queue, to B, the developer queue if it needs developer attention.<br>\n");
+printf("transfer button - press to transfer the pushQ entry to another queue.<br>\n");
 printf("lock - press lock to lock the record and edit it.  When in edit mode, make your changes and submit.  Do not leave the record locked.<br>\n");
 printf("<br>\n");
 printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n");
@@ -3007,52 +3118,77 @@ printf("<br>\n");
 printf("<a href=\"javascript:window.close();\">CLOSE</a> <br>\n");
 }
 
-
-
-void doShowGateway()
-/* This gives the user a choice of months to filter on */
+void checkConn2()
+/* get 2nd conn, if not already done */
 {
+if (!conn2)
+    conn2 = sqlConnectRemote(host, user, password, database);
+}
 
+boolean verifyTableIsQueue(char *table)
+/* Return TRUE if table is a push Q */
+{
+boolean result = TRUE;
+char query[256];
+char *field = NULL;
+safef(query, sizeof(query), "desc %s",table);
+checkConn2();
+field = sqlQuickString(conn2, query);
+result = sameString(field,"qid"); 
+freez(&field);
+return result;
+}
+
+void listQueues(char *action)
+/* list the available queues other than self */
+{
 struct sqlResult *sr;
 char **row;
 char query[256];
+safef(query, sizeof(query), "show tables");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (!sameString(row[0],pushQtbl) && !sameString(row[0],"users") && !sameString(row[0],"gbjunk"))
+	{
+	if (verifyTableIsQueue(row[0]))
+    	    printf("<A href=qaPushQ?%s=%s&cb=%s>%s</A><br>\n",action,row[0],newRandState,row[0]);
+	}
+    }
+sqlFreeResult(&sr);
+printf("<br>\n");
+}
+
+void doShowGateway()
+/* This gives the user a choice of queues to use */
+{
 
 printf("<h4>Gateway</h4>\n");
 printf("<br>\n");
 printf("<A href=qaPushQ?org=pushQ&cb=%s>Main Push Queue</A><br>\n",newRandState);
 printf("<br>\n");
 
-safef(query, sizeof(query), "show tables");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if ((!sameString(row[0],"pushQ") && (!sameString(row[0],"users"))))
-	{
-	printf("<A href=qaPushQ?org=%s&cb=%s>%s</A><br>\n",row[0],newRandState,row[0]);
-	}
-    }
-sqlFreeResult(&sr);
-printf("<br>\n");
+listQueues("org");
+
 printf("<a href=\"/cgi-bin/qaPushQ?cb=%s\">RETURN</a> <br>\n",newRandState);
 }
 
 void doUnlock()
 /* currently a backdoor for logged-in users to unlock a record */
 {
-struct pushQ q;
+struct pushQ *q;
 int updateSize = 2456; /* almost anything works here */
 
-ZeroVar(&q);
-safef(q.qid, sizeof(q.qid), cgiString("qid"));   /* required cgi var */
-
-loadPushQ(q.qid, &q, FALSE);
+q = mustLoadPushQ(cgiString("qid")); /* required cgi var */
 
 /* unlock record */
-safef(q.lockUser, sizeof(q.lockUser), "%s","");
-safef(q.lockDateTime, sizeof(q.lockDateTime), "%s","");
+safef(q->lockUser, sizeof(q->lockUser), "%s","");
+safef(q->lockDateTime, sizeof(q->lockDateTime), "%s","");
 
 /* update existing record */
-pushQUpdateEscaped(conn, &q, pushQtbl, updateSize);
+pushQUpdateEscaped(conn, q, pushQtbl, updateSize);
+
+pushQFree(&q);
 
 doDisplay();
 
@@ -3515,6 +3651,16 @@ else if (sameString(action,"showSizes" ))
     doShowSizes();
     }
 
+else if (sameString(action,"transfer" )) 
+    {
+    doTransfer();
+    }
+
+else if (sameString(action,"transferTo" )) 
+    {
+    doTransferTo();
+    }
+
 else if (sameString(action,"showGateway" )) 
     {
     doShowGateway();
@@ -3541,6 +3687,7 @@ oldRandState=newRandState;
 saveMyUser();
 releaseLock();
 sqlDisconnect(&conn);
+sqlDisconnect(&conn2);
 
 }
 
