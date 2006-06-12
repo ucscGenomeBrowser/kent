@@ -488,7 +488,7 @@ if (-e /tmp/galGal3/$2/$2.cat) /bin/cp /tmp/galGal3/$2/$2.cat ./
                 defaultPos, active, orderKey, genome, scientificName, \
                 htmlPath, hgNearOk, hgPbOk, sourceName) values \
         ("galGal3", "May 2006", "/gbdb/galGal3", "Chicken", \
-               "chr2:22845558-23004134", 1, 30, "Chicken", \
+               "chr5:57710001-57780000", 1, 30, "Chicken", \
                 "Gallus Gallus", "/gbdb/galGal3/html/description.html", \
                0, 0, "Chicken Genome Sequencing Consortium May 2006 release");'
 
@@ -764,7 +764,7 @@ BASE=/cluster/data/galGal3/bed/blastz.xenTro2.2006-05-26
 
 
 #########################################################################
-# GENBANK AUTO UPDATE (TODO 5//06 angie)
+# GENBANK AUTO UPDATE (DONE 6/9/06 angie)
     # align with revised genbank process. drop xeno ESTs.
     cd ~/kent/src/hg/makeDb/genbank
     cvsup
@@ -772,7 +772,7 @@ BASE=/cluster/data/galGal3/bed/blastz.xenTro2.2006-05-26
 
 # galGal3
 galGal3.serverGenome = /cluster/data/galGal3/galGal3.2bit
-galGal3.clusterGenome = /iscratch/i/galGal3/galGal3.2bit
+galGal3.clusterGenome = /scratch/hg/galGal3/galGal3.2bit
 galGal3.ooc = /cluster/bluearc/galGal3/11.ooc
 galGal3.align.unplacedChroms = chr*_random
 galGal3.lift = /cluster/data/galGal3/jkStuff/liftAll.lft
