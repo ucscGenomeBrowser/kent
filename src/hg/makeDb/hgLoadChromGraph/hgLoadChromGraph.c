@@ -8,7 +8,7 @@
 #include "hgRelate.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.1 2006/06/12 16:12:02 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.2 2006/06/12 16:21:30 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -87,6 +87,7 @@ if (doLoad)
 
     /* Load main table and clean up file handle. */
     hgLoadTabFile(conn, tempDir, track, &f);
+    hgRemoveTabFile(tempDir, track);
 
     /* If need be create meta table.  If need be delete old row. */
     if (!sqlTableExists(conn, "metaChromGraph"))
