@@ -3616,6 +3616,20 @@ BASE=/cluster/data/rn4/bed/blastz.galGal3.2006-05-24
    hgsql rn4 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
    hgsql rn4 -e 'load data local infile "keggPathway.tab" into table keggPathway'
   
+#########################################################################
+# BUILD SOME KNOWNTO... TABLES, DONE 6/12/06 Fan.
+
+cd /cluster/data/rn4/bed/geneSorter
+# Create table that maps between known genes and RefSeq
+hgMapToGene rn4 refGene knownGene knownToRefSeq
+
+# Create table that maps between known genes and LocusLink
+hgsql --skip-column-names -e "select mrnaAcc,locusLinkId from refLink" rn4 > refToLl.txt
+hgMapToGene rn4 refGene knownGene knownToLocusLink -lookup=refToLl.txt
+
+# Create table that maps between known genes and Pfam domains
+hgMapViaSwissProt rn4 knownGene name proteinID Pfam knownToPfam
+hgsql -e "select count(*) from knownToPfam;" rn4
 
 #########################################################################
 
