@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.50 2006/06/10 00:21:52 markd Exp $"
+#	"$Id: makeMm8.doc,v 1.51 2006/06/12 15:55:20 angie Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5735,4 +5735,16 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
     rm -rf /usr/local/apache/htdocs/knownGeneList/mm8
     mkdir -p /usr/local/apache/htdocs/knownGeneList/mm8
     cp -Rfp knownGeneList/mm8/* /usr/local/apache/htdocs/knownGeneList/mm8
+
+
+#########################################################################
+### IGTC (Int'l GeneTrap Consortium) (DONE - 2006-06-12 - angie)
+### Doug Stryke <stryke@cgl.ucsf.edu> in Tom Ferrin's lab
+    ssh hgwdev
+    mkdir /cluster/data/mm8/bed/igtc
+    cd /cluster/data/mm8/bed/igtc
+    wget http://www.genetrap.org/blattrack/genetrap_mm8.psl
+    grep -v ^track genetrap_mm8.psl \
+    | hgLoadPsl mm8 -table=igtc stdin
+
 
