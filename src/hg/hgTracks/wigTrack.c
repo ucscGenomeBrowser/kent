@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.73 2006/06/11 23:56:11 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.74 2006/06/12 18:23:49 kent Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -1015,6 +1015,9 @@ int x1 = 0;			/*	screen coordinates	*/
 int x2 = 0;			/*	screen coordinates	*/
 Color *colorArray = NULL;       /*	Array of pixels to be drawn.	*/
 int usingDataSpan = 1;		/* will become larger if possible */
+
+if (tg->items == NULL)
+    return;
 
 currentFile[0] = '\0';
 

@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1126 2006/06/10 21:48:23 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1127 2006/06/12 18:23:48 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -348,8 +348,7 @@ struct group *groupList = NULL;    /* List of all tracks. */
 
 /* Some little functional stubs to fill in track group
  * function pointers with if we have nothing to do. */
-boolean tgLoadNothing(struct track *tg){return TRUE;}
-void tgDrawNothing(struct track *tg){}
+void tgLoadNothing(struct track *tg){}
 void tgFreeNothing(struct track *tg){}
 int tgItemNoStart(struct track *tg, void *item) {return -1;}
 int tgItemNoEnd(struct track *tg, void *item) {return -1;}
@@ -10318,6 +10317,10 @@ else if (sameWord(type, "bed6FloatScore"))
     track->bedSize = 4;
     bedMethods(track);
     track->loadItems = loadSimpleBed;
+    }
+else if (sameWord(type, "chromGraph"))
+    {
+    chromGraphMethods(track);
     }
 
 }

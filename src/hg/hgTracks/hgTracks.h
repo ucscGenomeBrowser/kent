@@ -16,6 +16,14 @@
 #include "cart.h"
 #endif
 
+#ifndef PSL_H
+#include "psl.h"
+#endif
+
+#ifndef BED_H
+#include "bed.h"
+#endif
+
 #ifndef TRACKLAYOUT_H
 #include "trackLayout.h"
 #endif /* TRACKLAYOUT_H */
@@ -445,7 +453,7 @@ void resampleBytes(UBYTE *s, int sct, UBYTE *d, int dct);
 
 /* Some little functional stubs to fill in track group
  * function pointers with if we have nothing to do. */
-boolean tgLoadNothing(struct track *tg);
+void tgLoadNothing(struct track *tg);
 void tgDrawNothing(struct track *tg);
 void tgFreeNothing(struct track *tg);
 int tgItemNoStart(struct track *tg, void *item);
@@ -642,6 +650,10 @@ void bedGraphMethods(struct track *track, struct trackDb *tdb,
 	int wordCount, char *words[]);
 
 /* Make track group for wig - wiggle tracks. */
+
+void chromGraphMethods(struct track *tg);
+/* Fill in methods for chromGraph tracks. */
+
 
 void wigMafMethods(struct track *track, struct trackDb *tdb, 
                                 int wordCount, char *words[]);
