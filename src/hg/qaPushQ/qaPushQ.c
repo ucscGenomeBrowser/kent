@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.83 2006/06/12 21:34:35 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.84 2006/06/12 21:52:15 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -2925,7 +2925,7 @@ ZeroVar(&q);
 
 safef(newQid, sizeof(newQid), cgiString("qid"));
 
-printf("<H2>Tranfer Queue Entry %s to Another Queue </H2>\n", newQid);
+printf("<H2>Tranfer Queue Entry %s:%s to Another Queue </H2>\n", pushQtbl, newQid);
 
 q=mustLoadPushQ(newQid); 
 
@@ -3145,14 +3145,27 @@ void listQueues(char *action)
 struct sqlResult *sr;
 char **row;
 char query[256];
+if (!sameString(pushQtbl,"pushQ"))
+    {
+    printf("<A href=qaPushQ?%s=%s&cb=%s>Main Push Queue</A><br>\n",action,"pushQ",newRandState);
+    printf("<br>\n");
+    }
 safef(query, sizeof(query), "show tables");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    if (!sameString(row[0],pushQtbl) && !sameString(row[0],"users") && !sameString(row[0],"gbjunk"))
+    if (!sameString(row[0],pushQtbl) && 
+	!sameString(row[0],"pushQ") && 
+	!sameString(row[0],"users") && 
+	!sameString(row[0],"gbjunk"))
 	{
 	if (verifyTableIsQueue(row[0]))
-    	    printf("<A href=qaPushQ?%s=%s&cb=%s>%s</A><br>\n",action,row[0],newRandState,row[0]);
+	    {
+	    char *displayQ = row[0];
+	    if (sameString(displayQ,"pushQ"))
+		displayQ = "Main Push Queue";
+    	    printf("<A href=qaPushQ?%s=%s&cb=%s>%s</A><br>\n",action,row[0],newRandState,displayQ);
+	    }
 	}
     }
 sqlFreeResult(&sr);
@@ -3163,9 +3176,7 @@ void doShowGateway()
 /* This gives the user a choice of queues to use */
 {
 
-printf("<h4>Gateway</h4>\n");
-printf("<br>\n");
-printf("<A href=qaPushQ?org=pushQ&cb=%s>Main Push Queue</A><br>\n",newRandState);
+printf("<h2>Gateway - Choose Queue</h2>\n");
 printf("<br>\n");
 
 listQueues("org");
