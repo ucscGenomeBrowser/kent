@@ -312,9 +312,9 @@ visibility dense
 color 12,12,120
 type genePred refPep refMrna
 
-track augustusAbinito
-shortLabel Augustus Abinito
-longLabel Augustus Abinito Gene Predictions
+track augustusAbinitio
+shortLabel Augustus Ab Initio
+longLabel Augustus Ab Initio Gene Predictions
 group genes
 priority 51.7
 visibility hide
