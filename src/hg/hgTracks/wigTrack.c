@@ -14,7 +14,7 @@
 #include "customTrack.h"
 #include "wigCommon.h"
 
-static char const rcsid[] = "$Id: wigTrack.c,v 1.74 2006/06/12 18:23:49 kent Exp $";
+static char const rcsid[] = "$Id: wigTrack.c,v 1.75 2006/06/13 01:58:08 kent Exp $";
 
 struct wigItem
 /* A wig track item. */
@@ -1103,11 +1103,6 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	    bytesRead = read(wibFH, readData,
 		(size_t) wi->count * (size_t) sizeof(unsigned char));
 	    /*	walk through all the data in this block	*/
-	    lseek(wibFH, wi->offset, SEEK_SET);
-
-	    readData = (unsigned char *) needMem((size_t) (wi->count + 1));
-	    bytesRead = read(wibFH, readData,
-		(size_t) wi->count * (size_t) sizeof(unsigned char));
 	    for (dataOffset = 0; dataOffset < wi->count; ++dataOffset)
 		{
 		unsigned char datum = readData[dataOffset];
