@@ -1044,6 +1044,8 @@ cat > loadChipWig.csh << 'EOF'
 ##########################################################################
 # U North Carolina FAIRE  (2005-10-24 kate)
 #       Peaks data updated (2006-04-13 kate and 2006-05-01, hartera)
+# Added description for updated Peaks data - provided by 
+# Paul Giresi (paulg@email.unc.edu) (2006-06-13, hartera)
     # submitted by Paul Giresi, from Jason Lieb's lab
     # later, Paul submitted an "averages" file for the
     # raw data (but doesn't include the "peaks")
@@ -1141,7 +1143,9 @@ cat > load.csh << 'EOF'
     color 20,150,20
     altColor 50,100,50
     priority 3
-    # Waiting for methods update from track providers for the description.
+    # Description update added (2006-06-13, hartera).
+    # Add new description for new Peaks data subtrack from 
+    # FAIRE_peaks_DESC.htm to trackDb/human/encodeUncFaire.html 
 
 ##########################################################################
 # Gencode Genes (2005-10-10 kate)
