@@ -37,6 +37,7 @@ DIRS = \
 	hgLoadBed \
 	hgLoadBlastTab \
 	hgLoadChain \
+	hgLoadChromGraph \
 	hgLoadGenePred \
 	hgLoadItemAttr \
 	hgLoadMaf \
