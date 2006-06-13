@@ -1,5 +1,7 @@
 This describes changes from version to version.
 
+34 - Fixed a bug that would cause isPcr to rarely abort with message
+      start 0, end 0 out of range in findBin
 33 - Added checking of command line so that misspelled options
      result in an error message instead of being silently
      ignored.
