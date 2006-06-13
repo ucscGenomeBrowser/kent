@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.93 2006/06/08 23:40:57 galt Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.94 2006/06/13 18:05:17 kent Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -702,6 +702,21 @@ if (refOnList(*pRefList, val) == NULL)
     refAdd(pRefList, val);
     }
 }
+
+struct slRef *refListFromSlList(void *list)
+/* Make a reference list that mirrors a singly-linked list. */
+{
+struct slList *el;
+struct slRef *refList = NULL, *ref;
+for (el= list; el != NULL; el = el->next)
+    {
+    ref = slRefNew(el);
+    slAddHead(&refList, ref);
+    }
+slReverse(&refList);
+return refList;
+}
+
 
 struct slPair *slPairNew(char *name, void *val)
 /* Allocate new name/value pair. */

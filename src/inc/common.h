@@ -514,6 +514,9 @@ void refAdd(struct slRef **pRefList, void *val);
 void refAddUnique(struct slRef **pRefList, void *val);
 /* Add reference to list if not already on list. */
 
+struct slRef *refListFromSlList(void *list);
+/* Make a reference list that mirrors a singly-linked list. */
+
 struct slPair
 /* A name/value pair. */
     {
