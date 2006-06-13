@@ -16,7 +16,7 @@
 #include "chromInfo.h"
 #include "vGfx.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.6 2006/06/13 17:25:51 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.7 2006/06/13 18:09:17 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -157,20 +157,6 @@ slReverse(&sexList);
 slReverse(&autoList);
 *retAutoList = autoList;
 *retSexList = sexList;
-}
-
-struct slRef *refListFromSlList(void *list)
-/* Make a reference list that mirrors a singly-linked list. */
-{
-struct slList *el;
-struct slRef *refList = NULL, *ref;
-for (el= list; el != NULL; el = el->next)
-    {
-    ref = slRefNew(el);
-    slAddHead(&refList, ref);
-    }
-slReverse(&refList);
-return refList;
 }
 
 struct genoLay *genoLayNew(struct genoLayChrom *chromList,
@@ -353,13 +339,6 @@ for (ref = cl->bottomList; ref != NULL; ref = ref->next)
 return cl;
 }
 
-void drawChrom(struct vGfx *vg, struct genoLayChrom *chrom, int chromBoxHeight,
-	int color)
-{
-vgBox(vg, chrom->x, chrom->y + chrom->height - chromBoxHeight, 
-    chrom->width, chromBoxHeight, color);
-}
-
 void leftLabel(struct vGfx *vg, struct genoLay *cl,
 	struct genoLayChrom *chrom, int fontHeight, int chromBoxHeight,
 	int color)
@@ -392,6 +371,15 @@ vgTextRight(vg, chrom->x - textWidth - cl->spaceWidth,
     textWidth, fontHeight, color,
     font, chrom->shortName);
 }
+
+void drawChrom(struct vGfx *vg, struct genoLayChrom *chrom, int chromBoxHeight,
+	int color)
+/* Draw chromosomes. */
+{
+vgBox(vg, chrom->x, chrom->y + chrom->height - chromBoxHeight, 
+    chrom->width, chromBoxHeight, color);
+}
+
 
 void genomeGif(struct sqlConnection *conn, struct genoLay *cl)
 /* Create genome GIF file and HTML that includes it. */
