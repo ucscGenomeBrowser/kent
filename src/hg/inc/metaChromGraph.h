@@ -5,7 +5,7 @@
 #ifndef METACHROMGRAPH_H
 #define METACHROMGRAPH_H
 
-#define METACHROMGRAPH_NUM_COLS 3
+#define METACHROMGRAPH_NUM_COLS 4
 
 struct metaChromGraph
 /* Information about each chromosome graph. */
@@ -14,6 +14,7 @@ struct metaChromGraph
     char *name;	/* Corresponds to chrom graph table name */
     double minVal;	/* Minimum value observed */
     double maxVal;	/* Maximum value observed */
+    char *binaryFile;	/* Location of binary data point file if any */
     };
 
 void metaChromGraphStaticLoad(char **row, struct metaChromGraph *ret);

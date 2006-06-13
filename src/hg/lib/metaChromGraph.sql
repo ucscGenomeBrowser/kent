@@ -8,6 +8,7 @@ CREATE TABLE metaChromGraph (
     name varchar(255) not null,	# Corresponds to chrom graph table name
     minVal double not null,	# Minimum value observed
     maxVal double not null,	# Maximum value observed
+    binaryFile varchar(255) not null,	# Location of binary data point file if any
               #Indices
     PRIMARY KEY(name(32))
 );

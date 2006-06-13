@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "metaChromGraph.h"
 
-static char const rcsid[] = "$Id: metaChromGraph.c,v 1.1 2006/06/12 16:13:16 kent Exp $";
+static char const rcsid[] = "$Id: metaChromGraph.c,v 1.2 2006/06/13 16:14:26 kent Exp $";
 
 void metaChromGraphStaticLoad(char **row, struct metaChromGraph *ret)
 /* Load a row from metaChromGraph table into ret.  The contents of ret will
@@ -18,6 +18,7 @@ void metaChromGraphStaticLoad(char **row, struct metaChromGraph *ret)
 ret->name = row[0];
 ret->minVal = atof(row[1]);
 ret->maxVal = atof(row[2]);
+ret->binaryFile = row[3];
 }
 
 struct metaChromGraph *metaChromGraphLoad(char **row)
@@ -30,6 +31,7 @@ AllocVar(ret);
 ret->name = cloneString(row[0]);
 ret->minVal = atof(row[1]);
 ret->maxVal = atof(row[2]);
+ret->binaryFile = cloneString(row[3]);
 return ret;
 }
 
@@ -39,7 +41,7 @@ struct metaChromGraph *metaChromGraphLoadAll(char *fileName)
 {
 struct metaChromGraph *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[4];
 
 while (lineFileRow(lf, row))
     {
@@ -57,7 +59,7 @@ struct metaChromGraph *metaChromGraphLoadAllByChar(char *fileName, char chopper)
 {
 struct metaChromGraph *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[3];
+char *row[4];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -81,6 +83,7 @@ if (ret == NULL)
 ret->name = sqlStringComma(&s);
 ret->minVal = sqlDoubleComma(&s);
 ret->maxVal = sqlDoubleComma(&s);
+ret->binaryFile = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -93,6 +96,7 @@ struct metaChromGraph *el;
 
 if ((el = *pEl) == NULL) return;
 freeMem(el->name);
+freeMem(el->binaryFile);
 freez(pEl);
 }
 
@@ -119,6 +123,10 @@ fputc(sep,f);
 fprintf(f, "%g", el->minVal);
 fputc(sep,f);
 fprintf(f, "%g", el->maxVal);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->binaryFile);
+if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }
 
