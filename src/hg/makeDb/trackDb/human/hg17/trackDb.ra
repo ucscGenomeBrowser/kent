@@ -1297,7 +1297,7 @@ otherDb hg17
 
 track hgMut
 shortLabel Human Mutation
-longLabel Compilation of human disease variants and other mutations
+longLabel Compilation of Human Disease Variants and Other Mutations
 group phenDis
 priority 144.7
 visibility pack
@@ -1306,7 +1306,7 @@ type bed 4 +
 
 track landmark
 shortLabel Landmarks
-longLabel Compilation of landmarks from locus experts
+longLabel Compilation of Landmarks from Locus Experts
 group phenDis
 priority 144.8
 visibility hide
