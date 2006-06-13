@@ -9,7 +9,7 @@ O = hgLoadWiggle.o
 
 A = hgLoadWiggle
 
-all::	${A} hgWiggle wigEncode cgi
+all::	${A} hgWiggle wigEncode
 
 hgLoadWiggle: $O ${MYLIBS}
 	${CC} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
