@@ -16,7 +16,7 @@
 #include "chromInfo.h"
 #include "vGfx.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.5 2006/06/13 16:42:26 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.6 2006/06/13 17:25:51 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -37,29 +37,29 @@ errAbort(
   );
 }
 
-struct clChrom
+struct genoLayChrom
 /* Information on a chromosome. */
      {
-     struct clChrom *next;
-     char *fullName;	/* Name of full deal. */
-     char *shortName;	/* Name without chr prefix. */
-     int size;		/* Size in bases. */
-     struct cytoBand *bands;	/* May be NULL */
+     struct genoLayChrom *next;
+     char *fullName;	/* Name of full deal. Set before genoLayNew. */
+     char *shortName;	/* Name w/out chr prefix. Set before genoLayNew. */
+     int size;		/* Size in bases. Set before genoLayNew. */
      int x,y;		/* Upper left corner pixel coordinates*/
      int width,height; 	/* Pixel width and height */
      };
 
-struct chromLayout
+struct genoLay
 /* This has information on how to lay out chromosomes. */
     {
     MgFont *font;		/* Font used for labels */
+    struct genoLayChrom *chromList;	/* List of all chromosomes */
     int picWidth;			/* Total picture width */
     int picHeight;			/* Total picture height */
-    int margin;				/* BLank area around sides */
+    int margin;				/* Blank area around sides */
     int spaceWidth;			/* Width of a space. */
-    struct clChrom *leftList;	/* Left chromosomes. */
-    struct clChrom *rightList;	/* Right chromosomes. */
-    struct clChrom *bottomList;	/* Sex chromosomes are on bottom. */
+    struct slRef *leftList;	/* Left chromosomes. */
+    struct slRef *rightList;	/* Right chromosomes. */
+    struct slRef *bottomList;	/* Sex chromosomes are on bottom. */
     int lineCount;			/* Number of chromosome lines. */
     int leftLabelWidth, rightLabelWidth;/* Pixels for left/right labels */
     int lineHeight;			/* Height for one line */
@@ -76,11 +76,11 @@ while (isdigit(*s))
 return s;
 }
 
-int clChromCmpNum(const void *va, const void *vb)
+int genoLayChromCmpNum(const void *va, const void *vb)
 /* Compare two slNames. */
 {
-const struct clChrom *a = *((struct clChrom **)va);
-const struct clChrom *b = *((struct clChrom **)vb);
+const struct genoLayChrom *a = *((struct genoLayChrom **)va);
+const struct genoLayChrom *b = *((struct genoLayChrom **)vb);
 char *aName = a->shortName, *bName = b->shortName;
 if (isdigit(aName[0]))
     {
@@ -100,12 +100,13 @@ else
     return strcmp(aName, bName);
 }
 
-struct clChrom *getChromosomes(struct sqlConnection *conn)
+struct genoLayChrom *genoLayDbChroms(struct sqlConnection *conn, 
+	boolean withRandom)
 /* Get chrom info list. */
 {
 struct sqlResult *sr;
 char **row;
-struct clChrom *chrom, *chromList = NULL;
+struct genoLayChrom *chrom, *chromList = NULL;
 int count = sqlQuickNum(conn, "select count(*) from chromInfo");
 if (count > 500)
     errAbort("Sorry, hgGenome only works on assemblies mapped to chromosomes.");
@@ -113,9 +114,9 @@ sr = sqlGetResult(conn, "select chrom,size from chromInfo");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     char *name = row[0];
-    if (startsWith("chr", name) && 
+    if (withRandom || (startsWith("chr", name) && 
     	!strchr(name, '_') && !sameString("chrM", name) 
-	&& !sameString("chrUn", name))
+	&& !sameString("chrUn", name)))
         {
 	AllocVar(chrom);
 	chrom->fullName = cloneString(name);
@@ -127,27 +128,29 @@ while ((row = sqlNextRow(sr)) != NULL)
 if (chromList == NULL)
     errAbort("No chromosomes starting with chr in chromInfo for %s.", database);
 slReverse(&chromList);
-slSort(&chromList, clChromCmpNum);
+slSort(&chromList, genoLayChromCmpNum);
 return chromList;
 }
 
-void separateSexChroms(struct clChrom *in,
-	struct clChrom **retAutoList, struct clChrom **retSexList)
+void separateSexChroms(struct slRef *in,
+	struct slRef **retAutoList, struct slRef **retSexList)
 /* Separate input chromosome list into sex and non-sex chromosomes. */
 {
-struct clChrom *autoList = NULL, *sexList = NULL, *chrom, *next;
-for (chrom = in; chrom != NULL; chrom = next)
+struct slRef *autoList = NULL, *sexList = NULL, *ref, *next;
+
+for (ref = in; ref != NULL; ref = next)
     {
+    struct genoLayChrom *chrom = ref->val;
     char *name = chrom->shortName;
-    next = chrom->next;
+    next = ref->next;
     if (sameWord(name, "X") || sameWord(name, "Y") || sameWord(name, "Z")
     	|| sameWord(name, "W"))
 	{
-	slAddHead(&sexList, chrom);
+	slAddHead(&sexList, ref);
 	}
     else
         {
-	slAddHead(&autoList, chrom);
+	slAddHead(&autoList, ref);
 	}
     }
 slReverse(&sexList);
@@ -156,18 +159,35 @@ slReverse(&autoList);
 *retSexList = sexList;
 }
 
-struct chromLayout *chromLayoutCreate(struct clChrom *chromList,
-	MgFont *font, int picWidth, int lineHeight)
+struct slRef *refListFromSlList(void *list)
+/* Make a reference list that mirrors a singly-linked list. */
+{
+struct slList *el;
+struct slRef *refList = NULL, *ref;
+for (el= list; el != NULL; el = el->next)
+    {
+    ref = slRefNew(el);
+    slAddHead(&refList, ref);
+    }
+slReverse(&refList);
+return refList;
+}
+
+struct genoLay *genoLayNew(struct genoLayChrom *chromList,
+	MgFont *font, int picWidth, int lineHeight,
+	int minLeftLabelWidth, int minRightLabelWidth)
 /* Figure out layout.  For human and most mammals this will be
  * two columns with sex chromosomes on bottom.  This is complicated
  * by the platypus having a bunch of sex chromosomes. */
 {
 int margin = 2;
-struct clChrom *chrom, *left, *right;
-struct chromLayout *cl;
+struct slRef *refList = NULL, *ref, *left, *right;
+struct genoLayChrom *xyz;
+struct genoLay *cl;
 int autoCount, halfCount, bases, chromInLine;
 int leftLabelWidth=0, rightLabelWidth=0, labelWidth;
 int spaceWidth = mgFontCharWidth(font, ' ');
+int extraLabelPadding = 0;
 int autosomeOtherPixels=0, sexOtherPixels=0;
 int autosomeBasesInLine=0;	/* Maximum bases in a line for autosome. */
 int sexBasesInLine=0;		/* Bases in line for sex chromsome. */
@@ -175,25 +195,27 @@ double sexBasesPerPixel, autosomeBasesPerPixel, basesPerPixel;
 int pos = margin;
 int y = 0;
 
+refList = refListFromSlList(chromList);
 AllocVar(cl);
+cl->chromList = chromList;
 cl->font = font;
 cl->picWidth = picWidth;
 cl->margin = margin;
 cl->spaceWidth = spaceWidth;
 
 /* Put sex chromosomes on bottom, and rest on left. */
-separateSexChroms(chromList, &chromList, &cl->bottomList);
-autoCount = slCount(chromList);
-cl->leftList = chromList;
+separateSexChroms(refList, &refList, &cl->bottomList);
+autoCount = slCount(refList);
+cl->leftList = refList;
 
 /* If there are a lot of chromosomes, then move later
  * (and smaller) chromosomes to a new right column */
 if (autoCount > 12)
     {
     halfCount = (autoCount+1)/2;
-    chrom = slElementFromIx(chromList, halfCount-1);
-    cl->rightList = chrom->next;
-    chrom->next = NULL;
+    ref = slElementFromIx(refList, halfCount-1);
+    cl->rightList = ref->next;
+    ref->next = NULL;
     slReverse(&cl->rightList);
     }
 
@@ -206,18 +228,20 @@ while (left || right)
     chromInLine = 0;
     if (left)
         {
-	labelWidth = mgFontStringWidth(font, left->shortName) + spaceWidth;
+	xyz = left->val;
+	labelWidth = mgFontStringWidth(font, xyz->shortName) + spaceWidth;
 	if (leftLabelWidth < labelWidth)
 	    leftLabelWidth = labelWidth;
-	bases = left->size;
+	bases = xyz->size;
 	left = left->next;
 	}
     if (right)
         {
-	labelWidth = mgFontStringWidth(font, right->shortName) + spaceWidth;
+	xyz = right->val;
+	labelWidth = mgFontStringWidth(font, xyz->shortName) + spaceWidth;
 	if (rightLabelWidth < labelWidth)
 	    rightLabelWidth = labelWidth;
-	bases += right->size;
+	bases += xyz->size;
 	right = right->next;
 	}
     if (autosomeBasesInLine < bases)
@@ -231,17 +255,18 @@ if (cl->bottomList)
     cl->lineCount += 1;
     bases = 0;
     sexOtherPixels = spaceWidth + 2*margin;
-    for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
+    for (ref = cl->bottomList; ref != NULL; ref = ref->next)
 	{
-	sexBasesInLine += chrom->size;
-	labelWidth = mgFontStringWidth(font, chrom->shortName) + spaceWidth;
-	if (chrom == cl->bottomList )
+	xyz = ref->val;
+	sexBasesInLine += xyz->size;
+	labelWidth = mgFontStringWidth(font, xyz->shortName) + spaceWidth;
+	if (ref == cl->bottomList )
 	    {
 	    if (leftLabelWidth < labelWidth)
 		leftLabelWidth  = labelWidth;
 	    sexOtherPixels = leftLabelWidth;
 	    }
-	else if (chrom->next == NULL)
+	else if (ref->next == NULL)
 	    {
 	    if (rightLabelWidth < labelWidth)
 		rightLabelWidth  = labelWidth;
@@ -254,6 +279,20 @@ if (cl->bottomList)
 	}
     }
 
+/* Do some adjustments if side labels are bigger than needed for
+ * chromosome names. */
+if (leftLabelWidth < minLeftLabelWidth)
+    {
+    extraLabelPadding += (minLeftLabelWidth - leftLabelWidth);
+    leftLabelWidth = minLeftLabelWidth;
+    }
+if (rightLabelWidth < minRightLabelWidth)
+    {
+    extraLabelPadding += (minRightLabelWidth - rightLabelWidth);
+    rightLabelWidth = minRightLabelWidth;
+    }
+sexOtherPixels += extraLabelPadding;
+
 /* Figure out the number of bases needed per pixel. */
 autosomeOtherPixels = 2*margin + spaceWidth + leftLabelWidth + rightLabelWidth;
 basesPerPixel = autosomeBasesPerPixel 
@@ -264,82 +303,85 @@ if (cl->bottomList)
     if (sexBasesPerPixel > basesPerPixel)
         basesPerPixel = sexBasesPerPixel;
     }
+
+/* Save positions and sizes of some things in layout structure. */
 cl->leftLabelWidth = leftLabelWidth;
 cl->rightLabelWidth = rightLabelWidth;
 cl->basesPerPixel = basesPerPixel;
 uglyf("autosomeOtherPixels %d, sexOtherPixels %d, picWidth %d<BR>\n", autosomeOtherPixels, sexOtherPixels, picWidth);
 
 /* Set pixel positions for left autosomes */
-for (chrom = cl->leftList; chrom != NULL; chrom = chrom->next)
+for (ref = cl->leftList; ref != NULL; ref = ref->next)
     {
-    chrom->x = leftLabelWidth + margin;
-    chrom->y = y;
-    chrom->width = round(chrom->size/basesPerPixel);
-    chrom->height = lineHeight;
+    xyz = ref->val;
+    xyz->x = leftLabelWidth + margin;
+    xyz->y = y;
+    xyz->width = round(xyz->size/basesPerPixel);
+    xyz->height = lineHeight;
     y += lineHeight;
     }
 
 /* Set pixel positions for right autosomes */
 y = 0;
-for (chrom = cl->rightList; chrom != NULL; chrom = chrom->next)
+for (ref = cl->rightList; ref != NULL; ref = ref->next)
     {
-    chrom->width = round(chrom->size/basesPerPixel);
-    chrom->height = lineHeight;
-    chrom->x = picWidth - margin - rightLabelWidth - chrom->width;
-    chrom->y = y;
+    xyz = ref->val;
+    xyz->width = round(xyz->size/basesPerPixel);
+    xyz->height = lineHeight;
+    xyz->x = picWidth - margin - rightLabelWidth - xyz->width;
+    xyz->y = y;
     y += lineHeight;
     }
 cl->picHeight = 2*margin + lineHeight * cl->lineCount;
 y = cl->picHeight - margin - lineHeight;
 
 /* Set pixel positions for sex chromosomes */
-for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
+for (ref = cl->bottomList; ref != NULL; ref = ref->next)
     {
-    chrom->y = y;
-    chrom->width = round(chrom->size/basesPerPixel);
-    chrom->height = lineHeight;
-    if (chrom == cl->bottomList)
-	chrom->x = leftLabelWidth + margin;
-    else if (chrom->next == NULL)
-        chrom->x = picWidth - margin - rightLabelWidth - chrom->width;
+    xyz = ref->val;
+    xyz->y = y;
+    xyz->width = round(xyz->size/basesPerPixel);
+    xyz->height = lineHeight;
+    if (ref == cl->bottomList)
+	xyz->x = leftLabelWidth + margin;
+    else if (ref->next == NULL)
+        xyz->x = picWidth - margin - rightLabelWidth - xyz->width;
     else
-	chrom->x = 2*spaceWidth+mgFontStringWidth(font,chrom->shortName) + pos;
-    pos = chrom->x + chrom->width;
+	xyz->x = 2*spaceWidth+mgFontStringWidth(font,xyz->shortName) + pos;
+    pos = xyz->x + xyz->width;
     }
 return cl;
 }
 
-void drawChrom(struct vGfx *vg, struct clChrom *chrom, int chromBoxHeight,
+void drawChrom(struct vGfx *vg, struct genoLayChrom *chrom, int chromBoxHeight,
 	int color)
 {
 vgBox(vg, chrom->x, chrom->y + chrom->height - chromBoxHeight, 
     chrom->width, chromBoxHeight, color);
 }
 
-void leftLabel(struct vGfx *vg, struct chromLayout *cl,
-	struct clChrom *chrom, int fontHeight, int chromBoxHeight,
+void leftLabel(struct vGfx *vg, struct genoLay *cl,
+	struct genoLayChrom *chrom, int fontHeight, int chromBoxHeight,
 	int color)
 /* Draw a chromosome with label on left. */
 {
 vgTextRight(vg, cl->margin, chrom->y + chrom->height - fontHeight, 
     chrom->x - cl->margin - cl->spaceWidth, fontHeight, color,
     cl->font, chrom->shortName);
-drawChrom(vg, chrom, chromBoxHeight, color);
 }
 
-void rightLabel(struct vGfx *vg, struct chromLayout *cl,
-	struct clChrom *chrom, int fontHeight, int chromBoxHeight,
+void rightLabel(struct vGfx *vg, struct genoLay *cl,
+	struct genoLayChrom *chrom, int fontHeight, int chromBoxHeight,
 	int color)
 /* Draw a chromosome with label on left. */
 {
 vgText(vg, chrom->x + chrom->width + cl->spaceWidth,
 	chrom->y + chrom->height - fontHeight, 
 	color, cl->font, chrom->shortName);
-drawChrom(vg, chrom, chromBoxHeight, color);
 }
 
-void midLabel(struct vGfx *vg, struct chromLayout *cl,
-	struct clChrom *chrom, int fontHeight, int chromBoxHeight,
+void midLabel(struct vGfx *vg, struct genoLay *cl,
+	struct genoLayChrom *chrom, int fontHeight, int chromBoxHeight,
 	int color)
 /* Draw a chromosome with label on left. */
 {
@@ -349,15 +391,15 @@ vgTextRight(vg, chrom->x - textWidth - cl->spaceWidth,
     chrom->y + chrom->height - fontHeight, 
     textWidth, fontHeight, color,
     font, chrom->shortName);
-drawChrom(vg, chrom, chromBoxHeight, color);
 }
 
-void genomeGif(struct sqlConnection *conn, struct chromLayout *cl)
+void genomeGif(struct sqlConnection *conn, struct genoLay *cl)
 /* Create genome GIF file and HTML that includes it. */
 {
 struct vGfx *vg;
 struct tempName gifTn;
-struct clChrom *chrom;
+struct slRef *ref;
+struct genoLayChrom *chrom;
 int chromBoxHeight = 8;
 MgFont *font = cl->font;
 int fontHeight = mgFontPixelHeight(font);
@@ -368,19 +410,25 @@ vg = vgOpenGif(cl->picWidth, cl->picHeight, gifTn.forCgi);
 printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d>",
 	    gifTn.forHtml, cl->picWidth, cl->picHeight);
 
-for (chrom = cl->leftList; chrom != NULL; chrom = chrom->next)
-    leftLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
-for (chrom = cl->rightList; chrom != NULL; chrom = chrom->next)
-    rightLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
-for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
+/* Draw chromosome labels. */
+for (ref = cl->leftList; ref != NULL; ref = ref->next)
+    leftLabel(vg, cl, ref->val, fontHeight, chromBoxHeight, color);
+for (ref = cl->rightList; ref != NULL; ref = ref->next)
+    rightLabel(vg, cl, ref->val, fontHeight, chromBoxHeight, color);
+for (ref = cl->bottomList; ref != NULL; ref = ref->next)
     {
-    if (chrom == cl->bottomList)
+    chrom = ref->val;
+    if (ref == cl->bottomList)
 	leftLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
-    else if (chrom->next == NULL)
+    else if (ref->next == NULL)
 	rightLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
     else
         midLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
     }
+
+/* Draw chromosomes proper. */
+for (chrom = cl->chromList; chrom != NULL; chrom = chrom->next)
+    drawChrom(vg, chrom, chromBoxHeight, color);
 
 #ifdef SOMEDAY
 if(doIdeo)
@@ -440,15 +488,17 @@ void webMain(struct sqlConnection *conn)
 /* Set up fancy web page with hotlinks bar and
  * sections. */
 {
-struct clChrom *chromList, *chrom, *left, *right;
-struct chromLayout *cl;
+struct genoLayChrom *chromList, *chrom;
+struct slRef *left, *right, *ref;
+struct genoLay *cl;
 int total;
 int fontHeight, lineHeight;
 trackLayoutInit(&tl, cart);
 fontHeight = mgFontLineHeight(tl.font);
 lineHeight = fontHeight*3;
-chromList = getChromosomes(conn);
-cl = chromLayoutCreate(chromList, tl.font, tl.picWidth, lineHeight);
+chromList = genoLayDbChroms(conn, FALSE);
+cl = genoLayNew(chromList, tl.font, tl.picWidth, lineHeight, 
+	3*tl.nWidth, 4*tl.nWidth);
 uglyf("cl: lineCount %d, leftLabelWidth %d, rightLabelWidth %d, basesPerPixel %f<BR>\n",
 	cl->lineCount, cl->leftLabelWidth, cl->rightLabelWidth, cl->basesPerPixel);
 for (left = cl->leftList, right = cl->rightList; left != NULL || right != NULL;)
@@ -456,21 +506,24 @@ for (left = cl->leftList, right = cl->rightList; left != NULL || right != NULL;)
     total=0;
     if (left != NULL)
 	{
-	uglyf("%s@%d[%d] %d ----  ", left->fullName, left->x, left->width, left->size);
-	total += left->size;
+	chrom = left->val;
+	uglyf("%s@%d[%d] %d ----  ", chrom->fullName, chrom->x, chrom->width, chrom->size);
+	total += chrom->size;
         left = left->next;
 	}
     if (right != NULL)
 	{
-	uglyf("%d  %s@%d[%d]", right->size, right->fullName, right->x, right->width);
-	total += right->size;
+	chrom = right->val;
+	uglyf("%d  %s@%d[%d]", chrom->size, chrom->fullName, chrom->x, chrom->width);
+	total += chrom->size;
         right = right->next;
 	}
     uglyf(" : %d<BR>", total);
     }
 total=0;
-for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
+for (ref = cl->bottomList; ref != NULL; ref = ref->next)
     {
+    chrom = ref->val;
     total += chrom->size;
     uglyf("%s@%d[%d] %d ...  ", chrom->fullName, chrom->x, chrom->width, chrom->size);
     }
