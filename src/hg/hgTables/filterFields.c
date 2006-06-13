@@ -19,7 +19,7 @@
 #include "bedCart.h"
 #include "wiggle.h"
 
-static char const rcsid[] = "$Id: filterFields.c,v 1.45 2006/03/21 17:32:58 angie Exp $";
+static char const rcsid[] = "$Id: filterFields.c,v 1.46 2006/06/13 00:11:10 angie Exp $";
 
 /* ------- Stuff shared by Select Fields and Filters Pages ----------*/
 
@@ -1359,7 +1359,7 @@ for (var = varList; var != NULL; var = var->next)
 			    dyStringAppend(dy, "= ");
 			}
 		    dyStringAppendC(dy, '\'');
-		    dyStringAppend(dy, word);
+		    dyStringAppendEscapeQuotes(dy, word, '\'', '\\');
 		    dyStringAppendC(dy, '\'');
 		    }
 		}
