@@ -194,8 +194,8 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1032 2006/06/12 23:59:21 angie Exp $";
-static char *rootDir = "hgGeneData"; /* needs different value? */
+static char const rcsid[] = "$Id: hgc.c,v 1.1033 2006/06/13 15:11:37 giardine Exp $";
+static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
 
