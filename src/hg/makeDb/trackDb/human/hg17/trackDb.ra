@@ -1300,7 +1300,7 @@ shortLabel Human Mutation
 longLabel Compilation of Human Disease Variants and Other Mutations
 group phenDis
 priority 144.7
-visibility pack
+visibility hide
 color 150,0,150
 type bed 4 +
 
