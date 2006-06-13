@@ -63,6 +63,11 @@
 #define twoBitSwapSig 0x4327411A
 /* Signature of byte-swapped two-bit file. */
 
+#define chromGraphSig 0x4428421B
+/* Signature of chromGraph binary data file */
+
+#define chromGraphSwapSig 0x1B422844
+/* Signature of byte-swapped chromGraph binary data file */
 
 #endif /* SIG_H */
 
