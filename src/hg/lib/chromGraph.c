@@ -9,7 +9,7 @@
 #include "jksql.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.2 2006/06/12 18:23:00 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.3 2006/06/13 03:03:17 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -137,12 +137,30 @@ if (dif == 0)
 return dif;
 }
 
-#define varNameMaxSize 256
-
-void cgsCartVar(char *track, char *var, char output[varNameMaxSize])
+void chromGraphVarName(char *track, char *var, 
+	char output[chromGraphVarNameMaxSize])
 /* Fill in output with name of cart variable. */
 {
-safef(output, varNameMaxSize, "%s_%s_%s", "cgs", track, var);
+safef(output, chromGraphVarNameMaxSize, "%s_%s_%s", "cgs", track, var);
+}
+
+void chromGraphDataRange(char *trackName, struct sqlConnection *conn,
+	double *retMin, double *retMax)
+/* Get min/max values observed from metaChromGraph table */
+{
+char query[256];
+struct sqlResult *sr;
+char **row;
+safef(query, sizeof(query), 
+    "select minVal,maxVal from metaChromGraph where name='%s'",
+    trackName);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+if (row == NULL)
+    errAbort("%s is not in metaChromGraph", trackName);
+*retMin = atof(row[0]);
+*retMax = atof(row[1]);
+sqlFreeResult(&sr);
 }
 
 struct chromGraphSettings *chromGraphSettingsGet(char *trackName,
@@ -164,19 +182,7 @@ cgs->maxPixels = 128;
 /* Try and fill in max/min from database. */
 if (conn != NULL)
     {
-    char query[256];
-    struct sqlResult *sr;
-    char **row;
-    safef(query, sizeof(query), 
-    	"select minVal,maxVal from metaChromGraph where name='%s'",
-	trackName);
-    sr = sqlGetResult(conn, query);
-    row = sqlNextRow(sr);
-    if (row == NULL)
-        errAbort("%s is not in metaChromGraph", trackName);
-    cgs->minVal = atof(row[0]);
-    cgs->maxVal = atof(row[1]);
-    sqlFreeResult(&sr);
+    chromGraphDataRange(trackName, conn, &cgs->minVal, &cgs->maxVal);
     }
 
 /* Try and fill in settings from tdb */
@@ -221,15 +227,19 @@ if (tdb != NULL)
 /* Finally try and fill in settings from cart */
 if (cart != NULL)
     {
-    char varName[varNameMaxSize];
-    cgsCartVar(trackName, "maxGapToFill", varName);
+    char varName[chromGraphVarNameMaxSize];
+    chromGraphVarName(trackName, "maxGapToFill", varName);
     cgs->maxGapToFill = cartUsualInt(cart, varName, cgs->maxGapToFill);
-    cgsCartVar(trackName, "minVal", varName);
+    chromGraphVarName(trackName, "minVal", varName);
     cgs->minVal = cartUsualDouble(cart, varName, cgs->minVal);
-    cgsCartVar(trackName, "maxVal", varName);
+    chromGraphVarName(trackName, "maxVal", varName);
     cgs->maxVal = cartUsualDouble(cart, varName, cgs->maxVal);
-    cgsCartVar(trackName, "pixels", varName);
+    chromGraphVarName(trackName, "pixels", varName);
     cgs->pixels = cartUsualInt(cart, varName, cgs->pixels);
+    if (cgs->pixels < cgs->minPixels)
+        cgs->pixels = cgs->minPixels;
+    if (cgs->pixels > cgs->maxPixels)
+        cgs->pixels = cgs->maxPixels;
     }
 return cgs;
 }
