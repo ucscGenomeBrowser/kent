@@ -2490,7 +2490,6 @@ cd /cluster/data/genbank
 # gzip the Genbank sequences and create upstream sequence files for RefSeq.
 cd /cluster/data/danRer4/bigZips
 gzip *.fa
-end
 '_EOF_'
    # << this line makes emacs coloring happy
    chmod +x jkStuff/zipAll.csh
@@ -4767,6 +4766,7 @@ exit 0
 # Submission to last job:           953s      15.88m     0.26h    0.01d
    # net alignment chains
    ssh kkstore04
+   cd /cluster/data/danRer4/bed/liftOver
    makeLoChain-net danRer4 danRer3 >&! net.log &
    # load reference to over.chain into database table,
    # and create symlinks  /gbdb  and download area
@@ -4934,5 +4934,61 @@ BASE=/cluster/data/danRer4/bed/blastz.galGal3.2006-05-30
       >& do.log & tail -f do.log
     ln -s blastz.galGal3.2006-05-30 /cluster/data/danRer4/bed/blastz.galGal3
 
+###########################################################################
+# CREATE MICROARRAY DATA TRACK BY ADDING MICROARRAY DATA TO AFFY ZEBRAFISH 
+# ALIGNMENTS (DONE, 2006-06-10, hartera)
+    ssh hgwdev
+    mkdir /cluster/data/danRer4/bed/ZonLab/wtArray
+    cd /cluster/data/danRer4/bed/ZonLab/wtArray
+    hgMapMicroarray zebrafishZonWT.bed hgFixed.zebrafishZonWTMedian \
+         /cluster/data/danRer4/bed/affyZebrafish/affyZebrafish.psl
+    # Loaded 15617 rows of expression data from hgFixed.zebrafishZonWTMedian
+    # Mapped 14819,  multiply-mapped 6667, missed 0, unmapped 798
+    hgLoadBed danRer4 affyZonWildType zebrafishZonWT.bed
+    # Loaded 21486 elements of size 15
+    # add trackDb.ra entry at trackDb/zebrafish level
+# track affyZonWildType
+# shortLabel Wild Type Array
+# longLabel Zon Lab Expression data for Wild Type Zebrafish strains
+# group regulation
+# priority 80
+# visibility hide
+# type expRatio
+# expScale 8.0
+# expStep 1.0
+# expTable zebrafishZonWTMedianExps
+# chip Zebrafish
 
 ###########################################################################
+# HUMAN ORTHOLOGS ADDED TO AFFY ZEBRAFISH TRACK DETAILS
+# (DONE, 2006-06-08, hartera)
+    # Human orthologs were mapped to Affy Zebrafish probes by 
+    # Tony DiBiase (adibiase@enders.tch.harvard.edu) from Len Zon's group
+    # at Children's Hospital, Boston. They map to human hg16.
+    ssh kkstore04
+    mkdir -p /cluster/data/danRer4/bed/affyZebrafish/humanOrthologs
+    cd /cluster/data/danRer4/bed/affyZebrafish/humanOrthologs
+    sed -e 's/"//g' cumuList.gedi.2005oct12.txt > hg16Orthologs.txt
+    awk \
+    'BEGIN {FS="\t"} {OFS="\t"} {if ($2 == $1) print $1,"",""; else print;}' \
+        hg16Orthologs.txt > hg16Orthologs.tab 
+    # create a table definition for this set:
+cat << 'EOF' > orthologs.sql
+# Link together an item with an ortholog
+CREATE TABLE affyToHg16Orthologs (
+   name varchar(255) not null,        # Item ID
+   geneSymbol longblob not null,  # Gene Symbol of ortholog
+   description longblob not null, # Description of ortholog
+       # Indices
+   INDEX(name(20)),
+   INDEX(geneSymbol(20))
+);
+'EOF'    
+   # load table
+   ssh hgwdev 
+   cd /cluster/data/danRer4/bed/affyZebrafish/humanOrthologs
+   hgsql -e 'drop table affyToHg16Orthologs;' danRer4
+   hgLoadSqlTab danRer4 affyToHg16Orthologs orthologs.sql hg16Orthologs.tab
+   # edit hgc.c to use this table on affyZebrafish details page and add
+   # a search to use the human ortholog gene symbol in a search:
+   # affyZebrafishHg16Ortholog, put in trackDb/zebrafish/trackDb.ra
