@@ -4,10 +4,8 @@
 #include "binRange.h"
 #include "hash.h"
 
-/* Sized to hold maximum chromosome we have encountered.  This avoids need to
- * get chrom sizes from database at the expense of more memory used and
- * sometimes having to update this value. */
-static const int MAX_CHROM_SIZE = 400000000;
+/* Sized hold a very larger chromosome. */
+static const int MAX_CHROM_SIZE = 1000000000;
 
 struct chromBins *chromBinsNew(chromBinsFreeFunc *freeFunc)
 /* create a new chromBins object */
