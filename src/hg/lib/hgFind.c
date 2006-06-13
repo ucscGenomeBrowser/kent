@@ -31,7 +31,7 @@
 #include "hgConfig.h"
 #include "trix.h"
 
-static char const rcsid[] = "$Id: hgFind.c,v 1.186 2006/05/18 18:03:12 angie Exp $";
+static char const rcsid[] = "$Id: hgFind.c,v 1.187 2006/06/13 17:18:56 angie Exp $";
 
 extern struct cart *cart;
 char *hgAppName = "";
@@ -232,9 +232,10 @@ return isPrefix;
 
 static boolean allKeysPrefix(char **keys, int keyCount, char *text)
 /* Make sure that all keys in text are proper prefixes of a word. */
+/* NOTE: this is case sensitive.  To ignore case, caller must ensure that 
+ * all keys and text have been forced to the same case. */
 {
 int i;
-touppers(text);
 for (i=0; i<keyCount; ++i)
     {
     if (!keyIsPrefix(keys[i], text))
@@ -372,6 +373,7 @@ char **cmds[HGFIND_MAX_KEYWORDS+1];
 char *escapedKey = cloneString(key);
 int keyCount;
 
+touppers(escapedKey);
 keyCount = chopLine(escapedKey, keyWords);
 keyCount = removeTooCommon(table, keyWords, keyCount);
 if (keyCount > 0)
@@ -388,7 +390,7 @@ if (keyCount > 0)
 	{
 	id = nextWord(&line);
 	rest = skipLeadingSpaces(line);
-	touppers(line);
+	touppers(rest);
 	if (allKeysPrefix(keyWords, keyCount, rest))
 	    {
 	    struct slName *idEl = slNameNew(id);
@@ -1725,8 +1727,7 @@ else
     char buf[512];
     int wordCount;
     int i;
-    strncpy(buf, keys, sizeof(buf));
-    buf[sizeof(buf)-1] = 0;
+    safef(buf, sizeof(buf), "%s", keys);
     wordCount = chopLine(buf, words);
     if (wordCount == 0)
 	return FALSE;
