@@ -5,6 +5,14 @@
 #ifndef CHROMGRAPH_H
 #define CHROMGRAPH_H
 
+#ifndef TRACKDB_H
+#include "trackDb.h"
+#endif
+
+#ifndef CART_H
+#include "cart.h"
+#endif
+
 #define CHROMGRAPH_NUM_COLS 3
 
 struct chromGraph
@@ -61,6 +69,34 @@ void chromGraphOutput(struct chromGraph *el, FILE *f, char sep, char lastSep);
 
 int chromGraphCmp(const void *va, const void *vb);
 /* Compare to sort based on query chromStart. */
+
+struct chromGraphSettings
+/* Settings */
+    {
+    int maxGapToFill;		/* Maximum gap to fill with line */
+    double minVal, maxVal;	/* Max/min data range */
+    int linesAtCount;		/* Number of horizontal labeling lines */
+    double *linesAt;		/* Data values to label with horizontal line */
+    int minPixels;		/* Minimum allowed pixels. */
+    int pixels;			/* Actual pixels. */
+    int maxPixels;		/* Maximum allowed pixels. */
+    };
+
+struct chromGraphSettings *chromGraphSettingsGet(char *trackName,
+	struct sqlConnection *conn, struct trackDb *tdb, struct cart *cart);
+/* Get settings for chromGraph track.  If you pass in all NULLs
+ * you'll get a reasonable default. */
+
+#define chromGraphVarNameMaxSize 512
+
+void chromGraphVarName(char *track, char *var, 
+	char output[chromGraphVarNameMaxSize]);
+/* Fill in output with name of cart variable. */
+
+void chromGraphDataRange(char *trackName, struct sqlConnection *conn,
+	double *retMin, double *retMax);
+/* Get min/max values observed from metaChromGraph table */
+	
 
 #endif /* CHROMGRAPH_H */
 
