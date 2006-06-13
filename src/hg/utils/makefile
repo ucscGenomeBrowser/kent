@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.1 2006/05/20 14:42:23 hiram Exp $
+# 	$Id: makefile,v 1.2 2006/06/13 20:21:04 kent Exp $
 
 include ../../inc/common.mk
 
@@ -42,6 +42,8 @@ SCRIPT_FILES = \
 USE_DIRS = $(DIRS)
 
 DIRS = \
+	chromGraphFromBin \
+	chromGraphToBin \
 	safePush \
 	toDev64
 
