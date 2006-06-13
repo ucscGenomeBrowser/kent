@@ -3,9 +3,10 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "jksql.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraphFromBin.c,v 1.1 2006/06/13 14:07:46 kent Exp $";
+static char const rcsid[] = "$Id: chromGraphFromBin.c,v 1.2 2006/06/13 16:15:18 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
