@@ -14,11 +14,18 @@ are not displayed, they can be
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-The FAIRE data are represented by two subtracks. One subtrack shows the average 
-normalized log2 ratios for the tiled probes; the other displays peaks.  
-Peaks were determined using <em>PeakFinder</em> software supplied by 
-NimbleGen.  A false positive rate was estimated for the sets of peaks using a 
-permutation-based method. All peaks had an FPR of &lt; 0.01.</P>
+The FAIRE data are represented by three subtracks. One subtrack is simply the 
+average normalized log2 ratios for the tiled probes and the other two display 
+peaks.  One set of peaks were determined using <em>PeakFinder</em> software 
+supplied by NimbleGen.  A false positive rate was estimated for the sets of 
+peaks using a permutation-based method. All peaks had an FPR of &lt; 0.01. The
+other set of peaks (Apr. 2006 update) were identified by ChIPOTle, a peak 
+finding algorithm which uses a sliding window to identify statistically
+significant signals that comprise a peak.  A null distribution was determined 
+by reflecting the negative data, which is presumed to be noise, about zero and 
+a Gaussian distribution was fitted to it.  Windows were considered 
+significant with a p-value < 1e-25, after using the Benjamini-Hochberg 
+correction for multiple tests.</P>
 <P>
 This annotation follows the display conventions for composite 
 tracks. The subtracks within this annotation 
@@ -34,17 +41,16 @@ configuration help</A> link.</P>
 <P>
 To perform FAIRE, proteins were cross-linked to DNA using 
 1% formaldehyde solution, the complex was sheared using sonication, and a 
-phenol/chloroform extraction was performed 
-to remove DNA fragments crosslinked to protein.  The DNA recovered in the 
-aqueous phase was fluorescently-labeled and 
-hybridized to a microarray along with fluorescently-labeled genomic DNA as 
-a control.  Ratios were scaled by subtracting the 
-Tukey Bi-weight mean for the log-ratio values from each log-ratio value, 
-as recomended by NimbleGen.  Results in yeast were 
+phenol/chloroform extraction was performed to remove DNA fragments 
+crosslinked to protein.  The DNA recovered in the aqueous phase was 
+fluorescently-labeled and hybridized to a microarray along with 
+fluorescently-labeled genomic DNA as a control.  Ratios were scaled by 
+subtracting the Tukey Bi-weight mean for the log-ratio values from each 
+log-ratio value, as recomended by NimbleGen.  Results in yeast were 
 consistent with enrichment for nucleosome-depleted regions of the genome. 
-Therefore, the method may have utility as 
-a positive selection for genomic regions with properties normally detected by 
-assays like DNAse hypersensitivity. </P>
+Therefore, the method may have utility as a positive selection for genomic 
+regions with properties normally detected by assays like DNAse 
+hypersensitivity. </P>
 
 <H2>Verification</H2>
 <P>
@@ -68,4 +74,9 @@ Nagy, P.L., Cleary, M.L., Brown, P.O., and Lieb, J.L.
 <A HREF="http://www.pnas.org/cgi/content/full/100/11/6364"
 TARGET=_blank>Genomewide demarcation of RNA polymerase II transcription units 
 revealed by physical fractionation of chromatin</A>. 
-<em>PNAS</em> <B>100</B>(11), 6364-9 (2003).</P>
+<em>PNAS</em> <B>100</B>(11), 6364-9 (2003).
+
+Buck, MJ., Nobel, AB., and Lieb JD. <A HREF="http://genomebiology.com/2005/6/11/R97"> ChIPOTle: a user-friendly
+tool for the analysis of ChIP-chip data</A>. <em>Genome Biology</em> <B>6</B>
+(11):R97 (2005).
+</P>
