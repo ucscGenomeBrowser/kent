@@ -36,7 +36,7 @@ if (vis == tvFull && cgs->linesAtCount != 0)
     Color lightBlue = vgFindRgb(vg, &guidelineColor);
     for (i=0; i<cgs->linesAtCount; ++i)
         {
-	y = (cgs->linesAt[i] - minVal)*yScale + yOff;
+	y = height - 1 - (cgs->linesAt[i] - minVal)*yScale + yOff;
 	vgBox(vg, xOff, y, width, 1, lightBlue);
 	}
     }
@@ -152,7 +152,7 @@ else
     for (i=0; i<cgs->linesAtCount; ++i)
         {
 	double val = cgs->linesAt[i];
-	int y = (val - minVal)*yScale + realYoff;
+	int y = realHeight - 1 - (val - minVal)*yScale + realYoff;
 	char numText[16];
 	vgBox(vg, xOff + width - tickSize, y, tickSize, 1, color);
 	safef(numText, sizeof(numText), "%g", val);
