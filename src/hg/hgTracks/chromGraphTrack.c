@@ -21,7 +21,7 @@ struct sqlConnection *conn = hAllocConn();
 char query[512];
 struct sqlResult *sr;
 char **row;
-int x,y,lastX=0,lastY=0;
+int x,y,lastX=0,lastY=0, llastX = 0, llastY = 0;
 int height = tg->height;
 int maxGapToFill = cgs->maxGapToFill;
 int lastPos = -maxGapToFill-1;
@@ -49,10 +49,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (x >= xOff)
         {
 	if (pos - lastPos <= maxGapToFill)
-	    vgLine(vg, lastX, lastY, x, y, color);
+	    {
+	    if (llastX != lastX || llastY != lastY || lastX != x || lastY != y)
+		vgLine(vg, lastX, lastY, x, y, color);
+	    }
 	else
 	    vgDot(vg, x, y, color);
 	}
+    llastX = lastX;
+    llastY = lastY;
     lastX = x;
     lastY = y;
     lastPos = pos;
