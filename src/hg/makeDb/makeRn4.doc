@@ -766,7 +766,7 @@ rn4.mgcTables.mgc = all
     hgLoadWiggle -pathPrefix=/gbdb/rn4/wib rn4 gc5Base gc5Base.wig
 
 
-# ENSEMBL GENES (DONE 1/30/06 angie - UPDATED 6/12/06)
+# ENSEMBL GENES (DONE 1/30/06 angie - UPDATED 6/13/06)
     mkdir /cluster/data/rn4/bed/ensembl
     cd /cluster/data/rn4/bed/ensembl
     # Get the ensembl gene data from 
@@ -781,7 +781,8 @@ rn4.mgcTables.mgc = all
     # it compatible with our software.
     gunzip -c ensembl.gff.gz \
     | perl -wpe 's/^([0-9]+|X|Y|M|Un(_random)?)/chr$1/ \
-                 || die "Line $. doesnt start with rat chrom:\n$_"' \
+                 || die "Line $. doesnt start with rat chrom:\n$_"; \
+                 s/^chrMT/chrM/;' \
     > ensGene.gtf
     ssh hgwdev
     ldHgGene -gtf -genePredExt rn4 ensGene \
@@ -3486,7 +3487,7 @@ _EOF_
     # Create table that maps between known genes and RefSeq
     hgMapToGene rn4 refGene knownGene knownToRefSeq
 
-    # Create knownToEnsembl column -- redone 6/12/06 after ensGene update
+    # Create knownToEnsembl column -- redone 6/13/06 after ensGene update
     hgMapToGene rn4 ensGene knownGene knownToEnsembl
 
 
