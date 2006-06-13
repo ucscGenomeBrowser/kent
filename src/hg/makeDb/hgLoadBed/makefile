@@ -11,7 +11,6 @@ A = hgLoadBed
 hgLoadBed: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${HOME}/bin/${MACHTYPE}/${A} $O ${MYLIBS} $L
 	${STRIP} ${HOME}/bin/${MACHTYPE}/hgLoadBed${EXE}
-	${MAKE} cgi
 
 compile:	${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${A} $O ${MYLIBS} $L
