@@ -9482,20 +9482,22 @@ exonWalk:cds          31207765 27951670  1.00%  89.57%  90.24% 90.24% 90.24%
   # structure filters
   # first, remove pairs that can't form in human 
   cut -f 1-6 rawFoldsHg18.bed > tmp.bed
+  # sequenceForBed can be found and compiled from here: $HOME/kent/src/hg/altSplice/altSplice/
   nice /cluster/home/sugnet/bin/i386/sequenceForBed -db=hg18 -bedIn=tmp.bed -fastaOut=tmp.fa 
   cat tmp.fa | sed -e 's/\.[+-]\.chr.*$//' \
              | sed -e '/^>/s/$/\t/' | tr -d '\n' | sed -e 's/>/\n/g' | sed -e '1d' -e '$s/$/\n/' | sort -k1,1 > foldsHg18Seq.tab
   join -1 4 -2 1 -o "1.4 1.8 2.2" rawFoldsHg18.bed foldsHg18Seq.tab | sed -e 's/  */\t/g' | sort -k1,1 \
 	     | /cluster/home/jsp/scripts/tabFoldFilter.py > cleanFolds.tab
   join -1 4 -2 1 -o "1.1 1.2 1.3 1.4 1.5 1.6 1.7 2.2 1.9" rawFoldsHg18.bed cleanFolds.tab | sed -e 's/  */\t/g' > tmp1.bed
-  # second, remove poor predictions
+  # second, remove poor predictions 
+  # scripts can be found in cvs tree at: cvsroot/jsp/scripts/. They use a few modules which can be found at: cvsroot/jsp/py_modules
   cat tmp1.bed | /cluster/home/jsp/scripts/bedRnassFilter.py --dangling --minAvrStemSize=3 | /cluster/home/jsp/scripts/bedRnassFilter.sh 1 3 \
-	       | /cluster/home//scripts/roundListFloats.py -c9 > foldsHg18.bed
+	       | /cluster/home/jsp/scripts/roundListFloats.py -c9 > foldsHg18.bed
   # clean up
   rm tmp.bed tmp1.bed foldsHg17.bed foldsHg18Seq.tab rawFoldsHg18.bed tmp.fa cleanFolds.tab
 
   # upload
-  hgLoadBed -notItemRgb -sqlTable=/cluster/home/jsp/prog/kent/src/hg/lib/evofold.sql hg18 evofold foldsHg18.bed
+  hgLoadBed -notItemRgb -sqlTable=$HOME/kent/src/hg/lib/evofold.sql hg18 evofold foldsHg18.bed
 
 
 #########################################################################
