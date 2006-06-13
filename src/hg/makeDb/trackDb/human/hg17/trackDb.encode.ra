@@ -1124,7 +1124,7 @@ maxHeightPixels 128:16:16
 minLimit .5
 maxLimit 15
 windowingFunction mean
-viewLimits .5 5
+viewLimits .5:5
 autoScale off
 color 204,0,051 
 altColor 50, 50, 50
@@ -1163,6 +1163,66 @@ dataVersion ENCODE Oct 2005 Freeze
     type bed 5 .
     useScore 1
     priority 5
+
+track encodeUppsalaChipBut
+compositeTrack on
+shortLabel Uppsala ChIP Butyrate
+longLabel University of Uppsala, Sweden ChIP/Chip Na-butyrate time series
+group encodeChip
+priority 61.5
+chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
+visibility hide
+type wig 0.0 15.7
+spanList 1
+maxHeightPixels 128:16:16
+windowingFunction mean
+viewLimits 0:2
+autoScale off
+color 204,0,051 
+altColor 50, 50, 50
+dataVersion ENCODE May 2006
+
+    track encodeUppsalaChipH3acBut0h
+    subTrack encodeUppsalaChipBut
+    shortLabel UU H3ac HepG2 0h
+    longLabel University of Uppsala, Sweden  ChIP/Chip (H3ac, HepG2, Butyrate 0h) 
+    priority 1
+
+    track encodeUppsalaChipH3acBut12h
+    subTrack encodeUppsalaChipBut
+    shortLabel UU H3ac HepG2 12h
+    longLabel University of Uppsala, Sweden  ChIP/Chip (H3ac, HepG2, Butyrate 12h) 
+    priority 2
+
+    track encodeUppsalaChipH4acBut0h
+    subTrack encodeUppsalaChipBut
+    shortLabel UU H4ac HepG2 0h
+    longLabel University of Uppsala, Sweden  ChIP/Chip (H4ac, HepG2, Butyrate 0h) 
+    priority 3
+
+    track encodeUppsalaChipH4acBut12h
+    subTrack encodeUppsalaChipBut
+    shortLabel UU H4ac HepG2 12h
+    longLabel University of Uppsala, Sweden  ChIP/Chip (H4ac, HepG2, Butyrate 12h) 
+    priority 4
+
+    track encodeUppsalaChipH3acBut0vs12
+    subTrack encodeUppsalaChipBut
+    noInherit on
+    shortLabel UU H3ac 0h vs 12h
+    longLabel University of Uppsala, Sweden  ChIP/Chip (H3ac 0h vs. 12h)
+    type bed 9 .
+    itemRgb on
+    priority 5
+
+    track encodeUppsalaChipH4acBut0vs12
+    subTrack encodeUppsalaChipBut
+    noInherit on
+    shortLabel UU H4ac 0h vs 12h
+    longLabel University of Uppsala, Sweden  ChIP/Chip (H4ac 0h vs. 12h)
+    type bed 9 .
+    itemRgb on
+    priority 6
 
 track encodeYaleChIPSTAT1Pval
 compositeTrack on
