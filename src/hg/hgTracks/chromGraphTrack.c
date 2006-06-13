@@ -76,9 +76,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (pos >= seqEnd)
         break;
     }
-
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+
+/* Do map box */
+hPrintf("<AREA SHAPE=RECT COORDS=\"%d,%d,%d,%d\" ", xOff, yOff, xOff+width,
+	yOff+height);
+hPrintf("HREF=\"../cgi-bin/hgTrackUi?%s&c=%s&g=%s\">\n",
+	cartSidUrlString(cart), chromName, tg->mapName);
 }
 
 int cgTotalHeight(struct track *tg, enum trackVisibility vis)
