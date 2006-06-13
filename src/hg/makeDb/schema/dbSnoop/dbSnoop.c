@@ -8,7 +8,7 @@
 #include "obscure.h"
 #include "tableStatus.h"
 
-static char const rcsid[] = "$Id: dbSnoop.c,v 1.9 2006/05/20 00:55:14 kent Exp $";
+static char const rcsid[] = "$Id: dbSnoop.c,v 1.10 2006/06/13 15:52:56 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -155,7 +155,6 @@ void tableSummary(struct tableStatus *status,
 {
 char query[256];
 struct sqlResult *sr;
-int rowCount;
 char **row;
 struct dyString *fields = dyStringNew(0);
 struct tableInfo *ti;
@@ -226,7 +225,6 @@ void unsplitTables(struct sqlConnection *conn, struct tableInfo **pList)
 {
 /* Note, this routine leaks a little memory, but in this context that's
  * that's ok. */
-struct slName *chrom;
 struct tableInfo *ti, *newList = NULL, *next;
 struct hash *splitHash = hashNew(0);
 
@@ -306,7 +304,6 @@ void printIndexes(FILE *f, struct sqlConnection *conn, struct tableInfo *ti)
 {
 char query[256], **row;
 struct sqlResult *sr;
-int indexCount = 0;
 struct indexGroup *groupList = NULL, *group;
 struct hash *groupHash = newHash(8);
 struct indexInfo *ii;
@@ -393,8 +390,6 @@ struct tableInfo *tiList = NULL, *ti;
 struct tableType *ttList = NULL, *tt;
 long long totalData = 0, totalIndex = 0, totalRows = 0;
 int totalFields = 0;
-int indexCount = 0;	/* # of indexes, not bytes in indexes */
-
 
 /* Collect info from database. */
 while ((row = sqlNextRow(sr)) != NULL)
@@ -414,7 +409,6 @@ if (unsplit)
 /* Print overall database summary. */
 for (ti = tiList; ti != NULL; ti = ti->next)
     {
-    struct tableStatus *status = ti->status;
     totalFields += slCount(ti->fieldList);
     totalData += ti->status->dataLength;
     totalIndex += ti->status->indexLength;
@@ -437,7 +431,6 @@ fprintf(f, "TABLE SIZE SUMMARY:\n");
 fprintf(f, "#bytes\tname\trows\tdata\tindex\n");
 for (ti = tiList; ti != NULL; ti = ti->next)
     {
-    struct slName *t;
     printLongNumber(f, ti->status->dataLength + ti->status->indexLength);
     fprintf(f, "\t");
     fprintf(f, "%s\t", ti->name);
@@ -456,7 +449,6 @@ fprintf(f, "TABLE UPDATE SUMMARY:\n");
 fprintf(f, "#table\tupdate time\tcreate time\tcheckTime\t\n");
 for (ti = tiList; ti != NULL; ti = ti->next)
     {
-    struct slName *t;
     fprintf(f, "%s\t%s\t%s\t%s\n", ti->status->updateTime, ti->name,
     	ti->status->createTime, naForNull(ti->status->checkTime));
     }

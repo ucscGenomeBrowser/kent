@@ -8,7 +8,7 @@
 #include "hgRelate.h"
 #include "asParse.h"
 
-static char const rcsid[] = "$Id: makeTableDescriptions.c,v 1.1 2005/11/22 23:45:29 kent Exp $";
+static char const rcsid[] = "$Id: makeTableDescriptions.c,v 1.2 2006/06/13 15:50:51 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -32,11 +32,12 @@ void makeTableDescriptions(char *database, char *asFile)
 /* makeTableDescriptions - Add table descriptions to database.. */
 {
 struct sqlConnection *conn = sqlConnect(database);
-struct asObject *asList = asParseFile(asFile);	/* Just to check syntax */
 struct lineFile *lf = lineFileOpen(asFile, TRUE);
 FILE *f = hgCreateTabFile(".", "tableDescriptions");
 /* Open a tab file with name corresponding to tableName in tmpDir. */
 char *line;
+
+/* struct asObject *asList = */ asParseFile(asFile);	/* Just to check syntax */
 
 if (sqlTableExists(conn, "chromInfo"))
     errAbort("%s looks like a genome database, has chromInfo, aborting", 
