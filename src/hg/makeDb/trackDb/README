@@ -195,6 +195,20 @@ The format of the type fields:
    Two extra options are used here to specify maximum graphing bounds:
       minLimit <value>   # default is 0
       maxLimit <value>   # default is 1000
+
+16. type chromGraph
+   This draws lines connecting sparse, variably spaced data points.
+   Use wiggle for regularly spaced or dense data.  When using chromGraph
+   the following other settings may be used:
+       maxGapToFill <value> # default is 25000.  No line will be drawn between
+                            # data points further apart than this
+       maxHeightPixels <max:val:min>  # default 100:32:8
+                            # Specifies allowed and actual height in full mode.
+       minMax <min,max> # default is calculated from data in track
+                            # Specifies displayed data range
+       linesAt <val1,val2,...> # Default is none
+                            # If present labeled horizontal lines will be drawn
+			    # at the given values in full mode.
     
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
