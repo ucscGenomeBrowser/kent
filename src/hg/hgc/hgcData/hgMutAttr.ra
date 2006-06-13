@@ -14,8 +14,3 @@ dataId spId
 name MPlink
 label Mammalian Phenotype (MP)
 url http://www.informatics.jax.org/searches/Phat.cgi?id=%s
-
-name omimTitle
-label OMIM title
-dataSql select title from omimTitle, refLink where refLink.omimId = omimTitle.omimId and refLink.mrnaAcc = '%s'
-dataId mrna
