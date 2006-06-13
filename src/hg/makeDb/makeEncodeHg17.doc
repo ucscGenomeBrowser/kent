@@ -2061,10 +2061,122 @@ cat > load.csh << 'EOF'
 # Univ. Uppsala, Sweden Chip/chip (butyrate-treated H3Ac, H4Ac)
 # Submitted 5/29/06 by Adam Ameur <mada@lcb.uu.se>
 # 6 subtracks
+#	DONE - 2006-06-13 - Hiram
 
     cd /cluster/data/encode/Uppsala
     mkdir -p 2006-05-09/lab
     cd 2006-05-09/lab
     unzip H3H4ac_butyrate.zip
+    cat << '_EOF_' > splitTrack.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+open (FH,"<H3H4ac_butyrate.tracks") or die "can not open H3H4ac_butyrate.tracks: $!";
+
+my $trackCount = 1;
+my $outFile="track1";
+
+while(my $line=<FH>)
+{
+    if ($line =~ m/^track/) {
+        $outFile = sprintf("track_%d", $trackCount++);
+        open (OUT,">$outFile") or die "can not open $outFile: $!";
+    } else {
+            print OUT $line;
+    }
+}
+
+close(OUT);
+
+close (FH)
+'_EOF_'
+    # << emacs happy
+    chmod +x splitTrack.pl
+    ./splitTrack.pl
+    #	looking at the track definitions to get some reasonable names:
+    grep "^track" H3H4ac_butyrate.tracks
+    mv track_1 encodeUppsalaChipH3acBut0h.wig.txt
+    mv track_2 encodeUppsalaChipH3acBut12h.wig.txt
+    mv track_3 encodeUppsalaChipH4acBut0h.wig.txt
+    mv track_4 encodeUppsalaChipH4acBut12h.wig.txt
+    mv track_5 encodeUppsalaChipH3acBut0vs12.itemRgb.txt
+    mv track_6 encodeUppsalaChipH4acBut0vs12.itemRgb.txt
+
+    #	encoding
+    wigEncode encodeUppsalaChipH3acBut0h.wig.txt \
+    	encodeUppsalaChipH3acBut0h.wig encodeUppsalaChipH3acBut0h.wib
+    #	upper limit 15.68, lower limit 0.17
+    wigEncode encodeUppsalaChipH3acBut12h.wig.txt \
+	encodeUppsalaChipH3acBut12h.wig encodeUppsalaChipH3acBut12h.wib
+    #	upper limit 6.55, lower limit 0.22
+    wigEncode encodeUppsalaChipH4acBut0h.wig.txt \
+	encodeUppsalaChipH4acBut0h.wig encodeUppsalaChipH4acBut0h.wib
+    #	upper limit 14.47, lower limit 0.19
+    wigEncode encodeUppsalaChipH4acBut12h.wig.txt \
+	encodeUppsalaChipH4acBut12h.wig encodeUppsalaChipH4acBut12h.wib
+    #	upper limit 6.58, lower limit 0.05
+
+    mkdir /gbdb/hg17/encode/Uppsala
+    ln -s `pwd`/*.wib /gbdb/hg17/encode/Uppsala/
+
+    #	using the -tmpDir will cause the temp file to be removed
+    hgLoadWiggle -tmpDir=/scratch/tmp hg17 encodeUppsalaChipH3acBut0h \
+	-pathPrefix=/gbdb/hg17/encode/Uppsala encodeUppsalaChipH3acBut0h.wig
+    hgLoadWiggle -tmpDir=/scratch/tmp hg17 encodeUppsalaChipH3acBut12h \
+	-pathPrefix=/gbdb/hg17/encode/Uppsala encodeUppsalaChipH3acBut12h.wig
+    hgLoadWiggle -tmpDir=/scratch/tmp hg17 encodeUppsalaChipH4acBut0h \
+	-pathPrefix=/gbdb/hg17/encode/Uppsala encodeUppsalaChipH4acBut0h.wig
+    hgLoadWiggle -tmpDir=/scratch/tmp hg17 encodeUppsalaChipH4acBut12h \
+	-pathPrefix=/gbdb/hg17/encode/Uppsala encodeUppsalaChipH4acBut12h.wig
 
 
+    #	they don't have their score data normalized, find min, max, etc...
+    ave -col=5 encodeUppsalaChipH3acBut0vs12.itemRgb.txt
+    #	min 0.404995
+    #	max 7.091458
+    # -> max - min = 6.686463
+    echo "7.091458 - 0.404995" | bc
+    #	6.686463
+   
+    #	plugging in those numbers, normalize the score column
+    #	0.000001 from the min value to avoid -0 in the output
+    awk '
+    {
+    score = 1000.0*($5 - 0.404994)/6.686463
+    for (i=1; i < 5; ++i) { printf "%s\t", $i }
+    printf "%d\t", score
+    for (i=6; i < 9; ++i) { printf "%s\t", $i }
+    printf "%s\n", $9
+    } ' encodeUppsalaChipH3acBut0vs12.itemRgb.txt | \
+	hgLoadBed -tmpDir=/scratch/tmp -strict hg17 \
+	    encodeUppsalaChipH3acBut0vs12 stdin
+
+    #	using the -tmpDir will cause the temp file to be removed
+
+    #	same deal for the other one
+    ave -col=5 encodeUppsalaChipH4acBut0vs12.itemRgb.txt
+    #	min 0.347273
+    #	max 2.833333
+    echo "2.833333 - 0.347273" | bc
+    #	2.486060
+    #	plugging in those numbers, normalize the score column
+    #	0.000001 from the min value to avoid -0 in the output
+    awk '
+    {
+    score = 1000.0*($5 - 0.347272)/2.486060
+    for (i=1; i < 5; ++i) { printf "%s\t", $i }
+    printf "%d\t", score
+    for (i=6; i < 9; ++i) { printf "%s\t", $i }
+    printf "%s\n", $9
+    } ' encodeUppsalaChipH4acBut0vs12.itemRgb.txt | \
+	hgLoadBed -tmpDir=/scratch/tmp -strict hg17 \
+	    encodeUppsalaChipH4acBut0vs12 stdin
+
+    #	To see what would be reasonable view limits, look at these
+    #	histograms and see where the majority of the data is
+    hgWiggle -doHistogram -hBinSize=0.16 -hBinCount=100 -hMinVal=0.0 \
+	-db=hg17 encodeUppsalaChipH3acBut0h
+    #	running each of the wiggle tracks, it looks like 95% of the data
+    #	is in the region 0 to 2.0
