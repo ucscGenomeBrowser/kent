@@ -117,7 +117,6 @@ int yUsed, y;
 if (lineCount > wordCount) lineCount = wordCount;
 yUsed = lineCount * fontHeight;
 y = (height - yUsed)/2 + yOff;
-uglyf("height %d, yUsed %d, y %d, lineCount %d<BR>\n", height, yUsed, y, lineCount);
 for (word = wordList; word != NULL; word = word->next)
     {
     vgText(vg, xOff, y, color, font, word->name);

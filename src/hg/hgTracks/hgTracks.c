@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1129 2006/06/13 03:16:25 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1130 2006/06/13 05:32:37 kent Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -7936,6 +7936,7 @@ return y;
 static int doMapItems(struct track *track, int fontHeight, int y)
 /* Draw map boxes around track items */
 {
+char *type = track->tdb->type;
 int newy;
 char *directUrl = trackDbSetting(track->tdb, "directUrl");
 boolean withHgsid = (trackDbSetting(track->tdb, "hgsid") != NULL);
@@ -7943,13 +7944,26 @@ int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
 int trackPastTabWidth = tl.picWidth - trackPastTabX;
 int start = 1;
 struct slList *item;
+boolean isWig = (sameString("wig", type) || startsWith("wig ", type) ||
+		startsWith("bedGraph", type));
 
-if (track->subType == lfSubSample && track->items == NULL)
-     y += track->lineHeight;
 if (isWithCenterLabels(track))
     y += fontHeight;
-/* override doMapItems for hapmapLd track */
+if (track->mapsSelf)
+    {
+    /* Wiggle track's ->height is actually one less than what it returns from 
+     * totalHeight()... I think the least disruptive way to account for this
+     * (and not touch Ryan Weber's Sample stuff) is to just correct here if 
+     * we see wiggle or bedGraph: */
+    if (isWig)
+        return y+track->height + 1;
+    else
+        return y+track->height;
+    }
+if (track->subType == lfSubSample && track->items == NULL)
+     y += track->lineHeight;
 
+/* override doMapItems for hapmapLd track */
 /* does not scale with subtracks right now, so this is commented out until it can be fixed
 if (startsWith("hapmapLd",track->mapName))
     {
@@ -7993,9 +8007,7 @@ for (item = track->items; item != NULL; item = item->next)
  * totalHeight()... I think the least disruptive way to account for this
  * (and not touch Ryan Weber's Sample stuff) is to just correct here if 
  * we see wiggle or bedGraph: */
-if (sameString("wig", track->tdb->type) ||
-    startsWith("wig ", track->tdb->type) ||
-    startsWith("bedGraph", track->tdb->type))
+if (isWig)
     y++;
 return y;
 }
