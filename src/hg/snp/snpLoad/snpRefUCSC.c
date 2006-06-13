@@ -18,7 +18,7 @@
 /* errAbort if larger SNP found */
 #define MAX_SNP_SIZE 1024
 
-static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.10 2006/04/22 00:32:06 heather Exp $";
+static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.11 2006/06/13 16:56:24 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
@@ -41,7 +41,6 @@ char query[512];
 struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
-char *randomSubstring = NULL;
 struct chromInfo *el;
 char tableName[64];
 
