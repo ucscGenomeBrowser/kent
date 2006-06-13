@@ -16,7 +16,7 @@
 #include "chromInfo.h"
 #include "vGfx.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.4 2006/05/28 16:50:04 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.5 2006/06/13 16:42:26 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -37,10 +37,10 @@ errAbort(
   );
 }
 
-struct chromosome
+struct clChrom
 /* Information on a chromosome. */
      {
-     struct chromosome *next;
+     struct clChrom *next;
      char *fullName;	/* Name of full deal. */
      char *shortName;	/* Name without chr prefix. */
      int size;		/* Size in bases. */
@@ -57,9 +57,9 @@ struct chromLayout
     int picHeight;			/* Total picture height */
     int margin;				/* BLank area around sides */
     int spaceWidth;			/* Width of a space. */
-    struct chromosome *leftList;	/* Left chromosomes. */
-    struct chromosome *rightList;	/* Right chromosomes. */
-    struct chromosome *bottomList;	/* Sex chromosomes are on bottom. */
+    struct clChrom *leftList;	/* Left chromosomes. */
+    struct clChrom *rightList;	/* Right chromosomes. */
+    struct clChrom *bottomList;	/* Sex chromosomes are on bottom. */
     int lineCount;			/* Number of chromosome lines. */
     int leftLabelWidth, rightLabelWidth;/* Pixels for left/right labels */
     int lineHeight;			/* Height for one line */
@@ -68,24 +68,29 @@ struct chromLayout
     };
 
 
-int chromosomeCmpAscii(const void *va, const void *vb)
-/* Compare two slNames. */
+char *skipDigits(char *s)
+/* Return first char of s that's not a digit */
 {
-const struct chromosome *a = *((struct chromosome **)va);
-const struct chromosome *b = *((struct chromosome **)vb);
-return strcmp(a->shortName, b->shortName);
+while (isdigit(*s))
+   ++s;
+return s;
 }
 
-int chromosomeCmpNum(const void *va, const void *vb)
+int clChromCmpNum(const void *va, const void *vb)
 /* Compare two slNames. */
 {
-const struct chromosome *a = *((struct chromosome **)va);
-const struct chromosome *b = *((struct chromosome **)vb);
+const struct clChrom *a = *((struct clChrom **)va);
+const struct clChrom *b = *((struct clChrom **)vb);
 char *aName = a->shortName, *bName = b->shortName;
 if (isdigit(aName[0]))
     {
     if (isdigit(bName[0]))
-        return atoi(aName) - atoi(bName);
+	{
+	int diff = atoi(aName) - atoi(bName);
+	if (diff == 0)
+	    diff = strcmp(skipDigits(aName), skipDigits(bName));
+	return diff;
+	}
     else
         return -1;
     }
@@ -95,12 +100,12 @@ else
     return strcmp(aName, bName);
 }
 
-struct chromosome *getChromosomes(struct sqlConnection *conn)
+struct clChrom *getChromosomes(struct sqlConnection *conn)
 /* Get chrom info list. */
 {
 struct sqlResult *sr;
 char **row;
-struct chromosome *chrom, *chromList = NULL;
+struct clChrom *chrom, *chromList = NULL;
 int count = sqlQuickNum(conn, "select count(*) from chromInfo");
 if (count > 500)
     errAbort("Sorry, hgGenome only works on assemblies mapped to chromosomes.");
@@ -122,24 +127,15 @@ while ((row = sqlNextRow(sr)) != NULL)
 if (chromList == NULL)
     errAbort("No chromosomes starting with chr in chromInfo for %s.", database);
 slReverse(&chromList);
-if (isdigit(chromList->shortName[0]))
-    {
-    uglyf("Sort by number<BR>\n");
-    slSort(&chromList, chromosomeCmpNum);
-    }
-else
-    {
-    uglyf("Sort by name<BR>\n");
-    slSort(&chromList, chromosomeCmpAscii);
-    }
+slSort(&chromList, clChromCmpNum);
 return chromList;
 }
 
-void separateSexChroms(struct chromosome *in,
-	struct chromosome **retAutoList, struct chromosome **retSexList)
+void separateSexChroms(struct clChrom *in,
+	struct clChrom **retAutoList, struct clChrom **retSexList)
 /* Separate input chromosome list into sex and non-sex chromosomes. */
 {
-struct chromosome *autoList = NULL, *sexList = NULL, *chrom, *next;
+struct clChrom *autoList = NULL, *sexList = NULL, *chrom, *next;
 for (chrom = in; chrom != NULL; chrom = next)
     {
     char *name = chrom->shortName;
@@ -160,14 +156,14 @@ slReverse(&autoList);
 *retSexList = sexList;
 }
 
-struct chromLayout *chromLayoutCreate(struct chromosome *chromList,
+struct chromLayout *chromLayoutCreate(struct clChrom *chromList,
 	MgFont *font, int picWidth, int lineHeight)
 /* Figure out layout.  For human and most mammals this will be
  * two columns with sex chromosomes on bottom.  This is complicated
  * by the platypus having a bunch of sex chromosomes. */
 {
 int margin = 2;
-struct chromosome *chrom, *left, *right;
+struct clChrom *chrom, *left, *right;
 struct chromLayout *cl;
 int autoCount, halfCount, bases, chromInLine;
 int leftLabelWidth=0, rightLabelWidth=0, labelWidth;
@@ -313,15 +309,15 @@ for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
 return cl;
 }
 
-void drawChrom(struct vGfx *vg, struct chromosome *chrom, int chromBoxHeight,
+void drawChrom(struct vGfx *vg, struct clChrom *chrom, int chromBoxHeight,
 	int color)
 {
 vgBox(vg, chrom->x, chrom->y + chrom->height - chromBoxHeight, 
     chrom->width, chromBoxHeight, color);
 }
 
-void leftChromAndLabel(struct vGfx *vg, struct chromLayout *cl,
-	struct chromosome *chrom, int fontHeight, int chromBoxHeight,
+void leftLabel(struct vGfx *vg, struct chromLayout *cl,
+	struct clChrom *chrom, int fontHeight, int chromBoxHeight,
 	int color)
 /* Draw a chromosome with label on left. */
 {
@@ -331,8 +327,8 @@ vgTextRight(vg, cl->margin, chrom->y + chrom->height - fontHeight,
 drawChrom(vg, chrom, chromBoxHeight, color);
 }
 
-void rightChromAndLabel(struct vGfx *vg, struct chromLayout *cl,
-	struct chromosome *chrom, int fontHeight, int chromBoxHeight,
+void rightLabel(struct vGfx *vg, struct chromLayout *cl,
+	struct clChrom *chrom, int fontHeight, int chromBoxHeight,
 	int color)
 /* Draw a chromosome with label on left. */
 {
@@ -342,8 +338,8 @@ vgText(vg, chrom->x + chrom->width + cl->spaceWidth,
 drawChrom(vg, chrom, chromBoxHeight, color);
 }
 
-void midChromAndLabel(struct vGfx *vg, struct chromLayout *cl,
-	struct chromosome *chrom, int fontHeight, int chromBoxHeight,
+void midLabel(struct vGfx *vg, struct chromLayout *cl,
+	struct clChrom *chrom, int fontHeight, int chromBoxHeight,
 	int color)
 /* Draw a chromosome with label on left. */
 {
@@ -361,7 +357,7 @@ void genomeGif(struct sqlConnection *conn, struct chromLayout *cl)
 {
 struct vGfx *vg;
 struct tempName gifTn;
-struct chromosome *chrom;
+struct clChrom *chrom;
 int chromBoxHeight = 8;
 MgFont *font = cl->font;
 int fontHeight = mgFontPixelHeight(font);
@@ -373,17 +369,17 @@ printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d>",
 	    gifTn.forHtml, cl->picWidth, cl->picHeight);
 
 for (chrom = cl->leftList; chrom != NULL; chrom = chrom->next)
-    leftChromAndLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
+    leftLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
 for (chrom = cl->rightList; chrom != NULL; chrom = chrom->next)
-    rightChromAndLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
+    rightLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
 for (chrom = cl->bottomList; chrom != NULL; chrom = chrom->next)
     {
     if (chrom == cl->bottomList)
-	leftChromAndLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
+	leftLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
     else if (chrom->next == NULL)
-	rightChromAndLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
+	rightLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
     else
-        midChromAndLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
+        midLabel(vg, cl, chrom, fontHeight, chromBoxHeight, color);
     }
 
 #ifdef SOMEDAY
@@ -444,7 +440,7 @@ void webMain(struct sqlConnection *conn)
 /* Set up fancy web page with hotlinks bar and
  * sections. */
 {
-struct chromosome *chromList, *chrom, *left, *right;
+struct clChrom *chromList, *chrom, *left, *right;
 struct chromLayout *cl;
 int total;
 int fontHeight, lineHeight;
