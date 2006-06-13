@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.298 2006/06/06 00:39:10 galt Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.299 2006/06/13 06:04:59 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2454,15 +2454,13 @@ static boolean fitFields(struct hash *hash, char *chrom, char *start, char *end,
  * If so copy them to retChrom, retStart, retEnd. 
  * Helper routine for findChromStartEndFields below. */
 {
-if (hashLookup(hash, chrom) && hashLookup(hash, start) && hashLookup(hash, end))
-    {
-    strcpy(retChrom, chrom);
-    strcpy(retStart, start);
-    strcpy(retEnd, end);
-    return TRUE;
-    }
-else
+if (!fitField(hash, chrom, retChrom))
     return FALSE;
+if (!fitField(hash, start, retStart))
+    return FALSE;
+if (!fitField(hash, end, retEnd))
+    return FALSE;
+return TRUE;
 }
 
 boolean hIsBinned(char *table)
@@ -2560,6 +2558,18 @@ if (! hTableExistsDb(db, table))
     return FALSE;
 conn = hAllocOrConnect(db);
 
+/* Set field names to empty strings */
+retEnd[0] = 0;
+retName[0] = 0;
+retScore[0] = 0;
+retStrand[0] = 0;
+retCdsStart[0] = 0;
+retCdsEnd[0] = 0;
+retCount[0] = 0;
+retStarts[0] = 0;
+retEndsSizes[0] = 0;
+retSpan[0] = 0;
+
 /* Read table description into hash. */
 safef(query, sizeof(query), "describe %s", table);
 sr = sqlGetResult(conn, query);
@@ -2596,13 +2606,9 @@ else if (fitFields(hash, "tName", "tStart", "tEnd", retChrom, retStart, retEnd))
     {
     fitField(hash, "qName", retName);
     fitField(hash, "strand", retStrand);
-    retScore[0] = 0;
-    retCdsStart[0] = 0;
-    retCdsEnd[0] = 0;
     fitField(hash, "blockCount", retCount);
     fitField(hash, "tStarts", retStarts);
     fitField(hash, "blockSizes", retEndsSizes);
-    retSpan[0] = 0;
     }
 /* Look for gene prediction names. */
 else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd))
@@ -2616,7 +2622,6 @@ else if (fitFields(hash, "chrom", "txStart", "txEnd", retChrom, retStart, retEnd
     fitField(hash, "exonCount", retCount);
     fitField(hash, "exonStarts", retStarts);
     fitField(hash, "exonEnds", retEndsSizes);
-    retSpan[0] = 0;
     }
 /* Look for repeatMasker names. */
 else if (fitFields(hash, "genoName", "genoStart", "genoEnd", retChrom, retStart, retEnd))
@@ -2624,12 +2629,10 @@ else if (fitFields(hash, "genoName", "genoStart", "genoEnd", retChrom, retStart,
     fitField(hash, "repName", retName);
     fitField(hash, "swScore", retScore);
     fitField(hash, "strand", retStrand);
-    retCdsStart[0] = 0;
-    retCdsEnd[0] = 0;
-    retCount[0] = 0;
-    retStarts[0] = 0;
-    retEndsSizes[0] = 0;
-    retSpan[0] = 0;
+    }
+else if (fitField(hash, "chrom", retChrom) && 
+	 fitField(hash, "chromStart", retStart))
+    {
     }
 else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, "start") && hashLookup(hash, "end"))
     {
@@ -2638,13 +2641,6 @@ else if (startsWith("chr", table) && endsWith(table, "_gl") && hashLookup(hash, 
     strcpy(retEnd, "end");
     fitField(hash, "frag", retName);
     fitField(hash, "strand", retStrand);
-    retScore[0] = 0;
-    retCdsStart[0] = 0;
-    retCdsEnd[0] = 0;
-    retCount[0] = 0;
-    retStarts[0] = 0;
-    retEndsSizes[0] = 0;
-    retSpan[0] = 0;
     }
 else
     {
@@ -2812,8 +2808,13 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
 	    hti->type = cloneString("wiggle");
 	else if (hti->nameField[0] !=0)
 	    hti->type = cloneString("bed 4");
-	else
+	else if (hti->endField[0] != 0)
 	    hti->type = cloneString("bed 3");
+	else
+	    {
+	    hti->type = cloneString("chromGraph");
+	    strcpy(hti->endField, hti->startField);
+	    }
 	}
     else
 	hti->type = NULL;
