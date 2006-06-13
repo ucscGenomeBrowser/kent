@@ -33,7 +33,7 @@
 #include "genbank.h"
 #include "chromInfo.h"
 
-static char const rcsid[] = "$Id: hdb.c,v 1.299 2006/06/13 06:04:59 kent Exp $";
+static char const rcsid[] = "$Id: hdb.c,v 1.300 2006/06/13 21:33:57 kent Exp $";
 
 
 #define DEFAULT_PROTEINS "proteins"
@@ -2813,7 +2813,8 @@ if ((hti = hashFindVal(hash, rootName)) == NULL)
 	else
 	    {
 	    hti->type = cloneString("chromGraph");
-	    strcpy(hti->endField, hti->startField);
+	    safef(hti->endField, sizeof(hti->endField), "%s+1", 
+	    	hti->startField);
 	    }
 	}
     else
