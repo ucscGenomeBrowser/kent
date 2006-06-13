@@ -987,8 +987,9 @@ getSeqs.csh $(path1)
     make update
     make alpha
 
-# MAKE HGCENTRALTEST ENTRY FOR DANRER3 (DONE, 2004-06-16, hartera)
-    # Make dbDb and deafaultDb entries so test browser knows about it:
+# MAKE HGCENTRALTEST ENTRY FOR DANRER3 (DONE, 2005-06-16, hartera)
+# UPDATE ENTRY TO ADD DANRER3 TO GENE SORTER (DONE, 2006-06-09, hartera)
+    # Make dbDb and defaultDb entries so test browser knows about it:
     ssh hgwdev
     # Add dbDb and defaultDb entries:
     echo 'insert into dbDb (name, description, nibPath, organism,  \
@@ -1004,6 +1005,10 @@ getSeqs.csh $(path1)
     echo 'update defaultDb set name = "danRer3" \
           where genome = "Zebrafish";' \
           | hgsql -h genome-testdb hgcentraltest
+    # Update dbDb entry for danRer3 to add it to Gene Sorter 
+    # (hartera, 2006-06-09)
+    echo 'update dbDb set hgNearOk = 1 where name = "danRer3";' \
+         | hgsql -h genome-testdb hgcentraltest
 
 # PUT MASKED SEQUENCE OUT FOR CLUSTER RUNS AND ON BLUEARC
 # (DONE, 2005-06-16, hartera)
@@ -3307,7 +3312,9 @@ if ($found eq "TRUE")
     # bacPairsSangerSts and bacSinglesSangerSts). (2006-04-19, hartera)
 
 # CREATE BAC CLONES ALIAS AND CROSS-REFERENCE TABLES 
-# (bacCloneAlias and bacCloneXRef) (DONE, 2005-10-06, hartera)
+# (bacEndAlias, bacCloneAlias and bacCloneXRef) (DONE, 2005-10-06, hartera)
+# RECREATE TABLES AFTER REMAKING THE SINGLES AND PAIRS TABLES 
+# (see REDO BACENDS SECTION) (DONE, 2006-06-08, hartera)
     # Process data and create bacEndAlias table 
     ssh kkstore02
     cd /cluster/data/danRer3/bed/bacends/bacends.1
@@ -3341,24 +3348,26 @@ if ($found eq "TRUE")
     # 29885 clonemarkers.27.07.05.txt
     # 167858 ctgnames.27.07.05.txt
     # 12250 markers.27.07.05.txt
-
+    # Recreate tables as bacEndPairs, bacEndSingles, bacEndPairsBad and
+    # chrN_allBacends tables have changed (2006-06-08, hartera)
     # get list of BAC end names, lfNames
-    cp /cluster/data/danRer3/bed/bacends/scores/allBacEnds.names.uniq .
+    cp /cluster/data/danRer3/bed/bacends/scoresAndCoords/allBacEnds.names.uniq .
     # get list of BAC clone names 
     foreach f (bacEndPairs bacEndPairsBad bacEndSingles)
       awk '{print $4}' \
-      /cluster/data/danRer3/bed/bacends/scores/${f}GoodScores.bed >> bacs.names
+      /cluster/data/danRer3/bed/bacends/scoresAndCoords/${f}GoodScores.bed >> bacs.names
     end
     sort -u bacs.names > bacs.names.uniq
     wc -l *.uniq
-    # 512886 allBacEnds.names.uniq
-    # 300323 bacs.names.uniq
-     # from psl file
+    # 512321 allBacEnds.names.uniq
+    # 300290 bacs.names.uniq
+
+    # from psl file
     awk '{print $10;}' ../bacEnds.psl > bacEndsPsl.names
     # edit to remove first few lines with no names
     sort bacEndsPsl.names | uniq > bacEndsPsl.names.uniq
     wc -l bacEndsPsl.names.uniq
-    # 545922 bacEndsPsl.names.uniq
+    # 545920 bacEndsPsl.names.uniq
     # this is all the BAC ends that originally had alignments
     # Add an alias table for BAC clones
     # bacCloneAlias.sql is in $HOME/kent/src/hg/lib - see makeDanRer1.doc
@@ -3369,9 +3378,9 @@ if ($found eq "TRUE")
     # bacCloneXRef.sql is in $HOME/kent/src/hg/lib - see makeDanRer1.doc
     set dir=/cluster/data/danRer3/bed/bacends/
     awk 'BEGIN {OFS="\t"}{print $4, $1}' \
-        $dir/scores/bacEndPairsGoodScores.bed > bacClones.namesandchrom
+     $dir/scoresAndCoords/bacEndPairsGoodScores.bed > bacClones.namesandchrom
     awk 'BEGIN {OFS="\t"}{print $4, $1}' \
-        $dir/scores/bacEndSinglesGoodScores.bed >> bacClones.namesandchrom
+    $dir/scoresAndCoords/bacEndSinglesGoodScores.bed >> bacClones.namesandchrom
     sort bacClones.namesandchrom | uniq > bacClones.namesandchrom.uniq
     # use a list of internal names,Genbank accessions, and BAC clone names
     # use BACClonesIdsandAccs.txt.
@@ -3448,6 +3457,7 @@ close MARKERS;
     # use zfishBacClonesandSts to create tab files for loading into
     # bacCloneAlias and bacCloneXRef tables
     # make output directory
+    rm -r /cluster/bluearc/danRer3/bacEnds/out
     mkdir -p /cluster/bluearc/danRer3/bacEnds/out
     # edit zfishBacClonesandSts.c to add prefixes for CHORI73 library:
     # CHORI73_ for internal name, CH73- for external name
@@ -3457,41 +3467,41 @@ close MARKERS;
     mv clonemarkers.27.07.05.txt.bak clonemarkers.27.07.05.txt.orig
     # no change to markers file so remove .bak file
     rm markers.27.07.05.txt.bak 
-    nice $HOME/bin/i386/zfishBacClonesandSts ctgnames.27.07.05.txt \
+    nice $HOME/bin/x86_64/zfishBacClonesandSts ctgnames.27.07.05.txt \
       clonemarkers.27.07.05.txt markers.27.07.05.txt \
       bacClones.namesandchrom.uniq BACClonesIdsandAccs.txt \
-      sangerandUniSTSId.txt \
-      /cluster/bluearc/danRer3/bacEnds/out \
-      > /cluster/bluearc/danRer3/bacEnds/out/zfishBacs.out &
+      sangerandUniSTSId.txt ./out > ./out/zfishBacs.out &
     # output is in /cluster/bluearc/danRer3/bacends/out so copy over
     # sort alias tab file by sangerName
-    sort -k2 /cluster/bluearc/danRer3/bacEnds/out/bacAlias.tab \
-         > bacAlias.sort.tab
-    cp /cluster/bluearc/danRer3/bacEnds/out/bacXRef.tab .
+    sort -k2 ./out/bacAlias.tab > bacAlias.sort.tab
+    cp ./out/bacXRef.tab .
     wc -l *.tab
-    # 57656 bacAlias.sort.tab
-    # 356785 bacXRef.tab
-   
+    # 110961 bacAlias.sort.tab
+    # 540800 bacXRef.tab
+ 
     ssh hgwdev 
     cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases
-    hgsql danRer3 < $HOME/kent/src/hg/lib/bacCloneAlias.sql
-    hgsql danRer3 < $HOME/kent/src/hg/lib/bacCloneXRef.sql
-    nice hgsql danRer3 -e \
-          'load data local infile "bacAlias.sort.tab" into table bacCloneAlias'
-    nice hgsql danRer3 -e \
-          'load data local infile "bacXRef.tab" into table bacCloneXRef'
+    hgsql -e 'drop table bacCloneAlias;' danRer3
+    hgsql -e 'drop table bacCloneXRef;' danRer3
+     
+    hgLoadSqlTab danRer3 bacCloneAlias \
+          $HOME/kent/src/hg/lib/bacCloneAlias.sql bacAlias.sort.tab
+    hgLoadSqlTab danRer3 bacCloneXRef \
+          $HOME/kent/src/hg/lib/bacCloneXRef.sql bacXRef.tab
 # edit trackDb.ra to add bacEnds tracks and searches for the bacEndPairs
 # and bacEndSingles tracks as for danRer1. copy over html from danRer2
 # for bacEndPairs and bacEndSingles tracks.
 
-# BACENDS: TESTING OF bacCloneAlias and bacCloneXRef TABLES
+# BACENDS: TESTING OF bacCloneAlias AND bacCloneXRef TABLES
 # (DONE, 2005-10-06, hartera)
+# REDONE AFTER REMAKING bacCloneAlias AND bacCloneXRef TABLES - both ok.
+# (DONE, 2006-06-12, hartera)
     # The following tests were carried out to check that all the data
     # in the bacCloneAlias and bacCloneXRef tables is correct.
     ssh hgwdev
     mkdir -p \
-        /cluster/data/danRer3/bed/bacends/cloneandStsAliases/testTables
-    cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases/testTables
+        /cluster/data/danRer3/bed/bacends/cloneandStsAliases/testTablesNew
+    cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases/testTablesNew
                                                                                 
 # Check that the correct aliases are associated with their Sanger STS names
     awk 'BEGIN {FS="|"} {OFS="\t"} {print $2, $3;}' \
@@ -3544,7 +3554,7 @@ close MARKERS;
     # so they are not in the alias table so this is all ok.
   
 # Check that Sanger STS names and primers are associated correctly
-    cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases/testTables
+    cd /cluster/data/danRer3/bed/bacends/cloneandStsAliases/testTablesNew
     # get sanger names and primers from markers file
     awk 'BEGIN {FS="|"} {OFS="\t"} {print $2, $4, $5;}' \
         ../markers.27.07.05.txt > sNameandPrimers
@@ -3565,7 +3575,7 @@ close MARKERS;
     wc -l sNamesandprimers.fromdb.sort
     # 15309 sNamesandprimers.fromdb.sort
     diff sNamesandprimers.fromdb.sort sNameandPrimers.format.sort
-   # No difference so ok
+    # No difference so ok
 
 # Check that UniSTS IDs and Sanger STS names are associated correctly
    # get Sanger names and UniSTS IDs from the database
@@ -3694,7 +3704,7 @@ close MARKERS;
    hgsql -N -e 'select intName,name from bacCloneXRef;' danRer3 \
        | sort | uniq > intNameandextName.fromdb.sort
    wc -l intNameandextName*
-   # 340371 intNameandextName.fromdb.sort
+   # 340039 intNameandextName.fromdb.sort
    # 167858 intNameandextNamefromCtgNames.sort
    comm -12 intNameandextName.fromdb.sort intNameandextNamefromCtgNames.sort \
         > intandextindbAndCtgNames
@@ -3710,7 +3720,7 @@ close MARKERS;
    comm -23 intNameandextName.fromdb.sort intNameandextNamefromCtgNames.sort \
         > intandextNamesindbNotinCtgNames
    wc -l intandextNamesindbNotinCtgNames
-   # 172513 intandextNamesindbNotinCtgNames
+   # 172181 intandextNamesindbNotinCtgNames
    # get list of internal names from the clonemarkers file
    awk 'BEGIN {FS="|"} {print $1}' ../clonemarkers.27.07.05.txt | sort | uniq \
        > clonemarkers.intName.sort
@@ -3731,20 +3741,20 @@ close MARKERS;
    awk 'BEGIN {FS="|"} {print $3;}' ../ctgnames.27.07.05.txt \
        >> extNames.ctgnamesandbacClones
    wc -l extNames.ctgnamesandbacClones
-   # 508781 extNames.ctgnamesandbacClones
+   # 510169 extNames.ctgnamesandbacClones
    sort extNames.ctgnamesandbacClones | uniq \
         > extNames.ctgnamesandbacClones.sort
    wc -l extNames.ctgnamesandbacClones.sort
-   # 340371 extNames.ctgnamesandbacClones.sort
+   # 340039 extNames.ctgnamesandbacClones.sort
    # get extNames from the database
    hgsql -N -e 'select name from bacCloneXRef;' danRer3 | sort | uniq \
          > extNames.fromdb.sort
    wc -l extNames.fromdb.sort
-   # 340371 extNames.fromdb.sort
+   # 340039 extNames.fromdb.sort
    comm -12 extNames.fromdb.sort extNames.ctgnamesandbacClones.sort \
          > extNames.fromdbandfiles
    wc -l extNames.fromdbandfiles
-   # 340371 extNames.fromdbandfiles
+   # 340039 extNames.fromdbandfiles
    # find extNames in common from data files and database
    diff extNames.fromdb.sort extNames.fromdbandfiles
    # no difference, all extNames from files are in db
@@ -3766,7 +3776,7 @@ close MARKERS;
    hgsql -N -e 'select intName from bacCloneXRef;' danRer3 | sort | uniq \
         > intNames.fromdb.sort
    wc -l intNames.fromdb.sort
-   # 340371 intNames.fromdb.sort
+   # 340039 intNames.fromdb.sort
    # some of these intNames are derived from the corresponding extNames
    # all of the intNames from the file should be in the db
    comm -12 intNames.fromdb.sort intNames.ctgnamesandclonemarkers.sort \
@@ -6340,8 +6350,27 @@ CREATE TABLE ens38Zfish (
     # 45 of these left
     # ENSDART00000009971 has only 48% Identity to Q5DTD0. maps to Q58EF8 on
     # Ensembl web page.
-    # Stick with the ensBlastp90 (maybe) 
+    # Use ensBlastp90.
+
+# Add a proteinID column to the ensGene table:
+    ssh hgwdev
+    cd /cluster/data/danRer3/bed/ensGenes
+    # Add protein ID column:
+    hgsql -e 'alter table ensGene add proteinID varchar(40) NOT NULL;' danRer3
+    # Add index to this column: 
     # Next step, download the ZFIN IDs and UniProt IDs
+    hgsql -e 'alter table ensGene add index(proteinID);' danRer3
+    hgsql -e 'select count(*) from ensGene;' danRer3
+    # 32143
+    hgsql -e 'select count(*) from ensGene as g, test.ensBlastp90 as p \
+          where g.name = p.query;' danRer3
+    # 12614 
+    # Use these UniProt IDs to fill in proteinID table.
+    hgsql -e 'update ensGene as g, test.ensBlastp90 as p \
+          set g.proteinID = p.target where g.name = p.query;' danRer3
+    # check that there are   rows with proteID filled.
+    # once this is done, can create ensCanonical and ensIsoforms table -
+    # see section on "BUILD GENE SORTER TABLES".
     
     # for the Known Genes details pages. Changed table name from 
     # ensGeneXRef to ensXRefZfish as there are a number of tables already
@@ -7387,3 +7416,78 @@ exit 0
    # test by converting a region using the "convert" link on
    # the browser, and comparing to blat of the same region
 
+###########################################################################
+# CREATE MICROARRAY DATA TRACK BY ADDING WILD TYPE MICROARRAY DATA TO AFFY 
+# ZEBRAFISH ALIGNMENTS (DONE, 2006-06-10, hartera)
+# Array data is for whole embryos of five wild type zebrafish strains. 
+# Data is in hgFixed (see hgFixed.doc) - from Len Zon's lab at Children's 
+# Hospital Boston. Contact: adibiase@enders.tch.harvard.edu
+    ssh hgwdev
+    mkdir /cluster/data/danRer3/bed/ZonLab/wtArray
+    cd /cluster/data/danRer3/bed/ZonLab/wtArray
+    hgMapMicroarray zebrafishZonWT.bed hgFixed.zebrafishZonWTMedian \
+         /cluster/data/danRer3/bed/affyZebrafish/affyZebrafish.psl
+    # Loaded 15617 rows of expression data from hgFixed.zebrafishZonWTMedian
+    # Mapped 14335,  multiply-mapped 6861, missed 0, unmapped 1282
+    hgLoadBed danRer3 affyZonWildType zebrafishZonWT.bed
+    # Loaded 21196 elements of size 15
+    # add trackDb.ra entry at trackDb/zebrafish level
+
+###########################################################################
+# BUILD GENE SORTER TABLES (AKA FAMILY BROWSER) 
+# (DONE, 2006-06-08 - 2006-06-12, hartera)
+#  This should be done after creating ensGene, ensGtp and ensPep tables
+#  for the Ensembl Genes track.
+#  The BlastTab tables are already built - see HGNEAR PROTEIN BLAST TABLES
+#  Blastp of self is ensZfishBlastTab table.
+#  Other blastp ortholog tables are: hgBlastTab (hg18), mmBlastTab(mm8), 
+#  rnBlastTab (rn4), dmBlastTab (dm2), ceBlastTab (ce2), 
+#  sacCerBlastTab (sacCer1).
+   ssh hgwdev
+   mkdir /cluster/data/danRer3/bed/geneSorter.2006-06-08
+   ln -s /cluster/data/danRer3/bed/geneSorter.2006-06-08 \
+         /cluster/data/danRer3/bed/geneSorter
+   cd /cluster/data/danRer3/bed/geneSorter
+   # Create table that maps between known genes and RefSeq
+   # Index is only on first 16 characters, too short for Ensembl names
+   # manually changed hgMapToGene to create index with 20 characters 
+   # on name and use local copy of program.
+   $HOME/bin/x86_64/hgMapToGene danRer3 refGene ensGene ensToRefSeq
+   # hgsql -e 'select count(*) from ensToRefSeq;' danRer3
+   # 9707
+
+   # Create table that maps between Ensembl genes and LocusLink 
+   # LocusLink is now called Entrez Gene.
+   hgsql -N -e "select mrnaAcc,locusLinkId from refLink" danRer3 > refToLl.txt
+   $HOME/bin/x86_64/hgMapToGene danRer3 refGene ensGene \
+         ensToLocusLink -lookup=refToLl.txt
+
+   # Create table that maps between Ensembl genes and the Affy Zebrfish
+   # probeset consensus sequences.
+   $HOME/bin/x86_64/hgMapToGene danRer3 affyZebrafish ensGene ensToAffyZebrafish
+
+   # Create a table that maps between Ensembl genes and 
+   # the Zon lab microarray expression data.
+   $HOME/bin/x86_64/hgMapToGene "-type=bed 12" danRer3 affyZonWildType \
+               ensGene ensToAffyZonWildType 
+
+   # Create expression distance table.
+   nice hgExpDistance danRer3 hgFixed.zebrafishZonWTMedian \
+        hgFixed.zebrafishZonWTMedianExps zebrafishZonWTDistance  \
+        -lookup=ensToAffyZebrafish &
+   # Have 15617 elements in hgFixed.zebrafishZonWTMedian
+   # Got 9023 unique elements in hgFixed.zebrafishZonWTMedian
+   # Made zebrafishZonWTDistance.tab
+   # Loaded zebrafishZonWTDistance
+   # Made query index
+   # Took 2 minutes.
+   # To allow data to be viewed in Gene Sorter, add the hgNearOk=1 
+   # to the dbDb table entry for danRer3 on hgcentraltest -
+   # see section on MAKE HGCENTRALTEST ENTRY FOR DANRER3.
+
+   # added a protein ID field to ensGene before running this hgClusterGenes
+   # Cluster together various alt-splicing isoforms.
+   # Creates the knownIsoforms and knownCanonical tables
+   hgClusterGenes danRer3 ensGene ensIsoforms ensCanonical
+   # Got 22877 clusters, from 32143 genes in 28 chromosomes
+   # There are also 22877 genes in the ensGtp table so this is in agreement.
