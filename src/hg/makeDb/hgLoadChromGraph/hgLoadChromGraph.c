@@ -3,12 +3,13 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
+#include "portable.h"
 #include "jksql.h"
 #include "hdb.h"
 #include "hgRelate.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.2 2006/06/12 16:21:30 kent Exp $";
+static char const rcsid[] = "$Id: hgLoadChromGraph.c,v 1.3 2006/06/13 16:15:50 kent Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -41,9 +42,11 @@ char *metaCreateString =
 "    name varchar(255) not null,        # Corresponds to chrom graph table name\n"
 "    minVal double not null,    # Minimum value observed\n"
 "    maxVal double not null,    # Maximum value observed\n"
+"    binaryFile varchar(255) not null,  # Location of binary data point file if any\n"
 "              #Indices\n"
 "    PRIMARY KEY(name(32))\n"
 ");\n";
+
 
 
 void hgLoadChromGraph(boolean doLoad, char *db, char *track, char *fileName)
@@ -53,6 +56,7 @@ double minVal,maxVal;
 struct chromGraph *el, *list = chromGraphLoadAll(fileName);
 FILE *f;
 char *tempDir = ".";
+char path[PATH_LEN], gbdbPath[PATH_LEN];
 
 if (list == NULL)
     errAbort("%s is empty", fileName);
@@ -100,10 +104,33 @@ if (doLoad)
 	sqlUpdate(conn, dy->string);
 	}
 
+    /* Make directory for track. */
+    safef(path, sizeof(path), "/cluster/data/%s/bed/%s", db, track);
+    makeDir(path);
+
+    /* Make chrom graph file */
+    safef(path, sizeof(path), "/cluster/data/%s/bed/%s/%s.chromGraph", 
+    	db, track, track);
+    chromGraphToBin(list, path);
+
+    /* Link to gbdb */
+    safef(path, sizeof(path), "/gbdb/%s", db);
+    makeDir(path);
+    safef(path, sizeof(path), "/gbdb/%s/chromGraph", db);
+    makeDir(path);
+    safef(gbdbPath, sizeof(gbdbPath), "%s/%s.chromGraph", path, track);
+    remove(gbdbPath);
+    dyStringClear(dy);
+    dyStringPrintf(dy, "ln -s /cluster/data/%s/bed/%s/%s.chromGraph ",
+    	db, track, track);
+    dyStringPrintf(dy, "%s", gbdbPath);
+    if (system(dy->string) != 0)
+        errnoAbort("%s failed", dy->string);
+
     /* Create new line in meta table */
     dyStringClear(dy);
-    dyStringPrintf(dy, "insert into metaChromGraph values('%s',%f,%f);",
-    	track, minVal, maxVal);
+    dyStringPrintf(dy, "insert into metaChromGraph values('%s',%f,%f,'%s');",
+    	track, minVal, maxVal, gbdbPath);
     sqlUpdate(conn, dy->string);
     }
 }
