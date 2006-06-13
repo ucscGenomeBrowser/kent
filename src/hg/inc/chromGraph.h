@@ -97,6 +97,50 @@ void chromGraphDataRange(char *trackName, struct sqlConnection *conn,
 	double *retMin, double *retMax);
 /* Get min/max values observed from metaChromGraph table */
 	
+char *chromGraphBinaryFileName(char *trackName, struct sqlConnection *conn);
+/* Get binary file name associated with chromGraph track. Returns NULL
+ * if no such file or track. FreeMem result when done. */
+
+void chromGraphToBin(struct chromGraph *list, char *fileName);
+/* Create binary representation of chromGraph list, which should
+ * be sorted. */
+
+/* chromGraphBin interface.  The general calling sequence is:
+ *   struct chromGraphBin *cgb = chromGraphBinOpen(path);
+ *   while (chromGraphBinNextChrom(cgb))
+ *      {
+ *      char *chrom = cgb->chrom;
+ *      while (chromGraphBinNextVal(cgb))
+ *          {
+ *          // process cgb->pos, cgb->val 
+ *          }
+ *      }
+ *     chromGraphBinFree(&cgb);
+ */
+	  
+struct chromGraphBin
+/* A handle to binary representation to chrom graph */
+    {
+    struct chromGraphBin *next;	/* Next in list if any */
+    char *fileName;	/* Name of file. */
+    FILE *f;		/* File handle. */
+    boolean isSwapped;	/* Need to swap? */
+    char chrom[256];	/* Current chromosome. */
+    bits32 chromStart;	/* Current position. */
+    double val;		/* Current value. */
+    };
+
+struct chromGraphBin *chromGraphBinOpen(char *path);
+/* Open up a chromGraphBin file */
+
+void chromGraphBinFree(struct chromGraphBin **pCgb);
+/* Close down and free up chromGraphBin. */
+
+boolean chromGraphBinNextChrom(struct chromGraphBin *cgb);
+/* Fetch next chromosome, or FALSE if at end of file. */
+
+boolean chromGraphBinNextVal(struct chromGraphBin *cgb);
+/* Fetch next pos/val or FALSE if at end of chromosome. */
 
 #endif /* CHROMGRAPH_H */
 

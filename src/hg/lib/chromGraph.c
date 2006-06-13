@@ -7,9 +7,10 @@
 #include "dystring.h"
 #include "obscure.h"
 #include "jksql.h"
+#include "sig.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.3 2006/06/13 03:03:17 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.4 2006/06/13 14:17:47 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -163,6 +164,17 @@ if (row == NULL)
 sqlFreeResult(&sr);
 }
 
+char *chromGraphBinaryFileName(char *trackName, struct sqlConnection *conn)
+/* Get binary file name associated with chromGraph track. Returns NULL
+ * if no such file or track. FreeMem result when done. */
+{
+char query[256];
+safef(query, sizeof(query), 
+	"select binaryFile from metaChromGraph where name='%s'", trackName);
+return sqlQuickString(conn, query);
+}
+
+
 struct chromGraphSettings *chromGraphSettingsGet(char *trackName,
 	struct sqlConnection *conn, struct trackDb *tdb, struct cart *cart)
 /* Get settings for chromGraph track.  If you pass in all NULLs
@@ -243,3 +255,101 @@ if (cart != NULL)
     }
 return cgs;
 }
+
+void chromGraphToBin(struct chromGraph *list, char *fileName)
+/* Create binary representation of chromGraph list, which should
+ * be sorted. */
+{
+struct chromGraph *el;
+char *lastChrom = "";
+bits32 lastPos = 0;
+FILE *f = mustOpen(fileName, "wb");
+bits32 sig = chromGraphSig;
+bits32 endMarker = (bits32)(-1);
+writeOne(f, sig);
+for (el = list; el != NULL; el = el->next)
+    {
+    bits32 pos = el->chromStart;
+    if (!sameString(el->chrom, lastChrom))
+        {
+	int length = strlen(el->chrom);
+	UBYTE len = length;
+	if (el != list)
+	    {
+	    writeOne(f, endMarker);
+	    }
+	if (length > 255)
+	    errAbort("Chrom name %s too long", el->chrom);
+	writeOne(f, len);
+	mustWrite(f, el->chrom, length);
+	lastChrom = el->chrom;
+	lastPos = 0;
+	}
+    if (lastPos > pos)
+        errAbort("%s is not sorted", fileName);
+    lastPos = pos;
+    writeOne(f, pos);
+    writeOne(f, el->val);
+    }
+writeOne(f, endMarker);
+carefulClose(&f);
+}
+	  
+
+struct chromGraphBin *chromGraphBinOpen(char *path)
+/* Open up a chromGraphBin file */
+{
+struct chromGraphBin *cgb;
+FILE *f = mustOpen(path, "rb");
+bits32 sig;
+AllocVar(cgb);
+cgb->fileName = cloneString(path);
+cgb->f = f;
+if (!readOne(f, sig))
+    errAbort("%s is empty", path);
+if (sig == chromGraphSig)
+    cgb->isSwapped = FALSE;
+else if (sig == chromGraphSwapSig)
+    cgb->isSwapped = TRUE;
+else
+    errAbort("%s is not a chromGraph binary file", path);
+return cgb;
+}
+
+void chromGraphBinFree(struct chromGraphBin **pCgb)
+/* Close down and free up chromGraphBin. */
+{
+struct chromGraphBin *cgb = *pCgb;
+if (cgb != NULL)
+     {
+     freeMem(cgb->fileName);
+     carefulClose(&cgb->f);
+     freez(pCgb);
+     }
+}
+
+boolean chromGraphBinNextChrom(struct chromGraphBin *cgb)
+/* Fetch next chromosome, or FALSE if at end of file. */
+{
+UBYTE size;
+FILE *f = cgb->f;
+if (!readOne(f, size))
+    return FALSE;
+mustRead(f, cgb->chrom, size);
+cgb->chrom[size] = 0;
+return TRUE;
+}
+
+boolean chromGraphBinNextVal(struct chromGraphBin *cgb)
+/* Fetch next chromStart/val or FALSE if at end of chromosome. */
+{
+FILE *f = cgb->f;
+mustReadOne(f, cgb->chromStart);
+if (cgb->isSwapped)
+    cgb->chromStart = byteSwap32(cgb->chromStart);
+if (cgb->chromStart == (bits32)(-1))
+    return FALSE;
+mustReadOne(f, cgb->val);
+return TRUE;
+}
+
