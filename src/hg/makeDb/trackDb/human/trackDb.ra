@@ -1010,6 +1010,23 @@ type bed 5 .
 useScore 1
 origAssembly hg16
 
+track regPotential7X
+shortLabel Reg Potential 7 species
+longLabel SPERR Regulatory Potential (7 species)
+group regulation
+priority 101
+visibility hide
+autoScaleDefault Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+defaultViewLimits 0.0:0.10
+windowingFunction mean
+spanList 1
+type wig 0.0 1.0
+
 track blastDm1FB
 shortLabel D. mel. Proteins
 longLabel D. melanogaster Proteins
@@ -1618,4 +1635,3 @@ searchType genePred
 shortcircuit 1
 termRegex EG3HTT[0-9]+
 searchPriority 50
-
