@@ -1,21 +1,21 @@
 include ../../inc/common.mk
 
-L = -lm $(MYSQLLIBS)
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+L = -lm ${MYSQLLIBS}
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = pdbSP
 
 O = $A.o
 
 my: compile
-	mv $A /cluster/home/$(USER)/bin/$(MACHTYPE)
+	mv $A${EXE} ${HOME}/bin/${MACHTYPE}
 
 compile: $O 
-	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
+	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L} 
 	mv ${AOUT} $A${EXE}
 	${STRIP} $A${EXE}
-	chmod a+rx $A
+	chmod a+rx $A${EXE}
 
 lib:
 	cd ../../lib && ${MAKE}
@@ -23,3 +23,5 @@ lib:
 tags: 
 	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
 
+clean::
+	rm -f $A $A.o $A${EXE}
