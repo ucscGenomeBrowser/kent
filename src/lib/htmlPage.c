@@ -23,7 +23,7 @@
 #include "net.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: htmlPage.c,v 1.27 2005/12/12 18:33:22 kent Exp $";
+static char const rcsid[] = "$Id: htmlPage.c,v 1.28 2006/06/14 08:42:17 galt Exp $";
 
 void htmlStatusFree(struct htmlStatus **pStatus)
 /* Free up resources associated with status */
@@ -109,11 +109,12 @@ if (cookieList != NULL)
     dyStringAppend(dy, "Cookie:");
     for (cookie = cookieList; cookie != NULL; cookie = cookie->next)
 	{
+	if (cookie != cookieList)
+	    dyStringAppendC(dy, ';');
 	dyStringAppendC(dy, ' ');
 	dyStringAppend(dy, cookie->name);
 	dyStringAppendC(dy, '=');
 	dyStringAppend(dy, cookie->value);
-	dyStringAppendC(dy, ';');
 	}
     dyStringAppend(dy, "\r\n");
     }
