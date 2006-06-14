@@ -20953,7 +20953,7 @@ mysql> select count(*) from ContigLocFilter where orientation = 0;
 # condense ContigLocusIdFilter into ContigLocusIdCondense (one SNP can have multiple functions)
 # assumes SNPs are in numerical order
 # will errAbort if not true
-/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocusIdCondense dbSnpHumanBuild125 ref_haplotype
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpContigLocusIdCondense dbSnpHumanBuild125 
 # note rowcount
 # expect about 50% for human
 # ContigLocusIdCondense 4129899
