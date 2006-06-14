@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "repMask.h"
 
-static char const rcsid[] = "$Id: maskOutFa.c,v 1.8 2003/06/26 20:12:35 hiram Exp $";
+static char const rcsid[] = "$Id: maskOutFa.c,v 1.9 2006/06/14 16:31:30 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -38,7 +38,6 @@ struct hash *hash = newHash(0);
 struct dnaSeq *seqList = NULL, *seq;
 char *line;
 int lineSize;
-struct hashEl *hel;
 boolean ok;
 boolean isOut = endsWith(maskFile, ".out");
 boolean isBed = endsWith(maskFile, ".bed");
@@ -93,7 +92,6 @@ if (!extraHard)
 	char *seqName = (char *) NULL;
 	int start=-1, end=-1;
 	int repSize, seqSize;
-	boolean clipped;
 
 	if (isOut)
 	    {
