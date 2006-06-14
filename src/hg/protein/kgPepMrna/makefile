@@ -1,41 +1,14 @@
-
-#	$Id: makefile,v 1.3 2006/06/14 17:44:30 fanhsu Exp $
-
 include ../../../inc/common.mk
 
-L = -lm ${MYSQLLIBS}
+L = ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-A = kgPepMrna
+O = kgPepMrna.o
 
-O = $A.o
+kgPepMrna: $O ${MYLIBS}
+	${CC} ${COPT} -o ${HOME}/bin/${MACHTYPE}/kgPepMrna $O ${MYLIBS} $L
+	strip ${HOME}/bin/${MACHTYPE}/kgPepMrna
 
-my: compile
-	mv $A${EXE} ${HOME}/bin/${MACHTYPE}/$A
-
-mgsc: compile
-	mv $A${EXE} /usr/local/apache/cgi-bin-mgsc/$A
-
-alpha: compile
-	mv $A${EXE} /usr/local/apache/cgi-bin/$A
-
-beta: compile
-	mv $A${EXE} /usr/local/apache/cgi-bin-beta/$A
-
-
-compile: $O 
-	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
-	mv ${AOUT} $A${EXE}
-#	${STRIP} $A${EXE}
-	chmod a+rx $A${EXE}
-
-lib:
-	cd ../../lib && ${MAKE}
-
-tags: 
-	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
-
-clean::
-	rm -f $A $A${EXE} $A.o
-
+clean:
+	rm -f $O
