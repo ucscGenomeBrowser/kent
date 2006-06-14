@@ -877,7 +877,7 @@ cat > mafFrags.csh << 'EOF'
     # edit README.txt
 
 
-# MULTIZ7WAY MAF FRAMES (DONE 4/28/2006 angie)
+# MULTIZ7WAY MAF FRAMES (DONE 4/28/2006 angie - REDONE 2006-06-09 markd)
     ssh hgwdev
     mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/frames
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/frames
@@ -985,8 +985,6 @@ cat > mafFrags.csh << 'EOF'
     # clean up
     rm -rf ${clusterDir}
 
-
-
     ###
     # rebuild frames to get bug fix, using 1-pass maf methodology
     # (2006-06-09 markd)
@@ -1001,7 +999,7 @@ cat > mafFrags.csh << 'EOF'
     hgLoadMafFrames xenTro2 multiz7wayFrames multiz7way.mafFrames.gz >&log&
 
 
-# PHASTCONS (DONE 5/2/2006 angie)
+# PHASTCONS (DONE 5/2/2006 angie - REDONE w/pruned ENCODE model 6/14/06)
 # Using Kate's process from makeHg17.doc.
 # This process is distilled from Hiram and Adam's experiments
 # on mouse (mm7) 17way track.  Many parameters are now fixed, without
@@ -1016,7 +1014,7 @@ cat > mafFrags.csh << 'EOF'
 # we use a single, pre-existing tree model -- Elliot Margulies' model 
 # from the (37-way) ENCODE alignments.
 
-    ssh kki
+    ssh kkstore04
     # Prune Elliot's model to just our 7 species:
     mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
@@ -1029,61 +1027,43 @@ cat > mafFrags.csh << 'EOF'
 
     # Split MAF into windows and use to generate
     # "sufficient statistics" (ss) files for phastCons input
-    mkdir run.split
-    cd run.split
-    set WINDOWS = /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/ss
-    rm -fr $WINDOWS
-    mkdir -p $WINDOWS
-    # Make directory structure corresponding to maf:
-    foreach d1 (0 1 2 3 4 5 6 7 8 9)
-      mkdir $WINDOWS/$d1
-      foreach d0 (0 1 2 3 4 5 6 7 8 9)
-        mkdir $WINDOWS/$d1/$d0
-      end
-    end
-
-    cat << 'EOF' > doSplit.csh
-#!/bin/csh -ef
-    set MAFS = /cluster/data/xenTro2/bed/multiz7way.2006-04-27/maf
-    set WINDOWS = /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/ss
-    set d = $1
-    set c = $2
-    # skip the maf files that have only comments -- those crash msa_split:
-    if (`grep -v ^\# $MAFS/$d/$c.maf | wc -l`) then
-      set tmpDir = /scratch/tmp
-      twoBitToFa /scratch/hg/xenTro2/xenTro2.2bit -seq=$c $tmpDir/$c.fa
-      cd $WINDOWS
-      /cluster/bin/phast/$MACHTYPE/msa_split $MAFS/$d/$c.maf -i MAF \
-          -M $tmpDir/$c.fa \
-          -o SS -r $d/$c -w 10000000,0 -I 1000 -B 5000
-      rm -f $tmpDir/$c.fa
-    endif
-    echo "Done" >> $WINDOWS/$d/$c.done
-'EOF'
-# << emacs
-    chmod +x doSplit.csh
-
-    rm -f jobList
-    foreach path (../../maf/*/*) 
-      set d1 = $path:h:t
-      set d0 = $path:t
-      set d = "$d1/$d0"
-      foreach f ($path/*.maf)
+    # 6/14/06: For a chrom-based genome we would run a splitting job on the 
+    # small cluster.  However, since this is scaffold-based and we have 
+    # thousands of files (for sequences so small that they don't even get 
+    # split), the I/O time of a cluster run is huge and wasteful.  
+    # So run this directly on the fileserver.
+    cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons
+    cat > doSplitOnFileserver.csh << '_EOF_'
+#!/bin/csh -fex
+set WINDOWS = /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/ss
+set tmpDir = /scratch/tmp
+rm -fr $WINDOWS
+mkdir -p $WINDOWS
+date
+# Make directory structure corresponding to maf and fill with .ss:
+foreach d1 (0 1 2 3 4 5 6 7 8 9)
+  mkdir $WINDOWS/$d1
+  foreach d0 (0 1 2 3 4 5 6 7 8 9)
+    mkdir $WINDOWS/$d1/$d0
+    foreach f (../maf/$d1/$d0/scaf*.maf)
+      # skip the maf files that have only comments -- those crash msa_split:
+      if (`grep -v ^\# $f | wc -l`) then
         set c = $f:t:r
-        echo "doSplit.csh $d $c {check out line+ $WINDOWS/$d/$c.done}" \
-          >> jobList
-      end
+        twoBitToFa /cluster/data/xenTro2/xenTro2.2bit -seq=$c $tmpDir/$c.fa
+        /cluster/bin/phast/$MACHTYPE/msa_split $f -i MAF \
+            -M $tmpDir/$c.fa \
+            -o SS -r $WINDOWS/$d1/$d0/$c -w 10000000,0 -I 1000 -B 5000
+        rm -f $tmpDir/$c.fa
+      endif
     end
-    para make jobList
-    para time
-# Wow... looks like a single job on the fileserver would have finished 
-# quite a bit sooner:
-#Completed: 19759 of 19759 jobs
-#CPU time in finished jobs:        637s      10.61m     0.18h    0.01d  0.000 y
-#IO & Wait Time:                 53363s     889.39m    14.82h    0.62d  0.002 y
-#Average job time:                   3s       0.05m     0.00h    0.00d
-#Longest finished job:              10s       0.17m     0.00h    0.00d
-#Submission to last job:          3378s      56.30m     0.94h    0.04d
+  end
+end
+date
+'_EOF_'
+    # << emacs
+    chmod a+x doSplitOnFileserver.csh
+    nice ./doSplitOnFileserver.csh >& split.log & tail -f split.log
+    # Took 15 minutes (was 1 hour on small cluster due to I/O)
 
     # check tree model on a single chunk, using params recommended by Adam,
     # (to verify branch lengths on 2X species -- though we aren't using any 
@@ -1097,24 +1077,17 @@ cat > mafFrags.csh << 'EOF'
     # Comment from makeHg17.doc:
     # # he ok'ed the results -- not necessary for next human run
 
-    # TODO: maybe run these by Adam... the numbers in the RATE_MAT and 
-    # TREE are different between the phyloFit and elliotsEncode models,
-    # not sure if the differences are significant.  
-
-    # The elliotsEncode.mod is giving about twice as much coverage as 
-    # we want, despite extremely low --target-coverage, so use phyloFit.tree.
-    # Also, when I loaded wiggles made with elliotsEncode and phyloFit into 
+    # 6/14/06:
+    # The elliotsEncode.mod is gives about twice as much coverage as 
+    # I thought we wanted, despite extremely low --target-coverage, 
+    # but Adam and Jim say the coverage from phyloFit.tree is too low.
+    # When I loaded wiggles made with elliotsEncode and phyloFit into 
     # the browser for visual comparison, the elliotsEncode wiggle was maxed 
     # out (~1 wherever anything aligned) while the phyloFit wiggle showed a 
-    # lot more dynamics.  It bothers me that the elements' coverage was so 
-    # low with the phyloFit model... a lot more than 1.3% must be conserved!
-    # But the elliotsEncode seems off in the other direction, and not much 
-    # more informative than looking at the multiz alignment to see where 
-    # something aligns.
+    # lot more dynamics.  So initially I went with phyloFit for that reason,
+    # but it was not a good reason.  I'll rerun with elliotsEncode.
 
     # Run phastCons
-    #	This job is I/O intensive in its output files, thus it is all
-    #	working over in /scratch/tmp/
     mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons/run.cons
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastCons/run.cons
     cat > doPhast.csh << 'EOF'
@@ -1127,10 +1100,10 @@ set rho = $5
 set tmp = /scratch/tmp/$f
 mkdir -p $tmp
 set san = /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons
-cp -p $san/ss/$d/$f.ss ../phyloFit.tree.mod $tmp
+cp -p $san/ss/$d/$f.ss ../elliotsEncodePruned.mod $tmp
 pushd $tmp > /dev/null
 set c = $f:r:r
-/cluster/bin/phast/$MACHTYPE/phastCons $f.ss phyloFit.tree.mod \
+/cluster/bin/phast/$MACHTYPE/phastCons $f.ss elliotsEncodePruned.mod \
   --rho $rho --expected-length $len --target-coverage $cov --quiet \
   --seqname $c --idpref $c --viterbi $f.bed --score > $f.pp
 popd > /dev/null
@@ -1143,10 +1116,18 @@ rm -fr $tmp
     # << emacs
     chmod a+x doPhast.csh
 
+    # 6/14/06: Estimate rho on scaffold_1
+    /cluster/bin/phast/$MACHTYPE/phastCons --estimate-rho /tmp/estimatedRho.mod \
+      --target-coverage 0.005 --expected-length 12 --no-post-probs \
+      /cluster/bluearc/xenTro2/multiz7way.2006-04-27/phastCons/ss/0/1/scaffold_1.*.ss \
+      ../elliotsEncodePruned.mod
+#(rho = 0.255026)
+# for target-coverage 0.1: (rho = 0.223770)
+
     # Create gsub file
     cat > template << 'EOF'
 #LOOP
-doPhast.csh $(dir1) $(file1) 12 .50 .339
+doPhast.csh $(dir1) $(file1) 12 .005 .26
 #ENDLOOP
 'EOF'
     # << emacs
@@ -1218,9 +1199,12 @@ doPhast.csh $(dir1) $(file1) 12 .50 .339
 #mgcGenes:cds 0.235%, phastConsElements7way.bed 1.353%, both 0.091%, cover 38.78%, enrich 28.67x
     mv phastConsElements7way.bed phastConsElements7way_12_500_339.bed
 
+    # SIXTH ITERATION: elliotsEncode, doPhast (len cov rho) = (12 .005 .26)
+#mgcGenes:cds 0.235%, phastConsElements7way.bed 10.377%, both 0.194%, cover 82.42%, enrich 7.94x
+    mv phastConsElements7way.bed phastConsElements7way_12_005_26.bed
 
     # When happy:
-    hgLoadBed -strict xenTro2 phastConsElements7way phastConsElements7way_12_500_339.bed
+    hgLoadBed -strict xenTro2 phastConsElements7way phastConsElements7way_12_005_26.bed
 
     # Create merged posterior probability file and wiggle track data files
     ssh kolossus
@@ -1244,48 +1228,56 @@ doPhast.csh $(dir1) $(file1) 12 .50 .339
     hgLoadWiggle -pathPrefix=/gbdb/xenTro2/multiz7way xenTro2 \
         phastCons7way phastCons7way.wig
 
-    # Make .jpg for tree and install in htdocs/images/phylo/... don't forget
-    # to request a push of that file.  The treeImage setting in trackDb.ra 
-    # is phylo/xenTro2_7way.jpg (relative to htdocs/images).
-    # Since we used the phyloFit.tree.mod instead of elliotsEncodePruned.mod 
-    # in the final phastCons run, regenerate 7way.nh from phyloFit.tree.mod 
-    # so that those numbers are used to generate the picture.
+    # Make .jpg for tree, check in to browser/images and install in
+    # htdocs/images/phylo/... don't forget to request a push of that
+    # file.  The treeImage setting in trackDb.ra is
+    # phylo/xenTro2_7way.jpg (relative to htdocs/images).  
+    # Use 7way.nh from the model used in the final run: 
+    # elliotsEncodePruned.mod .
     ssh hgwdev
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27
     mv 7way.nh 7way.elliotsEncode.nh
     tail -1 phastCons/phyloFit.tree.mod | sed -e 's/^TREE: //' \
-      > 7way.nh
+      > 7way.phyloFit.nh
 
-    /cluster/bin/phast/all_dists 7way.nh > 7way.distances.txt
+    /cluster/bin/phast/all_dists 7way.elliotsEncode.nh > 7way.distances.txt
     grep xenTro2 7way.distances.txt | sort -k3,3n | \
         awk '{printf ("%.4f\t%s\n", $3, $2)}' > distances.txt
     cat distances.txt
-#0.4899  galGal2
-#0.5621  monDom4
-#0.5738  hg18
-#0.6038  mm8
-#0.6074  danRer4
-#0.6075  rn4
-    # the order in the browser display will be by tree topology,
-    # not by distance.
-
-    # Just for reference, these were the distances from elliotsEncode.mod...
-    # Quite different!
 #1.3604  chicken_galGal2
 #1.4357  human_hg18
 #1.4659  monodelphis_monDom4
 #1.7936  mouse_mm8
 #1.7983  rat_rn4
 #1.8771  zebrafish_danRer4
+    # the order in the browser display will be by tree topology,
+    # not by distance.
 
-    /cluster/bin/phast/draw_tree 7way.nh > 7way.ps
+    # Just for reference, these were the distances from phyloFit.tree.mod...
+    # Quite different!
+#0.4899  galGal2
+#0.5621  monDom4
+#0.5738  hg18
+#0.6038  mm8
+#0.6074  danRer4
+#0.6075  rn4
+
+    /cluster/bin/phast/draw_tree 7way.elliotsEncode.nh > 7way.ps
     ps2pdf 7way.ps > 7way.pdf
     pstopnm -stdout 7way.ps | pnmtojpeg > xenTro2_7way.jpg
-    ln -s /cluster/data/xenTro2/bed/multiz7way.2006-04-27/xenTro2_7way.jpg \
-      /usr/local/apache/htdocs/images/phylo/xenTro2_7way.jpg
+
+    # If you haven't already, check out the browser CVS tree in your ~/:
+    # (cd; cvs co -d hgwdev:/projects/hg/cvsroot browser)
+    cp xenTro2_7way.jpg ~/browser/images/phylo/
+    cd ~/browser/images/phylo
+    cvs add xenTro2_7way.jpg
+    cvs ci xenTro2_7way.jpg
+    cd ../..
+    cvsup
+    make alpha
 
 
-# PHASTCONS SCORES DOWNLOADABLES FOR 7WAY (DONE 5/2/2006 angie)
+# PHASTCONS SCORES DOWNLOADABLES FOR 7WAY (DONE 5/2/06 angie - REDONE 6/14/06)
     ssh kolossus
     mkdir /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastConsDownloads
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastConsDownloads
@@ -1304,7 +1296,7 @@ doPhast.csh $(dir1) $(file1) 12 .50 .339
       endif
     end
     nice gzip xenTro2.pp
-    md5sum *.gz > md5sum.txt
+    md5sum xenTro2.pp.gz > md5sum.txt
 
     ssh hgwdev
     cd /cluster/data/xenTro2/bed/multiz7way.2006-04-27/phastConsDownloads
