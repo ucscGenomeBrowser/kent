@@ -21,7 +21,7 @@
 #include "correlate.h"
 #include "hgTables.h"
 
-static char const rcsid[] = "$Id: wiggle.c,v 1.59 2006/05/31 22:17:03 hiram Exp $";
+static char const rcsid[] = "$Id: wiggle.c,v 1.60 2006/06/14 22:17:14 angie Exp $";
 
 extern char *maxOutMenu[];
 
@@ -328,7 +328,7 @@ if (anyIntersection() && !isWiggle(database, table))
     char *table2 = cartString(cart, hgtaIntersectTable);
     if (table2 && differentWord(table2, table))
 	{
-	struct trackDb *tdb2 = hTrackDbForTrack(track2);
+	struct trackDb *tdb2 = findTrack(track2, fullTrackList);
 	struct trackTable *tt2 = trackTableNew(tdb2, table2, conn);
 	struct dataVector *dataVector2 = dataVectorFetchOneRegion(tt2, region,
 								  conn);
