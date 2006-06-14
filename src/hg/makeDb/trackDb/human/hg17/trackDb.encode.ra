@@ -1563,6 +1563,137 @@ dataVersion ENCODE Oct 2005 Freeze
     type bed 5 .
     priority 2
 
+track encodeUWRegulomeBase
+compositeTrack on
+shortLabel UW/Reg QCP DNaseI Sens
+longLabel ENCODE UW/Regulome QCP DNaseI Sensitivity
+group encodeChrom
+priority 66.05
+chromosomes chr1,chr10,chr11,chr12,chr13,chr16,chr18,chr19,chr2,chr21,chr22,chr4,chr5,chr7,chr8,chr9,chrX
+visibility hide
+maxHeightPixels 128:16:16
+type bedGraph 0.0 3.0
+minLimit -5.45
+maxLimit 6.33
+viewLimits 0.5:3
+maxHeightPixels 128:16:16
+type bedGraph 5
+autoScaleDefault Off
+smoothingWindow 2
+dataVersion ENCODE June 2006
+
+    track encodeUWRegulomeBaseCD4
+    subTrack encodeUWRegulomeBase
+    shortLabel CD4
+    longLabel CD4 DNaseI Sensitivity
+    color 0,0,255
+    priority 1
+
+    track encodeUWRegulomeBaseCaCo2
+    subTrack encodeUWRegulomeBase
+    shortLabel CaCo2
+    longLabel CaCo2 DNaseI Sensitivity
+    color 0,48,224
+    priority 2
+
+    track encodeUWRegulomeBaseCaLU3
+    subTrack encodeUWRegulomeBase
+    shortLabel CaLU3
+    longLabel CaLU3 DNaseI Sensitivity
+    color 0,96,176
+    priority 3
+
+    track encodeUWRegulomeBaseEryAdult
+    subTrack encodeUWRegulomeBase
+    shortLabel EryAdult
+    longLabel EryAdult DNaseI Sensitivity
+    color 0,119,153
+    priority 4
+
+    track encodeUWRegulomeBaseEryFetal
+    subTrack encodeUWRegulomeBase
+    shortLabel EryFetal
+    longLabel EryFetal DNaseI Sensitivity
+    color 0,153,119
+    priority 5
+
+    track encodeUWRegulomeBaseGM
+    subTrack encodeUWRegulomeBase
+    shortLabel GM
+    longLabel GM DNaseI Sensitivity
+    color 0,187,85
+    priority 6
+
+    track encodeUWRegulomeBaseHMEC
+    subTrack encodeUWRegulomeBase
+    shortLabel HMEC
+    longLabel HMEC DNaseI Sensitivity
+    color 56,238,0
+    priority 7
+
+    track encodeUWRegulomeBaseHRE
+    subTrack encodeUWRegulomeBase
+    shortLabel HRE
+    longLabel HRE DNaseI Sensitivity
+    color 0,255,0
+    priority 8
+
+    track encodeUWRegulomeBaseHeLa
+    subTrack encodeUWRegulomeBase
+    shortLabel HeLa
+    longLabel HeLa DNaseI Sensitivity
+    color 68,238,0
+    priority 9
+
+    track encodeUWRegulomeBaseHepG2
+    subTrack encodeUWRegulomeBase
+    shortLabel HepG2
+    longLabel HepG2 DNaseI Sensitivity
+    color 96,192,326
+    priority 10
+
+    track encodeUWRegulomeBaseHuh7
+    subTrack encodeUWRegulomeBase
+    shortLabel Huh7
+    longLabel Huh7 DNaseI Sensitivity
+    color 136,170,0
+    priority 11
+
+    track encodeUWRegulomeBaseK562
+    subTrack encodeUWRegulomeBase
+    shortLabel K562
+    longLabel K562 DNaseI Sensitivity
+    color 170,136,0
+    priority 12
+
+    track encodeUWRegulomeBaseNHBE
+    subTrack encodeUWRegulomeBase
+    shortLabel NHBE
+    longLabel NHBE DNaseI Sensitivity
+    color 204,102,0
+    priority 13
+
+    track encodeUWRegulomeBasePANC
+    subTrack encodeUWRegulomeBase
+    shortLabel PANC
+    longLabel PANC DNaseI Sensitivity
+    color 238,68,0
+    priority 14
+
+    track encodeUWRegulomeBaseSAEC
+    subTrack encodeUWRegulomeBase
+    shortLabel SAEC
+    longLabel SAEC DNaseI Sensitivity
+    color 255,0,0
+    priority 15
+
+    track encodeUWRegulomeBaseSKnSH
+    subTrack encodeUWRegulomeBase
+    shortLabel SKnSH
+    longLabel SKnSH DNaseI Sensitivity
+    color 255,0,255
+    priority 16
+
 track encodeRegulomeBase
 release alpha
 compositeTrack on
