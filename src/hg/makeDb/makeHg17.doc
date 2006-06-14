@@ -21101,6 +21101,8 @@ mysql> desc chr1_snpTmp;
 # SingleClassTriAllelic
 # SingleClassQuadAllelic
 
+# This will also detect IUPAC symbols in allele
+
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpCheckClassAndObserved dbSnpHumanBuild125
 
 # add function
