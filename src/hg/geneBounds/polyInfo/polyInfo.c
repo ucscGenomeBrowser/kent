@@ -9,7 +9,7 @@
 #include "twoBit.h"
 #include "estOrientInfo.h"
 
-static char const rcsid[] = "$Id: polyInfo.c,v 1.16 2006/04/07 15:25:18 angie Exp $";
+static char const rcsid[] = "$Id: polyInfo.c,v 1.17 2006/06/14 16:58:10 kent Exp $";
 
 /* command line option specifications */
 static struct optionSpec optionSpecs[] = {
@@ -244,6 +244,8 @@ while (faSpeedReadNext(lf, &est.dna, &est.size, &est.name))
 	for (psl = pl->list; psl != NULL; psl = psl->next)
 	    {
             struct dnaSeq *geno = hashMustFindVal(genoHash, psl->tName);
+	    if (psl->tSize != geno->size)
+	        errAbort("psl generated on a different version of the genome");
 	    ZeroVar(&ei);
 	    fillInEstInfo(&ei, &est, geno, psl);
 	    estOrientInfoTabOut(&ei, f);
