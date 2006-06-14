@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.47 2006/06/09 21:40:55 galt Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.48 2006/06/14 21:50:32 donnak Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -254,7 +254,7 @@ void webDownloads()
 webNewSection("Command Line Tool");
 cgiParagraph(
 "To lift genome annotations locally on Linux systems, download the "
-"<A HREF=\"http://www.soe.ucsc.edu/~kent/exe/linux/liftOver.gz\">" 
+"<A HREF=\"http://hgdownload.cse.ucsc.edu/admin/exe/\">" 
 "<I>liftOver</I></A> executable and the appropriate "
 "<A HREF=\"http://hgdownload.cse.ucsc.edu/downloads.html#liftover\">"
 "chain file</A>."
