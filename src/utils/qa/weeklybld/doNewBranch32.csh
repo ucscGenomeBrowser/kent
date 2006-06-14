@@ -65,7 +65,7 @@ endif
 
 # do not do this here this way - we might as well wait until
 #  later in the week to run this after most branch-tag moves will have been applied.
-#ssh $BOX32 $WEEKLYBLD/buildCgis.csh
+#ssh $BOX32 $WEEKLYBLD/buildCgi32.csh
 if ( $status ) then
     echo "build 32-bit CGIs on $HOST failed"
     exit 1

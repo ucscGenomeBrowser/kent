@@ -22,16 +22,16 @@ set returnCode=0
 echo "Symlink Trick."
 ./symtrick.csh
 
-echo "disabled doHgNearTestRobot.csh"
-#./doHgNearTestRobot.csh
+#echo "disabled doHgNearTestRobot.csh"
+./doHgNearTestRobot.csh
 set err = $status
 if ( $err ) then
     echo "error running doHgNearTestRobot.csh: $err" 
     set returnCode=1
 endif
 
-echo "disabled doHgTablesTestRobot.csh"
-#./doHgTablesTestRobot.csh
+#echo "disabled doHgTablesTestRobot.csh"
+./doHgTablesTestRobot.csh
 set err = $status
 if ( $err ) then
     echo "error running doHgTablesTestRobot.csh: $err" 
@@ -42,6 +42,7 @@ endif
 #  so run them from hgwdev instead.
 
 # need to create a mini-sandbox to build these robot utilities
+#echo "disabled doJavaUtilBuild.csh"
 ssh hgwdev $WEEKLYBLD/doJavaUtilBuild.csh
 set err = $status
 if ( $err ) then
@@ -49,6 +50,7 @@ if ( $err ) then
     set returnCode=1
 endif 
 
+#echo "disabled doTrackCheckRobot.csh"
 ssh hgwdev $WEEKLYBLD/doTrackCheckRobot.csh
 set err = $status
 if ( $err ) then
@@ -57,6 +59,7 @@ if ( $err ) then
 endif 
 
 # note this uses java and ant, so it will not work on beta, so run from dev instead
+#echo "disabled doLiftOverTestRobot.csh"
 ssh hgwdev $WEEKLYBLD/doLiftOverTestRobot.csh
 set err = $status
 if ( $err ) then
