@@ -1321,4 +1321,174 @@ doPhast.csh $(dir1) $(file1) 12 .50 .339
 
 # ENSEMBL is on 4.0 not 4.1... do the coords mostly carry over???
 
+################################################
+# MAKE Human Proteins track (hg18 Working 2006-06-14 braney)
+    ssh kksilo
+    mkdir -p /cluster/data/danRer2/blastDb
+    cd /cluster/data/danRer2/blastDb
+    cut -f 1 ../chrom.sizes | sed "s/chr//" | sed "/NA/d" | sed "/Un/d" > chrom.list
+    for i in `cat chrom.list`; do ls -1 ../$i/*/*.fa . ; done | sed -n "/.*_.*_.*_.*/p" > list
+    ln -s `cat list` .
+    for i in *.fa
+    do
+	formatdb -i $i -p F
+    done
+    rm *.log *.fa list
+    cd ..
+    for i in `cat blastDb/chrom.list`; do cat  $i/chr*/*.lft  ; done > jkStuff/subChr.lft
+    rm blastDb/chrom.list
 
+    mkdir /cluster/data/danRer2/scaffoldBlastDb
+    cd /cluster/data/danRer2/scaffoldBlastDb
+    cat ../Un/scaffolds/*.fa ../NA/scaffolds/*.fa |  faSplit sequence stdin 500 scaf
+    for i in *.fa
+    do
+	formatdb -i $i -p F
+    done
+    rm *.log *.fa
+
+    ssh kkr1u00
+    mkdir -p /iscratch/i/danRer2/blastDb
+    cd /cluster/data/danRer2/blastDb
+    for i in nhr nin nsq; do cp *.$i /iscratch/i/danRer2/blastDb     ; echo $i; done
+
+    mkdir -p /iscratch/i/danRer2/scaffoldBlastDb
+    cd /cluster/data/danRer2/scaffoldBlastDb
+    for i in nhr nin nsq; do cp *.$i /iscratch/i/danRer2/scaffoldBlastDb     ; echo $i; done
+
+    cd
+    (iSync) > sync.out
+
+    mkdir -p /cluster/data/danRer2/bed/tblastn.hg17KG
+    cd /cluster/data/danRer2/bed/tblastn.hg17KG
+    echo  /iscratch/i/danRer2/blastDb/*.nsq  | xargs ls -S | sed "s/\.nsq//"  > query.lst  
+    echo  /iscratch/i/danRer2/scaffoldBlastDb/*.nsq  | xargs ls -S | sed "s/\.nsq//"  > scaffold.lst  
+    # back to kksilo
+    exit
+
+    # we want around 250000 jobs
+    cd /cluster/data/danRer2/bed/tblastn.hg17KG
+    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(250000/`wc query.lst | awk "{print \\\$1}"`\)
+    # 42156/(250000/3899) = 657.464976
+    mkdir -p /cluster/bluearc/danRer2/bed/tblastn.hg17KG/kgfa
+    split -l 657 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/danRer2/bed/tblastn.hg17KG/kgfa/kg
+    ln -s /cluster/bluearc/danRer2/bed/tblastn.hg17KG/kgfa kgfa
+    cd kgfa
+    for i in *; do pslxToFa $i $i.fa; rm $i; done
+    cd ..
+    ls -1S kgfa/*.fa > kg.lst
+    mkdir -p /cluster/bluearc/danRer2/bed/tblastn.hg17KG/blastOut
+    ln -s /cluster/bluearc/danRer2/bed/tblastn.hg17KG/blastOut
+    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+    tcsh
+    cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+#ENDLOOP
+'_EOF_'
+    cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/iscratch/i/blast/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+	liftUp -nosort -type=".psl" -nohead $f.3 ../../jkStuff/subChr.lft carry $f.2       
+        liftUp -nosort -type=".psl" -nohead $f.4 ../../jkStuff/liftAll.lft carry $f.3       
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.4       
+        if pslCheck -prot $3.tmp                                                                          
+        then                                                                                              
+            mv $3.tmp $3                                                                                  
+            rm -f $f.1 $f.2 $f.3 $f.4                                                                              
+        fi
+        exit 0                                                                                            
+    fi                                                                                                    
+fi                                                                                                        
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4      
+exit 1
+'_EOF_'
+
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    # I ended up doing the scaffolds separately from the chopped up chrom segments
+    # but next time I wouldn't
+    gensub2 scaffold.lst kg.lst blastGsub scaffoldBlastSpec
+
+    ssh kk
+    cd /cluster/data/danRer2/bed/tblastn.hg17KG
+    para create blastSpec
+    para push
+# Completed: 253435 of 253435 jobs
+# CPU time in finished jobs:   58003988s  966733.13m 16112.22h  671.34d  1.839 y
+# IO & Wait Time:              13196517s  219941.96m  3665.70h  152.74d  0.418 y
+# Average job time:                 281s       4.68m     0.08h    0.00d
+# Longest job:                     6238s     103.97m     1.73h    0.07d
+# Submission to last job:        174503s    2908.38m    48.47h    2.02d
+
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainSome $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainSome
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin ../c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainSome
+
+    ls -1dS `pwd`/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+
+    ssh kki
+    cd /cluster/data/danRer2/bed/tblastn.hg17KG
+    para create chainSpec
+    para push
+# Completed: 1287 of 1287 jobs
+# CPU time in finished jobs:      72236s    1203.94m    20.07h    0.84d  0.002 y
+# IO & Wait Time:                 22886s     381.43m     6.36h    0.26d  0.001 y
+# Average job time:                  74s       1.23m     0.02h    0.00d
+# Longest job:                     3374s      56.23m     0.94h    0.04d
+# Submission to last job:          5982s      99.70m     1.66h    0.07d
+
+    exit
+    # back to kksilo
+    cd /cluster/data/danRer2/bed/tblastn.hg17KG/blastOut
+    # again some weirdness because I did the NA and Un scaffolds separately
+    for i in kg??
+    do 
+	cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > cs60.$i.psl
+	sort -rn cs60.$i.psl | pslUniq stdin us.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" cs60.$i.psl > ms60.$i.psl
+	echo $i
+    done
+
+    for i in kg??
+    do 
+	cat $i/c.*.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+	echo $i
+    done
+
+    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/danRer2/bed/tblastn.hg17KG/blastHg17KG.psl
+    cd ..
+    # lift the chrUn and chrNA scaffolds 
+
+    ssh hgwdev
+    cd /cluster/data/danRer2/bed/tblastn.hg17KG
+    hgLoadPsl danRer2 blastHg17KG.psl
+
+    # back to kksilo
+    rm -rf blastOut
+# End tblastn
