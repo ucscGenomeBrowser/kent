@@ -11,7 +11,7 @@
 #include "linefile.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: snpMaskFlankSubset.c,v 1.5 2006/05/02 10:39:46 heather Exp $";
+static char const rcsid[] = "$Id: snpMaskFlankSubset.c,v 1.6 2006/06/14 23:12:41 heather Exp $";
 
 char *database = NULL;
 char *chromName = NULL;
@@ -508,7 +508,6 @@ return (newSeq);
 
 void readSnpsFromFile(char *inFile)
 {
-FILE *fileHandle = mustOpen(inFile, "r");
 struct lineFile *lf;
 char *line;
 int lineSize;
@@ -519,7 +518,7 @@ while (lineFileNext(lf, &line, &lineSize))
     {
     hashAdd(snpHash, cloneString(line), NULL);
     }
-carefulClose(&fileHandle);
+lineFileClose(&lf);
 }
 
 struct dnaSeq *getSeqFrag(int start, int size)
