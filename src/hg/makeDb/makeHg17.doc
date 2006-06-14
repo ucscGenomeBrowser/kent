@@ -21018,7 +21018,7 @@ mysql> desc chr1_snpTmp;
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpSort dbSnpHumanBuild125 ref_haplotype
 # get hg17 nib files
 # get hg17 chromInfo, load into dbSnpHumanBuild125 with editted path
-hgsql -e "rename table chrMT_snpTmp to chrM_snpTmp"
+hgsql -e "rename table chrMT_snpTmp to chrM_snpTmp" dbSnpHumanBuild125
 
 # lookup reference allele in nibs
 # keep reverse complement to use in error checking (snpCheckAlleles)
