@@ -29,7 +29,7 @@
 #include "dbDb.h"
 #include "htmlPage.h"
 
-static char const rcsid[] = "$Id: qaPushQ.c,v 1.84 2006/06/12 21:52:15 galt Exp $";
+static char const rcsid[] = "$Id: qaPushQ.c,v 1.85 2006/06/14 23:25:44 galt Exp $";
 
 char msg[2048] = "";
 char ** saveEnv;
@@ -1628,32 +1628,32 @@ if (!isOK)
     }
 if ((q->sizeMB < 0) || (q->sizeMB > 100000))
     {
-    safef(msg,sizeof(msg),"Size(MB): invalid size-> <br>\n");
+    safef(msg,sizeof(msg),"Size(MB): invalid size. <br>\n");
     isRedo = TRUE;
     }
 if (!isDateValid(cgiString("qadate")))
     {
-    safef(msg,sizeof(msg),"Date format invalid, should be YYYY-MM-DD-> <br>\n");
+    safef(msg,sizeof(msg),"Date format invalid, should be YYYY-MM-DD. <br>\n");
     isRedo = TRUE;
     }
 if (strlen(cgiString("track"))>255)
     {
-    safef(msg,sizeof(msg),"Track: too long for field, 255 char max-> <br>\n");
+    safef(msg,sizeof(msg),"Track: too long for field, 255 char max. <br>\n");
     isRedo = TRUE;
     }
 if (strlen(cgiString("dbs"))>255)
     {
-    safef(msg,sizeof(msg),"Database: too long for field, 255 char max-> <br>\n");
+    safef(msg,sizeof(msg),"Database: too long for field, 255 char max. <br>\n");
     isRedo = TRUE;
     }
 if (strlen(cgiString("cgis"))>255)
     {
-    safef(msg,sizeof(msg),"CGIs: too long for field, 255 char max-> <br>\n");
+    safef(msg,sizeof(msg),"CGIs: too long for field, 255 char max. <br>\n");
     isRedo = TRUE;
     }
 if (strlen(cgiString("stat"))>255)
     {
-    safef(msg,sizeof(msg),"Status: too long for field, 255 char max-> <br>\n");
+    safef(msg,sizeof(msg),"Status: too long for field, 255 char max. <br>\n");
     isRedo = TRUE;
     }
 
@@ -1661,42 +1661,42 @@ if (strlen(cgiString("stat"))>255)
 /* need to do this before delete or will lose the record */
 if ((sameString(pushbutton,"push requested"))&&(q->sizeMB==0))
     {
-    safef(msg,sizeof(msg),"Size (MB) should not be zero-> <br>\n");
+    safef(msg,sizeof(msg),"Size (MB) should not be zero. <br>\n");
     isRedo = TRUE;
     }
 
 if ((sameString(pushbutton,"push requested"))&&(!sameString(q->currLoc,"hgwbeta")))
     {
-    safef(msg,sizeof(msg),"Current Location should be hgwbeta-> <br>\n");
+    safef(msg,sizeof(msg),"Current Location should be hgwbeta. <br>\n");
     isRedo = TRUE;
     }
 
 if ((sameString(pushbutton,"push requested"))&&(sameString(q->makeDocYN,"N")))
     {
-    safef(msg,sizeof(msg),"MakeDoc not verified-> <br>\n");
+    safef(msg,sizeof(msg),"MakeDoc not verified. <br>\n");
     isRedo = TRUE;
     }
 
 if ((sameString(pushbutton,"push requested"))&&(sameString(q->ndxYN,"N")))
     {
-    safef(msg,sizeof(msg),"Index not verified-> <br>\n");
+    safef(msg,sizeof(msg),"Index not verified. <br>\n");
     isRedo = TRUE;
     }
 
 if ((sameString(pushbutton,"push requested"))&&(sameString(q->joinerYN,"N")))
     {
-    safef(msg,sizeof(msg),"All->Joiner not verified-> <br>\n");
+    safef(msg,sizeof(msg),"All->Joiner not verified. <br>\n");
     isRedo = TRUE;
     }
 
 if ((sameString(bouncebutton,"bounce"))&&(!sameString(q->priority,"A")))
     {
-    safef(msg,sizeof(msg),"Only priority A records should be bounced-> <br>\n");
+    safef(msg,sizeof(msg),"Only priority A records should be bounced. <br>\n");
     isRedo = TRUE;
     }
 if ((sameString(bouncebutton,"unbounce"))&&(sameString(q->priority,"A")))
     {
-    safef(msg,sizeof(msg),"Priority A records should not be unbounced-> <br>\n");
+    safef(msg,sizeof(msg),"Priority A records should not be unbounced. <br>\n");
     isRedo = TRUE;
     }
 
@@ -2925,7 +2925,7 @@ ZeroVar(&q);
 
 safef(newQid, sizeof(newQid), cgiString("qid"));
 
-printf("<H2>Tranfer Queue Entry %s:%s to Another Queue </H2>\n", pushQtbl, newQid);
+printf("<H2>Transfer Queue Entry %s:%s to Another Queue </H2>\n", pushQtbl, newQid);
 
 q=mustLoadPushQ(newQid); 
 
