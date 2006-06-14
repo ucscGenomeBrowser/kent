@@ -1,5 +1,5 @@
 
-#	$Id: makefile,v 1.2 2006/06/14 16:54:46 hiram Exp $
+#	$Id: makefile,v 1.3 2006/06/14 17:44:30 fanhsu Exp $
 
 include ../../../inc/common.mk
 
@@ -25,8 +25,8 @@ beta: compile
 
 
 compile: $O 
-	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L} 
-	mv a.out $A${EXE}
+	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
+	mv ${AOUT} $A${EXE}
 #	${STRIP} $A${EXE}
 	chmod a+rx $A${EXE}
 
@@ -37,4 +37,5 @@ tags:
 	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
 
 clean::
-	rm -f $A${EXE} $A.o
+	rm -f $A $A${EXE} $A.o
+
