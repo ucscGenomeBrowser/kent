@@ -147,7 +147,7 @@ speciesTarget human
 summary buildMafSummary
 # speciesOrder mouse/human chimp/human hg17 panTro1 rheMac1 oryCun1 rn3 mm6 bosTau1 canFam1 dasNov1 tenrec loxAfr1 
 #speciesOrder euArc primate ape hg18 panTro2 rheMac2 rn4 mm8 rodent oryCun1 glire bosTau2 canFam2 laurasia dasNov1 nonAfro echTel1 loxAfr1 afrothere eutherian
-speciesOrder homIni13 hg18 panTro2 rheMac2 rn4 mm8 rodEnt13 oryCun1 gliRes13 bosTau2 canFam2 lauRas13 borEut13 dasNov1 nonAfr13 echTel1 loxAfr1 afrOth13 euaGli13 eutHer13
+speciesOrder homPan1 hg18 panTro2 rheMac2 
 speciesCodonDefault hg18
 # frames buildMafFrames
 
