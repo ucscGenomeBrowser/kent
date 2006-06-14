@@ -2180,3 +2180,15 @@ close (FH)
 	-db=hg17 encodeUppsalaChipH3acBut0h
     #	running each of the wiggle tracks, it looks like 95% of the data
     #	is in the region 0 to 2.0
+
+
+##########################################################################
+# UW/Regulome QCP data
+# To replace existing tracks
+# Submitted 5/19/06 by John Stam <jstam@U.WASHINGTON.EDU>
+# 1 zip file data: UW_may06_ENCODE_data, plus Description.doc
+
+    cd /cluster/data/encode
+    mkdir -p 2006-05-19/lab
+    cd 2006-05-19/lab
+    # deposit data
