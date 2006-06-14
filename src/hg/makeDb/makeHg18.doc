@@ -9577,6 +9577,15 @@ BASE=/cluster/data/hg18/bed/blastz.galGal3.2006-05-22
     time hgLoadWiggle -tmpDir=/scratch/tmp \
 	hg18 regPotential7X regPotential7X.wig
 
+    #	How about a histogram of the data.
+    #	find min and max for everything to verify it is 0 to 1
+    ssh kkstore02
+    cd /cluster/data/hg18/bed/regPotential7X
+    time for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
+    do
+	echo " ============   ${C}  ======================="
+	bzcat chr${C}.scores.truncated.bz2 | ave -col=2 stdin
+    done > stats.all 2>&1
 
 #########################################################################
 # create md5sum.txt under bigZips (DONE, 6/7/06, Fan)
