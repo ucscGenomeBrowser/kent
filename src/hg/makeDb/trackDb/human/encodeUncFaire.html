@@ -14,17 +14,19 @@ are not displayed, they can be
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-The FAIRE data are represented by three subtracks. One subtrack is simply the 
-average normalized log2 ratios for the tiled probes and the other two display 
-peaks.  One set of peaks were determined using <em>PeakFinder</em> software 
-supplied by NimbleGen.  A false positive rate was estimated for the sets of 
-peaks using a permutation-based method. All peaks had an FPR of &lt; 0.01. The
-other set of peaks (Apr. 2006 update) were identified by ChIPOTle, a peak 
-finding algorithm which uses a sliding window to identify statistically
+The FAIRE data are represented by three subtracks. One subtrack shows the 
+average normalized log<sub>2</sub> ratios for the tiled probes; the other two 
+subtracks 
+display peaks.  The peaks in one set were determined using <em>PeakFinder</em> 
+software supplied by NimbleGen.  A false positive rate (FPR) was estimated for 
+the peak 
+set using a permutation-based method. All peaks had an FPR of &lt; 0.01. The
+peaks in the other set (Apr. 2006 update) were identified by ChIPOTle, a 
+peak-finding algorithm that uses a sliding window to identify statistically
 significant signals that comprise a peak.  A null distribution was determined 
 by reflecting the negative data, which is presumed to be noise, about zero and 
 a Gaussian distribution was fitted to it.  Windows were considered 
-significant with a p-value < 1e-25, after using the Benjamini-Hochberg 
+significant with a p-value &lt; 1e-25, after using the Benjamini-Hochberg 
 correction for multiple tests.</P>
 <P>
 This annotation follows the display conventions for composite 
@@ -64,19 +66,20 @@ the <A HREF="http://microarray.icmb.utexas.edu/" TARGET=_blank>Vishy Iyer
 lab</A> at the University of Texas, Austin.  FAIRE was done by Paul Giresi in 
 the <A HREF="http://www.bio.unc.edu/faculty/lieb/labpages/default.shtml"
 TARGET=_blank>Jason Lieb lab</A> at the University of North Carolina at 
-Chapel Hill. Paul Giresi of NimbleGen did the sample labeling and hybridization 
+Chapel Hill. Paul Giresi of <A HREF="http://nimblegen.com/"
+TARGET=_blank>NimbleGen</A> did the sample labeling and hybridization 
 with the help of Mike Singer and Roland Green.  Nan Jiang at NimbleGen supplied 
 the Software used for the permutation analysis.</P>
 
 <H2>References</H2>
 <P>
+Buck, M.J., Nobel, A.B., and Lieb, J.D. 
+<A HREF="http://genomebiology.com/2005/6/11/R97" TARGET=_blank>ChIPOTle: a 
+user-friendly tool for the analysis of ChIP-chip data</A>. <em>Genome Biol.</em>
+<B>6</B>(11), R97 (2005).</P>
+<P>
 Nagy, P.L., Cleary, M.L., Brown, P.O., and Lieb, J.L. 
 <A HREF="http://www.pnas.org/cgi/content/full/100/11/6364"
 TARGET=_blank>Genomewide demarcation of RNA polymerase II transcription units 
 revealed by physical fractionation of chromatin</A>. 
-<em>PNAS</em> <B>100</B>(11), 6364-9 (2003).
-
-Buck, MJ., Nobel, AB., and Lieb JD. <A HREF="http://genomebiology.com/2005/6/11/R97"> ChIPOTle: a user-friendly
-tool for the analysis of ChIP-chip data</A>. <em>Genome Biology</em> <B>6</B>
-(11):R97 (2005).
-</P>
+<em>PNAS</em> <B>100</B>(11), 6364-9 (2003).</P>
