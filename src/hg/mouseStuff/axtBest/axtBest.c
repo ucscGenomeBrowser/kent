@@ -9,7 +9,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtBest.c,v 1.17 2005/08/18 07:25:02 baertsch Exp $";
+static char const rcsid[] = "$Id: axtBest.c,v 1.18 2006/06/15 14:33:55 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -150,7 +150,9 @@ struct bestKeep
 
 void bestKeepFree(struct bestKeep **pEl)
 {
+/* #*** NOTE FIXME -- seems like this should free el->axts too.
 struct bestKeep *el = *pEl;
+*/
 freez(pEl);
 }
 
@@ -215,7 +217,7 @@ for (i=0; i<symCount; ++i)
 	}
     else
         {
-	score += ss->matrix[q][t];
+	score += ss->matrix[(int)q][(int)t];
 	lastGap = FALSE;
 	}
     if (score < 0)
