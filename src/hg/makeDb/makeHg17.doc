@@ -20399,7 +20399,10 @@ cat > loadMaf.csh << 'EOF'
     ssh hgwdev
     cd /cluster/data/hg17/bed/multiz17way/frames
 
-    hgLoadMafFrames hg17 multiz17wayFrames multiz17way.mafFrames.gz >&log&# EXTRACT LINEAGE-SPECIFIC REPEATS FOR RAT (DONE 2/8/06 angie)
+    hgLoadMafFrames hg17 multiz17wayFrames multiz17way.mafFrames.gz >&log&
+
+
+# EXTRACT LINEAGE-SPECIFIC REPEATS FOR RAT (DONE 2/8/06 angie)
     ssh kolossus
     mkdir /cluster/data/hg17/rmsk
     cd /cluster/data/hg17/rmsk
