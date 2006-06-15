@@ -2657,13 +2657,13 @@ dataVersion ENCODE Oct 2005 Freeze
 
     track encodeUncFairePeaks
     subTrack encodeUncFaire
-    shortLabel UNC FAIRE Peaks (PeakFinder)
+    shortLabel UNC FAIRE PeakFinder
     longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements) (PeakFinder)
     priority 2
     
     track encodeUncFairePeaksApr2006
     subTrack encodeUncFaire
-    shortLabel UNC FAIRE Peaks (ChIPOTle)
+    shortLabel UNC FAIRE ChIPOTle
     longLabel UNC FAIRE Peaks (Formaldehyde Assisted Isolation of Regulatory Elements) (ChIPOTle) Apr. 2006 Update
     noInherit on
     type bedGraph 4
