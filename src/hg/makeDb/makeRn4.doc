@@ -3025,6 +3025,8 @@ cat > downloads.csh << 'EOF'
     cd /cluster/data/rn4/bed/multiz9way/frames
 
     hgLoadMafFrames rn4 multiz9wayFrames multiz9way.mafFrames.gz >&log&
+
+
 # PHASTCONS (DONE 4/2/2006 angie)
 # Using Kate's process from makeHg17.doc.
 # This process is distilled from Hiram and Adam's experiments
