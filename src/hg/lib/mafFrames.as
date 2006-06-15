@@ -8,6 +8,6 @@ table mafFrames
     ubyte frame;       "frame (0,1,2) for first base(+) or last bast(-)"
     char[1] strand;    "+ or -"
     string name;       "Name of gene used to define frame"
-    int    prevFramePos; "target position of the previous base (in transcription direction) that continues this frame, or -1 if none, or frame not contiguous"
-    int    nextFramePos; "target position of the next base (in transcription direction) that continues this frame, or -1 if none, or frame not contiguous"
+    int    prevEnd;    "chromEnd of previous part of gene, or -1 if none"
+    int    nextStart;  "chromStart of next part of gene, or -1 if none"
     )
