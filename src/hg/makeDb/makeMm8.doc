@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.53 2006/06/15 00:09:34 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.54 2006/06/15 18:23:21 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5815,3 +5815,70 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
     #	real    18m29.167s
 
 #########################################################################
+# MAP CONTIGS TRACK (DONE - 2005-10-04 - Hiram)
+    ssh hgwdev
+    mkdir -p /cluster/data/mm8/bed/ctgPos
+    cd /cluster/data/mm8/bed/ctgPos
+    # hgCtgPos uses the lift files... but mouse lift files are for the
+    # 5MB contigs from splitFaIntoContigs, not for the real NT_ contigs
+    # from the assembly.  (In the future, we should go with the NT's!)
+    # So... just for this release, go straight from the seq_contig.md
+    # to the table def'n: contig, size, chrom, chromStart, chromEnd
+    #	This script is an improvement from before, this is now doing the
+    #	randoms properly.
+    cat << '_EOF_' > seqContigToCtgPos.pl
+#!/usr/bin/env perl
+
+use warnings;
+use strict;
+
+my $prevRandom="";
+my $randomPosition=0;
+
+while(my $line=<>)
+{
+chomp($line);
+my @a = split('\s+',$line);
+if ($a[1] =~ m/\|/)
+    {
+    my @b = split('\|',$a[1]);
+    if ($b[0] ne $prevRandom)
+	{
+	$randomPosition=0;
+	$prevRandom=$b[0];
+	}
+    my $size = $a[3]-$a[2]+1;
+    my $start = $randomPosition;
+    my $end = $randomPosition + $size;
+    printf "%s\t%d\tchr%s_random\t%d\t%d\n", $a[5],$size,$b[0],$start,$end;
+    if ($b[0] ne "Un") { $randomPosition += 50000; }
+	else { $randomPosition += 1000; }
+    $randomPosition += $size;
+    }
+elsif ($a[5] =~ m/^N[TC]_\d+$/)
+    {
+    my $start = $a[2]-1;
+    my $end = $a[3];
+    my $size = $end-$start;
+    printf "%s\t%d\tchr%s\t%d\t%d\n", $a[5],$size,$a[1],$start,$end;
+    }
+}
+'_EOF_'
+    #	<< emacs happy
+    chmod +x seqContigToCtgPos.pl
+
+    cat ../../seq_contig.md | ./seqContigToCtgPos.pl > ctgPos.tab
+
+    hgsql mm8 < ~/kent/src/hg/lib/ctgPos.sql
+    hgsql mm8 -e 'load data local infile "ctgPos.tab" into table ctgPos;'
+
+    featureBits -countGaps mm8 ctgPos
+    #	2573322222 bases of 2664455088 (96.580%) in intersection
+    featureBits -countGaps mm7 ctgPos
+    #	2608810329 bases of 2847717329 (91.611%) in intersection
+    featureBits -countGaps mm6 ctgPos
+    #	2638893452 bases of 3079633452 (85.689%) in intersection
+    featureBits -countGaps mm5 ctgPos
+    #	2557081173 bases of 3164952073 (80.794%) in intersection
+
+#####################################################################
