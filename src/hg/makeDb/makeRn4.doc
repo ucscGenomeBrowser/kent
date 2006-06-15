@@ -1716,19 +1716,22 @@ while (<>) {
 #   5234    5234   48832 [in rn4 only]
 
 
-# LOAD STS MARKER TABLES (DONE 3/8/06 angie)
+# LOAD STS MARKER TABLES (DONE 3/8/06 angie - ratSeq.fa added 6/14/06)
     ssh hgwdev
     cd /cluster/data/rn4/bed/stsMarkers
     # Add primer sequences to /gbdb and load:
     mkdir /gbdb/rn4/stsMarker
     ln -s /cluster/data/rn4/bed/stsMarkers/ratPrimer.fa \
       /gbdb/rn4/stsMarker/ratPrimer.fa
+    ln -s /cluster/data/rn4/bed/stsMarkers/ratSeq.fa \
+      /gbdb/rn4/stsMarker/ratSeq.fa
     # PLEASE NOTE: if re-running hgLoadSeq, you MUST add
     #	-replace
     #	hgLoadSeq -replace rn4 /gbdb/rn4/stsMarker/ratPrimer.fa
     # otherwise there will be a problem that the seq and extFile tables 
     # will be out of sync. 
     hgLoadSeq rn4 /gbdb/rn4/stsMarker/ratPrimer.fa
+    hgLoadSeq rn4 /gbdb/rn4/stsMarker/ratSeq.fa
     hgLoadSqlTab rn4 stsAlias \
       ~/kent/src/hg/lib/stsAlias.sql stsAlias.tab
     hgLoadSqlTab rn4 stsInfoRat \
