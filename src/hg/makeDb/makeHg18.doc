@@ -9562,7 +9562,7 @@ BASE=/cluster/data/hg18/bed/blastz.galGal3.2006-05-22
     do
 	bzcat chr${C}.scores.truncated.bz2
     done | wigEncode -noOverlap  stdin regPotential7X.wig regPotential7X.wib
-    #	Converted stdin, upper limit 1.00, lower limit -0.00
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
     #	real    23m27.454s
     #	user    22m41.058s
     #	sys     0m41.850s
@@ -9586,6 +9586,18 @@ BASE=/cluster/data/hg18/bed/blastz.galGal3.2006-05-22
 	echo " ============   ${C}  ======================="
 	bzcat chr${C}.scores.truncated.bz2 | ave -col=2 stdin
     done > stats.all 2>&1
+
+    grep "^min" stats.all | sort -u
+    #	min 0.000000
+    grep "^max" stats.all | sort -u
+    #	max 1.000000
+
+    ssh kolossus
+    cd /cluster/data/hg18/bed/regPotential7X
+    time hgWiggle -verbose=2 -doHistogram -hBinSize=0.01 -hBinCount=100 \
+	-hMinVal=0.0 -db=hg18 regPotential7X > histogram.data 2>&1
+    #	real    2m42.311s
+    #	73 % of the data values are zero
 
 #########################################################################
 # create md5sum.txt under bigZips (DONE, 6/7/06, Fan)

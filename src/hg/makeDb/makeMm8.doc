@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.52 2006/06/12 16:54:16 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.53 2006/06/15 00:09:34 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5769,4 +5769,49 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
     grep -v ^track genetrap_mm8.psl \
     | hgLoadPsl mm8 -table=igtc stdin
 
-############################################################################
+#########################################################################
+# REGULATORY POTENTIAL (DONE - 2006-06-12 - Hiram)
+    #	download data from "James Taylor" <james@bx.psu.edu>
+    ssh kkstore02
+    cd /cluster/data/mm8/bed
+    mkdir /cluster/store8/mm8/bed/regPotential7X
+    ln -s /cluster/store8/mm8/bed/regPotential7X .
+    cd regPotential7X
+    
+    #	This is a lot of data
+    time for C in 1 2 3 4 5 6 7 8 9 X 10 11 12 13 14 15 16 17 18 19
+    do
+    wget --timestamping \
+"http://www.bx.psu.edu/~james/esperr_rp_7way_scores/genome_scores_mm8/chr${C}.scores.truncated.bz2"
+    done
+    #	real    79m32.840s
+
+    wget --timestamping \
+"http://www.bx.psu.edu/~james/esperr_rp_7way_scores/genome_scores_mm8/trackDb.html" -O description.html
+
+    time for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X
+    do
+	bzcat chr${C}.scores.truncated.bz2
+    done | wigEncode -noOverlap  stdin regPotential7X.wig regPotential7X.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    22m28.583s
+
+    #	Loading the table on hgwdev
+    ssh hgwdev
+    cd /cluster/data/mm8/bed/regPotential7X
+    ln -s /cluster/data/mm8/bed/regPotential7X/regPotential7X.wib \
+	/gbdb/mm8/wib/regPotential7X.wib
+    #	using the tmpDir is faster since it is on local disk and it will
+    #	clean up any temporary .tab file it creates there
+    time hgLoadWiggle -tmpDir=/scratch/tmp \
+	mm8 regPotential7X regPotential7X.wig
+    #	real    0m28.683s
+
+    #	create a histogram
+    ssh kolossus
+    cd /cluster/data/mm8/bed/regPotential7X
+    time hgWiggle -verbose=2 -doHistogram -hBinSize=0.01 -hBinCount=100 \
+	-hMinVal=0.0 -db=mm8 regPotential7X > histogram.data 2>&1
+    #	real    18m29.167s
+
+#########################################################################

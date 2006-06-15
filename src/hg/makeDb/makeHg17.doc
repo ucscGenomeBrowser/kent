@@ -21317,6 +21317,7 @@ hgsql -e "alter table illumina add index chrom (chrom, bin)" hg17
     wget --timestamping \
 "http://www.bx.psu.edu/~james/esperr_rp_7way_scores/genome_scores_hg17/chr${C}.scores.truncated.bz2"
     done
+    #	real    115m1.855s
 
     wget --timestamping \
 "http://www.bx.psu.edu/~james/esperr_rp_7way_scores/genome_scores_hg17/trackDb.html" -O description.html
@@ -21326,9 +21327,7 @@ hgsql -e "alter table illumina add index chrom (chrom, bin)" hg17
 	bzcat chr${C}.scores.truncated.bz2
     done | wigEncode -noOverlap  stdin regPotential7X.wig regPotential7X.wib
     #	Converted stdin, upper limit 1.00, lower limit -0.00
-    #	real    23m27.454s
-    #	user    22m41.058s
-    #	sys     0m41.850s
+    #	real    33m48.487s
 
     #	Loading the table on hgwdev
     ssh hgwdev
@@ -21341,12 +21340,11 @@ hgsql -e "alter table illumina add index chrom (chrom, bin)" hg17
 	hg17 regPotential7X regPotential7X.wig
 
     #	How about a histogram of the data.
-    #	find min and max for everything to verify it is 0 to 1
-    ssh kkstore02
+    ssh kolossus
     cd /cluster/data/hg17/bed/regPotential7X
-    time for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 X Y
-    do
-	echo " ============   ${C}  ======================="
-	bzcat chr${C}.scores.truncated.bz2 | ave -col=2 stdin
-    done > stats.all 2>&1
+    time hgWiggle -verbose=2 -doHistogram -hBinSize=0.01 -hBinCount=100 \
+	-hMinVal=0.0 -db=hg17 regPotential7X > histogram.data 2>&1
+    #	real    2m48.810s
+    #	73 % of the data values are zero
 
+#########################################################################

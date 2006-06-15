@@ -2192,3 +2192,69 @@ close (FH)
     mkdir -p 2006-05-19/lab
     cd 2006-05-19/lab
     # deposit data
+    mkdir data
+    cd data
+    unzip ../*.zip
+    cd ..
+    ls data
+# CD4.baseline.hg17.bed       HMEC.baseline.hg17.bed   NHBE.baseline.hg17.bed
+# CaCo2.baseline.hg17.bed     HRE.baseline.hg17.bed    PANC.baseline.hg17.bed
+# CaLU3.baseline.hg17.bed     HeLa.baseline.hg17.bed   SAEC.baseline.hg17.bed
+# EryAdult.baseline.hg17.bed  HepG2.baseline.hg17.bed  SKnSH.baseline.hg17.bed
+# EryFetal.baseline.hg17.bed  Huh7.baseline.hg17.bed
+# GM.baseline.hg17.bed        K562.baseline.hg17.bed
+
+    #	loading bedGraph 5 data type:
+    for CELL in CD4 CaCo2 CaLU3 EryAdult EryFetal GM HMEC HRE HeLa HepG2 \
+        Huh7 K562 NHBE PANC SAEC SKnSH
+    do
+	sort -k1,1 -k2,2n data/$CELL.baseline.hg17.bed \
+	    | /cluster/data/encode/bin/scripts/trimOverlap.pl \
+		| hgLoadBed -noSort -noBin -strict -bedGraph=5 hg17 \
+		    encodeUWRegulomeBase$CELL stdin
+    done
+
+    #	a histogram of the data:
+    awk '{print $5}' data/* | textHistogram -verbose=2 -binSize=0.12 \
+	-maxBinCount=100 -minVal=-5.5 -real -pValues stdin \
+	    > histogram.data
+    #	looking at that, it appers that 95% of the data is within the
+    #	range of -1.0 to 1.0
+    #	The note that came with this data said to set view limits
+    #	at 0.5 : 3.0
+
+    #	Making the trackDb entries, taking colors from:
+    #	http://genome-test.cse.ucsc.edu/~hiram/rgbItemExamples.html
+
+    rm -f trackDb.entries.txt
+    I=1
+    export I
+    for CELL in CD4 CaCo2 CaLU3 EryAdult EryFetal GM HMEC HRE HeLa HepG2 \
+        Huh7 K562 NHBE PANC SAEC SKnSH
+    do
+	echo "    track encodeUWRegulomeBase${CELL}"
+	echo "    subTrack encodeUWRegulomeBase"
+	echo "    shortLabel ${CELL}"
+	echo "    longLabel ${CELL} DNaseI Sensitivity"
+	case $I in
+	    1) echo "    color 0,0,255";;
+	    2) echo "    color 0,48,224";;
+	    3) echo "    color 0,96,176";;
+	    4) echo "    color 0,119,153";;
+	    5) echo "    color 0,153,119";;
+	    6) echo "    color 0,187,85";;
+	    7) echo "    color 56,238,0";;
+	    8) echo "    color 0,255,0";;
+	    9) echo "    color 68,238,0";;
+	    10) echo "    color 96,192,326";;
+	    11) echo "    color 136,170,0";;
+	    12) echo "    color 170,136,0";;
+	    13) echo "    color 204,102,0";;
+	    14) echo "    color 238,68,0";;
+	    15) echo "    color 255,0,0";;
+	    16) echo "    color 255,0,255";;
+	esac
+	echo "    priority ${I}"
+	echo
+	I=`expr $I + 1`
+    done > trackDb.entries.txt
