@@ -17,7 +17,7 @@
 #include "liftOver.h"
 #include "liftOverChain.h"
 
-static char const rcsid[] = "$Id: hgLiftOver.c,v 1.48 2006/06/14 21:50:32 donnak Exp $";
+static char const rcsid[] = "$Id: hgLiftOver.c,v 1.49 2006/06/15 03:58:44 galt Exp $";
 
 /* CGI Variables */
 #define HGLFT_USERDATA_VAR "hglft_userData"     /* typed/pasted in data */
@@ -64,7 +64,7 @@ HGLFT_REFRESHONLY_VAR
 ".value = 1;"
 "document.mainForm.submit();\"";
 
-void webMain(struct liftOverChain *chain, char *dataFormat)
+void webMain(struct liftOverChain *chain, char *dataFormat, boolean multiple)
 /* set up page for entering data */
 {
 struct dbDb *dbList;
@@ -151,7 +151,7 @@ cgiSimpleTableFieldStart();
 cgiTableField("Allow multiple output regions:");
 cgiTableFieldEnd();
 cgiSimpleTableFieldStart();
-cgiMakeCheckBox(HGLFT_MULTIPLE,(chain->multiple[0]=='Y') ? TRUE : FALSE);
+cgiMakeCheckBox(HGLFT_MULTIPLE,multiple);
 cgiTableFieldEnd();
 cgiTableRowEnd();
 cgiSimpleTableRowStart();
@@ -406,7 +406,7 @@ fudgeThick = cartCgiUsualBoolean(cart, HGLFT_FUDGETHICK, (choice->fudgeThick[0]=
 multiple = cartCgiUsualBoolean(cart, HGLFT_MULTIPLE, (choice->multiple[0]=='Y') ? TRUE : FALSE);
 refreshOnly = cartCgiUsualInt(cart, HGLFT_REFRESHONLY_VAR, 0);
 
-webMain(choice, dataFormat);
+webMain(choice, dataFormat, multiple);
 liftOverChainFreeList(&chainList);
 
 if (!refreshOnly && userData != NULL && userData[0] != '\0')
@@ -447,20 +447,21 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
     readLiftOverMap(chainFile, chainHash);
     if (sameString(dataFormat, WIGGLE_FORMAT))
         /* TODO: implement Wiggle */
-            {}
+	{}
     else if (sameString(dataFormat, POSITION_FORMAT))
-        {
-/* minSizeT here and in liftOverChain.c/h has been renamed minChainT in liftOver.c */
+	{
+	/* minSizeT here and in liftOverChain.c/h has been renamed minChainT in liftOver.c */
+	/* ignore multiple, it must be false when position is used */
 	ct = liftOverPositions(oldTn.forCgi, chainHash, 
 			minMatch, minBlocks, 0, minSizeQ,
 			minSizeT, 0, 
-			fudgeThick, mapped, unmapped, multiple, NULL, &errCt);
+			fudgeThick, mapped, unmapped, FALSE, NULL, &errCt);
 
 	
         }
     else if (sameString(dataFormat, BED_FORMAT))
         {
-/* minSizeT here and in liftOverChain.c/h has been renamed minChainT in liftOver.c */
+	/* minSizeT here and in liftOverChain.c/h has been renamed minChainT in liftOver.c */
         ct = liftOverBed(oldTn.forCgi, chainHash, 
 			minMatch, minBlocks, 0, minSizeQ,
 			minSizeT, 0,
@@ -496,6 +497,12 @@ if (!refreshOnly && userData != NULL && userData[0] != '\0')
             puts(line);
         puts("</PRE></BLOCKQUOTE>\n");
         }
+    if (sameString(dataFormat, POSITION_FORMAT) && multiple)
+	{
+        puts("<BLOCKQUOTE><PRE>\n");
+        puts("Note: multiple checkbox ignored since it is not supported for position format.");
+        puts("</PRE></BLOCKQUOTE>\n");
+	}
     }
 webDataFormats();
 webDownloads();
