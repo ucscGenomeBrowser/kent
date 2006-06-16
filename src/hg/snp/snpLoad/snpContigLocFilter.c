@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.30 2006/06/16 18:12:57 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.31 2006/06/16 18:33:58 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -124,6 +124,7 @@ struct sqlConnection *conn = hAllocConn();
 struct sqlResult *sr;
 char **row;
 int weight = 0;
+int count0 = 0;
 int count1 = 0;
 int count2 = 0;
 int count3 = 0;
@@ -146,6 +147,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     weight = sqlUnsigned(row[1]);
     switch (weight)
         {
+	case 0:
+	    count0++;
+	    break;
         case 1:
             count1++;
 	    break;
@@ -162,6 +166,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+verbose(1, "count of snps with weight 0 = %d\n", count1);
 verbose(1, "count of snps with weight 1 = %d\n", count1);
 verbose(1, "count of snps with weight 2 = %d\n", count2);
 verbose(1, "count of snps with weight 3 = %d\n", count3);
@@ -174,7 +179,7 @@ void filterSnps()
 /* For each SNP, get loc_type (1-6), orientation (strand) and allele (refNCBI). */
 /* Output to ContigLocFilter table (tableName hard-coded). */
 /* Use ctg_id to filter: only save rows where ctg_id is in our hash. */
-/* Also, skip whenever weight = 10 from MapInfo weightHash. */
+/* Also, skip whenever weight = 0 or weight = 10 from MapInfo weightHash. */
 
 /* phys_pos_from (start) is always an integer. */
 /* If phys_pos_from is 0, this is a random contig and we generate lifted coords. */
@@ -206,6 +211,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         {
 	el2 = hashLookup(weightHash, row[0]);
 	if (sameString(el2->val, "10")) continue;
+	if (sameString(el2->val, "0")) continue;
 
 	cel = hashFindVal(contigCoords, row[1]);
 
