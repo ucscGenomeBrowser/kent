@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.28 2006/06/16 19:43:44 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.29 2006/06/16 20:10:49 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -107,12 +107,7 @@ int locTypeInt = sqlUnsigned(locTypeString);
 int chromStart = sqlUnsigned(chromStartString);
 int alleleSize = strlen(allele);
 int chromEnd = 0;
-char *tmpString;
 int size = 0;
-boolean randomChrom = FALSE;
-
-tmpString = strstr(chromName, "random");
-if (tmpString != NULL) randomChrom = TRUE;
 
 /* range */
 if (locTypeInt == 1)
@@ -179,11 +174,6 @@ FILE *f;
 int chromEnd = 0;
 int chromStart = 0;
 int skipCount = 0;
-boolean randomChrom = FALSE;
-char *tmpString;
-
-tmpString = strstr(chromName, "random");
-if (tmpString != NULL) randomChrom = TRUE;
 
 safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
 safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
