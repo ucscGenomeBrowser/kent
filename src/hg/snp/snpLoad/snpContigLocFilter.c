@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.31 2006/06/16 18:33:58 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.32 2006/06/16 18:39:08 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -166,7 +166,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
-verbose(1, "count of snps with weight 0 = %d\n", count1);
+verbose(1, "count of snps with weight 0 = %d\n", count0);
 verbose(1, "count of snps with weight 1 = %d\n", count1);
 verbose(1, "count of snps with weight 2 = %d\n", count2);
 verbose(1, "count of snps with weight 3 = %d\n", count3);
