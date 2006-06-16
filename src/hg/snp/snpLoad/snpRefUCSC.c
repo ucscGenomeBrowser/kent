@@ -5,8 +5,7 @@
  * Rename chrMT_snpTmp to chrM_snpTmp before running this.
  * Use UCSC chromInfo.  */
 
-/* Could check for coords larger than chromSize.
-   Relying on upstream ctgPos/ContigInfo checks for now. */
+/* Check for coords larger than chromSize; log as errors. */
 
 #include "common.h"
 
@@ -18,10 +17,11 @@
 /* errAbort if larger SNP found */
 #define MAX_SNP_SIZE 1024
 
-static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.11 2006/06/13 16:56:24 heather Exp $";
+static char const rcsid[] = "$Id: snpRefUCSC.c,v 1.12 2006/06/16 22:50:37 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *chromHash = NULL;
+FILE *errorFileHandle = NULL;
 
 void usage()
 /* Explain usage and exit. */
@@ -109,6 +109,12 @@ while ((row = sqlNextRow(sr)) != NULL)
     {
     start = sqlUnsigned(row[2]);
     end = sqlUnsigned(row[3]);
+    if (start > chromSize)
+        {
+        fprintf(errorFileHandle, "rs%s at %s:%d-%d; chromSize=%d\n", row[0], chromName, start, end, chromSize);
+	continue;
+	}
+
     snpSize = end - start;
     if (snpSize > MAX_SNP_SIZE)
 	errAbort("maximum size exceeded %s, %s:%d-%d\n", row[0], chromName, start, end);
@@ -207,6 +213,8 @@ if (chromHash == NULL)
     return 1;
     }
 
+errorFileHandle = mustOpen("snpRefUCSC.errors", "w");
+
 cookie = hashFirst(chromHash);
 while ((chromName = hashNextName(&cookie)) != NULL)
     {
@@ -218,5 +226,6 @@ while ((chromName = hashNextName(&cookie)) != NULL)
     loadDatabase(chromName);
     }
 
+carefulClose(&errorFileHandle);
 return 0;
 }
