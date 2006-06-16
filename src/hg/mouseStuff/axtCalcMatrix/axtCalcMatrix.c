@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtCalcMatrix.c,v 1.9 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: axtCalcMatrix.c,v 1.10 2006/06/16 16:33:22 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -27,8 +27,8 @@ int i, a, b;
 
 for (i=0; i<count; ++i)
     {
-    a = ntVal[as[i]];
-    b = ntVal[bs[i]];
+    a = ntVal[(int)as[i]];
+    b = ntVal[(int)bs[i]];
     if (a >= 0 && b >= 0)
          matrix[a][b] += 1;
     }
@@ -200,7 +200,7 @@ int *histIns, *histDel, *histPerfect, *histGapless, *histT, *histQ;
 int maxInDel = optionInt("maxInsert", 21);
 static int matrix[4][4];
 static char bestGapless[256], bestPerfect[256];
-int i,j,both,total = 0;
+int i, j, total = 0;
 double scale;
 int fileIx;
 struct axt *axt;
