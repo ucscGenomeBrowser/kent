@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.30 2006/06/16 21:59:32 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.31 2006/06/16 22:00:03 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -283,8 +283,8 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
     verbose(1, "chrom = %s\n", chromPtr->name);
     expandCount = expandCount + doLocType(chromPtr->name);
-    // recreateDatabaseTable(chromPtr->name);
-    // loadDatabase(chromPtr->name);
+    recreateDatabaseTable(chromPtr->name);
+    loadDatabase(chromPtr->name);
     }
 
 if (expandCount > 0)
