@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.29 2006/06/16 20:10:49 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.30 2006/06/16 21:59:32 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -27,15 +27,15 @@ char *locTypeStrings[] = {
     "rangeDeletion",
 };
 
-/* Errors detected here (written to snpLoctype.error): */
-/* Missing quotes in phys_pos for range */
-/* Chrom end <= chrom start for range */
-/* Wrong size for exact */
+/* Errors detected here (written to snpLoctype.error, rows skipped): */
 /* Unknown locType */
-/* Unable to get chromEnd */
+/* Between with end != start + 1 */
+/* Between with allele != '-' */
+/* Exact with end != start */
+/* Range with end < start */
 
 /* Exceptions detected: */
-/*  RefAlleleWrongSize */
+/* RefAlleleWrongSize */
 
 
 void usage()
@@ -98,71 +98,8 @@ fprintf(exceptionFileHandle, "chr%s\t%d\t%d\trs%s\t%s\n", chrom, start, end, nam
 }
 
 
-int getChromEnd(char *chromName, char *snpId, char *locTypeString, char *chromStartString, char *chromEndString, char *allele)
-/* calculate chromEnd based on locType */
-/* return -1 if any problems */
-/* calculate here, but return 0 (defer calculation) if allele needs to be expanded */
-{
-int locTypeInt = sqlUnsigned(locTypeString);
-int chromStart = sqlUnsigned(chromStartString);
-int alleleSize = strlen(allele);
-int chromEnd = 0;
-int size = 0;
-
-/* range */
-if (locTypeInt == 1)
-    {
-    chromEnd = sqlUnsigned(chromEndString);
-    chromEnd++;
-    size = chromEnd - chromStart;
-
-    if (chromEnd <= chromStart) 
-        {
-	fprintf(errorFileHandle, "Chrom end <= chrom start for range\n");
-        return (-1);
-	}
-
-    /* only check size if we don't need to expand (that is next step in processing) */
-    if (!needToExpand(allele) && alleleSize != size)
-        writeToExceptionFile(chromName, chromStart, chromEnd, snpId, "RefAlleleWrongSize");
-
-    return chromEnd;
-    }
-
-/* exact */
-if (locTypeInt == 2)
-    {
-    chromEnd = sqlUnsigned(chromEndString);
-    if (chromEnd != chromStart)
-    {
-        fprintf(errorFileHandle, "Wrong size for exact\n");
-        writeToExceptionFile(chromName, chromStart, chromEnd+1, snpId, "RefAlleleWrongSize");
-    }
-    return chromEnd + 1;
-    }
-
-/* between */
-/* could check endString */
-if (locTypeInt == 3)
-    {
-    return chromStart;
-    }
-
-/* rangeInsertion, rangeSubstitution, or rangeDeletion */
-if (locTypeInt == 4 || locTypeInt == 5 || locTypeInt == 6)
-    {
-    if (needToExpand(allele)) return 0;
-    chromEnd = chromStart + alleleSize;
-    return chromEnd;
-    }
-
-fprintf(errorFileHandle, "Unknown locType\n");
-return (-1);
-
-}
-
-void doLocType(char *chromName)
-/* read the database table, adjust, write .tab file, load */
+int doLocType(char *chromName)
+/* read the database table, adjust, write .tab file */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -171,9 +108,14 @@ char **row;
 char tableName[64];
 char fileName[64];
 FILE *f;
-int chromEnd = 0;
 int chromStart = 0;
+int chromEnd = 0;
 int skipCount = 0;
+int locTypeInt = 0;
+char *allele = NULL;
+int alleleSize = 0;
+int coordSpan = 0;
+int expandCount = 0;
 
 safef(tableName, ArraySize(tableName), "chr%s_snpTmp", chromName);
 safef(fileName, ArraySize(fileName), "chr%s_snpTmp.tab", chromName);
@@ -186,32 +128,77 @@ safef(query, sizeof(query),
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    chromEnd = getChromEnd(chromName,
-                           cloneString(row[0]),
-                           cloneString(row[2]), 
-                           cloneString(row[3]), 
-			   cloneString(row[4]), 
-			   cloneString(row[6]));
-    if (chromEnd == -1)
+    locTypeInt = sqlUnsigned(row[2]);
+    if (locTypeInt <= 0 || locTypeInt > 6)
         {
 	skipCount++;
-        fprintf(errorFileHandle, "snp = %s\tlocType = %s\tchrom = %s\tchromStart = %s\tchromEnd=%s\n", 
-	                          row[0], row[2], chromName, row[3], row[4]);
+        fprintf(errorFileHandle, "Unknown locType for snp = %s\tchrom = %s\tchromStart = %s\tchromEnd=%s\n",
+	        row[0], chromName, row[3], row[4]);
 	continue;
 	}
 
-    /* COORD ADJUSTMENT for between */
-    if (sameString(row[2], "3"))
+    chromStart = sqlUnsigned(row[3]);
+    chromEnd = sqlUnsigned(row[4]);
+    allele = cloneString(row[6]);
+
+    /* dbSNP reports insertions with end = start + 1 */
+    /* we use the convention start = end */
+    /* we increment the start */
+    if (locTypeInt == 3)
         {
-	chromStart = sqlUnsigned(row[3]);
+	if (chromEnd != chromStart + 1)
+	    {
+	    skipCount++;
+            fprintf(errorFileHandle, "Unexpected coords for between snp = %s\tchrom = %s\tchromStart = %s\tchromEnd=%s\n", 
+	                          row[0], chromName, row[3], row[4]);
+	    continue;
+	    }
+	if (!sameString(allele, "-"))
+	    {
+	    skipCount++;
+            fprintf(errorFileHandle, "Unexpected allele %s for between snp = %s\tchrom = %s\tchromStart = %s\tchromEnd=%s\n", 
+	                          allele, row[0], chromName, row[3], row[4]);
+	    continue;
+	    }
 	chromStart++;
+	}
+    /* dbSNP reports exact with start == end */
+    /* we increment the end */
+    else if (locTypeInt == 2)
+        {
+	if (chromEnd != chromStart)
+	    {
+	    skipCount++;
+            fprintf(errorFileHandle, "Unexpected coords for exact snp = %s\tchrom = %s\tchromStart = %s\tchromEnd=%s\n", 
+	                          row[0], chromName, row[3], row[4]);
+	    continue;
+	    }
+        alleleSize = strlen(allele);
+	if (alleleSize != 1)
+            writeToExceptionFile(chromName, chromStart, chromEnd, row[0], "RefAlleleWrongSize");
 	chromEnd++;
-        fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\t%s\n", row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6], row[7]);
-	continue;
+        }
+    else
+        {
+	if (chromEnd < chromEnd)
+	    {
+	    skipCount++;
+            fprintf(errorFileHandle, "Unexpected coords for range snp = %s\tchrom = %s\tchromStart = %s\tchromEnd=%s\n", 
+	                          row[0], chromName, row[3], row[4]);
+	    continue;
+	    }
+	chromEnd++;
+	coordSpan = chromEnd - chromStart;
+	alleleSize = strlen(allele);
+        /* only check size if we don't need to expand (that is next step in processing) */
+	if (needToExpand(allele))
+	    expandCount++;
+        else if (alleleSize != coordSpan)
+            writeToExceptionFile(chromName, chromStart, chromEnd, row[0], "RefAlleleWrongSize");
 	}
 
-    fprintf(f, "%s\t%s\t%s\t%d\t%s\t%s\t%s\t%s\n", 
-               row[0], row[1], row[3], chromEnd, row[2], row[5], row[6], row[7]);
+    fprintf(f, "%s\t%s\t%d\t%d\t%s\t%s\t%s\t%s\n", 
+               row[0], row[1], chromStart, chromEnd, row[2], row[5], row[6], row[7]);
 
     }
 sqlFreeResult(&sr);
@@ -219,6 +206,7 @@ hFreeConn(&conn);
 carefulClose(&f);
 if (skipCount > 0)
     verbose(1, "skipping %d rows\n", skipCount);
+return expandCount;
 }
 
 
@@ -272,6 +260,7 @@ int main(int argc, char *argv[])
 /* read chrN_snpTmp, handle locType, rewrite to individual chrom tables */
 {
 struct slName *chromList, *chromPtr;
+int expandCount = 0;
 
 if (argc != 3)
     usage();
@@ -293,11 +282,13 @@ exceptionFileHandle = mustOpen("snpLocType.exceptions", "w");
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
     verbose(1, "chrom = %s\n", chromPtr->name);
-    doLocType(chromPtr->name);
-    recreateDatabaseTable(chromPtr->name);
-    loadDatabase(chromPtr->name);
+    expandCount = expandCount + doLocType(chromPtr->name);
+    // recreateDatabaseTable(chromPtr->name);
+    // loadDatabase(chromPtr->name);
     }
 
+if (expandCount > 0)
+    verbose(1, "need to expand %d alleles\n", expandCount);
 carefulClose(&errorFileHandle);
 carefulClose(&exceptionFileHandle);
 return 0;
