@@ -7,7 +7,7 @@
 #include "dystring.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpLocType.c,v 1.27 2006/06/16 18:12:57 heather Exp $";
+static char const rcsid[] = "$Id: snpLocType.c,v 1.28 2006/06/16 19:43:44 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -129,10 +129,7 @@ if (locTypeInt == 1)
 
     /* only check size if we don't need to expand (that is next step in processing) */
     if (!needToExpand(allele) && alleleSize != size)
-        if (!randomChrom)
-            writeToExceptionFile(chromName, chromStart+1, chromEnd, snpId, "RefAlleleWrongSize");
-	else
-            writeToExceptionFile(chromName, chromStart, chromEnd, snpId, "RefAlleleWrongSize");
+        writeToExceptionFile(chromName, chromStart, chromEnd, snpId, "RefAlleleWrongSize");
 
     return chromEnd;
     }
