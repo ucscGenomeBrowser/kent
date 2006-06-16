@@ -1313,80 +1313,67 @@ doPhast.csh $(dir1) $(file1) 12 .005 .26
 
 # ENSEMBL is on 4.0 not 4.1... do the coords mostly carry over???
 
-################################################
-# MAKE Human Proteins track (hg18 Working 2006-06-14 braney)
-    ssh kksilo
-    mkdir -p /cluster/data/danRer2/blastDb
-    cd /cluster/data/danRer2/blastDb
-    cut -f 1 ../chrom.sizes | sed "s/chr//" | sed "/NA/d" | sed "/Un/d" > chrom.list
-    for i in `cat chrom.list`; do ls -1 ../$i/*/*.fa . ; done | sed -n "/.*_.*_.*_.*/p" > list
-    ln -s `cat list` .
+###########################################################################
+# HUMAN (hg18) PROTEINS TRACK (DONE braney2006-06-16)
+    ssh kkstore04
+    bash # if not using bash shell already
+
+    mkdir -p /cluster/data/xenTro2/blastDb
+    cd /cluster/data/xenTro2/blastDb
+    faSplit sequence ../xenTro2.fa  500 x
+
     for i in *.fa
     do
-	formatdb -i $i -p F
+       /cluster/bluearc/blast229/formatdb -p F -i $i
     done
-    rm *.log *.fa list
-    cd ..
-    for i in `cat blastDb/chrom.list`; do cat  $i/chr*/*.lft  ; done > jkStuff/subChr.lft
-    rm blastDb/chrom.list
+    rm *.log *.fa 
 
-    mkdir /cluster/data/danRer2/scaffoldBlastDb
-    cd /cluster/data/danRer2/scaffoldBlastDb
-    cat ../Un/scaffolds/*.fa ../NA/scaffolds/*.fa |  faSplit sequence stdin 500 scaf
-    for i in *.fa
-    do
-	formatdb -i $i -p F
+    mkdir -p /san/sanvol1/scratch/xenTro2/blastDb
+    cd /cluster/data/xenTro2/blastDb
+    for i in nhr nin nsq; 
+    do 
+	echo $i
+	cp *.$i /san/sanvol1/scratch/xenTro2/blastDb
     done
-    rm *.log *.fa
 
-    ssh kkr1u00
-    mkdir -p /iscratch/i/danRer2/blastDb
-    cd /cluster/data/danRer2/blastDb
-    for i in nhr nin nsq; do cp *.$i /iscratch/i/danRer2/blastDb     ; echo $i; done
-
-    mkdir -p /iscratch/i/danRer2/scaffoldBlastDb
-    cd /cluster/data/danRer2/scaffoldBlastDb
-    for i in nhr nin nsq; do cp *.$i /iscratch/i/danRer2/scaffoldBlastDb     ; echo $i; done
-
-    cd
-    (iSync) > sync.out
-
-    mkdir -p /cluster/data/danRer2/bed/tblastn.hg17KG
-    cd /cluster/data/danRer2/bed/tblastn.hg17KG
-    echo  /iscratch/i/danRer2/blastDb/*.nsq  | xargs ls -S | sed "s/\.nsq//"  > query.lst  
-    echo  /iscratch/i/danRer2/scaffoldBlastDb/*.nsq  | xargs ls -S | sed "s/\.nsq//"  > scaffold.lst  
-    # back to kksilo
-    exit
-
-    # we want around 250000 jobs
-    cd /cluster/data/danRer2/bed/tblastn.hg17KG
-    calc `wc /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl | awk "{print \\\$1}"`/\(250000/`wc query.lst | awk "{print \\\$1}"`\)
-    # 42156/(250000/3899) = 657.464976
-    mkdir -p /cluster/bluearc/danRer2/bed/tblastn.hg17KG/kgfa
-    split -l 657 /cluster/data/hg17/bed/blat.hg17KG/hg17KG.psl /cluster/bluearc/danRer2/bed/tblastn.hg17KG/kgfa/kg
-    ln -s /cluster/bluearc/danRer2/bed/tblastn.hg17KG/kgfa kgfa
-    cd kgfa
-    for i in *; do pslxToFa $i $i.fa; rm $i; done
-    cd ..
-    ls -1S kgfa/*.fa > kg.lst
-    mkdir -p /cluster/bluearc/danRer2/bed/tblastn.hg17KG/blastOut
-    ln -s /cluster/bluearc/danRer2/bed/tblastn.hg17KG/blastOut
-    for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
-    tcsh
-    cat << '_EOF_' > blastGsub
+    mkdir -p /cluster/data/xenTro2/bed/tblastn.hg18KG
+    cd /cluster/data/xenTro2/bed/tblastn.hg18KG
+    echo  /san/sanvol1/scratch/xenTro2/blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+# 496 query.lst
+   # we want around 150000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk "{print \\\$1}"`/\(150000/`wc query.lst | awk "{print \\\$1}"`\)
+# 36727/(150000/496) = 121.443947
+   mkdir -p /cluster/bluearc/xenTro2/bed/tblastn.hg18KG/kgfa
+   split -l 121 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl  /cluster/bluearc/xenTro2/bed/tblastn.hg18KG/kgfa/kg
+   ln -s /cluster/bluearc/xenTro2/bed/tblastn.hg18KG/kgfa kgfa
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   mkdir -p /cluster/bluearc/xenTro2/bed/tblastn.hg18KG/blastOut
+   ln -s /cluster/bluearc/xenTro2/bed/tblastn.hg18KG/blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/xenTro2/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
 #LOOP
-blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl } 
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
 #ENDLOOP
 '_EOF_'
-    cat << '_EOF_' > blastSome
+
+   cat << '_EOF_' > blastSome
 #!/bin/sh
-BLASTMAT=/iscratch/i/blast/data
+BLASTMAT=/cluster/bluearc/blast229/data
 export BLASTMAT
 g=`basename $2`
 f=/tmp/`basename $3`.$g
 for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
 do
-if /scratch/blast/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
 then
         mv $f.8 $f.1
         break;
@@ -1396,91 +1383,89 @@ if test -f  $f.1
 then
     if /cluster/bin/i386/blastToPsl $f.1 $f.2
     then
-	liftUp -nosort -type=".psl" -nohead $f.3 ../../jkStuff/subChr.lft carry $f.2       
-        liftUp -nosort -type=".psl" -nohead $f.4 ../../jkStuff/liftAll.lft carry $f.3       
-        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg17/bed/blat.hg17KG/protein.lft warn $f.4       
-        if pslCheck -prot $3.tmp                                                                          
-        then                                                                                              
-            mv $3.tmp $3                                                                                  
-            rm -f $f.1 $f.2 $f.3 $f.4                                                                              
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.4
+
+        if pslCheck -prot $3.tmp                                                  
+        then                                                                      
+            mv $3.tmp $3                                                          
+            rm -f $f.1 $f.2 $f.3 $f.4
         fi
-        exit 0                                                                                            
-    fi                                                                                                    
-fi                                                                                                        
-rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4      
+        exit 0                                                                    
+    fi                                                                            
+fi                                                                                
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
 exit 1
 '_EOF_'
-
+    # << happy emacs
     chmod +x blastSome
     gensub2 query.lst kg.lst blastGsub blastSpec
-    # I ended up doing the scaffolds separately from the chopped up chrom segments
-    # but next time I wouldn't
-    gensub2 scaffold.lst kg.lst blastGsub scaffoldBlastSpec
-
-    ssh kk
-    cd /cluster/data/danRer2/bed/tblastn.hg17KG
+    exit # back to bash
+    
+    ssh pk
+    cd /cluster/data/xenTro2/bed/tblastn.hg18KG
     para create blastSpec
-    para push
-# Completed: 253435 of 253435 jobs
-# CPU time in finished jobs:   58003988s  966733.13m 16112.22h  671.34d  1.839 y
-# IO & Wait Time:              13196517s  219941.96m  3665.70h  152.74d  0.418 y
-# Average job time:                 281s       4.68m     0.08h    0.00d
-# Longest job:                     6238s     103.97m     1.73h    0.07d
-# Submission to last job:        174503s    2908.38m    48.47h    2.02d
+#    para try, check, push, check etc.
 
+    para time
+# Completed: 150784 of 150784 jobs
+# CPU time in finished jobs:   12376974s  206282.91m  3438.05h  143.25d  0.392 y
+# IO & Wait Time:                603271s   10054.51m   167.58h    6.98d  0.019 y
+# Average job time:                  86s       1.43m     0.02h    0.00d
+# Longest finished job:             462s       7.70m     0.13h    0.01d
+# Submission to last job:         80194s    1336.57m    22.28h    0.93d
+
+    ssh kkstore04
+    cd /cluster/data/xenTro2/bed/tblastn.hg18KG
+    tcsh
+    mkdir chainRun
+    cd chainRun
     cat << '_EOF_' > chainGsub
 #LOOP
-chainSome $(path1)
+chainOne $(path1)
 #ENDLOOP
 '_EOF_'
 
-    cat << '_EOF_' > chainSome
-(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin ../c.`basename $1`.psl)
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=75000 stdin /cluster/bluearc/xenTro2/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
 '_EOF_'
-    chmod +x chainSome
-
-    ls -1dS `pwd`/blastOut/kg?? > chain.lst
-    gensub2 chain.lst single chainGsub chainSpec
-
-    ssh kki
-    cd /cluster/data/danRer2/bed/tblastn.hg17KG
-    para create chainSpec
-    para push
-# Completed: 1287 of 1287 jobs
-# CPU time in finished jobs:      72236s    1203.94m    20.07h    0.84d  0.002 y
-# IO & Wait Time:                 22886s     381.43m     6.36h    0.26d  0.001 y
-# Average job time:                  74s       1.23m     0.02h    0.00d
-# Longest job:                     3374s      56.23m     0.94h    0.04d
-# Submission to last job:          5982s      99.70m     1.66h    0.07d
-
     exit
-    # back to kksilo
-    cd /cluster/data/danRer2/bed/tblastn.hg17KG/blastOut
-    # again some weirdness because I did the NA and Un scaffolds separately
+    chmod +x chainOne
+    ls -1dS /cluster/bluearc/xenTro2/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    ssh kk
+    cd /cluster/data/xenTro2/bed/tblastn.hg18KG/chainRun
+    para create chainSpec
+    para try, check, push, check etc.
+# Completed: 304 of 304 jobs
+# CPU time in finished jobs:        764s      12.73m     0.21h    0.01d  0.000 y
+# IO & Wait Time:                 11950s     199.17m     3.32h    0.14d  0.000 y
+# Average job time:                  42s       0.70m     0.01h    0.00d
+# Longest finished job:              77s       1.28m     0.02h    0.00d
+# Submission to last job:          2117s      35.28m     0.59h    0.02d
+
+    ssh kkstore04
+    cd /cluster/data/xenTro2/bed/tblastn.hg18KG/blastOut
+    bash # if using another shell
     for i in kg??
-    do 
-	cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > cs60.$i.psl
-	sort -rn cs60.$i.psl | pslUniq stdin us.$i.psl
-	awk "((\$1 / \$11) ) > 0.60 { print   }" cs60.$i.psl > ms60.$i.psl
-	echo $i
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
     done
-
-    for i in kg??
-    do 
-	cat $i/c.*.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
-	sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
-	awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
-	echo $i
-    done
-
-    cat u.*.psl m60* | sort -T /tmp -k 14,14 -k 17,17n -k 17,17n  | uniq  > /cluster/data/danRer2/bed/tblastn.hg17KG/blastHg17KG.psl
-    cd ..
-    # lift the chrUn and chrNA scaffolds 
-
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/xenTro2/bed/tblastn.hg18KG/blastHg18KG.psl
+    pslCheck blastHg18KG.psl
+    # this is ok.
+    # load table 
     ssh hgwdev
-    cd /cluster/data/danRer2/bed/tblastn.hg17KG
-    hgLoadPsl danRer2 blastHg17KG.psl
-
-    # back to kksilo
-    rm -rf blastOut
-# End tblastn
+    cd /cluster/data/xenTro2/bed/tblastn.hg18KG
+    hgLoadPsl xenTro2 blastHg18KG.psl
+    # check coverage
+    featureBits xenTro2 refGene:cds  blastHg18KG -enrichment
+# refGene:cds 0.337%, blastHg18KG 1.477%, both 0.263%, cover 78.14%, enrich 52.91x
+    
+    ssh kkstore04
+    rm -rf /cluster/data/xenTro2/bed/tblastn.hg18KG/blastOut
+    rm -rf /cluster/bluearc/xenTro2/bed/tblastn.hg18KG/blastOut
+#end tblastn
