@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.32 2006/06/16 18:39:08 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.33 2006/06/16 20:54:22 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -181,8 +181,8 @@ void filterSnps()
 /* Use ctg_id to filter: only save rows where ctg_id is in our hash. */
 /* Also, skip whenever weight = 0 or weight = 10 from MapInfo weightHash. */
 
-/* phys_pos_from (start) is always an integer. */
-/* If phys_pos_from is 0, this is a random contig and we generate lifted coords. */
+/* use phys_pos_from to check coords for non_randoms */
+/* If phys_pos_from is 0, this is a random contig. */
 
 {
 char query[512];
@@ -220,7 +220,7 @@ while ((row = sqlNextRow(sr)) != NULL)
         start = sqlUnsigned(row[4]) + cel->start;
         end = sqlUnsigned(row[5]) + cel->start;
 
-        /* use phys_pos_from to check coords for non_randoms */
+        /* check against phys_pos_from */
 	phys_pos_from = sqlUnsigned(row[3]);
 	if (phys_pos_from > 0 && phys_pos_from != start)
 	   verbose(1, "unexpected coords snp_id = %d, ctg_id = %d, phys_pos_from = %d, start = %d\n", 
