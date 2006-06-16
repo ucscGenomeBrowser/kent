@@ -3,7 +3,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file -- 
 # edit ~/kent/src/hg/utils/cloneEndParse.pl instead.
 
-# $Id: cloneEndParse.pl,v 1.2 2006/05/06 00:05:45 hiram Exp $
+# $Id: cloneEndParse.pl,v 1.3 2006/06/16 21:08:16 hiram Exp $
 
 # File: convertTxt
 # Author: Heather Trumbower
@@ -42,7 +42,8 @@ sub usage()
 ########################################################################
 sub isForward {
     my $end = shift(@_);
-    if (($end =~ /^T7/) || ($end =~ /^M13F/) || ($end eq "F")) {
+    if (($end =~ /^T7/) || ($end =~ /^M13F/) ||
+	($end eq "F") || ($end =~ /^TJ/) || ($end eq "T")) {
 	return 1;
     } else {
 	return 0;
@@ -52,7 +53,9 @@ sub isForward {
 ########################################################################
 sub isReverse {
     my $end = shift(@_);
-    if (($end =~ /^SP6/) || ($end eq "M13R") || ($end eq "R") || ($end =~ /^TJ/)) {
+    if (($end =~ /^SP6/) || ($end eq "M13R") ||
+	($end eq "R") || ($end eq "DP6") || ($end =~ /^TK/) ||
+	($end eq "P6") || ($end eq "S6") || ($end eq "SP7") || ($end eq "S")) {
 	return 1;
     } else {
 	return 0;
@@ -104,7 +107,7 @@ while (my $line = <FILE>) {
   } elsif (&isReverse($end)) {
     $sp6{$clone} .= "$acc,";
   } elsif ($end) {
-    print STDERR "End $end for $acc / $clone\n";
+    print STDERR "End $end for $acc / $clone - unclassified\n";
   }
 }
 close(OUT);
