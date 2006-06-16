@@ -814,3 +814,178 @@ galGal3.downloadDir = galGal3
 # STS?
 #########################################################################
 #########################################################################
+
+###########################################################################
+# HUMAN (hg18) PROTEINS TRACK FOR hg18 (DONE,  2006-06-16, braney)
+    ssh kkstore03
+    bash # if not using bash shell already
+    # make Blast database for non-random chrom sequences
+    mkdir -p /cluster/data/galGal3/blastDb
+    cd /cluster/data/galGal3/blastDb
+    ls ../*/*/*.lft | grep -v lift | sed 's/lft/fa/' > list
+    ln -s `cat list` .
+    for i in *.fa
+    do
+	/cluster/bluearc/blast229/formatdb -i $i -p F
+    done
+    rm *.log *.fa list
+
+    cd /cluster/data/galGal3
+    for i in */*/*.lft
+       do cat  $i  ; 
+    done > jkStuff/subChr.lft
+
+    mkdir -p  /san/sanvol1/scratch/galGal3/blastDb; 
+    cd /cluster/data/galGal3/blastDb
+    for i in nhr nin nsq; 
+    do 
+	cp *.$i /san/sanvol1/scratch/galGal3/blastDb; 
+    done
+
+   mkdir /cluster/data/galGal3/bed/tblastnHg18KG
+   cd  /cluster/data/galGal3/bed/tblastnHg18KG
+   echo  /san/sanvol1/scratch/galGal3/blastDb/*.nsq | xargs ls -S | sed "s/\.nsq//"  > query.lst
+   wc -l query.lst
+# 259 query.lst
+
+   # we want around 250000 jobs
+   calc `wc /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl | awk "{print \\\$1}"`/\(250000/`wc query.lst | awk "{print \\\$1}"`\)
+# 36727/(250000/259) = 38.049172
+
+   mkdir -p /cluster/bluearc/galGal3/bed/tblastn.hg18KG/kgfa
+   split -l 60 /cluster/data/hg18/bed/blat.hg18KG/hg18KG.psl /cluster/bluearc/galGal3/bed/tblastn.hg18KG/kgfa/kg
+   ln -s /cluster/bluearc/galGal3/bed/tblastn.hg18KG/kgfa kgfa
+   cd kgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+     done
+   cd ..
+   ls -1S kgfa/*.fa > kg.lst
+   mkdir -p /cluster/bluearc/galGal3/bed/tblastn.hg18KG/blastOut
+   ln -s /cluster/bluearc/galGal3/bed/tblastn.hg18KG/blastOut
+   for i in `cat kg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   tcsh
+   cd /cluster/data/galGal3/bed/tblastn.hg18KG
+   cat << '_EOF_' > blastGsub
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+BLASTMAT=/cluster/bluearc/blast229/data
+export BLASTMAT
+g=`basename $2`
+f=/tmp/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /cluster/bluearc/blast229/blastall -M BLOSUM80 -m 0 -F no -e $eVal -p tblastn -d $1 -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/i386/blastToPsl $f.1 $f.2
+    then
+        liftUp -nosort -type=".psl" -nohead $f.4 /cluster/data/galGal3/jkStuff/liftAll.lft carry $f.2
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp /cluster/data/hg18/bed/blat.hg18KG/protein.lft warn $f.4
+
+        if pslCheck -prot $3.tmp                                                  
+        then                                                                      
+            mv $3.tmp $3                                                          
+            rm -f $f.1 $f.2 $f.3 $f.4
+        fi
+        exit 0                                                                    
+    fi                                                                            
+fi                                                                                
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+    gensub2 query.lst kg.lst blastGsub blastSpec
+    
+    # then run the Blast cluster jobs
+    ssh kk
+    cd /cluster/data/galGal3/bed/tblastn.hg18KG
+    para create blastSpec
+    para try, check, push, check etc.
+    # pushed 100,000 jobs at a time so need to do para push again later
+    para time
+# Completed: 158767 of 158767 jobs
+# CPU time in finished jobs:    9352133s  155868.88m  2597.81h  108.24d  0.297 y
+# IO & Wait Time:                526347s    8772.45m   146.21h    6.09d  0.017 y
+# Average job time:                  62s       1.04m     0.02h    0.00d
+# Longest finished job:             221s       3.68m     0.06h    0.00d
+# Submission to last job:        104854s    1747.57m    29.13h    1.21d
+
+    ssh kkstore03
+    cd /cluster/data/galGal3/bed/tblastn.hg18KG
+    tcsh
+    mkdir chainRun
+    cd chainRun
+    cat << '_EOF_' > chainGsub
+#LOOP
+chainOne $(path1)
+#ENDLOOP
+'_EOF_'
+
+    cat << '_EOF_' > chainOne
+(cd $1; cat q.*.psl | simpleChain -prot -outPsl -maxGap=150000 stdin /cluster/bluearc/galGal3/bed/tblastn.hg18KG/blastOut/c.`basename $1`.psl)
+'_EOF_'
+    chmod +x chainOne
+    ls -1dS \
+      /cluster/bluearc/galGal3/bed/tblastn.hg18KG/blastOut/kg?? > chain.lst
+    gensub2 chain.lst single chainGsub chainSpec
+    # do the cluster run for chaining
+    ssh pk
+    cd /cluster/data/galGal3/bed/tblastn.hg18KG/chainRun
+    para create chainSpec
+    para try, check, push, check etc.
+# Completed: 613 of 613 jobs
+# CPU time in finished jobs:      26409s     440.15m     7.34h    0.31d  0.001 y
+# IO & Wait Time:                  7787s     129.79m     2.16h    0.09d  0.000 y
+# Average job time:                  56s       0.93m     0.02h    0.00d
+# Longest finished job:             553s       9.22m     0.15h    0.01d
+# Submission to last job:          1834s      30.57m     0.51h    0.02d
+
+    ssh kkstore03
+    cd /cluster/data/galGal3/bed/tblastn.hg18KG/blastOut
+    bash # if using another shell
+    for i in kg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq > /cluster/data/galGal3/bed/tblastn.hg18KG/blastHg18KG.psl
+    pslCheck /cluster/data/galGal3/bed/tblastn.hg18KG/blastHg18KG.psl
+    # this is ok.
+    # load table 
+    ssh hgwdev
+    cd /cluster/data/galGal3/bed/tblastn.hg18KG
+    hgLoadPsl galGal3 blastHg18KG.psl
+    # check coverage
+    featureBits galGal3 blastHg18KG
+# 19638830 bases of 1042591351 (1.884%) in intersection
+    
+    featureBits galGal2 blastHg16KG
+# 17057637 bases of 1054197620 (1.618%) in intersection
+
+    featureBits galGal3 refGene:cds blastHg18KG -enrichment
+# refGene:cds 0.504%, blastHg18KG 1.884%, both 0.417%, cover 82.71%, enrich 43.91x
+
+    featureBits galGal2 refGene:cds blastHg16KG -enrichment
+# refGene:cds 0.497%, blastHg16KG 1.618%, both 0.335%, cover 67.42%, enrich 41.66x
+
+    ssh kkstore04
+    rm -rf /cluster/data/galGal3/bed/tblastn.hg18KG/blastOut
+    rm -rf /cluster/bluearc/galGal3/bed/tblastn.hg18KG/blastOut
+
+#end human proteins
+
