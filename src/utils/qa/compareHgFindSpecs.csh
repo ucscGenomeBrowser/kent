@@ -72,29 +72,27 @@ if ( $#argv == 4 ) then
   endif
 endif
 
-#set url = "http://hgwdev.cse.ucsc.edu/cgi-bin/hgText?db=hg16&table=hg16.hgFindSpec&outputType=Tab-separated%2C+Choose+fields...&origPhase=Get+results&field_tableName=on&phase=Get+these+fields"
+
+#### NEW WAY WITH hgTables
+#set url = "http://hgwdev.cse.ucsc.edu/cgi-bin/hgTables?db=hg16&hgta_outputType=selectedFields&hgta_regionType=genome&hgta_table=trackDb&origPhase=Get+results&outputType=Tab-separated%2C+Choose+fields...&phase=Get+these+fields&hgta_doPrintSelectedFields=get+output"
 
 set url1 = "http://"
-set url2 = ".cse.ucsc.edu/cgi-bin/hgText?db="
-set url3 = "&table="
-set url4 = "."
-set url5 = "&outputType=Tab-separated%2C+Choose+fields...&origPhase=Get+results"
-set url6 = "&field_$field=on"
-set url7 = "&phase=Get+these+fields"
+set url2 = ".cse.ucsc.edu/cgi-bin/hgTables?db="
+set url3 = "&hgta_outputType=selectedFields&hgta_regionType=genome&hgta_table="
+set url4 = "&outputType=Tab-separated%2C+Choose+fields...&origPhase=Get+results"
+set url5 = "&field_$field=on"
+set url6 = "&phase=Get+these+fields&hgta_doPrintSelectedFields=get+output"
 
 # add tableName to output if checking other fields -- to help interpret results
 # doesn't work for settings of because of embedded newlines
-set url6a = ""
+set url5a = ""
 if ($field != "tableName") then
-  set url6a = "&field_tableName=on"
+  set url5a = "&field_tableName=on"
 endif
-
-rm -f $machine1.$db.$table 
-rm -f $machine2.$db.$table 
 
 set machine=$machine1
 foreach mach ( $machine1 $machine2 )
-  set url="$url1$mach$url2$db$url3$db$url4$table$url5$url6a$url6$url7"
+  set url="$url1$mach$url2$db$url3$table$url4$url5a$url5$url6"
   wget -q -O $mach.$db.$table "$url"
 end
 

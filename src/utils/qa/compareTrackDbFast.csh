@@ -71,23 +71,6 @@ if ( $#argv == 4 ) then
   endif
 endif
 
-#set url = "http://hgwdev.cse.ucsc.edu/cgi-bin/hgText?db=hg16&table=hg16.trackDb&outputType=Tab-separated%2C+Choose+fields...&origPhase=Get+results&field_tableName=on&phase=Get+these+fields"
-
-set url1 = "http://"
-set url2 = ".cse.ucsc.edu/cgi-bin/hgText?db="
-set url3 = "&table="
-set url4 = "."
-set url5 = "&outputType=Tab-separated%2C+Choose+fields...&origPhase=Get+results"
-set url6a = ""
-set url6b = "&field_$field=on"
-set url7 = "&phase=Get+these+fields"
-
-# add tableName to output if checking other fields -- to help interpret results
-# doesn't work for settings of because of embedded newlines
-if ($field != "tableName") then
-  set url6a = "&field_tableName=on"
-endif
-
 # check individual html longBlobs one at a time and make pretty output
 # using list of tracks from beta
 # for html and settings fields, using public mysql server 

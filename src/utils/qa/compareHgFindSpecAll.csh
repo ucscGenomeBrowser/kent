@@ -7,7 +7,6 @@
 if ($#argv < 1 || $#argv > 4) then
   echo ""
   echo "  checks all fields in hgFindSpec"
-  echo "  this will break when hgText is replaced by hgTables."
   echo
   echo "    usage: database, [machine1], [machine2] (defaults to hgw1 and hgwbeta)"
   echo "             [mode] (fast) "
