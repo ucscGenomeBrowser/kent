@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSplitByChrom.c,v 1.4 2006/04/22 00:32:06 heather Exp $";
+static char const rcsid[] = "$Id: snpSplitByChrom.c,v 1.5 2006/06/16 18:12:57 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -78,7 +78,7 @@ char *chromName;
 verbose(1, "reading ContigLocFilter...\n");
 
 safef(query, sizeof(query), 
-    "select snp_id, ctg_id, chromName, loc_type, phys_pos_from, phys_pos, orientation, allele, weight from ContigLocFilter");
+    "select snp_id, ctg_id, chromName, loc_type, start, end, orientation, allele, weight from ContigLocFilter");
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -108,8 +108,8 @@ char *createString =
 "    ctg_id int(11) not null,\n"
 "    chromName char(32) not null,\n"
 "    loc_type tinyint(4) not null,\n"
-"    phys_pos_from int(11) not null,\n"
-"    phys_pos varchar(32),\n"
+"    start int(11) not null,\n"
+"    end int(11),\n"
 "    orientation tinyint(4) not null,\n"
 "    allele blob,\n"
 "    weight int\n"

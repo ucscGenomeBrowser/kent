@@ -9,7 +9,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.29 2006/04/22 00:29:25 heather Exp $";
+static char const rcsid[] = "$Id: snpContigLocFilter.c,v 1.30 2006/06/16 18:12:57 heather Exp $";
 
 static char *snpDb = NULL;
 static char *contigGroup = NULL;
@@ -116,8 +116,8 @@ verbose(1, "contigs found = %d\n", count);
 verbose(1, "-------------\n");
 }
 
-void getPoorlyAlignedSNPs()
-/* hash all snp IDs that have 10 into global weightHash */
+void getWeight()
+/* hash all snp IDs into global weightHash */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -179,11 +179,6 @@ void filterSnps()
 /* phys_pos_from (start) is always an integer. */
 /* If phys_pos_from is 0, this is a random contig and we generate lifted coords. */
 
-/* Format of phys_pos is based on loc_type: */
-/* 1: num..num */
-/* 2: num */
-/* 3: num^num */
-/* 4-6: NULL */
 {
 char query[512];
 struct sqlConnection *conn = hAllocConn();
@@ -194,14 +189,14 @@ struct hashEl *helRandom;
 FILE *f;
 struct coords *cel = NULL;
 int start = 0;
-char endString[32];
-int endNum = 0;
+int end = 0;
 int loc_type = 0;
+int phys_pos_from = 0;
 
 f = hgCreateTabFile(".", "ContigLocFilter");
 
 safef(query, sizeof(query), 
-    "select snp_id, ctg_id, loc_type, phys_pos_from, phys_pos, asn_from, asn_to, orientation, allele from ContigLoc");
+    "select snp_id, ctg_id, loc_type, phys_pos_from, asn_from, asn_to, orientation, allele from ContigLoc");
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -216,19 +211,17 @@ while ((row = sqlNextRow(sr)) != NULL)
 
 	loc_type = sqlUnsigned(row[2]);
 
-	start = sqlUnsigned(row[3]);
-	safef(endString, sizeof(endString), "%s", row[4]);
+        start = sqlUnsigned(row[4]) + cel->start;
+        end = sqlUnsigned(row[5]) + cel->start;
 
-        /* lift randoms */
-	if (start == 0)
-	    {
-	    start = sqlUnsigned(row[5]) + cel->start;
-	    endNum = sqlUnsigned(row[6]) + cel->start;
-	    safef(endString, sizeof(endString), "%d", endNum);
-	    }
+        /* use phys_pos_from to check coords for non_randoms */
+	phys_pos_from = sqlUnsigned(row[3]);
+	if (phys_pos_from > 0 && phys_pos_from != start)
+	   verbose(1, "unexpected coords snp_id = %d, ctg_id = %d, phys_pos_from = %d, start = %d\n", 
+	               row[0], row[1], phys_pos_from, start); 
 	
-	fprintf(f, "%s\t%s\t%s\t%s\t%d\t%s\t%s\t%s\t%s\n", 
-	            row[0], row[1], cel->chrom, row[2], start, endString, row[7], row[8], (char *)el2->val);
+	fprintf(f, "%s\t%s\t%s\t%s\t%d\t%d\t%s\t%s\t%s\n", 
+	            row[0], row[1], cel->chrom, row[2], start, end, row[6], row[7], (char *)el2->val);
 	}
     }
 sqlFreeResult(&sr);
@@ -247,8 +240,8 @@ char *createString =
 "    ctg_id int(11) not null,       \n"
 "    chromName varchar(32) not null,\n"
 "    loc_type tinyint(4) not null,       \n"
-"    phys_pos_from int(11) not null,       \n"
-"    phys_pos varchar(32), \n"
+"    start int(11) not null,       \n"
+"    end int(11), \n"
 "    orientation tinyint(4) not null, \n"
 "    allele blob,\n"
 "    weight int not null\n"
@@ -308,7 +301,7 @@ if (contigCoords == NULL)
     return 2;
     }
 
-getPoorlyAlignedSNPs();
+getWeight();
 if (weightHash == NULL)
     {
     verbose(1, "couldn't get MapInfo weight hash\n");
