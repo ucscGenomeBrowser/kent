@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.54 2006/06/15 18:23:21 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.55 2006/06/16 00:14:35 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5852,7 +5852,7 @@ if ($a[1] =~ m/\|/)
     my $end = $randomPosition + $size;
     printf "%s\t%d\tchr%s_random\t%d\t%d\n", $a[5],$size,$b[0],$start,$end;
     if ($b[0] ne "Un") { $randomPosition += 50000; }
-	else { $randomPosition += 1000; }
+	else { $randomPosition += 50000; }
     $randomPosition += $size;
     }
 elsif ($a[5] =~ m/^N[TC]_\d+$/)
@@ -5867,8 +5867,12 @@ elsif ($a[5] =~ m/^N[TC]_\d+$/)
     #	<< emacs happy
     chmod +x seqContigToCtgPos.pl
 
+    egrep "ref_strain|C57BL" ../../seq_contig.md \
+	| ./seqContigToCtgPos.pl > ctgPos.tab
+
     cat ../../seq_contig.md | ./seqContigToCtgPos.pl > ctgPos.tab
 
+    hgsql mm8 -e "drop table ctgPos;"
     hgsql mm8 < ~/kent/src/hg/lib/ctgPos.sql
     hgsql mm8 -e 'load data local infile "ctgPos.tab" into table ctgPos;'
 
