@@ -9606,3 +9606,147 @@ BASE=/cluster/data/hg18/bed/blastz.galGal3.2006-05-22
     md5sum *.zip *.2bit README.txt > md5sum.txt
 
 #########################################################################
+# UPDATE BACENDS track (WORKING - 2006-06-16 - Hiram)
+#	An attempt to recover some of the missing clones from the
+#	bacEnds track.  It turns out the perl processing script wasn't
+#	properly catagorizing all the clone ends, thus a lot of them
+#	were being left out of the final track
+    ssh hgwdev
+    mkdir /cluster/data/hg18/bed/updateCloneEnds
+    cd /cluster/data/hg18/bed/updateCloneEnds
+    ln -s ../cloneend/all.txt.gz .
+    #	Checked this script into the source tree and fixed it up to
+    #	recognize more of the catagories of clone ends
+    zcat all.txt.gz | $HOME/kent/src/hg/utils/cloneEndParse.pl /dev/stdin
+    #	Reading in end info
+    #	Writing out pair info
+    #	Writing out singleton info
+    #	301377 pairs and 204698 singles
+    #	Note that there are none marked at "unclassified" - this script
+    #	will print out that message to stderr if it doesn't recognize
+    #	any marker classifications.  This produces the files:
+    #	-rw-rw-r--  1 9645568 Jun 16 14:09 cloneEndPairs.txt
+    #	-rw-rw-r--  1 4906468 Jun 16 14:09 cloneEndSingles.txt
+    wc -l clone*.txt
+    #	301377 cloneEndPairs.txt
+    #	204698 cloneEndSingles.txt
+    #	This is a lot better than previous:
+    wc -l ../cloneend/cloneEnd*.txt
+    #	249619 ../cloneend/cloneEndPairs.txt
+    #	318500 ../cloneend/cloneEndSingles.txt
+
+    mkdir /san/sanvol1/scratch/hg18/updateBacEnds
+    cd /san/sanvol1/scratch/hg18/updateBacEnds
+    ln -s ../bacends/bacEnds.sorted.psl .
+    ln -s ../bacends/lifted .
+    pslPairs -tInsert=10000 -minId=0.91 -noBin -min=25000 -max=350000 \
+	-slopval=10000 -hardMax=500000 -slop -short -long -orphan \
+	-mismatch -verbose bacEnds.sorted.psl \
+	/cluster/data/hg18/bed/updateCloneEnds/cloneEndPairs.txt \
+	all_bacends bacEnds
+
+    echo -e \
+'chr\tstart\tend\tclone\tscore\tstrand\tall\tfeatures\tstarts\tsizes' > header
+    echo -e '10\t10N\t10N\t10\t10N\t10\t10\t10N\t10\t10' >> header
+    cat header bacEnds.pairs | row score ge 300 | sorttbl chr start \
+	| headchg -del > bacEndPairs.bed
+    cat header bacEnds.slop bacEnds.short bacEnds.long \
+	bacEnds.mismatch bacEnds.orphan \
+        | row score ge 300 | sorttbl chr start | headchg -del \
+	> bacEndPairsBad.bed
+
+    extractPslLoad -noBin bacEnds.sorted.psl bacEndPairs.bed \
+                bacEndPairsBad.bed | \
+                        sorttbl tname tstart | headchg -del > bacEnds.load.psl
+    #	looks like we are getting a lot more now in every catagory:
+    wc -l bacEnds.* bacEndPairs* | sort -n
+       49 bacEnds.long
+     1399 bacEnds.mismatch
+     4516 bacEnds.slop
+     7202 bacEnds.short
+    66861 bacEnds.orphan
+    78900 bacEndPairsBad.bed
+   205443 bacEndPairs.bed
+   207997 bacEnds.pairs
+  1727387 bacEnds.load.psl
+    #	Previously:
+    wc -l ../bacends/bacEnds.* ../bacends/bacEndPairs* | sort -n
+       40 ../bacends/bacEnds.long
+     1061 ../bacends/bacEnds.mismatch
+     3954 ../bacends/bacEnds.slop
+     6279 ../bacends/bacEnds.short
+    59245 ../bacends/bacEnds.orphan
+    69788 ../bacends/bacEndPairsBad.bed
+   159268 ../bacends/bacEndPairs.bed
+   161251 ../bacends/bacEnds.pairs
+  1249956 ../bacends/bacEnds.load.psl
+
+    #	Move the previous build out of the way and copy these
+    #	results over to the primary hg18 bed location:
+    mv /cluster/data/hg18/bed/bacends /cluster/data/hg18/bed/bacends.2006-02-02
+    mkdir /cluster/data/hg18/bed/bacends
+    cp -p bacEnd* /cluster/data/hg18/bed/bacends
+    cp -p lifted/bacEnds.lifted.psl /cluster/data/hg18/bed/bacends
+
+    #	load them into the database
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/bacends
+    #	CHECK bacEndPairs.bed ID's to make sure they have no blanks in them
+    awk '{print $5}' bacEndPairs.bed | sort | uniq -c
+    #	result should be the scores, no extraneous strings:
+    #	202488 1000
+    #	   255 300
+    #	   416 375
+    #	   384 500
+    #	  1900 750
+    #	edit the file and fix it if it has a bad name.
+
+    sed -e "s/bacEndPairs /bacEndPairsUpdate /" \
+	$HOME/kent/src/hg/lib/bacEndPairs.sql > bacEndPairsUpdate.sql
+
+    hgLoadBed -notItemRgb hg18 bacEndPairsUpdate bacEndPairs.bed \
+                 -sqlTable=bacEndPairsUpdate.sql 
+    # Loaded 205443 elements of size 11
+    #	Previously was:
+    # Loaded 159268  
+
+    # note - this track isn't pushed to RR, just used for assembly QA
+    sed -e "s/bacEndPairsBad /bacEndPairsBadUpdate /" \
+	$HOME/kent/src/hg/lib/bacEndPairsBad.sql > bacEndPairsBadUpdate.sql
+
+    hgLoadBed -notItemRgb hg18 bacEndPairsBadUpdate bacEndPairsBad.bed \
+                 -sqlTable=bacEndPairsBadUpdate.sql
+    # Loaded 78900 elements of size 11
+    #	Previously was:
+    # Loaded 69788
+    #hgLoadPsl hg18 -nobin -table=all_bacends bacEnds.load.psl
+    # NOTE: truncates file to 0 if -nobin is used
+    # NOTE: truncates file to 0 if -nobin is used
+    hgLoadPsl hg18 -table=all_bacendsUpdate bacEnds.load.psl
+
+    #	no complaints !  Usually there are, this loaded:
+    hgsql -N -e "select count(*) from all_bacendsUpdate;" hg18
+    #	1727387
+    #	Previously this was:
+    #	1249956
+
+    nice featureBits hg18 all_bacendsUpdate
+# 227770876 bases of 2881515245 (7.905%) in intersection
+    nice featureBits hg18 all_bacends
+# 191078854 bases of 2881515245 (6.631%) in intersection
+    nice featureBits hg17 all_bacends
+# 225763317 bases of 2866216770 (7.877%) in intersection
+
+    nice featureBits hg18 bacEndPairsUpdate
+# 162690030 bases of 2881515245 (5.646%) in intersection
+    nice featureBits hg18 bacEndPairs
+# 130270940 bases of 2881515245 (4.521%) in intersection
+    nice featureBits hg17 bacEndPairs
+# 162099487 bases of 2866216770 (5.656%) in intersection
+
+    nice featureBits hg18 bacEndPairsBadUpdate
+# 37326990 bases of 2881515245 (1.295%) in intersection
+    nice featureBits hg18 bacEndPairsBad
+# 33650226 bases of 2881515245 (1.168%) in intersection
+    nice featureBits hg17 bacEndPairsBad
+# 37437558 bases of 2866216770 (1.306%) in intersection
