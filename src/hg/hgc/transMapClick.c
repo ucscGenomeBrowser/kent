@@ -6,6 +6,7 @@
  *   transMapXxxAli - mapped PSLs aligments
  *   transMapXxxAliGene - mapped alignmetns with CDS and frame annotation
  *   transMapXxxChk - gene-check results
+ *   transMapXxxChkDetails - gene-check details
  *   transMapXxxInfo - mapping information, including source.
  *   transMapXxxAttr - optional coloring attr table
  *
@@ -18,6 +19,9 @@
 #include "hgc.h"
 #include "transMapClick.h"
 #include "transMapInfo.h"
+#include "geneCheck.h"
+#include "geneCheckDetails.h"
+#include "geneCheckWidget.h"
 #include "genbank.h"
 
 /* space to allocate for a id */
@@ -224,6 +228,50 @@ printAlignments(psl, start, "hgcTransMapCdnaAli", alignTbl, mi->tmi->mappedId);
 pslFreeList(&psl);
 }
 
+static struct geneCheck *displayGeneCheck(struct sqlConnection *conn, struct mappingInfo *mi,
+                                          char *mappedId)
+/* display gene-check results; return true geneCheck object, which must be freed */
+{
+struct geneCheck *gc
+    = sqlQueryObjs(conn, (sqlLoadFunc)geneCheckLoad, sqlQueryMust|sqlQuerySingle,
+                   "select * from %s%sChk where acc='%s'", mi->tblPre, mi->geneSet,
+                   mappedId);
+geneCheckWidgetSummary(gc, "transMap", "Gene checks\n");
+return gc;
+}
+
+static void displayGeneCheckDetails(struct sqlConnection *conn, struct mappingInfo *mi,
+                                    struct geneCheck *gc)
+/* display gene-check details */
+{
+struct geneCheckDetails *gcdList
+    = sqlQueryObjs(conn, (sqlLoadFunc)geneCheckDetailsLoad, sqlQueryMulti,
+                   "select * from %s%sChkDetails where acc='%s'", 
+                   mi->tblPre, mi->geneSet, gc->acc);
+geneCheckWidgetDetails(cart, gc, gcdList, "transMap", "Gene check details", NULL);
+geneCheckDetailsFreeList(&gcdList);
+}
+
+static void displayGeneCheckResults(struct sqlConnection *conn, struct mappingInfo *mi,
+                                    char *mappedId)
+/* display row with geneCheck info, if tables exist */
+{
+char tbl[256];
+struct geneCheck *gc;
+safef(tbl, sizeof(tbl), "%s%sChk", mi->tblPre, mi->geneSet);
+
+if (sqlTableExists(conn, tbl))
+    {
+    printf("<TR><TD>\n");
+    gc = displayGeneCheck(conn, mi, mappedId);
+    printf("<TD COLSPAN=2>\n");
+    if (!sameString(gc->stat, "ok"))
+        displayGeneCheckDetails(conn, mi, gc);
+    printf("</TR>\n");
+    geneCheckFree(&gc);
+    }
+}
+
 void transMapClickHandler(struct trackDb *tdb, char *mappedId)
 /* Handle click on a transMap tracks */
 {
@@ -231,36 +279,24 @@ struct sqlConnection *conn = hAllocConn();
 struct mappingInfo *mi = mappingInfoNew(conn, tdb->tableName, mappedId);
 
 genericHeader(tdb, mappedId);
-printf("<TABLE border=0>\n");
-printf("<TR CLASS=\"transMapLayout\">\n");
-printf("<TD COLSPAN=3>\n");
+printf("<TABLE class=\"transMapLayout\">\n");
+
+printf("<TR><TD COLSPAN=3>\n");
 displaySrcGene(conn, mi);
 printf("</TR>\n");
-printf("<TR CLASS=\"transMapLayout\">\n");
-printf("<TD>\n");
-displayMappingInfo(conn, mi);
-printf("<TD>\n");
-#if 0
-struct geneCheck *gc = displayGeneCheck(conn, &mti, mappedId);
-printf("<TD>\n");
-displayProtSim(conn, &mti, mappedId);
-#endif
-printf("</TR>\n");
-#if 0
-if (!sameString(gc->stat, "ok"))
-    {
-    printf("<TR CLASS=\"transMapLayout\">\n");
-    printf("<TD COLSPAN=3>\n");
-    displayGeneCheckDetails(conn, &mti, gc);
-    printf("</TR>\n");
-    }
-#endif
-printf("</TABLE>\n");
+
+printf("<TR><TD COLSPAN=3>\n");
 displayAligns(conn, mi);
+printf("</TR>\n");
+
+printf("<TR><TD COLSPAN=3>\n");
+displayMappingInfo(conn, mi);
+printf("</TR>\n");
+
+displayGeneCheckResults(conn, mi, mappedId);
+printf("</TABLE>\n");
+
 printTrackHtml(tdb);
-#if 0
-geneCheckFree(&gc);
-#endif
 mappingInfoFree(&mi);
 hFreeConn(&conn);
 }
