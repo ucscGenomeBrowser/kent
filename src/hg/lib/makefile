@@ -35,7 +35,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     flyBase2004Xref.o \
     flyBaseSwissProt.o flyreg.o flyreg2.o gbExtFile.o gbProtAnn.o gcPercent.o \
     gencodeGeneClass.o gencodeIntron.o genMapDb.o genbank.o \
-    geneBands.o geneGraph.o genePred.o genePredReader.o genomicDups.o \
+    geneBands.o geneCheck.o geneCheckDetails.o geneCheckWidget.o geneGraph.o genePred.o genePredReader.o genomicDups.o \
     genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     glDbRep.o goa.o goaPart.o growthCondition.o grp.o hapmapSnps.o hCommon.o \
     hdb.o hgConfig.o hgExp.o hgFind.o hgFindSpec.o hgFindSpecCustom.o \
