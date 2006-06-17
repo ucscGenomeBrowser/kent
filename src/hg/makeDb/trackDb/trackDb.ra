@@ -398,6 +398,7 @@ noInherit on
     priority 1
     noInherit on
     type genePred
+    itemAttrTbl transMapRefAttr
     cdsDrawDefault genomic\ codons
 
     track transMapRefAliGene
@@ -409,6 +410,7 @@ noInherit on
     visibility hide
     noInherit on
     type genePred
+    itemAttrTbl transMapRefAttr
     cdsDrawDefault genomic\ codons
 
     track transMapMRnaGene
@@ -419,6 +421,7 @@ noInherit on
     priority 3
     noInherit on
     type genePred
+    itemAttrTbl transMapMRnaAttr
     cdsDrawDefault genomic\ codons
 
     track transMapMRnaAliGene
@@ -430,6 +433,7 @@ noInherit on
     visibility hide
     noInherit on
     type genePred
+    itemAttrTbl transMapMRnaAttr
     cdsDrawDefault genomic\ codons
 
 track transMapAnc
@@ -450,6 +454,7 @@ noInherit on
     priority 1
     noInherit on
     type genePred
+    itemAttrTbl transMapRefAttr
     cdsDrawDefault genomic\ codons
 
     track transMapAncRefAliGene
@@ -461,6 +466,7 @@ noInherit on
     visibility hide
     noInherit on
     type genePred
+    itemAttrTbl transMapRefAttr
     cdsDrawDefault genomic\ codons
 
     track transMapAncMRnaGene
@@ -471,6 +477,7 @@ noInherit on
     priority 3
     noInherit on
     type genePred
+    itemAttrTbl transMapMRnaAttr
     cdsDrawDefault genomic\ codons
 
     track transMapAncMRnaAliGene
@@ -482,6 +489,7 @@ noInherit on
     visibility hide
     noInherit on
     type genePred
+    itemAttrTbl transMapMRnaAttr
     cdsDrawDefault genomic\ codons
 
 track genieAlt
