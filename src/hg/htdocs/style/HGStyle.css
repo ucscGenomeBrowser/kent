@@ -107,10 +107,10 @@ TR.transMapLeft TD {
 .transMapNoWrap {
     white-space: nowrap;
 }
-.transMapError {
+.errorBg {
     background-color: #ff704f;
 }
-.transMapWarn {
+.warnBg {
     background-color: #f8ff30;
 }
 
