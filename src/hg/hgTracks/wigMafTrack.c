@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.96 2006/06/02 17:03:54 braney Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.97 2006/06/17 03:00:12 galt Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -788,6 +788,7 @@ struct hash *componentHash = newHash(6);
 struct hashEl *hel;
 struct hashCookie cookie;
 struct dyString *where = dyStringNew(256);
+char *whereClause = NULL;
 boolean useIrowChains = FALSE;
 char option[64];
 
@@ -810,15 +811,18 @@ dyStringAppend(where, "src in (");
 for (mi = miList; mi != NULL; mi = mi->next)
     {
     if (!isPairwiseItem(mi))
-        /* exclude non-species items (e.g. conservation wiggle */
-        continue;
+	/* exclude non-species items (e.g. conservation wiggle */
+	continue;
     dyStringPrintf(where, "'%s'", mi->db);
     if (mi->next != NULL)
-        dyStringAppend(where, ",");
+	dyStringAppend(where, ",");
     }
 dyStringAppend(where, ")");
+/* check for empty where clause */
+if (!sameString(where->string,"src in ()"))
+    whereClause = where->string;
 sr = hOrderedRangeQuery(conn, summary, chromName, seqStart, seqEnd,
-                        where->string, &rowOffset);
+                        whereClause, &rowOffset);
 
 /* Loop through result creating a hash of lists of maf summary blocks.
  * The hash is keyed by species. */
