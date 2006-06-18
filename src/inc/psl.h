@@ -133,6 +133,11 @@ struct lineFile *pslFileOpenWithMeta(char *fileName, FILE *f);
 /* Read header part of psl and make sure it's right. 
  * Return line file handle to it and send meta data to output file f */
 
+struct lineFile *pslFileOpenWithUniqueMeta(char *fileName, FILE *f);
+/* Read header part of psl and make sure it's right. 
+* Set flag to suppress duplicate header comments.
+* Return line file handle to it. */
+
 void pslxFileOpen(char *fileName, enum gfType *retQueryType, 
 	enum gfType *retTargetType, struct lineFile **retLf);
 /* Read header part of psl and make sure it's right.  Return
@@ -141,6 +146,10 @@ void pslxFileOpen(char *fileName, enum gfType *retQueryType,
 void pslxFileOpenWithMeta(char *fileName, enum gfType *retQueryType, enum gfType *retTargetType, struct lineFile **retLf, FILE *f);
 /* Read header part of psl and make sure it's right.  Return
  * sequence types and file handle and send meta data to output file f */
+
+void pslxFileOpenWithUniqueMeta(char *fileName, enum gfType *retQueryType, enum gfType *retTargetType, struct lineFile **retLf, FILE *f);
+/* Read header part of psl and make sure it's right.  Return
+* sequence types and file handle and send only unique meta data to output f */
 
 int pslCmpQuery(const void *va, const void *vb);
 /* Compare to sort based on query. */

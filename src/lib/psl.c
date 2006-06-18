@@ -18,7 +18,7 @@
 #include "aliType.h"
 #include "binRange.h"
 
-static char const rcsid[] = "$Id: psl.c,v 1.72 2006/06/09 04:13:44 markd Exp $";
+static char const rcsid[] = "$Id: psl.c,v 1.73 2006/06/18 23:14:31 kate Exp $";
 
 static char *createString = 
 "CREATE TABLE %s (\n"
@@ -575,7 +575,7 @@ else
 *retLf = lf;
 }
 
-void pslxFileOpenWithMeta(char *fileName, enum gfType *retQueryType, enum gfType *retTargetType, struct lineFile **retLf, FILE *f)
+static void pslxFileOpenWithMetaConfig(char *fileName, bool isMetaUnique, enum gfType *retQueryType, enum gfType *retTargetType, struct lineFile **retLf, FILE *f)
 /* Read header part of psl and make sure it's right.  Return
  * sequence types and file handle and send meta data to output file f */
 {
@@ -589,6 +589,8 @@ enum gfType qt = gftRna,  tt = gftDna;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 
 lineFileSetMetaDataOutput(lf, f);
+if (isMetaUnique)
+    lineFileSetUniqueMetaData(lf);
 if (!lineFileNext(lf, &line, &lineSize))
     warn("%s is empty", fileName);
 else
@@ -641,6 +643,21 @@ else
 *retTargetType = tt;
 *retLf = lf;
 }
+
+void pslxFileOpenWithMeta(char *fileName, enum gfType *retQueryType, enum gfType *retTargetType, struct lineFile **retLf, FILE *f)
+/* Read header part of psl and make sure it's right.  Return
+ * sequence types and file handle and send meta data to output file f */
+{
+pslxFileOpenWithMetaConfig(fileName, FALSE, retQueryType, retTargetType, retLf, f);
+}
+
+void pslxFileOpenWithUniqueMeta(char *fileName, enum gfType *retQueryType, enum gfType *retTargetType, struct lineFile **retLf, FILE *f)
+/* Read header part of psl and make sure it's right.  Return
+ * sequence types and file handle and send only unique meta data to output f */
+{
+pslxFileOpenWithMetaConfig(fileName, TRUE, retQueryType, retTargetType, retLf, f);
+}
+
 struct lineFile *pslFileOpen(char *fileName)
 /* Read header part of psl and make sure it's right. 
  * Return line file handle to it. */
@@ -658,6 +675,17 @@ struct lineFile *pslFileOpenWithMeta(char *fileName, FILE *f)
 enum gfType qt, tt;
 struct lineFile *lf;
 pslxFileOpenWithMeta(fileName, &qt, &tt, &lf, f);
+return lf;
+}
+
+struct lineFile *pslFileOpenWithUniqueMeta(char *fileName, FILE *f)
+/* Read header part of psl and make sure it's right. 
+ * Set flag to suppress duplicate header comments.
+ * Return line file handle to it. */
+{
+enum gfType qt, tt;
+struct lineFile *lf;
+pslxFileOpenWithUniqueMeta(fileName, &qt, &tt, &lf, f);
 return lf;
 }
 

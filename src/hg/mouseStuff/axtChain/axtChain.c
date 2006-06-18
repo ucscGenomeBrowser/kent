@@ -16,7 +16,7 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.34 2005/11/21 18:47:55 hiram Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.35 2006/06/18 23:14:31 kate Exp $";
 
 /* Variables set via command line. */
 int minScore = 1000;
@@ -43,8 +43,8 @@ errAbort(
   "   -scoreScheme=fileName Read the scoring matrix from a blastz-format file\n"
   "   -linearGap=<medium|loose|filename> Specify type of linearGap to use.\n"
   "              *Must* specify this argument to one of these choices.\n"
-  "              loose is chicken/human gap costs.\n"
-  "              medium is mouse/human gap costs.\n"
+  "              loose is chicken/human linear gap costs.\n"
+  "              medium is mouse/human linear gap costs.\n"
   "              Or specify a piecewise linearGap tab delimited file.\n"
   "   sample linearGap file (loose)\n"
   "%s"
@@ -317,6 +317,7 @@ struct axt *axt;
 struct seqPair *spList = NULL, *sp;
 
 lineFileSetMetaDataOutput(lf, f);
+lineFileSetUniqueMetaData(lf);
 while ((axt = axtRead(lf)) != NULL)
     {
     dyStringClear(dy);
@@ -345,7 +346,7 @@ struct seqPair *readPslBlocks(char *fileName, struct hash *pairHash, FILE *f)
 /* Read in psl file and parse blocks into pairHash */
 {
 struct seqPair *spList = NULL, *sp;
-struct lineFile *lf = pslFileOpenWithMeta(fileName, f);
+struct lineFile *lf = pslFileOpenWithUniqueMeta(fileName, f);
 struct dyString *dy = newDyString(512);
 struct psl *psl;
 
@@ -465,7 +466,7 @@ struct gapCalc *gapCalcReadOrDefault(char *fileName)
 /* Return gaps from file, or default if fileName is NULL. */
 {
 if (fileName == NULL)
-    errAbort("Must specify gap costs.  Use 'loose' or 'medium' for defaults\n");
+    errAbort("Must specify linear gap costs.  Use 'loose' or 'medium' for defaults\n");
 return gapCalcFromFile(fileName);
 }
 
