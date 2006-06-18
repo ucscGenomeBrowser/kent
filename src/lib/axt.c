@@ -20,7 +20,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axt.c,v 1.46 2005/10/26 17:35:01 angie Exp $";
+static char const rcsid[] = "$Id: axt.c,v 1.47 2006/06/18 23:11:58 kate Exp $";
 
 void axtFree(struct axt **pEl)
 /* Free an axt. */
@@ -753,6 +753,7 @@ fprintf(f, "##matrix=%s 16 %d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\n",
     ss->matrix['t']['c'],
     ss->matrix['t']['g'],
     ss->matrix['t']['t']);
+fprintf(f, "##gapPenalties=%s O=%d E=%d\n", name, ss->gapOpen, ss->gapExtend);
 if (ss->extra!=NULL)
     {
     stripChar(ss->extra,' ');
