@@ -5,6 +5,7 @@
  * granted for all use - public, private or commercial. */
 
 #include "common.h"
+#include "hash.h"
 #include <fcntl.h>
 #include "dystring.h"
 #include "errabort.h"
@@ -12,7 +13,7 @@
 #include "pipeline.h"
 #include <signal.h>
 
-static char const rcsid[] = "$Id: linefile.c,v 1.43 2005/11/08 00:01:34 galt Exp $";
+static char const rcsid[] = "$Id: linefile.c,v 1.44 2006/06/18 23:07:43 kate Exp $";
 
 char *getFileNameFromHdrSig(char *m)
 /* Check if header has signature of supported compression stream,
@@ -52,9 +53,26 @@ static void metaDataAdd(struct lineFile *lf, char *line)
  * internal function called by lineFileNext */
 {
 struct metaOutput *meta = NULL;
+
+if (lf->isMetaUnique)
+    {
+    /* suppress repetition of comments */
+    if (hashLookup(lf->metaLines, line))
+        {
+        return;
+        }
+    hashAdd(lf->metaLines, line, NULL);
+    }
 for (meta = lf->metaOutput ; meta != NULL ; meta = meta->next)
     if (line != NULL && meta->metaFile != NULL)
         fprintf(meta->metaFile,"%s\n", line);
+}
+
+static void metaDataFree(struct lineFile *lf)
+/* free saved comments */
+{
+if (lf->isMetaUnique && lf->metaLines)
+    freeHash(&lf->metaLines);
 }
 
 void lineFileSetMetaDataOutput(struct lineFile *lf, FILE *f)
@@ -68,6 +86,13 @@ AllocVar(meta);
 meta->next = NULL;
 meta->metaFile = f;
 slAddHead(&lf->metaOutput, meta);
+}
+
+void lineFileSetUniqueMetaData(struct lineFile *lf)
+/* suppress duplicate lines in metadata */
+{
+lf->isMetaUnique = TRUE;
+lf->metaLines = hashNew(8);
 }
 
 static char * headerBytes(char *fileName, int numbytes)
@@ -463,6 +488,7 @@ if ((lf = *pLf) != NULL)
 	close(lf->fd);
     freeMem(lf->fileName);
     freeMem(lf->buf);
+    metaDataFree(lf);
     freez(pLf);
     }
 }

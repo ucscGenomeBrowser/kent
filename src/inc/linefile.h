@@ -42,6 +42,8 @@ struct lineFile
     char *buf;			/* Buffer. */
     struct pipeline *pl;        /* pipeline if reading compressed */
     struct metaOutput *metaOutput;   /* list of FILE handles to write metaData to */
+    bool isMetaUnique;          /* if set, do not repeat comments in output */
+    struct hash *metaLines;     /* save lines to suppress repetition */
     };
 
 char *getFileNameFromHdrSig(char *m);
@@ -174,6 +176,9 @@ struct dyString *lineFileSlurpHttpBody(struct lineFile *lf,
 void lineFileSetMetaDataOutput(struct lineFile *lf, FILE *f);
 /* set file to write meta data to,
  * should be called before reading from input file */
+
+void lineFileSetUniqueMetaData(struct lineFile *lf);
+/* suppress duplicate lines in metadata */
 
 #endif /* LINEFILE_H */
 
