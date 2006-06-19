@@ -12,7 +12,7 @@
 # Output created in a hierarchy under psl.tmp in current directory
 #    
 
-set blastDir=/scratch/blast
+set blastDir=/iscratch/blast
 set tmpDir=/scratch/tmp
 
 if ($#argv != 1) then
