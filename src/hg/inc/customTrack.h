@@ -11,6 +11,7 @@
 #endif
 
 #include "cart.h"
+#include "portable.h"
 
 struct customTrack
 /* A custom track. */
