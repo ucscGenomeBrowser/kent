@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1132 2006/06/19 23:16:05 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1133 2006/06/19 23:23:44 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -219,7 +219,7 @@ static void ideoTrashFile(struct tempName *tn, char *suffix)
 /*	obtain a trash file name for the ideogram	*/
 {
 static boolean firstTime = TRUE;
-char prefix[16];
+char prefix[32];
 if (firstTime)
     {
     mkdirTrashDirectory("hgtIdeo");
