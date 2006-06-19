@@ -2277,6 +2277,7 @@ sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmose
 sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
 sGroup_mammal monodelphis  platypus 
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+treeImage phylo/species28.jpg
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE Oct 2005 Freeze
 
@@ -2407,6 +2408,7 @@ sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmose
 sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
 sGroup_mammal monodelphis  platypus 
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+treeImage phylo/species28.jpg
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE Oct 2005 Freeze
 
@@ -2528,6 +2530,7 @@ sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmose
 sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
 sGroup_mammal monodelphis  platypus 
 sGroup_vertebrate chicken xenopus tetraodon fugu zebrafish
+treeImage phylo/species28.jpg
 chromosomes chr1,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr18,chr19,chr2,chr20,chr21,chr22,chr4,chr5,chr6,chr7,chr8,chr9,chrX
 dataVersion ENCODE Oct 2005 Freeze
 
