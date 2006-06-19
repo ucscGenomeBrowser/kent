@@ -1,14 +1,15 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.109 2006/06/02 17:15:37 hiram Exp $
+# 	$Id: makefile,v 1.110 2006/06/19 19:08:40 hiram Exp $
 
 BROWSER_BINS=cartReset das hgBlat hgConvert \
         hgGateway hgGene hgPcr hgSession hgTables hgText hgTracks \
 	hgTrackUi hgc cartDump near/hgNear \
 	protein/pbGateway protein/pbTracks protein/pbGlobal \
 	hgLiftOver visiGene/hgVisiGene \
-	encode/mkEncodeFrameset encode/hgEncodeDataVersions \
-	makeDb/hgLoadBed makeDb/hgLoadWiggle
+	encode/mkEncodeFrameset encode/hgEncodeDataVersions
+
+BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle
 
 TEST_DIRS = lib autoDtd autoSql blastToPsl checkTableCoords embossToPsl \
             genePredSingleCover genePredHisto genePredToMafFrames\
@@ -52,7 +53,7 @@ BAD_DIRS = \
 #	to apache cgi-bin directories  (this compiles and links executables)
 
 compile:	hgLib
-	@for D in ${BROWSER_BINS}; do \
+	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
 		(cd $${D} && ${MAKE} compile;) \
 	done
 
@@ -63,31 +64,34 @@ cgi:	hgLib
 	@for D in ${BROWSER_BINS}; do \
 		(cd $${D} && ${MAKE};) \
 	done
+	@for D in ${BROWSER_LOADERS}; do \
+		(cd $${D} && ${MAKE} cgi;) \
+	done
 
 #   alpha: Destination for the binaries is /usr/local/apache/cgi-bin/
 
 alpha:	hgLib
-	@for D in ${BROWSER_BINS}; do \
+	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
 		(cd $${D} && ${MAKE} alpha;) \
 	done
 
 #   beta: Destination for the binaries is /usr/local/apache/cgi-bin-beta/
 
 beta:	hgLib
-	@for D in ${BROWSER_BINS}; do \
+	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
 		(cd $${D} && ${MAKE} beta;) \
 	done
 
 # install: Destination for the binaries is ${DESTDIR}/usr/local/apache/cgi-bin
 
 install:	hgLib
-	@for D in ${BROWSER_BINS}; do \
+	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
 		(cd $${D} && ${MAKE} install;) \
 	done
 
 clean::
 	cd lib && ${MAKE} clean
-	@for D in ${BROWSER_BINS}; do \
+	@for D in ${BROWSER_BINS} ${BROWSER_LOADERS}; do \
 		(cd $${D} && ${MAKE} clean;) \
 	done
 	touch non-empty-rm.o
