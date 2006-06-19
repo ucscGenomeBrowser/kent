@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.101 2006/06/19 19:12:38 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.102 2006/06/19 19:52:57 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -223,22 +223,21 @@ return (loader);
 
 struct pipeline *pipeToLoader(struct customTrack *track)
 {
+static boolean firstTime = TRUE;
 char *db = cfgOptionDefault("customTracks.db", NULL);
-char *host = cfgOptionDefault("customTracks.host", NULL);
-char *user = cfgOptionDefault("customTracks.user", NULL);
-char *pass = cfgOptionDefault("customTracks.password", NULL);
-char envHost[128];
-char envUser[64];
-char envPass[64];
 struct pipeline *dbDataPipe = (struct pipeline *)NULL;
 
-/*	set environment for pipeline commands	*/
-safef(envHost, sizeof(envHost), "HGDB_HOST=%s", host);
-putenv(envHost);
-safef(envUser, sizeof(envUser), "HGDB_USER=%s", user);
-putenv(envUser);
-safef(envPass, sizeof(envPass), "HGDB_PASSWORD=%s", pass);
-putenv(envPass);
+if (firstTime)
+    {
+    /*	set environment for pipeline commands, one time only is sufficient */
+    char *host = cfgOptionDefault("customTracks.host", NULL);
+    char *user = cfgOptionDefault("customTracks.user", NULL);
+    char *pass = cfgOptionDefault("customTracks.password", NULL);
+    envUpdate("HGDB_HOST", host);
+    envUpdate("HGDB_USER", user);
+    envUpdate("HGDB_PASSWORD", pass);
+    firstTime = FALSE;
+    }
 
 /*	the different loaders require different pipeline commands */
 if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
@@ -1823,6 +1822,8 @@ for (track = trackList; track != NULL; track = track->next)
 			options.wibSizeLimit = 300000000; /* 300Mb limit*/
 			wigAsciiToBinary(track->wigAscii, track->wigFile,
 			    track->wibFile, &upperLimit, &lowerLimit, &options);
+			if (options.wibSizeLimit != 300000000)
+			    printf("#\twarning: reached data limit for wiggle track '%s'<BR>\n", track->tdb->shortLabel);
 			fprintf(f, "#\tascii data file: %s\n", track->wigAscii);
 			unlink(track->wigAscii);/* done with this, remove it */
 			}
