@@ -85,4 +85,7 @@ boolean ctDbAvailable(char *tableName);
 void ctAddToSettings(struct trackDb *tdb, char *format, ...);
 /*	add a variable to tdb->settings string	*/
 
+void customTrackTrashFile(struct tempName *tn, char *suffix);
+/*	obtain a customTrackTrashFile name	*/
+
 #endif
