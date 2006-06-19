@@ -22,8 +22,9 @@
 #include "wiggle.h"
 #include "hgConfig.h"
 #include "pipeline.h"
+#include <dirent.h>
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.103 2006/06/19 21:33:39 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.104 2006/06/19 22:27:37 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -48,9 +49,27 @@ static void saveBedPart(FILE *f, struct bed *bed, int fieldCount);
 void customTrackTrashFile(struct tempName *tn, char *suffix)
 /*	obtain a customTrackTrashFile name	*/
 {
+static boolean firstTime = TRUE;
 static int trackCount = 0;
 char prefix[16];
-safef(prefix, sizeof(prefix), "ct_%d", trackCount++);
+if (firstTime)
+    {
+    DIR *dirOpen;
+    char trashDirName[128];
+    safef(trashDirName, sizeof(trashDirName), "%s/ct", trashDir());
+    dirOpen = opendir(trashDirName);
+    if ((DIR *)NULL == dirOpen)
+	{
+	int result = mkdir (trashDirName, S_IRWXU | S_IRWXG | S_IRWXO);
+	if (0 != result)
+	    errnoAbort("failed to create directory %s", trashDirName);
+	}
+    else
+	closedir(dirOpen);
+
+    firstTime = FALSE;
+    }
+safef(prefix, sizeof(prefix), "ct/ct_%d", trackCount++);
 makeTempName(tn, prefix, suffix);
 }
 
@@ -260,12 +279,14 @@ if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
 	|| startsWith("psl", track->dbTrackType) || track->fromPsl)
     {
     /* running the single command:
-     *	hgLoadBed -verbose=0 -tmpDir=../trash
+     *	hgLoadBed -verbose=0 -tmpDir=../trash/ct
      *		-maxChromNameLength=${nameLength} stdin
      */
     struct dyString *tmpDy = newDyString(0);
-    char *cmd1[] = {NULL, "-verbose=0", "-tmpDir=../trash", NULL, NULL, NULL, "stdin", NULL};
+    char *cmd1[] = {NULL, "-verbose=0", NULL, NULL, NULL, NULL, "stdin", NULL};
     cmd1[0] = trackLoader(track->dbTrackType);
+    dyStringPrintf(tmpDy, "-tmpDir=%s/ct", trashDir());
+    cmd1[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
     cmd1[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "%s", db);
@@ -284,20 +305,22 @@ else if (startsWith("wiggle_0", track->dbTrackType))
     /*	running the two commands in a pipeline:
      *	loader/wigEncode -verbose=0 -wibSizeLimit=300000000 stdin stdout \
      *	    ${wibFile} | \
-     *		loader/hgLoadWiggle -verbose=0 -tmpDir=../trash \
+     *		loader/hgLoadWiggle -verbose=0 -tmpDir=../trash/ct \
      *		    -maxChromNameLength=${nameLength} -chromInfoDb=${database} \
      *			-pathPrefix=. ${db} ${table} stdin
      */
     struct dyString *tmpDy = newDyString(0);
     char *cmd1[] = {NULL, "-verbose=0", "-wibSizeLimit=300000000", "stdin",
 	"stdout", NULL, NULL};
-    char *cmd2[] = {"loader/hgLoadWiggle", "-verbose=0", "-tmpDir=../trash",
-	NULL, NULL, NULL, NULL, NULL, "stdin", NULL};
+    char *cmd2[] = {"loader/hgLoadWiggle", "-verbose=0", NULL, NULL, NULL,
+	NULL, NULL, NULL, "stdin", NULL};
     char **cmds[] = {cmd1, cmd2, NULL};
     cmd1[0] = trackLoader(track->dbTrackType);
     dyStringPrintf(tmpDy, "%s", track->wibFile);
     cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 
+    dyStringPrintf(tmpDy, "-tmpDir=%s/ct", trashDir());
+    cmd2[2] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
     cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
     dyStringPrintf(tmpDy, "-chromInfoDb=%s", "hg18");
