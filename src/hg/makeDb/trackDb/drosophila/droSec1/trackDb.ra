@@ -31,8 +31,8 @@ otherDb dm2
 track blastDm2FB
 shortLabel D. mel. Proteins
 longLabel D. melanogaster Proteins
-group compGeno
-priority 112
+group genes
+priority 200
 visibility dense
 colorChromDefault off
 type psl protein

@@ -19,8 +19,8 @@ cdsDrawOptions enabled
 track blastHg17KG
 shortLabel Hg17  Proteins
 longLabel Hg17 Proteins
-group compGeno
-priority 142
+group genes
+priority 201
 visibility pack
 colorChromDefault off
 type psl protein

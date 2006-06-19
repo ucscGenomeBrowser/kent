@@ -230,8 +230,8 @@ cdsDrawDefault genomic\ codons
 track blastHg17KG
 shortLabel Human Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
-group compGeno
-priority 142
+group genes
+priority 1
 visibility pack
 colorChromDefault off
 type psl protein

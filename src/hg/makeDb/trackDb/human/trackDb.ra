@@ -383,8 +383,8 @@ otherDb tetNig1
 track blastDm2FB
 shortLabel D. mel. Proteins (dm2)
 longLabel D. melanogaster Proteins (dm2)
-group compGeno
-priority 112
+group genes
+priority 2002
 visibility hide
 colorChromDefault off
 type psl protein
@@ -1030,8 +1030,8 @@ type wig 0.0 1.0
 track blastDm1FB
 shortLabel D. mel. Proteins
 longLabel D. melanogaster Proteins
-group compGeno
-priority 112
+group genes
+priority 201
 visibility hide
 colorChromDefault off
 type psl protein

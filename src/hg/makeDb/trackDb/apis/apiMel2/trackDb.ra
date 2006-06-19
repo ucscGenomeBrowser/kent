@@ -21,8 +21,8 @@ type bed 3 +
 track blastHg17KG
 shortLabel Human  Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
-group compGeno
-priority 142
+group genes
+priority 201
 visibility pack
 colorChromDefault off
 type psl protein
@@ -33,8 +33,8 @@ release beta
 track blastHg17KG
 shortLabel Human  Proteins
 longLabel Human(hg17) proteins mapped by chained tBLASTn
-group compGeno
-priority 142
+group genes
+priority 201
 visibility pack
 colorChromDefault off
 type psl protein
@@ -84,8 +84,8 @@ url http://www.ensembl.org/perl/transview?transcript=$$
 track blastDm1FB
 shortLabel D. mel. Proteins (dm1)
 longLabel $o_Organism ($o_date/$o_db) Proteins
-group compGeno
-priority 112
+group genes
+priority 201
 visibility pack
 colorChromDefault off
 type psl protein
@@ -97,8 +97,8 @@ otherDb dm1
 track blastDm2FB
 shortLabel D. mel. Proteins
 longLabel $o_Organism ($o_date/$o_db) Proteins
-group compGeno
-priority 112
+group genes
+priority 200
 visibility dense
 colorChromDefault off
 type psl protein

@@ -1430,9 +1430,9 @@ type psl protein
 
 track blastDm2FB
 shortLabel D. mel. Proteins (dm2)
-longLabel D. melanogaster Proteins (dm2)
-group compGeno
-priority 112
+longLabel D. melanogaster Proteins (dm2) mapped by chained tBLASTn
+group genes
+priority 200
 visibility dense
 colorChromDefault off
 type psl protein
@@ -1442,9 +1442,9 @@ url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 
 track blastDm1FB
 shortLabel D. mel. Proteins
-longLabel D. melanogaster Proteins
-group compGeno
-priority 112
+longLabel D. melanogaster Proteins (dm1) mapped by chained tBLASTn
+group genes
+priority 201
 visibility dense
 colorChromDefault off
 type psl protein
@@ -1454,9 +1454,9 @@ url http://flybase.bio.indiana.edu/.bin/fbidq.html?
 
 track blastHg16KG
 shortLabel Human Proteins
-longLabel Human Proteins
-group compGeno
-priority 142
+longLabel Human Proteins (hg16) mapped by chained tBLASTn
+group genes
+priority 250.4
 visibility hide
 colorChromDefault off
 type psl protein
@@ -2351,9 +2351,9 @@ otherDb rheMac2
 
 track blastSacCer1SG
 shortLabel Yeast Proteins
-longLabel  Yeast Proteins from SGD
-group compGeno
-priority 142
+longLabel  Yeast Proteins from SGD mapped by chained tBLASTn
+group genes
+priority 200
 visibility hide
 colorChromDefault off
 type psl protein
@@ -2387,9 +2387,9 @@ otherDb mm2X
 
 track blastHg17KG
 shortLabel Hg17  Proteins
-longLabel Hg17 Proteins
-group compGeno
-priority 142
+longLabel Hg17 Proteins mapped by chained tBLASTn
+group genes
+priority 250.3
 visibility pack
 colorChromDefault off
 type psl protein
@@ -2398,8 +2398,8 @@ blastRef hg17.blastKGRef01
 
 track blastHg18KG
 shortLabel Human Proteins
-longLabel Human Proteins
-group compGeno
+longLabel Human Proteins mapped by chained tBLASTn
+group genes
 priority 250.2
 visibility pack
 colorChromDefault off

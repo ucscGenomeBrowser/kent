@@ -1,8 +1,8 @@
 track blastDm2FB
 shortLabel D. mel. Proteins
 longLabel $o_Organism ($o_date/$o_db) Proteins
-group compGeno
-priority 112
+group genes
+priority 200
 visibility pack 
 colorChromDefault off
 type psl protein

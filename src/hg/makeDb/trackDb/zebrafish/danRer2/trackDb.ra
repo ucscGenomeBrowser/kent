@@ -80,8 +80,8 @@ treeImage phylo/DanRer2_6way.jpg
 track blastHg17KG
 shortLabel $o_Organism Proteins
 longLabel $o_Organism ($o_date/$o_db) proteins mapped by chained tBLASTn
-group compGeno
-priority 124
+group genes
+priority 201
 visibility squish
 colorChromDefault off
 type psl protein

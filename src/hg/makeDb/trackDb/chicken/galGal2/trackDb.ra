@@ -421,8 +421,8 @@ type bed 4 .
 track blastHg16KG
 shortLabel Human Proteins
 longLabel Human proteins mapped by chained tBLASTn
-group compGeno
-priority 212.9
+group genes
+priority 202
 visibility hide
 colorChromDefault off
 type psl protein
@@ -432,8 +432,8 @@ blastRef hg17.blastKGRef01
 track blastHg17KG
 shortLabel hg17 Proteins
 longLabel (hg17) Human proteins mapped by chained tBLASTn
-group compGeno
-priority 213
+group genes
+priority 201
 visibility pack
 colorChromDefault off
 type psl protein
