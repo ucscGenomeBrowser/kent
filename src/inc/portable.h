@@ -71,6 +71,9 @@ void makeTempName(struct tempName *tn, char *base, char *suffix);
 char *cgiDir();
 /* Return directory to look for cgi in. */
 
+char *trashDir();
+/* Return directory for relative path to trash from cgi binaries */
+
 double machineSpeed();
 /* Return relative speed of machine.  UCSC CSE dept. 1999 web server is 1.0 */
 
