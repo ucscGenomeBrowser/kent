@@ -16,7 +16,7 @@
 #include "gapCalc.h"
 #include "chainConnect.h"
 
-static char const rcsid[] = "$Id: axtChain.c,v 1.35 2006/06/18 23:14:31 kate Exp $";
+static char const rcsid[] = "$Id: axtChain.c,v 1.36 2006/06/19 14:50:29 angie Exp $";
 
 /* Variables set via command line. */
 int minScore = 1000;
@@ -168,7 +168,6 @@ if (sameString(newName, *pName))
     }
 else
     {
-    char fileName[512];
     *pName = newName;
     *pSeq = seq = hashFindVal(faHash, newName);
     *pStrand = strand;
@@ -385,11 +384,9 @@ struct dnaSeq *qSeq = NULL, *tSeq = NULL;
 char qStrand = 0, tStrand = 0;
 struct chain *chainList = NULL, *chain;
 FILE *details = NULL;
-struct lineFile *lf = NULL;
 struct dnaSeq *seq, *seqList = NULL;
 struct hash *faHash = newHash(0);
 struct hash *tFaHash = newHash(0);
-char comment[1024];
 FILE *faF;
 boolean qIsTwoBit = twoBitIsFile(qNibDir);
 boolean tIsTwoBit = twoBitIsFile(tNibDir);
