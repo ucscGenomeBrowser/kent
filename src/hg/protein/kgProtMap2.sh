@@ -11,7 +11,7 @@
 # 	See also, scripts: 
 #	mkSwissProtDB.sh, mkProteinsDB.sh, and KGprocess.sh
 #
-#	"$Id: kgProtMap2.sh,v 1.2 2006/03/01 19:30:25 angie Exp $"
+#	"$Id: kgProtMap2.sh,v 1.3 2006/06/19 17:12:11 fanhsu Exp $"
 #
 #	April 2004 - Separted the kgProtMap build process part from
 #		     KGprocess.sh
@@ -20,7 +20,7 @@
 ###########################  subroutines  ############################
 
 #	ensure usage of latest binaries no matter what PATH the user may have
-PATH=/cluster/bin/i386:$PATH
+PATH=/cluster/bin/$MACHTYPE:$PATH
 export PATH
 # If BLAST_DIR is already defined in the environment, use that, otherwise 
 # provide a default value:
@@ -80,7 +80,7 @@ echo "`date` kgProtMap.sh $*"
 
 foundALL=""
 for i in hgsql kgXref rmKGPepMrna \
-	/cluster/data/genbank/bin/i386/gbGetSeqs wget \
+	/cluster/data/genbank/bin/$MACHTYPE/gbGetSeqs wget \
 	hgMrnaRefseq kgGetPep pslReps hgKgMrna kgPrepBestMrna spm3 spm7 \
 	kgResultBestMrna rmKGPepMrna kgXref kgAliasM kgAliasP \
 	kgProtAlias kgAliasKgXref kgAliasRefseq kgProtAliasNCBI \
