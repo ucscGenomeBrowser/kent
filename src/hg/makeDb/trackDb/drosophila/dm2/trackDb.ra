@@ -240,7 +240,6 @@ colorChromDefault off
 type psl protein
 pred hg17.blastKGPep02
 blastRef hg17.blastKGRef02
-release alpha
 
 track blastzBestHg17
 shortLabel Human Best
