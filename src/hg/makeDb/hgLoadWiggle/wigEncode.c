@@ -1,6 +1,6 @@
 /* wigEncode - Convert wiggle ascii to wiggle binary format */
 
-static char const rcsid[] = "$Id: wigEncode.c,v 1.7 2006/04/25 23:12:06 hiram Exp $";
+static char const rcsid[] = "$Id: wigEncode.c,v 1.8 2006/06/19 19:11:25 hiram Exp $";
 
 #include "common.h"
 #include "wiggle.h"
@@ -25,6 +25,7 @@ errAbort("wigEncode - convert Wiggle ascii data to binary format\n\n"
     "    -noOverlap - check for overlapping data, default: overlap allowed\n"
     "               - only works for fixedStep and if fixedStep declarations\n"
     "               - are in order by chromName,chromStart\n"
+    "    -wibSizeLimit=<N> - ignore rest of input when wib size is >= N\n"
     "\n"
     "Example:\n"
     "    hgGcPercent -wigOut -doGaps -file=stdout -win=5 xenTro1 \\\n"
@@ -39,23 +40,26 @@ errAbort("wigEncode - convert Wiggle ascii data to binary format\n\n"
 static struct optionSpec optionSpecs[] = {
     {"lift", OPTION_INT},
     {"noOverlap", OPTION_BOOLEAN},
+    {"wibSizeLimit", OPTION_LONG_LONG},
     {NULL, 0}
 };
 
 static int lift = 0;		/*	offset to lift positions on input */
 static boolean noOverlap = FALSE;	/*	check for overlapping data */
+static long long wibSizeLimit = 0;	/*	governor on ct trash sizes */
 
 void wigEncode(char *bedFile, char *wigFile, char *wibFile)
 /* Convert BED file to wiggle binary representation */
 {
 double upper, lower;
-if (lift != 0 || noOverlap)
+if ((lift != 0) || noOverlap || (wibSizeLimit > 0))
     {
     struct wigEncodeOptions options;
 
     ZeroVar(&options);	/*	make sure everything is zero	*/
     options.lift = lift;
     options.noOverlap = noOverlap;
+    options.wibSizeLimit = wibSizeLimit;
     wigAsciiToBinary(bedFile, wigFile, wibFile, &upper, &lower, &options);
     }
 else
@@ -70,13 +74,21 @@ int main( int argc, char *argv[] )
 optionInit(&argc, argv, optionSpecs);
 
 lift = optionInt("lift", 0);
+wibSizeLimit = optionLongLong("wibSizeLimit", 0);
 noOverlap = optionExists("noOverlap");
+if (wibSizeLimit < 0)	/*	protect against negative limits	*/
+    {
+    wibSizeLimit = 0;
+    verbose(1,"warning: negative wibSizeLimit specified, becomes zero\n");
+    }
 
 if (argc < 4)
     usage();
 
 if (lift != 0)
     verbose(2,"option lift=%d to lift all positions by %d\n", lift, lift);
+if (wibSizeLimit > 0)
+    verbose(2,"option wibSizeLimit=%lld\n", wibSizeLimit);
 if (noOverlap)
     verbose(2,"option noOverlap on, will check for overlapping data\n" );
 verbose(2,"input ascii data file: %s\n", argv[1]);

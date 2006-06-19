@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.17 2006/05/26 18:12:19 hiram Exp $";
+static char const rcsid[] = "$Id: hgLoadWiggle.c,v 1.18 2006/06/19 19:11:25 hiram Exp $";
 
 /* Command line switches. */
 static boolean noBin = FALSE;		/* Suppress bin field. */
@@ -354,10 +354,8 @@ if (! noLoad)
     verbose(2, "#\t%s\n", comment);
     sqlDisconnect(&conn);
     /*	if temp dir specified, unlink file to make it disappear */
-/*
     if ((char *)NULL != tmpDir)
 	unlink(tab);
-*/
     }
 else
     verbose(1, "noLoad option requested, see resulting file: %s\n", tab);
