@@ -9,8 +9,9 @@
 #include "portable.h"
 #include "obscure.h"
 #include "portimpl.h"
+#include <dirent.h>
 
-static char const rcsid[] = "$Id: portimpl.c,v 1.12 2006/06/19 22:02:56 hiram Exp $";
+static char const rcsid[] = "$Id: portimpl.c,v 1.13 2006/06/19 23:15:09 hiram Exp $";
 
 static struct webServerSpecific *wss = NULL;
 
@@ -79,4 +80,21 @@ int size = strlen(name) + strlen(value) + 2;
 char *s = needMem(size);
 safef(s, size, "%s=%s", name, value);
 putenv(s);
+}
+
+void mkdirTrashDirectory(char *prefix)
+/*	create the specified trash directory if it doesn't exist */
+{
+DIR *dirOpen;
+char trashDirName[128];
+safef(trashDirName, sizeof(trashDirName), "%s/%s", trashDir(), prefix);
+dirOpen = opendir(trashDirName);
+if ((DIR *)NULL == dirOpen)
+    {
+    int result = mkdir (trashDirName, S_IRWXU | S_IRWXG | S_IRWXO);
+    if (0 != result)
+	errnoAbort("failed to create directory %s", trashDirName);
+    }
+else
+    closedir(dirOpen);
 }
