@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.12 2006/06/05 05:35:12 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.13 2006/06/19 21:34:08 hiram Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -367,7 +367,7 @@ if (ctList != NULL)
     /* create custom track file in trash dir, if needed */
     if (ctFileName == NULL)
         {
-        makeTempName(&tn, "ct", ".bed");
+	customTrackTrashFile(&tn, ".bed");
         ctFileName = tn.forCgi;
         cartSetString(cart, "ct", ctFileName);
         }
