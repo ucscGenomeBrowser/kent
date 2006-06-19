@@ -22,9 +22,8 @@
 #include "wiggle.h"
 #include "hgConfig.h"
 #include "pipeline.h"
-#include <dirent.h>
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.104 2006/06/19 22:27:37 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.105 2006/06/19 23:16:44 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -54,19 +53,7 @@ static int trackCount = 0;
 char prefix[16];
 if (firstTime)
     {
-    DIR *dirOpen;
-    char trashDirName[128];
-    safef(trashDirName, sizeof(trashDirName), "%s/ct", trashDir());
-    dirOpen = opendir(trashDirName);
-    if ((DIR *)NULL == dirOpen)
-	{
-	int result = mkdir (trashDirName, S_IRWXU | S_IRWXG | S_IRWXO);
-	if (0 != result)
-	    errnoAbort("failed to create directory %s", trashDirName);
-	}
-    else
-	closedir(dirOpen);
-
+    mkdirTrashDirectory("ct");
     firstTime = FALSE;
     }
 safef(prefix, sizeof(prefix), "ct/ct_%d", trackCount++);
