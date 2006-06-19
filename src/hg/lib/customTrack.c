@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.102 2006/06/19 19:52:57 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.103 2006/06/19 21:33:39 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -39,6 +39,20 @@ static char const rcsid[] = "$Id: customTrack.c,v 1.102 2006/06/19 19:52:57 hira
 
 /*	forward declaration, function used before the code appears	*/
 static void saveBedPart(FILE *f, struct bed *bed, int fieldCount);
+
+/* Sometimes we are using makeTempName() to generate names but not actually
+ * creating any files, so it gets confused because it checks for the file
+ * existence of previously created names.  Thus, help it out by adding a
+ * sequence number to our names to get them unique for this instance
+ */
+void customTrackTrashFile(struct tempName *tn, char *suffix)
+/*	obtain a customTrackTrashFile name	*/
+{
+static int trackCount = 0;
+char prefix[16];
+safef(prefix, sizeof(prefix), "ct_%d", trackCount++);
+makeTempName(tn, prefix, suffix);
+}
 
 static struct trackDb *tdbDefault()
 /* Return default custom table: black, dense, etc. */
@@ -364,20 +378,13 @@ tdb->settings = dyStringCannibalize(&dbSettings);
 static void establishDbNames(struct customTrack *track)
 /*	create dbTableName, sets dbTableName and dbDataLoad	*/
 {
-char count[16];
 char *baseName;
 static struct tempName tn;
-static int trackCount = 0;
 
 /*	verify known track type, this fails and exits when no good */
 trackLoader(track->dbTrackType);
 
-/* the makeTempName() function is getting confused
- * because we aren't actually making any trash files,
- *	so, help it out by adding a count to our names.
- */
-safef(count, sizeof(count), "ct_%d", trackCount++);
-makeTempName(&tn, count, ".dbData.gz");
+customTrackTrashFile(&tn, ".dbData.gz");
 track->dbTableName = cloneString(tn.forCgi);
 track->dbDataLoad = FALSE;	/*	not yet	*/
 /*	SQL table names can not have - signs, change to _ */
@@ -489,7 +496,7 @@ if (isWiggle)
     if ((wigFileNames = hashFindVal(hash, "wibFile")) == NULL)
 	{
 	FILE *wigFH;
-	makeTempName(&tn, "ct", ".wib");
+	customTrackTrashFile(&tn, ".wib");
 	track->wibFile = cloneString(tn.forCgi);
 	hashAdd(hash, "wibFile", cloneString(track->wibFile));
 	wigFH= mustOpen(track->wibFile, "w");
@@ -526,12 +533,12 @@ if (isWiggle)
 	else
 	    {
 	    FILE *wigFH;
-	    makeTempName(&tn, "ct", ".wig");
+	    customTrackTrashFile(&tn, ".wig");
 	    track->wigFile = cloneString(tn.forCgi);
 	    hashAdd(hash, "wigFile", cloneString(track->wigFile));
 	    wigFH= mustOpen(track->wigFile, "w");
 	    carefulClose(&wigFH);
-	    makeTempName(&tn, "ct", ".wia");
+	    customTrackTrashFile(&tn, ".wia");
 	    track->wigAscii = cloneString(tn.forCgi);
 	    wigFH= mustOpen(track->wigAscii, "w");
 	    carefulClose(&wigFH);
@@ -1531,7 +1538,7 @@ if (customText != NULL && customText[0] != 0)
     struct customTrack *theCtList = NULL;
     struct slName *browserLines = NULL;
     static struct tempName tn;
-    makeTempName(&tn, "ct", ".bed");
+    customTrackTrashFile(&tn, ".bed");
 
     if (cgiBooleanDefined("hgt.customAppend") && (fileName != (char *)NULL))
 	{
