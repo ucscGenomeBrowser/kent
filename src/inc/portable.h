@@ -74,6 +74,9 @@ char *cgiDir();
 char *trashDir();
 /* Return directory for relative path to trash from cgi binaries */
 
+void mkdirTrashDirectory(char *prefix);
+/*	create the specified trash directory if it doesn't exist */
+
 double machineSpeed();
 /* Return relative speed of machine.  UCSC CSE dept. 1999 web server is 1.0 */
 
