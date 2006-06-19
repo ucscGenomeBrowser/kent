@@ -1,6 +1,6 @@
 /* wigEncode - Convert wiggle ascii to wiggle binary format */
 
-static char const rcsid[] = "$Id: wigEncode.c,v 1.8 2006/06/19 19:11:25 hiram Exp $";
+static char const rcsid[] = "$Id: wigEncode.c,v 1.9 2006/06/19 19:48:20 hiram Exp $";
 
 #include "common.h"
 #include "wiggle.h"
@@ -61,9 +61,13 @@ if ((lift != 0) || noOverlap || (wibSizeLimit > 0))
     options.noOverlap = noOverlap;
     options.wibSizeLimit = wibSizeLimit;
     wigAsciiToBinary(bedFile, wigFile, wibFile, &upper, &lower, &options);
+    if ((wibSizeLimit > 0) && (options.wibSizeLimit >= wibSizeLimit))
+	verbose(1,"#\twarning, reached wiggle size limits, %lld vs. %lld\n",
+		wibSizeLimit, options.wibSizeLimit);
     }
 else
     wigAsciiToBinary(bedFile, wigFile, wibFile, &upper, &lower, NULL);
+
 verbose(1, "Converted %s, upper limit %.2f, lower limit %.2f\n",
                         bedFile, upper, lower);
 }
