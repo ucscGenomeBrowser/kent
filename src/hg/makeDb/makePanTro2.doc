@@ -3,7 +3,7 @@ exit; # don't actually run this like a script :)
 
 # This file describes browser build for the panTro2 chimp genome: Feb 2006
 #
-#	"$Id: makePanTro2.doc,v 1.18 2006/05/02 04:50:30 kate Exp $"
+#	"$Id: makePanTro2.doc,v 1.19 2006/06/19 04:23:54 kate Exp $"
 #
 #######################################################################
 # DOWNLOAD 6X CHIMP SEQUENCE FROM LaDeana HIllier, WUSTL (2006-02-27 - kate)
@@ -699,6 +699,7 @@ cat > liftChroms.csh << 'EOF'
     cp -p /cluster/data/panTro2/panTro2.2bit /iscratch/i/panTro2/panTro2.2bit
     ~kent/bin/iSync
 
+
     # after chr9 remask:
     cp -p /cluster/data/panTro2/panTro2.2bit /iscratch/i/panTro2
     cp -p /cluster/data/panTro2/nib/chr9.nib /iscratch/i/panTro2/nib
@@ -1176,6 +1177,46 @@ tar cvzf ../../downloads/bigZips/chromTrf.tar.gz ./trfMaskChrom
     ln -s /cluster/data/panTro2/downloads/chromosomes $d
 
 
+########################
+# BLASTZ HUMAN hg18 (2006-05-23 kate)
+# Do not use lineage-specific repeats, on recommendation of Arian Smit
+# Redo with human/chimp scoring matrix
+
+    ssh pk
+    cd /cluster/data/panTro2/bed
+    mkdir blastz.hg18.2006-05-23
+    rm blastz.hg18
+    ln -s blastz.hg18.2006-05-23 blastz.hg18
+    cd blastz.hg18
+
+    cat << '_EOF_' > DEF
+# chimp vs human
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
+
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=0
+
+# TARGET: Chimmp panTro2
+SEQ1_DIR=/scratch/hg/panTro2/panTro2.2bit
+SEQ1_CHUNK=10000000
+SEQ1_LAP=10000
+SEQ1_LEN=/cluster/bluearc/panTro2/chrom.sizes
+
+# QUERY: Human hg18 - single chunk big enough to run entire genome
+SEQ2_DIR=/scratch/hg/hg18/hg18.2bit
+SEQ2_LEN=/scratch/hg/hg18/chrom.sizes
+SEQ2_CHUNK=3000000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/panTro2/bed/blastz.hg18.2006-05-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+
+    # << happy emacs
+    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
+        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg18 \
+        `pwd`/DEF >&! blastz.out &
 
 ########################
 # BLASTZ HUMAN hg18 (2006-03-13 kate)
@@ -1938,37 +1979,44 @@ TMPDIR=/scratch/tmp
     makeLoChain-split panTro2 /cluster/data/panTro2/nib >&! split.log &
 
 ########################
-# BLASTZ HUMAN HG17 (2006-04-05 kate)
+# BLASTZ HUMAN HG17 (2006-06-17 kate)
 # Do not use lineage-specific repeats, on recommendation of Arian Smit
-# NOTE: next time try alternate scoring matrix (blastz and chainer)
-# and chain score recommended by Jim:
-#                    Try first    Alternate
-#  A/A and T/T:         93        93
-#  C/C and G/G:         100      100
-#  Transversions:      -400     -300
-#  Transitions:        -300     -200
-#  Min chain Score:    2000     2500
-
-#e.g.
-     A    C    G    T
-    93 -400 -300 -400
-  -400  100 -400 -300
-  -300 -400  100 -400
-  -400 -300 -400   93
-# Also, try filtering psl's for >80% identity, using pslCDnaFilter -minId=80
+# Do use latest human-chimp scoring matrix and gap penalties from Webb Miller
+# via rico (Richard Burhans) at PSU
+cat /cluster/data/penn/human_chimp.v2.q
+#    A    C    G    T
+#    90 -330 -236 -356
+#  -330  100 -318 -236
+#  -236 -318  100 -330
+#  -356 -236 -330   90
+# O = 600 E = 150
 
     ssh pk
     cd /cluster/data/panTro2/bed
-    mkdir blastz.hg17.2006-04-05
-    ln -s blastz.hg17.2006-04-05 blastz.hg17
+    mkdir blastz.hg17.2006-06-17-05
+    ln -s blastz.hg17.2006-06-17-05 blastz.hg17
     cd blastz.hg17
+
+    ssh kkr1u00
+    cp -p /cluster/data/hg17/hg17.2bit /scratch/hg/hg17
+    ~kent/bin/iSync
+       # failed for some reason, so I copied the files manually to
+       # kkr*u00
 
     cat << '_EOF_' > DEF
 # chimp vs human
+# Specially tuned blastz parameters from Webb Miller
+
 export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
 
 BLASTZ=blastz.v7.x86_64
 BLASTZ_ABRIDGE_REPEATS=0
+BLASTZ_O=600
+BLASTZ_E=150
+BLASTZ_Y=15000
+BLASTZ_T=2
+BLASTZ_K=4500
+BLASTZ_Q=/cluster/data/blastz/human_chimp.v2.q
 
 # TARGET: Chimmp panTro2
 SEQ1_DIR=/scratch/hg/panTro2/panTro2.2bit
@@ -1982,16 +2030,68 @@ SEQ2_LEN=/cluster/bluearc/hg17/chrom.sizes
 SEQ2_CHUNK=3000000000
 SEQ2_LAP=0
 
-BASE=/cluster/data/panTro2/bed/blastz.hg17.2006-04-05
+BASE=/cluster/data/panTro2/bed/blastz.hg17.2006-06-17-05
 TMPDIR=/scratch/tmp
 '_EOF_'
 
 # << happy emacs
-    # NOTE: next time use minScore=10000, like self chains
+/cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
+    -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg17 \
+    `pwd`/DEF >&! blastz.out &
+
+# failed due to badly formatted scoring matrix file, which
+# fortuitously pointed out the need for a trailing line
+# containing gap penalties in the scoring matrix file.
+# If it's missing (as in all of our current .q files),
+# axtChain uses defaults, not the penalties used for the
+# blastz run (although it could now get these from the axt files).
+# I'm adding this to the matrix file, also will change library
+# (axt.c) to add the gap values used by axtChain to the header comment
+
+/cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
+    -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg17 \
+    -continue=chainRun \
+    `pwd`/DEF >&! blastz.2.out &
+
+# failed due to ssh key failure on hgwdev
+
+/cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+    -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
+    -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg17 \
+    -continue=load \
+    `pwd`/DEF >&! blastz.3.out &
+
+nice featureBits panTro2 chainHg17Link
+# 2759308860 bases of 2909512873 (94.837%) in intersection
+nice featureBits panTro2 chainHg17OldLink
+# from alignments with default matrix
+#2782705676 bases of 2909512873 (95.642%) in intersection
+
+hgsql panTro2 -e "select count(*) from chr7_chainHg17"
+    # 75376
+hgsql panTro2 -e "select count(*) from chr7_chainHg17Old"
+    # 241200
+
+    # swap alignments to hg17 reference
     /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-        -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
-        -blastzOutRoot /san/sanvol1/scratch/panTro2/blastz.hg17 \
-        `pwd`/DEF >&! blastz.out &
+        -swap -bigClusterHub=pk \
+        `pwd`/DEF >&! swap.out &
+
+ nice featureBits hg17 chainPanTro2Link
+# 2719566113 bases of 2866216770 (94.883%) in intersection
+ nice featureBits hg17 chainPanTro2LinkOld
+# 2739413164 bases of 2866216770 (95.576%) in intersection
+
+hgsql panTro2 -e "select count(*) from chr7_chainPanTro2"
+    # 105398
+hgsql panTro2 -e "select count(*) from chr7_chainPanTro2Old"
+    # 333069
+
+# GOT HERE
+
+# PREVIOUS RUN
 
     /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
         -chainMinScore=5000 -chainLinearGap=medium -bigClusterHub=pk \
@@ -1999,12 +2099,7 @@ TMPDIR=/scratch/tmp
         -continue=cat \
         `pwd`/DEF >&! blastz.cat.out &
 
-    # failed due to missing 2bit file on iservers
-    ssh kkr1u00
-    cp -p /cluster/data/hg17/hg17.2bit /scratch/hg/hg17
-    ~kent/bin/iSync
-       # failed for some reason, so I copied the files manually to
-       # kkr*u00
+
     ssh pk
     cd /cluster/data/panTro2/bed/blastz.hg17
     /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
@@ -2040,11 +2135,6 @@ zcat ../../pslParts/$1*.psl.gz \
         -continue=chainMerge \
         `pwd`/DEF >&! blastz.chainMerge.out &
 
-    # swap alignments to hg17 reference
-    /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
-        -swap -bigClusterHub=pk \
-        `pwd`/DEF >&! swap.out &
-    
 
 #########################################################################
 # BLASTZ danRer3 (2006-04-07 kate)
