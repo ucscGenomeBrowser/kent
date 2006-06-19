@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.22 2006/06/19 19:12:38 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.23 2006/06/19 19:52:05 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -360,19 +360,9 @@ while (lineFileNext(lf, &line, NULL))
     boolean readingFrameSlipped;
 
     ++lineCount;
-    if (wibSizeLimit > 0)
-	{
-	if (wibSize >= wibSizeLimit)
-	    {
-	    static boolean warnLimit = TRUE;
-	    if (warnLimit)
-		{
-    warn("wiggle data encoding limit reached, skipping rest of input<BR>\n");
-		warnLimit = FALSE;	/*	warn only once	*/
-		}
+    if ((wibSizeLimit > 0) && (wibSize >= wibSizeLimit))
 	    continue;	/*	skip rest of input data	*/
-	    }
-	}
+
     line = skipLeadingSpaces(line);
     /*	ignore blank or comment lines	*/
     if ((line == (char *)NULL) || (line[0] == (char)NULL) || (line[0] == '#'))
@@ -673,4 +663,6 @@ if (upperLimit)
     *upperLimit = overallUpperLimit;
 if (lowerLimit)
     *lowerLimit = overallLowerLimit;
+if (wibSizeLimit > 0)
+	options->wibSizeLimit = wibSize;
 }
