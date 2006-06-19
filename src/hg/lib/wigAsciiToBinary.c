@@ -39,7 +39,7 @@
 #include	"linefile.h"
 #include	"wiggle.h"
 
-static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.21 2006/04/27 23:28:31 hiram Exp $";
+static char const rcsid[] = "$Id: wigAsciiToBinary.c,v 1.22 2006/06/19 19:12:38 hiram Exp $";
 
 /*	This list of static variables is here because the several
  *	subroutines in this source file need access to all this business
@@ -89,6 +89,8 @@ static unsigned char * validData = (unsigned char *) NULL;
 static double overallUpperLimit = -1.0e+300; /* for the complete set of data */
 static double overallLowerLimit = 1.0e+300; /* for the complete set of data */
 static char *wibFileName = (char *)NULL;	/* for use in output_row() */
+static long long wibSizeLimit = 0;	/*	governor on ct trash files */
+static long long wibSize = 0;	/*	counting up to limit */
 
 #if defined(NOT)
 /*	not used at this time, perhaps in the future */
@@ -129,6 +131,7 @@ boolean allIntegers = FALSE;	/*	off until further notice */
 
 if (bincount)
     {
+    wibSize += bincount;	/* counting up to check limit	*/
     /*	scan the data and determine stats for it	*/
     for (i=0; i < bincount; ++i)
 	{
@@ -339,6 +342,8 @@ if (options != NULL)
 	add_offset = options->lift;
     if (options->noOverlap)
 	noOverlap = TRUE;
+    if (options->wibSizeLimit > 0)
+	wibSizeLimit = options->wibSizeLimit;
     }
 
 overallLowerLimit = 1.0e+300;	/* for the complete set of data */
@@ -355,6 +360,19 @@ while (lineFileNext(lf, &line, NULL))
     boolean readingFrameSlipped;
 
     ++lineCount;
+    if (wibSizeLimit > 0)
+	{
+	if (wibSize >= wibSizeLimit)
+	    {
+	    static boolean warnLimit = TRUE;
+	    if (warnLimit)
+		{
+    warn("wiggle data encoding limit reached, skipping rest of input<BR>\n");
+		warnLimit = FALSE;	/*	warn only once	*/
+		}
+	    continue;	/*	skip rest of input data	*/
+	    }
+	}
     line = skipLeadingSpaces(line);
     /*	ignore blank or comment lines	*/
     if ((line == (char *)NULL) || (line[0] == (char)NULL) || (line[0] == '#'))

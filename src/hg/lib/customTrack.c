@@ -23,7 +23,7 @@
 #include "hgConfig.h"
 #include "pipeline.h"
 
-static char const rcsid[] = "$Id: customTrack.c,v 1.100 2006/06/09 16:39:18 hiram Exp $";
+static char const rcsid[] = "$Id: customTrack.c,v 1.101 2006/06/19 19:12:38 hiram Exp $";
 
 /* Track names begin with track and then go to variable/value pairs.  The
  * values must be quoted if they include white space. Defined variables are:
@@ -269,19 +269,21 @@ if (startsWith("bed", track->dbTrackType) || (track->gffHelper != NULL)
 else if (startsWith("wiggle_0", track->dbTrackType))
     {
     /*	running the two commands in a pipeline:
-     *	loader/wigEncode -verbose=0 stdin stdout ${wibFile} | \
-     *	    loader/hgLoadWiggle -verbose=0 -tmpDir=../trash \
-     *		-maxChromNameLength=${nameLength} -chromInfoDb=${database} \
-     *		    -pathPrefix=. ${db} ${table} stdin
+     *	loader/wigEncode -verbose=0 -wibSizeLimit=300000000 stdin stdout \
+     *	    ${wibFile} | \
+     *		loader/hgLoadWiggle -verbose=0 -tmpDir=../trash \
+     *		    -maxChromNameLength=${nameLength} -chromInfoDb=${database} \
+     *			-pathPrefix=. ${db} ${table} stdin
      */
     struct dyString *tmpDy = newDyString(0);
-    char *cmd1[] = {NULL, "-verbose=0", "stdin", "stdout", NULL, NULL};
+    char *cmd1[] = {NULL, "-verbose=0", "-wibSizeLimit=300000000", "stdin",
+	"stdout", NULL, NULL};
     char *cmd2[] = {"loader/hgLoadWiggle", "-verbose=0", "-tmpDir=../trash",
 	NULL, NULL, NULL, NULL, NULL, "stdin", NULL};
     char **cmds[] = {cmd1, cmd2, NULL};
     cmd1[0] = trackLoader(track->dbTrackType);
     dyStringPrintf(tmpDy, "%s", track->wibFile);
-    cmd1[4] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+    cmd1[5] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
 
     dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
     cmd2[3] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
@@ -1813,8 +1815,14 @@ for (track = trackList; track != NULL; track = track->next)
 			}
 		    else
 			{
+			struct wigEncodeOptions options;
+
+			ZeroVar(&options);	/*	all is zero	*/
+			options.lift = 0;
+			options.noOverlap = FALSE;
+			options.wibSizeLimit = 300000000; /* 300Mb limit*/
 			wigAsciiToBinary(track->wigAscii, track->wigFile,
-			    track->wibFile, &upperLimit, &lowerLimit, NULL);
+			    track->wibFile, &upperLimit, &lowerLimit, &options);
 			fprintf(f, "#\tascii data file: %s\n", track->wigAscii);
 			unlink(track->wigAscii);/* done with this, remove it */
 			}
