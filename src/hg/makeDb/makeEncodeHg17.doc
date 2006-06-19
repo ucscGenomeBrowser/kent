@@ -1546,6 +1546,17 @@ cat > load.csh << 'EOF'
     # lots of "score too small" messages -- these are OK.
     cat *.maf | hgLoadMafSummary hg17 encodeTbaSummary stdin
 
+    # create tree image:
+    # edit tree.nh to create species.nh with common names
+    cd /cluster/data/encode/MSA/SEP-2005
+    mkdir phylo
+    cd phylo
+    wget ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/SEP-2005/phylo/tree_4d.tba.v2.nh
+    /cluster/bin/phast/draw_tree -b -s tree_4d.tba.v2.nh > species28.ps
+        # photoshop to enhance, then save as gif/jpg
+        cp /cluster/data/encode/MSA/SEP-2005/phylo/species28.jpg \
+            /usr/local/apache/htdocs/images/phylo/species28.jpg
+
     #  MLAGAN alignments
     cd /cluster/data/encode/MLAGAN
     mkdir -p SEP-05/lab
