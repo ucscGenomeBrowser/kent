@@ -252,6 +252,7 @@ struct wigEncodeOptions
     {
     int lift;	/*	lift all incoming coordinates by this amount	*/
     boolean noOverlap;	/*	enforce no overlapping data verification */
+    unsigned wibSizeLimit;	/*	governor on ct trash files */
     };
 
 void wigAsciiToBinary(char *wigAscii, char *wigFile, char *wibFile,
