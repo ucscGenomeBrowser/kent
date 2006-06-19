@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1133 2006/06/19 23:23:44 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1134 2006/06/19 23:32:19 hiram Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -225,7 +225,7 @@ if (firstTime)
     mkdirTrashDirectory("hgtIdeo");
     firstTime = FALSE;
     }
-safef(prefix, sizeof(prefix), "hgtIdeo/hgtIdeo_");
+safef(prefix, sizeof(prefix), "hgtIdeo/hgtIdeo");
 makeTempName(tn, prefix, suffix);
 }
 
@@ -239,7 +239,7 @@ if (firstTime)
     mkdirTrashDirectory("hgt");
     firstTime = FALSE;
     }
-safef(prefix, sizeof(prefix), "hgt/hgt_");
+safef(prefix, sizeof(prefix), "hgt/hgt");
 makeTempName(tn, prefix, suffix);
 }
 
