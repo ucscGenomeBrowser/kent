@@ -26,6 +26,9 @@ struct webServerSpecific
     /* Return relative speed of CPU. (UCSC CSE 1999 FTP machine is 1.0) */
     double (*speed)();
 
+    /* The relative path to trash directory for CGI binaries */
+    char * (*trashDir)();
+
     };
 
 

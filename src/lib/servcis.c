@@ -9,15 +9,16 @@
 #include "obscure.h"
 #include "hash.h"
 
-static char const rcsid[] = "$Id: servcis.c,v 1.9 2005/04/10 14:41:25 markd Exp $";
+static char const rcsid[] = "$Id: servcis.c,v 1.10 2006/06/19 22:02:57 hiram Exp $";
 
+static char *__trashDir = "../trash";
 
 static void _makeTempName(struct tempName *tn, char *base, char *suffix)
 /* Figure out a temp name, and how CGI and HTML will access it. */
 {
 char *tname;
 
-tname = rTempName("../trash", base, suffix);
+tname = rTempName(__trashDir, base, suffix);
 strcpy(tn->forCgi, tname);
 strcpy(tn->forHtml, tname);
 }
@@ -25,6 +26,11 @@ strcpy(tn->forHtml, tname);
 static char *_cgiDir()
 {
 return "../cgi-bin/";
+}
+
+static char *_trashDir()
+{
+return __trashDir;
 }
 
 static double _speed()
@@ -39,4 +45,5 @@ struct webServerSpecific wssDefault =
     _makeTempName,
     _cgiDir,
     _speed,
+    _trashDir,
     };

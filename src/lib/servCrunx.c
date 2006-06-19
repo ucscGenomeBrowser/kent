@@ -8,13 +8,15 @@
 #include "portimpl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: servCrunx.c,v 1.6 2004/02/09 20:21:15 kent Exp $";
+static char const rcsid[] = "$Id: servCrunx.c,v 1.7 2006/06/19 22:02:56 hiram Exp $";
+
+static char *__trashDir = "/home/httpd/html/trash";
 
 static void _makeTempName(struct tempName *tn, char *base, char *suffix)
 /* Figure out a temp name, and how CGI and HTML will access it. */
 {
 char *tname;
-char *tempDirCgi = "/home/httpd/html/trash";
+char *tempDirCgi = __trashDir;
 char *tempDirHtml = "/trash";
 int tlcLen = strlen(tempDirCgi);
 int tlhLen = strlen(tempDirHtml);
@@ -30,6 +32,11 @@ static char *_cgiDir()
 return "../cgi-bin/";
 }
 
+static char *_trashDir()
+{
+return __trashDir;
+}
+
 static double _speed()
 {
 return 3.0;
@@ -41,4 +48,5 @@ struct webServerSpecific wssLinux =
     _makeTempName,
     _cgiDir,
     _speed,
+    _trashDir,
     };

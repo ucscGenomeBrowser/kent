@@ -8,20 +8,26 @@
 #include "portimpl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: servpws.c,v 1.5 2004/02/09 20:21:15 kent Exp $";
+static char const rcsid[] = "$Id: servpws.c,v 1.6 2006/06/19 22:02:57 hiram Exp $";
 
+static char *__trashDir = "..\\trash";
 
 static void _makeTempName(struct tempName *tn, char *base, char *suffix)
 /* Figure out a temp name, and how CGI and HTML will access it. */
 {
 long tempIx = incCounterFile("tcounter");
-sprintf(tn->forCgi, "..\\trash\\%s%ld%s", base, tempIx, suffix);
-sprintf(tn->forHtml, "..\\trash\\%s%ld%s", base, tempIx, suffix);
+sprintf(tn->forCgi, "%s\\%s%ld%s", __trashDir, base, tempIx, suffix);
+sprintf(tn->forHtml, "%s\\%s%ld%s", __trashDir, base, tempIx, suffix);
 }
 
 static char *_cgiDir()
 {
 return "../cgi-bin/";
+}
+
+static char *_trashDir()
+{
+return __trashDir;
 }
 
 static double _speed()
@@ -35,4 +41,5 @@ struct webServerSpecific wssMicrosoftPWS =
     _makeTempName,
     _cgiDir,
     _speed,
+    _trashDir,
     };

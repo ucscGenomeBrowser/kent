@@ -10,7 +10,7 @@
 #include "obscure.h"
 #include "portimpl.h"
 
-static char const rcsid[] = "$Id: portimpl.c,v 1.11 2004/09/03 22:01:19 markd Exp $";
+static char const rcsid[] = "$Id: portimpl.c,v 1.12 2006/06/19 22:02:56 hiram Exp $";
 
 static struct webServerSpecific *wss = NULL;
 
@@ -56,6 +56,13 @@ char *cgiDir()
 {
 setupWss();
 return wss->cgiDir();
+}
+
+char *trashDir()
+/* Return the relative path to trash directory for CGI binaries */
+{
+setupWss();
+return wss->trashDir();
 }
 
 double machineSpeed()
