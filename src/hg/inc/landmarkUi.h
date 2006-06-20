@@ -6,5 +6,7 @@ extern char *landmarkTypeLabel[];
 extern char *landmarkTypeString[];
 extern char *landmarkTypeDbValue[];
 extern int landmarkTypeSize;
+extern char *landmarkAttributes[];
+extern int landmarkAttrSize;
 
 #endif

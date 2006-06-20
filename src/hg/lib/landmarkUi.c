@@ -35,3 +35,12 @@ char *landmarkTypeDbValue[] = {
 
 int landmarkTypeSize = ArraySize(landmarkTypeString);
 
+/* list of attribute fields for landmarks, in order to be displayed */
+char *landmarkAttributes[] = {
+    "Source",
+    "External link",
+    "Gene name",
+    "Evidence type",
+};
+
+int landmarkAttrSize = ArraySize(landmarkAttributes);

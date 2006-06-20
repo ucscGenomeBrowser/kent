@@ -20578,6 +20578,7 @@ TMPDIR=/scratch/tmp
     # requires visiGene probe track vgImageProbes be created first
     knownToVisiGene hg17 -fromProbePsl=vgImageProbes
 
+############################################################################
 # Add Landmark track (2006-03-08 giardine)
 # Note: This track is for regulatory regions and other landmarks that are not
     #included in other tracks.  It is being gathered from the locus experts
@@ -20594,6 +20595,64 @@ grep "^chr" landmark.bed | sort -k1,1 -k2,2n > sortedLandmark.bed
 hgsql hg17 < landmark.sql
 hgLoadBed hg17 landmark sortedLandmark.bed -noSort -oldTable -tab
 #add to trackDb.ra file (human hg17 level)
+
+#changed landmark track to provide links and attributes in prep for ORegAnno
+#data.  Got set of test data by grabbing their .gff file used for custom
+#tracks and converting to bed, then to landmarks format.
+cd humPhen/landmarkData/June06/
+#convert data to new formats then
+cat newLandmark.txt landmarkORA.txt  > allLandmarks.txt
+grep "^chr" allLandmarks.txt | sort -k1,1 -k2,2n > sortedAllLandmark.txt
+#start new tables
+cd humPhen/kent/src/hg/lib/
+autoSql landmark.as landmark -dbLink
+#move bin in .h file to end of structure, to make load work
+mv landmark.h ../inc/landmark.h
+#change primary key to indexes where not unique, add index on landmarkId
+#limit name, landmarkType, raKey size to 64
+hgsql -e "drop table landmark;" hg17
+hgsql hg17 < landmark.sql
+cd ~giardine/humPhen/landmarkData/June06/
+hgLoadBed hg17 landmark sortedAllLandmark.txt -noSort -oldTable -tab
+hgsql hg17
+        load data local infile "landmarkAttrORA.txt" into table landmarkAttr;
+        load data local infile "landmarkAttrLinkORA.txt" into table landmarkAttrLink;
+        load data local infile "landmarkAttrCat.txt" into table landmarkAttrCat;
+cd ../../kent/src/
+make clean
+make libs
+cd hg
+make cgi
+cd makeDb/trackDb
+make DBS=hg17 update
+#test in hgwdev-giardine
+
+#redo landmarks, moving categories out of database
+convertORAformat < ORegAnnoBed
+#start new tables
+cd humPhen/kent/src/hg/lib/
+autoSql landmark.as landmark -dbLink
+#move bin in .h file to end of structure, to make load work
+mv landmark.h ../inc/landmark.h
+#change primary key to indexes, add primary key on landmarkId
+#limit name, landmarkType, raKey size to 64
+#only need to reload attributes rest of data & tables same
+hgsql -e "drop table landmarkAttr;" hg17
+hgsql -e "drop table landmarkAttrCat;" hg17
+cd ../../../../landmarkData/June06/
+hgsql hg17
+        #cut and paste in create table landmarkAttr
+        load data local infile "landmarkAttrORA.txt" into table landmarkAttr;
+#Records: 2028  Deleted: 0  Skipped: 0  Warnings: 8 ???
+cd ../../kent/src/
+make clean
+make libs
+cd hg
+make cgi
+cd makeDb/trackDb
+make DBS=hg17 update
+#test in hgwdev-giardine
+
 
 ############################################################################
 # hg15 -> hg17 LIFTOVER CHAINS (STARTED 3/9/06, DONE 3/10/06 Fan)

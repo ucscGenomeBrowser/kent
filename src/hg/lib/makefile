@@ -74,7 +74,7 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     transRegCode.o transRegCodeCondition.o \
     transRegCodeProbe.o vegaInfo.o visiGene.o vntr.o wabAli.o web.o wgRna.o \
     wigAsciiToBinary.o wigDataStream.o wiggle.o wiggleCart.o wiggleUtils.o \
-    wikiLink.o zdobnovSynt.o landmark.o landmarkUi.o
+    wikiLink.o zdobnovSynt.o landmark.o landmarkUi.o genomeVarUi.o 
 
 
 ../../lib/$(MACHTYPE)/jkhgap.a: $(O) 

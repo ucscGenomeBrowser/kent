@@ -8,7 +8,7 @@ table hgMut
     string  name;           "HGVS style description of mutation."
     string  mutId;          "unique ID for this mutation"
     ushort  srcId;          "source ID for this mutation"
-    char[1] hasPhenData;    "y or n, does this have phenotype data linked"
+    char    hasPhenData;    "no longer used"
     string  baseChangeType; "enum('insertion', 'deletion', 'substitution','duplication','complex','unknown')."
     string  location;       "enum('intron', 'exon', '5'' UTR', '3'' UTR', 'not within known transcription unit')."
     ubyte   coordinateAccuracy; "0=estimated, 1=definite, others?"

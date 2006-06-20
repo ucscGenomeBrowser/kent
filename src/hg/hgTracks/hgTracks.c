@@ -102,7 +102,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1134 2006/06/19 23:32:19 hiram Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1135 2006/06/20 14:58:32 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9971,7 +9971,7 @@ if (vis != tvDense)
 }
 
 boolean landmarkFilterType (struct landmark *el) 
-/* filter landmarks on regionType field */
+/* filter landmarks on landmarkType field */
 {
 int cnt = 0;
 for (cnt = 0; cnt < landmarkTypeSize; cnt++)
@@ -9979,7 +9979,7 @@ for (cnt = 0; cnt < landmarkTypeSize; cnt++)
     if (cartVarExists(cart, landmarkTypeString[cnt]) &&
         cartString(cart, landmarkTypeString[cnt]) != NULL &&
         differentString(cartString(cart, landmarkTypeString[cnt]), "0") &&
-        sameString(landmarkTypeDbValue[cnt], el->regionType))
+        sameString(landmarkTypeDbValue[cnt], el->landmarkType))
         {
         return FALSE;
         }
