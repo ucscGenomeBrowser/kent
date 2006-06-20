@@ -195,7 +195,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1034 2006/06/20 14:58:38 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1035 2006/06/20 17:03:59 hiram Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -5355,6 +5355,21 @@ blockCount = ffShAliPart(body, ffAli, psl->qName, rna, rnaSize, 0,
 return blockCount;
 }
 
+static void hgcTrashFile(struct tempName *tn, char *prefix, char *suffix)
+/*	obtain a trash file name for the index or body.html files */
+{
+static boolean firstTime = TRUE;
+char dirNamePrefix[16];
+if (firstTime)
+    {
+    mkdirTrashDirectory("index");
+    mkdirTrashDirectory("body");
+    firstTime = FALSE;
+    }
+safef(dirNamePrefix, sizeof(dirNamePrefix), "%s/%s", prefix, prefix);
+makeTempName(tn, dirNamePrefix, suffix);
+}
+
 void showSomeAlignment(struct psl *psl, bioSeq *oSeq, 
 		       enum gfType qType, int qStart, int qEnd, 
 		       char *qName, int cdsS, int cdsE)
@@ -5364,8 +5379,8 @@ int blockCount, i;
 struct tempName indexTn, bodyTn;
 FILE *index, *body;
 
-makeTempName(&indexTn, "index", ".html");
-makeTempName(&bodyTn, "body", ".html");
+hgcTrashFile(&indexTn, "index", ".html");
+hgcTrashFile(&bodyTn, "body", ".html");
 
 /* Writing body of alignment. */
 body = mustOpen(bodyTn.forCgi, "w");
@@ -5384,14 +5399,14 @@ if (qName == NULL)
     qName = psl->qName;
 htmStart(index, qName);
 fprintf(index, "<H3>Alignment of %s</H3>", qName);
-fprintf(index, "<A HREF=\"%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
-fprintf(index, "<A HREF=\"%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(hGetDb()), psl->tName);
+fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, qName);
+fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(hGetDb()), psl->tName);
 for (i=1; i<=blockCount; ++i)
     {
-    fprintf(index, "<A HREF=\"%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
+    fprintf(index, "<A HREF=\"../%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
 	    bodyTn.forCgi, i, i);
     }
-fprintf(index, "<A HREF=\"%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
+fprintf(index, "<A HREF=\"../%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
 fclose(index);
 chmod(indexTn.forCgi, 0666);
 
@@ -15410,6 +15425,20 @@ mgMakeColorGradient(mg, &black, &red, maxRGBShade+1, shadesOfRed);
 exprBedColorsMade = TRUE;
 }
 
+static void altXTrashFile(struct tempName *tn, char *suffix)
+/*	obtain a trash file name for the altX graph image	*/
+{
+static boolean firstTime = TRUE;
+char prefix[16];
+if (firstTime)
+    {
+    mkdirTrashDirectory("hgc");
+    firstTime = FALSE;
+    }
+safef(prefix, sizeof(prefix), "hgc/hgc");
+makeTempName(tn, prefix, suffix);
+}
+
 char *altGraphXMakeImage(struct trackDb *tdb, struct altGraphX *ag)
 /* Create a drawing of splicing pattern. */
 {
@@ -15429,7 +15458,7 @@ scale = (double)pixWidth/(ag->tEnd - ag->tStart);
 lineHeight = 2 * fontHeight +1;
 altGraphXLayout(ag, ag->tStart, ag->tEnd, scale, 100, &ssList, &heightHash, &rowCount);
 pixHeight = rowCount * lineHeight;
-makeTempName(&gifTn, "hgc", ".gif");
+altXTrashFile(&gifTn, ".gif");
 vg = vgOpenGif(pixWidth, pixHeight, gifTn.forCgi);
 makeGrayShades(vg);
 vgSetClip(vg, 0, 0, pixWidth, pixHeight);
@@ -16924,8 +16953,8 @@ struct dnaSeq *tSeq;
 char *tables[4] = {"luGene2", "luGene", "refGene", "mgcGenes"};
 
 /* open file to write to */
-makeTempName(&indexTn, "index", ".html");
-makeTempName(&bodyTn, "body", ".html");
+hgcTrashFile(&indexTn, "index", ".html");
+hgcTrashFile(&bodyTn, "body", ".html");
 body = mustOpen(bodyTn.forCgi, "w");
 
 /* get query genes struct info*/
@@ -17003,14 +17032,14 @@ if (entryName == NULL)
     entryName = psl->qName;
 htmStart(index, entryName);
 fprintf(index, "<H3>Alignment of %s</H3>", entryName);
-fprintf(index, "<A HREF=\"%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, entryName);
-fprintf(index, "<A HREF=\"%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(hGetDb()), psl->tName);
+fprintf(index, "<A HREF=\"../%s#cDNA\" TARGET=\"body\">%s</A><BR>\n", bodyTn.forCgi, entryName);
+fprintf(index, "<A HREF=\"../%s#genomic\" TARGET=\"body\">%s.%s</A><BR>\n", bodyTn.forCgi, hOrganism(hGetDb()), psl->tName);
 for (i=1; i<=blockCount; ++i)
     {
-    fprintf(index, "<A HREF=\"%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
+    fprintf(index, "<A HREF=\"../%s#%d\" TARGET=\"body\">block%d</A><BR>\n",
 	    bodyTn.forCgi, i, i);
     }
-fprintf(index, "<A HREF=\"%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
+fprintf(index, "<A HREF=\"../%s#ali\" TARGET=\"body\">together</A><BR>\n", bodyTn.forCgi);
 fclose(index);
 chmod(indexTn.forCgi, 0666);
 
