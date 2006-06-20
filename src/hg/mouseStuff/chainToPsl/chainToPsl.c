@@ -16,7 +16,7 @@
 #include "twoBit.h"
 #include "verbose.h"
 
-static char const rcsid[] = "$Id: chainToPsl.c,v 1.15 2005/09/26 16:53:56 braney Exp $";
+static char const rcsid[] = "$Id: chainToPsl.c,v 1.16 2006/06/20 15:30:07 angie Exp $";
 
 /* command line options */
 static struct optionSpec optionSpecs[] = {
@@ -68,7 +68,6 @@ void addNib(char *file, struct hash *fileHash, struct hash *seqHash)
 {
 struct seqFilePos *sfp;
 char root[128];
-FILE *f = NULL;
 splitPath(file, NULL, root, NULL);
 AllocVar(sfp);
 hashAddSaveName(seqHash, root, sfp, &sfp->name);
@@ -82,7 +81,6 @@ void addFa(char *file, struct hash *fileHash, struct hash *seqHash)
 {
 struct lineFile *lf = lineFileOpen(file, TRUE);
 char *line, *name;
-char root[128];
 char *rFile = hashStoreName(fileHash, file);
 
 while (lineFileNext(lf, &line, NULL))
@@ -107,7 +105,6 @@ void addTwoBit(char *file, struct hash *fileHash, struct hash *seqHash)
 /* Add a 2bit file to hashes. */
 {
 struct twoBitFile *lf = twoBitOpen(file);
-char root[128];
 char *rFile = hashStoreName(fileHash, file);
 struct slName *names = twoBitSeqNames(file);
 struct slName *name;
@@ -367,22 +364,17 @@ unsigned qNumInsert = 0;	/* Number of inserts in query */
 int qBaseInsert = 0;	/* Number of bases inserted in query */
 unsigned tNumInsert = 0;	/* Number of inserts in target */
 int tBaseInsert = 0;	/* Number of bases inserted in target */
-boolean qInInsert = FALSE; /* True if in insert state on query. */
-boolean tInInsert = FALSE; /* True if in insert state on target. */
 boolean eitherInsert = FALSE;	/* True if either in insert state. */
 int qOffset = 0;
 int tOffset = 0;
 boolean qIsNib = FALSE;
 static boolean tIsNib ;
 int blockCount = 1, blockIx=0;
-boolean qIsRc = FALSE;
 int i,j;
 int qs,qe,ts,te;
 int *blocks = NULL, *qStarts = NULL, *tStarts = NULL;
 struct cBlock *b, *nextB;
 int qbSize = 0, tbSize = 0; /* sum of block sizes */
-int qtSize = 0, ttSize = 0; /* sum of block + gap sizes */
-boolean qInsert = FALSE, tInsert = FALSE;
 
 /* Don't ouput if either query or target is zero length */
  if ((qStart == qEnd) || (tStart == tEnd))
@@ -540,9 +532,6 @@ struct hash *fileHash = newHash(0);  /* No value. */
 struct hash *tHash = newHash(20);  /* seqFilePos value. */
 struct hash *qHash = newHash(20);  /* seqFilePos value. */
 struct dlList *fileCache = newDlList();
-//FILE *f = mustOpen(prettyName, "w");
-FILE *checkFile = NULL;
-struct psl *psl;
 struct chain *chain;
 int q,t;
 
