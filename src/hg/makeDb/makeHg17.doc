@@ -21188,7 +21188,7 @@ cp snpLocType.exceptions snpLocType.tab
 
 # check for multiple alignments
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpMultiple dbSnpHumanBuild125
-mysql> load data local file 'snpMultiple.tab' into table snp125Exceptions;
+mysql> load data local infile 'snpMultiple.tab' into table snp125Exceptions;
 
 # run and review snpCompareLoctype (currently tuned for 124/125 differences)
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpCompareLoctype dbSnpHumanBuild125 snp124subset snp125
