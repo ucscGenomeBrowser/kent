@@ -16,7 +16,7 @@
 #include "errabort.h"
 #include "mime.h"
 
-static char const rcsid[] = "$Id: mime.c,v 1.12 2006/06/10 23:12:59 galt Exp $";
+static char const rcsid[] = "$Id: mime.c,v 1.13 2006/06/20 18:31:24 galt Exp $";
 /* 
  * Note: MIME is a nested structure that makes a tree that streams in depth-first.
  */
@@ -59,7 +59,7 @@ setEopMB(b);
 setEodMB(b);
 }
 
-//#ifdef DEBUG
+#ifdef DEBUG
 static void dumpMB(struct mimeBuf *b)
 /* debug dump */
 {
@@ -88,7 +88,7 @@ for(i=0;i<MIMEBUFSIZE;++i)
     }
 fprintf(stderr,"\n\n");    
 }
-//#endif
+#endif
 
 static void moreMimeBuf(struct mimeBuf *b)
 {
