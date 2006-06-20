@@ -35,7 +35,16 @@
         <A HREF ="https://www.soe.ucsc.edu/pipermail/genome/" TARGET=_blank>Browse</A>
         the Genome mailing list archives (indexed by thread, subject, author and date).
 	<LI>
-	<FORM name="googleForm" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm.q.value=document.googleForm.qq.value+'   inurl:www.cse.ucsc.edu/pipermail/genome';">
+	<FORM name="googleForm1" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm1.q.value=document.googleForm1.qq.value+'   site:genome.ucsc.edu/';">
+	Search the Genome Browser website: &nbsp;
+	<input type="hidden" name="q" value="">
+	<input type="hidden" name="num" value="10">
+	<input type="hidden" name="filter" value="0">
+	<INPUT TYPE=text name=qq size=30 maxlength=255 value="">
+	<input TYPE="submit" VALUE="Submit">
+	</FORM>
+	<LI>
+	<FORM name="googleForm2" method="GET" action="http://www.google.com/search" onSubmit="document.googleForm2.q.value=document.googleForm2.qq.value+'   site:www.cse.ucsc.edu/pipermail/genome';">
 	Search the Genome mailing list archives: &nbsp;
 	<input type="hidden" name="q" value="">
 	<input type="hidden" name="num" value="10">
