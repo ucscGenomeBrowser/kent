@@ -142,8 +142,8 @@ if (lineList)
 	int i;
 	s = line->name;
 	if (strlen(s) != lineSize)
-	   errAbort("Line %d of %s has %d chars, but first line has just %s",
-	       lineIx, fileName, strlen(s), lineSize);
+	   errAbort("Line %d of %s has %lu chars, but first line has just %d",
+	       lineIx, fileName, (unsigned long)strlen(s), lineSize);
 	for (i=0; i<lineSize; ++i)
 	    {
 	    if (s[i] != ' ')
@@ -192,8 +192,8 @@ if (lineList)
 	char *linePt = line->name;
 	int offIx = 0;
 	if (strlen(linePt) != lineSize)
-	   errAbort("Line %d of %s has %d chars, but first line has just %s",
-	       lineIx, fileName, strlen(linePt), lineSize);
+	   errAbort("Line %d of %s has %lu chars, but first line has just %d",
+	       lineIx, fileName, (unsigned long)strlen(linePt), lineSize);
 	row = tabRowNew(rowSize);
 	for (off = offList; off != NULL; off = off->next, ++offIx)
 	    {
