@@ -19,7 +19,6 @@ DIRS = \
 	axtBest \
 	axtCalcMatrix \
 	axtChain \
-	chainToPsl \
 	axtDropOverlap \
 	axtDropSelf \
 	axtFilter \
@@ -47,6 +46,7 @@ DIRS = \
 	chainSplit \
 	chainStats \
 	chainSwap \
+	chainToAxt \
 	chainToPsl \
 	gcForBed \
 	knownVsBlat \
