@@ -1,5 +1,5 @@
 /* snpMultiple - post-processing.
- * Read snp125.
+ * Read snp126.
  * Report coords for all SNPs that align more than once.
  * Also report counts. */
 
@@ -8,7 +8,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMultiple.c,v 1.13 2006/04/10 20:31:34 heather Exp $";
+static char const rcsid[] = "$Id: snpMultiple.c,v 1.14 2006/06/20 23:34:52 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -30,7 +30,7 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-    "snpMultiple - read snp125 for rsIds that appear more than once\n"
+    "snpMultiple - read snp126 for rsIds that appear more than once\n"
     "usage:\n"
     "    snpMultiple snpDb \n");
 }
@@ -50,7 +50,7 @@ struct coords *cel = NULL;
 coordHash = newHash(18);
 nameHash = newHash(0);
 verbose(1, "creating hashes...\n");
-safef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from snp125");
+safef(query, sizeof(query), "select name, chrom, chromStart, chromEnd from snp126");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -105,7 +105,7 @@ while ((name = hashNextName(&cookie)) != NULL)
 
 
 int main(int argc, char *argv[])
-/* Read snp125. */
+/* Read snp126. */
 /* Write coords of multiple alignments to .tab file. */
 /* Write counts to .log file. */
 {

@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCompareLoctype.c,v 1.3 2006/06/08 17:30:51 heather Exp $";
+static char const rcsid[] = "$Id: snpCompareLoctype.c,v 1.4 2006/06/20 23:35:35 heather Exp $";
 
 struct snpSubsetList
     {
@@ -266,7 +266,8 @@ if (sameString(oldElement->locType, "between"))
     }
 else if (sameString(oldElement->locType, "exact"))
     {
-    if (!sameString(oldElement->class, "snp")) return;
+    // if (!sameString(oldElement->class, "snp")) return;
+    if (!sameString(oldElement->class, "single")) return;
     if (!sameString(newElement->class, "single")) return;
     if (!sameString(newElement->locType, "exact")) return;
     if (oldElement->end != oldElement->start + 1) return;
@@ -276,8 +277,9 @@ else if (sameString(oldElement->locType, "exact"))
     }
 else if (sameString(oldElement->locType, "range"))
     {
-    if (!sameString(oldElement->class, "in-del")) return;
-    if (!sameString(newElement->locType, "range")) return;
+    // if (!sameString(oldElement->class, "in-del")) return;
+    // if (!sameString(newElement->locType, "range")) return;
+    if (!sameString(oldElement->class, "deletion")) return;
     if (!sameString(newElement->class, "deletion")) return;
     fileHandle = rangeFileHandle;
     }
