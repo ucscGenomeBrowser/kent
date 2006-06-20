@@ -4,7 +4,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: calcGap.c,v 1.4 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: calcGap.c,v 1.5 2006/06/20 15:49:00 angie Exp $";
 
 double scale = 200;
 int maxGap = 100;
@@ -71,7 +71,7 @@ void calcGap(char *fileName)
 {
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
 char *line, *words[4];
-int i, j, wordCount;
+int i, wordCount;
 int totalGaps = 0;
 int *xGaps, *yGaps, *bothGaps, *xNear, *yNear;
 int *samples, sampleCount;
@@ -109,7 +109,7 @@ while (lineFileNext(lf, &line, NULL))
 	    yGaps[yGap] += 1;
 	if (xGap != 0 && yGap != 0)
 	    {
-	    if (xGap <= near && yGap <= near || xGap > near && yGap > near)
+	    if ((xGap <= near && yGap <= near) || (xGap > near && yGap > near))
 	        {
 		if (bothGap < maxSample)
 		    bothGaps[bothGap] += 1;

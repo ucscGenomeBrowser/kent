@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "quickHeap.h"
 
-static char const rcsid[] = "$Id: chainMergeSort.c,v 1.11 2005/11/16 07:00:27 kent Exp $";
+static char const rcsid[] = "$Id: chainMergeSort.c,v 1.12 2006/06/20 15:52:48 angie Exp $";
 
 #define MAXFILES 400
 
@@ -84,7 +84,7 @@ return  0;
 void chainMergeSort(int fileCount, char *files[], FILE *out, int level)
 /* chainMergeSort - Combine sorted files into larger sorted file. */
 {
-int i, n, p, c1, c2;   /* node, parent, child1, child2 */
+int i;
 struct chainFile *cf;
 int id = 0;
 struct quickHeap *h = NULL;
@@ -207,7 +207,7 @@ optionInit(&argc, argv, optionSpecs);
 saveId = optionExists("saveId");
 inputList = optionVal("inputList",inputList);
 tempDir = optionVal("tempDir",tempDir);
-if (argc < 2 && !inputList || argc > 1 && inputList)
+if ((argc < 2 && !inputList) || (argc > 1 && inputList))
     usage();
 if (tempDir[0]!=0 && lastChar(tempDir) != '/')
     tempDir = addSuffix(tempDir,"/");
