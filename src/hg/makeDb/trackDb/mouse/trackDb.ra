@@ -324,7 +324,7 @@ type psl .
 
 track regPotential7X
 shortLabel Reg Potential 7 species
-longLabel SPERR Regulatory Potential (7 species)
+longLabel ESPERR Regulatory Potential (7 species)
 group regulation
 priority 91
 visibility hide

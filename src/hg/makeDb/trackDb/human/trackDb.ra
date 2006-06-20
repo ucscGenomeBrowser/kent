@@ -1012,7 +1012,7 @@ origAssembly hg16
 
 track regPotential7X
 shortLabel Reg Potential 7 species
-longLabel SPERR Regulatory Potential (7 species)
+longLabel ESPERR Regulatory Potential (7 species)
 group regulation
 priority 101
 visibility hide
