@@ -8,7 +8,7 @@
 #include "dnautil.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: subsetAxt.c,v 1.8 2003/07/21 19:02:22 kate Exp $";
+static char const rcsid[] = "$Id: subsetAxt.c,v 1.9 2006/06/20 16:37:58 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -50,7 +50,7 @@ for (end = 0; end < size; ++end)
 	}
     else
         {
-	score += ss->matrix[a][b];
+	score += ss->matrix[(int)a][(int)b];
 	lastGap = FALSE;
 	}
     if (score > bestScore)
