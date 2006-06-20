@@ -16,7 +16,7 @@ return ret;
 
 void printTo(FILE *f, char untilC)
 {
-signed char c;
+int c;
 
 for (;;)
     {

@@ -6,7 +6,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-static char const rcsid[] = "$Id: subs.c,v 1.7 2006/06/20 19:15:50 hiram Exp $";
+static char const rcsid[] = "$Id: subs.c,v 1.8 2006/06/20 19:21:28 hiram Exp $";
 
 #define TRUE 1
 #define FALSE 0
@@ -193,7 +193,7 @@ Boolean next_word(FILE *f, char *b, int size)
  * Put the next word (separated by white space) from file into b.
  ******************************************************************/
 {
-signed char c = 0;
+int c = 0;
 
 /* skip leading spaces */
 while (--size > 0)
