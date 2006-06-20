@@ -20,7 +20,7 @@
 #include "hash.h"
 #include "botDelay.h"
 
-static char const rcsid[] = "$Id: hgBlat.c,v 1.95 2006/05/30 16:56:10 kent Exp $";
+static char const rcsid[] = "$Id: hgBlat.c,v 1.96 2006/06/20 16:14:52 hiram Exp $";
 
 struct cart *cart;	/* The user's ui state. */
 struct hash *oldVars = NULL;
@@ -41,6 +41,20 @@ char *sortList[] = {"query,score", "query,start", "chrom,score", "chrom,start", 
 char *outputList[] = {"hyperlink", "psl", "psl no header"};
 
 int minMatchShown = 20;
+
+static void blatTrashFile(struct tempName *tn, char *suffix)
+/*	obtain a trash file .fa or .pslx output	*/
+{
+static boolean firstTime = TRUE;
+char prefix[16];
+if (firstTime)
+    {
+    mkdirTrashDirectory("hgSs");
+    firstTime = FALSE;
+    }
+safef(prefix, sizeof(prefix), "hgSs/hgSs");
+makeTempName(tn, prefix, suffix);
+}
 
 struct serverTable *findServer(char *db, boolean isTrans)
 /* Return server for given database.  Db can either be
@@ -492,11 +506,11 @@ maxTotalSize = maxSingleSize * 2.5;
 maxSeqCount = 25;
 
 /* Create temporary file to store sequence. */
-makeTempName(&faTn, "hgSs", ".fa");
+blatTrashFile(&faTn, ".fa");
 faWriteAll(faTn.forCgi, seqList);
 
 /* Create a temporary .psl file with the alignments against genome. */
-makeTempName(&pslTn, "hgSs", ".pslx");
+blatTrashFile(&pslTn, ".pslx");
 f = mustOpen(pslTn.forCgi, "w");
 gvo = gfOutputPsl(0, qIsProt, FALSE, f, FALSE, TRUE);
 serve = findServer(db, isTx);
