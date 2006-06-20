@@ -14,7 +14,7 @@
 
 #define MAXALIGN 30  /* max number of species to align */
 #define DEFCOUNT 3   /* require 3 species to match before counting as covered */
-static char const rcsid[] = "$Id: mafCoverage.c,v 1.4 2004/09/21 21:41:49 baertsch Exp $";
+static char const rcsid[] = "$Id: mafCoverage.c,v 1.5 2006/06/20 16:11:36 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -102,7 +102,9 @@ while (lineFileRow(lf, row))
     r->start = lineFileNeedNum(lf, row, 1);
     r->end = lineFileNeedNum(lf, row, 2);
     if (r->start < 0 || r->end > cs->totalSize)
-        errAbort("%d-%d doesn't fit into %s size %d line %d of %s", r->start, r->end, row[0], lf->lineIx, lf->fileName);
+        errAbort("%d-%d doesn't fit into %s size %ld line %d of %s",
+		 r->start, r->end, row[0], (long)cs->totalSize,
+		 lf->lineIx, lf->fileName);
     slAddHead(&cs->restrictList, r);
     ++count;
     }
@@ -185,7 +187,6 @@ struct sqlResult *sr;
 char **row;
 struct chromSizes *cs, *csList = NULL;
 struct hash *hash = newHash(8);
-char query[256];
 int rowOffset;
 
 for (ci = ciList; ci != NULL; ci = ci->next)
@@ -323,14 +324,13 @@ struct chromSizes *lastCs = NULL, *cs = NULL;
 char *chrom = NULL;
 int start = 0, end = 0, size = 0, j, k;
 int idStart = 0, idEnd = 0, idSize = 0;
-char *row[3];
 UBYTE *cov = NULL;
 UBYTE *align = NULL;
 UBYTE *id = NULL;
 char *tPtr[MAXALIGN];
 bool hit = FALSE;
 
-while (ali = mafNext(mf))
+while ((ali = mafNext(mf)) != NULL)
     {
     int cCount = slCount(ali->components);
     int i = 1;
@@ -410,15 +410,17 @@ while (ali = mafNext(mf))
     assert(cs!=NULL);
     end = start+size;
     if (end > cs->totalSize)
+	{
         if (cs->name != NULL)
-            errAbort("End %d past end %d of %f\n", end, cs->totalSize, ali->score);
+            errAbort("End %d past end %ld of %f\n", end, (long)cs->totalSize, ali->score);
         else
             {
             if (ali!=NULL)
-                errAbort("End %d past end %d %f\n", end, cs->totalSize, ali->score );
+                errAbort("End %d past end %ld %f\n", end, (long)cs->totalSize, ali->score );
             else
-                errAbort("End %d past end %d \n", end, cs->totalSize);
+                errAbort("End %d past end %ld \n", end, (long)cs->totalSize);
             }
+	}
     incNoOverflow(align+start, size-1);
     cs->totalDepth += size-1;
 
@@ -452,15 +454,17 @@ while (ali = mafNext(mf))
     assert(cs!=NULL);
     idEnd = idStart+idSize;
     if (idEnd > cs->totalSize)
+	{
         if (cs->name != NULL)
-            errAbort("End %d past end %d of %f\n", idEnd, cs->totalSize, ali->score);
+            errAbort("End %d past end %ld of %f\n", idEnd, (long)cs->totalSize, ali->score);
         else
             {
             if (ali!=NULL)
-                errAbort("End %d past end %d %f\n", idEnd, cs->totalSize, ali->score );
+                errAbort("End %d past end %ld %f\n", idEnd, (long)cs->totalSize, ali->score );
             else
-                errAbort("End %d past end %d \n", idEnd, cs->totalSize);
+                errAbort("End %d past end %ld \n", idEnd, (long)cs->totalSize);
             }
+	}
     incNoOverflow(id+idStart, idSize-1);
     mafAliFree(&ali);
     }
