@@ -9,7 +9,7 @@
 #include "portable.h"
 #include "linefile.h"
 
-static char const rcsid[] = "$Id: common.c,v 1.94 2006/06/13 18:05:17 kent Exp $";
+static char const rcsid[] = "$Id: common.c,v 1.95 2006/06/20 18:13:32 hiram Exp $";
 
 void *cloneMem(void *pt, size_t size)
 /* Allocate a new buffer of given size, and copy pt to it. */
@@ -1719,7 +1719,6 @@ boolean fileExists(char *fileName)
 /* Return TRUE if file exists (may replace this with non-
  * portable faster way some day). */
 {
-int fd;
 /* To make piping easier stdin and stdout always exist. */
 if (sameString(fileName, "stdin")) return TRUE;
 if (sameString(fileName, "stdout")) return TRUE;
