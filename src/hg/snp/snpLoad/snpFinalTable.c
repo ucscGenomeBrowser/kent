@@ -1,4 +1,4 @@
-/* snpFinalTable - create chrN_snp125 tables from chrN_snpTmp tables. */
+/* snpFinalTable - create chrN_snp tables from chrN_snpTmp tables. */
 /* Also create exceptions table from exceptions files. */
 /* Get chroms from UCSC chromInfo. */
 
@@ -20,9 +20,10 @@
 #include "snp125.h"
 #include "snp125Exceptions.h"
 
-static char const rcsid[] = "$Id: snpFinalTable.c,v 1.10 2006/04/22 00:32:06 heather Exp $";
+static char const rcsid[] = "$Id: snpFinalTable.c,v 1.11 2006/06/20 18:24:08 heather Exp $";
 
 static char *snpDb = NULL;
+static int version = 0;
 FILE *outputFileHandle = NULL;
 
 char *strandStrings[] = {
@@ -54,10 +55,10 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-    "snpFinalTable - create chrN_snp125 tables from chrN_snpTmp tables.\n"
+    "snpFinalTable - create chrN_snp tables from chrN_snpTmp tables.\n"
     "Also create exceptions table from exceptions files.\n"
     "usage:\n"
-    "    snpFinalTable snpDb\n");
+    "    snpFinalTable snpDb version\n");
 }
 
 char *validString(int validCode)
@@ -135,9 +136,9 @@ switch (validCode)
 }
 
 
-void processSnps(char *chromName)
+void processSnps(char *chromName, int version)
 /* read chrN_snpTmp */
-/* write to chrN_snp125.tab */
+/* write to chrN_snp.tab */
 
 /*  0: snp_id               int(11)       */
 /*  1: chromStart           int(11)       */
@@ -182,7 +183,7 @@ char *functionString = NULL;
 safef(tableName, ArraySize(tableName), "%s_snpTmp", chromName);
 if (!hTableExists(tableName)) return;
 
-safef(fileName, ArraySize(fileName), "%s_snp125.tab", chromName);
+safef(fileName, ArraySize(fileName), "%s_snp%d.tab", chromName, version);
 f = mustOpen(fileName, "w");
 
 safef(query, sizeof(query), "select * from %s", tableName);
@@ -217,15 +218,15 @@ carefulClose(&f);
 
 
 
-void loadDatabase(char *chromName)
+void loadDatabase(char *chromName, int version)
 {
 struct sqlConnection *conn = hAllocConn();
 char fileName[64];
 char tableName[64];
 FILE *f;
 
-safef(tableName, ArraySize(tableName), "%s_snp125", chromName);
-safef(fileName, ArraySize(fileName), "%s_snp125.tab", chromName);
+safef(tableName, ArraySize(tableName), "%s_snp%d", chromName, version);
+safef(fileName, ArraySize(fileName), "%s_snp%d.tab", chromName, version);
 
 snp125TableCreate(conn, tableName);
 f = mustOpen(fileName, "r");
@@ -233,47 +234,52 @@ hgLoadTabFile(conn, ".", tableName, &f);
 hFreeConn(&conn);
 }
 
-void doExceptions()
-/* write snp125Exceptions table */
+void doExceptions(int version)
+/* write snpExceptions table */
 {
 struct sqlConnection *conn = hAllocConn();
 int i = 0;
 FILE *exceptionFileHandle = NULL;
 char tableName[64];
+char fileName[64];
 
+safef(fileName, ArraySize(fileName), "snp%dExceptions", version);
 snp125ExceptionsTableCreate(conn);
 
 for (i = 0; i < ArraySize(exceptionTables); i++)
     {
     safef(tableName, ArraySize(tableName), "%s.tab", exceptionTables[i]);
     exceptionFileHandle = mustOpen(tableName, "r");
-    hgLoadNamedTabFile(conn, ".", "snp125Exceptions", exceptionTables[i], &exceptionFileHandle);
+    hgLoadNamedTabFile(conn, ".", fileName, exceptionTables[i], &exceptionFileHandle);
     }
 hFreeConn(&conn);
 }
 
 int main(int argc, char *argv[])
-/* Query all chrN_snpTmp tables; write to snp125.tab. */
+/* Query all chrN_snpTmp tables; write to snp.tab. */
 {
 
 struct slName *chromList, *chromPtr;
 char tableName[64];
+char fileName[64];
 
-if (argc != 2)
+if (argc != 3)
     usage();
 
 snpDb = argv[1];
 hSetDb(snpDb);
 chromList = hAllChromNamesDb(snpDb);
 
-outputFileHandle = mustOpen("snp125.tab", "w");
+version = atoi(argv[2]);
+safef(fileName, ArraySize(fileName), "snp%d.tab", version);
+outputFileHandle = mustOpen(fileName, "w");
 
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
     safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
     if (!hTableExists(tableName)) continue;
     verbose(1, "chrom = %s\n", chromPtr->name);
-    processSnps(chromPtr->name);
+    processSnps(chromPtr->name, version);
     }
 
 carefulClose(&outputFileHandle);
@@ -282,10 +288,10 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
     safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
     if (!hTableExists(tableName)) continue;
-    loadDatabase(chromPtr->name);
+    loadDatabase(chromPtr->name, version);
     }
 
-doExceptions();
+doExceptions(version);
 
 return 0;
 }
