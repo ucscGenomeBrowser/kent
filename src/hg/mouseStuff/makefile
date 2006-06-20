@@ -1,9 +1,11 @@
 # Build all directories in makeDb 
 
+include ../../inc/common.mk
+
 all:
 	@for D in ${USE_DIRS} x; do \
 	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && ${MAKE} ) ;\
+	    ( cd $$D && echo $$D && ${MAKE} 'HG_WARN=${HG_WARN_ERR}' ) ;\
 	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
 	    fi ;\
 	    done
