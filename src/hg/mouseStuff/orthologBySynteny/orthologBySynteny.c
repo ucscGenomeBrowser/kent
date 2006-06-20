@@ -13,7 +13,7 @@
 #include "gff.h"
 #include "genbank.h"
 
-static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.8 2003/08/12 20:38:04 weber Exp $";
+static char const rcsid[] = "$Id: orthologBySynteny.c,v 1.9 2006/06/20 16:32:01 angie Exp $";
 
 #define INTRON 10 
 #define CODINGA 11 
@@ -73,8 +73,8 @@ void gffWrite(struct genePred *gp, FILE *f)
     for (i=0 ; i< gp->exonCount ; i++)
         {
         if (
-            ((gp->strand[0] == '+') && ((gp->exonStarts[i])+1 >= gp->cdsStart) || ((gp->strand[0] == '-') && ((gp->exonEnds[i]) >= gp->cdsEnd))) &&
-            ((gp->strand[0] == '+') && ((gp->exonEnds[i])+1 <= gp->cdsEnd) || ((gp->strand[0] == '-') && ((gp->exonEnds[i]) <= gp->cdsStart)))
+            (((gp->strand[0] == '+') && ((gp->exonStarts[i])+1 >= gp->cdsStart)) || (((gp->strand[0] == '-') && ((gp->exonEnds[i]) >= gp->cdsEnd)))) &&
+            (((gp->strand[0] == '+') && ((gp->exonEnds[i])+1 <= gp->cdsEnd)) || (((gp->strand[0] == '-') && ((gp->exonEnds[i]) <= gp->cdsStart))))
            )
             /* if coding region write out CDS */
             fprintf(f, "%s\tucsc\tCDS\t%d\t%d\t.\t%c\t.\tgene_id %s\ttranscript_id %s\texon_number %d\n", 
@@ -121,7 +121,6 @@ char query[255];
 struct lineFile *lf ;
 struct axt *axt = NULL, *axtList = NULL;
 struct axtInfo *ai = NULL;
-int lineSize = 70;
 struct sqlResult *sr;
 struct sqlConnection *conn = hAllocConn();
 char **row;
@@ -173,11 +172,10 @@ for (axt = axtList; axt != NULL; axt = axt->next)
 void generateGff(struct chain *chain, FILE *f, char *ortholog, char *name, char *type, double score, int level, struct genePred *gp, struct axt *axtList)
 /* output a gff gene prediction*/
 {
-int tmp;
 struct axt *axt= NULL ;
 struct axt *axtFound = NULL ;
 struct genePred *gpSyn = NULL;
-int cStart, cEnd, txStart, txEnd, qStart, qEnd, nextEndIndex, posStrand, tPtr;
+int cStart, cEnd, txStart, txEnd, nextEndIndex, posStrand, tPtr;
 int oneSize = 1;
 int tCoding = FALSE;
 int qCoding = FALSE;
@@ -188,7 +186,6 @@ int prevQClass = INTERGENIC;
 int qStopCodon = FALSE;
 int nextStart = gp->exonStarts[0];
 int nextEnd = gp->exonEnds[0];
-int phase = 0;
 int tCodonPos = 1;
 int qCodonPos = 1;
 unsigned *eStarts, *eEnds;
@@ -297,6 +294,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
 
     /* skip alignments if on different chromosome UNLESS we haven't found any exons yet */
     if (!sameString(axt->qName,axtFound->qName))
+	{
         if (gpSyn->exonCount != 0)
             continue;
         else
@@ -314,6 +312,7 @@ for (axt = axtFound; axt != NULL ; axt = axt->next)
             prevQClass = INTERGENIC;
             qStopCodon = FALSE;
             }
+	}
 
     if (sameString(gp->name , "NM_008386"))
         {
@@ -650,7 +649,6 @@ char *mapOrtholog(struct sqlConnection *conn,  char *geneTable, char *chrom, int
 {
 struct sqlResult *sr;
 char **row;
-int i = 0;
 char query[512];
 static char retName[255];
 char *tFieldName = optionVal("tName", "name");
@@ -661,8 +659,6 @@ char *tFieldName = optionVal("tName", "name");
     while ((row = sqlNextRow(sr)) != NULL)
         {
         char *name = (row[0]);
-        int geneStart = atoi(row[1]);
-        int geneEnd = atoi(row[2]);
         sprintf(retName, "%s",name);
         sqlFreeResult(&sr);
         return(retName);
@@ -700,20 +696,16 @@ char *fieldName = optionVal("name", "name");
 char *syntenicGene = optionVal("track", "knownGene");
 boolean psl = optionExists("psl");
 boolean gff = optionExists("gff");
-struct hash *hash = newHash(0);
 struct chain *aChain;
 struct sqlConnection *conn = hAllocConn();
 struct sqlConnection *conn2 = hAllocConn2();
 struct sqlResult *sr;
 char **row;
-int i = 0;
-int j = 0;
 char query[512];
 char prevName[255] = "x";
 char *ortholog = NULL;
 struct chain *retSubChain;
 struct chain *retChainToFree;
-boolean hasBin = 0;
 /*int chainArr[MAXCHAINARRAY];*/
 filter = optionInt("filter",2000000);
 
@@ -735,7 +727,6 @@ while ((row = sqlNextRow(sr)) != NULL)
     int level = sqlUnsigned(row[13]);
     int sizeOne;
     char chainIdStr[128];
-    unsigned int temp;
     unsigned int cdsStart, cdsEnd;
 
     struct psl *p = NULL;
