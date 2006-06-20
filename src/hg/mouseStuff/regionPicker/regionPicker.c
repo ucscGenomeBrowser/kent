@@ -12,7 +12,7 @@
 #include "axt.h"
 #include "htmshell.h"
 
-static char const rcsid[] = "$Id: regionPicker.c,v 1.9 2003/05/06 07:22:29 kate Exp $";
+static char const rcsid[] = "$Id: regionPicker.c,v 1.10 2006/06/20 16:37:00 angie Exp $";
 
 /* Command line overridable variables. */
 char *clRegion = "genome";
@@ -281,7 +281,7 @@ for (i=0; i<symCount; ++i)
     if (q != '-' && t != '-')
         {
 	bitSetOne(aliBits, tPos);
-	if (ntChars[q] == ntChars[t])
+	if (ntChars[(int)q] == ntChars[(int)t])
 	    bitSetOne(matchBits, tPos);
 	}
     if (t != '-')
@@ -517,7 +517,7 @@ fprintf(f, "cons %f %f %f\n", consCuts[0], consCuts[1], consCuts[2]);
 calcCuts(stats->geneCounts, histSize, 
 	stats->totalGeneCount, 1.0/geneScale, geneCuts, strataCount);
 uglyf("gene %f %f %f\n", geneCuts[0], geneCuts[1], geneCuts[2]);
-f, uglyf("gene %f %f %f\n", geneCuts[0], geneCuts[1], geneCuts[2]);
+uglyf("gene %f %f %f\n", geneCuts[0], geneCuts[1], geneCuts[2]);
 fprintf(f, "\n");
 
 
@@ -648,7 +648,7 @@ struct slName *allChroms = NULL, *chrom = NULL;
 struct region *regionList = NULL, *region;
 FILE *f = mustOpen(output, "w");
 struct stats *stats;
-struct scoredWindow *winList = NULL, *win;
+struct scoredWindow *winList = NULL;
 struct hash *chromLimitHash = NULL;
 
 AllocVar(stats);
