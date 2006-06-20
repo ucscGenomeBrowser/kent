@@ -21182,9 +21182,17 @@ cp snpExpandAllele.exceptions snpExpandAllele.tab
 cp snpLocType.exceptions snpLocType.tab
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpFinalTable dbSnpHumanBuild125
 
+# PAR SNPs
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpPAR dbSnpHumanBuild125
+hgsql -e 'load data local infile "snpPARexceptions.tab" into table snp125Exceptions' dbSnpHumanBuild125
+
 # concat into snp125.tab
 # cat chr*_snp125.tab >> snp125.tab
-/bin/csh concat.csh
+/bin/sh concat.sh
+
+# load
+hgsql dbSnpHumanBuild125 < /cluster/home/heather/kent/src/hg/lib/snp125.sql
+hgsql -e 'load data local infile "snp125.tab" into table snp125' dbSnpHumanBuild125
 
 # check for multiple alignments
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpMultiple dbSnpHumanBuild125
