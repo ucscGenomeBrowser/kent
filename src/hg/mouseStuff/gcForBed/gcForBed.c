@@ -7,7 +7,7 @@
 #include "dnautil.h"
 #include "nib.h"
 
-static char const rcsid[] = "$Id: gcForBed.c,v 1.4 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: gcForBed.c,v 1.5 2006/06/20 15:55:18 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -48,7 +48,7 @@ while ((wordCount = lineFileChop(lf, words)) != 0)
     dna = seq->dna;
     size = seq->size;
     for (i=0; i<size; ++i)
-	baseCounts[ntVal5[dna[i]]] += 1;
+	baseCounts[ntVal5[(int)dna[i]]] += 1;
     dnaSeqFree(&seq);
     bedFree(&bed);
     }

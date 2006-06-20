@@ -9,7 +9,7 @@
 #include "nibTwo.h"
 #include "chain.h"
 
-static char const rcsid[] = "$Id: chainAntiRepeat.c,v 1.4 2005/08/18 07:40:19 baertsch Exp $";
+static char const rcsid[] = "$Id: chainAntiRepeat.c,v 1.5 2006/06/20 15:50:58 angie Exp $";
 
 int minScore = 5000;
 int noCheckScore = 200000;
@@ -56,8 +56,8 @@ for (b = chain->blockList; b != NULL; b = b->next)
     int i;
     for (i=0; i<size; ++i)
         {
-	int qb = ntVal[q[i]];
-	if (qb == ntVal[t[i]])
+	int qb = ntVal[(int)q[i]];
+	if (qb == ntVal[(int)t[i]])
 	    counts[qb] += 1;
 	}
     }
@@ -105,7 +105,7 @@ for (b = chain->blockList; b != NULL; b = b->next)
     int i;
     for (i=0; i<size; ++i)
         {
-	if (isLowerDna[q[i]] || isLowerDna[t[i]])
+	if (isLowerDna[(int)q[i]] || isLowerDna[(int)t[i]])
 	    ++repCount;
 	}
     total += size;
