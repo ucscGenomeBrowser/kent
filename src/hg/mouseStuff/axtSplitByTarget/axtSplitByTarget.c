@@ -6,7 +6,7 @@
 #include "portable.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtSplitByTarget.c,v 1.6 2005/02/24 18:56:36 braney Exp $";
+static char const rcsid[] = "$Id: axtSplitByTarget.c,v 1.7 2006/06/20 15:41:54 angie Exp $";
 
 int tStartSize = 0;
 double tSS = 0.0;
@@ -45,7 +45,7 @@ else if (chunkSize > 0)
     {
     if ((outName[0] == 0) || ((totalWritten > chunkSize) && !sameString(lastName, tName)))
 	{
-	if (f = hashFindVal(outHash, outName))
+	if ((f = hashFindVal(outHash, outName)) != NULL)
 	    fclose(f);
 	safef(outName, sizeof(outName), "%s/chunk%d.axt",outDir,fileCount++);
 	totalWritten = 0;
