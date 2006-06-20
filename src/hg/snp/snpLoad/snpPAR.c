@@ -3,7 +3,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpPAR.c,v 1.4 2006/04/25 21:58:04 heather Exp $";
+static char const rcsid[] = "$Id: snpPAR.c,v 1.5 2006/06/20 18:36:27 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *outputFileHandle = NULL;
@@ -29,7 +29,7 @@ int start = 0;
 int end = 0;
 int bin = 0;
 
-safef(query, sizeof(query), "select * from chrX_snp125 where chromEnd < 2642881");
+safef(query, sizeof(query), "select * from chrX_snp126 where chromEnd < 2709520");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -40,14 +40,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 
-safef(query, sizeof(query), "select * from chrX_snp125 where chromEnd > 154494748");
+safef(query, sizeof(query), "select * from chrX_snp126 where chromEnd > 154584237");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     start = sqlUnsigned(row[2]);
     end = sqlUnsigned(row[3]);
-    start = start - 97122574;
-    end = end - 97122574;
+    start = start - 97140800;
+    end = end - 97140800;
     bin = hFindBin(start, end);
     fprintf(outputFileHandle, "%d\t%s\t%d\t%d\t%s\t%s\t%s\t%s\t%s\t", 
                               bin, "chrY", start, end, row[4], row[5], row[6], row[7], row[8]);
@@ -68,20 +68,20 @@ char **row;
 int start = 0;
 int end = 0;
 
-safef(query, sizeof(query), "select * from snp125Exceptions where chrom = 'chrX' and chromEnd < 2642881");
+safef(query, sizeof(query), "select * from snp126Exceptions where chrom = 'chrX' and chromEnd < 2709520");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     fprintf(exceptionFileHandle, "chrY\t%s\t%s\t%s\t%s\n", row[1], row[2], row[3], row[4]);
 sqlFreeResult(&sr);
 
-safef(query, sizeof(query), "select * from snp125Exceptions where chrom = 'chrX' and chromEnd > 154494748");
+safef(query, sizeof(query), "select * from snp126Exceptions where chrom = 'chrX' and chromEnd > 154584237");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
     start = sqlUnsigned(row[1]);
     end = sqlUnsigned(row[2]);
-    start = start - 97122574;
-    end = end - 97122574;
+    start = start - 97140800;
+    end = end - 97140800;
     fprintf(exceptionFileHandle, "chrY\t%d\t%d\t%s\t%s\n", start, end, row[3], row[4]);
     }
 sqlFreeResult(&sr);
@@ -95,7 +95,7 @@ void loadDatabase()
 FILE *f;
 struct sqlConnection *conn = hAllocConn();
 
-hgLoadNamedTabFile(conn, ".", "chrY_snp125", "snpPAR", &f);
+hgLoadNamedTabFile(conn, ".", "chrY_snp126", "snpPAR", &f);
 hFreeConn(&conn);
 }
 
@@ -112,7 +112,7 @@ outputFileHandle = mustOpen("snpPAR.tab", "w");
 exceptionFileHandle = mustOpen("snpPARexceptions.tab", "w");
 getSnps();
 getExceptions();
-// loadDatabase();
+loadDatabase();
 carefulClose(&outputFileHandle);
 carefulClose(&exceptionFileHandle);
 
