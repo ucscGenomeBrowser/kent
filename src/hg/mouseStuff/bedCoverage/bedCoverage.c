@@ -10,7 +10,7 @@
 #include "agpFrag.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: bedCoverage.c,v 1.5 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: bedCoverage.c,v 1.6 2006/06/20 15:47:11 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -87,7 +87,9 @@ while (lineFileRow(lf, row))
     r->start = lineFileNeedNum(lf, row, 1);
     r->end = lineFileNeedNum(lf, row, 2);
     if (r->start < 0 || r->end > cs->totalSize)
-        errAbort("%d-%d doesn't fit into %s size %d line %d of %s", r->start, r->end, row[0], lf->lineIx, lf->fileName);
+        errAbort("%d-%d doesn't fit into %s size %ld line %d of %s",
+		 r->start, r->end, row[0], (long)(cs->totalSize),
+		 lf->lineIx, lf->fileName);
     slAddHead(&cs->restrictList, r);
     ++count;
     }
@@ -150,7 +152,6 @@ struct sqlResult *sr;
 char **row;
 struct chromSizes *cs, *csList = NULL;
 struct hash *hash = newHash(8);
-char query[256];
 int rowOffset;
 
 for (ci = ciList; ci != NULL; ci = ci->next)
@@ -291,7 +292,7 @@ while (lineFileRow(lf, row))
 	lastCs = cs;
 	}
     if (end > cs->totalSize)
-        errAbort("End %d past end %d of %s", end, cs->totalSize, cs->name);
+        errAbort("End %d past end %ld of %s", end, (long)(cs->totalSize), cs->name);
     incNoOverflow(cov+start, size);
     cs->totalDepth += size;
     }
