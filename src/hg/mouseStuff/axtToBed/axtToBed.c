@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "options.h"
 
-static char const rcsid[] = "$Id: axtToBed.c,v 1.8 2005/06/07 07:31:30 jill Exp $";
+static char const rcsid[] = "$Id: axtToBed.c,v 1.9 2006/06/20 16:44:16 angie Exp $";
 bool extended = FALSE;
 bool bed4 = FALSE;
 bool axtName = FALSE;
@@ -31,7 +31,7 @@ void axtToBed(char *inName, char *outName)
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
-char *row[9], *line;
+char *row[9];
 int s, e;
 
 for (;;)

@@ -7,7 +7,7 @@
 #include "chainNet.h"
 #include "rbTree.h"
 
-static char const rcsid[] = "$Id: netSyntenic.c,v 1.8 2005/08/18 07:46:57 baertsch Exp $";
+static char const rcsid[] = "$Id: netSyntenic.c,v 1.9 2006/06/20 16:44:18 angie Exp $";
 
 struct lm *lm;
 struct rbTreeNode **rbStack;
@@ -59,7 +59,7 @@ void dupeTreeAddSub(struct rbTree *dupeTree, int start, int end, int dir)
 {
 struct dupeRange key, *r, *nr;
 struct slRef *ref, *refList;
-int s, e, lastEnd = start;
+int lastEnd = start;
 
 if (start == end)
     return;

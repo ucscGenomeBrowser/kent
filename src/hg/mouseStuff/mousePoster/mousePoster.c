@@ -26,7 +26,7 @@
 #include "hCommon.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: mousePoster.c,v 1.6 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: mousePoster.c,v 1.7 2006/06/20 16:44:17 angie Exp $";
 
 /* Which database to use */
 char *database = "mm2";
@@ -142,7 +142,7 @@ void makeResolvedDupes(struct hash *hash, struct resolvedDup **retList)
 {
 struct lineFile *lf = lineFileMayOpen(bestDupFile, TRUE);
 char *row[3], *parts[4];
-int wordCount, partCount;
+int partCount;
 struct resolvedDup *rd, *rdList = NULL;
 
 if (lf == NULL)
@@ -304,7 +304,6 @@ struct hash *jaxStockHash = makeFirstColumnHash(stockFile);
 struct hash *jaxDiseaseStockHash = makeFirstColumnHash(diseaseStockFile);
 struct sqlResult *sr;
 char **row;
-char *jaxId;
 
 /* Using ensembl fillFirstColumnHash(diseaseFile, diseaseHash); */
 sr = sqlGetResult(conn, "select mrnaAcc,locusLinkId from refLink");
@@ -520,7 +519,6 @@ for (gp = gpList; gp != NULL; gp = gp->next)
 
 for (node = geneList->head; !dlEnd(node); node = node->next)
     {
-    int len;
     char *acc;
     kg = node->val;
 
@@ -592,7 +590,6 @@ void getRnaGenes(struct chromGaps *cg, char *chrom, struct sqlConnection *conn, 
 char **row;
 int rowOffset;
 struct sqlResult *sr = hChromQuery(conn, "rnaGene", chrom, NULL, &rowOffset);
-char query[256];
 struct rnaGene el;
 int r,g,b;
 
@@ -1050,7 +1047,7 @@ void getQtl(struct chromGaps *cg, char *fileName, char *chrom, FILE *f)
 {
 char *line;
 char *row[9];
-int i, fieldCount;
+int i;
 struct lineFile *lf = lineFileOpen(qtlFile, TRUE);
 while (lineFileNext(lf, &line, NULL))
     {

@@ -7,7 +7,7 @@
 #include "psl.h"
 #include "portable.h"
 
-static char const rcsid[] = "$Id: subsetTraces.c,v 1.3 2003/05/06 07:22:29 kate Exp $";
+static char const rcsid[] = "$Id: subsetTraces.c,v 1.4 2006/06/20 16:44:18 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -56,7 +56,7 @@ void saveHashedSeqs(char *fileName, struct hash *hash, FILE *f, char *abbr)
 {
 struct lineFile *lf = lineFileOpen(fileName, FALSE);
 char *line;
-int lineSize, len;
+int lineSize;
 int nameMaxSize = 8;
 char *firstLine = needMem(nameMaxSize);
 char *name;

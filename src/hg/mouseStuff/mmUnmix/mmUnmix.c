@@ -13,7 +13,7 @@
 #include "featureBits.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: mmUnmix.c,v 1.5 2003/05/06 07:22:28 kate Exp $";
+static char const rcsid[] = "$Id: mmUnmix.c,v 1.6 2006/06/20 16:44:17 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -326,7 +326,6 @@ void judgeClones(struct chrom *chrom, Bits *bits,
 {
 struct hash *cloneHash = newHash(0);
 struct clone *cloneList = NULL, *clone;
-int fragBad, cloneBad;
 
 cloneList = makeClones(chrom->frag, cloneHash);
 for (clone = cloneList; clone != NULL; clone = clone->next)

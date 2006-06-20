@@ -7,7 +7,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: axtPretty.c,v 1.4 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: axtPretty.c,v 1.5 2006/06/20 16:44:16 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -30,7 +30,6 @@ char *t = axt->tSym;
 int size = axt->symCount;
 int oneSize, sizeLeft = size;
 int i;
-char *rcText = "";
 
 fprintf(f, ">%s:%d%c%d %s:%d-%d %d\n", 
 	axt->qName, axt->qStart, axt->qStrand, axt->qEnd,

@@ -13,7 +13,7 @@
 
 struct dnaSeq *qFaList;
 struct dnaSeq *tFaList;
-static char const rcsid[] = "$Id: lavToAxt.c,v 1.20 2005/08/26 21:07:51 baertsch Exp $";
+static char const rcsid[] = "$Id: lavToAxt.c,v 1.21 2006/06/20 16:44:17 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -180,8 +180,6 @@ struct dnaSeq *qSeq = NULL, *tSeq = NULL, *seq = NULL;
 struct axt axt;
 boolean qIsTwoBit = twoBitIsFile(qNibDir);
 boolean tIsTwoBit = twoBitIsFile(tNibDir);
-
-static int ix = 0;
 
 if (blockList == NULL)
     return;
@@ -350,7 +348,7 @@ for (;;)
 void parseS(struct lineFile *lf, int *tSize, int *qSize)
 /* Parse s stanza and return tSize and qSize */
 {
-char *line, *words[3];
+char *words[3];
 if (!lineFileRow(lf, words))
     unexpectedEof(lf);
 *tSize = lineFileNeedNum(lf, words, 2);
@@ -410,7 +408,7 @@ seekEndOfStanza(lf);
 void parseH(struct lineFile *lf,  char **tName, char **qName, boolean *isRc)
 /* Parse out H stanza */
 {
-char *line, *word, *e, *dupe;
+char *line, *word, *e;
 int i;
 
 

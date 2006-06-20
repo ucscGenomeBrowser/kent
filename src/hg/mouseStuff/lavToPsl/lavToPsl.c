@@ -5,7 +5,7 @@
 #include "options.h"
 #include "axt.h"
 
-static char const rcsid[] = "$Id: lavToPsl.c,v 1.9 2005/08/18 07:44:41 baertsch Exp $";
+static char const rcsid[] = "$Id: lavToPsl.c,v 1.10 2006/06/20 16:44:17 angie Exp $";
 
 /* strand to us for target */
 char* targetStrand = "+";
@@ -147,7 +147,7 @@ for (;;)
 void parseS(struct lineFile *lf, int *tSize, int *qSize)
 /* Parse z stanza and return tSize and qSize */
 {
-char *line, *words[3];
+char *words[3];
 if (!lineFileRow(lf, words))
     unexpectedEof(lf);
 *tSize = lineFileNeedNum(lf, words, 2);
@@ -208,7 +208,7 @@ else
 void parseH(struct lineFile *lf,  char **tName, char **qName, boolean *isRc)
 /* Parse out H stanza */
 {
-char *line, *word, *e, *dupe;
+char *line, *word, *e;
 int i;
 
 
@@ -298,13 +298,8 @@ void parseIntoPsl(char *lavFile, FILE *f, FILE* ff)
 /* Parse a blastz lav file and put it into something .psl like. */
 {
 struct lineFile *lf = lineFileOpen(lavFile, TRUE);
-char *line, *words[10];
-boolean gotAli = FALSE;
-int wordCount;
-struct block *blockList = NULL, *block;
-int matchOne, match = 0, mismatch = 0, bases;
-double scale;
-int id;
+char *line;
+struct block *blockList = NULL;
 boolean isRc = FALSE;
 char *tName = NULL, *qName = NULL;
 char *matrix = NULL, *command = NULL;

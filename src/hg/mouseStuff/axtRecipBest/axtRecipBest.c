@@ -11,7 +11,7 @@
 #include "binRange.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: axtRecipBest.c,v 1.3 2003/05/06 07:22:27 kate Exp $";
+static char const rcsid[] = "$Id: axtRecipBest.c,v 1.4 2006/06/20 16:44:16 angie Exp $";
 
 #define minDistance 500000 /* minimum distance for reciprocal best alignment */
                             
@@ -181,26 +181,17 @@ void axtRecipBest(int axtCount, char *target, char *outFile, char *tSizeFile, ch
 {
 char *matrixName = optionVal("matrix", NULL);
 struct axtScoreScheme *ss = NULL;
-int *histIns, *histDel, *histPerfect, *histGapless, *histT, *histQ;
 int minScore = optionInt("minScore", 5000);
-static int matrix[4][4];
-int i,j,both,total = 0;
-double scale;
+int i;
 int fileIx;
 struct axt *axtTarget;
 struct slName *fileList = NULL, *name;
 struct slName *dirDir, *dirFile;
 char fileName[512];
 int fileCount;
-int filesPerMidFile = 0;
 int totalFilesProcessed = 0;
-int tempStart;
-struct lineFile *lf;
-static int trans[4] = {A_BASE_VAL, C_BASE_VAL, G_BASE_VAL, T_BASE_VAL};
-static char *bases[4] = {"A", "C", "G", "T"};
 struct chrom *chromList = NULL ;
-int totalT = 0, totalMatch = 0, totalMismatch = 0, 
-	tGapStart = 0, tGapExt=0, qGapStart = 0, qGapExt = 0;
+int totalT = 0;
 
     struct hash *tSizeHash = readSizes(tSizeFile);
     struct hash *qSizeHash = readSizes(qSizeFile);
@@ -229,7 +220,6 @@ int totalT = 0, totalMatch = 0, totalMismatch = 0,
 	{
 	int filesInMidFile = 0;
 	struct axt *axtList = NULL, *axt;
-	struct lm *lm = lmInit(256*1024);
     struct hash *nameHash = newHash(24);
 
     printf("for loop\n");

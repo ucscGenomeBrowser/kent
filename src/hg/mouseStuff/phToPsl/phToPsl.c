@@ -7,7 +7,7 @@
 #include "psl.h"
 #include "obscure.h"
 
-static char const rcsid[] = "$Id: phToPsl.c,v 1.6 2003/05/06 07:22:29 kate Exp $";
+static char const rcsid[] = "$Id: phToPsl.c,v 1.7 2006/06/20 16:44:18 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -87,8 +87,6 @@ unsigned qNumInsert = 0;	/* Number of inserts in query */
 int qBaseInsert = 0;	/* Number of bases inserted in query */
 unsigned tNumInsert = 0;	/* Number of inserts in target */
 int tBaseInsert = 0;	/* Number of bases inserted in target */
-boolean qInInsert = FALSE; /* True if in insert state on query. */
-boolean tInInsert = FALSE; /* True if in insert state on target. */
 boolean eitherInsert = FALSE;	/* True if either in insert state. */
 int blockCount = 1, blockIx=0;
 boolean qIsRc = FALSE;
@@ -317,7 +315,6 @@ boolean convertOneQuery(struct lineFile *lf,
 {
 char *line, *word;
 char *qName;
-struct block *blockList = NULL;
 int qSize, tSize;
 
 /* Grab first line and extract query name from it. */

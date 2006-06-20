@@ -6,7 +6,7 @@
 #include "chain.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netChainSubset.c,v 1.10 2005/08/18 07:45:58 baertsch Exp $";
+static char const rcsid[] = "$Id: netChainSubset.c,v 1.11 2006/06/20 16:44:18 angie Exp $";
 
 char *type = NULL;
 boolean splitOnInsert = FALSE;
@@ -89,7 +89,7 @@ void splitWrite(struct cnFill *fill, struct chain *chain,
 /* Split chain into pieces if it has inserts.  Write out
  * each piece. */
 {
-int tStart = fill->tStart, tEnd;
+int tStart = fill->tStart;
 struct cnFill *child = fill->children;
 
 for (;;)

@@ -80,7 +80,6 @@ return dif;
 int gapChains( struct chain *chainIn)
 {
 int count = 0;
-struct chain *outChain = NULL;
 struct chain *chain1=NULL, *chain2, *chain2Next, *prevChain2;
 
 //printf("%s%c%s\n",chainIn->qName, chainIn->qStrand, chainIn->tName);
@@ -155,16 +154,12 @@ return count;
 void chainStats(char *chains)
 {
 int lastChainId = -1;
-int jj;
-int deletedBases, addedBases;
 struct lineFile *chainsLf = lineFileOpen(chains, TRUE);
 struct cseqPair *cspList = NULL, *csp;
-struct seqPair *spList = NULL, *sp;
 struct dyString *dy = newDyString(512);
-struct hash *pslHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
 struct hash *chainHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
-struct chain *chain, *chainList = NULL;
-struct cBlock *block , *nextBlock = NULL, *prevBlock = NULL;
+struct chain *chain;
+struct cBlock *block;
 int count;
 
 count = 0;

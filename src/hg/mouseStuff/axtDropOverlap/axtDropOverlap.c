@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "dnautil.h"
 
-static char const rcsid[] = "$Id: axtDropOverlap.c,v 1.4 2003/09/18 19:12:55 baertsch Exp $";
+static char const rcsid[] = "$Id: axtDropOverlap.c,v 1.5 2006/06/20 16:44:16 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -50,23 +50,13 @@ return ptToInt(val);
 void axtDropOverlap(char *inName, char *tSizeFile, char *qSizeFile, char *outName)
 /* used for cleaning up self alignments - deletes all overlapping self alignments */
 {
-struct hash *tSizeHash = readSizes(tSizeFile);
 struct hash *qSizeHash = readSizes(qSizeFile);
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
 struct axt *axt;
-char *line;
-int lineSize;
-int skipMatch = 0, skipMis = 0, skipIns = 0, skipRepMatch = 0;
-int totMatch = 0, totMis = 0, totIns = 0, totRepMatch = 0;
-int minScore = 0;
-int minSize = 0;
+int totMatch = 0;
 int totSkip = 0;
 int totLines = 0;
-boolean noSelf = FALSE;
-boolean anyFilter = TRUE;
-boolean passFilter;
-
 
 while ((axt = axtRead(lf)) != NULL)
     {

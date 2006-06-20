@@ -33,12 +33,10 @@ struct mafFile *mp = mafOpen(in);
 FILE *f = mustOpen(out, "w");
 struct mafAli *ali;
 struct mafComp *comp;
-int i;
 
 while ((ali = mafNext(mp)) != NULL)
     {
     struct axt *axt;
-    char srcName[128];
     AllocVar(axt);
     axt->score = ali->score;
     for (comp = ali->components; comp != NULL; comp = comp->next)

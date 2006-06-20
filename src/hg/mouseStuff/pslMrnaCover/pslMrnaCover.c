@@ -6,7 +6,7 @@
 #include "psl.h"
 #include "fa.h"
 
-static char const rcsid[] = "$Id: pslMrnaCover.c,v 1.3 2003/05/06 07:22:29 kate Exp $";
+static char const rcsid[] = "$Id: pslMrnaCover.c,v 1.4 2006/06/20 16:44:18 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -68,9 +68,7 @@ void pslMrnaCover(char *pslFile, char *faFile)
 {
 static int histogram[101];
 int i;
-char *qLast = cloneString("");
-int qAli, qMaxAli = 0;
-int qLastSize = 0;
+int qAli;
 struct hash *hash;
 struct rnaCover *rcList = NULL, *rc;
 struct lineFile *lf = pslFileOpen(pslFile);

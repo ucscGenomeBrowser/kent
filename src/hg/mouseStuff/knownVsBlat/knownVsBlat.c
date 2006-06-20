@@ -13,7 +13,7 @@
 #include "bed.h"
 #include "blatStats.h"
 
-static char const rcsid[] = "$Id: knownVsBlat.c,v 1.13 2003/06/14 16:31:25 kent Exp $";
+static char const rcsid[] = "$Id: knownVsBlat.c,v 1.14 2006/06/20 16:44:17 angie Exp $";
 
 /* Variables that can be set from command line. */
 int dotEvery = 0;	/* How often to print I'm alive dots. */
@@ -157,11 +157,10 @@ void addPslFakeMilli(struct psl *psl, int *milliMatches,
 /* Similar to addBestMilli above.  However this only makes as much
  * of the stats as it can without having the sequence loaded. */
 {
-int  i, j, blockCount = psl->blockCount, blockStart, blockEnd;
-int same, score = pslMilliId(psl), *milliPt;
+int  i, blockCount = psl->blockCount, blockStart, blockEnd;
+int score = pslMilliId(psl);
 boolean tIsRc = (psl->strand[1] == '-');
 int start, end;
-int intersection;
 
 /* Loop through each block.... */
 for (i=0; i<blockCount; ++i)
@@ -284,10 +283,6 @@ struct blatStats *calcGeneStats(char *chrom,
  * (But the percent ID stuff won't be calculated. */
 {
 struct blatStats *stats;
-struct psl *psl;
-struct sqlConnection *conn = hAllocConn();
-struct sqlResult *sr;
-char query[256], **row;
 int exonCount = gp->exonCount, exonIx, exonStart, exonEnd;
 boolean anyMrna = FALSE;
 int mrnaSize, cdsSize, utrSize;
@@ -429,7 +424,6 @@ for (exonIx = 1; exonIx < exonCount; ++exonIx)
     }
 
 /* Clean up and return. */
-hFreeConn(&conn);
 return stats;
 }
 
@@ -622,7 +616,7 @@ int startRegion, endRegion;
 int sizeRegion;
 boolean isPsl = sameWord(format, "psl");
 struct hash *traceHash = newHash(0);
-struct dnaSeq *traceList = NULL, *trace = NULL;
+struct dnaSeq *traceList = NULL;
 
 hNibForChrom(chrom, nibName);
 nibOpenVerify(nibName, &nibFile, &chromSize);

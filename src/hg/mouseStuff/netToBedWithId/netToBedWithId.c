@@ -10,7 +10,7 @@
 #include "nib.h"
 #include "bed.h"
 
-static char const rcsid[] = "$Id: netToBedWithId.c,v 1.5 2005/01/10 00:40:26 kent Exp $";
+static char const rcsid[] = "$Id: netToBedWithId.c,v 1.6 2006/06/20 16:44:18 angie Exp $";
 
 boolean qChain = FALSE;  /* Do chain from query side. */
 int maxGap = 5000;
@@ -107,7 +107,7 @@ struct bed *chainToBed(struct chain *chain,
 	struct dnaSeq *qSeq, int qOffset,
 	struct dnaSeq *tSeq, int tOffset, int maxGap)
 {
-struct cBlock *startB = chain->blockList, *endB, *a = NULL, *b;
+struct cBlock *startB = chain->blockList, *a = NULL, *b;
 struct bed *bedList = NULL, *bed;
 
 for (b = chain->blockList; b != NULL; b = b->next)

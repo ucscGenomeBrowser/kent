@@ -5,7 +5,7 @@
 #include "cheapcgi.h"
 #include "blatStats.h"
 
-static char const rcsid[] = "$Id: kvsSummary.c,v 1.3 2003/06/14 16:31:25 kent Exp $";
+static char const rcsid[] = "$Id: kvsSummary.c,v 1.4 2006/06/20 16:44:17 angie Exp $";
 
 #define maxRuns 256
 #define maxChroms 256
@@ -128,8 +128,7 @@ struct hash *readRun(char *fileName,
 struct hash *chromHash = newHash(6);
 struct chrom *chrom;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *line, *words[12];
-int i, wordCount;
+char *line;
 char *chromName;
 
 while (lineFileNext(lf, &line, NULL))
