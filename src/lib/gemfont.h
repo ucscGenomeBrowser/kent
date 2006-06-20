@@ -34,7 +34,7 @@ WORD	undrline;
 WORD	lghtng_m;	/* Lightening mask.  Just use 0x55aa. */
 WORD	skewng_m;	/* Skewing mask for italics. If 1 bit rotate this line. 0xaaaa*/
 WORD	flags;		/* Just set to zero.  Half-assed intel swap if otherwise. */
-char *hz_ofst;  /* On disk byte offset from beginning of file to hor. offsets */
+signed char *hz_ofst;  /* On disk byte offset from beginning of file to hor. offsets */
 WORD	*ch_ofst;	/* On disk byte offset to beginning of ?? kerning ?? data. */
 UBYTE	*fnt_dta;	/* On disk byte offset to beginning of bitmap. */
 WORD	frm_wdt;	/* Byte width of bitmap. */

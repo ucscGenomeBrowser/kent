@@ -6,7 +6,7 @@
 #include "memgfx.h"
 #include "gemfont.h"
 
-static char const rcsid[] = "$Id: gemfont.c,v 1.8 2005/04/10 14:41:22 markd Exp $";
+static char const rcsid[] = "$Id: gemfont.c,v 1.9 2006/06/20 18:17:38 hiram Exp $";
 
 typedef union
     {
@@ -105,7 +105,7 @@ static int fchar_width(struct font_hdr *f,unsigned char *s)
 /* How wide is this character? */
 {
 int c;
-char *offsets;
+signed char *offsets;
 int width;
 int t;
 
