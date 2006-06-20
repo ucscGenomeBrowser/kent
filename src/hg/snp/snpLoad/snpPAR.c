@@ -3,7 +3,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpPAR.c,v 1.5 2006/06/20 18:36:27 heather Exp $";
+static char const rcsid[] = "$Id: snpPAR.c,v 1.6 2006/06/20 20:27:48 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *outputFileHandle = NULL;
@@ -95,6 +95,7 @@ void loadDatabase()
 FILE *f;
 struct sqlConnection *conn = hAllocConn();
 
+f = mustOpen("chrY_snp126.tab", "r");
 hgLoadNamedTabFile(conn, ".", "chrY_snp126", "snpPAR", &f);
 hFreeConn(&conn);
 }
