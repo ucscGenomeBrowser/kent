@@ -21228,21 +21228,13 @@ cp snp125.tab /cluster/home/heather/transfer/snp
 hgsql dbSnpHumanBuild125 -e 'select * from snp125Exceptions' > /cluster/home/heather/transfer/snp/snp125Exceptions.tab
 ssh hgwdev
 mysql> load data local infile 'snp125.tab' into table snp125; 
-# Query OK, 10113426 rows affected (3 min 8.28 sec)
-# Records: 10113426  Deleted: 0  Skipped: 0  Warnings: 0
-# note rowcount exactly matches ContigLocFilter;
 
 # create indexes
 mysql> alter table snp125 add index name (name);
-# Query OK, 10113426 rows affected (1 min 12.40 sec)
-# Records: 113426  Duplicates: 0  Warnings: 0
-
 mysql> alter table snp125 add index chrom (chrom, bin);
-# Query OK, 10113426 rows affected (2 min 17.20 sec)
-# Records: 10113426  Duplicates: 0  Warnings: 0
 
 mysql> load data local infile 'snp125Exceptions.tab' into table snp125Exceptions; 
-mysql> alter table snp125Exceptions add index name(name(10));
+mysql> alter table snp125Exceptions add index name(name);
 
 # create snp125ExceptionDesc table
 cd /cluster/data/dbSnp
