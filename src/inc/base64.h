@@ -2,6 +2,7 @@
  * by Galt Barber */
 
 #ifndef BASE64_H
+#define BASE64_H
 
 #define B64CHARS "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 

@@ -2,6 +2,7 @@
  * by Galt Barber */
 
 #ifndef QUOTEDP_H
+#define QUOTEDP_H
 
 char *quotedPrintableEncode(char *input);
 /* Use Quoted-Printable standard to encode a string.

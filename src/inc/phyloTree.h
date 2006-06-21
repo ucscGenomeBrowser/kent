@@ -1,5 +1,13 @@
 /* phlyogenetic trees */
 
+
+#ifndef PHYLOTREE_H
+#define PHYLOTREE_H
+
+#ifndef LINEFILE_H
+#include "linefile.h"
+#endif
+
 struct phyloName
 {
     char *name;		/* name of this node */
@@ -58,3 +66,5 @@ extern struct phyloTree *phyloFindMarkUpTree(struct phyloTree *tree);
 
 extern void phyloMarkUpTree(struct phyloTree *tree);
 /* mark all the nodes from this one up to the top of the tree */
+
+#endif
