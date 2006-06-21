@@ -1,74 +1,75 @@
-hgsql dbSnpHumanBuild125 < dropSplit125.sql
+# hgsql hg18snp126 < dropSplit126.sql
 echo "split..."
-snpSplitByChrom dbSnpHumanBuild125 ref_haplotype
+snpSplitByChrom hg18snp126 ref_assembly
 echo ""
 echo "locType..."
-snpLocType dbSnpHumanBuild125 ref_haplotype
+snpLocType hg18snp126 ref_assembly
 echo ""
 echo "expand allele..."
-snpExpandAllele dbSnpHumanBuild125 ref_haplotype
+snpExpandAllele hg18snp126 ref_assembly
 echo ""
 echo "sort by chromStart..."
-snpSort dbSnpHumanBuild125 ref_haplotype
-hgsql -e 'drop table chrM_snpTmp' dbSnpHumanBuild125
-hgsql -e 'rename table chrMT_snpTmp to chrM_snpTmp' dbSnpHumanBuild125
+snpSort hg18snp126 ref_assembly
+hgsql -e 'drop table chrM_snpTmp' hg18snp126
+hgsql -e 'rename table chrMT_snpTmp to chrM_snpTmp' hg18snp126
 echo ""
 echo "nib lookup..."
-snpRefUCSC dbSnpHumanBuild125 
+snpRefUCSC hg18snp126 
 echo ""
 echo "check alleles..."
-snpCheckAlleles dbSnpHumanBuild125 
+snpCheckAlleles hg18snp126 
 echo ""
 echo "lookup in chrN_snpFasta..."
-snpReadFasta dbSnpHumanBuild125 
+snpReadFasta hg18snp126 
 echo ""
 echo "check class and observed..."
-snpCheckClassAndObserved dbSnpHumanBuild125 
+snpCheckClassAndObserved hg18snp126 
 echo ""
 echo "get function..."
-snpFunction dbSnpHumanBuild125
+snpFunction hg18snp126
 echo ""
 echo "get validation status and heterozygosity..."
-snpSNP dbSnpHumanBuild125
+snpSNP hg18snp126
 echo ""
 echo "final table..."
 cp snpCheckAlleles.exceptions snpCheckAlleles.tab
 cp snpCheckClassAndObserved.exceptions snpCheckClassAndObserved.tab
 cp snpExpandAllele.exceptions snpExpandAllele.tab
 cp snpLocType.exceptions snpLocType.tab
-hgsql -e 'drop table snp125ExceptionsOld' dbSnpHumanBuild125
-hgsql -e 'rename table snp125Exceptions to snp125ExceptionsOld' dbSnpHumanBuild125
-/cluster/home/heather/kent/src/hg/snp/snpLoad/snpFinalTable dbSnpHumanBuild125
+# hgsql -e 'drop table snp126ExceptionsOld' hg18snp126
+# hgsql -e 'rename table snp126Exceptions to snp126ExceptionsOld' hg18snp126
+snpFinalTable hg18snp126 126
 rm snpCheckAlleles.tab
 rm snpCheckClassAndObserved.tab
 rm snpExpandAllele.tab
 rm snpLocType.tab
  
 # done with tmp files
-rm chr*snpTmp.tab
-hgsql dbSnpHumanBuild125 < dropTmp.sql
+# rm chr*snpTmp.tab
+# hgsql hg18snp126 < dropTmp.sql
 
 # PAR SNPs
-snpPAR dbSnpHumanBuild125
-hgsql -e 'load data local infile "snpPARexceptions.tab" into table snp125Exceptions' dbSnpHumanBuild125
+snpPAR hg18snp126
+hgsql -e 'load data local infile "snpPARexceptions.tab" into table snp126Exceptions' hg18snp126
  
 # load including PAR SNPs
-rm snp125.tab
 /bin/sh concat.sh
- rm chr*snp125.tab
-hgsql -e 'drop table snp125old' dbSnpHumanBuild125
-hgsql -e 'rename table snp125 to snp125old' dbSnpHumanBuild125
-hgsql dbSnpHumanBuild125 < $HOME/kent/src/hg/lib/snp125.sql
-hgsql -e 'load data local infile "snp125.tab" into table snp125' dbSnpHumanBuild125
-rm snp125.tab
+# rm chr*snp126.tab
+# hgsql -e 'drop table snp126old' hg18snp126
+hgsql -e 'rename table snp126 to snp126old' hg18snp126
+hgsql hg18snp126 < /cluster/home/heather/kent/src/hg/lib/snp126.sql
+hgsql -e 'load data local infile "snp126.tab" into table snp126' hg18snp126
+cp snp126.tab /cluster/home/heather/transfer/snp
+# rm snp126.tab
 
 # compareLoctype
-hgsql -e 'rename table snp125 to snp125new' dbSnpHumanBuild125
-snpCompareLoctype dbSnpHumanBuild125 snp124subset snp125new
-hgsql -e 'rename table snp125new to snp125' dbSnpHumanBuild125
+hgsql -e 'rename table snp126 to snp126new' hg18snp126
+snpCompareLoctype hg18snp126 snp125subset snp126new
+hgsql -e 'rename table snp126new to snp126' hg18snp126
 
 # multiples
-snpMultiple dbSnpHumanBuild125
-hgsql -e 'load data local infile "snpMultiple.tab" into table snp125Exceptions' dbSnpHumanBuild125
+snpMultiple hg18snp126
+hgsql -e 'load data local infile "snpMultiple.tab" into table snp126Exceptions' hg18snp126
 
-hgsql -e 'select count(*), exception from snp125Exceptions group by exception' dbSnpHumanBuild125
+hgsql -e 'select count(*), exception from snp126Exceptions group by exception' hg18snp126
+hgsql -N -e 'select * from snp126Exceptions' hg18snp126 > /cluster/home/heather/transfer/snp/snp126Exceptions.tab
