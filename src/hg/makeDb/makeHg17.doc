@@ -21410,3 +21410,89 @@ hgsql -e "alter table illumina add index chrom (chrom, bin)" hg17
     #	73 % of the data values are zero
 
 #########################################################################
+####### RE-BUILD RGD HUMAN QTL TRACKS (DONE 06/21/06 Fan) ##############
+
+ssh hgwdev
+mkdir -p /cluster/store8/rgd/human12062005
+rm /cluster/data/hg17/bed/rgdQtl
+ln -s /cluster/store8/rgd/human12062005 /cluster/data/hg17/bed/rgdQtl
+cd /cluster/data/hg17/bed/rgdQtl
+
+# download data files from RGD
+
+wget --timestamp ftp://rgd.mcw.edu/pub/RGD_genome_annotations/human/rgd_human_qtl_12062005.gff
+
+# remove extra line feed character at the end of lines
+
+rmLf rgd_human_qtl_12062005.gff > rgdQtl.gff
+
+# create rgdQtl.tab
+awk '{print $1"\t"$4"\t"$5"\t"$10}'  rgdQtl.gff |sed -e 's/Chr/chr/g'| \
+sed -e 's/"//g' |sed -e 's/RGD://g' | sed -e 's/;//g' |sort -u > rgdQtl.tab
+
+# create rgdQtlLink.tab
+
+cat rgdQtl.gff |cut -f 9 |sed -e 's/; Note /\t/g'|\
+sed -e 's/Alignment //' |sed -e 's/;Note /\t/' |\
+sed -e 's/"//g' |sed -e 's/RGD://' >j.tmp
+cut -f 2 j.tmp >j.1
+cut -f 1,3 j.tmp >j.2
+paste j.1 j.2 |sort -u >rgdQtlLink.tab
+rm j.1 j.2 j.tmp
+
+# load rgdQtl table
+hgLoadBed hg17 rgdQtl rgdQtl.tab
+
+# check rgdQtl table
+checkTableCoords hg17 rgdQtl
+
+# Go the following error messages:
+
+#hg17.rgdQtl has 2 records with end > chromSize.
+#hg17.rgdQtl has 2 records with end > chromSize.
+#hg17.rgdQtl has 2 records with end > chromSize.
+#hg17.rgdQtl has 1 records with end > chromSize.
+#hg17.rgdQtl has 2 records with end > chromSize.
+#hg17.rgdQtl has 3 records with end > chromSize.
+#hg17.rgdQtl has 1 records with end > chromSize.
+#hg17.rgdQtl has 3 records with end > chromSize.
+#hg17.rgdQtl has 2 records with end > chromSize.
+#hg17.rgdQtl has 1 records with end > chromSize.
+#hg17.rgdQtl has 3 records with end > chromSize.
+#hg17.rgdQtl has 2 records with end > chromSize.
+#hg17.rgdQtl has 1 records with end > chromSize.
+#hg17.rgdQtl has 1 records with end > chromSize.
+#hg17.rgdQtl has 1 records with end > chromSize.
+#hg17.rgdQtl has 1 records with end > chromSize.
+#hg17.rgdQtl has 1 records with end < start.
+
+hgsql hg17 -N -e 'select "do1", name, c.size from rgdQtl r, chromInfo c where chromEnd > c.size and r.chrom=c.chrom' >doall
+
+cat << '_EOF_' > do1
+hgsql hg17 -e "update rgdQtl set chromEnd = '${2}' where name='${1}'"
+'_EOF_'
+
+chmod +x do*
+doall
+
+checkTableCoords hg17 rgdQtl
+#hg17.rgdQtl has 1 records with end < start.
+
+hgsql hg17 -e 'select * from rgdQtl where chromEnd < chromStart'
+# bin     chrom   chromStart      chromEnd        name
+# 9       chr10   7135612 371019  BW63_H
+# 0       chr20   77628133        5242324 AASTH39_H
+
+# Don't know why checkTableCoords only catches one of the two erros.
+hgsql hg17 -e "update rgdQtl set chromStart = 271019 where name='BW63_H'"
+hgsql hg17 -e "update rgdQtl set chromEnd = 7135612 where name='BW63_H'"
+
+# Delete the following record.  The RGD QTL is very questionable. 
+hgsql hg17 -e "delete from rgdQtl where name='AASTH39_H'"
+
+# load rgdQtlLink table
+hgsql hg17 -e "drop table hg17.rgdQtlLink;"
+hgsql hg17 <~/kent/src/hg/lib/rgdQtlLink.sql
+hgsql hg17 -e 'load data local infile "rgdQtlLink.tab" into table hg17.rgdQtlLink;'
+
+########################################################################
