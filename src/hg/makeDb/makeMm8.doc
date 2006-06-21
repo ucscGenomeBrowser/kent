@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.56 2006/06/21 21:34:19 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.57 2006/06/21 21:42:09 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5887,8 +5887,6 @@ elsif ($a[5] =~ m/^N[TC]_\d+$/)
 
 #####################################################################
 #### LOAD ENSEMBL GENES (DONE - 2006-06-21 - Hiram)
-#	needed for Gene Sorter procedure below
-#	Ensembl released Mouse build 34 the week of August 10th, 2005
    mkdir /cluster/data/mm8/bed/ensGene
    cd /cluster/data/mm7/bed/ensGene
 
