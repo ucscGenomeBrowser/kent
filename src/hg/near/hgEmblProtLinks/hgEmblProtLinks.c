@@ -5,7 +5,7 @@
 #include "options.h"
 #include "emblParse.h"
 
-static char const rcsid[] = "$Id: hgEmblProtLinks.c,v 1.1 2003/09/25 00:05:07 kent Exp $";
+static char const rcsid[] = "$Id: hgEmblProtLinks.c,v 1.2 2006/06/21 14:38:30 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -44,7 +44,6 @@ void hgEmblProtLinks(char *inName, char *outName)
 {
 struct lineFile *lf = lineFileOpen(inName, TRUE);
 FILE *f = mustOpen(outName, "w");
-struct dyString *dy = newDyString(4*1024);
 struct hash *hash;
 
 while ((hash = emblRecord(lf)) != NULL)
