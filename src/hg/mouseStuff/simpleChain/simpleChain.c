@@ -241,7 +241,7 @@ void chainToPslWrite(struct chain *inChain, FILE *outFile, int tSize, int qSize)
 struct psl *totalPsl = (struct psl *)inChain->id;
 int lastTEnd=0, lastQEnd=0;
 struct psl psl;
-struct cBlock *chainBlock , *nextChainBlock = NULL, *prevChainBlock = NULL;
+struct cBlock *chainBlock, *prevChainBlock = NULL;
 int qInsert, tInsert;
 int blockNum;
 static unsigned *blockSizes = NULL;
@@ -345,10 +345,8 @@ void simpleChain(char *psls,  char *outChainName)
 {
 struct psl *newPsl = 0;
 int lastChainId = -1;
-int superCount = 0;
-struct psl *prevPsl, *nextPsl;
+struct psl *nextPsl;
 struct psl *fakePslList;
-int jj;
 int deletedBases, addedBases;
 FILE *outChains = mustOpen(outChainName, "w");
 struct seqPair *spList = NULL, *sp;
@@ -356,9 +354,7 @@ struct lineFile *pslLf = pslFileOpen(psls);
 struct dyString *dy = newDyString(512);
 struct psl *psl;
 struct hash *pslHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
-struct hash *chainHash = newHash(0);  /* Hash keyed by qSeq<strand>tSeq */
 struct chain *chain, *chainList = NULL;
-struct cBlock *block , *nextBlock = NULL, *prevBlock = NULL;
 int count;
 
 count = 0;
