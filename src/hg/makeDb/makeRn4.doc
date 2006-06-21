@@ -3723,7 +3723,106 @@ BASE=/cluster/data/rn4/bed/blastz.danRer4.2006-06-19
     cd kgProtMap
     hgLoadPsl -tNameIx rn4 psl.tmp/kgProtMap.psl
 
-#################################################################
+########################################################################
+#### BUILD SUPERFAMILY RELATED TABLES (DONE - 2006-06-19 - Fan)
+
+# Download latest Superfamily data files and build the Superfamily DB
+# from supfam.mrc-lmb.cam.ac.uk
+
+    mkdir /cluster/store10/superfamily/060619
+    ln -s /cluster/store10/superfamily/060619 /cluster/data/superfamily/060619
+    cd /cluster/data/superfamily/060619
+
+# ftp over the following two files:
+
+    ass_18-Jun-2006.tab.gz
+    supfam_18-Jun-2006.sql.gz
+
+    gzip -d *.gz
+
+# Load the Superfamily database
+    hgsql rn4 -e "create database superfam060619"
+    nice hgsql superfam060619 < supfam_18-Jun-2006.sql &
+
+# This may take about an hour.
+
+# Make sure to add an index on id of the des table of superfam060619.
+    hgsql superfam060619 -e "create index id on des(id);"
+
+    hgsql superfam060619 < ~/src/hg/lib/sfAssign.sql
+    hgsql superfam060619 -e 'load data local infile "ass_18-Jun-2006.tab" into table superfam060619.sfAssign;'
+
+# Build or rebuild Superfamily track and create sf tables needed for PB
+
+   hgsql rn4 < ~/src/hg/lib/sfAssign.sql
+
+   cd /cluster/data/superfamily/060619  
+   hgsql rn4 -e 'load data local infile "ass_18-Jun-2006.tab" into table rn4.sfAssign;'
+
+# If rn4.sfDes already exists, drop it.
+
+   hgsql superfam060619 -N -e "select * from des" >sfDes.tab
+   hgsql rn4 < ~/src/hg/lib/sfDes.sql
+   hgsql rn4 -e 'load data local infile "sfDes.tab" into table sfDes'
+
+# Build ensemblXref3 
+
+    # Get the ensembl gene/protein cross-reference data from Ensembl BioMart
+    # http://www.ensembl.org/Multi/martview
+    # Follow this sequence through the pages:
+    # Page 1) Select Ensembl39 and Rat. Hit next.
+    # Page 2) Do not select anything. Hit next.
+    # Page 3) Choose the "Feature" box, select Ensembl gene ID, transcript ID, peptide ID,
+              UniProt/TrEMBL ID, UniProt/SWISSPROT ID, and UniProt/SWISSPROT Accession
+    # Page 4) Choose "Text, tab separated".  choose gzip compression.  hit export.
+    # Save as ensXref.tsv.gz
+
+    ssh hgwdev
+    cd /cluster/data/rn4/bed/sf
+    hgsql rn4 < ~/src/hg/lib/ensemblXref3Temp.sql
+    hgsql rn4 -e \
+    'load data local infile "ensXref.tsv" into table ensemblXref3Temp ignore 1 lines'
+
+    hgsql rn4 -N -e \
+    'select gene, "0", transcript, "0", protein, "0", tremblAcc, swissDisplayId, swissAcc from ensemblXref3Temp' \
+    > ensemblXref3.tab
+
+    hgsql rn4 -e 'drop table ensemblXref3'
+    hgsql rn4 <~/src/hg/lib/ensemblXref3.sql
+    hgsql rn4 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3'
+
+# If rn4.superfamily already exists, drop it.
+   cd /cluster/data/rn4/bed
+   mkdir /cluster/data/rn4/bed/sf.20060619
+   ln -s sf.20060619 sf
+   cd sf
+   hgSuperfam rn4 superfam060619 > sf.log
+
+# It is normal that many proteins do not have corresponding Superfamily entries.
+
+# If rn4.sfDescription exists, drop it.
+
+   hgsql rn4 < ~/src/hg/lib/sfDescription.sql
+   hgsql rn4 -e 'LOAD DATA local INFILE "sfDescription.tab"  into table rn4.sfDescription;'
+
+# Finally, load the superfamily table.
+
+   hgLoadBed rn4 superfamily superfamily.tab -tab
+
+# Create knownToSuperfamily table
+# Note hs is changed into ht for this Superfamily release.
+   
+   cat /cluster/data/superfamily/060619/ass_18-Jun-2006.tab \
+   | hgKnownToSuper rn4 rn stdin
+# created 25287 rows in knownToSuper
+
+# Build tables needed by pbGlobal in proteins060115
+
+   cd /cluster/data/superfamily/060619  
+   hgsql proteins060115 -e 'load data local infile "ass_18-Jun-2006.tab" into table sfAssign'
+   hgsql proteins060115 -e 'load data local infile "sfDes.tab" into table sfDes'
+
+########################################################################
 # Build rn4 PROTEOME BROWSER TABLES (DONE 6/20/06, Fan)
 
 # These are instructions for building tables 
