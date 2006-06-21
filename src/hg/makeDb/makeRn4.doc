@@ -3724,3 +3724,122 @@ BASE=/cluster/data/rn4/bed/blastz.danRer4.2006-06-19
     hgLoadPsl -tNameIx rn4 psl.tmp/kgProtMap.psl
 
 #################################################################
+# Build rn4 PROTEOME BROWSER TABLES (DONE 6/20/06, Fan)
+
+# These are instructions for building tables 
+# needed for the Proteome Browser. 
+ 
+# DON'T START THESE UNTIL TABLES FOR KNOWN GENES AND kgProtMap table
+# ARE REBUILT.  
+# This build is based on proteins DBs dated 060115.
+
+# Create the working directory
+
+    ssh hgwdev
+    mkdir /cluster/store11/kg/kgRn4A/pb-2006-06-19
+    cd /cluster/data/rn4/bed
+    rm pb
+    ln -s /cluster/store11/kg/kgRn4A/pb-2006-06-19 pb
+    cd pb
+
+# Define pep* tables in rn4 DB
+
+	cat ~/kent/src/hg/lib/pep*.sql > pepAll.sql
+
+#  First edit out pepPred table definition, then
+
+	hgsql rn4 < pepAll.sql
+
+# Build the pepMwAa table
+
+  hgsql proteins060115 -N -e \
+"select info.acc, molWeight, aaSize from sp060115.info, sp060115.accToTaxon where accToTaxon.taxon=10116 and accToTaxon.acc = info.acc" > pepMwAa.tab
+
+hgsql rn4 -e 'load data local infile "pepMwAa.tab" into table pepMwAa'
+
+o Build the pepPi table
+
+    hgsql proteins060115 -e \
+    "select info.acc from sp060115.info, sp060115.accToTaxon where accToTaxon.taxon=10116 and accToTaxon.acc = info.acc" > protAcc.lis
+
+    hgsql rn4 -N -e 'select proteinID from knownGene where proteinID like "%-%"' | sort -u >> protAcc.lis
+
+    pbCalPi protAcc.lis sp060115 pepPi.tab
+    hgsql rn4 -e 'delete from pepPi'
+    hgsql rn4 -e 'load data local infile "pepPi.tab" into table rn4.pepPi'
+
+# Calculate and load pep distributions
+
+    pbCalDist sp060115 proteins060115 10116 rn4 >pbCalDist.out
+    wc  pbCalDist.out
+
+    hgsql rn4
+    load data local infile "pepExonCntDist.tab" into table rn4.pepExonCntDist;
+    load data local infile "pepCCntDist.tab" into table rn4.pepCCntDist;
+    load data local infile "pepHydroDist.tab" into table rn4.pepHydroDist;
+    load data local infile "pepMolWtDist.tab" into table rn4.pepMolWtDist;
+    load data local infile "pepResDist.tab" into table rn4.pepResDist;
+    load data local infile "pepIPCntDist.tab" into table rn4.pepIPCntDist;
+    load data local infile "pepPiDist.tab" into table rn4.pepPiDist;
+    quit
+
+# Calculate frequency distributions
+
+    pbCalResStd sp060115 10116 rn4
+
+# Create pbAnomLimit and pbResAvgStd tables
+
+   hgsql rn4 -e "drop table pbAnomLimit"
+   hgsql rn4 -e "drop table pbResAvgStd"
+   hgsql rn4 < ~/src/hg/lib/pbAnomLimit.sql
+   hgsql rn4 < ~/src/hg/lib/pbResAvgStd.sql
+
+   hgsql rn4 -e 'load data local infile "pbResAvgStd.tab" into table rn4.pbResAvgStd;'
+   hgsql rn4 -e 'load data local infile "pbAnomLimit.tab" into table rn4.pbAnomLimit;'
+
+# Create pbStamp table for PB
+  hgsql rn4 -e "drop table pbStamp"
+  hgsql rn4 < ~/src/hg/lib/pbStamp.sql
+  hgsql rn3 -N -e 'select * from pbStamp' > pbStamp.tab
+
+  hgsql rn4 -e 'delete from pbStamp'
+  hgsql rn4 -e 'load data local infile "pbStamp.tab" into table rn4.pbStamp'
+
+# Turn on Proteome Browser for rn4.
+
+  hgsql -e 'update dbDb set hgPbOk=1 where name="rn4"' \
+        -h genome-testdb hgcentraltest
+
+# Adjust drawing parameters for Proteome Browser stamps
+
+  Now invoke Proteome Browser and adjust various drawing parameters
+  (mostly the ymax of each stamp) if necessary, by updating the 
+  pbStamp.tab file and then delete and reload the pbStamp table. 
+
+  hgsql rn4 -e "drop table pbStamp"
+  hgsql rn4 < ~/src/hg/lib/pbStamp.sql
+  hgsql rn4 -e 'load data local infile "pbStamp.tab" into table rn4.pbStamp'
+
+# Perform preliminary review of Proteome Browser for rn4, then
+  notify QA for formal review.
+
+################################################################################
+# BUILD KNOWN GENE LIST FOR GOOGLE. (DONE, 6/6/06, Fan)  
+# make knownGeneLists.html rn4GeneList.html mm5GeneList.html rm3GeneList.html
+
+    cd /cluster/data/rn4/bed
+    rm -rf knownGeneList/rn4
+
+# Run hgKnownGeneList to generate the tree of HTML pages
+# under ./knownGeneList/rn4
+
+    hgKnownGeneList rn4
+
+# copy over to /usr/local/apache/htdocs
+
+    rm -rf /usr/local/apache/htdocs/knownGeneList/rn4
+    mkdir -p /usr/local/apache/htdocs/knownGeneList/rn4
+    cp -Rfp knownGeneList/rn4/* /usr/local/apache/htdocs/knownGeneList/rn4
+
+################################################################################
+
