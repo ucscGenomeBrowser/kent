@@ -4992,3 +4992,39 @@ CREATE TABLE affyToHg16Orthologs (
    # edit hgc.c to use this table on affyZebrafish details page and add
    # a search to use the human ortholog gene symbol in a search:
    # affyZebrafishHg16Ortholog, put in trackDb/zebrafish/trackDb.ra
+
+###########################################################################
+#  SWAP rn4 BLASTZ CHAIN/NET (DONE, 2006-06-19, hartera)
+#  See also makeRn4.doc
+    ssh pk
+    cd /cluster/data/rn4/bed/blastzDanRer4.2006-06-19
+    # blastz parameters used in blastz alignment of danRer4 on mm8:
+    # BLASTZ_ABRIDGE_REPEATS=0
+    # BLASTZ_H=2000
+    # BLASTZ_Y=3400
+    # BLASTZ_L=6000
+    # BLASTZ_K=2200
+    # BLASTZ_M=50
+    # BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+    nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+	-bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+	-swap `pwd`/DEF >& swap.log &
+    
+    ssh hgwdev
+    featureBits danRer4 chainRn4Link 
+    # 68978593 bases of 1626093931 (4.242%) in intersection
+    featureBits danRer4 refGene:cds chainRn4Link -chrom=chr1 -enrichment
+    # refGene:cds 0.746%, chainRn4Link 4.333%, both 0.564%, 
+    # cover 75.55%, enrich 17.43x
+    featureBits danRer3 refGene:cds chainRn4Link -chrom=chr1 -enrichment
+    # refGene:cds 0.786%, chainRn4Link 4.320%, both 0.604%, 
+    # cover 76.87%, enrich 17.80x
+    featureBits danRer4 refGene:cds netRn4 -chrom=chr1 -enrichment
+    # refGene:cds 0.746%, netRn4 29.601%,both 0.623%,cover 83.49%,enrich 2.82x
+    featureBits danRer3 refGene:cds netRn4 -chrom=chr1 -enrichment
+    # refGene:cds 0.786%, netRn4 33.103%, both 0.671%,cover 85.33%,enrich 2.58x
+    # Add symbolic link to new swap directory 
+    ssh kkstore04
+    cd /cluster/data/danRer4/bed
+    ln -s blastz.rn4.swap blastz.rn4
+    # Check README.txt for downloads. 
