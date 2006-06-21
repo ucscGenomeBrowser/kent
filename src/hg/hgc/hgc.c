@@ -195,7 +195,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1036 2006/06/21 16:51:39 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1037 2006/06/21 20:07:03 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -12110,6 +12110,51 @@ for (slNameElement = exceptionList; slNameElement != NULL; slNameElement = slNam
 hFreeConn(&conn);
 }
 
+void writeSnpExceptionWithVersion(char *itemName, int version)
+{
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char   query[256];
+int    start = cartInt(cart, "o");
+struct snp125Exceptions el;
+int count = 0;
+struct slName *exceptionList = NULL;
+struct slName *slNameElement = NULL;
+
+safef(query, sizeof(query), 
+      "select count(*) from snp%dExceptions where chrom='%s' and chromStart=%d and name='%s'", 
+      version, seqName, start, itemName);
+count = sqlQuickNum(conn, query);
+if (count == 0) return;
+
+printf("<BR><BR>Annotations:\n");
+
+safef(query, sizeof(query), 
+      "select * from snp%dExceptions where chrom='%s' and chromStart=%d and name='%s'", 
+      version, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr))!=NULL)
+    {
+    snp125ExceptionsStaticLoad(row, &el);
+    slNameElement = slNameNew(cloneString(el.exception));
+    slAddHead(&exceptionList, slNameElement);
+    }
+sqlFreeResult(&sr);
+
+for (slNameElement = exceptionList; slNameElement != NULL; slNameElement = slNameElement->next)
+    {
+    safef(query, sizeof(query), 
+      "select description from snp%dExceptionDesc where exception = '%s'", version, slNameElement->name);
+    sr = sqlGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        printf("<BR>%s\n", row[0]);
+    sqlFreeResult(&sr);
+    }
+hFreeConn(&conn);
+}
+
 void doSnp125(struct trackDb *tdb, char *itemName)
 /* Process SNP details. */
 {
@@ -12140,6 +12185,49 @@ doSnpEntrezGeneLink(tdb, itemName);
 
 if (hTableExists("snp125Exceptions") && hTableExists("snp125ExceptionDesc"))
     writeSnp125Exception(itemName);
+
+printTrackHtml(tdb);
+sqlFreeResult(&sr);
+hFreeConn(&conn);
+}
+
+
+void doSnpWithVersion(struct trackDb *tdb, char *itemName, int version)
+/* Process SNP details. */
+{
+char   *group = tdb->tableName;
+struct snp125 snp;
+int    start = cartInt(cart, "o");
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char   query[256];
+int    rowOffset=hOffsetPastBin(seqName, group);
+char title[64];
+char tableName1[64];
+char tableName2[64];
+
+safef(title, sizeof(title), "dbSNP build %d", version);
+cartWebStart(cart, title);
+printf("<H2>dbSNP build %d %s</H2>\n", version, itemName);
+safef(query, sizeof(query), "select * from %s where chrom='%s' and "
+      "chromStart=%d and name='%s'", group, seqName, start, itemName);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+snp125StaticLoad(row+rowOffset, &snp);
+bedPrintPos((struct bed *)&snp, 3);
+/*printSnpAlignment(snp);*/
+printf("<BR>\n");
+printSnp125Info(snp);
+printf("<BR>\n");
+printf("<A HREF=\"http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?");
+printf("type=rs&rs=%s\" TARGET=_blank>dbSNP</A>\n", itemName);
+doSnpEntrezGeneLink(tdb, itemName);
+
+safef(tableName1, sizeof(tableName1), "snp%dExceptions", version);
+safef(tableName2, sizeof(tableName2), "snp%dExceptionDesc", version);
+if (hTableExists(tableName1) && hTableExists(tableName2))
+    writeSnpExceptionWithVersion(itemName, version);
 
 printTrackHtml(tdb);
 sqlFreeResult(&sr);
@@ -18203,7 +18291,7 @@ else if (sameWord(track, "snp125"))
     }
 else if (sameWord(track, "snp126"))
     {
-    doSnp125(tdb, item);
+    doSnpWithVersion(tdb, item, 126);
     }
 else if (sameWord(track, "cnpIafrate"))
     {
