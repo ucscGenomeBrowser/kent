@@ -10104,6 +10104,21 @@ mysql> load data local infile 'snpMultiple.tab' into table snp126Exceptions;
 # rangeToExact = 15148
 # oldToNew = 10649
 
+# run and review snpCompareWeight
+# load into database snp125snp126
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpCompareWeight snp125snp126 weight125 weight126
+# cat snpCompareWeightCounts.out
+# oneToOne = 9161896
+# oneToTwo = 0   <-- good
+# oneToThree = 531  <--- interesting but minor 
+# twoToTwo = 38  <-- okay
+# twoToOne = 1896  <--- improvement
+# twoToThree = 0   <-- good
+# threeToThree = 494  <-- okay
+# threeToOne = 37571  <-- improvement
+# threeToTwo = 12  <-- improvement
+
+
 # load on hgwdev
 cp snp126.tab /cluster/home/heather/transfer/snp
 hgsql hg18snp126 -e 'select * from snp126Exceptions' > /cluster/home/heather/transfer/snp/snp126Exceptions.tab
@@ -10121,6 +10136,7 @@ cd /cluster/data/dbSnp
 # add counts to exception.template
 hgsql hg18 < snp126ExceptionDesc.sql
 mysql> load data local file 'exception.template' into table snp126ExceptionDesc;
+
 
 #################################################################
 ###### BUILD SUPERFAMILY RELATED TABLES (DONE - 2006-06-20 - Fan)
