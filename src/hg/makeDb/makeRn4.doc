@@ -3710,3 +3710,17 @@ BASE=/cluster/data/rn4/bed/blastz.danRer4.2006-06-19
     featureBits rn4 refGene:cds netDanRer3 -chrom=chr1 -enrichment
     # refGene:cds 0.731%, netDanRer3 25.934%, both 0.530%, cover 72.52%, 
     # enrich 2.80x
+
+#########################################################################
+#### REBUILD kgProtMap TABLE (DONE. 6/19/06 Fan)
+# Existing kgProtMap table only had 33 entries. 
+
+    ssh kolossus
+   
+    cd /cluster/store9/rn4/bed/kgRn4A
+    ~/kent/src/hg/protein/kgProtMap2.sh kgRn4A rn4 060115
+
+    cd kgProtMap
+    hgLoadPsl -tNameIx rn4 psl.tmp/kgProtMap.psl
+
+#################################################################
