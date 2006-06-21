@@ -3642,4 +3642,71 @@ hgMapViaSwissProt rn4 knownGene name proteinID Pfam knownToPfam
 hgsql -e "select count(*) from knownToPfam;" rn4
 
 #########################################################################
+# BLASTZ/CHAIN/NET DANRER4 - NO LINSPECREP (DONE, 2006-06-19, hartera) 
+    ssh pk
+    mkdir /cluster/data/rn4/bed/blastz.danRer4.2006-06-19
+    cd /cluster/data/rn4/bed/blastz.danRer4.2006-06-19
+    # There are no lineage-specific repeats for these two species. All repeats
+    # were not used as this was found to lower coverage with rn4 and danRer3
+    # so use dynamic masking instead (M parameter for Blastz).
+    cat << '_EOF_' > DEF
+# rat (rn4) vs zebrafish (danRer4)
+export PATH=/usr/bin:/bin:/usr/local/bin:/cluster/bin/penn:/cluster/bin/x86_64:/cluster/home/angie/schwartzbin:/parasol/bin
 
+BLASTZ=blastz.v7.x86_64
+BLASTZ_ABRIDGE_REPEATS=0
+
+# Reuse parameters from hg16-fr1, danRer-hg17 and mm5-danRer
+BLASTZ_H=2000
+BLASTZ_Y=3400
+BLASTZ_L=6000
+BLASTZ_K=2200
+BLASTZ_M=50
+BLASTZ_Q=/cluster/data/blastz/HoxD55.q
+
+# TARGET: Rat Rn4
+SEQ1_DIR=/scratch/hg/rn4/nib
+SEQ1_LEN=/cluster/data/rn4/chrom.sizes
+SEQ1_CHUNK=20000000
+SEQ1_LAP=10000
+
+# QUERY: Zebrafish (danRer4)
+#  large enough chunk to do complete chroms at once
+SEQ2_DIR=/san/sanvol1/scratch/danRer4/nib
+SEQ2_LEN=/san/sanvol1/scratch/danRer4/chrom.sizes
+SEQ2_CHUNK=250000000
+SEQ2_LAP=0
+
+BASE=/cluster/data/rn4/bed/blastz.danRer4.2006-06-19
+'_EOF_'
+    # << for emacs
+    chmod +x DEF
+    nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        `pwd`/DEF >& do.log &
+    tail -f do.log
+    # Took 2 hours and 50 minutes to run.
+    ln -s blastz.danRer4.2006-06-19 /cluster/data/rn4/bed/blastz.danRer4 
+    # Do swap to create danRer4 vs rn4:
+    ssh pk
+    cd /cluster/data/rn4/bed/blastz.danRer4.2006-06-19
+    nice /cluster/bin/scripts/doBlastzChainNet.pl -verbose=2 \
+        -bigClusterHub=pk -chainMinScore=5000 -chainLinearGap=loose \
+        -swap `pwd`/DEF >& swap.log &
+    # Took about 10 minutes to run.
+    rm *.log
+    # Check README.txt is correct for alignment downloads. 
+    featureBits rn4 chainDanRer4Link
+    # 67765280 bases of 2571531505 (2.635%) in intersection 
+    featureBits rn4 refGene:cds chainDanRer4Link -chrom=chr1 -enrichment
+    # refGene:cds 0.731%, chainDanRer4Link 3.337%, both 0.518%, 
+    # cover 70.86%, enrich 21.24x
+    featureBits rn4 refGene:cds chainDanRer3Link -chrom=chr1 -enrichment
+    # refGene:cds 0.731%, chainDanRer3Link 2.699%, both 0.475%, 
+    # cover 64.89%, enrich 24.04x
+    featureBits rn4 refGene:cds netDanRer4 -chrom=chr1 -enrichment
+    # refGene:cds 0.731%, netDanRer4 29.999%, both 0.575%, cover 78.65%, 
+    # enrich 2.62x
+    featureBits rn4 refGene:cds netDanRer3 -chrom=chr1 -enrichment
+    # refGene:cds 0.731%, netDanRer3 25.934%, both 0.530%, cover 72.52%, 
+    # enrich 2.80x
