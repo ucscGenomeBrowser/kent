@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.65 2006/06/12 21:41:51 hartera Exp $"
+#	"$Id: makeMm7.doc,v 1.66 2006/06/21 21:58:53 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12371,3 +12371,88 @@ exit 0
    # test by converting a region using the "convert" link on
    # the browser, and comparing to blat of the same region
 
+#########################################################################
+# REGULATORY POTENTIAL (DONE - 2006-06-12 - Hiram)
+    #	download data from "James Taylor" <james@bx.psu.edu>
+    ssh kkstore02
+    cd /cluster/data/mm7/bed
+    mkdir /cluster/store11/mm7/bed/regPotential7X
+    ln -s /cluster/store11/mm7/bed/regPotential7X .
+    cd regPotential7X
+    
+    #	This is a lot of data
+    time for C in 1 2 3 4 5 6 7 8 9 X 10 11 12 13 14 15 16 17 18 19
+    do
+    wget --timestamping \
+"http://www.bx.psu.edu/~james/esperr_rp_7way_scores/genome_scores_mm7/chr${C}.scores.truncated.bz2"
+    done
+
+    wget --timestamping \
+"http://www.bx.psu.edu/~james/esperr_rp_7way_scores/genome_scores_mm7/trackDb.html" -O description.html
+
+    time for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X
+    do
+	bzcat chr${C}.scores.truncated.bz2
+    done | wigEncode -noOverlap  stdin regPotential7X.wig regPotential7X.wib
+    #	Converted stdin, upper limit 1.00, lower limit -1.00
+    #	real    38m10.483s
+    #	user    37m16.747s
+    #	sys     0m51.110s
+
+    #	Loading the table on hgwdev
+    ssh hgwdev
+    cd /cluster/data/mm7/bed/regPotential7X
+    ln -s /cluster/data/mm7/bed/regPotential7X/regPotential7X.wib \
+	/gbdb/mm7/wib/regPotential7X.wib
+    #	using the tmpDir is faster since it is on local disk and it will
+    #	clean up any temporary .tab file it creates there
+    time hgLoadWiggle -tmpDir=/scratch/tmp \
+	mm7 regPotential7X regPotential7X.wig
+
+#########################################################################
+# REGULATORY POTENTIAL (DONE - 2006-06-12 - Hiram)
+    #	download data from "James Taylor" <james@bx.psu.edu>
+    ssh kkstore02
+    cd /cluster/data/mm7/bed
+    mkdir /cluster/store8/mm7/bed/regPotential7X
+    ln -s /cluster/store8/mm7/bed/regPotential7X .
+    cd regPotential7X
+    
+    #	This is a lot of data
+    time for C in 1 2 3 4 5 6 7 8 9 X 10 11 12 13 14 15 16 17 18 19
+    do
+    wget --timestamping \
+"http://www.bx.psu.edu/~james/esperr_rp_7way_scores/genome_scores_mm7/chr${C}.scores.truncated.bz2"
+    done
+    #	real    77m57.028s
+
+    wget --timestamping \
+"http://www.bx.psu.edu/~james/esperr_rp_7way_scores/genome_scores_mm7/trackDb.html" -O description.html
+
+    time for C in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 X
+    do
+	bzcat chr${C}.scores.truncated.bz2
+    done | wigEncode -noOverlap  stdin regPotential7X.wig regPotential7X.wib
+    #	Converted stdin, upper limit 1.00, lower limit 0.00
+    #	real    22m7.525s
+
+    #	Loading the table on hgwdev
+    ssh hgwdev
+    cd /cluster/data/mm7/bed/regPotential7X
+    ln -s /cluster/data/mm7/bed/regPotential7X/regPotential7X.wib \
+	/gbdb/mm7/wib/regPotential7X.wib
+    #	using the tmpDir is faster since it is on local disk and it will
+    #	clean up any temporary .tab file it creates there
+    time hgLoadWiggle -tmpDir=/scratch/tmp \
+	mm7 regPotential7X regPotential7X.wig
+    #	real    0m28.683s
+
+    #	create a histogram
+    ssh kolossus
+    cd /cluster/data/mm7/bed/regPotential7X
+    time hgWiggle -verbose=2 -doHistogram -hBinSize=0.01 -hBinCount=100 \
+	-hMinVal=0.0 -db=mm7 regPotential7X > histogram.data 2>&1
+    #	real    1m38.660s
+    #	only %65 of the data is 0.0
+
+#########################################################################
