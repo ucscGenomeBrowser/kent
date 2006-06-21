@@ -195,7 +195,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1037 2006/06/21 20:07:03 heather Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1038 2006/06/21 22:20:03 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17804,6 +17804,7 @@ void doIgtc(struct trackDb *tdb, char *itemName)
 {
 char *name = cloneString(itemName);
 char *source = NULL;
+char *encodedName = cgiEncode(itemName);
 
 cgiDecode(name, name, strlen(name));
 source = strrchr(name, '_');
@@ -17812,7 +17813,7 @@ if (source == NULL)
 else
     source++;
 
-genericHeader(tdb, itemName);
+genericHeader(tdb, name);
 printf("<B>Source:</B> %s<BR>\n", source);
 printCustomUrl(tdb, name, TRUE);
 if (startsWith("psl", tdb->type))
@@ -17835,8 +17836,18 @@ if (startsWith("psl", tdb->type))
 	struct psl *psl = pslLoad(row+rowOffset);
 	printPos(psl->tName, psl->tStart, psl->tEnd, psl->strand, TRUE,
 		 psl->qName);
-	printf("<B>Alignment details:</B>\n");
-	pslDumpHtml(psl);
+	if (hGenBankHaveSeq(itemName, NULL))
+	    {
+	    printf("<H3>%s/Genomic Alignments</H3>", name);
+	    printAlignments(psl, start, "htcCdnaAli", tdb->tableName,
+			    encodedName);
+	    }
+	else
+	    {
+	    printf("<B>Alignment details:</B>\n");
+	    pslDumpHtml(psl);
+	    }
+	pslFree(&psl);
 	}
     sqlFreeResult(&sr);
     hFreeConn(&conn);
