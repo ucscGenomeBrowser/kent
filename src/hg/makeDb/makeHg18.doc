@@ -10122,3 +10122,74 @@ cd /cluster/data/dbSnp
 hgsql hg18 < snp126ExceptionDesc.sql
 mysql> load data local file 'exception.template' into table snp126ExceptionDesc;
 
+#################################################################
+###### BUILD SUPERFAMILY RELATED TABLES (DONE - 2006-06-20 - Fan)
+
+# Build Superfamily track and create sf tables needed for PB
+
+   ssh hgwdev
+   hgsql hg18 < ~/src/hg/lib/sfAssign.sql
+
+   cd /cluster/data/superfamily/060619  
+   hgsql hg18 -e 'load data local infile "ass_18-Jun-2006.tab" into table hg18.sfAssign;'
+
+# If hg18.sfDes already exists, drop it.
+
+   mkdir /cluster/data/hg18/bed/sf
+   cd /cluster/data/hg18/bed/sf
+
+   hgsql superfam060619 -N -e "select * from des" >sfDes.tab
+   hgsql hg18 < ~/src/hg/lib/sfDes.sql
+   hgsql hg18 -e 'load data local infile "sfDes.tab" into table sfDes'
+
+# Build ensemblXref3 
+
+    # Get the ensembl gene/protein cross-reference data from Ensembl BioMart
+    # http://www.ensembl.org/Multi/martview
+    # Follow this sequence through the pages:
+    # Page 1) Select Ensembl39 and Homo Sapien. Hit next.
+    # Page 2) Do not select anything. Hit next.
+    # Page 3) Choose the "Feature" box, select Ensembl gene ID, transcript ID, peptide ID,
+              UniProt/TrEMBL ID, UniProt/SWISSPROT ID, and UniProt/SWISSPROT Accession
+    # Page 4) Choose "Text, tab separated".  choose gzip compression.  hit export.
+    # Save as ensembXref3.gz
+
+    ssh hgwdev
+    cd /cluster/data/hg18/bed/ensembl
+    gzip -d ensembXref3.gz
+
+    hgsql hg18 < ~/src/hg/lib/ensemblXref3Temp.sql
+    hgsql hg18 -e \
+    'load data local infile "ensemblXref3" into table ensemblXref3Temp ignore 1 lines'
+
+    hgsql hg18 -N -e \
+    'select gene, "0", transcript, "0", protein, "0", tremblAcc, swissDisplayId, swissAcc from ensemblXref3Temp' \
+    > ensemblXref3.tab
+
+    hgsql hg18 -e 'drop table ensemblXref3'
+    hgsql hg18 <~/src/hg/lib/ensemblXref3.sql
+    hgsql hg18 -e 'load data local infile "ensemblXref3.tab" into table ensemblXref3'
+
+# If hg18.superfamily already exists, drop it.
+   cd /cluster/data/hg18/bed/sf
+   hgSuperfam hg18 superfam060619 > sf.log
+
+# It is normal that many proteins do not have corresponding Superfamily entries.
+
+# If hg18.sfDescription exists, drop it.
+
+   hgsql hg18 < ~/src/hg/lib/sfDescription.sql
+   hgsql hg18 -e 'LOAD DATA local INFILE "sfDescription.tab"  into table hg18.sfDescription;'
+
+# Finally, load the superfamily table.
+
+   hgLoadBed hg18 superfamily superfamily.tab -tab
+
+# Create knownToSuperfamily table
+# Note hs is changed into ht for this Superfamily release.
+   
+   cat /cluster/data/superfamily/060619/ass_18-Jun-2006.tab \
+   | hgKnownToSuper hg18 hs stdin
+# created 27,511 rows in knownToSuper
+
+############################################################################
