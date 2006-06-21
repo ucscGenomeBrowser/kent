@@ -7,7 +7,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCompareWeight.c,v 1.1 2006/06/21 17:21:55 heather Exp $";
+static char const rcsid[] = "$Id: snpCompareWeight.c,v 1.2 2006/06/21 17:50:58 heather Exp $";
 
 struct weightList
     {
@@ -241,8 +241,8 @@ fprintf(countFileHandle, "oneToOne = %d\n", oneToOne);
 fprintf(countFileHandle, "oneToTwo = %d\n", oneToTwo);
 fprintf(countFileHandle, "oneToThree = %d\n", oneToThree);
 fprintf(countFileHandle, "twoToTwo = %d\n", twoToTwo);
-fprintf(countFileHandle, "twoToOne %d\n", twoToOne);
-fprintf(countFileHandle, "twoToThree %d\n", twoToThree);
+fprintf(countFileHandle, "twoToOne = %d\n", twoToOne);
+fprintf(countFileHandle, "twoToThree = %d\n", twoToThree);
 fprintf(countFileHandle, "threeToThree = %d\n", threeToThree);
 fprintf(countFileHandle, "threeToOne = %d\n", threeToOne);
 fprintf(countFileHandle, "threeToTwo = %d\n", threeToTwo);
