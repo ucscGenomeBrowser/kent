@@ -10132,10 +10132,11 @@ mysql> alter table snp126 add index chrom (chrom, bin);
 mysql> alter table snp126Exceptions add index name(name);
 
 # create snp126ExceptionDesc table
-cd /cluster/data/dbSnp
-# add counts to exception.template
+cd /cluster/data/dbSNP
 hgsql hg18 < snp126ExceptionDesc.sql
-mysql> load data local file 'exception.template' into table snp126ExceptionDesc;
+# add counts to exception.human.126, can start with exception.template
+hgsql -e 'select count(*), exception from snp126Exceptions group by exception' hg18
+mysql> load data local infile 'exception.human.126' into table snp126ExceptionDesc;
 
 
 #################################################################
