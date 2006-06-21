@@ -2727,4 +2727,62 @@ BASE=/cluster/data/monDom4/bed/blastzGalGal3.2006-05-25
     ln -s blastzGalGal3.2006-05-25 /cluster/data/monDom4/bed/blastz.galGal3
 
 
-#########################################################################
+#####################################################################
+#### LOAD ENSEMBL GENES (DONE - 2006-06-21 - Hiram)
+   mkdir /cluster/data/monDom4/bed/ensGene
+   cd /cluster/data/monDom4/bed/ensGene
+
+        Get the Ensembl BioMart at http://www.ensembl.org/Multi/martview
+        Choose Ensembl 39 and Monodelphis domestica, click next
+	It displays status in a window on the right, indicating how many
+	entries are here, currently: 20,907
+    	The next page is the "filter" step, we do not want any filters,
+	nothing is changed on this page, click next
+	Now we are on the "output" tab, the filter in the window on the right
+	indicates that 20,907 passed the filter.  (there is no filter)
+	Now, on this output page, change the pull-down menu item from
+	its default of "features" to read "structures"
+	All the check-boxes now change.
+	Mark the check box GTF under output format
+	Under Gene Ensemble Attributes,
+	Unselect Biotype
+	Select
+	Ensembl Gene ID
+	Ensembl Transcript ID
+	External Gene ID
+
+	gzip compression
+	and give it a filename: ensGeneMonDom4
+	it will add the .gff.gz suffix
+	press "export"
+
+
+    #	They have a chrMT - we don't have the chrM sequence, 
+    # Add "chr" to front of each line
+    #	 in the gene data gtf file to make 
+    # it compatible with ldHgGene and convert remove chrMT name
+
+    zcat ensGeneMonDom4.gff.gz \
+	| sed -e "s/^\([0-9XYU][0-9n]*\)/chr\1/; /^MT/d" > ensGene.gtf
+    #	Verify names converted OK:
+    awk '{print $1}' ensGene.gtf | sort | uniq -c
+    #	153247 chr1
+    #	126767 chr2
+    #	 82637 chr3
+    #	 90199 chr4
+    #	 47661 chr5
+    #	 50469 chr6
+    #	 34230 chr7
+    #	 55841 chr8
+    #	 41868 chrUn
+    #	  9965 chrX
+
+    ldHgGene monDom4 ensGene ensGene.gtf
+# Read 33878 transcripts in 692884 lines in 1 files
+#   33878 groups 10 seqs 1 sources 4 feature types
+# 33878 gene predictions
+
+    featureBits monDom4 ensGene
+    #	32770541 bases of 3501643220 (0.936%) in intersection
+
+###########################################################################
