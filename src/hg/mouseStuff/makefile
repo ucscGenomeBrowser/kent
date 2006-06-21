@@ -47,6 +47,7 @@ DIRS = \
 	chainSort \
 	chainSplit \
 	chainStats \
+	chainStitchId \
 	chainSwap \
 	chainToAxt \
 	chainToPsl \
