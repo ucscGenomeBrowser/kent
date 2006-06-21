@@ -2661,6 +2661,16 @@ dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
 searchPriority 12
 padding 250
 
+searchName snp126Short
+searchTable snp126
+searchMethod exact
+searchType bed
+shortCircuit 1
+termRegex (rs[0-9]{3}[0-9]+)
+dontCheck ([0-9]+|rs[0-9][0-9]?[0-9]?)
+searchPriority 12
+padding 250
+
 searchTable ensGene
 searchType genePred
 shortCircuit 1
@@ -2842,6 +2852,15 @@ padding 250
 
 searchName snp125Long
 searchTable snp125
+searchMethod exact
+searchType bed
+termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
+dontCheck (rs[0-9]{3}[0-9]+)
+searchPriority 16
+padding 250
+
+searchName snp126Long
+searchTable snp126
 searchMethod exact
 searchType bed
 termRegex ([0-9]+|rs[0-9][0-9]?[0-9]?)
