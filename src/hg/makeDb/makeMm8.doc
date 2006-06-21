@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.55 2006/06/16 00:14:35 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.56 2006/06/21 21:34:19 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5886,3 +5886,76 @@ elsif ($a[5] =~ m/^N[TC]_\d+$/)
     #	2557081173 bases of 3164952073 (80.794%) in intersection
 
 #####################################################################
+#### LOAD ENSEMBL GENES (DONE - 2006-06-21 - Hiram)
+#	needed for Gene Sorter procedure below
+#	Ensembl released Mouse build 34 the week of August 10th, 2005
+   mkdir /cluster/data/mm8/bed/ensGene
+   cd /cluster/data/mm7/bed/ensGene
+
+        Get the Ensembl BioMart at http://www.ensembl.org/Multi/martview
+        Choose Ensembl 39 and Mus musculus, click next
+	It displays status in a window on the right, indicating how many
+	entries are here, currently: 27,967
+    	The next page is the "filter" step, we do not want any filters,
+	nothing is changed on this page, click next
+	Now we are on the "output" tab, the filter in the window on the right
+	indicates that 27,967 passed the filter.  (there is no filter)
+	Now, on this output page, change the pull-down menu item from
+	its default of "features" to read "structures"
+	All the check-boxes now change.
+	Mark the check box GTF under output format
+	Under Gene Ensemble Attributes,
+	Unselect Biotype
+	Select
+	Ensembl Gene ID
+	Ensembl Transcript ID
+	External Gene ID
+
+	gzip compression
+	and give it a filename: ensGeneMm8
+	it will add the .gff.gz suffix
+	press "export"
+
+#	The random coordinates are given in contig
+#	coordinates, need to lift them to chroms, create a lift file:
+	echo << '_EOF_' > mkRandomNTLift.sh
+#!/bin/sh
+
+grep random /cluster/data/mm8/chrom.sizes | while read R
+do
+        chr=`echo $R | awk '{print $1}'`
+        size=`echo $R | awk '{print $2}'`
+        hgsql -N -e "select * from ctgPos where chrom=\"$chr\";" mm8 | \
+awk '
+BEGIN {size="'$size'"}
+{
+        printf "%s\t%s\t%s\t%s\t%s\n", $4, $1, $2, $3, size
+}
+'
+done
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkRandomNTLift.sh
+    ./mkRandomNTLift.sh > randomNT.lft
+
+    # Add "chr" to front of each line (that is a normal chrom number)
+    #	 in the gene data gtf file to make 
+    # it compatible with ldHgGene and convert the chrMT name, and lift
+    # the random coordinates
+
+    zcat ensGeneMm8.gff.gz \
+	| sed -e "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/" \
+	| liftUp ensGene.gtf randomNT.lft carry stdin
+    ldHgGene mm8 ensGene ensGene.gtf
+# Read 34831 transcripts in 597575 lines in 1 files
+#   34831 groups 34 seqs 1 sources 4 feature types
+# 34831 gene predictions
+
+    featureBits mm8 ensGene
+    #	56159487 bases of 2567283971 (2.188%) in intersection
+    featureBits mm7 ensGene
+    #	57484684 bases of 2583394090 (2.225%) in intersection
+    featureBits mm6 ensGene
+    #	54791625 bases of 2597150411 (2.110%) in intersection
+
+###########################################################################
