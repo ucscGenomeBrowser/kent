@@ -2269,7 +2269,6 @@ priority 70.1
 visibility hide
 color 0, 10, 100
 altColor 1,128,0
-pairwiseHeight 12
 type wigMaf 0.0 1.0
 summary encodeTbaSummary
 speciesGroups primate placental mammal vertebrate
@@ -2402,7 +2401,6 @@ color 0, 10, 100
 altColor 1,128,0
 type wigMaf 0.0 1.0
 summary encodeMlaganSummary
-maxHeightPixels 100:40:11
 speciesGroups primate placental mammal vertebrate
 sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
 sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
@@ -2524,7 +2522,6 @@ color 0, 10, 100
 altColor 1,128,0
 type wigMaf 0.0 1.0
 summary encodeMavidSummary
-maxHeightPixels 100:40:11
 speciesGroups primate placental mammal vertebrate
 sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
 sGroup_placental rat mouse rabbit cow dog rfbat hedgehog shrew armadillo elephant tenrec
