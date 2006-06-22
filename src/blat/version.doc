@@ -3,6 +3,9 @@
      o (in 33x2) Allowing -maxGap in gfServer.  (Forgot to add it to
        options table.)
      o (in 33x3) Making -maxIntron work better.
+     o (in 33x4) Fixed very rare bug that manifested doing protein/translated
+       DNA alignments in gfClient (not blat) in some frames when the
+       alignment extended all the way to the end of the DNA.
 
 33:
      o Fixed problem with out=blast8 and out=blast9 output using
