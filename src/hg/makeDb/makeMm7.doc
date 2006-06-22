@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, August 2005, ncbi mouse_35 - Mm7
 #
-#	"$Id: makeMm7.doc,v 1.66 2006/06/21 21:58:53 hiram Exp $"
+#	"$Id: makeMm7.doc,v 1.67 2006/06/22 15:20:27 angie Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-08-26 - Hiram)
@@ -12222,6 +12222,7 @@ refGene:CDS 1.059%, sgpGene 1.451%, both 0.912%, cover 86.18%, enrich 59.39x
 
 #########################################################################
 ### IGTC (Int'l GeneTrap Consortium) (DONE - 2006-06-07 - angie)
+### fasta added 2006-06-21
 ### Doug Stryke <stryke@cgl.ucsf.edu> in Tom Ferrin's lab
     ssh hgwdev
     mkdir /cluster/data/mm7/bed/igtc
@@ -12229,6 +12230,12 @@ refGene:CDS 1.059%, sgpGene 1.451%, both 0.912%, cover 86.18%, enrich 59.39x
     wget http://www.genetrap.org/blattrack/genetrap_mm7.psl
     grep -v ^track genetrap_mm7.psl \
     | hgLoadPsl mm7 -table=igtc stdin
+    # Probe fasta is shared by all assemblies:
+    wget http://www.genetrap.org/blattrack/genetrap.fasta
+    mkdir /gbdb/mm7/igtc
+    ln -s /cluster/data/mm7/bed/igtc/genetrap.fasta /gbdb/mm7/igtc/
+    hgLoadSeq -replace mm7 /gbdb/mm7/igtc/genetrap.fasta
+
 
 #########################################################################
 # LIFTOVER TO MM6 (DONE, 2006-06-11 - 2006-06-12, hartera)

@@ -1,7 +1,7 @@
 # This file describes browser build for the mouse
 # genome, March 2005, ncbi mouse_34 - Mm6
 #
-#	"$Id: makeMm6.doc,v 1.116 2006/06/12 21:41:06 hartera Exp $"
+#	"$Id: makeMm6.doc,v 1.117 2006/06/22 15:20:26 angie Exp $"
 #
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2005-03-09 - Hiram)
 #
@@ -10219,6 +10219,7 @@ knownToVisiGene mm6
 
 #########################################################################
 ### IGTC (Int'l GeneTrap Consortium) (DONE - 2006-06-07 - angie)
+### fasta added 2006-06-21
 ### Doug Stryke <stryke@cgl.ucsf.edu> in Tom Ferrin's lab
     ssh hgwdev
     mkdir /cluster/data/mm6/bed/igtc
@@ -10226,6 +10227,12 @@ knownToVisiGene mm6
     wget http://www.genetrap.org/blattrack/genetrap_mm6.psl
     grep -v ^track genetrap_mm6.psl \
     | hgLoadPsl mm6 -table=igtc stdin
+    # Probe fasta is shared by all assemblies:
+    wget http://www.genetrap.org/blattrack/genetrap.fasta
+    mkdir /gbdb/mm6/igtc
+    ln -s /cluster/data/mm6/bed/igtc/genetrap.fasta /gbdb/mm6/igtc/
+    hgLoadSeq -replace mm6 /gbdb/mm6/igtc/genetrap.fasta
+
 
 #########################################################################
 # SPLIT MM6 SEQUENCES FOR LIFTOVER FROM OTHER ASSEMBLIES 

@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.57 2006/06/21 21:42:09 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.58 2006/06/22 15:20:27 angie Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5761,6 +5761,7 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
 
 #########################################################################
 ### IGTC (Int'l GeneTrap Consortium) (DONE - 2006-06-12 - angie)
+### fasta added 2006-06-21
 ### Doug Stryke <stryke@cgl.ucsf.edu> in Tom Ferrin's lab
     ssh hgwdev
     mkdir /cluster/data/mm8/bed/igtc
@@ -5768,6 +5769,12 @@ BASE=/cluster/data/mm8/bed/blastz.galGal3.2006-05-23
     wget http://www.genetrap.org/blattrack/genetrap_mm8.psl
     grep -v ^track genetrap_mm8.psl \
     | hgLoadPsl mm8 -table=igtc stdin
+    # Probe fasta is shared by all assemblies:
+    wget http://www.genetrap.org/blattrack/genetrap.fasta
+    mkdir /gbdb/mm8/igtc
+    ln -s /cluster/data/mm8/bed/igtc/genetrap.fasta /gbdb/mm8/igtc/
+    hgLoadSeq -replace mm8 /gbdb/mm8/igtc/genetrap.fasta
+
 
 #########################################################################
 # REGULATORY POTENTIAL (DONE - 2006-06-12 - Hiram)
