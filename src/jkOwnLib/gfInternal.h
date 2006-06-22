@@ -48,7 +48,7 @@ void dumpBuns(struct ssBundle *bunList);  /* uglyf */
 void dumpFf(struct ffAli *left, DNA *needle, DNA *hay);/* uglyf */
 
 void gfiExpandRange(struct gfRange *range, int qSize, int tSize, 
-	boolean respectFrame, int expansion);
+	boolean respectFrame, boolean isRc, int expansion);
 /* Expand range to cover an additional 500 bases on either side. */
 
 struct dnaSeq *gfiExpandAndLoadCached(struct gfRange *range, 

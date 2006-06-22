@@ -18,7 +18,7 @@
 #include "trans3.h"
 
 
-static char const rcsid[] = "$Id: gfBlatLib.c,v 1.22 2006/03/15 18:36:16 angie Exp $";
+static char const rcsid[] = "$Id: gfBlatLib.c,v 1.23 2006/06/22 16:24:43 kent Exp $";
 
 static int ssAliCount = 16;	/* Number of alignments returned by ssStitch. */
 
@@ -482,7 +482,6 @@ static void saveAlignments(char *chromName, int chromSize, int chromOffset,
 {
 struct dnaSeq *tSeq = bun->genoSeq, *qSeq = bun->qSeq;
 struct ssFfItem *ffi;
-
 if (minMatch > qSeq->size/2) minMatch = qSeq->size/2;
 if (minMatch < 1) minMatch = 1;
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
@@ -626,7 +625,8 @@ return rangeList;
 }
 
 static struct ssBundle *gfClumpsToBundles(struct gfClump *clumpList, 
-    struct dnaSeq *seq, int minScore,  struct gfRange **retRangeList)
+    boolean isRc, struct dnaSeq *seq, int minScore,  
+    struct gfRange **retRangeList)
 /* Convert gfClumps to an actual alignments (ssBundles) */ 
 {
 struct ssBundle *bun, *bunList = NULL;
@@ -639,7 +639,8 @@ rangeList = gfRangesBundle(rangeList, 2000);
 for (range = rangeList; range != NULL; range = range->next)
     {
     targetSeq = range->tSeq;
-    gfiExpandRange(range, seq->size, targetSeq->size, FALSE, usualExpansion);
+    gfiExpandRange(range, seq->size, targetSeq->size, FALSE, isRc, 
+    	usualExpansion);
     range->tStart = 0;
     range->tEnd = targetSeq->size;
     AllocVar(bun);
@@ -794,6 +795,7 @@ for (hit = clump->hitList; ; hit = hit->next)
 		    range->hitCount = qe - qs;
 		    range->frame = frame;
 		    range->t3 = t3;
+		    assert(range->tEnd <= tSeq->size);
 		    slAddHead(pRangeList, range);
 		    }
 		}
@@ -990,8 +992,8 @@ for (range = rangeList; range != NULL; range = range->next)
     {
     range->qStart *= 3;
     range->qEnd *= 3;
-    range->tStart *= 3;
-    range->tEnd *= 3;
+    range->tStart = range->tStart*3;
+    range->tEnd = range->tEnd*3;
     }
 }
 
@@ -1035,6 +1037,7 @@ for (range = rangeList; range != NULL; range = range->next)
 *retSeqList = tSeqList;
 *retT3RefList = t3RefList;
 }
+
 
 void gfAlignTrans(int *pConn, char *tSeqDir, aaSeq *seq, int minMatch, 
     struct hash *tFileCache, struct gfOutput *out)
@@ -1531,7 +1534,7 @@ for (subOffset = 0; subOffset<query->size; subOffset = nextOffset)
 	    }
 	else
 	    {
-	    oneBunList = gfClumpsToBundles(clumpList, &subQuery, minScore, &rangeList);
+	    oneBunList = gfClumpsToBundles(clumpList, isRc, &subQuery, minScore, &rangeList);
 	    gfRangeFreeList(&rangeList);
 	    }
 	gfClumpFreeList(&clumpList);

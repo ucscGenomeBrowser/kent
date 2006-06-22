@@ -10,7 +10,7 @@
 #include "nib.h"
 #include "twoBit.h"
 
-static char const rcsid[] = "$Id: gfInternal.c,v 1.2 2004/06/06 03:23:37 kent Exp $";
+static char const rcsid[] = "$Id: gfInternal.c,v 1.3 2006/06/22 16:24:44 kent Exp $";
 
 
 static int extendRespect(int oldX, int newX)
@@ -22,7 +22,7 @@ return newX;
 }
 
 void gfiExpandRange(struct gfRange *range, int qSize, int tSize, 
-	boolean respectFrame, int expansion)
+	boolean respectFrame, boolean isRc, int expansion)
 /* Expand range to cover an additional 500 bases on either side. */
 {
 int x;
@@ -37,7 +37,7 @@ range->qEnd = x;
 
 x = range->tStart - expansion;
 if (x < 0) x = 0;
-if (respectFrame) 
+if (respectFrame && !isRc) 
     {
     x = extendRespect(range->tStart, x);
     }
@@ -45,7 +45,7 @@ range->tStart = x;
 
 x = range->tEnd + expansion;
 if (x > tSize) x = tSize;
-if (respectFrame)
+if (respectFrame && isRc)
     {
     x = extendRespect(range->tEnd, x);
     if (x > tSize)
@@ -75,7 +75,7 @@ if (nibIsFile(fileName))
 	}
     if (isRc)
 	reverseIntRange(&range->tStart, &range->tEnd, nib->size);
-    gfiExpandRange(range, querySize, nib->size, respectFrame, expansion);
+    gfiExpandRange(range, querySize, nib->size, respectFrame, isRc, expansion);
     target = nibLdPart(fileName, nib->f, nib->size, 
     	range->tStart, range->tEnd - range->tStart);
     if (isRc)
@@ -102,7 +102,7 @@ else
     tSeqSize = twoBitSeqSize(tbf, tSeqName);
     if (isRc)
 	reverseIntRange(&range->tStart, &range->tEnd, tSeqSize);
-    gfiExpandRange(range, querySize, tSeqSize, respectFrame, expansion);
+    gfiExpandRange(range, querySize, tSeqSize, respectFrame, isRc, expansion);
     target = twoBitReadSeqFragLower(tbf, tSeqName, range->tStart, range->tEnd);
     if (isRc)
 	{

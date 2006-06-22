@@ -12,7 +12,7 @@
 #include "bandExt.h"
 #include "gfInternal.h"
 
-static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.35 2006/03/14 19:02:31 angie Exp $";
+static char const rcsid[] = "$Id: ffSeedExtend.c,v 1.36 2006/06/22 16:24:43 kent Exp $";
 
 static void extendExactRight(int qMax, int tMax, char **pEndQ, char **pEndT)
 /* Extend endQ/endT as much to the right as possible. */
@@ -963,7 +963,6 @@ if (maxScore > 0)
 	    if (ff == NULL)
 		{
 		AllocVar(ff);
-		// uglyf("starting insert\n");
 		ff->left = left;
 		ff->right = right;
 		left->right = ff;
@@ -971,7 +970,6 @@ if (maxScore > 0)
 		left = ff;
 		ff->nStart = ff->nEnd = npStart + nIx;
 		ff->hStart = ff->hEnd = hpStart + hIx;
-		// uglyf("ending insert\n");
 		}
 	    ++nIx;
 	    ++hIx;
@@ -1001,7 +999,6 @@ if (maxScore > 0)
 	    if (ff == NULL)
 		{
 		AllocVar(ff);
-		// uglyf("starting insert 2\n");
 		ff->left = left;
 		ff->right = right;
 		left->right = ff;
@@ -1009,7 +1006,6 @@ if (maxScore > 0)
 		left = ff;
 		ff->nStart = ff->nEnd = npEnd - nIx;
 		ff->hStart = ff->hEnd = hpEnd - hIx;
-		// uglyf("ending insert 2\n");
 		}
 	    ++nIx;
 	    ++hIx;
@@ -1240,31 +1236,14 @@ ssStitch(bun, ffCdna, 16, 16);
 
 for (ffi = bun->ffList; ffi != NULL; ffi = ffi->next)
     {
-  // uglyf("Refine bundle start:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = scanIndexForSmallExons(gf, target, qSeq, qMaskBits, qMaskOffset, 
 	tSeq, lm, ffi->ff);
-  // uglyf("after scanIndexForSmallExons:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = bandedExtend(qSeq, tSeq, ffi->ff);
-  // uglyf("after bandedExtend:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = scanForSmallerExons(gf->tileSize, qSeq, tSeq, isRc, ffi->ff);
-  // uglyf("after scanForSmallerExons:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = refineSpliceSites(qSeq, tSeq, ffi->ff);
-  // uglyf("after refineSpliceSites:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = scanForTinyInternal(qSeq, tSeq, isRc, ffi->ff);
-  // uglyf("after scanForTinyInternal:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = smoothSmallGaps(qSeq, tSeq, ffi->ff);
-  // uglyf("after smoothSmallGaps:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
     ffi->ff = trimFlakyEnds(qSeq, tSeq, ffi->ff);
-  // uglyf("after trimFlakyEnds:\n");
-  // dumpFf(ffi->ff, qSeq->dna, tSeq->dna);
-  // uglyf("\n");
     }
 }
 
@@ -1290,7 +1269,6 @@ for (range = rangeList; range != NULL; range = range->next)
     range->qEnd += qOffset;
     tSeq = range->tSeq;
     AllocVar(bun);
-    // uglyf("RANGE (%d+%d)[%d%c%d]\n", range->tStart, range->tEnd, range->qStart, (isRc ? '-' : '+'), range->qEnd);
     bun->qSeq = qSeq;
     bun->genoSeq = tSeq;
     bun->ffList = gfRangesToFfItem(range->components, qSeq);
