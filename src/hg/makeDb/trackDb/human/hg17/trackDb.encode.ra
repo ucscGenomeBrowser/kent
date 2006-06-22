@@ -2270,6 +2270,7 @@ visibility hide
 color 0, 10, 100
 altColor 1,128,0
 type wigMaf 0.0 1.0
+pairwiseHeight 10
 summary encodeTbaSummary
 speciesGroups primate placental mammal vertebrate
 sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
@@ -2400,6 +2401,7 @@ visibility hide
 color 0, 10, 100
 altColor 1,128,0
 type wigMaf 0.0 1.0
+pairwiseHeight 10
 summary encodeMlaganSummary
 speciesGroups primate placental mammal vertebrate
 sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
@@ -2521,6 +2523,7 @@ visibility hide
 color 0, 10, 100
 altColor 1,128,0
 type wigMaf 0.0 1.0
+pairwiseHeight 10
 summary encodeMavidSummary
 speciesGroups primate placental mammal vertebrate
 sGroup_primate chimp colobus_monkey baboon macaque dusky_titi owl_monkey marmoset mouse_lemur galago
