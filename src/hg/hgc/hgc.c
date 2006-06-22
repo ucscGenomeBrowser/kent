@@ -197,7 +197,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1039 2006/06/22 22:06:20 giardine Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1040 2006/06/22 23:25:04 angie Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -13323,7 +13323,9 @@ if (cgiVarExists("o"))
     int rowOffset;
     int start = cgiInt("o");
     int end   = cgiInt("t");
-    char *alignUrl = "http://humanparalogy.gs.washington.edu";
+    char *alignUrl = NULL;
+    if (sameString("hg17", database))
+	alignUrl = "http://humanparalogy.gs.washington.edu";
     if (sameString("hg15", database) || sameString("hg16", database))
 	alignUrl = "http://humanparalogy.gs.washington.edu/jab/der_oo33";
     rowOffset = hOffsetPastBin(seqName, track);
@@ -13360,9 +13362,11 @@ if (cgiVarExists("o"))
 	printf("&nbsp;&nbsp;&nbsp;<B> ccov:</B>%s<BR>\n", dup.ccov);
 	printf("&nbsp;&nbsp;&nbsp;<B> posBasesHit:</B>%d<BR>\n",
 	       dup.posBasesHit);
-	printf("<A HREF=%s/%s "
-	       "TARGET=\"%s:%d-%d\">Optimal Global Alignment</A><BR>\n",
-	       alignUrl, dup.alignfile, dup.chrom, dup.chromStart, dup.chromEnd);
+	if (alignUrl != NULL)
+	    printf("<A HREF=%s/%s "
+		   "TARGET=\"%s:%d-%d\">Optimal Global Alignment</A><BR>\n",
+		   alignUrl, dup.alignfile, dup.chrom,
+		   dup.chromStart, dup.chromEnd);
 	printf("<B>Alignment Length:</B> %d<BR>\n", dup.alignL);
 	printf("&nbsp;&nbsp;&nbsp;<B>Indels #:</B> %d<BR>\n", dup.indelN);
 	printf("&nbsp;&nbsp;&nbsp;<B>Indels bp:</B> %d<BR>\n", dup.indelS);
