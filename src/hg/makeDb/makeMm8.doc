@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.58 2006/06/22 15:20:27 angie Exp $"
+#	"$Id: makeMm8.doc,v 1.59 2006/06/22 17:07:55 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5962,5 +5962,41 @@ done
     #	57484684 bases of 2583394090 (2.225%) in intersection
     featureBits mm6 ensGene
     #	54791625 bases of 2597150411 (2.110%) in intersection
+
+    # Load ensGtp table.
+    # ensGtp associates geneId/transcriptId/proteinId for hgPepPred and 
+    # hgKnownToSuper.  
+
+    # Get the Ensembl BioMart at http://www.ensembl.org/Multi/martview
+    # Choose Ensembl 39 and Mus musculus, click next
+    # Follow this sequence through the pages:
+    # 1) No filters in the filter section, click next go to Output
+    # 2) Select "Structures".
+    # 3) select Ensembl Gene ID, Ensembl Transcript ID, Ensembl Peptide ID. 
+    # 4) select "Text, tab separated" gzip and name the output file as "ensGtp"
+    # 5) download the output file "ensGtp.tsv.gz"
+    #       the tsv.gz is added automatically to the ensGtp
+
+    #	Something is unusual in this download.  The lines are duplicated
+    #	about 8 times more than necessary
+    zcat ensGtp.tsv.gz | wc -l
+    #	284554
+    zcat ensGtp.tsv.gz | sort -u | wc -l
+    gunzip ensGtp.tsv.gz
+    #	34832
+
+    hgsql mm8 < ~/kent/src/hg/lib/ensGtp.sql
+    #	The 'tail -n +2' skips the first line with is just column
+    #	heading labels.  The sort -u will eliminate the duplicate lines:
+    zcat ensGtp.tsv.gz | tail -n +2 | sort -u \
+    	| hgsql mm8 -e \
+	'load data local infile "/dev/stdin" into table ensGtp;' 
+    hgsql -e "select count(*) from ensGtp;" mm8
+    #	34831
+    #	properly, one less than the count above
+
+    #	clean up
+    gzip ensGene.gtf
+    rm genePred.tab
 
 ###########################################################################
