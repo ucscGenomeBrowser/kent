@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.16 2006/06/22 05:23:27 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.17 2006/06/22 05:37:29 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -274,12 +274,12 @@ while ((p = stringIn(DOC_TRACK_PREFIX, html)) != NULL)
     trackName = p + strlen(DOC_NAME_TAG);
     for (p = trackName; p != q && !isspace(*p); p++);
     *p = 0;
-    uglyf("<BR>trackName=%s\n", trackName);
+    //uglyf("<BR>trackName=%s\n", trackName);
     html = q + strlen(DOC_TRACK_SUFFIX);
     }
 if (trackName)
     {
-    uglyf("<BR>adding to hash: %s (%d)", trackName, (int)strlen(html));
+    //uglyf("<BR>adding to hash: %s (%d)", trackName, (int)strlen(html));
     hashAdd(docHash, trackName, html);
     }
 return docHash;
@@ -389,8 +389,10 @@ if (ctList != NULL)
             {
             if ((html = hashFindVal(docHash, ct->tdb->shortLabel)) != NULL)
                 {
+                /*
                 uglyf("<BR>found html for %s (%d)", ct->tdb->shortLabel,
                                         (int)strlen(html));
+                                        */
                 ct->tdb->html = cloneString(html);
                 }
             }
