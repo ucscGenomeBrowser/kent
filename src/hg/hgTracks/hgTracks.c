@@ -98,11 +98,13 @@
 #include "hgConfig.h"
 #include "hgMut.h"
 #include "hgMutUi.h"
+#include "genomeVar.h"
+#include "genomeVarUi.h"
 #include "landmark.h"
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1135 2006/06/20 14:58:32 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1136 2006/06/22 22:06:11 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9760,15 +9762,29 @@ tg->itemColor = vegaColor;
 tg->itemName = vegaGeneName;
 }
 
+Color genomeVarColor(struct track *tg, void *item, struct vGfx *vg)
+/* color items by type, need to add user selections */
+{
+struct genomeVar *el = item;
+if (sameString(el->baseChangeType, "substitution"))
+    return vgFindColorIx(vg, 204, 0, 255);
+else if (sameString(el->baseChangeType, "deletion"))
+    return MG_BLUE;
+else if (sameString(el->baseChangeType, "insertion"))
+    return vgFindColorIx(vg, 0, 153, 0); /* dark green */
+else if (sameString(el->baseChangeType, "complex"))
+    return vgFindColorIx(vg, 100, 50, 0); /* brown */ //return vgFindColorIx(vg, 221, 0, 0); /* dark red */
+else if (sameString(el->baseChangeType, "duplication"))
+    return vgFindColorIx(vg, 255, 153, 0);
+else
+    return MG_BLACK;
+}
+
 Color hgMutColor(struct track *tg, void *item, struct vGfx *vg)
 /* color items by type */
 {
 struct hgMut *el = item;
 
-//if (sameString(el->hasPhenData, "y")) 
-    //{
-/* disable shading for now, may want later so not deleted yet */
-/* Ross - lighter implies less sure, another way of indicating phenotype data? */
     if (sameString(el->baseChangeType, "substitution"))
         return vgFindColorIx(vg, 204, 0, 255);
     else if (sameString(el->baseChangeType, "deletion"))
@@ -9781,22 +9797,40 @@ struct hgMut *el = item;
         return vgFindColorIx(vg, 255, 153, 0);
     else
         return MG_BLACK;
-    //}
-//else
-    //{
-    //if (sameString(el->baseChangeType, "substitution"))
-        //return vgFindColorIx(vg, 204, 153, 255);   /* light purple */
-    //else if (sameString(el->baseChangeType, "deletion"))
-        //return vgFindColorIx(vg, 102, 204, 255); /* light blue */
-    //else if (sameString(el->baseChangeType, "insertion"))
-        //return vgFindColorIx(vg, 0, 255, 0);     /* light green */
-    //else if (sameString(el->baseChangeType, "complex"))
-        //return vgFindColorIx(vg, 255, 102, 102); /* light red, pink 153 too light?*/
-    //else if (sameString(el->baseChangeType, "duplication"))
-        //return vgFindColorIx(vg, 255, 204, 0);   /* light orange */
-    //else
-        //return vgFindColorIx(vg, 153, 153, 153); /* gray */
-    //}
+}
+
+boolean genomeVarFilterSrc(struct genomeVar *el, struct genomeVarSrc *srcList)
+/* Check to see if this element should be excluded. */
+{
+struct hashEl *filterList = NULL;
+struct hashEl *hashel = NULL;
+char *srcTxt = NULL;
+struct genomeVarSrc *src = NULL;
+
+for (src = srcList; src != NULL; src = src->next)
+    {
+    if (el->srcId == src->srcId) 
+        {
+        srcTxt = cloneString(src->src);
+        break;
+        }
+    }
+filterList = cartFindPrefix(cart, "genomeVar.filter.src.");
+if (filterList == NULL || srcTxt == NULL)
+    return TRUE;
+for (hashel = filterList; hashel != NULL; hashel = hashel->next)
+    {
+    if (endsWith(hashel->name, srcTxt) && 
+        differentString(hashel->val, "0")) 
+        {
+        freeMem(srcTxt);
+        hashElFreeList(&filterList);
+        return FALSE;
+        }
+    }
+hashElFreeList(&filterList);
+freeMem(srcTxt);
+return TRUE;
 }
 
 boolean hgMutFilterSrc(struct hgMut *el, struct hgMutSrc *srcList)
@@ -9833,6 +9867,23 @@ freeMem(srcTxt);
 return TRUE;
 }
 
+boolean genomeVarFilterType(struct genomeVar *el)
+/* Check to see if this element should be excluded. */
+{
+int cnt = 0;
+for (cnt = 0; cnt < mutationTypeSize; cnt++)
+    {
+    if (cartVarExists(cart, mutationTypeString[cnt]) &&
+        cartString(cart, mutationTypeString[cnt]) != NULL &&
+        differentString(cartString(cart, mutationTypeString[cnt]), "0") &&
+        sameString(mutationTypeDbValue[cnt], el->baseChangeType))
+        {
+        return FALSE;
+        }
+    }
+return TRUE;
+}
+
 boolean hgMutFilterType(struct hgMut *el)
 /* Check to see if this element should be excluded. */
 {
@@ -9843,6 +9894,23 @@ for (cnt = 0; cnt < variantTypeSize; cnt++)
         cartString(cart, variantTypeString[cnt]) != NULL &&
         differentString(cartString(cart, variantTypeString[cnt]), "0") &&
         sameString(variantTypeDbValue[cnt], el->baseChangeType))
+        {
+        return FALSE;
+        }
+    }
+return TRUE;
+}
+
+boolean genomeVarFilterLoc(struct genomeVar *el)
+/* Check to see if this element should be excluded. */
+{
+int cnt = 0;
+for (cnt = 0; cnt < mutationLocationSize; cnt++)
+    {
+    if (cartVarExists(cart, mutationLocationString[cnt]) &&
+        cartString(cart, mutationLocationString[cnt]) != NULL &&
+        differentString(cartString(cart, mutationLocationString[cnt]), "0") &&
+        sameString(mutationLocationDbValue[cnt], el->location))
         {
         return FALSE;
         }
@@ -9865,6 +9933,70 @@ for (cnt = 0; cnt < variantLocationSize; cnt++)
         }
     }
 return TRUE;
+}
+
+void lookupGenomeVarName(struct track *tg)
+/* give option on which name to display */
+{
+struct genomeVar *el;
+struct sqlConnection *conn = hAllocConn();
+boolean useHgvs = FALSE;
+boolean useId = FALSE;
+boolean useCommon = FALSE;
+boolean labelStarted = FALSE;
+
+struct hashEl *genomeVarLabels = cartFindPrefix(cart, "genomeVar.label");
+struct hashEl *label;
+if (genomeVarLabels == NULL)
+    {
+    useHgvs = TRUE; /* default to gene name */
+    /* set cart to match what is being displayed */
+    cartSetBoolean(cart, "genomeVar.label.hgvs", TRUE);
+    }
+for (label = genomeVarLabels; label != NULL; label = label->next)
+    {
+    if (endsWith(label->name, "hgvs") && differentString(label->val, "0"))
+        useHgvs = TRUE;
+    else if (endsWith(label->name, "common") && differentString(label->val, "0"))
+        useCommon = TRUE;
+    else if (endsWith(label->name, "dbid") && differentString(label->val, "0"))
+        useId = TRUE;
+    }
+
+for (el = tg->items; el != NULL; el = el->next)
+    {
+    struct dyString *name = dyStringNew(64);
+    labelStarted = FALSE; /* reset for each item */
+    if (useHgvs) 
+        {
+        dyStringAppend(name, el->name);
+        labelStarted = TRUE;
+        }
+    if (useCommon)
+        {
+        char query[256];
+        char *commonName = NULL;
+        char *escId = sqlEscapeString(el->mutId);
+        safef(query, sizeof(query), "select name from genomeVarAlias where mutId = '%s' and nameType = 'common'", escId);
+        commonName = sqlQuickString(conn, query);
+        freeMem(escId);
+        if (labelStarted) dyStringAppendC(name, '/');
+        else labelStarted = TRUE;
+        if (commonName != NULL)
+            dyStringAppend(name, commonName);
+        else
+            dyStringAppend(name, " ");
+        }
+    if (useId)
+        {
+        if (labelStarted) dyStringAppendC(name, '/');
+        else labelStarted = TRUE;
+        dyStringAppend(name, el->mutId);
+        }
+    freeMem(el->name); /* free old name */
+    el->name = dyStringCannibalize(&name);
+    }
+hFreeConn(&conn);
 }
 
 void lookupHgMutName(struct track *tg) 
@@ -9929,6 +10061,45 @@ for (el = tg->items; el != NULL; el = el->next)
     el->name = dyStringCannibalize(&name);
     }
 hFreeConn(&conn);
+}
+
+void loadGenomeVar(struct track *tg)
+/* Load human mutation with filter */
+{
+struct genomeVar *list = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+struct genomeVarSrc *srcList = NULL;
+char **row;
+int rowOffset;
+enum trackVisibility vis = tg->visibility;
+
+/* load as linked list once, outside of loop */
+srcList = genomeVarSrcLoadByQuery(conn, "select * from genomeVarSrc");
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
+                 NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct genomeVar *el = genomeVarLoad(row);
+    if (!genomeVarFilterType(el))
+        genomeVarFree(&el);
+    else if (!genomeVarFilterLoc(el))
+        genomeVarFree(&el);
+    else if (!genomeVarFilterSrc(el, srcList))
+        genomeVarFree(&el);
+    else
+        slAddHead(&list, el);
+    }
+sqlFreeResult(&sr);
+slReverse(&list);
+genomeVarSrcFreeList(&srcList);
+tg->items = list;
+/* change names here so not affected if change filters later 
+   and no extra if when viewing dense                        */
+if (vis != tvDense)
+    {
+    lookupGenomeVarName(tg);
+    }
 }
 
 void loadHgMut(struct track *tg)
@@ -10012,6 +10183,13 @@ tg->items = list;
 hFreeConn(&conn);
 }
 
+char *genomeVarName(struct track *tg, void *item)
+/* Get name to use for genomeVar item. */
+{
+struct genomeVar *el = item;
+return el->name;
+}
+
 char *hgMutName(struct track *tg, void *item)
 /* Get name to use for hgMut item. */
 {
@@ -10019,11 +10197,28 @@ struct hgMut *el = item;
 return el->name;
 }
 
+char *genomeVarMapName (struct track *tg, void *item)
+/* Return unique identifier for item */
+{
+struct genomeVar *el = item;
+return el->mutId;
+}
+
 char *hgMutMapName (struct track *tg, void *item)
 /* Return unique identifier for item */
 {
 struct hgMut *el = item;
 return el->mutId;
+}
+
+void genomeVarMethods (struct track *tg)
+/* Simple exclude/include filtering on human mutation items and color. */
+{
+tg->loadItems = loadGenomeVar;
+tg->itemColor = genomeVarColor;
+tg->itemNameColor = genomeVarColor;
+tg->itemName = genomeVarName;
+tg->mapItemName = genomeVarMapName;
 }
 
 void hgMutMethods (struct track *tg)
@@ -11461,6 +11656,7 @@ registerTrackHandler("encodeGencodeIntronJun05", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("hgMut", hgMutMethods);
+registerTrackHandler("genomeVar", genomeVarMethods);
 registerTrackHandler("landmark", landmarkMethods);
 registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);

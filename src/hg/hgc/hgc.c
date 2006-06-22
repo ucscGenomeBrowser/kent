@@ -189,13 +189,15 @@
 #include "omimTitle.h"
 #include "dless.h"
 #include "hgMut.h"
+#include "genomeVar.h"
+#include "genomeVarUi.h"
 #include "landmark.h"
 #include "landmarkUi.h"
 #include "ec.h"
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1038 2006/06/21 22:20:03 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1039 2006/06/22 22:06:20 giardine Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -17613,6 +17615,237 @@ hFreeConn(&conn);
 
 }
 
+void printGenomeVarAttrLink (char *linkId)
+{
+struct genomeVarAttrLink *link = NULL;
+struct hash *linkInstructions = NULL;
+struct hash *thisLink = NULL;
+struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *linktype, *label;
+char *doubleEntry = NULL;
+
+hgReadRa(database, organism, rootDir, "links.ra", &linkInstructions);
+safef(query, sizeof(query), "select * from genomeVarAttrLink "
+    "where linkId = '%s'", linkId);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct sqlResult *sr2;
+    char **row2;
+
+    link = genomeVarAttrLinkLoad(row);
+    if (link == NULL) 
+        continue; /* no link found */
+    /* determine how to do link from .ra file */
+    thisLink = hashFindVal(linkInstructions, link->raKey);
+    if (thisLink == NULL) 
+        continue; /* no link found */
+    /* type determined by fields: url = external, dataSql = internal, others added later? */
+    linktype = hashFindVal(thisLink, "dataSql");
+    label = hashFindVal(thisLink, "label");
+    if (label == NULL) 
+        label = "";
+    if (linktype != NULL) 
+        {
+        safef(query, sizeof(query), linktype, link->acc);
+        sr2 = sqlGetResult(conn2, query);
+        while ((row2 = sqlNextRow(sr2)) != NULL)
+            {
+            /* should this print more than 1 column, how know how many? */
+            if (row2[0] != NULL)
+                {
+                /* print label and result */
+                printf("<B>%s</B> - %s", label, row2[0]);
+                /* check for link */
+                doubleEntry = hashFindVal(thisLink, "dataLink");
+                if (doubleEntry != NULL)
+                    {
+                    char url[512];
+                    struct hash *newLink;
+                    char *accCol = NULL, *format = NULL;
+                    int colNum = 1;
+	            newLink = hashFindVal(linkInstructions, doubleEntry);
+                    accCol = hashFindVal(thisLink, "dataLinkCol");
+                    if (newLink == NULL || accCol == NULL)
+                       errAbort("missing required fields in .ra file");
+                    colNum = atoi(accCol);
+                    format = hashFindVal(newLink, "url");
+                    safef(url, sizeof(url), format, row2[colNum - 1]);
+                    printf(" - <A HREF=\"%s\" TARGET=_blank>%s</A>\n",
+                        url, row2[colNum - 1]);
+                    }
+                printf("<BR />\n");
+                }
+            }
+        sqlFreeResult(&sr2);
+        }
+    else 
+        {
+        linktype = hashFindVal(thisLink, "url");
+        if (linktype != NULL)
+            {
+            char url[512];
+            safef(url, sizeof(url), linktype, link->acc);
+            if (sameString(link->displayVal, ""))
+                printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR />\n", label, url, link->acc);
+            else
+                printf("<B>%s</B> - <A HREF=\"%s\" TARGET=_blank>%s</A><BR />\n", label, url, link->displayVal);
+            }
+        }
+    }
+sqlFreeResult(&sr);
+}
+
+void doGenomeVar (struct trackDb *tdb, char *itemName)
+/* this prints the detail page for the Genome variation track */
+{
+char *table = tdb->tableName;
+struct genomeVar *mut;
+struct genomeVarAlias alias;
+struct genomeVarAttr attr;
+struct sqlConnection *conn = hAllocConn();
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *escName;
+int hasAttr = 0;  
+int i;
+int start = cartInt(cart, "o");
+char *prevCat = NULL, *prevType = NULL;
+
+genericHeader(tdb, itemName);
+
+/* postion, band, genomic size */
+escName = sqlEscapeString(itemName);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and "
+      "chromStart=%d and mutId = '%s'", table, seqName, start, escName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    mut = genomeVarLoad(row);
+    /* change this based on species? */
+    printf("<B>HGVS name:</B> %s <BR />\n", mut->name);
+    bedPrintPos((struct bed *)mut, 3);
+    }
+sqlFreeResult(&sr);
+
+/* fetch and print the source */
+safef(query, sizeof(query),
+      "select * from genomeVarSrc where srcId = %d", mut->srcId);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct genomeVarSrc *src = genomeVarSrcLoad(row);
+    printf("<B>source:</B> %s", src->src);
+    if (src->lsdb != NULL && differentString(src->lsdb, "")) 
+        {
+        printf("; %s", src->lsdb);
+        }
+    printf("<BR />\n");
+    }
+sqlFreeResult(&sr);
+
+/* print location and mutation type fields */
+printf("<B>location:</B> %s<BR />\n", mut->location);
+printf("<B>type:</B> %s<BR />\n", mut->baseChangeType);
+/* add note here about exactness of coordinates */
+if (mut->coordinateAccuracy == 0) 
+    {
+    printf("<B>note:</B> The coordinates for this mutation are only estimated.<BR />\n");
+    }
+
+printf("<DL>");
+safef(query, sizeof(query),
+      "select * from genomeVarAlias where mutId = '%s'", escName);
+sr = sqlGetResult(conn, query);
+i = 0;  /* count lines, print html tags if needed */
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    i++;
+    if (i == 1) 
+        printf("<DT><B>Aliases:</B></DT><DD>\n ");
+    genomeVarAliasStaticLoad(row, &alias);
+    printf("%s", alias.name);
+    if (alias.nameType != NULL && sameString(alias.nameType, "common"))
+        printf(" (common name)");
+    printf("<BR />\n");
+    }
+sqlFreeResult(&sr);
+if (i > 0)
+    printf("</DD>");
+
+/* loop through attributes */
+for(i=0; i<mutationAttrSize; i++)
+    {
+    safef(query, sizeof(query),
+        "select * from genomeVarAttr where mutId = '%s' and attrKey = '%s'",
+        escName, mutationAttrTypeKey[i]);
+    /* attrKey == mutationAttrTypeKey should be quote safe */
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        hasAttr++;
+        genomeVarAttrStaticLoad(row, &attr);
+        /* only print name and category if different */
+        if (prevCat == NULL) 
+            {
+            /* print start of both */
+            /* if need to print category layer, here is where print first */
+            printf("<DT><B>%s:</B></DT><DD>\n", mutationAttrTypeDisplay[i]);
+            prevCat = cloneString(mutationAttrCategory[i]);
+            prevType = cloneString(mutationAttrTypeKey[i]);
+            }
+        else if (differentString(prevCat, mutationAttrCategory[i]))
+            {
+            /* end last, and print start of both */
+            printf("</DD>");
+            /* if/when add category here is where to print next */
+            printf("<DT><B>%s:</B></DT><DD>\n", mutationAttrTypeDisplay[i]);
+            freeMem(prevType);
+            prevType = cloneString(mutationAttrTypeKey[i]);
+            }
+        else if (sameString(prevCat, mutationAttrCategory[i]) &&
+                differentString(prevType, mutationAttrTypeKey[i]))
+            {
+            /* print new name */
+            printf("</DD>");
+            printf("<DT><B>%s:</B></DT><DD>\n", mutationAttrTypeDisplay[i]);
+            freeMem(prevType);
+            prevType = cloneString(mutationAttrTypeKey[i]);
+            }
+        /* else print value */
+        printf("%s", attr.attrVal);
+        if (differentString(mutationAttrTypeKey[i], "links"))
+            printf("<BR />\n");
+        if (differentString(attr.linkId, "")) 
+            {
+            /* indent linked attributes except links */
+            if (differentString(mutationAttrTypeKey[i], "links"))
+                printf("<DL><DT></DT><DD>\n");
+            printGenomeVarAttrLink(attr.linkId);
+            if (differentString(mutationAttrTypeKey[i], "links"))
+                printf("</DD></DL>");
+            }
+        }
+    }
+sqlFreeResult(&sr);
+if (hasAttr > 0)
+    printf("</DD>"); 
+printf("</DL>\n");
+
+genomeVarFree(&mut);
+freeMem(escName);
+freeMem(prevCat);
+freeMem(prevType);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void doHgMut (struct trackDb *tdb, char *itemName)
 /* this prints the detail page for the Human Mutation track */
 {
@@ -18745,6 +18978,10 @@ else if (sameString("illumina", track))
 else if (sameString("hgMut", track))
     {
     doHgMut(tdb, item);
+    }
+else if (sameString("genomeVar", track))
+    {
+    doGenomeVar(tdb, item);
     }
 else if (sameString("landmark", track))
     {

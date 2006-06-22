@@ -23,6 +23,7 @@
 #include "phyloTree.h"
 #include "humanPhenotypeUi.h"
 #include "hgMutUi.h"
+#include "genomeVarUi.h"
 #include "landmarkUi.h"
 #include "chromGraph.h"
 #include "hgConfig.h"
@@ -32,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.278 2006/06/21 22:01:05 heather Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.279 2006/06/22 22:05:53 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -511,6 +512,31 @@ for (i = 0; i < landmarkTypeSize; i++)
     }
 }
 
+void genomeVarIdControls (struct trackDb *tdb)
+/* print the controls for the label choice */
+{
+char varName[64];
+boolean option = FALSE;
+
+printf("<B>Label:</B> ");
+safef(varName, sizeof(varName), "%s.label.hgvs", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+/* need to change HGVS to reflect different species */
+printf(" %s&nbsp;&nbsp;&nbsp;", "HGVS name");
+
+safef(varName, sizeof(varName), "%s.label.common", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "Common name");
+
+safef(varName, sizeof(varName), "%s.label.dbid", tdb->tableName);
+option = cartUsualBoolean(cart, varName, FALSE);
+cgiMakeCheckBox(varName, option);
+printf(" %s&nbsp;&nbsp;&nbsp;", "ID");
+printf("<BR />\n");
+}
+
 void hgMutIdControls (struct trackDb *tdb) 
 /* print the controls for the label choice */
 {
@@ -533,6 +559,45 @@ option = cartUsualBoolean(cart, varName, FALSE);
 cgiMakeCheckBox(varName, option);
 printf(" %s&nbsp;&nbsp;&nbsp;", "ID");
 printf("<BR />\n");
+}
+
+void genomeVarUi(struct trackDb *tdb)
+/* print UI for human mutation filters */
+{
+int i = 0; /* variable to walk through arrays */
+char **row;
+struct sqlResult *sr;
+struct sqlConnection *conn = hAllocConn();
+char srcButton[128];
+
+genomeVarIdControls(tdb);
+printf("<BR /><B>Exclude mutation type</B><BR />");
+for (i = 0; i < mutationTypeSize; i++)
+    {
+    cartMakeCheckBox(cart, mutationTypeString[i], FALSE);
+    printf (" %s<BR />", mutationTypeLabel[i]);
+    }
+
+printf("<BR /><B>Exclude mutation location</B><BR />");
+for (i = 0; i < mutationLocationSize; i++)
+    {
+    cartMakeCheckBox(cart, mutationLocationString[i], FALSE);
+    printf (" %s<BR />", mutationLocationLabel[i]);
+    }
+
+printf("<BR /><B>Exclude data source</B><BR />");
+sr = sqlGetResult(conn, "select distinct(src) from genomeVarSrc order by src");
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    safef(srcButton, sizeof(srcButton), "genomeVar.filter.src.%s", row[0]);
+    cartMakeCheckBox(cart, srcButton, FALSE);
+    if (differentString(row[0], "LSDB")) 
+        printf (" %s<BR />", row[0]);
+    else 
+        printf (" Locus Specific Databases<BR />");
+    }
+sqlFreeResult(&sr);
+hFreeConn(&conn);
 }
 
 void hgMutUi(struct trackDb *tdb)
@@ -2042,6 +2107,8 @@ else if (sameString(track, "transRegCode"))
     transRegCodeUi(tdb);
 else if (sameString(track, "hgMut"))
     hgMutUi(tdb);
+else if (sameString(track, "genomeVar"))
+    genomeVarUi(tdb);
 else if (sameString(track, "landmark"))
     landmarkUi(tdb);
 else if (sameString(track, "humanPhenotype"))

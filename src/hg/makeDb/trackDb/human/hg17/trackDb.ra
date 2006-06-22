@@ -1304,6 +1304,15 @@ visibility hide
 color 150,0,150
 type bed 4 +
 
+track genomeVar
+shortLabel $Organism Mutation v2
+longLabel Compilation of $Organism Disease Variants and Other Mutations v2
+group phenDis
+priority 144.7
+visibility hide
+color 150,0,150
+type bed 4 +
+
 track landmark
 shortLabel Landmarks
 longLabel Compilation of Landmarks from ORegAnno and Locus Experts

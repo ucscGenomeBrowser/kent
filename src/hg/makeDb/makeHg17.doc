@@ -21338,6 +21338,88 @@ load data local infile "hgMutAttrLink.txt" into table hgMutAttrLink;
 load data local infile "hgMutAttrSP.txt" into table hgMutAttr;
 
 #############################################################
+# genomeVar  Belinda Giardine
+# These tables are to replace the hgMut tables
+# Most data is converted by me (on PSU machines) to loadable format and copied.
+# The Swiss-Prot/UniProt data, is generated from the dv track tables and
+# the UniProt database, using perl scripts and table dumps.
+# scripts: generateHGVSname, convertAttrLink, convertAttrSP
+
+#building Swiss-Prot attributes
+#start at links work back to attributes.
+#need a linkId for each spId that has UniProt disease, polymorphism, or OMIM title
+# scripts in ~giardine/humPhen/dvData
+#map OMIM IDs to spIds listSpXref2.sql
+#spId omimId (all have titles?)
+hgsql proteome < listSpXref2.sql > listSpXref2.txt
+#make other lists from tables
+hgsql hg17 < listGeneVals.sql > listGeneVals.tab
+hgsql hg17 < listGenes.sql > listGenes.txt
+hgsql hg17 < listSPconnections.sql > listSPconnections.tab
+#next make genomeVarAttrLink entries from the gene list
+#assign an ID per gene, 1 row per gene based link in ra, add appropriate acc
+#only make links where data available (listGeneVals)
+cat listGeneVals.tab listGenes.txt | convertAttrLink > genomeVarAttrLinkSPgene.txt
+#next generate the hgMutAttr entries, for the SP variants
+#use listSPconnections to get ID connections, based on dv table
+#match up spId to get gene ID
+convertAttrSP < listSPconnections.tab > genomeVarAttrSPgene.txt
+#generateHGVSname is up 1 directory and does rest of SwissProt data
+#this script needs redone to not depend on dv tables
+
+# June 21, 2006
+autoSql genomeVar.as genomeVar -dbLink
+#move bin in struct so works as bed 4+
+#move .h file to inc
+
+#edit indexes and string lengths in .sql file
+mutId=64, lsdbAbrev=48, nameType=48, linkId=64, raKey=64
+primary key=index except genomeVarSrc table
+#do enums
+#add unique index, to prevent doubles
+UNIQUE KEY (chrom(12), chromStart, chromEnd, mutId)
+
+#create tables
+hgsql hg17 < genomeVar.sql
+
+#prep data: concatenate all the genomeVar data
+cat genomeVarSP.txt genomeVarBgmut.txt genomeVarCftr.txt genomeVarHbVar.txt genomeVarPah.txt genomeVarARdb.txt > genomeVarAll.txt
+#sort
+grep "^chr" genomeVarAll.txt | sort -k1,1 -k2,2n > genomeVarSortedHg17.bed
+
+#load tables
+hgLoadBed hg17 genomeVar genomeVarSortedHg17.bed -noSort -oldTable -tab
+hgsql hg17 < genomeVarSrc.sql
+hgsql hg17
+        load data local infile "genomeVarAttrSP.txt" into table genomeVarAttr;
+        load data local infile "genomeVarAttrSPgene.txt" into table genomeVarAttr;
+        load data local infile "genomeVarAttrARdb.txt" into table genomeVarAttr;
+        load data local infile "genomeVarAttrBgmut.txt" into table genomeVarAttr;
+        load data local infile "genomeVarAttrCftr.txt" into table genomeVarAttr;
+        load data local infile "genomeVarAttrHbVar.txt" into table genomeVarAttr;
+        load data local infile "genomeVarAttrPah.txt" into table genomeVarAttr;
+        load data local infile "genomeVarAttrLinkSP.txt" into table genomeVarAttrLink;
+        load data local infile "genomeVarAttrLinkSPgene.txt" into table genomeVarAttrLink;
+        load data local infile "genomeVarAttrLinkBgmut.txt" into table genomeVarAttrLink;
+        load data local infile "genomeVarAttrLinkHbVar.txt" into table genomeVarAttrLink;
+        load data local infile "genomeVarAttrLinkPah.txt" into table genomeVarAttrLink;
+        load data local infile "genomeVarAliasHbVar.txt" into table genomeVarAlias;
+        load data local infile "genomeVarAliasBgmut.txt" into table genomeVarAlias;
+        load data local infile "genomeVarAliasCftr.txt" into table genomeVarAlias;
+        load data local infile "genomeVarAliasPah.txt" into table genomeVarAlias;
+#loading results:
+load of genomeVar did not go as planned: 21572 record(s), 1245 row(s) skipped, 1 warning(s) loading bed.tab
+#skipped okay, from unique index, warning?
+#warning from unknown in cftr data - fixed
+load of genomeVar did not go as planned: 21572 record(s), 1245 row(s) skipped, 0 warning(s) loading bed.tab
+#all load data local lines loaded without errors
+
+#reloaded SP attributes, to handle new omimTitle set up June 22, 2006
+#removed OMIM links that are no longer needed
+delete from genomeVarAttr where mutId like 'VAR%' and attrKey = 'links' and attrVal = 'OMIM';
+Query OK, 49502 rows affected (0.78 sec)
+
+#############################################################
 # Illumina Hap300
 
 cd /cluster/data/hg17/bed

@@ -1870,6 +1870,24 @@ identifier hgMutLinkId
     hg17.hgMutLink.linkId
     hg17.hgMutExtLink.linkId
 
+#links between genomeVar (the new Human Mutation) and related tables 
+
+identifier genomeVarMutId
+"Human Mutation track mutation identifier for attributes and links"
+    hg17.genomeVar.mutId dupeOk
+    hg17.genomeVarAlias.mutId
+    hg17.genomeVarAttr.mutId
+
+identifier genomeVarSrcId
+"Human Mutation track source ID"     
+    hg17.genomeVarSrc.srcId
+    hg17.genomeVar.srcId
+
+identifier genomeVarLinkId
+"Human Mutation track link ID: links from mutations to data sources +"
+    hg17.genomeVarAttrLink.linkId
+    hg17.genomeVarAttr.linkId
+
 # Dependencies not already captured in identifiers
 
 dependency $hg.gladHumESDistance $hg.knownToGnfAtlas2 hgFixed.gladHumESRatio

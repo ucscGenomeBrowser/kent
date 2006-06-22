@@ -63,36 +63,36 @@ int mutationLocationSize = ArraySize(mutationLocationLabel);
 
 /* list in display order of attribute type, key that is used in table */
 char *mutationAttrTypeKey[] = {
-    "rnaNtchange",
+    "links",
+    "rnaNtChange",
     "protEffect",
     "phenoCommon",
     "phenoOfficial",
     "geneVarsDis",
     "hap",
     "ethnic",
-    "links",
 };
 
 /* list in display order of attribute type display names */
 char *mutationAttrTypeDisplay[] = {
+    "External links",
     "RNA nucleotide change",
     "Effect on Protein",
-    "Common name",
-    "Official nomenclature",
-    "Variation and Disease Info",
+    "Phenotype common name",
+    "Phenotype official nomenclature",
+    "Variation and Disease information related to gene locus",
     "Haplotype",
     "Ethnicity/Nationality",
-    "External links",
 };
 
 /* category for each type above, match up by array index */
 char *mutationAttrCategory[] = {
+    "Links",
     "RNA effect",
     "Protein effect",
     "Patient/Subject phenotype",
     "Patient/Subject phenotype",
     "Data related to gene locus",
-    "Other Ancillary data",
     "Other Ancillary data",
     "Other Ancillary data",
 };
