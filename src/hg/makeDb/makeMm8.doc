@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.60 2006/06/22 17:42:55 fanhsu Exp $"
+#	"$Id: makeMm8.doc,v 1.61 2006/06/22 23:00:24 hiram Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -5998,6 +5998,57 @@ done
     #	clean up
     gzip ensGene.gtf
     rm genePred.tab
+
+    #	Now, an experiment to determine if the Ensembl peptide sequences
+    #	are the same thing we get here upon translation of the CDS coding
+    #	sequence from the genome
+    mkdir /cluster/data/mm8/bed/ensGene/testPeptides
+    cd /cluster/data/mm8/bed/ensGene/testPeptides
+    getRnaPred -cdsOnly mm8 ensGene all stdout | gzip > all.cdsOnly.gz
+    #	Obtaining protein sequence from EnsMart
+    #	Select "sequences" from the pull-down on the output page
+    #	check Peptide in the "Sequences" selection area
+    #	and "Ensembl Transcript ID (versioned) in the Transcript
+    #	Attributes area
+    #	Text,Fasta output, gzip, file name: ensPepMm8
+    #	becomes ensPepMm8.fasta.gz
+
+    #	A special faToTab.pl script to allow an exclude list, first need
+    #	to obtain the exclude list from the ensembl set:
+    zcat ensPepMm8.fasta.gz \
+	| ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \
+	    | sed -e "/^$/d; s/\*$//" | sort > ensPepMm8.fa.tab
+    #	extract the exclude list from that
+    grep "Sequence unavailable" ensPepMm8.fa.tab \
+	| awk '{print $1}' > excludeList.txt
+    #	now filter via that exclude list, remove the final '*' character
+    #	from their protein sequence and sort by name
+    zcat ensPepMm8.fasta.gz \
+	| ~/kent/src/utils/faToTab/faToTab.pl excludeList.txt /dev/stdin \
+	    | sed -e "/^$/d; s/\*$//" | sort > ensPepMm8.fa.tab
+    #	and then our peptides, same filter, remove the final 'Z' character
+    #	from this protein sequence (the stop codon):
+    zcat all.cdsOnly.gz | faTrans stdin stdout \
+	| ~/kent/src/utils/faToTab/faToTab.pl excludeList.txt /dev/stdin \
+	    | sed -e "/^$/d; s/Z$//" | sort > all.fa.tab
+    #	do we have the same lists:
+    awk '{print $1}' ensPepMm8.fa.tab > ensList		
+    awk '{print $1}' all.fa.tab > ucscList
+    diff ensList ucscList
+    #	no differences in the name list, numbering:
+    wc -l ensList ucscList
+    #	31302 ensList
+    #	31302 ucscList
+    #	How many proteins different:
+    diff ensPepMm8.fa.tab all.fa.tab | grep "^>" | awk '{print $2}' | wc -l
+    #	37
+    #	Taking a look at that difference, it is difficult to see the
+    #	individual differences, some are single amino acid
+    #	differences, others are more radically different:
+    diff ensPepMm8.fa.tab all.fa.tab | less
+
+    #	Conclusion, the 37 differences out of 31,302 are not worth the
+    #	trouble to load up the entire Ensembl peptide table 
 
 ###########################################################################
 ## MAKE SUPERFAMILY TRACK (DONE, 6/22/06, Fan)
