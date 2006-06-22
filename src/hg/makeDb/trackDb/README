@@ -155,6 +155,7 @@ The format of the type fields:
             be specified as the last word on this line.
             (e.g. pairwise CFTR 20, will have 20 pixel height of
             pairwise wiggle from tables named <species>_CFTR_wig).
+      pairwiseHeight N - sets pixel height of pairwise in full mode
       summary - contains table name of maf summary table (used as 
             replacement for "pairwise" tables, above.  A summary
             table is created from a multiple alignment maf file
