@@ -449,7 +449,7 @@ urlLabel Yale DART Link:
 
 track encodeSangerChip
 compositeTrack on
-subGroup1 celltype Cell_Type gm06990=GM06990 hela=HeLa k562=K562 hfl1=HFL-1
+subGroup1 celltype Cell_Type gm06990=GM06990 k562=K562 hela=HeLa hfl1=HFL-1
 subGroup2 factor Factor h3k4me1=H3K4me1 h3k4me2=H3K4me2 h3k4me3=H3K4me3 h3ac=H3ac h4ac=H4ac
 shortLabel Sanger ChIP
 longLabel Sanger ChIP/Chip (histones H3,H4 ab in GM06990, K562, HeLa, and HFL-1 cells) 
