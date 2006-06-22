@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.14 2006/06/22 00:32:37 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.15 2006/06/22 05:06:12 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -52,6 +52,7 @@ void addCustomTextEntry()
 /* display UI for adding custom tracks by URL or pasting data */
 {
 cartRemovePrefix(cart, hgCtDataFile);
+cgiParagraph("");
 
 cgiSimpleTableStart();
 
@@ -101,12 +102,9 @@ void addCustomFileEntry()
 
 cartRemove(cart, hgCtDataText);
 
+cgiParagraph("Upload file, or <A HREF=\"../cgi-bin/hgCustom?hgCt_do_fileEntry=0\">paste in URLs or data</A>");
+cgiParagraph("");
 cgiSimpleTableStart();
-
-cgiSimpleTableRowStart();
-puts("<TD COLSPAN=2>");
-puts("Upload file, or <A HREF=\"../cgi-bin/hgCustom?hgCt_do_fileEntry=0\">paste in URLs or data</A>");
-cgiTableRowEnd();
 
 cgiSimpleTableRowStart();
 cgiTableField("Data file:");
@@ -327,11 +325,9 @@ cartSaveSession(cart);
 /* get existing custom tracks from cart */
 ctList = customTracksParseCart(cart, &browserLines, &ctFileName);
 doBrowserLines(browserLines);
-//uglyf("<BR><FONT COLOR='GRAY'>Starting with %d cts<BR>", slCount(ctList));
 ctHash = hashNew(5);
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    //uglyf("<BR>Existing ct: %s<BR>", ct->tdb->tableName);
     hashAdd(ctHash, ct->tdb->tableName, ct);
     }
 
@@ -359,7 +355,6 @@ if (cartVarExists(cart,hgCtDataFile))
     }
 else if (cartVarExists(cart, hgCtDoDelete))
     {
-    //uglyf("<BR><FONT COLOR='GRAY'>delete tracks<BR>");
     /* delete tracks */
     for (ct = ctList; ct != NULL; ct = ct->next)
         {
@@ -413,8 +408,6 @@ if (ctList != NULL)
     {
     /* display list of custom tracks, with checkboxes to select for delete */
     showCustom();
-
-    //uglyf("<BR><FONT COLOR='GRAY'>saving %d cts<BR>\n", slCount(ctList));
 
     /* create custom track file in trash dir, if needed */
     if (ctFileName == NULL)
