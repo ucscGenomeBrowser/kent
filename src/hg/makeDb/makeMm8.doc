@@ -4,7 +4,7 @@ exit; # don't actually run this like a script :)
 # This file describes browser build for the mouse
 # genome, February 2006, ncbi mouse_36 - Mm8
 #
-#	"$Id: makeMm8.doc,v 1.59 2006/06/22 17:07:55 hiram Exp $"
+#	"$Id: makeMm8.doc,v 1.60 2006/06/22 17:42:55 fanhsu Exp $"
 #
 #######################################################################
 # DOWNLOAD THE MOUSE SEQUENCE FROM NCBI (DONE - 2006-02-14 - Hiram)
@@ -6000,3 +6000,33 @@ done
     rm genePred.tab
 
 ###########################################################################
+## MAKE SUPERFAMILY TRACK (DONE, 6/22/06, Fan)
+
+# If mm8.superfamily already exists, drop it.
+   cd /cluster/data/mm8/bed
+   mkdir /cluster/data/mm8/bed/sf.20060622
+   ln -s sf.20060622 sf
+   cd sf
+   hgSuperfam mm8 superfam060619 > sf.log
+
+# It is normal that many proteins do not have corresponding Superfamily entries.
+
+# If mm8.sfDescription exists, drop it.
+
+   hgsql mm8 < ~/src/hg/lib/sfDescription.sql
+   hgsql mm8 -e 'LOAD DATA local INFILE "sfDescription.tab"  into table mm8.sfDescription;'
+
+# Finally, load the superfamily table.
+
+   hgLoadBed mm8 superfamily superfamily.tab -tab
+
+# Create knownToEnsembl table
+   hgMapToGene mm8 ensGene knownGene knownToEnsembl
+
+# Create knownToSuperfamily table
+# Note hs is changed into ht for this Superfamily release.
+
+   cat /cluster/data/superfamily/060619/ass_18-Jun-2006.tab \
+   | hgKnownToSuper mm8 mm stdin
+# 26547 records output
+
