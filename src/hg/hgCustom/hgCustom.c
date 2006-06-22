@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.15 2006/06/22 05:06:12 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.16 2006/06/22 05:23:27 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -129,21 +129,21 @@ cgiTableEnd();
 void showCustom()
 /* list custom tracks and display checkboxes so user can select for delete */
 {
-int i;
+//int i;
 struct customTrack *ct;
 char option[64];
 
 webNewSection("Remove Custom Tracks");
 hTableStart();
-puts("<TR><TH align=LEFT colspan=3 BGCOLOR=#536ED3>");
+puts("<TR><TH ALIGN=LEFT COLSPAN=2 BGCOLOR=#536ED3>");
 printf("<B>&nbsp;%s</B> ", wrapWhiteFont("Custom Tracks"));
-for (i = 0; i < 50; i++)
-    puts("&nbsp;");
+puts("<TD BGCOLOR=#536ED3>");
 cgiMakeButton(hgCtDoDelete, "Delete");
+cgiTableFieldEnd();
 puts("</TH></TR>");
 for (ct = ctList; ct != NULL; ct = ct->next)
     {
-    printf("<TR><TD> %s </TD><TD> %s </TD><TD>", 
+    printf("<TR><TD>&nbsp; %s &nbsp; </TD><TD>&nbsp; %s &nbsp; </TD><TD ALIGN=CENTER>", 
             ct->tdb->shortLabel, ct->tdb->longLabel);
     safef(option, sizeof(option), "%s_%s", hgCtDeletePrefix, 
             ct->tdb->tableName);
@@ -290,7 +290,7 @@ void startCustomForm()
 {
 puts("Display your own custom annotation tracks in the browser"
      " using the procedure described in the custom tracks"
-"<A TARGET=_BLANK HREF=\"../goldenPath/help/customTrack.html\"> user's guide </A>."
+"<A TARGET=_BLANK HREF=\"/goldenPath/help/customTrack.html\"> user's guide </A>."
      " For information on upload procedures and supported formats, see "
      "the \"Loading Custom Annotation Tracks\" section, below.");
 /* create HMTL form */
