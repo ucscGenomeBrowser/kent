@@ -5,7 +5,7 @@
 #include "options.h"
 #include "chainNet.h"
 
-static char const rcsid[] = "$Id: netFilter.c,v 1.18 2005/08/11 23:21:42 kate Exp $";
+static char const rcsid[] = "$Id: netFilter.c,v 1.19 2006/06/22 08:27:02 jill Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -221,7 +221,10 @@ if (fill->chainId)
         return FALSE;
     if (noRandom)
         {
-	if (endsWith(fill->qName, "_random"))
+	if (endsWith(fill->qName, "_random") 
+	    || startsWith("chrUn", fill->qName)
+	    || sameWord("chrNA", fill->qName) /* danRer */
+	    || sameWord("chrU", fill->qName)) /* dm */
 	    return FALSE;
 	}
     if (fill->qStart < qStartMin || fill->qStart >= qStartMax)
@@ -367,7 +370,10 @@ for (i=0; i<inCount; ++i)
 		writeIt = FALSE;
 	    if (notTHash != NULL && hashLookup(notTHash, net->name))
 		writeIt = FALSE;
-	    if (noRandom && endsWith(net->name, "_random"))
+	    if (noRandom && (endsWith(net->name, "_random")
+			     || startsWith("chrUn", net->name)
+			     || sameWord("chrNA", net->name) /* danRer */
+			     || sameWord("chrU", net->name)))  /* dm */
 	        writeIt = FALSE;
 	    if (writeIt)
 		{
