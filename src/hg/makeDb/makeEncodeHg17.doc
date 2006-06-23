@@ -1519,7 +1519,7 @@ cat > load.csh << 'EOF'
 #       monDom1 panTro1 rheMac1 rn3 tetNig1
 # NOTE: reloaded phastCons scores (previously only manual regions
 #       were loaded (2006-05-03 kate)
-
+# Reloaded elements with updated files from Elliott (2006-06-22 kate)
     # TBA alignments
     cd /cluster/data/encode/TBA
     mkdir -p SEP-05/lab
@@ -1632,38 +1632,23 @@ cat > project.csh << 'EOF'
     # NOTE: Updated GERP elements 2/1/06, with new data from Greg Cooper
     # overwriting Elliott's elements.  This is doc'ed in the GERP section.
     cd /cluster/data/encode/MSA
-    mkdir -p SEP-05/elements/lab
-    cd SEP-05/elements/lab
+    mkdir -p SEP-05/elements.2005-12-12/lab
+    cd SEP-05/elements.2005-12-12/lab
     wget ftp://kronos.nhgri.nih.gov/pub/outgoing/elliott/msa/SEP-2005/cons/target.align.conservation.v1.tar.gz
+
+    # data update from Elliott , to fix off-by-one start coords
+    mkdir -p SEP-05/elements.2006-06-22/lab
+    cd SEP-05/elements.2006-06-22/lab
+    # copy in align_elements_tracks.tar.gz
+    # contains 9 tracks of elements (3 aligners * binCons, gerp, phastCons)
     cd ..
 cat > load.csh << 'EOF'
-    foreach d (lab/{tba,mlagan,mavid})
-        set align = `echo $d:t | sed 's/\(.*\)/\u\1/'`
-        set bTable = encode${align}BinConsEl
-        set pTable = encode${align}PhastConsEl
-        set gTable = encode${align}GerpEl
-        rm -f $bTable.bed $pTable.bed $gTable.bed
-        foreach rd ($d/*)
-            set region = $rd:t
-            set offset = `sed -n 's/.*offset=\([0-9][0-9]*\)$/\1/p' \
-                        $rd/human.$region.gerp.bed`
-            echo "$align $region"
-            awk -v OFFSET=$offset \
-                '/^chr/ {printf("%s\t%d\t%d\t%s\t%d\n", \
-                $1,$2+OFFSET,$3+OFFSET,$4,$5)}' \
-                        $rd/human.$region.binCons.bed >> $bTable.bed
-            awk -v OFFSET=$offset \
-                '/^chr/ {printf("%s\t%d\t%d\t%s\t%d\n", \
-                $1,$2+OFFSET,$3+OFFSET,$4,$5)}' \
-                        $rd/human.$region.phastCons.bed >> $pTable.bed
-            awk -v OFFSET=$offset \
-                '/^chr/ {printf("%s\t%d\t%d\t%s\t%.0f\n", \
-                $1,$2+OFFSET,$3+OFFSET,$4,$5)}' \
-                        $rd/human.$region.gerp.bed >> $gTable.bed
-        end
-        hgLoadBed -strict hg17 $bTable $bTable.bed
-        hgLoadBed -strict hg17 $pTable $pTable.bed
-        hgLoadBed -strict hg17 $gTable $gTable.bed
+    foreach f (lab/*.bed)
+        set root = $f:t:r
+        set align = `echo $root:e | perl -wpe  's/(.*)/\u$1/'`
+        set cons = `echo $root:r | perl -wpe 's/(.*)/\u$1/'`
+        set table = encode${align}${cons}El
+        hgLoadBed -strict hg17 $table $f
     end
 'EOF'
     csh load.csh >&! load.log &
