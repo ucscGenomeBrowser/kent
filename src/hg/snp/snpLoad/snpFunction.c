@@ -6,7 +6,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpFunction.c,v 1.10 2006/04/22 00:32:06 heather Exp $";
+static char const rcsid[] = "$Id: snpFunction.c,v 1.11 2006/06/23 21:15:13 heather Exp $";
 
 static char *snpDb = NULL;
 static struct hash *functionHash = NULL;
@@ -70,18 +70,18 @@ f = mustOpen(fileName, "w");
 
 safef(query, sizeof(query),
     "select snp_id, chromStart, chromEnd, loc_type, class, orientation, "
-    "molType, allele, refUCSC, refUCSCReverseComp, observed, weight from %s", tableName);
+    "allele, refUCSC, refUCSCReverseComp, observed, weight from %s", tableName);
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
+    fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3], row[4], row[5]);
     el1 = hashLookup(functionHash,row[0]);
     if (el1 == NULL)
 	fprintf(f, "unknown\t");
     else
         fprintf(f, "%s\t", (char *)el1->val);
-    fprintf(f, "%s\t%s\t%s\t%s\t%s\n", row[7], row[8], row[9], row[10], row[11]);
+    fprintf(f, "%s\t%s\t%s\t%s\t%s\n", row[6], row[7], row[8], row[9], row[10]);
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
@@ -102,7 +102,6 @@ char *createString =
 "    loc_type tinyint(4) not null,\n"
 "    class varchar(255) not null,\n"
 "    orientation tinyint(4) not null,\n"
-"    molType varchar(255) not null,\n"
 "    fxn_class varchar(255) not null,\n"
 "    allele blob,\n"
 "    refUCSC blob,\n"
