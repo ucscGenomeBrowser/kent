@@ -9,14 +9,14 @@ O = snpContigLocFilter.o snpContigLocusIdFilter.o snpContigLocusIdCondense.o \
     snpCheckAlleles.o snpLoadFasta.o snpReadFasta.o snpCheckClassAndObserved.o \
     snpFunction.o snpSNP.o snpFinalTable.o snpMultiple.o snpMissing.o snpCompareLoctype.o \
     snpPAR.o snpExceptionCheck.o illuminaLookup.o snpCompareWeight.o subSnpCondense.o \
-    snpClassAndObserved.o
+    snpClassAndObserved.o snpMoltype.o
 
 all: snpContigLocFilter snpContigLocusIdFilter snpContigLocusIdCondense \
      snpSplitByChrom snpLocType snpExpandAllele snpSort snpRefUCSC \
      snpCheckAlleles snpLoadFasta snpReadFasta snpCheckClassAndObserved \
      snpFunction snpSNP snpFinalTable snpMultiple snpMissing snpCompareLoctype \
      snpPAR snpExceptionCheck illuminaLookup snpCompareWeight subSnpCondense \
-     snpClassAndObserved
+     snpClassAndObserved snpMoltype
 
 snpContigLocFilter: snpContigLocFilter.o ${MYLIBS}
 	${CC} -O -o snpContigLocFilter snpContigLocFilter.o ${MYLIBS} $L
@@ -89,3 +89,6 @@ subSnpCondense: subSnpCondense.o ${MYLIBS}
 
 snpClassAndObserved: snpClassAndObserved.o ${MYLIBS}
 	${CC} -O -o snpClassAndObserved snpClassAndObserved.o ${MYLIBS} $L
+
+snpMoltype: snpMoltype.o ${MYLIBS}
+	${CC} -O -o snpMoltype snpMoltype.o ${MYLIBS} $L
