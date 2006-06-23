@@ -8,7 +8,7 @@
 #include "bed.h"
 #include "hgRelate.h"
 
-static char const rcsid[] = "$Id: hgExpDistance.c,v 1.4 2004/07/16 22:13:32 hiram Exp $";
+static char const rcsid[] = "$Id: hgExpDistance.c,v 1.5 2006/06/23 20:31:07 angie Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -220,7 +220,6 @@ struct sqlConnection *conn = sqlConnect(database);
 struct sqlResult *sr;
 char query[256];
 char **row;
-struct bed *bed;
 struct hash *expHash = hashNew(16);
 int realExpCount = -1;
 struct microData *geneList = NULL, *curGene, *gene;
@@ -283,7 +282,6 @@ for (gene = geneList,geneIx=0; gene != NULL; gene = gene->next, ++geneIx)
 /* Print out closest 1000 in tab file. */
 for (curGene = geneList; curGene != NULL; curGene = curGene->next)
     {
-    static int c = 0;
     calcDistances(curGene, geneList, weights);
     qsort(geneArray, geneCount, sizeof(geneArray[0]), cmpMicroDataDistance);
     for (geneIx=0; geneIx < 1000 && geneIx < geneCount; ++geneIx)
