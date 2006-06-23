@@ -14,7 +14,7 @@
 #include "portable.h"
 #include "errCatch.h"
 
-static char const rcsid[] = "$Id: hgCustom.c,v 1.17 2006/06/22 05:37:29 kate Exp $";
+static char const rcsid[] = "$Id: hgCustom.c,v 1.18 2006/06/23 03:03:52 kate Exp $";
 
 void usage()
 /* Explain usage and exit. */
@@ -215,21 +215,22 @@ static struct customTrack *parseTracks(char *var)
 /* get tracks from CGI/cart variable and add to custom track list */
 {
 struct customTrack *addCts = NULL;
-struct customTrack *ct, *oldCt;
+struct customTrack *ct, *oldCt, *next;
 struct errCatch *errCatch = errCatchNew();
 
 if (errCatchStart(errCatch))
     {
     addCts = customTracksParse(cartString(cart, var), FALSE, &browserLines);
     doBrowserLines(browserLines);
-    for (ct = addCts; ct != NULL; ct = ct->next)
+    for (ct = addCts; ct != NULL; ct = next)
         {
         if ((oldCt = hashFindVal(ctHash, ct->tdb->tableName)) != NULL)
             {
             printf("<BR>&nbsp; &nbsp; <FONT COLOR='GREEN'>Replacing track: %s <BR>", ct->tdb->tableName);
             slRemoveEl(&ctList, oldCt);
             }
-        slAddTail(&ctList, ct);
+        next = ct->next;
+        slAddTail(&ctList, ct); 
         }
     cartRemovePrefix(cart, var);
     }
