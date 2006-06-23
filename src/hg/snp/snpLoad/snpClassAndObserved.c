@@ -18,7 +18,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpClassAndObserved.c,v 1.1 2006/06/23 20:44:49 heather Exp $";
+static char const rcsid[] = "$Id: snpClassAndObserved.c,v 1.2 2006/06/23 20:49:42 heather Exp $";
 
 struct snpData
     {
@@ -308,16 +308,16 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     processSnps(chromPtr->name);
     }
 
-// for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
-    // {
-    // safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
-    // if (!hTableExists(tableName)) continue;
-    // recreateDatabaseTable(chromPtr->name);
-    // verbose(1, "loading chrom = %s\n", chromPtr->name);
-    // loadDatabase(chromPtr->name);
-    // }
-
 carefulClose(&errorFileHandle);
+
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
+    {
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
+    if (!hTableExists(tableName)) continue;
+    recreateDatabaseTable(chromPtr->name);
+    verbose(1, "loading chrom = %s\n", chromPtr->name);
+    loadDatabase(chromPtr->name);
+    }
 
 return 0;
 }
