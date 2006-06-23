@@ -9,7 +9,14 @@
 #include "portable.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: rnaStructure.c,v 1.7 2006/03/06 17:46:35 angie Exp $";
+static char const rcsid[] = "$Id: rnaStructure.c,v 1.8 2006/06/23 21:43:24 hiram Exp $";
+
+static void rnaTrashDirsInit(char **tables, int count)
+/*	create trash directories if necessary */
+{
+for ( count--; count > -1; count--)
+    mkdirTrashDirectory(tables[count]);
+}
 
 static boolean rnaStructureExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -28,10 +35,17 @@ static void rnaStructurePrint(struct section *section,
 	struct sqlConnection *conn, char *geneId)
 /* Print out rnaStructure table. */
 {
+static boolean firstTime = TRUE;
 static char *names[2] = 
 	{"5' UTR", "3' UTR"};
 static char *tables[2] = {"foldUtr5", "foldUtr3"};
 int side;
+
+if (firstTime)
+    {
+    rnaTrashDirsInit(tables, ArraySize(tables));
+    firstTime = FALSE;
+    }
 
 hPrintLinkTableStart();
 hPrintLabelCell("Region");
@@ -55,7 +69,7 @@ for (side = 0; side < ArraySize(names); ++side)
 
 	/* Load fold and save it as postScript. */
 	rnaFoldStaticLoad(row, &fold);
-	safef(psName, sizeof(psName), "../trash/%s_%s.ps", table, geneId);
+	safef(psName, sizeof(psName), "../trash/%s/%s_%s.ps", table, table, geneId);
 	if (!fileExists(psName))
 	    {
 	    FILE *f;
