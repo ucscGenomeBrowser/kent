@@ -5,7 +5,7 @@
 #include "common.h"
 #include "vGfx.h"
 
-static char const rcsid[] = "$Id: vGfx.c,v 1.5 2005/07/06 00:06:03 hiram Exp $";
+static char const rcsid[] = "$Id: vGfx.c,v 1.6 2006/06/23 23:45:02 kent Exp $";
 
 
 /* Most of the implementation of this is in macros in vGfx.h. */
@@ -30,3 +30,22 @@ vg->width = width;
 vg->height = height;
 return vg;
 }
+
+int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb)
+/* Find color index corresponding to rgb color. */
+{
+return vgFindColorIx(vg, rgb->r, rgb->g, rgb->b);
+}
+
+Color vgContrastingColor(struct vGfx *vg, int backgroundIx)
+/* Return black or white whichever would be more visible over
+ * background. */
+{
+struct rgbColor c = vgColorIxToRgb(vg, backgroundIx);
+int val = (int)c.r + c.g + c.g + c.b;
+if (val > 512)
+    return MG_BLACK;
+else
+    return MG_WHITE;
+}
+

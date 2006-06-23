@@ -104,9 +104,9 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1138 2006/06/23 19:37:29 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1139 2006/06/23 23:45:04 kent Exp $";
 
-boolean measureTiming = FALSE;	/* Flip this on to display timing
+boolean measureTiming = TRUE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
 static long enteredMainTime = 0;	/* time at beginning of main()	*/
 boolean isPrivateHost;		/* True if we're on genome-test. */
@@ -1136,24 +1136,10 @@ Color lightGrayIndex()
 return shadesOfGray[3];
 }
 
-int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb)
-/* Find color index corresponding to rgb color. */
-{
-return vgFindColorIx(vg, rgb->r, rgb->g, rgb->b);
-}
-
 void makeGrayShades(struct vGfx *vg)
 /* Make eight shades of gray in display. */
 {
-int i;
-for (i=0; i<=maxShade; ++i)
-    {
-    struct rgbColor rgb;
-    int level = 255 - (255*i/maxShade);
-    if (level < 0) level = 0;
-    rgb.r = rgb.g = rgb.b = level;
-    shadesOfGray[i] = vgFindRgb(vg, &rgb);
-    }
+hMakeGrayShades(vg, shadesOfGray, maxShade);
 shadesOfGray[maxShade+1] = MG_RED;
 }
 
@@ -1295,12 +1281,7 @@ chromosomeColorsMade = TRUE;
 int grayInRange(int val, int minVal, int maxVal)
 /* Return gray shade corresponding to a number from minVal - maxVal */
 {
-int range = maxVal - minVal;
-int level;
-level = ((val-minVal)*maxShade + (range>>1))/range;
-if (level <= 0) level = 1;
-if (level > maxShade) level = maxShade;
-return level;
+return hGrayInRange(val, minVal, maxVal, maxShade);
 }
 
 
@@ -1583,7 +1564,7 @@ for (sf = (zoomedToCdsColorLevel && lf->codons) ? lf->codons : lf->components; s
                 (sf->start <= winStart || sf->start == lf->start) &&
                 (sf->end >= winEnd || sf->end == lf->end))
                     {
-                    Color barbColor = contrastingColor(vg, color);
+                    Color barbColor = vgContrastingColor(vg, color);
                     x1 = round((double)((int)s-winStart)*scale) + xOff;
                     x2 = round((double)((int)e-winStart)*scale) + xOff;
                     w = x2-x1;
@@ -3485,7 +3466,7 @@ if (color)
 	w = x2-x1;
 	if (w > mgFontStringWidth(font, s))
 	    {
-	    Color textColor = contrastingColor(vg, color);
+	    Color textColor = vgContrastingColor(vg, color);
 	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
 	    }
 	mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
@@ -3502,7 +3483,7 @@ if (tg->subType == lfWithBarbs)
     if (dir != 0 && w > 2)
 	{
 	int midY = y + (heightPer>>1);
-	Color textColor = contrastingColor(vg, color);
+	Color textColor = vgContrastingColor(vg, color);
 	clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 	
 		dir, textColor, TRUE);
 	}
@@ -3589,13 +3570,13 @@ if (color)
 	w2 = x4 - x3;
 	if (w2 > mgFontStringWidth(font, s))
 	    {
-	    Color textColor = contrastingColor(vg, color);
+	    Color textColor = vgContrastingColor(vg, color);
 	    vgTextCentered(vg, x3, y, w2, heightPer, textColor, font, s);
 	    }
 	else if (w2 > mgFontStringWidth(font, s)/2)
 	    {
 	    /* sqeez in the text for shorter QTL range */
-	    Color textColor = contrastingColor(vg, color);
+	    Color textColor = vgContrastingColor(vg, color);
 	    vgText(vg, x3+1, y+heightPer/2-2, textColor, font, s);
 	    }
 	/* enable mouse over */
@@ -4374,18 +4355,6 @@ void bedLoadItem(struct track *tg, char *table, ItemLoader loader)
 bedLoadItemByQuery(tg, table, NULL, loader);
 }
 
-Color contrastingColor(struct vGfx *vg, int backgroundIx)
-/* Return black or white whichever would be more visible over
- * background. */
-{
-struct rgbColor c = vgColorIxToRgb(vg, backgroundIx);
-int val = (int)c.r + c.g + c.g + c.b;
-if (val > 512)
-    return MG_BLACK;
-else
-    return MG_WHITE;
-}
-
 void bedDrawSimpleAt(struct track *tg, void *item, 
 	struct vGfx *vg, int xOff, int y, 
 	double scale, MgFont *font, Color color, enum trackVisibility vis)
@@ -4422,7 +4391,7 @@ if (color)
 	w = x2-x1;
 	if (w > mgFontStringWidth(font, s))
 	    {
-	    Color textColor = contrastingColor(vg, color);
+	    Color textColor = vgContrastingColor(vg, color);
 	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
 	    }
 	mapBoxHgcOrHgGene(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
@@ -4439,7 +4408,7 @@ if (tg->subType == lfWithBarbs || tg->exonArrows)
     if (dir != 0 && w > 2)
 	{
 	int midY = y + (heightPer>>1);
-	Color textColor = contrastingColor(vg, color);
+	Color textColor = vgContrastingColor(vg, color);
 	clippedBarbs(vg, x1, midY, w, tl.barbHeight, tl.barbSpacing, 
 		dir, textColor, TRUE);
 	}

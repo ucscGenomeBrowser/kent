@@ -81,7 +81,7 @@ else
 	    w = x2-x1;
 	    if (w > mgFontStringWidth(font, s))
 		{
-		Color textColor = contrastingColor(vg, color);
+		Color textColor = vgContrastingColor(vg, color);
 		vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
 		}
 	    mapBoxHc(bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,

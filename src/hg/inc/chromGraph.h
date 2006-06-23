@@ -96,6 +96,9 @@ void chromGraphVarName(char *track, char *var,
 void chromGraphDataRange(char *trackName, struct sqlConnection *conn,
 	double *retMin, double *retMax);
 /* Get min/max values observed from metaChromGraph table */
+
+struct slName *chromGraphListAll(struct sqlConnection *conn);
+/* Return list of all chrom graph tables. */
 	
 char *chromGraphBinaryFileName(char *trackName, struct sqlConnection *conn);
 /* Get binary file name associated with chromGraph track. Returns NULL

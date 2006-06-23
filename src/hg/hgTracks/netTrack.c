@@ -11,7 +11,7 @@
 #include "chainNet.h"
 #include "chainNetDbLoad.h"
 
-static char const rcsid[] = "$Id: netTrack.c,v 1.19 2006/05/04 18:40:30 hiram Exp $";
+static char const rcsid[] = "$Id: netTrack.c,v 1.20 2006/06/23 23:45:04 kent Exp $";
 
 struct netItem
 /* A net track item. */
@@ -177,7 +177,7 @@ int orientation;
 for (fill = fillList; fill != NULL; fill = fill->next)
     {
     color = netColor(fill->qName);
-    invColor = contrastingColor(rVg, color);
+    invColor = vgContrastingColor(rVg, color);
     orientation = orientFromChar(fill->qStrand);
     if (fill->children == NULL || fill->tSize * rScale < 2.5)
     /* Draw single solid box if no gaps or no room to draw gaps. */

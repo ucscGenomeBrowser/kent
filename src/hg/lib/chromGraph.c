@@ -10,7 +10,7 @@
 #include "sig.h"
 #include "chromGraph.h"
 
-static char const rcsid[] = "$Id: chromGraph.c,v 1.4 2006/06/13 14:17:47 kent Exp $";
+static char const rcsid[] = "$Id: chromGraph.c,v 1.5 2006/06/23 23:45:03 kent Exp $";
 
 void chromGraphStaticLoad(char **row, struct chromGraph *ret)
 /* Load a row from chromGraph table into ret.  The contents of ret will
@@ -162,6 +162,12 @@ if (row == NULL)
 *retMin = atof(row[0]);
 *retMax = atof(row[1]);
 sqlFreeResult(&sr);
+}
+
+struct slName *chromGraphListAll(struct sqlConnection *conn)
+/* Return list of all chrom graph tables. */
+{
+return sqlQuickList(conn, "select name from metaChromGraph");
 }
 
 char *chromGraphBinaryFileName(char *trackName, struct sqlConnection *conn)

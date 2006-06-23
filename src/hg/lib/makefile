@@ -38,7 +38,8 @@ O = acemblyClass.o affyAllExonProbe.o affyAtlas.o affy10KDetails.o affy120KDetai
     geneBands.o geneCheck.o geneCheckDetails.o geneCheckWidget.o geneGraph.o genePred.o genePredReader.o genomicDups.o \
     genomicSuperDups.o ggCluster.o ggDbIo.o ggDump.o ggGraph.o ggMrnaAli.o \
     glDbRep.o goa.o goaPart.o growthCondition.o grp.o hapmapSnps.o hCommon.o \
-    hdb.o hgConfig.o hgExp.o hgFind.o hgFindSpec.o hgFindSpecCustom.o \
+    hCytoBand.o hdb.o hgColors.o hgConfig.o hgExp.o hgFind.o \
+    hgFindSpec.o hgFindSpecCustom.o \
     hgGene.o hgMaf.o hgMut.o hgMutUi.o hgRelate.o hgSeq.o \
     HInv.o hui.o humanParalog.o humPhen.o \
     imageClone.o isochores.o itemAttr.o jalview.o \

@@ -146,4 +146,12 @@ void vgClose(struct vGfx **pVg);
 #define vgDrawPoly(v,poly,color,filled) \
 	v->drawPoly(v->data,poly,color,filled)
     /* Draw a polygon in color, optionally filled. */
+
+int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb);
+/* Find color index corresponding to rgb color. */
+
+Color vgContrastingColor(struct vGfx *vg, int backgroundIx);
+/* Return black or white whichever would be more visible over
+ * background. */
+
 #endif /* VGFX_H */

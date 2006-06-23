@@ -3,6 +3,14 @@
 #ifndef HGCOLORS_H
 #define HGCOLORS_H
 
+#ifndef MEMGFX_H
+#include "memgfx.h"
+#endif
+
+#ifndef VGFX_H
+#include "vGfx.h"
+#endif
+
 #define HG_COL_HOTLINKS "2636D1"
 #define HG_COL_HEADER "D9E4F8"
 #define HG_COL_OUTSIDE "FFF9D2"
@@ -12,5 +20,15 @@
 #define HG_COL_BORDER "888888"
 #define HG_COL_TABLE "D9F8E4"
 #define HG_COL_TABLE_LABEL "1616D1"
+
+void hMakeGrayShades(struct vGfx *vg, Color *shades, int maxShade);
+/* Make up gray scale with 0 = white, and maxShade = black. 
+ * Shades needs to have maxShade+1 colors. */
+
+int hGrayInRange(int oldVal, int oldMin, int oldMax, int newMax);
+/* Return oldVal, which lies between oldMin and oldMax, to
+ * equivalent number between 1 and newMax. The way this does it
+ * is perhaps a little odd, forcing 0 go to 1, but visually it works
+ * out nicely when 0 is white. */
 
 #endif /* HGCOLORS_H */

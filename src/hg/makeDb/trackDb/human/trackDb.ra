@@ -7,7 +7,6 @@ longLabel Chromosome Bands Localized by FISH Mapping Clones (for Ideogram)
 group map
 priority .1
 visibility dense
-altColor 150,50,50
 type bed 4 +
 
 track cytoBand
@@ -16,7 +15,6 @@ longLabel Chromosome Bands Localized by FISH Mapping Clones
 group map
 priority 1
 visibility hide
-altColor 150,50,50
 type bed 4 +
 
 track ctgPos

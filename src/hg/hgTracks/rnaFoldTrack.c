@@ -10,7 +10,7 @@
 #include "rnaSecStr.h"
 #include "rnautil.h"
 
-static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.3 2005/03/28 22:42:54 jsp Exp $";
+static char const rcsid[] = "$Id: rnaFoldTrack.c,v 1.4 2006/06/23 23:45:05 kent Exp $";
 
 
 void bedLoadItemBySqlResult(struct track *tg, struct sqlResult *sr, int rowOffset, ItemLoader loader)
@@ -198,7 +198,7 @@ if (color)
 	if (dir != 0 && w > 2)
 	    {
 	    int midY = y + (heightPer>>1);
-	    Color textColor = contrastingColor(vg, color);
+	    Color textColor = vgContrastingColor(vg, color);
 	    clippedBarbs(vg, x1, midY, w, 2, 5, dir, textColor, TRUE);
 	    }
 	}
@@ -209,7 +209,7 @@ if (color)
 	w = x2-x1;
 	if (w > mgFontStringWidth(font, s))
 	    {
-	    Color textColor = contrastingColor(vg, color);
+	    Color textColor = vgContrastingColor(vg, color);
 	    vgTextCentered(vg, x1, y, w, heightPer, textColor, font, s);
 	    }
 	mapBoxHc(rnaSecStr->chromStart, rnaSecStr->chromEnd, x1, y, x2 - x1, heightPer,

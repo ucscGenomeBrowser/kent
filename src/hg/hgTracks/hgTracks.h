@@ -419,10 +419,6 @@ void vgMakeColorGradient(struct vGfx *vg,
  * to end colors in given number of steps.  Put indices
  * in color table in colorIxs */
 
-Color contrastingColor(struct vGfx *vg, int backgroundIx);
-/* Return black or white whichever would be more visible over
- * background. */
-
 boolean isNonChromColor(Color color);
 /* assign fake chrom color to scaffold, based on number */
 

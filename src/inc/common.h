@@ -933,6 +933,9 @@ void uglyTime(char *label, ...);
 void makeDirs(char* path);
 /* make a directory, including parent directories */
 
+char *skipNumeric(char *s);
+/* Return first char of s that's not a digit */
+
 char *skipToNumeric(char *s);
 /* skip up to where numeric digits appear */
 
