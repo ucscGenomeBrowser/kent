@@ -594,6 +594,7 @@ if (-e /tmp/rn4/$2/$2.cat) /bin/cp /tmp/rn4/$2/$2.cat ./
 
 # MAKE DOWNLOADABLE SEQUENCE FILES (DONE 1/30/06 angie)
 # chrom{Fa*,Out}, md5sum.txt REDONE, 3/17/06, after RepeatMasker re-run.
+# upstream*.fa.gz added 6/23/06
     ssh kolossus
     cd /cluster/data/rn4
     #- Build the .tar.gz files -- no genbank for now.
@@ -633,9 +634,17 @@ cd ../..
     mkdir -p $gp/chromosomes
     ln -s /cluster/data/rn4/chromGz/{chr*.gz,*.txt} $gp/chromosomes
     # Take a look at bigZips/* and chromosomes/*
-    # Can't make refGene upstream sequence files - no refSeq for yakuba.
     mkdir $gp/database
     # Create README.txt files in database/ to explain the files.
+    # 6/23/06 -- Add upstream*.fa.gz.
+    cd /cluster/data/rn4/bigZips
+    foreach size (1000 2000 5000)
+      echo $size
+      featureBits rn4 refGene:upstream:$size -fa=stdout \
+      | nice gzip -c > upstream$size.fa.gz
+    end
+    nice md5sum up*.gz >> md5sum.txt
+    ln -s /cluster/data/rn4/bigZips/up*.gz $gp/bigZips/
 
 
 # MAKE 11.OOC (DONE 2/10/06 angie)
