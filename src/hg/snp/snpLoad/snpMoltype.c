@@ -14,7 +14,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMoltype.c,v 1.1 2006/06/23 21:52:04 heather Exp $";
+static char const rcsid[] = "$Id: snpMoltype.c,v 1.2 2006/06/23 21:58:07 heather Exp $";
 
 static struct hash *multiFastaHash = NULL;
 static struct hash *chromFastaHash = NULL;
@@ -210,18 +210,18 @@ chromList = hAllChromNamesDb(snpDb);
 
 errorFileHandle = mustOpen("snpMoltype.errors", "w");
 
-// multiFastaHash = readFasta("chrMulti");
+multiFastaHash = readFasta("chrMulti");
 
-// for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
-    // {
-    // safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
-    // if (!hTableExists(tableName)) continue;
-    // verbose(1, "chrom = %s\n", chromPtr->name);
-    // chromFastaHash = readFasta(chromPtr->name);
-    // processSnps(chromPtr->name);
-    // }
+for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
+    {
+    safef(tableName, ArraySize(tableName), "%s_snpTmp", chromPtr->name);
+    if (!hTableExists(tableName)) continue;
+    verbose(1, "chrom = %s\n", chromPtr->name);
+    chromFastaHash = readFasta(chromPtr->name);
+    processSnps(chromPtr->name);
+    }
 
-// carefulClose(&errorFileHandle);
+carefulClose(&errorFileHandle);
 
 for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     {
