@@ -11,7 +11,7 @@
 #include "portimpl.h"
 #include <dirent.h>
 
-static char const rcsid[] = "$Id: portimpl.c,v 1.13 2006/06/19 23:15:09 hiram Exp $";
+static char const rcsid[] = "$Id: portimpl.c,v 1.14 2006/06/23 21:44:04 hiram Exp $";
 
 static struct webServerSpecific *wss = NULL;
 
@@ -85,16 +85,13 @@ putenv(s);
 void mkdirTrashDirectory(char *prefix)
 /*	create the specified trash directory if it doesn't exist */
 {
-DIR *dirOpen;
+struct stat buf;
 char trashDirName[128];
 safef(trashDirName, sizeof(trashDirName), "%s/%s", trashDir(), prefix);
-dirOpen = opendir(trashDirName);
-if ((DIR *)NULL == dirOpen)
+if (stat(trashDirName,&buf))
     {
     int result = mkdir (trashDirName, S_IRWXU | S_IRWXG | S_IRWXO);
     if (0 != result)
 	errnoAbort("failed to create directory %s", trashDirName);
     }
-else
-    closedir(dirOpen);
 }
