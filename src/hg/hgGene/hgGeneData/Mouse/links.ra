@@ -34,4 +34,11 @@ idSql select Id from geneNetworkId, knownToRefSeq where Id = value and name='%s'
 url http://www.genenetwork.org/cgi-bin/WebQTL.py?cmd=sch&refseq=%s&species=mouse
 priority 140
 
+name protBrowser
+shortLabel Proteome Browser
+tables kgXref
+idSql select spID from kgXref where kgID = '%s'
+nameSql select spId from kgXref where kgID = '%s'
+url ../cgi-bin/pbTracks?proteinID=%s
+priority 21
 

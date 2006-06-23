@@ -62,3 +62,12 @@ idSql select HInv.mrnaAcc from HInv, knownToHInv where knownToHInv.name = '%s' a
 url https://www.jbirc.aist.go.jp/hinv/soup/pub_Detail.pl?acc_id=%s
 priority 112
 
+name protBrowser
+shortLabel Proteome Browser
+tables kgXref
+idSql select spID from kgXref where kgID = '%s'
+nameSql select spId from kgXref where kgID = '%s'
+url ../cgi-bin/pbTracks?proteinID=%s
+hgsid on
+dbInUrl on
+priority 21
