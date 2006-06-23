@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: subSnpCondense.c,v 1.1 2006/06/23 07:04:21 heather Exp $";
+static char const rcsid[] = "$Id: subSnpCondense.c,v 1.2 2006/06/23 16:51:45 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -34,10 +34,12 @@ struct dyString *buildList = newDyString(255);
 char *currentSnpString = NULL;
 int currentSnpNum = 0;
 int count = 0;
+char firstBuild[32];
+char lastBuild[32];
 
 f = hgCreateTabFile(".", "SNPSubSNPLinkCondense");
 
-safef(query, sizeof(query), "select snp_id, subsnp_id, build_id from SNPSubSNPLink");
+safef(query, sizeof(query), "select snp_id, subsnp_id, build_id from SNPSubSNPLink limit 1000");
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -48,10 +50,13 @@ while ((row = sqlNextRow(sr)) != NULL)
 	currentSnpNum = sqlUnsigned(row[0]);
 	dyStringPrintf(ssList, "%s", row[1]);
 	dyStringPrintf(buildList, "%s", row[2]);
+	safef(firstBuild, sizeof(firstBuild), row[2]);
+	safef(lastBuild, sizeof(firstBuild), row[2]);
 	}
     else if (!sameString(row[0], currentSnpString))
         {
-	fprintf(f, "%s\t%s\t%s\t%d\n", currentSnpString, ssList->string, buildList->string, count);
+	fprintf(f, "%s\t%s\t%s\t%s\t%s\t%d\n", 
+	           currentSnpString, ssList->string, buildList->string, firstBuild, lastBuild, count);
 	if (currentSnpNum > sqlUnsigned(row[0]))
 	    errAbort("snps out of order: %d before %s\n", currentSnpNum, row[0]);
 	currentSnpString = cloneString(row[0]);
@@ -60,6 +65,8 @@ while ((row = sqlNextRow(sr)) != NULL)
 	dyStringPrintf(ssList, "%s", row[1]);
 	dyStringClear(buildList);
 	dyStringPrintf(buildList, "%s", row[2]);
+	safef(firstBuild, sizeof(firstBuild), row[2]);
+	safef(lastBuild, sizeof(lastBuild), row[2]);
 	count = 1;
 	}
     else
@@ -69,9 +76,11 @@ while ((row = sqlNextRow(sr)) != NULL)
 	dyStringAppend(ssList, row[1]);
 	dyStringAppend(buildList, ",");
 	dyStringAppend(buildList, row[2]);
+	safef(lastBuild, sizeof(lastBuild), row[2]);
 	}
     }
-fprintf(f, "%s\t%s\t%s\t%d\n", currentSnpString, ssList->string, buildList->string, count);
+fprintf(f, "%s\t%s\t%s\t%s\t%s\t%d\n", currentSnpString, ssList->string, buildList->string, 
+                                       firstBuild, lastBuild, count);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 carefulClose(&f);
@@ -87,6 +96,8 @@ char *createString =
 "    snp_id int(11) not null,       \n"
 "    subsnpIds varchar(255) not null,\n"
 "    buildIds varchar(255) not null,\n"
+"    firstBuild int(11) not null,\n"
+"    lastBuild int(11) not null,\n"
 "    count int(4) not null\n"
 ");\n";
 
