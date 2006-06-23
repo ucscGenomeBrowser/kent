@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.279 2006/06/22 22:05:53 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.280 2006/06/23 16:00:19 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -571,6 +571,13 @@ struct sqlConnection *conn = hAllocConn();
 char srcButton[128];
 
 genomeVarIdControls(tdb);
+printf("<BR /><B>Exclude</B><BR />");
+for (i = 0; i < mutationAccuracySize; i++)
+    {
+    cartMakeCheckBox(cart, mutationAccuracyString[i], FALSE);
+    printf (" %s<BR />", mutationAccuracyLabel[i]);
+    }
+
 printf("<BR /><B>Exclude mutation type</B><BR />");
 for (i = 0; i < mutationTypeSize; i++)
     {

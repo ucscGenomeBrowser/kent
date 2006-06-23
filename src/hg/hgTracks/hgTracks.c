@@ -104,7 +104,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1136 2006/06/22 22:06:11 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1137 2006/06/23 16:00:24 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9799,6 +9799,25 @@ struct hgMut *el = item;
         return MG_BLACK;
 }
 
+boolean genomeVarFilterAccuracy(struct genomeVar *el)
+/* Check to see if this element should be excluded. */
+{
+int cnt = 0;
+char accur[10];
+safef(accur, sizeof(accur), "%u", el->coordinateAccuracy);
+for (cnt = 0; cnt < mutationAccuracySize; cnt++)
+    {
+    if (cartVarExists(cart, mutationAccuracyString[cnt]) &&
+        cartString(cart, mutationAccuracyString[cnt]) != NULL &&
+        differentString(cartString(cart, mutationAccuracyString[cnt]), "0") &&
+        sameString(mutationAccuracyDbValue[cnt], accur))
+        {
+        return FALSE;
+        }
+    }
+return TRUE;
+}
+
 boolean genomeVarFilterSrc(struct genomeVar *el, struct genomeVarSrc *srcList)
 /* Check to see if this element should be excluded. */
 {
@@ -10086,6 +10105,8 @@ while ((row = sqlNextRow(sr)) != NULL)
     else if (!genomeVarFilterLoc(el))
         genomeVarFree(&el);
     else if (!genomeVarFilterSrc(el, srcList))
+        genomeVarFree(&el);
+    else if (!genomeVarFilterAccuracy(el))
         genomeVarFree(&el);
     else
         slAddHead(&list, el);

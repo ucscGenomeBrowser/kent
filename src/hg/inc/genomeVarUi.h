@@ -17,4 +17,9 @@ extern char *mutationAttrTypeDisplay[];
 extern char *mutationAttrCategory[];
 extern int mutationAttrSize;
 
+extern char *mutationAccuracyString[];
+extern char *mutationAccuracyLabel[];
+extern unsigned char *mutationAccuracyDbValue[];
+extern int mutationAccuracySize;
+
 #endif

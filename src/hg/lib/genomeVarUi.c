@@ -61,6 +61,20 @@ char *mutationLocationDbValue[] = {
 
 int mutationLocationSize = ArraySize(mutationLocationLabel);
 
+char *mutationAccuracyLabel[] = {
+    "estimated coordinates",
+};
+
+char *mutationAccuracyString[] = {
+    "genomeVar.filter.estimate",
+};
+
+unsigned char *mutationAccuracyDbValue[] = {
+    "0",
+};
+
+int mutationAccuracySize = ArraySize(mutationAccuracyLabel);
+
 /* list in display order of attribute type, key that is used in table */
 char *mutationAttrTypeKey[] = {
     "links",
