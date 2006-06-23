@@ -19,8 +19,8 @@ echo ""
 echo "check alleles..."
 snpCheckAlleles hg18snp126 
 echo ""
-echo "lookup in chrN_snpFasta..."
-snpReadFasta hg18snp126 
+echo "get class and observed..."
+snpClassAndObserved hg18snp126 
 echo ""
 echo "check class and observed..."
 snpCheckClassAndObserved hg18snp126 
@@ -31,13 +31,16 @@ echo ""
 echo "get validation status and heterozygosity..."
 snpSNP hg18snp126
 echo ""
+echo "get moltype..."
+snpMoltype hg18snp126
+echo ""
 echo "final table..."
+hgsql hg18snp126 < /cluster/home/heather/kent/src/hg/lib/snp126Exceptions.sql
 cp snpCheckAlleles.exceptions snpCheckAlleles.tab
 cp snpCheckClassAndObserved.exceptions snpCheckClassAndObserved.tab
 cp snpExpandAllele.exceptions snpExpandAllele.tab
 cp snpLocType.exceptions snpLocType.tab
-# hgsql -e 'drop table snp126ExceptionsOld' hg18snp126
-# hgsql -e 'rename table snp126Exceptions to snp126ExceptionsOld' hg18snp126
+hgsql -e 'drop table snp126Exceptions' hg18snp126
 snpFinalTable hg18snp126 126
 rm snpCheckAlleles.tab
 rm snpCheckClassAndObserved.tab
@@ -54,15 +57,15 @@ hgsql -e 'load data local infile "snpPARexceptions.tab" into table snp126Excepti
  
 # load including PAR SNPs
 /bin/sh concat.sh
-# rm chr*snp126.tab
-# hgsql -e 'drop table snp126old' hg18snp126
-hgsql -e 'rename table snp126 to snp126old' hg18snp126
+rm chr*snp126.tab
+hgsql -e 'drop table snp126' hg18snp126
 hgsql hg18snp126 < /cluster/home/heather/kent/src/hg/lib/snp126.sql
 hgsql -e 'load data local infile "snp126.tab" into table snp126' hg18snp126
 cp snp126.tab /cluster/home/heather/transfer/snp
-# rm snp126.tab
+rm snp126.tab
 
 # compareLoctype
+hgsql -e "drop table snp126new" hg18snp126
 hgsql -e 'rename table snp126 to snp126new' hg18snp126
 snpCompareLoctype hg18snp126 snp125subset snp126new
 hgsql -e 'rename table snp126new to snp126' hg18snp126
