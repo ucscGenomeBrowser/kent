@@ -1,9 +1,1 @@
-# Proteome Browser link info.
-name protBrowser
-shortLabel Proteome Browser
-tables kgXref
-idSql select spID from kgXref where kgID = '%s'
-nameSql select spId from kgXref where kgID = '%s'
-url ../cgi-bin/pbTracks?proteinID=%s
-priority 21
-
+# mm8 link info.
