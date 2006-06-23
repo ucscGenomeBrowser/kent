@@ -18,7 +18,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpClassAndObserved.c,v 1.2 2006/06/23 20:49:42 heather Exp $";
+static char const rcsid[] = "$Id: snpClassAndObserved.c,v 1.3 2006/06/23 20:52:01 heather Exp $";
 
 struct snpData
     {
@@ -45,6 +45,8 @@ char *classStrings[] = {
     "mixed",
     "mnp"
 };
+
+int classCount = sizeof(classStrings);
 
 void usage()
 /* Explain usage and exit. */
@@ -85,8 +87,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	skipCount++;
 	continue;
 	}
-    // this is buried, make it a constant
-    if (classInt > 8)
+    if (classInt > classCount)
         {
 	fprintf(errorFileHandle, "unexpected subsnp_class = %d for univar_id %s (skipping)\n", classInt, row[0]);
 	skipCount++;
@@ -198,7 +199,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     dataElement = (struct snpData *)univarElement->val;
     classInt = dataElement->classInt;
     // verbose(1, "classInt = %d\n", classInt);
-    assert(classInt >= 1 && classInt <= 8);
+    assert(classInt >= 1 && classInt <= classCount);
     /* lookup classString */
     classString = classStrings[classInt-1];
     /* special handling for class = in-del; split into classes of our own construction */
