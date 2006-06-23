@@ -4,7 +4,9 @@
  * 
  *  Designed to be run either as a cgi or as a command-line utility.
  *  The input file spec matches the .nh tree format e.g. (cat:0.5,dog:0.6):1.2;
- *  The output gif layout ignores branch lengths by design.
+ *  The output gif layout was originally designed to ignore branch lengths.
+ *  However, options have now been added to allow it to use branchlengths,
+ *  and to label the length of the branches.
  *  Any _suffix is stripped from labels both because pyloTree.c 
  *  can't tolerate underscores and because we don't want suffixes anyway.
  *  A semi-colon is automatically appended to the input if left off.
@@ -50,9 +52,11 @@
 #include "portable.h"
 #include "memgfx.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.1 2006/06/22 19:13:42 galt Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.2 2006/06/23 01:36:08 galt Exp $";
 
 int width=240,height=512;
+boolean branchLengths = FALSE;  /* branch lengths */
+boolean branchLabels = FALSE;   /* labelled branch lengths */
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -67,8 +71,11 @@ errAbort(
     "  -phyloGif_width - width of output GIF, default %d\n"
     "  -phyloGif_height - height of output GIF, default %d\n"
     "  -phyloGif_tree - data in format (nodeA:0.5,nodeB:0.6):1.2;\n"
-    "     If running at the command-line, can put filename here or stdin.\n"
-    "     (this is actually required).\n"
+    "     If running at the command-line, can put filename here or stdin\n"
+    "     (this is actually required)\n"
+    "  -phyloGif_branchLengths - use branch lengths for layout\n"
+    "  -phyloGif_branchLabels - show length of branch as label\n"
+    "     (used with -phyloGif_branchLengths)\n"
     , msg, width, height);
 }
 
@@ -76,6 +83,7 @@ struct phyloLayout
 {
     int depth;          /* leaves have depth=0 */
     double vPos;        /* vertical position   */
+    double hPos;        /* horizontal position */
 };
 
 
@@ -115,9 +123,11 @@ while(TRUE)
 }
 
 
-static void phyloTreeLayout(struct phyloTree *phyloTree, 
+#define MARGIN 10
+
+static void phyloTreeLayoutBL(struct phyloTree *phyloTree, 
     int *pMaxDepth, int *pNumLeafs, int depth,
-    MgFont *font, int *pMaxLabelWidth)
+    MgFont *font, int *pMaxLabelWidth, int width, double *pMinMaxFactor, double parentHPos)
 /* do a depth-first recursion over the tree, assigning depth and vPos to each node
  * and keeping track of maxDepth and numLeafs to return */
 {
@@ -126,13 +136,14 @@ if (depth > *pMaxDepth)
     *pMaxDepth = depth;
 phyloTree->priv = (void *) needMem(sizeof(struct phyloLayout));
 this = (struct phyloLayout *) phyloTree->priv;
+this->hPos = parentHPos + phyloTree->ident->length;
 if (phyloTree->numEdges == 2)  /* node */
     {
     int maxDepth = 0;
     struct phyloLayout *that = NULL;
     double vPos = 0;
-    phyloTreeLayout(phyloTree->edges[0], pMaxDepth, pNumLeafs, depth+1, font, pMaxLabelWidth);
-    phyloTreeLayout(phyloTree->edges[1], pMaxDepth, pNumLeafs, depth+1, font, pMaxLabelWidth);
+    phyloTreeLayoutBL(phyloTree->edges[0], pMaxDepth, pNumLeafs, depth+1, font, pMaxLabelWidth, width, pMinMaxFactor, this->hPos);
+    phyloTreeLayoutBL(phyloTree->edges[1], pMaxDepth, pNumLeafs, depth+1, font, pMaxLabelWidth, width, pMinMaxFactor, this->hPos);
     that = (struct phyloLayout *) phyloTree->edges[0]->priv;
     if (that->depth > maxDepth)
 	maxDepth = that->depth;
@@ -147,19 +158,21 @@ if (phyloTree->numEdges == 2)  /* node */
 else if (phyloTree->numEdges == 0)  /* leaf */
     {
     int w=0;
+    double factor=0.0;
     this->depth=0;
     this->vPos=*pNumLeafs;
     (*pNumLeafs)++;
     w=mgFontStringWidth(font,phyloTree->ident->name);
     if (w > *pMaxLabelWidth)
 	*pMaxLabelWidth = w;
+    factor = (width - 3*MARGIN - w) / this->hPos;
+    if (*pMinMaxFactor == 0.0 || factor < *pMinMaxFactor)
+	*pMinMaxFactor = factor;
     }
 else
     errAbort("expected tree nodes to have 0 or 2 edges, found %d\n", phyloTree->numEdges); 
 
 }
-
-#define MARGIN 10
 
 static void phyloTreeGif(struct phyloTree *phyloTree, 
     int maxDepth, int numLeafs, int maxLabelWidth, 
@@ -204,11 +217,57 @@ else
 
 }
 
+static void phyloTreeGifBL(struct phyloTree *phyloTree, 
+    int maxDepth, int numLeafs, int maxLabelWidth, 
+    int width, int height, struct memGfx *mg, MgFont *font, double minMaxFactor, boolean isRightEdge)
+/* do a depth-first recursion over the tree, printing tree to gif
+ *  */
+{
+struct phyloLayout *this = (struct phyloLayout *) phyloTree->priv;
+int fHeight = mgFontPixelHeight(font);
+int vdelta = numLeafs < 2 ? 0 : (height - 2*MARGIN - fHeight) / (numLeafs - 1);
+int v = MARGIN + this->vPos * vdelta;
+mgDrawLine(mg, MARGIN+(this->hPos-phyloTree->ident->length)*minMaxFactor, v+fHeight/2, 
+               MARGIN+this->hPos*minMaxFactor,                            v+fHeight/2, MG_BLACK);
+if (branchLabels)
+    {
+    if (phyloTree->ident->length > 0.0 && this->hPos > 0.0)
+	{
+	char label[256];
+	safef(label,sizeof(label),"%6.4f",phyloTree->ident->length);
+    	mgTextCentered(mg, MARGIN+(this->hPos-phyloTree->ident->length)*minMaxFactor, v+(fHeight/2)*(isRightEdge?1:-1), 
+	    phyloTree->ident->length*minMaxFactor, fHeight, MG_BLACK, font, label);
+	}
+    }
+
+//debug
+//fprintf(stderr,"name=%s depth=%d vPos=%f\n", phyloTree->ident->name, this->depth, this->vPos);
+
+if (phyloTree->numEdges == 2) 
+    {
+    struct phyloLayout *that0 = (struct phyloLayout *) phyloTree->edges[0]->priv;
+    struct phyloLayout *that1 = (struct phyloLayout *) phyloTree->edges[1]->priv;
+    phyloTreeGifBL(phyloTree->edges[0], maxDepth, numLeafs, maxLabelWidth, width, height, mg, font, minMaxFactor, FALSE);
+    phyloTreeGifBL(phyloTree->edges[1], maxDepth, numLeafs, maxLabelWidth, width, height, mg, font, minMaxFactor, TRUE);
+    mgDrawLine(mg, MARGIN+this->hPos*minMaxFactor, that0->vPos*vdelta+fHeight/2+MARGIN, 
+                   MARGIN+this->hPos*minMaxFactor, that1->vPos*vdelta+fHeight/2+MARGIN, MG_BLACK);
+    }
+else if (phyloTree->numEdges == 0)  
+    {
+    mgText(mg, MARGIN+this->hPos*minMaxFactor+MARGIN, v, MG_BLACK, font, phyloTree->ident->name);
+    }
+else
+    errAbort("expected tree nodes to have 0 or 2 edges, found %d\n", phyloTree->numEdges); 
+    
+
+}
+
 int main(int argc, char *argv[])
 {
 char *phyloData = NULL, *temp = NULL;
 struct phyloTree *phyloTree = NULL;
 int maxDepth = 0, numLeafs = 0, maxLabelWidth = 0;
+double minMaxFactor = 0.0;
 struct memGfx *mg = NULL;
 MgFont *font = mgMediumBoldFont();
 boolean onWeb = cgiIsOnWeb();
@@ -225,6 +284,8 @@ if (argc != 1)
 width = cgiOptionalInt("phyloGif_width",width);    
 height = cgiOptionalInt("phyloGif_height",height);    
 phyloData = cloneString(cgiOptionalString("phyloGif_tree"));
+branchLengths = cgiVarExists("phyloGif_branchLengths");
+branchLabels = cgiVarExists("phyloGif_branchLabels");
 if (!phyloData)
     usage("-phyloGif_tree is required 'option' or cgi variable.");
 //debug
@@ -263,11 +324,15 @@ if (phyloTree)
     //phyloDebugTree(phyloTree,stderr);
     //phyloPrintTree(phyloTree,stderr);
 
-    phyloTreeLayout(phyloTree, &maxDepth, &numLeafs, 0, font, &maxLabelWidth);
+    phyloTreeLayoutBL(phyloTree, &maxDepth, &numLeafs, 0, font, &maxLabelWidth, width, &minMaxFactor, 0.0);
+    
     //debug
-    //fprintf(stderr,"maxDepth=%d numLeafs=%d maxLabelWidth=%d\n", maxDepth, numLeafs, maxLabelWidth);
+    //fprintf(stderr,"maxDepth=%d numLeafs=%d maxLabelWidth=%d minMaxFactor=%f\n", maxDepth, numLeafs, maxLabelWidth, minMaxFactor);
 
-    phyloTreeGif(phyloTree, maxDepth, numLeafs, maxLabelWidth, width, height, mg, font);
+    if (branchLengths)
+        phyloTreeGifBL(phyloTree, maxDepth, numLeafs, maxLabelWidth, width, height, mg, font, minMaxFactor, FALSE);
+    else	    
+        phyloTreeGif(phyloTree, maxDepth, numLeafs, maxLabelWidth, width, height, mg, font);
     }
 if (onWeb)
     {
