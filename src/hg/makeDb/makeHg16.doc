@@ -11449,6 +11449,11 @@ hgLoadBed hg16 cnpSebat -tab -sqlTable=cnpSebat.sql cnpSebat.bed
 # From mccarroll@molbio.mgh.harvard.edu
 genId.pl < mcCarrolldels.txt > mcCarrolldels.bed
 hgLoadBed hg16 -noBin -tab delMccarroll mcCarrolldels.bed
+# Hinds data via Andy Sharp
+sort -n hindsDels.txt > hindsDels.sort
+genId.pl < hindsDels.sort > hindsDels.bed
+hgLoadBed hg16 -noBin -tab delHinds hindsDels.bed
+
 
 
 ##########################################################################
