@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: subSnpCondense.c,v 1.3 2006/06/23 16:52:08 heather Exp $";
+static char const rcsid[] = "$Id: subSnpCondense.c,v 1.4 2006/06/23 20:15:52 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -94,8 +94,8 @@ struct sqlConnection *conn = hAllocConn();
 char *createString =
 "CREATE TABLE SNPSubSNPLinkCondense (\n"
 "    snp_id int(11) not null,       \n"
-"    subsnpIds varchar(255) not null,\n"
-"    buildIds varchar(255) not null,\n"
+"    subsnpIds blob not null,\n"
+"    buildIds blob not null,\n"
 "    firstBuild int(11) not null,\n"
 "    lastBuild int(11) not null,\n"
 "    count int(4) not null\n"
