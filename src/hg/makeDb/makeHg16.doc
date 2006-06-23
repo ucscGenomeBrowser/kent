@@ -11453,6 +11453,9 @@ hgLoadBed hg16 -noBin -tab delMccarroll mcCarrolldels.bed
 sort -n hindsDels.txt > hindsDels.sort
 genId.pl < hindsDels.sort > hindsDels.bed
 hgLoadBed hg16 -noBin -tab delHinds hindsDels.bed
+# From conrad@uchicago.edu
+conrad.pl < conradDels.txt > conradDels.bed
+hgLoadBed hg16 -noBin -tab delConrad conradDels.bed
 
 
 
