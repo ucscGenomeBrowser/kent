@@ -2,6 +2,8 @@
 #include "genomeVarUi.h"
 #include "common.h"
 
+/***************Filters**************/
+
 /* some stuff for mutation type choices */
 /* labels for checkboxes */
 char *mutationTypeLabel[] = {
@@ -75,6 +77,8 @@ unsigned char *mutationAccuracyDbValue[] = {
 
 int mutationAccuracySize = ArraySize(mutationAccuracyLabel);
 
+/***************Attribute display**************/
+
 /* list in display order of attribute type, key that is used in table */
 char *mutationAttrTypeKey[] = {
     "links",
@@ -112,3 +116,55 @@ char *mutationAttrCategory[] = {
 };
 
 int mutationAttrSize = ArraySize(mutationAttrTypeKey);
+
+/***************Color options**************/
+
+char *genomeVarColorLabels[] = {
+    "purple",
+    "green",
+    "orange",
+    "blue",
+    "brown",
+    "black",
+};
+
+int genomeVarColorLabelSize = ArraySize(genomeVarColorLabels);
+
+char *genomeVarColorTypeLabels[] = {
+    "substitution",
+    "insertion",
+    "duplication",
+    "deletion",
+    "complex",
+    "unknown",
+};
+
+char *genomeVarColorTypeStrings[] = {
+    "genomeVarColorTypeSub",
+    "genomeVarColorTypeIns",
+    "genomeVarColorTypeDup",
+    "genomeVarColorTypeDel",
+    "genomeVarColorTypeComplex",
+    "genomeVarColorTypeUnk",
+};
+
+char *genomeVarColorTypeDefault[] = {
+    "purple",
+    "green",
+    "orange",
+    "blue",
+    "brown",
+    "black",
+};
+
+char *genomeVarColorTypeBaseChangeType[] = {
+    "substitution",
+    "insertion",
+    "duplication",
+    "deletion",
+    "complex",
+    "unknown",
+};
+
+/* all type arrays are same size */
+int genomeVarColorTypeSize = ArraySize(genomeVarColorTypeStrings);

@@ -22,4 +22,13 @@ extern char *mutationAccuracyLabel[];
 extern unsigned char *mutationAccuracyDbValue[];
 extern int mutationAccuracySize;
 
+extern char *genomeVarColorLabels[];
+extern int genomeVarColorLabelSize;
+
+extern char *genomeVarColorTypeLabels[];
+extern char *genomeVarColorTypeStrings[];
+extern char *genomeVarColorTypeDefault[];
+extern char *genomeVarColorTypeBaseChangeType[];
+extern int genomeVarColorTypeSize;
+
 #endif

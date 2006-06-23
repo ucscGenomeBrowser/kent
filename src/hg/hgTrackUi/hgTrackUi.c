@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.280 2006/06/23 16:00:19 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.281 2006/06/23 19:37:24 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -605,6 +605,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 sqlFreeResult(&sr);
 hFreeConn(&conn);
+
+printf("<BR /><B>Color mutations by type</B><BR />");
+for (i = 0; i < genomeVarColorTypeSize; i++)
+    {
+    char *defaultVal = cartUsualString(cart, genomeVarColorTypeStrings[i], genomeVarColorTypeDefault[i]);
+    printf (" %s ", genomeVarColorTypeLabels[i]);
+    cgiMakeDropList(genomeVarColorTypeStrings[i], genomeVarColorLabels, genomeVarColorLabelSize, defaultVal);
+    }
+printf("<BR />");
 }
 
 void hgMutUi(struct trackDb *tdb)

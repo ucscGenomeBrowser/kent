@@ -104,7 +104,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1137 2006/06/23 16:00:24 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1138 2006/06/23 19:37:29 giardine Exp $";
 
 boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9763,20 +9763,24 @@ tg->itemName = vegaGeneName;
 }
 
 Color genomeVarColor(struct track *tg, void *item, struct vGfx *vg)
-/* color items by type, need to add user selections */
+/* color items by type */
 {
 struct genomeVar *el = item;
-if (sameString(el->baseChangeType, "substitution"))
+char *typeColor = NULL;
+int index = stringArrayIx(el->baseChangeType, genomeVarColorTypeBaseChangeType, genomeVarColorTypeSize);
+typeColor = cartUsualString(cart, genomeVarColorTypeStrings[index], 
+    genomeVarColorTypeDefault[index]);
+if (sameString(typeColor, "purple"))
     return vgFindColorIx(vg, 204, 0, 255);
-else if (sameString(el->baseChangeType, "deletion"))
-    return MG_BLUE;
-else if (sameString(el->baseChangeType, "insertion"))
+else if (sameString(typeColor, "green"))
     return vgFindColorIx(vg, 0, 153, 0); /* dark green */
-else if (sameString(el->baseChangeType, "complex"))
-    return vgFindColorIx(vg, 100, 50, 0); /* brown */ //return vgFindColorIx(vg, 221, 0, 0); /* dark red */
-else if (sameString(el->baseChangeType, "duplication"))
-    return vgFindColorIx(vg, 255, 153, 0);
-else
+else if (sameString(typeColor, "orange"))
+    return vgFindColorIx(vg, 255, 153, 0); 
+else if (sameString(typeColor, "blue"))
+    return MG_BLUE;
+else if (sameString(typeColor, "brown"))
+    return vgFindColorIx(vg, 100, 50, 0); /* brown */
+else 
     return MG_BLACK;
 }
 
