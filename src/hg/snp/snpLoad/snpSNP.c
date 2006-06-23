@@ -1,6 +1,7 @@
 /* snpSNP - ninth step in dbSNP processing.
  * Read the chrN_snpTmp tables into memory.
  * Do lookups into SNP for validation status and heterozygosity.
+ * Could combine this with earlier step snpClassAndObserved, which also uses the SNP table. 
  * Report if missing.
  * Use UCSC chromInfo. */
 
@@ -9,7 +10,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpSNP.c,v 1.12 2006/04/22 00:32:06 heather Exp $";
+static char const rcsid[] = "$Id: snpSNP.c,v 1.13 2006/06/23 21:52:54 heather Exp $";
 
 struct snpData
     {
@@ -86,7 +87,7 @@ safef(fileName, ArraySize(fileName), "%s_snpTmp.tab", chromName);
 f = mustOpen(fileName, "w");
 
 safef(query, sizeof(query), 
-     "select snp_id, chromStart, chromEnd, loc_type, class, orientation, molType, fxn_class, "
+     "select snp_id, chromStart, chromEnd, loc_type, class, orientation, fxn_class, "
      "allele, refUCSC, refUCSCReverseComp, observed, weight from %s ", tableName);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -95,16 +96,16 @@ while ((row = sqlNextRow(sr)) != NULL)
     if (sel == NULL)
         {
         fprintf(f, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3]);
-	fprintf(f, "%s\t%s\t%s\t%s\t", row[4], row[5], row[6], row[7]);
+	fprintf(f, "%s\t%s\t%s\t", row[4], row[5], row[6]);
 	fprintf(f, "0\t0.0\t0.0\t");
-	fprintf(f, "%s\t%s\t%s\t%s\t%s\n", row[8], row[9], row[10], row[11], row[12]);
+	fprintf(f, "%s\t%s\t%s\t%s\t%s\n", row[7], row[8], row[9], row[10], row[11]);
         fprintf(errorFileHandle, "no match for snp_id %s\n", row[0]);
 	continue;
 	}
     fprintf(f, "%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3]);
-    fprintf(f, "%s\t%s\t%s\t%s\t", row[4], row[5], row[6], row[7]);
+    fprintf(f, "%s\t%s\t%s\t", row[4], row[5], row[6]);
     fprintf(f, "%d\t%s\t%s\t", sel->validation_status, sel->avHet, sel->avHetSE);
-    fprintf(f, "%s\t%s\t%s\t%s\t%s\n", row[8], row[9], row[10], row[11], row[12]);
+    fprintf(f, "%s\t%s\t%s\t%s\t%s\n", row[7], row[8], row[9], row[10], row[11]);
     }
 
 sqlFreeResult(&sr);
@@ -125,7 +126,6 @@ char *createString =
 "    loc_type tinyint(4) not null,\n"
 "    class varchar(255) not null,\n"
 "    orientation tinyint(4) not null,\n"
-"    molType varchar(255) not null,\n"
 "    fxn_class varchar(255) not null,\n"
 "    validation_status tinyint(4) not null,\n"
 "    avHet float not null, \n"
