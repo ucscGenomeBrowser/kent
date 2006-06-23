@@ -8,7 +8,7 @@
 #include "hdb.h"
 #include "dystring.h"
 
-static char const rcsid[] = "$Id: subSnpCondense.c,v 1.2 2006/06/23 16:51:45 heather Exp $";
+static char const rcsid[] = "$Id: subSnpCondense.c,v 1.3 2006/06/23 16:52:08 heather Exp $";
 
 static char *snpDb = NULL;
 
@@ -39,7 +39,7 @@ char lastBuild[32];
 
 f = hgCreateTabFile(".", "SNPSubSNPLinkCondense");
 
-safef(query, sizeof(query), "select snp_id, subsnp_id, build_id from SNPSubSNPLink limit 1000");
+safef(query, sizeof(query), "select snp_id, subsnp_id, build_id from SNPSubSNPLink");
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
