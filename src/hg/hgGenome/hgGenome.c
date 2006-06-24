@@ -18,9 +18,10 @@
 #include "genoLay.h"
 #include "cytoBand.h"
 #include "hCytoBand.h"
+#include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.10 2006/06/24 00:56:24 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.11 2006/06/24 01:33:57 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -41,13 +42,42 @@ errAbort(
   );
 }
 
-void genomeGif(struct sqlConnection *conn, struct genoLay *gl)
+void drawChromGraph(struct vGfx *vg, struct sqlConnection *conn, 
+	struct genoLay *gl, char *chromGraph, int yOff, int height, Color color)
+/* Draw chromosome graph on all chromosomes in layout at given
+ * y offset and height. */
+{
+char *fileName = chromGraphBinaryFileName(chromGraph, conn);
+struct chromGraphBin *cgb = chromGraphBinOpen(fileName);
+double gMin, gMax, gScale;
+double pixelsPerBase = 1.0/gl->basesPerPixel;
+
+chromGraphDataRange(chromGraph, conn, &gMin, &gMax);
+gScale = height/(gMax-gMin+1);
+while (chromGraphBinNextChrom(cgb))
+    {
+    struct genoLayChrom *chrom = hashFindVal(gl->chromHash, cgb->chrom);
+    while (chromGraphBinNextVal(cgb))
+        {
+	if (chrom)
+	    {
+	    int y = (height - ((cgb->val - gMin)*gScale));
+	    int x = (pixelsPerBase*cgb->chromStart);
+	    vgDot(vg, x+chrom->x, y+chrom->y+yOff, color);
+	    }
+	}
+    }
+}
+
+void genomeGif(struct sqlConnection *conn, struct genoLay *gl,
+	char *chromGraph)
 /* Create genome GIF file and HTML that includes it. */
 {
 struct vGfx *vg;
 struct tempName gifTn;
 Color shadesOfGray[10];
 int maxShade = ArraySize(shadesOfGray)-1;
+int spacing = 1;
 
 /* Create gif file and make reference to it in html. */
 makeTempName(&gifTn, "hgtIdeo", ".gif");
@@ -62,44 +92,12 @@ hMakeGrayShades(vg, shadesOfGray, maxShade);
 genoLayDrawChromLabels(gl, vg, MG_BLACK);
 genoLayDrawBandedChroms(gl, vg, database, conn, 
 	shadesOfGray, maxShade, MG_BLACK);
-vgClose(&vg);
-}
 
-void genoLayDump(struct genoLay *gl)
-/* Print out info on genoLay */
-{
-struct genoLayChrom *chrom;
-struct slRef *left, *right, *ref;
-int total;
-uglyf("gl: lineCount %d, leftLabelWidth %d, rightLabelWidth %d, basesPerPixel %f<BR>\n",
-	gl->lineCount, gl->leftLabelWidth, gl->rightLabelWidth, gl->basesPerPixel);
-for (left = gl->leftList, right = gl->rightList; left != NULL || right != NULL;)
-    {
-    total=0;
-    if (left != NULL)
-	{
-	chrom = left->val;
-	uglyf("%s@%d,%d[%d] %d ----  ", chrom->fullName, chrom->x, chrom->y, chrom->width, chrom->size);
-	total += chrom->size;
-        left = left->next;
-	}
-    if (right != NULL)
-	{
-	chrom = right->val;
-	uglyf("%d  %s@%d,%d[%d]", chrom->size, chrom->fullName, chrom->x, chrom->y, chrom->width);
-	total += chrom->size;
-        right = right->next;
-	}
-    uglyf(" : %d<BR>", total);
-    }
-total=0;
-for (ref = gl->bottomList; ref != NULL; ref = ref->next)
-    {
-    chrom = ref->val;
-    total += chrom->size;
-    uglyf("%s@%d,%d[%d] %d ...  ", chrom->fullName, chrom->x, chrom->y, chrom->width, chrom->size);
-    }
-uglyf(" : %d<BR>", total);
+/* Draw chromosome graphs. */
+if (sqlTableExists(conn, chromGraph))
+    drawChromGraph(vg, conn, gl, chromGraph, 2*spacing, 
+	    gl->lineHeight - gl->chromIdeoHeight - 3*spacing, MG_BLUE);
+vgClose(&vg);
 }
 
 void webMain(struct sqlConnection *conn)
@@ -121,7 +119,7 @@ gl = genoLayNew(chromList, tl.font, tl.picWidth, lineHeight,
 	3*tl.nWidth, 4*tl.nWidth);
 
 /* Draw picture. */
-genomeGif(conn, gl);
+genomeGif(conn, gl, "fakeChromGraph");
 }
 
 void cartMain(struct cart *theCart)
