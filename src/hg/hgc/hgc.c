@@ -197,7 +197,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1040 2006/06/22 23:25:04 angie Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1041 2006/06/24 15:12:11 kent Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -15462,12 +15462,6 @@ printf("</td></tr></table>\n");
   cgiMakeHiddenVar("db",database); 
   printf("<br>\n");*/
 chuckHtmlContactInfo();
-}
-
-int vgFindRgb(struct vGfx *vg, struct rgbColor *rgb)
-/* Find color index corresponding to rgb color. */
-{
-return vgFindColorIx(vg, rgb->r, rgb->g, rgb->b);
 }
 
 void makeGrayShades(struct vGfx *vg)
