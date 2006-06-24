@@ -12,6 +12,8 @@
  *  A semi-colon is automatically appended to the input if left off.
  *  Because phyloTree.c does errAbort on bad input, this causes cgi err 500
  *  if the input data has incorrect syntax.  See the apache error_log.
+ *  Added another option to place form output in a static html page
+ *  so that we can prevent IE6 save-as bug, and FF auto-shrunk output.
  *
  *  One may use as a cgi in html GET: 
  *    <IMG SRC="/cgi-bin/phyloGif?phyloGif_width=120&phyloGif_height=120&phyloGif_tree=(a:1,b:1);" >
@@ -52,11 +54,12 @@
 #include "portable.h"
 #include "memgfx.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.2 2006/06/23 01:36:08 galt Exp $";
+static char const rcsid[] = "$Id: phyloGif.c,v 1.3 2006/06/24 00:34:04 galt Exp $";
 
 int width=240,height=512;
 boolean branchLengths = FALSE;  /* branch lengths */
 boolean branchLabels = FALSE;   /* labelled branch lengths */
+boolean htmlPageWrapper = FALSE;  /* wrap output in an html page */
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -76,6 +79,7 @@ errAbort(
     "  -phyloGif_branchLengths - use branch lengths for layout\n"
     "  -phyloGif_branchLabels - show length of branch as label\n"
     "     (used with -phyloGif_branchLengths)\n"
+    "  -phyloGif_htmlPage - wrap the output in an html page (cgi only)\n"
     , msg, width, height);
 }
 
@@ -271,15 +275,20 @@ double minMaxFactor = 0.0;
 struct memGfx *mg = NULL;
 MgFont *font = mgMediumBoldFont();
 boolean onWeb = cgiIsOnWeb();
-if (onWeb && sameString(getenv("REQUEST_METHOD"),"HEAD"))
-    { /* tell browser it's static just so it can save it */
-    printf("Content-type: image/gif\r\n");
-    printf("\r\n");
-    return 0;
-    }
 cgiSpoof(&argc, argv);
 if (argc != 1)
     usage("wrong number of args");
+htmlPageWrapper = cgiVarExists("phyloGif_htmlPage"); /* wrap output in a page */
+
+if (onWeb && sameString(getenv("REQUEST_METHOD"),"HEAD"))
+    { /* tell browser it's static just so it can save it */
+    if (htmlPageWrapper)
+    	printf("Content-type: text/html\r\n");
+    else
+    	printf("Content-type: image/gif\r\n");
+    printf("\r\n");
+    return 0;
+    }
 
 width = cgiOptionalInt("phyloGif_width",width);    
 height = cgiOptionalInt("phyloGif_height",height);    
@@ -288,6 +297,7 @@ branchLengths = cgiVarExists("phyloGif_branchLengths");
 branchLabels = cgiVarExists("phyloGif_branchLabels");
 if (!phyloData)
     usage("-phyloGif_tree is required 'option' or cgi variable.");
+    
 //debug
 //fprintf(stderr,"width=%d height=%d\n%s\n-------------\n", width, height, phyloData);
 
@@ -309,12 +319,32 @@ stripUnderscoreSuffixes(phyloData);
 //fprintf(stderr,"%s\n-------------\n", phyloData);
 
 /* add trailing semi-colon if it got stripped off */
-if (lastChar(phyloData) !=  ';')
+if (!strchr(phyloData,';'))
     {
     temp = phyloData;
     phyloData = addSuffix(phyloData,";");
     freez(&temp);
     }
+
+if (htmlPageWrapper)
+    {
+    printf("Content-type: text/html\r\n");
+    printf("\r\n");
+    printf("<html><head><title></title></head><body>\n");
+    printf("<IMAGE SRC=\"http://%s%s"
+	    "?phyloGif_width=%d"
+	    "&phyloGif_height=%d"
+	    "&phyloGif_tree=%s"
+	,getenv("SERVER_NAME"),getenv("SCRIPT_NAME"),width,height,phyloData);
+    if (branchLengths)
+	printf("&phyloGif_branchLengths=1");
+    if (branchLabels)
+	printf("&phyloGif_branchLabels=1");
+    printf("\"></body></html>\n");
+    freez(&phyloData);
+    return 0;
+    }
+
 
 mg = mgNew(width,height);
 
