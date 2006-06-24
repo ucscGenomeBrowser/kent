@@ -439,6 +439,7 @@ int snpRows = 0;
 
 int goodExact = 0;
 int badExact = 0;
+struct slName *cns=NULL,*cn=NULL;
 
 if (!hDbIsActive(db))
     {
@@ -452,8 +453,6 @@ Org = hOrganism(db);
 
 simpleDnaScheme = axtScoreSchemeSimpleDna(matchScore, misMatchScore, gapOpenPenalty, gapExtendPenalty);
 
-struct slName *cns = hAllChromNames();
-struct slName *cn=NULL;
 if (!cns)
     {
     printf("testDb: hAllChromNames returned empty list \n");
@@ -465,6 +464,7 @@ openExOuts(db);  /* open separate files for each snp class of Exception of inter
 printf("maxFlank = %d \n",maxFlank);
 printf("threshold = %d \n",threshold);
 
+cns = hAllChromNames();
 for (cn = cns; cn != NULL; cn = cn->next)
     {
     struct dnaSeq *chromSeq = NULL;
@@ -699,6 +699,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 	    m = misses(seq,nibDna);
 	    if (m > 1)
 		{
+		int n = -1;
 	    
 		rc = checkAndFetchNib(chromSeq, snp, rf, ls);
 		if (rc==NULL) 
@@ -714,7 +715,7 @@ for (cn = cns; cn != NULL; cn = cn->next)
 		    }
 	    
 		reverseComplement(rc,strlen(rc));
-		int n = misses(seq, rc);
+		n = misses(seq, rc);
 		if (n < m) 
 		    {
 		    strand=-1;
