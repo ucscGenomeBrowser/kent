@@ -21,7 +21,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.12 2006/06/24 15:42:29 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.13 2006/06/24 16:34:24 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -40,6 +40,26 @@ errAbort(
   "   db=<genome database>\n"
   "   hggt_table=on where table is name of chromGraph table\n"
   );
+}
+
+/* ---- Some html helper routines. ---- */
+
+void hvPrintf(char *format, va_list args)
+/* Print out some html. */
+{
+vprintf(format, args);
+if (ferror(stdout))
+    noWarnAbort();
+}
+
+void hPrintf(char *format, ...)
+/* Print out some html.  Check for write error so we can
+ * terminate if http connection breaks. */
+{
+va_list(args);
+va_start(args, format);
+hvPrintf(format, args);
+va_end(args);
 }
 
 void drawChromGraph(struct vGfx *vg, struct sqlConnection *conn, 
@@ -95,9 +115,46 @@ genoLayDrawBandedChroms(gl, vg, database, conn,
 
 /* Draw chromosome graphs. */
 if (sqlTableExists(conn, chromGraph))
-    drawChromGraph(vg, conn, gl, chromGraph, 2*spacing, 
+    drawChromGraph(vg, conn, gl, chromGraph, 
+	    gl->betweenChromOffsetY + 2*spacing, 
 	    gl->betweenChromHeight - 3*spacing, MG_BLUE);
 vgClose(&vg);
+}
+
+struct slName *userListAll()
+/* List all graphs that user has uploaded */
+{
+return NULL;
+}
+
+void graphDropdown(struct sqlConnection *conn, char *varName)
+/* Make a drop-down with available chrom graphs */
+{
+struct slName *el;
+struct slName *userList = userListAll();
+struct slName *dbList=chromGraphListAll(conn);
+int totalCount = 1 + slCount(userList) + slCount(dbList);
+char **menu, **values;
+int i = 0;
+
+AllocArray(menu, totalCount);
+AllocArray(values, totalCount);
+menu[0] = "";
+values[0] = "none";
+
+for (el = userList; el != NULL; el = el->next)
+    {
+    ++i;
+    menu[i] = el->name;
+    values[i] = el->name;
+    }
+for (el = dbList; el != NULL; el = el->next)
+    {
+    ++i;
+    menu[i] = el->name;
+    values[i] = el->name;
+    }
+cgiMakeDropListFull(varName, menu, values, totalCount, values[0], NULL);
 }
 
 void webMain(struct sqlConnection *conn)
@@ -108,6 +165,27 @@ int fontHeight, lineHeight;
 struct genoLayChrom *chromList;
 struct genoLay *gl;
 
+/* Start form and save session var. */
+hPrintf("<FORM ACTION=\"../cgi-bin/hgGenome\" METHOD=GET>\n");
+cartSaveSession(cart);
+
+hPrintf("graph ");
+graphDropdown(conn, hggGraph1);
+hPrintf(" vs ");
+graphDropdown(conn, hggGraph2);
+hPrintf(" ");
+cgiMakeButton("submit", "Go!");
+hPrintf(" ");
+cgiMakeButton(hggConfigure, "Configure");
+hPrintf("<BR>");
+hPrintf(" significance threshold:");
+cgiMakeDoubleVar(hggThreshold, 3.5, 3);
+hPrintf(" ");
+cgiMakeButton(hggBrowse, "Browse Regions");
+hPrintf(" ");
+cgiMakeButton(hggSort, "Sort Genes");
+hPrintf("<BR>");
+
 /* Figure out basic dimensions of image. */
 trackLayoutInit(&tl, cart);
 fontHeight = mgFontLineHeight(tl.font);
@@ -117,9 +195,9 @@ lineHeight = fontHeight*3;
 chromList = genoLayDbChroms(conn, FALSE);
 gl = genoLayNew(chromList, tl.font, tl.picWidth, lineHeight, 
 	3*tl.nWidth, 4*tl.nWidth);
-
 /* Draw picture. */
 genomeGif(conn, gl, "fakeChromGraph");
+hPrintf("</FORM>\n");
 }
 
 void cartMain(struct cart *theCart)
@@ -151,6 +229,5 @@ if (argc != 1)
     usage();
 oldCart = hashNew(12);
 cartEmptyShell(cartMain, hUserCookie(), excludeVars, oldCart);
-return 0;
 return 0;
 }
