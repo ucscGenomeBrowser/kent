@@ -20,7 +20,7 @@
 #include "hCytoBand.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.8 2006/06/23 23:45:05 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.9 2006/06/24 00:44:34 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -157,6 +157,7 @@ gl->font = font;
 gl->picWidth = picWidth;
 gl->margin = margin;
 gl->spaceWidth = spaceWidth;
+gl->chromIdeoHeight = mgFontLineHeight(font);
 
 /* Save chromosomes in hash too, for easy access */
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
@@ -267,7 +268,6 @@ if (gl->bottomList)
 gl->leftLabelWidth = leftLabelWidth;
 gl->rightLabelWidth = rightLabelWidth;
 gl->basesPerPixel = basesPerPixel;
-uglyf("autosomeOtherPixels %d, sexOtherPixels %d, picWidth %d<BR>\n", autosomeOtherPixels, sexOtherPixels, picWidth);
 
 /* Set pixel positions for left autosomes */
 for (ref = gl->leftList; ref != NULL; ref = ref->next)
@@ -373,7 +373,7 @@ void genoLayDrawSimpleChroms(struct genoLay *gl,
 	struct vGfx *vg, int color)
 /* Draw boxes for all chromosomes in given color */
 {
-int lineHeight = mgFontLineHeight(gl->font);
+int lineHeight = gl->chromIdeoHeight;
 struct genoLayChrom *chrom;
 for (chrom = gl->chromList; chrom != NULL; chrom = chrom->next)
     vgBox(vg, chrom->x, chrom->y + chrom->height - lineHeight, 
@@ -389,17 +389,20 @@ void genoLayDrawBandedChroms(struct genoLay *gl, struct vGfx *vg,
  * there then draw simple chroms in default color instead */
 {
 char *bandTable = "cytoBandIdeo";
+genoLayDrawSimpleChroms(gl, vg, defaultColor);
 if (sqlTableExists(conn, bandTable))
     {
     int centromereColor = hCytoBandCentromereColor(vg);
     double pixelsPerBase = 1.0/gl->basesPerPixel;
-    int height = mgFontLineHeight(gl->font);
+    int height = gl->chromIdeoHeight;
+    int innerHeight = gl->chromIdeoHeight-2;
     struct genoLayChrom *chrom;
     boolean isDmel = hCytoBandIsDmel();
     boolean bColor = vgFindColorIx(vg, 200, 150, 150);
     int fontPixelHeight = mgFontPixelHeight(gl->font);
     for (chrom = gl->chromList; chrom != NULL; chrom = chrom->next)
 	{
+	boolean gotAny = FALSE;
 	struct sqlResult *sr;
 	char **row;
 	char query[256];
@@ -424,12 +427,17 @@ if (sqlTableExists(conn, bandTable))
 		}
 	    else
 		{
-		hCytoBandDrawAt(&band, vg, x1+chrom->x, y, x2-x1, height, 
+		hCytoBandDrawAt(&band, vg, x1+chrom->x, y+1, x2-x1, innerHeight, 
 			isDmel, gl->font, fontPixelHeight, MG_BLACK, bColor,
 		    shadesOfGray, maxShade);
+		gotAny = TRUE;
 		}
 	    }
 	sqlFreeResult(&sr);
+	vgBox(vg, chrom->x, y, chrom->width, 1, MG_BLACK);
+	vgBox(vg, chrom->x, y+height-1, chrom->width, 1, MG_BLACK);
+	vgBox(vg, chrom->x, y, 1, height, MG_BLACK);
+	vgBox(vg, chrom->x+chrom->width-1, y, 1, height, MG_BLACK);
 	if (cenX2 > cenX1)
 	    {
 	    hCytoBandDrawCentromere(vg, cenX1+chrom->x, y, cenX2-cenX1, height,
@@ -437,8 +445,6 @@ if (sqlTableExists(conn, bandTable))
 	    }
 	}
     }
-else
-    genoLayDrawSimpleChroms(gl, vg, defaultColor);
 }
 
 void genomeGif(struct sqlConnection *conn, struct genoLay *gl)
@@ -449,87 +455,27 @@ struct tempName gifTn;
 Color shadesOfGray[10];
 int maxShade = ArraySize(shadesOfGray)-1;
 
+/* Create gif file and make reference to it in html. */
 makeTempName(&gifTn, "hgtIdeo", ".gif");
 vg = vgOpenGif(gl->picWidth, gl->picHeight, gifTn.forCgi);
-hMakeGrayShades(vg, shadesOfGray, maxShade);
 printf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d>",
 	    gifTn.forHtml, gl->picWidth, gl->picHeight);
 
+/* Get our grayscale. */
+hMakeGrayShades(vg, shadesOfGray, maxShade);
+
+/* Draw the labels and then the chromosomes. */
 genoLayDrawChromLabels(gl, vg, MG_BLACK);
-genoLayDrawSimpleChroms(gl, vg, MG_BLUE);
-genoLayDrawBandedChroms(gl, vg, conn, shadesOfGray, maxShade, MG_GREEN);
-
-
-
-#ifdef SOMEDAY
-if(doIdeo)
-    {
-    char startBand[16];
-    char endBand[16];
-    char title[32];
-    startBand[0] = endBand[0] = '\0';
-    fillInStartEndBands(ideoTrack, startBand, endBand, sizeof(startBand)); 
-    /* Draw the ideogram. */
-    makeTempName(&gifTn, "hgtIdeo", ".gif");
-    /* Start up client side map. */
-    hPrintf("<MAP Name=%s>\n", mapName);
-    ideoHeight = gfxBorder + ideoTrack->height;
-    vg = vgOpenGif(ideoWidth, ideoHeight, gifTn.forCgi);
-    makeGrayShades(vg);
-    makeBrownShades(vg);
-    makeSeaShades(vg);
-    ideoTrack->ixColor = vgFindRgb(vg, &ideoTrack->color);
-    ideoTrack->ixAltColor = vgFindRgb(vg, &ideoTrack->altColor);
-    vgSetClip(vg, 0, gfxBorder, ideoWidth, ideoTrack->height);
-    if(sameString(startBand, endBand)) 
-	safef(title, sizeof(title), "%s (%s)", chromName, startBand);
-    else
-	safef(title, sizeof(title), "%s (%s-%s)", chromName, startBand, endBand);
-    textWidth = mgFontStringWidth(font, title);
-    vgTextCentered(vg, 2, gfxBorder, textWidth, ideoTrack->height, MG_BLACK, font, title);
-    ideoTrack->drawItems(ideoTrack, winStart, winEnd, vg, textWidth+4, gfxBorder, ideoWidth-textWidth-4,
-			 font, ideoTrack->ixColor, ideoTrack->limitedVis);
-    vgUnclip(vg);
-    /* Save out picture and tell html file about it. */
-    vgClose(&vg);
-    /* Finish map. */
-    hPrintf("</MAP>\n");
-    }
-hPrintf("<TABLE BORDER=0 CELLPADDING=0>");
-if(doIdeo)
-    {
-    hPrintf("<TR><TD HEIGHT=5></TD></TR>");
-    hPrintf("<TR><TD><IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s >",
-	    gifTn.forHtml, ideoWidth, ideoHeight, mapName);
-    hPrintf("</TD></TR>");
-    hPrintf("<TR><TD HEIGHT=5></TD></TR></TABLE>");
-    }
-else
-    hPrintf("<TR><TD HEIGHT=10></TD></TR></TABLE>");
-if(ideoTrack != NULL)
-    {
-    ideoTrack->limitedVisSet = TRUE;
-    ideoTrack->limitedVis = tvHide; /* Don't draw in main gif. */
-    }
-#endif /* SOMEDAY */
+genoLayDrawBandedChroms(gl, vg, conn, shadesOfGray, maxShade, MG_BLACK);
 vgClose(&vg);
 }
 
-void webMain(struct sqlConnection *conn)
-/* Set up fancy web page with hotlinks bar and
- * sections. */
+void genoLayDump(struct genoLay *gl)
+/* Print out info on genoLay */
 {
-struct genoLayChrom *chromList, *chrom;
+struct genoLayChrom *chrom;
 struct slRef *left, *right, *ref;
-struct genoLay *gl;
 int total;
-int fontHeight, lineHeight;
-trackLayoutInit(&tl, cart);
-fontHeight = mgFontLineHeight(tl.font);
-lineHeight = fontHeight*3;
-chromList = genoLayDbChroms(conn, FALSE);
-gl = genoLayNew(chromList, tl.font, tl.picWidth, lineHeight, 
-	3*tl.nWidth, 4*tl.nWidth);
 uglyf("gl: lineCount %d, leftLabelWidth %d, rightLabelWidth %d, basesPerPixel %f<BR>\n",
 	gl->lineCount, gl->leftLabelWidth, gl->rightLabelWidth, gl->basesPerPixel);
 for (left = gl->leftList, right = gl->rightList; left != NULL || right != NULL;)
@@ -559,6 +505,27 @@ for (ref = gl->bottomList; ref != NULL; ref = ref->next)
     uglyf("%s@%d,%d[%d] %d ...  ", chrom->fullName, chrom->x, chrom->y, chrom->width, chrom->size);
     }
 uglyf(" : %d<BR>", total);
+}
+
+void webMain(struct sqlConnection *conn)
+/* Set up fancy web page with hotlinks bar and
+ * sections. */
+{
+int fontHeight, lineHeight;
+struct genoLayChrom *chromList;
+struct genoLay *gl;
+
+/* Figure out basic dimensions of image. */
+trackLayoutInit(&tl, cart);
+fontHeight = mgFontLineHeight(tl.font);
+lineHeight = fontHeight*3;
+
+/* Get list of chromosomes and lay them out. */
+chromList = genoLayDbChroms(conn, FALSE);
+gl = genoLayNew(chromList, tl.font, tl.picWidth, lineHeight, 
+	3*tl.nWidth, 4*tl.nWidth);
+
+/* Draw picture. */
 genomeGif(conn, gl);
 }
 
