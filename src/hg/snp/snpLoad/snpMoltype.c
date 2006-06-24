@@ -14,7 +14,7 @@
 #include "hash.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpMoltype.c,v 1.2 2006/06/23 21:58:07 heather Exp $";
+static char const rcsid[] = "$Id: snpMoltype.c,v 1.3 2006/06/24 00:46:13 heather Exp $";
 
 static struct hash *multiFastaHash = NULL;
 static struct hash *chromFastaHash = NULL;
@@ -128,10 +128,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     molType = getMoltype(row[0], chromName);
     if (molType == NULL) 
         molType = cloneString("unknown");
-    fprintf(f, "%s\t%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3], row[4]);
+    fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t", row[0], row[1], row[2], row[3], row[4], row[5]);
     fprintf(f, "%s\t", molType);
-    fprintf(f, "%s\t%s\t%s\t%s\t%s\t", row[5], row[6], row[7], row[8], row[9]);
-    fprintf(f, "%s\t%s\t%s\t%s\t%s\n", row[10], row[11], row[12], row[13], row[14]);
+    fprintf(f, "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n", row[6], row[7], row[8], row[9], row[10], row[11], row[12], row[13], row[14]);
     }
 
 sqlFreeResult(&sr);
@@ -231,7 +230,6 @@ for (chromPtr = chromList; chromPtr != NULL; chromPtr = chromPtr->next)
     verbose(1, "loading chrom = %s\n", chromPtr->name);
     loadDatabase(chromPtr->name);
     }
-
 
 return 0;
 }
