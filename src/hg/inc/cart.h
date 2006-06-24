@@ -101,6 +101,10 @@ int cartIntExp(struct cart *cart, char *var);
 int cartUsualInt(struct cart *cart, char *var, int usual);
 /* Return variable value if it exists or usual if not. */
 
+int cartUsualIntClipped(struct cart *cart, char *var, int usual,
+	int minVal, int maxVal);
+/* Return integer variable clipped to lie between minVal/maxVal */
+
 int cartCgiUsualInt(struct cart *cart, char *var, int usual);
 /* Look for var in CGI, then in cart, if not found then return usual. */
 

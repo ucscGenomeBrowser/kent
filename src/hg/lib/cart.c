@@ -12,7 +12,7 @@
 #include "hdb.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: cart.c,v 1.55 2006/04/26 18:04:49 angie Exp $";
+static char const rcsid[] = "$Id: cart.c,v 1.56 2006/06/24 22:00:44 kent Exp $";
 
 static char *sessionVar = "hgsid";	/* Name of cgi variable session is stored in. */
 static char *positionCgiName = "position";
@@ -457,6 +457,16 @@ char *s = cartOptionalString(cart, var);
 if (s == NULL)
     return usual;
 return atoi(s);
+}
+
+int cartUsualIntClipped(struct cart *cart, char *var, int usual,
+	int minVal, int maxVal)
+/* Return integer variable clipped to lie between minVal/maxVal */
+{
+int val = cartUsualInt(cart, var, usual);
+if (val < minVal) val = minVal;
+if (val > maxVal) val = maxVal;
+return val;
 }
 
 int cartCgiUsualInt(struct cart *cart, char *var, int usual)
