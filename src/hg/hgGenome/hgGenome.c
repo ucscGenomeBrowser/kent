@@ -21,7 +21,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.13 2006/06/24 16:34:24 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.14 2006/06/24 16:41:20 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -210,12 +210,26 @@ getDbAndGenome(cart, &database, &genome);
 hSetDb(database);
 conn = hAllocConn();
 
+if (cartVarExists(cart, hggConfigure))
+    {
+    cartWebStart(cart, "Theoretically configuring, please go back");
+    }
+else if (cartVarExists(cart, hggBrowse))
+    {
+    cartWebStart(cart, "Theoretically browsing, please go back");
+    }
+else if (cartVarExists(cart, hggSort))
+    {
+    cartWebStart(cart, "Theoretically sorting, please go back");
+    }
+else
     {
     /* Default case - start fancy web page. */
-    cartWebStart(cart, "%s Genome View", genome);
+    cartWebStart(cart, "%s Genome Association View", genome);
     webMain(conn);
     cartWebEnd();
     }
+cartRemovePrefix(cart, hggDo);
 }
 
 char *excludeVars[] = {"Submit", "submit", NULL};
