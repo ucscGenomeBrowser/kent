@@ -9,6 +9,43 @@
 #include "hCytoBand.h"
 #include "genoLay.h"
 
+void genoLayDump(struct genoLay *gl)
+/* Print out info on genoLay */
+{
+struct genoLayChrom *chrom;
+struct slRef *left, *right, *ref;
+int total;
+printf("gl: lineCount %d, leftLabelWidth %d, rightLabelWidth %d, basesPerPixel %f<BR>\n",
+	gl->lineCount, gl->leftLabelWidth, gl->rightLabelWidth, gl->basesPerPixel);
+for (left = gl->leftList, right = gl->rightList; left != NULL || right != NULL;)
+    {
+    total=0;
+    if (left != NULL)
+	{
+	chrom = left->val;
+	printf("%s@%d,%d[%d] %d ----  ", chrom->fullName, chrom->x, chrom->y, chrom->width, chrom->size);
+	total += chrom->size;
+        left = left->next;
+	}
+    if (right != NULL)
+	{
+	chrom = right->val;
+	printf("%d  %s@%d,%d[%d]", chrom->size, chrom->fullName, chrom->x, chrom->y, chrom->width);
+	total += chrom->size;
+        right = right->next;
+	}
+    printf(" : %d<BR>", total);
+    }
+total=0;
+for (ref = gl->bottomList; ref != NULL; ref = ref->next)
+    {
+    chrom = ref->val;
+    total += chrom->size;
+    printf("%s@%d,%d[%d] %d ...  ", chrom->fullName, chrom->x, chrom->y, chrom->width, chrom->size);
+    }
+printf(" : %d<BR>", total);
+}
+
 int genoLayChromCmpName(const void *va, const void *vb)
 /* Compare two chromosome names so as to sort numerical part
  * by number.. */
@@ -126,6 +163,7 @@ gl->picWidth = picWidth;
 gl->margin = margin;
 gl->spaceWidth = spaceWidth;
 gl->chromIdeoHeight = mgFontLineHeight(font);
+gl->lineHeight = lineHeight;
 
 /* Save chromosomes in hash too, for easy access */
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
