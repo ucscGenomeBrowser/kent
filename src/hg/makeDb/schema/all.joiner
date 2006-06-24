@@ -1651,6 +1651,16 @@ identifier dbSnpMapInfo external=dbSNP
     $snp125.ContigLoc.snp_id dupeOk
     $snp125.SNPMapInfo.snp_id
 
+identifier snpAnnotations125
+"SNP annotations"
+    hg17.snp125.name dupeOk
+    hg17.snp125Exceptions.name 
+
+identifier snpAnnotations126
+"SNP annotations"
+    hg18.snp126.name dupeOk
+    hg18.snp126Exceptions.name 
+
 # Other NCBI Identifiers
 
 identifier locusLinkId external=LocusLink
@@ -2328,7 +2338,8 @@ tablesIgnored $hg
     slamRat
     slamNonCodingRat
     snp
-    snp125
+    snp125ExceptionDesc
+    snp126ExceptionDesc
     syntenyMouse
     syntenyRat
     targetScanS
