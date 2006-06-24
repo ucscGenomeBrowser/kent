@@ -131,7 +131,7 @@ slReverse(&autoList);
 }
 
 struct genoLay *genoLayNew(struct genoLayChrom *chromList,
-	MgFont *font, int picWidth, int lineHeight,
+	MgFont *font, int picWidth, int betweenChromHeight,
 	int minLeftLabelWidth, int minRightLabelWidth)
 /* Figure out layout.  For human and most mammals this will be
  * two columns with sex chromosomes on bottom.  This is complicated
@@ -151,6 +151,8 @@ int sexBasesInLine=0;		/* Bases in line for sex chromsome. */
 double sexBasesPerPixel, autosomeBasesPerPixel, basesPerPixel;
 int pos = margin;
 int y = 0;
+int chromHeight = mgFontLineHeight(font);
+int lineHeight = chromHeight + betweenChromHeight;
 
 refList = refListFromSlList(chromList);
 
@@ -162,8 +164,12 @@ gl->font = font;
 gl->picWidth = picWidth;
 gl->margin = margin;
 gl->spaceWidth = spaceWidth;
-gl->chromIdeoHeight = mgFontLineHeight(font);
 gl->lineHeight = lineHeight;
+gl->betweenChromHeight = betweenChromHeight;
+gl->betweenChromOffsetY = 0;
+gl->chromHeight = chromHeight;
+gl->chromOffsetY = lineHeight - chromHeight;
+
 
 /* Save chromosomes in hash too, for easy access */
 for (chrom = chromList; chrom != NULL; chrom = chrom->next)
@@ -274,6 +280,7 @@ if (gl->bottomList)
 gl->leftLabelWidth = leftLabelWidth;
 gl->rightLabelWidth = rightLabelWidth;
 gl->basesPerPixel = basesPerPixel;
+gl->pixelsPerBase = 1.0/basesPerPixel;
 
 /* Set pixel positions for left autosomes */
 for (ref = gl->leftList; ref != NULL; ref = ref->next)
@@ -319,34 +326,34 @@ return gl;
 }
 
 void leftLabel(struct vGfx *vg, struct genoLay *gl,
-	struct genoLayChrom *chrom, int fontHeight,
+	struct genoLayChrom *chrom, int yOffset, int fontHeight,
 	int color)
 /* Draw a chromosome with label on left. */
 {
-vgTextRight(vg, gl->margin, chrom->y + chrom->height - fontHeight, 
+vgTextRight(vg, gl->margin, chrom->y + yOffset, 
     chrom->x - gl->margin - gl->spaceWidth, fontHeight, color,
     gl->font, chrom->shortName);
 }
 
 void rightLabel(struct vGfx *vg, struct genoLay *gl,
-	struct genoLayChrom *chrom, int fontHeight, 
+	struct genoLayChrom *chrom, int yOffset, int fontHeight, 
 	int color)
 /* Draw a chromosome with label on left. */
 {
 vgText(vg, chrom->x + chrom->width + gl->spaceWidth,
-	chrom->y + chrom->height - fontHeight, 
+	chrom->y + yOffset, 
 	color, gl->font, chrom->shortName);
 }
 
 void midLabel(struct vGfx *vg, struct genoLay *gl,
-	struct genoLayChrom *chrom, int fontHeight, 
+	struct genoLayChrom *chrom, int yOffset, int fontHeight, 
 	int color)
 /* Draw a chromosome with label on left. */
 {
 MgFont *font = gl->font;
 int textWidth = mgFontStringWidth(font, chrom->shortName);
 vgTextRight(vg, chrom->x - textWidth - gl->spaceWidth, 
-    chrom->y + chrom->height - fontHeight, 
+    chrom->y + yOffset, 
     textWidth, fontHeight, color,
     font, chrom->shortName);
 }
@@ -357,21 +364,22 @@ void genoLayDrawChromLabels(struct genoLay *gl, struct vGfx *vg, int color)
 struct slRef *ref;
 struct genoLayChrom *chrom;
 int pixelHeight = mgFontPixelHeight(gl->font);
+int yOffset = gl->chromOffsetY + gl->chromHeight - pixelHeight;
 
 /* Draw chromosome labels. */
 for (ref = gl->leftList; ref != NULL; ref = ref->next)
-    leftLabel(vg, gl, ref->val, pixelHeight, color);
+    leftLabel(vg, gl, ref->val, yOffset, pixelHeight, color);
 for (ref = gl->rightList; ref != NULL; ref = ref->next)
-    rightLabel(vg, gl, ref->val, pixelHeight, color);
+    rightLabel(vg, gl, ref->val, yOffset, pixelHeight, color);
 for (ref = gl->bottomList; ref != NULL; ref = ref->next)
     {
     chrom = ref->val;
     if (ref == gl->bottomList)
-	leftLabel(vg, gl, chrom, pixelHeight, color);
+	leftLabel(vg, gl, chrom, yOffset, pixelHeight, color);
     else if (ref->next == NULL)
-	rightLabel(vg, gl, chrom, pixelHeight, color);
+	rightLabel(vg, gl, chrom, yOffset, pixelHeight, color);
     else
-        midLabel(vg, gl, chrom, pixelHeight, color);
+        midLabel(vg, gl, chrom, yOffset, pixelHeight, color);
     }
 }
 
@@ -379,11 +387,12 @@ void genoLayDrawSimpleChroms(struct genoLay *gl,
 	struct vGfx *vg, int color)
 /* Draw boxes for all chromosomes in given color */
 {
-int lineHeight = gl->chromIdeoHeight;
+int height = gl->chromHeight;
+int yOffset = gl->chromOffsetY;
 struct genoLayChrom *chrom;
 for (chrom = gl->chromList; chrom != NULL; chrom = chrom->next)
-    vgBox(vg, chrom->x, chrom->y + chrom->height - lineHeight, 
-	chrom->width, lineHeight, color);
+    vgBox(vg, chrom->x, chrom->y + yOffset, 
+	chrom->width, height, color);
 
 }
 
@@ -395,13 +404,14 @@ void genoLayDrawBandedChroms(struct genoLay *gl, struct vGfx *vg, char *db,
  * there then draw simple chroms in default color instead */
 {
 char *bandTable = "cytoBandIdeo";
+int yOffset = gl->chromOffsetY;
 genoLayDrawSimpleChroms(gl, vg, defaultColor);
 if (sqlTableExists(conn, bandTable))
     {
     int centromereColor = hCytoBandCentromereColor(vg);
     double pixelsPerBase = 1.0/gl->basesPerPixel;
-    int height = gl->chromIdeoHeight;
-    int innerHeight = gl->chromIdeoHeight-2;
+    int height = gl->chromHeight;
+    int innerHeight = gl->chromHeight-2;
     struct genoLayChrom *chrom;
     boolean isDmel = hCytoBandDbIsDmel(db);
     boolean bColor = vgFindColorIx(vg, 200, 150, 150);
@@ -413,7 +423,9 @@ if (sqlTableExists(conn, bandTable))
 	char **row;
 	char query[256];
 	int cenX1=BIGNUM, cenX2=0;
-	int y = chrom->y + chrom->height - height;
+	int y = chrom->y + yOffset;
+
+	/* Fetch bands from database and draw them. */
 	safef(query, sizeof(query), "select * from %s where chrom='%s'",
 		bandTable, chrom->fullName);
 	sr = sqlGetResult(conn, query);
@@ -426,6 +438,9 @@ if (sqlTableExists(conn, bandTable))
 	    x2 = pixelsPerBase*band.chromEnd;
 	    if (sameString(band.gieStain, "acen"))
 		{
+		/* Centromere is represented as two adjacent bands.
+		 * We'll just record the extents of it here, and draw it
+		 * in one piece later. */
 		if (x1 < cenX1)
 		    cenX1 = x1;
 		if (x2 > cenX2)
@@ -433,6 +448,7 @@ if (sqlTableExists(conn, bandTable))
 		}
 	    else
 		{
+		/* Draw band */
 		hCytoBandDrawAt(&band, vg, x1+chrom->x, y+1, x2-x1, innerHeight, 
 			isDmel, gl->font, fontPixelHeight, MG_BLACK, bColor,
 		    shadesOfGray, maxShade);
@@ -440,10 +456,14 @@ if (sqlTableExists(conn, bandTable))
 		}
 	    }
 	sqlFreeResult(&sr);
+
+	/* Draw box around chromosome */
 	vgBox(vg, chrom->x, y, chrom->width, 1, MG_BLACK);
 	vgBox(vg, chrom->x, y+height-1, chrom->width, 1, MG_BLACK);
 	vgBox(vg, chrom->x, y, 1, height, MG_BLACK);
 	vgBox(vg, chrom->x+chrom->width-1, y, 1, height, MG_BLACK);
+
+	/* Draw centromere if we found one. */
 	if (cenX2 > cenX1)
 	    {
 	    hCytoBandDrawCentromere(vg, cenX1+chrom->x, y, cenX2-cenX1, height,

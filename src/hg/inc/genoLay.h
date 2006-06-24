@@ -22,22 +22,26 @@ struct genoLayChrom
 struct genoLay
 /* This has information on how to lay out chromosomes. */
     {
-    MgFont *font;		/* Font used for labels */
+    MgFont *font;			/* Font used for labels */
     struct genoLayChrom *chromList;	/* List of all chromosomes. */
     struct hash *chromHash;		/* Hash of chromosomes. */
     int picWidth;			/* Total picture width */
     int picHeight;			/* Total picture height */
     int margin;				/* Blank area around sides */
     int spaceWidth;			/* Width of a space. */
-    struct slRef *leftList;	/* Left chromosomes. */
-    struct slRef *rightList;	/* Right chromosomes. */
-    struct slRef *bottomList;	/* Sex chromosomes are on bottom. */
+    struct slRef *leftList;		/* Left chromosomes. */
+    struct slRef *rightList;		/* Right chromosomes. */
+    struct slRef *bottomList;		/* Sex chromosomes are on bottom. */
     int lineCount;			/* Number of chromosome lines. */
     int leftLabelWidth, rightLabelWidth;/* Pixels for left/right labels */
     int lineHeight;			/* Height for one line */
-    int chromIdeoHeight;		/* Height of chromosome ideograms. */
-    int totalHeight;	/* Total width/height in pixels */
-    double basesPerPixel;	/* Bases per pixel */
+    int betweenChromHeight;		/* Height between chromosomes. */
+    int betweenChromOffsetY;		/* Start of area between chroms. */
+    int chromHeight;			/* Height of chromosome ideograms. */
+    int chromOffsetY;			/* Start of chromosome ideograms. */
+    int totalHeight;			/* Total width/height in pixels */
+    double basesPerPixel;		/* Bases per pixel */
+    double pixelsPerBase;		/* Pixels per base. */
     };
 
 void genoLayDump(struct genoLay *gl);
@@ -52,7 +56,7 @@ struct genoLayChrom *genoLayDbChroms(struct sqlConnection *conn,
 /* Get chrom info list. */
 
 struct genoLay *genoLayNew(struct genoLayChrom *chromList,
-	MgFont *font, int picWidth, int lineHeight,
+	MgFont *font, int picWidth, int betweenChromHeight,
 	int minLeftLabelWidth, int minRightLabelWidth);
 /* Figure out layout.  For human and most mammals this will be
  * two columns with sex chromosomes on bottom.  This is complicated

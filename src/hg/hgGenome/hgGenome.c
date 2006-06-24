@@ -21,7 +21,7 @@
 #include "chromGraph.h"
 #include "hgGenome.h"
 
-static char const rcsid[] = "$Id: hgGenome.c,v 1.11 2006/06/24 01:33:57 kent Exp $";
+static char const rcsid[] = "$Id: hgGenome.c,v 1.12 2006/06/24 15:42:29 kent Exp $";
 
 /* ---- Global variables. ---- */
 struct cart *cart;	/* This holds cgi and other variables between clicks. */
@@ -96,7 +96,7 @@ genoLayDrawBandedChroms(gl, vg, database, conn,
 /* Draw chromosome graphs. */
 if (sqlTableExists(conn, chromGraph))
     drawChromGraph(vg, conn, gl, chromGraph, 2*spacing, 
-	    gl->lineHeight - gl->chromIdeoHeight - 3*spacing, MG_BLUE);
+	    gl->betweenChromHeight - 3*spacing, MG_BLUE);
 vgClose(&vg);
 }
 
@@ -111,7 +111,7 @@ struct genoLay *gl;
 /* Figure out basic dimensions of image. */
 trackLayoutInit(&tl, cart);
 fontHeight = mgFontLineHeight(tl.font);
-lineHeight = fontHeight*4;
+lineHeight = fontHeight*3;
 
 /* Get list of chromosomes and lay them out. */
 chromList = genoLayDbChroms(conn, FALSE);
