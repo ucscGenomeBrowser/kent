@@ -13,22 +13,9 @@ include ../../../inc/cgi_build_rules.mk
 # be sure to make clean after changing this:
 CFLAGS=-DVISIGENE='"visiGene"'
 
-my::
-	cd ../vgGetText && ${MAKE}
-
-alpha::
-	cd ../vgGetText && ${MAKE} alpha
-
-beta::
-	cd ../vgGetText && ${MAKE} alpha
-
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
-
-quick: compile
-	chmod a+rx $A${EXE}
-	mv $A${EXE} ${CGI_BIN}-${USER}
 
 html: bigImage.html
 	cp bigImage.html /usr/local/apache/htdocs/
