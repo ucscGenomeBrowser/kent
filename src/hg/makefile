@@ -1,6 +1,6 @@
 # Build all directories in utils
 
-# 	$Id: makefile,v 1.111 2006/06/25 01:09:43 galt Exp $
+# 	$Id: makefile,v 1.112 2006/06/25 01:38:40 galt Exp $
 
 BROWSER_BINS=cartReset das hgBlat hgConvert \
         hgGateway hgGene hgPcr hgSession hgTables hgText hgTracks \
@@ -247,7 +247,6 @@ UTIL_DIRS = \
 	utils \
 	uniqSize \
 	updateStsInfo \
-	visiGene/vgGetText \
 	xmlCat \
 	xmlToSql
 
