@@ -6,9 +6,9 @@ if ( "$HOST" != "hgwbeta" ) then
  exit 1
 endif
 
-cd $BUILDDIR
 set dir = "v"$BRANCHNN"_branch"
-cd $dir
+
+cd $BUILDDIR/$dir
 
 cd kent
 pwd
@@ -43,6 +43,22 @@ if ( "$wc" != "0" ) then
  exit 1
 endif
 #
+# RUN vgGetText
+cd $BUILDDIR/$dir/kent/hg/visiGene/vgGetText
+make alpha >& make.alpha.log
+sed -i -e "s/-DJK_WARN//" make.alpha.log
+sed -i -e "s/-Werror//" make.alpha.log
+#-- report any compiler warnings, fix any errors (shouldn't be any)
+#-- to check for errors: 
+set res = `/bin/egrep -i "error|warn" make.alpha.log`
+set wc = `echo "$res" | wc -w` 
+if ( "$wc" != "0" ) then
+ echo "alpha errs found:"
+ echo "$res"
+ exit 1
+endif
+
+# MAKE STRICT BETA TRACKDB
 cd $WEEKLYBLD
 ./makeStrictBeta.csh
 if ( $status ) then
