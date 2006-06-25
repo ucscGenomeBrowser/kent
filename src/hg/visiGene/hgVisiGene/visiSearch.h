@@ -33,4 +33,6 @@ struct visiMatch *visiSearch(struct sqlConnection *conn, char *searchString);
  * by how well they match. This will search most fields in the
  * database. */
 
+extern char titleMessage[1024];
+
 #endif /* VISISEARCH_H */

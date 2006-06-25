@@ -523,7 +523,7 @@ matchFile = matchTempName.forCgi;
 saveMatchFile(matchFile, matchList);
 cartSetString(cart, hgpMatchFile, matchFile);
 cartSetInt(cart, hgpId, imageId);
-puts("\n");
+//puts("\n");
 puts("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 3.2//EN\">");
 printf("<HTML>\n");
 printf("<HEAD>\n");
@@ -542,6 +542,7 @@ if (imageId != 0)
 	    visiGeneStage(conn, imageId, FALSE),
 	    shortOrgName(visiGeneOrganism(conn, imageId)));
     }
+printf("%s",titleMessage);    
 printf("</TITLE>\n");
 printf("</HEAD>\n");
 
@@ -562,7 +563,6 @@ printf("  <p>This web page uses frames, but your browser doesn't support them.</
 printf("  </body>\n");
 printf("  </noframes>\n");
 printf("</frameset>\n");
-
 
 printf("</HTML>\n");
 }
