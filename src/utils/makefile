@@ -43,6 +43,7 @@ SCRIPT_FILES = \
 	doHgNearBlastp.pl \
 	dumpDb.pl \
 	HgAutomate.pm \
+	HgRemoteScript.pm \
         iSync \
         lodToBedScore \
 	mkMafFrames.pl \
