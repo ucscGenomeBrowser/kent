@@ -9787,7 +9787,7 @@ cd snp/organisms/human_9606/database/organism_schema
 get human_9606_table.sql.gz
 
 # Get fasta files from NCBI
-# using headers of fasta files for molType, class and observed
+# using headers of fasta files for molType
 cd /cluster/data/dbSNP/126/human/rs_fasta
 ftp ftp.ncbi.nih.gov
 cd snp/organisms/human_9606/rs_fasta
@@ -9803,7 +9803,7 @@ mv SNP.bcp.gz SNP.gz
 ls -1 *.gz > filelist
 
 # edit table descriptions
-cd /cluster/data/dbSnp/126//human/schema
+cd /cluster/data/dbSNP/126/human/schema
 # get CREATE statements from human_9606_table.sql for our 5 tables
 # store in table.tmp
 # convert and rename tables
@@ -9812,14 +9812,24 @@ rm table.tmp
 sed -f 'tableRename.sed' table2.tmp > table.sql
 rm table2.tmp
 
+# Get updated UniVariation table
+cd /cluster/data/dbSNP/126/shared
+ftp ftp.ncbi.nih.gov
+cd snp/organisms/human_9606/database/shared_data
+get UniVariation.bcp.gz
+cd ../shared_schema
+get dbSNP_main_table.sql.gz
+# get UniVariation CREATE statement from dbSNP_main_table.sql
+# use mssqlToMysql.sed to convert 
+
 # get header lines from rs_fasta
-cd /cluster/data/dbSnp/126/human/rs_fasta
+cd /cluster/data/dbSNP/126/human/rs_fasta
 /bin/csh gnl.csh
 
 # load on kkr5u00
 ssh kkr5u00
 hgsql -e mysql 'create database hg18snp126' 
-cd /cluster/data/dbSnp/126/human/schema
+cd /cluster/data/dbSNP/126/human/schema
 hgsql hg18snp126 < table.sql
 cd ../data
 /bin/csh load.csh
@@ -9829,6 +9839,10 @@ cd ../data
 # SNP           11961761 
 # MapInfo       11712346 
 # ContigLocusId 11854143
+
+cd /cluster/data/dbSNP/126/shared
+hgsql hg18snp126 < UniVariation.sql
+zcat UniVariation.bcp.gz | hgsql -e 'load data local infile "/dev/stdin" into table UniVariation'
 
 # create working /scratch dir
 cd /scratch/snp
@@ -9841,7 +9855,7 @@ cd human
 # Note: missing chrY PAR regions
 
 # get gnl files
-cp /cluster/data/dbSnp/126/human/rs_fasta/*.gnl .
+cp /cluster/data/dbSNP/126/human/rs_fasta/*.gnl .
 
 # examine ContigInfo for group_term and edit pipeline.csh
 # use "ref_assembly" 
@@ -9901,9 +9915,7 @@ mysql> select count(*), loc_type from ContigLocFilter group by loc_type;
 # could delete ContigLocusIdFilter table here
 
 # create chrN_snpFasta tables from *.gnl files
-# snpLoadFasta.error will report all SNPs with "lengthTooLong"
-# here we have 7424 SNPs with lengthTooLong
-# these are noted as ObservedNotAvailable
+# we are just using molType, but also storing class and observed
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpLoadFasta hg18snp126 
 
 # (could start using pipeline.csh here)
@@ -10011,16 +10023,23 @@ mysql> desc chr1_snpTmp;
 # Note this is double from build125
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpCheckAlleles hg18snp126
 
-# add class, observed and molType from chrN_snpFasta tables
-# log errors to snpReadFasta.errors
-# errors detected: no data available, duplicate data
+# add class and observed using univar_id from SNP table
+# to get class (subsnp_class) and observed (var_str) from UniVariation
+# log errors to snpClassAndObserved.errors
+# errors detected: 
+# class = 0 in UniVariation
+# class > 8 in UniVariation
+# univar_id = 0 in SNP
+# no row in SNP for snp_id in chrN_snpTmp
 # This run we got:
-# 879 no data available
-# 266366 duplicate
-# chrN_snpFasta has class = 'in-del'
+# 3 class = 0 in UniVariation
+# 0 class > 8 in UniVariation
+# 39059 univar_id = 0 in SNP
+# 879 no row in SNP for snp_id in chrN_snpTmp (all chr6)
+# dbSNP has class = 'in-del'
 # we promote this to 'deletion' for locType 1&2 and to 'insertion' for locType 3
 
-/cluster/home/heather/kent/src/hg/snp/snpLoad/snpReadFasta hg18snp126
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpClassAndObserved hg18snp126
 
 # morph chrN_snpTmp
 #  +--------------------+---------------+------+-----+---------+-------+
@@ -10032,7 +10051,6 @@ mysql> desc chr1_snpTmp;
 #  | loc_type           | tinyint(4)    | NO   |     |         |       |
 #  | class              | varchar(255)  | NO   |     |         |       |
 #  | orientation        | tinyint(4)    | NO   |     |         |       |
-#  | molType            | varchar(255)  | NO   |     |         |       |
 #  | allele             | blob          | YES  |     | NULL    |       |
 #  | refUCSC            | blob          | YES  |     | NULL    |       |
 #  | refUCSCReverseComp | blob          | YES  |     | NULL    |       |
@@ -10045,7 +10063,6 @@ mysql> desc chr1_snpTmp;
 # SingleClassRangeLocType
 # NamedClassWrongLocType
 
-# ObservedNotAvailable
 # ObservedWrongFormat
 # ObservedWrongSize (twice as many as hg17/snp125)
 # ObservedMismatch (nearly 3x as many as hg17/snp125)
@@ -10066,6 +10083,11 @@ mysql> desc chr1_snpTmp;
 # log error if validation status > 31 or missing
 # this run we got 8 missing
 /cluster/home/heather/kent/src/hg/snp/snpLoad/snpSNP hg18snp126
+
+# add molType
+# errors detected: missing or duplicate molType
+# no errors this run
+/cluster/home/heather/kent/src/hg/snp/snpLoad/snpMoltype hg18snp126
 
 # generate chrN_snp126 and snp126Exceptions tables
 cp snpCheckAlleles.exceptions snpCheckAlleles.tab
