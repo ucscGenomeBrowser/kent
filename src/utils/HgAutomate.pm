@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.1 2006/03/17 21:24:15 angie Exp $
+# $Id: HgAutomate.pm,v 1.2 2006/06/26 19:02:55 angie Exp $
 package HgAutomate;
 
 use warnings;
@@ -13,7 +13,21 @@ use vars qw(@ISA @EXPORT_OK);
 use Exporter;
 
 @ISA = qw(Exporter);
-@EXPORT_OK = qw( mustMkdir nfsNoodge run verbose );
+@EXPORT_OK = qw( makeGsub mustMkdir mustOpen nfsNoodge run verbose );
+
+sub makeGsub {
+  # Create a gsub file in the given dir with the given contents.
+  my ($runDir, $templateCmd) = @_;
+  $templateCmd =~ s/\n$//;
+  my $fh = mustOpen(">$runDir/gsub");
+  print $fh  <<_EOF_
+#LOOP
+$templateCmd
+#ENDLOOP
+_EOF_
+    ;
+  close($fh);
+}
 
 sub mustMkdir {
   # mkdir || die.  Immune to -debug -- we need to create the dir structure 
@@ -22,10 +36,19 @@ sub mustMkdir {
   system("mkdir -p $dir") == 0 || die "Couldn't mkdir $dir\n";
 }
 
+sub mustOpen {
+  # Open a file or else die with informative error message.
+  my ($fileSpec) = @_;
+  open(my $handle, $fileSpec)
+    || die "Couldn't open \"$fileSpec\": $!\n";
+  return $handle;
+}
+
 sub nfsNoodge {
   # sometimes localhost can't see the newly created file immediately,
   # so insert some artificial delay in order to prevent the next step
   # from dieing on lack of file:
+  return if ($main::opt_debug);
   my ($file) = @_;
   for (my $i=0;  $i < 5;  $i++) {
     last if (system("ls $file >& /dev/null") == 0);
