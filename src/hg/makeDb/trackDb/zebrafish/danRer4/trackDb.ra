@@ -42,6 +42,7 @@ windowingFunction mean
 summary multiz7waySummary
 frames multiz7wayFrames
 irows on
+speciesCodonDefault danRer4
 speciesGroups vertebrate mammal
 sGroup_vertebrate fr1 tetNig1 xenTro2
 sGroup_mammal monDom4 mm8 hg18

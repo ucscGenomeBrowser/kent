@@ -62,6 +62,7 @@ autoScaleDefault Off
 #summary multiz6waySummary
 #frames multiz6wayFrames
 #irows on
+speciesCodonDefault rheMac2
 speciesGroups mammal 
 sGroup_mammal hg18 panTro2 mm8 rn4 canFam2 
 speciesDefaultOff 
@@ -85,6 +86,7 @@ autoScaleDefault Off
 summary multiz5waySummary
 frames multiz5wayFrames
 #irows on
+speciesCodonDefault rheMac2
 speciesGroups mammal 
 sGroup_mammal hg18 mm8 rn4 canFam2 
 speciesDefaultOff 

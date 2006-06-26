@@ -44,6 +44,7 @@ autoScaleDefault Off
 summary multiz7waySummary
 frames multiz7wayFrames
 irows on
+speciesCodonDefault xenTro2
 speciesGroups bird mammal fish
 sGroup_bird galGal2 
 sGroup_mammal monDom4 hg18 mm8 rn4

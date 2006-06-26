@@ -48,6 +48,7 @@ irows on
 autoScaleDefault Off
 windowingFunction mean
 summary multiz17waySummary
+speciesCodonDefault mm8
 speciesGroups mammal vertebrate
 sGroup_mammal rn4 oryCun1 hg18 panTro2 rheMac2 canFam2 bosTau2 dasNov1 loxAfr1 echTel1 monDom4
 sGroup_vertebrate galGal2 xenTro2 danRer4 tetNig1 fr1
