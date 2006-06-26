@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1042 2006/06/26 20:39:59 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1043 2006/06/26 20:46:12 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -6805,7 +6805,7 @@ if (hTableExists("ensemblXref3"))
         chromStart = row[1];
         chromEnd   = row[2];
         printf("<HR>");
-        printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, item);
+        printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, TRUE, transcript);
         }
     sqlFreeResult(&sr);
     }
