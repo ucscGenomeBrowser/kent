@@ -10,7 +10,7 @@
 #include "bed.h"
 #include "hgGene.h"
 
-static char const rcsid[] = "$Id: mrnaDescriptions.c,v 1.6 2006/03/06 17:46:35 angie Exp $";
+static char const rcsid[] = "$Id: mrnaDescriptions.c,v 1.7 2006/06/26 16:00:59 hiram Exp $";
 
 static boolean mrnaDescriptionsExists(struct section *section, 
 	struct sqlConnection *conn, char *geneId)
@@ -48,7 +48,7 @@ for (i=0; i<blockCount; ++i)
     {
     s = psl->tStarts[i];
     e = s + psl->blockSizes[i];
-    if (psl->strand[1] < 0)
+    if (psl->strand[1] == '-')
 	reverseIntRange(&s, &e, psl->tSize);
     intersect += gpRangeIntersection(gp, s, e);
     }
