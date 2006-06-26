@@ -102,8 +102,8 @@ build 126, available from
       <A name="Weight"></A>
       <B>Weight</B>: Alignment quality assigned by dbSNP<BR>
       <UL>
-      <LI>Weight can be 1, 2, 3 or 10.   
-      <LI>We excluded weight = 10 from the data set.
+      <LI>Weight can be 0, 1, 2, 3 or 10.   
+      <LI>We excluded weight = 0 and weight = 10 from the data set.
       <LI>We support a filter on maximum weight value, which defaults to 3.
       </UL>
     </LI>
@@ -127,18 +127,14 @@ For the new location types, we preserve the class 'in-del'.
 <P>
   In addition to presenting the dbSNP data, we provide the following annotations:
   <UL>
-  <LI>We check that the size of the dbSNP reference allele matches the coordinate span.</LI>
-
   <LI>We compare the dbSNP reference allele to our reference allele and note if the 
       dbSNP reference allele is the reverse complement of our reference allele.</LI>
-      
   <LI>For single-base substitutions, we note where the alignments of the
       flanking sequences are adjacent or have a gap of more than one base.</LI>
-  <LI>We note if the observed alleles are not available from the rs_fasta files.</LI>
   <LI>We note if the observed alleles have an unexpected format.</LI>
   <LI>We check that the length of the observed alleles matches the coordinate span.</LI>
-  <LI>For simple deletions, we check that the observed allele matches the reference allele.</LI>
   <LI>For single-base substitutions, we check that one of the observed alleles matches the reference allele.</LI>
+  <LI>For simple deletions, we check that the observed allele matches the reference allele.</LI>
   <LI>We note tri-allelic and quad-allelic single-base substitutions.</LI>
   <LI>We note variants that have multiple mappings.</LI>
   </UL>
@@ -150,11 +146,12 @@ For the new location types, we preserve the class 'in-del'.
   <LI>We used b126_SNPContigLoc_36_1.bcp.gz for coordinates, orientation, location type
       and the dbSNP reference allele.  
   <LI>We used b126_SNPMapInfo_36_1.bcp.gz for alignment weights, filtering out 
-      alignments with weight = 10 or weight = 0.
+      alignments with weight = 0 or weight = 10.
+  <LI>We obtained class and observed polymorphism from the shared UniVariation.bcp.gz,
+      using the univar_id from SNP.bcp.gz as an index.
   <LI>We obtained functional classification from b126_SNPContigLocusId_36_1.bcp.gz.
   <LI>We obtained validation status and heterozygosity from SNP.bcp.gz.
-  <LI>We used the header line in the rs_fasta files for class, 
-      observed polymorphism and molecule type.
+  <LI>We used the header line in the rs_fasta files for molecule type.
   </UL>
 </P>
 
