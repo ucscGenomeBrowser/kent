@@ -7,10 +7,12 @@
  * NamedClassWrongLocType
  *
  * Check observed for annotations:
- * ObservedNotAvailable
+ * ObservedNotAvailable (obsolete)
  * ObservedWrongFormat
  * ObservedWrongSize
  * ObservedMismatch
+ *
+ * Also note RangeSubstitutionLocTypeExactMatch
  *
  * Also note SingleClassTriAllelic and SingleClassQuadAllelic
  */
@@ -19,7 +21,7 @@
 #include "common.h"
 #include "hdb.h"
 
-static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.26 2006/06/07 23:54:02 heather Exp $";
+static char const rcsid[] = "$Id: snpCheckClassAndObserved.c,v 1.27 2006/06/26 22:50:22 heather Exp $";
 
 static char *snpDb = NULL;
 FILE *exceptionFileHandle = NULL;
