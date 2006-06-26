@@ -1169,11 +1169,12 @@ cat > downloads.csh << 'EOF'
 
 
 #####################################################################
-# SEGMENTAL DUPLICATIONS (DONE 6/2/06 angie)
+# SEGMENTAL DUPLICATIONS (DONE 6/22/06 angie)
     # File emailed from Xinwei She <xws@u.washington.edu>
     mkdir /cluster/data/rheMac2/bed/genomicSuperDups
     cd /cluster/data/rheMac2/bed/genomicSuperDups
-    hgLoadBed rheMac2 genomicSuperDups rheMac2_genomicSuperDup.tab \
+    sed -e 's/\t_\t/\t-\t/' rheMac2_genomicSuperDup.tab \
+    | hgLoadBed rheMac2 genomicSuperDups stdin\
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 
 

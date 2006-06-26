@@ -7881,11 +7881,12 @@ knownToVisiGene mm5
 
 
 #####################################################################
-# SEGMENTAL DUPLICATIONS (DONE 6/2/06 angie)
+# SEGMENTAL DUPLICATIONS (DONE 6/22/06 angie)
     # File emailed from Xinwei She <xws@u.washington.edu>
     mkdir /cluster/data/mm5/bed/genomicSuperDups
     cd /cluster/data/mm5/bed/genomicSuperDups
-    hgLoadBed mm5 genomicSuperDups mm5_genomicSuperDup.tab \
+    sed -e 's/\t_\t/\t-\t/' mm5_genomicSuperDup.tab \
+    | hgLoadBed mm5 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 
 

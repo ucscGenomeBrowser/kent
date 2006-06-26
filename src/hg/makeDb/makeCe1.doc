@@ -1529,11 +1529,11 @@ type wig 0 100
 
 
 #####################################################################
-# SEGMENTAL DUPLICATIONS (DONE 6/2/06 angie)
+# SEGMENTAL DUPLICATIONS (DONE 6/22/06 angie)
     # File emailed from Xinwei She <xws@u.washington.edu>
     mkdir /cluster/data/ce1/bed/genomicSuperDups
     cd /cluster/data/ce1/bed/genomicSuperDups
-    sed -e 's/CHROMOSOME_/chr/g;' \
+    sed -e 's/CHROMOSOME_/chr/g; s/\t_\t/\t-\t/;' \
       ce1_genomicSuperDup.tab \
     | hgLoadBed ce1 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
