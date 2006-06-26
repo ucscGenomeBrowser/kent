@@ -132,7 +132,6 @@
 #include "sargassoSeaXra.h"
 #include "codeBlastScore.h"
 #include "codeBlast.h"
-/* #include "rnaGenes.h" */
 #include "tigrOperon.h"
 #include "easyGene.h"
 #include "llaInfo.h"
@@ -197,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1041 2006/06/24 15:12:11 kent Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1042 2006/06/26 20:39:59 fanhsu Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -638,7 +637,6 @@ if (featDna && end > start)
 	   chrom, start, end, strand, tbl);
     }
 }
-
 
 void printPosOnScaffold(char *chrom, int start, int end, char *strand)
 /* Print position lines referenced to scaffold.  'strand' argument may be null. */
@@ -6779,13 +6777,38 @@ if (url != NULL && url[0] != 0)
 void doSuperfamily(struct trackDb *tdb, char *item, char *itemForUrl)
 /* Put up Superfamily track info. */
 {
+struct sqlConnection *conn = hAllocConn();
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chrom, *chromStart, *chromEnd;
+char *transcript;
+
 if (itemForUrl == NULL)
     itemForUrl = item;
 
 genericHeader(tdb, item);
 
 printSuperfamilyCustomUrl(tdb, itemForUrl, item == itemForUrl);
-
+if (hTableExists("ensemblXref3"))
+    {
+    sprintf(query, "protein='%s'", item);
+    transcript = sqlGetField(conn, database, "ensemblXref3", "transcript", query);
+    
+    sprintf(query, 
+    	    "select chrom, chromStart, chromEnd from superfamily where name='%s';", transcript);
+    sr = sqlMustGetResult(conn, query);
+    row = sqlNextRow(sr);
+    if (row != NULL)
+        {
+        chrom      = row[0];
+        chromStart = row[1];
+        chromEnd   = row[2];
+        printf("<HR>");
+        printPosOnChrom(chrom, atoi(chromStart), atoi(chromEnd), NULL, FALSE, item);
+        }
+    sqlFreeResult(&sr);
+    }
 printTrackHtml(tdb);
 }
 
