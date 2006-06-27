@@ -51,6 +51,7 @@ visibility hide
 spectrum on
 type psl .
 cdsDrawOptions enabled
+release alpha
 
 track ensGene
 shortLabel Ensembl Genes
