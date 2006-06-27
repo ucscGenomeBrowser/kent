@@ -104,7 +104,7 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1139 2006/06/23 23:45:04 kent Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1140 2006/06/27 01:17:28 markd Exp $";
 
 boolean measureTiming = TRUE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -169,6 +169,7 @@ static char *position = NULL; 		/* Name of position. */
 static char *userSeqString = NULL;	/* User sequence .fa/.psl file. */
 
 int gfxBorder = hgDefaultGfxBorder;	/* Width of graphics border. */
+int leftLabelWidthChars = 17;   /* number of characters allowed for left label */
 int trackTabWidth = 11;
 int insideX;			/* Start of area to draw track in in pixels. */
 int insideWidth;		/* Width of area to draw tracks in in pixels. */
@@ -345,7 +346,7 @@ void initTl()
  * wide. */
 {
 trackLayoutInit(&tl, cart);
-tl.leftLabelWidth = 17*tl.nWidth + trackTabWidth;
+tl.leftLabelWidth = leftLabelWidthChars*tl.nWidth + trackTabWidth;
 }
 
 
