@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.281 2006/06/23 19:37:24 giardine Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.282 2006/06/27 00:11:35 kate Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -1380,7 +1380,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("%s&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", sample->name );
 
     newRow++;
-    if( newRow % 6 == 0 ) printf("<br>");
+    if( newRow % 5 == 0 ) printf("<br>");
 		    
     sampleFree(&sample);
     }
@@ -1623,6 +1623,8 @@ struct phyloTree *tree;
 char *consNames[10];
 char *consWiggle = trackDbSetting(tdb, CONS_WIGGLE);
 
+puts("<TABLE><TR><TD>");
+
 /* check for alternate conservation wiggles -- create dropbox */
 if (consWiggle)
     {
@@ -1670,11 +1672,8 @@ slReverse(&wmSpeciesList);
 char *currentCodonMode;
 #endif
 
-puts("<P><B>Pairwise alignments:</B><BR>" );
-treeImage = trackDbSetting(tdb, "treeImage");
-if (treeImage)
-    printf("<IMG ALIGN=right SRC=\"/images/%s\">", treeImage);
 
+puts("<P><B>Pairwise alignments:</B><BR>" );
 
 if ((speciesTree != NULL) && ((tree = phyloParseString(speciesTree)) != NULL))
 {
@@ -1720,7 +1719,7 @@ for (wmSpecies = wmSpeciesList, i = 0; wmSpecies != NULL;
 	printf("<P>&nbsp;&nbsp;<B><EM>%s</EM></B>", groups[group]);
 	puts("<TABLE><TR>");
 	}
-    if (i != 0 && (i % 6) == 0)
+    if (i != 0 && (i % 5) == 0)
 	puts("</TR><TR>");
     puts("<TD>");
     safef(option, sizeof(option), "%s.%s", tdb->tableName, wmSpecies->name);
@@ -1804,6 +1803,12 @@ else
     puts ("bases<BR>");
 #endif
     }
+
+treeImage = trackDbSetting(tdb, "treeImage");
+if (treeImage)
+    printf("</TD><TD><IMG ALIGN=TOP SRC=\"/images/%s\"></TD></TR></TABLE>", treeImage);
+else
+    puts("</TD></TR></TABLE");
 
 if (trackDbSetting(tdb, CONS_WIGGLE) != NULL)
     {
