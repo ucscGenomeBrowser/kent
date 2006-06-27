@@ -17,7 +17,7 @@
 #include "mafFrames.h"
 #include "phyloTree.h"
 
-static char const rcsid[] = "$Id: wigMafTrack.c,v 1.97 2006/06/17 03:00:12 galt Exp $";
+static char const rcsid[] = "$Id: wigMafTrack.c,v 1.98 2006/06/27 20:18:44 kate Exp $";
 
 struct wigMafItem
 /* A maf track item -- 
@@ -1958,7 +1958,7 @@ else
     {
     /* no wiggle */
     int height = tl.fontHeight * 4;
-    if (zoomedToBaseLevel || vis == tvFull || vis == tvPack)
+    if (vis == tvFull || vis == tvPack)
         /* suppress graph if other items displayed (bases or pairs) */
         return yOff;
     /* draw some kind of graph from multiple alignment */
