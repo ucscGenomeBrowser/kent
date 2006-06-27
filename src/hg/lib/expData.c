@@ -8,7 +8,7 @@
 #include "jksql.h"
 #include "expData.h"
 
-static char const rcsid[] = "$Id: expData.c,v 1.3 2005/04/13 06:25:52 markd Exp $";
+static char const rcsid[] = "$Id: expData.c,v 1.4 2006/06/27 00:28:55 aamp Exp $";
 
 struct expData *expDataLoad(char **row)
 /* Load a expData from row fetched with select * from expData
@@ -147,3 +147,32 @@ safef(query, sizeof(query),
 sqlRemakeTable(conn, table, query);
 }
 
+struct expData *expDataLoadTable(struct sqlConnection *conn, char *table)
+/* Load all the rows of an SQL table (already connected to the database) */
+/* into a list and return it. This should work on BED 15 tables as well */
+/* as native expData tables. */
+{
+char query[256];
+char **row;
+struct expData *exps = NULL;
+safef(query, sizeof(query), "select name, expCount, expScores from %s", table);
+struct sqlResult *sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    struct expData *addMe = expDataLoad(row);
+    slAddHead(&exps, addMe);
+    }
+slReverse(&exps);
+sqlFreeResult(&sr);
+return exps;
+}
+
+struct expData *expDataConnectAndLoadTable(char *database, char *table)
+/* Same thing as expDataLoadTableConn, but it does the extra step of */
+/* connecting to a database first. */
+{
+struct sqlConnection *conn = sqlConnect(database);
+struct expData *exps = expDataLoadTable(conn, table);
+sqlDisconnect(&conn);
+return exps;
+}

@@ -58,5 +58,14 @@ void expDataOutput(struct expData *el, FILE *f, char sep, char lastSep);
 void expDataCreateTable(struct sqlConnection *conn, char *table);
 /* Create table with given name. */
 
+struct expData *expDataLoadTable(struct sqlConnection *conn, char *table);
+/* Load all the rows of an SQL table (already connected to the database) */
+/* into a list and return it. This should work on BED 15 tables as well */
+/* as native expData tables. */
+
+struct expData *expDataConnectAndLoadTable(char *database, char *table);
+/* Same thing as expDataLoadTableConn, but it does the extra step of */
+/* connecting to a database first. */
+
 #endif /* EXPDATA_H */
 
