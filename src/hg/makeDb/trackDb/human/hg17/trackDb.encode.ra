@@ -2324,13 +2324,6 @@ dataVersion ENCODE Oct 2005 Freeze
     color 170,100,50
     priority 1
 
-    track encodeTbaBinCons
-    subTrack encodeTbaCons
-    shortLabel TBA BinCons
-    longLabel TBA BinCons Conservation
-    color 190,70,80
-    priority 2
-
     track encodeTbaGerpCons
     subTrack encodeTbaCons
     shortLabel TBA GERP Cons
@@ -2460,13 +2453,6 @@ dataVersion ENCODE Oct 2005 Freeze
     color 170,100,50
     priority 1
 
-    track encodeMlaganBinCons
-    subTrack encodeMlaganCons
-    shortLabel MLAGAN BinCons
-    longLabel MLAGAN BinCons Conservation
-    color 190,70,80
-    priority 2
-
     track encodeMlaganGerpCons
     subTrack encodeMlaganCons
     shortLabel MLAGAN GERP Cons
@@ -2580,13 +2566,6 @@ dataVersion ENCODE Oct 2005 Freeze
     windowingFunction mean
     color 170,100,50
     priority 1
-
-    track encodeMavidBinCons
-    subTrack encodeMavidCons
-    shortLabel MLAGAN BinCons
-    longLabel MLAGAN BinCons Conservation
-    color 190,70,80
-    priority 2
 
     track encodeMavidGerpCons
     subTrack encodeMavidCons
