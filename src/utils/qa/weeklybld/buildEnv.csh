@@ -1,8 +1,9 @@
 setenv BRANCHNN 136
 setenv TODAY 2006-06-26     # v136 final
 setenv LASTWEEK 2006-06-12  # v135 final
-setenv REVIEWDAY 2006-06-05  # preview of v135
-setenv LASTREVIEWDAY 2006-05-22 # preview of v134
+setenv REVIEWDAY 2006-06-19  # preview of v136
+setenv LASTREVIEWDAY 2006-06-05 # preview of v135
+
 setenv WEEKLYBLD /cluster/bin/build/scripts
 setenv BOX32 hgwdevold
 

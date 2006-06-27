@@ -66,11 +66,17 @@ if ( $status ) then
  exit 1
 endif
 #
-echo "buildTableDescriptions.pl."
+# Build Table Descriptions
 #
+echo "buildTableDescriptions.pl."
+echo "see buildDescr.log for output"
 cd $BUILDDIR/$dir
-kent/src/test/buildTableDescriptions.pl -kentSrc kent/src -gbdDPath /usr/local/apache/htdocs/goldenPath/gbdDescriptions.html >& buildDescr.log
-echo see buildDescr.log for output
+kent/src/test/buildTableDescriptions.pl -kentSrc kent/src -gbdDPath /usr/local/apache/htdocs/goldenPath/gbdDescriptions.html >& /cluster/bin/build/scripts/buildDescr.log
+set err = $status
+if ( $err ) then
+    echo "buildTableDescriptions.pl returned error $err"
+    exit 1
+endif
 #
 echo
 echo "Build libs, alpha, strict-track/zoo, table-descr  done."
