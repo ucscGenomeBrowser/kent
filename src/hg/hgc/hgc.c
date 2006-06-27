@@ -196,7 +196,7 @@
 #include "transMapClick.h"
 #include "memalloc.h"
 
-static char const rcsid[] = "$Id: hgc.c,v 1.1043 2006/06/26 20:46:12 fanhsu Exp $";
+static char const rcsid[] = "$Id: hgc.c,v 1.1044 2006/06/27 00:07:56 heather Exp $";
 static char *rootDir = "hgcData"; 
 
 #define LINESIZE 70  /* size of lines in comp seq feature */
@@ -11844,9 +11844,18 @@ char query[256], query2[1024];
 int rowOffset = hOffsetPastBin(seqName, table);
 int start = cartInt(cart, "o");
 float sample, cutoff;
+char variantSignal;
+char *itemCopy = cloneString(itemName);
 
-genericHeader(tdb, itemName);
-checkAndPrintCloneRegUrl(stdout,itemName);
+variantSignal = lastChar(itemName);
+if (variantSignal == '*')
+   stripChar(itemCopy, '*');
+if (variantSignal == '?')
+   stripChar(itemCopy, '?');
+genericHeader(tdb, itemCopy);
+checkAndPrintCloneRegUrl(stdout,itemCopy);
+if (variantSignal == '*' || variantSignal == '?')
+    printf("<B>Note this BAC was found to be variant.   See references.</B><BR>\n");
 safef(query, sizeof(query),
       "select * from %s where chrom = '%s' and "
       "chromStart=%d and name = '%s'", table, seqName, start, itemName);
@@ -11916,7 +11925,7 @@ while ((row = sqlNextRow(sr1)) != NULL)
 sqlFreeResult(&sr1);
 sqlDisconnect(&hgFixed1);
 sqlDisconnect(&hgFixed2);
-printf("<BR><B>Legend for individul values in table:</B>\n");
+printf("<BR><B>Legend for individual values in table:</B>\n");
 printf("&nbsp;&nbsp;<table>");
 printf("<TR><TD>Title Color:</TD><TD bgcolor=\"#FFCCFF\">Female</TD><TD bgcolor=\"#99FF99\">Male</TD></TR>\n");
 printf("<TR><TD>Value Color:</TD><TD bgcolor=\"yellow\" >Above Threshold</TD><TD bgcolor=\"gray\">Below negative threshold</TD></TR>\n");
