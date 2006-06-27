@@ -14,6 +14,9 @@
  *  if the input data has incorrect syntax.  See the apache error_log.
  *  Added another option to place form output in a static html page
  *  so that we can prevent IE6 save-as bug, and FF auto-shrunk output.
+ *  Added an option to display a length-scale legend or ruler at the bottom.
+ *  Added an option to preserve underscores in input as spaces in output.
+ *  
  *
  *  One may use as a cgi in html GET: 
  *    <IMG SRC="/cgi-bin/phyloGif?phyloGif_width=120&phyloGif_height=120&phyloGif_tree=(a:1,b:1);" >
@@ -54,12 +57,17 @@
 #include "portable.h"
 #include "memgfx.h"
 
-static char const rcsid[] = "$Id: phyloGif.c,v 1.3 2006/06/24 00:34:04 galt Exp $";
+#include "phyloForm.h"
+
+static char const rcsid[] = "$Id: phyloGif.c,v 1.4 2006/06/27 00:47:25 galt Exp $";
 
 int width=240,height=512;
 boolean branchLengths = FALSE;  /* branch lengths */
+boolean lengthLegend = FALSE;   /* length legend */
 boolean branchLabels = FALSE;   /* labelled branch lengths */
 boolean htmlPageWrapper = FALSE;  /* wrap output in an html page */
+boolean preserveUnderscores = FALSE;   /* preserve underscores in input as spaces in output */
+char *escapePattern = NULL;      /* use to escape dash '-' char in input */
 
 void usage(char *msg)
 /* Explain usage and exit. */
@@ -77,9 +85,11 @@ errAbort(
     "     If running at the command-line, can put filename here or stdin\n"
     "     (this is actually required)\n"
     "  -phyloGif_branchLengths - use branch lengths for layout\n"
+    "  -phyloGif_lengthLegend - show length legend at bottom\n"
     "  -phyloGif_branchLabels - show length of branch as label\n"
     "     (used with -phyloGif_branchLengths)\n"
     "  -phyloGif_htmlPage - wrap the output in an html page (cgi only)\n"
+    "  -phyloGif_underscores - preserve underscores in input as spaces in output\n"
     , msg, width, height);
 }
 
@@ -146,8 +156,10 @@ if (phyloTree->numEdges == 2)  /* node */
     int maxDepth = 0;
     struct phyloLayout *that = NULL;
     double vPos = 0;
-    phyloTreeLayoutBL(phyloTree->edges[0], pMaxDepth, pNumLeafs, depth+1, font, pMaxLabelWidth, width, pMinMaxFactor, this->hPos);
-    phyloTreeLayoutBL(phyloTree->edges[1], pMaxDepth, pNumLeafs, depth+1, font, pMaxLabelWidth, width, pMinMaxFactor, this->hPos);
+    phyloTreeLayoutBL(phyloTree->edges[0], pMaxDepth, pNumLeafs, depth+1, 
+	font, pMaxLabelWidth, width, pMinMaxFactor, this->hPos);
+    phyloTreeLayoutBL(phyloTree->edges[1], pMaxDepth, pNumLeafs, depth+1, 
+	font, pMaxLabelWidth, width, pMinMaxFactor, this->hPos);
     that = (struct phyloLayout *) phyloTree->edges[0]->priv;
     if (that->depth > maxDepth)
 	maxDepth = that->depth;
@@ -166,6 +178,13 @@ else if (phyloTree->numEdges == 0)  /* leaf */
     this->depth=0;
     this->vPos=*pNumLeafs;
     (*pNumLeafs)++;
+    /* de-escape name if needed */
+    if(stringIn(escapePattern,phyloTree->ident->name))
+	{
+	char *temp = phyloTree->ident->name;
+	phyloTree->ident->name = replaceChars(temp,escapePattern," ");
+	freez(&temp);
+	}	
     w=mgFontStringWidth(font,phyloTree->ident->name);
     if (w > *pMaxLabelWidth)
 	*pMaxLabelWidth = w;
@@ -273,6 +292,7 @@ struct phyloTree *phyloTree = NULL;
 int maxDepth = 0, numLeafs = 0, maxLabelWidth = 0;
 double minMaxFactor = 0.0;
 struct memGfx *mg = NULL;
+
 MgFont *font = mgMediumBoldFont();
 boolean onWeb = cgiIsOnWeb();
 cgiSpoof(&argc, argv);
@@ -294,9 +314,21 @@ width = cgiOptionalInt("phyloGif_width",width);
 height = cgiOptionalInt("phyloGif_height",height);    
 phyloData = cloneString(cgiOptionalString("phyloGif_tree"));
 branchLengths = cgiVarExists("phyloGif_branchLengths");
+lengthLegend = cgiVarExists("phyloGif_lengthLegend");
 branchLabels = cgiVarExists("phyloGif_branchLabels");
+preserveUnderscores = cgiVarExists("phyloGif_underscores");
 if (!phyloData)
-    usage("-phyloGif_tree is required 'option' or cgi variable.");
+    {
+    if (onWeb || TRUE) //debug
+	{
+    	printf("Content-type: text/html\r\n");
+	printf("\r\n");
+	printf("%s\n",phyloForm);
+	return 0;
+	}
+    else	    
+    	usage("-phyloGif_tree is required 'option' or cgi variable.");
+    }
     
 //debug
 //fprintf(stderr,"width=%d height=%d\n%s\n-------------\n", width, height, phyloData);
@@ -313,10 +345,34 @@ if (!onWeb && phyloData[0] != '(')
     phyloData = dyStringCannibalize(&dy);
     }
 
+/* preserve underscores option */
+if (preserveUnderscores)
+    {
+    char *temp = phyloData;
+    phyloData = replaceChars(temp,"_","-");
+    freez(&temp);
+    }
+
 /* get rid of underscore suffixes */
 stripUnderscoreSuffixes(phyloData);
 //debug
 //fprintf(stderr,"%s\n-------------\n", phyloData);
+
+/* escape dash chars with some XXX pattern */
+escapePattern = cloneString("");
+do
+    {
+    char *temp = escapePattern;
+    escapePattern=addSuffix(temp,"X");
+    freez(&temp);
+    } while (stringIn(escapePattern,phyloData));
+if (strchr(phyloData,'-'))
+    {
+    char *temp = phyloData;
+    phyloData = replaceChars(temp,"-",escapePattern);
+    freez(&temp);
+    }	
+
 
 /* add trailing semi-colon if it got stripped off */
 if (!strchr(phyloData,';'))
@@ -338,8 +394,12 @@ if (htmlPageWrapper)
 	,getenv("SERVER_NAME"),getenv("SCRIPT_NAME"),width,height,phyloData);
     if (branchLengths)
 	printf("&phyloGif_branchLengths=1");
+    if (lengthLegend)
+	printf("&phyloGif_lengthLegend=1");
     if (branchLabels)
 	printf("&phyloGif_branchLabels=1");
+    if (preserveUnderscores)
+	printf("&phyloGif_underscores=1");
     printf("\"></body></html>\n");
     freez(&phyloData);
     return 0;
@@ -347,6 +407,14 @@ if (htmlPageWrapper)
 
 
 mg = mgNew(width,height);
+
+lengthLegend = lengthLegend && branchLengths;  /* moot without lengths */
+
+if (lengthLegend)
+    {
+    int fHeight = mgFontPixelHeight(font);
+    height -= (MARGIN+2*fHeight);
+    }
 
 phyloTree = phyloParseString(phyloData);
 if (phyloTree)
@@ -357,13 +425,52 @@ if (phyloTree)
     phyloTreeLayoutBL(phyloTree, &maxDepth, &numLeafs, 0, font, &maxLabelWidth, width, &minMaxFactor, 0.0);
     
     //debug
-    //fprintf(stderr,"maxDepth=%d numLeafs=%d maxLabelWidth=%d minMaxFactor=%f\n", maxDepth, numLeafs, maxLabelWidth, minMaxFactor);
+    //fprintf(stderr,"maxDepth=%d numLeafs=%d maxLabelWidth=%d minMaxFactor=%f\n", 
+	//maxDepth, numLeafs, maxLabelWidth, minMaxFactor);
 
     if (branchLengths)
         phyloTreeGifBL(phyloTree, maxDepth, numLeafs, maxLabelWidth, width, height, mg, font, minMaxFactor, FALSE);
     else	    
         phyloTreeGif(phyloTree, maxDepth, numLeafs, maxLabelWidth, width, height, mg, font);
+
+    if (lengthLegend)
+	{
+	int i = 0;
+	char out[256];
+	double scaleEnd = (width - 2*MARGIN); 
+	int fHeight = mgFontPixelHeight(font);
+	int x=0;
+	int dh=0;
+	mgDrawLine(mg, MARGIN,       height+fHeight/2, 
+		       width-MARGIN, height+fHeight/2, MG_BLACK);
+	while(TRUE)
+	    {
+	    x=((minMaxFactor*i)/10);
+	    if (x >= scaleEnd)
+		break;
+	    if ((i % 5) == 0)
+		{
+		int y = mgFontCharWidth(font,'0');
+		y += 0.5*mgFontCharWidth(font,'.');
+		safef(out,sizeof(out),"%3.2f",i/10.0);
+    		mgText(mg, MARGIN+x-y, height+fHeight, MG_BLACK, font, out);
+		dh=fHeight/2;
+		}
+	    else
+		{
+		dh = fHeight / 4;
+		}
+	    mgDrawLine(mg, MARGIN+x, height+fHeight/2-dh, 
+	     		   MARGIN+x, height+fHeight/2+dh, MG_BLACK);
+	    ++i;
+	    }
+
+	
+	}
+
     }
+
+
 if (onWeb)
     {
     printf("Content-type: image/gif\r\n");
