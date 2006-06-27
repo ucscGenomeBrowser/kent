@@ -104,9 +104,9 @@
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1141 2006/06/27 13:56:29 giardine Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1142 2006/06/27 16:21:44 heather Exp $";
 
-boolean measureTiming = TRUE;	/* Flip this on to display timing
+boolean measureTiming = FALSE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
 static long enteredMainTime = 0;	/* time at beginning of main()	*/
 boolean isPrivateHost;		/* True if we're on genome-test. */
