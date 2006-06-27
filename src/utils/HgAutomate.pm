@@ -4,7 +4,7 @@
 # DO NOT EDIT the /cluster/bin/scripts copy of this file --
 # edit ~/kent/src/utils/HgAutomate.pm instead.
 
-# $Id: HgAutomate.pm,v 1.2 2006/06/26 19:02:55 angie Exp $
+# $Id: HgAutomate.pm,v 1.3 2006/06/27 22:47:22 angie Exp $
 package HgAutomate;
 
 use warnings;
@@ -13,7 +13,60 @@ use vars qw(@ISA @EXPORT_OK);
 use Exporter;
 
 @ISA = qw(Exporter);
-@EXPORT_OK = qw( makeGsub mustMkdir mustOpen nfsNoodge run verbose );
+@EXPORT_OK = qw( makeGsub mustMkdir mustOpen nfsNoodge run verbose
+		 getCommonOptionHelp processCommonOptions
+		 @commonOptionVars @commonOptionSpec
+	       );
+
+use vars qw( @commonOptionVars @commonOptionSpec );
+
+# Common option defaults:
+my $defaultVerbose = 1;
+
+@commonOptionVars = qw(
+    $opt_workhorse
+    $opt_fileServer
+    $opt_bigClusterHub
+    $opt_smallClusterHub
+    $opt_debug
+    $opt_verbose
+    $opt_help
+    );
+
+@commonOptionSpec = ("workhorse=s",
+		     "fileServer=s",
+		     "bigClusterHub=s",
+		     "smallClusterHub=s",
+		     "verbose=n",
+		     "debug",
+		     "help",
+		    );
+
+sub getCommonOptionHelp {
+  # Return description of common options, given defaults, for usage message.
+  my ($workhorse, $bigClusterHub, $smallClusterHub) = @_;
+  my $help = <<_EOF_
+    -workhorse machine    Use machine (default: $workhorse) for compute or
+                          memory-intensive steps.
+    -fileServer mach      Use mach (default: fileServer of the build directory)
+                          for I/O-intensive steps.
+    -bigClusterHub mach   Use mach (default: $bigClusterHub) as parasol hub
+                          for blastz cluster run.
+    -smallClusterHub mach Use mach (default: $smallClusterHub) as parasol hub
+                          for cat & chain cluster runs.
+    -debug                Don't actually run commands, just display them.
+    -verbose num          Set verbose level to num (default $defaultVerbose).
+    -help                 Show detailed help and exit.
+_EOF_
+  ;
+  return $help;
+}
+
+sub processCommonOptions {
+  # Process common command line options as specified above
+  # (except -help is up to caller):
+  $main::opt_verbose = $defaultVerbose if (! defined $main::opt_verbose);
+}
 
 sub makeGsub {
   # Create a gsub file in the given dir with the given contents.
