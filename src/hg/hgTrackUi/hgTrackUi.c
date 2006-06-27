@@ -23,7 +23,7 @@
 #include "phyloTree.h"
 #include "humanPhenotypeUi.h"
 #include "hgMutUi.h"
-#include "genomeVarUi.h"
+#include "gvUi.h"
 #include "landmarkUi.h"
 #include "chromGraph.h"
 #include "hgConfig.h"
@@ -33,7 +33,7 @@
 #define CDS_BASE_HELP_PAGE "/goldenPath/help/hgBaseLabel.html"
 #define WIGGLE_HELP_PAGE  "/goldenPath/help/hgWiggleTrackHelp.html"
 
-static char const rcsid[] = "$Id: hgTrackUi.c,v 1.282 2006/06/27 00:11:35 kate Exp $";
+static char const rcsid[] = "$Id: hgTrackUi.c,v 1.283 2006/06/27 13:56:23 giardine Exp $";
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
@@ -512,7 +512,7 @@ for (i = 0; i < landmarkTypeSize; i++)
     }
 }
 
-void genomeVarIdControls (struct trackDb *tdb)
+void gvIdControls (struct trackDb *tdb)
 /* print the controls for the label choice */
 {
 char varName[64];
@@ -561,57 +561,49 @@ printf(" %s&nbsp;&nbsp;&nbsp;", "ID");
 printf("<BR />\n");
 }
 
-void genomeVarUi(struct trackDb *tdb)
+void gvUi(struct trackDb *tdb)
 /* print UI for human mutation filters */
 {
 int i = 0; /* variable to walk through arrays */
-char **row;
-struct sqlResult *sr;
-struct sqlConnection *conn = hAllocConn();
-char srcButton[128];
 
-genomeVarIdControls(tdb);
+gvIdControls(tdb);
 printf("<BR /><B>Exclude</B><BR />");
-for (i = 0; i < mutationAccuracySize; i++)
+for (i = 0; i < gvAccuracySize; i++)
     {
-    cartMakeCheckBox(cart, mutationAccuracyString[i], FALSE);
-    printf (" %s<BR />", mutationAccuracyLabel[i]);
+    cartMakeCheckBox(cart, gvAccuracyString[i], FALSE);
+    printf (" %s<BR />", gvAccuracyLabel[i]);
     }
 
 printf("<BR /><B>Exclude mutation type</B><BR />");
-for (i = 0; i < mutationTypeSize; i++)
+for (i = 0; i < gvTypeSize; i++)
     {
-    cartMakeCheckBox(cart, mutationTypeString[i], FALSE);
-    printf (" %s<BR />", mutationTypeLabel[i]);
+    cartMakeCheckBox(cart, gvTypeString[i], FALSE);
+    printf (" %s<BR />", gvTypeLabel[i]);
     }
 
 printf("<BR /><B>Exclude mutation location</B><BR />");
-for (i = 0; i < mutationLocationSize; i++)
+for (i = 0; i < gvLocationSize; i++)
     {
-    cartMakeCheckBox(cart, mutationLocationString[i], FALSE);
-    printf (" %s<BR />", mutationLocationLabel[i]);
+    cartMakeCheckBox(cart, gvLocationString[i], FALSE);
+    printf (" %s<BR />", gvLocationLabel[i]);
     }
 
 printf("<BR /><B>Exclude data source</B><BR />");
-sr = sqlGetResult(conn, "select distinct(src) from genomeVarSrc order by src");
-while ((row = sqlNextRow(sr)) != NULL)
+for (i = 0; i < gvSrcSize; i++)
     {
-    safef(srcButton, sizeof(srcButton), "genomeVar.filter.src.%s", row[0]);
-    cartMakeCheckBox(cart, srcButton, FALSE);
-    if (differentString(row[0], "LSDB")) 
-        printf (" %s<BR />", row[0]);
+    cartMakeCheckBox(cart, gvSrcString[i], FALSE);
+    if (differentString(gvSrcDbValue[i], "LSDB"))
+        printf (" %s<BR />", gvSrcDbValue[i]); /* label with db value */
     else 
         printf (" Locus Specific Databases<BR />");
     }
-sqlFreeResult(&sr);
-hFreeConn(&conn);
 
 printf("<BR /><B>Color mutations by type</B><BR />");
-for (i = 0; i < genomeVarColorTypeSize; i++)
+for (i = 0; i < gvColorTypeSize; i++)
     {
-    char *defaultVal = cartUsualString(cart, genomeVarColorTypeStrings[i], genomeVarColorTypeDefault[i]);
-    printf (" %s ", genomeVarColorTypeLabels[i]);
-    cgiMakeDropList(genomeVarColorTypeStrings[i], genomeVarColorLabels, genomeVarColorLabelSize, defaultVal);
+    char *defaultVal = cartUsualString(cart, gvColorTypeStrings[i], gvColorTypeDefault[i]);
+    printf (" %s ", gvColorTypeLabels[i]);
+    cgiMakeDropList(gvColorTypeStrings[i], gvColorLabels, gvColorLabelSize, defaultVal);
     }
 printf("<BR />");
 }
@@ -2128,8 +2120,8 @@ else if (sameString(track, "transRegCode"))
     transRegCodeUi(tdb);
 else if (sameString(track, "hgMut"))
     hgMutUi(tdb);
-else if (sameString(track, "genomeVar"))
-    genomeVarUi(tdb);
+else if (sameString(track, "gvPos"))
+    gvUi(tdb);
 else if (sameString(track, "landmark"))
     landmarkUi(tdb);
 else if (sameString(track, "humanPhenotype"))

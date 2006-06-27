@@ -98,13 +98,13 @@
 #include "hgConfig.h"
 #include "hgMut.h"
 #include "hgMutUi.h"
-#include "genomeVar.h"
-#include "genomeVarUi.h"
+#include "gv.h"
+#include "gvUi.h"
 #include "landmark.h"
 #include "landmarkUi.h"
 #include "bed12Source.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1140 2006/06/27 01:17:28 markd Exp $";
+static char const rcsid[] = "$Id: hgTracks.c,v 1.1141 2006/06/27 13:56:29 giardine Exp $";
 
 boolean measureTiming = TRUE;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -9732,14 +9732,30 @@ tg->itemColor = vegaColor;
 tg->itemName = vegaGeneName;
 }
 
-Color genomeVarColor(struct track *tg, void *item, struct vGfx *vg)
+Color gvColor(struct track *tg, void *item, struct vGfx *vg)
 /* color items by type */
 {
-struct genomeVar *el = item;
+struct gvPos *el = item;
+struct gv *details = NULL;
+struct sqlConnection *conn = hAllocConn();
 char *typeColor = NULL;
-int index = stringArrayIx(el->baseChangeType, genomeVarColorTypeBaseChangeType, genomeVarColorTypeSize);
-typeColor = cartUsualString(cart, genomeVarColorTypeStrings[index], 
-    genomeVarColorTypeDefault[index]);
+int index = 5;
+char *escId = NULL; // name changed already, how get ID?
+char query[256];
+if (el->id != NULL)
+    escId = sqlEscapeString(el->id);
+else
+    escId = sqlEscapeString(el->name);
+
+safef(query, sizeof(query), "select * from gv where id = '%s'", escId);
+details = gvLoadByQuery(conn, query);
+index = stringArrayIx(details->baseChangeType, gvColorTypeBaseChangeType, gvColorTypeSize);
+if (index < 0)
+    return MG_BLACK;
+typeColor = cartUsualString(cart, gvColorTypeStrings[index], gvColorTypeDefault[index]);
+gvFreeList(&details);
+hFreeConn(&conn);
+freeMem(escId);
 if (sameString(typeColor, "purple"))
     return vgFindColorIx(vg, 204, 0, 255);
 else if (sameString(typeColor, "green"))
@@ -9773,18 +9789,18 @@ struct hgMut *el = item;
         return MG_BLACK;
 }
 
-boolean genomeVarFilterAccuracy(struct genomeVar *el)
+boolean gvFilterAccuracy(struct gv *el)
 /* Check to see if this element should be excluded. */
 {
 int cnt = 0;
 char accur[10];
 safef(accur, sizeof(accur), "%u", el->coordinateAccuracy);
-for (cnt = 0; cnt < mutationAccuracySize; cnt++)
+for (cnt = 0; cnt < gvAccuracySize; cnt++)
     {
-    if (cartVarExists(cart, mutationAccuracyString[cnt]) &&
-        cartString(cart, mutationAccuracyString[cnt]) != NULL &&
-        differentString(cartString(cart, mutationAccuracyString[cnt]), "0") &&
-        sameString(mutationAccuracyDbValue[cnt], accur))
+    if (cartVarExists(cart, gvAccuracyString[cnt]) &&
+        cartString(cart, gvAccuracyString[cnt]) != NULL &&
+        differentString(cartString(cart,gvAccuracyString[cnt]), "0") &&
+        sameString(gvAccuracyDbValue[cnt], accur))
         {
         return FALSE;
         }
@@ -9792,37 +9808,34 @@ for (cnt = 0; cnt < mutationAccuracySize; cnt++)
 return TRUE;
 }
 
-boolean genomeVarFilterSrc(struct genomeVar *el, struct genomeVarSrc *srcList)
+boolean gvFilterSrc(struct gv *el, struct gvSrc *srcList)
 /* Check to see if this element should be excluded. */
 {
-struct hashEl *filterList = NULL;
-struct hashEl *hashel = NULL;
+int cnt = 0;
+struct gvSrc *src = NULL;
 char *srcTxt = NULL;
-struct genomeVarSrc *src = NULL;
 
 for (src = srcList; src != NULL; src = src->next)
     {
-    if (el->srcId == src->srcId) 
+    if (sameString(el->srcId, src->srcId))
         {
         srcTxt = cloneString(src->src);
         break;
         }
     }
-filterList = cartFindPrefix(cart, "genomeVar.filter.src.");
-if (filterList == NULL || srcTxt == NULL)
-    return TRUE;
-for (hashel = filterList; hashel != NULL; hashel = hashel->next)
+if (srcTxt == NULL)
+    errAbort("Bad value for srcId");
+
+for (cnt = 0; cnt < gvSrcSize; cnt++)
     {
-    if (endsWith(hashel->name, srcTxt) && 
-        differentString(hashel->val, "0")) 
+    if (cartVarExists(cart, gvSrcString[cnt]) &&
+        cartString(cart, gvSrcString[cnt]) != NULL &&
+        differentString(cartString(cart,gvSrcString[cnt]), "0") &&
+        sameString(gvSrcDbValue[cnt], srcTxt))
         {
-        freeMem(srcTxt);
-        hashElFreeList(&filterList);
         return FALSE;
         }
     }
-hashElFreeList(&filterList);
-freeMem(srcTxt);
 return TRUE;
 }
 
@@ -9860,16 +9873,16 @@ freeMem(srcTxt);
 return TRUE;
 }
 
-boolean genomeVarFilterType(struct genomeVar *el)
+boolean gvFilterType(struct gv *el)
 /* Check to see if this element should be excluded. */
 {
 int cnt = 0;
-for (cnt = 0; cnt < mutationTypeSize; cnt++)
+for (cnt = 0; cnt < gvTypeSize; cnt++)
     {
-    if (cartVarExists(cart, mutationTypeString[cnt]) &&
-        cartString(cart, mutationTypeString[cnt]) != NULL &&
-        differentString(cartString(cart, mutationTypeString[cnt]), "0") &&
-        sameString(mutationTypeDbValue[cnt], el->baseChangeType))
+    if (cartVarExists(cart, gvTypeString[cnt]) &&
+        cartString(cart, gvTypeString[cnt]) != NULL &&
+        differentString(cartString(cart, gvTypeString[cnt]), "0") &&
+        sameString(gvTypeDbValue[cnt], el->baseChangeType))
         {
         return FALSE;
         }
@@ -9894,16 +9907,16 @@ for (cnt = 0; cnt < variantTypeSize; cnt++)
 return TRUE;
 }
 
-boolean genomeVarFilterLoc(struct genomeVar *el)
+boolean gvFilterLoc(struct gv *el)
 /* Check to see if this element should be excluded. */
 {
 int cnt = 0;
-for (cnt = 0; cnt < mutationLocationSize; cnt++)
+for (cnt = 0; cnt < gvLocationSize; cnt++)
     {
-    if (cartVarExists(cart, mutationLocationString[cnt]) &&
-        cartString(cart, mutationLocationString[cnt]) != NULL &&
-        differentString(cartString(cart, mutationLocationString[cnt]), "0") &&
-        sameString(mutationLocationDbValue[cnt], el->location))
+    if (cartVarExists(cart, gvLocationString[cnt]) &&
+        cartString(cart, gvLocationString[cnt]) != NULL &&
+        differentString(cartString(cart, gvLocationString[cnt]), "0") &&
+        sameString(gvLocationDbValue[cnt], el->location))
         {
         return FALSE;
         }
@@ -9928,25 +9941,25 @@ for (cnt = 0; cnt < variantLocationSize; cnt++)
 return TRUE;
 }
 
-void lookupGenomeVarName(struct track *tg)
+void lookupGvName(struct track *tg)
 /* give option on which name to display */
 {
-struct genomeVar *el;
+struct gvPos *el;
 struct sqlConnection *conn = hAllocConn();
 boolean useHgvs = FALSE;
 boolean useId = FALSE;
 boolean useCommon = FALSE;
 boolean labelStarted = FALSE;
 
-struct hashEl *genomeVarLabels = cartFindPrefix(cart, "genomeVar.label");
+struct hashEl *gvLabels = cartFindPrefix(cart, "gvPos.label");
 struct hashEl *label;
-if (genomeVarLabels == NULL)
+if (gvLabels == NULL)
     {
     useHgvs = TRUE; /* default to gene name */
     /* set cart to match what is being displayed */
-    cartSetBoolean(cart, "genomeVar.label.hgvs", TRUE);
+    cartSetBoolean(cart, "gvPos.label.hgvs", TRUE);
     }
-for (label = genomeVarLabels; label != NULL; label = label->next)
+for (label = gvLabels; label != NULL; label = label->next)
     {
     if (endsWith(label->name, "hgvs") && differentString(label->val, "0"))
         useHgvs = TRUE;
@@ -9962,15 +9975,24 @@ for (el = tg->items; el != NULL; el = el->next)
     labelStarted = FALSE; /* reset for each item */
     if (useHgvs) 
         {
-        dyStringAppend(name, el->name);
+        char query[256];
+        char *escId = sqlEscapeString(el->name);
+        char *hgvs = NULL;
+        safef(query, sizeof(query), "select name from gv where id = '%s'", escId);
+        hgvs = sqlQuickString(conn, query);
+        freeMem(escId);
+        if (hgvs != NULL)
+            dyStringAppend(name, hgvs);
+        else
+            dyStringAppend(name, " ");
         labelStarted = TRUE;
         }
     if (useCommon)
         {
         char query[256];
         char *commonName = NULL;
-        char *escId = sqlEscapeString(el->mutId);
-        safef(query, sizeof(query), "select name from genomeVarAlias where mutId = '%s' and nameType = 'common'", escId);
+        char *escId = sqlEscapeString(el->name);
+        safef(query, sizeof(query), "select attrVal from gvAttr where id = '%s' and attrType = 'commonName'", escId);
         commonName = sqlQuickString(conn, query);
         freeMem(escId);
         if (labelStarted) dyStringAppendC(name, '/');
@@ -9984,9 +10006,10 @@ for (el = tg->items; el != NULL; el = el->next)
         {
         if (labelStarted) dyStringAppendC(name, '/');
         else labelStarted = TRUE;
-        dyStringAppend(name, el->mutId);
+        dyStringAppend(name, el->name);
         }
-    freeMem(el->name); /* free old name */
+    el->id = el->name; /* reassign ID */
+    //freeMem(el->name); /* free old name */
     el->name = dyStringCannibalize(&name);
     }
 hFreeConn(&conn);
@@ -10056,45 +10079,54 @@ for (el = tg->items; el != NULL; el = el->next)
 hFreeConn(&conn);
 }
 
-void loadGenomeVar(struct track *tg)
+void loadGV(struct track *tg)
 /* Load human mutation with filter */
 {
-struct genomeVar *list = NULL;
+struct gvPos *list = NULL;
 struct sqlConnection *conn = hAllocConn();
+struct sqlConnection *conn2 = hAllocConn();
 struct sqlResult *sr;
-struct genomeVarSrc *srcList = NULL;
+struct gvSrc *srcList = NULL;
 char **row;
 int rowOffset;
 enum trackVisibility vis = tg->visibility;
 
 /* load as linked list once, outside of loop */
-srcList = genomeVarSrcLoadByQuery(conn, "select * from genomeVarSrc");
-sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd,
-                 NULL, &rowOffset);
+srcList = gvSrcLoadByQuery(conn, "select * from gvSrc");
+/* load part need from gv table, outside of loop (load in hash?) */
+sr = hRangeQuery(conn, tg->mapName, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    struct genomeVar *el = genomeVarLoad(row);
-    if (!genomeVarFilterType(el))
-        genomeVarFree(&el);
-    else if (!genomeVarFilterLoc(el))
-        genomeVarFree(&el);
-    else if (!genomeVarFilterSrc(el, srcList))
-        genomeVarFree(&el);
-    else if (!genomeVarFilterAccuracy(el))
-        genomeVarFree(&el);
+    struct gv *details = NULL;
+    char query[256], *escId;
+    struct gvPos *el = gvPosLoad(row);
+    escId = sqlEscapeString(el->name);
+    safef(query, sizeof(query), "select * from gv where id = '%s'", escId);
+    details = gvLoadByQuery(conn2, query);
+    if (!gvFilterType(details))
+        gvPosFree(&el);
+    else if (!gvFilterLoc(details))
+        gvPosFree(&el);
+    else if (!gvFilterSrc(details, srcList))
+        gvPosFree(&el);
+    else if (!gvFilterAccuracy(details))
+        gvPosFree(&el);
     else
         slAddHead(&list, el);
+    gvFreeList(&details);
     }
 sqlFreeResult(&sr);
 slReverse(&list);
-genomeVarSrcFreeList(&srcList);
+gvSrcFreeList(&srcList);
 tg->items = list;
 /* change names here so not affected if change filters later 
    and no extra if when viewing dense                        */
 if (vis != tvDense)
     {
-    lookupGenomeVarName(tg);
+    lookupGvName(tg);
     }
+hFreeConn(&conn);
+hFreeConn(&conn2);
 }
 
 void loadHgMut(struct track *tg)
@@ -10178,11 +10210,18 @@ tg->items = list;
 hFreeConn(&conn);
 }
 
-char *genomeVarName(struct track *tg, void *item)
-/* Get name to use for genomeVar item. */
+char *gvName(struct track *tg, void *item)
+/* Get name to use for gv item. */
 {
-struct genomeVar *el = item;
+struct gvPos *el = item;
 return el->name;
+}
+
+char *gvPosMapName (struct track *tg, void *item)
+/* return id for item */
+{
+struct gvPos *el = item;
+return el->id;
 }
 
 char *hgMutName(struct track *tg, void *item)
@@ -10192,13 +10231,6 @@ struct hgMut *el = item;
 return el->name;
 }
 
-char *genomeVarMapName (struct track *tg, void *item)
-/* Return unique identifier for item */
-{
-struct genomeVar *el = item;
-return el->mutId;
-}
-
 char *hgMutMapName (struct track *tg, void *item)
 /* Return unique identifier for item */
 {
@@ -10206,14 +10238,14 @@ struct hgMut *el = item;
 return el->mutId;
 }
 
-void genomeVarMethods (struct track *tg)
+void gvMethods (struct track *tg)
 /* Simple exclude/include filtering on human mutation items and color. */
 {
-tg->loadItems = loadGenomeVar;
-tg->itemColor = genomeVarColor;
-tg->itemNameColor = genomeVarColor;
-tg->itemName = genomeVarName;
-tg->mapItemName = genomeVarMapName;
+tg->loadItems = loadGV;
+tg->itemColor = gvColor;
+tg->itemNameColor = gvColor;
+tg->itemName = gvName;
+tg->mapItemName = gvPosMapName;
 }
 
 void hgMutMethods (struct track *tg)
@@ -11651,7 +11683,7 @@ registerTrackHandler("encodeGencodeIntronJun05", gencodeIntronMethods);
 registerTrackHandler("encodeGencodeIntronOct05", gencodeIntronMethods);
 registerTrackHandler("affyTxnPhase2", affyTxnPhase2Methods);
 registerTrackHandler("hgMut", hgMutMethods);
-registerTrackHandler("genomeVar", genomeVarMethods);
+registerTrackHandler("gvPos", gvMethods);
 registerTrackHandler("landmark", landmarkMethods);
 registerTrackHandler("jaxAllele", jaxAlleleMethods);
 registerTrackHandler("jaxPhenotype", jaxPhenotypeMethods);

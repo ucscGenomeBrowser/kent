@@ -6,22 +6,27 @@ acc yes
 
 name HbVar
 url http://globin.bx.psu.edu/cgi-bin/hbvar/query_vars3?mode=output&display_format=page&id=%s
+label HbVar
 acc yes
 
 name GenPhen
 url http://globin.bx.psu.edu/cgi-bin/genphen/test_gpquery?display_format=page&mode=Submit+Query&alleleId=%s
+label GenPhen
 acc yes
 
 name UniProtVar
 url http://us.expasy.org/cgi-bin/get-sprot-variant.pl?%s
+label UniProt variant
 acc yes
 
 name UniProtSearch
 url http://us.expasy.org/cgi-bin/sprot-search-ful?SEARCH=%s
+label UniProt search
 acc yes
 
 name OMIM
 url http://www.ncbi.nlm.nih.gov/entrez/dispomim.cgi?id=%s
+label OMIM
 acc yes
 
 name PAHdb

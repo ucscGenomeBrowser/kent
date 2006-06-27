@@ -1,12 +1,12 @@
-/* genomeVarUi.c - char arrays for Genome Variation UI features */
-#include "genomeVarUi.h"
+/* gvUi.c - char arrays for Genome Variation UI features */
+#include "gvUi.h"
 #include "common.h"
 
 /***************Filters**************/
 
 /* some stuff for mutation type choices */
 /* labels for checkboxes */
-char *mutationTypeLabel[] = {
+char *gvTypeLabel[] = {
     "substitution",
     "insertion",
     "duplication",
@@ -15,16 +15,16 @@ char *mutationTypeLabel[] = {
 };
 
 /* names for checkboxes */
-char *mutationTypeString[] = {
-    "genomeVar.filter.sub",
-    "genomeVar.filter.ins",
-    "genomeVar.filter.dup",
-    "genomeVar.filter.del",
-    "genomeVar.filter.complex",
+char *gvTypeString[] = {
+    "gvPos.filter.sub",
+    "gvPos.filter.ins",
+    "gvPos.filter.dup",
+    "gvPos.filter.del",
+    "gvPos.filter.complex",
 };
 
 /* values in the db */
-char *mutationTypeDbValue[] = {
+char *gvTypeDbValue[] = {
     "substitution",
     "insertion",
     "duplication",
@@ -32,11 +32,11 @@ char *mutationTypeDbValue[] = {
     "complex",
 };
 
-int mutationTypeSize = ArraySize(mutationTypeString);
+int gvTypeSize = ArraySize(gvTypeString);
 
 /* some stuff for the mutation location choices */
 /* labels for checkboxes */
-char *mutationLocationLabel[] = {
+char *gvLocationLabel[] = {
     "exon",
     "intron",
     "5' UTR",
@@ -45,15 +45,15 @@ char *mutationLocationLabel[] = {
 };
 
 /* names for checkboxes */
-char *mutationLocationString[] = {
-    "genomeVar.filter.xon",
-    "genomeVar.filter.intron",
-    "genomeVar.filter.utr5",
-    "genomeVar.filter.utr3",
-    "genomeVar.filter.intergenic",
+char *gvLocationString[] = {
+    "gvPos.filter.xon",
+    "gvPos.filter.intron",
+    "gvPos.filter.utr5",
+    "gvPos.filter.utr3",
+    "gvPos.filter.intergenic",
 };
 
-char *mutationLocationDbValue[] = {
+char *gvLocationDbValue[] = {
     "exon",
     "intron",
     "5' UTR",
@@ -61,26 +61,38 @@ char *mutationLocationDbValue[] = {
     "not within known transcription unit",
 };
 
-int mutationLocationSize = ArraySize(mutationLocationLabel);
+int gvLocationSize = ArraySize(gvLocationLabel);
 
-char *mutationAccuracyLabel[] = {
+char *gvSrcString[] = {
+    "gvPos.filter.src.SP",
+    "gvPos.filter.src.LSDB",
+};
+
+char *gvSrcDbValue[] = {
+    "UniProt (Swiss-Prot/TrEMBL)",
+    "LSDB",
+};
+
+int gvSrcSize = ArraySize(gvSrcString);
+
+char *gvAccuracyLabel[] = {
     "estimated coordinates",
 };
 
-char *mutationAccuracyString[] = {
-    "genomeVar.filter.estimate",
+char *gvAccuracyString[] = {
+    "gvPos.filter.estimate",
 };
 
-unsigned char *mutationAccuracyDbValue[] = {
+unsigned char *gvAccuracyDbValue[] = {
     "0",
 };
 
-int mutationAccuracySize = ArraySize(mutationAccuracyLabel);
+int gvAccuracySize = ArraySize(gvAccuracyLabel);
 
 /***************Attribute display**************/
 
 /* list in display order of attribute type, key that is used in table */
-char *mutationAttrTypeKey[] = {
+char *gvAttrTypeKey[] = {
     "commonName",
     "alias",
     "links",
@@ -94,7 +106,7 @@ char *mutationAttrTypeKey[] = {
 };
 
 /* list in display order of attribute type display names */
-char *mutationAttrTypeDisplay[] = {
+char *gvAttrTypeDisplay[] = {
     "Common name",
     "Alias",
     "External links",
@@ -108,7 +120,7 @@ char *mutationAttrTypeDisplay[] = {
 };
 
 /* category for each type above, match up by array index */
-char *mutationAttrCategory[] = {
+char *gvAttrCategory[] = {
     "Alias",
     "Alias",
     "Links",
@@ -121,11 +133,11 @@ char *mutationAttrCategory[] = {
     "Other Ancillary data",
 };
 
-int mutationAttrSize = ArraySize(mutationAttrTypeKey);
+int gvAttrSize = ArraySize(gvAttrTypeKey);
 
 /***************Color options**************/
 
-char *genomeVarColorLabels[] = {
+char *gvColorLabels[] = {
     "purple",
     "green",
     "orange",
@@ -134,9 +146,9 @@ char *genomeVarColorLabels[] = {
     "black",
 };
 
-int genomeVarColorLabelSize = ArraySize(genomeVarColorLabels);
+int gvColorLabelSize = ArraySize(gvColorLabels);
 
-char *genomeVarColorTypeLabels[] = {
+char *gvColorTypeLabels[] = {
     "substitution",
     "insertion",
     "duplication",
@@ -145,16 +157,16 @@ char *genomeVarColorTypeLabels[] = {
     "unknown",
 };
 
-char *genomeVarColorTypeStrings[] = {
-    "genomeVarColorTypeSub",
-    "genomeVarColorTypeIns",
-    "genomeVarColorTypeDup",
-    "genomeVarColorTypeDel",
-    "genomeVarColorTypeComplex",
-    "genomeVarColorTypeUnk",
+char *gvColorTypeStrings[] = {
+    "gvColorTypeSub",
+    "gvColorTypeIns",
+    "gvColorTypeDup",
+    "gvColorTypeDel",
+    "gvColorTypeComplex",
+    "gvColorTypeUnk",
 };
 
-char *genomeVarColorTypeDefault[] = {
+char *gvColorTypeDefault[] = {
     "purple",
     "green",
     "orange",
@@ -163,7 +175,7 @@ char *genomeVarColorTypeDefault[] = {
     "black",
 };
 
-char *genomeVarColorTypeBaseChangeType[] = {
+char *gvColorTypeBaseChangeType[] = {
     "substitution",
     "insertion",
     "duplication",
@@ -173,4 +185,4 @@ char *genomeVarColorTypeBaseChangeType[] = {
 };
 
 /* all type arrays are same size */
-int genomeVarColorTypeSize = ArraySize(genomeVarColorTypeStrings);
+int gvColorTypeSize = ArraySize(gvColorTypeStrings);
