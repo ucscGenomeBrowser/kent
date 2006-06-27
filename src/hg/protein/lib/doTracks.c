@@ -1147,6 +1147,7 @@ for (ii=0; ii<sf_cnt; ii++)
 	{
 	jj++;
 	safef(exonNumStr, sizeof(exonNumStr), "%d", jj);
+
 	calxy(sfStart[ii], *yOffp, &xx, &yy);
 
 	sf_len   = sfEnd[ii] - sfStart[ii];
@@ -1161,6 +1162,8 @@ for (ii=0; ii<sf_cnt; ii++)
 	    }
 
 	len = strlen(superfam_name[ii]);
+	/* prevent the painting spill over to the label */
+	if (xx < 120) xx = 120;
 	vgDrawBox(g_vg, xx, yy-9+(jj%4)*5, (sfEnd[ii] - sfStart[ii])*pbScale, 9, sfColor);
 	mapBoxSuperfamily(xx, yy-9+(jj%4)*5, 
 			  (sfEnd[ii] - sfStart[ii])*pbScale, 9,
