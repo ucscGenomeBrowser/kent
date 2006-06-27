@@ -44,6 +44,7 @@ SCRIPT_FILES = \
 	dumpDb.pl \
 	HgAutomate.pm \
 	HgRemoteScript.pm \
+	HgStepManager.pm \
         iSync \
         lodToBedScore \
 	mkMafFrames.pl \
